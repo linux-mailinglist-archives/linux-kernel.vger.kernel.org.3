@@ -2,109 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C85B4BEB45
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 20:37:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 416344BEB3B
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 20:37:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232256AbiBUSNG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 13:13:06 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41326 "EHLO
+        id S232042AbiBUSO7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 13:14:59 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232231AbiBUSL0 (ORCPT
+        with ESMTP id S229673AbiBUSLk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 13:11:26 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C274113D23;
-        Mon, 21 Feb 2022 10:01:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645466509; x=1677002509;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=sPqVwHORdIP+AJZPTEY+6JZ34Z1q+gC7lEhyccc3C9s=;
-  b=idiQfNBX1z29w3l1eyKvEtrDaFm7KOkZ0BPo/FaXf6XKNp0vkKs+6DOS
-   WT5qgwJQrulGfijUv+ibkRnn6g6wjAWUJvwtfYt+mpiEKl+GyDx5SlkzU
-   /wUR2kTusnsI/5jvxRVJdSPcNvfPcIhjYaLap6wCAwHoAkDUH5+jX/eyT
-   uyzgpsGfPqAo5q4eKKxH29mqe4Sih0U3MU4JKwdGK79o1bdsP+vwhlF7F
-   9fteBMvTIotyu/6GHCdT8jqJUxDDP0/ZolDlUeVnOudd6NONpZBWjjHxp
-   uyDM6pJhpGUXmRv+opFdcISA5lAwHZ0/2u5fjCTfQCq3ztt+Nw8elIV6s
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10265"; a="235091315"
-X-IronPort-AV: E=Sophos;i="5.88,386,1635231600"; 
-   d="scan'208";a="235091315"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2022 10:01:49 -0800
-X-IronPort-AV: E=Sophos;i="5.88,386,1635231600"; 
-   d="scan'208";a="547418308"
-Received: from smile.fi.intel.com ([10.237.72.59])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2022 10:01:44 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1nMCzU-006sBe-2m;
-        Mon, 21 Feb 2022 20:00:52 +0200
-Date:   Mon, 21 Feb 2022 20:00:51 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     =?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <clement.leger@bootlin.com>
-Cc:     Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Wolfram Sang <wsa@kernel.org>, Peter Rosin <peda@axentia.se>,
-        Russell King <linux@armlinux.org.uk>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
+        Mon, 21 Feb 2022 13:11:40 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BF3C13DF9
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 10:02:05 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 57129B816B9
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 18:02:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0CC4CC340E9;
+        Mon, 21 Feb 2022 18:02:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645466523;
+        bh=1o//f7ci38Nltr9ZStFH8Ui/1ANWC7noWUcvVsxH4Dk=;
+        h=In-Reply-To:References:Date:From:To:Cc:Subject:From;
+        b=O/vRl4W+1q3OlItbDWSIT1wpSOf+ke+C7ZG3LvL0E8Ya+3/aZd9JcNcVisu3jckU0
+         6sbYLe74cjvHHDMv8RnWlk5rBR1EOVZIGMboUNzvw4cJDnPk/2X52CjsYCEn65ZP9L
+         1jikMaz56J0R+vmkyJTLNY1ZN0ifhA0wlQmJHoPx/4CLp/b0mMktJUZkYIGqXptfWx
+         wLKcajj5/CDlapJ1A9YwGJOZK80GD/T6iWV1Ps8xJofVKspQVK3dkoDfWcGiIBVO70
+         ESAI4GM2Si1Nk030GEry7hHcn0i4RBdSvZ/3ox5sr7Y+J7MEhoVAom/tcuoj7Nvvk9
+         Bx8kmNoE88v7A==
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailauth.nyi.internal (Postfix) with ESMTP id C58BF27C005C;
+        Mon, 21 Feb 2022 13:02:00 -0500 (EST)
+Received: from imap48 ([10.202.2.98])
+  by compute5.internal (MEProxy); Mon, 21 Feb 2022 13:02:00 -0500
+X-ME-Sender: <xms:ltMTYrOO-q2eTdc7-lefNVhRw6CMzIIUjeq1Fl3pSsQUg5p0v4T3DQ>
+    <xme:ltMTYl-w3T6R0n3Nu6LPsQLBvomkxGIVmuyU0GhbO1DIpztXMJlRsLtQTCEYEh028
+    pjjpM0MX0B0CmMumOs>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrkeeigddutdeiucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvffutgesthdtredtreertdenucfhrhhomhepfdetnhgu
+    hicunfhuthhomhhirhhskhhifdcuoehluhhtoheskhgvrhhnvghlrdhorhhgqeenucggtf
+    frrghtthgvrhhnpeffffekfeeuueffkedvueeujeduledvteefveevvdeftdfhtdegfeej
+    geehveefudenucffohhmrghinhepuhhrrghnughomhdruggvvhdpshgvrhhvvghrrdguvg
+    hvnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghn
+    ugihodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdduudeiudekheeifedvqd
+    dvieefudeiiedtkedqlhhuthhopeepkhgvrhhnvghlrdhorhhgsehlihhnuhigrdhluhht
+    ohdruhhs
+X-ME-Proxy: <xmx:ltMTYqTKzeHmFBPj0KeeRRyeIPkPiIPH6vrTikCX73-28YSIWW4E9A>
+    <xmx:ltMTYvsLwlTbcAc-2gQCU0GdilV3LUcAV3MWMIErkd6OV7tI1F8Liw>
+    <xmx:ltMTYjdgCl_PWiXjxovjIlwKP-0RphBlU2K8uA3PaBzbcFmq9vAImg>
+    <xmx:mNMTYsvOQibdXI0qUTvczgxlr_u6ezUHEVT1YByEYw8pV2tlEZ9rHX6Q-Nw>
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 01C9B21E006E; Mon, 21 Feb 2022 13:01:57 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.5.0-alpha0-4778-g14fba9972e-fm-20220217.001-g14fba997
+Mime-Version: 1.0
+Message-Id: <6e117393-9c2f-441c-9c72-62c209643622@www.fastmail.com>
+In-Reply-To: <20220217162848.303601-1-Jason@zx2c4.com>
+References: <20220217162848.303601-1-Jason@zx2c4.com>
+Date:   Mon, 21 Feb 2022 10:01:37 -0800
+From:   "Andy Lutomirski" <luto@kernel.org>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
+        "Linux Crypto Mailing List" <linux-crypto@vger.kernel.org>,
+        linux-arch@vger.kernel.org
+Cc:     "Dinh Nguyen" <dinguyen@kernel.org>,
+        "Nick Hu" <nickhu@andestech.com>,
+        "Max Filippov" <jcmvbkbc@gmail.com>,
+        "Palmer Dabbelt" <palmer@dabbelt.com>,
         "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-acpi@vger.kernel.org, linux-i2c@vger.kernel.org,
-        netdev@vger.kernel.org,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-Subject: Re: [RFC 06/10] i2c: fwnode: add fwnode_find_i2c_adapter_by_node()
-Message-ID: <YhPTUxvaqd+1/23a@smile.fi.intel.com>
-References: <20220221162652.103834-1-clement.leger@bootlin.com>
- <20220221162652.103834-7-clement.leger@bootlin.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220221162652.103834-7-clement.leger@bootlin.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        "Yoshinori Sato" <ysato@users.sourceforge.jp>,
+        "Michal Simek" <monstr@monstr.eu>,
+        "Borislav Petkov" <bp@alien8.de>, "Guo Ren" <guoren@kernel.org>,
+        "Geert Uytterhoeven" <geert@linux-m68k.org>,
+        "Joshua Kinard" <kumba@gentoo.org>,
+        "David Laight" <David.Laight@aculab.com>,
+        "Dominik Brodowski" <linux@dominikbrodowski.net>,
+        "Eric Biggers" <ebiggers@google.com>,
+        "Ard Biesheuvel" <ardb@kernel.org>,
+        "Arnd Bergmann" <arnd@arndb.de>,
+        "Thomas Gleixner" <tglx@linutronix.de>,
+        "Kees Cook" <keescook@chromium.org>,
+        "Lennart Poettering" <mzxreary@0pointer.de>,
+        "Konstantin Ryabitsev" <konstantin@linuxfoundation.org>,
+        "Linus Torvalds" <torvalds@linux-foundation.org>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        "Theodore Ts'o" <tytso@mit.edu>
+Subject: Re: [PATCH v1] random: block in /dev/urandom
+Content-Type: text/plain
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 21, 2022 at 05:26:48PM +0100, Clément Léger wrote:
-> Add fwnode_find_i2c_adapter_by_node() which allows to retrieve a i2c
-> adapter using a fwnode. Since dev_fwnode() uses the fwnode provided by
-> the of_node member of the device, this will also work for devices were
-> the of_node has been set and not the fwnode field.
+On Thu, Feb 17, 2022, at 8:28 AM, Jason A. Donenfeld wrote:
+> This topic has come up countless times, and usually doesn't go anywhere.
+> This time I thought I'd bring it up with a slightly narrower focus,
+> updated for some developments over the last three years: we finally can
+> make /dev/urandom always secure, in light of the fact that our RNG is
+> now always seeded.
+>
+> Ever since Linus' 50ee7529ec45 ("random: try to actively add entropy
+> rather than passively wait for it"), the RNG does a haveged-style jitter
+> dance around the scheduler, in order to produce entropy (and credit it)
+> for the case when we're stuck in wait_for_random_bytes(). How ever you
+> feel about the Linus Jitter Dance is beside the point: it's been there
+> for three years and usually gets the RNG initialized in a second or so.
+>
+> As a matter of fact, this is what happens currently when people use
+> getrandom(). It's already there and working, and most people have been
+> using it for years without realizing.
+>
+> So, given that the kernel has grown this mechanism for seeding itself
+> from nothing, and that this procedure happens pretty fast, maybe there's
+> no point any longer in having /dev/urandom give insecure bytes. In the
+> past we didn't want the boot process to deadlock, which was
+> understandable. But now, in the worst case, a second goes by, and the
+> problem is resolved. It seems like maybe we're finally at a point when
+> we can get rid of the infamous "urandom read hole".
+>
 
-...
+This patch is 100% about a historical mistake.  Way back when (not actually that long ago), there were two usable interfaces to the random number generator: /dev/random and /dev/urandom.  /dev/random was, at least in principle, secure, but it blocked unnecessarily and was, therefore, incredibly slow.  It was totally unsuitable for repeated use by any sort of server.  /dev/urandom didn't block but was insecure if called too early.  *But* urandom was also the correct interface to get best-effort-i-need-them-right-now random bits.  The actual semantics that general crypography users wanted were not available.
 
-> +static int fwnode_dev_or_parent_node_match(struct device *dev, const void *data)
-> +{
+Fast forward to today.  /dev/random has the correct semantics for cryptographic purposes.  getrandom() also has the correct semantics for cryptographic purposes and is reliable as such -- it is guaranteed to either not exist or to DTRT.  And best-effort users can use GRND_INSECURE or /dev/urandom.
 
-> +	if (dev_fwnode(dev) == data)
-> +		return 1;
+If we imagine that every user program we care about uses GRND_INSECURE for best-effort and /dev/random or getrandom() without GRND_INSECURE for cryptography, then we're in great shape and this patch is irrelevant.
 
-This can use corresponding match function from bus.h.
+But we don't get to rely on that.  New kernels are supposed to be compatible with old userspace.  And with *old* userspace, we do not know whether /dev/urandom users want cryptographically secure output or whether they want insecure output.  And there is this window during boot that lasts, supposedly, up to 1 second, there is a massive difference. [0]
 
-> +	if (dev->parent)
-> +		return dev_fwnode(dev->parent) == data;
-> +
-> +	return 0;
+So, sorry, this patch is an ABI break.  You're reinterpreting any program that wanted best-effort randomness right after boot as wanting cryptographic randomness, this can delay boot by up to a second [0], and that's more than enough delay to be considered a break.
 
-The same.
+So I don't like this without a stronger justification and a clearer compatibility story.  I could *maybe* get on board if you had a urandom=insecure boot option to switch back to the old behavior and a very clear message like "random: startup of %s is delayed. Set urandom=insecure for faster boot if you do not need cryptographically secure urandom during boot", but I don't think this patch is okay otherwise.
 
-> +}
+Or we stick with the status quo and make the warning clearer.  "random: %s us using insecure urandom output.  Fix it to use getrandom() or /dev/rando as appropriate."
 
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+[0] I just booted 5.16 in a Skylake -rdrand,-rdseed VM and it took 1.14 seconds to initialize.

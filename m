@@ -2,94 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5D564BE99C
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:07:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE4874BEA27
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:10:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230408AbiBUSHL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 13:07:11 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36512 "EHLO
+        id S230060AbiBUSFR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 13:05:17 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232547AbiBUSE0 (ORCPT
+        with ESMTP id S232463AbiBUSEY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 13:04:26 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF7131D0C7;
-        Mon, 21 Feb 2022 09:56:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645466182; x=1677002182;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=+/KTjRfi65Ib76kWEGOorsZScmtiCnDSMiUu8H92FgM=;
-  b=ITLgqtddaj9jqorF5CndFdZuYeHqPzmeK9CwEFHoTW8C1rV5J8x8Nr2g
-   L6o9qXrSkWArfVrOfsUUquPA4cmaHrePYOgyc7Me3nqMQLLjk+0lHYNv8
-   +qyHTnvJe32vv6p2wpcqlPfZkcdTa8/4r4n0BWPL6DGIJVUav09bw49TJ
-   h4cN2Sv54eyyGHC0b6gL7FyMc3QJRAT77ed6egzjP0sMT92oseMNSMmwW
-   RSCItpfmqtW2uMbvmi19HjTbuHUS7PSRfdlKzuzagVkjVPL+bKJkE+MGQ
-   S+tCoQEaJoD5tuf3khN+27vGg9lts/JTRz3qf1NBrlvt86N3x83AXt5xg
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10265"; a="314812286"
-X-IronPort-AV: E=Sophos;i="5.88,386,1635231600"; 
-   d="scan'208";a="314812286"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2022 09:56:22 -0800
-X-IronPort-AV: E=Sophos;i="5.88,386,1635231600"; 
-   d="scan'208";a="706329238"
-Received: from smile.fi.intel.com ([10.237.72.59])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2022 09:56:17 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1nMCuD-006s7L-Qt;
-        Mon, 21 Feb 2022 19:55:25 +0200
-Date:   Mon, 21 Feb 2022 19:55:25 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     =?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <clement.leger@bootlin.com>
-Cc:     Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Wolfram Sang <wsa@kernel.org>, Peter Rosin <peda@axentia.se>,
-        Russell King <linux@armlinux.org.uk>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-acpi@vger.kernel.org, linux-i2c@vger.kernel.org,
-        netdev@vger.kernel.org,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-Subject: Re: [RFC 09/10] i2c: mux: add support for fwnode
-Message-ID: <YhPSDTAPiTvEESnO@smile.fi.intel.com>
-References: <20220221162652.103834-1-clement.leger@bootlin.com>
- <20220221162652.103834-10-clement.leger@bootlin.com>
+        Mon, 21 Feb 2022 13:04:24 -0500
+Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71D071AD90;
+        Mon, 21 Feb 2022 09:56:03 -0800 (PST)
+Received: by mail-wr1-f53.google.com with SMTP id d27so28483240wrb.5;
+        Mon, 21 Feb 2022 09:56:03 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=FQ/Oyj3CQfmniV07x3o++/fZN+iiONMTqxiWxhJRUlY=;
+        b=IaeQ3I2f6ayb3wpZCA4cKOoVf/SepEdNbhwAXPV23UjaibSB9oUR47V4Lekl+g3G0S
+         LaOiWiQLmD/hMKwb19+0IENZXqkkeBMUFmfN66PE7vkpwak5ryQEXgzuyym/b5u/47O0
+         AkXEx3HY4KgDv0inu88D68NNoj2ag9vRwKG+PsIjSgLjPSexGxAmmYNdxoWqU4J/Zgv1
+         Q16XWGyeI42WIxFOt2fRBjQSYti3ZqZenvhIW/fDE+arwIBQePPAAv/1nrMST7L+f+Yx
+         h1eRjhjXocerZqjz05hOE5ZNnRHAt96BT+Omv9no/rrfl/Q/MWV26+mLMTx3cSgNV2YG
+         1J+Q==
+X-Gm-Message-State: AOAM530ufGRl7J9qPKqmj7EUBPJu0wfgfd8DQhizr03IVaf7kivWPaWI
+        BqmDKOwPPpsOz2vK/yCZNoE=
+X-Google-Smtp-Source: ABdhPJxP5lu5chi+n8ksMNCmt7siV/ZlHwzfFSI60qorTjR4H+rzP++PgZMJY8qoNLyww1EqY9tqwQ==
+X-Received: by 2002:a5d:4d0d:0:b0:1e7:a9e7:ad31 with SMTP id z13-20020a5d4d0d000000b001e7a9e7ad31mr16266827wrt.281.1645466161856;
+        Mon, 21 Feb 2022 09:56:01 -0800 (PST)
+Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
+        by smtp.gmail.com with ESMTPSA id d2sm22558483wro.49.2022.02.21.09.56.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 21 Feb 2022 09:56:01 -0800 (PST)
+Date:   Mon, 21 Feb 2022 17:56:00 +0000
+From:   Wei Liu <wei.liu@kernel.org>
+To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>
+Cc:     Boqun Feng <boqun.feng@gmail.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Wei Liu <wei.liu@kernel.org>,
+        Sunil Muthuswamy <sunilmut@linux.microsoft.com>,
+        KY Srinivasan <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Dexuan Cui <decui@microsoft.com>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [RFC PATCH v2] PCI: hv: Avoid the retarget interrupt hypercall
+ in irq_unmask() on ARM64
+Message-ID: <20220221175600.gxbphsnbytgytcpz@liuwe-devbox-debian-v2>
+References: <20220217034525.1687678-1-boqun.feng@gmail.com>
+ <MWHPR21MB1593A265118977A57FF3B329D7369@MWHPR21MB1593.namprd21.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220221162652.103834-10-clement.leger@bootlin.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <MWHPR21MB1593A265118977A57FF3B329D7369@MWHPR21MB1593.namprd21.prod.outlook.com>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 21, 2022 at 05:26:51PM +0100, Clément Léger wrote:
-> Modify i2c_mux_add_adapter() to use with fwnode API to allow creating
-> mux adapters with fwnode based devices. This allows to have a node
-> independent support for i2c muxes.
+On Thu, Feb 17, 2022 at 04:31:06PM +0000, Michael Kelley (LINUX) wrote:
+> From: Boqun Feng <boqun.feng@gmail.com> Sent: Wednesday, February 16, 2022 7:45 PM
+> > 
+> > On ARM64 Hyper-V guests, SPIs are used for the interrupts of virtual PCI
+> > devices, and SPIs can be managed directly via GICD registers. Therefore
+> > the retarget interrupt hypercall is not needed on ARM64.
+> > 
+> > An arch-specific interface hv_arch_irq_unmask() is introduced to handle
+> > the architecture level differences on this. For x86, the behavior
+> > remains unchanged, while for ARM64 no hypercall is invoked when
+> > unmasking an irq for virtual PCI devices.
+> > 
+> > Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
+> > ---
+> > v1 -> v2:
+> > 
+> > *	Introduce arch-specific interface hv_arch_irq_unmask() as
+> > 	suggested by Bjorn
+> > 
+> >  drivers/pci/controller/pci-hyperv.c | 233 +++++++++++++++-------------
+> >  1 file changed, 122 insertions(+), 111 deletions(-)
+> 
+> Reviewed-by: Michael Kelley <mikelley@microsoft.com>
 
-I^2C muxes have their own description for DT and ACPI platforms, I'm not sure
-swnode should be used here at all. Just upload a corresponding SSDT overlay or
-DT overlay depending on the platform. Can it be achieved?
+I expect this to go through the PCI tree. Let me know if I should pick
+this up.
 
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+Thanks,
+Wei.

@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24FB04BE9A6
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:07:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 701E14BDD72
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:45:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353441AbiBUJ51 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 04:57:27 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42606 "EHLO
+        id S1347203AbiBUJFK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 04:05:10 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351343AbiBUJsw (ORCPT
+        with ESMTP id S1347563AbiBUJBb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 04:48:52 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DBBC3205A;
-        Mon, 21 Feb 2022 01:22:33 -0800 (PST)
+        Mon, 21 Feb 2022 04:01:31 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55D6822512;
+        Mon, 21 Feb 2022 00:56:44 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 70C8360B1E;
-        Mon, 21 Feb 2022 09:22:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 587DCC340EB;
-        Mon, 21 Feb 2022 09:22:31 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3D5A1B80EB5;
+        Mon, 21 Feb 2022 08:56:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54751C340E9;
+        Mon, 21 Feb 2022 08:56:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645435351;
-        bh=zPEyfU1ecxpvXSoCI9xFguvbg7TQZ1EtnpjrPVaVoKE=;
+        s=korg; t=1645433771;
+        bh=3hY4r8/3UO+KDlgWBI1PWNsgwmTFyNxZwI7NNxVqog0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PRF6anelFRHR9Rw96fPNstebQQu0PmHjUKH943umEZle+QHN8usesAh+dJFhHGQCc
-         PN++hU7SCTssCdGv4LVGxZgqwxCfRGUM3NtEs/syUnsn4TSoB4NW4/gqnkTUqmr1tL
-         7Vn9xEVzdOD8XcCTY27Fg926PzuBgqYVExamN+3Y=
+        b=XQ5L4cuMBd4DkEuor9d66Ysz7ijxThmhtGIS1FQG7E0wzRObtZEZbmpN0OhCB7iSs
+         M3Az+DvTVZX/jBn+9NbRZrhQP70dNPbrldwlneuu020YSOY/xAIzj54VP/rQTqOwos
+         ANGAKG4YxibrgUB1YPPmKPSvG1H3SsGr0dl39y44=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, "kernelci.org bot" <bot@kernelci.org>,
-        Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Kees Cook <keescook@chromium.org>
-Subject: [PATCH 5.16 133/227] selftests/exec: Add non-regular to TEST_GEN_PROGS
+        stable@vger.kernel.org, Guillaume Nault <gnault@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+Subject: [PATCH 4.19 19/58] xfrm: Dont accidentally set RTO_ONLINK in decode_session4()
 Date:   Mon, 21 Feb 2022 09:49:12 +0100
-Message-Id: <20220221084939.278758067@linuxfoundation.org>
+Message-Id: <20220221084912.507636200@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220221084934.836145070@linuxfoundation.org>
-References: <20220221084934.836145070@linuxfoundation.org>
+In-Reply-To: <20220221084911.895146879@linuxfoundation.org>
+References: <20220221084911.895146879@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,40 +55,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Muhammad Usama Anjum <usama.anjum@collabora.com>
+From: Guillaume Nault <gnault@redhat.com>
 
-commit a7e793a867ae312cecdeb6f06cceff98263e75dd upstream.
+commit 23e7b1bfed61e301853b5e35472820d919498278 upstream.
 
-non-regular file needs to be compiled and then copied to the output
-directory. Remove it from TEST_PROGS and add it to TEST_GEN_PROGS. This
-removes error thrown by rsync when non-regular object isn't found:
+Similar to commit 94e2238969e8 ("xfrm4: strip ECN bits from tos field"),
+clear the ECN bits from iph->tos when setting ->flowi4_tos.
+This ensures that the last bit of ->flowi4_tos is cleared, so
+ip_route_output_key_hash() isn't going to restrict the scope of the
+route lookup.
 
-rsync: [sender] link_stat "/linux/tools/testing/selftests/exec/non-regular" failed: No such file or directory (2)
-rsync error: some files/attrs were not transferred (see previous errors) (code 23) at main.c(1333) [sender=3.2.3]
+Use ~INET_ECN_MASK instead of IPTOS_RT_MASK, because we have no reason
+to clear the high order bits.
 
-Fixes: 0f71241a8e32 ("selftests/exec: add file type errno tests")
-Reported-by: "kernelci.org bot" <bot@kernelci.org>
-Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
-Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
-Reviewed-by: Kees Cook <keescook@chromium.org>
-Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+Found by code inspection, compile tested only.
+
+Fixes: 4da3089f2b58 ("[IPSEC]: Use TOS when doing tunnel lookups")
+Signed-off-by: Guillaume Nault <gnault@redhat.com>
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+[sudip: manually backport to previous location]
+Signed-off-by: Sudip Mukherjee <sudipm.mukherjee@gmail.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- tools/testing/selftests/exec/Makefile |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ net/ipv4/xfrm4_policy.c |    3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
---- a/tools/testing/selftests/exec/Makefile
-+++ b/tools/testing/selftests/exec/Makefile
-@@ -3,8 +3,8 @@ CFLAGS = -Wall
- CFLAGS += -Wno-nonnull
- CFLAGS += -D_GNU_SOURCE
+--- a/net/ipv4/xfrm4_policy.c
++++ b/net/ipv4/xfrm4_policy.c
+@@ -17,6 +17,7 @@
+ #include <net/xfrm.h>
+ #include <net/ip.h>
+ #include <net/l3mdev.h>
++#include <net/inet_ecn.h>
  
--TEST_PROGS := binfmt_script non-regular
--TEST_GEN_PROGS := execveat load_address_4096 load_address_2097152 load_address_16777216
-+TEST_PROGS := binfmt_script
-+TEST_GEN_PROGS := execveat load_address_4096 load_address_2097152 load_address_16777216 non-regular
- TEST_GEN_FILES := execveat.symlink execveat.denatured script subdir
- # Makefile is a run-time dependency, since it's accessed by the execveat test
- TEST_FILES := Makefile
+ static struct dst_entry *__xfrm4_dst_lookup(struct net *net, struct flowi4 *fl4,
+ 					    int tos, int oif,
+@@ -126,7 +127,7 @@ _decode_session4(struct sk_buff *skb, st
+ 	fl4->flowi4_proto = iph->protocol;
+ 	fl4->daddr = reverse ? iph->saddr : iph->daddr;
+ 	fl4->saddr = reverse ? iph->daddr : iph->saddr;
+-	fl4->flowi4_tos = iph->tos;
++	fl4->flowi4_tos = iph->tos & ~INET_ECN_MASK;
+ 
+ 	if (!ip_is_fragment(iph)) {
+ 		switch (iph->protocol) {
 
 

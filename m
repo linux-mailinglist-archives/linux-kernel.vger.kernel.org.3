@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F08C4BE4EE
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:59:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF28C4BDC1B
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:41:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350599AbiBUJea (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 04:34:30 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48112 "EHLO
+        id S1351618AbiBUJ7J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 04:59:09 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350116AbiBUJ1U (ORCPT
+        with ESMTP id S1351959AbiBUJu7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 04:27:20 -0500
+        Mon, 21 Feb 2022 04:50:59 -0500
 Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8831C5F76;
-        Mon, 21 Feb 2022 01:11:41 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE8A235DCD;
+        Mon, 21 Feb 2022 01:22:50 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 07F0ECE0E79;
-        Mon, 21 Feb 2022 09:11:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1DE60C340E9;
-        Mon, 21 Feb 2022 09:11:37 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 6FEECCE0E89;
+        Mon, 21 Feb 2022 09:22:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6113DC340E9;
+        Mon, 21 Feb 2022 09:22:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645434698;
-        bh=NiDEqgNTM0anrzgdi52tONruLfv+bKxdiq4x0ThFYBo=;
+        s=korg; t=1645435368;
+        bh=Qtr7JHf3mAjs2WT0nfBTCq+aPz6bs4dbO5nGkwPHaEA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FQlR7etQ3360leVAcMtswAkPCMEank+l+Im0vSN9gU1MwbeGohFgfYMKiW/5GwSJJ
-         0kDPZAv1SH/zSfSs6TnC0i3rJb/R6W3TY4YchiuF8V/LqruZn2o0KSJmsIClqD4Iq4
-         muAMVEV9Wplk1GXEfhIIlk+mUKLR1fVNGYRu1tUY=
+        b=UBrYpWV5fiZbCUGbC6mVMne/WQPDCQUMfie/wu5fDopW9JnhW4FDGLpLL5tYBBqe9
+         ZaN+yUX9IrTyq83fMpErzh/CMoQVJeOFiQ83oyfxsX18id+J658zyZMxexRxkIh1cM
+         aFolRAFZB5GVz+e4kdfuanSHazrHrkp/5E8XQp38=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
-        syzbot <syzkaller@googlegroups.com>,
-        Jay Vosburgh <j.vosburgh@gmail.com>,
-        Veaceslav Falico <vfalico@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 5.15 099/196] bonding: fix data-races around agg_select_timer
+        stable@vger.kernel.org, Mans Rullgard <mans@mansr.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 5.16 112/227] net: dsa: lan9303: handle hwaccel VLAN tags
 Date:   Mon, 21 Feb 2022 09:48:51 +0100
-Message-Id: <20220221084934.259088041@linuxfoundation.org>
+Message-Id: <20220221084938.583562326@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220221084930.872957717@linuxfoundation.org>
-References: <20220221084930.872957717@linuxfoundation.org>
+In-Reply-To: <20220221084934.836145070@linuxfoundation.org>
+References: <20220221084934.836145070@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,138 +55,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eric Dumazet <edumazet@google.com>
+From: Mans Rullgard <mans@mansr.com>
 
-commit 9ceaf6f76b203682bb6100e14b3d7da4c0bedde8 upstream.
+commit 017b355bbdc6620fd8fe05fe297f553ce9d855ee upstream.
 
-syzbot reported that two threads might write over agg_select_timer
-at the same time. Make agg_select_timer atomic to fix the races.
+Check for a hwaccel VLAN tag on rx and use it if present.  Otherwise,
+use __skb_vlan_pop() like the other tag parsers do.  This fixes the case
+where the VLAN tag has already been consumed by the master.
 
-BUG: KCSAN: data-race in bond_3ad_initiate_agg_selection / bond_3ad_state_machine_handler
-
-read to 0xffff8881242aea90 of 4 bytes by task 1846 on cpu 1:
- bond_3ad_state_machine_handler+0x99/0x2810 drivers/net/bonding/bond_3ad.c:2317
- process_one_work+0x3f6/0x960 kernel/workqueue.c:2307
- worker_thread+0x616/0xa70 kernel/workqueue.c:2454
- kthread+0x1bf/0x1e0 kernel/kthread.c:377
- ret_from_fork+0x1f/0x30
-
-write to 0xffff8881242aea90 of 4 bytes by task 25910 on cpu 0:
- bond_3ad_initiate_agg_selection+0x18/0x30 drivers/net/bonding/bond_3ad.c:1998
- bond_open+0x658/0x6f0 drivers/net/bonding/bond_main.c:3967
- __dev_open+0x274/0x3a0 net/core/dev.c:1407
- dev_open+0x54/0x190 net/core/dev.c:1443
- bond_enslave+0xcef/0x3000 drivers/net/bonding/bond_main.c:1937
- do_set_master net/core/rtnetlink.c:2532 [inline]
- do_setlink+0x94f/0x2500 net/core/rtnetlink.c:2736
- __rtnl_newlink net/core/rtnetlink.c:3414 [inline]
- rtnl_newlink+0xfeb/0x13e0 net/core/rtnetlink.c:3529
- rtnetlink_rcv_msg+0x745/0x7e0 net/core/rtnetlink.c:5594
- netlink_rcv_skb+0x14e/0x250 net/netlink/af_netlink.c:2494
- rtnetlink_rcv+0x18/0x20 net/core/rtnetlink.c:5612
- netlink_unicast_kernel net/netlink/af_netlink.c:1317 [inline]
- netlink_unicast+0x602/0x6d0 net/netlink/af_netlink.c:1343
- netlink_sendmsg+0x728/0x850 net/netlink/af_netlink.c:1919
- sock_sendmsg_nosec net/socket.c:705 [inline]
- sock_sendmsg net/socket.c:725 [inline]
- ____sys_sendmsg+0x39a/0x510 net/socket.c:2413
- ___sys_sendmsg net/socket.c:2467 [inline]
- __sys_sendmsg+0x195/0x230 net/socket.c:2496
- __do_sys_sendmsg net/socket.c:2505 [inline]
- __se_sys_sendmsg net/socket.c:2503 [inline]
- __x64_sys_sendmsg+0x42/0x50 net/socket.c:2503
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x44/0xd0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-
-value changed: 0x00000050 -> 0x0000004f
-
-Reported by Kernel Concurrency Sanitizer on:
-CPU: 0 PID: 25910 Comm: syz-executor.1 Tainted: G        W         5.17.0-rc4-syzkaller-dirty #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-
-Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-Signed-off-by: Eric Dumazet <edumazet@google.com>
-Reported-by: syzbot <syzkaller@googlegroups.com>
-Cc: Jay Vosburgh <j.vosburgh@gmail.com>
-Cc: Veaceslav Falico <vfalico@gmail.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Fixes: a1292595e006 ("net: dsa: add new DSA switch driver for the SMSC-LAN9303")
+Signed-off-by: Mans Rullgard <mans@mansr.com>
+Reviewed-by: Vladimir Oltean <olteanv@gmail.com>
+Link: https://lore.kernel.org/r/20220216124634.23123-1-mans@mansr.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/bonding/bond_3ad.c |   30 +++++++++++++++++++++++++-----
- include/net/bond_3ad.h         |    2 +-
- 2 files changed, 26 insertions(+), 6 deletions(-)
+ net/dsa/tag_lan9303.c |   21 +++++++--------------
+ 1 file changed, 7 insertions(+), 14 deletions(-)
 
---- a/drivers/net/bonding/bond_3ad.c
-+++ b/drivers/net/bonding/bond_3ad.c
-@@ -225,7 +225,7 @@ static inline int __check_agg_selection_
- 	if (bond == NULL)
- 		return 0;
+--- a/net/dsa/tag_lan9303.c
++++ b/net/dsa/tag_lan9303.c
+@@ -77,7 +77,6 @@ static struct sk_buff *lan9303_xmit(stru
  
--	return BOND_AD_INFO(bond).agg_select_timer ? 1 : 0;
-+	return atomic_read(&BOND_AD_INFO(bond).agg_select_timer) ? 1 : 0;
- }
- 
- /**
-@@ -1995,7 +1995,7 @@ static void ad_marker_response_received(
-  */
- void bond_3ad_initiate_agg_selection(struct bonding *bond, int timeout)
+ static struct sk_buff *lan9303_rcv(struct sk_buff *skb, struct net_device *dev)
  {
--	BOND_AD_INFO(bond).agg_select_timer = timeout;
-+	atomic_set(&BOND_AD_INFO(bond).agg_select_timer, timeout);
- }
+-	__be16 *lan9303_tag;
+ 	u16 lan9303_tag1;
+ 	unsigned int source_port;
  
- /**
-@@ -2279,6 +2279,28 @@ void bond_3ad_update_ad_actor_settings(s
- }
+@@ -87,14 +86,15 @@ static struct sk_buff *lan9303_rcv(struc
+ 		return NULL;
+ 	}
  
- /**
-+ * bond_agg_timer_advance - advance agg_select_timer
-+ * @bond:  bonding structure
-+ *
-+ * Return true when agg_select_timer reaches 0.
-+ */
-+static bool bond_agg_timer_advance(struct bonding *bond)
-+{
-+	int val, nval;
-+
-+	while (1) {
-+		val = atomic_read(&BOND_AD_INFO(bond).agg_select_timer);
-+		if (!val)
-+			return false;
-+		nval = val - 1;
-+		if (atomic_cmpxchg(&BOND_AD_INFO(bond).agg_select_timer,
-+				   val, nval) == val)
-+			break;
-+	}
-+	return nval == 0;
-+}
-+
-+/**
-  * bond_3ad_state_machine_handler - handle state machines timeout
-  * @work: work context to fetch bonding struct to work on from
-  *
-@@ -2313,9 +2335,7 @@ void bond_3ad_state_machine_handler(stru
- 	if (!bond_has_slaves(bond))
- 		goto re_arm;
+-	lan9303_tag = dsa_etype_header_pos_rx(skb);
+-
+-	if (lan9303_tag[0] != htons(ETH_P_8021Q)) {
+-		dev_warn_ratelimited(&dev->dev, "Dropping packet due to invalid VLAN marker\n");
+-		return NULL;
++	if (skb_vlan_tag_present(skb)) {
++		lan9303_tag1 = skb_vlan_tag_get(skb);
++		__vlan_hwaccel_clear_tag(skb);
++	} else {
++		skb_push_rcsum(skb, ETH_HLEN);
++		__skb_vlan_pop(skb, &lan9303_tag1);
++		skb_pull_rcsum(skb, ETH_HLEN);
+ 	}
  
--	/* check if agg_select_timer timer after initialize is timed out */
--	if (BOND_AD_INFO(bond).agg_select_timer &&
--	    !(--BOND_AD_INFO(bond).agg_select_timer)) {
-+	if (bond_agg_timer_advance(bond)) {
- 		slave = bond_first_slave_rcu(bond);
- 		port = slave ? &(SLAVE_AD_INFO(slave)->port) : NULL;
+-	lan9303_tag1 = ntohs(lan9303_tag[1]);
+ 	source_port = lan9303_tag1 & 0x3;
  
---- a/include/net/bond_3ad.h
-+++ b/include/net/bond_3ad.h
-@@ -262,7 +262,7 @@ struct ad_system {
- struct ad_bond_info {
- 	struct ad_system system;	/* 802.3ad system structure */
- 	struct bond_3ad_stats stats;
--	u32 agg_select_timer;		/* Timer to select aggregator after all adapter's hand shakes */
-+	atomic_t agg_select_timer;		/* Timer to select aggregator after all adapter's hand shakes */
- 	u16 aggregator_identifier;
- };
+ 	skb->dev = dsa_master_find_slave(dev, 0, source_port);
+@@ -103,13 +103,6 @@ static struct sk_buff *lan9303_rcv(struc
+ 		return NULL;
+ 	}
+ 
+-	/* remove the special VLAN tag between the MAC addresses
+-	 * and the current ethertype field.
+-	 */
+-	skb_pull_rcsum(skb, 2 + 2);
+-
+-	dsa_strip_etype_header(skb, LAN9303_TAG_LEN);
+-
+ 	if (!(lan9303_tag1 & LAN9303_TAG_RX_TRAPPED_TO_CPU))
+ 		dsa_default_offload_fwd_mark(skb);
  
 
 

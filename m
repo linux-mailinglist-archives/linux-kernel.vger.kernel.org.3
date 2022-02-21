@@ -2,43 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 220EF4BDB8C
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:40:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A7AB94BE394
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:57:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353311AbiBUKB3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 05:01:29 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56876 "EHLO
+        id S1345222AbiBUIxt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 03:53:49 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352265AbiBUJxs (ORCPT
+        with ESMTP id S1345588AbiBUIwy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 04:53:48 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC12D36B78;
-        Mon, 21 Feb 2022 01:23:27 -0800 (PST)
+        Mon, 21 Feb 2022 03:52:54 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 580B62AC7;
+        Mon, 21 Feb 2022 00:52:31 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 82E41B80EB8;
-        Mon, 21 Feb 2022 09:23:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C51B4C340E9;
-        Mon, 21 Feb 2022 09:23:25 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EB81861133;
+        Mon, 21 Feb 2022 08:52:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9E59C340E9;
+        Mon, 21 Feb 2022 08:52:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645435406;
-        bh=3fs6oNe7Ko7oVKXh9CVZYXEcEJvtYZ0K6qMFrb5P8Jk=;
+        s=korg; t=1645433550;
+        bh=5C8MD+mk+Eb5UUBsFV2o0TrobpgLPD9Gi8Eu2lLIYVk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DcjZSbD9OFKsMnNnF8to3UcNVUe1hPtg9yAGB5+q53vstV2eKutbZvU2X+kUUB6FY
-         sz8YS+HxtNTBaYdmRQuSBxAWHAaTnQpxrArYht0hdg44n0sOb4lrXmHRm6jfg3YpAP
-         4bSnt4iO1nEec71duk+6McKwMQTvv5WdSYbEE8WQ=
+        b=UsgPHbPw24OggaO64eTXc8JcXmPaCxyUA9EMm8xiQpiBsYts5MoDsHau+st+3++vN
+         Q54bFgz86ueLyUihCBxrDRyeSAdLJqpwyef4GSQ28blwMRCbmHhngAAhjX7I4P/Tzj
+         jZ/MU7q1UpdJGo1Ow8lEt0QmADV/NBnVxaq8yK1A=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Mark Brown <broonie@kernel.org>
-Subject: [PATCH 5.16 145/227] ASoC: ops: Fix stereo change notifications in snd_soc_put_volsw_sx()
+        stable@vger.kernel.org,
+        =?UTF-8?q?Zolt=C3=A1n=20B=C3=B6sz=C3=B6rm=C3=A9nyi?= 
+        <zboszor@gmail.com>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.9 31/33] ata: libata-core: Disable TRIM on M88V29
 Date:   Mon, 21 Feb 2022 09:49:24 +0100
-Message-Id: <20220221084939.655132365@linuxfoundation.org>
+Message-Id: <20220221084909.770943733@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220221084934.836145070@linuxfoundation.org>
-References: <20220221084934.836145070@linuxfoundation.org>
+In-Reply-To: <20220221084908.568970525@linuxfoundation.org>
+References: <20220221084908.568970525@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,53 +57,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mark Brown <broonie@kernel.org>
+From: Zoltán Böszörményi <zboszor@gmail.com>
 
-commit 7f3d90a3519680dfa23e750f80bfdefc0f5eda4a upstream.
+[ Upstream commit c8ea23d5fa59f28302d4e3370c75d9c308e64410 ]
 
-When writing out a stereo control we discard the change notification from
-the first channel, meaning that events are only generated based on changes
-to the second channel. Ensure that we report a change if either channel
-has changed.
+This device is a CF card, or possibly an SSD in CF form factor.
+It supports NCQ and high speed DMA.
 
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Cc: stable@vger.kernel.org
-Link: https://lore.kernel.org/r/20220201155629.120510-3-broonie@kernel.org
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+While it also advertises TRIM support, I/O errors are reported
+when the discard mount option fstrim is used. TRIM also fails
+when disabling NCQ and not just as an NCQ command.
+
+TRIM must be disabled for this device.
+
+Signed-off-by: Zoltán Böszörményi <zboszor@gmail.com>
+Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/soc-ops.c |    7 +++++++
- 1 file changed, 7 insertions(+)
+ drivers/ata/libata-core.c | 1 +
+ 1 file changed, 1 insertion(+)
 
---- a/sound/soc/soc-ops.c
-+++ b/sound/soc/soc-ops.c
-@@ -427,6 +427,7 @@ int snd_soc_put_volsw_sx(struct snd_kcon
- 	int min = mc->min;
- 	unsigned int mask = (1U << (fls(min + max) - 1)) - 1;
- 	int err = 0;
-+	int ret;
- 	unsigned int val, val_mask;
+diff --git a/drivers/ata/libata-core.c b/drivers/ata/libata-core.c
+index a92cbe1aa72a2..35db918a1de56 100644
+--- a/drivers/ata/libata-core.c
++++ b/drivers/ata/libata-core.c
+@@ -4486,6 +4486,7 @@ static const struct ata_blacklist_entry ata_device_blacklist [] = {
  
- 	val = ucontrol->value.integer.value[0];
-@@ -443,6 +444,7 @@ int snd_soc_put_volsw_sx(struct snd_kcon
- 	err = snd_soc_component_update_bits(component, reg, val_mask, val);
- 	if (err < 0)
- 		return err;
-+	ret = err;
+ 	/* devices that don't properly handle TRIM commands */
+ 	{ "SuperSSpeed S238*",		NULL,	ATA_HORKAGE_NOTRIM, },
++	{ "M88V29*",			NULL,	ATA_HORKAGE_NOTRIM, },
  
- 	if (snd_soc_volsw_is_stereo(mc)) {
- 		unsigned int val2;
-@@ -453,6 +455,11 @@ int snd_soc_put_volsw_sx(struct snd_kcon
- 
- 		err = snd_soc_component_update_bits(component, reg2, val_mask,
- 			val2);
-+
-+		/* Don't discard any error code or drop change flag */
-+		if (ret == 0 || err < 0) {
-+			ret = err;
-+		}
- 	}
- 	return err;
- }
+ 	/*
+ 	 * As defined, the DRAT (Deterministic Read After Trim) and RZAT
+-- 
+2.34.1
+
 
 

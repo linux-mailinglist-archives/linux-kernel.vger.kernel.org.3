@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5EEE4BE1B8
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:53:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B84684BE379
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:57:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349779AbiBUJkJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 04:40:09 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36316 "EHLO
+        id S1352439AbiBUKDj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 05:03:39 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350299AbiBUJcb (ORCPT
+        with ESMTP id S1352944AbiBUJ45 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 04:32:31 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85B0828981;
-        Mon, 21 Feb 2022 01:13:51 -0800 (PST)
+        Mon, 21 Feb 2022 04:56:57 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 112B345502;
+        Mon, 21 Feb 2022 01:24:47 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 2F81ACE0E76;
-        Mon, 21 Feb 2022 09:13:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 117D3C339C0;
-        Mon, 21 Feb 2022 09:13:19 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9CC816104F;
+        Mon, 21 Feb 2022 09:24:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81776C340F3;
+        Mon, 21 Feb 2022 09:24:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645434800;
-        bh=k746DZxAA+/aDYMWOEpZoYiOInvN5LqHlegOtLXaSH0=;
+        s=korg; t=1645435486;
+        bh=K6IXxwfYf+2EogGduwm0n8GcWNbITrkY/OPsF0vp9b0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tJCaRwhMShkSNKMJynp6qHUry2f0h7UgBsoZf+wAA5jMeIl19D6ViNe9bV3tXi+Ia
-         vJ6dD7BqwW1j/gisQGDjLNF9+tnmX/pUbJ4uo2MZ8lijgryJFdXLHufyGG//sWY0uR
-         NlumCnLUG+BHx+ozxhKsixGwJtd1FmQ+xgYA6w2I=
+        b=ZI4peuLW5EgrmZWFMCdC4hV14+rHO4euZJoSbQ1PCwxPfD/HSfrj4F2odU8k+N4Vy
+         X7GUjPHRCwRfYWpsTxyUHD2SLLmJgoqQJ2EYqMFitvnIt5bfr0k339tJumSMJWLPBE
+         0a48a96kX9ooKr2VT0kJQMPP+P1rI38yXcbq6nGg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Markus=20Bl=C3=B6chl?= <markus.bloechl@ipetronik.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Sagi Grimberg <sagi@grimberg.me>, Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH 5.15 135/196] block: fix surprise removal for drivers calling blk_set_queue_dying
+        stable@vger.kernel.org, Kim Scarborough <kim@scarborough.kim>,
+        "Paulo Alcantara (SUSE)" <pc@cjr.nz>,
+        Steve French <stfrench@microsoft.com>
+Subject: [PATCH 5.16 148/227] cifs: fix confusing unneeded warning message on smb2.1 and earlier
 Date:   Mon, 21 Feb 2022 09:49:27 +0100
-Message-Id: <20220221084935.438133819@linuxfoundation.org>
+Message-Id: <20220221084939.755611375@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220221084930.872957717@linuxfoundation.org>
-References: <20220221084930.872957717@linuxfoundation.org>
+In-Reply-To: <20220221084934.836145070@linuxfoundation.org>
+References: <20220221084934.836145070@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,163 +55,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christoph Hellwig <hch@lst.de>
+From: Steve French <stfrench@microsoft.com>
 
-commit 7a5428dcb7902700b830e912feee4e845df7c019 upstream.
+commit 53923e0fe2098f90f339510aeaa0e1413ae99a16 upstream.
 
-Various block drivers call blk_set_queue_dying to mark a disk as dead due
-to surprise removal events, but since commit 8e141f9eb803 that doesn't
-work given that the GD_DEAD flag needs to be set to stop I/O.
+When mounting with SMB2.1 or earlier, even with nomultichannel, we
+log the confusing warning message:
+  "CIFS: VFS: multichannel is not supported on this protocol version, use 3.0 or above"
 
-Replace the driver calls to blk_set_queue_dying with a new (and properly
-documented) blk_mark_disk_dead API, and fold blk_set_queue_dying into the
-only remaining caller.
+Fix this so that we don't log this unless they really are trying
+to mount with multichannel.
 
-Fixes: 8e141f9eb803 ("block: drain file system I/O on del_gendisk")
-Reported-by: Markus Blöchl <markus.bloechl@ipetronik.com>
-Signed-off-by: Christoph Hellwig <hch@lst.de>
-Reviewed-by: Sagi Grimberg <sagi@grimberg.me>
-Link: https://lore.kernel.org/r/20220217075231.1140-1-hch@lst.de
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
+BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=215608
+Reported-by: Kim Scarborough <kim@scarborough.kim>
+Cc: stable@vger.kernel.org # 5.11+
+Reviewed-by: Paulo Alcantara (SUSE) <pc@cjr.nz>
+Signed-off-by: Steve French <stfrench@microsoft.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- block/blk-core.c                  |   10 ++--------
- block/genhd.c                     |   14 ++++++++++++++
- drivers/block/mtip32xx/mtip32xx.c |    2 +-
- drivers/block/rbd.c               |    2 +-
- drivers/block/xen-blkfront.c      |    2 +-
- drivers/md/dm.c                   |    2 +-
- drivers/nvme/host/core.c          |    2 +-
- drivers/nvme/host/multipath.c     |    2 +-
- include/linux/blkdev.h            |    3 ++-
- 9 files changed, 24 insertions(+), 15 deletions(-)
+ fs/cifs/sess.c |   11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
 
---- a/block/blk-core.c
-+++ b/block/blk-core.c
-@@ -350,13 +350,6 @@ void blk_queue_start_drain(struct reques
- 	wake_up_all(&q->mq_freeze_wq);
- }
+--- a/fs/cifs/sess.c
++++ b/fs/cifs/sess.c
+@@ -76,11 +76,6 @@ int cifs_try_adding_channels(struct cifs
+ 	struct cifs_server_iface *ifaces = NULL;
+ 	size_t iface_count;
  
--void blk_set_queue_dying(struct request_queue *q)
--{
--	blk_queue_flag_set(QUEUE_FLAG_DYING, q);
--	blk_queue_start_drain(q);
--}
--EXPORT_SYMBOL_GPL(blk_set_queue_dying);
+-	if (ses->server->dialect < SMB30_PROT_ID) {
+-		cifs_dbg(VFS, "multichannel is not supported on this protocol version, use 3.0 or above\n");
+-		return 0;
+-	}
 -
- /**
-  * blk_cleanup_queue - shutdown a request queue
-  * @q: request queue to shutdown
-@@ -374,7 +367,8 @@ void blk_cleanup_queue(struct request_qu
- 	WARN_ON_ONCE(blk_queue_registered(q));
+ 	spin_lock(&ses->chan_lock);
  
- 	/* mark @q DYING, no new request or merges will be allowed afterwards */
--	blk_set_queue_dying(q);
-+	blk_queue_flag_set(QUEUE_FLAG_DYING, q);
-+	blk_queue_start_drain(q);
- 
- 	blk_queue_flag_set(QUEUE_FLAG_NOMERGES, q);
- 	blk_queue_flag_set(QUEUE_FLAG_NOXMERGES, q);
---- a/block/genhd.c
-+++ b/block/genhd.c
-@@ -545,6 +545,20 @@ out_free_ext_minor:
- EXPORT_SYMBOL(device_add_disk);
- 
- /**
-+ * blk_mark_disk_dead - mark a disk as dead
-+ * @disk: disk to mark as dead
-+ *
-+ * Mark as disk as dead (e.g. surprise removed) and don't accept any new I/O
-+ * to this disk.
-+ */
-+void blk_mark_disk_dead(struct gendisk *disk)
-+{
-+	set_bit(GD_DEAD, &disk->state);
-+	blk_queue_start_drain(disk->queue);
-+}
-+EXPORT_SYMBOL_GPL(blk_mark_disk_dead);
-+
-+/**
-  * del_gendisk - remove the gendisk
-  * @disk: the struct gendisk to remove
-  *
---- a/drivers/block/mtip32xx/mtip32xx.c
-+++ b/drivers/block/mtip32xx/mtip32xx.c
-@@ -4112,7 +4112,7 @@ static void mtip_pci_remove(struct pci_d
- 			"Completion workers still active!\n");
+ 	new_chan_count = old_chan_count = ses->chan_count;
+@@ -94,6 +89,12 @@ int cifs_try_adding_channels(struct cifs
+ 		return 0;
  	}
  
--	blk_set_queue_dying(dd->queue);
-+	blk_mark_disk_dead(dd->disk);
- 	set_bit(MTIP_DDF_REMOVE_PENDING_BIT, &dd->dd_flag);
- 
- 	/* Clean up the block layer. */
---- a/drivers/block/rbd.c
-+++ b/drivers/block/rbd.c
-@@ -7182,7 +7182,7 @@ static ssize_t do_rbd_remove(struct bus_
- 		 * IO to complete/fail.
- 		 */
- 		blk_mq_freeze_queue(rbd_dev->disk->queue);
--		blk_set_queue_dying(rbd_dev->disk->queue);
-+		blk_mark_disk_dead(rbd_dev->disk);
- 	}
- 
- 	del_gendisk(rbd_dev->disk);
---- a/drivers/block/xen-blkfront.c
-+++ b/drivers/block/xen-blkfront.c
-@@ -2128,7 +2128,7 @@ static void blkfront_closing(struct blkf
- 
- 	/* No more blkif_request(). */
- 	blk_mq_stop_hw_queues(info->rq);
--	blk_set_queue_dying(info->rq);
-+	blk_mark_disk_dead(info->gd);
- 	set_capacity(info->gd, 0);
- 
- 	for_each_rinfo(info, rinfo, i) {
---- a/drivers/md/dm.c
-+++ b/drivers/md/dm.c
-@@ -2156,7 +2156,7 @@ static void __dm_destroy(struct mapped_d
- 	set_bit(DMF_FREEING, &md->flags);
- 	spin_unlock(&_minor_lock);
- 
--	blk_set_queue_dying(md->queue);
-+	blk_mark_disk_dead(md->disk);
- 
- 	/*
- 	 * Take suspend_lock so that presuspend and postsuspend methods
---- a/drivers/nvme/host/core.c
-+++ b/drivers/nvme/host/core.c
-@@ -131,7 +131,7 @@ static void nvme_set_queue_dying(struct
- 	if (test_and_set_bit(NVME_NS_DEAD, &ns->flags))
- 		return;
- 
--	blk_set_queue_dying(ns->queue);
-+	blk_mark_disk_dead(ns->disk);
- 	blk_mq_unquiesce_queue(ns->queue);
- 
- 	set_capacity_and_notify(ns->disk, 0);
---- a/drivers/nvme/host/multipath.c
-+++ b/drivers/nvme/host/multipath.c
-@@ -792,7 +792,7 @@ void nvme_mpath_remove_disk(struct nvme_
- {
- 	if (!head->disk)
- 		return;
--	blk_set_queue_dying(head->disk->queue);
-+	blk_mark_disk_dead(head->disk);
- 	/* make sure all pending bios are cleaned up */
- 	kblockd_schedule_work(&head->requeue_work);
- 	flush_work(&head->requeue_work);
---- a/include/linux/blkdev.h
-+++ b/include/linux/blkdev.h
-@@ -1184,7 +1184,8 @@ extern void blk_dump_rq_flags(struct req
- 
- bool __must_check blk_get_queue(struct request_queue *);
- extern void blk_put_queue(struct request_queue *);
--extern void blk_set_queue_dying(struct request_queue *);
++	if (ses->server->dialect < SMB30_PROT_ID) {
++		spin_unlock(&ses->chan_lock);
++		cifs_dbg(VFS, "multichannel is not supported on this protocol version, use 3.0 or above\n");
++		return 0;
++	}
 +
-+void blk_mark_disk_dead(struct gendisk *disk);
- 
- #ifdef CONFIG_BLOCK
- /*
+ 	if (!(ses->server->capabilities & SMB2_GLOBAL_CAP_MULTI_CHANNEL)) {
+ 		ses->chan_max = 1;
+ 		spin_unlock(&ses->chan_lock);
 
 

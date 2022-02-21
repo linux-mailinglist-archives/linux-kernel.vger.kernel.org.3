@@ -2,56 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6C464BD3F2
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 03:57:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 349AE4BD3F9
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 03:57:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343896AbiBUCgg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Feb 2022 21:36:36 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48462 "EHLO
+        id S242859AbiBUCij (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Feb 2022 21:38:39 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343889AbiBUCgf (ORCPT
+        with ESMTP id S235152AbiBUCii (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Feb 2022 21:36:35 -0500
-Received: from mail-io1-f54.google.com (mail-io1-f54.google.com [209.85.166.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2600D3DDE0;
-        Sun, 20 Feb 2022 18:36:12 -0800 (PST)
-Received: by mail-io1-f54.google.com with SMTP id r7so8982377iot.3;
-        Sun, 20 Feb 2022 18:36:12 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=FxeQCl1x7bPN2N7fKduzQexfeAZe1Kk7c2rGWjraM2M=;
-        b=vKnQxwU0+VxmSw9UgqnXXmy67eKsY5scUhrpbbtqsCdtT4dRP+MxYhekfIpriQTshC
-         1nm2PjKWr6m0zD/HMv+YamC02/uNkUyKQA2phTNMYRPFErn166bxut6/9kHzAvgNwOjL
-         xzbb27GxpmVv3C6qYeCeEC43SeTYYOB3whsz09/BHkZLKGNL5q/rgPIT0tctSQJVaRfe
-         KST+7ak1id9I58t9S8i17QskVHfr5OIEc3LAO67hVS8FkPO3q524hELgHaYn13/W6Tyd
-         R4wlW1uXKFkaYttTA0zDX1zgQxKKIOord1jX0vtOraXN+uxsS4Rfywokru+s4rNP3pbg
-         hhTw==
-X-Gm-Message-State: AOAM530TsRhPWYhMdkRmKMuUkBwczMYaV2gv36O3PXXZFF3OKhpP+cJW
-        bjzhbTW0aSqazCtL9gqaGozjPJ73Eg==
-X-Google-Smtp-Source: ABdhPJwOKow//TiuesfE0CYp/GWJkr7IS6te0xCDAT81+jaq7aIKH6XqV2hxLRYv99lirxqpAHRZdQ==
-X-Received: by 2002:a05:6638:2722:b0:30d:2b4e:5ff with SMTP id m34-20020a056638272200b0030d2b4e05ffmr13408270jav.261.1645410972080;
-        Sun, 20 Feb 2022 18:36:12 -0800 (PST)
-Received: from robh.at.kernel.org ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id f13sm4569612iov.39.2022.02.20.18.36.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 20 Feb 2022 18:36:11 -0800 (PST)
-Received: (nullmailer pid 2041534 invoked by uid 1000);
-        Mon, 21 Feb 2022 02:36:09 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     chegbeli <ciprian.hegbeli@analog.com>
-Cc:     devicetree@vger.kernel.org, linux-iio@vger.kernel.org,
-        robh+dt@kernel.org, linux-kernel@vger.kernel.org, jic23@kernel.org
-In-Reply-To: <20220217135140.5658-3-ciprian.hegbeli@analog.com>
-References: <20220217135140.5658-1-ciprian.hegbeli@analog.com> <20220217135140.5658-3-ciprian.hegbeli@analog.com>
-Subject: Re: [PATCH 2/3] dt-bindings: iio: add ADE9078
-Date:   Sun, 20 Feb 2022 20:36:09 -0600
-Message-Id: <1645410969.316145.2041533.nullmailer@robh.at.kernel.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        Sun, 20 Feb 2022 21:38:38 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A683E1EED3;
+        Sun, 20 Feb 2022 18:38:16 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 47B0461124;
+        Mon, 21 Feb 2022 02:38:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8081BC340E8;
+        Mon, 21 Feb 2022 02:38:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645411095;
+        bh=dR9SzToMmoFqkyh1Vj1H8HzO4u+iPA3s8xWivFtFm3Y=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=fJodiHhaUOQMMaZWp/ydZMJjun0OLrJEdbTYmfSW7Eso3aerQdP0x8gV5JgJfEXkb
+         5HdccqbBXa0zbVfshLUwE+oxauzEFLqPyi7LFld9rf3Mm43TtQlHGTXqsG3PJ35teT
+         UEZq+9XC+2/2q2bjILMT9ftoNtXKpYffD+mUhXQxK6T++c22eMFbba27B55U5nNt79
+         uGxA5TiknqeHX7ar5/93cYJcXkW2fEs5soxKjT0//ydecr6uZFoAuzBsTdnp93JCN4
+         /8rkfJbyf9zNEdBxNTay06+kkCsb8vGzoITUXy4aNJ+HiRpR0SeMume5ZVwVmhPRrR
+         9rsm/L+ivbxYQ==
+Date:   Sun, 20 Feb 2022 18:38:14 -0800
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        tytso@mit.edu, linux@dominikbrodowski.net
+Subject: Re: [PATCH v2 2/9] random: get rid of secondary crngs
+Message-ID: <YhL7FoLE6w3eMjoy@sol.localdomain>
+References: <20220209011919.493762-1-Jason@zx2c4.com>
+ <20220209011919.493762-3-Jason@zx2c4.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220209011919.493762-3-Jason@zx2c4.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,65 +55,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 17 Feb 2022 15:51:39 +0200, chegbeli wrote:
-> Added device tree bindings for the ADE9078
+On Wed, Feb 09, 2022 at 02:19:12AM +0100, Jason A. Donenfeld wrote:
+> As the comment said, this is indeed a "hack". Since it was introduced,
+> it's been a constant state machine nightmare, with lots of subtle early
+> boot issues and a wildly complex set of machinery to keep everything in
+> sync. Rather than continuing to play whack-a-mole with this approach,
+> this commit simply removes it entirely. This commit is preparation for
+> "random: use simpler fast key erasure flow on per-cpu keys" in this
+> series, which introduces a simpler (and faster) mechanism to accomplish
+> the same thing.
 > 
-> Signed-off-by: chegbeli <ciprian.hegbeli@analog.com>
+> Cc: Theodore Ts'o <tytso@mit.edu>
+> Cc: Dominik Brodowski <linux@dominikbrodowski.net>
+> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 > ---
->  .../bindings/iio/meter/adi,ade9078.yaml       | 153 ++++++++++++++++++
->  include/dt-bindings/iio/meter/adi,ade9078.h   |  21 +++
->  2 files changed, 174 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/iio/meter/adi,ade9078.yaml
->  create mode 100644 include/dt-bindings/iio/meter/adi,ade9078.h
-> 
+>  drivers/char/random.c | 225 ++++++++++--------------------------------
+>  1 file changed, 53 insertions(+), 172 deletions(-)
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+Reviewed-by: Eric Biggers <ebiggers@google.com>
 
-yamllint warnings/errors:
-./Documentation/devicetree/bindings/iio/meter/adi,ade9078.yaml:131:1: [error] syntax error: found character '\t' that cannot start any token (syntax)
-
-dtschema/dtc warnings/errors:
-./Documentation/devicetree/bindings/iio/meter/adi,ade9078.yaml:  while scanning a block scalar
-  in "<unicode string>", line 129, column 5
-found a tab character where an indentation space is expected
-  in "<unicode string>", line 131, column 1
-make[1]: *** Deleting file 'Documentation/devicetree/bindings/iio/meter/adi,ade9078.example.dts'
-Traceback (most recent call last):
-  File "/usr/local/bin/dt-extract-example", line 46, in <module>
-    binding = yaml.load(open(args.yamlfile, encoding='utf-8').read())
-  File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/main.py", line 434, in load
-    return constructor.get_single_data()
-  File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/constructor.py", line 119, in get_single_data
-    node = self.composer.get_single_node()
-  File "_ruamel_yaml.pyx", line 706, in _ruamel_yaml.CParser.get_single_node
-  File "_ruamel_yaml.pyx", line 724, in _ruamel_yaml.CParser._compose_document
-  File "_ruamel_yaml.pyx", line 775, in _ruamel_yaml.CParser._compose_node
-  File "_ruamel_yaml.pyx", line 889, in _ruamel_yaml.CParser._compose_mapping_node
-  File "_ruamel_yaml.pyx", line 773, in _ruamel_yaml.CParser._compose_node
-  File "_ruamel_yaml.pyx", line 848, in _ruamel_yaml.CParser._compose_sequence_node
-  File "_ruamel_yaml.pyx", line 904, in _ruamel_yaml.CParser._parse_next_event
-ruamel.yaml.scanner.ScannerError: while scanning a block scalar
-  in "<unicode string>", line 129, column 5
-found a tab character where an indentation space is expected
-  in "<unicode string>", line 131, column 1
-make[1]: *** [Documentation/devicetree/bindings/Makefile:25: Documentation/devicetree/bindings/iio/meter/adi,ade9078.example.dts] Error 1
-make[1]: *** Waiting for unfinished jobs....
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/iio/meter/adi,ade9078.yaml: ignoring, error parsing file
-make: *** [Makefile:1398: dt_binding_check] Error 2
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/patch/1594257
-
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
-
+- Eric

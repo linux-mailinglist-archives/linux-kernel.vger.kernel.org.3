@@ -2,325 +2,403 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64BEB4BD7EC
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 09:40:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 93FF44BD7BC
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 09:40:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244199AbiBUIZP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 03:25:15 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37958 "EHLO
+        id S244468AbiBUIZ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 03:25:28 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230270AbiBUIZM (ORCPT
+        with ESMTP id S242262AbiBUIZ0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 03:25:12 -0500
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A039F219B
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 00:24:49 -0800 (PST)
-Received: by mail-pj1-x1033.google.com with SMTP id q8-20020a17090a178800b001bc299b8de1so3172723pja.1
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 00:24:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:user-agent:in-reply-to:references
-         :message-id:mime-version:content-transfer-encoding;
-        bh=tq75CxPMCVsoBqoIBKmpG9Xq9izNFXwI9AAm6hA/CT4=;
-        b=g1ox4N0q3/fyf0qYN2sLLiquD2FI9oNIUkA61gPCc0TBPDWM2d4YlEvtpxZivUGyJX
-         Tk+YfgfQWnGh0eZDR2i6adtW8UPiVKl/nvSWNMXGSM7PKN3YHQ35sQSueijw62jNynxx
-         D98b5OFx4GQqGTjcj1wttKuSJLQpmB1K91HJ0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:user-agent:in-reply-to
-         :references:message-id:mime-version:content-transfer-encoding;
-        bh=tq75CxPMCVsoBqoIBKmpG9Xq9izNFXwI9AAm6hA/CT4=;
-        b=htYuioxTHnxvz6wLAbKLmpEmkNpZSPJXdwJQpqS7/MkFqYM+mzVSbHiv3LCC8qy3+q
-         q8rvvxoGDl/TyhrrumPFHb94CdKQ/CHxPMPO4Q31mSYLy44u0+k/8ynUVitb/pmRXZuM
-         +n6ly1kAbspw6EO04nwSur+91u8XCMCwVqZZDytp7wHXJZmPoV3dhw+Iwxc7xmEp05vm
-         Wf2x/0LLeRCeYV5Hc73ekcQxOZd9H9uy8r0n3C1jeaePxlHD8S0B5arSj40g4+E3JK1n
-         ZCle6nAuJAC2DyJmXqpkONd55Yqa/4YJvjz300X+qxqXeRVdGCeVWRYp9CdeE5rBvB/b
-         td+g==
-X-Gm-Message-State: AOAM531YMeJCOTsX2dRo/oK9GhmA2uVS/ytQ8KK/kDhHhAIOqZU/6EfP
-        1Gyiil+g9mD6v6mk2uvqjUuVbw==
-X-Google-Smtp-Source: ABdhPJwv467EEXn83ohP6YsVPY3XLtA8IZfP5D2sF605P/pUBMkLYG+3vJTVZezi7/u0f/h6G/0G0w==
-X-Received: by 2002:a17:903:2d0:b0:14d:8a8d:cb1 with SMTP id s16-20020a17090302d000b0014d8a8d0cb1mr17667986plk.50.1645431889105;
-        Mon, 21 Feb 2022 00:24:49 -0800 (PST)
-Received: from ?IPv6:::1? ([2600:6c55:6300:7238:34b8:edf8:24ec:9845])
-        by smtp.gmail.com with ESMTPSA id ft9sm3370576pjb.4.2022.02.21.00.24.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Feb 2022 00:24:48 -0800 (PST)
-Date:   Mon, 21 Feb 2022 00:24:44 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
-        joao@overdrivepizza.com, hjl.tools@gmail.com, jpoimboe@redhat.com,
-        andrew.cooper3@citrix.com
-CC:     linux-kernel@vger.kernel.org, peterz@infradead.org,
-        ndesaulniers@google.com, samitolvanen@google.com,
-        mark.rutland@arm.com, alyssa.milburn@intel.com
-Subject: Re: [PATCH 14/29] x86/ibt: Add IBT feature, MSR and #CP handling
-User-Agent: K-9 Mail for Android
-In-Reply-To: <20220218171409.395399333@infradead.org>
-References: <20220218164902.008644515@infradead.org> <20220218171409.395399333@infradead.org>
-Message-ID: <0429C271-3C3F-4A1A-8B4E-73A940AB96E9@chromium.org>
+        Mon, 21 Feb 2022 03:25:26 -0500
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2075.outbound.protection.outlook.com [40.107.236.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2FA1219B;
+        Mon, 21 Feb 2022 00:25:01 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=kcUb4351a4Ud51brDMuhbsmnlF/KBnIAVI2jpqiT67Vngzoz75ASuLL6INf3VzvfGOG8horivleZx6W8AV8duXs5qHykWHgkVMUHOyY6hP6o7grY6h9OUtkb2TDNSFhKk9i52BzHy7PCcuhCd4gRPXHPpGCpJV/+Apa4jjHbTV7ULZBnxGB+4UcZinx9reUDSJvzorCPi04qQwOnnl6DyNuY/4pMqCe5z7MMChCAy9Uc5zWTiK6lNdUQy19DFZEAZ1u8IGrGEJAug7PIMICGDqjb3Rh5wwTiSqhrJVcfLX6/BeOa1T84r9x2mcEoSoVnFdsrMahdKn4Srpw/tEzF5A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=5OEVVJ/IdAuoLTgcNxL7S4kTR12vJyAKLaqR1j1/plQ=;
+ b=aDN4K5JDc2QXTeSv/XnPLLo3HfFbVlBs9cEN8yLUNahUGE2btGrO0Z8cU82LknALaXz6gqYjI4zKH400YTgputPha7bgqaGNrhHsbaOw2dM9HY4LoWyhwfE0n8UjF2f72ofLWJAa4r6PWR7NuA5lDWro/A6GvNeqRBEW5ehPwP2IxQJ/P/Y+c/IOycEc1H9dq1+Feu9VPl/pzehRZt2Mr9zihkoSZqwnJk/yOjAtMwPda+jAdyTjWLVmzmTeTRNlytuPZrNQyh5sbixYpxPjjQDydZLbzWNStJ04eVKyTCPdvM1/fLZ2xmG5GFpc/Q4C3Sbg9Pgr+Gxd4H7mzJ60Hg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=5OEVVJ/IdAuoLTgcNxL7S4kTR12vJyAKLaqR1j1/plQ=;
+ b=LdmzQHXB3/hhySCNVR8oy5jQVPpRgY88kd099lAfzqjGXLxVQON8i++8hGV4uQlcHUaQOhm1msrVo4akOynDU6AwJlVdiiB5mHkM6vdx28Qg4OnWypQHKxwWgP/NtT9pq9AslT1MBWJXXYfHCgV5aIYdrBeDdUbZiogvUls23RQ=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
+ by BYAPR12MB4709.namprd12.prod.outlook.com (2603:10b6:a03:98::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4995.26; Mon, 21 Feb
+ 2022 08:24:58 +0000
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::e03f:901a:be6c:b581]) by BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::e03f:901a:be6c:b581%6]) with mapi id 15.20.4995.027; Mon, 21 Feb 2022
+ 08:24:58 +0000
+Message-ID: <25ffdb03-b767-9e64-a636-55df2edc0d4c@amd.com>
+Date:   Mon, 21 Feb 2022 09:24:50 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] drm/amdgpu: check vm bo eviction valuable at last
+Content-Language: en-US
+To:     Qiang Yu <yuq825@gmail.com>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <ckoenig.leichtzumerken@gmail.com>
+Cc:     David Airlie <airlied@linux.ie>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        linaro-mm-sig@lists.linaro.org, Qiang Yu <qiang.yu@amd.com>,
+        amd-gfx@lists.freedesktop.org, Daniel Vetter <daniel@ffwll.ch>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        linux-media@vger.kernel.org
+References: <20220217090440.4468-1-qiang.yu@amd.com>
+ <5d3fdd2c-e74a-49f4-2b28-32c06483236f@amd.com>
+ <CAKGbVbtLTBJPF5eTu4rABUTBa8eqjQvqjo1AEUrzgPgYgCREuA@mail.gmail.com>
+ <dac70c05-e712-d2e3-2267-278380895f1e@amd.com>
+ <CAKGbVbvtLbDiKrX80-dMnipdLkTE+FP=g_mx37e12fuMtA1Y4Q@mail.gmail.com>
+ <ca27a9c6-f390-a938-dd66-ac23f3b44dc4@amd.com>
+ <CAKGbVbv4UFCybS_OFj5UkDgevbrB5qe3pv+0nHv9WdefYhy6Ww@mail.gmail.com>
+ <6711073b-8771-5750-33f7-b72333b411c6@amd.com>
+ <CAKGbVbvR+msXjrsXmDM8QTmsCP03hL5-q5CTJBYu4mm=NQd01A@mail.gmail.com>
+ <a11b7073-6597-8e87-b724-33acab32e791@gmail.com>
+ <CAKGbVbuJ-QdeoMTg=_O=1x5A5tbqZftsjt8aCCoVkAekci0USA@mail.gmail.com>
+ <d830bb82-63ea-2de6-6d10-3a401ac0dcf0@amd.com>
+ <CAKGbVbtorRius+Sq1_3SPUF3JzA00U747noSGhx7eP8Vn1rSDg@mail.gmail.com>
+ <47c3a681-379e-18d4-86da-c48721081911@gmail.com>
+ <CAKGbVbvmxOCZWYvB+ZSL7oHJmbm8vPgM-NJzadrEG1E=2c2Eyg@mail.gmail.com>
+From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+In-Reply-To: <CAKGbVbvmxOCZWYvB+ZSL7oHJmbm8vPgM-NJzadrEG1E=2c2Eyg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: AM6P193CA0051.EURP193.PROD.OUTLOOK.COM
+ (2603:10a6:209:8e::28) To BN8PR12MB3587.namprd12.prod.outlook.com
+ (2603:10b6:408:43::13)
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: f0cad0cb-c090-42f7-7e9e-08d9f513a566
+X-MS-TrafficTypeDiagnostic: BYAPR12MB4709:EE_
+X-Microsoft-Antispam-PRVS: <BYAPR12MB4709DCDF98EFD8D093F9E10E833A9@BYAPR12MB4709.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: E1QNRDcBeZdKyzaalbgy5hH/yE0o6xnI8JeIhwiTqHipE+QX4vp9152u53N5yaLxyegIqBKHoT+OWQXfFjUNzllgtfz7OcJ+0AabZSrq14UR59nAaPbvr0DPD27vW+WJ5vx1iWBM9HZsYxeQfCgw7PPIBV/zMdOxbPk2wwQRCfmBPBBQm5kRcyp9uK60VD1cB3hVwc4CKPl6qg7BGnvf7Vv/QXUNhhy4zjRH3Vv/TummcrbCyvxYFHQduaTrKXaScr32NtYH+t8GIANhJbWcgzZQvMwNAQx8PWwvCJ5mbbIw/eN5Mrjw9SqLAnTKQDm+KFj3S9ie/DR1gLsB2D9/qK2YimxuZrVmIFBxTtERaYIoF2FnE1QrjzWnpOwuBAHmMJ1ccbmvWiDaU6Wq4VZWJYzKwVRbfkZXkqOL/nATnYHcq0TMs3yooRE0bgIf4ums0N8UTXzoTWJ4RIg2bkdZTOxEATrXxZWi3veSVVdfJRNsyiSTI6Q5KKi8X1fRL1dEgRcWod+ZBtddoH/TzkYa89TpGZSuVygwf7icrw6bnHstG4D7GaxX2t89hOaftkgq1inpQ2Lxk9jFC3HuO27z/KumdIeQ3Qjre8hKAddRVeGIOBqlqgoPKYPh5J9sJXYZ7enqGwIl5ErNcgucXbCbxPAXkpiNve01VTiFQZbdl7SMeoko2xJRvAISK6SkK8O6aG8nmGyMkRp5wQ+Y1N3zDJpPDarIgFeWlblYO0figSPexW2NVwMz5/f06vlp9xfe
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(6666004)(6512007)(31696002)(6486002)(508600001)(6506007)(86362001)(66574015)(83380400001)(38100700002)(53546011)(186003)(26005)(2616005)(5660300002)(7416002)(8936002)(30864003)(8676002)(66946007)(66476007)(66556008)(4326008)(36756003)(31686004)(54906003)(2906002)(316002)(110136005)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?dm9IaDRjbys4b3UvNmxYYkkvVmZQbUFERUs1TWNjbFlWdlRXOWprME1sL0lE?=
+ =?utf-8?B?QkhNZ0c2eXJMa1Z1UXN6LzJBakc3cnJtVjVTbXBPSE1Mcjk0Z1lHemo4TmJN?=
+ =?utf-8?B?MjdQeDRPMXBnczBYZE5UbnlHVUllN3RFZHd2bk1PSG1VN2JVVXZWVHNXY042?=
+ =?utf-8?B?T1l5MlNqalo1YkwwaEtFeTRYb2g2b1h4bWU1TFBVZHBOTUptMDBleVNGQVBX?=
+ =?utf-8?B?bzE3RUl3ek41d0c3dHMzU3RwaS9FMWhUNmdjSVFjNlZxT2k4L2MvbDRLazR6?=
+ =?utf-8?B?Q3RvamMxSUFNU2VpU2x6QStJWGxDZWU1NzlKdDdPQk00N2pNNDI5dmRKSDc4?=
+ =?utf-8?B?S1RlSHY3cmFvMUhwVVBxVUJwQTl4V05UQlNOM2dRRGV0NVptUGxwdW5vQU1D?=
+ =?utf-8?B?MW00KzhGU3hFa3lCYmhrWW1ITTlkb2lGQUN4VmlKZTVPOUlHcmRsL2Zyajc3?=
+ =?utf-8?B?RzlFdzlSYmdUM3BLb3RacGhUS013a1pFUkJwNW50SlRrZnBMOUVVWGZmdlB4?=
+ =?utf-8?B?VXdpQzhtS2dwVGNRZWpldmdCeHpTTFkxTlRGY1dmYi9ZOWUzMnlBMms1U0tt?=
+ =?utf-8?B?T1d2UnI3bnAvaGlyaUIwSXczbHhmZU9WaWhob2ZUdGUxY0pXSjcxS0ZIajg2?=
+ =?utf-8?B?NUlBN0Fqc0I5elFpdEo2N2hBanp3RzNqZHVNOUhIZmtIN0VTZG0xSzRiV0NW?=
+ =?utf-8?B?MnRMRnJKckN1YkJNd2JDOFlIYXRZYXhjaTFET2dvenNNM3lPRlpiVzBranJh?=
+ =?utf-8?B?OHpGTU9pWDA1dlpaUWh3OU1ub3cvemtKTTA3bUw0Q3loNnY1dmtFYUNwSUhR?=
+ =?utf-8?B?eVpncFpKankrSEdzcTZPVmluc1NiQXprbnJuYXNPWVV1TGdHeGU5eTFqc21D?=
+ =?utf-8?B?WHozUW9KNU5kTzIwblNWcGpvQnFRb1dkaWhMNjlSNGdneFZBWjJ0dkF6dWxI?=
+ =?utf-8?B?RXVaYTZINU5uVVI0d3lNK1RuUW5nRUt2RVdVSjEwallNdFlDc0Q4R2xYaTBD?=
+ =?utf-8?B?L2w1bi9wZHVIQlpxVmNDeGVJd25xcDBDTjN3d0lLeTQycEhoT0kxdnVTaG11?=
+ =?utf-8?B?ZTVkOXZXY0VoU0YxbFpreDJjeU9WNkZGdllZODRKNXJaTTNJdmVpWFg2YWRz?=
+ =?utf-8?B?MmJqYmxJOEVCdjc2eFZVUzBSQ2kwRGNsS2RyY2pod1VUTHo4YnpmM0N0TDB1?=
+ =?utf-8?B?QUsrTE5RNTV6S213VVBQRzAxNDFMLzJSWmFVdVp4clo2eFdpWlo0Z3dwMGxD?=
+ =?utf-8?B?WDQzVGFKOFU0OG5RS3VEUHRwNjd6RVNoaTBTdExHaGxaYU5hZ0dsWGdpR01V?=
+ =?utf-8?B?OXlZaDZoSlpWRVNteXU2bmVVWHRBU2IrMExHVVR2YzdSWnJ1RkswVHZxWDZn?=
+ =?utf-8?B?TEhMNEVRamhuQmhEaXRaZUdZZGcwbTUwekZQNEd4NkhkYlJQQWU1QmZwaDAr?=
+ =?utf-8?B?YURXOXRjV2d3a2c4Vi8rVGhTYXJzNzVQcnlzTncwSnRJQ0o3cnhtcEZaR2x0?=
+ =?utf-8?B?Mng5MzFSVXhXR1FFSmxzN3hHdzcxbThmRHg4SDZWeGcyYnNmRHNrOGl5WlNw?=
+ =?utf-8?B?NnZGYm9ISlh5QThUWGlsQTBkQ2YvR0V4TFhjKzdnZ2c4YWloSU1QdkdrM094?=
+ =?utf-8?B?UUZtYm5vTnlHQ1RNWlNJaERVN01oSXcvdll5SFJaOFp3UC9hTG83NEJRdXdi?=
+ =?utf-8?B?RjZyNlJZdFN3bTdaWm9UMFVQVjN6WXJERTA4eXBSWEMzNGRheUNTOTFFbGM4?=
+ =?utf-8?B?Tmtia1ZiMWVVN3NxSDR1cndYOHJvTDQ3UWw5QytIMmQ3aEZVRTIwNjBYbEdY?=
+ =?utf-8?B?UUUyNGZsRkE3NkxXRkRLOU41TnQxZ0Ftdnh1bE1PaTdaYnpiTGZ3cjdZOGhw?=
+ =?utf-8?B?cHFPZVBjdWM4dzFGeE05cktZVlRSK005b29HbVBlT3BLUmNWakFHNDZOZklJ?=
+ =?utf-8?B?eFM3VFQwVXBDQWdKSDRVaDVKL0VoTnRPL2FpdlhKZkFOVFhwa09UWVpPUWJu?=
+ =?utf-8?B?N1Rjb3MrWEdKQm55a2JMamJKMnpuOGpWOFRlckdNQUFLUm54VnovdEN4Zmpi?=
+ =?utf-8?B?WEt5ZFhIWkdkcG5nVCt4aWgzWHgra0ZHNFMzTWx1cU9VdzdVbHhBd1hMakxi?=
+ =?utf-8?Q?6ve8=3D?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f0cad0cb-c090-42f7-7e9e-08d9f513a566
+X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Feb 2022 08:24:58.0589
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: I3FeNYtehwlqtVQCeb8WZTmeMR1Pcgxmynx+qu99BYLwe/sQgq73hPjGm4J5M7vR
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR12MB4709
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On February 18, 2022 8:49:16 AM PST, Peter Zijlstra <peterz@infradead=2Eor=
-g> wrote:
->The bits required to make the hardware go=2E=2E Of note is that, provided
->the syscall entry points are covered with ENDBR, #CP doesn't need to
->be an IST because we'll never hit the syscall gap=2E
+Am 21.02.22 um 04:28 schrieb Qiang Yu:
+> On Fri, Feb 18, 2022 at 6:24 PM Christian König
+> <ckoenig.leichtzumerken@gmail.com> wrote:
+>> Am 18.02.22 um 11:16 schrieb Qiang Yu:
+>>> [SNIP]
+>>>>> If amdgpu_vm_ready() use evicting flag, it's still not equivalent to check
+>>>>> vm idle: true -> vm idle, false -> vm may be idle or busy.
+>>>> Yeah, but why should that be relevant?
+>>>>
+>>>> The amdgpu_vm_ready() return if we can do page table updates or not. If
+>>>> the VM is idle or not is only relevant for eviction.
+>>>>
+>>>> In other words any CS or page table update makes the VM busy, but that
+>>>> only affects if the VM can be evicted or not.
+>>>>
+>>> My point is: we can't use amdgpu_vm_ready() to replace vm_is_busy(), so
+>>> currently we update vm even when vm is busy. So why not use:
+> Sorry, should be "vm is idle".
 >
->Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead=2Eorg>
->---
-> arch/x86/include/asm/cpufeatures=2Eh          |    1=20
-> arch/x86/include/asm/idtentry=2Eh             |    5 ++
-> arch/x86/include/asm/msr-index=2Eh            |   20 ++++++++
-> arch/x86/include/asm/traps=2Eh                |    2=20
-> arch/x86/include/uapi/asm/processor-flags=2Eh |    2=20
-> arch/x86/kernel/cpu/common=2Ec                |   23 +++++++++
-> arch/x86/kernel/idt=2Ec                       |    4 +
-> arch/x86/kernel/traps=2Ec                     |   65 +++++++++++++++++++=
-+++++++++
-> 8 files changed, 121 insertions(+), 1 deletion(-)
+>>> if (!amdgpu_vm_ready() || vm_is_busy()) return;
+>>> in amdgpu_gem_va_update_vm(), as you mentioned we prefer to not
+>>> update vm when it's idle.
+>> Because updating the VM while it is busy is perfectly fine, we do it all
+>> the time.
+>>
+> Yeah, as above, my typo.
 >
->--- a/arch/x86/include/asm/cpufeatures=2Eh
->+++ b/arch/x86/include/asm/cpufeatures=2Eh
->@@ -387,6 +387,7 @@
-> #define X86_FEATURE_TSXLDTRK		(18*32+16) /* TSX Suspend Load Address Tra=
-cking */
-> #define X86_FEATURE_PCONFIG		(18*32+18) /* Intel PCONFIG */
-> #define X86_FEATURE_ARCH_LBR		(18*32+19) /* Intel ARCH LBR */
->+#define X86_FEATURE_IBT			(18*32+20) /* Indirect Branch Tracking */
-> #define X86_FEATURE_AMX_BF16		(18*32+22) /* AMX bf16 Support */
-> #define X86_FEATURE_AVX512_FP16		(18*32+23) /* AVX512 FP16 */
-> #define X86_FEATURE_AMX_TILE		(18*32+24) /* AMX tile Support */
->--- a/arch/x86/include/asm/idtentry=2Eh
->+++ b/arch/x86/include/asm/idtentry=2Eh
->@@ -622,6 +622,11 @@ DECLARE_IDTENTRY_DF(X86_TRAP_DF,	exc_dou
-> DECLARE_IDTENTRY_RAW_ERRORCODE(X86_TRAP_DF,	xenpv_exc_double_fault);
-> #endif
->=20
->+/* #CP */
->+#ifdef CONFIG_X86_IBT
->+DECLARE_IDTENTRY_ERRORCODE(X86_TRAP_CP,	exc_control_protection);
->+#endif
->+
-> /* #VC */
-> #ifdef CONFIG_AMD_MEM_ENCRYPT
-> DECLARE_IDTENTRY_VC(X86_TRAP_VC,	exc_vmm_communication);
->--- a/arch/x86/include/asm/msr-index=2Eh
->+++ b/arch/x86/include/asm/msr-index=2Eh
->@@ -360,11 +360,29 @@
-> #define MSR_ATOM_CORE_TURBO_RATIOS	0x0000066c
-> #define MSR_ATOM_CORE_TURBO_VIDS	0x0000066d
->=20
->-
-> #define MSR_CORE_PERF_LIMIT_REASONS	0x00000690
-> #define MSR_GFX_PERF_LIMIT_REASONS	0x000006B0
-> #define MSR_RING_PERF_LIMIT_REASONS	0x000006B1
->=20
->+/* Control-flow Enforcement Technology MSRs */
->+#define MSR_IA32_U_CET			0x000006a0 /* user mode cet */
->+#define MSR_IA32_S_CET			0x000006a2 /* kernel mode cet */
->+#define CET_SHSTK_EN			BIT_ULL(0)
->+#define CET_WRSS_EN			BIT_ULL(1)
->+#define CET_ENDBR_EN			BIT_ULL(2)
->+#define CET_LEG_IW_EN			BIT_ULL(3)
->+#define CET_NO_TRACK_EN			BIT_ULL(4)
->+#define CET_SUPPRESS_DISABLE		BIT_ULL(5)
->+#define CET_RESERVED			(BIT_ULL(6) | BIT_ULL(7) | BIT_ULL(8) | BIT_ULL(9=
-))
->+#define CET_SUPPRESS			BIT_ULL(10)
->+#define CET_WAIT_ENDBR			BIT_ULL(11)
->+
->+#define MSR_IA32_PL0_SSP		0x000006a4 /* ring-0 shadow stack pointer */
->+#define MSR_IA32_PL1_SSP		0x000006a5 /* ring-1 shadow stack pointer */
->+#define MSR_IA32_PL2_SSP		0x000006a6 /* ring-2 shadow stack pointer */
->+#define MSR_IA32_PL3_SSP		0x000006a7 /* ring-3 shadow stack pointer */
->+#define MSR_IA32_INT_SSP_TAB		0x000006a8 /* exception shadow stack table=
- */
->+
-> /* Hardware P state interface */
-> #define MSR_PPERF			0x0000064e
-> #define MSR_PERF_LIMIT_REASONS		0x0000064f
->--- a/arch/x86/include/asm/traps=2Eh
->+++ b/arch/x86/include/asm/traps=2Eh
->@@ -18,6 +18,8 @@ void __init trap_init(void);
-> asmlinkage __visible noinstr struct pt_regs *vc_switch_off_ist(struct pt=
-_regs *eregs);
-> #endif
->=20
->+extern bool ibt_selftest(void);
->+
-> #ifdef CONFIG_X86_F00F_BUG
-> /* For handling the FOOF bug */
-> void handle_invalid_op(struct pt_regs *regs);
->--- a/arch/x86/include/uapi/asm/processor-flags=2Eh
->+++ b/arch/x86/include/uapi/asm/processor-flags=2Eh
->@@ -130,6 +130,8 @@
-> #define X86_CR4_SMAP		_BITUL(X86_CR4_SMAP_BIT)
-> #define X86_CR4_PKE_BIT		22 /* enable Protection Keys support */
-> #define X86_CR4_PKE		_BITUL(X86_CR4_PKE_BIT)
->+#define X86_CR4_CET_BIT		23 /* enable Control-flow Enforcement Technolog=
-y */
->+#define X86_CR4_CET		_BITUL(X86_CR4_CET_BIT)
->=20
-> /*
->  * x86-64 Task Priority Register, CR8
->--- a/arch/x86/kernel/cpu/common=2Ec
->+++ b/arch/x86/kernel/cpu/common=2Ec
->@@ -59,6 +59,7 @@
-> #include <asm/cpu_device_id=2Eh>
-> #include <asm/uv/uv=2Eh>
-> #include <asm/sigframe=2Eh>
->+#include <asm/traps=2Eh>
->=20
-> #include "cpu=2Eh"
->=20
->@@ -592,6 +593,27 @@ static __init int setup_disable_pku(char
-> __setup("nopku", setup_disable_pku);
-> #endif /* CONFIG_X86_64 */
->=20
->+static __always_inline void setup_cet(struct cpuinfo_x86 *c)
->+{
->+	u64 msr;
->+
->+	if (!IS_ENABLED(CONFIG_X86_IBT) ||
->+	    !cpu_feature_enabled(X86_FEATURE_IBT))
->+		return;
->+
->+	cr4_set_bits(X86_CR4_CET);
-
-Please add X86_CR4_CET to cr4_pinned_mask too=2E
-
->+
->+	rdmsrl(MSR_IA32_S_CET, msr);
->+	if (cpu_feature_enabled(X86_FEATURE_IBT))
->+		msr |=3D CET_ENDBR_EN;
->+	wrmsrl(MSR_IA32_S_CET, msr);
->+
->+	if (!ibt_selftest()) {
->+		pr_err("IBT selftest: Failed!\n");
->+		setup_clear_cpu_cap(X86_FEATURE_IBT);
->+	}
->+}
->+
-> /*
->  * Some CPU features depend on higher CPUID levels, which may not always
->  * be available due to CPUID level capping or broken virtualization
->@@ -1709,6 +1731,7 @@ static void identify_cpu(struct cpuinfo_
->=20
-> 	x86_init_rdrand(c);
-> 	setup_pku(c);
->+	setup_cet(c);
->=20
-> 	/*
-> 	 * Clear/Set all flags overridden by options, need do it
->--- a/arch/x86/kernel/idt=2Ec
->+++ b/arch/x86/kernel/idt=2Ec
->@@ -104,6 +104,10 @@ static const __initconst struct idt_data
-> 	ISTG(X86_TRAP_MC,		asm_exc_machine_check, IST_INDEX_MCE),
-> #endif
->=20
->+#ifdef CONFIG_X86_IBT
->+	INTG(X86_TRAP_CP,		asm_exc_control_protection),
->+#endif
->+
-> #ifdef CONFIG_AMD_MEM_ENCRYPT
-> 	ISTG(X86_TRAP_VC,		asm_exc_vmm_communication, IST_INDEX_VC),
-> #endif
->--- a/arch/x86/kernel/traps=2Ec
->+++ b/arch/x86/kernel/traps=2Ec
->@@ -210,6 +210,71 @@ DEFINE_IDTENTRY(exc_overflow)
-> 	do_error_trap(regs, 0, "overflow", X86_TRAP_OF, SIGSEGV, 0, NULL);
-> }
->=20
->+#ifdef CONFIG_X86_IBT
->+
->+static bool ibt_fatal =3D true;
-
-__ro_after_init please=2E :)
-
->+
->+extern unsigned long ibt_selftest_ip; /* defined in asm beow */
->+static volatile bool ibt_selftest_ok =3D false;
->+
->+DEFINE_IDTENTRY_ERRORCODE(exc_control_protection)
->+{
->+	if (!cpu_feature_enabled(X86_FEATURE_IBT)) {
->+		pr_err("Whaaa?!?!\n");
->+		return;
-
-Seems like this case should fail closed and not return?
-
->+	}
->+
->+	if (WARN_ON_ONCE(user_mode(regs) || error_code !=3D 3))
->+		return;
->+
->+	if (unlikely(regs->ip =3D=3D ibt_selftest_ip)) {
->+		ibt_selftest_ok =3D true;
->+		return;
->+	}
->+
->+	pr_err("Missing ENDBR: %pS\n", (void *)instruction_pointer(regs));
->+	BUG_ON(ibt_fatal);
->+}
->+
->+bool ibt_selftest(void)
->+{
->+	ibt_selftest_ok =3D false;
->+
->+	asm (ANNOTATE_NOENDBR
->+	     "1: lea 2f(%%rip), %%rax\n\t"
->+	     ANNOTATE_RETPOLINE_SAFE
->+	     "   jmp *%%rax\n\t"
->+	     "2: nop\n\t"
->+
->+	     /* unsigned ibt_selftest_ip =3D 2b */
->+	     "=2Epushsection =2Edata,\"aw\"\n\t"
->+	     "=2Ealign 8\n\t"
->+	     "=2Etype ibt_selftest_ip, @object\n\t"
->+	     "=2Esize ibt_selftest_ip, 8\n\t"
->+	     "ibt_selftest_ip:\n\t"
->+	     "=2Equad 2b\n\t"
->+	     "=2Epopsection\n\t"
->+
->+	     : : : "rax", "memory");
->+
->+	return ibt_selftest_ok;
->+}
->+
->+static int __init ibt_setup(char *str)
->+{
->+	if (!strcmp(str, "off"))
->+		setup_clear_cpu_cap(X86_FEATURE_IBT);
->+
->+	if (!strcmp(str, "warn"))
->+		ibt_fatal =3D false;
->+
->+	return 1;
->+}
->+
->+__setup("ibt=3D", ibt_setup);
->+
->+#endif /* CONFIG_X86_IBT */
->+
-> #ifdef CONFIG_X86_F00F_BUG
-> void handle_invalid_op(struct pt_regs *regs)
-> #else
+>> We should just not update it when it is already idle and was considered
+>> for eviction.
+> "and", not "or"?
 >
+>> In this situation it makes most of the time sense to keep
+>> it idle and postpone the update till the next command submission.
+>>
+>>>>>>> Then we can keep the evicting flag accurate (after solving your
+>>>>>>> concern for this patch that eviction may fail latter by further delay
+>>>>>>> the flag update after eviction success).
+>>>>>> That won't work. See we need to mark the VM as evicted before we
+>>>>>> actually evict them because otherwise somebody could use the VM in
+>>>>>> parallel and add another fence to it.
+>>>>>>
+>>>>> I see, make this too accurate should cost too much like holding the
+>>>>> eviction_lock when eviction. But just delay it in
+>>>>> amdgpu_ttm_bo_eviction_valuable()
+>>>>> could avoid most false positive case.
+>>>> Partially correct. Another fundamental problem is that we can't hold the
+>>>> eviction lock because that would result in lock inversion and potential
+>>>> deadlock.
+>>>>
+>>>> We could set the flag later on, but as I said before that when we set
+>>>> the evicted flag when the VM is already idle is a desired effect.
+>>>>
+>>> As above, this confuse me as we can explicitly check vm idle when
+>>> user update vm, why bother to embed it in evicting flag implicitly?
+>> Well as I said it's irrelevant for the update if the VM is idle or not.
+>>
+>> To summarize the rules once more:
+>> 1. When VM page tables are used by CS or page tables updates it is
+>> considered busy, e.g. not idle.
+>>
+>> 2. When we want to evict a VM it must be idle. As soon as we considered
+>> this we should set the evicted flag to make sure to keep it idle as much
+>> as possible.
+>>
+>> 3. When we want to update the page tables we just need to check if the
+>> VM is idle or not.
+>>
+> But now we does not check vm idle directly in amdgpu_gem_va_update_vm().
+> If VM bo has not been considered for eviction, it could be either idle or busy.
 >
+> Just want to confirm if the fix should be only change amdgpu_vm_ready()
+> to use evicting flag or besides using evicting flag, also check vm_idle() in
+> amdgpu_gem_va_update_vm().
 
---=20
-Kees Cook
+Only changing the amdgpu_vm_ready() should be enough. It can be that 
+this then bubbles up more issue, but those need to be taken care of 
+separately then.
+
+Regards,
+Christian.
+
+>
+> Regards,
+> Qiang
+>
+>> 4. When a CS happens we don't have another chance and make the VM busy
+>> again. And do all postponed page table updates.
+>>
+> Anyway,
+>
+>> Regards,
+>> Christian.
+>>
+>>> Check vm idle need to hold resv lock. Read your patch for adding
+>>> evicting flag is to update vm without resv lock. But user vm ops in
+>>> amdgpu_gem_va_update_vm() do hold the resv lock, so the difference
+>>> happens when calling amdgpu_vm_bo_update_mapping() from
+>>> svm_range_(un)map_to_gpu(). So embed vm idle in evicting flag
+>>> is for svm_range_(un)map_to_gpu() also do nothing when vm idle?
+>>
+>>
+>>> Regards,
+>>> Qiang
+>>>
+>>>> Regards,
+>>>> Christian.
+>>>>
+>>>>> Regards,
+>>>>> Qiang
+>>>>>
+>>>>>> Regards,
+>>>>>> Christian.
+>>>>>>
+>>>>>>> Regards,
+>>>>>>> Qiang
+>>>>>>>
+>>>>>>>
+>>>>>>>> Regards,
+>>>>>>>> Christian.
+>>>>>>>>
+>>>>>>>>> Regards,
+>>>>>>>>> Qiang
+>>>>>>>>>
+>>>>>>>>>> Regards,
+>>>>>>>>>> Christian.
+>>>>>>>>>>
+>>>>>>>>>>> Regards,
+>>>>>>>>>>> Qiang
+>>>>>>>>>>>
+>>>>>>>>>>>> Regards,
+>>>>>>>>>>>> Christian.
+>>>>>>>>>>>>
+>>>>>>>>>>>>> Regards,
+>>>>>>>>>>>>> Qiang
+>>>>>>>>>>>>>
+>>>>>>>>>>>>>> What we should rather do is to fix amdgpu_vm_ready() to take a look at
+>>>>>>>>>>>>>> the flag instead of the linked list.
+>>>>>>>>>>>>>>
+>>>>>>>>>>>>>> Regards,
+>>>>>>>>>>>>>> Christian.
+>>>>>>>>>>>>>>
+>>>>>>>>>>>>>>> Signed-off-by: Qiang Yu <qiang.yu@amd.com>
+>>>>>>>>>>>>>>> ---
+>>>>>>>>>>>>>>>          drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c | 85 ++++++++++++++-----------
+>>>>>>>>>>>>>>>          1 file changed, 47 insertions(+), 38 deletions(-)
+>>>>>>>>>>>>>>>
+>>>>>>>>>>>>>>> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c
+>>>>>>>>>>>>>>> index 5a32ee66d8c8..88a27911054f 100644
+>>>>>>>>>>>>>>> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c
+>>>>>>>>>>>>>>> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c
+>>>>>>>>>>>>>>> @@ -1306,45 +1306,11 @@ uint64_t amdgpu_ttm_tt_pte_flags(struct amdgpu_device *adev, struct ttm_tt *ttm,
+>>>>>>>>>>>>>>>              return flags;
+>>>>>>>>>>>>>>>          }
+>>>>>>>>>>>>>>>
+>>>>>>>>>>>>>>> -/*
+>>>>>>>>>>>>>>> - * amdgpu_ttm_bo_eviction_valuable - Check to see if we can evict a buffer
+>>>>>>>>>>>>>>> - * object.
+>>>>>>>>>>>>>>> - *
+>>>>>>>>>>>>>>> - * Return true if eviction is sensible. Called by ttm_mem_evict_first() on
+>>>>>>>>>>>>>>> - * behalf of ttm_bo_mem_force_space() which tries to evict buffer objects until
+>>>>>>>>>>>>>>> - * it can find space for a new object and by ttm_bo_force_list_clean() which is
+>>>>>>>>>>>>>>> - * used to clean out a memory space.
+>>>>>>>>>>>>>>> - */
+>>>>>>>>>>>>>>> -static bool amdgpu_ttm_bo_eviction_valuable(struct ttm_buffer_object *bo,
+>>>>>>>>>>>>>>> -                                         const struct ttm_place *place)
+>>>>>>>>>>>>>>> +static bool amdgpu_ttm_mem_eviction_valuable(struct ttm_buffer_object *bo,
+>>>>>>>>>>>>>>> +                                          const struct ttm_place *place)
+>>>>>>>>>>>>>>>          {
+>>>>>>>>>>>>>>>              unsigned long num_pages = bo->resource->num_pages;
+>>>>>>>>>>>>>>>              struct amdgpu_res_cursor cursor;
+>>>>>>>>>>>>>>> -     struct dma_resv_list *flist;
+>>>>>>>>>>>>>>> -     struct dma_fence *f;
+>>>>>>>>>>>>>>> -     int i;
+>>>>>>>>>>>>>>> -
+>>>>>>>>>>>>>>> -     /* Swapout? */
+>>>>>>>>>>>>>>> -     if (bo->resource->mem_type == TTM_PL_SYSTEM)
+>>>>>>>>>>>>>>> -             return true;
+>>>>>>>>>>>>>>> -
+>>>>>>>>>>>>>>> -     if (bo->type == ttm_bo_type_kernel &&
+>>>>>>>>>>>>>>> -         !amdgpu_vm_evictable(ttm_to_amdgpu_bo(bo)))
+>>>>>>>>>>>>>>> -             return false;
+>>>>>>>>>>>>>>> -
+>>>>>>>>>>>>>>> -     /* If bo is a KFD BO, check if the bo belongs to the current process.
+>>>>>>>>>>>>>>> -      * If true, then return false as any KFD process needs all its BOs to
+>>>>>>>>>>>>>>> -      * be resident to run successfully
+>>>>>>>>>>>>>>> -      */
+>>>>>>>>>>>>>>> -     flist = dma_resv_shared_list(bo->base.resv);
+>>>>>>>>>>>>>>> -     if (flist) {
+>>>>>>>>>>>>>>> -             for (i = 0; i < flist->shared_count; ++i) {
+>>>>>>>>>>>>>>> -                     f = rcu_dereference_protected(flist->shared[i],
+>>>>>>>>>>>>>>> -                             dma_resv_held(bo->base.resv));
+>>>>>>>>>>>>>>> -                     if (amdkfd_fence_check_mm(f, current->mm))
+>>>>>>>>>>>>>>> -                             return false;
+>>>>>>>>>>>>>>> -             }
+>>>>>>>>>>>>>>> -     }
+>>>>>>>>>>>>>>>
+>>>>>>>>>>>>>>>              switch (bo->resource->mem_type) {
+>>>>>>>>>>>>>>>              case AMDGPU_PL_PREEMPT:
+>>>>>>>>>>>>>>> @@ -1377,10 +1343,53 @@ static bool amdgpu_ttm_bo_eviction_valuable(struct ttm_buffer_object *bo,
+>>>>>>>>>>>>>>>                      return false;
+>>>>>>>>>>>>>>>
+>>>>>>>>>>>>>>>              default:
+>>>>>>>>>>>>>>> -             break;
+>>>>>>>>>>>>>>> +             return ttm_bo_eviction_valuable(bo, place);
+>>>>>>>>>>>>>>>              }
+>>>>>>>>>>>>>>> +}
+>>>>>>>>>>>>>>>
+>>>>>>>>>>>>>>> -     return ttm_bo_eviction_valuable(bo, place);
+>>>>>>>>>>>>>>> +/*
+>>>>>>>>>>>>>>> + * amdgpu_ttm_bo_eviction_valuable - Check to see if we can evict a buffer
+>>>>>>>>>>>>>>> + * object.
+>>>>>>>>>>>>>>> + *
+>>>>>>>>>>>>>>> + * Return true if eviction is sensible. Called by ttm_mem_evict_first() on
+>>>>>>>>>>>>>>> + * behalf of ttm_bo_mem_force_space() which tries to evict buffer objects until
+>>>>>>>>>>>>>>> + * it can find space for a new object and by ttm_bo_force_list_clean() which is
+>>>>>>>>>>>>>>> + * used to clean out a memory space.
+>>>>>>>>>>>>>>> + */
+>>>>>>>>>>>>>>> +static bool amdgpu_ttm_bo_eviction_valuable(struct ttm_buffer_object *bo,
+>>>>>>>>>>>>>>> +                                         const struct ttm_place *place)
+>>>>>>>>>>>>>>> +{
+>>>>>>>>>>>>>>> +     struct dma_resv_list *flist;
+>>>>>>>>>>>>>>> +     struct dma_fence *f;
+>>>>>>>>>>>>>>> +     int i;
+>>>>>>>>>>>>>>> +
+>>>>>>>>>>>>>>> +     /* Swapout? */
+>>>>>>>>>>>>>>> +     if (bo->resource->mem_type == TTM_PL_SYSTEM)
+>>>>>>>>>>>>>>> +             return true;
+>>>>>>>>>>>>>>> +
+>>>>>>>>>>>>>>> +     /* If bo is a KFD BO, check if the bo belongs to the current process.
+>>>>>>>>>>>>>>> +      * If true, then return false as any KFD process needs all its BOs to
+>>>>>>>>>>>>>>> +      * be resident to run successfully
+>>>>>>>>>>>>>>> +      */
+>>>>>>>>>>>>>>> +     flist = dma_resv_shared_list(bo->base.resv);
+>>>>>>>>>>>>>>> +     if (flist) {
+>>>>>>>>>>>>>>> +             for (i = 0; i < flist->shared_count; ++i) {
+>>>>>>>>>>>>>>> +                     f = rcu_dereference_protected(flist->shared[i],
+>>>>>>>>>>>>>>> +                             dma_resv_held(bo->base.resv));
+>>>>>>>>>>>>>>> +                     if (amdkfd_fence_check_mm(f, current->mm))
+>>>>>>>>>>>>>>> +                             return false;
+>>>>>>>>>>>>>>> +             }
+>>>>>>>>>>>>>>> +     }
+>>>>>>>>>>>>>>> +
+>>>>>>>>>>>>>>> +     /* Check by different mem type. */
+>>>>>>>>>>>>>>> +     if (!amdgpu_ttm_mem_eviction_valuable(bo, place))
+>>>>>>>>>>>>>>> +             return false;
+>>>>>>>>>>>>>>> +
+>>>>>>>>>>>>>>> +     /* VM bo should be checked at last because it will mark VM evicting. */
+>>>>>>>>>>>>>>> +     if (bo->type == ttm_bo_type_kernel)
+>>>>>>>>>>>>>>> +             return amdgpu_vm_evictable(ttm_to_amdgpu_bo(bo));
+>>>>>>>>>>>>>>> +
+>>>>>>>>>>>>>>> +     return true;
+>>>>>>>>>>>>>>>          }
+>>>>>>>>>>>>>>>
+>>>>>>>>>>>>>>>          static void amdgpu_ttm_vram_mm_access(struct amdgpu_device *adev, loff_t pos,
+

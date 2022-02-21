@@ -2,241 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57B3F4BD604
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 07:23:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BCD4B4BD608
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 07:23:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344849AbiBUGD2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 01:03:28 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53454 "EHLO
+        id S1344893AbiBUGIf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 01:08:35 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231797AbiBUGD0 (ORCPT
+        with ESMTP id S1344884AbiBUGIc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 01:03:26 -0500
-Received: from so254-9.mailgun.net (so254-9.mailgun.net [198.61.254.9])
-        by lindbergh.monkeyblade.net (Postfix) with UTF8SMTPS id 2E2F26302
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Feb 2022 22:03:03 -0800 (PST)
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1645423383; h=Message-ID: References: In-Reply-To: Subject:
- Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
- MIME-Version: Sender; bh=+AazQjQeDgQpPnJ/pXKd7WBiIS1jXxFHsSWffVy37C8=;
- b=PTYEMF7nSqPFS/ylxjGjuhcJcrBnbCN+gYp4bEmIqA4WPwBK6YfGkdGG+f5Ujg/EV1xNkN+s
- pTQjd4lxneTgvWLIJuBhv20+r+iqM16TWwzAYuy9iJHeDMnF5hsRCo6FG41aGYX2qEpj8M+W
- YZxa8T8rQ1jlOZLu2ETcauIgnVU=
-X-Mailgun-Sending-Ip: 198.61.254.9
-X-Mailgun-Sid: WyI0MWYwYSIsICJsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n04.prod.us-east-1.postgun.com with SMTP id
- 62132b14403a075b97a4b442 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Mon, 21 Feb 2022 06:03:00
- GMT
-Sender: dikshita=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 643AEC43618; Mon, 21 Feb 2022 06:02:59 +0000 (UTC)
+        Mon, 21 Feb 2022 01:08:32 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB09DB42
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Feb 2022 22:08:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645423689; x=1676959689;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=0wECCR6seht9A+oQ963iUJhb1K61TNr0ped9mHI4Sos=;
+  b=ASPgUyhBI+R7nw5oLiXujIl7D95Bt2AGP7/1mGCzt9LMG5T5uK9zl2FQ
+   NPvuHpvaWoCrDtsHhiPAs92Ols8oDT9DZ5WHGvhZunIQ4hJZOnzGlVInn
+   nB5kx5YyGKFrDckpo/08YxCqwkm3krEhz4UbHiL388aLPeIgIktKmtAj7
+   LSWMdnFNXijApeGuUUjcF8GNpMUIw9IZHq8Vdhupgr0Q/liTdnbAoR0Up
+   slzXeAfl3YzCgg+jjWOyP7tv3PxmHe/yj4Hd7numR+gaKhzuBkO1rGbbN
+   40ZzHa3QHuF1X+cJpBTDq8oIfUOVa8wtgvo53FZbP1yHTpxOrJ/ccrBtg
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10264"; a="251625606"
+X-IronPort-AV: E=Sophos;i="5.88,384,1635231600"; 
+   d="scan'208";a="251625606"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Feb 2022 22:08:09 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,384,1635231600"; 
+   d="scan'208";a="490332648"
+Received: from lkp-server01.sh.intel.com (HELO da3212ac2f54) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 20 Feb 2022 22:08:08 -0800
+Received: from kbuild by da3212ac2f54 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nM1rj-0001Mr-7K; Mon, 21 Feb 2022 06:08:07 +0000
+Date:   Mon, 21 Feb 2022 14:07:35 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Beau Belgrave <beaub@linux.microsoft.com>
+Cc:     kbuild-all@lists.01.org,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org,
+        "Steven Rostedt (Google)" <rostedt@goodmis.org>
+Subject: [ammarfaizi2-block:rostedt/linux-trace/for-next 21/32]
+ kernel/trace/trace_events_user.c:747:16: sparse: sparse: incompatible types
+ in comparison expression (different address spaces):
+Message-ID: <202202211437.jGl4NNlL-lkp@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
-        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: dikshita)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 3151BC4338F;
-        Mon, 21 Feb 2022 06:02:58 +0000 (UTC)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Mon, 21 Feb 2022 11:32:58 +0530
-From:   dikshita@codeaurora.org
-To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Cc:     Dikshita Agarwal <dikshita@qti.qualcomm.com>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, ezequiel@collabora.com,
-        vgarodia@codeaurora.org, stanimir.varbanov@linaro.org,
-        Dikshita Agarwal <quic_dikshita@quicinc.com>
-Subject: Re: [PATCH v1 1/2] media: v4l2-ctrls: Add intra-refresh type control
-In-Reply-To: <20ace4b3-5002-4edb-642b-bbb1952f3591@xs4all.nl>
-References: <1643019119-8309-1-git-send-email-dikshita@qti.qualcomm.com>
- <1643019119-8309-2-git-send-email-dikshita@qti.qualcomm.com>
- <20ace4b3-5002-4edb-642b-bbb1952f3591@xs4all.nl>
-Message-ID: <39d1418cec305e59d798242b34d62e90@codeaurora.org>
-X-Sender: dikshita@codeaurora.org
-User-Agent: Roundcube Webmail/1.3.9
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-02-15 13:51, Hans Verkuil wrote:
-> Hi Dikshita,
-> 
-> Some comments below:
-> 
-> On 1/24/22 11:11, Dikshita Agarwal wrote:
->> From: Dikshita Agarwal <quic_dikshita@quicinc.com>
->> 
->> Add a control to set intra-refresh type.
->> 
->> Signed-off-by: Dikshita Agarwal <quic_dikshita@quicinc.com>
->> ---
->>  .../userspace-api/media/v4l/ext-ctrls-codec.rst    | 23 
->> ++++++++++++++++++++++
->>  drivers/media/v4l2-core/v4l2-ctrls-defs.c          |  9 +++++++++
->>  include/uapi/linux/v4l2-controls.h                 |  5 +++++
->>  3 files changed, 37 insertions(+)
->> 
->> diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst 
->> b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
->> index e141f0e..54b42e1 100644
->> --- a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
->> +++ b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
->> @@ -1180,6 +1180,29 @@ enum v4l2_mpeg_video_h264_entropy_mode -
->>      is set to non zero value.
->>      Applicable to H264, H263 and MPEG4 encoder.
->> 
->> +``V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_TYPE (enum)``
->> +
->> +enum v4l2_mpeg_video_intra_refresh_type -
->> +    Sets the type of intra refresh. The period to refresh
->> +    the whole frame is specified by 
->> V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD.
->> +    Note if the client sets this control to either 
->> ``V4L2_MPEG_VIDEO_INTRA_REFRESH_RANDOM``
->> +    or ``V4L2_MPEG_VIDEO_INTRA_REFRESH_CYCLIC`` the 
->> ``V4L2_CID_MPEG_VIDEO_CYCLIC_INTRA_REFRESH_MB``
->> +    control shall be ignored.
-> 
-> Since this control has only two possible values, that would mean that,
-> if this control
-> is present, then REFRESH_MB is always ignored.
-> 
-> It seems to me that you need a third option here that specifically
-> selects the REFRESH_MB
-> method.
-> 
-> Also, this needs to be documented as well in REFRESH_MB (i.e. it is
-> ignored if this TYPE
-> control is present and is set to something other than REFRESH_MB).
-> 
+tree:   https://github.com/ammarfaizi2/linux-block rostedt/linux-trace/for-next
+head:   864ea0e10cc90416a01b46f0d47a6f26dc020820
+commit: 7f5a08c79df35e68f1a43033450c5050f12bc155 [21/32] user_events: Add minimal support for trace_event into ftrace
+config: x86_64-randconfig-s032-20220221 (https://download.01.org/0day-ci/archive/20220221/202202211437.jGl4NNlL-lkp@intel.com/config)
+compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
+reproduce:
+        # apt-get install sparse
+        # sparse version: v0.6.4-dirty
+        # https://github.com/ammarfaizi2/linux-block/commit/7f5a08c79df35e68f1a43033450c5050f12bc155
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block rostedt/linux-trace/for-next
+        git checkout 7f5a08c79df35e68f1a43033450c5050f12bc155
+        # save the config file to linux build tree
+        mkdir build_dir
+        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=x86_64 SHELL=/bin/bash kernel/trace/
 
-Hi Hans,
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-I don't think we need to add that as the third option in this control.
 
-So, there are two ways to set intra refresh to driver, it can be either 
-MB based or Frame-based.
-Currently, we have two v4l2 controls in place
-1. V4L2_CID_MPEG_VIDEO_CYCLIC_INTRA_REFRESH_MB -> this is MB based and 
-only applicable for cyclic
-2. V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD -> this is frame based and 
-has no type associated to it
-    and it is up to the driver to decide the type i.e Random or Cyclic.
+sparse warnings: (new ones prefixed by >>)
+>> kernel/trace/trace_events_user.c:747:16: sparse: sparse: incompatible types in comparison expression (different address spaces):
+>> kernel/trace/trace_events_user.c:747:16: sparse:    void [noderef] __rcu *
+>> kernel/trace/trace_events_user.c:747:16: sparse:    void *
+>> kernel/trace/trace_events_user.c:811:13: sparse: sparse: cast removes address space '__user' of expression
+>> kernel/trace/trace_events_user.c:811:13: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void [noderef] __user *buf @@     got char * @@
+   kernel/trace/trace_events_user.c:811:13: sparse:     expected void [noderef] __user *buf
+   kernel/trace/trace_events_user.c:811:13: sparse:     got char *
+   kernel/trace/trace_events_user.c:827:16: sparse: sparse: incompatible types in comparison expression (different address spaces):
+   kernel/trace/trace_events_user.c:827:16: sparse:    void [noderef] __rcu *
+   kernel/trace/trace_events_user.c:827:16: sparse:    void *
+   kernel/trace/trace_events_user.c:854:9: sparse: sparse: incompatible types in comparison expression (different address spaces):
+   kernel/trace/trace_events_user.c:854:9: sparse:    void [noderef] __rcu *
+   kernel/trace/trace_events_user.c:854:9: sparse:    void *
 
-with this new control V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_TYPE, we are 
-introducing
-a way for the client to set the type of intra refresh, either cyclic or 
-random.
+vim +747 kernel/trace/trace_events_user.c
 
-Thanks,
-Dikshita
+   730	
+   731	/*
+   732	 * Validates the user payload and writes via iterator.
+   733	 */
+   734	static ssize_t user_events_write_core(struct file *file, struct iov_iter *i)
+   735	{
+   736		struct user_event_refs *refs;
+   737		struct user_event *user = NULL;
+   738		struct tracepoint *tp;
+   739		ssize_t ret = i->count;
+   740		int idx;
+   741	
+   742		if (unlikely(copy_from_iter(&idx, sizeof(idx), i) != sizeof(idx)))
+   743			return -EFAULT;
+   744	
+   745		rcu_read_lock_sched();
+   746	
+ > 747		refs = rcu_dereference_sched(file->private_data);
+   748	
+   749		/*
+   750		 * The refs->events array is protected by RCU, and new items may be
+   751		 * added. But the user retrieved from indexing into the events array
+   752		 * shall be immutable while the file is opened.
+   753		 */
+   754		if (likely(refs && idx < refs->count))
+   755			user = refs->events[idx];
+   756	
+   757		rcu_read_unlock_sched();
+   758	
+   759		if (unlikely(user == NULL))
+   760			return -ENOENT;
+   761	
+   762		tp = &user->tracepoint;
+   763	
+   764		/*
+   765		 * It's possible key.enabled disables after this check, however
+   766		 * we don't mind if a few events are included in this condition.
+   767		 */
+   768		if (likely(atomic_read(&tp->key.enabled) > 0)) {
+   769			struct tracepoint_func *probe_func_ptr;
+   770			user_event_func_t probe_func;
+   771			void *tpdata;
+   772			void *kdata;
+   773			u32 datalen;
+   774	
+   775			kdata = kmalloc(i->count, GFP_KERNEL);
+   776	
+   777			if (unlikely(!kdata))
+   778				return -ENOMEM;
+   779	
+   780			datalen = copy_from_iter(kdata, i->count, i);
+   781	
+   782			rcu_read_lock_sched();
+   783	
+   784			probe_func_ptr = rcu_dereference_sched(tp->funcs);
+   785	
+   786			if (probe_func_ptr) {
+   787				do {
+   788					probe_func = probe_func_ptr->func;
+   789					tpdata = probe_func_ptr->data;
+   790					probe_func(user, kdata, datalen, tpdata);
+   791				} while ((++probe_func_ptr)->func);
+   792			}
+   793	
+   794			rcu_read_unlock_sched();
+   795	
+   796			kfree(kdata);
+   797		}
+   798	
+   799		return ret;
+   800	}
+   801	
+   802	static ssize_t user_events_write(struct file *file, const char __user *ubuf,
+   803					 size_t count, loff_t *ppos)
+   804	{
+   805		struct iovec iov;
+   806		struct iov_iter i;
+   807	
+   808		if (unlikely(*ppos != 0))
+   809			return -EFAULT;
+   810	
+ > 811		if (unlikely(import_single_range(READ, (char *)ubuf, count, &iov, &i)))
+   812			return -EFAULT;
+   813	
+   814		return user_events_write_core(file, &i);
+   815	}
+   816	
 
->> +    Applicable to H264, H263 and MPEG4 encoder. Possible values are:
->> +
->> +.. tabularcolumns:: |p{9.6cm}|p{7.9cm}|
->> +
->> +.. flat-table::
->> +    :header-rows:  0
->> +    :stub-columns: 0
->> +
->> +    * - ``V4L2_MPEG_VIDEO_INTRA_REFRESH_RANDOM``
-> 
-> I think you should add _TYPE after REFRESH in these names to clearly 
-> specify
-> that this is setting the refresh *type*.
-> 
->> +      - The whole frame is completely refreshed randomly
->> +      after the specified period.
->> +    * - ``V4L2_MPEG_VIDEO_INTRA_REFRESH_CYCLIC``
->> +      - The whole frame MBs are completely refreshed in cyclic order
->> +      after the specified period.
->> +
->>  ``V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD (integer)``
->>      Intra macroblock refresh period. This sets the period to refresh
->>      the whole frame. In other words, this defines the number of 
->> frames
->> diff --git a/drivers/media/v4l2-core/v4l2-ctrls-defs.c 
->> b/drivers/media/v4l2-core/v4l2-ctrls-defs.c
->> index 54ca4e6..f13f587 100644
->> --- a/drivers/media/v4l2-core/v4l2-ctrls-defs.c
->> +++ b/drivers/media/v4l2-core/v4l2-ctrls-defs.c
->> @@ -572,6 +572,11 @@ const char * const *v4l2_ctrl_get_menu(u32 id)
->>  		"VBV/CPB Limit",
->>  		NULL,
->>  	};
->> +	static const char * const intra_refresh_type[] = {
->> +		"Random",
->> +		"Cyclic",
->> +		NULL,
->> +	};
->> 
->>  	switch (id) {
->>  	case V4L2_CID_MPEG_AUDIO_SAMPLING_FREQ:
->> @@ -705,6 +710,8 @@ const char * const *v4l2_ctrl_get_menu(u32 id)
->>  		return hevc_start_code;
->>  	case V4L2_CID_CAMERA_ORIENTATION:
->>  		return camera_orientation;
->> +	case V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_TYPE:
->> +		return intra_refresh_type;
->>  	default:
->>  		return NULL;
->>  	}
->> @@ -834,6 +841,7 @@ const char *v4l2_ctrl_get_name(u32 id)
->>  	case V4L2_CID_MPEG_VIDEO_DECODER_SLICE_INTERFACE:	return "Decoder 
->> Slice Interface";
->>  	case V4L2_CID_MPEG_VIDEO_DECODER_MPEG4_DEBLOCK_FILTER:	return "MPEG4 
->> Loop Filter Enable";
->>  	case V4L2_CID_MPEG_VIDEO_CYCLIC_INTRA_REFRESH_MB:	return "Number of 
->> Intra Refresh MBs";
->> +	case V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_TYPE:		return "Intra Refresh 
->> Type";
->>  	case V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD:		return "Intra 
->> Refresh Period";
->>  	case V4L2_CID_MPEG_VIDEO_FRAME_RC_ENABLE:		return "Frame Level Rate 
->> Control Enable";
->>  	case V4L2_CID_MPEG_VIDEO_MB_RC_ENABLE:			return "H264 MB Level Rate 
->> Control";
->> @@ -1360,6 +1368,7 @@ void v4l2_ctrl_fill(u32 id, const char **name, 
->> enum v4l2_ctrl_type *type,
->>  	case V4L2_CID_STATELESS_H264_DECODE_MODE:
->>  	case V4L2_CID_STATELESS_H264_START_CODE:
->>  	case V4L2_CID_CAMERA_ORIENTATION:
->> +	case V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_TYPE:
->>  		*type = V4L2_CTRL_TYPE_MENU;
->>  		break;
->>  	case V4L2_CID_LINK_FREQ:
->> diff --git a/include/uapi/linux/v4l2-controls.h 
->> b/include/uapi/linux/v4l2-controls.h
->> index c8e0f84..9650b71 100644
->> --- a/include/uapi/linux/v4l2-controls.h
->> +++ b/include/uapi/linux/v4l2-controls.h
->> @@ -443,6 +443,11 @@ enum v4l2_mpeg_video_multi_slice_mode {
->>  #define V4L2_CID_MPEG_VIDEO_USE_LTR_FRAMES		(V4L2_CID_CODEC_BASE+234)
->>  #define 
->> V4L2_CID_MPEG_VIDEO_DEC_CONCEAL_COLOR		(V4L2_CID_CODEC_BASE+235)
->>  #define 
->> V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_PERIOD	(V4L2_CID_CODEC_BASE+236)
->> +#define 
->> V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_TYPE		(V4L2_CID_CODEC_BASE+237)
->> +enum v4l2_mpeg_video_intra_refresh_type {
->> +	V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_RANDOM	= 0,
->> +	V4L2_CID_MPEG_VIDEO_INTRA_REFRESH_CYCLIC	= 1,
->> +};
->> 
->>  /* CIDs for the MPEG-2 Part 2 (H.262) codec */
->>  #define V4L2_CID_MPEG_VIDEO_MPEG2_LEVEL			(V4L2_CID_CODEC_BASE+270)
-> 
-> Regards,
-> 
-> 	Hans
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

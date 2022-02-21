@@ -2,359 +2,594 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79E2D4BD81A
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 09:40:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 78E354BD79D
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 09:40:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234157AbiBUIM4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 03:12:56 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46836 "EHLO
+        id S229885AbiBUIO6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 03:14:58 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237124AbiBUIMq (ORCPT
+        with ESMTP id S229470AbiBUIOy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 03:12:46 -0500
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2060.outbound.protection.outlook.com [40.107.220.60])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB6A21AF21;
-        Mon, 21 Feb 2022 00:12:17 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=jbXmgPXkibmT5xErNwJ77ppdQLpt7QBNy4st9wyE7eVt1/6slxdO0+HTEjWWZaO2fb7JchhQRaQCmHRlMn68rTVbC8JB9i8Td0BrVKiGUjm6pdhIo+2qufO5YaPm+puJJPupQ95TFQ8Dh2aXshwDaDLUFg5dYN7CwVu0zZURQYZaL5AJfA8z2Sz6CXaUIKFP2S6Sswwh/3rQHcyeDaV52vyOPWOfQD7oQmi5ozpCdq4YbSg5xSNubUI06wNYS3FUNw2liXVdWBKwEVNZhOEV6PlgUhdZev1HJcDtFWgAoNWA0bO/qm79Buq/s8S6ckrG6BcLmwpdRVRc6BQlf387vQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=eX4aYD6IcJ++gr7bZLH8boIjwE4SGYoYmEkCIPJ/GO8=;
- b=K4fLcytoeaPPEmeT/vMxshKkHP6x+Rmj+y1cZZt5xNNakQ1olnE9dlVRSxkEe7BlMWFFqQUvz9bYL54/WC5iKS4+6li/lDBNJxJ1FWywRzXWntdu+LqE7+Fvf4bo7UqmCl1Y5wmQPMdhuHzBOHgRvKs0y/p9kGitPKYfe/Sb3L05XATt803pscmnYYRn36g76AdHMfj4W8hssyNvVUGnqvsLG/PxQc5hXVzIPZQAHCJcVCgG6g2+Mb65A8otQ3me2QBUZB669CCddn+Np1cvuSfsbVcplN3EOraww+lV/fwCu8zWz6I58vGcYyX8EIxp7wTJKHVgCq8VlVR/ZNQqjQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=eX4aYD6IcJ++gr7bZLH8boIjwE4SGYoYmEkCIPJ/GO8=;
- b=B+gGKbaE0x5hssytK7X64a512rMu9Do311QrHoxY9biepkbR4Btt5JvRjCqlJy9v7KRGwGeTait9befvaL7J77VsovABksxq/afTKOHvZpxEUI3QhEAjTT7PpzbMxAiXy5YMVCWo7jSQim4TcuUiZIOwUtlwGeKf2LGYUm+X0gpktwJvCYKYMdR71BZPEcF2XdZQ3DNj/jnY/TBb2UW5+pAnWOntHPMqyF52MJS9wjwgmEZk7+1CeE/I1u2TzMNLj+9hH0t0EHBwmO0LF//Qwop/zftWIbOHfyrjq/J1HJQ+VjZGMKl0GQtFuPqPQ8+5A1wt8uHe+cLjxo6XfWU7KA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from BL1PR12MB5304.namprd12.prod.outlook.com (2603:10b6:208:314::13)
- by BN7PR12MB2804.namprd12.prod.outlook.com (2603:10b6:408:2f::30) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4995.24; Mon, 21 Feb
- 2022 08:12:15 +0000
-Received: from BL1PR12MB5304.namprd12.prod.outlook.com
- ([fe80::c1b2:224f:101a:a588]) by BL1PR12MB5304.namprd12.prod.outlook.com
- ([fe80::c1b2:224f:101a:a588%8]) with mapi id 15.20.4995.027; Mon, 21 Feb 2022
- 08:12:15 +0000
-Message-ID: <fb52e3da-4808-ade5-7872-0432e5983c9b@nvidia.com>
-Date:   Mon, 21 Feb 2022 13:42:03 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [RFC PATCH v2 4/5] vfio/pci: Invalidate mmaps and block the
- access in D3hot power state
-Content-Language: en-US
-To:     Alex Williamson <alex.williamson@redhat.com>
-Cc:     kvm@vger.kernel.org, Cornelia Huck <cohuck@redhat.com>,
-        Max Gurtovoy <mgurtovoy@nvidia.com>,
-        Yishai Hadas <yishaih@nvidia.com>,
-        Zhen Lei <thunder.leizhen@huawei.com>,
-        Jason Gunthorpe <jgg@nvidia.com>, linux-kernel@vger.kernel.org
-References: <20220124181726.19174-1-abhsahu@nvidia.com>
- <20220124181726.19174-5-abhsahu@nvidia.com>
- <20220217161420.7232eab6.alex.williamson@redhat.com>
-X-Nvconfidentiality: public
-From:   Abhishek Sahu <abhsahu@nvidia.com>
-In-Reply-To: <20220217161420.7232eab6.alex.williamson@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: MA1PR0101CA0034.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:a00:22::20) To BL1PR12MB5304.namprd12.prod.outlook.com
- (2603:10b6:208:314::13)
+        Mon, 21 Feb 2022 03:14:54 -0500
+Received: from mail-il1-x134.google.com (mail-il1-x134.google.com [IPv6:2607:f8b0:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED6776326
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 00:14:30 -0800 (PST)
+Received: by mail-il1-x134.google.com with SMTP id h11so9431470ilq.9
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 00:14:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=mBCbklRXl8aQrC/7f1lBhEpFWD3ax2DlnMQGsoCri8s=;
+        b=bzVUCVUWAOAEpz/2BB00qWRz3tXIRWY81GtLfVC2mUVIGiijQeZBzMspK752S1/m/b
+         pwwm2hjC7usNUz5fP9vzczv5U+Y7u8zY+JueRNynxeMHJN+1LZmZhOZXTqIfwNnaKJS8
+         Sm1C5EisE2J3kKJ4yQjVegWf5OWHXtw2eYSCYLICPzCRELSCup9hBT0qPqSkvSuzBKr/
+         +b3+lLwGXg+dRHco55AtClujruexCSRI1OVnMY8Zz3OwwT4mWzsPaLz99v1+lE0Z9oAv
+         1rpXXVOh9L62ZiV8vjl1JWEdzi+UnjeZWtybzcGLXXXenuJy6hfCEIoMNLgLvDs5MdwA
+         DmoA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=mBCbklRXl8aQrC/7f1lBhEpFWD3ax2DlnMQGsoCri8s=;
+        b=XM7kqB8X2BrmoGKIUCTzriuttJdQ0C4/ghbT0H63vjmz+DrUZd0gLEdoMzCMUeBs/J
+         DYJBhb9bOUjY1Seub73wvif3nB+oS1zcnA93yRcq9CGMAot8LQKK3+L3jlp1d6JpZOpd
+         nSNw8v4GzN9MI1slsICf0Pw23ftA3uA6Fa/Gm6ji00Iy/UX9S4qlOJdad2xmSmwH/R/O
+         wyj+k3Y7VIAFEhGtsY7Mca9YgS8/i6TA9SiKBHZwZj4yAIk0f3ijzv4qXMy62RD4he1s
+         gx2DWZHrphuyRlGu7jQtSpKMCupVW/R/UrMS1cDzv9aRARQZXt24cYAWkOTuJd46QMJT
+         PTnw==
+X-Gm-Message-State: AOAM530n5xWnLAhegz4ZrJ8EHGgt9vsI4eEFpt/0jXImB21iUzDo1PNj
+        YCUGjtR150z8YXgbB9c3Dyh9og==
+X-Google-Smtp-Source: ABdhPJzzPgRnoCjKrbRbbJxnUtnIm+2pG1E4y2HQviJacl7wrNRo8181cUlAXnh9NSMMASXYiS9zyA==
+X-Received: by 2002:a92:cb44:0:b0:2be:33b0:2a52 with SMTP id f4-20020a92cb44000000b002be33b02a52mr14402316ilq.142.1645431269878;
+        Mon, 21 Feb 2022 00:14:29 -0800 (PST)
+Received: from google.com ([2620:15c:183:200:6c91:3ffb:ccf3:cca3])
+        by smtp.gmail.com with ESMTPSA id x15sm2912261ilo.33.2022.02.21.00.14.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 21 Feb 2022 00:14:29 -0800 (PST)
+Date:   Mon, 21 Feb 2022 01:14:24 -0700
+From:   Yu Zhao <yuzhao@google.com>
+To:     Johannes Weiner <hannes@cmpxchg.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Mel Gorman <mgorman@suse.de>, Michal Hocko <mhocko@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
+        Barry Song <21cnbao@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
+        Jesse Barnes <jsbarnes@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Michael Larabel <Michael@michaellarabel.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        Rik van Riel <riel@surriel.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Will Deacon <will@kernel.org>,
+        Ying Huang <ying.huang@intel.com>,
+        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        page-reclaim@google.com, x86@kernel.org,
+        Brian Geffon <bgeffon@google.com>,
+        Jan Alexander Steffens <heftig@archlinux.org>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
+        Steven Barrett <steven@liquorix.net>,
+        Suleiman Souhlal <suleiman@google.com>,
+        Daniel Byrne <djbyrne@mtu.edu>,
+        Donald Carr <d@chaos-reins.com>,
+        Holger =?iso-8859-1?Q?Hoffst=E4tte?= 
+        <holger@applied-asynchrony.com>,
+        Konstantin Kharlamov <Hi-Angel@yandex.ru>,
+        Shuang Zhai <szhai2@cs.rochester.edu>,
+        Sofia Trinh <sofia.trinh@edi.works>
+Subject: Re: [PATCH v7 04/12] mm: multigenerational LRU: groundwork
+Message-ID: <YhNJ4LVWpmZgLh4I@google.com>
+References: <20220208081902.3550911-1-yuzhao@google.com>
+ <20220208081902.3550911-5-yuzhao@google.com>
+ <YgV4lZXc6+jhUdsR@cmpxchg.org>
+ <Ygt1qaQM5YobEZK9@google.com>
+ <Ygwg9NXzQ+6U3RON@cmpxchg.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 06cc63ea-0c5c-4202-3ae3-08d9f511de94
-X-MS-TrafficTypeDiagnostic: BN7PR12MB2804:EE_
-X-Microsoft-Antispam-PRVS: <BN7PR12MB2804B281F2BA33BAC6C765FECC3A9@BN7PR12MB2804.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: cL77Cs+qa0amfp4BodDNpqOWLVyTN7y8IwCbyoIwEc/zmhpDRb+Og3dTWy54adHz8JsmaJueRyPxpPhr7uzh5wpO/0svmSXReDyaeC+6albULJJHAraL+9Q6M6ymNLlCF/rf+is4nBdVskNUKfvWdjm+Cj9mnT5E3s5ufnWipaoIQQZXdliBSuJY+bqUP8QXSUsgA2JrdWodoTBQ1cYCrA/6muH5RkthL3qMps/Mp7KqaOFG3FYSwZnNbxX/KcBoElXSqVDfmIw9EpiT3un/rwVc4G+bpO8IXuVmLylJGCKpEeIiSchibag3DhNWlHLFiV0/2KnoutJha/GNQ2C0qtiHJWm810Q/5Sq+DtVL0tvJgvhAZS2UKxqdEr/fvrJSmxdBmM2sN0OI1PH3cTwjcDMHsoXOkB28LH8BrVrTCU7tciqpqpcLhqZbj+bdf76B6tU6z2kUxd+C6czODjgpruOU/mNgKj9e+lW27qhEp6dhNlEd++/iQSVkBRDO15iqqlCNJaDWWeP2J493KVR7yqtjrrKN69DIC2ZQzzZ0dxmm/a3kiqXQy2IMEgUCPSU4PfmVsA5An67ox5x7tftFT75BqWr7UwUPccyvoADoz4H+I/jGfH33H8yEfKk4F6ft2E+hgsPB35+pOyYPsaIEQHbwVg5GxvEvpqc52oEoZRK2fpjcOgCUcyljRnRmQXWlkyH4sdmbOvw1dkKnL+a4h/cG+R2vaKoGbzkGlwFmKQPONcJDlD2eZzv9iqkqvQwDiADhWcutK9HUsSBi+HHL4g==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR12MB5304.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(55236004)(186003)(26005)(6506007)(53546011)(2616005)(66556008)(6512007)(66946007)(8676002)(6916009)(54906003)(66476007)(6486002)(6666004)(31696002)(86362001)(508600001)(316002)(83380400001)(4326008)(38100700002)(5660300002)(36756003)(8936002)(2906002)(31686004)(32563001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?NEh4TTVwcEtiTkVwWFhiM29pbTB2cmtxT1JJTjIzQk9HYk5PZXdnMWgxbkZM?=
- =?utf-8?B?dXRCMHdQYjFva0tCR0tSQ21Jekt2bWQwSnM0V3Q5TnlwRDcyOUlsaWVsbGQz?=
- =?utf-8?B?ZmpjUm9IN2U0cWZkQWs1Q0RwQUM0ekNjeDZtek04bVl5TnQ0NVlXRUVsTVFj?=
- =?utf-8?B?RU94R0dkb3VwbjBoaVkxVEZwRmUwaEVqN1VpS3EvUEluV1NpeXRqWUtYbGNO?=
- =?utf-8?B?QlBMNjI0eFJvK3lYNzlZMWEwQndvbHF4aVpHbDVndVRldVBDenduVE5ieXZm?=
- =?utf-8?B?Yi8zZldvY3lpS1RFekwxZ3BXeDBHdFo2dmNDQTVyRmpPc2dtcys1Nmp3eS90?=
- =?utf-8?B?em42WFJwQ1dXNitNa3RKcmtySDdCeHVabnZMTTJBbkl5dDZjcG5FNjJiSGdm?=
- =?utf-8?B?dklrZ09uZWFhNXZKeDQ0VlIyd09ydGphbGw2WlNBRGRmTk4xKzlzWVNPN0E0?=
- =?utf-8?B?SGlpbmcyam1jY3V0U0t2Y01iQ0ZtdTF3QXIrN2pnRDlMK2FDd3lsSkFMeG52?=
- =?utf-8?B?VDJIODNrM2FZZTc5bFkyNE9XdjJHUndFc24wYUJFdVhPZGpmMDlqQ0piOFZ4?=
- =?utf-8?B?aTNydDUvL0kvK2QvNkxmenhGR3I3MWtRNTRsS1BKR3MwU29aU2FraG5nemZZ?=
- =?utf-8?B?TlkvbjJVRGNCd3g3UVk4Q2lpSE1sTk1Gd3hCR3h2RndveGwreEZTcjBmVEE4?=
- =?utf-8?B?bDBGSzMvWDZSWkdPemcvVlFreDRma3dEYXdEeExRelZ2b2ZGUU1ES3o2UlFl?=
- =?utf-8?B?VlpucktvMGR6Zk05TnZyQVlCS0FwMU9jemVrb1RsKzNwdTl4cUUxbVBwaUxZ?=
- =?utf-8?B?M2V3UC9XR2EycFVsNFVsYjhaSkRaMFNmWi9QVGpmUUtFb2NDSnRnaXNiR2Z1?=
- =?utf-8?B?ZWpGbWw0MktFL01oTmZVRGIxWFVCUlVXcVcxQUlOajlNcDNBN2lmYjJnZ3du?=
- =?utf-8?B?eTJ4T1BXQmhPMXZKeGgrS2gzcVUvOWh1S3BXaGFaRnFvVVpvM01EdGFSTlZY?=
- =?utf-8?B?VXVKdVpvQkF5Nk83bEVCR1pJOCszUURlZjZCMThsdDFBbVBJdFVoYmViV3BP?=
- =?utf-8?B?Vzc1bm51cTJubjEwSlp1M0Y1K3BHSElkaDIrd0Y4MXhZdGhXQVM3YS9rT0tR?=
- =?utf-8?B?dTZNL1BZZk9lWjUxWHFXL3E0OHBSNlNyMURGY0tkdVIzUG9PREJXK250bHdz?=
- =?utf-8?B?eSt1VGhWaWt5Mm50WVl2akh4ZEIydUZyYW9RTjd0RjZ4R2FWeGNJTHpnUFFC?=
- =?utf-8?B?Mnp3Q01pOVZYQWlORWJFaHNiQW9iamt5MDEyTmgxN0dqdlhlRTNnS3d3R2Uv?=
- =?utf-8?B?VWQvY0VsYVZraUZqTmw2bjNucFZ4RHhFWmJBVEN3V2pGaXI5OUgySmUzbkNs?=
- =?utf-8?B?ZmZOUEVtQTg3di9tUGtzcW9xWkhFenJaSHJIbkNmcW1oZ0Z5NTYyZ1lab3dU?=
- =?utf-8?B?b2VSOWJ0QytDWk0rQm9UVlFEVG1DQ3Ntc2t2bjJyaGtMMnZheGlQUUk0Z1VY?=
- =?utf-8?B?QjM2ci80R3RMaEtvVE1ET2FqSUNiN0Y4azVSczJCMWFWVU5MUytpS0tjbkRj?=
- =?utf-8?B?MTVBSnZmM085RllaM042ZlBzekduL0dFdGYvdmUvSkxOMFVyVjlGZlZFb0V3?=
- =?utf-8?B?eDVTM1d0WXd5SW9McGdISHAxTUVsVDBoWDVuOEdkQWlnWDF4K0dTQm1IQTNZ?=
- =?utf-8?B?Z2E3ZFVDL1NpeHdYSnFScFpSOEEzd2JDWlpRbGdXeVJ2ZG5JWkVaSnVNRysw?=
- =?utf-8?B?TXdudFZsOXVSamxmM0MxOENOV05vazNRVDV0aGF4QTlOL3EyQ010d3B0dWRr?=
- =?utf-8?B?VGtuSWJBVWR0dC9od1BlWWhXeTNUa0hhaTV2aTRrWnZScjJDazFkenhVa2V2?=
- =?utf-8?B?ZEY5SXNYbm1GbG9VUzZreTcrMUZDSlg0dXBNdmdSQUNWZUttNnJHV3ptQk00?=
- =?utf-8?B?RllaM3FhQzlDYWRkNVk2QXJkbE1YQTRmT2xTbExTWEVnaWMxelp6b29ERkxC?=
- =?utf-8?B?dzU4SG95Z1F2bUVSWTdDeWZnd3hLaW1kQ21yNStsM2QrWlAxZlVwNWdZQ0FD?=
- =?utf-8?B?azVDQlZiN2tUMFBRcjFBWUtwMTdxRW5uNWUrbFNoOWcyb1RDWFlabmhwWm1q?=
- =?utf-8?B?ZURqZSs2RVR2b2Fnc3g4dU1lWFJVem01UGV5VUJqbTBSd0ZtVWZoeFVMS25n?=
- =?utf-8?Q?baiFZAngWQcKnnZvHIbL0CQ=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 06cc63ea-0c5c-4202-3ae3-08d9f511de94
-X-MS-Exchange-CrossTenant-AuthSource: BL1PR12MB5304.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Feb 2022 08:12:15.0902
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: /v66My/dlGpcSombE8H5FlnvtgEf5yUjxP/TJgPYsR19lxWaZ73PrJF8eU4i2Grk4UhZ5GDCzBFgr8C9dh13wA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN7PR12MB2804
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Ygwg9NXzQ+6U3RON@cmpxchg.org>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/18/2022 4:44 AM, Alex Williamson wrote:
-> On Mon, 24 Jan 2022 23:47:25 +0530
-> Abhishek Sahu <abhsahu@nvidia.com> wrote:
+On Tue, Feb 15, 2022 at 04:53:56PM -0500, Johannes Weiner wrote:
+> Hi Yu,
 > 
->> According to [PCIe v5 5.3.1.4.1] for D3hot state
->>
->>  "Configuration and Message requests are the only TLPs accepted by a
->>   Function in the D3Hot state. All other received Requests must be
->>   handled as Unsupported Requests, and all received Completions may
->>   optionally be handled as Unexpected Completions."
->>
->> Currently, if the vfio PCI device has been put into D3hot state and if
->> user makes non-config related read/write request in D3hot state, these
->> requests will be forwarded to the host and this access may cause
->> issues on a few systems.
->>
->> This patch leverages the memory-disable support added in commit
->> 'abafbc551fdd ("vfio-pci: Invalidate mmaps and block MMIO access on
->> disabled memory")' to generate page fault on mmap access and
->> return error for the direct read/write. If the device is D3hot state,
->> then the error needs to be returned for all kinds of BAR
->> related access (memory, IO and ROM). Also, the power related structure
->> fields need to be protected so we can use the same 'memory_lock' to
->> protect these fields also. For the few cases, this 'memory_lock' will be
->> already acquired by callers so introduce a separate function
->> vfio_pci_set_power_state_locked(). The original
->> vfio_pci_set_power_state() now contains the code to do the locking
->> related operations.
->>
->> Signed-off-by: Abhishek Sahu <abhsahu@nvidia.com>
->> ---
->>  drivers/vfio/pci/vfio_pci_core.c | 47 +++++++++++++++++++++++++-------
->>  drivers/vfio/pci/vfio_pci_rdwr.c | 20 ++++++++++----
->>  2 files changed, 51 insertions(+), 16 deletions(-)
->>
->> diff --git a/drivers/vfio/pci/vfio_pci_core.c b/drivers/vfio/pci/vfio_pci_core.c
->> index ee2fb8af57fa..38440d48973f 100644
->> --- a/drivers/vfio/pci/vfio_pci_core.c
->> +++ b/drivers/vfio/pci/vfio_pci_core.c
->> @@ -201,11 +201,12 @@ static void vfio_pci_probe_power_state(struct vfio_pci_core_device *vdev)
->>  }
->>
->>  /*
->> - * pci_set_power_state() wrapper handling devices which perform a soft reset on
->> - * D3->D0 transition.  Save state prior to D0/1/2->D3, stash it on the vdev,
->> - * restore when returned to D0.  Saved separately from pci_saved_state for use
->> - * by PM capability emulation and separately from pci_dev internal saved state
->> - * to avoid it being overwritten and consumed around other resets.
->> + * vfio_pci_set_power_state_locked() wrapper handling devices which perform a
->> + * soft reset on D3->D0 transition.  Save state prior to D0/1/2->D3, stash it
->> + * on the vdev, restore when returned to D0.  Saved separately from
->> + * pci_saved_state for use by PM capability emulation and separately from
->> + * pci_dev internal saved state to avoid it being overwritten and consumed
->> + * around other resets.
->>   *
->>   * There are few cases where the PCI power state can be changed to D0
->>   * without the involvement of this API. So, cache the power state locally
->> @@ -215,7 +216,8 @@ static void vfio_pci_probe_power_state(struct vfio_pci_core_device *vdev)
->>   * The memory taken for saving this PCI state needs to be freed to
->>   * prevent memory leak.
->>   */
->> -int vfio_pci_set_power_state(struct vfio_pci_core_device *vdev, pci_power_t state)
->> +static int vfio_pci_set_power_state_locked(struct vfio_pci_core_device *vdev,
->> +                                        pci_power_t state)
->>  {
->>       struct pci_dev *pdev = vdev->pdev;
->>       bool needs_restore = false, needs_save = false;
->> @@ -260,6 +262,26 @@ int vfio_pci_set_power_state(struct vfio_pci_core_device *vdev, pci_power_t stat
->>       return ret;
->>  }
->>
->> +/*
->> + * vfio_pci_set_power_state() takes all the required locks to protect
->> + * the access of power related variables and then invokes
->> + * vfio_pci_set_power_state_locked().
->> + */
->> +int vfio_pci_set_power_state(struct vfio_pci_core_device *vdev,
->> +                          pci_power_t state)
->> +{
->> +     int ret;
->> +
->> +     if (state >= PCI_D3hot)
->> +             vfio_pci_zap_and_down_write_memory_lock(vdev);
->> +     else
->> +             down_write(&vdev->memory_lock);
->> +
->> +     ret = vfio_pci_set_power_state_locked(vdev, state);
->> +     up_write(&vdev->memory_lock);
->> +     return ret;
->> +}
->> +
->>  int vfio_pci_core_enable(struct vfio_pci_core_device *vdev)
->>  {
->>       struct pci_dev *pdev = vdev->pdev;
->> @@ -354,7 +376,7 @@ void vfio_pci_core_disable(struct vfio_pci_core_device *vdev)
->>        * in running the logic needed for D0 power state. The subsequent
->>        * runtime PM API's will put the device into the low power state again.
->>        */
->> -     vfio_pci_set_power_state(vdev, PCI_D0);
->> +     vfio_pci_set_power_state_locked(vdev, PCI_D0);
->>
->>       /* Stop the device from further DMA */
->>       pci_clear_master(pdev);
->> @@ -967,7 +989,7 @@ long vfio_pci_core_ioctl(struct vfio_device *core_vdev, unsigned int cmd,
->>                * interaction. Update the power state in vfio driver to perform
->>                * the logic needed for D0 power state.
->>                */
->> -             vfio_pci_set_power_state(vdev, PCI_D0);
->> +             vfio_pci_set_power_state_locked(vdev, PCI_D0);
->>               up_write(&vdev->memory_lock);
->>
->>               return ret;
->> @@ -1453,6 +1475,11 @@ static vm_fault_t vfio_pci_mmap_fault(struct vm_fault *vmf)
->>               goto up_out;
->>       }
->>
->> +     if (vdev->power_state >= PCI_D3hot) {
->> +             ret = VM_FAULT_SIGBUS;
->> +             goto up_out;
->> +     }
->> +
->>       /*
->>        * We populate the whole vma on fault, so we need to test whether
->>        * the vma has already been mapped, such as for concurrent faults
->> @@ -1902,7 +1929,7 @@ int vfio_pci_core_register_device(struct vfio_pci_core_device *vdev)
->>        * be able to get to D3.  Therefore first do a D0 transition
->>        * before enabling runtime PM.
->>        */
->> -     vfio_pci_set_power_state(vdev, PCI_D0);
->> +     vfio_pci_set_power_state_locked(vdev, PCI_D0);
->>       pm_runtime_allow(&pdev->dev);
->>
->>       if (!disable_idle_d3)
->> @@ -2117,7 +2144,7 @@ static int vfio_pci_dev_set_hot_reset(struct vfio_device_set *dev_set,
->>                * interaction. Update the power state in vfio driver to perform
->>                * the logic needed for D0 power state.
->>                */
->> -             vfio_pci_set_power_state(cur, PCI_D0);
->> +             vfio_pci_set_power_state_locked(cur, PCI_D0);
->>               if (cur == cur_mem)
->>                       is_mem = false;
->>               if (cur == cur_vma)
->> diff --git a/drivers/vfio/pci/vfio_pci_rdwr.c b/drivers/vfio/pci/vfio_pci_rdwr.c
->> index 57d3b2cbbd8e..e97ba14c4aa0 100644
->> --- a/drivers/vfio/pci/vfio_pci_rdwr.c
->> +++ b/drivers/vfio/pci/vfio_pci_rdwr.c
->> @@ -41,8 +41,13 @@
->>  static int vfio_pci_iowrite##size(struct vfio_pci_core_device *vdev,         \
->>                       bool test_mem, u##size val, void __iomem *io)   \
->>  {                                                                    \
->> +     down_read(&vdev->memory_lock);                                  \
->> +     if (vdev->power_state >= PCI_D3hot) {                           \
->> +             up_read(&vdev->memory_lock);                            \
->> +             return -EIO;                                            \
->> +     }                                                               \
->> +                                                                     \
+> On Tue, Feb 15, 2022 at 02:43:05AM -0700, Yu Zhao wrote:
+> > On Thu, Feb 10, 2022 at 03:41:57PM -0500, Johannes Weiner wrote:
+> > > > +static inline bool lru_gen_is_active(struct lruvec *lruvec, int gen)
+> > > > +{
+> > > > +	unsigned long max_seq = lruvec->lrugen.max_seq;
+> > > > +
+> > > > +	VM_BUG_ON(gen >= MAX_NR_GENS);
+> > > > +
+> > > > +	/* see the comment on MIN_NR_GENS */
+> > > > +	return gen == lru_gen_from_seq(max_seq) || gen == lru_gen_from_seq(max_seq - 1);
+> > > > +}
+> > > 
+> > > I'm still reading the series, so correct me if I'm wrong: the "active"
+> > > set is split into two generations for the sole purpose of the
+> > > second-chance policy for fresh faults, right?
+> > 
+> > To be precise, the active/inactive notion on top of generations is
+> > just for ABI compatibility, e.g., the counters in /proc/vmstat.
+> > Otherwise, this function wouldn't be needed.
 > 
-> The reason that we only set test_mem for MMIO BARs is that systems are
-> generally more lenient about probing unresponsive I/O port space to
-> support legacy use cases.  Have you found cases where access to an I/O
-> port BAR when the device is either in D3hot+ or I/O port is disabled in
-> the command register triggers a system fault?  If not it seems we could
-> roll the power_state check into __vfio_pci_memory_enabled(), if so then
-> we probably need to improve our coverage of access to disabled I/O port
-> BARs beyond only the power_state check.  Thanks,
+> Ah! would you mind adding this as a comment to the function?
+
+Will do.
+
+> But AFAICS there is the lru_gen_del_folio() callsite that maps it to
+> the PG_active flag - which in turn gets used by add_folio() to place
+> the thing back on the max_seq generation. So I suppose there is a
+> secondary purpose of the function for remembering the page's rough age
+> for non-reclaim isolation.>
+
+Yes, e.g., migration.
+
+> It would be good to capture that as well in a comment on the function.
+
+Will do.
+
+> > > > +static inline void lru_gen_update_size(struct lruvec *lruvec, enum lru_list lru,
+> > > > +				       int zone, long delta)
+> > > > +{
+> > > > +	struct pglist_data *pgdat = lruvec_pgdat(lruvec);
+> > > > +
+> > > > +	lockdep_assert_held(&lruvec->lru_lock);
+> > > > +	WARN_ON_ONCE(delta != (int)delta);
+> > > > +
+> > > > +	__mod_lruvec_state(lruvec, NR_LRU_BASE + lru, delta);
+> > > > +	__mod_zone_page_state(&pgdat->node_zones[zone], NR_ZONE_LRU_BASE + lru, delta);
+> > > > +}
+> > > 
+> > > This is a duplicate of update_lru_size(), please use that instead.
+> > > 
+> > > Yeah technically you don't need the mem_cgroup_update_lru_size() but
+> > > that's not worth sweating over, better to keep it simple.
+> > 
+> > I agree we don't need the mem_cgroup_update_lru_size() -- let me spell
+> > out why:
+> >   this function is not needed here because it updates the counters used
+> >   only by the active/inactive lru code, i.e., get_scan_count().
+> > 
+> > However, we can't reuse update_lru_size() because MGLRU can trip the
+> > WARN_ONCE() in mem_cgroup_update_lru_size().
+> > 
+> > Unlike lru_zone_size[], lrugen->nr_pages[] is eventually consistent.
+> > To move a page to a different generation, the gen counter in page->flags
+> > is updated first, which doesn't require the LRU lock. The second step,
+> > i.e., the update of lrugen->nr_pages[], requires the LRU lock, and it
+> > usually isn't done immediately due to batching. Meanwhile, if this page
+> > is, for example, isolated, nr_pages[] becomes temporarily unbalanced.
+> > And this trips the WARN_ONCE().
 > 
-> Alex
+> Good insight.
 > 
-
- I have not seen any system unresponsive in the systems which I am using 
- for testing these patches. If I try to access MMIO BAR or IO port while
- the device is in D3hot+, then I am getting all 0xff. Since I was not
- sure regarding the behaviour in other systems while the device is in
- D3hot+, so I did power_state check outside.
-
- We can start with power_state check under __vfio_pci_memory_enabled()
- and improve coverage later-on if any issue arises.
-
- Thanks,
- Abhishek
-
->>       if (test_mem) {                                                 \
->> -             down_read(&vdev->memory_lock);                          \
->>               if (!__vfio_pci_memory_enabled(vdev)) {                 \
->>                       up_read(&vdev->memory_lock);                    \
->>                       return -EIO;                                    \
->> @@ -51,8 +56,7 @@ static int vfio_pci_iowrite##size(struct vfio_pci_core_device *vdev,                \
->>                                                                       \
->>       vfio_iowrite##size(val, io);                                    \
->>                                                                       \
->> -     if (test_mem)                                                   \
->> -             up_read(&vdev->memory_lock);                            \
->> +     up_read(&vdev->memory_lock);                                    \
->>                                                                       \
->>       return 0;                                                       \
->>  }
->> @@ -68,8 +72,13 @@ VFIO_IOWRITE(64)
->>  static int vfio_pci_ioread##size(struct vfio_pci_core_device *vdev,          \
->>                       bool test_mem, u##size *val, void __iomem *io)  \
->>  {                                                                    \
->> +     down_read(&vdev->memory_lock);                                  \
->> +     if (vdev->power_state >= PCI_D3hot) {                           \
->> +             up_read(&vdev->memory_lock);                            \
->> +             return -EIO;                                            \
->> +     }                                                               \
->> +                                                                     \
->>       if (test_mem) {                                                 \
->> -             down_read(&vdev->memory_lock);                          \
->>               if (!__vfio_pci_memory_enabled(vdev)) {                 \
->>                       up_read(&vdev->memory_lock);                    \
->>                       return -EIO;                                    \
->> @@ -78,8 +87,7 @@ static int vfio_pci_ioread##size(struct vfio_pci_core_device *vdev,         \
->>                                                                       \
->>       *val = vfio_ioread##size(io);                                   \
->>                                                                       \
->> -     if (test_mem)                                                   \
->> -             up_read(&vdev->memory_lock);                            \
->> +     up_read(&vdev->memory_lock);                                    \
->>                                                                       \
->>       return 0;                                                       \
->>  }
+> But in that case, I'd still think it's better to use update_lru_size()
+> and gate the memcg update on lrugen-enabled, with a short comment
+> saying that lrugen has its own per-cgroup counts already. It's just a
+> bit too error prone to duplicate the stat updates.
 > 
+> Even better would be:
+> 
+> static __always_inline
+> void lruvec_add_folio(struct lruvec *lruvec, struct folio *folio)
+> {
+> 	enum lru_list lru = folio_lru_list(folio);
+> 
+> 	update_lru_size(lruvec, lru, folio_zonenum(folio),
+> 			folio_nr_pages(folio));
+> 	if (lrugen_enabled(lruvec))
+> 		lrugen_add_folio(lruvec, folio);
+> 	else
+> 		list_add(&folio->lru, &lruvec->lists[lru]);
+> }
+> 
+> But it does mean you'd have to handle unevictable pages. I'm reviewing
+> from the position that mglru is going to supplant the existing reclaim
+> algorithm in the long term, though, so being more comprehensive and
+> eliminating special cases where possible is all-positive, IMO.
+> 
+> Up to you. I'd only insist on reusing update_lru_size() at least.
 
+Will do.
+
+> > > > +static inline bool lru_gen_add_folio(struct lruvec *lruvec, struct folio *folio, bool reclaiming)
+> > > > +{
+> > > > +	int gen;
+> > > > +	unsigned long old_flags, new_flags;
+> > > > +	int type = folio_is_file_lru(folio);
+> > > > +	int zone = folio_zonenum(folio);
+> > > > +	struct lru_gen_struct *lrugen = &lruvec->lrugen;
+> > > > +
+> > > > +	if (folio_test_unevictable(folio) || !lrugen->enabled)
+> > > > +		return false;
+> > > 
+> > > These two checks should be in the callsite and the function should
+> > > return void. Otherwise you can't understand the callsite without
+> > > drilling down into lrugen code, even if lrugen is disabled.
+> > 
+> > I agree it's a bit of nuisance this way. The alternative is we'd need
+> > ifdef or another helper at the call sites because lrugen->enabled is
+> > specific to lrugen.
+> 
+> Coming from memcg, my experience has been that when you have a compile
+> time-optional MM extension like this, you'll sooner or later need a
+> config-independent helper to gate callbacks in generic code. So I
+> think it's a good idea to add one now.
+> 
+> One of these?
+> 
+> lruvec_on_lrugen()
+
+SGTM.
+
+Personally I'd reuse lru_gen_enabled(), by passing NULL/lruvec. But
+my guess is you wouldn't like it.
+
+> lruvec_using_lrugen()
+> lruvec_lrugen_enabled()
+> 
+> lruvec_has_generations() :-)
+> 
+> > > On that note, I think #1 is reintroducing a problem we have fixed
+> > > before, which is trashing the workingset with a flood of use-once
+> > > mmapped pages. It's the classic scenario where LFU beats LRU.
+> > > 
+> > > Mapped streaming IO isn't very common, but it does happen. See these
+> > > commits:
+> > > 
+> > > dfc8d636cdb95f7b792d5ba8c9f3b295809c125d
+> > > 31c0569c3b0b6cc8a867ac6665ca081553f7984c
+> > > 645747462435d84c6c6a64269ed49cc3015f753d
+> > > 
+> > > From the changelog:
+> > > 
+> > >     The used-once mapped file page detection patchset.
+> > >     
+> > >     It is meant to help workloads with large amounts of shortly used file
+> > >     mappings, like rtorrent hashing a file or git when dealing with loose
+> > >     objects (git gc on a bigger site?).
+> > >     
+> > >     Right now, the VM activates referenced mapped file pages on first
+> > >     encounter on the inactive list and it takes a full memory cycle to
+> > >     reclaim them again.  When those pages dominate memory, the system
+> > >     no longer has a meaningful notion of 'working set' and is required
+> > >     to give up the active list to make reclaim progress.  Obviously,
+> > >     this results in rather bad scanning latencies and the wrong pages
+> > >     being reclaimed.
+> > >     
+> > >     This patch makes the VM be more careful about activating mapped file
+> > >     pages in the first place.  The minimum granted lifetime without
+> > >     another memory access becomes an inactive list cycle instead of the
+> > >     full memory cycle, which is more natural given the mentioned loads.
+> > > 
+> > > Translating this to multigen, it seems fresh faults should really
+> > > start on the second oldest rather than on the youngest generation, to
+> > > get a second chance but without jeopardizing the workingset if they
+> > > don't take it.
+> > 
+> > This is a good point, and I had worked on a similar idea but failed
+> > to measure its benefits. In addition to placing mmapped file pages in
+> > older generations, I also tried placing refaulted anon pages in older
+> > generations. My conclusion was that the initial LRU positions of NFU
+> > pages are not a bottleneck for workloads I've tested. The efficiency
+> > of testing/clearing the accessed bit is.
+> 
+> The concern isn't the scan overhead, but jankiness from the workingset
+> being flooded out by streaming IO.
+
+Yes, MGLRU uses a different approach to solve this problem, and for
+its approach, the scan overhead is the concern.
+
+MGLRU detects (defines) the working set by scanning the entire memory
+for each generation, and it counters the flooding by accelerating the
+creation of generations. IOW, all mapped pages have an equal chance to
+get scanned, no matter which generation they are in. This is a design
+difference compared with the active/inactive LRU, which tries to scans
+the active/inactive lists less/more frequently.
+
+> The concrete usecase at the time was a torrent client hashing a
+> downloaded file and thereby kicking out the desktop environment, which
+> caused jankiness. The hashing didn't benefit from caching - the file
+> wouldn't have fit into RAM anyway - so this was pointless to boot.
+> 
+> Essentially, the tradeoff is this:
+> 
+> 1) If you treat new pages as hot, you accelerate workingset
+> transitions, but on the flipside you risk unnecessary refaults in
+> running applications when those new pages are one-off.
+> 
+> 2) If you take new pages with a grain of salt, you protect existing
+> applications better from one-off floods, but risk refaults in NEW
+> application while they're trying to start up.
+
+Agreed.
+
+> There are two arguments for why 2) is preferable:
+> 
+> 1) Users are tolerant of cache misses when applications first launch,
+>    much less so after they've been running for hours.
+
+Our CUJs (Critical User Journeys) respectfully disagree :)
+
+They are built on the observation that once users have moved onto
+another tab/app, they are more likely to stay with the new tab/app
+rather than go back to the old ones. Speaking for myself, this is
+generally the case.
+
+> 2) Workingset transitions (and associated jankiness) are bounded by
+>    the amount of RAM you need to repopulate. But streaming IO is
+>    bounded by storage, and datasets are routinely several times the
+>    amount of RAM. Uncacheable sets in excess of RAM can produce an
+>    infinite stream of "new" references; not protecting the workingset
+>    from that means longer or even sustained jankiness.
+
+I'd argue the opposite -- we shouldn't risk refaulting fresh hot pages
+just to accommodate this concrete yet minor use case, especially
+considering torrent has been given the means (MADV_SEQUENTIAL) to help
+itself.
+
+I appreciate all your points here. The bottom line is we agree this is
+a trade off. For what disagree about, we could be both right -- it
+comes down to what workloads we care about *more*.
+
+To move forward, I propose we look at it from a non-technical POV:
+would we want to offer users an alternative trade off so that they can
+have greater flexibility?
+
+> > And some applications are smart enough to leverage MADV_SEQUENTIAL.
+> > In this case, MGLRU does place mmapped file pages in the oldest
+> > generation.
+> 
+> Yes, it makes sense to optimize when MADV_SEQUENTIAL is requested. But
+> that hint isn't reliably there, so it matters that we don't do poorly
+> when it's missing.
+
+Agreed.
+
+> > I have an oversimplified script that uses memcached to mimic a
+> > non-streaming workload and fio a (mmapped) streaming workload:
+> 
+> Looking at the paramters and observed behavior, let me say up front
+> that this looks like a useful benchmark, but doesn't capture the
+> scenario I was talking about above.
+> 
+> For one, the presence of swapping in both kernels suggests that the
+> "streaming IO" component actually has repeat access that could benefit
+> from caching. Second, I would expect memcache is accessing its memory
+> frequently and consistently, and so could withstand workingset
+> challenges from streaming IO better than, say, a desktop environment.
+
+The fio workload is a real streaming workload, but the memcached
+workload might have been too large to be a typical desktop workload.
+
+More below.
+
+> More on that below.
+> 
+> >   1. With MADV_SEQUENTIAL, the non-streaming workload is about 5 times
+> >      faster when using MGLRU. Somehow the baseline (rc3) swapped a lot.
+> >      (It shouldn't, and I haven't figured out why.)
+> 
+> Baseline swaps when there are cache refaults. This is regardless of
+> the hint: you may say you're accessing these pages sequentially, but
+> the refaults say you're reusing them, with a frequency that suggests
+> they might be cacheable. So it tries to cache them.
+> 
+> I'd be curious if that results in fio being faster, or whether it's
+> all just pointless thrashing. Can you share the fio results too?
+
+More below.
+
+> We could patch baseline to prioritize MADV_SEQUENTIAL more, but...
+> 
+> >   2. Without MADV_SEQUENTIAL, the non-streaming workload is about 1
+> >      time faster when using MGLRU. Both MGLRU and the baseline swapped
+> >      a lot.
+> 
+> ...in practice I think this scenario will matter to a lot more users.
+
+I strongly feel we should prioritize what's advertised on a man page
+over an unspecified (performance) behavior.
+
+> I would again be interested in the fio results.
+> 
+> >            MADV_SEQUENTIAL    non-streaming ops/sec (memcached)
+> >   rc3      yes                 292k
+> >   rc3      no                  203k
+> >   rc3+v7   yes                1967k
+> >   rc3+v7   no                  436k
+> > 
+> >   cat mmap.sh
+> >   modprobe brd rd_nr=2 rd_size=56623104
+> >   
+> >   mkswap /dev/ram0
+> >   swapon /dev/ram0
+> >   
+> >   mkfs.ext4 /dev/ram1
+> >   mount -t ext4 /dev/ram1 /mnt
+> >   
+> >   memtier_benchmark -S /var/run/memcached/memcached.sock -P memcache_binary \
+> >     -n allkeys --key-minimum=1 --key-maximum=50000000 --key-pattern=P:P -c 1 \
+> >     -t 36 --ratio 1:0 --pipeline 8 -d 2000
+> >   
+> >   # streaming workload: --fadvise_hint=0 disables MADV_SEQUENTIAL
+> >   fio -name=mglru --numjobs=12 --directory=/mnt --size=4224m --buffered=1 \
+> >     --ioengine=mmap --iodepth=128 --iodepth_batch_submit=32 \
+> >     --iodepth_batch_complete=32 --rw=read --time_based --ramp_time=10m \
+> >     --runtime=180m --group_reporting &
+> 
+> As per above, I think this would be closer to a cacheable workingset
+> than a streaming IO pattern. It depends on total RAM of course, but
+> size=4G and time_based should loop around pretty quickly.
+
+The file size here shouldn't matter since fio is smart enough to
+invalidate page cache before it rewinds (for sequential access):
+
+https://fio.readthedocs.io/en/latest/fio_doc.html#cmdoption-arg-invalidate
+https://github.com/axboe/fio/blob/master/filesetup.c#L602
+
+I think the problem might have been the memory size for memcached was
+too large (100GB) to be all hot (limited by memory bandwidth).
+
+> Would you mind rerunning with files larger than RAM, to avoid repeat
+> accesses (or at least only repeat with large distances)?
+
+Retested with the same free memory (120GB) for 40GB memcached and 200GB
+fio.
+
+           MADV_SEQUENTIAL  FADV_DONTNEED  memcached  fio
+  rc4      no               yes            4716k      232k
+  rc4+v7   no               yes            4307k      265k
+  delta                                    -9%        +14%
+
+MGLRU lost with memcached but won with fio for the same reason: it
+doesn't have any heuristics to detect the streaming characteristic
+(and therefore lost with memcached) but relies on faster scanning
+(and therefore won with fio) to keep the working set in memory.
+
+The baseline didn't swap this time (MGLRU did slightly), but it lost
+with fio because it had to walk the rmap for each page in the entire
+200GB VMA, at least once, even for this streaming workload.
+
+This reflects the design difference I mentioned earlier.
+
+  cat test.sh
+  modprobe brd rd_nr=1 rd_size=268435456
+  
+  mkfs.ext4 /dev/ram0
+  mount -t ext4 /dev/ram0 /mnt
+  
+  fallocate -l 40g /mnt/swapfile
+  mkswap /mnt/swapfile
+  swapon /mnt/swapfile
+  
+  fio -name=mglru --numjobs=1 --directory=/mnt --size=204800m \
+    --buffered=1 --ioengine=mmap --fadvise_hint=0 --iodepth=128 \
+    --iodepth_batch_submit=32 --iodepth_batch_complete=32 \
+    --rw=read --time_based --ramp_time=10m --runtime=180m \
+    --group_reporting &
+  pid=$!
+  
+  sleep 600
+  
+  # load objects
+  memtier_benchmark -S /var/run/memcached/memcached.sock \
+    -P memcache_binary -n allkeys --key-minimum=1 \
+    --key-maximum=20000000 --key-pattern=P:P -c 1 -t 36 \
+    --ratio 1:0 --pipeline 8 -d 2000
+  # read objects
+  memtier_benchmark -S /var/run/memcached/memcached.sock \
+    -P memcache_binary -n allkeys --key-minimum=1 \
+    --key-maximum=20000000 --key-pattern=R:R -c 1 -t 36 \
+    --ratio 0:1 --pipeline 8 --randomize --distinct-client-seed
+
+  kill -INT $pid
+
+> Depending on how hot memcache runs, it may or may not be able to hold
+> onto its workingset.
+
+Agreed.
+
+> Testing interactivity is notoriously hard, but
+> using a smaller, intermittent workload is probably more representative
+> of overall responsiveness. Let fio ramp until memory is full, then do
+> perf stat -r 10 /bin/sh -c 'git shortlog v5.0.. >/dev/null; sleep 1'
+
+I'll also check with the downstream maintainers to see if they have
+heard any complaints about streaming workloads negatively impacting
+user experience.
+
+> I'll try to reproduce this again too. Back then, that workload gave me
+> a very janky desktop experience, and the patch very obvious relief.
+
+SGTM.
+
+> > > > @@ -113,6 +298,9 @@ void lruvec_add_folio_tail(struct lruvec *lruvec, struct folio *folio)
+> > > >  {
+> > > >  	enum lru_list lru = folio_lru_list(folio);
+> > > >  
+> > > > +	if (lru_gen_add_folio(lruvec, folio, true))
+> > > > +		return;
+> > > > +
+> > > 
+> > > bool parameters are notoriously hard to follow in the callsite. Can
+> > > you please add lru_gen_add_folio_tail() instead and have them use a
+> > > common helper?
+> > 
+> > I'm not sure -- there are several places like this one. My question is
+> > whether we want to do it throughout this patchset. We'd end up with
+> > many helpers and duplicate code. E.g., in this file alone, we have two
+> > functions taking bool parameters:
+> >   lru_gen_add_folio(..., bool reclaiming)
+> >   lru_gen_del_folio(..., bool reclaiming)
+> > 
+> > I can't say they are very readable; at least they are very compact
+> > right now. My concern is that we might loose the latter without having
+> > enough of the former.
+> > 
+> > Perhaps this is something that we could revisit after you've finished
+> > reviewing the entire patchset?
+> 
+> Sure, fair enough.
+> 
+> > > > +void lru_gen_init_state(struct mem_cgroup *memcg, struct lruvec *lruvec);
+> > > 
+> > > "state" is what we usually init :) How about lrugen_init_lruvec()?
+> > 
+> > Same story as "file", lol -- this used to be lru_gen_init_lruvec():
+> > https://lore.kernel.org/linux-mm/20210413065633.2782273-9-yuzhao@google.com/
+> > 
+> > Naming is hard. Hopefully we can finalize it this time.
+> 
+> Was that internal feedback? The revisions show this function went
+> through several names, but I don't see reviews requesting those. If
+> they weren't public I'm gonna pretend they didn't happen ;-)
+
+Indeed. I lost track.
+
+> > > You can drop the memcg parameter and use lruvec_memcg().
+> > 
+> > lruvec_memcg() isn't available yet when pgdat_init_internals() calls
+> > this function because mem_cgroup_disabled() is initialized afterward.
+> 
+> Good catch. That'll container_of() into garbage. However, we have to
+> assume that somebody's going to try that simplification again, so we
+> should set up the code now to prevent issues.
+> 
+> cgroup_disable parsing is self-contained, so we can pull it ahead in
+> the init sequence. How about this?
+> 
+> diff --git a/kernel/cgroup/cgroup.c b/kernel/cgroup/cgroup.c
+> index 9d05c3ca2d5e..b544d768edc8 100644
+> --- a/kernel/cgroup/cgroup.c
+> +++ b/kernel/cgroup/cgroup.c
+> @@ -6464,9 +6464,9 @@ static int __init cgroup_disable(char *str)
+>  			break;
+>  		}
+>  	}
+> -	return 1;
+> +	return 0;
+>  }
+> -__setup("cgroup_disable=", cgroup_disable);
+> +early_param("cgroup_disable", cgroup_disable);
+
+I think early_param() is still after pgdat_init_internals(), no?
+
+Thanks!

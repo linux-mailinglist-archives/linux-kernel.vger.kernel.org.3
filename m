@@ -2,131 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9F7E4BDCF3
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:43:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 03B694BE115
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:53:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356078AbiBUKmZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 05:42:25 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35300 "EHLO
+        id S1355307AbiBUKmg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 05:42:36 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355175AbiBUKkB (ORCPT
+        with ESMTP id S1355271AbiBUKkF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 05:40:01 -0500
-Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B24C2E9B;
-        Mon, 21 Feb 2022 02:01:53 -0800 (PST)
-Received: by mail-wr1-f49.google.com with SMTP id m27so14267219wrb.4;
-        Mon, 21 Feb 2022 02:01:53 -0800 (PST)
+        Mon, 21 Feb 2022 05:40:05 -0500
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99BF1F35
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 02:02:03 -0800 (PST)
+Received: by mail-ed1-x52f.google.com with SMTP id c6so25385054edk.12
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 02:02:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=monstr-eu.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=kMIEQ6EmXrcKF9QOgwi4JP+rN/GpqbWH/lqcMa8liiA=;
+        b=QQbUtc7TFLde+vu666fP1jpn3ZV0FX04icLIemzeQRGi911a0jMrdL8vJdmL3pepEi
+         6okCY+lM3vY8PCpbLkL0CN1RQ4ccaCqElG9sY+NLCKb3+FcPSFZopQ52JY04uQApqnML
+         Q4cY5EH3iUC6W+Su0VttBmEwgrjlKWAQYvTGBsWINSb5FBW79dNR5AY4+0ePzW4cOSBz
+         Q0sUk5AIW65Wwz/1e5NuOnsKKgKEjkWiLU4zNXi8yPSJJtSQpBUtIyP/KtVR7SCVX7xF
+         /nGHil8Eqxvg9T8QZOz9HbijZq4GNAT7JXWKEOQyr7dui6njbDWHiKdx9LVYzym+qEK1
+         yy+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=YZ+si3odyYtBfKCwmZtlljyYoUebhhvf4uslsh/s+F4=;
-        b=7j90WRpima8SkDjbxZ99PgrwljlxTuf3uJ0AEu8yOKNK0T8/TrPJBEKduV1EssbyI5
-         HnQO4t0f03epmXHqXpZE4j4+gQkH/cPMXLSF4ewvft/IG6mY+eDjOMGPdt9/BJ01T+Dm
-         o/mBlqmwuXn78aIZzzDSMcqwXMEQ7X2CMwXdxqpAQwTx4ZjAAHnVlNwlggvNcpaRvFPA
-         VgikTqi1Hbg1jKVQago4AbxrcOVhu2M7ZbQYgEo9d3RBhxJ1WINAOSFkO3BNpizkfVBb
-         gjIGMqA/1lwArnLlBmJfY6gkcN8zIzBaJ0vNY7I9JYlfaW8pEp65NcRbpwBeeSqOTDK2
-         hOSg==
-X-Gm-Message-State: AOAM533huutrR9fSqTSiT3QCh69Z9QXiz2Sgh2t7zzNyVxD6pYDuInOG
-        7H8GCRuzyCdvxct8r8eENYTeUl/SEt0=
-X-Google-Smtp-Source: ABdhPJxiSwRwEHfd8Q+eqMRaMd1mC5EXxdtAwlKOfu4jlIozdrPKqmXsyZiymQ3sUemzBc2KSw7yWQ==
-X-Received: by 2002:adf:fb8e:0:b0:1e3:241b:218c with SMTP id a14-20020adffb8e000000b001e3241b218cmr15194533wrr.359.1645437712057;
-        Mon, 21 Feb 2022 02:01:52 -0800 (PST)
-Received: from [192.168.0.120] (xdsl-188-155-181-108.adslplus.ch. [188.155.181.108])
-        by smtp.googlemail.com with ESMTPSA id q76sm7668095wme.1.2022.02.21.02.01.50
+        bh=kMIEQ6EmXrcKF9QOgwi4JP+rN/GpqbWH/lqcMa8liiA=;
+        b=JHX6IYTlgCKSpny81UQ9wUX53Dnp3P66UUDMLkfW4cX3fBRpmOy0OTFUaNWRgzC8nE
+         5pplu9Bkupkx2xXeRH26zAaaAMQZDYb6nRPLosA1PPtok8S2U00RvoGXQ3RFv+SpBgrw
+         FE6SchT82k6kaVGst3EwNbusffKeH8fzlaK2+nIBv4tWhFaYaQX1ZKIwcuJNb1385NVM
+         18xeWXxnsZDQAye98S7voTn2KkkWyTktodvWb3YX6avjVluroKTKdRc4TEPR7HB6mQh5
+         x0xXxaWHM+0H+8Rj2X+EvYEzDd8CzqdBQZosmxBfEfF/aljFFRojra5mHl1QFzxdTeak
+         M/4w==
+X-Gm-Message-State: AOAM531dMDwIj5N54dgUoXRcVDa6Wd4g3sWKOpH6XmWMvSFjZCVlgrAy
+        0KZAH5VzDLIhw4gCfnKb5B8QUA==
+X-Google-Smtp-Source: ABdhPJwoxhTQ66ov81uyxAEEkMdXe2eNB3Eu5awgfYyKsjlTo0UYbaWCPMaaN9gxOKo3lAv87zWjkw==
+X-Received: by 2002:a50:f686:0:b0:410:e352:e61a with SMTP id d6-20020a50f686000000b00410e352e61amr19883345edn.23.1645437721836;
+        Mon, 21 Feb 2022 02:02:01 -0800 (PST)
+Received: from ?IPV6:2a02:768:2307:40d6::f9e? ([2a02:768:2307:40d6::f9e])
+        by smtp.gmail.com with ESMTPSA id gs6sm702985ejb.17.2022.02.21.02.02.01
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Feb 2022 02:01:51 -0800 (PST)
-Message-ID: <acf6d02d-0e17-b84a-5bd8-9f5165f73915@kernel.org>
-Date:   Mon, 21 Feb 2022 11:01:49 +0100
+        Mon, 21 Feb 2022 02:02:01 -0800 (PST)
+Message-ID: <f874a9c7-8d8d-fecc-8fc9-51dcf37cf60b@monstr.eu>
+Date:   Mon, 21 Feb 2022 11:02:00 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v10 1/4] MIPS: Loongson64: dts: update the display
- controller device node
+ Thunderbird/91.6.1
+Subject: Re: [PATCH] iio: adc: xilinx-ams: Use devm_delayed_work_autocancel()
+ to simplify code
 Content-Language: en-US
-To:     Sergei Shtylyov <sergei.shtylyov@gmail.com>,
-        Sui Jingfeng <15330273260@189.cn>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Roland Scheidegger <sroland@vmware.com>,
-        Zack Rusin <zackr@vmware.com>,
-        Christian Gmeiner <christian.gmeiner@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Ilia Mirkin <imirkin@alum.mit.edu>,
-        Qing Zhang <zhangqing@loongson.cn>,
-        suijingfeng <suijingfeng@loongson.cn>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org
-References: <20220220145554.117854-1-15330273260@189.cn>
- <20220220145554.117854-2-15330273260@189.cn>
- <08abcb14-f1f6-8be5-6309-cd16e0578c05@gmail.com>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <08abcb14-f1f6-8be5-6309-cd16e0578c05@gmail.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Jonathan Cameron <jic23@kernel.org>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     Anand Ashok Dumbre <anand.ashok.dumbre@xilinx.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Michal Simek <michal.simek@xilinx.com>,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-iio@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+References: <2626e6a057e40cd2271ef0e5f81d12e607bad5b4.1644776929.git.christophe.jaillet@wanadoo.fr>
+ <20220220114552.53fedd33@jic23-huawei>
+From:   Michal Simek <monstr@monstr.eu>
+In-Reply-To: <20220220114552.53fedd33@jic23-huawei>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/02/2022 10:19, Sergei Shtylyov wrote:
-> On 2/20/22 5:55 PM, Sui Jingfeng wrote:
+Hi,
+
+On 2/20/22 12:45, Jonathan Cameron wrote:
+> On Sun, 13 Feb 2022 19:29:05 +0100
+> Christophe JAILLET <christophe.jaillet@wanadoo.fr> wrote:
 > 
->> From: suijingfeng <suijingfeng@loongson.cn>
+>> Use devm_delayed_work_autocancel() instead of hand writing it. This is
+>> less verbose and saves a few lines of code.
 >>
->> The display controller is a pci device, its PCI vendor id is 0x0014
->> its PCI device id is 0x7a06.
+>> devm_delayed_work_autocancel() uses devm_add_action() instead of
+>> devm_add_action_or_reset(). This is fine, because if the underlying memory
+>> allocation fails, no work has been scheduled yet. So there is nothing to
+>> undo.
 >>
->> 1) In order to let the driver to know which chip the DC is contained
->>    in, the compatible string of the display controller is updated
->>    according to the chip's name.
->>
->> 2) Add display controller device node for ls2k1000 SoC
->>
->> Reported-by: Krzysztof Kozlowski <krzk@kernel.org>
->> Signed-off-by: suijingfeng <suijingfeng@loongson.cn>
->> Signed-off-by: Sui Jingfeng <15330273260@189.cn>
->> ---
->>  arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi | 8 ++++++++
->>  arch/mips/boot/dts/loongson/ls7a-pch.dtsi          | 7 ++-----
->>  2 files changed, 10 insertions(+), 5 deletions(-)
->>
->> diff --git a/arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi b/arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi
->> index 768cf2abcea3..af9cda540f9e 100644
->> --- a/arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi
->> +++ b/arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi
->> @@ -209,6 +209,14 @@ gpu@5,0 {
->>  				interrupt-parent = <&liointc0>;
->>  			};
->>  
->> +			lsdc: display-controller@6,0 {
-> 
->    Shouldn't the node name just be "display", according to the section 2.2.2
-> of the DT spec?
+>> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> Looks good to me, but I'd ideally like some input from someone familiar with
+> the driver.
 
-lcd-controller, led-controller. As I understood from the bindings, this
-is not physical device displaying something (like a panel) but rather a
-device controlling such panel. Therefore display-controller feels
-appropriate.
+Anand told me that the change is fine that's why here is my
+Acked-by: Michal Simek <michal.simek@xilinx.com>
 
+Jonathan: Anand decided to do change in his carrier that's why that emails won't 
+go through. But I am still around if you need something xilinx/amd to test.
 
-Best regards,
-Krzysztof
+Thanks,
+Michal

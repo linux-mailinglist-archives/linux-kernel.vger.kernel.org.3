@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 718BC4BDBF7
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:41:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 50D7A4BDC2F
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:41:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350915AbiBUJgU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 04:36:20 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51004 "EHLO
+        id S1346059AbiBUI6V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 03:58:21 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232073AbiBUJ1e (ORCPT
+        with ESMTP id S1346061AbiBUI4F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 04:27:34 -0500
+        Mon, 21 Feb 2022 03:56:05 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37B9F6377;
-        Mon, 21 Feb 2022 01:12:02 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81E562181E;
+        Mon, 21 Feb 2022 00:53:53 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C897B60018;
-        Mon, 21 Feb 2022 09:12:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE416C340E9;
-        Mon, 21 Feb 2022 09:12:00 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 623126112B;
+        Mon, 21 Feb 2022 08:53:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48B76C340EB;
+        Mon, 21 Feb 2022 08:53:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645434721;
-        bh=VLLiuLRtlIOdNKwOXTrIBHRlol07DVdf54qswhdIWCI=;
+        s=korg; t=1645433632;
+        bh=0x8uk8ogZkTiQRkXjDuzshmOMcA8a04iiSihN0Uu/A4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=aejGP5ginPYXfzs4AIYwtAkhUI2/eYaSomg6wiQ5Jz06qfm8tzPPTlOXWyUtPLxt+
-         SKxMrDMDXPLo4Tq1KwZKrnD6NIYNuXTchAfZ2vuFmjn7mFMPYLaNvJgvICwzWx9FWS
-         VSWW2qvPptn6mIUo6fJosfjrW0lhpDFrB6FYhC38=
+        b=POd7vDFjABxjqRV59qMhgM9VKdq+E721HP0JX7XcMtKDDaq0U6iWybeG+3Ys+oY40
+         KAWoYtEGbmYHklm10c76b/x5Q4KihZqyCGerg5iUwXDAHNAcn8sI+48/9fJe33D3Kp
+         R3elHlxbqLsRco1IkQWdNfKQLKdMWIAFtaU2UFdQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Oleksandr Mazur <oleksandr.mazur@plvision.eu>,
-        Nikolay Aleksandrov <nikolay@nvidia.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 5.15 107/196] net: bridge: multicast: notify switchdev driver whenever MC processing gets disabled
+        stable@vger.kernel.org, Yang Xu <xuyang2018.jy@fujitsu.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.14 08/45] selftests/zram: Skip max_comp_streams interface on newer kernel
 Date:   Mon, 21 Feb 2022 09:48:59 +0100
-Message-Id: <20220221084934.516798082@linuxfoundation.org>
+Message-Id: <20220221084910.737270667@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220221084930.872957717@linuxfoundation.org>
-References: <20220221084930.872957717@linuxfoundation.org>
+In-Reply-To: <20220221084910.454824160@linuxfoundation.org>
+References: <20220221084910.454824160@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,49 +55,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Oleksandr Mazur <oleksandr.mazur@plvision.eu>
+From: Yang Xu <xuyang2018.jy@fujitsu.com>
 
-commit c832962ac972082b3a1f89775c9d4274c8cb5670 upstream.
+[ Upstream commit fc4eb486a59d70bd35cf1209f0e68c2d8b979193 ]
 
-Whenever bridge driver hits the max capacity of MDBs, it disables
-the MC processing (by setting corresponding bridge option), but never
-notifies switchdev about such change (the notifiers are called only upon
-explicit setting of this option, through the registered netlink interface).
+Since commit 43209ea2d17a ("zram: remove max_comp_streams internals"), zram
+has switched to per-cpu streams. Even kernel still keep this interface for
+some reasons, but writing to max_comp_stream doesn't take any effect. So
+skip it on newer kernel ie 4.7.
 
-This could lead to situation when Software MDB processing gets disabled,
-but this event never gets offloaded to the underlying Hardware.
+The code that comparing kernel version is from xfstests testsuite ext4/053.
 
-Fix this by adding a notify message in such case.
-
-Fixes: 147c1e9b902c ("switchdev: bridge: Offload multicast disabled")
-Signed-off-by: Oleksandr Mazur <oleksandr.mazur@plvision.eu>
-Acked-by: Nikolay Aleksandrov <nikolay@nvidia.com>
-Link: https://lore.kernel.org/r/20220215165303.31908-1-oleksandr.mazur@plvision.eu
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Yang Xu <xuyang2018.jy@fujitsu.com>
+Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/bridge/br_multicast.c |    4 ++++
- 1 file changed, 4 insertions(+)
+ tools/testing/selftests/zram/zram_lib.sh | 24 ++++++++++++++++++++++++
+ 1 file changed, 24 insertions(+)
 
---- a/net/bridge/br_multicast.c
-+++ b/net/bridge/br_multicast.c
-@@ -82,6 +82,9 @@ static void br_multicast_find_del_pg(str
- 				     struct net_bridge_port_group *pg);
- static void __br_multicast_stop(struct net_bridge_mcast *brmctx);
+diff --git a/tools/testing/selftests/zram/zram_lib.sh b/tools/testing/selftests/zram/zram_lib.sh
+index 9e73a4fb9b0aa..2c1d1c567f854 100755
+--- a/tools/testing/selftests/zram/zram_lib.sh
++++ b/tools/testing/selftests/zram/zram_lib.sh
+@@ -20,6 +20,9 @@ dev_mounted=-1
  
-+static int br_mc_disabled_update(struct net_device *dev, bool value,
-+				 struct netlink_ext_ack *extack);
+ # Kselftest framework requirement - SKIP code is 4.
+ ksft_skip=4
++kernel_version=`uname -r | cut -d'.' -f1,2`
++kernel_major=${kernel_version%.*}
++kernel_minor=${kernel_version#*.}
+ 
+ trap INT
+ 
+@@ -34,6 +37,20 @@ check_prereqs()
+ 	fi
+ }
+ 
++kernel_gte()
++{
++	major=${1%.*}
++	minor=${1#*.}
 +
- static struct net_bridge_port_group *
- br_sg_port_find(struct net_bridge *br,
- 		struct net_bridge_port_group_sg_key *sg_p)
-@@ -1156,6 +1159,7 @@ struct net_bridge_mdb_entry *br_multicas
- 		return mp;
++	if [ $kernel_major -gt $major ]; then
++		return 0
++	elif [[ $kernel_major -eq $major && $kernel_minor -ge $minor ]]; then
++		return 0
++	fi
++
++	return 1
++}
++
+ zram_cleanup()
+ {
+ 	echo "zram cleanup"
+@@ -95,6 +112,13 @@ zram_max_streams()
+ {
+ 	echo "set max_comp_streams to zram device(s)"
  
- 	if (atomic_read(&br->mdb_hash_tbl.nelems) >= br->hash_max) {
-+		br_mc_disabled_update(br->dev, false, NULL);
- 		br_opt_toggle(br, BROPT_MULTICAST_ENABLED, false);
- 		return ERR_PTR(-E2BIG);
- 	}
++	kernel_gte 4.7
++	if [ $? -eq 0 ]; then
++		echo "The device attribute max_comp_streams was"\
++		               "deprecated in 4.7"
++		return 0
++	fi
++
+ 	local i=0
+ 	for max_s in $zram_max_streams; do
+ 		local sys_path="/sys/block/zram${i}/max_comp_streams"
+-- 
+2.34.1
+
 
 

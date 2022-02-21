@@ -2,44 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38E9F4BE085
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:52:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 745964BE66A
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:02:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236972AbiBUJTP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 04:19:15 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60540 "EHLO
+        id S244016AbiBUJ75 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 04:59:57 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348928AbiBUJLv (ORCPT
+        with ESMTP id S1351991AbiBUJwq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 04:11:51 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B664D28E0A;
-        Mon, 21 Feb 2022 01:04:28 -0800 (PST)
+        Mon, 21 Feb 2022 04:52:46 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B0BA1D0F2;
+        Mon, 21 Feb 2022 01:23:06 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 35E1DCE0E95;
-        Mon, 21 Feb 2022 09:04:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16455C340E9;
-        Mon, 21 Feb 2022 09:04:24 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id D9AC3CE0EA9;
+        Mon, 21 Feb 2022 09:23:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4977C340E9;
+        Mon, 21 Feb 2022 09:23:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645434265;
-        bh=fL4/Dra4cE3mCT/ue01DU22/SzyOjDpE0T3ldSIbAG0=;
+        s=korg; t=1645435383;
+        bh=NKr8jcP1dVRBCsxqTN+6PsHJDCIyuR2K4W8XcO7Uze0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BQqLrtZOqC3QEtVOLJgfZxDZPy6vOFdYyEtT3ZFc7cz1VLmXXLv6rwrWaGW6F4dzC
-         9H3zN9LlKpUPexlTDdlXaE/7tgdAc/SbubZlwlonwEPi32LNapCDPT4RpLdTP3KBAf
-         2o4g78lqUIY1Q3GZfOIAMF49xyTb+OSZzDU/pKZ4=
+        b=aTlrHgcfVC9vOFHNXl542g2OOFfrP76sMrnwmUKygyEv/hU/+w2qZRa2vjsQjbrGS
+         JXxn7L7SAN3qyW3Vt7+MfPtX3fT4wwIodXpuEmmIAsOTKzOsIuN4xRAZZyJSYH8thB
+         dal72T5MEzs/IlX00r0mou6wkQNzBjXMN81mnauA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Takashi Iwai <tiwai@suse.de>,
-        Julian Wollrath <jwollrath@web.de>
-Subject: [PATCH 5.10 070/121] ALSA: hda/realtek: Fix deadlock by COEF mutex
+        stable@vger.kernel.org, Mark Brown <broonie@kernel.org>
+Subject: [PATCH 5.16 143/227] ASoC: ops: Fix stereo change notifications in snd_soc_put_volsw()
 Date:   Mon, 21 Feb 2022 09:49:22 +0100
-Message-Id: <20220221084923.569773210@linuxfoundation.org>
+Message-Id: <20220221084939.592717242@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220221084921.147454846@linuxfoundation.org>
-References: <20220221084921.147454846@linuxfoundation.org>
+In-Reply-To: <20220221084934.836145070@linuxfoundation.org>
+References: <20220221084934.836145070@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,118 +53,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Takashi Iwai <tiwai@suse.de>
+From: Mark Brown <broonie@kernel.org>
 
-commit 2a845837e3d0ddaed493b4c5c4643d7f0542804d upstream.
+commit 564778d7b1ea465f9487eedeece7527a033549c5 upstream.
 
-The recently introduced coef_mutex for Realtek codec seems causing a
-deadlock when the relevant code is invoked from the power-off state;
-then the HD-audio core tries to power-up internally, and this kicks
-off the codec runtime PM code that tries to take the same coef_mutex.
+When writing out a stereo control we discard the change notification from
+the first channel, meaning that events are only generated based on changes
+to the second channel. Ensure that we report a change if either channel
+has changed.
 
-In order to avoid the deadlock, do the temporary power up/down around
-the coef_mutex acquisition and release.  This assures that the
-power-up sequence runs before the mutex, hence no re-entrance will
-happen.
-
-Fixes: b837a9f5ab3b ("ALSA: hda: realtek: Fix race at concurrent COEF updates")
-Reported-and-tested-by: Julian Wollrath <jwollrath@web.de>
-Cc: <stable@vger.kernel.org>
-Link: https://lore.kernel.org/r/20220214132838.4db10fca@schienar
-Link: https://lore.kernel.org/r/20220214130410.21230-1-tiwai@suse.de
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
+Signed-off-by: Mark Brown <broonie@kernel.org>
+Cc: stable@vger.kernel.org
+Link: https://lore.kernel.org/r/20220201155629.120510-2-broonie@kernel.org
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/pci/hda/patch_realtek.c |   39 ++++++++++++++++++++++++---------------
- 1 file changed, 24 insertions(+), 15 deletions(-)
+ sound/soc/soc-ops.c |   14 ++++++++++----
+ 1 file changed, 10 insertions(+), 4 deletions(-)
 
---- a/sound/pci/hda/patch_realtek.c
-+++ b/sound/pci/hda/patch_realtek.c
-@@ -134,6 +134,22 @@ struct alc_spec {
-  * COEF access helper functions
-  */
+--- a/sound/soc/soc-ops.c
++++ b/sound/soc/soc-ops.c
+@@ -308,7 +308,7 @@ int snd_soc_put_volsw(struct snd_kcontro
+ 	unsigned int sign_bit = mc->sign_bit;
+ 	unsigned int mask = (1 << fls(max)) - 1;
+ 	unsigned int invert = mc->invert;
+-	int err;
++	int err, ret;
+ 	bool type_2r = false;
+ 	unsigned int val2 = 0;
+ 	unsigned int val, val_mask;
+@@ -350,12 +350,18 @@ int snd_soc_put_volsw(struct snd_kcontro
+ 	err = snd_soc_component_update_bits(component, reg, val_mask, val);
+ 	if (err < 0)
+ 		return err;
++	ret = err;
  
-+static void coef_mutex_lock(struct hda_codec *codec)
-+{
-+	struct alc_spec *spec = codec->spec;
-+
-+	snd_hda_power_up_pm(codec);
-+	mutex_lock(&spec->coef_mutex);
-+}
-+
-+static void coef_mutex_unlock(struct hda_codec *codec)
-+{
-+	struct alc_spec *spec = codec->spec;
-+
-+	mutex_unlock(&spec->coef_mutex);
-+	snd_hda_power_down_pm(codec);
-+}
-+
- static int __alc_read_coefex_idx(struct hda_codec *codec, hda_nid_t nid,
- 				 unsigned int coef_idx)
- {
-@@ -147,12 +163,11 @@ static int __alc_read_coefex_idx(struct
- static int alc_read_coefex_idx(struct hda_codec *codec, hda_nid_t nid,
- 			       unsigned int coef_idx)
- {
--	struct alc_spec *spec = codec->spec;
- 	unsigned int val;
+-	if (type_2r)
++	if (type_2r) {
+ 		err = snd_soc_component_update_bits(component, reg2, val_mask,
+-			val2);
++						    val2);
++		/* Don't discard any error code or drop change flag */
++		if (ret == 0 || err < 0) {
++			ret = err;
++		}
++	}
  
--	mutex_lock(&spec->coef_mutex);
-+	coef_mutex_lock(codec);
- 	val = __alc_read_coefex_idx(codec, nid, coef_idx);
--	mutex_unlock(&spec->coef_mutex);
-+	coef_mutex_unlock(codec);
- 	return val;
+-	return err;
++	return ret;
  }
+ EXPORT_SYMBOL_GPL(snd_soc_put_volsw);
  
-@@ -169,11 +184,9 @@ static void __alc_write_coefex_idx(struc
- static void alc_write_coefex_idx(struct hda_codec *codec, hda_nid_t nid,
- 				 unsigned int coef_idx, unsigned int coef_val)
- {
--	struct alc_spec *spec = codec->spec;
--
--	mutex_lock(&spec->coef_mutex);
-+	coef_mutex_lock(codec);
- 	__alc_write_coefex_idx(codec, nid, coef_idx, coef_val);
--	mutex_unlock(&spec->coef_mutex);
-+	coef_mutex_unlock(codec);
- }
- 
- #define alc_write_coef_idx(codec, coef_idx, coef_val) \
-@@ -194,11 +207,9 @@ static void alc_update_coefex_idx(struct
- 				  unsigned int coef_idx, unsigned int mask,
- 				  unsigned int bits_set)
- {
--	struct alc_spec *spec = codec->spec;
--
--	mutex_lock(&spec->coef_mutex);
-+	coef_mutex_lock(codec);
- 	__alc_update_coefex_idx(codec, nid, coef_idx, mask, bits_set);
--	mutex_unlock(&spec->coef_mutex);
-+	coef_mutex_unlock(codec);
- }
- 
- #define alc_update_coef_idx(codec, coef_idx, mask, bits_set)	\
-@@ -231,9 +242,7 @@ struct coef_fw {
- static void alc_process_coef_fw(struct hda_codec *codec,
- 				const struct coef_fw *fw)
- {
--	struct alc_spec *spec = codec->spec;
--
--	mutex_lock(&spec->coef_mutex);
-+	coef_mutex_lock(codec);
- 	for (; fw->nid; fw++) {
- 		if (fw->mask == (unsigned short)-1)
- 			__alc_write_coefex_idx(codec, fw->nid, fw->idx, fw->val);
-@@ -241,7 +250,7 @@ static void alc_process_coef_fw(struct h
- 			__alc_update_coefex_idx(codec, fw->nid, fw->idx,
- 						fw->mask, fw->val);
- 	}
--	mutex_unlock(&spec->coef_mutex);
-+	coef_mutex_unlock(codec);
- }
- 
- /*
 
 

@@ -2,78 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F1204BDBF6
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:41:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E2154BE71E
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:03:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379917AbiBUQLe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 11:11:34 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60132 "EHLO
+        id S1379939AbiBUQLs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 11:11:48 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346398AbiBUQLc (ORCPT
+        with ESMTP id S1379935AbiBUQLq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 11:11:32 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 695302408B
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 08:11:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=dYsXggHn2A9n6FxteJ+9znoC/7uWDFSPYAMbC1idliw=; b=fx63exbLTFa3VqC1YJvNHgNPVO
-        bN81YavyAlSLaELxD8HWBgg9kSXs3Qan1YVOjZvOeSNQM0yvofl7ie6dEWh0WqztTMOdAXp3Uocef
-        z6+Ob/C0CIjiryNKIQ2Ye9+6c6JIbJSGbjceqBmTkBk3L1rRZgp+YBxD+PoyrBqIJIENH37fjTgSo
-        OsPH48vyRIMZrNFIp/p6kZIHZaB1/Z9grh8ECrIZuMLTbNeZvoLZLR4uRkEz72Jdb3wjeL655KFb6
-        F3X70qoVrJYylKz17DuA47pt7sAWcovs3BqqGoRIgxRXOf35dJfXO+o0rSimyspRt1B+VfYkTuSDT
-        5/504Vtw==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nMBH3-00Bg9S-2D; Mon, 21 Feb 2022 16:10:53 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id B00ED30045A;
-        Mon, 21 Feb 2022 17:10:51 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 8F3F1202411C1; Mon, 21 Feb 2022 17:10:51 +0100 (CET)
-Date:   Mon, 21 Feb 2022 17:10:51 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     x86@kernel.org, joao@overdrivepizza.com, hjl.tools@gmail.com,
-        jpoimboe@redhat.com, andrew.cooper3@citrix.com,
-        linux-kernel@vger.kernel.org, ndesaulniers@google.com,
-        samitolvanen@google.com, mark.rutland@arm.com,
-        alyssa.milburn@intel.com
-Subject: Re: [PATCH 15/29] x86: Disable IBT around firmware
-Message-ID: <YhO5i+DmY1+/l+PC@hirez.programming.kicks-ass.net>
-References: <20220218164902.008644515@infradead.org>
- <20220218171409.456054276@infradead.org>
- <831051EB-FF09-4B75-98EE-A7C8D0054CFE@chromium.org>
- <20220221100615.GK23216@worktop.programming.kicks-ass.net>
- <4DC4ECA7-902C-4496-8AAA-173D86C7C730@chromium.org>
+        Mon, 21 Feb 2022 11:11:46 -0500
+Received: from mail-qv1-xf2c.google.com (mail-qv1-xf2c.google.com [IPv6:2607:f8b0:4864:20::f2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EBC627160
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 08:11:23 -0800 (PST)
+Received: by mail-qv1-xf2c.google.com with SMTP id d7so33150105qvk.2
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 08:11:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=subject:to:references:from:message-id:date:user-agent:mime-version
+         :in-reply-to:content-transfer-encoding;
+        bh=d396PtROr+jPwEkDcy61jcpnkTVE5m6X1ZEPC1Mq6R0=;
+        b=OgdF/dWy8xpsv8JpMGt0895ynwGPKpH7tPRnhw90xwJ+PbyrMIYqCdlAxmsXtL3xg6
+         bAqxoRk1MPK/zriW/sWl6L+9DoanBM1jSKP7Bt0AayPKMx/IPiDbMhb6a9MyaFSs7+9c
+         WJbtkoRLF1t5COPU8BMwUYriXe1ZOyH72oH4ThIFec1NiDYjuF1YGtKFSuMHRaIrUCTI
+         fOrypVM6f1BW/lqQdZKmODdwuHyJPWN5kCGvQIDaEMQMjaiLVCj0FAWUckqEPhKHZolW
+         dgmP9NLiWud3trBpU9rY1NgkhzqkmAR3NoiqxQtoEgGG8iW2hFUmXr8cZixw9/c3dw1J
+         yTXg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding;
+        bh=d396PtROr+jPwEkDcy61jcpnkTVE5m6X1ZEPC1Mq6R0=;
+        b=XDG49lqaHfMHtYwlzdApLAMD535RvNnWnqp3Y1ov7qhO3Of5CbIpdHBW+s4gAHCc9J
+         vbQk4aKdvRl4UkJ0ugqni/3x3BrBd8JO1HK/g/mePcDyJ3cmWK4hmAlDyw9LfAbfWJCQ
+         A21qcBVI2xtnsqCBe41vC4ml6a4/QAvuVYg3SNeW45ygsDBVvRSi9qsAD3eOO5t4qDF7
+         emStqp9BBFBxu52qbNj+jhxh25tNyelT7L0d6/P9E4T8qkNw4HlTKg3s8tOyORkH3flz
+         PaV6WSvbqtzMz5Pzg3y6OD84w6OuzJMRQBCum7G8lCPdWDixaXS74FYdrL9TrM5ZYAy2
+         vMMA==
+X-Gm-Message-State: AOAM532LiKUytp7K0p6FXgyDbs+3M50lQ5mrGRaQMcNdEGn9k814ZkqS
+        Se1Q6g4YkNKwFTMqG5cc9XVttjMTB+w=
+X-Google-Smtp-Source: ABdhPJwW/9NjOXYdvMVZZVJ2vXSMs+hJXRrqlemsUNY6Kpl/tizcVjiwcIJwZqXYLaD9Ir5qk1JzKQ==
+X-Received: by 2002:a05:622a:40e:b0:2dc:eb59:4855 with SMTP id n14-20020a05622a040e00b002dceb594855mr18786913qtx.526.1645459881699;
+        Mon, 21 Feb 2022 08:11:21 -0800 (PST)
+Received: from [120.7.1.38] (198-84-206-107.cpe.teksavvy.com. [198.84.206.107])
+        by smtp.gmail.com with ESMTPSA id d23sm9295816qka.50.2022.02.21.08.11.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 21 Feb 2022 08:11:21 -0800 (PST)
+Subject: Re: Linux 5.17-rc5
+To:     Robert Gadsdon <rhgadsdon@gmail.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <CAHk-=wgsMMuMP9_dWps7f25e6G628Hf7-B3hvSDvjhRXqVQvpg@mail.gmail.com>
+ <2d30205a-fc22-02e1-5c4b-99b91493580c@gmail.com>
+From:   Woody Suwalski <wsuwalski@gmail.com>
+Message-ID: <013de68c-a30c-6c13-ee08-2af65d5cb849@gmail.com>
+Date:   Mon, 21 Feb 2022 11:11:18 -0500
+User-Agent: Mozilla/5.0 (X11; Linux i686; rv:68.0) Gecko/20100101 Firefox/68.0
+ SeaMonkey/2.53.10.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4DC4ECA7-902C-4496-8AAA-173D86C7C730@chromium.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <2d30205a-fc22-02e1-5c4b-99b91493580c@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URI_DOTEDU autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 21, 2022 at 07:54:55AM -0800, Kees Cook wrote:
-> A small bike shed: should __noendbr have an alias, like
-> __never_indirect or something, so there is an arch-agnostic way to do
-> this that actually says what it does? (yes, it's in x86-only code now,
-> hence the bike shed...)
+Robert Gadsdon wrote:
+> Compile fail.   Fedora 35, GCC 11.2.1, x86_64..
+>
+> ....................
+>   AR      net/netfilter/built-in.a
+>   LD [M]  net/netfilter/nf_conntrack.o
+>   CC [M]  net/netfilter/xt_socket.o
+> net/netfilter/xt_socket.c: In function ‘socket_mt_destroy’:
+> net/netfilter/xt_socket.c:224:17: error: implicit declaration of 
+> function ‘nf_defrag_ipv6_disable’; did you mean 
+> ‘nf_defrag_ipv4_disable’? [-Werror=implicit-function-declaration]
+>   224 |                 nf_defrag_ipv6_disable(par->net);
+>       |                 ^~~~~~~~~~~~~~~~~~~~~~
+>       |                 nf_defrag_ipv4_disable
+> cc1: some warnings being treated as errors
+> make[2]: *** [scripts/Makefile.build:288: net/netfilter/xt_socket.o] 
+> Error 1
+> make[1]: *** [scripts/Makefile.build:550: net/netfilter] Error 2
+> make: *** [Makefile:1831: net] Error 2
+>
+>
+> - already reported on Feb 11th, at:
+> http://lkml.iu.edu/hypermail/linux/kernel/2202.1/05890.html
+>
+> Robert Gadsdon
+> February 20th 2022.
+>
+Compile failed for me as well.
 
-I actually asked Mark a related question last week somewhere, I think
-the answer was that the annotation either wasn't working or not as
-useful on ARM64.
+The workaround:
 
-I'm thinking it's easy enough to do a mass rename if/when we cross that
-bridge though.
+nf_defrag_ipv6.patch
+--- a/net/netfilter/xt_socket.c    2022-02-21 07:29:21.938263397 -0500
++++ b/net/netfilter/xt_socket.c    2022-02-21 07:40:16.730022272 -0500
+@@ -17,11 +17,11 @@
+  #include <net/inet_sock.h>
+  #include <net/netfilter/ipv4/nf_defrag_ipv4.h>
+
+-#if IS_ENABLED(CONFIG_IP6_NF_IPTABLES)
++//#if IS_ENABLED(CONFIG_IP6_NF_IPTABLES)
+  #include <linux/netfilter_ipv6/ip6_tables.h>
+  #include <net/inet6_hashtables.h>
+  #include <net/netfilter/ipv6/nf_defrag_ipv6.h>
+-#endif
++//#endif
+
+  #include <net/netfilter/nf_socket.h>
+  #include <linux/netfilter/xt_socket.h>
+
+
+
+Or force use CONFIG_IP6_NF_IPTABLES
+
+Thanks, Woody
+

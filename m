@@ -2,60 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21E644BE639
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:01:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C60E94BE4C8
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:59:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377826AbiBUOav (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 09:30:51 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39234 "EHLO
+        id S1377820AbiBUOap (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 09:30:45 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346906AbiBUOag (ORCPT
+        with ESMTP id S1358822AbiBUOag (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 21 Feb 2022 09:30:36 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E47E41EC5E;
-        Mon, 21 Feb 2022 06:30:12 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id 7B35C1F437AC
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1645453811;
-        bh=30ZWPYBlO//VJMyIsttgH0MbJuCyxlDhqahcFdfPAB8=;
-        h=Date:From:Subject:To:Cc:References:In-Reply-To:From;
-        b=QJ6FOiPGUU7GGQDnQyd25ReRL5cH58XE8TzWDM1npSemzXh2egj1zhpwbhRMJ3Lmj
-         tGyN1oFN9mF0tG6VDxUVdN8TacgsCaX2KGZrq4FOKM0PpZ+ITOMvuYoLHx0sW4X50P
-         bA2TeDFRtsOV7b8gmAd2R/FvIEEsb3frNQixEvLY3kFlBrqVyB6H5edaNR/BIygDKM
-         LO3Yhv3xuemjuPMN8qiK2zbsaiGuUEqSFg4Ct8YletOTNm+haNpLY91tPyNoi39gMm
-         lBHbS6w5WSg0DevFAz7riBOae+Le7wrfV0DaRNq8tb1J0dUvWO01J5qQoy2Ev9ala1
-         ig10zEz/2uVrQ==
-Message-ID: <a7605c9f-55f9-c7cc-f2b9-89ddbffb4927@collabora.com>
-Date:   Mon, 21 Feb 2022 15:30:07 +0100
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12E3B1EC7B;
+        Mon, 21 Feb 2022 06:30:13 -0800 (PST)
+Received: from ip4d144895.dynamic.kabel-deutschland.de ([77.20.72.149] helo=[192.168.66.200]); authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1nM9ha-0002vS-2G; Mon, 21 Feb 2022 15:30:10 +0100
+Message-ID: <7dce67c2-918e-3553-9dd3-1f59d3d37e05@leemhuis.info>
+Date:   Mon, 21 Feb 2022 15:30:09 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Subject: Re: [PATCH v8 04/19] video/hdmi: Add audio_infoframe packing for DP
-To:     Guillaume Ranquet <granquet@baylibre.com>, chunkuang.hu@kernel.org,
-        p.zabel@pengutronix.de, airlied@linux.ie, daniel@ffwll.ch,
-        robh+dt@kernel.org, maarten.lankhorst@linux.intel.com,
-        mripard@kernel.org, tzimmermann@suse.de, matthias.bgg@gmail.com,
-        chunfeng.yun@mediatek.com, kishon@ti.com, vkoul@kernel.org,
-        deller@gmx.de, ck.hu@mediatek.com, jitao.shi@mediatek.com
-Cc:     dri-devel@lists.freedesktop.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-phy@lists.infradead.org, linux-fbdev@vger.kernel.org,
-        Markus Schneider-Pargmann <msp@baylibre.com>
-References: <20220218145437.18563-1-granquet@baylibre.com>
- <20220218145437.18563-5-granquet@baylibre.com>
-Content-Language: en-US
-In-Reply-To: <20220218145437.18563-5-granquet@baylibre.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 5.16 077/227] iwlwifi: fix use-after-free
+Content-Language: en-BS
+To:     Kalle Valo <kvalo@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Stefan Agner <stefan@agner.ch>,
+        Wolfgang Walter <linux@stwm.de>,
+        Jason Self <jason@bluehome.net>,
+        Dominik Behr <dominik@dominikbehr.com>,
+        =?UTF-8?Q?Marek_Marczykowski-G=c3=b3recki?= 
+        <marmarek@invisiblethingslab.com>,
+        Johannes Berg <johannes.berg@intel.com>
+References: <20220221084934.836145070@linuxfoundation.org>
+ <20220221084937.429986092@linuxfoundation.org>
+ <fd5bacfa-b357-a2e2-f0b2-2098cdc734f2@leemhuis.info>
+ <87h78swggw.fsf@kernel.org>
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+In-Reply-To: <87h78swggw.fsf@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1645453813;dabea8c3;
+X-HE-SMSGID: 1nM9ha-0002vS-2G
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,163 +54,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 18/02/22 15:54, Guillaume Ranquet ha scritto:
-> From: Markus Schneider-Pargmann <msp@baylibre.com>
+On 21.02.22 13:29, Kalle Valo wrote:
+> Thorsten Leemhuis <regressions@leemhuis.info> writes:
 > 
-> Similar to HDMI, DP uses audio infoframes as well which are structured
-> very similar to the HDMI ones.
+>> Hi, this is your Linux kernel regression tracker.
+>>
+>> On 21.02.22 09:48, Greg Kroah-Hartman wrote:
+>>> From: Johannes Berg <johannes.berg@intel.com>
+>>>
+>>> commit bea2662e7818e15d7607d17d57912ac984275d94 upstream.
+>>>
+>>> If no firmware was present at all (or, presumably, all of the
+>>> firmware files failed to parse), we end up unbinding by calling
+>>> device_release_driver(), which calls remove(), which then in
+>>> iwlwifi calls iwl_drv_stop(), freeing the 'drv' struct. However
+>>> the new code I added will still erroneously access it after it
+>>> was freed.
+>>>
+>>> Set 'failure=false' in this case to avoid the access, all data
+>>> was already freed anyway.
+>>>
+>>> Cc: stable@vger.kernel.org
+>>> Reported-by: Stefan Agner <stefan@agner.ch>
+>>> Reported-by: Wolfgang Walter <linux@stwm.de>
+>>> Reported-by: Jason Self <jason@bluehome.net>
+>>> Reported-by: Dominik Behr <dominik@dominikbehr.com>
+>>> Reported-by: Marek Marczykowski-Górecki <marmarek@invisiblethingslab.com>
+>>> Fixes: ab07506b0454 ("iwlwifi: fix leaks/bad data after failed firmware load")
+>>> Signed-off-by: Johannes Berg <johannes.berg@intel.com>
+>>> Signed-off-by: Kalle Valo <kvalo@kernel.org>
+>>> Link:
+>>> https://lore.kernel.org/r/20220208114728.e6b514cf4c85.Iffb575ca2a623d7859b542c33b2a507d01554251@changeid
+>>> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+>>
+>> Great to see that you quickly picked up this patch. Once the new stable
+>> and longterm releases are out on Wednesday, it will fix a regression
+>> that made it into many stable and longterm kernels nearly four weeks
+>> earlier. I tracked the issue, which made me we wonder: should I have
+>> done something differently in this case to get the regression resolved
+>> more quickly? Should I maybe have suggested to remove the culprit
+>> temporarily until the fix was merged to mainline?
+>>
+>> For context, this is the story of the regression afaics: the change
+>> ab07506b0454 ("iwlwifi: fix leaks/bad data after failed firmware load")
+>> was merged for 5.17-rc1 (released on 2022-01-23). Shortly after it was
+>> backported to several stable/longterm series with new versions released
+>> on 2022-01-27. It triggered a general protection fault, if the proper
+>> firmware file was missing. Afaics at least five people reported the
+>> problem between 2022-02-01 and 2022-02-11 for at least 5.10.y, 5.15.y
+>> and 5.16.y (some of those reports were on the stable list), which shows
+>> that such a setup is not that unusual. A fix was posted on 2022-02-08
+>> and approved and committed by a maintainer on 2022-02-10. It was then
+>> merged to mainline on 2022-02-17 (I hope we can find ways to reduce such
+>> particular timeframes in the future, but that's a different story).
 > 
-> This patch adds a helper function to pack the HDMI audio infoframe for
-> DP, called hdmi_audio_infoframe_pack_for_dp().
-> hdmi_audio_infoframe_pack_only() is split into two parts. One of them
-> packs the payload only and can be used for HDMI and DP.
-> 
-> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
-> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
-> ---
->   drivers/video/hdmi.c        | 83 ++++++++++++++++++++++++++++---------
->   include/drm/drm_dp_helper.h |  2 +
->   include/linux/hdmi.h        |  7 +++-
->   3 files changed, 72 insertions(+), 20 deletions(-)
-> 
-> diff --git a/drivers/video/hdmi.c b/drivers/video/hdmi.c
-> index 947be761dfa40..63e74d9fd210e 100644
-> --- a/drivers/video/hdmi.c
-> +++ b/drivers/video/hdmi.c
-> @@ -21,6 +21,7 @@
->    * DEALINGS IN THE SOFTWARE.
->    */
->   
-> +#include <drm/drm_dp_helper.h>
->   #include <linux/bitops.h>
->   #include <linux/bug.h>
->   #include <linux/errno.h>
-> @@ -381,12 +382,34 @@ static int hdmi_audio_infoframe_check_only(const struct hdmi_audio_infoframe *fr
->    *
->    * Returns 0 on success or a negative error code on failure.
->    */
-> -int hdmi_audio_infoframe_check(struct hdmi_audio_infoframe *frame)
-> +int hdmi_audio_infoframe_check(const struct hdmi_audio_infoframe *frame)
->   {
->   	return hdmi_audio_infoframe_check_only(frame);
->   }
->   EXPORT_SYMBOL(hdmi_audio_infoframe_check);
->   
-> +static void
-> +hdmi_audio_infoframe_pack_payload(const struct hdmi_audio_infoframe *frame,
-> +				  u8 *buffer)
-> +{
-> +	u8 channels;
-> +
-> +	if (frame->channels >= 2)
-> +		channels = frame->channels - 1;
-> +	else
-> +		channels = 0;
-> +
-> +	buffer[0] = ((frame->coding_type & 0xf) << 4) | (channels & 0x7);
-> +	buffer[1] = ((frame->sample_frequency & 0x7) << 2) |
-> +		 (frame->sample_size & 0x3);
-> +	buffer[2] = frame->coding_type_ext & 0x1f;
-> +	buffer[3] = frame->channel_allocation;
-> +	buffer[4] = (frame->level_shift_value & 0xf) << 3;
-> +
-> +	if (frame->downmix_inhibit)
-> +		buffer[4] |= BIT(7);
-> +}
-> +
->   /**
->    * hdmi_audio_infoframe_pack_only() - write HDMI audio infoframe to binary buffer
->    * @frame: HDMI audio infoframe
-> @@ -404,7 +427,6 @@ EXPORT_SYMBOL(hdmi_audio_infoframe_check);
->   ssize_t hdmi_audio_infoframe_pack_only(const struct hdmi_audio_infoframe *frame,
->   				       void *buffer, size_t size)
->   {
-> -	unsigned char channels;
->   	u8 *ptr = buffer;
->   	size_t length;
->   	int ret;
-> @@ -420,28 +442,13 @@ ssize_t hdmi_audio_infoframe_pack_only(const struct hdmi_audio_infoframe *frame,
->   
->   	memset(buffer, 0, size);
->   
-> -	if (frame->channels >= 2)
-> -		channels = frame->channels - 1;
-> -	else
-> -		channels = 0;
-> -
->   	ptr[0] = frame->type;
->   	ptr[1] = frame->version;
->   	ptr[2] = frame->length;
->   	ptr[3] = 0; /* checksum */
->   
-> -	/* start infoframe payload */
-> -	ptr += HDMI_INFOFRAME_HEADER_SIZE;
-> -
-> -	ptr[0] = ((frame->coding_type & 0xf) << 4) | (channels & 0x7);
-> -	ptr[1] = ((frame->sample_frequency & 0x7) << 2) |
-> -		 (frame->sample_size & 0x3);
-> -	ptr[2] = frame->coding_type_ext & 0x1f;
-> -	ptr[3] = frame->channel_allocation;
-> -	ptr[4] = (frame->level_shift_value & 0xf) << 3;
-> -
-> -	if (frame->downmix_inhibit)
-> -		ptr[4] |= BIT(7);
-> +	hdmi_audio_infoframe_pack_payload(frame,
-> +					  ptr + HDMI_INFOFRAME_HEADER_SIZE);
->   
->   	hdmi_infoframe_set_checksum(buffer, length);
->   
-> @@ -479,6 +486,44 @@ ssize_t hdmi_audio_infoframe_pack(struct hdmi_audio_infoframe *frame,
->   }
->   EXPORT_SYMBOL(hdmi_audio_infoframe_pack);
->   
-> +/**
-> + * hdmi_audio_infoframe_pack_for_dp - Pack a HDMI Audio infoframe for
-> + *                                    displayport
+> From mainline point of view there is not really any easy way to make
+> this faster. There are multiple trees involved and pull requests always
+> take time (we cannot submit a pull request for every commit sepately),
 
-This fits in one line (82 cols is ok)... but, anyway, please capitalize D and P
-in the DisplayPort word.
+Well, I'm aware of all that, but OTOH I might be missing something, as
+your reply makes me wonder: what is stopping you from asking Dave/Jakub
+or even Linus himself to directly pick up a regression fix that
+obviously bothers multiple people (the handful we known about might be
+the tip of the iceberg)? Some mailing list posts from Linus iirc
+indicate something like that is not a big problem for him, if it doesn't
+happen too often. With such a approach the issue could have vanished a
+from all our versions a week earlier (if that worth it in this
+particular case is a different question; same for skipping linux-next,
+but you accepted the patch on a Thursday, so it could have been in there
+for one regular work day). Or would that also skip some wireless
+specific CI that you want to chew on the patch first?
 
-> + *
-> + * @frame HDMI Audio infoframe
+The thing is: I noticed how quickly regressions sometimes get fixed when
+Linus is directly involved somehow, especially in cases where he himself
+is affected by the issue. Obviously he deserves some special treatment,
+but OTOH it kinda feels wrong to me when other regression fixes hang
+around in git tree for weeks before they finally make it to mainline
+(which is needed to also get them fixed in stable trees).
 
-You're almost there! You missed a colon after each description.
-Also, I personally like seeing indented descriptions as, in my opinion, this
-enhances human readability, as it's a bit more pleasing to the eye... but
-it's not a requirement, so you be the judge.
+But okay, let's assume for a moment that things can't be sped up, to
+bring me back to the question that made me write the mail you replied
+to: Should I (or you/Johannes?) in that case have asked Greg to
+temporarily revert the culprit in the stable tree until the fix is ready?
 
-* @frame:      HDMI Audio infoframe
-* @sdp:        Secondary data packet......
-* @dp_version: DisplayPort version......
-
-Please fix.
-
-> + * @sdp secondary data packet for display port. This is filled with the
-> + * appropriate data
-> + * @dp_version Display Port version to be encoded in the header
-> + *
-> + * Packs a HDMI Audio Infoframe to be sent over Display Port. This function
-> + * fills the secondary data packet to be used for Display Port.
-> + *
-> + * Return: Number of total written bytes or a negative errno on failure.
-> + */
-> +ssize_t
-> +hdmi_audio_infoframe_pack_for_dp(const struct hdmi_audio_infoframe *frame,
-> +				 struct dp_sdp *sdp, u8 dp_version)
-> +{
-> +	int ret;
-> +
-> +	ret = hdmi_audio_infoframe_check(frame);
-> +	if (ret)
-> +		return ret;
-> +
-> +	memset(sdp->db, 0, sizeof(sdp->db));
-> +
-> +	// Secondary-data packet header
-
-Please, C-style comments:
-
-	/* Secondary-data packet header */
-
-Thanks,
-Angelo
+Ciao, Thorsten

@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF9C64BE3FA
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:58:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D9344BE68E
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:02:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347509AbiBUJFv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 04:05:51 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55620 "EHLO
+        id S1351602AbiBUJqQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 04:46:16 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347963AbiBUJCG (ORCPT
+        with ESMTP id S1351455AbiBUJhP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 04:02:06 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2999E2A26C;
-        Mon, 21 Feb 2022 00:57:21 -0800 (PST)
+        Mon, 21 Feb 2022 04:37:15 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB03539838;
+        Mon, 21 Feb 2022 01:15:52 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9ECDDB80EA5;
-        Mon, 21 Feb 2022 08:57:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2CEAC340F1;
-        Mon, 21 Feb 2022 08:57:18 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 2B5C2CE0E8B;
+        Mon, 21 Feb 2022 09:15:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11116C340E9;
+        Mon, 21 Feb 2022 09:15:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645433839;
-        bh=ds2FuH8pOL3cY/92w6Bq0OB6x52HU1C+5zmw1fSGV9Y=;
+        s=korg; t=1645434947;
+        bh=jtUIix8YE2fPyTynYc8qgmVp0lmvN90YoZI+APmQjhk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Z9/dNLZ6rEuPqUC64J0XxCHrz1+WzmwUaY3kCQ/fITkXqD2Y7Ka5p2E268eIHJUkb
-         80lvCt9DbFEWHjQr4HHOH2BHUMzHs+tVpArbl2w/8BBMRcbiSlyWSlIqQHe66nvd9l
-         ubPgi3Fsa1KC+rPWuj9GubMbg/dgXwFDEXJBcku4=
+        b=dakPIsi5v9Fpt19+V776r3v5s6HWvvrABY6SmV/x1FFfmEY9xwCetAmNCEjHj291e
+         oSZHy0uuRDIH4nG3njpl8xBCnbXZyrxMNxacm+SyJIFDibt6RJuBqcX48UjUZHL9Cp
+         +uatGR9L8VQXVKm9cGWGh811ebw4tWkx4zBAaTf0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Mateusz Krzak <kszaquitto@gmail.com>,
-        Christian Hewitt <christianshewitt@gmail.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
+        stable@vger.kernel.org, Namjae Jeon <linkinjeon@kernel.org>,
+        Steve French <stfrench@microsoft.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 53/58] arm64: dts: meson-gx: add ATF BL32 reserved-memory region
-Date:   Mon, 21 Feb 2022 09:49:46 +0100
-Message-Id: <20220221084913.578903776@linuxfoundation.org>
+Subject: [PATCH 5.15 155/196] ksmbd: fix same UniqueId for dot and dotdot entries
+Date:   Mon, 21 Feb 2022 09:49:47 +0100
+Message-Id: <20220221084936.120538087@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220221084911.895146879@linuxfoundation.org>
-References: <20220221084911.895146879@linuxfoundation.org>
+In-Reply-To: <20220221084930.872957717@linuxfoundation.org>
+References: <20220221084930.872957717@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,41 +55,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christian Hewitt <christianshewitt@gmail.com>
+From: Namjae Jeon <linkinjeon@kernel.org>
 
-[ Upstream commit 76577c9137456febb05b0e17d244113196a98968 ]
+[ Upstream commit 97550c7478a2da93e348d8c3075d92cddd473a78 ]
 
-Add an additional reserved memory region for the BL32 trusted firmware
-present in many devices that boot from Amlogic vendor u-boot.
+ksmbd sets the inode number to UniqueId. However, the same UniqueId for
+dot and dotdot entry is set to the inode number of the parent inode.
+This patch set them using the current inode and parent inode.
 
-Suggested-by: Mateusz Krzak <kszaquitto@gmail.com>
-Signed-off-by: Christian Hewitt <christianshewitt@gmail.com>
-Reviewed-by: Neil Armstrong <narmstrong@baylibre.com>
-Reviewed-by: Kevin Hilman <khilman@baylibre.com>
-Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
-Link: https://lore.kernel.org/r/20220126044954.19069-2-christianshewitt@gmail.com
+Signed-off-by: Namjae Jeon <linkinjeon@kernel.org>
+Signed-off-by: Steve French <stfrench@microsoft.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm64/boot/dts/amlogic/meson-gx.dtsi | 6 ++++++
- 1 file changed, 6 insertions(+)
+ fs/ksmbd/smb_common.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/arch/arm64/boot/dts/amlogic/meson-gx.dtsi b/arch/arm64/boot/dts/amlogic/meson-gx.dtsi
-index b8dc4dbb391b6..4252119bfd901 100644
---- a/arch/arm64/boot/dts/amlogic/meson-gx.dtsi
-+++ b/arch/arm64/boot/dts/amlogic/meson-gx.dtsi
-@@ -41,6 +41,12 @@
- 			no-map;
- 		};
+diff --git a/fs/ksmbd/smb_common.c b/fs/ksmbd/smb_common.c
+index 707490ab1f4c4..f2e7e3a654b34 100644
+--- a/fs/ksmbd/smb_common.c
++++ b/fs/ksmbd/smb_common.c
+@@ -308,14 +308,17 @@ int ksmbd_populate_dot_dotdot_entries(struct ksmbd_work *work, int info_level,
+ 	for (i = 0; i < 2; i++) {
+ 		struct kstat kstat;
+ 		struct ksmbd_kstat ksmbd_kstat;
++		struct dentry *dentry;
  
-+		/* 32 MiB reserved for ARM Trusted Firmware (BL32) */
-+		secmon_reserved_bl32: secmon@5300000 {
-+			reg = <0x0 0x05300000 0x0 0x2000000>;
-+			no-map;
-+		};
-+
- 		linux,cma {
- 			compatible = "shared-dma-pool";
- 			reusable;
+ 		if (!dir->dot_dotdot[i]) { /* fill dot entry info */
+ 			if (i == 0) {
+ 				d_info->name = ".";
+ 				d_info->name_len = 1;
++				dentry = dir->filp->f_path.dentry;
+ 			} else {
+ 				d_info->name = "..";
+ 				d_info->name_len = 2;
++				dentry = dir->filp->f_path.dentry->d_parent;
+ 			}
+ 
+ 			if (!match_pattern(d_info->name, d_info->name_len,
+@@ -327,7 +330,7 @@ int ksmbd_populate_dot_dotdot_entries(struct ksmbd_work *work, int info_level,
+ 			ksmbd_kstat.kstat = &kstat;
+ 			ksmbd_vfs_fill_dentry_attrs(work,
+ 						    user_ns,
+-						    dir->filp->f_path.dentry->d_parent,
++						    dentry,
+ 						    &ksmbd_kstat);
+ 			rc = fn(conn, info_level, d_info, &ksmbd_kstat);
+ 			if (rc)
 -- 
 2.34.1
 

@@ -2,180 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D04C54BE13A
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:53:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A2A0C4BE547
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:00:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353340AbiBUKYW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 05:24:22 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58102 "EHLO
+        id S1354329AbiBUKZF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 05:25:05 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353333AbiBUKX7 (ORCPT
+        with ESMTP id S1353246AbiBUKYl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 05:23:59 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F21683E5F4
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 01:43:31 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 90CAB1F390;
-        Mon, 21 Feb 2022 09:43:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1645436610; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=u6LwIJ0VytGXZuwsUswyNAc7mSxg7aR+i+fci3dv+24=;
-        b=Vyo4LvhNcoc4NFfJpSdgCO5QQYUd32k5m59HD2fn2quVXOwBUjZCbOMQpePjSLUGc4aFyI
-        WD6C1pjVFdQ3ia+O4ZUiMizdKWum7Gev0KgZHErQFNo6kl5/6btTHEWwm5Id3swFh/Cks3
-        e0PBafErHfrigh4DKYkIh1HHduXdkzk=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1645436610;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=u6LwIJ0VytGXZuwsUswyNAc7mSxg7aR+i+fci3dv+24=;
-        b=mtuTDiuoPCSpo0Jxcx9ykNIIeTkZQ3wXduUYp8PSo9Ta6AQhL/BUIWz9C2nSex45NrU4mz
-        tojZPCT1W+WZaHDA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 6E94E13A5C;
-        Mon, 21 Feb 2022 09:43:30 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 9glUGsJeE2K+DAAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Mon, 21 Feb 2022 09:43:30 +0000
-Message-ID: <006330a3-8df9-dcd5-8ad6-fc23765a1266@suse.cz>
-Date:   Mon, 21 Feb 2022 10:43:30 +0100
+        Mon, 21 Feb 2022 05:24:41 -0500
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2716C65494
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 01:44:15 -0800 (PST)
+Received: by mail-wr1-x436.google.com with SMTP id u1so25952217wrg.11
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 01:44:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=brainfault-org.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=xZF9VPY+1TXkileF1qxxCQ2LRDWtQxNEI8s6875dzs4=;
+        b=4QHLnrhlwnZcj5DJ3/G46uWsDBuCIetkwxkmd/MdlZ6iEoCOeoU5pPwLqeWW44CU7H
+         DI+LsFmwDxfHTSQRa7f0QbbmWh0NxjW1SQI7FSqmYNkRSpBiTer4JrE9sskhsIF6LM1K
+         4j9H+gnoduOc3RvTapYELk6FotuQPAJFQWd6FDpQ375pGK+KyPita/wrYEt92iAzfotb
+         3FwCa7el23sTY6eIO1PmTC+Kz6+8Q4nSMQXnGDrQyT4PohDuqtoTdJScZCJnWOMjM6F6
+         T+FFyrRMjdTGv889Bim0VclYZKsn6uokSai1snou9jMQhg2EOSbLaDdYEqa4IUH0IaKK
+         xCaQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=xZF9VPY+1TXkileF1qxxCQ2LRDWtQxNEI8s6875dzs4=;
+        b=LZwObT6j2Lntl+LW3vjLpS3tQFEYNzFVkboNWV2QtwikrpCvr5frmKPez1Fh80ATQC
+         nRz/Dn8iXUdLeTG2u7UuXu/iXvLt9gZbmIUgCud7xW4aJgH4dreVwoaMRLQaCaYEMiwm
+         EOiUZvJ41VF52gYOzGEMkoqH0drdRd/Pdwh5FgtkZagv44gvzI7eqKXMzjRiRahS77CN
+         gYoIjGhSMvPyShm8TJ4Yp1DrxTC7kSIPcA7N8Atl30LIlxuN1TiMZk5aqwco7lkIjvYK
+         D63A/C0xUHgQvR//5wwINEXgEzNpa6OHpqm5hAA+wRR0vsqrRyrr6yjPBNZHuiEJOqZ7
+         aI6A==
+X-Gm-Message-State: AOAM531SYojHmYLCIP+znBDAcujbRhRSm0u6Eefa2wBJrkaoxqYnBZv7
+        N6bvxD4lVFANC0BWdaqkJdeoseyWw+CWPPa4/UQgyA==
+X-Google-Smtp-Source: ABdhPJzxcjh1RSAKHy35QGrgtWqpnYXvOMU3RukzoWMnRQVnYFIlPEMv40fZS1NH1VcazmtLeISGthiK/ESvhfLVWT4=
+X-Received: by 2002:a5d:6c6b:0:b0:1ea:77ea:dde8 with SMTP id
+ r11-20020a5d6c6b000000b001ea77eadde8mr162179wrz.690.1645436653537; Mon, 21
+ Feb 2022 01:44:13 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH 1/1] mm/page_alloc: Do not prefetch buddies during bulk
- free
-Content-Language: en-US
-To:     Mel Gorman <mgorman@techsingularity.net>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Aaron Lu <aaron.lu@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Jesper Dangaard Brouer <brouer@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>
-References: <20220221094119.15282-1-mgorman@techsingularity.net>
- <20220221094119.15282-2-mgorman@techsingularity.net>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <20220221094119.15282-2-mgorman@techsingularity.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220128052505.859518-1-apatel@ventanamicro.com>
+ <20220128052505.859518-3-apatel@ventanamicro.com> <063b8a5636d6372f37029946b2c3e0f4@kernel.org>
+ <CAAhSdy387r314f=YjvXJCxqxkvjm5q-EBOVu420giFzaVr_NYw@mail.gmail.com>
+ <31fea18e51a5021b79adb17973f9528e@kernel.org> <4A07582C-80BD-41F8-AEF5-EE48EB7D2D15@jrtc27.com>
+ <87ee3w4lmz.wl-maz@kernel.org>
+In-Reply-To: <87ee3w4lmz.wl-maz@kernel.org>
+From:   Anup Patel <anup@brainfault.org>
+Date:   Mon, 21 Feb 2022 15:14:01 +0530
+Message-ID: <CAAhSdy0LAqNerpd+qXwJj8NTTOX+Qu_CjmtpKPJFSbMH-HT_4g@mail.gmail.com>
+Subject: Re: [PATCH v2 2/6] irqchip/riscv-intc: Create domain using named fwnode
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     Jessica Clarke <jrtc27@jrtc27.com>,
+        Anup Patel <apatel@ventanamicro.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Alistair Francis <Alistair.Francis@wdc.com>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/21/22 10:41, Mel Gorman wrote:
-> free_pcppages_bulk() has taken two passes through the pcp lists since
-> commit 0a5f4e5b4562 ("mm/free_pcppages_bulk: do not hold lock when picking
-> pages to free") due to deferring the cost of selecting PCP lists until
-> the zone lock is held.
-> 
-> As the list processing now takes place under the zone lock, it's less
-> clear that this will always benefit for two reasons.
-> 
-> 1. There is a guaranteed cost to calculating the buddy which definitely
->    has to be calculated again. However, as the zone lock is held and
->    there is no deferring of buddy merging, there is no guarantee that the
->    prefetch will have completed when the second buddy calculation takes
->    place and buddies are being merged.  With or without the prefetch, there
->    may be further stalls depending on how many pages get merged. In other
->    words, a stall due to merging is inevitable and at best only one stall
->    might be avoided at the cost of calculating the buddy location twice.
-> 
-> 2. As the zone lock is held, prefetch_nr makes less sense as once
->    prefetch_nr expires, the cache lines of interest have already been
->    merged.
-> 
-> The main concern is that there is a definite cost to calculating the
-> buddy location early for the prefetch and it is a "maybe win" depending
-> on whether the CPU prefetch logic and memory is fast enough. Remove the
-> prefetch logic on the basis that reduced instructions in a path is always
-> a saving where as the prefetch might save one memory stall depending on
-> the CPU and memory.
-> 
-> In most cases, this has marginal benefit as the calculations are a small
-> part of the overall freeing of pages. However, it was detectable on at
-> least one machine.
-> 
->                               5.17.0-rc3             5.17.0-rc3
->                     mm-highpcplimit-v2r1     mm-noprefetch-v1r1
-> Min       elapsed      630.00 (   0.00%)      610.00 (   3.17%)
-> Amean     elapsed      639.00 (   0.00%)      623.00 *   2.50%*
-> Max       elapsed      660.00 (   0.00%)      660.00 (   0.00%)
-> 
-> Suggested-by: Aaron Lu <aaron.lu@intel.com>
-> Signed-off-by: Mel Gorman <mgorman@techsingularity.net>
+On Mon, Feb 21, 2022 at 2:55 PM Marc Zyngier <maz@kernel.org> wrote:
+>
+> On Sat, 19 Feb 2022 14:51:22 +0000,
+> Jessica Clarke <jrtc27@jrtc27.com> wrote:
+> >
+> > On 19 Feb 2022, at 09:32, Marc Zyngier <maz@kernel.org> wrote:
+> > >
+> > > But how do you plan to work around the fact that everything is curren=
+tly
+> > > build around having a node (and an irqdomain) per CPU? The PLIC, for =
+example,
+> > > clearly has one parent per CPU, not one global parent.
+> > >
+> > > I'm sure there was a good reason for this, and I suspect merging the =
+domains
+> > > will simply end up breaking things.
+> >
+> > On the contrary, the drivers rely on the controller being the same
+> > across all harts, with riscv_intc_init skipping initialisation for all
+> > but the boot hart=E2=80=99s controller. The bindings are a complete pai=
+n to
+> > deal with as a result, what you *want* is like you have in the Arm
+> > world where there is just one interrupt controller in the device tree
+> > with some of the interrupts per-processor, but instead we have this
+> > overengineered nuisance. The only reason there are per-hart interrupt
+> > controllers is because that=E2=80=99s how the contexts for the CLINT/PL=
+IC are
+> > specified, but that really should have been done another way rather
+> > than abusing the interrupts-extended property for that. In the FreeBSD
+> > world we=E2=80=99ve been totally ignoring the device tree nodes for the=
+ local
+> > interrupt controllers but for my AIA and ACLINT branch I started a few
+> > months ago (though ACLINT's now been completely screwed up by RVI
+> > politics, things have been renamed and split up differently in the past
+> > few days and software interrupts de-prioritised with no current path to
+> > ratification, so that was a waste of my time) I just hang the driver
+> > off the boot hart=E2=80=99s node and leave all the others as totally ig=
+nored
+> > and a waste of space other than to figure out the contexts for the PLIC
+> > etc.
+> >
+> > TL;DR yes the bindings are awful, no there=E2=80=99s no issue with merg=
+ing the
+> > domains.
+>
+> I don't know how that flies with something like[1], where CPU0 only
+> gets interrupts in M-Mode and not S-Mode. Maybe it doesn't really
+> matter, but this sort of asymmetric routing is totally backward.
 
-Reviewed-by: Vlastimil Babka <vbabka@suse.cz>
+The example PLIC DT node which I provided is from SiFive FU540, where
+we have 5 CPUs. The CPU0 in FU540 is a cache-coherent microcontroller
+having only M-mode (i.e. No MMU hence not Linux capable).
 
-> ---
->  mm/page_alloc.c | 24 ------------------------
->  1 file changed, 24 deletions(-)
-> 
-> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-> index de9f072d23bd..2d5cc098136d 100644
-> --- a/mm/page_alloc.c
-> +++ b/mm/page_alloc.c
-> @@ -1432,15 +1432,6 @@ static bool bulkfree_pcp_prepare(struct page *page)
->  }
->  #endif /* CONFIG_DEBUG_VM */
->  
-> -static inline void prefetch_buddy(struct page *page, unsigned int order)
-> -{
-> -	unsigned long pfn = page_to_pfn(page);
-> -	unsigned long buddy_pfn = __find_buddy_pfn(pfn, order);
-> -	struct page *buddy = page + (buddy_pfn - pfn);
-> -
-> -	prefetch(buddy);
-> -}
-> -
->  /*
->   * Frees a number of pages from the PCP lists
->   * Assumes all pages on list are in same zone.
-> @@ -1453,7 +1444,6 @@ static void free_pcppages_bulk(struct zone *zone, int count,
->  	int min_pindex = 0;
->  	int max_pindex = NR_PCP_LISTS - 1;
->  	unsigned int order;
-> -	int prefetch_nr = READ_ONCE(pcp->batch);
->  	bool isolated_pageblocks;
->  	struct page *page;
->  
-> @@ -1508,20 +1498,6 @@ static void free_pcppages_bulk(struct zone *zone, int count,
->  			if (bulkfree_pcp_prepare(page))
->  				continue;
->  
-> -			/*
-> -			 * We are going to put the page back to the global
-> -			 * pool, prefetch its buddy to speed up later access
-> -			 * under zone->lock. It is believed the overhead of
-> -			 * an additional test and calculating buddy_pfn here
-> -			 * can be offset by reduced memory latency later. To
-> -			 * avoid excessive prefetching due to large count, only
-> -			 * prefetch buddy for the first pcp->batch nr of pages.
-> -			 */
-> -			if (prefetch_nr) {
-> -				prefetch_buddy(page, order);
-> -				prefetch_nr--;
-> -			}
-> -
->  			/* MIGRATE_ISOLATE page should not go to pcplists */
->  			VM_BUG_ON_PAGE(is_migrate_isolate(mt), page);
->  			/* Pageblock could have been isolated meanwhile */
+>
+> It sometime feels like the RV folks are actively trying to make this
+> architecture a mess... :-/
 
+Well, I still fail to understand what is messy here.
+
+Regards,
+Anup
+
+>
+>         M.
+>
+> [1] CAAhSdy0jTTDzoc+3T_8uLiWfBN3AFCWj99Ayc-Yh8FBfzUY2sQ@mail.gmail.com
+>
+> --
+> Without deviation from the norm, progress is not possible.

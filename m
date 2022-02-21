@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C10C4BE6B6
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:02:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C4544BDC68
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:42:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347489AbiBUJGp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 04:06:45 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59658 "EHLO
+        id S1349471AbiBUJMa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 04:12:30 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348329AbiBUJCk (ORCPT
+        with ESMTP id S1347773AbiBUJIe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 04:02:40 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53477255A4;
-        Mon, 21 Feb 2022 00:57:55 -0800 (PST)
+        Mon, 21 Feb 2022 04:08:34 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 248FE3205A;
+        Mon, 21 Feb 2022 01:00:21 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A65A8B80EAA;
-        Mon, 21 Feb 2022 08:57:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B47A5C36AE7;
-        Mon, 21 Feb 2022 08:57:35 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D211EB80EB7;
+        Mon, 21 Feb 2022 09:00:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1EBE3C340E9;
+        Mon, 21 Feb 2022 09:00:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645433856;
-        bh=OjeT7xbUg1MBVFOFUc1x+gta//Ub/1+0ZP9aLZZxhhc=;
+        s=korg; t=1645434018;
+        bh=56qsthHrRBoFHqDWWpaeZQq+7/bpnQRvecrGixEmZW8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NNXru95SLSMIbc0sCjqi3vD1WsdSGh3kkrfFHdfmTuj/dQ41u3kBlDbjzCjbRubYD
-         zToZVwRNMcIAc/Ky1ES64w4sGDKZnm+sXnky0Qon9W8Gt7aV42VXM3r3sxd7ltLRdR
-         6vgfY8BGy1xrhh/rNpW3Oiq+mmox64JtB00vUSLU=
+        b=0Ok8n8v4OZcI5ZyC1uDdTN1sVtlCyEgSIF3Gzq14lZEkyufP0ZhsL8i87vhfzP5xI
+         fHyZPIw+/HKTuBe0I5hn/GV47drtWYWf0fQnL+zbhujm7g+vxPrfCHwFyAyWuP6YmD
+         a5M6R301q3qh25DdiWTMJlZ9WRDLBxEL4LSIEHaA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Florian Westphal <fw@strlen.de>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        Sasha Levin <sashal@kernel.org>,
-        Vivek Thrivikraman <vivek.thrivikraman@est.tech>
-Subject: [PATCH 4.19 52/58] netfilter: conntrack: dont refresh sctp entries in closed state
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        Juan Vazquez <juvazq@linux.microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 65/80] Drivers: hv: vmbus: Fix memory leak in vmbus_add_channel_kobj
 Date:   Mon, 21 Feb 2022 09:49:45 +0100
-Message-Id: <20220221084913.549519045@linuxfoundation.org>
+Message-Id: <20220221084917.715623302@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220221084911.895146879@linuxfoundation.org>
-References: <20220221084911.895146879@linuxfoundation.org>
+In-Reply-To: <20220221084915.554151737@linuxfoundation.org>
+References: <20220221084915.554151737@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,53 +55,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Florian Westphal <fw@strlen.de>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-[ Upstream commit 77b337196a9d87f3d6bb9b07c0436ecafbffda1e ]
+[ Upstream commit 8bc69f86328e87a0ffa79438430cc82f3aa6a194 ]
 
-Vivek Thrivikraman reported:
- An SCTP server application which is accessed continuously by client
- application.
- When the session disconnects the client retries to establish a connection.
- After restart of SCTP server application the session is not established
- because of stale conntrack entry with connection state CLOSED as below.
+kobject_init_and_add() takes reference even when it fails.
+According to the doc of kobject_init_and_add()：
 
- (removing this entry manually established new connection):
+   If this function returns an error, kobject_put() must be called to
+   properly clean up the memory associated with the object.
 
- sctp 9 CLOSED src=10.141.189.233 [..]  [ASSURED]
+Fix memory leak by calling kobject_put().
 
-Just skip timeout update of closed entries, we don't want them to
-stay around forever.
-
-Reported-and-tested-by: Vivek Thrivikraman <vivek.thrivikraman@est.tech>
-Closes: https://bugzilla.netfilter.org/show_bug.cgi?id=1579
-Signed-off-by: Florian Westphal <fw@strlen.de>
-Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
+Fixes: c2e5df616e1a ("vmbus: add per-channel sysfs info")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Reviewed-by: Juan Vazquez <juvazq@linux.microsoft.com>
+Link: https://lore.kernel.org/r/20220203173008.43480-1-linmq006@gmail.com
+Signed-off-by: Wei Liu <wei.liu@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/netfilter/nf_conntrack_proto_sctp.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ drivers/hv/vmbus_drv.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/net/netfilter/nf_conntrack_proto_sctp.c b/net/netfilter/nf_conntrack_proto_sctp.c
-index a937d4f75613f..8cb62805fd684 100644
---- a/net/netfilter/nf_conntrack_proto_sctp.c
-+++ b/net/netfilter/nf_conntrack_proto_sctp.c
-@@ -394,6 +394,15 @@ static int sctp_packet(struct nf_conn *ct,
- 			pr_debug("Setting vtag %x for dir %d\n",
- 				 ih->init_tag, !dir);
- 			ct->proto.sctp.vtag[!dir] = ih->init_tag;
-+
-+			/* don't renew timeout on init retransmit so
-+			 * port reuse by client or NAT middlebox cannot
-+			 * keep entry alive indefinitely (incl. nat info).
-+			 */
-+			if (new_state == SCTP_CONNTRACK_CLOSED &&
-+			    old_state == SCTP_CONNTRACK_CLOSED &&
-+			    nf_ct_is_confirmed(ct))
-+				ignore = true;
- 		}
+diff --git a/drivers/hv/vmbus_drv.c b/drivers/hv/vmbus_drv.c
+index 2d2568dac2a66..6b7ab8f234e87 100644
+--- a/drivers/hv/vmbus_drv.c
++++ b/drivers/hv/vmbus_drv.c
+@@ -1787,8 +1787,10 @@ int vmbus_add_channel_kobj(struct hv_device *dev, struct vmbus_channel *channel)
+ 	kobj->kset = dev->channels_kset;
+ 	ret = kobject_init_and_add(kobj, &vmbus_chan_ktype, NULL,
+ 				   "%u", relid);
+-	if (ret)
++	if (ret) {
++		kobject_put(kobj);
+ 		return ret;
++	}
  
- 		ct->proto.sctp.state = new_state;
+ 	ret = sysfs_create_group(kobj, &vmbus_chan_group);
+ 
+@@ -1797,6 +1799,7 @@ int vmbus_add_channel_kobj(struct hv_device *dev, struct vmbus_channel *channel)
+ 		 * The calling functions' error handling paths will cleanup the
+ 		 * empty channel directory.
+ 		 */
++		kobject_put(kobj);
+ 		dev_err(device, "Unable to set up channel sysfs files\n");
+ 		return ret;
+ 	}
 -- 
 2.34.1
 

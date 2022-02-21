@@ -2,42 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22AE04BE7A2
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:03:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B6924BE885
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:05:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353116AbiBUKJh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 05:09:37 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56870 "EHLO
+        id S1353936AbiBUKLq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 05:11:46 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353473AbiBUJ52 (ORCPT
+        with ESMTP id S1353477AbiBUJ52 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 21 Feb 2022 04:57:28 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CD063968C;
-        Mon, 21 Feb 2022 01:26:05 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62A6239693;
+        Mon, 21 Feb 2022 01:26:08 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 42C6EB80EB9;
-        Mon, 21 Feb 2022 09:26:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 830F3C340E9;
-        Mon, 21 Feb 2022 09:26:02 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2135AB80EBB;
+        Mon, 21 Feb 2022 09:26:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C86FC340E9;
+        Mon, 21 Feb 2022 09:26:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645435563;
-        bh=eEcLGIVXMQkyu6JpN7qeQfTNgzp08OYhHxab6htHh+g=;
+        s=korg; t=1645435565;
+        bh=I+jBkflwt0aPUiUvWdQx+Obp5Zu9ym9Yrxeq3MFXuxg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LDOgD04kyn9/fcAe/AhvIGSm8psdiZuX53zsCvN6dhk8xB7b41aWvEn8n2GAz1PGP
-         LssbQEIdwlHIwAjUIrlkXI74PQK8coETm+SuxZc0QVA6XJUSUISXMeP8ffKi/q9p9G
-         AweHoBxmGaUFBnmvp3Vktqm/N9/yL9jW5FwnjkOU=
+        b=aGrGFSEQF28ExQm9ZyYnFaEZvH+jnUsYbfqpdKoRfq6aVAKEUw+97fGazN6Ucs3pl
+         YCFci+USD/rtnfMjQH2jgYc3A6OgeQKzC36s2wNg2xSRBNTXD6g+tgdEejbfCRS+R8
+         Uf0QCqx4v8uc5iCbckJ5z66fubGUaDMZPDKfL3Dk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Namjae Jeon <linkinjeon@kernel.org>,
-        Steve French <stfrench@microsoft.com>,
+        stable@vger.kernel.org, Mateusz Krzak <kszaquitto@gmail.com>,
+        Christian Hewitt <christianshewitt@gmail.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 207/227] ksmbd: dont align last entry offset in smb2 query directory
-Date:   Mon, 21 Feb 2022 09:50:26 +0100
-Message-Id: <20220221084941.707495122@linuxfoundation.org>
+Subject: [PATCH 5.16 208/227] arm64: dts: meson-gx: add ATF BL32 reserved-memory region
+Date:   Mon, 21 Feb 2022 09:50:27 +0100
+Message-Id: <20220221084941.745794268@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220221084934.836145070@linuxfoundation.org>
 References: <20220221084934.836145070@linuxfoundation.org>
@@ -55,59 +57,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Namjae Jeon <linkinjeon@kernel.org>
+From: Christian Hewitt <christianshewitt@gmail.com>
 
-[ Upstream commit 04e260948a160d3b7d622bf4c8a96fa4577c09bd ]
+[ Upstream commit 76577c9137456febb05b0e17d244113196a98968 ]
 
-When checking smb2 query directory packets from other servers,
-OutputBufferLength is different with ksmbd. Other servers add an unaligned
-next offset to OutputBufferLength for the last entry.
+Add an additional reserved memory region for the BL32 trusted firmware
+present in many devices that boot from Amlogic vendor u-boot.
 
-Signed-off-by: Namjae Jeon <linkinjeon@kernel.org>
-Signed-off-by: Steve French <stfrench@microsoft.com>
+Suggested-by: Mateusz Krzak <kszaquitto@gmail.com>
+Signed-off-by: Christian Hewitt <christianshewitt@gmail.com>
+Reviewed-by: Neil Armstrong <narmstrong@baylibre.com>
+Reviewed-by: Kevin Hilman <khilman@baylibre.com>
+Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
+Link: https://lore.kernel.org/r/20220126044954.19069-2-christianshewitt@gmail.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/ksmbd/smb2pdu.c | 7 ++++---
- fs/ksmbd/vfs.h     | 1 +
- 2 files changed, 5 insertions(+), 3 deletions(-)
+ arch/arm64/boot/dts/amlogic/meson-gx.dtsi | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/fs/ksmbd/smb2pdu.c b/fs/ksmbd/smb2pdu.c
-index 1ff1e52f398fc..cbbbccdc5a0a5 100644
---- a/fs/ksmbd/smb2pdu.c
-+++ b/fs/ksmbd/smb2pdu.c
-@@ -3423,9 +3423,9 @@ static int smb2_populate_readdir_entry(struct ksmbd_conn *conn, int info_level,
- 		goto free_conv_name;
- 	}
+diff --git a/arch/arm64/boot/dts/amlogic/meson-gx.dtsi b/arch/arm64/boot/dts/amlogic/meson-gx.dtsi
+index 6b457b2c30a4b..aa14ea017a613 100644
+--- a/arch/arm64/boot/dts/amlogic/meson-gx.dtsi
++++ b/arch/arm64/boot/dts/amlogic/meson-gx.dtsi
+@@ -49,6 +49,12 @@
+ 			no-map;
+ 		};
  
--	struct_sz = readdir_info_level_struct_sz(info_level);
--	next_entry_offset = ALIGN(struct_sz - 1 + conv_len,
--				  KSMBD_DIR_INFO_ALIGNMENT);
-+	struct_sz = readdir_info_level_struct_sz(info_level) - 1 + conv_len;
-+	next_entry_offset = ALIGN(struct_sz, KSMBD_DIR_INFO_ALIGNMENT);
-+	d_info->last_entry_off_align = next_entry_offset - struct_sz;
- 
- 	if (next_entry_offset > d_info->out_buf_len) {
- 		d_info->out_buf_len = 0;
-@@ -3977,6 +3977,7 @@ int smb2_query_dir(struct ksmbd_work *work)
- 		((struct file_directory_info *)
- 		((char *)rsp->Buffer + d_info.last_entry_offset))
- 		->NextEntryOffset = 0;
-+		d_info.data_count -= d_info.last_entry_off_align;
- 
- 		rsp->StructureSize = cpu_to_le16(9);
- 		rsp->OutputBufferOffset = cpu_to_le16(72);
-diff --git a/fs/ksmbd/vfs.h b/fs/ksmbd/vfs.h
-index adf94a4f22fa6..8c37aaf936ab1 100644
---- a/fs/ksmbd/vfs.h
-+++ b/fs/ksmbd/vfs.h
-@@ -47,6 +47,7 @@ struct ksmbd_dir_info {
- 	int		last_entry_offset;
- 	bool		hide_dot_file;
- 	int		flags;
-+	int		last_entry_off_align;
- };
- 
- struct ksmbd_readdir_data {
++		/* 32 MiB reserved for ARM Trusted Firmware (BL32) */
++		secmon_reserved_bl32: secmon@5300000 {
++			reg = <0x0 0x05300000 0x0 0x2000000>;
++			no-map;
++		};
++
+ 		linux,cma {
+ 			compatible = "shared-dma-pool";
+ 			reusable;
 -- 
 2.34.1
 

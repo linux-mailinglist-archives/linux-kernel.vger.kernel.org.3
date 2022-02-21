@@ -2,168 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B986E4BE5D9
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:01:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 84A224BE9C3
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:08:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353176AbiBUJsO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 04:48:14 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34324 "EHLO
+        id S1344706AbiBUIrq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 03:47:46 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351164AbiBUJmz (ORCPT
+        with ESMTP id S231215AbiBUIro (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 04:42:55 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CE193EA99;
-        Mon, 21 Feb 2022 01:17:56 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 668BC60F22;
-        Mon, 21 Feb 2022 09:17:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77C3DC340E9;
-        Mon, 21 Feb 2022 09:17:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645435074;
-        bh=qXx8LLN8OdrK+AodAKJg3msw5uNFgNNxaDRX0Eumxzo=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SxSdJ3Cpi09PRwVju4BT8Kt60TMb5JhmwUJPwV/tLjatDgNm36H9HrJXIyspjB6s9
-         tBMeuMPOhUgSVoIKcm5qQTa2LnhRWVU108ZwQ0OhtkRLz1U+nWv25Q1uc8JBXczMWE
-         3xbj8N7NNJ24Kzgsw09yeQ/mbKldYyr88n+ZOqEk=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hao Luo <haoluo@google.com>,
-        Alexei Starovoitov <ast@kernel.org>
-Subject: [PATCH 5.16 008/227] bpf: Make per_cpu_ptr return rdonly PTR_TO_MEM.
-Date:   Mon, 21 Feb 2022 09:47:07 +0100
-Message-Id: <20220221084935.121206549@linuxfoundation.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220221084934.836145070@linuxfoundation.org>
-References: <20220221084934.836145070@linuxfoundation.org>
-User-Agent: quilt/0.66
+        Mon, 21 Feb 2022 03:47:44 -0500
+Received: from mail-vs1-xe2f.google.com (mail-vs1-xe2f.google.com [IPv6:2607:f8b0:4864:20::e2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 693CA2BB;
+        Mon, 21 Feb 2022 00:47:21 -0800 (PST)
+Received: by mail-vs1-xe2f.google.com with SMTP id j3so2571040vsi.7;
+        Mon, 21 Feb 2022 00:47:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=7bU+t7iJxXJ0OaoM2yVGvL7go0S1hioO91rPjZv/0z0=;
+        b=FrtcLlrS/mN+1ArTCSqQJP7OwWJSKnAIJoEa5iarc+OoEiID9eblolED3MW+RpC4iI
+         Uj30iVniCj9z114z9iXB5YPM3o8zMMxdE/XyclQUnkTJmjc7xdNvdEXqtX9zBX7B5P9x
+         8NOmjkfVirVkz4mkkYwkCObwJee276QceLrN8lO1ulssWB7HaA27T4BlB8YKaB9Hee+1
+         3g8lLGE+rXQ3gmr7VTsZS9PcV6ZDbMeTWrnyk0fQditLy3NT4JaZ+8/DHH8cgYeg96jp
+         H7kmCh40l0g5eZp7iDk2YhKhCTCI3douvetEz6cRvpjYB4vUamQT9Hk8fKmX9GUj79nr
+         XTyQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=7bU+t7iJxXJ0OaoM2yVGvL7go0S1hioO91rPjZv/0z0=;
+        b=zkrBsNmYElpzkyYjShqD0+4gYsm+D5lF2Dy+spB4Vi6ZPyO3c9xhnftyWTAMaEIa3i
+         xPr+u7mY29J7HU1kzMfkereHKKy395GI1UIrP9zer/wxKilVqdy247VmBaSqGcE9Xi5c
+         HJ1652JaX1RoCNjcuAbAiBVR0zQM+OnLJNPhlI0qdVeq8GpOLXHJjfCLMQL0Rk5rCHk5
+         OB7Egkhu/VtblNfpWqd4RhVvJ6j61lZoQE7trltEU7Qxw82pD5l32qv3y4YYGcAUBiZp
+         m8mayijVmeu8oi7yFTtjB0QmMd5ZRNUepP4RODjkqVU27wU3ByVNZYEMFtyhlgR7Pti2
+         LOhw==
+X-Gm-Message-State: AOAM5336gcCCPDAaQuCIVz6SZ9kJOkORj1M00uq9WYdtKuPABUQa7dbl
+        VP/osuCj3clSD3oFIj7M7vniuuAjVsmYRnAciw==
+X-Google-Smtp-Source: ABdhPJz87q7UEAPD90zMY5JUvmglimvP7o+lLeN7nmUzh3gNThbLp0iMMhFUe/WQABY4n4qBW73VqlU3+BeJKoEH4IM=
+X-Received: by 2002:a05:6102:370f:b0:31b:60dc:4f76 with SMTP id
+ s15-20020a056102370f00b0031b60dc4f76mr7914160vst.2.1645433240460; Mon, 21 Feb
+ 2022 00:47:20 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220220035321.3870-1-warp5tw@gmail.com> <5d507fda-525e-4064-3add-0bb0cc23d016@canonical.com>
+ <CACD3sJaXeWLu6=oLgxJcU9R+A1J+jB7xKaGcDFwYxof33yj17Q@mail.gmail.com> <5ce0f6a6-4a5f-4f25-3cc6-ab0f24bf15cf@canonical.com>
+In-Reply-To: <5ce0f6a6-4a5f-4f25-3cc6-ab0f24bf15cf@canonical.com>
+From:   Tyrone Ting <warp5tw@gmail.com>
+Date:   Mon, 21 Feb 2022 16:47:08 +0800
+Message-ID: <CACD3sJaWJMFgwzQgrHFV0KkkbJXzhgFx=umywxSrLszwP+hO2w@mail.gmail.com>
+Subject: Re: [PATCH v2 00/11] i2c: npcm: Bug fixes timeout, spurious interrupts
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
+        venture@google.com, yuenn@google.com, benjaminfair@google.com,
+        robh+dt@kernel.org, semen.protsenko@linaro.org,
+        yangyicong@hisilicon.com, wsa@kernel.org, jie.deng@intel.com,
+        sven@svenpeter.dev, bence98@sch.bme.hu,
+        christophe.leroy@csgroup.eu, lukas.bulwahn@gmail.com,
+        olof@lixom.net, arnd@arndb.de, digetx@gmail.com,
+        andriy.shevchenko@linux.intel.com, tali.perry@nuvoton.com,
+        Avi.Fishman@nuvoton.com, tomer.maimon@nuvoton.com,
+        KWLIU@nuvoton.com, JJLIU0@nuvoton.com, kfting@nuvoton.com,
+        openbmc@lists.ozlabs.org, linux-i2c@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hao Luo <haoluo@google.com>
+Hi Krzysztof:
 
-commit 34d3a78c681e8e7844b43d1a2f4671a04249c821 upstream.
+Got it and thank you for your comments.
 
-Tag the return type of {per, this}_cpu_ptr with RDONLY_MEM. The
-returned value of this pair of helpers is kernel object, which
-can not be updated by bpf programs. Previously these two helpers
-return PTR_OT_MEM for kernel objects of scalar type, which allows
-one to directly modify the memory. Now with RDONLY_MEM tagging,
-the verifier will reject programs that write into RDONLY_MEM.
+I'll keep old code as fallback, if getting nuvoton,sys-mgr fails as
+you point out.
 
-Fixes: 63d9b80dcf2c ("bpf: Introducte bpf_this_cpu_ptr()")
-Fixes: eaa6bcb71ef6 ("bpf: Introduce bpf_per_cpu_ptr()")
-Fixes: 4976b718c355 ("bpf: Introduce pseudo_btf_id")
-Signed-off-by: Hao Luo <haoluo@google.com>
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-Link: https://lore.kernel.org/bpf/20211217003152.48334-8-haoluo@google.com
-Cc: stable@vger.kernel.org # 5.16.x
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- kernel/bpf/helpers.c  |    4 ++--
- kernel/bpf/verifier.c |   30 ++++++++++++++++++++++++++----
- 2 files changed, 28 insertions(+), 6 deletions(-)
+Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com> =E6=96=BC 2022=E5=
+=B9=B42=E6=9C=8821=E6=97=A5
+=E9=80=B1=E4=B8=80 =E4=B8=8B=E5=8D=884:32=E5=AF=AB=E9=81=93=EF=BC=9A
+>
+> On 21/02/2022 09:16, Tyrone Ting wrote:
+> > Hi Krzysztof:
+> >
+> > Thank you for your comments and please find my reply next to your comme=
+nts.
+> >
+> > Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com> =E6=96=BC 2022=
+=E5=B9=B42=E6=9C=8820=E6=97=A5
+> > =E9=80=B1=E6=97=A5 =E4=B8=8B=E5=8D=885:30=E5=AF=AB=E9=81=93=EF=BC=9A
+> >>
+> >> On 20/02/2022 04:53, Tyrone Ting wrote:
+> >>> From: Tyrone Ting <kfting@nuvoton.com>
+> >>>
+> >>> This patchset includes the following fixes:
+> >>>
+> >>> - Add dt-bindings description for NPCM845.
+> >>> - Bug fix for timeout calculation.
+> >>> - Better handling of spurious interrupts.
+> >>> - Fix for event type in slave mode.
+> >>> - Removal of own slave addresses [2:10].
+> >>> - Support for next gen BMC (NPCM845).
+> >>>
+> >>> The NPCM I2C driver is tested on NPCM750 and NPCM845 evaluation board=
+s.
+> >>>
+> >>> Addressed comments from:
+> >>>  - Jonathan Neusch=C3=A4fer : https://lkml.org/lkml/2022/2/7/670
+> >>>  - Krzysztof Kozlowski : https://lkml.org/lkml/2022/2/7/760
+> >>
+> >> How did you address the ABI change comment? I still see you break the
+> >> ABI with the introduction of a new, required property.
+> >>
+> >
+> > I add the new, required property "nuvoton,sys-mgr" in the file
+> > nuvoton-common-npcm7xx.dtsi.
+> > The file nuvoton-common-npcm7xx.dtsi is required by the existing
+> > upstream NPCM devicetree files.
+> > It is also updated and committed in this patch set [PATCH v2 01/11]
+> > arm: dts: add new property for NPCM i2c module.
+> > Please let me know if I misunderstand the meaning of "breaking the ABI"=
+.
+> > Thank you again.
+>
+> Breaking the ABI means that old DTS stop working with new kernel. Your
+> change breaks old (and out-of-tree) DTS.
+>
+> What is more, your change is not bisectable because DTS goes via
+> separate branch or tree than driver change.
+>
+> You need to keep old code as fallback, if getting nuvoton,sys-mgr fails.
+>
+> Best regards,
+> Krzysztof
 
---- a/kernel/bpf/helpers.c
-+++ b/kernel/bpf/helpers.c
-@@ -667,7 +667,7 @@ BPF_CALL_2(bpf_per_cpu_ptr, const void *
- const struct bpf_func_proto bpf_per_cpu_ptr_proto = {
- 	.func		= bpf_per_cpu_ptr,
- 	.gpl_only	= false,
--	.ret_type	= RET_PTR_TO_MEM_OR_BTF_ID | PTR_MAYBE_NULL,
-+	.ret_type	= RET_PTR_TO_MEM_OR_BTF_ID | PTR_MAYBE_NULL | MEM_RDONLY,
- 	.arg1_type	= ARG_PTR_TO_PERCPU_BTF_ID,
- 	.arg2_type	= ARG_ANYTHING,
- };
-@@ -680,7 +680,7 @@ BPF_CALL_1(bpf_this_cpu_ptr, const void
- const struct bpf_func_proto bpf_this_cpu_ptr_proto = {
- 	.func		= bpf_this_cpu_ptr,
- 	.gpl_only	= false,
--	.ret_type	= RET_PTR_TO_MEM_OR_BTF_ID,
-+	.ret_type	= RET_PTR_TO_MEM_OR_BTF_ID | MEM_RDONLY,
- 	.arg1_type	= ARG_PTR_TO_PERCPU_BTF_ID,
- };
- 
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -4333,15 +4333,30 @@ static int check_mem_access(struct bpf_v
- 				mark_reg_unknown(env, regs, value_regno);
- 			}
- 		}
--	} else if (reg->type == PTR_TO_MEM) {
-+	} else if (base_type(reg->type) == PTR_TO_MEM) {
-+		bool rdonly_mem = type_is_rdonly_mem(reg->type);
-+
-+		if (type_may_be_null(reg->type)) {
-+			verbose(env, "R%d invalid mem access '%s'\n", regno,
-+				reg_type_str(env, reg->type));
-+			return -EACCES;
-+		}
-+
-+		if (t == BPF_WRITE && rdonly_mem) {
-+			verbose(env, "R%d cannot write into %s\n",
-+				regno, reg_type_str(env, reg->type));
-+			return -EACCES;
-+		}
-+
- 		if (t == BPF_WRITE && value_regno >= 0 &&
- 		    is_pointer_value(env, value_regno)) {
- 			verbose(env, "R%d leaks addr into mem\n", value_regno);
- 			return -EACCES;
- 		}
-+
- 		err = check_mem_region_access(env, regno, off, size,
- 					      reg->mem_size, false);
--		if (!err && t == BPF_READ && value_regno >= 0)
-+		if (!err && value_regno >= 0 && (t == BPF_READ || rdonly_mem))
- 			mark_reg_unknown(env, regs, value_regno);
- 	} else if (reg->type == PTR_TO_CTX) {
- 		enum bpf_reg_type reg_type = SCALAR_VALUE;
-@@ -6550,6 +6565,13 @@ static int check_helper_call(struct bpf_
- 			regs[BPF_REG_0].type = PTR_TO_MEM | ret_flag;
- 			regs[BPF_REG_0].mem_size = tsize;
- 		} else {
-+			/* MEM_RDONLY may be carried from ret_flag, but it
-+			 * doesn't apply on PTR_TO_BTF_ID. Fold it, otherwise
-+			 * it will confuse the check of PTR_TO_BTF_ID in
-+			 * check_mem_access().
-+			 */
-+			ret_flag &= ~MEM_RDONLY;
-+
- 			regs[BPF_REG_0].type = PTR_TO_BTF_ID | ret_flag;
- 			regs[BPF_REG_0].btf = meta.ret_btf;
- 			regs[BPF_REG_0].btf_id = meta.ret_btf_id;
-@@ -9362,7 +9384,7 @@ static int check_ld_imm(struct bpf_verif
- 
- 	if (insn->src_reg == BPF_PSEUDO_BTF_ID) {
- 		dst_reg->type = aux->btf_var.reg_type;
--		switch (dst_reg->type) {
-+		switch (base_type(dst_reg->type)) {
- 		case PTR_TO_MEM:
- 			dst_reg->mem_size = aux->btf_var.mem_size;
- 			break;
-@@ -11505,7 +11527,7 @@ static int check_pseudo_btf_id(struct bp
- 			err = -EINVAL;
- 			goto err_put;
- 		}
--		aux->btf_var.reg_type = PTR_TO_MEM;
-+		aux->btf_var.reg_type = PTR_TO_MEM | MEM_RDONLY;
- 		aux->btf_var.mem_size = tsize;
- 	} else {
- 		aux->btf_var.reg_type = PTR_TO_BTF_ID;
-
-
+Best regards,
+Tyrone

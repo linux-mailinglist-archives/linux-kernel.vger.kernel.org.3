@@ -2,130 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C5EB4BEC27
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 21:58:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 54FC44BEC24
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 21:58:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234122AbiBUU7L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 15:59:11 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34302 "EHLO
+        id S234087AbiBUU65 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 15:58:57 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234099AbiBUU7J (ORCPT
+        with ESMTP id S234020AbiBUU6y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 15:59:09 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81FEF237F4;
-        Mon, 21 Feb 2022 12:58:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645477125; x=1677013125;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Q8VbVq+l2O93VD3PU9iLNfpkN2dA3vfhrpThY/iQv7k=;
-  b=CuSW0yR16nYDmv8KQCiFubbtrGT6I8N3Nxt/QWSg9FmW3Rs1NafrOEnU
-   /tOkJgomlM6ErdLdFHoYL/TshgcVLX4JU5GZKakl70q2dFA9fy4dBLddE
-   DuKSKM5Yg0lFoYWgtFnPy5LJjGSaclI84CDN3hPwIWJLpeSfmhc7Dm3/f
-   pDW6glRrcIbHatrxanc6TCf1A5g/p0nssFTl6v87KK4v6kkCv/X7NAtFx
-   eEUGmBEjShdSYcZ86YpECfm0OZyLlX44mBd6Au4PYw6WbDNEq369gVOg0
-   IQnQuii7TT7j25gTfPwpyRpv6B0JgT0aBcjht6K/CthihvzCNZ0nmmPwZ
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10265"; a="238984546"
-X-IronPort-AV: E=Sophos;i="5.88,386,1635231600"; 
-   d="scan'208";a="238984546"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2022 12:58:44 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,386,1635231600"; 
-   d="scan'208";a="591075000"
-Received: from lkp-server01.sh.intel.com (HELO da3212ac2f54) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 21 Feb 2022 12:58:41 -0800
-Received: from kbuild by da3212ac2f54 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nMFlZ-0001ya-5Z; Mon, 21 Feb 2022 20:58:41 +0000
-Date:   Tue, 22 Feb 2022 04:57:51 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Like Xu <like.xu.linux@gmail.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jim Mattson <jmattson@google.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Like Xu <likexu@tencent.com>
-Subject: Re: [PATCH 09/11] KVM: x86/pmu: Replace pmc_perf_hw_id() with
- perf_get_hw_event_config()
-Message-ID: <202202220414.dzxjtMiF-lkp@intel.com>
-References: <20220221115201.22208-10-likexu@tencent.com>
+        Mon, 21 Feb 2022 15:58:54 -0500
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E02B237F4
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 12:58:30 -0800 (PST)
+Received: by mail-pj1-x102c.google.com with SMTP id j10-20020a17090a94ca00b001bc2a9596f6so323204pjw.5
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 12:58:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:user-agent:in-reply-to:references
+         :message-id:mime-version:content-transfer-encoding;
+        bh=a6R3uiwBvQCzSW4IZ+vEVAnPpskx5ZOkFf1DXk8xFS0=;
+        b=oWK2h0gA5Vxrrnw5yuR7cTomlH6B1SfEtqRGX6nMnZ3VwtIqdXGXM7IEmQ05mx0KtU
+         XUTmq6ACHafZL8hyqOnHwU84L9PgFUYXsAvalt+INQ081ZwjdgNbXYsBZp8Zmhwag0m0
+         JQeI8nHe8ztzQSHBVu7zhx3LqRNA34xE9KONk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:user-agent:in-reply-to
+         :references:message-id:mime-version:content-transfer-encoding;
+        bh=a6R3uiwBvQCzSW4IZ+vEVAnPpskx5ZOkFf1DXk8xFS0=;
+        b=fnOnpRiysLkCsVFms8mZ1/U+c4ylZ6EmbWlvUCdL/4FZmgo+/QrJaph+V9AhfW9Vkg
+         yMna4oiPR+2qBhMjWWR0m3Lgsk3fnvuMznIjrXToJPc5ioCFPI/BIJ4V2f5buI8fMAUN
+         K5ykWfcWw7jyukjk7tS8KoaDVM5ETuv+t4+mc8GALsybp3LOJclWyVUe6Ezyi4czbX7u
+         Hb2+s9ReyujzClMv9NbZOak0AKSDxa1Rc6i4D4QwuvIqty0CAyqJkAOOitXUmTCS4Eqz
+         hPdTmXAeX3XW0sZZka1a/0z2FNMBGOpSIWo8vSfUzwHpWglW0dJxy6NgPVdD1hhOpz0Y
+         Uygg==
+X-Gm-Message-State: AOAM5317QH2IvTXBUHyEFDVn+5WTMDcaGzxj8Y+Ij7Vt8XkV2BJkN4jH
+        z1ytwzYOYpywn6l752srEZmP7A==
+X-Google-Smtp-Source: ABdhPJwTzUj3oImdd2yhD2sZDVqdPHjySvfH8Q4/jdqzKMlaWiAqLrTil9g53jvldHuKwbydPxYm7g==
+X-Received: by 2002:a17:90a:da04:b0:1b9:8539:b45e with SMTP id e4-20020a17090ada0400b001b98539b45emr712980pjv.151.1645477109671;
+        Mon, 21 Feb 2022 12:58:29 -0800 (PST)
+Received: from [127.0.0.1] (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id a9sm18813346pgb.56.2022.02.21.12.58.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 21 Feb 2022 12:58:29 -0800 (PST)
+Date:   Mon, 21 Feb 2022 12:58:22 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        Thorsten Leemhuis <regressions@leemhuis.info>,
+        Anthony Yznaga <anthony.yznaga@oracle.com>
+CC:     matoro_bugzilla_kernel@matoro.tk,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+        linux-ia64@vger.kernel.org,
+        Linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>
+Subject: Re: regression: Bug 215601 - gcc segv at startup on ia64
+User-Agent: K-9 Mail for Android
+In-Reply-To: <94c3be49-0262-c613-e5f5-49b536985dde@physik.fu-berlin.de>
+References: <a3edd529-c42d-3b09-135c-7e98a15b150f@leemhuis.info> <823f70be-7661-0195-7c97-65673dc7c12a@leemhuis.info> <03497313-A472-4152-BD28-41C35E4E824E@chromium.org> <94c3be49-0262-c613-e5f5-49b536985dde@physik.fu-berlin.de>
+Message-ID: <9A1F30F8-3DE2-4075-B103-81D891773246@chromium.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220221115201.22208-10-likexu@tencent.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Like,
-
-Thank you for the patch! Perhaps something to improve:
-
-[auto build test WARNING on kvm/master]
-[also build test WARNING on linus/master v5.17-rc5 next-20220217]
-[cannot apply to tip/perf/core mst-vhost/linux-next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/Like-Xu/KVM-x86-pmu-Get-rid-of-PERF_TYPE_HARDWAR-and-other-minor-fixes/20220221-195359
-base:   https://git.kernel.org/pub/scm/virt/kvm/kvm.git master
-config: x86_64-randconfig-c007-20220221 (https://download.01.org/0day-ci/archive/20220222/202202220414.dzxjtMiF-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/29bdfb8b85a85f36e3fca739146845d7050a372d
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Like-Xu/KVM-x86-pmu-Get-rid-of-PERF_TYPE_HARDWAR-and-other-minor-fixes/20220221-195359
-        git checkout 29bdfb8b85a85f36e3fca739146845d7050a372d
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/kvm/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> arch/x86/kvm/pmu.c:471:66: warning: use of logical '&&' with constant operand [-Wconstant-logical-operand]
-           return !((pmc->eventsel ^ perf_get_hw_event_config(perf_hw_id)) &&
-                                                                           ^
-   arch/x86/kvm/pmu.c:471:66: note: use '&' for a bitwise operation
-           return !((pmc->eventsel ^ perf_get_hw_event_config(perf_hw_id)) &&
-                                                                           ^~
-                                                                           &
-   arch/x86/kvm/pmu.c:471:66: note: remove constant to silence this warning
-           return !((pmc->eventsel ^ perf_get_hw_event_config(perf_hw_id)) &&
-                                                                          ~^~
-   1 warning generated.
 
 
-vim +471 arch/x86/kvm/pmu.c
+On February 21, 2022 11:49:20 AM PST, John Paul Adrian Glaubitz <glaubitz@=
+physik=2Efu-berlin=2Ede> wrote:
+>Hi Kees!
+>
+>On 2/21/22 08:42, Kees Cook wrote:
+>>>>> Reverting this commit resolves the issue up to and including git tip=
+,
+>>>>> with no (visible) issues=2E
+>>>>>
+>>>>> Hardware:  HP Integrity rx2800 i2 Kernel config attached=2E
+>>>>
+>>>> Could somebody take a look into this? Or was this discussed somewhere
+>>>> else already? Or even fixed?
+>>>>
+>>>> Anyway, to get this tracked:
+>>>>
+>>>> #regzbot introduced: 5f501d555653f8968011a1e65ebb121c8b43c144
+>>>> #regzbot from: matoro <matoro_bugzilla_kernel@matoro=2Etk>
+>>>> #regzbot title: gcc segv at startup on ia64
+>>>> #regzbot link: https://bugzilla=2Ekernel=2Eorg/show_bug=2Ecgi?id=3D21=
+5601
+>>=20
+>> Does this fix it?
+>>=20
+>> https://www=2Eozlabs=2Eorg/~akpm/mmotm/broken-out/elf-fix-overflow-in-t=
+otal-mapping-size-calculation=2Epatch
+>
+>I have applied this patch on top of 038101e6b2cd5c55f888f85db42ea2ad3aecb=
+4b6 and it doesn't
+>fix the problem for me=2E Reverting 5f501d555653f8968011a1e65ebb121c8b43c=
+144, however, fixes
+>the problem=2E
+>
+>FWIW, this problem doesn't just affect GCC but systemd keeps segfaulting =
+with this change as well=2E
 
-   467	
-   468	static inline bool eventsel_match_perf_hw_id(struct kvm_pmc *pmc,
-   469		unsigned int perf_hw_id)
-   470	{
- > 471		return !((pmc->eventsel ^ perf_get_hw_event_config(perf_hw_id)) &&
-   472			AMD64_RAW_EVENT_MASK_NB);
-   473	}
-   474	
+Very weird! Can you attached either of those binaries to bugzilla (or a UR=
+L I can fetch it from)? I can try to figure out where it is going weird=2E=
+=2E=2E
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+--=20
+Kees Cook

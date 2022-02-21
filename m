@@ -2,77 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAFAE4BD48F
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 05:19:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EA8E4BD493
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 05:19:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245635AbiBUEHl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Feb 2022 23:07:41 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36734 "EHLO
+        id S245694AbiBUEII (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Feb 2022 23:08:08 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229932AbiBUEHk (ORCPT
+        with ESMTP id S245643AbiBUEH4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Feb 2022 23:07:40 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAB013E0EF;
-        Sun, 20 Feb 2022 20:07:17 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8C91CB80CF9;
-        Mon, 21 Feb 2022 04:07:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95CAAC340E9;
-        Mon, 21 Feb 2022 04:07:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645416435;
-        bh=/pMLcwxS55vkdNjjkIVbj3/i1HM4NDob3DVeTZUMjJs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=QIFH3ne72jgkpQRwFFYo44Md6hqYoMYdOXOUDckWzQuTDuopQ4PaiLJTAvIK15dFz
-         HVfHnZ599W7oZ5/kEzR9YecAYlvGrBTYfiGvPr1WoLXw4V3mn7Bvy6jQBB6JSTfI25
-         XqvhOroioyZ60V2DXZ7V12ntW7LmTZvsIKe3I+m46lhseGZK1XP32ON6I4x63e4k38
-         8a0gjcsu4qs3IPP+qmgCrOTen2urS+uRxXx8oLxabZ2XI/H6rkm3dFrT2C7fkvwXox
-         8wtqjeRLsBUqsEtGx6ZWIdNi4GuAcv61+s9gdag3BtbBS8qa2AXVCa2j4kz60Nc05v
-         u39ekNCYHisEQ==
-Date:   Mon, 21 Feb 2022 12:07:09 +0800
-From:   Shawn Guo <shawnguo@kernel.org>
-To:     Tim Harvey <tharvey@gateworks.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 1/2] dt-bindings: arm: imx: add imx8mm gw7903 support
-Message-ID: <20220221040709.GJ2249@dragon>
-References: <20220211190418.11870-1-tharvey@gateworks.com>
+        Sun, 20 Feb 2022 23:07:56 -0500
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 309614476D;
+        Sun, 20 Feb 2022 20:07:29 -0800 (PST)
+X-UUID: bdd467bc67bc445c99947520ce18f0fd-20220221
+X-UUID: bdd467bc67bc445c99947520ce18f0fd-20220221
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
+        (envelope-from <leilk.liu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 32669211; Mon, 21 Feb 2022 12:07:23 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Mon, 21 Feb 2022 12:07:22 +0800
+Received: from localhost.localdomain (10.17.3.154) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Mon, 21 Feb 2022 12:07:21 +0800
+From:   Leilk Liu <leilk.liu@mediatek.com>
+To:     Mark Brown <broonie@kernel.org>
+CC:     Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-spi@vger.kernel.org>, <linux-mediatek@lists.infradead.org>
+Subject: [PATCH V2 0/6] spi: mediatek: add single/quad mode support
+Date:   Mon, 21 Feb 2022 12:07:11 +0800
+Message-ID: <20220221040717.3729-1-leilk.liu@mediatek.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220211190418.11870-1-tharvey@gateworks.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-MTK:  N
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
+        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 11, 2022 at 11:04:17AM -0800, Tim Harvey wrote:
-> The GW7903 is based on the i.MX 8M Mini SoC featuring:
->  - LPDDR4 DRAM
->  - eMMC FLASH
->  - microSD connector with UHS support
->  - LIS2DE12 3-axis accelerometer
->  - Gateworks System Controller
->  - IMX8M FEC
->  - software selectable RS232/RS485/RS422 serial transceiver
->  - PMIC
->  - 2x off-board bi-directional opto-isolated digital I/O
->  - 1x M.2 A-E Key Socket and 1x MiniPCIe socket with USB2.0 and PCIe
->  (resistor loading to route PCIe/USB2 between M.2 and MiniPCIe socket)
-> 
-> Signed-off-by: Tim Harvey <tharvey@gateworks.com>
+v2:
+ 1. rebase this series on spi for-next.
+ 2. fix Rob and Krzysztof comments in v1. 
 
-Applied both, thanks!
+Leilk Liu (6):
+  dt-bindings: spi: Add compatible for Mediatek IPM IP with single mode
+  spi: mediatek: add IPM single mode design support
+  dt-bindings: spi: Add compatible for Mediatek IPM IP with quad mode
+  spi: mediatek: add spi memory support
+  dt-bindings: spi: support spi-hclk
+  spi: mediatek: support spi-hclk
+
+ .../bindings/spi/mediatek,spi-mt65xx.yaml     |   4 +
+ drivers/spi/spi-mt65xx.c                      | 496 ++++++++++++++++--
+ 2 files changed, 468 insertions(+), 32 deletions(-)
+
+--
+2.25.1
+
+

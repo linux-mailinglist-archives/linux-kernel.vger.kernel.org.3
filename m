@@ -2,168 +2,340 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C63B54BD2DA
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 01:19:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E1584BD2D3
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 01:19:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245366AbiBUAGf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Feb 2022 19:06:35 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52292 "EHLO
+        id S244953AbiBUAKf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Feb 2022 19:10:35 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244911AbiBUAG3 (ORCPT
+        with ESMTP id S229604AbiBUAKc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Feb 2022 19:06:29 -0500
-Received: from esa6.hgst.iphmx.com (esa6.hgst.iphmx.com [216.71.154.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B93C517DC
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Feb 2022 16:06:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1645401969; x=1676937969;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=qq4qpDosp6DxyH08XdA7K6jKs4urmOKuJ45lIhnK/EA=;
-  b=pLSn00eZNlGs9aWkEh1Gs3q5VhU8Sg95pxGqS2L6kEXPOAaaEE2H2Q0b
-   MJNVmSitno6pDokIvql6TnFrzO2aqzV3Qvj/S2+YNBZr9GUmL1ZK9qxQP
-   YFqZQWi8yhovADsOvYbTuk4bYJYWdqRWFd/abQ74uoBVu6+KO4UPKQtLM
-   V6Z/7vuX1Ih+hWJG7EWksbXqWC6uBk5fTSSFp2rJO+phPG3/rvuBQcBcn
-   hJFA1QfS0HFwx+SqEOG97bTUpFReeIESMZLsUaEU3ZVAHeH20e5NnPiNF
-   rv8KNcAnzwpYEXtHLkvXM2JC2FuEfFaryZTGmfOAjAwzH5EcXn/br+f4k
-   g==;
-X-IronPort-AV: E=Sophos;i="5.88,384,1635177600"; 
-   d="scan'208";a="194453436"
-Received: from h199-255-45-15.hgst.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
-  by ob1.hgst.iphmx.com with ESMTP; 21 Feb 2022 08:06:03 +0800
-IronPort-SDR: PzV1Vx6+vwxnPxqsYzyiTAPuC6oeVG69wcKNRygeZ2K35M1mjrFBV8ucYO1rblfCtpQ6G/X+NE
- /CuQx218QpV8FhPMJYve5rKE+2O61Rz/ha8XWt67rZIk+336BhUolBSxP+hwjsHj1SVjP12Pld
- a/nK6WStltUYn92AawLgh20AMKTITxNgHbGGjabbCqaK5QTW4f/4amsAMgkhNK9uSqpusf/BzL
- mkknoAV6qD7DZ9KVFS2B9B8jO7EzKEwPg8ytI+f9JFwUvId5+K19wMePzpE2xAIK1XmdHu/2Zn
- oIcA+qdjB7dvIk9LdVVk9jFC
-Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Feb 2022 15:37:36 -0800
-IronPort-SDR: 0/CgRJuO9Mv9V75Q6b148FvjMy4o+ZbntqyLL2QuIK8VS+MEXXseR5Iq38/fNyN4Kkq+uFjknu
- UUsLispPpk+rWfG7qo4oLD0hDSeyhxjpk0fEKmzLZ4E5P8ByvZC8GIHWrrqkkaE+j1ouq9yJdy
- qzX6J/sNgVyihoSgHbdWxZtmcznozC7ig4xb5HdJoGDej9rLm06rsMwsZOl+dwZ+gbkJ8TpmwF
- e/iyc5L7EfLfgCxY5prEjDIuMLCWII9UY1Yv+CANcWY3Z2qAfeekTFP+EB78Q4FxtoAqNnerry
- R/g=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Feb 2022 16:06:02 -0800
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4K22dP5tNDz1SVp1
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Feb 2022 16:06:01 -0800 (PST)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1645401960; x=1647993961; bh=qq4qpDosp6DxyH08XdA7K6jKs4urmOKuJ45
-        lIhnK/EA=; b=r6trkfg+h84wdZZMN3Yj54xs/5Xjvh94bt9D0qh3sewQfWEgfB4
-        m7E6z9GEa0tZndIdUDlKRCpGsWsI4bKryYxCRiojc9xnvcpKcS/NKzdsccbZOzIH
-        tVz+h4jEW4gH9ClXw79YCPAItdpKQ7jK+ObK++64nrEo0gooLVqc4Ll7l6zv+JXg
-        15xjxK9kOx/zmDX1+zcLYQBbgpiS3JJV1RyJ/uil+emANKZFUXr6eKGXgq9go6OS
-        53dqzMnuYmH/CG+iYY9pMsF64r0aJSiIB7Yqn9Re/m99RE2p0psrk+izVfKgjBsX
-        mkOXIUqI68AASKJiZC5an41Ca2//eYAN5ww==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id IlZis0lpa_kL for <linux-kernel@vger.kernel.org>;
-        Sun, 20 Feb 2022 16:06:00 -0800 (PST)
-Received: from [10.89.87.236] (c02drav6md6t.dhcp.fujisawa.hgst.com [10.89.87.236])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4K22dM57Tpz1Rvlx;
-        Sun, 20 Feb 2022 16:05:59 -0800 (PST)
-Message-ID: <ecdcc86e-433e-8592-bb7a-51aa1f83ae25@opensource.wdc.com>
-Date:   Mon, 21 Feb 2022 09:05:58 +0900
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.6.0
-Subject: Re: [PATCH] pata_parport: second preview
-Content-Language: en-US
-To:     Ondrej Zary <linux@zary.sk>
-Cc:     Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>,
-        Tim Waugh <tim@cyberelk.net>, linux-block@vger.kernel.org,
-        linux-parport@lists.infradead.org, linux-ide@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220220224909.8032-1-linux@zary.sk>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <20220220224909.8032-1-linux@zary.sk>
-Content-Type: text/plain; charset=UTF-8
+        Sun, 20 Feb 2022 19:10:32 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8451944755;
+        Sun, 20 Feb 2022 16:10:09 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 34CFBB80DB8;
+        Mon, 21 Feb 2022 00:10:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1134C340E8;
+        Mon, 21 Feb 2022 00:10:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645402206;
+        bh=UH4rwhicB3T7OCjBwUSzbQ/N6789LuIThsEDmHIKvkE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=LGrUJZ4UyaTcYs+MJIjPO1TF/cWxhUdi/e9KbXGpzrF+XKWHkvq7psOgln6vZHi+f
+         B4DJr86q9X/OwhWkxRUBHPHj02KoASJO6+n1O1wYwKgw3jGy7N7/JXgwFSBT/g7Lrz
+         snlkih3QKv3t6sk0Q8zDoXYR6r87nRGrcxivG8SY2sShzjg+jEFnxRghiwdnuptR+B
+         DpR5hX7YplhHwObC1P+apzqKzPclFka0fCSmFqkz+7t7+90Bi+Flc85aAa3SyIvRre
+         jPM5Ps9ByTaeUIxfTxQUNLzjLHMtHD+K7ycWDeT9MGvh2T+EE7ntdlx1Dzcoo36ksY
+         Q4uCRLMf+0UZw==
+Date:   Mon, 21 Feb 2022 09:10:02 +0900
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>, <bpf@vger.kernel.org>,
+        <linuxppc-dev@lists.ozlabs.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 1/3] powerpc/ftrace: Reserve instructions from function
+ entry for ftrace
+Message-Id: <20220221091002.5581c1effd557c62e06b821e@kernel.org>
+In-Reply-To: <8843d65ac0878232433573d10ebee30457748624.1645096227.git.naveen.n.rao@linux.vnet.ibm.com>
+References: <cover.1645096227.git.naveen.n.rao@linux.vnet.ibm.com>
+        <8843d65ac0878232433573d10ebee30457748624.1645096227.git.naveen.n.rao@linux.vnet.ibm.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/02/21 7:49, Ondrej Zary wrote:
-> Hello,
-> here's a second version of pata_parport. Now a complete patch with protocol
-> drivers (cleaned up coding style).
+Hi Naveen,
+
+On Thu, 17 Feb 2022 17:06:23 +0530
+"Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com> wrote:
+
+> On some architectures, enabling function tracing results in multiple
+> instructions being emitted at function entry. As an example, on
+> powerpc64 with -mprofile-kernel, two instructions are emitted at
+> function entry:
+> 	mflr	r0
+> 	bl	_mcount
 > 
-> The device model is complete now (pata_parport bus, protocol drivers and
-> manually created devices). Devices can also be deleted:
-> # echo pata_parport.0 > /sys/bus/pata_parport/delete_device 
+> It is desirable to nop out both these instructions when ftrace is not
+> active. For that purpose, it is essential to mark both these
+> instructions as belonging to ftrace so that other kernel subsystems
+> (such as kprobes) do not modify these instructions.
+
+Indeed, kprobes must handle this. However, to keep consistency of kprobes
+usage with/without CONFIG_FUNCTION_TRACER, I think KPROBES_ON_FTRACE should
+handle these instructions are virutal single instruction.
+More specifically, it should allow user to put a kprobe on 'mflr r0' address
+and the kprobes on 'bl _mcount' should return -EILSEQ. (because it is not an 
+instruction boundary.) And the kprobe's ftrace handler temporarily modifies
+the instruction pointer to the address of 'mflr'.
+
+Thank you,
+
 > 
-> Protocol registration could be improved - I don't like protocols[] and
-> protocol numbers, devices should probably be created by protocol name.
-> Also the LPT port base addresses should probably be replaced by port names
-> (like parport0).
+> Add support for this by allowing architectures to override
+> ftrace_cmp_recs() and to match against address ranges over and above a
+> single MCOUNT_INSN_SIZE.
 > 
-> The bpck driver seems to need to know if a CD drive is attached (weird) but
-> I doubt that I can get such info from libata.
+> For powerpc32, we mark the two instructions preceding the call to
+> _mcount() as belonging to ftrace.
 > 
-> I haven't tested other devices yet, only the Imation SuperDisk drive:
+> For powerpc64, an additional aspect to consider is that functions can
+> have a global entry point for setting up the TOC when invoked from other
+> modules. If present, global entry point always involves two instructions
+> (addis/lis and addi). To handle this, we provide a custom
+> ftrace_init_nop() for powerpc64 where we identify functions having a
+> global entry point and record this information in the LSB of
+> dyn_ftrace->arch.mod. This information is used in ftrace_cmp_recs() to
+> reserve instructions from the global entry point.
 > 
-> [ 4297.947270] paride: epat registered as protocol 0
-> [ 4302.019782] pata_parport pata_parport.0: 0x378 is parport0
-> [ 4302.030573] pata_parport pata_parport.0: epat: port 0x378, mode 0, ccr 0, test=(0,256,0)
-> [ 4302.030587] pata_parport pata_parport.0: Sharing parport0 at 0x378
-> [ 4302.030719] pata_parport pata_parport.0: epat, Shuttle EPAT chip c6 at 0x378, mode 0 (4-bit), delay 0
-> [ 4302.062891] scsi host4: pata_parport-epat
-> [ 4302.063036] ata6: PATA max PIO0 port parport0 protocol epat
-> [ 4302.277720] ata6.00: ATAPI: LS-120 COSM   04              UHD Floppy, 0270M09T, max PIO2
-> [ 4302.358986] scsi 4:0:0:0: Direct-Access     MATSHITA LS-120 COSM   04 0270 PQ: 0 ANSI: 5
-> [ 4302.394406] sd 4:0:0:0: Attached scsi generic sg1 type 0
-> [ 4302.429152] sd 4:0:0:0: [sdb] Media removed, stopped polling
-> [ 4302.461007] sd 4:0:0:0: [sdb] Attached SCSI removable disk
-> 
-> 
+> Suggested-by: Steven Rostedt <rostedt@goodmis.org>
+> Signed-off-by: Naveen N. Rao <naveen.n.rao@linux.vnet.ibm.com>
 > ---
->  drivers/ata/Kconfig                     |  25 +
->  drivers/ata/Makefile                    |   2 +
->  drivers/ata/pata_parport/Kconfig        | 189 ++++++
->  drivers/ata/pata_parport/Makefile       |  24 +
->  drivers/ata/pata_parport/aten.c         | 139 +++++
->  drivers/ata/pata_parport/bpck.c         | 481 +++++++++++++++
->  drivers/ata/pata_parport/bpck6.c        | 164 +++++
->  drivers/ata/pata_parport/comm.c         | 198 ++++++
->  drivers/ata/pata_parport/dstr.c         | 226 +++++++
->  drivers/ata/pata_parport/epat.c         | 320 ++++++++++
->  drivers/ata/pata_parport/epia.c         | 308 ++++++++++
->  drivers/ata/pata_parport/fit2.c         | 135 +++++
->  drivers/ata/pata_parport/fit3.c         | 195 ++++++
->  drivers/ata/pata_parport/friq.c         | 263 ++++++++
->  drivers/ata/pata_parport/frpw.c         | 292 +++++++++
->  drivers/ata/pata_parport/kbic.c         | 292 +++++++++
->  drivers/ata/pata_parport/ktti.c         | 112 ++++
->  drivers/ata/pata_parport/on20.c         | 136 +++++
->  drivers/ata/pata_parport/on26.c         | 302 +++++++++
->  drivers/ata/pata_parport/pata_parport.c | 773 ++++++++++++++++++++++++
->  drivers/ata/pata_parport/pata_parport.h | 114 ++++
-
-This is a very large patch... Could you split this into multiple patches ?
-1) The first patch adds the generic pata_parport & Kconfig
-2) Following patches add pata_parport drivers, one patch per driver.
-
-That will make reviewing easier.
-
+>  arch/powerpc/include/asm/ftrace.h  |  15 ++++
+>  arch/powerpc/kernel/trace/ftrace.c | 110 ++++++++++++++++++++++++++---
+>  kernel/trace/ftrace.c              |   2 +
+>  3 files changed, 117 insertions(+), 10 deletions(-)
+> 
+> diff --git a/arch/powerpc/include/asm/ftrace.h b/arch/powerpc/include/asm/ftrace.h
+> index debe8c4f706260..8eb3235831633d 100644
+> --- a/arch/powerpc/include/asm/ftrace.h
+> +++ b/arch/powerpc/include/asm/ftrace.h
+> @@ -59,6 +59,21 @@ static inline unsigned long ftrace_call_adjust(unsigned long addr)
+>  struct dyn_arch_ftrace {
+>  	struct module *mod;
+>  };
+> +
+> +struct dyn_ftrace;
+> +struct module *ftrace_mod_addr_get(struct dyn_ftrace *rec);
+> +void ftrace_mod_addr_set(struct dyn_ftrace *rec, struct module *mod);
+> +
+> +#ifdef CONFIG_MPROFILE_KERNEL
+> +int ftrace_init_nop(struct module *mod, struct dyn_ftrace *rec);
+> +#define ftrace_init_nop ftrace_init_nop
+> +#endif
+> +
+> +#if defined(CONFIG_MPROFILE_KERNEL) || defined(CONFIG_PPC32)
+> +int ftrace_cmp_recs(const void *a, const void *b);
+> +#define ftrace_cmp_recs ftrace_cmp_recs
+> +#endif
+> +
+>  #endif /* __ASSEMBLY__ */
+>  
+>  #ifdef CONFIG_DYNAMIC_FTRACE_WITH_REGS
+> diff --git a/arch/powerpc/kernel/trace/ftrace.c b/arch/powerpc/kernel/trace/ftrace.c
+> index 80b6285769f27c..11ce9296ce3cf2 100644
+> --- a/arch/powerpc/kernel/trace/ftrace.c
+> +++ b/arch/powerpc/kernel/trace/ftrace.c
+> @@ -428,21 +428,21 @@ int ftrace_make_nop(struct module *mod,
+>  	 * We should either already have a pointer to the module
+>  	 * or it has been passed in.
+>  	 */
+> -	if (!rec->arch.mod) {
+> +	if (!ftrace_mod_addr_get(rec)) {
+>  		if (!mod) {
+>  			pr_err("No module loaded addr=%lx\n", addr);
+>  			return -EFAULT;
+>  		}
+> -		rec->arch.mod = mod;
+> +		ftrace_mod_addr_set(rec, mod);
+>  	} else if (mod) {
+> -		if (mod != rec->arch.mod) {
+> +		if (mod != ftrace_mod_addr_get(rec)) {
+>  			pr_err("Record mod %p not equal to passed in mod %p\n",
+> -			       rec->arch.mod, mod);
+> +			       ftrace_mod_addr_get(rec), mod);
+>  			return -EINVAL;
+>  		}
+>  		/* nothing to do if mod == rec->arch.mod */
+>  	} else
+> -		mod = rec->arch.mod;
+> +		mod = ftrace_mod_addr_get(rec);
+>  
+>  	return __ftrace_make_nop(mod, rec, addr);
+>  #else
+> @@ -451,6 +451,96 @@ int ftrace_make_nop(struct module *mod,
+>  #endif /* CONFIG_MODULES */
+>  }
+>  
+> +#define FUNC_MCOUNT_OFFSET_PPC32	8
+> +#define FUNC_MCOUNT_OFFSET_PPC64_LEP	4
+> +#define FUNC_MCOUNT_OFFSET_PPC64_GEP	12
+> +
+> +#ifdef CONFIG_MPROFILE_KERNEL
+> +struct module *ftrace_mod_addr_get(struct dyn_ftrace *rec)
+> +{
+> +	return (struct module *)((unsigned long)rec->arch.mod & ~0x1);
+> +}
+> +
+> +void ftrace_mod_addr_set(struct dyn_ftrace *rec, struct module *mod)
+> +{
+> +	rec->arch.mod = (struct module *)(((unsigned long)rec->arch.mod & 0x1) | (unsigned long)mod);
+> +}
+> +
+> +int ftrace_init_nop(struct module *mod, struct dyn_ftrace *rec)
+> +{
+> +	unsigned long offset, ip = rec->ip;
+> +	ppc_inst_t op1, op2;
+> +	int ret;
+> +
+> +	if (!kallsyms_lookup_size_offset(rec->ip, NULL, &offset) ||
+> +	    (offset != FUNC_MCOUNT_OFFSET_PPC64_GEP && offset != FUNC_MCOUNT_OFFSET_PPC64_LEP)) {
+> +		ip -= FUNC_MCOUNT_OFFSET_PPC64_GEP;
+> +		ret = copy_inst_from_kernel_nofault(&op1, (void *)ip);
+> +		ret |= copy_inst_from_kernel_nofault(&op2, (void *)(ip + MCOUNT_INSN_SIZE));
+> +		if (!ret &&
+> +		    ((ppc_inst_val(op1) & 0xffff0000) == PPC_RAW_LIS(_R2, 0) ||
+> +		     (ppc_inst_val(op1) & 0xffff0000) == PPC_RAW_ADDIS(_R2, _R12, 0)) &&
+> +		    (ppc_inst_val(op2) & 0xffff0000) == PPC_RAW_ADDI(_R2, _R2, 0))
+> +			ftrace_mod_addr_set(rec, (struct module *)1);
+> +	} else if (offset == FUNC_MCOUNT_OFFSET_PPC64_GEP) {
+> +		ftrace_mod_addr_set(rec, (struct module *)1);
+> +	}
+> +
+> +	return ftrace_make_nop(mod, rec, MCOUNT_ADDR);
+> +}
+> +#else
+> +struct module *ftrace_mod_addr_get(struct dyn_ftrace *rec)
+> +{
+> +	return rec->arch.mod;
+> +}
+> +
+> +void ftrace_mod_addr_set(struct dyn_ftrace *rec, struct module *mod)
+> +{
+> +	rec->arch.mod = mod;
+> +}
+> +#endif /* CONFIG_MPROFILE_KERNEL */
+> +
+> +#if defined(CONFIG_MPROFILE_KERNEL) || defined(CONFIG_PPC32)
+> +int ftrace_location_get_offset(const struct dyn_ftrace *rec)
+> +{
+> +	if (IS_ENABLED(CONFIG_MPROFILE_KERNEL))
+> +		/*
+> +		 * On ppc64le with -mprofile-kernel, function entry can have:
+> +		 *   addis r2, r12, M
+> +		 *   addi  r2, r2, N
+> +		 *   mflr  r0
+> +		 *   bl    _mcount
+> +		 *
+> +		 * The first two instructions are for TOC setup and represent the global entry
+> +		 * point for cross-module calls, and may be missing if the function is never called
+> +		 * from other modules.
+> +		 */
+> +		return ((unsigned long)rec->arch.mod & 0x1) ? FUNC_MCOUNT_OFFSET_PPC64_GEP :
+> +							      FUNC_MCOUNT_OFFSET_PPC64_LEP;
+> +	else
+> +		/*
+> +		 * On ppc32, function entry always has:
+> +		 *   mflr r0
+> +		 *   stw  r0, 4(r1)
+> +		 *   bl   _mcount
+> +		 */
+> +		return FUNC_MCOUNT_OFFSET_PPC32;
+> +}
+> +
+> +int ftrace_cmp_recs(const void *a, const void *b)
+> +{
+> +	const struct dyn_ftrace *key = a;
+> +	const struct dyn_ftrace *rec = b;
+> +	int offset = ftrace_location_get_offset(rec);
+> +
+> +	if (key->flags < rec->ip - offset)
+> +		return -1;
+> +	if (key->ip >= rec->ip + MCOUNT_INSN_SIZE)
+> +		return 1;
+> +	return 0;
+> +}
+> +#endif
+> +
+>  #ifdef CONFIG_MODULES
+>  #ifdef CONFIG_PPC64
+>  /*
+> @@ -494,7 +584,7 @@ __ftrace_make_call(struct dyn_ftrace *rec, unsigned long addr)
+>  	ppc_inst_t instr;
+>  	void *ip = (void *)rec->ip;
+>  	unsigned long entry, ptr, tramp;
+> -	struct module *mod = rec->arch.mod;
+> +	struct module *mod = ftrace_mod_addr_get(rec);
+>  
+>  	/* read where this goes */
+>  	if (copy_inst_from_kernel_nofault(op, ip))
+> @@ -561,7 +651,7 @@ __ftrace_make_call(struct dyn_ftrace *rec, unsigned long addr)
+>  	int err;
+>  	ppc_inst_t op;
+>  	u32 *ip = (u32 *)rec->ip;
+> -	struct module *mod = rec->arch.mod;
+> +	struct module *mod = ftrace_mod_addr_get(rec);
+>  	unsigned long tramp;
+>  
+>  	/* read where this goes */
+> @@ -678,7 +768,7 @@ int ftrace_make_call(struct dyn_ftrace *rec, unsigned long addr)
+>  	 * Being that we are converting from nop, it had better
+>  	 * already have a module defined.
+>  	 */
+> -	if (!rec->arch.mod) {
+> +	if (!ftrace_mod_addr_get(rec)) {
+>  		pr_err("No module loaded\n");
+>  		return -EINVAL;
+>  	}
+> @@ -699,7 +789,7 @@ __ftrace_modify_call(struct dyn_ftrace *rec, unsigned long old_addr,
+>  	ppc_inst_t op;
+>  	unsigned long ip = rec->ip;
+>  	unsigned long entry, ptr, tramp;
+> -	struct module *mod = rec->arch.mod;
+> +	struct module *mod = ftrace_mod_addr_get(rec);
+>  
+>  	/* If we never set up ftrace trampolines, then bail */
+>  	if (!mod->arch.tramp || !mod->arch.tramp_regs) {
+> @@ -814,7 +904,7 @@ int ftrace_modify_call(struct dyn_ftrace *rec, unsigned long old_addr,
+>  	/*
+>  	 * Out of range jumps are called from modules.
+>  	 */
+> -	if (!rec->arch.mod) {
+> +	if (!ftrace_mod_addr_get(rec)) {
+>  		pr_err("No module loaded\n");
+>  		return -EINVAL;
+>  	}
+> diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
+> index f9feb197b2daaf..68f20cf34b0c47 100644
+> --- a/kernel/trace/ftrace.c
+> +++ b/kernel/trace/ftrace.c
+> @@ -1510,6 +1510,7 @@ ftrace_ops_test(struct ftrace_ops *ops, unsigned long ip, void *regs)
+>  	}
+>  
+>  
+> +#ifndef ftrace_cmp_recs
+>  static int ftrace_cmp_recs(const void *a, const void *b)
+>  {
+>  	const struct dyn_ftrace *key = a;
+> @@ -1521,6 +1522,7 @@ static int ftrace_cmp_recs(const void *a, const void *b)
+>  		return 1;
+>  	return 0;
+>  }
+> +#endif
+>  
+>  static struct dyn_ftrace *lookup_rec(unsigned long start, unsigned long end)
+>  {
+> -- 
+> 2.35.1
+> 
 
 
 -- 
-Damien Le Moal
-Western Digital Research
+Masami Hiramatsu <mhiramat@kernel.org>

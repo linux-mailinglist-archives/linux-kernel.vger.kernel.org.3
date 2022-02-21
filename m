@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80E784BE29E
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:55:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE8CA4BDE60
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:47:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351758AbiBUJqg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 04:46:36 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47138 "EHLO
+        id S1353416AbiBUKKr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 05:10:47 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351314AbiBUJg6 (ORCPT
+        with ESMTP id S1353294AbiBUJ5U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 04:36:58 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0C6B2DD7A;
-        Mon, 21 Feb 2022 01:15:39 -0800 (PST)
+        Mon, 21 Feb 2022 04:57:20 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5726046B05;
+        Mon, 21 Feb 2022 01:25:17 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 80340608C1;
-        Mon, 21 Feb 2022 09:15:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 639A1C340E9;
-        Mon, 21 Feb 2022 09:15:21 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F3E47B80EC9;
+        Mon, 21 Feb 2022 09:25:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 248A5C340EC;
+        Mon, 21 Feb 2022 09:25:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645434921;
-        bh=udyfW1L3muCkfAB2xkuL09YazwKCow9OUHBy04Zui/A=;
+        s=korg; t=1645435514;
+        bh=E10zvqeQW5+Fg49smzsMnHYL12P0GYgW1UwTNysAPfA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=aFd1M56BsN+KM7V0V9XXgqRIJ1kfG3kAhsZ21vG8uH/SNuKoZ82XNWvJaBpToAVcL
-         u0u8eaZezTeovo2O1XvLJVG27DTy7Nrn1Wh/uc0Ni2aHD4vjidqbwnytzqkWQB3TU7
-         sA1jP1ifJJol4+WFho3XiezwAZYImWVkFvJflRmQ=
+        b=NJQ/PoU2RpzMIV1Nz4MemJR+IbjnLsDeoMezwD6ZV3Ocwt5T60O8LrklM1ZdTwlCe
+         4MTbgICtdJNZiQWsbg8VXNsLESCFOlKOgS0hDqq9lSaYJCTeSibYeQnLsHyrr08KYt
+         GMe8AKTqCzEECXRsESuGdvIP+UhVs0m3C7d0tcTM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>,
-        "Eric W. Biederman" <ebiederm@xmission.com>
-Subject: [PATCH 5.15 178/196] ucounts: Handle wrapping in is_ucounts_overlimit
+        stable@vger.kernel.org,
+        Cheng Jui Wang <cheng-jui.wang@mediatek.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Boqun Feng <boqun.feng@gmail.com>
+Subject: [PATCH 5.16 191/227] lockdep: Correct lock_classes index mapping
 Date:   Mon, 21 Feb 2022 09:50:10 +0100
-Message-Id: <20220221084936.909589544@linuxfoundation.org>
+Message-Id: <20220221084941.166145669@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220221084930.872957717@linuxfoundation.org>
-References: <20220221084930.872957717@linuxfoundation.org>
+In-Reply-To: <20220221084934.836145070@linuxfoundation.org>
+References: <20220221084934.836145070@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,38 +56,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eric W. Biederman <ebiederm@xmission.com>
+From: Cheng Jui Wang <cheng-jui.wang@mediatek.com>
 
-commit 0cbae9e24fa7d6c6e9f828562f084da82217a0c5 upstream.
+commit 28df029d53a2fd80c1b8674d47895648ad26dcfb upstream.
 
-While examining is_ucounts_overlimit and reading the various messages
-I realized that is_ucounts_overlimit fails to deal with counts that
-may have wrapped.
+A kernel exception was hit when trying to dump /proc/lockdep_chains after
+lockdep report "BUG: MAX_LOCKDEP_CHAIN_HLOCKS too low!":
 
-Being wrapped should be a transitory state for counts and they should
-never be wrapped for long, but it can happen so handle it.
+Unable to handle kernel paging request at virtual address 00054005450e05c3
+...
+00054005450e05c3] address between user and kernel address ranges
+...
+pc : [0xffffffece769b3a8] string+0x50/0x10c
+lr : [0xffffffece769ac88] vsnprintf+0x468/0x69c
+...
+ Call trace:
+  string+0x50/0x10c
+  vsnprintf+0x468/0x69c
+  seq_printf+0x8c/0xd8
+  print_name+0x64/0xf4
+  lc_show+0xb8/0x128
+  seq_read_iter+0x3cc/0x5fc
+  proc_reg_read_iter+0xdc/0x1d4
 
-Cc: stable@vger.kernel.org
-Fixes: 21d1c5e386bc ("Reimplement RLIMIT_NPROC on top of ucounts")
-Link: https://lkml.kernel.org/r/20220216155832.680775-5-ebiederm@xmission.com
-Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
-Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
+The cause of the problem is the function lock_chain_get_class() will
+shift lock_classes index by 1, but the index don't need to be shifted
+anymore since commit 01bb6f0af992 ("locking/lockdep: Change the range
+of class_idx in held_lock struct") already change the index to start
+from 0.
+
+The lock_classes[-1] located at chain_hlocks array. When printing
+lock_classes[-1] after the chain_hlocks entries are modified, the
+exception happened.
+
+The output of lockdep_chains are incorrect due to this problem too.
+
+Fixes: f611e8cf98ec ("lockdep: Take read/write status in consideration when generate chainkey")
+Signed-off-by: Cheng Jui Wang <cheng-jui.wang@mediatek.com>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Reviewed-by: Boqun Feng <boqun.feng@gmail.com>
+Link: https://lore.kernel.org/r/20220210105011.21712-1-cheng-jui.wang@mediatek.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- kernel/ucount.c |    3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ kernel/locking/lockdep.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/kernel/ucount.c
-+++ b/kernel/ucount.c
-@@ -344,7 +344,8 @@ bool is_ucounts_overlimit(struct ucounts
- 	if (rlimit > LONG_MAX)
- 		max = LONG_MAX;
- 	for (iter = ucounts; iter; iter = iter->ns->ucounts) {
--		if (get_ucounts_value(iter, type) > max)
-+		long val = get_ucounts_value(iter, type);
-+		if (val < 0 || val > max)
- 			return true;
- 		max = READ_ONCE(iter->ns->ucount_max[type]);
+--- a/kernel/locking/lockdep.c
++++ b/kernel/locking/lockdep.c
+@@ -3462,7 +3462,7 @@ struct lock_class *lock_chain_get_class(
+ 	u16 chain_hlock = chain_hlocks[chain->base + i];
+ 	unsigned int class_idx = chain_hlock_class_idx(chain_hlock);
+ 
+-	return lock_classes + class_idx - 1;
++	return lock_classes + class_idx;
+ }
+ 
+ /*
+@@ -3530,7 +3530,7 @@ static void print_chain_keys_chain(struc
+ 		hlock_id = chain_hlocks[chain->base + i];
+ 		chain_key = print_chain_key_iteration(hlock_id, chain_key);
+ 
+-		print_lock_name(lock_classes + chain_hlock_class_idx(hlock_id) - 1);
++		print_lock_name(lock_classes + chain_hlock_class_idx(hlock_id));
+ 		printk("\n");
  	}
+ }
 
 

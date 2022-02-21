@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AC224BDC79
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:42:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EB314BE835
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:05:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351155AbiBUJgs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 04:36:48 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51024 "EHLO
+        id S229847AbiBUIyW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 03:54:22 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349099AbiBUJ1e (ORCPT
+        with ESMTP id S1345398AbiBUIxT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 04:27:34 -0500
+        Mon, 21 Feb 2022 03:53:19 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96DA8DF5E;
-        Mon, 21 Feb 2022 01:12:13 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9600E1093;
+        Mon, 21 Feb 2022 00:52:48 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 33ED7608C4;
-        Mon, 21 Feb 2022 09:12:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19014C340E9;
-        Mon, 21 Feb 2022 09:12:11 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3107961132;
+        Mon, 21 Feb 2022 08:52:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E421C340E9;
+        Mon, 21 Feb 2022 08:52:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645434732;
-        bh=Tmzs7DreLGoEQ0nImRKQ4cV5zyQ0u3xWsJnDnMuHTv4=;
+        s=korg; t=1645433567;
+        bh=CiNSoGFlVE7Yc/N15ISxD4jbOC0FtDELKkzSvEf6aAY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Dkjx292MdkQb2n/hz75MYJ7DTYJ5gPQQkKm0DoeiV+AaaYgrJEH+tsMB545IafjB+
-         DbLLHhfXP8bBIK13yxxYvfaL4aADBgjgHGmd+s+9oACR4/iwGvPVOH7uQB9HE4R30e
-         Jd504XybcvH9lZ3apRSW6ah3AG88A8HuZpfvF15g=
+        b=Yc/EknQW6tKHsiPzBi8koqaJIa/vnXeio1UE6CS3osLkqsx0HQ3lnxEae6ScP5+lb
+         8bC28EjlrnSEmaC25xXFtITIwbyL/1D/CgedTJNiwgIo/GXU2uHAE3nF0ofPqT7KVG
+         CgrmgIX/nr2MzACPPXJDe4SNSzsRyxUlV1jeU5zY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Joakim Tjernlund <joakim.tjernlund@infinera.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>
-Subject: [PATCH 5.15 110/196] arm64: Correct wrong label in macro __init_el2_gicv3
+        stable@vger.kernel.org, Duoming Zhou <duoming@zju.edu.cn>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.14 11/45] ax25: improve the incomplete fix to avoid UAF and NPD bugs
 Date:   Mon, 21 Feb 2022 09:49:02 +0100
-Message-Id: <20220221084934.619435963@linuxfoundation.org>
+Message-Id: <20220221084910.834764470@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220221084930.872957717@linuxfoundation.org>
-References: <20220221084930.872957717@linuxfoundation.org>
+In-Reply-To: <20220221084910.454824160@linuxfoundation.org>
+References: <20220221084910.454824160@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,44 +55,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Joakim Tjernlund <joakim.tjernlund@infinera.com>
+From: Duoming Zhou <duoming@zju.edu.cn>
 
-commit 4f6de676d94ee8ddfc2e7e7cd935fc7cb2feff3a upstream.
+[ Upstream commit 4e0f718daf97d47cf7dec122da1be970f145c809 ]
 
-In commit:
+The previous commit 1ade48d0c27d ("ax25: NPD bug when detaching
+AX25 device") introduce lock_sock() into ax25_kill_by_device to
+prevent NPD bug. But the concurrency NPD or UAF bug will occur,
+when lock_sock() or release_sock() dereferences the ax25_cb->sock.
 
-  114945d84a30a5fe ("arm64: Fix labels in el2_setup macros")
+The NULL pointer dereference bug can be shown as below:
 
-We renamed a label from '1' to '.Lskip_gicv3_\@', but failed to update
-a branch to it, which now targets a later label also called '1'.
+ax25_kill_by_device()        | ax25_release()
+                             |   ax25_destroy_socket()
+                             |     ax25_cb_del()
+  ...                        |     ...
+                             |     ax25->sk=NULL;
+  lock_sock(s->sk); //(1)    |
+  s->ax25_dev = NULL;        |     ...
+  release_sock(s->sk); //(2) |
+  ...                        |
 
-The branch is taken rarely, when GICv3 is present but SRE is disabled
-at EL3, causing a boot-time crash.
+The root cause is that the sock is set to null before dereference
+site (1) or (2). Therefore, this patch extracts the ax25_cb->sock
+in advance, and uses ax25_list_lock to protect it, which can synchronize
+with ax25_cb_del() and ensure the value of sock is not null before
+dereference sites.
 
-Update the caller to the new label name.
+The concurrency UAF bug can be shown as below:
 
-Fixes: 114945d84a30 ("arm64: Fix labels in el2_setup macros")
-Cc: <stable@vger.kernel.org> # 5.12.x
-Signed-off-by: Joakim Tjernlund <joakim.tjernlund@infinera.com>
-Link: https://lore.kernel.org/r/20220214175643.21931-1-joakim.tjernlund@infinera.com
-Reviewed-by: Mark Rutland <mark.rutland@arm.com>
-Reviewed-by: Marc Zyngier <maz@kernel.org>
-Signed-off-by: Catalin Marinas <catalin.marinas@arm.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+ax25_kill_by_device()        | ax25_release()
+                             |   ax25_destroy_socket()
+  ...                        |   ...
+                             |   sock_put(sk); //FREE
+  lock_sock(s->sk); //(1)    |
+  s->ax25_dev = NULL;        |   ...
+  release_sock(s->sk); //(2) |
+  ...                        |
+
+The root cause is that the sock is released before dereference
+site (1) or (2). Therefore, this patch uses sock_hold() to increase
+the refcount of sock and uses ax25_list_lock to protect it, which
+can synchronize with ax25_cb_del() in ax25_destroy_socket() and
+ensure the sock wil not be released before dereference sites.
+
+Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm64/include/asm/el2_setup.h |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ net/ax25/af_ax25.c | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
---- a/arch/arm64/include/asm/el2_setup.h
-+++ b/arch/arm64/include/asm/el2_setup.h
-@@ -106,7 +106,7 @@
- 	msr_s	SYS_ICC_SRE_EL2, x0
- 	isb					// Make sure SRE is now set
- 	mrs_s	x0, SYS_ICC_SRE_EL2		// Read SRE back,
--	tbz	x0, #0, 1f			// and check that it sticks
-+	tbz	x0, #0, .Lskip_gicv3_\@		// and check that it sticks
- 	msr_s	SYS_ICH_HCR_EL2, xzr		// Reset ICC_HCR_EL2 to defaults
- .Lskip_gicv3_\@:
- .endm
+diff --git a/net/ax25/af_ax25.c b/net/ax25/af_ax25.c
+index 0232afd9d9c3c..36d2e1dfa1e6b 100644
+--- a/net/ax25/af_ax25.c
++++ b/net/ax25/af_ax25.c
+@@ -80,6 +80,7 @@ static void ax25_kill_by_device(struct net_device *dev)
+ {
+ 	ax25_dev *ax25_dev;
+ 	ax25_cb *s;
++	struct sock *sk;
+ 
+ 	if ((ax25_dev = ax25_dev_ax25dev(dev)) == NULL)
+ 		return;
+@@ -88,13 +89,15 @@ static void ax25_kill_by_device(struct net_device *dev)
+ again:
+ 	ax25_for_each(s, &ax25_list) {
+ 		if (s->ax25_dev == ax25_dev) {
++			sk = s->sk;
++			sock_hold(sk);
+ 			spin_unlock_bh(&ax25_list_lock);
+-			lock_sock(s->sk);
++			lock_sock(sk);
+ 			s->ax25_dev = NULL;
+-			release_sock(s->sk);
++			release_sock(sk);
+ 			ax25_disconnect(s, ENETUNREACH);
+ 			spin_lock_bh(&ax25_list_lock);
+-
++			sock_put(sk);
+ 			/* The entry could have been deleted from the
+ 			 * list meanwhile and thus the next pointer is
+ 			 * no longer valid.  Play it safe and restart
+-- 
+2.34.1
+
 
 

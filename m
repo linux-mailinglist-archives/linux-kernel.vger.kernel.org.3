@@ -2,67 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 097B24BE773
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:03:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D3E144BDFA1
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:50:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347096AbiBUJEa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 04:04:30 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58386 "EHLO
+        id S1347705AbiBUJI2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 04:08:28 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:32956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347280AbiBUJBI (ORCPT
+        with ESMTP id S1347405AbiBUJBV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 04:01:08 -0500
-Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ADCB1B797;
-        Mon, 21 Feb 2022 00:56:13 -0800 (PST)
-Received: by mail-pf1-x441.google.com with SMTP id u16so8185270pfg.12;
-        Mon, 21 Feb 2022 00:56:13 -0800 (PST)
+        Mon, 21 Feb 2022 04:01:21 -0500
+Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA48D27FFA
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 00:56:26 -0800 (PST)
+Received: by mail-yb1-xb29.google.com with SMTP id y6so32810269ybc.5
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 00:56:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=WZXrnKErNeL5lMaOc5mdXm+VKeICKiYhtwQ5xG170Xw=;
-        b=jU/OVWCH/lwwVb3C6Bp5ADGr8MXWoiP7i+0Kij0V0hacdaZZ8tK00cVt6iZ/1oDgSf
-         zLCNBR+499VDg1KPetHCo+UMwdstxG/Wtb/cojSBn4CxSEJ6+B6Kn2sSEKMLa1FhpnkO
-         gOfg/cTYpGSln1Uw29rXocHi3cBKSe7DPv5ozIhOeUHwEN6CIvYt5Ra3Si/aWrc6nHOh
-         7aJAYpciUQhPZ4GngXgspMO/udtUSVPy9FfWweOkXFjyWaxJte3XNAcV5wQbDu9Bgw6B
-         LWwBJa1AeaH1H8LyWa/xijViaL4QCRQOZGKSBn+6X/iN/DMs7UCUWh/T95iDkQZ2eXiU
-         6NYA==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=OndnQyyeZ+3miOBGH8r6YA5jEmN8diDxn0ywrPw5RbI=;
+        b=r6XMOfHzsmunjQCdPWXKqKJJSdVe93vRBmWw6iI1QxXHltVnhZpxKeWCtl7rSxd0Bn
+         mFUYcsOQqjEaS/Bv6wJk/92zkAidghrW340oHGbb5ManDIB2en1xC4wgOelHIAlcYyHa
+         dfFj5hJlT1gEYCm0PxhPN04HwwkZP87C7+Agp3qZgexrPgMKo0FIFqFJ+QdRWGHwKIVB
+         ouXuzHFimH7skVcB7Stkb5IwMYuNu0/mElIuXEnTy2Q6UGiZrTAluuWZ/bHs75x6gcAG
+         j1wkxtI807p6h8tYlOxGFzMMnjg2eRNb1RhegCUnklr/K2Myfn2kOH4iQ6nTGrWyZkIG
+         VDgA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=WZXrnKErNeL5lMaOc5mdXm+VKeICKiYhtwQ5xG170Xw=;
-        b=8Ao2QHzkLB5cunQm+LHWy3/XEJ1+a9KDh/tknUv2DG3Xsx58pPfKJVaInlL/5YZroY
-         YyOjGs77n6kXHxknE4fcO1nOYX2WneXBfHLDyBKgFJrFgdp4qohK5KkI7I02Hh4jqqxk
-         JUZeMJLhnUnVC285PBNsl5DrJjS9gCztPgxlOuRXjcHyRxK3K0anni7LfPGZUTiQoEzo
-         mC9d4GlcexgL+dtd4+10/+VsTWj7rwcUw+YFDYSIeUj7xBB5oOhC94T9nj8m67hg2lVH
-         emCWsFPm2gHnfKNjvlBO8qCItWAGR93PPT7gCQqGzkfGGuZ67PY3Ompsh0jz51jlXtZi
-         ldvw==
-X-Gm-Message-State: AOAM533B1FrBjBGEobli9PWN3ICsQi54WRofdz+M7FwoVoZQtattK8lq
-        ZIWrVdk3j0XLoCP46i6irK8JoGuCEIvePqg7
-X-Google-Smtp-Source: ABdhPJxQFKuAvx0FRc1MFgpz68m7KDduM6CKW3pDZQEtnNhhGZJ/kLVbzQcknaO+Ju1xitzuqiXzYg==
-X-Received: by 2002:aa7:8d54:0:b0:4e0:bd6:cfb9 with SMTP id s20-20020aa78d54000000b004e00bd6cfb9mr19221126pfe.60.1645433768449;
-        Mon, 21 Feb 2022 00:56:08 -0800 (PST)
-Received: from slim.das-security.cn ([103.84.139.54])
-        by smtp.gmail.com with ESMTPSA id h5sm11488325pfc.118.2022.02.21.00.56.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Feb 2022 00:56:08 -0800 (PST)
-From:   Hangyu Hua <hbh25y@gmail.com>
-To:     manishc@marvell.com, GR-Linux-NIC-Dev@marvell.com,
-        coiby.xu@gmail.com, gregkh@linuxfoundation.org,
-        dan.carpenter@oracle.com
-Cc:     netdev@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org, Hangyu Hua <hbh25y@gmail.com>
-Subject: [PATCH v3] staging: qlge: add unregister_netdev in qlge_probe
-Date:   Mon, 21 Feb 2022 16:55:52 +0800
-Message-Id: <20220221085552.93561-1-hbh25y@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=OndnQyyeZ+3miOBGH8r6YA5jEmN8diDxn0ywrPw5RbI=;
+        b=tJ4OMyMXzpf7PoTaYPRNh5wMu17O2JwfNi0yRWxwbvX1DcrGFcLnk0vEE5/bYYVTfj
+         GVLMYJWs7DCttqWkGzIRdxDL7j9Gyib9x6NXg1UTUWNi+5WAd09RHVxMwel2wzSVxUAg
+         wklbZFh4jgmZ/d3I9TMI36L17cJSb3YNllpXFY1kcferhGHMLNjKQ7Agub7LO/xdm7Yy
+         +wQveetv/6b+fiizj6F/+r9Ef1Mo59etefvTrlKPUXm0pP4Etz5uXejYRxVBCe6CcK6f
+         0RB3Xj9ew90SmCbRyizd9tkwPx/wj3wGy6VTvUecrrL71HCc/LKJrqf8WsLxgay6L7Xv
+         uSkw==
+X-Gm-Message-State: AOAM532cdk7sv5kavEJp668I5PkHn5BJ2Yex0bZRi7sOymII+ZQsZy+8
+        4EMxngqtlOAdDAN+g4TwCF479/G7VxWwPDJ72iv4EQ==
+X-Google-Smtp-Source: ABdhPJxB+3u+xxR3NhROqHvmP4nDRvqNXs+Id/6TJtmzlWKjUapRxI31nEF87zsJAwMIUO24apW79b/nJxngD/X62RQ=
+X-Received: by 2002:a25:3542:0:b0:622:caf1:2c88 with SMTP id
+ c63-20020a253542000000b00622caf12c88mr13329448yba.625.1645433774543; Mon, 21
+ Feb 2022 00:56:14 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <20220221065525.21344-1-tangmeng@uniontech.com>
+In-Reply-To: <20220221065525.21344-1-tangmeng@uniontech.com>
+From:   Marco Elver <elver@google.com>
+Date:   Mon, 21 Feb 2022 09:56:03 +0100
+Message-ID: <CANpmjNNTsj-+=BBbt2pcbrqwOmiixjc6fE=Q=JoT=2kQfR0y_Q@mail.gmail.com>
+Subject: Re: [PATCH] mm/kfence: remove unnecessary CONFIG_KFENCE option
+To:     tangmeng <tangmeng@uniontech.com>
+Cc:     glider@google.com, dvyukov@google.com, akpm@linux-foundation.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        kasan-dev@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,53 +68,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-unregister_netdev need to be called when register_netdev succeeds
-qlge_health_create_reporters fails.
+On Mon, 21 Feb 2022 at 07:55, tangmeng <tangmeng@uniontech.com> wrote:
+>
+> In mm/Makefile has:
+> obj-$(CONFIG_KFENCE) += kfence/
+>
+> So that we don't need 'obj-$(CONFIG_KFENCE) :=' in mm/kfence/Makefile,
+> delete it from mm/kfence/Makefile.
+>
+> Signed-off-by: tangmeng <tangmeng@uniontech.com>
 
-Fixes: d8827ae8e22b ("staging: qlge: deal with the case that devlink_health_reporter_create fails")
-Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
----
+Looks reasonable, thanks.
 
-v3: add a Fixed tag
+Reviewed-by: Marco Elver <elver@google.com>
 
-v2: use goto to fix this bug
 
- drivers/staging/qlge/qlge_main.c | 11 +++++++----
- 1 file changed, 7 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/staging/qlge/qlge_main.c b/drivers/staging/qlge/qlge_main.c
-index 9873bb2a9ee4..113a3efd12e9 100644
---- a/drivers/staging/qlge/qlge_main.c
-+++ b/drivers/staging/qlge/qlge_main.c
-@@ -4605,14 +4605,12 @@ static int qlge_probe(struct pci_dev *pdev,
- 	err = register_netdev(ndev);
- 	if (err) {
- 		dev_err(&pdev->dev, "net device registration failed.\n");
--		qlge_release_all(pdev);
--		pci_disable_device(pdev);
--		goto netdev_free;
-+		goto cleanup_pdev;
- 	}
- 
- 	err = qlge_health_create_reporters(qdev);
- 	if (err)
--		goto netdev_free;
-+		goto unregister_netdev;
- 
- 	/* Start up the timer to trigger EEH if
- 	 * the bus goes dead
-@@ -4626,6 +4624,11 @@ static int qlge_probe(struct pci_dev *pdev,
- 	devlink_register(devlink);
- 	return 0;
- 
-+unregister_netdev:
-+	unregister_netdev(ndev);
-+cleanup_pdev:
-+	qlge_release_all(pdev);
-+	pci_disable_device(pdev);
- netdev_free:
- 	free_netdev(ndev);
- devlink_free:
--- 
-2.25.1
-
+> ---
+>  mm/kfence/Makefile | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/mm/kfence/Makefile b/mm/kfence/Makefile
+> index 6872cd5e5390..0bb95728a784 100644
+> --- a/mm/kfence/Makefile
+> +++ b/mm/kfence/Makefile
+> @@ -1,6 +1,6 @@
+>  # SPDX-License-Identifier: GPL-2.0
+>
+> -obj-$(CONFIG_KFENCE) := core.o report.o
+> +obj-y := core.o report.o
+>
+>  CFLAGS_kfence_test.o := -g -fno-omit-frame-pointer -fno-optimize-sibling-calls
+>  obj-$(CONFIG_KFENCE_KUNIT_TEST) += kfence_test.o
+> --
+> 2.20.1
+>
+>
+>
+> --
+> You received this message because you are subscribed to the Google Groups "kasan-dev" group.
+> To unsubscribe from this group and stop receiving emails from it, send an email to kasan-dev+unsubscribe@googlegroups.com.
+> To view this discussion on the web visit https://groups.google.com/d/msgid/kasan-dev/20220221065525.21344-1-tangmeng%40uniontech.com.

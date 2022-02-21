@@ -2,159 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF8E94BE09E
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:52:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 691304BE701
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:03:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356809AbiBULvw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 06:51:52 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46176 "EHLO
+        id S1356812AbiBULv5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 06:51:57 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356817AbiBULvl (ORCPT
+        with ESMTP id S1356802AbiBULvq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 06:51:41 -0500
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61E421FA42;
-        Mon, 21 Feb 2022 03:51:13 -0800 (PST)
-Received: from fraeml735-chm.china.huawei.com (unknown [172.18.147.207])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4K2LFt5Hsdz67jnf;
-        Mon, 21 Feb 2022 19:50:10 +0800 (CST)
-Received: from lhreml710-chm.china.huawei.com (10.201.108.61) by
- fraeml735-chm.china.huawei.com (10.206.15.216) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Mon, 21 Feb 2022 12:51:10 +0100
-Received: from localhost (10.202.226.41) by lhreml710-chm.china.huawei.com
- (10.201.108.61) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Mon, 21 Feb
- 2022 11:51:09 +0000
-Date:   Mon, 21 Feb 2022 11:51:08 +0000
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     Yicong Yang <yangyicong@hisilicon.com>
-CC:     <gregkh@linuxfoundation.org>, <helgaas@kernel.org>,
-        <alexander.shishkin@linux.intel.com>, <lorenzo.pieralisi@arm.com>,
-        <will@kernel.org>, <mark.rutland@arm.com>,
-        <mathieu.poirier@linaro.org>, <suzuki.poulose@arm.com>,
-        <mike.leach@linaro.org>, <leo.yan@linaro.org>,
-        <daniel.thompson@linaro.org>, <joro@8bytes.org>,
-        <john.garry@huawei.com>, <shameerali.kolothum.thodi@huawei.com>,
-        <robin.murphy@arm.com>, <peterz@infradead.org>, <mingo@redhat.com>,
-        <acme@kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <coresight@lists.linaro.org>, <linux-pci@vger.kernel.org>,
-        <linux-perf-users@vger.kernel.org>,
-        <iommu@lists.linux-foundation.org>, <prime.zeng@huawei.com>,
-        <liuqi115@huawei.com>, <zhangshaokun@hisilicon.com>,
-        <linuxarm@huawei.com>, <song.bao.hua@hisilicon.com>
-Subject: Re: [PATCH v4 4/8] hisi_ptt: Add support for dynamically updating
- the filter list
-Message-ID: <20220221115108.000033bf@Huawei.com>
-In-Reply-To: <20220221084307.33712-5-yangyicong@hisilicon.com>
-References: <20220221084307.33712-1-yangyicong@hisilicon.com>
-        <20220221084307.33712-5-yangyicong@hisilicon.com>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
+        Mon, 21 Feb 2022 06:51:46 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C4CC1EEE8;
+        Mon, 21 Feb 2022 03:51:22 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3C1EA6120C;
+        Mon, 21 Feb 2022 11:51:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A808DC340E9;
+        Mon, 21 Feb 2022 11:51:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645444281;
+        bh=aEjnWxrjnA14KfRLROgbL/4x95nqLDJdCIq8yEnO6sU=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=KPgkuE4B6hPHagMXMnP0a8ZrFMrlAC6lReEZiqHgP/nTU3UOxhFunYyDDjenWFYci
+         GuJXjg3s0wNm4h9juug2LyxQ9VsoUACToenFReqi6uTrDS7m9+M7NjjCt+ZtAuxqpv
+         LMoz5cfTZluggZbHdB8IzpEQGS52kUYnOavmJTuEIf/9P2Jf4O0wYVPiQRgcGzuls4
+         MU057l5rkYTsersBQzcw2jqf87L0LgTUEc7rX38v6dMOAH4yJcJJVNEnnRSTpjW4N2
+         4dVx5sSEzVQlws2tWjc7AAP1D/M9P00vnA9ROkrMmEOl3DArS7rlDdZ0j4MG1fOOc5
+         oHEBKXCwx+mCw==
+Message-ID: <dca886f1-a187-8fe2-33d3-0626ce62e39b@kernel.org>
+Date:   Mon, 21 Feb 2022 13:51:18 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.202.226.41]
-X-ClientProxiedBy: lhreml732-chm.china.huawei.com (10.201.108.83) To
- lhreml710-chm.china.huawei.com (10.201.108.61)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: Build regressions/improvements in v5.17-rc5
+Content-Language: en-US
+To:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        linux-kernel@vger.kernel.org
+Cc:     Eric Dumazet <edumazet@google.com>, netdev@vger.kernel.org
+References: <20220221095530.1355319-1-geert@linux-m68k.org>
+ <alpine.DEB.2.22.394.2202211143310.347934@ramsan.of.borg>
+From:   Roger Quadros <rogerq@kernel.org>
+In-Reply-To: <alpine.DEB.2.22.394.2202211143310.347934@ramsan.of.borg>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 21 Feb 2022 16:43:03 +0800
-Yicong Yang <yangyicong@hisilicon.com> wrote:
+Hi Geert,
 
-> The PCIe devices supported by the PTT trace can be removed/rescanned
-> by hotplug or through sysfs.  Add support for dynamically updating
-> the available filter list by registering a PCI bus notifier block.
-> Then user can always get latest information about available tracing
-> filters and driver can block the invalid filters of which related
-> devices no longer exist in the system.
+On 21/02/2022 12:47, Geert Uytterhoeven wrote:
+> On Mon, 21 Feb 2022, Geert Uytterhoeven wrote:
+>> JFYI, when comparing v5.17-rc5[1] to v5.17-rc4[3], the summaries are:
+>>  - build errors: +2/-1
 > 
-> Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
-
-One comment following on from ordering of mixed devm and manual cleanup
-in earlier patches.
-
-Otherwise looks fine to me.
-
-> ---
->  drivers/hwtracing/ptt/hisi_ptt.c | 138 ++++++++++++++++++++++++++++---
->  drivers/hwtracing/ptt/hisi_ptt.h |  34 ++++++++
->  2 files changed, 160 insertions(+), 12 deletions(-)
+>   + /kisskb/src/net/netfilter/xt_socket.c: error: implicit declaration of function 'nf_defrag_ipv6_disable'; did you mean 'nf_defrag_ipv4_disable'? [-Werror=implicit-function-declaration]:  => 224:3
 > 
-> diff --git a/drivers/hwtracing/ptt/hisi_ptt.c b/drivers/hwtracing/ptt/hisi_ptt.c
-> index c2b6f8aa9f1e..50193a331faa 100644
-> --- a/drivers/hwtracing/ptt/hisi_ptt.c
-> +++ b/drivers/hwtracing/ptt/hisi_ptt.c
-> @@ -269,25 +269,118 @@ static int hisi_ptt_register_irq(struct hisi_ptt *hisi_ptt)
->  	return 0;
->  }
->  
+> mips-gcc8/malta_defconfig
+> mips-gcc8/ip22_defconfig
+> 
+>   + error: omap-gpmc.c: undefined reference to `of_platform_device_create':  => .text.unlikely+0x14c4), .text.unlikely+0x1628)
 
+This error should be fixed by this patch
 
-...
+https://lore.kernel.org/all/20220219193600.24892-1-rogerq@kernel.org/t/
 
-> @@ -313,6 +406,9 @@ static void hisi_ptt_init_ctrls(struct hisi_ptt *hisi_ptt)
->  	struct pci_bus *bus;
->  	u32 reg;
->  
-> +	INIT_DELAYED_WORK(&hisi_ptt->work, hisi_ptt_update_filters);
-> +	spin_lock_init(&hisi_ptt->filter_update_lock);
-> +	INIT_KFIFO(hisi_ptt->filter_update_kfifo);
->  	INIT_LIST_HEAD(&hisi_ptt->port_filters);
->  	INIT_LIST_HEAD(&hisi_ptt->req_filters);
->  
-> @@ -329,6 +425,13 @@ static void hisi_ptt_init_ctrls(struct hisi_ptt *hisi_ptt)
->  	hisi_ptt->upper = FIELD_GET(HISI_PTT_DEVICE_RANGE_UPPER, reg);
->  	hisi_ptt->lower = FIELD_GET(HISI_PTT_DEVICE_RANGE_LOWER, reg);
->  
-> +	/*
-> +	 * No need to fail if the bus is NULL here as the device
-> +	 * maybe hotplugged after the PTT driver probe, in which
-> +	 * case we can detect the event and update the list as
-> +	 * we register a bus notifier for dynamically updating
-> +	 * the filter list.
-> +	 */
->  	bus = pci_find_bus(pci_domain_nr(pdev->bus), PCI_BUS_NUM(hisi_ptt->upper));
->  	if (bus)
->  		pci_walk_bus(bus, hisi_ptt_init_filters, hisi_ptt);
-> @@ -832,6 +935,12 @@ static int hisi_ptt_probe(struct pci_dev *pdev,
->  		return ret;
->  	}
->  
-> +	/* Register the bus notifier for dynamically updating the filter list */
-> +	hisi_ptt->hisi_ptt_nb.notifier_call = hisi_ptt_notifier_call;
-> +	ret = bus_register_notifier(&pci_bus_type, &hisi_ptt->hisi_ptt_nb);
-> +	if (ret)
-> +		pci_warn(pdev, "failed to register filter update notifier, ret = %d", ret);
-> +
->  	return 0;
->  }
->  
-> @@ -839,6 +948,11 @@ void hisi_ptt_remove(struct pci_dev *pdev)
->  {
->  	struct hisi_ptt *hisi_ptt = pci_get_drvdata(pdev);
->  
-> +	bus_unregister_notifier(&pci_bus_type, &hisi_ptt->hisi_ptt_nb);
-> +
+> 
+> sparc64-gcc11/sparc64-allmodconfig
+> sparc64/sparc-allmodconfig
+> sparc64/sparc64-allmodconfig
+> 
+>> [1] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/cfb92440ee71adcc2105b0890bb01ac3cddb8507/ (all 99 configs)
+>> [3] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/754e0b0e35608ed5206d6a67a791563c631cec07/ (all 99 configs)
+> 
+> Gr{oetje,eeting}s,
+> 
+>                         Geert
+> 
+> -- 
+> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+> 
+> In personal conversations with technical people, I call myself a hacker. But
+> when I'm talking to journalists I just say "programmer" or something like that.
+>                                 -- Linus Torvalds
 
-wrt to earlier comment on ordering you'll also need to move these to
-a devm_action() call to keep the ordering clean wrt to probe vs remove().
-
-> +	/* Cancel any work that has been queued */
-> +	cancel_delayed_work_sync(&hisi_ptt->work);
-> +
->  	if (hisi_ptt->trace_ctrl.status == HISI_PTT_TRACE_STATUS_ON)
->  		hisi_ptt_trace_end(hisi_ptt);
->  
-
-...
-
+--
+cheers,
+-roger

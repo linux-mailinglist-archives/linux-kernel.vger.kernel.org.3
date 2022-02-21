@@ -2,148 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEDFA4BDF00
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:49:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 873924BE7D0
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:04:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235564AbiBUQfS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 11:35:18 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44244 "EHLO
+        id S1380712AbiBUQgN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 11:36:13 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229477AbiBUQfM (ORCPT
+        with ESMTP id S1380689AbiBUQgJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 11:35:12 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03ACA1DA6E;
-        Mon, 21 Feb 2022 08:34:48 -0800 (PST)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id CFB9F482;
-        Mon, 21 Feb 2022 17:34:46 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1645461287;
-        bh=pH812wBkwmwahgNdQmrpdAadbxYpF5mQrxwGyx+vH/s=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=toOsy0irqhmaBh+Ui4+gshtDANbR/YDMwYwNqtKwkNEh3bGgXZ7Zbc7Bjx+kW4xNK
-         2P5/6AOh0FHBCojRddxB6vgl7kusGmiRk0IgxLCJzPvLcO31gpJqC5OmTZAKL9WDbX
-         q5WVCex9dfOVsGJwHfXWc9xIQ4G4HAxo9SMraR9Y=
-Date:   Mon, 21 Feb 2022 18:34:37 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Michael Rodin <mrodin@de.adit-jv.com>
-Cc:     Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel@lists.freedesktop.org, linux-renesas-soc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, michael@rodin.online,
-        efriedrich@de.adit-jv.com, erosca@de.adit-jv.com,
-        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
-Subject: Re: [PATCH] drm: rcar-du: do not restart rcar-du groups on gen3
-Message-ID: <YhO/HVluRy5g0i4q@pendragon.ideasonboard.com>
-References: <1637680811-90510-1-git-send-email-mrodin@de.adit-jv.com>
+        Mon, 21 Feb 2022 11:36:09 -0500
+Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FD45220C6;
+        Mon, 21 Feb 2022 08:35:46 -0800 (PST)
+Received: by mail-ed1-f41.google.com with SMTP id z22so30551253edd.1;
+        Mon, 21 Feb 2022 08:35:46 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=YFk+sl4M7Srs5DbyN1lMmhvfVbrNyGzC2wMufF8/rDI=;
+        b=a3nP+7a2WMjKLb+A+/p0mXULvk3eOmZE7OQNybxwWA+KTBhiEBn/YKCi2A9xgZFaVy
+         qnqITPv0RoaSbtukQ7BVl88pQnVAokUdYpVVb5uukUKYUzASu92iUAwdYcaQD1MfWEEz
+         YbWVUuHcQwKweHgvW1VfZTLiYQpcUKKT8iLcYWnEojMX/mTzmQewO2LuEjFAM22se/xm
+         XLhFAMXeglhve9r6T7V9JFII2d2K84yaRu/KumZb9wNKrpz/XfJMl4v6irrBFrLIdGnb
+         qUzC23AtR/kr26ZKSXX6QtnHDCi16qADorsYCU2OW1Qvm/YDlQOvyZADJTRNjweK6T5R
+         3S9g==
+X-Gm-Message-State: AOAM532vxTjN/aVWvA/UowGUz121bmoUKMOqyfSSngCX1oClRXrFji65
+        r7KpDCfl4bnfiUDVN9XT4bI=
+X-Google-Smtp-Source: ABdhPJyoawrcgww37p4WIuGhhpNJtlKE54lAC3oY6WyEM4tYYSDFB2khdaABAB+WyF0xZpbWP+d/XQ==
+X-Received: by 2002:a50:fc81:0:b0:408:4c2d:bf69 with SMTP id f1-20020a50fc81000000b004084c2dbf69mr22229360edq.229.1645461344712;
+        Mon, 21 Feb 2022 08:35:44 -0800 (PST)
+Received: from [192.168.0.122] (xdsl-188-155-181-108.adslplus.ch. [188.155.181.108])
+        by smtp.googlemail.com with ESMTPSA id e27sm5482626ejm.18.2022.02.21.08.35.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 21 Feb 2022 08:35:43 -0800 (PST)
+Message-ID: <61e964b4-a406-7721-f3d4-26754c7f865c@kernel.org>
+Date:   Mon, 21 Feb 2022 17:35:42 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <1637680811-90510-1-git-send-email-mrodin@de.adit-jv.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v4 2/3] dt-bindings:iio:amplifiers: add ada4250 doc
+Content-Language: en-US
+To:     Antoniu Miclaus <antoniu.miclaus@analog.com>, jic23@kernel.org,
+        robh+dt@kernel.org, linux-iio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220221092740.25511-1-antoniu.miclaus@analog.com>
+ <20220221092740.25511-2-antoniu.miclaus@analog.com>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <20220221092740.25511-2-antoniu.miclaus@analog.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Michael,
-
-Sorry for getting back to you so late, your patch got burried in my
-inbox.
-
-On Tue, Nov 23, 2021 at 04:20:11PM +0100, Michael Rodin wrote:
-> Restarting a display unit group can cause a visible flicker on the display.
-> Particularly when a LVDS display is connected to a Salvator board and an
-> HDMI display is (re)connected, then there will be 2 visible flickers on the
-> LVDS display:
-
-I can confirm the symptoms.
-
->  1. during atomic_flush (The need_restart flag is set in this case by
->     rcar_du_vsp_enable.):
->   rcar_du_crtc_atomic_flush
->     rcar_du_crtc_update_planes
->       ...
->       ...
->       /* Restart the group if plane sources have changed. */
->       if (rcrtc->group->need_restart)
->               rcar_du_group_restart(rcrtc->group);
->  2. during atomic_enable:
->   rcar_du_crtc_atomic_enable
->     rcar_du_crtc_start
->       rcar_du_group_start_stop(rcrtc->group, true);
+On 21/02/2022 10:27, Antoniu Miclaus wrote:
+> Add device tree bindings for the ADA4250 driver.
 > 
-> To avoid flickers in all use cases, do not restart DU groups on the Gen3
-> SoCs at all, since it is not required any more.
-
-I've tested this patch, and it breaks the HDMI output on my Salvator-XS
-M3N board. My test setup has a panel connected to LVDS0 and an HDMI
-monitor connected to HDMI0. The kernel is configured with fbdev
-emulation enabled. When the system boots, I get two penguins on the LVDS
-panel and the HDMI monitor. I then run
-
-$ modetest -M rcar-du -s HDMI-A-1@60:1024x768@XR24
-
-(you may need to change the CRTC number depending on your setup)
-
-Without this patch, I see a brief flicker on the LVDS panel, and a test
-pattern on the HDMI monitor. With this patch, the flicker is gone, but
-my HDMI monitor show an error message that complains about unsupported
-timings.
-
-The Gen3 documentation still documents many register bits as being
-updated on DRES. I don't think we can get rid of group restart like
-this.
-
-> Signed-off-by: Michael Rodin <mrodin@de.adit-jv.com>
+> Signed-off-by: Antoniu Miclaus <antoniu.miclaus@analog.com>
 > ---
->  drivers/gpu/drm/rcar-du/rcar_du_group.c | 5 ++++-
->  drivers/gpu/drm/rcar-du/rcar_du_vsp.c   | 2 --
->  2 files changed, 4 insertions(+), 3 deletions(-)
+> changes in v4:
+>  - add `spi-max-frequency` property
+>  - use generic node naming
+>  .../bindings/iio/amplifiers/adi,ada4250.yaml  | 50 +++++++++++++++++++
+>  1 file changed, 50 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/iio/amplifiers/adi,ada4250.yaml
 > 
-> diff --git a/drivers/gpu/drm/rcar-du/rcar_du_group.c b/drivers/gpu/drm/rcar-du/rcar_du_group.c
-> index 8665a1d..ff0a1c8 100644
-> --- a/drivers/gpu/drm/rcar-du/rcar_du_group.c
-> +++ b/drivers/gpu/drm/rcar-du/rcar_du_group.c
-> @@ -250,7 +250,7 @@ void rcar_du_group_start_stop(struct rcar_du_group *rgrp, bool start)
->  	 * when the display controller will have to be restarted.
->  	 */
->  	if (start) {
-> -		if (rgrp->used_crtcs++ != 0)
-> +		if (rgrp->used_crtcs++ != 0 && rgrp->dev->info->gen != 3)
->  			__rcar_du_group_start_stop(rgrp, false);
->  		__rcar_du_group_start_stop(rgrp, true);
->  	} else {
-> @@ -263,6 +263,9 @@ void rcar_du_group_restart(struct rcar_du_group *rgrp)
->  {
->  	rgrp->need_restart = false;
->  
-> +	if (rgrp->dev->info->gen == 3)
-> +		return;
-> +
->  	__rcar_du_group_start_stop(rgrp, false);
->  	__rcar_du_group_start_stop(rgrp, true);
->  }
-> diff --git a/drivers/gpu/drm/rcar-du/rcar_du_vsp.c b/drivers/gpu/drm/rcar-du/rcar_du_vsp.c
-> index b7fc5b0..a652c06 100644
-> --- a/drivers/gpu/drm/rcar-du/rcar_du_vsp.c
-> +++ b/drivers/gpu/drm/rcar-du/rcar_du_vsp.c
-> @@ -88,8 +88,6 @@ void rcar_du_vsp_enable(struct rcar_du_crtc *crtc)
->  	 * Ensure that the plane source configuration takes effect by requesting
->  	 * a restart of the group. See rcar_du_plane_atomic_update() for a more
->  	 * detailed explanation.
-> -	 *
-> -	 * TODO: Check whether this is still needed on Gen3.
->  	 */
->  	crtc->group->need_restart = true;
->  
 
--- 
-Regards,
+Please do not resend without fixing pointed out issues. It just looks
+you ignore comments.
 
-Laurent Pinchart
+Please fix or respond to previous comments. Please also fix all common
+issues recently pointed out for all Analog devices - folks from Analog
+are making the same mistakes. Reviewing the same mistake is a bit a
+waste of time. Much more appreciated is when team applies one feedback
+to all its submissions. IOW, do not repeat the same mistake second time.
+
+
+Best regards,
+Krzysztof

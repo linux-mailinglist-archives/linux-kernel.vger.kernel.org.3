@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C06474BE3B1
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:57:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D8164BDD67
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:45:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347386AbiBUJFn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 04:05:43 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58526 "EHLO
+        id S1351785AbiBUJhi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 04:37:38 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347836AbiBUJB6 (ORCPT
+        with ESMTP id S1349326AbiBUJ1i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 04:01:58 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B73B929C9D;
-        Mon, 21 Feb 2022 00:57:10 -0800 (PST)
+        Mon, 21 Feb 2022 04:27:38 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 645EC237F0;
+        Mon, 21 Feb 2022 01:12:50 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5F530B80EB1;
-        Mon, 21 Feb 2022 08:57:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7AB1FC340EB;
-        Mon, 21 Feb 2022 08:57:07 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0144760B1B;
+        Mon, 21 Feb 2022 09:12:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D468CC340E9;
+        Mon, 21 Feb 2022 09:12:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645433828;
-        bh=Exhw9qRz6Onrs4C2zIQQBF5Ajw38MzW0hDSwUJtPan8=;
+        s=korg; t=1645434769;
+        bh=wJmGrICC3wKZT0xL+U7a9yjc8m1LvWGA1Zirvk0fbuw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=zAzDEh93J3YbP7xobAcDreiXUWUYxaAy4kQRukE70SvefEx9V0zPr/MIvWNK5H0v7
-         aEvI2nCImFKW0GBDuAZ17Gt01F/bE9gzNZyg7+gTecL9W7xfFVUoLXLjQu4DZ+eqar
-         3+D7i05PSfrcSW1lMMnrL6GGVOARKFr3r0i/Kpog=
+        b=msVXOE8KdJwljaJ14036ZTbGmjsmD0KDHY4Rm0fH7edVIPCEjQcGgyhX4iajjPls+
+         1fJlepknmNayRFuyEk0d0vwn33mt07x9e6RywJC3cvBs0MpKzeqUq0LlbHC9VvMN9m
+         MrNAeMDG8heTPuTID4y8DVc3EFGbk/XndPytiUGE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Johannes Berg <johannes.berg@intel.com>,
-        Luca Coelho <luciano.coelho@intel.com>,
-        Kalle Valo <kvalo@kernel.org>
-Subject: [PATCH 4.19 24/58] iwlwifi: pcie: gen2: fix locking when "HW not ready"
+        stable@vger.kernel.org, Jon Maloy <jmaloy@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 5.15 125/196] tipc: fix wrong notification node addresses
 Date:   Mon, 21 Feb 2022 09:49:17 +0100
-Message-Id: <20220221084912.663313232@linuxfoundation.org>
+Message-Id: <20220221084935.121036020@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220221084911.895146879@linuxfoundation.org>
-References: <20220221084911.895146879@linuxfoundation.org>
+In-Reply-To: <20220221084930.872957717@linuxfoundation.org>
+References: <20220221084930.872957717@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,34 +54,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Johannes Berg <johannes.berg@intel.com>
+From: Jon Maloy <jmaloy@redhat.com>
 
-commit 4c29c1e27a1e178a219b3877d055e6dd643bdfda upstream.
+commit c08e58438d4a709fb451b6d7d33432cc9907a2a8 upstream.
 
-If we run into this error path, we shouldn't unlock the mutex
-since it's not locked since. Fix this in the gen2 code as well.
+The previous bug fix had an unfortunate side effect that broke
+distribution of binding table entries between nodes. The updated
+tipc_sock_addr struct is also used further down in the same
+function, and there the old value is still the correct one.
 
-Fixes: eda50cde58de ("iwlwifi: pcie: add context information support")
-Signed-off-by: Johannes Berg <johannes.berg@intel.com>
-Signed-off-by: Luca Coelho <luciano.coelho@intel.com>
-Signed-off-by: Kalle Valo <kvalo@kernel.org>
-Link: https://lore.kernel.org/r/iwlwifi.20220128142706.b8b0dfce16ef.Ie20f0f7b23e5911350a2766524300d2915e7b677@changeid
+Fixes: 032062f363b4 ("tipc: fix wrong publisher node address in link publications")
+Signed-off-by: Jon Maloy <jmaloy@redhat.com>
+Link: https://lore.kernel.org/r/20220216020009.3404578-1-jmaloy@redhat.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/wireless/intel/iwlwifi/pcie/trans-gen2.c |    3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ net/tipc/node.c |   11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
 
---- a/drivers/net/wireless/intel/iwlwifi/pcie/trans-gen2.c
-+++ b/drivers/net/wireless/intel/iwlwifi/pcie/trans-gen2.c
-@@ -310,8 +310,7 @@ int iwl_trans_pcie_gen2_start_fw(struct
- 	/* This may fail if AMT took ownership of the device */
- 	if (iwl_pcie_prepare_card_hw(trans)) {
- 		IWL_WARN(trans, "Exit HW not ready\n");
--		ret = -EIO;
--		goto out;
-+		return -EIO;
- 	}
+--- a/net/tipc/node.c
++++ b/net/tipc/node.c
+@@ -403,7 +403,7 @@ static void tipc_node_write_unlock(struc
+ 	u32 flags = n->action_flags;
+ 	struct list_head *publ_list;
+ 	struct tipc_uaddr ua;
+-	u32 bearer_id;
++	u32 bearer_id, node;
  
- 	iwl_enable_rfkill_int(trans);
+ 	if (likely(!flags)) {
+ 		write_unlock_bh(&n->lock);
+@@ -414,6 +414,7 @@ static void tipc_node_write_unlock(struc
+ 		   TIPC_LINK_STATE, n->addr, n->addr);
+ 	sk.ref = n->link_id;
+ 	sk.node = tipc_own_addr(net);
++	node = n->addr;
+ 	bearer_id = n->link_id & 0xffff;
+ 	publ_list = &n->publ_list;
+ 
+@@ -423,17 +424,17 @@ static void tipc_node_write_unlock(struc
+ 	write_unlock_bh(&n->lock);
+ 
+ 	if (flags & TIPC_NOTIFY_NODE_DOWN)
+-		tipc_publ_notify(net, publ_list, sk.node, n->capabilities);
++		tipc_publ_notify(net, publ_list, node, n->capabilities);
+ 
+ 	if (flags & TIPC_NOTIFY_NODE_UP)
+-		tipc_named_node_up(net, sk.node, n->capabilities);
++		tipc_named_node_up(net, node, n->capabilities);
+ 
+ 	if (flags & TIPC_NOTIFY_LINK_UP) {
+-		tipc_mon_peer_up(net, sk.node, bearer_id);
++		tipc_mon_peer_up(net, node, bearer_id);
+ 		tipc_nametbl_publish(net, &ua, &sk, sk.ref);
+ 	}
+ 	if (flags & TIPC_NOTIFY_LINK_DOWN) {
+-		tipc_mon_peer_down(net, sk.node, bearer_id);
++		tipc_mon_peer_down(net, node, bearer_id);
+ 		tipc_nametbl_withdraw(net, &ua, &sk, sk.ref);
+ 	}
+ }
 
 

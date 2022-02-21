@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56EBB4BE6C1
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:02:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C70BD4BE800
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:04:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345746AbiBUJRv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 04:17:51 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36152 "EHLO
+        id S1350511AbiBUJei (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 04:34:38 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348268AbiBUJLK (ORCPT
+        with ESMTP id S1350135AbiBUJ1V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 04:11:10 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD47B237CB;
-        Mon, 21 Feb 2022 01:03:07 -0800 (PST)
+        Mon, 21 Feb 2022 04:27:21 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CA0062DF;
+        Mon, 21 Feb 2022 01:11:45 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 80E31B80EB1;
-        Mon, 21 Feb 2022 09:03:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9623BC36AE3;
-        Mon, 21 Feb 2022 09:03:04 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9E17060018;
+        Mon, 21 Feb 2022 09:11:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8993CC340E9;
+        Mon, 21 Feb 2022 09:11:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645434185;
-        bh=Y8q/J0Iry0Dpi9EHXI2yalvcbthB960zMJ7G+0SH+Rw=;
+        s=korg; t=1645434704;
+        bh=U9FilwgzUHxGI/pxCJNkQLuIALWeDECqZfIDidr69OY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KA6krGMNkPYm1nD9LDX2Bu27j0cod9Pvgc6bCw91UDUh3uzE2iajerpEmOoVp36OI
-         p1k1b+N10WLbOtvfw0TjFpEgESO0mMdN7E3yLbu8cbTL4RpVidKUemwlJx61R61+cE
-         KHf5INhfflRg2CBWaWvPd6UPZ5vVYPmrWxI5dziI=
+        b=JXfn0foL4S4mJeT4ybcZiYQB9fK7PtP1BpLi4sY9uWYeCQeuv/qUm/cD7l6vTdGC2
+         IyDAVuNGfhdw9yCco1UQvvU+poAuxeNs+o2vj/cig2FCbNUilZ7KD7fr0UshaMXHXC
+         /yTfiiBdTDUU8RIEXRrdGps0pqfTn+wXajQM7LkU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jan Beulich <jbeulich@suse.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Juergen Gross <jgross@suse.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 041/121] x86/Xen: streamline (and fix) PV CPU enumeration
+        stable@vger.kernel.org,
+        syzbot+4de3c0e8a263e1e499bc@syzkaller.appspotmail.com,
+        Wen Gu <guwen@linux.alibaba.com>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: [PATCH 5.15 101/196] net/smc: Avoid overwriting the copies of clcsock callback functions
 Date:   Mon, 21 Feb 2022 09:48:53 +0100
-Message-Id: <20220221084922.600374607@linuxfoundation.org>
+Message-Id: <20220221084934.322831512@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220221084921.147454846@linuxfoundation.org>
-References: <20220221084921.147454846@linuxfoundation.org>
+In-Reply-To: <20220221084930.872957717@linuxfoundation.org>
+References: <20220221084930.872957717@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,106 +56,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jan Beulich <jbeulich@suse.com>
+From: Wen Gu <guwen@linux.alibaba.com>
 
-[ Upstream commit e25a8d959992f61b64a58fc62fb7951dc6f31d1f ]
+commit 1de9770d121ee9294794cca0e0be8fbfa0134ee8 upstream.
 
-This started out with me noticing that "dom0_max_vcpus=<N>" with <N>
-larger than the number of physical CPUs reported through ACPI tables
-would not bring up the "excess" vCPU-s. Addressing this is the primary
-purpose of the change; CPU maps handling is being tidied only as far as
-is necessary for the change here (with the effect of also avoiding the
-setting up of too much per-CPU infrastructure, i.e. for CPUs which can
-never come online).
+The callback functions of clcsock will be saved and replaced during
+the fallback. But if the fallback happens more than once, then the
+copies of these callback functions will be overwritten incorrectly,
+resulting in a loop call issue:
 
-Noticing that xen_fill_possible_map() is called way too early, whereas
-xen_filter_cpu_maps() is called too late (after per-CPU areas were
-already set up), and further observing that each of the functions serves
-only one of Dom0 or DomU, it looked like it was better to simplify this.
-Use the .get_smp_config hook instead, uniformly for Dom0 and DomU.
-xen_fill_possible_map() can be dropped altogether, while
-xen_filter_cpu_maps() is re-purposed but not otherwise changed.
+clcsk->sk_error_report
+ |- smc_fback_error_report() <------------------------------|
+     |- smc_fback_forward_wakeup()                          | (loop)
+         |- clcsock_callback()  (incorrectly overwritten)   |
+             |- smc->clcsk_error_report() ------------------|
 
-Signed-off-by: Jan Beulich <jbeulich@suse.com>
-Reviewed-by: Boris Ostrovsky <boris.ostrovsky@oracle.com>
-Link: https://lore.kernel.org/r/2dbd5f0a-9859-ca2d-085e-a02f7166c610@suse.com
-Signed-off-by: Juergen Gross <jgross@suse.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+So this patch fixes the issue by saving these function pointers only
+once in the fallback and avoiding overwriting.
+
+Reported-by: syzbot+4de3c0e8a263e1e499bc@syzkaller.appspotmail.com
+Fixes: 341adeec9ada ("net/smc: Forward wakeup to smc socket waitqueue after fallback")
+Link: https://lore.kernel.org/r/0000000000006d045e05d78776f6@google.com
+Signed-off-by: Wen Gu <guwen@linux.alibaba.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/x86/xen/enlighten_pv.c |  4 ----
- arch/x86/xen/smp_pv.c       | 26 ++++++--------------------
- 2 files changed, 6 insertions(+), 24 deletions(-)
+ net/smc/af_smc.c |   10 +++++++---
+ 1 file changed, 7 insertions(+), 3 deletions(-)
 
-diff --git a/arch/x86/xen/enlighten_pv.c b/arch/x86/xen/enlighten_pv.c
-index 16ff25d6935e7..804c65d2b95f3 100644
---- a/arch/x86/xen/enlighten_pv.c
-+++ b/arch/x86/xen/enlighten_pv.c
-@@ -1387,10 +1387,6 @@ asmlinkage __visible void __init xen_start_kernel(void)
+--- a/net/smc/af_smc.c
++++ b/net/smc/af_smc.c
+@@ -649,14 +649,17 @@ static void smc_fback_error_report(struc
+ static int smc_switch_to_fallback(struct smc_sock *smc, int reason_code)
+ {
+ 	struct sock *clcsk;
++	int rc = 0;
  
- 		xen_acpi_sleep_register();
+ 	mutex_lock(&smc->clcsock_release_lock);
+ 	if (!smc->clcsock) {
+-		mutex_unlock(&smc->clcsock_release_lock);
+-		return -EBADF;
++		rc = -EBADF;
++		goto out;
+ 	}
+ 	clcsk = smc->clcsock->sk;
  
--		/* Avoid searching for BIOS MP tables */
--		x86_init.mpparse.find_smp_config = x86_init_noop;
--		x86_init.mpparse.get_smp_config = x86_init_uint_noop;
--
- 		xen_boot_params_init_edd();
- 
- #ifdef CONFIG_ACPI
-diff --git a/arch/x86/xen/smp_pv.c b/arch/x86/xen/smp_pv.c
-index c2ac319f11a4b..8f9e7e2407c87 100644
---- a/arch/x86/xen/smp_pv.c
-+++ b/arch/x86/xen/smp_pv.c
-@@ -149,28 +149,12 @@ int xen_smp_intr_init_pv(unsigned int cpu)
- 	return rc;
++	if (smc->use_fallback)
++		goto out;
+ 	smc->use_fallback = true;
+ 	smc->fallback_rsn = reason_code;
+ 	smc_stat_fallback(smc);
+@@ -683,8 +686,9 @@ static int smc_switch_to_fallback(struct
+ 		smc->clcsock->sk->sk_user_data =
+ 			(void *)((uintptr_t)smc | SK_USER_DATA_NOCOPY);
+ 	}
++out:
+ 	mutex_unlock(&smc->clcsock_release_lock);
+-	return 0;
++	return rc;
  }
  
--static void __init xen_fill_possible_map(void)
--{
--	int i, rc;
--
--	if (xen_initial_domain())
--		return;
--
--	for (i = 0; i < nr_cpu_ids; i++) {
--		rc = HYPERVISOR_vcpu_op(VCPUOP_is_up, i, NULL);
--		if (rc >= 0) {
--			num_processors++;
--			set_cpu_possible(i, true);
--		}
--	}
--}
--
--static void __init xen_filter_cpu_maps(void)
-+static void __init _get_smp_config(unsigned int early)
- {
- 	int i, rc;
- 	unsigned int subtract = 0;
- 
--	if (!xen_initial_domain())
-+	if (early)
- 		return;
- 
- 	num_processors = 0;
-@@ -211,7 +195,6 @@ static void __init xen_pv_smp_prepare_boot_cpu(void)
- 		 * sure the old memory can be recycled. */
- 		make_lowmem_page_readwrite(xen_initial_gdt);
- 
--	xen_filter_cpu_maps();
- 	xen_setup_vcpu_info_placement();
- 
- 	/*
-@@ -491,5 +474,8 @@ static const struct smp_ops xen_smp_ops __initconst = {
- void __init xen_smp_init(void)
- {
- 	smp_ops = xen_smp_ops;
--	xen_fill_possible_map();
-+
-+	/* Avoid searching for BIOS MP tables */
-+	x86_init.mpparse.find_smp_config = x86_init_noop;
-+	x86_init.mpparse.get_smp_config = _get_smp_config;
- }
--- 
-2.34.1
-
+ /* fall back during connect */
 
 

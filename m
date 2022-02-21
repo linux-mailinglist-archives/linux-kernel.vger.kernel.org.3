@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09AF24BE40B
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:58:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 308434BE5FF
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:01:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232238AbiBUJdQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 04:33:16 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50918 "EHLO
+        id S1351837AbiBUJwm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 04:52:42 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349303AbiBUJZb (ORCPT
+        with ESMTP id S1352668AbiBUJro (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 04:25:31 -0500
+        Mon, 21 Feb 2022 04:47:44 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A1E639699;
-        Mon, 21 Feb 2022 01:10:30 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BB7043AC0;
+        Mon, 21 Feb 2022 01:20:16 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9DD9D608C4;
-        Mon, 21 Feb 2022 09:10:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79A41C340E9;
-        Mon, 21 Feb 2022 09:10:25 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 35FCE60F46;
+        Mon, 21 Feb 2022 09:20:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49A00C340E9;
+        Mon, 21 Feb 2022 09:20:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645434626;
-        bh=64VlcYegJ7J3ajnlObHc0xZ4ibsZb9NovkvekZYyx/A=;
+        s=korg; t=1645435215;
+        bh=u1VESbYTBB2j0uL6y0zoMIwdzny/GFPCUlEFzINx4XA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CDuHZrw4vynd7iesf82NmKOe8TclrpyOA4WGq+1/wfRfV9cEy3Sg/ny1n2AoVOssG
-         PeLYSLDmgOcLzVKIs0V9nNRbWC4C+W2/4+A1HOpB8tm0sT3IF4D5cXb1Fxz3Xl8JIy
-         YAPpdO49MDeRi4GVSBkxf0d5PAvXxblIOqSXFvnw=
+        b=hyUbQ9j+rSPTWuvTmp56IkntTD2xbXHTGjsGVf/gZ7g7HHqeVUQ3mCpllq0rgcAhL
+         PLqXYN4iQtr0rBKkx4F0GczCq1elf5Dmxq2AkHvkPsC0kbFaJEJQTukOIHn/44Vpnh
+         rQiUZ8JOaxxxnxe72y3SGKHnsnKlRyS9e8/tSGXQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Matthew Auld <matthew.auld@intel.com>,
-        =?UTF-8?q?Thomas=20Hellstr=C3=B6m?= 
-        <thomas.hellstrom@linux.intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@intel.com>
-Subject: [PATCH 5.15 073/196] drm/i915/ttm: tweak priority hint selection
+        stable@vger.kernel.org, Seth Forshee <sforshee@digitalocean.com>,
+        Stefano Garzarella <sgarzare@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 5.16 086/227] vsock: remove vsock from connected table when connect is interrupted by a signal
 Date:   Mon, 21 Feb 2022 09:48:25 +0100
-Message-Id: <20220221084933.386477663@linuxfoundation.org>
+Message-Id: <20220221084937.737285754@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220221084930.872957717@linuxfoundation.org>
-References: <20220221084930.872957717@linuxfoundation.org>
+In-Reply-To: <20220221084934.836145070@linuxfoundation.org>
+References: <20220221084934.836145070@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,43 +55,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Matthew Auld <matthew.auld@intel.com>
+From: Seth Forshee <sforshee@digitalocean.com>
 
-commit 0bdc0a0699929c814a8aecd55d2accb8c11beae2 upstream.
+commit b9208492fcaecff8f43915529ae34b3bcb03877c upstream.
 
-For some reason we are selecting PRIO_HAS_PAGES when we don't have
-mm.pages, and vice versa.
+vsock_connect() expects that the socket could already be in the
+TCP_ESTABLISHED state when the connecting task wakes up with a signal
+pending. If this happens the socket will be in the connected table, and
+it is not removed when the socket state is reset. In this situation it's
+common for the process to retry connect(), and if the connection is
+successful the socket will be added to the connected table a second
+time, corrupting the list.
 
-v2(Thomas):
-  - Add missing fixes tag
+Prevent this by calling vsock_remove_connected() if a signal is received
+while waiting for a connection. This is harmless if the socket is not in
+the connected table, and if it is in the table then removing it will
+prevent list corruption from a double add.
 
-Fixes: 213d50927763 ("drm/i915/ttm: Introduce a TTM i915 gem object backend")
-Signed-off-by: Matthew Auld <matthew.auld@intel.com>
-Cc: Thomas Hellström <thomas.hellstrom@linux.intel.com>
-Reviewed-by: Thomas Hellström <thomas.hellstrom@linux.intel.com>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220209111652.468762-1-matthew.auld@intel.com
-(cherry picked from commit ba2c5d15022a565da187d90e2fe44768e33e5034)
-Signed-off-by: Tvrtko Ursulin <tvrtko.ursulin@intel.com>
+Note for backporting: this patch requires d5afa82c977e ("vsock: correct
+removal of socket from the list"), which is in all current stable trees
+except 4.9.y.
+
+Fixes: d021c344051a ("VSOCK: Introduce VM Sockets")
+Signed-off-by: Seth Forshee <sforshee@digitalocean.com>
+Reviewed-by: Stefano Garzarella <sgarzare@redhat.com>
+Link: https://lore.kernel.org/r/20220217141312.2297547-1-sforshee@digitalocean.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/i915/gem/i915_gem_ttm.c |    6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ net/vmw_vsock/af_vsock.c |    1 +
+ 1 file changed, 1 insertion(+)
 
---- a/drivers/gpu/drm/i915/gem/i915_gem_ttm.c
-+++ b/drivers/gpu/drm/i915/gem/i915_gem_ttm.c
-@@ -759,11 +759,9 @@ static void i915_ttm_adjust_lru(struct d
- 	if (obj->mm.madv != I915_MADV_WILLNEED) {
- 		bo->priority = I915_TTM_PRIO_PURGE;
- 	} else if (!i915_gem_object_has_pages(obj)) {
--		if (bo->priority < I915_TTM_PRIO_HAS_PAGES)
--			bo->priority = I915_TTM_PRIO_HAS_PAGES;
-+		bo->priority = I915_TTM_PRIO_NO_PAGES;
- 	} else {
--		if (bo->priority > I915_TTM_PRIO_NO_PAGES)
--			bo->priority = I915_TTM_PRIO_NO_PAGES;
-+		bo->priority = I915_TTM_PRIO_HAS_PAGES;
- 	}
- 
- 	ttm_bo_move_to_lru_tail(bo, bo->resource, NULL);
+--- a/net/vmw_vsock/af_vsock.c
++++ b/net/vmw_vsock/af_vsock.c
+@@ -1400,6 +1400,7 @@ static int vsock_connect(struct socket *
+ 			sk->sk_state = sk->sk_state == TCP_ESTABLISHED ? TCP_CLOSING : TCP_CLOSE;
+ 			sock->state = SS_UNCONNECTED;
+ 			vsock_transport_cancel_pkt(vsk);
++			vsock_remove_connected(vsk);
+ 			goto out_wait;
+ 		} else if (timeout == 0) {
+ 			err = -ETIMEDOUT;
 
 

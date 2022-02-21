@@ -2,275 +2,330 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F5604BE54F
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:00:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EB6C4BE43D
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:58:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350205AbiBUJb7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 04:31:59 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38950 "EHLO
+        id S1350277AbiBUJd3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 04:33:29 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350325AbiBUJW0 (ORCPT
+        with ESMTP id S1349545AbiBUJ0O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 04:22:26 -0500
-Received: from mail-qv1-xf2a.google.com (mail-qv1-xf2a.google.com [IPv6:2607:f8b0:4864:20::f2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80E2638785
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 01:09:54 -0800 (PST)
-Received: by mail-qv1-xf2a.google.com with SMTP id h9so30486142qvm.0
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 01:09:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=jms.id.au; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=t6EQDaBYYRWCb4oKT3vUObC3Be0bsFP7kZxVaalF3tc=;
-        b=Cczgnc3hB0XtCzfgl7LdCO6WUTg9u2Fsi9YsLmQEJB899o45iwZ4tZwnEQcbietqoC
-         e/2+bGj0AovnQ4uDXMONdl/ODnzegfoDjW7/BVnikZPjb4gy62+wQapqK3oZMeYKI5qN
-         6Tz7eMuSQG/xcbFcEQGzFOIoyPrl5Q/fV25t8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=t6EQDaBYYRWCb4oKT3vUObC3Be0bsFP7kZxVaalF3tc=;
-        b=qkERubR3UM5Rk+NMI4tXm5iOpvrBVUc+t1oAatzGto+PqSJSg8+13OOzYNc6hIT4Ic
-         Wx7af7HMZzNY+dkHk7K5j6x6hOtRAPp3Ir5IsLB1YTwdbUmoWWQdGWUyrp8FGEjgT/pR
-         Mgbts7C7eH33ovv0KwEfUEyadUbSWMif1iFp/N0eZxmmLfykvgf1gdlHfSpSAtn/36Lb
-         yebnqXikRUJXGZ7vhXuzm9Q8dHpFqIjchZ6R0c5Dl4lrB88dijYEDKJxqfINTa6R8Mi+
-         LNchl0TIBj6YCscuTqPMmjz47JzaQ8ekoiDfNa6wT53xv9wKavIReIPI2fCt+dnO70ww
-         rmTA==
-X-Gm-Message-State: AOAM5336vW8oUz2Fwh2CRTB2A9JnDhiZZVd7qhheNYOjRKZ1iXJgsiQN
-        2mFFSPWEviTSowVsi3Zhz7OWwoXzrfWwtnBQ5OfXnLUBNpc=
-X-Google-Smtp-Source: ABdhPJwNfRrnlsfOC2RtSKZjqfK6d/2Zwn+FNsucSttU93RuMNvEAh9qxL07IhQwvjKDaqbtTvVWeo2SbpF+FCS+VI8=
-X-Received: by 2002:a05:622a:1b8d:b0:2c6:59a9:360e with SMTP id
- bp13-20020a05622a1b8d00b002c659a9360emr16559597qtb.678.1645434593594; Mon, 21
- Feb 2022 01:09:53 -0800 (PST)
+        Mon, 21 Feb 2022 04:26:14 -0500
+Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2043.outbound.protection.outlook.com [40.107.20.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A8A91DA53;
+        Mon, 21 Feb 2022 01:10:38 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=dfywg69aYpHmAqTXaDDzFh9E9U/wm/6gP9CyhoEIkwoRatQnJf6/4LPfW0Gzn2Q4Vsk53lGFnLigXxvrTb6LpEZpRLr4qCBlNQQlMAFtVURtXtSvy6dhtAkeCANY9FwI6W5V380g/qS9xwqVlvg1Y+mIBJqDqx6TZOz2o7pL1pVpCgLsLt1ZEL7xxgZYBjxrtmEr77Q7BkJYNUXqw48fjoeunVUXmKwXDP68v1m/NmSUj5TZHfrfmrFl5piVvMbymtdxc/Oqer3l1kEWSbOmR0HEid6EeVvqsmOj7rr8W6aOJ1gpaB8dV4Zu8+QcWphsi1CV+4TvCLtX2qYeCBNO5Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=lLykKgJpEIRiB/PiGIHMYLCcZYNd1Wf4IzA03nr/auw=;
+ b=K/P01kuDLeYlK3zubnZvkEBWwA8rSr6jUwoTH/4QGvNyRy+tBok0As1I/l5SGRXdpxay8/DVamQIaFIPnmOVjWesCu/RxGZeZTct7a532SkrUPQIJwNwXoo5/crFSigwh9PpKItm5BkMi3V9rmAJa+iuP2sAjNm6l4lGR0Q0/f/V1Bc1kVQ92ZOYvzmn7XpNJjE7Q8qSw77J0v8LAcXsGlToyxn+fK/S/ZGy9c7rT9nMcsrKzTIWVUUagiNJ5cvAojD2c5rAiGaHEu0qemcu/JTuGQP4DKDWOFGayLuQyYz6egzrJI+rGzF3myh/jeVK5uKJcJO4TLT6GbeUmiocZg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 194.138.21.71) smtp.rcpttodomain=ti.com smtp.mailfrom=siemens.com; dmarc=pass
+ (p=none sp=none pct=100) action=none header.from=siemens.com; dkim=none
+ (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=siemens.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=lLykKgJpEIRiB/PiGIHMYLCcZYNd1Wf4IzA03nr/auw=;
+ b=eMgtJ5rzOpr/zbe5RLTjrHgWINv12Y1kvxJ/r1SGu3/LrzgsB04tpUNQNtXdDf9F4CewcIInRqPrGD4loDrAu6DOHwZu/sIOeSh+v5sm6JS+1YQ2DhKC2/ETfPSYakGGP0ivhHv6vp19qtzh6nxvAXYufiMGMH2qZePiVYsA3HzseiIo4S9O6w88Go4FLl5deJWdsX09Ktl045pbq/HtI2uBT15cLPdJI7DwDNBGuZ0iUiNxyz5cgAkG5aGz0rPe8s8JMZPkBfg/+XMUs8KQrtR6UDEylucv34V4j5AJwh3hZ501LaP8cITxeWtvzWXqPUXzltEVfsZdh11eDrmpsQ==
+Received: from DB8PR04CA0025.eurprd04.prod.outlook.com (2603:10a6:10:110::35)
+ by AM6PR10MB2885.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:20b:ea::33) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4995.14; Mon, 21 Feb
+ 2022 09:10:30 +0000
+Received: from DB5EUR01FT054.eop-EUR01.prod.protection.outlook.com
+ (2603:10a6:10:110:cafe::72) by DB8PR04CA0025.outlook.office365.com
+ (2603:10a6:10:110::35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4995.27 via Frontend
+ Transport; Mon, 21 Feb 2022 09:10:30 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 194.138.21.71)
+ smtp.mailfrom=siemens.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=siemens.com;
+Received-SPF: Pass (protection.outlook.com: domain of siemens.com designates
+ 194.138.21.71 as permitted sender) receiver=protection.outlook.com;
+ client-ip=194.138.21.71; helo=hybrid.siemens.com;
+Received: from hybrid.siemens.com (194.138.21.71) by
+ DB5EUR01FT054.mail.protection.outlook.com (10.152.5.133) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.4995.15 via Frontend Transport; Mon, 21 Feb 2022 09:10:30 +0000
+Received: from DEMCHDC8A0A.ad011.siemens.net (139.25.226.106) by
+ DEMCHDC9SKA.ad011.siemens.net (194.138.21.71) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.18; Mon, 21 Feb 2022 10:10:30 +0100
+Received: from [167.87.32.158] (167.87.32.158) by
+ DEMCHDC8A0A.ad011.siemens.net (139.25.226.106) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.18; Mon, 21 Feb 2022 10:10:29 +0100
+Message-ID: <a80b83c6-cca5-f95c-6930-a6f3e79c6f15@siemens.com>
+Date:   Mon, 21 Feb 2022 10:10:29 +0100
 MIME-Version: 1.0
-References: <20220207161640.35605-1-eajames@linux.ibm.com>
-In-Reply-To: <20220207161640.35605-1-eajames@linux.ibm.com>
-From:   Joel Stanley <joel@jms.id.au>
-Date:   Mon, 21 Feb 2022 09:09:40 +0000
-Message-ID: <CACPK8XeGyGdVw-KzdCXD_JAL3Qymp_hY-v4pqP9GtxjpQ7G5rw@mail.gmail.com>
-Subject: Re: [PATCH] fsi: Add trace events in initialization path
-To:     Eddie James <eajames@linux.ibm.com>
-Cc:     linux-fsi@lists.ozlabs.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-aspeed <linux-aspeed@lists.ozlabs.org>,
-        Jeremy Kerr <jk@ozlabs.org>, Ingo Molnar <mingo@redhat.com>,
-        Alistair Popple <alistair@popple.id.au>,
-        Steven Rostedt <rostedt@goodmis.org>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCHv4 3/4] watchdog: rti-wdt: attach to running watchdog
+ during probe
+Content-Language: en-US
+To:     Tero Kristo <t-kristo@ti.com>, <wim@linux-watchdog.org>,
+        <linux@roeck-us.net>, <linux-watchdog@vger.kernel.org>
+CC:     <linux-kernel@vger.kernel.org>
+References: <20200717132958.14304-1-t-kristo@ti.com>
+ <20200717132958.14304-4-t-kristo@ti.com>
+From:   Jan Kiszka <jan.kiszka@siemens.com>
+In-Reply-To: <20200717132958.14304-4-t-kristo@ti.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [167.87.32.158]
+X-ClientProxiedBy: DEMCHDC8A0A.ad011.siemens.net (139.25.226.106) To
+ DEMCHDC8A0A.ad011.siemens.net (139.25.226.106)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 63d4935b-7d93-4082-64db-08d9f51a0240
+X-MS-TrafficTypeDiagnostic: AM6PR10MB2885:EE_
+X-Microsoft-Antispam-PRVS: <AM6PR10MB288587DE0D1E4528BBB6619B953A9@AM6PR10MB2885.EURPRD10.PROD.OUTLOOK.COM>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: kIiimBcULKymAifGAyPUdyA7/Xng9NUFOfe59WzU3YIzWsFNlQAY9qcGwLtx41d8gpG8TcTj5dhAuu0DF7ORBr+Oluyh+HvHJwjbolD6+kmti3k1o/0C/u7ULO9OopwkkkZmmYM080/UoTbhTDhpWabiZQ0ebEOqAYU37xzJXX1JQAIl7RVIMCyt92shmertPdL3EUz/0iYoevTbJoLRlfMQ7connsbLGBEZuq+EnlgDkwqVJDWA5UtG8K9FYviri6QDQkr2xPMxuiOzXMy5NH4mGho37uerUr4AXklD97J3HVZXsF+VWZUprlzwxiC/Lr6aBtzdkblW8XaJCQFvPnPCWzNLMjA4TBhHTCxaW8B5UsQ+MWca//REYVcNZDtWRWAssDVSUfZFgegG1Y0Io9nlQBXY1wXd3t0pzGZ2n3PH1ua8OCZFDKdf3hGYJEWIT0QZsPf/4JqEp7wp7ADEddo8VppYsKh0cxy/RcEWH9gVji8l7ndZasj+rTMIaa6a8P0K85miFCqWf04WNRNs3V30IgKb57YkTWGC1FBwk235NX0JUkOs/eg0uj/nThiWl0C917LHEj+s2hEGM79TSClTGOzbQZ2ptjySkY/6DznlZRhGeUZgpnHyJm/mvtzgAhMcuMRhvlLXNnxQd40JSGh6d1/mmGCScJO/4V5mbv4NCLDTDaPY3BQXb7qD0rOCMPMvWhMTLnJTejch/pWpqaQsqfUiQ4v0DWnKAHuVajvDMHsDoqpshAoOEFKB9AO/5H+uFubOnBeo5kXRIHBkRNc/oVvz6HNvsPTYxf+RM+A=
+X-Forefront-Antispam-Report: CIP:194.138.21.71;CTRY:DE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:hybrid.siemens.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(46966006)(36840700001)(40470700004)(4326008)(336012)(47076005)(40460700003)(83380400001)(36756003)(44832011)(5660300002)(2906002)(31686004)(8936002)(956004)(2616005)(6706004)(8676002)(110136005)(53546011)(16526019)(186003)(26005)(70206006)(70586007)(81166007)(356005)(82960400001)(16576012)(316002)(508600001)(31696002)(86362001)(36860700001)(82310400004)(3940600001)(36900700001)(43740500002)(2101003);DIR:OUT;SFP:1101;
+X-OriginatorOrg: siemens.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Feb 2022 09:10:30.4584
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 63d4935b-7d93-4082-64db-08d9f51a0240
+X-MS-Exchange-CrossTenant-Id: 38ae3bcd-9579-4fd4-adda-b42e1495d55a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=38ae3bcd-9579-4fd4-adda-b42e1495d55a;Ip=[194.138.21.71];Helo=[hybrid.siemens.com]
+X-MS-Exchange-CrossTenant-AuthSource: DB5EUR01FT054.eop-EUR01.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR10MB2885
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 7 Feb 2022 at 16:17, Eddie James <eajames@linux.ibm.com> wrote:
->
-> Add definitions for trace events to show the scanning flow.
->
-> Signed-off-by: Eddie James <eajames@linux.ibm.com>
-
-Thanks Eddie. I've applied this with Steven's r-b.
-
+On 17.07.20 15:29, Tero Kristo wrote:
+> If the RTI watchdog is running already during probe, the driver must
+> configure itself to match the HW. Window size and timeout is probed from
+> hardware, and the last keepalive ping is adjusted to match it also.
+> 
+> Signed-off-by: Tero Kristo <t-kristo@ti.com>
 > ---
->  drivers/fsi/fsi-core.c                   | 11 ++-
->  drivers/fsi/fsi-master-aspeed.c          |  2 +
->  include/trace/events/fsi.h               | 86 ++++++++++++++++++++++++
->  include/trace/events/fsi_master_aspeed.h | 12 ++++
->  4 files changed, 108 insertions(+), 3 deletions(-)
->
-> diff --git a/drivers/fsi/fsi-core.c b/drivers/fsi/fsi-core.c
-> index 59ddc9fd5bca..3a7b78e36701 100644
-> --- a/drivers/fsi/fsi-core.c
-> +++ b/drivers/fsi/fsi-core.c
-> @@ -24,9 +24,6 @@
->
->  #include "fsi-master.h"
->
-> -#define CREATE_TRACE_POINTS
-> -#include <trace/events/fsi.h>
-> -
->  #define FSI_SLAVE_CONF_NEXT_MASK       GENMASK(31, 31)
->  #define FSI_SLAVE_CONF_SLOTS_MASK      GENMASK(23, 16)
->  #define FSI_SLAVE_CONF_SLOTS_SHIFT     16
-> @@ -95,6 +92,9 @@ struct fsi_slave {
->         u8                      t_echo_delay;
->  };
->
-> +#define CREATE_TRACE_POINTS
-> +#include <trace/events/fsi.h>
-> +
->  #define to_fsi_master(d) container_of(d, struct fsi_master, dev)
->  #define to_fsi_slave(d) container_of(d, struct fsi_slave, dev)
->
-> @@ -524,6 +524,8 @@ static int fsi_slave_scan(struct fsi_slave *slave)
->                         dev->addr = engine_addr;
->                         dev->size = slots * engine_page_size;
->
-> +                       trace_fsi_dev_init(dev);
-> +
->                         dev_dbg(&slave->dev,
->                         "engine[%i]: type %x, version %x, addr %x size %x\n",
->                                         dev->unit, dev->engine_type, version,
-> @@ -1006,6 +1008,7 @@ static int fsi_slave_init(struct fsi_master *master, int link, uint8_t id)
->
->         crc = crc4(0, cfam_id, 32);
->         if (crc) {
-> +               trace_fsi_slave_invalid_cfam(master, link, cfam_id);
->                 dev_warn(&master->dev, "slave %02x:%02x invalid cfam id CRC!\n",
->                                 link, id);
->                 return -EIO;
-> @@ -1080,6 +1083,8 @@ static int fsi_slave_init(struct fsi_master *master, int link, uint8_t id)
->         if (rc)
->                 goto err_free;
->
-> +       trace_fsi_slave_init(slave);
-> +
->         /* Create chardev for userspace access */
->         cdev_init(&slave->cdev, &cfam_fops);
->         rc = cdev_device_add(&slave->cdev, &slave->dev);
-> diff --git a/drivers/fsi/fsi-master-aspeed.c b/drivers/fsi/fsi-master-aspeed.c
-> index 0bed2fab8055..7cec1772820d 100644
-> --- a/drivers/fsi/fsi-master-aspeed.c
-> +++ b/drivers/fsi/fsi-master-aspeed.c
-> @@ -449,11 +449,13 @@ static ssize_t cfam_reset_store(struct device *dev, struct device_attribute *att
->  {
->         struct fsi_master_aspeed *aspeed = dev_get_drvdata(dev);
->
-> +       trace_fsi_master_aspeed_cfam_reset(true);
->         mutex_lock(&aspeed->lock);
->         gpiod_set_value(aspeed->cfam_reset_gpio, 1);
->         usleep_range(900, 1000);
->         gpiod_set_value(aspeed->cfam_reset_gpio, 0);
->         mutex_unlock(&aspeed->lock);
-> +       trace_fsi_master_aspeed_cfam_reset(false);
->
->         return count;
+>  drivers/watchdog/rti_wdt.c | 112 +++++++++++++++++++++++++++++++++----
+>  1 file changed, 102 insertions(+), 10 deletions(-)
+> 
+> diff --git a/drivers/watchdog/rti_wdt.c b/drivers/watchdog/rti_wdt.c
+> index d456dd72d99a..7cbdc178ffe8 100644
+> --- a/drivers/watchdog/rti_wdt.c
+> +++ b/drivers/watchdog/rti_wdt.c
+> @@ -35,7 +35,11 @@
+>  
+>  #define RTIWWDRX_NMI	0xa
+>  
+> -#define RTIWWDSIZE_50P	0x50
+> +#define RTIWWDSIZE_50P		0x50
+> +#define RTIWWDSIZE_25P		0x500
+> +#define RTIWWDSIZE_12P5		0x5000
+> +#define RTIWWDSIZE_6P25		0x50000
+> +#define RTIWWDSIZE_3P125	0x500000
+>  
+>  #define WDENABLE_KEY	0xa98559da
+>  
+> @@ -48,7 +52,7 @@
+>  
+>  #define DWDST			BIT(1)
+>  
+> -static int heartbeat;
+> +static int heartbeat = DEFAULT_HEARTBEAT;
+>  
+>  /*
+>   * struct to hold data for each WDT device
+> @@ -79,11 +83,9 @@ static int rti_wdt_start(struct watchdog_device *wdd)
+>  	 * be petted during the open window; not too early or not too late.
+>  	 * The HW configuration options only allow for the open window size
+>  	 * to be 50% or less than that; we obviouly want to configure the open
+> -	 * window as large as possible so we select the 50% option. To avoid
+> -	 * any glitches, we accommodate 5% safety margin also, so we setup
+> -	 * the min_hw_hearbeat at 55% of the timeout period.
+> +	 * window as large as possible so we select the 50% option.
+>  	 */
+> -	wdd->min_hw_heartbeat_ms = 11 * wdd->timeout * 1000 / 20;
+> +	wdd->min_hw_heartbeat_ms = 500 * wdd->timeout;
+>  
+>  	/* Generate NMI when wdt expires */
+>  	writel_relaxed(RTIWWDRX_NMI, wdt->base + RTIWWDRXCTRL);
+> @@ -110,7 +112,48 @@ static int rti_wdt_ping(struct watchdog_device *wdd)
+>  	return 0;
 >  }
-> diff --git a/include/trace/events/fsi.h b/include/trace/events/fsi.h
-> index 9832cb8e0eb0..c9a72e8432b8 100644
-> --- a/include/trace/events/fsi.h
-> +++ b/include/trace/events/fsi.h
-> @@ -122,6 +122,92 @@ TRACE_EVENT(fsi_master_break,
->         )
->  );
->
-> +TRACE_EVENT(fsi_slave_init,
-> +       TP_PROTO(const struct fsi_slave *slave),
-> +       TP_ARGS(slave),
-> +       TP_STRUCT__entry(
-> +               __field(int,    master_idx)
-> +               __field(int,    master_n_links)
-> +               __field(int,    idx)
-> +               __field(int,    link)
-> +               __field(int,    chip_id)
-> +               __field(__u32,  cfam_id)
-> +               __field(__u32,  size)
-> +       ),
-> +       TP_fast_assign(
-> +               __entry->master_idx = slave->master->idx;
-> +               __entry->master_n_links = slave->master->n_links;
-> +               __entry->idx = slave->cdev_idx;
-> +               __entry->link = slave->link;
-> +               __entry->chip_id = slave->chip_id;
-> +               __entry->cfam_id = slave->cfam_id;
-> +               __entry->size = slave->size;
-> +       ),
-> +       TP_printk("fsi%d: idx:%d link:%d/%d cid:%d cfam:%08x %08x",
-> +               __entry->master_idx,
-> +               __entry->idx,
-> +               __entry->link,
-> +               __entry->master_n_links,
-> +               __entry->chip_id,
-> +               __entry->cfam_id,
-> +               __entry->size
-> +       )
-> +);
+>  
+> -static unsigned int rti_wdt_get_timeleft(struct watchdog_device *wdd)
+> +static int rti_wdt_setup_hw_hb(struct watchdog_device *wdd, u32 wsize)
+> +{
+> +	/*
+> +	 * RTI only supports a windowed mode, where the watchdog can only
+> +	 * be petted during the open window; not too early or not too late.
+> +	 * The HW configuration options only allow for the open window size
+> +	 * to be 50% or less than that.
+> +	 */
+> +	switch (wsize) {
+> +	case RTIWWDSIZE_50P:
+> +		/* 50% open window => 50% min heartbeat */
+> +		wdd->min_hw_heartbeat_ms = 500 * heartbeat;
+> +		break;
 > +
-> +TRACE_EVENT(fsi_slave_invalid_cfam,
-> +       TP_PROTO(const struct fsi_master *master, int link, uint32_t cfam_id),
-> +       TP_ARGS(master, link, cfam_id),
-> +       TP_STRUCT__entry(
-> +               __field(int,    master_idx)
-> +               __field(int,    master_n_links)
-> +               __field(int,    link)
-> +               __field(__u32,  cfam_id)
-> +       ),
-> +       TP_fast_assign(
-> +               __entry->master_idx = master->idx;
-> +               __entry->master_n_links = master->n_links;
-> +               __entry->link = link;
-> +               __entry->cfam_id = cfam_id;
-> +       ),
-> +       TP_printk("fsi%d: cfam:%08x link:%d/%d",
-> +               __entry->master_idx,
-> +               __entry->cfam_id,
-> +               __entry->link,
-> +               __entry->master_n_links
-> +       )
-> +);
+> +	case RTIWWDSIZE_25P:
+> +		/* 25% open window => 75% min heartbeat */
+> +		wdd->min_hw_heartbeat_ms = 750 * heartbeat;
+> +		break;
 > +
-> +TRACE_EVENT(fsi_dev_init,
-> +       TP_PROTO(const struct fsi_device *dev),
-> +       TP_ARGS(dev),
-> +       TP_STRUCT__entry(
-> +               __field(int,    master_idx)
-> +               __field(int,    link)
-> +               __field(int,    type)
-> +               __field(int,    unit)
-> +               __field(int,    version)
-> +               __field(__u32,  addr)
-> +               __field(__u32,  size)
-> +       ),
-> +       TP_fast_assign(
-> +               __entry->master_idx = dev->slave->master->idx;
-> +               __entry->link = dev->slave->link;
-> +               __entry->type = dev->engine_type;
-> +               __entry->unit = dev->unit;
-> +               __entry->version = dev->version;
-> +               __entry->addr = dev->addr;
-> +               __entry->size = dev->size;
-> +       ),
-> +       TP_printk("fsi%d: slv%d: t:%02x u:%02x v:%02x %08x@%08x",
-> +               __entry->master_idx,
-> +               __entry->link,
-> +               __entry->type,
-> +               __entry->unit,
-> +               __entry->version,
-> +               __entry->size,
-> +               __entry->addr
-> +       )
-> +);
->
->  #endif /* _TRACE_FSI_H */
->
-> diff --git a/include/trace/events/fsi_master_aspeed.h b/include/trace/events/fsi_master_aspeed.h
-> index a355ceacc33f..0fff873775f1 100644
-> --- a/include/trace/events/fsi_master_aspeed.h
-> +++ b/include/trace/events/fsi_master_aspeed.h
-> @@ -72,6 +72,18 @@ TRACE_EVENT(fsi_master_aspeed_opb_error,
->                 )
->         );
->
-> +TRACE_EVENT(fsi_master_aspeed_cfam_reset,
-> +       TP_PROTO(bool start),
-> +       TP_ARGS(start),
-> +       TP_STRUCT__entry(
-> +               __field(bool,   start)
-> +       ),
-> +       TP_fast_assign(
-> +               __entry->start = start;
-> +       ),
-> +       TP_printk("%s", __entry->start ? "start" : "end")
-> +);
+> +	case RTIWWDSIZE_12P5:
+> +		/* 12.5% open window => 87.5% min heartbeat */
+> +		wdd->min_hw_heartbeat_ms = 875 * heartbeat;
+> +		break;
 > +
->  #endif
->
->  #include <trace/define_trace.h>
-> --
-> 2.27.0
->
+> +	case RTIWWDSIZE_6P25:
+> +		/* 6.5% open window => 93.5% min heartbeat */
+> +		wdd->min_hw_heartbeat_ms = 935 * heartbeat;
+> +		break;
+> +
+> +	case RTIWWDSIZE_3P125:
+> +		/* 3.125% open window => 96.9% min heartbeat */
+> +		wdd->min_hw_heartbeat_ms = 969 * heartbeat;
+> +		break;
+> +
+> +	default:
+> +		return -EINVAL;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static unsigned int rti_wdt_get_timeleft_ms(struct watchdog_device *wdd)
+>  {
+>  	u64 timer_counter;
+>  	u32 val;
+> @@ -123,11 +166,18 @@ static unsigned int rti_wdt_get_timeleft(struct watchdog_device *wdd)
+>  
+>  	timer_counter = readl_relaxed(wdt->base + RTIDWDCNTR);
+>  
+> +	timer_counter *= 1000;
+> +
+>  	do_div(timer_counter, wdt->freq);
+>  
+>  	return timer_counter;
+>  }
+>  
+> +static unsigned int rti_wdt_get_timeleft(struct watchdog_device *wdd)
+> +{
+> +	return rti_wdt_get_timeleft_ms(wdd) / 1000;
+> +}
+> +
+>  static const struct watchdog_info rti_wdt_info = {
+>  	.options = WDIOF_KEEPALIVEPING,
+>  	.identity = "K3 RTI Watchdog",
+> @@ -148,6 +198,7 @@ static int rti_wdt_probe(struct platform_device *pdev)
+>  	struct watchdog_device *wdd;
+>  	struct rti_wdt_device *wdt;
+>  	struct clk *clk;
+> +	u32 last_ping = 0;
+>  
+>  	wdt = devm_kzalloc(dev, sizeof(*wdt), GFP_KERNEL);
+>  	if (!wdt)
+> @@ -169,6 +220,14 @@ static int rti_wdt_probe(struct platform_device *pdev)
+>  		return -EINVAL;
+>  	}
+>  
+> +	/*
+> +	 * If watchdog is running at 32k clock, it is not accurate.
+> +	 * Adjust frequency down in this case so that we don't pet
+> +	 * the watchdog too often.
+> +	 */
+> +	if (wdt->freq < 32768)
+> +		wdt->freq = wdt->freq * 9 / 10;
+> +
+
+This seems broken: You are only adjusting the frequency value used by
+the driver. What has been programmed into the hardware already is still
+based on real frequency. Moreover, this path is not only taken when the
+watchdog is already running - but the latter case is what the subject
+and commit message suggests. I've noticed this by comparing
+bootloader-programmed values with those the driver assumes to see - 10%
+off, obviously.
+
+So, what is actually supposed to happen here?
+
+Jan
+
+>  	pm_runtime_enable(dev);
+>  	ret = pm_runtime_get_sync(dev);
+>  	if (ret) {
+> @@ -185,11 +244,8 @@ static int rti_wdt_probe(struct platform_device *pdev)
+>  	wdd->min_timeout = 1;
+>  	wdd->max_hw_heartbeat_ms = (WDT_PRELOAD_MAX << WDT_PRELOAD_SHIFT) /
+>  		wdt->freq * 1000;
+> -	wdd->timeout = DEFAULT_HEARTBEAT;
+>  	wdd->parent = dev;
+>  
+> -	watchdog_init_timeout(wdd, heartbeat, dev);
+> -
+>  	watchdog_set_drvdata(wdd, wdt);
+>  	watchdog_set_nowayout(wdd, 1);
+>  	watchdog_set_restart_priority(wdd, 128);
+> @@ -201,12 +257,48 @@ static int rti_wdt_probe(struct platform_device *pdev)
+>  		goto err_iomap;
+>  	}
+>  
+> +	if (readl(wdt->base + RTIDWDCTRL) == WDENABLE_KEY) {
+> +		u32 time_left_ms;
+> +		u64 heartbeat_ms;
+> +		u32 wsize;
+> +
+> +		set_bit(WDOG_HW_RUNNING, &wdd->status);
+> +		time_left_ms = rti_wdt_get_timeleft_ms(wdd);
+> +		heartbeat_ms = readl(wdt->base + RTIDWDPRLD);
+> +		heartbeat_ms <<= WDT_PRELOAD_SHIFT;
+> +		heartbeat_ms *= 1000;
+> +		do_div(heartbeat_ms, wdt->freq);
+> +		if (heartbeat_ms != heartbeat * 1000)
+> +			dev_warn(dev, "watchdog already running, ignoring heartbeat config!\n");
+> +
+> +		heartbeat = heartbeat_ms;
+> +		heartbeat /= 1000;
+> +
+> +		wsize = readl(wdt->base + RTIWWDSIZECTRL);
+> +		ret = rti_wdt_setup_hw_hb(wdd, wsize);
+> +		if (ret) {
+> +			dev_err(dev, "bad window size.\n");
+> +			goto err_iomap;
+> +		}
+> +
+> +		last_ping = heartbeat_ms - time_left_ms;
+> +		if (time_left_ms > heartbeat_ms) {
+> +			dev_warn(dev, "time_left > heartbeat? Assuming last ping just before now.\n");
+> +			last_ping = 0;
+> +		}
+> +	}
+> +
+> +	watchdog_init_timeout(wdd, heartbeat, dev);
+> +
+>  	ret = watchdog_register_device(wdd);
+>  	if (ret) {
+>  		dev_err(dev, "cannot register watchdog device\n");
+>  		goto err_iomap;
+>  	}
+>  
+> +	if (last_ping)
+> +		watchdog_set_last_hw_keepalive(wdd, last_ping);
+> +
+>  	return 0;
+>  
+>  err_iomap:
+
+-- 
+Siemens AG, Technology
+Competence Center Embedded Linux

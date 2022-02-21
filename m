@@ -2,160 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23F634BE75C
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:03:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F2B214BE091
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:52:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357314AbiBUQ6j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 11:58:39 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46852 "EHLO
+        id S234251AbiBURCv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 12:02:51 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231262AbiBUQ6h (ORCPT
+        with ESMTP id S231158AbiBURCt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 11:58:37 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 04E4022B3D;
-        Mon, 21 Feb 2022 08:58:12 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8D5461042;
-        Mon, 21 Feb 2022 08:58:12 -0800 (PST)
-Received: from [10.57.40.147] (unknown [10.57.40.147])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id AB2533F70D;
-        Mon, 21 Feb 2022 08:58:09 -0800 (PST)
-Message-ID: <56cf458b-080b-2e22-69d7-039ff7d0b56a@arm.com>
-Date:   Mon, 21 Feb 2022 16:58:03 +0000
+        Mon, 21 Feb 2022 12:02:49 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 94D80AE74
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 09:02:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1645462944;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=a8jYdftJnmb0zvI4rCaqGXuSppwKQhG6hl6AuRmMuaU=;
+        b=M0dA2xZlg+1N8TEEWEv67o8cfmK0GAnQOiKTvMwDCIKuehfg8TXCmsYstoxYHZnqmo6IDi
+        MdkPBfXxI2+Hv0Qqk8fw+59NjMBcgDAnSNWxmtmfLZ+FcRC+3BUwt1lDEZTbVIJ7hj1FqH
+        pnv0LKCZ/+LFfkhqaa1vaLibkGTN368=
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
+ [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-113-W_Z1KJqfMR6eTbJgKQ17EQ-1; Mon, 21 Feb 2022 12:02:23 -0500
+X-MC-Unique: W_Z1KJqfMR6eTbJgKQ17EQ-1
+Received: by mail-qk1-f199.google.com with SMTP id w4-20020a05620a094400b0060dd52a1445so12806937qkw.3
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 09:02:23 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=a8jYdftJnmb0zvI4rCaqGXuSppwKQhG6hl6AuRmMuaU=;
+        b=W5Yhwppahj2O4Lpb4rkn2SCQjyJvQsJC86G00Mrku9PCEzjTSfGPAQnD5yq9lXEW7H
+         o0bP0STJVlJ/ILzFekYRkYrxVNMvQmCIeY6TrZA5H282Tps+XmKjYXEjv3hzUFlBDscv
+         Xv/N39PCcAsuDd/jGThFTuqD8sS8vDLkuaTizqOtpb6x4QPB3k5yEnBOPGPb4APFfGuy
+         03Cd8FTTO8NinZcWRN9WjqmrT0GFrWX/kIq07KfpyBXJtvshxAPTGg5Vm1QTL2N3FQ3w
+         kSSXM+jZEVoUNO17ByVKRbBp1TbNt+T5cYOYnGNla4szIT84dw10/bdHH9vQz/Frr9CZ
+         Tieg==
+X-Gm-Message-State: AOAM531ss3W7z+02I6YT9c6cXDdupvEDgHDUfUzyg3Tfi423kyrIFN7g
+        DiAoKCnTLngAyQNJX2vW7qwxQZ9W2adH00TOd6YAc7gdv6U6Q8MDFMpGd04hnmCC3Sg7rDqq826
+        mF+7359X8B+npD+ED2m4i14uT
+X-Received: by 2002:ac8:5950:0:b0:2dc:a139:4f36 with SMTP id 16-20020ac85950000000b002dca1394f36mr19235715qtz.646.1645462942693;
+        Mon, 21 Feb 2022 09:02:22 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJz4IW2ywlrbCp6vvy6jwSlIcSAdtGODJ9+dki3CIZxUMw8weOa4wJ8ZcCtuLx9JhEkSLSVVWA==
+X-Received: by 2002:ac8:5950:0:b0:2dc:a139:4f36 with SMTP id 16-20020ac85950000000b002dca1394f36mr19235682qtz.646.1645462942435;
+        Mon, 21 Feb 2022 09:02:22 -0800 (PST)
+Received: from sgarzare-redhat (host-95-248-229-156.retail.telecomitalia.it. [95.248.229.156])
+        by smtp.gmail.com with ESMTPSA id bk19sm26406528qkb.125.2022.02.21.09.02.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 21 Feb 2022 09:02:21 -0800 (PST)
+Date:   Mon, 21 Feb 2022 18:02:17 +0100
+From:   Stefano Garzarella <sgarzare@redhat.com>
+To:     David Woodhouse <dwmw2@infradead.org>
+Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        virtualization <virtualization@lists.linux-foundation.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] tools/virtio: Test virtual address range detection
+Message-ID: <20220221170217.5bq7nhr3pvchku5x@sgarzare-redhat>
+References: <c1895bcc240d413ff067f982b6e653996ace9887.camel@infradead.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH v3 1/9] dt-bindings: host1x: Add memory-contexts property
-Content-Language: en-GB
-To:     Mikko Perttunen <cyndis@kapsi.fi>,
-        Mikko Perttunen <mperttunen@nvidia.com>,
-        thierry.reding@gmail.com, jonathanh@nvidia.com, joro@8bytes.org,
-        will@kernel.org, robh+dt@kernel.org
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, iommu@lists.linux-foundation.org,
-        linux-tegra@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-References: <20220218113952.3077606-1-mperttunen@nvidia.com>
- <20220218113952.3077606-2-mperttunen@nvidia.com>
- <48ac567b-37e8-1fa2-c389-536e276fdd2c@arm.com>
- <2e9c4ea5-6bbd-9724-0f4e-ed25f7294aa2@kapsi.fi>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <2e9c4ea5-6bbd-9724-0f4e-ed25f7294aa2@kapsi.fi>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <c1895bcc240d413ff067f982b6e653996ace9887.camel@infradead.org>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-02-21 15:28, Mikko Perttunen wrote:
-> On 2/21/22 17:23, Robin Murphy wrote:
->> On 2022-02-18 11:39, Mikko Perttunen via iommu wrote:
->>> Add schema information for the memory-contexts property used to
->>> specify context stream IDs. This uses the standard iommu-map property
->>> inside a child node.
->>
->> Couldn't you simply make "iommu-map" an allowed property on the host1x 
->> node itself? From a DT perspective I'm not sure the intermediate node 
->> really fits meaningfully, and I can't see that it serves much purpose 
->> in practice either, other than perhaps defeating fw_devlink.
->>
->> Robin.
-> 
-> The stream IDs described here are not used by the host1x device itself, 
-> so I don't think I can. Host1x's memory transactions still go through 
-> the stream ID specified in its 'iommus' property, these stream IDs are 
-> used by engines (typically in addition to the stream ID specified in 
-> their own nodes).
-> 
-> Host1x 'iommus' -- Channel commands
-> Engine 'iommus' -- Engine firmware (and data if context isolation is not 
-> enabled)
-> memory-contexts 'iommu-map' -- Data used by engines.
+On Mon, Feb 21, 2022 at 04:15:22PM +0000, David Woodhouse wrote:
+>As things stand, an application which wants to use vhost with a trivial
+>1:1 mapping of its virtual address space is forced to jump through hoops
+>to detect what the address range might be. The VHOST_SET_MEM_TABLE ioctl
+>helpfully doesn't fail immediately; you only get a failure *later* when
+>you attempt to set the backend, if the table *could* map to an address
+>which is out of range, even if no out-of-range address is actually
+>being referenced.
+>
+>Since userspace is growing workarounds for this lovely kernel API, let's
+>ensure that we have a regression test that does things basically the same
+>way as https://gitlab.com/openconnect/openconnect/-/commit/443edd9d8826
+>does.
+>
+>This is untested as I can't actually get virtio_test to work at all; it
+>just seems to deadlock on a spinlock. But it's getting the right answer
+>for the virtio range on x86_64 at least.
 
-Right, that still appears to match my understanding, that as far as 
-software sees, the host1x is effectively acting as a bridge to the 
-engines in itself. Even if it's not physically routing traffic in and/or 
-out, the host1x device is the place where the context IDs *logically* 
-exist, and thus owns the mapping between context IDs and the StreamIDs 
-emitted by any engine working in a given context.
+I had a similar issue with virtio_test and this simple patch [1] should 
+fix the deadlock.
 
-Consider a PCIe root complex with integrated endpoints - chances are the 
-RCiEPs have their own physical interfaces to issue DMA directly into the 
-SoC interconnect, but that doesn't change how we describe the PCI 
-Requester ID to StreamID mapping at the root complex, since the RC still 
-logically owns the RID space. You can think of a RID as being "consumed" 
-at the RC by indexing into config space to ultimately gain control of 
-the corresponding endpoint, just like context IDs are "consumed" at the 
-  host1x by generating commands to ultimately cause some engine to 
-operate in the correct address space.
+[1] 
+https://lore.kernel.org/lkml/20220118150631.167015-1-sgarzare@redhat.com/
 
-You don't have to pretend the host1x uses a context for its own 
-command-fetching (or whatever) traffic either - it's always been 
-intended that the "iommus" and "iommu-map" properties should happily be 
-able to coexist on the same node, since they serve distinctly different 
-purposes. If it doesn't work in practice then we've got a bug to fix 
-somewhere.
+Stefano
 
-If the context-switching mechanism was some distinct self-contained 
-thing bolted on beside the other host1x functionality then describing it 
-as a separate level of DT hierarchy might be more justifiable, but 
-that's not the impression I'm getting from skimming the rest of the 
-series. Just reading of the names of things in patch #6, my intuitive 
-reaction is that clearly each host1x owns 9 StreamIDs, one for general 
-stuff and 8 for contexts. Adding the knowledge that technically the 
-context StreamIDs end up delegated to other host1x-controlled engines 
-still doesn't shift the paradigm. I don't believe we need a level of DT 
-structure purely to help document what the iommu-map means for host1x - 
-the binding can do that just fine.
-
-Thanks,
-Robin.
-
-> (Perhaps I should add this information to various places in more 
-> abundance and clarity.)
-> 
-> Mikko
-> 
->>
->>> Signed-off-by: Mikko Perttunen <mperttunen@nvidia.com>
->>> ---
->>> v3:
->>> * New patch
->>> ---
->>>   .../bindings/display/tegra/nvidia,tegra20-host1x.yaml  | 10 ++++++++++
->>>   1 file changed, 10 insertions(+)
->>>
->>> diff --git 
->>> a/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-host1x.yaml 
->>> b/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-host1x.yaml 
->>>
->>> index 4fd513efb0f7..3ac0fde54a16 100644
->>> --- 
->>> a/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-host1x.yaml 
->>>
->>> +++ 
->>> b/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-host1x.yaml 
->>>
->>> @@ -144,6 +144,16 @@ allOf:
->>>           reset-names:
->>>             maxItems: 1
->>> +        memory-contexts:
->>> +          type: object
->>> +          properties:
->>> +            iommu-map:
->>> +              description: Specification of stream IDs available for 
->>> memory context device
->>> +                use. Should be a mapping of IDs 0..n to IOMMU 
->>> entries corresponding to
->>> +                usable stream IDs.
->>> +          required:
->>> +            - iommu-map
->>> +
->>>         required:
->>>           - reg-names
-> 

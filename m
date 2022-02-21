@@ -2,109 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DF204BD741
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 08:43:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F54C4BD72C
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 08:43:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346228AbiBUHfC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 02:35:02 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50678 "EHLO
+        id S1346221AbiBUHe5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 02:34:57 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346307AbiBUHes (ORCPT
+        with ESMTP id S1346293AbiBUHet (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 02:34:48 -0500
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93FCF13E93;
-        Sun, 20 Feb 2022 23:34:10 -0800 (PST)
-Received: by mail-wr1-x436.google.com with SMTP id i14so25390929wrc.10;
-        Sun, 20 Feb 2022 23:34:10 -0800 (PST)
+        Mon, 21 Feb 2022 02:34:49 -0500
+Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com [IPv6:2607:f8b0:4864:20::f29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A2C26310;
+        Sun, 20 Feb 2022 23:34:12 -0800 (PST)
+Received: by mail-qv1-xf29.google.com with SMTP id c14so29934403qvl.12;
+        Sun, 20 Feb 2022 23:34:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=R+qoR05yyHcZH4vSpMFd8zmkj+IJ0A8LVRiydiNyLQE=;
-        b=bfJ5+9lJe1regsuOgOS62d6ohx+ewAGRCfg62qzUyvYZ+eec9jm0xpboi7mUJnHtRv
-         b81hAbPB3zc1/p3GtZnBfH5tb7iVphRT8k0sM1SUj/jymWXJOxMc+o3E8aRz24F9Qgbt
-         oQES8SLZ7qCM/r0yZHgLqC4AxDNlB8kFFZDMskAc36MeaGYxUDuqJqJkjZ1Yy8hHwxZj
-         JOYxBcGX0LlyvJUGOmRPN0lHOojK1SeGpCeoE5u8FSU19yXr4CDHEL28OV7ApyphpHzU
-         m/XuzUzdkLylwL8QK8qfXcgfIMIDEBt4xE83umKA13INLGHzsXmpMvThU1wPS76KJel0
-         ndhQ==
+        d=jms.id.au; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=R4B6JGXR6mvZF1952Vke43JV0QR66SxjuMutQVOsFo8=;
+        b=Z06LCpgN2MVimjjFUlm3IrOc0bB63t5ON0LGaE4naFFq5j3x0jb78evJj8rax3eWP/
+         wgLsdIlXGADTXtwIZOPQPKaJFEYfYXwgtZ5UOBJuzO2T8WAjlN5DomYW9eZL93ICBZT8
+         yimSlEUKhwEw4f1FPbp0zK/EwW0EF/4JAD5uY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=R+qoR05yyHcZH4vSpMFd8zmkj+IJ0A8LVRiydiNyLQE=;
-        b=g5urPmb7r+199O+WmoOQNU+h9fKfh1awGZFezOfrRM4EOgtsqvH+UyBQj/rqvOV+Bp
-         oTOmOzzJpcZEqkzKhPREicem3GEs9jNEqdSSNqxvIIeuVd77Omi/gWcHRPIF1UGjTdcd
-         lUNaiazwep9xUbP6bXGgRdhJQrnejhRov0QIl/zwVpRlsPqAqvMMeSmpQCl+YpWRls0z
-         eufJwcCCWZcvGf1NrtHB07rp9p/IQ1gcnpAYZ/IOdRzCkFpYs0oY0KBeJVsVaB2EyQhA
-         HKsKlp0oipeJQo/o6jEW0yLwz+lVC2iPqPjat6UWNbEd40QOrFBAgn/y+LP8oIV6GO6+
-         Aqdw==
-X-Gm-Message-State: AOAM531CcUCPjGTdLWySUBsN0AylVDwTSB/9VNAxOUc9clXDchDk/16z
-        a/gFfqvA+MjzN2hyUrzJ+SRUczkbka66kw==
-X-Google-Smtp-Source: ABdhPJx0lw3Y5VqBWVHfEPeyySbm9dv8MgG72DRRcySxMXil771gs/YOCQimQJH9Iw+6HqFyEOkkeQ==
-X-Received: by 2002:adf:e7cd:0:b0:1e3:31a4:4b55 with SMTP id e13-20020adfe7cd000000b001e331a44b55mr13981624wrn.650.1645428849129;
-        Sun, 20 Feb 2022 23:34:09 -0800 (PST)
-Received: from localhost.localdomain ([94.73.33.246])
-        by smtp.gmail.com with ESMTPSA id f13sm29876580wri.82.2022.02.20.23.34.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 20 Feb 2022 23:34:08 -0800 (PST)
-From:   =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
-To:     robdclark@gmail.com
-Cc:     sean@poorly.run, airlied@linux.ie, daniel@ffwll.ch,
-        swboyd@chromium.org, bjorn.andersson@linaro.org,
-        dmitry.baryshkov@linaro.org, maxime@cerno.tech,
-        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
-Subject: [PATCH] drm/msm/dp: switch to devm_drm_of_get_bridge
-Date:   Mon, 21 Feb 2022 08:33:39 +0100
-Message-Id: <20220221073339.10742-1-jose.exposito89@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=R4B6JGXR6mvZF1952Vke43JV0QR66SxjuMutQVOsFo8=;
+        b=YmMEd+CHsdS0M5r5aMIe5Z8ScJKlFdbIFOKLqG52zRhQyW7ptqSoXd1fiajzxbl9sH
+         l4L60kMO5C7KtaqsC1Fdyb9D8LMwkvfM9hepITVhgrdPLA+g/Of3vZouBZW/jwiLaeLn
+         fV3qp+A+TLNljy3hZVBSTd5GGSwA7A2A84Fge+rmIUYhwj+WfVi5ifza+XdEpQVT2+LH
+         41dCQZzG6lYTW64TablpGoo66LKFiUUXQdxKJ+9nKNjUYb5fZ75jOg9kJ7JxxJLEkr8s
+         Q2XC2e48GPr2aaDPn1C3PUTbTGpqlvcqQKzx36YyQIuVUNXwfsnRYZ2QjDCqbjPcf6kU
+         ZXxA==
+X-Gm-Message-State: AOAM530Fwtu09ZEqAqW8L10A/Lk3K218yaytYQuYDF9aTW54vHLIR5/Y
+        XhqY1NRbM+zHfpPhw/EUo2vgezzcJoraEtaVpjA=
+X-Google-Smtp-Source: ABdhPJx2pPvLE2lY8PhsDFi43EexUA016GTtes5KYX0xv/HLHfxhIxLOM/pn0HF05x8GWnFK30iX+BejJZ2bFcsMSdI=
+X-Received: by 2002:ac8:5b82:0:b0:2cf:232d:b1f8 with SMTP id
+ a2-20020ac85b82000000b002cf232db1f8mr16728455qta.58.1645428851531; Sun, 20
+ Feb 2022 23:34:11 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20210921043936.468001-1-andrew@aj.id.au> <d2b85ad7-aef7-6088-03f5-cbd6e0bcab5d@kaod.org>
+In-Reply-To: <d2b85ad7-aef7-6088-03f5-cbd6e0bcab5d@kaod.org>
+From:   Joel Stanley <joel@jms.id.au>
+Date:   Mon, 21 Feb 2022 07:33:59 +0000
+Message-ID: <CACPK8Xdvns7PK9t1ZutAbkJqhb5eRcoWCDySQGsfbtLv+XMvqQ@mail.gmail.com>
+Subject: Re: [PATCH 0/2] leds: pca955x: Expose GPIOs for all pins
+To:     Pavel Machek <pavel@ucw.cz>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        =?UTF-8?Q?C=C3=A9dric_Le_Goater?= <clg@kaod.org>,
+        linux-leds@vger.kernel.org,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-aspeed <linux-aspeed@lists.ozlabs.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The function "drm_of_find_panel_or_bridge" has been deprecated in
-favor of "devm_drm_of_get_bridge".
+Hello Pavel,
 
-Switch to the new function and reduce boilerplate.
 
-Signed-off-by: José Expósito <jose.exposito89@gmail.com>
----
- drivers/gpu/drm/msm/dp/dp_parser.c | 10 +---------
- 1 file changed, 1 insertion(+), 9 deletions(-)
 
-diff --git a/drivers/gpu/drm/msm/dp/dp_parser.c b/drivers/gpu/drm/msm/dp/dp_parser.c
-index a7acc23f742b..0951752e2d98 100644
---- a/drivers/gpu/drm/msm/dp/dp_parser.c
-+++ b/drivers/gpu/drm/msm/dp/dp_parser.c
-@@ -268,16 +268,8 @@ static int dp_parser_clock(struct dp_parser *parser)
- static int dp_parser_find_panel(struct dp_parser *parser)
- {
- 	struct device *dev = &parser->pdev->dev;
--	struct drm_panel *panel;
--	int rc;
- 
--	rc = drm_of_find_panel_or_bridge(dev->of_node, 1, 0, &panel, NULL);
--	if (rc) {
--		DRM_ERROR("failed to acquire DRM panel: %d\n", rc);
--		return rc;
--	}
--
--	parser->panel_bridge = devm_drm_panel_bridge_add(dev, panel);
-+	parser->panel_bridge = devm_drm_of_get_bridge(dev, dev->of_node, 1, 0);
- 	if (IS_ERR(parser->panel_bridge)) {
- 		DRM_ERROR("failed to create panel bridge\n");
- 		return PTR_ERR(parser->panel_bridge);
--- 
-2.25.1
+On Fri, 24 Sept 2021 at 06:41, C=C3=A9dric Le Goater <clg@kaod.org> wrote:
+>
+> On 9/21/21 06:39, Andrew Jeffery wrote:
+> > Without these patches the driver limits the number of pins exposed on
+> > the gpiochip to the number of pins specified as GPIO in the devicetree,
+> > but doesn't map between the GPIO and pin number spaces. The result is
+> > that specifying offset or interleaved GPIOs in the devicetree gives
+> > unexpected behaviour in userspace.
+> >
+> > By always exposing all pins as GPIOs the patches resolve the lack of
+> > mapping between GPIO offsets and pins on the package in the driver by
+> > ensuring we always have a 1-to-1 mapping.
+> >
+> > The issue is primarily addressed by patch 1/2. Patch 2/2 makes it
+> > possible to not expose any pins as LEDs (and therefore make them all
+> > accessible as GPIOs). This has a follow-on effect of allowing the drive=
+r
+> > to bind to a device instantiated at runtime without requiring a
+> > description in the devicetree.
+> >
+> > I've tested the series under qemu to inspect the various interactions
+> > between LEDs vs GPIOs as well as conflicting GPIO requests.
 
+> > Please review!
+>
+> This is simpler than the 'ngpio' business we had before.
+>
+> Reviewed-by: C=C3=A9dric Le Goater <clg@kaod.org>
+
+I saw that you recently merged some LED patches. I was wondering if
+you could consider this series for v5.18. It still applies cleanly,
+and we've been running it for a while now, so it's very well tested.
+
+Cheers,
+
+Joel

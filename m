@@ -2,212 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7080A4BEECE
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 02:14:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DFC54BEEBE
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 02:14:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237273AbiBUXtH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 18:49:07 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52836 "EHLO
+        id S237290AbiBUXxW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 18:53:22 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236881AbiBUXtG (ORCPT
+        with ESMTP id S232434AbiBUXxU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 18:49:06 -0500
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2071.outbound.protection.outlook.com [40.107.244.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2592F13;
-        Mon, 21 Feb 2022 15:48:41 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=iNZEDgFNnFhPYXzomqmbrgT0tqSH7TMaEphZNpIBa0hLLBW8RcOK/Lvc5a++pw1w52RvO5G8qU29coC5uRf5qFslhahjtqG+8nW4V0VfMq6RV8+7s1ZsQpoKs+8+u/zoqoxfKVFg2oz+dAaz2+9vnlNYE6RjYUE+5lCgWexl6howfNw7Ycga2cRofLesRWjlMOWPmPO1uTtswwp97KUMKOTfAoySrLVmT09OwxWWkULgt5lJBMgL8AfTlNx5lCF3CXqW+5JiV+DWOGQKkRe5c/hMxX0h8OsmAGNLSzn+ohoELg4h+QqOWKOCn4iVu5L01PTmxGC8IXPY8beJUiUpSQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=QcWDChi8lPpHRhyU4hWbSi2+fwKFXVHF64Gc3Ysd+bs=;
- b=N3YXewaMQvAsNiVlQdpaGsyyXjejaqzaNCPUM8A1Hkdaj+c7A7PEwyTnlvcpVCc9xdX/u4lp12kVNo18zGYcUnTD22xJloZpWVsYmmbEBvkn+NYkI2VSZj2j2iOMCtXQS2Ayqu/cwUjcrtcLvBcIQDNjsg1MssvtW3rynXFM7mx+IG0jUEVkppuSHpzaYzFPIExpVRy7RaNNyb/R76OB+HnPu907ZI+8Eo5dlmtqVZHy3ozLEB+kGMQtDrZZjEcd4LChsgXBB7ejCKJB86mneQtvvdWm+NcFaldWeroiGBtAPBUW4ezltKbDVl1T+MWHO7ninnyMhnTekghTjDPFxA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=QcWDChi8lPpHRhyU4hWbSi2+fwKFXVHF64Gc3Ysd+bs=;
- b=pWgowEP/6qB4TkkXkyWMJwNZWo9GZ2s9d6U0OfSJNXEiG7bGgC6RhL5dcu+G8vPdl01xciU7s2qcBhsJXpDK2rIPoMeC1WJyhskPXzj/ZJcRaVbUHoiSqydqUxcIdiPWAESicGULaSneEb8+v+Su48DBPJOw5ChNU9I9Gu9RQuykljwwa8WRtmsMvht5rXZrH7Lnm/jaq9hImB93dKhtims9yxkox2oeG5iSn2K6prgeWoWWQCAQvgngSnOgb/03etkDPpVU3GkvGjQcgvyYEd6c06uKnQuZ23x6QzOC9TpHRuzyXIS9Ql8RlY1/jTAB0ZolFE60ZBJYJ7LJJRanGQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
- by DM4PR12MB5055.namprd12.prod.outlook.com (2603:10b6:5:38a::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4995.16; Mon, 21 Feb
- 2022 23:48:39 +0000
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::e8f4:9793:da37:1bd3]) by MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::e8f4:9793:da37:1bd3%5]) with mapi id 15.20.4995.027; Mon, 21 Feb 2022
- 23:48:39 +0000
-Date:   Mon, 21 Feb 2022 19:48:37 -0400
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Robin Murphy <robin.murphy@arm.com>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        Lu Baolu <baolu.lu@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Joerg Roedel <joro@8bytes.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, kvm@vger.kernel.org,
-        rafael@kernel.org, David Airlie <airlied@linux.ie>,
-        linux-pci@vger.kernel.org,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Diana Craciun <diana.craciun@oss.nxp.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Will Deacon <will@kernel.org>,
-        Stuart Yoder <stuyoder@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        linux-kernel@vger.kernel.org, Li Yang <leoyang.li@nxp.com>,
-        iommu@lists.linux-foundation.org,
-        Jacob jun Pan <jacob.jun.pan@intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Subject: Re: [PATCH v6 02/11] driver core: Add dma_cleanup callback in
- bus_type
-Message-ID: <20220221234837.GA10061@nvidia.com>
-References: <20220218005521.172832-1-baolu.lu@linux.intel.com>
- <20220218005521.172832-3-baolu.lu@linux.intel.com>
- <YhCdEmC2lYStmUSL@infradead.org>
- <1d8004d3-1887-4fc7-08d2-0e2ee6b5fdcb@arm.com>
+        Mon, 21 Feb 2022 18:53:20 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9B0812A97
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 15:52:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645487572; x=1677023572;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=LrxaznrcxycmHWuLMrgEU6HpZt4roAckMSAd3xWs1Ds=;
+  b=AauxjPgA7kVdTSvedURvWEu1z1oj4GI16ZpJdIAH03/GZtK/tEUllq8a
+   MPg8ZX6gXlLCtvaj3UiJu4vJruODZdKI/bgFiyS4rtBzeRak6JvVlbvT9
+   VtaBdNqtg3FHO2lncD8UxLcnMFVPzHoXOpDZOGK8k708x1DYxEVMsUjCL
+   HK74Mvf4T13CoFDIpy898zJ6FdoqarSqMDr4pqeIksr88YDwj00Uw82JA
+   VJNJx/dWOyGLsS2fujDsOB/oV5TufTdNguMVYE4PilhDlMS1tRyToDOfF
+   M184U+rcdNSvk1ftVsFacQawbqLThKe71cxRus+ZHNn1tcKwNBWFDK+nC
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10265"; a="250402788"
+X-IronPort-AV: E=Sophos;i="5.88,386,1635231600"; 
+   d="scan'208";a="250402788"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2022 15:52:47 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,386,1635231600"; 
+   d="scan'208";a="776119047"
+Received: from lkp-server01.sh.intel.com (HELO da3212ac2f54) ([10.239.97.150])
+  by fmsmga006.fm.intel.com with ESMTP; 21 Feb 2022 15:52:46 -0800
+Received: from kbuild by da3212ac2f54 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nMIU1-00026L-As; Mon, 21 Feb 2022 23:52:45 +0000
+Date:   Tue, 22 Feb 2022 07:51:51 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [peterz-queue:x86/wip.ibt 24/39]
+ arch/x86/kernel/alternative.c:713:48: error: expected ')' before
+ 'ANNOTATE_NOENDBR'
+Message-ID: <202202220700.IaFMnMm9-lkp@intel.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1d8004d3-1887-4fc7-08d2-0e2ee6b5fdcb@arm.com>
-X-ClientProxiedBy: BL0PR05CA0014.namprd05.prod.outlook.com
- (2603:10b6:208:91::24) To MN2PR12MB4192.namprd12.prod.outlook.com
- (2603:10b6:208:1d5::15)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: b19a361d-6d97-4fd8-496e-08d9f594aeef
-X-MS-TrafficTypeDiagnostic: DM4PR12MB5055:EE_
-X-Microsoft-Antispam-PRVS: <DM4PR12MB5055D031CB232986AD17A984C23A9@DM4PR12MB5055.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: iWVceXc7lVdrPdreVogL6V9AQIMzQN8K8oV59skH3YwKFLWOq74a0t+2DGui4k1ZccILKQPeuhSgmXPsVXE29OcgbpZANTNFrWt3TAx/mIc2Tb9evhAk4XaL886ImbbmVW7JYay9B6GDlA1j+Tz3IuGjMeOD3ZeBq9kvyH6GoC3zhGiUBKC1KfGzGoiBwxJJRwcOXDK+dGQXewJcDOPlcGzXkOXf62iIGJ/BbvetT56TXkuCU54HixnGCTWu1sGVYShZzIb+inQDtuhbCAP/OfWk8QCSbbRN1Nw055ycrPlJWf5KnCng0rg8wr4aor9lcMiQGviDeN2HOdtrNGwc7q8qefSwNbpv00sAWVXY0u4uAC8d2CD99Ldb8D+GTeHaUFCiIm3hocImbdjuYZRAtFMb25T+331J6YOR7PEBK77UcyfDxwKEt2K9salWVQD7p5Z9blZVX9KXg8Q0KDDXVOnWdBgdfPw0F7Oemxvl8OC4aEWGCXjEcFDYq1PjKecev+/ZDWXfCINv1vpodgPKeGCFzxx7F7wFMcNc3ZzryYvCPwA7gbjt+2PcG6+ByNwYDEyjm89+bccjk1EUSq872Wl6jqV0B+V6A8wEHUeNxm2+oRgwNBapG0Gt1YdO4mtFVXdTC4z6nvAgH9VJzhH3Eg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(53546011)(186003)(66946007)(66556008)(6512007)(6916009)(2616005)(1076003)(6506007)(26005)(6486002)(54906003)(508600001)(316002)(66476007)(86362001)(8676002)(83380400001)(4326008)(38100700002)(5660300002)(8936002)(33656002)(2906002)(36756003)(7416002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?FqGHUW4HO/XDob+kwqpfJRJi/nZwyxdGegCS65n4AepFjWTXhsiiUI0NmipE?=
- =?us-ascii?Q?/eLjNdV7hdObvSQBUF6bTFNrAtP7iKP1jTcJuqCdpMia4LcWP6/35THRTZGF?=
- =?us-ascii?Q?pkbf/tbKp5LdizDBYD4cit8RztvATa70wjj9wb+h0VnCXWffMTLVuZGVL0XW?=
- =?us-ascii?Q?34/BrchfDODt/6TpawO84wAhNavE+H2//hT0R+0vr7+aYc40bhHATyqZT9r7?=
- =?us-ascii?Q?gCZr5Gr84ScijWtv+jgr5O8BmzAwWPKjlo0IvdJhZewbimvnEOAnQZF08Cut?=
- =?us-ascii?Q?rf9IACP8wAEiuPvR9bwtni1j4Us9EwJIltsDyTFyBAi9Yp8nSye6yaVZVo5X?=
- =?us-ascii?Q?lT/0o7wGSnjJbVcxeeegRA873rmecKPlbstcuNb2x2ozaVx3Q9SZ+HdbHrTP?=
- =?us-ascii?Q?cdd6UVP/tVap3NK0tSjntiv5ravvKxPzNuj7EsUf35n3fh9r5RPA24jWxKaU?=
- =?us-ascii?Q?JV8sty74ZsJXWYAzSOSaMc2nU3QilIZb73JNQFjg4TH6e36JZDWx0/vwPWyZ?=
- =?us-ascii?Q?IHjfIJLbRqMo33NDaEEVT4VbaqqGcRs0Z/xYSxvQDorI/x7YuC945CgvMyNz?=
- =?us-ascii?Q?4Rwq5e/1Vu2JGB9ZdUMthjgIYvrzyGvs3YCyA7zA0h7FSNpFNNFvg4QI0mWg?=
- =?us-ascii?Q?wHOODwS0l8hGEmG/LZ8b+hKMTnvksSnb9LyZGKVt7iLOSY8Uz/MRkrhDXTZE?=
- =?us-ascii?Q?L2e9Ertrr+Zqaq0KU/Ic7GNVBtSQe/pGM1RfYQ5ejxLOrsEyKQE3chv+wAtA?=
- =?us-ascii?Q?JUd+R4elCJ/jIRPNxDnS0v2FPfzCkbI7wHrhO6hIUQ5Xbs3SN3RkEI5vVxE+?=
- =?us-ascii?Q?DY/boNihonh8mA8ottlMVqgoc97d9MUrZpurHABmm6kM2aQIEoyle+GAXlHG?=
- =?us-ascii?Q?OpzNF2+Uti50fy4QJ6xB87yGk/bWYvS11jM50iVC0mf9FDErBi5locw1pOR0?=
- =?us-ascii?Q?vnKBg5ZD9L8lz2KtyTsfi4nak0lCMfzBhIOTRl6pGjJRa4DLziUYuscnzIJa?=
- =?us-ascii?Q?bou0Bq2Iv0vvPjFAY6v8nLfs95TWGcVyd62JMQMsfxPp8fsKl31PiWKtOqxl?=
- =?us-ascii?Q?kL6OwMibrUSoSlM6Qg/uYBxGaO9zhOD/3i3UsXIA8kEkRJXhv8509eakrFYA?=
- =?us-ascii?Q?CWj1mdmuzN6o5NbM8Yr8YF9I5NGMFV7oykxbsyUzu79Kolovs6IReiiOuXL5?=
- =?us-ascii?Q?41nInz9OSApPwogcJzvKKl2S0BdlKsyW2x9dLLzQw3p3BHxgKSy/DJJdsK0m?=
- =?us-ascii?Q?CviA0Z7CLI3oWCxaNz8/B7j2QJUp6KyfV7oMd9gBrtlpvY9uz0OimlAcsAzr?=
- =?us-ascii?Q?Dn3Oh9kfxiS08urdi37xXdRsmqxpZ+A0s1i+OfsTIYxqA3xklJZ47oyYQHBd?=
- =?us-ascii?Q?evf6a/f0cprE7R70tNjUgB62AI5+uGFXOZRr8wSET9+LiyH6yXI96B2jEZxK?=
- =?us-ascii?Q?JwGyZYzoFBTN/8W5I3YE/DJAZSzfyyg06/ueH830/P9XjU0fzKR8GitjGkC4?=
- =?us-ascii?Q?dzgv9Q3XTdPMxvpgd+QJImwrz3fK5dCvaZ9GcNaTL1YojRG3AoT9uNgaU99W?=
- =?us-ascii?Q?CPPbbIMzdiJtqA9zCs4=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b19a361d-6d97-4fd8-496e-08d9f594aeef
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Feb 2022 23:48:39.3673
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: iBlyFfVYnf1LhO6mLOQMM5dZkKEGBh5+w7/dZxFchQ+CA28cKFNmZ3H3TdDN4k1q
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5055
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 21, 2022 at 08:43:33PM +0000, Robin Murphy wrote:
-> On 2022-02-19 07:32, Christoph Hellwig wrote:
-> > So we are back to the callback madness instead of the nice and simple
-> > flag?  Sigh.
-> 
-> TBH, I *think* this part could be a fair bit simpler. It looks like this
-> whole callback mess is effectively just to decrement
-> group->owner_cnt, but
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git x86/wip.ibt
+head:   1436dce5f32d577e8cef693e09f4bb1faa0e2692
+commit: 691967145f3060050b5628f6863de26cc77ef17e [24/39] x86/ibt: Annotate text references
+config: i386-randconfig-r034-20220221 (https://download.01.org/0day-ci/archive/20220222/202202220700.IaFMnMm9-lkp@intel.com/config)
+compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
+reproduce (this is a W=1 build):
+        # https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git/commit/?id=691967145f3060050b5628f6863de26cc77ef17e
+        git remote add peterz-queue https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git
+        git fetch --no-tags peterz-queue x86/wip.ibt
+        git checkout 691967145f3060050b5628f6863de26cc77ef17e
+        # save the config file to linux build tree
+        mkdir build_dir
+        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
-Right, the new callback is because of Greg's push to put all the work
-into the existing bus callback. Having symetrical callbacks is
-cleaner.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-> since we should only care about ownership at probe, hotplug, and other
-> places well outside critical fast-paths, I'm not sure we really need to keep
-> track of that anyway - it can always be recalculated by walking the
-> group->devices list, 
+All errors (new ones prefixed by >>):
 
-It has to be locked against concurrent probe, and there isn't
-currently any locking scheme that can support this. The owner_cnt is
-effectively a new lock for this purpose. It is the same issue we
-talked about with that VFIO patch you showed me.
+>> arch/x86/kernel/alternative.c:713:48: error: expected ')' before 'ANNOTATE_NOENDBR'
+     713 | " .pushsection .init.text, \"ax\", @progbits\n"
+         |                                                ^
+         |                                                )
+   ......
+     716 |  ANNOTATE_NOENDBR
+         |  ~~~~~~~~~~~~~~~~                               
+   arch/x86/kernel/alternative.c:712:5: note: to match this '('
+     712 | asm (
+         |     ^
+   arch/x86/kernel/alternative.c: In function 'int3_selftest':
+>> arch/x86/kernel/alternative.c:761:16: error: expected string literal before 'ANNOTATE_NOENDBR'
+     761 |  asm volatile (ANNOTATE_NOENDBR
+         |                ^~~~~~~~~~~~~~~~
+--
+   arch/x86/lib/retpoline.S: Assembler messages:
+>> arch/x86/lib/retpoline.S:15: Error: no such instruction: `annotate_noendbr'
 
-So, using the group->device_list would require adding something else
-somewhere - which I think should happen when someone has
-justification for another use of whatever that something else is.
 
-Also, Greg's did have an objection to the the first version, with code
-living in dd.c, that was basically probe time performance. I'm not
-sure making this slower would really be welcomed..
+vim +713 arch/x86/kernel/alternative.c
 
-> and some of the relevant places have to do that anyway.
+ecc606103837b9 Peter Zijlstra 2019-07-08  711  
+ecc606103837b9 Peter Zijlstra 2019-07-08  712  asm (
+ecc606103837b9 Peter Zijlstra 2019-07-08 @713  "	.pushsection	.init.text, \"ax\", @progbits\n"
+ecc606103837b9 Peter Zijlstra 2019-07-08  714  "	.type		int3_magic, @function\n"
+ecc606103837b9 Peter Zijlstra 2019-07-08  715  "int3_magic:\n"
+691967145f3060 Peter Zijlstra 2022-02-17  716  	ANNOTATE_NOENDBR
+ecc606103837b9 Peter Zijlstra 2019-07-08  717  "	movl	$1, (%" _ASM_ARG1 ")\n"
+b17c2baa305ccc Peter Zijlstra 2021-12-04  718  	ASM_RET
+ecc606103837b9 Peter Zijlstra 2019-07-08  719  "	.size		int3_magic, .-int3_magic\n"
+ecc606103837b9 Peter Zijlstra 2019-07-08  720  "	.popsection\n"
+ecc606103837b9 Peter Zijlstra 2019-07-08  721  );
+7457c0da024b18 Peter Zijlstra 2019-05-03  722  
+7457c0da024b18 Peter Zijlstra 2019-05-03  723  extern __initdata unsigned long int3_selftest_ip; /* defined in asm below */
+7457c0da024b18 Peter Zijlstra 2019-05-03  724  
+7457c0da024b18 Peter Zijlstra 2019-05-03  725  static int __init
+7457c0da024b18 Peter Zijlstra 2019-05-03  726  int3_exception_notify(struct notifier_block *self, unsigned long val, void *data)
+7457c0da024b18 Peter Zijlstra 2019-05-03  727  {
+7457c0da024b18 Peter Zijlstra 2019-05-03  728  	struct die_args *args = data;
+7457c0da024b18 Peter Zijlstra 2019-05-03  729  	struct pt_regs *regs = args->regs;
+7457c0da024b18 Peter Zijlstra 2019-05-03  730  
+7457c0da024b18 Peter Zijlstra 2019-05-03  731  	if (!regs || user_mode(regs))
+7457c0da024b18 Peter Zijlstra 2019-05-03  732  		return NOTIFY_DONE;
+7457c0da024b18 Peter Zijlstra 2019-05-03  733  
+7457c0da024b18 Peter Zijlstra 2019-05-03  734  	if (val != DIE_INT3)
+7457c0da024b18 Peter Zijlstra 2019-05-03  735  		return NOTIFY_DONE;
+7457c0da024b18 Peter Zijlstra 2019-05-03  736  
+7457c0da024b18 Peter Zijlstra 2019-05-03  737  	if (regs->ip - INT3_INSN_SIZE != int3_selftest_ip)
+7457c0da024b18 Peter Zijlstra 2019-05-03  738  		return NOTIFY_DONE;
+7457c0da024b18 Peter Zijlstra 2019-05-03  739  
+7457c0da024b18 Peter Zijlstra 2019-05-03  740  	int3_emulate_call(regs, (unsigned long)&int3_magic);
+7457c0da024b18 Peter Zijlstra 2019-05-03  741  	return NOTIFY_STOP;
+7457c0da024b18 Peter Zijlstra 2019-05-03  742  }
+7457c0da024b18 Peter Zijlstra 2019-05-03  743  
+7457c0da024b18 Peter Zijlstra 2019-05-03  744  static void __init int3_selftest(void)
+7457c0da024b18 Peter Zijlstra 2019-05-03  745  {
+7457c0da024b18 Peter Zijlstra 2019-05-03  746  	static __initdata struct notifier_block int3_exception_nb = {
+7457c0da024b18 Peter Zijlstra 2019-05-03  747  		.notifier_call	= int3_exception_notify,
+7457c0da024b18 Peter Zijlstra 2019-05-03  748  		.priority	= INT_MAX-1, /* last */
+7457c0da024b18 Peter Zijlstra 2019-05-03  749  	};
+7457c0da024b18 Peter Zijlstra 2019-05-03  750  	unsigned int val = 0;
+7457c0da024b18 Peter Zijlstra 2019-05-03  751  
+7457c0da024b18 Peter Zijlstra 2019-05-03  752  	BUG_ON(register_die_notifier(&int3_exception_nb));
+7457c0da024b18 Peter Zijlstra 2019-05-03  753  
+7457c0da024b18 Peter Zijlstra 2019-05-03  754  	/*
+7457c0da024b18 Peter Zijlstra 2019-05-03  755  	 * Basically: int3_magic(&val); but really complicated :-)
+7457c0da024b18 Peter Zijlstra 2019-05-03  756  	 *
+7457c0da024b18 Peter Zijlstra 2019-05-03  757  	 * Stick the address of the INT3 instruction into int3_selftest_ip,
+7457c0da024b18 Peter Zijlstra 2019-05-03  758  	 * then trigger the INT3, padded with NOPs to match a CALL instruction
+7457c0da024b18 Peter Zijlstra 2019-05-03  759  	 * length.
+7457c0da024b18 Peter Zijlstra 2019-05-03  760  	 */
+691967145f3060 Peter Zijlstra 2022-02-17 @761  	asm volatile (ANNOTATE_NOENDBR
+691967145f3060 Peter Zijlstra 2022-02-17  762  		      "1: int3; nop; nop; nop; nop\n\t"
+7457c0da024b18 Peter Zijlstra 2019-05-03  763  		      ".pushsection .init.data,\"aw\"\n\t"
+7457c0da024b18 Peter Zijlstra 2019-05-03  764  		      ".align " __ASM_SEL(4, 8) "\n\t"
+7457c0da024b18 Peter Zijlstra 2019-05-03  765  		      ".type int3_selftest_ip, @object\n\t"
+7457c0da024b18 Peter Zijlstra 2019-05-03  766  		      ".size int3_selftest_ip, " __ASM_SEL(4, 8) "\n\t"
+7457c0da024b18 Peter Zijlstra 2019-05-03  767  		      "int3_selftest_ip:\n\t"
+7457c0da024b18 Peter Zijlstra 2019-05-03  768  		      __ASM_SEL(.long, .quad) " 1b\n\t"
+7457c0da024b18 Peter Zijlstra 2019-05-03  769  		      ".popsection\n\t"
+ecc606103837b9 Peter Zijlstra 2019-07-08  770  		      : ASM_CALL_CONSTRAINT
+ecc606103837b9 Peter Zijlstra 2019-07-08  771  		      : __ASM_SEL_RAW(a, D) (&val)
+ecc606103837b9 Peter Zijlstra 2019-07-08  772  		      : "memory");
+7457c0da024b18 Peter Zijlstra 2019-05-03  773  
+7457c0da024b18 Peter Zijlstra 2019-05-03  774  	BUG_ON(val != 1);
+7457c0da024b18 Peter Zijlstra 2019-05-03  775  
+7457c0da024b18 Peter Zijlstra 2019-05-03  776  	unregister_die_notifier(&int3_exception_nb);
+7457c0da024b18 Peter Zijlstra 2019-05-03  777  }
+7457c0da024b18 Peter Zijlstra 2019-05-03  778  
 
-???
+:::::: The code at line 713 was first introduced by commit
+:::::: ecc606103837b98a2b665e8f14e533a6c72bbdc0 x86/alternatives: Fix int3_emulate_call() selftest stack corruption
 
-> It has to be s It should be pretty straightforward for
-> iommu_bus_notifier to clear group->owner automatically upon an
-> unbind of the matching driver when it's no longer bound to any other
-> devices in the group either.
+:::::: TO: Peter Zijlstra <peterz@infradead.org>
+:::::: CC: Thomas Gleixner <tglx@linutronix.de>
 
-That not_bound/unbind notifier isn't currently triggred during
-necessary failure paths of really_probe().
-
-Even if this was patched up, it looks like spaghetti to me..
-
-> use-case) then it should be up to VFIO to decide when it's finally
-> finished with the whole group, rather than pretending we can keep
-> track of nested ownership claims from inside the API.
-
-What nesting?
- 
-> Furthermore, If Greg was willing to compromise just far enough to let us put
-> driver_managed_dma in the 3-byte hole in the generic struct
-> device_driver,
-
-Space was not an issue, the earlier version of this switched an
-existing bool to a bitfield.
-
-> we wouldn't have to have quite so much boilerplate repeated across the
-> various bus implementations (I'm not suggesting to move any actual calls
-> back into the driver core, just the storage of flag itself). 
-
-Not sure that makes sense.. But I don't understand why we need to copy
-and paste this code into every bus's dma_configure *shrug*
-
-> FWIW I have some ideas for re-converging .dma_configure in future
-> which I think should probably be able to subsume this into a
-> completely generic common path, given a common flag.
-
-This would be great!
-
-Jason
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

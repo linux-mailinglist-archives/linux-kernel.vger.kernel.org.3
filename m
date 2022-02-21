@@ -2,120 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7638B4BE375
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:57:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EA8B4BDE04
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:46:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358415AbiBUM6W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 07:58:22 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57630 "EHLO
+        id S1358439AbiBUM66 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 07:58:58 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231617AbiBUM6V (ORCPT
+        with ESMTP id S231617AbiBUM6y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 07:58:21 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 084F01EAD4;
-        Mon, 21 Feb 2022 04:57:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645448278; x=1676984278;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version;
-  bh=G6uPDsLPXAgZNQCtVqi3S/5UdXZRLfU1CWAz2itzvuA=;
-  b=fPca6omaRm69OL81DHC3tf/BR3Fl+VW9n8XnTFCGaZsQ8HzK6DJ+PAL6
-   cno3DU/H6+R2/mqpo+4N3y/ZF9y5DZeTr+EIC0JRHENCy3My48kDMc6tk
-   kgAhVZJ0FG42jMJRjZ4edo/R+lI/PKYYmKtQCv+B+82+2b0HFijR1Zb0f
-   VApAzGwIiemvsuA7BhwrQw9uHRzo2yGrrooFqY30ybpuwLj9omZkI6Nwg
-   5VRirTMqM94aaekD9r7VuTS4BY3UM5hT3UeEZ+4poV0L3Y4d5UyZ39JPb
-   g2zZw5OdAqiQoewbTv1aLs0p3Kg7ECSHtAYDgkMiSwLx/BaR9ych6Ifq+
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10264"; a="314765767"
-X-IronPort-AV: E=Sophos;i="5.88,385,1635231600"; 
-   d="scan'208";a="314765767"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2022 04:57:57 -0800
-X-IronPort-AV: E=Sophos;i="5.88,385,1635231600"; 
-   d="scan'208";a="547326671"
-Received: from ebruchet-mobl1.ger.corp.intel.com (HELO localhost) ([10.252.63.21])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2022 04:57:55 -0800
-From:   Jani Nikula <jani.nikula@linux.intel.com>
-To:     Matthew Wilcox <willy@infradead.org>,
-        Jonathan Corbet <corbet@lwn.net>
-Cc:     Tomasz =?utf-8?B?V2FybmllxYLFgm8=?= <tomasz.warniello@gmail.com>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [RFC] scripts: kernel-doc: Major kernel-doc rework
-In-Reply-To: <Yg8NWrvooEDbKg49@casper.infradead.org>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-References: <20220205233945.7a4d22d8@fuji.fritz.box>
- <8735ki2x62.fsf@meer.lwn.net> <20220217163247.03e37c9b@fuji.fritz.box>
- <87bkz51l2g.fsf@meer.lwn.net> <Yg8NWrvooEDbKg49@casper.infradead.org>
-Date:   Mon, 21 Feb 2022 14:57:53 +0200
-Message-ID: <87k0do8jhq.fsf@intel.com>
+        Mon, 21 Feb 2022 07:58:54 -0500
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 384401EAD5;
+        Mon, 21 Feb 2022 04:58:30 -0800 (PST)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 21LCwI27047020;
+        Mon, 21 Feb 2022 06:58:18 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1645448298;
+        bh=zJPkUq5bndr8qfbg5WIBf/HuUb+QSE7Kcn6n8iOJ4gU=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=Xix/xZcWtlSkqka3uGCAoboZQFohva0T2zZu93RneAZaStraEU8uCUh28fIkSYXxv
+         Ngt5guRsBnBV2GhcFu/gr/S1Xeitq9pwA34d/8QQVncSRP5QuKvqTxyiE2XgEQ48R+
+         hF18EocxkGyJS2S1Vkjp1PE5cflc3pWWhjCluARg=
+Received: from DLEE105.ent.ti.com (dlee105.ent.ti.com [157.170.170.35])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 21LCwI3Z035992
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 21 Feb 2022 06:58:18 -0600
+Received: from DLEE108.ent.ti.com (157.170.170.38) by DLEE105.ent.ti.com
+ (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Mon, 21
+ Feb 2022 06:58:18 -0600
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE108.ent.ti.com
+ (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Mon, 21 Feb 2022 06:58:18 -0600
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 21LCwHha021570;
+        Mon, 21 Feb 2022 06:58:17 -0600
+Date:   Mon, 21 Feb 2022 06:58:17 -0600
+From:   Nishanth Menon <nm@ti.com>
+To:     Drew Fustini <dfustini@baylibre.com>
+CC:     =?iso-8859-1?Q?Beno=EEt?= Cousson <bcousson@baylibre.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Dave Gerlach <d-gerlach@ti.com>, <devicetree@vger.kernel.org>,
+        Keerthy <j-keerthy@ti.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-omap@vger.kernel.org>,
+        <linux-remoteproc@vger.kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Tony Lindgren <tony@atomide.com>, <s-anna@ti.com>,
+        <khilman@baylibre.com>
+Subject: Re: [PATCH 00/11] soc: ti: wkup_m3_ipc: support vtt toggle, io
+ isolation & voltage scaling
+Message-ID: <20220221125817.eg2rf6ktrhiq7eck@overbook>
+References: <20220219215328.485660-1-dfustini@baylibre.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20220219215328.485660-1-dfustini@baylibre.com>
+User-Agent: NeoMutt/20171215
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 18 Feb 2022, Matthew Wilcox <willy@infradead.org> wrote:
-> On Thu, Feb 17, 2022 at 10:04:23AM -0700, Jonathan Corbet wrote:
->> *I* prefer Python, and the Sphinx side of things is necessarily in
->> Python, so I'd be happy to see kernel-doc move over.  That said, others
->> certainly disagree.
->> 
->> Markus's work was here:
->> 
->>   https://lore.kernel.org/lkml/1485287564-24205-1-git-send-email-markus.heiser@darmarit.de/
->> 
->> At the time, we were just trying to get the RST transition done, and
->> swapping out the kernel-doc script seemed like a major distraction that
->> we didn't need, so this never got looked at as seriously as I would have
->> liked.
->
-> Personally, I'd like to see us switch over to
-> https://github.com/jnikula/hawkmoth
->
-> but I don't have time to work on the rough edges.
-
-Basically Hawkmoth is my idea how C documentation comments should be
-incorporated to Sphinx *if* there is no legacy to care about. In that
-sense, I never wrote it with the kernel documentation in mind, on the
-contrary it's a hobby project where I can just not think about the
-kernel at all. ;)
-
-With that in mind, I'd really like to hear what the rough edges are that
-you see. Or are they kernel specific? Preferrably as issues on the
-project page if you don't mind.
-
-> I really hate the kernel-doc style; I think it makes us write very
-> stilted documentation, full of parameter descriptions like:
->
->  function() - Do the thing to a page.
->  @page: The page.
->
-> which really serves nobody.  Being able to write:
->
->  function() - Do the thing to @page
->
-> is easier to both write and read.
-
-I tend to agree. Though Hawkmoth does not take a stand here, basically
-the assumption is that the documentation comments are pure rst. And that
-was one of the goals, no parsing of the comments beyond removing the C
-comment markers. It's up to the users or projects to dictate what the
-comments should look like. There's some plugin support for users to add
-their own filters, e.g. there could be kernel-doc format support via
-that.
+On 13:53-20220219, Drew Fustini wrote:
+> Improve the wkup_m3_ipc driver to better support the TI Wakeup Cortex M3 
+> device found on TI AM33xx and AM43xx SoCs.
+> 
+> This series derives from these commits in the ti-linux-5.10.y branch of
+> the TI Linux repo [1]:
+> 
+>   6ab4eff1034b ("remoteproc: move rproc_da_to_va declaration to remoteproc.h")
+>   2a9be39a26f7 ("dt-bindings: wkup_m3_ipc: Add vtt toggling bindings")
+>   c65263f9e12c ("wkup_m3_ipc: Add support for toggling VTT regulator")
+>   5c6c821803e1 ("dt-bindings: wkup_m3_ipc: Add ti,io-isolation property")
+>   196c46f7577d ("wkup_m3_ipc: Add support for IO Isolation")
+>   c28acc847e5d ("soc: ti: wkup_m3_ipc: Add support for i2c voltage scaling")
+>   a4f9ef4ab5ca ("ARM: dts: am437x-gp-evm: Enable wkup_m3 control of IO isolation")
+>   94de756f1771 ("ARM: dts: am33xx: Add scale data fw to wkup_m3_ipc node")
+>   b7ae4b063793 ("ARM: dts: am43xx: Add scale data fw to wkup_m3_ipc node")
+>   451ec7871ae7 ("soc: ti: wkup_m3_ipc: Add debug option to halt m3 in suspend")
+> 
+> Minor changes have been made to some patches to resolve conflicts and 
+> to split i2c voltage scaling dt-bindings into separate patch.
+> 
+> [1] git://git.ti.com/ti-linux-kernel/ti-linux-kernel.git
+> 
+> Dave Gerlach (10):
+>   dt-bindings: wkup_m3_ipc: Add vtt toggling bindings
+>   soc: ti: wkup_m3_ipc: Add support for toggling VTT regulator
+>   dt-bindings: wkup_m3_ipc: Add ti,io-isolation property
+>   soc: ti: wkup_m3_ipc: Add support for IO Isolation
+>   ARM: dts: am437x-gp-evm: Enable wkup_m3 control of IO isolation
+>   dt-bindings: wkup_m3_ipc: Add scale-data-fw property
+>   soc: ti: wkup_m3_ipc: Add support for i2c voltage scaling
+>   ARM: dts: am33xx: Add scale data fw to wkup_m3_ipc node
+>   ARM: dts: am43xx: Add scale data fw to wkup_m3_ipc node
+>   soc: ti: wkup_m3_ipc: Add debug option to halt m3 in suspend
+> 
+> Suman Anna (1):
+>   remoteproc: move rproc_da_to_va declaration to remoteproc.h
 
 
-BR,
-Jani.
+This series seems to needing to go to various maintainers here
 
+Series should cleanup (example: txt files to yaml bindings),
+prior to creating patch series for each maintainer. I'd suggest bindings
+and drivers in 1 kernel rev and follow it up with dts updata for the
+next rev.
+
+
+> 
+>  .../bindings/soc/ti/wkup_m3_ipc.txt           |  91 ++++++++
+>  arch/arm/boot/dts/am335x-bone-common.dtsi     |   4 +
+>  arch/arm/boot/dts/am335x-evm.dts              |   4 +
+>  arch/arm/boot/dts/am335x-evmsk.dts            |   4 +
+>  arch/arm/boot/dts/am437x-gp-evm.dts           |   5 +
+>  arch/arm/boot/dts/am437x-sk-evm.dts           |   4 +
+>  arch/arm/boot/dts/am43x-epos-evm.dts          |   4 +
+>  drivers/remoteproc/remoteproc_internal.h      |   1 -
+>  drivers/soc/ti/wkup_m3_ipc.c                  | 208 +++++++++++++++++-
+>  include/linux/remoteproc.h                    |   1 +
+>  include/linux/wkup_m3_ipc.h                   |  13 ++
+>  11 files changed, 334 insertions(+), 5 deletions(-)
+> 
+> -- 
+> 2.32.0
+> 
 
 -- 
-Jani Nikula, Intel Open Source Graphics Center
+Regards,
+Nishanth Menon
+Key (0xDDB5849D1736249D)/Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D

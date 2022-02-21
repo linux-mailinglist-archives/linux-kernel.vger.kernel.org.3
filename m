@@ -2,63 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9853A4BE9B4
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:08:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C3714BE733
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:03:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378757AbiBUPEs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 10:04:48 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41214 "EHLO
+        id S1378795AbiBUPF6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 10:05:58 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378698AbiBUPEp (ORCPT
+        with ESMTP id S1378698AbiBUPF5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 10:04:45 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 822F9BC3B
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 07:04:21 -0800 (PST)
+        Mon, 21 Feb 2022 10:05:57 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DD75BF67
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 07:05:32 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4CA8C6117F
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 15:04:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8FCABC340EC
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 15:04:20 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6B1FFB811FC
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 15:05:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8245CC340E9;
+        Mon, 21 Feb 2022 15:05:29 +0000 (UTC)
 Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="Q9oeRAwV"
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="YpjcMtt5"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1645455858;
+        t=1645455928;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=hM71yuCM3+OXKIMaiJcGjymZ4zvSvahj07CTrhoP1E4=;
-        b=Q9oeRAwVJh9PFo6nwNel5ZNfv9JS8KBr8eV+OjGwEBrfQuj8ZM/SeFYkWFonvRjjCB7cjq
-        X4ygtTClaRkb+4pxG5UjZ24wkzTFP3xzGmVtVey6T9mOeKfXp2CeILL7qcaW9/SCZpBCFr
-        6GGS3PmqG1tep5WJr9nAtpxFqZhkchs=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 89c259e4 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO)
-        for <linux-kernel@vger.kernel.org>;
-        Mon, 21 Feb 2022 15:04:18 +0000 (UTC)
-Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-2d646fffcc2so141254877b3.4
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 07:04:18 -0800 (PST)
-X-Gm-Message-State: AOAM531wTLy5QBu+GT3UFgNxJ0bGjekshF0lYSqH4NnQ64+ReFpiRYpX
-        snh9DJNijA1a7A+Rfm+NTb8isV9bY/Lcg7kjDZ4=
-X-Google-Smtp-Source: ABdhPJw7BIn2BtCVdNm5s48y6S3hg0n68pBaEMLctwzmD2tSApTLpY2wsPw/QIVEiZ1nRhFNe/65FznIm1urhsj4rPs=
-X-Received: by 2002:a81:5c83:0:b0:2d2:c136:70f3 with SMTP id
- q125-20020a815c83000000b002d2c13670f3mr20917580ywb.404.1645455857226; Mon, 21
- Feb 2022 07:04:17 -0800 (PST)
-MIME-Version: 1.0
-References: <20220209135211.557032-1-Jason@zx2c4.com> <20220209180507.646941-1-Jason@zx2c4.com>
- <YhMM1C7n4ipZcQE3@sol.localdomain>
-In-Reply-To: <YhMM1C7n4ipZcQE3@sol.localdomain>
+        bh=xvt81sqeWZidEfpjqy/VjC2UKcbWml6drDLnGYCPRvY=;
+        b=YpjcMtt5Kdcbpc1TuZsDxr+px6CL+TGmYRZViG2eJWvPoI0qxiaZKUKFeLDsg329/8BzK5
+        UZMZ0tuB9lmYk9fXFkpcjb083wRAjEcTIpXtGW3ViOlHm0mMwJMmJUevSbBmqWqmPY7Vqj
+        04pNNgUNP/ysO4necZLCWwA5xUiGImY=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id f4a74fa9 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Mon, 21 Feb 2022 15:05:27 +0000 (UTC)
 From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date:   Mon, 21 Feb 2022 16:04:06 +0100
-X-Gmail-Original-Message-ID: <CAHmME9o5XzZVQUKBkS7d30AwVvPX3weyHdBsUBOK7fKaQO0JMA@mail.gmail.com>
-Message-ID: <CAHmME9o5XzZVQUKBkS7d30AwVvPX3weyHdBsUBOK7fKaQO0JMA@mail.gmail.com>
-Subject: Re: [PATCH v2] random: make more consistent use of integer types
-To:     Eric Biggers <ebiggers@kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        "Theodore Ts'o" <tytso@mit.edu>,
+To:     ebiggers@kernel.org, linux-kernel@vger.kernel.org
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Theodore Ts'o <tytso@mit.edu>,
         Dominik Brodowski <linux@dominikbrodowski.net>,
         Jann Horn <jannh@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Subject: [PATCH v3] random: make more consistent use of integer types
+Date:   Mon, 21 Feb 2022 16:05:23 +0100
+Message-Id: <20220221150523.2282542-1-Jason@zx2c4.com>
+In-Reply-To: <CAHmME9o5XzZVQUKBkS7d30AwVvPX3weyHdBsUBOK7fKaQO0JMA@mail.gmail.com>
+References: <CAHmME9o5XzZVQUKBkS7d30AwVvPX3weyHdBsUBOK7fKaQO0JMA@mail.gmail.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
         RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -69,29 +59,672 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 21, 2022 at 4:54 AM Eric Biggers <ebiggers@kernel.org> wrote:
-> > -static size_t crng_fast_load(const u8 *cp, size_t len)
-> > +static size_t crng_fast_load(const void *cp, size_t len)
-> >  {
-> >       unsigned long flags;
-> > -     u8 *p;
-> > +     u8 *src = (u8 *)cp;
->
-> This should use 'const u8 *'.
+We've been using a flurry of int, unsigned int, size_t, and ssize_t.
+Let's unify all of this into size_t where it makes sense, as it does in
+most places, and leave ssize_t for return values with possible errors.
 
-Will fix.
+In addition, keeping with the convention of other functions in this
+file, functions that are dealing with raw bytes now take void *
+consistently instead of a mix of that and u8 *, because much of the time
+we're actually passing some other structure that is then interpreted as
+bytes by the function.
 
->
-> >  int __init rand_initialize(void)
-> >  {
-> > -     int i;
-> > +     size_t i;
-> >       ktime_t now = ktime_get_real();
->
-> This introduces an assumption that BLAKE2S_BLOCK_SIZE % sizeof(unsigned long) ==
-> 0.  That happens to always be true, but it would be better to either not change
-> this, or rewrite the loop to 'i = 0; i < BLAKE2S_BLOCK_SIZE; i += sizeof(rv)'
+We also take the opportunity to fix the outdated and incorrect comment
+in get_random_bytes_arch().
 
-Good idea; I'll rewrite the loop. That always bothered me too.
+Cc: Theodore Ts'o <tytso@mit.edu>
+Reviewed-by: Dominik Brodowski <linux@dominikbrodowski.net>
+Reviewed-by: Jann Horn <jannh@google.com>
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+---
+v3 changes a u8* into a const u8* and makes the rand_initialize loop
+count up from 0, per Eric's request.
 
-Jason
+ drivers/char/random.c         | 123 +++++++++++++++-------------------
+ include/linux/hw_random.h     |   2 +-
+ include/linux/random.h        |  10 +--
+ include/trace/events/random.h |  79 +++++++++++-----------
+ 4 files changed, 99 insertions(+), 115 deletions(-)
+
+diff --git a/drivers/char/random.c b/drivers/char/random.c
+index 630b9b9e7d25..768dee5e081a 100644
+--- a/drivers/char/random.c
++++ b/drivers/char/random.c
+@@ -69,7 +69,7 @@
+  *
+  * The primary kernel interfaces are:
+  *
+- *	void get_random_bytes(void *buf, int nbytes);
++ *	void get_random_bytes(void *buf, size_t nbytes);
+  *	u32 get_random_u32()
+  *	u64 get_random_u64()
+  *	unsigned int get_random_int()
+@@ -97,14 +97,14 @@
+  * The current exported interfaces for gathering environmental noise
+  * from the devices are:
+  *
+- *	void add_device_randomness(const void *buf, unsigned int size);
++ *	void add_device_randomness(const void *buf, size_t size);
+  *	void add_input_randomness(unsigned int type, unsigned int code,
+  *                                unsigned int value);
+  *	void add_interrupt_randomness(int irq);
+  *	void add_disk_randomness(struct gendisk *disk);
+- *	void add_hwgenerator_randomness(const char *buffer, size_t count,
++ *	void add_hwgenerator_randomness(const void *buffer, size_t count,
+  *					size_t entropy);
+- *	void add_bootloader_randomness(const void *buf, unsigned int size);
++ *	void add_bootloader_randomness(const void *buf, size_t size);
+  *
+  * add_device_randomness() is for adding data to the random pool that
+  * is likely to differ between two devices (or possibly even per boot).
+@@ -268,7 +268,7 @@ static int crng_init = 0;
+ #define crng_ready() (likely(crng_init > 1))
+ static int crng_init_cnt = 0;
+ static void process_random_ready_list(void);
+-static void _get_random_bytes(void *buf, int nbytes);
++static void _get_random_bytes(void *buf, size_t nbytes);
+ 
+ static struct ratelimit_state unseeded_warning =
+ 	RATELIMIT_STATE_INIT("warn_unseeded_randomness", HZ, 3);
+@@ -290,7 +290,7 @@ MODULE_PARM_DESC(ratelimit_disable, "Disable random ratelimit suppression");
+ static struct {
+ 	struct blake2s_state hash;
+ 	spinlock_t lock;
+-	int entropy_count;
++	unsigned int entropy_count;
+ } input_pool = {
+ 	.hash.h = { BLAKE2S_IV0 ^ (0x01010000 | BLAKE2S_HASH_SIZE),
+ 		    BLAKE2S_IV1, BLAKE2S_IV2, BLAKE2S_IV3, BLAKE2S_IV4,
+@@ -308,18 +308,12 @@ static void crng_reseed(void);
+  * update the entropy estimate.  The caller should call
+  * credit_entropy_bits if this is appropriate.
+  */
+-static void _mix_pool_bytes(const void *in, int nbytes)
++static void _mix_pool_bytes(const void *in, size_t nbytes)
+ {
+ 	blake2s_update(&input_pool.hash, in, nbytes);
+ }
+ 
+-static void __mix_pool_bytes(const void *in, int nbytes)
+-{
+-	trace_mix_pool_bytes_nolock(nbytes, _RET_IP_);
+-	_mix_pool_bytes(in, nbytes);
+-}
+-
+-static void mix_pool_bytes(const void *in, int nbytes)
++static void mix_pool_bytes(const void *in, size_t nbytes)
+ {
+ 	unsigned long flags;
+ 
+@@ -383,18 +377,18 @@ static void process_random_ready_list(void)
+ 	spin_unlock_irqrestore(&random_ready_list_lock, flags);
+ }
+ 
+-static void credit_entropy_bits(int nbits)
++static void credit_entropy_bits(size_t nbits)
+ {
+-	int entropy_count, orig;
++	unsigned int entropy_count, orig, add;
+ 
+-	if (nbits <= 0)
++	if (!nbits)
+ 		return;
+ 
+-	nbits = min(nbits, POOL_BITS);
++	add = min_t(size_t, nbits, POOL_BITS);
+ 
+ 	do {
+ 		orig = READ_ONCE(input_pool.entropy_count);
+-		entropy_count = min(POOL_BITS, orig + nbits);
++		entropy_count = min_t(unsigned int, POOL_BITS, orig + add);
+ 	} while (cmpxchg(&input_pool.entropy_count, orig, entropy_count) != orig);
+ 
+ 	trace_credit_entropy_bits(nbits, entropy_count, _RET_IP_);
+@@ -443,10 +437,10 @@ static void invalidate_batched_entropy(void);
+  * path.  So we can't afford to dilly-dally. Returns the number of
+  * bytes processed from cp.
+  */
+-static size_t crng_fast_load(const u8 *cp, size_t len)
++static size_t crng_fast_load(const void *cp, size_t len)
+ {
+ 	unsigned long flags;
+-	u8 *p;
++	const u8 *src = (const u8 *)cp;
+ 	size_t ret = 0;
+ 
+ 	if (!spin_trylock_irqsave(&base_crng.lock, flags))
+@@ -455,10 +449,9 @@ static size_t crng_fast_load(const u8 *cp, size_t len)
+ 		spin_unlock_irqrestore(&base_crng.lock, flags);
+ 		return 0;
+ 	}
+-	p = base_crng.key;
+ 	while (len > 0 && crng_init_cnt < CRNG_INIT_CNT_THRESH) {
+-		p[crng_init_cnt % sizeof(base_crng.key)] ^= *cp;
+-		cp++; crng_init_cnt++; len--; ret++;
++		base_crng.key[crng_init_cnt % sizeof(base_crng.key)] ^= *src;
++		src++; crng_init_cnt++; len--; ret++;
+ 	}
+ 	if (crng_init_cnt >= CRNG_INIT_CNT_THRESH) {
+ 		invalidate_batched_entropy();
+@@ -482,7 +475,7 @@ static size_t crng_fast_load(const u8 *cp, size_t len)
+  * something like a fixed DMI table (for example), which might very
+  * well be unique to the machine, but is otherwise unvarying.
+  */
+-static void crng_slow_load(const u8 *cp, size_t len)
++static void crng_slow_load(const void *cp, size_t len)
+ {
+ 	unsigned long flags;
+ 	struct blake2s_state hash;
+@@ -656,14 +649,15 @@ static void crng_make_state(u32 chacha_state[CHACHA_STATE_WORDS],
+ static ssize_t get_random_bytes_user(void __user *buf, size_t nbytes)
+ {
+ 	bool large_request = nbytes > 256;
+-	ssize_t ret = 0, len;
++	ssize_t ret = 0;
++	size_t len;
+ 	u32 chacha_state[CHACHA_STATE_WORDS];
+ 	u8 output[CHACHA_BLOCK_SIZE];
+ 
+ 	if (!nbytes)
+ 		return 0;
+ 
+-	len = min_t(ssize_t, 32, nbytes);
++	len = min_t(size_t, 32, nbytes);
+ 	crng_make_state(chacha_state, output, len);
+ 
+ 	if (copy_to_user(buf, output, len))
+@@ -683,7 +677,7 @@ static ssize_t get_random_bytes_user(void __user *buf, size_t nbytes)
+ 		if (unlikely(chacha_state[12] == 0))
+ 			++chacha_state[13];
+ 
+-		len = min_t(ssize_t, nbytes, CHACHA_BLOCK_SIZE);
++		len = min_t(size_t, nbytes, CHACHA_BLOCK_SIZE);
+ 		if (copy_to_user(buf, output, len)) {
+ 			ret = -EFAULT;
+ 			break;
+@@ -721,7 +715,7 @@ struct timer_rand_state {
+  * the entropy pool having similar initial state across largely
+  * identical devices.
+  */
+-void add_device_randomness(const void *buf, unsigned int size)
++void add_device_randomness(const void *buf, size_t size)
+ {
+ 	unsigned long time = random_get_entropy() ^ jiffies;
+ 	unsigned long flags;
+@@ -749,7 +743,7 @@ static struct timer_rand_state input_timer_state = INIT_TIMER_RAND_STATE;
+  * keyboard scan codes, and 256 upwards for interrupts.
+  *
+  */
+-static void add_timer_randomness(struct timer_rand_state *state, unsigned num)
++static void add_timer_randomness(struct timer_rand_state *state, unsigned int num)
+ {
+ 	struct {
+ 		long jiffies;
+@@ -793,7 +787,7 @@ static void add_timer_randomness(struct timer_rand_state *state, unsigned num)
+ 	 * Round down by 1 bit on general principles,
+ 	 * and limit entropy estimate to 12 bits.
+ 	 */
+-	credit_entropy_bits(min_t(int, fls(delta >> 1), 11));
++	credit_entropy_bits(min_t(unsigned int, fls(delta >> 1), 11));
+ }
+ 
+ void add_input_randomness(unsigned int type, unsigned int code,
+@@ -874,8 +868,8 @@ void add_interrupt_randomness(int irq)
+ 	add_interrupt_bench(cycles);
+ 
+ 	if (unlikely(crng_init == 0)) {
+-		if ((fast_pool->count >= 64) &&
+-		    crng_fast_load((u8 *)fast_pool->pool, sizeof(fast_pool->pool)) > 0) {
++		if (fast_pool->count >= 64 &&
++		    crng_fast_load(fast_pool->pool, sizeof(fast_pool->pool)) > 0) {
+ 			fast_pool->count = 0;
+ 			fast_pool->last = now;
+ 			if (spin_trylock(&input_pool.lock)) {
+@@ -893,7 +887,7 @@ void add_interrupt_randomness(int irq)
+ 		return;
+ 
+ 	fast_pool->last = now;
+-	__mix_pool_bytes(&fast_pool->pool, sizeof(fast_pool->pool));
++	_mix_pool_bytes(&fast_pool->pool, sizeof(fast_pool->pool));
+ 	spin_unlock(&input_pool.lock);
+ 
+ 	fast_pool->count = 0;
+@@ -1002,18 +996,18 @@ static void _warn_unseeded_randomness(const char *func_name, void *caller, void
+  * wait_for_random_bytes() should be called and return 0 at least once
+  * at any point prior.
+  */
+-static void _get_random_bytes(void *buf, int nbytes)
++static void _get_random_bytes(void *buf, size_t nbytes)
+ {
+ 	u32 chacha_state[CHACHA_STATE_WORDS];
+ 	u8 tmp[CHACHA_BLOCK_SIZE];
+-	ssize_t len;
++	size_t len;
+ 
+ 	trace_get_random_bytes(nbytes, _RET_IP_);
+ 
+ 	if (!nbytes)
+ 		return;
+ 
+-	len = min_t(ssize_t, 32, nbytes);
++	len = min_t(size_t, 32, nbytes);
+ 	crng_make_state(chacha_state, buf, len);
+ 	nbytes -= len;
+ 	buf += len;
+@@ -1036,7 +1030,7 @@ static void _get_random_bytes(void *buf, int nbytes)
+ 	memzero_explicit(chacha_state, sizeof(chacha_state));
+ }
+ 
+-void get_random_bytes(void *buf, int nbytes)
++void get_random_bytes(void *buf, size_t nbytes)
+ {
+ 	static void *previous;
+ 
+@@ -1197,25 +1191,19 @@ EXPORT_SYMBOL(del_random_ready_callback);
+ 
+ /*
+  * This function will use the architecture-specific hardware random
+- * number generator if it is available.  The arch-specific hw RNG will
+- * almost certainly be faster than what we can do in software, but it
+- * is impossible to verify that it is implemented securely (as
+- * opposed, to, say, the AES encryption of a sequence number using a
+- * key known by the NSA).  So it's useful if we need the speed, but
+- * only if we're willing to trust the hardware manufacturer not to
+- * have put in a back door.
+- *
+- * Return number of bytes filled in.
++ * number generator if it is available. It is not recommended for
++ * use. Use get_random_bytes() instead. It returns the number of
++ * bytes filled in.
+  */
+-int __must_check get_random_bytes_arch(void *buf, int nbytes)
++size_t __must_check get_random_bytes_arch(void *buf, size_t nbytes)
+ {
+-	int left = nbytes;
++	size_t left = nbytes;
+ 	u8 *p = buf;
+ 
+ 	trace_get_random_bytes_arch(left, _RET_IP_);
+ 	while (left) {
+ 		unsigned long v;
+-		int chunk = min_t(int, left, sizeof(unsigned long));
++		size_t chunk = min_t(size_t, left, sizeof(unsigned long));
+ 
+ 		if (!arch_get_random_long(&v))
+ 			break;
+@@ -1248,12 +1236,12 @@ early_param("random.trust_cpu", parse_trust_cpu);
+  */
+ int __init rand_initialize(void)
+ {
+-	int i;
++	size_t i;
+ 	ktime_t now = ktime_get_real();
+ 	bool arch_init = true;
+ 	unsigned long rv;
+ 
+-	for (i = BLAKE2S_BLOCK_SIZE; i > 0; i -= sizeof(rv)) {
++	for (i = 0; i < BLAKE2S_BLOCK_SIZE; i += sizeof(rv)) {
+ 		if (!arch_get_random_seed_long_early(&rv) &&
+ 		    !arch_get_random_long_early(&rv)) {
+ 			rv = random_get_entropy();
+@@ -1302,7 +1290,7 @@ static ssize_t urandom_read_nowarn(struct file *file, char __user *buf,
+ 
+ 	nbytes = min_t(size_t, nbytes, INT_MAX >> 6);
+ 	ret = get_random_bytes_user(buf, nbytes);
+-	trace_urandom_read(8 * nbytes, 0, input_pool.entropy_count);
++	trace_urandom_read(nbytes, input_pool.entropy_count);
+ 	return ret;
+ }
+ 
+@@ -1346,19 +1334,18 @@ static __poll_t random_poll(struct file *file, poll_table *wait)
+ 	return mask;
+ }
+ 
+-static int write_pool(const char __user *buffer, size_t count)
++static int write_pool(const char __user *ubuf, size_t count)
+ {
+-	size_t bytes;
+-	u8 buf[BLAKE2S_BLOCK_SIZE];
+-	const char __user *p = buffer;
++	size_t len;
++	u8 block[BLAKE2S_BLOCK_SIZE];
+ 
+-	while (count > 0) {
+-		bytes = min(count, sizeof(buf));
+-		if (copy_from_user(buf, p, bytes))
++	while (count) {
++		len = min(count, sizeof(block));
++		if (copy_from_user(block, ubuf, len))
+ 			return -EFAULT;
+-		count -= bytes;
+-		p += bytes;
+-		mix_pool_bytes(buf, bytes);
++		count -= len;
++		ubuf += len;
++		mix_pool_bytes(block, len);
+ 		cond_resched();
+ 	}
+ 
+@@ -1368,7 +1355,7 @@ static int write_pool(const char __user *buffer, size_t count)
+ static ssize_t random_write(struct file *file, const char __user *buffer,
+ 			    size_t count, loff_t *ppos)
+ {
+-	size_t ret;
++	int ret;
+ 
+ 	ret = write_pool(buffer, count);
+ 	if (ret)
+@@ -1464,8 +1451,6 @@ const struct file_operations urandom_fops = {
+ SYSCALL_DEFINE3(getrandom, char __user *, buf, size_t, count, unsigned int,
+ 		flags)
+ {
+-	int ret;
+-
+ 	if (flags & ~(GRND_NONBLOCK | GRND_RANDOM | GRND_INSECURE))
+ 		return -EINVAL;
+ 
+@@ -1480,6 +1465,8 @@ SYSCALL_DEFINE3(getrandom, char __user *, buf, size_t, count, unsigned int,
+ 		count = INT_MAX;
+ 
+ 	if (!(flags & GRND_INSECURE) && !crng_ready()) {
++		int ret;
++
+ 		if (flags & GRND_NONBLOCK)
+ 			return -EAGAIN;
+ 		ret = wait_for_random_bytes();
+@@ -1751,7 +1738,7 @@ unsigned long randomize_page(unsigned long start, unsigned long range)
+  * Those devices may produce endless random bits and will be throttled
+  * when our pool is full.
+  */
+-void add_hwgenerator_randomness(const char *buffer, size_t count,
++void add_hwgenerator_randomness(const void *buffer, size_t count,
+ 				size_t entropy)
+ {
+ 	if (unlikely(crng_init == 0)) {
+@@ -1782,7 +1769,7 @@ EXPORT_SYMBOL_GPL(add_hwgenerator_randomness);
+  * it would be regarded as device data.
+  * The decision is controlled by CONFIG_RANDOM_TRUST_BOOTLOADER.
+  */
+-void add_bootloader_randomness(const void *buf, unsigned int size)
++void add_bootloader_randomness(const void *buf, size_t size)
+ {
+ 	if (IS_ENABLED(CONFIG_RANDOM_TRUST_BOOTLOADER))
+ 		add_hwgenerator_randomness(buf, size, size * 8);
+diff --git a/include/linux/hw_random.h b/include/linux/hw_random.h
+index 8e6dd908da21..1a9fc38f8938 100644
+--- a/include/linux/hw_random.h
++++ b/include/linux/hw_random.h
+@@ -61,6 +61,6 @@ extern int devm_hwrng_register(struct device *dev, struct hwrng *rng);
+ extern void hwrng_unregister(struct hwrng *rng);
+ extern void devm_hwrng_unregister(struct device *dve, struct hwrng *rng);
+ /** Feed random bits into the pool. */
+-extern void add_hwgenerator_randomness(const char *buffer, size_t count, size_t entropy);
++extern void add_hwgenerator_randomness(const void *buffer, size_t count, size_t entropy);
+ 
+ #endif /* LINUX_HWRANDOM_H_ */
+diff --git a/include/linux/random.h b/include/linux/random.h
+index c45b2693e51f..e92efb39779c 100644
+--- a/include/linux/random.h
++++ b/include/linux/random.h
+@@ -20,8 +20,8 @@ struct random_ready_callback {
+ 	struct module *owner;
+ };
+ 
+-extern void add_device_randomness(const void *, unsigned int);
+-extern void add_bootloader_randomness(const void *, unsigned int);
++extern void add_device_randomness(const void *, size_t);
++extern void add_bootloader_randomness(const void *, size_t);
+ 
+ #if defined(LATENT_ENTROPY_PLUGIN) && !defined(__CHECKER__)
+ static inline void add_latent_entropy(void)
+@@ -37,13 +37,13 @@ extern void add_input_randomness(unsigned int type, unsigned int code,
+ 				 unsigned int value) __latent_entropy;
+ extern void add_interrupt_randomness(int irq) __latent_entropy;
+ 
+-extern void get_random_bytes(void *buf, int nbytes);
++extern void get_random_bytes(void *buf, size_t nbytes);
+ extern int wait_for_random_bytes(void);
+ extern int __init rand_initialize(void);
+ extern bool rng_is_initialized(void);
+ extern int add_random_ready_callback(struct random_ready_callback *rdy);
+ extern void del_random_ready_callback(struct random_ready_callback *rdy);
+-extern int __must_check get_random_bytes_arch(void *buf, int nbytes);
++extern size_t __must_check get_random_bytes_arch(void *buf, size_t nbytes);
+ 
+ #ifndef MODULE
+ extern const struct file_operations random_fops, urandom_fops;
+@@ -87,7 +87,7 @@ static inline unsigned long get_random_canary(void)
+ 
+ /* Calls wait_for_random_bytes() and then calls get_random_bytes(buf, nbytes).
+  * Returns the result of the call to wait_for_random_bytes. */
+-static inline int get_random_bytes_wait(void *buf, int nbytes)
++static inline int get_random_bytes_wait(void *buf, size_t nbytes)
+ {
+ 	int ret = wait_for_random_bytes();
+ 	get_random_bytes(buf, nbytes);
+diff --git a/include/trace/events/random.h b/include/trace/events/random.h
+index ad149aeaf42c..0609a2810a12 100644
+--- a/include/trace/events/random.h
++++ b/include/trace/events/random.h
+@@ -9,13 +9,13 @@
+ #include <linux/tracepoint.h>
+ 
+ TRACE_EVENT(add_device_randomness,
+-	TP_PROTO(int bytes, unsigned long IP),
++	TP_PROTO(size_t bytes, unsigned long IP),
+ 
+ 	TP_ARGS(bytes, IP),
+ 
+ 	TP_STRUCT__entry(
+-		__field(	  int,	bytes			)
+-		__field(unsigned long,	IP			)
++		__field(size_t,		bytes	)
++		__field(unsigned long,	IP	)
+ 	),
+ 
+ 	TP_fast_assign(
+@@ -23,18 +23,18 @@ TRACE_EVENT(add_device_randomness,
+ 		__entry->IP		= IP;
+ 	),
+ 
+-	TP_printk("bytes %d caller %pS",
++	TP_printk("bytes %zu caller %pS",
+ 		__entry->bytes, (void *)__entry->IP)
+ );
+ 
+ DECLARE_EVENT_CLASS(random__mix_pool_bytes,
+-	TP_PROTO(int bytes, unsigned long IP),
++	TP_PROTO(size_t bytes, unsigned long IP),
+ 
+ 	TP_ARGS(bytes, IP),
+ 
+ 	TP_STRUCT__entry(
+-		__field(	  int,	bytes			)
+-		__field(unsigned long,	IP			)
++		__field(size_t,		bytes	)
++		__field(unsigned long,	IP	)
+ 	),
+ 
+ 	TP_fast_assign(
+@@ -42,12 +42,12 @@ DECLARE_EVENT_CLASS(random__mix_pool_bytes,
+ 		__entry->IP		= IP;
+ 	),
+ 
+-	TP_printk("input pool: bytes %d caller %pS",
++	TP_printk("input pool: bytes %zu caller %pS",
+ 		  __entry->bytes, (void *)__entry->IP)
+ );
+ 
+ DEFINE_EVENT(random__mix_pool_bytes, mix_pool_bytes,
+-	TP_PROTO(int bytes, unsigned long IP),
++	TP_PROTO(size_t bytes, unsigned long IP),
+ 
+ 	TP_ARGS(bytes, IP)
+ );
+@@ -59,13 +59,13 @@ DEFINE_EVENT(random__mix_pool_bytes, mix_pool_bytes_nolock,
+ );
+ 
+ TRACE_EVENT(credit_entropy_bits,
+-	TP_PROTO(int bits, int entropy_count, unsigned long IP),
++	TP_PROTO(size_t bits, size_t entropy_count, unsigned long IP),
+ 
+ 	TP_ARGS(bits, entropy_count, IP),
+ 
+ 	TP_STRUCT__entry(
+-		__field(	  int,	bits			)
+-		__field(	  int,	entropy_count		)
++		__field(size_t,		bits			)
++		__field(size_t,		entropy_count		)
+ 		__field(unsigned long,	IP			)
+ 	),
+ 
+@@ -75,34 +75,34 @@ TRACE_EVENT(credit_entropy_bits,
+ 		__entry->IP		= IP;
+ 	),
+ 
+-	TP_printk("input pool: bits %d entropy_count %d caller %pS",
++	TP_printk("input pool: bits %zu entropy_count %zu caller %pS",
+ 		  __entry->bits, __entry->entropy_count, (void *)__entry->IP)
+ );
+ 
+ TRACE_EVENT(add_input_randomness,
+-	TP_PROTO(int input_bits),
++	TP_PROTO(size_t input_bits),
+ 
+ 	TP_ARGS(input_bits),
+ 
+ 	TP_STRUCT__entry(
+-		__field(	  int,	input_bits		)
++		__field(size_t,	input_bits		)
+ 	),
+ 
+ 	TP_fast_assign(
+ 		__entry->input_bits	= input_bits;
+ 	),
+ 
+-	TP_printk("input_pool_bits %d", __entry->input_bits)
++	TP_printk("input_pool_bits %zu", __entry->input_bits)
+ );
+ 
+ TRACE_EVENT(add_disk_randomness,
+-	TP_PROTO(dev_t dev, int input_bits),
++	TP_PROTO(dev_t dev, size_t input_bits),
+ 
+ 	TP_ARGS(dev, input_bits),
+ 
+ 	TP_STRUCT__entry(
+-		__field(	dev_t,	dev			)
+-		__field(	  int,	input_bits		)
++		__field(dev_t,		dev			)
++		__field(size_t,		input_bits		)
+ 	),
+ 
+ 	TP_fast_assign(
+@@ -110,17 +110,17 @@ TRACE_EVENT(add_disk_randomness,
+ 		__entry->input_bits	= input_bits;
+ 	),
+ 
+-	TP_printk("dev %d,%d input_pool_bits %d", MAJOR(__entry->dev),
++	TP_printk("dev %d,%d input_pool_bits %zu", MAJOR(__entry->dev),
+ 		  MINOR(__entry->dev), __entry->input_bits)
+ );
+ 
+ DECLARE_EVENT_CLASS(random__get_random_bytes,
+-	TP_PROTO(int nbytes, unsigned long IP),
++	TP_PROTO(size_t nbytes, unsigned long IP),
+ 
+ 	TP_ARGS(nbytes, IP),
+ 
+ 	TP_STRUCT__entry(
+-		__field(	  int,	nbytes			)
++		__field(size_t,		nbytes			)
+ 		__field(unsigned long,	IP			)
+ 	),
+ 
+@@ -129,29 +129,29 @@ DECLARE_EVENT_CLASS(random__get_random_bytes,
+ 		__entry->IP		= IP;
+ 	),
+ 
+-	TP_printk("nbytes %d caller %pS", __entry->nbytes, (void *)__entry->IP)
++	TP_printk("nbytes %zu caller %pS", __entry->nbytes, (void *)__entry->IP)
+ );
+ 
+ DEFINE_EVENT(random__get_random_bytes, get_random_bytes,
+-	TP_PROTO(int nbytes, unsigned long IP),
++	TP_PROTO(size_t nbytes, unsigned long IP),
+ 
+ 	TP_ARGS(nbytes, IP)
+ );
+ 
+ DEFINE_EVENT(random__get_random_bytes, get_random_bytes_arch,
+-	TP_PROTO(int nbytes, unsigned long IP),
++	TP_PROTO(size_t nbytes, unsigned long IP),
+ 
+ 	TP_ARGS(nbytes, IP)
+ );
+ 
+ DECLARE_EVENT_CLASS(random__extract_entropy,
+-	TP_PROTO(int nbytes, int entropy_count),
++	TP_PROTO(size_t nbytes, size_t entropy_count),
+ 
+ 	TP_ARGS(nbytes, entropy_count),
+ 
+ 	TP_STRUCT__entry(
+-		__field(	  int,	nbytes			)
+-		__field(	  int,	entropy_count		)
++		__field(  size_t,	nbytes			)
++		__field(  size_t,	entropy_count		)
+ 	),
+ 
+ 	TP_fast_assign(
+@@ -159,37 +159,34 @@ DECLARE_EVENT_CLASS(random__extract_entropy,
+ 		__entry->entropy_count	= entropy_count;
+ 	),
+ 
+-	TP_printk("input pool: nbytes %d entropy_count %d",
++	TP_printk("input pool: nbytes %zu entropy_count %zu",
+ 		  __entry->nbytes, __entry->entropy_count)
+ );
+ 
+ 
+ DEFINE_EVENT(random__extract_entropy, extract_entropy,
+-	TP_PROTO(int nbytes, int entropy_count),
++	TP_PROTO(size_t nbytes, size_t entropy_count),
+ 
+ 	TP_ARGS(nbytes, entropy_count)
+ );
+ 
+ TRACE_EVENT(urandom_read,
+-	TP_PROTO(int got_bits, int pool_left, int input_left),
++	TP_PROTO(size_t nbytes, size_t entropy_count),
+ 
+-	TP_ARGS(got_bits, pool_left, input_left),
++	TP_ARGS(nbytes, entropy_count),
+ 
+ 	TP_STRUCT__entry(
+-		__field(	  int,	got_bits		)
+-		__field(	  int,	pool_left		)
+-		__field(	  int,	input_left		)
++		__field( size_t,	nbytes		)
++		__field( size_t,	entropy_count	)
+ 	),
+ 
+ 	TP_fast_assign(
+-		__entry->got_bits	= got_bits;
+-		__entry->pool_left	= pool_left;
+-		__entry->input_left	= input_left;
++		__entry->nbytes		= nbytes;
++		__entry->entropy_count	= entropy_count;
+ 	),
+ 
+-	TP_printk("got_bits %d nonblocking_pool_entropy_left %d "
+-		  "input_entropy_left %d", __entry->got_bits,
+-		  __entry->pool_left, __entry->input_left)
++	TP_printk("reading: nbytes %zu entropy_count %zu",
++		  __entry->nbytes, __entry->entropy_count)
+ );
+ 
+ TRACE_EVENT(prandom_u32,
+-- 
+2.35.1
+

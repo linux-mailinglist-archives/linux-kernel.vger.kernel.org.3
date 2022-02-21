@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA7F24BE07F
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:52:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 271834BE186
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:53:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351041AbiBUJlB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 04:41:01 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36286 "EHLO
+        id S1347559AbiBUJHa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 04:07:30 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:32962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350521AbiBUJeH (ORCPT
+        with ESMTP id S1347751AbiBUJBo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 04:34:07 -0500
+        Mon, 21 Feb 2022 04:01:44 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD5C029C89;
-        Mon, 21 Feb 2022 01:14:18 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24A4E28E39;
+        Mon, 21 Feb 2022 00:57:03 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CE01460018;
-        Mon, 21 Feb 2022 09:14:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9324C340E9;
-        Mon, 21 Feb 2022 09:14:16 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0581661133;
+        Mon, 21 Feb 2022 08:57:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4F79C340EB;
+        Mon, 21 Feb 2022 08:57:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645434857;
-        bh=Y+8wWX/+BHdYHM4G0Ut01oY1twruDTgP/fIUZ6UlneE=;
+        s=korg; t=1645433822;
+        bh=08h2yCgKCIY4hiAo9WbG4jL5EN1GuuYoPh/QspWaDig=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ULpM8Q4s6JRFhiazIiLzI4eLiNGz9HxxnkZWu27EhL8hp9jAQ11eiAmlJWfeW7a6C
-         48lketTq2i7/6fseeNl5y4r6vzl4aFLpLPyp7DXEY8W2LXXNDIiGuSHllvlSXlhJR5
-         2zb4Ln97HIAhic5jOqAphmRUt/pNe0iTm1YHimx8=
+        b=g352cpm0xv/DHxiNFynXX68aV57+sERiGJPGZOX53PUwUPk+C63scwBSpKLt15HHy
+         MQ/B4EKaucUS/oT/OpO9Eiu++vGsQ6C+vzAaGX0WZ53S1yiUSWMz5vlH4DNyxqvG6G
+         9pCsNI7O3o6T7ZCxh1cSgjXwp66yxqRALtH0Vo5M=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Pavel Machek <pavel@denx.de>,
-        Christian Eggers <ceggers@arri.de>,
-        Miquel Raynal <miquel.raynal@bootlin.com>
-Subject: [PATCH 5.15 123/196] mtd: rawnand: gpmi: dont leak PM reference in error path
+        stable@vger.kernel.org, Seth Forshee <sforshee@digitalocean.com>,
+        Stefano Garzarella <sgarzare@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 4.19 22/58] vsock: remove vsock from connected table when connect is interrupted by a signal
 Date:   Mon, 21 Feb 2022 09:49:15 +0100
-Message-Id: <20220221084935.052504671@linuxfoundation.org>
+Message-Id: <20220221084912.601395626@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220221084930.872957717@linuxfoundation.org>
-References: <20220221084930.872957717@linuxfoundation.org>
+In-Reply-To: <20220221084911.895146879@linuxfoundation.org>
+References: <20220221084911.895146879@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,42 +55,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christian Eggers <ceggers@arri.de>
+From: Seth Forshee <sforshee@digitalocean.com>
 
-commit 9161f365c91614e5a3f5c6dcc44c3b1b33bc59c0 upstream.
+commit b9208492fcaecff8f43915529ae34b3bcb03877c upstream.
 
-If gpmi_nfc_apply_timings() fails, the PM runtime usage counter must be
-dropped.
+vsock_connect() expects that the socket could already be in the
+TCP_ESTABLISHED state when the connecting task wakes up with a signal
+pending. If this happens the socket will be in the connected table, and
+it is not removed when the socket state is reset. In this situation it's
+common for the process to retry connect(), and if the connection is
+successful the socket will be added to the connected table a second
+time, corrupting the list.
 
-Reported-by: Pavel Machek <pavel@denx.de>
-Fixes: f53d4c109a66 ("mtd: rawnand: gpmi: Add ERR007117 protection for nfc_apply_timings")
-Signed-off-by: Christian Eggers <ceggers@arri.de>
-Cc: stable@vger.kernel.org
-Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
-Link: https://lore.kernel.org/linux-mtd/20220125081619.6286-1-ceggers@arri.de
+Prevent this by calling vsock_remove_connected() if a signal is received
+while waiting for a connection. This is harmless if the socket is not in
+the connected table, and if it is in the table then removing it will
+prevent list corruption from a double add.
+
+Note for backporting: this patch requires d5afa82c977e ("vsock: correct
+removal of socket from the list"), which is in all current stable trees
+except 4.9.y.
+
+Fixes: d021c344051a ("VSOCK: Introduce VM Sockets")
+Signed-off-by: Seth Forshee <sforshee@digitalocean.com>
+Reviewed-by: Stefano Garzarella <sgarzare@redhat.com>
+Link: https://lore.kernel.org/r/20220217141312.2297547-1-sforshee@digitalocean.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/mtd/nand/raw/gpmi-nand/gpmi-nand.c |    3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ net/vmw_vsock/af_vsock.c |    1 +
+ 1 file changed, 1 insertion(+)
 
---- a/drivers/mtd/nand/raw/gpmi-nand/gpmi-nand.c
-+++ b/drivers/mtd/nand/raw/gpmi-nand/gpmi-nand.c
-@@ -2293,7 +2293,7 @@ static int gpmi_nfc_exec_op(struct nand_
- 		this->hw.must_apply_timings = false;
- 		ret = gpmi_nfc_apply_timings(this);
- 		if (ret)
--			return ret;
-+			goto out_pm;
- 	}
- 
- 	dev_dbg(this->dev, "%s: %d instructions\n", __func__, op->ninstrs);
-@@ -2422,6 +2422,7 @@ unmap:
- 
- 	this->bch = false;
- 
-+out_pm:
- 	pm_runtime_mark_last_busy(this->dev);
- 	pm_runtime_put_autosuspend(this->dev);
- 
+--- a/net/vmw_vsock/af_vsock.c
++++ b/net/vmw_vsock/af_vsock.c
+@@ -1230,6 +1230,7 @@ static int vsock_stream_connect(struct s
+ 			sk->sk_state = sk->sk_state == TCP_ESTABLISHED ? TCP_CLOSING : TCP_CLOSE;
+ 			sock->state = SS_UNCONNECTED;
+ 			vsock_transport_cancel_pkt(vsk);
++			vsock_remove_connected(vsk);
+ 			goto out_wait;
+ 		} else if (timeout == 0) {
+ 			err = -ETIMEDOUT;
 
 

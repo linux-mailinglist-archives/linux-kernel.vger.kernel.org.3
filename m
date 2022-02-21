@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A4CB4BE37D
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:57:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA73A4BDCE5
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:43:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349035AbiBUJQg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 04:16:36 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59892 "EHLO
+        id S1347471AbiBUJGg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 04:06:36 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347941AbiBUJKG (ORCPT
+        with ESMTP id S1348285AbiBUJCh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 04:10:06 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3630E1D317;
-        Mon, 21 Feb 2022 01:02:32 -0800 (PST)
+        Mon, 21 Feb 2022 04:02:37 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AC2A2BB2A;
+        Mon, 21 Feb 2022 00:57:52 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BEB4EB80EB5;
-        Mon, 21 Feb 2022 09:02:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1397C340E9;
-        Mon, 21 Feb 2022 09:02:28 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 325F761222;
+        Mon, 21 Feb 2022 08:57:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15890C340E9;
+        Mon, 21 Feb 2022 08:57:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645434149;
-        bh=T0e5nwJQ1XBpLrbjbW/hRHChfr9mGV7tWN6MZ1JrH7w=;
+        s=korg; t=1645433870;
+        bh=ASK1MwfeL/CNuiui8+LcMzQGd1hoU+FW4p1Qlh7aswc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lF8JlerMyG+FJJ+MgHQ2MP9Mqwy3Tz0ZD8RTIVS/ryLyaO9qxrW5hwCEEg29IwFD4
-         gz7m5b2gcFafDb1N+P2fPbhrYy5y7yrNTiaEhyYIrCgP2ur5r1HI2YHRz2sTjvOx1z
-         6UYvSeu2YAKm8sC3CMVVe43Q7XG2vkVWbiRzP4Ks=
+        b=khI57OgDHUSYCpZK8cXxjvGmWjeDmdWfU5S0KlFfuEkUQv8eZQ7A5wwVyqIlmVenH
+         lBqZaVFa9QowWrh5LeX6X8ueq9aUOADPBJzqAjjdY+t3AMKf/uI9pQgpFzUXFyPEgd
+         nzDpyQEWqMtQuchqsr01NPfU8Hc/mAHfVcyVWO5c=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Aleksa Sarai <cyphar@cyphar.com>,
-        Cristian Marussi <cristian.marussi@arm.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 030/121] selftests: openat2: Skip testcases that fail with EOPNOTSUPP
-Date:   Mon, 21 Feb 2022 09:48:42 +0100
-Message-Id: <20220221084922.199643179@linuxfoundation.org>
+        stable@vger.kernel.org, Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Subject: [PATCH 5.4 03/80] Revert "svm: Add warning message for AVIC IPI invalid target"
+Date:   Mon, 21 Feb 2022 09:48:43 +0100
+Message-Id: <20220221084915.677311913@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220221084921.147454846@linuxfoundation.org>
-References: <20220221084921.147454846@linuxfoundation.org>
+In-Reply-To: <20220221084915.554151737@linuxfoundation.org>
+References: <20220221084915.554151737@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,53 +54,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Cristian Marussi <cristian.marussi@arm.com>
+From: Sean Christopherson <seanjc@google.com>
 
-[ Upstream commit ac9e0a250bb155078601a5b999aab05f2a04d1ab ]
+commit dd4589eee99db8f61f7b8f7df1531cad3f74a64d upstream.
 
-Skip testcases that fail since the requested valid flags combination is not
-supported by the underlying filesystem.
+Remove a WARN on an "AVIC IPI invalid target" exit, the WARN is trivial
+to trigger from guest as it will fail on any destination APIC ID that
+doesn't exist from the guest's perspective.
 
-Cc: Aleksa Sarai <cyphar@cyphar.com>
-Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
-Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Don't bother recording anything in the kernel log, the common tracepoint
+for kvm_avic_incomplete_ipi() is sufficient for debugging.
+
+This reverts commit 37ef0c4414c9743ba7f1af4392f0a27a99649f2a.
+
+Cc: stable@vger.kernel.org
+Signed-off-by: Sean Christopherson <seanjc@google.com>
+Message-Id: <20220204214205.3306634-2-seanjc@google.com>
+Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- tools/testing/selftests/openat2/openat2_test.c | 12 +++++++++++-
- 1 file changed, 11 insertions(+), 1 deletion(-)
+ arch/x86/kvm/svm.c |    2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/tools/testing/selftests/openat2/openat2_test.c b/tools/testing/selftests/openat2/openat2_test.c
-index b386367c606b1..453152b58e7f0 100644
---- a/tools/testing/selftests/openat2/openat2_test.c
-+++ b/tools/testing/selftests/openat2/openat2_test.c
-@@ -244,6 +244,16 @@ void test_openat2_flags(void)
- 		unlink(path);
- 
- 		fd = sys_openat2(AT_FDCWD, path, &test->how);
-+		if (fd < 0 && fd == -EOPNOTSUPP) {
-+			/*
-+			 * Skip the testcase if it failed because not supported
-+			 * by FS. (e.g. a valid O_TMPFILE combination on NFS)
-+			 */
-+			ksft_test_result_skip("openat2 with %s fails with %d (%s)\n",
-+					      test->name, fd, strerror(-fd));
-+			goto next;
-+		}
-+
- 		if (test->err >= 0)
- 			failed = (fd < 0);
- 		else
-@@ -288,7 +298,7 @@ void test_openat2_flags(void)
- 		else
- 			resultfn("openat2 with %s fails with %d (%s)\n",
- 				 test->name, test->err, strerror(-test->err));
--
-+next:
- 		free(fdpath);
- 		fflush(stdout);
+--- a/arch/x86/kvm/svm.c
++++ b/arch/x86/kvm/svm.c
+@@ -4585,8 +4585,6 @@ static int avic_incomplete_ipi_intercept
+ 		break;
  	}
--- 
-2.34.1
-
+ 	case AVIC_IPI_FAILURE_INVALID_TARGET:
+-		WARN_ONCE(1, "Invalid IPI target: index=%u, vcpu=%d, icr=%#0x:%#0x\n",
+-			  index, svm->vcpu.vcpu_id, icrh, icrl);
+ 		break;
+ 	case AVIC_IPI_FAILURE_INVALID_BACKING_PAGE:
+ 		WARN_ONCE(1, "Invalid backing page\n");
 
 

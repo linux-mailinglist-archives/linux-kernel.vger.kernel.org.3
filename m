@@ -2,43 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 046354BE4C9
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:59:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E15584BE0BB
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:52:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354313AbiBUJ6W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 04:58:22 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41630 "EHLO
+        id S1345962AbiBUJvp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 04:51:45 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352293AbiBUJrT (ORCPT
+        with ESMTP id S1352303AbiBUJrT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 21 Feb 2022 04:47:19 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8235026572;
-        Mon, 21 Feb 2022 01:19:22 -0800 (PST)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 469213134F;
+        Mon, 21 Feb 2022 01:19:23 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 015B7CE0E76;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D6B4D608C4;
+        Mon, 21 Feb 2022 09:19:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD3FEC340E9;
         Mon, 21 Feb 2022 09:19:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E87A9C340E9;
-        Mon, 21 Feb 2022 09:19:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645435159;
-        bh=+qyjXe69TfewTByTir3dxcvjKuJiAOpcbb+rC9WdSJA=;
+        s=korg; t=1645435162;
+        bh=/olF6Us9lbxAbXC7th3DTXiim40Q8iwY7LdThfGvC7k=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Bp1w0gNN/o5CoTiXy6+/0AuD8B2/Wslw7g1QtQH5ArbsnZskDlyzLmEejb/yxqLps
-         4hxq3rr+6/QHkNpvGQj1qM+oGHXyUPPwA6CPdbJOOBm8sTarHFf60PUQ3f/WhDdwhH
-         UBOhM3VYkX6DJKlcWLt3Abj1KwF42OAhQWAFZg+o=
+        b=n8xBtWxNr/QnNqo38at2TvMl4zkHS7dDQbVQ2WHJRTaYIw2tCcs7JThI3Oos15w7k
+         +gvyCM4qEz7A5fOqGKOpuyRqkO3IkU9GFi74tca4AJnj5zliVbces3dY5DFIlY9eoR
+         7cocurucT524UNn092/AmFrkz6YUlIaVvUblOPR0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Mario Limonciello <mario.limonciello@amd.com>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        Felix Kuehling <Felix.Kuehling@amd.com>,
         Alex Deucher <alexander.deucher@amd.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 065/227] drm/amd: Only run s3 or s0ix if system is configured properly
-Date:   Mon, 21 Feb 2022 09:48:04 +0100
-Message-Id: <20220221084937.032051177@linuxfoundation.org>
+Subject: [PATCH 5.16 066/227] drm/amdgpu: fix logic inversion in check
+Date:   Mon, 21 Feb 2022 09:48:05 +0100
+Message-Id: <20220221084937.063080395@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220221084934.836145070@linuxfoundation.org>
 References: <20220221084934.836145070@linuxfoundation.org>
@@ -56,55 +57,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mario Limonciello <mario.limonciello@amd.com>
+From: Christian König <christian.koenig@amd.com>
 
-[ Upstream commit 04ef860469fda6a646dc841190d05b31fae68e8c ]
+[ Upstream commit e8ae38720e1a685fd98cfa5ae118c9d07b45ca79 ]
 
-This will cause misconfigured systems to not run the GPU suspend
-routines.
+We probably never trigger this, but the logic inside the check is
+inverted.
 
-* In APUs that are properly configured system will go into s2idle.
-* In APUs that are intended to be S3 but user selects
-  s2idle the GPU will stay fully powered for the suspend.
-* In APUs that are intended to be s2idle and system misconfigured
-  the GPU will stay fully powered for the suspend.
-* In systems that are intended to be s2idle, but AMD dGPU is also
-  present, the dGPU will go through S3
-
-Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-Reviewed-by: Alex Deucher <alexander.deucher@amd.com>
+Signed-off-by: Christian König <christian.koenig@amd.com>
+Reviewed-by: Felix Kuehling <Felix.Kuehling@amd.com>
 Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
-index c811161ce9f09..ab3851c26f71c 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
-@@ -2236,6 +2236,7 @@ static void amdgpu_drv_delayed_reset_work_handler(struct work_struct *work)
- static int amdgpu_pmops_prepare(struct device *dev)
- {
- 	struct drm_device *drm_dev = dev_get_drvdata(dev);
-+	struct amdgpu_device *adev = drm_to_adev(drm_dev);
+diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c
+index c875f1cdd2af7..ffc3ce0004e99 100644
+--- a/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c
++++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c
+@@ -1913,7 +1913,7 @@ int amdgpu_copy_buffer(struct amdgpu_ring *ring, uint64_t src_offset,
+ 	unsigned i;
+ 	int r;
  
- 	/* Return a positive number here so
- 	 * DPM_FLAG_SMART_SUSPEND works properly
-@@ -2243,6 +2244,13 @@ static int amdgpu_pmops_prepare(struct device *dev)
- 	if (amdgpu_device_supports_boco(drm_dev))
- 		return pm_runtime_suspended(dev);
- 
-+	/* if we will not support s3 or s2i for the device
-+	 *  then skip suspend
-+	 */
-+	if (!amdgpu_acpi_is_s0ix_active(adev) &&
-+	    !amdgpu_acpi_is_s3_active(adev))
-+		return 1;
-+
- 	return 0;
- }
- 
+-	if (direct_submit && !ring->sched.ready) {
++	if (!direct_submit && !ring->sched.ready) {
+ 		DRM_ERROR("Trying to move memory with ring turned off.\n");
+ 		return -EINVAL;
+ 	}
 -- 
 2.34.1
 

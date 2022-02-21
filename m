@@ -2,91 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BC1D4BE25B
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:55:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC8924BE03B
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:51:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378856AbiBUPLg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 10:11:36 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52916 "EHLO
+        id S1378874AbiBUPNV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 10:13:21 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239706AbiBUPLe (ORCPT
+        with ESMTP id S233894AbiBUPNT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 10:11:34 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C15A81A396
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 07:11:10 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6A5D6611A2
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 15:11:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8ADD1C340E9
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 15:11:09 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="FtVHG7lJ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1645456267;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=/TQxR2945fuquOnrBphMAxVUXZPMijOC/VjXQu57pqE=;
-        b=FtVHG7lJkrJXh23Pspo+vAq150h9OJcd9MMBRkGzl+3waNHywPDlxVkVqBLSZ82uSf7Dkl
-        t8bx+fasJE8OGgKWYV489pSJ9Z3etTSbKmWF4n7x1y9rSc7azMzMIzJt4vvey6cDPfFbTK
-        8irnsWprKENzA4gz1OIn+VQ6j5uPrOo=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 69e61459 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO)
-        for <linux-kernel@vger.kernel.org>;
-        Mon, 21 Feb 2022 15:11:07 +0000 (UTC)
-Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-2d646fffcc2so141508337b3.4
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 07:11:07 -0800 (PST)
-X-Gm-Message-State: AOAM533iae578CTOIvQEtoSy2U0sdcYYkMnE24M/SZ/fqcrctjKr1aJS
-        cS5oNiEIeVkeev38x2lIWwJACDJRIjbM9e/PtiM=
-X-Google-Smtp-Source: ABdhPJxQBo8W+HUwNYl3w//wD+OhW/wQTMmeTLe8/SxBlU7lacnpqmV6n30VGcEaS+hFwPrYv2M1If65skA50z9ffi0=
-X-Received: by 2002:a81:8147:0:b0:2ca:287c:6c42 with SMTP id
- r68-20020a818147000000b002ca287c6c42mr19678342ywf.231.1645456266760; Mon, 21
- Feb 2022 07:11:06 -0800 (PST)
+        Mon, 21 Feb 2022 10:13:19 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0D881AF36;
+        Mon, 21 Feb 2022 07:12:55 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id 14D861F43970
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1645456374;
+        bh=D818uSaEHhBQptBy3IOTQWWmyxOFz7UQXvDTQWJYruQ=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=LJ/ZPHNnLPtD3Fk2hA4su8SMfk3HyjKQWYA1w5L7ukJUNF5PNeOOIvC+J7/AkSM7D
+         2UwX7z5NJbrJaMqnIx5XWx8Js7j+LRJ6aReCaDs3EGrYlhbj6xQYWa/R2hKR92n3hK
+         9YSXaGFsAJ1O1/+eCP1TjSqYoa/NTji/q3ArB9xtAjltf8Atszpo64lCnYTrd8D/W4
+         rYKzcarIeSIIh0X0Vqe1PbFz+9Vbglv+YBfdEvE9nrdiwgKYU5xQkwO2OoMO71T4Nh
+         eTtsn/Q8s1S6URIjg0RT13e6Gm+giWQjIPBEl47lKJSQ1xc54Ii5IQrQOahDPNcngI
+         QZbfTkljn3W8g==
+Message-ID: <11c7580e-d7e3-f8ab-3cdc-f310e8dc7308@collabora.com>
+Date:   Mon, 21 Feb 2022 16:12:51 +0100
 MIME-Version: 1.0
-References: <20220212122318.623435-1-Jason@zx2c4.com> <20220212122318.623435-5-Jason@zx2c4.com>
- <YhMZyrF2jkXRwA/D@sol.localdomain>
-In-Reply-To: <YhMZyrF2jkXRwA/D@sol.localdomain>
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date:   Mon, 21 Feb 2022 16:10:56 +0100
-X-Gmail-Original-Message-ID: <CAHmME9r5+9JLN8KjDwmuc1+p1O7THPmzW3sz0jMKKf9k6gCDtQ@mail.gmail.com>
-Message-ID: <CAHmME9r5+9JLN8KjDwmuc1+p1O7THPmzW3sz0jMKKf9k6gCDtQ@mail.gmail.com>
-Subject: Re: [PATCH v2 04/10] random: group initialization wait functions
-To:     Eric Biggers <ebiggers@kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        "Theodore Ts'o" <tytso@mit.edu>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [PATCH v1] media: v4l2-core: Initialize h264 scaling matrix
+Content-Language: en-US
+To:     Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Cc:     kernel@collabora.com, yunfei.dong@mediatek.com,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220218184208.455488-1-nicolas.dufresne@collabora.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220218184208.455488-1-nicolas.dufresne@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 21, 2022 at 5:49 AM Eric Biggers <ebiggers@kernel.org> wrote:
->
-> On Sat, Feb 12, 2022 at 01:23:12PM +0100, Jason A. Donenfeld wrote:
-> > +/*
-> > + * Static global variables
-> > + */
-> > +static DECLARE_WAIT_QUEUE_HEAD(random_write_wait);
-> > +static struct fasync_struct *fasync;
-> > +
-> > +static int crng_init_cnt = 0;
-> > +static void _get_random_bytes(void *buf, size_t nbytes);
->
-> A couple oddities here:
->
->   - 'fasync' is being defined twice.  It's already defined earlier in the file.
->   - The prototype for _get_random_bytes() is unnecessary.
->
-> Other than that this patch looks good.
+Il 18/02/22 19:42, Nicolas Dufresne ha scritto:
+> In the final H264 API, it is not required to set scaling matrix if
+> they are not present in the bitstream. A flag was added in order to let
+> the driver know. The downside is that it leaves the default control
+> value to 0, which isn't valid. As per the spec (see formulas 7-8/7-9),
+> when the scaling matrix are absent from the bitstream, flat values
+> of 16 should be used. This improves this control semantic in a way
+> that the control value are always valid. Drivers can then use
+> the scaling_matrix control values without having to check its presence.
+> Same method was employed for MPEG2_QUANTISATION.
+> 
+> This fixes issues with MTK VCODEC H264 decoder when using GStreamer.
+> GStreamer does not set this control if its not present in the bitstream.
+> As MTK VDCODEC was using the initialized to 0 values, the frames ended
+> up completely gray.
+> 
+> Fixes: 54889c51b833d236 ("media: uapi: h264: Rename and clarify PPS_FLAG_SCALING_MATRIX_PRESENT")
+> Signed-off-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
 
-Nice catch, thanks. Will fix.
-
-Jason
+Tested-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>

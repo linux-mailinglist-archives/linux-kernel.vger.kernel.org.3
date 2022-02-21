@@ -2,44 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E36D94BDB87
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:40:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 616F94BE1E8
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:53:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352678AbiBUJrs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 04:47:48 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59638 "EHLO
+        id S1352744AbiBUJrv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 04:47:51 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343960AbiBUJlR (ORCPT
+        with ESMTP id S1350933AbiBUJls (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 04:41:17 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EC8C3CA51;
-        Mon, 21 Feb 2022 01:17:29 -0800 (PST)
+        Mon, 21 Feb 2022 04:41:48 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2A373DA67;
+        Mon, 21 Feb 2022 01:17:36 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8A868608C4;
-        Mon, 21 Feb 2022 09:17:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9AACFC340E9;
-        Mon, 21 Feb 2022 09:17:26 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 57690CE0EA4;
+        Mon, 21 Feb 2022 09:17:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3780DC340FC;
+        Mon, 21 Feb 2022 09:17:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645435047;
-        bh=Vz4WDZtoUOzAcf9QAL9mQykts41Q8Xh0KlaY1mwEN2o=;
+        s=korg; t=1645435049;
+        bh=QVHi1Fo2w+5SF4nm3Aba/ncolOFBS7ktXZEtqMSRG1w=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=x2ShE3k6FL4OA7b54Jz3FoaBhJsF1JTiW/biKgjjzNU8GbKGekguLv24XgzoeEQV+
-         lunGosk41cNzm6O3dfVAu4RFUPE+dyQK0d0x6SmZHJez4pdVgqV//yVU4/dzGTbduL
-         3Sws32DwHpoPiIEw7v0RujyYQSTkcEVvHkAPxAW8=
+        b=1CqfhpZwK4jQZxYvQ00zJtyE3UiZhXpW3Wa7rxmvCMkLA5c2+cwTUFgNflkBa8olk
+         J3vaioM0GCOuVYiox7CwvFqlc0yJPj2njqsSHgQbWF7HKHeNXoxywYMuZIDtOO9rBQ
+         gdwqtVNPiKASxvhtjZ3So7WjF2/0grcl5+DmvPDk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Long Li <longli@microsoft.com>,
-        Michael Kelley <mikelley@microsoft.com>,
-        Purna Pavan Chandra Aekkaladevi <paekkaladevi@microsoft.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Wei Liu <wei.liu@kernel.org>
-Subject: [PATCH 5.16 025/227] PCI: hv: Fix NUMA node assignment when kernel boots with custom NUMA topology
-Date:   Mon, 21 Feb 2022 09:47:24 +0100
-Message-Id: <20220221084935.674987825@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Helge Deller <deller@gmx.de>
+Subject: [PATCH 5.16 026/227] parisc: Add ioread64_lo_hi() and iowrite64_lo_hi()
+Date:   Mon, 21 Feb 2022 09:47:25 +0100
+Message-Id: <20220221084935.708276643@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220221084934.836145070@linuxfoundation.org>
 References: <20220221084934.836145070@linuxfoundation.org>
@@ -57,49 +55,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Long Li <longli@microsoft.com>
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-commit 3149efcdf2c6314420c418dfc94de53bfd076b1f upstream.
+commit 18a1d5e1945385d9b5adc3fe11427ce4a9d2826e upstream.
 
-When kernel boots with a NUMA topology with some NUMA nodes offline, the PCI
-driver should only set an online NUMA node on the device. This can happen
-during KDUMP where some NUMA nodes are not made online by the KDUMP kernel.
+It's a followup to the previous commit f15309d7ad5d ("parisc: Add
+ioread64_hi_lo() and iowrite64_hi_lo()") which does only half of
+the job. Add the rest, so we won't get a new kernel test robot
+reports.
 
-This patch also fixes the case where kernel is booting with "numa=off".
-
-Fixes: 999dd956d838 ("PCI: hv: Add support for protocol 1.3 and support PCI_BUS_RELATIONS2")
-Signed-off-by: Long Li <longli@microsoft.com>
-Reviewed-by: Michael Kelley <mikelley@microsoft.com>
-Tested-by: Purna Pavan Chandra Aekkaladevi <paekkaladevi@microsoft.com>
-Acked-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-Link: https://lore.kernel.org/r/1643247814-15184-1-git-send-email-longli@linuxonhyperv.com
-Signed-off-by: Wei Liu <wei.liu@kernel.org>
+Fixes: f15309d7ad5d ("parisc: Add ioread64_hi_lo() and iowrite64_hi_lo()")
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Signed-off-by: Helge Deller <deller@gmx.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/pci/controller/pci-hyperv.c |   13 +++++++++++--
- 1 file changed, 11 insertions(+), 2 deletions(-)
+ arch/parisc/lib/iomap.c |   18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
 
---- a/drivers/pci/controller/pci-hyperv.c
-+++ b/drivers/pci/controller/pci-hyperv.c
-@@ -1899,8 +1899,17 @@ static void hv_pci_assign_numa_node(stru
- 		if (!hv_dev)
- 			continue;
+--- a/arch/parisc/lib/iomap.c
++++ b/arch/parisc/lib/iomap.c
+@@ -346,6 +346,16 @@ u64 ioread64be(const void __iomem *addr)
+ 	return *((u64 *)addr);
+ }
  
--		if (hv_dev->desc.flags & HV_PCI_DEVICE_FLAG_NUMA_AFFINITY)
--			set_dev_node(&dev->dev, hv_dev->desc.virtual_numa_node);
-+		if (hv_dev->desc.flags & HV_PCI_DEVICE_FLAG_NUMA_AFFINITY &&
-+		    hv_dev->desc.virtual_numa_node < num_possible_nodes())
-+			/*
-+			 * The kernel may boot with some NUMA nodes offline
-+			 * (e.g. in a KDUMP kernel) or with NUMA disabled via
-+			 * "numa=off". In those cases, adjust the host provided
-+			 * NUMA node to a valid NUMA node used by the kernel.
-+			 */
-+			set_dev_node(&dev->dev,
-+				     numa_map_to_online_node(
-+					     hv_dev->desc.virtual_numa_node));
- 
- 		put_pcichild(hv_dev);
++u64 ioread64_lo_hi(const void __iomem *addr)
++{
++	u32 low, high;
++
++	low = ioread32(addr);
++	high = ioread32(addr + sizeof(u32));
++
++	return low + ((u64)high << 32);
++}
++
+ u64 ioread64_hi_lo(const void __iomem *addr)
+ {
+ 	u32 low, high;
+@@ -419,6 +429,12 @@ void iowrite64be(u64 datum, void __iomem
  	}
+ }
+ 
++void iowrite64_lo_hi(u64 val, void __iomem *addr)
++{
++	iowrite32(val, addr);
++	iowrite32(val >> 32, addr + sizeof(u32));
++}
++
+ void iowrite64_hi_lo(u64 val, void __iomem *addr)
+ {
+ 	iowrite32(val >> 32, addr + sizeof(u32));
+@@ -530,6 +546,7 @@ EXPORT_SYMBOL(ioread32);
+ EXPORT_SYMBOL(ioread32be);
+ EXPORT_SYMBOL(ioread64);
+ EXPORT_SYMBOL(ioread64be);
++EXPORT_SYMBOL(ioread64_lo_hi);
+ EXPORT_SYMBOL(ioread64_hi_lo);
+ EXPORT_SYMBOL(iowrite8);
+ EXPORT_SYMBOL(iowrite16);
+@@ -538,6 +555,7 @@ EXPORT_SYMBOL(iowrite32);
+ EXPORT_SYMBOL(iowrite32be);
+ EXPORT_SYMBOL(iowrite64);
+ EXPORT_SYMBOL(iowrite64be);
++EXPORT_SYMBOL(iowrite64_lo_hi);
+ EXPORT_SYMBOL(iowrite64_hi_lo);
+ EXPORT_SYMBOL(ioread8_rep);
+ EXPORT_SYMBOL(ioread16_rep);
 
 

@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBB354BE2A9
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:55:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BEB614BE0D1
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:52:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349581AbiBUJcd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 04:32:33 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38972 "EHLO
+        id S1348839AbiBUJQY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 04:16:24 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350436AbiBUJWd (ORCPT
+        with ESMTP id S1347910AbiBUJJu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 04:22:33 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB0E01C920;
-        Mon, 21 Feb 2022 01:10:08 -0800 (PST)
+        Mon, 21 Feb 2022 04:09:50 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E38F1C937;
+        Mon, 21 Feb 2022 01:02:13 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AB5A660C35;
-        Mon, 21 Feb 2022 09:10:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94E83C36AFA;
-        Mon, 21 Feb 2022 09:10:05 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EDAF060FB6;
+        Mon, 21 Feb 2022 09:02:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2F19C340E9;
+        Mon, 21 Feb 2022 09:02:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645434606;
-        bh=k/anRwbEWWZuOX0JrgCHoQW624CPv9gHOM5tS0HeWXY=;
+        s=korg; t=1645434132;
+        bh=DzmpeJoKaV7iILY+sZu/gI4+52iSEawvhB6YbzA78R0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SHSCPpH4XjXTUGBQ9WXYFubfk/i8enfYRBRiAv8n7QxnLEDVG307UKX7gAZY19aeF
-         FN37letYkH5SNFfxyyD+PUdarwS0T53lNLHipT5/ExA2sFDU4mcIBlyAjtqvSR/1gj
-         E0tbx4ej5LrTXiHD4yZrlJCci4+IyGvko7Q+Qqx4=
+        b=KtZksYF68xcnsitzudtCKmxyBjxIBVjXgPVMANjU3qmfGW5qW+V82jeV21HisLHnb
+         01//wF5WGmo4DelkrCqMO//A7eTWloUw+vGQrztMggk2EUB5y4wHBpvbrWAsAv43kU
+         vzusR9V8xLtVffq7xr64ouYrnSxHUJoY7rABq5Ps=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Ville=20Syrj=C3=A4l=C3=A4?= 
-        <ville.syrjala@linux.intel.com>,
-        Jani Nikula <jani.nikula@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@intel.com>
-Subject: [PATCH 5.15 066/196] drm/i915: Fix dbuf slice config lookup
+        stable@vger.kernel.org, Norbert Slusarek <nslusarek@gmx.net>,
+        Thadeu Lima de Souza Cascardo <cascardo@canonical.com>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        Marc Kleine-Budde <mkl@pengutronix.de>
+Subject: [PATCH 5.10 006/121] can: isotp: prevent race between isotp_bind() and isotp_setsockopt()
 Date:   Mon, 21 Feb 2022 09:48:18 +0100
-Message-Id: <20220221084933.149539857@linuxfoundation.org>
+Message-Id: <20220221084921.366910498@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220221084930.872957717@linuxfoundation.org>
-References: <20220221084930.872957717@linuxfoundation.org>
+In-Reply-To: <20220221084921.147454846@linuxfoundation.org>
+References: <20220221084921.147454846@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,43 +56,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ville Syrjälä <ville.syrjala@linux.intel.com>
+From: Norbert Slusarek <nslusarek@gmx.net>
 
-commit 698bef8ff5d2edea5d1c9d6e5adf1bfed1e8a106 upstream.
+commit 2b17c400aeb44daf041627722581ade527bb3c1d upstream.
 
-Apparently I totally fumbled the loop condition when I
-removed the ARRAY_SIZE() stuff from the dbuf slice config
-lookup. Comparing the loop index with the active_pipes bitmask
-is utter nonsense, what we want to do is check to see if the
-mask is zero or not.
+A race condition was found in isotp_setsockopt() which allows to
+change socket options after the socket was bound.
+For the specific case of SF_BROADCAST support, this might lead to possible
+use-after-free because can_rx_unregister() is not called.
 
-Note that the code actually ended up working correctly despite
-the fumble, up until commit eef173954432 ("drm/i915: Allow
-!join_mbus cases for adlp+ dbuf configuration") when things
-broke for real.
+Checking for the flag under the socket lock in isotp_bind() and taking
+the lock in isotp_setsockopt() fixes the issue.
 
-Cc: stable@vger.kernel.org
-Fixes: 05e8155afe35 ("drm/i915: Use a sentinel to terminate the dbuf slice arrays")
-Signed-off-by: Ville Syrjälä <ville.syrjala@linux.intel.com>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220207132700.481-1-ville.syrjala@linux.intel.com
-Reviewed-by: Jani Nikula <jani.nikula@intel.com>
-(cherry picked from commit a28fde308c3c1c174249ff9559b57f24e6850086)
-Signed-off-by: Tvrtko Ursulin <tvrtko.ursulin@intel.com>
+Fixes: 921ca574cd38 ("can: isotp: add SF_BROADCAST support for functional addressing")
+Link: https://lore.kernel.org/r/trinity-e6ae9efa-9afb-4326-84c0-f3609b9b8168-1620773528307@3c-app-gmx-bs06
+Reported-by: Norbert Slusarek <nslusarek@gmx.net>
+Signed-off-by: Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
+Signed-off-by: Norbert Slusarek <nslusarek@gmx.net>
+Acked-by: Oliver Hartkopp <socketcan@hartkopp.net>
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/i915/intel_pm.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ net/can/isotp.c |   21 +++++++++++++++++----
+ 1 file changed, 17 insertions(+), 4 deletions(-)
 
---- a/drivers/gpu/drm/i915/intel_pm.c
-+++ b/drivers/gpu/drm/i915/intel_pm.c
-@@ -4861,7 +4861,7 @@ static u8 compute_dbuf_slices(enum pipe
- {
- 	int i;
+--- a/net/can/isotp.c
++++ b/net/can/isotp.c
+@@ -1193,16 +1193,13 @@ static int isotp_getname(struct socket *
+ 	return ISOTP_MIN_NAMELEN;
+ }
  
--	for (i = 0; i < dbuf_slices[i].active_pipes; i++) {
-+	for (i = 0; dbuf_slices[i].active_pipes != 0; i++) {
- 		if (dbuf_slices[i].active_pipes == active_pipes &&
- 		    dbuf_slices[i].join_mbus == join_mbus)
- 			return dbuf_slices[i].dbuf_mask[pipe];
+-static int isotp_setsockopt(struct socket *sock, int level, int optname,
++static int isotp_setsockopt_locked(struct socket *sock, int level, int optname,
+ 			    sockptr_t optval, unsigned int optlen)
+ {
+ 	struct sock *sk = sock->sk;
+ 	struct isotp_sock *so = isotp_sk(sk);
+ 	int ret = 0;
+ 
+-	if (level != SOL_CAN_ISOTP)
+-		return -EINVAL;
+-
+ 	if (so->bound)
+ 		return -EISCONN;
+ 
+@@ -1277,6 +1274,22 @@ static int isotp_setsockopt(struct socke
+ 	return ret;
+ }
+ 
++static int isotp_setsockopt(struct socket *sock, int level, int optname,
++			    sockptr_t optval, unsigned int optlen)
++
++{
++	struct sock *sk = sock->sk;
++	int ret;
++
++	if (level != SOL_CAN_ISOTP)
++		return -EINVAL;
++
++	lock_sock(sk);
++	ret = isotp_setsockopt_locked(sock, level, optname, optval, optlen);
++	release_sock(sk);
++	return ret;
++}
++
+ static int isotp_getsockopt(struct socket *sock, int level, int optname,
+ 			    char __user *optval, int __user *optlen)
+ {
 
 

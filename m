@@ -2,328 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51CC54BEA9A
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 20:36:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FE474BEB3E
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 20:37:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232437AbiBUSsI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 13:48:08 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:32890 "EHLO
+        id S232383AbiBUSvd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 13:51:33 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232354AbiBUSr1 (ORCPT
+        with ESMTP id S232880AbiBUStG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 13:47:27 -0500
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65BD0D97
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 10:46:40 -0800 (PST)
-Received: by mail-wm1-x32f.google.com with SMTP id k41so10056226wms.0
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 10:46:40 -0800 (PST)
+        Mon, 21 Feb 2022 13:49:06 -0500
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 696DFD87
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 10:48:25 -0800 (PST)
+Received: by mail-ej1-x62f.google.com with SMTP id vz16so35641133ejb.0
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 10:48:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=pqrs.dk; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=AH3hQsUn1T/lXJhfiUYvUkUtkgFsibZK+A7UVJghwao=;
-        b=WSZtf6kJssqO9GwX4qK8Qh9JEX+JYvAJ1+FTtvGEHvst/HhAgRyxq0kFXR72gUYGQD
-         QEM9b4H7gq9fQfGB0rI6+nxkPcCmNj0lQjEWUZexPtM495o061WHgZOTztW1STWxr+e+
-         Oq5VC4yZyD1KUfgsSSPrqRg+DqmVcmmtlpeYs=
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=vrA7knS+1mH335VFNHAwLVaOZ0ABUiEx8O7DVSOsX/s=;
+        b=nXiGzwnFJcabMOTlYk5USDFPUydtGqYwR8cUqnO2d/7zYnhGtWg8xS8uaxL88YCk9+
+         egKGQUy+wqdntUqlnOiJxAvSIVvufLAY+c+B0n0EZx1+BQ5mMlHL3GBM8Pu7c9D9v1RI
+         e29ubqi7say0HZM7Qc4TmbBfXT4kN/lz0GidnZmIhIjLWCerpvwjoL2jmmMCzvCwMnGh
+         7I4BDdTso5G1XLz1/I5RGiDMNxzl0m45PnGuxeTN/ypUmDsa1CHYJFi4UePPgbYOGhnk
+         +WoMkMBuK0gLtGlyYgx4YEHagOaAgkctLL1hwY9rMIPYwKxFvmFbq+Nh1142sgcJgmTc
+         gjJQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=AH3hQsUn1T/lXJhfiUYvUkUtkgFsibZK+A7UVJghwao=;
-        b=lg9U9fvg+lqGGRkLCpPqnwXJPJvnTiam4p62EVUPgAExhElWFS9MZw+3GMyqAmLrnv
-         u6s4mosCzVg//Gu78gFur1Ppz+kRzuQYSdFVrWURWEHM3yMqEv94zCWqjwgkfOfCOy1N
-         NgW8zpL+Ihn7KSgq2rN/ThEBd/ACz3d3i9l3qBP47lZFSbHz9/TRnyydyP6nb3pnGJGX
-         V5t8E341wPWR9jZUAvHnR8bLjLcChCeeUKzNAAjV+aFBZZZtiiAsTO4VRrye8eSlUrPE
-         dnvmH3JClvzI11DwcTJ4au/TkDnWYMCQrOPVRaiJd6l+b8uMqmA6wPuU9v3VoRM1jwg/
-         djtg==
-X-Gm-Message-State: AOAM533Q9yTmwtPDsOVCVdihuCkMnmGO+6Xi1RgvWdC5dzSHkAULfBQx
-        0efOueeH/Zw5QLhDRrSDEQi3qw==
-X-Google-Smtp-Source: ABdhPJzFJr/RI04JbZq+olBER4VkRgR4tdOFEEUnWO+9bdHCA5I7LVjDiUpLU1PcjQWhImbEEQcWfA==
-X-Received: by 2002:a05:600c:3d98:b0:352:cdcf:ef7f with SMTP id bi24-20020a05600c3d9800b00352cdcfef7fmr301271wmb.28.1645469198812;
-        Mon, 21 Feb 2022 10:46:38 -0800 (PST)
-Received: from capella.. (80.71.142.18.ipv4.parknet.dk. [80.71.142.18])
-        by smtp.gmail.com with ESMTPSA id 11-20020a05600c26cb00b0037ff53511f2sm140637wmv.31.2022.02.21.10.46.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Feb 2022 10:46:38 -0800 (PST)
-From:   =?UTF-8?q?Alvin=20=C5=A0ipraga?= <alvin@pqrs.dk>
-To:     Linus Walleij <linus.walleij@linaro.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Michael Rasmussen <mir@bang-olufsen.dk>,
-        =?UTF-8?q?Alvin=20=C5=A0ipraga?= <alsi@bang-olufsen.dk>
-Cc:     Luiz Angelo Daros de Luca <luizluca@gmail.com>,
-        =?UTF-8?q?Ar=C4=B1n=C3=A7=20=C3=9CNAL?= <arinc.unal@arinc9.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 net-next 2/2] net: dsa: realtek: rtl8365mb: serialize indirect PHY register access
-Date:   Mon, 21 Feb 2022 19:46:31 +0100
-Message-Id: <20220221184631.252308-3-alvin@pqrs.dk>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220221184631.252308-1-alvin@pqrs.dk>
-References: <20220221184631.252308-1-alvin@pqrs.dk>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=vrA7knS+1mH335VFNHAwLVaOZ0ABUiEx8O7DVSOsX/s=;
+        b=hocStsmtFlv/C+rMqDymRn2pvA0klotpGdPg6bj25aTT+uK0F2Q/Vb5f1qVBFjGiBV
+         MVkJCYtj4SO07X+/sRyPsI8wz6t+/bkk+e5IT0SptPa+2TYXiJgGX7k2TKGnqa+rw05M
+         J37xwrdz5KowwFhwJtf/H9+xVSgEZtP6pN/NeSm8bH4DXkXbs5BMoEb5ler/5GFaUoHK
+         mjMKd9RQCV+Fd1vs5mJPJqCUnbVLfuR1PD7YAPhWUGojN3swMEd55a8t5dwpOzW7aV5C
+         /CKfNLkdWeUJj5nM59FoNi2YDliu/gjqdpg+I6N3+rgPNJXxWZdjFWnsdLH64n3Yh7VZ
+         m1fg==
+X-Gm-Message-State: AOAM530F+7E8/urcEhm0u3j9EOWM+W7QM2NjM3LLyiH9Ojnq2QRssfqG
+        L+b6OPrJdXbhFnw95OpKBZE=
+X-Google-Smtp-Source: ABdhPJzwj+WUqtLBnZx/7AVxQv1trxO08byXV7PaSlvqNfgaiXgyKzDN/XWpOU4TziEy1iaC3bPmCQ==
+X-Received: by 2002:a17:906:4ad6:b0:6b8:33e5:c3a1 with SMTP id u22-20020a1709064ad600b006b833e5c3a1mr16916742ejt.472.1645469303934;
+        Mon, 21 Feb 2022 10:48:23 -0800 (PST)
+Received: from [192.168.0.253] (ip5f5abb8f.dynamic.kabel-deutschland.de. [95.90.187.143])
+        by smtp.gmail.com with ESMTPSA id p4sm5431949ejm.47.2022.02.21.10.48.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 21 Feb 2022 10:48:23 -0800 (PST)
+Message-ID: <fc8e4d44-fa64-f8bf-a442-87c1437978fa@gmail.com>
+Date:   Mon, 21 Feb 2022 19:48:22 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH v2 0/5] staging: r8188eu: odm cleanups
+Content-Language: en-US
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+References: <20220221073306.16636-1-straube.linux@gmail.com>
+ <YhPIOp/k/u9GUv73@kroah.com>
+From:   Michael Straube <straube.linux@gmail.com>
+In-Reply-To: <YhPIOp/k/u9GUv73@kroah.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alvin Šipraga <alsi@bang-olufsen.dk>
+On 2/21/22 18:13, Greg KH wrote:
+> On Mon, Feb 21, 2022 at 08:33:01AM +0100, Michael Straube wrote:
+>> This set removes two more functions from the unwanted hal/odm layer.
+>> Tested on x86_64 with Inter-Tech DMG-02.
+>>
+>> v2:
+>> Fixed a typo in the commit message of patch 2/5.
+>> unsed -> used
+>>
+>> Michael Straube (5):
+>>    staging: r8188eu: remove ODM_CmnInfoHook()
+>>    staging: r8188eu: convert two u8 variables to bool
+>>    staging: r8188eu: remove enum odm_bw
+>>    staging: r8188eu: convert type of pBandWidth in odm_dm_struct
+>>    staging: r8188eu: remove ODM_CmnInfoUpdate()
+>>
+>>   drivers/staging/r8188eu/hal/odm.c             | 56 +------------------
+>>   drivers/staging/r8188eu/hal/rtl8188e_dm.c     | 19 ++++---
+>>   drivers/staging/r8188eu/include/odm.h         | 29 +---------
+>>   drivers/staging/r8188eu/include/rtw_mlme.h    |  2 +-
+>>   drivers/staging/r8188eu/include/rtw_pwrctrl.h |  2 +-
+>>   5 files changed, 16 insertions(+), 92 deletions(-)
+>>
+>> -- 
+>> 2.35.1
+>>
+>>
+> 
+> This patch series does not apply to my tree.  Please rebase and resend.
+> 
 
-Realtek switches in the rtl8365mb family can access the PHY registers of
-the internal PHYs via the switch registers. This method is called
-indirect access. At a high level, the indirect PHY register access
-method involves reading and writing some special switch registers in a
-particular sequence. This works for both SMI and MDIO connected
-switches.
+Hi Greg,
 
-Currently the rtl8365mb driver does not take any care to serialize the
-aforementioned access to the switch registers. In particular, it is
-permitted for other driver code to access other switch registers while
-the indirect PHY register access is ongoing. Locking is only done at the
-regmap level. This, however, is a bug: concurrent register access, even
-to unrelated switch registers, risks corrupting the PHY register value
-read back via the indirect access method described above.
+looks like you already applied v1 of this series.
+The only change in v2 was fixing a typo in a commit message..
 
-Arınç reported that the switch sometimes returns nonsense data when
-reading the PHY registers. In particular, a value of 0 causes the
-kernel's PHY subsystem to think that the link is down, but since most
-reads return correct data, the link then flip-flops between up and down
-over a period of time.
+regards,
 
-The aforementioned bug can be readily observed by:
+Michael
 
- 1. Enabling ftrace events for regmap and mdio
- 2. Polling BSMR PHY register for a connected port;
-    it should always read the same (e.g. 0x79ed)
- 3. Wait for step 2 to give a different value
-
-Example command for step 2:
-
-    while true; do phytool read swp2/2/0x01; done
-
-On my i.MX8MM, the above steps will yield a bogus value for the BSMR PHY
-register within a matter of seconds. The interleaved register access it
-then evident in the trace log:
-
- kworker/3:4-70      [003] .......  1927.139849: regmap_reg_write: ethernet-switch reg=1004 val=bd
-     phytool-16816   [002] .......  1927.139979: regmap_reg_read: ethernet-switch reg=1f01 val=0
- kworker/3:4-70      [003] .......  1927.140381: regmap_reg_read: ethernet-switch reg=1005 val=0
-     phytool-16816   [002] .......  1927.140468: regmap_reg_read: ethernet-switch reg=1d15 val=a69
- kworker/3:4-70      [003] .......  1927.140864: regmap_reg_read: ethernet-switch reg=1003 val=0
-     phytool-16816   [002] .......  1927.140955: regmap_reg_write: ethernet-switch reg=1f02 val=2041
- kworker/3:4-70      [003] .......  1927.141390: regmap_reg_read: ethernet-switch reg=1002 val=0
-     phytool-16816   [002] .......  1927.141479: regmap_reg_write: ethernet-switch reg=1f00 val=1
- kworker/3:4-70      [003] .......  1927.142311: regmap_reg_write: ethernet-switch reg=1004 val=be
-     phytool-16816   [002] .......  1927.142410: regmap_reg_read: ethernet-switch reg=1f01 val=0
- kworker/3:4-70      [003] .......  1927.142534: regmap_reg_read: ethernet-switch reg=1005 val=0
-     phytool-16816   [002] .......  1927.142618: regmap_reg_read: ethernet-switch reg=1f04 val=0
-     phytool-16816   [002] .......  1927.142641: mdio_access: SMI-0 read  phy:0x02 reg:0x01 val:0x0000 <- ?!
- kworker/3:4-70      [003] .......  1927.143037: regmap_reg_read: ethernet-switch reg=1001 val=0
- kworker/3:4-70      [003] .......  1927.143133: regmap_reg_read: ethernet-switch reg=1000 val=2d89
- kworker/3:4-70      [003] .......  1927.143213: regmap_reg_write: ethernet-switch reg=1004 val=be
- kworker/3:4-70      [003] .......  1927.143291: regmap_reg_read: ethernet-switch reg=1005 val=0
- kworker/3:4-70      [003] .......  1927.143368: regmap_reg_read: ethernet-switch reg=1003 val=0
- kworker/3:4-70      [003] .......  1927.143443: regmap_reg_read: ethernet-switch reg=1002 val=6
-
-The kworker here is polling MIB counters for stats, as evidenced by the
-register 0x1004 that we are writing to (RTL8365MB_MIB_ADDRESS_REG). This
-polling is performed every 3 seconds, but is just one example of such
-unsynchronized access. In Arınç's case, the driver was not using the
-switch IRQ, so the PHY subsystem was itself doing polling analogous to
-phytool in the above example.
-
-A test module was created [see second Link] to simulate such spurious
-switch register accesses while performing indirect PHY register reads
-and writes. Realtek was also consulted to confirm whether this is a
-known issue or not. The conclusion of these lines of inquiry is as
-follows:
-
-1. Reading of PHY registers via indirect access will be aborted if,
-   after executing the read operation (via a write to the
-   INDIRECT_ACCESS_CTRL_REG), any register is accessed, other than
-   INDIRECT_ACCESS_STATUS_REG.
-
-2. The PHY register indirect read is only complete when
-   INDIRECT_ACCESS_STATUS_REG reads zero.
-
-3. The INDIRECT_ACCESS_DATA_REG, which is read to get the result of the
-   PHY read, will contain the result of the last successful read
-   operation. If there was spurious register access and the indirect
-   read was aborted, then this register is not guaranteed to hold
-   anything meaningful and the PHY read will silently fail.
-
-4. PHY writes do not appear to be affected by this mechanism.
-
-5. Other similar access routines, such as for MIB counters, although
-   similar to the PHY indirect access method, are actually table access.
-   Table access is not affected by spurious reads or writes of other
-   registers. However, concurrent table access is not allowed. Currently
-   this is protected via mib_lock, so there is nothing to fix.
-
-The above statements are corroborated both via the test module and
-through consultation with Realtek. In particular, Realtek states that
-this is simply a property of the hardware design and is not a hardware
-bug.
-
-To fix this problem, one must guard against regmap access while the
-PHY indirect register read is executing. Fix this by using the newly
-introduced "nolock" regmap in all PHY-related functions, and by aquiring
-the regmap mutex at the top level of the PHY register access callbacks.
-Although no issue has been observed with PHY register _writes_, this
-change also serializes the indirect access method there. This is done
-purely as a matter of convenience and for reasons of symmetry.
-
-Fixes: 4af2950c50c8 ("net: dsa: realtek-smi: add rtl8365mb subdriver for RTL8365MB-VC")
-Link: https://lore.kernel.org/netdev/CAJq09z5FCgG-+jVT7uxh1a-0CiiFsoKoHYsAWJtiKwv7LXKofQ@mail.gmail.com/
-Link: https://lore.kernel.org/netdev/871qzwjmtv.fsf@bang-olufsen.dk/
-Reported-by: Arınç ÜNAL <arinc.unal@arinc9.com>
-Reported-by: Luiz Angelo Daros de Luca <luizluca@gmail.com>
-Signed-off-by: Alvin Šipraga <alsi@bang-olufsen.dk>
----
- drivers/net/dsa/realtek/rtl8365mb.c | 54 ++++++++++++++++++-----------
- 1 file changed, 33 insertions(+), 21 deletions(-)
-
-diff --git a/drivers/net/dsa/realtek/rtl8365mb.c b/drivers/net/dsa/realtek/rtl8365mb.c
-index 2ed592147c20..c39d6b744597 100644
---- a/drivers/net/dsa/realtek/rtl8365mb.c
-+++ b/drivers/net/dsa/realtek/rtl8365mb.c
-@@ -590,7 +590,7 @@ static int rtl8365mb_phy_poll_busy(struct realtek_priv *priv)
- {
- 	u32 val;
- 
--	return regmap_read_poll_timeout(priv->map,
-+	return regmap_read_poll_timeout(priv->map_nolock,
- 					RTL8365MB_INDIRECT_ACCESS_STATUS_REG,
- 					val, !val, 10, 100);
- }
-@@ -604,7 +604,7 @@ static int rtl8365mb_phy_ocp_prepare(struct realtek_priv *priv, int phy,
- 	/* Set OCP prefix */
- 	val = FIELD_GET(RTL8365MB_PHY_OCP_ADDR_PREFIX_MASK, ocp_addr);
- 	ret = regmap_update_bits(
--		priv->map, RTL8365MB_GPHY_OCP_MSB_0_REG,
-+		priv->map_nolock, RTL8365MB_GPHY_OCP_MSB_0_REG,
- 		RTL8365MB_GPHY_OCP_MSB_0_CFG_CPU_OCPADR_MASK,
- 		FIELD_PREP(RTL8365MB_GPHY_OCP_MSB_0_CFG_CPU_OCPADR_MASK, val));
- 	if (ret)
-@@ -617,8 +617,8 @@ static int rtl8365mb_phy_ocp_prepare(struct realtek_priv *priv, int phy,
- 			  ocp_addr >> 1);
- 	val |= FIELD_PREP(RTL8365MB_INDIRECT_ACCESS_ADDRESS_OCPADR_9_6_MASK,
- 			  ocp_addr >> 6);
--	ret = regmap_write(priv->map, RTL8365MB_INDIRECT_ACCESS_ADDRESS_REG,
--			   val);
-+	ret = regmap_write(priv->map_nolock,
-+			   RTL8365MB_INDIRECT_ACCESS_ADDRESS_REG, val);
- 	if (ret)
- 		return ret;
- 
-@@ -631,36 +631,42 @@ static int rtl8365mb_phy_ocp_read(struct realtek_priv *priv, int phy,
- 	u32 val;
- 	int ret;
- 
-+	mutex_lock(&priv->map_lock);
-+
- 	ret = rtl8365mb_phy_poll_busy(priv);
- 	if (ret)
--		return ret;
-+		goto out;
- 
- 	ret = rtl8365mb_phy_ocp_prepare(priv, phy, ocp_addr);
- 	if (ret)
--		return ret;
-+		goto out;
- 
- 	/* Execute read operation */
- 	val = FIELD_PREP(RTL8365MB_INDIRECT_ACCESS_CTRL_CMD_MASK,
- 			 RTL8365MB_INDIRECT_ACCESS_CTRL_CMD_VALUE) |
- 	      FIELD_PREP(RTL8365MB_INDIRECT_ACCESS_CTRL_RW_MASK,
- 			 RTL8365MB_INDIRECT_ACCESS_CTRL_RW_READ);
--	ret = regmap_write(priv->map, RTL8365MB_INDIRECT_ACCESS_CTRL_REG, val);
-+	ret = regmap_write(priv->map_nolock, RTL8365MB_INDIRECT_ACCESS_CTRL_REG,
-+			   val);
- 	if (ret)
--		return ret;
-+		goto out;
- 
- 	ret = rtl8365mb_phy_poll_busy(priv);
- 	if (ret)
--		return ret;
-+		goto out;
- 
- 	/* Get PHY register data */
--	ret = regmap_read(priv->map, RTL8365MB_INDIRECT_ACCESS_READ_DATA_REG,
--			  &val);
-+	ret = regmap_read(priv->map_nolock,
-+			  RTL8365MB_INDIRECT_ACCESS_READ_DATA_REG, &val);
- 	if (ret)
--		return ret;
-+		goto out;
- 
- 	*data = val & 0xFFFF;
- 
--	return 0;
-+out:
-+	mutex_unlock(&priv->map_lock);
-+
-+	return ret;
- }
- 
- static int rtl8365mb_phy_ocp_write(struct realtek_priv *priv, int phy,
-@@ -669,32 +675,38 @@ static int rtl8365mb_phy_ocp_write(struct realtek_priv *priv, int phy,
- 	u32 val;
- 	int ret;
- 
-+	mutex_lock(&priv->map_lock);
-+
- 	ret = rtl8365mb_phy_poll_busy(priv);
- 	if (ret)
--		return ret;
-+		goto out;
- 
- 	ret = rtl8365mb_phy_ocp_prepare(priv, phy, ocp_addr);
- 	if (ret)
--		return ret;
-+		goto out;
- 
- 	/* Set PHY register data */
--	ret = regmap_write(priv->map, RTL8365MB_INDIRECT_ACCESS_WRITE_DATA_REG,
--			   data);
-+	ret = regmap_write(priv->map_nolock,
-+			   RTL8365MB_INDIRECT_ACCESS_WRITE_DATA_REG, data);
- 	if (ret)
--		return ret;
-+		goto out;
- 
- 	/* Execute write operation */
- 	val = FIELD_PREP(RTL8365MB_INDIRECT_ACCESS_CTRL_CMD_MASK,
- 			 RTL8365MB_INDIRECT_ACCESS_CTRL_CMD_VALUE) |
- 	      FIELD_PREP(RTL8365MB_INDIRECT_ACCESS_CTRL_RW_MASK,
- 			 RTL8365MB_INDIRECT_ACCESS_CTRL_RW_WRITE);
--	ret = regmap_write(priv->map, RTL8365MB_INDIRECT_ACCESS_CTRL_REG, val);
-+	ret = regmap_write(priv->map_nolock, RTL8365MB_INDIRECT_ACCESS_CTRL_REG,
-+			   val);
- 	if (ret)
--		return ret;
-+		goto out;
- 
- 	ret = rtl8365mb_phy_poll_busy(priv);
- 	if (ret)
--		return ret;
-+		goto out;
-+
-+out:
-+	mutex_unlock(&priv->map_lock);
- 
- 	return 0;
- }
--- 
-2.35.1
 

@@ -2,184 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A9114BDFB9
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:50:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 980FA4BDF47
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:49:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344209AbiBUIoE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 03:44:04 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33748 "EHLO
+        id S1354692AbiBUKYa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 05:24:30 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237755AbiBUIoA (ORCPT
+        with ESMTP id S1354654AbiBUKYD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 03:44:00 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D94513D78
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 00:43:38 -0800 (PST)
-Received: from dude.hi.pengutronix.de ([2001:67c:670:100:1d::7])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1nM4I6-0007Ir-6K; Mon, 21 Feb 2022 09:43:30 +0100
-Received: from ore by dude.hi.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ore@pengutronix.de>)
-        id 1nM4I5-00FMTH-KU; Mon, 21 Feb 2022 09:43:29 +0100
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Woojung Huh <woojung.huh@microchip.com>,
-        UNGLinuxDriver@microchip.com, Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>
-Cc:     Oleksij Rempel <o.rempel@pengutronix.de>, kernel@pengutronix.de,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH net-next v1 1/1] net: dsa: microchip: ksz9477: implement MTU configuration
-Date:   Mon, 21 Feb 2022 09:43:28 +0100
-Message-Id: <20220221084328.3661250-1-o.rempel@pengutronix.de>
-X-Mailer: git-send-email 2.30.2
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::7
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Mon, 21 Feb 2022 05:24:03 -0500
+X-Greylist: delayed 3599 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 21 Feb 2022 01:43:42 PST
+Received: from lgeamrelo11.lge.com (lgeamrelo12.lge.com [156.147.23.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EEA303EA9F
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 01:43:42 -0800 (PST)
+Received: from unknown (HELO lgeamrelo02.lge.com) (156.147.1.126)
+        by 156.147.23.52 with ESMTP; 21 Feb 2022 17:43:40 +0900
+X-Original-SENDERIP: 156.147.1.126
+X-Original-MAILFROM: kyeongdon.kim@lge.com
+Received: from unknown (HELO localhost.localdomain) (10.159.40.99)
+        by 156.147.1.126 with ESMTP; 21 Feb 2022 17:43:40 +0900
+X-Original-SENDERIP: 10.159.40.99
+X-Original-MAILFROM: kyeongdon.kim@lge.com
+From:   Kyeongdon Kim <kyeongdon.kim@lge.com>
+To:     viro@zeniv.linux.org.uk
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kyeongdon.kim@lge.com
+Subject: [PATCH] pipe: use kmem_cache for pipe_inode_info
+Date:   Mon, 21 Feb 2022 17:43:37 +0900
+Message-Id: <20220221084337.207414-1-kyeongdon.kim@lge.com>
+X-Mailer: git-send-email 2.10.2
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This chips supports two ways to configure max MTU size:
-- by setting SW_LEGAL_PACKET_DISABLE bit: if this bit is 0 allowed packed size
-  will be between 64 and bytes 1518. If this bit is 1, it will accept
-  packets up to 2000 bytes.
-- by setting SW_JUMBO_PACKET bit. If this bit is set, the chip will
-  ignore SW_LEGAL_PACKET_DISABLE value and use REG_SW_MTU__2 register to
-  configure MTU size.
+Because kzalloc() is used,
+the allocation size of pipe_inode_info is fixex at 192bytes,
+but it's only use 144bytes per each.
+We can use kmem_cache_zalloc() to reduce some dynamic allocation size.
 
-Current driver has disabled SW_JUMBO_PACKET bit and activates
-SW_LEGAL_PACKET_DISABLE. So the switch will pass all packets up to 2000 without
-any way to configure it.
-
-By providing port_change_mtu we are switch to SW_JUMBO_PACKET way and will
-be able to configure MTU up to ~9000.
-
-Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+Signed-off-by: Kyeongdon Kim <kyeongdon.kim@lge.com>
 ---
- drivers/net/dsa/microchip/ksz9477.c     | 42 +++++++++++++++++++++++--
- drivers/net/dsa/microchip/ksz9477_reg.h |  4 +++
- drivers/net/dsa/microchip/ksz_common.h  |  1 +
- 3 files changed, 45 insertions(+), 2 deletions(-)
+ fs/pipe.c | 12 +++++++++---
+ 1 file changed, 9 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/net/dsa/microchip/ksz9477.c b/drivers/net/dsa/microchip/ksz9477.c
-index 18ffc8ded7ee..ae5ce7e71d4c 100644
---- a/drivers/net/dsa/microchip/ksz9477.c
-+++ b/drivers/net/dsa/microchip/ksz9477.c
-@@ -11,6 +11,7 @@
- #include <linux/platform_data/microchip-ksz.h>
- #include <linux/phy.h>
- #include <linux/if_bridge.h>
-+#include <linux/if_vlan.h>
- #include <net/dsa.h>
- #include <net/switchdev.h>
+diff --git a/fs/pipe.c b/fs/pipe.c
+index 7194683..3054816 100644
+--- a/fs/pipe.c
++++ b/fs/pipe.c
+@@ -47,6 +47,9 @@
+  */
+ #define PIPE_MIN_DEF_BUFFERS 2
  
-@@ -182,6 +183,35 @@ static void ksz9477_port_cfg32(struct ksz_device *dev, int port, int offset,
- 			   bits, set ? bits : 0);
++/* SLAB cache for pipe inode */
++static struct kmem_cache *pipe_inode_cachep;
++
+ /*
+  * The max size that a non-root user is allowed to grow the pipe. Can
+  * be set by root in /proc/sys/fs/pipe-max-size
+@@ -786,7 +789,7 @@ struct pipe_inode_info *alloc_pipe_info(void)
+ 	unsigned long user_bufs;
+ 	unsigned int max_size = READ_ONCE(pipe_max_size);
+ 
+-	pipe = kzalloc(sizeof(struct pipe_inode_info), GFP_KERNEL_ACCOUNT);
++	pipe = kmem_cache_zalloc(pipe_inode_cachep, GFP_KERNEL_ACCOUNT);
+ 	if (pipe == NULL)
+ 		goto out_free_uid;
+ 
+@@ -820,7 +823,7 @@ struct pipe_inode_info *alloc_pipe_info(void)
+ 
+ out_revert_acct:
+ 	(void) account_pipe_buffers(user, pipe_bufs, 0);
+-	kfree(pipe);
++	kmem_cache_free(pipe_inode_cachep, pipe);
+ out_free_uid:
+ 	free_uid(user);
+ 	return NULL;
+@@ -847,7 +850,7 @@ void free_pipe_info(struct pipe_inode_info *pipe)
+ 	if (pipe->tmp_page)
+ 		__free_page(pipe->tmp_page);
+ 	kvfree(pipe->bufs);
+-	kfree(pipe);
++	kmem_cache_free(pipe_inode_cachep, pipe);
  }
  
-+static int ksz9477_change_mtu(struct dsa_switch *ds, int port, int mtu)
-+{
-+	struct ksz_device *dev = ds->priv;
-+	u16 new_mtu, max_mtu = 0;
-+	int i;
-+
-+	new_mtu = mtu + ETH_HLEN + VLAN_HLEN + ETH_FCS_LEN;
-+
-+	if (dsa_is_cpu_port(ds, port))
-+		new_mtu += KSZ9477_INGRESS_TAG_LEN;
-+
-+	/* Cache the per-port MTU setting */
-+	dev->ports[port].max_mtu = new_mtu;
-+
-+	for (i = 0; i < dev->port_cnt; i++) {
-+		if (dev->ports[i].max_mtu > max_mtu)
-+			max_mtu = dev->ports[i].max_mtu;
-+	}
-+
-+	return regmap_update_bits(dev->regmap[1], REG_SW_MTU__2,
-+				  REG_SW_MTU_MASK, max_mtu);
-+}
-+
-+static int ksz9477_max_mtu(struct dsa_switch *ds, int port)
-+{
-+	return KSZ9477_MAX_MTU - ETH_HLEN - ETH_FCS_LEN - VLAN_HLEN -
-+		KSZ9477_INGRESS_TAG_LEN;
-+}
-+
- static int ksz9477_wait_vlan_ctrl_ready(struct ksz_device *dev)
- {
- 	unsigned int val;
-@@ -1412,8 +1442,14 @@ static int ksz9477_setup(struct dsa_switch *ds)
- 	/* Do not work correctly with tail tagging. */
- 	ksz_cfg(dev, REG_SW_MAC_CTRL_0, SW_CHECK_LENGTH, false);
+ static struct vfsmount *pipe_mnt __read_mostly;
+@@ -1496,6 +1499,9 @@ static int __init init_pipe_fs(void)
+ #ifdef CONFIG_SYSCTL
+ 	register_sysctl_init("fs", fs_pipe_sysctls);
+ #endif
++	pipe_inode_cachep = kmem_cache_create("pipe_inode",
++					sizeof(struct pipe_inode_info),
++					0, SLAB_PANIC, NULL);
+ 	return err;
+ }
  
--	/* accept packet up to 2000bytes */
--	ksz_cfg(dev, REG_SW_MAC_CTRL_1, SW_LEGAL_PACKET_DISABLE, true);
-+	/* Enable REG_SW_MTU__2 reg by setting SW_JUMBO_PACKET */
-+	ksz_cfg(dev, REG_SW_MAC_CTRL_1, SW_JUMBO_PACKET, true);
-+
-+	/* Now we can configure default MTU value */
-+	ret = regmap_update_bits(dev->regmap[1], REG_SW_MTU__2, REG_SW_MTU_MASK,
-+				 VLAN_ETH_FRAME_LEN + ETH_FCS_LEN);
-+	if (ret)
-+		return ret;
- 
- 	ksz9477_config_cpu_port(ds);
- 
-@@ -1460,6 +1496,8 @@ static const struct dsa_switch_ops ksz9477_switch_ops = {
- 	.port_mirror_add	= ksz9477_port_mirror_add,
- 	.port_mirror_del	= ksz9477_port_mirror_del,
- 	.get_stats64		= ksz9477_get_stats64,
-+	.port_change_mtu	= ksz9477_change_mtu,
-+	.port_max_mtu		= ksz9477_max_mtu,
- };
- 
- static u32 ksz9477_get_port_addr(int port, int offset)
-diff --git a/drivers/net/dsa/microchip/ksz9477_reg.h b/drivers/net/dsa/microchip/ksz9477_reg.h
-index 16939f29faa5..34c368d3676c 100644
---- a/drivers/net/dsa/microchip/ksz9477_reg.h
-+++ b/drivers/net/dsa/microchip/ksz9477_reg.h
-@@ -176,6 +176,7 @@
- #define REG_SW_MAC_ADDR_5		0x0307
- 
- #define REG_SW_MTU__2			0x0308
-+#define REG_SW_MTU_MASK			GENMASK(13, 0)
- 
- #define REG_SW_ISP_TPID__2		0x030A
- 
-@@ -1662,4 +1663,7 @@
- /* 148,800 frames * 67 ms / 100 */
- #define BROADCAST_STORM_VALUE		9969
- 
-+#define KSZ9477_INGRESS_TAG_LEN		2
-+#define KSZ9477_MAX_MTU			9000
-+
- #endif /* KSZ9477_REGS_H */
-diff --git a/drivers/net/dsa/microchip/ksz_common.h b/drivers/net/dsa/microchip/ksz_common.h
-index c6fa487fb006..edf4a442de57 100644
---- a/drivers/net/dsa/microchip/ksz_common.h
-+++ b/drivers/net/dsa/microchip/ksz_common.h
-@@ -41,6 +41,7 @@ struct ksz_port {
- 
- 	struct ksz_port_mib mib;
- 	phy_interface_t interface;
-+	unsigned int max_mtu;
- };
- 
- struct ksz_device {
 -- 
-2.30.2
+2.10.2
 

@@ -2,147 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDD7E4BE4D3
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:59:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B4D74BE224
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:54:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351931AbiBUQdB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 11:33:01 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43008 "EHLO
+        id S1380448AbiBUQdO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 11:33:14 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235348AbiBUQc7 (ORCPT
+        with ESMTP id S235348AbiBUQdK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 11:32:59 -0500
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F1F31DA6E
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 08:32:35 -0800 (PST)
-Received: by mail-pj1-x1033.google.com with SMTP id t4-20020a17090a3b4400b001bc40b548f9so2831577pjf.0
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 08:32:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=9p9UW1ztCFicl4wOWM1XmJ1UIygmRbUNF3ZrGCMsB54=;
-        b=RvGVcJIpDoAbqeo+wRu4a9HBSsA6WfZNvT54dKmZTS5kHfraG6Ovauc5/MVe0+IGko
-         Rlw4Nl+GtgY/amZ2tKmNyePOAOQbSr/9YiOiXMiVIEgRd2Yxjx7X0Q0X4LqPI6SXgnVM
-         GfIVkld6jJ07wMROX8rskmHCQOycRP6kLZjCnNv8iRV13lyyhq8Y9RBhNxlVBjxLmjk/
-         FNz7DSxW8zns76NCZCUvmAaZwTi5wclz/Vj3/OHcjA158M78lU+HcRUue4j8ZO7JOs1q
-         Fjt/6Uhl0JWDGN350Da0BFXj+v3EulC0rwRkIQUiSYM+THlyZgvNBJLCKgkRBsuh4PdJ
-         bW+g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=9p9UW1ztCFicl4wOWM1XmJ1UIygmRbUNF3ZrGCMsB54=;
-        b=Vk98XWQaqmJg7YZb7A2b3sBuu/eZ8J3ULUmWDlUDIRij/jGLenT9fUzbE7nLsNsWvm
-         6BM9McldzIypShYd5IT+V1dV67U3JBinrk2FdmYguy1tUvXFQWBTAwwGYUDOB3lW2pbM
-         bTAN17jyQnriLpXt9Nh04I87Ju8heE7icdZLVHtLaMk4EHuBHJ6uD8Iqfnu1Irszrbfp
-         +x7EQ7nBLkkw50bmyUSDc7GHIGm9MjJ1PX8KlGWKQaQ7k8YnXw9CxqI3z/aa9TmeQqe8
-         pyRIcUK7tKiZ5aGWt5/JzMWtIum5R7ybtd97Cw0KWz715GNmLj2Rwdc3bmmQ60NB/KFR
-         P3IQ==
-X-Gm-Message-State: AOAM5307u2YxklfBS9uUlbqnEAo0/rGCgRDLYKbzULrCU0w/LAQeyIce
-        9XOcYM/ijBcYAxwP6yP3CLwmiu25vKbP/g==
-X-Google-Smtp-Source: ABdhPJwlTU+2aKKFbkkqE+oFyktV5D+caaKuDnY7RVSBS9lqdTYgr6jLTDq4s2e55uoX2ugaLsg5eg==
-X-Received: by 2002:a17:902:ccc1:b0:14f:b686:e6ff with SMTP id z1-20020a170902ccc100b0014fb686e6ffmr5876342ple.45.1645461154640;
-        Mon, 21 Feb 2022 08:32:34 -0800 (PST)
-Received: from [192.168.1.100] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id o14sm8297884pfw.121.2022.02.21.08.32.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Feb 2022 08:32:34 -0800 (PST)
-Message-ID: <50f407fd-d4e3-7c3f-5e8b-1f7fc366216d@kernel.dk>
-Date:   Mon, 21 Feb 2022 09:32:32 -0700
+        Mon, 21 Feb 2022 11:33:10 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EFDC1DA71;
+        Mon, 21 Feb 2022 08:32:46 -0800 (PST)
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21LEgWhB031083;
+        Mon, 21 Feb 2022 16:32:46 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding; s=pp1;
+ bh=u+VB6Mub6TwBOoLS8CCFDBRNUbyBeLZbwCtNn1pU+Mg=;
+ b=bjFvhOp2cgjeCXEg/PWWx8Tvh0m2lr9nqfMmT7m1yJ4Gmb1q5c2WgXb5S+KuH7vSW6K4
+ zKKUkggCXP+7VqWlIj/ijvkKKW+ttkvgLeCMMVh1H22mjMAkKKIoAt+F52V+2g+WlJyY
+ z+1lvEf3BfV9TgmwTm7IDjRzrl8GcKY2yb59LuDhM3I8Z5xyVsDx7DDdW7BJ+S85SqX2
+ hOY1a4S6iO9S3/8zHyxHAjDFLUBTg1tInO2Lkd5Ki/aFT9SSEiUhXtEWbuAIxqRHt++1
+ gRFTU1l1oTtEow8c9oocFbFeJzaevZNyXBVNlUsKg+jiuQzPV3tAUnuvM/dAUWZMOyoC 3A== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3eccr3amu9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 21 Feb 2022 16:32:45 +0000
+Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 21LGTQIx005184;
+        Mon, 21 Feb 2022 16:32:45 GMT
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3eccr3amtj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 21 Feb 2022 16:32:45 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 21LGQx38028029;
+        Mon, 21 Feb 2022 16:32:43 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma06ams.nl.ibm.com with ESMTP id 3eaqthv783-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 21 Feb 2022 16:32:42 +0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 21LGWdKh39977296
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 21 Feb 2022 16:32:39 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 41A774C050;
+        Mon, 21 Feb 2022 16:32:39 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D98A94C04E;
+        Mon, 21 Feb 2022 16:32:38 +0000 (GMT)
+Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon, 21 Feb 2022 16:32:38 +0000 (GMT)
+From:   Janis Schoetterl-Glausch <scgl@linux.ibm.com>
+To:     Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Janis Schoetterl-Glausch <scgl@linux.ibm.com>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Sven Schnelle <svens@linux.ibm.com>, kvm@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] KVM: s390: Add missing vm MEM_OP size check
+Date:   Mon, 21 Feb 2022 17:32:37 +0100
+Message-Id: <20220221163237.4122868-1-scgl@linux.ibm.com>
+X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20220211182215.2730017-7-scgl@linux.ibm.com>
+References: <20220211182215.2730017-7-scgl@linux.ibm.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [PATCH v2 2/4] io_uring: update kiocb->ki_pos at execution time
-Content-Language: en-US
-To:     Dylan Yudaken <dylany@fb.com>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        io-uring@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, kernel-team@fb.com
-References: <20220221141649.624233-1-dylany@fb.com>
- <20220221141649.624233-3-dylany@fb.com>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <20220221141649.624233-3-dylany@fb.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: TiEEXWyel54FLwn5jpBY3HdCKHuzNZEb
+X-Proofpoint-ORIG-GUID: zZMMGJt2KBcWEFpwsjdEU5TX6vVs_fa3
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-02-21_08,2022-02-21_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 mlxscore=0
+ lowpriorityscore=0 adultscore=0 mlxlogscore=882 impostorscore=0
+ spamscore=0 bulkscore=0 malwarescore=0 priorityscore=1501 phishscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2201110000 definitions=main-2202210097
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/21/22 7:16 AM, Dylan Yudaken wrote:
-> Update kiocb->ki_pos at execution time rather than in io_prep_rw().
-> io_prep_rw() happens before the job is enqueued to a worker and so the
-> offset might be read multiple times before being executed once.
-> 
-> Ensures that the file position in a set of _linked_ SQEs will be only
-> obtained after earlier SQEs have completed, and so will include their
-> incremented file position.
-> 
-> Signed-off-by: Dylan Yudaken <dylany@fb.com>
-> ---
->  fs/io_uring.c | 25 +++++++++++++++++--------
->  1 file changed, 17 insertions(+), 8 deletions(-)
-> 
-> diff --git a/fs/io_uring.c b/fs/io_uring.c
-> index 1f9b4466c269..50b93ff2ee12 100644
-> --- a/fs/io_uring.c
-> +++ b/fs/io_uring.c
-> @@ -3000,14 +3000,6 @@ static int io_prep_rw(struct io_kiocb *req, const struct io_uring_sqe *sqe)
->  		req->flags |= io_file_get_flags(file) << REQ_F_SUPPORT_NOWAIT_BIT;
->  
->  	kiocb->ki_pos = READ_ONCE(sqe->off);
-> -	if (kiocb->ki_pos == -1) {
-> -		if (!(file->f_mode & FMODE_STREAM)) {
-> -			req->flags |= REQ_F_CUR_POS;
-> -			kiocb->ki_pos = file->f_pos;
-> -		} else {
-> -			kiocb->ki_pos = 0;
-> -		}
-> -	}
->  	kiocb->ki_flags = iocb_flags(file);
->  	ret = kiocb_set_rw_flags(kiocb, READ_ONCE(sqe->rw_flags));
->  	if (unlikely(ret))
-> @@ -3074,6 +3066,19 @@ static inline void io_rw_done(struct kiocb *kiocb, ssize_t ret)
->  	}
->  }
->  
-> +static inline void
-> +io_kiocb_update_pos(struct io_kiocb *req, struct kiocb *kiocb)
-> +{
-> +	if (kiocb->ki_pos == -1) {
-> +		if (!(req->file->f_mode & FMODE_STREAM)) {
-> +			req->flags |= REQ_F_CUR_POS;
-> +			kiocb->ki_pos = req->file->f_pos;
-> +		} else {
-> +			kiocb->ki_pos = 0;
-> +		}
-> +	}
-> +}
+Check that size is not zero, preventing the following warning:
 
+WARNING: CPU: 0 PID: 9692 at mm/vmalloc.c:3059 __vmalloc_node_range+0x528/0x648
+Modules linked in:
+CPU: 0 PID: 9692 Comm: memop Not tainted 5.17.0-rc3-e4+ #80
+Hardware name: IBM 8561 T01 701 (LPAR)
+Krnl PSW : 0704c00180000000 0000000082dc584c (__vmalloc_node_range+0x52c/0x648)
+           R:0 T:1 IO:1 EX:1 Key:0 M:1 W:0 P:0 AS:3 CC:0 PM:0 RI:0 EA:3
+Krnl GPRS: 0000000000000083 ffffffffffffffff 0000000000000000 0000000000000001
+           0000038000000000 000003ff80000000 0000000000000cc0 000000008ebb8000
+           0000000087a8a700 000000004040aeb1 000003ffd9f7dec8 000000008ebb8000
+           000000009d9b8000 000000000102a1b4 00000380035afb68 00000380035afaa8
+Krnl Code: 0000000082dc583e: d028a7f4ff80        trtr    2036(41,%r10),3968(%r15)
+           0000000082dc5844: af000000            mc      0,0
+          #0000000082dc5848: af000000            mc      0,0
+          >0000000082dc584c: a7d90000            lghi    %r13,0
+           0000000082dc5850: b904002d            lgr     %r2,%r13
+           0000000082dc5854: eb6ff1080004        lmg     %r6,%r15,264(%r15)
+           0000000082dc585a: 07fe                bcr     15,%r14
+           0000000082dc585c: 47000700            bc      0,1792
+Call Trace:
+ [<0000000082dc584c>] __vmalloc_node_range+0x52c/0x648
+ [<0000000082dc5b62>] vmalloc+0x5a/0x68
+ [<000003ff8067f4ca>] kvm_arch_vm_ioctl+0x2da/0x2a30 [kvm]
+ [<000003ff806705bc>] kvm_vm_ioctl+0x4ec/0x978 [kvm]
+ [<0000000082e562fe>] __s390x_sys_ioctl+0xbe/0x100
+ [<000000008360a9bc>] __do_syscall+0x1d4/0x200
+ [<0000000083618bd2>] system_call+0x82/0xb0
+Last Breaking-Event-Address:
+ [<0000000082dc5348>] __vmalloc_node_range+0x28/0x648
 
-static inline void io_kiocb_update_pos(struct io_kiocb *req,
-				       struct kiocb *kiocb)
-{
-}
+Other than the warning, there is no ill effect from the missing check,
+the condition is detected by subsequent code and causes a return
+with ENOMEM.
 
-Can we just drop the kiocb argument? It'll always be req->rw.kiocb.
-Should generate the same code if you do:
+Fixes: ef11c9463ae0 (KVM: s390: Add vm IOCTL for key checked guest absolute memory access)
+Signed-off-by: Janis Schoetterl-Glausch <scgl@linux.ibm.com>
+---
+ arch/s390/kvm/kvm-s390.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-static inline void io_kiocb_update_pos(struct io_kiocb *req)
-{
-	struct kiocb *kiocb = &req->rw.kiocb;
-
-	...
-}
-
-Apart from that minor thing, looks good to me.
-
+diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
+index c2c26c2aad64..e056ad86ccd2 100644
+--- a/arch/s390/kvm/kvm-s390.c
++++ b/arch/s390/kvm/kvm-s390.c
+@@ -2374,7 +2374,7 @@ static int kvm_s390_vm_mem_op(struct kvm *kvm, struct kvm_s390_mem_op *mop)
+ 
+ 	supported_flags = KVM_S390_MEMOP_F_SKEY_PROTECTION
+ 			  | KVM_S390_MEMOP_F_CHECK_ONLY;
+-	if (mop->flags & ~supported_flags)
++	if (mop->flags & ~supported_flags || !mop->size)
+ 		return -EINVAL;
+ 	if (mop->size > MEM_OP_MAX_SIZE)
+ 		return -E2BIG;
 -- 
-Jens Axboe
+2.32.0
 

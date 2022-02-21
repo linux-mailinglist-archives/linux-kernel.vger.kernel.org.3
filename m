@@ -2,64 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD7EF4BDF73
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:50:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 068A04BE507
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:59:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356698AbiBULpC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 06:45:02 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38240 "EHLO
+        id S1356723AbiBULpO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 06:45:14 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237647AbiBULo4 (ORCPT
+        with ESMTP id S1356707AbiBULpF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 06:44:56 -0500
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DDE3B62;
-        Mon, 21 Feb 2022 03:44:33 -0800 (PST)
-Received: from fraeml742-chm.china.huawei.com (unknown [172.18.147.200])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4K2L6C0brlz67xLh;
-        Mon, 21 Feb 2022 19:43:31 +0800 (CST)
-Received: from lhreml710-chm.china.huawei.com (10.201.108.61) by
- fraeml742-chm.china.huawei.com (10.206.15.223) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Mon, 21 Feb 2022 12:44:31 +0100
-Received: from localhost (10.202.226.41) by lhreml710-chm.china.huawei.com
- (10.201.108.61) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Mon, 21 Feb
- 2022 11:44:30 +0000
-Date:   Mon, 21 Feb 2022 11:44:28 +0000
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     Yicong Yang <yangyicong@hisilicon.com>
-CC:     <gregkh@linuxfoundation.org>, <helgaas@kernel.org>,
-        <alexander.shishkin@linux.intel.com>, <lorenzo.pieralisi@arm.com>,
-        <will@kernel.org>, <mark.rutland@arm.com>,
-        <mathieu.poirier@linaro.org>, <suzuki.poulose@arm.com>,
-        <mike.leach@linaro.org>, <leo.yan@linaro.org>,
-        <daniel.thompson@linaro.org>, <joro@8bytes.org>,
-        <john.garry@huawei.com>, <shameerali.kolothum.thodi@huawei.com>,
-        <robin.murphy@arm.com>, <peterz@infradead.org>, <mingo@redhat.com>,
-        <acme@kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <coresight@lists.linaro.org>, <linux-pci@vger.kernel.org>,
-        <linux-perf-users@vger.kernel.org>,
-        <iommu@lists.linux-foundation.org>, <prime.zeng@huawei.com>,
-        <liuqi115@huawei.com>, <zhangshaokun@hisilicon.com>,
-        <linuxarm@huawei.com>, <song.bao.hua@hisilicon.com>
-Subject: Re: [PATCH v4 3/8] hisi_ptt: Register PMU device for PTT trace
-Message-ID: <20220221114428.000062cd@Huawei.com>
-In-Reply-To: <20220221084307.33712-4-yangyicong@hisilicon.com>
-References: <20220221084307.33712-1-yangyicong@hisilicon.com>
-        <20220221084307.33712-4-yangyicong@hisilicon.com>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
+        Mon, 21 Feb 2022 06:45:05 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E28D117AA0;
+        Mon, 21 Feb 2022 03:44:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645443881; x=1676979881;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=dQYmqJJE6FDYdAKgZgjhPy1rWMStu2e18a2SFM3qJPk=;
+  b=huILiGq4mR9ey2zpqbGNbEGjVHN/y5xlWCi2/t2cKw+Z7Oj8zREt7bXX
+   QIkhDT7V4wHL7YPyPgmwxeV9ESLh39jUIeIFoAEae0fsQ0IGhOBKyzo7d
+   AlytWiMhqFEjE6b3PHUm89IZAq/qNrK+Pq7gLWa2T+F0xR5KYGPtCzr9O
+   RgHQJ2s0zjYk8oBKWCk4U76piGoKff8LM+ONNxVNlasJNoweV90Oprt9x
+   R+cWC7oyrET09V0gAnZvnRQQjFv49Ct7u1v+bf3j6Co+hYGyq9o/oyn6S
+   xNkChGnC6QLUoU0s4tNiHLB+thKaM5du0ZR/fgYX7uD9Rp8U5H82n3AbJ
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10264"; a="276086217"
+X-IronPort-AV: E=Sophos;i="5.88,385,1635231600"; 
+   d="scan'208";a="276086217"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2022 03:44:41 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,385,1635231600"; 
+   d="scan'208";a="638530467"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga004.jf.intel.com with ESMTP; 21 Feb 2022 03:44:34 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1000)
+        id 2ABC1161; Mon, 21 Feb 2022 13:44:51 +0200 (EET)
+Date:   Mon, 21 Feb 2022 14:44:51 +0300
+From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     "Kirill A. Shutemov" <kirill@shutemov.name>, aarcange@redhat.com,
+        ak@linux.intel.com, dan.j.williams@intel.com,
+        dave.hansen@intel.com, david@redhat.com, hpa@zytor.com,
+        jgross@suse.com, jmattson@google.com, joro@8bytes.org,
+        jpoimboe@redhat.com, knsathya@kernel.org,
+        linux-kernel@vger.kernel.org, luto@kernel.org, mingo@redhat.com,
+        pbonzini@redhat.com, peterz@infradead.org,
+        sathyanarayanan.kuppuswamy@linux.intel.com, sdeep@vmware.com,
+        seanjc@google.com, tglx@linutronix.de, tony.luck@intel.com,
+        vkuznets@redhat.com, wanpengli@tencent.com, x86@kernel.org,
+        linux-hyperv@vger.kernel.org,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Tianyu Lan <Tianyu.Lan@microsoft.com>
+Subject: Re: [PATCHv3.1 2/32] x86/coco: Explicitly declare type of
+ confidential computing platform
+Message-ID: <20220221114451.mljggcmadgvrrxbv@black.fi.intel.com>
+References: <YhAWcPbzgUGcJZjI@zn.tnic>
+ <20220219001305.22883-1-kirill.shutemov@linux.intel.com>
+ <YhNyY5ErqQHZ961+@zn.tnic>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.202.226.41]
-X-ClientProxiedBy: lhreml732-chm.china.huawei.com (10.201.108.83) To
- lhreml710-chm.china.huawei.com (10.201.108.61)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YhNyY5ErqQHZ961+@zn.tnic>
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,249 +77,134 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 21 Feb 2022 16:43:02 +0800
-Yicong Yang <yangyicong@hisilicon.com> wrote:
-
-> Register PMU device of PTT trace, then users can use
-> trace through perf command. The driver makes use of perf
-> AUX trace and support following events to configure the
-> trace:
+On Mon, Feb 21, 2022 at 12:07:15PM +0100, Borislav Petkov wrote:
+> On Sat, Feb 19, 2022 at 03:13:04AM +0300, Kirill A. Shutemov wrote:
+> > diff --git a/arch/x86/kernel/cc_platform.c b/arch/x86/kernel/cc_platform.c
+> > index 6a6ffcd978f6..891d3074a16e 100644
+> > --- a/arch/x86/kernel/cc_platform.c
+> > +++ b/arch/x86/kernel/cc_platform.c
+> > @@ -9,18 +9,15 @@
+> >  
+> >  #include <linux/export.h>
+> >  #include <linux/cc_platform.h>
+> > -#include <linux/mem_encrypt.h>
+> >  
+> > -#include <asm/mshyperv.h>
+> > +#include <asm/coco.h>
+> >  #include <asm/processor.h>
+> >  
+> > -static bool __maybe_unused intel_cc_platform_has(enum cc_attr attr)
+> > +static enum cc_vendor cc_vendor;
 > 
-> - filter: select Root port or Endpoint to trace
-> - type: select the type of traced TLP headers
-> - direction: select the direction of traced TLP headers
-> - format: select the data format of the traced TLP headers
+> static enum cc_vendor vendor __ro_after_init;
+
+Hm. Isn't 'vendor' too generic? It may lead to name conflict in the
+future.
+
+What is wrong with cc_vendor here? I noticed that you don't like name of
+a variable to match type name. Why?
+
+> > @@ -344,6 +345,8 @@ static void __init ms_hyperv_init_platform(void)
+> >  		 */
+> >  		swiotlb_force = SWIOTLB_FORCE;
+> >  #endif
+> > +		if (hv_get_isolation_type() != HV_ISOLATION_TYPE_NONE)
+> > +			cc_init(CC_VENDOR_HYPERV);
 > 
-> This patch adds the PMU driver part of PTT trace. The perf
-> command support of PTT trace is added in the following
-> patch.
+> Isn't that supposed to test HV_ISOLATION_TYPE_SNP instead?
+
+Currently cc_platform_has() relies on hv_is_isolation_supported() which
+checks for !HV_ISOLATION_TYPE_NONE. This is direct transfer to the new
+scheme. It might be wrong, but it is not regression.
+
+> I mean, I have no clue what HV_ISOLATION_TYPE_VBS is. It is not used
+> anywhere in the tree either.
 > 
-> Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
+> a6c76bb08dc7 ("x86/hyperv: Load/save the Isolation Configuration leaf")
+> calls it "'VBS' (software-based isolation)" - whatever that means - so
+> I'm not sure that is going to need the cc-facilities.
+> 
+> For stuff like that you need to use get_maintainers.pl and Cc them
+> folks:
+> 
+> $ git log -p -1 | ./scripts/get_maintainer.pl | grep -i hyper
+> "K. Y. Srinivasan" <kys@microsoft.com> (supporter:Hyper-V/Azure CORE AND DRIVERS)
+> Haiyang Zhang <haiyangz@microsoft.com> (supporter:Hyper-V/Azure CORE AND DRIVERS)
+> Stephen Hemminger <sthemmin@microsoft.com> (supporter:Hyper-V/Azure CORE AND DRIVERS)
+> Wei Liu <wei.liu@kernel.org> (supporter:Hyper-V/Azure CORE AND DRIVERS,commit_signer:1/4=25%)
+> Dexuan Cui <decui@microsoft.com> (supporter:Hyper-V/Azure CORE AND DRIVERS)
+> linux-hyperv@vger.kernel.org (open list:Hyper-V/Azure CORE AND DRIVERS)
+> 
+> /me adds the ML to Cc.
 
-A few minor comments inline.
++Tianyu, who brought HyperV cc_platform_has().
 
-Thanks,
+Speaking about HyperV, moving to scheme with cc_init() revealed that
+HyperV never selected ARCH_HAS_CC_PLATFORM. Now it leads to build failure
+if AMD memory encryption is not enabled:
 
-Jonathan
+	ld: arch/x86/kernel/cpu/mshyperv.o: in function `ms_hyperv_init_platform':
+	mshyperv.c:(.init.text+0x297): undefined reference to `cc_init'
 
-> +static int hisi_ptt_trace_init_filter(struct hisi_ptt *hisi_ptt, u64 config)
-> +{
-> +	unsigned long val, port_mask = hisi_ptt->port_mask;
-> +	struct hisi_ptt_filter_desc *filter;
-> +	int ret = -EINVAL;
-> +
-> +	hisi_ptt->trace_ctrl.is_port = FIELD_GET(HISI_PTT_PMU_FILTER_IS_PORT, config);
-> +	val = FIELD_GET(HISI_PTT_PMU_FILTER_VAL_MASK, config);
-> +
-> +	/*
-> +	 * Port filters are defined as bit mask. For port filters, check
-> +	 * the bits in the @val are within the range of hisi_ptt->port_mask
-> +	 * and whether it's empty or not, otherwise user has specified
-> +	 * some unsupported root ports.
-> +	 *
-> +	 * For Requester ID filters, walk the available filter list to see
-> +	 * whether we have one matched.
-> +	 */
-> +	if (!hisi_ptt->trace_ctrl.is_port) {
-> +		list_for_each_entry(filter, &hisi_ptt->req_filters, list)
-> +			if (val == hisi_ptt_get_filter_val(filter->pdev)) {
-> +				ret = 0;
-> +				break;
-> +			}
-> +	} else if (bitmap_subset(&val, &port_mask, BITS_PER_LONG)) {
-> +		ret = 0;
-> +	}
-> +
-> +	if (ret)
-> +		return ret;
-> +
-> +	hisi_ptt->trace_ctrl.filter = val;
-> +	return 0;
-> +}
-> +
-> +static int hisi_ptt_pmu_event_init(struct perf_event *event)
-> +{
-> +	struct hisi_ptt *hisi_ptt = to_hisi_ptt(event->pmu);
-> +	struct hisi_ptt_trace_ctrl *ctrl = &hisi_ptt->trace_ctrl;
-> +	int ret;
-> +	u32 val;
-> +
-> +	if (event->attr.type != hisi_ptt->hisi_ptt_pmu.type)
-> +		return -ENOENT;
-> +
-> +	mutex_lock(&hisi_ptt->mutex);
-> +
-> +	ret = hisi_ptt_trace_init_filter(hisi_ptt, event->attr.config);
-> +	if (ret < 0)
-> +		goto out;
-> +
-> +	val = FIELD_GET(HISI_PTT_PMU_DIRECTION_MASK, event->attr.config);
-> +	ret = hisi_ptt_trace_valid_config_onehot(val, hisi_ptt_trace_available_direction,
-> +						 ARRAY_SIZE(hisi_ptt_trace_available_direction));
-> +	if (ret < 0)
-> +		goto out;
-> +	ctrl->direction = val;
-> +
-> +	val = FIELD_GET(HISI_PTT_PMU_TYPE_MASK, event->attr.config);
-> +
+Maybe something like this:
 
-For consistency, no blank line here.
+diff --git a/drivers/hv/Kconfig b/drivers/hv/Kconfig
+index 0747a8f1fcee..574ea80601e9 100644
+--- a/drivers/hv/Kconfig
++++ b/drivers/hv/Kconfig
+@@ -8,6 +8,7 @@ config HYPERV
+ 		|| (ARM64 && !CPU_BIG_ENDIAN))
+ 	select PARAVIRT
+ 	select X86_HV_CALLBACK_VECTOR if X86
++	select ARCH_HAS_CC_PLATFORM if X86
+ 	select VMAP_PFN
+ 	help
+ 	  Select this option to run Linux as a Hyper-V client operating
 
-> +	ret = hisi_ptt_trace_valid_config(val, hisi_ptt_trace_available_type,
-> +					  ARRAY_SIZE(hisi_ptt_trace_available_type));
-> +	if (ret < 0)
-> +		goto out;
-> +	ctrl->type = val;
-> +
-> +	val = FIELD_GET(HISI_PTT_PMU_FORMAT_MASK, event->attr.config);
-> +	ret = hisi_ptt_trace_valid_config_onehot(val, hisi_ptt_trace_availble_format,
-> +						 ARRAY_SIZE(hisi_ptt_trace_availble_format));
-> +	if (ret < 0)
-> +		goto out;
-> +	ctrl->format = val;
-> +
-> +out:
-> +	mutex_unlock(&hisi_ptt->mutex);
-> +	return ret;
-> +}
+Again, it is pre-existing issue. It only escalated to build failure.
 
-...
+> >  	if (hv_max_functions_eax >= HYPERV_CPUID_NESTED_FEATURES) {
+> > diff --git a/arch/x86/mm/mem_encrypt_identity.c b/arch/x86/mm/mem_encrypt_identity.c
+> > index 3f0abb403340..eb7fbd85b77e 100644
+> > --- a/arch/x86/mm/mem_encrypt_identity.c
+> > +++ b/arch/x86/mm/mem_encrypt_identity.c
+> > @@ -44,6 +44,7 @@
+> >  #include <asm/setup.h>
+> >  #include <asm/sections.h>
+> >  #include <asm/cmdline.h>
+> > +#include <asm/coco.h>
+> >  
+> >  #include "mm_internal.h"
+> >  
+> > @@ -565,8 +566,7 @@ void __init sme_enable(struct boot_params *bp)
+> >  	} else {
+> >  		/* SEV state cannot be controlled by a command line option */
+> >  		sme_me_mask = me_mask;
+> > -		physical_mask &= ~sme_me_mask;
+> > -		return;
+> > +		goto out;
+> >  	}
+> >  
+> >  	/*
+> > @@ -600,6 +600,8 @@ void __init sme_enable(struct boot_params *bp)
+> >  		sme_me_mask = 0;
+> >  	else
+> >  		sme_me_mask = active_by_default ? me_mask : 0;
+> > -
+> > +out:
+> >  	physical_mask &= ~sme_me_mask;
+> > +	if (sme_me_mask)
+> > +		cc_init(CC_VENDOR_AMD);
+> >  }
+> 
+> I guess.
+> 
+> Adding SEV folks to Cc too.
+> 
+> Please use get_maintainer.pl - you should know that - you're not some
+> newbie who started doing kernel work two weeks ago.
 
-> +
-> +static void hisi_ptt_pmu_start(struct perf_event *event, int flags)
-> +{
-> +	struct hisi_ptt *hisi_ptt = to_hisi_ptt(event->pmu);
-> +	struct perf_output_handle *handle = &hisi_ptt->trace_ctrl.handle;
-> +	struct hw_perf_event *hwc = &event->hw;
-> +	struct hisi_ptt_pmu_buf *buf;
-> +	int cpu = event->cpu;
-> +	int ret;
-> +
-> +	hwc->state = 0;
-> +	mutex_lock(&hisi_ptt->mutex);
-> +	if (hisi_ptt->trace_ctrl.status == HISI_PTT_TRACE_STATUS_ON) {
-> +		pci_dbg(hisi_ptt->pdev, "trace has already started\n");
-> +		goto stop;
+Sorry, will do.
 
-If it is already started setting the state to STOPPED without doing anything
-to change the hardware state doesn't feel right.
-I'm assuming we only get here as a result of a bug, so perhaps its fine
-to do this.
-
-> +	}
-> +
-> +	if (cpu == -1)
-> +		cpu = hisi_ptt->trace_ctrl.default_cpu;
-> +
-> +	/*
-> +	 * Handle the interrupt on the same cpu which starts the trace to avoid
-> +	 * context mismatch. Otherwise we'll trigger the WARN from the perf
-> +	 * core in event_function_local().
-> +	 */
-> +	WARN_ON(irq_set_affinity(pci_irq_vector(hisi_ptt->pdev, HISI_PTT_TRACE_DMA_IRQ),
-> +				 cpumask_of(cpu)));
-> +
-> +	ret = hisi_ptt_alloc_trace_buf(hisi_ptt);
-> +	if (ret) {
-> +		pci_dbg(hisi_ptt->pdev, "alloc trace buf failed, ret = %d\n", ret);
-> +		goto stop;
-> +	}
-> +
-> +	buf = perf_aux_output_begin(handle, event);
-> +	if (!buf) {
-> +		pci_dbg(hisi_ptt->pdev, "aux output begin failed\n");
-> +		goto stop;
-> +	}
-> +
-> +	buf->pos = handle->head % buf->length;
-> +
-> +	ret = hisi_ptt_trace_start(hisi_ptt);
-> +	if (ret) {
-> +		pci_dbg(hisi_ptt->pdev, "trace start failed, ret = %d\n", ret);
-> +		perf_aux_output_end(handle, 0);
-> +		goto stop;
-> +	}
-> +
-> +	mutex_unlock(&hisi_ptt->mutex);
-> +	return;
-> +stop:
-> +	event->hw.state |= PERF_HES_STOPPED;
-> +	mutex_unlock(&hisi_ptt->mutex);
-> +}
-> +
-
-...
-
-> +static int hisi_ptt_register_pmu(struct hisi_ptt *hisi_ptt)
-> +{
-> +	u16 core_id, sicl_id;
-> +	char *pmu_name;
-> +	int ret;
-> +	u32 reg;
-> +
-> +	hisi_ptt->hisi_ptt_pmu = (struct pmu) {
-> +		.module		= THIS_MODULE,
-> +		.capabilities	= PERF_PMU_CAP_EXCLUSIVE | PERF_PMU_CAP_ITRACE,
-> +		.task_ctx_nr	= perf_sw_context,
-> +		.attr_groups	= hisi_ptt_pmu_groups,
-> +		.event_init	= hisi_ptt_pmu_event_init,
-> +		.setup_aux	= hisi_ptt_pmu_setup_aux,
-> +		.free_aux	= hisi_ptt_pmu_free_aux,
-> +		.start		= hisi_ptt_pmu_start,
-> +		.stop		= hisi_ptt_pmu_stop,
-> +		.add		= hisi_ptt_pmu_add,
-> +		.del		= hisi_ptt_pmu_del,
-> +	};
-> +
-> +	reg = readl(hisi_ptt->iobase + HISI_PTT_LOCATION);
-> +	core_id = FIELD_GET(HISI_PTT_CORE_ID, reg);
-> +	sicl_id = FIELD_GET(HISI_PTT_SICL_ID, reg);
-> +
-> +	pmu_name = devm_kasprintf(&hisi_ptt->pdev->dev, GFP_KERNEL, "hisi_ptt%u_%u",
-> +				  sicl_id, core_id);
-> +	if (!pmu_name)
-> +		return -ENOMEM;
-> +
-> +	ret = perf_pmu_register(&hisi_ptt->hisi_ptt_pmu, pmu_name, -1);
-> +	if (ret)
-> +		return ret;
-> +
-> +	return devm_add_action_or_reset(&hisi_ptt->pdev->dev,
-> +					hisi_ptt_unregister_pmu,
-> +					&hisi_ptt->hisi_ptt_pmu);
-
-This result in the cleanup of the driver being slightly out of order wrt to
-the setup as we have the filters cleared after this (in remove())
-Ideally the remove() ordering should be the precise reverse of the
-probe() order except where it is necessary to deviate from that and
-in those deviations I'd expect to see a comment saying why.
-
-So either clear up the filters using a devm_add_action_or_reset()
-or do a manual unregister of the pmu in remove. I prefer the
-devm_add_action_or_reset for hisi_ptt_release_filters() option.
-
-There may well not be a race here, but it is always good to avoid
-reviewers having to think about whether there might be one!
-
-Note that other reviewers may have different views on this however
-so perhaps go with what they say as this subsystem isn't my area
-of expertise!
-
-> +}
-> +
->  /*
->   * The DMA of PTT trace can only use direct mapping, due to some
->   * hardware restriction. Check whether there is an IOMMU or the
-> @@ -337,6 +826,12 @@ static int hisi_ptt_probe(struct pci_dev *pdev,
->  
->  	hisi_ptt_init_ctrls(hisi_ptt);
->  
-> +	ret = hisi_ptt_register_pmu(hisi_ptt);
-> +	if (ret) {
-> +		pci_err(pdev, "failed to register pmu device, ret = %d", ret);
-> +		return ret;
-> +	}
-> +
->  	return 0;
->  }
->  
+-- 
+ Kirill A. Shutemov

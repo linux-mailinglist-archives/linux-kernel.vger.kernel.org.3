@@ -2,145 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1620C4BED0C
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 23:11:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6461E4BED0D
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 23:14:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235263AbiBUWLs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 17:11:48 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37210 "EHLO
+        id S235257AbiBUWOn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 17:14:43 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232574AbiBUWLr (ORCPT
+        with ESMTP id S229624AbiBUWOl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 17:11:47 -0500
-Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9216C22BF0;
-        Mon, 21 Feb 2022 14:11:21 -0800 (PST)
-Received: by mail-qk1-x734.google.com with SMTP id f10so14456589qkg.9;
-        Mon, 21 Feb 2022 14:11:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=CuC7f4KIwhRURQqrkG1raV3vJWZvnVGFpmPUwwQMuuE=;
-        b=EPQjAeljfZI07y1KWMA5ii6YRXBezMDpX4SEnWzSYInuqPIBI6PSuD3mEq88PACcIF
-         BXnbcHmvKplH7koEBdQbpua/DvYHU3K+ylBLgw8Hdhyni9QEC1jQKkUf8S17NEd0tSpV
-         EKaaOFLNJucljmw1c7lE+1ho7tBIsOy1M9+o/g0OJPNHPIRCAbLgLrwhbbahY31PdSlO
-         /Kwh8R0pgEamuORLmC+fgNYuip5EAGQ7ZuQbZdu9B1u3h9KkjGSvyXq3JAE5W07GrK5A
-         nqaltX6dD1VUnahlWp+CM7/hysZK5A9VP0DrHT08Um20TanzRODtDvbAnnkaIDu+Oyi4
-         jbOw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=CuC7f4KIwhRURQqrkG1raV3vJWZvnVGFpmPUwwQMuuE=;
-        b=WBBhdAVHRhdJ1iIrm7coY1miuk0ctcAIrbCk1Yrcb+1elX2btCxmcKh5KrpaX2Zbud
-         SiUbdvX72xdAlg9i4kY4zO+BoY7tCYVH6RRQ7sgoZKdMmnQp2B3M1xvKThVj4L0f9Wni
-         tpwF9Kmwm13sE5cQyTnjeFT5O+/QKZGVNdiMcUW0wpx1FkaS6hrkuYIubXkOuD28/yVX
-         piYO/ielQJ4xl2BTUyGf9F7LoR3XYkvS76bfaqe/RKqmKoBcRIm6zDH/qyhlZgd5tqt0
-         6SPITQxTG56JIKwLfDNSho9OgUL/USEDDkvIT35H4NH4LvEDCwJthm88xlniP2ZxBj+Z
-         a6MA==
-X-Gm-Message-State: AOAM53065/enzU9VRbjxS8g2p/cCwNlGM7ElDi9lLZQVqJ2waADRwr72
-        6gq6OF45gTy1NF6K+yfNQwk0fD4ziYpnaw==
-X-Google-Smtp-Source: ABdhPJxpJ+l2HZnyCZFV4l5AhFdQti/g+NjkiIxQWV5JfL7+b5zo1Dwj1KsaXDmwMtkX0JIsX7QE4A==
-X-Received: by 2002:ae9:dfc7:0:b0:648:e065:84be with SMTP id t190-20020ae9dfc7000000b00648e06584bemr4538507qkf.129.1645481480727;
-        Mon, 21 Feb 2022 14:11:20 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id h1sm28345769qkn.71.2022.02.21.14.11.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Feb 2022 14:11:19 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <238e6fb0-cd77-4772-3e92-23941dc74403@roeck-us.net>
-Date:   Mon, 21 Feb 2022 14:11:17 -0800
+        Mon, 21 Feb 2022 17:14:41 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CE3EDA1
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 14:14:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645481657; x=1677017657;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=k0LGZcF34AzYUyZ6uE6NhbzWtk03tdkaMAz0Tr4gNVg=;
+  b=Ux/bRjoWiyllfSrnRYwqNXJ/FzLbETn5P4EnFNIfU8nFq3Hdj8+3rmB7
+   +aICklqDszFOo5ibVBWs7nGBuCLXXSqKV3BCL74Ic8Z+nGHiaActBX3Ws
+   RVYl6NpAl4RE67Ka58k++rpPiRLDonZS+5TuU5OTma/8Ae8wps/QEcM7z
+   gp2a6iF41dpw81FRK4pugDVD/5z0kqF3TCAfTioOao+UJmBOy/j7Qi8m1
+   2QLklRk4PNEfJikXaX5TNwKhro+x+w62xW3NbI5fq7aJo4RRj5ebBsm2L
+   luplG8KG7UvEeiW61NOlm9e51LkuLYuF9nrMmuEw+T8r/9o9tYfRT8hUf
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10265"; a="338006042"
+X-IronPort-AV: E=Sophos;i="5.88,386,1635231600"; 
+   d="scan'208";a="338006042"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2022 14:14:16 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,386,1635231600"; 
+   d="scan'208";a="591087330"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga008.fm.intel.com with ESMTP; 21 Feb 2022 14:14:08 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1000)
+        id 190AD12C; Tue, 22 Feb 2022 00:14:25 +0200 (EET)
+Date:   Tue, 22 Feb 2022 01:14:24 +0300
+From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+To:     Tom Lendacky <thomas.lendacky@amd.com>
+Cc:     "Kirill A. Shutemov" <kirill@shutemov.name>, bp@alien8.de,
+        aarcange@redhat.com, ak@linux.intel.com, dan.j.williams@intel.com,
+        dave.hansen@intel.com, david@redhat.com, hpa@zytor.com,
+        jgross@suse.com, jmattson@google.com, joro@8bytes.org,
+        jpoimboe@redhat.com, knsathya@kernel.org,
+        linux-kernel@vger.kernel.org, luto@kernel.org, mingo@redhat.com,
+        pbonzini@redhat.com, peterz@infradead.org,
+        sathyanarayanan.kuppuswamy@linux.intel.com, sdeep@vmware.com,
+        seanjc@google.com, tglx@linutronix.de, tony.luck@intel.com,
+        vkuznets@redhat.com, wanpengli@tencent.com, x86@kernel.org
+Subject: Re: [PATCHv3.1 2.1/2] x86/coco: Add API to handle encryption mask
+Message-ID: <20220221221424.r7ffo5je4lyt4tw5@black.fi.intel.com>
+References: <YhAWcPbzgUGcJZjI@zn.tnic>
+ <20220219001305.22883-1-kirill.shutemov@linux.intel.com>
+ <20220219001305.22883-2-kirill.shutemov@linux.intel.com>
+ <0c0a4199-1318-5290-9d9d-43bcb9017228@amd.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v5 1/2] dt-bindings: hwmon: add tmp464.yaml
-Content-Language: en-US
-To:     Krzysztof Adamski <krzysztof.adamski@nokia.com>
-Cc:     linux-hwmon@vger.kernel.org, Agathe Porte <agathe.porte@nokia.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220218150908.1947772-1-linux@roeck-us.net>
- <YhNWVLHYVtCvdGhi@localhost.localdomain>
- <66e6b131-274f-454b-44f6-17df879d71a9@roeck-us.net>
- <YhQDGHD3S0qwP2OB@localhost.localdomain>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <YhQDGHD3S0qwP2OB@localhost.localdomain>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0c0a4199-1318-5290-9d9d-43bcb9017228@amd.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/21/22 13:24, Krzysztof Adamski wrote:
-> Dnia Mon, Feb 21, 2022 at 08:16:15AM -0800, Guenter Roeck napisał(a):
->>> I still thing we should have the same format here and in tmp421, for
->>> consistency. If use the same property name, "ti,n-factor" but on tmp421
->>> you have use 32bit value while here you have to use 8bit (which is weird
->>> in DT, BTW), it might be confusing.
->>> Back when we did this for TMP421, there was some discussion and we
->>> settled on this approach, why do it differently now?
->>>
->>
->> I seem to recall from that discussion that there was supposedly no way to
->> express negative numbers in devicetree. Obviously that is incorrect.
+On Mon, Feb 21, 2022 at 12:31:40PM -0600, Tom Lendacky wrote:
+> On 2/18/22 18:13, Kirill A. Shutemov wrote:
+> > AMD SME/SEV uses a bit in the page table entries to indicate that the
+> > page is encrypted and not accessible to the VMM.
+> > 
+> > TDX uses a similar approach, but the polarity of the mask is opposite to
+> > AMD: if the bit is set the page is accessible to VMM.
+> > 
+> > Provide vendor-neutral API to deal with the mask:
+> > 
+> >    - cc_mkenc() and cc_mkdec() modify given address to make it
+> >      encrypted/decrypted. It can be applied to phys_addr_t, pgprotval_t
+> >      or page table entry value.
+> > 
+> >    - cc_get_mask() returns encryption or decrypthion mask. It is useful
+> >      for set_memory_encrypted() and set_memory_decrypted()
+> >      implementation.
+> > 
+> > The implementation will be extended to cover TDX.
+> > 
+> > pgprot_decrypted() is used by drivers (i915, virtio_gpu, vfio).
+> > cc_mkdec() called by pgprot_decrypted(). Export cc_mkdec().
+> > 
+> > HyperV doesn't use bits in page table entries, so the mask is 0 for both
+> > encrypthion and decrypthion.
+> > 
+> > Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
 > 
-> Well, I would still argue it *is* correct. DT only support unsigned
-> numbers and, really, only 32 or 64 bit. See the chapter 2.2.4 Properties
-> in:
-> https://github.com/devicetree-org/devicetree-specification/releases/download/v0.4-rc1/devicetree-specification-v0.4-rc1.pdf
+> > @@ -84,7 +85,39 @@ bool cc_platform_has(enum cc_attr attr)
+> >   }
+> >   EXPORT_SYMBOL_GPL(cc_platform_has);
+> > -__init void cc_init(enum cc_vendor vendor)
+> > +u64 cc_get_mask(bool enc)
 > 
-> Devicetree also supports array of bytes, and this is how we get the
-> /bits/ magic but this is just a syntactic suggar. The same is true about
-> negative values. Just decompile your compiled DTB and you will see.
-> To put it in other words - DTS does support negative values, DTB don't.j
-> 
->> In addition to that, I strongly suspect that the tmp421 code as written
->> does not work. Its value range is specified as 0..255, but it is read with
->>     err = of_property_read_s32(child, "ti,n-factor", &val);
->> and range checked with
->>     if (val > 127 || val < -128) {
->>                dev_err(dev, "n-factor for channel %d invalid (%d)\n",
->>                       i, val);
->>                return -EINVAL;
->>        }
->>
->> That just looks wrong. Either the value range is 0..255 and checked
->> as 0 .. 255, or it is -128 .. 127 and must be both checked and specified
->> accordingly. This made me look into the code and I found how negative
->> numbers are supposed to be handled.
-> 
-> It worked for me when I tested that. I could redo the test, if you are
-> unsure. The code also looks good to me. I wasn't convinced for this
-> format in yaml but after the whole discussion we had, we settled on
-> that, with Robs blessing :)
-> 
+> I was a bit confused by this name, expecting to always get the mask, but it
+> is dependent on the input parameter.
 
-It is hard for me to believe that you can enter, say, 255 into the dts file
-and of_property_read_s32() reads it as -1. If so, of_property_read_s32()
-could never support values of 128 and above, which seems unlikely.
+Well, it always get you a mask. But it can be empty :P
 
-Now, I can imagine that one can enter 0xffffffff and of_property_read_s32()
-returns -1, but that isn't what is documented for tmp421.
+> How about cc_get_operation_mask() or ... ? I'm struggling to come up
+> with a good name, but plain cc_get_mask() is very confusing.
 
-Guenter
-
-> Here's the actual discussion where all this was considered:
-> https://patchwork.kernel.org/project/linux-hwmon/patch/3ff7b4cc57dab2073fa091072366c1e524631729.1632984254.git.krzysztof.adamski@nokia.com/
+Yeah. Naming is hard. cc_get_operation_mask() doesn't clarify anything
+comparing to cc_get_mask(). To me it is as confusing.
 > 
-> I'm not saying the way we do this for tmp421 is better or even right,
-> all I say is that it would make sense to be consistent and not redo this
-> discussion every time we have this problem.
+> > +{
+> > +	switch (cc_vendor) {
+> > +	case CC_VENDOR_AMD:
+> > +		return enc ? cc_mask : 0;
+> > +	default:
+> > +		return 0;
+> > +	}
+> > +}
+> > +
 > 
-> Krzysztof
+> > diff --git a/arch/x86/mm/mem_encrypt_identity.c b/arch/x86/mm/mem_encrypt_identity.c
+> > index eb7fbd85b77e..fa758247ab57 100644
+> > --- a/arch/x86/mm/mem_encrypt_identity.c
+> > +++ b/arch/x86/mm/mem_encrypt_identity.c
+> > @@ -603,5 +603,5 @@ void __init sme_enable(struct boot_params *bp)
+> >   out:
+> >   	physical_mask &= ~sme_me_mask;
+> >   	if (sme_me_mask)
+> > -		cc_init(CC_VENDOR_AMD);
+> > +		cc_init(CC_VENDOR_AMD, sme_me_mask);
+> 
+> Since you're adding the if statement, you can probably wrap the adjustment
+> to physical_mask within the if, also (I guess in the previous patch). Not
+> required, though.
 
+Can do.
+
+-- 
+ Kirill A. Shutemov

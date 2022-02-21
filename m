@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CEFF4BE543
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:00:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FDAD4BDC88
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:42:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347839AbiBUJQt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 04:16:49 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34782 "EHLO
+        id S1350388AbiBUJdf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 04:33:35 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347869AbiBUJJf (ORCPT
+        with ESMTP id S1349607AbiBUJ0W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 04:09:35 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B290DFF3;
-        Mon, 21 Feb 2022 01:01:55 -0800 (PST)
+        Mon, 21 Feb 2022 04:26:22 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AEB41DA6C;
+        Mon, 21 Feb 2022 01:10:41 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CBA85B80EB3;
-        Mon, 21 Feb 2022 09:01:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA257C340E9;
-        Mon, 21 Feb 2022 09:01:51 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AC53460DDF;
+        Mon, 21 Feb 2022 09:10:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91C04C340E9;
+        Mon, 21 Feb 2022 09:10:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645434112;
-        bh=ZuE/Z/bq3S+9y920nyWf42fUMdYekNAaXDde+xO2nPc=;
+        s=korg; t=1645434640;
+        bh=bYmxFUxu5FgBnwgvdPY3DcQ50JmfRGtEJ/k/w9849Q0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WD4tuGIOEPkD7Ubw5hVU24o8Sn+kKOLVSjviY1+vKC/4gXccvH0DOI6MyR1yeZFX0
-         aTcxZt1nxWtHc4b6xkG4w7KGNfIPcs3I6Rxw+UmZE8FrTTWQVB8tmsqVVWMxsEw9F/
-         PeXgmFVoMfYcW6VG9waC1aZXPIckeJDrrXvCt3Ik=
+        b=RT1EvrFrmFwUJ9kz2RMmn0eFbIO8an5nrTEHO7Fp+qMUafzod3tU+izegCvbuMzif
+         Dp6KqsYNvLziBwMTa9c8yd/V4kxYn4MRMt1OnJnAEZZNYWFOYGvf9605a5QvEE8Ve8
+         lpK4/O9cHij2Fo3LmkIqV49L7HjTh3t4WOTO0fbs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Long Li <longli@microsoft.com>,
-        Michael Kelley <mikelley@microsoft.com>,
-        Purna Pavan Chandra Aekkaladevi <paekkaladevi@microsoft.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Wei Liu <wei.liu@kernel.org>
-Subject: [PATCH 5.10 017/121] PCI: hv: Fix NUMA node assignment when kernel boots with custom NUMA topology
+        stable@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
+        Florian Westphal <fw@strlen.de>,
+        Pablo Neira Ayuso <pablo@netfilter.org>
+Subject: [PATCH 5.15 077/196] netfilter: xt_socket: fix a typo in socket_mt_destroy()
 Date:   Mon, 21 Feb 2022 09:48:29 +0100
-Message-Id: <20220221084921.732987240@linuxfoundation.org>
+Message-Id: <20220221084933.509894998@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220221084921.147454846@linuxfoundation.org>
-References: <20220221084921.147454846@linuxfoundation.org>
+In-Reply-To: <20220221084930.872957717@linuxfoundation.org>
+References: <20220221084930.872957717@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,49 +55,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Long Li <longli@microsoft.com>
+From: Eric Dumazet <edumazet@google.com>
 
-commit 3149efcdf2c6314420c418dfc94de53bfd076b1f upstream.
+commit 75063c9294fb239bbe64eb72141b6871fe526d29 upstream.
 
-When kernel boots with a NUMA topology with some NUMA nodes offline, the PCI
-driver should only set an online NUMA node on the device. This can happen
-during KDUMP where some NUMA nodes are not made online by the KDUMP kernel.
+Calling nf_defrag_ipv4_disable() instead of nf_defrag_ipv6_disable()
+was probably not the intent.
 
-This patch also fixes the case where kernel is booting with "numa=off".
+I found this by code inspection, while chasing a possible issue in TPROXY.
 
-Fixes: 999dd956d838 ("PCI: hv: Add support for protocol 1.3 and support PCI_BUS_RELATIONS2")
-Signed-off-by: Long Li <longli@microsoft.com>
-Reviewed-by: Michael Kelley <mikelley@microsoft.com>
-Tested-by: Purna Pavan Chandra Aekkaladevi <paekkaladevi@microsoft.com>
-Acked-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-Link: https://lore.kernel.org/r/1643247814-15184-1-git-send-email-longli@linuxonhyperv.com
-Signed-off-by: Wei Liu <wei.liu@kernel.org>
+Fixes: de8c12110a13 ("netfilter: disable defrag once its no longer needed")
+Signed-off-by: Eric Dumazet <edumazet@google.com>
+Reviewed-by: Florian Westphal <fw@strlen.de>
+Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/pci/controller/pci-hyperv.c |   13 +++++++++++--
- 1 file changed, 11 insertions(+), 2 deletions(-)
+ net/netfilter/xt_socket.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/pci/controller/pci-hyperv.c
-+++ b/drivers/pci/controller/pci-hyperv.c
-@@ -1841,8 +1841,17 @@ static void hv_pci_assign_numa_node(stru
- 		if (!hv_dev)
- 			continue;
+--- a/net/netfilter/xt_socket.c
++++ b/net/netfilter/xt_socket.c
+@@ -221,7 +221,7 @@ static void socket_mt_destroy(const stru
+ 	if (par->family == NFPROTO_IPV4)
+ 		nf_defrag_ipv4_disable(par->net);
+ 	else if (par->family == NFPROTO_IPV6)
+-		nf_defrag_ipv4_disable(par->net);
++		nf_defrag_ipv6_disable(par->net);
+ }
  
--		if (hv_dev->desc.flags & HV_PCI_DEVICE_FLAG_NUMA_AFFINITY)
--			set_dev_node(&dev->dev, hv_dev->desc.virtual_numa_node);
-+		if (hv_dev->desc.flags & HV_PCI_DEVICE_FLAG_NUMA_AFFINITY &&
-+		    hv_dev->desc.virtual_numa_node < num_possible_nodes())
-+			/*
-+			 * The kernel may boot with some NUMA nodes offline
-+			 * (e.g. in a KDUMP kernel) or with NUMA disabled via
-+			 * "numa=off". In those cases, adjust the host provided
-+			 * NUMA node to a valid NUMA node used by the kernel.
-+			 */
-+			set_dev_node(&dev->dev,
-+				     numa_map_to_online_node(
-+					     hv_dev->desc.virtual_numa_node));
- 
- 		put_pcichild(hv_dev);
- 	}
+ static struct xt_match socket_mt_reg[] __read_mostly = {
 
 

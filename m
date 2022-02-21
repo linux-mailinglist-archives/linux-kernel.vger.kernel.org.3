@@ -2,84 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 405F74BDFDF
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:50:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 170A14BE3FC
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:58:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378916AbiBUPPc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 10:15:32 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58538 "EHLO
+        id S1378966AbiBUPSH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 10:18:07 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235311AbiBUPPb (ORCPT
+        with ESMTP id S235434AbiBUPSF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 10:15:31 -0500
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 978B01B792;
-        Mon, 21 Feb 2022 07:15:07 -0800 (PST)
-Received: by mail-pf1-x435.google.com with SMTP id i21so9120192pfd.13;
-        Mon, 21 Feb 2022 07:15:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language
-         :from:to:cc:references:in-reply-to:content-transfer-encoding;
-        bh=rQjzrJUBJUG4lrXY3qHLoN254Z+Hvh/Va/Cpr5SArPA=;
-        b=YB37ZflfT9ggqvpHpDLeP8hKKD9vSOva3ZaRBtd3tgoeYOYCGS/+oOCm9dvs5+8Wr3
-         9m9VOC1yL/2ha0cc8D9+MLPdWVL5Y0UtghNB+2KfdcOAl7UfAZ8JSEDIDQBuBUpsSd05
-         YfAu3GG7/z4rqLLCa7Ur4F0fYf79Ri2KUmBE/N+KsRRrqtnuzULfCX1i78dghi1zf+0V
-         qqA4m2PtIrmFeaTmVPH+e1otxTv9qMz0z/PuOXXfneytP+fflzqJ+CmI32BrqCWU5OSE
-         gO9FLaK9LU2vQkti/b7TlzQvzfLpeNUkv9G8DzVCo2XbOtXOO6yJyP7LVqqCye+nyFjk
-         aOvA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:from:to:cc:references:in-reply-to
-         :content-transfer-encoding;
-        bh=rQjzrJUBJUG4lrXY3qHLoN254Z+Hvh/Va/Cpr5SArPA=;
-        b=EFK/rFEd9gikuyKiWbUGzHEGnOmAWkAiEEZs80wrvdsewoDm/fFALgu4oPhl8qE+4U
-         UAA0q+YnHuPr3MAGzO5sWOm48ov3eDfqAzSxUE2KEH6N5kfl1pca+ZrwnC0Zc5JfgMEH
-         Xf6GNceec4IUnAKVL4TLXhd58PFW8OPNK9AymlG8j6iqS4D8FDaYjwNiZAToBHzP2jyk
-         Rd/jo8paskmL5yRl2e9FdbYmPRlyfo5fYqG9dL0xmD/BxsRVz9ZfJpz3xppXh6ADvi1H
-         Bgme72af55TFUDFX5JNSx71FzG5oADak5uiW7apTlLHSz+PUaosYyBQkUdaz91DhJLA0
-         2v1w==
-X-Gm-Message-State: AOAM533cy5au6LDYRJCaDxjse2oEwJLk7ja3LWLE+3K1avJ/h7JzUu3l
-        vn9TGiMzFZiDpuwZ0cARxRU=
-X-Google-Smtp-Source: ABdhPJylmsV+h5d8jn8qiDmtwnHSxu0TXVS9IMCo+KFkNe8tAnqXy4KJ+vAfQkmA12bMTt5jor+fkw==
-X-Received: by 2002:a05:6a02:182:b0:374:5a57:cbf9 with SMTP id bj2-20020a056a02018200b003745a57cbf9mr2835424pgb.616.1645456506920;
-        Mon, 21 Feb 2022 07:15:06 -0800 (PST)
-Received: from ?IPV6:2404:f801:0:5:8000::754? ([2404:f801:9000:1a:efea::754])
-        by smtp.gmail.com with ESMTPSA id s2sm13819900pfk.3.2022.02.21.07.15.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Feb 2022 07:15:06 -0800 (PST)
-Message-ID: <23f4a64d-5977-1816-8faa-fe7691ace2ff@gmail.com>
-Date:   Mon, 21 Feb 2022 23:14:58 +0800
+        Mon, 21 Feb 2022 10:18:05 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DE471DA72
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 07:17:42 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4D5A3B81216
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 15:17:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C579CC340E9
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 15:17:39 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="F1zazOBT"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1645456658;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=RQqwLIRqBF6IyJA8RF+kEDk7RrKOa7nHZ2TpMJ5iw60=;
+        b=F1zazOBTR9OUFsDoxxY30c4zIb3qZv1Vjy7v9LeaDCE/HMYs8wqPshpfiJjNRm6cAtPDjZ
+        mrbi7S9dQlRv9QpoXr5OnOK8MO4oTc40OwjanTk/pjpa3W5CnmosRCaZKxFHbH3qdAIHaw
+        1ivICK0GZy3G7Fz21n/VhXc643lHawg=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 886fdb3a (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO)
+        for <linux-kernel@vger.kernel.org>;
+        Mon, 21 Feb 2022 15:17:38 +0000 (UTC)
+Received: by mail-yb1-f174.google.com with SMTP id j2so35201149ybu.0
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 07:17:37 -0800 (PST)
+X-Gm-Message-State: AOAM533vtrxrvdwdiPAbF4B91Qa1IOonmi8N6nYVT3hbdUSkL3C0bCRo
+        AyN0Vo4/1Va8wbfLYt8AzWfCbm9C9xtrEHPbnsY=
+X-Google-Smtp-Source: ABdhPJzIo6+FKcwGDk2ZOrmtcF/jiRF4YC5g4FCcZzIJGlJLhYRwRvX9Fn5wGM1AhBS61/W65/RGqHVGuIaiDv7zOZA=
+X-Received: by 2002:a25:d116:0:b0:61d:e8c9:531e with SMTP id
+ i22-20020a25d116000000b0061de8c9531emr19182794ybg.637.1645456657044; Mon, 21
+ Feb 2022 07:17:37 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [PATCH V2 1/2] Swiotlb: Add swiotlb_alloc_from_low_pages switch
-Content-Language: en-US
-From:   Tianyu Lan <ltykernel@gmail.com>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
-        wei.liu@kernel.org, decui@microsoft.com, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        x86@kernel.org, hpa@zytor.com, hch@infradead.org,
-        m.szyprowski@samsung.com, robin.murphy@arm.com,
-        michael.h.kelley@microsoft.com,
-        Tianyu Lan <Tianyu.Lan@microsoft.com>,
-        iommu@lists.linux-foundation.org, linux-hyperv@vger.kernel.org,
-        linux-kernel@vger.kernel.org, vkuznets@redhat.com,
-        brijesh.singh@amd.com, konrad.wilk@oracle.com,
-        parri.andrea@gmail.com, thomas.lendacky@amd.com
-References: <20220209122302.213882-1-ltykernel@gmail.com>
- <20220209122302.213882-2-ltykernel@gmail.com> <20220214081919.GA18337@lst.de>
- <4f433f07-05be-f81f-43e8-55c3f1af23b3@gmail.com>
- <20220214135834.GA30150@lst.de>
- <8d052867-ccff-f00f-7c89-cc26a4bfa347@gmail.com>
-In-Reply-To: <8d052867-ccff-f00f-7c89-cc26a4bfa347@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <20220212122318.623435-1-Jason@zx2c4.com> <20220212122318.623435-8-Jason@zx2c4.com>
+ <YhMfhipo95HxVaFO@sol.localdomain>
+In-Reply-To: <YhMfhipo95HxVaFO@sol.localdomain>
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date:   Mon, 21 Feb 2022 16:17:26 +0100
+X-Gmail-Original-Message-ID: <CAHmME9qs5gBFrGXGktB9kOx8oSdfow+-Tc=ie7b1J8aT5SfQ7Q@mail.gmail.com>
+Message-ID: <CAHmME9qs5gBFrGXGktB9kOx8oSdfow+-Tc=ie7b1J8aT5SfQ7Q@mail.gmail.com>
+Subject: Re: [PATCH v2 07/10] random: group entropy collection functions
+To:     Eric Biggers <ebiggers@kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        "Theodore Ts'o" <tytso@mit.edu>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,48 +68,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/15/2022 11:32 PM, Tianyu Lan wrote:
-> On 2/14/2022 9:58 PM, Christoph Hellwig wrote:
->> On Mon, Feb 14, 2022 at 07:28:40PM +0800, Tianyu Lan wrote:
->>> On 2/14/2022 4:19 PM, Christoph Hellwig wrote:
->>>> Adding a function to set the flag doesn't really change much.  As Robin
->>>> pointed out last time you should fine a way to just call
->>>> swiotlb_init_with_tbl directly with the memory allocated the way you
->>>> like it.  Or given that we have quite a few of these trusted hypervisor
->>>> schemes maybe add an argument to swiotlb_init that specifies how to
->>>> allocate the memory.
->>>
->>> Thanks for your suggestion. I will try the first approach first 
->>> approach.
->>
->> Take a look at the SWIOTLB_ANY flag in this WIP branch:
->>
->>     
->> http://git.infradead.org/users/hch/misc.git/shortlog/refs/heads/swiotlb-init-cleanup 
->>
->>
->> That being said I'm not sure that either this flag or the existing 
->> powerpc
->> code iѕ actually the right thing to do.  We still need the 4G limited
->> buffer to support devices with addressing limitations.  So I think we 
->> need
->> an additional io_tlb_mem instance for the devices without addressing
->> limitations instead.
->>
-> 
-> Hi Christoph:
->       Thanks for your patches. I tested these patches in Hyper-V trusted 
-> VM and system can't boot up. I am debugging and will report back.
+On Mon, Feb 21, 2022 at 6:13 AM Eric Biggers <ebiggers@kernel.org> wrote:
+>
+> On Sat, Feb 12, 2022 at 01:23:15PM +0100, Jason A. Donenfeld wrote:
+> > +/**********************************************************************
+> > + *
+> > + * Entropy collection routines.
+> > + *
+> > + * The following exported functions are used for pushing entropy into
+> > + * the above entropy accumulation routines:
+> > + *
+> > + *   void add_device_randomness(const void *buf, size_t size);
+> > + *   void add_input_randomness(unsigned int type, unsigned int code,
+> > + *                             unsigned int value);
+> > + *   void add_interrupt_randomness(int irq);
+> > + *   void add_disk_randomness(struct gendisk *disk);
+> > + *   void add_hwgenerator_randomness(const void *buffer, size_t count,
+> > + *                                   size_t entropy);
+> > + *   void add_bootloader_randomness(const void *buf, size_t size);
+> > + *
+> > + * add_device_randomness() adds data to the input pool that
+> > + * is likely to differ between two devices (or possibly even per boot).
+> > + * This would be things like MAC addresses or serial numbers, or the
+> > + * read-out of the RTC. This does *not* credit any actual entropy to
+> > + * the pool, but it initializes the pool to different values for devices
+> > + * that might otherwise be identical and have very little entropy
+> > + * available to them (particularly common in the embedded world).
+>
+> Perhaps this comment should match the order in which these functions are defined
+> in the file?
 
-Sorry. The boot failure is not related with these patches and the issue
-has been fixed in the latest upstream code.
-
-There is a performance bottleneck due to io tlb mem's spin lock during
-performance test. All devices'io queues uses same io tlb mem entry
-and the spin lock of io tlb mem introduce overheads. There is a fix 
-patch from Andi Kleen in the github. Could you have a look?
-
-https://github.com/intel/tdx/commit/4529b5784c141782c72ec9bd9a92df2b68cb7d45
-
-Thanks.
-
+Sure. Will do

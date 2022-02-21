@@ -2,43 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25A4B4BDD79
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:45:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ACCE34BE540
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:00:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347199AbiBUJEN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 04:04:13 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58056 "EHLO
+        id S1346769AbiBUJAU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 04:00:20 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347192AbiBUJA5 (ORCPT
+        with ESMTP id S1346923AbiBUI7r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 04:00:57 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6655A27B2E;
-        Mon, 21 Feb 2022 00:56:02 -0800 (PST)
+        Mon, 21 Feb 2022 03:59:47 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 475E826566;
+        Mon, 21 Feb 2022 00:55:17 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E5A63B80EAF;
-        Mon, 21 Feb 2022 08:56:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BBA9C340E9;
-        Mon, 21 Feb 2022 08:55:59 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 67E6960FB6;
+        Mon, 21 Feb 2022 08:54:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46339C340E9;
+        Mon, 21 Feb 2022 08:54:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645433760;
-        bh=XNcZJD8WoDEQAQnmMUE/R3Xrqgj7fY2o72ZslMisX7s=;
+        s=korg; t=1645433683;
+        bh=EteLPQ1xpo8u1pYKeNPetV3v8Y6SoK7eagmQ+X6IfdQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=s2sVU+G2mtBjWBcoVjXuCwr0d5MWF5JJSYoKCG1mXVmhriI1aBITZqtbTHij1Bv9+
-         x4M7L7zS5lGgv49IbtsLNhWEEhIUGNZHRY3SXCFocF5u056thYJizsIgUwbw3xKW9p
-         30yC5XqUQL/5qCQWpw637X6DFm6u8wQaKbqSvFJ8=
+        b=zyCFP3sj3DP2OnGnOqFx9vLZaQgOkuVwm9NNcQb1Ktm8vxbvnWNrB27zNrQAryaet
+         VZsycubKfW+h4MnHDmo47jDpYiZ63aS8TnbUlB4Jqy471KIHhOSxcEcm+eYj6BIoc8
+         Cl8MevHlSxeXkEx0A3+sN2ZLPhGR1N4wFFQJQVPM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Mark Brown <broonie@kernel.org>
-Subject: [PATCH 4.19 33/58] ASoC: ops: Fix stereo change notifications in snd_soc_put_volsw()
-Date:   Mon, 21 Feb 2022 09:49:26 +0100
-Message-Id: <20220221084912.949334538@linuxfoundation.org>
+        stable@vger.kernel.org,
+        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Wolfram Sang <wsa@kernel.org>
+Subject: [PATCH 4.14 36/45] i2c: brcmstb: fix support for DSL and CM variants
+Date:   Mon, 21 Feb 2022 09:49:27 +0100
+Message-Id: <20220221084911.621975133@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220221084911.895146879@linuxfoundation.org>
-References: <20220221084911.895146879@linuxfoundation.org>
+In-Reply-To: <20220221084910.454824160@linuxfoundation.org>
+References: <20220221084910.454824160@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,56 +56,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mark Brown <broonie@kernel.org>
+From: Rafał Miłecki <rafal@milecki.pl>
 
-commit 564778d7b1ea465f9487eedeece7527a033549c5 upstream.
+commit 834cea3a252ed4847db076a769ad9efe06afe2d5 upstream.
 
-When writing out a stereo control we discard the change notification from
-the first channel, meaning that events are only generated based on changes
-to the second channel. Ensure that we report a change if either channel
-has changed.
+DSL and CM (Cable Modem) support 8 B max transfer size and have a custom
+DT binding for that reason. This driver was checking for a wrong
+"compatible" however which resulted in an incorrect setup.
 
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Cc: stable@vger.kernel.org
-Link: https://lore.kernel.org/r/20220201155629.120510-2-broonie@kernel.org
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Fixes: e2e5a2c61837 ("i2c: brcmstb: Adding support for CM and DSL SoCs")
+Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
+Acked-by: Florian Fainelli <f.fainelli@gmail.com>
+Signed-off-by: Wolfram Sang <wsa@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/soc/soc-ops.c |   14 ++++++++++----
- 1 file changed, 10 insertions(+), 4 deletions(-)
+ drivers/i2c/busses/i2c-brcmstb.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/sound/soc/soc-ops.c
-+++ b/sound/soc/soc-ops.c
-@@ -314,7 +314,7 @@ int snd_soc_put_volsw(struct snd_kcontro
- 	unsigned int sign_bit = mc->sign_bit;
- 	unsigned int mask = (1 << fls(max)) - 1;
- 	unsigned int invert = mc->invert;
--	int err;
-+	int err, ret;
- 	bool type_2r = false;
- 	unsigned int val2 = 0;
- 	unsigned int val, val_mask;
-@@ -356,12 +356,18 @@ int snd_soc_put_volsw(struct snd_kcontro
- 	err = snd_soc_component_update_bits(component, reg, val_mask, val);
- 	if (err < 0)
- 		return err;
-+	ret = err;
+--- a/drivers/i2c/busses/i2c-brcmstb.c
++++ b/drivers/i2c/busses/i2c-brcmstb.c
+@@ -645,7 +645,7 @@ static int brcmstb_i2c_probe(struct plat
  
--	if (type_2r)
-+	if (type_2r) {
- 		err = snd_soc_component_update_bits(component, reg2, val_mask,
--			val2);
-+						    val2);
-+		/* Don't discard any error code or drop change flag */
-+		if (ret == 0 || err < 0) {
-+			ret = err;
-+		}
-+	}
- 
--	return err;
-+	return ret;
- }
- EXPORT_SYMBOL_GPL(snd_soc_put_volsw);
- 
+ 	/* set the data in/out register size for compatible SoCs */
+ 	if (of_device_is_compatible(dev->device->of_node,
+-				    "brcmstb,brcmper-i2c"))
++				    "brcm,brcmper-i2c"))
+ 		dev->data_regsz = sizeof(u8);
+ 	else
+ 		dev->data_regsz = sizeof(u32);
 
 

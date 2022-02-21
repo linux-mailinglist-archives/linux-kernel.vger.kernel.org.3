@@ -2,52 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4F584BE7F9
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:04:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 406A74BDD4E
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:45:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347656AbiBUJHf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 04:07:35 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57952 "EHLO
+        id S1351364AbiBUJn7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 04:43:59 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348062AbiBUJCR (ORCPT
+        with ESMTP id S1351564AbiBUJhZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 04:02:17 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B380222BEE;
-        Mon, 21 Feb 2022 00:57:30 -0800 (PST)
+        Mon, 21 Feb 2022 04:37:25 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B79CB3A5CB;
+        Mon, 21 Feb 2022 01:16:01 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1810EB80EBA;
-        Mon, 21 Feb 2022 08:57:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36564C340E9;
-        Mon, 21 Feb 2022 08:57:27 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id E14A3CE0E76;
+        Mon, 21 Feb 2022 09:15:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2F55C340E9;
+        Mon, 21 Feb 2022 09:15:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645433847;
-        bh=r+bNCJC5D6dgqgospRgsdedmZ0Hcm+1d/jSHPYZYSUE=;
+        s=korg; t=1645434953;
+        bh=I+jBkflwt0aPUiUvWdQx+Obp5Zu9ym9Yrxeq3MFXuxg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Dy0KwiqiXpyFY3MwuFBj2Ebtfk+Nj7QRC85coKOYM8eGD80BrFtBEVQu3e4d6YYvN
-         4IL4GcG45n3GSIqNs5o9rqy0Cut/J+TtfgQDL9Gi+tEr5UAxoLFfmMI6x4d++qaLuN
-         SfJYlxCZFWaC+AEOXqilMgWGW6gaZi3UVQTmzAGY=
+        b=L2JabJm174fNJPTYP6endTaA6k55k3EVqQ/azSWewUUFMUam/rXvExTn7iT/GkPmb
+         MUIKYsK64VwZPrKrj9i1F4LM002mEBAB/8gfT5z7MtQJpJQZ4v7CjeOwo2J/MVRzkx
+         Vl5bZkh4TgZQvnHBZU7kVHBJMM/aDdq0WR6JDUHg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, JaeSang Yoo <jsyoo5b@gmail.com>,
-        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
+        stable@vger.kernel.org, Mateusz Krzak <kszaquitto@gmail.com>,
+        Christian Hewitt <christianshewitt@gmail.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 56/58] tracing: Fix tp_printk option related with tp_printk_stop_on_boot
+Subject: [PATCH 5.15 157/196] arm64: dts: meson-gx: add ATF BL32 reserved-memory region
 Date:   Mon, 21 Feb 2022 09:49:49 +0100
-Message-Id: <20220221084913.683951906@linuxfoundation.org>
+Message-Id: <20220221084936.199519629@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220221084911.895146879@linuxfoundation.org>
-References: <20220221084911.895146879@linuxfoundation.org>
+In-Reply-To: <20220221084930.872957717@linuxfoundation.org>
+References: <20220221084930.872957717@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,47 +57,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: JaeSang Yoo <js.yoo.5b@gmail.com>
+From: Christian Hewitt <christianshewitt@gmail.com>
 
-[ Upstream commit 3203ce39ac0b2a57a84382ec184c7d4a0bede175 ]
+[ Upstream commit 76577c9137456febb05b0e17d244113196a98968 ]
 
-The kernel parameter "tp_printk_stop_on_boot" starts with "tp_printk" which is
-the same as another kernel parameter "tp_printk". If "tp_printk" setup is
-called before the "tp_printk_stop_on_boot", it will override the latter
-and keep it from being set.
+Add an additional reserved memory region for the BL32 trusted firmware
+present in many devices that boot from Amlogic vendor u-boot.
 
-This is similar to other kernel parameter issues, such as:
-  Commit 745a600cf1a6 ("um: console: Ignore console= option")
-or init/do_mounts.c:45 (setup function of "ro" kernel param)
-
-Fix it by checking for a "_" right after the "tp_printk" and if that
-exists do not process the parameter.
-
-Link: https://lkml.kernel.org/r/20220208195421.969326-1-jsyoo5b@gmail.com
-
-Signed-off-by: JaeSang Yoo <jsyoo5b@gmail.com>
-[ Fixed up change log and added space after if condition ]
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+Suggested-by: Mateusz Krzak <kszaquitto@gmail.com>
+Signed-off-by: Christian Hewitt <christianshewitt@gmail.com>
+Reviewed-by: Neil Armstrong <narmstrong@baylibre.com>
+Reviewed-by: Kevin Hilman <khilman@baylibre.com>
+Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
+Link: https://lore.kernel.org/r/20220126044954.19069-2-christianshewitt@gmail.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- kernel/trace/trace.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ arch/arm64/boot/dts/amlogic/meson-gx.dtsi | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
-index 17e337a22c239..19a6b088f1e72 100644
---- a/kernel/trace/trace.c
-+++ b/kernel/trace/trace.c
-@@ -232,6 +232,10 @@ __setup("trace_clock=", set_trace_boot_clock);
+diff --git a/arch/arm64/boot/dts/amlogic/meson-gx.dtsi b/arch/arm64/boot/dts/amlogic/meson-gx.dtsi
+index 6b457b2c30a4b..aa14ea017a613 100644
+--- a/arch/arm64/boot/dts/amlogic/meson-gx.dtsi
++++ b/arch/arm64/boot/dts/amlogic/meson-gx.dtsi
+@@ -49,6 +49,12 @@
+ 			no-map;
+ 		};
  
- static int __init set_tracepoint_printk(char *str)
- {
-+	/* Ignore the "tp_printk_stop_on_boot" param */
-+	if (*str == '_')
-+		return 0;
++		/* 32 MiB reserved for ARM Trusted Firmware (BL32) */
++		secmon_reserved_bl32: secmon@5300000 {
++			reg = <0x0 0x05300000 0x0 0x2000000>;
++			no-map;
++		};
 +
- 	if ((strcmp(str, "=0") != 0 && strcmp(str, "=off") != 0))
- 		tracepoint_printk = 1;
- 	return 1;
+ 		linux,cma {
+ 			compatible = "shared-dma-pool";
+ 			reusable;
 -- 
 2.34.1
 

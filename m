@@ -2,108 +2,226 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6CBC4BD382
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 03:09:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C6374BD377
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 03:09:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245428AbiBUCDz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Feb 2022 21:03:55 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58248 "EHLO
+        id S245717AbiBUCHr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Feb 2022 21:07:47 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238820AbiBUCDx (ORCPT
+        with ESMTP id S245487AbiBUCHq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Feb 2022 21:03:53 -0500
-Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75F6E3616C
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Feb 2022 18:03:31 -0800 (PST)
-Received: by mail-qv1-xf2f.google.com with SMTP id f19so28203331qvb.6
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Feb 2022 18:03:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=IfnVO7g/7CxNyjGwJs8ebOgPHTkowomqY0vYzJnQWEU=;
-        b=YxyzZV7Ag9r/75/hPkMlxBZKN1rdYRDbkqra+lJ+le34W3Q5rwmQTGZyIf77lM1l8d
-         8AQ1GX/RDHXZbWhA07H7FCi4zq3ez3izY2z10YpcR5KVZRR/Yb3ZCA3hcwHXTNQh5qMV
-         jIcTYUuTc1LEcxW+RWsOmP3UDVf+KVBSSGiVvpVHFX4h9uNlrJHTXnGQEVibPrFB4wWI
-         iFDOYrdYt3/2CY6FJo+WEG6YtYOFkIgh+F4VqXYdrzojflPJyqir2iMpLE6Y+gYvKaql
-         gljZJLM/f5UyV93jUlmjSOerjuFh9F9FvicFYzRqZmDQKSbkJ0z/0gly9AE1I/E2V0YP
-         weWw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=IfnVO7g/7CxNyjGwJs8ebOgPHTkowomqY0vYzJnQWEU=;
-        b=c/ZJwBtrNOoFg9qQZ8ebPZBRGLuMcQJaZKonyVum4X5cTA8dzq1DAxrsHQdBDVInvQ
-         2bkVHtUso18yfYX8ORk8+37GiVwRuXyhJQRSBaGmm6UPKcrgo8u1J0jHg6ae5tEO6H67
-         kPpajsdWiUi++HNOi+6WEHlldEyGkk+J4CCR+H4PNaeIdkqrbOAskOYjks2ojKbTCfNK
-         ZnApb7fx1/4h8Jhg5p/+RfeLD7qmjPopo+bXhlEqBtFOWXiEyWQwFHP5XMqk3Qw+N4Qo
-         NVZVTazKg4APhyW1yB3fu+eva2LSsDqT+RxE26wtTasLzLGHTn2GkLcWtUSqNc81wvo3
-         QBVQ==
-X-Gm-Message-State: AOAM5333SKvnXiexlnWQjeLYuSAJperE1lFM7xy+991Ewltd230UflKa
-        Tq1lsLXJkS6TwXlF90fuTfw=
-X-Google-Smtp-Source: ABdhPJxKoVUYoG24d5EjClZyQdLEGq9z9gFN3oVKJvpQFPtE4bTKdHpZUX9MNAf19i9XBrjLu3hkPQ==
-X-Received: by 2002:a05:622a:1041:b0:2de:332:fe28 with SMTP id f1-20020a05622a104100b002de0332fe28mr5793243qte.141.1645409010597;
-        Sun, 20 Feb 2022 18:03:30 -0800 (PST)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id v19sm26617207qkp.131.2022.02.20.18.03.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 20 Feb 2022 18:03:30 -0800 (PST)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: chi.minghao@zte.com.cn
-To:     oss@buserror.net
-Cc:     mpe@ellerman.id.au, benh@kernel.crashing.org,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        Minghao Chi <chi.minghao@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH] platforms/83xx: Use of_device_get_match_data()
-Date:   Mon, 21 Feb 2022 02:03:23 +0000
-Message-Id: <20220221020323.1925215-1-chi.minghao@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        Sun, 20 Feb 2022 21:07:46 -0500
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41E5E3FD9E;
+        Sun, 20 Feb 2022 18:07:24 -0800 (PST)
+X-UUID: 3261f95a62d1426eaa304a0716ed11db-20220221
+X-UUID: 3261f95a62d1426eaa304a0716ed11db-20220221
+Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw01.mediatek.com
+        (envelope-from <chui-hao.chiu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1175757474; Mon, 21 Feb 2022 10:07:20 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Mon, 21 Feb 2022 10:07:18 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Mon, 21 Feb 2022 10:07:18 +0800
+From:   Peter Chiu <chui-hao.chiu@mediatek.com>
+To:     Rob Herring <robh+dt@kernel.org>
+CC:     Matthias Brugger <matthias.bgg@gmail.com>,
+        <devicetree@vger.kernel.org>, Ryder Lee <ryder.Lee@mediatek.com>,
+        Evelyn Tsai <evelyn.tsai@mediatek.com>,
+        Sam Shih <sam.shih@mediatek.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        "Peter Chiu" <chui-hao.chiu@mediatek.com>
+Subject: [PATCH] arm64: dts: mt7986: add built-in Wi-Fi device nodes
+Date:   Mon, 21 Feb 2022 10:07:08 +0800
+Message-ID: <20220221020708.12724-1-chui-hao.chiu@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Minghao Chi (CGEL ZTE) <chi.minghao@zte.com.cn>
+This enables built-in 802.11ax Wi-Fi support.
 
-Use of_device_get_match_data() to simplify the code.
-
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Minghao Chi (CGEL ZTE) <chi.minghao@zte.com.cn>
+Signed-off-by: Peter Chiu <chui-hao.chiu@mediatek.com>
 ---
- arch/powerpc/platforms/83xx/suspend.c | 7 +------
- 1 file changed, 1 insertion(+), 6 deletions(-)
+This patch depends on below patchs
+1) https://patchwork.kernel.org/patch/12704208/
+2) https://patchwork.kernel.org/patch/12704207/
+3) https://patchwork.kernel.org/patch/12739683/
+---
+ arch/arm64/boot/dts/mediatek/mt7986a-rfb.dts | 41 +++++++++++++++++++
+ arch/arm64/boot/dts/mediatek/mt7986a.dtsi    | 19 +++++++++
+ arch/arm64/boot/dts/mediatek/mt7986b-rfb.dts | 43 ++++++++++++++++++++
+ 3 files changed, 103 insertions(+)
 
-diff --git a/arch/powerpc/platforms/83xx/suspend.c b/arch/powerpc/platforms/83xx/suspend.c
-index bb147d34d4a6..9ae9268b683c 100644
---- a/arch/powerpc/platforms/83xx/suspend.c
-+++ b/arch/powerpc/platforms/83xx/suspend.c
-@@ -322,17 +322,12 @@ static const struct platform_suspend_ops mpc83xx_suspend_ops = {
- static const struct of_device_id pmc_match[];
- static int pmc_probe(struct platform_device *ofdev)
- {
--	const struct of_device_id *match;
- 	struct device_node *np = ofdev->dev.of_node;
- 	struct resource res;
- 	const struct pmc_type *type;
- 	int ret = 0;
+diff --git a/arch/arm64/boot/dts/mediatek/mt7986a-rfb.dts b/arch/arm64/boot/dts/mediatek/mt7986a-rfb.dts
+index 4f3ff4e32452..06d09b33fabc 100644
+--- a/arch/arm64/boot/dts/mediatek/mt7986a-rfb.dts
++++ b/arch/arm64/boot/dts/mediatek/mt7986a-rfb.dts
+@@ -40,6 +40,13 @@
+ 	status = "okay";
+ };
  
--	match = of_match_device(pmc_match, &ofdev->dev);
--	if (!match)
--		return -EINVAL;
--
--	type = match->data;
-+	type = of_device_get_match_data(&ofdev->dev);
++&wmac {
++	status = "okay";
++	pinctrl-names = "default", "dbdc";
++	pinctrl-0 = <&wf_2g_5g_pins>;
++	pinctrl-1 = <&wf_dbdc_pins>;
++};
++
+ &pio {
+ 	uart1_pins: uart1-pins {
+ 		mux {
+@@ -61,6 +68,40 @@
+ 			groups = "jtag";
+ 		};
+ 	};
++
++	wf_2g_5g_pins: wf_2g_5g-pins {
++		mux {
++			function = "wifi";
++			groups = "wf_2g", "wf_5g";
++		};
++		conf {
++			pins = "WF0_HB1", "WF0_HB2", "WF0_HB3", "WF0_HB4",
++			       "WF0_HB0", "WF0_HB0_B", "WF0_HB5", "WF0_HB6",
++			       "WF0_HB7", "WF0_HB8", "WF0_HB9", "WF0_HB10",
++			       "WF0_TOP_CLK", "WF0_TOP_DATA", "WF1_HB1",
++			       "WF1_HB2", "WF1_HB3", "WF1_HB4", "WF1_HB0",
++			       "WF1_HB5", "WF1_HB6", "WF1_HB7", "WF1_HB8",
++			       "WF1_TOP_CLK", "WF1_TOP_DATA";
++			drive-strength = <4>;
++		};
++	};
++
++	wf_dbdc_pins: wf_dbdc-pins {
++		mux {
++			function = "wifi";
++			groups = "wf_dbdc";
++		};
++		conf {
++			pins = "WF0_HB1", "WF0_HB2", "WF0_HB3", "WF0_HB4",
++			       "WF0_HB0", "WF0_HB0_B", "WF0_HB5", "WF0_HB6",
++			       "WF0_HB7", "WF0_HB8", "WF0_HB9", "WF0_HB10",
++			       "WF0_TOP_CLK", "WF0_TOP_DATA", "WF1_HB1",
++			       "WF1_HB2", "WF1_HB3", "WF1_HB4", "WF1_HB0",
++			       "WF1_HB5", "WF1_HB6", "WF1_HB7", "WF1_HB8",
++			       "WF1_TOP_CLK", "WF1_TOP_DATA";
++			drive-strength = <4>;
++		};
++	};
+ };
  
- 	if (!of_device_is_available(np))
- 		return -ENODEV;
+ &ice {
+diff --git a/arch/arm64/boot/dts/mediatek/mt7986a.dtsi b/arch/arm64/boot/dts/mediatek/mt7986a.dtsi
+index fa98c2305e75..3896b5dca4b4 100644
+--- a/arch/arm64/boot/dts/mediatek/mt7986a.dtsi
++++ b/arch/arm64/boot/dts/mediatek/mt7986a.dtsi
+@@ -7,6 +7,7 @@
+ #include <dt-bindings/interrupt-controller/irq.h>
+ #include <dt-bindings/interrupt-controller/arm-gic.h>
+ #include <dt-bindings/clock/mt7986-clk.h>
++#include <dt-bindings/reset/mt7986-resets.h>
+ 
+ / {
+ 	interrupt-parent = <&gic>;
+@@ -79,6 +80,11 @@
+ 			reg = <0 0x43000000 0 0x30000>;
+ 			no-map;
+ 		};
++
++		wmcpu_emi: wmcpu-reserved@4fc00000 {
++			no-map;
++			reg = <0 0x4fc00000 0 0x00100000>;
++		};
+ 	};
+ 
+ 	timer {
+@@ -231,6 +237,19 @@
+ 			 #reset-cells = <1>;
+ 		};
+ 
++		wmac: wmac@18000000 {
++			compatible = "mediatek,mt7986-wmac";
++			resets = <&watchdog MT7986_TOPRGU_CONSYS_SW_RST>;
++			reset-names = "consys";
++			reg = <0 0x18000000 0 0x1000000>,
++			      <0 0x10003000 0 0x1000>,
++			      <0 0x11d10000 0 0x1000>;
++			interrupts = <GIC_SPI 213 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 214 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 215 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 216 IRQ_TYPE_LEVEL_HIGH>;
++			memory-region = <&wmcpu_emi>;
++		};
+ 	};
+ 
+ };
+diff --git a/arch/arm64/boot/dts/mediatek/mt7986b-rfb.dts b/arch/arm64/boot/dts/mediatek/mt7986b-rfb.dts
+index 5fb752edd754..fb422878ebb2 100644
+--- a/arch/arm64/boot/dts/mediatek/mt7986b-rfb.dts
++++ b/arch/arm64/boot/dts/mediatek/mt7986b-rfb.dts
+@@ -27,3 +27,46 @@
+ &uart0 {
+ 	status = "okay";
+ };
++
++&wmac {
++	status = "okay";
++	pinctrl-names = "default", "dbdc";
++	pinctrl-0 = <&wf_2g_5g_pins>;
++	pinctrl-1 = <&wf_dbdc_pins>;
++};
++
++&pio {
++	wf_2g_5g_pins: wf_2g_5g-pins {
++		mux {
++			function = "wifi";
++			groups = "wf_2g", "wf_5g";
++		};
++		conf {
++			pins = "WF0_HB1", "WF0_HB2", "WF0_HB3", "WF0_HB4",
++			       "WF0_HB0", "WF0_HB0_B", "WF0_HB5", "WF0_HB6",
++			       "WF0_HB7", "WF0_HB8", "WF0_HB9", "WF0_HB10",
++			       "WF0_TOP_CLK", "WF0_TOP_DATA", "WF1_HB1",
++			       "WF1_HB2", "WF1_HB3", "WF1_HB4", "WF1_HB0",
++			       "WF1_HB5", "WF1_HB6", "WF1_HB7", "WF1_HB8",
++			       "WF1_TOP_CLK", "WF1_TOP_DATA";
++			drive-strength = <4>;
++		};
++	};
++
++	wf_dbdc_pins: wf_dbdc-pins {
++		mux {
++			function = "wifi";
++			groups = "wf_dbdc";
++		};
++		conf {
++			pins = "WF0_HB1", "WF0_HB2", "WF0_HB3", "WF0_HB4",
++			       "WF0_HB0", "WF0_HB0_B", "WF0_HB5", "WF0_HB6",
++			       "WF0_HB7", "WF0_HB8", "WF0_HB9", "WF0_HB10",
++			       "WF0_TOP_CLK", "WF0_TOP_DATA", "WF1_HB1",
++			       "WF1_HB2", "WF1_HB3", "WF1_HB4", "WF1_HB0",
++			       "WF1_HB5", "WF1_HB6", "WF1_HB7", "WF1_HB8",
++			       "WF1_TOP_CLK", "WF1_TOP_DATA";
++			drive-strength = <4>;
++		};
++	};
++};
 -- 
-2.25.1
+2.18.0
 

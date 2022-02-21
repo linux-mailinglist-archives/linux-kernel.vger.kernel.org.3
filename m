@@ -2,106 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81A174BE587
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:00:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB45E4BE0C1
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:52:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379975AbiBUQOH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 11:14:07 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38446 "EHLO
+        id S1380039AbiBUQQi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 11:16:38 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235938AbiBUQOF (ORCPT
+        with ESMTP id S1379981AbiBUQPx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 11:14:05 -0500
-Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EE17BF56
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 08:13:42 -0800 (PST)
-Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-2d646fffcc2so143749207b3.4
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 08:13:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rajagiritech-edu-in.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=WXjHQX1AtlViHFaHWd6Iva+LTxgoLMRJ8aez/lEDXws=;
-        b=H29Z+yo8CnxLWxuAHti4RuiHYpPkOmKT5Q9C9W/QzMzIxgoTQRRazAZMYv6iGkxDD/
-         RZsqiQqSHU8PBCbKORaDfFJYwAOUlcfHB5RQ8Y+bW8kVSfPPmTvEpqijsfqk2tr5KNBL
-         Ms/zzzK0auvHhSbEcmmLuWf30ymx51y94UKRMJKSICUJ2vESLM8n/M35hJ94761Q1HeA
-         jzYX4iIm4m6Mxj8koAVOn3c0JhMNX8us8n/H4ypGL+NjWDT+fcek2WLQKlapkI/CQXKr
-         E7D/hAUb2r8v+qwectFWhQ6EnG2TJA6yfOkHkT1bONQ7nDBMLro34ct1yMQ1KuWiOeFz
-         eOqw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=WXjHQX1AtlViHFaHWd6Iva+LTxgoLMRJ8aez/lEDXws=;
-        b=gTeQZeQKev+DpQMJEV7x3w4EOShPHeysR5xju37CjkcVVg1kaoVdDTLRl3vOXPxODx
-         t27pBHW7vOZe6751FLZ9zDlsZgFMneUcpJd+/Dzua2HD21lZhnxfKhlyjAvohG/3muMr
-         CPc4zx//K61r9n6g7R+SiWR2eBfZ9JPkhXjiaibMrrac9tATKLwYLqND68WNmJbO8LRL
-         HdXRScHUh63+ThVmgVbI5ZAFpuXp8XvRfvLKbaLvubOuGoELGqm6RlxWQbHE0cHsnG4m
-         oh4R/roU4Fogcvf/0pt1EVcBbbffCpurXAK2jWUnDcpcxSdULbl5y4GebksuGr6f9Vnu
-         K7Dw==
-X-Gm-Message-State: AOAM532/VNMb2RxgICJrCQi9Sa7f+X4f5aSJxL+3qVwlmXYCdUab3o40
-        fiIBhJiDeKJ+lub0IpHnGNCy1DvmOT3+RG4Epoouig==
-X-Google-Smtp-Source: ABdhPJw5U/qXF+ljM3+m5p6sV0+H7RK8foGv2De7rZsl9ijk7+Y3Lz4D947ss/tnnBgFW7icUbb8tyBd3qbBzkTfY1s=
-X-Received: by 2002:a81:1408:0:b0:2d0:7c31:97dc with SMTP id
- 8-20020a811408000000b002d07c3197dcmr20092237ywu.216.1645460021600; Mon, 21
- Feb 2022 08:13:41 -0800 (PST)
+        Mon, 21 Feb 2022 11:15:53 -0500
+Received: from sender4-of-o53.zoho.com (sender4-of-o53.zoho.com [136.143.188.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3115F23BD4;
+        Mon, 21 Feb 2022 08:15:28 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1645460114; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=DuraJutovSGUPCk2XURRrMVrKu6VjFrkpxn3ohqo5fprZYZythN4kZr5L9vB+4OWuIwfdwPp+RpUOJquHBSulT8FY/qwXVq43kqpJaKCM9aJM2wf7dl29hIRxg7vzkYPpGh2RMi+ark3/46aurhztCscwZ1lXvxWARegXKg5BD0=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1645460114; h=Content-Type:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=WKgVCY1x560wjpb2d6+V1DLhy9frcWvJFP7CwbCVLYo=; 
+        b=nicyYhark7OR16sCX1xhUBcwDGIYt4LknSzouz0gc7yc5uN5RKAAm8i9TKH/DRcPHjW8wTWm7vmGVvlD9PBKLQiAhutmoNm2zD4KL4rynz9FX3JxcFggEgUyRTIkgWPodjkn3d3po5z4HU+hnL/RWx6iATs5fF4HkVVIhIygPvE=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=anirudhrb.com;
+        spf=pass  smtp.mailfrom=mail@anirudhrb.com;
+        dmarc=pass header.from=<mail@anirudhrb.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1645460114;
+        s=zoho; d=anirudhrb.com; i=mail@anirudhrb.com;
+        h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:Content-Type:In-Reply-To;
+        bh=WKgVCY1x560wjpb2d6+V1DLhy9frcWvJFP7CwbCVLYo=;
+        b=jGUZ9sbhScheWcPDrud7NDlwDJxZu5m76omQlDu2Vg5+271FB2w8f/PRG7UQpB2f
+        2EjASNOE+EbFI/B0ooZl7DSteqIpUvjkw0RXrCMT3fHe+bdJDeSJIv/Cp0CMN4t4RX6
+        QgxShMv7rSPGHGKHtXew11+2odP6x1wKSZ0tz0FA=
+Received: from anirudhrb.com (49.207.206.107 [49.207.206.107]) by mx.zohomail.com
+        with SMTPS id 1645460088394764.7856299620081; Mon, 21 Feb 2022 08:14:48 -0800 (PST)
+Date:   Mon, 21 Feb 2022 21:44:39 +0530
+From:   Anirudh Rayabharam <mail@anirudhrb.com>
+To:     Stefano Garzarella <sgarzare@redhat.com>
+Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
+        kernel list <linux-kernel@vger.kernel.org>,
+        Mike Christie <michael.christie@oracle.com>,
+        Jason Wang <jasowang@redhat.com>,
+        netdev <netdev@vger.kernel.org>,
+        Linux Virtualization <virtualization@lists.linux-foundation.org>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        kvm <kvm@vger.kernel.org>, Hillf Danton <hdanton@sina.com>
+Subject: Re: [PATCH] vhost/vsock: don't check owner in vhost_vsock_stop()
+ while releasing
+Message-ID: <YhO6bwu7iDtUFQGj@anirudhrb.com>
+References: <20220221114916.107045-1-sgarzare@redhat.com>
+ <CAGxU2F6aMqTaNaeO7xChtf=veDJYtBjDRayRRYkZ_FOq4CYJWQ@mail.gmail.com>
 MIME-Version: 1.0
-References: <20220221084934.836145070@linuxfoundation.org>
-In-Reply-To: <20220221084934.836145070@linuxfoundation.org>
-From:   Jeffrin Thalakkottoor <jeffrin@rajagiritech.edu.in>
-Date:   Mon, 21 Feb 2022 21:43:05 +0530
-Message-ID: <CAG=yYwnpcxnZ1yXQSHHa-6SEUv60PFD48w8K9sVPU3pROCn0HQ@mail.gmail.com>
-Subject: Re: [PATCH 5.16 000/227] 5.16.11-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     lkml <linux-kernel@vger.kernel.org>, stable@vger.kernel.org,
-        torvalds@linux-foundation.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Shuah Khan <shuah@kernel.org>, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, Pavel Machek <pavel@denx.de>,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAGxU2F6aMqTaNaeO7xChtf=veDJYtBjDRayRRYkZ_FOq4CYJWQ@mail.gmail.com>
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 21, 2022 at 3:13 PM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 5.16.11 release.
-> There are 227 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Wed, 23 Feb 2022 08:48:58 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.16.11-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.16.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
->
-hello,
+On Mon, Feb 21, 2022 at 02:59:30PM +0100, Stefano Garzarella wrote:
+> On Mon, Feb 21, 2022 at 12:49 PM Stefano Garzarella <sgarzare@redhat.com> wrote:
+> >
+> > vhost_vsock_stop() calls vhost_dev_check_owner() to check the device
+> > ownership. It expects current->mm to be valid.
+> >
+> > vhost_vsock_stop() is also called by vhost_vsock_dev_release() when
+> > the user has not done close(), so when we are in do_exit(). In this
+> > case current->mm is invalid and we're releasing the device, so we
+> > should clean it anyway.
+> >
+> > Let's check the owner only when vhost_vsock_stop() is called
+> > by an ioctl.
+> >
+> > Fixes: 433fc58e6bf2 ("VSOCK: Introduce vhost_vsock.ko")
+> > Cc: stable@vger.kernel.org
+> > Reported-by: syzbot+1e3ea63db39f2b4440e0@syzkaller.appspotmail.com
+> > Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
+> > ---
+> >  drivers/vhost/vsock.c | 14 ++++++++------
+> >  1 file changed, 8 insertions(+), 6 deletions(-)
+> 
+> Reported-and-tested-by: syzbot+0abd373e2e50d704db87@syzkaller.appspotmail.com
 
-Compiled  and booted  5.16.11-rc1+ on  VivoBook 15_ASUS Laptop X507UAR.
-NO new  regression or regressions  from dmesg.
+I don't think this patch fixes "INFO: task hung in vhost_work_dev_flush"
+even though syzbot says so. I am able to reproduce the issue locally
+even with this patch applied.
 
+Thanks,
 
-Tested-by: Jeffrin Jose T <jeffrin@rajagiritech.edu.in>
+	- Anirudh.
 
-
--- 
-software engineer
-rajagiri school of engineering and technology  -  autonomous
+> Reported-and-tested-by: syzbot+3140b17cb44a7b174008@syzkaller.appspotmail.com
+> 

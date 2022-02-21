@@ -2,41 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A5FC4BDC2D
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:41:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 111A74BE3EC
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:58:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344051AbiBUJXY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 04:23:24 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36136 "EHLO
+        id S1349217AbiBUJVH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 04:21:07 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349557AbiBUJMf (ORCPT
+        with ESMTP id S1349586AbiBUJMg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 04:12:35 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EB0B15A29;
-        Mon, 21 Feb 2022 01:05:30 -0800 (PST)
+        Mon, 21 Feb 2022 04:12:36 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16EC1240A1;
+        Mon, 21 Feb 2022 01:05:35 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C29AC6112F;
-        Mon, 21 Feb 2022 09:05:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A247EC340E9;
-        Mon, 21 Feb 2022 09:05:28 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 89CD7CE0E89;
+        Mon, 21 Feb 2022 09:05:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A610C340E9;
+        Mon, 21 Feb 2022 09:05:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645434329;
-        bh=ZS1TD7nsvGNTR1DMMV/5tMV8xT5RFlc/uTU2g8Au49o=;
+        s=korg; t=1645434332;
+        bh=8E9nmzjr+oVBPaIx2NahacyRPguKBnPNkSFQybHOK2E=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Ksx78a3NaKWQe7nQqPxI9Dv8nn0A+7QFkVIqCXEaKj+ZXPjJhYBrFpfHnYGLNQDrp
-         jnSknUiH+Bn0Sq4xEvqQC87Lj1WHQ2HpZe/WBS4sGkC15G0KYoAXBqNzq6ekqv3mpQ
-         fVOI7N+PpA3suPeSo8fNT1MOulZGp0NuY2n53apk=
+        b=SW7lftjMit+fYwE+HGNPzWVTZO1BE2rbZ3lHvmDfmAQLFpXu96iMheeKNBNJewenA
+         Onp7ppAkpPquSRGe23pU9qyQQbmW9U8kB30kXPRl5/nHm2nCTbYJ/9k7OExhbrYwO3
+         9oIwmo7YP1QlKyIBwsQrDm7B856GZcJEUBXlljns=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miquel Raynal <miquel.raynal@bootlin.com>,
-        Stefan Schmidt <stefan@datenfreihafen.org>
-Subject: [PATCH 5.10 059/121] net: ieee802154: ca8210: Fix lifs/sifs periods
-Date:   Mon, 21 Feb 2022 09:49:11 +0100
-Message-Id: <20220221084923.214332939@linuxfoundation.org>
+        stable@vger.kernel.org, Jianlin Shi <jishi@redhat.com>,
+        Xin Long <lucien.xin@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: [PATCH 5.10 060/121] ping: fix the dif and sdif check in ping_lookup
+Date:   Mon, 21 Feb 2022 09:49:12 +0100
+Message-Id: <20220221084923.246198490@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220221084921.147454846@linuxfoundation.org>
 References: <20220221084921.147454846@linuxfoundation.org>
@@ -54,36 +55,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miquel Raynal <miquel.raynal@bootlin.com>
+From: Xin Long <lucien.xin@gmail.com>
 
-commit bdc120a2bcd834e571ce4115aaddf71ab34495de upstream.
+commit 35a79e64de29e8d57a5989aac57611c0cd29e13e upstream.
 
-These periods are expressed in time units (microseconds) while 40 and 12
-are the number of symbol durations these periods will last. We need to
-multiply them both with the symbol_duration in order to get these
-values in microseconds.
+When 'ping' changes to use PING socket instead of RAW socket by:
 
-Fixes: ded845a781a5 ("ieee802154: Add CA8210 IEEE 802.15.4 device driver")
-Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
-Link: https://lore.kernel.org/r/20220201180629.93410-2-miquel.raynal@bootlin.com
-Signed-off-by: Stefan Schmidt <stefan@datenfreihafen.org>
+   # sysctl -w net.ipv4.ping_group_range="0 100"
+
+There is another regression caused when matching sk_bound_dev_if
+and dif, RAW socket is using inet_iif() while PING socket lookup
+is using skb->dev->ifindex, the cmd below fails due to this:
+
+  # ip link add dummy0 type dummy
+  # ip link set dummy0 up
+  # ip addr add 192.168.111.1/24 dev dummy0
+  # ping -I dummy0 192.168.111.1 -c1
+
+The issue was also reported on:
+
+  https://github.com/iputils/iputils/issues/104
+
+But fixed in iputils in a wrong way by not binding to device when
+destination IP is on device, and it will cause some of kselftests
+to fail, as Jianlin noticed.
+
+This patch is to use inet(6)_iif and inet(6)_sdif to get dif and
+sdif for PING socket, and keep consistent with RAW socket.
+
+Fixes: c319b4d76b9e ("net: ipv4: add IPPROTO_ICMP socket kind")
+Reported-by: Jianlin Shi <jishi@redhat.com>
+Signed-off-by: Xin Long <lucien.xin@gmail.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ieee802154/ca8210.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ net/ipv4/ping.c |   11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
 
---- a/drivers/net/ieee802154/ca8210.c
-+++ b/drivers/net/ieee802154/ca8210.c
-@@ -2977,8 +2977,8 @@ static void ca8210_hw_setup(struct ieee8
- 	ca8210_hw->phy->cca.opt = NL802154_CCA_OPT_ENERGY_CARRIER_AND;
- 	ca8210_hw->phy->cca_ed_level = -9800;
- 	ca8210_hw->phy->symbol_duration = 16;
--	ca8210_hw->phy->lifs_period = 40;
--	ca8210_hw->phy->sifs_period = 12;
-+	ca8210_hw->phy->lifs_period = 40 * ca8210_hw->phy->symbol_duration;
-+	ca8210_hw->phy->sifs_period = 12 * ca8210_hw->phy->symbol_duration;
- 	ca8210_hw->flags =
- 		IEEE802154_HW_AFILT |
- 		IEEE802154_HW_OMIT_CKSUM |
+--- a/net/ipv4/ping.c
++++ b/net/ipv4/ping.c
+@@ -172,16 +172,23 @@ static struct sock *ping_lookup(struct n
+ 	struct sock *sk = NULL;
+ 	struct inet_sock *isk;
+ 	struct hlist_nulls_node *hnode;
+-	int dif = skb->dev->ifindex;
++	int dif, sdif;
+ 
+ 	if (skb->protocol == htons(ETH_P_IP)) {
++		dif = inet_iif(skb);
++		sdif = inet_sdif(skb);
+ 		pr_debug("try to find: num = %d, daddr = %pI4, dif = %d\n",
+ 			 (int)ident, &ip_hdr(skb)->daddr, dif);
+ #if IS_ENABLED(CONFIG_IPV6)
+ 	} else if (skb->protocol == htons(ETH_P_IPV6)) {
++		dif = inet6_iif(skb);
++		sdif = inet6_sdif(skb);
+ 		pr_debug("try to find: num = %d, daddr = %pI6c, dif = %d\n",
+ 			 (int)ident, &ipv6_hdr(skb)->daddr, dif);
+ #endif
++	} else {
++		pr_err("ping: protocol(%x) is not supported\n", ntohs(skb->protocol));
++		return NULL;
+ 	}
+ 
+ 	read_lock_bh(&ping_table.lock);
+@@ -221,7 +228,7 @@ static struct sock *ping_lookup(struct n
+ 		}
+ 
+ 		if (sk->sk_bound_dev_if && sk->sk_bound_dev_if != dif &&
+-		    sk->sk_bound_dev_if != inet_sdif(skb))
++		    sk->sk_bound_dev_if != sdif)
+ 			continue;
+ 
+ 		sock_hold(sk);
 
 

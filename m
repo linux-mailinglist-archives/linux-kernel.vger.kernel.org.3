@@ -2,127 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A85F4BEC1A
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 21:53:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F1254BEC1C
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 21:54:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234050AbiBUUxm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 15:53:42 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60548 "EHLO
+        id S234063AbiBUUzT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 15:55:19 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:32946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231537AbiBUUxk (ORCPT
+        with ESMTP id S231537AbiBUUzR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 15:53:40 -0500
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2045.outbound.protection.outlook.com [40.107.243.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8F79237E7
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 12:53:15 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=QlIWXkBIB83Fl2tckkSGPPtjrLSAmDcNvFx18E6uk/mGBoe2/okd46mBbC84u8RzxYzAxYRCKOTq4pq6aMdTM7UaLaH0OUzeciPobTG1OX+/OlurOZIICpoEgTFKztM68CH/2D9dM9gQA2ly5Wc1KgtxAhOQR+XY6w1q/WWBpraFpNdopF4OL/hecVT2qB2NFAMbcpIsSPl4l3d2fwTJltYdJ8QaLMFpvleRKgMdDUQMe2yHvzKWaI9dtHQhE6+p+mykRKDqasGLYyFLcJEbKmhIwuO8NDUjstsVoMZvAZjncHXscbY83b+eogxswxIi+pRZLVhjAzVwZkbs1prBsg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=+EE7dN1e/0zpHBzbiIVQzIXO5CQidk9F5L5lCaQLxPY=;
- b=EOI0gOdz0FyYXiyKNhNUCBL5CJAUoiuJQuuVdyulu68lpR07MEHnquDog0LfEbmmrZMGaAsHg0tBjaLIewJc77swsg4oRU6ZvasB6DI/QPs2atGqi8iCPwcan9mgQqqFloUyRQ6XSeH3wsotP0eNfsb1Y2PDWUEKzLwWS+mB4PayTuWNuCyhG70Og7SkEL58XtMvDns7jdYnlsICqbinWjigRRWE1v7dvymj9aZMS6DgBo+4NvEtsoda6o/mZwMfNXfYFCehYL0wbpQ+pJ0mGwFSsP7M9CQD4Of8orLyD4f92IvK51DWqkUz4MWYKLBvJf4Lmt/XKSqpNeY551KlzQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=+EE7dN1e/0zpHBzbiIVQzIXO5CQidk9F5L5lCaQLxPY=;
- b=NvgDiSh70WWXKPae356simNPw77DhhbexzspV9ftdoVzYk0F0nig115QKvt7+yXc2eLKauQ/jXRYepSoOaNRc6JykpX7SLN1hD3BgIFcwLQGGL/PLlruRzRNSAErwqHHY6JnhfU8Mt/f/vVWmuesM7g2hAHrOoJY5VVH1jhQGfI=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DM6PR12MB3370.namprd12.prod.outlook.com (2603:10b6:5:38::25) by
- CY4PR12MB1318.namprd12.prod.outlook.com (2603:10b6:903:38::10) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.4995.16; Mon, 21 Feb 2022 20:53:11 +0000
-Received: from DM6PR12MB3370.namprd12.prod.outlook.com
- ([fe80::7587:626e:3703:9db8]) by DM6PR12MB3370.namprd12.prod.outlook.com
- ([fe80::7587:626e:3703:9db8%6]) with mapi id 15.20.4995.027; Mon, 21 Feb 2022
- 20:53:11 +0000
-Message-ID: <84b3679e-8900-ae51-e700-867631618829@amd.com>
-Date:   Mon, 21 Feb 2022 15:53:05 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH] drm/amdgpu: fix printk format for size_t variable
-Content-Language: en-CA
-To:     Tom Rix <trix@redhat.com>, alexander.deucher@amd.com,
-        christian.koenig@amd.com, Xinhui.Pan@amd.com, airlied@linux.ie,
-        daniel@ffwll.ch, guchun.chen@amd.com, Prike.Liang@amd.com,
-        Hawking.Zhang@amd.com
-Cc:     dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org,
-        Nick Desaulniers <ndesaulniers@google.com>
-References: <20220221173737.3725760-1-trix@redhat.com>
- <84e354ec-cfbf-a23f-ddd5-417d6f029873@amd.com>
- <e490241d-9a22-f873-2b15-18b12896ea65@redhat.com>
-From:   Luben Tuikov <luben.tuikov@amd.com>
-In-Reply-To: <e490241d-9a22-f873-2b15-18b12896ea65@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: YT3PR01CA0141.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b01:83::34) To DM6PR12MB3370.namprd12.prod.outlook.com
- (2603:10b6:5:38::25)
+        Mon, 21 Feb 2022 15:55:17 -0500
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16F83237CC
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 12:54:54 -0800 (PST)
+Received: by mail-lf1-x12d.google.com with SMTP id e5so20807924lfr.9
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 12:54:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=9O3/P6nDT9vew0ys+NqmJ/EyY8z22EgOFRFm9Et7xg4=;
+        b=kG9GzAkheiHFSYStMre7Sbd4nDnyVbI9S6lYxgznlRwabVMFV+6NYKe5C1y19RzNhi
+         9pYuMftc9tFm2b5WlMsD4f8nnNP3hCIFLYPKTztX1q8uodWNn07Th0yoPcl9CBixLcQi
+         9/CvZhL3Y0LcxON1qET6MGSGMSaDfzm6nGZA/DURDrvSbexXEjRxrpE2zkindlxpqUrE
+         XBbUazcyXadWAo9tQuaGN5OPZc7XVPhYxNDW2u2eDcng08fSVvay5rZ7H9un2Yj1VE6g
+         TIai1GiBhMuT2rCcT/CxuJe25C9YaToNXd5HL623gkQ0b0nmjgWMxw8G/u3ldHUYGp7f
+         HqLg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=9O3/P6nDT9vew0ys+NqmJ/EyY8z22EgOFRFm9Et7xg4=;
+        b=sNQrUJYt5hA0HEsz4VAmvyT/BeQiwwtCxm+iQD+//JhAqzUTAG+CiuWiWOO4hHlOFy
+         Wiq6woL+n7/+sHJ2tYi1EJQZVNHkOgro/tRFtglbxzRGpzh9ZiM1pQHQG3i9xBRKY91y
+         o9eqwfHlRi8KoqtmzPZQWLDXtaCR1T+emh2T+nHeTiVwPWOrX3xVhsstePvM2wMyCdDq
+         ALSGpSUHb6lKpy2JV4vPaUr8jf5U+30i1P3YiWsA8Lx7zn4vxEK9VQ3bUESFd7ufyKFt
+         5BBXLCfMm7kGsfeijI42+LC09MX9acm6QoYZzFOj05cEP7iOByh4teIk6J4l2iXJStS2
+         +/Ww==
+X-Gm-Message-State: AOAM532HcqSc7HdI/VZFVfTSz7k4gZGswARa0PxSduJyBe6GxUNTcwrT
+        fzktbHKnq9pmviO2l7wDDxnXfhuOfc4=
+X-Google-Smtp-Source: ABdhPJxqC+dfNhYkr89kIWaeS6hp2VDMz4tsyJMXGQ0VMknz69H/1Zu07idN9LJ40JYAy7NH2Jru0w==
+X-Received: by 2002:ac2:5e2f:0:b0:438:a4b5:4c72 with SMTP id o15-20020ac25e2f000000b00438a4b54c72mr15526215lfg.304.1645476892223;
+        Mon, 21 Feb 2022 12:54:52 -0800 (PST)
+Received: from [192.168.1.11] ([94.103.229.64])
+        by smtp.gmail.com with ESMTPSA id o1sm1203816lfk.62.2022.02.21.12.54.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 21 Feb 2022 12:54:51 -0800 (PST)
+Message-ID: <8d5cf235-27f0-9c7a-3659-d2b1fe7a02dd@gmail.com>
+Date:   Mon, 21 Feb 2022 23:54:50 +0300
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 935bdfbc-54d0-4077-62df-08d9f57c2bf3
-X-MS-TrafficTypeDiagnostic: CY4PR12MB1318:EE_
-X-Microsoft-Antispam-PRVS: <CY4PR12MB1318DEF7E5ACCC3AB1886901993A9@CY4PR12MB1318.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 0+6Xxy7YWjmindd2ux12x1kKBxXOCwFwHzP7BukNDvspcVmM7Z/Dkszj/8c8koGU7IM7VZWvTHibErmi+KpiccJr2e+F7T2/et4BoNtAM7CZrSjG4IxWd9SWQvlQii1FsxiHSX2biY6Wz7ASiLLzAbJ2D+9MVShxvrACo0XRp5BQZRFQ55FUqvGqonRnriQJ+H4XcsCb7F8mc9trfe7sswuqT4KSeeAoop65C3OJwRy6tBKibjFkItw1l8lw136r/LhqWRGfYsuJTf8HXlJWL2r1JLWpURkDaz31L4wQziL62IaB4d6uMnLSCSOesXCi6vDsm4Na/0Eq1OASjKxUGLrrW9SCTyJIcditpJFDycnvbinr6UFQ3LvegG+++9LsksritTimQ6gK+AJRGF5DvRgRBt1yPR95fP72EDtzJ6XcRRrmuoYARdw/MDwTmA3dycvNtvs8iPyX6eLHPixXpXhbO8Kt4v+sIgXzRad0zm3JjeYcTlE5asRtuWYCAfuqlX9Gub2NZb4tUFKWrOKqZUWiGGmvzt5gpxrfae2t0J3Ps3U4FZuqrfTMFyQ5gw/8la6dahrnjrv3JhBxu9UbnMVuZd/YCVZ8EolRleM2Q2nWsbZ0Ybc1/DFNRrZeC0kCS/CZU/1vWgKwB5lXX0NNQETaS0W7NCVctKvxBWxb5JMotk2OU0Ki3uHel9OXAzzLQigy5tS96G2l+ZPqgarrwUQXSMWpKlj7SSU8kBNZPH3AV4EovidzBEAfnJkRSj9e
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB3370.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(66476007)(6506007)(36756003)(2906002)(6512007)(31686004)(66556008)(6666004)(86362001)(26005)(31696002)(2616005)(53546011)(44832011)(8936002)(4326008)(186003)(66946007)(8676002)(6486002)(508600001)(38100700002)(5660300002)(316002)(83380400001)(6636002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZzZrRkVkTlduMDJmTDhVNGlKNUs0Tjhoc0F5ODQ2WEZWZm1yckh1UmR0VW5M?=
- =?utf-8?B?cGJnanVyWjQ5aFFlK0U0Y1V0VFUwbmZ3MmVWaFQwZTNtbGllRkxnWGdkdjly?=
- =?utf-8?B?OVdtR21uTDg2T1R1blhtSkNNaFdEeVpKS1VDeEhjS1VNNFNkZVFGbVJzcUpX?=
- =?utf-8?B?YUwxN3hSVjV1ekFxWkIyWmp4K0l5aStXVGNoanZZWVVOd1R0RXc5SGorVzBh?=
- =?utf-8?B?VHVFVVgvN29LRkFFck54bnlDQ1ZBY3dnQ2VSUHZwY1NleUdVOTV0Z2h0ZmtH?=
- =?utf-8?B?ZC9lU29QNk1kQzhOdjVMR3V6QlFKOG1SbDBRTTlXRENoRnJpbmVaTzJpRDZi?=
- =?utf-8?B?MHI4ZFpSbERWL3daNi8vQ0wzbTJaMmFIMnJzUlhqelAzOHNMYnplNzh2LzBQ?=
- =?utf-8?B?N0RkS0xoNzhERnVyWU9sZlB3c2NpeGlBK2ZkOVRveXQ0c1haZGhXd25XbGVL?=
- =?utf-8?B?RkNmeTVUM3piREtYR2hPclNtYmhqVU9wRDVzNUx0bFpyelU4aGhqZlo0OVIr?=
- =?utf-8?B?akJ2M3J6YUEzUHJMSDBIOFJwUGJ5YVBtYndzMXk5UWZuWTY5Nkd4Z09ZTzUv?=
- =?utf-8?B?TnJmNzUwRm1JQlMrTGxxSC9hV2V1emZYUFFTeCtvMTh3cmgvWTIxYW1nazk2?=
- =?utf-8?B?cUJSNGxqUklXamFnc2k0Q2VMOGZjd050WUZUMG9iN3lwUHlIME11UmVYTVhK?=
- =?utf-8?B?c25RUWpSS3NpWGhhTVgySG02aUJ3R2FNdFd5Qmw3SEdmREJ2UmtiaU1ZR2Zx?=
- =?utf-8?B?VFZ3MU5JRlVCVHNIMk5Tb1NmYVNtRm1JdUJ3V2pGek83TG16RWdqRlVDRGo5?=
- =?utf-8?B?cGlWSk5zei9FLzE0VVU5WlFIUVo0NlVCYms3WmRvMHEzVHpmUE43bGlpNXdB?=
- =?utf-8?B?YjdvbzlvMmRTN1pTR2dXWm14Ni9rOEpDOU5BKzhHZVhjTDk3Qkk0WkdBQ0RZ?=
- =?utf-8?B?YXF4OGNNVTdGNXVTc2NzZ3hzV05QbjRJdWFaenh2ZTZkSS95Mk9OYmRybGNG?=
- =?utf-8?B?NXhwbHhIaGwrcnd0VndXS2VuNEZFbHA1Mjc3b3M1dXJCL0NnVWZEV0VyRXl3?=
- =?utf-8?B?VmdOdmxBeTRjVUcvRWcwS2FodVBzbkhjbnhaR1p6aGNHSGJvdmVNeS9UYzJn?=
- =?utf-8?B?ZDVPQ1BTR3YwcXluaGVYUjh4NGUwdm9GbURabnhYWHEzc29IVzVCNXBEL3JC?=
- =?utf-8?B?LytZNkhVTHZkK1o3VXJMRW0xWEZoTG1NRmwrVlZmSU9oZzl0a1lEbFBaWHlh?=
- =?utf-8?B?YUU4S2tUWVlYWGJVQzFvY2wvcHBSMDIyTHBBVnIzdmU4ZGx4Q2FMV3EyREMr?=
- =?utf-8?B?KzFoa0h1QjhwcVoxT0wyTWY2aFpqcGMzb2tHWnNJcUZkSXZMY1NPYk5yRFZZ?=
- =?utf-8?B?cW1yT0FCT21aRWk2VndlYUZhM3VrV1p4aytoQXUyT21OREpWUGsza2VEeW5R?=
- =?utf-8?B?QzVGdW1NYkpid0RPWkpETXdXcms5SHRZa2E4YWt3d1JsQzNOQ082ZkpyU05E?=
- =?utf-8?B?aC9EZjRoeW91b1JicXVjbHNNQzBRVkNtUStVNEtvdndrVUhGSjB1WjhiaWhE?=
- =?utf-8?B?VHU2S0pFNjVUanY5UklrNS9aQWJMTXNybjlRSExhL3BZZ1h5OVVEY1FjUlo0?=
- =?utf-8?B?UEhYWEdNUlJRaFM0aDN6ZnM0L0Q5ajBCdm9kTDdEUjc3TGp3aGpvWWl1ZFJo?=
- =?utf-8?B?YzJnam9BamZCdTA3V0htY0ZxSEd1U0UwOUVwK0E1TjdiVW9ZUWJUT2dZRFFx?=
- =?utf-8?B?anZlVFVqTkU5TGRvRnpVU2JTZkpzK0JrL3FjQ3VoVTl2VkJvcmI2VThXbHcv?=
- =?utf-8?B?b0VXd1Z0ZTk0UisrQWpaMUIyNHNVNDVSM2NjRDZBQ1RXZzFTMzVWV0lqZCt6?=
- =?utf-8?B?UzVJaU5KcmF3UDNOb1RXNUgzdlJXS1VXdjFSUFFYV3FtT3pRcXk0Z2JOVStR?=
- =?utf-8?B?ZnhQVmxQV3lyYTRvcVo2bWhRbHZ6ZVdEdjFRUW9tbjJyeVlITVVING94RElL?=
- =?utf-8?B?V0owQmZBUk92S0dibWoxL2hGUFZGSFJxOTFPbERFS0RpY1hlV3lPRnVNcUtj?=
- =?utf-8?B?MEp1Y2o5aGd0bmRYRy91aHBpK2szY1d1SnQ1M2xzeHpOMlpCR3FoelpaY1Jz?=
- =?utf-8?Q?ZOiA=3D?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 935bdfbc-54d0-4077-62df-08d9f57c2bf3
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB3370.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Feb 2022 20:53:11.3475
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: JZ2mTO+6UZRFymu3qx30oSGMYdNX7Xa66HtouZvGt/Zl9bAw+BM9MYbs0RpOrCXv
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR12MB1318
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [PATCH 2/3] staging: r8188eu: refactor rtw_ch2freq()
+Content-Language: en-US
+To:     Michael Straube <straube.linux@gmail.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>
+Cc:     gregkh@linuxfoundation.org, Larry.Finger@lwfinger.net,
+        phil@philpotter.co.uk, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+References: <20220220154847.7521-1-straube.linux@gmail.com>
+ <20220220154847.7521-3-straube.linux@gmail.com>
+ <cb7db1ac-8e7e-d549-a5c0-fcd072ae815e@gmail.com>
+ <94160654-ec16-cad2-3cc2-46628caaa17e@gmail.com>
+ <20220221122250.GE3965@kadam>
+ <32a2b74b-f541-ddf6-d8c9-6bd6ca0ad07b@gmail.com>
+From:   Pavel Skripkin <paskripkin@gmail.com>
+In-Reply-To: <32a2b74b-f541-ddf6-d8c9-6bd6ca0ad07b@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -130,106 +81,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-02-21 15:36, Tom Rix wrote:
-> 
-> On 2/21/22 11:57 AM, Luben Tuikov wrote:
->> Hi Tom,
->>
->> This was already fixed with this patch, and LKML was CC-ed. See the CC tags in the patch below,
->>
->> commit 4f7d7cda90cbd7
->> Author: Luben Tuikov <luben.tuikov@amd.com>
->> Date:   Wed Feb 16 16:47:32 2022 -0500
->>
->>      drm/amdgpu: Fix ARM compilation warning
->>      
->>      Fix this ARM warning:
-> 
-> I glad it wasn't just mips ;)
-> 
-> There have been a couple of build breaks with amdgpu recently.
-> 
-> Nick asked about adding clang to your ci.
-> 
-> Could at least one non x86_64 gcc also be added, maybe aarch64 ?
+Hi Michael,
 
-Yeah, that's a great idea. I tried the make.cross (for ARM) as per
-the initial breakage report, but when I tried it, it got into a loop of
-"make ARCH=arm mrproper" --> "make prepare" --> "make ARCH=arm mrproper" --> "make prepare" --> ...
-and I couldn't figure out why.
-
-I don't mind adding ARM cross compilation into my local setup.
-
-Regards,
-Luben
-
-
+On 2/21/22 22:20, Michael Straube wrote:
+>> I'm glad that Pavel noticed this change.  This is a risky thing and
+>> should have been noted in the commit message.
+>> 
+>> Just from a review stand point it would be best to leave the original
+>> behavior.
+>>
 > 
-> Tom
-> 
->>      
->>      drivers/gpu/drm/amd/amdgpu/amdgpu_discovery.c:664:35: warning: format '%ld'
->>      expects argument of type 'long int', but argument 4 has type 'size_t' {aka
->>      'unsigned int'} [-Wformat=]
->>      
->>      Cc: Alex Deucher <Alexander.Deucher@amd.com>
->>      Cc: kbuild-all@lists.01.org
->>      Cc: linux-kernel@vger.kernel.org
->>      Reported-by: kernel test robot <lkp@intel.com>
->>      Fixes: 7e60fbfbdc10a0 ("drm/amdgpu: Show IP discovery in sysfs")
->>      Signed-off-by: Luben Tuikov <luben.tuikov@amd.com>
->>      Acked-by: Alex Deucher <Alexander.Deucher@amd.com>
->>
->> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_discovery.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_discovery.c
->> index 2506bcf36c870c..6c7ec058125e1d 100644
->> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_discovery.c
->> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_discovery.c
->> @@ -668,7 +668,7 @@ static int amdgpu_discovery_sysfs_ips(struct amdgpu_device *adev,
->>                              le16_to_cpu(ip->hw_id) != ii)
->>                                  goto next_ip;
->>   
->> -                       DRM_DEBUG("match:%d @ ip_offset:%ld", ii, ip_offset);
->> +                       DRM_DEBUG("match:%d @ ip_offset:%zu", ii, ip_offset);
->>   
->>                          /* We have a hw_id match; register the hw
->>                           * block if not yet registered.
->>
->> Regards,
->> Luben
->>
->> On 2022-02-21 12:37, trix@redhat.com wrote:
->>> From: Tom Rix <trix@redhat.com>
->>>
->>> On mips64 allyesconfig, there is this build break
->>> amdgpu_discovery.c:671:35: error: format '%ld' expects
->>>    argument of type 'long int', but argument 4 has
->>>    type 'size_t' {aka 'unsigned int'}
->>>    DRM_DEBUG("match:%d @ ip_offset:%ld", ii, ip_offset);
->>>
->>> For size_t, use %zu.
->>>
->>> Fixes: a6c40b178092 ("drm/amdgpu: Show IP discovery in sysfs")
->>> Signed-off-by: Tom Rix <trix@redhat.com>
->>> ---
->>>   drivers/gpu/drm/amd/amdgpu/amdgpu_discovery.c | 2 +-
->>>   1 file changed, 1 insertion(+), 1 deletion(-)
->>>
->>> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_discovery.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_discovery.c
->>> index 7c7e28fd912e..58238f67b1d3 100644
->>> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_discovery.c
->>> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_discovery.c
->>> @@ -668,7 +668,7 @@ static int amdgpu_discovery_sysfs_ips(struct amdgpu_device *adev,
->>>   			    le16_to_cpu(ip->hw_id) != ii)
->>>   				goto next_ip;
->>>   
->>> -			DRM_DEBUG("match:%d @ ip_offset:%ld", ii, ip_offset);
->>> +			DRM_DEBUG("match:%d @ ip_offset:%zu", ii, ip_offset);
->>>   
->>>   			/* We have a hw_id match; register the hw
->>>   			 * block if not yet registered.
->> Regards,
+> Do you mean to leave the whole original code including the 5 GHz
+> frequencies? Or returning a default value if we have a channel value < 1
+> or > 14?
 > 
 
-Regards,
--- 
-Luben
+IMO, your version is much cleaner than previous one. This table walk 
+seems really unreasonable, since 5 GHz support is really redundant (I 
+saw it in other thread)
+
+I'd put just sanity check and return the default value from previous 
+version. Maybe even wrapped with unlikely() if we sure, that in normal 
+state we won't hit it ;)
+
+
+
+
+With regards,
+Pavel Skripkin

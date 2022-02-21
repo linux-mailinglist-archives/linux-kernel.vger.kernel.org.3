@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C219E4BE17F
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:53:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E9FB4BE843
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:05:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347421AbiBUJGZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 04:06:25 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58130 "EHLO
+        id S1354200AbiBUKDN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 05:03:13 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348268AbiBUJCg (ORCPT
+        with ESMTP id S1352279AbiBUJzR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 04:02:36 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DE412BB20;
-        Mon, 21 Feb 2022 00:57:50 -0800 (PST)
+        Mon, 21 Feb 2022 04:55:17 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C83CF38D8E;
+        Mon, 21 Feb 2022 01:24:25 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1AE3561137;
-        Mon, 21 Feb 2022 08:57:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03608C340EB;
-        Mon, 21 Feb 2022 08:57:29 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7FFDEB80EB9;
+        Mon, 21 Feb 2022 09:24:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFF80C340E9;
+        Mon, 21 Feb 2022 09:24:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645433850;
-        bh=DFsLvK0i3BObqF26aZZdRrDS2/spMsYEUdcIUmBugTU=;
+        s=korg; t=1645435463;
+        bh=QQ5ZIGrzyf85aJ0Ve7YOb/9ft6x8SGP+hp/fR0elpo0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XgWFHK/DO84hIEo3lN1Nnkz0SjaX9/wA0OJmFm4rMIxkTZS2IfU1s6jrXSGqTFpC6
-         RhL75qrfOOYSLyR7MPPhSZFdEya+dYFzBiXUwNgXyjDdusbUK/W8moo6TTPReyc44k
-         BwG1q9p/1TMUtevR7sMCfG1PYRDCOsdwcSR4DrUk=
+        b=DAtUb89WLuPjd+NFV3byZ1bp/501XYXSaGnxeF7UkfY8VhVFKnB4NJAJzv2fhDPbI
+         bflo/4KlI0Ji9BAg7MFpAdpXmOp5845oES80t63DC5SOWzapFKB8SHoZw2eLSfvcGh
+         OSiy9Tk/k7eNyo/YFNviiXQIvEDiH5hOdZBhRcM0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Slark Xiao <slark_xiao@163.com>,
-        =?UTF-8?q?Bj=C3=B8rn=20Mork?= <bjorn@mork.no>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 57/58] net: usb: qmi_wwan: Add support for Dell DW5829e
-Date:   Mon, 21 Feb 2022 09:49:50 +0100
-Message-Id: <20220221084913.715265851@linuxfoundation.org>
+        stable@vger.kernel.org,
+        =?UTF-8?q?Lu=C3=ADs=20Ferreira?= <contact@lsferreira.net>,
+        Andy Lutomirski <luto@kernel.org>, Borislav Petkov <bp@suse.de>
+Subject: [PATCH 5.16 172/227] x86/ptrace: Fix xfpregs_set()s incorrect xmm clearing
+Date:   Mon, 21 Feb 2022 09:49:51 +0100
+Message-Id: <20220221084940.529596581@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220221084911.895146879@linuxfoundation.org>
-References: <20220221084911.895146879@linuxfoundation.org>
+In-Reply-To: <20220221084934.836145070@linuxfoundation.org>
+References: <20220221084934.836145070@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,67 +55,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Slark Xiao <slark_xiao@163.com>
+From: Andy Lutomirski <luto@kernel.org>
 
-[ Upstream commit 8ecbb179286cbc91810c16caeb3396e06305cd0c ]
+commit 44cad52cc14ae10062f142ec16ede489bccf4469 upstream.
 
-Dell DW5829e same as DW5821e except the CAT level.
-DW5821e supports CAT16 but DW5829e supports CAT9.
-Also, DW5829e includes normal and eSIM type.
-Please see below test evidence:
+xfpregs_set() handles 32-bit REGSET_XFP and 64-bit REGSET_FP. The actual
+code treats these regsets as modern FX state (i.e. the beginning part of
+XSTATE). The declarations of the regsets thought they were the legacy
+i387 format. The code thought they were the 32-bit (no xmm8..15) variant
+of XSTATE and, for good measure, made the high bits disappear by zeroing
+the wrong part of the buffer. The latter broke ptrace, and everything
+else confused anyone trying to understand the code. In particular, the
+nonsense definitions of the regsets confused me when I wrote this code.
 
-T:  Bus=04 Lev=01 Prnt=01 Port=01 Cnt=01 Dev#=  5 Spd=5000 MxCh= 0
-D:  Ver= 3.10 Cls=ef(misc ) Sub=02 Prot=01 MxPS= 9 #Cfgs=  1
-P:  Vendor=413c ProdID=81e6 Rev=03.18
-S:  Manufacturer=Dell Inc.
-S:  Product=DW5829e Snapdragon X20 LTE
-S:  SerialNumber=0123456789ABCDEF
-C:  #Ifs= 6 Cfg#= 1 Atr=a0 MxPwr=896mA
-I:  If#=0x0 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=qmi_wwan
-I:  If#=0x1 Alt= 0 #EPs= 1 Cls=03(HID  ) Sub=00 Prot=00 Driver=usbhid
-I:  If#=0x2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-I:  If#=0x3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-I:  If#=0x4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-I:  If#=0x5 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
+Clean this all up. Change the declarations to match reality (which
+shouldn't change the generated code, let alone the ABI) and fix
+xfpregs_set() to clear the correct bits and to only do so for 32-bit
+callers.
 
-T:  Bus=04 Lev=01 Prnt=01 Port=01 Cnt=01 Dev#=  7 Spd=5000 MxCh= 0
-D:  Ver= 3.10 Cls=ef(misc ) Sub=02 Prot=01 MxPS= 9 #Cfgs=  1
-P:  Vendor=413c ProdID=81e4 Rev=03.18
-S:  Manufacturer=Dell Inc.
-S:  Product=DW5829e-eSIM Snapdragon X20 LTE
-S:  SerialNumber=0123456789ABCDEF
-C:  #Ifs= 6 Cfg#= 1 Atr=a0 MxPwr=896mA
-I:  If#=0x0 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=qmi_wwan
-I:  If#=0x1 Alt= 0 #EPs= 1 Cls=03(HID  ) Sub=00 Prot=00 Driver=usbhid
-I:  If#=0x2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-I:  If#=0x3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-I:  If#=0x4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-I:  If#=0x5 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
-
-Signed-off-by: Slark Xiao <slark_xiao@163.com>
-Acked-by: Bjørn Mork <bjorn@mork.no>
-Link: https://lore.kernel.org/r/20220209024717.8564-1-slark_xiao@163.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: 6164331d15f7 ("x86/fpu: Rewrite xfpregs_set()")
+Reported-by: Luís Ferreira <contact@lsferreira.net>
+Signed-off-by: Andy Lutomirski <luto@kernel.org>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Cc: <stable@vger.kernel.org>
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=215524
+Link: https://lore.kernel.org/r/YgpFnZpF01WwR8wU@zn.tnic
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/usb/qmi_wwan.c | 2 ++
- 1 file changed, 2 insertions(+)
+ arch/x86/kernel/fpu/regset.c |    9 ++++-----
+ arch/x86/kernel/ptrace.c     |    4 ++--
+ 2 files changed, 6 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/net/usb/qmi_wwan.c b/drivers/net/usb/qmi_wwan.c
-index 54b37a30df18b..c2e872f926f1c 100644
---- a/drivers/net/usb/qmi_wwan.c
-+++ b/drivers/net/usb/qmi_wwan.c
-@@ -1358,6 +1358,8 @@ static const struct usb_device_id products[] = {
- 	{QMI_FIXED_INTF(0x413c, 0x81d7, 0)},	/* Dell Wireless 5821e */
- 	{QMI_FIXED_INTF(0x413c, 0x81d7, 1)},	/* Dell Wireless 5821e preproduction config */
- 	{QMI_FIXED_INTF(0x413c, 0x81e0, 0)},	/* Dell Wireless 5821e with eSIM support*/
-+	{QMI_FIXED_INTF(0x413c, 0x81e4, 0)},	/* Dell Wireless 5829e with eSIM support*/
-+	{QMI_FIXED_INTF(0x413c, 0x81e6, 0)},	/* Dell Wireless 5829e */
- 	{QMI_FIXED_INTF(0x03f0, 0x4e1d, 8)},	/* HP lt4111 LTE/EV-DO/HSPA+ Gobi 4G Module */
- 	{QMI_FIXED_INTF(0x03f0, 0x9d1d, 1)},	/* HP lt4120 Snapdragon X5 LTE */
- 	{QMI_FIXED_INTF(0x22de, 0x9061, 3)},	/* WeTelecom WPD-600N */
--- 
-2.34.1
-
+--- a/arch/x86/kernel/fpu/regset.c
++++ b/arch/x86/kernel/fpu/regset.c
+@@ -91,11 +91,9 @@ int xfpregs_set(struct task_struct *targ
+ 		const void *kbuf, const void __user *ubuf)
+ {
+ 	struct fpu *fpu = &target->thread.fpu;
+-	struct user32_fxsr_struct newstate;
++	struct fxregs_state newstate;
+ 	int ret;
+ 
+-	BUILD_BUG_ON(sizeof(newstate) != sizeof(struct fxregs_state));
+-
+ 	if (!cpu_feature_enabled(X86_FEATURE_FXSR))
+ 		return -ENODEV;
+ 
+@@ -116,9 +114,10 @@ int xfpregs_set(struct task_struct *targ
+ 	/* Copy the state  */
+ 	memcpy(&fpu->fpstate->regs.fxsave, &newstate, sizeof(newstate));
+ 
+-	/* Clear xmm8..15 */
++	/* Clear xmm8..15 for 32-bit callers */
+ 	BUILD_BUG_ON(sizeof(fpu->__fpstate.regs.fxsave.xmm_space) != 16 * 16);
+-	memset(&fpu->fpstate->regs.fxsave.xmm_space[8], 0, 8 * 16);
++	if (in_ia32_syscall())
++		memset(&fpu->fpstate->regs.fxsave.xmm_space[8*4], 0, 8 * 16);
+ 
+ 	/* Mark FP and SSE as in use when XSAVE is enabled */
+ 	if (use_xsave())
+--- a/arch/x86/kernel/ptrace.c
++++ b/arch/x86/kernel/ptrace.c
+@@ -1224,7 +1224,7 @@ static struct user_regset x86_64_regsets
+ 	},
+ 	[REGSET_FP] = {
+ 		.core_note_type = NT_PRFPREG,
+-		.n = sizeof(struct user_i387_struct) / sizeof(long),
++		.n = sizeof(struct fxregs_state) / sizeof(long),
+ 		.size = sizeof(long), .align = sizeof(long),
+ 		.active = regset_xregset_fpregs_active, .regset_get = xfpregs_get, .set = xfpregs_set
+ 	},
+@@ -1271,7 +1271,7 @@ static struct user_regset x86_32_regsets
+ 	},
+ 	[REGSET_XFP] = {
+ 		.core_note_type = NT_PRXFPREG,
+-		.n = sizeof(struct user32_fxsr_struct) / sizeof(u32),
++		.n = sizeof(struct fxregs_state) / sizeof(u32),
+ 		.size = sizeof(u32), .align = sizeof(u32),
+ 		.active = regset_xregset_fpregs_active, .regset_get = xfpregs_get, .set = xfpregs_set
+ 	},
 
 

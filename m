@@ -2,65 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF1724BEBFE
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 21:41:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EAF94BEBFF
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 21:42:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233890AbiBUUl6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 15:41:58 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55620 "EHLO
+        id S232365AbiBUUnA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 15:43:00 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229929AbiBUUl5 (ORCPT
+        with ESMTP id S229929AbiBUUm7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 15:41:57 -0500
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD447237E2;
-        Mon, 21 Feb 2022 12:41:33 -0800 (PST)
-Received: by mail-ej1-x630.google.com with SMTP id gb39so36273825ejc.1;
-        Mon, 21 Feb 2022 12:41:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=kllIKaEP4ASYUGo7rizKiRa0ECvHNSY0zpurb7azwtM=;
-        b=NTYNErI+B4N/iyG4EIeQ19fiwh6NFceTnj/4C7jF960lYdT+aWuyYAcybrIbaTVQoc
-         W4AM/51UUt0adUcPS9ZNucs2ccZbxHIzx4zPS8RZbn2dzrW6oqMi7/vXAtkjPRj75SdN
-         nE68D7M2oyUZDYfUFBxiyp6di4CAnG0305IAZMfn63aGszk+SShrsDxe5pSuOqGTCA/W
-         TjIVQtuUTtKJ+wv/7QS6nF6VWGgSigguXpgIluAHfmR09DTQ2N9xJJqQjXq+8stH66/R
-         30M8YqaIET4ml4FY94FD9HahCVfCj+9C2Ms5Ayu3pWrzzt9RNJtlX2LGMsJh9DSunlmd
-         fiiQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=kllIKaEP4ASYUGo7rizKiRa0ECvHNSY0zpurb7azwtM=;
-        b=k1S7N/DIgIQaa6UpO/LSdS0zZYYZzwacyJn2YoddJqyFLyR1wC8G0lyRb/rVz/7Kbm
-         N74E2TlRh8TkCQRvZB4+YMJGImkYnYY9Q0toszDGor3nR79j2xGJCXXlX2n4sZsBgTDD
-         Bf9NkP3FO5KIYksViaKo/8OS4h1mT1l2wh2i2FMSTwrAM1fZkx7VxqCyl2uCeAaVKqmi
-         KhgIWdoS0vJNTtuz7z/J8afxyXB/o1lAd1Ct8CInXK5fGWdGoJVKep/aIPWHEtkaItEE
-         ILqVhhJd8Y47EpNPmpXBY5qVZElaziTF5CCj9XNS+SipZTSXJmc+4/RVjwHC9i0iXEUv
-         MV0g==
-X-Gm-Message-State: AOAM530BfUCrVlAdb68JrF1TYhHSnWEjdN7OTAM9ULXy7c0nvbTwSmlj
-        HrAkD23OZBEHXRCQd+uFFiARH320Eh44IBRNJ8HNO4xCh7jjkQ==
-X-Google-Smtp-Source: ABdhPJzmii9X8gVhdxnj0kbhKWqpf58dIwRlx7ia37K4HtzJf9O31hc3c62wowh2zdNGRdQeX7LzLv6GNbrR33fh5RQ=
-X-Received: by 2002:a17:906:cc12:b0:6b5:ec8f:fdf2 with SMTP id
- ml18-20020a170906cc1200b006b5ec8ffdf2mr16739434ejb.579.1645476092274; Mon, 21
- Feb 2022 12:41:32 -0800 (PST)
+        Mon, 21 Feb 2022 15:42:59 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4330E237DC;
+        Mon, 21 Feb 2022 12:42:35 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E74821063;
+        Mon, 21 Feb 2022 12:42:34 -0800 (PST)
+Received: from [10.1.39.143] (e127744.cambridge.arm.com [10.1.39.143])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 864133F66F;
+        Mon, 21 Feb 2022 12:42:31 -0800 (PST)
+Subject: Re: [PATCH 2/2] perf arm-spe: Parse more SPE fields and store source
+To:     Leo Yan <leo.yan@linaro.org>, Ali Saidi <alisaidi@amazon.com>
+Cc:     acme@kernel.org, alexander.shishkin@linux.intel.com,
+        andrew.kilroy@arm.com, benh@kernel.crashing.org,
+        james.clark@arm.com, john.garry@huawei.com, jolsa@redhat.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, mark.rutland@arm.com,
+        mathieu.poirier@linaro.org, mingo@redhat.com, namhyung@kernel.org,
+        peterz@infradead.org, will@kernel.org
+References: <b1b3697d-4a0a-d041-5cbd-e08fec9e658c@arm.com>
+ <20220128210245.4628-1-alisaidi@amazon.com>
+ <7eca7a1d-a5a2-2aab-b3cf-5d83cb8ccf4f@arm.com>
+ <20220212041927.GA763461@leoy-ThinkPad-X240s>
+From:   German Gomez <german.gomez@arm.com>
+Message-ID: <9266bfb6-341c-1d9c-e96f-c9f856a5ffb6@arm.com>
+Date:   Mon, 21 Feb 2022 20:41:43 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-References: <20220218042038.15176-1-jagathjog1996@gmail.com> <20220218042038.15176-4-jagathjog1996@gmail.com>
-In-Reply-To: <20220218042038.15176-4-jagathjog1996@gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 21 Feb 2022 21:40:56 +0100
-Message-ID: <CAHp75VdFnkz4iL4BH1COdOxBGkaeAA58+A87KqnC6d-p+GfGbA@mail.gmail.com>
-Subject: Re: [PATCH v3 3/6] iio: potentiometer: Add channel information in
- device data
-To:     Jagath Jog J <jagathjog1996@gmail.com>
-Cc:     jic23@kernel.org, lars@metafoo.de, sst@poczta.fm,
-        robh+dt@kernel.org, linux-iio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+In-Reply-To: <20220212041927.GA763461@leoy-ThinkPad-X240s>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,42 +53,135 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 18, 2022 at 5:20 AM Jagath Jog J <jagathjog1996@gmail.com> wrote:
+Hi Leo, Ali,
+
+On 12/02/2022 04:19, Leo Yan wrote:
+> Hi German, Ali,
 >
-> Adding each device wiper count and channel information into
-> device private data.
-> Utilizing addr member of struct iio_chan_spec to get the
-> wiper register address so that the value can be read or write
-> to the same address.
+> On Fri, Feb 11, 2022 at 04:31:40PM +0000, German Gomez wrote:
+>> Hi Ali,
+>>
+>> [...]
+> Let's step back a bit and divide the decoding flow into two parts:
+> backend and frontend.
 
-Looks much better!
+Sorry for derailing the conversation.
 
-...
+(I made some additional comments on the generation of samples below)
 
->  static const struct ds1803_cfg ds1803_cfg[] = {
-> -       [DS1803_010] = { .avail = { 0, 1, 255 }, .kohms =  10, },
-> -       [DS1803_050] = { .avail = { 0, 1, 255 }, .kohms =  50, },
-> -       [DS1803_100] = { .avail = { 0, 1, 255 }, .kohms = 100, },
-> +       [DS1803_010] = { .wipers = 2, .avail = { 0, 1, 255 }, .kohms =  10,
-> +                        .channels = ds1803_channels,
-> +                        .num_channels = ARRAY_SIZE(ds1803_channels) },
-> +       [DS1803_050] = { .wipers = 2, .avail = { 0, 1, 255 }, .kohms =  50,
-> +                        .channels = ds1803_channels,
-> +                        .num_channels = ARRAY_SIZE(ds1803_channels) },
-> +       [DS1803_100] = { .wipers = 2, .avail = { 0, 1, 255 }, .kohms = 100,
-> +                        .channels = ds1803_channels,
-> +                        .num_channels = ARRAY_SIZE(ds1803_channels) },
->  };
+> enum arm_spe_op_type {
+>         /* First level operation type */
+> 	ARM_SPE_OP_OTHER        = 1 << 0,
+> 	ARM_SPE_OP_LDST		= 1 << 1,
+> 	ARM_SPE_OP_BRANCH_ERET  = 1 << 2,
+>
+>         /* Second level operation type for OTHER */
+>         ARM_SPE_OP_SVE_OTHER    = 1 << 16,
+>         ARM_SPE_OP_SVE_FP       = 1 << 17,
+>         ARM_SPE_OP_SVE_PRED     = 1 << 18,
+>
+>         /* Second level operation type for LDST */
+>         ARM_SPE_OP_LD           = 1 << 16,
+>         ARM_SPE_OP_ST           = 1 << 17,
+>         ARM_SPE_OP_ATOMIC       = 1 << 18,
+>         ARM_SPE_OP_EXCL         = 1 << 19,
+>         ARM_SPE_OP_AR           = 1 << 20,
+>         ARM_SPE_OP_SIMD_FP      = 1 << 21,
+>         ARM_SPE_OP_GP_REG       = 1 << 22,
+>         ARM_SPE_OP_UNSPEC_REG   = 1 << 23,
+>         ARM_SPE_OP_NV_SYSREG    = 1 << 24,
+>         ARM_SPE_OP_SVE_PRED     = 1 << 25,
+>         ARM_SPE_OP_SVE_SG       = 1 << 26,
+>
+>         /* Second level operation type for BRANCH_ERET */
+>         ARM_SPE_OP_BR_COND      = 1 << 16,
+>         ARM_SPE_OP_BR_INDIRECT  = 1 << 17,
+> };
+>
+> IIUC, Ali suggested to directly reuse packet format to express
+> operation type and don't need to redefine the operation types like
+> above structure arm_spe_op_type.  I personally bias to convert the raw
+> packet format to more readable format, a benefit is this would give
+> us more readable code.
 
-Now, you may see you touch still the lines that are not changed, so
-consider in the _previous_ patch to define each entry like the
-following:
+I personally like this method as well
 
-  [DS1803_...] = {
-    .avail = {...},
-    .kohms = ...,
-  },
+>
+> For the frontend, we need to convert Arm SPE record to samples.
+> We can explore two fields: sample::flags and sample::data_src, for
+> load/store related operations, I perfer we can fill more complete
+> info in field sample::data_src and extend the definitions for
+> perf_mem_data_src; for branch operations, we can fill sample::flags.
+>
+> So I am just wandering if we can set the field
+> sample::data_src::mem_lock for atomic operations, like:
+>
+>     data_src.mem_op   = PERF_MEM_OP_LOAD;
+>     data_src.mem_lock = PERF_MEM_LOCK_ATOMIC;
+>
+> The field "mem_lock" is only two bits, we can consider to extend the
+> structure with an extra filed "mem_lock_ext" if it cannot meet our
+> requirement.
 
--- 
-With Best Regards,
-Andy Shevchenko
+Indeed it makes more sense to use data_src as much as possible. Thanks
+for pointing that out.
+
+Some comments:
+
+# ARM_SPE_OP_ATOMIC
+
+  This might be a hack, but can we not represent it as both LD&SR as the
+  atomic op would combine both?
+
+  data_src.mem_op = PERF_MEM_OP_LOAD | PERF_MEM_OP_STORE;
+
+# ARM_SPE_OP_EXCL (instructions ldxr/stxr)
+
+  x86 doesn't seem to have similar instructions with similar semantics
+  (please correct me if I'm wrong). For this arch, PERF_MEM_LOCK_LOCK
+  probably suffices.
+
+  PPC seems to have similar instructions to arm64 (lwarx/stwcx). I don't
+  know if they also have instructions with same semantics as x86.
+
+  I think it makes sense to have a PERF_MEM_LOCK_EXCL. If not, reusing
+  PERF_MEM_LOCK_LOCK is the quicker alternative.
+
+# ARM_SPE_OP_SVE_SG
+
+  (I'm sorry if this is too far out of scope of the original patch. Let
+  me know if you would prefer to discuss it on a separate channel)
+
+  On a separate note, I'm also looking at incorporating some of the SVE
+  bits in the perf samples.
+ 
+  For this, do you think it makes sense to have two mem_* categories in
+  perf_mem_data_src:
+
+  mem_vector (2 bits)
+    - simd
+    - other (SVE in arm64)
+
+  mem_src (1 bit)
+    - sparse (scatter/gather loads/stores in SVE, as well as simd)
+
+---
+Thanks,
+German
+
+>>>>> +	ARM_SPE_BR		= 1 << 5,
+>>>>> +	ARM_SPE_BR_COND		= 1 << 6,
+>>>>> +	ARM_SPE_BR_IND		= 1 << 7,
+>> Seems like we can store BR_COND in the existing "branch-miss" event
+>> (--itrace=b) with:
+>>
+>> sample->flags = PERF_IP_FLAG_BRANCH;
+>> sample->flags |= PERF_IP_FLAG_CONDITIONAL;
+>> and/or
+>> sample->flags |= PERF_IP_FLAG_INDIRECT;
+>>
+>> PERF_IP_FLAG_INDIRECT doesn't exist yet but we can probably add it.
+> Yes, for branch samples, this makes sense for me.
+>
+> Thanks,
+> Leo

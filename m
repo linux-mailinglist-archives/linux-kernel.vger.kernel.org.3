@@ -2,40 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23BBC4BDEDC
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:47:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A0FB4BE243
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:55:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345569AbiBUIxN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 03:53:13 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45142 "EHLO
+        id S236463AbiBUIxQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 03:53:16 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345606AbiBUIwj (ORCPT
+        with ESMTP id S1345615AbiBUIwu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 03:52:39 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DEAEDCF;
-        Mon, 21 Feb 2022 00:52:15 -0800 (PST)
+        Mon, 21 Feb 2022 03:52:50 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A45CE49;
+        Mon, 21 Feb 2022 00:52:17 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A6A83B80EAC;
-        Mon, 21 Feb 2022 08:52:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9135C340E9;
-        Mon, 21 Feb 2022 08:52:12 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AD0016113E;
+        Mon, 21 Feb 2022 08:52:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91D18C340E9;
+        Mon, 21 Feb 2022 08:52:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645433533;
-        bh=5sLu45vTwCyC0fAQEh4BeyyVfv4gE8u5PKzwexJXSbM=;
+        s=korg; t=1645433536;
+        bh=bLYGSPg5pngi8ECVVjxmJsAUVouNH0aHvZNl9/486ko=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Rm8cV1dnfppoLkR+1+eMQZa78sWSUG+D1z9g000jV8ieFnAedQAhzh5Kn87GqFT+j
-         hnOMMFSqttma8cb+uRZjZW4OhXyhaKd5gQQ3vGidUf4DqgoWbO+hDhwoLgta1eZfV4
-         3eb8dXrsfLQGoeav1q1kqXAi5HarzHzRGTRigLJE=
+        b=T2yp1pRpB4IUX/53O1xqMR0DicSGM9RbNPHvfpp2RNdnH3dsZEWKNRYSjidvWB3m5
+         Q1T91aTauv6TK4sT+PWrTW+gVBgm7bKfgteJoHR6ZwZ47qvq11Hha7ZoHv1YYeIxpL
+         o+CHoD96/IcuLTMPI7ETnLd60NiFBY5yavBq5io4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Mark Brown <broonie@kernel.org>
-Subject: [PATCH 4.9 25/33] ASoC: ops: Fix stereo change notifications in snd_soc_put_volsw_range()
-Date:   Mon, 21 Feb 2022 09:49:18 +0100
-Message-Id: <20220221084909.583090885@linuxfoundation.org>
+        stable@vger.kernel.org, Paul Menzel <pmenzel@molgen.mpg.de>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        Donald Buczek <buczek@molgen.mpg.de>,
+        Anna Schumaker <Anna.Schumaker@Netapp.com>
+Subject: [PATCH 4.9 26/33] NFS: LOOKUP_DIRECTORY is also ok with symlinks
+Date:   Mon, 21 Feb 2022 09:49:19 +0100
+Message-Id: <20220221084909.615332672@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220221084908.568970525@linuxfoundation.org>
 References: <20220221084908.568970525@linuxfoundation.org>
@@ -53,62 +56,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mark Brown <broonie@kernel.org>
+From: Trond Myklebust <trond.myklebust@hammerspace.com>
 
-commit 650204ded3703b5817bd4b6a77fa47d333c4f902 upstream.
+commit e0caaf75d443e02e55e146fd75fe2efc8aed5540 upstream.
 
-When writing out a stereo control we discard the change notification from
-the first channel, meaning that events are only generated based on changes
-to the second channel. Ensure that we report a change if either channel
-has changed.
+Commit ac795161c936 (NFSv4: Handle case where the lookup of a directory
+fails) [1], part of Linux since 5.17-rc2, introduced a regression, where
+a symbolic link on an NFS mount to a directory on another NFS does not
+resolve(?) the first time it is accessed:
 
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Cc: stable@vger.kernel.org
-Link: https://lore.kernel.org/r/20220201155629.120510-4-broonie@kernel.org
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Reported-by: Paul Menzel <pmenzel@molgen.mpg.de>
+Fixes: ac795161c936 ("NFSv4: Handle case where the lookup of a directory fails")
+Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
+Tested-by: Donald Buczek <buczek@molgen.mpg.de>
+Signed-off-by: Anna Schumaker <Anna.Schumaker@Netapp.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/soc/soc-ops.c |   15 ++++++++++-----
- 1 file changed, 10 insertions(+), 5 deletions(-)
+ fs/nfs/dir.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/sound/soc/soc-ops.c
-+++ b/sound/soc/soc-ops.c
-@@ -528,7 +528,7 @@ int snd_soc_put_volsw_range(struct snd_k
- 	unsigned int mask = (1 << fls(max)) - 1;
- 	unsigned int invert = mc->invert;
- 	unsigned int val, val_mask;
--	int ret;
-+	int err, ret;
- 
- 	if (invert)
- 		val = (max - ucontrol->value.integer.value[0]) & mask;
-@@ -537,9 +537,10 @@ int snd_soc_put_volsw_range(struct snd_k
- 	val_mask = mask << shift;
- 	val = val << shift;
- 
--	ret = snd_soc_component_update_bits(component, reg, val_mask, val);
--	if (ret < 0)
--		return ret;
-+	err = snd_soc_component_update_bits(component, reg, val_mask, val);
-+	if (err < 0)
-+		return err;
-+	ret = err;
- 
- 	if (snd_soc_volsw_is_stereo(mc)) {
- 		if (invert)
-@@ -549,8 +550,12 @@ int snd_soc_put_volsw_range(struct snd_k
- 		val_mask = mask << shift;
- 		val = val << shift;
- 
--		ret = snd_soc_component_update_bits(component, rreg, val_mask,
-+		err = snd_soc_component_update_bits(component, rreg, val_mask,
- 			val);
-+		/* Don't discard any error code or drop change flag */
-+		if (ret == 0 || err < 0) {
-+			ret = err;
-+		}
- 	}
- 
- 	return ret;
+--- a/fs/nfs/dir.c
++++ b/fs/nfs/dir.c
+@@ -1605,14 +1605,14 @@ no_open:
+ 	if (!res) {
+ 		inode = d_inode(dentry);
+ 		if ((lookup_flags & LOOKUP_DIRECTORY) && inode &&
+-		    !S_ISDIR(inode->i_mode))
++		    !(S_ISDIR(inode->i_mode) || S_ISLNK(inode->i_mode)))
+ 			res = ERR_PTR(-ENOTDIR);
+ 		else if (inode && S_ISREG(inode->i_mode))
+ 			res = ERR_PTR(-EOPENSTALE);
+ 	} else if (!IS_ERR(res)) {
+ 		inode = d_inode(res);
+ 		if ((lookup_flags & LOOKUP_DIRECTORY) && inode &&
+-		    !S_ISDIR(inode->i_mode)) {
++		    !(S_ISDIR(inode->i_mode) || S_ISLNK(inode->i_mode))) {
+ 			dput(res);
+ 			res = ERR_PTR(-ENOTDIR);
+ 		} else if (inode && S_ISREG(inode->i_mode)) {
 
 

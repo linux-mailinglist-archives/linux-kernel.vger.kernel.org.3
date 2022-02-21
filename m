@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CDAE4BDD3A
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:45:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CFE334BE5B4
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:01:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352288AbiBUJzR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 04:55:17 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42606 "EHLO
+        id S1351554AbiBUJhZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 04:37:25 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353017AbiBUJsH (ORCPT
+        with ESMTP id S1349297AbiBUJ1h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 04:48:07 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 265F3220DC;
-        Mon, 21 Feb 2022 01:22:18 -0800 (PST)
+        Mon, 21 Feb 2022 04:27:37 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C1BB237E0;
+        Mon, 21 Feb 2022 01:12:44 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 81F03CE0E95;
-        Mon, 21 Feb 2022 09:22:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5EEB7C340E9;
-        Mon, 21 Feb 2022 09:22:14 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3891360B1B;
+        Mon, 21 Feb 2022 09:12:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F873C340E9;
+        Mon, 21 Feb 2022 09:12:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645435334;
-        bh=nq4RGDjMqlFVwtDTrTSQfcMRT5Kyveke7zxrDBK+h7U=;
+        s=korg; t=1645434763;
+        bh=g/HgtpBBObGeQPvjdrbi8IklQvypj/Rpp30Wgl/uAwQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=S/A35OwUo8AjZas3PpRMYTQErzpfbtDyL+ij4BtfHFwknw3bM6vIAaON4EotfdQPg
-         ju1hlGgy6U/WfLJvALyuPVsslzTTXmamwOpz7yqJ5C8pjnsCERpdA+Kig8ItNBHtmN
-         ZpISf86Uu3cc3TigxIjukygIHiqyTAdb7S1tXkEg=
+        b=G3zrkz3EUfLHWEtuuaajsayj2MJaKouxjNnD45TzXx1X2ZRNFbkY7a0hO14an5Rk8
+         pvhEz9OYdoXymWfWTA0woot0RPTI6Y0d6rOTxy5A6zCSmqtQvVJiwYxoSG0BMoCRpa
+         tNlbMvLjnqE0vK9Gb4VZEwyPrx85fXswzfoOOJLk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Tom Rix <trix@redhat.com>,
-        Ioana Ciornei <ioana.ciornei@nxp.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 5.16 128/227] dpaa2-switch: fix default return of dpaa2_switch_flower_parse_mirror_key
+        stable@vger.kernel.org, dmummenschanz@web.de,
+        Takashi Iwai <tiwai@suse.de>
+Subject: [PATCH 5.15 115/196] ALSA: hda: Fix missing codec probe on Shenker Dock 15
 Date:   Mon, 21 Feb 2022 09:49:07 +0100
-Message-Id: <20220221084939.106577173@linuxfoundation.org>
+Message-Id: <20220221084934.796379626@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220221084934.836145070@linuxfoundation.org>
-References: <20220221084934.836145070@linuxfoundation.org>
+In-Reply-To: <20220221084930.872957717@linuxfoundation.org>
+References: <20220221084930.872957717@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,49 +54,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tom Rix <trix@redhat.com>
+From: Takashi Iwai <tiwai@suse.de>
 
-commit 2a36ed7c1cd55742503bed81d2cc0ea83bd0ad0c upstream.
+commit dd8e5b161d7fb9cefa1f1d6e35a39b9e1563c8d3 upstream.
 
-Clang static analysis reports this representative problem
-dpaa2-switch-flower.c:616:24: warning: The right operand of '=='
-  is a garbage value
-  tmp->cfg.vlan_id == vlan) {
-                   ^  ~~~~
-vlan is set in dpaa2_switch_flower_parse_mirror_key(). However
-this function can return success without setting vlan.  So
-change the default return to -EOPNOTSUPP.
+By some unknown reason, BIOS on Shenker Dock 15 doesn't set up the
+codec mask properly for the onboard audio.  Let's set the forced codec
+mask to enable the codec discovery.
 
-Fixes: 0f3faece5808 ("dpaa2-switch: add VLAN based mirroring")
-Signed-off-by: Tom Rix <trix@redhat.com>
-Reviewed-by: Ioana Ciornei <ioana.ciornei@nxp.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Reported-by: dmummenschanz@web.de
+Cc: <stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/trinity-f018660b-95c9-442b-a2a8-c92a56eb07ed-1644345967148@3c-app-webde-bap22
+Link: https://lore.kernel.org/r/20220214100020.8870-2-tiwai@suse.de
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/freescale/dpaa2/dpaa2-switch-flower.c |    4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ sound/pci/hda/hda_intel.c |    1 +
+ 1 file changed, 1 insertion(+)
 
---- a/drivers/net/ethernet/freescale/dpaa2/dpaa2-switch-flower.c
-+++ b/drivers/net/ethernet/freescale/dpaa2/dpaa2-switch-flower.c
-@@ -532,6 +532,7 @@ static int dpaa2_switch_flower_parse_mir
- 	struct flow_rule *rule = flow_cls_offload_flow_rule(cls);
- 	struct flow_dissector *dissector = rule->match.dissector;
- 	struct netlink_ext_ack *extack = cls->common.extack;
-+	int ret = -EOPNOTSUPP;
- 
- 	if (dissector->used_keys &
- 	    ~(BIT(FLOW_DISSECTOR_KEY_BASIC) |
-@@ -561,9 +562,10 @@ static int dpaa2_switch_flower_parse_mir
- 		}
- 
- 		*vlan = (u16)match.key->vlan_id;
-+		ret = 0;
- 	}
- 
--	return 0;
-+	return ret;
- }
- 
- static int
+--- a/sound/pci/hda/hda_intel.c
++++ b/sound/pci/hda/hda_intel.c
+@@ -1611,6 +1611,7 @@ static const struct snd_pci_quirk probe_
+ 	/* forced codec slots */
+ 	SND_PCI_QUIRK(0x1043, 0x1262, "ASUS W5Fm", 0x103),
+ 	SND_PCI_QUIRK(0x1046, 0x1262, "ASUS W5F", 0x103),
++	SND_PCI_QUIRK(0x1558, 0x0351, "Schenker Dock 15", 0x105),
+ 	/* WinFast VP200 H (Teradici) user reported broken communication */
+ 	SND_PCI_QUIRK(0x3a21, 0x040d, "WinFast VP200 H", 0x101),
+ 	{}
 
 

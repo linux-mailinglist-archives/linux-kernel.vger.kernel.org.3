@@ -2,47 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1385B4BE640
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:01:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 369154BDDD2
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:46:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353815AbiBUKLf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 05:11:35 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57298 "EHLO
+        id S1348581AbiBUJXw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 04:23:52 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353502AbiBUJ53 (ORCPT
+        with ESMTP id S1347668AbiBUJNX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 04:57:29 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACB748D;
-        Mon, 21 Feb 2022 01:26:29 -0800 (PST)
+        Mon, 21 Feb 2022 04:13:23 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C0E4E77;
+        Mon, 21 Feb 2022 01:06:31 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4B49B60F8C;
-        Mon, 21 Feb 2022 09:26:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 337A0C340E9;
-        Mon, 21 Feb 2022 09:26:28 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 0767ECE0E89;
+        Mon, 21 Feb 2022 09:06:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E04F2C340E9;
+        Mon, 21 Feb 2022 09:06:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645435588;
-        bh=42zi/zigIyIUQ1oqsPKN7CLx5IlCRHcYsWZ5A3UZKvg=;
+        s=korg; t=1645434389;
+        bh=M7rw4VAT6smeA48hftqBET0E4QavWoABwBhdGG38QcI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=xwxlS6l8PdgXLhcc7De8Y+jd5TpTkWUAz7INUaaKoR40P/6z2o/f3B0oDkCl54j7E
-         iRmgcYO3EeEijY1UgnKWc2SySWAercv4qzGfb5lk47JvOwfGKfmqbip8QIFcDYJYL4
-         LDwXDCtBvGY652G2X5IObxm7TGajO7N2Mxt0Pil0=
+        b=DmPyVVgNenISnz5vGPTplAUzmNOKQ+ehKPAtfd3ZbtQejwZyakdDBvkd3DB5mdtWz
+         YKMq67Z0+WKjbRpbHVcdJ7FaguZ5lz02jLgQM9gRb+4LYhi1LhvoCCeRZBOat+Tz6c
+         W69mJz3OVv2HrO95dSx9h2XTpGOE34IebeZQSXXE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
-        Robert Foss <robert.foss@linaro.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Wolfram Sang <wsa@kernel.org>
-Subject: [PATCH 5.16 184/227] i2c: qcom-cci: dont put a device tree node before i2c_add_adapter()
-Date:   Mon, 21 Feb 2022 09:50:03 +0100
-Message-Id: <20220221084940.937091035@linuxfoundation.org>
+        stable@vger.kernel.org, Eliav Farber <farbere@amazon.com>,
+        Borislav Petkov <bp@suse.de>
+Subject: [PATCH 5.10 112/121] EDAC: Fix calculation of returned address and next offset in edac_align_ptr()
+Date:   Mon, 21 Feb 2022 09:50:04 +0100
+Message-Id: <20220221084924.982510503@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220221084934.836145070@linuxfoundation.org>
-References: <20220221084934.836145070@linuxfoundation.org>
+In-Reply-To: <20220221084921.147454846@linuxfoundation.org>
+References: <20220221084921.147454846@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,71 +54,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
+From: Eliav Farber <farbere@amazon.com>
 
-commit 02a4a69667a2ad32f3b52ca906f19628fbdd8a01 upstream.
+commit f8efca92ae509c25e0a4bd5d0a86decea4f0c41e upstream.
 
-There is a minor chance for a race, if a pointer to an i2c-bus subnode
-is stored and then reused after releasing its reference, and it would
-be sufficient to get one more reference under a loop over children
-subnodes.
+Do alignment logic properly and use the "ptr" local variable for
+calculating the remainder of the alignment.
 
-Fixes: e517526195de ("i2c: Add Qualcomm CCI I2C driver")
-Signed-off-by: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
-Reviewed-by: Robert Foss <robert.foss@linaro.org>
-Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-Signed-off-by: Wolfram Sang <wsa@kernel.org>
+This became an issue because struct edac_mc_layer has a size that is not
+zero modulo eight, and the next offset that was prepared for the private
+data was unaligned, causing an alignment exception.
+
+The patch in Fixes: which broke this actually wanted to "what we
+actually care about is the alignment of the actual pointer that's about
+to be returned." But it didn't check that alignment.
+
+Use the correct variable "ptr" for that.
+
+  [ bp: Massage commit message. ]
+
+Fixes: 8447c4d15e35 ("edac: Do alignment logic properly in edac_align_ptr()")
+Signed-off-by: Eliav Farber <farbere@amazon.com>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Cc: <stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/20220113100622.12783-2-farbere@amazon.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/i2c/busses/i2c-qcom-cci.c |   14 ++++++++++----
- 1 file changed, 10 insertions(+), 4 deletions(-)
+ drivers/edac/edac_mc.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/i2c/busses/i2c-qcom-cci.c
-+++ b/drivers/i2c/busses/i2c-qcom-cci.c
-@@ -558,7 +558,7 @@ static int cci_probe(struct platform_dev
- 		cci->master[idx].adap.quirks = &cci->data->quirks;
- 		cci->master[idx].adap.algo = &cci_algo;
- 		cci->master[idx].adap.dev.parent = dev;
--		cci->master[idx].adap.dev.of_node = child;
-+		cci->master[idx].adap.dev.of_node = of_node_get(child);
- 		cci->master[idx].master = idx;
- 		cci->master[idx].cci = cci;
+--- a/drivers/edac/edac_mc.c
++++ b/drivers/edac/edac_mc.c
+@@ -210,7 +210,7 @@ void *edac_align_ptr(void **p, unsigned
+ 	else
+ 		return (char *)ptr;
  
-@@ -643,8 +643,10 @@ static int cci_probe(struct platform_dev
- 			continue;
+-	r = (unsigned long)p % align;
++	r = (unsigned long)ptr % align;
  
- 		ret = i2c_add_adapter(&cci->master[i].adap);
--		if (ret < 0)
-+		if (ret < 0) {
-+			of_node_put(cci->master[i].adap.dev.of_node);
- 			goto error_i2c;
-+		}
- 	}
- 
- 	pm_runtime_set_autosuspend_delay(dev, MSEC_PER_SEC);
-@@ -656,8 +658,10 @@ static int cci_probe(struct platform_dev
- 
- error_i2c:
- 	for (--i ; i >= 0; i--) {
--		if (cci->master[i].cci)
-+		if (cci->master[i].cci) {
- 			i2c_del_adapter(&cci->master[i].adap);
-+			of_node_put(cci->master[i].adap.dev.of_node);
-+		}
- 	}
- error:
- 	disable_irq(cci->irq);
-@@ -673,8 +677,10 @@ static int cci_remove(struct platform_de
- 	int i;
- 
- 	for (i = 0; i < cci->data->num_masters; i++) {
--		if (cci->master[i].cci)
-+		if (cci->master[i].cci) {
- 			i2c_del_adapter(&cci->master[i].adap);
-+			of_node_put(cci->master[i].adap.dev.of_node);
-+		}
- 		cci_halt(cci, i);
- 	}
- 
+ 	if (r == 0)
+ 		return (char *)ptr;
 
 

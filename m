@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47FDF4BE3C9
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:57:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5E924BE03A
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:51:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350761AbiBUJjb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 04:39:31 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36332 "EHLO
+        id S245567AbiBUJEu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 04:04:50 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350367AbiBUJcU (ORCPT
+        with ESMTP id S1347434AbiBUJBX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 04:32:20 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED64D27FFA;
-        Mon, 21 Feb 2022 01:13:43 -0800 (PST)
+        Mon, 21 Feb 2022 04:01:23 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD09310A8;
+        Mon, 21 Feb 2022 00:56:29 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 177A9CE0E92;
-        Mon, 21 Feb 2022 09:13:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A0D5C340E9;
-        Mon, 21 Feb 2022 09:13:36 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7C539B80EB0;
+        Mon, 21 Feb 2022 08:56:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BCAAFC340EB;
+        Mon, 21 Feb 2022 08:56:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645434817;
-        bh=7eP9GV9smWbWM1dmSH/hpT0rJMPPs4tjxlSzxYHcRbg=;
+        s=korg; t=1645433783;
+        bh=Wy4mJoN20U98Cm52ZyFWsaPcCLt5lNHiuQSa3YpeI+Y=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FzVm97yMIJEJAJ5D6/cfhmH0sz3uNeh9pIibmkWaVE7oJty29NV1Z1qGr3DLwsZL6
-         T24VinTF23uigfb6/8grhUWqQEAOt19JXFC78A47bMjh2T95oGf5Mx7HP8M0xQMc0p
-         1XLuEf28P6o/VUsPePlL/xeFxTr2g8SS4ZyZaFzY=
+        b=ZeBi8rTAcGgMhgu40tSPjSZl20hp5PVonKvJFuZurXaMQHOuzMbfJKLPTKfWwGG5u
+         +jKytDCVB3naVbr8fFbkdvvalqov2d489vljgpENtmADj3dC/YFZ3Bz28Mz/izQtDu
+         5Q/Jo4mVcQxqQP+h6vD6iYvlujgsJZnaCLwpFE9c=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, syzkaller <syzkaller@googlegroups.com>,
-        Dongliang Mu <mudongliangabcd@gmail.com>,
-        Jiri Kosina <jkosina@suse.cz>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 141/196] HID: elo: fix memory leak in elo_probe
+        stable@vger.kernel.org,
+        Bryan ODonoghue <bryan.odonoghue@linaro.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>
+Subject: [PATCH 4.19 40/58] mtd: rawnand: qcom: Fix clock sequencing in qcom_nandc_probe()
 Date:   Mon, 21 Feb 2022 09:49:33 +0100
-Message-Id: <20220221084935.638846630@linuxfoundation.org>
+Message-Id: <20220221084913.172673927@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220221084930.872957717@linuxfoundation.org>
-References: <20220221084930.872957717@linuxfoundation.org>
+In-Reply-To: <20220221084911.895146879@linuxfoundation.org>
+References: <20220221084911.895146879@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,38 +56,91 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dongliang Mu <mudongliangabcd@gmail.com>
+From: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 
-[ Upstream commit 817b8b9c5396d2b2d92311b46719aad5d3339dbe ]
+commit 5c23b3f965bc9ee696bf2ed4bdc54d339dd9a455 upstream.
 
-When hid_parse() in elo_probe() fails, it forgets to call usb_put_dev to
-decrease the refcount.
+Interacting with a NAND chip on an IPQ6018 I found that the qcomsmem NAND
+partition parser was returning -EPROBE_DEFER waiting for the main smem
+driver to load.
 
-Fix this by adding usb_put_dev() in the error handling code of elo_probe().
+This caused the board to reset. Playing about with the probe() function
+shows that the problem lies in the core clock being switched off before the
+nandc_unalloc() routine has completed.
 
-Fixes: fbf42729d0e9 ("HID: elo: update the reference count of the usb device structure")
-Reported-by: syzkaller <syzkaller@googlegroups.com>
-Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
-Signed-off-by: Jiri Kosina <jkosina@suse.cz>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+If we look at how qcom_nandc_remove() tears down allocated resources we see
+the expected order is
+
+qcom_nandc_unalloc(nandc);
+
+clk_disable_unprepare(nandc->aon_clk);
+clk_disable_unprepare(nandc->core_clk);
+
+dma_unmap_resource(&pdev->dev, nandc->base_dma, resource_size(res),
+		   DMA_BIDIRECTIONAL, 0);
+
+Tweaking probe() to both bring up and tear-down in that order removes the
+reset if we end up deferring elsewhere.
+
+Fixes: c76b78d8ec05 ("mtd: nand: Qualcomm NAND controller driver")
+Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Reviewed-by: Manivannan Sadhasivam <mani@kernel.org>
+Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
+Link: https://lore.kernel.org/linux-mtd/20220103030316.58301-2-bryan.odonoghue@linaro.org
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/hid/hid-elo.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/mtd/nand/raw/qcom_nandc.c |   14 ++++++--------
+ 1 file changed, 6 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/hid/hid-elo.c b/drivers/hid/hid-elo.c
-index 8e960d7b233b3..9b42b0cdeef06 100644
---- a/drivers/hid/hid-elo.c
-+++ b/drivers/hid/hid-elo.c
-@@ -262,6 +262,7 @@ static int elo_probe(struct hid_device *hdev, const struct hid_device_id *id)
+--- a/drivers/mtd/nand/raw/qcom_nandc.c
++++ b/drivers/mtd/nand/raw/qcom_nandc.c
+@@ -10,7 +10,6 @@
+  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  * GNU General Public License for more details.
+  */
+-
+ #include <linux/clk.h>
+ #include <linux/slab.h>
+ #include <linux/bitops.h>
+@@ -2959,10 +2958,6 @@ static int qcom_nandc_probe(struct platf
+ 	if (!nandc->base_dma)
+ 		return -ENXIO;
  
+-	ret = qcom_nandc_alloc(nandc);
+-	if (ret)
+-		goto err_nandc_alloc;
+-
+ 	ret = clk_prepare_enable(nandc->core_clk);
+ 	if (ret)
+ 		goto err_core_clk;
+@@ -2971,6 +2966,10 @@ static int qcom_nandc_probe(struct platf
+ 	if (ret)
+ 		goto err_aon_clk;
+ 
++	ret = qcom_nandc_alloc(nandc);
++	if (ret)
++		goto err_nandc_alloc;
++
+ 	ret = qcom_nandc_setup(nandc);
+ 	if (ret)
+ 		goto err_setup;
+@@ -2982,15 +2981,14 @@ static int qcom_nandc_probe(struct platf
  	return 0;
- err_free:
-+	usb_put_dev(udev);
- 	kfree(priv);
+ 
+ err_setup:
++	qcom_nandc_unalloc(nandc);
++err_nandc_alloc:
+ 	clk_disable_unprepare(nandc->aon_clk);
+ err_aon_clk:
+ 	clk_disable_unprepare(nandc->core_clk);
+ err_core_clk:
+-	qcom_nandc_unalloc(nandc);
+-err_nandc_alloc:
+ 	dma_unmap_resource(dev, res->start, resource_size(res),
+ 			   DMA_BIDIRECTIONAL, 0);
+-
  	return ret;
  }
--- 
-2.34.1
-
+ 
 
 

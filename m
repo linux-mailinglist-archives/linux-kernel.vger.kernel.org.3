@@ -2,52 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D7B74BE577
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:00:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 23DC34BE233
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:54:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358834AbiBUNSp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 08:18:45 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53222 "EHLO
+        id S1358861AbiBUNTm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 08:19:42 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358825AbiBUNSl (ORCPT
+        with ESMTP id S232982AbiBUNTk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 08:18:41 -0500
+        Mon, 21 Feb 2022 08:19:40 -0500
 Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 312471EED9
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 05:18:18 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 515BA1EEDA
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 05:19:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645449498; x=1676985498;
+  t=1645449557; x=1676985557;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=vcJYgubBwS5EWIZVc7wEuxJrBDMZX2y3GacrrLk695Y=;
-  b=Ra7EVIZdB+3b4SQuvi4A0Bmv3ic/M7MpXGs4trnnA14Jg/YnBU0aqbBd
-   J843CASvPHgLJpq5oLL0jpPAEhRfhTXWTEoJs7EbDJzYoGbt5yfztQqGO
-   ejVFUnaztnCC285/W3ByP2ypKQ+1iDGAZ+JsZd0qn94jgAVkK2j3+S/E0
-   9ITqmHkTx/+OXEqXZgowk4rn1s7QQRJqguDujfpdYrcz94oMxdvWHsnrZ
-   r0gpenFeDabx90QUazP1KRXZc2JO0OK6oXCas+YrQXlv19YOx199MBKQh
-   lb7Krwvx7BxgN0Br0PFdhzHdwxiOGO8gZTZm8DFtlZY/zn2mMRYcIf0Qz
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10264"; a="276098710"
+  bh=I79uwjS1z7JWGQEvjvtR53Cl64d3hoSo4uV5m4nZh5k=;
+  b=YxkcLNMPBlxctV9ZJrmKxUUszcNdTUcGrpoce3BS9Q8n2Ac9iWZfLMNe
+   zEdOapvmpGQZMN+9TAyz3iGR2YX7C8fgxaHHv1pCsN4A9Dn7SWB68VbuM
+   Af40rCBbfBBrt5SGauzlYUARhA+/9biN4cQflSt3BC2V1Qte37cZEkm6E
+   ipF0HNNL+alOlQlUDBicdJnUrsD04SOW+XT+4P8jEZQRv7MuATW09ADMG
+   UayeyMI47xdljFQRnjnDYz/iXwTb4296FRzX+lCz2YK4/EypEYs41/FKA
+   EY9mphcQNbszpiSZ6VXHTgGPJDM9yH3ce3senYh/zTKgndvKOvrMg5V+8
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10264"; a="276098869"
 X-IronPort-AV: E=Sophos;i="5.88,385,1635231600"; 
-   d="scan'208";a="276098710"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2022 05:18:17 -0800
+   d="scan'208";a="276098869"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2022 05:19:17 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,385,1635231600"; 
-   d="scan'208";a="638553145"
+   d="scan'208";a="683203057"
 Received: from lkp-server01.sh.intel.com (HELO da3212ac2f54) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 21 Feb 2022 05:18:16 -0800
+  by fmsmga001.fm.intel.com with ESMTP; 21 Feb 2022 05:19:16 -0800
 Received: from kbuild by da3212ac2f54 with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1nM8Zz-0001dP-9V; Mon, 21 Feb 2022 13:18:15 +0000
-Date:   Mon, 21 Feb 2022 21:18:06 +0800
+        id 1nM8ax-0001dj-Ah; Mon, 21 Feb 2022 13:19:15 +0000
+Date:   Mon, 21 Feb 2022 21:18:13 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Gustavo Pimentel <Gustavo.Pimentel@synopsys.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, Vinod Koul <vkoul@kernel.org>
-Subject: drivers/dma/dw-edma/dw-edma-v0-core.c:192:19: warning: unused
- function 'readq_ch'
-Message-ID: <202202212129.7Gipg08u-lkp@intel.com>
+To:     Janne Grunau <j@jannau.net>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Hector Martin <marcan@marcan.st>
+Subject: [asahilinux:bits/090-spi-hid 11/11]
+ drivers/hid/spi-hid/spi-hid-apple-core.c:259:22: warning: no previous
+ prototype for 'spihid_get_data'
+Message-ID: <202202212138.tQW6fcMZ-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
@@ -62,83 +63,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Gustavo,
-
-FYI, the error/warning still remains.
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   cfb92440ee71adcc2105b0890bb01ac3cddb8507
-commit: e0c1d53891c43a70c9fa85ddb3174ab5afd7e2ec dmaengine: dw-edma: Add support for the HDMA feature
-date:   11 months ago
-config: mips-randconfig-r001-20220221 (https://download.01.org/0day-ci/archive/20220221/202202212129.7Gipg08u-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
+tree:   https://github.com/AsahiLinux/linux bits/090-spi-hid
+head:   6503ad96bc85209be90119188ff30d21612bbbf8
+commit: 6503ad96bc85209be90119188ff30d21612bbbf8 [11/11] WIP: HID: transport: spi: add Apple SPI transport
+config: csky-allyesconfig (https://download.01.org/0day-ci/archive/20220221/202202212138.tQW6fcMZ-lkp@intel.com/config)
+compiler: csky-linux-gcc (GCC) 11.2.0
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=e0c1d53891c43a70c9fa85ddb3174ab5afd7e2ec
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout e0c1d53891c43a70c9fa85ddb3174ab5afd7e2ec
+        # https://github.com/AsahiLinux/linux/commit/6503ad96bc85209be90119188ff30d21612bbbf8
+        git remote add asahilinux https://github.com/AsahiLinux/linux
+        git fetch --no-tags asahilinux bits/090-spi-hid
+        git checkout 6503ad96bc85209be90119188ff30d21612bbbf8
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash arch/mips/cavium-octeon/crypto/ arch/mips/cavium-octeon/executive/ arch/mips/kernel/ drivers/dma/dw-edma/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=csky SHELL=/bin/bash drivers/hid/spi-hid/ drivers/platform/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> drivers/dma/dw-edma/dw-edma-v0-core.c:192:19: warning: unused function 'readq_ch'
-   static inline u64 readq_ch(struct dw_edma enum dw_edma_dir dir, u16 ch,
-   ^
-   fatal error: error in backend: Nested variants found in inline asm string: '.if ( 0x00 ) != -1)) 0x00 ) != -1)) : ($( static struct ftrace_branch_data __attribute__((__aligned__(4))) __attribute__((__section__("_ftrace_branch"))) __if_trace = $( .func = __func__, .file = "arch/mips/include/asm/barrier.h", .line = 16, $); 0x00 ) != -1)) : $))) ) && ( (1 << 0) ); .set push; .set mips64r2; .rept (1 - (0x00 == 0x04)); sync 0x00; .endr; .set pop; .else; ; .endif'
-   clang-15: error: clang frontend command failed with exit code 70 (use -v to see invocation)
-   clang version 15.0.0 (git://gitmirror/llvm_project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
-   Target: mips64el-unknown-linux
-   Thread model: posix
-   InstalledDir: /opt/cross/clang-d271fc04d5/bin
-   clang-15: note: diagnostic msg:
-   Makefile arch drivers include kernel nr_bisected scripts source usr
+>> drivers/hid/spi-hid/spi-hid-apple-core.c:259:22: warning: no previous prototype for 'spihid_get_data' [-Wmissing-prototypes]
+     259 | struct spihid_apple *spihid_get_data(struct spihid_interface *idev)
+         |                      ^~~~~~~~~~~~~~~
+--
+>> drivers/hid/spi-hid/spi-hid-apple-of.c:24:5: warning: no previous prototype for 'spihid_apple_of_power_on' [-Wmissing-prototypes]
+      24 | int spihid_apple_of_power_on(struct spihid_apple_ops *ops)
+         |     ^~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/hid/spi-hid/spi-hid-apple-of.c:40:5: warning: no previous prototype for 'spihid_apple_of_power_off' [-Wmissing-prototypes]
+      40 | int spihid_apple_of_power_off(struct spihid_apple_ops *ops)
+         |     ^~~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/hid/spi-hid/spi-hid-apple-of.c:50:5: warning: no previous prototype for 'spihid_apple_of_enable_irq' [-Wmissing-prototypes]
+      50 | int spihid_apple_of_enable_irq(struct spihid_apple_ops *ops)
+         |     ^~~~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/hid/spi-hid/spi-hid-apple-of.c:59:5: warning: no previous prototype for 'spihid_apple_of_disable_irq' [-Wmissing-prototypes]
+      59 | int spihid_apple_of_disable_irq(struct spihid_apple_ops *ops)
+         |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
-vim +/readq_ch +192 drivers/dma/dw-edma/dw-edma-v0-core.c
+vim +/spihid_get_data +259 drivers/hid/spi-hid/spi-hid-apple-core.c
 
-04e0a39fc10f82 Gustavo Pimentel 2021-02-18  191  
-04e0a39fc10f82 Gustavo Pimentel 2021-02-18 @192  static inline u64 readq_ch(struct dw_edma *dw, enum dw_edma_dir dir, u16 ch,
-04e0a39fc10f82 Gustavo Pimentel 2021-02-18  193  			   const void __iomem *addr)
-04e0a39fc10f82 Gustavo Pimentel 2021-02-18  194  {
-04e0a39fc10f82 Gustavo Pimentel 2021-02-18  195  	u32 value;
-04e0a39fc10f82 Gustavo Pimentel 2021-02-18  196  
-04e0a39fc10f82 Gustavo Pimentel 2021-02-18  197  	if (dw->mf == EDMA_MF_EDMA_LEGACY) {
-04e0a39fc10f82 Gustavo Pimentel 2021-02-18  198  		u32 viewport_sel;
-04e0a39fc10f82 Gustavo Pimentel 2021-02-18  199  		unsigned long flags;
-04e0a39fc10f82 Gustavo Pimentel 2021-02-18  200  
-04e0a39fc10f82 Gustavo Pimentel 2021-02-18  201  		raw_spin_lock_irqsave(&dw->lock, flags);
-04e0a39fc10f82 Gustavo Pimentel 2021-02-18  202  
-04e0a39fc10f82 Gustavo Pimentel 2021-02-18  203  		viewport_sel = FIELD_PREP(EDMA_V0_VIEWPORT_MASK, ch);
-04e0a39fc10f82 Gustavo Pimentel 2021-02-18  204  		if (dir == EDMA_DIR_READ)
-04e0a39fc10f82 Gustavo Pimentel 2021-02-18  205  			viewport_sel |= BIT(31);
-04e0a39fc10f82 Gustavo Pimentel 2021-02-18  206  
-04e0a39fc10f82 Gustavo Pimentel 2021-02-18  207  		writel(viewport_sel,
-04e0a39fc10f82 Gustavo Pimentel 2021-02-18  208  		       &(__dw_regs(dw)->type.legacy.viewport_sel));
-04e0a39fc10f82 Gustavo Pimentel 2021-02-18  209  		value = readq(addr);
-04e0a39fc10f82 Gustavo Pimentel 2021-02-18  210  
-04e0a39fc10f82 Gustavo Pimentel 2021-02-18  211  		raw_spin_unlock_irqrestore(&dw->lock, flags);
-04e0a39fc10f82 Gustavo Pimentel 2021-02-18  212  	} else {
-04e0a39fc10f82 Gustavo Pimentel 2021-02-18  213  		value = readq(addr);
-04e0a39fc10f82 Gustavo Pimentel 2021-02-18  214  	}
-04e0a39fc10f82 Gustavo Pimentel 2021-02-18  215  
-04e0a39fc10f82 Gustavo Pimentel 2021-02-18  216  	return value;
-04e0a39fc10f82 Gustavo Pimentel 2021-02-18  217  }
-04e0a39fc10f82 Gustavo Pimentel 2021-02-18  218  
-
-:::::: The code at line 192 was first introduced by commit
-:::::: 04e0a39fc10f82a71b84af73351333b184cee578 dmaengine: dw-edma: Add writeq() and readq() for 64 bits architectures
-
-:::::: TO: Gustavo Pimentel <Gustavo.Pimentel@synopsys.com>
-:::::: CC: Vinod Koul <vkoul@kernel.org>
+   258	
+ > 259	struct spihid_apple *spihid_get_data(struct spihid_interface *idev)
+   260	{
+   261		switch (idev->id) {
+   262		case SPIHID_DEVICE_ID_KBD:
+   263			return container_of(idev, struct spihid_apple, kbd);
+   264		case SPIHID_DEVICE_ID_TP:
+   265			return container_of(idev, struct spihid_apple, tp);
+   266		default:
+   267			return NULL;
+   268		}
+   269	}
+   270	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation

@@ -2,47 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83DA74BE7D5
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:04:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3680D4BDFF1
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:51:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344456AbiBUJTE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 04:19:04 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33980 "EHLO
+        id S241241AbiBUI73 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 03:59:29 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348864AbiBUJLs (ORCPT
+        with ESMTP id S1346525AbiBUI6k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 04:11:48 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D33C228988;
-        Mon, 21 Feb 2022 01:04:17 -0800 (PST)
+        Mon, 21 Feb 2022 03:58:40 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8229625E85;
+        Mon, 21 Feb 2022 00:54:52 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6EE4160FB6;
-        Mon, 21 Feb 2022 09:04:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52FBDC340E9;
-        Mon, 21 Feb 2022 09:04:16 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1EAF8611DD;
+        Mon, 21 Feb 2022 08:54:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1131C340E9;
+        Mon, 21 Feb 2022 08:54:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645434256;
-        bh=w7C2GgCRtP1+xltsNW+WDszYMEqhmA+wflbrN7qr1Ow=;
+        s=korg; t=1645433689;
+        bh=ylA+VLrhYECc4xYLWXrutYwBlyqWHicuJlTJMCc1yuY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dxdk/+52oV79MA/rMQ/vjSa3m6L4MXCIlAgTjNuVNDK21DTPM+cATWEYl5b05KHnm
-         +KgJQkxRuL/gWNUSiIZ7i83urF2tstKWB/zZC6vSLuJ66s7PNsfR1yp4wAFgjzq1jV
-         ARUNZsgFKRdYN0ZaY6G9Ab01dvclps1q9xU6lPTY=
+        b=iuQwX0VYca4D/dS/oHYYxuD6daJUTaxQtuBIqpXrNc/scvAuS6jVG+uPtKQ4uyfVv
+         uUYivx5GMW0h16JTN46mRfohmZVbrlKKUAiddbBZxMoSL7uO1SvF0VsoTHeeZHpfId
+         vbnkXo6Ac5utVX8ROIfUafksMGJXQlKUs4GMQrXo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Adrian Hunter <adrian.hunter@intel.com>,
-        Ian Rogers <irogers@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Wang ShaoBo <bobo.shaobowang@huawei.com>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>
-Subject: [PATCH 5.10 067/121] perf bpf: Defer freeing string after possible strlen() on it
+        stable@vger.kernel.org, dmummenschanz@web.de,
+        Takashi Iwai <tiwai@suse.de>
+Subject: [PATCH 4.14 28/45] ALSA: hda: Fix missing codec probe on Shenker Dock 15
 Date:   Mon, 21 Feb 2022 09:49:19 +0100
-Message-Id: <20220221084923.467669276@linuxfoundation.org>
+Message-Id: <20220221084911.362480350@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220221084921.147454846@linuxfoundation.org>
-References: <20220221084921.147454846@linuxfoundation.org>
+In-Reply-To: <20220221084910.454824160@linuxfoundation.org>
+References: <20220221084910.454824160@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,50 +54,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arnaldo Carvalho de Melo <acme@redhat.com>
+From: Takashi Iwai <tiwai@suse.de>
 
-commit 31ded1535e3182778a1d0e5c32711f55da3bc512 upstream.
+commit dd8e5b161d7fb9cefa1f1d6e35a39b9e1563c8d3 upstream.
 
-This was detected by the gcc in Fedora Rawhide's gcc:
+By some unknown reason, BIOS on Shenker Dock 15 doesn't set up the
+codec mask properly for the onboard audio.  Let's set the forced codec
+mask to enable the codec discovery.
 
-  50    11.01 fedora:rawhide                : FAIL gcc version 12.0.1 20220205 (Red Hat 12.0.1-0) (GCC)
-        inlined from 'bpf__config_obj' at util/bpf-loader.c:1242:9:
-    util/bpf-loader.c:1225:34: error: pointer 'map_opt' may be used after 'free' [-Werror=use-after-free]
-     1225 |                 *key_scan_pos += strlen(map_opt);
-          |                                  ^~~~~~~~~~~~~~~
-    util/bpf-loader.c:1223:9: note: call to 'free' here
-     1223 |         free(map_name);
-          |         ^~~~~~~~~~~~~~
-    cc1: all warnings being treated as errors
-
-So do the calculations on the pointer before freeing it.
-
-Fixes: 04f9bf2bac72480c ("perf bpf-loader: Add missing '*' for key_scan_pos")
-Cc: Adrian Hunter <adrian.hunter@intel.com>
-Cc: Ian Rogers <irogers@google.com>
-Cc: Jiri Olsa <jolsa@kernel.org>
-Cc: Namhyung Kim <namhyung@kernel.org>
-Cc: Wang ShaoBo <bobo.shaobowang@huawei.com>
-Link: https://lore.kernel.org/lkml/Yg1VtQxKrPpS3uNA@kernel.org
-Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+Reported-by: dmummenschanz@web.de
+Cc: <stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/trinity-f018660b-95c9-442b-a2a8-c92a56eb07ed-1644345967148@3c-app-webde-bap22
+Link: https://lore.kernel.org/r/20220214100020.8870-2-tiwai@suse.de
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- tools/perf/util/bpf-loader.c |    3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ sound/pci/hda/hda_intel.c |    1 +
+ 1 file changed, 1 insertion(+)
 
---- a/tools/perf/util/bpf-loader.c
-+++ b/tools/perf/util/bpf-loader.c
-@@ -1215,9 +1215,10 @@ bpf__obj_config_map(struct bpf_object *o
- 	pr_debug("ERROR: Invalid map config option '%s'\n", map_opt);
- 	err = -BPF_LOADER_ERRNO__OBJCONF_MAP_OPT;
- out:
--	free(map_name);
- 	if (!err)
- 		*key_scan_pos += strlen(map_opt);
-+
-+	free(map_name);
- 	return err;
- }
- 
+--- a/sound/pci/hda/hda_intel.c
++++ b/sound/pci/hda/hda_intel.c
+@@ -1636,6 +1636,7 @@ static struct snd_pci_quirk probe_mask_l
+ 	/* forced codec slots */
+ 	SND_PCI_QUIRK(0x1043, 0x1262, "ASUS W5Fm", 0x103),
+ 	SND_PCI_QUIRK(0x1046, 0x1262, "ASUS W5F", 0x103),
++	SND_PCI_QUIRK(0x1558, 0x0351, "Schenker Dock 15", 0x105),
+ 	/* WinFast VP200 H (Teradici) user reported broken communication */
+ 	SND_PCI_QUIRK(0x3a21, 0x040d, "WinFast VP200 H", 0x101),
+ 	{}
 
 

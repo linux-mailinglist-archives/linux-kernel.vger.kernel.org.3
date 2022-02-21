@@ -2,108 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43B5B4BE040
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:51:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C90814BE8FD
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:06:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354931AbiBUKgc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 05:36:32 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57302 "EHLO
+        id S1354859AbiBUKgl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 05:36:41 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355182AbiBUKf7 (ORCPT
+        with ESMTP id S1355196AbiBUKgB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 05:35:59 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1191140EF;
-        Mon, 21 Feb 2022 01:57:32 -0800 (PST)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1645437450;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=CbvypUV4PljgvnNET61NtCqtxN9TG2dxR/pcJjN8TKk=;
-        b=Z1PtO3+o0SylAySoCVISwmJoQ/VDToBIk/QWBbSsyPUPxvKz4lEmz/FtewIfJxUP1WFSgX
-        CkPsHINPU/jaMa09H51sIvO35dc7q6pgc+CLG/k14SsmA9PDo0wDmvtM2ejAXjdfL4C/6c
-        Q66kJqhzEMb0cY1wnZPkgBQ7+t4LcIZwAT7aMaSY8qYLeWGYlMrLPufSNep14AgxtCOmiR
-        EIMwZ8zVAFh4lWS0wPv/IT7833I40UFZIJ6KPlh6GpS1sEKf+LGHXVOvkDI7Dww4Vk0tRy
-        6hPW2W5UPBPLteNTnx+gu78G6NU3TiQ7b2fAaD/Bjm1XtACv4i4WSg7JhQaIZg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1645437450;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=CbvypUV4PljgvnNET61NtCqtxN9TG2dxR/pcJjN8TKk=;
-        b=y78lXjA5DpGSvbgDzZAMDOKwtFxAoVIuHQELT/smmXEPXBj9QptRh1I2zqMkiPUhfbxDSR
-        ux63licBrEo4dvCQ==
-To:     Lee Jones <lee.jones@linaro.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc:     greybus-dev@lists.linaro.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Alex Elder <elder@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Johan Hovold <johan@kernel.org>,
-        Rui Miguel Silva <rmfrfs@gmail.com>,
-        UNGLinuxDriver@microchip.com, Wolfram Sang <wsa@kernel.org>,
-        Woojung Huh <woojung.huh@microchip.com>
-Subject: Re: [PATCH v4 0/7] Provide and use generic_handle_irq_safe() where
- appropriate.
-In-Reply-To: <YgvJ1fCUYmaV0Mbx@google.com>
-References: <20220211181500.1856198-1-bigeasy@linutronix.de>
- <Ygu6UewoPbYC9yPa@google.com> <Ygu9xtrMxxq36FRH@linutronix.de>
- <YgvD1HpN2oyalDmj@google.com> <YgvH4ROUQVgusBdA@linutronix.de>
- <YgvJ1fCUYmaV0Mbx@google.com>
-Date:   Mon, 21 Feb 2022 10:57:29 +0100
-Message-ID: <87a6ekleye.ffs@tglx>
+        Mon, 21 Feb 2022 05:36:01 -0500
+Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8274AD7D
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 01:58:23 -0800 (PST)
+Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-2d6d0cb5da4so76765257b3.10
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 01:58:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=2eHktmmt0PkDk6CLraSoVlcsRan7jcJUGHnpRXDCQ04=;
+        b=H7/UrUOdRbce8sQw2RpFzn7uMvbVVdDt0g3qOad21EwoGC+Ad83x4dQFUzNpD1uWoE
+         jcFM2i4O3BSz6X/IcOg1pZ/1HhX+iFLloQs0Tn0GMaYilDBKWgjI+4UrU9p6GpQbZy6h
+         h8BVNFlrqQsZNlBg5wd9UhjQMMisuAe4IF23k=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=2eHktmmt0PkDk6CLraSoVlcsRan7jcJUGHnpRXDCQ04=;
+        b=mp9B1v2Y0/G3/fpXVlk+B5k7gsdXat1tkz+VwYRZ6165KODUxYAfaewQvangfeLvNV
+         xFzxJXRvosgYm5L/j/Nj2ZEZDE+6/ILXbItxLuJ0yQDv/BXPTSuAudLlxBuRFVfwaGta
+         TF6mnV3yq01LRJr5rCKefODBJFuw7FHlM7Q/q33j6ih5BYlj8jA03CXQGz3Vo5CDjsaZ
+         FgDPgwmql7aTOe2ECe6C+8kyM3Oby2A+bsHhzBBQoYiiUAOQ5LZlDAmqrm8DQt0HqA3R
+         GiP+ZKp/D107A/Pf+1IsIjlyRmacR7mjrrrNry3iw7y3MSLPfqB29ExgArvALHhOnhnH
+         bPwQ==
+X-Gm-Message-State: AOAM5302tHEpiPLhO5Ux2Wq+bCQiWUuVTyRBRlvTV7PriiQfoedzzZhz
+        exzOioUkGpptrU5wG42A0ms3QYR1/qBtf7DII8zlag==
+X-Google-Smtp-Source: ABdhPJzWDVfTXmYwYk7yxLYvEuw00wYztgloZbX0vxTDnjc2/iQC2gsSGREss62vQj9jqvxQSfLcrGRXd4Sj0X1WK5s=
+X-Received: by 2002:a0d:d613:0:b0:2d6:227e:1a10 with SMTP id
+ y19-20020a0dd613000000b002d6227e1a10mr18998317ywd.21.1645437502779; Mon, 21
+ Feb 2022 01:58:22 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220210141931.291712-1-angelogioacchino.delregno@collabora.com> <20220210141931.291712-6-angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220210141931.291712-6-angelogioacchino.delregno@collabora.com>
+From:   Chen-Yu Tsai <wenst@chromium.org>
+Date:   Mon, 21 Feb 2022 17:58:11 +0800
+Message-ID: <CAGXv+5H0OkMk=1MZH3jCFSZbauJmEcgFADfDXDPf2r1wrp8wCw@mail.gmail.com>
+Subject: Re: [PATCH 5/5] pinctrl: mediatek: common-v1: Commonize
+ spec_ies_smt_set callback
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     sean.wang@kernel.org, linus.walleij@linaro.org,
+        matthias.bgg@gmail.com, linux-mediatek@lists.infradead.org,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kernel@collabora.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Lee,
-
-On Tue, Feb 15 2022 at 15:42, Lee Jones wrote:
-> On Tue, 15 Feb 2022, Sebastian Andrzej Siewior wrote:
->> Either way it remains bisect-able since each driver is changed
->> individually. There is no need to merge them in one go but since it is
->> that small it probably makes sense. But I don't do the logistics here.
+On Thu, Feb 10, 2022 at 10:21 PM AngeloGioacchino Del Regno
+<angelogioacchino.delregno@collabora.com> wrote:
 >
-> Okay, this is what I was asking.
+> All of the MediaTek pinctrl drivers registering with pinctrl-mtk-common
+> that are offering a .spec_ies_smt_set() callback are declaring their
+> own function which is doing exactly the same on all drivers: calling
+> mtk_pconf_spec_set_ies_smt_range() with their struct and a simple check.
 >
-> So there aren't any hard dependencies between the driver changes?
+> Commonize this callback by adding the ies and smt structure pointers
+> to struct mtk_pinctrl_devdata and changing the callback signature to
+> take it.
 >
-> Only the drivers are dependent on the API.
-
-Correct.
-
-> So, if we choose to do so, we can merge the API and then subsequently
-> add the users one by one into their respective subsystem, in any
-> order.  This would save on creating an immutable topic branch which we
-> all pull from.
+> Removing the callback and checking for the existence of the spec_smt
+> and/or spec_ies data would allow us to staticize the function
+> mtk_pconf_spec_set_ies_smt_range(), but this solution was avoided as
+> to keep flexibility, as some SoCs may need to perform a very different
+> operation compared to what this commonized function is doing.
 >
-> What is your preference Thomas?
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-I suggest doing it the following way:
-
- 1) I apply 1/7 on top of -rc5 and tag it
-
- 2) Driver maintainers who want to merge via their trees pull that tag
-    apply the relevant driver changes
-
- 3) I collect the leftovers and merge them via irq/core
-
-Does that make sense?
-
-Thanks,
-
-        tglx
+Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>

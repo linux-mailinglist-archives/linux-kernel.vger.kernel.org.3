@@ -2,194 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B52B94BDB7F
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:40:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D9E864BDFBB
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:50:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355238AbiBUKvv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 05:51:51 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49730 "EHLO
+        id S1350341AbiBUKwM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 05:52:12 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355805AbiBUKvR (ORCPT
+        with ESMTP id S1355865AbiBUKvW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 05:51:17 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5638357B31
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 02:13:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645438399; x=1676974399;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=EhGh1hrXlmWRmd4DO0zw3q9pv+kq236zpC0vmb9HMWU=;
-  b=L4zUaC6VrYmv6oq6GnOrGVx7L8riKPbiG//ANj4ke8wqn0aJ0fSRe5j2
-   VE/6LIdIZ3fxXbbEbV4bX/tVbm2/QvBpP/HMz167LWA4Tjot+F1bman2K
-   77f+Zl4JIQeXIglYvRM9JJkMIopHmo99zopu/ig6YFB6kIpAveZjkS3rT
-   94wfPSLWwz36BB4fcSjWa8NzRoZ3ilVjXUX0vt2ZgZiaenrDB8Afsxg4M
-   BJVbd8ElJsAD9ZDra2e0FDqQRRGblYUo6tP6hFnIQD4btigjG49cz47HO
-   6n2T/fq+93SwoG/A/jriP7SF7FUIfuM/02IZryM/XxWkT94id6RvkDhqt
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10264"; a="276072160"
-X-IronPort-AV: E=Sophos;i="5.88,385,1635231600"; 
-   d="scan'208";a="276072160"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2022 02:13:14 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,385,1635231600"; 
-   d="scan'208";a="490396275"
-Received: from lkp-server01.sh.intel.com (HELO da3212ac2f54) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 21 Feb 2022 02:13:12 -0800
-Received: from kbuild by da3212ac2f54 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nM5gt-0001Uy-FB; Mon, 21 Feb 2022 10:13:11 +0000
-Date:   Mon, 21 Feb 2022 18:12:33 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Beau Belgrave <beaub@linux.microsoft.com>
-Cc:     kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org,
-        "Steven Rostedt (Google)" <rostedt@goodmis.org>
-Subject: [ammarfaizi2-block:rostedt/linux-trace/for-next 21/32]
- kernel/trace/trace_events_user.c:747:16: sparse: sparse: incompatible types
- in comparison expression (different address spaces):
-Message-ID: <202202211836.MuxsYYnx-lkp@intel.com>
+        Mon, 21 Feb 2022 05:51:22 -0500
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2040.outbound.protection.outlook.com [40.107.243.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C257D7086E
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 02:13:24 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=YF2lamQPWaYpuewhY2laRfsa49ZZ+FxgCvdbqtkNY8cfuqpwtUpOIGLYfYCXabX6q9OsVbpkpFOVPJAu32U8P+HWFeV0ba+noRyrBfUndSu3nmMxWDQppQhk+s5h3FomSsjcVWXd5E46DXJXy1FV5xDCtQ46m+GE7EZQVo823xk272TPkMaFKd0sdudcUCSw2D1Wyj7co3qBZtidTwlsVrL5dE5TzGOnbuHgFYPKtP/pOZ/hgqcio7IFWT7QN+icI4tcbfNpkIq9ruK8ynwTLImamxTuz1qd+sKP9NkuA8TqWWcZ3rvxasO0XdxPfPeITgAC7MUyKZtm58OhHWq9Cg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=mFvjvBPo0KeGxdb3dtgdf2/eI01KkNsEtmpJlQ59fPI=;
+ b=DILEPKcBKv4tKpSPKa612I/0aBMDsXRZ/NBVVPRekRTlTDWwBGSfKhtjmxV9qvslIRWVbF5T//SANp8HXflkjD1p/6aF/vK3Acwj9enp/AgqOs6LBsZfhVBwegk22ArLf8K6eyuyjHzlMImfmZUEJK6ZH2I1F9OxmpnXXMpbU3YxDMiXhSiPvfL5Zm2AUpMqKHctH/avXVOV/h0NPoRQRS7LLXhXHWfb8YHqzDrkWI7g0VEsUNOXc04/1n+9pjSAW7X+3eUW097cUlpzWxVtHzyNMyNnQQgFJJrY0xzkh2/3qPyWFlS//3uk87gQ6lyKZx20+Z2IMSZlDDHBH24QWg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=linux.ie smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=mFvjvBPo0KeGxdb3dtgdf2/eI01KkNsEtmpJlQ59fPI=;
+ b=kuhaXe7oxsiFxbfnsL2QrAwj2dl8nVbYEP6CxPrIsr1qfnUTEFnToYGsmGEjWI6KxK8Doovsx2+VNn4jn4z9mmtLQBu2dOU2UWLUgKs112m9UVUNngAMaVmIP/fVWlc8JzEfskuvmf0fktHEtq5EsZerSQHD2IyNY+AAgwwX4EA=
+Received: from CO1PR15CA0055.namprd15.prod.outlook.com (2603:10b6:101:1f::23)
+ by MWHPR1201MB0111.namprd12.prod.outlook.com (2603:10b6:301:55::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4995.16; Mon, 21 Feb
+ 2022 10:13:17 +0000
+Received: from CO1NAM11FT053.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:101:1f:cafe::a9) by CO1PR15CA0055.outlook.office365.com
+ (2603:10b6:101:1f::23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4975.11 via Frontend
+ Transport; Mon, 21 Feb 2022 10:13:17 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CO1NAM11FT053.mail.protection.outlook.com (10.13.175.63) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.4995.15 via Frontend Transport; Mon, 21 Feb 2022 10:13:16 +0000
+Received: from localhost.localdomain (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Mon, 21 Feb
+ 2022 04:13:13 -0600
+From:   Qiang Yu <qiang.yu@amd.com>
+To:     Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>
+CC:     Qiang Yu <qiang.yu@amd.com>, <amd-gfx@lists.freedesktop.org>,
+        <dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH] drm/amdgpu: check vm ready by evicting
+Date:   Mon, 21 Feb 2022 18:12:35 +0800
+Message-ID: <20220221101239.2863-1-qiang.yu@amd.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 4750c9a3-e121-4e88-a6c8-08d9f522c72d
+X-MS-TrafficTypeDiagnostic: MWHPR1201MB0111:EE_
+X-Microsoft-Antispam-PRVS: <MWHPR1201MB011145A5444FF9A0C0BCA26D8F3A9@MWHPR1201MB0111.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: abT/Yf2+1eCZcvLUVhc8ozKefnp6n8Xw0jbqtewzL7ROqbeCp0dRz+BJ9AP9yGyCOBOfMYrR4IEG/s7TC/nTNrQcBSCTEcSIhoY+KF/RlDgDLVX13xwqsUOdFOp0kJl7/9uiLCp8uPhAzZ+igLNrC/pfb+GWVXyaWbIzX0FX3+2173GP7q+3sOW+v4T2wST1MUPgReKyEq3O0PPvpKImhTzwODFKdcwSDIRlrBxmUfpPQQp///cNJJrYp7IIfwtix6LuQ9tNTlJ4VsjoecQoVswiSAnZxX3AHwWXPpLaHNawdXv2oAXOxs+yC8568G3jkBHtZC+XlnlTcYFR/+TYbarG3Td3rvF9lBAtTr7saE2VttdAlc6Md8AXk1X0WxG48W2mUuOJDcTV+PGGK4m7QvI2Ssjl2GOyGJ7M9bROAWdLScSOWubzAae3w3oLSOpoQ2KmatWnFnf58nGFj1hwxV3cj1yV6rFr2SR/4XGp2sV4Yizwk1OZxE53hEYChXQ0q2L9y6dlU2JETtdxVRxC1QIXNTHE1INLEw0sJg8NdyBAZgfECinNcgoy3G3N+PQMddhwtjCUVbO6+/ecZ/2P9UZ9aak7biNInSHSn3NNH6WnaAOlA1kWeVESOLiN0vHNLPYNDc9h8TUs181xl1pZr5ATNshDZ+H94e1dT9AUGjpHoqN5oT1ZEXGrm9ZH83xh8RpMmoSebBepuD+IwGqlfg==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(40470700004)(46966006)(36840700001)(8936002)(6666004)(336012)(26005)(40460700003)(508600001)(186003)(81166007)(5660300002)(2616005)(86362001)(1076003)(70586007)(70206006)(8676002)(4326008)(16526019)(82310400004)(356005)(2906002)(110136005)(54906003)(47076005)(36860700001)(83380400001)(316002)(44832011)(36756003)(426003)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Feb 2022 10:13:16.7111
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4750c9a3-e121-4e88-a6c8-08d9f522c72d
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT053.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR1201MB0111
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/ammarfaizi2/linux-block rostedt/linux-trace/for-next
-head:   864ea0e10cc90416a01b46f0d47a6f26dc020820
-commit: 7f5a08c79df35e68f1a43033450c5050f12bc155 [21/32] user_events: Add minimal support for trace_event into ftrace
-config: x86_64-randconfig-s032-20220221 (https://download.01.org/0day-ci/archive/20220221/202202211836.MuxsYYnx-lkp@intel.com/config)
-compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
-reproduce:
-        # apt-get install sparse
-        # sparse version: v0.6.4-dirty
-        # https://github.com/ammarfaizi2/linux-block/commit/7f5a08c79df35e68f1a43033450c5050f12bc155
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block rostedt/linux-trace/for-next
-        git checkout 7f5a08c79df35e68f1a43033450c5050f12bc155
-        # save the config file to linux build tree
-        mkdir build_dir
-        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=x86_64 SHELL=/bin/bash kernel/trace/
+Workstation application ANSA/META get this error dmesg:
+[drm:amdgpu_gem_va_ioctl [amdgpu]] *ERROR* Couldn't update BO_VA (-16)
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+This is caused by:
+1. create a 256MB buffer in invisible VRAM
+2. CPU map the buffer and access it causes vm_fault and try to move
+   it to visible VRAM
+3. force visible VRAM space and traverse all VRAM bos to check if
+   evicting this bo is valuable
+4. when checking a VM bo (in invisible VRAM), amdgpu_vm_evictable()
+   will set amdgpu_vm->evicting, but latter due to not in visible
+   VRAM, won't really evict it so not add it to amdgpu_vm->evicted
+5. before next CS to clear the amdgpu_vm->evicting, user VM ops
+   ioctl will pass amdgpu_vm_ready() (check amdgpu_vm->evicted)
+   but fail in amdgpu_vm_bo_update_mapping() (check
+   amdgpu_vm->evicting) and get this error log
 
+This error won't affect functionality as next CS will finish the
+waiting VM ops. But we'd better clear the error log by check the
+evicting flag which really stop VM ops latter.
 
-sparse warnings: (new ones prefixed by >>)
->> kernel/trace/trace_events_user.c:747:16: sparse: sparse: incompatible types in comparison expression (different address spaces):
->> kernel/trace/trace_events_user.c:747:16: sparse:    void [noderef] __rcu *
->> kernel/trace/trace_events_user.c:747:16: sparse:    void *
->> kernel/trace/trace_events_user.c:811:13: sparse: sparse: cast removes address space '__user' of expression
->> kernel/trace/trace_events_user.c:811:13: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void [noderef] __user *buf @@     got char * @@
-   kernel/trace/trace_events_user.c:811:13: sparse:     expected void [noderef] __user *buf
-   kernel/trace/trace_events_user.c:811:13: sparse:     got char *
-   kernel/trace/trace_events_user.c:827:16: sparse: sparse: incompatible types in comparison expression (different address spaces):
-   kernel/trace/trace_events_user.c:827:16: sparse:    void [noderef] __rcu *
-   kernel/trace/trace_events_user.c:827:16: sparse:    void *
-   kernel/trace/trace_events_user.c:854:9: sparse: sparse: incompatible types in comparison expression (different address spaces):
-   kernel/trace/trace_events_user.c:854:9: sparse:    void [noderef] __rcu *
-   kernel/trace/trace_events_user.c:854:9: sparse:    void *
-
-vim +747 kernel/trace/trace_events_user.c
-
-   730	
-   731	/*
-   732	 * Validates the user payload and writes via iterator.
-   733	 */
-   734	static ssize_t user_events_write_core(struct file *file, struct iov_iter *i)
-   735	{
-   736		struct user_event_refs *refs;
-   737		struct user_event *user = NULL;
-   738		struct tracepoint *tp;
-   739		ssize_t ret = i->count;
-   740		int idx;
-   741	
-   742		if (unlikely(copy_from_iter(&idx, sizeof(idx), i) != sizeof(idx)))
-   743			return -EFAULT;
-   744	
-   745		rcu_read_lock_sched();
-   746	
- > 747		refs = rcu_dereference_sched(file->private_data);
-   748	
-   749		/*
-   750		 * The refs->events array is protected by RCU, and new items may be
-   751		 * added. But the user retrieved from indexing into the events array
-   752		 * shall be immutable while the file is opened.
-   753		 */
-   754		if (likely(refs && idx < refs->count))
-   755			user = refs->events[idx];
-   756	
-   757		rcu_read_unlock_sched();
-   758	
-   759		if (unlikely(user == NULL))
-   760			return -ENOENT;
-   761	
-   762		tp = &user->tracepoint;
-   763	
-   764		/*
-   765		 * It's possible key.enabled disables after this check, however
-   766		 * we don't mind if a few events are included in this condition.
-   767		 */
-   768		if (likely(atomic_read(&tp->key.enabled) > 0)) {
-   769			struct tracepoint_func *probe_func_ptr;
-   770			user_event_func_t probe_func;
-   771			void *tpdata;
-   772			void *kdata;
-   773			u32 datalen;
-   774	
-   775			kdata = kmalloc(i->count, GFP_KERNEL);
-   776	
-   777			if (unlikely(!kdata))
-   778				return -ENOMEM;
-   779	
-   780			datalen = copy_from_iter(kdata, i->count, i);
-   781	
-   782			rcu_read_lock_sched();
-   783	
-   784			probe_func_ptr = rcu_dereference_sched(tp->funcs);
-   785	
-   786			if (probe_func_ptr) {
-   787				do {
-   788					probe_func = probe_func_ptr->func;
-   789					tpdata = probe_func_ptr->data;
-   790					probe_func(user, kdata, datalen, tpdata);
-   791				} while ((++probe_func_ptr)->func);
-   792			}
-   793	
-   794			rcu_read_unlock_sched();
-   795	
-   796			kfree(kdata);
-   797		}
-   798	
-   799		return ret;
-   800	}
-   801	
-   802	static ssize_t user_events_write(struct file *file, const char __user *ubuf,
-   803					 size_t count, loff_t *ppos)
-   804	{
-   805		struct iovec iov;
-   806		struct iov_iter i;
-   807	
-   808		if (unlikely(*ppos != 0))
-   809			return -EFAULT;
-   810	
- > 811		if (unlikely(import_single_range(READ, (char *)ubuf, count, &iov, &i)))
-   812			return -EFAULT;
-   813	
-   814		return user_events_write_core(file, &i);
-   815	}
-   816	
-
+Signed-off-by: Qiang Yu <qiang.yu@amd.com>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c
+index 37acd8911168..2cd9f1a2e5fa 100644
+--- a/drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c
++++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c
+@@ -770,11 +770,16 @@ int amdgpu_vm_validate_pt_bos(struct amdgpu_device *adev, struct amdgpu_vm *vm,
+  * Check if all VM PDs/PTs are ready for updates
+  *
+  * Returns:
+- * True if eviction list is empty.
++ * True if VM is not evicting.
+  */
+ bool amdgpu_vm_ready(struct amdgpu_vm *vm)
+ {
+-	return list_empty(&vm->evicted);
++	bool ret;
++
++	amdgpu_vm_eviction_lock(vm);
++	ret = !vm->evicting;
++	amdgpu_vm_eviction_unlock(vm);
++	return ret;
+ }
+ 
+ /**
+-- 
+2.25.1
+

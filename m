@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 807A24BE999
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:07:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E3494BE6B9
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:02:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348311AbiBUJTr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 04:19:47 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34774 "EHLO
+        id S1348614AbiBUJL0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 04:11:26 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349450AbiBUJM3 (ORCPT
+        with ESMTP id S1347639AbiBUJHW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 04:12:29 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9AF02BB32;
-        Mon, 21 Feb 2022 01:05:19 -0800 (PST)
+        Mon, 21 Feb 2022 04:07:22 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E42D3123F;
+        Mon, 21 Feb 2022 00:59:56 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 4AC11CE0E85;
-        Mon, 21 Feb 2022 09:05:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A157C340E9;
-        Mon, 21 Feb 2022 09:05:14 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7036261204;
+        Mon, 21 Feb 2022 08:59:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F964C340F1;
+        Mon, 21 Feb 2022 08:59:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645434314;
-        bh=r1SRfg9nnyENEPqICKXQBUH9uxt2e9BvLhFVnJyJHP8=;
+        s=korg; t=1645433995;
+        bh=kMSEXPBoSwoQwmpkWwpG7HzOODbVad/ahoEiMcTEZ58=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JPMrz5K29pAwwcX0W7DEqlNRvlbrS7tA/sa1aCsB+J3hNa5G9pU+hV0vc2m8capaP
-         a6MlbabW1sFKh5o1ZuKsqXBjP1rEHvm9gU6glLkUaiFmdjqOIt0PE+ti3xWg/5mSjk
-         ld0CftFA0xgDQ2vK6h9R6p80t7Rrn/ytZwMCk3Hk=
+        b=rKscJb1nWELFbr8DZWxFFFaVEk2M4qFm1OhfRRueMHy9oPgwzGEKctqJcVwbVnCGq
+         ESH2fkIYCC0VQFhqQmjnawBtNkwSpJQfNM5qH2+EjRwmDjQWbU2ojapimotlpKqHmz
+         2vBc7N9tu2zP9gYWfBeFqmtTz4oV+ejowk/sbSiM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -36,19 +36,19 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Bryan ODonoghue <bryan.odonoghue@linaro.org>,
         Manivannan Sadhasivam <mani@kernel.org>,
         Miquel Raynal <miquel.raynal@bootlin.com>
-Subject: [PATCH 5.10 085/121] mtd: rawnand: qcom: Fix clock sequencing in qcom_nandc_probe()
+Subject: [PATCH 5.4 57/80] mtd: rawnand: qcom: Fix clock sequencing in qcom_nandc_probe()
 Date:   Mon, 21 Feb 2022 09:49:37 +0100
-Message-Id: <20220221084924.082316212@linuxfoundation.org>
+Message-Id: <20220221084917.446340483@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220221084921.147454846@linuxfoundation.org>
-References: <20220221084921.147454846@linuxfoundation.org>
+In-Reply-To: <20220221084915.554151737@linuxfoundation.org>
+References: <20220221084915.554151737@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -102,7 +102,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
  #include <linux/clk.h>
  #include <linux/slab.h>
  #include <linux/bitops.h>
-@@ -2968,10 +2967,6 @@ static int qcom_nandc_probe(struct platf
+@@ -2944,10 +2943,6 @@ static int qcom_nandc_probe(struct platf
  	if (!nandc->base_dma)
  		return -ENXIO;
  
@@ -113,7 +113,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
  	ret = clk_prepare_enable(nandc->core_clk);
  	if (ret)
  		goto err_core_clk;
-@@ -2980,6 +2975,10 @@ static int qcom_nandc_probe(struct platf
+@@ -2956,6 +2951,10 @@ static int qcom_nandc_probe(struct platf
  	if (ret)
  		goto err_aon_clk;
  
@@ -124,7 +124,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
  	ret = qcom_nandc_setup(nandc);
  	if (ret)
  		goto err_setup;
-@@ -2991,15 +2990,14 @@ static int qcom_nandc_probe(struct platf
+@@ -2967,15 +2966,14 @@ static int qcom_nandc_probe(struct platf
  	return 0;
  
  err_setup:

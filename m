@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 565884BDBCB
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:41:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3138F4BDC74
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:42:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352867AbiBUKBF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 05:01:05 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53990 "EHLO
+        id S1347431AbiBUJHZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 04:07:25 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352323AbiBUJxx (ORCPT
+        with ESMTP id S1347506AbiBUJB1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 04:53:53 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8754A1D33A;
-        Mon, 21 Feb 2022 01:23:41 -0800 (PST)
+        Mon, 21 Feb 2022 04:01:27 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1E7E624D;
+        Mon, 21 Feb 2022 00:56:38 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2729860F6E;
-        Mon, 21 Feb 2022 09:23:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 118A7C340E9;
-        Mon, 21 Feb 2022 09:23:39 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D937DB80EAA;
+        Mon, 21 Feb 2022 08:56:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24F3CC340E9;
+        Mon, 21 Feb 2022 08:56:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645435420;
-        bh=TYuvVS3fFqWieGFmsqv7QYOngtgAFJf28ruJSp8ojrk=;
+        s=korg; t=1645433794;
+        bh=EteLPQ1xpo8u1pYKeNPetV3v8Y6SoK7eagmQ+X6IfdQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=xM7tF3S59AZJ6vOM2f2GeN/ngr3ST6NtCRX1kfn4JdnDT2BWRkR3xXR7cA/lQfukH
-         bAh8QaR9gxt0coHVe41yXapMizT+S2NMZHMWefRAi96xp8j/BJr2YZRrrGWCyYx07H
-         2AoWttPUpj7jTDTSZ87P1HkLmGg1VKu6OKW0xQSU=
+        b=DAvDNfCqSwAkA1SeT/GbMB11cSkHNVgbUV+M9WiSCv6yb4ovCK5cWa4vu1G547rsa
+         L11I7NJ6hNamxHDY2KAFR0JrMaK0ej3JVqFKXLIKY4zAih3MjnCGdZsEwsyDdtCcfi
+         MEK/NCl5Wc8z9K7bCCYgc67GjCu58A6VCFV8TiJE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Srinivasa Rao Mandadapu <srivasam@codeaurora.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Mark Brown <broonie@kernel.org>
-Subject: [PATCH 5.16 158/227] ASoC: qcom: Actually clear DMA interrupt register for HDMI
+        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Wolfram Sang <wsa@kernel.org>
+Subject: [PATCH 4.19 44/58] i2c: brcmstb: fix support for DSL and CM variants
 Date:   Mon, 21 Feb 2022 09:49:37 +0100
-Message-Id: <20220221084940.074411279@linuxfoundation.org>
+Message-Id: <20220221084913.303040483@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220221084934.836145070@linuxfoundation.org>
-References: <20220221084934.836145070@linuxfoundation.org>
+In-Reply-To: <20220221084911.895146879@linuxfoundation.org>
+References: <20220221084911.895146879@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,81 +56,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Stephen Boyd <swboyd@chromium.org>
+From: Rafał Miłecki <rafal@milecki.pl>
 
-commit c8d251f51ee61df06ee0e419348d8c9160bbfb86 upstream.
+commit 834cea3a252ed4847db076a769ad9efe06afe2d5 upstream.
 
-In commit da0363f7bfd3 ("ASoC: qcom: Fix for DMA interrupt clear reg
-overwriting") we changed regmap_write() to regmap_update_bits() so that
-we can avoid overwriting bits that we didn't intend to modify.
-Unfortunately this change breaks the case where a register is writable
-but not readable, which is exactly how the HDMI irq clear register is
-designed (grep around LPASS_HDMITX_APP_IRQCLEAR_REG to see how it's
-write only). That's because regmap_update_bits() tries to read the
-register from the hardware and if it isn't readable it looks in the
-regmap cache to see what was written there last time to compare against
-what we want to write there. Eventually, we're unable to modify this
-register at all because the bits that we're trying to set are already
-set in the cache.
+DSL and CM (Cable Modem) support 8 B max transfer size and have a custom
+DT binding for that reason. This driver was checking for a wrong
+"compatible" however which resulted in an incorrect setup.
 
-This is doubly bad for the irq clear register because you have to write
-the bit to clear an interrupt. Given the irq is level triggered, we see
-an interrupt storm upon plugging in an HDMI cable and starting audio
-playback. The irq storm is so great that performance degrades
-significantly, leading to CPU soft lockups.
-
-Fix it by using regmap_write_bits() so that we really do write the bits
-in the clear register that we want to. This brings the number of irqs
-handled by lpass_dma_interrupt_handler() down from ~150k/sec to ~10/sec.
-
-Fixes: da0363f7bfd3 ("ASoC: qcom: Fix for DMA interrupt clear reg overwriting")
-Cc: Srinivasa Rao Mandadapu <srivasam@codeaurora.org>
-Cc: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Signed-off-by: Stephen Boyd <swboyd@chromium.org>
-Link: https://lore.kernel.org/r/20220209232520.4017634-1-swboyd@chromium.org
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Fixes: e2e5a2c61837 ("i2c: brcmstb: Adding support for CM and DSL SoCs")
+Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
+Acked-by: Florian Fainelli <f.fainelli@gmail.com>
+Signed-off-by: Wolfram Sang <wsa@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/soc/qcom/lpass-platform.c |    8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ drivers/i2c/busses/i2c-brcmstb.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/sound/soc/qcom/lpass-platform.c
-+++ b/sound/soc/qcom/lpass-platform.c
-@@ -524,7 +524,7 @@ static int lpass_platform_pcmops_trigger
- 			return -EINVAL;
- 		}
+--- a/drivers/i2c/busses/i2c-brcmstb.c
++++ b/drivers/i2c/busses/i2c-brcmstb.c
+@@ -645,7 +645,7 @@ static int brcmstb_i2c_probe(struct plat
  
--		ret = regmap_update_bits(map, reg_irqclr, val_irqclr, val_irqclr);
-+		ret = regmap_write_bits(map, reg_irqclr, val_irqclr, val_irqclr);
- 		if (ret) {
- 			dev_err(soc_runtime->dev, "error writing to irqclear reg: %d\n", ret);
- 			return ret;
-@@ -665,7 +665,7 @@ static irqreturn_t lpass_dma_interrupt_h
- 	return -EINVAL;
- 	}
- 	if (interrupts & LPAIF_IRQ_PER(chan)) {
--		rv = regmap_update_bits(map, reg, mask, (LPAIF_IRQ_PER(chan) | val));
-+		rv = regmap_write_bits(map, reg, mask, (LPAIF_IRQ_PER(chan) | val));
- 		if (rv) {
- 			dev_err(soc_runtime->dev,
- 				"error writing to irqclear reg: %d\n", rv);
-@@ -676,7 +676,7 @@ static irqreturn_t lpass_dma_interrupt_h
- 	}
- 
- 	if (interrupts & LPAIF_IRQ_XRUN(chan)) {
--		rv = regmap_update_bits(map, reg, mask, (LPAIF_IRQ_XRUN(chan) | val));
-+		rv = regmap_write_bits(map, reg, mask, (LPAIF_IRQ_XRUN(chan) | val));
- 		if (rv) {
- 			dev_err(soc_runtime->dev,
- 				"error writing to irqclear reg: %d\n", rv);
-@@ -688,7 +688,7 @@ static irqreturn_t lpass_dma_interrupt_h
- 	}
- 
- 	if (interrupts & LPAIF_IRQ_ERR(chan)) {
--		rv = regmap_update_bits(map, reg, mask, (LPAIF_IRQ_ERR(chan) | val));
-+		rv = regmap_write_bits(map, reg, mask, (LPAIF_IRQ_ERR(chan) | val));
- 		if (rv) {
- 			dev_err(soc_runtime->dev,
- 				"error writing to irqclear reg: %d\n", rv);
+ 	/* set the data in/out register size for compatible SoCs */
+ 	if (of_device_is_compatible(dev->device->of_node,
+-				    "brcmstb,brcmper-i2c"))
++				    "brcm,brcmper-i2c"))
+ 		dev->data_regsz = sizeof(u8);
+ 	else
+ 		dev->data_regsz = sizeof(u32);
 
 

@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 086B44BE3EA
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:58:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D9434BE784
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:03:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353588AbiBUKLK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 05:11:10 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35824 "EHLO
+        id S1353201AbiBUKKU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 05:10:20 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353226AbiBUJ5R (ORCPT
+        with ESMTP id S1353428AbiBUJ50 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 04:57:17 -0500
+        Mon, 21 Feb 2022 04:57:26 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2610846646;
-        Mon, 21 Feb 2022 01:25:07 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CA5D47AC2;
+        Mon, 21 Feb 2022 01:25:38 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AE97D60FE0;
-        Mon, 21 Feb 2022 09:25:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9BCBAC340E9;
-        Mon, 21 Feb 2022 09:25:05 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2121560F8C;
+        Mon, 21 Feb 2022 09:25:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08AD5C340E9;
+        Mon, 21 Feb 2022 09:25:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645435506;
-        bh=R4TuLef2DSgjZ3rFzWIyayhSS9Db1ZXijWzAtPi6lX0=;
+        s=korg; t=1645435537;
+        bh=Kj5P1zY5l6pTNOhGPDTG6um+5ioqc9DX0x+C/sMtssQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=i3tyon1FaPaiL5/OiqcIaPOa6tHcBM5RhnJuAOBiAtYQR2CkMXv4AzOo8UpfxWQK5
-         qn74usyIAK7Ihj7eI9e7HS+Q2xJFfM+XFuUhz2jRayyVRkmr1rO9ete78e7l6OVxsa
-         RHSedNW9GguXky+yLYcCBcrGxpy9KYPc+BArJHRY=
+        b=p3tKIDeNGl16zxKzqDQbOqhXtL4H0vnZQ3kaoxKdv0/qouyYou2cIe5joxVAM6cc3
+         aKk5dWyx6HEVIDE0C4Tmp0N/od9BJ3h4oiWqu5x7ZSKm0xjR77q+/nfIne1O83N9gB
+         xHHZ9T9LqpsAmV7Fh/ItRd9+jCfoaouq/QjH+P2s=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        Amelie Delaunay <amelie.delaunay@foss.st.com>,
+        stable@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Jiasheng Jiang <jiasheng@iscas.ac.cn>,
         Vinod Koul <vkoul@kernel.org>
-Subject: [PATCH 5.16 180/227] dmaengine: stm32-dmamux: Fix PM disable depth imbalance in stm32_dmamux_probe
-Date:   Mon, 21 Feb 2022 09:49:59 +0100
-Message-Id: <20220221084940.797979682@linuxfoundation.org>
+Subject: [PATCH 5.16 181/227] dmaengine: sh: rcar-dmac: Check for error num after dma_set_max_seg_size
+Date:   Mon, 21 Feb 2022 09:50:00 +0100
+Message-Id: <20220221084940.829316946@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220221084934.836145070@linuxfoundation.org>
 References: <20220221084934.836145070@linuxfoundation.org>
@@ -55,39 +56,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
 
-commit e831c7aba950f3ae94002b10321279654525e5ec upstream.
+commit da2ad87fba0891576aadda9161b8505fde81a84d upstream.
 
-The pm_runtime_enable will increase power disable depth.
-If the probe fails, we should use pm_runtime_disable() to balance
-pm_runtime_enable().
+As the possible failure of the dma_set_max_seg_size(), it should be
+better to check the return value of the dma_set_max_seg_size().
 
-Fixes: 4f3ceca254e0 ("dmaengine: stm32-dmamux: Add PM Runtime support")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Reviewed-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
-Link: https://lore.kernel.org/r/20220108085336.11992-1-linmq006@gmail.com
+Fixes: 97d49c59e219 ("dmaengine: rcar-dmac: set scatter/gather max segment size")
+Reported-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Link: https://lore.kernel.org/r/20220111011239.452837-1-jiasheng@iscas.ac.cn
 Signed-off-by: Vinod Koul <vkoul@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/dma/stm32-dmamux.c |    4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/dma/sh/rcar-dmac.c |    5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
---- a/drivers/dma/stm32-dmamux.c
-+++ b/drivers/dma/stm32-dmamux.c
-@@ -292,10 +292,12 @@ static int stm32_dmamux_probe(struct pla
- 	ret = of_dma_router_register(node, stm32_dmamux_route_allocate,
- 				     &stm32_dmamux->dmarouter);
+--- a/drivers/dma/sh/rcar-dmac.c
++++ b/drivers/dma/sh/rcar-dmac.c
+@@ -1868,7 +1868,10 @@ static int rcar_dmac_probe(struct platfo
+ 
+ 	dmac->dev = &pdev->dev;
+ 	platform_set_drvdata(pdev, dmac);
+-	dma_set_max_seg_size(dmac->dev, RCAR_DMATCR_MASK);
++	ret = dma_set_max_seg_size(dmac->dev, RCAR_DMATCR_MASK);
++	if (ret)
++		return ret;
++
+ 	ret = dma_set_mask_and_coherent(dmac->dev, DMA_BIT_MASK(40));
  	if (ret)
--		goto err_clk;
-+		goto pm_disable;
- 
- 	return 0;
- 
-+pm_disable:
-+	pm_runtime_disable(&pdev->dev);
- err_clk:
- 	clk_disable_unprepare(stm32_dmamux->clk);
- 
+ 		return ret;
 
 

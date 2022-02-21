@@ -2,156 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B4D74BE224
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:54:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 65BEA4BE3A8
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:57:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380448AbiBUQdO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 11:33:14 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43278 "EHLO
+        id S1380569AbiBUQeO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 11:34:14 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235348AbiBUQdK (ORCPT
+        with ESMTP id S1380552AbiBUQeC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 11:33:10 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EFDC1DA71;
-        Mon, 21 Feb 2022 08:32:46 -0800 (PST)
-Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21LEgWhB031083;
-        Mon, 21 Feb 2022 16:32:46 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=u+VB6Mub6TwBOoLS8CCFDBRNUbyBeLZbwCtNn1pU+Mg=;
- b=bjFvhOp2cgjeCXEg/PWWx8Tvh0m2lr9nqfMmT7m1yJ4Gmb1q5c2WgXb5S+KuH7vSW6K4
- zKKUkggCXP+7VqWlIj/ijvkKKW+ttkvgLeCMMVh1H22mjMAkKKIoAt+F52V+2g+WlJyY
- z+1lvEf3BfV9TgmwTm7IDjRzrl8GcKY2yb59LuDhM3I8Z5xyVsDx7DDdW7BJ+S85SqX2
- hOY1a4S6iO9S3/8zHyxHAjDFLUBTg1tInO2Lkd5Ki/aFT9SSEiUhXtEWbuAIxqRHt++1
- gRFTU1l1oTtEow8c9oocFbFeJzaevZNyXBVNlUsKg+jiuQzPV3tAUnuvM/dAUWZMOyoC 3A== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3eccr3amu9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 21 Feb 2022 16:32:45 +0000
-Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 21LGTQIx005184;
-        Mon, 21 Feb 2022 16:32:45 GMT
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3eccr3amtj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 21 Feb 2022 16:32:45 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 21LGQx38028029;
-        Mon, 21 Feb 2022 16:32:43 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma06ams.nl.ibm.com with ESMTP id 3eaqthv783-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 21 Feb 2022 16:32:42 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 21LGWdKh39977296
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 21 Feb 2022 16:32:39 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 41A774C050;
-        Mon, 21 Feb 2022 16:32:39 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D98A94C04E;
-        Mon, 21 Feb 2022 16:32:38 +0000 (GMT)
-Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon, 21 Feb 2022 16:32:38 +0000 (GMT)
-From:   Janis Schoetterl-Glausch <scgl@linux.ibm.com>
-To:     Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Janis Schoetterl-Glausch <scgl@linux.ibm.com>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Sven Schnelle <svens@linux.ibm.com>, kvm@vger.kernel.org,
-        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] KVM: s390: Add missing vm MEM_OP size check
-Date:   Mon, 21 Feb 2022 17:32:37 +0100
-Message-Id: <20220221163237.4122868-1-scgl@linux.ibm.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220211182215.2730017-7-scgl@linux.ibm.com>
-References: <20220211182215.2730017-7-scgl@linux.ibm.com>
+        Mon, 21 Feb 2022 11:34:02 -0500
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20882220D4
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 08:33:38 -0800 (PST)
+Received: by mail-pf1-x433.google.com with SMTP id l19so9357245pfu.2
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 08:33:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=1hCTFpnCzLuUDmQAPaFu3Al0s869BISW6EAQBZ7qqBQ=;
+        b=ZHQBO7YRd+MwRstOGyPLZqm0n0FbXbOkUaPY4bB86b9QTu3EA2Ll+4jcO31UKwiWxR
+         hCR9nr1ZMxHFrcLXqh0Wg9j5yKwccuFw4/MBPYbhESiQnW9VPoY3Rv78CYqgmgSDQc8+
+         dpmInxs3O1Mo2iLLGUnJpDXOQw7ZMA6oKc4wJIupYYoheFkV2XXCZdglUKyQCyDROS5G
+         8lNZEbg1rjd5HegyJ3J2CcP33AzMyzXY6Cm82ULQY/b6UPylHTLsOQTfNYv29RcLJgxH
+         htJ/Zs5l7I0yF5VlvjEM3d/r62t/bdoaEHp4lBcTtThTaa2lZZvEkb+EtEXXXlrjmcKE
+         Sd1Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=1hCTFpnCzLuUDmQAPaFu3Al0s869BISW6EAQBZ7qqBQ=;
+        b=crMx9d3ellaM8QCmwiBn2kn2FFGX3OM6zef82njCkitYymbY2wzpDYD1WGk6qPKcnn
+         cTf5xMAiGJoXSKZpgX0YiJb6jB5St6TiTYAHjFKzhjJtKyKHFAQMWO5mvo4DO5PQI/gz
+         ySXpWEH8+VdI7BYdhtovlxBsY9DNcwFm80SsMgX3msxoXA+FOx1NDrRERtFgPwcChyD7
+         fnDIXbiHxeXzLdsmJBNFvxIkjgQANpf29XfU4h/tadVd41L4cCmG4zxjALuqUGyVA0PE
+         iouPS0If7UVc9Uzq+ySSFbtKWNXHIEZZxjHJShaEVDE8BuzNtVFv/7xvr7YNhWSkg2vW
+         NU+g==
+X-Gm-Message-State: AOAM530uCo54XzPnfP1tCbqcH5SKNFvJdnxBXLJQnNYzgytDileiPfS2
+        lco8Wbpd8dVWqOlRRCooY4RI+A==
+X-Google-Smtp-Source: ABdhPJzp9N1FQggNes9vJSVICTbf/PbgO4928ZkIXYTXVCSkurWSwOBFEmdqwABEWlnOll4YOrbqiQ==
+X-Received: by 2002:a65:6255:0:b0:364:4513:67bf with SMTP id q21-20020a656255000000b00364451367bfmr16699877pgv.64.1645461217587;
+        Mon, 21 Feb 2022 08:33:37 -0800 (PST)
+Received: from [192.168.1.100] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id v3-20020a17090abb8300b001bc0740c35dsm7192931pjr.18.2022.02.21.08.33.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 21 Feb 2022 08:33:37 -0800 (PST)
+Message-ID: <f8f591d7-09c8-c537-ea41-30e0b33e29a3@kernel.dk>
+Date:   Mon, 21 Feb 2022 09:33:35 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: TiEEXWyel54FLwn5jpBY3HdCKHuzNZEb
-X-Proofpoint-ORIG-GUID: zZMMGJt2KBcWEFpwsjdEU5TX6vVs_fa3
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-02-21_08,2022-02-21_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 mlxscore=0
- lowpriorityscore=0 adultscore=0 mlxlogscore=882 impostorscore=0
- spamscore=0 bulkscore=0 malwarescore=0 priorityscore=1501 phishscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2201110000 definitions=main-2202210097
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Subject: Re: [PATCH v2 0/4] io_uring: consistent behaviour with linked
+ read/write
+Content-Language: en-US
+To:     Dylan Yudaken <dylany@fb.com>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        io-uring@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, kernel-team@fb.com
+References: <20220221141649.624233-1-dylany@fb.com>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <20220221141649.624233-1-dylany@fb.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Check that size is not zero, preventing the following warning:
+On 2/21/22 7:16 AM, Dylan Yudaken wrote:
+> Currently submitting multiple read/write for one file with offset = -1 will
+> not behave as if calling read(2)/write(2) multiple times. The offset may be
+> pinned to the same value for each submission (for example if they are
+> punted to the async worker) and so each read/write will have the same
+> offset.
+> 
+> This patch series fixes this.
+> 
+> Patch 1,3 cleans up the code a bit
+> 
+> Patch 2 grabs the file position at execution time, rather than when the job
+> is queued to be run which fixes inconsistincies when jobs are run asynchronously.
+> 
+> Patch 4 increments the file's f_pos when reading it, which fixes
+> inconsistincies with concurrent runs. 
+> 
+> A test for this will be submitted to liburing separately.
 
-WARNING: CPU: 0 PID: 9692 at mm/vmalloc.c:3059 __vmalloc_node_range+0x528/0x648
-Modules linked in:
-CPU: 0 PID: 9692 Comm: memop Not tainted 5.17.0-rc3-e4+ #80
-Hardware name: IBM 8561 T01 701 (LPAR)
-Krnl PSW : 0704c00180000000 0000000082dc584c (__vmalloc_node_range+0x52c/0x648)
-           R:0 T:1 IO:1 EX:1 Key:0 M:1 W:0 P:0 AS:3 CC:0 PM:0 RI:0 EA:3
-Krnl GPRS: 0000000000000083 ffffffffffffffff 0000000000000000 0000000000000001
-           0000038000000000 000003ff80000000 0000000000000cc0 000000008ebb8000
-           0000000087a8a700 000000004040aeb1 000003ffd9f7dec8 000000008ebb8000
-           000000009d9b8000 000000000102a1b4 00000380035afb68 00000380035afaa8
-Krnl Code: 0000000082dc583e: d028a7f4ff80        trtr    2036(41,%r10),3968(%r15)
-           0000000082dc5844: af000000            mc      0,0
-          #0000000082dc5848: af000000            mc      0,0
-          >0000000082dc584c: a7d90000            lghi    %r13,0
-           0000000082dc5850: b904002d            lgr     %r2,%r13
-           0000000082dc5854: eb6ff1080004        lmg     %r6,%r15,264(%r15)
-           0000000082dc585a: 07fe                bcr     15,%r14
-           0000000082dc585c: 47000700            bc      0,1792
-Call Trace:
- [<0000000082dc584c>] __vmalloc_node_range+0x52c/0x648
- [<0000000082dc5b62>] vmalloc+0x5a/0x68
- [<000003ff8067f4ca>] kvm_arch_vm_ioctl+0x2da/0x2a30 [kvm]
- [<000003ff806705bc>] kvm_vm_ioctl+0x4ec/0x978 [kvm]
- [<0000000082e562fe>] __s390x_sys_ioctl+0xbe/0x100
- [<000000008360a9bc>] __do_syscall+0x1d4/0x200
- [<0000000083618bd2>] system_call+0x82/0xb0
-Last Breaking-Event-Address:
- [<0000000082dc5348>] __vmalloc_node_range+0x28/0x648
+Looks good to me, but the patch 2 change will bubble through to patch 3
+and 4 as well. Care to respin a v3?
 
-Other than the warning, there is no ill effect from the missing check,
-the condition is detected by subsequent code and causes a return
-with ENOMEM.
-
-Fixes: ef11c9463ae0 (KVM: s390: Add vm IOCTL for key checked guest absolute memory access)
-Signed-off-by: Janis Schoetterl-Glausch <scgl@linux.ibm.com>
----
- arch/s390/kvm/kvm-s390.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
-index c2c26c2aad64..e056ad86ccd2 100644
---- a/arch/s390/kvm/kvm-s390.c
-+++ b/arch/s390/kvm/kvm-s390.c
-@@ -2374,7 +2374,7 @@ static int kvm_s390_vm_mem_op(struct kvm *kvm, struct kvm_s390_mem_op *mop)
- 
- 	supported_flags = KVM_S390_MEMOP_F_SKEY_PROTECTION
- 			  | KVM_S390_MEMOP_F_CHECK_ONLY;
--	if (mop->flags & ~supported_flags)
-+	if (mop->flags & ~supported_flags || !mop->size)
- 		return -EINVAL;
- 	if (mop->size > MEM_OP_MAX_SIZE)
- 		return -E2BIG;
 -- 
-2.32.0
+Jens Axboe
 

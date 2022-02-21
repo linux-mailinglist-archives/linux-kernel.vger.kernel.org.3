@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 462124BDFCF
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:50:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8024B4BE40F
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:58:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349221AbiBUJZA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 04:25:00 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33880 "EHLO
+        id S1347738AbiBUJKG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 04:10:06 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348906AbiBUJLt (ORCPT
+        with ESMTP id S1347518AbiBUJFv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 04:11:49 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC2AC289B6;
-        Mon, 21 Feb 2022 01:04:25 -0800 (PST)
+        Mon, 21 Feb 2022 04:05:51 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB2BD2E0B5;
+        Mon, 21 Feb 2022 00:59:14 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 43729CE0E85;
-        Mon, 21 Feb 2022 09:04:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26321C340E9;
-        Mon, 21 Feb 2022 09:04:21 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4DAB7B80EAC;
+        Mon, 21 Feb 2022 08:59:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 692F4C340E9;
+        Mon, 21 Feb 2022 08:59:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645434262;
-        bh=qaRvoCYE7nQqXFaHyTkUVm02t8lUFcpW7qmIJoRN/vw=;
+        s=korg; t=1645433953;
+        bh=8E9nmzjr+oVBPaIx2NahacyRPguKBnPNkSFQybHOK2E=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IlhHrXrILKl1UQYfNO5MbzvRdMNpnd8vbFdmVnpSI38xD+Dr1WpHLLVRaGxj231Rv
-         AeGSFwS4bS4JbiWQfRQ0513bwGqwA6xdGEmzDdCyD920Z7DdVwKnsartYdGhX2SXKl
-         1GRM2n7rnxP5hyDweAnk5GP7qQpA+73+FURNj/Fg=
+        b=Nh8NBTcs0TkzwRukRtwuhmzftU/fZRzQ07oUx85YDzP5Bkf+7feQ1xF79VW5fXGl+
+         2G5nqUcBweSsCMvtM+adR7xNYZ0qEjtz/umDP/PkU0xdIbjCPRll/8XDv5PFedH5k2
+         ceY7+owFITHVfdgPyQx/tllRUSP7rPyT7LUAF6K4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Yu Huang <diwang90@gmail.com>,
-        Takashi Iwai <tiwai@suse.de>
-Subject: [PATCH 5.10 069/121] ALSA: hda/realtek: Add quirk for Legion Y9000X 2019
+        stable@vger.kernel.org, Jianlin Shi <jishi@redhat.com>,
+        Xin Long <lucien.xin@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: [PATCH 5.4 41/80] ping: fix the dif and sdif check in ping_lookup
 Date:   Mon, 21 Feb 2022 09:49:21 +0100
-Message-Id: <20220221084923.538399666@linuxfoundation.org>
+Message-Id: <20220221084916.922438699@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220221084921.147454846@linuxfoundation.org>
-References: <20220221084921.147454846@linuxfoundation.org>
+In-Reply-To: <20220221084915.554151737@linuxfoundation.org>
+References: <20220221084915.554151737@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,32 +55,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yu Huang <diwang90@gmail.com>
+From: Xin Long <lucien.xin@gmail.com>
 
-commit c07f2c7b45413a9e50ba78630fda04ecfa17b4f2 upstream.
+commit 35a79e64de29e8d57a5989aac57611c0cd29e13e upstream.
 
-Legion Y9000X 2019 has the same speaker with Y9000X 2020,
-but with a different quirk address. Add one quirk entry
-to make the speaker work on Y9000X 2019 too.
+When 'ping' changes to use PING socket instead of RAW socket by:
 
-Signed-off-by: Yu Huang <diwang90@gmail.com>
-Cc: <stable@vger.kernel.org>
-Link: https://lore.kernel.org/r/20220212160835.165065-1-diwang90@gmail.com
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
+   # sysctl -w net.ipv4.ping_group_range="0 100"
+
+There is another regression caused when matching sk_bound_dev_if
+and dif, RAW socket is using inet_iif() while PING socket lookup
+is using skb->dev->ifindex, the cmd below fails due to this:
+
+  # ip link add dummy0 type dummy
+  # ip link set dummy0 up
+  # ip addr add 192.168.111.1/24 dev dummy0
+  # ping -I dummy0 192.168.111.1 -c1
+
+The issue was also reported on:
+
+  https://github.com/iputils/iputils/issues/104
+
+But fixed in iputils in a wrong way by not binding to device when
+destination IP is on device, and it will cause some of kselftests
+to fail, as Jianlin noticed.
+
+This patch is to use inet(6)_iif and inet(6)_sdif to get dif and
+sdif for PING socket, and keep consistent with RAW socket.
+
+Fixes: c319b4d76b9e ("net: ipv4: add IPPROTO_ICMP socket kind")
+Reported-by: Jianlin Shi <jishi@redhat.com>
+Signed-off-by: Xin Long <lucien.xin@gmail.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/pci/hda/patch_realtek.c |    1 +
- 1 file changed, 1 insertion(+)
+ net/ipv4/ping.c |   11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
 
---- a/sound/pci/hda/patch_realtek.c
-+++ b/sound/pci/hda/patch_realtek.c
-@@ -8948,6 +8948,7 @@ static const struct snd_pci_quirk alc269
- 	SND_PCI_QUIRK(0x17aa, 0x3824, "Legion Y9000X 2020", ALC285_FIXUP_LEGION_Y9000X_SPEAKERS),
- 	SND_PCI_QUIRK(0x17aa, 0x3827, "Ideapad S740", ALC285_FIXUP_IDEAPAD_S740_COEF),
- 	SND_PCI_QUIRK(0x17aa, 0x3834, "Lenovo IdeaPad Slim 9i 14ITL5", ALC287_FIXUP_YOGA7_14ITL_SPEAKERS),
-+	SND_PCI_QUIRK(0x17aa, 0x383d, "Legion Y9000X 2019", ALC285_FIXUP_LEGION_Y9000X_SPEAKERS),
- 	SND_PCI_QUIRK(0x17aa, 0x3843, "Yoga 9i", ALC287_FIXUP_IDEAPAD_BASS_SPK_AMP),
- 	SND_PCI_QUIRK(0x17aa, 0x384a, "Lenovo Yoga 7 15ITL5", ALC287_FIXUP_YOGA7_14ITL_SPEAKERS),
- 	SND_PCI_QUIRK(0x17aa, 0x3852, "Lenovo Yoga 7 14ITL5", ALC287_FIXUP_YOGA7_14ITL_SPEAKERS),
+--- a/net/ipv4/ping.c
++++ b/net/ipv4/ping.c
+@@ -172,16 +172,23 @@ static struct sock *ping_lookup(struct n
+ 	struct sock *sk = NULL;
+ 	struct inet_sock *isk;
+ 	struct hlist_nulls_node *hnode;
+-	int dif = skb->dev->ifindex;
++	int dif, sdif;
+ 
+ 	if (skb->protocol == htons(ETH_P_IP)) {
++		dif = inet_iif(skb);
++		sdif = inet_sdif(skb);
+ 		pr_debug("try to find: num = %d, daddr = %pI4, dif = %d\n",
+ 			 (int)ident, &ip_hdr(skb)->daddr, dif);
+ #if IS_ENABLED(CONFIG_IPV6)
+ 	} else if (skb->protocol == htons(ETH_P_IPV6)) {
++		dif = inet6_iif(skb);
++		sdif = inet6_sdif(skb);
+ 		pr_debug("try to find: num = %d, daddr = %pI6c, dif = %d\n",
+ 			 (int)ident, &ipv6_hdr(skb)->daddr, dif);
+ #endif
++	} else {
++		pr_err("ping: protocol(%x) is not supported\n", ntohs(skb->protocol));
++		return NULL;
+ 	}
+ 
+ 	read_lock_bh(&ping_table.lock);
+@@ -221,7 +228,7 @@ static struct sock *ping_lookup(struct n
+ 		}
+ 
+ 		if (sk->sk_bound_dev_if && sk->sk_bound_dev_if != dif &&
+-		    sk->sk_bound_dev_if != inet_sdif(skb))
++		    sk->sk_bound_dev_if != sdif)
+ 			continue;
+ 
+ 		sock_hold(sk);
 
 

@@ -2,58 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E6EF4BDBB9
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:40:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE9474BE06B
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:51:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243278AbiBUJfO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 04:35:14 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51026 "EHLO
+        id S1350423AbiBUJfD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 04:35:03 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350003AbiBUJ1B (ORCPT
+        with ESMTP id S1350044AbiBUJ1H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 04:27:01 -0500
+        Mon, 21 Feb 2022 04:27:07 -0500
 Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95DFA20F5B;
-        Mon, 21 Feb 2022 01:11:11 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00F4622513
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 01:11:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645434671; x=1676970671;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=UHJyMtuKTt6keT+yxnngiSoVONkyZhQhlKsTRvMsUrU=;
-  b=n7dxZU+d09qhlft/6iSKcBe+de+pr37sj+Mpxyh/dDtkO2Lnvpxqp0dr
-   oyeB6x6cKqoJA7Nw0Cy4ZVJ0BccDQIGiAKgJn9MibgLeCjODceZEaqXfU
-   2kFtWBqqaBET5pUAptiTh3D9Z23jAkWC2M4jZCiPRga/O95unXAdwipIY
-   rPDSgnOtHEd1voNqaViVrK84Osu/aKysde13Z6pHQg3s9SrG9YTDjhkNN
-   1mAl+ePYmS09bgSswVytpuF/cJWOLgHnK9UeOb+Cm8cVknV6HUKlLfWKG
-   XswovNBBtctk+SU10ic2BQqCdUyxKD3QCcfQDM5Wru0dSUlgklFv7IFUq
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10264"; a="238884535"
+  t=1645434684; x=1676970684;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=wOTmblO5+ELXVIIn1qHC/eijBtSFzcFQf/GVXdIIgMA=;
+  b=gZXEemEt7IzEAXLfh46bJMYKhY35DmxfflFTAX3Lf8QBwgPylW2dbolQ
+   V5QV3M94I4AQNASWj1lL4bwvEd7XKPovg9DGS/gyNqMKzB7QBCqRPAfUK
+   wzXuAav6hWET/1VLhSTHC0A2O1bbUQWKhVl/KxlIn+kR5LUaWAnoiXCYh
+   aiaDoWRcpUT8S3ww6Eo+GTx/K4mhloc5ZIlJNTPY5IWVYPQWKqTHC611t
+   38YvtRTikiHS4HLa/zPhcQh/BQu/Ef69Mvlj+CJOXlAThvTvaZP8Pl8z8
+   kRmqaKZXsYIFLzsRoVoMumlAcE9cqgBga3XYl4tiNar17CSIjYHAso5Wz
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10264"; a="238884566"
 X-IronPort-AV: E=Sophos;i="5.88,385,1635231600"; 
-   d="scan'208";a="238884535"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2022 01:11:11 -0800
+   d="scan'208";a="238884566"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2022 01:11:23 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,385,1635231600"; 
-   d="scan'208";a="778639289"
+   d="scan'208";a="627314918"
 Received: from lkp-server01.sh.intel.com (HELO da3212ac2f54) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 21 Feb 2022 01:11:10 -0800
+  by FMSMGA003.fm.intel.com with ESMTP; 21 Feb 2022 01:11:10 -0800
 Received: from kbuild by da3212ac2f54 with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1nM4ir-0001SA-Es; Mon, 21 Feb 2022 09:11:09 +0000
-Date:   Mon, 21 Feb 2022 17:10:57 +0800
+        id 1nM4ir-0001S8-EN; Mon, 21 Feb 2022 09:11:09 +0000
+Date:   Mon, 21 Feb 2022 17:11:01 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Marek =?iso-8859-1?Q?Marczykowski-G=F3recki?= 
-        <marmarek@invisiblethingslab.com>, linux-kernel@vger.kernel.org
-Cc:     netdev@vger.kernel.org
-Subject: Re: [PATCH 1/2] Revert "xen-netback: remove 'hotplug-status' once it
- has served its purpose"
-Message-ID: <202202211740.AbFni9u8-lkp@intel.com>
-References: <20220221034214.2237097-1-marmarek@invisiblethingslab.com>
+To:     Sven Peter <sven@svenpeter.dev>
+Cc:     kbuild-all@lists.01.org,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org, Hector Martin <marcan@marcan.st>
+Subject: [ammarfaizi2-block:axboe/linux-block/m1/2022-02-19 434/552]
+ include/linux/soc/apple/rtkit.h:223:5: warning: no previous prototype for
+ 'apple_rtkit_poll'
+Message-ID: <202202211757.0kgIweOT-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220221034214.2237097-1-marmarek@invisiblethingslab.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
@@ -65,76 +64,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi "Marek,
-
-Thank you for the patch! Yet something to improve:
-
-[auto build test ERROR on linux/master]
-[also build test ERROR on linus/master v5.17-rc5 next-20220217]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/Marek-Marczykowski-G-recki/Revert-xen-netback-remove-hotplug-status-once-it-has-served-its-purpose/20220221-114409
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 2c271fe77d52a0555161926c232cd5bc07178b39
-config: x86_64-randconfig-a011-20220221 (https://download.01.org/0day-ci/archive/20220221/202202211740.AbFni9u8-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
+tree:   https://github.com/ammarfaizi2/linux-block axboe/linux-block/m1/2022-02-19
+head:   b781e0ccdc0c9a931571d15db09d45b7258b9905
+commit: 493f6321556155242b30f79a6aa6afa58d5ff28d [434/552] WIP: nvme-apple: add initial Apple SoC NVMe driver
+config: h8300-randconfig-r025-20220221 (https://download.01.org/0day-ci/archive/20220221/202202211757.0kgIweOT-lkp@intel.com/config)
+compiler: h8300-linux-gcc (GCC) 11.2.0
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/0605cde993ca8f5f7ab43ae68117d73623edd227
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Marek-Marczykowski-G-recki/Revert-xen-netback-remove-hotplug-status-once-it-has-served-its-purpose/20220221-114409
-        git checkout 0605cde993ca8f5f7ab43ae68117d73623edd227
+        # https://github.com/ammarfaizi2/linux-block/commit/493f6321556155242b30f79a6aa6afa58d5ff28d
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block axboe/linux-block/m1/2022-02-19
+        git checkout 493f6321556155242b30f79a6aa6afa58d5ff28d
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=h8300 SHELL=/bin/bash drivers/nvme/host/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> drivers/net/xen-netback/xenbus.c:259:22: error: use of undeclared identifier 'dev'
-                   xenbus_rm(XBT_NIL, dev->nodename, "hotplug-status");
-                                      ^
-   1 error generated.
+   In file included from drivers/nvme/host/apple.c:32:
+>> include/linux/soc/apple/rtkit.h:223:5: warning: no previous prototype for 'apple_rtkit_poll' [-Wmissing-prototypes]
+     223 | int apple_rtkit_poll(struct apple_rtkit *rtk)
+         |     ^~~~~~~~~~~~~~~~
+
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for NFSD_V2_ACL
+   Depends on NETWORK_FILESYSTEMS && NFSD
+   Selected by
+   - NFSD_V3_ACL && NETWORK_FILESYSTEMS
 
 
-vim +/dev +259 drivers/net/xen-netback/xenbus.c
+vim +/apple_rtkit_poll +223 include/linux/soc/apple/rtkit.h
 
-   249	
-   250	static void backend_disconnect(struct backend_info *be)
-   251	{
-   252		struct xenvif *vif = be->vif;
-   253	
-   254		if (vif) {
-   255			unsigned int num_queues = vif->num_queues;
-   256			unsigned int queue_index;
-   257	
-   258			xen_unregister_watchers(vif);
- > 259			xenbus_rm(XBT_NIL, dev->nodename, "hotplug-status");
-   260	#ifdef CONFIG_DEBUG_FS
-   261			xenvif_debugfs_delif(vif);
-   262	#endif /* CONFIG_DEBUG_FS */
-   263			xenvif_disconnect_data(vif);
-   264	
-   265			/* At this point some of the handlers may still be active
-   266			 * so we need to have additional synchronization here.
-   267			 */
-   268			vif->num_queues = 0;
-   269			synchronize_net();
-   270	
-   271			for (queue_index = 0; queue_index < num_queues; ++queue_index)
-   272				xenvif_deinit_queue(&vif->queues[queue_index]);
-   273	
-   274			vfree(vif->queues);
-   275			vif->queues = NULL;
-   276	
-   277			xenvif_disconnect_ctrl(vif);
-   278		}
-   279	}
-   280	
+aee0bc1199b4a8 Hector Martin 2022-02-08  222  
+d47d01d475b6a9 Hector Martin 2022-02-08 @223  int apple_rtkit_poll(struct apple_rtkit *rtk)
+d47d01d475b6a9 Hector Martin 2022-02-08  224  {
+d47d01d475b6a9 Hector Martin 2022-02-08  225  	return -ENODEV;
+d47d01d475b6a9 Hector Martin 2022-02-08  226  }
+d47d01d475b6a9 Hector Martin 2022-02-08  227  
+
+:::::: The code at line 223 was first introduced by commit
+:::::: d47d01d475b6a9678964a7bcd5566378902185f7 soc: apple: rtkit: Add recv_message_early callback and apple_rtkit_poll
+
+:::::: TO: Hector Martin <marcan@marcan.st>
+:::::: CC: Hector Martin <marcan@marcan.st>
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation

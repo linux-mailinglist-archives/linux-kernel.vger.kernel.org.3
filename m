@@ -2,209 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 068A04BE507
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:59:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2748E4BE57D
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:00:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356723AbiBULpO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 06:45:14 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38350 "EHLO
+        id S1356730AbiBULsb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 06:48:31 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356707AbiBULpF (ORCPT
+        with ESMTP id S242753AbiBULs2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 06:45:05 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E28D117AA0;
-        Mon, 21 Feb 2022 03:44:41 -0800 (PST)
+        Mon, 21 Feb 2022 06:48:28 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93D1B1EEE6;
+        Mon, 21 Feb 2022 03:48:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645443881; x=1676979881;
+  t=1645444085; x=1676980085;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=dQYmqJJE6FDYdAKgZgjhPy1rWMStu2e18a2SFM3qJPk=;
-  b=huILiGq4mR9ey2zpqbGNbEGjVHN/y5xlWCi2/t2cKw+Z7Oj8zREt7bXX
-   QIkhDT7V4wHL7YPyPgmwxeV9ESLh39jUIeIFoAEae0fsQ0IGhOBKyzo7d
-   AlytWiMhqFEjE6b3PHUm89IZAq/qNrK+Pq7gLWa2T+F0xR5KYGPtCzr9O
-   RgHQJ2s0zjYk8oBKWCk4U76piGoKff8LM+ONNxVNlasJNoweV90Oprt9x
-   R+cWC7oyrET09V0gAnZvnRQQjFv49Ct7u1v+bf3j6Co+hYGyq9o/oyn6S
-   xNkChGnC6QLUoU0s4tNiHLB+thKaM5du0ZR/fgYX7uD9Rp8U5H82n3AbJ
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10264"; a="276086217"
+  bh=d2nxSyxlFXj9Y46HQxQTGJPE6uNfiwCTcyQito04juU=;
+  b=QUP9c7FgSwFWB3m3foNATrhxlm4uPApRpjjSwzLS+Vu9ixzbnVkW616j
+   GLAz7Y1f5QmRNECLSAg6E7QOhQXns0Jgg+BsRDVVbbSSWH/9f+5qiRYY5
+   iaEd3O0HgVQNjYZO5b2Itveq33xbTN2vRt1xxraWRdPbb9RuAm2e1pC71
+   gzlYpgzoWlTv2jLt2RgbQ78obi/9YRIwmafzQLriBod8Z0Zsh6p9GVNXo
+   sVWjvynrV3XqMPWtn70EaW//pX1m5XjzMlJn5TSuIG+pSoaqWG4ak6Sjn
+   RMHPrSDXjKDYWTbiGUs98Svmo4PeDG329E8ZTdab1u4avDLr8ALuXz2r4
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10264"; a="231463399"
 X-IronPort-AV: E=Sophos;i="5.88,385,1635231600"; 
-   d="scan'208";a="276086217"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2022 03:44:41 -0800
-X-ExtLoop1: 1
+   d="scan'208";a="231463399"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2022 03:48:05 -0800
 X-IronPort-AV: E=Sophos;i="5.88,385,1635231600"; 
-   d="scan'208";a="638530467"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga004.jf.intel.com with ESMTP; 21 Feb 2022 03:44:34 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1000)
-        id 2ABC1161; Mon, 21 Feb 2022 13:44:51 +0200 (EET)
-Date:   Mon, 21 Feb 2022 14:44:51 +0300
-From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     "Kirill A. Shutemov" <kirill@shutemov.name>, aarcange@redhat.com,
-        ak@linux.intel.com, dan.j.williams@intel.com,
-        dave.hansen@intel.com, david@redhat.com, hpa@zytor.com,
-        jgross@suse.com, jmattson@google.com, joro@8bytes.org,
-        jpoimboe@redhat.com, knsathya@kernel.org,
-        linux-kernel@vger.kernel.org, luto@kernel.org, mingo@redhat.com,
-        pbonzini@redhat.com, peterz@infradead.org,
-        sathyanarayanan.kuppuswamy@linux.intel.com, sdeep@vmware.com,
-        seanjc@google.com, tglx@linutronix.de, tony.luck@intel.com,
-        vkuznets@redhat.com, wanpengli@tencent.com, x86@kernel.org,
-        linux-hyperv@vger.kernel.org,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Tianyu Lan <Tianyu.Lan@microsoft.com>
-Subject: Re: [PATCHv3.1 2/32] x86/coco: Explicitly declare type of
- confidential computing platform
-Message-ID: <20220221114451.mljggcmadgvrrxbv@black.fi.intel.com>
-References: <YhAWcPbzgUGcJZjI@zn.tnic>
- <20220219001305.22883-1-kirill.shutemov@linux.intel.com>
- <YhNyY5ErqQHZ961+@zn.tnic>
+   d="scan'208";a="547305643"
+Received: from silpixa00400314.ir.intel.com (HELO silpixa00400314) ([10.237.222.76])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2022 03:48:02 -0800
+Date:   Mon, 21 Feb 2022 11:47:55 +0000
+From:   Giovanni Cabiddu <giovanni.cabiddu@intel.com>
+To:     Kyle Sanderson <kyle.leet@gmail.com>, herbert@gondor.apana.org.au
+Cc:     Dave Chinner <david@fromorbit.com>, qat-linux@intel.com,
+        Linux-Kernal <linux-kernel@vger.kernel.org>,
+        linux-xfs@vger.kernel.org, linux-crypto@vger.kernel.org,
+        dm-devel@redhat.com,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Greg KH <gregkh@linuxfoundation.org>
+Subject: Re: Intel QAT on A2SDi-8C-HLN4F causes massive data corruption with
+ dm-crypt + xfs
+Message-ID: <YhN76/ONC9qgIKQc@silpixa00400314>
+References: <CACsaVZ+mt3CfdXV0_yJh7d50tRcGcRZ12j3n6-hoX2cz3+njsg@mail.gmail.com>
+ <20220219210354.GF59715@dread.disaster.area>
+ <CACsaVZ+LZUebtsGuiKhNV_No8fNLTv5kJywFKOigieB1cZcKUw@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YhNyY5ErqQHZ961+@zn.tnic>
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CACsaVZ+LZUebtsGuiKhNV_No8fNLTv5kJywFKOigieB1cZcKUw@mail.gmail.com>
+Organization: Intel Research and Development Ireland Ltd - Co. Reg. #308263 -
+ Collinstown Industrial Park, Leixlip, County Kildare - Ireland
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 21, 2022 at 12:07:15PM +0100, Borislav Petkov wrote:
-> On Sat, Feb 19, 2022 at 03:13:04AM +0300, Kirill A. Shutemov wrote:
-> > diff --git a/arch/x86/kernel/cc_platform.c b/arch/x86/kernel/cc_platform.c
-> > index 6a6ffcd978f6..891d3074a16e 100644
-> > --- a/arch/x86/kernel/cc_platform.c
-> > +++ b/arch/x86/kernel/cc_platform.c
-> > @@ -9,18 +9,15 @@
-> >  
-> >  #include <linux/export.h>
-> >  #include <linux/cc_platform.h>
-> > -#include <linux/mem_encrypt.h>
-> >  
-> > -#include <asm/mshyperv.h>
-> > +#include <asm/coco.h>
-> >  #include <asm/processor.h>
-> >  
-> > -static bool __maybe_unused intel_cc_platform_has(enum cc_attr attr)
-> > +static enum cc_vendor cc_vendor;
-> 
-> static enum cc_vendor vendor __ro_after_init;
+Hi Kyle,
 
-Hm. Isn't 'vendor' too generic? It may lead to name conflict in the
-future.
+The issue is that the implementations of aead and skcipher in the QAT
+driver are not properly supporting requests with the
+CRYPTO_TFM_REQ_MAY_BACKLOG flag set.
+If the HW queue is full, the driver returns -EBUSY [1] but does not
+enqueues the request as dm-crypt expects [2]. Dm-crypt ends up waiting
+indefinitely for a completion to a request that was never submitted,
+therefore the stall.
+This is not related to QATE-7495 'An incorrectly formatted request to
+QAT can hang the entire QAT endpoint' [3], which occurs when a malformed
+request is sent to the device.
 
-What is wrong with cc_vendor here? I noticed that you don't like name of
-a variable to match type name. Why?
+I'm working at patch that resolves this problem. In the meanwhile a
+workaround is to blacklist the qat_c3xxx.ko driver.
 
-> > @@ -344,6 +345,8 @@ static void __init ms_hyperv_init_platform(void)
-> >  		 */
-> >  		swiotlb_force = SWIOTLB_FORCE;
-> >  #endif
-> > +		if (hv_get_isolation_type() != HV_ISOLATION_TYPE_NONE)
-> > +			cc_init(CC_VENDOR_HYPERV);
-> 
-> Isn't that supposed to test HV_ISOLATION_TYPE_SNP instead?
+Regarding avoiding this issue on stable kernels. The usage of QAT with
+dm-crypt was already disabled in kernel 5.10 for a different issue
+(the driver allocates memory in the datapath).
+The following patches implement the change:
+    7bcb2c99f8ed crypto: algapi - use common mechanism for inheriting flags
+    2eb27c11937e crypto: algapi - add NEED_FALLBACK to INHERITED_FLAGS
+    fbb6cda44190 crypto: algapi - introduce the flag CRYPTO_ALG_ALLOCATES_MEMORY
+    b8aa7dc5c753 crypto: drivers - set the flag CRYPTO_ALG_ALLOCATES_MEMORY
+    cd74693870fb dm crypt: don't use drivers that have CRYPTO_ALG_ALLOCATES_MEMORY
+An option would be to send the patches above to stable, another is to wait
+for a patch that fixes the problems in the QAT driver and send that to
+stable.
+@Herbert, what is the preferred approach here?
 
-Currently cc_platform_has() relies on hv_is_isolation_supported() which
-checks for !HV_ISOLATION_TYPE_NONE. This is direct transfer to the new
-scheme. It might be wrong, but it is not regression.
+Thanks,
 
-> I mean, I have no clue what HV_ISOLATION_TYPE_VBS is. It is not used
-> anywhere in the tree either.
-> 
-> a6c76bb08dc7 ("x86/hyperv: Load/save the Isolation Configuration leaf")
-> calls it "'VBS' (software-based isolation)" - whatever that means - so
-> I'm not sure that is going to need the cc-facilities.
-> 
-> For stuff like that you need to use get_maintainers.pl and Cc them
-> folks:
-> 
-> $ git log -p -1 | ./scripts/get_maintainer.pl | grep -i hyper
-> "K. Y. Srinivasan" <kys@microsoft.com> (supporter:Hyper-V/Azure CORE AND DRIVERS)
-> Haiyang Zhang <haiyangz@microsoft.com> (supporter:Hyper-V/Azure CORE AND DRIVERS)
-> Stephen Hemminger <sthemmin@microsoft.com> (supporter:Hyper-V/Azure CORE AND DRIVERS)
-> Wei Liu <wei.liu@kernel.org> (supporter:Hyper-V/Azure CORE AND DRIVERS,commit_signer:1/4=25%)
-> Dexuan Cui <decui@microsoft.com> (supporter:Hyper-V/Azure CORE AND DRIVERS)
-> linux-hyperv@vger.kernel.org (open list:Hyper-V/Azure CORE AND DRIVERS)
-> 
-> /me adds the ML to Cc.
-
-+Tianyu, who brought HyperV cc_platform_has().
-
-Speaking about HyperV, moving to scheme with cc_init() revealed that
-HyperV never selected ARCH_HAS_CC_PLATFORM. Now it leads to build failure
-if AMD memory encryption is not enabled:
-
-	ld: arch/x86/kernel/cpu/mshyperv.o: in function `ms_hyperv_init_platform':
-	mshyperv.c:(.init.text+0x297): undefined reference to `cc_init'
-
-Maybe something like this:
-
-diff --git a/drivers/hv/Kconfig b/drivers/hv/Kconfig
-index 0747a8f1fcee..574ea80601e9 100644
---- a/drivers/hv/Kconfig
-+++ b/drivers/hv/Kconfig
-@@ -8,6 +8,7 @@ config HYPERV
- 		|| (ARM64 && !CPU_BIG_ENDIAN))
- 	select PARAVIRT
- 	select X86_HV_CALLBACK_VECTOR if X86
-+	select ARCH_HAS_CC_PLATFORM if X86
- 	select VMAP_PFN
- 	help
- 	  Select this option to run Linux as a Hyper-V client operating
-
-Again, it is pre-existing issue. It only escalated to build failure.
-
-> >  	if (hv_max_functions_eax >= HYPERV_CPUID_NESTED_FEATURES) {
-> > diff --git a/arch/x86/mm/mem_encrypt_identity.c b/arch/x86/mm/mem_encrypt_identity.c
-> > index 3f0abb403340..eb7fbd85b77e 100644
-> > --- a/arch/x86/mm/mem_encrypt_identity.c
-> > +++ b/arch/x86/mm/mem_encrypt_identity.c
-> > @@ -44,6 +44,7 @@
-> >  #include <asm/setup.h>
-> >  #include <asm/sections.h>
-> >  #include <asm/cmdline.h>
-> > +#include <asm/coco.h>
-> >  
-> >  #include "mm_internal.h"
-> >  
-> > @@ -565,8 +566,7 @@ void __init sme_enable(struct boot_params *bp)
-> >  	} else {
-> >  		/* SEV state cannot be controlled by a command line option */
-> >  		sme_me_mask = me_mask;
-> > -		physical_mask &= ~sme_me_mask;
-> > -		return;
-> > +		goto out;
-> >  	}
-> >  
-> >  	/*
-> > @@ -600,6 +600,8 @@ void __init sme_enable(struct boot_params *bp)
-> >  		sme_me_mask = 0;
-> >  	else
-> >  		sme_me_mask = active_by_default ? me_mask : 0;
-> > -
-> > +out:
-> >  	physical_mask &= ~sme_me_mask;
-> > +	if (sme_me_mask)
-> > +		cc_init(CC_VENDOR_AMD);
-> >  }
-> 
-> I guess.
-> 
-> Adding SEV folks to Cc too.
-> 
-> Please use get_maintainer.pl - you should know that - you're not some
-> newbie who started doing kernel work two weeks ago.
-
-Sorry, will do.
+[1] https://elixir.bootlin.com/linux/latest/source/drivers/crypto/qat/qat_common/qat_algs.c#L1022
+[2] https://elixir.bootlin.com/linux/latest/source/drivers/md/dm-crypt.c#L1584
+[3] https://01.org/sites/default/files/downloads//336211qatsoftwareforlinux-rn-hwversion1.7021.pdf - page 25
 
 -- 
- Kirill A. Shutemov
+Giovanni
+
+
+On Sat, Feb 19, 2022 at 03:00:51PM -0800, Kyle Sanderson wrote:
+> hi Dave,
+> 
+> > This really sounds like broken hardware, not a kernel problem.
+> 
+> It is indeed a hardware issue, specifically the intel qat crypto
+> driver that's in-tree - the hardware is fine (see below). The IQAT
+> eratta documentation states that if a request is not submitted
+> properly it can stall the entire device. The remediation guidance from
+> 2020 was "don't do that" and "don't allow unprivileged users access to
+> the device". The in-tree driver is not implemented properly either for
+> this SoC or board - I'm thinking it's related to QATE-7495.
+> 
+> https://01.org/sites/default/files/downloads//336211qatsoftwareforlinux-rn-hwversion1.7021.pdf
+> 
+> > This implies a dmcrypt level problem - XFS can't make progress is dmcrypt is not completing IOs.
+> 
+> That's the weird part about it. Some bio's are completing, others are
+> completely dropped, with some stalling forever. I had to use
+> xfs_repair to get the volumes operational again. I lost a good deal of
+> files and had to recover from backup after toggling the device back on
+> on a production system (silly, I know).
+> 
+> > Where are the XFS corruption reports that the subject implies is occurring?
+> 
+> I think you're right, it's dm-crypt that's broken here, with
+> ultimately the crypto driver causing this corruption. XFS being the
+> edge to the end-user is taking the brunt of it. There's reports going
+> back to late 2017 of significant issues with this mainlined stable
+> driver.
+> 
+> https://bugzilla.redhat.com/show_bug.cgi?id=1522962
+> https://serverfault.com/questions/1010108/luks-hangs-on-centos-running-on-atom-c3758-cpu
+> https://www.phoronix.com/forums/forum/software/distributions/1172231-fedora-33-s-enterprise-linux-next-effort-approved-testbed-for-raising-cpu-requirements-etc?p=1174560#post1174560
+> 
+> Any guidance would be appreciated.
+> Kyle.
+> On Sat, Feb 19, 2022 at 1:03 PM Dave Chinner <david@fromorbit.com> wrote:
+> >
+> > On Fri, Feb 18, 2022 at 09:02:28PM -0800, Kyle Sanderson wrote:
+> > > A2SDi-8C-HLN4F has IQAT enabled by default, when this device is
+> > > attempted to be used by xfs (through dm-crypt) the entire kernel
+> > > thread stalls forever. Multiple users have hit this over the years
+> > > (through sporadic reporting) - I ended up trying ZFS and encryption
+> > > wasn't an issue there at all because I guess they don't use this
+> > > device. Returning to sanity (xfs), I was able to provision a dm-crypt
+> > > volume no problem on the disk, however when running mkfs.xfs on the
+> > > volume is what triggers the cascading failure (each request kills a
+> > > kthread).
+> >
+> > Can you provide the full stack traces for these errors so we can see
+> > exactly what this cascading failure looks like, please? In reality,
+> > the stall messages some time after this are not interesting - it's
+> > the first errors that cause the stall that need to be investigated.
+> >
+> > A good idea would be to provide the full storage stack decription
+> > and hardware in use, as per:
+> >
+> > https://xfs.org/index.php/XFS_FAQ#Q:_What_information_should_I_include_when_reporting_a_problem.3F
+> >
+> > > Disabling IQAT on the south bridge results in a working
+> > > system, however this is not the default configuration for the
+> > > distribution of choice (Ubuntu 20.04.3 LTS), nor the motherboard. I'm
+> > > convinced this never worked properly based on the lack of popularity
+> > > for kernel encryption (crypto), and the embedded nature that
+> > > SuperMicro has integrated this device in collaboration with intel as
+> > > it looks like the primary usage is through external accelerator cards.
+> >
+> > This really sounds like broken hardware, not a kernel problem.
+> >
+> > > Kernels tried were from RHEL8 over a year ago, and this impacts the
+> > > entirety of the 5.4 series on Ubuntu.
+> > > Please CC me on replies as I'm not subscribed to all lists. CPU is C3758.
+> >
+> > [snip stalled kcryptd worker threads]
+> >
+> > This implies a dmcrypt level problem - XFS can't make progress is
+> > dmcrypt is not completing IOs.
+> >
+> > Where are the XFS corruption reports that the subject implies is
+> > occurring?
+> >
+> > Cheers,
+> >
+> > Dave.
+> > --
+> > Dave Chinner
+> > david@fromorbit.com

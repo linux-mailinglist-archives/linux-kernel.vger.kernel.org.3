@@ -2,134 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFBF14BEE3A
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 00:40:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 161FA4BEE07
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 00:40:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237328AbiBUXdc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 18:33:32 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45202 "EHLO
+        id S237031AbiBUXgU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 18:36:20 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236985AbiBUXdA (ORCPT
+        with ESMTP id S233290AbiBUXgS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 18:33:00 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD3E924F3E;
-        Mon, 21 Feb 2022 15:32:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645486353; x=1677022353;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=7Sp016gWiFymeeK5GqSm/jmRV32k3K/juTtOS55z76U=;
-  b=EhS5Uk7HnE81P99SCkqWVE7kh2WJiqcqr/Cww7RbEtlxCaTUIFxY5suJ
-   NecmIvmxmhMogr21ePOma9i2nLI5T9hK4iDGntWXQNrX8V+fToC3x/8G1
-   JQ9H73lieiDfFXguOUSSPCCm8pILnhgZRuA3pNdiMCeEwvBY/NwMgXCF7
-   OdJuU0VMOETbe3JVtNrfEuu6P8oww2cT1Or5mKEbUR8eYGt1WYae230dw
-   X5vJYrSMv1ppkHEV6ZLk0nuvD7nUcdYzRx/Jx35Mn1uwbOmf+R+owKBSZ
-   h0j0F9LG4vSdwfuEdsWVpXkh/QzfGyWc2VJDn56WmwAfGvrEGUgpokzyd
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10265"; a="314841875"
-X-IronPort-AV: E=Sophos;i="5.88,386,1635231600"; 
-   d="scan'208";a="314841875"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2022 15:32:32 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,386,1635231600"; 
-   d="scan'208";a="505303713"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga002.jf.intel.com with ESMTP; 21 Feb 2022 15:32:30 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id EF3567CC; Tue, 22 Feb 2022 01:32:43 +0200 (EET)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Lars-Peter Clausen <lars@metafoo.de>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>
-Subject: [PATCH v1 8/8] iio: accel: adxl345: Remove unneeded blank lines
-Date:   Tue, 22 Feb 2022 01:32:35 +0200
-Message-Id: <20220221233235.86893-8-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220221233235.86893-1-andriy.shevchenko@linux.intel.com>
-References: <20220221233235.86893-1-andriy.shevchenko@linux.intel.com>
+        Mon, 21 Feb 2022 18:36:18 -0500
+Received: from mail-il1-x12f.google.com (mail-il1-x12f.google.com [IPv6:2607:f8b0:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70AAD2558D;
+        Mon, 21 Feb 2022 15:35:54 -0800 (PST)
+Received: by mail-il1-x12f.google.com with SMTP id j5so8546592ila.2;
+        Mon, 21 Feb 2022 15:35:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=QsU1doQuLDWMomjns2YITOt0nS0W9JINmgNgQg1HhGw=;
+        b=nykv/uzsyVHKdVYpJn/szfh8lKKmFsx3tu6pV7fTBO2Cdb5JDbslKqMPPMQvlK4MuW
+         7ZTbTGdMiHJNbOXBnX6AIBJ2o38kyf3fEduK1v75XgXa1cp0abeS0pXVWvGMcxcQ0KMj
+         7n+GsjCunrYZPJXGlp369nEIAtWEnrQDz3l7g7qWxY9cHApwj/F7EUe/wpW4XFZKp4/x
+         aKDIh6XuH8ulNE4I2prwiZ5PbHkewPZ+DKwj+CRjRxhowP+5ZO/bY4USsLkBpQaUsp2g
+         bufHdnHuE7rQb06Wj/9+zOKvaKxCKt80QdFwaJCRVi+RNIwIT37xTOS6lmoC4KqVidek
+         PT0Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=QsU1doQuLDWMomjns2YITOt0nS0W9JINmgNgQg1HhGw=;
+        b=e2ybT1TKtwzmYxTQzSbUMlUfzvL/QV9ku5boWGXDFgqADjeXWgUlMuVuYdZZTW56fP
+         CYBbK/DqJ4t75uhn2a1vBj1OQC3S+pFBrkWZGoM+1oLqlkPEaCH8RlI42axFJDMTyyxM
+         Ru1UxRfTWzkgyDkV3pDyfIi/r+wg2O8yxxSa0nBbT7GMmk2jV5xZehG+0GKSkcECs6up
+         GJk69d9JbLj2iEokZV36764JQYE2+qVKRIHIXncRifjwLQPeYGmVc0Qz7ZtxfFKqvMJd
+         xSx7a22LthepVyTNeNyX2xt7AXOEyBj1O+Moy9nn3/qi4joWpccGxUusRLNz3lY2yfTl
+         B5kg==
+X-Gm-Message-State: AOAM532Izk6wCQpw6dM+yQ3Bl+t9IRtqQWCdIetGpnHdyOwANYEcIyCg
+        UzkIugXGkJWonq2AmJeldgFeHgyahyu+unt7N0c=
+X-Google-Smtp-Source: ABdhPJw0Xv9v2mvaCvorY8c9mCVmFThM9k9j5cX2G3ihw1xx8TiKJ6Ie868SWze7xswxB9Dw/aN2HBJJKIUtTzvUXrU=
+X-Received: by 2002:a05:6e02:b4c:b0:2be:a7be:cffe with SMTP id
+ f12-20020a056e020b4c00b002bea7becffemr17160826ilu.225.1645486553793; Mon, 21
+ Feb 2022 15:35:53 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220221084934.836145070@linuxfoundation.org>
+In-Reply-To: <20220221084934.836145070@linuxfoundation.org>
+From:   Zan Aziz <zanaziz313@gmail.com>
+Date:   Mon, 21 Feb 2022 16:35:43 -0700
+Message-ID: <CAFU3qoa7JwdHrJzTFWY4NfnHXqErA1suJg4eLbWC=tMo9hN9wA@mail.gmail.com>
+Subject: Re: [PATCH 5.16 000/227] 5.16.11-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove unneeded blank lines where they separate the data type definitions
-and the macros which are using them.
+On Mon, Feb 21, 2022 at 9:01 AM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.16.11 release.
+> There are 227 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Wed, 23 Feb 2022 08:48:58 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.16.11-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.16.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/iio/accel/adxl345_i2c.c | 3 ---
- drivers/iio/accel/adxl345_spi.c | 3 ---
- 2 files changed, 6 deletions(-)
+Hi Greg,
 
-diff --git a/drivers/iio/accel/adxl345_i2c.c b/drivers/iio/accel/adxl345_i2c.c
-index 2b5e64c467ec..6fcd439ab554 100644
---- a/drivers/iio/accel/adxl345_i2c.c
-+++ b/drivers/iio/accel/adxl345_i2c.c
-@@ -36,7 +36,6 @@ static const struct i2c_device_id adxl345_i2c_id[] = {
- 	{ "adxl375", ADXL375 },
- 	{ }
- };
--
- MODULE_DEVICE_TABLE(i2c, adxl345_i2c_id);
- 
- static const struct of_device_id adxl345_of_match[] = {
-@@ -44,7 +43,6 @@ static const struct of_device_id adxl345_of_match[] = {
- 	{ .compatible = "adi,adxl375", ADXL375 },
- 	{ }
- };
--
- MODULE_DEVICE_TABLE(of, adxl345_of_match);
- 
- static const struct acpi_device_id adxl345_acpi_match[] = {
-@@ -62,7 +60,6 @@ static struct i2c_driver adxl345_i2c_driver = {
- 	.probe_new	= adxl345_i2c_probe,
- 	.id_table	= adxl345_i2c_id,
- };
--
- module_i2c_driver(adxl345_i2c_driver);
- 
- MODULE_AUTHOR("Eva Rachel Retuya <eraretuya@gmail.com>");
-diff --git a/drivers/iio/accel/adxl345_spi.c b/drivers/iio/accel/adxl345_spi.c
-index 4bc4c842357d..aded5da4928e 100644
---- a/drivers/iio/accel/adxl345_spi.c
-+++ b/drivers/iio/accel/adxl345_spi.c
-@@ -40,7 +40,6 @@ static const struct spi_device_id adxl345_spi_id[] = {
- 	{ "adxl375", ADXL375 },
- 	{ }
- };
--
- MODULE_DEVICE_TABLE(spi, adxl345_spi_id);
- 
- static const struct of_device_id adxl345_of_match[] = {
-@@ -48,7 +47,6 @@ static const struct of_device_id adxl345_of_match[] = {
- 	{ .compatible = "adi,adxl375", ADXL375 },
- 	{ }
- };
--
- MODULE_DEVICE_TABLE(of, adxl345_of_match);
- 
- static const struct acpi_device_id adxl345_acpi_match[] = {
-@@ -66,7 +64,6 @@ static struct spi_driver adxl345_spi_driver = {
- 	.probe		= adxl345_spi_probe,
- 	.id_table	= adxl345_spi_id,
- };
--
- module_spi_driver(adxl345_spi_driver);
- 
- MODULE_AUTHOR("Eva Rachel Retuya <eraretuya@gmail.com>");
--- 
-2.34.1
+Compiled and booted on my test system Lenovo P50s: Intel Core i7
+No emergency and critical messages in the dmesg
 
+./perf bench sched all
+# Running sched/messaging benchmark...
+# 20 sender and receiver processes per group
+# 10 groups == 400 processes run
+
+     Total time: 0.441 [sec]
+
+# Running sched/pipe benchmark...
+# Executed 1000000 pipe operations between two processes
+
+     Total time: 10.147 [sec]
+
+      10.147192 usecs/op
+          98549 ops/sec
+
+Tested-by: Zan Aziz <zanaziz313@gmail.com>
+
+Thanks
+-Zan

@@ -2,73 +2,309 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EBC24BE73B
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:03:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AB894BE870
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:05:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377315AbiBUP33 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 10:29:29 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48732 "EHLO
+        id S1379253AbiBUPaX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 10:30:23 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356477AbiBUP3Z (ORCPT
+        with ESMTP id S1379132AbiBUPaS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 10:29:25 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6378220E9;
-        Mon, 21 Feb 2022 07:29:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645457342; x=1676993342;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=KbSp/teu1GK16ew77EjvfNtP5gerVHwaaYi2wsE3vIo=;
-  b=hkS54PJ2d5NpW/uyUyCEg1yOnIKbdRec/HShMcAQBp9rdrBOPxCKwn2H
-   wM1eh29w6wE1WAWITY6ASYnubgPXFfr7pscPCDQtafSnpZUVWpCETqslP
-   eQWXFCb/lWYFvtd3Evd/FhKAi0dnLhiIPmthuIGy/g+X3gD9mmDGe856e
-   e9zwRSnW4Oos7gv6NQDvm83SCWSivW0rG4xDkhI5sNYfsDM3YOJosaQJo
-   y2+a+4WMUJbT6ETUMEYx+sBjKWT+LaB4FtFTah7rOfqmusie4irw3KEmZ
-   PsoKxZlGS13a3gdbI+JBo2tmKknUa6Ii6+AgmUp5ILaEfIRclMhWSta0+
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10265"; a="232147670"
-X-IronPort-AV: E=Sophos;i="5.88,386,1635231600"; 
-   d="scan'208";a="232147670"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2022 07:29:02 -0800
-X-IronPort-AV: E=Sophos;i="5.88,386,1635231600"; 
-   d="scan'208";a="638585960"
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.162])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2022 07:28:59 -0800
-Received: by lahna (sSMTP sendmail emulation); Mon, 21 Feb 2022 17:28:56 +0200
-Date:   Mon, 21 Feb 2022 17:28:56 +0200
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Andy Shevchenko <andy@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>
-Subject: Re: [PATCH v1 4/4] pinctrl: icelake: Add Ice Lake-N PCH pin
- controller support
-Message-ID: <YhOvuFwr2v15zY3u@lahna>
-References: <20220215152800.21104-1-andriy.shevchenko@linux.intel.com>
- <20220215152800.21104-4-andriy.shevchenko@linux.intel.com>
+        Mon, 21 Feb 2022 10:30:18 -0500
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36DD5220E4
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 07:29:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1645457395; x=1676993395;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=TJATCfdEY+Yshshlz7Pap97zJDfTn8eCDrhWL1Hqg0o=;
+  b=psLAxKvtuHHJtiAB+ekCE/fbgxwCJrTCr3Gt0Qko/XOHuHnZzdAmIiX1
+   C0V9oH9tl5SAVKwEqK+cHQp6gj46qP+IAeJMccUg41YPUTM4/SwnIz3+l
+   MUs/6n2qYj+kNBKln4t1rV4qWSJhvBkuyU0E3hnTrfM/dD5m2zVCNOH3u
+   8=;
+Received: from unknown (HELO ironmsg02-sd.qualcomm.com) ([10.53.140.142])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 21 Feb 2022 07:29:54 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg02-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2022 07:29:54 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.15; Mon, 21 Feb 2022 07:29:53 -0800
+Received: from [10.216.13.78] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.15; Mon, 21 Feb
+ 2022 07:29:49 -0800
+Message-ID: <00f23e1c-aef3-e95c-3f0c-0dd9e21e8d1b@quicinc.com>
+Date:   Mon, 21 Feb 2022 20:59:45 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220215152800.21104-4-andriy.shevchenko@linux.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Subject: Re: [PATCH v4] mm: shmem: implement POSIX_FADV_[WILL|DONT]NEED for
+ shmem
+Content-Language: en-US
+To:     <hughd@google.com>, <akpm@linux-foundation.org>,
+        <willy@infradead.org>, <markhemm@googlemail.com>, <vbabka@suse.cz>,
+        <rientjes@google.com>, <mhocko@suse.com>, <surenb@google.com>,
+        <shakeelb@google.com>
+CC:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>
+References: <1644572051-24091-1-git-send-email-quic_charante@quicinc.com>
+From:   Charan Teja Kalla <quic_charante@quicinc.com>
+In-Reply-To: <1644572051-24091-1-git-send-email-quic_charante@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 15, 2022 at 05:28:00PM +0200, Andy Shevchenko wrote:
-> This adds pinctrl/GPIO support for Intel Ice Lake-N PCH. The Ice Lake-N
-> PCH GPIO is based on the same version of the Intel GPIO hardware than
-> Intel Cannon Lake with different set of pins and ACPI ID.
-> 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Just a gentle ping. Please help in providing your inputs here.
 
-Acked-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+Thanks,
+
+On 2/11/2022 3:04 PM, Charan Teja Kalla wrote:
+> Currently fadvise(2) is supported only for the files that doesn't
+> associated with noop_backing_dev_info thus for the files, like shmem,
+> fadvise results into NOP. But then there is file_operations->fadvise()
+> that lets the file systems to implement their own fadvise
+> implementation. Use this support to implement some of the POSIX_FADV_XXX
+> functionality for shmem files.
+> 
+> This patch aims to implement POSIX_FADV_WILLNEED and POSIX_FADV_DONTNEED
+> advices to shmem files which can be helpful for the drivers who may want
+> to manage the shmem pages of the files that are created through
+> shmem_file_setup[_with_mnt]().  An example usecase may be like, driver
+> can create the shmem file of the size equal to its requirements and
+> map the pages for DMA and then pass the fd to user. The user who knows
+> well about the usage of these pages can now decide when these pages are
+> not required push them to swap through DONTNEED thus free up memory well
+> in advance rather than relying on the reclaim and use WILLNEED when it
+> decide that they are useful in the near future. IOW, it lets the clients
+> to free up/read the memory when it wants to. Another usecase is that GEM
+> objets which are currenlty allocated and managed through shmem files can
+> use vfs_fadvise(DONT|WILLNEED) on shmem fd when the driver comes to
+> know(like through some hints from user space) that GEM objects are not
+> going to use/will need in the near future.
+> 
+> Some questions asked while reviewing this patch:
+> 
+> Q) Can the same thing be achieved with FD mapped to user and use
+> madvise?
+> A) All drivers are not mapping all the shmem fd's to user space and want
+> to manage them with in the kernel. Ex: shmem memory can be mapped to the
+> other subsystems and they fill in the data and then give it to other
+> subsystem for further processing, where, the user mapping is not at all
+> required.  A simple example, memory that is given for gpu subsystem
+> which can be filled directly and give to display subsystem. And the
+> respective drivers know well about when to keep that memory in ram or
+> swap based on may be a user activity.
+> 
+> Q) Should we add the documentation section in Manual pages?
+> A) The man[1] pages for the fadvise() whatever says is also applicable
+> for shmem files. so couldn't feel it correct to add specific to shmem
+> files separately.
+> [1] https://linux.die.net/man/2/fadvise
+> 
+> Q) The proposed semantics of POSIX_FADV_DONTNEED is actually similar to
+> MADV_PAGEOUT and different from MADV_DONTNEED. This is a user facing API
+> and this difference will cause confusion?
+> A) man pages [1] says that "POSIX_FADV_DONTNEED attempts to free cached
+> pages associated with the specified region." This means on issuing this
+> FADV, it is expected to free the file cache pages. And it is
+> implementation defined If the dirty pages may be attempted to writeback.
+> And the unwritten dirty pages will not be freed. So, FADV_DONTNEED also
+> covers the semantics of MADV_PAGEOUT for file pages and there is no
+> purpose of PAGEOUT for file pages.
+> [1] https://man7.org/linux/man-pages/man2/posix_fadvise.2.html
+> 
+> Signed-off-by: Charan Teja Kalla <quic_charante@quicinc.com>
+> ---
+> Changes in V4:
+>   -- Changed the code to use reclaim_pages() to writeout the shmem pages to swap and then reclaim.
+>   -- Addressed comments from Mark Hemment and Matthew.
+>   -- fadvise() on shmem file may even unmap a page.
+> 
+> Changes in V3:
+>   -- Considered THP pages while doing FADVISE_[DONT|WILL]NEED, identified by Matthew.
+>   -- xarray used properly, as identified by Matthew.
+>   -- Excluded mapped pages as it requires unmapping and the man pages of fadvise don't talk about them.
+>   -- RESEND: Fixed the compilation issue when CONFIG_TMPFS is not defined.
+>   -- https://patchwork.kernel.org/project/linux-mm/patch/1641488717-13865-1-git-send-email-quic_charante@quicinc.com/
+> 
+> Changes in V2:
+>   -- Rearranged the code to not to sleep with rcu_lock while using xas_() functionality.
+>   -- Addressed the comments from Suren.
+>   -- https://patchwork.kernel.org/project/linux-mm/patch/1638442253-1591-1-git-send-email-quic_charante@quicinc.com/
+> 
+> changes in V1:
+>   -- Created the interface for fadvise(2) to work on shmem files.
+>   -- https://patchwork.kernel.org/project/linux-mm/patch/1633701982-22302-1-git-send-email-charante@codeaurora.org/
+> 
+>  mm/shmem.c | 129 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 129 insertions(+)
+> 
+> diff --git a/mm/shmem.c b/mm/shmem.c
+> index 18f93c2..fe475af 100644
+> --- a/mm/shmem.c
+> +++ b/mm/shmem.c
+> @@ -39,6 +39,9 @@
+>  #include <linux/frontswap.h>
+>  #include <linux/fs_parser.h>
+>  #include <linux/swapfile.h>
+> +#include <linux/mm_inline.h>
+> +#include <linux/fadvise.h>
+> +#include <linux/page_idle.h>
+>  
+>  static struct vfsmount *shm_mnt;
+>  
+> @@ -2275,6 +2278,131 @@ static int shmem_mmap(struct file *file, struct vm_area_struct *vma)
+>  	return 0;
+>  }
+>  
+> +static void shmem_isolate_pages_range(struct address_space *mapping, loff_t start,
+> +				loff_t end, struct list_head *list)
+> +{
+> +	XA_STATE(xas, &mapping->i_pages, start);
+> +	struct page *page;
+> +
+> +	rcu_read_lock();
+> +	xas_for_each(&xas, page, end) {
+> +		if (xas_retry(&xas, page))
+> +			continue;
+> +		if (xa_is_value(page))
+> +			continue;
+> +
+> +		if (!get_page_unless_zero(page))
+> +			continue;
+> +		if (isolate_lru_page(page)) {
+> +			put_page(page);
+> +			continue;
+> +		}
+> +		put_page(page);
+> +
+> +		if (PageUnevictable(page) || page_mapcount(page) > 1) {
+> +			putback_lru_page(page);
+> +			continue;
+> +		}
+> +
+> +		/*
+> +		 * Prepare the page to be passed to the reclaim_pages().
+> +		 * VM couldn't reclaim the page unless we clear PG_young.
+> +		 * Also, to ensure that the pages are written before
+> +		 * reclaiming, page is set to dirty.
+> +		 * Since we are not clearing the pte_young in the mapped
+> +		 * page pte's, its reclaim may not be attempted.
+> +		 */
+> +		ClearPageReferenced(page);
+> +		test_and_clear_page_young(page);
+> +		SetPageDirty(page);
+> +		list_add(&page->lru, list);
+> +		if (need_resched()) {
+> +			xas_pause(&xas);
+> +			cond_resched_rcu();
+> +		}
+> +	}
+> +	rcu_read_unlock();
+> +}
+> +
+> +static int shmem_fadvise_dontneed(struct address_space *mapping, loff_t start,
+> +				loff_t end)
+> +{
+> +	LIST_HEAD(list);
+> +
+> +	if (!shmem_mapping(mapping))
+> +		return -EINVAL;
+> +
+> +	if (!total_swap_pages)
+> +		return 0;
+> +
+> +	lru_add_drain();
+> +	shmem_isolate_pages_range(mapping, start, end, &list);
+> +	reclaim_pages(&list);
+> +
+> +	return 0;
+> +}
+> +
+> +static int shmem_fadvise_willneed(struct address_space *mapping,
+> +				 pgoff_t start, pgoff_t long end)
+> +{
+> +	struct page *page;
+> +	pgoff_t index;
+> +
+> +	xa_for_each_range(&mapping->i_pages, index, page, start, end) {
+> +		if (!xa_is_value(page))
+> +			continue;
+> +		page = shmem_read_mapping_page(mapping, index);
+> +		if (!IS_ERR(page))
+> +			put_page(page);
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int shmem_fadvise(struct file *file, loff_t offset, loff_t len, int advice)
+> +{
+> +	loff_t endbyte;
+> +	pgoff_t start_index;
+> +	pgoff_t end_index;
+> +	struct address_space *mapping;
+> +	int ret = 0;
+> +
+> +	mapping = file->f_mapping;
+> +	if (!mapping || len < 0)
+> +		return -EINVAL;
+> +
+> +	endbyte = (u64)offset + (u64)len;
+> +	if (!len || endbyte < len)
+> +		endbyte = -1;
+> +	else
+> +		endbyte--;
+> +
+> +
+> +	start_index = offset >> PAGE_SHIFT;
+> +	end_index   = endbyte >> PAGE_SHIFT;
+> +	switch (advice) {
+> +	case POSIX_FADV_DONTNEED:
+> +		ret = shmem_fadvise_dontneed(mapping, start_index, end_index);
+> +		break;
+> +	case POSIX_FADV_WILLNEED:
+> +		ret = shmem_fadvise_willneed(mapping, start_index, end_index);
+> +		break;
+> +	case POSIX_FADV_NORMAL:
+> +	case POSIX_FADV_RANDOM:
+> +	case POSIX_FADV_SEQUENTIAL:
+> +	case POSIX_FADV_NOREUSE:
+> +		/*
+> +		 * No bad return value, but ignore advice. May have to
+> +		 * implement in future.
+> +		 */
+> +		break;
+> +	default:
+> +		return -EINVAL;
+> +	}
+> +
+> +	return ret;
+> +}
+> +
+>  static struct inode *shmem_get_inode(struct super_block *sb, const struct inode *dir,
+>  				     umode_t mode, dev_t dev, unsigned long flags)
+>  {
+> @@ -3777,6 +3905,7 @@ static const struct file_operations shmem_file_operations = {
+>  	.splice_write	= iter_file_splice_write,
+>  	.fallocate	= shmem_fallocate,
+>  #endif
+> +	.fadvise	= shmem_fadvise,
+>  };
+>  
+>  static const struct inode_operations shmem_inode_operations = {

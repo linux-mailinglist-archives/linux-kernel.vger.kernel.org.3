@@ -2,171 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A1534BE4EB
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:59:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B48864BDF59
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:49:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348600AbiBUPpf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 10:45:35 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38668 "EHLO
+        id S1379502AbiBUPqZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 10:46:25 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379534AbiBUPpW (ORCPT
+        with ESMTP id S1379586AbiBUPqD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 10:45:22 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5395D22BF8
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 07:44:45 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D27E5B81223
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 15:44:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE832C340E9;
-        Mon, 21 Feb 2022 15:44:41 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="L5eUZeh7"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1645458280;
+        Mon, 21 Feb 2022 10:46:03 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 226BF22B0E
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 07:45:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1645458339;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=pqnKR0BFpDKQNAT0nDTPG+o8dIz539BXbxHycmJ2vBA=;
-        b=L5eUZeh7c1apK2tjqh7RRwwaMin/3abegip9J4peH5steLj0t2mQu/criG1ZEa9PQUAM1L
-        cF9rLNHDzwInmxIMuCxGqMr4H8Ke3EPAjgUoKyR1Xg/ypaTAH7iQj/KKN7W1z6iJuYeISf
-        IYH+iesWL4/vJp59WPc8J84/1SXx+qE=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 24677fe8 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Mon, 21 Feb 2022 15:44:40 +0000 (UTC)
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     ebiggers@kernel.org, linux-kernel@vger.kernel.org
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Theodore Ts'o <tytso@mit.edu>,
-        Eric Biggers <ebiggers@google.com>,
-        Dominik Brodowski <linux@dominikbrodowski.net>
-Subject: [PATCH v2] random: remove ifdef'd out interrupt bench
-Date:   Mon, 21 Feb 2022 16:44:34 +0100
-Message-Id: <20220221154434.2291742-1-Jason@zx2c4.com>
-In-Reply-To: <CAHmME9pAf_ZJjkn4jqDwgwAMBxXjkAZb3BdznJi2AvSCAsSUaw@mail.gmail.com>
-References: <CAHmME9pAf_ZJjkn4jqDwgwAMBxXjkAZb3BdznJi2AvSCAsSUaw@mail.gmail.com>
+         content-transfer-encoding:content-transfer-encoding;
+        bh=5p6SVD+iSqqkjQ95jNA8dJL55xZ3wL1UzWwbq1ZkZlU=;
+        b=ieUeonr/JUc9Dk2nItDbDnSTLjH21qFTFpZqVFMh5TU0s2OaOb5acHgCbp/VY2nozp9Pk5
+        MBK8IQapYIZOe6wONP9dmCKzL9W53NB6dfuN77HzgP5CSvptirSwhgVDS5v6YfySm+WpJ+
+        6gtvf480Q0piCyU15SV8PBqq4PIUsQo=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-422-5YxYP_JDPTOfWzl8jPuItQ-1; Mon, 21 Feb 2022 10:45:36 -0500
+X-MC-Unique: 5YxYP_JDPTOfWzl8jPuItQ-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 9BE49801B0C;
+        Mon, 21 Feb 2022 15:45:34 +0000 (UTC)
+Received: from t480s.redhat.com (unknown [10.39.195.59])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 8A92A2BE74;
+        Mon, 21 Feb 2022 15:45:32 +0000 (UTC)
+From:   David Hildenbrand <david@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-mm@kvack.org, David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Michal Hocko <mhocko@suse.com>,
+        Oscar Salvador <osalvador@suse.de>
+Subject: [PATCH v1] drivers/base/memory: clarify adding and removing of memory blocks
+Date:   Mon, 21 Feb 2022 16:45:31 +0100
+Message-Id: <20220221154531.11382-1-david@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-With tools like kbench9000 giving more finegrained responses, and this
-basically never having been used ever since it was initially added,
-let's just get rid of this. There *is* still work to be done on the
-interrupt handler, but this really isn't the way it's being developed.
+Let's make it clearer at which places we actually add and remove memory
+blocks -- streamlining the terminology -- and highlight which memory
+block start out online and which start out as offline.
 
-Cc: Theodore Ts'o <tytso@mit.edu>
-Reviewed-by: Eric Biggers <ebiggers@google.com>
-Reviewed-by: Dominik Brodowski <linux@dominikbrodowski.net>
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+* rename add_memory_block -> add_boot_memory_block
+* rename init_memory_block -> add_memory_block
+* rename unregister_memory -> remove_memory_block
+* rename register_memory -> __add_memory_block
+* add add_hotplug_memory_block
+* mark add_boot_memory_block with __init (suggested by Oscar)
+
+__add_memory_block() is  a pure helper for add_memory_block(), remove
+the somewhat obvious comment.
+
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Michal Hocko <mhocko@suse.com>
+Cc: Oscar Salvador <osalvador@suse.de>
+Signed-off-by: David Hildenbrand <david@redhat.com>
 ---
-v2 updates kernel.rst.
 
- Documentation/admin-guide/sysctl/kernel.rst |  9 -----
- drivers/char/random.c                       | 40 ---------------------
- 2 files changed, 49 deletions(-)
+Based on v5.17-rc5 and:
+	[PATCH v2 0/2] drivers/base/memory: determine and store zone for
+	single-zone memory blocks [1]
 
-diff --git a/Documentation/admin-guide/sysctl/kernel.rst b/Documentation/admin-guide/sysctl/kernel.rst
-index d3c6d9a501a9..5dd660aac0ae 100644
---- a/Documentation/admin-guide/sysctl/kernel.rst
-+++ b/Documentation/admin-guide/sysctl/kernel.rst
-@@ -1041,15 +1041,6 @@ This is a directory, with the following entries:
-   are woken up. This file is writable for compatibility purposes, but
-   writing to it has no effect on any RNG behavior.
- 
--If ``drivers/char/random.c`` is built with ``ADD_INTERRUPT_BENCH``
--defined, these additional entries are present:
--
--* ``add_interrupt_avg_cycles``: the average number of cycles between
--  interrupts used to feed the pool;
--
--* ``add_interrupt_avg_deviation``: the standard deviation seen on the
--  number of cycles between interrupts used to feed the pool.
--
- 
- randomize_va_space
- ==================
-diff --git a/drivers/char/random.c b/drivers/char/random.c
-index c27ebf707380..35c440a0d83c 100644
---- a/drivers/char/random.c
-+++ b/drivers/char/random.c
-@@ -240,8 +240,6 @@
- #define CREATE_TRACE_POINTS
- #include <trace/events/random.h>
- 
--/* #define ADD_INTERRUPT_BENCH */
--
- enum {
- 	POOL_BITS = BLAKE2S_HASH_SIZE * 8,
- 	POOL_MIN_BITS = POOL_BITS /* No point in settling for less. */
-@@ -808,27 +806,6 @@ EXPORT_SYMBOL_GPL(add_input_randomness);
- 
- static DEFINE_PER_CPU(struct fast_pool, irq_randomness);
- 
--#ifdef ADD_INTERRUPT_BENCH
--static unsigned long avg_cycles, avg_deviation;
--
--#define AVG_SHIFT 8 /* Exponential average factor k=1/256 */
--#define FIXED_1_2 (1 << (AVG_SHIFT - 1))
--
--static void add_interrupt_bench(cycles_t start)
--{
--	long delta = random_get_entropy() - start;
--
--	/* Use a weighted moving average */
--	delta = delta - ((avg_cycles + FIXED_1_2) >> AVG_SHIFT);
--	avg_cycles += delta;
--	/* And average deviation */
--	delta = abs(delta) - ((avg_deviation + FIXED_1_2) >> AVG_SHIFT);
--	avg_deviation += delta;
--}
--#else
--#define add_interrupt_bench(x)
--#endif
--
- static u32 get_reg(struct fast_pool *f, struct pt_regs *regs)
- {
- 	u32 *ptr = (u32 *)regs;
-@@ -865,7 +842,6 @@ void add_interrupt_randomness(int irq)
- 		(sizeof(ip) > 4) ? ip >> 32 : get_reg(fast_pool, regs);
- 
- 	fast_mix(fast_pool);
--	add_interrupt_bench(cycles);
- 
- 	if (unlikely(crng_init == 0)) {
- 		if (fast_pool->count >= 64 &&
-@@ -1574,22 +1550,6 @@ static struct ctl_table random_table[] = {
- 		.mode		= 0444,
- 		.proc_handler	= proc_do_uuid,
- 	},
--#ifdef ADD_INTERRUPT_BENCH
--	{
--		.procname	= "add_interrupt_avg_cycles",
--		.data		= &avg_cycles,
--		.maxlen		= sizeof(avg_cycles),
--		.mode		= 0444,
--		.proc_handler	= proc_doulongvec_minmax,
--	},
--	{
--		.procname	= "add_interrupt_avg_deviation",
--		.data		= &avg_deviation,
--		.maxlen		= sizeof(avg_deviation),
--		.mode		= 0444,
--		.proc_handler	= proc_doulongvec_minmax,
--	},
--#endif
- 	{ }
+[1] https://lkml.kernel.org/r/20220210184359.235565-1-david@redhat.com
+
+---
+ drivers/base/memory.c | 38 ++++++++++++++++++++------------------
+ 1 file changed, 20 insertions(+), 18 deletions(-)
+
+diff --git a/drivers/base/memory.c b/drivers/base/memory.c
+index 5297c8a84428..c7dfd86e960f 100644
+--- a/drivers/base/memory.c
++++ b/drivers/base/memory.c
+@@ -617,11 +617,7 @@ static const struct attribute_group *memory_memblk_attr_groups[] = {
+ 	NULL,
  };
  
+-/*
+- * register_memory - Setup a sysfs device for a memory block
+- */
+-static
+-int register_memory(struct memory_block *memory)
++static int __add_memory_block(struct memory_block *memory)
+ {
+ 	int ret;
+ 
+@@ -721,9 +717,9 @@ void memory_block_add_nid(struct memory_block *mem, int nid,
+ }
+ #endif
+ 
+-static int init_memory_block(unsigned long block_id, unsigned long state,
+-			     unsigned long nr_vmemmap_pages,
+-			     struct memory_group *group)
++static int add_memory_block(unsigned long block_id, unsigned long state,
++			    unsigned long nr_vmemmap_pages,
++			    struct memory_group *group)
+ {
+ 	struct memory_block *mem;
+ 	int ret = 0;
+@@ -754,7 +750,7 @@ static int init_memory_block(unsigned long block_id, unsigned long state,
+ 		mem->zone = early_node_zone_for_memory_block(mem, NUMA_NO_NODE);
+ #endif /* CONFIG_NUMA */
+ 
+-	ret = register_memory(mem);
++	ret = __add_memory_block(mem);
+ 	if (ret)
+ 		return ret;
+ 
+@@ -766,7 +762,7 @@ static int init_memory_block(unsigned long block_id, unsigned long state,
+ 	return 0;
+ }
+ 
+-static int add_memory_block(unsigned long base_section_nr)
++static int __init add_boot_memory_block(unsigned long base_section_nr)
+ {
+ 	int section_count = 0;
+ 	unsigned long nr;
+@@ -778,11 +774,18 @@ static int add_memory_block(unsigned long base_section_nr)
+ 
+ 	if (section_count == 0)
+ 		return 0;
+-	return init_memory_block(memory_block_id(base_section_nr),
+-				 MEM_ONLINE, 0,  NULL);
++	return add_memory_block(memory_block_id(base_section_nr),
++				MEM_ONLINE, 0,  NULL);
++}
++
++static int add_hotplug_memory_block(unsigned long block_id,
++				    unsigned long nr_vmemmap_pages,
++				    struct memory_group *group)
++{
++	return add_memory_block(block_id, MEM_OFFLINE, nr_vmemmap_pages, group);
+ }
+ 
+-static void unregister_memory(struct memory_block *memory)
++static void remove_memory_block(struct memory_block *memory)
+ {
+ 	if (WARN_ON_ONCE(memory->dev.bus != &memory_subsys))
+ 		return;
+@@ -821,8 +824,7 @@ int create_memory_block_devices(unsigned long start, unsigned long size,
+ 		return -EINVAL;
+ 
+ 	for (block_id = start_block_id; block_id != end_block_id; block_id++) {
+-		ret = init_memory_block(block_id, MEM_OFFLINE, vmemmap_pages,
+-					group);
++		ret = add_hotplug_memory_block(block_id, vmemmap_pages, group);
+ 		if (ret)
+ 			break;
+ 	}
+@@ -833,7 +835,7 @@ int create_memory_block_devices(unsigned long start, unsigned long size,
+ 			mem = find_memory_block_by_id(block_id);
+ 			if (WARN_ON_ONCE(!mem))
+ 				continue;
+-			unregister_memory(mem);
++			remove_memory_block(mem);
+ 		}
+ 	}
+ 	return ret;
+@@ -862,7 +864,7 @@ void remove_memory_block_devices(unsigned long start, unsigned long size)
+ 		if (WARN_ON_ONCE(!mem))
+ 			continue;
+ 		unregister_memory_block_under_nodes(mem);
+-		unregister_memory(mem);
++		remove_memory_block(mem);
+ 	}
+ }
+ 
+@@ -922,7 +924,7 @@ void __init memory_dev_init(void)
+ 	 */
+ 	for (nr = 0; nr <= __highest_present_section_nr;
+ 	     nr += sections_per_block) {
+-		ret = add_memory_block(nr);
++		ret = add_boot_memory_block(nr);
+ 		if (ret)
+ 			panic("%s() failed to add memory block: %d\n", __func__,
+ 			      ret);
 -- 
 2.35.1
 

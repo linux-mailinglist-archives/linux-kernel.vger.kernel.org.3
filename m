@@ -2,48 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A34C14BE5E7
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:01:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AC224BDC79
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:42:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347472AbiBUJIN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 04:08:13 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41870 "EHLO
+        id S1351155AbiBUJgs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 04:36:48 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348518AbiBUJC4 (ORCPT
+        with ESMTP id S1349099AbiBUJ1e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 04:02:56 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A2372CC88;
-        Mon, 21 Feb 2022 00:58:17 -0800 (PST)
+        Mon, 21 Feb 2022 04:27:34 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96DA8DF5E;
+        Mon, 21 Feb 2022 01:12:13 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 91C6760FB6;
-        Mon, 21 Feb 2022 08:58:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C9E7C340EB;
-        Mon, 21 Feb 2022 08:58:15 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 33ED7608C4;
+        Mon, 21 Feb 2022 09:12:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19014C340E9;
+        Mon, 21 Feb 2022 09:12:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645433896;
-        bh=6ISO8dDd+jBpPTo5s/rGjUHrpeEbfdrVumxDZHMAUh8=;
+        s=korg; t=1645434732;
+        bh=Tmzs7DreLGoEQ0nImRKQ4cV5zyQ0u3xWsJnDnMuHTv4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NWuR7OTStFO/RpsrXbhrhuQTXKN+tROyHlqkeondhXIf7lRWoJBawtg4o58FgWHnU
-         3JKT/6T7dxeTzmSmVtU4I77tmxXXMS30q90K2YcJNYKFBaMwgq9bS9X/Mwa2mQ5mqk
-         955G1qkMX2aL6u97Ez38DDwinDk7KfLo3zc1O5Es=
+        b=Dkjx292MdkQb2n/hz75MYJ7DTYJ5gPQQkKm0DoeiV+AaaYgrJEH+tsMB545IafjB+
+         DbLLHhfXP8bBIK13yxxYvfaL4aADBgjgHGmd+s+9oACR4/iwGvPVOH7uQB9HE4R30e
+         Jd504XybcvH9lZ3apRSW6ah3AG88A8HuZpfvF15g=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Igor Pylypiv <ipylypiv@google.com>,
-        Changyuan Lyu <changyuanl@google.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Tejun Heo <tj@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 22/80] Revert "module, async: async_synchronize_full() on module init iff async is used"
+        stable@vger.kernel.org,
+        Joakim Tjernlund <joakim.tjernlund@infinera.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>
+Subject: [PATCH 5.15 110/196] arm64: Correct wrong label in macro __init_el2_gicv3
 Date:   Mon, 21 Feb 2022 09:49:02 +0100
-Message-Id: <20220221084916.312284506@linuxfoundation.org>
+Message-Id: <20220221084934.619435963@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220221084915.554151737@linuxfoundation.org>
-References: <20220221084915.554151737@linuxfoundation.org>
+In-Reply-To: <20220221084930.872957717@linuxfoundation.org>
+References: <20220221084930.872957717@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,143 +57,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Igor Pylypiv <ipylypiv@google.com>
+From: Joakim Tjernlund <joakim.tjernlund@infinera.com>
 
-[ Upstream commit 67d6212afda218d564890d1674bab28e8612170f ]
+commit 4f6de676d94ee8ddfc2e7e7cd935fc7cb2feff3a upstream.
 
-This reverts commit 774a1221e862b343388347bac9b318767336b20b.
+In commit:
 
-We need to finish all async code before the module init sequence is
-done.  In the reverted commit the PF_USED_ASYNC flag was added to mark a
-thread that called async_schedule().  Then the PF_USED_ASYNC flag was
-used to determine whether or not async_synchronize_full() needs to be
-invoked.  This works when modprobe thread is calling async_schedule(),
-but it does not work if module dispatches init code to a worker thread
-which then calls async_schedule().
+  114945d84a30a5fe ("arm64: Fix labels in el2_setup macros")
 
-For example, PCI driver probing is invoked from a worker thread based on
-a node where device is attached:
+We renamed a label from '1' to '.Lskip_gicv3_\@', but failed to update
+a branch to it, which now targets a later label also called '1'.
 
-	if (cpu < nr_cpu_ids)
-		error = work_on_cpu(cpu, local_pci_probe, &ddi);
-	else
-		error = local_pci_probe(&ddi);
+The branch is taken rarely, when GICv3 is present but SRE is disabled
+at EL3, causing a boot-time crash.
 
-We end up in a situation where a worker thread gets the PF_USED_ASYNC
-flag set instead of the modprobe thread.  As a result,
-async_synchronize_full() is not invoked and modprobe completes without
-waiting for the async code to finish.
+Update the caller to the new label name.
 
-The issue was discovered while loading the pm80xx driver:
-(scsi_mod.scan=async)
-
-modprobe pm80xx                      worker
-...
-  do_init_module()
-  ...
-    pci_call_probe()
-      work_on_cpu(local_pci_probe)
-                                     local_pci_probe()
-                                       pm8001_pci_probe()
-                                         scsi_scan_host()
-                                           async_schedule()
-                                           worker->flags |= PF_USED_ASYNC;
-                                     ...
-      < return from worker >
-  ...
-  if (current->flags & PF_USED_ASYNC) <--- false
-  	async_synchronize_full();
-
-Commit 21c3c5d28007 ("block: don't request module during elevator init")
-fixed the deadlock issue which the reverted commit 774a1221e862
-("module, async: async_synchronize_full() on module init iff async is
-used") tried to fix.
-
-Since commit 0fdff3ec6d87 ("async, kmod: warn on synchronous
-request_module() from async workers") synchronous module loading from
-async is not allowed.
-
-Given that the original deadlock issue is fixed and it is no longer
-allowed to call synchronous request_module() from async we can remove
-PF_USED_ASYNC flag to make module init consistently invoke
-async_synchronize_full() unless async module probe is requested.
-
-Signed-off-by: Igor Pylypiv <ipylypiv@google.com>
-Reviewed-by: Changyuan Lyu <changyuanl@google.com>
-Reviewed-by: Luis Chamberlain <mcgrof@kernel.org>
-Acked-by: Tejun Heo <tj@kernel.org>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: 114945d84a30 ("arm64: Fix labels in el2_setup macros")
+Cc: <stable@vger.kernel.org> # 5.12.x
+Signed-off-by: Joakim Tjernlund <joakim.tjernlund@infinera.com>
+Link: https://lore.kernel.org/r/20220214175643.21931-1-joakim.tjernlund@infinera.com
+Reviewed-by: Mark Rutland <mark.rutland@arm.com>
+Reviewed-by: Marc Zyngier <maz@kernel.org>
+Signed-off-by: Catalin Marinas <catalin.marinas@arm.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- include/linux/sched.h |    1 -
- kernel/async.c        |    3 ---
- kernel/module.c       |   25 +++++--------------------
- 3 files changed, 5 insertions(+), 24 deletions(-)
+ arch/arm64/include/asm/el2_setup.h |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/include/linux/sched.h
-+++ b/include/linux/sched.h
-@@ -1454,7 +1454,6 @@ extern struct pid *cad_pid;
- #define PF_MEMALLOC		0x00000800	/* Allocating memory */
- #define PF_NPROC_EXCEEDED	0x00001000	/* set_user() noticed that RLIMIT_NPROC was exceeded */
- #define PF_USED_MATH		0x00002000	/* If unset the fpu must be initialized before use */
--#define PF_USED_ASYNC		0x00004000	/* Used async_schedule*(), used by module init */
- #define PF_NOFREEZE		0x00008000	/* This thread should not be frozen */
- #define PF_FROZEN		0x00010000	/* Frozen for system suspend */
- #define PF_KSWAPD		0x00020000	/* I am kswapd */
---- a/kernel/async.c
-+++ b/kernel/async.c
-@@ -205,9 +205,6 @@ async_cookie_t async_schedule_node_domai
- 	atomic_inc(&entry_count);
- 	spin_unlock_irqrestore(&async_lock, flags);
- 
--	/* mark that this task has queued an async job, used by module init */
--	current->flags |= PF_USED_ASYNC;
--
- 	/* schedule for execution */
- 	queue_work_node(node, system_unbound_wq, &entry->work);
- 
---- a/kernel/module.c
-+++ b/kernel/module.c
-@@ -3711,12 +3711,6 @@ static noinline int do_init_module(struc
- 	}
- 	freeinit->module_init = mod->init_layout.base;
- 
--	/*
--	 * We want to find out whether @mod uses async during init.  Clear
--	 * PF_USED_ASYNC.  async_schedule*() will set it.
--	 */
--	current->flags &= ~PF_USED_ASYNC;
--
- 	do_mod_ctors(mod);
- 	/* Start the module */
- 	if (mod->init != NULL)
-@@ -3742,22 +3736,13 @@ static noinline int do_init_module(struc
- 
- 	/*
- 	 * We need to finish all async code before the module init sequence
--	 * is done.  This has potential to deadlock.  For example, a newly
--	 * detected block device can trigger request_module() of the
--	 * default iosched from async probing task.  Once userland helper
--	 * reaches here, async_synchronize_full() will wait on the async
--	 * task waiting on request_module() and deadlock.
--	 *
--	 * This deadlock is avoided by perfomring async_synchronize_full()
--	 * iff module init queued any async jobs.  This isn't a full
--	 * solution as it will deadlock the same if module loading from
--	 * async jobs nests more than once; however, due to the various
--	 * constraints, this hack seems to be the best option for now.
--	 * Please refer to the following thread for details.
-+	 * is done. This has potential to deadlock if synchronous module
-+	 * loading is requested from async (which is not allowed!).
- 	 *
--	 * http://thread.gmane.org/gmane.linux.kernel/1420814
-+	 * See commit 0fdff3ec6d87 ("async, kmod: warn on synchronous
-+	 * request_module() from async workers") for more details.
- 	 */
--	if (!mod->async_probe_requested && (current->flags & PF_USED_ASYNC))
-+	if (!mod->async_probe_requested)
- 		async_synchronize_full();
- 
- 	ftrace_free_mem(mod, mod->init_layout.base, mod->init_layout.base +
+--- a/arch/arm64/include/asm/el2_setup.h
++++ b/arch/arm64/include/asm/el2_setup.h
+@@ -106,7 +106,7 @@
+ 	msr_s	SYS_ICC_SRE_EL2, x0
+ 	isb					// Make sure SRE is now set
+ 	mrs_s	x0, SYS_ICC_SRE_EL2		// Read SRE back,
+-	tbz	x0, #0, 1f			// and check that it sticks
++	tbz	x0, #0, .Lskip_gicv3_\@		// and check that it sticks
+ 	msr_s	SYS_ICH_HCR_EL2, xzr		// Reset ICC_HCR_EL2 to defaults
+ .Lskip_gicv3_\@:
+ .endm
 
 

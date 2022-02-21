@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6A634BE5E1
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:01:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D2AFD4BDC5B
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:42:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358712AbiBUNLk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 08:11:40 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42068 "EHLO
+        id S1358772AbiBUNLm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 08:11:42 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358653AbiBUNL3 (ORCPT
+        with ESMTP id S1358708AbiBUNL3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 21 Feb 2022 08:11:29 -0500
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 451271EECD
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 05:10:50 -0800 (PST)
-Received: by mail-wr1-x42e.google.com with SMTP id d27so27034423wrb.5
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 05:10:50 -0800 (PST)
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 289451EEE8
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 05:10:51 -0800 (PST)
+Received: by mail-wr1-x429.google.com with SMTP id j22so924381wrb.13
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 05:10:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=vyVwZE5kS8xGdR91o+WjovvMprsI53ZLyaYZnmErV2U=;
-        b=T5M6rVpQg5CiNr0ALeXidXgJ27NA+ORiCY2Lluwps+MNSbQ6BG7XRz9qUUmz9jpiAk
-         lO8F5HA6p6nn2XwUZ2QXVPvwzILoFklTOwYzQ8dj7F5STNqv3ZWHXR6BK/iyTsyfx/q1
-         qtH7bL/pdBvtx40noEamhS+8PkOAm1+FOXNWMGzCUXt4ls3KcE8E6sEKlbKgoXHS2ygq
-         fZFtH8gyBLWxsUoMTZ4g9ekdM4Lwxip+0iYdGeSZCqcdm867uR2YqICwSm9R/ih6nvvk
-         E9h2iZT2/iZyOQjcSTxyVGT7WHaZaH6Bf7vvtdF/t0PBj4wTAFens0KXhPeOFwqL9/fB
-         fz7g==
+        bh=to/0VQRxET3KlmX/g/6lkGwzP14Y4zFtNFsg8ymenlA=;
+        b=mbzV2rMh2TIubzZRZpZTj5cmoESg5T8lu0MMvfc1S98Psy4yiSSn4zn54E+r2mQPJu
+         vCSzoIucJ27el+jkSLan/J2VU8veKAGCYUQUEovYVIXeZ8CYklNabYfZILeOtgcfXS8F
+         EUMSjGIkqebrpIiIyGifTRr1p2NqmschAolxTVT3np5RVssz03nz3ybbxEDUHzp4ecNu
+         2fQerpohucN1tYDjjF89HccRxQHoiYRQmEUhxbSAC7ClcQNrme0R1rEtqsd+p6efDXZE
+         qkXvaPwMsBGNEWqdXarP1ItkvdRYcSLf1icCdmNNSJIjnx7SaJ0dYoI4p5YpqxeqHoiY
+         bPFQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=vyVwZE5kS8xGdR91o+WjovvMprsI53ZLyaYZnmErV2U=;
-        b=fz+1Zw0bMMxo1MCMr0FL2Wg4ylgmJ9ZPn/Q8WK+me2WDC3qAaLllLY3NJ5TwiS+Sw9
-         QGd+nyrK/W/sI8fzSaqhLVRFdQvtB+T+DIV53/xUuEDuhWeUaKL1TFIgQT8vRMcowP9f
-         7mUPaA9eZQeol82rZKkk7BiT41uaXK80CdimvJcqA0mGUH/qxPaUUXpBUgCa9mmrJ0c1
-         FPqJTxZb9j5iP4r/LobVtbCfh75+2nQmkp15QOVeJ1PdSMW8uGjQyA9W74ej2ejF+SzI
-         CNQGN0Rjbl2fgakdWh3Ivs5deAnUYlhUuRaQUbDvji+nPcy8yjMRrlglUcbZTkgAlB6N
-         wovA==
-X-Gm-Message-State: AOAM5325bCMiPDIdMIr2k4csVukecra06TCEjaS1Ky7/lS63ObTHnkvr
-        cnuwITzzMwj8jukoKzE6Gwsj8Q==
-X-Google-Smtp-Source: ABdhPJzoGZPyDMK/rd4UpWIt18POgV1l3Mt9/on0ljpwn4kVUcoE59SuHBLlq6qeR6BQ5cDdBUGS3A==
-X-Received: by 2002:a5d:6488:0:b0:1ea:7bfa:41e1 with SMTP id o8-20020a5d6488000000b001ea7bfa41e1mr394408wri.563.1645449048801;
-        Mon, 21 Feb 2022 05:10:48 -0800 (PST)
+        bh=to/0VQRxET3KlmX/g/6lkGwzP14Y4zFtNFsg8ymenlA=;
+        b=3bMHQaw2sK726dMU/LI7XQl6FrSz205AytklxGTtrKkGkoL2pUxqyeFW/MxpPYGEf3
+         3kHFQQy/IMdd0jPeke9Bnq0skAOWBszNw7QJt0t9wxYptI9HYdE85Q/A+0h83kjsHOOA
+         4L2oIz9KGBHSsPYxVUvR20xaJIiZQKyxHGlg8BY8lV6GnwnOzjvTF0XrOwuNNOJrFAb9
+         eNOnW1TzSH1oIafR4oEDyh1EPWJXb2V9K7J2iOfFLQRu6Sc9sJQhZSXGQU3xdzdokQip
+         ueBjoH78c4b50hr6OFJ0IKvpeh6Xt6uaYzleO70JKw+jF0856KeRCgko3mvB+4lLDAeL
+         bBOQ==
+X-Gm-Message-State: AOAM532yf5NsDMOmeRYZ6Df+FrMJKbGeUWTSew4eETkU1FosCPxQm8vb
+        cJmCeI6OlBks26e2NStQkII3hw==
+X-Google-Smtp-Source: ABdhPJwVS2QIlSS1PXWjt7wJwFAbOL6vY5vnL/xglBpqQiKgDeFouZ3MoUiTvK6PusY2cD4HIY5CnA==
+X-Received: by 2002:a05:6000:1881:b0:1e8:f75c:591d with SMTP id a1-20020a056000188100b001e8f75c591dmr13975498wri.257.1645449050313;
+        Mon, 21 Feb 2022 05:10:50 -0800 (PST)
 Received: from srini-hackbox.lan (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
-        by smtp.gmail.com with ESMTPSA id 3sm49412801wrz.86.2022.02.21.05.10.47
+        by smtp.gmail.com with ESMTPSA id 3sm49412801wrz.86.2022.02.21.05.10.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Feb 2022 05:10:48 -0800 (PST)
+        Mon, 21 Feb 2022 05:10:49 -0800 (PST)
 From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 To:     broonie@kernel.org
 Cc:     lgirdwood@gmail.com, perex@perex.cz, tiwai@suse.com,
         pierre-louis.bossart@linux.intel.com, alsa-devel@alsa-project.org,
         linux-kernel@vger.kernel.org, quic_srivasam@quicinc.com,
         Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Subject: [PATCH 07/10] ASoC: codecs: wcd-mbhc: add runtime pm support
-Date:   Mon, 21 Feb 2022 13:10:34 +0000
-Message-Id: <20220221131037.8809-8-srinivas.kandagatla@linaro.org>
+Subject: [PATCH 08/10] ASoC: codecs: wsa-macro: setup soundwire clks correctly
+Date:   Mon, 21 Feb 2022 13:10:35 +0000
+Message-Id: <20220221131037.8809-9-srinivas.kandagatla@linaro.org>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20220221131037.8809-1-srinivas.kandagatla@linaro.org>
 References: <20220221131037.8809-1-srinivas.kandagatla@linaro.org>
@@ -72,83 +72,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-under low power state a SoundWire Wake IRQ could trigger MBHC interrupts
-so make sure that codec is not in suspended state when this happens.
+For SoundWire Frame sync to be generated correctly we need both MCLK
+and MCLKx2 (npl). Without pm runtime enabled these two clocks will remain on,
+however after adding pm runtime support its possible that NPl clock could be
+turned off even when SoundWire controller is active.
+
+Fix this by enabling mclk and npl clk when SoundWire clks are enabled.
 
 Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 ---
- sound/soc/codecs/wcd-mbhc-v2.c | 26 ++++++++++++++++++++++++++
- 1 file changed, 26 insertions(+)
+ sound/soc/codecs/lpass-wsa-macro.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/sound/soc/codecs/wcd-mbhc-v2.c b/sound/soc/codecs/wcd-mbhc-v2.c
-index 7488a150a138..c53c2ef33e1a 100644
---- a/sound/soc/codecs/wcd-mbhc-v2.c
-+++ b/sound/soc/codecs/wcd-mbhc-v2.c
-@@ -5,6 +5,7 @@
- #include <linux/init.h>
- #include <linux/slab.h>
- #include <linux/device.h>
-+#include <linux/pm_runtime.h>
- #include <linux/printk.h>
- #include <linux/delay.h>
- #include <linux/kernel.h>
-@@ -711,6 +712,16 @@ static irqreturn_t wcd_mbhc_hphr_ocp_irq(int irq, void *data)
- static int wcd_mbhc_initialise(struct wcd_mbhc *mbhc)
- {
- 	struct snd_soc_component *component = mbhc->component;
-+	int ret;
-+
-+	ret = pm_runtime_get_sync(component->dev);
-+	if (ret < 0 && ret != -EACCES) {
-+		dev_err_ratelimited(component->dev,
-+				    "pm_runtime_get_sync failed in %s, ret %d\n",
-+				    __func__, ret);
-+		pm_runtime_put_noidle(component->dev);
-+		return ret;
-+	}
+diff --git a/sound/soc/codecs/lpass-wsa-macro.c b/sound/soc/codecs/lpass-wsa-macro.c
+index a8d30f3b3fdf..d51d6acac28b 100644
+--- a/sound/soc/codecs/lpass-wsa-macro.c
++++ b/sound/soc/codecs/lpass-wsa-macro.c
+@@ -2257,6 +2257,7 @@ static int wsa_swrm_clock(struct wsa_macro *wsa, bool enable)
+ 	struct regmap *regmap = wsa->regmap;
  
- 	mutex_lock(&mbhc->lock);
+ 	if (enable) {
++		clk_prepare_enable(wsa->clks[2].clk);
+ 		wsa_macro_mclk_enable(wsa, true);
  
-@@ -751,6 +762,9 @@ static int wcd_mbhc_initialise(struct wcd_mbhc *mbhc)
+ 		/* reset swr ip */
+@@ -2281,6 +2282,7 @@ static int wsa_swrm_clock(struct wsa_macro *wsa, bool enable)
+ 		regmap_update_bits(regmap, CDC_WSA_CLK_RST_CTRL_SWR_CONTROL,
+ 				   CDC_WSA_SWR_CLK_EN_MASK, 0);
+ 		wsa_macro_mclk_enable(wsa, false);
++		clk_disable_unprepare(wsa->clks[2].clk);
+ 	}
  
- 	mutex_unlock(&mbhc->lock);
- 
-+	pm_runtime_mark_last_busy(component->dev);
-+	pm_runtime_put_autosuspend(component->dev);
-+
  	return 0;
- }
+@@ -2351,7 +2353,7 @@ static int wsa_macro_register_mclk_output(struct wsa_macro *wsa)
+ 	struct clk_init_data init;
+ 	int ret;
  
-@@ -1078,10 +1092,19 @@ static void wcd_correct_swch_plug(struct work_struct *work)
- 	int output_mv, cross_conn, hs_threshold, try = 0, micbias_mv;
- 	bool is_spl_hs = false;
- 	bool is_pa_on;
-+	int ret;
+-	parent_clk_name = __clk_get_name(wsa->clks[2].clk);
++	parent_clk_name = __clk_get_name(wsa->clks[3].clk);
  
- 	mbhc = container_of(work, struct wcd_mbhc, correct_plug_swch);
- 	component = mbhc->component;
- 
-+	ret = pm_runtime_get_sync(component->dev);
-+	if (ret < 0 && ret != -EACCES) {
-+		dev_err_ratelimited(component->dev,
-+				    "pm_runtime_get_sync failed in %s, ret %d\n",
-+				    __func__, ret);
-+		pm_runtime_put_noidle(component->dev);
-+		return;
-+	}
- 	micbias_mv = wcd_mbhc_get_micbias(mbhc);
- 	hs_threshold = wcd_mbhc_adc_get_hs_thres(mbhc);
- 
-@@ -1232,6 +1255,9 @@ static void wcd_correct_swch_plug(struct work_struct *work)
- 
- 	if (mbhc->mbhc_cb->hph_pull_down_ctrl)
- 		mbhc->mbhc_cb->hph_pull_down_ctrl(component, true);
-+
-+	pm_runtime_mark_last_busy(component->dev);
-+	pm_runtime_put_autosuspend(component->dev);
- }
- 
- static irqreturn_t wcd_mbhc_adc_hs_rem_irq(int irq, void *data)
+ 	init.name = clk_name;
+ 	init.ops = &swclk_gate_ops;
 -- 
 2.21.0
 

@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAE714BE326
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:56:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A73AC4BE8A6
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:06:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346296AbiBUI5B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 03:57:01 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43148 "EHLO
+        id S1345093AbiBUIv7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 03:51:59 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345773AbiBUIyR (ORCPT
+        with ESMTP id S1345012AbiBUIvq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 03:54:17 -0500
+        Mon, 21 Feb 2022 03:51:46 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D38F8237CE;
-        Mon, 21 Feb 2022 00:53:05 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 824C65F64;
+        Mon, 21 Feb 2022 00:51:23 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 179B06114B;
-        Mon, 21 Feb 2022 08:53:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE1D3C340E9;
-        Mon, 21 Feb 2022 08:53:03 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1EE216114A;
+        Mon, 21 Feb 2022 08:51:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0330C340EB;
+        Mon, 21 Feb 2022 08:51:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645433584;
-        bh=3hY4r8/3UO+KDlgWBI1PWNsgwmTFyNxZwI7NNxVqog0=;
+        s=korg; t=1645433482;
+        bh=kGaxBwPREl1YNNSsVl3yhY4N9ZSYBCM7azMKuUbnDI8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PJrcETf3e23SBoAsaD6+SaKS1ZKUk0gRErAQ9ly8Rh+tCwOQ1tOQ1mBIpvlsdyEjm
-         YAt9DEXBHfSECS0RvntzphlovNhxPbzelwI/902TkgrjTy5sNHziniastZuNAIwin1
-         jcAophyWRbeBLenMfYdtiuLZfJs8FYCmt8RZb3Tg=
+        b=bQErazDxYmCY6ZaMTIfE/HU749WJU3fKxpIicwtwtQkGwH2oqB4O/hEPAE/H0cQij
+         P4V/JRlc+HucEVS4TiWkPdvKZTMC7DNXTriPFChH6cBZnIa7tH6xGCoLzy2o86DAgL
+         xfpwCYJ9DSliUdZyvH65xhxnfsj9XXkTDlCqGIOc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Guillaume Nault <gnault@redhat.com>,
         Jakub Kicinski <kuba@kernel.org>,
         Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-Subject: [PATCH 4.14 17/45] xfrm: Dont accidentally set RTO_ONLINK in decode_session4()
+Subject: [PATCH 4.9 15/33] xfrm: Dont accidentally set RTO_ONLINK in decode_session4()
 Date:   Mon, 21 Feb 2022 09:49:08 +0100
-Message-Id: <20220221084911.021608828@linuxfoundation.org>
+Message-Id: <20220221084909.273177621@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220221084910.454824160@linuxfoundation.org>
-References: <20220221084910.454824160@linuxfoundation.org>
+In-Reply-To: <20220221084908.568970525@linuxfoundation.org>
+References: <20220221084908.568970525@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -82,15 +82,15 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
 --- a/net/ipv4/xfrm4_policy.c
 +++ b/net/ipv4/xfrm4_policy.c
-@@ -17,6 +17,7 @@
+@@ -16,6 +16,7 @@
  #include <net/xfrm.h>
  #include <net/ip.h>
  #include <net/l3mdev.h>
 +#include <net/inet_ecn.h>
  
- static struct dst_entry *__xfrm4_dst_lookup(struct net *net, struct flowi4 *fl4,
- 					    int tos, int oif,
-@@ -126,7 +127,7 @@ _decode_session4(struct sk_buff *skb, st
+ static struct xfrm_policy_afinfo xfrm4_policy_afinfo;
+ 
+@@ -123,7 +124,7 @@ _decode_session4(struct sk_buff *skb, st
  	fl4->flowi4_proto = iph->protocol;
  	fl4->daddr = reverse ? iph->saddr : iph->daddr;
  	fl4->saddr = reverse ? iph->daddr : iph->saddr;

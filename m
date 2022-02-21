@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36CAE4BE5DD
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:01:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 09AF24BE40B
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:58:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353697AbiBUJ5k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 04:57:40 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41704 "EHLO
+        id S232238AbiBUJdQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 04:33:16 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352624AbiBUJri (ORCPT
+        with ESMTP id S1349303AbiBUJZb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 04:47:38 -0500
+        Mon, 21 Feb 2022 04:25:31 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAF1C43493;
-        Mon, 21 Feb 2022 01:20:13 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A1E639699;
+        Mon, 21 Feb 2022 01:10:30 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8579360EB3;
-        Mon, 21 Feb 2022 09:20:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65FCEC340EB;
-        Mon, 21 Feb 2022 09:20:12 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9DD9D608C4;
+        Mon, 21 Feb 2022 09:10:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79A41C340E9;
+        Mon, 21 Feb 2022 09:10:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645435213;
-        bh=MG0LT0WpiF9RrSxHDVMgtYZYTt4Y0WHzXS5mZYOvIYI=;
+        s=korg; t=1645434626;
+        bh=64VlcYegJ7J3ajnlObHc0xZ4ibsZb9NovkvekZYyx/A=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=W5ACgQ2oD/xH3169Lc0d5P3WGA+AfujknAJI66njCk0kOL2DwF1XpnOn6eGQRg0ut
-         jImrk+dA2cXqKP+gs8myrwIZqOT+Hbhbnp47Dx1Tj4nGF5Ggr2D+DMvM3BK+u1dHt1
-         b4vNYTWuXYjzGbn4EHbyip0cb/9RTGlmhWQF/ito=
+        b=CDuHZrw4vynd7iesf82NmKOe8TclrpyOA4WGq+1/wfRfV9cEy3Sg/ny1n2AoVOssG
+         PeLYSLDmgOcLzVKIs0V9nNRbWC4C+W2/4+A1HOpB8tm0sT3IF4D5cXb1Fxz3Xl8JIy
+         YAPpdO49MDeRi4GVSBkxf0d5PAvXxblIOqSXFvnw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Ville=20Syrj=C3=A4l=C3=A4?= 
-        <ville.syrjala@linux.intel.com>,
-        Jani Nikula <jani.nikula@intel.com>,
+        stable@vger.kernel.org, Matthew Auld <matthew.auld@intel.com>,
+        =?UTF-8?q?Thomas=20Hellstr=C3=B6m?= 
+        <thomas.hellstrom@linux.intel.com>,
         Tvrtko Ursulin <tvrtko.ursulin@intel.com>
-Subject: [PATCH 5.16 085/227] drm/i915: Fix mbus join config lookup
-Date:   Mon, 21 Feb 2022 09:48:24 +0100
-Message-Id: <20220221084937.698308163@linuxfoundation.org>
+Subject: [PATCH 5.15 073/196] drm/i915/ttm: tweak priority hint selection
+Date:   Mon, 21 Feb 2022 09:48:25 +0100
+Message-Id: <20220221084933.386477663@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220221084934.836145070@linuxfoundation.org>
-References: <20220221084934.836145070@linuxfoundation.org>
+In-Reply-To: <20220221084930.872957717@linuxfoundation.org>
+References: <20220221084930.872957717@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,36 +56,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ville Syrjälä <ville.syrjala@linux.intel.com>
+From: Matthew Auld <matthew.auld@intel.com>
 
-commit 8d9d2a723d64b650f2e6423024ccb4a33f0cdc40 upstream.
+commit 0bdc0a0699929c814a8aecd55d2accb8c11beae2 upstream.
 
-The bogus loop from compute_dbuf_slices() was copied into
-check_mbus_joined() as well. So this lookup is wrong as well.
-Fix it.
+For some reason we are selecting PRIO_HAS_PAGES when we don't have
+mm.pages, and vice versa.
 
-Cc: stable@vger.kernel.org
-Fixes: f4dc00863226 ("drm/i915/adl_p: MBUS programming")
-Signed-off-by: Ville Syrjälä <ville.syrjala@linux.intel.com>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220207132700.481-2-ville.syrjala@linux.intel.com
-Reviewed-by: Jani Nikula <jani.nikula@intel.com>
-(cherry picked from commit 053f2b85631316a9226f6340c1c0fd95634f7a5b)
+v2(Thomas):
+  - Add missing fixes tag
+
+Fixes: 213d50927763 ("drm/i915/ttm: Introduce a TTM i915 gem object backend")
+Signed-off-by: Matthew Auld <matthew.auld@intel.com>
+Cc: Thomas Hellström <thomas.hellstrom@linux.intel.com>
+Reviewed-by: Thomas Hellström <thomas.hellstrom@linux.intel.com>
+Link: https://patchwork.freedesktop.org/patch/msgid/20220209111652.468762-1-matthew.auld@intel.com
+(cherry picked from commit ba2c5d15022a565da187d90e2fe44768e33e5034)
 Signed-off-by: Tvrtko Ursulin <tvrtko.ursulin@intel.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/i915/intel_pm.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/gpu/drm/i915/gem/i915_gem_ttm.c |    6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
---- a/drivers/gpu/drm/i915/intel_pm.c
-+++ b/drivers/gpu/drm/i915/intel_pm.c
-@@ -4843,7 +4843,7 @@ static bool check_mbus_joined(u8 active_
- {
- 	int i;
- 
--	for (i = 0; i < dbuf_slices[i].active_pipes; i++) {
-+	for (i = 0; dbuf_slices[i].active_pipes != 0; i++) {
- 		if (dbuf_slices[i].active_pipes == active_pipes)
- 			return dbuf_slices[i].join_mbus;
+--- a/drivers/gpu/drm/i915/gem/i915_gem_ttm.c
++++ b/drivers/gpu/drm/i915/gem/i915_gem_ttm.c
+@@ -759,11 +759,9 @@ static void i915_ttm_adjust_lru(struct d
+ 	if (obj->mm.madv != I915_MADV_WILLNEED) {
+ 		bo->priority = I915_TTM_PRIO_PURGE;
+ 	} else if (!i915_gem_object_has_pages(obj)) {
+-		if (bo->priority < I915_TTM_PRIO_HAS_PAGES)
+-			bo->priority = I915_TTM_PRIO_HAS_PAGES;
++		bo->priority = I915_TTM_PRIO_NO_PAGES;
+ 	} else {
+-		if (bo->priority > I915_TTM_PRIO_NO_PAGES)
+-			bo->priority = I915_TTM_PRIO_NO_PAGES;
++		bo->priority = I915_TTM_PRIO_HAS_PAGES;
  	}
+ 
+ 	ttm_bo_move_to_lru_tail(bo, bo->resource, NULL);
 
 

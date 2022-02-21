@@ -2,188 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00CE34BE88C
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:05:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EEDCA4BE8B7
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:06:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348797AbiBULEk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 06:04:40 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36656 "EHLO
+        id S1355446AbiBULHV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 06:07:21 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355565AbiBULE3 (ORCPT
+        with ESMTP id S1348163AbiBULFj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 06:04:29 -0500
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2041.outbound.protection.outlook.com [40.107.94.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAE333E5CE
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 02:32:17 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=XI2CeO5fpm0S+n39ytoxRzbGoXriNykxZlC2N0s/u3N8zalOjh3KbRneoh3kpq+ndNFKDfUfuZ/G8o2Ro12PskWL5MmPyM3wrH7EsD+EQI22OD154oNfaz24Y62wACJvbwoZ6u+m4en/V7ztbA/4hn4sTr6jMi4F0gyLLEbAoGWo30byFDJWMmb4omWs2NiZhMkvvGtYryknO68eyNwBcjeHzscOfBhp0yXakqHOUk5zFHxfKnOunzQX+jJzhiSyrcn4ObLIeEeMM7vS9xd2gkEHzyQa5OTcu9/m7gL91/9QIHZMX3MWh/NhffkPoFi3T9284J+glirB2T4EbtHZfg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=8clvoOxm7+7c4D3BTExzoWieZO0+85MDo0X8K3ZTpQU=;
- b=hBoOX0Fgt8vCz4qU2fE2wXOCD8sG6oYmQVp1vHIpTX66kjJHHf2+3RTiQZB0UjZf6wSb9Ng4HAPfqzesqJxXeMebcvKyLQhbYNG3d5cNWq61jrWzcKEbVeNeAreltooznDHHRXHBJav41SK9mf2YXNESPRkFc3bx5qtkjdysFz8NNB05atL7wlbwGVDcFEGKXluzJVcpD0bbYaicAzwwotCiq3dSFBA87VzMgr6vTCFdoDxagKxK0PNu+dmkysl992rwq35aq2BuLf4MmGedCBge4nafImnHLtHJ6blm43DuiXwodI+UeBvhmV1Fiog0DRTCxCc2jDC1PesGTT3u0g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=8clvoOxm7+7c4D3BTExzoWieZO0+85MDo0X8K3ZTpQU=;
- b=n7s6/xC9A4cxE56plItJVZN4f65cFr5gyMDonlpWcPLSDLexY6rLV191bi4Old7KWf9W8EGhpsD0gaQY310hGpT4Hjs0hidACKaZugDn+r4Clk5bPG2nWbqcpoTrOt+IdBzcy5h4WjCy8hMiEcqimFroJhgQ0a9UcakRFRD72RE=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
- by CO6PR12MB5475.namprd12.prod.outlook.com (2603:10b6:5:354::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4995.14; Mon, 21 Feb
- 2022 10:32:16 +0000
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::e03f:901a:be6c:b581]) by BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::e03f:901a:be6c:b581%6]) with mapi id 15.20.4995.027; Mon, 21 Feb 2022
- 10:32:16 +0000
-Message-ID: <6e0ebf4b-ffd7-df55-8ae9-472878f22605@amd.com>
-Date:   Mon, 21 Feb 2022 11:32:10 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] drm/amdgpu: check vm ready by evicting
-Content-Language: en-US
-To:     Qiang Yu <qiang.yu@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-References: <20220221101239.2863-1-qiang.yu@amd.com>
-From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
-In-Reply-To: <20220221101239.2863-1-qiang.yu@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: AS8PR05CA0003.eurprd05.prod.outlook.com
- (2603:10a6:20b:311::8) To BN8PR12MB3587.namprd12.prod.outlook.com
- (2603:10b6:408:43::13)
+        Mon, 21 Feb 2022 06:05:39 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A546F3FBE5
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 02:33:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1645439618;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=2s850PTFKMgt+79nojpojufcF5kfxJ20TLZLutPamXM=;
+        b=DUogjPZ+45IGi5Mlx1LyGCtdOUlgnTXLDSO4awkw+SCbGxhRalrOwSuYqJPQNO2tsVGvSP
+        nYcMixkW3+VV8LCj5NlzcGrh/rhU6zYHrRWpMnd0E3S6vaY94jan2H1W+fNMkzQi/8lega
+        yv3lbUcox/SshM0Ev1WB4cKFvpjydAg=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-322-k1gX53XgNweS7itiC_n6RQ-1; Mon, 21 Feb 2022 05:33:35 -0500
+X-MC-Unique: k1gX53XgNweS7itiC_n6RQ-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 3A28F814243;
+        Mon, 21 Feb 2022 10:33:34 +0000 (UTC)
+Received: from localhost.localdomain (unknown [10.40.195.190])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 5AB236F9D0;
+        Mon, 21 Feb 2022 10:33:32 +0000 (UTC)
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     kvm@vger.kernel.org
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, linux-kernel@vger.kernel.org,
+        Maxim Levitsky <mlevitsk@redhat.com>, stable@vger.kernel.org,
+        =?UTF-8?q?D=C4=81vis=20Mos=C4=81ns?= <davispuh@gmail.com>
+Subject: [PATCH] KVM: nSVM: fix nested tsc scaling when not enabled but MSR_AMD64_TSC_RATIO set
+Date:   Mon, 21 Feb 2022 12:33:31 +0200
+Message-Id: <20220221103331.58956-1-mlevitsk@redhat.com>
+In-Reply-To: <0a0b61c5c071415f213a4704ebd73e65761ec1a3.camel@redhat.com>
+References: <0a0b61c5c071415f213a4704ebd73e65761ec1a3.camel@redhat.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 9353dc55-295c-4a2b-7277-08d9f5256e19
-X-MS-TrafficTypeDiagnostic: CO6PR12MB5475:EE_
-X-Microsoft-Antispam-PRVS: <CO6PR12MB5475325AC0A88F62DE191309833A9@CO6PR12MB5475.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: WDjcX13Ims5hef8r+rjd7fgrcenwO1VvyhUE/q1nJDIGTZdxKCltD68dzhJ3yrFnKVP26mUWtiv4SIiy0xdViQZusCgrL/8YS43Oe5KgBqaLANPqzSprLtuFeIKFEdd8NfLbvUNavRmJFIAuP+N8gmle6ODFghWHy9sS+MY6D9YXDISmWYdYXmFm1psrq9e5IguWvlCJzJDBZhQAOYa8QgWCVB3lkslWv1cktNzRJq2iO/Vr48efL9MuIn/fz4lNSM1n0IiMohy4xEz+jSJpo96ihmk0Z/OdHv9+oO/qEfWtVHg475p3h9tAcwPCR0Pho9cpUPYaaGxgHPk9N5Y1S4u67pAd2qcg0adCfAFyNs7f7y7/g5p5L0XAIGi5iSeX7iX75IFbSd5wf9iObvYRWRTYF5pqtbjSo9Sl3ik6FtqqeYGaOMj+pPgF5Erd6p8FpkfUaSTVTSwgi1qq+WpcovZkhHtbpzjdBIq5jtREc2Ouua8eqENxuRwrGefNYGGzS9DAJRKn5Y3KQDLvejboBPNgPtr3xtOyakMNxNiPHIUQL4Tfjgwh0jlwIFe+5peR2MD5F7mNkx2o8Yq4VCIOX+vojl6i+NM44fpIS2A5eI/x2ivZJxlC5Y0few5FyuBzL7ZQbdYbT5JPodmXAh2aFKcfnCu4aLJ5FcJk70zmblRiRNouMA0IpplvPItUAnkHYixE0CwpptWALC/oxG1thNPM/rrYYzGZHfawzPyJKtXtn5n3yXJdDyUdvC6+JG8r
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(5660300002)(31696002)(2906002)(2616005)(8936002)(38100700002)(186003)(26005)(86362001)(6512007)(316002)(66476007)(31686004)(66556008)(6666004)(83380400001)(110136005)(66574015)(6506007)(6486002)(8676002)(508600001)(4326008)(36756003)(66946007)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?TmNKOW03cThGSkJBS1ZueGJzaFlZeStQNmtmNlB1azBubGdocmgrNTJ4Yzd3?=
- =?utf-8?B?L05DSHFYblpiMVdFK0VXc1hDTis0Q0hPOFRBWm10bm9taW5hMS94S2Y1akJF?=
- =?utf-8?B?bUxGSy9WRUxpQUFnZi9nTm5IWmNjZnNQUi85emQzQWdTQnpwZjVzcmF1dUFR?=
- =?utf-8?B?Nm9ZY2VVZWNVaE4xRkpCQXF4RjJCdmF1NVJPdm15T0ZuSWZMN051NVozZkdp?=
- =?utf-8?B?OWc2S2x2d3d1dGhBdkV2OHBhRUEzdFIweHpTaTFLbFJlM0t6Q1FyNlQzVVh0?=
- =?utf-8?B?cW0wMDVuek9WQmwvK0h2TWJDTTF1NjhoVWtJeEZkWXBVZnk2c2NWR0lPQk1U?=
- =?utf-8?B?NHlRN0xYNHh4TWJTdS92Z2N2WVEyUkIyNzNxc1Q2UEpVUjhhTUQ0YlI2L1NI?=
- =?utf-8?B?M3RNTm1QQ3ByRkNWYWtuR3IyTEFkZGZVVGlDSUdPcWNXTVV5VURTaHgyYUxX?=
- =?utf-8?B?cnFEK0w0d1NTa1RjdWl5a0phaUhpdzJPRlo4eWZkOWVwS003U0o3UWkxUHUz?=
- =?utf-8?B?WjZINDllZndSNGZ6dTlRdk05NDNUMUZvSTUzSkVidXhPaURjcnM5dE5WdlFy?=
- =?utf-8?B?d2tiMGI2VGRhb1VDRWNKOUk4Q09rTDYwYWtIaVVPQVdRTjAvNXVkdERybmpU?=
- =?utf-8?B?ZEd6UlhpeW0zc1ovR080UCtZNXFJZm1VeGJQampnSEpkM1NtVS9VR2hBc1Y5?=
- =?utf-8?B?TzI3RC9TTlRxMGpLT0owc2V1QXd0T2NyL0FvYndQaTJodFdMZEVyMXdVS0dv?=
- =?utf-8?B?L01GdXVEZGRpUm1TdXdsaXUweHorSHNMZUhQdkZsSXljOEFaTWwyK0J0V0Jl?=
- =?utf-8?B?MHpKOVVXeWZQRnhPOEVPNXh1bXVZSGJ0VTd1MWZhMndhYnBXMzhyYzM2K2tu?=
- =?utf-8?B?MnpYUUxOTUhqQ3RWZWNkdWxFWHN0SzJpSVhRd014MWdUakpaSHVwd1hmcXZ6?=
- =?utf-8?B?cGdVK2JFeDdFUjZPU2JWMDliRERHVmcxZ2ZyditxaGxZMGlseUxKYWpNRG8w?=
- =?utf-8?B?UkJUNFZ0d1JTdWU1NW1vczdKNjdOeVB4bGozUWJKcTc3Q1dROW1aajBMQTcv?=
- =?utf-8?B?T3lWemhwR1REUW9qdy93MmhrWE90dWIxNENORU5vSWtPU0J5SThqSlhHMlNi?=
- =?utf-8?B?ek1PQndtekFyMkZtcFAwOFp0VFFzRU1GMlgyL0haTXpaMmlFcFpsYjdsdHNL?=
- =?utf-8?B?VWp3SXFqMFpGWGh2emJkWFVERCtPUU14TG8zWnYxNDdsbWIwRURjbzAwWEp3?=
- =?utf-8?B?T3U0eTBkaEFyVWVCcGZvUVFOQWF4YkQ3YXFxSWlwZm1CNW9BTENWemFoTWph?=
- =?utf-8?B?NUVhcTlqQmhiWWtFU09GRGsya3Q0VTBCRExtbXpIRVJIaVZ6Q0FCZTliWElh?=
- =?utf-8?B?Rmo3UGNwOFBZZzU0aTNPWDBRaFVQbkRMY3FTdkJObm5xRGpYV2o5ajRHclN0?=
- =?utf-8?B?aUNwcG5jVkx3K3hNVkQ2OEdEQ2VjTjI1TDZlMjlMNXZpQVMyWEMxY01nTEEz?=
- =?utf-8?B?R1pmb1lIejJWN1dmemJGaFAxMHh1QnhVMmQzNklLclFybWZ2RU8wU1NaL05v?=
- =?utf-8?B?VFpXT0psekhFU3dwRmlkc1prT3FjUDlsUHJyUTVhbFliaVZYOGFlMTJFT1F2?=
- =?utf-8?B?RUI4eE1EUHh2d3RvUDhRQTZ2bC9PSlNIdmMxYmdwdERCeU8yRUhIUVNjeHp2?=
- =?utf-8?B?elFROUNva0RRUDRjbkpSdjJjVFNvcklDKzVLK01tSkxENFBBTlR1bGppMCtv?=
- =?utf-8?B?dDhqcCttcm94R1Y1VmxCYWw0VHYweHRjdzBlREFUa05ZUHR2UWxlbHFhSEVR?=
- =?utf-8?B?SHQ1YTBEVFdXdzczTnVPemU4RXB0dHRLa2JDUFA2UmFtZkE2Wm5ZRi9IOW5T?=
- =?utf-8?B?Rk9YRWN0TnpCaU5mUU03VDBJcTFjS3hlS2dlaTdURHIxTGtnZllGUkhjTGht?=
- =?utf-8?B?OWh3WmVoYTdHT3NURXJLQ1NRUi9NRVNYSUEvVUNuaE9JQUQycWgyN3dGaTVx?=
- =?utf-8?B?b3hncFE1RHVWS2VJNU5RTVJZaWcvSGYvTVlueDd2OTlkQkJTZzJoVUVQVTRw?=
- =?utf-8?B?TTF4ZTNBQVUvYXNzcVhVc3YwYjg2cHNWSUR2ZFFmVmJVUVdDdUpaWnVPbGk3?=
- =?utf-8?Q?OI8o=3D?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9353dc55-295c-4a2b-7277-08d9f5256e19
-X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Feb 2022 10:32:16.0642
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Tlt1Aufo+vZlj0sno3JcJPl0o4VNqymRGIfTeX0lT4WaSCEuWGu4mWinpKvtTvOS
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO6PR12MB5475
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+For compatibility with userspace the MSR_AMD64_TSC_RATIO can be set
+even when the feature is not exposed to the guest, which breaks assumptions
+that it has the default value in this case.
 
+Fixes: 5228eb96a487 ("KVM: x86: nSVM: implement nested TSC scaling")
+Cc: stable@vger.kernel.org
 
-Am 21.02.22 um 11:12 schrieb Qiang Yu:
-> Workstation application ANSA/META get this error dmesg:
-> [drm:amdgpu_gem_va_ioctl [amdgpu]] *ERROR* Couldn't update BO_VA (-16)
->
-> This is caused by:
-> 1. create a 256MB buffer in invisible VRAM
-> 2. CPU map the buffer and access it causes vm_fault and try to move
->     it to visible VRAM
-> 3. force visible VRAM space and traverse all VRAM bos to check if
->     evicting this bo is valuable
-> 4. when checking a VM bo (in invisible VRAM), amdgpu_vm_evictable()
->     will set amdgpu_vm->evicting, but latter due to not in visible
->     VRAM, won't really evict it so not add it to amdgpu_vm->evicted
-> 5. before next CS to clear the amdgpu_vm->evicting, user VM ops
->     ioctl will pass amdgpu_vm_ready() (check amdgpu_vm->evicted)
->     but fail in amdgpu_vm_bo_update_mapping() (check
->     amdgpu_vm->evicting) and get this error log
->
-> This error won't affect functionality as next CS will finish the
-> waiting VM ops. But we'd better clear the error log by check the
-> evicting flag which really stop VM ops latter.
->
-> Signed-off-by: Qiang Yu <qiang.yu@amd.com>
+Reported-by: Dāvis Mosāns <davispuh@gmail.com>
+Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
+---
+ arch/x86/kvm/svm/nested.c | 10 ++++------
+ arch/x86/kvm/svm/svm.c    |  5 +++--
+ arch/x86/kvm/svm/svm.h    |  1 +
+ 3 files changed, 8 insertions(+), 8 deletions(-)
 
-Reviewed-by: Christian König <christian.koenig@amd.com>
-
-Good work.
-
-> ---
->   drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c | 9 +++++++--
->   1 file changed, 7 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c
-> index 37acd8911168..2cd9f1a2e5fa 100644
-> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c
-> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c
-> @@ -770,11 +770,16 @@ int amdgpu_vm_validate_pt_bos(struct amdgpu_device *adev, struct amdgpu_vm *vm,
->    * Check if all VM PDs/PTs are ready for updates
->    *
->    * Returns:
-> - * True if eviction list is empty.
-> + * True if VM is not evicting.
->    */
->   bool amdgpu_vm_ready(struct amdgpu_vm *vm)
->   {
-> -	return list_empty(&vm->evicted);
-> +	bool ret;
-> +
-> +	amdgpu_vm_eviction_lock(vm);
-> +	ret = !vm->evicting;
-> +	amdgpu_vm_eviction_unlock(vm);
-> +	return ret;
->   }
->   
->   /**
+diff --git a/arch/x86/kvm/svm/nested.c b/arch/x86/kvm/svm/nested.c
+index 1218b5a342fc..a2e2436057dc 100644
+--- a/arch/x86/kvm/svm/nested.c
++++ b/arch/x86/kvm/svm/nested.c
+@@ -574,14 +574,12 @@ static void nested_vmcb02_prepare_control(struct vcpu_svm *svm)
+ 	vcpu->arch.tsc_offset = kvm_calc_nested_tsc_offset(
+ 			vcpu->arch.l1_tsc_offset,
+ 			svm->nested.ctl.tsc_offset,
+-			svm->tsc_ratio_msr);
++			svm_get_l2_tsc_multiplier(vcpu));
+ 
+ 	svm->vmcb->control.tsc_offset = vcpu->arch.tsc_offset;
+ 
+-	if (svm->tsc_ratio_msr != kvm_default_tsc_scaling_ratio) {
+-		WARN_ON(!svm->tsc_scaling_enabled);
++	if (svm_get_l2_tsc_multiplier(vcpu) != kvm_default_tsc_scaling_ratio)
+ 		nested_svm_update_tsc_ratio_msr(vcpu);
+-	}
+ 
+ 	svm->vmcb->control.int_ctl             =
+ 		(svm->nested.ctl.int_ctl & int_ctl_vmcb12_bits) |
+@@ -867,8 +865,7 @@ int nested_svm_vmexit(struct vcpu_svm *svm)
+ 		vmcb_mark_dirty(svm->vmcb, VMCB_INTERCEPTS);
+ 	}
+ 
+-	if (svm->tsc_ratio_msr != kvm_default_tsc_scaling_ratio) {
+-		WARN_ON(!svm->tsc_scaling_enabled);
++	if (svm_get_l2_tsc_multiplier(vcpu) != kvm_default_tsc_scaling_ratio) {
+ 		vcpu->arch.tsc_scaling_ratio = vcpu->arch.l1_tsc_scaling_ratio;
+ 		svm_write_tsc_multiplier(vcpu, vcpu->arch.tsc_scaling_ratio);
+ 	}
+@@ -1264,6 +1261,7 @@ void nested_svm_update_tsc_ratio_msr(struct kvm_vcpu *vcpu)
+ {
+ 	struct vcpu_svm *svm = to_svm(vcpu);
+ 
++	WARN_ON_ONCE(!svm->tsc_scaling_enabled);
+ 	vcpu->arch.tsc_scaling_ratio =
+ 		kvm_calc_nested_tsc_multiplier(vcpu->arch.l1_tsc_scaling_ratio,
+ 					       svm->tsc_ratio_msr);
+diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
+index 975be872cd1a..5cf6bb5bfd3e 100644
+--- a/arch/x86/kvm/svm/svm.c
++++ b/arch/x86/kvm/svm/svm.c
+@@ -911,11 +911,12 @@ static u64 svm_get_l2_tsc_offset(struct kvm_vcpu *vcpu)
+ 	return svm->nested.ctl.tsc_offset;
+ }
+ 
+-static u64 svm_get_l2_tsc_multiplier(struct kvm_vcpu *vcpu)
++u64 svm_get_l2_tsc_multiplier(struct kvm_vcpu *vcpu)
+ {
+ 	struct vcpu_svm *svm = to_svm(vcpu);
+ 
+-	return svm->tsc_ratio_msr;
++	return svm->tsc_scaling_enabled ? svm->tsc_ratio_msr :
++	       kvm_default_tsc_scaling_ratio;
+ }
+ 
+ static void svm_write_tsc_offset(struct kvm_vcpu *vcpu, u64 offset)
+diff --git a/arch/x86/kvm/svm/svm.h b/arch/x86/kvm/svm/svm.h
+index 852b12aee03d..006571dd30df 100644
+--- a/arch/x86/kvm/svm/svm.h
++++ b/arch/x86/kvm/svm/svm.h
+@@ -542,6 +542,7 @@ int nested_svm_check_exception(struct vcpu_svm *svm, unsigned nr,
+ 			       bool has_error_code, u32 error_code);
+ int nested_svm_exit_special(struct vcpu_svm *svm);
+ void nested_svm_update_tsc_ratio_msr(struct kvm_vcpu *vcpu);
++u64 svm_get_l2_tsc_multiplier(struct kvm_vcpu *vcpu);
+ void svm_write_tsc_multiplier(struct kvm_vcpu *vcpu, u64 multiplier);
+ void nested_copy_vmcb_control_to_cache(struct vcpu_svm *svm,
+ 				       struct vmcb_control_area *control);
+-- 
+2.26.3
 

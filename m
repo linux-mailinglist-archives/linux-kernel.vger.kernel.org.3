@@ -2,197 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4ABD14BDF6A
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:50:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 02F764BDF3B
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:49:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356026AbiBULSV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 06:18:21 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48048 "EHLO
+        id S1355472AbiBULRk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 06:17:40 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355776AbiBULPW (ORCPT
+        with ESMTP id S1355953AbiBULPl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 06:15:22 -0500
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D992CDC0
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 02:54:08 -0800 (PST)
-Received: by mail-pl1-x62c.google.com with SMTP id z2so3934611plg.8
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 02:54:08 -0800 (PST)
+        Mon, 21 Feb 2022 06:15:41 -0500
+Received: from mail-qv1-xf2d.google.com (mail-qv1-xf2d.google.com [IPv6:2607:f8b0:4864:20::f2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B278C5F6A
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 02:55:03 -0800 (PST)
+Received: by mail-qv1-xf2d.google.com with SMTP id x3so31014989qvd.8
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 02:55:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=mNqSGZPctSWXqZ6gYN0FXGhiJj1MEcwtFP+jmJt2lAM=;
-        b=RFTPXk5DrwGPw8J5yfqw2l+chmPeFSAdBQcKMCI2hS+QHbqTp47fbGdwOgCxkQjL/5
-         s4KOqNYdUwQnAXGGSon/S4gwtsNgaUQm+hPClmpa6dsyOiUsk4bIbjjXDMN/Mr2LxJbF
-         8iglITyjVsZYvBOGkg8UpLRM/fXaOMnQJleiLza6uMPjkMb/zZEeyzuW3RjXegMQEwQW
-         5MfkgPkZqcSZ8OXKsXauuKkYUDFECPq7K/51WtVTzGXzDDDE5FHKMFo7H6Q04KmMXAxr
-         TmgkL1ED1/zGJod/kfDAgFV7FFH/oMNp1EaundBNuAFgPhyWacQ4ZfNwxfK6yHdTy9nY
-         vRxg==
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=agx76WiKUJ0kEWV4KQGw41yeHdxUAdPKb8aKMVI6l5Q=;
+        b=iI6RZfHx7mLYiLTb8nh1zJgHGFjkvCE+d9+ki6tgYACqi6zViNYjchzFNt20a+nzLM
+         KwlIa19GU00ThwpDXN0md/uDwB4bW4Vp0yicKWckUz2sLexUZEs7dfzNP4LVKQ8kEj+y
+         F8V+893JzEoVxrxMMkGT43RlYrkxORkbWJ38en/EobVmtvudtn3rTgKriGmG+ifXJ8cq
+         G9lC8EJGY0gPNp3/v0CkZXwwoZmyXQpLh2BJJ2XpfeGeCszZj/C5xZRRupGZc5WscADw
+         if0tZixNZCLICi3JpTGwNBrbpHAkqPr8wTGD1BHohAU8TX5rYcFjbFqIpsIQlUk+B4Vy
+         CS0g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=mNqSGZPctSWXqZ6gYN0FXGhiJj1MEcwtFP+jmJt2lAM=;
-        b=LMswQwoPlgv9XX47tbaBVlQkjqT6Q+yHKs8mZvK2QdKSd2aAJecqUK1BCNlaNEje9C
-         he860hvRcKx/tw3Y+yKYlD2AggXayIKtuozmWzisf0tNdT36499d5R7S3D8Boeg0aQmD
-         MDkY7UBKK3WuT8NRIrd9maYGRfdnUl9vQvqiqNrm7gJBk1oPjK0KkF5roAcTWWu/H6Tq
-         I/hNgmS6+/9l/Gq2Ato1yPI+m3TwBr9PQidB0VNV5+PcAWlkSZ/BTzvvWS85hl0Yre4V
-         Slm2/k1eSBHEZbfW1LUkMkvk94pXUl6qX3MprbbZt99u1fiVAG6eFTik8go0HhgpECgB
-         J5Yg==
-X-Gm-Message-State: AOAM533FhmiK8Q6p7y8JNVZHAvSTas7FukXjL/t0DSWMagB8BN01aEe8
-        EsIC4L2pmVvo/jt7Wu3cRxs=
-X-Google-Smtp-Source: ABdhPJywNTHU63XkzHt51xLMmCuOt0KCbfUmRMm0QdINnoAQ9l+TE+h6FliiSaxwldW7bQVaCkRlDQ==
-X-Received: by 2002:a17:90a:8048:b0:1b9:55dd:b72d with SMTP id e8-20020a17090a804800b001b955ddb72dmr20733044pjw.90.1645440848421;
-        Mon, 21 Feb 2022 02:54:08 -0800 (PST)
-Received: from ip-172-31-19-208.ap-northeast-1.compute.internal (ec2-18-181-137-102.ap-northeast-1.compute.amazonaws.com. [18.181.137.102])
-        by smtp.gmail.com with ESMTPSA id u6sm2214725pfk.203.2022.02.21.02.54.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Feb 2022 02:54:08 -0800 (PST)
-From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
-To:     linux-mm@kvack.org
-Cc:     Roman Gushchin <guro@fb.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>, linux-kernel@vger.kernel.org,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        David Rientjes <rientjes@google.com>,
-        Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>
-Subject: [PATCH 5/5] mm/slub: Refactor deactivate_slab()
-Date:   Mon, 21 Feb 2022 10:53:36 +0000
-Message-Id: <20220221105336.522086-6-42.hyeyoo@gmail.com>
-X-Mailer: git-send-email 2.33.1
-In-Reply-To: <20220221105336.522086-1-42.hyeyoo@gmail.com>
-References: <20220221105336.522086-1-42.hyeyoo@gmail.com>
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=agx76WiKUJ0kEWV4KQGw41yeHdxUAdPKb8aKMVI6l5Q=;
+        b=bip9BpTaI4rXRDeZpK7nl3XKBPsZK2s9UdjaAFphJBsuGgXMfSVN32mgUnbj3+Vvmx
+         5i4hDSccpdjf0Dd5dc3QGtHZiHY1Nkygw/XSz8kL/UkuUVK9PxIGIPr3wYuPhzKWFCNx
+         LrskSfHo43zfpuWs+ZoqNlqsv6ykpluZvS5+A+385jU/mkuBY56q5bJJR9pwV8HLggbj
+         OA2rpwNZZAWoIOz0QxcFqYwnR4BYOga7YBfQplzdAk1DfnfygBoKhFVGGORUIiKWqmCl
+         679/gDtYMpHNJyhnzV8cSwIFEflI3zzBHv+0c13KnxqRSt9AKGp0h0xXZoqbiyApvHNc
+         8Tdw==
+X-Gm-Message-State: AOAM5300OJkm+tzfOemNeGKDdodeg7NISvkEU7Pb/LtJeutSs1VS790k
+        tgyqBML1zuy1988S0BoH4vWo0vdDOziqsxvMXzs=
+X-Google-Smtp-Source: ABdhPJwpAub9l3PBMRXuLTrgcBPYDsILekplfNHb+cDuU/3bLH06RTrnXJl167m+7VKgmtYVGU1poV6y1optv25wdmY=
+X-Received: by 2002:a05:6214:23cf:b0:42c:a789:146 with SMTP id
+ hr15-20020a05621423cf00b0042ca7890146mr15285807qvb.89.1645440902833; Mon, 21
+ Feb 2022 02:55:02 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Received: by 2002:ad4:4e6f:0:0:0:0:0 with HTTP; Mon, 21 Feb 2022 02:55:02
+ -0800 (PST)
+Reply-To: byunghunl76@gmail.com
+From:   Hassan Gilbert <pfazzabin014@gmail.com>
+Date:   Mon, 21 Feb 2022 11:55:02 +0100
+Message-ID: <CAPjrFYsMsdgOuPrk7x5+u7MppQncmtUhCWxTO3BXpn=Dsey14w@mail.gmail.com>
+Subject: Please Read!
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:f2d listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [pfazzabin014[at]gmail.com]
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [byunghunl76[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [pfazzabin014[at]gmail.com]
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  3.5 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Simply deactivate_slab() by removing variable 'lock' and replacing
-'l' and 'm' with 'mode'. Instead, remove slab from list and unlock
-n->list_lock when cmpxchg_double() fails, and then retry.
+Hello,
 
-One slight functional change is releasing and taking n->list_lock again
-when cmpxchg_double() fails. This is not harmful because SLUB avoids
-deactivating slabs as much as possible.
+How are you doing today?.
 
-Signed-off-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
----
- mm/slub.c | 74 +++++++++++++++++++++++++------------------------------
- 1 file changed, 33 insertions(+), 41 deletions(-)
+I am Gilbert Hassan, the financial and legal adviser to AL MAKTOUM
 
-diff --git a/mm/slub.c b/mm/slub.c
-index a4964deccb61..2d0663befb9e 100644
---- a/mm/slub.c
-+++ b/mm/slub.c
-@@ -2350,8 +2350,8 @@ static void deactivate_slab(struct kmem_cache *s, struct slab *slab,
- {
- 	enum slab_modes { M_NONE, M_PARTIAL, M_FULL, M_FREE };
- 	struct kmem_cache_node *n = get_node(s, slab_nid(slab));
--	int lock = 0, free_delta = 0;
--	enum slab_modes l = M_NONE, m = M_NONE;
-+	int free_delta = 0;
-+	enum slab_modes mode = M_NONE;
- 	void *nextfree, *freelist_iter, *freelist_tail;
- 	int tail = DEACTIVATE_TO_HEAD;
- 	unsigned long flags = 0;
-@@ -2420,57 +2420,49 @@ static void deactivate_slab(struct kmem_cache *s, struct slab *slab,
- 	new.frozen = 0;
- 
- 	if (!new.inuse && n->nr_partial >= s->min_partial)
--		m = M_FREE;
-+		mode = M_FREE;
- 	else if (new.freelist) {
--		m = M_PARTIAL;
--		if (!lock) {
--			lock = 1;
--			/*
--			 * Taking the spinlock removes the possibility that
--			 * acquire_slab() will see a slab that is frozen
--			 */
--			spin_lock_irqsave(&n->list_lock, flags);
--		}
--	} else {
--		m = M_FULL;
--		if (kmem_cache_debug_flags(s, SLAB_STORE_USER) && !lock) {
--			lock = 1;
--			/*
--			 * This also ensures that the scanning of full
--			 * slabs from diagnostic functions will not see
--			 * any frozen slabs.
--			 */
--			spin_lock_irqsave(&n->list_lock, flags);
--		}
-+		mode = M_PARTIAL;
-+		/*
-+		 * Taking the spinlock removes the possibility that
-+		 * acquire_slab() will see a slab that is frozen
-+		 */
-+		spin_lock_irqsave(&n->list_lock, flags);
-+		add_partial(n, slab, tail);
-+	} else if (kmem_cache_debug_flags(s, SLAB_STORE_USER)) {
-+		mode = M_FULL;
-+		/*
-+		 * This also ensures that the scanning of full
-+		 * slabs from diagnostic functions will not see
-+		 * any frozen slabs.
-+		 */
-+		spin_lock_irqsave(&n->list_lock, flags);
-+		add_full(s, n, slab);
- 	}
- 
--	if (l != m) {
--		if (l == M_PARTIAL)
--			remove_partial(n, slab);
--		else if (l == M_FULL)
--			remove_full(s, n, slab);
- 
--		if (m == M_PARTIAL)
--			add_partial(n, slab, tail);
--		else if (m == M_FULL)
--			add_full(s, n, slab);
--	}
--
--	l = m;
- 	if (!cmpxchg_double_slab(s, slab,
- 				old.freelist, old.counters,
- 				new.freelist, new.counters,
--				"unfreezing slab"))
-+				"unfreezing slab")) {
-+		if (mode == M_PARTIAL) {
-+			remove_partial(n, slab);
-+			spin_unlock_irqrestore(&n->list_lock, flags);
-+		} else if (mode == M_FULL) {
-+			remove_full(s, n, slab);
-+			spin_unlock_irqrestore(&n->list_lock, flags);
-+		}
- 		goto redo;
-+	}
- 
--	if (lock)
--		spin_unlock_irqrestore(&n->list_lock, flags);
- 
--	if (m == M_PARTIAL)
-+	if (mode == M_PARTIAL) {
-+		spin_unlock_irqrestore(&n->list_lock, flags);
- 		stat(s, tail);
--	else if (m == M_FULL)
-+	} else if (mode == M_FULL) {
-+		spin_unlock_irqrestore(&n->list_lock, flags);
- 		stat(s, DEACTIVATE_FULL);
--	else if (m == M_FREE) {
-+	} else if (mode == M_FREE) {
- 		stat(s, DEACTIVATE_EMPTY);
- 		discard_slab(s, slab);
- 		stat(s, FREE_SLAB);
--- 
-2.33.1
+FOUNDATION which is founded and owned by Sheikh Hamdan bin Mohammed
 
+bin Rashid Al Maktoum (Crown Prince Hamdan Fazza of Dubai).
+
+Can we seek you be our ambassador?
+
+Can you join our charity foundation?
+
+Can you join us in making the world a better place for living for the
+
+less privileged, the poor and the orphans?
+
+Can we seek your consent in establishing charity work and investment
+
+in your country with the funds Sheikh Hamdan bin Mohammed bin Rashid
+
+Al Maktoum (Crown Prince Hamdan Fazza of Dubai) deposited in a bank?
+
+In your interest, get back to me for more details.
+
+Awaits your response.
+
+Reagrds,
+Hassan Gilbert

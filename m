@@ -2,93 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7BAF4BEA74
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 20:36:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 650AB4BEAF7
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 20:37:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231265AbiBUTGG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 14:06:06 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37600 "EHLO
+        id S232604AbiBUTGt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 14:06:49 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbiBUTGD (ORCPT
+        with ESMTP id S229452AbiBUTGr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 14:06:03 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 829EA13CE4
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 11:05:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645470340; x=1677006340;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=ypaInhFIxfeh7EXMlUI10RweM83KJs7oHDp6TtM0eM8=;
-  b=edg477Iw3QbnFijCP0SyCSxvIfJlgUP8qKYx6HrwJFADB37LlsLLQP2u
-   kBMzwewouV6a+jX9FTUshygoGdomNjrZHJ6vyJJXT+ScBi0fET0nrm+hR
-   mW2mNo1RLZVH5a9kJF5Hnfq+FDY1blDlzuJk+bpiGKJBE/62uq92ZJ93Y
-   DQXmAWBwUp3yzm02jIm5gnwb5u1wvWPqYAUCz69KUrx318NUHITUUYg36
-   8Jb8hZXVfC499eikk+8ufi2VAJyN9uniqLixhOJGiUD0p/VNgRA1P8yNX
-   MR5RGoejLkmzRzP9bOX5Ejb2oEW2X3fyjyYW3Q1ux9tTiHsfXJmCRY1wC
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10265"; a="250378951"
-X-IronPort-AV: E=Sophos;i="5.88,386,1635231600"; 
-   d="scan'208";a="250378951"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2022 11:05:39 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,386,1635231600"; 
-   d="scan'208";a="547435014"
-Received: from lkp-server01.sh.intel.com (HELO da3212ac2f54) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 21 Feb 2022 11:05:38 -0800
-Received: from kbuild by da3212ac2f54 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nME09-0001uE-KY; Mon, 21 Feb 2022 19:05:37 +0000
-Date:   Tue, 22 Feb 2022 03:05:27 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [paulmck-rcu:dev.2022.02.17a 73/73] make[3]: *** No rule to make
- target 'kernel/rcu/typesafe.o', needed by 'kernel/rcu/built-in.a'.
-Message-ID: <202202220308.TNib9D2v-lkp@intel.com>
+        Mon, 21 Feb 2022 14:06:47 -0500
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9005C13CE4;
+        Mon, 21 Feb 2022 11:06:23 -0800 (PST)
+Received: by mail-ed1-x52b.google.com with SMTP id s14so13975256edw.0;
+        Mon, 21 Feb 2022 11:06:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=ceab05HpR+ch4TiH/Ob+GFc5+HuiNbuq+Jenpr7lwVY=;
+        b=HwR7DkTjKPXlt4FrU/+Ajrp3Ch6Yk9qvXE0fIx8SjYAQjR76JkgOwTA+i+ahZCzaxt
+         J00wR7GMsnxrMoLd0RrUdLUsdpM+qJ2XVBT+vpc5vyve5JPUuYQG9zeVYithd7tsEL2K
+         c4sfPNc1cE23cGRJde900zuust3i0bAQGsi5V0U6YNphYds8kXX96Bc9MWE1F1jWYnST
+         dYqAM+SK8Y5Eh5q1aAz9FOAeKdcjut26JgGmVinGz+3UXwWy2Z2gEaSshav3p2Jx336Y
+         De6Xy5111TmgFJhF98xndSovZ/QcUI4eM7tBFrw3JNIDxEdVjZabi87YPPgEwzKsDFLH
+         hXLw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=ceab05HpR+ch4TiH/Ob+GFc5+HuiNbuq+Jenpr7lwVY=;
+        b=Ozea6GpuC9XeLlmlUaa+EKjaLMR438HVmJeBHTciUmyaFgH8QI5DqLzLUV6JHxKARf
+         Rj397RKHlY0Qw4p29VQw5djNU+fZvQCVJ8DXczLdQm62iRHisJB+kLiOo0CIt1EZ7pyP
+         9gUMUBcKwIwVAnOoNOb3YOwN9HXWvMnA8dkWWvIyN4z65BvpWcG3ZnU27W07sKJWLtnK
+         YXcjtp49h+q+9CqywImNzIjzatwxsUcBOqomb9j4pfQ+FA8aPqJhd9CEwqM1EF1VKek5
+         EW6JEpRtlfWk+20atRx2/ZArGZ0Pe/OV8aQPdlEqRdIVLO2yfXd/gZDDgmTvy3nFQGtC
+         OjoA==
+X-Gm-Message-State: AOAM530n3pjIeISTxn+tDB3ZOHkeMEcmJayp4a6mhVwmNZIBc92bTBb+
+        7dPJX9+j2yc9xRG5y5GbP7c=
+X-Google-Smtp-Source: ABdhPJyFxhMatni7cLWuGFa67F+eaPI+3F3yFbkng7b/N+qeLlNJr5ElGOCe40QfwPtTNJxrUoT+Rg==
+X-Received: by 2002:a50:8714:0:b0:410:5c41:3f25 with SMTP id i20-20020a508714000000b004105c413f25mr22483492edb.183.1645470381959;
+        Mon, 21 Feb 2022 11:06:21 -0800 (PST)
+Received: from skbuf ([188.25.231.156])
+        by smtp.gmail.com with ESMTPSA id lw18sm5394725ejb.88.2022.02.21.11.06.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 21 Feb 2022 11:06:21 -0800 (PST)
+Date:   Mon, 21 Feb 2022 21:06:19 +0200
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Alvin =?utf-8?Q?=C5=A0ipraga?= <alvin@pqrs.dk>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Michael Rasmussen <mir@bang-olufsen.dk>,
+        Alvin =?utf-8?Q?=C5=A0ipraga?= <alsi@bang-olufsen.dk>,
+        Luiz Angelo Daros de Luca <luizluca@gmail.com>,
+        =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 net-next 1/2] net: dsa: realtek: allow subdrivers to
+ externally lock regmap
+Message-ID: <20220221190619.4zgv7vwyvzcvxxxk@skbuf>
+References: <20220221184631.252308-1-alvin@pqrs.dk>
+ <20220221184631.252308-2-alvin@pqrs.dk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220221184631.252308-2-alvin@pqrs.dk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Paul,
+On Mon, Feb 21, 2022 at 07:46:30PM +0100, Alvin Šipraga wrote:
+> From: Alvin Šipraga <alsi@bang-olufsen.dk>
+> 
+> Currently there is no way for Realtek DSA subdrivers to serialize
+> consecutive regmap accesses. In preparation for a bugfix relating to
+> indirect PHY register access - which involves a series of regmap
+> reads and writes - add a facility for subdrivers to serialize their
+> regmap access.
+> 
+> Specifically, a mutex is added to the driver private data structure and
+> the standard regmap is initialized with custom lock/unlock ops which use
+> this mutex. Then, a "nolock" variant of the regmap is added, which is
+> functionally equivalent to the existing regmap except that regmap
+> locking is disabled. Functions that wish to serialize a sequence of
+> regmap accesses may then lock the newly introduced driver-owned mutex
+> before using the nolock regmap.
+> 
+> Doing things this way means that subdriver code that doesn't care about
+> serialized register access - i.e. the vast majority of code - needn't
+> worry about synchronizing register access with an external lock: it can
+> just continue to use the original regmap.
+> 
+> Another advantage of this design is that, while regmaps with locking
+> disabled do not expose a debugfs interface for obvious reasons, there
+> still exists the original regmap which does expose this interface. This
+> interface remains safe to use even combined with driver codepaths that
+> use the nolock regmap, because said codepaths will use the same mutex
+> to synchronize access.
+> 
+> With respect to disadvantages, it can be argued that having
+> near-duplicate regmaps is confusing. However, the naming is rather
+> explicit, and examples will abound.
+> 
+> Finally, while we are at it, rename realtek_smi_mdio_regmap_config to
+> realtek_smi_regmap_config. This makes it consistent with the naming
+> realtek_mdio_regmap_config in realtek-mdio.c.
+> 
+> Signed-off-by: Alvin Šipraga <alsi@bang-olufsen.dk>
+> ---
 
-First bad commit (maybe != root cause):
+Reviewed-by: Vladimir Oltean <olteanv@gmail.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git dev.2022.02.17a
-head:   f5b2eaf791ebbd6af881947ab7c40ed70681e534
-commit: f5b2eaf791ebbd6af881947ab7c40ed70681e534 [73/73] EXP torture: Add tests demoing SLAB_TYPESAFE_BY_RCU
-config: arc-allyesconfig (https://download.01.org/0day-ci/archive/20220222/202202220308.TNib9D2v-lkp@intel.com/config)
-compiler: arceb-elf-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git/commit/?id=f5b2eaf791ebbd6af881947ab7c40ed70681e534
-        git remote add paulmck-rcu https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git
-        git fetch --no-tags paulmck-rcu dev.2022.02.17a
-        git checkout f5b2eaf791ebbd6af881947ab7c40ed70681e534
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arc SHELL=/bin/bash
+>  drivers/net/dsa/realtek/realtek-mdio.c | 46 ++++++++++++++++++++++--
+>  drivers/net/dsa/realtek/realtek-smi.c  | 48 ++++++++++++++++++++++++--
+>  drivers/net/dsa/realtek/realtek.h      |  2 ++
+>  3 files changed, 91 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/net/dsa/realtek/realtek-mdio.c b/drivers/net/dsa/realtek/realtek-mdio.c
+> index 0308be95d00a..31e1f100e48e 100644
+> --- a/drivers/net/dsa/realtek/realtek-mdio.c
+> +++ b/drivers/net/dsa/realtek/realtek-mdio.c
+> @@ -98,6 +98,20 @@ static int realtek_mdio_read(void *ctx, u32 reg, u32 *val)
+>  	return ret;
+>  }
+>  
+> +static void realtek_mdio_lock(void *ctx)
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+I looked even at the build results for v1 and I don't know exactly why
+sparse doesn't complain about the lack of __acquires() and __releases()
+annotations, to avoid context imbalance warnings.
 
-All errors (new ones prefixed by >>):
+https://patchwork.kernel.org/project/netdevbpf/patch/20220216160500.2341255-2-alvin@pqrs.dk/
 
->> make[3]: *** No rule to make target 'kernel/rcu/typesafe.o', needed by 'kernel/rcu/built-in.a'.
-   make[3]: Target '__build' not remade because of errors.
+Anyway, those aren't of much use IMO (you can't get it to do anything
+but very trivial checks), and if sparse doesn't complain for whatever
+reason, I certainly won't request you to add them.
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+I see other implementations don't have them either - like vexpress_config_lock.

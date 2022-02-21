@@ -2,103 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9D134BDEC8
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:47:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 866574BE684
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:02:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380977AbiBUQoO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 11:44:14 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58346 "EHLO
+        id S1381017AbiBUQo7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 11:44:59 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380940AbiBUQoH (ORCPT
+        with ESMTP id S1380958AbiBUQox (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 11:44:07 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91A67220E8;
-        Mon, 21 Feb 2022 08:43:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1645461820; x=1676997820;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=HrHAf6gEsOAhEpFdK8CdrZ0sJZ9UBBtJ6ScL1EPZiy0=;
-  b=1SRJSbbTYOY3q9ifajm7BjSJmBvWpraTrmsgqCaYHAZMjQqcmnnAvCha
-   +1pijPaBC9I97Mx8TLLBow+LSJlXfl/X24zl2T1bJuGcq7R4SOUZFwIMo
-   OcdOmx2qeVAGjrRbtvK8Tjo66+NSk5vywecaEO9AYFiQPMwUD44iuHqAI
-   naOHJUGnrYILkKGA784W9gwHxfJASKkM9JBLOFkc5t6qpOsRJD4obnrYA
-   IDq4DsTCvc8zttizvDSR9CpOaSbxlL88zi5LSNZfYtwcVeJmMEU2bO5QG
-   6wAuKGsq+RadtyEcYOS1qX2sSIWQBJqOv04c8PxNOkyV7SmUA6rlMw24P
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.88,386,1635231600"; 
-   d="scan'208";a="163022563"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 21 Feb 2022 09:43:39 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Mon, 21 Feb 2022 09:43:39 -0700
-Received: from [10.12.68.158] (10.10.115.15) by chn-vm-ex04.mchp-main.com
- (10.10.85.152) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
- Transport; Mon, 21 Feb 2022 09:43:38 -0700
-Message-ID: <994b754f-a8b0-2504-0803-d12fa9975ff5@microchip.com>
-Date:   Mon, 21 Feb 2022 17:43:37 +0100
+        Mon, 21 Feb 2022 11:44:53 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 76B611EC6B
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 08:44:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1645461869;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=VNieaTwekELLlfDmLcMtpN2ymnlly2vIEQ3lgNT3la0=;
+        b=RlHDYW/oWNSOZabieGNo8Iaqd7Wv0Ig4jDoEYrEk6sehYqHgbe1MhfD4le0QGv/SRUJeYL
+        QaJyMtR/5VxataocwbTrb9srd7fGIQHLpO1FBCO+fNSTfpXOyDPtKf8iBaOErLqBQeGmtk
+        0Bk6xbabPkBLzFrocSipOUfam0eql0s=
+Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
+ [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-635-bAm_nY2zMqWO0mq2DvhCvA-1; Mon, 21 Feb 2022 11:44:28 -0500
+X-MC-Unique: bAm_nY2zMqWO0mq2DvhCvA-1
+Received: by mail-qk1-f198.google.com with SMTP id bj2-20020a05620a190200b005084968bb24so14869492qkb.23
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 08:44:28 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=VNieaTwekELLlfDmLcMtpN2ymnlly2vIEQ3lgNT3la0=;
+        b=k2CYiwdq5KkT2c1oL3mXiyoe/c3VmI2zCW3JBhrvVrNTWgcot9SlD+YHeTVtoHCA60
+         fOBbdulXPlljJG8XanubteQS5UtcYx0UhO7qiCvqXCdT2MYAUe3cSBKozQf7fT2olrra
+         R53ExYxaZ0EfojpNA0PKhTbQc4aCRH85ImP8zdwbZWVp3FSKqLjMAEAvsrokJ2dbJMvj
+         uEnle4e1iS48cL6mS/SRE+VZxj2s5klTKfcBcVZl6q8IJlhMZeiYCxQ7/oV9ON3J+VWI
+         7hwvs9LCZZy8b2DulJew3KGN9ymXB/XDb0vzyo5uclWJfGrAiMPftIVMp7ymK4ocRII6
+         9n8w==
+X-Gm-Message-State: AOAM530hAWrRv8EbYidzKzPo+aXJPdvj2+CPeD65/8Aqntp9Gh9GN6nV
+        RbvXRphf1O3IoQDJWwrtiirbumDOoFT4njNIDDkOAE2tsYiqK/qxdrB5C7uEd0O3s3cIXYQFleB
+        H3snh551Odx58I55y0bR4XF9a
+X-Received: by 2002:a37:9cd6:0:b0:5dd:184f:a6a6 with SMTP id f205-20020a379cd6000000b005dd184fa6a6mr12426923qke.76.1645461868002;
+        Mon, 21 Feb 2022 08:44:28 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJy9+BSp31qAHOQzN7kKtZNi6gPPEeZ2f6xPuAzosuYqWftvxHapdtxcfYdSzcIVRhUHsRkkXA==
+X-Received: by 2002:a37:9cd6:0:b0:5dd:184f:a6a6 with SMTP id f205-20020a379cd6000000b005dd184fa6a6mr12426906qke.76.1645461867775;
+        Mon, 21 Feb 2022 08:44:27 -0800 (PST)
+Received: from sgarzare-redhat (host-95-248-229-156.retail.telecomitalia.it. [95.248.229.156])
+        by smtp.gmail.com with ESMTPSA id y15sm27100949qko.133.2022.02.21.08.44.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 21 Feb 2022 08:44:27 -0800 (PST)
+Date:   Mon, 21 Feb 2022 17:44:20 +0100
+From:   Stefano Garzarella <sgarzare@redhat.com>
+To:     Anirudh Rayabharam <mail@anirudhrb.com>
+Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
+        kernel list <linux-kernel@vger.kernel.org>,
+        Mike Christie <michael.christie@oracle.com>,
+        Jason Wang <jasowang@redhat.com>,
+        netdev <netdev@vger.kernel.org>,
+        Linux Virtualization <virtualization@lists.linux-foundation.org>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        kvm <kvm@vger.kernel.org>, Hillf Danton <hdanton@sina.com>
+Subject: Re: [PATCH] vhost/vsock: don't check owner in vhost_vsock_stop()
+ while releasing
+Message-ID: <20220221164420.cnhs6sgxizc6tcok@sgarzare-redhat>
+References: <20220221114916.107045-1-sgarzare@redhat.com>
+ <CAGxU2F6aMqTaNaeO7xChtf=veDJYtBjDRayRRYkZ_FOq4CYJWQ@mail.gmail.com>
+ <YhO6bwu7iDtUFQGj@anirudhrb.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] clk: lan966x: Fix linking error
-Content-Language: en-US
-To:     Horatiu Vultur <horatiu.vultur@microchip.com>,
-        <linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>
-CC:     <mturquette@baylibre.com>, <sboyd@kernel.org>,
-        <kavyasree.kotagiri@microchip.com>,
-        kernel test robot <lkp@intel.com>
-References: <20220219141536.460812-1-horatiu.vultur@microchip.com>
-From:   Nicolas Ferre <nicolas.ferre@microchip.com>
-Organization: microchip
-In-Reply-To: <20220219141536.460812-1-horatiu.vultur@microchip.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <YhO6bwu7iDtUFQGj@anirudhrb.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/02/2022 at 15:15, Horatiu Vultur wrote:
-> If the config options HAS_IOMEM is not set then the driver fails to link
-> with the following error:
-> clk-lan966x.c:(.text+0x950): undefined reference to
-> `devm_platform_ioremap_resource'
-> 
-> Therefor add missing dependencies: HAS_IOMEM and OF.
-> 
-> Fixes: 54104ee02333 ("clk: lan966x: Add lan966x SoC clock driver")
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
+On Mon, Feb 21, 2022 at 09:44:39PM +0530, Anirudh Rayabharam wrote:
+>On Mon, Feb 21, 2022 at 02:59:30PM +0100, Stefano Garzarella wrote:
+>> On Mon, Feb 21, 2022 at 12:49 PM Stefano Garzarella <sgarzare@redhat.com> wrote:
+>> >
+>> > vhost_vsock_stop() calls vhost_dev_check_owner() to check the device
+>> > ownership. It expects current->mm to be valid.
+>> >
+>> > vhost_vsock_stop() is also called by vhost_vsock_dev_release() when
+>> > the user has not done close(), so when we are in do_exit(). In this
+>> > case current->mm is invalid and we're releasing the device, so we
+>> > should clean it anyway.
+>> >
+>> > Let's check the owner only when vhost_vsock_stop() is called
+>> > by an ioctl.
+>> >
+>> > Fixes: 433fc58e6bf2 ("VSOCK: Introduce vhost_vsock.ko")
+>> > Cc: stable@vger.kernel.org
+>> > Reported-by: syzbot+1e3ea63db39f2b4440e0@syzkaller.appspotmail.com
+>> > Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
+>> > ---
+>> >  drivers/vhost/vsock.c | 14 ++++++++------
+>> >  1 file changed, 8 insertions(+), 6 deletions(-)
+>>
+>> Reported-and-tested-by: syzbot+0abd373e2e50d704db87@syzkaller.appspotmail.com
+>
+>I don't think this patch fixes "INFO: task hung in vhost_work_dev_flush"
+>even though syzbot says so. I am able to reproduce the issue locally
+>even with this patch applied.
 
-Reviewed-by: Nicolas Ferre <nicolas.ferre@microchip.com>
+Are you using the sysbot reproducer or another test?
+In that case, can you share it?
 
-> ---
->   drivers/clk/Kconfig | 2 ++
->   1 file changed, 2 insertions(+)
-> 
-> diff --git a/drivers/clk/Kconfig b/drivers/clk/Kconfig
-> index 4a8451f61f37..6f03c29c40be 100644
-> --- a/drivers/clk/Kconfig
-> +++ b/drivers/clk/Kconfig
-> @@ -232,6 +232,8 @@ config COMMON_CLK_GEMINI
->   
->   config COMMON_CLK_LAN966X
->   	bool "Generic Clock Controller driver for LAN966X SoC"
-> +	depends on HAS_IOMEM
-> +	depends on OF
->   	help
->   	  This driver provides support for Generic Clock Controller(GCK) on
->   	  LAN966X SoC. GCK generates and supplies clock to various peripherals
+ From the stack trace it seemed to me that the worker accesses a zone 
+that has been cleaned (iotlb), so it is invalid and fails.
+That's why I had this patch tested which should stop the worker before 
+cleaning.
 
+Thanks,
+Stefano
 
--- 
-Nicolas Ferre

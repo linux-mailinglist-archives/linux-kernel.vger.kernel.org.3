@@ -2,207 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AE314BDFB1
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:50:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 95BCC4BE2B3
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:55:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357899AbiBUMTj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 07:19:39 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52842 "EHLO
+        id S1357782AbiBUMTv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 07:19:51 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357853AbiBUMT3 (ORCPT
+        with ESMTP id S1357840AbiBUMTf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 07:19:29 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5268CCEF
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 04:16:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645445779; x=1676981779;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=8hVLrnAnBGBdpP5SQ/9ADmMHt7FI1CBjOU1y3Dq+Z6k=;
-  b=BzPUURULbtYdVVQ7cMCT32dETHossNtQKF3X+M8Bf8vDjwSrtsdJIiv+
-   ZBfHF96zHxYOfkwRGrW6IUjZczv8PWXFDwQwQYoshuKqBiJ7GXBLn6NKS
-   utAV9dzCrFSNnQw/81JltNnVJ6iwiqA76A3ODHPbZDx7zm83oAxi1blTx
-   Wxd9uq1KuWDEBvg8MgF8PJR8kWUQnuOarzjaNSFQllNwzqBVGxQRjg1UW
-   tqQagz2GHMPCxsx7AKI+jwT2aDCV0uYFXR8oioIcgLYUgQnCcQ+X+6w7v
-   R9TgGbiQkzqMqiJMvaxRLQibr+2S1dxlnSe0gCMRAv7eklj+iWbZlGLm5
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10264"; a="235038646"
-X-IronPort-AV: E=Sophos;i="5.88,385,1635231600"; 
-   d="scan'208";a="235038646"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2022 04:16:18 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,385,1635231600"; 
-   d="scan'208";a="775981651"
-Received: from lkp-server01.sh.intel.com (HELO da3212ac2f54) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 21 Feb 2022 04:16:15 -0800
-Received: from kbuild by da3212ac2f54 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nM7by-0001Zy-3Q; Mon, 21 Feb 2022 12:16:14 +0000
-Date:   Mon, 21 Feb 2022 20:15:44 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Michael Walle <michael@walle.cc>, linux-mtd@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Cc:     kbuild-all@lists.01.org,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Pratyush Yadav <p.yadav@ti.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        yaliang.wang@windriver.com, Michael Walle <michael@walle.cc>
-Subject: Re: [PATCH v3 12/32] mtd: spi-nor: spansion: unify function names
-Message-ID: <202202212013.sOSFyoNv-lkp@intel.com>
-References: <20220221085236.1452024-13-michael@walle.cc>
+        Mon, 21 Feb 2022 07:19:35 -0500
+Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1anam02on2079.outbound.protection.outlook.com [40.107.96.79])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A2831A81D;
+        Mon, 21 Feb 2022 04:17:06 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=QufdramQXl2HKXiM3B7Dyv1V0oQ+4gg2ECMlG3WP0DRW2xYKNsHoZLMwntGLVGqLggo6X1BPqHO0aK7LAbkX1J2GaaB1aChrC3CtsPCQD+Lho7k5qtiB0yxYxI1hNPiOMVJe+PhYsHgs0Ari7C51EimAE6k0xF1IeACUqJMrfxwwH+7uRhq7oQl6tUDekXhbxMqqslVNLERNEPG1B80ST+coHl+hkI+G11sHppEh4cnnGDAJgrkny825uWrZ6xjL8lgAyUP1zr+YqZBf9jHScb23CJrECHU4uO44LkzBu0/yCIGh7l00syo4JDDWRajdB0l7H78CzU92uqBiSqxHGQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=tKrvxpORAMdXIEaAw72CafZuv1/+GUIIPR5c85RDcIY=;
+ b=Kcc7A6Gn9IowKl4tvlC0Ne3PiddkzYsOf8jZNhqN72sOCB88BYKDwNMMpU4COmvIP0YUURWihhs1v2Z/dXUAvUHqZAhupR0TDvuKOCOdsiMBQ5KUdfdVY0T8lLl9225AarVPvWmEuAnQQo7xc4ilHnJ5Y7yeDHZMfwwYYZQYunbQx8Y1uVUfSEy4SD9X/Nd1ivKo08HBC3OneIHA6H56O8yZsnUZLOge75cNylewEQ93G9oEzqYJiXfN7OSB2EMf78ej0jpJa3o6mohJHE3s2FEMOsAfamDuMgPL6JxVdJXUieuY0W3cg935PfUL0+q+CEEDY3zLVUTk1WOL1NmW8w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=xilinx.com; dmarc=pass action=none header.from=xilinx.com;
+ dkim=pass header.d=xilinx.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=tKrvxpORAMdXIEaAw72CafZuv1/+GUIIPR5c85RDcIY=;
+ b=GXvV+nmcRmeY8WUQdRdYeZg+P1KFip6qezPvCGarhS7FQl8y6IuHwXtBIdm0fyh2H7jh0x/lQ+K8dHypwlB0ZH5imV3Cp4SQ9UEWp6jFuWh9BJYwjISDoFsO5AUN4ReW+fR2Mo/0EAxYmCKfGvzGGEJrZNm5XtEjCRUnXzFT2D8=
+Received: from SJ0PR02MB7279.namprd02.prod.outlook.com (2603:10b6:a03:2a1::9)
+ by SN6PR02MB5342.namprd02.prod.outlook.com (2603:10b6:805:74::29) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4995.24; Mon, 21 Feb
+ 2022 12:17:03 +0000
+Received: from SJ0PR02MB7279.namprd02.prod.outlook.com
+ ([fe80::a159:fdbf:b4d0:c180]) by SJ0PR02MB7279.namprd02.prod.outlook.com
+ ([fe80::a159:fdbf:b4d0:c180%8]) with mapi id 15.20.4995.027; Mon, 21 Feb 2022
+ 12:17:03 +0000
+From:   Harsha Harsha <harshah@xilinx.com>
+To:     Corentin Labbe <clabbe.montjoie@gmail.com>
+CC:     "herbert@gondor.apana.org.au" <herbert@gondor.apana.org.au>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        Michal Simek <michals@xilinx.com>,
+        Sarat Chand Savitala <saratcha@xilinx.com>,
+        Harsh Jain <harshj@xilinx.com>, git <git@xilinx.com>
+Subject: RE: [PATCH V2 2/4] firmware: xilinx: Add ZynqMP SHA API for SHA3
+ functionality
+Thread-Topic: [PATCH V2 2/4] firmware: xilinx: Add ZynqMP SHA API for SHA3
+ functionality
+Thread-Index: AQHYJDLEV7muFowk2EOLQ1JY4Y7bbqyZD4kAgATePfA=
+Date:   Mon, 21 Feb 2022 12:17:02 +0000
+Message-ID: <SJ0PR02MB7279894629DCA2758355A9D2DE3A9@SJ0PR02MB7279.namprd02.prod.outlook.com>
+References: <1645125264-11033-1-git-send-email-harsha.harsha@xilinx.com>
+ <1645125264-11033-3-git-send-email-harsha.harsha@xilinx.com>
+ <Yg9qOrjJuttVSetN@Red>
+In-Reply-To: <Yg9qOrjJuttVSetN@Red>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=xilinx.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: a3d4d9d4-2983-4e42-e116-08d9f5341180
+x-ms-traffictypediagnostic: SN6PR02MB5342:EE_
+x-ld-processed: 657af505-d5df-48d0-8300-c31994686c5c,ExtAddr
+x-microsoft-antispam-prvs: <SN6PR02MB53428277AB554BCC09D5E8F4DE3A9@SN6PR02MB5342.namprd02.prod.outlook.com>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: qRicbAG2jBHe6MT2SJGFxlv1iGztZjLljxmRbZqBDvH4JGjz/tyNCw92ABbc5idbdkvHwNQGn0e0VM7tgxvBaMt8MSFnWsV1c1mJ/bucFY4TduJXcQ8aChuDOpa3KSQkhrjOeObs1O5uBZWtBreZNS0hi01ASElCfDqvCQMV9kd3HErTn1pKD54lqQI57yYpPHt28F/WyT1w6tHeZ06oiLA2NZkRRSBXwAvFhI9W8XwRtLXz3fySBF4O/tpcm6HMbCOn6utRIwqBXi9ezc1vqR0OIpldTdtOnuDf7MwIh5GMBaTuIG3EdMTFsDzVeLpf0sK/T8L9NEwbM1xKWAT9xD5l8rLbNhK0+IEimyjKGouN09N2aJzLw9A1KpRn0Ju8LVBzscjw5MKY1SnZEzE5b2lD0VYMCcYUAen/X1KEPWMLEJqj1BmWwhTz8R2oavIU5CY9R2ZX+hbeBQQHVF9/iZMqB3BqHO3ww21lwE3YuynrpF9R1TzFHoal9lHXEIiwIMebQITlgcgkkeInFUmOebijErof/cRZ5T7TKrEG16vG+9cB3vNmnsdMP7iqIprHVce18jGUaLEmX6WZhZ9+z+8E8tgMQ5wXFOPN2lRZ4943OR6HqRjEzcJq5loa3+8pQOVR349pN6DMc/uFthZvDdRA0nZFgzWdbrg8VTqYB8C58vjL+hlzCsbPuu2cHIaF5Bdah0MyfIvLMki0JZPZWviLczO4NTOjAx6GQoV+AsjzkPRu4/6mdWGdnqVkVKXbh95bsLBl/n5mjyU5TQE+2RhssmTxoIPlVHvHpkdmgfY=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR02MB7279.namprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(7696005)(508600001)(66556008)(76116006)(5660300002)(4326008)(107886003)(6506007)(66946007)(66476007)(66446008)(64756008)(9686003)(966005)(83380400001)(26005)(186003)(66574015)(71200400001)(33656002)(316002)(52536014)(8676002)(8936002)(55016003)(38100700002)(2906002)(6916009)(122000001)(53546011)(54906003)(38070700005)(86362001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?HX1XwnYoe/ZIQV0+UDhQbJEs1gUvdlgCIsOvWRNYWYn644S7OaazahBfnV?=
+ =?iso-8859-1?Q?o7ipg7wgvDc4DplWLH+eNBwkhk3JgkV2JwamqvBE7A2rDB7Q6rRptYH1dD?=
+ =?iso-8859-1?Q?9WSyas0lGkjQ8uguZWHfOLi+o49Z2mp1NjxVMXZ88MqUwOMj2zrVmmTXCB?=
+ =?iso-8859-1?Q?TeY+ac9E2GH507yDSUJs4/OzU2wmaGaqWV0vqQH0heDdiQpY5c5cBFnGLf?=
+ =?iso-8859-1?Q?JOEgI6JWk7ZJnXAgdFFGL6iucO+MLxY1qmVPMzQVh0HHU7OIR/Wx7Nj4JU?=
+ =?iso-8859-1?Q?5wNFJomvIG2CENz8oGHKpFjEry6ITuGq63Pr7Xdzik/WXx1reuuH6+F02Z?=
+ =?iso-8859-1?Q?FLjNO89S2XiGWQusYYHAO54Dybliziuyu1XJusairlB9B1XavopuAi0Sao?=
+ =?iso-8859-1?Q?kq9sIcT3e72mgVyvJlvKjtTBj5g1JPKZVIaD3JJHpaOvH5QdmsehtkSghT?=
+ =?iso-8859-1?Q?nkwP9VvkC2Mt1heaTlNySotzG3+a9xO3m4UqJpcn5Pl7hIxIlOj6LhlSK4?=
+ =?iso-8859-1?Q?nVtdRRtquREWnUcGnVaJHBRWOSecJZOHKTwmcgk2aiJiB01YM1gf4Cksv6?=
+ =?iso-8859-1?Q?/c8Lf1s13cS0MG9iAAd3j3VmvipX5/x+3lw7y1RXnDVR6rZrKFGyH+ERpS?=
+ =?iso-8859-1?Q?KEj4+Bta2kYM4NC33/8XEPlt8IzBnXKGExpLy0/s2FGtYSMDZBEcmOQTzO?=
+ =?iso-8859-1?Q?X+SkWjNup9ItnK6DoSiuQlf2GTol4SoaKKnCbYSpwb9sXxvEWEiDXB176Y?=
+ =?iso-8859-1?Q?/sySDD+pYdr8jjdPLL3guboeZwBt0V8XLmOLHqzyFGUGd6pehqLmUiraqu?=
+ =?iso-8859-1?Q?CYYneAqPN0t3rgbU1J6++fcBSRORah9aTeGdOx0iyI3vUp3Ozv9tS+Fyq2?=
+ =?iso-8859-1?Q?iQgXy0aFQfrlGYI1pPn7gcLIBVd1ob/7OWPvmQ+Wgo5rhtyiLvWQZWx7hA?=
+ =?iso-8859-1?Q?k743lM8E/sYSs0/boZEm9BWgXII/TQ+M39JhvWfdT2dc4/GjGZsnGyIeZj?=
+ =?iso-8859-1?Q?mW6rHHZ1AilrFE37t3zqzfp9yzE8uXWmNB6DtZfa8bfGNpHcp6tewf2DHX?=
+ =?iso-8859-1?Q?VDlgVqOQ2Ax/XGow75BIpV5xgHKH1r0K8DIZkifvJP4KO7IKseOkbRQEQZ?=
+ =?iso-8859-1?Q?NhmKg9a4ydGJTBzAdpbHNiqNMFF2Upy3TYqi8q3t727TqnINACPeHvuAhD?=
+ =?iso-8859-1?Q?bRQKM8i/Ez6QVtG1kfpHtceCWNUYGG9amLwsyrjLe0d5LafTd7Im0RB07Q?=
+ =?iso-8859-1?Q?7mVmUDVwcY/DWz+6qA5Pe6icrD0nWFA7fJ6Q4nUVWKDj7dPVdJSjYyjZJt?=
+ =?iso-8859-1?Q?J0rDuq16ejQxUavkrwXkTspUh/3YW6wNpdc41G+oFxPr4653U8saVHSBfR?=
+ =?iso-8859-1?Q?4o2khr8wXluZmswg/5l54onBjJjcacz6HyYEAjdAFVPzMm6kYyWcEukINX?=
+ =?iso-8859-1?Q?hidelrFaje853UoZ3WkueozF92VtC6p+J8sOWfNQ9KLfJulqw2rC/+F8wq?=
+ =?iso-8859-1?Q?H9oCaHgNcWXyZyAs10IgGTCg85/C9vSVIMBrk/wBw+W8j3Fo5KA2aC4mZy?=
+ =?iso-8859-1?Q?3OhaV+eUhfKLN9caf9PpS8BDXg82hHrdAsaSXBzyuwmxoeWdiTmThXI4RS?=
+ =?iso-8859-1?Q?6pXRGddx4sS5/4R1uNRyC62IqnrxetQeWf8nC0apt8pnzjC9st5EJQUg?=
+ =?iso-8859-1?Q?=3D=3D?=
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220221085236.1452024-13-michael@walle.cc>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-OriginatorOrg: xilinx.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SJ0PR02MB7279.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a3d4d9d4-2983-4e42-e116-08d9f5341180
+X-MS-Exchange-CrossTenant-originalarrivaltime: 21 Feb 2022 12:17:02.8750
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: dUWKdGwXFSVHxnUQIQCXQIdyHe3wBDMk/F4eEY8XKgJ0nj9ALJPRXUnaN1s9AuhLq7Bp7hY2Rmm7RwMxN1GEwg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR02MB5342
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Michael,
-
-I love your patch! Yet something to improve:
-
-[auto build test ERROR on mtd/spi-nor/next]
-[also build test ERROR on tip/master linux/master linus/master v5.17-rc5 next-20220217]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/Michael-Walle/mtd-spi-nor-move-vendor-specific-code-into-vendor-modules/20220221-165728
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git spi-nor/next
-config: x86_64-randconfig-a003-20220221 (https://download.01.org/0day-ci/archive/20220221/202202212013.sOSFyoNv-lkp@intel.com/config)
-compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/0day-ci/linux/commit/f8aeae6008aa9a304aacb1914911dcb3a895da53
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Michael-Walle/mtd-spi-nor-move-vendor-specific-code-into-vendor-modules/20220221-165728
-        git checkout f8aeae6008aa9a304aacb1914911dcb3a895da53
-        # save the config file to linux build tree
-        mkdir build_dir
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/mtd/spi-nor/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> drivers/mtd/spi-nor/spansion.c:232:14: error: 's25fs_s_fixups' undeclared here (not in a function); did you mean 's25fs_s_nor_fixups'?
-     232 |   .fixups = &s25fs_s_fixups, },
-         |              ^~~~~~~~~~~~~~
-         |              s25fs_s_nor_fixups
-   drivers/mtd/spi-nor/spansion.c:201:36: warning: 's25fs_s_nor_fixups' defined but not used [-Wunused-const-variable=]
-     201 | static const struct spi_nor_fixups s25fs_s_nor_fixups = {
-         |                                    ^~~~~~~~~~~~~~~~~~
 
 
-vim +232 drivers/mtd/spi-nor/spansion.c
+> -----Original Message-----
+> From: Corentin Labbe <clabbe.montjoie@gmail.com>
+> Sent: Friday, February 18, 2022 3:13 PM
+> To: Harsha Harsha <harshah@xilinx.com>
+> Cc: herbert@gondor.apana.org.au; davem@davemloft.net; linux-crypto@vger.k=
+ernel.org; linux-kernel@vger.kernel.org; linux-arm-
+> kernel@lists.infradead.org; Michal Simek <michals@xilinx.com>; Sarat Chan=
+d Savitala <saratcha@xilinx.com>; Harsh Jain
+> <harshj@xilinx.com>; git <git@xilinx.com>
+> Subject: Re: [PATCH V2 2/4] firmware: xilinx: Add ZynqMP SHA API for SHA3=
+ functionality
+>=20
+> Le Fri, Feb 18, 2022 at 12:44:22AM +0530, Harsha a =E9crit :
+> > This patch adds zynqmp_pm_sha_hash API in the ZynqMP firmware to comput=
+e
+> > SHA3 hash of given data.
+> >
+> > Signed-off-by: Harsha <harsha.harsha@xilinx.com>
+> > Acked-by: Michal Simek <michal.simek@xilinx.com>
+> > ---
+>=20
+> Hello
+>=20
+> Your signed-off should contain your real name.
 
-5587fa489747a8 Sergei Shtylyov 2020-04-20  204  
-f8aeae6008aa9a Michael Walle   2022-02-21  205  static const struct flash_info spansion_nor_parts[] = {
-0173c32a0ebd42 Boris Brezillon 2020-03-13  206  	/* Spansion/Cypress -- single (large) sector size only, at least
-0173c32a0ebd42 Boris Brezillon 2020-03-13  207  	 * for the chips listed here (without boot sectors).
-0173c32a0ebd42 Boris Brezillon 2020-03-13  208  	 */
-ec1c0e996035c8 Tudor Ambarus   2021-12-07  209  	{ "s25sl032p",  INFO(0x010215, 0x4d00,  64 * 1024,  64)
-ec1c0e996035c8 Tudor Ambarus   2021-12-07  210  		NO_SFDP_FLAGS(SPI_NOR_DUAL_READ | SPI_NOR_QUAD_READ) },
-ec1c0e996035c8 Tudor Ambarus   2021-12-07  211  	{ "s25sl064p",  INFO(0x010216, 0x4d00,  64 * 1024, 128)
-ec1c0e996035c8 Tudor Ambarus   2021-12-07  212  		NO_SFDP_FLAGS(SPI_NOR_DUAL_READ | SPI_NOR_QUAD_READ) },
-ec1c0e996035c8 Tudor Ambarus   2021-12-07  213  	{ "s25fl128s0", INFO6(0x012018, 0x4d0080, 256 * 1024, 64)
-ec1c0e996035c8 Tudor Ambarus   2021-12-07  214  		FLAGS(USE_CLSR)
-ec1c0e996035c8 Tudor Ambarus   2021-12-07  215  		NO_SFDP_FLAGS(SPI_NOR_DUAL_READ | SPI_NOR_QUAD_READ) },
-ec1c0e996035c8 Tudor Ambarus   2021-12-07  216  	{ "s25fl128s1", INFO6(0x012018, 0x4d0180, 64 * 1024, 256)
-ec1c0e996035c8 Tudor Ambarus   2021-12-07  217  		FLAGS(USE_CLSR)
-ec1c0e996035c8 Tudor Ambarus   2021-12-07  218  		NO_SFDP_FLAGS(SPI_NOR_DUAL_READ | SPI_NOR_QUAD_READ) },
-ec1c0e996035c8 Tudor Ambarus   2021-12-07  219  	{ "s25fl256s0", INFO6(0x010219, 0x4d0080, 256 * 1024, 128)
-ec1c0e996035c8 Tudor Ambarus   2021-12-07  220  		FLAGS(USE_CLSR)
-5eefc2dc03192c Tudor Ambarus   2021-12-07  221  		NO_SFDP_FLAGS(SPI_NOR_SKIP_SFDP | SPI_NOR_DUAL_READ |
-5eefc2dc03192c Tudor Ambarus   2021-12-07  222  			      SPI_NOR_QUAD_READ) },
-ec1c0e996035c8 Tudor Ambarus   2021-12-07  223  	{ "s25fl256s1", INFO6(0x010219, 0x4d0180, 64 * 1024, 512)
-ec1c0e996035c8 Tudor Ambarus   2021-12-07  224  		FLAGS(USE_CLSR)
-ec1c0e996035c8 Tudor Ambarus   2021-12-07  225  		NO_SFDP_FLAGS(SPI_NOR_DUAL_READ | SPI_NOR_QUAD_READ) },
-ec1c0e996035c8 Tudor Ambarus   2021-12-07  226  	{ "s25fl512s",  INFO6(0x010220, 0x4d0080, 256 * 1024, 256)
-ec1c0e996035c8 Tudor Ambarus   2021-12-07  227  		FLAGS(SPI_NOR_HAS_LOCK | USE_CLSR)
-ec1c0e996035c8 Tudor Ambarus   2021-12-07  228  		NO_SFDP_FLAGS(SPI_NOR_DUAL_READ | SPI_NOR_QUAD_READ) },
-ec1c0e996035c8 Tudor Ambarus   2021-12-07  229  	{ "s25fs128s1", INFO6(0x012018, 0x4d0181, 64 * 1024, 256)
-ec1c0e996035c8 Tudor Ambarus   2021-12-07  230  		FLAGS(USE_CLSR)
-ec1c0e996035c8 Tudor Ambarus   2021-12-07  231  		NO_SFDP_FLAGS(SPI_NOR_DUAL_READ | SPI_NOR_QUAD_READ)
-c26d0d87f175b8 Yicong Yang     2020-04-22 @232  		.fixups = &s25fs_s_fixups, },
-ec1c0e996035c8 Tudor Ambarus   2021-12-07  233  	{ "s25fs256s0", INFO6(0x010219, 0x4d0081, 256 * 1024, 128)
-ec1c0e996035c8 Tudor Ambarus   2021-12-07  234  		FLAGS(USE_CLSR)
-ec1c0e996035c8 Tudor Ambarus   2021-12-07  235  		NO_SFDP_FLAGS(SPI_NOR_DUAL_READ | SPI_NOR_QUAD_READ) },
-ec1c0e996035c8 Tudor Ambarus   2021-12-07  236  	{ "s25fs256s1", INFO6(0x010219, 0x4d0181, 64 * 1024, 512)
-ec1c0e996035c8 Tudor Ambarus   2021-12-07  237  		FLAGS(USE_CLSR)
-ec1c0e996035c8 Tudor Ambarus   2021-12-07  238  		NO_SFDP_FLAGS(SPI_NOR_DUAL_READ | SPI_NOR_QUAD_READ) },
-ec1c0e996035c8 Tudor Ambarus   2021-12-07  239  	{ "s25fs512s",  INFO6(0x010220, 0x4d0081, 256 * 1024, 256)
-ec1c0e996035c8 Tudor Ambarus   2021-12-07  240  		FLAGS(USE_CLSR)
-ec1c0e996035c8 Tudor Ambarus   2021-12-07  241  		NO_SFDP_FLAGS(SPI_NOR_DUAL_READ | SPI_NOR_QUAD_READ)
-5587fa489747a8 Sergei Shtylyov 2020-04-20  242  		.fixups = &s25fs_s_fixups, },
-ec1c0e996035c8 Tudor Ambarus   2021-12-07  243  	{ "s25sl12800", INFO(0x012018, 0x0300, 256 * 1024,  64) },
-ec1c0e996035c8 Tudor Ambarus   2021-12-07  244  	{ "s25sl12801", INFO(0x012018, 0x0301,  64 * 1024, 256) },
-ec1c0e996035c8 Tudor Ambarus   2021-12-07  245  	{ "s25fl129p0", INFO(0x012018, 0x4d00, 256 * 1024,  64)
-ec1c0e996035c8 Tudor Ambarus   2021-12-07  246  		FLAGS(USE_CLSR)
-ec1c0e996035c8 Tudor Ambarus   2021-12-07  247  		NO_SFDP_FLAGS(SPI_NOR_DUAL_READ | SPI_NOR_QUAD_READ) },
-ec1c0e996035c8 Tudor Ambarus   2021-12-07  248  	{ "s25fl129p1", INFO(0x012018, 0x4d01,  64 * 1024, 256)
-ec1c0e996035c8 Tudor Ambarus   2021-12-07  249  		FLAGS(USE_CLSR)
-ec1c0e996035c8 Tudor Ambarus   2021-12-07  250  		NO_SFDP_FLAGS(SPI_NOR_DUAL_READ | SPI_NOR_QUAD_READ) },
-ec1c0e996035c8 Tudor Ambarus   2021-12-07  251  	{ "s25sl004a",  INFO(0x010212,      0,  64 * 1024,   8) },
-ec1c0e996035c8 Tudor Ambarus   2021-12-07  252  	{ "s25sl008a",  INFO(0x010213,      0,  64 * 1024,  16) },
-ec1c0e996035c8 Tudor Ambarus   2021-12-07  253  	{ "s25sl016a",  INFO(0x010214,      0,  64 * 1024,  32) },
-ec1c0e996035c8 Tudor Ambarus   2021-12-07  254  	{ "s25sl032a",  INFO(0x010215,      0,  64 * 1024,  64) },
-ec1c0e996035c8 Tudor Ambarus   2021-12-07  255  	{ "s25sl064a",  INFO(0x010216,      0,  64 * 1024, 128) },
-ec1c0e996035c8 Tudor Ambarus   2021-12-07  256  	{ "s25fl004k",  INFO(0xef4013,      0,  64 * 1024,   8)
-ec1c0e996035c8 Tudor Ambarus   2021-12-07  257  		NO_SFDP_FLAGS(SECT_4K | SPI_NOR_DUAL_READ |
-ec1c0e996035c8 Tudor Ambarus   2021-12-07  258  			      SPI_NOR_QUAD_READ) },
-ec1c0e996035c8 Tudor Ambarus   2021-12-07  259  	{ "s25fl008k",  INFO(0xef4014,      0,  64 * 1024,  16)
-ec1c0e996035c8 Tudor Ambarus   2021-12-07  260  		NO_SFDP_FLAGS(SECT_4K | SPI_NOR_DUAL_READ |
-ec1c0e996035c8 Tudor Ambarus   2021-12-07  261  			      SPI_NOR_QUAD_READ) },
-ec1c0e996035c8 Tudor Ambarus   2021-12-07  262  	{ "s25fl016k",  INFO(0xef4015,      0,  64 * 1024,  32)
-ec1c0e996035c8 Tudor Ambarus   2021-12-07  263  		NO_SFDP_FLAGS(SECT_4K | SPI_NOR_DUAL_READ |
-ec1c0e996035c8 Tudor Ambarus   2021-12-07  264  			      SPI_NOR_QUAD_READ) },
-ec1c0e996035c8 Tudor Ambarus   2021-12-07  265  	{ "s25fl064k",  INFO(0xef4017,      0,  64 * 1024, 128)
-ec1c0e996035c8 Tudor Ambarus   2021-12-07  266  		NO_SFDP_FLAGS(SECT_4K | SPI_NOR_DUAL_READ |
-ec1c0e996035c8 Tudor Ambarus   2021-12-07  267  			      SPI_NOR_QUAD_READ) },
-ec1c0e996035c8 Tudor Ambarus   2021-12-07  268  	{ "s25fl116k",  INFO(0x014015,      0,  64 * 1024,  32)
-ec1c0e996035c8 Tudor Ambarus   2021-12-07  269  		NO_SFDP_FLAGS(SECT_4K | SPI_NOR_DUAL_READ |
-ec1c0e996035c8 Tudor Ambarus   2021-12-07  270  			      SPI_NOR_QUAD_READ) },
-ec1c0e996035c8 Tudor Ambarus   2021-12-07  271  	{ "s25fl132k",  INFO(0x014016,      0,  64 * 1024,  64)
-ec1c0e996035c8 Tudor Ambarus   2021-12-07  272  		NO_SFDP_FLAGS(SECT_4K) },
-ec1c0e996035c8 Tudor Ambarus   2021-12-07  273  	{ "s25fl164k",  INFO(0x014017,      0,  64 * 1024, 128)
-ec1c0e996035c8 Tudor Ambarus   2021-12-07  274  		NO_SFDP_FLAGS(SECT_4K) },
-ec1c0e996035c8 Tudor Ambarus   2021-12-07  275  	{ "s25fl204k",  INFO(0x014013,      0,  64 * 1024,   8)
-ec1c0e996035c8 Tudor Ambarus   2021-12-07  276  		NO_SFDP_FLAGS(SECT_4K | SPI_NOR_DUAL_READ) },
-ec1c0e996035c8 Tudor Ambarus   2021-12-07  277  	{ "s25fl208k",  INFO(0x014014,      0,  64 * 1024,  16)
-ec1c0e996035c8 Tudor Ambarus   2021-12-07  278  		NO_SFDP_FLAGS(SECT_4K | SPI_NOR_DUAL_READ) },
-ec1c0e996035c8 Tudor Ambarus   2021-12-07  279  	{ "s25fl064l",  INFO(0x016017,      0,  64 * 1024, 128)
-ec1c0e996035c8 Tudor Ambarus   2021-12-07  280  		NO_SFDP_FLAGS(SECT_4K | SPI_NOR_DUAL_READ | SPI_NOR_QUAD_READ)
-ec1c0e996035c8 Tudor Ambarus   2021-12-07  281  		FIXUP_FLAGS(SPI_NOR_4B_OPCODES) },
-ec1c0e996035c8 Tudor Ambarus   2021-12-07  282  	{ "s25fl128l",  INFO(0x016018,      0,  64 * 1024, 256)
-ec1c0e996035c8 Tudor Ambarus   2021-12-07  283  		NO_SFDP_FLAGS(SECT_4K | SPI_NOR_DUAL_READ | SPI_NOR_QUAD_READ)
-ec1c0e996035c8 Tudor Ambarus   2021-12-07  284  		FIXUP_FLAGS(SPI_NOR_4B_OPCODES) },
-ec1c0e996035c8 Tudor Ambarus   2021-12-07  285  	{ "s25fl256l",  INFO(0x016019,      0,  64 * 1024, 512)
-ec1c0e996035c8 Tudor Ambarus   2021-12-07  286  		NO_SFDP_FLAGS(SECT_4K | SPI_NOR_DUAL_READ | SPI_NOR_QUAD_READ)
-ec1c0e996035c8 Tudor Ambarus   2021-12-07  287  		FIXUP_FLAGS(SPI_NOR_4B_OPCODES) },
-ec1c0e996035c8 Tudor Ambarus   2021-12-07  288  	{ "cy15x104q",  INFO6(0x042cc2, 0x7f7f7f, 512 * 1024, 1)
-ec1c0e996035c8 Tudor Ambarus   2021-12-07  289  		FLAGS(SPI_NOR_NO_ERASE) },
-ec1c0e996035c8 Tudor Ambarus   2021-12-07  290  	{ "s28hs512t",   INFO(0x345b1a,      0, 256 * 1024, 256)
-ec1c0e996035c8 Tudor Ambarus   2021-12-07  291  		NO_SFDP_FLAGS(SECT_4K | SPI_NOR_OCTAL_DTR_READ |
-c3266af101f28e Pratyush Yadav  2020-10-05  292  			      SPI_NOR_OCTAL_DTR_PP)
-c3266af101f28e Pratyush Yadav  2020-10-05  293  		.fixups = &s28hs512t_fixups,
-c3266af101f28e Pratyush Yadav  2020-10-05  294  	},
-0173c32a0ebd42 Boris Brezillon 2020-03-13  295  };
-0173c32a0ebd42 Boris Brezillon 2020-03-13  296  
+My complete name is Harsha which I have mentioned in the signed-off section=
+.
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> Furthermore why did you drop copyright from previous poster ?
+> See https://patchwork.kernel.org/project/linux-crypto/cover/1556793282-17=
+346-1-git-send-email-kalyani.akula@xilinx.com/ for
+> reference.
+
+I did not understand the comment. Do you want me to add Kalyani's name also=
+ in the Signed of section?
+
+>=20
+> Furthermore, the previous poster didnt answered my questions about parall=
+el processing and tests.
+
+Since SHA3 HW engine in ZynqMPSoC does not support parallel processing of 2=
+ hash requests, so we have changed our approach.=20
+Now  to support parallel processing of 2 hash requests, software fallback i=
+s being used for init, update, final, export and import in the ZynqMP SHA d=
+river.
+For digest, the calculation of SHA3 hash is done by the hardened SHA3 accel=
+erator in Xilinx ZynqMP SoC.
+
+Following tests have been done for the driver:
+- Enabled kernel self tests and extra run-time crypto self tests
+- Tested SHA hash computation for different sizes of data using userspace a=
+pplication
+- Tested SHA hash computation using multiple updates of data using userspac=
+e application
+- Tested parallel hash computation
+- Tested using the tcrypt module
+
+>=20
+> Regards
+
+Regards,
+Harsha

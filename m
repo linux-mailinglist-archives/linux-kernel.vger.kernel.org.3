@@ -2,106 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E792F4BDD4B
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:45:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 570F44BDD96
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:45:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378604AbiBUO6w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 09:58:52 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55654 "EHLO
+        id S1378618AbiBUPAI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 10:00:08 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378607AbiBUO6s (ORCPT
+        with ESMTP id S1378615AbiBUPAE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 09:58:48 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7F612650;
-        Mon, 21 Feb 2022 06:58:23 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 544D46111D;
-        Mon, 21 Feb 2022 14:58:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2AC1DC340E9;
-        Mon, 21 Feb 2022 14:58:22 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="Oq+efNoh"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1645455500;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=m30Y6pCz0nayXwh5tE0f209A8zx+eNSfcHhDVp8qt7w=;
-        b=Oq+efNoha28DJjkRc/kqRh7JXZ/w0Ct3DB2k1k6MRofxNhegPBuClp8Y7vKDLSrVd652eW
-        ibOtRdQ2/+TPSVjHi0/l/JadigKYXuLfd0whVxF5gLlkaYperg9mgXni3+Dm9s4eNhH5Ec
-        MaYAGfMjr0BN7M5aO7fI9btOGx7+TDs=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 14bbcbbb (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Mon, 21 Feb 2022 14:58:20 +0000 (UTC)
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     ebiggers@kernel.org, linux-crypto@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Theodore Ts'o <tytso@mit.edu>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Eric Biggers <ebiggers@google.com>
-Subject: [PATCH v4] random: absorb fast pool into input pool after fast load
-Date:   Mon, 21 Feb 2022 15:58:16 +0100
-Message-Id: <20220221145816.2278732-1-Jason@zx2c4.com>
-In-Reply-To: <CAHmME9pCGHuhZW-HQD==2h0=YRk=Man0KU6+RAGiT0QD-PCNpg@mail.gmail.com>
-References: <CAHmME9pCGHuhZW-HQD==2h0=YRk=Man0KU6+RAGiT0QD-PCNpg@mail.gmail.com>
+        Mon, 21 Feb 2022 10:00:04 -0500
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5995F5F64;
+        Mon, 21 Feb 2022 06:59:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1645455579; x=1676991579;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=18VrRwILwh7yofAr5KlIeJlDHPccvTfxrd+4gwwYXM0=;
+  b=SYZvxDg+sxEXDGbzFp+ViGfbAEm657CTDsSmGTvTftRdCyfE5e43ethZ
+   s/yFmvifThsouOq865feEl4X/+Mn3rTjE0CSnWoIDdSNe96tlgNUhfZvg
+   txOAiRoS6ypKQLV+HoRpmGYt+y2K8eSZDFTI1gzJMDH2cJZOvxUaugaWi
+   s=;
+Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 21 Feb 2022 06:59:38 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2022 06:59:37 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.15; Mon, 21 Feb 2022 06:59:37 -0800
+Received: from hu-srivasam-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.15; Mon, 21 Feb 2022 06:59:30 -0800
+From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+To:     <agross@kernel.org>, <bjorn.andersson@linaro.org>,
+        <lgirdwood@gmail.com>, <broonie@kernel.org>, <robh+dt@kernel.org>,
+        <quic_plai@quicinc.com>, <bgoswami@codeaurora.org>,
+        <perex@perex.cz>, <tiwai@suse.com>,
+        <srinivas.kandagatla@linaro.org>, <rohitkr@codeaurora.org>,
+        <linux-arm-msm@vger.kernel.org>, <alsa-devel@alsa-project.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <swboyd@chromium.org>, <judyhsiao@chromium.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        <linux-gpio@vger.kernel.org>
+CC:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+Subject: [PATCH v8 0/7] Add pin control support for lpass sc7280
+Date:   Mon, 21 Feb 2022 20:29:07 +0530
+Message-ID: <1645455554-22370-1-git-send-email-quic_srivasam@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-During crng_init == 0, we never credit entropy in add_interrupt_
-randomness(), but instead dump it directly into the primary_crng. That's
-fine, except for the fact that we then wind up throwing away that
-entropy later when we switch to extracting from the input pool and
-xoring into (and later in this series overwriting) the primary_crng key.
-The two other early init sites -- add_hwgenerator_randomness()'s use
-crng_fast_load() and add_device_ randomness()'s use of crng_slow_load()
--- always additionally give their inputs to the input pool. But not
-add_interrupt_randomness().
+This patch series is to split lpass variant common pin control
+functions and SoC specific functions and to add lpass sc7280 pincontrol support.
+It also Adds dt-bindings for lpass sc7280 lpass lpi pincontrol.
 
-This commit fixes that shortcoming by calling mix_pool_bytes() after
-crng_fast_load() in add_interrupt_randomness(). That's partially
-verboten on PREEMPT_RT, where it implies taking spinlock_t from an IRQ
-handler. But this also only happens during early boot and then never
-again after that. Plus it's a trylock so it has the same considerations
-as calling crng_fast_load(), which we're already using.
+Changes Since V7:
+    -- Update optional clock voting with conditional check.
+    -- Add const to lpi_pinctrl_variant_data structure.
+    -- Update required headers and remove redundant.
+    -- Change EXPORT_SYMBOL to EXPORT_SYMBOL_GPL
+    -- Fix typo errors.
+Changes Since V6:
+    -- Update conditional clock voting to optional clock voting.
+    -- Update Kconfig depends on field with select.
+    -- Fix typo errors. 
+Changes Since V5:
+    -- Create new patch by updating macro name to lpi specific.
+    -- Create new patch by updating lpi pin group structure with core group_desc structure.
+    -- Fix typo errors.
+    -- Sort macros in the make file and configuration file.
+Changes Since V4:
+    -- Update commit message and description of the chip specific extraction patch.
+    -- Sort macros in kconfig and makefile.
+    -- Update optional clock voting to conditional clock voting.
+    -- Fix typo errors.
+    -- Move to quicinc domain email id's.
+Changes Since V3:
+    -- Update separate Kconfig fields for sm8250 and sc7280.
+    -- Update module license and description.
+    -- Move static variables to corresponding .c files from header file.
 
-Cc: Theodore Ts'o <tytso@mit.edu>
-Reviewed-by: Dominik Brodowski <linux@dominikbrodowski.net>
-Suggested-by: Eric Biggers <ebiggers@google.com>
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
----
-v4 has no changes except for a commit message nit, per Eric's request.
+Changes Since V2:
+    -- Add new dt-bindings for sc7280 lpi driver.
+    -- Make clock voting change as separate patch.
+    -- Split existing pincontrol driver and make common functions 
+       as part of separate file.
+    -- Rename lpass pincontrol lpi dt-bindings to sm8250 specific dt-bindings
+		
+Changes Since V1:
+    -- Make lpi pinctrl variant data structure as constant
+    -- Add appropriate commit message
+    -- Change signedoff by sequence.
 
- drivers/char/random.c | 4 ++++
- 1 file changed, 4 insertions(+)
+Srinivasa Rao Mandadapu (7):
+  dt-bindings: pinctrl: qcom: Update lpass lpi file name to SoC specific
+  dt-bindings: pinctrl: qcom: Add sc7280 lpass lpi pinctrl bindings
+  pinctrl: qcom: Update macro name to LPI specific
+  pinctrl: qcom: Update lpi pin group structure
+  pinctrl: qcom: Extract chip specific LPASS LPI code
+  pinctrl: qcom: Add SC7280 lpass pin configuration
+  pinctrl: qcom: Update clock voting as optional
 
-diff --git a/drivers/char/random.c b/drivers/char/random.c
-index d31b0b3afe2e..f3179c67010b 100644
---- a/drivers/char/random.c
-+++ b/drivers/char/random.c
-@@ -850,6 +850,10 @@ void add_interrupt_randomness(int irq)
- 		    crng_fast_load((u8 *)fast_pool->pool, sizeof(fast_pool->pool)) > 0) {
- 			fast_pool->count = 0;
- 			fast_pool->last = now;
-+			if (spin_trylock(&input_pool.lock)) {
-+				_mix_pool_bytes(&fast_pool->pool, sizeof(fast_pool->pool));
-+				spin_unlock(&input_pool.lock);
-+			}
- 		}
- 		return;
- 	}
+Tested this on SM8250 MTP with WSA and WCD codecs.
+Tested-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+
+ .../bindings/pinctrl/qcom,lpass-lpi-pinctrl.yaml   | 133 -----------
+ .../pinctrl/qcom,sc7280-lpass-lpi-pinctrl.yaml     | 115 ++++++++++
+ .../pinctrl/qcom,sm8250-lpass-lpi-pinctrl.yaml     | 133 +++++++++++
+ drivers/pinctrl/qcom/Kconfig                       |  16 ++
+ drivers/pinctrl/qcom/Makefile                      |   2 +
+ drivers/pinctrl/qcom/pinctrl-lpass-lpi.c           | 255 ++-------------------
+ drivers/pinctrl/qcom/pinctrl-lpass-lpi.h           |  86 +++++++
+ drivers/pinctrl/qcom/pinctrl-sc7280-lpass-lpi.c    | 169 ++++++++++++++
+ drivers/pinctrl/qcom/pinctrl-sm8250-lpass-lpi.c    | 166 ++++++++++++++
+ 9 files changed, 705 insertions(+), 370 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/pinctrl/qcom,lpass-lpi-pinctrl.yaml
+ create mode 100644 Documentation/devicetree/bindings/pinctrl/qcom,sc7280-lpass-lpi-pinctrl.yaml
+ create mode 100644 Documentation/devicetree/bindings/pinctrl/qcom,sm8250-lpass-lpi-pinctrl.yaml
+ create mode 100644 drivers/pinctrl/qcom/pinctrl-lpass-lpi.h
+ create mode 100644 drivers/pinctrl/qcom/pinctrl-sc7280-lpass-lpi.c
+ create mode 100644 drivers/pinctrl/qcom/pinctrl-sm8250-lpass-lpi.c
+
 -- 
-2.35.1
+2.7.4
 

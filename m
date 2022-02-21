@@ -2,119 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E7204BDBD0
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:41:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 15F864BDC49
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:41:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345564AbiBUKqa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 05:46:30 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44068 "EHLO
+        id S1355314AbiBUKqY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 05:46:24 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355249AbiBUKpm (ORCPT
+        with ESMTP id S1355230AbiBUKpm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 21 Feb 2022 05:45:42 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14D77D69
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 02:06:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=RpBKsVZQGw9BH4QPev42eXnbVs5cNcqTAyBEyLsnM0U=; b=hqoT0z2W1y5VOYy+ndSdVNBa0b
-        MCVpWQcRp4KkJzPLTOAToIaLhE72Vwncn4hGPwExWubQlKcNvpETWbX0FuY8ZksyVHfFEkGc4t/tE
-        IT3Z7AGmlMprhRPVeNfh66BYJqnIQCqoAL7uSDgnzD82XbI3rgmmagg/8No3p4V6B48Aw7NXsAb/O
-        /Y5/jxxRsn0A7Llejh9P9uhBc1hSJcu2WFFA8B14GB2FLiXq9Jdu1RCa1Tkg1/zjs4kUBDhzjiw2a
-        WEimjO6TofBE2AILLdsIgdvl6XLnksVyt4nmNj4fG5JMny+DfUR+wBLvvBIvGNjDoKi6uQzx8nKBI
-        kXDtL1ag==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nM5aD-00BcH4-8Y; Mon, 21 Feb 2022 10:06:17 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id B423A9857C7; Mon, 21 Feb 2022 11:06:15 +0100 (CET)
-Date:   Mon, 21 Feb 2022 11:06:15 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     x86@kernel.org, joao@overdrivepizza.com, hjl.tools@gmail.com,
-        jpoimboe@redhat.com, andrew.cooper3@citrix.com,
-        linux-kernel@vger.kernel.org, ndesaulniers@google.com,
-        samitolvanen@google.com, mark.rutland@arm.com,
-        alyssa.milburn@intel.com
-Subject: Re: [PATCH 15/29] x86: Disable IBT around firmware
-Message-ID: <20220221100615.GK23216@worktop.programming.kicks-ass.net>
-References: <20220218164902.008644515@infradead.org>
- <20220218171409.456054276@infradead.org>
- <831051EB-FF09-4B75-98EE-A7C8D0054CFE@chromium.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <831051EB-FF09-4B75-98EE-A7C8D0054CFE@chromium.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEF9762F8
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 02:06:36 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1107460C11
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 10:06:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7906BC340E9;
+        Mon, 21 Feb 2022 10:06:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645437995;
+        bh=EAg8qRnojnOG9Klcio4JVQSoeMM7BiVD8rhDZqhOPTA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=V/GH8/s4qiWDxM0W3kR+h/+jjuT+XDRZJzuf8NykEjP8KSWvnR/dKOakQBwy/O+w/
+         7DItrH5EcNbUmMmrpWkAOKVtKwLpdL3DcKZv4dwslR5YZTn91eXlyp6IJAgjgfXUsU
+         ZOsm/7HIsELjXGT5ZGUH/CYEtZMZjgsTIEX1CQC9ASvqjApHwukq1HPtFcQQeU1OFL
+         o8DyNv/qJwJNgOkKWzxSQHr6aw0P/jV+hBUpXeT7YYQvPBQAKozfEG57abiVgH5nC7
+         ussqV3e0XFqgRC2JrA2R6nYdGrsF58WTZeH2v3/DJNHvGGge+z1eyGzK1yzFmrkCUQ
+         UXJXxlUbxZ6Aw==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nM5aT-009FuI-J8; Mon, 21 Feb 2022 10:06:33 +0000
+Date:   Mon, 21 Feb 2022 10:06:33 +0000
+Message-ID: <87bkz04jpy.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Anup Patel <anup@brainfault.org>
+Cc:     Anup Patel <apatel@ventanamicro.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Alistair Francis <Alistair.Francis@wdc.com>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3 2/6] irqchip/riscv-intc: Allow drivers to directly discover INTC hwnode
+In-Reply-To: <CAAhSdy2abxjz2GAF7dTbxDa32244wEJeYBCeuY2Ag84HK_FXow@mail.gmail.com>
+References: <20220220050854.743420-1-apatel@ventanamicro.com>
+        <20220220050854.743420-3-apatel@ventanamicro.com>
+        <87czjg4kf4.wl-maz@kernel.org>
+        <CAAhSdy2abxjz2GAF7dTbxDa32244wEJeYBCeuY2Ag84HK_FXow@mail.gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: anup@brainfault.org, apatel@ventanamicro.com, palmer@dabbelt.com, paul.walmsley@sifive.com, tglx@linutronix.de, daniel.lezcano@linaro.org, atishp@atishpatra.org, Alistair.Francis@wdc.com, linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-Could you trim replies so that I can actually find what you write?
-
-On Mon, Feb 21, 2022 at 12:27:20AM -0800, Kees Cook wrote:
-
-> >+#ifdef CONFIG_X86_IBT
-> >+
-> >+u64 ibt_save(void)
-> >+{
-> >+	u64 msr = 0;
-> >+
-> >+	if (cpu_feature_enabled(X86_FEATURE_IBT)) {
-> >+		rdmsrl(MSR_IA32_S_CET, msr);
-> >+		wrmsrl(MSR_IA32_S_CET, msr & ~CET_ENDBR_EN);
-> >+	}
-> >+
-> >+	return msr;
-> >+}
-> >+
-> >+void ibt_restore(u64 save)
+On Mon, 21 Feb 2022 09:55:05 +0000,
+Anup Patel <anup@brainfault.org> wrote:
 > 
-> Please make these both __always_inline so there no risk of them ever gaining ENDBRs and being used by ROP to disable IBT...
+> On Mon, Feb 21, 2022 at 3:21 PM Marc Zyngier <maz@kernel.org> wrote:
+> >
+> > On Sun, 20 Feb 2022 05:08:50 +0000,
+> > Anup Patel <apatel@ventanamicro.com> wrote:
+> > >
+> > > Various RISC-V drivers (such as SBI IPI, SBI Timer, SBI PMU, and
+> > > KVM RISC-V) don't have associated DT node but these drivers need
+> > > standard per-CPU (local) interrupts defined by the RISC-V privileged
+> > > specification.
+> > >
+> > > We add riscv_get_intc_hwnode() in arch/riscv which allows RISC-V
+> > > drivers not having DT node to discover INTC hwnode which in-turn
+> > > helps these drivers to map per-CPU (local) interrupts provided
+> > > by the INTC driver.
+> > >
+> > > Signed-off-by: Anup Patel <apatel@ventanamicro.com>
+> > > ---
+> > >  arch/riscv/include/asm/irq.h     |  4 ++++
+> > >  arch/riscv/kernel/irq.c          | 19 +++++++++++++++++++
+> > >  drivers/irqchip/irq-riscv-intc.c |  7 +++++++
+> > >  3 files changed, 30 insertions(+)
+> > >
 
-Either that or mark them __noendbr. The below seems to work.
+[...]
 
-Do we have a preference?
+> > > index b65bd8878d4f..fa24ecd01d39 100644
+> > > --- a/drivers/irqchip/irq-riscv-intc.c
+> > > +++ b/drivers/irqchip/irq-riscv-intc.c
+> > > @@ -92,6 +92,11 @@ static const struct irq_domain_ops riscv_intc_domain_ops = {
+> > >       .xlate  = irq_domain_xlate_onecell,
+> > >  };
+> > >
+> > > +static struct fwnode_handle *riscv_intc_hwnode(void)
+> > > +{
+> > > +     return (intc_domain) ? intc_domain->fwnode : NULL;
+> > > +}
+> >
+> > This makes no sense. Either you have found the interrupt controller
+> > and allocated the domain, or you haven't. But you don't register a
+> > callback without having found it.
+> 
+> We are registering this callback after creating the INTC domain.
 
+Then why are you checking for intc_domain being NULL?
 
---- a/arch/x86/include/asm/ibt.h
-+++ b/arch/x86/include/asm/ibt.h
-@@ -48,8 +48,8 @@ static inline bool is_endbr(const void *
- 	return val == gen_endbr64();
- }
- 
--extern u64 ibt_save(void);
--extern void ibt_restore(u64 save);
-+extern __noendbr u64 ibt_save(void);
-+extern __noendbr void ibt_restore(u64 save);
- 
- #else /* __ASSEMBLY__ */
- 
---- a/arch/x86/kernel/cpu/common.c
-+++ b/arch/x86/kernel/cpu/common.c
-@@ -596,7 +596,7 @@ __setup("nopku", setup_disable_pku);
- 
- #ifdef CONFIG_X86_IBT
- 
--u64 ibt_save(void)
-+__noendbr u64 ibt_save(void)
- {
- 	u64 msr = 0;
- 
-@@ -608,7 +608,7 @@ u64 ibt_save(void)
- 	return msr;
- }
- 
--void ibt_restore(u64 save)
-+__noendbr void ibt_restore(u64 save)
- {
- 	u64 msr;
- 
+> > And you have totally ignored my previous comments about the multitude
+> > of irq domains for the INTC. Either you get rid of all but one and you
+> > can register a single fwnode, or you stay with what you have today,
+> 
+> Only the INTC DT nodes are per-CPU but we are creating only one
+> INTC domain to manage per-CPU IRQs across all CPUs.
+
+Ah, there is this guard that is only valid on the boot CPU. Fair
+enough.
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.

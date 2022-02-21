@@ -2,85 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C82DB4BE46C
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:59:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53C5E4BE10A
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:52:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358076AbiBUMii (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 07:38:38 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59176 "EHLO
+        id S1358143AbiBUMkZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 07:40:25 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348408AbiBUMif (ORCPT
+        with ESMTP id S1346010AbiBUMkX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 07:38:35 -0500
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33C8019287
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 04:38:12 -0800 (PST)
-Received: by mail-wr1-x432.google.com with SMTP id j22so756539wrb.13
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 04:38:12 -0800 (PST)
+        Mon, 21 Feb 2022 07:40:23 -0500
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AE9919287
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 04:40:00 -0800 (PST)
+Received: by mail-wm1-x336.google.com with SMTP id x3-20020a05600c21c300b0037c01ad715bso11106218wmj.2
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 04:39:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=LKx7tTbFFTJnPN+u30WrvTluvsJNKvcCbVga5G4cng4=;
-        b=euLhhZZCAI7A/+S/XKiME2KJm3o1oTmFVCPDGgzFxPD2ZbJ1lTYg7afyyVyL3gRe98
-         idxSTePdGLX9d7sOwTHhzwAEWxOh9vHhERxV3oXp6U/pHUot27L8awxSYKn43JgEk9VO
-         xMoaXpKHXp/XPZDkz7aGntl2MjCvslMxkER2B5OVMkqBxRsO+tvKorJ/2YRTj2go2DYy
-         Ao/Jv886fKTdXfeFsccbc2ocJU51YG/+RctufqIhNMKqdkpkTjGfiMa+jJ0BPchvN3Zp
-         6ed29r/PqxTv4NtEV3O9aeq+xkTgM2hKtwH9kJX+P4Ib7K6K0TjwFSUIuLcUh4EPHgM4
-         gYRw==
+        bh=R/f51CIZR0643bv1aqteYa+9eUKhtWxP5/qjv85KXj8=;
+        b=bameRcwi6JoaD2M3I7RYimjEysOpTD99zApAfcKTy8lF1obgbQ6PoH6zMBRJ2an/ra
+         XhZzLk3+P+LvmUJZSRGo4u8NywtRdT60Ep/BJndTU9XZN0l/x97cjTIiC6uUhPa5CI+u
+         2yGfP0g/fZlGpKCNHecWTXhTofhlVHrxTrfUcXfIPQXu6FzNUZvuCnIubkD51i96XpnI
+         YhGDkFnBSIt8SZ6nEEVsX44HT5XlTjrJVeA5v9cK/0vDZiU66acvNjNqWq/oXo3STiGl
+         rYWGVpV0RfbMjPmDFPQQkEEq89/Q7TdhtztPWUmgT2lujlH966adrVVYnJYctL7JNq+P
+         3cWg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:content-transfer-encoding
          :in-reply-to;
-        bh=LKx7tTbFFTJnPN+u30WrvTluvsJNKvcCbVga5G4cng4=;
-        b=2kMPyXWdZn63Ed4NIBj2s2RBYZ6DHR3f/qHCmRQIeCp0vwRj4rU8eOO5AxXzQFIQGF
-         X3bd2x+4ESe9S7XYtbqLAE47h/XPBS2YfTelKfekWmhMegsM7iiF5wGWmmI7mnmCOo71
-         vsujD5lFl6651mXJCe64HNyfpxasGRF0l5ns3IPu5O27kyWfc8C4YBhbNM6MqCfDRsFs
-         86lGEz5yb7QA61GAPK16XtZp9Qpca5tCWZgI7I4RlGbN7lntiAaUsw01HXI0pX2TZO9S
-         i+aHUvxc1ot8u0yKK9b+eE1Od2NiYvUBZKST4JC5BOOMGQh0Z1AKfmuTb6PrUMJnX3zn
-         xzjA==
-X-Gm-Message-State: AOAM533h7kQg4tNPaeq/suygHhXsn4dtx7rgCn+G9iXB7EN86svqe6bL
-        HYOxbKHXj+GnnAWUDnaeoTvzhA==
-X-Google-Smtp-Source: ABdhPJxHAdNPhIyEhEY/h4/cryx14gzxwTvnqDvWQ2edSk5VVdfaR7tSY1L1Bei9A1l58+XEvcEKig==
-X-Received: by 2002:a5d:6a09:0:b0:1e3:3f5e:e8d with SMTP id m9-20020a5d6a09000000b001e33f5e0e8dmr15590128wru.670.1645447090808;
-        Mon, 21 Feb 2022 04:38:10 -0800 (PST)
+        bh=R/f51CIZR0643bv1aqteYa+9eUKhtWxP5/qjv85KXj8=;
+        b=TvstBrVNfTen9IyAL04jlRswbiytCanXQc7I4OwGHfPvGJIODs6kjj8Z+ssJiyWQUR
+         c9SxUB8qO3Hk7/f0PtJ51yN/bnsay/HAQSGhCpbJn8ujoDyvyKVoYp9KiiU6Zk39y3h4
+         EwSeBRDCLd/X3yhNsq96HjlDT36hFhIUGCeCmnlGtOshv9SehFVffAZ5h3r2vrPsD5ql
+         O92YOCMhAzDTUgHHcbbCFo1BNzbDumIMnk19frLQziFA7WvLfkr5EunxKUc0A/2OIiDl
+         EpzAmRL1sAhEmp0cSYUF17uPIULKPcb+C1YmqpX61eBnuEU+AVL/Pb3PlgBDcRIu2H1N
+         TygA==
+X-Gm-Message-State: AOAM532WlNGDVjmWDyYn0926eTE6hl3E8vSSlY9PNqYRfcyK1PKbwnSF
+        O/TtYM7ZvYYbTwNaqPbF24mqgA==
+X-Google-Smtp-Source: ABdhPJxkJi1EPLjYr7iSmElxNRVJGzj1OLsfkUvsS+BfolnnyJhH3DB/wikuEdQKXWXlhbT3n4hdJg==
+X-Received: by 2002:a05:600c:1e0e:b0:37c:6c82:72a6 with SMTP id ay14-20020a05600c1e0e00b0037c6c8272a6mr21033143wmb.35.1645447198661;
+        Mon, 21 Feb 2022 04:39:58 -0800 (PST)
 Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
-        by smtp.gmail.com with ESMTPSA id t1sm60536942wre.45.2022.02.21.04.38.09
+        by smtp.gmail.com with ESMTPSA id h11sm32207945wrr.64.2022.02.21.04.39.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Feb 2022 04:38:10 -0800 (PST)
-Date:   Mon, 21 Feb 2022 12:38:08 +0000
+        Mon, 21 Feb 2022 04:39:58 -0800 (PST)
+Date:   Mon, 21 Feb 2022 12:39:56 +0000
 From:   Lee Jones <lee.jones@linaro.org>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        greybus-dev@lists.linaro.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Alex Elder <elder@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+To:     Roger Quadros <rogerq@kernel.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Johan Hovold <johan@kernel.org>,
-        Rui Miguel Silva <rmfrfs@gmail.com>,
-        UNGLinuxDriver@microchip.com, Wolfram Sang <wsa@kernel.org>,
-        Woojung Huh <woojung.huh@microchip.com>
-Subject: Re: [PATCH v4 0/7] Provide and use generic_handle_irq_safe() where
- appropriate.
-Message-ID: <YhOHsD4jB9pHpfdl@google.com>
-References: <20220211181500.1856198-1-bigeasy@linutronix.de>
- <Ygu6UewoPbYC9yPa@google.com>
- <Ygu9xtrMxxq36FRH@linutronix.de>
- <YgvD1HpN2oyalDmj@google.com>
- <YgvH4ROUQVgusBdA@linutronix.de>
- <YgvJ1fCUYmaV0Mbx@google.com>
- <87a6ekleye.ffs@tglx>
- <875yp8laj5.ffs@tglx>
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-phy@lists.infradead.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: update Roger Quadros email
+Message-ID: <YhOIHARSdIliVWjW@google.com>
+References: <20220221100701.48593-1-krzysztof.kozlowski@canonical.com>
+ <2e33c00b-8460-3d85-92aa-2c3257725c2c@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <875yp8laj5.ffs@tglx>
+In-Reply-To: <2e33c00b-8460-3d85-92aa-2c3257725c2c@kernel.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -91,32 +78,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 21 Feb 2022, Thomas Gleixner wrote:
+On Mon, 21 Feb 2022, Roger Quadros wrote:
 
-> Lee & al!
+> On 21/02/2022 12:07, Krzysztof Kozlowski wrote:
+> > Emails to Roger Quadros TI account bounce with:
+> >   550 Invalid recipient <rogerq@ti.com> (#5.1.1)
+> > 
+> > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 > 
-> On Mon, Feb 21 2022 at 10:57, Thomas Gleixner wrote:
-> > On Tue, Feb 15 2022 at 15:42, Lee Jones wrote:
-> >> What is your preference Thomas?
-> >
-> > I suggest doing it the following way:
-> >
-> >  1) I apply 1/7 on top of -rc5 and tag it
+> Thanks so much!
 > 
-> That's what I did now. The tag to pull from is:
-> 
->    git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git irq-api-2022-02-21
-> 
-> >  2) Driver maintainers who want to merge via their trees pull that tag
-> >     apply the relevant driver changes
-> >
-> >  3) I collect the leftovers and merge them via irq/core
-> 
-> So everyone who wants to merge the relevant driver changes, please pull
-> and let me know which driver patch(es) you merged. I'll pick up the
-> leftovers after -rc6.
+> Signed-off-by: Roger Quadros <rogerq@kernel.org>
 
-Ideal.  Thanks Thomas.
+I assume you mean Acked-by (if you are the maintainer) or Reviewed-by?
+
+> > ---
+> > 
+> > Roger,
+> > You should also add a mailmap entry for your inactive emails.
+> 
+> OK. I will send out a patch for this. Thanks for the hint. :)
+> 
+> > ---
+> >  .../devicetree/bindings/mfd/ti,j721e-system-controller.yaml     | 2 +-
+> >  Documentation/devicetree/bindings/phy/ti,omap-usb2.yaml         | 2 +-
+> >  Documentation/devicetree/bindings/usb/ti,j721e-usb.yaml         | 2 +-
+> >  Documentation/devicetree/bindings/usb/ti,keystone-dwc3.yaml     | 2 +-
+> >  4 files changed, 4 insertions(+), 4 deletions(-)
+
+What's the merge-plan for this Krzysztof?
 
 -- 
 Lee Jones [李琼斯]

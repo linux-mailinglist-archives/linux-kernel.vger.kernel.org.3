@@ -2,159 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 135964BE047
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:51:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A9D134BDEC8
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:47:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380968AbiBUQov (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 11:44:51 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58820 "EHLO
+        id S1380977AbiBUQoO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 11:44:14 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380958AbiBUQor (ORCPT
+        with ESMTP id S1380940AbiBUQoH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 11:44:47 -0500
-Received: from conuserg-08.nifty.com (conuserg-08.nifty.com [210.131.2.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA35D21E1B;
-        Mon, 21 Feb 2022 08:44:23 -0800 (PST)
-Received: from grover.. (133-32-176-37.west.xps.vectant.ne.jp [133.32.176.37]) (authenticated)
-        by conuserg-08.nifty.com with ESMTP id 21LGhRJV012353;
-        Tue, 22 Feb 2022 01:43:27 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-08.nifty.com 21LGhRJV012353
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1645461808;
-        bh=0lpOuou+kcNVbG8u1/xvN0fu2ccE7lmgZvdRKN+/V9k=;
-        h=From:To:Cc:Subject:Date:From;
-        b=rxrmbFhJc0FseiGBjSdBFXfJYXpGU9anCdgbAvJ8HvCHa+s/9l4K1khr+IUvTiAcw
-         Qo9aoh5Ng/NzBGs+PJ5MoUPDyxnLkH7964q9lksp2dYq5jiPa5bX2uZfQKtdB3heHB
-         bfeiXkoDNi71q75SEaohADJKhYx1Y25D7aW3Vi/Ox/FdnaYCfqYGx/AxtTzgKt53Vs
-         //fnQVojGCMfceoIAF5F+6M00zWp6Pxg9CUEGDPn8C7ChIFj33qep/y8NurfTb4Prv
-         QpVVWWejmbiqq3TdN6kpfOLKSYijXqTS+x6PixgNaXTcIUvopK1sjz03zcRNkg8khB
-         8hS8vvC8j7HPA==
-X-Nifty-SrcIP: [133.32.176.37]
-From:   Masahiro Yamada <masahiroy@kernel.org>
-To:     linux-kbuild@vger.kernel.org
-Cc:     David Laight <David.Laight@ACULAB.COM>,
-        linux-kernel@vger.kernel.org,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Subject: [PATCH] fixdep: use fflush() and ferror() to ensure successful write to files
-Date:   Tue, 22 Feb 2022 01:43:15 +0900
-Message-Id: <20220221164316.113489-1-masahiroy@kernel.org>
-X-Mailer: git-send-email 2.32.0
+        Mon, 21 Feb 2022 11:44:07 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91A67220E8;
+        Mon, 21 Feb 2022 08:43:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1645461820; x=1676997820;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=HrHAf6gEsOAhEpFdK8CdrZ0sJZ9UBBtJ6ScL1EPZiy0=;
+  b=1SRJSbbTYOY3q9ifajm7BjSJmBvWpraTrmsgqCaYHAZMjQqcmnnAvCha
+   +1pijPaBC9I97Mx8TLLBow+LSJlXfl/X24zl2T1bJuGcq7R4SOUZFwIMo
+   OcdOmx2qeVAGjrRbtvK8Tjo66+NSk5vywecaEO9AYFiQPMwUD44iuHqAI
+   naOHJUGnrYILkKGA784W9gwHxfJASKkM9JBLOFkc5t6qpOsRJD4obnrYA
+   IDq4DsTCvc8zttizvDSR9CpOaSbxlL88zi5LSNZfYtwcVeJmMEU2bO5QG
+   6wAuKGsq+RadtyEcYOS1qX2sSIWQBJqOv04c8PxNOkyV7SmUA6rlMw24P
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.88,386,1635231600"; 
+   d="scan'208";a="163022563"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 21 Feb 2022 09:43:39 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Mon, 21 Feb 2022 09:43:39 -0700
+Received: from [10.12.68.158] (10.10.115.15) by chn-vm-ex04.mchp-main.com
+ (10.10.85.152) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
+ Transport; Mon, 21 Feb 2022 09:43:38 -0700
+Message-ID: <994b754f-a8b0-2504-0803-d12fa9975ff5@microchip.com>
+Date:   Mon, 21 Feb 2022 17:43:37 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] clk: lan966x: Fix linking error
+Content-Language: en-US
+To:     Horatiu Vultur <horatiu.vultur@microchip.com>,
+        <linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>
+CC:     <mturquette@baylibre.com>, <sboyd@kernel.org>,
+        <kavyasree.kotagiri@microchip.com>,
+        kernel test robot <lkp@intel.com>
+References: <20220219141536.460812-1-horatiu.vultur@microchip.com>
+From:   Nicolas Ferre <nicolas.ferre@microchip.com>
+Organization: microchip
+In-Reply-To: <20220219141536.460812-1-horatiu.vultur@microchip.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Checking the return value of (v)printf does not ensure the successful
-write to the .cmd file.
+On 19/02/2022 at 15:15, Horatiu Vultur wrote:
+> If the config options HAS_IOMEM is not set then the driver fails to link
+> with the following error:
+> clk-lan966x.c:(.text+0x950): undefined reference to
+> `devm_platform_ioremap_resource'
+> 
+> Therefor add missing dependencies: HAS_IOMEM and OF.
+> 
+> Fixes: 54104ee02333 ("clk: lan966x: Add lan966x SoC clock driver")
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
 
-Call fflush() and ferror() to make sure that everything has been
-written to the file.
+Reviewed-by: Nicolas Ferre <nicolas.ferre@microchip.com>
 
-Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
----
+> ---
+>   drivers/clk/Kconfig | 2 ++
+>   1 file changed, 2 insertions(+)
+> 
+> diff --git a/drivers/clk/Kconfig b/drivers/clk/Kconfig
+> index 4a8451f61f37..6f03c29c40be 100644
+> --- a/drivers/clk/Kconfig
+> +++ b/drivers/clk/Kconfig
+> @@ -232,6 +232,8 @@ config COMMON_CLK_GEMINI
+>   
+>   config COMMON_CLK_LAN966X
+>   	bool "Generic Clock Controller driver for LAN966X SoC"
+> +	depends on HAS_IOMEM
+> +	depends on OF
+>   	help
+>   	  This driver provides support for Generic Clock Controller(GCK) on
+>   	  LAN966X SoC. GCK generates and supplies clock to various peripherals
 
- scripts/basic/fixdep.c | 44 ++++++++++++++++--------------------------
- 1 file changed, 17 insertions(+), 27 deletions(-)
 
-diff --git a/scripts/basic/fixdep.c b/scripts/basic/fixdep.c
-index 44e887cff49b..fad6f29373a9 100644
---- a/scripts/basic/fixdep.c
-+++ b/scripts/basic/fixdep.c
-@@ -105,25 +105,6 @@ static void usage(void)
- 	exit(1);
- }
- 
--/*
-- * In the intended usage of this program, the stdout is redirected to .*.cmd
-- * files. The return value of printf() must be checked to catch any error,
-- * e.g. "No space left on device".
-- */
--static void xprintf(const char *format, ...)
--{
--	va_list ap;
--	int ret;
--
--	va_start(ap, format);
--	ret = vprintf(format, ap);
--	if (ret < 0) {
--		perror("fixdep");
--		exit(1);
--	}
--	va_end(ap);
--}
--
- struct item {
- 	struct item	*next;
- 	unsigned int	len;
-@@ -189,7 +170,7 @@ static void use_config(const char *m, int slen)
- 
- 	define_config(m, slen, hash);
- 	/* Print out a dependency path from a symbol name. */
--	xprintf("    $(wildcard include/config/%.*s) \\\n", slen, m);
-+	printf("    $(wildcard include/config/%.*s) \\\n", slen, m);
- }
- 
- /* test if s ends in sub */
-@@ -318,13 +299,13 @@ static void parse_dep_file(char *m, const char *target)
- 				 */
- 				if (!saw_any_target) {
- 					saw_any_target = 1;
--					xprintf("source_%s := %s\n\n",
--						target, m);
--					xprintf("deps_%s := \\\n", target);
-+					printf("source_%s := %s\n\n",
-+					       target, m);
-+					printf("deps_%s := \\\n", target);
- 				}
- 				is_first_dep = 0;
- 			} else {
--				xprintf("  %s \\\n", m);
-+				printf("  %s \\\n", m);
- 			}
- 
- 			buf = read_file(m);
-@@ -347,8 +328,8 @@ static void parse_dep_file(char *m, const char *target)
- 		exit(1);
- 	}
- 
--	xprintf("\n%s: $(deps_%s)\n\n", target, target);
--	xprintf("$(deps_%s):\n", target);
-+	printf("\n%s: $(deps_%s)\n\n", target, target);
-+	printf("$(deps_%s):\n", target);
- }
- 
- int main(int argc, char *argv[])
-@@ -363,11 +344,20 @@ int main(int argc, char *argv[])
- 	target = argv[2];
- 	cmdline = argv[3];
- 
--	xprintf("cmd_%s := %s\n\n", target, cmdline);
-+	printf("cmd_%s := %s\n\n", target, cmdline);
- 
- 	buf = read_file(depfile);
- 	parse_dep_file(buf, target);
- 	free(buf);
- 
-+	fflush(stdout);
-+
-+	/*
-+	 * In the intended usage, the stdout is redirected to .*.cmd files.
-+	 * Call ferror() to catch errors such as "No space left on device".
-+	 */
-+	if (ferror(stdout))
-+		exit(1);
-+
- 	return 0;
- }
 -- 
-2.32.0
-
+Nicolas Ferre

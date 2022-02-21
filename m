@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DA874BDC6E
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:42:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CCD6F4BE946
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:07:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243656AbiBUJQy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 04:16:54 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33916 "EHLO
+        id S231368AbiBUJIB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 04:08:01 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:32960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347949AbiBUJKH (ORCPT
+        with ESMTP id S1348487AbiBUJCy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 04:10:07 -0500
+        Mon, 21 Feb 2022 04:02:54 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EA521D32C;
-        Mon, 21 Feb 2022 01:02:36 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CDC12C678;
+        Mon, 21 Feb 2022 00:58:14 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9C66260FB6;
-        Mon, 21 Feb 2022 09:02:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 834EDC340E9;
-        Mon, 21 Feb 2022 09:02:34 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BB84B6112B;
+        Mon, 21 Feb 2022 08:57:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3071C340E9;
+        Mon, 21 Feb 2022 08:57:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645434155;
-        bh=aTGTPT/7hWx4tc2XHp3CRc8jZVh4W6036HHeZlprClc=;
+        s=korg; t=1645433876;
+        bh=jth1zaFSPBq8shktgRO3aI+1QIAjT7qWetuzUubsnf0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=wsd/EB2k2fNl/KsGYxbYdmnRFuFbyGQkAyrN12Hkq4a1CjTpE3rc3ee01toDCy0Rd
-         zvXPNtuGot2NXrCbfT+OF6+JBDIjw5B3hF70/lXp6ZajD49eAP03lR9cvhheok7tcv
-         ZLa5aQlbvPTtPgtJ+cGn3SAuITIXDU1g/d/+daqA=
+        b=B/0X5lvriF0seuspW9Y2Bd1sQDvHcWFu4j4ifQjkZMoMo/dVN9Fbe5DZdVMGcUidc
+         V4GYtAlQHk8j3KA27QRsq9OSHku8izXdVmjGc1FXhw0USBuTu0nfqkgHPd10T+WnF+
+         nFzd0iXpAz4AIuX7r3gVOFqLP1Rqa1gaFtAHXKRY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Duoming Zhou <duoming@zju.edu.cn>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 032/121] ax25: improve the incomplete fix to avoid UAF and NPD bugs
-Date:   Mon, 21 Feb 2022 09:48:44 +0100
-Message-Id: <20220221084922.268428906@linuxfoundation.org>
+        stable@vger.kernel.org, John David Anglin <dave.anglin@bell.net>,
+        Helge Deller <deller@gmx.de>
+Subject: [PATCH 5.4 05/80] parisc: Drop __init from map_pages declaration
+Date:   Mon, 21 Feb 2022 09:48:45 +0100
+Message-Id: <20220221084915.762531012@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220221084921.147454846@linuxfoundation.org>
-References: <20220221084921.147454846@linuxfoundation.org>
+In-Reply-To: <20220221084915.554151737@linuxfoundation.org>
+References: <20220221084915.554151737@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,90 +54,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Duoming Zhou <duoming@zju.edu.cn>
+From: John David Anglin <dave.anglin@bell.net>
 
-[ Upstream commit 4e0f718daf97d47cf7dec122da1be970f145c809 ]
+commit 9129886b88185962538180625ca8051362b01327 upstream.
 
-The previous commit 1ade48d0c27d ("ax25: NPD bug when detaching
-AX25 device") introduce lock_sock() into ax25_kill_by_device to
-prevent NPD bug. But the concurrency NPD or UAF bug will occur,
-when lock_sock() or release_sock() dereferences the ax25_cb->sock.
+With huge kernel pages, we randomly eat a SPARC in map_pages(). This
+is fixed by dropping __init from the declaration.
 
-The NULL pointer dereference bug can be shown as below:
+However, map_pages references the __init routine memblock_alloc_try_nid
+via memblock_alloc.  Thus, it needs to be marked with __ref.
 
-ax25_kill_by_device()        | ax25_release()
-                             |   ax25_destroy_socket()
-                             |     ax25_cb_del()
-  ...                        |     ...
-                             |     ax25->sk=NULL;
-  lock_sock(s->sk); //(1)    |
-  s->ax25_dev = NULL;        |     ...
-  release_sock(s->sk); //(2) |
-  ...                        |
+memblock_alloc is only called before the kernel text is set to readonly.
 
-The root cause is that the sock is set to null before dereference
-site (1) or (2). Therefore, this patch extracts the ax25_cb->sock
-in advance, and uses ax25_list_lock to protect it, which can synchronize
-with ax25_cb_del() and ensure the value of sock is not null before
-dereference sites.
+The __ref on free_initmem is no longer needed.
 
-The concurrency UAF bug can be shown as below:
+Comment regarding map_pages being in the init section is removed.
 
-ax25_kill_by_device()        | ax25_release()
-                             |   ax25_destroy_socket()
-  ...                        |   ...
-                             |   sock_put(sk); //FREE
-  lock_sock(s->sk); //(1)    |
-  s->ax25_dev = NULL;        |   ...
-  release_sock(s->sk); //(2) |
-  ...                        |
-
-The root cause is that the sock is released before dereference
-site (1) or (2). Therefore, this patch uses sock_hold() to increase
-the refcount of sock and uses ax25_list_lock to protect it, which
-can synchronize with ax25_cb_del() in ax25_destroy_socket() and
-ensure the sock wil not be released before dereference sites.
-
-Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: John David Anglin <dave.anglin@bell.net>
+Cc: stable@vger.kernel.org # v5.4+
+Signed-off-by: Helge Deller <deller@gmx.de>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/ax25/af_ax25.c | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+ arch/parisc/mm/init.c |    9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
 
-diff --git a/net/ax25/af_ax25.c b/net/ax25/af_ax25.c
-index 5e84dce5ff7ae..23bd26057a828 100644
---- a/net/ax25/af_ax25.c
-+++ b/net/ax25/af_ax25.c
-@@ -77,6 +77,7 @@ static void ax25_kill_by_device(struct net_device *dev)
- {
- 	ax25_dev *ax25_dev;
- 	ax25_cb *s;
-+	struct sock *sk;
+--- a/arch/parisc/mm/init.c
++++ b/arch/parisc/mm/init.c
+@@ -347,9 +347,9 @@ static void __init setup_bootmem(void)
  
- 	if ((ax25_dev = ax25_dev_ax25dev(dev)) == NULL)
- 		return;
-@@ -85,13 +86,15 @@ static void ax25_kill_by_device(struct net_device *dev)
- again:
- 	ax25_for_each(s, &ax25_list) {
- 		if (s->ax25_dev == ax25_dev) {
-+			sk = s->sk;
-+			sock_hold(sk);
- 			spin_unlock_bh(&ax25_list_lock);
--			lock_sock(s->sk);
-+			lock_sock(sk);
- 			s->ax25_dev = NULL;
--			release_sock(s->sk);
-+			release_sock(sk);
- 			ax25_disconnect(s, ENETUNREACH);
- 			spin_lock_bh(&ax25_list_lock);
--
-+			sock_put(sk);
- 			/* The entry could have been deleted from the
- 			 * list meanwhile and thus the next pointer is
- 			 * no longer valid.  Play it safe and restart
--- 
-2.34.1
-
+ static bool kernel_set_to_readonly;
+ 
+-static void __init map_pages(unsigned long start_vaddr,
+-			     unsigned long start_paddr, unsigned long size,
+-			     pgprot_t pgprot, int force)
++static void __ref map_pages(unsigned long start_vaddr,
++			    unsigned long start_paddr, unsigned long size,
++			    pgprot_t pgprot, int force)
+ {
+ 	pgd_t *pg_dir;
+ 	pmd_t *pmd;
+@@ -485,7 +485,7 @@ void __init set_kernel_text_rw(int enabl
+ 	flush_tlb_all();
+ }
+ 
+-void __ref free_initmem(void)
++void free_initmem(void)
+ {
+ 	unsigned long init_begin = (unsigned long)__init_begin;
+ 	unsigned long init_end = (unsigned long)__init_end;
+@@ -499,7 +499,6 @@ void __ref free_initmem(void)
+ 	/* The init text pages are marked R-X.  We have to
+ 	 * flush the icache and mark them RW-
+ 	 *
+-	 * This is tricky, because map_pages is in the init section.
+ 	 * Do a dummy remap of the data section first (the data
+ 	 * section is already PAGE_KERNEL) to pull in the TLB entries
+ 	 * for map_kernel */
 
 

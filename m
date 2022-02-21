@@ -2,121 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23DC34BE233
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:54:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C98E14BE908
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:06:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358861AbiBUNTm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 08:19:42 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54142 "EHLO
+        id S1358871AbiBUNTq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 08:19:46 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232982AbiBUNTk (ORCPT
+        with ESMTP id S1347708AbiBUNTl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 08:19:40 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 515BA1EEDA
+        Mon, 21 Feb 2022 08:19:41 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05E0B1EEDF
         for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 05:19:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645449557; x=1676985557;
+  t=1645449558; x=1676985558;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=I79uwjS1z7JWGQEvjvtR53Cl64d3hoSo4uV5m4nZh5k=;
-  b=YxkcLNMPBlxctV9ZJrmKxUUszcNdTUcGrpoce3BS9Q8n2Ac9iWZfLMNe
-   zEdOapvmpGQZMN+9TAyz3iGR2YX7C8fgxaHHv1pCsN4A9Dn7SWB68VbuM
-   Af40rCBbfBBrt5SGauzlYUARhA+/9biN4cQflSt3BC2V1Qte37cZEkm6E
-   ipF0HNNL+alOlQlUDBicdJnUrsD04SOW+XT+4P8jEZQRv7MuATW09ADMG
-   UayeyMI47xdljFQRnjnDYz/iXwTb4296FRzX+lCz2YK4/EypEYs41/FKA
-   EY9mphcQNbszpiSZ6VXHTgGPJDM9yH3ce3senYh/zTKgndvKOvrMg5V+8
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10264"; a="276098869"
+  bh=XHf7vacCOjqjspJj9G/kxmSULYKIEHDDy6GKS4fU+u8=;
+  b=Dy7vpzgTCxHPC9JLjo8qOQhyp9ZJ/Te4+vmTQkdQWFrjyMYDj5zMCjza
+   s1pleoOzCVXrTAqrQbw3J0NLLmcexj/cqYwWpqdPSCkSXFc+OJ+UUrNsv
+   QYxwxH4jldriMZen+ns8vXObeUcQMqVcEW81I3L9QvxndR8qR/IcbgjDA
+   +eUWthp3zbl1VpZeaSMMPDMoCo9wE2AfazYfuPt0CBiK4bC9mLRDO3kS+
+   hbqs3/rLCr5n6QeM9F3udzEOh6TqHKo4s6aCjVu2wk+ZbnwQHah6RtNSD
+   4eRMqSr/v6Q9FlK/D6Q4xT9u2oj46U4nWgo/HqzWp//u8tIsou4p+ktxf
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10264"; a="314769091"
 X-IronPort-AV: E=Sophos;i="5.88,385,1635231600"; 
-   d="scan'208";a="276098869"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2022 05:19:17 -0800
+   d="scan'208";a="314769091"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2022 05:19:17 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,385,1635231600"; 
-   d="scan'208";a="683203057"
+   d="scan'208";a="627371367"
 Received: from lkp-server01.sh.intel.com (HELO da3212ac2f54) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 21 Feb 2022 05:19:16 -0800
+  by FMSMGA003.fm.intel.com with ESMTP; 21 Feb 2022 05:19:16 -0800
 Received: from kbuild by da3212ac2f54 with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1nM8ax-0001dj-Ah; Mon, 21 Feb 2022 13:19:15 +0000
-Date:   Mon, 21 Feb 2022 21:18:13 +0800
+        id 1nM8ax-0001dh-AB; Mon, 21 Feb 2022 13:19:15 +0000
+Date:   Mon, 21 Feb 2022 21:18:18 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Janne Grunau <j@jannau.net>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Hector Martin <marcan@marcan.st>
-Subject: [asahilinux:bits/090-spi-hid 11/11]
- drivers/hid/spi-hid/spi-hid-apple-core.c:259:22: warning: no previous
- prototype for 'spihid_get_data'
-Message-ID: <202202212138.tQW6fcMZ-lkp@intel.com>
+To:     Ingo Molnar <mingo@kernel.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [mingo-tip:sched/headers 119/2575]
+ arch/arm64/kernel/../../../kernel/sched/per_task_area_struct_defs.h:13:13:
+ warning: no previous prototype for 'per_task_common'
+Message-ID: <202202212129.CrbfLJmZ-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/AsahiLinux/linux bits/090-spi-hid
-head:   6503ad96bc85209be90119188ff30d21612bbbf8
-commit: 6503ad96bc85209be90119188ff30d21612bbbf8 [11/11] WIP: HID: transport: spi: add Apple SPI transport
-config: csky-allyesconfig (https://download.01.org/0day-ci/archive/20220221/202202212138.tQW6fcMZ-lkp@intel.com/config)
-compiler: csky-linux-gcc (GCC) 11.2.0
+tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git sched/headers
+head:   21149ca19c21f6b5593d5146690ec83f8f633976
+commit: c3ed1822feb47b47a7efdaac15349fab91de0ece [119/2575] headers/deps: per_task, arm64, x86: Convert task_struct::thread to a per_task() field
+config: arm64-allnoconfig (https://download.01.org/0day-ci/archive/20220221/202202212129.CrbfLJmZ-lkp@intel.com/config)
+compiler: aarch64-linux-gcc (GCC) 11.2.0
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/AsahiLinux/linux/commit/6503ad96bc85209be90119188ff30d21612bbbf8
-        git remote add asahilinux https://github.com/AsahiLinux/linux
-        git fetch --no-tags asahilinux bits/090-spi-hid
-        git checkout 6503ad96bc85209be90119188ff30d21612bbbf8
+        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=c3ed1822feb47b47a7efdaac15349fab91de0ece
+        git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
+        git fetch --no-tags mingo-tip sched/headers
+        git checkout c3ed1822feb47b47a7efdaac15349fab91de0ece
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=csky SHELL=/bin/bash drivers/hid/spi-hid/ drivers/platform/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm64 prepare
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> drivers/hid/spi-hid/spi-hid-apple-core.c:259:22: warning: no previous prototype for 'spihid_get_data' [-Wmissing-prototypes]
-     259 | struct spihid_apple *spihid_get_data(struct spihid_interface *idev)
-         |                      ^~~~~~~~~~~~~~~
+   In file included from arch/arm64/kernel/asm-offsets.c:29:
+>> arch/arm64/kernel/../../../kernel/sched/per_task_area_struct_defs.h:13:13: warning: no previous prototype for 'per_task_common' [-Wmissing-prototypes]
+      13 | void __used per_task_common(void)
+         |             ^~~~~~~~~~~~~~~
 --
->> drivers/hid/spi-hid/spi-hid-apple-of.c:24:5: warning: no previous prototype for 'spihid_apple_of_power_on' [-Wmissing-prototypes]
-      24 | int spihid_apple_of_power_on(struct spihid_apple_ops *ops)
-         |     ^~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/hid/spi-hid/spi-hid-apple-of.c:40:5: warning: no previous prototype for 'spihid_apple_of_power_off' [-Wmissing-prototypes]
-      40 | int spihid_apple_of_power_off(struct spihid_apple_ops *ops)
-         |     ^~~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/hid/spi-hid/spi-hid-apple-of.c:50:5: warning: no previous prototype for 'spihid_apple_of_enable_irq' [-Wmissing-prototypes]
-      50 | int spihid_apple_of_enable_irq(struct spihid_apple_ops *ops)
-         |     ^~~~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/hid/spi-hid/spi-hid-apple-of.c:59:5: warning: no previous prototype for 'spihid_apple_of_disable_irq' [-Wmissing-prototypes]
-      59 | int spihid_apple_of_disable_irq(struct spihid_apple_ops *ops)
-         |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+   In file included from arch/arm64/kernel/asm-offsets.c:29:
+>> arch/arm64/kernel/../../../kernel/sched/per_task_area_struct_defs.h:13:13: warning: no previous prototype for 'per_task_common' [-Wmissing-prototypes]
+      13 | void __used per_task_common(void)
+         |             ^~~~~~~~~~~~~~~
+   arch/arm64/kernel/vdso/vgettimeofday.c:9:5: warning: no previous prototype for '__kernel_clock_gettime' [-Wmissing-prototypes]
+       9 | int __kernel_clock_gettime(clockid_t clock,
+         |     ^~~~~~~~~~~~~~~~~~~~~~
+   arch/arm64/kernel/vdso/vgettimeofday.c:15:5: warning: no previous prototype for '__kernel_gettimeofday' [-Wmissing-prototypes]
+      15 | int __kernel_gettimeofday(struct __kernel_old_timeval *tv,
+         |     ^~~~~~~~~~~~~~~~~~~~~
+   arch/arm64/kernel/vdso/vgettimeofday.c:21:5: warning: no previous prototype for '__kernel_clock_getres' [-Wmissing-prototypes]
+      21 | int __kernel_clock_getres(clockid_t clock_id,
+         |     ^~~~~~~~~~~~~~~~~~~~~
 
 
-vim +/spihid_get_data +259 drivers/hid/spi-hid/spi-hid-apple-core.c
+vim +/per_task_common +13 arch/arm64/kernel/../../../kernel/sched/per_task_area_struct_defs.h
 
-   258	
- > 259	struct spihid_apple *spihid_get_data(struct spihid_interface *idev)
-   260	{
-   261		switch (idev->id) {
-   262		case SPIHID_DEVICE_ID_KBD:
-   263			return container_of(idev, struct spihid_apple, kbd);
-   264		case SPIHID_DEVICE_ID_TP:
-   265			return container_of(idev, struct spihid_apple, tp);
-   266		default:
-   267			return NULL;
-   268		}
-   269	}
-   270	
+dae7a695f3f100 Ingo Molnar 2021-09-05  11  
+dae7a695f3f100 Ingo Molnar 2021-09-05  12  
+8327799a692062 Ingo Molnar 2022-01-04 @13  void __used per_task_common(void)
+8327799a692062 Ingo Molnar 2022-01-04  14  {
+8327799a692062 Ingo Molnar 2022-01-04  15  #include "per_task_area_struct_template.h"
+8327799a692062 Ingo Molnar 2022-01-04  16  }
+dae7a695f3f100 Ingo Molnar 2021-09-05  17  
+
+:::::: The code at line 13 was first introduced by commit
+:::::: 8327799a692062c3eb7fa4327584d1b4ca7da0be headers/deps: per_task: Implement single template to define 'struct task_struct_per_task' fields and offsets
+
+:::::: TO: Ingo Molnar <mingo@kernel.org>
+:::::: CC: Ingo Molnar <mingo@kernel.org>
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation

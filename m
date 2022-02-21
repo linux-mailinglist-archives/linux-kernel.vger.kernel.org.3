@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE9A84BE70E
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:03:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF6C14BE528
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:00:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237588AbiBUJPf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 04:15:35 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36060 "EHLO
+        id S1350540AbiBUJdi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 04:33:38 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346595AbiBUJJc (ORCPT
+        with ESMTP id S1349569AbiBUJ0R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 04:09:32 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 648F6B84E;
-        Mon, 21 Feb 2022 01:01:49 -0800 (PST)
+        Mon, 21 Feb 2022 04:26:17 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 445501DA63;
+        Mon, 21 Feb 2022 01:10:39 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 19ACDB80EB3;
-        Mon, 21 Feb 2022 09:01:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 551B3C340E9;
-        Mon, 21 Feb 2022 09:01:46 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D409260B1B;
+        Mon, 21 Feb 2022 09:10:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5A03C340E9;
+        Mon, 21 Feb 2022 09:10:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645434106;
-        bh=4QdFwBGFGOVe419XrsVm0Y0paoawSUMkqzD0XvRfOTU=;
+        s=korg; t=1645434637;
+        bh=8agQrglvWx4whqxjjqslS46mi/r1Jr37ohVeGNh+rPc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dwKXq/KuKnGAlfyx39Mv2DaPCBE5UWX9cdx2KrkA3VCTrBYE1VlSxcXLKD/1akGJy
-         778KPnc0NxL4O1qwlDMbM7gZjMO1vFNJZalfs1wg3CJqEBI4tON+a/7+Gvw1Xu7IsJ
-         XSjAbKvcwP9zu0QdD1TghJW44puJxNa0OKPWvaNw=
+        b=DmYTU9vtdTQXXsssa/YxGpmjbWlLoC53WMsAOT00JeCnczePjnfZewp1Djy8Vkjm2
+         nKYLRHYRHWnIm0khYMTTtKq/18u/Nfk9MdhlFOFPLK0MenW6AIEFgUSO/jCBJoUUls
+         H+NmbiabWiq0MIG0ucjwfjl0SSLRGqO24UGqc4bo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Christian Loehle <cloehle@hyperstone.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>
-Subject: [PATCH 5.10 015/121] mmc: block: fix read single on recovery logic
-Date:   Mon, 21 Feb 2022 09:48:27 +0100
-Message-Id: <20220221084921.667232415@linuxfoundation.org>
+        stable@vger.kernel.org, Len Brown <lenb@kernel.org>,
+        Luca Coelho <luciano.coelho@intel.com>,
+        Kalle Valo <kvalo@kernel.org>
+Subject: [PATCH 5.15 076/196] iwlwifi: mvm: dont send SAR GEO command for 3160 devices
+Date:   Mon, 21 Feb 2022 09:48:28 +0100
+Message-Id: <20220221084933.478411606@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220221084921.147454846@linuxfoundation.org>
-References: <20220221084921.147454846@linuxfoundation.org>
+In-Reply-To: <20220221084930.872957717@linuxfoundation.org>
+References: <20220221084930.872957717@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,83 +55,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christian Löhle <CLoehle@hyperstone.com>
+From: Luca Coelho <luciano.coelho@intel.com>
 
-commit 54309fde1a352ad2674ebba004a79f7d20b9f037 upstream.
+commit 5f06f6bf8d816578c390a2b8a485d40adcca4749 upstream.
 
-On reads with MMC_READ_MULTIPLE_BLOCK that fail,
-the recovery handler will use MMC_READ_SINGLE_BLOCK for
-each of the blocks, up to MMC_READ_SINGLE_RETRIES times each.
-The logic for this is fixed to never report unsuccessful reads
-as success to the block layer.
+SAR GEO offsets are not supported on 3160 devices.  The code was
+refactored and caused us to start sending the command anyway, which
+causes a FW assertion failure.  Fix that only considering this feature
+supported on FW API with major version is 17 if the device is not
+3160.
 
-On command error with retries remaining, blk_update_request was
-called with whatever value error was set last to.
-In case it was last set to BLK_STS_OK (default), the read will be
-reported as success, even though there was no data read from the device.
-This could happen on a CRC mismatch for the response,
-a card rejecting the command (e.g. again due to a CRC mismatch).
-In case it was last set to BLK_STS_IOERR, the error is reported correctly,
-but no retries will be attempted.
+Additionally, fix the caller of iwl_mvm_sar_geo_init() so that it
+checks for the return value, which it was ignoring.
 
-Fixes: 81196976ed946c ("mmc: block: Add blk-mq support")
-Cc: stable@vger.kernel.org
-Signed-off-by: Christian Loehle <cloehle@hyperstone.com>
-Reviewed-by: Adrian Hunter <adrian.hunter@intel.com>
-Link: https://lore.kernel.org/r/bc706a6ab08c4fe2834ba0c05a804672@hyperstone.com
-Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+Reported-by: Len Brown <lenb@kernel.org>
+Signed-off-by: Luca Coelho <luciano.coelho@intel.com>
+Fixes: 78a19d5285d9 ("iwlwifi: mvm: Read the PPAG and SAR tables at INIT stage")
+Signed-off-by: Luca Coelho <luciano.coelho@intel.com>
+Signed-off-by: Kalle Valo <kvalo@kernel.org>
+Link: https://lore.kernel.org/r/iwlwifi.20220128144623.96f683a89b42.I14e2985bfd7ddd8a8d83eb1869b800c0e7f30db4@changeid
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/mmc/core/block.c |   28 ++++++++++++++--------------
- 1 file changed, 14 insertions(+), 14 deletions(-)
+ drivers/net/wireless/intel/iwlwifi/fw/acpi.c |   11 ++++++-----
+ drivers/net/wireless/intel/iwlwifi/iwl-csr.h |    3 ++-
+ drivers/net/wireless/intel/iwlwifi/mvm/fw.c  |    2 +-
+ 3 files changed, 9 insertions(+), 7 deletions(-)
 
---- a/drivers/mmc/core/block.c
-+++ b/drivers/mmc/core/block.c
-@@ -1642,31 +1642,31 @@ static void mmc_blk_read_single(struct m
- 	struct mmc_card *card = mq->card;
- 	struct mmc_host *host = card->host;
- 	blk_status_t error = BLK_STS_OK;
--	int retries = 0;
+--- a/drivers/net/wireless/intel/iwlwifi/fw/acpi.c
++++ b/drivers/net/wireless/intel/iwlwifi/fw/acpi.c
+@@ -1,7 +1,7 @@
+ // SPDX-License-Identifier: GPL-2.0 OR BSD-3-Clause
+ /*
+  * Copyright (C) 2017 Intel Deutschland GmbH
+- * Copyright (C) 2019-2021 Intel Corporation
++ * Copyright (C) 2019-2022 Intel Corporation
+  */
+ #include <linux/uuid.h>
+ #include "iwl-drv.h"
+@@ -814,10 +814,11 @@ bool iwl_sar_geo_support(struct iwl_fw_r
+ 	 * only one using version 36, so skip this version entirely.
+ 	 */
+ 	return IWL_UCODE_SERIAL(fwrt->fw->ucode_ver) >= 38 ||
+-	       IWL_UCODE_SERIAL(fwrt->fw->ucode_ver) == 17 ||
+-	       (IWL_UCODE_SERIAL(fwrt->fw->ucode_ver) == 29 &&
+-		((fwrt->trans->hw_rev & CSR_HW_REV_TYPE_MSK) ==
+-		 CSR_HW_REV_TYPE_7265D));
++		(IWL_UCODE_SERIAL(fwrt->fw->ucode_ver) == 17 &&
++		 fwrt->trans->hw_rev != CSR_HW_REV_TYPE_3160) ||
++		(IWL_UCODE_SERIAL(fwrt->fw->ucode_ver) == 29 &&
++		 ((fwrt->trans->hw_rev & CSR_HW_REV_TYPE_MSK) ==
++		  CSR_HW_REV_TYPE_7265D));
+ }
+ IWL_EXPORT_SYMBOL(iwl_sar_geo_support);
  
- 	do {
- 		u32 status;
- 		int err;
-+		int retries = 0;
+--- a/drivers/net/wireless/intel/iwlwifi/iwl-csr.h
++++ b/drivers/net/wireless/intel/iwlwifi/iwl-csr.h
+@@ -1,6 +1,6 @@
+ /* SPDX-License-Identifier: GPL-2.0 OR BSD-3-Clause */
+ /*
+- * Copyright (C) 2005-2014, 2018-2021 Intel Corporation
++ * Copyright (C) 2005-2014, 2018-2022 Intel Corporation
+  * Copyright (C) 2013-2014 Intel Mobile Communications GmbH
+  * Copyright (C) 2016 Intel Deutschland GmbH
+  */
+@@ -319,6 +319,7 @@ enum {
+ #define CSR_HW_REV_TYPE_2x00		(0x0000100)
+ #define CSR_HW_REV_TYPE_105		(0x0000110)
+ #define CSR_HW_REV_TYPE_135		(0x0000120)
++#define CSR_HW_REV_TYPE_3160		(0x0000164)
+ #define CSR_HW_REV_TYPE_7265D		(0x0000210)
+ #define CSR_HW_REV_TYPE_NONE		(0x00001F0)
+ #define CSR_HW_REV_TYPE_QNJ		(0x0000360)
+--- a/drivers/net/wireless/intel/iwlwifi/mvm/fw.c
++++ b/drivers/net/wireless/intel/iwlwifi/mvm/fw.c
+@@ -1572,7 +1572,7 @@ int iwl_mvm_up(struct iwl_mvm *mvm)
+ 	ret = iwl_mvm_sar_init(mvm);
+ 	if (ret == 0)
+ 		ret = iwl_mvm_sar_geo_init(mvm);
+-	else if (ret < 0)
++	if (ret < 0)
+ 		goto error;
  
--		mmc_blk_rw_rq_prep(mqrq, card, 1, mq);
-+		while (retries++ <= MMC_READ_SINGLE_RETRIES) {
-+			mmc_blk_rw_rq_prep(mqrq, card, 1, mq);
- 
--		mmc_wait_for_req(host, mrq);
-+			mmc_wait_for_req(host, mrq);
- 
--		err = mmc_send_status(card, &status);
--		if (err)
--			goto error_exit;
--
--		if (!mmc_host_is_spi(host) &&
--		    !mmc_ready_for_data(status)) {
--			err = mmc_blk_fix_state(card, req);
-+			err = mmc_send_status(card, &status);
- 			if (err)
- 				goto error_exit;
--		}
- 
--		if (mrq->cmd->error && retries++ < MMC_READ_SINGLE_RETRIES)
--			continue;
-+			if (!mmc_host_is_spi(host) &&
-+			    !mmc_ready_for_data(status)) {
-+				err = mmc_blk_fix_state(card, req);
-+				if (err)
-+					goto error_exit;
-+			}
- 
--		retries = 0;
-+			if (!mrq->cmd->error)
-+				break;
-+		}
- 
- 		if (mrq->cmd->error ||
- 		    mrq->data->error ||
+ 	iwl_mvm_tas_init(mvm);
 
 

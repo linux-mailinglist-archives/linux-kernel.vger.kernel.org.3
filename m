@@ -2,169 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AFD54BEAC8
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 20:37:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1874F4BEACD
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 20:37:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232159AbiBUT2r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 14:28:47 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52328 "EHLO
+        id S233071AbiBUTad (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 14:30:33 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229510AbiBUT2p (ORCPT
+        with ESMTP id S229510AbiBUTa0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 14:28:45 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7299C65FC
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 11:28:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645471702; x=1677007702;
-  h=message-id:date:mime-version:to:cc:references:from:
-   subject:in-reply-to:content-transfer-encoding;
-  bh=ax7MOh6iqPNpABeyMv0mtFHIoP6A+V0ZoaBmiM4rzLQ=;
-  b=ZUuoxiNErOPB/scw0vHfZ57LMovqFp6L6jTvyJcHz4LytUT/D1jlf1rX
-   1u+qZt9jQV5sctwzrLVmdey0vh3ZCK/EpFSgRafnEHxvzsHWgMsHXObzj
-   9CfQIw7v56tiVmQPmxg8AM0/dxP74sNQk48FhHVLwuWv6KAGWhLXjE5/x
-   kkbtOAsmIH2Yo7xHXmf6Ob5lnJk1ASVlkCfJiwCQy+vkgY0XPvo/6PYBc
-   /1fPpaHVjero/iLmXXwoTfcFrJIubxm7+vM/iiJNpQMnLb3kp620a4RxB
-   lh2TMAzomz1l8s9jeV6d/goxpudNZRidwNW4sJq9N4IihbKwHJ2Uc3NI0
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10265"; a="232180697"
-X-IronPort-AV: E=Sophos;i="5.88,386,1635231600"; 
-   d="scan'208";a="232180697"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2022 11:28:21 -0800
-X-IronPort-AV: E=Sophos;i="5.88,386,1635231600"; 
-   d="scan'208";a="638651388"
-Received: from cynthiaj-mobl1.amr.corp.intel.com (HELO [10.212.185.129]) ([10.212.185.129])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2022 11:28:21 -0800
-Message-ID: <7ebd6ba1-85a4-6fee-c897-22ed108ac8b7@intel.com>
-Date:   Mon, 21 Feb 2022 11:28:16 -0800
+        Mon, 21 Feb 2022 14:30:26 -0500
+Received: from cloud48395.mywhc.ca (cloud48395.mywhc.ca [173.209.37.211])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5420E65FC;
+        Mon, 21 Feb 2022 11:30:02 -0800 (PST)
+Received: from [45.44.224.220] (port=44686 helo=[192.168.1.179])
+        by cloud48395.mywhc.ca with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <olivier@trillion01.com>)
+        id 1nMENj-0008Ff-VX; Mon, 21 Feb 2022 14:30:00 -0500
+Message-ID: <cfa4268754a9884d22ac901a42817716ee33ab5f.camel@trillion01.com>
+Subject: Re: [PATCH v1] io_uring: Add support for napi_busy_poll
+From:   Olivier Langlois <olivier@trillion01.com>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     Pavel Begunkov <asml.silence@gmail.com>,
+        Hao Xu <haoxu@linux.alibaba.com>,
+        io-uring <io-uring@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Date:   Mon, 21 Feb 2022 14:29:59 -0500
+In-Reply-To: <76456775-a0c5-7925-0160-9037512e7e4d@kernel.dk>
+References: <d11e31bd59c75b2cce994dd90a07e769d4e039db.1645257310.git.olivier@trillion01.com>
+         <cbf791fb3cd495f156eb4aeb4dd01c42fca22cd4.camel@trillion01.com>
+         <f070354c-b65b-f8b3-e597-2e756bcfa705@kernel.dk>
+         <b674472d8c52a84002908e2248fd81ce11247569.camel@trillion01.com>
+         <76456775-a0c5-7925-0160-9037512e7e4d@kernel.dk>
+Organization: Trillion01 Inc
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.42.3 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Content-Language: en-US
-To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        luto@kernel.org, peterz@infradead.org,
-        sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
-        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
-        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
-        joro@8bytes.org, jpoimboe@redhat.com, knsathya@kernel.org,
-        pbonzini@redhat.com, sdeep@vmware.com, seanjc@google.com,
-        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
-        x86@kernel.org, linux-kernel@vger.kernel.org
-References: <20220218161718.67148-1-kirill.shutemov@linux.intel.com>
- <20220218161718.67148-3-kirill.shutemov@linux.intel.com>
- <66fcd7e7-deb6-f27e-9fc6-33293ce04f16@intel.com>
- <20220218213300.2bs4t3admhozonaq@black.fi.intel.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-Subject: Re: [PATCHv3 02/32] x86/coco: Add API to handle encryption mask
-In-Reply-To: <20220218213300.2bs4t3admhozonaq@black.fi.intel.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - cloud48395.mywhc.ca
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - trillion01.com
+X-Get-Message-Sender-Via: cloud48395.mywhc.ca: authenticated_id: olivier@trillion01.com
+X-Authenticated-Sender: cloud48395.mywhc.ca: olivier@trillion01.com
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/18/22 13:33, Kirill A. Shutemov wrote:
-> On Fri, Feb 18, 2022 at 12:36:02PM -0800, Dave Hansen wrote:
->> On 2/18/22 08:16, Kirill A. Shutemov wrote:
->>> +#ifdef CONFIG_ARCH_HAS_CC_PLATFORM
->>> +u64 cc_get_mask(bool enc);
->>> +u64 cc_mkenc(u64 val);
->>> +u64 cc_mkdec(u64 val);
->>> +#else
->>> +#define cc_get_mask(enc)	0
->>> +#define cc_mkenc(val)		(val)
->>> +#define cc_mkdec(val)		(val)
->>> +#endif
->>
->> Is there a reason the stubs as #defines?  Static inlines are preferred
->> for consistent type safety among other things.
+On Sun, 2022-02-20 at 12:38 -0700, Jens Axboe wrote:
 > 
-> I was slightly worried about 32-bit non-PAE that has phys_addr_t and
-> pgprotval_t 32-bit. I was not completely sure it will not cause any
-> issue due to type mismatch. Maybe it is ungrounded.
+> OK, that's a pretty good improvement in both latency and
+> deviation/consistency. Is this using SQPOLL, or is it using polling
+> off
+> cqring_wait from the task itself? Also something to consider for the
+> test benchmark app, should be able to run both (which is usually just
+> setting the SETUP_SQPOLL flag or not, if done right).
 > 
-> With CONFIG_ARCH_HAS_CC_PLATFORM=y, all relevant types are 64-bit.
 > 
->> It would also be nice to talk about the u64 type in the changelog.  If I
->> remember right, there was a reason you didn't want to have a pgprot_t
->> here.
-> 
-> With standalone <asm/coco.h> I think we can make it work with other type.
-> But I'm not sure what it has to be.
-> 
-> I found helpers useful for modifying pgprotval_t and phys_addr_t. I
-> considered u64 a common ground.
-> 
-> Should I change this to something else?
+The answer to your question is complex. This is one of the external
+factor that I was refering too.
 
-cc_get_mask() is only used once and is assigned to a pgprot_t variable.
- I expect it to return a pgprot_t.
+1 thread is managing 49 TCP sockets. This thread io_uring context is
+configured with SQPOLL. Upon receiving a packet of interest, it will
+wake up thread #2 with an eventfd installed into a private non SQPOLL 
+io_uring context and will send a request to a 50th TCP socket.
 
-...
->>> +u64 cc_mkenc(u64 val)
->>> +{
->>> +	switch (cc_vendor) {
->>> +	case CC_VENDOR_AMD:
->>> +		return val | cc_mask;
->>> +	default:
->>> +		return val;
->>> +	}
->>> +}
->>> +
->>> +u64 cc_mkdec(u64 val)
->>> +{
->>> +	switch (cc_vendor) {
->>> +	case CC_VENDOR_AMD:
->>> +		return val & ~cc_mask;
->>> +	default:
->>> +		return val;
->>> +	}
->>> +}
->>> +EXPORT_SYMBOL_GPL(cc_mkdec);
+Both threads are now busy polling NAPI. One from the SQPOLL code and
+the other with the io_cqring_wait() code.
 
-I'm just a bit confused why *this* was chosen as the cc_whatever() hook.
- Just like the mask function, it has one spot where it gets used:
+If it was not enough, since I have discovered busy poll benefits and
+that to reschedule a sleeping task takes about 5-10 uSecs, thread #1 is
+also busy polling io_uring instead of blocking in io_uring_enter().
 
-+#define pgprot_encrypted(prot)	__pgprot(cc_mkenc(pgprot_val(prot)))
-+#define pgprot_decrypted(prot)	__pgprot(cc_mkdec(pgprot_val(prot)))
+Thx for suggesting designing the benchmark to be able to test both
+SQPOLL and non SQPOLL busy polling. This is something that I already in
+mind.
 
-So, why bother having another level of abstraction?
+I have completed 3 small improvements for the patch v2. I need to check
+the kernel test bot and Hao comments to see if I have more to work on
+but if all is good, I only need to complete the benchmark program. I
+might able to send v2 later today.
 
-Why don't we just have:
+Greetings,
 
-	pgprot_t cc_mkenc(pgprot prot)
-	pgprot_t cc_mkenc(pgprot prot)
-
-and *no* pgprot_{en,de}crypted()?
-
-...
->>> +out:
->>>  	physical_mask &= ~sme_me_mask;
->>> +	if (sme_me_mask)
->>> +		cc_init(CC_VENDOR_AMD, sme_me_mask);
->>>  }
->>
->> I don't think you need to mop it up here, but where does this leave
->> sme_me_mask?
-> 
-> I think sme_me_mask still can be useful to indicate that the code is only
-> relevant for AMD context.
-
-Shouldn't we be able to tell that because something is in an
-AMD-specific file, function or #ifdef?
-
-Is there ever a time where sme_me_mask is populated by cc_mask is not?
-This seems like it is just making a copy of sme_me_mask.
-
-sme_me_mask does look quite AMD-specialized, like its assembly
-manipulation.  Even if it's just a copy of cc_mask, it would be nice to
-call that out so the relationship is crystal clear.

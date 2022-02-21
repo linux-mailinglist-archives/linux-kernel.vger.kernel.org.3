@@ -2,204 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82FE54BDC93
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:42:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 95F394BE6E0
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:02:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379471AbiBUPr4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 10:47:56 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44622 "EHLO
+        id S1379501AbiBUPtG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 10:49:06 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234370AbiBUPrw (ORCPT
+        with ESMTP id S1379480AbiBUPtF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 10:47:52 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 469CC22BC5
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 07:47:29 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BB8AF6120F
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 15:47:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C8C2C340E9;
-        Mon, 21 Feb 2022 15:47:27 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="jKYr5cIO"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1645458446;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=SBYkKyKNPkdz2kvGFW609VIaQtBA6vJAm5BIip1HHmo=;
-        b=jKYr5cIOzzJ/FFJs/BX/lSydIpnJVHGexwNCNmAblhnlMEmGDFyzKNeolb3i/6XlDHdfoC
-        z85AqBdJoAgYZrboRkHsU3Uln+Wqt7/O/aQ6UpYNem7/Djukuv5sc/A1GVqzTpQfy5Z0BF
-        ivtcg3uiKPa2PHhQfBoVlcWAaqvqjeA=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id e28c4740 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Mon, 21 Feb 2022 15:47:25 +0000 (UTC)
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Theodore Ts'o <tytso@mit.edu>,
-        Eric Biggers <ebiggers@kernel.org>,
-        Eric Biggers <ebiggers@google.com>,
-        Dominik Brodowski <linux@dominikbrodowski.net>
-Subject: [PATCH v4] random: always wake up entropy writers after extraction
-Date:   Mon, 21 Feb 2022 16:47:21 +0100
-Message-Id: <20220221154721.2292443-1-Jason@zx2c4.com>
-In-Reply-To: <CAHmME9rNtcZfj5CmRarX3-MKBYVG0tTzu80Jmm=2peWp0zy2UA@mail.gmail.com>
-References: <CAHmME9rNtcZfj5CmRarX3-MKBYVG0tTzu80Jmm=2peWp0zy2UA@mail.gmail.com>
+        Mon, 21 Feb 2022 10:49:05 -0500
+Received: from conssluserg-06.nifty.com (conssluserg-06.nifty.com [210.131.2.91])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADE0A23BF4
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 07:48:39 -0800 (PST)
+Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169]) (authenticated)
+        by conssluserg-06.nifty.com with ESMTP id 21LFmFtX007182
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 00:48:15 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-06.nifty.com 21LFmFtX007182
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1645458495;
+        bh=Eq86KaLsmhn/jol5Cl8rzxgkWiNMVMb0uEfZ1QLZapo=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Ts3bbvIUNhE0Y6Bzss57FFqwRvn8Wc/PkOSyPLDeypC1k78+CvrOTRlgjsEXuxEYE
+         5NTs5N/PTQLeNrWbp4d4e58Yd2W74J89cZRrBxhyhraLmAxDlKeRQi3mhi3D/LoKx1
+         S5E92VIWwX4sB2oSs6RlucNfUIWqS27MOST4QzglE5L92ogAJhAXXFYI/UKNm9+Fq9
+         D890iCMxRvvmOj+y91+gLM4MDwZeBA1clPKkJnDvV+kkY01C97mX1Eae/JMZBqL6V0
+         2oOAwlzGRR/FukvlPYLTJ0Z6lRj8vqk1yXYnLSh4Wy9z2vnvjMaw1snJDIDBB0dXEB
+         W7CLgcztMYI0A==
+X-Nifty-SrcIP: [209.85.210.169]
+Received: by mail-pf1-f169.google.com with SMTP id z15so3469323pfe.7
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 07:48:15 -0800 (PST)
+X-Gm-Message-State: AOAM533N6JRf6jJR0N6Fk9A9MSkNEfDtBd9OtU3jE0ovNGnCeuIY10Zc
+        gwIOvdedy4i/qCkVxWVq2N3gIwU4ImAukTXi7Ac=
+X-Google-Smtp-Source: ABdhPJyIDoa3KpkYnOJOjGfpO89oU3Wb/HC5/pM/hhJVkCzjD2oDLvQEdThWSSXmLxjexnlDDXnTVXnsngQ2AX1NiQI=
+X-Received: by 2002:a65:5341:0:b0:363:da77:99df with SMTP id
+ w1-20020a655341000000b00363da7799dfmr16423493pgr.126.1645458494757; Mon, 21
+ Feb 2022 07:48:14 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220201013257.17926-1-changbin.du@gmail.com> <20220221143758.7wln3mklyaj7mzod@mail.google.com>
+In-Reply-To: <20220221143758.7wln3mklyaj7mzod@mail.google.com>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Tue, 22 Feb 2022 00:47:36 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAQtuMujS32JTmjj3kPwiHALmV+izV4_mjRtFq6szC-e2Q@mail.gmail.com>
+Message-ID: <CAK7LNAQtuMujS32JTmjj3kPwiHALmV+izV4_mjRtFq6szC-e2Q@mail.gmail.com>
+Subject: Re: [PATCH] kallsyms: ignore all local labels prefixed by '.L'
+To:     Changbin Du <changbin.du@gmail.com>
+Cc:     Nick Desaulniers <ndesaulniers@google.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:SIFIVE DRIVERS" <linux-riscv@lists.infradead.org>,
+        llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now that POOL_BITS == POOL_MIN_BITS, we must unconditionally wake up
-entropy writers after every extraction. Therefore there's no point of
-write_wakeup_threshold, so we can move it to the dustbin of unused
-compatibility sysctls. While we're at it, we can fix a small comparison
-where we were waking up after <= min rather than < min.
+On Mon, Feb 21, 2022 at 11:38 PM Changbin Du <changbin.du@gmail.com> wrote:
+>
+> Hi, Masahiro,
+> Could you consider picking up this change if you have no objection?
+>
+> On Tue, Feb 01, 2022 at 09:32:57AM +0800, Changbin Du wrote:
+> > The llvm compiler can generate lots of local labels ('.LBB', '.Ltmpxxx',
+> > '.L__unnamed_xx', etc.). These symbols usually are useless for debugging.
+> > And they might overlap with handwritten symbols.
+> >
+> > Before this change, a dumpstack shows a local symbol for epc:
+> > [    0.040341][    T0] Hardware name: riscv-virtio,qemu (DT)
+> > [    0.040376][    T0] epc : .LBB6_14+0x22/0x6a
+> > [    0.040452][    T0]  ra : restore_all+0x12/0x6e
+> >
+> > The simple solution is that we can ignore all local labels prefixed by '.L'.
+> > For handwritten symbols which need to be preserved should drop the '.L'
+> > prefix.
+> >
+> > After this change, the C defined symbol is shown so we can locate the
+> > problematical code immediately:
+> > [    0.035795][    T0] Hardware name: riscv-virtio,qemu (DT)
+> > [    0.036332][    T0] epc : trace_hardirqs_on+0x54/0x13c
+> > [    0.036567][    T0]  ra : restore_all+0x12/0x6e
+> >
+> > Signed-off-by: Changbin Du <changbin.du@gmail.com>
 
-Cc: Theodore Ts'o <tytso@mit.edu>
-Suggested-by: Eric Biggers <ebiggers@kernel.org>
-Reviewed-by: Eric Biggers <ebiggers@google.com>
-Reviewed-by: Dominik Brodowski <linux@dominikbrodowski.net>
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
----
-v4 keeps the file writable to avoid breaking userspace and updates
-kernel.rst.
+Now applied to linux-kbuild. Thanks.
 
- Documentation/admin-guide/sysctl/kernel.rst |  7 +++--
- drivers/char/random.c                       | 33 +++++++--------------
- 2 files changed, 16 insertions(+), 24 deletions(-)
 
-diff --git a/Documentation/admin-guide/sysctl/kernel.rst b/Documentation/admin-guide/sysctl/kernel.rst
-index d359bcfadd39..d3c6d9a501a9 100644
---- a/Documentation/admin-guide/sysctl/kernel.rst
-+++ b/Documentation/admin-guide/sysctl/kernel.rst
-@@ -1029,14 +1029,17 @@ This is a directory, with the following entries:
- * ``poolsize``: the entropy pool size, in bits;
- 
- * ``urandom_min_reseed_secs``: obsolete (used to determine the minimum
--  number of seconds between urandom pool reseeding).
-+  number of seconds between urandom pool reseeding). This file is
-+  writable for compatibility purposes, but writing to it has no effect
-+  on any RNG behavior.
- 
- * ``uuid``: a UUID generated every time this is retrieved (this can
-   thus be used to generate UUIDs at will);
- 
- * ``write_wakeup_threshold``: when the entropy count drops below this
-   (as a number of bits), processes waiting to write to ``/dev/random``
--  are woken up.
-+  are woken up. This file is writable for compatibility purposes, but
-+  writing to it has no effect on any RNG behavior.
- 
- If ``drivers/char/random.c`` is built with ``ADD_INTERRUPT_BENCH``
- defined, these additional entries are present:
-diff --git a/drivers/char/random.c b/drivers/char/random.c
-index 20538e9b1a2c..3b30e764eeef 100644
---- a/drivers/char/random.c
-+++ b/drivers/char/random.c
-@@ -296,12 +296,6 @@ enum {
-  */
- static DECLARE_WAIT_QUEUE_HEAD(random_write_wait);
- static struct fasync_struct *fasync;
--/*
-- * If the entropy count falls under this number of bits, then we
-- * should wake up processes which are selecting or polling on write
-- * access to /dev/random.
-- */
--static int random_write_wakeup_bits = POOL_MIN_BITS;
- 
- static DEFINE_SPINLOCK(random_ready_list_lock);
- static LIST_HEAD(random_ready_list);
-@@ -739,10 +733,8 @@ static void crng_reseed(struct crng_state *crng, bool use_input_pool)
- 				return;
- 		} while (cmpxchg(&input_pool.entropy_count, entropy_count, 0) != entropy_count);
- 		extract_entropy(buf.key, sizeof(buf.key));
--		if (random_write_wakeup_bits) {
--			wake_up_interruptible(&random_write_wait);
--			kill_fasync(&fasync, SIGIO, POLL_OUT);
--		}
-+		wake_up_interruptible(&random_write_wait);
-+		kill_fasync(&fasync, SIGIO, POLL_OUT);
- 	} else {
- 		_extract_crng(&primary_crng, buf.block);
- 		_crng_backtrack_protect(&primary_crng, buf.block,
-@@ -1471,7 +1463,7 @@ static __poll_t random_poll(struct file *file, poll_table *wait)
- 	mask = 0;
- 	if (crng_ready())
- 		mask |= EPOLLIN | EPOLLRDNORM;
--	if (input_pool.entropy_count < random_write_wakeup_bits)
-+	if (input_pool.entropy_count < POOL_MIN_BITS)
- 		mask |= EPOLLOUT | EPOLLWRNORM;
- 	return mask;
- }
-@@ -1556,7 +1548,7 @@ static long random_ioctl(struct file *f, unsigned int cmd, unsigned long arg)
- 		 */
- 		if (!capable(CAP_SYS_ADMIN))
- 			return -EPERM;
--		if (xchg(&input_pool.entropy_count, 0) && random_write_wakeup_bits) {
-+		if (xchg(&input_pool.entropy_count, 0)) {
- 			wake_up_interruptible(&random_write_wait);
- 			kill_fasync(&fasync, SIGIO, POLL_OUT);
- 		}
-@@ -1636,9 +1628,9 @@ SYSCALL_DEFINE3(getrandom, char __user *, buf, size_t, count, unsigned int,
- 
- #include <linux/sysctl.h>
- 
--static int min_write_thresh;
--static int max_write_thresh = POOL_BITS;
- static int random_min_urandom_seed = 60;
-+static int random_write_wakeup_bits = POOL_MIN_BITS;
-+static int sysctl_poolsize = POOL_BITS;
- static char sysctl_bootid[16];
- 
- /*
-@@ -1677,7 +1669,6 @@ static int proc_do_uuid(struct ctl_table *table, int write, void *buffer,
- 	return proc_dostring(&fake_table, write, buffer, lenp, ppos);
- }
- 
--static int sysctl_poolsize = POOL_BITS;
- static struct ctl_table random_table[] = {
- 	{
- 		.procname	= "poolsize",
-@@ -1698,9 +1689,7 @@ static struct ctl_table random_table[] = {
- 		.data		= &random_write_wakeup_bits,
- 		.maxlen		= sizeof(int),
- 		.mode		= 0644,
--		.proc_handler	= proc_dointvec_minmax,
--		.extra1		= &min_write_thresh,
--		.extra2		= &max_write_thresh,
-+		.proc_handler	= proc_dointvec,
- 	},
- 	{
- 		.procname	= "urandom_min_reseed_secs",
-@@ -1892,13 +1881,13 @@ void add_hwgenerator_randomness(const char *buffer, size_t count,
- 	}
- 
- 	/* Throttle writing if we're above the trickle threshold.
--	 * We'll be woken up again once below random_write_wakeup_thresh,
--	 * when the calling thread is about to terminate, or once
--	 * CRNG_RESEED_INTERVAL has lapsed.
-+	 * We'll be woken up again once below POOL_MIN_BITS, when
-+	 * the calling thread is about to terminate, or once
-+	 * CRNG_RESEED_INTERVAL has elapsed.
- 	 */
- 	wait_event_interruptible_timeout(random_write_wait,
- 			!system_wq || kthread_should_stop() ||
--			input_pool.entropy_count <= random_write_wakeup_bits,
-+			input_pool.entropy_count < POOL_MIN_BITS,
- 			CRNG_RESEED_INTERVAL);
- 	mix_pool_bytes(buffer, count);
- 	credit_entropy_bits(entropy);
+
+> > ---
+> >  scripts/kallsyms.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/scripts/kallsyms.c b/scripts/kallsyms.c
+> > index 54ad86d13784..8caabddf817c 100644
+> > --- a/scripts/kallsyms.c
+> > +++ b/scripts/kallsyms.c
+> > @@ -108,7 +108,7 @@ static bool is_ignored_symbol(const char *name, char type)
+> >       /* Symbol names that begin with the following are ignored.*/
+> >       static const char * const ignored_prefixes[] = {
+> >               "$",                    /* local symbols for ARM, MIPS, etc. */
+> > -             ".LASANPC",             /* s390 kasan local symbols */
+> > +             ".L",                   /* local labels, .LBB,.Ltmpxxx,.L__unnamed_xx,.LASANPC, etc. */
+> >               "__crc_",               /* modversions */
+> >               "__efistub_",           /* arm64 EFI stub namespace */
+> >               "__kvm_nvhe_",          /* arm64 non-VHE KVM namespace */
+> > --
+> > 2.32.0
+> >
+>
+> --
+> Cheers,
+> Changbin Du
+
+
+
 -- 
-2.35.1
-
+Best Regards
+Masahiro Yamada

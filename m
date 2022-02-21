@@ -2,83 +2,476 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBE164BE440
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:58:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 78ABA4BE86F
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:05:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377822AbiBUObJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 09:31:09 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39506 "EHLO
+        id S1377857AbiBUObS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 09:31:18 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377837AbiBUObB (ORCPT
+        with ESMTP id S1377825AbiBUObJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 09:31:01 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59DF72251A;
-        Mon, 21 Feb 2022 06:30:37 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id C45F81F88E;
-        Mon, 21 Feb 2022 14:30:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1645453835; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=TpI+cKxMChFCiCtvh2NLQERVjIj4zZNRW9bSICtuUmA=;
-        b=aCMoadF0LVnnQ+VKVgj7fnCZPEBpLO/gHwdORfjcQxrcQ/dgwjWhkKmXSz6hV4KqLu5aC5
-        Xzqn84pKCQo6GkMQtB3MUy6Q2dENVYWC12XgOm79IWsAq+7uf1HEcFEnql4u6lDOxHJvEY
-        5sUJMaJBwMh5pLnKTbc86vaCXvNVYdU=
-Received: from suse.cz (unknown [10.100.224.162])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 5A0E9A3C1A;
-        Mon, 21 Feb 2022 14:30:35 +0000 (UTC)
-Date:   Mon, 21 Feb 2022 15:30:34 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-doc@vger.kernel.org
-Subject: Re: [PATCH v2] vsprintf: Fix %pK with kptr_restrict == 0
-Message-ID: <YhOiCka59MkVkuOC@alley>
-References: <107476128e59bff11a309b5bf7579a1753a41aca.1645087605.git.christophe.leroy@csgroup.eu>
+        Mon, 21 Feb 2022 09:31:09 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5706D1EEC6;
+        Mon, 21 Feb 2022 06:30:45 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id 3790D1F437A8
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1645453844;
+        bh=FNOwiqQ/KP71DW3JZYaleITbg/KKUYV3qtTy/sQhpYA=;
+        h=Date:From:Subject:To:Cc:References:In-Reply-To:From;
+        b=O0sNex8vtLXvYrEn0AGCj/JFqXd7DBrBnryyYPg4f4u3sIw7+lzYL2TLHMEDvqrJX
+         Fok0/WjnD2CiD/rhv9wu1YnQw8PWhOBgHh+/LnGiclBDvoXgKpHvSMh+XyIUv9Bgz2
+         gOm4MI20YKwosP/MnzXtGwzeKQLOs9X+vduH1rv4nIfcsLBMxB7pusyoO3PM0TIaSw
+         p0LC/EDNE/pHaydudXnsq47RZVggB/5rqoxkbG6h/OjRCcm5yyaq0q5V/IjdtEA1NG
+         4EJXVBVk9PGfO25dNL5Haw07G/fpGs7fp3AZQLErKkoOPb2w+j86e8geY8bOriJ3A/
+         lPFpHbijByA6g==
+Message-ID: <9b4e50fd-cfa2-542f-d16a-3771284eece7@collabora.com>
+Date:   Mon, 21 Feb 2022 15:30:40 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <107476128e59bff11a309b5bf7579a1753a41aca.1645087605.git.christophe.leroy@csgroup.eu>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Subject: Re: [PATCH v8 13/19] drm/mediatek: dpi: Add dpintf support
+To:     Guillaume Ranquet <granquet@baylibre.com>, chunkuang.hu@kernel.org,
+        p.zabel@pengutronix.de, airlied@linux.ie, daniel@ffwll.ch,
+        robh+dt@kernel.org, maarten.lankhorst@linux.intel.com,
+        mripard@kernel.org, tzimmermann@suse.de, matthias.bgg@gmail.com,
+        chunfeng.yun@mediatek.com, kishon@ti.com, vkoul@kernel.org,
+        deller@gmx.de, ck.hu@mediatek.com, jitao.shi@mediatek.com
+Cc:     dri-devel@lists.freedesktop.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-phy@lists.infradead.org, linux-fbdev@vger.kernel.org,
+        Markus Schneider-Pargmann <msp@baylibre.com>
+References: <20220218145437.18563-1-granquet@baylibre.com>
+ <20220218145437.18563-14-granquet@baylibre.com>
+Content-Language: en-US
+In-Reply-To: <20220218145437.18563-14-granquet@baylibre.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 2022-02-17 09:49:59, Christophe Leroy wrote:
-> Although kptr_restrict is set to 0 and the kernel is booted with
-> no_hash_pointers parameter, the content of /proc/vmallocinfo is
-> lacking the real addresses.
+Il 18/02/22 15:54, Guillaume Ranquet ha scritto:
+> dpintf is the displayport interface hardware unit. This unit is similar
+> to dpi and can reuse most of the code.
 > 
->   / # cat /proc/vmallocinfo
->   0x(ptrval)-0x(ptrval)    8192 load_module+0xc0c/0x2c0c pages=1 vmalloc
->   0x(ptrval)-0x(ptrval)   12288 start_kernel+0x4e0/0x690 pages=2 vmalloc
->   0x(ptrval)-0x(ptrval)   12288 start_kernel+0x4e0/0x690 pages=2 vmalloc
->   0x(ptrval)-0x(ptrval)    8192 _mpic_map_mmio.constprop.0+0x20/0x44 phys=0x80041000 ioremap
->   0x(ptrval)-0x(ptrval)   12288 _mpic_map_mmio.constprop.0+0x20/0x44 phys=0x80041000 ioremap
->     ...
+> This patch adds support for mt8195-dpintf to this dpi driver. Main
+> differences are:
+>   - Some features/functional components are not available for dpintf
+>     which are now excluded from code execution once is_dpintf is set
+>   - dpintf can and needs to choose between different clockdividers based
+>     on the clockspeed. This is done by choosing a different clock parent.
+>   - There are two additional clocks that need to be managed. These are
+>     only set for dpintf and will be set to NULL if not supplied. The
+>     clk_* calls handle these as normal clocks then.
+>   - Some register contents differ slightly between the two components. To
+>     work around this I added register bits/masks with a DPINTF_ prefix
+>     and use them where different.
 > 
-> According to the documentation for /proc/sys/kernel/, %pK is
-> equivalent to %p when kptr_restrict is set to 0.
+> Based on a separate driver for dpintf created by
+> Jason-JH.Lin <jason-jh.lin@mediatek.com>.
 > 
-> Fixes: 5ead723a20e0 ("lib/vsprintf: no_hash_pointers prints all addresses as unhashed")
-> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
+> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
+> ---
+>   drivers/gpu/drm/mediatek/mtk_dpi.c          | 164 +++++++++++++++++---
+>   drivers/gpu/drm/mediatek/mtk_dpi_regs.h     |  38 +++++
+>   drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.c |   8 +
+>   drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.h |   1 +
+>   drivers/gpu/drm/mediatek/mtk_drm_drv.c      |   5 +-
+>   include/linux/soc/mediatek/mtk-mmsys.h      |   2 +
+>   6 files changed, 198 insertions(+), 20 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/mediatek/mtk_dpi.c b/drivers/gpu/drm/mediatek/mtk_dpi.c
+> index be99399faf1bb..c5639ada868f8 100644
+> --- a/drivers/gpu/drm/mediatek/mtk_dpi.c
+> +++ b/drivers/gpu/drm/mediatek/mtk_dpi.c
+> @@ -63,6 +63,14 @@ enum mtk_dpi_out_color_format {
+>   	MTK_DPI_COLOR_FORMAT_YCBCR_422_FULL
+>   };
+>   
+> +enum TVDPLL_CLK {
+> +	TVDPLL_PLL = 0,
+> +	TVDPLL_D2 = 2,
+> +	TVDPLL_D4 = 4,
+> +	TVDPLL_D8 = 8,
+> +	TVDPLL_D16 = 16,
+> +};
+> +
+>   struct mtk_dpi {
+>   	struct drm_encoder encoder;
+>   	struct drm_bridge bridge;
+> @@ -71,8 +79,10 @@ struct mtk_dpi {
+>   	void __iomem *regs;
+>   	struct device *dev;
+>   	struct clk *engine_clk;
+> +	struct clk *dpi_ck_cg;
+>   	struct clk *pixel_clk;
+>   	struct clk *tvd_clk;
+> +	struct clk *pclk_src[5];
+>   	int irq;
+>   	struct drm_display_mode mode;
+>   	const struct mtk_dpi_conf *conf;
+> @@ -126,6 +136,7 @@ struct mtk_dpi_conf {
+>   	const u32 *output_fmts;
+>   	u32 num_output_fmts;
+>   	bool is_ck_de_pol;
+> +	bool is_dpintf;
+>   	bool swap_input_support;
+>   	// Mask used for HWIDTH, HPORCH, VSYNC_WIDTH and VSYNC_PORCH (no shift)
+>   	u32 dimension_mask;
+> @@ -384,6 +395,25 @@ static void mtk_dpi_config_disable_edge(struct mtk_dpi *dpi)
+>   		mtk_dpi_mask(dpi, dpi->conf->reg_h_fre_con, 0, EDGE_SEL_EN);
+>   }
+>   
+> +static void mtk_dpi_matrix_sel(struct mtk_dpi *dpi, enum mtk_dpi_out_color_format format)
+> +{
+> +	u32 matrix_sel = 0;
+> +
+> +	switch (format) {
+> +	case MTK_DPI_COLOR_FORMAT_YCBCR_422:
+> +	case MTK_DPI_COLOR_FORMAT_YCBCR_422_FULL:
+> +	case MTK_DPI_COLOR_FORMAT_YCBCR_444:
+> +	case MTK_DPI_COLOR_FORMAT_YCBCR_444_FULL:
+> +	case MTK_DPI_COLOR_FORMAT_XV_YCC:
+> +		if (dpi->mode.hdisplay <= 720)
+> +			matrix_sel = 0x2;
+> +		break;
+> +	default:
+> +		break;
+> +	}
+> +	mtk_dpi_mask(dpi, DPI_MATRIX_SET, matrix_sel, INT_MATRIX_SEL_MASK);
+> +}
+> +
+>   static void mtk_dpi_config_color_format(struct mtk_dpi *dpi,
+>   					enum mtk_dpi_out_color_format format)
+>   {
+> @@ -391,6 +421,7 @@ static void mtk_dpi_config_color_format(struct mtk_dpi *dpi,
+>   	    (format == MTK_DPI_COLOR_FORMAT_YCBCR_444_FULL)) {
+>   		mtk_dpi_config_yuv422_enable(dpi, false);
+>   		mtk_dpi_config_csc_enable(dpi, true);
+> +		mtk_dpi_matrix_sel(dpi, format);
+>   		if (dpi->conf->swap_input_support)
+>   			mtk_dpi_config_swap_input(dpi, false);
+>   		mtk_dpi_config_channel_swap(dpi, MTK_DPI_OUT_CHANNEL_SWAP_BGR);
+> @@ -398,6 +429,7 @@ static void mtk_dpi_config_color_format(struct mtk_dpi *dpi,
+>   		   (format == MTK_DPI_COLOR_FORMAT_YCBCR_422_FULL)) {
+>   		mtk_dpi_config_yuv422_enable(dpi, true);
+>   		mtk_dpi_config_csc_enable(dpi, true);
+> +		mtk_dpi_matrix_sel(dpi, format);
+>   		if (dpi->conf->swap_input_support)
+>   			mtk_dpi_config_swap_input(dpi, true);
+>   		mtk_dpi_config_channel_swap(dpi, MTK_DPI_OUT_CHANNEL_SWAP_RGB);
+> @@ -438,6 +470,8 @@ static void mtk_dpi_power_off(struct mtk_dpi *dpi)
+>   	mtk_dpi_disable(dpi);
+>   	clk_disable_unprepare(dpi->pixel_clk);
+>   	clk_disable_unprepare(dpi->engine_clk);
+> +	clk_disable_unprepare(dpi->dpi_ck_cg);
+> +	clk_disable_unprepare(dpi->tvd_clk);
+>   }
+>   
+>   static int mtk_dpi_power_on(struct mtk_dpi *dpi)
+> @@ -447,12 +481,24 @@ static int mtk_dpi_power_on(struct mtk_dpi *dpi)
+>   	if (++dpi->refcount != 1)
+>   		return 0;
+>   
+> +	ret = clk_prepare_enable(dpi->tvd_clk);
+> +	if (ret) {
+> +		dev_err(dpi->dev, "Failed to enable tvd pll: %d\n", ret);
+> +		goto err_pixel;
+> +	}
+> +
+>   	ret = clk_prepare_enable(dpi->engine_clk);
+>   	if (ret) {
+>   		dev_err(dpi->dev, "Failed to enable engine clock: %d\n", ret);
+>   		goto err_refcount;
+>   	}
+>   
+> +	ret = clk_prepare_enable(dpi->dpi_ck_cg);
+> +	if (ret) {
+> +		dev_err(dpi->dev, "Failed to enable dpi_ck_cg clock: %d\n", ret);
+> +		goto err_ck_cg;
+> +	}
+> +
+>   	ret = clk_prepare_enable(dpi->pixel_clk);
+>   	if (ret) {
+>   		dev_err(dpi->dev, "Failed to enable pixel clock: %d\n", ret);
+> @@ -462,10 +508,11 @@ static int mtk_dpi_power_on(struct mtk_dpi *dpi)
+>   	if (dpi->pinctrl && dpi->pins_dpi)
+>   		pinctrl_select_state(dpi->pinctrl, dpi->pins_dpi);
+>   
+> -	mtk_dpi_enable(dpi);
+>   	return 0;
+>   
+>   err_pixel:
+> +	clk_disable_unprepare(dpi->dpi_ck_cg);
+> +err_ck_cg:
+>   	clk_disable_unprepare(dpi->engine_clk);
+>   err_refcount:
+>   	dpi->refcount--;
+> @@ -497,12 +544,21 @@ static int mtk_dpi_set_display_mode(struct mtk_dpi *dpi,
+>   	pll_rate = clk_get_rate(dpi->tvd_clk);
+>   
+>   	vm.pixelclock = pll_rate / factor;
+> -	if ((dpi->output_fmt == MEDIA_BUS_FMT_RGB888_2X12_LE) ||
+> -	    (dpi->output_fmt == MEDIA_BUS_FMT_RGB888_2X12_BE))
+> +	if (dpi->conf->is_dpintf) {
+> +		if (factor == 1)
+> +			clk_set_parent(dpi->pixel_clk, dpi->pclk_src[2]);
+> +		else if (factor == 2)
+> +			clk_set_parent(dpi->pixel_clk, dpi->pclk_src[3]);
+> +		else if (factor == 4)
+> +			clk_set_parent(dpi->pixel_clk, dpi->pclk_src[4]);
+> +		else
+> +			clk_set_parent(dpi->pixel_clk, dpi->pclk_src[2]);
+> +	} else if ((dpi->output_fmt == MEDIA_BUS_FMT_RGB888_2X12_LE) ||
+> +		 (dpi->output_fmt == MEDIA_BUS_FMT_RGB888_2X12_BE)) {
+>   		clk_set_rate(dpi->pixel_clk, vm.pixelclock * 2);
+> -	else
+> +	} else {
+>   		clk_set_rate(dpi->pixel_clk, vm.pixelclock);
+> -
+> +	}
+>   
+>   	vm.pixelclock = clk_get_rate(dpi->pixel_clk);
+>   
+> @@ -515,9 +571,15 @@ static int mtk_dpi_set_display_mode(struct mtk_dpi *dpi,
+>   			    MTK_DPI_POLARITY_FALLING : MTK_DPI_POLARITY_RISING;
+>   	dpi_pol.vsync_pol = vm.flags & DISPLAY_FLAGS_VSYNC_HIGH ?
+>   			    MTK_DPI_POLARITY_FALLING : MTK_DPI_POLARITY_RISING;
+> -	hsync.sync_width = vm.hsync_len;
+> -	hsync.back_porch = vm.hback_porch;
+> -	hsync.front_porch = vm.hfront_porch;
+> +	if (dpi->conf->is_dpintf) {
+> +		hsync.sync_width = vm.hsync_len / 4;
+> +		hsync.back_porch = vm.hback_porch / 4;
+> +		hsync.front_porch = vm.hfront_porch / 4;
+> +	} else {
+> +		hsync.sync_width = vm.hsync_len;
+> +		hsync.back_porch = vm.hback_porch;
+> +		hsync.front_porch = vm.hfront_porch;
+> +	}
 
-Reviewed-by: Petr Mladek <pmladek@suse.com>
+I would propose the following, instead:
 
-I am going to push this within two days or so unless anyone complains.
+	hsync.sync_width = vm.hsync_len;
+	hsync.back_porch = vm.hback_porch;
+	hsync.front_porch = vm.hfront_porch;
 
-Best Regards,
-Petr
+	/*
+	 * For DPINTF, we need to divide everything by 4 because of this,
+	 * that and the other reason.
+	 */
+	if (dpi->conf->is_dpintf) {
+		hsync.sync_width /= 4;
+		hsync.back_porch /= 4;
+		hsync.front_porch /= 4;
+	}
+
+>   	hsync.shift_half_line = false;
+>   	vsync_lodd.sync_width = vm.vsync_len;
+>   	vsync_lodd.back_porch = vm.vback_porch;
+> @@ -559,13 +621,20 @@ static int mtk_dpi_set_display_mode(struct mtk_dpi *dpi,
+>   	mtk_dpi_config_channel_limit(dpi);
+>   	mtk_dpi_config_bit_num(dpi, dpi->bit_num);
+>   	mtk_dpi_config_channel_swap(dpi, dpi->channel_swap);
+> -	mtk_dpi_config_yc_map(dpi, dpi->yc_map);
+>   	mtk_dpi_config_color_format(dpi, dpi->color_format);
+> -	mtk_dpi_config_2n_h_fre(dpi);
+> -	mtk_dpi_dual_edge(dpi);
+> -	mtk_dpi_config_disable_edge(dpi);
+> +	if (dpi->conf->is_dpintf) {
+> +		mtk_dpi_mask(dpi, DPI_CON, DPINTF_INPUT_2P_EN,
+> +			     DPINTF_INPUT_2P_EN);
+> +	} else {
+> +		mtk_dpi_config_yc_map(dpi, dpi->yc_map);
+> +		mtk_dpi_config_2n_h_fre(dpi);
+> +		mtk_dpi_dual_edge(dpi);
+> +		mtk_dpi_config_disable_edge(dpi);
+> +	}
+>   	mtk_dpi_sw_reset(dpi, false);
+>   
+> +	mtk_dpi_enable(dpi);
+> +
+>   	return 0;
+>   }
+>   
+> @@ -608,7 +677,6 @@ static u32 *mtk_dpi_bridge_atomic_get_input_bus_fmts(struct drm_bridge *bridge,
+>   	u32 *input_fmts;
+>   
+>   	*num_input_fmts = 0;
+> -
+
+Why are you removing this line? imo, it's fine to have it.
+
+>   	input_fmts = kcalloc(1, sizeof(*input_fmts),
+>   			     GFP_KERNEL);
+>   	if (!input_fmts)
+> @@ -634,15 +702,18 @@ static int mtk_dpi_bridge_atomic_check(struct drm_bridge *bridge,
+>   		if (dpi->conf->num_output_fmts)
+>   			out_bus_format = dpi->conf->output_fmts[0];
+>   
+> -	dev_dbg(dpi->dev, "input format 0x%04x, output format 0x%04x\n",
+> -		bridge_state->input_bus_cfg.format,
+> -		bridge_state->output_bus_cfg.format);
+> +	dev_info(dpi->dev, "input format 0x%04x, output format 0x%04x\n",
+> +		 bridge_state->input_bus_cfg.format,
+> +		 bridge_state->output_bus_cfg.format);
+
+This is definitely debugging information, and has to be kept as such.
+
+>   
+>   	dpi->output_fmt = out_bus_format;
+>   	dpi->bit_num = MTK_DPI_OUT_BIT_NUM_8BITS;
+>   	dpi->channel_swap = MTK_DPI_OUT_CHANNEL_SWAP_RGB;
+>   	dpi->yc_map = MTK_DPI_OUT_YC_MAP_RGB;
+> -	dpi->color_format = MTK_DPI_COLOR_FORMAT_RGB;
+> +	if (out_bus_format == MEDIA_BUS_FMT_YUYV8_1X16)
+> +		dpi->color_format = MTK_DPI_COLOR_FORMAT_YCBCR_422_FULL;
+> +	else
+> +		dpi->color_format = MTK_DPI_COLOR_FORMAT_RGB;
+>   
+>   	return 0;
+>   }
+> @@ -687,7 +758,7 @@ mtk_dpi_bridge_mode_valid(struct drm_bridge *bridge,
+>   {
+>   	struct mtk_dpi *dpi = bridge_to_dpi(bridge);
+>   
+> -	if (mode->clock > dpi->conf->max_clock_khz)
+> +	if (dpi->conf->max_clock_khz && mode->clock > dpi->conf->max_clock_khz)
+>   		return MODE_CLOCK_HIGH;
+>   
+>   	return MODE_OK;
+> @@ -801,6 +872,16 @@ static unsigned int mt8183_calculate_factor(int clock)
+>   		return 2;
+>   }
+>   
+> +static unsigned int mt8195_dpintf_calculate_factor(int clock)
+> +{
+> +	if (clock < 70000)
+> +		return 4;
+> +	else if (clock < 200000)
+> +		return 2;
+> +	else
+> +		return 1;
+> +}
+> +
+>   static const u32 mt8173_output_fmts[] = {
+>   	MEDIA_BUS_FMT_RGB888_1X24,
+>   };
+> @@ -810,6 +891,12 @@ static const u32 mt8183_output_fmts[] = {
+>   	MEDIA_BUS_FMT_RGB888_2X12_BE,
+>   };
+>   
+> +static const u32 mt8195_output_fmts[] = {
+> +	MEDIA_BUS_FMT_RGB888_1X24,
+> +	MEDIA_BUS_FMT_YUV8_1X24,
+> +	MEDIA_BUS_FMT_YUYV8_1X16,
+> +};
+> +
+>   static const struct mtk_dpi_yc_limit mtk_dpi_limit = {
+>   	.c_bottom = 0x0010,
+>   	.c_top = 0x0FE0,
+> @@ -817,6 +904,13 @@ static const struct mtk_dpi_yc_limit mtk_dpi_limit = {
+>   	.y_top = 0x0FE0,
+>   };
+>   
+> +static const struct mtk_dpi_yc_limit mtk_dpintf_limit = {
+> +	.c_bottom = 0x0000,
+> +	.c_top = 0xFFF,
+> +	.y_bottom = 0x0000,
+> +	.y_top = 0xFFF,
+> +};
+> +
+>   static const struct mtk_dpi_conf mt8173_conf = {
+>   	.cal_factor = mt8173_calculate_factor,
+>   	.reg_h_fre_con = 0xe0,
+> @@ -882,6 +976,19 @@ static const struct mtk_dpi_conf mt8192_conf = {
+>   	.limit = &mtk_dpi_limit,
+>   };
+>   
+> +static const struct mtk_dpi_conf mt8195_dpintf_conf = {
+> +	.cal_factor = mt8195_dpintf_calculate_factor,
+> +	.output_fmts = mt8195_output_fmts,
+> +	.num_output_fmts = ARRAY_SIZE(mt8195_output_fmts),
+> +	.is_dpintf = true,
+> +	.dimension_mask = DPINTF_HPW_MASK,
+> +	.hvsize_mask = DPINTF_HSIZE_MASK,
+> +	.channel_swap_shift = DPINTF_CH_SWAP,
+> +	.yuv422_en_bit = DPINTF_YUV422_EN,
+> +	.csc_enable_bit = DPINTF_CSC_ENABLE,
+> +	.limit = &mtk_dpintf_limit,
+> +};
+> +
+>   static int mtk_dpi_probe(struct platform_device *pdev)
+>   {
+>   	struct device *dev = &pdev->dev;
+> @@ -929,7 +1036,18 @@ static int mtk_dpi_probe(struct platform_device *pdev)
+>   	if (IS_ERR(dpi->engine_clk)) {
+>   		ret = PTR_ERR(dpi->engine_clk);
+>   		if (ret != -EPROBE_DEFER)
+> -			dev_err(dev, "Failed to get engine clock: %d\n", ret);
+> +			dev_err(dev, "Failed to get engine clock: %d\n",
+> +				ret);
+
+Why are you breaking this line? It fits! :)
+
+> +
+> +		return ret;
+> +	}
+> +
+> +	dpi->dpi_ck_cg = devm_clk_get_optional(dev, "ck_cg");
+> +	if (IS_ERR(dpi->dpi_ck_cg)) {
+> +		ret = PTR_ERR(dpi->dpi_ck_cg);
+> +		if (ret != -EPROBE_DEFER)
+> +			dev_err(dev, "Failed to get dpi ck cg clock: %d\n",
+> +				ret);
+
+ditto
+
+>   
+>   		return ret;
+>   	}
+> @@ -952,6 +1070,11 @@ static int mtk_dpi_probe(struct platform_device *pdev)
+>   		return ret;
+>   	}
+>   
+> +	dpi->pclk_src[1] = devm_clk_get(dev, "TVDPLL_D2");
+> +	dpi->pclk_src[2] = devm_clk_get(dev, "TVDPLL_D4");
+> +	dpi->pclk_src[3] = devm_clk_get(dev, "TVDPLL_D8");
+> +	dpi->pclk_src[4] = devm_clk_get(dev, "TVDPLL_D16");
+
+	if (dpi->conf->is_dpintf) {
+		dpi->pclk_src[1] = devm_clk_get(.....);
+		if (IS_ERR(dpi->pclk_src[1]))
+			return dpi->pclk_src[1];
+
+		dpi->pclk_src[2] = ..... (blahblah, etc)
+	}
+
+or, you can also do (but I'm undecided on that)
+
+	if (dpi->conf->is_dpintf) {
+		for (........) {
+			dpi->pclk_src[...........
+			if (IS_ERR....)
+				return .....
+		}
+	}
+
+It's your choice.... as long as you correctly error-check these calls.
+
+Thanks,
+Angelo

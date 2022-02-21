@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFE334BE5B4
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:01:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BAE714BE326
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:56:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351554AbiBUJhZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 04:37:25 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51842 "EHLO
+        id S1346296AbiBUI5B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 03:57:01 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349297AbiBUJ1h (ORCPT
+        with ESMTP id S1345773AbiBUIyR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 04:27:37 -0500
+        Mon, 21 Feb 2022 03:54:17 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C1BB237E0;
-        Mon, 21 Feb 2022 01:12:44 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D38F8237CE;
+        Mon, 21 Feb 2022 00:53:05 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3891360B1B;
-        Mon, 21 Feb 2022 09:12:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F873C340E9;
-        Mon, 21 Feb 2022 09:12:42 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 179B06114B;
+        Mon, 21 Feb 2022 08:53:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE1D3C340E9;
+        Mon, 21 Feb 2022 08:53:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645434763;
-        bh=g/HgtpBBObGeQPvjdrbi8IklQvypj/Rpp30Wgl/uAwQ=;
+        s=korg; t=1645433584;
+        bh=3hY4r8/3UO+KDlgWBI1PWNsgwmTFyNxZwI7NNxVqog0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=G3zrkz3EUfLHWEtuuaajsayj2MJaKouxjNnD45TzXx1X2ZRNFbkY7a0hO14an5Rk8
-         pvhEz9OYdoXymWfWTA0woot0RPTI6Y0d6rOTxy5A6zCSmqtQvVJiwYxoSG0BMoCRpa
-         tNlbMvLjnqE0vK9Gb4VZEwyPrx85fXswzfoOOJLk=
+        b=PJrcETf3e23SBoAsaD6+SaKS1ZKUk0gRErAQ9ly8Rh+tCwOQ1tOQ1mBIpvlsdyEjm
+         YAt9DEXBHfSECS0RvntzphlovNhxPbzelwI/902TkgrjTy5sNHziniastZuNAIwin1
+         jcAophyWRbeBLenMfYdtiuLZfJs8FYCmt8RZb3Tg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, dmummenschanz@web.de,
-        Takashi Iwai <tiwai@suse.de>
-Subject: [PATCH 5.15 115/196] ALSA: hda: Fix missing codec probe on Shenker Dock 15
-Date:   Mon, 21 Feb 2022 09:49:07 +0100
-Message-Id: <20220221084934.796379626@linuxfoundation.org>
+        stable@vger.kernel.org, Guillaume Nault <gnault@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+Subject: [PATCH 4.14 17/45] xfrm: Dont accidentally set RTO_ONLINK in decode_session4()
+Date:   Mon, 21 Feb 2022 09:49:08 +0100
+Message-Id: <20220221084911.021608828@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220221084930.872957717@linuxfoundation.org>
-References: <20220221084930.872957717@linuxfoundation.org>
+In-Reply-To: <20220221084910.454824160@linuxfoundation.org>
+References: <20220221084910.454824160@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,33 +55,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Takashi Iwai <tiwai@suse.de>
+From: Guillaume Nault <gnault@redhat.com>
 
-commit dd8e5b161d7fb9cefa1f1d6e35a39b9e1563c8d3 upstream.
+commit 23e7b1bfed61e301853b5e35472820d919498278 upstream.
 
-By some unknown reason, BIOS on Shenker Dock 15 doesn't set up the
-codec mask properly for the onboard audio.  Let's set the forced codec
-mask to enable the codec discovery.
+Similar to commit 94e2238969e8 ("xfrm4: strip ECN bits from tos field"),
+clear the ECN bits from iph->tos when setting ->flowi4_tos.
+This ensures that the last bit of ->flowi4_tos is cleared, so
+ip_route_output_key_hash() isn't going to restrict the scope of the
+route lookup.
 
-Reported-by: dmummenschanz@web.de
-Cc: <stable@vger.kernel.org>
-Link: https://lore.kernel.org/r/trinity-f018660b-95c9-442b-a2a8-c92a56eb07ed-1644345967148@3c-app-webde-bap22
-Link: https://lore.kernel.org/r/20220214100020.8870-2-tiwai@suse.de
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
+Use ~INET_ECN_MASK instead of IPTOS_RT_MASK, because we have no reason
+to clear the high order bits.
+
+Found by code inspection, compile tested only.
+
+Fixes: 4da3089f2b58 ("[IPSEC]: Use TOS when doing tunnel lookups")
+Signed-off-by: Guillaume Nault <gnault@redhat.com>
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+[sudip: manually backport to previous location]
+Signed-off-by: Sudip Mukherjee <sudipm.mukherjee@gmail.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/pci/hda/hda_intel.c |    1 +
- 1 file changed, 1 insertion(+)
+ net/ipv4/xfrm4_policy.c |    3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
---- a/sound/pci/hda/hda_intel.c
-+++ b/sound/pci/hda/hda_intel.c
-@@ -1611,6 +1611,7 @@ static const struct snd_pci_quirk probe_
- 	/* forced codec slots */
- 	SND_PCI_QUIRK(0x1043, 0x1262, "ASUS W5Fm", 0x103),
- 	SND_PCI_QUIRK(0x1046, 0x1262, "ASUS W5F", 0x103),
-+	SND_PCI_QUIRK(0x1558, 0x0351, "Schenker Dock 15", 0x105),
- 	/* WinFast VP200 H (Teradici) user reported broken communication */
- 	SND_PCI_QUIRK(0x3a21, 0x040d, "WinFast VP200 H", 0x101),
- 	{}
+--- a/net/ipv4/xfrm4_policy.c
++++ b/net/ipv4/xfrm4_policy.c
+@@ -17,6 +17,7 @@
+ #include <net/xfrm.h>
+ #include <net/ip.h>
+ #include <net/l3mdev.h>
++#include <net/inet_ecn.h>
+ 
+ static struct dst_entry *__xfrm4_dst_lookup(struct net *net, struct flowi4 *fl4,
+ 					    int tos, int oif,
+@@ -126,7 +127,7 @@ _decode_session4(struct sk_buff *skb, st
+ 	fl4->flowi4_proto = iph->protocol;
+ 	fl4->daddr = reverse ? iph->saddr : iph->daddr;
+ 	fl4->saddr = reverse ? iph->daddr : iph->saddr;
+-	fl4->flowi4_tos = iph->tos;
++	fl4->flowi4_tos = iph->tos & ~INET_ECN_MASK;
+ 
+ 	if (!ip_is_fragment(iph)) {
+ 		switch (iph->protocol) {
 
 

@@ -2,138 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 636E24BEACE
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 20:37:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B9FC44BEA67
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 20:36:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230377AbiBUS2J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 13:28:09 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46886 "EHLO
+        id S231139AbiBUSah (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 13:30:37 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233413AbiBUS0N (ORCPT
+        with ESMTP id S233412AbiBUS0N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 21 Feb 2022 13:26:13 -0500
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD977C7D
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 10:24:33 -0800 (PST)
-Received: by mail-ej1-x62a.google.com with SMTP id p15so35309670ejc.7
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 10:24:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=VrJahzZJ/M1x1jlKCya/AAr+tVg0X5cYEeiwY9y7oXw=;
-        b=qnOqGiaChnG940C+mXX+rqoKTtx/ZMYCjlcLfjZ6RW+CRW5Zf2MmiSQUtQR6OduRuQ
-         ut2YxNw024KMpK8H2Wm9+PRRrZmlte3Xuc2NemvqdLvAjERKIqw6cqU9/U1weZn0d4iA
-         KHtLQn85kQt51KZYF3Gtgkvj8b01K+o2uiA4BuDpuwIIWd1zyUI/EZ+HHxOUoCipUahY
-         gPV449t2bucHBkj+iPzoFIXuOee74A8cT5Q+Et+a7rbVlY2SirZfrs7DcCz/TlRk9Sxf
-         GDWVU73VUGoZYkBllBYBEBrhj6k83R38kgm2UkCgZM1/TWRVOvc87MniiRRKr6jZjY81
-         8gwQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=VrJahzZJ/M1x1jlKCya/AAr+tVg0X5cYEeiwY9y7oXw=;
-        b=bOTHRh01OecLhkUhefwP5A/76J16aJxsrZ6Sktdnb6oeLUNhAAcOVonyo4hBICIdCk
-         4Hj9Q9QFThVwT/7YIU2uEypP7+W1+if5JSSC0/csi8WVTC9W6tkVluI8ueRsve3ONxgS
-         sj2pEjBtDJZ/FVKktY8zE6Vx1pYUYKAzs/8lnMit4DbJI8mL4AsDJT9NTnY2cYerPJkT
-         70BMF8gMDuLXz4Sn1I9/mHQqqhJsp6KsC+OBSuqOV0Pi0H0aX2H7IOWLdlXPNlKdj2r3
-         LqwD22c4NIn9skBQ2CGk2h0JwCJq5Vq8w9B7SQJYHVJNocWPcEx5nakUlmHNorAPdZhB
-         6b+g==
-X-Gm-Message-State: AOAM532hfI9B3SYYd1+7hmfGmJQE6QG5P97447wuuhs37DuilAIVvG8a
-        PEwfW/kuqrGxQ8qnxw0LYGLfBa0aCQQsMw==
-X-Google-Smtp-Source: ABdhPJwrco5rvnrea2wm51FpkRbG+pj00GDNzUojXDuXcdeMT7F6tysHbzvaz0t807k7a6ANgZujpg==
-X-Received: by 2002:a17:906:3a41:b0:6ce:374d:adfa with SMTP id a1-20020a1709063a4100b006ce374dadfamr16941562ejf.199.1645467872286;
-        Mon, 21 Feb 2022 10:24:32 -0800 (PST)
-Received: from krava ([2a00:102a:500a:4c07:3c4e:83d8:8cd9:974f])
-        by smtp.gmail.com with ESMTPSA id h7sm9097346ede.66.2022.02.21.10.24.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Feb 2022 10:24:31 -0800 (PST)
-Date:   Mon, 21 Feb 2022 19:24:28 +0100
-From:   Jiri Olsa <olsajiri@gmail.com>
-To:     "Bayduraev, Alexey V" <alexey.v.bayduraev@linux.intel.com>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Alexander Antonov <alexander.antonov@linux.intel.com>,
-        Alexei Budankov <abudankov@huawei.com>
-Subject: Re: [PATCH core] perf data: Adding error message if
- perf_data__create_dir fails
-Message-ID: <YhPY3B3QumIZWukQ@krava>
-References: <20220218152341.5197-1-alexey.v.bayduraev@linux.intel.com>
- <YhLEHCttvXmRu78G@krava>
- <60253e6d-e8c5-550e-73b5-40720114c2a4@linux.intel.com>
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09B3DC7E
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 10:24:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645467879; x=1677003879;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=mzCGaMqSIKCdL//0sI2JbSojC7b0HtfrzdHg0ku3H2s=;
+  b=P69fujhjGYJfEXDZocA7AHfkT98opcGqk5LJTDbs3Gz1VbDnfeN9pzq9
+   LqtE/EbWLy7tgxNSTFuoPg9DJqJl5YGFeI2hyJddaUd78jyMbIdTZdXQU
+   5efe6kEme+xBzTOXxHXvGc/Yq4b77dczulVjWemEVel6Rmz5geqAzfy+v
+   rLRlivLpuI2Bd0ep3ojLuG9H6M/Y2FK5/3tg35sPiax/X+KBHys7RWgQr
+   RKofuw1YMdsfqvhpG99XciPswAbWakGE3a4HEjbiSVwrHq3hStKcLgcDc
+   3sXS9VMhg0kgtmyIJYzKbvdS9QSeRf7YIcqdlMJh9PYHyIgRuYBDlfNiI
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10265"; a="251310863"
+X-IronPort-AV: E=Sophos;i="5.88,386,1635231600"; 
+   d="scan'208";a="251310863"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2022 10:24:38 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,386,1635231600"; 
+   d="scan'208";a="627443330"
+Received: from lkp-server01.sh.intel.com (HELO da3212ac2f54) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 21 Feb 2022 10:24:37 -0800
+Received: from kbuild by da3212ac2f54 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nMDMS-0001sW-E2; Mon, 21 Feb 2022 18:24:36 +0000
+Date:   Tue, 22 Feb 2022 02:24:29 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Tom Zanussi <zanussi@kernel.org>
+Cc:     kbuild-all@lists.01.org,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org,
+        "Steven Rostedt (Google)" <rostedt@goodmis.org>
+Subject: [ammarfaizi2-block:rostedt/linux-trace/for-next 19/32]
+ kernel/trace/trace_events_synth.c:65:9: warning: 'strncpy' specified bound
+ depends on the length of the source argument
+Message-ID: <202202220258.LyXgZyyT-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <60253e6d-e8c5-550e-73b5-40720114c2a4@linux.intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 21, 2022 at 04:24:28PM +0300, Bayduraev, Alexey V wrote:
-> On 21.02.2022 1:43, Jiri Olsa wrote:
-> > On Fri, Feb 18, 2022 at 06:23:40PM +0300, Alexey Bayduraev wrote:
-> >> There is no notification about data directory creation failure. Add it.
-> >>
-> >> Signed-off-by: Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>
-> >> ---
-> >>  tools/perf/builtin-record.c | 4 +++-
-> >>  1 file changed, 3 insertions(+), 1 deletion(-)
-> >>
-> >> diff --git a/tools/perf/builtin-record.c b/tools/perf/builtin-record.c
-> >> index 0bc6529814b2..0306d5911de2 100644
-> >> --- a/tools/perf/builtin-record.c
-> >> +++ b/tools/perf/builtin-record.c
-> >> @@ -1186,8 +1186,10 @@ static int record__mmap_evlist(struct record *rec,
-> >>  
-> >>  	if (record__threads_enabled(rec)) {
-> >>  		ret = perf_data__create_dir(&rec->data, evlist->core.nr_mmaps);
-> >> -		if (ret)
-> >> +		if (ret) {
-> >> +			pr_err("Failed to create data directory: %s\n", strerror(errno));
-> > 
-> > errno will be misleading in here, because perf_data__create_dir
-> > calls other syscalls on error path
-> 
-> Mostly I want to output something like:
-> 
->   Failed to create data dir: Too many open files
-> 
-> This will trigger the user to increase the open files limit.
-> Would it be better to place such message to perf_data__create_dir after 
-> open() syscall?
+tree:   https://github.com/ammarfaizi2/linux-block rostedt/linux-trace/for-next
+head:   864ea0e10cc90416a01b46f0d47a6f26dc020820
+commit: 27c888da9867725784bad3d6455d6e53b425fa2b [19/32] tracing: Remove size restriction on synthetic event cmd error logging
+config: arm-randconfig-r022-20220221 (https://download.01.org/0day-ci/archive/20220222/202202220258.LyXgZyyT-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/ammarfaizi2/linux-block/commit/27c888da9867725784bad3d6455d6e53b425fa2b
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block rostedt/linux-trace/for-next
+        git checkout 27c888da9867725784bad3d6455d6e53b425fa2b
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm SHELL=/bin/bash kernel/trace/
 
-how about something like below (with your change)
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-jirka
+All warnings (new ones prefixed by >>):
 
+   kernel/trace/trace_events_synth.c: In function 'last_cmd_set':
+>> kernel/trace/trace_events_synth.c:65:9: warning: 'strncpy' specified bound depends on the length of the source argument [-Wstringop-truncation]
+      65 |         strncpy(last_cmd, str, strlen(str) + 1);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   kernel/trace/trace_events_synth.c:65:32: note: length computed here
+      65 |         strncpy(last_cmd, str, strlen(str) + 1);
+         |                                ^~~~~~~~~~~
+
+
+vim +/strncpy +65 kernel/trace/trace_events_synth.c
+
+    54	
+    55	static void last_cmd_set(const char *str)
+    56	{
+    57		if (!str)
+    58			return;
+    59	
+    60		kfree(last_cmd);
+    61		last_cmd = kzalloc(strlen(str) + 1, GFP_KERNEL);
+    62		if (!last_cmd)
+    63			return;
+    64	
+  > 65		strncpy(last_cmd, str, strlen(str) + 1);
+    66	}
+    67	
 
 ---
-diff --git a/tools/perf/util/data.c b/tools/perf/util/data.c
-index 15a4547d608e..d3382098d6f9 100644
---- a/tools/perf/util/data.c
-+++ b/tools/perf/util/data.c
-@@ -52,8 +52,10 @@ int perf_data__create_dir(struct perf_data *data, int nr)
- 			goto out_err;
- 
- 		ret = open(file->path, O_RDWR|O_CREAT|O_TRUNC, S_IRUSR|S_IWUSR);
--		if (ret < 0)
-+		if (ret < 0) {
-+			ret = -errno;
- 			goto out_err;
-+		}
- 
- 		file->fd = ret;
- 	}
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

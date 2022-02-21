@@ -2,43 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1134C4BE65D
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:02:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 037FC4BDECB
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:47:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348996AbiBUJYp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 04:24:45 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38844 "EHLO
+        id S1345457AbiBUJi4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 04:38:56 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348978AbiBUJLy (ORCPT
+        with ESMTP id S1350182AbiBUJbl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 04:11:54 -0500
+        Mon, 21 Feb 2022 04:31:41 -0500
 Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 235BF29801;
-        Mon, 21 Feb 2022 01:04:37 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB71E2717A;
+        Mon, 21 Feb 2022 01:13:28 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 96FB2CE0E7C;
-        Mon, 21 Feb 2022 09:04:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89536C340E9;
-        Mon, 21 Feb 2022 09:04:33 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id AC173CE0E8B;
+        Mon, 21 Feb 2022 09:13:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F1E7C339C1;
+        Mon, 21 Feb 2022 09:13:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645434274;
-        bh=NKr8jcP1dVRBCsxqTN+6PsHJDCIyuR2K4W8XcO7Uze0=;
+        s=korg; t=1645434792;
+        bh=D5JJpy/c72AVrlauMZGzdolk6JLEapyqWRS8VLnIalA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LqlssyL1EIQNd9s0U3C1PIM1MJG6GszJ+78xvPZXK6CFTV98CUJ9662EaM0jiEGpH
-         mzPbvnzHpvXfXRqvMqWtfCdnkblzy1q/dhfLRI8hS7TOkuinAIHhZ3ukPjykP44BCi
-         d4QW+TfZ5tqFtoIW31IBJacPVVDSAq0hV3EtSu1k=
+        b=ET6ZUQvuyVwe/GPXLsFvgG8pdsDEdK7XGw+t7DU+/rFRqsIZf4gWokw0aUWnVOrrf
+         hfroDTZFRyqQU0oLNGqUZOpYtx3KuIlJ+mboHODWGkthEFlWbX9nOk/bbTmyHMJZ6m
+         1hZ+ZR1bK+NlWwuTAiTjAVZVujeA6gkV8/4fDRNw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Mark Brown <broonie@kernel.org>
-Subject: [PATCH 5.10 073/121] ASoC: ops: Fix stereo change notifications in snd_soc_put_volsw()
+        stable@vger.kernel.org,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        Anna Schumaker <Anna.Schumaker@Netapp.com>
+Subject: [PATCH 5.15 133/196] NFS: Do not report writeback errors in nfs_getattr()
 Date:   Mon, 21 Feb 2022 09:49:25 +0100
-Message-Id: <20220221084923.679783480@linuxfoundation.org>
+Message-Id: <20220221084935.373328706@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220221084921.147454846@linuxfoundation.org>
-References: <20220221084921.147454846@linuxfoundation.org>
+In-Reply-To: <20220221084930.872957717@linuxfoundation.org>
+References: <20220221084930.872957717@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,56 +55,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mark Brown <broonie@kernel.org>
+From: Trond Myklebust <trond.myklebust@hammerspace.com>
 
-commit 564778d7b1ea465f9487eedeece7527a033549c5 upstream.
+commit d19e0183a88306acda07f4a01fedeeffe2a2a06b upstream.
 
-When writing out a stereo control we discard the change notification from
-the first channel, meaning that events are only generated based on changes
-to the second channel. Ensure that we report a change if either channel
-has changed.
+The result of the writeback, whether it is an ENOSPC or an EIO, or
+anything else, does not inhibit the NFS client from reporting the
+correct file timestamps.
 
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Cc: stable@vger.kernel.org
-Link: https://lore.kernel.org/r/20220201155629.120510-2-broonie@kernel.org
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Fixes: 79566ef018f5 ("NFS: Getattr doesn't require data sync semantics")
+Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
+Signed-off-by: Anna Schumaker <Anna.Schumaker@Netapp.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/soc/soc-ops.c |   14 ++++++++++----
- 1 file changed, 10 insertions(+), 4 deletions(-)
+ fs/nfs/inode.c |    9 +++------
+ 1 file changed, 3 insertions(+), 6 deletions(-)
 
---- a/sound/soc/soc-ops.c
-+++ b/sound/soc/soc-ops.c
-@@ -308,7 +308,7 @@ int snd_soc_put_volsw(struct snd_kcontro
- 	unsigned int sign_bit = mc->sign_bit;
- 	unsigned int mask = (1 << fls(max)) - 1;
- 	unsigned int invert = mc->invert;
--	int err;
-+	int err, ret;
- 	bool type_2r = false;
- 	unsigned int val2 = 0;
- 	unsigned int val, val_mask;
-@@ -350,12 +350,18 @@ int snd_soc_put_volsw(struct snd_kcontro
- 	err = snd_soc_component_update_bits(component, reg, val_mask, val);
- 	if (err < 0)
- 		return err;
-+	ret = err;
+--- a/fs/nfs/inode.c
++++ b/fs/nfs/inode.c
+@@ -840,12 +840,9 @@ int nfs_getattr(struct user_namespace *m
+ 	}
  
--	if (type_2r)
-+	if (type_2r) {
- 		err = snd_soc_component_update_bits(component, reg2, val_mask,
--			val2);
-+						    val2);
-+		/* Don't discard any error code or drop change flag */
-+		if (ret == 0 || err < 0) {
-+			ret = err;
-+		}
-+	}
+ 	/* Flush out writes to the server in order to update c/mtime.  */
+-	if ((request_mask & (STATX_CTIME|STATX_MTIME)) &&
+-			S_ISREG(inode->i_mode)) {
+-		err = filemap_write_and_wait(inode->i_mapping);
+-		if (err)
+-			goto out;
+-	}
++	if ((request_mask & (STATX_CTIME | STATX_MTIME)) &&
++	    S_ISREG(inode->i_mode))
++		filemap_write_and_wait(inode->i_mapping);
  
--	return err;
-+	return ret;
- }
- EXPORT_SYMBOL_GPL(snd_soc_put_volsw);
- 
+ 	/*
+ 	 * We may force a getattr if the user cares about atime.
 
 

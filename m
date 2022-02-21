@@ -2,94 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8EA04BE020
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:51:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 731FF4BE958
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:07:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359031AbiBUNXZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 08:23:25 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59668 "EHLO
+        id S1359035AbiBUNZB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 08:25:01 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359028AbiBUNXV (ORCPT
+        with ESMTP id S1359028AbiBUNY6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 08:23:21 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E374421E21
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 05:22:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=E1jw4QCDDG+dnzq5XQgBCgmJVKTljbhRv7BVuT5xZ2U=; b=VcusZoj1rkj4rTxMtEmTlTU/Ux
-        Choa690NHAFFaG8kaGupw/PdeEv93b/Ce1y3M7vPRuaUkDEks1onEJ1V7nJ6tRUahx6pjYdzIVoZa
-        iBrHlTj8n2nRkQttn0KbFeFgLidRt6TB7s2xfLCmU14OItNGdtPBoJQ52Po0djpQf44cZLC2uwIKD
-        CWHhgSR4YJkJaKJEQEqg4rdsc3jkiCYWwuJoF01/Gg0BotGx7cpVwSQQ6zrFEwvEwUIuM3QUiOY5l
-        qWVRNVsOSLY5UVSnb0vq2na+OmVj/LH42hxI0jQ/vRYKrvfDjnN56qzVrx/SLl+LacAVZl55bb2dS
-        6ojAWdFA==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nM8eG-00Bdwy-FR; Mon, 21 Feb 2022 13:22:40 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 67E0E30045A;
-        Mon, 21 Feb 2022 14:22:38 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id CF54D2D5BE0AA; Mon, 21 Feb 2022 14:22:37 +0100 (CET)
-Date:   Mon, 21 Feb 2022 14:22:37 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     x86@kernel.org, joao@overdrivepizza.com, hjl.tools@gmail.com,
-        jpoimboe@redhat.com, andrew.cooper3@citrix.com,
-        linux-kernel@vger.kernel.org, ndesaulniers@google.com,
-        samitolvanen@google.com, mark.rutland@arm.com,
-        alyssa.milburn@intel.com
-Subject: Re: [PATCH 15/29] x86: Disable IBT around firmware
-Message-ID: <YhOSHfocRmYlY3JM@hirez.programming.kicks-ass.net>
-References: <20220218164902.008644515@infradead.org>
- <20220218171409.456054276@infradead.org>
- <831051EB-FF09-4B75-98EE-A7C8D0054CFE@chromium.org>
- <20220221100615.GK23216@worktop.programming.kicks-ass.net>
+        Mon, 21 Feb 2022 08:24:58 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2B33220C6
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 05:24:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645449875; x=1676985875;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=BY3O+U22wmHQzj1Bw29UYgQWBmjpUnWFMJ+oi7gNy8I=;
+  b=g5L6xecSJDD989qN9poyM0OvucHf6xkzNvnY/pHocK+dGBKgSWEe44ZT
+   IDiBs0K4o5gX7yy9FoDRcWrH3MJWMwWCyoXh7sYjIH142Ulmk4LN9siC/
+   WCCGTqSol5ApFe5Bckuxuw7MGRGpz7MbOLFlKtMMx9WyLN14y93sw8pA4
+   2eY8xWJ6+K1wjGKnD9MNqr5e3CJZQhKSmeOdYBY3uRi4+AF0g8kHvaCmL
+   Zb3Zsyhnab2K256XS0n95Gbi1GbvI2TITfpIbussHDkjRhoHxy9nxWw8s
+   I8/lPNlGcYuI1R/VnXasaqn93g85J6t2bBnny+LQ1o/tN2ly4MrQ+2msS
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10264"; a="238921981"
+X-IronPort-AV: E=Sophos;i="5.88,385,1635231600"; 
+   d="scan'208";a="238921981"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2022 05:24:34 -0800
+X-IronPort-AV: E=Sophos;i="5.88,385,1635231600"; 
+   d="scan'208";a="547334141"
+Received: from abaydur-mobl1.ccr.corp.intel.com (HELO [10.249.228.66]) ([10.249.228.66])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2022 05:24:31 -0800
+Message-ID: <60253e6d-e8c5-550e-73b5-40720114c2a4@linux.intel.com>
+Date:   Mon, 21 Feb 2022 16:24:28 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220221100615.GK23216@worktop.programming.kicks-ass.net>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH core] perf data: Adding error message if
+ perf_data__create_dir fails
+Content-Language: en-GB
+To:     Jiri Olsa <olsajiri@gmail.com>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Alexander Antonov <alexander.antonov@linux.intel.com>,
+        Alexei Budankov <abudankov@huawei.com>
+References: <20220218152341.5197-1-alexey.v.bayduraev@linux.intel.com>
+ <YhLEHCttvXmRu78G@krava>
+From:   "Bayduraev, Alexey V" <alexey.v.bayduraev@linux.intel.com>
+Organization: Intel Corporation
+In-Reply-To: <YhLEHCttvXmRu78G@krava>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 21, 2022 at 11:06:15AM +0100, Peter Zijlstra wrote:
+On 21.02.2022 1:43, Jiri Olsa wrote:
+> On Fri, Feb 18, 2022 at 06:23:40PM +0300, Alexey Bayduraev wrote:
+>> There is no notification about data directory creation failure. Add it.
+>>
+>> Signed-off-by: Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>
+>> ---
+>>  tools/perf/builtin-record.c | 4 +++-
+>>  1 file changed, 3 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/tools/perf/builtin-record.c b/tools/perf/builtin-record.c
+>> index 0bc6529814b2..0306d5911de2 100644
+>> --- a/tools/perf/builtin-record.c
+>> +++ b/tools/perf/builtin-record.c
+>> @@ -1186,8 +1186,10 @@ static int record__mmap_evlist(struct record *rec,
+>>  
+>>  	if (record__threads_enabled(rec)) {
+>>  		ret = perf_data__create_dir(&rec->data, evlist->core.nr_mmaps);
+>> -		if (ret)
+>> +		if (ret) {
+>> +			pr_err("Failed to create data directory: %s\n", strerror(errno));
 > 
-> Could you trim replies so that I can actually find what you write?
-> 
-> On Mon, Feb 21, 2022 at 12:27:20AM -0800, Kees Cook wrote:
-> 
-> > >+#ifdef CONFIG_X86_IBT
-> > >+
-> > >+u64 ibt_save(void)
-> > >+{
-> > >+	u64 msr = 0;
-> > >+
-> > >+	if (cpu_feature_enabled(X86_FEATURE_IBT)) {
-> > >+		rdmsrl(MSR_IA32_S_CET, msr);
-> > >+		wrmsrl(MSR_IA32_S_CET, msr & ~CET_ENDBR_EN);
-> > >+	}
-> > >+
-> > >+	return msr;
-> > >+}
-> > >+
-> > >+void ibt_restore(u64 save)
-> > 
-> > Please make these both __always_inline so there no risk of them ever gaining ENDBRs and being used by ROP to disable IBT...
-> 
-> Either that or mark them __noendbr. The below seems to work.
-> 
-> Do we have a preference?
+> errno will be misleading in here, because perf_data__create_dir
+> calls other syscalls on error path
 
-The inline thing runs into header hell..
+Mostly I want to output something like:
+
+  Failed to create data dir: Too many open files
+
+This will trigger the user to increase the open files limit.
+Would it be better to place such message to perf_data__create_dir after 
+open() syscall?
+
+Regards,
+Alexey
+
+> 
+> jirka
+> 
+>>  			return ret;
+>> +		}
+>>  		for (i = 0; i < evlist->core.nr_mmaps; i++) {
+>>  			if (evlist->mmap)
+>>  				evlist->mmap[i].file = &rec->data.dir.files[i];
+>> -- 
+>> 2.19.0
+>>

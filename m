@@ -2,301 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C559B4BD3A3
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 03:22:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16E604BD3AB
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 03:35:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343524AbiBUCRx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Feb 2022 21:17:53 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33592 "EHLO
+        id S1343602AbiBUCX0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Feb 2022 21:23:26 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240542AbiBUCRw (ORCPT
+        with ESMTP id S1343563AbiBUCXO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Feb 2022 21:17:52 -0500
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E0F04CD6A
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Feb 2022 18:17:29 -0800 (PST)
-Received: by mail-lf1-x129.google.com with SMTP id j15so15863737lfe.11
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Feb 2022 18:17:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=eb896sueNM4NHpigYPMkh5NK55eQiNdPOGg2uyxmUwE=;
-        b=FU4dSv1ZSLXJ2sgUfR7Y2KHFmTT4TqLKUqNnrjcCeboM4ZE0FkQ2lRUZ97k5t+lNrI
-         u4VNugYm+ggJk3+UNK2J4/O8xpFiH1ZUAGXUR77OHNd8WkDsKGjNE3Nys/MAr4eyLEUX
-         VRBvTuc/iMALphJberS1xU6csyYguaKJJEoymBXa9roTEAhMuT9GMge2FRoGitNdBsae
-         wGCy3HC+ODsdJ98fmtjmbOQAVg5zwnWprZoojBI+bJjIW1w9HnEavBWXWb/9Bc74aU7S
-         au4TN6VV5v0uM127oSckWfnOvSNw7vH2lW2Ml0z7auHuTr/errwS1BvaqYQtffkVtXMT
-         FqgA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=eb896sueNM4NHpigYPMkh5NK55eQiNdPOGg2uyxmUwE=;
-        b=S+8dbJdp6irRxKDtRWLcgkt+nwqtZGKP7N+pSy+EuGJA44lY5TdWTQ8Mi8ouEDUon+
-         621bSZ/VbzmKwkurUcyQgxGlOYVFLAV4zg20iz849kBUo7R2LaVLyGfKHR7ER++JeqHi
-         i89PvQ0Nu+uH+1x8fp0l7Fcj/sqptU32FvzCukp1O2mgPuartbCCH70LBC/HpePQjGRB
-         pnAs5MidPR7CbbBRur74I/1BTXnXrZTJoMgOlqJA0z0GEyzlwkFToF/MkEnzatMtMJkR
-         CdFtUq+UfNU/tPwmCmMJME1nWK3piWSJf5z2y1BH4EO4MHZtd333b1z1OkanE1rC7kH4
-         x4cg==
-X-Gm-Message-State: AOAM531gUJpwwLwnUCCLvGMug6kUHY6OkRY70iVecdsk5CkPTdzD9FFU
-        +1+sfRoeR9som6+S7gnCVjNymA==
-X-Google-Smtp-Source: ABdhPJzbA9aXh3dYLrH4glJrMZRMzNuqetdxDYq2qKoFNE2JfpglCmr900uihhRF09ObDGDKRwUqPA==
-X-Received: by 2002:a05:6512:3b88:b0:443:7b08:2fcb with SMTP id g8-20020a0565123b8800b004437b082fcbmr12370342lfv.621.1645409847655;
-        Sun, 20 Feb 2022 18:17:27 -0800 (PST)
-Received: from [192.168.1.211] ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id 6sm969170lfq.241.2022.02.20.18.17.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 20 Feb 2022 18:17:26 -0800 (PST)
-Message-ID: <abbccac6-7637-c981-e22f-6ea057b1fa55@linaro.org>
-Date:   Mon, 21 Feb 2022 05:17:26 +0300
+        Sun, 20 Feb 2022 21:23:14 -0500
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2045.outbound.protection.outlook.com [40.107.244.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9388A3B2A3;
+        Sun, 20 Feb 2022 18:22:50 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=KbcdxaawS9L3cj/gObv6T+gndMU4yBNN8X42/rB6gK7qEMrfNRgkgvawwBER5viVlMW3ZyJGwfT+aW/72D67u10WpVmJaD6UgiRBE/CKRQnuLYaM5lrnF+dgw6mqJp1VW4P2Uh9R/2J5M5fXw2zam+qBIB98Dkq4Q88aYA+OrEq7V4XHCb6nHaY42NP5TuDSWMEaMck/ueGXCIqe5tyuiJaEOo3BRulvn5Apar/xw7QvqR9R6gPLcbWhEZELucw9IlJIKef1T8LdL5zi7Or/eX5iKVSTQ48HHO1vikIK65lOX9tNsp2uaH9V+fU+OhAGob/vrYu6sVSTbsp0ZJ31TA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=zfpGwzmO7gmU+3tZa3lf4CE4iatWWboCiyBvHOIyZbI=;
+ b=lVrROKVUS31MH8iekwIq8OEW7DSsVjKwUKOqQP2Sj+duKnYd53sNhPjRisY5JTCGMMyVgnHBQE1Gw6qIUwi44tihECMvZ54NV2u5YT7pBMKJUEvld4qEspQXTXyMEml3YMEnWGHa0qaJkdg/XIng+q5175W04F88hGuFPiczQ04KMC0UWiMTpLgQ7JE0ZzMOI6ejvRoaqy6svTFM9f1qbXChgISQL0HaEvp24YBYMF9ndxsgXI0LmQcMm3GJ669ujGw7d8lh8Iqvpp8CKvM/ELL0GL3uWfMXvpq1KSAvmOVlzFmI6xN2SlX6KJJCY4h4xBZlGqBiGoyg2u2BlHR0cg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=zfpGwzmO7gmU+3tZa3lf4CE4iatWWboCiyBvHOIyZbI=;
+ b=sxeqJ4n72CHH5eM5+SuSQhrgcsYyCqy5aBgFQwenj77q92iCrHuNC9ndJedug1HQ6hpsHVQM2OisScE3C3kmMuiQOty5LeQYGOckQ8AYQmvFITlQ8e6mbDdoQH1vte6ZYOwiApakL0b+sujCgcEKinMo6jcvfvDk0HqTRBGSCoM=
+Received: from MWHPR1401CA0024.namprd14.prod.outlook.com
+ (2603:10b6:301:4b::34) by MN2PR12MB3117.namprd12.prod.outlook.com
+ (2603:10b6:208:d1::22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4995.22; Mon, 21 Feb
+ 2022 02:22:44 +0000
+Received: from CO1NAM11FT027.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:301:4b:cafe::f7) by MWHPR1401CA0024.outlook.office365.com
+ (2603:10b6:301:4b::34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4995.24 via Frontend
+ Transport; Mon, 21 Feb 2022 02:22:44 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CO1NAM11FT027.mail.protection.outlook.com (10.13.174.224) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.4995.15 via Frontend Transport; Mon, 21 Feb 2022 02:22:43 +0000
+Received: from sp5-759chost.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Sun, 20 Feb
+ 2022 20:22:41 -0600
+From:   Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
+To:     <linux-kernel@vger.kernel.org>, <kvm@vger.kernel.org>
+CC:     <pbonzini@redhat.com>, <seanjc@google.com>, <joro@8bytes.org>,
+        <jon.grimm@amd.com>, <wei.huang2@amd.com>, <terry.bowman@amd.com>,
+        "Suravee Suthikulpanit" <suravee.suthikulpanit@amd.com>
+Subject: [RFC PATCH 00/13] Introducing AMD x2APIC Virtualization (x2AVIC) support.
+Date:   Sun, 20 Feb 2022 20:19:09 -0600
+Message-ID: <20220221021922.733373-1-suravee.suthikulpanit@amd.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [REPOST PATCH v4 01/13] drm/msm/dsi: add support for dsc data
-Content-Language: en-GB
-To:     Vinod Koul <vkoul@kernel.org>, Rob Clark <robdclark@gmail.com>
-Cc:     linux-arm-msm@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jonathan Marek <jonathan@marek.ca>,
-        Abhinav Kumar <abhinavk@codeaurora.org>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org
-References: <20220210103423.271016-1-vkoul@kernel.org>
- <20220210103423.271016-2-vkoul@kernel.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20220210103423.271016-2-vkoul@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: d340e69d-8266-469b-baef-08d9f4e10b12
+X-MS-TrafficTypeDiagnostic: MN2PR12MB3117:EE_
+X-Microsoft-Antispam-PRVS: <MN2PR12MB31172DDF31C26968AE49C324F33A9@MN2PR12MB3117.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: R7/RxPQLXnNdQS72sI7UwzvWcvO/Tqvnx43ExWTGLEJAk+KNvAyzPWk0ho2vU0AR1WedoirQeVhJSE3fw98Kztrgv+2PVKr+f/3bvYNKmWm/fxLWDFuvaiOMG5oop1ey3om8Jjq/tGDhc2PjZpMiILHCvHiugXGurhRU1RVlSLmVdQ9HYYgYiDJ4bnROfPY7MMXqBhMVXmJax1F0AiQrgPSTNX2HqdUXNcpqUYHCKwWcm0ENLEjtPxV1dlhmv15DVNmkPzcm4Ou70qyYJt+Cmqxrm1mXPes08xg1TyKYb8C3wd2YLYRCTHvq+cyz+S2dXaKoGHt5lB6af6oQ9QA2YgHvu34XZ/OWv5/N6p2HKEKOlZzSb918qa+HQfa6cdFxbVlgjtD2Y6HKtq7vZaowgyzX6PQK/Gh+FPzzBgqcSBWKMshFcA55Mqhq+hWExKbFtBJJi2OE6j/O98uhNXfu7nhpUCK1eHYheDKOV5/n+092Ald48wZuoCln+a6v4k8mPRtnkjH4LqHHUf8xyIkvhjslOV+nswo1Ow3/oGtaG8lJmDCfgIPH9zSTqthX8CCTB/LUXonDbXixBSEkBitW5H78r4zxkWmsGMAZg9NseLXxFEOyx8BMAM/Hypxequhw8gl4wlbbonnPpVoIawfKixN8jydSAyooQ5VYFIhOp3MvVf0PIdr2BvP0uFp8jstSoDq0GoeyVeFzO75C39ybDg==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(46966006)(40470700004)(36840700001)(36756003)(40460700003)(7696005)(6666004)(508600001)(47076005)(2616005)(2906002)(36860700001)(16526019)(5660300002)(186003)(110136005)(54906003)(8936002)(26005)(1076003)(316002)(44832011)(82310400004)(356005)(81166007)(86362001)(336012)(426003)(70586007)(70206006)(83380400001)(4326008)(8676002)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Feb 2022 02:22:43.8356
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: d340e69d-8266-469b-baef-08d9f4e10b12
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT027.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB3117
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/02/2022 13:34, Vinod Koul wrote:
-> Display Stream Compression (DSC) parameters need to be calculated. Add
-> helpers and struct msm_display_dsc_config in msm_drv for this
-> msm_display_dsc_config uses drm_dsc_config for DSC parameters.
-> 
-> Signed-off-by: Vinod Koul <vkoul@kernel.org>
-> ---
->   drivers/gpu/drm/msm/dsi/dsi_host.c | 132 +++++++++++++++++++++++++++++
->   drivers/gpu/drm/msm/msm_drv.h      |  15 ++++
->   2 files changed, 147 insertions(+)
-> 
-> diff --git a/drivers/gpu/drm/msm/dsi/dsi_host.c b/drivers/gpu/drm/msm/dsi/dsi_host.c
-> index 6b3ced4aaaf5..27553194f9fa 100644
-> --- a/drivers/gpu/drm/msm/dsi/dsi_host.c
-> +++ b/drivers/gpu/drm/msm/dsi/dsi_host.c
-> @@ -31,6 +31,8 @@
->   
->   #define DSI_RESET_TOGGLE_DELAY_MS 20
->   
-> +static int dsi_populate_dsc_params(struct msm_display_dsc_config *dsc);
-> +
->   static int dsi_get_version(const void __iomem *base, u32 *major, u32 *minor)
->   {
->   	u32 ver;
-> @@ -157,6 +159,7 @@ struct msm_dsi_host {
->   	struct regmap *sfpb;
->   
->   	struct drm_display_mode *mode;
-> +	struct msm_display_dsc_config *dsc;
->   
->   	/* connected device info */
->   	struct device_node *device_node;
-> @@ -1718,6 +1721,135 @@ static int dsi_host_parse_lane_data(struct msm_dsi_host *msm_host,
->   	return -EINVAL;
->   }
->   
-> +static u32 dsi_dsc_rc_buf_thresh[DSC_NUM_BUF_RANGES - 1] = {
-> +	0x0e, 0x1c, 0x2a, 0x38, 0x46, 0x54, 0x62,
-> +	0x69, 0x70, 0x77, 0x79, 0x7b, 0x7d, 0x7e
-> +};
-> +
-> +/* only 8bpc, 8bpp added */
-> +static char min_qp[DSC_NUM_BUF_RANGES] = {
-> +	0, 0, 1, 1, 3, 3, 3, 3, 3, 3, 5, 5, 5, 7, 13
-> +};
-> +
-> +static char max_qp[DSC_NUM_BUF_RANGES] = {
-> +	4, 4, 5, 6, 7, 7, 7, 8, 9, 10, 11, 12, 13, 13, 15
-> +};
-> +
-> +static char bpg_offset[DSC_NUM_BUF_RANGES] = {
-> +	2, 0, 0, -2, -4, -6, -8, -8, -8, -10, -10, -12, -12, -12, -12
-> +};
-> +
-> +static int dsi_populate_dsc_params(struct msm_display_dsc_config *dsc)
-> +{
-> +	int mux_words_size;
-> +	int groups_per_line, groups_total;
-> +	int min_rate_buffer_size;
-> +	int hrd_delay;
-> +	int pre_num_extra_mux_bits, num_extra_mux_bits;
-> +	int slice_bits;
-> +	int target_bpp_x16;
-> +	int data;
-> +	int final_value, final_scale;
-> +	int i;
-> +
-> +	dsc->drm->rc_model_size = 8192;
-> +	dsc->drm->first_line_bpg_offset = 12;
-> +	dsc->drm->rc_edge_factor = 6;
-> +	dsc->drm->rc_tgt_offset_high = 3;
-> +	dsc->drm->rc_tgt_offset_low = 3;
-> +	dsc->drm->simple_422 = 0;
-> +	dsc->drm->convert_rgb = 1;
-> +	dsc->drm->vbr_enable = 0;
-> +
-> +	/* handle only bpp = bpc = 8 */
-> +	for (i = 0; i < DSC_NUM_BUF_RANGES - 1 ; i++)
-> +		dsc->drm->rc_buf_thresh[i] = dsi_dsc_rc_buf_thresh[i];
-> +
-> +	for (i = 0; i < DSC_NUM_BUF_RANGES; i++) {
-> +		dsc->drm->rc_range_params[i].range_min_qp = min_qp[i];
-> +		dsc->drm->rc_range_params[i].range_max_qp = max_qp[i];
-> +		dsc->drm->rc_range_params[i].range_bpg_offset = bpg_offset[i];
-> +	}
-> +
-> +	dsc->drm->initial_offset = 6144; /* Not bpp 12 */
-> +	if (dsc->drm->bits_per_pixel != 8)
-> +		dsc->drm->initial_offset = 2048;	/* bpp = 12 */
-> +
-> +	mux_words_size = 48;		/* bpc == 8/10 */
-> +	if (dsc->drm->bits_per_component == 12)
-> +		mux_words_size = 64;
-> +
-> +	dsc->drm->initial_xmit_delay = 512;
-> +	dsc->drm->initial_scale_value = 32;
-> +	dsc->drm->first_line_bpg_offset = 12;
-> +	dsc->drm->line_buf_depth = dsc->drm->bits_per_component + 1;
-> +
-> +	/* bpc 8 */
-> +	dsc->drm->flatness_min_qp = 3;
-> +	dsc->drm->flatness_max_qp = 12;
-> +	dsc->det_thresh_flatness = 7 + 2 * (dsc->drm->bits_per_component - 8);
-> +	dsc->drm->rc_quant_incr_limit0 = 11;
-> +	dsc->drm->rc_quant_incr_limit1 = 11;
-> +	dsc->drm->mux_word_size = DSC_MUX_WORD_SIZE_8_10_BPC;
-> +
-> +	/* FIXME: need to call drm_dsc_compute_rc_parameters() so that rest of
-> +	 * params are calculated
-> +	 */
-> +	dsc->slice_last_group_size = 3 - (dsc->drm->slice_width % 3);
-> +	groups_per_line = DIV_ROUND_UP(dsc->drm->slice_width, 3);
-> +	dsc->drm->slice_chunk_size = dsc->drm->slice_width * dsc->drm->bits_per_pixel / 8;
-> +	if ((dsc->drm->slice_width * dsc->drm->bits_per_pixel) % 8)
-> +		dsc->drm->slice_chunk_size++;
-> +
-> +	/* rbs-min */
-> +	min_rate_buffer_size =  dsc->drm->rc_model_size - dsc->drm->initial_offset +
-> +				dsc->drm->initial_xmit_delay * dsc->drm->bits_per_pixel +
-> +				groups_per_line * dsc->drm->first_line_bpg_offset;
-> +
-> +	hrd_delay = DIV_ROUND_UP(min_rate_buffer_size, dsc->drm->bits_per_pixel);
-> +
-> +	dsc->drm->initial_dec_delay = hrd_delay - dsc->drm->initial_xmit_delay;
-> +
-> +	dsc->drm->initial_scale_value = 8 * dsc->drm->rc_model_size /
-> +				       (dsc->drm->rc_model_size - dsc->drm->initial_offset);
-> +
-> +	slice_bits = 8 * dsc->drm->slice_chunk_size * dsc->drm->slice_height;
-> +
-> +	groups_total = groups_per_line * dsc->drm->slice_height;
-> +
-> +	data = dsc->drm->first_line_bpg_offset * 2048;
-> +
-> +	dsc->drm->nfl_bpg_offset = DIV_ROUND_UP(data, (dsc->drm->slice_height - 1));
-> +
-> +	pre_num_extra_mux_bits = 3 * (mux_words_size + (4 * dsc->drm->bits_per_component + 4) - 2);
-> +
-> +	num_extra_mux_bits = pre_num_extra_mux_bits - (mux_words_size -
-> +			     ((slice_bits - pre_num_extra_mux_bits) % mux_words_size));
-> +
-> +	data = 2048 * (dsc->drm->rc_model_size - dsc->drm->initial_offset + num_extra_mux_bits);
-> +	dsc->drm->slice_bpg_offset = DIV_ROUND_UP(data, groups_total);
-> +
-> +	/* bpp * 16 + 0.5 */
-> +	data = dsc->drm->bits_per_pixel * 16;
-> +	data *= 2;
-> +	data++;
-> +	data /= 2;
-> +	target_bpp_x16 = data;
-> +
-> +	data = (dsc->drm->initial_xmit_delay * target_bpp_x16) / 16;
-> +	final_value =  dsc->drm->rc_model_size - data + num_extra_mux_bits;
-> +	dsc->drm->final_offset = final_value;
-> +
-> +	final_scale = 8 * dsc->drm->rc_model_size / (dsc->drm->rc_model_size - final_value);
-> +
-> +	data = (final_scale - 9) * (dsc->drm->nfl_bpg_offset + dsc->drm->slice_bpg_offset);
-> +	dsc->drm->scale_increment_interval = (2048 * dsc->drm->final_offset) / data;
-> +
-> +	dsc->drm->scale_decrement_interval = groups_per_line / (dsc->drm->initial_scale_value - 8);
-> +
-> +	return 0;
-> +}
-> +
->   static int dsi_host_parse_dt(struct msm_dsi_host *msm_host)
->   {
->   	struct device *dev = &msm_host->pdev->dev;
-> diff --git a/drivers/gpu/drm/msm/msm_drv.h b/drivers/gpu/drm/msm/msm_drv.h
-> index d7574e6bd4e4..384f9bad4760 100644
-> --- a/drivers/gpu/drm/msm/msm_drv.h
-> +++ b/drivers/gpu/drm/msm/msm_drv.h
-> @@ -30,6 +30,7 @@
->   #include <drm/drm_plane_helper.h>
->   #include <drm/drm_probe_helper.h>
->   #include <drm/drm_fb_helper.h>
-> +#include <drm/drm_dsc.h>
->   #include <drm/msm_drm.h>
->   #include <drm/drm_gem.h>
->   
-> @@ -134,6 +135,20 @@ struct msm_drm_thread {
->   	struct kthread_worker *worker;
->   };
->   
-> +/* DSC config */
-> +struct msm_display_dsc_config {
-> +	struct drm_dsc_config *drm;
-> +
-> +	u32 initial_lines;
-> +	u32 pkt_per_line;
-> +	u32 bytes_in_slice;
-> +	u32 bytes_per_pkt;
-> +	u32 eol_byte_num;
-> +	u32 pclk_per_line;
-> +	u32 slice_last_group_size;
-> +	u32 det_thresh_flatness;
+Previously, with AVIC, guest needs to disable x2APIC capability and
+can only run in APIC mode to activate hardware-accelerated interrupt
+virtualization.  With x2AVIC, guest can run in x2APIC mode.
+This feature is indicated by the CPUID Fn8000_000A EDX[14],
+and it can be activated by setting bit 31 (enable AVIC) and
+bit 30 (x2APIC mode) of VMCB offset 60h.
 
-I have been looking throught the dsc params calculation. And it looks 
-like this struct is not necessary at all.
+The mode of interrupt virtualization can dynamically change during runtime.
+For example, when AVIC is enabled, the hypervisor currently keeps track of
+the AVIC activation and set the VMCB bit 31 accordingly. With x2AVIC,
+the guest OS can also switch between APIC and x2APIC modes during runtime.
+The kvm_amd driver needs to also keep track and set the VMCB
+bit 30 accordingly. 
 
-inital_lines can be passed to dpu_encoder_dsc_pipe_cfg() / 
-hw_dsc->ops.dsc_config() directly.
+Besides, for x2AVIC, kvm_amd driver needs to disable interception for the
+x2APIC MSR range to allow AVIC hardware to virtualize register accesses.
 
-slice_last_group_size and det_thresh_flatness can be calculated in 
-dpu_hw_dsc_config() directly. And the rest is only used in 
-dsi_timing_setup(), where they are calculated an immediately used to set 
-the hardware. Let's probably drop it, unless there is a good reason to 
-have it?
+Testing:
+  * This series has been tested booting a Linux VM with x2APIC physical
+    and logical modes upto 511 vCPUs.
 
-> +};
-> +
->   struct msm_drm_private {
->   
->   	struct drm_device *dev;
+Regards,
+Suravee
 
+
+Suravee Suthikulpanit (13):
+  KVM: SVM: Add warning when encounter invalid APIC ID
+  x86/cpufeatures: Introduce x2AVIC CPUID bit
+  KVM: SVM: Detect X2APIC virtualization (x2AVIC) support
+  KVM: SVM: Only call vcpu_(un)blocking when AVIC is enabled.
+  KVM: SVM: Update max number of vCPUs supported for x2AVIC mode
+  KVM: SVM: Add logic to determine x2APIC mode
+  KVM: SVM: Update avic_kick_target_vcpus to support 32-bit APIC ID
+  KVM: SVM: Do not update logical APIC ID table when in x2APIC mode
+  KVM: SVM: Introduce helper function avic_get_apic_id
+  KVM: SVM: Adding support for configuring x2APIC MSRs interception
+  KVM: SVM: Add logic to switch between APIC and x2APIC virtualization
+    mode
+  KVM: SVM: Remove APICv inhibit reasone due to x2APIC
+  KVM: SVM: Use fastpath x2apic IPI emulation when #vmexit with x2AVIC
+
+ arch/x86/include/asm/cpufeatures.h |   1 +
+ arch/x86/include/asm/svm.h         |  15 +-
+ arch/x86/kvm/svm/avic.c            | 216 ++++++++++++++++++++++++++---
+ arch/x86/kvm/svm/svm.c             | 102 ++++++++------
+ arch/x86/kvm/svm/svm.h             |  13 +-
+ arch/x86/kvm/x86.c                 |   3 +-
+ arch/x86/kvm/x86.h                 |   1 +
+ 7 files changed, 281 insertions(+), 70 deletions(-)
 
 -- 
-With best wishes
-Dmitry
+2.25.1
+

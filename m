@@ -2,76 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50CF64BEC0E
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 21:46:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB3E14BEC11
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 21:47:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233991AbiBUUqZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 15:46:25 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58078 "EHLO
+        id S234027AbiBUUsU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 15:48:20 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230412AbiBUUqX (ORCPT
+        with ESMTP id S230412AbiBUUsT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 15:46:23 -0500
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE71B237F1;
-        Mon, 21 Feb 2022 12:45:59 -0800 (PST)
-Received: by mail-ed1-x52f.google.com with SMTP id bq11so10527956edb.2;
-        Mon, 21 Feb 2022 12:45:59 -0800 (PST)
+        Mon, 21 Feb 2022 15:48:19 -0500
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BBBCB12;
+        Mon, 21 Feb 2022 12:47:55 -0800 (PST)
+Received: by mail-ej1-x62f.google.com with SMTP id gb39so36312018ejc.1;
+        Mon, 21 Feb 2022 12:47:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=sArEs4i+TWwbLDKHjUB5Hm9AhrhMG2e1+fbvFn1kdjk=;
-        b=jy748iPwgDsaD45Y4tJIjkHIjodPrvI7bdKiLJUrQ704l6Ie2gpWZiVGc0Ru7Y9tVw
-         zl/9/ZTlb7Wvhvbvqea46fHp+G2eijFBCW1ZRl372kI8h6Mc6ONcG+cqU0zDjiLfB+Aw
-         HiiAzFTL9L0/+t+z9Ot2IPtVGK2sCo6+xmfqtOtdpSn6DJI3jTp8soVsuB/XlA+Cp3li
-         Gsb2Ms7Rg/fuL+V4HyMhtsdsrWU1BnJRkF/VWsSZECcWtOhUdwPoZ/nx0R2ZHYTPzTL5
-         8c2SCrNgo7JVqXCTGgzVPJfKgKJNAFrIkEL1O1rlGxtN595RKJURfLIDe1XcXkeszGCS
-         MSmw==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=zGSZ89NGWU5FaKpIsF1/9hh9l6nIkwe/qG/ZNjD1Gho=;
+        b=WGVTzUfSeqcpIobttsC2YB0FBAfz9AJG8O2SqFwqkbZN1W3mzv4xX4ji5VS7KE9sr4
+         aeSMQn7UgoagvDwc5wLxL0ymAtY3KdbU/MwJay+vgNFlvD3o4B6QbH3TIOdbxfDrTX8w
+         yCyFRCLPSWS48GElAiH9sOMR2iUtZGlP2GYEypbF+p93pTzVvrS7lSUQcwecdfevodlW
+         M6WyE8M47stH/JwBKC8kVH2A5EAF/4N8agW/vA6MnKAKFk4i2i1E2GE+FU31wIGcpFHO
+         hNpcxAOmWoMW/hkjKWFHFnIQ3L+ywIjSLHaJtXrqx94QBZyDycAiIky/+bVBmJoo+DBb
+         0BuQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=sArEs4i+TWwbLDKHjUB5Hm9AhrhMG2e1+fbvFn1kdjk=;
-        b=YyqG6eux5jlh3ISmwetcI3DwkJ0bhL0al9MibmeQyS3nqK2LgfR6G2CCCuuk1cX2bB
-         nsLaq2IaOllRcB1/BZ3SewklHslPJsTiPxKmP6WM2ZTVPw9Ir+C9F6RvfiZZ8EPS3MCN
-         84kzp4Iy+Kp7BeL4sBZY/GEaNG/5QmA8+RNdjv5AYrkW9VJmhnRevKGC3ieifLJxPnPu
-         tIzl91vKFljYFQG/TGKdTlJ/W53buoxkgxfAA6iKK1HmrzqdjDIYBR8WjRM0fULenrQG
-         J7DElZXvwImwqTtoPZdXhUUpR2RdmQDY2jWlWCAdSapWo1NcBP6FMGvAN3uzMSkoTHPq
-         v2tA==
-X-Gm-Message-State: AOAM533qsNSXsG/ENptkKNaPJ5POkotHESKJk6/IeeKfycQAxyptfXCu
-        2nlbDjqQU/+DId078R8ZUv8=
-X-Google-Smtp-Source: ABdhPJwb4oapY7zioWOh4tvQOJemevk+jli14tRMx/qRS6MqyXHFmkFeYAKai1beCTJxhrU4vkLRzQ==
-X-Received: by 2002:aa7:c90c:0:b0:410:a178:319f with SMTP id b12-20020aa7c90c000000b00410a178319fmr23245367edt.451.1645476358454;
-        Mon, 21 Feb 2022 12:45:58 -0800 (PST)
-Received: from skbuf ([188.25.231.156])
-        by smtp.gmail.com with ESMTPSA id z12sm2452892edc.80.2022.02.21.12.45.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Feb 2022 12:45:58 -0800 (PST)
-Date:   Mon, 21 Feb 2022 22:45:56 +0200
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Alvin =?utf-8?Q?=C5=A0ipraga?= <ALSI@bang-olufsen.dk>
-Cc:     Alvin =?utf-8?Q?=C5=A0ipraga?= <alvin@pqrs.dk>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH net] net: dsa: fix panic when removing unoffloaded port
- from bridge
-Message-ID: <20220221204556.ymlwsrm4rfllp54y@skbuf>
-References: <20220221201931.296500-1-alvin@pqrs.dk>
- <20220221202637.he5hm6fbqhuayisv@skbuf>
- <87ilt8hs5e.fsf@bang-olufsen.dk>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=zGSZ89NGWU5FaKpIsF1/9hh9l6nIkwe/qG/ZNjD1Gho=;
+        b=fjxN3e1b+Mtmc1N+RHEm+C7rIO6GUsRZexXrZs2YMq5FFRf2UxyD+oa//4Vwh0cQM/
+         yyOh6OIWlZ4gPbP9UfOhA/taVpdQDyEELaM7ClGode8SmbcBteCvcsEFhxKtk/jKSmk3
+         srMOTNK0WvPA8rHRkyV3JLg4jjA9d2vMREVfYUQ6phK/dz8Q21kJPjJ3B0isw+ont2Ys
+         uHpdNHqpQXQcO3YjWiKoLSDLhpQRNHpgMrmbAguOBBy6MQMwSJTUBm5ztwAkwyPZIlNn
+         jSJ/LxsTPquA5wptlCTUtqn4Qdx36MUDUvksZ5bJWJw9/Y/CgffFknpjQNjmcZkeV15+
+         YpBQ==
+X-Gm-Message-State: AOAM533dYlvHOYbfKTltJVbgHj4I9XmHs+jDIaMcKmzjiUYewFZahl0s
+        1/KvJhy4uC80h489+wApXnq1dr/0TH39yTwriNE=
+X-Google-Smtp-Source: ABdhPJxdwH7zfNkiQ4rytH7m242Ve2I/jw1LQ+RosnvzuBHwS2SMPecJxy/LPj8BMksh+YX6BEylXz54Ck1bjtQTNag=
+X-Received: by 2002:a17:906:4cc7:b0:6d0:7efb:49f with SMTP id
+ q7-20020a1709064cc700b006d07efb049fmr15837539ejt.639.1645476474036; Mon, 21
+ Feb 2022 12:47:54 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <87ilt8hs5e.fsf@bang-olufsen.dk>
+References: <20220218042038.15176-1-jagathjog1996@gmail.com> <20220218042038.15176-6-jagathjog1996@gmail.com>
+In-Reply-To: <20220218042038.15176-6-jagathjog1996@gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Mon, 21 Feb 2022 21:47:18 +0100
+Message-ID: <CAHp75Ve=CQ6DL-J=9v_fnCHZydc=QQZOAC=RkFq0Ckkjk+-dAw@mail.gmail.com>
+Subject: Re: [PATCH v3 5/6] iio: potentiometer: Add support for Maxim DS3502
+To:     Jagath Jog J <jagathjog1996@gmail.com>
+Cc:     jic23@kernel.org, lars@metafoo.de, sst@poczta.fm,
+        robh+dt@kernel.org, linux-iio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -82,18 +67,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 21, 2022 at 08:38:21PM +0000, Alvin Šipraga wrote:
-> >> +	info.bridge = *dp->bridge,
-> >
-> > By the way, does this patch compile, with the comma and not the
-> > semicolon, like that?
-> 
-> Yikes, sorry about that. Sent a corrected v2 now.
-> 
-> It does actually compile though.
+On Fri, Feb 18, 2022 at 5:20 AM Jagath Jog J <jagathjog1996@gmail.com> wrote:
+>
+> The DS3502 is a 7-bit, nonvolatile digital potentiometer featuring
+> an output voltage range of up to 15.5V.
+> DS3502 support is implemented into existing DS1803 driver.
 
-Yes, I see, I think it probably works too:
 
-	info.bridge = *dp->bridge, dsa_port_bridge_destroy(dp, br);
+> Datasheet: https://datasheets.maximintegrated.com/en/ds/DS3502.pdf
+>
+> Signed-off-by: Jagath Jog J <jagathjog1996@gmail.com>
 
-although I would never write code like that.
+Please, make sure the Datasheet will be in the tag block (tag block
+doesn't allow blank lines).
+
+1. summary
+2. blank line
+3. long description (may contain blank lines)
+4. blank line
+5. tag block (may not contain blank lines)
+
+-- 
+With Best Regards,
+Andy Shevchenko

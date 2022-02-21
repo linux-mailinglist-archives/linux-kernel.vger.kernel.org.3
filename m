@@ -2,136 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C135D4BEAFE
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 20:37:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C4F8F4BEB03
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 20:37:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230245AbiBUSU7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 13:20:59 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42762 "EHLO
+        id S231266AbiBUSXC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 13:23:02 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232769AbiBUSSl (ORCPT
+        with ESMTP id S230200AbiBUSUm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 13:18:41 -0500
-Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D76731175;
-        Mon, 21 Feb 2022 10:10:47 -0800 (PST)
-Received: by mail-qk1-x734.google.com with SMTP id v5so15396515qkj.4;
-        Mon, 21 Feb 2022 10:10:47 -0800 (PST)
+        Mon, 21 Feb 2022 13:20:42 -0500
+Received: from mail-vs1-xe36.google.com (mail-vs1-xe36.google.com [IPv6:2607:f8b0:4864:20::e36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC2A811C0C;
+        Mon, 21 Feb 2022 10:12:49 -0800 (PST)
+Received: by mail-vs1-xe36.google.com with SMTP id t22so18461339vsa.4;
+        Mon, 21 Feb 2022 10:12:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:content-language:to
-         :cc:references:from:subject:in-reply-to:content-transfer-encoding;
-        bh=mbIldg0iF9VjD3Ozzo0Wwc3h0+c5pHLpFRfUlyikWD4=;
-        b=SQpgVeknETm3lRds0h8fPFBRjuKgDeVGe06ljjy5wKCPljPOA7MqeVpck/bg0csbR1
-         UAO+ruRNU8ddhRbpew5DiEEGCk6rOw6Su+03sK65CLqQpzi/ZjF7qyA5g7audHAFztL5
-         WkSkn7YB1qni8heM2nQn0fZnxcKy6djTP3qUkE7OvL1VM+G9spFe1cCeE+lBAjwsP/Gj
-         1bJBNyWJX1LuJihDid+PreN37nev/tcMqcx5OUf4ALfVJ6KejgsjskBv9J/m/XyJUvPc
-         azge9p4hvpIs8aO6QtJwrm5C8iYbtXQYbGrGfS5Iqz2UaAW6co9/Su8uDg3Hga5eHArL
-         hNpA==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=ifxp+oAlm2yMFNon3VLJzDL+D3DBh2HNHEmG4Ml9zb0=;
+        b=Rlr9COL1Llqt7kw3rO7nvsMKahQFjas2hu/wLUz4jU939rpNXGjySCevgwWcfTu+/j
+         gZPHu4QRXTPCkmBBAwGeP1X1lcIk7YkiwmCjjwPr89EDPA2NI+XorD1kpcNyuqRKz5eq
+         6m07UoguhQW+/TAQmM7xpJIbd4Gvz9+xcsO7uj34HuW/OtABV3iVNeoeLVE4CT2IoVzc
+         GecghsENS5WOApHe9nhcNUaEhNkx9gsrsXekGedb1K2eQxUiDpVouuMpUb5BMcru9sBS
+         X2gRStEWtcWyrnwG2W0Gu0QiCkkm9vVlT5BJMSZZk6e/AbBUVWDDftEkf947CqYijPus
+         Azmg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:subject:in-reply-to
-         :content-transfer-encoding;
-        bh=mbIldg0iF9VjD3Ozzo0Wwc3h0+c5pHLpFRfUlyikWD4=;
-        b=mlsLmgOWIVVijzmrxK0+IAbPDisB3oiH7R0oe6phKLRPfiqeEJMWLmCtKZZxiTMnGX
-         n5eF1h86CI2Tm10B01M/hDN/ud02XJKnSrJ9KHN89CR03JdBjMwpJutpUKe06qJEDBZm
-         Gz7whO26uD/zowrfRt/yJbF7AjbVV6SBD+dFzhGUYmLPXSiOzgHAV44cEdDvPW9K9UDR
-         +UItwDZUQCf+Kpvy48XsPnGLQ69xOYkqmlNVzH35nw8f9ImukEWPTHXuqbwxUjUEcYnr
-         eMvoMx8rofJ2mdZX2DJ2EjKjSLeHEGcJCRmyhQerR9yH8t3rwpx4Q9zqFS2IQYgKyopl
-         443A==
-X-Gm-Message-State: AOAM532UThDls6gCkflpM6rl1caEDaDamB0LCDmYFzkTLzPnKIp/eC24
-        FAYmt2q6VFH5MWApu3jQ4FQ=
-X-Google-Smtp-Source: ABdhPJxiPfnOca6vCD4UTzyG1YC6EYVSfPpA7lakd+x2ogE1JO2/bWacWek6BJYIuzhu0DvmO25RtA==
-X-Received: by 2002:a05:620a:288f:b0:47e:afd0:3f88 with SMTP id j15-20020a05620a288f00b0047eafd03f88mr12752484qkp.393.1645467047029;
-        Mon, 21 Feb 2022 10:10:47 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id o19sm30418708qta.19.2022.02.21.10.10.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Feb 2022 10:10:46 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <1778a683-30fa-9119-c3ce-2dddb5939809@roeck-us.net>
-Date:   Mon, 21 Feb 2022 10:10:44 -0800
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=ifxp+oAlm2yMFNon3VLJzDL+D3DBh2HNHEmG4Ml9zb0=;
+        b=Z7equoiVXH0rC6iO1o2zfgz2sli9SHaUoxmK0vi63Jnid94jys7/ZjfuS2P9gQjcmb
+         gIX32zFXJ+GQ6b/emCImr9829fRGzfsmfwens8PK5kWpDv5W2JtAlY/jud3+cNg9c9LY
+         PDyfJJwRacze2ZPV3RvlCuTLpPISKzxD9Fc8VI3KznrsuqBDuciIW+EIs5URDjfjBLPV
+         lpRTtfo5drTS2XC7WCJztL0s0QsYG+bnv3BeoAE7QQASMd6kT1g33v186glcd9JFK8tR
+         /oNLeeDvxgu+ri9uEcNIjc+UMemM/BqCN+v0DtdfTLQkJQn9U1jml+YcCSg7vWU1JnxW
+         RPzw==
+X-Gm-Message-State: AOAM533BxiAvAzLOICTf8rtxT+d3T7XQkbJdpIOjDTuFULnYI7UfXCcG
+        gE1kXsyvKWxe9zx9xbLYa522peGa1U1cQWE/7x4=
+X-Google-Smtp-Source: ABdhPJzFoIn78Lp4wnf0kYFF3TXrdo7QcL9/NZ62n/cDuV0zl3L5ZDiqeB+mDhq4xkfM35WmnUHJuj5OJliHPXU6gGM=
+X-Received: by 2002:a05:6102:5715:b0:31b:3dc6:10fd with SMTP id
+ dg21-20020a056102571500b0031b3dc610fdmr7679285vsb.50.1645467168788; Mon, 21
+ Feb 2022 10:12:48 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Content-Language: en-US
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Rob Herring <robh@kernel.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>
-References: <CAHk-=wiWZ=3dTuRq46KvQVpx-e7xqrnMAVB73dzj7g4Pbwc1zg@mail.gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: Linux 5.17-rc5
-In-Reply-To: <CAHk-=wiWZ=3dTuRq46KvQVpx-e7xqrnMAVB73dzj7g4Pbwc1zg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+References: <yonglin.tan@outlook.com> <MEYP282MB237454C97E14056454FBBC77FD3A9@MEYP282MB2374.AUSP282.PROD.OUTLOOK.COM>
+ <CAMZdPi_7KGx69s5tFumkswVXiQSdxXZjDXT5f9njRnBNz1k-VA@mail.gmail.com> <MEYP282MB2374BDAB34B7AE65C1246A44FD3A9@MEYP282MB2374.AUSP282.PROD.OUTLOOK.COM>
+In-Reply-To: <MEYP282MB2374BDAB34B7AE65C1246A44FD3A9@MEYP282MB2374.AUSP282.PROD.OUTLOOK.COM>
+From:   Sergey Ryazanov <ryazanov.s.a@gmail.com>
+Date:   Mon, 21 Feb 2022 21:12:55 +0300
+Message-ID: <CAHNKnsQtENMg2pv+AD1BYm=MA63O3j=1agUXGdgogpZh5c6JCw@mail.gmail.com>
+Subject: Re: [PATCH] net: wwan: To support SAHARA port for Qualcomm WWAN module.
+To:     =?UTF-8?B?6LCtIOawuOaelw==?= <yonglin.tan@outlook.com>
+Cc:     Loic Poulain <loic.poulain@linaro.org>,
+        "johannes@sipsolutions.net" <johannes@sipsolutions.net>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/21/22 09:44, Linus Torvalds wrote:
-> [ Fixed the subject line - you answered the wrong email.]
-> 
-> On Sun, Feb 20, 2022 at 6:47 PM Guenter Roeck <linux@roeck-us.net> wrote:
+Hello Yonglin,
+
+On Mon, Feb 21, 2022 at 7:21 PM =E8=B0=AD =E6=B0=B8=E6=9E=97 <yonglin.tan@o=
+utlook.com> wrote:
+> SAHARA protocol is used not only to dump the memory but also to enable FW=
+ downloading.
+> The protocol is designed primarily for transferring software images from =
+a host to a target and provides a simple mechanism for requesting data to b=
+e transferred over any physical link.
+>
+> To conclude, the SAHARA port provide a mechanism to transfer messages bet=
+ween host and device during SBL.
+>
+> -----=E9=82=AE=E4=BB=B6=E5=8E=9F=E4=BB=B6-----
+> =E5=8F=91=E4=BB=B6=E4=BA=BA: Loic Poulain <loic.poulain@linaro.org>
+> =E5=8F=91=E9=80=81=E6=97=B6=E9=97=B4: 2022=E5=B9=B42=E6=9C=8822=E6=97=A5 =
+0:03
+> =E6=94=B6=E4=BB=B6=E4=BA=BA: Yonglin Tan <yonglin.tan@outlook.com>
+> =E6=8A=84=E9=80=81: ryazanov.s.a@gmail.com; johannes@sipsolutions.net; da=
+vem@davemloft.net; kuba@kernel.org; netdev@vger.kernel.org; linux-kernel@vg=
+er.kernel.org; stable@vger.kernel.org
+> =E4=B8=BB=E9=A2=98: Re: [PATCH] net: wwan: To support SAHARA port for Qua=
+lcomm WWAN module.
+>
+> Hi Yonglin,
+>
+> On Mon, 21 Feb 2022 at 13:21, Yonglin Tan <yonglin.tan@outlook.com> wrote=
+:
 >>
->> Build results:
->>          total: 155 pass: 152 fail: 3
-> 
-> Grr. Things are going in the wrong direction here.
-> 
-> At least the two new cases look trivial, and that ppc fix is finally
-> in linux-next.
-> 
->> Qemu test results:
->>          total: 488 pass: 427 fail: 61
->> Failed tests:
->>          arm:orangepi-pc:multi_v7_defconfig:usb1:net,nic:sun8i-h3-orangepi-pc:rootfs
-> 
-> Adding some devicetree and otherwise involved people to the cc, can we
-> *finally* get this fixed? It's been around for all of this release,
-> and Guenter has done a fair amount of bisecting and testing, chasing
-> down lockdep reports etc.
-> 
-> I've been ignoring this on the assumption that it will just get fixed,
-> but it's starting to be pretty late in the game now..
-> 
->>          <almost all mips tests>
-> 
-> Gaah. And what happened here? There aren't even any MIPS changes in
-> rc5, so clearly something went sideways that just must have happened
-> to affect your mips qemu tests. Added Thomas Bogendoerfer despite the
-> lack of commits.
-> 
+>> The SAHARA port for Qualcomm WWAN module is used to capture memory
+>> dump. But now this feature has not been supported by linux kernel
+>> code. Such that no SAHARA driver matched while the device entered to
+>> DUMP mode. Once the device crashed due to some reasons, device will
+>> enter into DUMP mode and running in SBL stage. After that, the device
+>> change EE to SBL and the host will detect the EE change event and
+>> re-enumerate SAHARA port.
+>>
+>> Cc: stable@vger.kernel.org
+>> Fixes: fa588eba632d ("net: Add Qcom WWAN control driver")
+>> Signed-off-by: Yonglin Tan <yonglin.tan@outlook.com>
+>> Reviewed-by: Loic Poulain <loic.poulain@linaro.org>
+>
+> Sorry, but I've not yet offered that tag :-)
+>
+> The WWAN framework is a generic way to expose a WWAN device and its relat=
+ed control/data protocols, such as AT, QMI, MBIM, QCDM, etc...
+> All the exposed protocols are supported by open-source user tools/daemons=
+ such as ModemManager, ofono, fwupd... SAHARA does not seem to be WWAN spec=
+ific and is not something needed for controlling a modem, right?
+>
+> I know it would be easier to just add this channel to the WWAN ports, but=
+ we don't want to rawly expose something that could fit into an existing fr=
+amework/subsystem, that's why I referred to the devcoredump framework, whic=
+h 'seems' a better place for its integration. But I could be wrong, I don't=
+ know much about devcoredump and maybe SAHARA is doing much more than a fir=
+mware coredump...
+>
+> As a last resort, I think this kind of debug interface should go to debug=
+fs.
 
-Oh, that is "just" the result of the netfilter build problem.
+Here I agree with Loic. An interface that is exported through the WWAN
+subsystem should be common enough for WWAN devices. For a firmware
+crash dump collection, there are better solutions like devcoredump as
+already pointed out by Loic. The firmware update function can be
+implemented using the devlink firmware flashing API. You could see the
+use of both APIs in the IOSM driver.
 
-Building mips:malta_defconfig ... failed
---------------
-Error log:
-net/netfilter/xt_socket.c: In function 'socket_mt_destroy':
-net/netfilter/xt_socket.c:224:17: error: implicit declaration of function 'nf_defrag_ipv6_disable'; did you mean 'nf_defrag_ipv4_disable'?
+If none of these interfaces can be used to utilize the SAHARA
+functionality, then, as Loic has already pointed out, such an
+interface should probably go to the debugfs. But I suggest to
+implement the firmware management functionality using the generic
+kernel API. This will save time for end users, distro maintainers and
+probably for modem vendor support too.
 
-This was introduced with commit 75063c9294fb ("netfilter: xt_socket:
-fix a typo in socket_mt_destroy()"). The build error is seen whenever
-NETFILTER_XT_MATCH_SOCKET is enabled and IPV6 is disabled, and mips
-builds are the unfortunate victim. The patch introducing the problem
-now proliferated into the 5.15 and 5.16 stable release candidates
-as well, causing the same build and test failures there.
-
-The real question is why to patch introducing the problem made it
-upstream even though the problem was reported several days before
-the push request was sent.
-
-Guenter
+--=20
+Sergey

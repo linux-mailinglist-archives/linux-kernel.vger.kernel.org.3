@@ -2,75 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF5564BE637
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:01:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 388414BDF83
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:50:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378070AbiBUOhe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 09:37:34 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49550 "EHLO
+        id S1357536AbiBUOio (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 09:38:44 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356282AbiBUOha (ORCPT
+        with ESMTP id S1350689AbiBUOid (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 09:37:30 -0500
-Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 458AD1EEF9
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 06:37:07 -0800 (PST)
-Received: by mail-io1-f70.google.com with SMTP id n5-20020a5e8c05000000b00640d0a712d3so3465392ioj.1
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 06:37:07 -0800 (PST)
+        Mon, 21 Feb 2022 09:38:33 -0500
+Received: from mail-qk1-x72a.google.com (mail-qk1-x72a.google.com [IPv6:2607:f8b0:4864:20::72a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 600E9205D2
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 06:38:08 -0800 (PST)
+Received: by mail-qk1-x72a.google.com with SMTP id z66so11190324qke.10
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 06:38:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=SQkkpjsX6TpHTIkwX4rlheMVKzlTSUCBOIkGIhUmEnk=;
+        b=lFloJT5XTRR77kzfHXTKnbI4pb8ZRFszg5NJtpODh2xdLUe/I00E73ECSqJvCocxE2
+         b91NgLxHbLq2mKguKL6+A8vg59eCEqgoc3DveKrETnDLj1w3kQOwUnqmAyyMEzwuyF++
+         1oz4fM9tYT3W1pjPYzepabrJTciPcMKBtMn9aK5T3gg7gaxtxK3qGRDfcii8PSRqH1m5
+         jTfcfIxVWzqsyre+F9ScBo3PJyTGXXcumCcPycf5oTgrENXqutdnUW36PETYhvnU0X6i
+         kE5fYBI0/0sqdCVOLbEJmColObNXJPYvXf2JzQQK0cwu9DtCZ/5LkSqn+45P9FbV6RjB
+         gqew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=UXuZuAFf06AjNDv96AIjaTSOnvpwB56946KWBbv5zI8=;
-        b=FO/IhiZOnLRJP6zdUEbcapOi26HjW2M7LrYWUrzKAbHQAoPGM+Wg3FB4erxWrSrDSM
-         7uxR1InFa5EB1gI0nNSoEIQjTPm05QsL0yv2kCVb/hIOl6OG8v5pYlJP6ZBsguWLR6aI
-         YS53w85jha5/asZj7yCuzkLdP7rPJC2feoBBzifSzHdPsAqQJJ5qEn+BfpD5fSKQFvmw
-         tC7neX/QpXOKAsFMr1oXheie1JY8XQssfsQsxzvychwzYAKSS7Vh24TAZ+dHzourVlsg
-         /xd/ned0is6EgJcR6HcHwQcXN7uLupNXwNFPRmTp329U8ccKmw60X/+taIi8HPmtyajG
-         MxTw==
-X-Gm-Message-State: AOAM5335CogynE4HbFXsFSigv9Rbd2JIykYArAOjEdLKsi28gQz+RIVg
-        C9WwlxoP+HyQ9/3oUDWE7MCN/JZJPHDa9QDm6DHTrOrbcIh8
-X-Google-Smtp-Source: ABdhPJxI9n7981umWgxAkYi8nKTFYbbnjwZVOUXk22WmatR+LG0H0VtkRrDs5wSXcX4+ImWNsFu8NNEDe6+uhDX1c+HlQGRQyJSt
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=SQkkpjsX6TpHTIkwX4rlheMVKzlTSUCBOIkGIhUmEnk=;
+        b=Q4+vPdyV9fpi2+NZ5mGjsa2HOMv4HFMT5gGAYg5lap1gzEN2GRUkdPErzewtMKi5vB
+         xo05kXqTNl52I6yGGvUXBCp9QInfMvi+M1c3ke36TfcLjEoqoo9rPw55yMqE35Vr+YxS
+         cSmxHCFg9OiO0J94em92WASiqkxmxrs5cyOvNWz//EmvxOW8Xyw+31dQr+WD/q53Egpe
+         KeIN/v24JAqqbVm1nyzCSG6EaE+m/WyefGn/itL1zivo5oqNlM/QN4RtpKvcl8QXELpl
+         kPq4C/jmHDpqj8xucAxLP8M2OW9xRNKQJiHHm2ueDh8WqewyB+esmDZwKnSpLBjNb4hK
+         oENQ==
+X-Gm-Message-State: AOAM531Zw3YB0QBDWeVN6j3OSfK90qY44xRKzvWGQjBnC9fNlQjhW2FC
+        ofzXNy4QrFnjqJhbF8dcxXY=
+X-Google-Smtp-Source: ABdhPJxlKmrxFZuT/FAITTFKtimqCuPmpqJElllBfSaAREj/db8P6HZlcu9ug388nFgwdaclSsMcRA==
+X-Received: by 2002:ae9:df42:0:b0:47e:fe7b:a202 with SMTP id t63-20020ae9df42000000b0047efe7ba202mr12266908qkf.256.1645454287319;
+        Mon, 21 Feb 2022 06:38:07 -0800 (PST)
+Received: from mail.google.com ([207.246.89.135])
+        by smtp.gmail.com with ESMTPSA id bm8sm20942916qkb.25.2022.02.21.06.38.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 21 Feb 2022 06:38:07 -0800 (PST)
+Date:   Mon, 21 Feb 2022 22:37:58 +0800
+From:   Changbin Du <changbin.du@gmail.com>
+To:     Changbin Du <changbin.du@gmail.com>
+Cc:     Nick Desaulniers <ndesaulniers@google.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        llvm@lists.linux.dev
+Subject: Re: [PATCH] kallsyms: ignore all local labels prefixed by '.L'
+Message-ID: <20220221143758.7wln3mklyaj7mzod@mail.google.com>
+References: <20220201013257.17926-1-changbin.du@gmail.com>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1d86:b0:2bd:ef9f:cfa6 with SMTP id
- h6-20020a056e021d8600b002bdef9fcfa6mr16231349ila.314.1645454226686; Mon, 21
- Feb 2022 06:37:06 -0800 (PST)
-Date:   Mon, 21 Feb 2022 06:37:06 -0800
-In-Reply-To: <CAGxU2F4nGWxG0wymrDZzd8Hwhm2=8syuEB3fLMd+t7bbN7qWrQ@mail.gmail.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000ad0c4005d8882aa8@google.com>
-Subject: Re: [syzbot] INFO: task hung in vhost_work_dev_flush
-From:   syzbot <syzbot+0abd373e2e50d704db87@syzkaller.appspotmail.com>
-To:     jasowang@redhat.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mst@redhat.com,
-        netdev@vger.kernel.org, sgarzare@redhat.com,
-        syzkaller-bugs@googlegroups.com,
-        virtualization@lists.linux-foundation.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220201013257.17926-1-changbin.du@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Hi, Masahiro,
+Could you consider picking up this change if you have no objection?
 
-syzbot has tested the proposed patch and the reproducer did not trigger any issue:
+On Tue, Feb 01, 2022 at 09:32:57AM +0800, Changbin Du wrote:
+> The llvm compiler can generate lots of local labels ('.LBB', '.Ltmpxxx',
+> '.L__unnamed_xx', etc.). These symbols usually are useless for debugging.
+> And they might overlap with handwritten symbols.
+> 
+> Before this change, a dumpstack shows a local symbol for epc:
+> [    0.040341][    T0] Hardware name: riscv-virtio,qemu (DT)
+> [    0.040376][    T0] epc : .LBB6_14+0x22/0x6a
+> [    0.040452][    T0]  ra : restore_all+0x12/0x6e
+> 
+> The simple solution is that we can ignore all local labels prefixed by '.L'.
+> For handwritten symbols which need to be preserved should drop the '.L'
+> prefix.
+> 
+> After this change, the C defined symbol is shown so we can locate the
+> problematical code immediately:
+> [    0.035795][    T0] Hardware name: riscv-virtio,qemu (DT)
+> [    0.036332][    T0] epc : trace_hardirqs_on+0x54/0x13c
+> [    0.036567][    T0]  ra : restore_all+0x12/0x6e
+> 
+> Signed-off-by: Changbin Du <changbin.du@gmail.com>
+> ---
+>  scripts/kallsyms.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/scripts/kallsyms.c b/scripts/kallsyms.c
+> index 54ad86d13784..8caabddf817c 100644
+> --- a/scripts/kallsyms.c
+> +++ b/scripts/kallsyms.c
+> @@ -108,7 +108,7 @@ static bool is_ignored_symbol(const char *name, char type)
+>  	/* Symbol names that begin with the following are ignored.*/
+>  	static const char * const ignored_prefixes[] = {
+>  		"$",			/* local symbols for ARM, MIPS, etc. */
+> -		".LASANPC",		/* s390 kasan local symbols */
+> +		".L",			/* local labels, .LBB,.Ltmpxxx,.L__unnamed_xx,.LASANPC, etc. */
+>  		"__crc_",		/* modversions */
+>  		"__efistub_",		/* arm64 EFI stub namespace */
+>  		"__kvm_nvhe_",		/* arm64 non-VHE KVM namespace */
+> -- 
+> 2.32.0
+> 
 
-Reported-and-tested-by: syzbot+0abd373e2e50d704db87@syzkaller.appspotmail.com
-
-Tested on:
-
-commit:         f71077a4 Merge tag 'mmc-v5.17-rc1-2' of git://git.kern..
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/
-kernel config:  https://syzkaller.appspot.com/x/.config?x=a78b064590b9f912
-dashboard link: https://syzkaller.appspot.com/bug?extid=0abd373e2e50d704db87
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=1502488e700000
-
-Note: testing is done by a robot and is best-effort only.
+-- 
+Cheers,
+Changbin Du

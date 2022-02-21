@@ -2,125 +2,231 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A00284BE8DA
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:06:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B84094BDCFC
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:43:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350549AbiBUJfG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 04:35:06 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51002 "EHLO
+        id S1350870AbiBUJkU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 04:40:20 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350001AbiBUJ1B (ORCPT
+        with ESMTP id S236978AbiBUJdP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 04:27:01 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 902D2116
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 01:11:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645434673; x=1676970673;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=+sMSFdBUf/9LvW63UTt/8rXrHUw2YlFgt4UKqrVoN7s=;
-  b=JrV1JDUdwhHQpGhwUvwIkMQ2xEygKVcJ3vlBkasCMoBYUHRv6MduTp4z
-   aDmBe+mUbi64tr/ByNKUW7dLaVy64lR2BPt/qYgHyd0U96QhrLddgvoG5
-   gXrZwDNcQ3TOMKn/HbrfXlOTqTHJ5SHyEcWQVoXjjjpS52d9x+wwk0Ahf
-   J+HJOONITFQ/CJA+f5daeC4h1CUiaTdSLL1n2TrqJru4xl/pzJanxox1U
-   i/Lzuj/grdQr8/lLD1seOGLj5E3lzBXyVBySpvS4Dk16K3vfOf9dvbrrF
-   Z3szmYiFQ5aAgPIz7X6iN7jaOKLKwLphOBcGDzzg+eYCntqnoGsp9GpbF
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10264"; a="231439306"
-X-IronPort-AV: E=Sophos;i="5.88,385,1635231600"; 
-   d="scan'208";a="231439306"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2022 01:11:12 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,385,1635231600"; 
-   d="scan'208";a="775938345"
-Received: from lkp-server01.sh.intel.com (HELO da3212ac2f54) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 21 Feb 2022 01:11:10 -0800
-Received: from kbuild by da3212ac2f54 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nM4ir-0001S6-E0; Mon, 21 Feb 2022 09:11:09 +0000
-Date:   Mon, 21 Feb 2022 17:11:04 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Martin =?utf-8?Q?Povi=C5=A1er?= <povik+lin@cutebit.org>
-Cc:     kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org
-Subject: [ammarfaizi2-block:axboe/linux-block/m1/2022-02-19 517/552]
- drivers/clk/clk-apple-nco.c:139:16: error: implicit declaration of function
- 'FIELD_PREP'
-Message-ID: <202202211707.LrS0JBhZ-lkp@intel.com>
+        Mon, 21 Feb 2022 04:33:15 -0500
+Received: from smtpout1.mo528.mail-out.ovh.net (smtpout1.mo528.mail-out.ovh.net [46.105.34.251])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F13F28997;
+        Mon, 21 Feb 2022 01:13:54 -0800 (PST)
+Received: from pro2.mail.ovh.net (unknown [10.109.138.12])
+        by mo528.mail-out.ovh.net (Postfix) with ESMTPS id C3F61E720712;
+        Mon, 21 Feb 2022 10:13:23 +0100 (CET)
+Received: from [192.168.1.103] (88.125.132.78) by DAG1EX2.emp2.local
+ (172.16.2.2) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Mon, 21 Feb
+ 2022 10:13:22 +0100
+Message-ID: <e4b4fbc7-53ee-987b-7849-bf625fc2155e@traphandler.com>
+Date:   Mon, 21 Feb 2022 10:13:21 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2 6/6] clk: renesas: r9a06g032: Disable the watchdog
+ reset sources when halting
+Content-Language: en-US
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+CC:     <linux-renesas-soc@vger.kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, <linux-clk@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        <linux-watchdog@vger.kernel.org>
+References: <20220208183511.2925304-1-jjhiblot@traphandler.com>
+ <20220208183511.2925304-7-jjhiblot@traphandler.com>
+ <CAMuHMdUCT-qwhN53mRnAUox2pqw+Y5-7Gw5EbC+-HCF054kkgQ@mail.gmail.com>
+ <4595fbfe-da0b-1b1a-2478-6d537012a2bf@roeck-us.net>
+From:   Jean-Jacques Hiblot <jjhiblot@traphandler.com>
+In-Reply-To: <4595fbfe-da0b-1b1a-2478-6d537012a2bf@roeck-us.net>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [88.125.132.78]
+X-ClientProxiedBy: CAS4.emp2.local (172.16.1.4) To DAG1EX2.emp2.local
+ (172.16.2.2)
+X-Ovh-Tracer-Id: 6319676177827838292
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvvddrkeeiucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepkfffgggfuffvfhfhjggtgfhisehtkeertddtfeejnecuhfhrohhmpeflvggrnhdqlfgrtghquhgvshcujfhisghlohhtuceojhhjhhhisghlohhtsehtrhgrphhhrghnughlvghrrdgtohhmqeenucggtffrrghtthgvrhhnpeeufeeggeevkefguedtheeufefftdehkeegkeetudetjeehjedtudeuveffkeehteenucfkpheptddrtddrtddrtddpkeekrdduvdehrddufedvrdejkeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhhouggvpehsmhhtphhouhhtpdhhvghlohepphhrohdvrdhmrghilhdrohhvhhdrnhgvthdpihhnvghtpedtrddtrddtrddtpdhmrghilhhfrhhomhepjhhjhhhisghlohhtsehtrhgrphhhrghnughlvghrrdgtohhmpdhnsggprhgtphhtthhopedupdhrtghpthhtoheplhhinhhugidqfigrthgthhguohhgsehvghgvrhdrkhgvrhhnvghlrdhorhhg
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/ammarfaizi2/linux-block axboe/linux-block/m1/2022-02-19
-head:   b781e0ccdc0c9a931571d15db09d45b7258b9905
-commit: 276bb3ac97d54e2461f27705391a3b87750a390e [517/552] clk: clk-apple-nco: Add driver for Apple NCO
-config: arm-randconfig-r026-20220221 (https://download.01.org/0day-ci/archive/20220221/202202211707.LrS0JBhZ-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/ammarfaizi2/linux-block/commit/276bb3ac97d54e2461f27705391a3b87750a390e
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block axboe/linux-block/m1/2022-02-19
-        git checkout 276bb3ac97d54e2461f27705391a3b87750a390e
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm SHELL=/bin/bash drivers/
+Hi,
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+On 14/02/2022 16:34, Guenter Roeck wrote:
+> On 2/14/22 02:45, Geert Uytterhoeven wrote:
+>> Hi Jean-Jacques,
+>>
+>> CC watchdog people, who only received some patches.
+>>
+>> On Tue, Feb 8, 2022 at 7:35 PM Jean-Jacques Hiblot
+>> <jjhiblot@traphandler.com> wrote:
+>>> The watchdog reset sources must be disabled when the system is halted.
+>>> Otherwise the watchdogs will trigger a reset if they have been armed.
+>>>
+>>> Signed-off-by: Jean-Jacques Hiblot <jjhiblot@traphandler.com>
+>>
+>> Thanks for your patch!
+>>
+>> [inserting changelog]
+>>
+>> | Changes v1 -> v2:
+>> | * Modified the clock driver to not enable the watchdog reset sources.
+>> |   On other renesas platforms, those bits are by the bootloader. The
+>> |   watchdog reset sources are still disabled when the platform is 
+>> halted
+>> |   to prevent a watchdog reset.
+>>
+>> I still have my doubts about this part. So on halt, you override the
+>> policy configured by the boot loader, which means the watchdog is no
+>> longer triggered on halt.
+>>
+>>> From a system perspective, the system can be in five states:
+>>    1. Running,
+>>    2. Crashed/lock-ed up,
+>>    3. Halt,
+>>    4. Reboot,
+>>    5. Poweroff.
+>>
+>> Now, from a policy perspective, what is the difference between a
+>> system that crashes or locks up, and a system that halts?
+>> I.e. should the system reboot on halt, or not?
+>>
+>> I think halting a system where the watchdog has been activated makes
+>> no sense, and the user either wants to explicitly reboot the system, or
+>> power it off, but never halt it.  So I think this patch is not needed.
 
-All errors (new ones prefixed by >>):
+I don't see halting the machine as a must-have feature either, but it 
+seemed to me
 
-   drivers/clk/clk-apple-nco.c: In function 'applnco_div_translate':
->> drivers/clk/clk-apple-nco.c:139:16: error: implicit declaration of function 'FIELD_PREP' [-Werror=implicit-function-declaration]
-     139 |         return FIELD_PREP(DIV_COARSE, tbl->fwd[coarse - COARSE_DIV_OFFSET]) |
-         |                ^~~~~~~~~~
-   drivers/clk/clk-apple-nco.c: In function 'applnco_div_translate_inv':
->> drivers/clk/clk-apple-nco.c:147:27: error: implicit declaration of function 'FIELD_GET' [-Werror=implicit-function-declaration]
-     147 |         coarse = tbl->inv[FIELD_GET(DIV_COARSE, regval)] + COARSE_DIV_OFFSET;
-         |                           ^~~~~~~~~
-   cc1: some warnings being treated as errors
+that there could be other people relying on it. I'll remove this patch 
+from the series.
+
+>>
+>> Watchdog people: what is your opinion?
+>
+> In my understanding the shutdown code is always executed, ie also for
+> restarts and poweroff. Disabling the watchdog in that situation is not
+> always desirable, though sometimes necessary depending on the hardware.
+> Disabling it through the backdoor (instead of calling 
+> watchdog_stop_on_reboot)
+> seems odd, though.
 
 
-vim +/FIELD_PREP +139 drivers/clk/clk-apple-nco.c
+Unfortunately, in this case it is not possible to stop the watchdog once 
+started.
 
-   131	
-   132	static u32 applnco_div_translate(struct applnco_tables *tbl, unsigned int div)
-   133	{
-   134		unsigned int coarse = div / 4;
-   135	
-   136		if (WARN_ON(applnco_div_out_of_range(div)))
-   137			return 0;
-   138	
- > 139		return FIELD_PREP(DIV_COARSE, tbl->fwd[coarse - COARSE_DIV_OFFSET]) |
-   140				FIELD_PREP(DIV_FINE, div % 4);
-   141	}
-   142	
-   143	static unsigned int applnco_div_translate_inv(struct applnco_tables *tbl, u32 regval)
-   144	{
-   145		unsigned int coarse, fine;
-   146	
- > 147		coarse = tbl->inv[FIELD_GET(DIV_COARSE, regval)] + COARSE_DIV_OFFSET;
-   148		fine = FIELD_GET(DIV_FINE, regval);
-   149	
-   150		return coarse * 4 + fine;
-   151	}
-   152	
+The only way to halt the machine is to disable the watchdog reset source.
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+
+JJ
+
+
+>
+> Guenter
+>
+>> Thanks!
+>>
+>>> --- a/drivers/clk/renesas/r9a06g032-clocks.c
+>>> +++ b/drivers/clk/renesas/r9a06g032-clocks.c
+>>> @@ -129,6 +129,11 @@ enum { K_GATE = 0, K_FFC, K_DIV, K_BITSEL, 
+>>> K_DUALGATE };
+>>>
+>>>   #define R9A06G032_CLOCK_COUNT (R9A06G032_UART_GROUP_34567 + 1)
+>>>
+>>> +#define R9A06G032_SYSCTRL_REG_RSTEN            0x120
+>>> +#define WDA7RST1       BIT(2)
+>>> +#define WDA7RST0       BIT(1)
+>>> +#define MRESET         BIT(0)
+>>> +
+>>>   static const struct r9a06g032_clkdesc r9a06g032_clocks[] = {
+>>>          D_ROOT(CLKOUT, "clkout", 25, 1),
+>>>          D_ROOT(CLK_PLL_USB, "clk_pll_usb", 12, 10),
+>>> @@ -893,6 +898,19 @@ static void 
+>>> r9a06g032_clocks_del_clk_provider(void *data)
+>>>          of_clk_del_provider(data);
+>>>   }
+>>>
+>>> +static void r9a06g032_reset_sources(struct r9a06g032_priv *clocks,
+>>> +                       uint32_t mask, uint32_t value)
+>>> +{
+>>> +       uint32_t rsten;
+>>> +       unsigned long flags;
+>>> +
+>>> +       spin_lock_irqsave(&clocks->lock, flags);
+>>> +       rsten = readl(clocks->reg);
+>>> +       rsten = (rsten & ~mask) | (value & mask);
+>>> +       writel(rsten, clocks->reg + R9A06G032_SYSCTRL_REG_RSTEN);
+>>> +       spin_unlock_irqrestore(&clocks->lock, flags);
+>>> +}
+>>> +
+>>>   static int __init r9a06g032_clocks_probe(struct platform_device 
+>>> *pdev)
+>>>   {
+>>>          struct device *dev = &pdev->dev;
+>>> @@ -910,6 +928,8 @@ static int __init r9a06g032_clocks_probe(struct 
+>>> platform_device *pdev)
+>>>          if (!clocks || !clks)
+>>>                  return -ENOMEM;
+>>>
+>>> +       platform_set_drvdata(pdev, clocks);
+>>> +
+>>>          spin_lock_init(&clocks->lock);
+>>>
+>>>          clocks->data.clks = clks;
+>>> @@ -963,9 +983,18 @@ static int __init r9a06g032_clocks_probe(struct 
+>>> platform_device *pdev)
+>>>          if (error)
+>>>                  return error;
+>>>
+>>> +
+>>>          return r9a06g032_add_clk_domain(dev);
+>>>   }
+>>>
+>>> +static void r9a06g032_clocks_shutdown(struct platform_device *pdev)
+>>> +{
+>>> +       struct r9a06g032_priv *clocks = platform_get_drvdata(pdev);
+>>> +
+>>> +       /* Disable the watchdog reset sources */
+>>> +       r9a06g032_reset_sources(clocks, WDA7RST0 | WDA7RST1, 0);
+>>> +}
+>>> +
+>>>   static const struct of_device_id r9a06g032_match[] = {
+>>>          { .compatible = "renesas,r9a06g032-sysctrl" },
+>>>          { }
+>>> @@ -976,6 +1005,7 @@ static struct platform_driver 
+>>> r9a06g032_clock_driver = {
+>>>                  .name   = "renesas,r9a06g032-sysctrl",
+>>>                  .of_match_table = r9a06g032_match,
+>>>          },
+>>> +       .shutdown = r9a06g032_clocks_shutdown,
+>>>   };
+>>>
+>>>   static int __init r9a06g032_clocks_init(void)
+>>
+>> Gr{oetje,eeting}s,
+>>
+>>                          Geert
+>>
+>> -- 
+>> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- 
+>> geert@linux-m68k.org
+>>
+>> In personal conversations with technical people, I call myself a 
+>> hacker. But
+>> when I'm talking to journalists I just say "programmer" or something 
+>> like that.
+>>                                  -- Linus Torvalds
+>

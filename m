@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8B254BE260
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:55:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 99FE34BDF6C
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:50:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347240AbiBUJFN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 04:05:13 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58076 "EHLO
+        id S1346257AbiBUI5r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 03:57:47 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347562AbiBUJBb (ORCPT
+        with ESMTP id S245153AbiBUIzT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 04:01:31 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5524C20F6D;
-        Mon, 21 Feb 2022 00:56:44 -0800 (PST)
+        Mon, 21 Feb 2022 03:55:19 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E3E42459F;
+        Mon, 21 Feb 2022 00:53:35 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7137AB80EB9;
-        Mon, 21 Feb 2022 08:56:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B1C0C340E9;
-        Mon, 21 Feb 2022 08:56:42 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DB2616113B;
+        Mon, 21 Feb 2022 08:53:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BCCE2C340E9;
+        Mon, 21 Feb 2022 08:53:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645433803;
-        bh=Jx8LAhV6OIpIdGMzBxuqr8O6xckWBkwl6Prj0jsGmvw=;
+        s=korg; t=1645433601;
+        bh=bnRgaCYY2Io/dz1lctcW09Cp9g3QrduhEn3iv3fnR8U=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Ae+gda3hFD1dRvbAHl0MDwTyWqHAFHNhgFBkTgdVlk7VZGtpalZcmzsejoUr7FtaH
-         JTH1bNTf7N7Lnn1qVIhWLKGuftR18HUOcZKvaOWddN5opujEWE5/lr84nZquTlNNDg
-         PatFCCf76k7y8mZnR196RDdABMSFWj+QGqqinbnU=
+        b=ajqCTmEvlx9/uuH2BRaHcBUoeS86s+JzwxZrv0KHAaXjY3Ej+DAcw69JWC4xRkean
+         LPe32k4v4wAjYueeaBsbbc+/iEicbO5YV2dv4JpgypblMrcTBjy9jbXlka8eQx/qUK
+         OwGUQhJjd7Yba2kpr/6Hpx6nNpEcSNJu+qMkpjI8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Balbir Singh <bsingharora@gmail.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-Subject: [PATCH 4.19 20/58] taskstats: Cleanup the use of task->exit_code
+        stable@vger.kernel.org, Miquel Raynal <miquel.raynal@bootlin.com>,
+        Stefan Schmidt <stefan@datenfreihafen.org>
+Subject: [PATCH 4.14 22/45] net: ieee802154: ca8210: Fix lifs/sifs periods
 Date:   Mon, 21 Feb 2022 09:49:13 +0100
-Message-Id: <20220221084912.538420079@linuxfoundation.org>
+Message-Id: <20220221084911.177636856@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220221084911.895146879@linuxfoundation.org>
-References: <20220221084911.895146879@linuxfoundation.org>
+In-Reply-To: <20220221084910.454824160@linuxfoundation.org>
+References: <20220221084910.454824160@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,61 +54,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Eric W. Biederman" <ebiederm@xmission.com>
+From: Miquel Raynal <miquel.raynal@bootlin.com>
 
-commit 1b5a42d9c85f0e731f01c8d1129001fd8531a8a0 upstream.
+commit bdc120a2bcd834e571ce4115aaddf71ab34495de upstream.
 
-In the function bacct_add_task the code reading task->exit_code was
-introduced in commit f3cef7a99469 ("[PATCH] csa: basic accounting over
-taskstats"), and it is not entirely clear what the taskstats interface
-is trying to return as only returning the exit_code of the first task
-in a process doesn't make a lot of sense.
+These periods are expressed in time units (microseconds) while 40 and 12
+are the number of symbol durations these periods will last. We need to
+multiply them both with the symbol_duration in order to get these
+values in microseconds.
 
-As best as I can figure the intent is to return task->exit_code after
-a task exits.  The field is returned with per task fields, so the
-exit_code of the entire process is not wanted.  Only the value of the
-first task is returned so this is not a useful way to get the per task
-ptrace stop code.  The ordinary case of returning this value is
-returning after a task exits, which also precludes use for getting
-a ptrace value.
-
-It is common to for the first task of a process to also be the last
-task of a process so this field may have done something reasonable by
-accident in testing.
-
-Make ac_exitcode a reliable per task value by always returning it for
-every exited task.
-
-Setting ac_exitcode in a sensible mannter makes it possible to continue
-to provide this value going forward.
-
-Cc: Balbir Singh <bsingharora@gmail.com>
-Fixes: f3cef7a99469 ("[PATCH] csa: basic accounting over taskstats")
-Link: https://lkml.kernel.org/r/20220103213312.9144-5-ebiederm@xmission.com
-Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
-[sudip: adjust context]
-Signed-off-by: Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+Fixes: ded845a781a5 ("ieee802154: Add CA8210 IEEE 802.15.4 device driver")
+Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
+Link: https://lore.kernel.org/r/20220201180629.93410-2-miquel.raynal@bootlin.com
+Signed-off-by: Stefan Schmidt <stefan@datenfreihafen.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- kernel/tsacct.c |    7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+ drivers/net/ieee802154/ca8210.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/kernel/tsacct.c
-+++ b/kernel/tsacct.c
-@@ -46,11 +46,10 @@ void bacct_add_tsk(struct user_namespace
- 	/* Convert to seconds for btime */
- 	do_div(delta, USEC_PER_SEC);
- 	stats->ac_btime = get_seconds() - delta;
--	if (thread_group_leader(tsk)) {
-+	if (tsk->flags & PF_EXITING)
- 		stats->ac_exitcode = tsk->exit_code;
--		if (tsk->flags & PF_FORKNOEXEC)
--			stats->ac_flag |= AFORK;
--	}
-+	if (thread_group_leader(tsk) && (tsk->flags & PF_FORKNOEXEC))
-+		stats->ac_flag |= AFORK;
- 	if (tsk->flags & PF_SUPERPRIV)
- 		stats->ac_flag |= ASU;
- 	if (tsk->flags & PF_DUMPCORE)
+--- a/drivers/net/ieee802154/ca8210.c
++++ b/drivers/net/ieee802154/ca8210.c
+@@ -2976,8 +2976,8 @@ static void ca8210_hw_setup(struct ieee8
+ 	ca8210_hw->phy->cca.opt = NL802154_CCA_OPT_ENERGY_CARRIER_AND;
+ 	ca8210_hw->phy->cca_ed_level = -9800;
+ 	ca8210_hw->phy->symbol_duration = 16;
+-	ca8210_hw->phy->lifs_period = 40;
+-	ca8210_hw->phy->sifs_period = 12;
++	ca8210_hw->phy->lifs_period = 40 * ca8210_hw->phy->symbol_duration;
++	ca8210_hw->phy->sifs_period = 12 * ca8210_hw->phy->symbol_duration;
+ 	ca8210_hw->flags =
+ 		IEEE802154_HW_AFILT |
+ 		IEEE802154_HW_OMIT_CKSUM |
 
 

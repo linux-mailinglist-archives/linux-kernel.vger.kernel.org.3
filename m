@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB9FF4BD727
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 08:43:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF93B4BD6EF
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 08:43:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233819AbiBUHeK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 02:34:10 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51586 "EHLO
+        id S1346265AbiBUHeU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 02:34:20 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346326AbiBUHdz (ORCPT
+        with ESMTP id S1346258AbiBUHdy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 02:33:55 -0500
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98C6913EAE
+        Mon, 21 Feb 2022 02:33:54 -0500
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B31E913E82
         for <linux-kernel@vger.kernel.org>; Sun, 20 Feb 2022 23:33:18 -0800 (PST)
-Received: by mail-ej1-x635.google.com with SMTP id a8so30880381ejc.8
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Feb 2022 23:33:17 -0800 (PST)
+Received: by mail-ej1-x633.google.com with SMTP id d10so30787746eje.10
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Feb 2022 23:33:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=LmobdHxkxm4sdZUtfeeL0jQWyBgw3L2XhUOirp2Pdv8=;
-        b=JFK//iev0pBvNj0CFQ9+b4BEWenMAl8usHqaW23BHSYyZtw9W/X7F/NKjK+fyHz/6n
-         qEUzb1v+9BsdAXdg2zQSHBXGVy0lObGc/bLnYXNi5sBEA6g3IzTHkrnOe++R/CzL/49y
-         7aUC6ci5LMzdG13gm3mWL43W39ZcoX1eSDD32wIKSCsq6w45oi8tDNfj2c5B5sVqbnGz
-         4bk7Svz3Jy2GQvlkvtFnQi43WrBR5wx36uNA9F937H6lNsmO9WJaSjbYZx6VXkbts6tX
-         IyhN6BdqKDfzTv/RfnvvVVYaddb7Tuy0gJCB3yubDu6m6Op6kUxO6Jk0zFgFrBjuYi1b
-         u97A==
+        bh=O6E3mVixruLxdZHjJ1wxRBvkKpRcoOQJ1soEUthx7X8=;
+        b=gUQMEEqFDEmmcDfzQK4o4ZPd3s+UQuFOc+Zi9aGoY4O9z4ClQqvVxUQKAp84YpPBNy
+         BM+t/PtQ76A2WSBqY3SoOh1ZsaLIfjOqC4TexkXAyjPiJLcyBIp2NsIgEOrV5u4t91MG
+         NXffr3x/r3eBumnMs8Cefeo2RwA/35zjl1ikjnym6ZxGZAgr+lMf5J618Rms6eUX9GFM
+         3BwDy6Q8AfjVRmv7EiYNcU/CApBEF+Q+G/hCSe1Y0/WsKwIISG9q0bHIwLiZxoPgvElB
+         4VLmCzRidd1PO53gsCfXp/E4ikpWLwS9b8zQ9X+uz5HsJwqrcGkcf4SAAiztXlI8TuiS
+         J4LA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=LmobdHxkxm4sdZUtfeeL0jQWyBgw3L2XhUOirp2Pdv8=;
-        b=7sK1wCJ9YzFlj0s11gjgt+KP5HcNG426nulXR28k9btdUsVXY40ObRWKhTusxH9Xe0
-         SHZr8Dv7raXpbwI6LMJMAwP4lIQ5InmyzLFqGV8BjQTSUN3VxqV3aOf0O+hIZOeC1bT/
-         LytBzXm4HQ1DXoVcTKHdaRjApWTezTYzSl0rgJl/XtlPUkdqxv/bhop+qN4mgdn8nhCi
-         MGvTy3lnr7mFY0CEq6pXeOBhEIwdcwQXBctGi4F66qCXKBXQiyN5Y6R9vkAU62CEaoyD
-         1DXqfUAKcRJ+VF63nOh9VD8XIRJAfEhB61gTlfb9gRu0J+gMYV3rKsqYsE5IB0Ylh/E1
-         w8Fg==
-X-Gm-Message-State: AOAM530NY6jITD5yZ1FFKKxSGRtD3t2C536yiB3i88gGN55q6OWMr251
-        pDrnJd0I1sHd5Sqrn9eKSIg=
-X-Google-Smtp-Source: ABdhPJwekhD4/9toUXVwuLkN3p5pIZZr2uNzNF7c7+/+v4nqnQ1e/O3LotKXODnpNJ8mdR+A7sxGXA==
-X-Received: by 2002:a17:906:37cf:b0:6ce:6321:5ecb with SMTP id o15-20020a17090637cf00b006ce63215ecbmr14897728ejc.385.1645428796658;
-        Sun, 20 Feb 2022 23:33:16 -0800 (PST)
+        bh=O6E3mVixruLxdZHjJ1wxRBvkKpRcoOQJ1soEUthx7X8=;
+        b=QCtP8e04r3zb7lGkYusD4L6rq/XysWGyVngn7O9EiqqDh0BQJBj17CJhFG+XHNvKmM
+         z2q/nWsc59OAMXLWmyrSmxNpD3SmEokPQa1qwCsTjQKCdbqpt5XvnMJtLyGoLzFX/BE7
+         eXSt9NohSX+Gj+On+MXCZ0oxd8zjqtC6fNbfZOMQ5e+XmYJbB7YxrQkmKzZT9Vl0xmE8
+         +E2ls+rzRv6Rm6TxsBI/Q4MLWIrYf5N5XvDZskk8J03xiGaluVjE6OKcpSMzzXgYVylN
+         wZ08vNLgSXhtiliS1Bbil0m5eC2x3sWOhNcLhwRbwgPgOAe3Ja/7UYrG/rbUbhUNkch1
+         u4/Q==
+X-Gm-Message-State: AOAM5301gEp4n0WYXMVczLpMl/sshzpCm6P7OvRis1DzlRwbyD8Rj/6p
+        z7aF/+iKw5NNqjBOyzHD+DY=
+X-Google-Smtp-Source: ABdhPJxTNUhzfwuSfieA7KUNxbkpK3lwDok77gr9+EbSnDej9/2n495FaAXct4sPOB+LaEklpGVrKw==
+X-Received: by 2002:a17:906:407:b0:6cd:472b:2d5f with SMTP id d7-20020a170906040700b006cd472b2d5fmr14530079eja.573.1645428797278;
+        Sun, 20 Feb 2022 23:33:17 -0800 (PST)
 Received: from localhost.localdomain (ip5f5abb8f.dynamic.kabel-deutschland.de. [95.90.187.143])
         by smtp.gmail.com with ESMTPSA id c11sm8673128edx.42.2022.02.20.23.33.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 20 Feb 2022 23:33:16 -0800 (PST)
+        Sun, 20 Feb 2022 23:33:17 -0800 (PST)
 From:   Michael Straube <straube.linux@gmail.com>
 To:     gregkh@linuxfoundation.org
 Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
         linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
         Michael Straube <straube.linux@gmail.com>
-Subject: [PATCH v2 2/5] staging: r8188eu: convert two u8 variables to bool
-Date:   Mon, 21 Feb 2022 08:33:03 +0100
-Message-Id: <20220221073306.16636-3-straube.linux@gmail.com>
+Subject: [PATCH v2 3/5] staging: r8188eu: remove enum odm_bw
+Date:   Mon, 21 Feb 2022 08:33:04 +0100
+Message-Id: <20220221073306.16636-4-straube.linux@gmail.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220221073306.16636-1-straube.linux@gmail.com>
 References: <20220221073306.16636-1-straube.linux@gmail.com>
@@ -71,63 +71,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The variables bScanInProcess in struct mlme_priv and bpower_saving in
-struct pwrctrl_priv are both used to store only boolean values true
-and false. Convert them from u8 to bool to avoid type casts in the
-function Update_ODM_ComInfo_88E().
+The enums odm_bw and ht_channel_width are redundant. Keep
+ht_channel_width and remove odm_bw.
 
 Signed-off-by: Michael Straube <straube.linux@gmail.com>
 ---
 v2:
-Fixed a typo in the commit message.
-unsed -> used
+no changes
 
- drivers/staging/r8188eu/hal/rtl8188e_dm.c     | 4 ++--
- drivers/staging/r8188eu/include/rtw_mlme.h    | 2 +-
- drivers/staging/r8188eu/include/rtw_pwrctrl.h | 2 +-
- 3 files changed, 4 insertions(+), 4 deletions(-)
+ drivers/staging/r8188eu/hal/odm.c     | 4 ++--
+ drivers/staging/r8188eu/include/odm.h | 6 ------
+ 2 files changed, 2 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/staging/r8188eu/hal/rtl8188e_dm.c b/drivers/staging/r8188eu/hal/rtl8188e_dm.c
-index 09e78c4855f9..082104c9b2e8 100644
---- a/drivers/staging/r8188eu/hal/rtl8188e_dm.c
-+++ b/drivers/staging/r8188eu/hal/rtl8188e_dm.c
-@@ -42,8 +42,8 @@ static void Update_ODM_ComInfo_88E(struct adapter *Adapter)
- 	dm_odm->pSecChOffset = &hal_data->nCur40MhzPrimeSC;
- 	dm_odm->pBandWidth = (u8 *)&hal_data->CurrentChannelBW;
- 	dm_odm->pChannel = &hal_data->CurrentChannel;
--	dm_odm->pbScanInProcess = (bool *)&pmlmepriv->bScanInProcess;
--	dm_odm->pbPowerSaving = (bool *)&pwrctrlpriv->bpower_saving;
-+	dm_odm->pbScanInProcess = &pmlmepriv->bScanInProcess;
-+	dm_odm->pbPowerSaving = &pwrctrlpriv->bpower_saving;
+diff --git a/drivers/staging/r8188eu/hal/odm.c b/drivers/staging/r8188eu/hal/odm.c
+index 6f594ae33c6e..5d2f934d78ae 100644
+--- a/drivers/staging/r8188eu/hal/odm.c
++++ b/drivers/staging/r8188eu/hal/odm.c
+@@ -266,7 +266,7 @@ static void odm_CommonInfoSelfUpdate(struct odm_dm_struct *pDM_Odm)
+ 	u8 i;
+ 	struct sta_info *pEntry;
  
- 	ODM_CmnInfoInit(dm_odm, ODM_CMNINFO_RF_ANTENNA_TYPE, hal_data->TRxAntDivType);
+-	if (*pDM_Odm->pBandWidth == ODM_BW40M) {
++	if (*pDM_Odm->pBandWidth == HT_CHANNEL_WIDTH_40) {
+ 		if (*pDM_Odm->pSecChOffset == 1)
+ 			pDM_Odm->ControlChannel = *pDM_Odm->pChannel - 2;
+ 		else if (*pDM_Odm->pSecChOffset == 2)
+@@ -766,7 +766,7 @@ u32 ODM_Get_Rate_Bitmap(struct odm_dm_struct *pDM_Odm, u32 macid, u32 ra_mask, u
+ 		} else if (rssi_level == DM_RATR_STA_MIDDLE) {
+ 			rate_bitmap = 0x000ff000;
+ 		} else {
+-			if (*pDM_Odm->pBandWidth == ODM_BW40M)
++			if (*pDM_Odm->pBandWidth == HT_CHANNEL_WIDTH_40)
+ 				rate_bitmap = 0x000ff015;
+ 			else
+ 				rate_bitmap = 0x000ff005;
+diff --git a/drivers/staging/r8188eu/include/odm.h b/drivers/staging/r8188eu/include/odm.h
+index 0e85bd88ab8a..fed12203c558 100644
+--- a/drivers/staging/r8188eu/include/odm.h
++++ b/drivers/staging/r8188eu/include/odm.h
+@@ -166,12 +166,6 @@ enum odm_wireless_mode {
+ 	ODM_WM_AUTO	= BIT(5),
+ };
  
-diff --git a/drivers/staging/r8188eu/include/rtw_mlme.h b/drivers/staging/r8188eu/include/rtw_mlme.h
-index 1e16fa615b94..d418d57f99b6 100644
---- a/drivers/staging/r8188eu/include/rtw_mlme.h
-+++ b/drivers/staging/r8188eu/include/rtw_mlme.h
-@@ -310,7 +310,7 @@ struct qos_priv {
- struct mlme_priv {
- 	spinlock_t lock;
- 	int fw_state;	/* shall we protect this variable? maybe not necessarily... */
--	u8 bScanInProcess;
-+	bool bScanInProcess;
- 	u8 to_join; /* flag */
- 	u8 to_roaming; /*  roaming trying times */
- 
-diff --git a/drivers/staging/r8188eu/include/rtw_pwrctrl.h b/drivers/staging/r8188eu/include/rtw_pwrctrl.h
-index 2d5298373d74..7c3cb895c3cd 100644
---- a/drivers/staging/r8188eu/include/rtw_pwrctrl.h
-+++ b/drivers/staging/r8188eu/include/rtw_pwrctrl.h
-@@ -49,7 +49,7 @@ struct pwrctrl_priv {
- 
- 	u32	alives;
- 	struct work_struct cpwm_event;
--	u8	bpower_saving;
-+	bool	bpower_saving;
- 
- 	u8	reg_rfoff;
- 	u8	reg_pdnmode; /* powerdown mode */
+-/*  ODM_CMNINFO_BW */
+-enum odm_bw {
+-	ODM_BW20M		= 0,
+-	ODM_BW40M		= 1,
+-};
+-
+ struct odm_ra_info {
+ 	u8 RateID;
+ 	u32 RateMask;
 -- 
 2.35.1
 

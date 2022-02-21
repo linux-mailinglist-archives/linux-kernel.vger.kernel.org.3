@@ -2,45 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 089B34BE8D6
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:06:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E6D04BDF48
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:49:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348974AbiBUJU5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 04:20:57 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56924 "EHLO
+        id S1347759AbiBUJIz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 04:08:55 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348609AbiBUJLZ (ORCPT
+        with ESMTP id S1347135AbiBUJEA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 04:11:25 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E3B92717F;
-        Mon, 21 Feb 2022 01:03:43 -0800 (PST)
+        Mon, 21 Feb 2022 04:04:00 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E32402DA9C;
+        Mon, 21 Feb 2022 00:58:36 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 70ACECE0E7A;
-        Mon, 21 Feb 2022 09:03:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5EACEC340E9;
-        Mon, 21 Feb 2022 09:03:39 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AB3B8B80EAC;
+        Mon, 21 Feb 2022 08:58:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E88E6C36AE3;
+        Mon, 21 Feb 2022 08:58:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645434219;
-        bh=1jVry6EzWmdaPynnQY4Bu5KULnUeP+l7PqFmLHbCtkQ=;
+        s=korg; t=1645433901;
+        bh=V+GAnAacYdkyKm/bNFvDuRxcECMVX1bM81QitkE3o3U=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Z+TANLX/cdnEKKtobCbtOYqbyo04WiJKkhXqVJR6XdMaKW45vTGicCi/sAmTdYlcc
-         +PjBuaiR09dd8UiaKntNt4yLCALhcbtpcyJLwY5frjmTKotv3cJ1Tbe8fniuh1kSlx
-         zbRRzCerQqkMYxHvU8NdVM54qq2zXkunsOzKQpC8=
+        b=bGFJYiFMUtoaMeQ9aM+dtGfddAfl8scLujkE3AJvvCn/m84ZPgwUjHx3B7IdLFPqY
+         ZSsdq9OcB0JSJGgxXbxtGib21T3XfnL7v3coTi9pWfRRqfXrNxX6Qx033ls4NpOQ4p
+         1Kul/4MeIEEWwhuHljuu9gLVrFd2cgqApV6WWdZA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Johannes Berg <johannes.berg@intel.com>,
-        Luca Coelho <luciano.coelho@intel.com>,
-        Kalle Valo <kvalo@kernel.org>
-Subject: [PATCH 5.10 052/121] iwlwifi: pcie: fix locking when "HW not ready"
+        stable@vger.kernel.org, Mark Rutland <mark.rutland@arm.com>,
+        Helge Deller <deller@gmx.de>,
+        "Steven Rostedt (VMware)" <rostedt@goodmis.org>,
+        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
+        Torsten Duwe <duwe@suse.de>,
+        Amit Daniel Kachhap <amit.kachhap@arm.com>,
+        Sven Schnelle <svens@stackframe.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Jessica Yu <jeyu@kernel.org>, linux-parisc@vger.kernel.org,
+        Stephen Boyd <swboyd@chromium.org>
+Subject: [PATCH 5.4 24/80] module/ftrace: handle patchable-function-entry
 Date:   Mon, 21 Feb 2022 09:49:04 +0100
-Message-Id: <20220221084922.970652803@linuxfoundation.org>
+Message-Id: <20220221084916.374474220@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220221084921.147454846@linuxfoundation.org>
-References: <20220221084921.147454846@linuxfoundation.org>
+In-Reply-To: <20220221084915.554151737@linuxfoundation.org>
+References: <20220221084915.554151737@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,34 +63,168 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Johannes Berg <johannes.berg@intel.com>
+From: Mark Rutland <mark.rutland@arm.com>
 
-commit e9848aed147708a06193b40d78493b0ef6abccf2 upstream.
+commit a1326b17ac03a9012cb3d01e434aacb4d67a416c upstream.
 
-If we run into this error path, we shouldn't unlock the mutex
-since it's not locked since. Fix this.
+When using patchable-function-entry, the compiler will record the
+callsites into a section named "__patchable_function_entries" rather
+than "__mcount_loc". Let's abstract this difference behind a new
+FTRACE_CALLSITE_SECTION, so that architectures don't have to handle this
+explicitly (e.g. with custom module linker scripts).
 
-Fixes: a6bd005fe92d ("iwlwifi: pcie: fix RF-Kill vs. firmware load race")
-Signed-off-by: Johannes Berg <johannes.berg@intel.com>
-Signed-off-by: Luca Coelho <luciano.coelho@intel.com>
-Signed-off-by: Kalle Valo <kvalo@kernel.org>
-Link: https://lore.kernel.org/r/iwlwifi.20220128142706.5d16821d1433.Id259699ddf9806459856d6aefbdbe54477aecffd@changeid
+As parisc currently handles this explicitly, it is fixed up accordingly,
+with its custom linker script removed. Since FTRACE_CALLSITE_SECTION is
+only defined when DYNAMIC_FTRACE is selected, the parisc module loading
+code is updated to only use the definition in that case. When
+DYNAMIC_FTRACE is not selected, modules shouldn't have this section, so
+this removes some redundant work in that case.
+
+To make sure that this is keep up-to-date for modules and the main
+kernel, a comment is added to vmlinux.lds.h, with the existing ifdeffery
+simplified for legibility.
+
+I built parisc generic-{32,64}bit_defconfig with DYNAMIC_FTRACE enabled,
+and verified that the section made it into the .ko files for modules.
+
+Signed-off-by: Mark Rutland <mark.rutland@arm.com>
+Acked-by: Helge Deller <deller@gmx.de>
+Acked-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
+Reviewed-by: Ard Biesheuvel <ard.biesheuvel@linaro.org>
+Reviewed-by: Torsten Duwe <duwe@suse.de>
+Tested-by: Amit Daniel Kachhap <amit.kachhap@arm.com>
+Tested-by: Sven Schnelle <svens@stackframe.org>
+Tested-by: Torsten Duwe <duwe@suse.de>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: James E.J. Bottomley <James.Bottomley@HansenPartnership.com>
+Cc: Jessica Yu <jeyu@kernel.org>
+Cc: linux-parisc@vger.kernel.org
+Cc: Stephen Boyd <swboyd@chromium.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/wireless/intel/iwlwifi/pcie/trans.c |    3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ arch/parisc/Makefile              |    1 -
+ arch/parisc/kernel/module.c       |   10 +++++++---
+ arch/parisc/kernel/module.lds     |    7 -------
+ include/asm-generic/vmlinux.lds.h |   14 +++++++-------
+ include/linux/ftrace.h            |    5 +++++
+ kernel/module.c                   |    2 +-
+ 6 files changed, 20 insertions(+), 19 deletions(-)
+ delete mode 100644 arch/parisc/kernel/module.lds
 
---- a/drivers/net/wireless/intel/iwlwifi/pcie/trans.c
-+++ b/drivers/net/wireless/intel/iwlwifi/pcie/trans.c
-@@ -1313,8 +1313,7 @@ static int iwl_trans_pcie_start_fw(struc
- 	/* This may fail if AMT took ownership of the device */
- 	if (iwl_pcie_prepare_card_hw(trans)) {
- 		IWL_WARN(trans, "Exit HW not ready\n");
--		ret = -EIO;
--		goto out;
-+		return -EIO;
- 	}
+--- a/arch/parisc/Makefile
++++ b/arch/parisc/Makefile
+@@ -65,7 +65,6 @@ KBUILD_CFLAGS += -DCC_USING_PATCHABLE_FU
+ 		 -DFTRACE_PATCHABLE_FUNCTION_SIZE=$(NOP_COUNT)
  
- 	iwl_enable_rfkill_int(trans);
+ CC_FLAGS_FTRACE := -fpatchable-function-entry=$(NOP_COUNT),$(shell echo $$(($(NOP_COUNT)-1)))
+-KBUILD_LDS_MODULE += $(srctree)/arch/parisc/kernel/module.lds
+ endif
+ 
+ OBJCOPY_FLAGS =-O binary -R .note -R .comment -S
+--- a/arch/parisc/kernel/module.c
++++ b/arch/parisc/kernel/module.c
+@@ -43,6 +43,7 @@
+ #include <linux/elf.h>
+ #include <linux/vmalloc.h>
+ #include <linux/fs.h>
++#include <linux/ftrace.h>
+ #include <linux/string.h>
+ #include <linux/kernel.h>
+ #include <linux/bug.h>
+@@ -862,7 +863,7 @@ int module_finalize(const Elf_Ehdr *hdr,
+ 	const char *strtab = NULL;
+ 	const Elf_Shdr *s;
+ 	char *secstrings;
+-	int err, symindex = -1;
++	int symindex = -1;
+ 	Elf_Sym *newptr, *oldptr;
+ 	Elf_Shdr *symhdr = NULL;
+ #ifdef DEBUG
+@@ -946,11 +947,13 @@ int module_finalize(const Elf_Ehdr *hdr,
+ 			/* patch .altinstructions */
+ 			apply_alternatives(aseg, aseg + s->sh_size, me->name);
+ 
++#ifdef CONFIG_DYNAMIC_FTRACE
+ 		/* For 32 bit kernels we're compiling modules with
+ 		 * -ffunction-sections so we must relocate the addresses in the
+-		 *__mcount_loc section.
++		 *  ftrace callsite section.
+ 		 */
+-		if (symindex != -1 && !strcmp(secname, "__mcount_loc")) {
++		if (symindex != -1 && !strcmp(secname, FTRACE_CALLSITE_SECTION)) {
++			int err;
+ 			if (s->sh_type == SHT_REL)
+ 				err = apply_relocate((Elf_Shdr *)sechdrs,
+ 							strtab, symindex,
+@@ -962,6 +965,7 @@ int module_finalize(const Elf_Ehdr *hdr,
+ 			if (err)
+ 				return err;
+ 		}
++#endif
+ 	}
+ 	return 0;
+ }
+--- a/arch/parisc/kernel/module.lds
++++ /dev/null
+@@ -1,7 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0 */
+-
+-SECTIONS {
+-	__mcount_loc : {
+-		*(__patchable_function_entries)
+-	}
+-}
+--- a/include/asm-generic/vmlinux.lds.h
++++ b/include/asm-generic/vmlinux.lds.h
+@@ -110,17 +110,17 @@
+ #endif
+ 
+ #ifdef CONFIG_FTRACE_MCOUNT_RECORD
+-#ifdef CC_USING_PATCHABLE_FUNCTION_ENTRY
+-#define MCOUNT_REC()	. = ALIGN(8);				\
+-			__start_mcount_loc = .;			\
+-			KEEP(*(__patchable_function_entries))	\
+-			__stop_mcount_loc = .;
+-#else
++/*
++ * The ftrace call sites are logged to a section whose name depends on the
++ * compiler option used. A given kernel image will only use one, AKA
++ * FTRACE_CALLSITE_SECTION. We capture all of them here to avoid header
++ * dependencies for FTRACE_CALLSITE_SECTION's definition.
++ */
+ #define MCOUNT_REC()	. = ALIGN(8);				\
+ 			__start_mcount_loc = .;			\
+ 			KEEP(*(__mcount_loc))			\
++			KEEP(*(__patchable_function_entries))	\
+ 			__stop_mcount_loc = .;
+-#endif
+ #else
+ #define MCOUNT_REC()
+ #endif
+--- a/include/linux/ftrace.h
++++ b/include/linux/ftrace.h
+@@ -738,6 +738,11 @@ static inline unsigned long get_lock_par
+ 
+ #ifdef CONFIG_FTRACE_MCOUNT_RECORD
+ extern void ftrace_init(void);
++#ifdef CC_USING_PATCHABLE_FUNCTION_ENTRY
++#define FTRACE_CALLSITE_SECTION	"__patchable_function_entries"
++#else
++#define FTRACE_CALLSITE_SECTION	"__mcount_loc"
++#endif
+ #else
+ static inline void ftrace_init(void) { }
+ #endif
+--- a/kernel/module.c
++++ b/kernel/module.c
+@@ -3377,7 +3377,7 @@ static int find_module_sections(struct m
+ #endif
+ #ifdef CONFIG_FTRACE_MCOUNT_RECORD
+ 	/* sechdrs[0].sh_size is always zero */
+-	mod->ftrace_callsites = section_objs(info, "__mcount_loc",
++	mod->ftrace_callsites = section_objs(info, FTRACE_CALLSITE_SECTION,
+ 					     sizeof(*mod->ftrace_callsites),
+ 					     &mod->num_ftrace_callsites);
+ #endif
 
 

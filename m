@@ -2,81 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECEEF4BE00F
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:51:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C97F84BE4E0
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:59:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381264AbiBUQtI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 11:49:08 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35870 "EHLO
+        id S1377479AbiBUOQm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 09:16:42 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235840AbiBUQsy (ORCPT
+        with ESMTP id S1377473AbiBUOQk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 11:48:54 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14949237C9;
-        Mon, 21 Feb 2022 08:48:31 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A477E61368;
-        Mon, 21 Feb 2022 16:48:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87773C340E9;
-        Mon, 21 Feb 2022 16:48:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645462110;
-        bh=5Pik22iN7iVIuLmm2Qayj9ScyA9AdJpopJLWIeVTAO8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=j6/VUANCfZ3zsZMa78OVM/eXtdb+Wx7BU73JJqHVT2qCPaPdr8GVfBMnUHK4Egzxj
-         9ZR8kjzx7pM5mcb6n6n8j9lhrg1eU/0CXFGdD1pzT/KTXV1vUIu/ViKYGoJ36XDfsz
-         MLPOiBsSkPOsTYIhQsHfLc4A/ROVu11any6IKXso=
-Date:   Mon, 21 Feb 2022 15:16:08 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Pavel Machek <pavel@denx.de>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Subject: Re: [PATCH 4.19 00/58] 4.19.231-rc1 review
-Message-ID: <YhOeqJ0XLjYVuBCe@kroah.com>
-References: <20220221084911.895146879@linuxfoundation.org>
- <20220221122340.GA15152@duo.ucw.cz>
+        Mon, 21 Feb 2022 09:16:40 -0500
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E3241EACF;
+        Mon, 21 Feb 2022 06:16:16 -0800 (PST)
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 3A8F420011;
+        Mon, 21 Feb 2022 14:16:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1645452975;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ODvyZvZqdacklZ9aM1iSEKqfNp5Cqiwau4V4K6DcxSs=;
+        b=oJZZIw4nkZZWnxKikQFHjyWZwwa72kZ4pi7IZkfVWTGtxEfjPzQzznHFxx0FbDWFyn5mg/
+        ZYfjr337cqAbq8xdt/wnmZifvFrrRqTVLb2jSIXhC6qul1XaHfX6IglEVANvJNpWxnv+Yn
+        2/FleAKKgzYHkZjiBoiVpjqthS+QXjobIJ4fm/OEa4NpFYbXoYweoidME0tvC7/R8VWAK5
+        ScipJ13S/lp80hemQw+1ZdGskmjzYZDGI7+hSOOsOn5SGEU7Z3yS7bZe8K6dCG8YpAMxLJ
+        Ubm+iDleiWcBLkf/qBcfMPvMkQB8RlwNXfQmVGR6j6dH4X2DpwouOnuFL6uFcg==
+Date:   Mon, 21 Feb 2022 15:16:12 +0100
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     broonie@kernel.org
+Cc:     Boris Brezillon <boris.brezillon@collabora.com>,
+        Christophe Kerello <christophe.kerello@foss.st.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: manual merge of the nand tree with the mtd tree
+Message-ID: <20220221151612.67a2dfbc@xps13>
+In-Reply-To: <20220221135552.2196160-1-broonie@kernel.org>
+References: <20220221135552.2196160-1-broonie@kernel.org>
+Organization: Bootlin
+X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220221122340.GA15152@duo.ucw.cz>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 21, 2022 at 01:23:40PM +0100, Pavel Machek wrote:
-> Hi!
-> 
-> > This is the start of the stable review cycle for the 4.19.231 release.
-> > There are 58 patches in this series, all will be posted as a response
-> > to this one.  If anyone has any issues with these being applied, please
-> > let me know.
-> 
-> > or in the git tree and branch at:
-> > 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.19.y
-> > and the diffstat can be found below.
-> 
-> Do you think you could quote git hash of the respective commit here?
+Hello,
 
-No, as that tree is a "throw away" one which I delete instantly on my
-side once I create it and push it out.  I am only creating it so that
-people who use git for their CI can have an easy way to test it.
+broonie@kernel.org wrote on Mon, 21 Feb 2022 13:55:52 +0000:
 
-Once I do a -rc announcement, the branch here should always work, if
-not, please report it.
+> Hi all,
+>=20
+> Today's linux-next merge of the nand tree got a conflict in:
+>=20
+>   Documentation/devicetree/bindings/mtd/nand-controller.yaml
+>=20
+> between commit:
+>=20
+>   751f204a6fe6f ("dt-bindings: mtd: nand-chip: Create a NAND chip descrip=
+tion")
+>=20
+> from the mtd tree and commit:
+>=20
+>   cb57fae479be4 ("dt-binding: mtd: nand: Document the wp-gpios property")
+>=20
+> from the nand tree.
+>=20
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
 
-thanks,
+Thanks for fixing it up in -next. We will anyway merge the NAND tree
+into the MTD tree before sending a unique PR so Linus won't have to
+handle it.
 
-greg k-h
+>=20
+> diff --cc Documentation/devicetree/bindings/mtd/nand-controller.yaml
+> index 33855eb48a795,53b21aed0ac5f..0000000000000
+> --- a/Documentation/devicetree/bindings/mtd/nand-controller.yaml
+> +++ b/Documentation/devicetree/bindings/mtd/nand-controller.yaml
+> @@@ -116,6 -154,20 +116,13 @@@ patternProperties
+>             Ready/Busy pins. Active state refers to the NAND ready state =
+and
+>             should be set to GPIOD_ACTIVE_HIGH unless the signal is inver=
+ted.
+>  =20
+> +       wp-gpios:
+> +         description:
+> +           Contains one GPIO descriptor for the Write Protect pin.
+> +           Active state refers to the NAND Write Protect state and shoul=
+d be
+> +           set to GPIOD_ACTIVE_LOW unless the signal is inverted.
+> +         maxItems: 1
+> +=20
+>  -      secure-regions:
+>  -        $ref: /schemas/types.yaml#/definitions/uint64-matrix
+>  -        description:
+>  -          Regions in the NAND chip which are protected using a secure e=
+lement
+>  -          like Trustzone. This property contains the start address and =
+size of
+>  -          the secure regions present.
+>  -
+>       required:
+>         - reg
+>  =20
+
+
+Thanks,
+Miqu=C3=A8l

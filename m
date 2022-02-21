@@ -2,43 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70B4C4BE7E0
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:04:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 897994BE2FC
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:56:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354089AbiBUKMC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 05:12:02 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56862 "EHLO
+        id S1350842AbiBUJlc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 04:41:32 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352868AbiBUJ4y (ORCPT
+        with ESMTP id S1350520AbiBUJfD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 04:56:54 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D51B445048;
-        Mon, 21 Feb 2022 01:24:42 -0800 (PST)
+        Mon, 21 Feb 2022 04:35:03 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F140B2AE3D;
+        Mon, 21 Feb 2022 01:14:43 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 83E6FB80EB8;
-        Mon, 21 Feb 2022 09:24:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD81DC340E9;
-        Mon, 21 Feb 2022 09:24:39 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9C89060EB5;
+        Mon, 21 Feb 2022 09:14:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85CBFC340E9;
+        Mon, 21 Feb 2022 09:14:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645435480;
-        bh=7/FBbwrvHWUltZ4Jxxrkk2lhlNEV2NohBiXF+5Bj8II=;
+        s=korg; t=1645434882;
+        bh=myw3QrAMQ7VVVXV9oni2wkVFSEnyKFd6dj17fy2ABdo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JpJOqU9b3kLwHvoFCSUhxjjZmO2fmAzGUtK0H2+cYBdS0CCM9CCO8bxbpJ4m2JO6S
-         IbUYRhD+Q5uZhDeHgZuMllVJVy5SHWJQFFdXFLfJgOXj0u6HDwxYNLKjL3h+orz+Ab
-         PCQLJb/fKc4PVEcfb1f3CVtM21+NYjqjJZ8odrvQ=
+        b=knsp71VkOVBxdDWs1n8BuWHR0i/BeXBvB3DQ8RZ3B5K/Rt/dEDx/PNuCk7pcDRogt
+         6WTBd5xRgHKNiT1i3LZYGW0tfsArGRIplWjIg6yX/UajPVh7oqn083p5xNIDVTmjDs
+         U9XlPr6FmTZE+9SglLYkkhdClt/whPJhcM7zKo+8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, "Eric W. Biederman" <ebiederm@xmission.com>
-Subject: [PATCH 5.16 177/227] ucounts: Move RLIMIT_NPROC handling after set_user
-Date:   Mon, 21 Feb 2022 09:49:56 +0100
-Message-Id: <20220221084940.695551387@linuxfoundation.org>
+        stable@vger.kernel.org,
+        =?UTF-8?q?Zolt=C3=A1n=20B=C3=B6sz=C3=B6rm=C3=A9nyi?= 
+        <zboszor@gmail.com>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 165/196] ata: libata-core: Disable TRIM on M88V29
+Date:   Mon, 21 Feb 2022 09:49:57 +0100
+Message-Id: <20220221084936.475426026@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220221084934.836145070@linuxfoundation.org>
-References: <20220221084934.836145070@linuxfoundation.org>
+In-Reply-To: <20220221084930.872957717@linuxfoundation.org>
+References: <20220221084930.872957717@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,89 +57,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eric W. Biederman <ebiederm@xmission.com>
+From: Zoltán Böszörményi <zboszor@gmail.com>
 
-commit c923a8e7edb010da67424077cbf1a6f1396ebd2e upstream.
+[ Upstream commit c8ea23d5fa59f28302d4e3370c75d9c308e64410 ]
 
-During set*id() which cred->ucounts to charge the the current process
-to is not known until after set_cred_ucounts.  So move the
-RLIMIT_NPROC checking into a new helper flag_nproc_exceeded and call
-flag_nproc_exceeded after set_cred_ucounts.
+This device is a CF card, or possibly an SSD in CF form factor.
+It supports NCQ and high speed DMA.
 
-This is very much an arbitrary subset of the places where we currently
-change the RLIMIT_NPROC accounting, designed to preserve the existing
-logic.
+While it also advertises TRIM support, I/O errors are reported
+when the discard mount option fstrim is used. TRIM also fails
+when disabling NCQ and not just as an NCQ command.
 
-Fixing the existing logic will be the subject of another series of
-changes.
+TRIM must be disabled for this device.
 
-Cc: stable@vger.kernel.org
-Link: https://lkml.kernel.org/r/20220216155832.680775-4-ebiederm@xmission.com
-Fixes: 21d1c5e386bc ("Reimplement RLIMIT_NPROC on top of ucounts")
-Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Zoltán Böszörményi <zboszor@gmail.com>
+Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- kernel/sys.c |   19 ++++++++++++++-----
- 1 file changed, 14 insertions(+), 5 deletions(-)
+ drivers/ata/libata-core.c | 1 +
+ 1 file changed, 1 insertion(+)
 
---- a/kernel/sys.c
-+++ b/kernel/sys.c
-@@ -472,6 +472,16 @@ static int set_user(struct cred *new)
- 	if (!new_user)
- 		return -EAGAIN;
+diff --git a/drivers/ata/libata-core.c b/drivers/ata/libata-core.c
+index 4d848cfc406fe..24b67d78cb83d 100644
+--- a/drivers/ata/libata-core.c
++++ b/drivers/ata/libata-core.c
+@@ -4014,6 +4014,7 @@ static const struct ata_blacklist_entry ata_device_blacklist [] = {
  
-+	free_uid(new->user);
-+	new->user = new_user;
-+	return 0;
-+}
-+
-+static void flag_nproc_exceeded(struct cred *new)
-+{
-+	if (new->ucounts == current_ucounts())
-+		return;
-+
+ 	/* devices that don't properly handle TRIM commands */
+ 	{ "SuperSSpeed S238*",		NULL,	ATA_HORKAGE_NOTRIM, },
++	{ "M88V29*",			NULL,	ATA_HORKAGE_NOTRIM, },
+ 
  	/*
- 	 * We don't fail in case of NPROC limit excess here because too many
- 	 * poorly written programs don't check set*uid() return code, assuming
-@@ -480,14 +490,10 @@ static int set_user(struct cred *new)
- 	 * failure to the execve() stage.
- 	 */
- 	if (is_ucounts_overlimit(new->ucounts, UCOUNT_RLIMIT_NPROC, rlimit(RLIMIT_NPROC)) &&
--			new_user != INIT_USER)
-+			new->user != INIT_USER)
- 		current->flags |= PF_NPROC_EXCEEDED;
- 	else
- 		current->flags &= ~PF_NPROC_EXCEEDED;
--
--	free_uid(new->user);
--	new->user = new_user;
--	return 0;
- }
- 
- /*
-@@ -562,6 +568,7 @@ long __sys_setreuid(uid_t ruid, uid_t eu
- 	if (retval < 0)
- 		goto error;
- 
-+	flag_nproc_exceeded(new);
- 	return commit_creds(new);
- 
- error:
-@@ -624,6 +631,7 @@ long __sys_setuid(uid_t uid)
- 	if (retval < 0)
- 		goto error;
- 
-+	flag_nproc_exceeded(new);
- 	return commit_creds(new);
- 
- error:
-@@ -703,6 +711,7 @@ long __sys_setresuid(uid_t ruid, uid_t e
- 	if (retval < 0)
- 		goto error;
- 
-+	flag_nproc_exceeded(new);
- 	return commit_creds(new);
- 
- error:
+ 	 * As defined, the DRAT (Deterministic Read After Trim) and RZAT
+-- 
+2.34.1
+
 
 

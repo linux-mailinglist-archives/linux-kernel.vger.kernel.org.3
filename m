@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D55D4BE563
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:00:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EEFA4BDDBA
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:45:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349609AbiBUJ0W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 04:26:22 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49310 "EHLO
+        id S1349164AbiBUJMH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 04:12:07 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348631AbiBUJQF (ORCPT
+        with ESMTP id S1347587AbiBUJIi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 04:16:05 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C647830F4F;
-        Mon, 21 Feb 2022 01:07:01 -0800 (PST)
+        Mon, 21 Feb 2022 04:08:38 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59725245A2;
+        Mon, 21 Feb 2022 01:00:24 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5D60F61284;
-        Mon, 21 Feb 2022 09:07:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36C72C340E9;
-        Mon, 21 Feb 2022 09:07:00 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CE143B80EB9;
+        Mon, 21 Feb 2022 09:00:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8144C340F1;
+        Mon, 21 Feb 2022 09:00:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645434420;
-        bh=PFd0vWbuccoeBz31rmd7XX1dtx0C17Ku1YNGpKvMo6I=;
+        s=korg; t=1645434021;
+        bh=xctn4KdYqFohpXKSojF1MJkD6sY2jg+PlDeaCt992FE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WYGA0mn0blY5VwN7JMP5AhNrt78Tsp0gwD60Ro0D8+nbVpfT2Sqswsmas5UVgSShB
-         rQiR0quvFCn1LGS7wEHcAEpK48KU1A6tMFdf9e0jaxO9/PfLhouV+RtgPgyxIOC2q7
-         8hrSo7u+EiiMlRXxLLJTJzaehLsCRZivTKUvizY8=
+        b=CjLy1fm0CO0M7ccqQfhdvnyZuwhW69lm6QpR3SU1Lg86EbrxTKFxlPU4H7VjzhtmP
+         +GpVOnHT64tL51OoRXSs9Ze1zbYY71imPPWQu4ijRL9/qnEcKRNjgu5C0KjO/cuIJh
+         ISWEqwXtc5BEzzU35A6El8YqLPUbuG5BcOXKw9fQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Al Cooper <alcooperx@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vinod Koul <vkoul@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 094/121] phy: usb: Leave some clocks running during suspend
+        stable@vger.kernel.org, Jim Mattson <jmattson@google.com>,
+        David Dunn <daviddunn@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 66/80] KVM: x86/pmu: Use AMD64_RAW_EVENT_MASK for PERF_TYPE_RAW
 Date:   Mon, 21 Feb 2022 09:49:46 +0100
-Message-Id: <20220221084924.371414385@linuxfoundation.org>
+Message-Id: <20220221084917.745909366@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220221084921.147454846@linuxfoundation.org>
-References: <20220221084921.147454846@linuxfoundation.org>
+In-Reply-To: <20220221084915.554151737@linuxfoundation.org>
+References: <20220221084915.554151737@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,133 +56,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Al Cooper <alcooperx@gmail.com>
+From: Jim Mattson <jmattson@google.com>
 
-[ Upstream commit 42fed57046fc74586d7058bd51a1c10ac9c690cb ]
+[ Upstream commit 710c476514313c74045c41c0571bb5178fd16e3d ]
 
-The PHY client driver does a phy_exit() call on suspend or rmmod and
-the PHY driver needs to know the difference because some clocks need
-to be kept running for suspend but can be shutdown on unbind/rmmod
-(or if there are no PHY clients at all).
+AMD's event select is 3 nybbles, with the high nybble in bits 35:32 of
+a PerfEvtSeln MSR. Don't mask off the high nybble when configuring a
+RAW perf event.
 
-The fix is to use a PM notifier so the driver can tell if a PHY
-client is calling exit() because of a system suspend or a driver
-unbind/rmmod.
-
-Signed-off-by: Al Cooper <alcooperx@gmail.com>
-Acked-by: Florian Fainelli <f.fainelli@gmail.com>
-Link: https://lore.kernel.org/r/20211201180653.35097-2-alcooperx@gmail.com
-Signed-off-by: Vinod Koul <vkoul@kernel.org>
+Fixes: ca724305a2b0 ("KVM: x86/vPMU: Implement AMD vPMU code for KVM")
+Signed-off-by: Jim Mattson <jmattson@google.com>
+Message-Id: <20220203014813.2130559-2-jmattson@google.com>
+Reviewed-by: David Dunn <daviddunn@google.com>
+Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/phy/broadcom/phy-brcm-usb.c | 38 +++++++++++++++++++++++++++++
- 1 file changed, 38 insertions(+)
+ arch/x86/kvm/pmu.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/phy/broadcom/phy-brcm-usb.c b/drivers/phy/broadcom/phy-brcm-usb.c
-index 99fbc7e4138be..b901a0d4e2a80 100644
---- a/drivers/phy/broadcom/phy-brcm-usb.c
-+++ b/drivers/phy/broadcom/phy-brcm-usb.c
-@@ -17,6 +17,7 @@
- #include <linux/soc/brcmstb/brcmstb.h>
- #include <dt-bindings/phy/phy.h>
- #include <linux/mfd/syscon.h>
-+#include <linux/suspend.h>
+diff --git a/arch/x86/kvm/pmu.c b/arch/x86/kvm/pmu.c
+index 46875bbd04198..e0e3776059af4 100644
+--- a/arch/x86/kvm/pmu.c
++++ b/arch/x86/kvm/pmu.c
+@@ -191,7 +191,7 @@ void reprogram_gp_counter(struct kvm_pmc *pmc, u64 eventsel)
+ 	}
  
- #include "phy-brcm-usb-init.h"
+ 	if (type == PERF_TYPE_RAW)
+-		config = eventsel & X86_RAW_EVENT_MASK;
++		config = eventsel & AMD64_RAW_EVENT_MASK;
  
-@@ -69,12 +70,35 @@ struct brcm_usb_phy_data {
- 	int			init_count;
- 	int			wake_irq;
- 	struct brcm_usb_phy	phys[BRCM_USB_PHY_ID_MAX];
-+	struct notifier_block	pm_notifier;
-+	bool			pm_active;
- };
- 
- static s8 *node_reg_names[BRCM_REGS_MAX] = {
- 	"crtl", "xhci_ec", "xhci_gbl", "usb_phy", "usb_mdio", "bdc_ec"
- };
- 
-+static int brcm_pm_notifier(struct notifier_block *notifier,
-+			    unsigned long pm_event,
-+			    void *unused)
-+{
-+	struct brcm_usb_phy_data *priv =
-+		container_of(notifier, struct brcm_usb_phy_data, pm_notifier);
-+
-+	switch (pm_event) {
-+	case PM_HIBERNATION_PREPARE:
-+	case PM_SUSPEND_PREPARE:
-+		priv->pm_active = true;
-+		break;
-+	case PM_POST_RESTORE:
-+	case PM_POST_HIBERNATION:
-+	case PM_POST_SUSPEND:
-+		priv->pm_active = false;
-+		break;
-+	}
-+	return NOTIFY_DONE;
-+}
-+
- static irqreturn_t brcm_usb_phy_wake_isr(int irq, void *dev_id)
- {
- 	struct phy *gphy = dev_id;
-@@ -90,6 +114,9 @@ static int brcm_usb_phy_init(struct phy *gphy)
- 	struct brcm_usb_phy_data *priv =
- 		container_of(phy, struct brcm_usb_phy_data, phys[phy->id]);
- 
-+	if (priv->pm_active)
-+		return 0;
-+
- 	/*
- 	 * Use a lock to make sure a second caller waits until
- 	 * the base phy is inited before using it.
-@@ -119,6 +146,9 @@ static int brcm_usb_phy_exit(struct phy *gphy)
- 	struct brcm_usb_phy_data *priv =
- 		container_of(phy, struct brcm_usb_phy_data, phys[phy->id]);
- 
-+	if (priv->pm_active)
-+		return 0;
-+
- 	dev_dbg(&gphy->dev, "EXIT\n");
- 	if (phy->id == BRCM_USB_PHY_2_0)
- 		brcm_usb_uninit_eohci(&priv->ini);
-@@ -484,6 +514,9 @@ static int brcm_usb_phy_probe(struct platform_device *pdev)
- 	if (err)
- 		return err;
- 
-+	priv->pm_notifier.notifier_call = brcm_pm_notifier;
-+	register_pm_notifier(&priv->pm_notifier);
-+
- 	mutex_init(&priv->mutex);
- 
- 	/* make sure invert settings are correct */
-@@ -524,7 +557,10 @@ static int brcm_usb_phy_probe(struct platform_device *pdev)
- 
- static int brcm_usb_phy_remove(struct platform_device *pdev)
- {
-+	struct brcm_usb_phy_data *priv = dev_get_drvdata(&pdev->dev);
-+
- 	sysfs_remove_group(&pdev->dev.kobj, &brcm_usb_phy_group);
-+	unregister_pm_notifier(&priv->pm_notifier);
- 
- 	return 0;
- }
-@@ -535,6 +571,7 @@ static int brcm_usb_phy_suspend(struct device *dev)
- 	struct brcm_usb_phy_data *priv = dev_get_drvdata(dev);
- 
- 	if (priv->init_count) {
-+		dev_dbg(dev, "SUSPEND\n");
- 		priv->ini.wake_enabled = device_may_wakeup(dev);
- 		if (priv->phys[BRCM_USB_PHY_3_0].inited)
- 			brcm_usb_uninit_xhci(&priv->ini);
-@@ -574,6 +611,7 @@ static int brcm_usb_phy_resume(struct device *dev)
- 	 * Uninitialize anything that wasn't previously initialized.
- 	 */
- 	if (priv->init_count) {
-+		dev_dbg(dev, "RESUME\n");
- 		if (priv->wake_irq >= 0)
- 			disable_irq_wake(priv->wake_irq);
- 		brcm_usb_init_common(&priv->ini);
+ 	pmc_reprogram_counter(pmc, type, config,
+ 			      !(eventsel & ARCH_PERFMON_EVENTSEL_USR),
 -- 
 2.34.1
 

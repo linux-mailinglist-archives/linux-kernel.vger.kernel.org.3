@@ -2,45 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5E294BDB98
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:40:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DFCB4BE9B1
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:08:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346983AbiBUJEn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 04:04:43 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58560 "EHLO
+        id S1348445AbiBUJTW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 04:19:22 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347315AbiBUJBO (ORCPT
+        with ESMTP id S1349056AbiBUJMA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 04:01:14 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2FB627CEB;
-        Mon, 21 Feb 2022 00:56:17 -0800 (PST)
+        Mon, 21 Feb 2022 04:12:00 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB28229C97;
+        Mon, 21 Feb 2022 01:04:49 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9580BB80EB7;
-        Mon, 21 Feb 2022 08:56:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 966C0C340E9;
-        Mon, 21 Feb 2022 08:56:08 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 45EEE60FB6;
+        Mon, 21 Feb 2022 09:04:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D1D0C340E9;
+        Mon, 21 Feb 2022 09:04:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645433769;
-        bh=7q0BDtyRXVNalxa0DqT6OCIOkrN0gIrOxt75iA2zV+A=;
+        s=korg; t=1645434288;
+        bh=BlVGSWzcKf/HzPDNKVqs/ptJwKBbwsdtW1dVNKbX9Sk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LaTPXrNA1rrxzixDVfsS5Eri4fK6YAtj2pwSVtRKxR7X0zMJElLbElvubJhFtKFPk
-         zB85ctvh1tb9DCzdsiBVQdiSLuzKM1tCXOgnmHRglEYtrxnfkV902hk1LB05NIRGAh
-         QcEei8Ow9dKKeOO8Ub6KSeW/mH7ZI1xTL9VAlzPo=
+        b=sVfWQGN47SNDDdqBrWGri5ozVJmIpOOjbTxlUlMt8M+SJCU3TWPF2ioVDhXioWJIr
+         RHSr8TV8TyfUQU8jk4w79EHvy7PCZG6yCmXOnJx02lcpj9JaQJkZtiZWoV4PJYIsel
+         B+Du0PGSBo6/+rmBB6GlJVDXdIrZdtwTPT6RfM3s=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zhang Yi <yi.zhang@huawei.com>,
-        Theodore Tso <tytso@mit.edu>,
-        Leah Rumancik <leah.rumancik@gmail.com>
-Subject: [PATCH 4.19 36/58] ext4: check for out-of-order index extents in ext4_valid_extent_entries()
+        stable@vger.kernel.org, Tom Lendacky <thomas.lendacky@amd.com>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Liam Merwick <liam.merwick@oracle.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jack Wang <jinpu.wang@ionos.com>
+Subject: [PATCH 5.10 077/121] KVM: SVM: Never reject emulation due to SMAP errata for !SEV guests
 Date:   Mon, 21 Feb 2022 09:49:29 +0100
-Message-Id: <20220221084913.044238604@linuxfoundation.org>
+Message-Id: <20220221084923.816329383@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220221084911.895146879@linuxfoundation.org>
-References: <20220221084911.895146879@linuxfoundation.org>
+In-Reply-To: <20220221084921.147454846@linuxfoundation.org>
+References: <20220221084921.147454846@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,93 +58,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zhang Yi <yi.zhang@huawei.com>
+From: Sean Christopherson <seanjc@google.com>
 
-commit 8dd27fecede55e8a4e67eef2878040ecad0f0d33 upstream.
+commit 55467fcd55b89c622e62b4afe60ac0eb2fae91f2 upstream.
 
-After commit 5946d089379a ("ext4: check for overlapping extents in
-ext4_valid_extent_entries()"), we can check out the overlapping extent
-entry in leaf extent blocks. But the out-of-order extent entry in index
-extent blocks could also trigger bad things if the filesystem is
-inconsistent. So this patch add a check to figure out the out-of-order
-index extents and return error.
+Always signal that emulation is possible for !SEV guests regardless of
+whether or not the CPU provided a valid instruction byte stream.  KVM can
+read all guest state (memory and registers) for !SEV guests, i.e. can
+fetch the code stream from memory even if the CPU failed to do so because
+of the SMAP errata.
 
-Signed-off-by: Zhang Yi <yi.zhang@huawei.com>
-Reviewed-by: Theodore Ts'o <tytso@mit.edu>
-Link: https://lore.kernel.org/r/20210908120850.4012324-2-yi.zhang@huawei.com
-Signed-off-by: Theodore Ts'o <tytso@mit.edu>
-Signed-off-by: Leah Rumancik <leah.rumancik@gmail.com>
+Fixes: 05d5a4863525 ("KVM: SVM: Workaround errata#1096 (insn_len maybe zero on SMAP violation)")
+Cc: stable@vger.kernel.org
+Cc: Tom Lendacky <thomas.lendacky@amd.com>
+Cc: Brijesh Singh <brijesh.singh@amd.com>
+Signed-off-by: Sean Christopherson <seanjc@google.com>
+Reviewed-by: Liam Merwick <liam.merwick@oracle.com>
+Message-Id: <20220120010719.711476-2-seanjc@google.com>
+Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+[jwang: adjust context for kernel 5.10.101]
+Signed-off-by: Jack Wang <jinpu.wang@ionos.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/ext4/extents.c |   21 ++++++++++++++-------
- 1 file changed, 14 insertions(+), 7 deletions(-)
+ arch/x86/kvm/svm/svm.c |    7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
---- a/fs/ext4/extents.c
-+++ b/fs/ext4/extents.c
-@@ -390,9 +390,12 @@ static int ext4_valid_extent_idx(struct
+--- a/arch/x86/kvm/svm/svm.c
++++ b/arch/x86/kvm/svm/svm.c
+@@ -4103,6 +4103,10 @@ static bool svm_can_emulate_instruction(
+ 	bool smep, smap, is_user;
+ 	unsigned long cr4;
  
- static int ext4_valid_extent_entries(struct inode *inode,
- 				struct ext4_extent_header *eh,
--				int depth)
-+				ext4_fsblk_t *pblk, int depth)
- {
- 	unsigned short entries;
-+	ext4_lblk_t lblock = 0;
-+	ext4_lblk_t prev = 0;
++	/* Emulation is always possible when KVM has access to all guest state. */
++	if (!sev_guest(vcpu->kvm))
++		return true;
 +
- 	if (eh->eh_entries == 0)
- 		return 1;
+ 	/*
+ 	 * Detect and workaround Errata 1096 Fam_17h_00_0Fh.
+ 	 *
+@@ -4151,9 +4155,6 @@ static bool svm_can_emulate_instruction(
+ 	smap = cr4 & X86_CR4_SMAP;
+ 	is_user = svm_get_cpl(vcpu) == 3;
+ 	if (smap && (!smep || is_user)) {
+-		if (!sev_guest(vcpu->kvm))
+-			return true;
+-
+ 		pr_err_ratelimited("KVM: SEV Guest triggered AMD Erratum 1096\n");
  
-@@ -403,32 +406,36 @@ static int ext4_valid_extent_entries(str
- 		struct ext4_extent *ext = EXT_FIRST_EXTENT(eh);
- 		struct ext4_super_block *es = EXT4_SB(inode->i_sb)->s_es;
- 		ext4_fsblk_t pblock = 0;
--		ext4_lblk_t lblock = 0;
--		ext4_lblk_t prev = 0;
--		int len = 0;
- 		while (entries) {
- 			if (!ext4_valid_extent(inode, ext))
- 				return 0;
- 
- 			/* Check for overlapping extents */
- 			lblock = le32_to_cpu(ext->ee_block);
--			len = ext4_ext_get_actual_len(ext);
- 			if ((lblock <= prev) && prev) {
- 				pblock = ext4_ext_pblock(ext);
- 				es->s_last_error_block = cpu_to_le64(pblock);
- 				return 0;
- 			}
-+			prev = lblock + ext4_ext_get_actual_len(ext) - 1;
- 			ext++;
- 			entries--;
--			prev = lblock + len - 1;
- 		}
- 	} else {
- 		struct ext4_extent_idx *ext_idx = EXT_FIRST_INDEX(eh);
- 		while (entries) {
- 			if (!ext4_valid_extent_idx(inode, ext_idx))
- 				return 0;
-+
-+			/* Check for overlapping index extents */
-+			lblock = le32_to_cpu(ext_idx->ei_block);
-+			if ((lblock <= prev) && prev) {
-+				*pblk = ext4_idx_pblock(ext_idx);
-+				return 0;
-+			}
- 			ext_idx++;
- 			entries--;
-+			prev = lblock;
- 		}
- 	}
- 	return 1;
-@@ -462,7 +469,7 @@ static int __ext4_ext_check(const char *
- 		error_msg = "invalid eh_entries";
- 		goto corrupted;
- 	}
--	if (!ext4_valid_extent_entries(inode, eh, depth)) {
-+	if (!ext4_valid_extent_entries(inode, eh, &pblk, depth)) {
- 		error_msg = "invalid extent entries";
- 		goto corrupted;
- 	}
+ 		/*
 
 

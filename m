@@ -2,60 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20C6A4BDD5E
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:45:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 32B194BE544
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:00:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378999AbiBUPU4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 10:20:56 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36646 "EHLO
+        id S1379043AbiBUPXg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 10:23:36 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378992AbiBUPUu (ORCPT
+        with ESMTP id S1379020AbiBUPXa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 10:20:50 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02B061DA75;
-        Mon, 21 Feb 2022 07:20:27 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id 055AA1F41EEC
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1645456820;
-        bh=AEBHpU/YbpjVEE8sZ5e3auTLaK6lJUMCcaPJ3UkaE2k=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=jZecYRDSM0F1Bp2byQMHOXaZ+4j0RYg3NQ9SGon82I9nC4mXy4ZC9g3Ko3n8Ulwnq
-         IxwJhIh9bAvdLEqiiq/MwLRTYK6f3sys6ayrZi32wwZvjGYx7Gg8pJ4AhcEiFkIDLS
-         85PS9J+KBAk/VtY2il5I5+/0AqM74nUwR3x/NKNYUuOY354iWDvKeqLwUTrT2CxhN4
-         5NZ+dbKDh2ILefofSluV6/SVfbj62+cSIFIYqX/Rzt+qjBAHFp5lNElCRl4XicKtDT
-         Y352CifU41aaojSbv45BlylJVUzStY1cXPklAKqXonJKvwuIPuBpT6qWNdEzIyjRU6
-         4qviYDH4uqGXw==
-Message-ID: <d4e27af2-0f64-9c7f-489d-0f7dfcdd9ee5@collabora.com>
-Date:   Mon, 21 Feb 2022 16:20:17 +0100
+        Mon, 21 Feb 2022 10:23:30 -0500
+Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 49D6C1DA7C;
+        Mon, 21 Feb 2022 07:23:07 -0800 (PST)
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1nMAWk-00025w-00; Mon, 21 Feb 2022 16:23:02 +0100
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id 22D4EC25F8; Mon, 21 Feb 2022 16:21:30 +0100 (CET)
+Date:   Mon, 21 Feb 2022 16:21:30 +0100
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Christoph Hellwig <hch@lst.de>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        Linux API <linux-api@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Russell King - ARM Linux <linux@armlinux.org.uk>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        Brian Cain <bcain@codeaurora.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Michal Simek <monstr@monstr.eu>,
+        Nick Hu <nickhu@andestech.com>,
+        Greentime Hu <green.hu@gmail.com>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Stafford Horne <shorne@gmail.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Rich Felker <dalias@libc.org>,
+        David Miller <davem@davemloft.net>,
+        Richard Weinberger <richard@nod.at>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        "Eric W . Biederman" <ebiederm@xmission.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        alpha <linux-alpha@vger.kernel.org>,
+        "open list:SYNOPSYS ARC ARCHITECTURE" 
+        <linux-snps-arc@lists.infradead.org>, linux-csky@vger.kernel.org,
+        "open list:QUALCOMM HEXAGON..." <linux-hexagon@vger.kernel.org>,
+        linux-ia64@vger.kernel.org,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Openrisc <openrisc@lists.librecores.org>,
+        Parisc List <linux-parisc@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        sparclinux <sparclinux@vger.kernel.org>,
+        linux-um <linux-um@lists.infradead.org>,
+        "open list:TENSILICA XTENSA PORT (xtensa)" 
+        <linux-xtensa@linux-xtensa.org>
+Subject: Re: [PATCH v2 09/18] mips: use simpler access_ok()
+Message-ID: <20220221152130.GA17373@alpha.franken.de>
+References: <20220216131332.1489939-1-arnd@kernel.org>
+ <20220216131332.1489939-10-arnd@kernel.org>
+ <20220221132456.GA7139@alpha.franken.de>
+ <CAK8P3a2usZWPDDDUcscwS0aVKsY6aLXFGFPqYNkm4hcDERim9w@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH v2 09/23] arm64: dts: mt8192: Add infracfg_rst node
-Content-Language: en-US
-To:     "allen-kh.cheng" <allen-kh.cheng@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        --to=Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     Project_Global_Chrome_Upstream_Group@mediatek.com,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        Chen-Yu Tsai <wenst@chromium.org>,
-        Ryder Lee <ryder.lee@kernel.org>
-References: <20220218091633.9368-1-allen-kh.cheng@mediatek.com>
- <20220218091633.9368-10-allen-kh.cheng@mediatek.com>
- <c84ec638-3134-fc1c-4761-7f1ec8381a39@collabora.com>
- <8a3a6167450bdd51bdff2e9b12a15522a18dd38e.camel@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <8a3a6167450bdd51bdff2e9b12a15522a18dd38e.camel@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAK8P3a2usZWPDDDUcscwS0aVKsY6aLXFGFPqYNkm4hcDERim9w@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_HELO_PERMERROR autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,35 +91,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 21/02/22 14:05, allen-kh.cheng ha scritto:
-> On Fri, 2022-02-18 at 13:55 +0100, AngeloGioacchino Del Regno wrote:
->> Il 18/02/22 10:16, Allen-KH Cheng ha scritto:
->>> add infracfg_rst node for mt8192 SoC.
->>>
->>> Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
->>
->> For v3, please mention that you're adding simple-mfd to allow probing
->> the
->> ti,syscon-reset node.
->>
->> After the commit description fix:
->> Reviewed-by: AngeloGioacchino Del Regno <
->> angelogioacchino.delregno@collabora.com>
->>
+On Mon, Feb 21, 2022 at 03:31:23PM +0100, Arnd Bergmann wrote:
+> On Mon, Feb 21, 2022 at 2:24 PM Thomas Bogendoerfer
+> <tsbogend@alpha.franken.de> wrote:
+> > On Wed, Feb 16, 2022 at 02:13:23PM +0100, Arnd Bergmann wrote:
+> > >
+> > > diff --git a/arch/mips/include/asm/uaccess.h b/arch/mips/include/asm/uaccess.h
+> > > index db9a8e002b62..d7c89dc3426c 100644
+> >
+> > this doesn't work. For every access above maximum implemented virtual address
+> > space of the CPU an address error will be issued, but not a TLB miss.
+> > And address error isn't able to handle this situation.
 > 
-> Hi Angelo,
-> 
-> Thanks for reminding, I will update commit message.
-> 
-> Do I need to also change the commit title ?
-> 
-> Best regards,
-> Allen
-> 
+> Ah, so the __ex_table entry only catches TLB misses?
 
-Hi Allen,
+no, but there is no __ex_table handling in address error hanlder (yet).
 
-Please update only the description; the title is fine.
+> Does this mean it also traps for kernel memory accesses, or do those
+> work again?
 
-Thank you,
-Angelo
+it will trap for every access.
+
+
+> If the addresses on mips64 are separate like on
+> sparc64 or s390, the entire access_ok() step could be replaced
+> by a fixup code in the exception handler. I suppose this depends on
+> CONFIG_EVA and you still need a limit check at least when EVA is
+> disabled.
+
+only EVA has seperate address spaces for kernel/user.
+
+> > Is there a reason to not also #define TASK_SIZE_MAX   __UA_LIMIT like
+> > for the 32bit case ?
+> >
+> 
+> For 32-bit, the __UA_LIMIT is a compile-time constant, so the check
+> ends up being trivial. On all other architectures, the same thing can
+> be done after the set_fs removal, so I was hoping it would work here
+> as well.
+
+ic
+
+> I suspect doing the generic (size <= limit) && (addr <= (limit - size))
+> check on mips64 with the runtime limit ends up slightly slower
+> than the current code that checks a bit mask instead. If you like,
+> I'll update it this way, otherwise I'd need help in form of a patch
+> that changes the exception handling so __get_user/__put_user
+> also return -EFAULT for an address error.
+
+that's what the patch does. For aligned accesses the patch should
+do the right thing, but it breaks unaligned get_user/put_user.
+Checking if the trapping vaddr is between end of CPU VM space and
+TASK_MAX_SIZE before exception handling should do the trick. I'll
+send a patch, if this works.
+
+Thomas.
+
+-- 
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]

@@ -2,151 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C75684BEB49
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 20:37:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B7FCE4BEB4B
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 20:38:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231557AbiBUThF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 14:37:05 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55244 "EHLO
+        id S232955AbiBUTiW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 14:38:22 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230074AbiBUThB (ORCPT
+        with ESMTP id S233106AbiBUTiK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 14:37:01 -0500
-Received: from sender4-of-o53.zoho.com (sender4-of-o53.zoho.com [136.143.188.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07E47220C0;
-        Mon, 21 Feb 2022 11:36:37 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1645472182; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=ELj0qaZrVN9+8/MbO+oZkcjZjej+CF9JdOrfBe3B4612MQ9YQxt0D2biwawvkS8riJ5x/basfuC0Vd7/D5CkmnY9auKmtpo3q+p2NM+vWR39OlwtBGjXiUD9fQRS3lAxyagUn158CHDdOoKpanNccHL5Ungs9IpMhM8trLKOLTM=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1645472182; h=Content-Type:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=6HIcSMjNNH8sPwVcXqKBcDlV55UD/Yv/2pTDKIr+ocU=; 
-        b=W5nVL2dsKwNzJaCQiR0lgx7zD5YZltP8apKkMOFxqWW4be2xaymyNEn4UJ+48DEidBtSDkogC5mTf7bfm2v5HPBx550xiTrcc7vtG7K5VCt8OELDPN11o0j3HTejSnOsWUUf9wU5bHfEqs54fAU28IoRnsxDSuoMivhKAM3u8gg=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=anirudhrb.com;
-        spf=pass  smtp.mailfrom=mail@anirudhrb.com;
-        dmarc=pass header.from=<mail@anirudhrb.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1645472182;
-        s=zoho; d=anirudhrb.com; i=mail@anirudhrb.com;
-        h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:Content-Type:In-Reply-To;
-        bh=6HIcSMjNNH8sPwVcXqKBcDlV55UD/Yv/2pTDKIr+ocU=;
-        b=lMuTQHsMi3arXTC0WpQxU3pDwjuzhbJSSzs1LMwKERZ/Q11XIBnOhoiDUeby1khs
-        TJgzhsi9L4qXS+wNBk286ba7/nxo1nSfJw8LDKAylAgFrUgcDfoaM3KfzWQX739ssuB
-        xqRDPRve3rDXLzo0+d++a92drVyW80MUBUVeuTGY=
-Received: from anirudhrb.com (49.207.206.107 [49.207.206.107]) by mx.zohomail.com
-        with SMTPS id 1645472180057230.55490921676846; Mon, 21 Feb 2022 11:36:20 -0800 (PST)
-Date:   Tue, 22 Feb 2022 01:06:12 +0530
-From:   Anirudh Rayabharam <mail@anirudhrb.com>
-To:     Stefano Garzarella <sgarzare@redhat.com>
-Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
-        kernel list <linux-kernel@vger.kernel.org>,
-        Mike Christie <michael.christie@oracle.com>,
-        Jason Wang <jasowang@redhat.com>,
-        netdev <netdev@vger.kernel.org>,
-        Linux Virtualization <virtualization@lists.linux-foundation.org>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        kvm <kvm@vger.kernel.org>, Hillf Danton <hdanton@sina.com>
-Subject: Re: [PATCH] vhost/vsock: don't check owner in vhost_vsock_stop()
- while releasing
-Message-ID: <YhPprNUAqYS3RVtU@anirudhrb.com>
-References: <20220221114916.107045-1-sgarzare@redhat.com>
- <CAGxU2F6aMqTaNaeO7xChtf=veDJYtBjDRayRRYkZ_FOq4CYJWQ@mail.gmail.com>
- <YhO6bwu7iDtUFQGj@anirudhrb.com>
- <20220221164420.cnhs6sgxizc6tcok@sgarzare-redhat>
- <YhPT37ETuSfmxr5G@anirudhrb.com>
- <20220221182628.vy2bjntxnzqh7elj@sgarzare-redhat>
+        Mon, 21 Feb 2022 14:38:10 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 810A423BCF;
+        Mon, 21 Feb 2022 11:37:40 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: nicolas)
+        with ESMTPSA id B16341F43D58
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1645472259;
+        bh=ppkjAqsyefNanhA6ebbN+nOWgkrenoU3SYfcyrnCW9U=;
+        h=From:To:Cc:Subject:Date:From;
+        b=UXVJl8OQpjuFzsctC70VXjMowE4u/MClizz+0R07tdlyi4D/ePgvcJ17qe6xyx5L7
+         RST1wUjyIIezhSv3Wc102bupCZ9AU+lKxqhQHPukmAzg9zNlHOANUsJAztS6siaHE/
+         mJ42kjp2lpjDzgQOyJEWcszvlY2U8OnPIEVnJPF4PxRinzgM/wR8xH5jxE/0rJOIn3
+         TDrffNLQBlK3Y+ZxFG4t5lLnIYXoTuuXKGm18ZjCoI/obHr5LCj4o7Q+smY7pYdoGH
+         RczE0mFJffSNF+ixZY2HnnxWzXry75dTH7VRWQtjVA0GuI/cQNEcPwmuCO6OmQ2tkz
+         OqxmFoDJjFNOg==
+From:   Nicolas Dufresne <nicolas.dufresne@collabora.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     kernel@collabora.com,
+        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v1] doc: media: Document VP9 reference_mode miss-placement
+Date:   Mon, 21 Feb 2022 14:37:27 -0500
+Message-Id: <20220221193728.808414-1-nicolas.dufresne@collabora.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220221182628.vy2bjntxnzqh7elj@sgarzare-redhat>
-X-ZohoMailClient: External
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 21, 2022 at 07:26:28PM +0100, Stefano Garzarella wrote:
-> On Mon, Feb 21, 2022 at 11:33:11PM +0530, Anirudh Rayabharam wrote:
-> > On Mon, Feb 21, 2022 at 05:44:20PM +0100, Stefano Garzarella wrote:
-> > > On Mon, Feb 21, 2022 at 09:44:39PM +0530, Anirudh Rayabharam wrote:
-> > > > On Mon, Feb 21, 2022 at 02:59:30PM +0100, Stefano Garzarella wrote:
-> > > > > On Mon, Feb 21, 2022 at 12:49 PM Stefano Garzarella <sgarzare@redhat.com> wrote:
-> > > > > >
-> > > > > > vhost_vsock_stop() calls vhost_dev_check_owner() to check the device
-> > > > > > ownership. It expects current->mm to be valid.
-> > > > > >
-> > > > > > vhost_vsock_stop() is also called by vhost_vsock_dev_release() when
-> > > > > > the user has not done close(), so when we are in do_exit(). In this
-> > > > > > case current->mm is invalid and we're releasing the device, so we
-> > > > > > should clean it anyway.
-> > > > > >
-> > > > > > Let's check the owner only when vhost_vsock_stop() is called
-> > > > > > by an ioctl.
-> > > > > >
-> > > > > > Fixes: 433fc58e6bf2 ("VSOCK: Introduce vhost_vsock.ko")
-> > > > > > Cc: stable@vger.kernel.org
-> > > > > > Reported-by: syzbot+1e3ea63db39f2b4440e0@syzkaller.appspotmail.com
-> > > > > > Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
-> > > > > > ---
-> > > > > >  drivers/vhost/vsock.c | 14 ++++++++------
-> > > > > >  1 file changed, 8 insertions(+), 6 deletions(-)
-> > > > >
-> > > > > Reported-and-tested-by: syzbot+0abd373e2e50d704db87@syzkaller.appspotmail.com
-> > > >
-> > > > I don't think this patch fixes "INFO: task hung in vhost_work_dev_flush"
-> > > > even though syzbot says so. I am able to reproduce the issue locally
-> > > > even with this patch applied.
-> > > 
-> > > Are you using the sysbot reproducer or another test?
-> > > In that case, can you share it?
-> > 
-> > I am using the syzbot reproducer.
-> > 
-> > > 
-> > > From the stack trace it seemed to me that the worker accesses a zone that
-> > > has been cleaned (iotlb), so it is invalid and fails.
-> > 
-> > Would the thread hang in that case? How?
-> 
-> Looking at this log [1] it seems that the process is blocked on the
-> wait_for_completion() in vhost_work_dev_flush().
-> 
-> Since we're not setting the backend to NULL to stop the worker, it's likely
-> that the worker will keep running, preventing the flush work from
-> completing.
+The reference_mode derived syntax is part of the compressed headers and
+should have been moved into the corresponding control structure. Document
+this mistake. The value can be set to 0 if the driver does not require
+compressed headers information.
 
-The log shows that the worker thread is stuck in iotlb_access_ok(). How
-will setting the backend to NULL stop it? During my debugging I found
-that the worker is stuck in this while loop:
+Signed-off-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+---
+ .../userspace-api/media/v4l/ext-ctrls-codec-stateless.rst  | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-1361         while (len > s) {                                                                     
-1362                 map = vhost_iotlb_itree_first(umem, addr, last);                        
-1363                 if (map == NULL || map->start > addr) {                                 
-1364                         vhost_iotlb_miss(vq, addr, access);     
-1365                         return false;                      
-1366                 } else if (!(map->perm & access)) {        
-1367                         /* Report the possible access violation by
-1368                          * request another translation from userspace.    
-1369                          */                                           
-1370                         return false;                                 
-1371                 }                      
-1372                                          
-1373                 pr_info("iotlb_access_ok: after msize=%llu, mstart=%llu\n",
-1374                                 map->size, map->start);                    
-1375                 size = map->size - addr + map->start;                      
-1376                                                             
-1377                 if (orig_addr == addr && size >= len)       
-1378                         vhost_vq_meta_update(vq, map, type);                      
-1379                                                                                   
-1380                 s += size;                                                        
-1381                 addr += size;                                                     
-1382         }
+diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-codec-stateless.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-codec-stateless.rst
+index cc080c4257d01..ec48e4acb5ece 100644
+--- a/Documentation/userspace-api/media/v4l/ext-ctrls-codec-stateless.rst
++++ b/Documentation/userspace-api/media/v4l/ext-ctrls-codec-stateless.rst
+@@ -1692,7 +1692,12 @@ See section '7.3.1 Tx mode semantics' of the :ref:`vp9` specification for more d
+     * - __u8
+       - ``reference_mode``
+       - Specifies the type of inter prediction to be used. See
+-        :ref:`Reference Mode<vp9_reference_mode>` for more details.
++        :ref:`Reference Mode<vp9_reference_mode>` for more details. Note that
++	this is derived as part of the compressed header parsing process and
++	for this reason should have bee part of
++	:c:type: `v4l2_ctrl_vp9_compressed_hdr` optional control. It is safe to
++	set this value to zero if the driver does not require compressed
++	headers.
+     * - __u8
+       - ``reserved[7]``
+       - Applications and drivers must set this to zero.
+-- 
+2.35.1
 
-> 
-> [1] https://syzkaller.appspot.com/text?tag=CrashLog&x=153f0852700000
-> 

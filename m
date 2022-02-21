@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6FD04BE61A
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:01:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 968264BDB6C
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:40:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238555AbiBUJOl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 04:14:41 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58692 "EHLO
+        id S245122AbiBUJTU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 04:19:20 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347858AbiBUJJA (ORCPT
+        with ESMTP id S1349014AbiBUJL5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 04:09:00 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA83A21A6;
-        Mon, 21 Feb 2022 01:01:27 -0800 (PST)
+        Mon, 21 Feb 2022 04:11:57 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C63E02982A;
+        Mon, 21 Feb 2022 01:04:43 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 462616112F;
-        Mon, 21 Feb 2022 09:01:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26B3CC340E9;
-        Mon, 21 Feb 2022 09:01:25 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 65B4B60FB6;
+        Mon, 21 Feb 2022 09:04:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3FE87C340E9;
+        Mon, 21 Feb 2022 09:04:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645434086;
-        bh=5f9gAGn2hO/TL8PKOGA5jVucUBImiNJAwwpbXHHEbbg=;
+        s=korg; t=1645434282;
+        bh=jzZZGm6cisae2ZuvIi1SZ72d9vOPD+/9g581Dgl5SeI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UvPlEf/nUjTnLCy9yWhNzr9oRbvDNYyTtd5X9D0+FEqyoAxtxEJ6KRaClAAhVdxYr
-         ggPwSAxRcbltLA1pMyjnux/4szKHL0ZIWxdMFcx2g949JVmADDU9hl0Y1pC9IA3dzD
-         kI0OdcS8+YjIhAP2sSzF3G8mIyRPjBTJqJxotM0o=
+        b=VDoRGZ+3cDi/YxYlpAGcyRA/Gpm/KpHmei8RiSInZqnqVmRK2+1BBUCA8EHhieVJz
+         bXvZvm01iOOGucsgz3NqY50EMpwPdYcYhHjL1MZNE2sLvzfpH2YV7jjG4lCjcH+CNx
+         PK/PvkQWtGzE7DwoLjqUAg90Qj1lg/Xxexl58nSU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, dmummenschanz@web.de,
-        Takashi Iwai <tiwai@suse.de>
-Subject: [PATCH 5.4 47/80] ALSA: hda: Fix missing codec probe on Shenker Dock 15
+        stable@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        Michael Ellerman <mpe@ellerman.id.au>
+Subject: [PATCH 5.10 075/121] powerpc/lib/sstep: fix ptesync build error
 Date:   Mon, 21 Feb 2022 09:49:27 +0100
-Message-Id: <20220221084917.113140525@linuxfoundation.org>
+Message-Id: <20220221084923.753881162@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220221084915.554151737@linuxfoundation.org>
-References: <20220221084915.554151737@linuxfoundation.org>
+In-Reply-To: <20220221084921.147454846@linuxfoundation.org>
+References: <20220221084921.147454846@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,33 +55,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Takashi Iwai <tiwai@suse.de>
+From: Anders Roxell <anders.roxell@linaro.org>
 
-commit dd8e5b161d7fb9cefa1f1d6e35a39b9e1563c8d3 upstream.
+commit fe663df7825811358531dc2e8a52d9eaa5e3515e upstream.
 
-By some unknown reason, BIOS on Shenker Dock 15 doesn't set up the
-codec mask properly for the onboard audio.  Let's set the forced codec
-mask to enable the codec discovery.
+Building tinyconfig with gcc (Debian 11.2.0-16) and assembler (Debian
+2.37.90.20220207) the following build error shows up:
 
-Reported-by: dmummenschanz@web.de
-Cc: <stable@vger.kernel.org>
-Link: https://lore.kernel.org/r/trinity-f018660b-95c9-442b-a2a8-c92a56eb07ed-1644345967148@3c-app-webde-bap22
-Link: https://lore.kernel.org/r/20220214100020.8870-2-tiwai@suse.de
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
+  {standard input}: Assembler messages:
+  {standard input}:2088: Error: unrecognized opcode: `ptesync'
+  make[3]: *** [/builds/linux/scripts/Makefile.build:287: arch/powerpc/lib/sstep.o] Error 1
+
+Add the 'ifdef CONFIG_PPC64' around the 'ptesync' in function
+'emulate_update_regs()' to like it is in 'analyse_instr()'. Since it looks like
+it got dropped inadvertently by commit 3cdfcbfd32b9 ("powerpc: Change
+analyse_instr so it doesn't modify *regs").
+
+A key detail is that analyse_instr() will never recognise lwsync or
+ptesync on 32-bit (because of the existing ifdef), and as a result
+emulate_update_regs() should never be called with an op specifying
+either of those on 32-bit. So removing them from emulate_update_regs()
+should be a nop in terms of runtime behaviour.
+
+Fixes: 3cdfcbfd32b9 ("powerpc: Change analyse_instr so it doesn't modify *regs")
+Cc: stable@vger.kernel.org # v4.14+
+Suggested-by: Arnd Bergmann <arnd@arndb.de>
+Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
+[mpe: Add last paragraph of change log mentioning analyse_instr() details]
+Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+Link: https://lore.kernel.org/r/20220211005113.1361436-1-anders.roxell@linaro.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/pci/hda/hda_intel.c |    1 +
- 1 file changed, 1 insertion(+)
+ arch/powerpc/lib/sstep.c |    2 ++
+ 1 file changed, 2 insertions(+)
 
---- a/sound/pci/hda/hda_intel.c
-+++ b/sound/pci/hda/hda_intel.c
-@@ -1608,6 +1608,7 @@ static struct snd_pci_quirk probe_mask_l
- 	/* forced codec slots */
- 	SND_PCI_QUIRK(0x1043, 0x1262, "ASUS W5Fm", 0x103),
- 	SND_PCI_QUIRK(0x1046, 0x1262, "ASUS W5F", 0x103),
-+	SND_PCI_QUIRK(0x1558, 0x0351, "Schenker Dock 15", 0x105),
- 	/* WinFast VP200 H (Teradici) user reported broken communication */
- 	SND_PCI_QUIRK(0x3a21, 0x040d, "WinFast VP200 H", 0x101),
- 	{}
+--- a/arch/powerpc/lib/sstep.c
++++ b/arch/powerpc/lib/sstep.c
+@@ -3062,12 +3062,14 @@ void emulate_update_regs(struct pt_regs
+ 		case BARRIER_EIEIO:
+ 			eieio();
+ 			break;
++#ifdef CONFIG_PPC64
+ 		case BARRIER_LWSYNC:
+ 			asm volatile("lwsync" : : : "memory");
+ 			break;
+ 		case BARRIER_PTESYNC:
+ 			asm volatile("ptesync" : : : "memory");
+ 			break;
++#endif
+ 		}
+ 		break;
+ 
 
 

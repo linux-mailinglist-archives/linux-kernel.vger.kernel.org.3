@@ -2,361 +2,262 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB9324BE8EA
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:06:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9ED204BE5CF
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:01:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347915AbiBUJRD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 04:17:03 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33972 "EHLO
+        id S1348648AbiBUJUP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 04:20:15 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347942AbiBUJKH (ORCPT
+        with ESMTP id S1349567AbiBUJMf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 04:10:07 -0500
-Received: from mout-p-201.mailbox.org (mout-p-201.mailbox.org [IPv6:2001:67c:2050::465:201])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35EA91D30F;
-        Mon, 21 Feb 2022 01:02:31 -0800 (PST)
-Received: from smtp102.mailbox.org (smtp102.mailbox.org [IPv6:2001:67c:2050:105:465:1:3:0])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mout-p-201.mailbox.org (Postfix) with ESMTPS id 4K2GXP552Nz9sQY;
-        Mon, 21 Feb 2022 10:02:29 +0100 (CET)
-X-Virus-Scanned: amavisd-new at heinlein-support.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sylv.io; s=MBO0001;
-        t=1645434147;
+        Mon, 21 Feb 2022 04:12:35 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AE5F02408A
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 01:05:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1645434328;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=wEZ76kGSwSq5Wb4rRjccaeTPhaIObqPlN/MOOW3VPhk=;
-        b=uZQ8LMcMBT9oxmgLlM7ejy4iHa61SJVdQKomL126T+USo6k9wMltyZIMsdv6RJuSNGYFiM
-        S1dDaLLtAAYeps1yeehJYUM9B1b13ztJHt1UVevaGB3FgufO1NXMMpTvBQhyorRgEd2+Lt
-        DfL+TufSWx+Tj6Uzk+iX/7Tv2pugG9uoUy2rSPLP1Yfsen8Ek0iHiq228vBMMEwUSB9zf2
-        8dUQ33R3D9UOOtB5GO0QZa12hhADkxFx/xK+O/OhgFhdNOhzd+5mcOILWlRAzUsmtigumC
-        P5ciVoGn3UwkhyNQhsVw1KsqLZ+oSE4fJ8/aWZHtg+y2qCBBw0hxLN71LCj9kw==
-Message-ID: <3c931f2f23546f17ea232346b43550ee42d6d7dc.camel@sylv.io>
-Subject: Re: [PATCH v3 3/4] pmbus: Add support for pli1209bc
-From:   sylv <sylv@sylv.io>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
-        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        Patrick Rudolph <patrick.rudolph@9elements.com>,
-        linux-doc@vger.kernel.org
-Date:   Mon, 21 Feb 2022 10:02:17 +0100
-In-Reply-To: <20220219144110.GA1032070@roeck-us.net>
-References: <cover.1644874828.git.sylv@sylv.io>
-         <8d44098e7b8ca5d4c13733267836d5a147539277.1644874828.git.sylv@sylv.io>
-         <20220219144110.GA1032070@roeck-us.net>
-Content-Type: text/plain; charset="UTF-8"
+        bh=NYLLwD8bJ4Pq61ytGnPJ+l31crIWDd1Z3kl4/7tNe/4=;
+        b=Nl0tI8L/eX1Tn2R+aDCjTgHlxDdCHXltzbzPI1uCCDH+4zoq+XKQjuTfojQq5Eh/WJmje/
+        VIjK4GYys6pxTG2x6D+51ppzG+SF1jcyWljaoBC5vGZSNEafGLlCWynpNGj1FvBPdm9ZnM
+        qX118CsDm7RZ2XwgmZ4HPJLSFrSHBQw=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-359-C4k9ojZVMomPara1XiAD_A-1; Mon, 21 Feb 2022 04:05:26 -0500
+X-MC-Unique: C4k9ojZVMomPara1XiAD_A-1
+Received: by mail-ed1-f72.google.com with SMTP id j29-20020a508a9d000000b00412aa79f367so6936195edj.0
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 01:05:26 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=NYLLwD8bJ4Pq61ytGnPJ+l31crIWDd1Z3kl4/7tNe/4=;
+        b=YmVhN3NIH9fMbFo6zE67el3DQ98uD9/o5GbX+Tq6DTq2CgWKBTQBFSb8Z/8aYO/Y4q
+         gk8GdqYId2hrhVhda02zRGWdXX8D0w7OnyrlLRi8uBZOMK/Sx7IQmRNFvqJFRMctbG81
+         YE5Dkq9cqcQp6ccsp1tBCITb4fYCoG8gMYUfBgVcRIU+2SRuCOVESbP7G8plZgh8LD39
+         P/avYCSnEDuqtZx0ccU27eFd/5kL2EGn0no890ls74ubXDk5TnO4vc+wX6htSBTGFSyf
+         qU269VXLKWjy3YaHWhu18OA62BGJ5Yvy8Gh04vfOqJpnbGKgxbjqPVeJEtixTqr3+3hz
+         NmFw==
+X-Gm-Message-State: AOAM530bnAZnvOjeZqL+lAC/taWAkFGOfjhN2g2wuAVddc9ScLVU2J7a
+        RylnzwLM8D4/+XATpp0dEBJCbr2t9+OD7W5r5ujRMf66dzVJY9cg6sC+vIN7JiuVOnEWPmCbwmi
+        QdCdfkzoNllDDSkjo/vUXm4Be
+X-Received: by 2002:a05:6402:50cd:b0:410:5da3:b569 with SMTP id h13-20020a05640250cd00b004105da3b569mr20220310edb.188.1645434325285;
+        Mon, 21 Feb 2022 01:05:25 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwJ6zo5BL/OxFVP+iqo/I0uGmkJieugYJhKHOCIdg0T/R75w4YC0Dv+l9cjAI0fIIph8xqloA==
+X-Received: by 2002:a05:6402:50cd:b0:410:5da3:b569 with SMTP id h13-20020a05640250cd00b004105da3b569mr20220286edb.188.1645434325018;
+        Mon, 21 Feb 2022 01:05:25 -0800 (PST)
+Received: from [10.40.98.142] ([78.108.130.194])
+        by smtp.gmail.com with ESMTPSA id h5sm5021885ejo.142.2022.02.21.01.05.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 21 Feb 2022 01:05:24 -0800 (PST)
+Message-ID: <5ba6e52c-d7e9-39fc-cb84-963a403385ca@redhat.com>
+Date:   Mon, 21 Feb 2022 10:05:24 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH 1/3] platform/x86/intel: pmt: Remove bin_attribute mmap
+ support to runtime pm
+Content-Language: en-US
+To:     "David E. Box" <david.e.box@linux.intel.com>,
+        mgross@linux.intel.com, rjw@rjwysocki.net,
+        srinivas.pandruvada@intel.com
+Cc:     linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org
+References: <20220214213258.1929462-1-david.e.box@linux.intel.com>
+ <20220214213258.1929462-2-david.e.box@linux.intel.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20220214213258.1929462-2-david.e.box@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 2022-02-19 at 06:41 -0800, Guenter Roeck wrote:
-> On Mon, Feb 14, 2022 at 10:44:55PM +0100, Marcello Sylvester Bauer
-> wrote:
-> > PLI1209BC is a Digital Supervisor from Vicor Corporation.
-> > 
-> > Signed-off-by: Marcello Sylvester Bauer <sylv@sylv.io>
-> 
-> checkpatch says:
-> 
-> WARNING: Missing or malformed SPDX-License-Identifier tag in line 1
-> #82: FILE: Documentation/hwmon/pli1209bc.rst:1:
-> +Kernel driver pli1209bc
-> 
-> I can not accept the patch without license identifier.
+Hi,
 
-oh, sure. I thought it is still optional for documentation entries.
+On 2/14/22 22:32, David E. Box wrote:
+> PMT devices need to support runtime D3. However, binary attributes don't
+> provide access to open/release methods that could be used to control
+> runtime pm. Therefore, remove the mmap operation. The data may still be
+> accessed with read() calls.
+> 
+> Signed-off-by: David E. Box <david.e.box@linux.intel.com>
+> ---
+> V0 comments:
+> 
+> I expect that this is an undesirable solution because of the ABI change.
+> I don't know if anyone is using this ABI outside of our Intel tools which
+> are willing to make this change. I'd rather find a solution to keep the
+> mmap support. I initially wrote a patch to simply add the missing open and
+> release callbacks to binary attributes but this was thought to be too heavy
+> handed in our internal review. I'm open to suggestions. Thanks.
 
-> 
-> > ---
-> >  Documentation/hwmon/pli1209bc.rst |  73 +++++++++++++++++++
-> 
-> This needs to be added to Documentation/hwmon/index.rst.
-> 
-> >  drivers/hwmon/pmbus/Kconfig       |   9 +++
-> >  drivers/hwmon/pmbus/Makefile      |   1 +
-> >  drivers/hwmon/pmbus/pli1209bc.c   | 115
-> > ++++++++++++++++++++++++++++++
-> >  4 files changed, 198 insertions(+)
-> >  create mode 100644 Documentation/hwmon/pli1209bc.rst
-> >  create mode 100644 drivers/hwmon/pmbus/pli1209bc.c
-> > 
-> > diff --git a/Documentation/hwmon/pli1209bc.rst
-> > b/Documentation/hwmon/pli1209bc.rst
-> > new file mode 100644
-> > index 000000000000..a3f686d03cf2
-> > --- /dev/null
-> > +++ b/Documentation/hwmon/pli1209bc.rst
-> > @@ -0,0 +1,73 @@
-> > +Kernel driver pli1209bc
-> > +=======================
-> > +
-> > +Supported chips:
-> > +
-> > +  * Digital Supervisor PLI1209BC
-> > +
-> > +    Prefix: 'pli1209bc'
-> > +
-> > +    Addresses scanned: 0x50 - 0x5F
-> > +
-> > +    Datasheet:
-> > https://www.vicorpower.com/documents/datasheets/ds-PLI1209BCxyzz-VICOR.pdf
-> > +
-> > +Authors:
-> > +    - Marcello Sylvester Bauer <sylv@sylv.io>
-> > +
-> > +Description
-> > +-----------
-> > +
-> > +The Vicor PLI1209BC is an isolated digital power system supervisor
-> > thatprovides
-> 
-> that provides
+We really cannot go and break userspace API like this. Even if you are
+dropping mmap support from the Intel tools; and we assume that the Intel
+tools are the only consumer, then we still cannot drop mmap support
+because users may install a new kernel without updating the tools.
 
-ack.
+The never break userspace rule applies here and that is a very clear
+and hard rule.
 
+So please respin the series using the approach with open and release
+callbacks.
+
+If you want to get rid of mmap in the future you need to follow the
+official deprecation process:
+
+1. Announce that mmap is going away
+2. Move the ABI doc with the mmap support to
+   Documentation/ABI/obsolete with a note explaining what is being
+   removed and why it is being removed. Since you are only removing mmap you
+   will want to keep the testing version with mmap removed and have the 2
+   point to each other
+3. Wait at least 1 year until after a kernel with the docs in the obsolete dir
+   has been released
+4. Remove the mmap API and move the Documentation/ABI/obsolete version
+   of the ABI doc to Documentation/ABI/removed
+
+Regards,
+
+Hans
+
+
+
+
+
+
+>  .../ABI/testing/sysfs-class-intel_pmt         | 24 +++++++-------
+>  drivers/platform/x86/intel/pmt/class.c        | 31 -------------------
+>  2 files changed, 12 insertions(+), 43 deletions(-)
 > 
-> > +a communication interface between a host processor and one Bus
-> > Converter Module
-> > +(BCM). The PLI communicates with a system controller via a PMBus
-> > compatible
-> > +interface over an isolated UART interface. Through the PLI, the
-> > host processor
-> > +can configure, set protection limits, and monitor the BCM.
-> > +
-> > +Sysfs entries
-> > +-------------
-> > +
-> > +=======================
-> > ========================================================
-> > +in1_label              "vin2"
-> > +in1_input              Input voltage.
-> > +in1_rated_min          Minimum rated input voltage.
-> > +in1_rated_max          Maximum rated input voltage.
-> > +in1_max                        Maximum input voltage.
-> > +in1_max_alarm          Input voltage high alarm.
-> > +in1_crit               Critical input voltage.
-> > +in1_crit_alarm         Input voltage critical alarm.
-> > +
-> > +in2_label              "vout2"
-> > +in2_input              Output voltage.
-> > +in2_rated_min          Minimum rated output voltage.
-> > +in2_rated_max          Maximum rated output voltage.
-> > +in2_alarm              Output voltage alarm
-> > +
-> > +curr1_label            "iin2"
-> > +curr1_input            Input current.
-> > +curr1_max              Maximum input current.
-> > +curr1_max_alarm                Maximum input current high alarm.
-> > +curr1_crit             Critical input current.
-> > +curr1_crit_alarm       Input current critical alarm.
-> > +
-> > +curr2_label            "iout2"
-> > +curr2_input            Output current.
-> > +curr2_crit             Critical output current.
-> > +curr2_crit_alarm       Output current critical alarm.
-> > +curr2_max              Maximum output current.
-> > +curr2_max_alarm                Output current high alarm.
-> > +
-> > +power1_label           "pin2"
-> > +power1_input           Input power.
-> > +power1_alarm           Input power alarm.
-> > +
-> > +power2_label           "pout2"
-> > +power2_input           Output power.
-> > +power2_rated_max       Maximum rated output power.
-> > +
-> > +temp1_input            Die temperature.
-> > +temp1_alarm            Die temperature alarm.
-> > +temp1_max              Maximum die temperature.
-> > +temp1_max_alarm                Die temperature high alarm.
-> > +temp1_crit             Critical die temperature.
-> > +temp1_crit_alarm       Die temperature critical alarm.
-> > +=======================
-> > ========================================================
-> > diff --git a/drivers/hwmon/pmbus/Kconfig
-> > b/drivers/hwmon/pmbus/Kconfig
-> > index c96f7b7338bd..831db423bea0 100644
-> > --- a/drivers/hwmon/pmbus/Kconfig
-> > +++ b/drivers/hwmon/pmbus/Kconfig
-> > @@ -310,6 +310,15 @@ config SENSORS_PIM4328
-> >           This driver can also be built as a module. If so, the
-> > module will
-> >           be called pim4328.
-> >  
-> > +config SENSORS_PLI1209BC
-> > +       tristate "Vicor PLI1209BC"
-> > +       help
-> > +         If you say yes here you get hardware monitoring support
-> > for Vicor
-> > +         PLI1209BC Digital Supervisor.
-> > +
-> > +         This driver can also be built as a module. If so, the
-> > module will
-> > +         be called pli1209bc.
-> > +
-> >  config SENSORS_PM6764TR
-> >         tristate "ST PM6764TR"
-> >         help
-> > diff --git a/drivers/hwmon/pmbus/Makefile
-> > b/drivers/hwmon/pmbus/Makefile
-> > index e5935f70c9e0..7ce74e3b8552 100644
-> > --- a/drivers/hwmon/pmbus/Makefile
-> > +++ b/drivers/hwmon/pmbus/Makefile
-> > @@ -34,6 +34,7 @@ obj-$(CONFIG_SENSORS_MP2888)  += mp2888.o
-> >  obj-$(CONFIG_SENSORS_MP2975)   += mp2975.o
-> >  obj-$(CONFIG_SENSORS_MP5023)   += mp5023.o
-> >  obj-$(CONFIG_SENSORS_PM6764TR) += pm6764tr.o
-> > +obj-$(CONFIG_SENSORS_PLI1209BC)        += pli1209bc.o
-> 
-> Alphabetic order please.
+> diff --git a/Documentation/ABI/testing/sysfs-class-intel_pmt b/Documentation/ABI/testing/sysfs-class-intel_pmt
+> index ed4c886a21b1..4182f67dcef8 100644
+> --- a/Documentation/ABI/testing/sysfs-class-intel_pmt
+> +++ b/Documentation/ABI/testing/sysfs-class-intel_pmt
+> @@ -15,10 +15,10 @@ Description:
+>  		The telem<x> directory contains files describing an instance of
+>  		a PMT telemetry device that exposes hardware telemetry. Each
+>  		telem<x> directory has an associated telem file. This file
+> -		may be opened and mapped or read to access the telemetry space
+> -		of the device. The register layout of the telemetry space is
+> -		determined from an XML file that matches the PCI device id and
+> -		GUID for the device.
+> +		may be opened and read to access the telemetry space of the
+> +		device. The register layout of the telemetry space is determined
+> +		from an XML file that matches the PCI device id and GUID for the
+> +		device.
+>  
+>  What:		/sys/class/intel_pmt/telem<x>/telem
+>  Date:		October 2020
+> @@ -26,7 +26,7 @@ KernelVersion:	5.10
+>  Contact:	David Box <david.e.box@linux.intel.com>
+>  Description:
+>  		(RO) The telemetry data for this telemetry device. This file
+> -		may be mapped or read to obtain the data.
+> +		may be read to obtain the data.
+>  
+>  What:		/sys/class/intel_pmt/telem<x>/guid
+>  Date:		October 2020
+> @@ -43,7 +43,7 @@ KernelVersion:	5.10
+>  Contact:	David Box <david.e.box@linux.intel.com>
+>  Description:
+>  		(RO) The size of telemetry region in bytes that corresponds to
+> -		the mapping size for the telem file.
+> +		the size of the telem file.
+>  
+>  What:		/sys/class/intel_pmt/telem<x>/offset
+>  Date:		October 2020
+> @@ -51,7 +51,7 @@ KernelVersion:	5.10
+>  Contact:	David Box <david.e.box@linux.intel.com>
+>  Description:
+>  		(RO) The offset of telemetry region in bytes that corresponds to
+> -		the mapping for the telem file.
+> +		the size of the telem file.
+>  
+>  What:		/sys/class/intel_pmt/crashlog<x>
+>  Date:		October 2020
+> @@ -61,10 +61,10 @@ Description:
+>  		The crashlog<x> directory contains files for configuring an
+>  		instance of a PMT crashlog device that can perform crash data
+>  		recording. Each crashlog<x> device has an associated crashlog
+> -		file. This file can be opened and mapped or read to access the
+> -		resulting crashlog buffer. The register layout for the buffer
+> -		can be determined from an XML file of specified GUID for the
+> -		parent device.
+> +		file. This file can be opened and read to access the resulting
+> +		crashlog buffer. The register layout for the buffer can be
+> +		determined from an XML file of specified GUID for the parent
+> +		device.
+>  
+>  What:		/sys/class/intel_pmt/crashlog<x>/crashlog
+>  Date:		October 2020
+> @@ -72,7 +72,7 @@ KernelVersion:	5.10
+>  Contact:	David Box <david.e.box@linux.intel.com>
+>  Description:
+>  		(RO) The crashlog buffer for this crashlog device. This file
+> -		may be mapped or read to obtain the data.
+> +		may be read to obtain the data.
+>  
+>  What:		/sys/class/intel_pmt/crashlog<x>/guid
+>  Date:		October 2020
+> diff --git a/drivers/platform/x86/intel/pmt/class.c b/drivers/platform/x86/intel/pmt/class.c
+> index 1c9e3f3ea41c..85fc159961c1 100644
+> --- a/drivers/platform/x86/intel/pmt/class.c
+> +++ b/drivers/platform/x86/intel/pmt/class.c
+> @@ -68,36 +68,6 @@ intel_pmt_read(struct file *filp, struct kobject *kobj,
+>  	return count;
+>  }
+>  
+> -static int
+> -intel_pmt_mmap(struct file *filp, struct kobject *kobj,
+> -		struct bin_attribute *attr, struct vm_area_struct *vma)
+> -{
+> -	struct intel_pmt_entry *entry = container_of(attr,
+> -						     struct intel_pmt_entry,
+> -						     pmt_bin_attr);
+> -	unsigned long vsize = vma->vm_end - vma->vm_start;
+> -	struct device *dev = kobj_to_dev(kobj);
+> -	unsigned long phys = entry->base_addr;
+> -	unsigned long pfn = PFN_DOWN(phys);
+> -	unsigned long psize;
+> -
+> -	if (vma->vm_flags & (VM_WRITE | VM_MAYWRITE))
+> -		return -EROFS;
+> -
+> -	psize = (PFN_UP(entry->base_addr + entry->size) - pfn) * PAGE_SIZE;
+> -	if (vsize > psize) {
+> -		dev_err(dev, "Requested mmap size is too large\n");
+> -		return -EINVAL;
+> -	}
+> -
+> -	vma->vm_page_prot = pgprot_noncached(vma->vm_page_prot);
+> -	if (io_remap_pfn_range(vma, vma->vm_start, pfn,
+> -		vsize, vma->vm_page_prot))
+> -		return -EAGAIN;
+> -
+> -	return 0;
+> -}
+> -
+>  static ssize_t
+>  guid_show(struct device *dev, struct device_attribute *attr, char *buf)
+>  {
+> @@ -263,7 +233,6 @@ static int intel_pmt_dev_register(struct intel_pmt_entry *entry,
+>  	sysfs_bin_attr_init(&entry->pmt_bin_attr);
+>  	entry->pmt_bin_attr.attr.name = ns->name;
+>  	entry->pmt_bin_attr.attr.mode = 0440;
+> -	entry->pmt_bin_attr.mmap = intel_pmt_mmap;
+>  	entry->pmt_bin_attr.read = intel_pmt_read;
+>  	entry->pmt_bin_attr.size = entry->size;
+>  
 
-ack.
-
-Thanks,
-Marcello
-
-> 
-> >  obj-$(CONFIG_SENSORS_PXE1610)  += pxe1610.o
-> >  obj-$(CONFIG_SENSORS_Q54SJ108A2)       += q54sj108a2.o
-> >  obj-$(CONFIG_SENSORS_STPDDC60) += stpddc60.o
-> > diff --git a/drivers/hwmon/pmbus/pli1209bc.c
-> > b/drivers/hwmon/pmbus/pli1209bc.c
-> > new file mode 100644
-> > index 000000000000..5f8847307e55
-> > --- /dev/null
-> > +++ b/drivers/hwmon/pmbus/pli1209bc.c
-> > @@ -0,0 +1,115 @@
-> > +// SPDX-License-Identifier: GPL-2.0+
-> > +/*
-> > + * Hardware monitoring driver for Vicor PLI1209BC Digital
-> > Supervisor
-> > + *
-> > + * Copyright (c) 2022 9elements GmbH
-> > + */
-> > +
-> > +#include <linux/i2c.h>
-> > +#include <linux/module.h>
-> > +#include <linux/pmbus.h>
-> > +#include "pmbus.h"
-> > +
-> > +/*
-> > + * The capability command is only supported at page 0. Probing the
-> > device while
-> > + * the page register is set to 1 will falsely enable PEC support.
-> > Disable
-> > + * capability probing accordingly, since the PLI1209BC does not
-> > have any
-> > + * additional capabilities.
-> > + */
-> > +static struct pmbus_platform_data pli1209bc_plat_data = {
-> > +       .flags = PMBUS_NO_CAPABILITY,
-> > +};
-> > +
-> > +static int pli1209bc_read_word_data(struct i2c_client *client, int
-> > page,
-> > +                                   int phase, int reg)
-> > +{
-> > +       int data;
-> > +
-> > +       switch (reg) {
-> > +       /* PMBUS_READ_POUT uses a direct format with R=0 */
-> > +       case PMBUS_READ_POUT:
-> > +               data = pmbus_read_word_data(client, page, phase,
-> > reg);
-> > +               if (data < 0)
-> > +                       return data;
-> > +               data = sign_extend32(data, 15) * 10;
-> > +               return clamp_val(data, -32768, 32767) & 0xffff;
-> > +       default:
-> > +               return -ENODATA;
-> > +       }
-> > +}
-> > +
-> > +static struct pmbus_driver_info pli1209bc_info = {
-> > +       .pages = 2,
-> > +       .format[PSC_VOLTAGE_IN] = direct,
-> > +       .format[PSC_VOLTAGE_OUT] = direct,
-> > +       .format[PSC_CURRENT_IN] = direct,
-> > +       .format[PSC_CURRENT_OUT] = direct,
-> > +       .format[PSC_POWER] = direct,
-> > +       .format[PSC_TEMPERATURE] = direct,
-> > +       .m[PSC_VOLTAGE_IN] = 1,
-> > +       .b[PSC_VOLTAGE_IN] = 0,
-> > +       .R[PSC_VOLTAGE_IN] = 1,
-> > +       .m[PSC_VOLTAGE_OUT] = 1,
-> > +       .b[PSC_VOLTAGE_OUT] = 0,
-> > +       .R[PSC_VOLTAGE_OUT] = 1,
-> > +       .m[PSC_CURRENT_IN] = 1,
-> > +       .b[PSC_CURRENT_IN] = 0,
-> > +       .R[PSC_CURRENT_IN] = 3,
-> > +       .m[PSC_CURRENT_OUT] = 1,
-> > +       .b[PSC_CURRENT_OUT] = 0,
-> > +       .R[PSC_CURRENT_OUT] = 2,
-> > +       .m[PSC_POWER] = 1,
-> > +       .b[PSC_POWER] = 0,
-> > +       .R[PSC_POWER] = 1,
-> > +       .m[PSC_TEMPERATURE] = 1,
-> > +       .b[PSC_TEMPERATURE] = 0,
-> > +       .R[PSC_TEMPERATURE] = 0,
-> > +       /*
-> > +        * Page 0 sums up all attributes except voltage readings.
-> > +        * The pli1209 digital supervisor only contains a single
-> > BCM, making
-> > +        * page 0 redundant.
-> > +        */
-> > +       .func[1] = PMBUS_HAVE_VIN | PMBUS_HAVE_VOUT
-> > +           | PMBUS_HAVE_IIN | PMBUS_HAVE_IOUT
-> > +           | PMBUS_HAVE_PIN | PMBUS_HAVE_POUT
-> > +           | PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP
-> > +           | PMBUS_HAVE_STATUS_IOUT | PMBUS_HAVE_STATUS_INPUT,
-> > +       .read_word_data = pli1209bc_read_word_data,
-> > +};
-> > +
-> > +static int pli1209bc_probe(struct i2c_client *client)
-> > +{
-> > +       client->dev.platform_data = &pli1209bc_plat_data;
-> > +       return pmbus_do_probe(client, &pli1209bc_info);
-> > +}
-> > +
-> > +static const struct i2c_device_id pli1209bc_id[] = {
-> > +       {"pli1209bc", 0},
-> > +       {}
-> > +};
-> > +
-> > +MODULE_DEVICE_TABLE(i2c, pli1209bc_id);
-> > +
-> > +#ifdef CONFIG_OF
-> > +static const struct of_device_id pli1209bc_of_match[] = {
-> > +       { .compatible = "vicor,pli1209bc" },
-> > +       { },
-> > +};
-> > +MODULE_DEVICE_TABLE(of, pli1209bc_of_match);
-> > +#endif
-> > +
-> > +static struct i2c_driver pli1209bc_driver = {
-> > +       .driver = {
-> > +                  .name = "pli1209bc",
-> > +                  .of_match_table =
-> > of_match_ptr(pli1209bc_of_match),
-> > +                  },
-> > +       .probe_new = pli1209bc_probe,
-> > +       .id_table = pli1209bc_id,
-> > +};
-> > +
-> > +module_i2c_driver(pli1209bc_driver);
-> > +
-> > +MODULE_AUTHOR("Marcello Sylvester Bauer <sylv@sylv.io>");
-> > +MODULE_DESCRIPTION("PMBus driver for Vicor PLI1209BC");
-> > +MODULE_LICENSE("GPL");
-> > +MODULE_IMPORT_NS(PMBUS);

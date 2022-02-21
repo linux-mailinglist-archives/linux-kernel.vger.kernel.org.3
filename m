@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A68004BE446
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:58:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F335D4BE664
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:02:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347568AbiBUJHC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 04:07:02 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59592 "EHLO
+        id S1353342AbiBUKBe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 05:01:34 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348422AbiBUJCt (ORCPT
+        with ESMTP id S1352224AbiBUJxr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 04:02:49 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ADA42C64C;
-        Mon, 21 Feb 2022 00:58:05 -0800 (PST)
+        Mon, 21 Feb 2022 04:53:47 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42FE936B66;
+        Mon, 21 Feb 2022 01:23:26 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 18B7CB80EB6;
-        Mon, 21 Feb 2022 08:58:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3CD4FC340F1;
-        Mon, 21 Feb 2022 08:58:01 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EB257B80EB9;
+        Mon, 21 Feb 2022 09:23:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02CAFC340E9;
+        Mon, 21 Feb 2022 09:23:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645433881;
-        bh=B3V/EFHY9+d/uJRBcFrB7LlPclALnd89vW1EiTlJXt4=;
+        s=korg; t=1645435403;
+        bh=nkcQxGdJDoVl8oaSFTYORMJhIKjObWqU0wdGclgp29w=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MVJGgM1/TqRqNajntrmNviImMIf8mQ5+XL+PpZaPZHBQQTNEAoUYAVUvyU9w7kmnD
-         2WSSIYTXZVUyuqgi1VsTaMXtt+/UZvTTzLr4OQTpwJ1YalljWk88E/IibXGbifPe65
-         dYZNOIKkcTqd8wKKoKY29L82NkzDqpEeRvYkecqw=
+        b=Qd0pUMEN1CsKnN5Bs/2JqM1MZZ6q9t8K8g1C/0zGpTlpc+nejwTkpvUvQ3eH+6wPr
+         kVLEi6OQTazEToATz2dqnyajz5CHbSlFKrgHG0wXtJsRwJFL3gn1E3WVFegY7sfXb5
+         zUFikcRsuyNWgP7+7nS7mO92ONZhJZDMYYzLjUJw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, John David Anglin <dave.anglin@bell.net>,
-        Helge Deller <deller@gmx.de>
-Subject: [PATCH 5.4 07/80] parisc: Fix sglist access in ccio-dma.c
-Date:   Mon, 21 Feb 2022 09:48:47 +0100
-Message-Id: <20220221084915.835383796@linuxfoundation.org>
+        stable@vger.kernel.org, Mans Rullgard <mans@mansr.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fianelil <f.fainelli@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 5.16 109/227] net: dsa: lan9303: fix reset on probe
+Date:   Mon, 21 Feb 2022 09:48:48 +0100
+Message-Id: <20220221084938.489786570@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220221084915.554151737@linuxfoundation.org>
-References: <20220221084915.554151737@linuxfoundation.org>
+In-Reply-To: <20220221084934.836145070@linuxfoundation.org>
+References: <20220221084934.836145070@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,39 +56,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: John David Anglin <dave.anglin@bell.net>
+From: Mans Rullgard <mans@mansr.com>
 
-commit d7da660cab47183cded65e11b64497d0f56c6edf upstream.
+commit 6bb9681a43f34f2cab4aad6e2a02da4ce54d13c5 upstream.
 
-This patch implements the same bug fix to ccio-dma.c as to sba_iommu.c.
-It ensures that only the allocated entries of the sglist are accessed.
+The reset input to the LAN9303 chip is active low, and devicetree
+gpio handles reflect this.  Therefore, the gpio should be requested
+with an initial state of high in order for the reset signal to be
+asserted.  Other uses of the gpio already use the correct polarity.
 
-Signed-off-by: John David Anglin <dave.anglin@bell.net>
-Cc: stable@vger.kernel.org
-Signed-off-by: Helge Deller <deller@gmx.de>
+Fixes: a1292595e006 ("net: dsa: add new DSA switch driver for the SMSC-LAN9303")
+Signed-off-by: Mans Rullgard <mans@mansr.com>
+Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+Reviewed-by: Florian Fianelil <f.fainelli@gmail.com>
+Link: https://lore.kernel.org/r/20220209145454.19749-1-mans@mansr.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/parisc/ccio-dma.c |    3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/net/dsa/lan9303-core.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/parisc/ccio-dma.c
-+++ b/drivers/parisc/ccio-dma.c
-@@ -1003,7 +1003,7 @@ ccio_unmap_sg(struct device *dev, struct
- 	ioc->usg_calls++;
- #endif
+--- a/drivers/net/dsa/lan9303-core.c
++++ b/drivers/net/dsa/lan9303-core.c
+@@ -1309,7 +1309,7 @@ static int lan9303_probe_reset_gpio(stru
+ 				     struct device_node *np)
+ {
+ 	chip->reset_gpio = devm_gpiod_get_optional(chip->dev, "reset",
+-						   GPIOD_OUT_LOW);
++						   GPIOD_OUT_HIGH);
+ 	if (IS_ERR(chip->reset_gpio))
+ 		return PTR_ERR(chip->reset_gpio);
  
--	while(sg_dma_len(sglist) && nents--) {
-+	while (nents && sg_dma_len(sglist)) {
- 
- #ifdef CCIO_COLLECT_STATS
- 		ioc->usg_pages += sg_dma_len(sglist) >> PAGE_SHIFT;
-@@ -1011,6 +1011,7 @@ ccio_unmap_sg(struct device *dev, struct
- 		ccio_unmap_page(dev, sg_dma_address(sglist),
- 				  sg_dma_len(sglist), direction, 0);
- 		++sglist;
-+		nents--;
- 	}
- 
- 	DBG_RUN_SG("%s() DONE (nents %d)\n", __func__, nents);
 
 

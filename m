@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58EE14BDC18
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:41:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D85134BE71D
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:03:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347994AbiBUJNg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 04:13:36 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36372 "EHLO
+        id S1351105AbiBUJmj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 04:42:39 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347839AbiBUJI7 (ORCPT
+        with ESMTP id S1350838AbiBUJgG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 04:08:59 -0500
+        Mon, 21 Feb 2022 04:36:06 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D191B1F5;
-        Mon, 21 Feb 2022 01:01:07 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 052492BB37;
+        Mon, 21 Feb 2022 01:14:58 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6FA1A611F4;
-        Mon, 21 Feb 2022 09:01:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47CA0C340EB;
-        Mon, 21 Feb 2022 09:01:06 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EE7E0608C4;
+        Mon, 21 Feb 2022 09:14:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1ED9C340E9;
+        Mon, 21 Feb 2022 09:14:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645434066;
-        bh=3iJNsLs5igWnW9tIYI/say2ztI8UpVKT9KjMYdP1aAU=;
+        s=korg; t=1645434896;
+        bh=irm/IpB0amb9hj620Syux/kXZz0jKhnqBvMBFBvfmTI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mFQpi4tOp9bU37mz3KFzovlC4nM1SKqI/y8Pu/2mB65ErewqIoBXSHQ18RkjmFQiQ
-         ncSRsEFChe6Eqs1kBqHIKcgQvXkO3jxyNVl/siWy/KcCoTSpTx0sAgS2oXl/LdVAxO
-         EdYsh3fK2udG+fbXy/qxtIivJvPgoHL6JCVJL2hc=
+        b=Pr7/vi1mCynzxooBWv/pg90t3nQRa8Q1hosYoEozsNkX1bVl1x6I3IFs3CInHGILt
+         syyPHqPxjzxSijXkBmPtNdHQCg83677fjKXH0D8/yXrOO3uZ0Wnhhhq+9RJjlH/Zs4
+         GJ4BOnvkPdFzTOMSdM1ACoB9hZZjhTjSGXJjeQUA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jing Leng <jleng@ambarella.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
+        stable@vger.kernel.org, JaeSang Yoo <jsyoo5b@gmail.com>,
+        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 80/80] kconfig: fix failing to generate auto.conf
-Date:   Mon, 21 Feb 2022 09:50:00 +0100
-Message-Id: <20220221084918.211979289@linuxfoundation.org>
+Subject: [PATCH 5.15 169/196] tracing: Fix tp_printk option related with tp_printk_stop_on_boot
+Date:   Mon, 21 Feb 2022 09:50:01 +0100
+Message-Id: <20220221084936.599307147@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220221084915.554151737@linuxfoundation.org>
-References: <20220221084915.554151737@linuxfoundation.org>
+In-Reply-To: <20220221084930.872957717@linuxfoundation.org>
+References: <20220221084930.872957717@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,50 +55,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jing Leng <jleng@ambarella.com>
+From: JaeSang Yoo <js.yoo.5b@gmail.com>
 
-[ Upstream commit 1b9e740a81f91ae338b29ed70455719804957b80 ]
+[ Upstream commit 3203ce39ac0b2a57a84382ec184c7d4a0bede175 ]
 
-When the KCONFIG_AUTOCONFIG is specified (e.g. export \
-KCONFIG_AUTOCONFIG=output/config/auto.conf), the directory of
-include/config/ will not be created, so kconfig can't create deps
-files in it and auto.conf can't be generated.
+The kernel parameter "tp_printk_stop_on_boot" starts with "tp_printk" which is
+the same as another kernel parameter "tp_printk". If "tp_printk" setup is
+called before the "tp_printk_stop_on_boot", it will override the latter
+and keep it from being set.
 
-Signed-off-by: Jing Leng <jleng@ambarella.com>
-Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+This is similar to other kernel parameter issues, such as:
+  Commit 745a600cf1a6 ("um: console: Ignore console= option")
+or init/do_mounts.c:45 (setup function of "ro" kernel param)
+
+Fix it by checking for a "_" right after the "tp_printk" and if that
+exists do not process the parameter.
+
+Link: https://lkml.kernel.org/r/20220208195421.969326-1-jsyoo5b@gmail.com
+
+Signed-off-by: JaeSang Yoo <jsyoo5b@gmail.com>
+[ Fixed up change log and added space after if condition ]
+Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- scripts/kconfig/confdata.c | 13 +++++++++----
- 1 file changed, 9 insertions(+), 4 deletions(-)
+ kernel/trace/trace.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/scripts/kconfig/confdata.c b/scripts/kconfig/confdata.c
-index 17298239e3633..5c2493c8e9de8 100644
---- a/scripts/kconfig/confdata.c
-+++ b/scripts/kconfig/confdata.c
-@@ -987,14 +987,19 @@ static int conf_write_dep(const char *name)
+diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
+index 51a87a67e2abe..618c20ce2479d 100644
+--- a/kernel/trace/trace.c
++++ b/kernel/trace/trace.c
+@@ -252,6 +252,10 @@ __setup("trace_clock=", set_trace_boot_clock);
  
- static int conf_touch_deps(void)
+ static int __init set_tracepoint_printk(char *str)
  {
--	const char *name;
-+	const char *name, *tmp;
- 	struct symbol *sym;
- 	int res, i;
- 
--	strcpy(depfile_path, "include/config/");
--	depfile_prefix_len = strlen(depfile_path);
--
- 	name = conf_get_autoconfig_name();
-+	tmp = strrchr(name, '/');
-+	depfile_prefix_len = tmp ? tmp - name + 1 : 0;
-+	if (depfile_prefix_len + 1 > sizeof(depfile_path))
-+		return -1;
++	/* Ignore the "tp_printk_stop_on_boot" param */
++	if (*str == '_')
++		return 0;
 +
-+	strncpy(depfile_path, name, depfile_prefix_len);
-+	depfile_path[depfile_prefix_len] = 0;
-+
- 	conf_read_simple(name, S_DEF_AUTO);
- 	sym_calc_value(modules_sym);
- 
+ 	if ((strcmp(str, "=0") != 0 && strcmp(str, "=off") != 0))
+ 		tracepoint_printk = 1;
+ 	return 1;
 -- 
 2.34.1
 

@@ -2,159 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BAC24BE8C5
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:06:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B18964BDF74
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:50:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355953AbiBULTy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 06:19:54 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47590 "EHLO
+        id S1356081AbiBULUM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 06:20:12 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355984AbiBULSH (ORCPT
+        with ESMTP id S1355824AbiBULT2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 06:18:07 -0500
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75EA41705D
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 03:00:24 -0800 (PST)
-Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21L9Qcp5022629;
-        Mon, 21 Feb 2022 11:00:20 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : content-type : in-reply-to :
- mime-version; s=corp-2021-07-09;
- bh=9Rg2P5Phy93+hfW+nkU7m6e/dK/SUr84NuaCgbMfs+A=;
- b=Qhjx6j5zc1Lll2Cp7OZtSKoNCS9KefVZLs0EJ/MeNJA5CY3TMulME70UhWeKXTLOa96W
- kCyzSbJ1+cnO+SnXphcSxJ1AW5Z5zpLfYo3n0rH9YJSo6xfoPskXMmSLmOztdRpae/6y
- jKUApP85rDkpFBZin73MmHszHi8LTKUJdk0xB5qnZ8rkUz7CrOqjkhwN1ylZ+/DhwL51
- do19g6YNq1hnkU/Nh1jbOqnV+rvQonibWGTpFcnDhrr96sFpetCAUrV9iV90NHw17Y7B
- xQG0G2XQ315sfGYZs0NrcmFWzTUwnNr4LNfxlfXE/S5tZFr6MBqHsmjZ2gzBatj09zuv tA== 
-Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3eaqb3bwyq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 21 Feb 2022 11:00:20 +0000
-Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
-        by userp3030.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 21LAtVCd055808;
-        Mon, 21 Feb 2022 11:00:19 GMT
-Received: from nam02-dm3-obe.outbound.protection.outlook.com (mail-dm3nam07lp2048.outbound.protection.outlook.com [104.47.56.48])
-        by userp3030.oracle.com with ESMTP id 3eanntb484-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 21 Feb 2022 11:00:18 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=D9Vp1i7haxunxSn1zG7jD7ii7lxUUrOCJElOjxuYYzrVNQX7M7Y+PjAidIYnTyZUMdHXb+Q2/0XG0/cZaxvZcI8L9cZhtuv89U01dGJYW7YmTQxVB3p4sFDM1wt1DxBoRVZkD1xImHAkDluWp2gbSPHfp+Otq44SYC4eSG7HXGHoXQLKkicvKrhpvZFJfcNVQXzhBcEJYIz4ENToPP83uJFhkpW+6meg4uvyWIM3zcYJCydAr5UZT7fSdQhOsjYSCiSPCo+kmaMgsvrQ0lE15cfDfaQtOO4Lwr7iwWRjwmJ/YlOlXbQApPac2jwzN3olVUtvzjE48OepDVH7kmqJ9g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=9Rg2P5Phy93+hfW+nkU7m6e/dK/SUr84NuaCgbMfs+A=;
- b=fVkSr0C2mNkON+lp7lcqQVvdH+0Wxaoc/mB9CeAJaG/dgNJnDCgsIFUAMz0praxznhzxmF+q4DATbxyf7jxJh634eAemKHrZizJnSXjhIKGH1oDXV/9Br329k7/7fQQJ4rHKMT2QhonQJ7NswmyXvUP1nyakRvd5HUd2YbnXT+g6AhsqcvaMhGVDiHvoNGfKgoT2i1QgKe5IsdlX6PqCCUEc2AQnNtZwp/DtilEPg7qzzcLUzWNDJsAoBiKwzG2CE8wGJTt0IIrXQcRyfW64ssRW0LhOcCTIiwl21k5TVCaHK2CBYSuUyBg/lvzdTdRfXRoGP+xQZMGHOV8I0rA6Tw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=9Rg2P5Phy93+hfW+nkU7m6e/dK/SUr84NuaCgbMfs+A=;
- b=VaIDzFc7TkN0hfqCBRV3vFnZyO7pEQZn/Zy7SzE5SWi5YFRmaOArYLHCRO/Jt6qqFcUj1zkHNVDWxfPO0SVnnw/NYc/sRufaUIaAnYWIVP/Mbit0fAPRUUF2Dcyp8Q+o5w0ryPolDAdcEWFTZjsxvQcHq4sey7EAGml3ubH4Z7Y=
-Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
- (2603:10b6:301:2d::28) by CO1PR10MB4450.namprd10.prod.outlook.com
- (2603:10b6:303:93::21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4995.14; Mon, 21 Feb
- 2022 11:00:17 +0000
-Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
- ([fe80::2c3d:92b5:42b3:c1c5]) by MWHPR1001MB2365.namprd10.prod.outlook.com
- ([fe80::2c3d:92b5:42b3:c1c5%4]) with mapi id 15.20.4995.027; Mon, 21 Feb 2022
- 11:00:17 +0000
-Date:   Mon, 21 Feb 2022 14:00:00 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     Moses Christopher Bollavarapu <mosescb.dev@gmail.com>
-Cc:     gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] staging: rtl8192e: use BIT macro instead of left shifting
-Message-ID: <20220221110000.GD3965@kadam>
-References: <20220219183234.31216-1-mosescb.dev@gmail.com>
+        Mon, 21 Feb 2022 06:19:28 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47782BBF
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 03:04:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645441455; x=1676977455;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=m0RoA4wRLQQDzi48j0rjW/nwYArZ4gVG2Dv/aEkZHuU=;
+  b=QafB0xpOU7ff9Ej9VfQKXNmtp86zsgc6ewXJaJ2uak5EuWrO/QRU9jQA
+   +fclD8DJ93Jb951tWMZYXgGNmKYeqpql1mmWf9kbkTGxiZt4EnKTF4eTJ
+   rZ/XrzV4Kk8S10jeRi35/7bc6rgwcjP0ZO126AEoD4cOG3sJos5MwzLNA
+   dnMfcEco6aqPzQrYS0oBkPhjEirfWPLvzVlnKXXpZFZARCgFahj8qjBs+
+   B+4ZdghgvnkcBwS3EvaowNTMygS89SjiB4IMd/e5HXZSIZKYEkEOLTcmA
+   2BNt7UhWyVZCMdWjbkixvfpn0IK4TO2qzuXE5HS7+uqdbf+rY6WZItb14
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10264"; a="251242188"
+X-IronPort-AV: E=Sophos;i="5.88,385,1635231600"; 
+   d="scan'208";a="251242188"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2022 03:04:14 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,385,1635231600"; 
+   d="scan'208";a="627340043"
+Received: from lkp-server01.sh.intel.com (HELO da3212ac2f54) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 21 Feb 2022 03:04:13 -0800
+Received: from kbuild by da3212ac2f54 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nM6UG-0001XG-R0; Mon, 21 Feb 2022 11:04:12 +0000
+Date:   Mon, 21 Feb 2022 19:03:44 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Ingo Molnar <mingo@kernel.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [mingo-tip:sched/headers 1505/2574]
+ drivers/hwspinlock/hwspinlock_core.c:369:26: sparse: sparse: incompatible
+ types in comparison expression (different address spaces):
+Message-ID: <202202211957.Gxf9NwU6-lkp@intel.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220219183234.31216-1-mosescb.dev@gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-ClientProxiedBy: JNAP275CA0060.ZAFP275.PROD.OUTLOOK.COM (2603:1086:0:4f::14)
- To MWHPR1001MB2365.namprd10.prod.outlook.com (2603:10b6:301:2d::28)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 3817fd9d-d3b4-43ff-78df-08d9f52957ce
-X-MS-TrafficTypeDiagnostic: CO1PR10MB4450:EE_
-X-Microsoft-Antispam-PRVS: <CO1PR10MB44502167F170C0B1FE3809C88E3A9@CO1PR10MB4450.namprd10.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: s9BqnoW6eo5DqMLBBG3mN14BehROXE+lL14n7g2Q3wlHfsS6cotZ4ZKNhAg2GRZTvhFdObSFDvmxzNQoKkrLyUDClYfNxDZEDNmF4LsraS2uDXzGqNdkIQtZi/3amz0wCI7dY5oi2bffrFKAYL7K5/LvBwbGH/b3UJQjEyxP4bpEb3PsXd1WWELlLJriqvMeQVvKPYpwlEKCKC/s9D9xmaddKYId14EiyFVvsZ/Fvq6Oc8ByIb5BsLFzSgp2yoIF/jhMFEyAW2hi7yxt/osGhpFpvujzle4LXONotPq7LdilrVhT4ICWx3F7dqpYfr1Giom+vcJHC+tH97xk5YQanCsABKGOuPAWf4ZJTHVEWrdbwhjiAjqJlT00FdEV/GLMfDJYLkehTLMfeeOWT00zMWxjwSzajrG+JcgEB79oUl3YZIimCnPMvofAHyY4DCvoOsWSC/quq0bfDlC0tvcT0wBsCMBFahYFIe5sHh+JagyhogoO3sH8Qo6iWM2Qx1KhH2vZ0mgEpkIav+LVC+tDfDO6TzbXxtQFsMuQciJIc3uTfs++s7lh8rvj7ztpZkeyKGEaC1+x68q3nfRSNYY7wCaFgqb5p7OwPWD8lcS0ekolo5IJa+HPetOQ6Y5RRVhyS4N3enderwx+s37GQwJzNruVTGUmx+Vuto/zYl9En7SLHQLvP2/Nh7KkFg6ywTTETi9uNWt5iHKUWlPlL+5ndg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2365.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(7916004)(366004)(66476007)(6506007)(2906002)(66556008)(6512007)(9686003)(4326008)(1076003)(86362001)(26005)(66946007)(186003)(8936002)(52116002)(38350700002)(6486002)(508600001)(38100700002)(44832011)(8676002)(5660300002)(4744005)(6666004)(33656002)(33716001)(316002)(6916009);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?9FDmnKGPDKOnDDva1OhqPXL3ebSPw7rbEfKKtA48W/ZnMcQWbGZCrKbyj5/y?=
- =?us-ascii?Q?nQ9RzopH+m8wHfcF4QtZE/7x5a/1ryJxWu2rXy/D/sQgJycJshnYHg3/Efd3?=
- =?us-ascii?Q?QGmDgzCT+upYM7FVdS02zLEj3AZgMGZaxdfNLRT/D9UVJpoq+AvaeHV7CqMn?=
- =?us-ascii?Q?/3WlSFcqEbMy+46XRZRHKsEkjA/SoaRLvuCwRbQaMQVudiQp+cgCXZoG6lzP?=
- =?us-ascii?Q?RIq0Ncob7OiY9A4McldWik78uA7t5MzvcWEPIjbnxWri4BrHJHHi7/RdDcqM?=
- =?us-ascii?Q?POMqybg5GhUCF0eOsQ7rEMWHJGQhv2AkHrXLphCnSNK/7AAKS1KWg5izxzaL?=
- =?us-ascii?Q?W0XOi7E9zYrDjBYL6VCNamf7+UqZcFYmVTjdmqJk0eR57ldFqNhlrRdAyC94?=
- =?us-ascii?Q?ZLU53PchBQNW4kN/6f/NytQFuXt0RP7tCc42Amp3XZK6dupgtSmzFtIs9oRQ?=
- =?us-ascii?Q?rM3h8Ag3vxdufnTSnjHKrI2IVwpM5UEy0fJIC3uFPPxbvoitjpHUlweogq41?=
- =?us-ascii?Q?SScK20GlVvscqP+1OvnNOnMN1OhhLCwAz1Wg3ji87oA8dleoRTSAYtY9jIj2?=
- =?us-ascii?Q?6Vlp0e6QPP4/Q2ZokSDmUsDOegF7HTfxmKxyIwE2nvLUimLKWDnxHfKPiJE6?=
- =?us-ascii?Q?Is69sONBYgXkeLjbHb61Ocu2MYDmrWo3HdvBCyq2OVnFm/7EJOi4W/W/cyW5?=
- =?us-ascii?Q?RspmRPD+ks4M9sERUiWAm8xzgLWQOAiYNSsosAduQtlt7WezTn4NjRgvl8Nk?=
- =?us-ascii?Q?xKsskc9zQSkdHGsFsZ56tEnS2KMki5wqH3HzwDxOYrewZ7vL5CR0VVknYobK?=
- =?us-ascii?Q?KkL+6IksWwTxVog9Ctw7Hwsa7ODxvgWeZnLOGIXE7dSK+4pu52KZ/RVJvJbh?=
- =?us-ascii?Q?r7HAwlBoQu+gIBPCmxy0d7Oajl7C5Yvc5h8N1cNicWLdX4il57Kq0Xj6uEIw?=
- =?us-ascii?Q?UrLGTuRmO2UlE8rVq3XxhlQLkwAWjYtfDloSXMap/yKPjt+odkRd5G+0Q6vk?=
- =?us-ascii?Q?755+zpyBvS0wWzq7DuS1nhjRibxQykdRcQwVOx1Jw84Wr4pzI4RQ+a3WraPs?=
- =?us-ascii?Q?Faz2798OzS9G5V+DGzQfrPzNCe+dPAFBA6F9Lyw96qE3TqjCNxUMVtMVdywl?=
- =?us-ascii?Q?32Fko9W7U8S6vkANhrkFuA48pgcW3/LrqjrsHLi/YJ4p9K6mi217z8ttN8pw?=
- =?us-ascii?Q?hD56CJPQGUtj7fiDLUuv8cvjmdNmJs++j4HVLOp8cjEwVOHxxkmU9z6YKFdj?=
- =?us-ascii?Q?XkHov/0qyQC7KDH9AHZNdxpw4eHKljsnWAf3vUT7f3NeZ/ljQJdnezp8AC11?=
- =?us-ascii?Q?/LLfAoXKptzeydiBp2uREwuCmeTpXNFC6BmkYeRY7SNwJcX72/1Me1EicF16?=
- =?us-ascii?Q?HkOxAA5rpIFarcPP9krJn19Lil10AfRkazPfFdgNOOBxU5UzjniwB9HPm4bn?=
- =?us-ascii?Q?ZLiEKhEZzHenwkmCTiQN1zTEfKt5CBN+17JV+yISZw9OzZ8VcZdoxu3h4g3c?=
- =?us-ascii?Q?y/Td7yoSQbHWP/2X2/5w7DPWepTpBPS07kd1e7jVIdUhgoIVxnLwgZkFTgP3?=
- =?us-ascii?Q?JOSt0lpTrGpZl/jj8AdJLe3NXKqv0mo4JKb7c3Rd+5fiMwrLcfNuKuezWo5c?=
- =?us-ascii?Q?5Jkt2VtSpdv2oT/JoN0bIYyT01xaVm0BHbEhARjVLwaqt3q2hGpb3RotAs7N?=
- =?us-ascii?Q?R//pjA=3D=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3817fd9d-d3b4-43ff-78df-08d9f52957ce
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2365.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Feb 2022 11:00:17.2436
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: APNSfEgJiN9tkLeJr5tWcX/umIeWWUiRaocjeFkd/5b/Xo9hxr9P8k3na+nN7n6SgBIMoit/438exDoDMxzhcqcB2ChDhoc19kEsAwoQla0=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO1PR10MB4450
-X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10264 signatures=677614
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 suspectscore=0 adultscore=0
- malwarescore=0 phishscore=0 mlxlogscore=999 mlxscore=0 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2201110000
- definitions=main-2202210065
-X-Proofpoint-ORIG-GUID: H4mdm_mFc2aCrEXHALFWPZrZh6dEYBZm
-X-Proofpoint-GUID: H4mdm_mFc2aCrEXHALFWPZrZh6dEYBZm
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Feb 19, 2022 at 07:32:34PM +0100, Moses Christopher Bollavarapu wrote:
-> There is a BIT(nr) macro available in vdso/bits.h
-> which is doing the same left shift operation
-> 
-> Example: (1 << 7) == BIT(7)
-> 
-> Signed-off-by: Moses Christopher Bollavarapu <mosescb.dev@gmail.com>
-> ---
+tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git sched/headers
+head:   39e8a0edc8fae20758051dadf7846849edc18b88
+commit: 75d1193425bb839256332fc5d2d7051f603a1830 [1505/2574] headers/deps: radix-tree: Optimize <linux/radix-tree.h> dependencies, remove <linux/rcupdate.h>
+config: x86_64-randconfig-s022-20220221 (https://download.01.org/0day-ci/archive/20220221/202202211957.Gxf9NwU6-lkp@intel.com/config)
+compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
+reproduce:
+        # apt-get install sparse
+        # sparse version: v0.6.4-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=75d1193425bb839256332fc5d2d7051f603a1830
+        git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
+        git fetch --no-tags mingo-tip sched/headers
+        git checkout 75d1193425bb839256332fc5d2d7051f603a1830
+        # save the config file to linux build tree
+        mkdir build_dir
+        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/entry/vsyscall/ drivers/hwspinlock/
 
-Reviewed-by: Dan Carpenter <dan.carpenter@oracle.com>
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-regards,
-dan carpenter
 
+sparse warnings: (new ones prefixed by >>)
+   drivers/hwspinlock/hwspinlock_core.c:368:9: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected void **slot @@     got void [noderef] __rcu ** @@
+   drivers/hwspinlock/hwspinlock_core.c:368:9: sparse:     expected void **slot
+   drivers/hwspinlock/hwspinlock_core.c:368:9: sparse:     got void [noderef] __rcu **
+   drivers/hwspinlock/hwspinlock_core.c:368:9: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected void **slot @@     got void [noderef] __rcu ** @@
+   drivers/hwspinlock/hwspinlock_core.c:368:9: sparse:     expected void **slot
+   drivers/hwspinlock/hwspinlock_core.c:368:9: sparse:     got void [noderef] __rcu **
+>> drivers/hwspinlock/hwspinlock_core.c:369:26: sparse: sparse: incompatible types in comparison expression (different address spaces):
+>> drivers/hwspinlock/hwspinlock_core.c:369:26: sparse:    void [noderef] __rcu *
+>> drivers/hwspinlock/hwspinlock_core.c:369:26: sparse:    void *
+   drivers/hwspinlock/hwspinlock_core.c:98:5: sparse: sparse: context imbalance in '__hwspin_trylock' - different lock contexts for basic block
+   drivers/hwspinlock/hwspinlock_core.c:296:39: sparse: sparse: context imbalance in '__hwspin_unlock' - unexpected unlock
+
+vim +369 drivers/hwspinlock/hwspinlock_core.c
+
+fb7737e949e31d Suman Anna      2015-03-04  331  
+fb7737e949e31d Suman Anna      2015-03-04  332  /**
+fb7737e949e31d Suman Anna      2015-03-04  333   * of_hwspin_lock_get_id() - get lock id for an OF phandle-based specific lock
+fb7737e949e31d Suman Anna      2015-03-04  334   * @np: device node from which to request the specific hwlock
+fb7737e949e31d Suman Anna      2015-03-04  335   * @index: index of the hwlock in the list of values
+fb7737e949e31d Suman Anna      2015-03-04  336   *
+fb7737e949e31d Suman Anna      2015-03-04  337   * This function provides a means for DT users of the hwspinlock module to
+fb7737e949e31d Suman Anna      2015-03-04  338   * get the global lock id of a specific hwspinlock using the phandle of the
+fb7737e949e31d Suman Anna      2015-03-04  339   * hwspinlock device, so that it can be requested using the normal
+fb7737e949e31d Suman Anna      2015-03-04  340   * hwspin_lock_request_specific() API.
+fb7737e949e31d Suman Anna      2015-03-04  341   *
+fb7737e949e31d Suman Anna      2015-03-04  342   * Returns the global lock id number on success, -EPROBE_DEFER if the hwspinlock
+fb7737e949e31d Suman Anna      2015-03-04  343   * device is not yet registered, -EINVAL on invalid args specifier value or an
+fb7737e949e31d Suman Anna      2015-03-04  344   * appropriate error as returned from the OF parsing of the DT client node.
+fb7737e949e31d Suman Anna      2015-03-04  345   */
+fb7737e949e31d Suman Anna      2015-03-04  346  int of_hwspin_lock_get_id(struct device_node *np, int index)
+fb7737e949e31d Suman Anna      2015-03-04  347  {
+fb7737e949e31d Suman Anna      2015-03-04  348  	struct of_phandle_args args;
+fb7737e949e31d Suman Anna      2015-03-04  349  	struct hwspinlock *hwlock;
+fb7737e949e31d Suman Anna      2015-03-04  350  	struct radix_tree_iter iter;
+fb7737e949e31d Suman Anna      2015-03-04  351  	void **slot;
+fb7737e949e31d Suman Anna      2015-03-04  352  	int id;
+fb7737e949e31d Suman Anna      2015-03-04  353  	int ret;
+fb7737e949e31d Suman Anna      2015-03-04  354  
+fb7737e949e31d Suman Anna      2015-03-04  355  	ret = of_parse_phandle_with_args(np, "hwlocks", "#hwlock-cells", index,
+fb7737e949e31d Suman Anna      2015-03-04  356  					 &args);
+fb7737e949e31d Suman Anna      2015-03-04  357  	if (ret)
+fb7737e949e31d Suman Anna      2015-03-04  358  		return ret;
+fb7737e949e31d Suman Anna      2015-03-04  359  
+fbd7330c9fd8ef Fabien Dessenne 2019-03-08  360  	if (!of_device_is_available(args.np)) {
+fbd7330c9fd8ef Fabien Dessenne 2019-03-08  361  		ret = -ENOENT;
+fbd7330c9fd8ef Fabien Dessenne 2019-03-08  362  		goto out;
+fbd7330c9fd8ef Fabien Dessenne 2019-03-08  363  	}
+fbd7330c9fd8ef Fabien Dessenne 2019-03-08  364  
+fb7737e949e31d Suman Anna      2015-03-04  365  	/* Find the hwspinlock device: we need its base_id */
+fb7737e949e31d Suman Anna      2015-03-04  366  	ret = -EPROBE_DEFER;
+fb7737e949e31d Suman Anna      2015-03-04  367  	rcu_read_lock();
+fb7737e949e31d Suman Anna      2015-03-04 @368  	radix_tree_for_each_slot(slot, &hwspinlock_tree, &iter, 0) {
+fb7737e949e31d Suman Anna      2015-03-04 @369  		hwlock = radix_tree_deref_slot(slot);
+fb7737e949e31d Suman Anna      2015-03-04  370  		if (unlikely(!hwlock))
+fb7737e949e31d Suman Anna      2015-03-04  371  			continue;
+b76ba4af4ddd6a Matthew Wilcox  2016-05-20  372  		if (radix_tree_deref_retry(hwlock)) {
+c6400ba7e13a41 Matthew Wilcox  2016-02-02  373  			slot = radix_tree_iter_retry(&iter);
+c6400ba7e13a41 Matthew Wilcox  2016-02-02  374  			continue;
+c6400ba7e13a41 Matthew Wilcox  2016-02-02  375  		}
+fb7737e949e31d Suman Anna      2015-03-04  376  
+fb7737e949e31d Suman Anna      2015-03-04  377  		if (hwlock->bank->dev->of_node == args.np) {
+fb7737e949e31d Suman Anna      2015-03-04  378  			ret = 0;
+fb7737e949e31d Suman Anna      2015-03-04  379  			break;
+fb7737e949e31d Suman Anna      2015-03-04  380  		}
+fb7737e949e31d Suman Anna      2015-03-04  381  	}
+fb7737e949e31d Suman Anna      2015-03-04  382  	rcu_read_unlock();
+fb7737e949e31d Suman Anna      2015-03-04  383  	if (ret < 0)
+fb7737e949e31d Suman Anna      2015-03-04  384  		goto out;
+fb7737e949e31d Suman Anna      2015-03-04  385  
+fb7737e949e31d Suman Anna      2015-03-04  386  	id = of_hwspin_lock_simple_xlate(&args);
+fb7737e949e31d Suman Anna      2015-03-04  387  	if (id < 0 || id >= hwlock->bank->num_locks) {
+fb7737e949e31d Suman Anna      2015-03-04  388  		ret = -EINVAL;
+fb7737e949e31d Suman Anna      2015-03-04  389  		goto out;
+fb7737e949e31d Suman Anna      2015-03-04  390  	}
+fb7737e949e31d Suman Anna      2015-03-04  391  	id += hwlock->bank->base_id;
+fb7737e949e31d Suman Anna      2015-03-04  392  
+fb7737e949e31d Suman Anna      2015-03-04  393  out:
+fb7737e949e31d Suman Anna      2015-03-04  394  	of_node_put(args.np);
+fb7737e949e31d Suman Anna      2015-03-04  395  	return ret ? ret : id;
+fb7737e949e31d Suman Anna      2015-03-04  396  }
+fb7737e949e31d Suman Anna      2015-03-04  397  EXPORT_SYMBOL_GPL(of_hwspin_lock_get_id);
+fb7737e949e31d Suman Anna      2015-03-04  398  
+
+:::::: The code at line 369 was first introduced by commit
+:::::: fb7737e949e31d8a71acee6bbb670f32dbd2a2c0 hwspinlock/core: add device tree support
+
+:::::: TO: Suman Anna <s-anna@ti.com>
+:::::: CC: Ohad Ben-Cohen <ohad@wizery.com>
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

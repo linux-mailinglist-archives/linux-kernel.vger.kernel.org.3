@@ -2,105 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1718D4BE254
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:55:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B00C4BE480
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:59:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346422AbiBUKFg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 05:05:36 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57164 "EHLO
+        id S243765AbiBUIyM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 03:54:12 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353575AbiBUJ5e (ORCPT
+        with ESMTP id S1345625AbiBUIxT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 04:57:34 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A955A330;
-        Mon, 21 Feb 2022 01:26:59 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 21 Feb 2022 03:53:19 -0500
+Received: from ssl.serverraum.org (ssl.serverraum.org [176.9.125.105])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C2FB192B7
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 00:52:48 -0800 (PST)
+Received: from mwalle01.kontron.local. (unknown [213.135.10.150])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 62BA8B80EBB;
-        Mon, 21 Feb 2022 09:26:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 878FDC340E9;
-        Mon, 21 Feb 2022 09:26:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645435617;
-        bh=9Dj2S3rmu+atdgPw4d5KgzUpQOmctFRQN5kYq9qjlHg=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qAIS9j0CeIdx6jQ1BGsXfyu5KqcC1T9Yoatrj3dbvMA4PGxj/ADh5eosWC1xOLX8A
-         KTgBm+tkGxHKQ6WFoo60xvYyUW4mrC5sh1XXK6aG4yw/Ryget04O0PjLLpC217O6oh
-         e0G0nMTq7W8lLh4vBPueBJgXNZ9fK5Bx2SLfWqi0=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jing Leng <jleng@ambarella.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 227/227] kconfig: fix failing to generate auto.conf
-Date:   Mon, 21 Feb 2022 09:50:46 +0100
-Message-Id: <20220221084942.338752004@linuxfoundation.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220221084934.836145070@linuxfoundation.org>
-References: <20220221084934.836145070@linuxfoundation.org>
-User-Agent: quilt/0.66
+        by ssl.serverraum.org (Postfix) with ESMTPSA id 8DF76223E9;
+        Mon, 21 Feb 2022 09:52:43 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        t=1645433565;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=vhXcIyrYYOOhtTLar2qt08o1kFLd8n5VCrCCKuuqYdg=;
+        b=kEcjqtpRny+mV6S0WqzV2adQV+CoG8z2MbrIHVId4XF2SmF11oMU8O/UP13AoNY48BnaHL
+        pJasnkluLLVpQeGUgcf+e6tEjfEHDNz54xOvzq9KYvc9PB9VWNi18FX6CNY2LkZnzT7/1J
+        4UmmuDAmDM9LL67Y7yv4EupkWa2Dx84=
+From:   Michael Walle <michael@walle.cc>
+To:     linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Pratyush Yadav <p.yadav@ti.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        yaliang.wang@windriver.com, Michael Walle <michael@walle.cc>
+Subject: [PATCH v3 00/32] mtd: spi-nor: move vendor specific code into vendor modules
+Date:   Mon, 21 Feb 2022 09:52:04 +0100
+Message-Id: <20220221085236.1452024-1-michael@walle.cc>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jing Leng <jleng@ambarella.com>
+It turns out that most of the special status register handling is
+specific for a particular vendor. I.e. Xilinx has some different
+opcodes for the status register read, Micron has an additional FSR
+register and Spansion has these flags integrated into the SR.
 
-[ Upstream commit 1b9e740a81f91ae338b29ed70455719804957b80 ]
+Create a callback to ready() where a flash chip can register its
+own function. This will let us move all the vendor specific stuff
+out of the core into the vendor modules.
 
-When the KCONFIG_AUTOCONFIG is specified (e.g. export \
-KCONFIG_AUTOCONFIG=output/config/auto.conf), the directory of
-include/config/ will not be created, so kconfig can't create deps
-files in it and auto.conf can't be generated.
+As a preparation step, unify all function and object names in the
+vendor modules. For the sake of consistency and better readability
+of the code flow, I also converted the setup() callback to be
+optional.
 
-Signed-off-by: Jing Leng <jleng@ambarella.com>
-Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- scripts/kconfig/confdata.c | 13 +++++++++----
- 1 file changed, 9 insertions(+), 4 deletions(-)
+Please note that this is only compile-time tested.
 
-diff --git a/scripts/kconfig/confdata.c b/scripts/kconfig/confdata.c
-index 00284c03da4d3..027f4c28dc320 100644
---- a/scripts/kconfig/confdata.c
-+++ b/scripts/kconfig/confdata.c
-@@ -992,14 +992,19 @@ static int conf_write_autoconf_cmd(const char *autoconf_name)
- 
- static int conf_touch_deps(void)
- {
--	const char *name;
-+	const char *name, *tmp;
- 	struct symbol *sym;
- 	int res, i;
- 
--	strcpy(depfile_path, "include/config/");
--	depfile_prefix_len = strlen(depfile_path);
--
- 	name = conf_get_autoconfig_name();
-+	tmp = strrchr(name, '/');
-+	depfile_prefix_len = tmp ? tmp - name + 1 : 0;
-+	if (depfile_prefix_len + 1 > sizeof(depfile_path))
-+		return -1;
-+
-+	strncpy(depfile_path, name, depfile_prefix_len);
-+	depfile_path[depfile_prefix_len] = 0;
-+
- 	conf_read_simple(name, S_DEF_AUTO);
- 	sym_calc_value(modules_sym);
- 
+Changes since v2:
+ - use family_nor_ instead of just family_ prefix
+ - fix function doc
+
+Changes since v1:
+ - rename/unify function names inside the vendor modules.
+ - make local functions static
+ - fix function doc typo
+ - use late_init hook to set fsr_ready op
+ - Use uppercase and period in comments
+ - Add comments for the vendor flags
+ - move coding style change in spi_nor_sr_ready() into own patch
+ - new patch to add missing parenthesis in S3AN_INFO()
+ - add missing function prefix rename patch for the spansion module
+
+Michael Walle (32):
+  mtd: spi-nor: atmel: unify function names
+  mtd: spi-nor: catalyst: unify function names
+  mtd: spi-nor: eon: unify function names
+  mtd: spi-nor: esmt: unify function names
+  mtd: spi-nor: everspin: unify function names
+  mtd: spi-nor: fujitsu: unify function names
+  mtd: spi-nor: gigadevice: unify function names
+  mtd: spi-nor: intel: unify function names
+  mtd: spi-nor: issi: unify function names
+  mtd: spi-nor: macronix: unify function names
+  mtd: spi-nor: micron-st: unify function names
+  mtd: spi-nor: spansion: unify function names
+  mtd: spi-nor: sst: unify function names
+  mtd: spi-nor: winbond: unify function names
+  mtd: spi-nor: xilinx: unify function names
+  mtd: spi-nor: xmc: unify function names
+  mtd: spi-nor: slightly refactor the spi_nor_setup()
+  mtd: spi-nor: allow a flash to define its own ready() function
+  mtd: spi-nor: export more function to be used in vendor modules
+  mtd: spi-nor: guard _page_size parameter in S3AN_INFO()
+  mtd: spi-nor: move all xilinx specifics into xilinx.c
+  mtd: spi-nor: xilinx: rename vendor specific functions and defines
+  mtd: spi-nor: xilinx: correct the debug message
+  mtd: spi-nor: move all micron-st specifics into micron-st.c
+  mtd: spi-nor: micron-st: convert USE_FSR to a manufacturer flag
+  mtd: spi-nor: micron-st: rename vendor specific functions and defines
+  mtd: spi-nor: spansion: slightly rework control flow in late_init()
+  mtd: spi-nor: move all spansion specifics into spansion.c
+  mtd: spi-nor: spansion: convert USE_CLSR to a manufacturer flag
+  mtd: spi-nor: spansion: rename vendor specific functions and defines
+  mtd: spi-nor: slightly change code style in spi_nor_sr_ready()
+  mtd: spi-nor: renumber flags
+
+ drivers/mtd/spi-nor/atmel.c      |  81 +++++-----
+ drivers/mtd/spi-nor/catalyst.c   |   6 +-
+ drivers/mtd/spi-nor/core.c       | 265 ++-----------------------------
+ drivers/mtd/spi-nor/core.h       |  70 ++++----
+ drivers/mtd/spi-nor/eon.c        |   6 +-
+ drivers/mtd/spi-nor/esmt.c       |   6 +-
+ drivers/mtd/spi-nor/everspin.c   |   6 +-
+ drivers/mtd/spi-nor/fujitsu.c    |   6 +-
+ drivers/mtd/spi-nor/gigadevice.c |   6 +-
+ drivers/mtd/spi-nor/intel.c      |   6 +-
+ drivers/mtd/spi-nor/issi.c       |  10 +-
+ drivers/mtd/spi-nor/macronix.c   |  14 +-
+ drivers/mtd/spi-nor/micron-st.c  | 258 ++++++++++++++++++++++++------
+ drivers/mtd/spi-nor/spansion.c   | 164 ++++++++++++++-----
+ drivers/mtd/spi-nor/sst.c        |  44 ++---
+ drivers/mtd/spi-nor/winbond.c    |  29 ++--
+ drivers/mtd/spi-nor/xilinx.c     |  97 +++++++++--
+ drivers/mtd/spi-nor/xmc.c        |   6 +-
+ include/linux/mtd/spi-nor.h      |  18 ---
+ 19 files changed, 576 insertions(+), 522 deletions(-)
+
 -- 
-2.34.1
-
-
+2.30.2
 

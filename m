@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8024B4BE40F
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:58:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0A274BE91C
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:06:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347738AbiBUJKG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 04:10:06 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42670 "EHLO
+        id S232875AbiBUJiR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 04:38:17 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347518AbiBUJFv (ORCPT
+        with ESMTP id S1350058AbiBUJ3F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 04:05:51 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB2BD2E0B5;
-        Mon, 21 Feb 2022 00:59:14 -0800 (PST)
+        Mon, 21 Feb 2022 04:29:05 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAF1B24BFD;
+        Mon, 21 Feb 2022 01:13:01 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4DAB7B80EAC;
-        Mon, 21 Feb 2022 08:59:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 692F4C340E9;
-        Mon, 21 Feb 2022 08:59:12 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6D053608C1;
+        Mon, 21 Feb 2022 09:13:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51D8BC340F1;
+        Mon, 21 Feb 2022 09:13:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645433953;
-        bh=8E9nmzjr+oVBPaIx2NahacyRPguKBnPNkSFQybHOK2E=;
+        s=korg; t=1645434780;
+        bh=TYuvVS3fFqWieGFmsqv7QYOngtgAFJf28ruJSp8ojrk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Nh8NBTcs0TkzwRukRtwuhmzftU/fZRzQ07oUx85YDzP5Bkf+7feQ1xF79VW5fXGl+
-         2G5nqUcBweSsCMvtM+adR7xNYZ0qEjtz/umDP/PkU0xdIbjCPRll/8XDv5PFedH5k2
-         ceY7+owFITHVfdgPyQx/tllRUSP7rPyT7LUAF6K4=
+        b=wzNEJKm6shk7Uu607y5ndSn9RJm8PEgXV0riLJCmYEXfgU23ajoQG5/mctrUmSKnR
+         bEaskR/vqxh3AISKbTzgYIIvenBbtbn8KCnRh8rlginZDP6KlQQUXf3pJlPE8EPM4I
+         tQBotBJroM6a4TsZw5FOMWzrh6eweqG8sOOuvDTw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jianlin Shi <jishi@redhat.com>,
-        Xin Long <lucien.xin@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 5.4 41/80] ping: fix the dif and sdif check in ping_lookup
+        stable@vger.kernel.org,
+        Srinivasa Rao Mandadapu <srivasam@codeaurora.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Mark Brown <broonie@kernel.org>
+Subject: [PATCH 5.15 129/196] ASoC: qcom: Actually clear DMA interrupt register for HDMI
 Date:   Mon, 21 Feb 2022 09:49:21 +0100
-Message-Id: <20220221084916.922438699@linuxfoundation.org>
+Message-Id: <20220221084935.251121740@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220221084915.554151737@linuxfoundation.org>
-References: <20220221084915.554151737@linuxfoundation.org>
+In-Reply-To: <20220221084930.872957717@linuxfoundation.org>
+References: <20220221084930.872957717@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,78 +57,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xin Long <lucien.xin@gmail.com>
+From: Stephen Boyd <swboyd@chromium.org>
 
-commit 35a79e64de29e8d57a5989aac57611c0cd29e13e upstream.
+commit c8d251f51ee61df06ee0e419348d8c9160bbfb86 upstream.
 
-When 'ping' changes to use PING socket instead of RAW socket by:
+In commit da0363f7bfd3 ("ASoC: qcom: Fix for DMA interrupt clear reg
+overwriting") we changed regmap_write() to regmap_update_bits() so that
+we can avoid overwriting bits that we didn't intend to modify.
+Unfortunately this change breaks the case where a register is writable
+but not readable, which is exactly how the HDMI irq clear register is
+designed (grep around LPASS_HDMITX_APP_IRQCLEAR_REG to see how it's
+write only). That's because regmap_update_bits() tries to read the
+register from the hardware and if it isn't readable it looks in the
+regmap cache to see what was written there last time to compare against
+what we want to write there. Eventually, we're unable to modify this
+register at all because the bits that we're trying to set are already
+set in the cache.
 
-   # sysctl -w net.ipv4.ping_group_range="0 100"
+This is doubly bad for the irq clear register because you have to write
+the bit to clear an interrupt. Given the irq is level triggered, we see
+an interrupt storm upon plugging in an HDMI cable and starting audio
+playback. The irq storm is so great that performance degrades
+significantly, leading to CPU soft lockups.
 
-There is another regression caused when matching sk_bound_dev_if
-and dif, RAW socket is using inet_iif() while PING socket lookup
-is using skb->dev->ifindex, the cmd below fails due to this:
+Fix it by using regmap_write_bits() so that we really do write the bits
+in the clear register that we want to. This brings the number of irqs
+handled by lpass_dma_interrupt_handler() down from ~150k/sec to ~10/sec.
 
-  # ip link add dummy0 type dummy
-  # ip link set dummy0 up
-  # ip addr add 192.168.111.1/24 dev dummy0
-  # ping -I dummy0 192.168.111.1 -c1
-
-The issue was also reported on:
-
-  https://github.com/iputils/iputils/issues/104
-
-But fixed in iputils in a wrong way by not binding to device when
-destination IP is on device, and it will cause some of kselftests
-to fail, as Jianlin noticed.
-
-This patch is to use inet(6)_iif and inet(6)_sdif to get dif and
-sdif for PING socket, and keep consistent with RAW socket.
-
-Fixes: c319b4d76b9e ("net: ipv4: add IPPROTO_ICMP socket kind")
-Reported-by: Jianlin Shi <jishi@redhat.com>
-Signed-off-by: Xin Long <lucien.xin@gmail.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Fixes: da0363f7bfd3 ("ASoC: qcom: Fix for DMA interrupt clear reg overwriting")
+Cc: Srinivasa Rao Mandadapu <srivasam@codeaurora.org>
+Cc: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Signed-off-by: Stephen Boyd <swboyd@chromium.org>
+Link: https://lore.kernel.org/r/20220209232520.4017634-1-swboyd@chromium.org
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/ipv4/ping.c |   11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
+ sound/soc/qcom/lpass-platform.c |    8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
---- a/net/ipv4/ping.c
-+++ b/net/ipv4/ping.c
-@@ -172,16 +172,23 @@ static struct sock *ping_lookup(struct n
- 	struct sock *sk = NULL;
- 	struct inet_sock *isk;
- 	struct hlist_nulls_node *hnode;
--	int dif = skb->dev->ifindex;
-+	int dif, sdif;
- 
- 	if (skb->protocol == htons(ETH_P_IP)) {
-+		dif = inet_iif(skb);
-+		sdif = inet_sdif(skb);
- 		pr_debug("try to find: num = %d, daddr = %pI4, dif = %d\n",
- 			 (int)ident, &ip_hdr(skb)->daddr, dif);
- #if IS_ENABLED(CONFIG_IPV6)
- 	} else if (skb->protocol == htons(ETH_P_IPV6)) {
-+		dif = inet6_iif(skb);
-+		sdif = inet6_sdif(skb);
- 		pr_debug("try to find: num = %d, daddr = %pI6c, dif = %d\n",
- 			 (int)ident, &ipv6_hdr(skb)->daddr, dif);
- #endif
-+	} else {
-+		pr_err("ping: protocol(%x) is not supported\n", ntohs(skb->protocol));
-+		return NULL;
- 	}
- 
- 	read_lock_bh(&ping_table.lock);
-@@ -221,7 +228,7 @@ static struct sock *ping_lookup(struct n
+--- a/sound/soc/qcom/lpass-platform.c
++++ b/sound/soc/qcom/lpass-platform.c
+@@ -524,7 +524,7 @@ static int lpass_platform_pcmops_trigger
+ 			return -EINVAL;
  		}
  
- 		if (sk->sk_bound_dev_if && sk->sk_bound_dev_if != dif &&
--		    sk->sk_bound_dev_if != inet_sdif(skb))
-+		    sk->sk_bound_dev_if != sdif)
- 			continue;
+-		ret = regmap_update_bits(map, reg_irqclr, val_irqclr, val_irqclr);
++		ret = regmap_write_bits(map, reg_irqclr, val_irqclr, val_irqclr);
+ 		if (ret) {
+ 			dev_err(soc_runtime->dev, "error writing to irqclear reg: %d\n", ret);
+ 			return ret;
+@@ -665,7 +665,7 @@ static irqreturn_t lpass_dma_interrupt_h
+ 	return -EINVAL;
+ 	}
+ 	if (interrupts & LPAIF_IRQ_PER(chan)) {
+-		rv = regmap_update_bits(map, reg, mask, (LPAIF_IRQ_PER(chan) | val));
++		rv = regmap_write_bits(map, reg, mask, (LPAIF_IRQ_PER(chan) | val));
+ 		if (rv) {
+ 			dev_err(soc_runtime->dev,
+ 				"error writing to irqclear reg: %d\n", rv);
+@@ -676,7 +676,7 @@ static irqreturn_t lpass_dma_interrupt_h
+ 	}
  
- 		sock_hold(sk);
+ 	if (interrupts & LPAIF_IRQ_XRUN(chan)) {
+-		rv = regmap_update_bits(map, reg, mask, (LPAIF_IRQ_XRUN(chan) | val));
++		rv = regmap_write_bits(map, reg, mask, (LPAIF_IRQ_XRUN(chan) | val));
+ 		if (rv) {
+ 			dev_err(soc_runtime->dev,
+ 				"error writing to irqclear reg: %d\n", rv);
+@@ -688,7 +688,7 @@ static irqreturn_t lpass_dma_interrupt_h
+ 	}
+ 
+ 	if (interrupts & LPAIF_IRQ_ERR(chan)) {
+-		rv = regmap_update_bits(map, reg, mask, (LPAIF_IRQ_ERR(chan) | val));
++		rv = regmap_write_bits(map, reg, mask, (LPAIF_IRQ_ERR(chan) | val));
+ 		if (rv) {
+ 			dev_err(soc_runtime->dev,
+ 				"error writing to irqclear reg: %d\n", rv);
 
 

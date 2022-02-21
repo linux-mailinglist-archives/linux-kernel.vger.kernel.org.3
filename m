@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7AB94BE394
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:57:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E273E4BDF98
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:50:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345222AbiBUIxt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 03:53:49 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42148 "EHLO
+        id S1350643AbiBUJjE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 04:39:04 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345588AbiBUIwy (ORCPT
+        with ESMTP id S1350332AbiBUJav (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 03:52:54 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 580B62AC7;
-        Mon, 21 Feb 2022 00:52:31 -0800 (PST)
+        Mon, 21 Feb 2022 04:30:51 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F42C25E9B;
+        Mon, 21 Feb 2022 01:13:18 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EB81861133;
-        Mon, 21 Feb 2022 08:52:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9E59C340E9;
-        Mon, 21 Feb 2022 08:52:29 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id ED8FCCE0E92;
+        Mon, 21 Feb 2022 09:13:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C73C1C339C1;
+        Mon, 21 Feb 2022 09:13:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645433550;
-        bh=5C8MD+mk+Eb5UUBsFV2o0TrobpgLPD9Gi8Eu2lLIYVk=;
+        s=korg; t=1645434789;
+        bh=LlrEcvhY71E33DIPn31y+UFouQ9wZxklBPAu27DkQ20=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UsgPHbPw24OggaO64eTXc8JcXmPaCxyUA9EMm8xiQpiBsYts5MoDsHau+st+3++vN
-         Q54bFgz86ueLyUihCBxrDRyeSAdLJqpwyef4GSQ28blwMRCbmHhngAAhjX7I4P/Tzj
-         jZ/MU7q1UpdJGo1Ow8lEt0QmADV/NBnVxaq8yK1A=
+        b=hlUvpoT6Ndag7uLDRJ9HkoJMS7xjQ79yVfmqEXBDkL4HbL69GFhLW/PcZiWj3Chg+
+         WARBeg0tv2U5gvoj1AzqmQnLTZTxENKsiriGz2E6GX2uH2fI2iTlLBXZBc6VBJ3/ug
+         skJkoYEwzwzV3dKhloetR34YPuHvS4BQZLxfZ1Bs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Zolt=C3=A1n=20B=C3=B6sz=C3=B6rm=C3=A9nyi?= 
-        <zboszor@gmail.com>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 31/33] ata: libata-core: Disable TRIM on M88V29
+        stable@vger.kernel.org, Paul Menzel <pmenzel@molgen.mpg.de>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        Donald Buczek <buczek@molgen.mpg.de>,
+        Anna Schumaker <Anna.Schumaker@Netapp.com>
+Subject: [PATCH 5.15 132/196] NFS: LOOKUP_DIRECTORY is also ok with symlinks
 Date:   Mon, 21 Feb 2022 09:49:24 +0100
-Message-Id: <20220221084909.770943733@linuxfoundation.org>
+Message-Id: <20220221084935.342839045@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220221084908.568970525@linuxfoundation.org>
-References: <20220221084908.568970525@linuxfoundation.org>
+In-Reply-To: <20220221084930.872957717@linuxfoundation.org>
+References: <20220221084930.872957717@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,40 +56,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zoltán Böszörményi <zboszor@gmail.com>
+From: Trond Myklebust <trond.myklebust@hammerspace.com>
 
-[ Upstream commit c8ea23d5fa59f28302d4e3370c75d9c308e64410 ]
+commit e0caaf75d443e02e55e146fd75fe2efc8aed5540 upstream.
 
-This device is a CF card, or possibly an SSD in CF form factor.
-It supports NCQ and high speed DMA.
+Commit ac795161c936 (NFSv4: Handle case where the lookup of a directory
+fails) [1], part of Linux since 5.17-rc2, introduced a regression, where
+a symbolic link on an NFS mount to a directory on another NFS does not
+resolve(?) the first time it is accessed:
 
-While it also advertises TRIM support, I/O errors are reported
-when the discard mount option fstrim is used. TRIM also fails
-when disabling NCQ and not just as an NCQ command.
-
-TRIM must be disabled for this device.
-
-Signed-off-by: Zoltán Böszörményi <zboszor@gmail.com>
-Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Reported-by: Paul Menzel <pmenzel@molgen.mpg.de>
+Fixes: ac795161c936 ("NFSv4: Handle case where the lookup of a directory fails")
+Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
+Tested-by: Donald Buczek <buczek@molgen.mpg.de>
+Signed-off-by: Anna Schumaker <Anna.Schumaker@Netapp.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/ata/libata-core.c | 1 +
- 1 file changed, 1 insertion(+)
+ fs/nfs/dir.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/ata/libata-core.c b/drivers/ata/libata-core.c
-index a92cbe1aa72a2..35db918a1de56 100644
---- a/drivers/ata/libata-core.c
-+++ b/drivers/ata/libata-core.c
-@@ -4486,6 +4486,7 @@ static const struct ata_blacklist_entry ata_device_blacklist [] = {
- 
- 	/* devices that don't properly handle TRIM commands */
- 	{ "SuperSSpeed S238*",		NULL,	ATA_HORKAGE_NOTRIM, },
-+	{ "M88V29*",			NULL,	ATA_HORKAGE_NOTRIM, },
- 
- 	/*
- 	 * As defined, the DRAT (Deterministic Read After Trim) and RZAT
--- 
-2.34.1
-
+--- a/fs/nfs/dir.c
++++ b/fs/nfs/dir.c
+@@ -1987,14 +1987,14 @@ no_open:
+ 	if (!res) {
+ 		inode = d_inode(dentry);
+ 		if ((lookup_flags & LOOKUP_DIRECTORY) && inode &&
+-		    !S_ISDIR(inode->i_mode))
++		    !(S_ISDIR(inode->i_mode) || S_ISLNK(inode->i_mode)))
+ 			res = ERR_PTR(-ENOTDIR);
+ 		else if (inode && S_ISREG(inode->i_mode))
+ 			res = ERR_PTR(-EOPENSTALE);
+ 	} else if (!IS_ERR(res)) {
+ 		inode = d_inode(res);
+ 		if ((lookup_flags & LOOKUP_DIRECTORY) && inode &&
+-		    !S_ISDIR(inode->i_mode)) {
++		    !(S_ISDIR(inode->i_mode) || S_ISLNK(inode->i_mode))) {
+ 			dput(res);
+ 			res = ERR_PTR(-ENOTDIR);
+ 		} else if (inode && S_ISREG(inode->i_mode)) {
 
 

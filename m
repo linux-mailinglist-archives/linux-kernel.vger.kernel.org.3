@@ -2,141 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EEFB4BDF27
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:49:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D2E2B4BE76A
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:03:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359159AbiBUNiK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 08:38:10 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54168 "EHLO
+        id S1359192AbiBUNio (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 08:38:44 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359139AbiBUNiF (ORCPT
+        with ESMTP id S1359139AbiBUNik (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 08:38:05 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D16A213E22
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 05:37:41 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nM8sa-0007tK-MQ; Mon, 21 Feb 2022 14:37:28 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nM8sY-000R0Q-Ao; Mon, 21 Feb 2022 14:37:25 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nM8sX-004bq8-12; Mon, 21 Feb 2022 14:37:25 +0100
-Date:   Mon, 21 Feb 2022 14:37:24 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Mikko Perttunen <mperttunen@nvidia.com>,
-        Lee Jones <lee.jones@linaro.org>, Nishanth Menon <nm@ti.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-pwm@vger.kernel.org,
-        linux-mmc@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-clk@vger.kernel.org, David Heidelberg <david@ixit.cz>
-Subject: Re: [PATCH v16 21/40] pwm: tegra: Add runtime PM and OPP support
-Message-ID: <20220221133724.iusksyn7n7hmxil2@pengutronix.de>
-References: <20211130232347.950-1-digetx@gmail.com>
- <20211130232347.950-22-digetx@gmail.com>
- <20220221081727.jeq2jff5ewjzubxv@pengutronix.de>
- <677beebd-5a16-297f-c09a-fa4b72c001c9@gmail.com>
+        Mon, 21 Feb 2022 08:38:40 -0500
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C949517A88;
+        Mon, 21 Feb 2022 05:38:16 -0800 (PST)
+Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 21LCjG3k002334;
+        Mon, 21 Feb 2022 14:37:55 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=selector1;
+ bh=98j3uGLmj33OK+/665DQtkEMyBwIaDlMKW+jkpdU1TM=;
+ b=Vb/jqUnVGN3ob4XyHIF0tzlPrgVqEXNa4naZDcql/WKygA9XMVdlQnPNgU0OTjrK1OyE
+ nUNgb5jBoDHIlx1PQH2d/B2AWVndyd2iw1NjyGAegLHClqNsg8TZBq9+J4ckisi+42Y9
+ lbpjHChikaXXiL5FvdfXKTLwR5KdNhrDXx1ux4Cw5pnGGxA6uTZxuZxNwKMukz04Hv/D
+ tSAp1U7VnnTBJCdyBremNgY/eSqSYzyzAg2L37qHDx9VtZ5II+/MZaE9Qqe49xFfYcnR
+ NnkKvIlegA4QZPY/NwyMofmgCLEn4SvRaGOkxGtf8OdoHCC2a8E/M6agbxiSJIYEVW74 1Q== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3ebsqxcdbp-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 21 Feb 2022 14:37:55 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 9BBB010002A;
+        Mon, 21 Feb 2022 14:37:53 +0100 (CET)
+Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 902DB229A81;
+        Mon, 21 Feb 2022 14:37:53 +0100 (CET)
+Received: from localhost (10.75.127.48) by SFHDAG2NODE2.st.com (10.75.127.5)
+ with Microsoft SMTP Server (TLS) id 15.0.1497.26; Mon, 21 Feb 2022 14:37:52
+ +0100
+From:   Alexandre Torgue <alexandre.torgue@foss.st.com>
+To:     <arnd@arndb.de>, <robh+dt@kernel.org>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-kernel@vger.kernel.org>, Marek Vasut <marex@denx.de>,
+        <jagan@amarulasolutions.com>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Marcin Sloniewski <marcin.sloniewski@gmail.com>,
+        Ahmad Fatoum <a.fatoum@pengutronix.de>,
+        Marc Zyngier <maz@kernel.org>
+Subject: [PATCH 0/2] ARM: dts: stm32: Correct masks for GIC PPI interrupts on stm32mp
+Date:   Mon, 21 Feb 2022 14:37:48 +0100
+Message-ID: <20220221133750.20297-1-alexandre.torgue@foss.st.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="l5jzzhwrtignnt6r"
-Content-Disposition: inline
-In-Reply-To: <677beebd-5a16-297f-c09a-fa4b72c001c9@gmail.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.75.127.48]
+X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SFHDAG2NODE2.st.com
+ (10.75.127.5)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-02-21_07,2022-02-21_01,2021-12-02_01
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Using GIC_CPU_MASK_SIMPLE(x), x should reflect the number of CPUs.
 
---l5jzzhwrtignnt6r
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+regards
+alex
 
-Hello,
+Alexandre Torgue (2):
+  ARM: dts: stm32: Correct masks for GIC PPI interrupts on stm32mp13
+  ARM: dts: stm32: Correct masks for GIC PPI interrupts on stm32mp15
 
-On Mon, Feb 21, 2022 at 12:53:58PM +0300, Dmitry Osipenko wrote:
-> 21.02.2022 11:17, Uwe Kleine-K=C3=B6nig =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
-> >> @@ -344,7 +387,10 @@ static const struct of_device_id tegra_pwm_of_mat=
-ch[] =3D {
-> >>  MODULE_DEVICE_TABLE(of, tegra_pwm_of_match);
-> >> =20
-> >>  static const struct dev_pm_ops tegra_pwm_pm_ops =3D {
-> >> -	SET_SYSTEM_SLEEP_PM_OPS(tegra_pwm_suspend, tegra_pwm_resume)
-> >> +	SET_RUNTIME_PM_OPS(tegra_pwm_runtime_suspend, tegra_pwm_runtime_resu=
-me,
-> >> +			   NULL)
-> >> +	SET_SYSTEM_SLEEP_PM_OPS(pm_runtime_force_suspend,
-> >> +				pm_runtime_force_resume)
-> >>  };
-> >> =20
-> >>  static struct platform_driver tegra_pwm_driver =3D {
-> > I admit to not completely understand the effects of this patch, but I
-> > don't see a problem either. So for me this patch is OK:
-> >=20
-> > Acked-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
-> >=20
-> > I spot a problem, it's not introduced by this patch however: If the
-> > consumer of the PWM didn't stop the hardware, the suspend should IMHO be
-> > prevented.
->=20
-> Why? The PWM driver itself will stop the h/w on suspend.
+ arch/arm/boot/dts/stm32mp131.dtsi | 8 ++++----
+ arch/arm/boot/dts/stm32mp151.dtsi | 8 ++++----
+ arch/arm/boot/dts/stm32mp153.dtsi | 7 +++++++
+ 3 files changed, 15 insertions(+), 8 deletions(-)
 
-Stopping the PWM might be bad. Only the consumer can know if it's ok to
-stop the PWM on suspend. If so the consumer should stop the PWM in their
-suspend callback and the PWM should prevent suspend if it wasn't
-stopped.
+-- 
+2.17.1
 
-> > I wonder if the patches in this series go in in one go via an ARM or
-> > Tegra tree, or each patch via its respective maintainer tree.
->=20
-> This series, including this patch, was already applied to 5.17 via the
-> tegra/soc tree. No action is needed anymore.
-
-Ah, I missed that, thanks.
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=C3=B6nig         =
-   |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---l5jzzhwrtignnt6r
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmITlYwACgkQwfwUeK3K
-7Ak0Awf7Bng3Bp8dIdZWVJ0IKQy7Zh14yrunKW/TyOp4ENrNgLtH1N+DE2F332Mj
-dYGX26syp+azTB+kvoYCzH3Ro0Cisl+Ssvvm95pL0PiFStqoSwXJgti+dSqIWspK
-bwYm7tYUNcvJecG8YuuCZwSrUC6N15wccUN/VU2i8ZTOWfVAjmAKbxTNj6yLJNIU
-VvWsqthnEOGiHxH6KueZlwL3DRbTZ2QmykKmUaUFAnJwvjH24B6lAFHQnUDOFIQv
-vIbPMFpKTOvm8tOIFpqse8QJLzRAHbu5iuIiZkGnN5MVJg2C6fbo2fYVM1Ya/2c2
-YXsdY3K0KB4X8v/eFrEX5qZdljYVCA==
-=NwNV
------END PGP SIGNATURE-----
-
---l5jzzhwrtignnt6r--

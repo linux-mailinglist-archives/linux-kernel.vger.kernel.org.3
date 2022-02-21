@@ -2,32 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC2924BED19
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 23:17:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE6F24BED29
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 23:18:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235466AbiBUWSK convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 21 Feb 2022 17:18:10 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39932 "EHLO
+        id S235697AbiBUWSY convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 21 Feb 2022 17:18:24 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235535AbiBUWSG (ORCPT
+        with ESMTP id S235569AbiBUWSH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 17:18:06 -0500
-Received: from us-smtp-delivery-44.mimecast.com (us-smtp-delivery-44.mimecast.com [207.211.30.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D341522BE8
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 14:17:41 -0800 (PST)
+        Mon, 21 Feb 2022 17:18:07 -0500
+Received: from us-smtp-delivery-44.mimecast.com (us-smtp-delivery-44.mimecast.com [205.139.111.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A738E23BD4
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 14:17:42 -0800 (PST)
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-483-rt7nUSh1P8y_Q6hojWC9WQ-1; Mon, 21 Feb 2022 17:17:35 -0500
-X-MC-Unique: rt7nUSh1P8y_Q6hojWC9WQ-1
+ us-mta-612-fA0w9ciIPpCuAggYa31MgA-1; Mon, 21 Feb 2022 17:17:38 -0500
+X-MC-Unique: fA0w9ciIPpCuAggYa31MgA-1
 Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 541271091DA2;
-        Mon, 21 Feb 2022 22:17:34 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 773971DDE9;
+        Mon, 21 Feb 2022 22:17:37 +0000 (UTC)
 Received: from x1.com (unknown [10.22.16.159])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 657BE5DB8F;
-        Mon, 21 Feb 2022 22:17:31 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id CAB335DB8F;
+        Mon, 21 Feb 2022 22:17:34 +0000 (UTC)
 From:   Daniel Bristot de Oliveira <bristot@kernel.org>
 To:     Steven Rostedt <rostedt@goodmis.org>
 Cc:     Daniel Bristot de Oliveira <bristot@kernel.org>,
@@ -35,9 +35,9 @@ Cc:     Daniel Bristot de Oliveira <bristot@kernel.org>,
         Clark Williams <williams@redhat.com>,
         Juri Lelli <juri.lelli@redhat.com>, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-trace-devel@vger.kernel.org
-Subject: [PATCH V2 08/11] rtla: Add --trigger support
-Date:   Mon, 21 Feb 2022 23:16:53 +0100
-Message-Id: <78c84d7fff6cbf8b7a97938b5cc0fc7fb452d57d.1645481500.git.bristot@kernel.org>
+Subject: [PATCH V2 09/11] rtla/trace: Add trace event filter helpers
+Date:   Mon, 21 Feb 2022 23:16:54 +0100
+Message-Id: <8846cb46f9b4277b44e523881bbcd0e6b7f31e91.1645481500.git.bristot@kernel.org>
 In-Reply-To: <cover.1645481500.git.bristot@kernel.org>
 References: <cover.1645481500.git.bristot@kernel.org>
 MIME-Version: 1.0
@@ -49,275 +49,176 @@ X-Mimecast-Originator: kernel.org
 Content-Transfer-Encoding: 8BIT
 Content-Type: text/plain; charset=WINDOWS-1252
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add --trigger option. This option enables a trace event trigger to the
-previous -e sys:event argument, allowing some advanced tracing options.
-
-For instance, in a system with CPUs 2:23 isolated, it is possible to get
-a stack trace of thread wakeup targeting those CPUs while running
-osnoise with the following command line:
-
- # osnoise top -c 2-23 -a 50 -e sched:sched_wakeup --trigger="stacktrace if target_cpu >= 2"
-
-This option is available for all current tools.
+Add a set of helper functions to allow rtla tools to filter events
+in the trace instance.
 
 Cc: Daniel Bristot de Oliveira <bristot@kernel.org>
 Cc: Steven Rostedt <rostedt@goodmis.org>
 Cc: Jonathan Corbet <corbet@lwn.net>
 Signed-off-by: Daniel Bristot de Oliveira <bristot@kernel.org>
 ---
- Documentation/tools/rtla/common_options.rst |  3 +++
- tools/tracing/rtla/src/osnoise_hist.c       | 19 ++++++++++++++++---
- tools/tracing/rtla/src/osnoise_top.c        | 17 +++++++++++++++--
- tools/tracing/rtla/src/timerlat_hist.c      | 19 ++++++++++++++++---
- tools/tracing/rtla/src/timerlat_top.c       | 17 +++++++++++++++--
- 5 files changed, 65 insertions(+), 10 deletions(-)
+ tools/tracing/rtla/src/trace.c | 83 ++++++++++++++++++++++++++++++++++
+ tools/tracing/rtla/src/trace.h |  3 ++
+ 2 files changed, 86 insertions(+)
 
-diff --git a/Documentation/tools/rtla/common_options.rst b/Documentation/tools/rtla/common_options.rst
-index 89d783dc3304..e5870b944334 100644
---- a/Documentation/tools/rtla/common_options.rst
-+++ b/Documentation/tools/rtla/common_options.rst
-@@ -18,6 +18,9 @@
+diff --git a/tools/tracing/rtla/src/trace.c b/tools/tracing/rtla/src/trace.c
+index 7f8661b2724d..ef44bab0c404 100644
+--- a/tools/tracing/rtla/src/trace.c
++++ b/tools/tracing/rtla/src/trace.c
+@@ -204,6 +204,8 @@ static void trace_events_free(struct trace_events *events)
  
-         Enable an event in the trace (**-t**) session. The argument can be a specific event, e.g., **-e** *sched:sched_switch*, or all events of a system group, e.g., **-e** *sched*. Multiple **-e** are allowed. It is only active when **-t** or **-a** are set.
+ 		tevent = tevent->next;
  
-+**--trigger** *<trigger>*
-+        Enable a trace event trigger to the previous **-e** *sys:event*. For further information about event trigger see https://www.kernel.org/doc/html/latest/trace/events.html#event-triggers.
++		if (free_event->filter)
++			free(free_event->filter);
+ 		if (free_event->trigger)
+ 			free(free_event->trigger);
+ 		free(free_event->system);
+@@ -237,6 +239,21 @@ struct trace_events *trace_event_alloc(const char *event_string)
+ 	return tevent;
+ }
+ 
++/*
++ * trace_event_add_filter - record an event filter
++ */
++int trace_event_add_filter(struct trace_events *event, char *filter)
++{
++	if (event->filter)
++		free(event->filter);
 +
- **-P**, **--priority** *o:prio|r:prio|f:prio|d:runtime:period*
++	event->filter = strdup(filter);
++	if (!event->filter)
++		return 1;
++
++	return 0;
++}
++
+ /*
+  * trace_event_add_trigger - record an event trigger action
+  */
+@@ -252,6 +269,33 @@ int trace_event_add_trigger(struct trace_events *event, char *trigger)
+ 	return 0;
+ }
  
-         Set scheduling parameters to the osnoise tracer threads, the format to set the priority are:
-diff --git a/tools/tracing/rtla/src/osnoise_hist.c b/tools/tracing/rtla/src/osnoise_hist.c
-index 10d683a98087..3e8f89b4f306 100644
---- a/tools/tracing/rtla/src/osnoise_hist.c
-+++ b/tools/tracing/rtla/src/osnoise_hist.c
-@@ -428,8 +428,8 @@ static void osnoise_hist_usage(char *usage)
- 	static const char * const msg[] = {
- 		"",
- 		"  usage: rtla osnoise hist [-h] [-D] [-d s] [-a us] [-p us] [-r us] [-s us] [-S us] \\",
--		"	  [-T us] [-t[=file]] [-e sys[:event]] [-c cpu-list] [-P priority] [-b N] [-E N] \\",
--		"	  [--no-header] [--no-summary] [--no-index] [--with-zeros]",
-+		"	  [-T us] [-t[=file]] [-e sys[:event]] [--trigger <trigger>] [-c cpu-list] [-P priority] \\",
-+		"	  [-b N] [-E N] [--no-header] [--no-summary] [--no-index] [--with-zeros]",
- 		"",
- 		"	  -h/--help: print this menu",
- 		"	  -a/--auto: set automatic trace mode, stopping the session if argument in us sample is hit",
-@@ -443,6 +443,7 @@ static void osnoise_hist_usage(char *usage)
- 		"	  -D/--debug: print debug info",
- 		"	  -t/--trace[=file]: save the stopped trace to [file|osnoise_trace.txt]",
- 		"	  -e/--event <sys:event>: enable the <sys:event> in the trace instance, multiple -e are allowed",
-+		"	     --trigger <trigger>: enable a trace event trigger to the previous -e event",
- 		"	  -b/--bucket-size N: set the histogram bucket size (default 1)",
- 		"	  -E/--entries N: set the number of entries of the histogram (default 256)",
- 		"	     --no-header: do not print header",
-@@ -510,13 +511,14 @@ static struct osnoise_hist_params
- 			{"no-summary",		no_argument,		0, '1'},
- 			{"no-index",		no_argument,		0, '2'},
- 			{"with-zeros",		no_argument,		0, '3'},
-+			{"trigger",		required_argument,	0, '4'},
- 			{0, 0, 0, 0}
- 		};
- 
- 		/* getopt_long stores the option index here. */
- 		int option_index = 0;
- 
--		c = getopt_long(argc, argv, "a:c:b:d:e:E:Dhp:P:r:s:S:t::T:0123",
-+		c = getopt_long(argc, argv, "a:c:b:d:e:E:Dhp:P:r:s:S:t::T:01234:",
- 				 long_options, &option_index);
- 
- 		/* detect the end of the options. */
-@@ -619,6 +621,17 @@ static struct osnoise_hist_params
- 		case '3': /* with zeros */
- 			params->with_zeros = 1;
- 			break;
-+		case '4': /* trigger */
-+			if (params->events) {
-+				retval = trace_event_add_trigger(params->events, optarg);
-+				if (retval) {
-+					err_msg("Error adding trigger %s\n", optarg);
-+					exit(EXIT_FAILURE);
-+				}
-+			} else {
-+				osnoise_hist_usage("--trigger requires a previous -e\n");
-+			}
-+			break;
- 		default:
- 			osnoise_hist_usage("Invalid option");
++/*
++ * trace_event_disable_filter - disable an event filter
++ */
++static void trace_event_disable_filter(struct trace_instance *instance,
++				       struct trace_events *tevent)
++{
++	char filter[1024];
++	int retval;
++
++	if (!tevent->filter)
++		return;
++
++	if (!tevent->filter_enabled)
++		return;
++
++	debug_msg("Disabling %s:%s filter %s\n", tevent->system,
++		  tevent->event ? : "*", tevent->filter);
++
++	snprintf(filter, 1024, "!%s\n", tevent->filter);
++
++	retval = tracefs_event_file_write(instance->inst, tevent->system,
++					  tevent->event, "filter", filter);
++	if (retval < 0)
++		err_msg("Error disabling %s:%s filter %s\n", tevent->system,
++			tevent->event ? : "*", tevent->filter);
++}
++
+ /*
+  * trace_event_disable_trigger - disable an event trigger
+  */
+@@ -293,6 +337,7 @@ void trace_events_disable(struct trace_instance *instance,
+ 	while (tevent) {
+ 		debug_msg("Disabling event %s:%s\n", tevent->system, tevent->event ? : "*");
+ 		if (tevent->enabled) {
++			trace_event_disable_filter(instance, tevent);
+ 			trace_event_disable_trigger(instance, tevent);
+ 			tracefs_event_disable(instance->inst, tevent->system, tevent->event);
  		}
-diff --git a/tools/tracing/rtla/src/osnoise_top.c b/tools/tracing/rtla/src/osnoise_top.c
-index 218dc1114139..d16c7ce3e9fa 100644
---- a/tools/tracing/rtla/src/osnoise_top.c
-+++ b/tools/tracing/rtla/src/osnoise_top.c
-@@ -247,7 +247,7 @@ void osnoise_top_usage(char *usage)
+@@ -302,6 +347,41 @@ void trace_events_disable(struct trace_instance *instance,
+ 	}
+ }
  
- 	static const char * const msg[] = {
- 		"  usage: rtla osnoise [top] [-h] [-q] [-D] [-d s] [-a us] [-p us] [-r us] [-s us] [-S us] \\",
--		"	  [-T us] [-t[=file]] [-e sys[:event]] [-c cpu-list] [-P priority]",
-+		"	  [-T us] [-t[=file]] [-e sys[:event]] [--trigger <trigger>] [-c cpu-list] [-P priority]",
- 		"",
- 		"	  -h/--help: print this menu",
- 		"	  -a/--auto: set automatic trace mode, stopping the session if argument in us sample is hit",
-@@ -261,6 +261,7 @@ void osnoise_top_usage(char *usage)
- 		"	  -D/--debug: print debug info",
- 		"	  -t/--trace[=file]: save the stopped trace to [file|osnoise_trace.txt]",
- 		"	  -e/--event <sys:event>: enable the <sys:event> in the trace instance, multiple -e are allowed",
-+		"	     --trigger <trigger>: enable a trace event trigger to the previous -e event",
- 		"	  -q/--quiet print only a summary at the end",
- 		"	  -P/--priority o:prio|r:prio|f:prio|d:runtime:period : set scheduling parameters",
- 		"		o:prio - use SCHED_OTHER with prio",
-@@ -312,13 +313,14 @@ struct osnoise_top_params *osnoise_top_parse_args(int argc, char **argv)
- 			{"stop-total",		required_argument,	0, 'S'},
- 			{"threshold",		required_argument,	0, 'T'},
- 			{"trace",		optional_argument,	0, 't'},
-+			{"trigger",		required_argument,	0, '0'},
- 			{0, 0, 0, 0}
- 		};
- 
- 		/* getopt_long stores the option index here. */
- 		int option_index = 0;
- 
--		c = getopt_long(argc, argv, "a:c:d:De:hp:P:qr:s:S:t::T:",
-+		c = getopt_long(argc, argv, "a:c:d:De:hp:P:qr:s:S:t::T:0:",
- 				 long_options, &option_index);
- 
- 		/* Detect the end of the options. */
-@@ -402,6 +404,17 @@ struct osnoise_top_params *osnoise_top_parse_args(int argc, char **argv)
- 		case 'T':
- 			params->threshold = get_llong_from_str(optarg);
- 			break;
-+		case '0': /* trigger */
-+			if (params->events) {
-+				retval = trace_event_add_trigger(params->events, optarg);
-+				if (retval) {
-+					err_msg("Error adding trigger %s\n", optarg);
-+					exit(EXIT_FAILURE);
-+				}
-+			} else {
-+				osnoise_top_usage("--trigger requires a previous -e\n");
-+			}
-+			break;
- 		default:
- 			osnoise_top_usage("Invalid option");
++/*
++ * trace_event_enable_filter - enable an event filter associated with an event
++ */
++static int trace_event_enable_filter(struct trace_instance *instance,
++				     struct trace_events *tevent)
++{
++	char filter[1024];
++	int retval;
++
++	if (!tevent->filter)
++		return 0;
++
++	if (!tevent->event) {
++		err_msg("Filter %s applies only for single events, not for all %s:* events\n",
++			tevent->filter, tevent->system);
++		return 1;
++	}
++
++	snprintf(filter, 1024, "%s\n", tevent->filter);
++
++	debug_msg("Enabling %s:%s filter %s\n", tevent->system,
++		  tevent->event ? : "*", tevent->filter);
++
++	retval = tracefs_event_file_write(instance->inst, tevent->system,
++					  tevent->event, "filter", filter);
++	if (retval < 0) {
++		err_msg("Error enabling %s:%s filter %s\n", tevent->system,
++			tevent->event ? : "*", tevent->filter);
++		return 1;
++	}
++
++	tevent->filter_enabled = 1;
++	return 0;
++}
++
+ /*
+  * trace_event_enable_trigger - enable an event trigger associated with an event
+  */
+@@ -356,6 +436,9 @@ int trace_events_enable(struct trace_instance *instance,
+ 			return 1;
  		}
-diff --git a/tools/tracing/rtla/src/timerlat_hist.c b/tools/tracing/rtla/src/timerlat_hist.c
-index 2bd668fd36f5..765b5a313bd2 100644
---- a/tools/tracing/rtla/src/timerlat_hist.c
-+++ b/tools/tracing/rtla/src/timerlat_hist.c
-@@ -430,8 +430,8 @@ static void timerlat_hist_usage(char *usage)
- 	char *msg[] = {
- 		"",
- 		"  usage: [rtla] timerlat hist [-h] [-q] [-d s] [-D] [-n] [-a us] [-p us] [-i us] [-T us] [-s us] \\",
--		"         [-t[=file]] [-e sys[:event]] [-c cpu-list] [-P priority] [-E N] [-b N] [--no-irq] \\",
--		"         [--no-thread] [--no-header] [--no-summary] [--no-index] [--with-zeros]",
-+		"         [-t[=file]] [-e sys[:event]] [--trigger <trigger>] [-c cpu-list] [-P priority] [-E N] \\",
-+		"         [-b N] [--no-irq] [--no-thread] [--no-header] [--no-summary] [--no-index] [--with-zeros]",
- 		"",
- 		"	  -h/--help: print this menu",
- 		"	  -a/--auto: set automatic trace mode, stopping the session if argument in us latency is hit",
-@@ -444,6 +444,7 @@ static void timerlat_hist_usage(char *usage)
- 		"	  -D/--debug: print debug info",
- 		"	  -t/--trace[=file]: save the stopped trace to [file|timerlat_trace.txt]",
- 		"	  -e/--event <sys:event>: enable the <sys:event> in the trace instance, multiple -e are allowed",
-+		"	     --trigger <trigger>: enable a trace event trigger to the previous -e event",
- 		"	  -n/--nano: display data in nanoseconds",
- 		"	  -b/--bucket-size N: set the histogram bucket size (default 1)",
- 		"	  -E/--entries N: set the number of entries of the histogram (default 256)",
-@@ -517,13 +518,14 @@ static struct timerlat_hist_params
- 			{"no-summary",		no_argument,		0, '3'},
- 			{"no-index",		no_argument,		0, '4'},
- 			{"with-zeros",		no_argument,		0, '5'},
-+			{"trigger",		required_argument,	0, '6'},
- 			{0, 0, 0, 0}
- 		};
  
- 		/* getopt_long stores the option index here. */
- 		int option_index = 0;
++		retval = trace_event_enable_filter(instance, tevent);
++		if (retval)
++			return 1;
  
--		c = getopt_long(argc, argv, "a:c:b:d:e:E:Dhi:np:P:s:t::T:012345",
-+		c = getopt_long(argc, argv, "a:c:b:d:e:E:Dhi:np:P:s:t::T:0123456:",
- 				 long_options, &option_index);
+ 		retval = trace_event_enable_trigger(instance, tevent);
+ 		if (retval)
+diff --git a/tools/tracing/rtla/src/trace.h b/tools/tracing/rtla/src/trace.h
+index 856b26d93064..51ad344c600b 100644
+--- a/tools/tracing/rtla/src/trace.h
++++ b/tools/tracing/rtla/src/trace.h
+@@ -6,8 +6,10 @@ struct trace_events {
+ 	struct trace_events *next;
+ 	char *system;
+ 	char *event;
++	char *filter;
+ 	char *trigger;
+ 	char enabled;
++	char filter_enabled;
+ 	char trigger_enabled;
+ };
  
- 		/* detect the end of the options. */
-@@ -632,6 +634,17 @@ static struct timerlat_hist_params
- 		case '5': /* with zeros */
- 			params->with_zeros = 1;
- 			break;
-+		case '6': /* trigger */
-+			if (params->events) {
-+				retval = trace_event_add_trigger(params->events, optarg);
-+				if (retval) {
-+					err_msg("Error adding trigger %s\n", optarg);
-+					exit(EXIT_FAILURE);
-+				}
-+			} else {
-+				timerlat_hist_usage("--trigger requires a previous -e\n");
-+			}
-+			break;
- 		default:
- 			timerlat_hist_usage("Invalid option");
- 		}
-diff --git a/tools/tracing/rtla/src/timerlat_top.c b/tools/tracing/rtla/src/timerlat_top.c
-index 13bd922ab147..76927d4e0dac 100644
---- a/tools/tracing/rtla/src/timerlat_top.c
-+++ b/tools/tracing/rtla/src/timerlat_top.c
-@@ -268,7 +268,7 @@ static void timerlat_top_usage(char *usage)
- 	static const char *const msg[] = {
- 		"",
- 		"  usage: rtla timerlat [top] [-h] [-q] [-a us] [-d s] [-D] [-n] [-p us] [-i us] [-T us] [-s us] \\",
--		"	  [[-t[=file]] [-e sys[:event]] [-c cpu-list] [-P priority]",
-+		"	  [[-t[=file]] [-e sys[:event]] [--trigger <trigger>] [-c cpu-list] [-P priority]",
- 		"",
- 		"	  -h/--help: print this menu",
- 		"	  -a/--auto: set automatic trace mode, stopping the session if argument in us latency is hit",
-@@ -281,6 +281,7 @@ static void timerlat_top_usage(char *usage)
- 		"	  -D/--debug: print debug info",
- 		"	  -t/--trace[=file]: save the stopped trace to [file|timerlat_trace.txt]",
- 		"	  -e/--event <sys:event>: enable the <sys:event> in the trace instance, multiple -e are allowed",
-+		"	     --trigger <command>: enable a trace event trigger to the previous -e event",
- 		"	  -n/--nano: display data in nanoseconds",
- 		"	  -q/--quiet print only a summary at the end",
- 		"	  -P/--priority o:prio|r:prio|f:prio|d:runtime:period : set scheduling parameters",
-@@ -338,13 +339,14 @@ static struct timerlat_top_params
- 			{"stack",		required_argument,	0, 's'},
- 			{"thread",		required_argument,	0, 'T'},
- 			{"trace",		optional_argument,	0, 't'},
-+			{"trigger",		required_argument,	0, '0'},
- 			{0, 0, 0, 0}
- 		};
+@@ -43,4 +45,5 @@ void trace_events_destroy(struct trace_instance *instance,
+ int trace_events_enable(struct trace_instance *instance,
+ 			  struct trace_events *events);
  
- 		/* getopt_long stores the option index here. */
- 		int option_index = 0;
- 
--		c = getopt_long(argc, argv, "a:c:d:De:hi:np:P:qs:t::T:",
-+		c = getopt_long(argc, argv, "a:c:d:De:hi:np:P:qs:t::T:0:",
- 				 long_options, &option_index);
- 
- 		/* detect the end of the options. */
-@@ -427,6 +429,17 @@ static struct timerlat_top_params
- 			else
- 				params->trace_output = "timerlat_trace.txt";
- 			break;
-+		case '0': /* trigger */
-+			if (params->events) {
-+				retval = trace_event_add_trigger(params->events, optarg);
-+				if (retval) {
-+					err_msg("Error adding trigger %s\n", optarg);
-+					exit(EXIT_FAILURE);
-+				}
-+			} else {
-+				timerlat_top_usage("--trigger requires a previous -e\n");
-+			}
-+			break;
- 		default:
- 			timerlat_top_usage("Invalid option");
- 		}
++int trace_event_add_filter(struct trace_events *event, char *filter);
+ int trace_event_add_trigger(struct trace_events *event, char *trigger);
 -- 
 2.34.1
 

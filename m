@@ -2,118 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E6DE4BE1D6
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:53:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 37F884BE099
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:52:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376748AbiBUNxg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 08:53:36 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51168 "EHLO
+        id S1376772AbiBUNxk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 08:53:40 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377097AbiBUNx3 (ORCPT
+        with ESMTP id S1377098AbiBUNx3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 21 Feb 2022 08:53:29 -0500
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6B4DBF73;
-        Mon, 21 Feb 2022 05:53:01 -0800 (PST)
-Received: by mail-wm1-f47.google.com with SMTP id m126-20020a1ca384000000b0037bb8e379feso13599373wme.5;
-        Mon, 21 Feb 2022 05:53:01 -0800 (PST)
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41224BF7A;
+        Mon, 21 Feb 2022 05:53:02 -0800 (PST)
+Received: by mail-ej1-x633.google.com with SMTP id lw4so33444023ejb.12;
+        Mon, 21 Feb 2022 05:53:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:cc:subject:message-id:mime-version:content-disposition
+         :user-agent;
+        bh=El2FYnbFWqJ8MOcEYqcNQD/+HC9m/bKVYX0CqwB0WKY=;
+        b=UaYlQ5AKDy3ry1iI3lPRHhO5dQzDmKBfoRvlmUk/2DI4JQQMdoLX467rqqwpxhF7cW
+         VxIZcsfQccGv9H+99wSTFWDUISoeKy4ut9V+tdmUXOP6C7ssRqsahg+67Sr2rYWibQzX
+         BS9JQFuZSbtT2Y6S8KtFJuYVwOGXw8dYumX/oZstBfSWuxKgWu58mYHjbqVOs9/6m7en
+         8rCfq2Pi4qldA0RMqRHIm83jY3MgdYdzxp2edMyYBb5Q942cmytpAiuNw+aQx5/VCQJz
+         J6Rw/mKCfxguO+g+OcRw/ArU4cLuFNAXH29tum+/iG8ae6HZJgdiHrCIhYeoUXqZxFmt
+         adkQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=FVZxpUvN+zstZFcKDqV/8zmg5Gk1qj5hbIIYrPrX9Ls=;
-        b=kMwnYDDdmuiMBqOOuLMuOOk7Xj4jMoxY6TOtyv9H8GQv3AKqwLHyJXeb9b7zbx4Dem
-         ViIGex0cpSZ1qtitJuHECvJUWMgC9Fu/ZDm4T6XCDinxEs1S8vYv4Feb1mlOvmQZ7dc4
-         +ug0+B9qiYCIOemXLCz6NECYKhviksnLW+TvM7plElyhH7u805qokUQAX17TgWs+78qO
-         6kZyRZg2sIjB6D7qtA0YgNiWxHK79hfZlVrk3LBrImsrX/dKw0K5XCUcE7FX1NjVTEgC
-         rQ+r4JvsMKXSRUvMR2olp9efx+qrE8+54k1Hqae8bTBrWXQupghJlXRtu8ywRS/HmfYi
-         unNQ==
-X-Gm-Message-State: AOAM533WuUpkp3lGCT74WM3KbRWLO5k5CYuH0oNPbU5BfpyOnw6cU7CV
-        QZFPjDI47A/JibXVXXSos+s=
-X-Google-Smtp-Source: ABdhPJzLOEYRW5GD8yq3kxkuqYJ3JVjEJVI3qB1VJlyRSXhVBfP0Bsz3YLK51THp24/oSndCDkeemQ==
-X-Received: by 2002:a7b:c19a:0:b0:37b:c68c:7162 with SMTP id y26-20020a7bc19a000000b0037bc68c7162mr20931277wmi.7.1645451580286;
+        h=x-gm-message-state:date:from:cc:subject:message-id:mime-version
+         :content-disposition:user-agent;
+        bh=El2FYnbFWqJ8MOcEYqcNQD/+HC9m/bKVYX0CqwB0WKY=;
+        b=5X52BxKZaFei29vj5xZS1/b0DZN+Ol9DzIKswpY6Exi1BOYgvw/kxMizQO/b3moDsf
+         LId5YwRgDL3UgnX03c55a3QRFBAPaOmO9q3Z1QkyuT/db3q9WsYx5KJSPAF/GX4QQXrt
+         AM2p9UwhcUIJ3mRHwcIDNl1lrLUPlIPzGo49+wA32WtuS5rB1uyGk8n4ZsOHRt+Eg/pC
+         41sSgbKHU8xY3RWDTSNbS8TSJEE3DbW8AclaCVFHToWyE1GbPsCAvVV/XcmzFQSQwlGM
+         ZWGX2aW5Om3KQw5oNHGWuGQuOcLQQouedvbSocJOu8Veb3YdEK49uDdKRH6weUC7mMvI
+         6opA==
+X-Gm-Message-State: AOAM532oGAngZziCiss0WQMt1tldHknVHcZy8QQQuAghH5/Od72VHSI2
+        FrHPpIlnhViplgqKT/P72wdTmNvd5R23EA==
+X-Google-Smtp-Source: ABdhPJwUjlffjPBP0V/IgMWBf3DmtadHWtnsx+jWBG0vCh0XG1ohzkpQP4E/gckz+q5KcEfPClkkZg==
+X-Received: by 2002:a17:906:2ac9:b0:6ce:dc0f:9139 with SMTP id m9-20020a1709062ac900b006cedc0f9139mr16060173eje.206.1645451580122;
         Mon, 21 Feb 2022 05:53:00 -0800 (PST)
-Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
-        by smtp.gmail.com with ESMTPSA id c9sm30128821wrn.51.2022.02.21.05.52.59
+Received: from ubuntu ([155.133.219.250])
+        by smtp.gmail.com with ESMTPSA id m17sm9053091edc.2.2022.02.21.05.52.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Mon, 21 Feb 2022 05:52:59 -0800 (PST)
-Date:   Mon, 21 Feb 2022 13:52:58 +0000
-From:   Wei Liu <wei.liu@kernel.org>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     "Kirill A. Shutemov" <kirill@shutemov.name>, aarcange@redhat.com,
-        ak@linux.intel.com, dan.j.williams@intel.com,
-        dave.hansen@intel.com, david@redhat.com, hpa@zytor.com,
-        jgross@suse.com, jmattson@google.com, joro@8bytes.org,
-        jpoimboe@redhat.com, kirill.shutemov@linux.intel.com,
-        knsathya@kernel.org, linux-kernel@vger.kernel.org, luto@kernel.org,
-        mingo@redhat.com, pbonzini@redhat.com, peterz@infradead.org,
-        sathyanarayanan.kuppuswamy@linux.intel.com, sdeep@vmware.com,
-        seanjc@google.com, tglx@linutronix.de, tony.luck@intel.com,
-        vkuznets@redhat.com, wanpengli@tencent.com, x86@kernel.org,
-        linux-hyperv@vger.kernel.org,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Wei Liu <wei.liu@kernel.org>
-Subject: Re: [PATCHv3.1 2/32] x86/coco: Explicitly declare type of
- confidential computing platform
-Message-ID: <20220221135258.4qcpt6i2zaou7ygm@liuwe-devbox-debian-v2>
-References: <YhAWcPbzgUGcJZjI@zn.tnic>
- <20220219001305.22883-1-kirill.shutemov@linux.intel.com>
- <YhNyY5ErqQHZ961+@zn.tnic>
+Date:   Mon, 21 Feb 2022 14:52:59 +0100
+From:   Daniel Kestrel <kestrelseventyfour@gmail.com>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Daniel Kestrel <kestrelseventyfour@gmail.com>,
+        linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 1/3] dt-bindings: vendor-prefixes: Add AVM
+Message-ID: <20220221135259.GA7306@ubuntu>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YhNyY5ErqQHZ961+@zn.tnic>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,MISSING_HEADERS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 21, 2022 at 12:07:15PM +0100, Borislav Petkov wrote:
-> On Sat, Feb 19, 2022 at 03:13:04AM +0300, Kirill A. Shutemov wrote:
-[...]
-> > diff --git a/arch/x86/kernel/cpu/mshyperv.c b/arch/x86/kernel/cpu/mshyperv.c
-> > index 5a99f993e639..d77cf3a31f07 100644
-> > --- a/arch/x86/kernel/cpu/mshyperv.c
-> > +++ b/arch/x86/kernel/cpu/mshyperv.c
-> > @@ -33,6 +33,7 @@
-> >  #include <asm/nmi.h>
-> >  #include <clocksource/hyperv_timer.h>
-> >  #include <asm/numa.h>
-> > +#include <asm/coco.h>
-> >  
-> >  /* Is Linux running as the root partition? */
-> >  bool hv_root_partition;
-> > @@ -344,6 +345,8 @@ static void __init ms_hyperv_init_platform(void)
-> >  		 */
-> >  		swiotlb_force = SWIOTLB_FORCE;
-> >  #endif
-> > +		if (hv_get_isolation_type() != HV_ISOLATION_TYPE_NONE)
-> > +			cc_init(CC_VENDOR_HYPERV);
-> 
-> Isn't that supposed to test HV_ISOLATION_TYPE_SNP instead?
-> 
-> I mean, I have no clue what HV_ISOLATION_TYPE_VBS is. It is not used
-> anywhere in the tree either.
-> 
-> a6c76bb08dc7 ("x86/hyperv: Load/save the Isolation Configuration leaf")
-> calls it "'VBS' (software-based isolation)" - whatever that means - so
-> I'm not sure that is going to need the cc-facilities.
-> 
+Add vendor prefix for AVM Computersysteme Vertriebs GmbH (http://www.avm.de/en)
 
-Hi Boris and Kirill, I only see VBS mentioned here so I don't have much
-context, but VBS likely means virtualization-based security. There is a
-public document for it.
+Signed-off-by: Daniel Kestrel <kestrelseventyfour@gmail.com>
+---
+ Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
+ 1 file changed, 2 insertions(+)
 
-https://docs.microsoft.com/en-us/windows-hardware/design/device-experiences/oem-vbs
+diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+index 294093d45a23..0be52bb27f2b 100644
+--- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
++++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+@@ -153,6 +153,8 @@ patternProperties:
+     description: avia semiconductor
+   "^avic,.*":
+     description: Shanghai AVIC Optoelectronics Co., Ltd.
++  "^avm,.*":
++    description: AVM Computersysteme Vertriebs GmbH
+   "^avnet,.*":
+     description: Avnet, Inc.
+   "^awinic,.*":
+-- 
+2.17.1
 
-Whether it needs a new isolation type or not, I am not sure. Perhaps
-Tianyu can provide more context.
-
-Thanks,
-Wei.

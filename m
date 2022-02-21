@@ -2,59 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C98E14BE908
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:06:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2792A4BE5CC
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:01:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358871AbiBUNTq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 08:19:46 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54160 "EHLO
+        id S1358844AbiBUNTE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 08:19:04 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347708AbiBUNTl (ORCPT
+        with ESMTP id S1358840AbiBUNTB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 08:19:41 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05E0B1EEDF
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 05:19:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645449558; x=1676985558;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=XHf7vacCOjqjspJj9G/kxmSULYKIEHDDy6GKS4fU+u8=;
-  b=Dy7vpzgTCxHPC9JLjo8qOQhyp9ZJ/Te4+vmTQkdQWFrjyMYDj5zMCjza
-   s1pleoOzCVXrTAqrQbw3J0NLLmcexj/cqYwWpqdPSCkSXFc+OJ+UUrNsv
-   QYxwxH4jldriMZen+ns8vXObeUcQMqVcEW81I3L9QvxndR8qR/IcbgjDA
-   +eUWthp3zbl1VpZeaSMMPDMoCo9wE2AfazYfuPt0CBiK4bC9mLRDO3kS+
-   hbqs3/rLCr5n6QeM9F3udzEOh6TqHKo4s6aCjVu2wk+ZbnwQHah6RtNSD
-   4eRMqSr/v6Q9FlK/D6Q4xT9u2oj46U4nWgo/HqzWp//u8tIsou4p+ktxf
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10264"; a="314769091"
-X-IronPort-AV: E=Sophos;i="5.88,385,1635231600"; 
-   d="scan'208";a="314769091"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2022 05:19:17 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,385,1635231600"; 
-   d="scan'208";a="627371367"
-Received: from lkp-server01.sh.intel.com (HELO da3212ac2f54) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 21 Feb 2022 05:19:16 -0800
-Received: from kbuild by da3212ac2f54 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nM8ax-0001dh-AB; Mon, 21 Feb 2022 13:19:15 +0000
-Date:   Mon, 21 Feb 2022 21:18:18 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Ingo Molnar <mingo@kernel.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [mingo-tip:sched/headers 119/2575]
- arch/arm64/kernel/../../../kernel/sched/per_task_area_struct_defs.h:13:13:
- warning: no previous prototype for 'per_task_common'
-Message-ID: <202202212129.CrbfLJmZ-lkp@intel.com>
+        Mon, 21 Feb 2022 08:19:01 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8071B1EEDA;
+        Mon, 21 Feb 2022 05:18:38 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 3EA76210F0;
+        Mon, 21 Feb 2022 13:18:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1645449517; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=qx0Q18ljVcrXhWvAQ6cUSrAVYJIdsXr8hIUlUK/8QpM=;
+        b=Cqj3DkYxCZV9tKvMhc20KpHen50b9YvAxjUyjNAy5j3Xvz2X6M0bSDZR+S3amBXFlcd7E4
+        GyiTc/uusdBsKhLqAoKvJRO3wfHJj0bubdlDIchD/mMCW6ZPJMlJ/ltShHLGbV4Wa1/4JU
+        n5b02J35yPJl5V5IYGUmr/t7NQ9B6+A=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1645449517;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=qx0Q18ljVcrXhWvAQ6cUSrAVYJIdsXr8hIUlUK/8QpM=;
+        b=LofZw7M41jMg5B5ffe5yCkle/xS/uTOv0SumivGAz0qPUIAYkZOprL+M7W3Dd6TBDjORLq
+        bvgQ+L7Wq+Q15pAg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 0F39B13AF2;
+        Mon, 21 Feb 2022 13:18:37 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id sKQ3Ai2RE2K2fwAAMHmgww
+        (envelope-from <hare@suse.de>); Mon, 21 Feb 2022 13:18:37 +0000
+Message-ID: <9bfe807a-d14e-feea-6fcd-b1526da16ff5@suse.de>
+Date:   Mon, 21 Feb 2022 14:18:36 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH v4 01/15] crypto: kpp - provide support for KPP template
+ instances
+Content-Language: en-US
+To:     Nicolai Stange <nstange@suse.de>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>
+Cc:     =?UTF-8?Q?Stephan_M=c3=bcller?= <smueller@chronox.de>,
+        Torsten Duwe <duwe@suse.de>,
+        David Howells <dhowells@redhat.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        keyrings@vger.kernel.org
+References: <20220221121101.1615-1-nstange@suse.de>
+ <20220221121101.1615-2-nstange@suse.de>
+From:   Hannes Reinecke <hare@suse.de>
+In-Reply-To: <20220221121101.1615-2-nstange@suse.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,63 +82,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git sched/headers
-head:   21149ca19c21f6b5593d5146690ec83f8f633976
-commit: c3ed1822feb47b47a7efdaac15349fab91de0ece [119/2575] headers/deps: per_task, arm64, x86: Convert task_struct::thread to a per_task() field
-config: arm64-allnoconfig (https://download.01.org/0day-ci/archive/20220221/202202212129.CrbfLJmZ-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=c3ed1822feb47b47a7efdaac15349fab91de0ece
-        git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
-        git fetch --no-tags mingo-tip sched/headers
-        git checkout c3ed1822feb47b47a7efdaac15349fab91de0ece
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm64 prepare
+On 2/21/22 13:10, Nicolai Stange wrote:
+> The upcoming support for the RFC 7919 ffdhe group parameters will be
+> made available in the form of templates like "ffdhe2048(dh)",
+> "ffdhe3072(dh)" and so on. Template instantiations thereof would wrap the
+> inner "dh" kpp_alg and also provide kpp_alg services to the outside again.
+> Furthermore, it might be perhaps be desirable to provide KDF templates in
+> the future, which would similarly wrap an inner kpp_alg and present
+> themselves to the outside as another kpp_alg, transforming the shared
+> secret on its way out.
+> 
+> Introduce the bits needed for supporting KPP template instances. Everything
+> related to inner kpp_alg spawns potentially being held by such template
+> instances will be deferred to a subsequent patch in order to facilitate
+> review.
+> 
+> Define struct struct kpp_instance in close analogy to the already existing
+> skcipher_instance, shash_instance and alike, but wrapping a struct kpp_alg.
+> Implement the new kpp_register_instance() template instance registration
+> primitive. Provide some helper functions for
+> - going back and forth between a generic struct crypto_instance and the new
+>    struct kpp_instance,
+> - obtaining the instantiating kpp_instance from a crypto_kpp transform and
+> - for accessing a given kpp_instance's implementation specific context
+>    data.
+> 
+> Annotate everything with proper kernel-doc comments, even though
+> include/crypto/internal/kpp.h is not considered for the generated docs.
+> 
+> Signed-off-by: Nicolai Stange <nstange@suse.de>
+> ---
+>   crypto/kpp.c                  | 20 +++++++++
+>   include/crypto/internal/kpp.h | 83 +++++++++++++++++++++++++++++++++++
+>   2 files changed, 103 insertions(+)
+> 
+Reviewed-by: Hannes Reinecke <hare@suse.de>
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Cheers,
 
-All warnings (new ones prefixed by >>):
-
-   In file included from arch/arm64/kernel/asm-offsets.c:29:
->> arch/arm64/kernel/../../../kernel/sched/per_task_area_struct_defs.h:13:13: warning: no previous prototype for 'per_task_common' [-Wmissing-prototypes]
-      13 | void __used per_task_common(void)
-         |             ^~~~~~~~~~~~~~~
---
-   In file included from arch/arm64/kernel/asm-offsets.c:29:
->> arch/arm64/kernel/../../../kernel/sched/per_task_area_struct_defs.h:13:13: warning: no previous prototype for 'per_task_common' [-Wmissing-prototypes]
-      13 | void __used per_task_common(void)
-         |             ^~~~~~~~~~~~~~~
-   arch/arm64/kernel/vdso/vgettimeofday.c:9:5: warning: no previous prototype for '__kernel_clock_gettime' [-Wmissing-prototypes]
-       9 | int __kernel_clock_gettime(clockid_t clock,
-         |     ^~~~~~~~~~~~~~~~~~~~~~
-   arch/arm64/kernel/vdso/vgettimeofday.c:15:5: warning: no previous prototype for '__kernel_gettimeofday' [-Wmissing-prototypes]
-      15 | int __kernel_gettimeofday(struct __kernel_old_timeval *tv,
-         |     ^~~~~~~~~~~~~~~~~~~~~
-   arch/arm64/kernel/vdso/vgettimeofday.c:21:5: warning: no previous prototype for '__kernel_clock_getres' [-Wmissing-prototypes]
-      21 | int __kernel_clock_getres(clockid_t clock_id,
-         |     ^~~~~~~~~~~~~~~~~~~~~
-
-
-vim +/per_task_common +13 arch/arm64/kernel/../../../kernel/sched/per_task_area_struct_defs.h
-
-dae7a695f3f100 Ingo Molnar 2021-09-05  11  
-dae7a695f3f100 Ingo Molnar 2021-09-05  12  
-8327799a692062 Ingo Molnar 2022-01-04 @13  void __used per_task_common(void)
-8327799a692062 Ingo Molnar 2022-01-04  14  {
-8327799a692062 Ingo Molnar 2022-01-04  15  #include "per_task_area_struct_template.h"
-8327799a692062 Ingo Molnar 2022-01-04  16  }
-dae7a695f3f100 Ingo Molnar 2021-09-05  17  
-
-:::::: The code at line 13 was first introduced by commit
-:::::: 8327799a692062c3eb7fa4327584d1b4ca7da0be headers/deps: per_task: Implement single template to define 'struct task_struct_per_task' fields and offsets
-
-:::::: TO: Ingo Molnar <mingo@kernel.org>
-:::::: CC: Ingo Molnar <mingo@kernel.org>
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Hannes
+-- 
+Dr. Hannes Reinecke		           Kernel Storage Architect
+hare@suse.de			                  +49 911 74053 688
+SUSE Software Solutions Germany GmbH, Maxfeldstr. 5, 90409 Nürnberg
+HRB 36809 (AG Nürnberg), GF: Felix Imendörffer

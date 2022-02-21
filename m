@@ -2,111 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCB2F4BE2DB
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:56:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BCB1E4BE6FF
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:02:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353309AbiBUKRY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 05:17:24 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45642 "EHLO
+        id S232715AbiBUKSu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 05:18:50 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354499AbiBUKRP (ORCPT
+        with ESMTP id S1353232AbiBUKRi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 05:17:15 -0500
-Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA41F59392
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 01:36:04 -0800 (PST)
-Received: by mail-qk1-x731.google.com with SMTP id c7so13732943qka.7
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 01:36:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=jms.id.au; s=google;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=bgsGIrytvR2f8/yVo1S/y5IWwN7H3cmZnEMMfAtdWf0=;
-        b=K6uaH/fKmHE34Xe2fb+Lte6tPBKBVeS/To/4ZgLRSzPMdkdxqb4jPM9BjUDO5HwrJS
-         /DumexTvnBM+dV67Vs5XwaxtsSM6c4R9t8p2bjGklI1qPIFEgvTvorUqkpl2gxMa/Jgi
-         QuAr/2QFIDUHUqyIAIZ5X0LQRLKbCCQxnK00Q=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=bgsGIrytvR2f8/yVo1S/y5IWwN7H3cmZnEMMfAtdWf0=;
-        b=GXTPVc6mGcHVOOvliTYe3ZbaB7UnO0F6U9T17DLkaBZ8F41VIeTO2/6D+3BHLM3shf
-         DjxkviiY2kL8oYYKO6c5ZuzVhCVH34RrpN63eEDPNpTExX4ZNzWB6UUp75hX38IILpwm
-         wV+/cqFIKnJJkE/dCEL+vDWZTkxzRCPZlMaCTAzyoczYnQR4dQk8Q2d0xFU0O98hxfmB
-         Du+1BxfrkesM1RuW6mAqRJesHqmtiS18EaEieGAjjJm62EoDQIh3vfFj4Xf1/m27Y6p0
-         Iv0zv4W+4DjoqiCOMXsX1twh43vczKzTW57fn4QrB4zqod8DR2g1KVqPN3FEeReGX8Of
-         t3ow==
-X-Gm-Message-State: AOAM531LHOf3RvJSbInreIz7wyM+YLBchYXgXUjgTaCgYHFiztXkDRUm
-        F8KCkSsUMeydZYIZRStQRiThQ18QpkRcUKBdOWU=
-X-Google-Smtp-Source: ABdhPJyy1dLnRvjEJlffIU0RqbkI2F+nYxBLcRKQ3Gr9JkqzUFAZaTI4lV+kbX3d3hD5luDdGpsGNPFCz/XvkPsH4pQ=
-X-Received: by 2002:ae9:e841:0:b0:508:1f6e:f020 with SMTP id
- a62-20020ae9e841000000b005081f6ef020mr11313921qkg.243.1645436164087; Mon, 21
- Feb 2022 01:36:04 -0800 (PST)
+        Mon, 21 Feb 2022 05:17:38 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0CADCF6;
+        Mon, 21 Feb 2022 01:37:32 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6DC32B80EB5;
+        Mon, 21 Feb 2022 09:37:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1AB07C340E9;
+        Mon, 21 Feb 2022 09:37:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645436250;
+        bh=2nbjOpE9zmPxYH13Z1D0YQfu2xXpZIXk2Ir5r88/Ckk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=H9hy0puJZI5Bm7ywRlVCyRWBMQDR+AcNBlH5CmjyoUwUsNjRh7nhTdaYlc79Y9WXh
+         uK/SLH/rJbpK+XhHzULudnZGpw0TQKZRoN+0LsLnaITPHwjaEbyyt+EfWSOgmn20ZR
+         VJzYBtCa46mtgb/Hn4TriItD/+AxE5v/y+XW8DYirNIHLgJwVJd/rhUQ16Y1f9t2Ok
+         CeJsmAntWCEuc9raor8TtJhZZUvV9/Cmb0aASnhaElo+4lHdlrt9yUCpfQxbQIBonc
+         mfmAKos1TBkYLdnyUizI2KToM3IjL/O79POFKpWuwLLneLVxzfSnM2/ffINB64aXq0
+         JwPgFUrELVz8g==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1nM58I-00079Y-HK; Mon, 21 Feb 2022 10:37:27 +0100
+Date:   Mon, 21 Feb 2022 10:37:26 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Husni Faiz <ahamedhusni73@gmail.com>
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] usb: serial: Fix Space Prohibited Coding Style
+ Errors
+Message-ID: <YhNdVtrXnIehZzfy@hovoldconsulting.com>
+References: <20220212175510.521072-1-ahamedhusni73@gmail.com>
+ <20220220131339.179648-1-ahamedhusni73@gmail.com>
 MIME-Version: 1.0
-From:   Joel Stanley <joel@jms.id.au>
-Date:   Mon, 21 Feb 2022 09:35:53 +0000
-Message-ID: <CACPK8XeofS1jPtKcFgqmwaXfiH+GPCg7c8LhQx8N9m=xOwy=XA@mail.gmail.com>
-Subject: [GIT PULL] fsi: changes for v5.18
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-fsi@lists.ozlabs.org, Eddie James <eajames@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220220131339.179648-1-ahamedhusni73@gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Greg,
+On Sun, Feb 20, 2022 at 06:43:39PM +0530, Husni Faiz wrote:
+> This patch fixes "space prohibited before that ','"  checkpatch error.
+> Removed the space after the function argument value "8".
+> 
+> Signed-off-by: Husni Faiz <ahamedhusni73@gmail.com>
+> ---
+> V1->V2 : Separated the style changes into multiple patches.
 
-Here are some FSI changes that I would like you to pull through the
-drivers tree for v5.18.
+As Greg mentioned, please work in drivers/staging if you want to submit
+these kind of patches.
 
-They have been on the list for some time and all have had review.
+checkpatch.pl is great for checking your own patches before submission,
+but it shouldn't be run on code that's already in the tree, and where
+fixing a white space issue like this one has essentially no value.
 
-The following changes since commit e783362eb54cd99b2cac8b3a9aeac942e6f6ac07:
+And as your staging/greybus submission showed, using the output of tools
+like checkpatch.pl even risks breaking things if you take it too
+literally and don't use your own judgement.
 
-  Linux 5.17-rc1 (2022-01-23 10:12:53 +0200)
+>  drivers/usb/serial/iuu_phoenix.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/usb/serial/iuu_phoenix.c b/drivers/usb/serial/iuu_phoenix.c
+> index 0be3b5e1eaf3..2f7784572c4d 100644
+> --- a/drivers/usb/serial/iuu_phoenix.c
+> +++ b/drivers/usb/serial/iuu_phoenix.c
+> @@ -360,7 +360,7 @@ static void iuu_led_activity_on(struct urb *urb)
+>  	usb_fill_bulk_urb(port->write_urb, port->serial->dev,
+>  			  usb_sndbulkpipe(port->serial->dev,
+>  					  port->bulk_out_endpointAddress),
+> -			  port->write_urb->transfer_buffer, 8 ,
+> +			  port->write_urb->transfer_buffer, 8,
+>  			  iuu_rxcmd, port);
+>  	usb_submit_urb(port->write_urb, GFP_ATOMIC);
+>  }
+> @@ -380,7 +380,7 @@ static void iuu_led_activity_off(struct urb *urb)
+>  	usb_fill_bulk_urb(port->write_urb, port->serial->dev,
+>  			  usb_sndbulkpipe(port->serial->dev,
+>  					  port->bulk_out_endpointAddress),
+> -			  port->write_urb->transfer_buffer, 8 ,
+> +			  port->write_urb->transfer_buffer, 8,
+>  			  iuu_rxcmd, port);
+>  	usb_submit_urb(port->write_urb, GFP_ATOMIC);
+>  }
 
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/joel/fsi.git tags/fsi-for-v5.18
-
-for you to fetch changes up to f2af60bb7ce2fa5397f401cbf65725d9c87329a4:
-
-  fsi: Add trace events in initialization path (2022-02-21 19:38:54 +1030)
-
-----------------------------------------------------------------
-FSI changes for v5.18
-
- * Improvements in SCOM and OCC drivers for error handling and retries
-
- * Addition of tracepoints for initialisation path
-
- * API for setting long running SBE FIFO operations
-
-----------------------------------------------------------------
-Amitay Isaacs (2):
-      fsi: sbefifo: Use specified value of start of response timeout
-      fsi: sbefifo: Implement FSI_SBEFIFO_READ_TIMEOUT_SECONDS ioctl
-
-Eddie James (2):
-      fsi: occ: Improve response status checking
-      fsi: Add trace events in initialization path
-
-Joel Stanley (2):
-      fsi: scom: Fix error handling
-      fsi: scom: Remove retries in indirect scoms
-
- include/trace/events/fsi.h               | 86 +++++++++++++++++++++++++++++++
- include/trace/events/fsi_master_aspeed.h | 12 +++++
- include/uapi/linux/fsi.h                 | 14 +++++
- drivers/fsi/fsi-core.c                   | 11 ++--
- drivers/fsi/fsi-master-aspeed.c          |  2 +
- drivers/fsi/fsi-occ.c                    | 87 ++++++++++++++++++++------------
- drivers/fsi/fsi-sbefifo.c                | 53 ++++++++++++++++++-
- drivers/fsi/fsi-scom.c                   | 45 +++++++----------
- 8 files changed, 247 insertions(+), 63 deletions(-)
+Johan

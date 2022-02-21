@@ -2,334 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A88224BDC98
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:42:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C4D24BE278
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:55:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352365AbiBUN1D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 08:27:03 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35392 "EHLO
+        id S1359085AbiBUN2T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 08:28:19 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359071AbiBUN1A (ORCPT
+        with ESMTP id S1359074AbiBUN2R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 08:27:00 -0500
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B78925598;
-        Mon, 21 Feb 2022 05:26:35 -0800 (PST)
-Received: from canpemm500009.china.huawei.com (unknown [172.30.72.53])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4K2NK81nbWz8wtB;
-        Mon, 21 Feb 2022 21:23:08 +0800 (CST)
-Received: from [10.67.102.169] (10.67.102.169) by
- canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Mon, 21 Feb 2022 21:26:32 +0800
-CC:     <gregkh@linuxfoundation.org>, <helgaas@kernel.org>,
-        <alexander.shishkin@linux.intel.com>, <lorenzo.pieralisi@arm.com>,
-        <will@kernel.org>, <mark.rutland@arm.com>,
-        <mathieu.poirier@linaro.org>, <suzuki.poulose@arm.com>,
-        <mike.leach@linaro.org>, <leo.yan@linaro.org>,
-        <daniel.thompson@linaro.org>, <joro@8bytes.org>,
-        <john.garry@huawei.com>, <shameerali.kolothum.thodi@huawei.com>,
-        <robin.murphy@arm.com>, <peterz@infradead.org>, <mingo@redhat.com>,
-        <acme@kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <coresight@lists.linaro.org>, <linux-pci@vger.kernel.org>,
-        <linux-perf-users@vger.kernel.org>,
-        <iommu@lists.linux-foundation.org>, <prime.zeng@huawei.com>,
-        <liuqi115@huawei.com>, <zhangshaokun@hisilicon.com>,
-        <linuxarm@huawei.com>, <song.bao.hua@hisilicon.com>
-Subject: Re: [PATCH v4 3/8] hisi_ptt: Register PMU device for PTT trace
-To:     Jonathan Cameron <Jonathan.Cameron@Huawei.com>,
-        Yicong Yang <yangyicong@hisilicon.com>
-References: <20220221084307.33712-1-yangyicong@hisilicon.com>
- <20220221084307.33712-4-yangyicong@hisilicon.com>
- <20220221114428.000062cd@Huawei.com>
-From:   Yicong Yang <yangyicong@huawei.com>
-Message-ID: <b8e2ef7e-8a24-e2aa-bd60-0989202c865d@huawei.com>
-Date:   Mon, 21 Feb 2022 21:26:32 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.1
+        Mon, 21 Feb 2022 08:28:17 -0500
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECB9513D30
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 05:27:53 -0800 (PST)
+Received: by mail-wm1-x32f.google.com with SMTP id j9-20020a05600c190900b0037bff8a24ebso13505005wmq.4
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 05:27:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=/lGIfMGk1oVr2+u1/5qKv/kN5Orfd9go72p5+5s/Q1Q=;
+        b=Nn23Z3VJQgFV/uNeTp2uTp/Mpb76j7vhPK0nI2byWaEp2tI1bKPWr4+pk5pbqkHpDg
+         HQlS+z9Oiw8FNgfxvncdtmqlQgI3ccP4XXIQkpKj8UA8vDB9+GZC0ZzrJV+KiyO1+/py
+         +ULXb/rd2IH+UeQaYsWm2UwcKP27BDuNuOxAxRM4Xf7ltHDyAQ/6BcQmKV32iHhA8oUk
+         VIBmldm8FfoJaZ8b8ZFgcF4d3ayOh5glmC/vTW4YOJ80zTrfk3TNgVcbd1ezM/1B7fVs
+         9Me1mk4gyQjTmr0FyoUORZSAYuWhiT677ZuFvsA3tRgh/9DcCce8MnLKGLzVS3FXZA1q
+         SdYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=/lGIfMGk1oVr2+u1/5qKv/kN5Orfd9go72p5+5s/Q1Q=;
+        b=5CRiRI0nvlq0o4DPMjnEU/xxb+ZI/3qO0abaBknp2a0nqaMCpipu4Ez0Qmmjg0vZeP
+         XKRY3D3AOJ3DDrIBlWwR96oIr3b/EDTjDL+2qw1RBSrBY7YBw1spsBbi56Xt6679InCC
+         vuNqWVLsZAByEIOErF9HlPO8dI2/oBcJYOI+a25MAHF1a6O7WPGu2xw4+w8FK3D53Y3K
+         dssCr2MZujx8VSVxW6phqdsCLVDxZxpXMcMHXUowina1pwFlFO/7KbBZDixMLGeK3bVW
+         Ctoy0nm7patwvF6gj6lkEZ46TZyQ3ZUsnGAWkh81aIiDN2PlB7WziEoLQEHmA5crP45S
+         Guug==
+X-Gm-Message-State: AOAM5329D2BxL663SK9jKgGnXWpbb1tK2hqk8ZyfJ7T69xAtTIA3e7mk
+        zGHReys7lhDaotLNfJz6tT2jrEZU8G6zvQ==
+X-Google-Smtp-Source: ABdhPJwF5QWnYt1zOPAojpFO1VDPsFZ4MZKwOYNkOiOQlcod81UDKpEXWWBm+3GFWGQFtL4+tnSMvQ==
+X-Received: by 2002:a7b:c196:0:b0:37c:91e0:85f3 with SMTP id y22-20020a7bc196000000b0037c91e085f3mr21240303wmi.172.1645450072472;
+        Mon, 21 Feb 2022 05:27:52 -0800 (PST)
+Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
+        by smtp.gmail.com with ESMTPSA id n15sm24583839wri.80.2022.02.21.05.27.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 21 Feb 2022 05:27:52 -0800 (PST)
+Date:   Mon, 21 Feb 2022 13:27:50 +0000
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     Roger Quadros <rogerq@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-phy@lists.infradead.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: update Roger Quadros email
+Message-ID: <YhOTVrrzYMMC7DKL@google.com>
+References: <20220221100701.48593-1-krzysztof.kozlowski@canonical.com>
+ <2e33c00b-8460-3d85-92aa-2c3257725c2c@kernel.org>
+ <YhOIHARSdIliVWjW@google.com>
+ <7448b9b3-78f9-6f33-ae8d-d099bc64abe4@canonical.com>
 MIME-Version: 1.0
-In-Reply-To: <20220221114428.000062cd@Huawei.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.102.169]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- canpemm500009.china.huawei.com (7.192.105.203)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <7448b9b3-78f9-6f33-ae8d-d099bc64abe4@canonical.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/2/21 19:44, Jonathan Cameron wrote:
-> On Mon, 21 Feb 2022 16:43:02 +0800
-> Yicong Yang <yangyicong@hisilicon.com> wrote:
-> 
->> Register PMU device of PTT trace, then users can use
->> trace through perf command. The driver makes use of perf
->> AUX trace and support following events to configure the
->> trace:
->>
->> - filter: select Root port or Endpoint to trace
->> - type: select the type of traced TLP headers
->> - direction: select the direction of traced TLP headers
->> - format: select the data format of the traced TLP headers
->>
->> This patch adds the PMU driver part of PTT trace. The perf
->> command support of PTT trace is added in the following
->> patch.
->>
->> Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
-> 
-> A few minor comments inline.
-> 
+On Mon, 21 Feb 2022, Krzysztof Kozlowski wrote:
 
-Thanks for the comments!
+> On 21/02/2022 13:39, Lee Jones wrote:
+> > On Mon, 21 Feb 2022, Roger Quadros wrote:
+> > 
+> >> On 21/02/2022 12:07, Krzysztof Kozlowski wrote:
+> >>> Emails to Roger Quadros TI account bounce with:
+> >>>   550 Invalid recipient <rogerq@ti.com> (#5.1.1)
+> >>>
+> >>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> >>
+> >> Thanks so much!
+> >>
+> >> Signed-off-by: Roger Quadros <rogerq@kernel.org>
+> > 
+> > I assume you mean Acked-by (if you are the maintainer) or Reviewed-by?
+> > 
+> >>> ---
+> >>>
+> >>> Roger,
+> >>> You should also add a mailmap entry for your inactive emails.
+> >>
+> >> OK. I will send out a patch for this. Thanks for the hint. :)
+> >>
+> >>> ---
+> >>>  .../devicetree/bindings/mfd/ti,j721e-system-controller.yaml     | 2 +-
+> >>>  Documentation/devicetree/bindings/phy/ti,omap-usb2.yaml         | 2 +-
+> >>>  Documentation/devicetree/bindings/usb/ti,j721e-usb.yaml         | 2 +-
+> >>>  Documentation/devicetree/bindings/usb/ti,keystone-dwc3.yaml     | 2 +-
+> >>>  4 files changed, 4 insertions(+), 4 deletions(-)
+> > 
+> > What's the merge-plan for this Krzysztof?
+> 
+> First-in-first-served? :) or Rob?
+> It's a small change and I think non-controversial, so whoever could pick
+> it up first, should do it.
 
-> Thanks,
-> 
-> Jonathan
-> 
->> +static int hisi_ptt_trace_init_filter(struct hisi_ptt *hisi_ptt, u64 config)
->> +{
->> +	unsigned long val, port_mask = hisi_ptt->port_mask;
->> +	struct hisi_ptt_filter_desc *filter;
->> +	int ret = -EINVAL;
->> +
->> +	hisi_ptt->trace_ctrl.is_port = FIELD_GET(HISI_PTT_PMU_FILTER_IS_PORT, config);
->> +	val = FIELD_GET(HISI_PTT_PMU_FILTER_VAL_MASK, config);
->> +
->> +	/*
->> +	 * Port filters are defined as bit mask. For port filters, check
->> +	 * the bits in the @val are within the range of hisi_ptt->port_mask
->> +	 * and whether it's empty or not, otherwise user has specified
->> +	 * some unsupported root ports.
->> +	 *
->> +	 * For Requester ID filters, walk the available filter list to see
->> +	 * whether we have one matched.
->> +	 */
->> +	if (!hisi_ptt->trace_ctrl.is_port) {
->> +		list_for_each_entry(filter, &hisi_ptt->req_filters, list)
->> +			if (val == hisi_ptt_get_filter_val(filter->pdev)) {
->> +				ret = 0;
->> +				break;
->> +			}
->> +	} else if (bitmap_subset(&val, &port_mask, BITS_PER_LONG)) {
->> +		ret = 0;
->> +	}
->> +
->> +	if (ret)
->> +		return ret;
->> +
->> +	hisi_ptt->trace_ctrl.filter = val;
->> +	return 0;
->> +}
->> +
->> +static int hisi_ptt_pmu_event_init(struct perf_event *event)
->> +{
->> +	struct hisi_ptt *hisi_ptt = to_hisi_ptt(event->pmu);
->> +	struct hisi_ptt_trace_ctrl *ctrl = &hisi_ptt->trace_ctrl;
->> +	int ret;
->> +	u32 val;
->> +
->> +	if (event->attr.type != hisi_ptt->hisi_ptt_pmu.type)
->> +		return -ENOENT;
->> +
->> +	mutex_lock(&hisi_ptt->mutex);
->> +
->> +	ret = hisi_ptt_trace_init_filter(hisi_ptt, event->attr.config);
->> +	if (ret < 0)
->> +		goto out;
->> +
->> +	val = FIELD_GET(HISI_PTT_PMU_DIRECTION_MASK, event->attr.config);
->> +	ret = hisi_ptt_trace_valid_config_onehot(val, hisi_ptt_trace_available_direction,
->> +						 ARRAY_SIZE(hisi_ptt_trace_available_direction));
->> +	if (ret < 0)
->> +		goto out;
->> +	ctrl->direction = val;
->> +
->> +	val = FIELD_GET(HISI_PTT_PMU_TYPE_MASK, event->attr.config);
->> +
-> 
-> For consistency, no blank line here.
-> 
+I'm inclined to agree.
 
-will drop it.
+Acked-by: Lee Jones <lee.jones@linaro.org>
 
->> +	ret = hisi_ptt_trace_valid_config(val, hisi_ptt_trace_available_type,
->> +					  ARRAY_SIZE(hisi_ptt_trace_available_type));
->> +	if (ret < 0)
->> +		goto out;
->> +	ctrl->type = val;
->> +
->> +	val = FIELD_GET(HISI_PTT_PMU_FORMAT_MASK, event->attr.config);
->> +	ret = hisi_ptt_trace_valid_config_onehot(val, hisi_ptt_trace_availble_format,
->> +						 ARRAY_SIZE(hisi_ptt_trace_availble_format));
->> +	if (ret < 0)
->> +		goto out;
->> +	ctrl->format = val;
->> +
->> +out:
->> +	mutex_unlock(&hisi_ptt->mutex);
->> +	return ret;
->> +}
-> 
-> ...
-> 
->> +
->> +static void hisi_ptt_pmu_start(struct perf_event *event, int flags)
->> +{
->> +	struct hisi_ptt *hisi_ptt = to_hisi_ptt(event->pmu);
->> +	struct perf_output_handle *handle = &hisi_ptt->trace_ctrl.handle;
->> +	struct hw_perf_event *hwc = &event->hw;
->> +	struct hisi_ptt_pmu_buf *buf;
->> +	int cpu = event->cpu;
->> +	int ret;
->> +
->> +	hwc->state = 0;
->> +	mutex_lock(&hisi_ptt->mutex);
->> +	if (hisi_ptt->trace_ctrl.status == HISI_PTT_TRACE_STATUS_ON) {
->> +		pci_dbg(hisi_ptt->pdev, "trace has already started\n");
->> +		goto stop;
-> 
-> If it is already started setting the state to STOPPED without doing anything
-> to change the hardware state doesn't feel right.
+:)
 
-I think it won't happen as we follow the order to stop the hardware and then
-set the HISI_PTT_TRACE_STATUS_OFF flags.
-
-But it makes me read start/stop process again and I find that I should set the
-HISI_PTT_TRACE_STATUS_ON first before I start the hardware. Now it maybe problematic.
-
-> I'm assuming we only get here as a result of a bug, so perhaps its fine
-> to do this.
-> 
->> +	}
->> +
->> +	if (cpu == -1)
->> +		cpu = hisi_ptt->trace_ctrl.default_cpu;
->> +
->> +	/*
->> +	 * Handle the interrupt on the same cpu which starts the trace to avoid
->> +	 * context mismatch. Otherwise we'll trigger the WARN from the perf
->> +	 * core in event_function_local().
->> +	 */
->> +	WARN_ON(irq_set_affinity(pci_irq_vector(hisi_ptt->pdev, HISI_PTT_TRACE_DMA_IRQ),
->> +				 cpumask_of(cpu)));
->> +
->> +	ret = hisi_ptt_alloc_trace_buf(hisi_ptt);
->> +	if (ret) {
->> +		pci_dbg(hisi_ptt->pdev, "alloc trace buf failed, ret = %d\n", ret);
->> +		goto stop;
->> +	}
->> +
->> +	buf = perf_aux_output_begin(handle, event);
->> +	if (!buf) {
->> +		pci_dbg(hisi_ptt->pdev, "aux output begin failed\n");
->> +		goto stop;
->> +	}
->> +
->> +	buf->pos = handle->head % buf->length;
->> +
->> +	ret = hisi_ptt_trace_start(hisi_ptt);
->> +	if (ret) {
->> +		pci_dbg(hisi_ptt->pdev, "trace start failed, ret = %d\n", ret);
->> +		perf_aux_output_end(handle, 0);
->> +		goto stop;
->> +	}
->> +
->> +	mutex_unlock(&hisi_ptt->mutex);
->> +	return;
->> +stop:
->> +	event->hw.state |= PERF_HES_STOPPED;
->> +	mutex_unlock(&hisi_ptt->mutex);
->> +}
->> +
-> 
-> ...
-> 
->> +static int hisi_ptt_register_pmu(struct hisi_ptt *hisi_ptt)
->> +{
->> +	u16 core_id, sicl_id;
->> +	char *pmu_name;
->> +	int ret;
->> +	u32 reg;
->> +
->> +	hisi_ptt->hisi_ptt_pmu = (struct pmu) {
->> +		.module		= THIS_MODULE,
->> +		.capabilities	= PERF_PMU_CAP_EXCLUSIVE | PERF_PMU_CAP_ITRACE,
->> +		.task_ctx_nr	= perf_sw_context,
->> +		.attr_groups	= hisi_ptt_pmu_groups,
->> +		.event_init	= hisi_ptt_pmu_event_init,
->> +		.setup_aux	= hisi_ptt_pmu_setup_aux,
->> +		.free_aux	= hisi_ptt_pmu_free_aux,
->> +		.start		= hisi_ptt_pmu_start,
->> +		.stop		= hisi_ptt_pmu_stop,
->> +		.add		= hisi_ptt_pmu_add,
->> +		.del		= hisi_ptt_pmu_del,
->> +	};
->> +
->> +	reg = readl(hisi_ptt->iobase + HISI_PTT_LOCATION);
->> +	core_id = FIELD_GET(HISI_PTT_CORE_ID, reg);
->> +	sicl_id = FIELD_GET(HISI_PTT_SICL_ID, reg);
->> +
->> +	pmu_name = devm_kasprintf(&hisi_ptt->pdev->dev, GFP_KERNEL, "hisi_ptt%u_%u",
->> +				  sicl_id, core_id);
->> +	if (!pmu_name)
->> +		return -ENOMEM;
->> +
->> +	ret = perf_pmu_register(&hisi_ptt->hisi_ptt_pmu, pmu_name, -1);
->> +	if (ret)
->> +		return ret;
->> +
->> +	return devm_add_action_or_reset(&hisi_ptt->pdev->dev,
->> +					hisi_ptt_unregister_pmu,
->> +					&hisi_ptt->hisi_ptt_pmu);
-> 
-> This result in the cleanup of the driver being slightly out of order wrt to
-> the setup as we have the filters cleared after this (in remove())
-> Ideally the remove() ordering should be the precise reverse of the
-> probe() order except where it is necessary to deviate from that and
-> in those deviations I'd expect to see a comment saying why.
-> 
-> So either clear up the filters using a devm_add_action_or_reset()
-> or do a manual unregister of the pmu in remove. I prefer the
-> devm_add_action_or_reset for hisi_ptt_release_filters() option.
-> 
-> There may well not be a race here, but it is always good to avoid
-> reviewers having to think about whether there might be one!
-> 
-> Note that other reviewers may have different views on this however
-> so perhaps go with what they say as this subsystem isn't my area
-> of expertise!
-> 
-
-I'd like to think a bit more time about the orders here before reply. :)
-
-Thanks,
-Yicong
-
->> +}
->> +
->>  /*
->>   * The DMA of PTT trace can only use direct mapping, due to some
->>   * hardware restriction. Check whether there is an IOMMU or the
->> @@ -337,6 +826,12 @@ static int hisi_ptt_probe(struct pci_dev *pdev,
->>  
->>  	hisi_ptt_init_ctrls(hisi_ptt);
->>  
->> +	ret = hisi_ptt_register_pmu(hisi_ptt);
->> +	if (ret) {
->> +		pci_err(pdev, "failed to register pmu device, ret = %d", ret);
->> +		return ret;
->> +	}
->> +
->>  	return 0;
->>  }
->>  
-> .
-> 
+-- 
+Lee Jones [李琼斯]
+Principal Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog

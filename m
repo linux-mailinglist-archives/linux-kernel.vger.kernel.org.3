@@ -2,62 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1155A4BE41A
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:58:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E792F4BDD4B
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:45:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378593AbiBUO55 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 09:57:57 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51310 "EHLO
+        id S1378604AbiBUO6w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 09:58:52 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378589AbiBUO5x (ORCPT
+        with ESMTP id S1378607AbiBUO6s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 09:57:53 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B65CE9E;
-        Mon, 21 Feb 2022 06:57:29 -0800 (PST)
+        Mon, 21 Feb 2022 09:58:48 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7F612650;
+        Mon, 21 Feb 2022 06:58:23 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BA3D7B811BB;
-        Mon, 21 Feb 2022 14:57:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39FAAC340E9;
-        Mon, 21 Feb 2022 14:57:26 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 544D46111D;
+        Mon, 21 Feb 2022 14:58:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2AC1DC340E9;
+        Mon, 21 Feb 2022 14:58:22 +0000 (UTC)
 Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="lSIETL2b"
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="Oq+efNoh"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1645455444;
+        t=1645455500;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=w1dYxGGlAk7oSg4VWIgvCkMkLUjlbhh57JEWSqOr12E=;
-        b=lSIETL2bQn3QNaiOHaact6B7Gr93MDQ+R7sLPeBKKpFVBbk9Y4K3mWWVVpQHG/KpWZdPMe
-        dC///8VIylVNmiLeF68Oij/6+LpxxM1bCb7zaLNrcWpk6MdVwlGAufPqoVWbPlk6chsCz/
-        WS9/YqKe2fcCTPcWwqxBT37F+gtCxaU=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 2e60c24e (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Mon, 21 Feb 2022 14:57:24 +0000 (UTC)
-Received: by mail-yb1-f173.google.com with SMTP id b35so7136532ybi.13;
-        Mon, 21 Feb 2022 06:57:23 -0800 (PST)
-X-Gm-Message-State: AOAM532bCsfh7RhWzoWY1iBsT3U8C7NLsAsXdyWEdO7erCkJpArxHlvK
-        fjkay0R085j3fg6EnX2jqrWUiIZ7y96GPaW0gI4=
-X-Google-Smtp-Source: ABdhPJyedvueidxl7Ut4gzsMJfO+JuBbjpJ5//8X8pqsmwDdVK+Rq6mCXO5pVXOwvh7K5E5BB34xOlKzEUkdQSgyApY=
-X-Received: by 2002:a5b:d11:0:b0:623:fbda:40f4 with SMTP id
- y17-20020a5b0d11000000b00623fbda40f4mr19309542ybp.398.1645455443231; Mon, 21
- Feb 2022 06:57:23 -0800 (PST)
-MIME-Version: 1.0
-References: <CAHmME9qMRO0YFwQRUZfuUjTy2=C0QYkNLZSK5YgVD0xpcP2qbQ@mail.gmail.com>
- <20220215211333.244383-1-Jason@zx2c4.com> <YhL9QNsMSHZvuR0u@sol.localdomain>
-In-Reply-To: <YhL9QNsMSHZvuR0u@sol.localdomain>
+        bh=m30Y6pCz0nayXwh5tE0f209A8zx+eNSfcHhDVp8qt7w=;
+        b=Oq+efNoha28DJjkRc/kqRh7JXZ/w0Ct3DB2k1k6MRofxNhegPBuClp8Y7vKDLSrVd652eW
+        ibOtRdQ2/+TPSVjHi0/l/JadigKYXuLfd0whVxF5gLlkaYperg9mgXni3+Dm9s4eNhH5Ec
+        MaYAGfMjr0BN7M5aO7fI9btOGx7+TDs=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 14bbcbbb (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Mon, 21 Feb 2022 14:58:20 +0000 (UTC)
 From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date:   Mon, 21 Feb 2022 15:57:11 +0100
-X-Gmail-Original-Message-ID: <CAHmME9pCGHuhZW-HQD==2h0=YRk=Man0KU6+RAGiT0QD-PCNpg@mail.gmail.com>
-Message-ID: <CAHmME9pCGHuhZW-HQD==2h0=YRk=Man0KU6+RAGiT0QD-PCNpg@mail.gmail.com>
-Subject: Re: [PATCH v3] random: absorb fast pool into input pool after fast load
-To:     Eric Biggers <ebiggers@kernel.org>
-Cc:     Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "Theodore Ts'o" <tytso@mit.edu>,
-        Dominik Brodowski <linux@dominikbrodowski.net>
-Content-Type: text/plain; charset="UTF-8"
+To:     ebiggers@kernel.org, linux-crypto@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Theodore Ts'o <tytso@mit.edu>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Eric Biggers <ebiggers@google.com>
+Subject: [PATCH v4] random: absorb fast pool into input pool after fast load
+Date:   Mon, 21 Feb 2022 15:58:16 +0100
+Message-Id: <20220221145816.2278732-1-Jason@zx2c4.com>
+In-Reply-To: <CAHmME9pCGHuhZW-HQD==2h0=YRk=Man0KU6+RAGiT0QD-PCNpg@mail.gmail.com>
+References: <CAHmME9pCGHuhZW-HQD==2h0=YRk=Man0KU6+RAGiT0QD-PCNpg@mail.gmail.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
         RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -68,11 +60,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 21, 2022 at 3:47 AM Eric Biggers <ebiggers@kernel.org> wrote:
-> This looks fine, though it's unfortunate that it has to be a trylock so this
-> isn't guaranteed.  Also, the commit message is a bit misleading because it talks
-> about "overwriting" the primary_crng key, but at this point in the series the
-> extracted entropy is still being XOR'd with the primary_crng key.  It's not
-> until the next patch that the key is simply overwritten.
+During crng_init == 0, we never credit entropy in add_interrupt_
+randomness(), but instead dump it directly into the primary_crng. That's
+fine, except for the fact that we then wind up throwing away that
+entropy later when we switch to extracting from the input pool and
+xoring into (and later in this series overwriting) the primary_crng key.
+The two other early init sites -- add_hwgenerator_randomness()'s use
+crng_fast_load() and add_device_ randomness()'s use of crng_slow_load()
+-- always additionally give their inputs to the input pool. But not
+add_interrupt_randomness().
 
-I'll fix up the commit message.
+This commit fixes that shortcoming by calling mix_pool_bytes() after
+crng_fast_load() in add_interrupt_randomness(). That's partially
+verboten on PREEMPT_RT, where it implies taking spinlock_t from an IRQ
+handler. But this also only happens during early boot and then never
+again after that. Plus it's a trylock so it has the same considerations
+as calling crng_fast_load(), which we're already using.
+
+Cc: Theodore Ts'o <tytso@mit.edu>
+Reviewed-by: Dominik Brodowski <linux@dominikbrodowski.net>
+Suggested-by: Eric Biggers <ebiggers@google.com>
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+---
+v4 has no changes except for a commit message nit, per Eric's request.
+
+ drivers/char/random.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/drivers/char/random.c b/drivers/char/random.c
+index d31b0b3afe2e..f3179c67010b 100644
+--- a/drivers/char/random.c
++++ b/drivers/char/random.c
+@@ -850,6 +850,10 @@ void add_interrupt_randomness(int irq)
+ 		    crng_fast_load((u8 *)fast_pool->pool, sizeof(fast_pool->pool)) > 0) {
+ 			fast_pool->count = 0;
+ 			fast_pool->last = now;
++			if (spin_trylock(&input_pool.lock)) {
++				_mix_pool_bytes(&fast_pool->pool, sizeof(fast_pool->pool));
++				spin_unlock(&input_pool.lock);
++			}
+ 		}
+ 		return;
+ 	}
+-- 
+2.35.1
+

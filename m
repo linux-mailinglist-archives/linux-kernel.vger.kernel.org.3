@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8E834BD576
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 06:45:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 187E44BD57A
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 06:45:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344567AbiBUFfs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 00:35:48 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45464 "EHLO
+        id S1344575AbiBUFgc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 00:36:32 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344559AbiBUFfn (ORCPT
+        with ESMTP id S1344559AbiBUFga (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 00:35:43 -0500
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AA684AE21
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Feb 2022 21:35:21 -0800 (PST)
-Received: by mail-pj1-x1032.google.com with SMTP id ci24-20020a17090afc9800b001bc3071f921so2012988pjb.5
-        for <linux-kernel@vger.kernel.org>; Sun, 20 Feb 2022 21:35:21 -0800 (PST)
+        Mon, 21 Feb 2022 00:36:30 -0500
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DE244AE1D
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Feb 2022 21:36:08 -0800 (PST)
+Received: by mail-pf1-x42e.google.com with SMTP id x18so7800096pfh.5
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Feb 2022 21:36:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=33J/57nAxSn7KHcYx9u5u+41MVedNA5dVhmvQ8pezfU=;
-        b=oWfhdr7k2nhW6My+Jw699SkuwzOehDV+ERYV4S0wJGzSIA+D5A7otdDLVyUxXta/1s
-         6yQ55L+EMRIDv2aK2JEYK7DC3GUfyQK8GjcctyBWpM9OYMFxCTuAys7NjLTzGJ/P9NyC
-         Bq7Z0kOuHa/Lo2tZz8ZYA6/LPwylRcTWQVOMxaQOp+l89MbpptCoVzB/LnNtkHoxnNgg
-         JVe52SLiL32NkfgLgO/QIobIsHwKCqBFPp0AhuCkzK7SDfE04I8IkzFYaAm38UHezeAL
-         F26pgCf7EvviSLZ3KuQx3T0/SO5faCXWMWk38eq8yQrgahovFTbbRksOPqUQ8csL1YkV
-         JLfQ==
+        bh=EAQyTnkUAM1IyjIOYRpB8FD6IRTMq3X88oxk+zMSmuw=;
+        b=HGX6JqZPd7SOhy7rGlrb+9QbVSbS8V8qseTxZvNxl2bz6WJXcFhPXCcrBaNKCsYMZy
+         k91+IS6zV/GAPkDueN1i+jCDQ7bzLTgPQBCZTVgycMH/seYvMVUZrGZ+t3oefUnZVtuM
+         nvQgi5b3KlzMgHuV7+AhT5UUuUc5FmEbcGANWBa/54/Oa8eyUIq2P0Eqd4jF0Rvw4MRk
+         LbUx2/7cJFtPncbG8fxUOaPFnKbf/XyzXxYu+q02Fo6Iau/4EGz9lQ5kPPhJh4Hg9ejq
+         oR5hyuuPCQnb8kAWw1qSNOv3KyoIDjNibV/T1ZayhSGDefjWPKJwX1lM+H+329pnRM+z
+         E/ww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=33J/57nAxSn7KHcYx9u5u+41MVedNA5dVhmvQ8pezfU=;
-        b=v8qOzr6w+dZRMAfmVbgJ08ZluaMpFuIGkljo9PDtmtoiSVwtAXAyWVnn/CLqusSM7i
-         bTEA517TyUTKYVbplmEZjloGRKUSiLojADeCsuUDt77rN7uIk3F3KoiNkv4hyzXNAMAw
-         xH1w0An/YECkkaqs+do4d48Gn4NmOjyb0gtJHPBoxM4ELYVS6ktYmBaFI9yfH/oUSS6G
-         pTRrqLKJlih79RkShqc4D+2xIVm+ddgnXZP+aKcdD44ccslJtE+B9f6Z0MWx78jsYuht
-         hwMWh22pbGIgKdBzWfRPA+yrDzR9Yf6BBfGScVxcrW+e/gbuEh40CpaE1g9tbAT3eyQ7
-         Rkfw==
-X-Gm-Message-State: AOAM532ccwAAuZ7aEoZOgJ9b8mvJoHZdZatWjz1Yz0l0hOdOp8kbprNv
-        jNftmHy81LvPRSzNKynaFNux
-X-Google-Smtp-Source: ABdhPJwCxa7n3N2IQRg6LXTIhA76NLNBlBqFee+u+GuUOaJ509tU02AxKJ+XNItcF5t2ZB5HPixdjA==
-X-Received: by 2002:a17:90b:110a:b0:1b9:eb62:7c00 with SMTP id gi10-20020a17090b110a00b001b9eb627c00mr19837163pjb.67.1645421719824;
-        Sun, 20 Feb 2022 21:35:19 -0800 (PST)
+        bh=EAQyTnkUAM1IyjIOYRpB8FD6IRTMq3X88oxk+zMSmuw=;
+        b=HYDTP6Nkrbt5N9YFK/2ULIPvJ4OPYsVaPA52Jz0LTE9TmCcPbaMBnincnCmnjaSDz4
+         1SMdEeAyczrC0bUBega15oP2lGskaq9rY2muPijqiQWnAEEZvTY/IUbj/ipThqp1mC6s
+         DWux3wD4ICsEnFAJF+nsd7+cYvE6YShOYyVDnHSdvMKJYCC4lO7rzo3JAhZHCp0zzHQk
+         P9ZvVUkzl/XCyj6kluOfJoyylmwreZOwKi0fHglTEVaFodHgQRGd5L1qmBG4e9YYIY09
+         ss0C94Bd9jRrpqvAs81nMorxU7XMMtPKs579eHdmFg6pPlVtTPvyeuFufHxIPL7s3v/C
+         ymIg==
+X-Gm-Message-State: AOAM533gR84U1789Y0xgU0w2lh3cHvYELT6TJf0/SEs2xl5FNOHmuHxT
+        7yOvLQ4t/XB0aBI7dgpjxJKo
+X-Google-Smtp-Source: ABdhPJyWPfzuqcZjoJhZxxBokayrbHM72NFJNCELyFIV5od8JvOEyY9VZKHm9DCOUQ3CewuEaVvnSw==
+X-Received: by 2002:a05:6a00:c95:b0:4e1:1f5a:35cf with SMTP id a21-20020a056a000c9500b004e11f5a35cfmr18794483pfv.56.1645421767940;
+        Sun, 20 Feb 2022 21:36:07 -0800 (PST)
 Received: from thinkpad ([220.158.158.223])
-        by smtp.gmail.com with ESMTPSA id b22-20020a17090a10d600b001b8e6841ca5sm6019443pje.51.2022.02.20.21.35.16
+        by smtp.gmail.com with ESMTPSA id u6sm588982pfk.203.2022.02.20.21.36.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 20 Feb 2022 21:35:19 -0800 (PST)
-Date:   Mon, 21 Feb 2022 11:05:14 +0530
+        Sun, 20 Feb 2022 21:36:07 -0800 (PST)
+Date:   Mon, 21 Feb 2022 11:06:03 +0530
 From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 To:     Rohit Agarwal <quic_rohiagar@quicinc.com>
 Cc:     agross@kernel.org, bjorn.andersson@linaro.org,
@@ -56,17 +56,17 @@ Cc:     agross@kernel.org, bjorn.andersson@linaro.org,
         jassisinghbrar@gmail.com, linux-arm-msm@vger.kernel.org,
         linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 2/7] mailbox: qcom: Add support for SDX65 APCS IPC
-Message-ID: <20220221053514.GA15108@thinkpad>
+Subject: Re: [PATCH v3 7/7] clk: qcom: Add SDX65 APCS clock controller support
+Message-ID: <20220221053603.GB15108@thinkpad>
 References: <1645420953-21176-1-git-send-email-quic_rohiagar@quicinc.com>
- <1645420953-21176-3-git-send-email-quic_rohiagar@quicinc.com>
+ <1645420953-21176-8-git-send-email-quic_rohiagar@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1645420953-21176-3-git-send-email-quic_rohiagar@quicinc.com>
+In-Reply-To: <1645420953-21176-8-git-send-email-quic_rohiagar@quicinc.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,47 +74,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 21, 2022 at 10:52:28AM +0530, Rohit Agarwal wrote:
-> In SDX65, the IPC bits are located in the APCS GCC block. Also, this block
-> can provide clock functionality. Hence, add support for IPC with correct
-> offset and name of the clock provider.
+On Mon, Feb 21, 2022 at 10:52:33AM +0530, Rohit Agarwal wrote:
+> Update APCS Kconfig to reflect support for SDX65
+> APCS clock controller.
 > 
 > Signed-off-by: Rohit Agarwal <quic_rohiagar@quicinc.com>
-> ---
->  drivers/mailbox/qcom-apcs-ipc-mailbox.c | 5 +++++
->  1 file changed, 5 insertions(+)
-> 
-> diff --git a/drivers/mailbox/qcom-apcs-ipc-mailbox.c b/drivers/mailbox/qcom-apcs-ipc-mailbox.c
-> index 9325d2a..54d7659 100644
-> --- a/drivers/mailbox/qcom-apcs-ipc-mailbox.c
-> +++ b/drivers/mailbox/qcom-apcs-ipc-mailbox.c
-> @@ -53,6 +53,10 @@ static const struct qcom_apcs_ipc_data sdx55_apcs_data = {
->  	.offset = 0x1008, .clk_name = "qcom-sdx55-acps-clk"
->  };
->  
-> +static const struct qcom_apcs_ipc_data sdx65_apcs_data = {
-> +	.offset = 0x1008, .clk_name = "qcom-sdx55-acps-clk"
-> +};
 
-What I suggested was reusing the "qcom,sdx55-apcs-gcc" compatible in devicetree.
-So with that, you won't need this specific compatible for SDX65 that essentially
-duplicates SDX55.
+Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 
 Thanks,
 Mani
 
-> +
->  static const struct regmap_config apcs_regmap_config = {
->  	.reg_bits = 32,
->  	.reg_stride = 4,
-> @@ -159,6 +163,7 @@ static const struct of_device_id qcom_apcs_ipc_of_match[] = {
->  	{ .compatible = "qcom,sm8150-apss-shared", .data = &apps_shared_apcs_data },
->  	{ .compatible = "qcom,sm6115-apcs-hmss-global", .data = &msm8994_apcs_data },
->  	{ .compatible = "qcom,sdx55-apcs-gcc", .data = &sdx55_apcs_data },
-> +	{ .compatible = "qcom,sdx65-apcs-gcc", .data = &sdx65_apcs_data },
->  	{}
->  };
->  MODULE_DEVICE_TABLE(of, qcom_apcs_ipc_of_match);
+> ---
+>  drivers/clk/qcom/Kconfig | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/clk/qcom/Kconfig b/drivers/clk/qcom/Kconfig
+> index 5159a1d..a2fa9af 100644
+> --- a/drivers/clk/qcom/Kconfig
+> +++ b/drivers/clk/qcom/Kconfig
+> @@ -55,13 +55,13 @@ config QCOM_CLK_APCC_MSM8996
+>  	  drivers for dynamic power management.
+>  
+>  config QCOM_CLK_APCS_SDX55
+> -	tristate "SDX55 APCS Clock Controller"
+> +	tristate "SDX55 and SDX65 APCS Clock Controller"
+>  	depends on QCOM_APCS_IPC || COMPILE_TEST
+>  	help
+> -	  Support for the APCS Clock Controller on SDX55 platform. The
+> +	  Support for the APCS Clock Controller on SDX55, SDX65 platform. The
+>  	  APCS is managing the mux and divider which feeds the CPUs.
+>  	  Say Y if you want to support CPU frequency scaling on devices
+> -	  such as SDX55.
+> +	  such as SDX55, SDX65.
+>  
+>  config QCOM_CLK_RPM
+>  	tristate "RPM based Clock Controller"
 > -- 
 > 2.7.4
 > 

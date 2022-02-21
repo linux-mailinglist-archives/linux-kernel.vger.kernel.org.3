@@ -2,140 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 939CB4BD45C
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 04:43:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 243544BD470
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 05:01:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344390AbiBUDnP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 20 Feb 2022 22:43:15 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44368 "EHLO
+        id S1343967AbiBUDpb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 20 Feb 2022 22:45:31 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344371AbiBUDnI (ORCPT
+        with ESMTP id S230247AbiBUDp3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 20 Feb 2022 22:43:08 -0500
-Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 742F33C70E;
-        Sun, 20 Feb 2022 19:42:45 -0800 (PST)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id 412EC32001BB;
-        Sun, 20 Feb 2022 22:42:44 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Sun, 20 Feb 2022 22:42:45 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; bh=kRJmWAWFjKOALsTRLgibyhb8NsyL7NusOB/YUc9eB
-        kM=; b=hd0w/MJf6l//ha5NyaJHPHtK+xblj4CF7MnwjPQP918OiOgwP+vE+zlRl
-        vkKsrgeohaO+ZE2PT3ab/v5Bc9Lk+yhUhBm09xahRA0oGJ3NTTz1cuqxoEotitz4
-        mjy7FKfgTgsNNgnWzt5bk4ujJFPRPZVdhbEFkj4iCTwJqJ5gnUoKQYC8/t0eQ70k
-        HC6j3ozXuG1GM2BG5LH52Y0kkfPIfAxBZPdE/BASgP0MnByqcAXv7wfm+lR+/awr
-        aBxwKvbMEafVx1ppp2sukMezYqZmd5zK3LuF8M4os1aelsbNjxNcbeUiW+UdLHLJ
-        RmtUwsrOae1YyHt21nbhMq9AKRyNw==
-X-ME-Sender: <xms:MwoTYpJAi8YoCYmyuEqg-QdsIRKZ6L7-NhiHdG7SEG7lMyP8nALj6Q>
-    <xme:MwoTYlLG2w-RlJ5DEbSD9gPWL9EnEJzkpLT7dJZ6AGwsLgQ0sg7HtN4MHdllqBix3
-    ySyHXipQVRB4Q>
-X-ME-Received: <xmr:MwoTYht1uRt60FM5guu_6RXFXGIRWdYP2MwQCY0yYop4o7IebxWgUEC7TaiXnHs1h61vX4BDQhy3TGtvonP0XMpRjAOi7nVnKdNSGiTYsaNMmLbA6To>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrkeehgdeitdcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefhvffufffkofgjfhggtghogfesthekredtredtjeenucfhrhhomhepofgrrhgv
-    khcuofgrrhgtiiihkhhofihskhhiqdfikphrvggtkhhiuceomhgrrhhmrghrvghksehinh
-    hvihhsihgslhgvthhhihhnghhslhgrsgdrtghomheqnecuggftrfgrthhtvghrnhepffdt
-    uefffeduhfelueegvdetheejvdehteelfeetfeekgfekkefggedtgefhieejnecuffhomh
-    grihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgr
-    mhepmhgrihhlfhhrohhmpehmrghrmhgrrhgvkhesihhnvhhishhisghlvghthhhinhhgsh
-    hlrggsrdgtohhm
-X-ME-Proxy: <xmx:MwoTYqaK9BAcguBxDC2Hd73fGSTVhtfhY7s3hgvK24QFn6aHVI5R-g>
-    <xmx:MwoTYgbx--0TdhDf36bHLrCDs32_iWQH7Li3s42yimtcuB6CDw25BA>
-    <xmx:MwoTYuCfP5VPhCYLo4ZQbRtRTBc2Eeii-zqjX9Ujjz-bYtDLiypS7g>
-    <xmx:MwoTYg6J601ARQwvABPkeNeeDB-PEJwSE5WkMjMDK-spsG7obGyI-g>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
- 20 Feb 2022 22:42:42 -0500 (EST)
-From:   =?UTF-8?q?Marek=20Marczykowski-G=C3=B3recki?= 
-        <marmarek@invisiblethingslab.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     =?UTF-8?q?Marek=20Marczykowski-G=C3=B3recki?= 
-        <marmarek@invisiblethingslab.com>, stable@vger.kernel.org,
-        Michael Brown <mcb30@ipxe.org>, Wei Liu <wei.liu@kernel.org>,
-        Paul Durrant <paul@xen.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        xen-devel@lists.xenproject.org (moderated list:XEN NETWORK BACKEND
-        DRIVER),
-        netdev@vger.kernel.org (open list:XEN NETWORK BACKEND DRIVER)
-Subject: [PATCH 2/2] Revert "xen-netback: Check for hotplug-status existence before watching"
-Date:   Mon, 21 Feb 2022 04:42:13 +0100
-Message-Id: <20220221034214.2237097-2-marmarek@invisiblethingslab.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20220221034214.2237097-1-marmarek@invisiblethingslab.com>
-References: <20220221034214.2237097-1-marmarek@invisiblethingslab.com>
+        Sun, 20 Feb 2022 22:45:29 -0500
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0472C3C70E
+        for <linux-kernel@vger.kernel.org>; Sun, 20 Feb 2022 19:45:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645415107; x=1676951107;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=mXaE3NrZ/6rQAuz2OlCanXe+El280BbMnY6fc1exphw=;
+  b=AWgN2GZZmWPf0F56FfAykwrFDxt1Ppg9g6ypER5Oehj34zyDqCnJntbQ
+   njR6mCxwowDP2c/7ICbxQGwJhmgPCRnmkvGhyO9S9Wq0L2kbwFEDQbAGX
+   psQI3Tb5Ii+WbEBds/cyPFxYuldjFSoqJgiLHs4Cs73ES3AX/B14dBlEm
+   xR70T0z7tzea6SKUape+7RQquNn9DhREET46LJYLxVJ4bLufCT6dW+j1Q
+   dT7OLr+I/JDPO21HmOdGLfyYAvZm00Trob+VKHcZwoD3z85zPBpIx72jR
+   /wlYbWkYUEB46UeAyc84UeAhj5Y5ozF7TtKl9+Jy9Nsb8jq0//Kcg84Ez
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10264"; a="251376475"
+X-IronPort-AV: E=Sophos;i="5.88,384,1635231600"; 
+   d="scan'208";a="251376475"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Feb 2022 19:45:06 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,384,1635231600"; 
+   d="scan'208";a="490305833"
+Received: from lkp-server01.sh.intel.com (HELO da3212ac2f54) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 20 Feb 2022 19:45:05 -0800
+Received: from kbuild by da3212ac2f54 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nLzdI-0001Gy-U0; Mon, 21 Feb 2022 03:45:04 +0000
+Date:   Mon, 21 Feb 2022 11:44:14 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Ingo Molnar <mingo@kernel.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [mingo-tip:sched/headers 90/2574] kernel/sched/deadline.c:1883:50:
+ sparse: sparse: cast removes address space '__rcu' of expression
+Message-ID: <202202211135.6YTPVoRB-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Organization: Invisible Things Lab
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This reverts commit 2afeec08ab5c86ae21952151f726bfe184f6b23d.
+tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git sched/headers
+head:   39e8a0edc8fae20758051dadf7846849edc18b88
+commit: d58c0a66fcb697b448eee902e4d8faa3ebe21c0d [90/2574] headers/deps: sched/deadline: Move task->dl to per_task
+config: sparc64-randconfig-s031-20220220 (https://download.01.org/0day-ci/archive/20220221/202202211135.6YTPVoRB-lkp@intel.com/config)
+compiler: sparc64-linux-gcc (GCC) 11.2.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=d58c0a66fcb697b448eee902e4d8faa3ebe21c0d
+        git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
+        git fetch --no-tags mingo-tip sched/headers
+        git checkout d58c0a66fcb697b448eee902e4d8faa3ebe21c0d
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=sparc64 SHELL=/bin/bash
 
-The reasoning in the commit was wrong - the code expected to setup the
-watch even if 'hotplug-status' didn't exist. In fact, it relied on the
-watch being fired the first time - to check if maybe 'hotplug-status' is
-already set to 'connected'. Not registering a watch for non-existing
-path (which is the case if hotplug script hasn't been executed yet),
-made the backend not waiting for the hotplug script to execute. This in
-turns, made the netfront think the interface is fully operational, while
-in fact it was not (the vif interface on xen-netback side might not be
-configured yet).
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-This was a workaround for 'hotplug-status' erroneously being removed.
-But since that is reverted now, the workaround is not necessary either.
 
-More discussion at
-https://lore.kernel.org/xen-devel/afedd7cb-a291-e773-8b0d-4db9b291fa98@ipxe.org/T/#u
+sparse warnings: (new ones prefixed by >>)
+>> kernel/sched/deadline.c:1883:50: sparse: sparse: cast removes address space '__rcu' of expression
+   kernel/sched/deadline.c:1114:23: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct task_struct *p @@     got struct task_struct [noderef] __rcu *curr @@
+   kernel/sched/deadline.c:1114:23: sparse:     expected struct task_struct *p
+   kernel/sched/deadline.c:1114:23: sparse:     got struct task_struct [noderef] __rcu *curr
+   kernel/sched/deadline.c:1243:38: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected struct task_struct *curr @@     got struct task_struct [noderef] __rcu *curr @@
+   kernel/sched/deadline.c:1243:38: sparse:     expected struct task_struct *curr
+   kernel/sched/deadline.c:1243:38: sparse:     got struct task_struct [noderef] __rcu *curr
+   kernel/sched/deadline.c:1738:9: sparse: sparse: cast removes address space '__rcu' of expression
+   kernel/sched/deadline.c:2587:22: sparse: sparse: incompatible types in comparison expression (different address spaces):
+   kernel/sched/deadline.c:2587:22: sparse:    struct task_struct [noderef] __rcu *
+   kernel/sched/deadline.c:2587:22: sparse:    struct task_struct *
+   kernel/sched/deadline.c:1142:24: sparse: sparse: context imbalance in 'dl_task_timer' - wrong count at exit
+   kernel/sched/deadline.c:1383:24: sparse: sparse: context imbalance in 'inactive_task_timer' - wrong count at exit
+   kernel/sched/deadline.c: note: in included file:
+   kernel/sched/sched.h:2036:25: sparse: sparse: incompatible types in comparison expression (different address spaces):
+   kernel/sched/sched.h:2036:25: sparse:    struct task_struct [noderef] __rcu *
+   kernel/sched/sched.h:2036:25: sparse:    struct task_struct *
+   kernel/sched/sched.h:2036:25: sparse: sparse: incompatible types in comparison expression (different address spaces):
+   kernel/sched/sched.h:2036:25: sparse:    struct task_struct [noderef] __rcu *
+   kernel/sched/sched.h:2036:25: sparse:    struct task_struct *
 
-Cc: stable@vger.kernel.org
-Signed-off-by: Marek Marczykowski-Górecki <marmarek@invisiblethingslab.com>
+vim +/__rcu +1883 kernel/sched/deadline.c
+
+  1875	
+  1876	/*
+  1877	 * Only called when both the current and waking task are -deadline
+  1878	 * tasks.
+  1879	 */
+  1880	static void check_preempt_curr_dl(struct rq *rq, struct task_struct *p,
+  1881					  int flags)
+  1882	{
+> 1883		if (dl_entity_preempt(&per_task(p, dl), &per_task(rq->curr, dl))) {
+  1884			resched_curr(rq);
+  1885			return;
+  1886		}
+  1887	
+
 ---
-I believe this is the same issue as discussed at
-https://lore.kernel.org/xen-devel/20220113111946.GA4133739@dingwall.me.uk/
-Cc: James Dingwall <james-xen@dingwall.me.uk
-Cc: Michael Brown <mcb30@ipxe.org>
----
- drivers/net/xen-netback/xenbus.c | 12 ++++--------
- 1 file changed, 4 insertions(+), 8 deletions(-)
-
-diff --git a/drivers/net/xen-netback/xenbus.c b/drivers/net/xen-netback/xenbus.c
-index ce0f3035bee8..9d7a3a92959f 100644
---- a/drivers/net/xen-netback/xenbus.c
-+++ b/drivers/net/xen-netback/xenbus.c
-@@ -824,15 +824,11 @@ static void connect(struct backend_info *be)
- 	xenvif_carrier_on(be->vif);
- 
- 	unregister_hotplug_status_watch(be);
--	if (xenbus_exists(XBT_NIL, dev->nodename, "hotplug-status")) {
--		err = xenbus_watch_pathfmt(dev, &be->hotplug_status_watch,
--					   NULL, hotplug_status_changed,
--					   "%s/%s", dev->nodename,
--					   "hotplug-status");
--		if (err)
--			goto err;
-+	err = xenbus_watch_pathfmt(dev, &be->hotplug_status_watch, NULL,
-+				   hotplug_status_changed,
-+				   "%s/%s", dev->nodename, "hotplug-status");
-+	if (!err)
- 		be->have_hotplug_status_watch = 1;
--	}
- 
- 	netif_tx_wake_all_queues(be->vif->dev);
- 
--- 
-2.31.1
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

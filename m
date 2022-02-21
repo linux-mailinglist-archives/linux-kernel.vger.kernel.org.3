@@ -2,45 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE8A24BE001
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:51:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0869D4BE75B
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:03:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345481AbiBUIxJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 03:53:09 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43148 "EHLO
+        id S1349124AbiBUJZd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 04:25:33 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345564AbiBUIwd (ORCPT
+        with ESMTP id S1348467AbiBUJLT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 03:52:33 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6BC52A3;
-        Mon, 21 Feb 2022 00:52:05 -0800 (PST)
+        Mon, 21 Feb 2022 04:11:19 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D3BF2558B;
+        Mon, 21 Feb 2022 01:03:28 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 862A960FB6;
-        Mon, 21 Feb 2022 08:52:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7160BC340E9;
-        Mon, 21 Feb 2022 08:52:04 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 56F956112B;
+        Mon, 21 Feb 2022 09:03:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32F71C340E9;
+        Mon, 21 Feb 2022 09:03:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645433525;
-        bh=0x8uk8ogZkTiQRkXjDuzshmOMcA8a04iiSihN0Uu/A4=;
+        s=korg; t=1645434207;
+        bh=R5X8/FUlzd8jvkjp+N2CQAhYJtz6zR/mssnbBS5jf7Y=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rYK2BW2NFwuMvEKPpVQfzkG9Q+BpnSvYtqK56jS8cYWMmEafeiBiVurJEdUO/jhzq
-         V98hoKWpyjRdglavTGxG7g76Kub2AYlocN3HzDc1lAZ/81PlWG67iGqYw5Ez/PCyTd
-         PqtYIyvy810JVLXZtXgY4BNHuNCa5rG+NP+qQuQ0=
+        b=gFmpQKY7jb1sribYlOPeXkOVYk+moaRcTj0ZbqQEHpSt3ZrY5fN/FRdfj8lLCRkyC
+         zuhV48DapI+9Mp0bg/4uXqnaK2Yq9hT+SBq+9R0WK1Z9OAPc96oUXbuXIQFyhGke5k
+         lm6/gQ8wYK3EqygOY30XyUFDnwGSSbLSt68EcS8M=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Yang Xu <xuyang2018.jy@fujitsu.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 08/33] selftests/zram: Skip max_comp_streams interface on newer kernel
+        stable@vger.kernel.org,
+        =?UTF-8?q?Ville=20Syrj=C3=A4l=C3=A4?= 
+        <ville.syrjala@linux.intel.com>,
+        Lucas De Marchi <lucas.demarchi@intel.com>,
+        Jani Nikula <jani.nikula@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@intel.com>
+Subject: [PATCH 5.10 049/121] drm/i915/opregion: check port number bounds for SWSCI display power state
 Date:   Mon, 21 Feb 2022 09:49:01 +0100
-Message-Id: <20220221084908.832464802@linuxfoundation.org>
+Message-Id: <20220221084922.867983562@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220221084908.568970525@linuxfoundation.org>
-References: <20220221084908.568970525@linuxfoundation.org>
+In-Reply-To: <20220221084921.147454846@linuxfoundation.org>
+References: <20220221084921.147454846@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,75 +58,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yang Xu <xuyang2018.jy@fujitsu.com>
+From: Jani Nikula <jani.nikula@intel.com>
 
-[ Upstream commit fc4eb486a59d70bd35cf1209f0e68c2d8b979193 ]
+commit ea958422291de248b9e2eaaeea36004e84b64043 upstream.
 
-Since commit 43209ea2d17a ("zram: remove max_comp_streams internals"), zram
-has switched to per-cpu streams. Even kernel still keep this interface for
-some reasons, but writing to max_comp_stream doesn't take any effect. So
-skip it on newer kernel ie 4.7.
+The mapping from enum port to whatever port numbering scheme is used by
+the SWSCI Display Power State Notification is odd, and the memory of it
+has faded. In any case, the parameter only has space for ports numbered
+[0..4], and UBSAN reports bit shift beyond it when the platform has port
+F or more.
 
-The code that comparing kernel version is from xfstests testsuite ext4/053.
+Since the SWSCI functionality is supposed to be obsolete for new
+platforms (i.e. ones that might have port F or more), just bail out
+early if the mapped and mangled port number is beyond what the Display
+Power State Notification can support.
 
-Signed-off-by: Yang Xu <xuyang2018.jy@fujitsu.com>
-Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: 9c4b0a683193 ("drm/i915: add opregion function to notify bios of encoder enable/disable")
+Cc: <stable@vger.kernel.org> # v3.13+
+Cc: Ville Syrjälä <ville.syrjala@linux.intel.com>
+Cc: Lucas De Marchi <lucas.demarchi@intel.com>
+Closes: https://gitlab.freedesktop.org/drm/intel/-/issues/4800
+Signed-off-by: Jani Nikula <jani.nikula@intel.com>
+Reviewed-by: Ville Syrjälä <ville.syrjala@linux.intel.com>
+Link: https://patchwork.freedesktop.org/patch/msgid/cc363f42d6b5a5932b6d218fefcc8bdfb15dbbe5.1644489329.git.jani.nikula@intel.com
+(cherry picked from commit 24a644ebbfd3b13cda702f98907f9dd123e34bf9)
+Signed-off-by: Tvrtko Ursulin <tvrtko.ursulin@intel.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- tools/testing/selftests/zram/zram_lib.sh | 24 ++++++++++++++++++++++++
- 1 file changed, 24 insertions(+)
+ drivers/gpu/drm/i915/display/intel_opregion.c |   15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
 
-diff --git a/tools/testing/selftests/zram/zram_lib.sh b/tools/testing/selftests/zram/zram_lib.sh
-index 9e73a4fb9b0aa..2c1d1c567f854 100755
---- a/tools/testing/selftests/zram/zram_lib.sh
-+++ b/tools/testing/selftests/zram/zram_lib.sh
-@@ -20,6 +20,9 @@ dev_mounted=-1
+--- a/drivers/gpu/drm/i915/display/intel_opregion.c
++++ b/drivers/gpu/drm/i915/display/intel_opregion.c
+@@ -361,6 +361,21 @@ int intel_opregion_notify_encoder(struct
+ 		port++;
+ 	}
  
- # Kselftest framework requirement - SKIP code is 4.
- ksft_skip=4
-+kernel_version=`uname -r | cut -d'.' -f1,2`
-+kernel_major=${kernel_version%.*}
-+kernel_minor=${kernel_version#*.}
- 
- trap INT
- 
-@@ -34,6 +37,20 @@ check_prereqs()
- 	fi
- }
- 
-+kernel_gte()
-+{
-+	major=${1%.*}
-+	minor=${1#*.}
++	/*
++	 * The port numbering and mapping here is bizarre. The now-obsolete
++	 * swsci spec supports ports numbered [0..4]. Port E is handled as a
++	 * special case, but port F and beyond are not. The functionality is
++	 * supposed to be obsolete for new platforms. Just bail out if the port
++	 * number is out of bounds after mapping.
++	 */
++	if (port > 4) {
++		drm_dbg_kms(&dev_priv->drm,
++			    "[ENCODER:%d:%s] port %c (index %u) out of bounds for display power state notification\n",
++			    intel_encoder->base.base.id, intel_encoder->base.name,
++			    port_name(intel_encoder->port), port);
++		return -EINVAL;
++	}
 +
-+	if [ $kernel_major -gt $major ]; then
-+		return 0
-+	elif [[ $kernel_major -eq $major && $kernel_minor -ge $minor ]]; then
-+		return 0
-+	fi
-+
-+	return 1
-+}
-+
- zram_cleanup()
- {
- 	echo "zram cleanup"
-@@ -95,6 +112,13 @@ zram_max_streams()
- {
- 	echo "set max_comp_streams to zram device(s)"
+ 	if (!enable)
+ 		parm |= 4 << 8;
  
-+	kernel_gte 4.7
-+	if [ $? -eq 0 ]; then
-+		echo "The device attribute max_comp_streams was"\
-+		               "deprecated in 4.7"
-+		return 0
-+	fi
-+
- 	local i=0
- 	for max_s in $zram_max_streams; do
- 		local sys_path="/sys/block/zram${i}/max_comp_streams"
--- 
-2.34.1
-
 
 

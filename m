@@ -2,211 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF8A84BD701
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 08:43:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA4734BD73C
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 08:43:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346072AbiBUHSM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 02:18:12 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48622 "EHLO
+        id S1345945AbiBUHSp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 02:18:45 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346067AbiBUHSF (ORCPT
+        with ESMTP id S1345941AbiBUHSh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 02:18:05 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBE7C14019;
-        Sun, 20 Feb 2022 23:17:28 -0800 (PST)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 8ACCF482;
-        Mon, 21 Feb 2022 08:17:26 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1645427847;
-        bh=aSB52NNA4H92Oslixgeyy510diwPvOcyJd91kINF57c=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=JlSHLBrDXvdSWLwOBbH7z38SPLDPRbp/mPG/gBe+ulwi/xzqbFc6bDYXOLadUDJB4
-         5FYBuMgNCjUG3MPq0DvymghRTRKOwZgbbLqRyHPtFxQPq2TmC88wqbpyucwMD5IzwT
-         oPzdhyvDd0La3qg9C2OeUUUAc1FNifOLgVy/6wuM=
-Date:   Mon, 21 Feb 2022 09:17:16 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Jean-Michel Hautbois <jeanmichel.hautbois@ideasonboard.com>
-Cc:     dave.stevenson@raspberrypi.com, devicetree@vger.kernel.org,
-        kernel-list@raspberrypi.com, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-rpi-kernel@lists.infradead.org, lukasz@jany.st,
-        mchehab@kernel.org, naush@raspberrypi.com, robh@kernel.org,
-        tomi.valkeinen@ideasonboard.com,
-        bcm-kernel-feedback-list@broadcom.com, stefan.wahren@i2se.com
-Subject: Re: [PATCH v5 09/11] media: imx219: Introduce the set_routing
- operation
-Message-ID: <YhM8fFae+Zmxymd3@pendragon.ideasonboard.com>
-References: <20220208155027.891055-1-jeanmichel.hautbois@ideasonboard.com>
- <20220208155027.891055-10-jeanmichel.hautbois@ideasonboard.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220208155027.891055-10-jeanmichel.hautbois@ideasonboard.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 21 Feb 2022 02:18:37 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C0282631;
+        Sun, 20 Feb 2022 23:18:15 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BE81860F31;
+        Mon, 21 Feb 2022 07:18:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D93AEC340E9;
+        Mon, 21 Feb 2022 07:18:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645427894;
+        bh=LgQjXd4WN0kF4H55no28FnkGWNbYSD9+uIC761PMlbc=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=e4uPllXxesVF8kZU6rixAvWBH7hkw5/x6qSlo1CxnP0B9Zt+wA+DFDrSlh2/9Zv57
+         BZrYiJZqlvm/yMNGLPYK4k2Wi0g4HcR3osWJn16gkcbc9Ra2xWgIG0xNIK1M2Ya04O
+         Tv2BwVvv6XH+Azr/T2tlXdCsOnya7t5wpfpZlbR4LOqUDRAGWkCCB/qwji/0fzFz/n
+         nFC6RKpk/LenLzQyx7jQWiK/kxIoAq6sftOzrzp9wZoYzKaoNOLQe38awRe4/87Z6l
+         XJTXJwUAC/aWwrCVuKW5yiBf+iW6AszicZMXw58qW5+V01h2Msbi2hOJ2Sjs3OCyGk
+         wssEgTVrgaMUw==
+Date:   Mon, 21 Feb 2022 16:18:08 +0900
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Jiri Olsa <olsajiri@gmail.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>, lkml <linux-kernel@vger.kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Oleg Nesterov <oleg@redhat.com>
+Subject: Re: [PATCH 0/8] bpf: Add fprobe link
+Message-Id: <20220221161808.46d9809fed5be7be8e16e47d@kernel.org>
+In-Reply-To: <CAADnVQ+eojJ8KMwbieJrtOf7oWPqw7VDYV9EAAWpx3UoFHZFDQ@mail.gmail.com>
+References: <Yfq+PJljylbwJ3Bf@krava>
+        <CAADnVQKeTB=UgY4Gf-46EBa8rwWTu2wvi7hEj2sdVTALGJ0JEg@mail.gmail.com>
+        <YfvvfLlM1FOTgvDm@krava>
+        <20220204094619.2784e00c0b7359356458ca57@kernel.org>
+        <CAADnVQJYY0Xm6M9O02E5rOkdQPX39NOOS4tM2jpwRLQvP-qDBg@mail.gmail.com>
+        <20220204110704.7c6eaf43ff9c8f5fe9bf3179@kernel.org>
+        <CAADnVQJfq_10H0V+u0w0rzyZ9uy7vq=T-3BMDANjEN8A3-prsQ@mail.gmail.com>
+        <20220203211954.67c20cd3@gandalf.local.home>
+        <CAADnVQKjNJjZDs+ZV7vcusEkKuDq+sWhSD3M5GtvNeZMx3Fcmg@mail.gmail.com>
+        <20220204125942.a4bda408f536c2e3248955e1@kernel.org>
+        <Yguo4v7c+3A0oW/h@krava>
+        <CAEf4BzYO_B51TPgUnDXUPUsK55RSczwcnhuLz9DMbfO5JCj=Cw@mail.gmail.com>
+        <20220217230357.67d09baa261346a985b029b6@kernel.org>
+        <CAEf4BzYxcSCae=sF3EKNUtLDCZhkhHkd88CEBt4bffzN_AZrDw@mail.gmail.com>
+        <20220218130727.51db96861c3e1c79b45daafb@kernel.org>
+        <CAADnVQ+eojJ8KMwbieJrtOf7oWPqw7VDYV9EAAWpx3UoFHZFDQ@mail.gmail.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jean-Michel,
+On Fri, 18 Feb 2022 18:10:08 -0800
+Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
 
-Thank you for the patch.
-
-On Tue, Feb 08, 2022 at 04:50:25PM +0100, Jean-Michel Hautbois wrote:
-> As we want to use multiplexed streams API, we need to be able to set the
-> pad routing. Introduce the set_routing operation.
+> On Thu, Feb 17, 2022 at 8:07 PM Masami Hiramatsu <mhiramat@kernel.org> wrote:
+> >
+> > On Thu, 17 Feb 2022 14:01:30 -0800
+> > Andrii Nakryiko <andrii.nakryiko@gmail.com> wrote:
+> >
+> >
+> > > > > Is there any chance to support this fast multi-attach for uprobe? If
+> > > > > yes, we might want to reuse the same link for both (so should we name
+> > > > > it more generically?
+> > > >
+> > > > There is no interface to do that but also there is no limitation to
+> > > > expand uprobes. For the kprobes, there are some limitations for the
+> > > > function entry because it needs to share the space with ftrace. So
+> > > > I introduced fprobe for easier to use.
+> > > >
+> > > > > on the other hand BPF program type for uprobe is
+> > > > > BPF_PROG_TYPE_KPROBE anyway, so keeping it as "kprobe" also would be
+> > > > > consistent with what we have today).
+> > > >
+> > > > Hmm, I'm not sure why BPF made such design choice... (Uprobe needs
+> > > > the target program.)
+> > > >
+> > >
+> > > We've been talking about sleepable uprobe programs, so we might need
+> > > to add uprobe-specific program type, probably. But historically, from
+> > > BPF point of view there was no difference between kprobe and uprobe
+> > > programs (in terms of how they are run and what's available to them).
+> > > From BPF point of view, it was just attaching BPF program to a
+> > > perf_event.
+> >
+> > Got it, so that will reuse the uprobe_events in ftrace. But I think
+> > the uprobe requires a "path" to the attached binary, how is it
+> > specified?
+> >
+> > > > > But yeah, the main question is whether there is something preventing
+> > > > > us from supporting multi-attach uprobe as well? It would be really
+> > > > > great for USDT use case.
+> > > >
+> > > > Ah, for the USDT, it will be useful. But since now we will have "user-event"
+> > > > which is faster than uprobes, we may be better to consider to use it.
+> > >
+> > > Any pointers? I'm not sure what "user-event" refers to.
+> >
+> > Here is the user-events series, which allows user program to define
+> > raw dynamic events and it can write raw event data directly from
+> > user space.
+> >
+> > https://lore.kernel.org/all/20220118204326.2169-1-beaub@linux.microsoft.com/
 > 
-> As this operation is required for a multiplexed able sensor, add the
-> V4L2_SUBDEV_FL_MULTIPLEXED flag.
-> 
-> Signed-off-by: Jean-Michel Hautbois <jeanmichel.hautbois@ideasonboard.com>
-> ---
->  drivers/media/i2c/imx219.c | 82 ++++++++++++++++++++++++++++++++++++--
->  1 file changed, 79 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/media/i2c/imx219.c b/drivers/media/i2c/imx219.c
-> index abcaee15c4a0..35b61fad8e35 100644
-> --- a/drivers/media/i2c/imx219.c
-> +++ b/drivers/media/i2c/imx219.c
-> @@ -118,6 +118,10 @@
->  #define IMX219_PIXEL_ARRAY_WIDTH	3280U
->  #define IMX219_PIXEL_ARRAY_HEIGHT	2464U
->  
-> +/* Embedded metadata stream structure */
-> +#define IMX219_EMBEDDED_LINE_WIDTH	16384
-> +#define IMX219_NUM_EMBEDDED_LINES	1
-> +
->  struct imx219_reg {
->  	u16 address;
->  	u8 val;
-> @@ -784,15 +788,85 @@ static void imx219_init_formats(struct v4l2_subdev_state *state)
->  	format->height = supported_modes[0].height;
->  	format->field = V4L2_FIELD_NONE;
->  	format->colorspace = V4L2_COLORSPACE_RAW;
-> +
-> +	if (state->routing.routes[1].flags & V4L2_SUBDEV_ROUTE_FL_ACTIVE) {
+> Is this a way for user space to inject user bytes into kernel events?
 
-There's no guarantee the routing table will have 2 entries.
+Yes, it is.
 
-> +		format = v4l2_state_get_stream_format(state, 0, 1);
-> +		format->code = MEDIA_BUS_FMT_METADATA_8;
-> +		format->width = IMX219_EMBEDDED_LINE_WIDTH;
-> +		format->height = 1;
-> +		format->field = V4L2_FIELD_NONE;
-> +		format->colorspace = V4L2_COLORSPACE_DEFAULT;
-> +	}
->  }
->  
-> -static int imx219_init_cfg(struct v4l2_subdev *sd,
-> -			   struct v4l2_subdev_state *state)
-> +static int __imx219_set_routing(struct v4l2_subdev *sd,
-> +				struct v4l2_subdev_state *state)
->  {
-> +	struct v4l2_subdev_route routes[] = {
-> +		{
-> +			.source_pad = 0,
-> +			.source_stream = 0,
-> +			.flags = V4L2_SUBDEV_ROUTE_FL_IMMUTABLE |
-> +				 V4L2_SUBDEV_ROUTE_FL_SOURCE |
-> +				 V4L2_SUBDEV_ROUTE_FL_ACTIVE,
-> +		},
-> +		{
+> What is the use case?
 
-		}, {
+This is like trace_marker but more ftrace/perf friendly version. The trace_marker
+can only send a user string, and the kernel can not parse it. Thus, the traced
+data will be shown in the trace buffer, but the event filter, event trigger,
+histogram etc didn't work with trace_marker.
 
-> +			.source_pad = 0,
-> +			.source_stream = 1,
-> +			.flags = V4L2_SUBDEV_ROUTE_FL_SOURCE |
-> +				 V4L2_SUBDEV_ROUTE_FL_ACTIVE,
-> +		}
-> +	};
+On the other hand, the user-events allows user-space defines new events with
+various arguments with types, and the application can send the formatted raw
+data to the kernel. Thus the kernel can apply event filter, event trigger and
+histograms on those events as same as other kernel defined events.
 
-That doesn't look right. You're hardcoding the routes, disregarding
-completely what userspace wants to program. This default configuration
-must move to .init_cfg().
+This will be helpful for users to push their own data as events of ftrace
+and perf (and eBPF I think) so that they can use those tracing tools to analyze
+both of their events and kernel events. :-)
 
-> +
-> +	struct v4l2_subdev_krouting routing = {
-> +		.num_routes = ARRAY_SIZE(routes),
-> +		.routes = routes,
-> +	};
-> +
-> +	int ret;
-> +
-> +	ret = v4l2_subdev_set_routing(sd, state, &routing);
-> +	if (ret)
-> +		return ret;
-> +
->  	imx219_init_formats(state);
-> +
->  	return 0;
->  }
->  
-> +static int imx219_set_routing(struct v4l2_subdev *sd,
-> +			      struct v4l2_subdev_state *state,
-> +			      enum v4l2_subdev_format_whence which,
-> +			      struct v4l2_subdev_krouting *routing)
-> +{
-> +	int ret;
-> +
-> +	if (routing->num_routes == 0 || routing->num_routes > 2)
-> +		return -EINVAL;
-> +
-> +	v4l2_subdev_lock_state(state);
-
-Note for the future: v11 of the V4L2 streams series will handle locking
-in the code, so you'll have to drop this (same in .init_cfg()).
-
-> +
-> +	ret = __imx219_set_routing(sd, state);
-> +
-> +	v4l2_subdev_unlock_state(state);
-> +
-> +	return ret;
-> +}
-> +
-> +static int imx219_init_cfg(struct v4l2_subdev *sd,
-> +			   struct v4l2_subdev_state *state)
-> +{
-> +	int ret;
-> +
-> +	v4l2_subdev_lock_state(state);
-> +
-> +	ret = __imx219_set_routing(sd, state);
-> +
-> +	v4l2_subdev_unlock_state(state);
-> +
-> +	return ret;
-> +}
-> +
->  static int imx219_enum_mbus_code(struct v4l2_subdev *sd,
->  				 struct v4l2_subdev_state *sd_state,
->  				 struct v4l2_subdev_mbus_code_enum *code)
-> @@ -1251,6 +1325,7 @@ static const struct v4l2_subdev_pad_ops imx219_pad_ops = {
->  	.get_fmt		= imx219_get_pad_format,
->  	.set_fmt		= imx219_set_pad_format,
->  	.get_selection		= imx219_get_selection,
-> +	.set_routing		= imx219_set_routing,
->  	.enum_frame_size	= imx219_enum_frame_size,
->  };
->  
-> @@ -1509,7 +1584,8 @@ static int imx219_probe(struct i2c_client *client)
->  
->  	/* Initialize subdev */
->  	imx219->sd.flags |= V4L2_SUBDEV_FL_HAS_DEVNODE |
-> -			    V4L2_SUBDEV_FL_HAS_EVENTS;
-> +			    V4L2_SUBDEV_FL_HAS_EVENTS |
-> +			    V4L2_SUBDEV_FL_MULTIPLEXED;
->  	imx219->sd.entity.function = MEDIA_ENT_F_CAM_SENSOR;
->  
->  	/* Initialize source pad */
+Thank you,
 
 -- 
-Regards,
-
-Laurent Pinchart
+Masami Hiramatsu <mhiramat@kernel.org>

@@ -2,158 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3841F4BE5F4
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:01:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA2524BE6E9
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:02:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352199AbiBUJxi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 04:53:38 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40156 "EHLO
+        id S1352513AbiBUJzx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 04:55:53 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352913AbiBUJsB (ORCPT
+        with ESMTP id S1352955AbiBUJsD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 04:48:01 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C20282458D
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 01:21:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1645435278;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=GumUOC/tpD4HU1sIpPheYV1+0ORIMlK0adifuiQaD2s=;
-        b=GXv+0AePUYzFnb6lfa22WqIaj+yIkt8WH4Fv7jmRmWh278dpN66TUmF2Z5UGdFxCauKGrW
-        czaMupB94wtGptK+yT5UEYIEsR8yGoDCorwGvdA9IZWvhaXcBEhblzScpc4riyc0c+Qje3
-        Yjh4DdLKTSiPbXDD9Y6NOJd7wuZFKdA=
-Received: from mail-lj1-f199.google.com (mail-lj1-f199.google.com
- [209.85.208.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-648-n0fepWuPNHq1nzeCDxZE-Q-1; Mon, 21 Feb 2022 04:21:15 -0500
-X-MC-Unique: n0fepWuPNHq1nzeCDxZE-Q-1
-Received: by mail-lj1-f199.google.com with SMTP id 185-20020a2e05c2000000b002463aff775aso1659024ljf.17
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 01:21:15 -0800 (PST)
+        Mon, 21 Feb 2022 04:48:03 -0500
+Received: from mail-qv1-xf2b.google.com (mail-qv1-xf2b.google.com [IPv6:2607:f8b0:4864:20::f2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76E9513CCE
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 01:21:47 -0800 (PST)
+Received: by mail-qv1-xf2b.google.com with SMTP id x3so30510043qvd.8
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 01:21:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to;
+        bh=/zMMnHpU33a/fR4VbyyTa7iT756O176trm2NNe2YalE=;
+        b=XWfdKjiBLSrYRHJ7/rGaFYqwg7r6A02RDtCHCx5hbmI+4V23kJ8KQsYDrmseKrg3Wb
+         0WSn+/fpw+NOz3DEpldSRYkla5ClpTo7OntL08Pozd07RG4dC2p4cCgAbO/zDAJX785E
+         hGBTzSPsFygKMFdTCMXaKlJnnB8IqUergCbK1vvab97FA30h3B2oqqBTleH/LctaJ/Eh
+         cvBYqNpXqU3u3b956xaPiF/f/R0yhZSUXY2r7CszqMK7tdGq8PJ2oS0XZnBrYWxweoy5
+         aBGa/ejbjVDRVNNTLFWFqSPKNHOTq3jlMwzL95M14bDa6bOAEyt1MJmC+qkvWmolNlex
+         scEQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=GumUOC/tpD4HU1sIpPheYV1+0ORIMlK0adifuiQaD2s=;
-        b=AFh74wYguG+Boen5f4lVjR2+VrkfkIX16NV4PWsjhHkoRW9eyv1/DaQvsFWdQjOsS9
-         Y7bW9DbKGAXiOxRZoIEVFdRE1VKSSNBySJU4MJQ2yqj3F06fDdaMDxDHTMVdYtENyRYI
-         UQVrykb6LEfZD9b6YpecbdNHtKdQGYUuDz6AgNdNvF5zXc+wBDyCPj3FCXeKnEHIB4bv
-         Bxx4XuPyRsjlSrecuA4LHwCkvucgrU3loR2VivlaTvr7S+H2ThijcPaNuo3ASidZ5hMU
-         QCYMrJnt+TSOtRNMCEGmxaxhH8P5BDCwLH/hGtoo88leiXspIU0VS9wYE5wnVAEZW5Gn
-         0nEg==
-X-Gm-Message-State: AOAM533afY+2ki5EQFBQ4Hss2rS7zok/lGXe7PojLsH3WxCeQoEuwY6+
-        vI2D8f88j+9x5kYbvJnEY5LKipVQz2ZTDEyy6RSBcjLdygpTeyNkwqCJ+gW+yVAKaimOeo6RUoV
-        FapHNCzkVwaS0mIw4obLmW7oZfuA3I6OBG9MJdqw=
-X-Received: by 2002:a05:651c:386:b0:244:e2ab:87f9 with SMTP id e6-20020a05651c038600b00244e2ab87f9mr13464558ljp.201.1645435272754;
-        Mon, 21 Feb 2022 01:21:12 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwvHaDSK1yq/EJhp1HN5IPx788Jxxn4WG+3hHVeYtWFW+WKzEDLmnp+QQW9Oi3deV9rKkZ3Si1vrNu1O+WNJLA=
-X-Received: by 2002:a05:651c:386:b0:244:e2ab:87f9 with SMTP id
- e6-20020a05651c038600b00244e2ab87f9mr13464535ljp.201.1645435272173; Mon, 21
- Feb 2022 01:21:12 -0800 (PST)
+         :message-id:subject:to;
+        bh=/zMMnHpU33a/fR4VbyyTa7iT756O176trm2NNe2YalE=;
+        b=0gTCmHjKe514wmiZyXFaOVvzuSJeVn8Ozezqc9FLhfiblcYF1ihVhZ8ixEwH9fpuvE
+         /v+QV5IYrCuPiKz/OVacj54DDPvcBAGzz7yUtQO8zixN7+NyMl5bGXkKBZpiBTUvbbY0
+         B/cp0uyAbgkf/LhFM8v4wW9YE4IjlmrUdepJ5Tjbw62msI9FNx3DcOU9ZUqoV9e1YOPx
+         vw2c3W5w8AOZk2RbGQQGl8VBnicn91E8+9V1PmFekqMURnfn4AxV9/X36JnwBuzQcsmk
+         0MumjLK2QwKDO0Hj8O8TY8gv/E5qa4y7QbcucJWBGHasWwI2A0f8tT/ZRCQW5eVlmSMB
+         9SnA==
+X-Gm-Message-State: AOAM533uY4p4Ng14/JCeiL6f9jsp9yVMaIKZUTmEesbrR4but/Uhh1y/
+        /aT06aJFsTeJQ1Y69efUw896Fz1nbkrUQh/wgtg=
+X-Google-Smtp-Source: ABdhPJz9jbEsluAZP7h5vwHMMRZOFdSZnFCjnNW3VeSP0WGX5JfWxc0E2hUYM0VvR0QJZEhhUDSdjqAZ7mD06DWDlE0=
+X-Received: by 2002:a05:622a:19a2:b0:2de:600:a597 with SMTP id
+ u34-20020a05622a19a200b002de0600a597mr6539456qtc.160.1645435306596; Mon, 21
+ Feb 2022 01:21:46 -0800 (PST)
 MIME-Version: 1.0
-References: <20220218212511.887059-1-atomlin@redhat.com> <20220218212511.887059-10-atomlin@redhat.com>
- <98cff67e-d2ca-705b-7c83-bd3f41df98d9@csgroup.eu>
-In-Reply-To: <98cff67e-d2ca-705b-7c83-bd3f41df98d9@csgroup.eu>
-From:   Aaron Tomlin <atomlin@redhat.com>
-Date:   Mon, 21 Feb 2022 09:21:00 +0000
-Message-ID: <CANfR36gBNC0ZPJPAn2H04cOC+ztQdeBC19LzaF5hU2fhHqrr9A@mail.gmail.com>
-Subject: Re: [PATCH v6 09/13] module: Move kallsyms support into a separate file
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     "mcgrof@kernel.org" <mcgrof@kernel.org>,
-        "cl@linux.com" <cl@linux.com>,
-        "pmladek@suse.com" <pmladek@suse.com>,
-        "mbenes@suse.cz" <mbenes@suse.cz>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "jeyu@kernel.org" <jeyu@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
-        "live-patching@vger.kernel.org" <live-patching@vger.kernel.org>,
-        "atomlin@atomlin.com" <atomlin@atomlin.com>,
-        "ghalat@redhat.com" <ghalat@redhat.com>,
-        "allen.lkml@gmail.com" <allen.lkml@gmail.com>,
-        "joe@perches.com" <joe@perches.com>,
-        "msuchanek@suse.de" <msuchanek@suse.de>,
-        "oleksandr@natalenko.name" <oleksandr@natalenko.name>
+References: <1645174105-31224-1-git-send-email-huangzhaoyang@gmail.com>
+In-Reply-To: <1645174105-31224-1-git-send-email-huangzhaoyang@gmail.com>
+From:   Zhaoyang Huang <huangzhaoyang@gmail.com>
+Date:   Mon, 21 Feb 2022 17:21:18 +0800
+Message-ID: <CAGWkznHS7AnManNUyytEZGxymFKi+MxOOq2vZe5U03W9YPdqww@mail.gmail.com>
+Subject: Re: [RFC PATCH] block: set bdi congested when no tag available
+To:     Jens Axboe <axboe@kernel.dk>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Ming Lei <ming.lei@redhat.com>, Hannes Reinecke <hare@suse.de>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Zhaoyang Huang <zhaoyang.huang@unisoc.com>,
+        LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 2022-02-21 08:15 +0000, Christophe Leroy wrote:
-> [   36.421711] BUG: Unable to handle kernel data access on write at
-> 0xbe79bb40
-> [   36.428435] Faulting instruction address: 0xc008b74c
-> [   36.433342] Oops: Kernel access of bad area, sig: 11 [#1]
-> [   36.438672] BE PAGE_SIZE=16K PREEMPT CMPC885
-> [   36.442947] SAF3000 DIE NOTIFICATION
-> [   36.446421] Modules linked in:
-> [   36.449436] CPU: 0 PID: 374 Comm: insmod Not tainted
-> 5.17.0-rc4-s3k-dev-02274-g7d4ec8831803 #1016
-> [   36.458211] NIP:  c008b74c LR: c00897ac CTR: c001145c
-> [   36.463200] REGS: caf8bcf0 TRAP: 0300   Not tainted
-> (5.17.0-rc4-s3k-dev-02274-g7d4ec8831803)
-> [   36.471633] MSR:  00009032 <EE,ME,IR,DR,RI>  CR: 24002842  XER: 00000000
-> [   36.478261] DAR: be79bb40 DSISR: c2000000
-> [   36.478261] GPR00: c00899a0 caf8bdb0 c230a980 be74c000 caf8beb8
-> 00000008 00000000 c035629c
-> [   36.478261] GPR08: be75c000 caf9c9fc be79bb40 00000004 24002842
-> 100d166a 00000290 00000000
-> [   36.478261] GPR16: c0747320 caf9c9fc c11ff918 caf9b2a7 be75c290
-> 00000550 00000022 c0747210
-> [   36.478261] GPR24: c11ff8e8 be74c000 c11ff8fc 100b8820 00000000
-> 00000000 be74c000 caf8beb8
-> [   36.516729] NIP [c008b74c] add_kallsyms+0x48/0x30c
-> [   36.521465] LR [c00897ac] load_module+0x16f8/0x2504
-> [   36.526286] Call Trace:
-> [   36.528693] [caf8bdb0] [00000208] 0x208 (unreliable)
-> [   36.533598] [caf8bde0] [c00899a0] load_module+0x18ec/0x2504
-> [   36.539107] [caf8beb0] [c008a7a8] sys_finit_module+0xb4/0xf8
-> [   36.544700] [caf8bf30] [c00120a4] ret_from_syscall+0x0/0x28
-> [   36.550209] --- interrupt: c00 at 0xfd5e7c0
-> [   36.554339] NIP:  0fd5e7c0 LR: 100144e8 CTR: 10013238
-> [   36.559331] REGS: caf8bf40 TRAP: 0c00   Not tainted
-> (5.17.0-rc4-s3k-dev-02274-g7d4ec8831803)
-> [   36.567763] MSR:  0000d032 <EE,PR,ME,IR,DR,RI>  CR: 24002222  XER:
-> 00000000
-> [   36.574735]
-> [   36.574735] GPR00: 00000161 7fc5a130 7792f4e0 00000003 100b8820
-> 00000000 0fd4ded4 0000d032
-> [   36.574735] GPR08: 00000000 10013238 00000000 00000002 142d2297
-> 100d166a 100a0920 00000000
-> [   36.574735] GPR16: 100cac0c 100b0000 1013c3cc 1013d685 100d0000
-> 100d0000 00000000 100a0900
-> [   36.574735] GPR24: ffffffa2 ffffffff 1013c3a4 00000003 1013c3cc
-> 100b8820 1013c3f0 1013c3cc
-> [   36.610535] NIP [0fd5e7c0] 0xfd5e7c0
-> [   36.614065] LR [100144e8] 0x100144e8
-> [   36.617593] --- interrupt: c00
-> [   36.620609] Instruction dump:
-> [   36.623534] 7c7e1b78 81040038 8124003c 81430100 55082036 7d0a4214
-> 1d490028 81240010
-> [   36.631365] 9103015c 7d295214 8109000c 8143015c <910a0000> 81290014
-> 8143015c 5529e13e
-> [   36.639376] ---[ end trace 0000000000000000 ]---
-
-Hi Christophe,
-
-Unfortunately, I do not have the debuginfo data. Albeit, based on the stack
-trace, I suspect this was the result of the dereference attempt (below) due
-to the invalid pointer stored in mod->kallsyms i.e. mod->kallsyms = (struct
-mod_kallsyms __rcu *)mod->init_layout.base + info->mod_kallsyms_init_off:
-
-  177             /* The following is safe since this pointer cannot change */
-  178             rcu_dereference_sched(mod->kallsyms)->symtab = (void
-*)symsec->sh_addr;
-
-Kind regards,
-
--- 
-Aaron Tomlin
-
+On Fri, Feb 18, 2022 at 4:48 PM Huangzhaoyang <huangzhaoyang@gmail.com> wrote:
+>
+> From: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
+>
+> In previous version, block layer will set bdi to be congested when
+> get_request fail, which may throttle direct_reclaim. Move them back
+> under current design.
+>
+> Signed-off-by: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
+> ---
+>  block/blk-mq-tag.c      | 18 +++++++++++++++++-
+>  include/linux/sbitmap.h |  1 +
+>  lib/sbitmap.c           | 17 +++++++++++++++++
+>  3 files changed, 35 insertions(+), 1 deletion(-)
+>
+> diff --git a/block/blk-mq-tag.c b/block/blk-mq-tag.c
+> index 995336a..abb0685 100644
+> --- a/block/blk-mq-tag.c
+> +++ b/block/blk-mq-tag.c
+> @@ -11,6 +11,7 @@
+>
+>  #include <linux/blk-mq.h>
+>  #include <linux/delay.h>
+> +#include <linux/backing-dev.h>
+>  #include "blk.h"
+>  #include "blk-mq.h"
+>  #include "blk-mq-sched.h"
+> @@ -126,8 +127,11 @@ unsigned int blk_mq_get_tag(struct blk_mq_alloc_data *data)
+>         if (tag != BLK_MQ_NO_TAG)
+>                 goto found_tag;
+>
+> -       if (data->flags & BLK_MQ_REQ_NOWAIT)
+> +       if (data->flags & BLK_MQ_REQ_NOWAIT) {
+> +               set_bdi_congested(data->q->disk->bdi,BLK_RW_SYNC);
+> +               set_bdi_congested(data->q->disk->bdi,BLK_RW_ASYNC);
+>                 return BLK_MQ_NO_TAG;
+> +       }
+>
+>         ws = bt_wait_ptr(bt, data->hctx);
+>         do {
+> @@ -193,9 +197,21 @@ unsigned int blk_mq_get_tag(struct blk_mq_alloc_data *data)
+>         return tag + tag_offset;
+>  }
+>
+> +static bool blk_mq_has_free_tags(struct blk_mq_tags *tags)
+> +{
+> +       if (!tags)
+> +               return true;
+> +
+> +       return sbitmap_any_bit_set(&tags->bitmap_tags.sb);
+should be return sbitmap_any_bit_clear(&tags->bitmap_tags.sb)
+> +}
+> +
+>  void blk_mq_put_tag(struct blk_mq_tags *tags, struct blk_mq_ctx *ctx,
+>                     unsigned int tag)
+>  {
+> +       if (!blk_mq_has_free_tags(tags)) {
+> +               clear_bdi_congested(ctx->queue->disk->bdi, BLK_RW_SYNC);
+> +               clear_bdi_congested(ctx->queue->disk->bdi, BLK_RW_ASYNC);
+> +       }
+>         if (!blk_mq_tag_is_reserved(tags, tag)) {
+>                 const int real_tag = tag - tags->nr_reserved_tags;
+>
+> diff --git a/include/linux/sbitmap.h b/include/linux/sbitmap.h
+> index 4a6ff27..30a5553 100644
+> --- a/include/linux/sbitmap.h
+> +++ b/include/linux/sbitmap.h
+> @@ -210,6 +210,7 @@ static inline void sbitmap_free(struct sbitmap *sb)
+>   * Return: true if any bit in the bitmap is set, false otherwise.
+>   */
+>  bool sbitmap_any_bit_set(const struct sbitmap *sb);
+> +bool sbitmap_any_bit_clear(const struct sbitmap *sb);
+>
+>  #define SB_NR_TO_INDEX(sb, bitnr) ((bitnr) >> (sb)->shift)
+>  #define SB_NR_TO_BIT(sb, bitnr) ((bitnr) & ((1U << (sb)->shift) - 1U))
+> diff --git a/lib/sbitmap.c b/lib/sbitmap.c
+> index 2709ab8..baa30d8 100644
+> --- a/lib/sbitmap.c
+> +++ b/lib/sbitmap.c
+> @@ -309,6 +309,23 @@ bool sbitmap_any_bit_set(const struct sbitmap *sb)
+>  }
+>  EXPORT_SYMBOL_GPL(sbitmap_any_bit_set);
+>
+> +bool sbitmap_any_bit_clear(const struct sbitmap *sb)
+> +{
+> +       unsigned int i;
+> +
+> +       for (i = 0; i < sb->map_nr; i++) {
+> +               const struct sbitmap_word *word = &sb->map[i];
+> +               unsigned long mask = word->word & ~word->cleared;
+> +               unsigned long ret;
+> +
+> +               ret = find_first_zero_bit(&mask, word->depth);
+> +               if (ret < word->depth)
+> +                       return true;
+> +       }
+> +       return false;
+> +}
+> +EXPORT_SYMBOL_GPL(sbitmap_any_bit_clear);
+> +
+>  static unsigned int __sbitmap_weight(const struct sbitmap *sb, bool set)
+>  {
+>         unsigned int i, weight = 0;
+> --
+> 1.9.1
+>

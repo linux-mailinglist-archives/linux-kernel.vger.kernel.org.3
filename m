@@ -2,88 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D00F44BE195
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:53:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CBC304BE78F
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:03:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377876AbiBUOga (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 09:36:30 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47136 "EHLO
+        id S1378077AbiBUOhm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 09:37:42 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378042AbiBUOg1 (ORCPT
+        with ESMTP id S1378073AbiBUOhh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 09:36:27 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAB2E1C116
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 06:36:01 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 98443B811B8
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 14:36:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0880DC340F0
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 14:35:58 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="T5TTZcfU"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1645454157;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=JZWqQucztzl4FMO8upbni3vH9WRsE2DJlKlbVztRZoI=;
-        b=T5TTZcfUVNzi1UuVD1Sv4M5Gfa1uWebZtnEz3y2EM/ZbI85v7/FSTQu7x26jApWi6Omnq/
-        hIsNsCH1UB7UAVvhNgM786UwNLcd9G1jnLJ4Ee/HoAjA/mQ+6icJzpc4YPJn/wrz4/0edb
-        hmXpx2OxNxARYkt1PmmgOjUUfuHRV4Q=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 5be08c28 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO)
-        for <linux-kernel@vger.kernel.org>;
-        Mon, 21 Feb 2022 14:35:56 +0000 (UTC)
-Received: by mail-yb1-f174.google.com with SMTP id y189so13169401ybe.4
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 06:35:56 -0800 (PST)
-X-Gm-Message-State: AOAM533hOLXR2BnI/fnizgw3kU/nojWcUD3gNCRKqISYRRRSnwwj/nkp
-        s+ZaPvawiU5/10a4iD6prsW+uOr78RCnC+8b8bk=
-X-Google-Smtp-Source: ABdhPJx0GrQm2ETAXXUyfWLsSofotwSTZNfBq9JAl4lU3Htn6q2iDm1AkpeyoIFC4AsH3ekfrsal5pICYi5IbH7Jcss=
-X-Received: by 2002:a25:d116:0:b0:61d:e8c9:531e with SMTP id
- i22-20020a25d116000000b0061de8c9531emr18996061ybg.637.1645454155557; Mon, 21
- Feb 2022 06:35:55 -0800 (PST)
+        Mon, 21 Feb 2022 09:37:37 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1449C1FA42;
+        Mon, 21 Feb 2022 06:37:14 -0800 (PST)
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21LEQ5jG020639;
+        Mon, 21 Feb 2022 14:37:12 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding; s=pp1;
+ bh=tSbMXh38w1m5isYJZGMogBGAKJRCnfBSGcDktspG2Ug=;
+ b=s4HAo9W6I80iDjKKQhmsLrWqPxcJYiSZUHZj3J9g0z8uwVriH2DWNKH5jJvf8cBkn+n1
+ QXTD7UnNFvC7BACGputh1/xn6+W5LD0EcI0QtTuea8DzU/gFytlnhY9VPwiow9UzNIa/
+ L5QOtk1Hzd7MQ0Xmh2MFwsOtqXhWkv72QqU1iGn3iPVR55o0+utmA2AgQHy+9bPZLtor
+ eGyXfUcH+Z7OufMeb335++dGmjxKfR+7+8NyxBStywWmeAO0rKmhsMZ4cPrGMOZiFiGH
+ rFsAe7HyaERzWfPrJT3mfBpZydVK2ufQ0sD+r8hB5rFMKorDU9niCRaevD138PxHU7i7 Rg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3eca3skp9m-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 21 Feb 2022 14:37:11 +0000
+Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 21LCxpbY022981;
+        Mon, 21 Feb 2022 14:37:09 GMT
+Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3eca3skp8x-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 21 Feb 2022 14:37:09 +0000
+Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
+        by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 21LESiW9021454;
+        Mon, 21 Feb 2022 14:37:07 GMT
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
+        by ppma03fra.de.ibm.com with ESMTP id 3ear68te2r-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 21 Feb 2022 14:37:07 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 21LEb3V252822526
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 21 Feb 2022 14:37:03 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 97286A4040;
+        Mon, 21 Feb 2022 14:37:03 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 34E2EA4051;
+        Mon, 21 Feb 2022 14:37:03 +0000 (GMT)
+Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon, 21 Feb 2022 14:37:03 +0000 (GMT)
+From:   Janis Schoetterl-Glausch <scgl@linux.ibm.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>
+Cc:     Janis Schoetterl-Glausch <scgl@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>, kvm@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] KVM: s390: Clarify key argument for MEM_OP in api docs
+Date:   Mon, 21 Feb 2022 15:36:57 +0100
+Message-Id: <20220221143657.3712481-1-scgl@linux.ibm.com>
+X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20220211182215.2730017-10-scgl@linux.ibm.com>
+References: <20220211182215.2730017-10-scgl@linux.ibm.com>
 MIME-Version: 1.0
-References: <CAHmME9oo5y08skaOOXg-q0T9pDs580dOotm6Wz0t96AssZr2Pw@mail.gmail.com>
- <20220210131304.97224-1-Jason@zx2c4.com> <YhMRf1tqgB/zSvAs@sol.localdomain>
-In-Reply-To: <YhMRf1tqgB/zSvAs@sol.localdomain>
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date:   Mon, 21 Feb 2022 15:35:44 +0100
-X-Gmail-Original-Message-ID: <CAHmME9pcFkPysTHHUCiPwqO0rv-i8X4nzNvomaSnyxbx3nauig@mail.gmail.com>
-Message-ID: <CAHmME9pcFkPysTHHUCiPwqO0rv-i8X4nzNvomaSnyxbx3nauig@mail.gmail.com>
-Subject: Re: [PATCH v2] random: tie batched entropy generation to base_crng generation
-To:     Eric Biggers <ebiggers@kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        "Theodore Ts'o" <tytso@mit.edu>,
-        Dominik Brodowski <linux@dominikbrodowski.net>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAD_CREDIT,BAYES_00,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 7f4pXBRszYbuNTzEk8_TPPvd-DC6tPt8
+X-Proofpoint-ORIG-GUID: JYOJ6p9eazyxRnWLgAwhmir51Je-4MmW
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-02-21_07,2022-02-21_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 impostorscore=0
+ suspectscore=0 priorityscore=1501 mlxscore=0 spamscore=0 bulkscore=0
+ adultscore=0 malwarescore=0 lowpriorityscore=0 clxscore=1015
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2201110000 definitions=main-2202210087
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 21, 2022 at 5:13 AM Eric Biggers <ebiggers@kernel.org> wrote:
-> > @@ -455,7 +453,7 @@ static size_t crng_fast_load(const void *cp, size_t len)
-> >               src++; crng_init_cnt++; len--; ret++;
-> >       }
-> >       if (crng_init_cnt >= CRNG_INIT_CNT_THRESH) {
-> > -             invalidate_batched_entropy();
-> > +             ++base_crng.generation;
-> >               crng_init = 1;
-> >       }
->
-> This is an existing issue, but why doesn't crng_slow_load() do this too?
+Clarify that the key argument represents the access key, not the whole
+storage key.
 
-Because it's called by add_device_randomness(), which is mostly
-ingesting static bytes, akin to what you get by running `dmidecode`
-and such. The idea is that this is something that's good to mix, but
-bad to credit. I think there was a CVE a few years back about this,
-precipitating the change.
+Signed-off-by: Janis Schoetterl-Glausch <scgl@linux.ibm.com>
+---
+ Documentation/virt/kvm/api.rst | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Jason
+diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
+index 48f23bb80d7f..622667cc87ef 100644
+--- a/Documentation/virt/kvm/api.rst
++++ b/Documentation/virt/kvm/api.rst
+@@ -3763,7 +3763,7 @@ KVM_S390_MEMOP_F_INJECT_EXCEPTION is set.
+ 
+ If the KVM_S390_MEMOP_F_SKEY_PROTECTION flag is set, storage key
+ protection is also in effect and may cause exceptions if accesses are
+-prohibited given the access key passed in "key".
++prohibited given the access key designated by "key"; the valid range is 0..15.
+ KVM_S390_MEMOP_F_SKEY_PROTECTION is available if KVM_CAP_S390_MEM_OP_EXTENSION
+ is > 0.
+ 
+
+base-commit: af33593d63a403287b8a6edd217e854a3571938b
+-- 
+2.32.0
+

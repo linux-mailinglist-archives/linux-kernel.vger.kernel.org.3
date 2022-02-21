@@ -2,74 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEDD64BEADF
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 20:37:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC21B4BEB13
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 20:37:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229864AbiBUST3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 13:19:29 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41786 "EHLO
+        id S229906AbiBUSTe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 13:19:34 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232589AbiBUSQA (ORCPT
+        with ESMTP id S232617AbiBUSQK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 13:16:00 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F39CDFFF;
-        Mon, 21 Feb 2022 10:06:33 -0800 (PST)
-Received: from zn.tnic (dslb-088-067-221-104.088.067.pools.vodafone-ip.de [88.67.221.104])
+        Mon, 21 Feb 2022 13:16:10 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B1DA15A2D;
+        Mon, 21 Feb 2022 10:06:57 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 6FFC01EC0531;
-        Mon, 21 Feb 2022 19:06:26 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1645466786;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=MWw/afFsOSxJd3d13rKUZHwqChPZ/A+IszeqZt9+ZxE=;
-        b=Zk1raW6/fw1YdurcyqLzeJQ7rNXBWPIoUVEVWPfTnDlK2Nwh9wuLji4gF4dQ7Po3Fh4lTz
-        UOJLIha0PKE4e4iR6cRUEl0q+kqm+K9Gv+Fppz5xJ2HVXKKgBiY4u3QfZGeYH6b7LHNOMA
-        suVVW2daCREEY+ZHQxlrBtkZRhicKz8=
-Date:   Mon, 21 Feb 2022 19:06:29 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     "Kirill A. Shutemov" <kirill@shutemov.name>
-Cc:     Brijesh Singh <brijesh.singh@amd.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-efi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-coco@lists.linux.dev, linux-mm@kvack.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Sergio Lopez <slp@redhat.com>, Peter Gonda <pgonda@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Dov Murik <dovmurik@linux.ibm.com>,
-        Tobin Feldman-Fitzthum <tobin@ibm.com>,
-        Michael Roth <michael.roth@amd.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Andi Kleen <ak@linux.intel.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        brijesh.ksingh@gmail.com, tony.luck@intel.com, marcorr@google.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com
-Subject: Re: [PATCH v10 21/45] x86/mm: Add support to validate memory when
- changing C-bit
-Message-ID: <YhPUpauLlfsPnfbr@zn.tnic>
-References: <Ygz88uacbwuTTNat@zn.tnic.mbx>
- <20220216160457.1748381-1-brijesh.singh@amd.com>
- <20220221174121.ceeplpoaz63q72kv@box>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2B2EDB816FE;
+        Mon, 21 Feb 2022 18:06:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2AD5C340E9;
+        Mon, 21 Feb 2022 18:06:53 +0000 (UTC)
+Date:   Mon, 21 Feb 2022 18:06:50 +0000
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Liam Howlett <liam.howlett@oracle.com>
+Cc:     Will Deacon <will@kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: [PATCH] arm64: Change elfcore for_each_mte_vma() to use VMA
+ iterator
+Message-ID: <YhPUuu+6TPMKjhwk@arm.com>
+References: <20220218014642.lop2ohx4ov6fekyl@revolver>
+ <20220218023650.672072-1-Liam.Howlett@oracle.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220221174121.ceeplpoaz63q72kv@box>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+In-Reply-To: <20220218023650.672072-1-Liam.Howlett@oracle.com>
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,47 +47,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 21, 2022 at 08:41:21PM +0300, Kirill A. Shutemov wrote:
-> On Wed, Feb 16, 2022 at 10:04:57AM -0600, Brijesh Singh wrote:
-> > @@ -287,6 +301,7 @@ struct x86_platform_ops {
-> >  	struct x86_legacy_features legacy;
-> >  	void (*set_legacy_features)(void);
-> >  	struct x86_hyper_runtime hyper;
-> > +	struct x86_guest guest;
-> >  };
-> 
-> I used 'cc' instead of 'guest'. 'guest' looks too generic.
+On Fri, Feb 18, 2022 at 02:37:04AM +0000, Liam Howlett wrote:
+> diff --git a/arch/arm64/kernel/elfcore.c b/arch/arm64/kernel/elfcore.c
+> index 3455ee4acc04..930a0bc4cac4 100644
+> --- a/arch/arm64/kernel/elfcore.c
+> +++ b/arch/arm64/kernel/elfcore.c
+> @@ -8,9 +8,9 @@
+>  #include <asm/cpufeature.h>
+>  #include <asm/mte.h>
+>  
+> -#define for_each_mte_vma(tsk, vma)					\
+> +#define for_each_mte_vma(vmi, vma)					\
+>  	if (system_supports_mte())					\
+> -		for (vma = tsk->mm->mmap; vma; vma = vma->vm_next)	\
+> +		for_each_vma(vmi, vma)					\
+>  			if (vma->vm_flags & VM_MTE)
+>  
+>  static unsigned long mte_vma_tag_dump_size(struct vm_area_struct *vma)
+> @@ -65,8 +65,9 @@ Elf_Half elf_core_extra_phdrs(void)
+>  {
+>  	struct vm_area_struct *vma;
+>  	int vma_count = 0;
+> +	VMA_ITERATOR(vmi, current->mm, 0);
+>  
+> -	for_each_mte_vma(current, vma)
+> +	for_each_mte_vma(vmi, vma)
+>  		vma_count++;
 
-But guest is what is needed there. Not all cases where the kernel runs
-as a guest are confidential ones.
+I'm fine with the patch but it can't be applied to arm64 for-next/mte
+branch as it won't build and the maple tree doesn't have the MTE
+patches. Do you have a stable branch with the for_each_vma() iterator?
 
-Later, that hyperv thing should be merged into the guest one too as the
-hyperv should be a guest too. AFAICT.
+Anyway, if you find a way to solve the problem, for this patch:
 
-> Also, I'm not sure why not to use pointer to ops struct instead of stroing
-> them directly in x86_platform. Yes, it is consistent with 'hyper', but I
-> don't see it as a strong argument.
-
-There should be no big difference but we're doing it with direct struct
-member assignment so far so we should keep doing the same and not start
-doing pointers now, all of a sudden.
-
-> This doesn't cover difference in flushing requirements. Can we get it too?
-
-What are the requirements you have for TDX on this path?
-
-This is the main reason why I'm asking you to review this - I'd like to
-have one version which works for both and then I'll queue it on a common
-branch.
-
-This is also why I'd like for you and SEV folks to agree on all the
-common code so that I can apply it and you can both base your patchsets
-ontop.
-
-Thx.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Acked-by: Catalin Marinas <catalin.marinas@arm.com>

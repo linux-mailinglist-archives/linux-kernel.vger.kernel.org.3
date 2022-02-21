@@ -2,188 +2,361 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 594AA4BE366
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:57:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB9324BE8EA
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:06:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348599AbiBUJQE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 04:16:04 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55888 "EHLO
+        id S1347915AbiBUJRD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 04:17:03 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347909AbiBUJJu (ORCPT
+        with ESMTP id S1347942AbiBUJKH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 04:09:50 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F1F71C91D;
-        Mon, 21 Feb 2022 01:02:12 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 21 Feb 2022 04:10:07 -0500
+Received: from mout-p-201.mailbox.org (mout-p-201.mailbox.org [IPv6:2001:67c:2050::465:201])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35EA91D30F;
+        Mon, 21 Feb 2022 01:02:31 -0800 (PST)
+Received: from smtp102.mailbox.org (smtp102.mailbox.org [IPv6:2001:67c:2050:105:465:1:3:0])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 08678B80EAC;
-        Mon, 21 Feb 2022 09:02:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB9A2C340F3;
-        Mon, 21 Feb 2022 09:01:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645434129;
-        bh=No5SvW/qQe4jwmC+qej3w+cHlrTRKUCXpvJgRwrsQTA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qkT/vEFaMAHuGvom2URQqyWYR3h8IN25ik8YNrTiDzN/SzFCh5Fb90ZWTwjlAs9AX
-         0WKpABuOCRZAXOvbmHnDBJ/BWW1qEle4/7RNNIewIF9ejzoFRzeMaicj9ZnnKVJ3N5
-         HbmXY3PRfkSD77So4qD4WTHvCkX2OkESls+EhaOFDuEp7Wsb4a2s0y/iIVDp4+RZa9
-         bpQdNuSb7eVGaYMaauThSvXvbw3G9cZ9+4eCR2sni+NjNh8EVMexku/MR4EAquO8Eu
-         7y4ZpI9Ynz1ENzk7zitF8gSTjCe6dHR9IgZViRuVu8P/XW6bTYudamo35rrc/Y6jH3
-         AzCW2Q7wHj2Cw==
-Date:   Mon, 21 Feb 2022 11:01:53 +0200
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Yu Zhao <yuzhao@google.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Mel Gorman <mgorman@suse.de>, Michal Hocko <mhocko@kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
-        Barry Song <21cnbao@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
-        Jesse Barnes <jsbarnes@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Michael Larabel <Michael@michaellarabel.com>,
-        Rik van Riel <riel@surriel.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Will Deacon <will@kernel.org>,
-        Ying Huang <ying.huang@intel.com>,
-        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        page-reclaim@google.com, x86@kernel.org,
-        Brian Geffon <bgeffon@google.com>,
-        Jan Alexander Steffens <heftig@archlinux.org>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        Steven Barrett <steven@liquorix.net>,
-        Suleiman Souhlal <suleiman@google.com>,
-        Daniel Byrne <djbyrne@mtu.edu>,
-        Donald Carr <d@chaos-reins.com>,
-        Holger =?iso-8859-1?Q?Hoffst=E4tte?= 
-        <holger@applied-asynchrony.com>,
-        Konstantin Kharlamov <Hi-Angel@yandex.ru>,
-        Shuang Zhai <szhai2@cs.rochester.edu>,
-        Sofia Trinh <sofia.trinh@edi.works>
-Subject: Re: [PATCH v7 12/12] mm: multigenerational LRU: documentation
-Message-ID: <YhNVAUM7H7PF7j7j@kernel.org>
-References: <20220208081902.3550911-1-yuzhao@google.com>
- <20220208081902.3550911-13-yuzhao@google.com>
- <Ygou6Gq79XY3mFK7@kernel.org>
- <Ygxt4iR9ZMYEbV78@google.com>
+        by mout-p-201.mailbox.org (Postfix) with ESMTPS id 4K2GXP552Nz9sQY;
+        Mon, 21 Feb 2022 10:02:29 +0100 (CET)
+X-Virus-Scanned: amavisd-new at heinlein-support.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sylv.io; s=MBO0001;
+        t=1645434147;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=wEZ76kGSwSq5Wb4rRjccaeTPhaIObqPlN/MOOW3VPhk=;
+        b=uZQ8LMcMBT9oxmgLlM7ejy4iHa61SJVdQKomL126T+USo6k9wMltyZIMsdv6RJuSNGYFiM
+        S1dDaLLtAAYeps1yeehJYUM9B1b13ztJHt1UVevaGB3FgufO1NXMMpTvBQhyorRgEd2+Lt
+        DfL+TufSWx+Tj6Uzk+iX/7Tv2pugG9uoUy2rSPLP1Yfsen8Ek0iHiq228vBMMEwUSB9zf2
+        8dUQ33R3D9UOOtB5GO0QZa12hhADkxFx/xK+O/OhgFhdNOhzd+5mcOILWlRAzUsmtigumC
+        P5ciVoGn3UwkhyNQhsVw1KsqLZ+oSE4fJ8/aWZHtg+y2qCBBw0hxLN71LCj9kw==
+Message-ID: <3c931f2f23546f17ea232346b43550ee42d6d7dc.camel@sylv.io>
+Subject: Re: [PATCH v3 3/4] pmbus: Add support for pli1209bc
+From:   sylv <sylv@sylv.io>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        Patrick Rudolph <patrick.rudolph@9elements.com>,
+        linux-doc@vger.kernel.org
+Date:   Mon, 21 Feb 2022 10:02:17 +0100
+In-Reply-To: <20220219144110.GA1032070@roeck-us.net>
+References: <cover.1644874828.git.sylv@sylv.io>
+         <8d44098e7b8ca5d4c13733267836d5a147539277.1644874828.git.sylv@sylv.io>
+         <20220219144110.GA1032070@roeck-us.net>
+Content-Type: text/plain; charset="UTF-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Ygxt4iR9ZMYEbV78@google.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 15, 2022 at 08:22:10PM -0700, Yu Zhao wrote:
-> On Mon, Feb 14, 2022 at 12:28:56PM +0200, Mike Rapoport wrote:
-> 
-> > > +====== ========
-> > > +Values Features
-> > > +====== ========
-> > > +0x0001 the multigenerational LRU
+On Sat, 2022-02-19 at 06:41 -0800, Guenter Roeck wrote:
+> On Mon, Feb 14, 2022 at 10:44:55PM +0100, Marcello Sylvester Bauer
+> wrote:
+> > PLI1209BC is a Digital Supervisor from Vicor Corporation.
 > > 
-> > The multigenerational LRU what?
+> > Signed-off-by: Marcello Sylvester Bauer <sylv@sylv.io>
 > 
-> Itself? This depends on the POV, and I'm trying to determine what would
-> be the natural way to present it.
+> checkpatch says:
 > 
-> MGLRU itself could be seen as an add-on atop the existing page reclaim
-> or an alternative in parallel. The latter would be similar to sl[aou]b,
-> and that's how I personally see it.
+> WARNING: Missing or malformed SPDX-License-Identifier tag in line 1
+> #82: FILE: Documentation/hwmon/pli1209bc.rst:1:
+> +Kernel driver pli1209bc
 > 
-> But here I presented it more like the former because I feel this way is
-> more natural to users because they are like switches on a single panel.
+> I can not accept the patch without license identifier.
 
-Than I think it should be described as "enable multigenerational LRU" or
-something like this.
- 
-> > What will happen if I write 0x2 to this file?
+oh, sure. I thought it is still optional for documentation entries.
+
 > 
-> Just like turning on a branch breaker while leaving the main breaker
-> off in a circuit breaker box. This is how I see it, and I'm totally
-> fine with changing it to whatever you'd recommend.
-
-That was my guess that when bit 0 is clear the rest do not matter :)
-What's important, IMO, is that it is stated explicitly in the description.
- 
-> > Please consider splitting "enable" and "features" attributes.
+> > ---
+> >  Documentation/hwmon/pli1209bc.rst |  73 +++++++++++++++++++
 > 
-> How about s/Features/Components/?
-
-I meant to use two attributes:
-
-/sys/kernel/mm/lru_gen/enable for the main breaker, and
-/sys/kernel/mm/lru_gen/features (or components) for the branch breakers
- 
-> > > +0x0002 clear the accessed bit in leaf page table entries **in large
-> > > +       batches**, when MMU sets it (e.g., on x86)
+> This needs to be added to Documentation/hwmon/index.rst.
+> 
+> >  drivers/hwmon/pmbus/Kconfig       |   9 +++
+> >  drivers/hwmon/pmbus/Makefile      |   1 +
+> >  drivers/hwmon/pmbus/pli1209bc.c   | 115
+> > ++++++++++++++++++++++++++++++
+> >  4 files changed, 198 insertions(+)
+> >  create mode 100644 Documentation/hwmon/pli1209bc.rst
+> >  create mode 100644 drivers/hwmon/pmbus/pli1209bc.c
 > > 
-> > Is extra markup really needed here...
-> > 
-> > > +0x0004 clear the accessed bit in non-leaf page table entries **as
-> > > +       well**, when MMU sets it (e.g., on x86)
-> > 
-> > ... and here?
+> > diff --git a/Documentation/hwmon/pli1209bc.rst
+> > b/Documentation/hwmon/pli1209bc.rst
+> > new file mode 100644
+> > index 000000000000..a3f686d03cf2
+> > --- /dev/null
+> > +++ b/Documentation/hwmon/pli1209bc.rst
+> > @@ -0,0 +1,73 @@
+> > +Kernel driver pli1209bc
+> > +=======================
+> > +
+> > +Supported chips:
+> > +
+> > +  * Digital Supervisor PLI1209BC
+> > +
+> > +    Prefix: 'pli1209bc'
+> > +
+> > +    Addresses scanned: 0x50 - 0x5F
+> > +
+> > +    Datasheet:
+> > https://www.vicorpower.com/documents/datasheets/ds-PLI1209BCxyzz-VICOR.pdf
+> > +
+> > +Authors:
+> > +    - Marcello Sylvester Bauer <sylv@sylv.io>
+> > +
+> > +Description
+> > +-----------
+> > +
+> > +The Vicor PLI1209BC is an isolated digital power system supervisor
+> > thatprovides
 > 
-> Will do.
+> that provides
+
+ack.
+
 > 
-> > As for the descriptions, what is the user-visible effect of these features?
-> > How different modes of clearing the access bit are reflected in, say, GUI
-> > responsiveness, database TPS, or probability of OOM?
+> > +a communication interface between a host processor and one Bus
+> > Converter Module
+> > +(BCM). The PLI communicates with a system controller via a PMBus
+> > compatible
+> > +interface over an isolated UART interface. Through the PLI, the
+> > host processor
+> > +can configure, set protection limits, and monitor the BCM.
+> > +
+> > +Sysfs entries
+> > +-------------
+> > +
+> > +=======================
+> > ========================================================
+> > +in1_label              "vin2"
+> > +in1_input              Input voltage.
+> > +in1_rated_min          Minimum rated input voltage.
+> > +in1_rated_max          Maximum rated input voltage.
+> > +in1_max                        Maximum input voltage.
+> > +in1_max_alarm          Input voltage high alarm.
+> > +in1_crit               Critical input voltage.
+> > +in1_crit_alarm         Input voltage critical alarm.
+> > +
+> > +in2_label              "vout2"
+> > +in2_input              Output voltage.
+> > +in2_rated_min          Minimum rated output voltage.
+> > +in2_rated_max          Maximum rated output voltage.
+> > +in2_alarm              Output voltage alarm
+> > +
+> > +curr1_label            "iin2"
+> > +curr1_input            Input current.
+> > +curr1_max              Maximum input current.
+> > +curr1_max_alarm                Maximum input current high alarm.
+> > +curr1_crit             Critical input current.
+> > +curr1_crit_alarm       Input current critical alarm.
+> > +
+> > +curr2_label            "iout2"
+> > +curr2_input            Output current.
+> > +curr2_crit             Critical output current.
+> > +curr2_crit_alarm       Output current critical alarm.
+> > +curr2_max              Maximum output current.
+> > +curr2_max_alarm                Output current high alarm.
+> > +
+> > +power1_label           "pin2"
+> > +power1_input           Input power.
+> > +power1_alarm           Input power alarm.
+> > +
+> > +power2_label           "pout2"
+> > +power2_input           Output power.
+> > +power2_rated_max       Maximum rated output power.
+> > +
+> > +temp1_input            Die temperature.
+> > +temp1_alarm            Die temperature alarm.
+> > +temp1_max              Maximum die temperature.
+> > +temp1_max_alarm                Die temperature high alarm.
+> > +temp1_crit             Critical die temperature.
+> > +temp1_crit_alarm       Die temperature critical alarm.
+> > +=======================
+> > ========================================================
+> > diff --git a/drivers/hwmon/pmbus/Kconfig
+> > b/drivers/hwmon/pmbus/Kconfig
+> > index c96f7b7338bd..831db423bea0 100644
+> > --- a/drivers/hwmon/pmbus/Kconfig
+> > +++ b/drivers/hwmon/pmbus/Kconfig
+> > @@ -310,6 +310,15 @@ config SENSORS_PIM4328
+> >           This driver can also be built as a module. If so, the
+> > module will
+> >           be called pim4328.
+> >  
+> > +config SENSORS_PLI1209BC
+> > +       tristate "Vicor PLI1209BC"
+> > +       help
+> > +         If you say yes here you get hardware monitoring support
+> > for Vicor
+> > +         PLI1209BC Digital Supervisor.
+> > +
+> > +         This driver can also be built as a module. If so, the
+> > module will
+> > +         be called pli1209bc.
+> > +
+> >  config SENSORS_PM6764TR
+> >         tristate "ST PM6764TR"
+> >         help
+> > diff --git a/drivers/hwmon/pmbus/Makefile
+> > b/drivers/hwmon/pmbus/Makefile
+> > index e5935f70c9e0..7ce74e3b8552 100644
+> > --- a/drivers/hwmon/pmbus/Makefile
+> > +++ b/drivers/hwmon/pmbus/Makefile
+> > @@ -34,6 +34,7 @@ obj-$(CONFIG_SENSORS_MP2888)  += mp2888.o
+> >  obj-$(CONFIG_SENSORS_MP2975)   += mp2975.o
+> >  obj-$(CONFIG_SENSORS_MP5023)   += mp5023.o
+> >  obj-$(CONFIG_SENSORS_PM6764TR) += pm6764tr.o
+> > +obj-$(CONFIG_SENSORS_PLI1209BC)        += pli1209bc.o
 > 
-> These remain to be seen :) I just added these switches in v7, per Mel's
-> request from the meeting we had. These were never tested in the field.
+> Alphabetic order please.
 
-I see :)
+ack.
 
-It would be nice to have a description or/and examples of user-visible
-effects when there will be some insight on what these features do.
+Thanks,
+Marcello
 
-> > > +:Debugfs interface: ``/sys/kernel/debug/lru_gen`` has the following
-> > 
-> > Is debugfs interface relevant only for datacenters? 
 > 
-> For the moment, yes.
-
-And what will happen if somebody uses these interfaces outside
-datacenters? As soon as there is a sysfs intefrace, somebody will surely
-play with it.
-
-I think the job schedulers might be the most important user of that
-interface, but the documentation should not presume it is the only user.
- 
-> > > + job scheduler writes to this file at a certain time interval to
-> > > + create new generations, and it ranks available servers based on the
-> > > + sizes of their cold memory defined by this time interval. For
-> > > + proactive reclaim, a job scheduler writes to this file before it
-> > > + tries to land a new job, and if it fails to materialize the cold
-> > > + memory without impacting the existing jobs, it retries on the next
-> > > + server according to the ranking result.
-> > 
-> > Is this knob only relevant for a job scheduler? Or it can be used in other
-> > use-cases as well?
-> 
-> There are other concrete use cases but I'm not ready to discuss them
-> yet.
- 
-Here as well, as soon as there is an interface it's not necessarily "job
-scheduler" that will "write to this file", anybody can write to that file.
-Please adjust the documentation to be more neutral regarding the use-cases.
-
--- 
-Sincerely yours,
-Mike.
+> >  obj-$(CONFIG_SENSORS_PXE1610)  += pxe1610.o
+> >  obj-$(CONFIG_SENSORS_Q54SJ108A2)       += q54sj108a2.o
+> >  obj-$(CONFIG_SENSORS_STPDDC60) += stpddc60.o
+> > diff --git a/drivers/hwmon/pmbus/pli1209bc.c
+> > b/drivers/hwmon/pmbus/pli1209bc.c
+> > new file mode 100644
+> > index 000000000000..5f8847307e55
+> > --- /dev/null
+> > +++ b/drivers/hwmon/pmbus/pli1209bc.c
+> > @@ -0,0 +1,115 @@
+> > +// SPDX-License-Identifier: GPL-2.0+
+> > +/*
+> > + * Hardware monitoring driver for Vicor PLI1209BC Digital
+> > Supervisor
+> > + *
+> > + * Copyright (c) 2022 9elements GmbH
+> > + */
+> > +
+> > +#include <linux/i2c.h>
+> > +#include <linux/module.h>
+> > +#include <linux/pmbus.h>
+> > +#include "pmbus.h"
+> > +
+> > +/*
+> > + * The capability command is only supported at page 0. Probing the
+> > device while
+> > + * the page register is set to 1 will falsely enable PEC support.
+> > Disable
+> > + * capability probing accordingly, since the PLI1209BC does not
+> > have any
+> > + * additional capabilities.
+> > + */
+> > +static struct pmbus_platform_data pli1209bc_plat_data = {
+> > +       .flags = PMBUS_NO_CAPABILITY,
+> > +};
+> > +
+> > +static int pli1209bc_read_word_data(struct i2c_client *client, int
+> > page,
+> > +                                   int phase, int reg)
+> > +{
+> > +       int data;
+> > +
+> > +       switch (reg) {
+> > +       /* PMBUS_READ_POUT uses a direct format with R=0 */
+> > +       case PMBUS_READ_POUT:
+> > +               data = pmbus_read_word_data(client, page, phase,
+> > reg);
+> > +               if (data < 0)
+> > +                       return data;
+> > +               data = sign_extend32(data, 15) * 10;
+> > +               return clamp_val(data, -32768, 32767) & 0xffff;
+> > +       default:
+> > +               return -ENODATA;
+> > +       }
+> > +}
+> > +
+> > +static struct pmbus_driver_info pli1209bc_info = {
+> > +       .pages = 2,
+> > +       .format[PSC_VOLTAGE_IN] = direct,
+> > +       .format[PSC_VOLTAGE_OUT] = direct,
+> > +       .format[PSC_CURRENT_IN] = direct,
+> > +       .format[PSC_CURRENT_OUT] = direct,
+> > +       .format[PSC_POWER] = direct,
+> > +       .format[PSC_TEMPERATURE] = direct,
+> > +       .m[PSC_VOLTAGE_IN] = 1,
+> > +       .b[PSC_VOLTAGE_IN] = 0,
+> > +       .R[PSC_VOLTAGE_IN] = 1,
+> > +       .m[PSC_VOLTAGE_OUT] = 1,
+> > +       .b[PSC_VOLTAGE_OUT] = 0,
+> > +       .R[PSC_VOLTAGE_OUT] = 1,
+> > +       .m[PSC_CURRENT_IN] = 1,
+> > +       .b[PSC_CURRENT_IN] = 0,
+> > +       .R[PSC_CURRENT_IN] = 3,
+> > +       .m[PSC_CURRENT_OUT] = 1,
+> > +       .b[PSC_CURRENT_OUT] = 0,
+> > +       .R[PSC_CURRENT_OUT] = 2,
+> > +       .m[PSC_POWER] = 1,
+> > +       .b[PSC_POWER] = 0,
+> > +       .R[PSC_POWER] = 1,
+> > +       .m[PSC_TEMPERATURE] = 1,
+> > +       .b[PSC_TEMPERATURE] = 0,
+> > +       .R[PSC_TEMPERATURE] = 0,
+> > +       /*
+> > +        * Page 0 sums up all attributes except voltage readings.
+> > +        * The pli1209 digital supervisor only contains a single
+> > BCM, making
+> > +        * page 0 redundant.
+> > +        */
+> > +       .func[1] = PMBUS_HAVE_VIN | PMBUS_HAVE_VOUT
+> > +           | PMBUS_HAVE_IIN | PMBUS_HAVE_IOUT
+> > +           | PMBUS_HAVE_PIN | PMBUS_HAVE_POUT
+> > +           | PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP
+> > +           | PMBUS_HAVE_STATUS_IOUT | PMBUS_HAVE_STATUS_INPUT,
+> > +       .read_word_data = pli1209bc_read_word_data,
+> > +};
+> > +
+> > +static int pli1209bc_probe(struct i2c_client *client)
+> > +{
+> > +       client->dev.platform_data = &pli1209bc_plat_data;
+> > +       return pmbus_do_probe(client, &pli1209bc_info);
+> > +}
+> > +
+> > +static const struct i2c_device_id pli1209bc_id[] = {
+> > +       {"pli1209bc", 0},
+> > +       {}
+> > +};
+> > +
+> > +MODULE_DEVICE_TABLE(i2c, pli1209bc_id);
+> > +
+> > +#ifdef CONFIG_OF
+> > +static const struct of_device_id pli1209bc_of_match[] = {
+> > +       { .compatible = "vicor,pli1209bc" },
+> > +       { },
+> > +};
+> > +MODULE_DEVICE_TABLE(of, pli1209bc_of_match);
+> > +#endif
+> > +
+> > +static struct i2c_driver pli1209bc_driver = {
+> > +       .driver = {
+> > +                  .name = "pli1209bc",
+> > +                  .of_match_table =
+> > of_match_ptr(pli1209bc_of_match),
+> > +                  },
+> > +       .probe_new = pli1209bc_probe,
+> > +       .id_table = pli1209bc_id,
+> > +};
+> > +
+> > +module_i2c_driver(pli1209bc_driver);
+> > +
+> > +MODULE_AUTHOR("Marcello Sylvester Bauer <sylv@sylv.io>");
+> > +MODULE_DESCRIPTION("PMBus driver for Vicor PLI1209BC");
+> > +MODULE_LICENSE("GPL");
+> > +MODULE_IMPORT_NS(PMBUS);

@@ -2,100 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E69784BEB5A
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 20:49:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6945E4BEA64
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 20:36:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233160AbiBUTtz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 14:49:55 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33836 "EHLO
+        id S232478AbiBUSvt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 13:51:49 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231753AbiBUTtw (ORCPT
+        with ESMTP id S233873AbiBUSvN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 14:49:52 -0500
-Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C4032251A;
-        Mon, 21 Feb 2022 11:49:28 -0800 (PST)
-Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
-          by outpost.zedat.fu-berlin.de (Exim 4.94)
-          with esmtps (TLS1.2)
-          tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@zedat.fu-berlin.de>)
-          id 1nMEgT-000rHd-Bl; Mon, 21 Feb 2022 20:49:21 +0100
-Received: from p57ae5149.dip0.t-ipconnect.de ([87.174.81.73] helo=[192.168.178.35])
-          by inpost2.zedat.fu-berlin.de (Exim 4.94)
-          with esmtpsa (TLS1.2)
-          tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-          (envelope-from <glaubitz@physik.fu-berlin.de>)
-          id 1nMEgT-003cYB-4v; Mon, 21 Feb 2022 20:49:21 +0100
-Message-ID: <94c3be49-0262-c613-e5f5-49b536985dde@physik.fu-berlin.de>
-Date:   Mon, 21 Feb 2022 20:49:20 +0100
+        Mon, 21 Feb 2022 13:51:13 -0500
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F7FF195;
+        Mon, 21 Feb 2022 10:50:49 -0800 (PST)
+Received: by mail-ej1-x632.google.com with SMTP id p15so35461872ejc.7;
+        Mon, 21 Feb 2022 10:50:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=pQO7ydSB+50ZXan7KxUTGPR/+jBW3P05AbbyHsGBMKY=;
+        b=MiHsA54rwzT6JJTQGupn68fWrBjqzaF61BiDr8rHkbH8QnbpbyoSumktR8sO1QRCAB
+         rHx0ANh1OECLZVHur9t8k0XntOogV7eF9VuSxKFYr0mMHGW2wrtdXOMkVBA17kUF90uG
+         WCqFo64y0vxipTMMEqbJyuju4cXFzaOdjwmEQ7Xl6MN59qjfPGDH0GevCTfV7h6yMHek
+         hUMtbqmH/FAp2hddDV0GFA1qFdZ50bUfGUC8+0q2dzGGqb0++0jEsAVMOzTcibVCIQID
+         ClDxidSt//yLe33TJ3qg80pzV28dqw568vxbEOiLWGiBgfT6NXAki/66ybGN0ghiUrh2
+         nZ9A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=pQO7ydSB+50ZXan7KxUTGPR/+jBW3P05AbbyHsGBMKY=;
+        b=XZPXr4sBKY2JsojxLG0WzQZWqO22FhXiOHp1HYrAD0rUnjgu99MPNdZdxZzV0xldWT
+         xOEIdAcLODMAyRBnRMfadsyZ9jQTpr+tEWY4DQpPYJoazWDWn3v9Z935qcKMyfQdDqWA
+         ugUWFzhhayp51kYMoARWi4PV/2TJu0iPsoLr/jhpmsgkTkztUllCzwIdzGz5S8T0oTH9
+         /LVDDGJ0OiJuM5TNVB1xM+jnvZi0q3w5kYleX27relohuYm0VV2YjEiHYsnRagfyki11
+         JtnYyOn1gsVcL50WTVraFzOJjg55p7iJKaaJCbNJVz2jtAtW8T+D+UezR0GEoN2t1Pg7
+         ec2A==
+X-Gm-Message-State: AOAM5331LodJMkV9bOSMQqPvKNTDE1yLPQVytc+uPMpYyniX1tDhWyWQ
+        uGVlBxZkbTQiqfQUAwPtm11cluMoLtCIcub8
+X-Google-Smtp-Source: ABdhPJzFGoAnbg9Tir3q3AwivZ1RtHXAgpklM0kqVF+wy/ZDxtkkjMKtPZ8fHxt6/8Tr65w8HfFw/A==
+X-Received: by 2002:a17:906:a057:b0:6cf:2736:ba65 with SMTP id bg23-20020a170906a05700b006cf2736ba65mr16575265ejb.171.1645469447972;
+        Mon, 21 Feb 2022 10:50:47 -0800 (PST)
+Received: from localhost.localdomain ([2a02:ab88:368f:2080:5d6e:322:57b6:5f03])
+        by smtp.googlemail.com with ESMTPSA id 23sm5334497ejg.209.2022.02.21.10.50.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 21 Feb 2022 10:50:47 -0800 (PST)
+From:   David Virag <virag.david003@gmail.com>
+Cc:     Sam Protsenko <semen.protsenko@linaro.org>,
+        phone-devel@vger.kernel.org,
+        David Virag <virag.david003@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v6 0/1] Initial Samsung Galaxy A8 (2018) support
+Date:   Mon, 21 Feb 2022 20:49:55 +0100
+Message-Id: <20220221194958.117361-1-virag.david003@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: regression: Bug 215601 - gcc segv at startup on ia64
-Content-Language: en-US
-To:     Kees Cook <keescook@chromium.org>,
-        Thorsten Leemhuis <regressions@leemhuis.info>,
-        Anthony Yznaga <anthony.yznaga@oracle.com>
-Cc:     matoro_bugzilla_kernel@matoro.tk,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
-        linux-ia64@vger.kernel.org,
-        Linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>
-References: <a3edd529-c42d-3b09-135c-7e98a15b150f@leemhuis.info>
- <823f70be-7661-0195-7c97-65673dc7c12a@leemhuis.info>
- <03497313-A472-4152-BD28-41C35E4E824E@chromium.org>
-From:   John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-In-Reply-To: <03497313-A472-4152-BD28-41C35E4E824E@chromium.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Original-Sender: glaubitz@physik.fu-berlin.de
-X-Originating-IP: 87.174.81.73
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Kees!
+Add basic initial support for the Samsung Galaxy A8 (2018) smartphone.
+This phone is also known as "jackpotlte" and under the model name
+"SM-A530F". In its current state this should work on most if not all
+Exynos7885 phones/devices released.
 
-On 2/21/22 08:42, Kees Cook wrote:
->>>> Reverting this commit resolves the issue up to and including git tip,
->>>> with no (visible) issues.
->>>>
->>>> Hardware:  HP Integrity rx2800 i2 Kernel config attached.
->>>
->>> Could somebody take a look into this? Or was this discussed somewhere
->>> else already? Or even fixed?
->>>
->>> Anyway, to get this tracked:
->>>
->>> #regzbot introduced: 5f501d555653f8968011a1e65ebb121c8b43c144
->>> #regzbot from: matoro <matoro_bugzilla_kernel@matoro.tk>
->>> #regzbot title: gcc segv at startup on ia64
->>> #regzbot link: https://bugzilla.kernel.org/show_bug.cgi?id=215601
-> 
-> Does this fix it?
-> 
-> https://www.ozlabs.org/~akpm/mmotm/broken-out/elf-fix-overflow-in-total-mapping-size-calculation.patch
+As of now, it supports I2C nodes (all disabled by default) and UART
+console with basic clock support in place.
 
-I have applied this patch on top of 038101e6b2cd5c55f888f85db42ea2ad3aecb4b6 and it doesn't
-fix the problem for me. Reverting 5f501d555653f8968011a1e65ebb121c8b43c144, however, fixes
-the problem.
+To access the UART console on the A8, there are two methods:
+  -You can open up the device and solder directly to some debug pins
+   close to the display connector.
+  -Through I2C you can set the S2MU004 MFD chip to multiplex the SoC's
+   UART lines to the d+ and d- on the USB Type-C port of the device.
 
-FWIW, this problem doesn't just affect GCC but systemd keeps segfaulting with this change as well.
+Note that UART works on 1.8 volts, so plugging in a normal USB cable
+while multiplexed to UART may fry the SoC.
 
-Adrian
+Everything was tested through UART by using a minimal driver that sets
+the S2MU004 to multiplex UART.
+
+The preferred way to boot this device is by using my Minimal S-Boot
+Wrapper [1] to work around some issues caused by the stock, and
+non-replacable Samsung S-Boot bootloader.
+
+Changes in v2:
+- Added R-b tags by Krzysztof Kozlowski
+- Moved dt-bindings patches to the beginning of the series
+- Fixed double : in 7885 CMU bindings
+- Fixed multiple double line breaks
+- Made Exynos850 and 7885 clock drivers share some code in a new patch
+- Lots of dts/dtsi fixes
+
+Changes in v3:
+- Fix SPDX comment style in clk-exynos-arm64.h
+- Fix typo in dts comment
+
+Changes in v4:
+- Fixed leading 0x in clock-controller nodes
+- Fixed missing headers in clock driver patches
+- "__SAMSUNG_CLK_ARM64_H" -> "__CLK_EXYNOS_ARM64_H" in
+  clk-exynos-arm64.h everywhere (only the comment at the end had the
+  latter by accident)
+- Added R-b tag by Krzysztof Kozlowski to pll1417x patch
+- Actually suffixed pin configuration node names with "-pins"
+- Seperated Cortex-A53 and Cortex-A73 PMU
+
+Changes in v5:
+- Only kept DTS patch as the rest have been merged.
+- Several fixes in DTS patch
+
+Changes in v6:
+- DTS patch fixes
+- Rebased on top of linux-next
+
+[1] https://github.com/VDavid003/minimal_sboot_wrapper
+
+David Virag (1):
+  arm64: dts: exynos: Add initial device tree support for Exynos7885 SoC
+
+ arch/arm64/boot/dts/exynos/Makefile           |   9 +-
+ .../boot/dts/exynos/exynos7885-jackpotlte.dts |  92 ++
+ .../boot/dts/exynos/exynos7885-pinctrl.dtsi   | 855 ++++++++++++++++++
+ arch/arm64/boot/dts/exynos/exynos7885.dtsi    | 423 +++++++++
+ 4 files changed, 1375 insertions(+), 4 deletions(-)
+ create mode 100644 arch/arm64/boot/dts/exynos/exynos7885-jackpotlte.dts
+ create mode 100644 arch/arm64/boot/dts/exynos/exynos7885-pinctrl.dtsi
+ create mode 100644 arch/arm64/boot/dts/exynos/exynos7885.dtsi
 
 -- 
- .''`.  John Paul Adrian Glaubitz
-: :' :  Debian Developer - glaubitz@debian.org
-`. `'   Freie Universitaet Berlin - glaubitz@physik.fu-berlin.de
-  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
+2.35.1
 

@@ -2,208 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B68A4BE3CB
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:57:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 880634BDC29
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:41:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351959AbiBUQQq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 11:16:46 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40494 "EHLO
+        id S1380127AbiBUQRT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 11:17:19 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380052AbiBUQQn (ORCPT
+        with ESMTP id S1380109AbiBUQRJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 11:16:43 -0500
-Received: from mail-qk1-x729.google.com (mail-qk1-x729.google.com [IPv6:2607:f8b0:4864:20::729])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6E4A27B2B;
-        Mon, 21 Feb 2022 08:16:19 -0800 (PST)
-Received: by mail-qk1-x729.google.com with SMTP id n185so17361223qke.5;
-        Mon, 21 Feb 2022 08:16:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:content-language:to
-         :cc:references:from:subject:in-reply-to:content-transfer-encoding;
-        bh=0//CVz6gk3WJBaFfbakgy/AkhXMrrOJmbYrtOzjKFkE=;
-        b=N/JFzI/+U+wnEsmJb7DivTCxpnLwNBrtF95c3bX5Xxy01+suQFUHC/HxctxMu1wW2P
-         e4MMh9JeVtPoc8QEw6mvP7LAVf6swYi/rp3uYu/sM25J8tH4ngeahei3orV6dHkPUI1S
-         TBGONE6vwWh5fsiyA/rLugS7SiSJyyIpcStMF9WFM9yE3b4Vnwq2yies4KdzZJc9Cdux
-         /YHxvtZbZQD0HMEN93mAuXISuFTkSzQTjbx4UPqrAgc+EotwC55p5+oxcylXN6RN31oO
-         ErswE/PEFJMrYnCwoxyexgcLinTbvFHDXyj2ntTPHjDKtEMKQxAYOt4WsO5IkZrOyGFA
-         ELmA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:subject:in-reply-to
-         :content-transfer-encoding;
-        bh=0//CVz6gk3WJBaFfbakgy/AkhXMrrOJmbYrtOzjKFkE=;
-        b=0nLFd+AaHmlfzNcMtPhfrvk45c7q8hSCdnD5rAp67tt3T8boITzZVPLaQ5SDCG4H2s
-         T0lvbu96Aw+MmCUwxGl3LoeHYvWrwIXGZxInNEHYbor5sSUZtoZaI3crTz4oNVHUj4PY
-         EoJt5qDh2dCQHM3z4AyfHYUAomxvum5Tb6dRdy9aKmRjx4QANzajizHLcaXXdmLiJxWm
-         Fk70GoV+Qm+DShdSu71RyQtlW4Rdfu1HO8QAKYMgGOk9sjFQd11sA3/8mokVzqO0J/h3
-         iWBTBo8f64+1n/+p+t9Y/ALVAnbkSgJ3tQYuGRdqSht65KapnCJbdP2dJCdAbCkv6uYy
-         /Z0g==
-X-Gm-Message-State: AOAM532TjHTg7skkXq0YueYTvjwknRljka4Xg85GtjZRVc2+pSHyhhLX
-        wJuPYR2e6rQNzm1pHYOBAVnjJeL0N3v1tw==
-X-Google-Smtp-Source: ABdhPJwoEOTVBrQQIyosl5WPPTTmhHfA/ViqBve4fuHNiKzkl3QtZ10AyQ61BippJHp6qpKmyYD5Qg==
-X-Received: by 2002:a37:6712:0:b0:49b:4bb0:ea32 with SMTP id b18-20020a376712000000b0049b4bb0ea32mr12662896qkc.132.1645460178673;
-        Mon, 21 Feb 2022 08:16:18 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id o10sm2154992qtk.84.2022.02.21.08.16.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Feb 2022 08:16:18 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <66e6b131-274f-454b-44f6-17df879d71a9@roeck-us.net>
-Date:   Mon, 21 Feb 2022 08:16:15 -0800
-MIME-Version: 1.0
+        Mon, 21 Feb 2022 11:17:09 -0500
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2086.outbound.protection.outlook.com [40.107.223.86])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F5CBDECA;
+        Mon, 21 Feb 2022 08:16:38 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=m5tx1Vr4tz3n/fJtUZ02Gb/hS1wswipCm8+GQpmfRONWcDUCWYmSlU3jzta3jahwkzUEdIUcKfnrZVyoOcEgihr8CWRmvRlqGvpKj0+UQhZSNnKkxCXEBAxx30NU9UUPDHZ+V5D9FmdRQ3zoJ396bJWuEsIZl44mH3EkOfxUP5S6UPr3tzZbz4lcsGn4mgcil97ZVFtRDoxTA3FQvK8y6o+pLDfaqiCPFZpsTIYX+lepsc8z5b23WIEgNobiKuDkNCIgHNv+vAP+cXUh1MqUtCwHGTj1ZHWYWLHog49jNH0l1Msm4q++KEKmxng6dfVde4MybNU7RELHVKtCFexByg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=/CXzvkWov1jZCRLnfN0btciH9XVwe0p8QUplTQKvEBo=;
+ b=PvUhPyska4Mx3I7ZQRVd/amqNHMFPy9ZDYiCBHdK87F0rFbdgTmWvablQsZ615akfP8EIQV4tSw2/yL23nhzmNmZvhboRsJm3ofE1Fq7AEw56OKRvJRjCesghxkj076DIEUbon/bu3IHbmlNb10ysIQSIw9Q8VZOoMzibALK/L9PU0LLNzqjOXm5YL5zTBor+++LMPS/iFS7+4wPCGK52PJnRH8E8IxCm/qRNWcf8bO3GGTR9VBoaozk5hNTH7/3e9ooE8RwpNhKyH3newUf9owTkL4c+gBVjc4/6BFZAUZ13ymRUB4/bGP28CFRyTx14I1owxl1KW2gZz6tE5dmng==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=/CXzvkWov1jZCRLnfN0btciH9XVwe0p8QUplTQKvEBo=;
+ b=L80w8m+SbaGzvVjaJ3fRG4c4a3JeA1oeN27e9UMXD1zLFVyVSs7hYd714WBwzWKVjPZFDzNlLvyB3i58s0eyDn7Ln98WEwpEBxqgXv+a9RMOYeTcvIdLCZIkQzjOK6WgAA4CeCtEh0l77P9Dwm83g8jwVVF14S1WPZd17EGeM3uYyHqOOZGiMzmQdnongAELqnN7p4I1+04Gh/Coh0a7buxcYAYNnceRHe8k5czJcUnWCDuXsxPRQ65xG7Y68/VG8tbL0B0mrdNHYy0yI7ofwRNexT/duj3SG7B4aQ0nizYBAfeEGFRjLGtkdk3KCfKX2xGg/24jOPKT8MOqms4BWA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from CO6PR12MB5444.namprd12.prod.outlook.com (2603:10b6:5:35e::8) by
+ MN2PR12MB4045.namprd12.prod.outlook.com (2603:10b6:208:1d6::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4995.16; Mon, 21 Feb
+ 2022 16:16:36 +0000
+Received: from CO6PR12MB5444.namprd12.prod.outlook.com
+ ([fe80::3df2:54be:277e:7ed7]) by CO6PR12MB5444.namprd12.prod.outlook.com
+ ([fe80::3df2:54be:277e:7ed7%5]) with mapi id 15.20.4995.027; Mon, 21 Feb 2022
+ 16:16:36 +0000
+Message-ID: <20da6f55-682f-4b30-7be7-f425f8efa995@nvidia.com>
+Date:   Mon, 21 Feb 2022 16:16:28 +0000
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
+Subject: Re: [PATCH v3 2/4] hwmon: (lm90) Use hwmon_notify_event()
 Content-Language: en-US
-To:     Krzysztof Adamski <krzysztof.adamski@nokia.com>
-Cc:     linux-hwmon@vger.kernel.org, Agathe Porte <agathe.porte@nokia.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220218150908.1947772-1-linux@roeck-us.net>
- <YhNWVLHYVtCvdGhi@localhost.localdomain>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH v5 1/2] dt-bindings: hwmon: add tmp464.yaml
-In-Reply-To: <YhNWVLHYVtCvdGhi@localhost.localdomain>
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Jean Delvare <jdelvare@suse.com>
+Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-tegra@vger.kernel.org
+References: <20210618215455.19986-1-digetx@gmail.com>
+ <20210618215455.19986-3-digetx@gmail.com>
+ <9580f660-2a11-40e4-2986-f05703822d72@nvidia.com>
+ <2aae3bac-c9b3-ab47-aae4-a3c7b6fb4bb5@roeck-us.net>
+ <84ddad27-eb22-0ba6-594f-2fc6d098dc2a@nvidia.com>
+ <bdb8b51f-93ac-9f99-914e-e1ce16c0076d@roeck-us.net>
+From:   Jon Hunter <jonathanh@nvidia.com>
+In-Reply-To: <bdb8b51f-93ac-9f99-914e-e1ce16c0076d@roeck-us.net>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-ClientProxiedBy: LO2P265CA0461.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:a2::17) To CO6PR12MB5444.namprd12.prod.outlook.com
+ (2603:10b6:5:35e::8)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 5b7a5368-68c3-4100-dda1-08d9f55588af
+X-MS-TrafficTypeDiagnostic: MN2PR12MB4045:EE_
+X-Microsoft-Antispam-PRVS: <MN2PR12MB404515E638D006650AC4FE78D93A9@MN2PR12MB4045.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: U7SsL/ipEOVcNBU/hJUTkvl8DJ+/WPPGgop+l1ppG8jD2Tuvze+rZ5CVlD3l5UdjpkugHnoRoJ6h7XbwiGSISZyVaQVcn483hncofxRKq7jxBwzGV2dopab9dEP0WW82vJTbmXcw1cfFtYuPLoOz3R8/2GhBhsyDZTxyxRpJLBBvUy/C7ft8r0dd86HuY0DwhcEEr3WcvEZKLmX9Xlbsd9z4vVv9tJoZxy8LV8egeodN6d7VORf5uMxY7r6q+JlLozk1ZCCUZBfKx0oSp0hvpivpKvn02wgE5VLEUpT6Q1ibvqUr1n3vJdA188csYe0AoE8lVHHs3xpMrO96oFHc81zxOzCwoL5Qu8JxhCxPoKuuSFRh0LH/QGXGeGiUyj78Le/kgQ6dlb2JtsXLW5wmhHFL8cps80s7Vpi0C0hf5nbM0n+ZXMZO004OR69t4Oj4b2EWLnU0jcb+d2JuVmBq4lUi5WQ7guCGHIa8kkRrk6FQbg2sEXm33ZTObjIff+aFrrzEmo9FAkCXF8oujXFvc5MDPDeKWK4m38+0hX2KGYtDCwcWYHw6FKp9BXriydZutPeyKVAucQ0xC3XLCxs4t7gHkZz/6ejgpgY2FqCVkfZPwsFiljI2VBFMzR6pBPiaQx4kgYc3Unmfq3B6Th1RPZIgJdt1c+u6eSRFGlrNlEGYr+cz+r/y3sW6qbDjEK4R3GeVOsKgRc2DEsfawaDFmvG98/j1V58RQ/pRPbdSo7I=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR12MB5444.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(55236004)(6512007)(2616005)(26005)(186003)(6506007)(6666004)(508600001)(53546011)(6486002)(4744005)(316002)(5660300002)(31696002)(110136005)(36756003)(86362001)(31686004)(8676002)(66556008)(66946007)(4326008)(8936002)(66476007)(2906002)(38100700002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZWxpODRZMkNhRWQ1alYyVENJN01oTGVwRmtHM3c3ZDVXUUpwZ0swcGhLamFZ?=
+ =?utf-8?B?ZlZVVEZBRmRwREtUMTZWSERFUXJpN1MwUXRsYmp3UHhsNnBRNThjdWlOZ3lh?=
+ =?utf-8?B?WGMzekFFazZ6bXBOQmRKQmFqeVdmVStOU3RXbm0zYWZIZTZ0MmVjM0FvRXhR?=
+ =?utf-8?B?SXBON29jN04vbnl4VlZYQ1pPSDdKV3FyZVBpUWV5L2xlbjlxYkVjcysxaENG?=
+ =?utf-8?B?UFJMUHdmYk5kbGhzbFZQQVgremtIZmh5WWVZeEJtcG41TUFPeXE5Q3JnZmxG?=
+ =?utf-8?B?dFpiRW0yMkpLRm1hRnRJU01ZOXF1aUtLQ2R5TjlieUdTMEQwTk93UFVSTjVU?=
+ =?utf-8?B?WWp5MnUyNzJDUmgzc2RUOFk0QzEwQnViNm1KWStBVWwxeVZFMWZJREVZcEtC?=
+ =?utf-8?B?aHFuTnRPYjlyZHNuR2xFMzdqUDRLUHNPb2pTSnprK0xYVTlOTVlMYWpMaUF3?=
+ =?utf-8?B?UWZ5Q0FBZU1vTWZTNmhwODBUWk12eUY4K3RjaWo2VktnYm42bFp0aWo3d2lP?=
+ =?utf-8?B?NXd0ZU1ORS8rdER5UzJJa0FvVSswZE11VnZJMWI1L3VQcXBCYnFoSkt6NmxW?=
+ =?utf-8?B?cWpLdkVlZ3NGdnY1T1NMUk92NGd1cU5kemwyNVI1NGZSRjVJZmZxTkcrdVVD?=
+ =?utf-8?B?ZXdQSWVuS0g2ZGxZUTU0WDZQMS9nMG9ucGhScHhkb1pERXIvWm9BS1JZa2F0?=
+ =?utf-8?B?WlNWSG5McVUwZmt0RE9ORGk3Zmw4UEM0RmJxZm04Z3Z2Nmo1NkoxVmtxSndk?=
+ =?utf-8?B?cEp1RmQzVTFzSFZ5b3FlaHo3ZVhkd3lnWDJSSEljMkgyUnM5Qk5GQVFrbEpE?=
+ =?utf-8?B?NXYwRE1yVmNMODRQWEZpSkVFMEJITnFPRTlVYU9BQmpTVGVmNUk5VnNVWXZM?=
+ =?utf-8?B?dE5RQTZjeGFTQkk4Y2huUzFheVRxY3VkV2VJcGFDaGlPcXBZNDZ5dzhIYmNS?=
+ =?utf-8?B?QjhIVUQwSWRSaWJRTVFuemZXQkpacmN0KzNkbnJXaXYwVjlWdENyVGE5eU9H?=
+ =?utf-8?B?MnppOS8xUmxyelZndXNzNmNPYVZTSEZ3UVJGaWlRL2l4OWU4K0IzOWY0UHEw?=
+ =?utf-8?B?cVhqL2VMeU5hNlpzNTliOVJMdUdtUUg2QnVKRUFYZlVFZ1cxUlE3d0g5Y3lS?=
+ =?utf-8?B?TTJUdENHakxIcG96VjQyQlNub2NPaFRJdUhMTnA2UUt2Rk40Y0REWEtZNlZv?=
+ =?utf-8?B?UmFpMnc1OXVDYTdNR3VNTmJhTjdZVUdsRDFxZ2M0SkEyaDhNdkhHbEFxbjJT?=
+ =?utf-8?B?UFFudzhBZUVEbmZobTh2TWNHTEdOL20wTjRjcG9UbUNMNTlyMG5YUXlNZkk4?=
+ =?utf-8?B?RC9BRDdaM2VxQmc4Tk1HZHpzN3ZqM0JzOUxvVWNBZ2twQ2wrRm53cXJ1V2Ry?=
+ =?utf-8?B?QW9ackM3WjNuNkxHaDdmZVowUGdTOWtMblBLM2NhR005bXhHeGNTM1hIZlpV?=
+ =?utf-8?B?K3V0UkNkc2U2OG0rTFVRSUdNNEJiVDFLZFBxQlRBeFJSclpsVzRQKytiQ0RB?=
+ =?utf-8?B?Ym5IMlcvS3N5eWwxb1VvREZmRlUyMVl2VDlmREJma2hUSlBhOURPUkg3TWFu?=
+ =?utf-8?B?NXNsY0ttWWdYbkpvWmhzaTZKRmlYeXg4a21MZ29HSU9FOVZBUnM2REZOTFRP?=
+ =?utf-8?B?SGNkb2Z5VnpwdW1iRTFYbGpYYzZURDFkcm40OFdzVHJjQitIU3pyZE1Sbjcr?=
+ =?utf-8?B?Y1NMV1Y5SDdLQytSZ2poWWphTXpKZWlLdC9GYmljS1RiN3hnUW5hbmwyemhG?=
+ =?utf-8?B?S1poVzNPUjdBa2JqSG8xYzZTL1N5Ny8vcVJhS0FTZmJPT0pOZUZ2YnhoNkpx?=
+ =?utf-8?B?cjRBelJwTjljc2VNZ0cwNWx1MEwvVGVhYkdkdkk0NUdvek95bit2SXhrMXRo?=
+ =?utf-8?B?QVpyd2Y5UVJZRUdDZGtqd21tdHBrMGEvMHVxRmFVYjJ1bWNsaVArYzhaSmR2?=
+ =?utf-8?B?VUdNZndOR2ZmV1NaVWJlUzdDU0VzQkNvTHNyaEw3MktxWGFsQTd5cDJoWm8w?=
+ =?utf-8?B?QnM3cEZwWW00T3lhWXdYU1F6cE12N1pVemoySmVqdy83WmhURWJqaG1KZVNh?=
+ =?utf-8?B?ZC9nTmU5RElOTFpSVDRURGVtQUZaa1hNVWhhVHdCS1RYTnJmK01XY2dybmVI?=
+ =?utf-8?B?SU5zVXAxMmZkOE0vSmkwTHZkUnZwTk5aRFZUQnBMcGFsNkFGMU1mOW9waUdh?=
+ =?utf-8?Q?HBVKrQLG0rXrXZLAC08uiIk=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5b7a5368-68c3-4100-dda1-08d9f55588af
+X-MS-Exchange-CrossTenant-AuthSource: CO6PR12MB5444.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Feb 2022 16:16:36.6543
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: VY0r9TEoqQUXX/2zau4Rd3qre3/wdHrR/gSbIurexVGq5o/pKxzIGVHJjEPwUlEeOAd5La8TLLAlk3l8iUh/lw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4045
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/21/22 01:07, Krzysztof Adamski wrote:
-> Dnia Fri, Feb 18, 2022 at 07:09:07AM -0800, Guenter Roeck napisał(a):
->> From: Agathe Porte <agathe.porte@nokia.com>
+
+On 21/02/2022 16:02, Guenter Roeck wrote:
+
+...
+
+>> The platform I see this on does use device-tree and it does have a 
+>> node for the ti,tmp451 device which uses the lm90 device. This 
+>> platform uses the device-tree source 
+>> arch/arm64/boot/dts/nvidia/tegra194-p2972-0000.dts and the tmp451 node 
+>> is in arch/arm64/boot/dts/nvidia/tegra194-p2888.dtsi.
 >>
->> Add basic description of the tmp464 driver DT bindings.
->>
->> Signed-off-by: Agathe Porte <agathe.porte@nokia.com>
->> Cc: Krzysztof Adamski <krzysztof.adamski@nokia.com>
->> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
->> ---
->> v5:
->> - Dropped ti,n-factor from channel@0 example. Added additional
->>  channel to examples to show positive ti,n-factor property.
->>
->> v4:
->> - No changes
->>
->> v3:
->> - Addedd support for TMP468.
->> - Changed number of channels from 0..3 (which was wrong anyway) to 0..8.
->> - Changed value range for ti,n-factor to int8, with an example for
->>  a negative value.
->> - Added myself as driver maintainer.
->>
->> .../devicetree/bindings/hwmon/ti,tmp464.yaml  | 114 ++++++++++++++++++
->> MAINTAINERS                                   |   7 ++
->> 2 files changed, 121 insertions(+)
->> create mode 100644 Documentation/devicetree/bindings/hwmon/ti,tmp464.yaml
->>
->> diff --git a/Documentation/devicetree/bindings/hwmon/ti,tmp464.yaml b/Documentation/devicetree/bindings/hwmon/ti,tmp464.yaml
->> new file mode 100644
->> index 000000000000..14f6a3412b8c
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/hwmon/ti,tmp464.yaml
->> @@ -0,0 +1,114 @@
->> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/hwmon/ti,tmp464.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: TMP464 and TMP468 temperature sensors
->> +
->> +maintainers:
->> +  - Agathe Porte <agathe.porte@nokia.com>
->> +
->> +description: |
->> +  ±0.0625°C Remote and Local temperature sensor
->> +  https://www.ti.com/lit/ds/symlink/tmp464.pdf
->> +  https://www.ti.com/lit/ds/symlink/tmp468.pdf
->> +
->> +properties:
->> +  compatible:
->> +    enum:
->> +      - ti,tmp464
->> +      - ti,tmp468
->> +
->> +  reg:
->> +    maxItems: 1
->> +
->> +  '#address-cells':
->> +    const: 1
->> +
->> +  '#size-cells':
->> +    const: 0
->> +
->> +required:
->> +  - compatible
->> +  - reg
->> +
->> +additionalProperties: false
->> +
->> +patternProperties:
->> +  "^channel@([0-8])$":
->> +    type: object
->> +    description: |
->> +      Represents channels of the device and their specific configuration.
->> +
->> +    properties:
->> +      reg:
->> +        description: |
->> +          The channel number. 0 is local channel, 1-8 are remote channels.
->> +        items:
->> +          minimum: 0
->> +          maximum: 8
->> +
->> +      label:
->> +        description: |
->> +          A descriptive name for this channel, like "ambient" or "psu".
->> +
->> +      ti,n-factor:
->> +        description: |
->> +          The value (two's complement) to be programmed in the channel specific N correction register.
->> +          For remote channels only.
->> +        $ref: /schemas/types.yaml#/definitions/int8
->> +        items:
->> +          minimum: -128
->> +          maximum: 127
 > 
-> I still thing we should have the same format here and in tmp421, for
-> consistency. If use the same property name, "ti,n-factor" but on tmp421
-> you have use 32bit value while here you have to use 8bit (which is weird
-> in DT, BTW), it might be confusing.
-> Back when we did this for TMP421, there was some discussion and we
-> settled on this approach, why do it differently now?
-> 
+> Interesting. It appears that the call to 
+> devm_thermal_zone_of_sensor_register()
+> in the hwmon core nevertheless returns -ENODEV which is not handled 
+> properly
+> in the hwmon core. I can see a number of reasons for this to happen:
+> - there is no devicetree node for the lm90 device
+> - there is no thermal-zones devicetree node
+> - there is no thermal zone entry in the thermal-zones node which matches
+>    the sensor
 
-I seem to recall from that discussion that there was supposedly no way to
-express negative numbers in devicetree. Obviously that is incorrect.
-In addition to that, I strongly suspect that the tmp421 code as written
-does not work. Its value range is specified as 0..255, but it is read with
-	err = of_property_read_s32(child, "ti,n-factor", &val);
-and range checked with
-	if (val > 127 || val < -128) {
-                 dev_err(dev, "n-factor for channel %d invalid (%d)\n",
-                        i, val);
-                 return -EINVAL;
-         }
 
-That just looks wrong. Either the value range is 0..255 and checked
-as 0 .. 255, or it is -128 .. 127 and must be both checked and specified
-accordingly. This made me look into the code and I found how negative
-numbers are supposed to be handled.
+So we definitely have the node for the lm90 device and a thermal-zones 
+node, but I do not see a thermal-sensor node. Maybe this is what we are 
+missing?
 
-We can go either way, but whatever it is should be correct and be confirmed
-to work. Rob, any thoughts ?
+Jon
 
-Guenter
+-- 
+nvpublic

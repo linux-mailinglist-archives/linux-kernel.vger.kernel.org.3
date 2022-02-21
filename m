@@ -2,41 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1BA64BDF8D
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:50:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD03B4BE770
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:03:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350071AbiBUJ1M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 04:27:12 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51818 "EHLO
+        id S1350095AbiBUJ1T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 04:27:19 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348481AbiBUJT3 (ORCPT
+        with ESMTP id S1348574AbiBUJTj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 04:19:29 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A550533E32;
-        Mon, 21 Feb 2022 01:07:29 -0800 (PST)
+        Mon, 21 Feb 2022 04:19:39 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44D3B33E3E;
+        Mon, 21 Feb 2022 01:07:30 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id D8F1ACE0E86;
-        Mon, 21 Feb 2022 09:07:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9DD7C340E9;
-        Mon, 21 Feb 2022 09:07:25 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D31A16112F;
+        Mon, 21 Feb 2022 09:07:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AEA16C340E9;
+        Mon, 21 Feb 2022 09:07:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645434446;
-        bh=GHgELpMbuBi4RgTc9u5PwVwcvv+8eW94mjNWXIGJY2Y=;
+        s=korg; t=1645434449;
+        bh=ewdxi9hgGmr5HP1M9SuoF72mT/b/4gFiUqS6P8tN7Ec=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XkPKk4bVkZU76PRJ5pIPdUaA+FXyZACaCk3BmMyDKsma13DydRJiLzLy4pUCMECQd
-         I4JmtVShaBobRCo5hracZ4xo1XYYDC3Z9bVjTWukBkufVvOdEVQA3Exqf1t58mGcU4
-         GVCG5biYrPmAnUjSDZp0fBMrxKXixZFzFhRcG0W0=
+        b=tsVwSZKo5qp4jvpBvFF4ywFBulifvhWA5R3lUcZdVWqyrZULQYB+Gr+q43qNvvIi7
+         +bRp1m81zKzzl7CPkWjhCv9EiBKeptbc6dKzYLYnm7d9GY3PlyKRs5gMQTqJGWiQtr
+         vkCcNYjCVTvZYkOLnsb6ar85TV45EkcpbSw1C0KM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Naohiro Aota <naohiro.aota@wdc.com>,
-        David Sterba <dsterba@suse.com>
-Subject: [PATCH 5.15 003/196] btrfs: zoned: cache reported zone during mount
-Date:   Mon, 21 Feb 2022 09:47:15 +0100
-Message-Id: <20220221084930.993153960@linuxfoundation.org>
+        stable@vger.kernel.org, Nigel Kirkland <nkirkland2304@gmail.com>,
+        James Smart <jsmart2021@gmail.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Subject: [PATCH 5.15 004/196] scsi: lpfc: Fix mailbox command failure during driver initialization
+Date:   Mon, 21 Feb 2022 09:47:16 +0100
+Message-Id: <20220221084931.025316397@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220221084930.872957717@linuxfoundation.org>
 References: <20220221084930.872957717@linuxfoundation.org>
@@ -54,290 +55,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Naohiro Aota <naohiro.aota@wdc.com>
+From: James Smart <jsmart2021@gmail.com>
 
-commit 16beac87e95e2fb278b552397c8260637f8a63f7 upstream.
+commit efe1dc571a5b808baa26682eef16561be2e356fd upstream.
 
-When mounting a device, we are reporting the zones twice: once for
-checking the zone attributes in btrfs_get_dev_zone_info and once for
-loading block groups' zone info in
-btrfs_load_block_group_zone_info(). With a lot of block groups, that
-leads to a lot of REPORT ZONE commands and slows down the mount
-process.
+Contention for the mailbox interface may occur during driver initialization
+(immediately after a function reset), between mailbox commands initiated
+via ioctl (bsg) and those driver requested by the driver.
 
-This patch introduces a zone info cache in struct
-btrfs_zoned_device_info. The cache is populated while in
-btrfs_get_dev_zone_info() and used for
-btrfs_load_block_group_zone_info() to reduce the number of REPORT ZONE
-commands. The zone cache is then released after loading the block
-groups, as it will not be much effective during the run time.
+After setting SLI_ACTIVE flag for a port, there is a window in which the
+driver will allow an ioctl to be initiated while the adapter is
+initializing and issuing mailbox commands via polling. The polling logic
+then gets confused.
 
-Benchmark: Mount an HDD with 57,007 block groups
-Before patch: 171.368 seconds
-After patch: 64.064 seconds
+Correct by having thread setting SLI_ACTIVE spot an active mailbox command
+and allow it complete before proceeding.
 
-While it still takes a minute due to the slowness of loading all the
-block groups, the patch reduces the mount time by 1/3.
-
-Link: https://lore.kernel.org/linux-btrfs/CAHQ7scUiLtcTqZOMMY5kbWUBOhGRwKo6J6wYPT5WY+C=cD49nQ@mail.gmail.com/
-Fixes: 5b316468983d ("btrfs: get zone information of zoned block devices")
-CC: stable@vger.kernel.org
-Signed-off-by: Naohiro Aota <naohiro.aota@wdc.com>
-Signed-off-by: David Sterba <dsterba@suse.com>
+Link: https://lore.kernel.org/r/20210921143008.64212-1-jsmart2021@gmail.com
+Co-developed-by: Nigel Kirkland <nkirkland2304@gmail.com>
+Signed-off-by: Nigel Kirkland <nkirkland2304@gmail.com>
+Signed-off-by: James Smart <jsmart2021@gmail.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/btrfs/dev-replace.c |    2 -
- fs/btrfs/disk-io.c     |    2 +
- fs/btrfs/volumes.c     |    2 -
- fs/btrfs/zoned.c       |   85 ++++++++++++++++++++++++++++++++++++++++++++-----
- fs/btrfs/zoned.h       |    8 +++-
- 5 files changed, 87 insertions(+), 12 deletions(-)
+ drivers/scsi/lpfc/lpfc_sli.c |   15 +++++++++++++--
+ 1 file changed, 13 insertions(+), 2 deletions(-)
 
---- a/fs/btrfs/dev-replace.c
-+++ b/fs/btrfs/dev-replace.c
-@@ -325,7 +325,7 @@ static int btrfs_init_dev_replace_tgtdev
- 	set_blocksize(device->bdev, BTRFS_BDEV_BLOCKSIZE);
- 	device->fs_devices = fs_info->fs_devices;
+--- a/drivers/scsi/lpfc/lpfc_sli.c
++++ b/drivers/scsi/lpfc/lpfc_sli.c
+@@ -8147,6 +8147,7 @@ lpfc_sli4_hba_setup(struct lpfc_hba *phb
+ 	struct lpfc_vport *vport = phba->pport;
+ 	struct lpfc_dmabuf *mp;
+ 	struct lpfc_rqb *rqbp;
++	u32 flg;
  
--	ret = btrfs_get_dev_zone_info(device);
-+	ret = btrfs_get_dev_zone_info(device, false);
- 	if (ret)
- 		goto error;
- 
---- a/fs/btrfs/disk-io.c
-+++ b/fs/btrfs/disk-io.c
-@@ -3565,6 +3565,8 @@ int __cold open_ctree(struct super_block
- 		goto fail_sysfs;
- 	}
- 
-+	btrfs_free_zone_cache(fs_info);
-+
- 	if (!sb_rdonly(sb) && fs_info->fs_devices->missing_devices &&
- 	    !btrfs_check_rw_degradable(fs_info, NULL)) {
- 		btrfs_warn(fs_info,
---- a/fs/btrfs/volumes.c
-+++ b/fs/btrfs/volumes.c
-@@ -2596,7 +2596,7 @@ int btrfs_init_new_device(struct btrfs_f
- 	device->fs_info = fs_info;
- 	device->bdev = bdev;
- 
--	ret = btrfs_get_dev_zone_info(device);
-+	ret = btrfs_get_dev_zone_info(device, false);
- 	if (ret)
- 		goto error_free_device;
- 
---- a/fs/btrfs/zoned.c
-+++ b/fs/btrfs/zoned.c
-@@ -4,6 +4,7 @@
- #include <linux/slab.h>
- #include <linux/blkdev.h>
- #include <linux/sched/mm.h>
-+#include <linux/vmalloc.h>
- #include "ctree.h"
- #include "volumes.h"
- #include "zoned.h"
-@@ -195,6 +196,8 @@ static int emulate_report_zones(struct b
- static int btrfs_get_dev_zones(struct btrfs_device *device, u64 pos,
- 			       struct blk_zone *zones, unsigned int *nr_zones)
- {
-+	struct btrfs_zoned_device_info *zinfo = device->zone_info;
-+	u32 zno;
- 	int ret;
- 
- 	if (!*nr_zones)
-@@ -206,6 +209,34 @@ static int btrfs_get_dev_zones(struct bt
- 		return 0;
- 	}
- 
-+	/* Check cache */
-+	if (zinfo->zone_cache) {
-+		unsigned int i;
-+
-+		ASSERT(IS_ALIGNED(pos, zinfo->zone_size));
-+		zno = pos >> zinfo->zone_size_shift;
-+		/*
-+		 * We cannot report zones beyond the zone end. So, it is OK to
-+		 * cap *nr_zones to at the end.
+ 	/* Perform a PCI function reset to start from clean */
+ 	rc = lpfc_pci_function_reset(phba);
+@@ -8160,7 +8161,17 @@ lpfc_sli4_hba_setup(struct lpfc_hba *phb
+ 	else {
+ 		spin_lock_irq(&phba->hbalock);
+ 		phba->sli.sli_flag |= LPFC_SLI_ACTIVE;
++		flg = phba->sli.sli_flag;
+ 		spin_unlock_irq(&phba->hbalock);
++		/* Allow a little time after setting SLI_ACTIVE for any polled
++		 * MBX commands to complete via BSG.
 +		 */
-+		*nr_zones = min_t(u32, *nr_zones, zinfo->nr_zones - zno);
-+
-+		for (i = 0; i < *nr_zones; i++) {
-+			struct blk_zone *zone_info;
-+
-+			zone_info = &zinfo->zone_cache[zno + i];
-+			if (!zone_info->len)
-+				break;
++		for (i = 0; i < 50 && (flg & LPFC_SLI_MBOX_ACTIVE); i++) {
++			msleep(20);
++			spin_lock_irq(&phba->hbalock);
++			flg = phba->sli.sli_flag;
++			spin_unlock_irq(&phba->hbalock);
 +		}
-+
-+		if (i == *nr_zones) {
-+			/* Cache hit on all the zones */
-+			memcpy(zones, zinfo->zone_cache + zno,
-+			       sizeof(*zinfo->zone_cache) * *nr_zones);
-+			return 0;
-+		}
-+	}
-+
- 	ret = blkdev_report_zones(device->bdev, pos >> SECTOR_SHIFT, *nr_zones,
- 				  copy_zone_info_cb, zones);
- 	if (ret < 0) {
-@@ -219,6 +250,11 @@ static int btrfs_get_dev_zones(struct bt
- 	if (!ret)
- 		return -EIO;
- 
-+	/* Populate cache */
-+	if (zinfo->zone_cache)
-+		memcpy(zinfo->zone_cache + zno, zones,
-+		       sizeof(*zinfo->zone_cache) * *nr_zones);
-+
- 	return 0;
- }
- 
-@@ -282,7 +318,7 @@ int btrfs_get_dev_zone_info_all_devices(
- 		if (!device->bdev)
- 			continue;
- 
--		ret = btrfs_get_dev_zone_info(device);
-+		ret = btrfs_get_dev_zone_info(device, true);
- 		if (ret)
- 			break;
- 	}
-@@ -291,7 +327,7 @@ int btrfs_get_dev_zone_info_all_devices(
- 	return ret;
- }
- 
--int btrfs_get_dev_zone_info(struct btrfs_device *device)
-+int btrfs_get_dev_zone_info(struct btrfs_device *device, bool populate_cache)
- {
- 	struct btrfs_fs_info *fs_info = device->fs_info;
- 	struct btrfs_zoned_device_info *zone_info = NULL;
-@@ -318,6 +354,8 @@ int btrfs_get_dev_zone_info(struct btrfs
- 	if (!zone_info)
- 		return -ENOMEM;
- 
-+	device->zone_info = zone_info;
-+
- 	if (!bdev_is_zoned(bdev)) {
- 		if (!fs_info->zone_size) {
- 			ret = calculate_emulated_zone_size(fs_info);
-@@ -369,6 +407,23 @@ int btrfs_get_dev_zone_info(struct btrfs
- 		goto out;
  	}
  
-+	/*
-+	 * Enable zone cache only for a zoned device. On a non-zoned device, we
-+	 * fill the zone info with emulated CONVENTIONAL zones, so no need to
-+	 * use the cache.
-+	 */
-+	if (populate_cache && bdev_is_zoned(device->bdev)) {
-+		zone_info->zone_cache = vzalloc(sizeof(struct blk_zone) *
-+						zone_info->nr_zones);
-+		if (!zone_info->zone_cache) {
-+			btrfs_err_in_rcu(device->fs_info,
-+				"zoned: failed to allocate zone cache for %s",
-+				rcu_str_deref(device->name));
-+			ret = -ENOMEM;
-+			goto out;
-+		}
-+	}
-+
- 	/* Get zones type */
- 	while (sector < nr_sectors) {
- 		nr_zones = BTRFS_REPORT_NR_ZONES;
-@@ -444,8 +499,6 @@ int btrfs_get_dev_zone_info(struct btrfs
- 
- 	kfree(zones);
- 
--	device->zone_info = zone_info;
--
- 	switch (bdev_zoned_model(bdev)) {
- 	case BLK_ZONED_HM:
- 		model = "host-managed zoned";
-@@ -478,10 +531,7 @@ int btrfs_get_dev_zone_info(struct btrfs
- out:
- 	kfree(zones);
- out_free_zone_info:
--	bitmap_free(zone_info->empty_zones);
--	bitmap_free(zone_info->seq_zones);
--	kfree(zone_info);
--	device->zone_info = NULL;
-+	btrfs_destroy_dev_zone_info(device);
- 
- 	return ret;
- }
-@@ -495,6 +545,7 @@ void btrfs_destroy_dev_zone_info(struct
- 
- 	bitmap_free(zone_info->seq_zones);
- 	bitmap_free(zone_info->empty_zones);
-+	vfree(zone_info->zone_cache);
- 	kfree(zone_info);
- 	device->zone_info = NULL;
- }
-@@ -1551,3 +1602,21 @@ void btrfs_clear_data_reloc_bg(struct bt
- 		fs_info->data_reloc_bg = 0;
- 	spin_unlock(&fs_info->relocation_bg_lock);
- }
-+
-+void btrfs_free_zone_cache(struct btrfs_fs_info *fs_info)
-+{
-+	struct btrfs_fs_devices *fs_devices = fs_info->fs_devices;
-+	struct btrfs_device *device;
-+
-+	if (!btrfs_is_zoned(fs_info))
-+		return;
-+
-+	mutex_lock(&fs_devices->device_list_mutex);
-+	list_for_each_entry(device, &fs_devices->devices, dev_list) {
-+		if (device->zone_info) {
-+			vfree(device->zone_info->zone_cache);
-+			device->zone_info->zone_cache = NULL;
-+		}
-+	}
-+	mutex_unlock(&fs_devices->device_list_mutex);
-+}
---- a/fs/btrfs/zoned.h
-+++ b/fs/btrfs/zoned.h
-@@ -25,6 +25,7 @@ struct btrfs_zoned_device_info {
- 	u32 nr_zones;
- 	unsigned long *seq_zones;
- 	unsigned long *empty_zones;
-+	struct blk_zone *zone_cache;
- 	struct blk_zone sb_zones[2 * BTRFS_SUPER_MIRROR_MAX];
- };
- 
-@@ -32,7 +33,7 @@ struct btrfs_zoned_device_info {
- int btrfs_get_dev_zone(struct btrfs_device *device, u64 pos,
- 		       struct blk_zone *zone);
- int btrfs_get_dev_zone_info_all_devices(struct btrfs_fs_info *fs_info);
--int btrfs_get_dev_zone_info(struct btrfs_device *device);
-+int btrfs_get_dev_zone_info(struct btrfs_device *device, bool populate_cache);
- void btrfs_destroy_dev_zone_info(struct btrfs_device *device);
- int btrfs_check_zoned_mode(struct btrfs_fs_info *fs_info);
- int btrfs_check_mountopts_zoned(struct btrfs_fs_info *info);
-@@ -67,6 +68,7 @@ int btrfs_sync_zone_write_pointer(struct
- struct btrfs_device *btrfs_zoned_get_device(struct btrfs_fs_info *fs_info,
- 					    u64 logical, u64 length);
- void btrfs_clear_data_reloc_bg(struct btrfs_block_group *bg);
-+void btrfs_free_zone_cache(struct btrfs_fs_info *fs_info);
- #else /* CONFIG_BLK_DEV_ZONED */
- static inline int btrfs_get_dev_zone(struct btrfs_device *device, u64 pos,
- 				     struct blk_zone *zone)
-@@ -79,7 +81,8 @@ static inline int btrfs_get_dev_zone_inf
- 	return 0;
- }
- 
--static inline int btrfs_get_dev_zone_info(struct btrfs_device *device)
-+static inline int btrfs_get_dev_zone_info(struct btrfs_device *device,
-+					  bool populate_cache)
- {
- 	return 0;
- }
-@@ -202,6 +205,7 @@ static inline struct btrfs_device *btrfs
- 
- static inline void btrfs_clear_data_reloc_bg(struct btrfs_block_group *bg) { }
- 
-+static inline void btrfs_free_zone_cache(struct btrfs_fs_info *fs_info) { }
- #endif
- 
- static inline bool btrfs_dev_is_sequential(struct btrfs_device *device, u64 pos)
+ 	lpfc_sli4_dip(phba);
+@@ -9744,7 +9755,7 @@ lpfc_sli_issue_mbox_s4(struct lpfc_hba *
+ 					"(%d):2541 Mailbox command x%x "
+ 					"(x%x/x%x) failure: "
+ 					"mqe_sta: x%x mcqe_sta: x%x/x%x "
+-					"Data: x%x x%x\n,",
++					"Data: x%x x%x\n",
+ 					mboxq->vport ? mboxq->vport->vpi : 0,
+ 					mboxq->u.mb.mbxCommand,
+ 					lpfc_sli_config_mbox_subsys_get(phba,
+@@ -9778,7 +9789,7 @@ lpfc_sli_issue_mbox_s4(struct lpfc_hba *
+ 					"(%d):2597 Sync Mailbox command "
+ 					"x%x (x%x/x%x) failure: "
+ 					"mqe_sta: x%x mcqe_sta: x%x/x%x "
+-					"Data: x%x x%x\n,",
++					"Data: x%x x%x\n",
+ 					mboxq->vport ? mboxq->vport->vpi : 0,
+ 					mboxq->u.mb.mbxCommand,
+ 					lpfc_sli_config_mbox_subsys_get(phba,
 
 

@@ -2,52 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61AEF4BE58D
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:00:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C2EB94BE8B0
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:06:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244542AbiBUJEj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 04:04:39 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59650 "EHLO
+        id S1351094AbiBUJgn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 04:36:43 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347321AbiBUJBP (ORCPT
+        with ESMTP id S1349118AbiBUJ1e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 04:01:15 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B03527CED;
-        Mon, 21 Feb 2022 00:56:18 -0800 (PST)
+        Mon, 21 Feb 2022 04:27:34 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E911FDEBF;
+        Mon, 21 Feb 2022 01:12:12 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5684F611C4;
-        Mon, 21 Feb 2022 08:55:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38C7BC340F1;
-        Mon, 21 Feb 2022 08:55:32 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 572BDCE0E7D;
+        Mon, 21 Feb 2022 09:12:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B9A9C340E9;
+        Mon, 21 Feb 2022 09:12:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645433732;
-        bh=0x8uk8ogZkTiQRkXjDuzshmOMcA8a04iiSihN0Uu/A4=;
+        s=korg; t=1645434729;
+        bh=zPEyfU1ecxpvXSoCI9xFguvbg7TQZ1EtnpjrPVaVoKE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rxcW3ioGgITJybH7lL7q5gMRfUp+J7626eGscxHb90shURn3K+6NCb491q1zEYu5q
-         3xeIIwA3ll7JXeGgZ3tf+GjINB2QLxPXFN8Om/lTyihIytZcYniWtwPgqMkygavOx4
-         go01vmsvHdGfjioyydqe7UkyDuZk8AUrlIl2VsPk=
+        b=GU06+kr/PL2TZJ3pRa/me1Wq+/v1lKt8f+wrtaamoivAWRvXrZ8uB44uxbismuml4
+         fzD5M9KAKTKeErxSiWTAuRx3xbxVRl2FCYM/sRkpFFWzwikaUID1qbQV+VpZ8qYk6p
+         ybt5+BOm6lvdnRzXEaaiSEDyZgKgXWMC+zaOeuaI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Yang Xu <xuyang2018.jy@fujitsu.com>,
+        stable@vger.kernel.org, "kernelci.org bot" <bot@kernelci.org>,
+        Muhammad Usama Anjum <usama.anjum@collabora.com>,
         Shuah Khan <skhan@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 08/58] selftests/zram: Skip max_comp_streams interface on newer kernel
+        Kees Cook <keescook@chromium.org>
+Subject: [PATCH 5.15 109/196] selftests/exec: Add non-regular to TEST_GEN_PROGS
 Date:   Mon, 21 Feb 2022 09:49:01 +0100
-Message-Id: <20220221084912.155685491@linuxfoundation.org>
+Message-Id: <20220221084934.588735942@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220221084911.895146879@linuxfoundation.org>
-References: <20220221084911.895146879@linuxfoundation.org>
+In-Reply-To: <20220221084930.872957717@linuxfoundation.org>
+References: <20220221084930.872957717@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,75 +56,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yang Xu <xuyang2018.jy@fujitsu.com>
+From: Muhammad Usama Anjum <usama.anjum@collabora.com>
 
-[ Upstream commit fc4eb486a59d70bd35cf1209f0e68c2d8b979193 ]
+commit a7e793a867ae312cecdeb6f06cceff98263e75dd upstream.
 
-Since commit 43209ea2d17a ("zram: remove max_comp_streams internals"), zram
-has switched to per-cpu streams. Even kernel still keep this interface for
-some reasons, but writing to max_comp_stream doesn't take any effect. So
-skip it on newer kernel ie 4.7.
+non-regular file needs to be compiled and then copied to the output
+directory. Remove it from TEST_PROGS and add it to TEST_GEN_PROGS. This
+removes error thrown by rsync when non-regular object isn't found:
 
-The code that comparing kernel version is from xfstests testsuite ext4/053.
+rsync: [sender] link_stat "/linux/tools/testing/selftests/exec/non-regular" failed: No such file or directory (2)
+rsync error: some files/attrs were not transferred (see previous errors) (code 23) at main.c(1333) [sender=3.2.3]
 
-Signed-off-by: Yang Xu <xuyang2018.jy@fujitsu.com>
+Fixes: 0f71241a8e32 ("selftests/exec: add file type errno tests")
+Reported-by: "kernelci.org bot" <bot@kernelci.org>
+Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
+Reviewed-by: Kees Cook <keescook@chromium.org>
 Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- tools/testing/selftests/zram/zram_lib.sh | 24 ++++++++++++++++++++++++
- 1 file changed, 24 insertions(+)
+ tools/testing/selftests/exec/Makefile |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/zram/zram_lib.sh b/tools/testing/selftests/zram/zram_lib.sh
-index 9e73a4fb9b0aa..2c1d1c567f854 100755
---- a/tools/testing/selftests/zram/zram_lib.sh
-+++ b/tools/testing/selftests/zram/zram_lib.sh
-@@ -20,6 +20,9 @@ dev_mounted=-1
+--- a/tools/testing/selftests/exec/Makefile
++++ b/tools/testing/selftests/exec/Makefile
+@@ -3,8 +3,8 @@ CFLAGS = -Wall
+ CFLAGS += -Wno-nonnull
+ CFLAGS += -D_GNU_SOURCE
  
- # Kselftest framework requirement - SKIP code is 4.
- ksft_skip=4
-+kernel_version=`uname -r | cut -d'.' -f1,2`
-+kernel_major=${kernel_version%.*}
-+kernel_minor=${kernel_version#*.}
- 
- trap INT
- 
-@@ -34,6 +37,20 @@ check_prereqs()
- 	fi
- }
- 
-+kernel_gte()
-+{
-+	major=${1%.*}
-+	minor=${1#*.}
-+
-+	if [ $kernel_major -gt $major ]; then
-+		return 0
-+	elif [[ $kernel_major -eq $major && $kernel_minor -ge $minor ]]; then
-+		return 0
-+	fi
-+
-+	return 1
-+}
-+
- zram_cleanup()
- {
- 	echo "zram cleanup"
-@@ -95,6 +112,13 @@ zram_max_streams()
- {
- 	echo "set max_comp_streams to zram device(s)"
- 
-+	kernel_gte 4.7
-+	if [ $? -eq 0 ]; then
-+		echo "The device attribute max_comp_streams was"\
-+		               "deprecated in 4.7"
-+		return 0
-+	fi
-+
- 	local i=0
- 	for max_s in $zram_max_streams; do
- 		local sys_path="/sys/block/zram${i}/max_comp_streams"
--- 
-2.34.1
-
+-TEST_PROGS := binfmt_script non-regular
+-TEST_GEN_PROGS := execveat load_address_4096 load_address_2097152 load_address_16777216
++TEST_PROGS := binfmt_script
++TEST_GEN_PROGS := execveat load_address_4096 load_address_2097152 load_address_16777216 non-regular
+ TEST_GEN_FILES := execveat.symlink execveat.denatured script subdir
+ # Makefile is a run-time dependency, since it's accessed by the execveat test
+ TEST_FILES := Makefile
 
 

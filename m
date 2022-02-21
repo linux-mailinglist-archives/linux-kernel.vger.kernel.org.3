@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC7964BE34A
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:57:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D9F4F4BE02F
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:51:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347179AbiBUJGH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 04:06:07 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58048 "EHLO
+        id S1349981AbiBUJ1B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 04:27:01 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348004AbiBUJCM (ORCPT
+        with ESMTP id S1348482AbiBUJSl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 04:02:12 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35DF52A71F;
-        Mon, 21 Feb 2022 00:57:24 -0800 (PST)
+        Mon, 21 Feb 2022 04:18:41 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2274A26AC7;
+        Mon, 21 Feb 2022 01:07:21 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BAD87B80EAF;
-        Mon, 21 Feb 2022 08:56:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7120C340E9;
-        Mon, 21 Feb 2022 08:56:50 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 797AACE0E7C;
+        Mon, 21 Feb 2022 09:07:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6169DC340E9;
+        Mon, 21 Feb 2022 09:07:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645433811;
-        bh=A8RtHxPSiVbrzT1K6DRZ6tVHZyVui5YgZ47NX4cDOkU=;
+        s=korg; t=1645434438;
+        bh=rCLK1isdgnG1EXdfAkFvPKqK2hZ0U3V3404DM11jp34=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=eJ7hsv/L7bI9Pjt26LKK2VR/B36q43LDagpQZcn7yPR6g5Yx3o/2JJB2sV0l2mcrF
-         87W7xvbc7Q+PTXeXD1OtckWNiShikKhTfzMPq8Jy/Rk8+53F4wRVnxzQVtBo7Uzuno
-         S6N9ByanYp0T2vnd8F2x4S3BjOuMafWBd/ftBsl4=
+        b=BKHwV+mloz5tuvkolafOPPtTRcD4PujWKZ1Vmd/g5UMQ1LxG7pZzM+7MRKZGay0Gn
+         d3K1fMTqxh6nDXVQ7R3dW8ePAlzRdyvYVVFIkg2kBlT1ruXnDjJ2OUeDwwDcOC12v7
+         Ty2ePOewWt5Ctda5H0Akm+OYo/VKjb6L3OALlLdg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -36,12 +36,12 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         David Dunn <daviddunn@google.com>,
         Paolo Bonzini <pbonzini@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 49/58] KVM: x86/pmu: Use AMD64_RAW_EVENT_MASK for PERF_TYPE_RAW
+Subject: [PATCH 5.10 090/121] KVM: x86/pmu: Use AMD64_RAW_EVENT_MASK for PERF_TYPE_RAW
 Date:   Mon, 21 Feb 2022 09:49:42 +0100
-Message-Id: <20220221084913.456697491@linuxfoundation.org>
+Message-Id: <20220221084924.244292221@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220221084911.895146879@linuxfoundation.org>
-References: <20220221084911.895146879@linuxfoundation.org>
+In-Reply-To: <20220221084921.147454846@linuxfoundation.org>
+References: <20220221084921.147454846@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -75,18 +75,18 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/arch/x86/kvm/pmu.c b/arch/x86/kvm/pmu.c
-index acc8d217f6565..ad3d39c00d7fc 100644
+index 2d91e39dbdf67..2f83b5d948b33 100644
 --- a/arch/x86/kvm/pmu.c
 +++ b/arch/x86/kvm/pmu.c
-@@ -171,7 +171,7 @@ void reprogram_gp_counter(struct kvm_pmc *pmc, u64 eventsel)
+@@ -214,7 +214,7 @@ void reprogram_gp_counter(struct kvm_pmc *pmc, u64 eventsel)
  	}
  
  	if (type == PERF_TYPE_RAW)
 -		config = eventsel & X86_RAW_EVENT_MASK;
 +		config = eventsel & AMD64_RAW_EVENT_MASK;
  
- 	pmc_reprogram_counter(pmc, type, config,
- 			      !(eventsel & ARCH_PERFMON_EVENTSEL_USR),
+ 	if (pmc->current_config == eventsel && pmc_resume_counter(pmc))
+ 		return;
 -- 
 2.34.1
 

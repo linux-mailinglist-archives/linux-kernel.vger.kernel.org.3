@@ -2,44 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 374454BE7F0
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:04:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CB864BDF35
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:49:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353007AbiBUJsG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 04:48:06 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57762 "EHLO
+        id S1350154AbiBUJ3p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 04:29:45 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351170AbiBUJmN (ORCPT
+        with ESMTP id S1350002AbiBUJV5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 04:42:13 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57A813E0DF;
-        Mon, 21 Feb 2022 01:17:44 -0800 (PST)
+        Mon, 21 Feb 2022 04:21:57 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D53A537003;
+        Mon, 21 Feb 2022 01:09:21 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id C757BCE0E88;
-        Mon, 21 Feb 2022 09:17:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7E46C340E9;
-        Mon, 21 Feb 2022 09:17:40 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7253A6077B;
+        Mon, 21 Feb 2022 09:09:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50C8CC340E9;
+        Mon, 21 Feb 2022 09:09:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645435061;
-        bh=8Fp2icFelVe5cF2glrfpTqMr4PApFbTngg78rssYqCo=;
+        s=korg; t=1645434560;
+        bh=Vz4WDZtoUOzAcf9QAL9mQykts41Q8Xh0KlaY1mwEN2o=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=EiSLghU7ftsr2F6ZcndNAM0JbGntvVM6sXn3yjAheU0m6bPT7zVwyCnS6P5oHvKpQ
-         bt2Ul8QrPZCp1OuqBug5nN7haM4eKoozpFIWT2fq38rn9iNuvFmPxrZu45QQ6ZYCAX
-         BRWrr9D1/FDB0tqoF7u1OibKxfXArEjzDJjEw6v0=
+        b=LQ7NzSrQaDEyJflxgDs0y9W3BFlRrnnoqU6tW9vw9rV2DFiRLYi73d9S43pCqkbhB
+         5W4ST+dMiU2+04+ib6yuB3ec1hcGAeR6lCsBjdpJ1TcqhXQRo8zNFNDLxAK5ebV6k8
+         LwvQOCK3Lq0SMQ4XwW5TvkCS5C1P/7u/TnS6YRTg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Filipe Manana <fdmanana@suse.com>,
-        Qu Wenruo <wqu@suse.com>, David Sterba <dsterba@suse.com>
-Subject: [PATCH 5.16 030/227] btrfs: defrag: dont try to defrag extents which are under writeback
-Date:   Mon, 21 Feb 2022 09:47:29 +0100
-Message-Id: <20220221084935.841579106@linuxfoundation.org>
+        stable@vger.kernel.org, Long Li <longli@microsoft.com>,
+        Michael Kelley <mikelley@microsoft.com>,
+        Purna Pavan Chandra Aekkaladevi <paekkaladevi@microsoft.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Wei Liu <wei.liu@kernel.org>
+Subject: [PATCH 5.15 018/196] PCI: hv: Fix NUMA node assignment when kernel boots with custom NUMA topology
+Date:   Mon, 21 Feb 2022 09:47:30 +0100
+Message-Id: <20220221084931.498848452@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220221084934.836145070@linuxfoundation.org>
-References: <20220221084934.836145070@linuxfoundation.org>
+In-Reply-To: <20220221084930.872957717@linuxfoundation.org>
+References: <20220221084930.872957717@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,49 +57,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Qu Wenruo <wqu@suse.com>
+From: Long Li <longli@microsoft.com>
 
-commit 0d1ffa2228cb34f485f8fe927f134b82a0ea62ae upstream.
+commit 3149efcdf2c6314420c418dfc94de53bfd076b1f upstream.
 
-Once we start writeback (have called btrfs_run_delalloc_range()), we
-allocate an extent, create an extent map point to that extent, with a
-generation of (u64)-1, created the ordered extent and then clear the
-DELALLOC bit from the range in the inode's io tree.
+When kernel boots with a NUMA topology with some NUMA nodes offline, the PCI
+driver should only set an online NUMA node on the device. This can happen
+during KDUMP where some NUMA nodes are not made online by the KDUMP kernel.
 
-Such extent map can pass the first call of defrag_collect_targets(), as
-its generation is (u64)-1, meets any possible minimal generation check.
-And the range will not have DELALLOC bit, also passing the DELALLOC bit
-check.
+This patch also fixes the case where kernel is booting with "numa=off".
 
-It will only be re-checked in the second call of
-defrag_collect_targets(), which will wait for writeback.
-
-But at that stage we have already spent our time waiting for some IO we
-may or may not want to defrag.
-
-Let's reject such extents early so we won't waste our time.
-
-CC: stable@vger.kernel.org # 5.16
-Reviewed-by: Filipe Manana <fdmanana@suse.com>
-Signed-off-by: Qu Wenruo <wqu@suse.com>
-Signed-off-by: David Sterba <dsterba@suse.com>
+Fixes: 999dd956d838 ("PCI: hv: Add support for protocol 1.3 and support PCI_BUS_RELATIONS2")
+Signed-off-by: Long Li <longli@microsoft.com>
+Reviewed-by: Michael Kelley <mikelley@microsoft.com>
+Tested-by: Purna Pavan Chandra Aekkaladevi <paekkaladevi@microsoft.com>
+Acked-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+Link: https://lore.kernel.org/r/1643247814-15184-1-git-send-email-longli@linuxonhyperv.com
+Signed-off-by: Wei Liu <wei.liu@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/btrfs/ioctl.c |    4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/pci/controller/pci-hyperv.c |   13 +++++++++++--
+ 1 file changed, 11 insertions(+), 2 deletions(-)
 
---- a/fs/btrfs/ioctl.c
-+++ b/fs/btrfs/ioctl.c
-@@ -1184,6 +1184,10 @@ static int defrag_collect_targets(struct
- 		if (em->generation < newer_than)
- 			goto next;
+--- a/drivers/pci/controller/pci-hyperv.c
++++ b/drivers/pci/controller/pci-hyperv.c
+@@ -1899,8 +1899,17 @@ static void hv_pci_assign_numa_node(stru
+ 		if (!hv_dev)
+ 			continue;
  
-+		/* This em is under writeback, no need to defrag */
-+		if (em->generation == (u64)-1)
-+			goto next;
-+
- 		/*
- 		 * Our start offset might be in the middle of an existing extent
- 		 * map, so take that into account.
+-		if (hv_dev->desc.flags & HV_PCI_DEVICE_FLAG_NUMA_AFFINITY)
+-			set_dev_node(&dev->dev, hv_dev->desc.virtual_numa_node);
++		if (hv_dev->desc.flags & HV_PCI_DEVICE_FLAG_NUMA_AFFINITY &&
++		    hv_dev->desc.virtual_numa_node < num_possible_nodes())
++			/*
++			 * The kernel may boot with some NUMA nodes offline
++			 * (e.g. in a KDUMP kernel) or with NUMA disabled via
++			 * "numa=off". In those cases, adjust the host provided
++			 * NUMA node to a valid NUMA node used by the kernel.
++			 */
++			set_dev_node(&dev->dev,
++				     numa_map_to_online_node(
++					     hv_dev->desc.virtual_numa_node));
+ 
+ 		put_pcichild(hv_dev);
+ 	}
 
 

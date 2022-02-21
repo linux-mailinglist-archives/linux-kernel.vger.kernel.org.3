@@ -2,129 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E2154BE71E
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:03:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D20EF4BE58A
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:00:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379939AbiBUQLs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 11:11:48 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60342 "EHLO
+        id S1379948AbiBUQMZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 11:12:25 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379935AbiBUQLq (ORCPT
+        with ESMTP id S236097AbiBUQMY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 11:11:46 -0500
-Received: from mail-qv1-xf2c.google.com (mail-qv1-xf2c.google.com [IPv6:2607:f8b0:4864:20::f2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EBC627160
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 08:11:23 -0800 (PST)
-Received: by mail-qv1-xf2c.google.com with SMTP id d7so33150105qvk.2
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 08:11:23 -0800 (PST)
+        Mon, 21 Feb 2022 11:12:24 -0500
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE1072BCE
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 08:12:00 -0800 (PST)
+Received: by mail-wr1-x435.google.com with SMTP id j17so1279270wrc.0
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 08:12:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:references:from:message-id:date:user-agent:mime-version
-         :in-reply-to:content-transfer-encoding;
-        bh=d396PtROr+jPwEkDcy61jcpnkTVE5m6X1ZEPC1Mq6R0=;
-        b=OgdF/dWy8xpsv8JpMGt0895ynwGPKpH7tPRnhw90xwJ+PbyrMIYqCdlAxmsXtL3xg6
-         bAqxoRk1MPK/zriW/sWl6L+9DoanBM1jSKP7Bt0AayPKMx/IPiDbMhb6a9MyaFSs7+9c
-         WJbtkoRLF1t5COPU8BMwUYriXe1ZOyH72oH4ThIFec1NiDYjuF1YGtKFSuMHRaIrUCTI
-         fOrypVM6f1BW/lqQdZKmODdwuHyJPWN5kCGvQIDaEMQMjaiLVCj0FAWUckqEPhKHZolW
-         dgmP9NLiWud3trBpU9rY1NgkhzqkmAR3NoiqxQtoEgGG8iW2hFUmXr8cZixw9/c3dw1J
-         yTXg==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=zlMFpcP0zNNriVnT5doP/SyJTwdm7nH+VKFwP5oEA8M=;
+        b=yR2PUefhHHXddq0ZZeBLi0plQyYgvn0D8x3KItsVGFh6ni4JOUJbjnoBJqWJ/9qpHp
+         RGN3lyzVFfzJqFUgngJEy08hEqOjt0iSgamn1nDIDemPbWeCXMif4BfBmIMKpKFGfLmv
+         AXUWG2HqimBK1BM08WiBrEGwp2YT8BLO3YYndzkgujGRwykzkBUuqQptkpw28rBrY0Qq
+         GWNptMlkuoIlcXdZT1WuIicQWe+xs6vKUlyxkItsmx/60HD7/t3uXhmp+JkpWg0+MycQ
+         kcyxccYPfTha0/+REIyv4f5xIC3B04Eu6vXwRhxr3If4ld1wbjoH1UkRUoguOZ++3EmC
+         uS2w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding;
-        bh=d396PtROr+jPwEkDcy61jcpnkTVE5m6X1ZEPC1Mq6R0=;
-        b=XDG49lqaHfMHtYwlzdApLAMD535RvNnWnqp3Y1ov7qhO3Of5CbIpdHBW+s4gAHCc9J
-         vbQk4aKdvRl4UkJ0ugqni/3x3BrBd8JO1HK/g/mePcDyJ3cmWK4hmAlDyw9LfAbfWJCQ
-         A21qcBVI2xtnsqCBe41vC4ml6a4/QAvuVYg3SNeW45ygsDBVvRSi9qsAD3eOO5t4qDF7
-         emStqp9BBFBxu52qbNj+jhxh25tNyelT7L0d6/P9E4T8qkNw4HlTKg3s8tOyORkH3flz
-         PaV6WSvbqtzMz5Pzg3y6OD84w6OuzJMRQBCum7G8lCPdWDixaXS74FYdrL9TrM5ZYAy2
-         vMMA==
-X-Gm-Message-State: AOAM532LiKUytp7K0p6FXgyDbs+3M50lQ5mrGRaQMcNdEGn9k814ZkqS
-        Se1Q6g4YkNKwFTMqG5cc9XVttjMTB+w=
-X-Google-Smtp-Source: ABdhPJwW/9NjOXYdvMVZZVJ2vXSMs+hJXRrqlemsUNY6Kpl/tizcVjiwcIJwZqXYLaD9Ir5qk1JzKQ==
-X-Received: by 2002:a05:622a:40e:b0:2dc:eb59:4855 with SMTP id n14-20020a05622a040e00b002dceb594855mr18786913qtx.526.1645459881699;
-        Mon, 21 Feb 2022 08:11:21 -0800 (PST)
-Received: from [120.7.1.38] (198-84-206-107.cpe.teksavvy.com. [198.84.206.107])
-        by smtp.gmail.com with ESMTPSA id d23sm9295816qka.50.2022.02.21.08.11.19
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=zlMFpcP0zNNriVnT5doP/SyJTwdm7nH+VKFwP5oEA8M=;
+        b=K1zV4t8qQ/Teag+gR1nF2zifhI3c9uYvurlIkmBhZnXA5QbbdXVMiUjSkn/Qc/BJhJ
+         OOYw5vF50AnlbReYFLgINvCooRFDLQ2O6v6IzNIhUszbEYPjoeSIOXMxnqTbav/E+sn7
+         91DFJQPbizdEP9oofiUwqq+E4lUA/xQpBpuvQc6lQ6Ec6m4gSiLbCDN4tahV7t+TXxJs
+         c7Zohq1tb2e2z9IsfDCWgXKjU7Nf9T6qevxWFdAxd7dPWVIu9IUWdTFw7IXNtejMTrUV
+         I55ZLLQ445Gv9hShMuIVxdVYy1J7/qZkVvY8W7ZrFmwYB5dp76GR9WrW0fJyxbuqWGLF
+         u0ZQ==
+X-Gm-Message-State: AOAM5313HikhKZ0KlO9ZOJkzcYJ9Q11uIcYorzKL8s52yB0gobbmWFxA
+        hQ578XhvT545+KiOdJ2xpUdPHw==
+X-Google-Smtp-Source: ABdhPJyDpq3A74100QuIQ6OMl/1/0C5WUkzHL4jQxF7X3+yOs91rMUhAVfAZD1S8e2lUJuD1eJ/Pow==
+X-Received: by 2002:a5d:64c3:0:b0:1e5:94d3:5bf2 with SMTP id f3-20020a5d64c3000000b001e594d35bf2mr16370510wri.488.1645459919309;
+        Mon, 21 Feb 2022 08:11:59 -0800 (PST)
+Received: from [192.168.86.34] (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
+        by smtp.googlemail.com with ESMTPSA id 24sm7818702wmf.48.2022.02.21.08.11.58
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Feb 2022 08:11:21 -0800 (PST)
-Subject: Re: Linux 5.17-rc5
-To:     Robert Gadsdon <rhgadsdon@gmail.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <CAHk-=wgsMMuMP9_dWps7f25e6G628Hf7-B3hvSDvjhRXqVQvpg@mail.gmail.com>
- <2d30205a-fc22-02e1-5c4b-99b91493580c@gmail.com>
-From:   Woody Suwalski <wsuwalski@gmail.com>
-Message-ID: <013de68c-a30c-6c13-ee08-2af65d5cb849@gmail.com>
-Date:   Mon, 21 Feb 2022 11:11:18 -0500
-User-Agent: Mozilla/5.0 (X11; Linux i686; rv:68.0) Gecko/20100101 Firefox/68.0
- SeaMonkey/2.53.10.2
+        Mon, 21 Feb 2022 08:11:58 -0800 (PST)
+Message-ID: <d8f1db40-33ce-671c-2041-5f12608afee5@linaro.org>
+Date:   Mon, 21 Feb 2022 16:11:56 +0000
 MIME-Version: 1.0
-In-Reply-To: <2d30205a-fc22-02e1-5c4b-99b91493580c@gmail.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 09/10] ASoC: codecs: tx-macro: setup soundwire clks
+ correctly
+Content-Language: en-US
+To:     Mark Brown <broonie@kernel.org>
+Cc:     lgirdwood@gmail.com, perex@perex.cz, tiwai@suse.com,
+        pierre-louis.bossart@linux.intel.com, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org, quic_srivasam@quicinc.com
+References: <20220221131037.8809-1-srinivas.kandagatla@linaro.org>
+ <20220221131037.8809-10-srinivas.kandagatla@linaro.org>
+ <YhOx+nQ/G+HNRXbq@sirena.org.uk>
+From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+In-Reply-To: <YhOx+nQ/G+HNRXbq@sirena.org.uk>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URI_DOTEDU autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Robert Gadsdon wrote:
-> Compile fail.   Fedora 35, GCC 11.2.1, x86_64..
->
-> ....................
->   AR      net/netfilter/built-in.a
->   LD [M]  net/netfilter/nf_conntrack.o
->   CC [M]  net/netfilter/xt_socket.o
-> net/netfilter/xt_socket.c: In function ‘socket_mt_destroy’:
-> net/netfilter/xt_socket.c:224:17: error: implicit declaration of 
-> function ‘nf_defrag_ipv6_disable’; did you mean 
-> ‘nf_defrag_ipv4_disable’? [-Werror=implicit-function-declaration]
->   224 |                 nf_defrag_ipv6_disable(par->net);
->       |                 ^~~~~~~~~~~~~~~~~~~~~~
->       |                 nf_defrag_ipv4_disable
-> cc1: some warnings being treated as errors
-> make[2]: *** [scripts/Makefile.build:288: net/netfilter/xt_socket.o] 
-> Error 1
-> make[1]: *** [scripts/Makefile.build:550: net/netfilter] Error 2
-> make: *** [Makefile:1831: net] Error 2
->
->
-> - already reported on Feb 11th, at:
-> http://lkml.iu.edu/hypermail/linux/kernel/2202.1/05890.html
->
-> Robert Gadsdon
-> February 20th 2022.
->
-Compile failed for me as well.
-
-The workaround:
-
-nf_defrag_ipv6.patch
---- a/net/netfilter/xt_socket.c    2022-02-21 07:29:21.938263397 -0500
-+++ b/net/netfilter/xt_socket.c    2022-02-21 07:40:16.730022272 -0500
-@@ -17,11 +17,11 @@
-  #include <net/inet_sock.h>
-  #include <net/netfilter/ipv4/nf_defrag_ipv4.h>
-
--#if IS_ENABLED(CONFIG_IP6_NF_IPTABLES)
-+//#if IS_ENABLED(CONFIG_IP6_NF_IPTABLES)
-  #include <linux/netfilter_ipv6/ip6_tables.h>
-  #include <net/inet6_hashtables.h>
-  #include <net/netfilter/ipv6/nf_defrag_ipv6.h>
--#endif
-+//#endif
-
-  #include <net/netfilter/nf_socket.h>
-  #include <linux/netfilter/xt_socket.h>
 
 
+On 21/02/2022 15:38, Mark Brown wrote:
+> On Mon, Feb 21, 2022 at 01:10:36PM +0000, Srinivas Kandagatla wrote:
+>> For SoundWire Frame sync to be generated correctly we need both MCLK
+>> and MCLKx2 (npl). Without pm runtime enabled these two clocks will remain on,
+>> however after adding pm runtime support its possible that NPl clock could be
+>> turned off even when SoundWire controller is active.
+>>
+>> Fix this by enabling mclk and npl clk when SoundWire clks are enabled.
+> 
+> A lot of these commit messages sound like earlier patches in the series
+> introduced bugs which isn't going to be ideal for bisection.
+Yes that is true, I did think about sending this as a fix.
 
-Or force use CONFIG_IP6_NF_IPTABLES
+Adding a fix tag would not really make any functional difference as we 
+will be hitting the issue only when we enable pm runtime in codec and
+SoundWire controller, so I did add this as part of pm runtime patches.
 
-Thanks, Woody
+Without runtime pm the clocks are left always on, so it worked so far.
 
+
+--srini

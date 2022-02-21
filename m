@@ -2,88 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E13F4BDC21
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:41:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79E6D4BE593
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:00:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377180AbiBURYD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 12:24:03 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57614 "EHLO
+        id S1381707AbiBUR2S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 12:28:18 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356325AbiBURYA (ORCPT
+        with ESMTP id S236985AbiBUR2I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 12:24:00 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8044FAE69
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 09:23:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645464217; x=1677000217;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=3l0vzYKfBNnbTycsWQ7CSo9hdXKMkG+TtZm7tloWDuM=;
-  b=BA5Zvbt3t+oUJOiiinBwfU91B6EzY5B5sukLj4SEoxgTDdmnY03aNw9l
-   AWJF3hrkW62gYkGFjeh1p0w+Ht0uxVSZu23MswDcUQqw/Z1tRQoO7nagP
-   4cgoVMxT5FAv/+3Nv8gEU5WplUeFcB/uMJ9n9KlDf4L57vaITVPbYz97y
-   zKFUQxJ3wZM73xF8GNXC86jtqRBhcS2nPCVt1jBAkIJSiiaugShO+wVSe
-   GFuNpFkvSeFYQ5OVSeKJL63iAT5E9Zys5A+OyRl2etD6BdS+7PR31Wcaq
-   pZUD1gdiBenp/utWYNAq1XUXQfs9HERol1dqFSMDsip76cWJFepMXS4cM
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10265"; a="276139480"
-X-IronPort-AV: E=Sophos;i="5.88,386,1635231600"; 
-   d="scan'208";a="276139480"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2022 09:23:37 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,386,1635231600"; 
-   d="scan'208";a="507700031"
-Received: from lkp-server01.sh.intel.com (HELO da3212ac2f54) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 21 Feb 2022 09:23:35 -0800
-Received: from kbuild by da3212ac2f54 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nMCPP-0001p1-4q; Mon, 21 Feb 2022 17:23:35 +0000
-Date:   Tue, 22 Feb 2022 01:23:20 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Luca Coelho <luciano.coelho@intel.com>
-Subject: ERROR: modpost: "iwl_mei_is_connected"
- [drivers/net/wireless/intel/iwlwifi/iwlwifi.ko] undefined!
-Message-ID: <202202220159.LV6Fd9SI-lkp@intel.com>
+        Mon, 21 Feb 2022 12:28:08 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C624419C02;
+        Mon, 21 Feb 2022 09:27:44 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8F5DB1063;
+        Mon, 21 Feb 2022 09:27:44 -0800 (PST)
+Received: from [10.57.40.147] (unknown [10.57.40.147])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8D1663F70D;
+        Mon, 21 Feb 2022 09:27:42 -0800 (PST)
+Message-ID: <71e94ac3-20fc-6f41-270f-fe246740e7e0@arm.com>
+Date:   Mon, 21 Feb 2022 17:27:30 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH v3 8/9] drm/tegra: vic: Implement get_streamid_offset
+Content-Language: en-GB
+To:     Mikko Perttunen <mperttunen@nvidia.com>, thierry.reding@gmail.com,
+        jonathanh@nvidia.com, joro@8bytes.org, will@kernel.org,
+        robh+dt@kernel.org
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, iommu@lists.linux-foundation.org,
+        linux-tegra@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+References: <20220218113952.3077606-1-mperttunen@nvidia.com>
+ <20220218113952.3077606-9-mperttunen@nvidia.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <20220218113952.3077606-9-mperttunen@nvidia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   cfb92440ee71adcc2105b0890bb01ac3cddb8507
-commit: 977df8bd5844c9370c26a9477418165b870da27c iwlwifi: work around reverse dependency on MEI
-date:   3 months ago
-config: x86_64-randconfig-c002-20220221 (https://download.01.org/0day-ci/archive/20220222/202202220159.LV6Fd9SI-lkp@intel.com/config)
-compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
-reproduce (this is a W=1 build):
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=977df8bd5844c9370c26a9477418165b870da27c
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 977df8bd5844c9370c26a9477418165b870da27c
-        # save the config file to linux build tree
-        mkdir build_dir
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+On 2022-02-18 11:39, Mikko Perttunen via iommu wrote:
+> Implement the get_streamid_offset required for supporting context
+> isolation. Since old firmware cannot support context isolation
+> without hacks that we don't want to implement, check the firmware
+> binary to see if context isolation should be enabled.
+> 
+> Signed-off-by: Mikko Perttunen <mperttunen@nvidia.com>
+> ---
+>   drivers/gpu/drm/tegra/vic.c | 38 +++++++++++++++++++++++++++++++++++++
+>   1 file changed, 38 insertions(+)
+> 
+> diff --git a/drivers/gpu/drm/tegra/vic.c b/drivers/gpu/drm/tegra/vic.c
+> index 1e342fa3d27b..2863ee5e0e67 100644
+> --- a/drivers/gpu/drm/tegra/vic.c
+> +++ b/drivers/gpu/drm/tegra/vic.c
+> @@ -38,6 +38,8 @@ struct vic {
+>   	struct clk *clk;
+>   	struct reset_control *rst;
+>   
+> +	bool can_use_context;
+> +
+>   	/* Platform configuration */
+>   	const struct vic_config *config;
+>   };
+> @@ -229,6 +231,7 @@ static int vic_load_firmware(struct vic *vic)
+>   {
+>   	struct host1x_client *client = &vic->client.base;
+>   	struct tegra_drm *tegra = vic->client.drm;
+> +	u32 fce_bin_data_offset;
+>   	dma_addr_t iova;
+>   	size_t size;
+>   	void *virt;
+> @@ -277,6 +280,25 @@ static int vic_load_firmware(struct vic *vic)
+>   		vic->falcon.firmware.phys = phys;
+>   	}
+>   
+> +	/*
+> +	 * Check if firmware is new enough to not require mapping firmware
+> +	 * to data buffer domains.
+> +	 */
+> +	fce_bin_data_offset = *(u32 *)(virt + VIC_UCODE_FCE_DATA_OFFSET);
+> +
+> +	if (!vic->config->supports_sid) {
+> +		vic->can_use_context = false;
+> +	} else if (fce_bin_data_offset != 0x0 && fce_bin_data_offset != 0xa5a5a5a5) {
+> +		/*
+> +		 * Firmware will access FCE through STREAMID0, so context
+> +		 * isolation cannot be used.
+> +		 */
+> +		vic->can_use_context = false;
+> +		dev_warn_once(vic->dev, "context isolation disabled due to old firmware\n");
+> +	} else {
+> +		vic->can_use_context = true;
+> +	}
+> +
+>   	return 0;
+>   
+>   cleanup:
+> @@ -358,10 +380,26 @@ static void vic_close_channel(struct tegra_drm_context *context)
+>   	host1x_channel_put(context->channel);
+>   }
+>   
+> +static int vic_get_streamid_offset(struct tegra_drm_client *client)
+> +{
+> +	struct vic *vic = to_vic(client);
+> +	int err;
+> +
+> +	err = vic_load_firmware(vic);
+> +	if (err < 0)
+> +		return err;
+> +
+> +	if (vic->can_use_context)
+> +		return 0x30;
+> +	else
+> +		return -ENOTSUPP;
+> +}
+> +
+>   static const struct tegra_drm_client_ops vic_ops = {
+>   	.open_channel = vic_open_channel,
+>   	.close_channel = vic_close_channel,
+>   	.submit = tegra_drm_submit,
+> +	.get_streamid_offset = vic_get_streamid_offset,
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+The patch order seems off here, since the .get_streamid_offset member 
+isn't defined yet.
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
+Robin.
 
->> ERROR: modpost: "iwl_mei_is_connected" [drivers/net/wireless/intel/iwlwifi/iwlwifi.ko] undefined!
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+>   };
+>   
+>   #define NVIDIA_TEGRA_124_VIC_FIRMWARE "nvidia/tegra124/vic03_ucode.bin"

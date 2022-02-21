@@ -2,170 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC94F4BDCE4
-	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 18:43:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 67CF04BE8B6
+	for <lists+linux-kernel@lfdr.de>; Mon, 21 Feb 2022 19:06:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356756AbiBULuW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 06:50:22 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44998 "EHLO
+        id S1356749AbiBULtv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 06:49:51 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356751AbiBULuP (ORCPT
+        with ESMTP id S1356738AbiBULtq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 06:50:15 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C5121EEE6;
-        Mon, 21 Feb 2022 03:49:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1645444156;
-        bh=9wq7WtAJcIzsC43pheO+mOf/CLyOnMHoPtsnM+1Q4JQ=;
-        h=X-UI-Sender-Class:Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=lcLAC3LbLAG4Z2MM6AZap1Y4EopsKgoYLOWADpRmeKpKNujSHq9sqWNknKBUBEBKN
-         6UW31xIWfs5PtluSWpa+P1AdlXLqfddnor/Hx+PWfh2k9ODg4cXmHb9/BdeC/1dHe5
-         rjnYkLVSmhfiHpRgWMDTo4nDAd42tXXnuN2+t0wg=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from longitude ([5.146.194.160]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1Mf0BG-1nsg341v34-00gV35; Mon, 21
- Feb 2022 12:49:16 +0100
-Date:   Mon, 21 Feb 2022 12:49:12 +0100
-From:   Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-To:     Tyrone Ting <warp5tw@gmail.com>
-Cc:     avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
-        venture@google.com, yuenn@google.com, benjaminfair@google.com,
-        robh+dt@kernel.org, krzysztof.kozlowski@canonical.com,
-        semen.protsenko@linaro.org, yangyicong@hisilicon.com,
-        wsa@kernel.org, jie.deng@intel.com, sven@svenpeter.dev,
-        bence98@sch.bme.hu, christophe.leroy@csgroup.eu,
-        lukas.bulwahn@gmail.com, olof@lixom.net, arnd@arndb.de,
-        digetx@gmail.com, andriy.shevchenko@linux.intel.com,
-        tali.perry@nuvoton.com, Avi.Fishman@nuvoton.com,
-        tomer.maimon@nuvoton.com, KWLIU@nuvoton.com, JJLIU0@nuvoton.com,
-        kfting@nuvoton.com, devicetree@vger.kernel.org,
-        openbmc@lists.ozlabs.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 05/11] i2c: npcm: Remove unused clock node
-Message-ID: <YhN8OGIR9eSCus8E@latitude>
-References: <20220220035321.3870-1-warp5tw@gmail.com>
- <20220220035321.3870-6-warp5tw@gmail.com>
+        Mon, 21 Feb 2022 06:49:46 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3219D1EEE9
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 03:49:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1645444162;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=12CjzIfm9u48VcTin9bYn/mbYSt9Byr6lQhm+jL2Tdg=;
+        b=CaLFA52pANpwtvPLFo3l6VKuyE5jb11J434odrF/Ih89gtV4xSJ0wb0kP7VyFeetRmY3bg
+        PSsBVJefRvSpXAOYueh7ymA8xsJxY6mX8EwmW/h+O0qz0m2I2IjY/gpHNk+KKX8EcHvn6M
+        csshzug0f/uqdL8kGlmsZ7oUDTUUHHU=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-295-VQMasphEOz6sznIOg5JWWQ-1; Mon, 21 Feb 2022 06:49:21 -0500
+X-MC-Unique: VQMasphEOz6sznIOg5JWWQ-1
+Received: by mail-wm1-f69.google.com with SMTP id b17-20020a05600c4e1100b0037cc0d56524so7936432wmq.2
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 03:49:21 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=12CjzIfm9u48VcTin9bYn/mbYSt9Byr6lQhm+jL2Tdg=;
+        b=QhsLpjYiykYiaZij76sSkMUPLJLx2RitTEBQc8ljin4jdDGdAddDxoMlfm9rqVVnAw
+         xC0zbEuzrEnYaBFKQylaCROiEjLo2HEK5flMLE/6mX3+7VJ/zhmMC2eo6/lolztFQY1W
+         Yv6lkpYY5xyFa1ezCiDsijX2f84K5+CAG2EmbKdlZDTeFBwvyYoX2hG0ymkdrAAxDREl
+         DczvpCh2DJQTWK+xTZPWIOBislEOFXBdZlWvYfi3Y8+3alx/MEIzIOooktFdBvCx+SUW
+         nu3CHWCzKK2UtcRFxR5zBKG7lXc6lBce/PUcaswoRY4xcu5lqqEGqwQOW3q4qA+wigRw
+         Eueg==
+X-Gm-Message-State: AOAM5327R41PP9fTPK8uqaUxzgM14C4A5TE15cp3XwaIOOJ5NOGPDTFM
+        X2HMvL684wowR1YBZ+Okc5YNQPCkmCpQrc+0LbKANVvSqqz62nyTSvC+uYIh7Ygg91Sd5TH0E7s
+        5k4/GeAuUJ8Usp2308nqf9kPj
+X-Received: by 2002:a7b:c844:0:b0:37b:b986:7726 with SMTP id c4-20020a7bc844000000b0037bb9867726mr17401382wml.160.1645444158955;
+        Mon, 21 Feb 2022 03:49:18 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJz80NBK4xySdNK92dBVDo686zdoILiLjZ8DrwJxbn6DUuDBzdF93Cfrshx7zCott46Y92HTgQ==
+X-Received: by 2002:a7b:c844:0:b0:37b:b986:7726 with SMTP id c4-20020a7bc844000000b0037bb9867726mr17401363wml.160.1645444158689;
+        Mon, 21 Feb 2022 03:49:18 -0800 (PST)
+Received: from step1.redhat.com (host-95-248-229-156.retail.telecomitalia.it. [95.248.229.156])
+        by smtp.gmail.com with ESMTPSA id o6-20020a05600c338600b0037c322d1425sm7141176wmp.8.2022.02.21.03.49.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 21 Feb 2022 03:49:17 -0800 (PST)
+From:   Stefano Garzarella <sgarzare@redhat.com>
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Mike Christie <michael.christie@oracle.com>,
+        Stefano Garzarella <sgarzare@redhat.com>,
+        Jason Wang <jasowang@redhat.com>, netdev@vger.kernel.org,
+        Asias He <asias@redhat.com>,
+        virtualization@lists.linux-foundation.org,
+        Stefan Hajnoczi <stefanha@redhat.com>, kvm@vger.kernel.org
+Subject: [PATCH] vhost/vsock: don't check owner in vhost_vsock_stop() while releasing
+Date:   Mon, 21 Feb 2022 12:49:16 +0100
+Message-Id: <20220221114916.107045-1-sgarzare@redhat.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="5bsHzk28K+QW/lWF"
-Content-Disposition: inline
-In-Reply-To: <20220220035321.3870-6-warp5tw@gmail.com>
-X-Provags-ID: V03:K1:A3A94t6ywOBQp5e/eufvWk1pKc7j11XIziyDptaPzqcGk5A/uoU
- 5IgYxy5UOPRt+qY3IdhUe8KMsnxkzYgiFigoezPYO3GN4dcVkF2d1Mi7shfsaOJcDG7kCKL
- UDTQsUlEcQJoHW+4esUkzbXX43lJRUomqY1/ivWGA+l20tMn5mpnwBFLxf23AQg7lh1hts3
- cDzjDFB6kb4oNPQ/RDb4Q==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:0xJ5SR0QHkc=:StKWUAaEns4yWxlxobvPjI
- 4uhT+HjljB966gTpr4qY4/5jxRKlSQYSEHMqqwX6Pv1g5nSMDlAI8OfmA0hqXHw+IjdyeYISE
- kz4gtIJ+etuIEjUhg9O0sOTMRkVEnx0rYpIH/4yscpSZd57hAYZhkVqo9O4I0YOmLyTzM+28h
- +ZiZy1yecl5AHAMotCzuFcmpFetxoDQUDlIqv3GH+iLxRZSb9UcMjo6dd0p6snUCN8H5PHaGp
- FCgq5rsBsLqFOxmRS61xvVPc5Ev5rixfzj4Nkr9Up8ZX7anZc/peRhSh4yecv4yunifqZnmN/
- BbWavMTNtWrTnU3DlrjHsd2T20+lnU1kFi7utDaX//O4xHO32+s4sQmG2hZ9kcfiguJ1ub6GI
- gNDoneXTvGtWtzxnhirIkeC9x1WMBaWv30rnhedpfliOnY3WTimTi8hq2FEA2xYLY9mog3RfG
- s07UB80OS7raI1XX5IAfpX8r2jK/ycsBYXzkKkbBv81i5iU9lUbWoHfs1/vdGPGDzP7b7u7tx
- ePfvpz84bdLlZLgU/fvxVkgfwc8Y4C/DA/RrEw5bgK1MS1M6DHeT+UtoZGeLb03dZAb1veRr7
- C3t6YitwBi4vhEi8pEan4GommmKR1zDyf6zNTCmbRc4DyepPg2rD15VIfhfqKACtFZ0PbRusk
- 7Iu2YC3iZJypvp0EaZkr6YHnqvomFuCUe0E4CTSE5R7Pa7qX9AYfCk1MUidDTL090V+zdXd/D
- RQ+27I74IP7jmFQ3bDqyT1lGHDufBa2dp4yuIfCxEqUYwAQ0EpEzbsVFmy2vjC6s1P5i9HgOU
- Dx/BLhHqnaBS9L0fniab51eWzwOapNW2r7UOma3HC9ANP+R5SwXYRU61c1QfbOXS5Oe4YmCZJ
- YN0N4lzGvDtiWxIvolKTVlp01TG68azWZcaywM2p9M1Oc/32AYQkwO+HbqoDT5LMiTWVOpg3R
- DTEZNFNkxNtfYH8wXnxJKh3UELU/a1au+sMVbRTcwL+SWDr3gT7UqN5zi5hK7UdphgseuqwEd
- Dw3J2jVlbki8SYp0pMbg/c6WRsci0lhziUv9b6Q/wBnUUqsATaLs7WuPFH/rgz3/JwXZLPK14
- 0qX3Y1HZI7eIxE=
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+vhost_vsock_stop() calls vhost_dev_check_owner() to check the device
+ownership. It expects current->mm to be valid.
 
---5bsHzk28K+QW/lWF
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+vhost_vsock_stop() is also called by vhost_vsock_dev_release() when
+the user has not done close(), so when we are in do_exit(). In this
+case current->mm is invalid and we're releasing the device, so we
+should clean it anyway.
 
-On Sun, Feb 20, 2022 at 11:53:15AM +0800, Tyrone Ting wrote:
-> From: Tali Perry <tali.perry1@gmail.com>
->=20
-> Remove unused npcm750-clk node.
+Let's check the owner only when vhost_vsock_stop() is called
+by an ioctl.
 
-You're not actually removing a node, for example in the sense of removing a
-devicetree node from a devicetree.
+Fixes: 433fc58e6bf2 ("VSOCK: Introduce vhost_vsock.ko")
+Cc: stable@vger.kernel.org
+Reported-by: syzbot+1e3ea63db39f2b4440e0@syzkaller.appspotmail.com
+Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
+---
+ drivers/vhost/vsock.c | 14 ++++++++------
+ 1 file changed, 8 insertions(+), 6 deletions(-)
 
-So, I think "Remove unused variable clk_regmap." would be a better
-description.
+diff --git a/drivers/vhost/vsock.c b/drivers/vhost/vsock.c
+index d6ca1c7ad513..f00d2dfd72b7 100644
+--- a/drivers/vhost/vsock.c
++++ b/drivers/vhost/vsock.c
+@@ -629,16 +629,18 @@ static int vhost_vsock_start(struct vhost_vsock *vsock)
+ 	return ret;
+ }
+ 
+-static int vhost_vsock_stop(struct vhost_vsock *vsock)
++static int vhost_vsock_stop(struct vhost_vsock *vsock, bool check_owner)
+ {
+ 	size_t i;
+ 	int ret;
+ 
+ 	mutex_lock(&vsock->dev.mutex);
+ 
+-	ret = vhost_dev_check_owner(&vsock->dev);
+-	if (ret)
+-		goto err;
++	if (check_owner) {
++		ret = vhost_dev_check_owner(&vsock->dev);
++		if (ret)
++			goto err;
++	}
+ 
+ 	for (i = 0; i < ARRAY_SIZE(vsock->vqs); i++) {
+ 		struct vhost_virtqueue *vq = &vsock->vqs[i];
+@@ -753,7 +755,7 @@ static int vhost_vsock_dev_release(struct inode *inode, struct file *file)
+ 	 * inefficient.  Room for improvement here. */
+ 	vsock_for_each_connected_socket(vhost_vsock_reset_orphans);
+ 
+-	vhost_vsock_stop(vsock);
++	vhost_vsock_stop(vsock, false);
+ 	vhost_vsock_flush(vsock);
+ 	vhost_dev_stop(&vsock->dev);
+ 
+@@ -868,7 +870,7 @@ static long vhost_vsock_dev_ioctl(struct file *f, unsigned int ioctl,
+ 		if (start)
+ 			return vhost_vsock_start(vsock);
+ 		else
+-			return vhost_vsock_stop(vsock);
++			return vhost_vsock_stop(vsock, true);
+ 	case VHOST_GET_FEATURES:
+ 		features = VHOST_VSOCK_FEATURES;
+ 		if (copy_to_user(argp, &features, sizeof(features)))
+-- 
+2.35.1
 
->=20
-> Fixes: 56a1485b102e ("i2c: npcm7xx: Add Nuvoton NPCM I2C controller drive=
-r")
-> Signed-off-by: Tali Perry <tali.perry1@gmail.com>
-> Signed-off-by: Tyrone Ting <kfting@nuvoton.com>
-> ---
->  drivers/i2c/busses/i2c-npcm7xx.c | 5 -----
->  1 file changed, 5 deletions(-)
->=20
-> diff --git a/drivers/i2c/busses/i2c-npcm7xx.c b/drivers/i2c/busses/i2c-np=
-cm7xx.c
-> index a51db3f50274..9ccb9958945e 100644
-> --- a/drivers/i2c/busses/i2c-npcm7xx.c
-> +++ b/drivers/i2c/busses/i2c-npcm7xx.c
-> @@ -2233,7 +2233,6 @@ static int npcm_i2c_probe_bus(struct platform_devic=
-e *pdev)
->  	struct i2c_adapter *adap;
->  	struct clk *i2c_clk;
->  	static struct regmap *gcr_regmap;
-> -	static struct regmap *clk_regmap;
->  	int irq;
->  	int ret;
->  	struct device_node *np =3D pdev->dev.of_node;
-> @@ -2256,10 +2255,6 @@ static int npcm_i2c_probe_bus(struct platform_devi=
-ce *pdev)
->  		return PTR_ERR(gcr_regmap);
->  	regmap_write(gcr_regmap, NPCM_I2CSEGCTL, NPCM_I2CSEGCTL_INIT_VAL);
-> =20
-> -	clk_regmap =3D syscon_regmap_lookup_by_compatible("nuvoton,npcm750-clk"=
-);
-> -	if (IS_ERR(clk_regmap))
-> -		return PTR_ERR(clk_regmap);
-> -
-
-The change itself looks good to me,
-
-Reviewed-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
-
->  	bus->reg =3D devm_platform_ioremap_resource(pdev, 0);
->  	if (IS_ERR(bus->reg))
->  		return PTR_ERR(bus->reg);
-> --=20
-> 2.17.1
->=20
-
-
-Thanks,
-Jonathan
-
---5bsHzk28K+QW/lWF
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEvHAHGBBjQPVy+qvDCDBEmo7zX9sFAmITfBYACgkQCDBEmo7z
-X9u67A/8DITpR6PwEHyOhlZUQgCqO7IkhgngdjLbfGYcdhSAtq69YPAq+CNYRPUh
-QqSLYsT1ZFHfNEBUgotfG9UcBLQvJexV4usHwRR3s443Fikou8a+J1HDNvwOOKeO
-ygPaffGiYEtNtZn+CXhkOCpJ05R5gmMZP3CK/HXF+AM2EDKsO0OtsgOlJWpczyqj
-Jw8IAtnN08SNM7BH8uoNkZfSTWaPoS4Muyvp7+OX+y24rht7BO5nmofDhRsNKZ7Y
-dfUQRa44Z/7J/wN7TcW7eoYAn0cw9K8UUZWu94w++eqSJsRbUPcXjskESgooFMyw
-IoHxHhOuvN4kBLCx/62qeIaait5lcWqUWFXxRe08EjhR4AQJpmWy/3F21mRiw8R3
-uF3gP6iZuUToM1JyHqcXq2RaF3O63y7s6rVJLcpi3yJqpDCZUxvbrqb3kzPFURAM
-nNW1uJemP43tNEeNcQw4doc5yKh1FqE9XEFctqkvdXRnJYdnj5TuG3gu/FQzKjPN
-p75J9u7doqvA/n3OI0jT3ByJkW2mZK3F3k4rEgfKU7zmxEKhDlqlTcqFwh7bjPrO
-fAtN0CiZh9PCPt4CubsFBW1AbCAuHV3J6buMi+/QZPGRz9aw3gP7Jwnddl5BH4EJ
-yiyyA2QC5RnVqB9AENHP8EhFEhgMDSvCgMiRMatAF3/uZ6I7LIU=
-=P2fi
------END PGP SIGNATURE-----
-
---5bsHzk28K+QW/lWF--

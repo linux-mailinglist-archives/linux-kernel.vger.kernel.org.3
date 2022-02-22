@@ -2,204 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 694B44BF6D7
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 11:59:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BEB34BF6DD
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 12:01:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231587AbiBVK72 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 05:59:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34080 "EHLO
+        id S231589AbiBVLAe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 06:00:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229786AbiBVK71 (ORCPT
+        with ESMTP id S229659AbiBVLAd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 05:59:27 -0500
+        Tue, 22 Feb 2022 06:00:33 -0500
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 70E16A66CF;
-        Tue, 22 Feb 2022 02:59:02 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BFEBB15A21A;
+        Tue, 22 Feb 2022 03:00:06 -0800 (PST)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 39757139F;
-        Tue, 22 Feb 2022 02:59:02 -0800 (PST)
-Received: from [10.57.40.147] (unknown [10.57.40.147])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D6D613F70D;
-        Tue, 22 Feb 2022 02:58:57 -0800 (PST)
-Message-ID: <1acb8748-8d44-688d-2380-f39ec820776f@arm.com>
-Date:   Tue, 22 Feb 2022 10:58:37 +0000
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8EA51139F;
+        Tue, 22 Feb 2022 03:00:06 -0800 (PST)
+Received: from e120937-lin (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6AA8A3F70D;
+        Tue, 22 Feb 2022 03:00:05 -0800 (PST)
+Date:   Tue, 22 Feb 2022 11:00:03 +0000
+From:   Cristian Marussi <cristian.marussi@arm.com>
+To:     Oleksii Moisieiev <Oleksii_Moisieiev@epam.com>
+Cc:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Souvik Chakravarty <Souvik.Chakravarty@arm.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [RFC PATCH 0/1] dt-bindings: arm: Add scmi_devid paramter for
+Message-ID: <20220222110003.GC21915@e120937-lin>
+References: <cover.1645460043.git.oleksii_moisieiev@epam.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH v6 02/11] driver core: Add dma_cleanup callback in
- bus_type
-Content-Language: en-GB
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        Lu Baolu <baolu.lu@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Joerg Roedel <joro@8bytes.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, kvm@vger.kernel.org,
-        rafael@kernel.org, David Airlie <airlied@linux.ie>,
-        linux-pci@vger.kernel.org,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Diana Craciun <diana.craciun@oss.nxp.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Will Deacon <will@kernel.org>,
-        Stuart Yoder <stuyoder@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        linux-kernel@vger.kernel.org, Li Yang <leoyang.li@nxp.com>,
-        iommu@lists.linux-foundation.org,
-        Jacob jun Pan <jacob.jun.pan@intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-References: <20220218005521.172832-1-baolu.lu@linux.intel.com>
- <20220218005521.172832-3-baolu.lu@linux.intel.com>
- <YhCdEmC2lYStmUSL@infradead.org>
- <1d8004d3-1887-4fc7-08d2-0e2ee6b5fdcb@arm.com>
- <20220221234837.GA10061@nvidia.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <20220221234837.GA10061@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cover.1645460043.git.oleksii_moisieiev@epam.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-02-21 23:48, Jason Gunthorpe wrote:
-> On Mon, Feb 21, 2022 at 08:43:33PM +0000, Robin Murphy wrote:
->> On 2022-02-19 07:32, Christoph Hellwig wrote:
->>> So we are back to the callback madness instead of the nice and simple
->>> flag?  Sigh.
->>
->> TBH, I *think* this part could be a fair bit simpler. It looks like this
->> whole callback mess is effectively just to decrement
->> group->owner_cnt, but
+On Mon, Feb 21, 2022 at 05:26:46PM +0000, Oleksii Moisieiev wrote:
+> Introducing new parameter called scmi_devid to the device-tree bindings.
+> This parameter should be set for the device nodes, which has
+> clocks/power-domains/resets working through SCMI.
+> Given parameter should set the device_id, needed to set device
+> permissions in the Firmware. This feature will be extremely useful for
+> the virtualized systems, which has more that one Guests running on the
+> system at the same time or for the syestems, which require several
+> agents with different permissions. Trusted agent will use scmi_devid to
+> set the Device permissions for the Firmware (See Section 4.2.2.10 [0]
+> for details).
+> Agents concept is described in Section 4.2.1 [0].
 > 
-> Right, the new callback is because of Greg's push to put all the work
-> into the existing bus callback. Having symetrical callbacks is
-> cleaner.
 
-I'll continue to disagree that having tons more code purely for the sake 
-of it is cleaner. The high-level requirements are fundamentally 
-asymmetrical - ownership has to be actively claimed by the bus code at a 
-point during probe where it can block probing if necessary, but it can 
-be released anywhere at all during remove since that cannot fail. I 
-don't personally see the value in a bunch of code bloat for no reason 
-other than trying to pretend that an asymmetrical thing isn't.
+Hi Oleksii,
 
-We already have other concepts in the IOMMU API, like the domain ops 
-lifecycle, which are almost self-contained but for needing an external 
-prod to get started, so I'm naturally viewing this one the same way.
+I had a look at this patch and the related XEN series and I'd have a few
+questions/doubts. (adding to the loop in CC Souvik from ATG and Vincent
+from Linaro since he's working on similar SCMI virtualization stuff)
 
->> since we should only care about ownership at probe, hotplug, and other
->> places well outside critical fast-paths, I'm not sure we really need to keep
->> track of that anyway - it can always be recalculated by walking the
->> group->devices list,
+> scmi_devid in Device-tree node example:
+> usb@e6590000
+> {
+>     scmi_devid = <19>;
+>     clocks = <&scmi_clock 3>, <&scmi_clock 2>;
+>     resets = <&scmi_reset 10>, <&scmi_reset 9>;
+>     power-domains = <&scmi_power 0>;
+> };
 > 
-> It has to be locked against concurrent probe, and there isn't
-> currently any locking scheme that can support this. The owner_cnt is
-> effectively a new lock for this purpose. It is the same issue we
-> talked about with that VFIO patch you showed me.
 
-Huh? How hard is it to hold group->mutex when reading or writing 
-group->owner? Walking the list would only have to be done for 
-*releasing* ownership and I'm pretty sure all the races there are benign 
-- only probe/remove of the driver (or DMA API token) matching a current 
-non-NULL owner matter; if two removes race, the first might end up 
-releasing ownership "early", but the second is waiting to do that anyway 
-so it's OK; if a remove races with a probe, the remove may end up 
-leaving the owner set, but the probe is waiting to do that anyway so 
-it's OK.
+So this SCMI device ID is meant to identify an SCMI device, viewed as a
+grouping of SCMI resources (clock/power/...etc) so that a Trusted Agent
+can issue a BASE_SET_DEVICE_PERMISSIONS telling to the SCMI Server
+platform backend (SCP sw sitting somewhere) which SCMI agents on the
+system can access which (SCMI) devices (in the Normal nonSecure world):
+basically, if I got it right from the Xen series, your hypervisor acting
+as Trusted Agent (and recognized as trusted agent by by the SCP) tells
+the SCMI platform server SCP (via SMC in your case) how to configure the
+access to the devices for all the other (non trusted) agents in the system
+(other Guest OS/Domains instances).
 
-> So, using the group->device_list would require adding something else
-> somewhere - which I think should happen when someone has
-> justification for another use of whatever that something else is.
+The SCMI spec does not indeed cover the discovery of such devices and
+the related associated resources: it indeed delegates such description
+to FDT/ACPI as of now.
+
+AFAIU in this scenario I imagine:
+
+- SCMI Server platform (SCP) knows via its own methods (builtin_config
+  FDT...etc) the list of defined SCMI devices and related associated
+  resources like:
+  
+  deviceNNN -->> clock_X / power_Q
+  deviceYYY ---> clock_Z / power_W
+  ..etc
+
+
+- Trusted Agent (XEN hypervisor) in turn:
+
+  + is configured/recognized by the SCMI Server as a Trusted Agent (based
+    on the channel it uses to talk to the server) and as such it is allowed
+    to issue BASE_SET_DEVICE_PERMISSIONS (by the SCMI server)
+
+  + has knowledge of the same set of devices/resources allocations (via
+    its own FDT) as the SCMI server
+
+  + can issue a proper set of BASE_SET_DEVICE_PERMISSIONS telling the
+    SCMI server backend which devices can be used by which non-trusted
+    agents (GuestOS) ... even dynamically I suppose when guests come and
+    go.
+
+    Xen:
+	    BASE_SET_DEVICE_PERMISSIONS(dev_NNN, agent_3)
+	    BASE_SET_DEVICE_PERMISSIONS(dev_YYY, agent_2)
+	    BASE_SET_DEVICE_PERMISSIONS(dev_NNN, agent_4)
+
+    and in this scenario the same dev_NNN could be made accessible to
+    two different agents, it will be anyway up to the SCMI Server
+    backend to armonize or reject such requests from 2 different
+    agents around the same shared resources
+
+
+- Other non-trusted agents on the system (GuestOSes or other non
+  virtualized subsystems...e.g. WiFi/Modem...etc), described in their
+  DTs (for Linux GuestOS) as using SCMI resources as usual (without SCMI
+  device id) just issue SCMI request on the basic resource and those are
+  routed to the SCMI Server backend by the Hypervisor UNMODIFIED:
+
+  example for a shared resource:
+
+   - Agent_2 set power_Q ON --->>> SCMI Server - OK - powerQ TURNED ON
+    				  (allowed as configured by Trusted Agent,
+				   powerQ hw was OFF turn it ON)
+
+   - Agent_3 set power_Q OFF --->>> SCMI Server - DENIED
+    				  (disallowed as configured by Trusted Agent)
+
+   - Agent_4 set power_Q ON --->>> SCMI Server - OK - powerQ ALREADY ON
+    				  (allowed as configured by Trusted Agent,
+				   powerQ hw was ON nothing to be done)
+
+   - Agent_2 set power_Q OFF --->>> SCMI Server - OK - powerQ UNCHANGED (SHARED with Agent_2)
+    				  (allowed as configured by Trusted Agent but shared with
+				   another agent)
+
+   - Agent_4 set power_Q OFF --->>> SCMI Server - OK - powerQ OFF
+    				  (allowed as configured by Trusted Agent but shared with
+				   another agent
+
+So in all of this, I don't get why you need this DT definition aggregating SCMI
+resources to SCMI device IDs in the Guest OS, which is an SCMI agent that does not
+need to now anything about SCMI device IDs (at least with the current spec): this
+would make sense only if the Linux Kernel was the TrustedAgent in charge of
+configuring the devices permissions via BASE_SET_DEVICE_PERMISSIONS.
+(in fact you said you won't provide any code to manage this scmi_devid
+in the kernel since those guests are not trusted agents and the won't be
+allowed to set device permissions...)
+
+The only tricky part I can see in all of the above is agent identification, since
+the agents are assigned an ID by the SCMI platform (which can be queried) and they
+have a set of dedicated channels to use, so basically the platform really identifies
+the Agents looking at the channel from which a request is coming from and AgentID is
+not carried inside the message as a source and cannot be spoofed.
+
+> Given example shows the configuration of the hsusb node, which is using
+> scmi to contol clocks, resets and power-domains. scmi_devid is set
+> equals to 19, which should match defined id for usb in the Firmware.
 > 
-> Also, Greg's did have an objection to the the first version, with code
-> living in dd.c, that was basically probe time performance. I'm not
-> sure making this slower would really be welcomed..
-
-Again, this does not affect probe at all, only remove, and TBH I'd 
-expect the performance impact to be negligible. On any sensible system, 
-IOMMU groups are not large. Heck, in the typical case I'd guess it's no 
-worse than the time we currently spend on group notifiers. I was just 
-making the point that there should not be a significant performance 
-argument for needing to cache a count value.
-
->> and some of the relevant places have to do that anyway.
+> Trusted agent will use scmi_devid to set the device permissions for
+> the Agents. Guest OS should not have an access to the permissions
+> settings, so no code to process scmi_devid was presented in Linux
+> kernel.
 > 
-> ???
-
-I was looking at iommu_group_remove_device() at the time, but of course 
-we should always have seen an unbind before we get there - that one's on 
-me, sorry for the confusion.
-
->> It has to be s It should be pretty straightforward for
->> iommu_bus_notifier to clear group->owner automatically upon an
->> unbind of the matching driver when it's no longer bound to any other
->> devices in the group either.
+> We are currently contributing changes to Xen, which are intended to
+> mediate SCMI access from Guests to the Firmware. Xen uses scmi_devid to set
+> the permissions for the devices. See [1] thread for details.
 > 
-> That not_bound/unbind notifier isn't currently triggred during
-> necessary failure paths of really_probe().
+> [0] https://developer.arm.com/documentation/den0056/latest
+> [1] https://xen.markmail.org/message/mmi4fpb4qr6e3kad
 
-Eh? Just look at the context of patch #2, let alone the rest of the 
-function, and tell me how, if we can't rely on 
-BUS_NOTIFY_DRIVER_NOT_BOUND, calling .dma_cleanup *from the exact same 
-place* is somehow more reliable?
+IMHO, but I could be wrong, looking at the current SCMI spec you cannot just
+gather messages from a set of GuestOs talking via different SCMI channels and
+then pipe/route them through a single channel to the backend server,
+attaching/spoofing some sort of Agent source ID to each message like you seem to
+be doing in the Xen series
 
-AFAICS, a notifier handling both BUS_NOTIFY_UNBOUND_DRIVER and 
-BUS_NOTIFY_DRIVER_NOT_BOUND would be directly equivalent to the callers 
-of .dma_cleanup here.
+" Also XEN is the mediator which redirects SCMI requests, adding agentID so
+  firmware should know the sender."
 
-> Even if this was patched up, it looks like spaghetti to me..
-> 
->> use-case) then it should be up to VFIO to decide when it's finally
->> finished with the whole group, rather than pretending we can keep
->> track of nested ownership claims from inside the API.
-> 
-> What nesting?
-
-The current implementation of iommu_group_claim_dma_owner() allows 
-owner_cnt to increase beyond 1, and correspondingly requires 
-iommu_group_release_dma_owner() to be called the same number of times. 
-It doesn't appear that VFIO needs that, and I'm not sure I'd trust any 
-other potential users to get it right either.
-
->> Furthermore, If Greg was willing to compromise just far enough to let us put
->> driver_managed_dma in the 3-byte hole in the generic struct
->> device_driver,
-> 
-> Space was not an issue, the earlier version of this switched an
-> existing bool to a bitfield.
-> 
->> we wouldn't have to have quite so much boilerplate repeated across the
->> various bus implementations (I'm not suggesting to move any actual calls
->> back into the driver core, just the storage of flag itself).
-> 
-> Not sure that makes sense.. But I don't understand why we need to copy
-> and paste this code into every bus's dma_configure *shrug*
-
-That's what I'm saying - right now every bus *has* to have a specific 
-.dma_configure implementation if only to retrieve a 
-semantically-identical flag from each bus-specific structure; there is 
-zero possible code-sharing. With a generically-defined flag, there is 
-some possibility for code-sharing now (e.g. patch #3 wouldn't be 
-needed), and the potential for more in future.
-
->> FWIW I have some ideas for re-converging .dma_configure in future
->> which I think should probably be able to subsume this into a
->> completely generic common path, given a common flag.
-> 
-> This would be great!
-
-Indeed, so if we're enthusiastic about future cleanup that necessitates 
-a generic flag, why not make the flag generic to start with?
+I may missing something though, not really a Xen expert here, or maybe this
+agentID identification trick could be considered something not covered
+by the spec and strictly part of the transport layer...not sure... the guys
+in CC may have different/opposite opinions so feel free to redirect my
+blabbing to /dev/null at the end :D
 
 Thanks,
-Robin.
+Cristian
+

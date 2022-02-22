@@ -2,152 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 167874BF526
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 10:53:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C95474BF54A
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 10:59:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229993AbiBVJxw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 04:53:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42306 "EHLO
+        id S230094AbiBVJ75 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 04:59:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229481AbiBVJxu (ORCPT
+        with ESMTP id S229613AbiBVJ7y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 04:53:50 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 213D7D10BD;
-        Tue, 22 Feb 2022 01:53:25 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9E262B8196F;
-        Tue, 22 Feb 2022 09:53:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA03CC340E8;
-        Tue, 22 Feb 2022 09:53:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645523602;
-        bh=OnZcoGRyx5ne7WbzoVcMoT8X+32SVf+MsXCe4fPWrwQ=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:From;
-        b=pYMdQVZ9bNBt2ie3VUyBv7oBFvHnVklEhjKZXF4Jx07Bx/qPsv7YnMYcenlzPNgKc
-         ZQcKFWUgx4UuXsk06/ziK6VJaAhxWMKIMjiVyUBsDyFMcqRVnCeOudlvcMI74onZ3G
-         TPF2RxqCbEwMxpm2u+T0qwKHqfmLAGMbrRsf5HYm/m2la12+7B8gt93wnDi9khYr7y
-         lFoD6q0lWt2iNzzbtQc/nIGESuGEZd71nn954NREz7Rn7Qvrmt7/j3qqYqMSEx601w
-         MGKKsrJD3YqacsqlaldYJObBGpQyPndMR8B5/g8wXzIAqWgXfENfurX+5m5h7NUmyL
-         sqT/Myl/gtkZg==
-From:   SeongJae Park <sj@kernel.org>
-To:     Jonghyeon Kim <tome01@ajou.ac.kr>
-Cc:     akpm@linux-foundation.org, Jonathan.Cameron@Huawei.com,
-        amit@kernel.org, benh@kernel.crashing.org, corbet@lwn.net,
-        david@redhat.com, dwmw@amazon.com, elver@google.com,
-        foersleo@amazon.de, gthelen@google.com, markubo@amazon.de,
-        rientjes@google.com, shakeelb@google.com, shuah@kernel.org,
-        linux-damon@amazon.com, linux-mm@kvack.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH v1 1/3] mm/damon: Rebase damos watermarks for NUMA systems
-Date:   Tue, 22 Feb 2022 09:53:17 +0000
-Message-Id: <20220222095317.7911-1-sj@kernel.org>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220218102611.31895-2-tome01@ajou.ac.kr>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 22 Feb 2022 04:59:54 -0500
+X-Greylist: delayed 174 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 22 Feb 2022 01:59:28 PST
+Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9513D21FD
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 01:59:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1645523606;
+    s=strato-dkim-0002; d=fpond.eu;
+    h=Subject:References:In-Reply-To:Message-ID:Cc:To:From:Date:Cc:Date:
+    From:Subject:Sender;
+    bh=dWKZOFQ+HIvrBNvfir4obwb7uVDZZb0beIIECXtlDkQ=;
+    b=exfJhR7jvCtg4CEw/NPhwh4CrS/VHlNeZhrary/CFZIVX0kpWMYhA10vK6naSw4iMY
+    nYyBeUC8Afyiu/qE7odMcG7NAQIFB9J41nU7dVAbQVLO3QmiY9cqp8faFxXIuGMFbzYw
+    KziTMkmXEwB0XAmjIkyE1GVV2nH4Qns92uFRI3zyIg3TuW0nw4D9ww1mn7FyJAorGnHE
+    yhJOqiyDQWnA+5Ll8RxVVFOQynKJ4EfD8iKLZPtJud/ZaaItB2dsBwDSW1j7BsbqkEv2
+    vRPmVu+o5PWG/mzREGV0C/+iZQ7OS3P/V0Qs4GgJCXRDBdkQbYoJK/vPtVecD9MMkLpF
+    EA5A==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":OWANVUa4dPFUgKR/3dpvnYP0Np73amq+g13rqGzvv3qxio1R8fCs/87J2o0="
+X-RZG-CLASS-ID: mo00
+Received: from oxapp05-05.back.ox.d0m.de
+    by smtp-ox.front (RZmta 47.40.0 AUTH)
+    with ESMTPSA id 6c30c7y1M9rQ2KB
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
+        (Client did not present a certificate);
+    Tue, 22 Feb 2022 10:53:26 +0100 (CET)
+Date:   Tue, 22 Feb 2022 10:53:26 +0100 (CET)
+From:   Ulrich Hecht <uli@fpond.eu>
+To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, linux-can@vger.kernel.org,
+        Pavel Machek <pavel@denx.de>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org,
+        Ulrich Hecht <uli+renesas@fpond.eu>,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>
+Message-ID: <1103141484.974980.1645523606875@webmail.strato.com>
+In-Reply-To: <20220221225935.12300-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+References: <20220221225935.12300-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: Re: [PATCH] can: rcar_canfd: Register the CAN device when fully
+ ready
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Priority: 3
+Importance: Normal
+X-Mailer: Open-Xchange Mailer v7.10.5-Rev38
+X-Originating-Client: open-xchange-appsuite
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Jonghyeon,
 
-On Fri, 18 Feb 2022 19:26:09 +0900 Jonghyeon Kim <tome01@ajou.ac.kr> wrote:
-
-> For NUMA systems, there is a need to allow damos to select watermark
-> options for monitoring each NUMA node or whole system free memory. Even
-> if we do not use NUMA, since the default NUMA node number is 0, we can
-> monitor the whole system memory without any configuration.
-
-Some users using NUMA machines but don't do NUMA-specific memory allocations
-and therefore assume memory free rate in each NUMA node will be similar might
-want to monitor only global free memory ratio, to limit number of kdamonds for
-reducing CPU overhead.  In the case, this patch would make them monitor only
-the first node.
-
-How about leaving DAMOS_WMARK_FREE_MEM_RATE to work as is, and adding a new
-metric type, say, DAMOS_WMARK_NODE_FREE_MEM_RATE?
-
-
-Thanks,
-SJ
-
+> On 02/21/2022 11:59 PM Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
 > 
-> Signed-off-by: Jonghyeon Kim <tome01@ajou.ac.kr>
+>  
+> Register the CAN device only when all the necessary initialization
+> is completed. This patch makes sure all the data structures and locks are
+> initialized before registering the CAN device.
+> 
+> Reported-by: Pavel Machek <pavel@denx.de>
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 > ---
->  include/linux/damon.h |  2 ++
->  mm/damon/core.c       | 14 ++++++++------
->  2 files changed, 10 insertions(+), 6 deletions(-)
+>  drivers/net/can/rcar/rcar_canfd.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
 > 
-> diff --git a/include/linux/damon.h b/include/linux/damon.h
-> index 49c4a11ecf20..c0adf1566603 100644
-> --- a/include/linux/damon.h
-> +++ b/include/linux/damon.h
-> @@ -170,6 +170,7 @@ enum damos_wmark_metric {
->   * @high:	High watermark.
->   * @mid:	Middle watermark.
->   * @low:	Low watermark.
-> + * @node:	NUMA node for the watermarks.
->   *
->   * If &metric is &DAMOS_WMARK_NONE, the scheme is always active.  Being active
->   * means DAMON does monitoring and applying the action of the scheme to
-> @@ -186,6 +187,7 @@ struct damos_watermarks {
->  	unsigned long high;
->  	unsigned long mid;
->  	unsigned long low;
-> +	int node;
+> diff --git a/drivers/net/can/rcar/rcar_canfd.c b/drivers/net/can/rcar/rcar_canfd.c
+> index 3ad3a6f6a1dd..8c378b20b2aa 100644
+> --- a/drivers/net/can/rcar/rcar_canfd.c
+> +++ b/drivers/net/can/rcar/rcar_canfd.c
+> @@ -1783,15 +1783,15 @@ static int rcar_canfd_channel_probe(struct rcar_canfd_global *gpriv, u32 ch,
 >  
->  /* private: */
->  	bool activated;
-> diff --git a/mm/damon/core.c b/mm/damon/core.c
-> index 82e0a4620c4f..290c9c0535ee 100644
-> --- a/mm/damon/core.c
-> +++ b/mm/damon/core.c
-> @@ -179,6 +179,7 @@ struct damos *damon_new_scheme(
->  	scheme->wmarks.high = wmarks->high;
->  	scheme->wmarks.mid = wmarks->mid;
->  	scheme->wmarks.low = wmarks->low;
-> +	scheme->wmarks.node = wmarks->node;
->  	scheme->wmarks.activated = true;
->  
->  	return scheme;
-> @@ -951,14 +952,15 @@ static bool kdamond_need_stop(struct damon_ctx *ctx)
->  	return true;
->  }
->  
-> -static unsigned long damos_wmark_metric_value(enum damos_wmark_metric metric)
-> +static unsigned long damos_wmark_metric_value(struct damos_watermarks wmarks)
->  {
-> -	struct sysinfo i;
-> +	unsigned long nr_total, nr_free;
->  
-> -	switch (metric) {
-> +	switch (wmarks.metric) {
->  	case DAMOS_WMARK_FREE_MEM_RATE:
-> -		si_meminfo(&i);
-> -		return i.freeram * 1000 / i.totalram;
-> +		nr_total = node_present_pages(wmarks.node);
-> +		nr_free = sum_zone_node_page_state(wmarks.node, NR_FREE_PAGES);
-> +		return nr_free * 1000 / nr_total;
->  	default:
->  		break;
+>  	netif_napi_add(ndev, &priv->napi, rcar_canfd_rx_poll,
+>  		       RCANFD_NAPI_WEIGHT);
+> +	spin_lock_init(&priv->tx_lock);
+> +	devm_can_led_init(ndev);
+> +	gpriv->ch[priv->channel] = priv;
+>  	err = register_candev(ndev);
+>  	if (err) {
+>  		dev_err(&pdev->dev,
+>  			"register_candev() failed, error %d\n", err);
+>  		goto fail_candev;
 >  	}
-> @@ -976,7 +978,7 @@ static unsigned long damos_wmark_wait_us(struct damos *scheme)
->  	if (scheme->wmarks.metric == DAMOS_WMARK_NONE)
->  		return 0;
+> -	spin_lock_init(&priv->tx_lock);
+> -	devm_can_led_init(ndev);
+> -	gpriv->ch[priv->channel] = priv;
+>  	dev_info(&pdev->dev, "device registered (channel %u)\n", priv->channel);
+>  	return 0;
 >  
-> -	metric = damos_wmark_metric_value(scheme->wmarks.metric);
-> +	metric = damos_wmark_metric_value(scheme->wmarks);
->  	/* higher than high watermark or lower than low watermark */
->  	if (metric > scheme->wmarks.high || scheme->wmarks.low > metric) {
->  		if (scheme->wmarks.activated)
 > -- 
 > 2.17.1
-> 
-> 
+
+Reviewed-by: Ulrich Hecht <uli+renesas@fpond.eu>
+
+CU
+Uli

@@ -2,139 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62A8F4BF869
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 13:56:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C6E844BF8AD
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 14:01:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232053AbiBVM4g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 07:56:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55352 "EHLO
+        id S231267AbiBVNB2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 08:01:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231889AbiBVM4f (ORCPT
+        with ESMTP id S229590AbiBVNBY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 07:56:35 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A01F128DF7
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 04:56:10 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 16BF2B81998
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 12:56:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2026AC340E8;
-        Tue, 22 Feb 2022 12:56:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645534567;
-        bh=oJ/w9DrjJ8UVUe7wYc1OQHhSMTw8H6h+UWV8CFaeNPM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Mxayw4Pqw5XPRdaAsVWmuRsbbbCslKZoiBb8FJ2oApvIJFv2jL35xShhlroFOEs2X
-         JlyvhbEnkYlsVX1DVTiGtFmjmCtmTJQ0FN1S2fKvb09j99a+mieAjG3KL/gQvyhotn
-         UbUbnPE3id7GMKPRIZ2pkuQ08QRucvGUXiSjl1GkmigHeQWN3WewzT+QirTa7Sejdg
-         QT+NdZnzL650m9fIShnU8GmzP2rh0op5qBZEePzwT2BM1Bc5/+cBsVxLPT+4r5Oxu4
-         HJtrX21OVDYaNvGZxHj9rwx9A+7MWi0FQENZ0eS+xELs9GA+8BVMtHPaqHYRMzoKVY
-         uRe3dZbIto9uQ==
-Date:   Tue, 22 Feb 2022 18:26:03 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Swapnil Jakhade <sjakhade@cadence.com>
-Cc:     kishon@ti.com, linux-phy@lists.infradead.org,
-        linux-kernel@vger.kernel.org, mparab@cadence.com,
-        a-govindraju@ti.com, r-ravikumar@ti.com
-Subject: Re: [PATCH 1/4] phy: cadence-torrent: Add function to get PLL to be
- configured for DP
-Message-ID: <YhTdY+UfIEtvDBK+@matsya>
-References: <20220127142958.23465-1-sjakhade@cadence.com>
- <20220127142958.23465-2-sjakhade@cadence.com>
+        Tue, 22 Feb 2022 08:01:24 -0500
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E422AA2FC
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 05:00:59 -0800 (PST)
+Received: by mail-pg1-x52b.google.com with SMTP id 195so16952978pgc.6
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 05:00:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=nUt0EmZnAjWhiw3ria3c4mQpo/dgjgtowmwpyAc1Cbo=;
+        b=IP8F2yfh8d9HOTDVcoFaajwYozjX6JSyXP3lHDNGD3uvbAQVChed6Pz/o8d3z4BNRs
+         MQK37Phm7nbNzeUZ+cXLmxGBsiQ72zVhnyAWEqSe2D2o9aVHg9eUXvIykPldJaOHOmfd
+         CjE2cQMjYIqPRckAM3+o+BGDt25/XhJsKE4CnwE6adTKuZoU/GiMBSde94S1m+bSN7Qf
+         CZtgSdF5JIC7t6i4xns3a4pzTam5nUyPhwg/QGgzpx/CLBrm07+bT06ZHdz4Hc+YpLWa
+         KuXk8qhaTBWulKv1AHGOjWNnadxF/sUbuP9lebmDv2CkFBjxUDQVNeCiohTE2WhHnVa6
+         zflQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=nUt0EmZnAjWhiw3ria3c4mQpo/dgjgtowmwpyAc1Cbo=;
+        b=Rk3uQkJC1JBacOKztp26KQo53DLSk636895O/Wd9d2E9OHCuc6uqLzesbLsLTFy1sg
+         /+16CSM0hrnvy7H4eziIPr5oTUj4Iy09KgJngRDLxABXJLiJJ6y7qeECSEHAZanVnApp
+         72ydqzNYz034h6z9F6oouCNGXN5bqPeBmpWgcp1u1dCFRYYlXRWcL01ysyloLIhktHUw
+         IgJlv4lx2wocI9M1L7/qhpBuTydeOF9mibxSsla4lEw8/i6/5oghx/EYuld8EuN1X+XW
+         /boNhy08drqy5tR/+EERRjG9hgFTvAXCaqqk+O9HkFHsoQBw6CrfhsDBU8zZMrf76EyT
+         ghnQ==
+X-Gm-Message-State: AOAM532jCx2t5OCYZEmnC38BNlrvTCxYlk8oqkxGsC+Knot9ImNprzK9
+        v+r4m1xfxk1OUyK8dg6G851NZg==
+X-Google-Smtp-Source: ABdhPJzCf/hDKsVXtxWWr8kywPLuoA+ON50H4nU4G+0ivdzrlLu+RLrQDET6/Rcu1f60yUg8oVBCpQ==
+X-Received: by 2002:aa7:9f5b:0:b0:4cc:964c:99dd with SMTP id h27-20020aa79f5b000000b004cc964c99ddmr24960894pfr.42.1645534858709;
+        Tue, 22 Feb 2022 05:00:58 -0800 (PST)
+Received: from C02CV1DAMD6P.bytedance.net ([139.177.225.236])
+        by smtp.gmail.com with ESMTPSA id j15sm18125567pfj.102.2022.02.22.05.00.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Feb 2022 05:00:58 -0800 (PST)
+From:   Chengming Zhou <zhouchengming@bytedance.com>
+To:     rostedt@goodmis.org, mingo@redhat.com, catalin.marinas@arm.com,
+        will@kernel.org, mark.rutland@arm.com, broonie@kernel.org
+Cc:     songmuchun@bytedance.com, qirui.001@bytedance.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Chengming Zhou <zhouchengming@bytedance.com>
+Subject: [PATCH] arm64/ftrace: Make function graph use ftrace directly
+Date:   Tue, 22 Feb 2022 21:00:49 +0800
+Message-Id: <20220222130049.81284-1-zhouchengming@bytedance.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220127142958.23465-2-sjakhade@cadence.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27-01-22, 15:29, Swapnil Jakhade wrote:
-> Torrent PHY PLL0 or PLL1 is used for DP depending on the single link or
-> multilink protocol configuration for which PHY is configured. In multilink
-> configurations with other protocols, either PLL0 or PLL1 will be used
-> for DP. For single link DP, both PLLs need to be configured at POR.
-> 
-> Signed-off-by: Swapnil Jakhade <sjakhade@cadence.com>
-> ---
->  drivers/phy/cadence/phy-cadence-torrent.c | 30 +++++++++++++++++++++++
->  1 file changed, 30 insertions(+)
-> 
-> diff --git a/drivers/phy/cadence/phy-cadence-torrent.c b/drivers/phy/cadence/phy-cadence-torrent.c
-> index 7c4b8050485f..0e2839a6c65d 100644
-> --- a/drivers/phy/cadence/phy-cadence-torrent.c
-> +++ b/drivers/phy/cadence/phy-cadence-torrent.c
-> @@ -38,6 +38,9 @@
->  #define POLL_TIMEOUT_US		5000
->  #define PLL_LOCK_TIMEOUT	100000
->  
-> +#define DP_PLL0			BIT(0)
-> +#define DP_PLL1			BIT(1)
-> +
->  #define TORRENT_COMMON_CDB_OFFSET	0x0
->  
->  #define TORRENT_TX_LANE_CDB_OFFSET(ln, block_offset, reg_offset)	\
-> @@ -323,6 +326,7 @@ struct cdns_torrent_phy {
->  	void __iomem *base;	/* DPTX registers base */
->  	void __iomem *sd_base; /* SD0801 registers base */
->  	u32 max_bit_rate; /* Maximum link bit rate to use (in Mbps) */
-> +	u32 dp_pll;
->  	struct reset_control *phy_rst;
->  	struct reset_control *apb_rst;
->  	struct device *dev;
-> @@ -978,6 +982,30 @@ void cdns_torrent_dp_pma_cmn_vco_cfg_100mhz(struct cdns_torrent_phy *cdns_phy,
->  	}
->  }
->  
-> +/* Set PLL used for DP configuration */
-> +static int cdns_torrent_dp_get_pll(struct cdns_torrent_phy *cdns_phy,
-> +				   enum cdns_torrent_phy_type phy_t2)
+As we do in commit 0c0593b45c9b ("x86/ftrace: Make function graph
+use ftrace directly"), we don't need special hook for graph tracer,
+but instead we use graph_ops:func function to install return_hooker.
 
-why return an error if you are going to ignore it!
+Since commit 3b23e4991fb6 ("arm64: implement ftrace with regs") add
+implementation for FTRACE_WITH_REGS on arm64, we can easily adopt
+the same optimization on arm64.
 
-> +{
-> +	switch (phy_t2) {
-> +	case TYPE_PCIE:
-> +	case TYPE_USB:
-> +		cdns_phy->dp_pll = DP_PLL1;
-> +		break;
-> +	case TYPE_SGMII:
-> +	case TYPE_QSGMII:
-> +		cdns_phy->dp_pll = DP_PLL0;
-> +		break;
-> +	case TYPE_NONE:
-> +		cdns_phy->dp_pll = DP_PLL0 | DP_PLL1;
-> +		break;
-> +	default:
-> +		dev_err(cdns_phy->dev, "Unsupported PHY configuration\n");
-> +		return -EINVAL;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
->  /*
->   * Enable or disable PLL for selected lanes.
->   */
-> @@ -1640,6 +1668,8 @@ static int cdns_torrent_dp_init(struct phy *phy)
->  		return -EINVAL;
->  	}
->  
-> +	cdns_torrent_dp_get_pll(cdns_phy, TYPE_NONE);
-> +
->  	cdns_torrent_dp_common_init(cdns_phy, inst);
->  
->  	return cdns_torrent_dp_start(cdns_phy, inst, phy);
-> -- 
-> 2.34.1
+Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
+---
+ arch/arm64/include/asm/ftrace.h  |  7 +++++++
+ arch/arm64/kernel/entry-ftrace.S |  6 ------
+ arch/arm64/kernel/ftrace.c       | 21 +++++++++++++++++++++
+ 3 files changed, 28 insertions(+), 6 deletions(-)
 
+diff --git a/arch/arm64/include/asm/ftrace.h b/arch/arm64/include/asm/ftrace.h
+index 1494cfa8639b..dbc45a4157fa 100644
+--- a/arch/arm64/include/asm/ftrace.h
++++ b/arch/arm64/include/asm/ftrace.h
+@@ -80,8 +80,15 @@ static inline unsigned long ftrace_call_adjust(unsigned long addr)
+ 
+ #ifdef CONFIG_DYNAMIC_FTRACE_WITH_REGS
+ struct dyn_ftrace;
++struct ftrace_ops;
++struct ftrace_regs;
++
+ int ftrace_init_nop(struct module *mod, struct dyn_ftrace *rec);
+ #define ftrace_init_nop ftrace_init_nop
++
++void ftrace_graph_func(unsigned long ip, unsigned long parent_ip,
++		       struct ftrace_ops *op, struct ftrace_regs *fregs);
++#define ftrace_graph_func ftrace_graph_func
+ #endif
+ 
+ #define ftrace_return_address(n) return_address(n)
+diff --git a/arch/arm64/kernel/entry-ftrace.S b/arch/arm64/kernel/entry-ftrace.S
+index e535480a4069..eb4a69b1f84d 100644
+--- a/arch/arm64/kernel/entry-ftrace.S
++++ b/arch/arm64/kernel/entry-ftrace.S
+@@ -97,12 +97,6 @@ SYM_CODE_START(ftrace_common)
+ SYM_INNER_LABEL(ftrace_call, SYM_L_GLOBAL)
+ 	bl	ftrace_stub
+ 
+-#ifdef CONFIG_FUNCTION_GRAPH_TRACER
+-SYM_INNER_LABEL(ftrace_graph_call, SYM_L_GLOBAL) // ftrace_graph_caller();
+-	nop				// If enabled, this will be replaced
+-					// "b ftrace_graph_caller"
+-#endif
+-
+ /*
+  * At the callsite x0-x8 and x19-x30 were live. Any C code will have preserved
+  * x19-x29 per the AAPCS, and we created frame records upon entry, so we need
+diff --git a/arch/arm64/kernel/ftrace.c b/arch/arm64/kernel/ftrace.c
+index 4506c4a90ac1..1b5da231b1de 100644
+--- a/arch/arm64/kernel/ftrace.c
++++ b/arch/arm64/kernel/ftrace.c
+@@ -268,6 +268,26 @@ void prepare_ftrace_return(unsigned long self_addr, unsigned long *parent,
+ }
+ 
+ #ifdef CONFIG_DYNAMIC_FTRACE
++#ifdef CONFIG_DYNAMIC_FTRACE_WITH_REGS
++int ftrace_enable_ftrace_graph_caller(void)
++{
++	return 0;
++}
++
++int ftrace_disable_ftrace_graph_caller(void)
++{
++	return 0;
++}
++
++void ftrace_graph_func(unsigned long ip, unsigned long parent_ip,
++		       struct ftrace_ops *op, struct ftrace_regs *fregs)
++{
++	struct pt_regs *regs = arch_ftrace_get_regs(fregs);
++	unsigned long *parent = (unsigned long *)&procedure_link_pointer(regs);
++
++	prepare_ftrace_return(ip, parent, frame_pointer(regs));
++}
++#else
+ /*
+  * Turn on/off the call to ftrace_graph_caller() in ftrace_caller()
+  * depending on @enable.
+@@ -297,5 +317,6 @@ int ftrace_disable_ftrace_graph_caller(void)
+ {
+ 	return ftrace_modify_graph_caller(false);
+ }
++#endif /* CONFIG_DYNAMIC_FTRACE_WITH_REGS */
+ #endif /* CONFIG_DYNAMIC_FTRACE */
+ #endif /* CONFIG_FUNCTION_GRAPH_TRACER */
 -- 
-~Vinod
+2.20.1
+

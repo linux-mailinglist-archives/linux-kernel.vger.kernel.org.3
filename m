@@ -2,62 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 236104BF98A
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 14:37:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BC034BF98B
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 14:37:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232240AbiBVNhl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 08:37:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38650 "EHLO
+        id S232199AbiBVNiI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 08:38:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231440AbiBVNhj (ORCPT
+        with ESMTP id S232421AbiBVNhu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 08:37:39 -0500
-Received: from p3plsmtpa07-06.prod.phx3.secureserver.net (p3plsmtpa07-06.prod.phx3.secureserver.net [173.201.192.235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ACD2192BA
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 05:37:10 -0800 (PST)
-Received: from localhost ([82.17.115.212])
-        by :SMTPAUTH: with ESMTPA
-        id MVLonjBopdsXDMVLpnM6Jf; Tue, 22 Feb 2022 06:37:10 -0700
-X-CMAE-Analysis: v=2.4 cv=ZLASJV3b c=1 sm=1 tr=0 ts=6214e706
- a=9gipVNR6X1CoIeAWHwLoWw==:117 a=9gipVNR6X1CoIeAWHwLoWw==:17
- a=IkcTkHD0fZMA:10 a=20KFwNOVAAAA:8 a=j-GoWnyPFWeJtNoJgLoA:9 a=QEXdDO2ut3YA:10
-X-SECURESERVER-ACCT: atomlin@atomlin.com
-Date:   Tue, 22 Feb 2022 13:37:08 +0000
-From:   Aaron Tomlin <atomlin@atomlin.com>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     Aaron Tomlin <atomlin@redhat.com>,
-        "mcgrof@kernel.org" <mcgrof@kernel.org>,
-        "cl@linux.com" <cl@linux.com>,
-        "pmladek@suse.com" <pmladek@suse.com>,
-        "mbenes@suse.cz" <mbenes@suse.cz>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "jeyu@kernel.org" <jeyu@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
-        "void@manifault.com" <void@manifault.com>,
-        "allen.lkml@gmail.com" <allen.lkml@gmail.com>,
-        "joe@perches.com" <joe@perches.com>,
-        "msuchanek@suse.de" <msuchanek@suse.de>,
-        "oleksandr@natalenko.name" <oleksandr@natalenko.name>
-Subject: Re: [PATCH v7 05/13] module: Move latched RB-tree support to a
- separate file
-Message-ID: <20220222133708.tew4wxhkf5hpkg2u@ava.usersys.com>
-References: <20220222130911.1348513-1-atomlin@redhat.com>
- <20220222130911.1348513-6-atomlin@redhat.com>
- <8ed19f41-625a-154f-096c-ae7ea19a9649@csgroup.eu>
+        Tue, 22 Feb 2022 08:37:50 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD1355A5BB
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 05:37:25 -0800 (PST)
+Received: from zn.tnic (dslb-088-067-221-104.088.067.pools.vodafone-ip.de [88.67.221.104])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id C67891EC0478;
+        Tue, 22 Feb 2022 14:37:19 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1645537039;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=rIzCHu7vWbE7jPkhWFahwChinGRQ+u4nZtOXmNmbih4=;
+        b=kvrwwzw/InANdZgtVqRFahRs3d9e0TmqgNfvgkv3nElMq/pS9QdZeueLQPz2b1ADnYxNV3
+        0FI8C0g3kXsug29tDKwI2xKoCJ/Z/EyXGzCW2IwA0wmzGq69DOoWrb9tWgM3u0FCgFFej5
+        LgS6qcxOnwjwRq2/HuEDdsFpSd8XNPY=
+Date:   Tue, 22 Feb 2022 14:37:27 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Cc:     Dave Hansen <dave.hansen@intel.com>, tglx@linutronix.de,
+        mingo@redhat.com, luto@kernel.org, peterz@infradead.org,
+        sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
+        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
+        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
+        joro@8bytes.org, jpoimboe@redhat.com, knsathya@kernel.org,
+        pbonzini@redhat.com, sdeep@vmware.com, seanjc@google.com,
+        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
+        x86@kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCHv3 02/32] x86/coco: Add API to handle encryption mask
+Message-ID: <YhTnF4Wpd8/9QjO/@zn.tnic>
+References: <20220218161718.67148-1-kirill.shutemov@linux.intel.com>
+ <20220218161718.67148-3-kirill.shutemov@linux.intel.com>
+ <66fcd7e7-deb6-f27e-9fc6-33293ce04f16@intel.com>
+ <20220218213300.2bs4t3admhozonaq@black.fi.intel.com>
+ <7ebd6ba1-85a4-6fee-c897-22ed108ac8b7@intel.com>
+ <20220221222856.c6b74b3n3fwqe6vy@black.fi.intel.com>
+ <20220222110312.q7eaepfph2tyjq3e@black.fi.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <8ed19f41-625a-154f-096c-ae7ea19a9649@csgroup.eu>
-X-CMAE-Envelope: MS4xfH8N2fumSewoTMn9SJibgCg3aysMctgxzFqQ0FzPkDdCexLi5prNkq9ZxW8LQvuNr9W0hZTqRUOIvOuTVrBRkjd84KNOVluyHcTLuWkiDbgLIObPT5PY
- Eo45c5/nKDApOLEQMD5uDSYNISMNXaLM/QSJmNbPmeFZUOwCaTgtOvV43/NaHkMNyZkHorNjCwm0x6/JNQuUtcoiGd8rdZq/W7VlAAjA0lGZvtvhEAp8cphP
- jOKhOH5Lz+54qf30GP9O5uDWMw1lNyDVnIvvELlHF85TZ9NPkVfsker4g12wG6A5IXY5qXGqNuwr5OqSnLJXbXM5rmQ4ymyW5gsvDZfM4mEbjEFyCaBJjy7C
- 0Ybl1asxwjhrSb6kxKzZMHwCAuljUdW2vOgPEx05bLTZ6ZE7p4+Ub8W1adlgEyfUumk0RJdBwnS3p7PWLOlxXYsh9a/xp8esdceOiqUIg8JsfqC8ZmhmQ564
- lLPYmGWO0ltHmetZ67ktaQWAIMoMB1Z/9g3d9QqrhYVOk4FOL9pNTUYZmVLAYMJ0R6nnN7PknMxPjJIDhnbk29IuweH4NJyQqpF/4R6PKkSStrJEAwf4bxb8
- fkwZD0rJ1HxlSuKxuEMf4lOqnGD6OTINVFN1fgFWD7AkcQ==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+In-Reply-To: <20220222110312.q7eaepfph2tyjq3e@black.fi.intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,39 +63,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue 2022-02-22 13:32 +0000, Christophe Leroy wrote:
-> Le 22/02/2022 à 14:09, Aaron Tomlin a écrit :
-> > No functional change.
-> > 
-> > This patch migrates module latched RB-tree support
-> > (e.g. see __module_address()) from core module code
-> > into kernel/module/tree_lookup.c.
-> > 
-> > Signed-off-by: Aaron Tomlin <atomlin@redhat.com>
-> > ---
-> >   kernel/module/Makefile      |   3 +
-> >   kernel/module/internal.h    |  33 +++++++++
-> >   kernel/module/main.c        | 130 ++----------------------------------
-> >   kernel/module/tree_lookup.c | 109 ++++++++++++++++++++++++++++++
-> >   4 files changed, 149 insertions(+), 126 deletions(-)
-> >   create mode 100644 kernel/module/tree_lookup.c
-> > 
-> > diff --git a/kernel/module/Makefile b/kernel/module/Makefile
-> > index ed3aacb04f17..e8413975bf1d 100644
-> > --- a/kernel/module/Makefile
-> > +++ b/kernel/module/Makefile
-> > @@ -11,3 +11,6 @@ obj-y += main.o
-> >   obj-$(CONFIG_MODULE_DECOMPRESS) += decompress.o
-> >   obj-$(CONFIG_MODULE_SIG) += signing.o
-> >   obj-$(CONFIG_LIVEPATCH) += livepatch.o
-> > +ifdef CONFIG_MODULES
+On Tue, Feb 22, 2022 at 02:03:12PM +0300, Kirill A. Shutemov wrote:
+> I would rather make cc_mkenc()/cc_mkdec() to operate on u64 (or
+> phys_addr_t?) while pgprot_encrypted()/pgprot_decrypted() cover pgprot_t.
+> It also makes set_memory cleaner:
 > 
-> This ifdef is not needed anymore.
+> 	cpa.mask_set = __pgprot(enc ? cc_mkenc(0) : cc_mkdec(0));
+> 	cpa.mask_clr = __pgprot(enc ? cc_mkdec(0) : cc_mkenc(0));
 > 
-> > +obj-$(CONFIG_MODULES_TREE_LOOKUP) += tree_lookup.o
-> > +endif
+> Opinions?
 
-Oops! Apologies this was an oversight.
+Right, do I see it correctly that the cc_mk{enc,dec}() things should
+take a u64 as an argument and return a pgprot_t, and that would be the
+most optimal way for all the use cases?
 
 -- 
-Aaron Tomlin
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette

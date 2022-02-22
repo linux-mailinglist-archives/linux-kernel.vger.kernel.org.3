@@ -2,140 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA5B44BF34F
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 09:16:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 704804BF3CC
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 09:38:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229673AbiBVIPE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 03:15:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57002 "EHLO
+        id S229878AbiBVIiv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 03:38:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbiBVIPB (ORCPT
+        with ESMTP id S229515AbiBVIit (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 03:15:01 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28B2A151D23;
-        Tue, 22 Feb 2022 00:14:35 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A5F83B8189E;
-        Tue, 22 Feb 2022 08:14:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E60B6C340E8;
-        Tue, 22 Feb 2022 08:14:30 +0000 (UTC)
-Message-ID: <621be862-7478-dc70-3f65-db9b95115821@xs4all.nl>
-Date:   Tue, 22 Feb 2022 09:14:29 +0100
+        Tue, 22 Feb 2022 03:38:49 -0500
+Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F163F931A4;
+        Tue, 22 Feb 2022 00:38:21 -0800 (PST)
+Received: from relay1-d.mail.gandi.net (unknown [IPv6:2001:4b98:dc4:8::221])
+        by mslow1.mail.gandi.net (Postfix) with ESMTP id 53506D5FE5;
+        Tue, 22 Feb 2022 08:16:15 +0000 (UTC)
+Received: (Authenticated sender: clement.leger@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 9F63524000E;
+        Tue, 22 Feb 2022 08:16:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1645517768;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Natz2NWgWvho24fzbCnusdUGHKptahSa6WvIBwYrqSQ=;
+        b=VFqnw5A4k32g9vv1hZ1WxHt+0LScib2vaHxuNFrVQIzAbiNQvi9w9aozpXKFol2lRZqOVF
+        95IeseqOVi5x429kyWRL3YziWtD4op8InbwsyCh22H1/S+qxJAAQzfSnAqnO7yh9RiQMCh
+        dfcoOFtLIT6xK/3ZZdXAboxypJh81/YGzAKPdQ7WfrdEmAWrErp931dGktpL9wkV6aBF7Y
+        NAkjIKRKrcpclQvSdkMlhORlS5hdyAFJNQx2ktDQWdvHcnFI6GReL7Fp4fUVBeHjGpZAFj
+        7YV4vP2R0KG2+wv2089hfUC+xiBahzcZR5T0UpD7rEKQUg18k7/YjQ0c6ae6Ig==
+Date:   Tue, 22 Feb 2022 09:14:47 +0100
+From:   =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Wolfram Sang <wsa@kernel.org>, Peter Rosin <peda@axentia.se>,
+        Russell King <linux@armlinux.org.uk>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-acpi@vger.kernel.org, linux-i2c@vger.kernel.org,
+        netdev@vger.kernel.org,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+Subject: Re: [RFC 01/10] property: add fwnode_match_node()
+Message-ID: <20220222091447.4afa940a@fixe.home>
+In-Reply-To: <YhPPlFZGFvbNs+ZJ@smile.fi.intel.com>
+References: <20220221162652.103834-1-clement.leger@bootlin.com>
+        <20220221162652.103834-2-clement.leger@bootlin.com>
+        <YhPPlFZGFvbNs+ZJ@smile.fi.intel.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH v16 03/13] media: amphion: add amphion vpu device driver
-Content-Language: en-US
-To:     Ming Qian <ming.qian@nxp.com>, mchehab@kernel.org,
-        shawnguo@kernel.org, robh+dt@kernel.org, s.hauer@pengutronix.de
-Cc:     kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        aisheng.dong@nxp.com, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-References: <cover.1645422822.git.ming.qian@nxp.com>
- <1ccdc8c9b7d521f3f839bb2c8d269aa299cd0595.1645422822.git.ming.qian@nxp.com>
-From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
-In-Reply-To: <1ccdc8c9b7d521f3f839bb2c8d269aa299cd0595.1645422822.git.ming.qian@nxp.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Le Mon, 21 Feb 2022 19:44:52 +0200,
+Andy Shevchenko <andriy.shevchenko@linux.intel.com> a =C3=A9crit :
 
+> On Mon, Feb 21, 2022 at 05:26:43PM +0100, Cl=C3=A9ment L=C3=A9ger wrote:
+> > Add a function equivalent to of_match_node() which is usable for
+> > fwnode support. Matching is based on the compatible property and it
+> > returns the best matches for the node according to the compatible
+> > list ordering. =20
+>=20
+> Not sure I understand the purpose of this API.
+> We have device_get_match_data(), maybe you want similar for fwnode?
+>=20
 
-On 2/21/22 07:10, Ming Qian wrote:
-> The amphion vpu codec ip contains encoder and decoder.
-> Windsor is the encoder, it supports to encode H.264.
-> Malone is the decoder, it features a powerful
-> video processing unit able to decode many formats,
-> such as H.264, HEVC, and other formats.
-> 
-> This Driver is for this IP that is based on the v4l2 mem2mem framework.
-> 
-> Supported SoCs are: IMX8QXP, IMX8QM
-> 
-> Signed-off-by: Ming Qian <ming.qian@nxp.com>
-> Signed-off-by: Shijie Qin <shijie.qin@nxp.com>
-> Signed-off-by: Zhou Peng <eagle.zhou@nxp.com>
-> Reported-by: kernel test robot <lkp@intel.com>
-> Tested-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
-> ---
->  arch/arm64/configs/defconfig               |   1 +
->  drivers/media/platform/Kconfig             |  19 ++
->  drivers/media/platform/Makefile            |   2 +
->  drivers/media/platform/amphion/Makefile    |  20 ++
->  drivers/media/platform/amphion/vpu.h       | 356 +++++++++++++++++++++
->  drivers/media/platform/amphion/vpu_defs.h  | 187 +++++++++++
->  drivers/media/platform/amphion/vpu_drv.c   | 260 +++++++++++++++
->  drivers/media/platform/amphion/vpu_imx8q.c | 271 ++++++++++++++++
->  drivers/media/platform/amphion/vpu_imx8q.h | 115 +++++++
->  9 files changed, 1231 insertions(+)
->  create mode 100644 drivers/media/platform/amphion/Makefile
->  create mode 100644 drivers/media/platform/amphion/vpu.h
->  create mode 100644 drivers/media/platform/amphion/vpu_defs.h
->  create mode 100644 drivers/media/platform/amphion/vpu_drv.c
->  create mode 100644 drivers/media/platform/amphion/vpu_imx8q.c
->  create mode 100644 drivers/media/platform/amphion/vpu_imx8q.h
-> 
-> diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-> index 30516dc0b70e..5423075730f8 100644
-> --- a/arch/arm64/configs/defconfig
-> +++ b/arch/arm64/configs/defconfig
-> @@ -662,6 +662,7 @@ CONFIG_V4L_PLATFORM_DRIVERS=y
->  CONFIG_VIDEO_RCAR_CSI2=m
->  CONFIG_VIDEO_RCAR_VIN=m
->  CONFIG_VIDEO_SUN6I_CSI=m
-> +CONFIG_VIDEO_AMPHION_VPU=m
->  CONFIG_V4L_MEM2MEM_DRIVERS=y
->  CONFIG_VIDEO_SAMSUNG_S5P_JPEG=m
->  CONFIG_VIDEO_SAMSUNG_S5P_MFC=m
+Hi Andy,
 
-This must be a separate patch! The media subsystem doesn't maintain defconfig.
+Actually device_get_match_data() is calling the .device_get_match_data
+callback of the dev fwnode. This function is meant to be used by the
+next patch (fwnode_get_match_data()) to be used as a generic fwnode
+operation and thus be usable with software_node.
 
-> diff --git a/drivers/media/platform/Kconfig b/drivers/media/platform/Kconfig
-> index 9fbdba0fd1e7..947ae16c73f5 100644
-> --- a/drivers/media/platform/Kconfig
-> +++ b/drivers/media/platform/Kconfig
-> @@ -216,6 +216,25 @@ config VIDEO_RCAR_ISP
->  	  To compile this driver as a module, choose M here: the
->  	  module will be called rcar-isp.
->  
-> +config VIDEO_AMPHION_VPU
-> +	tristate "Amphion VPU (Video Processing Unit) Codec IP"
-> +	depends on ARCH_MXC || COMPILE_TEST
-> +	depends on MEDIA_SUPPORT
-> +	depends on VIDEO_DEV
-> +	depends on VIDEO_V4L2
-> +	select MEDIA_CONTROLLER
-> +	select V4L2_MEM2MEM_DEV
-> +	select VIDEOBUF2_DMA_CONTIG
-> +	select VIDEOBUF2_VMALLOC
-> +	help
-> +	  Amphion VPU Codec IP contains two parts: Windsor and Malone.
-> +	  Windsor is encoder that supports H.264, and Malone is decoder
-> +	  that supports H.264, HEVC, and other video formats.
-> +	  This is a V4L2 driver for NXP MXC 8Q video accelerator hardware.
-> +	  It accelerates encoding and decoding operations on
-> +	  various NXP SoCs.
-> +	  To compile this driver as a module choose m here.
-> +
->  endif # V4L_PLATFORM_DRIVERS
->  
->  menuconfig V4L_MEM2MEM_DRIVERS
-
-This Kconfig entry is in the wrong place: this driver is a mem2mem driver, so
-it should be in the following section (V4L_MEM2MEM_DRIVERS).
-
-Regards,
-
-	Hans
+--=20
+Cl=C3=A9ment L=C3=A9ger,
+Embedded Linux and Kernel engineer at Bootlin
+https://bootlin.com

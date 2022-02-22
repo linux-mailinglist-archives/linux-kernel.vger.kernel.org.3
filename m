@@ -2,64 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 465A34BF69E
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 11:51:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BAC4D4BF693
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 11:49:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231425AbiBVKua (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 05:50:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54336 "EHLO
+        id S231485AbiBVKtu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 05:49:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231453AbiBVKuP (ORCPT
+        with ESMTP id S230008AbiBVKtq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 05:50:15 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3689515C645
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 02:49:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645526989; x=1677062989;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=AH3i71adBJa4cIL5KGhl6be44uWOrFukTl0Y59xqeRg=;
-  b=XFPh9ybR4gox1puHqGhHXM71kb8dAzdqEEKO3pCUEFT12A4HU8ghwv0p
-   K2z7BzORKtohjDrvHBOu8+/pPPeFCk1KxHxpevsUQd2gMgNgbftKdTcvB
-   tjbBp3U0vJit2VnFMQ1znB0Z1MW29lkQsECZwqJAEY/c6XqdWmD99RvOQ
-   nIykC5AI3WwUXcOF31FONAoMrl8SW3g2krKjmTsLNx1o2i3hAshoZ41Yd
-   c6Imrmx0VEgUdgPgZGzEI7SjYbxHmIA6wRlr6ZyGlk+YKmg5lcaA6/Ayt
-   FiP/kyGGdeb8hmduCOEPYX0xGlWxqimKIEVKp6dh1nqBBWBwInB3MNIFJ
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10265"; a="250489675"
-X-IronPort-AV: E=Sophos;i="5.88,387,1635231600"; 
-   d="scan'208";a="250489675"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2022 02:49:48 -0800
-X-IronPort-AV: E=Sophos;i="5.88,387,1635231600"; 
-   d="scan'208";a="706569681"
-Received: from sannilnx.jer.intel.com ([10.12.231.79])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2022 02:49:45 -0800
-From:   Alexander Usyskin <alexander.usyskin@intel.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
-Cc:     Tomas Winkler <tomas.winkler@intel.com>,
-        Alexander Usyskin <alexander.usyskin@intel.com>,
-        Vitaly Lubart <vitaly.lubart@intel.com>,
-        intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 7/7] mei: extend timeouts on slow devices.
-Date:   Tue, 22 Feb 2022 12:48:54 +0200
-Message-Id: <20220222104854.3188643-8-alexander.usyskin@intel.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220222104854.3188643-1-alexander.usyskin@intel.com>
-References: <20220222104854.3188643-1-alexander.usyskin@intel.com>
+        Tue, 22 Feb 2022 05:49:46 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9F47C085A;
+        Tue, 22 Feb 2022 02:49:20 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id D8A971F41027
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1645526959;
+        bh=TpRiUd7AL73EBQsM0SJNQxUrB36YF2YMbGieardk/+k=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=cu9jRc8W3tQAgoKDyPqKIA00eaYPYaRG2nU5KgMaxhcZG9Hz3ZTWXLNhzq/SYtdIz
+         55ZWHqvIHS8HM9Qzxx14GBxEDxcRkQXDIc9J7vbRgz/p3hW2hyCxjnyrg9G531evir
+         J99v95OzGdgSJC6tz/G6+XpuN60Yxmr2rp2D6K8kmkGXOmnh9AbAnHLLAoD9aBgGJU
+         Y7xOjC1Ny/Fuh4miSKiqfZcrvfzMTUgS7hQ8eg8ahzoU9oHt3+nNx/lXgXiss1H4Zh
+         NUtObhA+fFB1tWP80eBMFMH4q3JLTbBtyskE9JJieJNdNxirxPR42uym4ZPvcrSut3
+         CN2f2QSntDrgQ==
+Message-ID: <2e994be0-8b60-a3dc-2ab7-34d93192dc09@collabora.com>
+Date:   Tue, 22 Feb 2022 11:49:16 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [PATCH V2 4/6] spi: mediatek: add spi memory support
+Content-Language: en-US
+To:     Leilk Liu <leilk.liu@mediatek.com>, Mark Brown <broonie@kernel.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
+        linux-mediatek@lists.infradead.org
+References: <20220221040717.3729-1-leilk.liu@mediatek.com>
+ <20220221040717.3729-5-leilk.liu@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220221040717.3729-5-leilk.liu@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,479 +58,355 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Parametrize operational timeouts in order
-to support slow firmware on some graphic devices.
+Il 21/02/22 05:07, Leilk Liu ha scritto:
+> this patch add the support of spi-mem.
+> 
+> Signed-off-by: Leilk Liu <leilk.liu@mediatek.com>
+> ---
+>   drivers/spi/spi-mt65xx.c | 310 ++++++++++++++++++++++++++++++++++++++-
+>   1 file changed, 309 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/spi/spi-mt65xx.c b/drivers/spi/spi-mt65xx.c
+> index 5fa677a589a4..852fc008329a 100644
+> --- a/drivers/spi/spi-mt65xx.c
+> +++ b/drivers/spi/spi-mt65xx.c
+> @@ -17,6 +17,7 @@
+>   #include <linux/platform_data/spi-mt65xx.h>
+>   #include <linux/pm_runtime.h>
+>   #include <linux/spi/spi.h>
+> +#include <linux/spi/spi-mem.h>
+>   #include <linux/dma-mapping.h>
+>   
+>   #define SPI_CFG0_REG                      0x0000
+> @@ -75,8 +76,21 @@
+>   #define SPI_CMD_IPM_GET_TICKDLY_OFFSET    22
+>   
+>   #define SPI_CMD_IPM_GET_TICKDLY_MASK	GENMASK(24, 22)
+> +
+> +#define PIN_MODE_CFG(x)	((x) / 2)
+> +
+> +#define SPI_CFG3_IPM_PIN_MODE_OFFSET		0
+>   #define SPI_CFG3_IPM_HALF_DUPLEX_DIR		BIT(2)
+>   #define SPI_CFG3_IPM_HALF_DUPLEX_EN		BIT(3)
+> +#define SPI_CFG3_IPM_XMODE_EN			BIT(4)
+> +#define SPI_CFG3_IPM_NODATA_FLAG		BIT(5)
+> +#define SPI_CFG3_IPM_CMD_BYTELEN_OFFSET		8
+> +#define SPI_CFG3_IPM_ADDR_BYTELEN_OFFSET	12
+> +
+> +#define SPI_CFG3_IPM_CMD_PIN_MODE_MASK		GENMASK(1, 0)
+> +#define SPI_CFG3_IPM_CMD_BYTELEN_MASK		GENMASK(11, 8)
+> +#define SPI_CFG3_IPM_ADDR_BYTELEN_MASK		GENMASK(15, 12)
+> +
+>   #define MT8173_SPI_MAX_PAD_SEL 3
+>   
+>   #define MTK_SPI_PAUSE_INT_STATUS 0x2
+> @@ -87,6 +101,8 @@
+>   #define MTK_SPI_MAX_FIFO_SIZE 32U
+>   #define MTK_SPI_PACKET_SIZE 1024
+>   #define MTK_SPI_IPM_PACKET_SIZE SZ_64K
+> +#define MTK_SPI_IPM_PACKET_LOOP SZ_256
+> +
+>   #define MTK_SPI_32BITS_MASK  (0xffffffff)
+>   
+>   #define DMA_ADDR_EXT_BITS (36)
+> @@ -104,7 +120,8 @@ struct mtk_spi_compatible {
+>   	bool no_need_unprepare;
+>   	/* IPM design improve some single mode features */
+>   	bool ipm_design;
+> -
+> +	/* IPM design that support quad mode */
+> +	bool support_quad;
+>   };
+>   
+>   struct mtk_spi {
+> @@ -120,6 +137,11 @@ struct mtk_spi {
+>   	u32 tx_sgl_len, rx_sgl_len;
+>   	const struct mtk_spi_compatible *dev_comp;
+>   	u32 spi_clk_hz;
+> +	struct completion spimem_done;
+> +	bool use_spimem;
+> +	struct device *dev;
+> +	dma_addr_t tx_dma;
+> +	dma_addr_t rx_dma;
+>   };
+>   
+>   static const struct mtk_spi_compatible mtk_common_compat;
+> @@ -134,6 +156,13 @@ static const struct mtk_spi_compatible ipm_compat_single = {
+>   	.ipm_design = true,
+>   };
+>   
+> +static const struct mtk_spi_compatible ipm_compat_quad = {
+> +	.enhance_timing = true,
+> +	.dma_ext = true,
+> +	.ipm_design = true,
+> +	.support_quad = true,
+> +};
+> +
+>   static const struct mtk_spi_compatible mt6765_compat = {
+>   	.need_pad_sel = true,
+>   	.must_tx = true,
+> @@ -178,6 +207,9 @@ static const struct of_device_id mtk_spi_of_match[] = {
+>   	{ .compatible = "mediatek,ipm-spi-single",
+>   		.data = (void *)&ipm_compat_single,
+>   	},
+> +	{ .compatible = "mediatek,ipm-spi-quad",
+> +		.data = (void *)&ipm_compat_quad,
+> +	},
+>   	{ .compatible = "mediatek,mt2701-spi",
+>   		.data = (void *)&mtk_common_compat,
+>   	},
+> @@ -694,6 +726,13 @@ static irqreturn_t mtk_spi_interrupt(int irq, void *dev_id)
+>   	else
+>   		mdata->state = MTK_SPI_IDLE;
+>   
+> +	/* SPI-MEM ops */
+> +	if (mdata->use_spimem) {
+> +		complete(&mdata->spimem_done);
+> +
+> +		return IRQ_HANDLED;
+> +	}
+> +
 
-Signed-off-by: Alexander Usyskin <alexander.usyskin@intel.com>
-Signed-off-by: Tomas Winkler <tomas.winkler@intel.com>
----
- drivers/misc/mei/bus-fixup.c |  3 +--
- drivers/misc/mei/client.c    | 14 +++++++-------
- drivers/misc/mei/gsc-me.c    |  2 +-
- drivers/misc/mei/hbm.c       | 12 ++++++------
- drivers/misc/mei/hw-me.c     | 30 ++++++++++++++++--------------
- drivers/misc/mei/hw-me.h     |  2 +-
- drivers/misc/mei/hw-txe.c    |  2 +-
- drivers/misc/mei/hw.h        |  5 +++++
- drivers/misc/mei/init.c      | 19 ++++++++++++++++++-
- drivers/misc/mei/main.c      |  2 +-
- drivers/misc/mei/mei_dev.h   | 16 ++++++++++++++++
- drivers/misc/mei/pci-me.c    |  2 +-
- 12 files changed, 74 insertions(+), 35 deletions(-)
+I would instead make a new ISR for the SPI-MEM case... as you're bypassing the
+entire mtk_spi_interrupt() function like that.
 
-diff --git a/drivers/misc/mei/bus-fixup.c b/drivers/misc/mei/bus-fixup.c
-index 59506ba6fc48..24e91a9ea558 100644
---- a/drivers/misc/mei/bus-fixup.c
-+++ b/drivers/misc/mei/bus-fixup.c
-@@ -164,7 +164,6 @@ static int mei_osver(struct mei_cl_device *cldev)
- 			    sizeof(struct mkhi_fw_ver))
- #define MKHI_FWVER_LEN(__num) (sizeof(struct mkhi_msg_hdr) + \
- 			       sizeof(struct mkhi_fw_ver_block) * (__num))
--#define MKHI_RCV_TIMEOUT 500 /* receive timeout in msec */
- static int mei_fwver(struct mei_cl_device *cldev)
- {
- 	char buf[MKHI_FWVER_BUF_LEN];
-@@ -187,7 +186,7 @@ static int mei_fwver(struct mei_cl_device *cldev)
- 
- 	ret = 0;
- 	bytes_recv = __mei_cl_recv(cldev->cl, buf, sizeof(buf), NULL, 0,
--				   MKHI_RCV_TIMEOUT);
-+				   cldev->bus->timeouts.mkhi_recv);
- 	if (bytes_recv < 0 || (size_t)bytes_recv < MKHI_FWVER_LEN(1)) {
- 		/*
- 		 * Should be at least one version block,
-diff --git a/drivers/misc/mei/client.c b/drivers/misc/mei/client.c
-index 06734670a732..5cdc78b68044 100644
---- a/drivers/misc/mei/client.c
-+++ b/drivers/misc/mei/client.c
-@@ -870,7 +870,7 @@ static int mei_cl_send_disconnect(struct mei_cl *cl, struct mei_cl_cb *cb)
- 	}
- 
- 	list_move_tail(&cb->list, &dev->ctrl_rd_list);
--	cl->timer_count = MEI_CONNECT_TIMEOUT;
-+	cl->timer_count = dev->timeouts.connect;
- 	mei_schedule_stall_timer(dev);
- 
- 	return 0;
-@@ -945,7 +945,7 @@ static int __mei_cl_disconnect(struct mei_cl *cl)
- 	wait_event_timeout(cl->wait,
- 			   cl->state == MEI_FILE_DISCONNECT_REPLY ||
- 			   cl->state == MEI_FILE_DISCONNECTED,
--			   mei_secs_to_jiffies(MEI_CL_CONNECT_TIMEOUT));
-+			   dev->timeouts.cl_connect);
- 	mutex_lock(&dev->device_lock);
- 
- 	rets = cl->status;
-@@ -1065,7 +1065,7 @@ static int mei_cl_send_connect(struct mei_cl *cl, struct mei_cl_cb *cb)
- 	}
- 
- 	list_move_tail(&cb->list, &dev->ctrl_rd_list);
--	cl->timer_count = MEI_CONNECT_TIMEOUT;
-+	cl->timer_count = dev->timeouts.connect;
- 	mei_schedule_stall_timer(dev);
- 	return 0;
- }
-@@ -1164,7 +1164,7 @@ int mei_cl_connect(struct mei_cl *cl, struct mei_me_client *me_cl,
- 			 cl->state == MEI_FILE_DISCONNECTED ||
- 			 cl->state == MEI_FILE_DISCONNECT_REQUIRED ||
- 			 cl->state == MEI_FILE_DISCONNECT_REPLY),
--			mei_secs_to_jiffies(MEI_CL_CONNECT_TIMEOUT));
-+			dev->timeouts.cl_connect);
- 	mutex_lock(&dev->device_lock);
- 
- 	if (!mei_cl_is_connected(cl)) {
-@@ -1562,7 +1562,7 @@ int mei_cl_notify_request(struct mei_cl *cl,
- 			   cl->notify_en == request ||
- 			   cl->status ||
- 			   !mei_cl_is_connected(cl),
--			   mei_secs_to_jiffies(MEI_CL_CONNECT_TIMEOUT));
-+			   dev->timeouts.cl_connect);
- 	mutex_lock(&dev->device_lock);
- 
- 	if (cl->notify_en != request && !cl->status)
-@@ -2335,7 +2335,7 @@ int mei_cl_dma_alloc_and_map(struct mei_cl *cl, const struct file *fp,
- 	mutex_unlock(&dev->device_lock);
- 	wait_event_timeout(cl->wait,
- 			   cl->dma_mapped || cl->status,
--			   mei_secs_to_jiffies(MEI_CL_CONNECT_TIMEOUT));
-+			   dev->timeouts.cl_connect);
- 	mutex_lock(&dev->device_lock);
- 
- 	if (!cl->dma_mapped && !cl->status)
-@@ -2414,7 +2414,7 @@ int mei_cl_dma_unmap(struct mei_cl *cl, const struct file *fp)
- 	mutex_unlock(&dev->device_lock);
- 	wait_event_timeout(cl->wait,
- 			   !cl->dma_mapped || cl->status,
--			   mei_secs_to_jiffies(MEI_CL_CONNECT_TIMEOUT));
-+			   dev->timeouts.cl_connect);
- 	mutex_lock(&dev->device_lock);
- 
- 	if (cl->dma_mapped && !cl->status)
-diff --git a/drivers/misc/mei/gsc-me.c b/drivers/misc/mei/gsc-me.c
-index ffe9bf980f92..4dfb9afeb4c6 100644
---- a/drivers/misc/mei/gsc-me.c
-+++ b/drivers/misc/mei/gsc-me.c
-@@ -48,7 +48,7 @@ static int mei_gsc_probe(struct auxiliary_device *aux_dev,
- 
- 	device = &aux_dev->dev;
- 
--	dev = mei_me_dev_init(device, cfg);
-+	dev = mei_me_dev_init(device, cfg, adev->slow_fw);
- 	if (IS_ERR(dev)) {
- 		ret = PTR_ERR(dev);
- 		goto err;
-diff --git a/drivers/misc/mei/hbm.c b/drivers/misc/mei/hbm.c
-index cebcca6d6d3e..4ff4dbfd07c0 100644
---- a/drivers/misc/mei/hbm.c
-+++ b/drivers/misc/mei/hbm.c
-@@ -232,7 +232,7 @@ int mei_hbm_start_wait(struct mei_device *dev)
- 	mutex_unlock(&dev->device_lock);
- 	ret = wait_event_timeout(dev->wait_hbm_start,
- 			dev->hbm_state != MEI_HBM_STARTING,
--			mei_secs_to_jiffies(MEI_HBM_TIMEOUT));
-+			dev->timeouts.hbm);
- 	mutex_lock(&dev->device_lock);
- 
- 	if (ret == 0 && (dev->hbm_state <= MEI_HBM_STARTING)) {
-@@ -275,7 +275,7 @@ int mei_hbm_start_req(struct mei_device *dev)
- 	}
- 
- 	dev->hbm_state = MEI_HBM_STARTING;
--	dev->init_clients_timer = MEI_CLIENTS_INIT_TIMEOUT;
-+	dev->init_clients_timer = dev->timeouts.client_init;
- 	mei_schedule_stall_timer(dev);
- 	return 0;
- }
-@@ -316,7 +316,7 @@ static int mei_hbm_dma_setup_req(struct mei_device *dev)
- 	}
- 
- 	dev->hbm_state = MEI_HBM_DR_SETUP;
--	dev->init_clients_timer = MEI_CLIENTS_INIT_TIMEOUT;
-+	dev->init_clients_timer = dev->timeouts.client_init;
- 	mei_schedule_stall_timer(dev);
- 	return 0;
- }
-@@ -351,7 +351,7 @@ static int mei_hbm_capabilities_req(struct mei_device *dev)
- 	}
- 
- 	dev->hbm_state = MEI_HBM_CAP_SETUP;
--	dev->init_clients_timer = MEI_CLIENTS_INIT_TIMEOUT;
-+	dev->init_clients_timer = dev->timeouts.client_init;
- 	mei_schedule_stall_timer(dev);
- 	return 0;
- }
-@@ -385,7 +385,7 @@ static int mei_hbm_enum_clients_req(struct mei_device *dev)
- 		return ret;
- 	}
- 	dev->hbm_state = MEI_HBM_ENUM_CLIENTS;
--	dev->init_clients_timer = MEI_CLIENTS_INIT_TIMEOUT;
-+	dev->init_clients_timer = dev->timeouts.client_init;
- 	mei_schedule_stall_timer(dev);
- 	return 0;
- }
-@@ -751,7 +751,7 @@ static int mei_hbm_prop_req(struct mei_device *dev, unsigned long start_idx)
- 		return ret;
- 	}
- 
--	dev->init_clients_timer = MEI_CLIENTS_INIT_TIMEOUT;
-+	dev->init_clients_timer = dev->timeouts.client_init;
- 	mei_schedule_stall_timer(dev);
- 
- 	return 0;
-diff --git a/drivers/misc/mei/hw-me.c b/drivers/misc/mei/hw-me.c
-index 1eaba035cb2a..bc438e750bbb 100644
---- a/drivers/misc/mei/hw-me.c
-+++ b/drivers/misc/mei/hw-me.c
-@@ -445,7 +445,7 @@ static int mei_me_hw_ready_wait(struct mei_device *dev)
- 	mutex_unlock(&dev->device_lock);
- 	wait_event_timeout(dev->wait_hw_ready,
- 			dev->recvd_hw_ready,
--			mei_secs_to_jiffies(MEI_HW_READY_TIMEOUT));
-+			dev->timeouts.hw_ready);
- 	mutex_lock(&dev->device_lock);
- 	if (!dev->recvd_hw_ready) {
- 		dev_err(dev->dev, "wait hw ready failed\n");
-@@ -707,7 +707,6 @@ static void mei_me_pg_unset(struct mei_device *dev)
- static int mei_me_pg_legacy_enter_sync(struct mei_device *dev)
- {
- 	struct mei_me_hw *hw = to_me_hw(dev);
--	unsigned long timeout = mei_secs_to_jiffies(MEI_PGI_TIMEOUT);
- 	int ret;
- 
- 	dev->pg_event = MEI_PG_EVENT_WAIT;
-@@ -718,7 +717,8 @@ static int mei_me_pg_legacy_enter_sync(struct mei_device *dev)
- 
- 	mutex_unlock(&dev->device_lock);
- 	wait_event_timeout(dev->wait_pg,
--		dev->pg_event == MEI_PG_EVENT_RECEIVED, timeout);
-+		dev->pg_event == MEI_PG_EVENT_RECEIVED,
-+		dev->timeouts.pgi);
- 	mutex_lock(&dev->device_lock);
- 
- 	if (dev->pg_event == MEI_PG_EVENT_RECEIVED) {
-@@ -744,7 +744,6 @@ static int mei_me_pg_legacy_enter_sync(struct mei_device *dev)
- static int mei_me_pg_legacy_exit_sync(struct mei_device *dev)
- {
- 	struct mei_me_hw *hw = to_me_hw(dev);
--	unsigned long timeout = mei_secs_to_jiffies(MEI_PGI_TIMEOUT);
- 	int ret;
- 
- 	if (dev->pg_event == MEI_PG_EVENT_RECEIVED)
-@@ -756,7 +755,8 @@ static int mei_me_pg_legacy_exit_sync(struct mei_device *dev)
- 
- 	mutex_unlock(&dev->device_lock);
- 	wait_event_timeout(dev->wait_pg,
--		dev->pg_event == MEI_PG_EVENT_RECEIVED, timeout);
-+		dev->pg_event == MEI_PG_EVENT_RECEIVED,
-+		dev->timeouts.pgi);
- 	mutex_lock(&dev->device_lock);
- 
- reply:
-@@ -772,7 +772,8 @@ static int mei_me_pg_legacy_exit_sync(struct mei_device *dev)
- 
- 	mutex_unlock(&dev->device_lock);
- 	wait_event_timeout(dev->wait_pg,
--		dev->pg_event == MEI_PG_EVENT_INTR_RECEIVED, timeout);
-+		dev->pg_event == MEI_PG_EVENT_INTR_RECEIVED,
-+		dev->timeouts.pgi);
- 	mutex_lock(&dev->device_lock);
- 
- 	if (dev->pg_event == MEI_PG_EVENT_INTR_RECEIVED)
-@@ -887,8 +888,6 @@ static u32 mei_me_d0i3_unset(struct mei_device *dev)
- static int mei_me_d0i3_enter_sync(struct mei_device *dev)
- {
- 	struct mei_me_hw *hw = to_me_hw(dev);
--	unsigned long d0i3_timeout = mei_secs_to_jiffies(MEI_D0I3_TIMEOUT);
--	unsigned long pgi_timeout = mei_secs_to_jiffies(MEI_PGI_TIMEOUT);
- 	int ret;
- 	u32 reg;
- 
-@@ -910,7 +909,8 @@ static int mei_me_d0i3_enter_sync(struct mei_device *dev)
- 
- 	mutex_unlock(&dev->device_lock);
- 	wait_event_timeout(dev->wait_pg,
--		dev->pg_event == MEI_PG_EVENT_RECEIVED, pgi_timeout);
-+		dev->pg_event == MEI_PG_EVENT_RECEIVED,
-+		dev->timeouts.pgi);
- 	mutex_lock(&dev->device_lock);
- 
- 	if (dev->pg_event != MEI_PG_EVENT_RECEIVED) {
-@@ -930,7 +930,8 @@ static int mei_me_d0i3_enter_sync(struct mei_device *dev)
- 
- 	mutex_unlock(&dev->device_lock);
- 	wait_event_timeout(dev->wait_pg,
--		dev->pg_event == MEI_PG_EVENT_INTR_RECEIVED, d0i3_timeout);
-+		dev->pg_event == MEI_PG_EVENT_INTR_RECEIVED,
-+		dev->timeouts.d0i3);
- 	mutex_lock(&dev->device_lock);
- 
- 	if (dev->pg_event != MEI_PG_EVENT_INTR_RECEIVED) {
-@@ -990,7 +991,6 @@ static int mei_me_d0i3_enter(struct mei_device *dev)
- static int mei_me_d0i3_exit_sync(struct mei_device *dev)
- {
- 	struct mei_me_hw *hw = to_me_hw(dev);
--	unsigned long timeout = mei_secs_to_jiffies(MEI_D0I3_TIMEOUT);
- 	int ret;
- 	u32 reg;
- 
-@@ -1013,7 +1013,8 @@ static int mei_me_d0i3_exit_sync(struct mei_device *dev)
- 
- 	mutex_unlock(&dev->device_lock);
- 	wait_event_timeout(dev->wait_pg,
--		dev->pg_event == MEI_PG_EVENT_INTR_RECEIVED, timeout);
-+		dev->pg_event == MEI_PG_EVENT_INTR_RECEIVED,
-+		dev->timeouts.pgi);
- 	mutex_lock(&dev->device_lock);
- 
- 	if (dev->pg_event != MEI_PG_EVENT_INTR_RECEIVED) {
-@@ -1677,11 +1678,12 @@ EXPORT_SYMBOL_GPL(mei_me_get_cfg);
-  *
-  * @parent: device associated with physical device (pci/platform)
-  * @cfg: per device generation config
-+ * @slow_fw: configure longer timeouts as FW is slow
-  *
-  * Return: The mei_device pointer on success, NULL on failure.
-  */
- struct mei_device *mei_me_dev_init(struct device *parent,
--				   const struct mei_cfg *cfg)
-+				   const struct mei_cfg *cfg, bool slow_fw)
- {
- 	struct mei_device *dev;
- 	struct mei_me_hw *hw;
-@@ -1696,7 +1698,7 @@ struct mei_device *mei_me_dev_init(struct device *parent,
- 	for (i = 0; i < DMA_DSCR_NUM; i++)
- 		dev->dr_dscr[i].size = cfg->dma_size[i];
- 
--	mei_device_init(dev, parent, &mei_me_hw_ops);
-+	mei_device_init(dev, parent, slow_fw, &mei_me_hw_ops);
- 	hw->cfg = cfg;
- 
- 	dev->fw_f_fw_ver_supported = cfg->fw_ver_supported;
-diff --git a/drivers/misc/mei/hw-me.h b/drivers/misc/mei/hw-me.h
-index ca09274ac299..0e9d90808bcf 100644
---- a/drivers/misc/mei/hw-me.h
-+++ b/drivers/misc/mei/hw-me.h
-@@ -131,7 +131,7 @@ enum mei_cfg_idx {
- const struct mei_cfg *mei_me_get_cfg(kernel_ulong_t idx);
- 
- struct mei_device *mei_me_dev_init(struct device *parent,
--				   const struct mei_cfg *cfg);
-+				   const struct mei_cfg *cfg, bool slow_fw);
- 
- int mei_me_pg_enter_sync(struct mei_device *dev);
- int mei_me_pg_exit_sync(struct mei_device *dev);
-diff --git a/drivers/misc/mei/hw-txe.c b/drivers/misc/mei/hw-txe.c
-index 00652c137cc7..fccfa806bd63 100644
---- a/drivers/misc/mei/hw-txe.c
-+++ b/drivers/misc/mei/hw-txe.c
-@@ -1201,7 +1201,7 @@ struct mei_device *mei_txe_dev_init(struct pci_dev *pdev)
- 	if (!dev)
- 		return NULL;
- 
--	mei_device_init(dev, &pdev->dev, &mei_txe_hw_ops);
-+	mei_device_init(dev, &pdev->dev, false, &mei_txe_hw_ops);
- 
- 	hw = to_txe_hw(dev);
- 
-diff --git a/drivers/misc/mei/hw.h b/drivers/misc/mei/hw.h
-index b46077b17114..9381e5c13b4f 100644
---- a/drivers/misc/mei/hw.h
-+++ b/drivers/misc/mei/hw.h
-@@ -16,11 +16,16 @@
- #define MEI_CONNECT_TIMEOUT         3  /* HPS: at least 2 seconds */
- 
- #define MEI_CL_CONNECT_TIMEOUT     15  /* HPS: Client Connect Timeout */
-+#define MEI_CL_CONNECT_TIMEOUT_SLOW 30 /* HPS: Client Connect Timeout, slow FW */
- #define MEI_CLIENTS_INIT_TIMEOUT   15  /* HPS: Clients Enumeration Timeout */
- 
- #define MEI_PGI_TIMEOUT             1  /* PG Isolation time response 1 sec */
- #define MEI_D0I3_TIMEOUT            5  /* D0i3 set/unset max response time */
- #define MEI_HBM_TIMEOUT             1  /* 1 second */
-+#define MEI_HBM_TIMEOUT_SLOW        5  /* 5 second, slow FW */
-+
-+#define MKHI_RCV_TIMEOUT 500 /* receive timeout in msec */
-+#define MKHI_RCV_TIMEOUT_SLOW 10000 /* receive timeout in msec, slow FW */
- 
- /*
-  * FW page size for DMA allocations
-diff --git a/drivers/misc/mei/init.c b/drivers/misc/mei/init.c
-index 873fa96fa29c..88ee5351579f 100644
---- a/drivers/misc/mei/init.c
-+++ b/drivers/misc/mei/init.c
-@@ -354,14 +354,16 @@ bool mei_write_is_idle(struct mei_device *dev)
- EXPORT_SYMBOL_GPL(mei_write_is_idle);
- 
- /**
-- * mei_device_init  -- initialize mei_device structure
-+ * mei_device_init - initialize mei_device structure
-  *
-  * @dev: the mei device
-  * @device: the device structure
-+ * @slow_fw: configure longer timeouts as FW is slow
-  * @hw_ops: hw operations
-  */
- void mei_device_init(struct mei_device *dev,
- 		     struct device *device,
-+		     bool slow_fw,
- 		     const struct mei_hw_ops *hw_ops)
- {
- 	/* setup our list array */
-@@ -399,6 +401,21 @@ void mei_device_init(struct mei_device *dev,
- 	dev->pg_event = MEI_PG_EVENT_IDLE;
- 	dev->ops      = hw_ops;
- 	dev->dev      = device;
-+
-+	dev->timeouts.hw_ready = mei_secs_to_jiffies(MEI_HW_READY_TIMEOUT);
-+	dev->timeouts.connect = MEI_CONNECT_TIMEOUT;
-+	dev->timeouts.client_init = MEI_CLIENTS_INIT_TIMEOUT;
-+	dev->timeouts.pgi = mei_secs_to_jiffies(MEI_PGI_TIMEOUT);
-+	dev->timeouts.d0i3 = mei_secs_to_jiffies(MEI_D0I3_TIMEOUT);
-+	if (slow_fw) {
-+		dev->timeouts.cl_connect = mei_secs_to_jiffies(MEI_CL_CONNECT_TIMEOUT_SLOW);
-+		dev->timeouts.hbm = mei_secs_to_jiffies(MEI_HBM_TIMEOUT_SLOW);
-+		dev->timeouts.mkhi_recv = msecs_to_jiffies(MKHI_RCV_TIMEOUT_SLOW);
-+	} else {
-+		dev->timeouts.cl_connect = mei_secs_to_jiffies(MEI_CL_CONNECT_TIMEOUT);
-+		dev->timeouts.hbm = mei_secs_to_jiffies(MEI_HBM_TIMEOUT);
-+		dev->timeouts.mkhi_recv = msecs_to_jiffies(MKHI_RCV_TIMEOUT);
-+	}
- }
- EXPORT_SYMBOL_GPL(mei_device_init);
- 
-diff --git a/drivers/misc/mei/main.c b/drivers/misc/mei/main.c
-index 786f7c8f7f61..261939b945ef 100644
---- a/drivers/misc/mei/main.c
-+++ b/drivers/misc/mei/main.c
-@@ -571,7 +571,7 @@ static int mei_ioctl_connect_vtag(struct file *file,
- 				    cl->state == MEI_FILE_DISCONNECTED ||
- 				    cl->state == MEI_FILE_DISCONNECT_REQUIRED ||
- 				    cl->state == MEI_FILE_DISCONNECT_REPLY),
--				   mei_secs_to_jiffies(MEI_CL_CONNECT_TIMEOUT));
-+				   dev->timeouts.cl_connect);
- 		mutex_lock(&dev->device_lock);
- 	}
- 
-diff --git a/drivers/misc/mei/mei_dev.h b/drivers/misc/mei/mei_dev.h
-index 694f866f87ef..16f59b3a45fc 100644
---- a/drivers/misc/mei/mei_dev.h
-+++ b/drivers/misc/mei/mei_dev.h
-@@ -415,6 +415,17 @@ struct mei_fw_version {
- 
- #define MEI_MAX_FW_VER_BLOCKS 3
- 
-+struct mei_dev_timeouts {
-+	unsigned long hw_ready; /* Timeout on ready message, in jiffies */
-+	int connect; /* HPS: at least 2 seconds, in seconds */
-+	unsigned long cl_connect; /* HPS: Client Connect Timeout, in jiffies */
-+	int client_init; /* HPS: Clients Enumeration Timeout, in seconds */
-+	unsigned long pgi; /* PG Isolation time response, in jiffies */
-+	unsigned int d0i3; /* D0i3 set/unset max response time, in jiffies */
-+	unsigned long hbm; /* HBM operation timeout, in jiffies */
-+	unsigned long mkhi_recv; /* receive timeout, in jiffies */
-+};
-+
- /**
-  * struct mei_device -  MEI private device struct
-  *
-@@ -480,6 +491,8 @@ struct mei_fw_version {
-  * @allow_fixed_address: allow user space to connect a fixed client
-  * @override_fixed_address: force allow fixed address behavior
-  *
-+ * @timeouts: actual timeout values
-+ *
-  * @reset_work  : work item for the device reset
-  * @bus_rescan_work : work item for the bus rescan
-  *
-@@ -568,6 +581,8 @@ struct mei_device {
- 	bool allow_fixed_address;
- 	bool override_fixed_address;
- 
-+	struct mei_dev_timeouts timeouts;
-+
- 	struct work_struct reset_work;
- 	struct work_struct bus_rescan_work;
- 
-@@ -632,6 +647,7 @@ static inline u32 mei_slots2data(int slots)
-  */
- void mei_device_init(struct mei_device *dev,
- 		     struct device *device,
-+		     bool slow_fw,
- 		     const struct mei_hw_ops *hw_ops);
- int mei_reset(struct mei_device *dev);
- int mei_start(struct mei_device *dev);
-diff --git a/drivers/misc/mei/pci-me.c b/drivers/misc/mei/pci-me.c
-index 3a45aaf002ac..4ac163131be8 100644
---- a/drivers/misc/mei/pci-me.c
-+++ b/drivers/misc/mei/pci-me.c
-@@ -206,7 +206,7 @@ static int mei_me_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
- 	}
- 
- 	/* allocates and initializes the mei dev structure */
--	dev = mei_me_dev_init(&pdev->dev, cfg);
-+	dev = mei_me_dev_init(&pdev->dev, cfg, false);
- 	if (!dev) {
- 		err = -ENOMEM;
- 		goto end;
--- 
-2.32.0
+Example:
 
+static void mtk_spi_check_and_set_state(struct mtk_spi *mdata)
+{
+	u32 reg_val;
+
+	reg_val = readl(mdata->base + SPI_STATUS0_REG);
+
+	if (reg_val & MTK_SPI_PAUSE_INT_STATUS)
+
+		mdata->state = MTK_SPI_PAUSED;
+
+	else
+
+		mdata->state = MTK_SPI_IDLE;
+}
+
+static irqreturn_t mtk_spi_interrupt(int irq, void *dev_id)
+
+{
+	u32 cmd, reg_val, cnt, remainder, len;
+
+	struct spi_master *master = dev_id;
+
+	struct mtk_spi *mdata = spi_master_get_devdata(master);
+
+	struct spi_transfer *trans = mdata->cur_transfer;
+
+	mtk_spi_check_and_set_state(mdata);
+
+	if (!master->can_dma(........
+	.... blurb...
+}
+
+static irqreturn_t mtk_spimem_interrupt(int irq, void *dev_id)
+{
+	struct spi_master *master = dev_id;
+
+	struct mtk_spi *mdata = spi_master_get_devdata(master);
+
+	mtk_spi_check_and_set_state(mdata);
+	complete(&mdata->spimem_done);
+
+	return IRQ_HANDLED;
+}
+
+... of course, in mtk_spi_probe(), you would do something like
+
+if (mdata->use_spimem)
+	ret = devm_request_irq(&pdev->dev, irq, mtk_spimem_interrupt,
+		...... blah ......
+else
+	ret = devm_request_irq(&pdev->dev, irq, mtk_spi_interrupt,
+		..... blah ......
+
+This way, you're separating the two - increasing human readability and showing
+the simplifications (in that regard) in the IPM IP's SPI-MEM handling.
+
+>   	if (!master->can_dma(master, NULL, trans)) {
+>   		if (trans->rx_buf) {
+>   			cnt = mdata->xfer_len / 4;
+> @@ -777,6 +816,266 @@ static irqreturn_t mtk_spi_interrupt(int irq, void *dev_id)
+>   	return IRQ_HANDLED;
+>   }
+>   
+> +static int mtk_spi_mem_adjust_op_size(struct spi_mem *mem,
+> +				      struct spi_mem_op *op)
+> +{
+> +	int opcode_len;
+> +
+> +	if (op->data.dir != SPI_MEM_NO_DATA) {
+> +		opcode_len = 1 + op->addr.nbytes + op->dummy.nbytes;
+> +		if (opcode_len + op->data.nbytes > MTK_SPI_IPM_PACKET_SIZE) {
+> +			op->data.nbytes = MTK_SPI_IPM_PACKET_SIZE - opcode_len;
+> +			/* force data buffer dma-aligned. */
+> +			op->data.nbytes -= op->data.nbytes % 4;
+> +		}
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static bool mtk_spi_mem_supports_op(struct spi_mem *mem,
+> +				    const struct spi_mem_op *op)
+> +{
+> +	if (op->data.buswidth > 4 || op->addr.buswidth > 4 ||
+> +	    op->dummy.buswidth > 4 || op->cmd.buswidth > 4)
+> +		return false;
+> +
+> +	if (op->addr.nbytes && op->dummy.nbytes &&
+> +	    op->addr.buswidth != op->dummy.buswidth)
+> +		return false;
+> +
+> +	if (op->addr.nbytes + op->dummy.nbytes > 16)
+> +		return false;
+> +
+> +	if (op->data.nbytes > MTK_SPI_IPM_PACKET_SIZE) {
+> +		if (op->data.nbytes / MTK_SPI_IPM_PACKET_SIZE >
+> +		    MTK_SPI_IPM_PACKET_LOOP ||
+> +		    op->data.nbytes % MTK_SPI_IPM_PACKET_SIZE != 0)
+> +			return false;
+> +	}
+> +
+> +	return true;
+> +}
+> +
+> +static void mtk_spi_mem_setup_dma_xfer(struct spi_master *master,
+> +				       const struct spi_mem_op *op)
+> +{
+> +	struct mtk_spi *mdata = spi_master_get_devdata(master);
+> +
+> +	writel((u32)(mdata->tx_dma & MTK_SPI_32BITS_MASK),
+> +	       mdata->base + SPI_TX_SRC_REG);
+> +#ifdef CONFIG_ARCH_DMA_ADDR_T_64BIT
+> +	if (mdata->dev_comp->dma_ext)
+> +		writel((u32)(mdata->tx_dma >> 32),
+> +		       mdata->base + SPI_TX_SRC_REG_64);
+> +#endif
+> +
+> +	if (op->data.dir == SPI_MEM_DATA_IN) {
+> +		writel((u32)(mdata->rx_dma & MTK_SPI_32BITS_MASK),
+> +		       mdata->base + SPI_RX_DST_REG);
+> +#ifdef CONFIG_ARCH_DMA_ADDR_T_64BIT
+> +		if (mdata->dev_comp->dma_ext)
+> +			writel((u32)(mdata->rx_dma >> 32),
+> +			       mdata->base + SPI_RX_DST_REG_64);
+> +#endif
+> +	}
+> +}
+> +
+> +static int mtk_spi_transfer_wait(struct spi_mem *mem,
+> +				 const struct spi_mem_op *op)
+> +{
+> +	struct mtk_spi *mdata = spi_master_get_devdata(mem->spi->master);
+> +	unsigned long long ms = 1;
+
+Initializing ms to 1 here is useless, as you're anyway reinitializing it
+right after. I would do it as following:
+
+u64 ms = 8000LL;
+
+if (op->data.dir == SPI_MEM_NO_DATA)
+	ms *= 32;
+else
+	ms *= op->data.nbytes;
+
+Besides, can you please add a comment to the code explaining why the
+reason for the waits (why 8, why 1000, why 32)?
+
+> +
+> +	if (op->data.dir == SPI_MEM_NO_DATA)
+> +		ms = 8LL * 1000LL * 32;
+> +	else
+> +		ms = 8LL * 1000LL * op->data.nbytes;
+> +	do_div(ms, mem->spi->max_speed_hz);
+
+I appreciate the usage of safe division helpers, but this is the wrong one:
+you have a unsigned long long (64-bits) dividend and a u32 divisor, so the
+right function to use here is div_u64().
+
+	ms = div_u64(ms, mem->spi->max_speed_hz);
+
+> +	ms += ms + 1000; /* 1s tolerance */
+> +
+> +	if (ms > UINT_MAX)
+> +		ms = UINT_MAX;
+> +
+> +	if (!wait_for_completion_timeout(&mdata->spimem_done,
+> +					 msecs_to_jiffies(ms))) {
+> +		dev_err(mdata->dev, "spi-mem transfer timeout\n");
+> +		return -ETIMEDOUT;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int mtk_spi_mem_exec_op(struct spi_mem *mem,
+> +			       const struct spi_mem_op *op)
+> +{
+> +	struct mtk_spi *mdata = spi_master_get_devdata(mem->spi->master);
+> +	u32 reg_val, nio = 1, tx_size;
+> +	char *tx_tmp_buf, *rx_tmp_buf;
+> +	int ret = 0;
+> +
+> +	mdata->use_spimem = true;
+> +	reinit_completion(&mdata->spimem_done);
+> +
+> +	mtk_spi_reset(mdata);
+> +	mtk_spi_hw_init(mem->spi->master, mem->spi);
+> +	mtk_spi_prepare_transfer(mem->spi->master, mem->spi->max_speed_hz);
+> +
+> +	reg_val = readl(mdata->base + SPI_CFG3_IPM_REG);
+> +	/* opcode byte len */
+> +	reg_val &= ~SPI_CFG3_IPM_CMD_BYTELEN_MASK;
+> +	reg_val |= 1 << SPI_CFG3_IPM_CMD_BYTELEN_OFFSET;
+> +
+> +	/* addr & dummy byte len */
+> +	reg_val &= ~SPI_CFG3_IPM_ADDR_BYTELEN_MASK;
+> +	if (op->addr.nbytes || op->dummy.nbytes)
+> +		reg_val |= (op->addr.nbytes + op->dummy.nbytes) <<
+> +			    SPI_CFG3_IPM_ADDR_BYTELEN_OFFSET;
+> +
+> +	/* data byte len */
+> +	if (op->data.dir == SPI_MEM_NO_DATA) {
+> +		reg_val |= SPI_CFG3_IPM_NODATA_FLAG;
+> +		writel(0, mdata->base + SPI_CFG1_REG);
+> +	} else {
+> +		reg_val &= ~SPI_CFG3_IPM_NODATA_FLAG;
+> +		mdata->xfer_len = op->data.nbytes;
+> +		mtk_spi_setup_packet(mem->spi->master);
+> +	}
+> +
+> +	if (op->addr.nbytes || op->dummy.nbytes) {
+> +		if (op->addr.buswidth == 1 || op->dummy.buswidth == 1)
+> +			reg_val |= SPI_CFG3_IPM_XMODE_EN;
+> +		else
+> +			reg_val &= ~SPI_CFG3_IPM_XMODE_EN;
+> +	}
+> +
+> +	if (op->addr.buswidth == 2 ||
+> +	    op->dummy.buswidth == 2 ||
+> +	    op->data.buswidth == 2)
+> +		nio = 2;
+> +	else if (op->addr.buswidth == 4 ||
+> +		 op->dummy.buswidth == 4 ||
+> +		 op->data.buswidth == 4)
+> +		nio = 4;
+
+	else
+		nio = 1;
+
+...so that you can avoid double initialization of the `nio` variable.
+
+> +
+> +	reg_val &= ~SPI_CFG3_IPM_CMD_PIN_MODE_MASK;
+> +	reg_val |= PIN_MODE_CFG(nio) << SPI_CFG3_IPM_PIN_MODE_OFFSET;
+> +
+
+Regards,
+Angelo

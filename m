@@ -2,213 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BBBD4BF03F
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 05:10:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B0C294BF025
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 05:10:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240138AbiBVDpk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 22:45:40 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58554 "EHLO
+        id S240145AbiBVDuL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 22:50:11 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234459AbiBVDpi (ORCPT
+        with ESMTP id S229789AbiBVDuK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 22:45:38 -0500
-Received: from conssluserg-01.nifty.com (conssluserg-01.nifty.com [210.131.2.80])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30DAF240BE;
-        Mon, 21 Feb 2022 19:45:13 -0800 (PST)
-Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181]) (authenticated)
-        by conssluserg-01.nifty.com with ESMTP id 21M3j0i4032480;
-        Tue, 22 Feb 2022 12:45:00 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-01.nifty.com 21M3j0i4032480
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1645501501;
-        bh=R2Wl9mO/uTrVsBj3vIXpY3Af06YT9dbiQUgtaSK3yWQ=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=q17fLXl+la77Rw/OrgU35Cu2+M6dQpaFFxeQIShi5qMbxwrLLQ4XwsNXda/1wLsFK
-         L9leRNYy8wSJsm1+4okwZe9UeIfSG/yg8qHKbv6IvHlGLuycKI+8YlxT+nqRgV44xN
-         jrDffJukNGP8CoZc3uku9HGWj4i3UufkoGbIw+USqbipeP/L4heBzmsTKNUwmQvFcR
-         lFx5Ouvwjs1ykv0LRtXzvkRGhVc7gebaKVO76/xx7ZmS/lZDCMRjW49u19NCLnRJTv
-         AQOIdXgGfADY+mVtKk9COKRaUIAuOk80B8GrY1+UZs9kZMO5+LfkbS4uIhTfrsLIr+
-         z/7/r7AwdHybw==
-X-Nifty-SrcIP: [209.85.210.181]
-Received: by mail-pf1-f181.google.com with SMTP id i21so10635792pfd.13;
-        Mon, 21 Feb 2022 19:45:00 -0800 (PST)
-X-Gm-Message-State: AOAM530ubKckJqYXKNUpdbd99N07fyGOEC21zhcg7JnhCTZIn7+rU1rE
-        r60mrSFlx5bOimWPY4JATIuq9IuF4V4ff5EhXf8=
-X-Google-Smtp-Source: ABdhPJwkFaH664Eu2+lSbukb04IdKTOs/E9jWk6zh/0pu8hwLH3fAWQ9gngSTM58BpK+Q6LI9wE3BorVRbBBVnwdQlM=
-X-Received: by 2002:a05:6a00:24c7:b0:4e1:cb76:32d1 with SMTP id
- d7-20020a056a0024c700b004e1cb7632d1mr21840603pfv.36.1645501499642; Mon, 21
- Feb 2022 19:44:59 -0800 (PST)
+        Mon, 21 Feb 2022 22:50:10 -0500
+Received: from mail-ed1-x544.google.com (mail-ed1-x544.google.com [IPv6:2a00:1450:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A0F624BD7;
+        Mon, 21 Feb 2022 19:49:45 -0800 (PST)
+Received: by mail-ed1-x544.google.com with SMTP id bq11so12341569edb.2;
+        Mon, 21 Feb 2022 19:49:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=s2XSMVj1kILwt68WwMudYnmLz1ROeiH1LOdTavQMelo=;
+        b=oOHR9c5Wf55GRsvLNqdswIBJpUBSrMPSg/Ou0HlmCVg3+8TmzRHE/UrAYQVyUZK4ia
+         PeMeq+IddUMoWrYYqW1GFiJIZgOFcJSJJMwbWjxoPN8fMy1I/S/SVTyClbjCS0fkhPnv
+         5H5NpizsrTuknRRRBNSbJOCf6CINwgYZ1QIUSM2ursPxRP8am7hs5E6Auv0iGbqDvA4F
+         MOMkEDB8bLVO0QxqMPNixoLe/XA9AZiKakFXeZ+StN1UA5cJX5Ox6bnX8GFhTAc6aiIW
+         quke8hAzfnMNzocvLbiDdJ0zgA4WRA2FYgQqPoj/jj13aXHbOV9FgbzXufxrUlxAV8UV
+         k+lQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=s2XSMVj1kILwt68WwMudYnmLz1ROeiH1LOdTavQMelo=;
+        b=IQyEqMNCBoTAJYr2ynr6SMzH1iC97sz+BgxnfPMyYyo2aQMmeAVUnk4YkSUBudc9T/
+         28sZRRKnZpUdebLQ6aBL3xHmxQKsDy2OYCnVTaaauVPzCNLG3keZHe1Ca4FXpQbU6lJ3
+         xiqUVZl5z5vW07kv/d7naSaeyhuJsCNIkmdoANfKiWB/xGjjMkOol8IIut+cQknxbzWR
+         oFAFybGsT7WfgajD7Kur4kflJNsCOh9seR1gMz6tR7GYY5lYyM805Cp440mt6V18CIfd
+         1odtFiMCV5P5EWa9JOH7FYO0hsYjnnEMxG+YXd9lTjVsbVxYheoJrnr1gXKMrbVAPrRU
+         r04A==
+X-Gm-Message-State: AOAM533o4x0yNH+US3WZlhvOfg3BQwvxfKvxPu/DT6c8QsuamQASRRKi
+        0NoOHQwNGxeTnF1ApbNxXjPT47RlIUnk3jit0nE=
+X-Google-Smtp-Source: ABdhPJxgnDvWvb2diDocMe2RJQoCH11Grw1/0dR5EAwDrSr/Bu+/DWHw7xgWPaYTAGyIegHH88P11WecFKe62GKOOTM=
+X-Received: by 2002:a05:6402:17c8:b0:406:80a3:5cad with SMTP id
+ s8-20020a05640217c800b0040680a35cadmr24039051edy.388.1645501783973; Mon, 21
+ Feb 2022 19:49:43 -0800 (PST)
 MIME-Version: 1.0
-References: <20220221164316.113489-1-masahiroy@kernel.org> <04d06889d8ea41589628995a6cb53874@AcuMS.aculab.com>
-In-Reply-To: <04d06889d8ea41589628995a6cb53874@AcuMS.aculab.com>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Tue, 22 Feb 2022 12:44:21 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAQgucSQQLauRoaFza6YHGMBrSr+-ag1m=bmWXas5WEb0A@mail.gmail.com>
-Message-ID: <CAK7LNAQgucSQQLauRoaFza6YHGMBrSr+-ag1m=bmWXas5WEb0A@mail.gmail.com>
-Subject: Re: [PATCH] fixdep: use fflush() and ferror() to ensure successful
- write to files
-To:     David Laight <David.Laight@aculab.com>
-Cc:     "linux-kbuild@vger.kernel.org" <linux-kbuild@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>
+References: <20220220155705.194266-1-imagedong@tencent.com>
+ <20220220155705.194266-2-imagedong@tencent.com> <3183c3c9-6644-b2de-885e-9e3699138102@kernel.org>
+In-Reply-To: <3183c3c9-6644-b2de-885e-9e3699138102@kernel.org>
+From:   Menglong Dong <menglong8.dong@gmail.com>
+Date:   Tue, 22 Feb 2022 11:44:24 +0800
+Message-ID: <CADxym3aMn_h_x0HYopDRu8y_sgRii+=myFtVr8iAYYxJuT2_JA@mail.gmail.com>
+Subject: Re: [PATCH net-next 1/3] net: ip: add skb drop reasons for ip egress path
+To:     David Ahern <dsahern@kernel.org>
+Cc:     Jakub Kicinski <kuba@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        David Miller <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Menglong Dong <imagedong@tencent.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Alexander Lobakin <alobakin@pm.me>,
+        Cong Wang <cong.wang@bytedance.com>, paulb@nvidia.com,
+        Talal Ahmad <talalahmad@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        flyingpeng@tencent.com, Mengen Sun <mengensun@tencent.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Yajun Deng <yajun.deng@linux.dev>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 22, 2022 at 7:33 AM David Laight <David.Laight@aculab.com> wrote:
+On Tue, Feb 22, 2022 at 11:13 AM David Ahern <dsahern@kernel.org> wrote:
 >
-> From: Masahiro Yamada
-> > Sent: 21 February 2022 16:43
-> > To: linux-kbuild@vger.kernel.org
+> On 2/20/22 8:57 AM, menglong8.dong@gmail.com wrote:
+> > From: Menglong Dong <imagedong@tencent.com>
 > >
-> > Checking the return value of (v)printf does not ensure the successful
-> > write to the .cmd file.
+> > Replace kfree_skb() with kfree_skb_reason() in the packet egress path of
+> > IP layer (both IPv4 and IPv6 are considered).
 > >
-> > Call fflush() and ferror() to make sure that everything has been
-> > written to the file.
+> > Following functions are involved:
 > >
-> > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
->
-> Reviewed-by: David Laight <dvid.laight@aculab.com>
->
-> I'll note that you've lost the perror("fixdep").
-> But I suspect that isn't very meaningful.
-> If the disk is full it'd probably get lost anyway.
-
-
-perror() will go to stderr, i.e. tty here.
-So, that is not the issue.
-
-ferror() itself does not set errno here; "man ferror" says,
-"These  functions  should  not  fail  and  do  not set the external
-variable errno"
-
-So, I dropped perror() because I am not sure if any related error
-message is printed here.
-
-Perhaps, errno was set by some of preceding printf() calls,
-but I am not quite sure if it is carried all the way to the end
-of this program.
-
-
-
-
-
-
-
-
->
+> > __ip_queue_xmit()
+> > ip_finish_output()
+> > ip_mc_finish_output()
+> > ip6_output()
+> > ip6_finish_output()
+> > ip6_finish_output2()
+> >
+> > Following new drop reasons are introduced:
+> >
+> > SKB_DROP_REASON_IP_OUTNOROUTES
+> > SKB_DROP_REASON_BPF_CGROUP_EGRESS
+> > SKB_DROP_REASON_IPV6DSIABLED
+> >
+> > Reviewed-by: Mengen Sun <mengensun@tencent.com>
+> > Reviewed-by: Hao Peng <flyingpeng@tencent.com>
+> > Signed-off-by: Menglong Dong <imagedong@tencent.com>
 > > ---
+> >  include/linux/skbuff.h     | 13 +++++++++++++
+> >  include/trace/events/skb.h |  4 ++++
+> >  net/ipv4/ip_output.c       |  6 +++---
+> >  net/ipv6/ip6_output.c      |  6 +++---
+> >  4 files changed, 23 insertions(+), 6 deletions(-)
 > >
-> >  scripts/basic/fixdep.c | 44 ++++++++++++++++--------------------------
-> >  1 file changed, 17 insertions(+), 27 deletions(-)
-> >
-> > diff --git a/scripts/basic/fixdep.c b/scripts/basic/fixdep.c
-> > index 44e887cff49b..fad6f29373a9 100644
-> > --- a/scripts/basic/fixdep.c
-> > +++ b/scripts/basic/fixdep.c
-> > @@ -105,25 +105,6 @@ static void usage(void)
-> >       exit(1);
-> >  }
-> >
-> > -/*
-> > - * In the intended usage of this program, the stdout is redirected to .*.cmd
-> > - * files. The return value of printf() must be checked to catch any error,
-> > - * e.g. "No space left on device".
-> > - */
-> > -static void xprintf(const char *format, ...)
-> > -{
-> > -     va_list ap;
-> > -     int ret;
-> > -
-> > -     va_start(ap, format);
-> > -     ret = vprintf(format, ap);
-> > -     if (ret < 0) {
-> > -             perror("fixdep");
-> > -             exit(1);
-> > -     }
-> > -     va_end(ap);
-> > -}
-> > -
-> >  struct item {
-> >       struct item     *next;
-> >       unsigned int    len;
-> > @@ -189,7 +170,7 @@ static void use_config(const char *m, int slen)
-> >
-> >       define_config(m, slen, hash);
-> >       /* Print out a dependency path from a symbol name. */
-> > -     xprintf("    $(wildcard include/config/%.*s) \\\n", slen, m);
-> > +     printf("    $(wildcard include/config/%.*s) \\\n", slen, m);
-> >  }
-> >
-> >  /* test if s ends in sub */
-> > @@ -318,13 +299,13 @@ static void parse_dep_file(char *m, const char *target)
-> >                                */
-> >                               if (!saw_any_target) {
-> >                                       saw_any_target = 1;
-> > -                                     xprintf("source_%s := %s\n\n",
-> > -                                             target, m);
-> > -                                     xprintf("deps_%s := \\\n", target);
-> > +                                     printf("source_%s := %s\n\n",
-> > +                                            target, m);
-> > +                                     printf("deps_%s := \\\n", target);
-> >                               }
-> >                               is_first_dep = 0;
-> >                       } else {
-> > -                             xprintf("  %s \\\n", m);
-> > +                             printf("  %s \\\n", m);
-> >                       }
-> >
-> >                       buf = read_file(m);
-> > @@ -347,8 +328,8 @@ static void parse_dep_file(char *m, const char *target)
-> >               exit(1);
-> >       }
-> >
-> > -     xprintf("\n%s: $(deps_%s)\n\n", target, target);
-> > -     xprintf("$(deps_%s):\n", target);
-> > +     printf("\n%s: $(deps_%s)\n\n", target, target);
-> > +     printf("$(deps_%s):\n", target);
-> >  }
-> >
-> >  int main(int argc, char *argv[])
-> > @@ -363,11 +344,20 @@ int main(int argc, char *argv[])
-> >       target = argv[2];
-> >       cmdline = argv[3];
-> >
-> > -     xprintf("cmd_%s := %s\n\n", target, cmdline);
-> > +     printf("cmd_%s := %s\n\n", target, cmdline);
-> >
-> >       buf = read_file(depfile);
-> >       parse_dep_file(buf, target);
-> >       free(buf);
-> >
-> > +     fflush(stdout);
-> > +
-> > +     /*
-> > +      * In the intended usage, the stdout is redirected to .*.cmd files.
-> > +      * Call ferror() to catch errors such as "No space left on device".
-> > +      */
-> > +     if (ferror(stdout))
-> > +             exit(1);
-> > +
-> >       return 0;
-> >  }
-> > --
-> > 2.32.0
+> > diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
+> > index a3e90efe6586..c310a4a8fc86 100644
+> > --- a/include/linux/skbuff.h
+> > +++ b/include/linux/skbuff.h
+> > @@ -380,6 +380,19 @@ enum skb_drop_reason {
+> >                                        * the ofo queue, corresponding to
+> >                                        * LINUX_MIB_TCPOFOMERGE
+> >                                        */
+> > +     SKB_DROP_REASON_IP_OUTNOROUTES, /* route lookup failed during
+> > +                                      * packet outputting
+> > +                                      */
 >
-> -
-> Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-> Registration No: 1397386 (Wales)
+> This should be good enough since the name contains OUT.
+>
+> /* route lookup failed */
+>
+> > +     SKB_DROP_REASON_BPF_CGROUP_EGRESS,      /* dropped by eBPF program
+> > +                                              * with type of BPF_PROG_TYPE_CGROUP_SKB
+> > +                                              * and attach type of
+> > +                                              * BPF_CGROUP_INET_EGRESS
+> > +                                              * during packet sending
+> > +                                              */
+>
+> /* dropped by BPF_CGROUP_INET_EGRESS eBPF program */
+>
+> > +     SKB_DROP_REASON_IPV6DSIABLED,   /* IPv6 is disabled on the device,
+> > +                                      * see the doc for disable_ipv6
+> > +                                      * in ip-sysctl.rst for detail
+> > +                                      */
+>
+> Just /* IPv6 is disabled on the device */
+>
+>
+> >       SKB_DROP_REASON_MAX,
+> >  };
+> >
+>
+> > diff --git a/net/ipv4/ip_output.c b/net/ipv4/ip_output.c
+> > index 0c0574eb5f5b..df549b7415fb 100644
+> > --- a/net/ipv4/ip_output.c
+> > +++ b/net/ipv4/ip_output.c
+>
+> This file has other relevant drops. e.g., ip_finish_output2 when a neigh
+> entry can not be created and after skb_gso_segment. The other set for
+> tun/tap devices has SKB_DROP_REASON_SKB_GSO_SEG which can be used for
+> the latter. That set also adds kfree_skb_list_reason for the frag drops.
 >
 
+I tried to add a drop reason for neigh creating fail, but I found it's hard
+to find the root reason, as __neigh_create() can fail in many cases.
+And I'm not sure if there is any help when we get a
+'SKB_DROP_REASON_NEIGH_CREATEFAIL' message.
 
---
-Best Regards
-Masahiro Yamada
+Seems it's hard to make every drop reason accurate, is it ok if we
+use the name 'SKB_DROP_REASON_NEIGH_CREATEFAIL' for
+this path?
+
+>
+> > diff --git a/net/ipv6/ip6_output.c b/net/ipv6/ip6_output.c
+> > index 0c6c971ce0a5..4cd9e5fd25e4 100644
+> > --- a/net/ipv6/ip6_output.c
+> > +++ b/net/ipv6/ip6_output.c
+>
+> Similarly here. The other set should land in the next few days, so you
+> cna put this set on top of it.
+
+Yeah, I can make use of it.
+
+>

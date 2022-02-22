@@ -2,140 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CBDB4BEFE6
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 04:16:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E7094BEFEF
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 04:16:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239462AbiBVCzx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 21:55:53 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34454 "EHLO
+        id S239478AbiBVC4f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 21:56:35 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239444AbiBVCzw (ORCPT
+        with ESMTP id S233030AbiBVC4d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 21:55:52 -0500
-Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6D9025C78
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 18:55:27 -0800 (PST)
-Received: by mail-yb1-xb31.google.com with SMTP id bt13so38196114ybb.2
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 18:55:27 -0800 (PST)
+        Mon, 21 Feb 2022 21:56:33 -0500
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C86125C78;
+        Mon, 21 Feb 2022 18:56:09 -0800 (PST)
+Received: by mail-pf1-x42e.google.com with SMTP id l19so10565209pfu.2;
+        Mon, 21 Feb 2022 18:56:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=flwzoWXjBS1fKxQYSqzor2TYAU8hRShfKYrKLieas1Y=;
-        b=DpG8Z7TGWUvG/BQ+qbHS5epx1Ot08wZ4somVg/8Hv8Ipg4wjnOzU/2zaF7cbkFzGQY
-         DdNH0nh1ltW3b5lUN4eFL8Gr+kU4irEFLTkTgTxJ2dspwBKKVY9OjQKum+lbDZ1YZq3y
-         KjiPhY6gPlTfDnvw6F9YBQwFGxzH4wSBSHj94=
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=uy+63u5eMvVbGphKBYAIAoCM2kDIle1HkZDXPrgQl2A=;
+        b=UPoYStfcx5MwyoGlXvcMj6xzJpvaTdU+mKNlr6MR3PaZ5bN8l8KFJL0DXlMT+JPtJF
+         ougmX4BWAG2fTtn0aMqMzdK7teG0BIhSz/ArBeQrvlHM/svZLA+M+SsPQEurEDWCZD1Q
+         e2yo0bELWZfLXXJUUYFAy0zgaqcF+LGwhi25ezIM130KBuYvVVbFajXOuza/ofUtbBTz
+         hjtBsgjeVgJg0kgDB1pMNUniv0zcDOQl8bRiO6xjs1/KvwVH1M6l3pUQCFd+8rl7KUFj
+         dbmu4cQ9nRASBHaTxOfK0DDHdvoyAJp0S0jyAOsIvXUeDfOen0pcnb3HM4UDO2FhYo4n
+         5lNA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=flwzoWXjBS1fKxQYSqzor2TYAU8hRShfKYrKLieas1Y=;
-        b=VOPKaIxz4xS8uZABUuBpaTWHVpFxU4dvsinlbyOl+0YJn2NPDtOeCBYB9S5dHIMXD+
-         8uJxdzgyxITa70j5TKvab6ZL4f37VGunlqHcdkZfuCGxYB/cojAf2+0/cvtA/YP79mtQ
-         fM2Gh43fvNeZpM6ti0Rzex31jP4yk/Gta22aNX7SIK0vqQg7NZCXp7qrYWZv/IwDBg1U
-         WLJj7NPPhowt4APcAgqRz00qUCnneXP6ASj20efp8v4jxHoiZFikkREaNT6zXn8z0ULw
-         LMqUXICvlb8JuNN1zYQ7ODsLkzQbs2Ht2VoON9+qj6bJK5obKe5TvkJXesw3x2xaITcL
-         r1Tw==
-X-Gm-Message-State: AOAM530GI+oO9EFwg+Ws6kbxP/3PodWZocLduvEy4xzPEpZf4UhdFo3v
-        JMLPqcwReoDkERPFPdgPYqloiCPC2mI1wf2/u7Thrw==
-X-Google-Smtp-Source: ABdhPJzx/1Y7F9nbMupU99Wa5ez7jb/PujfIQdzFN2lV5ICZOAAPdhGexRkhW8sMu/dsmOHX3knv1+MYsXkEzSrU9C4=
-X-Received: by 2002:a25:24d6:0:b0:623:a267:b5ee with SMTP id
- k205-20020a2524d6000000b00623a267b5eemr20997387ybk.278.1645498527071; Mon, 21
- Feb 2022 18:55:27 -0800 (PST)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=uy+63u5eMvVbGphKBYAIAoCM2kDIle1HkZDXPrgQl2A=;
+        b=lfEORVWwuipMMYL42hmBTkdq6sPFRYX4V0Sjl+AiA7iDJwTf1SqTTfI2OsWJAK9eml
+         QJoKGzg6/xZKKzy1+LfSMzFrEMci1RS02iu4W6XlGT4UJlBvXJTEOqoPNT/Vl2qPWFiT
+         REP1igye/GQWHaBK24yWC6HoIrchi8ByoLpmF4bC9nvACPzwMZ1c3rREVw6ZxZVyYLOI
+         DrmG5VsI6c8BQ1fhQeGVrufonDK+Kj01R+ADas3CSrQeBJTf2dZ553sYxqpi/vwwqxew
+         98zOdX/t8+Iphlxxp9qDpNTxe9xNWezZUI8jkiXctP7CM+echfc5QDrm36HVSFZD1THw
+         r9DA==
+X-Gm-Message-State: AOAM531QyMGlrGDzkRlTL2olcLtjxulmHewUdU0XCQLhLL8wp0c5BfFe
+        WwfjiNFThckDWK5F7v2IXeQ=
+X-Google-Smtp-Source: ABdhPJyUYAALWlcX96UrLIq7tISfijKnfu7pGvZvnPt2HZFvLSvYrT3l9p0Pd03YzjYNKOKeXO/IPQ==
+X-Received: by 2002:a05:6a00:148f:b0:4bc:fb2d:4b6f with SMTP id v15-20020a056a00148f00b004bcfb2d4b6fmr22723923pfu.62.1645498569046;
+        Mon, 21 Feb 2022 18:56:09 -0800 (PST)
+Received: from [192.168.1.3] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
+        by smtp.gmail.com with ESMTPSA id j9sm13455031pfj.13.2022.02.21.18.56.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 21 Feb 2022 18:56:08 -0800 (PST)
+Message-ID: <f2dcb930-0b20-8956-14a3-14f8f49f4152@gmail.com>
+Date:   Mon, 21 Feb 2022 18:56:06 -0800
 MIME-Version: 1.0
-References: <20220210141931.291712-1-angelogioacchino.delregno@collabora.com>
- <20220210141931.291712-5-angelogioacchino.delregno@collabora.com> <CAGXv+5GLSnr1rQ_K3Y1Ou3ocoq7cSmv8GMkRCEi4adxewY1dHA@mail.gmail.com>
-In-Reply-To: <CAGXv+5GLSnr1rQ_K3Y1Ou3ocoq7cSmv8GMkRCEi4adxewY1dHA@mail.gmail.com>
-From:   Chen-Yu Tsai <wenst@chromium.org>
-Date:   Tue, 22 Feb 2022 10:55:16 +0800
-Message-ID: <CAGXv+5GyrMnR3Zu9AYT-pkctdEhFibSiX6xuEpS1u_=Zhx3N+Q@mail.gmail.com>
-Subject: Re: [PATCH 4/5] pinctrl: mediatek: common-v1: Commonize spec_pupd callback
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     sean.wang@kernel.org, linus.walleij@linaro.org,
-        matthias.bgg@gmail.com, linux-mediatek@lists.infradead.org,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, kernel@collabora.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Subject: Re: [PATCH v2 net] net: dsa: fix panic when removing unoffloaded port
+ from bridge
+Content-Language: en-US
+To:     =?UTF-8?Q?Alvin_=c5=a0ipraga?= <alvin@pqrs.dk>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        =?UTF-8?Q?Alvin_=c5=a0ipraga?= <alsi@bang-olufsen.dk>
+Cc:     Vladimir Oltean <vladimir.oltean@nxp.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220221203539.310690-1-alvin@pqrs.dk>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20220221203539.310690-1-alvin@pqrs.dk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 21, 2022 at 5:59 PM Chen-Yu Tsai <wenst@chromium.org> wrote:
->
-> On Thu, Feb 10, 2022 at 10:20 PM AngeloGioacchino Del Regno
-> <angelogioacchino.delregno@collabora.com> wrote:
-> >
-> > Reduce code size and duplication by using a common spec_pupd callback,
-> > which is possible to use on all of the pinctrl drivers that are
-> > using the v1 pinctrl-mtk-common code, with the exception of mt8135,
-> > which has a different handling compared to the others.
-> > Since the callback function signature was changed, this had to be
-> > propagated to pinctrl-mt8135's spec_pull_set().
-> >
-> > Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> > ---
->
-> [...]
->
-> > diff --git a/drivers/pinctrl/mediatek/pinctrl-mtk-common.c b/drivers/pinctrl/mediatek/pinctrl-mtk-common.c
-> > index 007da39b68c9..5e1d17512a0d 100644
-> > --- a/drivers/pinctrl/mediatek/pinctrl-mtk-common.c
-> > +++ b/drivers/pinctrl/mediatek/pinctrl-mtk-common.c
-> > @@ -222,9 +222,8 @@ static int mtk_pconf_set_driving(struct mtk_pinctrl *pctl,
-> >  }
-> >
-> >  int mtk_pctrl_spec_pull_set_samereg(struct regmap *regmap,
-> > -               const struct mtk_pin_spec_pupd_set_samereg *pupd_infos,
-> > -               unsigned int info_num, unsigned int pin,
-> > -               unsigned char align, bool isup, unsigned int r1r0)
-> > +               const struct mtk_pinctrl_devdata *devdata,
-> > +               unsigned int pin, bool isup, unsigned int r1r0)
-> >  {
-> >         unsigned int i;
-> >         unsigned int reg_pupd, reg_set, reg_rst;
-> > @@ -232,8 +231,11 @@ int mtk_pctrl_spec_pull_set_samereg(struct regmap *regmap,
-> >         const struct mtk_pin_spec_pupd_set_samereg *spec_pupd_pin;
-> >         bool find = false;
-> >
-> > -       for (i = 0; i < info_num; i++) {
-> > -               if (pin == pupd_infos[i].pin) {
-> > +       if (!devdata->spec_pupd)
-> > +               return -EINVAL;
-> > +
-> > +       for (i = 0; i < devdata->n_spec_pupd; i++) {
-> > +               if (pin == devdata->spec_pupd[i].pin) {
-> >                         find = true;
-> >                         break;
-> >                 }
-> > @@ -242,9 +244,9 @@ int mtk_pctrl_spec_pull_set_samereg(struct regmap *regmap,
-> >         if (!find)
-> >                 return -EINVAL;
-> >
-> > -       spec_pupd_pin = pupd_infos + i;
-> > -       reg_set = spec_pupd_pin->offset + align;
-> > -       reg_rst = spec_pupd_pin->offset + (align << 1);
-> > +       spec_pupd_pin = devdata->spec_pupd + i;
-> > +       reg_set = spec_pupd_pin->offset + devdata->port_align;
-> > +       reg_rst = spec_pupd_pin->offset + (devdata->port_align << 1);
-> >
-> >         if (isup)
-> >                 reg_pupd = reg_rst;
-> > @@ -293,12 +295,13 @@ static int mtk_pconf_set_pull_select(struct mtk_pinctrl *pctl,
-> >          * resistor bit, so we need this special handle.
-> >          */
-> >         if (pctl->devdata->spec_pull_set) {
-> > -               /* For special pins, bias-disable is set by R1R0,
-> > +               /* For special pins, bias-disable is set by R1R0
->
-> Nit: This seems unrelated, and doesn't read correctly either way.
 
-Once removed,
 
-Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
+On 2/21/2022 12:35 PM, Alvin Šipraga wrote:
+> From: Alvin Šipraga <alsi@bang-olufsen.dk>
+> 
+> If a bridged port is not offloaded to the hardware - either because the
+> underlying driver does not implement the port_bridge_{join,leave} ops,
+> or because the operation failed - then its dp->bridge pointer will be
+> NULL when dsa_port_bridge_leave() is called. Avoid dereferncing NULL.
+> 
+> This fixes the following splat when removing a port from a bridge:
+> 
+>   Unable to handle kernel access to user memory outside uaccess routines at virtual address 0000000000000000
+>   Internal error: Oops: 96000004 [#1] PREEMPT_RT SMP
+>   CPU: 3 PID: 1119 Comm: brctl Tainted: G           O      5.17.0-rc4-rt4 #1
+>   Call trace:
+>    dsa_port_bridge_leave+0x8c/0x1e4
+>    dsa_slave_changeupper+0x40/0x170
+>    dsa_slave_netdevice_event+0x494/0x4d4
+>    notifier_call_chain+0x80/0xe0
+>    raw_notifier_call_chain+0x1c/0x24
+>    call_netdevice_notifiers_info+0x5c/0xac
+>    __netdev_upper_dev_unlink+0xa4/0x200
+>    netdev_upper_dev_unlink+0x38/0x60
+>    del_nbp+0x1b0/0x300
+>    br_del_if+0x38/0x114
+>    add_del_if+0x60/0xa0
+>    br_ioctl_stub+0x128/0x2dc
+>    br_ioctl_call+0x68/0xb0
+>    dev_ifsioc+0x390/0x554
+>    dev_ioctl+0x128/0x400
+>    sock_do_ioctl+0xb4/0xf4
+>    sock_ioctl+0x12c/0x4e0
+>    __arm64_sys_ioctl+0xa8/0xf0
+>    invoke_syscall+0x4c/0x110
+>    el0_svc_common.constprop.0+0x48/0xf0
+>    do_el0_svc+0x28/0x84
+>    el0_svc+0x1c/0x50
+>    el0t_64_sync_handler+0xa8/0xb0
+>    el0t_64_sync+0x17c/0x180
+>   Code: f9402f00 f0002261 f9401302 913cc021 (a9401404)
+>   ---[ end trace 0000000000000000 ]---
+> 
+> Fixes: d3eed0e57d5d ("net: dsa: keep the bridge_dev and bridge_num as part of the same structure")
+> Signed-off-by: Alvin Šipraga <alsi@bang-olufsen.dk>
+
+Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
+-- 
+Florian

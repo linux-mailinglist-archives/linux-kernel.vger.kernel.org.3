@@ -2,55 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C24D54C027C
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 20:54:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5386C4C0289
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 20:57:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235299AbiBVTzD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 14:55:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54708 "EHLO
+        id S234425AbiBVT5W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 14:57:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231732AbiBVTzC (ORCPT
+        with ESMTP id S233291AbiBVT5U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 14:55:02 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57787C486B;
-        Tue, 22 Feb 2022 11:54:36 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 15425B81C5B;
-        Tue, 22 Feb 2022 19:54:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75EEAC340E8;
-        Tue, 22 Feb 2022 19:54:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645559673;
-        bh=2yoZXAZ2q0++zmDjP+ejRntLgW9usbykRPKM+jn7RvA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=F8UWrXJujLmvHh1w9CqBKy4QutjAMfCCUw/wULVyy+4whPVz+AQ6eIhIlZ5+tvwIF
-         Uo6oIDK8PmySh3bxyFhbUoVovrdntR/sm7clciM6v5dW+KSTLkQ+TOXvsNAfFuQekU
-         smFD6X+zDZiKjlpeYgxSinerPqxZdGO1YAzOh51O5n17SXSNsfynAh4TYGYm3R6Ml0
-         VJrIy8r+nqrYalv3nLt5W4otYLms6QueecW67VJ7SpQ2nL3Q9MupfWvk97Sv1IeXkx
-         wSPCXynfm22snba36Zg9KqZzFctDsZCQgVIvfWguIIbV+jddkxUz6YmtMFaRCEeQH8
-         WyPUgnsOv6hXg==
-Date:   Tue, 22 Feb 2022 11:54:31 -0800
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Keith Busch <kbusch@kernel.org>
-Cc:     linux-nvme@lists.infradead.org, linux-block@vger.kernel.org,
-        linux-crypto@vger.kernel.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, axboe@kernel.dk, hch@lst.de,
-        martin.petersen@oracle.com, colyli@suse.de
-Subject: Re: [PATCHv3 06/10] crypto: add rocksoft 64b crc framework
-Message-ID: <YhU/d6wn55/GWPxm@sol.localdomain>
-References: <20220222163144.1782447-1-kbusch@kernel.org>
- <20220222163144.1782447-7-kbusch@kernel.org>
- <YhU+kuMhueXVQvxe@sol.localdomain>
+        Tue, 22 Feb 2022 14:57:20 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B48D6E282
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 11:56:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645559814; x=1677095814;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=82yB985+AKBkWSUrHonoGkU/PPQIGUpBLW/3jx5KV+M=;
+  b=fR9QdO5V84brn6H7bqMmMekNg+pF8w4ClbADyzUzlJGVMGSr27jm8nER
+   nGWo04NkeAFVpky/HYYtT6WhFhKldW8D2fBvLD92WaKlACbjlj6DO2JCq
+   rq0o3XW8p5V5Q8KSc5V3lvonuglGnYmLw3HAkdyt7Lz8Eijk+sCreblCI
+   9fEjh6+UTPjchnbDcRl/j7D/ksjtBbnaqtF5YEkIix4fuDddHfuw/72kC
+   kVsptAJOnphGsdFFQwEOa5QyReRsS9rRJazf7rit4UVYrtrgkx/OKlGpr
+   X3luoKlecjaQqoMVALssSwFOybhnL6eZpJyG8fxZ01pvT0jPWf/0PRRzk
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10266"; a="231772980"
+X-IronPort-AV: E=Sophos;i="5.88,387,1635231600"; 
+   d="scan'208";a="231772980"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2022 11:56:54 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,387,1635231600"; 
+   d="scan'208";a="543066586"
+Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 22 Feb 2022 11:56:53 -0800
+Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nMbHI-0000Z6-FE; Tue, 22 Feb 2022 19:56:52 +0000
+Date:   Wed, 23 Feb 2022 03:56:23 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Felix Fietkau <nbd@nbd.name>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [nbd168-wireless:mtk-flow-offload 5/14] ERROR: Input tree has
+ errors, aborting (use -f to force output)
+Message-ID: <202202230356.HxgGrXil-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YhU+kuMhueXVQvxe@sol.localdomain>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,24 +61,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 22, 2022 at 11:50:44AM -0800, Eric Biggers wrote:
-> > +config CRC64_ROCKSOFT
-> > +	tristate "CRC calculation for the Rocksoft^TM model CRC64"
-> 
-> I'm sure what the rules for trademarks are, but kernel source code usually
-> doesn't have the trademark symbol/abbreviation scattered everywhere.
-> 
-> > +	select CRYPTO
-> > +	select CRYPTO_CRC64_ROCKSOFT
-> > +	help
-> > +	  This option is only needed if a module that's not in the
-> > +	  kernel tree needs to calculate CRC checks for use with the
-> > +	  rocksoft model parameters.
-> 
-> Out-of-tree modules can't be the reason to have a kconfig option.  What is the
-> real reason?
+tree:   https://github.com/nbd168/wireless mtk-flow-offload
+head:   c5c9c022de79aa26f88a358954a868d8bbc2af11
+commit: ad070cb96f71f13aa6fde0e13fba0a87c1cc91bf [5/14] arm64: dts: mediatek: mt7622: introduce nodes for Wireless Ethernet Dispatch
+config: arm64-buildonly-randconfig-r001-20220221 (https://download.01.org/0day-ci/archive/20220223/202202230356.HxgGrXil-lkp@intel.com/config)
+compiler: aarch64-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/nbd168/wireless/commit/ad070cb96f71f13aa6fde0e13fba0a87c1cc91bf
+        git remote add nbd168-wireless https://github.com/nbd168/wireless
+        git fetch --no-tags nbd168-wireless mtk-flow-offload
+        git checkout ad070cb96f71f13aa6fde0e13fba0a87c1cc91bf
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm64 SHELL=/bin/bash
 
-Also this option can be enabled without the CONFIG_CRC64 it depends on, which is
-broken.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-- Eric
+All errors (new ones prefixed by >>):
+
+   also defined at arch/arm64/boot/dts/mediatek/mt7622-rfb1.dts:103.6-174.3
+>> ERROR: Input tree has errors, aborting (use -f to force output)
+--
+   also defined at arch/arm64/boot/dts/mediatek/mt7622-bananapi-bpi-r64.dts:117.6-197.3
+>> ERROR: Input tree has errors, aborting (use -f to force output)
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

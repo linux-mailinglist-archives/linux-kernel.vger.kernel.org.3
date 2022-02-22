@@ -2,58 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F21824BFC67
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 16:23:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC5424BFC6E
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 16:24:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233439AbiBVPX7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 10:23:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34436 "EHLO
+        id S233454AbiBVPYo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 10:24:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230322AbiBVPX6 (ORCPT
+        with ESMTP id S233228AbiBVPYn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 10:23:58 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF9AD113DAC
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 07:23:32 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5B8BB61624
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 15:23:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00490C340E8;
-        Tue, 22 Feb 2022 15:23:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645543411;
-        bh=36C5XSTwUOyfNvIcqQ9TuoXhkklJD5exPe/8nUTTeMo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=urLBibFGvdPJvEFgJ9BsfC5Bsg1TMwd4yAIQItElZeHpfxbBUwiq+uVBZ6rCsy5nZ
-         DxRN/Jf4b9JFwNA19WCikuBAWnLuwy60r33trFBY6LkxYWmfxJ8bA41GzTQQejHvh2
-         fDBuky1YfbotkK4ulW8pGdbsQlt4kaC+F/21xSno517Mn2E/8owx36fe3zGd1KsiQO
-         mDU/XdDw89zUgNRcgJNnSfNFcD3mlI1zeNB1MP2mCkVJUlkw4uToyxzF6+J1Ty58Vz
-         PBIJOjNCNVBFgiubAridjRXeowbCoQdTPM5+iqTddQJ90VTYucnhiCMhOIYYXu750w
-         bkLWBMZnUmJJA==
-Date:   Tue, 22 Feb 2022 08:23:27 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Philippe CORNU <philippe.cornu@foss.st.com>
-Cc:     Nick Desaulniers <ndesaulniers@google.com>,
-        Yannick Fertre <yannick.fertre@foss.st.com>,
-        Benjamin Gaignard <benjamin.gaignard@linaro.org>,
-        dri-devel@lists.freedesktop.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-Subject: Re: [PATCH] drm/stm: Avoid using val uninitialized in
- ltdc_set_ycbcr_config()
-Message-ID: <YhT/73ZM7IytO3+Q@dev-arch.archlinux-ax161>
-References: <20220207165304.1046867-1-nathan@kernel.org>
- <CAKwvOdkXe8CB3QGe2e6Fhz8_SLOsOpcMumoKBiAzGE_VTXCkVg@mail.gmail.com>
- <430ee06d-04e7-3b8b-bf11-48a7b62eaf18@foss.st.com>
+        Tue, 22 Feb 2022 10:24:43 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4C247114754;
+        Tue, 22 Feb 2022 07:24:17 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 17950ED1;
+        Tue, 22 Feb 2022 07:24:17 -0800 (PST)
+Received: from lpieralisi (e121166-lin.cambridge.arm.com [10.1.196.255])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9FFA73F5A1;
+        Tue, 22 Feb 2022 07:24:15 -0800 (PST)
+Date:   Tue, 22 Feb 2022 15:24:09 +0000
+From:   Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+To:     Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>
+Cc:     robh+dt@kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>,
+        Russell King <rmk+kernel@armlinux.org.uk>,
+        Marc Zyngier <maz@kernel.org>, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v2 10/11] PCI: mvebu: Implement support for legacy INTx
+ interrupts
+Message-ID: <20220222152409.GA18799@lpieralisi>
+References: <20220105150239.9628-1-pali@kernel.org>
+ <20220112151814.24361-1-pali@kernel.org>
+ <20220112151814.24361-11-pali@kernel.org>
+ <20220211171917.GA740@lpieralisi>
+ <20220211175202.gku5pkwn5wmjo5al@pali>
+ <20220216234039.stxv5ndd6ai23sbb@pali>
+ <20220222102057.GA17238@lpieralisi>
+ <20220222105129.jg5kwmhvhggsv72n@pali>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <430ee06d-04e7-3b8b-bf11-48a7b62eaf18@foss.st.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220222105129.jg5kwmhvhggsv72n@pali>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -62,88 +57,147 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 22, 2022 at 11:54:04AM +0100, Philippe CORNU wrote:
-> 
-> 
-> On 2/7/22 8:44 PM, Nick Desaulniers wrote:
-> > On Mon, Feb 7, 2022 at 8:53 AM Nathan Chancellor <nathan@kernel.org> wrote:
+On Tue, Feb 22, 2022 at 11:51:29AM +0100, Pali Rohár wrote:
+> On Tuesday 22 February 2022 10:21:06 Lorenzo Pieralisi wrote:
+> > On Thu, Feb 17, 2022 at 12:40:39AM +0100, Pali Rohár wrote:
+> > > On Friday 11 February 2022 18:52:02 Pali Rohár wrote:
+> > > > On Friday 11 February 2022 17:19:17 Lorenzo Pieralisi wrote:
+> > > > > On Wed, Jan 12, 2022 at 04:18:13PM +0100, Pali Rohár wrote:
+> > > > > > This adds support for legacy INTx interrupts received from other PCIe
+> > > > > > devices and which are reported by a new INTx irq chip.
+> > > > > > 
+> > > > > > With this change, kernel can distinguish between INTA, INTB, INTC and INTD
+> > > > > > interrupts.
+> > > > > > 
+> > > > > > Note that for this support, device tree files has to be properly adjusted
+> > > > > > to provide "interrupts" or "interrupts-extended" property with intx
+> > > > > > interrupt source, "interrupt-names" property with "intx" string and also
+> > > > > > 'interrupt-controller' subnode must be defined.
+> > > > > > 
+> > > > > > If device tree files do not provide these nodes then driver would work as
+> > > > > > before.
+> > > > > 
+> > > > > Nit: this information is not useful. DT rules are written in DT
+> > > > > bindings, not in kernel commit logs. All I am saying is that firmware
+> > > > > developers should not have to read this log to write firmware.
+> > > > 
+> > > > It was not intended for firmware developers, but for reviewers of this
+> > > > patch to understand, what is happening in code and that with old DT
+> > > > files this patch does not change driver behavior (= work as before).
+> > > > 
+> > > > > > Signed-off-by: Pali Rohár <pali@kernel.org>
+> > > > > > ---
+> > > > > >  drivers/pci/controller/pci-mvebu.c | 185 +++++++++++++++++++++++++++--
+> > > > > >  1 file changed, 177 insertions(+), 8 deletions(-)
+> > > > > > 
+> > > > > > diff --git a/drivers/pci/controller/pci-mvebu.c b/drivers/pci/controller/pci-mvebu.c
+> > > > > > index 1e90ab888075..dbb6ecb4cb70 100644
+> > > > > > --- a/drivers/pci/controller/pci-mvebu.c
+> > > > > > +++ b/drivers/pci/controller/pci-mvebu.c
+> > > > > > @@ -54,9 +54,10 @@
+> > > > > >  	 PCIE_CONF_ADDR_EN)
+> > > > > >  #define PCIE_CONF_DATA_OFF	0x18fc
+> > > > > >  #define PCIE_INT_CAUSE_OFF	0x1900
+> > > > > > +#define PCIE_INT_UNMASK_OFF	0x1910
+> > > > > 
+> > > > > Nit: I understand it is tempting but here you are redefining or better
+> > > > > giving a proper label to a register. Separate patch please.
+> > > > 
+> > > > Ok!
+> > > > 
+> > > > > > +#define  PCIE_INT_INTX(i)		BIT(24+i)
+> > > > > >  #define  PCIE_INT_PM_PME		BIT(28)
+> > > > > > -#define PCIE_MASK_OFF		0x1910
+> > > > > 
+> > > > > See above.
+> > > > > 
+> > > > > > -#define  PCIE_MASK_ENABLE_INTS          0x0f000000
+> > > > > > +#define  PCIE_INT_ALL_MASK		GENMASK(31, 0)
+> > > > > >  #define PCIE_CTRL_OFF		0x1a00
+> > > > > >  #define  PCIE_CTRL_X1_MODE		0x0001
+> > > > > >  #define  PCIE_CTRL_RC_MODE		BIT(1)
+> > > > > > @@ -110,6 +111,9 @@ struct mvebu_pcie_port {
+> > > > > >  	struct mvebu_pcie_window iowin;
+> > > > > >  	u32 saved_pcie_stat;
+> > > > > >  	struct resource regs;
+> > > > > > +	struct irq_domain *intx_irq_domain;
+> > > > > > +	raw_spinlock_t irq_lock;
+> > > > > > +	int intx_irq;
+> > > > > >  };
+> > > > > >  
+> > > > > >  static inline void mvebu_writel(struct mvebu_pcie_port *port, u32 val, u32 reg)
+> > > > > > @@ -235,7 +239,7 @@ static void mvebu_pcie_setup_wins(struct mvebu_pcie_port *port)
+> > > > > >  
+> > > > > >  static void mvebu_pcie_setup_hw(struct mvebu_pcie_port *port)
+> > > > > >  {
+> > > > > > -	u32 ctrl, lnkcap, cmd, dev_rev, mask;
+> > > > > > +	u32 ctrl, lnkcap, cmd, dev_rev, unmask;
+> > > > > >  
+> > > > > >  	/* Setup PCIe controller to Root Complex mode. */
+> > > > > >  	ctrl = mvebu_readl(port, PCIE_CTRL_OFF);
+> > > > > > @@ -288,10 +292,30 @@ static void mvebu_pcie_setup_hw(struct mvebu_pcie_port *port)
+> > > > > >  	/* Point PCIe unit MBUS decode windows to DRAM space. */
+> > > > > >  	mvebu_pcie_setup_wins(port);
+> > > > > >  
+> > > > > > -	/* Enable interrupt lines A-D. */
+> > > > > > -	mask = mvebu_readl(port, PCIE_MASK_OFF);
+> > > > > > -	mask |= PCIE_MASK_ENABLE_INTS;
+> > > > > > -	mvebu_writel(port, mask, PCIE_MASK_OFF);
+> > > > > > +	/* Mask all interrupt sources. */
+> > > > > > +	mvebu_writel(port, ~PCIE_INT_ALL_MASK, PCIE_INT_UNMASK_OFF);
+> > > > > > +
+> > > > > > +	/* Clear all interrupt causes. */
+> > > > > > +	mvebu_writel(port, ~PCIE_INT_ALL_MASK, PCIE_INT_CAUSE_OFF);
+> > > > > > +
+> > > > > > +	if (port->intx_irq <= 0) {
+> > > > > > +		/*
+> > > > > > +		 * When neither "summary" interrupt, nor "intx" interrupt was
+> > > > > > +		 * specified in DT then unmask all legacy INTx interrupts as in
+> > > > > > +		 * this case driver does not provide a way for masking and
+> > > > > > +		 * unmasking of individual legacy INTx interrupts. In this case
+> > > > > > +		 * all interrupts, including legacy INTx are reported via one
+> > > > > > +		 * shared GIC source and therefore kernel cannot distinguish
+> > > > > > +		 * which individual legacy INTx was triggered. These interrupts
+> > > > > > +		 * are shared, so it should not cause any issue. Just
+> > > > > > +		 * performance penalty as every PCIe interrupt handler needs to
+> > > > > > +		 * be called when some interrupt is triggered.
+> > > > > > +		 */
+> > > > > 
+> > > > > This comment applies to current mainline right (ie it describes how
+> > > > > current mainline handles INTx) ? IMO you should split it out in a
+> > > > > separate patch.
+> > > > 
+> > > > This above comment describe what happens in if-branch when intx_irq is
+> > > > not set (as written in comment "when intx interrupt was not specified in
+> > > > DT"). You are right that this is also the behavior in the current
+> > > > mainline.
+> > > > 
+> > > > I'm not sure if this comment can be split out as support for "intx"
+> > > > interrupt is in this patch.
+> > > > 
+> > > > > I understand it is hard but a patch is a logical _change_, this
+> > > > > comment is a change per se, it is a clarification on current
+> > > > > behaviour.
+> > > > 
+> > > > Ok, I could try to split this comment into two patches, but part about
+> > > > if-branch comment needs to stay in "this" patch.
 > > > 
-> > > Clang warns:
+> > > I have done it locally.
 > > > 
-> > >    drivers/gpu/drm/stm/ltdc.c:625:2: warning: variable 'val' is used uninitialized whenever switch default is taken [-Wsometimes-uninitialized]
-> > >            default:
-> > >            ^~~~~~~
-> > >    drivers/gpu/drm/stm/ltdc.c:635:2: note: uninitialized use occurs here
-> > >            val |= LxPCR_YCEN;
-> > >            ^~~
-> > >    drivers/gpu/drm/stm/ltdc.c:600:9: note: initialize the variable 'val' to silence this warning
-> > >            u32 val;
-> > >                   ^
-> > >                    = 0
-> > >    1 warning generated.
-> > > 
-> > > Use a return instead of break in the default case to fix the warning.
-> > > Add an error message so that this return is not silent, which could hide
-> > > issues in the future.
-> > > 
-> > > Fixes: 484e72d3146b ("drm/stm: ltdc: add support of ycbcr pixel formats")
-> > > Link: https://github.com/ClangBuiltLinux/linux/issues/1575
-> > > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> > > ---
-> > >   drivers/gpu/drm/stm/ltdc.c | 3 ++-
-> > >   1 file changed, 2 insertions(+), 1 deletion(-)
-> > > 
-> > > diff --git a/drivers/gpu/drm/stm/ltdc.c b/drivers/gpu/drm/stm/ltdc.c
-> > > index 5eeb32c9c9ce..447ddde1786c 100644
-> > > --- a/drivers/gpu/drm/stm/ltdc.c
-> > > +++ b/drivers/gpu/drm/stm/ltdc.c
-> > > @@ -624,7 +624,8 @@ static inline void ltdc_set_ycbcr_config(struct drm_plane *plane, u32 drm_pix_fm
-> > >                  break;
-> > >          default:
-> > >                  /* RGB or not a YCbCr supported format */
-> > > -               break;
-> > > +               drm_err(plane->dev, "Unsupported pixel format: %u\n", drm_pix_fmt);
+> > > Let me know when I should resend this patch series and I will include
+> > > into it also these changes.
 > > 
-> > This is fine, but in the future you should add an explicit
-> > #include <drm/drm_print.h>
-> > to avoid implicit header dependencies (like the ones that Mingo is
-> > trying to detangle) for the declaration of drm_err. `drm_vprintf`
-> > needs it, too.
+> > Hi,
 > > 
-> > Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-> > 
+> > yes please resend it and I will merge it.
 > 
-> Hi Nick,
-> and thank you for having pointing this.
-> 
-> Hi Nathan,
-> May I ask you please to update your patch changing drm_err(plane->dev, )
-> with DRM_ERROR().
+> Done!
+> https://lore.kernel.org/linux-pci/20220222104625.28461-1-pali@kernel.org/T/#u
 
-Sure thing, v2 has been sent:
+Can you rebase it please on top of my pci/mvebu branch ?
 
-https://lore.kernel.org/r/20220222152045.484610-1-nathan@kernel.org/
+https://git.kernel.org/pub/scm/linux/kernel/git/lpieralisi/pci.git/
 
-I used drm_err() as I saw DRM_ERROR() was deprecated but I get internal
-driver consistency is important.
+Forgive me, I forgot to mention that, thanks.
 
-Cheers,
-Nathan
-
-> Big thank you,
-> 
-> Philippe :-)
-> 
-> 
-> 
-> > > +               return;
-> > >          }
-> > > 
-> > >          /* Enable limited range */
-> > > 
-> > > base-commit: 542898c5aa5c6a3179dffb1d1606884a63f75fed
-> > > --
-> > > 2.35.1
-> > > 
-> > 
-> > 
+Lorenzo

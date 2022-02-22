@@ -2,438 +2,741 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E4A84BFFED
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 18:16:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 50D244BFFF2
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 18:17:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234600AbiBVRQ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 12:16:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47454 "EHLO
+        id S234177AbiBVRRi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 12:17:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231236AbiBVRQ0 (ORCPT
+        with ESMTP id S232502AbiBVRRg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 12:16:26 -0500
-Received: from mx0a-0039f301.pphosted.com (mx0a-0039f301.pphosted.com [148.163.133.242])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0B7E10874C;
-        Tue, 22 Feb 2022 09:15:59 -0800 (PST)
-Received: from pps.filterd (m0174677.ppops.net [127.0.0.1])
-        by mx0a-0039f301.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 21MGdHkv016399;
-        Tue, 22 Feb 2022 17:15:54 GMT
-Received: from eur04-vi1-obe.outbound.protection.outlook.com (mail-vi1eur04lp2058.outbound.protection.outlook.com [104.47.14.58])
-        by mx0a-0039f301.pphosted.com (PPS) with ESMTPS id 3ed3hmg455-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 22 Feb 2022 17:15:53 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=M4QARsOxt75iIMEWLuChYRozNN46b9Zruj8DSapt9jlELCAPBGu1rTIIxrzY/lhrLsO1wh3HWdJP0Ysdn2C2QAMp50IJXYFWtvjQ/+2ohFmOtIIOUVb+59h0Jk8qixTyjlhFpTAoRi6r53Na7IOojPM/wq6HopMxPAduVlEA1YTqehV7Hdd4DQypEva10ITdjGz3L9mEOs/h1TBI+PWfd88qeqwhcfM5U/7i+7+N8xcwhUAlpu+AJRFM3kwbaf2neQJI7+T9b09DdOxFKX3bm1C4h6DJaoysKd5ZSybTqdoPTl4+6F8iVcxcHZfsjnD2v8s3t1sUP7Q//iLR5I3lqw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=unFCmEUDIo4auc8K3GBMcy94FFIhO1izgA13pQHiBrY=;
- b=kYF3dWiJLqTSxDdAz+FMQ3tMDB0uwZbLX2gXXjrD3OIpQi5uRM348gaUCO2gQ6yI0WyNpEe4CZBF4npygeZ00X2GmLJKKw/+vqR3Jyw/VG0220JoHvJUgtwVBSFN2PZitfqEvk+3Z8P3z6wObmhbmJnGK4++kiOpuqMXOPxTKrcJ/Qi+KsdqVdjf+nYi1BSv2dZQQBvCofvuZwXd+2iQK3VwI3jEEdcsShS79chKFJjYI0a3iBL8ujt2DHaMOShi1Zk++VqyMHWQBlk1zJXRWbdl+nGA0pj1I/m1cVcvzKplQpS+VCnl/RQAKgUFBRIS4dpjarA6RzPMyCP+3Sq3cQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=epam.com; dmarc=pass action=none header.from=epam.com;
- dkim=pass header.d=epam.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=epam.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=unFCmEUDIo4auc8K3GBMcy94FFIhO1izgA13pQHiBrY=;
- b=MoDJQmuuwCTD0ADqOl7FInzf5kthMyxgib24eyu7h+bZVBrYzyYCqEPJ2VTMTqStaHy4vXTNgwP1Cwy4melu4jFi/uyscXvkHXr95K1M/RleXcMI1tCAsUa+xY6pKTv7A1izfIp1cxDNdXYcQoC3/eJcfS1ot1x8em5h/7dZijdy/ykGy9FlKyIliEujlxs9HzNkufG12YRcpW/NHkkdWtF30DjjeFQL+8GftfoibKadBlvYLdm1osrw0JXTgtmv9effxt/P4lUZ/fbc2XtApa6DHr9xn4MX4QJADuIGVpmFKHFLUO/0sRQKMf7PkE23IYJx0Z7lYMURLy/wau5Egw==
-Received: from PA4PR03MB7136.eurprd03.prod.outlook.com (2603:10a6:102:ea::23)
- by DB8PR03MB6203.eurprd03.prod.outlook.com (2603:10a6:10:140::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4995.27; Tue, 22 Feb
- 2022 17:15:49 +0000
-Received: from PA4PR03MB7136.eurprd03.prod.outlook.com
- ([fe80::c1c:f98:9dd:86e0]) by PA4PR03MB7136.eurprd03.prod.outlook.com
- ([fe80::c1c:f98:9dd:86e0%5]) with mapi id 15.20.4995.027; Tue, 22 Feb 2022
- 17:15:49 +0000
-From:   Oleksii Moisieiev <Oleksii_Moisieiev@epam.com>
-To:     Sudeep Holla <sudeep.holla@arm.com>
-CC:     Cristian Marussi <cristian.marussi@arm.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Souvik Chakravarty <Souvik.Chakravarty@arm.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [RFC PATCH 0/1] dt-bindings: arm: Add scmi_devid paramter for
-Thread-Topic: [RFC PATCH 0/1] dt-bindings: arm: Add scmi_devid paramter for
-Thread-Index: AQHYJ0gzI98NnKSQaEaZikv/1tAERayfaB6AgABVqICAABNVgA==
-Date:   Tue, 22 Feb 2022 17:15:49 +0000
-Message-ID: <20220222171549.GA2194063@EPUAKYIW015D>
-References: <cover.1645460043.git.oleksii_moisieiev@epam.com>
- <20220222110003.GC21915@e120937-lin> <20220222160637.yn6pru4nfgwih23j@bogus>
-In-Reply-To: <20220222160637.yn6pru4nfgwih23j@bogus>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 335ef721-cce6-48d3-55be-08d9f626f90f
-x-ms-traffictypediagnostic: DB8PR03MB6203:EE_
-x-microsoft-antispam-prvs: <DB8PR03MB620398D98F484D9DC590D4E4E33B9@DB8PR03MB6203.eurprd03.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: tbR6wgTCGDqY0RU2ui018v+rfBgvyol/vBIAirC9mLS6yvAUPW4uZdWAsr0oWn0Pk3bOQlE6X1ulfyMxeEKiFxNtKEEALDc/l2FZ4HYOjzyJRBsz5nP6XbFN3IS8a31YSijYaPQYpKyta5wA+2MQ8FFoprg3Ko15zQDXniNjcyoe15RL/w/vl1sQCvRWgWxy0Abcbn7q1RXlLwl1tBM7gHixiT5tcuo0XUdib9ZIKdnhY3c5hHxAOtgm1k1dMlMr4q0Zuzt3CeZ5yKd50wWyftaATFnXLhdHUvSPh91KHDQIcCtv3uSDpfwkYwSB8rc6MPUxLkeUSBS06fyCZlY4GCq8APgYrRhRJ/XLPeqDjzbi6gnMBu/4p8+VedA6GP1Vzvq51ntG4htZRyUJvhNPfBbgb/5NPNXmTDJ5+WExYNgWcYwz5259nY1YDYtX4SeKlAvlHueF7NJ/FfEyahHFteJ+q4BXcH1FfNjp14YKj6z33PIO/q26X6UiXY8Jgze3tp4ZlFGV2/NhJIAAK4xh+cm1KBxANm3+ZAUJ00BnOLsQy+gyXLwcVeJuPCQOqlcqSz1XMvYYLlSv9BuQnC3iVyrjc3mIXunbDmNwtX8SLlfcjShwKEY1ZqXlmsCzF+3Bb8WRzYIIDhFSGdHpCGgIm4KJKOoYb0KCqgMZ62ZTvCa/k0s4JL0jqeJ85j0jb2rklDh2/C9eg66iwiKA7Ih0zy0EoQqcQw4McQQIPtdqu/7eQBw9hMElilpaJo0Sd0oPJnY5G3dnoh+wqse8+AzjjIU5KAs2ZNfg44ZvVBkSWvc=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PA4PR03MB7136.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(7916004)(366004)(6512007)(9686003)(6506007)(508600001)(5660300002)(38070700005)(38100700002)(8936002)(30864003)(2906002)(66476007)(66556008)(54906003)(26005)(4326008)(8676002)(6486002)(186003)(966005)(71200400001)(66446008)(83380400001)(91956017)(86362001)(33716001)(122000001)(6916009)(316002)(33656002)(1076003)(66946007)(64756008)(76116006);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?Zci2sA1J1hTtEtStxBEQKjXlROg6Ty47dG6nusNQPaN6FMDwtGwyO0amB0u1?=
- =?us-ascii?Q?PGRuOzO4vtQtI+ycAXt0XLduLLErigS5vNC6ugWl3XT5KOTsqcDm212fB6M0?=
- =?us-ascii?Q?yU1IB2eleIrvac/uC5HJcTS1D6NZTlSnHNnzC+Wyc+jTCNhU11hsIOBPnjef?=
- =?us-ascii?Q?GEVu8iw9MIIzmY17JnYYpP3rAgKHYsb/Zi7/rO7SuKZLZUHs22Yiyas2eWzT?=
- =?us-ascii?Q?hcqAskUpqDbNvjSyZt0vNOqa+uothvX4kTyj0+lwoR95CNeJXs9G8OnPDm1b?=
- =?us-ascii?Q?NC0GnMGHr25HYLaF6vjwrxM/zYI5COn9LD9Sf7zavnsh9ntAsj1i+YTbxq5b?=
- =?us-ascii?Q?VDEqqOownZ1MmTOcdHjAWIyH8byAh4Hl1WRba2L8m7ywvpiZ7Kd0oU7pKXvh?=
- =?us-ascii?Q?QHkDglpbGcbCPqUoKUM4u2jWRRfZnhbWRSZr8SXyDsBjxhKrdwLU3wUVE0Xm?=
- =?us-ascii?Q?qyP0iv1kUG4Ajh9TIuXudnlYz5DjNXujH44UoVxEq7w0viSg4krNt2LgjDNd?=
- =?us-ascii?Q?zzaD3YSQn1URb5Q7R7Qmcaa0GCw/p6kuaxWtSFXzthOXEGRjLCd5bU424Hlh?=
- =?us-ascii?Q?ayTFAD7RJF8Gzq9tnsPGx+zZySKs5HOJRSndnpxl9tpo3H/2yXPpIyhoQdD2?=
- =?us-ascii?Q?F83TrbT9lTIEyRWvHu+vX7Y19zAm4N+jGhokbfrVnMAywqzNlzp1+0Lo63bo?=
- =?us-ascii?Q?d5gCwThQaDGRxfn0fuOA/nMV8JD0yO5EflndTQtMqajywzi47zEizIBvM0Nb?=
- =?us-ascii?Q?hTbScIjarnK62yn/oGMgHQBtxY2JfFoKDCaYsfHw8b9WZdqPt7LODXV7rIaM?=
- =?us-ascii?Q?Dy3UlTv7WqXKKHZ3pteNVSkPYPXnyUqvBGA8IJFaOFW43jzgBUzVFIpN9aIO?=
- =?us-ascii?Q?aKCp398mKN3HWUi0bzFC5d0adwtoFoiuE4T6eaGZ7FHVmI4tzQuLmcmDKOjb?=
- =?us-ascii?Q?OwWXunaUILQT/u0wYG1PaOKMDNnRtRAnrphdkvtO6DXbtxMl1t/ErOjhW6N9?=
- =?us-ascii?Q?1QJK1HEalX/eFMnjFFPaKRyXAbH1LEf15PyQe24+FWRljainte/ht0Dn/dXn?=
- =?us-ascii?Q?CfX3V99b8ZKFAA2Cs5uDme8G6Pmyd8Zm/YLPtSSVDYIXqcAUk0X1b7VMgfG4?=
- =?us-ascii?Q?2730L07uun6n90gJaf3+pU907iP0cG2BCS2AMC1gT9v5oa2ngf0rD5vqRYWH?=
- =?us-ascii?Q?MvZ1X329ABjE9dqnD0UamQM7WlckEqOeSwEgW7CL1ZrBMDzNpMhVGR7JTU9f?=
- =?us-ascii?Q?BCtJE9Cu4mWzwiFwUW0kRZr60YHgtJj5A3ne7jZMyGJK9E0W1qE5f8stan/d?=
- =?us-ascii?Q?tMiInImdcKYkuDkl+gYtq1pPYMt//Su/QRkoe8+cXVedtrRIVPcPZmqO+Ytt?=
- =?us-ascii?Q?FCLveT8pon5BoOaxO6NbKGs+0cNYu0deW+EYJ57xh/+s87B1cdCLU55QqppM?=
- =?us-ascii?Q?ge3iCgoUiGCn8ljsJbxKLmLiKS8XFV968exn32Jc8EJ3seWvbWW2PJX2chjP?=
- =?us-ascii?Q?vtiCJSGh2dXK4/PLBfNegyZKG3ZLu45oQXqRJhtMS/C2/NLpszjBvLOy3//i?=
- =?us-ascii?Q?oGeiJ0MIzI3D/3W864csvtOMu+E833lgqCn27yX/cGmdt/pJ4TyskECeKEF/?=
- =?us-ascii?Q?NYQo65r5No1P0gy++OcoVuGoM7GtV7Kp1TTMHTOsxCEJy2VQv5E6TAF9kbjX?=
- =?us-ascii?Q?wlGIPSqIGYV0g0kItZsRpSp48Vo=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <BBB9DB133DB5F54CB3AB51CA367C2037@eurprd03.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+        Tue, 22 Feb 2022 12:17:36 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5F1C8109A41
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 09:17:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1645550229;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=oHe974geFrPel4g+rKfH6+7OgLH9Ylgjg162kmu47Ok=;
+        b=GljulqKHcqj/peqSBZpkT1jfTmbOvI0Zor+tHgyhGoJu/DDFVcnT0NWbQYGEa2ob3eY4GA
+        6v8AgVb424rT7DCi8RKitLVsfTGak9n2xfQfsh7F1pmxasfpC7kNC9JSKYTwY36kBqLk+l
+        prvU5ju5cBSVF8+1tZSjshq/1CRgmyg=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-86-QqA_J-9BO7CyKdwnhPxw4g-1; Tue, 22 Feb 2022 12:17:08 -0500
+X-MC-Unique: QqA_J-9BO7CyKdwnhPxw4g-1
+Received: by mail-ed1-f71.google.com with SMTP id y13-20020aa7c24d000000b00411925b7829so12163538edo.22
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 09:17:07 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=oHe974geFrPel4g+rKfH6+7OgLH9Ylgjg162kmu47Ok=;
+        b=yWgWyj9hDNcI6gB1H0dSmq8ye2/GNe1SAMUK2U6FH4j++DH361K/EyTrosGEWXd0//
+         AcMXMvTsBDttDRMuOTTf4Avpti4oFgB427RHKd+TyBLfRhNGW2ozEQ07c9IAqpnyAMGl
+         aZ9eXXadWwQ0pbgw5RUuoK6hJMQx1eyW9cFPwTfO8Rf5qBZjqS4Zj7yocnZAcC2ctLPj
+         jKofXrsqyy6JGCYZ6q471flxs2Spiu1uWzWV7LTsMggCH/HnDDdm5rPnPNOTb/7Iadny
+         Vg135YptMsF2F9mxRFwrumFvQtBeDj5lnW/mwb8cC7P7scxqddPzqFsylWLmu846upB8
+         D7dw==
+X-Gm-Message-State: AOAM532Sxm+RCjeQxBZm/ouxLWhuuwIKdALG/8Cu3MaPvfBG9zzZaIqe
+        icrZWRTX2ZFR5xIZZf/0P6C/H1H4QOntIg+HAOeVvaiLK8d3WorCf7qM+urFJOJwE12TvdWIX/7
+        3sv2/55yhsFFBMlkLyPfHz2BZ
+X-Received: by 2002:a05:6402:354c:b0:412:b2f2:f8e4 with SMTP id f12-20020a056402354c00b00412b2f2f8e4mr25472672edd.269.1645550226578;
+        Tue, 22 Feb 2022 09:17:06 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJydW2kjVwz6VIaDrvYWFBervMTEjS7bhomB5NY5dgMJ95nnIRIOnSYl72WEDBbtDr69c9TPmw==
+X-Received: by 2002:a05:6402:354c:b0:412:b2f2:f8e4 with SMTP id f12-20020a056402354c00b00412b2f2f8e4mr25472651edd.269.1645550226344;
+        Tue, 22 Feb 2022 09:17:06 -0800 (PST)
+Received: from ?IPV6:2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1? (2001-1c00-0c1e-bf00-1db8-22d3-1bc9-8ca1.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1])
+        by smtp.gmail.com with ESMTPSA id 9sm6574098ejk.28.2022.02.22.09.17.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 22 Feb 2022 09:17:05 -0800 (PST)
+Message-ID: <e4aa0035-ff12-f6a7-a481-983f8cfc3dcb@redhat.com>
+Date:   Tue, 22 Feb 2022 18:17:05 +0100
 MIME-Version: 1.0
-X-OriginatorOrg: epam.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PA4PR03MB7136.eurprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 335ef721-cce6-48d3-55be-08d9f626f90f
-X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Feb 2022 17:15:49.6588
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: b41b72d0-4e9f-4c26-8a69-f949f367c91d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: UzuJHNDoQ8Eycx6pF87B4662P8o0Nal+s+o6anvjFKZyCQu0/PP7n/I3hCwSi9bETpXGqRlCE985gLqy05vSKxsxrjAjoJSEX+hCQ/NYLco=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB8PR03MB6203
-X-Proofpoint-ORIG-GUID: 6VkzA6m_8s92ABPJ56Ir5DSi3Mnzz2Tt
-X-Proofpoint-GUID: 6VkzA6m_8s92ABPJ56Ir5DSi3Mnzz2Tt
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-02-22_05,2022-02-21_02,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
- priorityscore=1501 mlxscore=0 malwarescore=0 mlxlogscore=999 adultscore=0
- spamscore=0 lowpriorityscore=0 impostorscore=0 phishscore=0 suspectscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2201110000 definitions=main-2202220106
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH] platform/x86: Add Steam Deck driver
+Content-Language: en-US
+To:     Andrey Smirnov <andrew.smirnov@gmail.com>,
+        Hans de Goede <hans@hansg.org>
+Cc:     platform-driver-x86@vger.kernel.org,
+        Mark Gross <markgross@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-hwmon@vger.kernel.org
+References: <20220206022023.376142-1-andrew.smirnov@gmail.com>
+ <f5189aa3-77e1-f976-ac4b-5d1293dfa1b2@hansg.org>
+ <CAHQ1cqHi5DmCB4ThQ_enr6BSOR-Oej19BprGZrphKeVzp5it4Q@mail.gmail.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <CAHQ1cqHi5DmCB4ThQ_enr6BSOR-Oej19BprGZrphKeVzp5it4Q@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sudeep,
+Hi,
 
-On Tue, Feb 22, 2022 at 04:06:37PM +0000, Sudeep Holla wrote:
-> Hi Oleksii,
->=20
-> My initial feedback on this. And thanks Cristian for making it so easy as
-> you have covered most of the things in depth(which I might have not done
-> myself that well)
->=20
-> On Tue, Feb 22, 2022 at 11:00:03AM +0000, Cristian Marussi wrote:
-> > On Mon, Feb 21, 2022 at 05:26:46PM +0000, Oleksii Moisieiev wrote:
-> > > Introducing new parameter called scmi_devid to the device-tree bindin=
-gs.
-> > > This parameter should be set for the device nodes, which has
-> > > clocks/power-domains/resets working through SCMI.
->=20
-> I prefer you had given more details on your usage model here instead of
-> pointing to the other Xen thread as it helps for someone without much
-> background on Xen or your use-case to review this.
->=20
-Let me describe the process in few words:
-We implemented a new feature, called SCI-mediator in Xen.
-The proposed implementation allows Guests to communicate with the Firmware =
-using SCMI
-protocol with SMC as a transport. Other implementation are also
-possible, such as SCMI-Mailbox, SCPI-mailbox etc.
+On 2/19/22 22:08, Andrey Smirnov wrote:
+> On Thu, Feb 17, 2022 at 8:26 AM Hans de Goede <hans@hansg.org> wrote:
+>>
+>> Hi Andrey,
+>>
+>> On 2/6/22 03:20, Andrey Smirnov wrote:
+>>> Add a driver exposing various bits and pieces of functionality
+>>> provided by Steam Deck specific VLV0100 device presented by EC
+>>> firmware. This includes but not limited to:
+>>>
+>>>     - CPU/device's fan control
+>>>     - Read-only access to DDIC registers
+>>>     - Battery tempreature measurements
+>>>     - Various display related control knobs
+>>>     - USB Type-C connector event notification
+>>>
+>>> Cc: Hans de Goede <hdegoede@redhat.com>
+>>> Cc: Mark Gross <markgross@kernel.org>
+>>> Cc: Jean Delvare <jdelvare@suse.com>
+>>> Cc: Guenter Roeck <linux@roeck-us.net>
+>>> Cc: linux-kernel@vger.kernel.org (open list)
+>>> Cc: platform-driver-x86@vger.kernel.org
+>>> Cc: linux-hwmon@vger.kernel.org
+>>> Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
+>>
+>> The .c file says: "Copyright (C) 2021-2022 Valve Corporation"
+>> yet you are using a personal email address. This is not really
+>> an issue, but it does look a bit weird.
+>>
+> 
+> I'm not an FTE at Valve, although I might have a dedicated address in
+> their e-mail system, however in my experience corporate emails
+> addresses come and go, so I prefer to put an address a) I won't have
+> to change few years down the road b) check regularly and try to
+> respond promptly on, so almost all of my kernel contributions have
+> been done using that address.
 
-In this feature Xen is the Trusted Agent, which receives the following
-information in Xen device-tree:
-1) All channels should be described, each channel defined as
-arm,scmi-shmem node;
-2) Scmi node arm,scmi-smc with protocols description;
-3) scmi-devid should be set in nodes, which works through SCMI.
+Ok, I understand thanks for the explaination.
 
-On start Xen inits itself as trusted agent and requests agent
-configuration by using BASE_DISCOVER_AGENT message. This message is sent
-to each configured channel to get agent_id
+Regards,
 
-On Domain creation stage Xen will do the following steps:
-1) Assign channel to the Guest and map channel address to the Domain
-address. For the Domain this address should be the same;
-2) Generate arm,scmi-shmem and arm,scmi-smc nodes if needed for Guest
-device-tree (the device-tree which should be passed to the Guest);
-3) Process devices, which are passed through to this Guest and set
-BASE_SET_DEVICE_PERMISSIONS for the scmi-devid, received from the
-device-node;
+Hans
 
-Guest OS will receive non-trusted channel and ignore scmi-devid fields
-in the device-nodes.
 
-IMPORTANT: Guest OS is non-trusted Agent. Xen is the only trusted agent
-in the system. Guest OS uses standart scmi drivers without any xen
-related changes. So Guest OS doesn't know it works through mediator.
 
-The main question is - how Firmware will know what agent sent SMC
-message and what channel_id should be used? I couldn't find clear
-explanation in spec.
-That's why I end up with the following approaches:
-1) Current implemenation: Guest OS send SMC request, Xen intercept this
-request and set channel ID to SMC Client_ID field (reg7), then resend
-SMC message to Firmware. Firmware parses SMC Client ID to get channel_id
-to work with.
-2) Another approach is to generate unique FuncID for each GuestOS. In
-this case no interception from Xen is needed - Guest OS can work
-directly with Firmware.
 
-I hope you'll be able to help me with that.
 
-> > > Given parameter should set the device_id, needed to set device
-> > > permissions in the Firmware. This feature will be extremely useful fo=
-r
-> > > the virtualized systems, which has more that one Guests running on th=
-e
-> > > system at the same time or for the syestems, which require several
-> > > agents with different permissions. Trusted agent will use scmi_devid =
-to
-> > > set the Device permissions for the Firmware (See Section 4.2.2.10 [0]
-> > > for details).
->=20
-> I am bit confused here, so you expecting a non-secure/non-trusted entity
-> to supply this device-id to the Trusted agent ? Is that not the breach of
-> trust as any non-trusted entity can supply any agent-id and get the permi=
-ssion
-> to access the associated resource in this way ? Or am I missing something
-> totally here.
->=20
+>>> ---
+>>>
+>>> This driver is really a kitchen sink of various small bits. Maybe it
+>>> is worth splitting into an MFD + child drivers/devices?
+>>
+>> Yes with the extcon thing I think you should definitely go for
+>> a MFD device. In which case the main driver registering the
+>> regmap + the cells would go under drivers/mfd and most of the
+>> other drivers would go in their own subsystems.
+>>
+>> And as the drivers/platform/x86/ subsystem maintainer I guess
+>> that means I don't have to do much with this driver :)
+>>
+> 
+> Yep, that's my plan :-)
+> 
+>> I would still be happy to yake any bits which don't fit
+>> anywhere else attaching to say a "misc" MFD cell.
+>>
+>> Regards,
+>>
+>> Hans
+>>
+>>
+>>
+>>>
+>>>  drivers/platform/x86/Kconfig     |  15 +
+>>>  drivers/platform/x86/Makefile    |   2 +
+>>>  drivers/platform/x86/steamdeck.c | 523 +++++++++++++++++++++++++++++++
+>>>  3 files changed, 540 insertions(+)
+>>>  create mode 100644 drivers/platform/x86/steamdeck.c
+>>>
+>>> diff --git a/drivers/platform/x86/Kconfig b/drivers/platform/x86/Kconfig
+>>> index c23612d98126..86f014e78a6e 100644
+>>> --- a/drivers/platform/x86/Kconfig
+>>> +++ b/drivers/platform/x86/Kconfig
+>>> @@ -1136,6 +1136,21 @@ config SIEMENS_SIMATIC_IPC
+>>>         To compile this driver as a module, choose M here: the module
+>>>         will be called simatic-ipc.
+>>>
+>>> +config STEAMDECK
+>>> +       tristate "Valve Steam Deck platform driver"
+>>> +       depends on X86_64
+>>> +       help
+>>> +         Driver exposing various bits and pieces of functionality
+>>> +      provided by Steam Deck specific VLV0100 device presented by
+>>> +      EC firmware. This includes but not limited to:
+>>> +          - CPU/device's fan control
+>>> +          - Read-only access to DDIC registers
+>>> +          - Battery tempreature measurements
+>>> +          - Various display related control knobs
+>>> +          - USB Type-C connector event notification
+>>> +
+>>> +      Say N unless you are running on a Steam Deck.
+>>> +
+>>>  endif # X86_PLATFORM_DEVICES
+>>>
+>>>  config PMC_ATOM
+>>> diff --git a/drivers/platform/x86/Makefile b/drivers/platform/x86/Makefile
+>>> index c12a9b044fd8..2eb965e14ced 100644
+>>> --- a/drivers/platform/x86/Makefile
+>>> +++ b/drivers/platform/x86/Makefile
+>>> @@ -129,3 +129,5 @@ obj-$(CONFIG_PMC_ATOM)                    += pmc_atom.o
+>>>
+>>>  # Siemens Simatic Industrial PCs
+>>>  obj-$(CONFIG_SIEMENS_SIMATIC_IPC)    += simatic-ipc.o
+>>> +
+>>> +obj-$(CONFIG_STEAMDECK)                      += steamdeck.o
+>>> diff --git a/drivers/platform/x86/steamdeck.c b/drivers/platform/x86/steamdeck.c
+>>> new file mode 100644
+>>> index 000000000000..77a6677ec19e
+>>> --- /dev/null
+>>> +++ b/drivers/platform/x86/steamdeck.c
+>>> @@ -0,0 +1,523 @@
+>>> +// SPDX-License-Identifier: GPL-2.0+
+>>> +
+>>> +/*
+>>> + * Steam Deck ACPI platform driver
+>>> + *
+>>> + * Copyright (C) 2021-2022 Valve Corporation
+>>> + *
+>>> + */
+>>> +#include <linux/acpi.h>
+>>> +#include <linux/hwmon.h>
+>>> +#include <linux/platform_device.h>
+>>> +#include <linux/regmap.h>
+>>> +#include <linux/extcon-provider.h>
+>>> +
+>>> +#define ACPI_STEAMDECK_NOTIFY_STATUS 0x80
+>>> +
+>>> +/* 0 - port connected, 1 -port disconnected */
+>>> +#define ACPI_STEAMDECK_PORT_CONNECT  BIT(0)
+>>> +/* 0 - Upstream Facing Port, 1 - Downdstream Facing Port */
+>>> +#define ACPI_STEAMDECK_CUR_DATA_ROLE BIT(3)
+>>> +/*
+>>> + * Debouncing delay to allow negotiation process to settle. 2s value
+>>> + * was arrived at via trial and error.
+>>> + */
+>>> +#define STEAMDECK_ROLE_SWITCH_DELAY  (msecs_to_jiffies(2000))
+>>> +
+>>> +struct steamdeck {
+>>> +     struct acpi_device *adev;
+>>> +     struct device *hwmon;
+>>> +     void *regmap;
+>>> +     long fan_target;
+>>> +     struct delayed_work role_work;
+>>> +     struct extcon_dev *edev;
+>>> +     struct device *dev;
+>>> +};
+>>> +
+>>> +static ssize_t
+>>> +steamdeck_simple_store(struct device *dev, const char *buf, size_t count,
+>>> +                    const char *method,
+>>> +                    unsigned long upper_limit)
+>>> +{
+>>> +     struct steamdeck *fan = dev_get_drvdata(dev);
+>>> +     unsigned long value;
+>>> +
+>>> +     if (kstrtoul(buf, 10, &value) || value >= upper_limit)
+>>> +             return -EINVAL;
+>>> +
+>>> +     if (ACPI_FAILURE(acpi_execute_simple_method(fan->adev->handle,
+>>> +                                                 (char *)method, value)))
+>>> +             return -EIO;
+>>> +
+>>> +     return count;
+>>> +}
+>>> +
+>>> +#define STEAMDECK_ATTR_WO(_name, _method, _upper_limit)                      \
+>>> +     static ssize_t _name##_store(struct device *dev,                \
+>>> +                                  struct device_attribute *attr,     \
+>>> +                                  const char *buf, size_t count)     \
+>>> +     {                                                               \
+>>> +             return steamdeck_simple_store(dev, buf, count,          \
+>>> +                                         _method,                    \
+>>> +                                         _upper_limit);              \
+>>> +     }                                                               \
+>>> +     static DEVICE_ATTR_WO(_name)
+>>> +
+>>> +STEAMDECK_ATTR_WO(target_cpu_temp, "STCT", U8_MAX / 2);
+>>> +STEAMDECK_ATTR_WO(gain, "SGAN", U16_MAX);
+>>> +STEAMDECK_ATTR_WO(ramp_rate, "SFRR", U8_MAX);
+>>> +STEAMDECK_ATTR_WO(hysteresis, "SHTS",  U16_MAX);
+>>> +STEAMDECK_ATTR_WO(maximum_battery_charge_rate, "CHGR", U16_MAX);
+>>> +STEAMDECK_ATTR_WO(recalculate, "SCHG", U16_MAX);
+>>> +
+>>> +STEAMDECK_ATTR_WO(led_brightness, "CHBV", U8_MAX);
+>>> +STEAMDECK_ATTR_WO(content_adaptive_brightness, "CABC", U8_MAX);
+>>> +STEAMDECK_ATTR_WO(gamma_set, "GAMA", U8_MAX);
+>>> +STEAMDECK_ATTR_WO(display_brightness, "WDBV", U8_MAX);
+>>> +STEAMDECK_ATTR_WO(ctrl_display, "WCDV", U8_MAX);
+>>> +STEAMDECK_ATTR_WO(cabc_minimum_brightness, "WCMB", U8_MAX);
+>>> +STEAMDECK_ATTR_WO(memory_data_access_control, "MDAC", U8_MAX);
+>>> +
+>>> +#define STEAMDECK_ATTR_WO_NOARG(_name, _method)                              \
+>>> +     static ssize_t _name##_store(struct device *dev,                \
+>>> +                                  struct device_attribute *attr,     \
+>>> +                                  const char *buf, size_t count)     \
+>>> +     {                                                               \
+>>> +             struct steamdeck *fan = dev_get_drvdata(dev);           \
+>>> +                                                                     \
+>>> +             if (ACPI_FAILURE(acpi_evaluate_object(fan->adev->handle, \
+>>> +                                                   _method, NULL, NULL))) \
+>>> +                     return -EIO;                                    \
+>>> +                                                                     \
+>>> +             return count;                                           \
+>>> +     }                                                               \
+>>> +     static DEVICE_ATTR_WO(_name)
+>>> +
+>>> +STEAMDECK_ATTR_WO_NOARG(power_cycle_display, "DPCY");
+>>> +STEAMDECK_ATTR_WO_NOARG(display_normal_mode_on, "NORO");
+>>> +STEAMDECK_ATTR_WO_NOARG(display_inversion_off, "INOF");
+>>> +STEAMDECK_ATTR_WO_NOARG(display_inversion_on, "INON");
+>>> +STEAMDECK_ATTR_WO_NOARG(idle_mode_on, "WRNE");
+>>> +
+>>> +#define STEAMDECK_ATTR_RO(_name, _method)                            \
+>>> +     static ssize_t _name##_show(struct device *dev,                 \
+>>> +                                 struct device_attribute *attr,      \
+>>> +                                 char *buf)                          \
+>>> +     {                                                               \
+>>> +             struct steamdeck *jup = dev_get_drvdata(dev);           \
+>>> +             unsigned long long val;                                 \
+>>> +                                                                     \
+>>> +             if (ACPI_FAILURE(acpi_evaluate_integer(                 \
+>>> +                                      jup->adev->handle,             \
+>>> +                                      _method, NULL, &val)))         \
+>>> +                     return -EIO;                                    \
+>>> +                                                                     \
+>>> +             return sprintf(buf, "%llu\n", val);                     \
+>>> +     }                                                               \
+>>> +     static DEVICE_ATTR_RO(_name)
+>>> +
+>>> +STEAMDECK_ATTR_RO(firmware_version, "PDFW");
+>>> +STEAMDECK_ATTR_RO(board_id, "BOID");
+>>> +STEAMDECK_ATTR_RO(pdcs, "PDCS");
+>>> +
+>>> +static umode_t
+>>> +steamdeck_is_visible(struct kobject *kobj, struct attribute *attr, int index)
+>>> +{
+>>> +     return attr->mode;
+>>> +}
+>>> +
+>>> +static struct attribute *steamdeck_attributes[] = {
+>>> +     &dev_attr_target_cpu_temp.attr,
+>>> +     &dev_attr_gain.attr,
+>>> +     &dev_attr_ramp_rate.attr,
+>>> +     &dev_attr_hysteresis.attr,
+>>> +     &dev_attr_maximum_battery_charge_rate.attr,
+>>> +     &dev_attr_recalculate.attr,
+>>> +     &dev_attr_power_cycle_display.attr,
+>>> +
+>>> +     &dev_attr_led_brightness.attr,
+>>> +     &dev_attr_content_adaptive_brightness.attr,
+>>> +     &dev_attr_gamma_set.attr,
+>>> +     &dev_attr_display_brightness.attr,
+>>> +     &dev_attr_ctrl_display.attr,
+>>> +     &dev_attr_cabc_minimum_brightness.attr,
+>>> +     &dev_attr_memory_data_access_control.attr,
+>>> +
+>>> +     &dev_attr_display_normal_mode_on.attr,
+>>> +     &dev_attr_display_inversion_off.attr,
+>>> +     &dev_attr_display_inversion_on.attr,
+>>> +     &dev_attr_idle_mode_on.attr,
+>>> +
+>>> +     &dev_attr_firmware_version.attr,
+>>> +     &dev_attr_board_id.attr,
+>>> +     &dev_attr_pdcs.attr,
+>>> +
+>>> +     NULL
+>>> +};
+>>> +
+>>> +static const struct attribute_group steamdeck_group = {
+>>> +     .attrs = steamdeck_attributes,
+>>> +     .is_visible = steamdeck_is_visible,
+>>> +};
+>>> +
+>>> +static const struct attribute_group *steamdeck_groups[] = {
+>>> +     &steamdeck_group,
+>>> +     NULL
+>>> +};
+>>> +
+>>> +static int steamdeck_read_fan_speed(struct steamdeck *jup, long *speed)
+>>> +{
+>>> +     unsigned long long val;
+>>> +
+>>> +     if (ACPI_FAILURE(acpi_evaluate_integer(jup->adev->handle,
+>>> +                                            "FANR", NULL, &val)))
+>>> +             return -EIO;
+>>> +
+>>> +     *speed = val;
+>>> +     return 0;
+>>> +}
+>>> +
+>>> +static int
+>>> +steamdeck_hwmon_read(struct device *dev, enum hwmon_sensor_types type,
+>>> +                  u32 attr, int channel, long *out)
+>>> +{
+>>> +     struct steamdeck *sd = dev_get_drvdata(dev);
+>>> +     unsigned long long val;
+>>> +
+>>> +     switch (type) {
+>>> +     case hwmon_temp:
+>>> +             if (attr != hwmon_temp_input)
+>>> +                     return -EOPNOTSUPP;
+>>> +
+>>> +             if (ACPI_FAILURE(acpi_evaluate_integer(sd->adev->handle,
+>>> +                                                    "BATT", NULL, &val)))
+>>> +                     return -EIO;
+>>> +             /*
+>>> +              * Assuming BATT returns deg C we need to mutiply it
+>>> +              * by 1000 to convert to mC
+>>> +              */
+>>> +             *out = val * 1000;
+>>> +             break;
+>>> +     case hwmon_fan:
+>>> +             switch (attr) {
+>>> +             case hwmon_fan_input:
+>>> +                     return steamdeck_read_fan_speed(sd, out);
+>>> +             case hwmon_fan_target:
+>>> +                     *out = sd->fan_target;
+>>> +                     break;
+>>> +             case hwmon_fan_fault:
+>>> +                     if (ACPI_FAILURE(acpi_evaluate_integer(
+>>> +                                              sd->adev->handle,
+>>> +                                              "FANC", NULL, &val)))
+>>> +                             return -EIO;
+>>> +                     /*
+>>> +                      * FANC (Fan check):
+>>> +                      * 0: Abnormal
+>>> +                      * 1: Normal
+>>> +                      */
+>>> +                     *out = !val;
+>>> +                     break;
+>>> +             default:
+>>> +                     return -EOPNOTSUPP;
+>>> +             }
+>>> +             break;
+>>> +     default:
+>>> +             return -EOPNOTSUPP;
+>>> +     }
+>>> +
+>>> +     return 0;
+>>> +}
+>>> +
+>>> +static int
+>>> +steamdeck_hwmon_read_string(struct device *dev, enum hwmon_sensor_types type,
+>>> +                         u32 attr, int channel, const char **str)
+>>> +{
+>>> +     switch (type) {
+>>> +     case hwmon_temp:
+>>> +             *str = "Battery Temp";
+>>> +             break;
+>>> +     case hwmon_fan:
+>>> +             *str = "System Fan";
+>>> +             break;
+>>> +     default:
+>>> +             return -EOPNOTSUPP;
+>>> +     }
+>>> +
+>>> +     return 0;
+>>> +}
+>>> +
+>>> +static int
+>>> +steamdeck_hwmon_write(struct device *dev, enum hwmon_sensor_types type,
+>>> +                   u32 attr, int channel, long val)
+>>> +{
+>>> +     struct steamdeck *sd = dev_get_drvdata(dev);
+>>> +
+>>> +     if (type != hwmon_fan ||
+>>> +         attr != hwmon_fan_target)
+>>> +             return -EOPNOTSUPP;
+>>> +
+>>> +     if (val > U16_MAX)
+>>> +             return -EINVAL;
+>>> +
+>>> +     sd->fan_target = val;
+>>> +
+>>> +     if (ACPI_FAILURE(acpi_execute_simple_method(sd->adev->handle,
+>>> +                                                 "FANS", val)))
+>>> +             return -EIO;
+>>> +
+>>> +     return 0;
+>>> +}
+>>> +
+>>> +static umode_t
+>>> +steamdeck_hwmon_is_visible(const void *data, enum hwmon_sensor_types type,
+>>> +                        u32 attr, int channel)
+>>> +{
+>>> +     if (type == hwmon_fan &&
+>>> +         attr == hwmon_fan_target)
+>>> +             return 0644;
+>>> +
+>>> +     return 0444;
+>>> +}
+>>> +
+>>> +static const struct hwmon_channel_info *steamdeck_info[] = {
+>>> +     HWMON_CHANNEL_INFO(temp,
+>>> +                        HWMON_T_INPUT | HWMON_T_LABEL),
+>>> +     HWMON_CHANNEL_INFO(fan,
+>>> +                        HWMON_F_INPUT | HWMON_F_LABEL |
+>>> +                        HWMON_F_TARGET | HWMON_F_FAULT),
+>>> +     NULL
+>>> +};
+>>> +
+>>> +static const struct hwmon_ops steamdeck_hwmon_ops = {
+>>> +     .is_visible = steamdeck_hwmon_is_visible,
+>>> +     .read = steamdeck_hwmon_read,
+>>> +     .read_string = steamdeck_hwmon_read_string,
+>>> +     .write = steamdeck_hwmon_write,
+>>> +};
+>>> +
+>>> +static const struct hwmon_chip_info steamdeck_chip_info = {
+>>> +     .ops = &steamdeck_hwmon_ops,
+>>> +     .info = steamdeck_info,
+>>> +};
+>>> +
+>>> +#define STEAMDECK_STA_OK                     \
+>>> +     (ACPI_STA_DEVICE_ENABLED |              \
+>>> +      ACPI_STA_DEVICE_PRESENT |              \
+>>> +      ACPI_STA_DEVICE_FUNCTIONING)
+>>> +
+>>> +static int
+>>> +steamdeck_ddic_reg_read(void *context, unsigned int reg, unsigned int *val)
+>>> +{
+>>> +     union acpi_object obj = { .type = ACPI_TYPE_INTEGER };
+>>> +     struct acpi_object_list arg_list = { .count = 1, .pointer = &obj, };
+>>> +     struct steamdeck *sd = context;
+>>> +     unsigned long long _val;
+>>> +
+>>> +     obj.integer.value = reg;
+>>> +
+>>> +     if (ACPI_FAILURE(acpi_evaluate_integer(sd->adev->handle,
+>>> +                                            "RDDI", &arg_list, &_val)))
+>>> +             return -EIO;
+>>> +
+>>> +     *val = _val;
+>>> +     return 0;
+>>> +}
+>>> +
+>>> +static int steamdeck_read_pdcs(struct steamdeck *sd, unsigned long long *pdcs)
+>>> +{
+>>> +     acpi_status status;
+>>> +
+>>> +     status = acpi_evaluate_integer(sd->adev->handle, "PDCS", NULL, pdcs);
+>>> +     if (ACPI_FAILURE(status)) {
+>>> +             dev_err(sd->dev, "PDCS evaluation failed: %s\n",
+>>> +                     acpi_format_exception(status));
+>>> +             return -EIO;
+>>> +     }
+>>> +
+>>> +     return 0;
+>>> +}
+>>> +
+>>> +static void steamdeck_usb_role_work(struct work_struct *work)
+>>> +{
+>>> +     struct steamdeck *sd =
+>>> +             container_of(work, struct steamdeck, role_work.work);
+>>> +     unsigned long long pdcs;
+>>> +     bool usb_host;
+>>> +
+>>> +     if (steamdeck_read_pdcs(sd, &pdcs))
+>>> +             return;
+>>> +
+>>> +     /*
+>>> +      * We only care about these two
+>>> +      */
+>>> +     pdcs &= ACPI_STEAMDECK_PORT_CONNECT | ACPI_STEAMDECK_CUR_DATA_ROLE;
+>>> +
+>>> +     /*
+>>> +      * For "connect" events our role is determined by a bit in
+>>> +      * PDCS, for "disconnect" we switch to being a gadget
+>>> +      * unconditionally. The thinking for the latter is we don't
+>>> +      * want to start acting as a USB host until we get
+>>> +      * confirmation from the firmware that we are a USB host
+>>> +      */
+>>> +     usb_host = (pdcs & ACPI_STEAMDECK_PORT_CONNECT) ?
+>>> +             pdcs & ACPI_STEAMDECK_CUR_DATA_ROLE : false;
+>>> +
+>>> +     WARN_ON(extcon_set_state_sync(sd->edev, EXTCON_USB_HOST,
+>>> +                                   usb_host));
+>>> +     dev_dbg(sd->dev, "USB role is %s\n", usb_host ? "host" : "device");
+>>> +}
+>>> +
+>>> +static void steamdeck_notify(acpi_handle handle, u32 event, void *context)
+>>> +{
+>>> +     struct device *dev = context;
+>>> +     struct steamdeck *sd = dev_get_drvdata(dev);
+>>> +     unsigned long long pdcs;
+>>> +     unsigned long delay;
+>>> +
+>>> +     switch (event) {
+>>> +     case ACPI_STEAMDECK_NOTIFY_STATUS:
+>>> +             if (steamdeck_read_pdcs(sd, &pdcs))
+>>> +                     return;
+>>> +             /*
+>>> +              * We process "disconnect" events immediately and
+>>> +              * "connect" events with a delay to give the HW time
+>>> +              * to settle. For example attaching USB hub (at least
+>>> +              * for HW used for testing) will generate intermediary
+>>> +              * event with "host" bit not set, followed by the one
+>>> +              * that does have it set.
+>>> +              */
+>>> +             delay = (pdcs & ACPI_STEAMDECK_PORT_CONNECT) ?
+>>> +                     STEAMDECK_ROLE_SWITCH_DELAY : 0;
+>>> +
+>>> +             queue_delayed_work(system_long_wq, &sd->role_work, delay);
+>>> +             break;
+>>> +     default:
+>>> +             dev_err(dev, "Unsupported event [0x%x]\n", event);
+>>> +     }
+>>> +}
+>>> +
+>>> +static void steamdeck_remove_notify_handler(void *data)
+>>> +{
+>>> +     struct steamdeck *sd = data;
+>>> +
+>>> +     acpi_remove_notify_handler(sd->adev->handle, ACPI_DEVICE_NOTIFY,
+>>> +                                steamdeck_notify);
+>>> +     cancel_delayed_work_sync(&sd->role_work);
+>>> +}
+>>> +
+>>> +static const unsigned int steamdeck_extcon_cable[] = {
+>>> +     EXTCON_USB,
+>>> +     EXTCON_USB_HOST,
+>>> +     EXTCON_CHG_USB_SDP,
+>>> +     EXTCON_CHG_USB_CDP,
+>>> +     EXTCON_CHG_USB_DCP,
+>>> +     EXTCON_CHG_USB_ACA,
+>>> +     EXTCON_NONE,
+>>> +};
+>>> +
+>>> +static int steamdeck_probe(struct platform_device *pdev)
+>>> +{
+>>> +     struct device *dev = &pdev->dev;
+>>> +     struct steamdeck *sd;
+>>> +     acpi_status status;
+>>> +     unsigned long long sta;
+>>> +     int ret;
+>>> +
+>>> +     static const struct regmap_config regmap_config = {
+>>> +             .reg_bits = 8,
+>>> +             .val_bits = 8,
+>>> +             .max_register = 255,
+>>> +             .cache_type = REGCACHE_NONE,
+>>> +             .reg_read = steamdeck_ddic_reg_read,
+>>> +     };
+>>> +
+>>> +     sd = devm_kzalloc(dev, sizeof(*sd), GFP_KERNEL);
+>>> +     if (!sd)
+>>> +             return -ENOMEM;
+>>> +     sd->adev = ACPI_COMPANION(&pdev->dev);
+>>> +     sd->dev = dev;
+>>> +     platform_set_drvdata(pdev, sd);
+>>> +     INIT_DELAYED_WORK(&sd->role_work, steamdeck_usb_role_work);
+>>> +
+>>> +     status = acpi_evaluate_integer(sd->adev->handle, "_STA",
+>>> +                                    NULL, &sta);
+>>> +     if (ACPI_FAILURE(status)) {
+>>> +             dev_err(dev, "Status check failed (0x%x)\n", status);
+>>> +             return -EINVAL;
+>>> +     }
+>>> +
+>>> +     if ((sta & STEAMDECK_STA_OK) != STEAMDECK_STA_OK) {
+>>> +             dev_err(dev, "Device is not ready\n");
+>>> +             return -EINVAL;
+>>> +     }
+>>> +
+>>> +     /*
+>>> +      * Our ACPI interface doesn't expose a method to read current
+>>> +      * fan target, so we use current fan speed as an
+>>> +      * approximation.
+>>> +      */
+>>> +     if (steamdeck_read_fan_speed(sd, &sd->fan_target))
+>>> +             dev_warn(dev, "Failed to read fan speed");
+>>> +
+>>> +     sd->hwmon = devm_hwmon_device_register_with_info(dev,
+>>> +                                                      "steamdeck",
+>>> +                                                      sd,
+>>> +                                                      &steamdeck_chip_info,
+>>> +                                                      steamdeck_groups);
+>>> +     if (IS_ERR(sd->hwmon)) {
+>>> +             dev_err(dev, "Failed to register HWMON device");
+>>> +             return PTR_ERR(sd->hwmon);
+>>> +     }
+>>> +
+>>> +     sd->regmap = devm_regmap_init(dev, NULL, sd, &regmap_config);
+>>> +     if (IS_ERR(sd->regmap))
+>>> +             dev_err(dev, "Failed to register REGMAP");
+>>> +
+>>> +     sd->edev = devm_extcon_dev_allocate(dev, steamdeck_extcon_cable);
+>>> +     if (IS_ERR(sd->edev))
+>>> +             return -ENOMEM;
+>>> +
+>>> +     ret = devm_extcon_dev_register(dev, sd->edev);
+>>> +     if (ret < 0) {
+>>> +             dev_err(dev, "Failed to register extcon device: %d\n", ret);
+>>> +             return ret;
+>>> +     }
+>>> +
+>>> +     /*
+>>> +      * Set initial role value
+>>> +      */
+>>> +     queue_delayed_work(system_long_wq, &sd->role_work, 0);
+>>> +     flush_delayed_work(&sd->role_work);
+>>> +
+>>> +     status = acpi_install_notify_handler(sd->adev->handle,
+>>> +                                          ACPI_DEVICE_NOTIFY,
+>>> +                                          steamdeck_notify,
+>>> +                                          dev);
+>>> +     if (ACPI_FAILURE(status)) {
+>>> +             dev_err(dev, "Error installing ACPI notify handler\n");
+>>> +             return -EIO;
+>>> +     }
+>>> +
+>>> +     ret = devm_add_action_or_reset(dev, steamdeck_remove_notify_handler,
+>>> +                                    sd);
+>>> +     return ret;
+>>> +}
+>>> +
+>>> +static const struct acpi_device_id steamdeck_device_ids[] = {
+>>> +     { "VLV0100", 0 },
+>>> +     { "", 0 },
+>>> +};
+>>> +MODULE_DEVICE_TABLE(acpi, steamdeck_device_ids);
+>>> +
+>>> +static struct platform_driver steamdeck_driver = {
+>>> +     .probe = steamdeck_probe,
+>>> +     .driver = {
+>>> +             .name = "steamdeck",
+>>> +             .acpi_match_table = steamdeck_device_ids,
+>>> +     },
+>>> +};
+>>> +module_platform_driver(steamdeck_driver);
+>>> +
+>>> +MODULE_AUTHOR("Andrey Smirnov <andrew.smirnov@gmail.com>");
+>>> +MODULE_DESCRIPTION("Steam Deck ACPI platform driver");
+>>> +MODULE_LICENSE("GPL");
+>>> --
+>>> 2.25.1
+>>>
+> 
 
-No, Device-id will be used only by trusted agents, which is Xen in our
-case. Please see above.
-
-> > > Agents concept is described in Section 4.2.1 [0].
-> > >
-> >
-> > Hi Oleksii,
-> >
-> > I had a look at this patch and the related XEN series and I'd have a fe=
-w
-> > questions/doubts. (adding to the loop in CC Souvik from ATG and Vincent
-> > from Linaro since he's working on similar SCMI virtualization stuff)
-> >
-> > > scmi_devid in Device-tree node example:
-> > > usb@e6590000
-> > > {
-> > >     scmi_devid =3D <19>;
-> > >     clocks =3D <&scmi_clock 3>, <&scmi_clock 2>;
-> > >     resets =3D <&scmi_reset 10>, <&scmi_reset 9>;
-> > >     power-domains =3D <&scmi_power 0>;
-> > > };
-> > >
-> >
-> > So this SCMI device ID is meant to identify an SCMI device, viewed as a
-> > grouping of SCMI resources (clock/power/...etc) so that a Trusted Agent
-> > can issue a BASE_SET_DEVICE_PERMISSIONS telling to the SCMI Server
-> > platform backend (SCP sw sitting somewhere) which SCMI agents on the
-> > system can access which (SCMI) devices (in the Normal nonSecure world):
-> > basically, if I got it right from the Xen series, your hypervisor actin=
-g
-> > as Trusted Agent (and recognized as trusted agent by by the SCP) tells
-> > the SCMI platform server SCP (via SMC in your case) how to configure th=
-e
-> > access to the devices for all the other (non trusted) agents in the sys=
-tem
-> > (other Guest OS/Domains instances).
-> >
->=20
-> To add to the above, getting the device-id from GuestOS/DomX(X!=3D0) is m=
-ain
-> issue.
->=20
-
-please see above. We will not either use not provice scmi-devid from
-non-trusted agent.
-
-> > The SCMI spec does not indeed cover the discovery of such devices and
-> > the related associated resources: it indeed delegates such description
-> > to FDT/ACPI as of now.
-> >
-> > AFAIU in this scenario I imagine:
-> >
-> > - SCMI Server platform (SCP) knows via its own methods (builtin_config
-> >   FDT...etc) the list of defined SCMI devices and related associated
-> >   resources like:
-> >
-> >   deviceNNN -->> clock_X / power_Q
-> >   deviceYYY ---> clock_Z / power_W
-> >   ..etc
-> >
-> >
-> > - Trusted Agent (XEN hypervisor) in turn:
-> >
-> >   + is configured/recognized by the SCMI Server as a Trusted Agent (bas=
-ed
-> >     on the channel it uses to talk to the server) and as such it is all=
-owed
-> >     to issue BASE_SET_DEVICE_PERMISSIONS (by the SCMI server)
-> >
-> >   + has knowledge of the same set of devices/resources allocations (via
-> >     its own FDT) as the SCMI server
-> >
-> >   + can issue a proper set of BASE_SET_DEVICE_PERMISSIONS telling the
-> >     SCMI server backend which devices can be used by which non-trusted
-> >     agents (GuestOS) ... even dynamically I suppose when guests come an=
-d
-> >     go.
-> >
-> >     Xen:
-> > 	    BASE_SET_DEVICE_PERMISSIONS(dev_NNN, agent_3)
-> > 	    BASE_SET_DEVICE_PERMISSIONS(dev_YYY, agent_2)
-> > 	    BASE_SET_DEVICE_PERMISSIONS(dev_NNN, agent_4)
-> >
-> >     and in this scenario the same dev_NNN could be made accessible to
-> >     two different agents, it will be anyway up to the SCMI Server
-> >     backend to armonize or reject such requests from 2 different
-> >     agents around the same shared resources
-> >
->=20
-> Agreed with all the details above.
->=20
-> >
-> > - Other non-trusted agents on the system (GuestOSes or other non
-> >   virtualized subsystems...e.g. WiFi/Modem...etc), described in their
-> >   DTs (for Linux GuestOS) as using SCMI resources as usual (without SCM=
-I
-> >   device id) just issue SCMI request on the basic resource and those ar=
-e
-> >   routed to the SCMI Server backend by the Hypervisor UNMODIFIED:
-> >
->=20
-> +1(specifically mentioning it to emphasize how much I agree on no need
-> for device-id in guest OS(VMs)
-
-I agree with this too.
->=20
-> >   example for a shared resource:
-> >
-> >    - Agent_2 set power_Q ON --->>> SCMI Server - OK - powerQ TURNED ON
-> >     				  (allowed as configured by Trusted Agent,
-> > 				   powerQ hw was OFF turn it ON)
-> >
-> >    - Agent_3 set power_Q OFF --->>> SCMI Server - DENIED
-> >     				  (disallowed as configured by Trusted Agent)
-> >
-> >    - Agent_4 set power_Q ON --->>> SCMI Server - OK - powerQ ALREADY ON
-> >     				  (allowed as configured by Trusted Agent,
-> > 				   powerQ hw was ON nothing to be done)
-> >
-> >    - Agent_2 set power_Q OFF --->>> SCMI Server - OK - powerQ UNCHANGED=
- (SHARED with Agent_2)
-> >     				  (allowed as configured by Trusted Agent but shared with
-> > 				   another agent)
-> >
-> >    - Agent_4 set power_Q OFF --->>> SCMI Server - OK - powerQ OFF
-> >     				  (allowed as configured by Trusted Agent but shared with
-> > 				   another agent
-> >
-> > So in all of this, I don't get why you need this DT definition aggregat=
-ing SCMI
-> > resources to SCMI device IDs in the Guest OS, which is an SCMI agent th=
-at does not
-> > need to now anything about SCMI device IDs (at least with the current s=
-pec): this
-> > would make sense only if the Linux Kernel was the TrustedAgent in charg=
-e of
-> > configuring the devices permissions via BASE_SET_DEVICE_PERMISSIONS.
-> > (in fact you said you won't provide any code to manage this scmi_devid
-> > in the kernel since those guests are not trusted agents and the won't b=
-e
-> > allowed to set device permissions...)
-> >
->=20
-> +1 (again)
->=20
-> > The only tricky part I can see in all of the above is agent identificat=
-ion, since
-> > the agents are assigned an ID by the SCMI platform (which can be querie=
-d) and they
-> > have a set of dedicated channels to use, so basically the platform real=
-ly identifies
-> > the Agents looking at the channel from which a request is coming from a=
-nd AgentID is
-> > not carried inside the message as a source and cannot be spoofed.
-> >
->=20
-> IIUC, the physical/virtual transport and associated transport chosen
-> identifies the agent for the SCMI platform.
-
-Could you please clarify what do you mean under "physical/virtual
-transport"?
-For now yes - Firmware should get information for the channel from
-transport.
->=20
-> > > Given example shows the configuration of the hsusb node, which is usi=
-ng
-> > > scmi to contol clocks, resets and power-domains. scmi_devid is set
-> > > equals to 19, which should match defined id for usb in the Firmware.
-> > >
-> > > Trusted agent will use scmi_devid to set the device permissions for
-> > > the Agents. Guest OS should not have an access to the permissions
-> > > settings, so no code to process scmi_devid was presented in Linux
-> > > kernel.
-> > >
-> > > We are currently contributing changes to Xen, which are intended to
-> > > mediate SCMI access from Guests to the Firmware. Xen uses scmi_devid =
-to set
-> > > the permissions for the devices. See [1] thread for details.
-> > >
-> > > [0] https://urldefense.com/v3/__https://developer.arm.com/documentati=
-on/den0056/latest__;!!GF_29dbcQIUBPA!mGggDzmp0B8cSdGJdH4utz6sx7g5PMXq05mXf9=
-1dU8XgkJaCuEpHdARZCdl-g1BnrduL$ [developer[.]arm[.]com]
-> > > [1] https://urldefense.com/v3/__https://xen.markmail.org/message/mmi4=
-fpb4qr6e3kad__;!!GF_29dbcQIUBPA!mGggDzmp0B8cSdGJdH4utz6sx7g5PMXq05mXf91dU8X=
-gkJaCuEpHdARZCdl-g-bWzzb5$ [xen[.]markmail[.]org]
-> >
-> > IMHO, but I could be wrong, looking at the current SCMI spec you cannot=
- just
-> > gather messages from a set of GuestOs talking via different SCMI channe=
-ls and
-> > then pipe/route them through a single channel to the backend server,
-> > attaching/spoofing some sort of Agent source ID to each message like yo=
-u seem to
-> > be doing in the Xen series
-> >
->=20
-> I haven't looked at the other series, but it is hard to say the spec proh=
-ibits
-> this. I don't understand that spoofing part, but Xen hyp can arbitrate th=
-e
-> requests across guests I believe. But the devil is in details so I can't
-> comment on what is done. What I can say is this Agent ID is in each messa=
-ge is
-> not compliant to spec.
->=20
-
-In our implementation XEN do not copy any data from shared memory. The
-only thing it does is letting Firmware know which channel it should use.
-
-Best regards,
-Oleksii.=

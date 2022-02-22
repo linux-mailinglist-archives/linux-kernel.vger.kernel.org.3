@@ -2,132 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E6714C0262
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 20:50:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E47EF4C0265
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 20:50:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234179AbiBVTus (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 14:50:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50988 "EHLO
+        id S235316AbiBVTvE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 14:51:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233668AbiBVTuo (ORCPT
+        with ESMTP id S233668AbiBVTvC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 14:50:44 -0500
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC7DAB6D09
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 11:50:18 -0800 (PST)
-Received: by mail-il1-f200.google.com with SMTP id l5-20020a927005000000b002c24d650588so3754293ilc.5
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 11:50:18 -0800 (PST)
+        Tue, 22 Feb 2022 14:51:02 -0500
+Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B994CBA75A;
+        Tue, 22 Feb 2022 11:50:36 -0800 (PST)
+Received: by mail-pg1-x536.google.com with SMTP id d16so17885656pgd.9;
+        Tue, 22 Feb 2022 11:50:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=UXjqKNRIgAxMkX6Cqpc/qXekDEWeVq9e93BE44DZgy8=;
+        b=bzNy2OQYqoF9fgSgZMFDD5DbAtgYNYLa2UZkmn8QOEBGt9Ddtu+Xm0gVwHi5NeBRLw
+         Xanu1t2DcPXG0uuFeBVnkrZ5Xux/TYpApMgXLVHeNHAHNL//JZEQdgImpgwjuRR0U6pV
+         9soDMPSrXsY1fjBNig2HWKxELREeNFI1I0Mj/hsX2erYiDcGUnLHDwJz3WXlGJQ1zUrd
+         IwfAFtDasYah/dnF5DrT+KqRe9JPoX+z9vYIz6mvfVY88As2x80YUcXiD6OpuLEp38uX
+         5UH+96wV1uLjy3PBjdqhvFOQsHaCBKqKihcj9VZWXAFEnNgsNY43d/+N8Y+vaG+dYOam
+         Z8Zw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=fdJDIrhq6AjxWdy9QWWruG80JTZiFgwR3NgptNzXp7c=;
-        b=nXNuFBYlpXEyNoF9fiG8d0z7Gquo/0JbEmHvLBbElCj4Q9M7RwICWZmrNASM7w2f7t
-         teHAPEI0ZjJIMmnVbj7Jgua4uqeMjH71++C1wm+UUtc+ewFiIWpBOLfmYoISR7pEbdUk
-         dICUxbIXdH8EHZ0Z/rqlRapZ58mEgEr4Dh1yfO1aFJsZo2zMIli6uNCA0O38PHVWL3vg
-         KacmhrBnrdBFJx7Qtk4wI8JNTaaFHnV5CK/TZqp1C/5dRpcPr4a1bmEA3mQwST2eq7lO
-         uQjPwRVw6KopWaBZ6prioAICB328Ze/htUTuu+TiyeEMNwL4HlLiJQPGVwGrq2tdWlQi
-         94cg==
-X-Gm-Message-State: AOAM530nMJtjeR5L9yzgl3AaUZlB1ikr4TNkw+PGeo0Nc7EuphoqAv+v
-        ZHHKfi6V/DFhnKmQOAklZjea2BvZOp/FOOTNVq2J20WoNFiQ
-X-Google-Smtp-Source: ABdhPJxzXn0HAF1srxPYH/n0a3v62AYi50L/gJXjfHtDtnDNU49drLAVxvbnu6K3fs8YAGrf6XHppYvz3uOVanIHvG4rs484szF+
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=UXjqKNRIgAxMkX6Cqpc/qXekDEWeVq9e93BE44DZgy8=;
+        b=mH9dlkbYK7Q1zYwLZosuQxvrr/KjbqWfMX2qXIM/tbvzuvG2VWPzeNtLAWH0cclu/7
+         pk6W8taTk4yUiCKVaZuchaf3L3JZDtfpyzhyfaBdDCIQ0Hkk32BMcA0psD35fpbrnQxT
+         5Mmk4i3utX5eifCBlGshkWQaQdbu5QbqxfX2tJ84JChGGDYSfz9jnh0a9yjE4cArnRCL
+         j4Hm1m+LDX5XeELhcVimSzxbX6Ol9CrbZvwV++MbusE8kKvU6IqZ3+bnvoPml5sIH+tX
+         devOEl715uashx/M2Rb8aAQPmEfr6Vljxij7/AGX58zWxLNqSSmW7r7cB+MTZIHzlbm4
+         kbHQ==
+X-Gm-Message-State: AOAM532BxkA0J50D43d+EI7gcJgcunBgy/1Rvc7VhM2yr/aerV6xnW12
+        xS9VpxEu97dpTwslwVHcvns=
+X-Google-Smtp-Source: ABdhPJyTOKkCrJShCu5+Ro+v3Di/q1CAk6Xek47BOOTpf1EsNabtf1X1LNcMfc/wnAoXdkJV5Qk/cg==
+X-Received: by 2002:a63:894a:0:b0:365:8dbf:cd0d with SMTP id v71-20020a63894a000000b003658dbfcd0dmr20710224pgd.5.1645559436052;
+        Tue, 22 Feb 2022 11:50:36 -0800 (PST)
+Received: from localhost (2603-800c-1a02-1bae-e24f-43ff-fee6-449f.res6.spectrum.com. [2603:800c:1a02:1bae:e24f:43ff:fee6:449f])
+        by smtp.gmail.com with ESMTPSA id ep5-20020a17090ae64500b001bc56af507dsm333344pjb.47.2022.02.22.11.50.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Feb 2022 11:50:35 -0800 (PST)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Tue, 22 Feb 2022 09:50:33 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+Cc:     lizefan.x@bytedance.com, hannes@cmpxchg.org,
+        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: Re: [PATCH] cpuset: Fix kernel-doc
+Message-ID: <YhU+iQ8GdN9JKjgs@slm.duckdns.org>
+References: <20220216031753.8298-1-jiapeng.chong@linux.alibaba.com>
 MIME-Version: 1.0
-X-Received: by 2002:a5d:8714:0:b0:636:13bb:bc89 with SMTP id
- u20-20020a5d8714000000b0063613bbbc89mr20048910iom.126.1645559418262; Tue, 22
- Feb 2022 11:50:18 -0800 (PST)
-Date:   Tue, 22 Feb 2022 11:50:18 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000951c2505d8a0a8e5@google.com>
-Subject: [syzbot] WARNING in j1939_session_deactivate_activate_next
-From:   syzbot <syzbot+3d2eaacbc2b94537c6c5@syzkaller.appspotmail.com>
-To:     davem@davemloft.net, kernel@pengutronix.de, kuba@kernel.org,
-        linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux@rempel-privat.de, mkl@pengutronix.de, netdev@vger.kernel.org,
-        robin@protonic.nl, socketcan@hartkopp.net,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220216031753.8298-1-jiapeng.chong@linux.alibaba.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Wed, Feb 16, 2022 at 11:17:53AM +0800, Jiapeng Chong wrote:
+> Fix the following W=1 kernel warnings:
+> 
+> kernel/cgroup/cpuset.c:3718: warning: expecting prototype for
+> cpuset_memory_pressure_bump(). Prototype was for
+> __cpuset_memory_pressure_bump() instead.
+> 
+> kernel/cgroup/cpuset.c:3568: warning: expecting prototype for
+> cpuset_node_allowed(). Prototype was for __cpuset_node_allowed()
+> instead.
+> 
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
 
-syzbot found the following issue on:
+Applied to cgroup/for-5.17-fixes.
 
-HEAD commit:    7993e65fdd0f Merge tag 'mtd/fixes-for-5.17-rc5' of git://g..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=16c9b264700000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=b41a243aa9878175
-dashboard link: https://syzkaller.appspot.com/bug?extid=3d2eaacbc2b94537c6c5
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=133ec75a700000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1039840a700000
+Thanks.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+3d2eaacbc2b94537c6c5@syzkaller.appspotmail.com
-
-vcan0: j1939_xtp_rx_dat_one: 0xffff88801fdd2800: Data of RX-looped back packet (00 ff ff ff ff ff ff) doesn't match TX data (00 00 00 00 00 00 00)!
-vcan0: j1939_xtp_rx_dat_one: 0xffff88801c86f000: last 15
-vcan0: j1939_xtp_rx_abort_one: 0xffff88801fdd2800: 0x00000: (5) Maximal retransmit request limit reached
-vcan0: j1939_xtp_rx_abort_one: 0xffff88801fdd2000: 0x00000: (5) Maximal retransmit request limit reached
-------------[ cut here ]------------
-WARNING: CPU: 0 PID: 13 at net/can/j1939/transport.c:1090 j1939_session_deactivate net/can/j1939/transport.c:1090 [inline]
-WARNING: CPU: 0 PID: 13 at net/can/j1939/transport.c:1090 j1939_session_deactivate_activate_next+0x95/0xd3 net/can/j1939/transport.c:1100
-Modules linked in:
-CPU: 0 PID: 13 Comm: ksoftirqd/0 Not tainted 5.17.0-rc4-syzkaller-00217-g7993e65fdd0f #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-RIP: 0010:j1939_session_deactivate net/can/j1939/transport.c:1090 [inline]
-RIP: 0010:j1939_session_deactivate_activate_next+0x95/0xd3 net/can/j1939/transport.c:1100
-Code: 03 38 d0 7c 0c 84 d2 74 08 4c 89 ef e8 73 71 75 f8 8b 5d 28 bf 01 00 00 00 89 de e8 04 e3 2d f8 83 fb 01 77 07 e8 7a df 2d f8 <0f> 0b e8 73 df 2d f8 48 89 ef e8 8b 7a de fe 4c 89 e7 89 c3 e8 e1
-RSP: 0018:ffffc90000d279b0 EFLAGS: 00010246
-RAX: 0000000000000000 RBX: 0000000000000001 RCX: 0000000000000100
-RDX: ffff888011918000 RSI: ffffffff894afea6 RDI: 0000000000000003
-RBP: ffff88801fdd2000 R08: 0000000000000001 R09: ffff88801fdd202b
-R10: ffffffff894afe9c R11: 0000000000000000 R12: ffff88801dd41070
-R13: ffff88801fdd2028 R14: ffff88801c9fd818 R15: ffffffff8ac38340
-FS:  0000000000000000(0000) GS:ffff8880b9c00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000000020000048 CR3: 000000007f5b2000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- j1939_xtp_rx_abort_one.cold+0x20b/0x33c net/can/j1939/transport.c:1340
- j1939_xtp_rx_abort net/can/j1939/transport.c:1352 [inline]
- j1939_tp_cmd_recv net/can/j1939/transport.c:2100 [inline]
- j1939_tp_recv+0xb3d/0xcb0 net/can/j1939/transport.c:2133
- j1939_can_recv+0x6ff/0x9a0 net/can/j1939/main.c:108
- deliver net/can/af_can.c:574 [inline]
- can_rcv_filter+0x5d4/0x8d0 net/can/af_can.c:608
- can_receive+0x31d/0x580 net/can/af_can.c:665
- can_rcv+0x120/0x1c0 net/can/af_can.c:696
- __netif_receive_skb_one_core+0x114/0x180 net/core/dev.c:5351
- __netif_receive_skb+0x24/0x1b0 net/core/dev.c:5465
- process_backlog+0x2a5/0x6c0 net/core/dev.c:5797
- __napi_poll+0xb3/0x6e0 net/core/dev.c:6365
- napi_poll net/core/dev.c:6432 [inline]
- net_rx_action+0x801/0xb40 net/core/dev.c:6519
- __do_softirq+0x29b/0x9c2 kernel/softirq.c:558
- run_ksoftirqd kernel/softirq.c:921 [inline]
- run_ksoftirqd+0x2d/0x60 kernel/softirq.c:913
- smpboot_thread_fn+0x645/0x9c0 kernel/smpboot.c:164
- kthread+0x2e9/0x3a0 kernel/kthread.c:377
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
- </TASK>
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+-- 
+tejun

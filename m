@@ -2,138 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C0E64C0209
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 20:29:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E8EB4C020B
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 20:30:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235211AbiBVTaL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 14:30:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34956 "EHLO
+        id S235221AbiBVTa2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 14:30:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234928AbiBVTaK (ORCPT
+        with ESMTP id S235185AbiBVTa0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 14:30:10 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9EDA8140F6
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 11:29:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1645558183;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=P/Jd5qPSi0YoZ3kqzdTLt1xOvKYnU22Qo00BT9erdYs=;
-        b=cWUvuzIEBCRxeeVM6AfOwHjb9u8ay8CZawKb0WI4zLT+y0FksHRjgIinwaJaUgBVJYACSU
-        q8b2tsQN93vogykVhE6Qx8Oh0wQ3vpRSxtDHg3Y4T2/RENNK257eLvYx3O0YFZ2lvNIPcl
-        LBxXov9IYlWJ4S/yxrz8BVpn29obpQE=
-Received: from mail-ot1-f69.google.com (mail-ot1-f69.google.com
- [209.85.210.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-35-BjQ6rLSwO5qHrSq6Urw6Pw-1; Tue, 22 Feb 2022 14:29:42 -0500
-X-MC-Unique: BjQ6rLSwO5qHrSq6Urw6Pw-1
-Received: by mail-ot1-f69.google.com with SMTP id l23-20020a056830239700b005ad40210ca2so8794736ots.3
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 11:29:42 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
-         :references:organization:mime-version:content-transfer-encoding;
-        bh=P/Jd5qPSi0YoZ3kqzdTLt1xOvKYnU22Qo00BT9erdYs=;
-        b=QbL2Xcpr+N1iYiCCy4Hcx25sfx1C8On46FXqkJ74p09ZYdrnErX5OhLIxAyJ2t0Jy5
-         rvkLoAAiUxR+m+4jwrFilnMGghAAdclcrmBluP07XHsoPkcq2prmic0dhHg+0/Rp87zR
-         92dCjcs19AOz+8ponQUtwbLi3ak461+YNkJZNfwRglULDPriwlu0qy6NB8fTAEPh+3jb
-         I8K97bXKDReBgXHwvRysG6nKih6g0kC/A731QF1SwcHq7CNRkA4dur+oiMVjopxrmdq/
-         ptik31Pbf4teWYEuw3dr87OwxAYA3CPgOiU8pSLIMpcizEBZw0Ga3XfTdhZ6869oqV41
-         39OA==
-X-Gm-Message-State: AOAM5307UuxrMrbz9+U/2mZJiJwrlDkN72xna2dXMO/Om4TK96Vwaj5Q
-        bWd+qQ6o2wEjabusZ8YtF+5fFCPImxuJ7q+s+liwkzBVuW0WiqyPhlYO5oP+/SjZAna4j1wcEKj
-        t6SDVIrEaZ8ssedfZXEvXZGza
-X-Received: by 2002:a05:6808:2228:b0:2cf:f102:b72b with SMTP id bd40-20020a056808222800b002cff102b72bmr2831422oib.286.1645558181759;
-        Tue, 22 Feb 2022 11:29:41 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwh29+asBEtg/qsvLMW4an6L8Nd9/EVBQ/g0hcum7J+rAegjy9pBVpr3MCPenuuqCzVpTX6pA==
-X-Received: by 2002:a05:6808:2228:b0:2cf:f102:b72b with SMTP id bd40-20020a056808222800b002cff102b72bmr2831418oib.286.1645558181540;
-        Tue, 22 Feb 2022 11:29:41 -0800 (PST)
-Received: from redhat.com ([38.15.36.239])
-        by smtp.gmail.com with ESMTPSA id g34sm6632626ooi.48.2022.02.22.11.29.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Feb 2022 11:29:40 -0800 (PST)
-Date:   Tue, 22 Feb 2022 12:29:39 -0700
-From:   Alex Williamson <alex.williamson@redhat.com>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-crypto@vger.kernel.org, cohuck@redhat.com,
-        mgurtovoy@nvidia.com, yishaih@nvidia.com, linuxarm@huawei.com,
-        liulongfang@huawei.com, prime.zeng@hisilicon.com,
-        jonathan.cameron@huawei.com, wangzhou1@hisilicon.com
-Subject: Re: [PATCH v5 0/8] vfio/hisilicon: add ACC live migration driver
-Message-ID: <20220222122939.0394d152.alex.williamson@redhat.com>
-In-Reply-To: <20220222004943.GF193956@nvidia.com>
-References: <20220221114043.2030-1-shameerali.kolothum.thodi@huawei.com>
-        <20220222004943.GF193956@nvidia.com>
-Organization: Red Hat
+        Tue, 22 Feb 2022 14:30:26 -0500
+Received: from smtp-fw-80007.amazon.com (smtp-fw-80007.amazon.com [99.78.197.218])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B96D4522EF;
+        Tue, 22 Feb 2022 11:30:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1645558200; x=1677094200;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=5kh9q0GW+wnQrt40nuaSNB7naZayQpuxWFvUGfnyRoc=;
+  b=cXQzjesQHmSea9I77WtRTy54zV9thI8zPhTsomU/UwapoaErPKdhvphu
+   8tHNAGfF201H2dQRIASEYN7qPWM//CsmnF4Y3wgJEbNi4EsbC0yqP6TDA
+   VP9J/x5WPXUP25bTz5pSMi/ujbIsRQolP5rwR3ikSUYIy3eESoyaGJCqt
+   8=;
+X-IronPort-AV: E=Sophos;i="5.88,387,1635206400"; 
+   d="scan'208";a="65281020"
+Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO email-inbound-relay-iad-1a-87b71607.us-east-1.amazon.com) ([10.25.36.210])
+  by smtp-border-fw-80007.pdx80.corp.amazon.com with ESMTP; 22 Feb 2022 19:29:55 +0000
+Received: from EX13MTAUWB001.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan3.iad.amazon.com [10.40.163.38])
+        by email-inbound-relay-iad-1a-87b71607.us-east-1.amazon.com (Postfix) with ESMTPS id E6F0714118C;
+        Tue, 22 Feb 2022 19:29:50 +0000 (UTC)
+Received: from EX13D02UWB002.ant.amazon.com (10.43.161.160) by
+ EX13MTAUWB001.ant.amazon.com (10.43.161.207) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.28; Tue, 22 Feb 2022 19:29:50 +0000
+Received: from EX13MTAUWB001.ant.amazon.com (10.43.161.207) by
+ EX13D02UWB002.ant.amazon.com (10.43.161.160) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.28; Tue, 22 Feb 2022 19:29:49 +0000
+Received: from dev-dsk-alisaidi-1d-b9a0e636.us-east-1.amazon.com
+ (172.19.181.128) by mail-relay.amazon.com (10.43.161.249) with Microsoft SMTP
+ Server id 15.0.1497.28 via Frontend Transport; Tue, 22 Feb 2022 19:29:49
+ +0000
+Received: by dev-dsk-alisaidi-1d-b9a0e636.us-east-1.amazon.com (Postfix, from userid 5131138)
+        id 6E61F15C9; Tue, 22 Feb 2022 19:29:49 +0000 (UTC)
+From:   Ali Saidi <alisaidi@amazon.com>
+To:     <german.gomez@arm.com>
+CC:     <acme@kernel.org>, <alexander.shishkin@linux.intel.com>,
+        <alisaidi@amazon.com>, <andrew.kilroy@arm.com>,
+        <benh@kernel.crashing.org>, <james.clark@arm.com>,
+        <john.garry@huawei.com>, <jolsa@redhat.com>, <leo.yan@linaro.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-perf-users@vger.kernel.org>,
+        <mark.rutland@arm.com>, <mathieu.poirier@linaro.org>,
+        <mingo@redhat.com>, <namhyung@kernel.org>, <peterz@infradead.org>,
+        <will@kernel.org>
+Subject: Re: [PATCH 2/2] perf arm-spe: Parse more SPE fields and store source
+Date:   Tue, 22 Feb 2022 19:29:43 +0000
+Message-ID: <20220222192943.20137-1-alisaidi@amazon.com>
+X-Mailer: git-send-email 2.32.0
+In-Reply-To: <9266bfb6-341c-1d9c-e96f-c9f856a5ffb6@arm.com>
+References: <9266bfb6-341c-1d9c-e96f-c9f856a5ffb6@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-11.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 21 Feb 2022 20:49:43 -0400
-Jason Gunthorpe <jgg@nvidia.com> wrote:
 
-> On Mon, Feb 21, 2022 at 11:40:35AM +0000, Shameer Kolothum wrote:
-> >=20
-> > Hi,
-> >=20
-> > This series attempts to add vfio live migration support for
-> > HiSilicon ACC VF devices based on the new v2 migration protocol
-> > definition and mlx5 v8 series discussed here[0].
-> >=20
-> > RFCv4 --> v5
-> >   - Dropped RFC tag as v2 migration APIs are more stable now.
-> >   - Addressed review comments from Jason and Alex (Thanks!).
-> >=20
-> > This is sanity tested on a HiSilicon platform using the Qemu branch
-> > provided here[1].
-> >=20
-> > Please take a look and let me know your feedback.
-> >=20
-> > Thanks,
-> > Shameer
-> > [0] https://lore.kernel.org/kvm/20220220095716.153757-1-yishaih@nvidia.=
-com/
-> > [1] https://github.com/jgunthorpe/qemu/commits/vfio_migration_v2
-> >=20
-> >=20
-> > v3 --> RFCv4
-> > -Based on migration v2 protocol and mlx5 v7 series.
-> > -Added RFC tag again as migration v2 protocol is still under discussion.
-> > -Added new patch #6 to retrieve the PF QM data.
-> > -PRE_COPY compatibility check is now done after the migration data
-> > =C2=A0transfer. This is not ideal and needs discussion. =20
->=20
-> Alex, do you want to keep the PRE_COPY in just for acc for now? Or do
-> you think this is not a good temporary use for it?
->=20
-> We have some work toward doing the compatability more generally, but I
-> think it will be a while before that is all settled.
+Hi German & Yan,
 
-In the original migration protocol I recall that we discussed that
-using the pre-copy phase for compatibility testing, even without
-additional device data, as a valid use case.  The migration driver of
-course needs to account for the fact that userspace is not required to
-perform a pre-copy, and therefore cannot rely on that exclusively for
-compatibility testing, but failing a migration earlier due to detection
-of an incompatibility is generally a good thing.
+Sorry about the delay in responding.
 
-If the ACC driver wants to re-incorporate this behavior into a non-RFC
-proposed series and we could align accepting them into the same kernel
-release, that sounds ok to me.  Thanks,
+>Hi German, Ali,
+>
+[...]
+> >>>  };
+>> >>>  
+>> >>>  enum arm_spe_op_type {
+>> >>>  	ARM_SPE_LD		= 1 << 0,
+>> >>>  	ARM_SPE_ST		= 1 << 1,
+>> >>> +	ARM_SPE_LDST_EXCL	= 1 << 2,
+>> >>> +	ARM_SPE_LDST_ATOMIC	= 1 << 3,
+>> >>> +	ARM_SPE_LDST_ACQREL	= 1 << 4,
+>> 
+>> Wondering if we can store this in perf_sample->flags. The values are
+>> defined in "util/event.h" (PERF_IP_*). Maybe we can extend it to allow
+>> doing "sample->flags = PERF_LDST_FLAG_LD | PERF_LDST_FLAG_ATOMIC" and
+>> such.
+>> 
+>> @Leo do you think that could work?
+>
+>Let's step back a bit and divide the decoding flow into two parts:
+>backend and frontend.
+>
+>For the backend part, we decode the SPE hardware trace data and
+>generate the SPE record in the file
+>util/arm-spe-decoder/arm-spe-decoder.c.  As we want to support
+>complete operation types, we can extend arm_spe_op_type as below:
+>
+>enum arm_spe_op_type {
+>        /* First level operation type */
+>	ARM_SPE_OP_OTHER        = 1 << 0,
+>	ARM_SPE_OP_LDST		= 1 << 1,
+[...]
 
-Alex
+I'm OK with this approach, but perhaps instead the op type should
+just be the raw traces op-type and op-type-payload? Macros to decode
+this information are already present and extensively used in the text
+decoding of the packet. While it's a little bit harder than just picking
+a bit, the op_type is only used in a single place today outside of
+the existing textual script decoding and what would be this decoding.
+Do we forsee many more uses that would justify having to maintain
+the immediate format vs finding a way to unify arm_spe_pkt_desc_op_type
+to support both the text decoding and this?
+
+[...]
+>So I am just wandering if we can set the field
+>sample::data_src::mem_lock for atomic operations, like:
+>
+>    data_src.mem_op   = PERF_MEM_OP_LOAD;
+>    data_src.mem_lock = PERF_MEM_LOCK_ATOMIC;
+>
+>The field "mem_lock" is only two bits, we can consider to extend the
+>structure with an extra filed "mem_lock_ext" if it cannot meet our
+>requirement.
+
+These are for the LOCK instruction on x86. I don't know that we want to
+overload the meaning here. Minimally there is value in differentiating
+exclusives vs atomics.
+
+>
+>> >>> +	ARM_SPE_BR		= 1 << 5,
+>> >>> +	ARM_SPE_BR_COND		= 1 << 6,
+>> >>> +	ARM_SPE_BR_IND		= 1 << 7,
+>> 
+>> Seems like we can store BR_COND in the existing "branch-miss" event
+>> (--itrace=b) with:
+>> 
+>>   sample->flags = PERF_IP_FLAG_BRANCH;
+>>   sample->flags |= PERF_IP_FLAG_CONDITIONAL;
+>> and/or
+>>   sample->flags |= PERF_IP_FLAG_INDIRECT;
+>> 
+>> PERF_IP_FLAG_INDIRECT doesn't exist yet but we can probably add it.
+>
+>Yes, for branch samples, this makes sense for me.
+
+makes sense to me too.
+
+Ali
 

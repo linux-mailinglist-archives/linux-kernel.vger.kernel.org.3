@@ -2,72 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 743DC4C04D4
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 23:45:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 490D94C04D7
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 23:45:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236128AbiBVWpe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 17:45:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60136 "EHLO
+        id S236134AbiBVWqR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 17:46:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236113AbiBVWpc (ORCPT
+        with ESMTP id S231479AbiBVWqP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 17:45:32 -0500
-Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA6591285BF
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 14:45:06 -0800 (PST)
-Received: by mail-yb1-xb34.google.com with SMTP id b35so16561696ybi.13
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 14:45:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=HadLybndSc4+83udfaFf6CPAEtJp2NdGL5J7rhdH6QI=;
-        b=g2WRHS6wQdK3tXYzDPeyJLqMhw6ManzjpWTA2X6HQ5WyjR9VzujGnKgB5uu+Qx64Se
-         rGHymFc5xxmNZIxevQ1UjDdKf417WYtyEyIyyrt+yjkW3nROZawRFM5w6y3dhHVSLFZR
-         B3qHayA6j2OzWyupaCIRb+PS9IBuXmvGkaU2g7EqNQdRuQksvwISiD8FeTU9OHrqiLvw
-         0WwtVy82DYJyIKtOj96IOVeOShNshiagT2cIwOEPcwi6G+wg5hxgfTBZz1B77Rc4uqMs
-         zc6wCQ77J+u6w3qDB1pXCwAStZvr8qqj1oJvXat9Oc8asioowCLaPKKigK8K8pofIuZP
-         t2YQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=HadLybndSc4+83udfaFf6CPAEtJp2NdGL5J7rhdH6QI=;
-        b=nUr5Q6i7vYRxH65eYAybieWWLNxcG1RKPukbwobiXPJfud2TOBaHBCSXiwejCla175
-         xkUX/0C0sZl2LZ65a1C+juq32FED1h9IMMrEAnXsLRfLJ4LYxOixAUNKyyWyDHH2wBda
-         I2xv9GKW6CzXxKM2QikmQjOhLv25nIr8IjWbynMpRpULEZ+Zio85773HnHos9K9s3cpE
-         /ZInIJK6pbepikkYd2py2rF0Sy7jaNvk6YvrXt8QQM/i/e0k+yTDvI/UE8y+mwI7iPhi
-         QdgukmSQxVjoXActBlLLK831ItLOreUJaEXiiY393vFoIkZQehrMKCuhYG5XvGBrwyE/
-         0pNg==
-X-Gm-Message-State: AOAM532QC+OJzjS0Os9nNpaFl7YZl7D6G88inZjQ9oycxP7zr6MK3hwS
-        WIWtUAX+u2O01OFJhtZ/l+z8xf7cvLtLKSfxLzhdGQ==
-X-Google-Smtp-Source: ABdhPJwXhQzLFapXj6GO5ms7h/KJI9VTpfh/O4OclZgrb8LhtsEGl7isKasno4HU0SgGHd/4gJMddJRV2PFl9WlJTz8=
-X-Received: by 2002:a25:9108:0:b0:61e:329:700 with SMTP id v8-20020a259108000000b0061e03290700mr24730620ybl.369.1645569906080;
- Tue, 22 Feb 2022 14:45:06 -0800 (PST)
+        Tue, 22 Feb 2022 17:46:15 -0500
+Received: from mail105.syd.optusnet.com.au (mail105.syd.optusnet.com.au [211.29.132.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 804D9128647;
+        Tue, 22 Feb 2022 14:45:49 -0800 (PST)
+Received: from dread.disaster.area (pa49-186-17-0.pa.vic.optusnet.com.au [49.186.17.0])
+        by mail105.syd.optusnet.com.au (Postfix) with ESMTPS id 57F1910E0F91;
+        Wed, 23 Feb 2022 09:45:46 +1100 (AEDT)
+Received: from dave by dread.disaster.area with local (Exim 4.92.3)
+        (envelope-from <david@fromorbit.com>)
+        id 1nMduk-00FEq0-BE; Wed, 23 Feb 2022 09:45:46 +1100
+Date:   Wed, 23 Feb 2022 09:45:46 +1100
+From:   Dave Chinner <david@fromorbit.com>
+To:     NeilBrown <neilb@suse.de>
+Cc:     Al Viro <viro@zeniv.linux.org.uk>,
+        Linux NFS Mailing List <linux-nfs@vger.kernel.org>,
+        linux-fsdevel@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        Daire Byrne <daire@dneg.com>,
+        Andreas Dilger <adilger.kernel@dilger.ca>
+Subject: Re: [PATCH/RFC] VFS: support parallel updates in the one directory.
+Message-ID: <20220222224546.GE3061737@dread.disaster.area>
+References: <164549669043.5153.2021348013072574365@noble.neil.brown.name>
 MIME-Version: 1.0
-References: <20220222141838.1.If784ba19e875e8ded4ec4931601ce6d255845245@changeid>
-In-Reply-To: <20220222141838.1.If784ba19e875e8ded4ec4931601ce6d255845245@changeid>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Tue, 22 Feb 2022 23:44:54 +0100
-Message-ID: <CACRpkdbQ9U22afR74YiZs95qCm7dnLb2k4_nT3Le__hJPpDGUw@mail.gmail.com>
-Subject: Re: [PATCH] drm/bridge: ti-sn65dsi86: Properly undo autosuspend
-To:     Douglas Anderson <dianders@chromium.org>
-Cc:     dri-devel@lists.freedesktop.org,
-        Brian Norris <briannorris@chromium.org>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <164549669043.5153.2021348013072574365@noble.neil.brown.name>
+X-Optus-CM-Score: 0
+X-Optus-CM-Analysis: v=2.4 cv=VuxAv86n c=1 sm=1 tr=0 ts=6215679c
+        a=+dVDrTVfsjPpH/ci3UuFng==:117 a=+dVDrTVfsjPpH/ci3UuFng==:17
+        a=kj9zAlcOel0A:10 a=oGFeUVbbRNcA:10 a=7-415B0cAAAA:8
+        a=yXyu7VD68H5JFmdjK-oA:9 a=CjuIK1q_8ugA:10 a=biEYGPWJfzWAr4FL6Ov7:22
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,20 +50,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 22, 2022 at 11:19 PM Douglas Anderson <dianders@chromium.org> wrote:
->
-> The PM Runtime docs say:
->   Drivers in ->remove() callback should undo the runtime PM changes done
->   in ->probe(). Usually this means calling pm_runtime_disable(),
->   pm_runtime_dont_use_autosuspend() etc.
->
-> We weren't doing that for autosuspend. Let's do it.
->
-> Fixes: 9bede63127c6 ("drm/bridge: ti-sn65dsi86: Use pm_runtime autosuspend")
-> Signed-off-by: Douglas Anderson <dianders@chromium.org>
+On Tue, Feb 22, 2022 at 01:24:50PM +1100, NeilBrown wrote:
+> 
+> Hi Al,
+>  I wonder if you might find time to have a look at this patch.  It
+>  allows concurrent updates to a single directory.  This can result in
+>  substantial throughput improvements when the application uses multiple
+>  threads to create lots of files in the one directory, and there is
+>  noticeable per-create latency, as there can be with NFS to a remote
+>  server.
+> Thanks,
+> NeilBrown
+> 
+> Some filesystems can support parallel modifications to a directory,
+> either because the modification happen on a remote server which does its
+> own locking (e.g.  NFS) or because they can internally lock just a part
+> of a directory (e.g.  many local filesystems, with a bit of work - the
+> lustre project has patches for ext4 to support concurrent updates).
+> 
+> To allow this, we introduce VFS support for parallel modification:
+> unlink (including rmdir) and create.  Parallel rename is not (yet)
+> supported.
 
-Hm. I know a few places in drivers where I don't do this :/
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+Yay!
 
-Yours,
-Linus Walleij
+> If a filesystem supports parallel modification in a given directory, it
+> sets S_PAR_UNLINK on the inode for that directory.  lookup_open() and
+> the new lookup_hash_modify() (similar to __lookup_hash()) notice the
+> flag and take a shared lock on the directory, and rely on a lock-bit in
+> d_flags, much like parallel lookup relies on DCACHE_PAR_LOOKUP.
+
+I suspect that you could enable this for XFS right now. XFS has internal
+directory inode locking that should serialise all reads and writes
+correctly regardless of what the VFS does. So while the VFS might
+use concurrent updates (e.g. inode_lock_shared() instead of
+inode_lock() on the dir inode), XFS has an internal metadata lock
+that will then serialise the concurrent VFS directory modifications
+correctly....
+
+Yeah, I know, this isn't true concurrent dir updates, but it should
+allow multiple implementations of the concurrent dir update VFS APIs
+across multiple filesystems and shake out any assumptions that might
+arise from a single implementation target (e.g. silly rename
+quirks).
+
+Cheers,
+
+Dave.
+-- 
+Dave Chinner
+david@fromorbit.com

@@ -2,70 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DA0C4C00FB
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 19:10:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 28A864C00FE
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 19:11:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234898AbiBVSKU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 13:10:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59050 "EHLO
+        id S234906AbiBVSK7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 13:10:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232416AbiBVSKS (ORCPT
+        with ESMTP id S230084AbiBVSK5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 13:10:18 -0500
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D5D9172E42
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 10:09:53 -0800 (PST)
-Received: by mail-pj1-x1030.google.com with SMTP id m1-20020a17090a668100b001bc023c6f34so305031pjj.3
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 10:09:53 -0800 (PST)
+        Tue, 22 Feb 2022 13:10:57 -0500
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D28B7172E4A
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 10:10:31 -0800 (PST)
+Received: by mail-pf1-x432.google.com with SMTP id z16so12887275pfh.3
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 10:10:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=MpI+QTR5uF3hHf4Bz32+IS/VxWSVY5unua7iw2tRhM0=;
-        b=MY/vtW3ixj5BU9FxhwE4xPZw7v8TDLwDtmESYmhbKmbENBU2uHhOqYkTXnejRD3t8b
-         0jKaXB2gG63yb0pCHHEqTd0UDLRmTYnBJ15BvP11zbtwPsJqevTqYZEHo7ABbbnIa1WQ
-         43P6ye86Nbsw0DOEN71dOFbzPfOu1xqQfxAsUAhW6CYPw7swPfjQPe6Zz9kq8XsWJWtm
-         Nutxs3j0OSfHBT+USXXm1RaL1qCXXVX7nuKUUvub5IcigHFFr8Nhfi6xofxlPqg0TpgD
-         kCfh2nkOxc03yRWfATpcllTQQ+oS1TqvQ8w6V+7srJuqoBgpbX+4fsafAJF7ZHLM3iID
-         mIaQ==
+        bh=Z5CMwP8NIk4EFDRAq2l/o2l6e+d+RgBkaYNFQ7hwo+o=;
+        b=aaE3k90pS3EmG3r8CJGx1XPZCHA0r1CQxRrGD5olNTiKMSXkpbV4945pB33NpfUBu/
+         zQOJ7pHLy7dXMMpJVw1QYFjPSqUbQeNou1CSrStliyOrHlgHfrP/vfUH+zwEm5sFYUJt
+         2WHzYqi5g2mxWFBEfVVvmRTfPKq5V7YgMtSYMBTTntRZLTo2Q7P4FOcHEdjnYxFKTb0c
+         7I9x6KR7Jm56jvD9It3JsFPGMxuHczrWOQ2AbhKvPhoLPK2BsfHD4847ll1zL0+fhEcC
+         4jAWUXe1FCuEZe4SExRgtMLU/yYrhHQOw91Bgp7nfQirsC/AhH882a30fuxCVcAIpmld
+         TFgA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
          :references:mime-version:content-disposition:in-reply-to;
-        bh=MpI+QTR5uF3hHf4Bz32+IS/VxWSVY5unua7iw2tRhM0=;
-        b=C5Yb+hNuVMUEL9KQKyVmjLJr8vktnqqrXoz5sRgn2ck+e7dQfnP1YZInfCenCoAMTe
-         uAPg8G+WrNmRPNMbhTI78Ly0dchsOKgH9RbvHjGgwCXVPwN3qQuhIGLlD8mZnZEb8iCi
-         lRpsKWadU2yYq8BUI+/ik/ZpSUde/AgvqeGCgawndh2zSpBF0+YgsFU5hoJ1vyJsf2I5
-         02H/2nKvzz3bsJoUVUrsmwMXmfXZgaOY+XkfCXHxKwPmgz9qxWB7zret889AsqqAPotJ
-         7zgythFH7h+QBaKS5dNIbj6Fc/vmx1CdPuK1P6GPCSFOhgnEAobD+0ZeE3wzSs8AxNLM
-         ugSA==
-X-Gm-Message-State: AOAM533M528Z3sRk/05upE1SOSPp4rjHvMWDR/LKd4sSOEhs3VHirX3F
-        o+3vI9eKiOQ8b6QFNV/YArg=
-X-Google-Smtp-Source: ABdhPJwiITEzUUWrciSmx1oxDk8DSXSPm6PxXeWk3NZMJCfFtMZGxO6wYfJwq47EIstRR1EMurvU4Q==
-X-Received: by 2002:a17:90a:800c:b0:1bc:6faa:623f with SMTP id b12-20020a17090a800c00b001bc6faa623fmr4825103pjn.76.1645553392928;
-        Tue, 22 Feb 2022 10:09:52 -0800 (PST)
+        bh=Z5CMwP8NIk4EFDRAq2l/o2l6e+d+RgBkaYNFQ7hwo+o=;
+        b=EU/HvSD/lupHPvqM1136+Zwl1DHv7V0SLRCCup+GKbSlwAR/W4A/2llqmVUF38N6CH
+         +qTpvU2uOm5acKCWtWcY7Yt69v16XPGzKvgPvatKAcAxveuHYqiplWVjozWbqM0TT5Dq
+         zh4Ux93ZVP7/Pt2vbmkHvqLLRRfMI9UElYZk+vBRgc6e7PDUj+IvRBbi9RzsDI3Ib0hd
+         SbGdPjyGSCWmW6Kd3jOhamXxYmCXHIiOtucWYJtAjZuY8SksDh3ttcRWeJOUZki56+da
+         6o4ECbN7mnFP1qahMqqL31nWuWBJR2h5NAtK+MVd5XbyoxrYKXHdq+DUk/GQn0k5SEd6
+         /iyQ==
+X-Gm-Message-State: AOAM532wo1BSb1WLL3jD3/AzDHm9RWsm/BiYA3wkHzt7XcqyCYV8usZP
+        HQqOkGALhEjzgKhsBueFLyM=
+X-Google-Smtp-Source: ABdhPJx1Izz4wlNdJ7gU9O+L4i8v0O3Vk1ggQtRlKGT9Yjj0Bm5jVOF3VFWW3GDJ9VRvqwN42T6WoA==
+X-Received: by 2002:a05:6a00:1943:b0:4cb:79c9:fa48 with SMTP id s3-20020a056a00194300b004cb79c9fa48mr25950207pfk.47.1645553431241;
+        Tue, 22 Feb 2022 10:10:31 -0800 (PST)
 Received: from localhost (2603-800c-1a02-1bae-e24f-43ff-fee6-449f.res6.spectrum.com. [2603:800c:1a02:1bae:e24f:43ff:fee6:449f])
-        by smtp.gmail.com with ESMTPSA id z14sm18356959pfe.30.2022.02.22.10.09.52
+        by smtp.gmail.com with ESMTPSA id nu11sm137649pjb.36.2022.02.22.10.10.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Feb 2022 10:09:52 -0800 (PST)
+        Tue, 22 Feb 2022 10:10:30 -0800 (PST)
 Sender: Tejun Heo <htejun@gmail.com>
-Date:   Tue, 22 Feb 2022 08:09:51 -1000
+Date:   Tue, 22 Feb 2022 08:10:29 -1000
 From:   Tejun Heo <tj@kernel.org>
-To:     Al Viro <viro@zeniv.linux.org.uk>
-Cc:     Imran Khan <imran.f.khan@oracle.com>, gregkh@linuxfoundation.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6 6/7] kernfs: Introduce hashed rw-sem to replace per-fs
- kernfs_rwsem.
-Message-ID: <YhUm7yVBSoxACRUb@slm.duckdns.org>
-References: <20220214120322.2402628-1-imran.f.khan@oracle.com>
- <20220214120322.2402628-7-imran.f.khan@oracle.com>
- <YgxXh3clQqpxUPba@zeniv-ca.linux.org.uk>
- <bfdef75d-4343-2734-2723-d8546df37c69@oracle.com>
- <Yg8Rq2H1C1ihFqds@zeniv-ca.linux.org.uk>
+To:     Imran Khan <imran.f.khan@oracle.com>
+Cc:     gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] kernfs: remove redundant kernfs_rwsem declaration.
+Message-ID: <YhUnFWUL3AQF50z1@slm.duckdns.org>
+References: <20220218010205.717582-1-imran.f.khan@oracle.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Yg8Rq2H1C1ihFqds@zeniv-ca.linux.org.uk>
+In-Reply-To: <20220218010205.717582-1-imran.f.khan@oracle.com>
 X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
@@ -77,12 +71,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 18, 2022 at 03:25:31AM +0000, Al Viro wrote:
-> There are very few sources of cross-directory moves in the entire system.
-> One is cross-directory cgroup rename(2) (already serialized on per-fs basis
-> on VFS level), another is device_move().  Which is uncommon (5 callers
+On Fri, Feb 18, 2022 at 12:02:05PM +1100, Imran Khan wrote:
+> Since 'commit 393c3714081a ("kernfs: switch global kernfs_rwsem lock to
+> per-fs lock")' per-fs kernfs_rwsem has replaced global kernfs_rwsem.
+> Remove redundant declaration of global kernfs_rwsem.
+> 
+> Fixes: 393c3714081a ("kernfs: switch global kernfs_rwsem lock to per-fs
+> lock")
+> 
+> Signed-off-by: Imran Khan <imran.f.khan@oracle.com>
 
-FWIW, cgroup rename(2) doesn't allow changing the parent.
+Acked-by: Tejun Heo <tj@kernel.org>
 
 Thanks.
 

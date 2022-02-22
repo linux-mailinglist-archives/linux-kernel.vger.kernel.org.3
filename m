@@ -2,63 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3EC54BF59B
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 11:19:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 74DAE4BF5A2
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 11:21:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230466AbiBVKTr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 05:19:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46326 "EHLO
+        id S230473AbiBVKVe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 05:21:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229772AbiBVKTq (ORCPT
+        with ESMTP id S229772AbiBVKVa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 05:19:46 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8206913EF8D;
-        Tue, 22 Feb 2022 02:19:20 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 3D4DF1F39A;
-        Tue, 22 Feb 2022 10:19:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1645525159; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Nd6Y06WPdUzGLt9uFP0+QcSRgSpsN30ENtdTm/2OQIw=;
-        b=LNDjK6NrofKlw36GmECzp8PiOVKAzoePJ0x6/QosEUnBxBpoVoW0ZxklczKgnlkP/KKtDz
-        gYGUBLMmr5eHMxbPj0ThWOTwx/0SQ73QajYPGXnocCq+MMaGhhaYYylZ8Ybf2Lz4QlUVNc
-        wDf0rz+hKoD9yc0Rq4oScb6uh4xPLOo=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1645525159;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Nd6Y06WPdUzGLt9uFP0+QcSRgSpsN30ENtdTm/2OQIw=;
-        b=SHwU5F/z5IEJSmkyw4ybJwcRr76y5UKKBod6Om9yawkEXXiFqdID+ThEw/axQGDCjJLtTH
-        hkAs/P5UxXleekBw==
-Received: from pobox.suse.cz (pobox.suse.cz [10.100.2.14])
+        Tue, 22 Feb 2022 05:21:30 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0231013EFB5;
+        Tue, 22 Feb 2022 02:21:01 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id CF122A3B8A;
-        Tue, 22 Feb 2022 10:19:18 +0000 (UTC)
-Date:   Tue, 22 Feb 2022 11:19:18 +0100 (CET)
-From:   Miroslav Benes <mbenes@suse.cz>
-To:     Aaron Tomlin <atomlin@redhat.com>
-cc:     mcgrof@kernel.org, cl@linux.com, pmladek@suse.com,
-        akpm@linux-foundation.org, jeyu@kernel.org,
-        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
-        live-patching@vger.kernel.org, atomlin@atomlin.com,
-        ghalat@redhat.com, allen.lkml@gmail.com, joe@perches.com,
-        christophe.leroy@csgroup.eu, msuchanek@suse.de,
-        oleksandr@natalenko.name
-Subject: Re: [PATCH v6 11/13] module: Move sysfs support into a separate
- file
-In-Reply-To: <20220218212757.888751-1-atomlin@redhat.com>
-Message-ID: <alpine.LSU.2.21.2202221115471.15071@pobox.suse.cz>
-References: <20220218212757.888751-1-atomlin@redhat.com>
-User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 611A8CE1316;
+        Tue, 22 Feb 2022 10:20:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4AE0BC340E8;
+        Tue, 22 Feb 2022 10:20:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1645525257;
+        bh=c+MUjJQQSEz6EcrkGQwWMDKOpd6pQpqW5YnvVC432Ls=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=gpJBpDdcB+qqUdfAoLh6lZyh+2gHjF8UO4QG+ufHTaisPt7A3i6lr6jdsxBU6G3FT
+         ECQwmhgctyORBzXN1ozJ/2+UXL8QwWyR0/m1yjtikrNtPmudn9JHg5BZUDdkRLZEgg
+         AUWkcrwQ4hB4XVRNR8gJk0WIhw72vseVvXZqzVZQ=
+Date:   Tue, 22 Feb 2022 11:20:54 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     =?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <clement.leger@bootlin.com>
+Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Wolfram Sang <wsa@kernel.org>, Peter Rosin <peda@axentia.se>,
+        Russell King <linux@armlinux.org.uk>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+Subject: Re: [RFC 02/10] property: add fwnode_get_match_data()
+Message-ID: <YhS5BnvofimMReDE@kroah.com>
+References: <20220221162652.103834-1-clement.leger@bootlin.com>
+ <20220221162652.103834-3-clement.leger@bootlin.com>
+ <YhPP5GWt7XEv5xx8@smile.fi.intel.com>
+ <20220222091902.198ce809@fixe.home>
+ <CAHp75VdwfhGKOiGhJ1JsiG+R2ZdHa3N4hz6tyy5BmyFLripV5A@mail.gmail.com>
+ <20220222094623.1f7166c3@fixe.home>
+ <CAHp75VfduXwRvxkNg=At5jaN-tcP3=utiukEDL35PEv_grK4Pw@mail.gmail.com>
+ <20220222104705.54a73165@fixe.home>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220222104705.54a73165@fixe.home>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -67,67 +75,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 18 Feb 2022, Aaron Tomlin wrote:
-
-> No functional change.
+On Tue, Feb 22, 2022 at 10:47:05AM +0100, Clément Léger wrote:
+> Le Tue, 22 Feb 2022 10:24:13 +0100,
+> Andy Shevchenko <andy.shevchenko@gmail.com> a écrit :
 > 
-> This patch migrates module sysfs support out of core code into
-> kernel/module/sysfs.c. In addition simple code refactoring to
-> make this possible.
+> > > > If you want to use the device on an ACPI based platform, you need to
+> > > > describe it in ACPI as much as possible. The rest we may discuss.  
+> > >
+> > > Agreed but the PCIe card might also be plugged in a system using a
+> > > device-tree description (ARM for instance). I should I do that without
+> > > duplicating the description both in DT and ACPI ?  
+> > 
+> > Why is it (duplication) a problem?
+> > Each platform has its own kind of description, so one needs to provide
+> > it in the format the platform accepts.
+> > 
 > 
-> Signed-off-by: Aaron Tomlin <atomlin@redhat.com>
-
-There was apparently a problem on your side when sending the series. There 
-is Reply-To field which probably should have been In-Reply-To. It also 
-applied to the following two patches.
-
->  kernel/module/Makefile   |   1 +
->  kernel/module/internal.h |  21 ++
->  kernel/module/main.c     | 469 +--------------------------------------
->  kernel/module/sysfs.c    | 436 ++++++++++++++++++++++++++++++++++++
->  4 files changed, 461 insertions(+), 466 deletions(-)
->  create mode 100644 kernel/module/sysfs.c
+> The problem that I see is not only duplication but also that the PCIe
+> card won't work out of the box and will need a specific SSDT overlays
+> each time it is used. According to your document about SSDT overlays,
+> there is no way to load this from the driver. This means that the user
+> will have to compile a platform specific .aml file to match its
+> platform configuration. If the user wants to change the PCIe port, than
+> I guess it will have to load another .aml file. I do not think a user
+> expect to do so when plugging a PCIe card.
 > 
-> diff --git a/kernel/module/Makefile b/kernel/module/Makefile
-> index f66fda0b41cc..a3cbe09ce2b2 100644
-> --- a/kernel/module/Makefile
-> +++ b/kernel/module/Makefile
-> @@ -14,4 +14,5 @@ obj-$(CONFIG_STRICT_MODULE_RWX) += strict_rwx.o
->  obj-$(CONFIG_DEBUG_KMEMLEAK) += debug_kmemleak.o
->  obj-$(CONFIG_KALLSYMS) += kallsyms.o
->  obj-$(CONFIG_PROC_FS) += procfs.o
-> +obj-$(CONFIG_SYSFS) += sysfs.o
->  endif
-> diff --git a/kernel/module/internal.h b/kernel/module/internal.h
-> index ddb37024a0d6..74096cca742c 100644
-> --- a/kernel/module/internal.h
-> +++ b/kernel/module/internal.h
-> @@ -34,6 +34,9 @@
->  extern struct mutex module_mutex;
->  extern struct list_head modules;
->  
-> +extern struct module_attribute *modinfo_attrs[];
-> +extern size_t modinfo_attrs_count;
-> +
->  /* Provided by the linker */
->  extern const struct kernel_symbol __start___ksymtab[];
->  extern const struct kernel_symbol __stop___ksymtab[];
-> @@ -213,3 +216,21 @@ static inline bool sect_empty(const Elf_Shdr *sect)
->  static inline void layout_symtab(struct module *mod, struct load_info *info) { }
->  static inline void add_kallsyms(struct module *mod, const struct load_info *info) { }
->  #endif /* CONFIG_KALLSYMS */
-> +
-> +#ifdef CONFIG_SYSFS
-> +int mod_sysfs_setup(struct module *mod, const struct load_info *info,
-> +		    struct kernel_param *kparam, unsigned int num_params);
-> +void mod_sysfs_teardown(struct module *mod);
-> +void init_param_lock(struct module *mod);
-> +#else /* !CONFIG_SYSFS */
-> +static inline int mod_sysfs_setup(struct module *mod,
-> +			   	  const struct load_info *info,
-> +			   	  struct kernel_param *kparam,
-> +			   	  unsigned int num_params)
+> Moreover, the APCI documentation [1] says the following:
+> 
+> "PCI devices, which are below the host bridge, generally do not need to
+> be described via ACPI. The OS can discover them via the standard PCI
+> enumeration mechanism, using config accesses to discover and identify
+> devices and read and size their BARs. However, ACPI may describe PCI
+> devices if it provides power management or hotplug functionality for
+> them or if the device has INTx interrupts connected by platform
+> interrupt controllers and a _PRT is needed to describe those
+> connections."
+> 
+> The device I want to use (a PCIe switch) does not fall into these
+> categories so there should be no need to describe it using ACPI.
 
-Whitespace is broken here.
+There should not be any need to describe it in any way, the device
+should provide all of the needed information.  PCIe devices do not need
+a DT entry, as that does not make sense.
 
-Miroslav
+thanks,
+
+greg k-h

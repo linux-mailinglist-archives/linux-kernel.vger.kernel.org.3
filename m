@@ -2,97 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D78D74BFA4C
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 15:06:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DDC734BFA46
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 15:05:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232699AbiBVOGa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 09:06:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33280 "EHLO
+        id S232694AbiBVOGS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 09:06:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232708AbiBVOG0 (ORCPT
+        with ESMTP id S232693AbiBVOGP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 09:06:26 -0500
-Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B8ED15F630
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 06:05:42 -0800 (PST)
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-        by localhost (Postfix) with ESMTP id 4K31Cm50BMz9sSK;
-        Tue, 22 Feb 2022 15:05:40 +0100 (CET)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id pQe4Nwa6JW_l; Tue, 22 Feb 2022 15:05:40 +0100 (CET)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase2.c-s.fr (Postfix) with ESMTP id 4K31Cm4HVCz9sSG;
-        Tue, 22 Feb 2022 15:05:40 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 83C588B778;
-        Tue, 22 Feb 2022 15:05:40 +0100 (CET)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id dfKKNeyMRAAb; Tue, 22 Feb 2022 15:05:40 +0100 (CET)
-Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.7.78])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 56E648B764;
-        Tue, 22 Feb 2022 15:05:40 +0100 (CET)
-Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 21ME5WUk1085144
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-        Tue, 22 Feb 2022 15:05:32 +0100
-Received: (from chleroy@localhost)
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 21ME5U491085143;
-        Tue, 22 Feb 2022 15:05:30 +0100
-X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-Subject: [PATCH] powerpc: Remove remaining stab codes
-Date:   Tue, 22 Feb 2022 15:05:30 +0100
-Message-Id: <d8b33342d7454f6ca4f368f5206896558dfa06f4.1645538722.git.christophe.leroy@csgroup.eu>
+        Tue, 22 Feb 2022 09:06:15 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 535CE15F358;
+        Tue, 22 Feb 2022 06:05:38 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D60EBB819DC;
+        Tue, 22 Feb 2022 14:05:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80F81C340E8;
+        Tue, 22 Feb 2022 14:05:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645538735;
+        bh=mmRQ0qAgbzChI43XHSGUVycAOrzRnz+hpOjvD+qkyxs=;
+        h=From:To:Cc:Subject:Date:From;
+        b=KtQlPU7H/sG+N8vocLEX4eDpjQpqURP8xWZE+TUc/98X3HoNry08MzBqaSm+tgl0W
+         LQbcqhaLK6qiMO3GoRo/i5h876ABimZR/mvXoaE+0VQy5tLFoTcmhkvJRSsMbTyTBE
+         mp7z/HUO45IGdes6Ehdh0rqRmQLZ1OkG9muEXOiVXnnhHdd1baFuQqPlBe4MAZNsce
+         8b2jIN9CB5GeeqCNpm7jFDXzZh18mKfJSfXTiBTcZaOLVHq9+4peAKN0Qs+1+bzcvs
+         J/Fgo+ov/5DV35dJNBQW2VK1GBUYKERMzKYXy0KnxOXzCi2iQ7KW7/yCZtGrlNQy/X
+         bIKit+QCVfmsQ==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Maxim Levitsky <mlevitsk@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sasha Levin <sashal@kernel.org>, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        x86@kernel.org, kvm@vger.kernel.org
+Subject: [PATCH MANUALSEL 5.10 1/2] KVM: x86: lapic: don't touch irr_pending in kvm_apic_update_apicv when inhibiting it
+Date:   Tue, 22 Feb 2022 09:05:31 -0500
+Message-Id: <20220222140532.211620-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1645538729; l=790; s=20211009; h=from:subject:message-id; bh=FwvgNvm0imPRq6IfGzlyBogWeJqgKYW43VV3hftz2h0=; b=MRPARWAomFIMqE/iqctBUKRDVCsWcseycsKuW6EO+O4/tAS2wW2wJsa2kZzHS46FtCGxRqeFFMzT u56doPUeASmdcSdtbQ1rRF8XUbDpgfuvBrmNqRWlUHQdd772i353
-X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
+X-stable: review
+X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Following commit 12318163737c ("powerpc/32: Remove remaining .stabs
-annotations"), stabs code are not used anymore.
+From: Maxim Levitsky <mlevitsk@redhat.com>
 
-Remove them.
+[ Upstream commit 755c2bf878607dbddb1423df9abf16b82205896f ]
 
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+kvm_apic_update_apicv is called when AVIC is still active, thus IRR bits
+can be set by the CPU after it is called, and don't cause the irr_pending
+to be set to true.
+
+Also logic in avic_kick_target_vcpu doesn't expect a race with this
+function so to make it simple, just keep irr_pending set to true and
+let the next interrupt injection to the guest clear it.
+
+Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
+Message-Id: <20220207155447.840194-9-mlevitsk@redhat.com>
+Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/powerpc/include/asm/ppc_asm.h | 6 ------
- 1 file changed, 6 deletions(-)
+ arch/x86/kvm/lapic.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/arch/powerpc/include/asm/ppc_asm.h b/arch/powerpc/include/asm/ppc_asm.h
-index d9c6f12e6d3e..ee52667d76e2 100644
---- a/arch/powerpc/include/asm/ppc_asm.h
-+++ b/arch/powerpc/include/asm/ppc_asm.h
-@@ -693,12 +693,6 @@ END_FTR_SECTION_NESTED(CPU_FTR_CELL_TB_BUG, CPU_FTR_CELL_TB_BUG, 96)
- #define	evr30	30
- #define	evr31	31
- 
--/* some stab codes */
--#define N_FUN	36
--#define N_RSYM	64
--#define N_SLINE	68
--#define N_SO	100
--
- #define RFSCV	.long 0x4c0000a4
- 
- /*
+diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
+index 677d21082454f..d484269a390bc 100644
+--- a/arch/x86/kvm/lapic.c
++++ b/arch/x86/kvm/lapic.c
+@@ -2292,7 +2292,12 @@ void kvm_apic_update_apicv(struct kvm_vcpu *vcpu)
+ 		apic->irr_pending = true;
+ 		apic->isr_count = 1;
+ 	} else {
+-		apic->irr_pending = (apic_search_irr(apic) != -1);
++		/*
++		 * Don't clear irr_pending, searching the IRR can race with
++		 * updates from the CPU as APICv is still active from hardware's
++		 * perspective.  The flag will be cleared as appropriate when
++		 * KVM injects the interrupt.
++		 */
+ 		apic->isr_count = count_vectors(apic->regs + APIC_ISR);
+ 	}
+ }
 -- 
 2.34.1
 

@@ -2,120 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC5224BFE9A
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 17:31:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 12B314BFE9B
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 17:31:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233871AbiBVQcA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 11:32:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34830 "EHLO
+        id S234038AbiBVQcH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 11:32:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232197AbiBVQbv (ORCPT
+        with ESMTP id S230003AbiBVQb6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 11:31:51 -0500
-Received: from new2-smtp.messagingengine.com (new2-smtp.messagingengine.com [66.111.4.224])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84657167F91;
-        Tue, 22 Feb 2022 08:31:25 -0800 (PST)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 50AB35802CB;
-        Tue, 22 Feb 2022 11:31:22 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute2.internal (MEProxy); Tue, 22 Feb 2022 11:31:22 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=4ss1OyObCw6S1k0Bd
-        D49Bd/baqeCBEC7bJc1jbF4kQ8=; b=Zr/jral3v63ownQ139f6+E1aDV9q8GCHc
-        KcTQMkkm41zRVwqqeRw+mE0twRJb8xNBgaoDzK4OW7As70ult9xz7UFXuMDlqGTN
-        Vin2dmDadlbFkZtCZcMg7Qepi5DEEWurHkkfkgtR5WYoMS2ccaj6VTUjUyjxTR+J
-        Dco1PWhrY+HXa+WRv6BHHjj5ly3XiQH5KOEDii3t6MfowBddgHK2Zr+hJuq3q9tp
-        WnLprQCI2WxP5fcFvqyN/aq+YsCIhlGOp87G9/UVpt7NPAM2qQ8bqGv3L/0eFeXE
-        RbqiQ50evYv7FFDIJddcPlUwjhkDWNalKUFtkBsq2EAXVwz/WGQog==
-X-ME-Sender: <xms:2A8VYlizXRrpm-lof6juTHVPTX1wdlyGcFJyJO-e04ClbWBT2p0iww>
-    <xme:2A8VYqCIHFYedOOfl_LLu6kgSn_yve2Yv8nV4WsMVQZBM-sbFcoteoLXVm_dnu03r
-    SuIfjaUenoA-Ow>
-X-ME-Received: <xmr:2A8VYlFExvdFaBqqXvIBd-LpuqQF-6srEFT3vuEshY_PPg82dWeH1Rp-aPqXuVPm6CFRPErT7Gv3oV16eZ4as_h6awI>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrkeekgdekkecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepkfguohcuufgt
-    hhhimhhmvghluceoihguohhstghhsehiughoshgthhdrohhrgheqnecuggftrfgrthhtvg
-    hrnheptdffkeekfeduffevgeeujeffjefhtefgueeugfevtdeiheduueeukefhudehleet
-    necuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepihguoh
-    hstghhsehiughoshgthhdrohhrgh
-X-ME-Proxy: <xmx:2A8VYqRIWx5dxUGGtzepG7eWrUSMcjCBLDsqggKFU8COb1rXcMYuyg>
-    <xmx:2A8VYiwKlVsG-o6frmym9pzzrfLIfO5B5JP2SxOpinJMGQbwg_r3Fg>
-    <xmx:2A8VYg55D-9rXrFLrexJEzc2_fsRt3GfRhQ8HXMmKDnGobmrAvanFg>
-    <xmx:2g8VYsqmbIT4gyC0pp00XkrHZtXN9KfiWMtZSAajG9LDBUInFMKZWQ>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 22 Feb 2022 11:31:19 -0500 (EST)
-Date:   Tue, 22 Feb 2022 18:31:14 +0200
-From:   Ido Schimmel <idosch@idosch.org>
-To:     Baowen Zheng <baowen.zheng@corigine.com>
-Cc:     Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Jianbo Liu <jianbol@nvidia.com>,
-        "olteanv@gmail.com" <olteanv@gmail.com>,
-        "andrew@lunn.ch" <andrew@lunn.ch>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        "vivien.didelot@gmail.com" <vivien.didelot@gmail.com>,
-        Petr Machata <petrm@nvidia.com>,
-        "jhs@mojatatu.com" <jhs@mojatatu.com>,
-        oss-drivers <oss-drivers@corigine.com>,
-        "hkelam@marvell.com" <hkelam@marvell.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "leon@kernel.org" <leon@kernel.org>,
-        Nole Zhang <peng.zhang@corigine.com>,
-        "louis.peens@netronome.com" <louis.peens@netronome.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>,
-        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
-        "UNGLinuxDriver@microchip.com" <UNGLinuxDriver@microchip.com>,
-        "rajur@chelsio.com" <rajur@chelsio.com>,
-        Ido Schimmel <idosch@nvidia.com>,
-        Simon Horman <simon.horman@corigine.com>,
-        "sbhatta@marvell.com" <sbhatta@marvell.com>,
-        "xiyou.wangcong@gmail.com" <xiyou.wangcong@gmail.com>,
-        Roi Dayan <roid@nvidia.com>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "jiri@resnulli.us" <jiri@resnulli.us>,
-        Saeed Mahameed <saeedm@nvidia.com>,
-        "sgoutham@marvell.com" <sgoutham@marvell.com>,
-        "gakula@marvell.com" <gakula@marvell.com>,
-        "f.fainelli@gmail.com" <f.fainelli@gmail.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
-Subject: Re: [PATCH net-next v2 2/2] flow_offload: reject offload for all
- drivers with invalid police parameters
-Message-ID: <YhUP0lVaq+M/mwdY@shredder>
-References: <20220217082803.3881-1-jianbol@nvidia.com>
- <20220217082803.3881-3-jianbol@nvidia.com>
- <20220217124935.p7pbgv2cfmhpshxv@skbuf>
- <6291dabcca7dd2d95b4961f660ec8b0226b8fbce.camel@nvidia.com>
- <20220222100929.gj2my4maclyrwz35@skbuf>
- <DM5PR1301MB21724BB2B0FF7C7A57BD1631E73B9@DM5PR1301MB2172.namprd13.prod.outlook.com>
+        Tue, 22 Feb 2022 11:31:58 -0500
+Received: from mail-oo1-xc2b.google.com (mail-oo1-xc2b.google.com [IPv6:2607:f8b0:4864:20::c2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8406C6266
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 08:31:32 -0800 (PST)
+Received: by mail-oo1-xc2b.google.com with SMTP id p206-20020a4a2fd7000000b0031bfec11983so18276863oop.13
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 08:31:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=dtYXm2hT3lcm5wvRcUbNMDyXlIE45DADQhitf3Rlc88=;
+        b=LLMAhUgwrk/DYdWw6wgJuwrPS/o2NfgI10xeypJfrum8mmbBBX7d3r55885xcA0GSs
+         N/0qnhPz6EDwjfCDK9EZLNApIQzBOjUAMTbhqcUrBws8r9XcYI+ZsjrQ1ackTdFYnXca
+         KSe0mNO3CmeSvS7ItohT2P9sU7Dj+jbiFaynHZLO0MRk1EWBfi4n3U+MDt0xN/KgkRbR
+         PUNRwRCH7/I5NqRt3zdTxI5yt4hkikKqm97sSwd5jrXi84dTOOy6v7mgYho9MtQZxmcW
+         QzXsp71CoMubPYHdfyu53sEstrFfcN6QNLP2z/JN+YpWcau4FD4aw1cQMev20HollGSz
+         gEvQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=dtYXm2hT3lcm5wvRcUbNMDyXlIE45DADQhitf3Rlc88=;
+        b=AxD7P8Us1RDgjZ2bJ0k7dEIx7GY2dJE8oPP/MIdQfdUFM5UKzjNCR1gFHtLZRF+jGH
+         QXgFqhzZPsSox/d1S8tLLqVxpZDr7Ibg34jnJKQ3nZ9VoUj9ysX883FRWfviD0R2+nKa
+         4VMcYEieGwvy+UY8o4rYBondwkXLef8DxWRTrsqTMJq7Zx+N18m5jtlvEGKceWfAcv8g
+         iTy5yZwbtdNbNcizn6X7W+JgvhFSwg2ABvC3or9VZaWVKp96ORwFyxvSlfq1WPbeRLGK
+         0u9Ci9766W6jn5sZUxwqIjYh515kmIbZMWm/g9rIGq6BE2WfPoaIFkCqhykXAErWaG/e
+         3+dA==
+X-Gm-Message-State: AOAM530hLVWF8EKuxmyn2p0KVxYgMaw8sOkHaVY1YEl7paCzGNkMOvLK
+        OvPfeLdjeTmT0WmA2X1SZQyam1mZg66BPZf08/A=
+X-Google-Smtp-Source: ABdhPJwfj6FZ41K/ClOtZcMS0gc0gQWKuRYKXqqfYle6jHWNbXIrWRxGaQ1cQvTxxQ6ZhiRII8f7GBeUIdvBRT/zdf8=
+X-Received: by 2002:a05:6870:3e0d:b0:d3:fe6d:57c3 with SMTP id
+ lk13-20020a0568703e0d00b000d3fe6d57c3mr2020968oab.225.1645547491928; Tue, 22
+ Feb 2022 08:31:31 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <DM5PR1301MB21724BB2B0FF7C7A57BD1631E73B9@DM5PR1301MB2172.namprd13.prod.outlook.com>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220222131701.356117-1-maira.canal@usp.br> <20220222131701.356117-5-maira.canal@usp.br>
+In-Reply-To: <20220222131701.356117-5-maira.canal@usp.br>
+From:   Alex Deucher <alexdeucher@gmail.com>
+Date:   Tue, 22 Feb 2022 11:31:20 -0500
+Message-ID: <CADnq5_NSMvOUuLo936pbs+J7ajMCn3zDV5knYQo5t1f94KYW-w@mail.gmail.com>
+Subject: Re: [PATCH 04/10] drm/amd/display: Remove unused temp variable
+To:     =?UTF-8?B?TWHDrXJhIENhbmFs?= <maira.canal@usp.br>
+Cc:     "Deucher, Alexander" <alexander.deucher@amd.com>,
+        Christian Koenig <christian.koenig@amd.com>,
+        xinhui pan <Xinhui.Pan@amd.com>,
+        Hawking Zhang <Hawking.Zhang@amd.com>,
+        John Clements <john.clements@amd.com>,
+        Tao Zhou <tao.zhou1@amd.com>,
+        "Chai, Thomas" <YiPeng.Chai@amd.com>,
+        "Tuikov, Luben" <luben.tuikov@amd.com>,
+        "Stanley.Yang" <Stanley.Yang@amd.com>,
+        Dennis Li <Dennis.Li@amd.com>,
+        "Joshi, Mukul" <mukul.joshi@amd.com>,
+        "Wentland, Harry" <harry.wentland@amd.com>,
+        "Leo (Sunpeng) Li" <sunpeng.li@amd.com>,
+        "Siqueira, Rodrigo" <Rodrigo.Siqueira@amd.com>,
+        Anthony Koo <Anthony.Koo@amd.com>,
+        Magali Lemes <magalilemes00@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Maling list - DRI developers 
+        <dri-devel@lists.freedesktop.org>, mwen@igalia.com,
+        amd-gfx list <amd-gfx@lists.freedesktop.org>,
+        Isabella Basso <isabbasso@riseup.net>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 22, 2022 at 10:29:57AM +0000, Baowen Zheng wrote:
-> Since almost all the drivers that support to offload police action make the similar validation, if it make sense to add the validation in the file of flow_offload.h or flow_offload.c?
-> Then the other drivers do not need to make the similar validation.
-> WDYT?
+Applied.  Thanks!
 
-But not all the drivers need the same validation. For example, nfp is
-one of the few drivers that supports policing based on packet rate. The
-octeontx2 driver has different restrictions based on whether the policer
-is attached to matchall or flower.
+Alex
 
-We can put the restrictions that are common between all the drivers
-somewhere, but it's not that much and it will also change over time,
-resulting in needless churn where checks are moved to individual
-drivers.
+On Tue, Feb 22, 2022 at 8:18 AM Ma=C3=ADra Canal <maira.canal@usp.br> wrote=
+:
+>
+> Remove unused temp variable from the dmub_rb_flush_pending function by
+> using arithmetic to remove the loop.
+>
+> The -Wunused-but-set-variable warning was pointed out by Clang with the
+> following warning:
+>
+> drivers/gpu/drm/amd/amdgpu/../display/dmub/inc/dmub_cmd.h:2921:12: warnin=
+g:
+> variable 'temp' set but not used [-Wunused-but-set-variable]
+>     uint64_t temp;
+>              ^
+>
+> Signed-off-by: Ma=C3=ADra Canal <maira.canal@usp.br>
+> ---
+>  drivers/gpu/drm/amd/display/dmub/inc/dmub_cmd.h | 5 +----
+>  1 file changed, 1 insertion(+), 4 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/amd/display/dmub/inc/dmub_cmd.h b/drivers/gp=
+u/drm/amd/display/dmub/inc/dmub_cmd.h
+> index fb01ff49e655..d3088836d4e4 100644
+> --- a/drivers/gpu/drm/amd/display/dmub/inc/dmub_cmd.h
+> +++ b/drivers/gpu/drm/amd/display/dmub/inc/dmub_cmd.h
+> @@ -2918,11 +2918,8 @@ static inline void dmub_rb_flush_pending(const str=
+uct dmub_rb *rb)
+>         while (rptr !=3D wptr) {
+>                 uint64_t volatile *data =3D (uint64_t volatile *)((uint8_=
+t *)(rb->base_address) + rptr);
+>                 //uint64_t volatile *p =3D (uint64_t volatile *)data;
+> -               uint64_t temp;
+> -               uint8_t i;
+>
+> -               for (i =3D 0; i < DMUB_RB_CMD_SIZE / sizeof(uint64_t); i+=
++)
+> -                       temp =3D *data++;
+> +               *data +=3D DMUB_RB_CMD_SIZE / sizeof(uint64_t);
+>
+>                 rptr +=3D DMUB_RB_CMD_SIZE;
+>                 if (rptr >=3D rb->capacity)
+> --
+> 2.35.1
+>

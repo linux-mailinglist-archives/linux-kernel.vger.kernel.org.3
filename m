@@ -2,58 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 154D84BFE2F
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 17:12:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DCC4F4BFE33
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 17:12:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233924AbiBVQMP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 11:12:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38660 "EHLO
+        id S233941AbiBVQMy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 11:12:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233921AbiBVQMO (ORCPT
+        with ESMTP id S229913AbiBVQMt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 11:12:14 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8698D125CB0;
-        Tue, 22 Feb 2022 08:11:48 -0800 (PST)
+        Tue, 22 Feb 2022 11:12:49 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEA28164D0D;
+        Tue, 22 Feb 2022 08:12:23 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 36379B81B5B;
-        Tue, 22 Feb 2022 16:11:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3C8EC340E8;
-        Tue, 22 Feb 2022 16:11:45 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6508F61671;
+        Tue, 22 Feb 2022 16:12:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12384C340E8;
+        Tue, 22 Feb 2022 16:12:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645546306;
-        bh=tPHcG2vdwAjVfMszEDtyGTUBaKWeavojfMTme0Rscn0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kQ3Xz8WjUlhH9p01XoZLlCwUI55NY9NHNCqbu3P08LPqNsjkwVFYIngPrRsOxVSbT
-         axJ3j1jiC0CzyIKHFXr4c0pdGR7C02LiDYOc9ibdhdkduhjINAuC1XIMcUCKr6WgDD
-         lkzXFYkfhh4s26mG/6UOVF2OQ689nb+pjhZyqvYSvk/5KKAUgI7wOLcgPR/YpYUDwm
-         xh6vALYshMH62HIK/q8uMvvm5j/5FlGnLNq3x+G+i+kxUDh97n8tRsv/Dmnmodx1Y2
-         xit9VtH9DJPW9cHsbxaKx0vLNh/oqYKB91Hwn4X7jnbwA1INQdUJVn94jChpQv/qs2
-         0qspFaRoN5hgA==
-Received: by pali.im (Postfix)
-        id 5B817FDB; Tue, 22 Feb 2022 17:11:43 +0100 (CET)
-Date:   Tue, 22 Feb 2022 17:11:43 +0100
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-Cc:     Russell King <rmk+kernel@armlinux.org.uk>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Rob Herring <robh+dt@kernel.org>, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: (subset) [PATCH v4 00/12] PCI: mvebu: subsystem ids, AER and INTx
-Message-ID: <20220222161143.6ryghgtfmhnmhpmz@pali>
-References: <20220222155030.988-1-pali@kernel.org>
- <164554589988.5595.5091384618177225445.b4-ty@arm.com>
+        s=k20201202; t=1645546342;
+        bh=JbZNjB4KGWYd20a2LVQuakEsG+xsLIwMnjoAuJwYCYQ=;
+        h=From:To:Cc:Subject:Date:From;
+        b=DzdTjKKYVUqytA2bcMONMRNgnEZSCfzE/1M0o7D/JCJ8QlhgnneioFA17heK8aPpm
+         EVANyFcNpM2O88sOWjAaG9W4XsV+J7dWZ45WsImR0Z61CkwYBH2u9yJ+NV4Ttyk+z2
+         fzcp8YNKjiPRuyhlRLGPo2P3y4/huznTmyg7IyimTkelJ2DpswrYXHUOJCZXbzhXqn
+         3/7RAQry00vDRH1XdknLs9QB0q2ENbqxJ4S8nW3ub8RriCI1/PMG8tT4Jy7cgbIJnz
+         1FbjL2hPY7sP8lDOcjlxXd9m6uSzGeymu9mrt9iR6mWNuuhQcLrBCHcFWY51bgF0Fu
+         PFtf10CV9we5g==
+From:   broonie@kernel.org
+To:     Kalle Valo <kvalo@kernel.org>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Wireless <linux-wireless@vger.kernel.org>
+Cc:     Ilan Peer <ilan.peer@intel.com>,
+        Jiasheng Jiang <jiasheng@iscas.ac.cn>,
+        Johannes Berg <johannes.berg@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the wireless-next tree with the origin tree
+Date:   Tue, 22 Feb 2022 16:12:18 +0000
+Message-Id: <20220222161218.4028508-1-broonie@kernel.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <164554589988.5595.5091384618177225445.b4-ty@arm.com>
-User-Agent: NeoMutt/20180716
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -64,52 +57,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tuesday 22 February 2022 16:06:20 Lorenzo Pieralisi wrote:
-> On Tue, 22 Feb 2022 16:50:18 +0100, Pali Rohár wrote:
-> > This patch series extends pci-bridge-emul.c driver to emulate PCI Subsystem
-> > Vendor ID capability and PCIe extended capabilities. And then implement
-> > in pci-mvebu.c driver support for PCI Subsystem Vendor IDs, PCIe AER
-> > registers, support for legacy INTx interrupts, configuration for X1/X4
-> > mode and usage of new PCI child_ops API.
-> > 
-> > Changes in v4:
-> > * rebased on c3bd7dc553eea5a3595ca3aa0adee9bf83622a1f
-> > 
-> > [...]
-> 
-> I can't apply dts changes, patch 12 should go via the arm-soc tree.
+Hi all,
 
-Gregory already wrote about this dts change:
-https://lore.kernel.org/linux-pci/87tud1jwpr.fsf@BL-laptop/
-"So the easier is to let merge it through the PCI subsystem with the
-other patches from this series."
+Today's linux-next merge of the wireless-next tree got a conflict in:
 
-Are there any issues with applying this dts change via pci tree?
+  net/mac80211/mlme.c
 
-> Applied the others to pci/mvebu, thanks.
-> 
-> [01/12] PCI: pci-bridge-emul: Re-arrange register tests
->         https://git.kernel.org/lpieralisi/pci/c/c453bf6f9b
-> [02/12] PCI: pci-bridge-emul: Add support for PCIe extended capabilities
->         https://git.kernel.org/lpieralisi/pci/c/c0bd419732
-> [03/12] PCI: pci-bridge-emul: Add support for PCI Bridge Subsystem Vendor ID capability
->         https://git.kernel.org/lpieralisi/pci/c/3767a90242
-> [04/12] dt-bindings: PCI: mvebu: Add num-lanes property
->         https://git.kernel.org/lpieralisi/pci/c/26b982ca83
-> [05/12] PCI: mvebu: Correctly configure x1/x4 mode
->         https://git.kernel.org/lpieralisi/pci/c/2a81dd9fd9
-> [06/12] PCI: mvebu: Add support for PCI Bridge Subsystem Vendor ID on emulated bridge
->         https://git.kernel.org/lpieralisi/pci/c/e3e13c9135
-> [07/12] PCI: mvebu: Add support for Advanced Error Reporting registers on emulated bridge
->         https://git.kernel.org/lpieralisi/pci/c/2b6ee04c0a
-> [08/12] PCI: mvebu: Use child_ops API
->         https://git.kernel.org/lpieralisi/pci/c/c099c2a761
-> [09/12] dt-bindings: PCI: mvebu: Update information about intx interrupts
->         https://git.kernel.org/lpieralisi/pci/c/0124989220
-> [10/12] PCI: mvebu: Fix macro names and comments about legacy interrupts
->         https://git.kernel.org/lpieralisi/pci/c/d00ea94e62
-> [11/12] PCI: mvebu: Implement support for legacy INTx interrupts
->         https://git.kernel.org/lpieralisi/pci/c/ec07526264
-> 
-> Thanks,
-> Lorenzo
+between commit:
+
+  a72c01a94f1d2 ("mac80211: mlme: check for null after calling kmemdup")
+
+from the origin tree and commit:
+
+  820acc810fb6e ("mac80211: Add EHT capabilities to association/probe request")
+
+from the wireless-next tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+diff --cc net/mac80211/mlme.c
+index 20b57ddf149c4,197cad4a2768a..0000000000000
+--- a/net/mac80211/mlme.c
++++ b/net/mac80211/mlme.c
+@@@ -671,7 -692,49 +692,49 @@@ static void ieee80211_add_he_ie(struct 
+  	ieee80211_ie_build_he_6ghz_cap(sdata, skb);
+  }
+  
++ static void ieee80211_add_eht_ie(struct ieee80211_sub_if_data *sdata,
++ 				 struct sk_buff *skb,
++ 				 struct ieee80211_supported_band *sband)
++ {
++ 	u8 *pos;
++ 	const struct ieee80211_sta_he_cap *he_cap;
++ 	const struct ieee80211_sta_eht_cap *eht_cap;
++ 	struct ieee80211_chanctx_conf *chanctx_conf;
++ 	u8 eht_cap_size;
++ 	bool reg_cap = false;
++ 
++ 	rcu_read_lock();
++ 	chanctx_conf = rcu_dereference(sdata->vif.chanctx_conf);
++ 	if (!WARN_ON_ONCE(!chanctx_conf))
++ 		reg_cap = cfg80211_chandef_usable(sdata->wdev.wiphy,
++ 						  &chanctx_conf->def,
++ 						  IEEE80211_CHAN_NO_HE |
++ 						  IEEE80211_CHAN_NO_EHT);
++ 	rcu_read_unlock();
++ 
++ 	he_cap = ieee80211_get_he_iftype_cap(sband,
++ 					     ieee80211_vif_type_p2p(&sdata->vif));
++ 	eht_cap = ieee80211_get_eht_iftype_cap(sband,
++ 					       ieee80211_vif_type_p2p(&sdata->vif));
++ 
++ 	/*
++ 	 * EHT capabilities element is only added if the HE capabilities element
++ 	 * was added so assume that 'he_cap' is valid and don't check it.
++ 	 */
++ 	if (WARN_ON(!he_cap || !eht_cap || !reg_cap))
++ 		return;
++ 
++ 	eht_cap_size =
++ 		2 + 1 + sizeof(eht_cap->eht_cap_elem) +
++ 		ieee80211_eht_mcs_nss_size(&he_cap->he_cap_elem,
++ 					   &eht_cap->eht_cap_elem) +
++ 		ieee80211_eht_ppe_size(eht_cap->eht_ppe_thres[0],
++ 				       eht_cap->eht_cap_elem.phy_cap_info);
++ 	pos = skb_put(skb, eht_cap_size);
++ 	ieee80211_ie_build_eht_cap(pos, he_cap, eht_cap, pos + eht_cap_size);
++ }
++ 
+ -static void ieee80211_send_assoc(struct ieee80211_sub_if_data *sdata)
+ +static int ieee80211_send_assoc(struct ieee80211_sub_if_data *sdata)
+  {
+  	struct ieee80211_local *local = sdata->local;
+  	struct ieee80211_if_managed *ifmgd = &sdata->u.mgd;

@@ -2,125 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41A1C4BFDC7
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 16:54:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D0D7B4BFDC9
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 16:54:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233555AbiBVPyW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 10:54:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48298 "EHLO
+        id S233844AbiBVPyg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 10:54:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232078AbiBVPyT (ORCPT
+        with ESMTP id S233826AbiBVPyc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 10:54:19 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AF782164D04
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 07:53:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1645545215;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=l6CVgHNITh5wTbLqWE2e3/qhwXVPmAcMBmmuUl7zJ+g=;
-        b=Q+VMkWSNe8gZx1wKSZ0+2HfnyAvGaOjDJNHej8a5iZqXrZUv7SkdwISojMboPujBmS+uvu
-        Oeqr1Wctu+ftgXiImpMJEMg4X9C2spQPXxPCcTsS6Lt90UktUSb0pP5qVLd0JXYmwfX0HF
-        VeqCfCEBxObyzjVpczgNY51StO41HrE=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-182-hzW2XmveME2mgKz4Yeq6gQ-1; Tue, 22 Feb 2022 10:53:34 -0500
-X-MC-Unique: hzW2XmveME2mgKz4Yeq6gQ-1
-Received: by mail-wr1-f71.google.com with SMTP id m3-20020adfa3c3000000b001ea95eb48abso997321wrb.3
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 07:53:34 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:user-agent:mime-version:content-transfer-encoding;
-        bh=l6CVgHNITh5wTbLqWE2e3/qhwXVPmAcMBmmuUl7zJ+g=;
-        b=abN6fNzP1WhBWA8P6FoinMdESBDDsSGGWeRJ6UopXVg0adbXSu7T4TaAhiWNK1q8U3
-         /z2lc8HPqHflr7aR2/FnybmNLhkw4MYDwUhLg0z4v91xA63F35JMH2e6MZGiN4qeoDat
-         WseAcgpOykYs8hqg59GAgDRKRDH7aA2QGCXrZkMI0fu5PGeQZ/bLZ+YOsQMd9eQnLwog
-         RTDy4IJs1640praEu4qx2cmynLxvFkN2iKdvSoieXUhH7xguHNuDg6j9XFQglUWr0UXK
-         nJayECwpCSZiIFPZPgmfApjU4Igsz3qWZUHrJ5MJc5l4nDYV6dXW29qKsQOeBKtohZcI
-         bjhg==
-X-Gm-Message-State: AOAM530Cg+QHPVpZdPXUxbTTH13aYIDhNrEvvOcyFymQf6vkyG6RsDdd
-        1dXe3NPZ/4Mi0SwXGnKxn1cez1nfRJMmlcoaddKThkuHkFBoclsRZLJLDGFGZY2OJJkdac9yMgM
-        Sicpkp5SIXlFFuDgCPU1Ezj/k
-X-Received: by 2002:adf:b34a:0:b0:1ea:8df9:318c with SMTP id k10-20020adfb34a000000b001ea8df9318cmr3083970wrd.190.1645545213445;
-        Tue, 22 Feb 2022 07:53:33 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzo3GvDiqubhPSIJifPiUva9RGNbzGHEZatlkRxV1l7JjrHoN2d+MTshFta3P9CUaYL7LMjlw==
-X-Received: by 2002:adf:b34a:0:b0:1ea:8df9:318c with SMTP id k10-20020adfb34a000000b001ea8df9318cmr3083945wrd.190.1645545213044;
-        Tue, 22 Feb 2022 07:53:33 -0800 (PST)
-Received: from ?IPv6:2a0c:5a80:1204:1500:37e7:8150:d9df:36f? ([2a0c:5a80:1204:1500:37e7:8150:d9df:36f])
-        by smtp.gmail.com with ESMTPSA id v17-20020a05600c12d100b0037c918292d4sm2532981wmd.28.2022.02.22.07.53.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Feb 2022 07:53:32 -0800 (PST)
-Message-ID: <b3d35a3e605880034a619e9a3113980107b6d18d.camel@redhat.com>
-Subject: Re: [patch 2/2] mm: lru_cache_disable: replace work queue
- synchronization with synchronize_rcu
-From:   Nicolas Saenz Julienne <nsaenzju@redhat.com>
-To:     Marcelo Tosatti <mtosatti@redhat.com>, linux-kernel@vger.kernel.org
-Cc:     linux-mm@kvack.org, Minchan Kim <minchan@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Juri Lelli <juril@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        "Paul E. McKenney" <paulmck@kernel.org>
-Date:   Tue, 22 Feb 2022 16:53:30 +0100
-In-Reply-To: <20220222144907.056089321@redhat.com>
-References: <20220222144706.937848439@redhat.com>
-         <20220222144907.056089321@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
+        Tue, 22 Feb 2022 10:54:32 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBD7E652DC;
+        Tue, 22 Feb 2022 07:53:52 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 87FA21F39E;
+        Tue, 22 Feb 2022 15:53:51 +0000 (UTC)
+Received: from adalid.arch.suse.de (adalid.arch.suse.de [10.161.8.13])
+        by relay2.suse.de (Postfix) with ESMTP id 73181A3B88;
+        Tue, 22 Feb 2022 15:53:51 +0000 (UTC)
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     arnd@kernel.org
+Subject: [PATCH] MIPS: Handle address errors for accesses above CPU max virtual user address
+Date:   Tue, 22 Feb 2022 16:53:44 +0100
+Message-Id: <20220222155345.138861-1-tsbogend@alpha.franken.de>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-02-22 at 11:47 -0300, Marcelo Tosatti wrote:
-> @@ -918,14 +917,23 @@ atomic_t lru_disable_count = ATOMIC_INIT
->  void lru_cache_disable(void)
->  {
->  	atomic_inc(&lru_disable_count);
-> +	synchronize_rcu();
->  #ifdef CONFIG_SMP
->  	/*
-> -	 * lru_add_drain_all in the force mode will schedule draining on
-> -	 * all online CPUs so any calls of lru_cache_disabled wrapped by
-> -	 * local_lock or preemption disabled would be ordered by that.
-> -	 * The atomic operation doesn't need to have stronger ordering
-> -	 * requirements because that is enforced by the scheduling
-> -	 * guarantees.
-> +	 * synchronize_rcu() waits for preemption disabled
-> +	 * and RCU read side critical sections
-> +	 * For the users of lru_disable_count:
-> +	 *
-> +	 * preempt_disable, local_irq_disable() [bh_lru_lock()]
-> +	 * rcu_read_lock			[lru_pvecs CONFIG_PREEMPT_RT]
-> +	 * preempt_disable			[lru_pvecs !CONFIG_PREEMPT_RT]
-> +	 *
-> +	 *
-> +	 * so any calls of lru_cache_disabled wrapped by
-> +	 * local_lock+rcu_read_lock or preemption disabled would be
-> +	 * ordered by that. The atomic operation doesn't need to have
-> +	 * stronger ordering requirements because that is enforced
-> +	 * by the scheduling guarantees.
+Address errors have always been treated as unaliged accesses and handled
+as such. But address errors are also issued for illegal accesses like
+user to kernel space or accesses outside of implemented spaces. This
+change implements Linux exception handling for accesses to the illegal
+space above the CPU implemented maximum virtual user address and the
+MIPS 64bit architecture maximum. With this we can now use a fixed value
+for the maximum task size on every MIPS CPU and get a more optimized
+access_ok().
 
-"The atomic operation doesn't need to have stronger ordering requirements
-because that is enforced by the scheduling guarantees."
+Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+---
+ arch/mips/kernel/unaligned.c | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
 
-This is no longer needed.
-
-Regards,
-
+diff --git a/arch/mips/kernel/unaligned.c b/arch/mips/kernel/unaligned.c
+index df4b708c04a9..7b5aba5df02e 100644
+--- a/arch/mips/kernel/unaligned.c
++++ b/arch/mips/kernel/unaligned.c
+@@ -1480,6 +1480,23 @@ asmlinkage void do_ade(struct pt_regs *regs)
+ 	prev_state = exception_enter();
+ 	perf_sw_event(PERF_COUNT_SW_ALIGNMENT_FAULTS,
+ 			1, regs, regs->cp0_badvaddr);
++
++#ifdef CONFIG_64BIT
++	/*
++	 * check, if we are hitting space between CPU implemented maximum
++	 * virtual user address and 64bit maximum virtual user address
++	 * and do exception handling to get EFAULTs for get_user/put_user
++	 */
++	if ((regs->cp0_badvaddr >= (1UL << cpu_vmbits)) &&
++	    (regs->cp0_badvaddr < XKSSEG)) {
++		if (fixup_exception(regs)) {
++			current->thread.cp0_baduaddr = regs->cp0_badvaddr;
++			return;
++		}
++		goto sigbus;
++	}
++#endif
++
+ 	/*
+ 	 * Did we catch a fault trying to load an instruction?
+ 	 */
 -- 
-Nicolás Sáenz
+2.29.2
 

@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 531BA4BFEB9
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 17:32:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC7444BFECC
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 17:33:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234166AbiBVQdK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 11:33:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39688 "EHLO
+        id S234087AbiBVQdm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 11:33:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232774AbiBVQcq (ORCPT
+        with ESMTP id S234097AbiBVQcu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 11:32:46 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41527A1472;
-        Tue, 22 Feb 2022 08:32:21 -0800 (PST)
+        Tue, 22 Feb 2022 11:32:50 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E5A3113AD5;
+        Tue, 22 Feb 2022 08:32:24 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D16F760AE7;
+        by sin.source.kernel.org (Postfix) with ESMTPS id B39DECE17A3;
+        Tue, 22 Feb 2022 16:32:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72ABAC340FB;
         Tue, 22 Feb 2022 16:32:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B647C340FA;
-        Tue, 22 Feb 2022 16:32:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645547540;
-        bh=uWKvcbndHUbVrYNRcixdhR5Elks38X+3GOL0tdfRPzw=;
+        s=k20201202; t=1645547541;
+        bh=UcJmaYKYSUedgav8DTnlV/x/GzgaonSprD2wkPg3Hq4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ieNUGNnXSHNKaVr1+0n5C4OGbzjh8+RApiiRpmD9IWGLKqlKo+faMq77/wn0IOHzO
-         7tE/CuRKrnSlvV55q79nm9CRk3ecj1ECY/9MemIUOWBYdUmJUDThKQqAJWrwYdPVeU
-         PI/urv8P3Hn+TztOQI1jTDMABmI2GddCcVHOw4vEUQd52J9jcysYlGBPKIGrHpxm2T
-         SBpEX9aPVfCj08okWmiN9/18ISSV3zwTw3b4DBX/SH3ac6ppOKWXv+SDbDWCoGKMXg
-         +89YtCMB/o6uVD72f6yIRvb/XGP4UXdOlteEiCLXzixHiDTkOhSExbS2w9wfm/vS04
-         VGYH3orrCxn6A==
+        b=pW31tNlM7vrf4Vja9RGa/oOYqzpEBdOuNydh7Ok1ffO63/zOdH2U0436X7xpoxH/8
+         7s6I316cTMlOtl6fP7RXS+RVgFgxGG5E823yZS5kPKCn3awuLuwEbPgJZATptM5xXG
+         C0nlmBtQHPmAPwvKugvDIo7PJXkZs9TZj79n6IMUVDugAWJUmeT+WjvcP6V6njW8wD
+         AXeVPSmqv4Y8KdVJrjVsQ1jiYk1hDAi9OPnwhVH1TOrZKJnA1RaGGHU0DmHO3mVJls
+         vBARKxLPPxYkqEZ/tWPceK9rZ5KhnYxAB34eR5iEalccUIb/p7mWMMkyBxCKs8aqLy
+         kZ5NghPYeOjOg==
 From:   Keith Busch <kbusch@kernel.org>
 To:     linux-nvme@lists.infradead.org, linux-block@vger.kernel.org,
         linux-crypto@vger.kernel.org, x86@kernel.org,
@@ -39,9 +39,9 @@ To:     linux-nvme@lists.infradead.org, linux-block@vger.kernel.org,
 Cc:     axboe@kernel.dk, hch@lst.de, martin.petersen@oracle.com,
         colyli@suse.de, Keith Busch <kbusch@kernel.org>,
         Hannes Reinecke <hare@suse.de>
-Subject: [PATCHv3 01/10] block: support pi with extended metadata
-Date:   Tue, 22 Feb 2022 08:31:35 -0800
-Message-Id: <20220222163144.1782447-2-kbusch@kernel.org>
+Subject: [PATCHv3 02/10] nvme: allow integrity on extended metadata formats
+Date:   Tue, 22 Feb 2022 08:31:36 -0800
+Message-Id: <20220222163144.1782447-3-kbusch@kernel.org>
 X-Mailer: git-send-email 2.25.4
 In-Reply-To: <20220222163144.1782447-1-kbusch@kernel.org>
 References: <20220222163144.1782447-1-kbusch@kernel.org>
@@ -57,65 +57,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The nvme spec allows protection information formats with metadata
-extending beyond the pi field. Use the actual size of the metadata field
-for incrementing the buffer.
+The block integrity subsystem knows how to construct protection
+information buffers with metadata beyond the protection information
+fields. Remove the driver restriction.
+
+Note, this can only work if the PI field appears first in the metadata,
+as the integrity subsystem doesn't calculate guard tags on preceding
+metadata.
 
 Reviewed-by: Hannes Reinecke <hare@suse.de>
 Reviewed-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Keith Busch <kbusch@kernel.org>
 ---
- block/bio-integrity.c         | 1 +
- block/t10-pi.c                | 4 ++--
- include/linux/blk-integrity.h | 1 +
- 3 files changed, 4 insertions(+), 2 deletions(-)
+ drivers/nvme/host/core.c | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
 
-diff --git a/block/bio-integrity.c b/block/bio-integrity.c
-index 6996e7bd66e9..32929c89ba8a 100644
---- a/block/bio-integrity.c
-+++ b/block/bio-integrity.c
-@@ -165,6 +165,7 @@ static blk_status_t bio_integrity_process(struct bio *bio,
+diff --git a/drivers/nvme/host/core.c b/drivers/nvme/host/core.c
+index 3b876dcab730..8132b1282082 100644
+--- a/drivers/nvme/host/core.c
++++ b/drivers/nvme/host/core.c
+@@ -1760,12 +1760,9 @@ static int nvme_configure_metadata(struct nvme_ns *ns, struct nvme_id_ns *id)
+ {
+ 	struct nvme_ctrl *ctrl = ns->ctrl;
  
- 	iter.disk_name = bio->bi_bdev->bd_disk->disk_name;
- 	iter.interval = 1 << bi->interval_exp;
-+	iter.tuple_size = bi->tuple_size;
- 	iter.seed = proc_iter->bi_sector;
- 	iter.prot_buf = bvec_virt(bip->bip_vec);
- 
-diff --git a/block/t10-pi.c b/block/t10-pi.c
-index 25a52a2a09a8..758a76518854 100644
---- a/block/t10-pi.c
-+++ b/block/t10-pi.c
-@@ -44,7 +44,7 @@ static blk_status_t t10_pi_generate(struct blk_integrity_iter *iter,
- 			pi->ref_tag = 0;
- 
- 		iter->data_buf += iter->interval;
--		iter->prot_buf += sizeof(struct t10_pi_tuple);
-+		iter->prot_buf += iter->tuple_size;
- 		iter->seed++;
- 	}
- 
-@@ -93,7 +93,7 @@ static blk_status_t t10_pi_verify(struct blk_integrity_iter *iter,
- 
- next:
- 		iter->data_buf += iter->interval;
--		iter->prot_buf += sizeof(struct t10_pi_tuple);
-+		iter->prot_buf += iter->tuple_size;
- 		iter->seed++;
- 	}
- 
-diff --git a/include/linux/blk-integrity.h b/include/linux/blk-integrity.h
-index 8a038ea0717e..378b2459efe2 100644
---- a/include/linux/blk-integrity.h
-+++ b/include/linux/blk-integrity.h
-@@ -19,6 +19,7 @@ struct blk_integrity_iter {
- 	sector_t		seed;
- 	unsigned int		data_size;
- 	unsigned short		interval;
-+	unsigned char		tuple_size;
- 	const char		*disk_name;
- };
- 
+-	/*
+-	 * The PI implementation requires the metadata size to be equal to the
+-	 * t10 pi tuple size.
+-	 */
+ 	ns->ms = le16_to_cpu(id->lbaf[id->flbas & NVME_NS_FLBAS_LBA_MASK].ms);
+-	if (ns->ms == sizeof(struct t10_pi_tuple))
++	if (id->dps & NVME_NS_DPS_PI_FIRST ||
++	    ns->ms == sizeof(struct t10_pi_tuple))
+ 		ns->pi_type = id->dps & NVME_NS_DPS_PI_MASK;
+ 	else
+ 		ns->pi_type = 0;
 -- 
 2.25.4
 

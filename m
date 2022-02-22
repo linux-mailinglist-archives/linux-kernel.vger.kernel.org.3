@@ -2,146 +2,373 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E18F4BF8DC
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 14:11:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C773E4BF8CF
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 14:09:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231224AbiBVNLp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 08:11:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43736 "EHLO
+        id S232280AbiBVNKK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 08:10:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232259AbiBVNKE (ORCPT
+        with ESMTP id S232216AbiBVNJ5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 08:10:04 -0500
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2074.outbound.protection.outlook.com [40.107.237.74])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E75301533BB;
-        Tue, 22 Feb 2022 05:09:27 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=X5jfkoAVeLUAf7mGS8yqZW0DqDBbBdYgC9chpZ/RP83RXQvy2GeIMPpCcX2v+jS/NW8Swauy4tnC+s7IPUrjjrCc7Q135u/XBOpKE9fEzXmis8lhBIiskUSW/EZGDGAyAxpN18G3FJLgEaKaCi73MzQqQdUz6Xj7eMAJInzvn0rQLLqfsgJ1Fl/UoZTJingMp25bUVtzKD3wPSesiKPkZA2TXnxmwAxDnGikRvOWHNIkqTijhRUj9Fimp/gVCE4rdB24XNijDofmeZ1Y91HKxOS8t+TFx2LSWv7YFO73icHS1pBNtpsJ0jk0r5tNYMkAWBpwjOGj5eF3O0/Fm02MTw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=6vfXcr536bemeh81FHzrlNim153nDcqpdr7jFH1GHMQ=;
- b=m+Q0uspoS+cPuQaZAqf8nEmmY8Kp8w5t8UVezHeZQvjAroMg6ZAvAOkjSzNm7Kp0tV3NutiIi0Wybx3Fj1VTH9kRvoEiWUCXBkaO1cO8ePcfVzhRiqlwP/YpHRZw7gdq0Ues6/2RdNBA8ozERVfmcdNvi1kWmlKKmzu6PX635jsO38FS+tNErQUAHnTpd7gYfPQMaR9/3WH4wQWd4AnwkH0Ust+zmgIDsFdzlP6dEoq5jr56fe+iwQmh74VDrbGXkSPAgGZFxv8kxJT/so4IKWQ2gki8JvAJbkeF4lPL1SQyuqw7HY/ZzFyVB/6muzHR3S3GRBSklvQ98k+YYNVC4w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 149.199.62.198) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=xilinx.com;
- dmarc=pass (p=none sp=none pct=100) action=none header.from=xilinx.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=6vfXcr536bemeh81FHzrlNim153nDcqpdr7jFH1GHMQ=;
- b=Em7M+jvnt7iHkgbaOnVGWDrJhYEiKa6i+cLKKWo+n8p+VYCA2e+z9EweO/Kf3f6uqEut/ViAHeeR36P4qsKoZFIK4j1UUmS5gSzVDeYYm598Xzo+PORnqNT7aPV54kzM9XiKUz0IuulwlyeUDj9UC4zVKY1vgJz3mUQOh7QWxuY=
-Received: from DS7PR05CA0085.namprd05.prod.outlook.com (2603:10b6:8:56::15) by
- BY5PR02MB7026.namprd02.prod.outlook.com (2603:10b6:a03:23d::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4995.16; Tue, 22 Feb
- 2022 13:09:25 +0000
-Received: from DM3NAM02FT037.eop-nam02.prod.protection.outlook.com
- (2603:10b6:8:56:cafe::75) by DS7PR05CA0085.outlook.office365.com
- (2603:10b6:8:56::15) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5017.9 via Frontend
- Transport; Tue, 22 Feb 2022 13:09:25 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
- smtp.mailfrom=xilinx.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=xilinx.com;
-Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
- 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
- client-ip=149.199.62.198; helo=xsj-pvapexch02.xlnx.xilinx.com;
-Received: from xsj-pvapexch02.xlnx.xilinx.com (149.199.62.198) by
- DM3NAM02FT037.mail.protection.outlook.com (10.13.4.166) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.4995.19 via Frontend Transport; Tue, 22 Feb 2022 13:09:25 +0000
-Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
- xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.14; Tue, 22 Feb 2022 05:09:24 -0800
-Received: from smtp.xilinx.com (172.19.127.96) by
- xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
- 15.1.2176.14 via Frontend Transport; Tue, 22 Feb 2022 05:09:24 -0800
-Envelope-to: git@xilinx.com,
- linux-clk@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Received: from [10.140.6.59] (port=35690 helo=xhdshubhraj40.xilinx.com)
-        by smtp.xilinx.com with esmtp (Exim 4.90)
-        (envelope-from <shubhrajyoti.datta@xilinx.com>)
-        id 1nMUux-000Eql-K8; Tue, 22 Feb 2022 05:09:24 -0800
-From:   Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
-To:     <linux-clk@vger.kernel.org>
-CC:     <git@xilinx.com>, <michal.simek@xilinx.com>,
-        <linux-kernel@vger.kernel.org>,
-        Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
-Subject: [PATCH 2/2] clk: zynq: Update the parameters to zynq_clk_register_periph_clk
-Date:   Tue, 22 Feb 2022 18:39:03 +0530
-Message-ID: <20220222130903.17235-3-shubhrajyoti.datta@xilinx.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220222130903.17235-1-shubhrajyoti.datta@xilinx.com>
-References: <20220222130903.17235-1-shubhrajyoti.datta@xilinx.com>
+        Tue, 22 Feb 2022 08:09:57 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D78081520DD
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 05:09:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1645535362;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=sArOKonR7mVFrI6wVfY/YbS2e2+J3MFk5Acury5CQLE=;
+        b=BbWqFYhXHAjknHqMjWQyc6u/gq3vEE25p7ddloLEp1xZtJod0bEEyYQKkivhOSDy6qwZrL
+        kF/R7KZkKxt5be/aCEG4SeYCEdpmxtR9zX2kb7L6fgnxcisTxAdzf/sByAAEcjYcpg/uHF
+        JztBDb9kY7tlJpARVEGPfQN/DOXY4bk=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-166-t5j-AUnyOsSjcDphQfqxdQ-1; Tue, 22 Feb 2022 08:09:21 -0500
+X-MC-Unique: t5j-AUnyOsSjcDphQfqxdQ-1
+Received: by mail-wm1-f71.google.com with SMTP id i20-20020a05600c051400b00380d5eb51a7so514611wmc.3
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 05:09:21 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=sArOKonR7mVFrI6wVfY/YbS2e2+J3MFk5Acury5CQLE=;
+        b=xycCMhaJzHFkKVfN/w44kc3ZVwL72OdVJ+JE8cC21hfddvVnxKgE20A8UifTTJ9xQz
+         GqznlYE60/OHFCnUJ/2/WzvPl83wJFtBjh6erFs++cHvvVmPPgvu1OYE5NBnrx0dBiaI
+         X+0f1tWT7kdtFALWEtdlXttjcsB63CUfutF9QxZgh+/qEzoGQojoFveRpfxN82NVE7T6
+         DD956hgtTmEnF37fdSc4BI5vxTdWR0Wg4Heqh/pdR96wOKW4ux/jpCRHN8zqlV1frm8H
+         eJ4IUzR6Mx7p+7ypQKY0CRtexAHOQsY39TmH0lR3OcOQkKzhHjvtHbLQEDu5AGBNJ2Ex
+         u8kg==
+X-Gm-Message-State: AOAM531MbEsMaetcmy4xsFWJ5QaRuUe11R3KUkAxKdcJsTcZ4zpm7OAb
+        umTpV7UeZu8nyfEycYzLmzT2jtZTNawUwtzsmyhD9lIXeqTi7w32fY6N+1YFtKy6GRKTj4wX67N
+        r0/ezHhyZ5k/fAkUTR/udXKA=
+X-Received: by 2002:adf:f312:0:b0:1e8:f4bb:5a5c with SMTP id i18-20020adff312000000b001e8f4bb5a5cmr18827184wro.668.1645535360281;
+        Tue, 22 Feb 2022 05:09:20 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwdtYD0SY4elWorSjlwcfxRCumG4lM0O7DpJgXC9+O5rcv2+b+vUCA7DjuMPYepijML3Zrq4w==
+X-Received: by 2002:adf:f312:0:b0:1e8:f4bb:5a5c with SMTP id i18-20020adff312000000b001e8f4bb5a5cmr18827170wro.668.1645535360068;
+        Tue, 22 Feb 2022 05:09:20 -0800 (PST)
+Received: from localhost (cpc111743-lutn13-2-0-cust979.9-3.cable.virginm.net. [82.17.115.212])
+        by smtp.gmail.com with ESMTPSA id g22sm2316566wmh.12.2022.02.22.05.09.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Feb 2022 05:09:19 -0800 (PST)
+From:   Aaron Tomlin <atomlin@redhat.com>
+To:     mcgrof@kernel.org, christophe.leroy@csgroup.eu
+Cc:     cl@linux.com, pmladek@suse.com, mbenes@suse.cz,
+        akpm@linux-foundation.org, jeyu@kernel.org,
+        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
+        void@manifault.com, atomlin@atomlin.com, allen.lkml@gmail.com,
+        joe@perches.com, msuchanek@suse.de, oleksandr@natalenko.name
+Subject: [PATCH v7 06/13] module: Move strict rwx support to a separate file
+Date:   Tue, 22 Feb 2022 13:09:04 +0000
+Message-Id: <20220222130911.1348513-7-atomlin@redhat.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220222130911.1348513-1-atomlin@redhat.com>
+References: <20220222130911.1348513-1-atomlin@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 1994d895-6f7e-4db8-e567-08d9f6048cde
-X-MS-TrafficTypeDiagnostic: BY5PR02MB7026:EE_
-X-Microsoft-Antispam-PRVS: <BY5PR02MB7026C9C2A15323375D9005CBAA3B9@BY5PR02MB7026.namprd02.prod.outlook.com>
-X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: M3mbS1x9XA4rLwSrHDMlNUzHpiEFFp+RslrfPMiJaeQv4mKa1bkP08+rMoJzatGzK5zAoGi+eZgTVfeKNg1qFjxDr7vUtMsd5D2FGwekyPOOwe5B2u29GrgwAniLg2TnFHIyHgs+PDjqpsFvxh6hEmh5e65DjvtAvDo1ccTmaa7t30r11+MuAjyQ9IIIJid71e+KX6vTAdiD/txSE85vd/x7DcCzcJ9Toc3eN4vQJ8OmJPv/z0vqJNqXfTuy+6Z3ngzigzMw74y3TksDDGIgVi0WNmcphxZKhGh4L8dCagAIgNoJjeoHYgxzE5m+UaUhC8fOYL3wgoQXTqDOtbIQyceBbLvMwAPLpXiddPySAaJXNS2Be5DFOm6UKH5dCaIFAHPgmrkyBQ6RfmUHZF52fm/8wSbmJ2JMzKpj75tuqWmei8rMBI/uP87gQ3vI6SZdVk9D/bYUpOsPU6X7t5iHyFIn4oRXW/v1dfHEQPS5i63zbUGcok4/oxTXFC2exb3zrcZ/wFduvErd9sniLFpsBaDGWJSGDfhrb/UhjQxOcZhq4l8kw47NshQvF1aYoWbbQnMctC9NUZNGJBlrrheJG5ftLaLU6RA1YFXlTwOQSh07OPV23pbfT1PvId4iuIUZ9pqAn5OjsiToJS0egkK/h8jZTSG4+xPh2D7VmhNL9LfKqj6kd0LNTqWH9K5pdYm4
-X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch02.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(13230001)(4636009)(46966006)(36840700001)(4326008)(426003)(47076005)(336012)(83380400001)(44832011)(36756003)(5660300002)(9786002)(2906002)(8936002)(26005)(7696005)(2616005)(107886003)(36860700001)(186003)(70586007)(70206006)(1076003)(356005)(7636003)(54906003)(8676002)(508600001)(316002)(6916009)(82310400004)(6666004)(450100002)(102446001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: xilinx.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Feb 2022 13:09:25.2417
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1994d895-6f7e-4db8-e567-08d9f6048cde
-X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch02.xlnx.xilinx.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM3NAM02FT037.eop-nam02.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR02MB7026
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In case there are only one gate or the two_gate is 0 the clk1 clock
-passed is not used. We are passing 0 which is arm_pll.
-Pass a invalid clock instead.
+No functional change.
 
-Signed-off-by: Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
+This patch migrates code that makes module text
+and rodata memory read-only and non-text memory
+non-executable from core module code into
+kernel/module/strict_rwx.c.
+
+Signed-off-by: Aaron Tomlin <atomlin@redhat.com>
 ---
- drivers/clk/zynq/clkc.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ kernel/module/Makefile     |  1 +
+ kernel/module/internal.h   | 32 ++++++++++++
+ kernel/module/main.c       | 99 +-------------------------------------
+ kernel/module/strict_rwx.c | 85 ++++++++++++++++++++++++++++++++
+ 4 files changed, 120 insertions(+), 97 deletions(-)
+ create mode 100644 kernel/module/strict_rwx.c
 
-diff --git a/drivers/clk/zynq/clkc.c b/drivers/clk/zynq/clkc.c
-index 434511dcf5cb..7bdeaff2bfd6 100644
---- a/drivers/clk/zynq/clkc.c
-+++ b/drivers/clk/zynq/clkc.c
-@@ -355,14 +355,14 @@ static void __init zynq_clk_setup(struct device_node *np)
- 				periph_parents, enable);
- 	}
+diff --git a/kernel/module/Makefile b/kernel/module/Makefile
+index e8413975bf1d..8ff5c92daf52 100644
+--- a/kernel/module/Makefile
++++ b/kernel/module/Makefile
+@@ -13,4 +13,5 @@ obj-$(CONFIG_MODULE_SIG) += signing.o
+ obj-$(CONFIG_LIVEPATCH) += livepatch.o
+ ifdef CONFIG_MODULES
+ obj-$(CONFIG_MODULES_TREE_LOOKUP) += tree_lookup.o
++obj-$(CONFIG_STRICT_MODULE_RWX) += strict_rwx.o
+ endif
+diff --git a/kernel/module/internal.h b/kernel/module/internal.h
+index f1682e3677be..a6895bb5598a 100644
+--- a/kernel/module/internal.h
++++ b/kernel/module/internal.h
+@@ -20,6 +20,17 @@
+ /* Maximum number of characters written by module_flags() */
+ #define MODULE_FLAGS_BUF_SIZE (TAINT_FLAGS_COUNT + 4)
  
--	zynq_clk_register_periph_clk(lqspi, 0, clk_output_name[lqspi], NULL,
--			SLCR_LQSPI_CLK_CTRL, periph_parents, 0);
-+	zynq_clk_register_periph_clk(lqspi, clk_max, clk_output_name[lqspi], NULL,
-+				     SLCR_LQSPI_CLK_CTRL, periph_parents, 0);
++/*
++ * Modules' sections will be aligned on page boundaries
++ * to ensure complete separation of code and data, but
++ * only when CONFIG_ARCH_HAS_STRICT_MODULE_RWX=y
++ */
++#ifdef CONFIG_ARCH_HAS_STRICT_MODULE_RWX
++# define debug_align(X) PAGE_ALIGN(X)
++#else
++# define debug_align(X) (X)
++#endif
++
+ extern struct mutex module_mutex;
+ extern struct list_head modules;
  
--	zynq_clk_register_periph_clk(smc, 0, clk_output_name[smc], NULL,
--			SLCR_SMC_CLK_CTRL, periph_parents, 0);
-+	zynq_clk_register_periph_clk(smc, clk_max, clk_output_name[smc], NULL,
-+				     SLCR_SMC_CLK_CTRL, periph_parents, 0);
+@@ -126,3 +137,24 @@ static inline struct module *mod_find(unsigned long addr)
+ 	return NULL;
+ }
+ #endif /* CONFIG_MODULES_TREE_LOOKUP */
++
++#ifdef CONFIG_ARCH_HAS_STRICT_MODULE_RWX
++void frob_text(const struct module_layout *layout, int (*set_memory)(unsigned long start,
++								     int num_pages));
++#endif /* CONFIG_ARCH_HAS_STRICT_MODULE_RWX */
++
++#ifdef CONFIG_STRICT_MODULE_RWX
++void module_enable_ro(const struct module *mod, bool after_init);
++void module_enable_nx(const struct module *mod);
++int module_enforce_rwx_sections(Elf_Ehdr *hdr, Elf_Shdr *sechdrs,
++				char *secstrings, struct module *mod);
++
++#else /* !CONFIG_STRICT_MODULE_RWX */
++static inline void module_enable_nx(const struct module *mod) { }
++static inline void module_enable_ro(const struct module *mod, bool after_init) {}
++static inline int module_enforce_rwx_sections(Elf_Ehdr *hdr, Elf_Shdr *sechdrs,
++				       char *secstrings, struct module *mod)
++{
++	return 0;
++}
++#endif /* CONFIG_STRICT_MODULE_RWX */
+diff --git a/kernel/module/main.c b/kernel/module/main.c
+index 76b53880ad91..5cd63f14b1ef 100644
+--- a/kernel/module/main.c
++++ b/kernel/module/main.c
+@@ -63,17 +63,6 @@
+ #define CREATE_TRACE_POINTS
+ #include <trace/events/module.h>
  
--	zynq_clk_register_periph_clk(pcap, 0, clk_output_name[pcap], NULL,
--			SLCR_PCAP_CLK_CTRL, periph_parents, 0);
-+	zynq_clk_register_periph_clk(pcap, clk_max, clk_output_name[pcap], NULL,
-+				     SLCR_PCAP_CLK_CTRL, periph_parents, 0);
+-/*
+- * Modules' sections will be aligned on page boundaries
+- * to ensure complete separation of code and data, but
+- * only when CONFIG_ARCH_HAS_STRICT_MODULE_RWX=y
+- */
+-#ifdef CONFIG_ARCH_HAS_STRICT_MODULE_RWX
+-# define debug_align(X) ALIGN(X, PAGE_SIZE)
+-#else
+-# define debug_align(X) (X)
+-#endif
+-
+ /*
+  * Mutex protects:
+  * 1) List of modules (also safely readable with preempt_disable),
+@@ -1819,8 +1808,8 @@ static void mod_sysfs_teardown(struct module *mod)
+  * whether we are strict.
+  */
+ #ifdef CONFIG_ARCH_HAS_STRICT_MODULE_RWX
+-static void frob_text(const struct module_layout *layout,
+-		      int (*set_memory)(unsigned long start, int num_pages))
++void frob_text(const struct module_layout *layout,
++	       int (*set_memory)(unsigned long start, int num_pages))
+ {
+ 	BUG_ON((unsigned long)layout->base & (PAGE_SIZE-1));
+ 	BUG_ON((unsigned long)layout->text_size & (PAGE_SIZE-1));
+@@ -1837,90 +1826,6 @@ static void module_enable_x(const struct module *mod)
+ static void module_enable_x(const struct module *mod) { }
+ #endif /* CONFIG_ARCH_HAS_STRICT_MODULE_RWX */
  
- 	zynq_clk_register_periph_clk(sdio0, sdio1, clk_output_name[sdio0],
- 			clk_output_name[sdio1], SLCR_SDIO_CLK_CTRL,
+-#ifdef CONFIG_STRICT_MODULE_RWX
+-static void frob_rodata(const struct module_layout *layout,
+-			int (*set_memory)(unsigned long start, int num_pages))
+-{
+-	BUG_ON((unsigned long)layout->base & (PAGE_SIZE-1));
+-	BUG_ON((unsigned long)layout->text_size & (PAGE_SIZE-1));
+-	BUG_ON((unsigned long)layout->ro_size & (PAGE_SIZE-1));
+-	set_memory((unsigned long)layout->base + layout->text_size,
+-		   (layout->ro_size - layout->text_size) >> PAGE_SHIFT);
+-}
+-
+-static void frob_ro_after_init(const struct module_layout *layout,
+-				int (*set_memory)(unsigned long start, int num_pages))
+-{
+-	BUG_ON((unsigned long)layout->base & (PAGE_SIZE-1));
+-	BUG_ON((unsigned long)layout->ro_size & (PAGE_SIZE-1));
+-	BUG_ON((unsigned long)layout->ro_after_init_size & (PAGE_SIZE-1));
+-	set_memory((unsigned long)layout->base + layout->ro_size,
+-		   (layout->ro_after_init_size - layout->ro_size) >> PAGE_SHIFT);
+-}
+-
+-static void frob_writable_data(const struct module_layout *layout,
+-			       int (*set_memory)(unsigned long start, int num_pages))
+-{
+-	BUG_ON((unsigned long)layout->base & (PAGE_SIZE-1));
+-	BUG_ON((unsigned long)layout->ro_after_init_size & (PAGE_SIZE-1));
+-	BUG_ON((unsigned long)layout->size & (PAGE_SIZE-1));
+-	set_memory((unsigned long)layout->base + layout->ro_after_init_size,
+-		   (layout->size - layout->ro_after_init_size) >> PAGE_SHIFT);
+-}
+-
+-static void module_enable_ro(const struct module *mod, bool after_init)
+-{
+-	if (!rodata_enabled)
+-		return;
+-
+-	set_vm_flush_reset_perms(mod->core_layout.base);
+-	set_vm_flush_reset_perms(mod->init_layout.base);
+-	frob_text(&mod->core_layout, set_memory_ro);
+-
+-	frob_rodata(&mod->core_layout, set_memory_ro);
+-	frob_text(&mod->init_layout, set_memory_ro);
+-	frob_rodata(&mod->init_layout, set_memory_ro);
+-
+-	if (after_init)
+-		frob_ro_after_init(&mod->core_layout, set_memory_ro);
+-}
+-
+-static void module_enable_nx(const struct module *mod)
+-{
+-	frob_rodata(&mod->core_layout, set_memory_nx);
+-	frob_ro_after_init(&mod->core_layout, set_memory_nx);
+-	frob_writable_data(&mod->core_layout, set_memory_nx);
+-	frob_rodata(&mod->init_layout, set_memory_nx);
+-	frob_writable_data(&mod->init_layout, set_memory_nx);
+-}
+-
+-static int module_enforce_rwx_sections(Elf_Ehdr *hdr, Elf_Shdr *sechdrs,
+-				       char *secstrings, struct module *mod)
+-{
+-	const unsigned long shf_wx = SHF_WRITE|SHF_EXECINSTR;
+-	int i;
+-
+-	for (i = 0; i < hdr->e_shnum; i++) {
+-		if ((sechdrs[i].sh_flags & shf_wx) == shf_wx) {
+-			pr_err("%s: section %s (index %d) has invalid WRITE|EXEC flags\n",
+-				mod->name, secstrings + sechdrs[i].sh_name, i);
+-			return -ENOEXEC;
+-		}
+-	}
+-
+-	return 0;
+-}
+-
+-#else /* !CONFIG_STRICT_MODULE_RWX */
+-static void module_enable_nx(const struct module *mod) { }
+-static void module_enable_ro(const struct module *mod, bool after_init) {}
+-static int module_enforce_rwx_sections(Elf_Ehdr *hdr, Elf_Shdr *sechdrs,
+-				       char *secstrings, struct module *mod)
+-{
+-	return 0;
+-}
+-#endif /*  CONFIG_STRICT_MODULE_RWX */
+-
+ void __weak module_memfree(void *module_region)
+ {
+ 	/*
+diff --git a/kernel/module/strict_rwx.c b/kernel/module/strict_rwx.c
+new file mode 100644
+index 000000000000..7949dfd449c2
+--- /dev/null
++++ b/kernel/module/strict_rwx.c
+@@ -0,0 +1,85 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
++/*
++ * Module strict rwx
++ *
++ * Copyright (C) 2015 Rusty Russell
++ */
++
++#include <linux/module.h>
++#include <linux/mm.h>
++#include <linux/vmalloc.h>
++#include <linux/set_memory.h>
++#include "internal.h"
++
++static void frob_rodata(const struct module_layout *layout,
++		 int (*set_memory)(unsigned long start, int num_pages))
++{
++	BUG_ON(!PAGE_ALIGNED(layout->base));
++	BUG_ON(!PAGE_ALIGNED(layout->text_size));
++	BUG_ON(!PAGE_ALIGNED(layout->ro_size));
++	set_memory((unsigned long)layout->base + layout->text_size,
++		   (layout->ro_size - layout->text_size) >> PAGE_SHIFT);
++}
++
++static void frob_ro_after_init(const struct module_layout *layout,
++			int (*set_memory)(unsigned long start, int num_pages))
++{
++	BUG_ON(!PAGE_ALIGNED(layout->base));
++	BUG_ON(!PAGE_ALIGNED(layout->ro_size));
++	BUG_ON(!PAGE_ALIGNED(layout->ro_after_init_size));
++	set_memory((unsigned long)layout->base + layout->ro_size,
++		   (layout->ro_after_init_size - layout->ro_size) >> PAGE_SHIFT);
++}
++
++static void frob_writable_data(const struct module_layout *layout,
++			int (*set_memory)(unsigned long start, int num_pages))
++{
++	BUG_ON(!PAGE_ALIGNED(layout->base));
++	BUG_ON(!PAGE_ALIGNED(layout->ro_after_init_size));
++	BUG_ON(!PAGE_ALIGNED(layout->size));
++	set_memory((unsigned long)layout->base + layout->ro_after_init_size,
++		   (layout->size - layout->ro_after_init_size) >> PAGE_SHIFT);
++}
++
++void module_enable_ro(const struct module *mod, bool after_init)
++{
++	if (!rodata_enabled)
++		return;
++
++	set_vm_flush_reset_perms(mod->core_layout.base);
++	set_vm_flush_reset_perms(mod->init_layout.base);
++	frob_text(&mod->core_layout, set_memory_ro);
++
++	frob_rodata(&mod->core_layout, set_memory_ro);
++	frob_text(&mod->init_layout, set_memory_ro);
++	frob_rodata(&mod->init_layout, set_memory_ro);
++
++	if (after_init)
++		frob_ro_after_init(&mod->core_layout, set_memory_ro);
++}
++
++void module_enable_nx(const struct module *mod)
++{
++	frob_rodata(&mod->core_layout, set_memory_nx);
++	frob_ro_after_init(&mod->core_layout, set_memory_nx);
++	frob_writable_data(&mod->core_layout, set_memory_nx);
++	frob_rodata(&mod->init_layout, set_memory_nx);
++	frob_writable_data(&mod->init_layout, set_memory_nx);
++}
++
++int module_enforce_rwx_sections(Elf_Ehdr *hdr, Elf_Shdr *sechdrs,
++				char *secstrings, struct module *mod)
++{
++	const unsigned long shf_wx = SHF_WRITE | SHF_EXECINSTR;
++	int i;
++
++	for (i = 0; i < hdr->e_shnum; i++) {
++		if ((sechdrs[i].sh_flags & shf_wx) == shf_wx) {
++			pr_err("%s: section %s (index %d) has invalid WRITE|EXEC flags\n",
++			       mod->name, secstrings + sechdrs[i].sh_name, i);
++			return -ENOEXEC;
++		}
++	}
++
++	return 0;
++}
 -- 
-2.17.1
+2.34.1
 

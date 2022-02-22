@@ -2,68 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 654C34C0167
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 19:33:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C90C4C0163
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 19:33:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235074AbiBVSdb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 13:33:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52700 "EHLO
+        id S235045AbiBVSd2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 13:33:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235056AbiBVSdE (ORCPT
+        with ESMTP id S235050AbiBVSdD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 13:33:04 -0500
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFCCB10782C
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 10:32:36 -0800 (PST)
-Received: by mail-wm1-x336.google.com with SMTP id n29-20020a05600c3b9d00b00380e379bae2so1220779wms.3
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 10:32:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=KSXL61TJ4FNLzWo1z0RhBOi7zjEjelC9n+5VWaG+Gtc=;
-        b=LOawPkVnk1MoWqXpWg+WWqin6xRMXhzW4CLjSSOhnuq+96bpU6bSNdNC/i2q8xxCxU
-         pD7o8rNuHyRITWoTZzNmgrO8VQX0+5qvwi6++2BjpM8LQbsaC8GVdmwGyGDyp2qdaW/A
-         nwPt+QvZNxnUnk7uGrfM/jc4F7I6LjHiST6yseSPN84zlakeiK/xAmzG8elnlIWDNFF6
-         aXuyrcOwDCwH+2AjdPF/Q0uQo+KRibmh8Bfajko2eqMdVqXRQe8bCviaLxssJFnHJAvA
-         BrVdS30ex+AOTwkyt0kivVyTgcU84ldmZDLMxz4/jyCeO3CzYRATJKgmy1Y8ZPnZikX3
-         PjOg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=KSXL61TJ4FNLzWo1z0RhBOi7zjEjelC9n+5VWaG+Gtc=;
-        b=Y8tKsHdsh1nAPIi0AtbzC+dwPXWgQLMA4kNsI1yQ69mWxplRk6+uE7NjmZblsOHVgJ
-         sbsT4WU5SJrKCD1NlhAJJDuDnLU068hpEe3vj0Ckcr3ynDdN5+HEmjBkD1gjpRy3d4bW
-         vUX8br3Cv5WZlNrVujzlaQTiVtgWfw6BbLl6b0bSbJNAGtQKz09Gkk7iU9M3wcOiipzC
-         cL9Mh6CxUmp4LhdhKS+v7xOq1QgHHeXH3QSd8R79T+DTcr7rsb3NCmGxSuKQRxNDng7O
-         NCt+WDitMgOppU2Y40Dd3vWx2zBKg8+L79ULRJRE71LqbzZ9X2tW+PEMQVtF9jA84vGb
-         JOyg==
-X-Gm-Message-State: AOAM531dT2knKNOqXi00/dSroVfvj7N3FxZvkqe8J6AZBYpBDt6PmR+r
-        8BzFHJ/L8I4Ymyee5legRepE1Q==
-X-Google-Smtp-Source: ABdhPJzdgtosvehWqrOxuEsYt+VvH5/nC7aOJ9BODdKou2VckN37w33Q/6riYz0ejmzxIro7uicoJA==
-X-Received: by 2002:a1c:a915:0:b0:380:e3de:b78f with SMTP id s21-20020a1ca915000000b00380e3deb78fmr1724213wme.19.1645554755595;
+        Tue, 22 Feb 2022 13:33:03 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 082137D03A
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 10:32:38 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C95D1139F;
+        Tue, 22 Feb 2022 10:32:37 -0800 (PST)
+Received: from lakrids (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 61EB33F66F;
         Tue, 22 Feb 2022 10:32:35 -0800 (PST)
-Received: from srini-hackbox.lan (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
-        by smtp.gmail.com with ESMTPSA id l28sm57642165wrz.90.2022.02.22.10.32.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Feb 2022 10:32:35 -0800 (PST)
-From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-To:     broonie@kernel.org
-Cc:     lgirdwood@gmail.com, perex@perex.cz, tiwai@suse.com,
-        pierre-louis.bossart@linux.intel.com, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org, quic_srivasam@quicinc.com,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Subject: [PATCH v2 9/9] ASoC: codecs: wcd934x: fix return value of wcd934x_rx_hph_mode_put
-Date:   Tue, 22 Feb 2022 18:32:12 +0000
-Message-Id: <20220222183212.11580-10-srinivas.kandagatla@linaro.org>
-X-Mailer: git-send-email 2.21.0
-In-Reply-To: <20220222183212.11580-1-srinivas.kandagatla@linaro.org>
-References: <20220222183212.11580-1-srinivas.kandagatla@linaro.org>
+Date:   Tue, 22 Feb 2022 18:32:33 +0000
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Kalesh Singh <kaleshsingh@google.com>
+Cc:     will@kernel.org, maz@kernel.org, qperret@google.com,
+        tabba@google.com, surenb@google.com, kernel-team@android.com,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Joey Gouly <joey.gouly@arm.com>,
+        Peter Collingbourne <pcc@google.com>,
+        Andrew Scull <ascull@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kvmarm@lists.cs.columbia.edu
+Subject: Re: [PATCH v2 5/9] arm64: asm: Introduce test_sp_overflow macro
+Message-ID: <YhUsQZUqgb94EjmD@lakrids>
+References: <20220222165212.2005066-1-kaleshsingh@google.com>
+ <20220222165212.2005066-6-kaleshsingh@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220222165212.2005066-6-kaleshsingh@google.com>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -72,37 +55,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-wcd934x_rx_hph_mode_put currently returns zero eventhough it changes the value.
-Fix this, so that change notifications are sent correctly.
+On Tue, Feb 22, 2022 at 08:51:06AM -0800, Kalesh Singh wrote:
+> From: Quentin Perret <qperret@google.com>
+> 
+> The asm entry code in the kernel uses a trick to check if VMAP'd stacks
+> have overflowed by aligning them at THREAD_SHIFT * 2 granularity and
+> checking the SP's THREAD_SHIFT bit.
+> 
+> Protected KVM will soon make use of a similar trick to detect stack
+> overflows, so factor out the asm code in a re-usable macro.
+> 
+> Signed-off-by: Quentin Perret <qperret@google.com>
+> [Kalesh - Resolve minor conflicts]
+> Signed-off-by: Kalesh Singh <kaleshsingh@google.com>
+> ---
+>  arch/arm64/include/asm/assembler.h | 11 +++++++++++
+>  arch/arm64/kernel/entry.S          |  7 +------
+>  2 files changed, 12 insertions(+), 6 deletions(-)
+> 
+> diff --git a/arch/arm64/include/asm/assembler.h b/arch/arm64/include/asm/assembler.h
+> index e8bd0af0141c..ad40eb0eee83 100644
+> --- a/arch/arm64/include/asm/assembler.h
+> +++ b/arch/arm64/include/asm/assembler.h
+> @@ -850,4 +850,15 @@ alternative_endif
+>  
+>  #endif /* GNU_PROPERTY_AARCH64_FEATURE_1_DEFAULT */
+>  
+> +/*
+> + * Test whether the SP has overflowed, without corrupting a GPR.
+> + */
+> +.macro test_sp_overflow shift, label
+> +	add	sp, sp, x0			// sp' = sp + x0
+> +	sub	x0, sp, x0			// x0' = sp' - x0 = (sp + x0) - x0 = sp
+> +	tbnz	x0, #\shift, \label
+> +	sub	x0, sp, x0			// x0'' = sp' - x0' = (sp + x0) - sp = x0
+> +	sub	sp, sp, x0			// sp'' = sp' - x0 = (sp + x0) - x0 = sp
+> +.endm
 
-Fixes: 1cde8b822332 ("ASoC: wcd934x: add basic controls")
-Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
----
- sound/soc/codecs/wcd934x.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+I'm a little unhappy about factoring this out, since it's not really
+self-contained and leaves sp and x0 partially-swapped when it branches
+to the label. You can't really make that clear with comments on the
+macro, and you need comments at each use-sire, so I'd ratehr we just
+open-coded a copy of this.
 
-diff --git a/sound/soc/codecs/wcd934x.c b/sound/soc/codecs/wcd934x.c
-index f2674905a4a7..40b414867872 100644
---- a/sound/soc/codecs/wcd934x.c
-+++ b/sound/soc/codecs/wcd934x.c
-@@ -3308,13 +3308,16 @@ static int wcd934x_rx_hph_mode_put(struct snd_kcontrol *kc,
- 
- 	mode_val = ucontrol->value.enumerated.item[0];
- 
-+	if (mode_val == wcd->hph_mode)
-+		return 0;
-+
- 	if (mode_val == 0) {
- 		dev_err(wcd->dev, "Invalid HPH Mode, default to ClSH HiFi\n");
- 		mode_val = CLS_H_LOHIFI;
- 	}
- 	wcd->hph_mode = mode_val;
- 
--	return 0;
-+	return 1;
- }
- 
- static int slim_rx_mux_get(struct snd_kcontrol *kc,
--- 
-2.21.0
+> +
+>  #endif	/* __ASM_ASSEMBLER_H */
+> diff --git a/arch/arm64/kernel/entry.S b/arch/arm64/kernel/entry.S
+> index 772ec2ecf488..ce99ee30c77e 100644
+> --- a/arch/arm64/kernel/entry.S
+> +++ b/arch/arm64/kernel/entry.S
+> @@ -53,15 +53,10 @@ alternative_else_nop_endif
+>  	sub	sp, sp, #PT_REGS_SIZE
+>  #ifdef CONFIG_VMAP_STACK
+>  	/*
+> -	 * Test whether the SP has overflowed, without corrupting a GPR.
+>  	 * Task and IRQ stacks are aligned so that SP & (1 << THREAD_SHIFT)
+>  	 * should always be zero.
+>  	 */
+> -	add	sp, sp, x0			// sp' = sp + x0
+> -	sub	x0, sp, x0			// x0' = sp' - x0 = (sp + x0) - x0 = sp
+> -	tbnz	x0, #THREAD_SHIFT, 0f
+> -	sub	x0, sp, x0			// x0'' = sp' - x0' = (sp + x0) - sp = x0
+> -	sub	sp, sp, x0			// sp'' = sp' - x0 = (sp + x0) - x0 = sp
+> +	test_sp_overflow THREAD_SHIFT, 0f
+>  	b	el\el\ht\()_\regsize\()_\label
+>  
+>  0:
 
+Further to my comment above, immediately after this we have:
+
+	/* Stash the original SP (minus PT_REGS_SIZE) in tpidr_el0. */
+	msr     tpidr_el0, x0
+
+	/* Recover the original x0 value and stash it in tpidrro_el0 */
+	sub     x0, sp, x0
+	msr     tpidrro_el0, x0
+
+... which is really surprising with the `test_sp_overflow` macro because
+it's not clear that modifies x0 and sp in this way.
+
+Thanks,
+Mark.
+... 
+
+> -- 
+> 2.35.1.473.g83b2b277ed-goog
+> 

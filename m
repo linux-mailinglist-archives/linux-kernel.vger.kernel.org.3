@@ -2,147 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 869EC4BF1EC
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 07:12:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 72B034BF1EF
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 07:13:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230229AbiBVGLZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 01:11:25 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:55900 "EHLO
+        id S230190AbiBVGNg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 01:13:36 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:35438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230182AbiBVGLU (ORCPT
+        with ESMTP id S230181AbiBVGNe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 01:11:20 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0E88C3331
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 22:10:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645510255; x=1677046255;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=9ilr9rbsDwfjmR9iFtIV52yKRpeR9y4HwxI7wXpXrB8=;
-  b=GWMOSDK/DfO4k5DLJgwPk1L8wQ9Qy94hEawHDFHqwDC0u0reP1WTJiib
-   n8jVaq8nEC/Va7oHBUDA7umPjExjNDn7uUYh9xezwQyOzjkGb6ngKWpk7
-   xo6gAmWtWnOVDR00sQDHV3CLVke6PEXWAtv3XC317RYB2bUAslV6dvSJF
-   ll0viYGpxbSNEDc+pV7phDFrHObqf4ragHrZYv2JeF6nr4XxacUjTSMXm
-   8IxaU0C1GrrQQwvljHteJdnPUlUURS9WwHGWy/WdzPhEPiwLXNQyhKTCY
-   nFlMK3ozwU0z+W65IVmqu1jRGjnpjpF7QhYRMIzW4w1NbBbjfDLHyZ5DE
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10265"; a="276217983"
-X-IronPort-AV: E=Sophos;i="5.88,387,1635231600"; 
-   d="scan'208";a="276217983"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2022 22:10:55 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,387,1635231600"; 
-   d="scan'208";a="532099330"
-Received: from lkp-server01.sh.intel.com (HELO da3212ac2f54) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 21 Feb 2022 22:10:54 -0800
-Received: from kbuild by da3212ac2f54 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nMONx-0002Oa-CP; Tue, 22 Feb 2022 06:10:53 +0000
-Date:   Tue, 22 Feb 2022 14:10:41 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Ingo Molnar <mingo@kernel.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: [mingo-tip:sched/headers 2122/2541]
- arch/s390/include/asm/processor.h:307:13: error: use of undeclared
- identifier '_THIS_IP_'
-Message-ID: <202202221415.RGRWi3xN-lkp@intel.com>
+        Tue, 22 Feb 2022 01:13:34 -0500
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2070.outbound.protection.outlook.com [40.107.94.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C291BC7E5C
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 22:13:09 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=c8aLc3I1TgUFG33OA3uQZ4HyflI+UjB01ASq7SICMWMZe24N7qqx8v4w39EflNnAkHvH52wT4g5R80eTyjKxYV5t8HFrn+UsN55NcINaWyRNnaV54zF6d6CyVEwD1R5ICSRFpJzivj3D/k9qroTlwqkZzyJZq4OUoWpWXZ9MyFi7pU17ijEfOQKb/HNl/c0cKqWvIAkvHDfbQA/kx00tknK6Y6+DyVIJRutNHmCbsbvW5FwCi/yyMSbFQQZIlmbXlORaitD2Gi69UcKPAalo6aXeAkPMqVQrmPdV22IR5qTf2o2WavwXJR1pK8V9NzDBd+ZkSNu5qwcGqVRPOoOx5g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=H0e5Yf/l7KLhk03Q8tqx3awfxFgaYY9GQxqf0QmqNpU=;
+ b=eGk9ik8j9HFUZs524dGfRyo5xFrExDsTjaLznqqsdsflA7jjd2x1L54+wpRiGPzcHgEdNxmLJAVj0NpG+bC57Jl7bU/U7hvYqPLaEQ22mUn+o2O/YuOpquImfQ7Mur/j95xmnx/2o13mknx2+ts7OYHtEVGinKXM/9oR0wh+O4ZWUpaYueAXZceepSDZvQxiIKLoHLCY6zE3undhgpQmqLP2K/eekZPj/JhrfKEHRBCWe9aKk832+gwHRwNwasG848BjlnWS/BqD70caRxQUtPQRT9DKdiub9b9kUt4oo8qSOap1f8gOo0zj7m7t8Y60OD5Wm0tZMxKP4xlfut+XrA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=H0e5Yf/l7KLhk03Q8tqx3awfxFgaYY9GQxqf0QmqNpU=;
+ b=MjyZNW7R9SqytB91ZHwZNZOp0xkdR0FZ7KAD2l8DjQZt4GftZ+Ttb7YcPcfDk7rUgDQH01C3sRHVlKD5FN2i+TerUGNb6v0YuUyoJINpd7wMJQ3HZ20LBTYV9teheGIof1YdN/8E4d2BhpXzsnZkEkVCcOGKuIGPzFJ+OUDYANA=
+Received: from MW4PR04CA0330.namprd04.prod.outlook.com (2603:10b6:303:82::35)
+ by DM4PR12MB5056.namprd12.prod.outlook.com (2603:10b6:5:38b::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4995.16; Tue, 22 Feb
+ 2022 06:13:07 +0000
+Received: from CO1NAM11FT045.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:82:cafe::9) by MW4PR04CA0330.outlook.office365.com
+ (2603:10b6:303:82::35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4995.16 via Frontend
+ Transport; Tue, 22 Feb 2022 06:13:07 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CO1NAM11FT045.mail.protection.outlook.com (10.13.175.181) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.4995.15 via Frontend Transport; Tue, 22 Feb 2022 06:13:06 +0000
+Received: from SATLEXMB05.amd.com (10.181.40.146) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Tue, 22 Feb
+ 2022 00:13:03 -0600
+Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB05.amd.com
+ (10.181.40.146) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Tue, 22 Feb
+ 2022 00:13:02 -0600
+Received: from chrome.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server id 15.1.2375.18 via Frontend
+ Transport; Tue, 22 Feb 2022 00:12:59 -0600
+From:   Ajit Kumar Pandey <AjitKumar.Pandey@amd.com>
+To:     <broonie@kernel.org>, <alsa-devel@alsa-project.org>
+CC:     <Vijendar.Mukunda@amd.com>, <Alexander.Deucher@amd.com>,
+        <Basavaraj.Hiregoudar@amd.com>, <Sunil-kumar.Dommati@amd.com>,
+        "Ajit Kumar Pandey" <AjitKumar.Pandey@amd.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        "V sujith kumar Reddy" <vsujithkumar.reddy@amd.com>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: [PATCH 1/3] ASoC: amd: acp: Change card name for Guybrush Machine
+Date:   Tue, 22 Feb 2022 11:41:26 +0530
+Message-ID: <20220222061128.719400-2-AjitKumar.Pandey@amd.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220222061128.719400-1-AjitKumar.Pandey@amd.com>
+References: <20220222061128.719400-1-AjitKumar.Pandey@amd.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 7eabe6d7-46b9-45e2-5697-08d9f5ca64a7
+X-MS-TrafficTypeDiagnostic: DM4PR12MB5056:EE_
+X-Microsoft-Antispam-PRVS: <DM4PR12MB5056253182A56FEB6D4AFEDE823B9@DM4PR12MB5056.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: lDmgGE5G4LJiEjfi9cHnj0QPDpcN7R6Qa3BgVxOwAbbSV5eibOuw2FI6FyCaEr1yiwcgu3i9GsDSlSAka2JGQJN9IZ2jlaK8Wl9wcCJ2GiCZw1jKC+A9PIivB2hi8wRRR8CkqSygYBjYrOFWYSM+5eE+xd3KmBdt7mytntirnd2cDBzIKksiDrmttq2CeGw0hxhGeTXKYiqBQfegKSO7aSFflYuZU95Z3MNV73LLlgV0cHXZ8av30IFCENFJLScSpOQCyLm+UP2dLy7/b2xn/E+f37q5YPycmr0/DxkApGcyvcSyLcAHnC0SHFar3DJjsoLKpvPcHXt+ct4brXb7J6TLW8P/8Q74lDa2rV52tyyyuK+tpZKuET0XO5tq6Iw7CnrsQ8zp9lf2rZQ2S657ZUZNFcCDdBOEBIVIVPpcMBbf2lQOzJHc7jyd9gZhWgA7tYbYMCpXTAO0ctVaXlEBqsL/IWc2FRVUJl1x6dT/8lFF/qRv3LOUnuNhmNdEdHVsyvngW/NFystj6jws4vKjCH7N1OZZGcaPT4IZ5YLtPj4L6g+CDfnGc4BIeS1AkX5ZWeNmwLJkBqvIITOcq4xqXUh+7FtzJONyoLXtw9w5xgqP4/P7UsF+mSu4zFzEP2nbR6RbzGab1XDUeXqL/MO89cWmV1b3wzP7ns7xNbY5T66MG5bGsiYKoUv54itM7ozbtiLvkA6g5CqQ/0BaG+1gxg==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(46966006)(40470700004)(186003)(26005)(2616005)(70586007)(70206006)(36860700001)(1076003)(7696005)(6666004)(86362001)(54906003)(110136005)(316002)(82310400004)(508600001)(8676002)(356005)(81166007)(336012)(426003)(83380400001)(4326008)(47076005)(5660300002)(8936002)(2906002)(40460700003)(36756003)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Feb 2022 06:13:06.8648
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7eabe6d7-46b9-45e2-5697-08d9f5ca64a7
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT045.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5056
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git sched/headers
-head:   601144c0da5edfa67a9654158370da19c67e17e2
-commit: 58809689cf88dc9300f57d8a653053ae3d36acbd [2122/2541] headers/deps: Add header dependencies to .h files: <linux/xarray_api.h>
-config: s390-randconfig-r044-20220221 (https://download.01.org/0day-ci/archive/20220222/202202221415.RGRWi3xN-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=58809689cf88dc9300f57d8a653053ae3d36acbd
-        git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
-        git fetch --no-tags mingo-tip sched/headers
-        git checkout 58809689cf88dc9300f57d8a653053ae3d36acbd
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 prepare
+Change sound card name for guybrush machine with rt5682 as primary
+codec and rt1019 amp to align with names given in UCM config.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   In file included from arch/s390/kernel/asm-offsets.c:11:
-   In file included from include/linux/kvm_host.h:6:
-   In file included from include/linux/xarray_api.h:15:
-   In file included from include/linux/lockdep_api.h:27:
-   In file included from include/linux/smp_api.h:15:
-   In file included from arch/s390/include/asm/smp.h:13:
->> arch/s390/include/asm/processor.h:307:13: error: use of undeclared identifier '_THIS_IP_'
-           psw.addr = _THIS_IP_;
-                      ^
-   In file included from arch/s390/kernel/asm-offsets.c:11:
-   In file included from include/linux/kvm_host.h:6:
-   In file included from include/linux/xarray_api.h:15:
-   In file included from include/linux/lockdep_api.h:27:
-   In file included from include/linux/smp_api.h:15:
-   arch/s390/include/asm/smp.h:20:30: error: expected ';' after top level declarator
-   extern __vector128 __initdata boot_cpu_vector_save_area[__NUM_VXRS];
-                                ^
-                                ;
-   In file included from arch/s390/kernel/asm-offsets.c:11:
-   In file included from include/linux/kvm_host.h:6:
-   In file included from include/linux/xarray_api.h:19:
-   In file included from include/linux/rcupdate.h:35:
-   include/linux/sched/per_task.h:48:11: fatal error: 'generated/asm-offsets.h' file not found
-   # include <generated/asm-offsets.h>
-             ^~~~~~~~~~~~~~~~~~~~~~~~~
-   3 errors generated.
-   make[2]: *** [scripts/Makefile.build:121: arch/s390/kernel/asm-offsets.s] Error 1
-   make[2]: Target '__build' not remade because of errors.
-   make[1]: *** [Makefile:1191: prepare0] Error 2
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:219: __sub-make] Error 2
-   make: Target 'prepare' not remade because of errors.
-
-
-vim +/_THIS_IP_ +307 arch/s390/include/asm/processor.h
-
-ccf45cafb08059 arch/s390/include/asm/processor.h Martin Schwidefsky 2011-10-30  298  
-^1da177e4c3f41 include/asm-s390/processor.h      Linus Torvalds     2005-04-16  299  /*
-^1da177e4c3f41 include/asm-s390/processor.h      Linus Torvalds     2005-04-16  300   * Function to drop a processor into disabled wait state
-^1da177e4c3f41 include/asm-s390/processor.h      Linus Torvalds     2005-04-16  301   */
-c2e06e15ad92ba arch/s390/include/asm/processor.h Vasily Gorbik      2019-11-22  302  static __always_inline void __noreturn disabled_wait(void)
-^1da177e4c3f41 include/asm-s390/processor.h      Linus Torvalds     2005-04-16  303  {
-f9e6edfb9cf780 arch/s390/include/asm/processor.h Heiko Carstens     2015-10-12  304  	psw_t psw;
-^1da177e4c3f41 include/asm-s390/processor.h      Linus Torvalds     2005-04-16  305  
-f9e6edfb9cf780 arch/s390/include/asm/processor.h Heiko Carstens     2015-10-12  306  	psw.mask = PSW_MASK_BASE | PSW_MASK_WAIT | PSW_MASK_BA | PSW_MASK_EA;
-98587c2d894c34 arch/s390/include/asm/processor.h Martin Schwidefsky 2019-04-30 @307  	psw.addr = _THIS_IP_;
-f9e6edfb9cf780 arch/s390/include/asm/processor.h Heiko Carstens     2015-10-12  308  	__load_psw(psw);
-edd5378740fe77 arch/s390/include/asm/processor.h Heiko Carstens     2008-12-25  309  	while (1);
-^1da177e4c3f41 include/asm-s390/processor.h      Linus Torvalds     2005-04-16  310  }
-^1da177e4c3f41 include/asm-s390/processor.h      Linus Torvalds     2005-04-16  311  
-
-:::::: The code at line 307 was first introduced by commit
-:::::: 98587c2d894c34c9af5cd84ca169e1cd493aa692 s390: simplify disabled_wait
-
-:::::: TO: Martin Schwidefsky <schwidefsky@de.ibm.com>
-:::::: CC: Martin Schwidefsky <schwidefsky@de.ibm.com>
-
+Signed-off-by: Ajit Kumar Pandey <AjitKumar.Pandey@amd.com>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ sound/soc/amd/acp/acp-legacy-mach.c | 4 ++--
+ sound/soc/amd/acp/acp-renoir.c      | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/sound/soc/amd/acp/acp-legacy-mach.c b/sound/soc/amd/acp/acp-legacy-mach.c
+index 91140d15691b..50a5aa4d6da9 100644
+--- a/sound/soc/amd/acp/acp-legacy-mach.c
++++ b/sound/soc/amd/acp/acp-legacy-mach.c
+@@ -96,7 +96,7 @@ static int acp_asoc_probe(struct platform_device *pdev)
+ 
+ static const struct platform_device_id board_ids[] = {
+ 	{
+-		.name = "rn_rt5682_rt1019",
++		.name = "acp3xalc56821019",
+ 		.driver_data = (kernel_ulong_t)&rt5682_rt1019_data,
+ 	},
+ 	{ }
+@@ -113,5 +113,5 @@ module_platform_driver(acp_asoc_audio);
+ 
+ MODULE_IMPORT_NS(SND_SOC_AMD_MACH);
+ MODULE_DESCRIPTION("ACP chrome audio support");
+-MODULE_ALIAS("platform:rn_rt5682_rt1019");
++MODULE_ALIAS("platform:acp3xalc56821019");
+ MODULE_LICENSE("GPL v2");
+diff --git a/sound/soc/amd/acp/acp-renoir.c b/sound/soc/amd/acp/acp-renoir.c
+index d06ad5ce7fec..b8dc25a1d31d 100644
+--- a/sound/soc/amd/acp/acp-renoir.c
++++ b/sound/soc/amd/acp/acp-renoir.c
+@@ -47,7 +47,7 @@ static struct snd_soc_acpi_codecs amp_rt1019 = {
+ static struct snd_soc_acpi_mach snd_soc_acpi_amd_acp_machines[] = {
+ 	{
+ 		.id = "10EC5682",
+-		.drv_name = "rn_rt5682_rt1019",
++		.drv_name = "acp3xalc56821019",
+ 		.machine_quirk = snd_soc_acpi_codec_list,
+ 		.quirk_data = &amp_rt1019,
+ 	},
+-- 
+2.25.1
+

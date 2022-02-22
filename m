@@ -2,65 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFA874BF408
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 09:49:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 062964BF409
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 09:49:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229998AbiBVIsb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 03:48:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57028 "EHLO
+        id S229902AbiBVItM convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 22 Feb 2022 03:49:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229944AbiBVIsN (ORCPT
+        with ESMTP id S229449AbiBVItK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 03:48:13 -0500
-Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 28B00BA75D;
-        Tue, 22 Feb 2022 00:47:48 -0800 (PST)
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1nMQpn-0001CP-04; Tue, 22 Feb 2022 09:47:47 +0100
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 2DDFBC2609; Tue, 22 Feb 2022 09:47:14 +0100 (CET)
-Date:   Tue, 22 Feb 2022 09:47:14 +0100
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Rikard Falkeborn <rikard.falkeborn@gmail.com>
-Cc:     Marc Zyngier <maz@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/3] MIPS: Constify static irq_domain_ops structs
-Message-ID: <20220222084714.GB7123@alpha.franken.de>
-References: <20220207211816.57860-1-rikard.falkeborn@gmail.com>
+        Tue, 22 Feb 2022 03:49:10 -0500
+Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0AE3A2F36;
+        Tue, 22 Feb 2022 00:48:42 -0800 (PST)
+Authenticated-By: 
+X-SpamFilter-By: ArmorX SpamTrap 5.73 with qID 21M8mVGO1021748, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
+        by rtits2.realtek.com.tw (8.15.2/2.71/5.88) with ESMTPS id 21M8mVGO1021748
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Tue, 22 Feb 2022 16:48:31 +0800
+Received: from RTEXMBS03.realtek.com.tw (172.21.6.96) by
+ RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Tue, 22 Feb 2022 16:48:31 +0800
+Received: from RTEXMBS01.realtek.com.tw (172.21.6.94) by
+ RTEXMBS03.realtek.com.tw (172.21.6.96) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Tue, 22 Feb 2022 16:48:31 +0800
+Received: from RTEXMBS01.realtek.com.tw ([fe80::a0f1:14d7:38a1:7026]) by
+ RTEXMBS01.realtek.com.tw ([fe80::a0f1:14d7:38a1:7026%5]) with mapi id
+ 15.01.2308.021; Tue, 22 Feb 2022 16:48:31 +0800
+From:   Ricky WU <ricky_wu@realtek.com>
+To:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
+CC:     "ulf.hansson@linaro.org" <ulf.hansson@linaro.org>,
+        "kai.heng.feng@canonical.com" <kai.heng.feng@canonical.com>,
+        "tommyhebb@gmail.com" <tommyhebb@gmail.com>,
+        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH] mmc: rtsx: add 74 Clocks in power on flow
+Thread-Topic: [PATCH] mmc: rtsx: add 74 Clocks in power on flow
+Thread-Index: AQHYJ7nTpeKajlBmYU+vTOb/+dRQe6yeqeWAgACTEEA=
+Date:   Tue, 22 Feb 2022 08:48:30 +0000
+Message-ID: <90844cba1cb64571a8597a6e0afee01d@realtek.com>
+References: <fb7cda69c5c244dfa579229ee2f0da83@realtek.com>
+ <YhST32rsfl7MDv34@kroah.com>
+In-Reply-To: <YhST32rsfl7MDv34@kroah.com>
+Accept-Language: zh-TW, en-US
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.22.81.103]
+x-kse-serverinfo: RTEXMBS03.realtek.com.tw, 9
+x-kse-attachmentfiltering-interceptor-info: no applicable attachment filtering
+ rules found
+x-kse-antivirus-interceptor-info: scan successful
+x-kse-antivirus-info: =?us-ascii?Q?Clean,_bases:_2022/2/22_=3F=3F_06:23:00?=
+x-kse-bulkmessagesfiltering-scan-result: protection disabled
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220207211816.57860-1-rikard.falkeborn@gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_HELO_PERMERROR autolearn=ham
-        autolearn_force=no version=3.4.6
+X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
+X-KSE-Attachment-Filter-Triggered-Rules: Clean
+X-KSE-Attachment-Filter-Triggered-Filters: Clean
+X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 07, 2022 at 10:18:13PM +0100, Rikard Falkeborn wrote:
-> Constify a number of static irq_domain_ops structs that were never
-> modified. This allows the compiler to put them in read-only memory.
+> -----Original Message-----
+> From: gregkh@linuxfoundation.org <gregkh@linuxfoundation.org>
+> Sent: Tuesday, February 22, 2022 3:42 PM
+> To: Ricky WU <ricky_wu@realtek.com>
+> Cc: ulf.hansson@linaro.org; kai.heng.feng@canonical.com;
+> tommyhebb@gmail.com; linux-mmc@vger.kernel.org;
+> linux-kernel@vger.kernel.org
+> Subject: Re: [PATCH] mmc: rtsx: add 74 Clocks in power on flow
 > 
-> Rikard Falkeborn (3):
->   MIPS: OCTEON: Constify static irq_domain_ops
->   MIPS: ath25: Constify static irq_domain_ops
->   MIPS: pci-ar2315: Constify static irq_domain_ops
+> On Tue, Feb 22, 2022 at 07:27:52AM +0000, Ricky WU wrote:
+> > After 1ms stabilizing the voltage time add "Host provides at least 74
+> > Clocks before issuing first command" that is spec definition
 > 
->  arch/mips/ath25/ar2315.c             |  2 +-
->  arch/mips/ath25/ar5312.c             |  2 +-
->  arch/mips/cavium-octeon/octeon-irq.c | 10 +++++-----
->  arch/mips/pci/pci-ar2315.c           |  2 +-
->  4 files changed, 8 insertions(+), 8 deletions(-)
+> You do have 72 columns to use here, no need to wrap this so tightly.
+>
 
-series applied to mips-next.
+Ok...
+so I need to have next patch to fix this format?
 
-Thomas.
+> >
+> > Signed-off-by: Ricky Wu <ricky_wu@realtek.com>
+> > ---
+> >  drivers/mmc/host/rtsx_pci_sdmmc.c | 7 +++++++
+> >  1 file changed, 7 insertions(+)
+> >
+> > diff --git a/drivers/mmc/host/rtsx_pci_sdmmc.c
+> > b/drivers/mmc/host/rtsx_pci_sdmmc.c
+> > index 2a3f14afe9f8..e016d720e453 100644
+> > --- a/drivers/mmc/host/rtsx_pci_sdmmc.c
+> > +++ b/drivers/mmc/host/rtsx_pci_sdmmc.c
+> > @@ -940,10 +940,17 @@ static int sd_power_on(struct realtek_pci_sdmmc
+> *host)
+> >  	if (err < 0)
+> >  		return err;
+> >
+> > +	mdelay(1);
+> 
+> What is this delay for?
+>
 
--- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+Spec definition, need to wait 1ms for voltage stable
+and below mdelay(5) is our device send 74 Clocks time
+ 
+> thanks,
+> 
+> greg k-h
+> ------Please consider the environment before printing this e-mail.

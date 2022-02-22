@@ -2,116 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 812CA4C01B5
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 19:55:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 004A94C01C1
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 19:57:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235143AbiBVSzd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 13:55:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60850 "EHLO
+        id S235165AbiBVS6S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 13:58:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235136AbiBVSzb (ORCPT
+        with ESMTP id S235147AbiBVS6P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 13:55:31 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9483F13AA33
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 10:55:05 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 60D2D1042;
-        Tue, 22 Feb 2022 10:55:05 -0800 (PST)
-Received: from lakrids (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 15A843F66F;
-        Tue, 22 Feb 2022 10:55:02 -0800 (PST)
-Date:   Tue, 22 Feb 2022 18:55:00 +0000
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Kalesh Singh <kaleshsingh@google.com>
-Cc:     will@kernel.org, maz@kernel.org, qperret@google.com,
-        tabba@google.com, surenb@google.com, kernel-team@android.com,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Joey Gouly <joey.gouly@arm.com>,
-        Peter Collingbourne <pcc@google.com>,
-        Andrew Scull <ascull@google.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kvmarm@lists.cs.columbia.edu
-Subject: Re: [PATCH v2 4/9] KVM: arm64: Add guard pages for pKVM (protected
- nVHE) hypervisor stack
-Message-ID: <YhUxhEHNKlqip51u@lakrids>
-References: <20220222165212.2005066-1-kaleshsingh@google.com>
- <20220222165212.2005066-5-kaleshsingh@google.com>
+        Tue, 22 Feb 2022 13:58:15 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61F1ABF97B
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 10:57:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645556269; x=1677092269;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=ofWFZpzYO/qnLxOCsHEB1xbjxhDgd/GCEJLCnQf88OQ=;
+  b=Mk1GSR3qctuLQqHAyCAPsnNWWJXu60WKC/IJ5rEmCdLdrdqlG14wqNL8
+   XTI6pABveH6r91R6LTDSUAxO6IS3/XyTOuomqTqEB0AULyoZ55VUhwyFH
+   y+3KMiiUKzWhz9D/1R1AlvF/FzjSVgno6XpFFLIqeOsNdpmAiFfcz2C5G
+   acgz3hogcesYZBmDMKZyHXwhSkDV9c/G+1ABPntZfQdA0exmKbelbyzdS
+   ifofFs9rikZnD/yN/eGLsuMIMULLuDNH9MDx/woQDijJim6rnjbCwlnlq
+   hZ60jOmrAJC2pv5Dxf0hGJ1xwQH3s7YMt2GEVTOQMVAK2jmbPG68K3CtJ
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10266"; a="231756953"
+X-IronPort-AV: E=Sophos;i="5.88,387,1635231600"; 
+   d="scan'208";a="231756953"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2022 10:57:39 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,387,1635231600"; 
+   d="scan'208";a="490900618"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga003.jf.intel.com with ESMTP; 22 Feb 2022 10:57:34 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1000)
+        id 3905D142; Tue, 22 Feb 2022 20:57:50 +0200 (EET)
+From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+To:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@intel.com, luto@kernel.org, peterz@infradead.org
+Cc:     sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
+        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
+        hpa@zytor.com, jmattson@google.com, seanjc@google.com,
+        thomas.lendacky@amd.com, brijesh.singh@amd.com, x86@kernel.org,
+        linux-kernel@vger.kernel.org,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Subject: [PATCH 0/4] x86: Cleanup and extend computing computing API
+Date:   Tue, 22 Feb 2022 21:57:36 +0300
+Message-Id: <20220222185740.26228-1-kirill.shutemov@linux.intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220222165212.2005066-5-kaleshsingh@google.com>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 22, 2022 at 08:51:05AM -0800, Kalesh Singh wrote:
-> Maps the stack pages in the flexible private VA range and allocates
-> guard pages below the stack as unbacked VA space. The stack is aligned
-> to twice its size to aid overflow detection (implemented in a subsequent
-> patch in the series).
-> 
-> Signed-off-by: Kalesh Singh <kaleshsingh@google.com>
-> ---
->  arch/arm64/kvm/hyp/nvhe/setup.c | 25 +++++++++++++++++++++----
->  1 file changed, 21 insertions(+), 4 deletions(-)
-> 
-> diff --git a/arch/arm64/kvm/hyp/nvhe/setup.c b/arch/arm64/kvm/hyp/nvhe/setup.c
-> index 27af337f9fea..69df21320b09 100644
-> --- a/arch/arm64/kvm/hyp/nvhe/setup.c
-> +++ b/arch/arm64/kvm/hyp/nvhe/setup.c
-> @@ -105,11 +105,28 @@ static int recreate_hyp_mappings(phys_addr_t phys, unsigned long size,
->  		if (ret)
->  			return ret;
->  
-> -		end = (void *)per_cpu_ptr(&kvm_init_params, i)->stack_hyp_va;
-> +		/*
-> +		 * Private mappings are allocated upwards from __io_map_base
-> +		 * so allocate the guard page first then the stack.
-> +		 */
-> +		start = (void *)pkvm_alloc_private_va_range(PAGE_SIZE, PAGE_SIZE);
-> +		if (IS_ERR_OR_NULL(start))
-> +			return PTR_ERR(start);
+Updates for CC API:
+ - Fix for HyperV when AMD SME/SEV disabled;
+ - New home for CC code: arch/x86/coco;
+ - Explicitly declare vendor of CC platform;
+ - New cc_mkenc() and cc_mkdec();
 
-As on a prior patch, this usage of PTR_ERR() pattern is wrong when the
-ptr is NULL.
+Kirill A. Shutemov (4):
+  x86/hyperv: Add missing ARCH_HAS_CC_PLATFORM dependency
+  x86: Rename cc_platform.c to arch/x86/coco/core.c
+  x86/coco: Explicitly declare type of confidential computing platform
+  x86/coco: Add API to handle encryption mask
 
-> +		/*
-> +		 * The stack is aligned to twice its size to facilitate overflow
-> +		 * detection.
-> +		 */
-> +		end = (void *)per_cpu_ptr(&kvm_init_params, i)->stack_pa;
->  		start = end - PAGE_SIZE;
-> -		ret = pkvm_create_mappings(start, end, PAGE_HYP);
-> -		if (ret)
-> -			return ret;
-> +		start = (void *)__pkvm_create_private_mapping((phys_addr_t)start,
-> +					PAGE_SIZE, PAGE_SIZE * 2, PAGE_HYP);
-> +		if (IS_ERR_OR_NULL(start))
-> +			return PTR_ERR(start);
+ arch/x86/Kbuild                               |  2 +
+ arch/x86/coco/Makefile                        |  6 ++
+ .../x86/{kernel/cc_platform.c => coco/core.c} | 56 +++++++++++++++----
+ arch/x86/include/asm/coco.h                   | 32 +++++++++++
+ arch/x86/include/asm/pgtable.h                | 13 +++--
+ arch/x86/kernel/Makefile                      |  5 --
+ arch/x86/kernel/cpu/mshyperv.c                |  3 +
+ arch/x86/mm/mem_encrypt_identity.c            | 12 ++--
+ arch/x86/mm/pat/set_memory.c                  |  5 +-
+ drivers/hv/Kconfig                            |  1 +
+ 10 files changed, 106 insertions(+), 29 deletions(-)
+ create mode 100644 arch/x86/coco/Makefile
+ rename arch/x86/{kernel/cc_platform.c => coco/core.c} (73%)
+ create mode 100644 arch/x86/include/asm/coco.h
 
-Likewise.
+-- 
+2.34.1
 
-Thanks,
-Mark.
-
-> +		end = start + PAGE_SIZE;
-> +
-> +		/* Update stack_hyp_va to end of the stack's private VA range */
-> +		per_cpu_ptr(&kvm_init_params, i)->stack_hyp_va = (unsigned long) end;
->  	}
->  
->  	/*
-> -- 
-> 2.35.1.473.g83b2b277ed-goog
-> 

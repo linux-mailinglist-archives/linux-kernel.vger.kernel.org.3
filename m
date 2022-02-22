@@ -2,106 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4893C4BF7CA
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 13:07:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E38694BF7CD
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 13:07:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230154AbiBVMH3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 07:07:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46472 "EHLO
+        id S231288AbiBVMII (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 07:08:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbiBVMH1 (ORCPT
+        with ESMTP id S229437AbiBVMIE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 07:07:27 -0500
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C95EA90276;
-        Tue, 22 Feb 2022 04:07:01 -0800 (PST)
-Received: by mail-wm1-x32e.google.com with SMTP id k3-20020a1ca103000000b0037bdea84f9cso1633328wme.1;
-        Tue, 22 Feb 2022 04:07:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=IJKZ3DzNTnMs7ghsS35I7GgW6AncsP9hbNlD6hh1Vyo=;
-        b=q6t21GadQCxE3Kbueq749cAc/V4/hcdwM0SUfy/FDzyv31mMdj5Fo/GUT7qrpWOuUP
-         m612nkEMUP0rw4rxKm29j0FadlfiRODNqgbV5AJxnknxmh/W1vttd1lvy6beYtBWU870
-         hwCA6+kQ3nNokd3gzbm2upggDJKHmSJ0WCgREoqjxYDlNJTKo6AkF2WrjtTNiIfrKk9n
-         gDYwoPnlOsVNZuX4/y34s/97A7u0Q690eKfSOAcT5vLIIkHBxYlmVkpWhsvdMDyUAkyX
-         QFaix36IuzZxcQeoooIIqjO92bEdjYdwGUTZsVf6C6bR1iAbdSHt0Clqiuizf3ejagRj
-         Hxiw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=IJKZ3DzNTnMs7ghsS35I7GgW6AncsP9hbNlD6hh1Vyo=;
-        b=mRPTHI3FqXEeCrchs3AFRaZVbpGo4PH76PKQ9EKOlQ2XIyTaAXZ5ioLt13K7Db4u5U
-         gObrDcJa+buOVAg3m6qfbuCl6KcnyIiy90rAuEpUBRywdpwtC6S7hANaETbh3uBd60n/
-         rX42jACyRRocY/y0/u57XSG/ll5xJqMae9O2ZyQzqvK9FwvZgTzQ14jTSjGpAgU+eBoK
-         /2FZNjKkJnOXXTewcq3wTrWTqvrT+D/QA6Rzug7L8ib9qaXvGWZWe1wlqRWP9A4EJ2a9
-         PyXWPn/I9yUpqB/dfLdMvCNHg5BOiKCwiOXWAMunyCwyXs53ZO7MZCzN0WG8Ksn4iXSl
-         1Pyg==
-X-Gm-Message-State: AOAM532FDTQ6FMyqgGEa2YNozR2+89zpZvjsRghjTdPLFM0HRO/51k0h
-        KrP+dQs6WbpXrVpQZo03qbY=
-X-Google-Smtp-Source: ABdhPJyHWhIZ/wGrUCALXDDN5Z8Q7E6OAlvwAkMOx26DrNupE9NEXBPJCYbT6OFbKR17uYPWxtnOew==
-X-Received: by 2002:a1c:35c9:0:b0:37b:edec:4d88 with SMTP id c192-20020a1c35c9000000b0037bedec4d88mr3049959wma.159.1645531620387;
-        Tue, 22 Feb 2022 04:07:00 -0800 (PST)
-Received: from debian (host-78-145-97-89.as13285.net. [78.145.97.89])
-        by smtp.gmail.com with ESMTPSA id q13sm53992582wrd.78.2022.02.22.04.06.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Feb 2022 04:06:59 -0800 (PST)
-Date:   Tue, 22 Feb 2022 12:06:58 +0000
-From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, slade@sladewatkins.com
-Subject: Re: [PATCH 5.10 000/121] 5.10.102-rc1 review
-Message-ID: <YhTR4l4Et1/BxLiV@debian>
-References: <20220221084921.147454846@linuxfoundation.org>
+        Tue, 22 Feb 2022 07:08:04 -0500
+Received: from mx1.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B165492D32;
+        Tue, 22 Feb 2022 04:07:38 -0800 (PST)
+Received: from localhost.localdomain (ip5f5aebb8.dynamic.kabel-deutschland.de [95.90.235.184])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: pmenzel)
+        by mx.molgen.mpg.de (Postfix) with ESMTPSA id 3D66261E6478B;
+        Tue, 22 Feb 2022 13:07:35 +0100 (CET)
+From:   Paul Menzel <pmenzel@molgen.mpg.de>
+To:     "Paul E. McKenney" <paulmck@kernel.org>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     Paul Menzel <pmenzel@molgen.mpg.de>,
+        Zhouyi Zhou <zhouzhouyi@gmail.com>, rcu@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 1/2] torture: Select line in sed and replace grep
+Date:   Tue, 22 Feb 2022 13:07:16 +0100
+Message-Id: <20220222120718.17141-1-pmenzel@molgen.mpg.de>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220221084921.147454846@linuxfoundation.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
+sed’s switch `-n` (`--silent`) suppresses the automatic printing of
+the pattern space, therefore, allowing to replace grep by only
+printing the current pattern space using the command `p`.
 
-On Mon, Feb 21, 2022 at 09:48:12AM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.10.102 release.
-> There are 121 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Wed, 23 Feb 2022 08:48:58 +0000.
-> Anything received after that time might be too late.
+Signed-off-by: Paul Menzel <pmenzel@molgen.mpg.de>
+---
+ tools/testing/selftests/rcutorture/bin/functions.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Build test:
-mips (gcc version 11.2.1 20220213): 63 configs -> no failure
-arm (gcc version 11.2.1 20220213): 105 configs -> no new failure
-arm64 (gcc version 11.2.1 20220213): 3 configs -> no failure
-x86_64 (gcc version 11.2.1 20220213): 4 configs -> no failure
-
-Boot test:
-x86_64: Booted on my test laptop. No regression.
-x86_64: Booted on qemu. No regression. [1]
-arm64: Booted on rpi4b (4GB model). No regression. [2]
-
-[1]. https://openqa.qa.codethink.co.uk/tests/797
-[2]. https://openqa.qa.codethink.co.uk/tests/799
-
-
-Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
-
---
-Regards
-Sudip
+diff --git a/tools/testing/selftests/rcutorture/bin/functions.sh b/tools/testing/selftests/rcutorture/bin/functions.sh
+index c35ba24f994c..5cff520955e6 100644
+--- a/tools/testing/selftests/rcutorture/bin/functions.sh
++++ b/tools/testing/selftests/rcutorture/bin/functions.sh
+@@ -301,7 +301,7 @@ specify_qemu_cpus () {
+ 			echo $2 -smp $3
+ 			;;
+ 		qemu-system-ppc64)
+-			nt="`lscpu | grep '^NUMA node0' | sed -e 's/^[^,]*,\([0-9]*\),.*$/\1/'`"
++			nt="`lscpu | sed -n -e '/^NUMA node0/s/^[^,]*,\([0-9]*\),.*$/\1/p'`"
+ 			echo $2 -smp cores=`expr \( $3 + $nt - 1 \) / $nt`,threads=$nt
+ 			;;
+ 		esac
+-- 
+2.35.1
 

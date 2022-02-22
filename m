@@ -2,141 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84FFE4BF091
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 05:10:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 434844BF041
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 05:10:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240199AbiBVDsS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 22:48:18 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59452 "EHLO
+        id S232070AbiBVDx0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 22:53:26 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:35692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229789AbiBVDsQ (ORCPT
+        with ESMTP id S229625AbiBVDxZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 22:48:16 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F19524BD3
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 19:47:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645501672; x=1677037672;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=ay21XNpMYTX5RnLpflKexkXgUtuSuC5IhzNLm8m5hWI=;
-  b=Pr9EaY9Pw+ZnLv0Q4AjtU+OQYDwTQqsFvCvJr171Rq22R/eGGeaj4HjI
-   8xMZ5s6cTk+z3m9Qp5SMVfkUuUEUa4nmFFwBAkK4Cfxh7F8rg7oDCjIs/
-   q3bo6YSGr+NbXrtGOaLujYig3L1Ls7jyMRi2IV0rkc6hUgBMuuJlfgQop
-   8ndTt1a7kt+Z9/yOe4Dsw18m2F33fkxZ+lYceHfenxzQdDi8b2HQArgbV
-   DMFMcDH4ffXQJC+mehqfgmDfGyfLBF+SOMiX0s6npcaFvnlfnUqDXn2+U
-   BS0H3MzHYeHy7xE32IrB+NKpuYd0sKRzEiyZ5t3p3lhPJa20/BV6VjwL8
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10265"; a="239022882"
-X-IronPort-AV: E=Sophos;i="5.88,387,1635231600"; 
-   d="scan'208";a="239022882"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2022 19:47:52 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,387,1635231600"; 
-   d="scan'208";a="532062778"
-Received: from lkp-server01.sh.intel.com (HELO da3212ac2f54) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 21 Feb 2022 19:47:50 -0800
-Received: from kbuild by da3212ac2f54 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nMM9V-0002IG-P2; Tue, 22 Feb 2022 03:47:49 +0000
-Date:   Tue, 22 Feb 2022 11:46:59 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Prasad Sodagudi <psodagud@codeaurora.org>
-Cc:     kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org,
-        Elliot Berman <eberman@codeaurora.org>
-Subject: [ammarfaizi2-block:google/android/kernel/common/android12-5.10-2021-11
- 239/9999] drivers/android/debug_symbols.c:11:10: fatal error:
- asm/stacktrace.h: No such file or directory
-Message-ID: <202202221136.tCMedR7t-lkp@intel.com>
+        Mon, 21 Feb 2022 22:53:25 -0500
+Received: from mail-ed1-x544.google.com (mail-ed1-x544.google.com [IPv6:2a00:1450:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82C102A256;
+        Mon, 21 Feb 2022 19:52:58 -0800 (PST)
+Received: by mail-ed1-x544.google.com with SMTP id i11so31990794eda.9;
+        Mon, 21 Feb 2022 19:52:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=9ZgQXvZsELc67V/yMhgs9KgblP3IFQsF3DCluKIvHKw=;
+        b=lVaEZqzYR7smwdFaIjgLjx6+jCb/kseFnkpfOD4fET89Pq2Hfph9uE1j8sN5t2WR+w
+         IcNAE0xRi4+JqAxLJ5+3/2z4FSM3vtrK+0PlfyKadYhKEolLN7Sl/7JUPDzyrl1gvKCT
+         1xp+AAowN8t+YAghA8piED042G6OUA25Fp3MMSAy0WKwJsCNlzU0GDbvwen2Cxi6aVWO
+         y70cz8yYwv1PYvdeB5bP+eup9AEPwZg7/+Rx0a9cQJv34BVBJlRZeYDjNkI+VNKNQqri
+         pfx2xZt0EScxDb41WscyD6I7vaN3qOnvuEq/5dmXPRO7bbQuYWv4D2VTmJw6KkO8lpLN
+         4n5g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=9ZgQXvZsELc67V/yMhgs9KgblP3IFQsF3DCluKIvHKw=;
+        b=28LRfiF3iqNusluFzuwUIBYI37Z5+7BlNtXiHkqub2xmlTSUQn3e4i17Rfn+W+3bHn
+         vGzGDfrtf1gMxKl8WGJbaQnetwQflXgl3CHtu3DcID9TCnXByfOQitSYuHbvXoyATE4Y
+         iHP8IqfI9OD98z1r893kQXOPVPvwBZdU2C6RiPFjtVbcXTMiTiayMuaouV26uAANqBzF
+         hZWGKfsy6/SzDL+BVO2y1zobvi+2EvNKsF/czf+/I0wVocypmfSfN9lh5tU4X0X3ZylE
+         /5YOMdSMaXdP9TuVSlsMvBoZ+FFCn6DkEiZOgd8fydJyVK4FII3UywXAnb3Yw4EDOZHE
+         d4aA==
+X-Gm-Message-State: AOAM5309Nb5hTwH+ES/alpIemxJ7TMcUqVy3fI75UGUJbIXNQx2eDHjO
+        SpWJXMICiTkgLF30zz1FNvaW+jsBc7xdtMzMJ6w=
+X-Google-Smtp-Source: ABdhPJwECknUN4HgmiXQAEsGZDIbkmhr5k3+UG3WEcenrX0WRxxLVNKK6JAmsYh+R6JyZ/XWHWkqzMMbi8RwgtYbdWA=
+X-Received: by 2002:aa7:d7c8:0:b0:3f9:3b65:f2b3 with SMTP id
+ e8-20020aa7d7c8000000b003f93b65f2b3mr24053092eds.389.1645501977019; Mon, 21
+ Feb 2022 19:52:57 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220220155705.194266-1-imagedong@tencent.com>
+ <20220220155705.194266-3-imagedong@tencent.com> <2969b15c-b825-3b0e-2ad7-00633ee6815b@kernel.org>
+In-Reply-To: <2969b15c-b825-3b0e-2ad7-00633ee6815b@kernel.org>
+From:   Menglong Dong <menglong8.dong@gmail.com>
+Date:   Tue, 22 Feb 2022 11:47:38 +0800
+Message-ID: <CADxym3YX2+3EQPxynQj6FyXquNWJaefDrQJLAH4YroC8CvkHwQ@mail.gmail.com>
+Subject: Re: [PATCH net-next 2/3] net: neigh: use kfree_skb_reason() for __neigh_event_send()
+To:     David Ahern <dsahern@kernel.org>
+Cc:     Jakub Kicinski <kuba@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        David Miller <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Menglong Dong <imagedong@tencent.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Alexander Lobakin <alobakin@pm.me>,
+        Cong Wang <cong.wang@bytedance.com>, paulb@nvidia.com,
+        Talal Ahmad <talalahmad@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        flyingpeng@tencent.com, Mengen Sun <mengensun@tencent.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Yajun Deng <yajun.deng@linux.dev>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Prasad,
+On Tue, Feb 22, 2022 at 11:17 AM David Ahern <dsahern@kernel.org> wrote:
+>
+> On 2/20/22 8:57 AM, menglong8.dong@gmail.com wrote:
+> > diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
+> > index c310a4a8fc86..206b66f5ce6b 100644
+> > --- a/include/linux/skbuff.h
+> > +++ b/include/linux/skbuff.h
+> > @@ -393,6 +393,15 @@ enum skb_drop_reason {
+> >                                        * see the doc for disable_ipv6
+> >                                        * in ip-sysctl.rst for detail
+> >                                        */
+> > +     SKB_DROP_REASON_NEIGH_FAILED,   /* dropped as the state of
+> > +                                      * neighbour is NUD_FAILED
+> > +                                      */
+>
+> /* neigh entry in failed state */
+>
+> > +     SKB_DROP_REASON_NEIGH_QUEUEFULL,        /* the skbs that waiting
+> > +                                              * for sending on the queue
+> > +                                              * of neigh->arp_queue is
+> > +                                              * full, and the skbs on the
+> > +                                              * tail will be dropped
+> > +                                              */
+>
+> /* arp_queue for neigh entry is full */
+>
+>
+> > diff --git a/net/core/neighbour.c b/net/core/neighbour.c
+> > index ec0bf737b076..c353834e8fa9 100644
+> > --- a/net/core/neighbour.c
+> > +++ b/net/core/neighbour.c
+> > @@ -1171,7 +1171,7 @@ int __neigh_event_send(struct neighbour *neigh, struct sk_buff *skb,
+> >                       neigh->updated = jiffies;
+> >                       write_unlock_bh(&neigh->lock);
+> >
+> > -                     kfree_skb(skb);
+> > +                     kfree_skb_reason(skb, SKB_DROP_REASON_NEIGH_FAILED);
+> >                       return 1;
+> >               }
+> >       } else if (neigh->nud_state & NUD_STALE) {
+> > @@ -1193,7 +1193,7 @@ int __neigh_event_send(struct neighbour *neigh, struct sk_buff *skb,
+> >                               if (!buff)
+> >                                       break;
+> >                               neigh->arp_queue_len_bytes -= buff->truesize;
+> > -                             kfree_skb(buff);
+> > +                             kfree_skb_reason(buff, SKB_DROP_REASON_NEIGH_QUEUEFULL);
+> >                               NEIGH_CACHE_STAT_INC(neigh->tbl, unres_discards);
+> >                       }
+> >                       skb_dst_force(skb);
+>
+> what about out_dead: path? the tracepoint there shows that path is of
+> interest.
 
-FYI, the error/warning still remains.
-
-tree:   https://github.com/ammarfaizi2/linux-block google/android/kernel/common/android12-5.10-2021-11
-head:   6207e9121a093289b249b66385af719b68c4b889
-commit: 3fcbb15c1a91a318fb9367bee24603af24648a2d [239/9999] ANDROID: android: Create debug_symbols driver
-config: ia64-allmodconfig (https://download.01.org/0day-ci/archive/20220222/202202221136.tCMedR7t-lkp@intel.com/config)
-compiler: ia64-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/ammarfaizi2/linux-block/commit/3fcbb15c1a91a318fb9367bee24603af24648a2d
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block google/android/kernel/common/android12-5.10-2021-11
-        git checkout 3fcbb15c1a91a318fb9367bee24603af24648a2d
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=ia64 SHELL=/bin/bash drivers/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> drivers/android/debug_symbols.c:11:10: fatal error: asm/stacktrace.h: No such file or directory
-      11 | #include <asm/stacktrace.h>
-         |          ^~~~~~~~~~~~~~~~~~
-   compilation terminated.
-
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for SND_VMASTER
-   Depends on SOUND && !UML && SND
-   Selected by
-   - GKI_HIDDEN_SND_CONFIGS
-   WARNING: unmet direct dependencies detected for SND_PCM_IEC958
-   Depends on SOUND && !UML && SND
-   Selected by
-   - GKI_HIDDEN_SND_SOC_CONFIGS
-   WARNING: unmet direct dependencies detected for SND_JACK
-   Depends on SOUND && !UML && SND
-   Selected by
-   - GKI_HIDDEN_SND_CONFIGS
-   WARNING: unmet direct dependencies detected for SND_JACK_INPUT_DEV
-   Depends on SOUND && !UML && SND && SND_JACK
-   Selected by
-   - GKI_HIDDEN_SND_CONFIGS
-   WARNING: unmet direct dependencies detected for SND_PCM_ELD
-   Depends on SOUND && !UML && SND
-   Selected by
-   - GKI_HIDDEN_SND_CONFIGS
-   WARNING: unmet direct dependencies detected for SND_INTEL_NHLT
-   Depends on SOUND && !UML && SND
-   Selected by
-   - GKI_HIDDEN_SND_CONFIGS && ACPI
-
-
-vim +11 drivers/android/debug_symbols.c
-
-     2	
-     3	/*
-     4	 * Copyright (c) 2021, The Linux Foundation. All rights reserved.
-     5	 */
-     6	
-     7	#include <linux/types.h>
-     8	#include <linux/kernel.h>
-     9	#include <linux/module.h>
-    10	#include <linux/android_debug_symbols.h>
-  > 11	#include <asm/stacktrace.h>
-    12	#include <asm/sections.h>
-    13	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+You are right, that path should be considered too.

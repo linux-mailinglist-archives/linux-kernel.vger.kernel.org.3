@@ -2,109 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EA794BF91F
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 14:19:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3218E4BF924
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 14:21:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232262AbiBVNUJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 08:20:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50554 "EHLO
+        id S232376AbiBVNVi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 08:21:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231223AbiBVNUH (ORCPT
+        with ESMTP id S231599AbiBVNVi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 08:20:07 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5F3FBD2F5
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 05:19:42 -0800 (PST)
+        Tue, 22 Feb 2022 08:21:38 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 615B2154D19;
+        Tue, 22 Feb 2022 05:21:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645535982; x=1677071982;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=NndnFPRYWtuIIxTmT7iL9a8cEQbFdTEMsAlSZBZruJ4=;
-  b=GmnTg0aKmRBez9Fzg4uTPd8yYznmoqHfz+jkSJ05qWyRSHhjY4LzCLWH
-   ChlUxBrjjChv28NH86UGe6XbhGsFOphEZ5OtOPWoPPmqgpEUySrzdy6Rr
-   ONfgkpX8DYyM2N7wmjDzbho4ueh0mpKXTVc92yt6GvoEpDMggPZJZFqq2
-   gECV8kXQCA685PAqPD6eqkTtbnWoLPoQYTNkCZgQowkLh6rxiO+hutraZ
-   z2qsrUkxgdO1oeEDjDis3IvkkLrkQjssUGItsApPJ5TJ8Uxigzeuo3U6w
-   CN6lmUvXDl/4I+B9sYx0FHgj3tX67NCaiXvFwYgi+j0eLchT1iiM4hw4k
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10265"; a="249280240"
+  t=1645536072; x=1677072072;
+  h=message-id:date:mime-version:subject:to:references:from:
+   in-reply-to:content-transfer-encoding;
+  bh=LlDTmjwS1WHEhK9J84iLZY/ntYEVzCRnQKxmqUeWpr8=;
+  b=YdtDwRHFcszOmnX4VnOOQUO8XWYR5gaO0Lf4oeuuCvh/TMklaMvYnUWV
+   wdhJjgxMjG65z1YN5QFP4COQo7XIk6LCfJUrgaRqmVSe7E+MegeyJ8ao7
+   Qf8WFi3mCQzwLhi85eAr7nQg0cCAk+GYtmi66+lXy/8N27bd22tRx+l06
+   ZNq6N1eUwlMp48Re1uZxSt3XS1wE8aGdNl+UWPWY4ZvywlDT4hWjvUmQQ
+   +HcEIBoS2/Eh+eeAObu1QBEsPFQhdy0PIKFJqyC4ja1OSizxmzTM2P/TD
+   fumIudtBzZ9u0oRGz8LA4FPoOsLvSzItOT33M9ejkRlW3wfgjlzRj2MuK
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10265"; a="276300640"
 X-IronPort-AV: E=Sophos;i="5.88,387,1635231600"; 
-   d="scan'208";a="249280240"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2022 05:19:42 -0800
-X-ExtLoop1: 1
+   d="scan'208";a="276300640"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2022 05:21:12 -0800
 X-IronPort-AV: E=Sophos;i="5.88,387,1635231600"; 
-   d="scan'208";a="606688461"
-Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 22 Feb 2022 05:19:41 -0800
-Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nMV4u-0000GM-89; Tue, 22 Feb 2022 13:19:40 +0000
-Date:   Tue, 22 Feb 2022 21:18:52 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     John Stultz <john.stultz@linaro.org>
-Cc:     kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org
-Subject: [ammarfaizi2-block:google/android/kernel/common/android12-5.4
- 4044/9999] drivers/dma-buf/heaps/page_pool.c:236:17: sparse: sparse: symbol
- 'pool_shrinker' was not declared. Should it be static?
-Message-ID: <202202222121.0IUBHSwF-lkp@intel.com>
+   d="scan'208";a="507983334"
+Received: from vchandol-mobl.gar.corp.intel.com (HELO [10.252.64.244]) ([10.252.64.244])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2022 05:21:09 -0800
+Message-ID: <4dec1984-b406-7b54-7f8e-7ac93d4eb6f0@linux.intel.com>
+Date:   Tue, 22 Feb 2022 18:50:51 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Subject: Re: [PATCH] hwmon: (pmbus) Clear pmbus fault/warning bits before read
+Content-Language: en-US
+To:     Guenter Roeck <linux@roeck-us.net>, iwona.winiarska@intel.com,
+        jdelvare@suse.com, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220210124154.1304852-1-vikash.chandola@linux.intel.com>
+ <46684682-a718-ca9a-b502-2031afd3a756@roeck-us.net>
+ <6b5b3d5b-68c9-3f04-d9b7-b58951f5557a@linux.intel.com>
+ <91104ef8-de89-aeb3-91ef-8925260e8782@roeck-us.net>
+ <56283791-4b82-ad66-174b-49f717d224eb@linux.intel.com>
+ <ea859778-92ba-ce22-7c17-4a891d5466e8@roeck-us.net>
+ <cfc47708-26a3-8836-2eef-5b5bfb809e71@roeck-us.net>
+From:   Vikash Chandola <vikash.chandola@linux.intel.com>
+In-Reply-To: <cfc47708-26a3-8836-2eef-5b5bfb809e71@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/ammarfaizi2/linux-block google/android/kernel/common/android12-5.4
-head:   29002d26b47f382cfaad78623470129c398f8563
-commit: 44008f99d9ca0793e2562967e1da01fa74ee4a41 [4044/9999] ANDROID: dma-buf: system_heap: Add pagepool support to system heap
-config: x86_64-randconfig-s022-20220221 (https://download.01.org/0day-ci/archive/20220222/202202222121.0IUBHSwF-lkp@intel.com/config)
-compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
-reproduce:
-        # apt-get install sparse
-        # sparse version: v0.6.4-dirty
-        # https://github.com/ammarfaizi2/linux-block/commit/44008f99d9ca0793e2562967e1da01fa74ee4a41
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block google/android/kernel/common/android12-5.4
-        git checkout 44008f99d9ca0793e2562967e1da01fa74ee4a41
-        # save the config file to linux build tree
-        mkdir build_dir
-        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/dma-buf/heaps/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
 
 
-sparse warnings: (new ones prefixed by >>)
->> drivers/dma-buf/heaps/page_pool.c:236:17: sparse: sparse: symbol 'pool_shrinker' was not declared. Should it be static?
-   drivers/dma-buf/heaps/page_pool.c:243:5: sparse: sparse: symbol 'dmabuf_page_pool_init_shrinker' was not declared. Should it be static?
+On 2/11/2022 1:27 AM, Guenter Roeck wrote:
+> On 2/10/22 11:55, Guenter Roeck wrote:
+>> On 2/10/22 10:29, Vikash Chandola wrote:
+>>>
+>>>
+>>> On 2/10/2022 10:55 PM, Guenter Roeck wrote:
+>>>> On 2/10/22 07:57, Vikash Chandola wrote:
+>>>>>
+>>>>>
+>>>>> On 2/10/2022 8:14 PM, Guenter Roeck wrote:
+>>>>>> On 2/10/22 04:41, Vikash Chandola wrote:
+>>>>>>> pmbus fault and warning bits are not cleared by itself once 
+>>>>>>> fault/warning
+>>>>>>> condition is not valid anymore. As per pmbus datasheet faults 
+>>>>>>> must be
+>>>>>>> cleared by user.
+>>>>>>> Modify hwmon behavior to clear latched status bytes if any bit in 
+>>>>>>> status
+>>>>>>> register is high prior to returning fresh data to userspace. If
+>>>>>>> fault/warning conditions are still applicable fault/warning bits 
+>>>>>>> will be
+>>>>>>> set and we will get updated data in second read.
+>>>>>>>
+>>>>>>> Hwmon behavior is changed here. Now sysfs reads will reflect latest
+>>>>>>> values from pmbus slave, not latched values.
+>>>>>>> In case a transient warning/fault has happened in the past, it 
+>>>>>>> will no
+>>>>>>> longer be reported to userspace.
+>>>>>>>
+>>>>>>
+>>>>>>
+>>>>>> NACK.
+>>>>>>
+>>>>>> Reporting that information is exactly the point of the current code.
+>>>>>> We _do_ want to report at least once that a problem occurred in 
+>>>>>> the past,
+>>>>>> and only clear the warning flag(s) afterwards.
+>>>>>>
+>>>>>> Guenter
+>>>>>>
+>>>>> But as per current implementation we will continue to report fault 
+>>>>> even after fault condition is cleared. I could not find sysfs entry 
+>>>>> or any other means by which user/kernel can clear the 
+>>>>> faults/warnings after it is reported. Please point if I am missing 
+>>>>> anything.
+>>>>>
+>>>>
+>>>> Normally a chip should clear the status after the fault condition 
+>>>> cleared
+>>>> and the register was read. At least that was my experience so far.
+>>>> What chip (or chips) don't do that ?
+>>>>
+>>>> Guenter
+>>>
+>>> I see that pmbus spec says that once fault/warning bits are set
+>>> they won't be cleared by itself. Section 10.2.3 of
+>>> "PMBus Specification Rev. 1.3.1 Part II 2015-03-13" from
+>>> https://pmbus.org/specification-archives/   says
+>>>
+>>> "
+>>> Almost all of the warning or fault bits set in the status registers 
+>>> remain set, even if the fault or warning condition is removed
+>>> or corrected, until one of the following occur:
+>>> * The bit is individually cleared (Section 10.2.4),
+>>> * The device receives a CLEAR_FAULTS command (Section 15.1),
+>>> * A RESET signal (if one exists) is asserted,
+>>> * The output is commanded through the CONTROL pin, the OPERATION 
+>>> command, or the combined action of the CONTROL pin and OPERATION
+>>> command, to turn off and then to turn back on, or
+>>> * Bias power is removed from the PMBus device...
+>>> "
+>>>
+>>>  From this I concluded that slave(PSU) following pmbus spec will not
+>>> clear the fault/warning in status registers.
+>>> I don't have exact chip details handy but I can get it by tomorrow.
+>>> However this looks to be issue not related to specific chip ?
+>>>
+>>
+>> Good point. Interesting that I have not seen this before.
+>>
+>>> If this is a problem, how should I approach this ? Shall I create a new
+>>> sysfs entry that user space application can invoke and clear all faults
+>>> or provide sysfs entry to clear individual fault/warning bits or
+>>> something else ?
+>>>
+>>
+>> No. What we need to do is to add code to pmbus_get_boolean() and 
+>> selectively
+>> write the reported status bit back into the status register. Something 
+>> like
+>>      ...
+>>      regval = status & mask;
+>>      if (regval) {
+>>          ret = pmbus_write_status(client, page, reg, regval);
+>>                        ^^^^^^^^^^^^^^^^^^ new function
+>>          if (ret)
+>>              goto unlock;
+>>      }
+>>
+>> and that will need to be tested on a variety of real hardware.
+Hi Guenter,
+I see that there is already a method pmbus_write_byte_data that does
+same thing. I will post patch using that method to update one bit.
+>>
+> 
+> Plus, of course, we need to confirm that there is at least one chip which
+> does follow the specification and does not auto-clear alarms.
+We observed above behavior SOLUM G36234-015 PSU.
+Apologies for delay. It took some time to get information from our PSU
+experts that PSU firmware itself is not broken here.
+> 
+> Guenter
 
-vim +/pool_shrinker +236 drivers/dma-buf/heaps/page_pool.c
-
-bd4db96bfc247af John Stultz 2020-10-02  235  
-bd4db96bfc247af John Stultz 2020-10-02 @236  struct shrinker pool_shrinker = {
-bd4db96bfc247af John Stultz 2020-10-02  237  	.count_objects = dmabuf_page_pool_shrink_count,
-bd4db96bfc247af John Stultz 2020-10-02  238  	.scan_objects = dmabuf_page_pool_shrink_scan,
-bd4db96bfc247af John Stultz 2020-10-02  239  	.seeks = DEFAULT_SEEKS,
-bd4db96bfc247af John Stultz 2020-10-02  240  	.batch = 0,
-bd4db96bfc247af John Stultz 2020-10-02  241  };
-bd4db96bfc247af John Stultz 2020-10-02  242  
-
-:::::: The code at line 236 was first introduced by commit
-:::::: bd4db96bfc247afdaf7a4cfde85fd8147522f3e6 ANDROID: dma-buf: heaps: Add a shrinker controlled page pool
-
-:::::: TO: John Stultz <john.stultz@linaro.org>
-:::::: CC: John Stultz <john.stultz@linaro.org>
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+-- 
+Vikash

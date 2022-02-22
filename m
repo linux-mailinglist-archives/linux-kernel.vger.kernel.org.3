@@ -2,183 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BD914C0206
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 20:27:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 77D274C0282
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 20:55:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235211AbiBVT1V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 14:27:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60300 "EHLO
+        id S235332AbiBVT4A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 14:56:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235205AbiBVT1S (ORCPT
+        with ESMTP id S235316AbiBVTz5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 14:27:18 -0500
-Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com [209.85.219.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4BD15FF2;
-        Tue, 22 Feb 2022 11:26:51 -0800 (PST)
-Received: by mail-yb1-f178.google.com with SMTP id c6so43391464ybk.3;
-        Tue, 22 Feb 2022 11:26:51 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=auass86NnK6jgtGXzsQPs02Y0ugTrnRk/+rq5sZjjoE=;
-        b=tnXt0drz4oyHqanGTC/G0/XVBpX2k9URAu7PGNTAkjSoY98K8i1FgD3w6ThUYNnFMV
-         ujviuIhHMMeOFN6Y6tmn8vZ+WkGeCRlHHGep+6C616n+9dMUY0bifchW4MvqzChN4bIe
-         mYObiCaNZHLSI6E7eZRCPxhbUMG+Oajdhm+mgQfH7js9OywheTWSskobOPVuJEBxGZuV
-         NR5wImdPbpODqOcOdPWMsrNrOARXlFPyB7ZGPoiKl4XWOmulzHDq+yOZ/CdfQpNAwF/k
-         Vys21OScFu4dgkQRX0wGl28ZnqTBAxqM2jhO1r4TtEsGdB9uSvZoR7GUdxsj7krIPFmX
-         QZSw==
-X-Gm-Message-State: AOAM533yJTdXFm/cPfVhFU123huT34drauCSapsddmXiaGKbX/DqYGjk
-        FFQ27CTGzw3q54ESV1uObN5EC1lOb583qMxAAK8=
-X-Google-Smtp-Source: ABdhPJwZ1WMVROHVQg+WnFqspJgmHubD1xUjLhp8RmdEZsXXdJfhaaImSHrprnZcMpG9AXvygfIb3A5gWxm+wwqcFWY=
-X-Received: by 2002:a25:da16:0:b0:624:64e1:35b with SMTP id
- n22-20020a25da16000000b0062464e1035bmr14904008ybf.153.1645558010965; Tue, 22
- Feb 2022 11:26:50 -0800 (PST)
+        Tue, 22 Feb 2022 14:55:57 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACF4EC621D;
+        Tue, 22 Feb 2022 11:55:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645559731; x=1677095731;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=VHSxbtD4mVx8CwpUuPAeIMnzDxuN5vCFvKRBG3+7rIs=;
+  b=K9IgKY9KYFhrkkRVT+Dl8DqIEQUdV6U3nCB5uUxsGshQarMZYRMUwdjq
+   s0VgH6Ooe2B3dKn5bPsTBW6x/egCfL81YG5a/OoEO8dN0ha8qo1YP3L1Y
+   PpXJPfKE7m0DGxgCd7g72+j2Wa6AEZprazarVWnKOeBGzhRokT7xrEAsk
+   5KDzZe/SWw1LutoR7+01IANEEFx1AO8uJQAQc7cApRiixmaJXsCXmxRW/
+   i8ykxboByRN4RheM4tJAGJo8AJBT2bnYEZkWJLYStEhHFgZMKUUbnhIPm
+   YlhDUnh9fA2qKyZGz0D4a2ac/VoEKwFykS3jwNoL5rqcskTBYl+/7gIxq
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10266"; a="231772629"
+X-IronPort-AV: E=Sophos;i="5.88,387,1635231600"; 
+   d="scan'208";a="231772629"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2022 11:55:18 -0800
+X-IronPort-AV: E=Sophos;i="5.88,387,1635231600"; 
+   d="scan'208";a="639032064"
+Received: from mjpatel-mobl.amr.corp.intel.com (HELO [10.212.37.223]) ([10.212.37.223])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2022 11:55:18 -0800
+Message-ID: <5e050d4c-e3d2-35fb-ca49-7be53579bc31@linux.intel.com>
+Date:   Tue, 22 Feb 2022 13:26:57 -0600
 MIME-Version: 1.0
-References: <20220220060053.13647-1-tangmeng@uniontech.com>
- <CAJZ5v0gowqO1fTdDYqhRJ38bSMpKb8bUFE-=P7GSmVaFdeVyDg@mail.gmail.com> <62143e02.1c69fb81.b7ae3.ddfeSMTPIN_ADDED_BROKEN@mx.google.com>
-In-Reply-To: <62143e02.1c69fb81.b7ae3.ddfeSMTPIN_ADDED_BROKEN@mx.google.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 22 Feb 2022 20:26:39 +0100
-Message-ID: <CAJZ5v0gst95Mm_PP8oMrPAWh+xudkeds3V8sARPcbFeF9ksC9A@mail.gmail.com>
-Subject: Re: [PATCH 05/11] kernel/acpi: move acpi_video_flags sysctl to its
- own file
-To:     tangmeng <tangmeng@uniontech.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Luis R. Rodriguez" <mcgrof@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Iurii Zaikin <yzaikin@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org, nizhen@uniontech.com,
-        zhanglianjie@uniontech.com, nixiaoming@huawei.com,
-        Linux PM <linux-pm@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.5.0
+Subject: Re: [PATCH 3/3] soundwire: qcom: add wake up interrupt support
+Content-Language: en-US
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        robh+dt@kernel.org, vkoul@kernel.org,
+        yung-chuan.liao@linux.intel.com
+Cc:     devicetree@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org, quic_srivasam@quicinc.com
+References: <20220221104127.15670-1-srinivas.kandagatla@linaro.org>
+ <20220221104127.15670-4-srinivas.kandagatla@linaro.org>
+From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+In-Reply-To: <20220221104127.15670-4-srinivas.kandagatla@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 22, 2022 at 2:36 AM tangmeng <tangmeng@uniontech.com> wrote:
->
-> On 2022/2/22 00:08, Rafael J. Wysocki wrote:
-> > On Sun, Feb 20, 2022 at 7:01 AM tangmeng <tangmeng@uniontech.com> wrote:
-> >>
-> >> kernel/sysctl.c is a kitchen sink where everyone leaves their dirty
-> >> dishes, this makes it very difficult to maintain.
-> >>
-> >> To help with this maintenance let's start by moving sysctls to places
-> >> where they actually belong.  The proc sysctl maintainers do not want to
-> >> know what sysctl knobs you wish to add for your own piece of code, we
-> >> just care about the core logic.
-> >>
-> >> All filesystem syctls now get reviewed by fs folks. This commit
-> >> follows the commit of fs, move the acpi_video_flags sysctl to its
-> >> own file, arch/x86/kernel/acpi/sleep.c.
-> >>
-> >> Signed-off-by: tangmeng <tangmeng@uniontech.com>
-> >
-> > Do you want me to take this or does it depend on the rest of the series?
-> >
->
-> All current commits that move sysctl to its own file will be queued on
-> to the new sysctl-next, I used that tree for further sysctl changes.
->
-> git://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git sysctl-next
->
-> So, it depend on the rest of the series. And my series of commits need
-> to be merged into the sysctl-next branch first together.
 
-OK, so please feel free to add
 
-Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-to this patch.
+> +static irqreturn_t qcom_swrm_wake_irq_handler(int irq, void *dev_id)
+> +{
+> +	struct qcom_swrm_ctrl *swrm = dev_id;
+> +	int ret = IRQ_HANDLED;
+> +	struct sdw_slave *slave;
+> +
+> +	clk_prepare_enable(swrm->hclk);
+> +
+> +	if (swrm->wake_irq > 0) {
+> +		if (!irqd_irq_disabled(irq_get_irq_data(swrm->wake_irq)))
+> +			disable_irq_nosync(swrm->wake_irq);
+> +	}
+> +
+> +	/*
+> +	 * resume all the slaves which must have potentially generated this
+> +	 * interrupt, this should also wake the controller at the same time.
+> +	 * this is much safer than waking controller directly that will deadlock!
+> +	 */
+There should be no difference if you first resume the controller and
+then attached peripherals, or do a loop where you rely on the pm_runtime
+framework.
 
-> >> ---
-> >>   arch/x86/kernel/acpi/sleep.c | 21 ++++++++++++++++++++-
-> >>   include/linux/acpi.h         |  1 -
-> >>   kernel/sysctl.c              |  9 ---------
-> >>   3 files changed, 20 insertions(+), 11 deletions(-)
-> >>
-> >> diff --git a/arch/x86/kernel/acpi/sleep.c b/arch/x86/kernel/acpi/sleep.c
-> >> index 1e97f944b47d..256f3c065605 100644
-> >> --- a/arch/x86/kernel/acpi/sleep.c
-> >> +++ b/arch/x86/kernel/acpi/sleep.c
-> >> @@ -20,7 +20,26 @@
-> >>   #include "../../realmode/rm/wakeup.h"
-> >>   #include "sleep.h"
-> >>
-> >> -unsigned long acpi_realmode_flags;
-> >> +static unsigned long acpi_realmode_flags;
-> >> +#ifdef CONFIG_SYSCTL
-> >> +static struct ctl_table kern_acpi_table[] = {
-> >> +       {
-> >> +               .procname       = "acpi_video_flags",
-> >> +               .data           = &acpi_realmode_flags,
-> >> +               .maxlen         = sizeof(unsigned long),
-> >> +               .mode           = 0644,
-> >> +               .proc_handler   = proc_doulongvec_minmax,
-> >> +       },
-> >> +       { }
-> >> +};
-> >> +
-> >> +static __init int kernel_acpi_sysctls_init(void)
-> >> +{
-> >> +       register_sysctl_init("kernel", kern_acpi_table);
-> >> +       return 0;
-> >> +}
-> >> +late_initcall(kernel_acpi_sysctls_init);
-> >> +#endif /* CONFIG_SYSCTL */
-> >>
-> >>   #if defined(CONFIG_SMP) && defined(CONFIG_64BIT)
-> >>   static char temp_stack[4096];
-> >> diff --git a/include/linux/acpi.h b/include/linux/acpi.h
-> >> index 6274758648e3..4f1d9cf579f5 100644
-> >> --- a/include/linux/acpi.h
-> >> +++ b/include/linux/acpi.h
-> >> @@ -349,7 +349,6 @@ static inline bool acpi_sci_irq_valid(void)
-> >>   }
-> >>
-> >>   extern int sbf_port;
-> >> -extern unsigned long acpi_realmode_flags;
-> >>
-> >>   int acpi_register_gsi (struct device *dev, u32 gsi, int triggering, int polarity);
-> >>   int acpi_gsi_to_irq (u32 gsi, unsigned int *irq);
-> >> diff --git a/kernel/sysctl.c b/kernel/sysctl.c
-> >> index e6d99bbf9a9d..62499e3207aa 100644
-> >> --- a/kernel/sysctl.c
-> >> +++ b/kernel/sysctl.c
-> >> @@ -1973,15 +1973,6 @@ static struct ctl_table kern_table[] = {
-> >>                  .proc_handler   = proc_dointvec,
-> >>          },
-> >>   #endif
-> >> -#if    defined(CONFIG_ACPI_SLEEP) && defined(CONFIG_X86)
-> >> -       {
-> >> -               .procname       = "acpi_video_flags",
-> >> -               .data           = &acpi_realmode_flags,
-> >> -               .maxlen         = sizeof (unsigned long),
-> >> -               .mode           = 0644,
-> >> -               .proc_handler   = proc_doulongvec_minmax,
-> >> -       },
-> >> -#endif
-> >>   #ifdef CONFIG_SYSCTL_ARCH_UNALIGN_NO_WARN
-> >>          {
-> >>                  .procname       = "ignore-unaligned-usertrap",
-> >> --
-> >> 2.20.1
-> >>
-> >>
-> >>
-> >
->
->
+The notion that there might be a dead-lock is surprising, you would need
+to elaborate here.
+
+> +	list_for_each_entry(slave, &swrm->bus.slaves, node) {
+> +		ret = pm_runtime_get_sync(&slave->dev);
+
+In my experience, you don't want to blur layers and take references on
+the child devices from the parent device. I don't know how many times we
+end-up with weird behavior.
+
+we've done something similar on the Intel side but implemented in a less
+directive manner.
+
+ret = device_for_each_child(bus->dev, NULL, intel_resume_child_device);
+
+static int intel_resume_child_device(struct device *dev, void *data)
+{
+[...]	
+	ret = pm_request_resume(dev);
+	if (ret < 0)
+		dev_err(dev, "%s: pm_request_resume failed: %d\n", __func__, ret);
+
+	return ret;
+}
+
+
+> +		if (ret < 0 && ret != -EACCES) {
+> +			dev_err_ratelimited(swrm->dev,
+> +					    "pm_runtime_get_sync failed in %s, ret %d\n",
+> +					    __func__, ret);
+> +			pm_runtime_put_noidle(&slave->dev);
+> +			ret = IRQ_NONE;
+> +			goto err;
+> +		}
+> +	}
+> +
+> +	list_for_each_entry(slave, &swrm->bus.slaves, node) {
+> +		pm_runtime_mark_last_busy(&slave->dev);
+> +		pm_runtime_put_autosuspend(&slave->dev);
+> +	}
+> +err:
+> +	clk_disable_unprepare(swrm->hclk);
+> +	return IRQ_HANDLED;
+> +}
+> +
+

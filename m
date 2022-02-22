@@ -2,154 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF0F54BF6BC
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 11:55:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D18D4BF6B5
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 11:54:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231490AbiBVKzP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 05:55:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44500 "EHLO
+        id S231282AbiBVKzI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 05:55:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231444AbiBVKzO (ORCPT
+        with ESMTP id S230222AbiBVKzI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 05:55:14 -0500
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12335158DA3
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 02:54:47 -0800 (PST)
-Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 21M9PpLE004215;
-        Tue, 22 Feb 2022 11:54:15 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=eyPV2WHrs60DIefFS3PzEvweoMxStSGvtgWsUpYbsgQ=;
- b=c+16qZyVN9Tj5TaYjnG/16ROtJ1e/mpPK0NFcoCu/9/bwNnW3wxw4uF4uOmKeMk0e3Gh
- JGA7tEpo61C4wHtAs+cXJjNldTK0I07mKwOQIdBPfOCBabMRVbfEPosl21X5JUahVsce
- iQ29O2rWmvfH+3+vDti1nsVnPZpRRkH5QQyAQSuY+4UeG2TYrv6k3t2TKoxODI6Odiqm
- PmKoFN1ya63dU71s9G3tcuWDEiJZBQfVPz5zycXf75TY9Pp2frk2F46XLMZUWMpcxQo7
- UOHq6k7sytmIy+K2PB7wijEkYYmu565acr4XlItWA0xbK6QdNSN6r1FCiFowMf3TGNb9 Aw== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3ecq13jjsa-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 22 Feb 2022 11:54:15 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 67229100034;
-        Tue, 22 Feb 2022 11:54:13 +0100 (CET)
-Received: from Webmail-eu.st.com (sfhdag2node1.st.com [10.75.127.4])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 53FB221B52E;
-        Tue, 22 Feb 2022 11:54:13 +0100 (CET)
-Received: from lmecxl0993.lme.st.com (10.75.127.45) by SFHDAG2NODE1.st.com
- (10.75.127.4) with Microsoft SMTP Server (TLS) id 15.0.1497.26; Tue, 22 Feb
- 2022 11:54:12 +0100
-Subject: Re: [PATCH] drm/stm: Avoid using val uninitialized in
- ltdc_set_ycbcr_config()
-To:     Nick Desaulniers <ndesaulniers@google.com>,
-        Nathan Chancellor <nathan@kernel.org>
-CC:     Yannick Fertre <yannick.fertre@foss.st.com>,
-        Benjamin Gaignard <benjamin.gaignard@linaro.org>,
-        <dri-devel@lists.freedesktop.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <llvm@lists.linux.dev>
-References: <20220207165304.1046867-1-nathan@kernel.org>
- <CAKwvOdkXe8CB3QGe2e6Fhz8_SLOsOpcMumoKBiAzGE_VTXCkVg@mail.gmail.com>
-From:   Philippe CORNU <philippe.cornu@foss.st.com>
-Message-ID: <430ee06d-04e7-3b8b-bf11-48a7b62eaf18@foss.st.com>
-Date:   Tue, 22 Feb 2022 11:54:04 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Tue, 22 Feb 2022 05:55:08 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63CB315723F;
+        Tue, 22 Feb 2022 02:54:42 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0EF4BB81964;
+        Tue, 22 Feb 2022 10:54:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 982DFC340E8;
+        Tue, 22 Feb 2022 10:54:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645527279;
+        bh=wIRTylDSbq6HNFsEKrJCzozVwSFnbvJ1TOl9tZAPoFw=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=OTGR21oPljJsMlXB9NwMH2jR4MA/2qUFE1AnLUILq/xm8lDV1Dy9QOm0kgixTQgDr
+         IjU16kzMaO8H+sCMpNx1c9p6buXGmGsS0Wn9H5/G86WF6+94qSfxokV/rj2LPWf/2C
+         kEwHE1P+aDtPJnl2JQUZEekETlrR/VyPlI/IiUIqikepF1UBenhMUUAo9/l4XUyrwf
+         BOLqpYzJGT7OkIFvkAZNzm5yn5ZsYu0knKIZjHC9fxfittK+bDGpMjRs/y4zx9Wv6T
+         LS9sVMGh7tEtG5xQ1phvYDc2plf8+alhylZdypAxX+8fPGvWkJUBt+vgO9hYIPIJLB
+         f2I9rTUDjQcOg==
+Received: by pali.im (Postfix)
+        id 3BF31FDB; Tue, 22 Feb 2022 11:54:37 +0100 (CET)
+From:   =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
+Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] =?UTF-8?q?MAINTAINERS:=20Add=20Pali=20Roh=C3=A1r=20as?= =?UTF-8?q?=20mvebu-uart.c=20maintainer?=
+Date:   Tue, 22 Feb 2022 11:54:06 +0100
+Message-Id: <20220222105406.28894-1-pali@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20220214124808.31971-1-pali@kernel.org>
+References: <20220214124808.31971-1-pali@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <CAKwvOdkXe8CB3QGe2e6Fhz8_SLOsOpcMumoKBiAzGE_VTXCkVg@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.75.127.45]
-X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SFHDAG2NODE1.st.com
- (10.75.127.4)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-02-22_02,2022-02-21_02,2021-12-02_01
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Add Pali Rohár as mvebu-uart.c maintainer
 
+Signed-off-by: Pali Rohár <pali@kernel.org>
+---
+ MAINTAINERS | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-On 2/7/22 8:44 PM, Nick Desaulniers wrote:
-> On Mon, Feb 7, 2022 at 8:53 AM Nathan Chancellor <nathan@kernel.org> wrote:
->>
->> Clang warns:
->>
->>    drivers/gpu/drm/stm/ltdc.c:625:2: warning: variable 'val' is used uninitialized whenever switch default is taken [-Wsometimes-uninitialized]
->>            default:
->>            ^~~~~~~
->>    drivers/gpu/drm/stm/ltdc.c:635:2: note: uninitialized use occurs here
->>            val |= LxPCR_YCEN;
->>            ^~~
->>    drivers/gpu/drm/stm/ltdc.c:600:9: note: initialize the variable 'val' to silence this warning
->>            u32 val;
->>                   ^
->>                    = 0
->>    1 warning generated.
->>
->> Use a return instead of break in the default case to fix the warning.
->> Add an error message so that this return is not silent, which could hide
->> issues in the future.
->>
->> Fixes: 484e72d3146b ("drm/stm: ltdc: add support of ycbcr pixel formats")
->> Link: https://github.com/ClangBuiltLinux/linux/issues/1575
->> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
->> ---
->>   drivers/gpu/drm/stm/ltdc.c | 3 ++-
->>   1 file changed, 2 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/gpu/drm/stm/ltdc.c b/drivers/gpu/drm/stm/ltdc.c
->> index 5eeb32c9c9ce..447ddde1786c 100644
->> --- a/drivers/gpu/drm/stm/ltdc.c
->> +++ b/drivers/gpu/drm/stm/ltdc.c
->> @@ -624,7 +624,8 @@ static inline void ltdc_set_ycbcr_config(struct drm_plane *plane, u32 drm_pix_fm
->>                  break;
->>          default:
->>                  /* RGB or not a YCbCr supported format */
->> -               break;
->> +               drm_err(plane->dev, "Unsupported pixel format: %u\n", drm_pix_fmt);
-> 
-> This is fine, but in the future you should add an explicit
-> #include <drm/drm_print.h>
-> to avoid implicit header dependencies (like the ones that Mingo is
-> trying to detangle) for the declaration of drm_err. `drm_vprintf`
-> needs it, too.
-> 
-> Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-> 
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 24527789d933..4a0170718b67 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -11330,6 +11330,13 @@ F:	Documentation/devicetree/bindings/phy/marvell,armada-3700-utmi-phy.yaml
+ F:	drivers/phy/marvell/phy-mvebu-a3700-comphy.c
+ F:	drivers/phy/marvell/phy-mvebu-a3700-utmi.c
+ 
++MARVELL ARMADA 3700 SERIAL DRIVER
++M:	Pali Rohár <pali@kernel.org>
++S:	Maintained
++F:	Documentation/devicetree/bindings/clock/marvell,armada-3700-uart-clock.yaml
++F:	Documentation/devicetree/bindings/serial/mvebu-uart.txt
++F:	drivers/tty/serial/mvebu-uart.c
++
+ MARVELL ARMADA DRM SUPPORT
+ M:	Russell King <linux@armlinux.org.uk>
+ S:	Maintained
+-- 
+2.20.1
 
-Hi Nick,
-and thank you for having pointing this.
-
-Hi Nathan,
-May I ask you please to update your patch changing drm_err(plane->dev, ) 
-with DRM_ERROR().
-
-
-Big thank you,
-
-Philippe :-)
-
-
-
->> +               return;
->>          }
->>
->>          /* Enable limited range */
->>
->> base-commit: 542898c5aa5c6a3179dffb1d1606884a63f75fed
->> --
->> 2.35.1
->>
-> 
-> 

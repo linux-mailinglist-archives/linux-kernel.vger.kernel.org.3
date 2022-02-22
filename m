@@ -2,41 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09AB84C0292
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 20:58:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F37C4C02A8
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 20:59:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235345AbiBVT7A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 14:59:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36174 "EHLO
+        id S235390AbiBVT7u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 14:59:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230522AbiBVT65 (ORCPT
+        with ESMTP id S235366AbiBVT7o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 14:58:57 -0500
-Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D6781DE2D8;
-        Tue, 22 Feb 2022 11:58:30 -0800 (PST)
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1nMbIs-0006bB-00; Tue, 22 Feb 2022 20:58:30 +0100
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 9ABD8C26B8; Tue, 22 Feb 2022 20:58:06 +0100 (CET)
-Date:   Tue, 22 Feb 2022 20:58:06 +0100
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     linux-mips <linux-mips@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] MIPS: Handle address errors for accesses above CPU max
- virtual user address
-Message-ID: <20220222195806.GA17107@alpha.franken.de>
-References: <20220222155345.138861-1-tsbogend@alpha.franken.de>
- <CAK8P3a0QV7y_gFv=VHGKVWjXyYmFFZRrXj3m52d21Fyydib4NQ@mail.gmail.com>
+        Tue, 22 Feb 2022 14:59:44 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 846CEE98F7
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 11:59:18 -0800 (PST)
+Received: from dude.hi.pengutronix.de ([2001:67c:670:100:1d::7])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <afa@pengutronix.de>)
+        id 1nMbJF-00050T-2f; Tue, 22 Feb 2022 20:58:53 +0100
+Received: from afa by dude.hi.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <afa@pengutronix.de>)
+        id 1nMbJC-009hyD-9M; Tue, 22 Feb 2022 20:58:50 +0100
+From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
+To:     Jarkko Sakkinen <jarkko@kernel.org>,
+        =?UTF-8?q?Horia=20Geant=C4=83?= <horia.geanta@nxp.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Aymen Sghaier <aymen.sghaier@nxp.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        James Bottomley <jejb@linux.ibm.com>
+Cc:     kernel@pengutronix.de, David Howells <dhowells@redhat.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Steffen Trumtrar <s.trumtrar@pengutronix.de>,
+        Jan Luebbe <j.luebbe@pengutronix.de>,
+        David Gstir <david@sigma-star.at>,
+        Eric Biggers <ebiggers@kernel.org>,
+        Richard Weinberger <richard@nod.at>,
+        Franck LENORMAND <franck.lenormand@nxp.com>,
+        Sumit Garg <sumit.garg@linaro.org>,
+        Andreas Rammhold <andreas@rammhold.de>,
+        Tim Harvey <tharvey@gateworks.com>,
+        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
+        Pankaj Gupta <pankaj.gupta@nxp.com>,
+        linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Subject: [PATCH v5 0/5] KEYS: trusted: Introduce support for NXP CAAM-based trusted keys
+Date:   Tue, 22 Feb 2022 20:58:14 +0100
+Message-Id: <20220222195819.2313913-1-a.fatoum@pengutronix.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAK8P3a0QV7y_gFv=VHGKVWjXyYmFFZRrXj3m52d21Fyydib4NQ@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_HELO_PERMERROR autolearn=ham
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::7
+X-SA-Exim-Mail-From: afa@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -44,58 +68,162 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 22, 2022 at 06:04:07PM +0100, Arnd Bergmann wrote:
-> On Tue, Feb 22, 2022 at 4:53 PM Thomas Bogendoerfer
-> <tsbogend@alpha.franken.de> wrote:
-> >
-> > Address errors have always been treated as unaliged accesses and handled
-> > as such. But address errors are also issued for illegal accesses like
-> > user to kernel space or accesses outside of implemented spaces. This
-> > change implements Linux exception handling for accesses to the illegal
-> > space above the CPU implemented maximum virtual user address and the
-> > MIPS 64bit architecture maximum. With this we can now use a fixed value
-> > for the maximum task size on every MIPS CPU and get a more optimized
-> > access_ok().
-> >
-> > Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-> 
-> Thank you for addressing this. Should I add this patch to my series
-> ahead of "mips: use simpler access_ok()"? That way I can keep it all
-> in my asm-generic tree as a series for 5.18.
+Series applies on top of current linux-tpmdd/master
 
-yes please add it to your series.
+v4 was here:
+https://lore.kernel.org/linux-integrity/cover.8f40b6d1b93adc80aed2cac29a134f7a7fb5ee98.1633946449.git-series.a.fatoum@pengutronix.de
 
-> >  arch/mips/kernel/unaligned.c | 17 +++++++++++++++++
-> >  1 file changed, 17 insertions(+)
-> >
-> > diff --git a/arch/mips/kernel/unaligned.c b/arch/mips/kernel/unaligned.c
-> > index df4b708c04a9..7b5aba5df02e 100644
-> > --- a/arch/mips/kernel/unaligned.c
-> > +++ b/arch/mips/kernel/unaligned.c
-> > @@ -1480,6 +1480,23 @@ asmlinkage void do_ade(struct pt_regs *regs)
-> >         prev_state = exception_enter();
-> >         perf_sw_event(PERF_COUNT_SW_ALIGNMENT_FAULTS,
-> >                         1, regs, regs->cp0_badvaddr);
-> > +
-> > +#ifdef CONFIG_64BIT
-> > +       /*
-> > +        * check, if we are hitting space between CPU implemented maximum
-> > +        * virtual user address and 64bit maximum virtual user address
-> > +        * and do exception handling to get EFAULTs for get_user/put_user
-> > +        */
-> > +       if ((regs->cp0_badvaddr >= (1UL << cpu_vmbits)) &&
-> > +           (regs->cp0_badvaddr < XKSSEG)) {
-> 
-> It might be clearer to use TASK_SIZE_MAX here instead of XKSSEG,
-> to match the check in access_ok(). If you like, I can change that while
-> applying.
+v4 -> v5:
+  - Collected Reviewed-by's and Tested-by's
+  - Changed trusted.kernel_rng bool option into a string trusted.rng option
+    (Jarkko)
+  - Changed modifier to SECURE_KEY for compatibility with linux-imx
+    (Matthias)
+  - Typo fix in commit message (Jarkko)
+  - Note in CAAM patch what CAAM is (Jarkko)
 
-I had TASK_SIZE_MAX in an intermediate version, but decided to go with XKSSEG,
-because it's what this check is about. It's about checking what the MIPS
-architecture defined.
+v3 -> v4:
+  - Collected Acked-by's, Reviewed-by's and Tested-by
+  - Fixed typo spotted by David
+  - Rebased on top of Andreas' regression fix and pulled Kconfig
+    inflexibility fix back into series
 
-Thomas.
+v2 -> v3:
+ - Split off first Kconfig preparation patch. It fixes a regression,
+   so sent that out, so it can be applied separately (Sumit)
+ - Split off second key import patch. I'll send that out separately
+   as it's a development aid and not required within the CAAM series
+ - add MAINTAINERS entry
+
+v1 -> v2:
+ - Added new commit to make trusted key Kconfig option independent
+   of TPM and added new Kconfig file for trusted keys
+ - Add new commit for importing existing key material
+ - Allow users to force use of kernel RNG (Jarkko)
+ - Enforce maximum keymod size (Horia)
+ - Use append_seq_(in|out)_ptr_intlen instead of append_seq_(in|out)_ptr
+   (Horia)
+ - Make blobifier handle private to CAAM glue code file (Horia)
+ - Extend trusted keys documentation for CAAM
+ - Rebased and updated original cover letter:
+
+The Cryptographic Acceleration and Assurance Module (CAAM) is an IP core
+built into many newer i.MX and QorIQ SoCs by NXP.
+
+Its blob mechanism can AES encrypt/decrypt user data using a unique
+never-disclosed device-specific key.
+
+There has been multiple discussions on how to represent this within the kernel:
+
+The Cryptographic Acceleration and Assurance Module (CAAM) is an IP core
+built into many newer i.MX and QorIQ SoCs by NXP.
+
+Its blob mechanism can AES encrypt/decrypt user data using a unique
+never-disclosed device-specific key. There has been multiple
+discussions on how to represent this within the kernel:
+
+ - [RFC] crypto: caam - add red blobifier
+   Steffen implemented[1] a PoC sysfs driver to start a discussion on how to
+   best integrate the blob mechanism.
+   Mimi suggested that it could be used to implement trusted keys.
+   Trusted keys back then were a TPM-only feature.
+
+ - security/keys/secure_key: Adds the secure key support based on CAAM.
+   Udit Agarwal added[2] a new "secure" key type with the CAAM as backend.
+   The key material stays within the kernel only.
+   Mimi and James agreed that this needs a generic interface, not specific
+   to CAAM. Mimi suggested trusted keys. Jan noted that this could serve as
+   basis for TEE-backed keys.
+
+ - [RFC] drivers: crypto: caam: key: Add caam_tk key type
+   Franck added[3] a new "caam_tk" key type based on Udit's work. This time
+   it uses CAAM "black blobs" instead of "red blobs", so key material stays
+   within the CAAM and isn't exposed to kernel in plaintext.
+   James voiced the opinion that there should be just one user-facing generic
+   wrap/unwrap key type with multiple possible handlers.
+   David suggested trusted keys.
+
+ - Introduce TEE based Trusted Keys support
+   Sumit reworked[4] trusted keys to support multiple possible backends with
+   one chosen at boot time and added a new TEE backend along with TPM.
+   This now sits in Jarkko's master branch to be sent out for v5.13
+
+This patch series builds on top of Sumit's rework to have the CAAM as yet another
+trusted key backend.
+
+The CAAM bits are based on Steffen's initial patch from 2015. His work had been
+used in the field for some years now, so I preferred not to deviate too much from it.
+
+This series has been tested with dmcrypt[5] on an i.MX6DL.
+
+Looking forward to your feedback.
+
+Cheers,
+Ahmad
+
+ [1]: https://lore.kernel.org/linux-crypto/1447082306-19946-2-git-send-email-s.trumtrar@pengutronix.de/
+ [2]: https://lore.kernel.org/linux-integrity/20180723111432.26830-1-udit.agarwal@nxp.com/
+ [3]: https://lore.kernel.org/lkml/1551456599-10603-2-git-send-email-franck.lenormand@nxp.com/
+ [4]: https://lore.kernel.org/lkml/1604419306-26105-1-git-send-email-sumit.garg@linaro.org/
+ [5]: https://lore.kernel.org/linux-integrity/20210122084321.24012-2-a.fatoum@pengutronix.de/
+
+---
+To: Jarkko Sakkinen <jarkko@kernel.org>
+To: "Horia Geantă" <horia.geanta@nxp.com>
+To: Mimi Zohar <zohar@linux.ibm.com>
+To: Aymen Sghaier <aymen.sghaier@nxp.com>
+To: Herbert Xu <herbert@gondor.apana.org.au>
+To: "David S. Miller" <davem@davemloft.net>
+To: James Bottomley <jejb@linux.ibm.com>
+Cc: David Howells <dhowells@redhat.com>
+Cc: James Morris <jmorris@namei.org>
+Cc: "Serge E. Hallyn" <serge@hallyn.com>
+Cc: Steffen Trumtrar <s.trumtrar@pengutronix.de>
+Cc: Jan Luebbe <j.luebbe@pengutronix.de>
+Cc: David Gstir <david@sigma-star.at>
+Cc: Eric Biggers <ebiggers@kernel.org>
+Cc: Richard Weinberger <richard@nod.at>
+Cc: Franck LENORMAND <franck.lenormand@nxp.com>
+Cc: Sumit Garg <sumit.garg@linaro.org>
+Cc: Andreas Rammhold <andreas@rammhold.de>
+Cc: Tim Harvey <tharvey@gateworks.com>
+Cc: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+Cc: Pankaj Gupta <pankaj.gupta@nxp.com>
+Cc: linux-integrity@vger.kernel.org
+Cc: keyrings@vger.kernel.org
+Cc: linux-crypto@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-security-module@vger.kernel.org
+
+Ahmad Fatoum (5):
+  KEYS: trusted: allow use of TEE as backend without TCG_TPM support
+  KEYS: trusted: allow users to use kernel RNG for key material
+  KEYS: trusted: allow trust sources to use kernel RNG for key material
+  crypto: caam - add in-kernel interface for blob generator
+  KEYS: trusted: Introduce support for NXP CAAM-based trusted keys
+
+ .../admin-guide/kernel-parameters.txt         |  11 +
+ .../security/keys/trusted-encrypted.rst       |  60 ++++-
+ MAINTAINERS                                   |   9 +
+ crypto/asymmetric_keys/Kconfig                |   2 +-
+ drivers/crypto/caam/Kconfig                   |   3 +
+ drivers/crypto/caam/Makefile                  |   1 +
+ drivers/crypto/caam/blob_gen.c                | 230 ++++++++++++++++++
+ include/keys/trusted-type.h                   |   2 +-
+ include/keys/trusted_caam.h                   |  11 +
+ include/soc/fsl/caam-blob.h                   |  56 +++++
+ security/keys/Kconfig                         |  18 +-
+ security/keys/trusted-keys/Kconfig            |  38 +++
+ security/keys/trusted-keys/Makefile           |  10 +-
+ security/keys/trusted-keys/trusted_caam.c     |  74 ++++++
+ security/keys/trusted-keys/trusted_core.c     |  45 +++-
+ 15 files changed, 540 insertions(+), 30 deletions(-)
+ create mode 100644 drivers/crypto/caam/blob_gen.c
+ create mode 100644 include/keys/trusted_caam.h
+ create mode 100644 include/soc/fsl/caam-blob.h
+ create mode 100644 security/keys/trusted-keys/Kconfig
+ create mode 100644 security/keys/trusted-keys/trusted_caam.c
 
 -- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+2.30.2
+

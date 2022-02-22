@@ -2,43 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E2074C033F
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 21:46:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ABC114C035E
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 21:51:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235176AbiBVUqt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 15:46:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60048 "EHLO
+        id S233743AbiBVUvr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 15:51:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230431AbiBVUqr (ORCPT
+        with ESMTP id S230391AbiBVUvq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 15:46:47 -0500
-Received: from box.fidei.email (box.fidei.email [IPv6:2605:2700:0:2:a800:ff:feba:dc44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2EEEA2F09;
-        Tue, 22 Feb 2022 12:46:19 -0800 (PST)
-Received: from authenticated-user (box.fidei.email [71.19.144.250])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by box.fidei.email (Postfix) with ESMTPSA id 1FD08805FB;
-        Tue, 22 Feb 2022 15:46:18 -0500 (EST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=dorminy.me; s=mail;
-        t=1645562779; bh=exGi9sfLEpUdeDCaCpnxyACq8VLY6wHANq4eBPZRm2A=;
-        h=From:To:Cc:Subject:Date:From;
-        b=g6rkG2WZYpJJqbTRLCoVPwDStFmTw+ZWy6aHR0WCwHtvTRrFsBKGuxamTQSE0tLOn
-         Nq64Snr129PRK/TJBuiumQZqS6sx+AQePU5MpoeR4uq/ViTwn7v8q1vDezOTjtczTo
-         ZZqUOczwoy8oBEtebeQig5XhMFRapZ4Sj/dtK/iXHorQbFQWp/MPnWMM3rc3jFok5+
-         ZzIuiSGmgMcVo2m9o45ZvvcHv9IL0THRCq8LmnhceZ4ZUa29eSCHbW3QbQX1050/D5
-         f0ymfS77sRmAgw+QaQReo9Hx+zRv8KbDxXu6xwc6l1JGE3FitepTt1n3P+QjgqVEQf
-         KOdeAHmrtjrug==
-From:   Sweet Tea Dorminy <sweettea-kernel@dorminy.me>
-To:     Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>, linux-btrfs@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel-team@fb.com
-Cc:     Sweet Tea Dorminy <sweettea-kernel@dorminy.me>
-Subject: [PATCH v3] btrfs: add fs state details to error messages.
-Date:   Tue, 22 Feb 2022 15:42:28 -0500
-Message-Id: <8a2a73ab4b48a4e73d24cf7f10cc0fe245d50a84.1645562216.git.sweettea-kernel@dorminy.me>
+        Tue, 22 Feb 2022 15:51:46 -0500
+X-Greylist: delayed 512 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 22 Feb 2022 12:51:16 PST
+Received: from mail.tintel.eu (mail.tintel.eu [51.83.127.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D48E2A9A5D;
+        Tue, 22 Feb 2022 12:51:16 -0800 (PST)
+Received: from localhost (localhost [IPv6:::1])
+        by mail.tintel.eu (Postfix) with ESMTP id 1E8714474A4B;
+        Tue, 22 Feb 2022 21:42:38 +0100 (CET)
+Received: from mail.tintel.eu ([IPv6:::1])
+        by localhost (mail.tintel.eu [IPv6:::1]) (amavisd-new, port 10032)
+        with ESMTP id BM6b5kB9oOfL; Tue, 22 Feb 2022 21:42:37 +0100 (CET)
+Received: from localhost (localhost [IPv6:::1])
+        by mail.tintel.eu (Postfix) with ESMTP id 8DBF242A43DF;
+        Tue, 22 Feb 2022 21:42:37 +0100 (CET)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.tintel.eu 8DBF242A43DF
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux-ipv6.be;
+        s=502B7754-045F-11E5-BBC5-64595FD46BE8; t=1645562557;
+        bh=pYviirxjEDGerTDDcjS7GbGKZkzZlGlIYio/BGWknF4=;
+        h=From:To:Date:Message-Id:MIME-Version;
+        b=frvh2zYWczA9n39TRhcHcFP9YQnZG56XYXkJnz/d06YV+sTTTmuyGxxycfTe8qzeW
+         0HSVMSz9RZh7kFkCfsOKupV97fDuvSNwRatmbkCBJHj4e6USTL0EQupP5vZJ617E8W
+         x378qFJLE14BkAYuY3pgoYaH9DuZ4706lWWVuSzA=
+X-Virus-Scanned: amavisd-new at mail.tintel.eu
+Received: from mail.tintel.eu ([IPv6:::1])
+        by localhost (mail.tintel.eu [IPv6:::1]) (amavisd-new, port 10026)
+        with ESMTP id AcB_YAI3-8Gp; Tue, 22 Feb 2022 21:42:37 +0100 (CET)
+Received: from taz.sof.bg.adlevio.net (unknown [IPv6:2001:67c:21bc:20::10])
+        by mail.tintel.eu (Postfix) with ESMTPS id 3B38A4474A4B;
+        Tue, 22 Feb 2022 21:42:37 +0100 (CET)
+From:   Stijn Tintel <stijn@linux-ipv6.be>
+To:     toke@redhat.com, netdev@vger.kernel.org
+Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kpsingh@kernel.org, john.fastabend@gmail.com, yhs@fb.com,
+        songliubraving@fb.com, kafai@fb.com, andrii@kernel.org,
+        daniel@iogearbox.net, ast@kernel.org
+Subject: [PATCH] libbpf: fix BPF_MAP_TYPE_PERF_EVENT_ARRAY auto-pinning
+Date:   Tue, 22 Feb 2022 22:42:36 +0200
+Message-Id: <20220222204236.2192513-1-stijn@linux-ipv6.be>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-Rspamd-Pre-Result: action=no action;
+        module=multimap;
+        Matched map: IP_WHITELIST
+X-Rspamd-Queue-Id: 3B38A4474A4B
+X-Rspamd-Pre-Result: action=no action;
+        module=multimap;
+        Matched map: IP_WHITELIST
+X-Spamd-Result: default: False [0.00 / 15.00];
+        TAGGED_RCPT(0.00)[];
+        ASN(0.00)[asn:200533, ipnet:2001:67c:21bc::/48, country:BG];
+        IP_WHITELIST(0.00)[2001:67c:21bc:20::10]
+X-Rspamd-Server: skulls
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
         DKIM_SIGNED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
@@ -48,159 +73,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When a filesystem goes read-only due to an error, multiple errors tend
-to be reported, some of which are knock-on failures. Logging fs_states,
-in btrfs_handle_fs_error() and btrfs_printk() helps distinguish the
-first error from subsequent messages which may only exist due to an
-error state.
+When a BPF map of type BPF_MAP_TYPE_PERF_EVENT_ARRAY doesn't have the
+max_entries parameter set, this parameter will be set to the number of
+possible CPUs. Due to this, the map_is_reuse_compat function will return
+false, causing the following error when trying to reuse the map:
 
-Under the new format, most initial errors will look like:
-`BTRFS: error (device loop0) in ...`
-while subsequent errors will begin with:
-`error (device loop0: state E) in ...`
+libbpf: couldn't reuse pinned map at '/sys/fs/bpf/m_logging': parameter m=
+ismatch
 
-An initial transaction abort error will look like
-`error (device loop0: state A) in ...`
-and subsequent messages will contain
-`(device loop0: state EA) in ...`
+Fix this by checking against the number of possible CPUs if the
+max_entries parameter is not set in the map definition.
 
-Signed-off-by: Sweet Tea Dorminy <sweettea-kernel@dorminy.me>
+Fixes: 57a00f41644f ("libbpf: Add auto-pinning of maps when loading BPF o=
+bjects")
+Signed-off-by: Stijn Tintel <stijn@linux-ipv6.be>
 ---
-v3:
-  - Reworked btrfs_state_to_string to use an array mapping all states
-    to various error chars, or nothing, explicitly. Added error logging
-    for more states, as requested.
-  - Consolidated buffer length definition
+ tools/lib/bpf/libbpf.c | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
-v2: 
-  - Changed btrfs_state_to_string() for clarity
-  - Removed superfluous whitespace change
-  - https://lore.kernel.org/linux-btrfs/084c136c6bb2d20ca0e91af7ded48306d52bb910.1645210326.git.sweettea-kernel@dorminy.me/
-
-v1:
-  - https://lore.kernel.org/linux-btrfs/20220212191042.94954-1-sweettea-kernel@dorminy.me/
-
- fs/btrfs/ctree.h |  2 ++
- fs/btrfs/super.c | 62 +++++++++++++++++++++++++++++++++++++++++-------
- 2 files changed, 56 insertions(+), 8 deletions(-)
-
-diff --git a/fs/btrfs/ctree.h b/fs/btrfs/ctree.h
-index 8992e0096163..3db337cd015a 100644
---- a/fs/btrfs/ctree.h
-+++ b/fs/btrfs/ctree.h
-@@ -148,6 +148,8 @@ enum {
- 
- 	/* Indicates there was an error cleaning up a log tree. */
- 	BTRFS_FS_STATE_LOG_CLEANUP_ERROR,
-+
-+	BTRFS_FS_STATE_COUNT,
- };
- 
- #define BTRFS_BACKREF_REV_MAX		256
-diff --git a/fs/btrfs/super.c b/fs/btrfs/super.c
-index 4d947ba32da9..3fab9e46e80c 100644
---- a/fs/btrfs/super.c
-+++ b/fs/btrfs/super.c
-@@ -66,6 +66,46 @@ static struct file_system_type btrfs_root_fs_type;
- 
- static int btrfs_remount(struct super_block *sb, int *flags, char *data);
- 
-+#define STATE_STRING_PREFACE ": state "
-+#define STATE_STRING_BUF_LEN \
-+	(sizeof(STATE_STRING_PREFACE) + BTRFS_FS_STATE_COUNT)
-+
-+/* Characters to print to indicate error conditions. RO is not an error. */
-+static const char * const fs_state_strings[] = {
-+	[BTRFS_FS_STATE_ERROR]			= "E",
-+	[BTRFS_FS_STATE_REMOUNTING]		= "M",
-+	[BTRFS_FS_STATE_RO]			= NULL,
-+	[BTRFS_FS_STATE_TRANS_ABORTED]		= "A",
-+	[BTRFS_FS_STATE_DEV_REPLACING]		= "P",
-+	[BTRFS_FS_STATE_DUMMY_FS_INFO]		= NULL,
-+	[BTRFS_FS_STATE_NO_CSUMS]		= NULL,
-+	[BTRFS_FS_STATE_LOG_CLEANUP_ERROR]	= "L",
-+};
-+
-+static void btrfs_state_to_string(const struct btrfs_fs_info *info, char *buf)
-+{
-+	unsigned int bit;
-+	unsigned int states_printed = 0;
-+	char *curr = buf;
-+
-+	memcpy(curr, STATE_STRING_PREFACE, sizeof(STATE_STRING_PREFACE));
-+	curr += sizeof(STATE_STRING_PREFACE) - 1;
-+
-+	for_each_set_bit(bit, &info->fs_state, sizeof(info->fs_state)) {
-+		WARN_ON_ONCE(bit >= BTRFS_FS_STATE_COUNT);
-+		if ((bit < BTRFS_FS_STATE_COUNT) && (fs_state_strings[bit] != NULL)) {
-+			*curr++ = fs_state_strings[bit][0];
-+			states_printed++;
-+		}
-+	}
-+
-+	/* If no states were printed, reset the buffer */
-+	if (!states_printed)
-+		curr = buf;
-+
-+	*curr++ = '\0';
-+}
-+
- /*
-  * Generally the error codes correspond to their respective errors, but there
-  * are a few special cases.
-@@ -128,6 +168,7 @@ void __btrfs_handle_fs_error(struct btrfs_fs_info *fs_info, const char *function
- {
- 	struct super_block *sb = fs_info->sb;
- #ifdef CONFIG_PRINTK
-+	char statestr[STATE_STRING_BUF_LEN];
- 	const char *errstr;
- #endif
- 
-@@ -140,6 +181,7 @@ void __btrfs_handle_fs_error(struct btrfs_fs_info *fs_info, const char *function
- 
- #ifdef CONFIG_PRINTK
- 	errstr = btrfs_decode_error(errno);
-+	btrfs_state_to_string(fs_info, statestr);
- 	if (fmt) {
- 		struct va_format vaf;
- 		va_list args;
-@@ -148,12 +190,12 @@ void __btrfs_handle_fs_error(struct btrfs_fs_info *fs_info, const char *function
- 		vaf.fmt = fmt;
- 		vaf.va = &args;
- 
--		pr_crit("BTRFS: error (device %s) in %s:%d: errno=%d %s (%pV)\n",
--			sb->s_id, function, line, errno, errstr, &vaf);
-+		pr_crit("BTRFS: error (device %s%s) in %s:%d: errno=%d %s (%pV)\n",
-+			sb->s_id, statestr, function, line, errno, errstr, &vaf);
- 		va_end(args);
- 	} else {
--		pr_crit("BTRFS: error (device %s) in %s:%d: errno=%d %s\n",
--			sb->s_id, function, line, errno, errstr);
-+		pr_crit("BTRFS: error (device %s%s) in %s:%d: errno=%d %s\n",
-+			sb->s_id, statestr, function, line, errno, errstr);
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index 7f10dd501a52..b076ab728f0e 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -4750,7 +4750,7 @@ static bool map_is_reuse_compat(const struct bpf_ma=
+p *map, int map_fd)
+ 	struct bpf_map_info map_info =3D {};
+ 	char msg[STRERR_BUFSIZE];
+ 	__u32 map_info_len;
+-	int err;
++	int def_max_entries, err;
+=20
+ 	map_info_len =3D sizeof(map_info);
+=20
+@@ -4763,10 +4763,15 @@ static bool map_is_reuse_compat(const struct bpf_=
+map *map, int map_fd)
+ 		return false;
  	}
- #endif
- 
-@@ -240,11 +282,15 @@ void __cold btrfs_printk(const struct btrfs_fs_info *fs_info, const char *fmt, .
- 	vaf.va = &args;
- 
- 	if (__ratelimit(ratelimit)) {
--		if (fs_info)
--			printk("%sBTRFS %s (device %s): %pV\n", lvl, type,
--				fs_info->sb->s_id, &vaf);
--		else
-+		if (fs_info) {
-+			char statestr[STATE_STRING_BUF_LEN];
+=20
++	if (map->def.type =3D=3D BPF_MAP_TYPE_PERF_EVENT_ARRAY && !map->def.max=
+_entries)
++		def_max_entries =3D libbpf_num_possible_cpus();
++	else
++		def_max_entries =3D map->def.max_entries;
 +
-+			btrfs_state_to_string(fs_info, statestr);
-+			printk("%sBTRFS %s (device %s%s): %pV\n", lvl, type,
-+				fs_info->sb->s_id, statestr, &vaf);
-+		} else {
- 			printk("%sBTRFS %s: %pV\n", lvl, type, &vaf);
-+		}
- 	}
- 
- 	va_end(args);
--- 
-2.35.1
+ 	return (map_info.type =3D=3D map->def.type &&
+ 		map_info.key_size =3D=3D map->def.key_size &&
+ 		map_info.value_size =3D=3D map->def.value_size &&
+-		map_info.max_entries =3D=3D map->def.max_entries &&
++		map_info.max_entries =3D=3D def_max_entries &&
+ 		map_info.map_flags =3D=3D map->def.map_flags &&
+ 		map_info.map_extra =3D=3D map->map_extra);
+ }
+--=20
+2.34.1
 

@@ -2,55 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E58E84BFAC0
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 15:18:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 136984BFACA
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 15:21:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231851AbiBVOSi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 09:18:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44414 "EHLO
+        id S232613AbiBVOWD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 09:22:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229523AbiBVOSe (ORCPT
+        with ESMTP id S232484AbiBVOWA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 09:18:34 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB1F910854B;
-        Tue, 22 Feb 2022 06:18:08 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5CA3EB81A2B;
-        Tue, 22 Feb 2022 14:18:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84629C340E8;
-        Tue, 22 Feb 2022 14:18:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645539486;
-        bh=ArDLp9Yf09I1STzBMYLCq+XcO2PjHAI+AeehNM63oSs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gh0M4Ghe7NMX+TLc/5+z8wVPV4e/YmRLZAyJL5X0FeeUhwnqZFSK2rOLXUJ43NucH
-         IOgDygEyj0i2vLHbu2HIiPu3xJ2lpRihS7rF3zllgRbs1w2mkhSYysQLDxLdWTWM+w
-         wIWVzgVuIE6IvqIyJn6RQZUEr+6iNXQZpFF9wBSg=
-Date:   Tue, 22 Feb 2022 15:18:03 +0100
-From:   "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
-To:     Ricky WU <ricky_wu@realtek.com>
-Cc:     "ulf.hansson@linaro.org" <ulf.hansson@linaro.org>,
-        "kai.heng.feng@canonical.com" <kai.heng.feng@canonical.com>,
-        "tommyhebb@gmail.com" <tommyhebb@gmail.com>,
-        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] mmc: rtsx: add 74 Clocks in power on flow
-Message-ID: <YhTwm9yDEhjEXt6H@kroah.com>
-References: <fb7cda69c5c244dfa579229ee2f0da83@realtek.com>
- <YhST32rsfl7MDv34@kroah.com>
- <90844cba1cb64571a8597a6e0afee01d@realtek.com>
- <YhSl4WuE2Dpil/Zj@kroah.com>
- <d28b6fb6649d472a809329876c3ac4bd@realtek.com>
+        Tue, 22 Feb 2022 09:22:00 -0500
+Received: from gproxy4-pub.mail.unifiedlayer.com (gproxy4-pub.mail.unifiedlayer.com [69.89.23.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80DBF6B0A1
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 06:21:34 -0800 (PST)
+Received: from cmgw11.mail.unifiedlayer.com (unknown [10.0.90.126])
+        by progateway6.mail.pro1.eigbox.com (Postfix) with ESMTP id E21DC10047FA8
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 14:21:33 +0000 (UTC)
+Received: from box5620.bluehost.com ([162.241.219.59])
+        by cmsmtp with ESMTP
+        id MW2nnap2Rwm8iMW2nnbrCf; Tue, 22 Feb 2022 14:21:33 +0000
+X-Authority-Reason: nr=8
+X-Authority-Analysis: v=2.4 cv=DpSTREz+ c=1 sm=1 tr=0 ts=6214f16d
+ a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
+ a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
+ a=oGFeUVbbRNcA:10:nop_rcvd_month_year
+ a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
+ a=HaFmDPmJAAAA:8 a=49j0FZ7RFL9ueZfULrUA:9 a=QEXdDO2ut3YA:10:nop_charset_2
+ a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
+        s=default; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=+bTtUnnjQep40ozlUHBwlqgi9sKTUeV160TTuTnXvcE=; b=rZq5LXg3g/gKMY4tS7dWyYv5xF
+        JX0hkdY5AJGLPZFD04l5eHgQzuy2sbWhhXWgUXBLZumtdVN2jkTgUdf0j1wBEx6Y1Egv0ZNaAQoHx
+        aJfttJdBHFp7zI2I1iAaLB15o;
+Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:55138 helo=[10.0.1.23])
+        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <re@w6rz.net>)
+        id 1nMW2n-003zml-1x; Tue, 22 Feb 2022 07:21:33 -0700
+Message-ID: <41106841-f445-07e4-55b3-63c87c158e8a@w6rz.net>
+Date:   Tue, 22 Feb 2022 06:21:31 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d28b6fb6649d472a809329876c3ac4bd@realtek.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 5.16 000/227] 5.16.11-rc1 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
+References: <20220221084934.836145070@linuxfoundation.org>
+From:   Ron Economos <re@w6rz.net>
+In-Reply-To: <20220221084934.836145070@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - box5620.bluehost.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - w6rz.net
+X-BWhitelist: no
+X-Source-IP: 73.162.232.9
+X-Source-L: No
+X-Exim-ID: 1nMW2n-003zml-1x
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.23]) [73.162.232.9]:55138
+X-Source-Auth: re@w6rz.net
+X-Email-Count: 13
+X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
+X-Local-Domain: yes
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,86 +89,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 22, 2022 at 12:31:10PM +0000, Ricky WU wrote:
-> > -----Original Message-----
-> > From: gregkh@linuxfoundation.org <gregkh@linuxfoundation.org>
-> > Sent: Tuesday, February 22, 2022 4:59 PM
-> > To: Ricky WU <ricky_wu@realtek.com>
-> > Cc: ulf.hansson@linaro.org; kai.heng.feng@canonical.com;
-> > tommyhebb@gmail.com; linux-mmc@vger.kernel.org;
-> > linux-kernel@vger.kernel.org
-> > Subject: Re: [PATCH] mmc: rtsx: add 74 Clocks in power on flow
-> > 
-> > On Tue, Feb 22, 2022 at 08:48:30AM +0000, Ricky WU wrote:
-> > > > -----Original Message-----
-> > > > From: gregkh@linuxfoundation.org <gregkh@linuxfoundation.org>
-> > > > Sent: Tuesday, February 22, 2022 3:42 PM
-> > > > To: Ricky WU <ricky_wu@realtek.com>
-> > > > Cc: ulf.hansson@linaro.org; kai.heng.feng@canonical.com;
-> > > > tommyhebb@gmail.com; linux-mmc@vger.kernel.org;
-> > > > linux-kernel@vger.kernel.org
-> > > > Subject: Re: [PATCH] mmc: rtsx: add 74 Clocks in power on flow
-> > > >
-> > > > On Tue, Feb 22, 2022 at 07:27:52AM +0000, Ricky WU wrote:
-> > > > > After 1ms stabilizing the voltage time add "Host provides at least
-> > > > > 74 Clocks before issuing first command" that is spec definition
-> > > >
-> > > > You do have 72 columns to use here, no need to wrap this so tightly.
-> > > >
-> > >
-> > > Ok...
-> > > so I need to have next patch to fix this format?
-> > 
-> > Please do, because:
-> > 
-> > >
-> > > > >
-> > > > > Signed-off-by: Ricky Wu <ricky_wu@realtek.com>
-> > > > > ---
-> > > > >  drivers/mmc/host/rtsx_pci_sdmmc.c | 7 +++++++
-> > > > >  1 file changed, 7 insertions(+)
-> > > > >
-> > > > > diff --git a/drivers/mmc/host/rtsx_pci_sdmmc.c
-> > > > > b/drivers/mmc/host/rtsx_pci_sdmmc.c
-> > > > > index 2a3f14afe9f8..e016d720e453 100644
-> > > > > --- a/drivers/mmc/host/rtsx_pci_sdmmc.c
-> > > > > +++ b/drivers/mmc/host/rtsx_pci_sdmmc.c
-> > > > > @@ -940,10 +940,17 @@ static int sd_power_on(struct
-> > > > > realtek_pci_sdmmc
-> > > > *host)
-> > > > >  	if (err < 0)
-> > > > >  		return err;
-> > > > >
-> > > > > +	mdelay(1);
-> > > >
-> > > > What is this delay for?
-> > > >
-> > >
-> > > Spec definition, need to wait 1ms for voltage stable and below
-> > > mdelay(5) is our device send 74 Clocks time
-> > 
-> > Clock cycles and mdelay() are not going to always stay the same, right?
-> > 
-> > I really have no idea what "74 clocks time" means, is this some specific timing
-> > value for this hardware?  What is the units?  This needs to be documented
-> > better in both the changelog and in the code.
-> > 
-> > thanks,
-> > 
-> 
-> Please ref: https://www.sdcard.org/downloads/pls/ Version8
+On 2/21/22 00:46, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.16.11 release.
+> There are 227 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Wed, 23 Feb 2022 08:48:58 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.16.11-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.16.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-I can not download those specifications according to the license that
-they ask me to abide by.
+Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
 
-> And see the 6.4.1.2 Power Up Time of Host Figure 6-5: Power Up Diagram of Host
-> mdelay(1) corresponds to Stable supply voltage
-> mdelay(5) corresponds to Host provides at least 74 Clocks before issuing first command
-> our device need 5ms to issue 74 Clocks
+Tested-by: Ron Economos <re@w6rz.net>
 
-What is a "clock"?  The kernel works with time units, how does "5" equal
-to 74?
-
-thanks,
-
-greg k-h

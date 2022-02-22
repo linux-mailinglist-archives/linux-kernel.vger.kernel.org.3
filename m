@@ -2,53 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D6B24BFC61
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 16:22:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E60E4BFC50
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 16:21:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232786AbiBVPWn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 10:22:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57060 "EHLO
+        id S233312AbiBVPVk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 10:21:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230446AbiBVPWl (ORCPT
+        with ESMTP id S231143AbiBVPVi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 10:22:41 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25552CD5E3
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 07:22:16 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B79F2615E3
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 15:22:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35FE0C340E8;
-        Tue, 22 Feb 2022 15:22:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645543335;
-        bh=dJFaztZbOTKlwjszD+cQgkDqaaoQUaeR4abG0LlrMB4=;
-        h=From:To:Cc:Subject:Date:From;
-        b=DXHzm1Ojr/JdzsxpKmL+iNBWnbLZMRdxOs3Z6Lw0U0yZwOti1yflN+C6vng2Eba++
-         i+vpqCBIIMuKux+/wtJht32wzJ7HVm3kE5VkuRBFdiSbB8S4Hlk7Lcgz5uZsekJXE1
-         qV1Ljp+h6xRJF7YXQN/+qDTtQRuPAyRvTXZSJwAOnOfKMwOBcEePpACcjr6Vrb7HwY
-         0UIwnMCgtZ54v+f+KYU6kpPC1h4J1ojPkGhkjPPWAPwBuastYyBzoktQThSsGVt4Z6
-         73dHlUoFqFrUoSU0oK12YMxzPSHt9lFm48gh1/2cesQFXcKyu40FPSTA0i57xvcuN4
-         Mf9izYSZYCRLg==
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Yannick Fertre <yannick.fertre@foss.st.com>,
-        Philippe Cornu <philippe.cornu@foss.st.com>
-Cc:     Nick Desaulniers <ndesaulniers@google.com>,
-        dri-devel@lists.freedesktop.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>,
-        Raphael Gallais-Pou <raphael.gallais-pou@foss.st.com>
-Subject: [PATCH v2] drm/stm: Avoid using val uninitialized in ltdc_set_ycbcr_config()
-Date:   Tue, 22 Feb 2022 08:20:46 -0700
-Message-Id: <20220222152045.484610-1-nathan@kernel.org>
-X-Mailer: git-send-email 2.35.1
+        Tue, 22 Feb 2022 10:21:38 -0500
+Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CAA21617CD
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 07:21:13 -0800 (PST)
+Received: by mail-yb1-xb34.google.com with SMTP id g6so20464848ybe.12
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 07:21:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=HVdVMfysf95jTHRvOxuNoVjxuB0CjZvhXhqlbIHuN0Y=;
+        b=KTh8aFNGaoyntsSAxBWClVP9/nSFTBS6irzubM66J/T39Yf6IABij0qQupUfuzzdZH
+         ihIj4SU7EJtHUp3eNKbXfhrrfrdHCRjI06QOYhuWfa0CrRe5czKlGZ0kFgPhNtdusiE/
+         0cWGtj2Eo8LQ48RmeuO5gh48DJcz9Ic28mn3vkGeynwoJm2hTtHUmOW3NPXIa4x6jgsf
+         6IVhC3O85FyU1YztP8Nj8fRJuiHPBP5iQXLzDxOET1eFSu7QBjKPOJvhBmaOXJMJnFLm
+         a5nEmVP4VCmsyQ2WvCMH6N508jNFlxP3rso6X+xul9CMCySIXCetVpdBnk8Y2gRuOE2p
+         bnRA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=HVdVMfysf95jTHRvOxuNoVjxuB0CjZvhXhqlbIHuN0Y=;
+        b=1G35xupxnyYiMz2Cq8MQWU3iyS/O7XMwhir7Yf6yocRWvg+fbwbuX+UHI7/rwnEYbm
+         ZGq5dXNGx0sT1oo1vhsnPONlExkcurPdAB7KsEHdB/D/7lW0uKCJNpWj7ZTjPcd+R9nx
+         xY+84ouvSu0eYFZ1fmVaUN/mHCEGR1HLmiEGWFwKL/f6BxodF+fPC8jHISjtXUPTqnO/
+         +mUq2L+9gmNzo4OTVD0d2vvumN70wNZMPyUUeSovISWHAKEOW5NNa3gQYuxElIWX1x3y
+         lp33QtQA7VLHGgbIkyb7DLmHU7GGdFMfZRiayA+RuQk/MPEw7/I9m+ZR8QKHyNaPOc9P
+         mn/A==
+X-Gm-Message-State: AOAM532rnkuk42+5ZEphp4FzQS6wnt4sHjMFvpAJ4qkyjxegDVPvZJTI
+        Rf2VaZ6dWPd2iK0/Fpn4gSoGl+QMILoSO+Bjzrv9nQ==
+X-Google-Smtp-Source: ABdhPJyCcJARRbkiTPXc35f6YTtpOe1UTQH526CZggy98Wmxv6UfuXKgc5itp4zRkLxISttmSWvkXXI+3Fq9wJhPrqM=
+X-Received: by 2002:a25:aac3:0:b0:624:ab10:49dc with SMTP id
+ t61-20020a25aac3000000b00624ab1049dcmr6967837ybi.291.1645543272820; Tue, 22
+ Feb 2022 07:21:12 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+References: <20220216212433.1373903-1-luca@z3ntu.xyz> <20220216212433.1373903-2-luca@z3ntu.xyz>
+In-Reply-To: <20220216212433.1373903-2-luca@z3ntu.xyz>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Tue, 22 Feb 2022 16:21:01 +0100
+Message-ID: <CACRpkdZhtdyni0cKT43nd9YVSnA_Dza6=kuECuXLJKbDG2rbEA@mail.gmail.com>
+Subject: Re: [PATCH 1/5] dt-bindings: bluetooth: broadcom: add BCM43430A0
+To:     Luca Weiss <luca@z3ntu.xyz>
+Cc:     linux-arm-msm@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -57,57 +70,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Clang warns:
+On Wed, Feb 16, 2022 at 10:25 PM Luca Weiss <luca@z3ntu.xyz> wrote:
 
-  drivers/gpu/drm/stm/ltdc.c:625:2: warning: variable 'val' is used uninitialized whenever switch default is taken [-Wsometimes-uninitialized]
-          default:
-          ^~~~~~~
-  drivers/gpu/drm/stm/ltdc.c:635:2: note: uninitialized use occurs here
-          val |= LxPCR_YCEN;
-          ^~~
-  drivers/gpu/drm/stm/ltdc.c:600:9: note: initialize the variable 'val' to silence this warning
-          u32 val;
-                 ^
-                  = 0
-  1 warning generated.
+> Document the compatible string for BCM43430A0 bluetooth.
+>
+> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
 
-Use a return instead of break in the default case to fix the warning.
-Add an error message so that this return is not silent, which could hide
-issues in the future.
+Looks good to me:
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
-Fixes: 484e72d3146b ("drm/stm: ltdc: add support of ycbcr pixel formats")
-Link: https://github.com/ClangBuiltLinux/linux/issues/1575
-Acked-by: Yannick Fertre <yannick.fertre@foss.st.com>
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-Reviewed-by: Raphael Gallais-Pou <raphael.gallais-pou@foss.st.com>
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
-
-v1 -> v2: https://lore.kernel.org/r/20220207165304.1046867-1-nathan@kernel.org/
-
-* Use DRM_ERROR() instead of drm_err() (Philippe).
-
-* Collect tags from v1, as nothing substantial has changed.
-
- drivers/gpu/drm/stm/ltdc.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/gpu/drm/stm/ltdc.c b/drivers/gpu/drm/stm/ltdc.c
-index 5eeb32c9c9ce..c9bc4ccb6d43 100644
---- a/drivers/gpu/drm/stm/ltdc.c
-+++ b/drivers/gpu/drm/stm/ltdc.c
-@@ -624,7 +624,8 @@ static inline void ltdc_set_ycbcr_config(struct drm_plane *plane, u32 drm_pix_fm
- 		break;
- 	default:
- 		/* RGB or not a YCbCr supported format */
--		break;
-+		DRM_ERROR("Unsupported pixel format: %u\n", drm_pix_fmt);
-+		return;
- 	}
- 
- 	/* Enable limited range */
-
-base-commit: 542898c5aa5c6a3179dffb1d1606884a63f75fed
--- 
-2.35.1
-
+Yours,
+Linus Walleij

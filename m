@@ -2,163 +2,227 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10DE44BF847
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 13:44:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BF594BF83F
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 13:43:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232045AbiBVMpL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 07:45:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48178 "EHLO
+        id S232012AbiBVMnW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 07:43:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232024AbiBVMpH (ORCPT
+        with ESMTP id S232036AbiBVMnS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 07:45:07 -0500
-Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1anam02on2052.outbound.protection.outlook.com [40.107.96.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 889B012558D
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 04:44:42 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=a7BFvjAMyhWma5DbuWRKgfOhMPfvPPoVR+JyEFcKluShVyw9v8lJLaIJfo6LvFNkk/XkrQbO954sSGOL8PGMRBkygnxMY1TTykLh/s+uzRAfVGu1xOAx/OIHxLE8SRgGZ0X9vVfqa0gOitSOvb9ZNP0TZWsu0rlc2l7bxHvzmHoQuxGT90vdz54XvgSuCOysDy1dH+tRicllRreKhB8jDnGNts017rWBbRlzhuYUS1NYEAYoph5cB45wFdUoAdVFG4l4EUJUVQmdg+S4lqb2I5ORFJNhpI6L1OB1JKofxRpyPJialLINi+5MFB9+rFgPCE2IM2e3kve2mW6uOm4uhQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=OiNSGGyM0C1UPk4vM3/QgttQek1MahQKX1tvma+NlQw=;
- b=nt2po3iSlTcC49nL0J133vNshwq7PKt4ZVdSPyASXgJZ5Vo/irGcsR0Zh4kKddY3Hg9AMvNaAI9OKfegKBw9dCAL86Ot8cBOvGVh6yqJtHcER2NMXrjyPFjGGB6GIkr3KYaVCbJhSbt3i4ELdxY5nWC6JgUgpmZCBr4DFQxLniA4JSmzJ6JJ0563stdV67zspHhm/S22Vx+duBLLOYo9rPQdEtGYa5nJquJo0fClPjH82/py55/Y0chIAJ6LamIr2hhW+EQ8UjohJijPe5q//2mM6fXvebtc/GjK9ic3uSRsUROFIJevOtMufvOVvIrId/3ldpdZOz9POHGLAXkGfw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=OiNSGGyM0C1UPk4vM3/QgttQek1MahQKX1tvma+NlQw=;
- b=tH4/ssTiNmd7okdtAEharfr+/Oe9NaTlDbFu4+Yywr7o9WyZg9UxdgVblP8Y6cX60TjdPChQKTiBxIGgZ1f8CJJ4wDB/YU8TwPt4o6Lxx9liAAjPlY66oZ5dhK/KFbdoivK4hVWUllZuEC1vfvH8zzZT6QLcrmyRqnlHLTCTFSo=
-Received: from MWHPR04CA0050.namprd04.prod.outlook.com (2603:10b6:300:6c::12)
- by BN6PR1201MB0242.namprd12.prod.outlook.com (2603:10b6:405:57::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5017.21; Tue, 22 Feb
- 2022 12:44:40 +0000
-Received: from CO1NAM11FT043.eop-nam11.prod.protection.outlook.com
- (2603:10b6:300:6c:cafe::88) by MWHPR04CA0050.outlook.office365.com
- (2603:10b6:300:6c::12) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5017.21 via Frontend
- Transport; Tue, 22 Feb 2022 12:44:39 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1NAM11FT043.mail.protection.outlook.com (10.13.174.193) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.4995.15 via Frontend Transport; Tue, 22 Feb 2022 12:44:39 +0000
-Received: from SATLEXMB03.amd.com (10.181.40.144) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Tue, 22 Feb
- 2022 06:44:38 -0600
-Received: from chrome.amd.com (10.180.168.240) by SATLEXMB03.amd.com
- (10.181.40.144) with Microsoft SMTP Server id 15.1.2375.18 via Frontend
- Transport; Tue, 22 Feb 2022 06:44:35 -0600
-From:   Ajit Kumar Pandey <AjitKumar.Pandey@amd.com>
-To:     <broonie@kernel.org>, <alsa-devel@alsa-project.org>
-CC:     <Vijendar.Mukunda@amd.com>, <Alexander.Deucher@amd.com>,
-        <Basavaraj.Hiregoudar@amd.com>, <Sunil-kumar.Dommati@amd.com>,
-        "Ajit Kumar Pandey" <AjitKumar.Pandey@amd.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        "V sujith kumar Reddy" <vsujithkumar.reddy@amd.com>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: [PATCH  v2 3/3] ASoC: amd: acp: Add DMIC machine driver ops
-Date:   Tue, 22 Feb 2022 18:12:13 +0530
-Message-ID: <20220222124213.721224-4-AjitKumar.Pandey@amd.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220222124213.721224-1-AjitKumar.Pandey@amd.com>
-References: <20220222124213.721224-1-AjitKumar.Pandey@amd.com>
+        Tue, 22 Feb 2022 07:43:18 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1599E125CB0;
+        Tue, 22 Feb 2022 04:42:45 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id C38581F39D;
+        Tue, 22 Feb 2022 12:42:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1645533763; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=0rPgnpg+5gQ/8b52Q6pAhqccBeucqyapDk4V0HZ7WlE=;
+        b=PX1WeeyFJawzM1aA4txXUhQ1CEmCwrnwEeVvXxZQLMPWrKyDSc1M7wbxNJq76uHh58fDZt
+        Ijq3tblqE4/v3fMWiMB2wTMic6xohLuTDapLUu3gG26cHzVv+0wj4BywHyfDQThHQ0CsFY
+        BtuM6mDgSzTO/m5Memy3eHOXk30p+vA=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1645533763;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=0rPgnpg+5gQ/8b52Q6pAhqccBeucqyapDk4V0HZ7WlE=;
+        b=rBQrYLLWLXVGSzXgo+Ab4OLAQkZEUbDNbH5chqPWgz2bFTabVMyPRsii896UYl70HjEMmu
+        9jCVhQBw8+atbcAg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9EE3B13C1E;
+        Tue, 22 Feb 2022 12:42:43 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id TeIsJkPaFGIeRwAAMHmgww
+        (envelope-from <ppavlu@suse.cz>); Tue, 22 Feb 2022 12:42:43 +0000
+From:   Petr Pavlu <ppavlu@suse.cz>
+To:     martin.petersen@oracle.com
+Cc:     linux-scsi@vger.kernel.org, target-devel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Petr Pavlu <petr.pavlu@suse.com>
+Subject: [PATCH] target/iscsi: Fix detection of excess number of login exchanges
+Date:   Tue, 22 Feb 2022 13:42:17 +0100
+Message-Id: <20220222124217.21715-1-ppavlu@suse.cz>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 6d059d31-2bce-4290-6c04-08d9f6011766
-X-MS-TrafficTypeDiagnostic: BN6PR1201MB0242:EE_
-X-Microsoft-Antispam-PRVS: <BN6PR1201MB0242DBD52B43F7AD30B64314823B9@BN6PR1201MB0242.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: d0iOlSROiRzrmCs7A86uASQLj0fK+7p2CdcE12DRlWuiqmFwEESsTwWtlttE8/xeMWh12YfrYWH4KA0i/dv70LH+t3d6Rc7Nw92q2+nCIwrRguuF3p3vadJicADP9IfuqV0OFcXWVzOdSv/iiS++wHCS03wpRIcNtiS8pZXxgrVWnl8v90jhb6mxN8OJ0ybGlvE4TdnNL1hM39h/mgl5rorXg3F3QtfPShc5lmG+dSSzArjEEjpAGSuEi36STR2wFvpZ19OjFpLLlGLtRrIjbIgvx5b/ljlKTyIiOACWiALNaLrVXPV7ltGgz1oxbOokCNxni9z3Owxk2j4n+5afef7eeVQ7CYMyqWkMhaCPkc1fjxijEnqSgoEQx3LTbLMywsW8+nz1WyL3P0fZ72+/4zRxOFHT8/6j0RXL7d59ioVz1bw2Llz5o+mRs9hoSl8TizoLLceEyddGrhZDSBfDnhWDg2lOMcdQOZMldISjzOJBiU+76IWiOCpiMxahfzViJT7MvJSrO9YLXzNxX2/HgvpxrBbkxF2gKIw6BFhZM45196G+oCjLRYr1E7lWMnzVpdrqa7wF71k2OTJu7eoBroBY2ZKzzHAHvoa9YppgjtL3toUqIzm5NWgRB9wXnlpxmV8WUrtehJ+R26B9P3OeGda4oLazICLXfSEt3HEL5vK4SbGJz5g1AUhiFWYFzMPHluPGoegxvL2dlXN4oCSDxA==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(40470700004)(46966006)(36840700001)(8936002)(47076005)(336012)(2906002)(36756003)(426003)(5660300002)(36860700001)(508600001)(40460700003)(6666004)(7696005)(26005)(82310400004)(186003)(1076003)(2616005)(86362001)(70206006)(81166007)(356005)(70586007)(4326008)(8676002)(316002)(110136005)(54906003)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Feb 2022 12:44:39.5749
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6d059d31-2bce-4290-6c04-08d9f6011766
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT043.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR1201MB0242
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add dmic ops and startup callback to add snd_pcm_hw_constraint for
-pdm related device node.
+From: Petr Pavlu <petr.pavlu@suse.com>
 
-Signed-off-by: Ajit Kumar Pandey <AjitKumar.Pandey@amd.com>
+Function iscsi_target_do_login() attempts to cancel a connection when
+a number of login exchanges reaches MAX_LOGIN_PDUS (7). This is done by
+having a local counter and incrementing+checking it as the function
+processes requests in a loop. A problem is that since the login rework in
+back in 2013, the function always processes only a single request and the
+loop is terminated at the end of the first iteration. This means the
+counter reaches only value 1 and any excess number of login requests is
+never rejected.
+
+Fix the problem by introducing iscsi_login.negotiation_exchanges counter
+and update the logic to count exchanges per each login phase as described
+in RFC 7143:
+> 6.2. Text Mode Negotiation:
+> [...]
+> In the Login Phase (see Section 6.3), every stage is a separate
+> negotiation. [...]
+> [...]
+> An iSCSI initiator or target MAY terminate a negotiation that does
+> not terminate within an implementation-specific reasonable time or
+> number of exchanges but SHOULD allow at least six (6) exchanges.
+
+Fixes: d381a8010a05 ("iscsi-target: Add login negotiation multi-plexing support")
+Signed-off-by: Petr Pavlu <petr.pavlu@suse.com>
 ---
- sound/soc/amd/acp/acp-mach-common.c | 27 +++++++++++++++++++++++++++
- 1 file changed, 27 insertions(+)
+ drivers/target/iscsi/iscsi_target_nego.c | 92 ++++++++++++------------
+ include/target/iscsi/iscsi_target_core.h |  1 +
+ 2 files changed, 47 insertions(+), 46 deletions(-)
 
-diff --git a/sound/soc/amd/acp/acp-mach-common.c b/sound/soc/amd/acp/acp-mach-common.c
-index b45442a56c40..d3034ee2ff59 100644
---- a/sound/soc/amd/acp/acp-mach-common.c
-+++ b/sound/soc/amd/acp/acp-mach-common.c
-@@ -291,6 +291,32 @@ static const struct snd_soc_ops acp_card_rt5682s_ops = {
- 	.shutdown = acp_card_shutdown,
- };
+diff --git a/drivers/target/iscsi/iscsi_target_nego.c b/drivers/target/iscsi/iscsi_target_nego.c
+index c0ed6f8e5c5b..a5077ea09f6c 100644
+--- a/drivers/target/iscsi/iscsi_target_nego.c
++++ b/drivers/target/iscsi/iscsi_target_nego.c
+@@ -970,65 +970,65 @@ static int iscsi_target_handle_csg_one(struct iscsi_conn *conn, struct iscsi_log
  
-+static const unsigned int dmic_channels[] = {
-+	DUAL_CHANNEL, FOUR_CHANNEL,
-+};
+ static int iscsi_target_do_login(struct iscsi_conn *conn, struct iscsi_login *login)
+ {
+-	int pdu_count = 0;
+ 	struct iscsi_login_req *login_req;
+ 	struct iscsi_login_rsp *login_rsp;
+ 
+ 	login_req = (struct iscsi_login_req *) login->req;
+ 	login_rsp = (struct iscsi_login_rsp *) login->rsp;
+ 
+-	while (1) {
+-		if (++pdu_count > MAX_LOGIN_PDUS) {
+-			pr_err("MAX_LOGIN_PDUS count reached.\n");
+-			iscsit_tx_login_rsp(conn, ISCSI_STATUS_CLS_TARGET_ERR,
+-					ISCSI_LOGIN_STATUS_TARGET_ERROR);
++	switch (ISCSI_LOGIN_CURRENT_STAGE(login_req->flags)) {
++	case 0:
++		login_rsp->flags &= ~ISCSI_FLAG_LOGIN_CURRENT_STAGE_MASK;
++		if (iscsi_target_handle_csg_zero(conn, login) < 0)
+ 			return -1;
+-		}
+-
+-		switch (ISCSI_LOGIN_CURRENT_STAGE(login_req->flags)) {
+-		case 0:
+-			login_rsp->flags &= ~ISCSI_FLAG_LOGIN_CURRENT_STAGE_MASK;
+-			if (iscsi_target_handle_csg_zero(conn, login) < 0)
+-				return -1;
+-			break;
+-		case 1:
+-			login_rsp->flags |= ISCSI_FLAG_LOGIN_CURRENT_STAGE1;
+-			if (iscsi_target_handle_csg_one(conn, login) < 0)
++		break;
++	case 1:
++		login_rsp->flags |= ISCSI_FLAG_LOGIN_CURRENT_STAGE1;
++		if (iscsi_target_handle_csg_one(conn, login) < 0)
++			return -1;
++		if (login_rsp->flags & ISCSI_FLAG_LOGIN_TRANSIT) {
++			/*
++			 * Check to make sure the TCP connection has not dropped
++			 * asynchronously while session reinstatement was
++			 * occurring in this kthread context, before
++			 * transitioning to full feature phase operation.
++			 */
++			if (iscsi_target_sk_check_close(conn))
+ 				return -1;
+-			if (login_rsp->flags & ISCSI_FLAG_LOGIN_TRANSIT) {
+-				/*
+-				 * Check to make sure the TCP connection has not
+-				 * dropped asynchronously while session reinstatement
+-				 * was occuring in this kthread context, before
+-				 * transitioning to full feature phase operation.
+-				 */
+-				if (iscsi_target_sk_check_close(conn))
+-					return -1;
+ 
+-				login->tsih = conn->sess->tsih;
+-				login->login_complete = 1;
+-				iscsi_target_restore_sock_callbacks(conn);
+-				if (iscsi_target_do_tx_login_io(conn,
+-						login) < 0)
+-					return -1;
+-				return 1;
+-			}
+-			break;
+-		default:
+-			pr_err("Illegal CSG: %d received from"
+-				" Initiator, protocol error.\n",
+-				ISCSI_LOGIN_CURRENT_STAGE(login_req->flags));
+-			break;
++			login->tsih = conn->sess->tsih;
++			login->login_complete = 1;
++			iscsi_target_restore_sock_callbacks(conn);
++			if (iscsi_target_do_tx_login_io(conn, login) < 0)
++				return -1;
++			return 1;
+ 		}
++		break;
++	default:
++		pr_err("Illegal CSG: %d received from Initiator,"
++			" protocol error.\n",
++			ISCSI_LOGIN_CURRENT_STAGE(login_req->flags));
++		break;
++	}
+ 
+-		if (iscsi_target_do_tx_login_io(conn, login) < 0)
++	if (login_rsp->flags & ISCSI_FLAG_LOGIN_TRANSIT)
++		login->negotiation_exchanges = 0;
++	else {
++		login->negotiation_exchanges++;
++		if (login->negotiation_exchanges >= MAX_LOGIN_PDUS) {
++			pr_err("MAX_LOGIN_PDUS count reached.\n");
++			iscsit_tx_login_rsp(conn, ISCSI_STATUS_CLS_TARGET_ERR,
++					ISCSI_LOGIN_STATUS_TARGET_ERROR);
+ 			return -1;
+-
+-		if (login_rsp->flags & ISCSI_FLAG_LOGIN_TRANSIT) {
+-			login_rsp->flags &= ~ISCSI_FLAG_LOGIN_TRANSIT;
+-			login_rsp->flags &= ~ISCSI_FLAG_LOGIN_NEXT_STAGE_MASK;
+ 		}
+-		break;
++	}
 +
-+static const struct snd_pcm_hw_constraint_list dmic_constraints_channels = {
-+	.count = ARRAY_SIZE(dmic_channels),
-+	.list = dmic_channels,
-+	.mask = 0,
-+};
++	if (iscsi_target_do_tx_login_io(conn, login) < 0)
++		return -1;
 +
-+static int acp_card_dmic_startup(struct snd_pcm_substream *substream)
-+{
-+	struct snd_pcm_runtime *runtime = substream->runtime;
-+
-+	snd_pcm_hw_constraint_list(runtime, 0, SNDRV_PCM_HW_PARAM_CHANNELS,
-+				   &dmic_constraints_channels);
-+	snd_pcm_hw_constraint_list(runtime, 0, SNDRV_PCM_HW_PARAM_RATE,
-+				   &constraints_rates);
-+
-+	return 0;
-+}
-+
-+static const struct snd_soc_ops acp_card_dmic_ops = {
-+	.startup = acp_card_dmic_startup,
-+};
-+
- /* Declare RT1019 codec components */
- SND_SOC_DAILINK_DEF(rt1019,
- 	DAILINK_COMP_ARRAY(COMP_CODEC("i2c-10EC1019:00", "rt1019-aif"),
-@@ -633,6 +659,7 @@ int acp_legacy_dai_links_create(struct snd_soc_card *card)
- 		links[i].num_cpus = ARRAY_SIZE(pdm_dmic);
- 		links[i].platforms = platform_component;
- 		links[i].num_platforms = ARRAY_SIZE(platform_component);
-+		links[i].ops = &acp_card_dmic_ops;
- 		links[i].dpcm_capture = 1;
++	if (login_rsp->flags & ISCSI_FLAG_LOGIN_TRANSIT) {
++		login_rsp->flags &= ~ISCSI_FLAG_LOGIN_TRANSIT;
++		login_rsp->flags &= ~ISCSI_FLAG_LOGIN_NEXT_STAGE_MASK;
  	}
  
+ 	return 0;
+diff --git a/include/target/iscsi/iscsi_target_core.h b/include/target/iscsi/iscsi_target_core.h
+index 1eccb2ac7d02..b6a5e1cf3f77 100644
+--- a/include/target/iscsi/iscsi_target_core.h
++++ b/include/target/iscsi/iscsi_target_core.h
+@@ -705,6 +705,7 @@ struct iscsi_login {
+ 	u32 rsp_length;
+ 	u16 cid;
+ 	u16 tsih;
++	u8 negotiation_exchanges;
+ 	char req[ISCSI_HDR_LEN];
+ 	char rsp[ISCSI_HDR_LEN];
+ 	char *req_buf;
 -- 
-2.25.1
+2.35.1
 

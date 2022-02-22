@@ -2,99 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A1AD4BFF81
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 17:59:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53BD84BFF89
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 18:01:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233343AbiBVRAG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 12:00:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55586 "EHLO
+        id S234156AbiBVRBU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 12:01:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232427AbiBVRAG (ORCPT
+        with ESMTP id S231290AbiBVRBS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 12:00:06 -0500
-Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CC3716C4F5;
-        Tue, 22 Feb 2022 08:59:40 -0800 (PST)
-Received: by mail-io1-xd2b.google.com with SMTP id r7so15596318iot.3;
-        Tue, 22 Feb 2022 08:59:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=kUhUIIyA9GUDM8KAXwt3EGlZrHMsIuoyJtppWvJlpD8=;
-        b=CDa4MR96luDCq3/3+R1N8T0Pu1JW9iXOgvzqQpbn2Z14ilhGhdOncz7u8Dpe8sej6G
-         9ri5Lc4CH1xQfBxDfaLGxR/knU8dI9COjumA2Ekkt4tJbfqAfDLX0R10dy1xTOAV129/
-         x8WLL8ezTrhtbU7BPvTNOrR2fZOkPTvjZeyq3bF+x98VRTqC6B+i0zvS0VOKjbSeQspM
-         UODPTZRrLHrVKjOwc7Evd3ajetOcKlAjfijWUq8bfAYEatcZLVZ5ReZAWQ6uxkwFfOPI
-         2OfMKZS4h8nc/clDlpskPws0oHuNAbsIfBX/SK2ZQFFBPao8PU3yBmy2TTnzj2l1iSoy
-         y48g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=kUhUIIyA9GUDM8KAXwt3EGlZrHMsIuoyJtppWvJlpD8=;
-        b=IoLaZk5TzudpxyX34Ei0a3Bv+gmYW952ttK8s7pfzgPIifwJwAlQbMI57NHk7hUTDh
-         bQNa/5mE9eEWG9vN2BhGDjxq/GOKncmYRvGBow8iN7voRlX2iGes1Eqa4vc1Q2cqJ0y/
-         NdIbrASOSHx2NS6Mnkkoi0YDQ2ZxXopQoMuuxPzMfIxTF6n7fdbSfKpBnWEjFVcJrJB2
-         +Q+a37QTegoSI0NcZDA8KAqXpaS7Igzdq9tokoRTijTFXIRCrW+VWXYYfRSNtHoj3Whl
-         BnalcJYbysmhLLHrGuKE3Zx9Y9Aehfe8RdTVxFy30v9hI5UnQctGAQ29mmSvRvZe/Dkq
-         wbQA==
-X-Gm-Message-State: AOAM530X1W5WODtAnGE22ed0go82oyLdDvVphRhiG+0vyK6YvlNmNCfY
-        kKEMVhneSPO0PHh1/PhXn0IlONgP1nlielVN/h8=
-X-Google-Smtp-Source: ABdhPJyOix0MphY4qHD8XfOuBGs0S/4oSg4gAzztyQmn/MgeYmRbPXRpPA0Lye6W0eH522Agyz1bmc6W3MZDm7HoPEw=
-X-Received: by 2002:a05:6638:204d:b0:314:a290:48c with SMTP id
- t13-20020a056638204d00b00314a290048cmr18055215jaj.264.1645549179943; Tue, 22
- Feb 2022 08:59:39 -0800 (PST)
+        Tue, 22 Feb 2022 12:01:18 -0500
+Received: from new2-smtp.messagingengine.com (new2-smtp.messagingengine.com [66.111.4.224])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29E8E16E7CB;
+        Tue, 22 Feb 2022 09:00:51 -0800 (PST)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 797D65803B7;
+        Tue, 22 Feb 2022 12:00:50 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute4.internal (MEProxy); Tue, 22 Feb 2022 12:00:50 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=HtCItNyhGVUgQ9zYx
+        8y8HwkSSNP7qG6erjhX3gp1Vas=; b=GtZc3a+Qfwr7g0xbB/r/BXPgspmACWS5G
+        0OGqRVvN6z11OqHVovHGRWCIY+6qwMtxF85hTXbUfkCrF+fnjHoeZnPCv0XXOJla
+        0JkgBu9WCWEnKJottlEKs/Q4JTZdyLmnRmhTbDr+/rVr0IPN2yxgwBw/wMgTVpG8
+        C9DoX4S/LL3KjKX65DZDCRznCURUQokspAfI6u2Fi3Fx8wU6QTNyq8N5GoT7nieO
+        Yhhv/C7ifwD/9umjdWpzeNwMitCll2oBCOj6sJ8t/mdGGx5OHFJ+xV/TdaC/1R0N
+        6AUjtVDxl/Y72YPEjJVL0il7EKgeRDlxX1hKjl3laKNHeOagby5aA==
+X-ME-Sender: <xms:wRYVYiV488PJ8dsyWXC2-qZX4Ec6K41Dsf4gR_5L-9d82sciAItPsQ>
+    <xme:wRYVYumBrUxVr8yJp28gXjHjH6idO1Ji3PhD6ODs9V4bVAf8CwKGf-myJP2AHBedc
+    jQyhpQuubrzuUs>
+X-ME-Received: <xmr:wRYVYmb-w1BGYM1gutgPONq5dR0QQG6p26CwXhoUD4DKQDnERE5vPOkh4d_7pU4ztW3VGAKMjf_r8oAuyqgkzbGcag0>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrkeekgdelfecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepkfguohcuufgt
+    hhhimhhmvghluceoihguohhstghhsehiughoshgthhdrohhrgheqnecuggftrfgrthhtvg
+    hrnheptdffkeekfeduffevgeeujeffjefhtefgueeugfevtdeiheduueeukefhudehleet
+    necuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepihguoh
+    hstghhsehiughoshgthhdrohhrgh
+X-ME-Proxy: <xmx:whYVYpVh7rh-btnjQECit2ixdjjH1xEQgpb0OQe732sLUJXzafy88w>
+    <xmx:whYVYskuy1ClagUaAi7TsEOtjRvTRcRyXCCXBfOPZhK_9PsMx-ELbw>
+    <xmx:whYVYucdvuL-RBwSfTBPxtNiwaIxsdnMxtpGFdKjt1-cJflnmCUyjw>
+    <xmx:whYVYqpPNokjYGIilBHrkHosAHqdWOFV-0p14_H7TjNh5i0VZ3gNjw>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 22 Feb 2022 12:00:48 -0500 (EST)
+Date:   Tue, 22 Feb 2022 19:00:46 +0200
+From:   Ido Schimmel <idosch@idosch.org>
+To:     Hans Schultz <schultz.hans@gmail.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
+        Hans Schultz <schultz.hans+netdev@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <nikolay@nvidia.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Stephen Suryaputra <ssuryaextr@gmail.com>,
+        David Ahern <dsahern@kernel.org>,
+        Ido Schimmel <idosch@nvidia.com>,
+        Petr Machata <petrm@nvidia.com>,
+        Amit Cohen <amcohen@nvidia.com>,
+        Po-Hsu Lin <po-hsu.lin@canonical.com>,
+        Baowen Zheng <baowen.zheng@corigine.com>,
+        linux-kernel@vger.kernel.org, bridge@lists.linux-foundation.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net-next v4 5/5] selftests: forwarding: tests of locked
+ port feature
+Message-ID: <YhUWvhkhRVY+/Osd@shredder>
+References: <20220222132818.1180786-1-schultz.hans+netdev@gmail.com>
+ <20220222132818.1180786-6-schultz.hans+netdev@gmail.com>
 MIME-Version: 1.0
-References: <20220222095736.24898-1-ashimida@linux.alibaba.com>
- <YhUMRoLDan7tJRiL@dev-arch.archlinux-ax161> <f44612ce-5bb1-da45-d6cb-39464898c4ff@roeck-us.net>
-In-Reply-To: <f44612ce-5bb1-da45-d6cb-39464898c4ff@roeck-us.net>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Tue, 22 Feb 2022 17:59:29 +0100
-Message-ID: <CANiq72nhu+CtYYNfWLYxf19OscoEEZj=TATM0SHNU8ic1iDhyQ@mail.gmail.com>
-Subject: Re: [PATCH] [PATCH] AARCH64: Add gcc Shadow Call Stack support
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Nathan Chancellor <nathan@kernel.org>,
-        Dan Li <ashimida@linux.alibaba.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
-        Marco Elver <elver@google.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        llvm@lists.linux.dev, linux-hardening@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220222132818.1180786-6-schultz.hans+netdev@gmail.com>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 22, 2022 at 5:48 PM Guenter Roeck <linux@roeck-us.net> wrote:
->
-> The point here, I think, is to list the minimum gcc version.
-> It is going to be a long time until gcc 12.0 is the minimum version,
-> so I think it makes sense to list the minimum version number for
-> each compiler here.
+On Tue, Feb 22, 2022 at 02:28:18PM +0100, Hans Schultz wrote:
+> diff --git a/tools/testing/selftests/net/forwarding/bridge_locked_port.sh b/tools/testing/selftests/net/forwarding/bridge_locked_port.sh
+> new file mode 100755
+> index 000000000000..a8800e531d07
+> --- /dev/null
+> +++ b/tools/testing/selftests/net/forwarding/bridge_locked_port.sh
+> @@ -0,0 +1,180 @@
+> +#!/bin/bash
+> +# SPDX-License-Identifier: GPL-2.0
+> +
+> +ALL_TESTS="locked_port_ipv4 locked_port_ipv6 locked_port_vlan"
+> +NUM_NETIFS=4
+> +CHECK_TC="no"
+> +source lib.sh
+> +
+> +h1_create()
+> +{
+> +	simple_if_init $h1 192.0.2.1/24 2001:db8:1::1/64
+> +	vrf_create "vrf-vlan-h1"
+> +	ip link set dev vrf-vlan-h1 up
+> +	vlan_create $h1 100 vrf-vlan-h1 198.51.100.1/24 ::ffff:c633:6401/64
 
-Yeah, please list the minimum version (ideally `>=` instead of `>`,
-with the actual version where it first appeared). It makes it easy to
-then remove things that are not needed anymore when the minimum GCC
-version is upgraded.
+Hi,
 
-Cheers,
-Miguel
+Why did you change it from 2001:db8:3::1/64 to ::ffff:c633:6401/64? It
+was actually OK the first time...
+
+Anyway, looking at locked_port_vlan() I see that you are only testing
+IPv4 so you can just drop this address:
+
+vlan_create $h1 100 vrf-vlan-h1 198.51.100.1/24
+
+Same for $h2
+
+LGTM otherwise. Feel free to add my tag to the next version
+
+
+> +}

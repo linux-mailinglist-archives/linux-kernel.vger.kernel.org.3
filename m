@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 722F34BF785
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 13:00:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 02D454BF786
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 13:00:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231843AbiBVMAg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 07:00:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47244 "EHLO
+        id S231849AbiBVMAk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 07:00:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231398AbiBVMAR (ORCPT
+        with ESMTP id S231438AbiBVMAT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 07:00:17 -0500
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECEF0156C62
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 03:59:51 -0800 (PST)
-Received: by mail-wm1-x32e.google.com with SMTP id w13so10898466wmi.2
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 03:59:51 -0800 (PST)
+        Tue, 22 Feb 2022 07:00:19 -0500
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 273A5156C65
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 03:59:53 -0800 (PST)
+Received: by mail-wm1-x32c.google.com with SMTP id o62-20020a1ca541000000b00380e3cc26b7so226009wme.0
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 03:59:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=qAYVw6f87nBCDJGUCPz374Y+GRm8ih0aIXd7jYiegYk=;
-        b=CQqzgB9yPbuTyePAU9nroBloxL1ZgVMRzSIxuE5V8cp8RnsAAmLD/DG4Y/U4+52JtP
-         l0i4vxh63W11kE4hkrTnjovKpOEVgEa1OuzczjQflVozla893MxHxmTRZ5RSpbgYPPpu
-         WWWCPTDJC6Ah2yvXr1BXpsOLIK8iBQlC1cLaVJyOHRuFnvHI0iZWvmwHpjWP3WmThslC
-         Az2U5BLZUkpfGspnqVwzfcBt+TqzwaTTQGEBq8/AjQs0gqSr+1LZOL29qIt0ZY/0QuqW
-         Hb/khWTEL9bGjL6XLp9XcEClJHUQYc66qWhLG2pBq4leI/6VB9v52SoFzyqpLgYHk4tN
-         oqWA==
+        bh=b/RMewZRNdO9Wc+5bCNqy1Hhh9vonM3PUYPjxzgWe6c=;
+        b=SanxqFiRWVCfz2tMk6aRuN8EEWVdZcWBZqQ/p98luZkdfvMRIOd/tTpvxbWWTEU53M
+         +K2TVExVtW+/JyRFknezKVtcO5x12s/Yn17Y9baJmceusyiSFROq1sIowVFwhAXaQjre
+         J/bQdVKvT3CfbuacjV/caOuz/9GQLYDwX4q3y4G4KTC7uVgy29Bt5TEv41mAKt1uV0bD
+         bu8hEpEzxqK5v0nBIJfN3ilaTQ+3BGT49GMN7JYKt76nx3cJViR9l+yyEIWABmRTFw9e
+         lHwVf1OhEGAGt+5qkdF0ggw+czKMt2L7rJZvogJtHTRbqr5DM8A0aPvizAnMNJi9TJxz
+         ztEA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=qAYVw6f87nBCDJGUCPz374Y+GRm8ih0aIXd7jYiegYk=;
-        b=gO4ZkWdkchCycicTi5QT3RzDoJoWIWAqlHwJTdIm6siqRM3PFm8NBDU9WeUkG192RL
-         Q7TpIPh8TD8Rj3CRAsB634jGxRPfZegEXhQLo31m6v2/PxNKqSrtrmmfX2dJOvSbiVH7
-         SCrXONqDK0IaLht0GRetDrR7M1hWkcSKFpChHq6oHG6JRcozxSQsgW0d9IdR2Cptl7d+
-         MEezeaWApT7bJUtdYwoGI/IilFH6aEOOVsHMkyOTReLbqRWri8GyWHbeJyCq7rLf53in
-         OYYN9M/Qfm1yxYYI4AA3ZpRYLPxBRTokHYrlkq1aOCewsQkiapW5aOHjaFIwdxkndLi2
-         SOcg==
-X-Gm-Message-State: AOAM532ecnVBS6u3O19PE3Xk+Qfo1noCe8ulZUusLT3wRe/LyvnUCOum
-        tiHFnzzOpBtUORoVdDNaMezUiQ==
-X-Google-Smtp-Source: ABdhPJwhpijOE/o2mCXCiE9KnjdyQ6TxkwxS7wznSwBFTO06MlhP+grm26A3hMPj6+GwbD3L+uTUQg==
-X-Received: by 2002:a05:600c:3650:b0:37b:dd89:2f01 with SMTP id y16-20020a05600c365000b0037bdd892f01mr3086611wmq.43.1645531190597;
-        Tue, 22 Feb 2022 03:59:50 -0800 (PST)
+        bh=b/RMewZRNdO9Wc+5bCNqy1Hhh9vonM3PUYPjxzgWe6c=;
+        b=GcA311oGPa5rDFWTSY63dKT4+5IVxpV4e8IjnrrRx7+pslaAt7bJqwlCTuppmp3qX0
+         yWZtkUTHa5mQvIkc45K9Dsf/l+JRtUoJiyOu2MUw6gtXHTZS9FCC/at0HmvbSIFon3bu
+         0VaKdugxbUHfyXoMd+G3oc9MEWECJHsA8/qtdqX5ceqG/fkYwqSFcb6JqyAhU7ebYUPi
+         2gxkfwVL6yU5FLGLFabX/MCKL3tU9drGHVnikdZm1InJHQUN50MaR5hJMoPaG7vgnbZr
+         5fLa+8Uq3qKORrFPPmueVM6u87ToqJ8wnag6oBWXTUpgegmhjPYLo2/VlUT+xZ4XErG3
+         dWUA==
+X-Gm-Message-State: AOAM5307RMboT52NMeyDxBTiIshKotJNkBEG/jy9YLlUXlZHjG1x3EYk
+        Oe6F/nJyRZ1kcgkuNIkgxGS1oQ==
+X-Google-Smtp-Source: ABdhPJxzgULSLUP2pqn4tukUw2n0gKmU+1hjzQ8HM08B5i+0uUMqJIsF0uL6zc5my2JKVFxfGP6fJQ==
+X-Received: by 2002:a05:600c:354c:b0:380:dec4:10ac with SMTP id i12-20020a05600c354c00b00380dec410acmr1382242wmq.62.1645531191766;
+        Tue, 22 Feb 2022 03:59:51 -0800 (PST)
 Received: from srini-hackbox.lan (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
-        by smtp.gmail.com with ESMTPSA id a18sm50014661wrg.13.2022.02.22.03.59.49
+        by smtp.gmail.com with ESMTPSA id a18sm50014661wrg.13.2022.02.22.03.59.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Feb 2022 03:59:50 -0800 (PST)
+        Tue, 22 Feb 2022 03:59:51 -0800 (PST)
 From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 To:     broonie@kernel.org
 Cc:     lgirdwood@gmail.com, perex@perex.cz, tiwai@suse.com,
         pierre-louis.bossart@linux.intel.com, alsa-devel@alsa-project.org,
         linux-kernel@vger.kernel.org, quic_srivasam@quicinc.com,
         Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Subject: [PATCH 03/16] ASoC: codecs: tx-macro: fix accessing array out of bounds for enum type
-Date:   Tue, 22 Feb 2022 11:59:20 +0000
-Message-Id: <20220222115933.9114-4-srinivas.kandagatla@linaro.org>
+Subject: [PATCH 04/16] ASoC: codecs: va-macro: fix accessing array out of bounds for enum type
+Date:   Tue, 22 Feb 2022 11:59:21 +0000
+Message-Id: <20220222115933.9114-5-srinivas.kandagatla@linaro.org>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20220222115933.9114-1-srinivas.kandagatla@linaro.org>
 References: <20220222115933.9114-1-srinivas.kandagatla@linaro.org>
@@ -76,54 +76,34 @@ Accessing enums using integer would result in array out of bounds access
 on platforms like aarch64 where sizeof(long) is 8 compared to enum size
 which is 4 bytes.
 
-Also few return value of put functions, so that change notifications are
-sent correctly.
-
-Fixes: c39667ddcfc5 ("ASoC: codecs: lpass-tx-macro: add support for lpass tx macro")
+Fixes: 908e6b1df26e ("ASoC: codecs: lpass-va-macro: Add support to VA Macro")
 Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 ---
- sound/soc/codecs/lpass-tx-macro.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ sound/soc/codecs/lpass-va-macro.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/sound/soc/codecs/lpass-tx-macro.c b/sound/soc/codecs/lpass-tx-macro.c
-index 094756544eed..f90786100d1a 100644
---- a/sound/soc/codecs/lpass-tx-macro.c
-+++ b/sound/soc/codecs/lpass-tx-macro.c
-@@ -998,7 +998,7 @@ static int tx_macro_dec_mode_get(struct snd_kcontrol *kcontrol,
+diff --git a/sound/soc/codecs/lpass-va-macro.c b/sound/soc/codecs/lpass-va-macro.c
+index 803e4dca0538..0fd0139e8229 100644
+--- a/sound/soc/codecs/lpass-va-macro.c
++++ b/sound/soc/codecs/lpass-va-macro.c
+@@ -781,7 +781,7 @@ static int va_macro_dec_mode_get(struct snd_kcontrol *kcontrol,
  	struct soc_enum *e = (struct soc_enum *)kcontrol->private_value;
  	int path = e->shift_l;
  
--	ucontrol->value.integer.value[0] = tx->dec_mode[path];
-+	ucontrol->value.enumerated.item[0] = tx->dec_mode[path];
+-	ucontrol->value.integer.value[0] = va->dec_mode[path];
++	ucontrol->value.enumerated.item[0] = va->dec_mode[path];
  
  	return 0;
  }
-@@ -1007,14 +1007,14 @@ static int tx_macro_dec_mode_put(struct snd_kcontrol *kcontrol,
+@@ -790,7 +790,7 @@ static int va_macro_dec_mode_put(struct snd_kcontrol *kcontrol,
  				 struct snd_ctl_elem_value *ucontrol)
  {
- 	struct snd_soc_component *component = snd_soc_kcontrol_component(kcontrol);
+ 	struct snd_soc_component *comp = snd_soc_kcontrol_component(kcontrol);
 -	int value = ucontrol->value.integer.value[0];
 +	int value = ucontrol->value.enumerated.item[0];
  	struct soc_enum *e = (struct soc_enum *)kcontrol->private_value;
  	int path = e->shift_l;
- 	struct tx_macro *tx = snd_soc_component_get_drvdata(component);
- 
- 	tx->dec_mode[path] = value;
- 
--	return 0;
-+	return 1;
- }
- 
- static int tx_macro_get_bcs(struct snd_kcontrol *kcontrol,
-@@ -1037,7 +1037,7 @@ static int tx_macro_set_bcs(struct snd_kcontrol *kcontrol,
- 
- 	tx->bcs_enable = value;
- 
--	return 0;
-+	return 1;
- }
- 
- static int tx_macro_hw_params(struct snd_pcm_substream *substream,
+ 	struct va_macro *va = snd_soc_component_get_drvdata(comp);
 -- 
 2.21.0
 

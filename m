@@ -2,141 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 324E94BF3AC
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 09:31:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 26F494BF3AE
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 09:32:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229791AbiBVIbM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 03:31:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52218 "EHLO
+        id S229815AbiBVIcA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 03:32:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229539AbiBVIbJ (ORCPT
+        with ESMTP id S229485AbiBVIb7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 03:31:09 -0500
-Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03D4B157234
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 00:30:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645518645; x=1677054645;
-  h=subject:to:cc:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=p/uQG9xFm7ykKXUfDUkdJBF+6OfW00wuzETwMOs/iqg=;
-  b=Zmad2E/yLc2Q/Glw4sGoWO/1v+oInXZCwQ4knMgcr/aa9pWqm4v9NNKU
-   c3gie+ZMc5fdTyep1A1x32r0QwtE1cucO3kRBhd+d/tld6Y+TQNsTVjoz
-   nuUlhAeHhfu03KsyEeo0IMSfsBtLojXi/nI/811mTc/prg0ZDpwG+naQS
-   Ov3a/MeG3rsIfF59p9DLVj1gmDgEudFVDLJ1KRjgR80DHSZQ6YpbGJbNw
-   lIJGLrbXdvQz5RPeYfSyjfhlCqMp5KurA6rjQJ/tgG+vGC55T7slnvb32
-   33W2JJ5wT7cB+pwG5iQiIX4aYoSbK1qWYvKEsP+Z6oW/O5oPRyLCYorgX
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10265"; a="312386723"
-X-IronPort-AV: E=Sophos;i="5.88,387,1635231600"; 
-   d="scan'208";a="312386723"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2022 00:30:44 -0800
-X-IronPort-AV: E=Sophos;i="5.88,387,1635231600"; 
-   d="scan'208";a="547641849"
-Received: from rongch2-mobl.ccr.corp.intel.com (HELO [10.255.31.219]) ([10.255.31.219])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2022 00:30:43 -0800
-Subject: Re: [kbuild-all] Re: [paulmck-rcu:dev.2022.02.17a 73/73] make[3]: ***
- No rule to make target 'kernel/rcu/typesafe.o', needed by
- 'kernel/rcu/built-in.a'.
-To:     paulmck@kernel.org, kernel test robot <lkp@intel.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-References: <202202220308.TNib9D2v-lkp@intel.com>
- <20220221214736.GE4285@paulmck-ThinkPad-P17-Gen-1>
-From:   "Chen, Rong A" <rong.a.chen@intel.com>
-Message-ID: <b481fd02-7b4f-7752-8852-d1a61b4916f1@intel.com>
-Date:   Tue, 22 Feb 2022 16:30:40 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.12.0
+        Tue, 22 Feb 2022 03:31:59 -0500
+Received: from mail-vs1-f49.google.com (mail-vs1-f49.google.com [209.85.217.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AD643A1A2;
+        Tue, 22 Feb 2022 00:31:33 -0800 (PST)
+Received: by mail-vs1-f49.google.com with SMTP id y26so16355535vsq.8;
+        Tue, 22 Feb 2022 00:31:33 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=KBQ/S+xkvJ+74y8gguMwbyM41nXFoVAQwL7MwfS99aU=;
+        b=NZi6+dYJAWMkqJW3iNQqSLPEP+UFuQYPGZsliD5OF6K35A2veeTdtc585/ZrkAZ3C7
+         SXHPCK7ldSjXFz9XdWDgFLI9EqQYvmMJd1DkkgSlTi5HegGjiGV3RJBeZeSl8Yb38DAF
+         /PhKY9m4q+VKkqeS7+eIC1Bh2ARGAkhwAnwvRdfMHU2qVwiM5Rk+b3rl4rAtl9/EsvFD
+         iEMfV1l9Fn9h+FqLfzzY9a/H7ks1iApAxG92xSqPWXXb/uXQh+vcFy5TtYDJLIa8dg0F
+         eK4J4n8gW6asTGORzw2UTtSsHskWX7Lo8a4mdCu0ukr8Yr/tBPkz7TDEVqGaJltnuWap
+         FVZQ==
+X-Gm-Message-State: AOAM530aWamj3InpxZRinZ6+9vK1bi5hsUuRLpzfa8vX9EWAyyrb9ukW
+        hxnS2xc00HqSdtdpMgIWADfZqmZRE6onrg==
+X-Google-Smtp-Source: ABdhPJy+TYVD8RlHqGB6w6B2CoSOcxFWaUCjg6iN0MEcSM9/iBRZ53HpnbcTvvh8t0vwmAMAEY6rag==
+X-Received: by 2002:a67:d81e:0:b0:31b:a09a:1c4d with SMTP id e30-20020a67d81e000000b0031ba09a1c4dmr10340707vsj.0.1645518692591;
+        Tue, 22 Feb 2022 00:31:32 -0800 (PST)
+Received: from mail-vs1-f46.google.com (mail-vs1-f46.google.com. [209.85.217.46])
+        by smtp.gmail.com with ESMTPSA id c66sm1962214vkg.35.2022.02.22.00.31.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 22 Feb 2022 00:31:32 -0800 (PST)
+Received: by mail-vs1-f46.google.com with SMTP id g21so20291361vsp.6;
+        Tue, 22 Feb 2022 00:31:32 -0800 (PST)
+X-Received: by 2002:a67:af08:0:b0:31b:9451:bc39 with SMTP id
+ v8-20020a67af08000000b0031b9451bc39mr9530796vsl.68.1645518692146; Tue, 22 Feb
+ 2022 00:31:32 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20220221214736.GE4285@paulmck-ThinkPad-P17-Gen-1>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220221222450.5393-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <CAMuHMdVb38_nhxVqUdtedyP0wMWmgkC-4K+OgbY0bOO8Hw4w4Q@mail.gmail.com> <OS0PR01MB59226DF1128AE3BBAEA2E96E863B9@OS0PR01MB5922.jpnprd01.prod.outlook.com>
+In-Reply-To: <OS0PR01MB59226DF1128AE3BBAEA2E96E863B9@OS0PR01MB5922.jpnprd01.prod.outlook.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 22 Feb 2022 09:31:21 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdXzz1szS=6aY7RKRo1YAGqQ_AjmkXk6x4CryRtoSADfcw@mail.gmail.com>
+Message-ID: <CAMuHMdXzz1szS=6aY7RKRo1YAGqQ_AjmkXk6x4CryRtoSADfcw@mail.gmail.com>
+Subject: Re: [PATCH] soc: renesas: Kconfig: Explicitly select PM and
+ PM_GENERIC_DOMAINS configs
+To:     Biju Das <biju.das.jz@bp.renesas.com>
+Cc:     Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Prabhakar <prabhakar.csengg@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Biju,
 
+On Tue, Feb 22, 2022 at 9:30 AM Biju Das <biju.das.jz@bp.renesas.com> wrote:
+> > Subject: Re: [PATCH] soc: renesas: Kconfig: Explicitly select PM and
+> > PM_GENERIC_DOMAINS configs
+> >
+> > On Mon, Feb 21, 2022 at 11:25 PM Lad Prabhakar <prabhakar.mahadev-
+> > lad.rj@bp.renesas.com> wrote:
+> > > Explicitly select PM and PM_GENERIC_DOMAINS configs for ARCH_R9A07G044
+> > > and ARCH_R9A07G045 configs. PM and PM_GENERIC_DOMAINS configs are
+>
+> Typo ARCH_R9A07G054 configs
 
-On 2/22/2022 5:47 AM, Paul E. McKenney wrote:
-> On Tue, Feb 22, 2022 at 03:05:27AM +0800, kernel test robot wrote:
->> Hi Paul,
->>
->> First bad commit (maybe != root cause):
->>
->> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git dev.2022.02.17a
->> head:   f5b2eaf791ebbd6af881947ab7c40ed70681e534
->> commit: f5b2eaf791ebbd6af881947ab7c40ed70681e534 [73/73] EXP torture: Add tests demoing SLAB_TYPESAFE_BY_RCU
->> config: arc-allyesconfig (https://download.01.org/0day-ci/archive/20220222/202202220308.TNib9D2v-lkp@intel.com/config)
->> compiler: arceb-elf-gcc (GCC) 11.2.0
->> reproduce (this is a W=1 build):
->>          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->>          chmod +x ~/bin/make.cross
->>          # https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git/commit/?id=f5b2eaf791ebbd6af881947ab7c40ed70681e534
->>          git remote add paulmck-rcu https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git
->>          git fetch --no-tags paulmck-rcu dev.2022.02.17a
->>          git checkout f5b2eaf791ebbd6af881947ab7c40ed70681e534
->>          # save the config file to linux build tree
->>          mkdir build_dir
->>          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arc SHELL=/bin/bash
->>
->> If you fix the issue, kindly add following tag as appropriate
->> Reported-by: kernel test robot <lkp@intel.com>
->>
->> All errors (new ones prefixed by >>):
->>
->>>> make[3]: *** No rule to make target 'kernel/rcu/typesafe.o', needed by 'kernel/rcu/built-in.a'.
->>     make[3]: Target '__build' not remade because of errors.
-> 
-> This is the only commit involving kernel/rcu/typesafe.o, so...
-> 
-> One the one hand, I do not plan to upstream this, so maybe it doesn't
-> matter.
-> 
-> I have been building this using the rcutorture scripting for some time,
-> same RCU-related .config as you are using.  But when I pulled it into
-> a clone in a neighboring directory, it failed just as it did for you.
-> The problem was that the update to kernel/rcu/Makefile somehow didn't
-> come across, so this line was missing:
-> 
-> 	obj-$(CONFIG_RCU_TYPESAFE_TEST) += typesafe.o
-> 
-> Which of course explains the build failure.
-> 
-> I blew away that clone and re-cloned it.  And it still failed, both
-> with "make" from the commandline and under rcutorture.
-> 
-> Hahahahahahaahaha!!!
-> 
-> I forgot "git add kernel/rcu/typesafe.c".
-> 
-> There is now a new typesafe.2022.02.21a tag with this file added.
-> 
-> Good catch!  That file happened to still be lying around.  The first
-> "git reset --hard" would have destroyed.  Thank you!!!
-> 
-> And with that fixed, my clone now builds correctly.  Does this fix
-> it for you?
+Thanks, will fix while applying.
 
-Hi Paul,
+Gr{oetje,eeting}s,
 
-I can't find the tag 'typesafe.2022.02.21a' from 
-https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git/refs/tags
+                        Geert
 
-Best Regards,
-Rong Chen
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-> 
-> 							Thanx, Paul
-> _______________________________________________
-> kbuild-all mailing list -- kbuild-all@lists.01.org
-> To unsubscribe send an email to kbuild-all-leave@lists.01.org
-> 
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

@@ -2,94 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E47EF4C0265
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 20:50:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FF774C0268
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 20:50:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235316AbiBVTvE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 14:51:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51228 "EHLO
+        id S235317AbiBVTvO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 14:51:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233668AbiBVTvC (ORCPT
+        with ESMTP id S233500AbiBVTvM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 14:51:02 -0500
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B994CBA75A;
-        Tue, 22 Feb 2022 11:50:36 -0800 (PST)
-Received: by mail-pg1-x536.google.com with SMTP id d16so17885656pgd.9;
-        Tue, 22 Feb 2022 11:50:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=UXjqKNRIgAxMkX6Cqpc/qXekDEWeVq9e93BE44DZgy8=;
-        b=bzNy2OQYqoF9fgSgZMFDD5DbAtgYNYLa2UZkmn8QOEBGt9Ddtu+Xm0gVwHi5NeBRLw
-         Xanu1t2DcPXG0uuFeBVnkrZ5Xux/TYpApMgXLVHeNHAHNL//JZEQdgImpgwjuRR0U6pV
-         9soDMPSrXsY1fjBNig2HWKxELREeNFI1I0Mj/hsX2erYiDcGUnLHDwJz3WXlGJQ1zUrd
-         IwfAFtDasYah/dnF5DrT+KqRe9JPoX+z9vYIz6mvfVY88As2x80YUcXiD6OpuLEp38uX
-         5UH+96wV1uLjy3PBjdqhvFOQsHaCBKqKihcj9VZWXAFEnNgsNY43d/+N8Y+vaG+dYOam
-         Z8Zw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=UXjqKNRIgAxMkX6Cqpc/qXekDEWeVq9e93BE44DZgy8=;
-        b=mH9dlkbYK7Q1zYwLZosuQxvrr/KjbqWfMX2qXIM/tbvzuvG2VWPzeNtLAWH0cclu/7
-         pk6W8taTk4yUiCKVaZuchaf3L3JZDtfpyzhyfaBdDCIQ0Hkk32BMcA0psD35fpbrnQxT
-         5Mmk4i3utX5eifCBlGshkWQaQdbu5QbqxfX2tJ84JChGGDYSfz9jnh0a9yjE4cArnRCL
-         j4Hm1m+LDX5XeELhcVimSzxbX6Ol9CrbZvwV++MbusE8kKvU6IqZ3+bnvoPml5sIH+tX
-         devOEl715uashx/M2Rb8aAQPmEfr6Vljxij7/AGX58zWxLNqSSmW7r7cB+MTZIHzlbm4
-         kbHQ==
-X-Gm-Message-State: AOAM532BxkA0J50D43d+EI7gcJgcunBgy/1Rvc7VhM2yr/aerV6xnW12
-        xS9VpxEu97dpTwslwVHcvns=
-X-Google-Smtp-Source: ABdhPJyTOKkCrJShCu5+Ro+v3Di/q1CAk6Xek47BOOTpf1EsNabtf1X1LNcMfc/wnAoXdkJV5Qk/cg==
-X-Received: by 2002:a63:894a:0:b0:365:8dbf:cd0d with SMTP id v71-20020a63894a000000b003658dbfcd0dmr20710224pgd.5.1645559436052;
-        Tue, 22 Feb 2022 11:50:36 -0800 (PST)
-Received: from localhost (2603-800c-1a02-1bae-e24f-43ff-fee6-449f.res6.spectrum.com. [2603:800c:1a02:1bae:e24f:43ff:fee6:449f])
-        by smtp.gmail.com with ESMTPSA id ep5-20020a17090ae64500b001bc56af507dsm333344pjb.47.2022.02.22.11.50.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Feb 2022 11:50:35 -0800 (PST)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Tue, 22 Feb 2022 09:50:33 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-Cc:     lizefan.x@bytedance.com, hannes@cmpxchg.org,
-        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: Re: [PATCH] cpuset: Fix kernel-doc
-Message-ID: <YhU+iQ8GdN9JKjgs@slm.duckdns.org>
-References: <20220216031753.8298-1-jiapeng.chong@linux.alibaba.com>
+        Tue, 22 Feb 2022 14:51:12 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE9C4BB097;
+        Tue, 22 Feb 2022 11:50:45 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5AE3D61638;
+        Tue, 22 Feb 2022 19:50:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B671C340F1;
+        Tue, 22 Feb 2022 19:50:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645559444;
+        bh=l639N21A2FrjSs/WG0rCtIuhybcq24CZv4Vtx+UKttk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Irx+SLoYYE4wGSeXxrVOr/7x0kf5CJU/O6kGp1PTQL0PoOg7Y8xTdt4gtt35pqirB
+         Fz/7MdwiISDDp7bKfySLsgjR8Qa9A1slwZId5NyeipA/9gw2FoOd3RUN5RBquwzmpW
+         TJdyT49+tR9n7os7o6Ksawv/yJzeePn+eb+zPG9rvtRz2JxF9+kpiSUeMHJeMK7vft
+         Az4u2xE12wvsP6fTqA2tNXevWSysmu1Bakcg8EC86sjmQEQy04gh+ECR+cm49X6eG4
+         y/xN1Z/ZQ5J+meMPKwY9oNMfgvLcirNzLkJ1a/FEK8Y3soyghpccFTKPMsaO61B7y9
+         UIo1jhARzPBEw==
+Date:   Tue, 22 Feb 2022 11:50:42 -0800
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     Keith Busch <kbusch@kernel.org>
+Cc:     linux-nvme@lists.infradead.org, linux-block@vger.kernel.org,
+        linux-crypto@vger.kernel.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, axboe@kernel.dk, hch@lst.de,
+        martin.petersen@oracle.com, colyli@suse.de
+Subject: Re: [PATCHv3 06/10] crypto: add rocksoft 64b crc framework
+Message-ID: <YhU+kuMhueXVQvxe@sol.localdomain>
+References: <20220222163144.1782447-1-kbusch@kernel.org>
+ <20220222163144.1782447-7-kbusch@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220216031753.8298-1-jiapeng.chong@linux.alibaba.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220222163144.1782447-7-kbusch@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 16, 2022 at 11:17:53AM +0800, Jiapeng Chong wrote:
-> Fix the following W=1 kernel warnings:
-> 
-> kernel/cgroup/cpuset.c:3718: warning: expecting prototype for
-> cpuset_memory_pressure_bump(). Prototype was for
-> __cpuset_memory_pressure_bump() instead.
-> 
-> kernel/cgroup/cpuset.c:3568: warning: expecting prototype for
-> cpuset_node_allowed(). Prototype was for __cpuset_node_allowed()
-> instead.
-> 
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+On Tue, Feb 22, 2022 at 08:31:40AM -0800, Keith Busch wrote:
+> +config CRYPTO_CRC64_ROCKSOFT
+> +	tristate "Rocksoft Model CRC64 algorithm"
+> +	depends on CRC64
+> +	select CRYPTO_HASH
+> +	help
+> +	  Rocksoft Model CRC64 computation is being cast as a crypto
+> +	  transform. This allows for faster crc64 transforms to be used
+> +	  if they are available.
 
-Applied to cgroup/for-5.17-fixes.
+The first sentence of this help text doesn't make sense.
 
-Thanks.
+> diff --git a/crypto/crc64_rocksoft_generic.c b/crypto/crc64_rocksoft_generic.c
+> new file mode 100644
+> index 000000000000..55bad1939614
+> --- /dev/null
+> +++ b/crypto/crc64_rocksoft_generic.c
+> @@ -0,0 +1,104 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Cryptographic API.
 
--- 
-tejun
+The "Cryptographic API" line doesn't provide any helpful information.
+
+> +static int chksum_final(struct shash_desc *desc, u8 *out)
+> +{
+> +	struct chksum_desc_ctx *ctx = shash_desc_ctx(desc);
+> +
+> +	*(u64 *)out = ctx->crc;
+> +	return 0;
+> +}
+> +
+> +static int __chksum_finup(u64 crc, const u8 *data, unsigned int len, u8 *out)
+> +{
+> +	*(u64 *)out = crc64_rocksoft_generic(crc, data, len);
+> +	return 0;
+> +}
+
+These 64-bit writes violate alignment rules and will give the wrong result on
+big endian CPUs.  They need to use put_unaligned_le64().
+
+> +static int __init crc64_rocksoft_x86_mod_init(void)
+> +{
+> +	return crypto_register_shash(&alg);
+> +}
+> +
+> +static void __exit crc64_rocksoft_x86_mod_fini(void)
+> +{
+> +	crypto_unregister_shash(&alg);
+> +}
+
+This has nothing to do with x86.
+
+> +config CRC64_ROCKSOFT
+> +	tristate "CRC calculation for the Rocksoft^TM model CRC64"
+
+I'm sure what the rules for trademarks are, but kernel source code usually
+doesn't have the trademark symbol/abbreviation scattered everywhere.
+
+> +	select CRYPTO
+> +	select CRYPTO_CRC64_ROCKSOFT
+> +	help
+> +	  This option is only needed if a module that's not in the
+> +	  kernel tree needs to calculate CRC checks for use with the
+> +	  rocksoft model parameters.
+
+Out-of-tree modules can't be the reason to have a kconfig option.  What is the
+real reason?
+
+> +u64 crc64_rocksoft(const unsigned char *buffer, size_t len)
+> +{
+> +	return crc64_rocksoft_update(~0ULL, buffer, len);
+> +}
+> +EXPORT_SYMBOL(crc64_rocksoft);
+
+Isn't this missing the bitwise inversion at the end?
+
+> +MODULE_AUTHOR("Keith Busch <kbusch@kernel.org>");
+> +MODULE_DESCRIPTION("Rocksoft model CRC64 calculation (library API)");
+> +MODULE_LICENSE("GPL");
+> +MODULE_SOFTDEP("pre: crc64");
+
+Shouldn't the MODULE_SOFTDEP be on crc64-rocksoft?
+
+- Eric

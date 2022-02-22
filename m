@@ -2,58 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 551B34C0211
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 20:31:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A4DE94C0214
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 20:32:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235233AbiBVTcR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 14:32:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37522 "EHLO
+        id S235211AbiBVTcm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 14:32:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231702AbiBVTcO (ORCPT
+        with ESMTP id S234445AbiBVTch (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 14:32:14 -0500
+        Tue, 22 Feb 2022 14:32:37 -0500
 Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AACD83CA53;
-        Tue, 22 Feb 2022 11:31:48 -0800 (PST)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 21MJVgiR032351;
-        Tue, 22 Feb 2022 13:31:42 -0600
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40F1D8BE2F;
+        Tue, 22 Feb 2022 11:32:11 -0800 (PST)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 21MJW6bh032536;
+        Tue, 22 Feb 2022 13:32:06 -0600
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1645558302;
-        bh=fJN1oYa3XToyh1Sxwy1ZAbKlDyBkS1XToPQnJvq85yU=;
+        s=ti-com-17Q1; t=1645558326;
+        bh=VMSzmceLGTfxcOmF2qmhWIVBgsfVi18L43a4m1NAcZM=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=WvSrKxyercfQ6lV1ZmpX2gxUQyaQwPlIq3+ots6Z25J/lmh9kJdnjJP+iWetdGKM8
-         qTRniUWAxcVfLm0oGprrsaPQiTnzOGWcXPXWrCPr9D/dHbD3r0xs+O4wBUXf8Xh0t4
-         7Hl+qigVGgsBd3MMu2GrzCkgdDTS24KydNk+39xY=
-Received: from DLEE113.ent.ti.com (dlee113.ent.ti.com [157.170.170.24])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 21MJVgqu045317
+        b=u7bRFqRQILl9UWJYJIADHH1J66+fDuVqlBxJ1GCpkGcJdJwW000z9VHrIMMp8P2MC
+         7O3tLmwN+DCEQMHoP+s+C+0BtIkUD1I7jm2ugSrzparTWuV+XXZsPEpBkV+4oHFylO
+         M7CiaPVUHwiAK+Ojua49JnhZrxnYCelgCHk41toQ=
+Received: from DLEE101.ent.ti.com (dlee101.ent.ti.com [157.170.170.31])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 21MJW6vD005628
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 22 Feb 2022 13:31:42 -0600
-Received: from DLEE100.ent.ti.com (157.170.170.30) by DLEE113.ent.ti.com
- (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
+        Tue, 22 Feb 2022 13:32:06 -0600
+Received: from DLEE106.ent.ti.com (157.170.170.36) by DLEE101.ent.ti.com
+ (157.170.170.31) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Tue, 22
- Feb 2022 13:31:42 -0600
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE100.ent.ti.com
- (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
+ Feb 2022 13:32:05 -0600
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE106.ent.ti.com
+ (157.170.170.36) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Tue, 22 Feb 2022 13:31:42 -0600
+ Frontend Transport; Tue, 22 Feb 2022 13:32:05 -0600
 Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 21MJVgtg022105;
-        Tue, 22 Feb 2022 13:31:42 -0600
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 21MJW5M0077569;
+        Tue, 22 Feb 2022 13:32:05 -0600
 From:   Nishanth Menon <nm@ti.com>
-To:     Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>
-CC:     Rob Herring <robh+dt@kernel.org>,
+To:     Pratyush Yadav <p.yadav@ti.com>
+CC:     Nishanth Menon <nm@ti.com>, <linux-kernel@vger.kernel.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
         <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 0/5] arm64: dts: ti: k3*: Fix gic-v3 compatible regs
-Date:   Tue, 22 Feb 2022 13:31:41 -0600
-Message-ID: <164555829763.27188.1899521132083967069.b4-ty@ti.com>
+        Tero Kristo <kristo@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, <devicetree@vger.kernel.org>
+Subject: Re: [PATCH 1/2] arm64: dts: ti: k3-*: Fix whitespace around flash@0 nodes
+Date:   Tue, 22 Feb 2022 13:32:04 -0600
+Message-ID: <164555831294.27295.15758870545966791533.b4-ty@ti.com>
 X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20220215201008.15235-1-nm@ti.com>
-References: <20220215201008.15235-1-nm@ti.com>
+In-Reply-To: <20220217181025.1815118-1-p.yadav@ti.com>
+References: <20220217181025.1815118-1-p.yadav@ti.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -68,37 +68,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Nishanth Menon,
+Hi Pratyush Yadav,
 
-On Tue, 15 Feb 2022 14:10:03 -0600, Nishanth Menon wrote:
-> This series was triggered by the discussion in [1], and we realized we
-> need to cleanup the definitions in K3 SoC. Usage of kvm with gic-v2
-> compatibility is a bit niche usecase, but valid and possible with A53
-> and A72 even though the GIC500 instantiation is done with no backward
-> compatibility.
+On Thu, 17 Feb 2022 23:40:24 +0530, Pratyush Yadav wrote:
+> The OSPI flash nodes are missing a space before the opening brace. Fix
+> that.
 > 
-> Nishanth Menon (5):
->   arm64: dts: ti: k3-am65: Fix gic-v3 compatible regs
->   arm64: dts: ti: k3-j721e: Fix gic-v3 compatible regs
->   arm64: dts: ti: k3-j7200: Fix gic-v3 compatible regs
->   arm64: dts: ti: k3-am64: Fix gic-v3 compatible regs
->   arm64: dts: ti: k3-j721s2: Fix gic-v3 compatible regs
 > 
-> [...]
 
 I have applied the following to branch ti-k3-dts-next on [1].
 Thank you!
 
-[1/5] arm64: dts: ti: k3-am65: Fix gic-v3 compatible regs
-      commit: 8cae268b70f387ff9e697ccd62fb2384079124e7
-[2/5] arm64: dts: ti: k3-j721e: Fix gic-v3 compatible regs
-      commit: a06ed27f3bc63ab9e10007dc0118d910908eb045
-[3/5] arm64: dts: ti: k3-j7200: Fix gic-v3 compatible regs
-      commit: 1a307cc299430dd7139d351a3b8941f493dfa885
-[4/5] arm64: dts: ti: k3-am64: Fix gic-v3 compatible regs
-      commit: de60edf1be3d42d4a1b303b41c7c53b2f865726e
-[5/5] arm64: dts: ti: k3-j721s2: Fix gic-v3 compatible regs
-      commit: a966803781fc5e1875511db9392b0d16174c5dd2
+[1/2] arm64: dts: ti: k3-*: Fix whitespace around flash@0 nodes
+      commit: 672e89d731c46b1f4118a070366dc117afed0f7c
+[2/2] arm64: dts: ti: k3-*: Drop address and size cells from flash nodes
+      commit: cd9342109a7a901a115227978b86a3db6ee3d7a9
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent up the chain during

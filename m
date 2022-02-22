@@ -2,120 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9ACFC4BF2E9
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 08:51:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F4F54BF2EB
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 08:51:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229559AbiBVHv0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 02:51:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60932 "EHLO
+        id S229502AbiBVHvU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 02:51:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229520AbiBVHvX (ORCPT
+        with ESMTP id S229446AbiBVHvT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 02:51:23 -0500
-Received: from mail-vs1-xe2f.google.com (mail-vs1-xe2f.google.com [IPv6:2607:f8b0:4864:20::e2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30D2D145E00;
-        Mon, 21 Feb 2022 23:50:58 -0800 (PST)
-Received: by mail-vs1-xe2f.google.com with SMTP id j3so5986735vsi.7;
-        Mon, 21 Feb 2022 23:50:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=uzFl6sqnppLbE/reSAw0Z5UcOZ1BcsboAOECKBIl91c=;
-        b=a5Xuu8aA+xACIZl3B7LWvPIlbuhmt8vIyo1mz/GH3brKs0JizVcUTzmv1gQTT5Iin6
-         YrdNLDg2lBUZ9srG4BI/EDO45xLd2v6rUtqD1R5Nh9Xw9DqnJ+PhEclWzGdVv40daqPU
-         RkGgdc1v3DfbQHPx8rB1EV4i7YLQGQSkPttx0meFhXJhA42rgK+XGl3CAW/LqFX4nzpo
-         g+3m9nXNPC3YKj0507M7//7Hg6mln+Y1UhYFA/7POLikvUd0mz6g5VF5plkog765RCiT
-         f3pUlGVT+hRIEoY5L2/S+HvSgl45GLQBndPIu9m7vgDyOw3FUpAuYTZFyRGKZ5kDCxc8
-         QwZg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=uzFl6sqnppLbE/reSAw0Z5UcOZ1BcsboAOECKBIl91c=;
-        b=lI4byn5gyVmdCP4GXj1bQDNgR5QfhqBtGOty8VaP1chgiC0HhBIEr9g5GIXghTXoEo
-         FXnWA2B8CoTtMpLOOPgByu8j2eHN+8dcZUTqFdYLq6IEUAT6NrBWb3F7KDw+nRODY4Ay
-         FnOGtRoFahgNGScSokr6SJGAai6nAQ+BCYFekfFWMavNxc9fBEUMt5LuWRiOOOzauItK
-         2zDvw9FmWvET29CaRpUzjb4rCeczpsWhNgReQv4u1HJFd6jjYF2pluBrb6lQ/j/pXCuH
-         MBDwZYkqa9HkDRrdJMXdKDo5houMcSyF6ZCQqPu6cGYe2wnnIMbvdGLd2rz8kmlAozAi
-         Exbg==
-X-Gm-Message-State: AOAM533IUGYpPDpuR3U4wbhrl+O1pEFC9AQQUL54xbMdfTql5fgo0ogU
-        rc9iKgk9BZGA+3/uzvbTYkYNVLiTIh/XoTThstk=
-X-Google-Smtp-Source: ABdhPJzocCr94zTr+ZAkP6jgRQmORnoaN5tSWsl5OKqascjV1wkde9J5Fpxth9MD5BMsQ4o3FzhOKRbu7zx2QdnUrnA=
-X-Received: by 2002:a67:eb9a:0:b0:31b:db46:4c82 with SMTP id
- e26-20020a67eb9a000000b0031bdb464c82mr8999722vso.38.1645516257285; Mon, 21
- Feb 2022 23:50:57 -0800 (PST)
+        Tue, 22 Feb 2022 02:51:19 -0500
+Received: from ssl.serverraum.org (ssl.serverraum.org [IPv6:2a01:4f8:151:8464::1:2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3AD2145AEE
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 23:50:54 -0800 (PST)
+Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ssl.serverraum.org (Postfix) with ESMTPSA id B10BD22175;
+        Tue, 22 Feb 2022 08:50:50 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        t=1645516251;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=yGq+Oc5aD7EUYB4n828ghG01xMsEGGRgt8fg8Ih6798=;
+        b=kwuCX5ruihrC3zbgci6X0EZ4+u1LNrbfUiFoLnb9hydgfhMmwuG7kljqM2cSQqsEmjuzIQ
+        Tw8B5Unp4q5/nW0TIw+z6sibzt4vusLZwPqtJ4Y2HdV3dTHZk3VmGjWvmQhOGkj2q4tYIQ
+        nUqOP4/NSI8gT6UBPy2H2leNVEgXXc8=
 MIME-Version: 1.0
-References: <20220220144606.5695-1-jrdr.linux@gmail.com> <0a2e57ad-2973-ea01-ceda-3262cde1f5aa@gmx.com>
-In-Reply-To: <0a2e57ad-2973-ea01-ceda-3262cde1f5aa@gmx.com>
-From:   Souptick Joarder <jrdr.linux@gmail.com>
-Date:   Tue, 22 Feb 2022 13:20:45 +0530
-Message-ID: <CAFqt6zZsv+bMwbdqrcOMCZE08O_q7DGa0ejVAbokLybsSch5fw@mail.gmail.com>
-Subject: Re: [PATCH] btrfs: Initialize ret to 0 in scrub_simple_mirror()
-To:     Qu Wenruo <quwenruo.btrfs@gmx.com>
-Cc:     Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
-        dsterba@suse.com, nathan@kernel.org,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, kernel test robot <lkp@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8;
+ format=flowed
+Content-Transfer-Encoding: 8bit
+Date:   Tue, 22 Feb 2022 08:50:50 +0100
+From:   Michael Walle <michael@walle.cc>
+To:     =?UTF-8?Q?Potin_Lai_=28=E8=B3=B4=E6=9F=8F=E5=BB=B7=29?= 
+        <Potin.Lai@quantatw.com>
+Cc:     Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Pratyush Yadav <p.yadav@ti.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Patrick Williams <patrick@stwcx.xyz>,
+        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/1] mtd: spi-nor: winbond: Add support for w25q01jv-iq
+In-Reply-To: <0b619d9e-4ca0-88ae-69a1-4cb07d2aeea4@quantatw.com>
+References: <20220222064227.16724-1-potin.lai@quantatw.com>
+ <aedb6f8e3d878f487aa7fef147e352b4@walle.cc>
+ <0b619d9e-4ca0-88ae-69a1-4cb07d2aeea4@quantatw.com>
+User-Agent: Roundcube Webmail/1.4.12
+Message-ID: <ef3d0391d22ce472e7410a77af3e938d@walle.cc>
+X-Sender: michael@walle.cc
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 21, 2022 at 5:46 AM Qu Wenruo <quwenruo.btrfs@gmx.com> wrote:
->
->
->
-> On 2022/2/20 22:46, Souptick Joarder wrote:
-> > From: "Souptick Joarder (HPE)" <jrdr.linux@gmail.com>
-> >
-> > Kernel test robot reported below warning ->
-> > fs/btrfs/scrub.c:3439:2: warning: Undefined or garbage value
-> > returned to caller [clang-analyzer-core.uninitialized.UndefReturn]
-> >
-> > Initialize ret to 0.
-> >
-> > Reported-by: kernel test robot <lkp@intel.com>
-> > Signed-off-by: Souptick Joarder (HPE) <jrdr.linux@gmail.com>
->
-> Although the patch is not yet merged, but I have to say, it's a false alert.
+Am 2022-02-22 08:37, schrieb Potin Lai:
+> Michael Walle 於 2022/2/22 下午 03:24 寫道:
+>> Hi,
+>> 
+>> Am 2022-02-22 07:42, schrieb Potin Lai:
+>>> Add support for winbond w25q01jv-iq chip
+>>> 
+>>> root@bletchley:~# cat
+>>> /sys/devices/platform/ahb/1e620000.spi/spi_master/spi0/spi0.0/spi-nor/jedec_id
+>>> ef4021
+>>> root@bletchley:~# cat
+>>> /sys/devices/platform/ahb/1e620000.spi/spi_master/spi0/spi0.0/spi-nor/manufacturer
+>>> winbond
+>>> root@bletchley:~# cat
+>>> /sys/devices/platform/ahb/1e620000.spi/spi_master/spi0/spi0.0/spi-nor/partname
+>>> w25q01jv-iq
+>>> root@bletchley:~# hexdump -C
+>>> /sys/devices/platform/ahb/1e620000.spi/spi_master/spi0/spi0.0/spi-nor/sfdp
+>>> 00000000 53 46 44 50 06 01 01 ff 00 06 01 10 80 00 00 ff 
+>>> |SFDP............|
+>>> 00000010 84 00 01 02 d0 00 00 ff 03 00 01 02 f0 00 00 ff 
+>>> |................|
+>>> 00000020 ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff 
+>>> |................|
+>>> *
+>>> 00000080 e5 20 fb ff ff ff ff 3f 44 eb 08 6b 08 3b 42 bb |. 
+>>> .....?D..k.;B.|
+>>> 00000090 fe ff ff ff ff ff 00 00 ff ff 40 eb 0c 20 0f 52 
+>>> |..........@.. .R|
+>>> 000000a0 10 d8 00 00 36 02 a6 00 82 ea 14 e2 e9 63 76 33 
+>>> |....6........cv3|
+>>> 000000b0 7a 75 7a 75 f7 a2 d5 5c 19 f7 4d ff e9 70 f9 a5 
+>>> |zuzu...\..M..p..|
+>>> 000000c0 ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff 
+>>> |................|
+>>> 000000d0 ff 0a f0 ff 21 ff dc ff |....!...|
+>>> 000000d8
+>> 
+>> Can you please provide an md5sum or sha256sum of this file?
+> 
+> root@bletchley:~# md5sum
+> /sys/devices/platform/ahb/1e620000.spi/spi_master/spi0/spi0.0/spi-nor/sfdp
+> a7b9dbf76e99a33db99e557b6676588a 
 
-Yes, I agree it is a false positive but this patch will at least keep
-kernel test robot happy :)
->
-> Firstly, the while loop will always get at least one run.
->
-> Secondly, in that loop, we either set ret to some error value and break,
-> or after at least one find_first_extent_item() and scrub_extent() call,
-> we increase cur_logical and reached the limit of the while loop and exit.
->
-> So there is no possible routine to leave @ret uninitialized and returned
-> to caller.
->
-> Thanks,
-> Qu
->
-> > ---
-> >   fs/btrfs/scrub.c | 2 +-
-> >   1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/fs/btrfs/scrub.c b/fs/btrfs/scrub.c
-> > index 4baa8e43d585..5ca7e5ffbc96 100644
-> > --- a/fs/btrfs/scrub.c
-> > +++ b/fs/btrfs/scrub.c
-> > @@ -3325,7 +3325,7 @@ static int scrub_simple_mirror(struct scrub_ctx *sctx,
-> >       const u32 max_length = SZ_64K;
-> >       struct btrfs_path path = {};
-> >       u64 cur_logical = logical_start;
-> > -     int ret;
-> > +     int ret = 0;
-> >
-> >       /* The range must be inside the bg */
-> >       ASSERT(logical_start >= bg->start &&
+Thanks!
+
+> /sys/devices/platform/ahb/1e620000.spi/spi_master/spi0/spi0.0/spi-nor/sfdp
+> 
+> Is it required in commit message, if yes, I will update it.
+
+Ohh, I actually missed that. These information should go as
+a comment, that is below the "---" line.
+
+-michael

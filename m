@@ -2,177 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D51224C04F1
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 23:56:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE2B24C04F5
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 00:00:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236158AbiBVW4g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 17:56:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54140 "EHLO
+        id S234924AbiBVXAg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 18:00:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235210AbiBVW4d (ORCPT
+        with ESMTP id S229509AbiBVXAe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 17:56:33 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1DB266AFB;
-        Tue, 22 Feb 2022 14:56:06 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 59ECC60BC9;
-        Tue, 22 Feb 2022 22:56:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E46CEC340E8;
-        Tue, 22 Feb 2022 22:56:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645570565;
-        bh=NRmy3RSn/nbdEABt2HaHzeybpTLaSk8inhbxfo1jZpU=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=QgxpLl+iLkSrHvtdsG0z8VhK+E0iSmS4f5eb7XHZQD2Y0X+cX0ziliYGN8pxIi7cw
-         j5HrxPp8oglQjLa5e9D+cAQcMrYvBwgmI2V1zyF3tDf5MnyCzxwTI/zTT2Onn8N+2f
-         li0+mdDFYFNVj27BABhQDzhqHp705Hw7eKxGurt/xCdHJ7xKi31vZlba6kfh0ehyTW
-         349nqG5vmahkB3Nk7DALQN1kd9pDu8ewczCwljpLnLSkIQmRwVIkC0+fTIIaVbemVa
-         B1hGoDNPfcIgo6GNfffEh1ez6DJJ6EYucDw+lhe+FgGN/nJYjdF3K1b7KYitySEwsz
-         HYPmrYzMLXz9g==
-Message-ID: <158868e5-257a-1986-4b85-b47b368a5ec7@kernel.org>
-Date:   Tue, 22 Feb 2022 16:56:03 -0600
+        Tue, 22 Feb 2022 18:00:34 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33E5E261D
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 15:00:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645570808; x=1677106808;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=OmeWRV5IimFQ4Dk3oyvxyAAuxAGhWAT3d6jpO9rVn7s=;
+  b=ib8/amGv6WRRCv01SWqw2Ftmu63shVEMUXnOF0j2QAlI/QQv057HfL/F
+   gQ3malG5jiYAynkiPcw/ipH8SMyjNr8DUIHagdbTQciw9/aNR6mdtzAfR
+   39K3CPOOKfC42UFFjoXyAnOJ0qVL352Py0x0QzHOUHQ2bgFs639iwQk38
+   0ji8bcZ2s7cVjvlbkYGmyZc/FKPZ3Fsl7yHJegmDOv3Uouvnit2lPjKmv
+   GSC/ojnY+gODCaVVc4CNu4QvZlw2y+4mL/LYblWP4bLFDAXt/w3C55EDc
+   7YDSts+9UvbLYibrZNZtLnpk2yhR+7LHq0lXZNQ1oc0iLyVlx8tom6v7O
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10266"; a="338269430"
+X-IronPort-AV: E=Sophos;i="5.88,389,1635231600"; 
+   d="scan'208";a="338269430"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2022 15:00:07 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,389,1635231600"; 
+   d="scan'208";a="683690224"
+Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 22 Feb 2022 15:00:06 -0800
+Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nMe8c-0000hz-99; Tue, 22 Feb 2022 23:00:06 +0000
+Date:   Wed, 23 Feb 2022 06:59:54 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Ingo Molnar <mingo@kernel.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [mingo-tip:sched/headers 2300/2324]
+ drivers/hwtracing/coresight/coresight-syscfg.c:383:15: error: implicit
+ declaration of function 'try_module_get'
+Message-ID: <202202230657.yONGvBnm-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH V2 25/30] nios2/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
-Content-Language: en-US
-To:     Anshuman Khandual <anshuman.khandual@arm.com>, linux-mm@kvack.org,
-        akpm@linux-foundation.org
-Cc:     linux-kernel@vger.kernel.org,
-        Christoph Hellwig <hch@infradead.org>,
-        linux-arch@vger.kernel.org
-References: <1645425519-9034-1-git-send-email-anshuman.khandual@arm.com>
- <1645425519-9034-26-git-send-email-anshuman.khandual@arm.com>
-From:   Dinh Nguyen <dinguyen@kernel.org>
-In-Reply-To: <1645425519-9034-26-git-send-email-anshuman.khandual@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git sched/headers
+head:   7d9efc989eceed6a8fa475a186880ec4a1ad54a3
+commit: b6ac2dbb891219be5e264504adb69b35c95647a8 [2300/2324] headers/deps: driver/core: Optimize <linux/device/driver.h> dependencies, remove <linux/module.h> inclusion
+config: arm64-buildonly-randconfig-r006-20220221 (https://download.01.org/0day-ci/archive/20220223/202202230657.yONGvBnm-lkp@intel.com/config)
+compiler: aarch64-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=b6ac2dbb891219be5e264504adb69b35c95647a8
+        git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
+        git fetch --no-tags mingo-tip sched/headers
+        git checkout b6ac2dbb891219be5e264504adb69b35c95647a8
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/hwtracing/coresight/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   In file included from arch/arm64/include/asm/current.h:5,
+                    from include/linux/preempt.h:10,
+                    from include/linux/spinlock_api.h:55,
+                    from drivers/hwtracing/coresight/coresight-syscfg.c:7:
+   drivers/hwtracing/coresight/coresight-syscfg.c: In function 'cscfg_owner_get':
+>> drivers/hwtracing/coresight/coresight-syscfg.c:383:15: error: implicit declaration of function 'try_module_get' [-Werror=implicit-function-declaration]
+     383 |             (!try_module_get(owner_info->owner_handle)))
+         |               ^~~~~~~~~~~~~~
+   include/linux/compiler.h:58:52: note: in definition of macro '__trace_if_var'
+      58 | #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+         |                                                    ^~~~
+   drivers/hwtracing/coresight/coresight-syscfg.c:382:9: note: in expansion of macro 'if'
+     382 |         if ((owner_info->type == CSCFG_OWNER_MODULE) &&
+         |         ^~
+   drivers/hwtracing/coresight/coresight-syscfg.c: In function 'cscfg_owner_put':
+>> drivers/hwtracing/coresight/coresight-syscfg.c:392:17: error: implicit declaration of function 'module_put' [-Werror=implicit-function-declaration]
+     392 |                 module_put(owner_info->owner_handle);
+         |                 ^~~~~~~~~~
+   cc1: some warnings being treated as errors
 
 
-On 2/21/22 00:38, Anshuman Khandual wrote:
-> This defines and exports a platform specific custom vm_get_page_prot() via
-> subscribing ARCH_HAS_VM_GET_PAGE_PROT. Subsequently all __SXXX and __PXXX
-> macros can be dropped which are no longer needed.
-> 
-> Cc: Dinh Nguyen <dinguyen@kernel.org>
-> Cc: linux-kernel@vger.kernel.org
-> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
-> Acked-by: Dinh Nguyen <dinguyen@kernel.org>
-> ---
->   arch/nios2/Kconfig               |  1 +
->   arch/nios2/include/asm/pgtable.h | 16 ------------
->   arch/nios2/mm/init.c             | 45 ++++++++++++++++++++++++++++++++
->   3 files changed, 46 insertions(+), 16 deletions(-)
-> 
-> diff --git a/arch/nios2/Kconfig b/arch/nios2/Kconfig
-> index 33fd06f5fa41..85a58a357a3b 100644
-> --- a/arch/nios2/Kconfig
-> +++ b/arch/nios2/Kconfig
-> @@ -6,6 +6,7 @@ config NIOS2
->   	select ARCH_HAS_SYNC_DMA_FOR_CPU
->   	select ARCH_HAS_SYNC_DMA_FOR_DEVICE
->   	select ARCH_HAS_DMA_SET_UNCACHED
-> +	select ARCH_HAS_VM_GET_PAGE_PROT
->   	select ARCH_NO_SWAP
->   	select COMMON_CLK
->   	select TIMER_OF
-> diff --git a/arch/nios2/include/asm/pgtable.h b/arch/nios2/include/asm/pgtable.h
-> index 4a995fa628ee..2678dad58a63 100644
-> --- a/arch/nios2/include/asm/pgtable.h
-> +++ b/arch/nios2/include/asm/pgtable.h
-> @@ -40,24 +40,8 @@ struct mm_struct;
->    */
->   
->   /* Remove W bit on private pages for COW support */
-> -#define __P000	MKP(0, 0, 0)
-> -#define __P001	MKP(0, 0, 1)
-> -#define __P010	MKP(0, 0, 0)	/* COW */
-> -#define __P011	MKP(0, 0, 1)	/* COW */
-> -#define __P100	MKP(1, 0, 0)
-> -#define __P101	MKP(1, 0, 1)
-> -#define __P110	MKP(1, 0, 0)	/* COW */
-> -#define __P111	MKP(1, 0, 1)	/* COW */
->   
->   /* Shared pages can have exact HW mapping */
-> -#define __S000	MKP(0, 0, 0)
-> -#define __S001	MKP(0, 0, 1)
-> -#define __S010	MKP(0, 1, 0)
-> -#define __S011	MKP(0, 1, 1)
-> -#define __S100	MKP(1, 0, 0)
-> -#define __S101	MKP(1, 0, 1)
-> -#define __S110	MKP(1, 1, 0)
-> -#define __S111	MKP(1, 1, 1)
->   
->   /* Used all over the kernel */
->   #define PAGE_KERNEL __pgprot(_PAGE_PRESENT | _PAGE_CACHED | _PAGE_READ | \
-> diff --git a/arch/nios2/mm/init.c b/arch/nios2/mm/init.c
-> index 613fcaa5988a..311b2146a248 100644
-> --- a/arch/nios2/mm/init.c
-> +++ b/arch/nios2/mm/init.c
-> @@ -124,3 +124,48 @@ const char *arch_vma_name(struct vm_area_struct *vma)
->   {
->   	return (vma->vm_start == KUSER_BASE) ? "[kuser]" : NULL;
->   }
-> +
-> +pgprot_t vm_get_page_prot(unsigned long vm_flags)
-> +{
-> +	switch (vm_flags & (VM_READ | VM_WRITE | VM_EXEC | VM_SHARED)) {
-> +	case VM_NONE:
-> +		return MKP(0, 0, 0);
-> +	case VM_READ:
-> +		return MKP(0, 0, 1);
-> +	/* COW */
-> +	case VM_WRITE:
-> +		return MKP(0, 0, 0);
-> +	/* COW */
-> +	case VM_WRITE | VM_READ:
-> +		return MKP(0, 0, 1);
-> +	case VM_EXEC:
-> +		return MKP(1, 0, 0);
-> +	case VM_EXEC | VM_READ:
-> +		return MKP(1, 0, 1);
-> +	/* COW */
-> +	case VM_EXEC | VM_WRITE:
-> +		return MKP(1, 0, 0);
-> +	/* COW */
-> +	case VM_EXEC | VM_WRITE | VM_READ:
-> +		return MKP(1, 0, 1);
-> +	case VM_SHARED:
-> +		return MKP(0, 0, 0);
-> +	case VM_SHARED | VM_READ:
-> +		return MKP(0, 0, 1);
-> +	case VM_SHARED | VM_WRITE:
-> +		return MKP(0, 1, 0);
-> +	case VM_SHARED | VM_WRITE | VM_READ:
-> +		return MKP(0, 1, 1);
-> +	case VM_SHARED | VM_EXEC:
-> +		return MKP(1, 0, 0);
-> +	case VM_SHARED | VM_EXEC | VM_READ:
-> +		return MKP(1, 0, 1);
-> +	case VM_SHARED | VM_EXEC | VM_WRITE:
-> +		return MKP(1, 1, 0);
-> +	case VM_SHARED | VM_EXEC | VM_WRITE | VM_READ:
-> +		return MKP(1, 1, 1);
-> +	default:
-> +		BUILD_BUG();
-> +	}
-> +}
-> +EXPORT_SYMBOL(vm_get_page_prot);
+vim +/try_module_get +383 drivers/hwtracing/coresight/coresight-syscfg.c
 
-Applied!
+a13d5a246aca17 Mike Leach 2021-08-18  374  
+eb2ec49606c2a0 Mike Leach 2021-11-24  375  /*
+eb2ec49606c2a0 Mike Leach 2021-11-24  376   * Conditionally up reference count on owner to prevent unload.
+eb2ec49606c2a0 Mike Leach 2021-11-24  377   *
+eb2ec49606c2a0 Mike Leach 2021-11-24  378   * module loaded configs need to be locked in to prevent premature unload.
+eb2ec49606c2a0 Mike Leach 2021-11-24  379   */
+eb2ec49606c2a0 Mike Leach 2021-11-24  380  static int cscfg_owner_get(struct cscfg_load_owner_info *owner_info)
+eb2ec49606c2a0 Mike Leach 2021-11-24  381  {
+eb2ec49606c2a0 Mike Leach 2021-11-24  382  	if ((owner_info->type == CSCFG_OWNER_MODULE) &&
+eb2ec49606c2a0 Mike Leach 2021-11-24 @383  	    (!try_module_get(owner_info->owner_handle)))
+eb2ec49606c2a0 Mike Leach 2021-11-24  384  		return -EINVAL;
+eb2ec49606c2a0 Mike Leach 2021-11-24  385  	return 0;
+eb2ec49606c2a0 Mike Leach 2021-11-24  386  }
+eb2ec49606c2a0 Mike Leach 2021-11-24  387  
+eb2ec49606c2a0 Mike Leach 2021-11-24  388  /* conditionally lower ref count on an owner */
+eb2ec49606c2a0 Mike Leach 2021-11-24  389  static void cscfg_owner_put(struct cscfg_load_owner_info *owner_info)
+eb2ec49606c2a0 Mike Leach 2021-11-24  390  {
+eb2ec49606c2a0 Mike Leach 2021-11-24  391  	if (owner_info->type == CSCFG_OWNER_MODULE)
+eb2ec49606c2a0 Mike Leach 2021-11-24 @392  		module_put(owner_info->owner_handle);
+eb2ec49606c2a0 Mike Leach 2021-11-24  393  }
+eb2ec49606c2a0 Mike Leach 2021-11-24  394  
 
-Thanks,
-Dinh
+:::::: The code at line 383 was first introduced by commit
+:::::: eb2ec49606c2a02d6382d56a0e19f34e515fde3f coresight: syscfg: Update load API for config loadable modules
+
+:::::: TO: Mike Leach <mike.leach@linaro.org>
+:::::: CC: Mathieu Poirier <mathieu.poirier@linaro.org>
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

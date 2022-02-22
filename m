@@ -2,104 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 183864BF80E
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 13:27:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 513114BF810
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 13:31:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231939AbiBVM2J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 07:28:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38146 "EHLO
+        id S231940AbiBVMba (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 07:31:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231383AbiBVM2G (ORCPT
+        with ESMTP id S231915AbiBVMb2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 07:28:06 -0500
-Received: from mail-yw1-x1142.google.com (mail-yw1-x1142.google.com [IPv6:2607:f8b0:4864:20::1142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 761A86F4A6
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 04:27:40 -0800 (PST)
-Received: by mail-yw1-x1142.google.com with SMTP id 00721157ae682-2d07c4a0d06so171470437b3.13
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 04:27:40 -0800 (PST)
+        Tue, 22 Feb 2022 07:31:28 -0500
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6D0A9A4DD;
+        Tue, 22 Feb 2022 04:31:01 -0800 (PST)
+Received: by mail-wr1-x42a.google.com with SMTP id f17so8046692wrh.7;
+        Tue, 22 Feb 2022 04:31:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=xVJHepNq93ePmAbCv1LHbdOWJcqWYQh8v11fr0KUdVw=;
-        b=RltRUuEz8qTFSSDlLGIrW17zY6vkj/WiZwk/2DEws0fCs/4S/lZgH7OjKCucY+P9rc
-         PpZSO1MJs+RPLStTXXHm0UvtzMrkNk0vGMEm4nywE6+G6lkgDBgjCIo9+w3vOdi8Sor/
-         V0PD5UAmPtH/oZ3oAyziUzVXc0pnF/o76H6Jse+bevHTbbBo1VP8yZOQITNLqWtRqYJH
-         RNTK3BXyYsuVTedkMfcic0HvXkxRMwYM7n5FD9aiUftk8RfBf+RRJV04ParnSV7tcHDk
-         d27MFGrGBs74FMu6/JZ6nw0qLAGsLSuavAJXEsvOOI5UCeKWgNG8XUYeMS+sswfKrmjm
-         ggmQ==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Ytf3B0TUzpPjLZkjeVV4ovMnqxam63CdUAj7HAoJ+og=;
+        b=S4aJFdu7ESFjce26eB1MIRYSKt9cw58AJ01xnESYdhee6eGT1jF8awIfYw7gGqhz/U
+         T1qu5WuWvfpnr6p4QMts4lJr2jL+BhPIqMvWv8bifRQWSwqy5et5w5jn9/dSKcGwVJ9E
+         82E6f10ke0KhT7OiCZS/PIEGU4E8CNuAtNOiV1vLtvd7wFDSWefFtgXb+Jkj+jkZ2XTR
+         LWolTgZZXiwOjcPwacWzFHKMh8/ZTJxlk4iLuIJQl6qPbci9J0tgzCaEhoyTpYnquA84
+         VUhffwxUXIYGSeBzxFFn3fItrDlOqnJ9c3a6ySwIN6iTXj0g9KqzMhJ8y8MoRNL6c1NM
+         26nw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=xVJHepNq93ePmAbCv1LHbdOWJcqWYQh8v11fr0KUdVw=;
-        b=zH6rkL1Cwb0yr5dleffwkea9AnNxlcTIARW2cbVqLAxNB8/qyjd/Tc7/yX4w03xWOI
-         8550nwZVPuYvzcUibuflJEaz9s1QZqPMlI+XbQdXlpzUeEbuk/znqwkH6wbjRuM9d6GF
-         TgimqptxxgwELQrh955ltZIsVCtXRxQM3P7xfV1kegzel3pJv2OsRGNo+stJ/5uKYHS7
-         l+YpAeZdHHQGD1f8HztvP8V/l72XCwXj/fT3ZshO+BCTv68aXLv7BbGJVX5U1+SPnv/1
-         y6gAam1iCTdCVmqSom4Rl+2XXNDjGS5y2ttGlVAoXo6lFBnJsneVLBiikPNOgQ8zurmn
-         L1Iw==
-X-Gm-Message-State: AOAM530nImh6tVPbFs63AVRskqnY4uf0uC/gkIuh5iWXyD0E7NUEncBt
-        dZcwYTwgv8MFUzImImLuigCoRVKW8su/nQhEFPo=
-X-Google-Smtp-Source: ABdhPJzRoBykVu7xnpnnBjdEOY9arVZihjzBMwHAaeshpqP+pSt9pNC6/J+/AMp+3dJehh+CBWgxpq+/O4zotq/f1CQ=
-X-Received: by 2002:a81:5591:0:b0:2ca:287c:6c8a with SMTP id
- j139-20020a815591000000b002ca287c6c8amr23735902ywb.303.1645532858985; Tue, 22
- Feb 2022 04:27:38 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Ytf3B0TUzpPjLZkjeVV4ovMnqxam63CdUAj7HAoJ+og=;
+        b=u65zFaKPxwUqWoUlJBfyOKOdSQ7gPDEOz/O8Bc/NHImk6K51GysPphnaB3r24galGW
+         uyGSokVSunwOPJJlHBmxwbET1HPOyJQ5PgXGo3WUDyh0y1EexphewiyqaBMUTc1ggL+K
+         4Gppa0Od/9n/rJ7hcmy12LPo5F5qOfe68fHE6ZqIVTjzfHzC/xYWzxwVIgOIGGIvJ2Wq
+         O9tlulwIaCbTHFy+Zhqvb2802jVYHRyFd8QxmN1yuRlYRG5LC08wERkh9xemW4KYFD7e
+         vovhte0WiwN9cA6Lm5OnqOrtFpiXAmGb6kP38Tup0l510chEV+jEfPet6aWdRz9dTt4G
+         zjfQ==
+X-Gm-Message-State: AOAM531ZO7VU2nHQA5Lj/EQUDPdd06HyeI8LhyunjTq+Vgac+uvduEhK
+        newa0lwzVlhrIVPLOd+1Ju0=
+X-Google-Smtp-Source: ABdhPJzWwW8IcKTuPO9AOzq1sTPEbYVE7yBhhBnybH0UlJtZEfjXBvWQHvVLF4V5f06l8XkRCmNBDA==
+X-Received: by 2002:a05:6000:1ac7:b0:1e8:b550:a596 with SMTP id i7-20020a0560001ac700b001e8b550a596mr19112977wry.584.1645533060492;
+        Tue, 22 Feb 2022 04:31:00 -0800 (PST)
+Received: from debian (host-78-145-97-89.as13285.net. [78.145.97.89])
+        by smtp.gmail.com with ESMTPSA id g16-20020a7bc4d0000000b0037bbe255339sm2296177wmk.15.2022.02.22.04.30.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Feb 2022 04:30:59 -0800 (PST)
+Date:   Tue, 22 Feb 2022 12:30:58 +0000
+From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, slade@sladewatkins.com
+Subject: Re: [PATCH 5.15 000/196] 5.15.25-rc1 review
+Message-ID: <YhTXgiBmJqO1uh60@debian>
+References: <20220221084930.872957717@linuxfoundation.org>
 MIME-Version: 1.0
-Received: by 2002:a05:7010:48d0:b0:210:a074:c1c3 with HTTP; Tue, 22 Feb 2022
- 04:27:38 -0800 (PST)
-Reply-To: lilywilliam989@gmail.com
-From:   Lily William <marvelouschinaza54@gmail.com>
-Date:   Tue, 22 Feb 2022 04:27:38 -0800
-Message-ID: <CAE53ddZS_x-v=CDAXwUoU+KzL-ZiH4r9pHYQ4ZJ+VJFjShuLkA@mail.gmail.com>
-Subject: Hi Dear,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:1142 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.4187]
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [marvelouschinaza54[at]gmail.com]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [lilywilliam989[at]gmail.com]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [marvelouschinaza54[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  3.5 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220221084930.872957717@linuxfoundation.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
--- 
-Hi Dear,
+Hi Greg,
 
-My name is Lily William, I am from the United States of America. It's my
-pleasure to contact you for a new and special friendship. I will be glad to
-see your reply so we can get to know each other better.
+On Mon, Feb 21, 2022 at 09:47:12AM +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.25 release.
+> There are 196 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Wed, 23 Feb 2022 08:48:58 +0000.
+> Anything received after that time might be too late.
 
-Yours
-Lily
+Build test:
+mips (gcc version 11.2.1 20220213): 62 configs -> no new failure
+arm (gcc version 11.2.1 20220213): 100 configs -> 1 new failure
+arm64 (gcc version 11.2.1 20220213): 3 configs -> 1 new failure
+x86_64 (gcc version 11.2.1 20220213): 4 configs -> no failure
+
+Both arm and arm64 failed with the error:
+drivers/tee/optee/core.c: In function 'optee_probe':
+drivers/tee/optee/core.c:726:20: error: operation on 'rc' may be undefined [-Werror=sequence-point]
+  726 |                 rc = rc = PTR_ERR(ctx);
+
+Caused by: d7151f4ed49b ("optee: use driver internal tee_context for some rpc")
+
+Boot test:
+x86_64: Booted on my test laptop. No regression.
+x86_64: Booted on qemu. No regression. [1]
+arm64: Booted on rpi4b (4GB model). No regression. [2]
+mips: Booted on ci20 board. No regression. [3]
+
+[1]. https://openqa.qa.codethink.co.uk/tests/794
+[2]. https://openqa.qa.codethink.co.uk/tests/800
+[3]. https://openqa.qa.codethink.co.uk/tests/802
+
+Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
+
+--
+Regards
+Sudip

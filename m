@@ -2,240 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94A294BFFC9
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 18:08:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8416A4BFFCE
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 18:10:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234429AbiBVRI7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 12:08:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40978 "EHLO
+        id S233305AbiBVRKV convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 22 Feb 2022 12:10:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234591AbiBVRIv (ORCPT
+        with ESMTP id S231679AbiBVRKR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 12:08:51 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1518990249;
-        Tue, 22 Feb 2022 09:08:23 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A516161291;
-        Tue, 22 Feb 2022 17:08:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D7A1C340E8;
-        Tue, 22 Feb 2022 17:08:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645549702;
-        bh=bYw58Oim7YKxfKRi3NAAACDa3WAM5CvIxglbEBfCSe0=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TEZysduse1anvebQk5Ub3ENn7A3VKtOSHtoCkDPP9CQgWhC9OR6fTLFYecgxGhGMz
-         O1FPUEUbT857+cmOvxR5CcCkvYwfMslcN64WzEm26X1c3dGfgkzfbHg2D8K93qixEZ
-         d2b3NsE4Be+5/ImeQdLFnJ90AibwXpUA8VeoyxZNZqx/3KcSzlAVx/KBJhvXXA0A03
-         w9exsqVpolSvH8V3oswd0CBmWv/v010cyzXTxV19qV8V35A+ZgiMvKAmL/6IA5GHKI
-         8Fi0YUuOT6k32gyjvaeiV/nzFZhE5loK7XZ1+VGEd+6WixwJmE9jbbHPEuESgXGoS5
-         iIXeOhvZv7J+Q==
-From:   Jiri Olsa <jolsa@kernel.org>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
-        lkml <linux-kernel@vger.kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>
-Subject: [PATCH 10/10] selftest/bpf: Add kprobe_multi test for bpf_cookie values
-Date:   Tue, 22 Feb 2022 18:06:00 +0100
-Message-Id: <20220222170600.611515-11-jolsa@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220222170600.611515-1-jolsa@kernel.org>
-References: <20220222170600.611515-1-jolsa@kernel.org>
+        Tue, 22 Feb 2022 12:10:17 -0500
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E8307D049E
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 09:09:51 -0800 (PST)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-210-AoyiLaE1OJah7Pz61gNshw-1; Tue, 22 Feb 2022 17:09:49 +0000
+X-MC-Unique: AoyiLaE1OJah7Pz61gNshw-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.28; Tue, 22 Feb 2022 17:09:47 +0000
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.028; Tue, 22 Feb 2022 17:09:47 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Christoph Hellwig' <hch@lst.de>, Joe Perches <joe@perches.com>
+CC:     Keith Busch <kbusch@kernel.org>,
+        "linux-nvme@lists.infradead.org" <linux-nvme@lists.infradead.org>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "axboe@kernel.dk" <axboe@kernel.dk>,
+        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
+        "colyli@suse.de" <colyli@suse.de>,
+        "Bart Van Assche" <bvanassche@acm.org>
+Subject: RE: [PATCHv3 04/10] linux/kernel: introduce lower_48_bits macro
+Thread-Topic: [PATCHv3 04/10] linux/kernel: introduce lower_48_bits macro
+Thread-Index: AQHYKAxbyZzL6Kc8n0eksk5bzcXivKyfzIzQ
+Date:   Tue, 22 Feb 2022 17:09:47 +0000
+Message-ID: <c5b76c7a0db647bd9850e6165cdb5da0@AcuMS.aculab.com>
+References: <20220222163144.1782447-1-kbusch@kernel.org>
+ <20220222163144.1782447-5-kbusch@kernel.org>
+ <66a0c8210cf9e7dfcc3fa2d247de1eebd5a8acb7.camel@perches.com>
+ <20220222165045.GA14168@lst.de>
+In-Reply-To: <20220222165045.GA14168@lst.de>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Adding bpf_cookie test for programs attached by kprobe_multi links.
+From: Christoph Hellwig
+> Sent: 22 February 2022 16:51
+> 
+> On Tue, Feb 22, 2022 at 08:45:53AM -0800, Joe Perches wrote:
+> > On Tue, 2022-02-22 at 08:31 -0800, Keith Busch wrote:
+> > > Recent data integrity field enhancements allow 48-bit reference tags.
+> > > Introduce a helper macro since this will be a repeated operation.
+> > []
+> > > diff --git a/include/linux/kernel.h b/include/linux/kernel.h
+> > []
+> > > @@ -63,6 +63,12 @@
+> > >  }					\
+> > >  )
+> > >
+> > > +/**
+> > > + * lower_48_bits - return bits 0-47 of a number
+> > > + * @n: the number we're accessing
+> > > + */
+> > > +#define lower_48_bits(n) ((u64)((n) & 0xffffffffffffull))
+> >
+> > why not make this a static inline function?
+> 
+> Agreed.
+> 
+> > And visually, it's difficult to quickly count a repeated character to 12.
+> >
+> > Perhaps:
+> >
+> > static inline u64 lower_48_bits(u64 val)
+> > {
+> > 	return val & GENMASK_ULL(47, 0);
+> > }
+> 
+> For anyone who has a minimum knowledge of C and hardware your version
+> is an obsfucated clusterfuck, while the version Keith wrote is trivial
+> to read.
 
-Signed-off-by: Jiri Olsa <jolsa@kernel.org>
----
- .../selftests/bpf/prog_tests/bpf_cookie.c     | 72 +++++++++++++++++++
- .../bpf/progs/kprobe_multi_bpf_cookie.c       | 62 ++++++++++++++++
- 2 files changed, 134 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/progs/kprobe_multi_bpf_cookie.c
+I'd use the explicit: val & ((1ull << 48) - 1)
+I think it is even fewer characters.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_cookie.c b/tools/testing/selftests/bpf/prog_tests/bpf_cookie.c
-index cd10df6cd0fc..edfb9f8736c6 100644
---- a/tools/testing/selftests/bpf/prog_tests/bpf_cookie.c
-+++ b/tools/testing/selftests/bpf/prog_tests/bpf_cookie.c
-@@ -7,6 +7,7 @@
- #include <unistd.h>
- #include <test_progs.h>
- #include "test_bpf_cookie.skel.h"
-+#include "kprobe_multi_bpf_cookie.skel.h"
- 
- /* uprobe attach point */
- static void trigger_func(void)
-@@ -63,6 +64,75 @@ static void kprobe_subtest(struct test_bpf_cookie *skel)
- 	bpf_link__destroy(retlink2);
- }
- 
-+static void kprobe_multi_subtest(void)
-+{
-+	DECLARE_LIBBPF_OPTS(bpf_link_create_opts, opts);
-+	int err, prog_fd, link1_fd = -1, link2_fd = -1;
-+	LIBBPF_OPTS(bpf_test_run_opts, topts);
-+	struct kprobe_multi_bpf_cookie *skel = NULL;
-+	__u64 addrs[8], cookies[8];
-+
-+	skel = kprobe_multi_bpf_cookie__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "fentry_raw_skel_load"))
-+		goto cleanup;
-+
-+	kallsyms_find("bpf_fentry_test1", &addrs[0]);
-+	kallsyms_find("bpf_fentry_test2", &addrs[1]);
-+	kallsyms_find("bpf_fentry_test3", &addrs[2]);
-+	kallsyms_find("bpf_fentry_test4", &addrs[3]);
-+	kallsyms_find("bpf_fentry_test5", &addrs[4]);
-+	kallsyms_find("bpf_fentry_test6", &addrs[5]);
-+	kallsyms_find("bpf_fentry_test7", &addrs[6]);
-+	kallsyms_find("bpf_fentry_test8", &addrs[7]);
-+
-+	cookies[0] = 1;
-+	cookies[1] = 2;
-+	cookies[2] = 3;
-+	cookies[3] = 4;
-+	cookies[4] = 5;
-+	cookies[5] = 6;
-+	cookies[6] = 7;
-+	cookies[7] = 8;
-+
-+	opts.kprobe_multi.addrs = ptr_to_u64(&addrs);
-+	opts.kprobe_multi.cnt = 8;
-+	opts.kprobe_multi.cookies = ptr_to_u64(&cookies);
-+	prog_fd = bpf_program__fd(skel->progs.test2);
-+
-+	link1_fd = bpf_link_create(prog_fd, 0, BPF_TRACE_KPROBE_MULTI, &opts);
-+	if (!ASSERT_GE(link1_fd, 0, "link1_fd"))
-+		return;
-+
-+	cookies[0] = 8;
-+	cookies[1] = 7;
-+	cookies[2] = 6;
-+	cookies[3] = 5;
-+	cookies[4] = 4;
-+	cookies[5] = 3;
-+	cookies[6] = 2;
-+	cookies[7] = 1;
-+
-+	opts.flags = BPF_F_KPROBE_MULTI_RETURN;
-+	prog_fd = bpf_program__fd(skel->progs.test3);
-+
-+	link2_fd = bpf_link_create(prog_fd, 0, BPF_TRACE_KPROBE_MULTI, &opts);
-+	if (!ASSERT_GE(link2_fd, 0, "link2_fd"))
-+		goto cleanup;
-+
-+	prog_fd = bpf_program__fd(skel->progs.test1);
-+	err = bpf_prog_test_run_opts(prog_fd, &topts);
-+	ASSERT_OK(err, "test_run");
-+	ASSERT_EQ(topts.retval, 0, "test_run");
-+
-+	ASSERT_EQ(skel->bss->test2_result, 8, "test2_result");
-+	ASSERT_EQ(skel->bss->test3_result, 8, "test3_result");
-+
-+cleanup:
-+	close(link1_fd);
-+	close(link2_fd);
-+	kprobe_multi_bpf_cookie__destroy(skel);
-+}
-+
- static void uprobe_subtest(struct test_bpf_cookie *skel)
- {
- 	DECLARE_LIBBPF_OPTS(bpf_uprobe_opts, opts);
-@@ -249,6 +319,8 @@ void test_bpf_cookie(void)
- 
- 	if (test__start_subtest("kprobe"))
- 		kprobe_subtest(skel);
-+	if (test__start_subtest("multi_kprobe"))
-+		kprobe_multi_subtest();
- 	if (test__start_subtest("uprobe"))
- 		uprobe_subtest(skel);
- 	if (test__start_subtest("tracepoint"))
-diff --git a/tools/testing/selftests/bpf/progs/kprobe_multi_bpf_cookie.c b/tools/testing/selftests/bpf/progs/kprobe_multi_bpf_cookie.c
-new file mode 100644
-index 000000000000..d6f8454ba093
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/kprobe_multi_bpf_cookie.c
-@@ -0,0 +1,62 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <linux/bpf.h>
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+
-+char _license[] SEC("license") = "GPL";
-+
-+extern const void bpf_fentry_test1 __ksym;
-+extern const void bpf_fentry_test2 __ksym;
-+extern const void bpf_fentry_test3 __ksym;
-+extern const void bpf_fentry_test4 __ksym;
-+extern const void bpf_fentry_test5 __ksym;
-+extern const void bpf_fentry_test6 __ksym;
-+extern const void bpf_fentry_test7 __ksym;
-+extern const void bpf_fentry_test8 __ksym;
-+
-+/* No tests, just to trigger bpf_fentry_test* through tracing test_run */
-+SEC("fentry/bpf_modify_return_test")
-+int BPF_PROG(test1)
-+{
-+	return 0;
-+}
-+
-+__u64 test2_result = 0;
-+
-+SEC("kprobe.multi/bpf_fentry_tes??")
-+int test2(struct pt_regs *ctx)
-+{
-+	__u64 cookie = bpf_get_attach_cookie(ctx);
-+	__u64 addr = bpf_get_func_ip(ctx);
-+
-+	test2_result += (const void *) addr == &bpf_fentry_test1 && cookie == 1;
-+	test2_result += (const void *) addr == &bpf_fentry_test2 && cookie == 2;
-+	test2_result += (const void *) addr == &bpf_fentry_test3 && cookie == 3;
-+	test2_result += (const void *) addr == &bpf_fentry_test4 && cookie == 4;
-+	test2_result += (const void *) addr == &bpf_fentry_test5 && cookie == 5;
-+	test2_result += (const void *) addr == &bpf_fentry_test6 && cookie == 6;
-+	test2_result += (const void *) addr == &bpf_fentry_test7 && cookie == 7;
-+	test2_result += (const void *) addr == &bpf_fentry_test8 && cookie == 8;
-+
-+	return 0;
-+}
-+
-+__u64 test3_result = 0;
-+
-+SEC("kretprobe.multi/bpf_fentry_test*")
-+int test3(struct pt_regs *ctx)
-+{
-+	__u64 cookie = bpf_get_attach_cookie(ctx);
-+	__u64 addr = bpf_get_func_ip(ctx);
-+
-+	test3_result += (const void *) addr == &bpf_fentry_test1 && cookie == 8;
-+	test3_result += (const void *) addr == &bpf_fentry_test2 && cookie == 7;
-+	test3_result += (const void *) addr == &bpf_fentry_test3 && cookie == 6;
-+	test3_result += (const void *) addr == &bpf_fentry_test4 && cookie == 5;
-+	test3_result += (const void *) addr == &bpf_fentry_test5 && cookie == 4;
-+	test3_result += (const void *) addr == &bpf_fentry_test6 && cookie == 3;
-+	test3_result += (const void *) addr == &bpf_fentry_test7 && cookie == 2;
-+	test3_result += (const void *) addr == &bpf_fentry_test8 && cookie == 1;
-+
-+	return 0;
-+}
--- 
-2.35.1
+	David.
+
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
 

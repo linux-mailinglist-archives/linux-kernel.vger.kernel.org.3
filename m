@@ -2,217 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5242D4BF93A
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 14:27:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B7BC34BF94E
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 14:29:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232394AbiBVN12 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 08:27:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52516 "EHLO
+        id S232437AbiBVN3O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 08:29:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232334AbiBVN10 (ORCPT
+        with ESMTP id S232425AbiBVN3J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 08:27:26 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A130D427DB
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 05:26:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1645536416;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=r0cJAIJbSE4AchjJtTEDrpwEPLk6IwUMV9ko/1GRnXQ=;
-        b=VN+tzl2GMntaabwBXqmJm91ovM7RHmfh6Q0Jv3ETeOLZPwEGu+gJCp5xxoQA+YyS4iQqaU
-        o/afMIiEotGdtWWHcSd1eCiSBV+rPU/XYLlJTsi8v3A/KbG0sJJAefppiRW5ROxGmAANlF
-        MRvvpXieplwQ8zGOek6Gf7O6qsHhxuk=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-643-m_HRy8R7PmaTGxttwcF2jw-1; Tue, 22 Feb 2022 08:26:53 -0500
-X-MC-Unique: m_HRy8R7PmaTGxttwcF2jw-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Tue, 22 Feb 2022 08:29:09 -0500
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D0EF939EF
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 05:28:44 -0800 (PST)
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com [209.85.208.72])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 824501006AA5;
-        Tue, 22 Feb 2022 13:26:49 +0000 (UTC)
-Received: from localhost (ovpn-12-122.pek2.redhat.com [10.72.12.122])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 6F6451062254;
-        Tue, 22 Feb 2022 13:26:30 +0000 (UTC)
-Date:   Tue, 22 Feb 2022 21:26:27 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Heiko Carstens <hca@linux.ibm.com>, Christoph Hellwig <hch@lst.de>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        akpm@linux-foundation.org, cl@linux.com, 42.hyeyoo@gmail.com,
-        penberg@kernel.org, rientjes@google.com, iamjoonsoo.kim@lge.com,
-        vbabka@suse.cz, David.Laight@aculab.com, david@redhat.com,
-        herbert@gondor.apana.org.au, davem@davemloft.net,
-        linux-crypto@vger.kernel.org, steffen.klassert@secunet.com,
-        netdev@vger.kernel.org, gor@linux.ibm.com, agordeev@linux.ibm.com,
-        borntraeger@linux.ibm.com, svens@linux.ibm.com,
-        linux-s390@vger.kernel.org, michael@walle.cc,
-        linux-i2c@vger.kernel.org, wsa@kernel.org,
-        Halil Pasic <pasic@linux.ibm.com>,
-        Vineeth Vijayan <vneethv@linux.ibm.com>, x86@kernel.org
-Subject: Re: [PATCH 00/22] Don't use kmalloc() with GFP_DMA
-Message-ID: <YhTkgytf1YnQLcuB@MiWiFi-R3L-srv>
-References: <20220219005221.634-1-bhe@redhat.com>
- <YhOaTsWUKO0SWsh7@osiris>
- <20220222084422.GA6139@lst.de>
- <YhThVgoRJoZ7Voyy@MiWiFi-R3L-srv>
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id E25AF4004D
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 13:28:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1645536522;
+        bh=syQJnDJvIk7oDut501097JANOAQimJJ8XX+nOUPJjUo=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+        b=SpwWIDK079KsZengzmEv7Z0tWqAsfgDccqZg/evf9Aep7QIQA6kKGZJ9qo9IMKUyL
+         ceIhsXdXVYbxsIvN28bBnyZQXkvvIYOmRSYWVZEwYWHQ5ipWWv2Tjpx1ecsjQHu2mi
+         VYexBbTwFXCi0Lz07FCHf3Ad2dHa/GjqWPOfODFikl7DHKj3y4OPkOQpFNxsdg2vqE
+         98wf7OMaNV26+zIxuFIzlICNTdIK0SW1ko7zuseztlVf2l265XqAOOYM/x5nu+gtkk
+         sFjnZBZdDw9OkkF2izQCFkTRRd4RnuzfC9MS/01Mmz1GgCfP0mGxo8xqZDnBDHnp25
+         dUHc22fReuncA==
+Received: by mail-ed1-f72.google.com with SMTP id r9-20020a05640251c900b00412d54ea618so6220854edd.3
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 05:28:42 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=syQJnDJvIk7oDut501097JANOAQimJJ8XX+nOUPJjUo=;
+        b=BrrcG8RermHVqHKhEHghmXehVOPsUxvU+eugboSIe9TNiwSRw/NbJMYhS+WUTsmcKH
+         bsPqRyb8A8F+DGtBzz9mffAunBGe4JgECFos7updwQKyScarZ/SZ9X8j7MB1Dn2Fh5ms
+         lwvnBohIriXeCCttw8ykpTvNJjhyTJiVAKomdHW9HygsLQIY5YnYBsJ2vfTamjNmSW/X
+         aPsAlkOySF5IdG2juf1gn+bDXm0Fr9ya7p3c1Ki5l+xXahsE7yryLMBBcUJJIGZkmKbX
+         JI45w3TiTff3RGwES/v6p8o9FcXQY/ptjUq+jyN4m57Pc7MlmRyddSLCdDUqXI0m8+9Q
+         o7DA==
+X-Gm-Message-State: AOAM533J8Rg7aeNtlvqN1HmrLrBW7KGjLZjad4wF+uAE/I/s2z1enJNG
+        jM45YANGxo9mbVzFakKFNmYwGiOcBBiwdcZuFNhErf5QAG1nYbpkkxAO7g7Kz6wmdZVTu5wJe01
+        cpJoTxHT9vGCcZVvEtBx31URqb0Ge8OrmcFZpp8OxCQ==
+X-Received: by 2002:a17:906:d935:b0:6cc:fcfc:c286 with SMTP id rn21-20020a170906d93500b006ccfcfcc286mr19267967ejb.423.1645536520192;
+        Tue, 22 Feb 2022 05:28:40 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzyrFfwlMx3wyhaWOiWMYUuCZ2Sd0V6lJlo9wHP9II92B5eFvZo3+bHsg4+GgnT5+leTtK+fA==
+X-Received: by 2002:a17:906:d935:b0:6cc:fcfc:c286 with SMTP id rn21-20020a170906d93500b006ccfcfcc286mr19267945ejb.423.1645536520030;
+        Tue, 22 Feb 2022 05:28:40 -0800 (PST)
+Received: from localhost.localdomain (xdsl-188-155-181-108.adslplus.ch. [188.155.181.108])
+        by smtp.gmail.com with ESMTPSA id c5sm10029875edk.43.2022.02.22.05.28.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Feb 2022 05:28:39 -0800 (PST)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+To:     Abel Vesa <abel.vesa@nxp.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, alsa-devel@alsa-project.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Subject: [RFT PATCH 0/3] Fix kfree() of const memory on setting driver_override
+Date:   Tue, 22 Feb 2022 14:27:04 +0100
+Message-Id: <20220222132707.266883-1-krzysztof.kozlowski@canonical.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YhThVgoRJoZ7Voyy@MiWiFi-R3L-srv>
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02/22/22 at 09:12pm, Baoquan He wrote:
-> On 02/22/22 at 09:44am, Christoph Hellwig wrote:
-> > On Mon, Feb 21, 2022 at 02:57:34PM +0100, Heiko Carstens wrote:
-> > > > 1) Kmalloc(GFP_DMA) in s390 platform, under arch/s390 and drivers/s390;
-> > > 
-> > > So, s390 partially requires GFP_DMA allocations for memory areas which
-> > > are required by the hardware to be below 2GB. There is not necessarily
-> > > a device associated when this is required. E.g. some legacy "diagnose"
-> > > calls require buffers to be below 2GB.
-> > > 
-> > > How should something like this be handled? I'd guess that the
-> > > dma_alloc API is not the right thing to use in such cases. Of course
-> > > we could say, let's waste memory and use full pages instead, however
-> > > I'm not sure this is a good idea.
-> > 
-> > Yeah, I don't think the DMA API is the right thing for that.  This
-> > is one of the very rare cases where a raw allocation makes sense.
-> > 
-> > That being said being able to drop kmalloc support for GFP_DMA would
-> > be really useful. How much memory would we waste if switching to the
-> > page allocator?
-> > 
-> > > s390 drivers could probably converted to dma_alloc API, even though
-> > > that would cause quite some code churn.
-> > 
-> > I think that would be a very good thing to have.
-> > 
-> > > > For this first patch series, thanks to Hyeonggon for helping
-> > > > reviewing and great suggestions on patch improving. We will work
-> > > > together to continue the next steps of work.
-> > > > 
-> > > > Any comment, thought, or suggestoin is welcome and appreciated,
-> > > > including but not limited to:
-> > > > 1) whether we should remove dma-kmalloc support in kernel();
-> > > 
-> > > The question is: what would this buy us? As stated above I'd assume
-> > > this comes with quite some code churn, so there should be a good
-> > > reason to do this.
-> > 
-> > There is two steps here.  One is to remove GFP_DMA support from
-> > kmalloc, which would help to cleanup the slab allocator(s) very nicely,
-> > as at that point it can stop to be zone aware entirely.
-> > 
-> > The long term goal is to remove ZONE_DMA entirely at least for
-> > architectures that only use the small 16MB ISA-style one.  It can
-> > then be replaced with for example a CMA area and fall into a movable
-> > zone.  I'd have to prototype this first and see how it applies to the
-> > s390 case.  It might not be worth it and maybe we should replace
-> > ZONE_DMA and ZONE_DMA32 with a ZONE_LIMITED for those use cases as
-> > the amount covered tends to not be totally out of line for what we
-> > built the zone infrastructure.
-> > 
-> > > >From this cover letter I only get that there was a problem with kdump
-> > > on x86, and this has been fixed. So why this extra effort?
-> > > 
-> > > >     3) Drop support for allocating DMA memory from slab allocator
-> > > >     (as Christoph Hellwig said) and convert them to use DMA32
-> > > >     and see what happens
-> > > 
-> > > Can you please clarify what "convert to DMA32" means? I would assume
-> > > this does _not_ mean that passing GFP_DMA32 to slab allocator would
-> > > work then?
-> > 
-> > I'm really not sure what this means.
-> 
-> Thanks a lot to Heiko for valuable input, it's very helpful. And thanks
-> a lot to Christoph for explaining.
-> 
-> I guess this "convert to DMA32" is similar to "replace ZONE_DMA and
-> ZONE_DMA32 with a ZONE_LIMITED".
+Hi,
 
-And by the way, when I searched SLAB_CACHE_DMA32 which is another zone
-aware slab flag, I got that not all people likes to abuse
-kmalloc(GFP_DMA). There are two places where 
-kmem_cache_create(SLAB_CACHE_DMA32) are called to create slab grabbing
-memory from zone DMA32. Obviously the code author really knows slab
-allocator. They use dma32 slab to get cache memory under 4G.
+Drivers still seem to use driver_override incorrectly. Perhaps my old
+patch makes sense now?
+https://lore.kernel.org/all/1550484960-2392-3-git-send-email-krzk@kernel.org/
 
-drivers/firmware/google/gsmi.c : gsmi_init()
-drivers/iommu/io-pgtable-arm-v7s.c: arm_v7s_alloc_pgtable()
+Not tested - please review and test (e.g. by writing to dirver_override
+sysfs entry with KASAN enabled).
 
-> 
-> When I use 'git grep "GFP_DMA/>"' to search all places specifying GFP_DMA,
-> I noticed the main usage of kmalloc(GFP_DMA) is to get memory under a
-> memory limitation, but not for DMA buffer allocation. Below is what I got
-> for earlier kdump issue explanation. It can help explain why kmalloc(GFP_DMA)
-> is useful on ARCHes w/o ZONE_DMA32, but doesn't make sense on x86_64 which
-> has both zone DMA and DMA32. The 16M ZONE_DMA is only for very rarely used
-> legacy ISA device, but most pci devices driver supporting 32bit addressing
-> likes to abuse kmalloc(GFP_DMA) to get DMA buffer from the zone DMA.
-> That obviously is unsafe and unreasonable.
-> 
-> Like risc-V which doesn't have the burden of legacy ISA devices, it can
-> take only containing DMA32 zone way. ARM64 also adjusts to have only
-> arm64 if not on Raspberry Pi. Using kmalloc(GFP_DMA) makes them no
-> inconvenience. If finally having dma32-kmalloc, the name may need be
-> carefully considerred, it seems to be acceptable. We just need to pick
-> up those ISA device driver and handle their 24bit addressing DMA well.
-> 
-> For this patchset, I only find out places in which GPF_DMA is
-> redundant and can be removed directly, and places where
-> kmalloc(GFP_DMA)|dma_map_ pair can be replaced with dma_alloc_xxxx() API
-> and the memory wasting is not so big. I have patches converting
-> kmalloc(GFP_DMA) to alloc_pages(GFP_DMA), but not easy to replace with
-> dma_alloc_xxx(), Hyeonggon suggested not adding them to this series.
-> I will continue investigating the left places, see whether or how we can
-> convert them.
-> 
-> =============================
-> ARCH which has DMA32
->         ZONE_DMA       ZONE_DMA32
-> arm64   0~X            X~4G  (X is got from ACPI or DT. Otherwise it's 4G by default, DMA32 is empty)
-> ia64    None           0~4G
-> mips    0 or 0~16M     X~4G  (zone DMA is empty on SGI_IP22 or SGI_IP28, otherwise 16M by default like i386)
-> riscv   None           0~4G
-> x86_64  16M            16M~4G
-> 
-> 
-> =============================
-> ARCH which has no DMA32
->         ZONE_DMA
-> alpha   0~16M or empty if IOMMU enabled
-> arm     0~X (X is reported by fdt, 4G by default)
-> m68k    0~total memory
-> microblaze 0~total low memory
-> powerpc 0~2G
-> s390    0~2G
-> sparc   0~ total low memory
-> i386    0~16M
-> 
-> > 
-> > > 
-> > > btw. there are actually two kmalloc allocations which pass GFP_DMA32;
-> > > I guess this is broken(?):
-> > > 
-> > > drivers/hid/intel-ish-hid/ishtp-fw-loader.c:    dma_buf = kmalloc(payload_max_size, GFP_KERNEL | GFP_DMA32);
-> > > drivers/media/test-drivers/vivid/vivid-osd.c:   dev->video_vbase = kzalloc(dev->video_buffer_size, GFP_KERNEL | GFP_DMA32);
-> > 
-> > Yes, this is completely broken.
-> > 
-> 
+Dependencies
+============
+Patches are independent.
+
+Best regards,
+Krzysztof
+
+Krzysztof Kozlowski (3):
+  clk: imx: scu: fix kfree() of const memory on setting driver_override
+  slimbus: qcom-ngd: fix kfree() of const memory on setting
+    driver_override
+  rpmsg: fix kfree() of const memory on setting driver_override
+
+ drivers/clk/imx/clk-scu.c       |  6 +++++-
+ drivers/rpmsg/rpmsg_internal.h  | 12 ++++++++++--
+ drivers/rpmsg/rpmsg_ns.c        | 13 +++++++++++--
+ drivers/slimbus/qcom-ngd-ctrl.c |  9 ++++++++-
+ 4 files changed, 34 insertions(+), 6 deletions(-)
+
+-- 
+2.32.0
 

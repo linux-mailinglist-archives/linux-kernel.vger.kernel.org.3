@@ -2,237 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95C984BF908
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 14:18:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EA794BF91F
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 14:19:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230431AbiBVNTP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 08:19:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45440 "EHLO
+        id S232262AbiBVNUJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 08:20:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232365AbiBVNTL (ORCPT
+        with ESMTP id S231223AbiBVNUH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 08:19:11 -0500
-Received: from mail-ot1-x32d.google.com (mail-ot1-x32d.google.com [IPv6:2607:f8b0:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C41C7C2E6E
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 05:18:45 -0800 (PST)
-Received: by mail-ot1-x32d.google.com with SMTP id w3-20020a056830060300b005ad10e3becaso9605266oti.3
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 05:18:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=usp.br; s=usp-google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=m7m0+PF7saTzmzCja9hykhB/MRHQ+aIAgZTpGlXhHzw=;
-        b=ubi5Nm/hc13TZrLP09ZiZRLp3a2ho4dHP2ehi7CFHPZ2s6iZ0e3mlYsRva1Lo79rof
-         meuN9eLCrtEoUc2bmNz8XfqhPigO2am6hz09EKWPa5tYM4mkQjkHmB4qmkgP6wysKRSp
-         MYcDxon4lPSJgg20sSlxVY/SDgzPwLvjUDgt3YmbkhU8/u3rhab/RurOUlKHmgC50WKg
-         FVi5Zyc72Oxho4L2Rqgl1V2Q8nWaSRqR7Yqu9aZdVQcu8hvak1SgPfdx1yxVpsGKtzJM
-         UXec4VOo7nf+J0oBnWsFRjoIEKP2D37OAkq6NiDruGUON4PMb3jdr1chSd9Z5zSf6E0k
-         u7pg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=m7m0+PF7saTzmzCja9hykhB/MRHQ+aIAgZTpGlXhHzw=;
-        b=bIHJpzVY93Diom+UJwXVGZQ4T3N1+3bjOaPBxNuBDKAFRUsPMxyMgTyDa7PR6CyQdo
-         XGupff9o4idB6LeglCVCkl18j9vEwOsCUUKScbCuMSiiFjfibzSn5JlXRLlB4PORfl2h
-         zEmuq5mWJQy4EvdwsQiniJewF6gTKX9oKADor3yHQODGGsPzIEjS2f9lr3ieY5rilPmt
-         ozSuSezz9hJQ/zIWBgeVdzta3pm9CyD9KkxTkl73KfQzUOAIiUhjo+7Bcevz4RPxkxpG
-         1rYDyCxZ9HPIJEd3jgh45sAq9Kfq6a9CDJDTUf8b/sLHQ9gvvJTb9XoY6pQYrjlfIOyE
-         IkhQ==
-X-Gm-Message-State: AOAM53091tzcz1WgE9zsN63EolbnWhKHUKStGeAEwm3xKmcxbS1TEm0I
-        x7wQik/E0oeZys7PZckJtR7RPg==
-X-Google-Smtp-Source: ABdhPJwXb2Ih6ABCM4wFKq+J7EONDr5AujGDHaz2bmBm8K1zfSsUX01jAP2smZyZy7rVzqADpM/0Dg==
-X-Received: by 2002:a05:6830:40c6:b0:5a0:4cee:1e7d with SMTP id h6-20020a05683040c600b005a04cee1e7dmr8308902otu.121.1645535925058;
-        Tue, 22 Feb 2022 05:18:45 -0800 (PST)
-Received: from fedora.. ([187.36.236.204])
-        by smtp.gmail.com with ESMTPSA id c9sm6325050otd.26.2022.02.22.05.18.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Feb 2022 05:18:44 -0800 (PST)
-From:   =?UTF-8?q?Ma=C3=ADra=20Canal?= <maira.canal@usp.br>
-To:     alexander.deucher@amd.com, christian.koenig@amd.com,
-        Xinhui.Pan@amd.com, Hawking.Zhang@amd.com, john.clements@amd.com,
-        tao.zhou1@amd.com, YiPeng.Chai@amd.com, luben.tuikov@amd.com,
-        Stanley.Yang@amd.com, Dennis.Li@amd.com, mukul.joshi@amd.com,
-        harry.wentland@amd.com, sunpeng.li@amd.com,
-        Rodrigo.Siqueira@amd.com, Anthony.Koo@amd.com
-Cc:     amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, magalilemes00@gmail.com,
-        mwen@igalia.com, isabbasso@riseup.net,
-        =?UTF-8?q?Ma=C3=ADra=20Canal?= <maira.canal@usp.br>
-Subject: [PATCH 10/10] drm/amd/display: Turn global functions into static functions
-Date:   Tue, 22 Feb 2022 10:17:01 -0300
-Message-Id: <20220222131701.356117-11-maira.canal@usp.br>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220222131701.356117-1-maira.canal@usp.br>
-References: <20220222131701.356117-1-maira.canal@usp.br>
+        Tue, 22 Feb 2022 08:20:07 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5F3FBD2F5
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 05:19:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645535982; x=1677071982;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=NndnFPRYWtuIIxTmT7iL9a8cEQbFdTEMsAlSZBZruJ4=;
+  b=GmnTg0aKmRBez9Fzg4uTPd8yYznmoqHfz+jkSJ05qWyRSHhjY4LzCLWH
+   ChlUxBrjjChv28NH86UGe6XbhGsFOphEZ5OtOPWoPPmqgpEUySrzdy6Rr
+   ONfgkpX8DYyM2N7wmjDzbho4ueh0mpKXTVc92yt6GvoEpDMggPZJZFqq2
+   gECV8kXQCA685PAqPD6eqkTtbnWoLPoQYTNkCZgQowkLh6rxiO+hutraZ
+   z2qsrUkxgdO1oeEDjDis3IvkkLrkQjssUGItsApPJ5TJ8Uxigzeuo3U6w
+   CN6lmUvXDl/4I+B9sYx0FHgj3tX67NCaiXvFwYgi+j0eLchT1iiM4hw4k
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10265"; a="249280240"
+X-IronPort-AV: E=Sophos;i="5.88,387,1635231600"; 
+   d="scan'208";a="249280240"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2022 05:19:42 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,387,1635231600"; 
+   d="scan'208";a="606688461"
+Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 22 Feb 2022 05:19:41 -0800
+Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nMV4u-0000GM-89; Tue, 22 Feb 2022 13:19:40 +0000
+Date:   Tue, 22 Feb 2022 21:18:52 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     John Stultz <john.stultz@linaro.org>
+Cc:     kbuild-all@lists.01.org,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org
+Subject: [ammarfaizi2-block:google/android/kernel/common/android12-5.4
+ 4044/9999] drivers/dma-buf/heaps/page_pool.c:236:17: sparse: sparse: symbol
+ 'pool_shrinker' was not declared. Should it be static?
+Message-ID: <202202222121.0IUBHSwF-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Turn previously global functions into static functions to avoid
--Wmissing-prototype warnings, such as:
+tree:   https://github.com/ammarfaizi2/linux-block google/android/kernel/common/android12-5.4
+head:   29002d26b47f382cfaad78623470129c398f8563
+commit: 44008f99d9ca0793e2562967e1da01fa74ee4a41 [4044/9999] ANDROID: dma-buf: system_heap: Add pagepool support to system heap
+config: x86_64-randconfig-s022-20220221 (https://download.01.org/0day-ci/archive/20220222/202202222121.0IUBHSwF-lkp@intel.com/config)
+compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
+reproduce:
+        # apt-get install sparse
+        # sparse version: v0.6.4-dirty
+        # https://github.com/ammarfaizi2/linux-block/commit/44008f99d9ca0793e2562967e1da01fa74ee4a41
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block google/android/kernel/common/android12-5.4
+        git checkout 44008f99d9ca0793e2562967e1da01fa74ee4a41
+        # save the config file to linux build tree
+        mkdir build_dir
+        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/dma-buf/heaps/
 
-drivers/gpu/drm/amd/amdgpu/../display/dc/irq/dcn30/irq_service_dcn30.c:50:20:
-warning: no previous prototype for function 'to_dal_irq_source_dcn30'
-[-Wmissing-prototypes]
-enum dc_irq_source to_dal_irq_source_dcn30(
-                   ^
-drivers/gpu/drm/amd/amdgpu/../display/dc/irq/dcn30/irq_service_dcn30.c:50:1:
-note: declare 'static' if the function is not intended to be used outside
-of this translation unit
-enum dc_irq_source to_dal_irq_source_dcn30(
-^
-static
-1 warning generated.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-drivers/gpu/drm/amd/amdgpu/../display/dc/clk_mgr/dcn316/dcn316_clk_mgr.c:488:6:
-warning: no previous prototype for function
-'dcn316_clk_mgr_helper_populate_bw_params' [-Wmissing-prototypes]
-void dcn316_clk_mgr_helper_populate_bw_params(
-     ^
-drivers/gpu/drm/amd/amdgpu/../display/dc/clk_mgr/dcn316/dcn316_clk_mgr.c:488:1:
-note: declare 'static' if the function is not intended to be used outside
-of this translation unit
-void dcn316_clk_mgr_helper_populate_bw_params(
-^
-static
-1 warning generated.
 
-Signed-off-by: Maíra Canal <maira.canal@usp.br>
+sparse warnings: (new ones prefixed by >>)
+>> drivers/dma-buf/heaps/page_pool.c:236:17: sparse: sparse: symbol 'pool_shrinker' was not declared. Should it be static?
+   drivers/dma-buf/heaps/page_pool.c:243:5: sparse: sparse: symbol 'dmabuf_page_pool_init_shrinker' was not declared. Should it be static?
+
+vim +/pool_shrinker +236 drivers/dma-buf/heaps/page_pool.c
+
+bd4db96bfc247af John Stultz 2020-10-02  235  
+bd4db96bfc247af John Stultz 2020-10-02 @236  struct shrinker pool_shrinker = {
+bd4db96bfc247af John Stultz 2020-10-02  237  	.count_objects = dmabuf_page_pool_shrink_count,
+bd4db96bfc247af John Stultz 2020-10-02  238  	.scan_objects = dmabuf_page_pool_shrink_scan,
+bd4db96bfc247af John Stultz 2020-10-02  239  	.seeks = DEFAULT_SEEKS,
+bd4db96bfc247af John Stultz 2020-10-02  240  	.batch = 0,
+bd4db96bfc247af John Stultz 2020-10-02  241  };
+bd4db96bfc247af John Stultz 2020-10-02  242  
+
+:::::: The code at line 236 was first introduced by commit
+:::::: bd4db96bfc247afdaf7a4cfde85fd8147522f3e6 ANDROID: dma-buf: heaps: Add a shrinker controlled page pool
+
+:::::: TO: John Stultz <john.stultz@linaro.org>
+:::::: CC: John Stultz <john.stultz@linaro.org>
+
 ---
- drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c             | 4 ++--
- drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.c   | 2 +-
- .../drm/amd/display/dc/clk_mgr/dcn10/rv1_clk_mgr_vbios_smu.c  | 3 ++-
- .../gpu/drm/amd/display/dc/clk_mgr/dcn316/dcn316_clk_mgr.c    | 2 +-
- drivers/gpu/drm/amd/display/dc/clk_mgr/dcn316/dcn316_smu.c    | 2 +-
- drivers/gpu/drm/amd/display/dc/core/dc_resource.c             | 2 +-
- drivers/gpu/drm/amd/display/dc/irq/dcn20/irq_service_dcn20.c  | 2 +-
- drivers/gpu/drm/amd/display/dc/irq/dcn30/irq_service_dcn30.c  | 2 +-
- 8 files changed, 10 insertions(+), 9 deletions(-)
-
-diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-index c9ca328d34e3..a99b92526b55 100644
---- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-+++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-@@ -6362,7 +6362,7 @@ static bool is_freesync_video_mode(const struct drm_display_mode *mode,
- 		return true;
- }
- 
--struct dc_stream_state *
-+static struct dc_stream_state *
- create_stream_for_sink(struct amdgpu_dm_connector *aconnector,
- 		       const struct drm_display_mode *drm_mode,
- 		       const struct dm_connector_state *dm_state,
-@@ -10189,7 +10189,7 @@ static void set_freesync_fixed_config(struct dm_crtc_state *dm_new_crtc_state) {
- 	dm_new_crtc_state->freesync_config.fixed_refresh_in_uhz = res;
- }
- 
--int dm_update_crtc_state(struct amdgpu_display_manager *dm,
-+static int dm_update_crtc_state(struct amdgpu_display_manager *dm,
- 			 struct drm_atomic_state *state,
- 			 struct drm_crtc *crtc,
- 			 struct drm_crtc_state *old_crtc_state,
-diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.c
-index 389b0cb37995..05573f073b21 100644
---- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.c
-+++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.c
-@@ -213,7 +213,7 @@ static bool validate_dsc_caps_on_connector(struct amdgpu_dm_connector *aconnecto
- 	return true;
- }
- 
--bool retrieve_downstream_port_device(struct amdgpu_dm_connector *aconnector)
-+static bool retrieve_downstream_port_device(struct amdgpu_dm_connector *aconnector)
- {
- 	union dp_downstream_port_present ds_port_present;
- 
-diff --git a/drivers/gpu/drm/amd/display/dc/clk_mgr/dcn10/rv1_clk_mgr_vbios_smu.c b/drivers/gpu/drm/amd/display/dc/clk_mgr/dcn10/rv1_clk_mgr_vbios_smu.c
-index 06bab24d8e27..450eaead4f20 100644
---- a/drivers/gpu/drm/amd/display/dc/clk_mgr/dcn10/rv1_clk_mgr_vbios_smu.c
-+++ b/drivers/gpu/drm/amd/display/dc/clk_mgr/dcn10/rv1_clk_mgr_vbios_smu.c
-@@ -101,7 +101,8 @@ static uint32_t rv1_smu_wait_for_response(struct clk_mgr_internal *clk_mgr, unsi
- 	return res_val;
- }
- 
--int rv1_vbios_smu_send_msg_with_param(struct clk_mgr_internal *clk_mgr, unsigned int msg_id, unsigned int param)
-+static int rv1_vbios_smu_send_msg_with_param(struct clk_mgr_internal *clk_mgr,
-+		unsigned int msg_id, unsigned int param)
- {
- 	uint32_t result;
- 
-diff --git a/drivers/gpu/drm/amd/display/dc/clk_mgr/dcn316/dcn316_clk_mgr.c b/drivers/gpu/drm/amd/display/dc/clk_mgr/dcn316/dcn316_clk_mgr.c
-index ffd3d5cb9871..02a59adff90d 100644
---- a/drivers/gpu/drm/amd/display/dc/clk_mgr/dcn316/dcn316_clk_mgr.c
-+++ b/drivers/gpu/drm/amd/display/dc/clk_mgr/dcn316/dcn316_clk_mgr.c
-@@ -485,7 +485,7 @@ static unsigned int find_clk_for_voltage(
- 	return clock;
- }
- 
--void dcn316_clk_mgr_helper_populate_bw_params(
-+static void dcn316_clk_mgr_helper_populate_bw_params(
- 		struct clk_mgr_internal *clk_mgr,
- 		struct integrated_info *bios_info,
- 		const DpmClocks_316_t *clock_table)
-diff --git a/drivers/gpu/drm/amd/display/dc/clk_mgr/dcn316/dcn316_smu.c b/drivers/gpu/drm/amd/display/dc/clk_mgr/dcn316/dcn316_smu.c
-index fd6497fd2dc5..128614dff108 100644
---- a/drivers/gpu/drm/amd/display/dc/clk_mgr/dcn316/dcn316_smu.c
-+++ b/drivers/gpu/drm/amd/display/dc/clk_mgr/dcn316/dcn316_smu.c
-@@ -111,7 +111,7 @@ static uint32_t dcn316_smu_wait_for_response(struct clk_mgr_internal *clk_mgr, u
- 	return res_val;
- }
- 
--int dcn316_smu_send_msg_with_param(
-+static int dcn316_smu_send_msg_with_param(
- 		struct clk_mgr_internal *clk_mgr,
- 		unsigned int msg_id, unsigned int param)
- {
-diff --git a/drivers/gpu/drm/amd/display/dc/core/dc_resource.c b/drivers/gpu/drm/amd/display/dc/core/dc_resource.c
-index 19b56f9acf84..29ab67f42d92 100644
---- a/drivers/gpu/drm/amd/display/dc/core/dc_resource.c
-+++ b/drivers/gpu/drm/amd/display/dc/core/dc_resource.c
-@@ -1622,7 +1622,7 @@ bool dc_add_all_planes_for_stream(
- 	return add_all_planes_for_stream(dc, stream, &set, 1, context);
- }
- 
--bool is_timing_changed(struct dc_stream_state *cur_stream,
-+static bool is_timing_changed(struct dc_stream_state *cur_stream,
- 		       struct dc_stream_state *new_stream)
- {
- 	if (cur_stream == NULL)
-diff --git a/drivers/gpu/drm/amd/display/dc/irq/dcn20/irq_service_dcn20.c b/drivers/gpu/drm/amd/display/dc/irq/dcn20/irq_service_dcn20.c
-index c4b067d01895..93c31111500b 100644
---- a/drivers/gpu/drm/amd/display/dc/irq/dcn20/irq_service_dcn20.c
-+++ b/drivers/gpu/drm/amd/display/dc/irq/dcn20/irq_service_dcn20.c
-@@ -40,7 +40,7 @@
- 
- #include "ivsrcid/dcn/irqsrcs_dcn_1_0.h"
- 
--enum dc_irq_source to_dal_irq_source_dcn20(
-+static enum dc_irq_source to_dal_irq_source_dcn20(
- 		struct irq_service *irq_service,
- 		uint32_t src_id,
- 		uint32_t ext_id)
-diff --git a/drivers/gpu/drm/amd/display/dc/irq/dcn30/irq_service_dcn30.c b/drivers/gpu/drm/amd/display/dc/irq/dcn30/irq_service_dcn30.c
-index 0b68c08fac3f..ac0c6a62d17b 100644
---- a/drivers/gpu/drm/amd/display/dc/irq/dcn30/irq_service_dcn30.c
-+++ b/drivers/gpu/drm/amd/display/dc/irq/dcn30/irq_service_dcn30.c
-@@ -47,7 +47,7 @@
- 
- #include "ivsrcid/dcn/irqsrcs_dcn_1_0.h"
- 
--enum dc_irq_source to_dal_irq_source_dcn30(
-+static enum dc_irq_source to_dal_irq_source_dcn30(
- 		struct irq_service *irq_service,
- 		uint32_t src_id,
- 		uint32_t ext_id)
--- 
-2.35.1
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

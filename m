@@ -2,101 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 521754BF5AF
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 11:25:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D946A4BF5BE
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 11:27:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229629AbiBVKZR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 05:25:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51030 "EHLO
+        id S231150AbiBVK11 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 05:27:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231147AbiBVKZJ (ORCPT
+        with ESMTP id S229613AbiBVK1W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 05:25:09 -0500
-Received: from mail-qv1-xf31.google.com (mail-qv1-xf31.google.com [IPv6:2607:f8b0:4864:20::f31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB88A159E80;
-        Tue, 22 Feb 2022 02:24:44 -0800 (PST)
-Received: by mail-qv1-xf31.google.com with SMTP id 8so4277855qvf.2;
-        Tue, 22 Feb 2022 02:24:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=ZwVsXW12gm3VwwhPmVGdM4QmytARwditCmcefz+2r74=;
-        b=Z1mQiaGgxCb9cd9lkH/PWqaC7V+yMwbi8iDmq2TQ4kPMn+Dhm9OXlqeFFF+rMvgQZE
-         8/b7D5EtYdkfjwwtrUAf7pUFKB2+NgTSsiVs2WbKyMoYVQ69FLQdzDOFEa2MghOF06jO
-         M/JBE0U0abxWVXw8mRF0MX4CV6fcS3JfA+R6qMUqmkOKLT+v+N2kt2nlDEYeaIJuu+jR
-         xJ02RjQCyzFBjewl4i3R6pRfjFHD09KEOHWd+wDAjMiBe/kvBX4tRYIMhNuHZdRCXRIm
-         703qF9SZZX+aDIspAJafIAXDPQca+8eflHkw3Uve9aGUzOgMh6foCNCgOAn9M5JKmznP
-         Y1hg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=ZwVsXW12gm3VwwhPmVGdM4QmytARwditCmcefz+2r74=;
-        b=b4DExrUS1MUbJiuB4G+axJ022v8Iw2xk4dbgJalgN7tI8EUNAL9PcoUHWk3w2Gdw5c
-         ziIxCOfFZKsvh3+cju+w7DOh7hm6n8hFGFaGFj41HcsEqkZHFqi0b6NTrmI7iOIoOxZT
-         9atS/DzJooPTHAZnJ4BRCTMgk3GkeYRFC3rJVsC3wiMBv09GwAPluopTwCcIqZnSkq5U
-         VQtrj1zC7kHjOW4ksvnAg3pPL3A+eDx+E9sV+CR8pwmajPBoM8q2lsGyX6xxbudDNVFo
-         yhrNc8cfdFpJAP72CTVx7oRcSNT3FG1tDULzf2XPEn1vrln5SMWq6zIwJgDfDyQ/ZFml
-         XCSg==
-X-Gm-Message-State: AOAM532u/rlF+L4lF92a+QBONRyk94bPwQT+GxqvmjbvUwiD+CFHROBq
-        tovKTdX+/fkML4MDumIKhiI=
-X-Google-Smtp-Source: ABdhPJwY72MpP1R5Ah7WW2R4pXSYtRWIGk0/fr7S/30d7VWzLmNB/IjZkS1+K5fOokHdqM4wX5Slow==
-X-Received: by 2002:a05:6214:4a1:b0:432:3676:f227 with SMTP id w1-20020a05621404a100b004323676f227mr2877021qvz.25.1645525483968;
-        Tue, 22 Feb 2022 02:24:43 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id y18sm32215141qtj.33.2022.02.22.02.24.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 22 Feb 2022 02:24:43 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <6534b889-41c5-dd7a-578b-27dc6668064a@roeck-us.net>
-Date:   Tue, 22 Feb 2022 02:24:40 -0800
+        Tue, 22 Feb 2022 05:27:22 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 814F7127D5F
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 02:26:57 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 3FE8A1F397;
+        Tue, 22 Feb 2022 10:26:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1645525616; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=w1hg232T/yWKq7vGtVyNo0OEgr0wbTVArMC8JKVB+m8=;
+        b=ovsHd8BJu5ZGWXYkkmH2y62O0geJ6mMX+IvK7ogKTok8QytXsMXH8hizEzDSq69zawifTX
+        WvqFcU1SRzgh6XD4yErlNkJaH+fo+vmhEmiOJg04yLqFw90zz91jazeSvpo6c1UAEAw9mG
+        MbgWP4mdhWQGpt9BmPsGnM0IWk9L9hw=
+Received: from suse.cz (unknown [10.100.201.86])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 2AEACA3B88;
+        Tue, 22 Feb 2022 10:26:56 +0000 (UTC)
+Date:   Tue, 22 Feb 2022 11:26:52 +0100
+From:   Michal Hocko <mhocko@suse.com>
+To:     Roman Gushchin <roman.gushchin@linux.dev>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, Johannes Weiner <hannes@cmpxchg.org>,
+        Vladimir Davydov <vdavydov.dev@gmail.com>
+Subject: Re: [PATCH] MAINTAINERS: add myself as a memcg co-maintainer
+Message-ID: <YhS6bCYZKMbLFdrs@dhcp22.suse.cz>
+References: <20220221233951.659048-1-roman.gushchin@linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] MIPS: Remove TX39XX support
-Content-Language: en-US
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
-        "Maciej W. Rozycki" <macro@orcam.me.uk>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, dmaengine@vger.kernel.org,
-        linux-watchdog@vger.kernel.org
-References: <20220222090435.62571-1-tsbogend@alpha.franken.de>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20220222090435.62571-1-tsbogend@alpha.franken.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220221233951.659048-1-roman.gushchin@linux.dev>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/22/22 01:04, Thomas Bogendoerfer wrote:
-> No (active) developer owns this hardware, so let's remove Linux support.
+On Mon 21-02-22 15:39:51, Roman Gushchin wrote:
+> Add myself as a memcg co-maintainer. My primary focus over last few
+> years was the kernel memory accounting stack, but I do work on some
+> other parts of the memory controller as well.
 > 
-> Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> Signed-off-by: Roman Gushchin <roman.gushchin@linux.dev>
+> Cc: Johannes Weiner <hannes@cmpxchg.org>
+> Cc: Michal Hocko <mhocko@kernel.org>
+> Cc: Vladimir Davydov <vdavydov.dev@gmail.com>
+
+Acked-by: Michal Hocko <mhocko@suse.com>
+
 > ---
-[ ... ]
+>  MAINTAINERS | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 66aa3a589f6a..ecdb90e99ba7 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -4991,6 +4991,7 @@ CONTROL GROUP - MEMORY RESOURCE CONTROLLER (MEMCG)
+>  M:	Johannes Weiner <hannes@cmpxchg.org>
+>  M:	Michal Hocko <mhocko@kernel.org>
+>  M:	Vladimir Davydov <vdavydov.dev@gmail.com>
+> +M:	Roman Gushchin <roman.gushchin@linux.dev>
+>  L:	cgroups@vger.kernel.org
+>  L:	linux-mm@kvack.org
+>  S:	Maintained
+> -- 
+> 2.35.1
 
->   drivers/watchdog/Kconfig                      |   2 +-
-
-For watchdog:
-
-Acked-by: Guenter Roeck <linux@roeck-us.net>
+-- 
+Michal Hocko
+SUSE Labs

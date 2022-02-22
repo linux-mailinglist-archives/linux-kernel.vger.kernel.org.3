@@ -2,147 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C68184C01E5
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 20:16:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D0F274C01E6
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 20:16:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235177AbiBVTQW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 14:16:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38344 "EHLO
+        id S235184AbiBVTQp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 14:16:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235165AbiBVTQU (ORCPT
+        with ESMTP id S235165AbiBVTQo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 14:16:20 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EA4615E6D4;
-        Tue, 22 Feb 2022 11:15:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645557355; x=1677093355;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=G+u1GVMAA5AenTmPkcf2A62IVjXLsOKGaaxomIJ91iw=;
-  b=IbtkdahH8aP+DzoD/UBvDGbtLa6fUOfq0QCTRXp8ou64ALYU9luT57XR
-   /afK8IzcOEolYGlCjkmhHfQVu5c9g5VUe20pi7OA42ZSQtazzepkMkmq+
-   jmvQDzDqypcatJocWyJhnp9T6Igsu4te9peX6Q5Fg5Ah3zh2924rqeMaH
-   RDxcaD3LjaalSf042dDkT8sUSdGDlOdu3/Pv4CMtbuAycUe2xr47VZgvz
-   f/0Mh38dhyfztz+LGEtW+mI83QwuDNtjWtE7rxgx8iavRhy562PaW/JhM
-   oI9MNC6onyPuT5C3QoBtMAujuRh1Rn46YGdyhEvqjLn8UZY5w3xgLLWZk
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10266"; a="231763257"
-X-IronPort-AV: E=Sophos;i="5.88,387,1635231600"; 
-   d="scan'208";a="231763257"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2022 11:15:54 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,387,1635231600"; 
-   d="scan'208";a="683627455"
-Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 22 Feb 2022 11:15:52 -0800
-Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nMadb-0000Wn-Dz; Tue, 22 Feb 2022 19:15:51 +0000
-Date:   Wed, 23 Feb 2022 03:15:28 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Andrew Melnychenko <andrew@daynix.com>, netdev@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
-        jasowang@redhat.com, mst@redhat.com
-Cc:     kbuild-all@lists.01.org, yan@daynix.com,
-        yuri.benditovich@daynix.com
-Subject: Re: [PATCH v4 3/4] drivers/net/virtio_net: Added RSS hash report.
-Message-ID: <202202230342.HPYe6dHA-lkp@intel.com>
-References: <20220222120054.400208-4-andrew@daynix.com>
+        Tue, 22 Feb 2022 14:16:44 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 294C715E6D4
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 11:16:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1645557377;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=T+GUkN0EwP3DJ0lx9lCnDa6Z8wiaRvOcLwpTDRLmnnU=;
+        b=QDE01n6CkBFxaItVWG1/DbMwfd5kGbcGZR/Tcsxu59AzzdfIElWamAJJeJF8os3OjEc2ES
+        JBQZFdwXthhHnLn66Y/nTp5lCkeMmCsmu9Fx6DWAqD5uvLt8rgor9cvwLZV30eMNj9w0kQ
+        7n1x06ohFnJ+Ik4mQBmmERPJwGurSKI=
+Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
+ [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-253-cx6FFd5PO0ObXeseIhVUtw-1; Tue, 22 Feb 2022 14:16:16 -0500
+X-MC-Unique: cx6FFd5PO0ObXeseIhVUtw-1
+Received: by mail-qv1-f69.google.com with SMTP id if3-20020a0562141c4300b0043147d6bacdso731165qvb.13
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 11:16:16 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=T+GUkN0EwP3DJ0lx9lCnDa6Z8wiaRvOcLwpTDRLmnnU=;
+        b=NVNOCl28Ta3zisF+0vl91db500915E5gaFIg5CGFzXBsEHUaXIrmGU6XBrIDlioTwU
+         nUeYUIP/AmE5VMa/BbeNRv83QIdLKXy8ZZ1B6KUqKni7BJD0Ns3WCOPdXx10tQ93+Fty
+         1i4fv1Yo50SmuINs3Cs2/n+ltGF/Crq1+52JwooN0JyCeJZdrcwi7XpEBHL+r3OEg+XE
+         F0TYlg8o706T25ZdpTZaKIICapIq72SGA/g62qOL+ipVLrfqD335wTW50HocxPlZX1JU
+         B5+iu9GYJrg3bBd5JCe9p2DZZX4u6BWUWAust+8czCACqu/K964/EFc1DZPA9asb2WD8
+         XuRA==
+X-Gm-Message-State: AOAM53180zbV9P/BlIWkkukBqnOOuQA1txeFFhKCW5n6pWnBO4yuwNrO
+        uvPYsU/hbMYB8TbbBJChL3M7frbB1+03MAusfRvpRRoJMYaEyaEQvi/0NIDr/0sdueOlMiH5QBW
+        0PPFlwjt4fS3V2nCAk/NQweM=
+X-Received: by 2002:a37:8602:0:b0:62c:de8f:ad74 with SMTP id i2-20020a378602000000b0062cde8fad74mr13357246qkd.142.1645557375261;
+        Tue, 22 Feb 2022 11:16:15 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyoqR48S+c52tioZfwhQpWLjHci5jUdhUMN36vrY1CYw/3YuAqGThC/L/gVEu0PVsn1GFntaQ==
+X-Received: by 2002:a37:8602:0:b0:62c:de8f:ad74 with SMTP id i2-20020a378602000000b0062cde8fad74mr13357235qkd.142.1645557375068;
+        Tue, 22 Feb 2022 11:16:15 -0800 (PST)
+Received: from localhost (pool-68-160-176-52.bstnma.fios.verizon.net. [68.160.176.52])
+        by smtp.gmail.com with ESMTPSA id b14sm426205qtk.44.2022.02.22.11.16.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Feb 2022 11:16:14 -0800 (PST)
+Date:   Tue, 22 Feb 2022 14:16:13 -0500
+From:   Mike Snitzer <snitzer@redhat.com>
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     Brian Geffon <bgeffon@google.com>,
+        Alasdair Kergon <agk@redhat.com>, dm-devel@redhat.com,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: dm: introduce a DM_ENFORCE_OPEN_COUNT flag.
+Message-ID: <YhU2faRZJ4NstJ6L@redhat.com>
+References: <20220125002025.GA21887@agk-cloud1.hosts.prod.upshift.rdu2.redhat.com>
+ <20220126192234.572058-1-bgeffon@google.com>
+ <CADyq12yugY0g2EMYvyrPVn98x3Tp4PR+eVddmmjZpKSYyrrzag@mail.gmail.com>
+ <YfqYTuhGqOl4SneK@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220222120054.400208-4-andrew@daynix.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <YfqYTuhGqOl4SneK@infradead.org>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andrew,
+On Wed, Feb 02 2022 at  9:42P -0500,
+Christoph Hellwig <hch@infradead.org> wrote:
 
-Thank you for the patch! Perhaps something to improve:
+> Withmy block hat on: nak to this.  No block driver has any business at
+> all rejecting "too many openers".  In fact any opener but the first of
+> a partition is already not counted as an opener, and I plan to complete
+> hide the open count from the device driver.
 
-[auto build test WARNING on mst-vhost/linux-next]
-[also build test WARNING on net/master horms-ipvs/master net-next/master linus/master v5.17-rc5 next-20220217]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+I agree that this proposal exposes controls to userspace that simply
+shouldn't be meaningful given the arbitrary nature of openers.  And
+preventing openers can result in a race where systemd or some other
+service opens before the intended primary consumer of the device.
 
-url:    https://github.com/0day-ci/linux/commits/Andrew-Melnychenko/RSS-support-for-VirtioNet/20220222-200334
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/mst/vhost.git linux-next
-config: i386-randconfig-s002-20220221 (https://download.01.org/0day-ci/archive/20220223/202202230342.HPYe6dHA-lkp@intel.com/config)
-compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
-reproduce:
-        # apt-get install sparse
-        # sparse version: v0.6.4-dirty
-        # https://github.com/0day-ci/linux/commit/4fda71c17afd24d8afb675baa0bb14dbbc6cd23c
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Andrew-Melnychenko/RSS-support-for-VirtioNet/20220222-200334
-        git checkout 4fda71c17afd24d8afb675baa0bb14dbbc6cd23c
-        # save the config file to linux build tree
-        mkdir build_dir
-        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=i386 SHELL=/bin/bash
+Seriously brittle and even if finely tuned to have a suitable value
+for some niche usecase like android: an absolute hack.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Sorry, not interested in taking this.
 
-
-sparse warnings: (new ones prefixed by >>)
-   drivers/net/virtio_net.c:1160:25: sparse: sparse: restricted __le16 degrades to integer
-   drivers/net/virtio_net.c:1160:25: sparse: sparse: restricted __le16 degrades to integer
-   drivers/net/virtio_net.c:1160:25: sparse: sparse: restricted __le16 degrades to integer
-   drivers/net/virtio_net.c:1160:25: sparse: sparse: restricted __le16 degrades to integer
-   drivers/net/virtio_net.c:1160:25: sparse: sparse: restricted __le16 degrades to integer
-   drivers/net/virtio_net.c:1160:25: sparse: sparse: restricted __le16 degrades to integer
-   drivers/net/virtio_net.c:1160:25: sparse: sparse: restricted __le16 degrades to integer
-   drivers/net/virtio_net.c:1160:25: sparse: sparse: restricted __le16 degrades to integer
-   drivers/net/virtio_net.c:1160:25: sparse: sparse: restricted __le16 degrades to integer
->> drivers/net/virtio_net.c:1178:35: sparse: sparse: incorrect type in argument 2 (different base types) @@     expected unsigned int [usertype] hash @@     got restricted __le32 const [usertype] hash_value @@
-   drivers/net/virtio_net.c:1178:35: sparse:     expected unsigned int [usertype] hash
-   drivers/net/virtio_net.c:1178:35: sparse:     got restricted __le32 const [usertype] hash_value
-
-vim +1178 drivers/net/virtio_net.c
-
-  1151	
-  1152	static void virtio_skb_set_hash(const struct virtio_net_hdr_v1_hash *hdr_hash,
-  1153					struct sk_buff *skb)
-  1154	{
-  1155		enum pkt_hash_types rss_hash_type;
-  1156	
-  1157		if (!hdr_hash || !skb)
-  1158			return;
-  1159	
-  1160		switch (hdr_hash->hash_report) {
-  1161		case VIRTIO_NET_HASH_REPORT_TCPv4:
-  1162		case VIRTIO_NET_HASH_REPORT_UDPv4:
-  1163		case VIRTIO_NET_HASH_REPORT_TCPv6:
-  1164		case VIRTIO_NET_HASH_REPORT_UDPv6:
-  1165		case VIRTIO_NET_HASH_REPORT_TCPv6_EX:
-  1166		case VIRTIO_NET_HASH_REPORT_UDPv6_EX:
-  1167			rss_hash_type = PKT_HASH_TYPE_L4;
-  1168			break;
-  1169		case VIRTIO_NET_HASH_REPORT_IPv4:
-  1170		case VIRTIO_NET_HASH_REPORT_IPv6:
-  1171		case VIRTIO_NET_HASH_REPORT_IPv6_EX:
-  1172			rss_hash_type = PKT_HASH_TYPE_L3;
-  1173			break;
-  1174		case VIRTIO_NET_HASH_REPORT_NONE:
-  1175		default:
-  1176			rss_hash_type = PKT_HASH_TYPE_NONE;
-  1177		}
-> 1178		skb_set_hash(skb, hdr_hash->hash_value, rss_hash_type);
-  1179	}
-  1180	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

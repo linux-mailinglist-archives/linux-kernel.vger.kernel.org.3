@@ -2,130 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A52D4C03B4
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 22:23:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A5CB4C03B9
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 22:24:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235759AbiBVVXe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 16:23:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32776 "EHLO
+        id S235769AbiBVVZN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 16:25:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235751AbiBVVXc (ORCPT
+        with ESMTP id S233010AbiBVVZK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 16:23:32 -0500
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14D3EC6803
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 13:23:06 -0800 (PST)
-Received: by mail-lf1-x12c.google.com with SMTP id i11so27420666lfu.3
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 13:23:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=jtBVx2Q/oC2O51WQvIZoigpKLKNp7EeBw9E1UoJ7r14=;
-        b=mAa8bFMjWfWT9TC79LezRPpW/O5teRZRBGOhGeyZlyPSn1RHq2IC87Lql6EkKB7Q9m
-         mWTGKLknMy42DlWk53dfq8vebjptcTZh6UxaO0cddBDBmquX3n9al0Dqy9jX0rj7IZ02
-         1VZKBc9lz4Sk37aQVP8iDCiQOm/V2CeoounJUpha1YMvihrLHinMviFRB7MLSZyWzBoj
-         VIpbYCKPeZGB9rygAk59ibEocVP51rrPpEeTfuMsqlHME1qioGGOfoITrhi9YsPi/Ylt
-         KFL/EJ8TWFhqkvM2YB8Qszca7EvBlru9P36GBNQ3E39PGwe9YvcU2QIurKKcVl1MHHNW
-         l4pg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=jtBVx2Q/oC2O51WQvIZoigpKLKNp7EeBw9E1UoJ7r14=;
-        b=RegqVW+X8wbKWIvxvT70LLRzg4fbeZKsTcmvb4Q5VfdqkqZeRcMZD+YKgJ75I3Cz2s
-         rddNC01HdBLNjeoheDznk4DP02seDYO7Gsz5qFS7kUUdwcSr8+lCa4caoIJ+7sFWEEdc
-         XwvmX6aKFBaycDJ5EZKkvxQqbcxq00N5i+QXqKtsjZiQwtvNZxq+bljSQktjq6GOXgUi
-         xOa+cin+n7/jkxRrv59fyx7XCCF1KjTqtl9T/i4PRpuW/dnMEgsI1k9clxJP2PTg1TdT
-         1FCIiW780rqexCMc/Xu7FsglK30uDzp4P3yM4y5lGx840t+OCcF3TG6B6qRWzyfQbu8T
-         XmRw==
-X-Gm-Message-State: AOAM530m4gjOc6jz8dUxRWAlas1Zfmys4o9o5YDRPwZkMDMQncxwgv5C
-        AWYDW1WAEuTqOJK6mF/EroikuA==
-X-Google-Smtp-Source: ABdhPJzpuqxZyPb0Aal7oIwfG1XVN3zZsfnOTv+F0lFTZPwG9KQdFdeL5m54z3cXCPgTPAfvJx5dzw==
-X-Received: by 2002:ac2:51d0:0:b0:43a:df78:18c with SMTP id u16-20020ac251d0000000b0043adf78018cmr18410052lfm.168.1645564984361;
-        Tue, 22 Feb 2022 13:23:04 -0800 (PST)
-Received: from [192.168.1.211] ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id k14sm1847626ljh.82.2022.02.22.13.23.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 22 Feb 2022 13:23:03 -0800 (PST)
-Message-ID: <c388d91c-ea00-8fa8-3fcf-4ce754edb1b4@linaro.org>
-Date:   Wed, 23 Feb 2022 00:23:03 +0300
+        Tue, 22 Feb 2022 16:25:10 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D967BE1B66;
+        Tue, 22 Feb 2022 13:24:43 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8C12FB81A2C;
+        Tue, 22 Feb 2022 21:24:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C27C8C340EF;
+        Tue, 22 Feb 2022 21:24:40 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="eOQgnPCp"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1645565074;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=JVDKbWuQaqEUhqppE+Xa9vvhTXzWjrw/6DnshvBmlO0=;
+        b=eOQgnPCpWRl5TMMpaPVhvbX6lq+sLxdAY8XQgNIujD8GpCWeghLZw1cOioWX9ZHqZq42aJ
+        0U6KNQ0GbKy4KAbjj8gUNeGqbxnOPJ8h3rLImgPORyI8JEFRqKDXCdWFJyb/Yrkm7tWc0V
+        OU1nnLROMDx67R/QmiMkZKbSlou8ISc=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 1ec5e406 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Tue, 22 Feb 2022 21:24:34 +0000 (UTC)
+Received: by mail-yb1-f174.google.com with SMTP id p19so43940630ybc.6;
+        Tue, 22 Feb 2022 13:24:32 -0800 (PST)
+X-Gm-Message-State: AOAM533rByRKf3PzatJuSPHFsa5T6Ry4V1y9miuCSBaQord//8uPntne
+        UJsk8EOMvAE7yVOoOKhmIbNj2+7zVT3mf4aP780=
+X-Google-Smtp-Source: ABdhPJwvfehACY5olNLdLYWx+1mbRCA/UudBhvxotju5WcW8qrMaLZ7L0JYyK5Hf2olVo7SAOkvPTIjxZVLW1My2qho=
+X-Received: by 2002:a5b:d11:0:b0:623:fbda:40f4 with SMTP id
+ y17-20020a5b0d11000000b00623fbda40f4mr25771486ybp.398.1645565070061; Tue, 22
+ Feb 2022 13:24:30 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [PATCH v2 1/4] drm/msm/dp: Add basic PSR support for eDP
-Content-Language: en-GB
-To:     Doug Anderson <dianders@chromium.org>
-Cc:     Vinod Polimera <quic_vpolimer@quicinc.com>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        freedreno <freedreno@lists.freedesktop.org>,
+References: <1614156452-17311-1-git-send-email-acatan@amazon.com> <1614156452-17311-3-git-send-email-acatan@amazon.com>
+In-Reply-To: <1614156452-17311-3-git-send-email-acatan@amazon.com>
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date:   Tue, 22 Feb 2022 22:24:19 +0100
+X-Gmail-Original-Message-ID: <CAHmME9o6cjZT1Cj1g5w5WQE83YxJNqB7eUCWn74FA9Pbb3Y6nQ@mail.gmail.com>
+Message-ID: <CAHmME9o6cjZT1Cj1g5w5WQE83YxJNqB7eUCWn74FA9Pbb3Y6nQ@mail.gmail.com>
+Subject: Re: [PATCH v7 2/2] drivers/virt: vmgenid: add vm generation id driver
+To:     Adrian Catangiu <acatan@amazon.com>
+Cc:     "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
         LKML <linux-kernel@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Sean Paul <seanpaul@chromium.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, quic_kalyant@quicinc.com,
-        Sankeerth Billakanti <quic_sbillaka@quicinc.com>,
-        quic_vproddut@quicinc.com
-References: <1645455086-9359-1-git-send-email-quic_vpolimer@quicinc.com>
- <1645455086-9359-2-git-send-email-quic_vpolimer@quicinc.com>
- <CAA8EJppRUZ5OHSMS1NdFXDDvRXJFNsdoJDWgU7ZPUoAW9OD+eQ@mail.gmail.com>
- <CAD=FV=W2wi47egKmWDS+BZGSy85K+A8jX0gvi6CYhmFgoBBRmw@mail.gmail.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <CAD=FV=W2wi47egKmWDS+BZGSy85K+A8jX0gvi6CYhmFgoBBRmw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        QEMU Developers <qemu-devel@nongnu.org>,
+        KVM list <kvm@vger.kernel.org>, linux-s390@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        graf@amazon.com, Randy Dunlap <rdunlap@infradead.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Mike Rapoport <rppt@kernel.org>, 0x7f454c46@gmail.com,
+        borntraeger@de.ibm.com, Jann Horn <jannh@google.com>,
+        Willy Tarreau <w@1wt.eu>,
+        Colm MacCarthaigh <colmmacc@amazon.com>,
+        Andrew Lutomirski <luto@kernel.org>,
+        "Theodore Ts'o" <tytso@mit.edu>,
+        Eric Biggers <ebiggers@kernel.org>,
+        "Woodhouse, David" <dwmw@amazon.co.uk>, bonzini@gnu.org,
+        "Singh, Balbir" <sblbir@amazon.com>,
+        "Weiss, Radu" <raduweis@amazon.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>,
+        Michael Ellerman <mpe@ellerman.id.au>, areber@redhat.com,
+        ovzxemul@gmail.com, avagin@gmail.com, ptikhomirov@virtuozzo.com,
+        gil@azul.com, asmehra@redhat.com, dgunigun@redhat.com,
+        vijaysun@ca.ibm.com, oridgar@gmail.com, ghammer@redhat.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/02/2022 22:25, Doug Anderson wrote:
-> Hi,
-> 
-> On Mon, Feb 21, 2022 at 7:12 PM Dmitry Baryshkov
-> <dmitry.baryshkov@linaro.org> wrote:
->>
->>> +static int dp_link_psr_status(struct dp_link_private *link)
->>> +{
->>> +       u8 status[2];
->>> +
->>> +       drm_dp_dpcd_read(link->aux, DP_PSR_ERROR_STATUS, status, 2);
->>> +
->>> +       if (status[0] & DP_PSR_LINK_CRC_ERROR)
->>> +               DRM_ERROR("PSR LINK CRC ERROR\n");
->>> +       else if (status[0] & DP_PSR_RFB_STORAGE_ERROR)
->>> +               DRM_ERROR("PSR RFB STORAGE ERROR\n");
->>> +       else if (status[0] & DP_PSR_VSC_SDP_UNCORRECTABLE_ERROR)
->>> +               DRM_ERROR("PSR VSC SDP UNCORRECTABLE ERROR\n");
->>> +       else if (status[1] & DP_PSR_CAPS_CHANGE)
->>> +               DRM_INFO("PSR Capability Change\n");
->>
->> DRM_DEBUG_DP
-> 
-> Not sure I'll have time to go back and review the series, but one
-> thing that caught my eye as this flashed through my inbox is that I
-> think all of these "shouting" are deprecated. It's even officially
-> documented now as of commit d2f0a8afc1be ("UPSTREAM: drm/print: Add
-> deprecation notes to DRM_...() functions").
+Hi Adrian,
 
-Agreed. But not the DRM_INFO too.
+This thread seems to be long dead, but I couldn't figure out what
+happened to the ideas in it. I'm specifically interested in this part:
 
+On Wed, Feb 24, 2021 at 9:48 AM Adrian Catangiu <acatan@amazon.com> wrote:
+> +static void vmgenid_acpi_notify(struct acpi_device *device, u32 event)
+> +{
+> +       uuid_t old_uuid;
+> +
+> +       if (!device || acpi_driver_data(device) != &vmgenid_data) {
+> +               pr_err("VMGENID notify with unexpected driver private data\n");
+> +               return;
+> +       }
+> +
+> +       /* update VM Generation UUID */
+> +       old_uuid = vmgenid_data.uuid;
+> +       memcpy_fromio(&vmgenid_data.uuid, vmgenid_data.uuid_iomap, sizeof(uuid_t));
+> +
+> +       if (memcmp(&old_uuid, &vmgenid_data.uuid, sizeof(uuid_t))) {
+> +               /* HW uuid updated */
+> +               sysgenid_bump_generation();
+> +               add_device_randomness(&vmgenid_data.uuid, sizeof(uuid_t));
+> +       }
+> +}
 
--- 
-With best wishes
-Dmitry
+As Jann mentioned in an earlier email, we probably want this to
+immediately reseed the crng, not just dump it into
+add_device_randomness alone. But either way, the general idea seems
+interesting to me. As far as I can tell, QEMU still supports this. Was
+it not deemed to be sufficiently interesting?
+
+Thanks,
+Jason

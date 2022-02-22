@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EF5A4BF02E
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 05:10:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B443C4BF0D3
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 05:11:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241390AbiBVDVb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 22:21:31 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51636 "EHLO
+        id S241397AbiBVDVZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 22:21:25 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241291AbiBVDVO (ORCPT
+        with ESMTP id S241420AbiBVDVP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 22:21:14 -0500
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A8A0192B5
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 19:20:42 -0800 (PST)
-Received: by mail-pj1-x1031.google.com with SMTP id gl14-20020a17090b120e00b001bc2182c3d5so721310pjb.1
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 19:20:42 -0800 (PST)
+        Mon, 21 Feb 2022 22:21:15 -0500
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 008CC193CD
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 19:20:44 -0800 (PST)
+Received: by mail-pl1-x62a.google.com with SMTP id i1so629204plr.2
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 19:20:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=Bo6oFnHJAbU/j6h7MDnhNKM3GTAQUQeHdOFA1uJIsUk=;
-        b=EDq4SB+mfddJkNzCL9/fiSz1vybCDTColQrt8/RVk3xtwZMlybZx64fyOoDEmqXskF
-         44JDspyyREMNADEBbTQ19OHSGxh79/dNXb6l+Ebujg1nt2ZSwZwtnQClQRgWOaQ2IfeG
-         0R1lU4alHMG9J6VKJy4dFW4440rYTyHsKh5Yj4vnKcmOt2gYIYyjIjgrYkrZMUfjZPVG
-         0evu6LGLPMc9yVvyVpMSmDrhx+7jR0BXTW/asbgpZen2sXuEZo+moIhA8TzG1Wqeqg+H
-         UcZ/ZAkZbFKK1JgaenBlQiUop97ggn912xs6QBiGKMseO621NBwuV8KEsbT/EpakB5Bh
-         Z72w==
+        bh=It4RGSp99XFUqiUGEzXdClglbEaTDz0QTVwNHQyEiwQ=;
+        b=cx1GruLCUFuWF7dtq9M4B+SERi38A8PQacjrwesId9ucpYxtjotiSzO4viRRv/JP9Q
+         WcliL46uWLjYbOHMp+awY+Zu8CwIsXbs08iczmte1LLIbhx/rVIs1xBNfQxd3zHMp1kf
+         ruTlt0V03qjcNf/gOL+XRYE2XWl46F1iNfxUKqyAukgmj/CISyiaBYCjIQCU0g+EYOAJ
+         eJVVn0n2/RggnLnJwa+xxclZuueEhw1NOuEtAEaQhrDtVeviQE1ej7iYbTFlruvdnffi
+         2jIH7zDmfdnfguTInXU/gQpev9UgrtfQ9yim4Bfk3Ef3hVZ/OthgdtsiAdW5hvUfMgN3
+         A9Lw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=Bo6oFnHJAbU/j6h7MDnhNKM3GTAQUQeHdOFA1uJIsUk=;
-        b=smppZ+rZi4AmaXZFdnJxxW5PHS8YADnle7MvFVtX6XUUBPHEzktwvr9pi/MLFWhzLF
-         83E512428zAt6NCUAPveK/bBU5+9qhi+eB8Z93tU23W36gUEu4O7XtCuayy9wxuPqGzE
-         ZUHkXrWANhd7JeloJyztammoYwplk4j6W8ySdj+dgg+PbqmpLtvzVfD2j0pqpMKNU3pj
-         gH6kwsnsBcZimXSw/wrQTsI+gG4lDREW4dIjX6XQ7hIIIQ4FibPrB+A+q/u0/vP6S4Fd
-         D0HvJ4wxAu1qCg/ahx59smrL/Al/gpfPWJ56OMGsmOY/j0itNVRtVhGRf8+ITKUoUh4q
-         Ytnw==
-X-Gm-Message-State: AOAM533XwAw+KRT6HXX5wvx8w/rROjsNiD3YPBOZJQ8tNIbknLmX5Ut6
-        x2+fZpyN+5koy0Ud0fmXW5k=
-X-Google-Smtp-Source: ABdhPJy4i4RlzYqweyTHlpPwJmd11zenAaP8eiZmT+eCs5JW/E2Jzh7enjEMTMuPMemNWopbUEZoPw==
-X-Received: by 2002:a17:90b:388d:b0:1b9:950c:f08b with SMTP id mu13-20020a17090b388d00b001b9950cf08bmr2019553pjb.49.1645500041868;
-        Mon, 21 Feb 2022 19:20:41 -0800 (PST)
+        bh=It4RGSp99XFUqiUGEzXdClglbEaTDz0QTVwNHQyEiwQ=;
+        b=0lgTQ4bogAkpfMBAk4iNlbfZuc/nakazbB6ERFVB5QDIuU0dIlFINgP/lFXZegrnZt
+         BQbWaBAisPNeXMnHeITXl9/53HsJNz4VuuBGC3/RRVx8hpV9NyUNQJn+owFCdXsxPG6Z
+         MbNCuiUxNn7vV956NIoQULb0lR3IJSfxSoQksVRtIbhVj2eEgMfMsrn5WoUfH3b55Ivx
+         Rfo32vkrKrp0Z4BR9pJQ77410DSgPOl9dU9/YoeRm1H1Vkh7iG84SYYqvieTkKq48ruE
+         qmGpPSPx/ZI1RLG5goAq1kHfOAgyUOZKw+sqniLr/bLjna5Lq5oUAkg/Tx/IXcRAliSr
+         3JNA==
+X-Gm-Message-State: AOAM531jTT/XU4rkb7lReKl/pGzM/CEzwlL6J9DhVLBOmWJRSUAEy7/l
+        0hV5YSZQtGKx1DBLUF9pNk8=
+X-Google-Smtp-Source: ABdhPJyoHG04LqVY1IevXNqwDu7zqZjBOqBAtL3B6R+NdFZG6EVXz/I5pqamqF9ZVV7eGCHSnCWYtg==
+X-Received: by 2002:a17:90b:3a85:b0:1b9:e751:2335 with SMTP id om5-20020a17090b3a8500b001b9e7512335mr2020652pjb.43.1645500044463;
+        Mon, 21 Feb 2022 19:20:44 -0800 (PST)
 Received: from 7YHHR73.igp.broadcom.net (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
-        by smtp.gmail.com with ESMTPSA id x12sm19068111pgp.25.2022.02.21.19.20.40
+        by smtp.gmail.com with ESMTPSA id x12sm19068111pgp.25.2022.02.21.19.20.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Feb 2022 19:20:41 -0800 (PST)
+        Mon, 21 Feb 2022 19:20:43 -0800 (PST)
 From:   Florian Fainelli <f.fainelli@gmail.com>
 To:     linux-mtd@lists.infradead.org
 Cc:     david regan <dregan@mail.com>,
@@ -57,9 +57,9 @@ Cc:     david regan <dregan@mail.com>,
         Vignesh Raghavendra <vigneshr@ti.com>,
         Brian Norris <computersforpeace@gmail.com>,
         linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH stable 4.14] mtd: rawnand: brcmnand: Fixed incorrect sub-page ECC status
-Date:   Mon, 21 Feb 2022 19:20:23 -0800
-Message-Id: <20220222032024.10220-2-f.fainelli@gmail.com>
+Subject: [PATCH stable 4.9] mtd: rawnand: brcmnand: Fixed incorrect sub-page ECC status
+Date:   Mon, 21 Feb 2022 19:20:24 -0800
+Message-Id: <20220222032024.10220-3-f.fainelli@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220222032024.10220-1-f.fainelli@gmail.com>
 References: <20220222032024.10220-1-f.fainelli@gmail.com>
@@ -104,7 +104,7 @@ Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/mtd/nand/brcmnand/brcmnand.c b/drivers/mtd/nand/brcmnand/brcmnand.c
-index c65724d0c725..0138c0c6a4b9 100644
+index 40fdc9d267b9..1c8e95cf29d2 100644
 --- a/drivers/mtd/nand/brcmnand/brcmnand.c
 +++ b/drivers/mtd/nand/brcmnand/brcmnand.c
 @@ -1637,7 +1637,7 @@ static int brcmnand_read_by_pio(struct mtd_info *mtd, struct nand_chip *chip,

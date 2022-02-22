@@ -2,90 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F3814BF952
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 14:29:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 83ED44BF93B
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 14:27:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232489AbiBVN3Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 08:29:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56176 "EHLO
+        id S232334AbiBVN16 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 08:27:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232446AbiBVN3M (ORCPT
+        with ESMTP id S232442AbiBVN1x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 08:29:12 -0500
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6852498596
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 05:28:46 -0800 (PST)
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com [209.85.208.70])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 44AFE3FCAF
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 13:28:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1645536525;
-        bh=4gAKTfhEbiOa5VKlvnZrWEbzuOeUPflEFSiM68fpB+I=;
-        h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-         MIME-Version;
-        b=dkYI8QB+a7ihANAbPp67FEFYSsTNU7f+rC+C/bV0S9rQ4WP5qUoFjkZa4gza16jvU
-         cP0TSqxFDRjILd5ggExIYtRMR3Ql0+8HEwbIZ1ywFXs60RFnOJS02ZM4sR0QIKFWCs
-         eaxREbZn9gis9Y/dy/BS2YQm1WOfa1Rvt0mtlUp2xc9gumju1UCnYQjVEXdLhaUrps
-         d8RljRvvp068RxFSPE9gnoRvc00sjabOYqf+qhRBnYi2XoXnArV/RptJSxvv5UwyUF
-         98BKEIIjI7tXBjKm1z25FqwmTkXCkWP+v7YQUB1TAS+4ikgvkrc3se3clYy4iPeTbU
-         3RscVdDMUeM2g==
-Received: by mail-ed1-f70.google.com with SMTP id dy17-20020a05640231f100b00412897682b4so10184204edb.18
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 05:28:45 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=4gAKTfhEbiOa5VKlvnZrWEbzuOeUPflEFSiM68fpB+I=;
-        b=Cf36abxf5bEDzwlqmmICNe3Qc8w2SrQG55VKhqPcXZmPVueWsvtfzgJVEg1e4OFxEA
-         deK6Z/X/mILkaN85QFxYRh7wTUBPBkTO/jUoLLV6tA8V6dYphFl8+I8tydKOuVMbChA4
-         jpKzeDhzU/WiP7yBiu5B5TmI62mnLc7AL+iAaYaETyxnCblMeh6P9FKFRh9S8Scm92OT
-         TxfUoWh/0vejTBiD8C6lT5p6f0sv482vAgT/x7uvIhIU7RH/KmK2uMQ/OgTdlHZnkgFO
-         X2mG6kzBlHdm6hTMG9dIZIZ10Fk41fYW95bn1UsO42DmfhPQhQPY3hUN1+TDIdGiNRd9
-         DtOA==
-X-Gm-Message-State: AOAM533BU73zt05Nkk/BMV3eBS6tmKKflkrfnweLlNLfdIEP8UbbI9N+
-        3HnICP9CQ/lTz0Yh86qQ6XLWsOQsqAmiKA436OuZNm8vGhuvNqv0M2pYRDSr9bYIHlvosx7XXtb
-        6YvoInSVXk6wFKLU8IBF9xl0HMQlPmYomHiO83W3vEQ==
-X-Received: by 2002:a05:6402:50d2:b0:413:1cd8:e08e with SMTP id h18-20020a05640250d200b004131cd8e08emr4730737edb.276.1645536524858;
-        Tue, 22 Feb 2022 05:28:44 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyk7fFQMdh++yZYYeqYdt0QvvL2iwrOb2soDeyOFOcCMFVM9JS2wL10Ee7DBznFmZmRSj/ibA==
-X-Received: by 2002:a05:6402:50d2:b0:413:1cd8:e08e with SMTP id h18-20020a05640250d200b004131cd8e08emr4730720edb.276.1645536524647;
-        Tue, 22 Feb 2022 05:28:44 -0800 (PST)
-Received: from localhost.localdomain (xdsl-188-155-181-108.adslplus.ch. [188.155.181.108])
-        by smtp.gmail.com with ESMTPSA id c5sm10029875edk.43.2022.02.22.05.28.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Feb 2022 05:28:44 -0800 (PST)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-To:     Abel Vesa <abel.vesa@nxp.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, alsa-devel@alsa-project.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        stable@vger.kernel.org
-Subject: [RFT PATCH 3/3] rpmsg: fix kfree() of const memory on setting driver_override
-Date:   Tue, 22 Feb 2022 14:27:07 +0100
-Message-Id: <20220222132707.266883-4-krzysztof.kozlowski@canonical.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220222132707.266883-1-krzysztof.kozlowski@canonical.com>
-References: <20220222132707.266883-1-krzysztof.kozlowski@canonical.com>
+        Tue, 22 Feb 2022 08:27:53 -0500
+Received: from outbound-smtp11.blacknight.com (outbound-smtp11.blacknight.com [46.22.139.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9446F8CDAF
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 05:27:26 -0800 (PST)
+Received: from mail.blacknight.com (pemlinmail03.blacknight.ie [81.17.254.16])
+        by outbound-smtp11.blacknight.com (Postfix) with ESMTPS id 220FF1C37F5
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 13:27:25 +0000 (GMT)
+Received: (qmail 5624 invoked from network); 22 Feb 2022 13:27:24 -0000
+Received: from unknown (HELO techsingularity.net) (mgorman@techsingularity.net@[84.203.17.223])
+  by 81.17.254.9 with ESMTPSA (AES256-SHA encrypted, authenticated); 22 Feb 2022 13:27:24 -0000
+Date:   Tue, 22 Feb 2022 13:27:22 +0000
+From:   Mel Gorman <mgorman@techsingularity.net>
+To:     K Prateek Nayak <kprateek.nayak@amd.com>
+Cc:     peterz@infradead.org, aubrey.li@linux.intel.com, efault@gmx.de,
+        gautham.shenoy@amd.com, linux-kernel@vger.kernel.org,
+        mingo@kernel.org, song.bao.hua@hisilicon.com,
+        srikar@linux.vnet.ibm.com, valentin.schneider@arm.com,
+        vincent.guittot@linaro.org
+Subject: Re: [PATCH v5] sched/fair: Consider cpu affinity when allowing NUMA
+ imbalance in find_idlest_group
+Message-ID: <20220222132722.GC4423@techsingularity.net>
+References: <20220222102133.2956-1-kprateek.nayak@amd.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=iso-8859-15
+Content-Disposition: inline
+In-Reply-To: <20220222102133.2956-1-kprateek.nayak@amd.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -93,72 +47,144 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The driver_override field from rpmsg_device should not be initialized
-from const memory because the core later kfree() it, for example when
-driver_override is set via sysfs.
+On Tue, Feb 22, 2022 at 03:51:33PM +0530, K Prateek Nayak wrote:
+> In the case of systems containing multiple LLCs per socket, like
+> AMD Zen systems, users want to spread bandwidth hungry applications
+> across multiple LLCs. Stream is one such representative workload where
+> the best performance is obtained by limiting one stream thread per LLC.
+> To ensure this, users are known to pin the tasks to a specify a subset
+> of the CPUs consisting of one CPU per LLC while running such bandwidth
+> hungry tasks.
+> 
+> Suppose we kickstart a multi-threaded task like stream with 8 threads
+> using taskset or numactl to run on a subset of CPUs on a 2 socket Zen3
+> server where each socket contains 128 CPUs
+> (0-63,128-191 in one socket, 64-127,192-255 in another socket)
+> 
+> Eg: numactl -C 0,16,32,48,64,80,96,112 ./stream8
+> 
+> Here each CPU in the list is from a different LLC and 4 of those LLCs
+> are on one socket, while the other 4 are on another socket.
+> 
+> Ideally we would prefer that each stream thread runs on a different
+> CPU from the allowed list of CPUs. However, the current heuristics in
+> find_idlest_group() do not allow this during the initial placement.
+> 
+> Suppose the first socket (0-63,128-191) is our local group from which
+> we are kickstarting the stream tasks. The first four stream threads
+> will be placed in this socket. When it comes to placing the 5th
+> thread, all the allowed CPUs are from the local group (0,16,32,48)
+> would have been taken.
+> 
+> However, the current scheduler code simply checks if the number of
+> tasks in the local group is fewer than the allowed numa-imbalance
+> threshold. This threshold was previously 25% of the NUMA domain span
+> (in this case threshold = 32) but after the v6 of Mel's patchset
+> "Adjust NUMA imbalance for multiple LLCs", got merged in sched-tip,
+> Commit: e496132ebedd ("sched/fair: Adjust the allowed NUMA imbalance
+> when SD_NUMA spans multiple LLCs") it is now equal to number of LLCs
+> in the NUMA domain, for processors with multiple LLCs.
+> (in this case threshold = 8).
+> 
+> For this example, the number of tasks will always be within threshold
+> and thus all the 8 stream threads will be woken up on the first socket
+> thereby resulting in sub-optimal performance.
+> 
+> The following sched_wakeup_new tracepoint output shows the initial
+> placement of tasks in the current tip/sched/core on the Zen3 machine:
+> 
+> stream-5045    [032] d..2.   167.914699: sched_wakeup_new: comm=stream pid=5047 prio=120 target_cpu=048
+> stream-5045    [032] d..2.   167.914746: sched_wakeup_new: comm=stream pid=5048 prio=120 target_cpu=000
+> stream-5045    [032] d..2.   167.914846: sched_wakeup_new: comm=stream pid=5049 prio=120 target_cpu=016
+> stream-5045    [032] d..2.   167.914891: sched_wakeup_new: comm=stream pid=5050 prio=120 target_cpu=032
+> stream-5045    [032] d..2.   167.914928: sched_wakeup_new: comm=stream pid=5051 prio=120 target_cpu=032
+> stream-5045    [032] d..2.   167.914976: sched_wakeup_new: comm=stream pid=5052 prio=120 target_cpu=032
+> stream-5045    [032] d..2.   167.915011: sched_wakeup_new: comm=stream pid=5053 prio=120 target_cpu=032
+> 
+> Once the first four threads are distributed among the allowed CPUs of
+> socket one, the rest of the treads start piling on these same CPUs
+> when clearly there are CPUs on the second socket that can be used.
+> 
+> Following the initial pile up on a small number of CPUs, though the
+> load-balancer eventually kicks in, it takes a while to get to {4}{4}
+> and even {4}{4} isn't stable as we observe a bunch of ping ponging
+> between {4}{4} to {5}{3} and back before a stable state is reached
+> much later (1 Stream thread per allowed CPU) and no more migration is
+> required.
+> 
+> We can detect this piling and avoid it by checking if the number of
+> allowed CPUs in the local group are fewer than the number of tasks
+> running in the local group and use this information to spread the
+> 5th task out into the next socket (after all, the goal in this
+> slowpath is to find the idlest group and the idlest CPU during the
+> initial placement!).
+> 
+> The following sched_wakeup_new tracepoint output shows the initial
+> placement of tasks after adding this fix on the Zen3 machine:
+> 
+> stream-4733    [032] d..2.   116.017980: sched_wakeup_new: comm=stream pid=4735 prio=120 target_cpu=048
+> stream-4733    [032] d..2.   116.018032: sched_wakeup_new: comm=stream pid=4736 prio=120 target_cpu=000
+> stream-4733    [032] d..2.   116.018127: sched_wakeup_new: comm=stream pid=4737 prio=120 target_cpu=064
+> stream-4733    [032] d..2.   116.018185: sched_wakeup_new: comm=stream pid=4738 prio=120 target_cpu=112
+> stream-4733    [032] d..2.   116.018235: sched_wakeup_new: comm=stream pid=4739 prio=120 target_cpu=096
+> stream-4733    [032] d..2.   116.018289: sched_wakeup_new: comm=stream pid=4740 prio=120 target_cpu=016
+> stream-4733    [032] d..2.   116.018334: sched_wakeup_new: comm=stream pid=4741 prio=120 target_cpu=080
+> 
+> We see that threads are using all of the allowed CPUs and there is
+> no pileup.
+> 
+> No output is generated for tracepoint sched_migrate_task with this
+> patch due to a perfect initial placement which removes the need
+> for balancing later on - both across NUMA boundaries and within
+> NUMA boundaries for stream.
+> 
+> Following are the results from running 8 Stream threads with and
+> without pinning on a dual socket Zen3 Machine (2 x 64C/128T):
+> 
+> Pinning is done using: numactl -C 0,16,32,48,64,80,96,112 ./stream8
+> 
+> 	           5.17.0-rc1               5.17.0-rc1                5.17.0-rc1
+>                tip sched/core           tip sched/core            tip sched/core
+>                  (no pinning)                 +pinning              + this-patch
+> 								       + pinning
+> 
+>  Copy:    97699.28 (0.00 pct)     95933.60  (-1.80 pct)    156578.91 (60.26 pct)
+> Scale:   107754.15 (0.00 pct)     91869.88 (-14.74 pct)    149783.25 (39.00 pct)
+>   Add:   126383.29 (0.00 pct)    105730.86 (-16.34 pct)    186493.09 (47.56 pct)
+> Triad:   124896.78 (0.00 pct)    106394.38 (-14.81 pct)    184733.48 (47.90 pct)
+> 
+> Pinning currently hurts the performance compared to unbound case on
+> tip/sched/core. With the addition of this patch, we are able to
+> outperform tip/sched/core by a good margin with pinning.
+> 
+> Following are the results from running 16 Stream threads with and
+> without pinning on a dual socket Skylake Machine (2 x 24C/48T):
+> 
+> Pinning is done using: numactl -C 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15 ./stream16
+> 
+> 	           5.17.0-rc1               5.17.0-rc1                5.17.0-rc1
+>                tip sched/core           tip sched/core            tip sched/core
+>                  (no pinning)                 +pinning              + this-patch
+> 								       + pinning
+> 
+>  Copy:   126620.67 (0.00 pct)     141062.10 (11.40 pct)    147615.44 (16.58 pct)
+> Scale:   91313.51 (0.00 pct)      112879.61 (23.61 pct)    122591.28 (34.25 pct)
+>   Add:   102035.43 (0.00 pct)     125889.98 (23.37 pct)    138179.01 (35.42 pct)
+> Triad:   102281.91 (0.00 pct)     123743.48 (20.98 pct)    138940.41 (35.84 pct)
+> 
+> In case of Skylake machine, with single LLC per socket, we see good
+> improvement brought about by pinning which is further benefited by
+> this patch.
+> 
+> Signed-off-by: K Prateek Nayak <kprateek.nayak@amd.com>
 
-Fixes: 950a7388f02b ("rpmsg: Turn name service into a stand alone driver")
-Fixes: c0cdc19f84a4 ("rpmsg: Driver for user space endpoint interface")
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
----
- drivers/rpmsg/rpmsg_internal.h | 12 ++++++++++--
- drivers/rpmsg/rpmsg_ns.c       | 13 +++++++++++--
- 2 files changed, 21 insertions(+), 4 deletions(-)
+Only minor nit would that the cpumask can be declared within the if
+block to limit scope but that is just being picky so
 
-diff --git a/drivers/rpmsg/rpmsg_internal.h b/drivers/rpmsg/rpmsg_internal.h
-index b1245d3ed7c6..c21e73ffbf05 100644
---- a/drivers/rpmsg/rpmsg_internal.h
-+++ b/drivers/rpmsg/rpmsg_internal.h
-@@ -92,10 +92,18 @@ int rpmsg_release_channel(struct rpmsg_device *rpdev,
-  */
- static inline int rpmsg_chrdev_register_device(struct rpmsg_device *rpdev)
- {
-+	int ret;
-+
- 	strcpy(rpdev->id.name, "rpmsg_chrdev");
--	rpdev->driver_override = "rpmsg_chrdev";
-+	rpdev->driver_override = kstrdup("rpmsg_chrdev", GFP_KERNEL);
-+	if (!rpdev->driver_override)
-+		return -ENOMEM;
-+
-+	ret = rpmsg_register_device(rpdev);
-+	if (ret)
-+		kfree(rpdev->driver_override);
- 
--	return rpmsg_register_device(rpdev);
-+	return ret;
- }
- 
- #endif
-diff --git a/drivers/rpmsg/rpmsg_ns.c b/drivers/rpmsg/rpmsg_ns.c
-index 762ff1ae279f..7d0605307d23 100644
---- a/drivers/rpmsg/rpmsg_ns.c
-+++ b/drivers/rpmsg/rpmsg_ns.c
-@@ -20,12 +20,21 @@
-  */
- int rpmsg_ns_register_device(struct rpmsg_device *rpdev)
- {
-+	int ret;
-+
- 	strcpy(rpdev->id.name, "rpmsg_ns");
--	rpdev->driver_override = "rpmsg_ns";
-+	rpdev->driver_override = kstrdup("rpmsg_ns", GFP_KERNEL);
-+	if (!rpdev->driver_override)
-+		return -ENOMEM;
-+
- 	rpdev->src = RPMSG_NS_ADDR;
- 	rpdev->dst = RPMSG_NS_ADDR;
- 
--	return rpmsg_register_device(rpdev);
-+	ret = rpmsg_register_device(rpdev);
-+	if (ret)
-+		kfree(rpdev->driver_override);
-+
-+	return ret;
- }
- EXPORT_SYMBOL(rpmsg_ns_register_device);
- 
+Acked-by: Mel Gorman <mgorman@techsingularity.net>
+
+Thanks!
+
 -- 
-2.32.0
-
+Mel Gorman
+SUSE Labs

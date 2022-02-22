@@ -2,50 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF0794BF3A3
+	by mail.lfdr.de (Postfix) with ESMTP id 93CDF4BF3A2
 	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 09:29:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229840AbiBVI32 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 03:29:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44178 "EHLO
+        id S229853AbiBVI3a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 03:29:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229825AbiBVI3Y (ORCPT
+        with ESMTP id S229831AbiBVI3Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 03:29:24 -0500
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7A6215678A
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 00:28:59 -0800 (PST)
-Received: by mail-ed1-x536.google.com with SMTP id u18so35049481edt.6
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 00:28:59 -0800 (PST)
+        Tue, 22 Feb 2022 03:29:25 -0500
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6F3C157226
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 00:29:00 -0800 (PST)
+Received: by mail-ej1-x636.google.com with SMTP id a23so40363487eju.3
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 00:29:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=0UMhoqvO6ENLxC1LYsXqT72OwTuutJDRaWt1RySjxzE=;
-        b=frQy8xE5Q48UYglVBLtvg+MTWzX1vQejrd8uuX/0WsUkOqCechJJCFAEKyCSsvgLmN
-         i2hcyjrQW5aerzDaveJCGvbAPZBXV+cfuzcvElznoO1KS0Eg9BD8/VnPSstA1ZJB+cYD
-         O+/om76OPESqB1JcBpChocbdIpEP6oAS+R65b9zfe2wiSQ3B+ElKj/eUNz6rIOEfcpev
-         QdpQIc/B767WGnAo9BJmzp4GvZzF0G64xkch0oyYXV12sr0bNwEiZbnlA8C0Mazq0Flb
-         IIq/k7PPXxtgBMnNuqsIOr/MtU+xJuGFw2Jf6MmD/bSJo9GZMc0ARFteGUzqIvPSJMVX
-         ClWw==
+        bh=J4YfQybsK+XfBBKMof2I6wzbyQxle5AmeBoOukDBvsE=;
+        b=PC9HeviVJ9bQZnx0cbe2TiMsc5Rrn4zqRnAIQngqMUsOaJ5r13jAxh6bmWwwk5/61T
+         4qA9VlvySrUgbUttIEmpCJG3op/YHzagejyfu51VDgsZbEOq93q0gsu0M+NnYa0qvkaX
+         53CnWroqu7cy9J6MyqgKkcrEHZdAL5KvXqE5QhP7hcJvshx+cMjfEa0FZt5nx8dScJ/Q
+         2H5R0yLwL2abEMhsmyXMEgngaNtL3R2pUCy75Py6nksvUEQDcXedlHkXTd2sgv1/Tfsd
+         RpWYmxpl1YXzYQZw+T7Fqm/p5lKyx1kbVgF65vos+xVZFv3Rr99aGYHTS7z3jc0iBQIT
+         xqoQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=0UMhoqvO6ENLxC1LYsXqT72OwTuutJDRaWt1RySjxzE=;
-        b=m23/3Dsml/mQNFC7+LCBRgNqbiEzJ28BJ4zLzTyEFKdWZUCa+3gDRirniymhW+ibVY
-         dqvhq4Bcz/v7Qq2fD5p3KOKL3P24FxpXhYCGtybVxePHIx6rJtfhXAPI7JNIj4KYELuv
-         DVmNLWkdo/rDbu9J9Xf+ffLzyrs83NvqGcJuq06/VCNMDwMHjJKACMcwfwAXPnxkszBX
-         rFg+BfoUB4yPGcT2jw3KQWec4Z7d5C52zxYQJgsvhOL+K3e7fxRFC6X1fa7R+gjkfHMx
-         Mj5vSWyOyke3hyyLeK6MeeTw4IgbArlwrmRQETBX9gyDVE8BFe9xkZfYgPVImdbmpysl
-         DYSA==
-X-Gm-Message-State: AOAM531kog2jm31uba6drTIGpcOvVQJ4GUV4KD7Xbe6q08i+R4j0lYmA
-        mFxiUxUlfjTJfYpQTWWRLqM=
-X-Google-Smtp-Source: ABdhPJz2e1oWv0FkjbWR3Z//1hhYeL5xwBnQ9MW/NyOEOt+kqyCib93ouedmgh+gvwlQNYxTn23NJA==
-X-Received: by 2002:aa7:cb8b:0:b0:410:9aaf:2974 with SMTP id r11-20020aa7cb8b000000b004109aaf2974mr24726526edt.173.1645518538404;
-        Tue, 22 Feb 2022 00:28:58 -0800 (PST)
+        bh=J4YfQybsK+XfBBKMof2I6wzbyQxle5AmeBoOukDBvsE=;
+        b=dMsTq6ZsAOYxo0Kc8hAp2DQHLSRglKqVJOHj3uRyfLry+DO0SrHE5VqjTZ2N4PUEe+
+         qjDN5hq6W0y1RjQ91RBH+M1nyrkh6pZZIOFIqVZ7sQCcGnuKahdVbrf+4D47L2TYusD4
+         TR3NyfpVNc/xTrFs7fBFu0M4qYqaGqiRm8KiYt9yWMHyKMoc68UB9Z/Hfw3CFT8EXpR1
+         LH03DIJBkC99tLbVjTUV+3iFLt5SjWtK6WTnxMKr2QVvCmeyP/XL2UtvMOiSRCcgSwLb
+         kGEYf/uLVWl95Dq0UnjpWLXo6mw4pllv2+nlpuJnOvIe5oJSfkyTik0u97vcSUw0IxzU
+         N/EQ==
+X-Gm-Message-State: AOAM531LwuFztmn/QRXIVVnt+NOfegXgz3oIQEks4PK1oE8RusiwX14J
+        lZyiYUUXck9eTbfQ4J+K8o8=
+X-Google-Smtp-Source: ABdhPJxoHl1uKaghZMUCYpBJ/nzr1+Srdcw1R2PqegQppU8mvJhAqbR24+PJ+ni/HgCKkTanG66ILQ==
+X-Received: by 2002:a17:907:366:b0:6ba:fff6:4fc7 with SMTP id rs6-20020a170907036600b006bafff64fc7mr18310266ejb.756.1645518539303;
+        Tue, 22 Feb 2022 00:28:59 -0800 (PST)
 Received: from localhost.localdomain (ip5f5abb8f.dynamic.kabel-deutschland.de. [95.90.187.143])
-        by smtp.gmail.com with ESMTPSA id v12sm9831926edr.8.2022.02.22.00.28.57
+        by smtp.gmail.com with ESMTPSA id v12sm9831926edr.8.2022.02.22.00.28.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Tue, 22 Feb 2022 00:28:58 -0800 (PST)
 From:   Michael Straube <straube.linux@gmail.com>
@@ -53,9 +53,9 @@ To:     gregkh@linuxfoundation.org
 Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
         linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
         Michael Straube <straube.linux@gmail.com>
-Subject: [PATCH v2 2/3] staging: r8188eu: refactor rtw_ch2freq()
-Date:   Tue, 22 Feb 2022 09:28:46 +0100
-Message-Id: <20220222082847.6687-3-straube.linux@gmail.com>
+Subject: [PATCH v2 3/3] staging: r8188eu: clean up rtw_rf.c
+Date:   Tue, 22 Feb 2022 09:28:47 +0100
+Message-Id: <20220222082847.6687-4-straube.linux@gmail.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220222082847.6687-1-straube.linux@gmail.com>
 References: <20220222082847.6687-1-straube.linux@gmail.com>
@@ -71,75 +71,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert the array ch_freq_map to a simple integer array and use
-the indices as channel numbers. This simplifies the code and avoids
-looping through the array to get the frequency. To avoid out of
-bounds array access return a default value for invalid channel values,
-like the original code did.
+Remove unnecessary includes and the unused define _RTW_RF_C_ from
+rtw_rf.c.
 
 Signed-off-by: Michael Straube <straube.linux@gmail.com>
 ---
 v2:
-Added a check to avoid out of bounds array access.
+No changes.
 
- drivers/staging/r8188eu/core/rtw_rf.c | 41 ++++++++++++---------------
- 1 file changed, 18 insertions(+), 23 deletions(-)
+ drivers/staging/r8188eu/core/rtw_rf.c | 5 -----
+ 1 file changed, 5 deletions(-)
 
 diff --git a/drivers/staging/r8188eu/core/rtw_rf.c b/drivers/staging/r8188eu/core/rtw_rf.c
-index 51425971782b..68178699a0c6 100644
+index 68178699a0c6..2d2f0fc4c942 100644
 --- a/drivers/staging/r8188eu/core/rtw_rf.c
 +++ b/drivers/staging/r8188eu/core/rtw_rf.c
-@@ -8,32 +8,27 @@
- #include "../include/recv_osdep.h"
- #include "../include/xmit_osdep.h"
+@@ -1,12 +1,7 @@
+ // SPDX-License-Identifier: GPL-2.0
+ /* Copyright(c) 2007 - 2011 Realtek Corporation. */
  
--struct ch_freq {
--	u32 channel;
--	u32 frequency;
-+static const u32 ch_freq_map[] = {
-+	2412,
-+	2417,
-+	2422,
-+	2427,
-+	2432,
-+	2437,
-+	2442,
-+	2447,
-+	2452,
-+	2457,
-+	2462,
-+	2467,
-+	2472,
-+	2484
- };
+-#define _RTW_RF_C_
+-
+-#include "../include/osdep_service.h"
+ #include "../include/drv_types.h"
+-#include "../include/recv_osdep.h"
+-#include "../include/xmit_osdep.h"
  
--static struct ch_freq ch_freq_map[] = {
--	{1, 2412}, {2, 2417}, {3, 2422}, {4, 2427}, {5, 2432},
--	{6, 2437}, {7, 2442}, {8, 2447}, {9, 2452}, {10, 2457},
--	{11, 2462}, {12, 2467}, {13, 2472}, {14, 2484},
--};
--
--static int ch_freq_map_num = ARRAY_SIZE(ch_freq_map);
--
- u32 rtw_ch2freq(u32 channel)
- {
--	u8	i;
--	u32	freq = 0;
--
--	for (i = 0; i < ch_freq_map_num; i++) {
--		if (channel == ch_freq_map[i].channel) {
--			freq = ch_freq_map[i].frequency;
--				break;
--		}
--	}
--	if (i == ch_freq_map_num)
--		freq = 2412;
-+	if (channel == 0 || channel > ARRAY_SIZE(ch_freq_map))
-+		return 2412;
- 
--	return freq;
-+	return ch_freq_map[channel - 1];
- }
+ static const u32 ch_freq_map[] = {
+ 	2412,
 -- 
 2.35.1
 

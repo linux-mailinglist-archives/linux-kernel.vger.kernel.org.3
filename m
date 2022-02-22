@@ -2,141 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FB404BF4F3
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 10:47:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A4EA44BF4F9
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 10:48:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230260AbiBVJre (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 04:47:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43492 "EHLO
+        id S230290AbiBVJs7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 04:48:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229520AbiBVJrc (ORCPT
+        with ESMTP id S230274AbiBVJs4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 04:47:32 -0500
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83B9E8BE33;
-        Tue, 22 Feb 2022 01:47:07 -0800 (PST)
-Received: by mail-wr1-x42d.google.com with SMTP id h6so31943507wrb.9;
-        Tue, 22 Feb 2022 01:47:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=BmCM771/H8fMGA2TM9vIMuFjbF0aY9kc+ryD8RCZwDs=;
-        b=idzQPKZoLATAZxfyuZGOcDY/2sUODvMOnd/QV1CEQCDccF+PWPrqBdSJUbkutKn6uq
-         Lzp/jKHgQ6uQXsauKGJ2KAztiFzZ8Fj6mQ8lwRKK/oRT5BpMwabXVRzhKN1dxscDWNNw
-         6R7+qhb78rincI66EA87GH3lUlbKWdm/gddbv385b+2n8uXNbk0ZBRWf89UqfwMJJbAD
-         cH13YFUDCxt9gYdAvmiR5cJgEeQjPwoYsEDSHA4SdHGigQShR5b4qHOhGrR+fMVDkbFN
-         F9W1M/atDfXtUuu4X5VwAJiKOe8nd0SXdTiMZmlpuj5n9fT4Y7O7kYqlLIrLEuIyez3f
-         Y2AQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=BmCM771/H8fMGA2TM9vIMuFjbF0aY9kc+ryD8RCZwDs=;
-        b=E9qyPCB4zifrNujkwkft5jus8lrw8HA7hZTN0yX6q16+ZwpoA3QuF4pEeQkemvF0fk
-         ZNs2LZof0Yzklvfa6HGyBkEm1HF1+5m+oT101J85CpxAEqDrHh3BaSNSROOl0ee6nzgn
-         YWioVkKW+s7d+LoVlijWoEe4PXHGveQwiwkYnbEzHlqtzjiDq7C2iKkoN/XvWpnHQNJH
-         82dk9VhyjRFgII46eEwRQ/xanGXCLHYzb7YC7a/h3UmXzH5/I7XlEECmJKGwk+GJ+Oxv
-         bXMFutEyHeLs/Tp2+GBwyzwbf8+23RKBPnSAbztG9USGu3YBBvVQGhOXfRmVsC27fCZy
-         iTmQ==
-X-Gm-Message-State: AOAM532JtjfhOtvO+hmSrxPAa39oEuL4qLSYrc2P53ONOsqhhwbZ1K+N
-        vrZ08hSMSl2oB2oHGfokUyCDXmpX+FY=
-X-Google-Smtp-Source: ABdhPJxK24rkLm2wkZV8z8R7xDAF5lTZl8sNGmPovb/9HW2VOQ3JIudeOlcRuv9J+GZ49zKqu/oa4A==
-X-Received: by 2002:a5d:5888:0:b0:1ea:118f:4a82 with SMTP id n8-20020a5d5888000000b001ea118f4a82mr8365095wrf.502.1645523226065;
-        Tue, 22 Feb 2022 01:47:06 -0800 (PST)
-Received: from Red ([2a01:cb1d:3d5:a100:264b:feff:fe03:2806])
-        by smtp.googlemail.com with ESMTPSA id x17sm43745672wrv.107.2022.02.22.01.47.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Feb 2022 01:47:05 -0800 (PST)
-Date:   Tue, 22 Feb 2022 10:47:03 +0100
-From:   Corentin Labbe <clabbe.montjoie@gmail.com>
-To:     Harsha Harsha <harshah@xilinx.com>
-Cc:     "herbert@gondor.apana.org.au" <herbert@gondor.apana.org.au>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        Michal Simek <michals@xilinx.com>,
-        Sarat Chand Savitala <saratcha@xilinx.com>,
-        Harsh Jain <harshj@xilinx.com>, git <git@xilinx.com>
-Subject: Re: [PATCH V2 2/4] firmware: xilinx: Add ZynqMP SHA API for SHA3
- functionality
-Message-ID: <YhSxF5nDzwsY9BFS@Red>
-References: <1645125264-11033-1-git-send-email-harsha.harsha@xilinx.com>
- <1645125264-11033-3-git-send-email-harsha.harsha@xilinx.com>
- <Yg9qOrjJuttVSetN@Red>
- <SJ0PR02MB7279894629DCA2758355A9D2DE3A9@SJ0PR02MB7279.namprd02.prod.outlook.com>
+        Tue, 22 Feb 2022 04:48:56 -0500
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::221])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82E938CDBD;
+        Tue, 22 Feb 2022 01:48:29 -0800 (PST)
+Received: (Authenticated sender: clement.leger@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 0D04C24000E;
+        Tue, 22 Feb 2022 09:48:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1645523308;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=EFAaqhIoJajTkLT+95fOlAru+/AxTHVWX3q/uD+uNdU=;
+        b=eAg3o386bJa6y9cGCHbx42R8Tm9kdj+SIwPdnXDvQTrUGO3IzullL5zCABe+VbXtKnDp6B
+        IrZ1MycmBt6u13sM0hJIAEi7XNZLihmD5SK9SuRjtT8NmGD3eRVUG1pLJWcbb0PIQUHlVO
+        M5tiXKtegLhr4tiXoUSopSd0EczlGZ+2L0fe+IUyNEAbqN1hy4tHgkEu40wVFrcdVlR8/s
+        ut9iB78G/W6kLYj3Xn1LOeYWI6WjMVb+SVIG16TN03qHYTM9VEExmrNC68wuf/gvM/nEEK
+        dB2blcd5oXMwfoX/59MJ86WrOy8GPGGR39UcgbH2hdb4zEhhJIiy74iQltOH5g==
+Date:   Tue, 22 Feb 2022 10:47:05 +0100
+From:   =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Wolfram Sang <wsa@kernel.org>, Peter Rosin <peda@axentia.se>,
+        Russell King <linux@armlinux.org.uk>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+Subject: Re: [RFC 02/10] property: add fwnode_get_match_data()
+Message-ID: <20220222104705.54a73165@fixe.home>
+In-Reply-To: <CAHp75VfduXwRvxkNg=At5jaN-tcP3=utiukEDL35PEv_grK4Pw@mail.gmail.com>
+References: <20220221162652.103834-1-clement.leger@bootlin.com>
+        <20220221162652.103834-3-clement.leger@bootlin.com>
+        <YhPP5GWt7XEv5xx8@smile.fi.intel.com>
+        <20220222091902.198ce809@fixe.home>
+        <CAHp75VdwfhGKOiGhJ1JsiG+R2ZdHa3N4hz6tyy5BmyFLripV5A@mail.gmail.com>
+        <20220222094623.1f7166c3@fixe.home>
+        <CAHp75VfduXwRvxkNg=At5jaN-tcP3=utiukEDL35PEv_grK4Pw@mail.gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <SJ0PR02MB7279894629DCA2758355A9D2DE3A9@SJ0PR02MB7279.namprd02.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le Mon, Feb 21, 2022 at 12:17:02PM +0000, Harsha Harsha a écrit :
-> 
-> 
-> > -----Original Message-----
-> > From: Corentin Labbe <clabbe.montjoie@gmail.com>
-> > Sent: Friday, February 18, 2022 3:13 PM
-> > To: Harsha Harsha <harshah@xilinx.com>
-> > Cc: herbert@gondor.apana.org.au; davem@davemloft.net; linux-crypto@vger.kernel.org; linux-kernel@vger.kernel.org; linux-arm-
-> > kernel@lists.infradead.org; Michal Simek <michals@xilinx.com>; Sarat Chand Savitala <saratcha@xilinx.com>; Harsh Jain
-> > <harshj@xilinx.com>; git <git@xilinx.com>
-> > Subject: Re: [PATCH V2 2/4] firmware: xilinx: Add ZynqMP SHA API for SHA3 functionality
-> > 
-> > Le Fri, Feb 18, 2022 at 12:44:22AM +0530, Harsha a écrit :
-> > > This patch adds zynqmp_pm_sha_hash API in the ZynqMP firmware to compute
-> > > SHA3 hash of given data.
-> > >
-> > > Signed-off-by: Harsha <harsha.harsha@xilinx.com>
-> > > Acked-by: Michal Simek <michal.simek@xilinx.com>
-> > > ---
-> > 
-> > Hello
-> > 
-> > Your signed-off should contain your real name.
-> 
-> My complete name is Harsha which I have mentioned in the signed-off section.
+Le Tue, 22 Feb 2022 10:24:13 +0100,
+Andy Shevchenko <andy.shevchenko@gmail.com> a =C3=A9crit :
 
-I am sorry, I believed it was your pseudo. If it is your real name, no change are needed.
+> > > If you want to use the device on an ACPI based platform, you need to
+> > > describe it in ACPI as much as possible. The rest we may discuss. =20
+> >
+> > Agreed but the PCIe card might also be plugged in a system using a
+> > device-tree description (ARM for instance). I should I do that without
+> > duplicating the description both in DT and ACPI ? =20
+>=20
+> Why is it (duplication) a problem?
+> Each platform has its own kind of description, so one needs to provide
+> it in the format the platform accepts.
+>=20
 
-> 
-> > Furthermore why did you drop copyright from previous poster ?
-> > See https://patchwork.kernel.org/project/linux-crypto/cover/1556793282-17346-1-git-send-email-kalyani.akula@xilinx.com/ for
-> > reference.
-> 
-> I did not understand the comment. Do you want me to add Kalyani's name also in the Signed of section?
-> 
-> > 
-> > Furthermore, the previous poster didnt answered my questions about parallel processing and tests.
-> 
-> Since SHA3 HW engine in ZynqMPSoC does not support parallel processing of 2 hash requests, so we have changed our approach. 
-> Now  to support parallel processing of 2 hash requests, software fallback is being used for init, update, final, export and import in the ZynqMP SHA driver.
-> For digest, the calculation of SHA3 hash is done by the hardened SHA3 accelerator in Xilinx ZynqMP SoC.
-> 
+The problem that I see is not only duplication but also that the PCIe
+card won't work out of the box and will need a specific SSDT overlays
+each time it is used. According to your document about SSDT overlays,
+there is no way to load this from the driver. This means that the user
+will have to compile a platform specific .aml file to match its
+platform configuration. If the user wants to change the PCIe port, than
+I guess it will have to load another .aml file. I do not think a user
+expect to do so when plugging a PCIe card.
 
-I asked for parallel processing since I didnt see any locking or way to prevent hardware to be used in the same time.
-But the final work is done by a firmware call, so my knowledge stop here.
+Moreover, the APCI documentation [1] says the following:
 
-> Following tests have been done for the driver:
-> - Enabled kernel self tests and extra run-time crypto self tests
-> - Tested SHA hash computation for different sizes of data using userspace application
-> - Tested SHA hash computation using multiple updates of data using userspace application
-> - Tested parallel hash computation
-> - Tested using the tcrypt module
-> 
+"PCI devices, which are below the host bridge, generally do not need to
+be described via ACPI. The OS can discover them via the standard PCI
+enumeration mechanism, using config accesses to discover and identify
+devices and read and size their BARs. However, ACPI may describe PCI
+devices if it provides power management or hotplug functionality for
+them or if the device has INTx interrupts connected by platform
+interrupt controllers and a _PRT is needed to describe those
+connections."
 
-This should be in the cover letter.
+The device I want to use (a PCIe switch) does not fall into these
+categories so there should be no need to describe it using ACPI.
+Regarding the use of software nodes, the documentation also says that:
 
-Regards
+"The software nodes can be used to complement fwnodes representing real
+firmware nodes when they are incomplete, for example missing device
+properties, *and to supply the primary fwnode when the firmware lacks
+hardware description for a device completely.*"
+
+I think my device falls into this last category but I might be wrong. I
+understand that using software_node is probably not the best idea to do
+so but I did not found any other convenient way to do it and SSDT
+overlays do not really seems to be ideal. I would be glad if you
+could provide me with an example of such usage to check if it's really
+usable.
+
+Thanks,
+
+[1] https://www.kernel.org/doc/html/latest/PCI/acpi-info.html
+--=20
+Cl=C3=A9ment L=C3=A9ger,
+Embedded Linux and Kernel engineer at Bootlin
+https://bootlin.com

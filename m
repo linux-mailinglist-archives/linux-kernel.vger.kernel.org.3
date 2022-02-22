@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AA304BF78A
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 13:00:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A3A4C4BF78F
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 13:00:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231826AbiBVMBA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 07:01:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47448 "EHLO
+        id S231829AbiBVMBH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 07:01:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231808AbiBVMAX (ORCPT
+        with ESMTP id S231805AbiBVMA0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 07:00:23 -0500
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58B55156C70
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 03:59:58 -0800 (PST)
-Received: by mail-wm1-x330.google.com with SMTP id p14-20020a05600c1d8e00b0037f881182a8so1628884wms.2
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 03:59:58 -0800 (PST)
+        Tue, 22 Feb 2022 07:00:26 -0500
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8298C156C64
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 03:59:59 -0800 (PST)
+Received: by mail-wr1-x42b.google.com with SMTP id s13so4184296wrb.6
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 03:59:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=TT58Pxq1258T4AxyuLdXgL1OIhP7Hr2onHMX8NaDui0=;
-        b=OlsqQ+HYW21fdRD6Ie2kAF0sLLQXbbvVHzDRxuPbFBpppJeOcibTqM53uRG725SIm/
-         5hZ/AGJpEmJP5N3am+fe7KIvlFwLrrn93UN6ZV3ky4sQrUoAs5TVKpAU2Q4F+cz8SQGX
-         K+rfi/eblBV5qbMFbU07oElE7eOsTeU1tp/c6zSPfUQlgNqwOKlMS4iRRFl5cAIU1zyN
-         CoftkLdoW0KnNngUjTdrxms5xLic4p6+Etf3nDx2U7ZAufFJf6o1G7O/HKH14OlwAIdL
-         HxNtQvbXxGDxymxxMkGeYxlSLWZEiJ5+Y4A+VovzD/K2OmbM8zA4S1Zvalqg2czbNlVg
-         nz2g==
+        bh=FmiJNex1ot8tDEQkrlMDikI8ft3IlZn2sN6gtT8TTKk=;
+        b=NFB3RliSVCvIj1utGaE/jSklWt1AArhvVYfiMhiGpoNLoRv65H7F7COpmVqkX/CmKk
+         D88sHc4WmVJ5AQlccvWS/rDejHhplBiTj6CYQVahEKJFZ3MUNg8ByGToogl9GHCbs7St
+         qQtjocyj7dMI/0dXBEN3DFVvFWAtlu4XysqdruQ3xlv9dmlLXdKshOrhekswoHG2Lq4X
+         jlHzhyBFFuFWkLpxDFIgkBC6VrhbQwOQoqvRdiIwShMkD8mCCOow/iMu9Q7dVitNSGoD
+         UmL+1Q58u6wBi5owCaGJSHaGtvutHULTfMpGF+n6lE15gKDVSaRdzFf47XnKRzKDypjs
+         NwBA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=TT58Pxq1258T4AxyuLdXgL1OIhP7Hr2onHMX8NaDui0=;
-        b=4xAAj19DmUUVXpiSpMZ09fssFq1Q/rJMqxDhwHyaSH9zJOZOT8apcIoIFvWVSn95KF
-         JEHFv0mjKs3hxZELp+vA1YNL6HulUCLYKdxNUUzsgr9eXYRxU5Lchq+9opsBfr3nUmSx
-         H9pcSyZ5VZcNwe+WJ3usV+sQlKOuMS6p+wmQHk9cr8BxanOoebMseKc4a7VUVQBLIr+8
-         +MlGiQwr04zW3E/ZZgmcZUO0CJZwGJQA18cxpWFZ+NsEtOHv0btm83KiQCFEUs0c21o4
-         JFUD3WL/O2zV8MHkaqWBGbL1/dgnR660SLybVvhEnCIWK0XQv+n/B47ogY4jUgPj+1tL
-         TeWA==
-X-Gm-Message-State: AOAM532trOr4aNSKWflNfzupvmUJTYRGvkDSA7T2kSvP3CV1NHRy6Gxu
-        gTcz3DOmBLj8y1B16PVftEk7wQNJFnM4Hw==
-X-Google-Smtp-Source: ABdhPJxBY/ikhqjz0AGd2wmSRhvxpIVt0C6nKXdpBIDhdfbRAM6xKSfI39VaB3VRbnro5u+Oi0EiQA==
-X-Received: by 2002:a1c:a915:0:b0:380:e3de:b78f with SMTP id s21-20020a1ca915000000b00380e3deb78fmr321477wme.19.1645531196938;
-        Tue, 22 Feb 2022 03:59:56 -0800 (PST)
+        bh=FmiJNex1ot8tDEQkrlMDikI8ft3IlZn2sN6gtT8TTKk=;
+        b=ZBcD3hRc5mCBUdmfPPSG4R5h/7xtOi7kinRARml9WB8wfYa0Qs0xp1bV1gnAKKpRH4
+         f3vA4rA0OcSmkB3npOn42YmHYiJGcsV/8gXAS9BvDfP595VJkXm9CSSmMXnA8AY5Yhd5
+         oXx7K72msHQyG20tQ4ryA+AZmn47QhBODgmXj95V6xrpKE4jn8f2nM6OcSAXJy0fGlE8
+         RGk0a+Cl6SksD23f4zm1a2aP9dxa4QnSwOlwtyMIaECzDeDPgUxqP2Wp1e9SEX+Jv5av
+         WUBn0pwzB0AVyHDWnGFQ+KYiyn+GT+U5t+z1fa0i59YJKyu7eCL4+jB3BOfglEBW3rp6
+         vEoA==
+X-Gm-Message-State: AOAM533oJmngvPft5lxJkztV2s9AtyzbOC2rI7/cFHVxnNNMj+8VAFhf
+        St1HiU9pK0PJbIPHazbKEaoWaw==
+X-Google-Smtp-Source: ABdhPJz4PUmhR2AT0PBVCIOTknderZ9Je7FIrmTupP/bK0KhlsEDdjeHurgqYXa+WjyF7LnxbZiDaw==
+X-Received: by 2002:a05:6000:154c:b0:1ea:76b7:20c4 with SMTP id 12-20020a056000154c00b001ea76b720c4mr4529319wry.626.1645531197891;
+        Tue, 22 Feb 2022 03:59:57 -0800 (PST)
 Received: from srini-hackbox.lan (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
-        by smtp.gmail.com with ESMTPSA id a18sm50014661wrg.13.2022.02.22.03.59.56
+        by smtp.gmail.com with ESMTPSA id a18sm50014661wrg.13.2022.02.22.03.59.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Feb 2022 03:59:56 -0800 (PST)
+        Tue, 22 Feb 2022 03:59:57 -0800 (PST)
 From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 To:     broonie@kernel.org
 Cc:     lgirdwood@gmail.com, perex@perex.cz, tiwai@suse.com,
         pierre-louis.bossart@linux.intel.com, alsa-devel@alsa-project.org,
         linux-kernel@vger.kernel.org, quic_srivasam@quicinc.com,
         Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Subject: [PATCH 09/16] ASoC: codecs: wcd934x: fix return value of wcd934x_rx_hph_mode_put
-Date:   Tue, 22 Feb 2022 11:59:26 +0000
-Message-Id: <20220222115933.9114-10-srinivas.kandagatla@linaro.org>
+Subject: [PATCH 10/16] ASoC: codecs: rx-macro: fix tlv min max range
+Date:   Tue, 22 Feb 2022 11:59:27 +0000
+Message-Id: <20220222115933.9114-11-srinivas.kandagatla@linaro.org>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20220222115933.9114-1-srinivas.kandagatla@linaro.org>
 References: <20220222115933.9114-1-srinivas.kandagatla@linaro.org>
@@ -72,28 +72,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-wcd934x_rx_hph_mode_put currently returns zero eventhough it changes the value.
-Fix this, so that change notifications are sent correctly.
+on Qualcomm codecs gain tlv control specifies min max range as both
+negative to positive numbers like
 
-Fixes: 1cde8b822332 ("ASoC: wcd934x: add basic controls")
+SOC_SINGLE_S8_TLV("... Volume", ..,  -84, 40, gain)
+
+However with recent boundary checks added in commit 817f7c9335ec0
+("ASoC: ops: Reject out of bounds values in snd_soc_put_volsw())
+setting a value above 40 gain will fail.
+
+So fix this min max range correctly to
+SOC_SINGLE_S8_TLV("... Volume", ..,  0, 124, gain)
+so that users can now set gain correctly
+
+Fixes: af3d54b99764 ("ASoC: codecs: lpass-rx-macro: add support for lpass rx macro")
 Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 ---
- sound/soc/codecs/wcd934x.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ sound/soc/codecs/lpass-rx-macro.c | 28 ++++++++++++++--------------
+ 1 file changed, 14 insertions(+), 14 deletions(-)
 
-diff --git a/sound/soc/codecs/wcd934x.c b/sound/soc/codecs/wcd934x.c
-index f2674905a4a7..ab580f37cf00 100644
---- a/sound/soc/codecs/wcd934x.c
-+++ b/sound/soc/codecs/wcd934x.c
-@@ -3314,7 +3314,7 @@ static int wcd934x_rx_hph_mode_put(struct snd_kcontrol *kc,
- 	}
- 	wcd->hph_mode = mode_val;
+diff --git a/sound/soc/codecs/lpass-rx-macro.c b/sound/soc/codecs/lpass-rx-macro.c
+index 058d8634ce40..d31d4d45ba01 100644
+--- a/sound/soc/codecs/lpass-rx-macro.c
++++ b/sound/soc/codecs/lpass-rx-macro.c
+@@ -2800,17 +2800,17 @@ static int rx_macro_iir_filter_info(struct snd_kcontrol *kcontrol,
  
--	return 0;
-+	return 1;
- }
+ static const struct snd_kcontrol_new rx_macro_snd_controls[] = {
+ 	SOC_SINGLE_S8_TLV("RX_RX0 Digital Volume", CDC_RX_RX0_RX_VOL_CTL,
+-			  -84, 40, digital_gain),
++			  0, 124, digital_gain),
+ 	SOC_SINGLE_S8_TLV("RX_RX1 Digital Volume", CDC_RX_RX1_RX_VOL_CTL,
+-			  -84, 40, digital_gain),
++			  0, 124, digital_gain),
+ 	SOC_SINGLE_S8_TLV("RX_RX2 Digital Volume", CDC_RX_RX2_RX_VOL_CTL,
+-			  -84, 40, digital_gain),
++			  0, 124, digital_gain),
+ 	SOC_SINGLE_S8_TLV("RX_RX0 Mix Digital Volume", CDC_RX_RX0_RX_VOL_MIX_CTL,
+-			  -84, 40, digital_gain),
++			  0, 124, digital_gain),
+ 	SOC_SINGLE_S8_TLV("RX_RX1 Mix Digital Volume", CDC_RX_RX1_RX_VOL_MIX_CTL,
+-			  -84, 40, digital_gain),
++			  0, 124, digital_gain),
+ 	SOC_SINGLE_S8_TLV("RX_RX2 Mix Digital Volume", CDC_RX_RX2_RX_VOL_MIX_CTL,
+-			  -84, 40, digital_gain),
++			  0, 124, digital_gain),
  
- static int slim_rx_mux_get(struct snd_kcontrol *kc,
+ 	SOC_SINGLE_EXT("RX_COMP1 Switch", SND_SOC_NOPM, RX_MACRO_COMP1, 1, 0,
+ 		rx_macro_get_compander, rx_macro_set_compander),
+@@ -2834,28 +2834,28 @@ static const struct snd_kcontrol_new rx_macro_snd_controls[] = {
+ 			rx_macro_aux_hpf_mode_put),
+ 
+ 	SOC_SINGLE_S8_TLV("IIR0 INP0 Volume",
+-		CDC_RX_SIDETONE_IIR0_IIR_GAIN_B1_CTL, -84, 40,
++		CDC_RX_SIDETONE_IIR0_IIR_GAIN_B1_CTL, 0, 124,
+ 		digital_gain),
+ 	SOC_SINGLE_S8_TLV("IIR0 INP1 Volume",
+-		CDC_RX_SIDETONE_IIR0_IIR_GAIN_B2_CTL, -84, 40,
++		CDC_RX_SIDETONE_IIR0_IIR_GAIN_B2_CTL, 0, 124,
+ 		digital_gain),
+ 	SOC_SINGLE_S8_TLV("IIR0 INP2 Volume",
+-		CDC_RX_SIDETONE_IIR0_IIR_GAIN_B3_CTL, -84, 40,
++		CDC_RX_SIDETONE_IIR0_IIR_GAIN_B3_CTL, 0, 124,
+ 		digital_gain),
+ 	SOC_SINGLE_S8_TLV("IIR0 INP3 Volume",
+-		CDC_RX_SIDETONE_IIR0_IIR_GAIN_B4_CTL, -84, 40,
++		CDC_RX_SIDETONE_IIR0_IIR_GAIN_B4_CTL, 0, 124,
+ 		digital_gain),
+ 	SOC_SINGLE_S8_TLV("IIR1 INP0 Volume",
+-		CDC_RX_SIDETONE_IIR1_IIR_GAIN_B1_CTL, -84, 40,
++		CDC_RX_SIDETONE_IIR1_IIR_GAIN_B1_CTL, 0, 124,
+ 		digital_gain),
+ 	SOC_SINGLE_S8_TLV("IIR1 INP1 Volume",
+-		CDC_RX_SIDETONE_IIR1_IIR_GAIN_B2_CTL, -84, 40,
++		CDC_RX_SIDETONE_IIR1_IIR_GAIN_B2_CTL, 0, 124,
+ 		digital_gain),
+ 	SOC_SINGLE_S8_TLV("IIR1 INP2 Volume",
+-		CDC_RX_SIDETONE_IIR1_IIR_GAIN_B3_CTL, -84, 40,
++		CDC_RX_SIDETONE_IIR1_IIR_GAIN_B3_CTL, 0, 124,
+ 		digital_gain),
+ 	SOC_SINGLE_S8_TLV("IIR1 INP3 Volume",
+-		CDC_RX_SIDETONE_IIR1_IIR_GAIN_B4_CTL, -84, 40,
++		CDC_RX_SIDETONE_IIR1_IIR_GAIN_B4_CTL, 0, 124,
+ 		digital_gain),
+ 
+ 	SOC_SINGLE("IIR1 Band1 Switch", CDC_RX_SIDETONE_IIR0_IIR_CTL,
 -- 
 2.21.0
 

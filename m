@@ -2,130 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C3214C03BE
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 22:25:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5660F4C03BF
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 22:26:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235774AbiBVVZv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 16:25:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41092 "EHLO
+        id S235778AbiBVV01 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 16:26:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235734AbiBVVZt (ORCPT
+        with ESMTP id S234356AbiBVV0Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 16:25:49 -0500
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B698F10F20A
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 13:25:22 -0800 (PST)
-Received: by mail-ed1-x534.google.com with SMTP id bq11so18787654edb.2
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 13:25:22 -0800 (PST)
+        Tue, 22 Feb 2022 16:26:25 -0500
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 667C2111094
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 13:25:59 -0800 (PST)
+Received: by mail-pj1-x1034.google.com with SMTP id gi6so850209pjb.1
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 13:25:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ncH9c7SiYmN6itdECS9f8vr7OT3dx9aRl+ruQf7+yUg=;
-        b=bie/EqstQq7cMH+SvIyYScs9hMbdl5FmT1j31NstckurYsN72clBvZSAs4si7yh9wD
-         r/miD7WgoTgKOsFCyHBeU2c8gQTdgqSJy1y26X892UgDwNWsMNYp9/ub7c2lCI6GZ3co
-         KlMSphSYJYjvpWZcfeXWn0GgJ+1a1Y3QNMTE0=
+        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
+        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
+         :content-transfer-encoding;
+        bh=3GMGpmsX5Sxh9Rowtyg+q5ai/Y4YeFDXutspTo0kPIY=;
+        b=DsglCOfTfDoGrxhojDR2OSvkMLectqlyMrwgCAEGegWACO8c2TO3vAZm5AvuDGbGB/
+         AfwU6PLsVNUCL9sjR8OiRWGPi4w6Mzn6aTt5qLRA31Z+7Vx5g7yvzVgn/2TGDmrXwXiR
+         tX9rxjEZWMPm4qrXxdcFSUA9q65lbl/3+7CWEkc1+dNLzw9Xgu9CtqgX8I0TdrWDtoZo
+         Pmw8yG1ve5uOR3VxbLyZeiSfoyP2HyAaDw2y39u7pKSZHBN4E3RsPhF6wymCys+IwJX9
+         0ydnrclVrc7ceNSE2nLgoxHYLEf/goG4zfja1UxHEfgz/ElcwjHLS9z8yGLuZ+Hws1Oy
+         cMDA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ncH9c7SiYmN6itdECS9f8vr7OT3dx9aRl+ruQf7+yUg=;
-        b=6o7tb+hbFaRzySNGMcN2+c6wB93NE9kfzEKp8oSz2iuCJEQNHQApNr/q62owJo0wBn
-         c8BtfNoJuvj/BUE1lPNIG+AL/rgipcnp8QD45Hgcqn2fniwMVnTBwbRTDcLa2bd09Plh
-         X7BheSegFv5yTN2ZtMfY6T68veg5ETz81eq8OWx6MEozvS4uBhNtxD/OWuhmASOKVwv8
-         te2qPvm8gqKUHM0FdwHRD5SRzEkM+FUrnBBY9ExZxSROt9RNCcgCT38GA5J+rXb9xRRL
-         KCzWg61T+JVzehIzzLsjaMSiayI7BmMHOVh0XBVJ4eyAwO9NcwV5tc500HVrBaX8idfu
-         OwVg==
-X-Gm-Message-State: AOAM533y20s4QBktS4aQ0am4iO5hYrjUbIUl8Fjsz5e9j/vxf5TOHH9A
-        QVpzXcF886X8UeUowT49j8BbH+I4doYUIhuGsRI=
-X-Google-Smtp-Source: ABdhPJzsMkl6uVuHBAYV703O8UPRN0VONEUcZpKatA7PIEnRP35tcuFpFV8ah6sw7Gg+xS3CJKjS3w==
-X-Received: by 2002:a50:fd16:0:b0:410:82ea:7911 with SMTP id i22-20020a50fd16000000b0041082ea7911mr28040178eds.315.1645565121067;
-        Tue, 22 Feb 2022 13:25:21 -0800 (PST)
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com. [209.85.128.49])
-        by smtp.gmail.com with ESMTPSA id u27sm6614694ejc.220.2022.02.22.13.25.19
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 22 Feb 2022 13:25:19 -0800 (PST)
-Received: by mail-wm1-f49.google.com with SMTP id az26-20020a05600c601a00b0037c078db59cso2846455wmb.4
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 13:25:19 -0800 (PST)
-X-Received: by 2002:a05:600c:228e:b0:37c:2eef:7bf with SMTP id
- 14-20020a05600c228e00b0037c2eef07bfmr4792688wmf.73.1645565118969; Tue, 22 Feb
- 2022 13:25:18 -0800 (PST)
-MIME-Version: 1.0
-References: <1645449126-17718-1-git-send-email-quic_vpolimer@quicinc.com> <CAE-0n507XcYRz4=Uw-K37kPsLRqi_gN2L9y1wcu_X-UJP+6ySg@mail.gmail.com>
-In-Reply-To: <CAE-0n507XcYRz4=Uw-K37kPsLRqi_gN2L9y1wcu_X-UJP+6ySg@mail.gmail.com>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Tue, 22 Feb 2022 13:25:05 -0800
-X-Gmail-Original-Message-ID: <CAD=FV=WvstZkDJcHJPAT0aez3X=uSKzDX0paQRHYD4DEktkMEQ@mail.gmail.com>
-Message-ID: <CAD=FV=WvstZkDJcHJPAT0aez3X=uSKzDX0paQRHYD4DEktkMEQ@mail.gmail.com>
-Subject: Re: [v1] arm64/dts/qcom/sc7280: update mdp clk to max supported value
- to support higher refresh rates
-To:     Stephen Boyd <swboyd@chromium.org>
-Cc:     Vinod Polimera <quic_vpolimer@quicinc.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        freedreno <freedreno@lists.freedesktop.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        quic_kalyant@quicinc.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
+         :mime-version:content-transfer-encoding;
+        bh=3GMGpmsX5Sxh9Rowtyg+q5ai/Y4YeFDXutspTo0kPIY=;
+        b=FM36NXB4de157G71egEcfeiaNCpaBeShPPvNFjNnswx0aVZO/U15vzoSKSc+VqiTG1
+         4ssplBo/V7RqcCgUoWCa3NttQYnAMp278i/QxarVV7cufK0bSTVEJ9slErPnnWxVWTRo
+         rAoWRl2LYkdrcR9YaIgfYHr0HiH8q8zhDV8CHvsrjlqCbHaDUt+cRcsqu9ySSxFf0a9k
+         JES+fihzP0y/9JPgyRe2Bq03QxH8Q+YvVS+A0eUEDqwVHtYpNcdANwuXqYX3m7FrSpsR
+         pHh2g4ZgecT4/HU7wRhA9BrAdyBZq79Ia+BeAe7voY4Jv+wCU7rmzLYC82JypaB3ShEL
+         5PsA==
+X-Gm-Message-State: AOAM532mPiJ1g38CSKfk3i8bDFlNX8OraeQN9Ah1+EwsOglmoQmk4fC+
+        cfBEUR9hNVLqcA1YnlnLy5POJg==
+X-Google-Smtp-Source: ABdhPJypI0+UnxdX0K60WGxnqqz7+VBknfaZQj1jQNbPKlMSomWbVprZfDl6vXHOVBZEQqXoDneoCQ==
+X-Received: by 2002:a17:902:6b49:b0:149:7c73:bd6f with SMTP id g9-20020a1709026b4900b001497c73bd6fmr24550258plt.46.1645565158855;
+        Tue, 22 Feb 2022 13:25:58 -0800 (PST)
+Received: from localhost ([12.3.194.138])
+        by smtp.gmail.com with ESMTPSA id v22-20020a17090ad59600b001b7deb42251sm500928pju.15.2022.02.22.13.25.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Feb 2022 13:25:58 -0800 (PST)
+Date:   Tue, 22 Feb 2022 13:25:58 -0800 (PST)
+X-Google-Original-Date: Tue, 22 Feb 2022 13:25:00 PST (-0800)
+Subject:     Re: [PATCH] riscv: mm: Remove the copy operation of pmd
+In-Reply-To: <20220127100622.11856-1-hanchuanhua@oppo.com>
+CC:     Paul Walmsley <paul.walmsley@sifive.com>, aou@eecs.berkeley.edu,
+        jszhang@kernel.org, alexandre.ghiti@canonical.com,
+        wangkefeng.wang@huawei.com, zhengqi.arch@bytedance.com,
+        ebiederm@xmission.com, liushixin2@huawei.com,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        hanchuanhua@oppo.com
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     hanchuanhua@oppo.com
+Message-ID: <mhng-98c8a68c-ecb2-4db1-ab3e-3a35d5e764d0@palmer-ri-x1c9>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On Tue, Feb 22, 2022 at 12:58 PM Stephen Boyd <swboyd@chromium.org> wrote:
+On Thu, 27 Jan 2022 02:06:22 PST (-0800), hanchuanhua@oppo.com wrote:
+> Since all processes share the kernel address space,
+> we only need to copy pgd in case of a vmalloc page
+> fault exception, the other levels of page tables are
+> shared, so the operation of copying pmd is unnecessary.
 >
-> Quoting Vinod Polimera (2022-02-21 05:12:06)
-> > Panels with higher refresh rate will need mdp clk above 300Mhz.
-> > Select max frequency for mdp clock during bootup, dpu driver will
-> > scale down the clock as per usecase when first update from the framework is received.
-> >
-> > Signed-off-by: Vinod Polimera <quic_vpolimer@quicinc.com>
+> Signed-off-by: hanchuanhua <hanchuanhua@oppo.com>
+> ---
+>  arch/riscv/mm/fault.c | 10 +++-------
+>  1 file changed, 3 insertions(+), 7 deletions(-)
 >
-> Please add a Fixes tag.
+> diff --git a/arch/riscv/mm/fault.c b/arch/riscv/mm/fault.c
+> index 4e9efbe..40694f0 100644
+> --- a/arch/riscv/mm/fault.c
+> +++ b/arch/riscv/mm/fault.c
+> @@ -102,9 +102,9 @@ static inline void bad_area(struct pt_regs *regs, struct mm_struct *mm, int code
+>  static inline void vmalloc_fault(struct pt_regs *regs, int code, unsigned long addr)
+>  {
+>         pgd_t *pgd, *pgd_k;
+> -       pud_t *pud, *pud_k;
+> -       p4d_t *p4d, *p4d_k;
+> -       pmd_t *pmd, *pmd_k;
+> +       pud_t *pud_k;
+> +       p4d_t *p4d_k;
+> +       pmd_t *pmd_k;
+>         pte_t *pte_k;
+>         int index;
+>         unsigned long pfn;
+> @@ -132,14 +132,12 @@ static inline void vmalloc_fault(struct pt_regs *regs, int code, unsigned long a
+>         }
+>         set_pgd(pgd, *pgd_k);
 >
-> > ---
-> >  arch/arm64/boot/dts/qcom/sc7280.dtsi | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-> > index baf1653..7af96fc 100644
-> > --- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
-> > +++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-> > @@ -2895,7 +2895,7 @@
-> >                                 assigned-clocks = <&dispcc DISP_CC_MDSS_MDP_CLK>,
-> >                                                 <&dispcc DISP_CC_MDSS_VSYNC_CLK>,
-> >                                                 <&dispcc DISP_CC_MDSS_AHB_CLK>;
-> > -                               assigned-clock-rates = <300000000>,
-> > +                               assigned-clock-rates = <506666667>,
+> -       p4d = p4d_offset(pgd, addr);
+>         p4d_k = p4d_offset(pgd_k, addr);
+>         if (!p4d_present(*p4d_k)) {
+>                 no_context(regs, addr);
+>                 return;
+>         }
 >
-> Why not simply remove the clock assignment and set the rate based on the
-> OPP when the driver probes?
+> -       pud = pud_offset(p4d, addr);
+>         pud_k = pud_offset(p4d_k, addr);
+>         if (!pud_present(*pud_k)) {
+>                 no_context(regs, addr);
+> @@ -150,13 +148,11 @@ static inline void vmalloc_fault(struct pt_regs *regs, int code, unsigned long a
+>          * Since the vmalloc area is global, it is unnecessary
+>          * to copy individual PTEs
+>          */
+> -       pmd = pmd_offset(pud, addr);
+>         pmd_k = pmd_offset(pud_k, addr);
+>         if (!pmd_present(*pmd_k)) {
+>                 no_context(regs, addr);
+>                 return;
+>         }
+> -       set_pmd(pmd, *pmd_k);
+>
+>         /*
+>          * Make sure the actual PTE exists as well to
 
-I was curious so I dug. It turns out that it _is_ using the OPP. It's
-just that the kernel driver currently assumes that the initial rate is
-the max rate. :-P You can actually see in msm_dss_parse_clock() that
-it walks through each of its clocks at boot and records the boot rate
-and stashes it as the "max_rate". That's not a scheme I've seen done
-commonly, so if nothing else it deserves a comment in the commit
-message.
+This looks good, but "Signed off by" lines are supposed to have real 
+names associated with them and this looks like a handle to me.  There 
+also seems to be something broken with the email, as this is causing git 
+to blow up, but for a small patch like this that's OK as I can resurrect 
+it by hand.
 
-One other note is that I think there are _two_ places in the dtsi that
-are setting this same clock rate, right? The parent node `mdss`, which
-you're not touching, and the child `mdss_mdp`, which you are touching.
-Seems like you should just do it in one place. If it needs to be done
-by the parent then the child could just assume that the clock has
-already been set by the parent.
+Reviewed-by: Palmer Dabbelt <palmer@rivosinc.com> # aside from the name
 
--Doug
+Please send a v2 with the proper Signed off by line, as that's not 
+something I'm supposed to just fix up myself.
+
+Thanks!

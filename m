@@ -2,99 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E4994C0562
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 00:35:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 471BD4C0566
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 00:38:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235246AbiBVXfh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 18:35:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44818 "EHLO
+        id S236215AbiBVXiz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 18:38:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231772AbiBVXff (ORCPT
+        with ESMTP id S235246AbiBVXix (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 18:35:35 -0500
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2D7929CA9
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 15:35:08 -0800 (PST)
-Received: by mail-wr1-x436.google.com with SMTP id x15so2010886wrg.8
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 15:35:08 -0800 (PST)
+        Tue, 22 Feb 2022 18:38:53 -0500
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 756364B863
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 15:38:27 -0800 (PST)
+Received: by mail-pf1-x436.google.com with SMTP id y11so13637670pfa.6
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 15:38:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=philpotter-co-uk.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=owMM0MyODP9S0fBThXOMsfsqzmiy6hi7ZMz5dzGpfrQ=;
-        b=xaaS1XUGcRe5wBuR2EjG/YYJL7aRWre/dZK5/1zvdjYcvp4SEqLVhJeef9dIqE5X/K
-         jcL65pSWpn5jyzxAsQ3up4qrEMFn+JxIMUvjDsf33IR8azog7h9jCLu74PqqqyNOY4od
-         G7rzDQEelHmLIGqf3KicPgyR3zGfDLnuK6zhNzJk83dKSv3qH7vYUxDuZqAILbNWrFV9
-         B2vZFbe7nAvHAFkZPlTXGK8odlgoPXw5ndraZNY21d1LCZ20tmXBMinRZEivkznk6HBL
-         OhYbEzDB17g6xj++OT/E7Am/baxgwp1939p1Qm864U1tpmsWKa9MK4BIQmSw7kQHKxUQ
-         Vp+A==
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:in-reply-to:message-id:references
+         :mime-version;
+        bh=z14gdztNmeBCFYN6Nsa2blKh3AYnO4tYG9TJ7do4igA=;
+        b=P8gl+rGgObz5JsQXub2YaOttUkPyGb7i1SkmFpqxkIGdUAU4YRxZiisW87LG9VpuCb
+         4xpTct734i09Qzvlpxm2rsqYyXUeerHt09s8oTueO0vyy7cZq824/v8CE3tLThpYelvl
+         eGhZ7/kKZNE2OzXT2ZnCyxKGFSGiR2+9TGAg+1jte1PnDWyifvCjffRrTEx8WPNVXUQh
+         Ss0lTlHq8dKJpg115nPsBQWM6W9sHaYtYCXG5ghn91RI8pHSvR7KpVfQavU1lD7gLMkR
+         fHgjaNKyXXnLzLV5azir/FN8AoEUAlUNfS4x+XnLacwJ6pNtrFt334tlZsU2uR+7Lfv4
+         pT4A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=owMM0MyODP9S0fBThXOMsfsqzmiy6hi7ZMz5dzGpfrQ=;
-        b=lql0/jZhXHOMvbz9fBjQDjCUMEi0F7ppPppLf65HxUA38owDnBvbdXskFEyCvrGvho
-         ntjOOLNjdFsjKDm/o90aMjVb5c8p1h1nT1g8QO3uOl4PNwGI74zn3a0wEVKaeNBeUPX2
-         Ix5onNw3eVGc/rQ0txntwB/CVSY4OLhXrxt5I99PbQTa0Mc2YYpP4dpl3pmZX9rJk4Lm
-         kFkUrzeEhsX0QbJDTxvrM/X2wOKTqLn8V948UDsMzYqoUgLt7mg/xNFrUNhiPpl/F381
-         J0YuxuUUFYmGT7wZMM/cp1X+Rwh3PyWR8n8nEua3SJM8NTP4h6tQggaJKBR4ZHwP97rf
-         XKcA==
-X-Gm-Message-State: AOAM5317CGGAgGiTVWCajg1kY1JwGyVezDoksdEjue6a7Pq3iPFcoMOR
-        sHrhdVCjQOeoQV+3L/u/+MKjFA==
-X-Google-Smtp-Source: ABdhPJz2ov7OFX6GiQnn5S+SlBfODGaH6/54lyEGQ/ZUYKAI6+txY3GKGWUyHcKVDgOXELiv67sDyQ==
-X-Received: by 2002:adf:fd03:0:b0:1e4:a106:8fae with SMTP id e3-20020adffd03000000b001e4a1068faemr20586447wrr.336.1645572907597;
-        Tue, 22 Feb 2022 15:35:07 -0800 (PST)
-Received: from localhost.localdomain (3.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.6.1.f.d.0.b.8.0.1.0.0.2.ip6.arpa. [2001:8b0:df16::3])
-        by smtp.gmail.com with ESMTPSA id f3sm21563638wri.6.2022.02.22.15.35.06
+        h=x-gm-message-state:date:from:to:cc:subject:in-reply-to:message-id
+         :references:mime-version;
+        bh=z14gdztNmeBCFYN6Nsa2blKh3AYnO4tYG9TJ7do4igA=;
+        b=7u1SscxDom399WG/XFzKDxYD3fsPoy50dLsynBje7j6Trugl+WKT0+aLa3m391UsBc
+         hUapik9snq49sXG7fvcKJ7hZBI7Fb9czcoFQbx4y3h/Jlueclc7G4+iwN4leBvqv/81I
+         GuRfk7rakPbdOWgbZuMvjhMcYRRQ1ht3pEpm+L/FzMGN7NzpB0x4+T5mQThYFex8ekN8
+         Vh3FoxMoATAWnJZnv3pTT0ZY2LO2g2g243cKYuTKspBKxWjEAhAf23AKx2HYOwDOmqgH
+         dadg1wJDZlhBU9ugcAlioDNiNIklUac2cNqck8d96MZy8gSa2W0if9ZUbD5OG02acNRA
+         f7Kw==
+X-Gm-Message-State: AOAM532r5URvWlHndxsM1IBewmSaCnqneDBJsw+BGoXdvlgM88xdZ7JI
+        OfJPYyqhcjPzHymAasu1n7OTog==
+X-Google-Smtp-Source: ABdhPJxooYUF3cMjgU9bh8ub5zJAQM7l/5INUFoLGNz1daFOw83ZQTajR0NlWO7J06goIxmoJ8O6Qg==
+X-Received: by 2002:a05:6a00:984:b0:4e1:5e1b:1e9b with SMTP id u4-20020a056a00098400b004e15e1b1e9bmr26851040pfg.71.1645573106467;
+        Tue, 22 Feb 2022 15:38:26 -0800 (PST)
+Received: from [2620:15c:29:204:6b0f:423a:fd82:4e05] ([2620:15c:29:204:6b0f:423a:fd82:4e05])
+        by smtp.gmail.com with ESMTPSA id c9sm19098644pfv.70.2022.02.22.15.38.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Feb 2022 15:35:07 -0800 (PST)
-From:   Phillip Potter <phil@philpotter.co.uk>
-To:     gregkh@linuxfoundation.org
-Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH] staging: r8188eu: remove unused variable from UpdateHalRAMask8188EUsb
-Date:   Tue, 22 Feb 2022 23:35:06 +0000
-Message-Id: <20220222233506.72778-1-phil@philpotter.co.uk>
-X-Mailer: git-send-email 2.34.1
+        Tue, 22 Feb 2022 15:38:26 -0800 (PST)
+Date:   Tue, 22 Feb 2022 15:38:25 -0800 (PST)
+From:   David Rientjes <rientjes@google.com>
+To:     Roman Gushchin <roman.gushchin@linux.dev>
+cc:     Vlastimil Babka <vbabka@suse.cz>, Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, patches@lists.linux.dev
+Subject: Re: [PATCH] MAINTAINERS, SLAB: Add Roman as reviewer, git tree
+In-Reply-To: <YhU7T//RK6E+1Nig@carbon.DHCP.thefacebook.com>
+Message-ID: <2c52e740-8373-4234-aeef-928abb41f521@google.com>
+References: <20220222103104.13241-1-vbabka@suse.cz> <YhU7T//RK6E+1Nig@carbon.DHCP.thefacebook.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove the 'arg' variable from the block inside the if statement in the
-UpdateHalRAMask8188EUsb function in hal/usb_halinit.c, as due to the
-recent DBG_88E cleanup series, this is now set but not used. Also remove
-the rest of the lines in this block that further modify 'arg' as they
-are superfluous, due to it never being used afterwards.
+On Tue, 22 Feb 2022, Roman Gushchin wrote:
 
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Phillip Potter <phil@philpotter.co.uk>
----
- drivers/staging/r8188eu/hal/usb_halinit.c | 6 ------
- 1 file changed, 6 deletions(-)
+> On Tue, Feb 22, 2022 at 11:31:04AM +0100, Vlastimil Babka wrote:
+> > The slab code has an overlap with kmem accounting, where Roman has done
+> > a lot of work recently and it would be useful to make sure he's CC'd on
+> > patches that potentially affect it. Thus add him as a reviewer for the
+> > SLAB subsystem.
+> > 
+> > Also while at it, add the link to slab git tree.
+> > 
+> > Signed-off-by: Vlastimil Babka <vbabka@suse.cz>
+> 
+> Sorry, used the old e-mail. Here is the correct one:
+> 
+> Acked-by: Roman Gushchin <roman.gushchin@linux.dev>
+> 
 
-diff --git a/drivers/staging/r8188eu/hal/usb_halinit.c b/drivers/staging/r8188eu/hal/usb_halinit.c
-index 0704fa3156af..d7dcef3ece3d 100644
---- a/drivers/staging/r8188eu/hal/usb_halinit.c
-+++ b/drivers/staging/r8188eu/hal/usb_halinit.c
-@@ -1528,12 +1528,6 @@ void UpdateHalRAMask8188EUsb(struct adapter *adapt, u32 mac_id, u8 rssi_level)
- 	init_rate = get_highest_rate_idx(mask) & 0x3f;
- 
- 	if (haldata->fw_ractrl) {
--		u8 arg;
--
--		arg = mac_id & 0x1f;/* MACID */
--		arg |= BIT(7);
--		if (shortGIrate)
--			arg |= BIT(5);
- 		mask |= ((raid << 28) & 0xf0000000);
- 		psta->ra_mask = mask;
- 		mask |= ((raid << 28) & 0xf0000000);
--- 
-2.34.1
-
+Acked-by: David Rientjes <rientjes@google.com>

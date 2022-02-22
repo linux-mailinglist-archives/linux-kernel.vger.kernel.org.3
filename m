@@ -2,281 +2,216 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E99224BF2F6
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 08:56:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B3D34BF2FC
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 08:59:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229736AbiBVH5L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 02:57:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37564 "EHLO
+        id S229826AbiBVH7R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 02:59:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbiBVH5I (ORCPT
+        with ESMTP id S229437AbiBVH7L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 02:57:08 -0500
-X-Greylist: delayed 64 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 21 Feb 2022 23:56:42 PST
-Received: from esa20.fujitsucc.c3s2.iphmx.com (esa20.fujitsucc.c3s2.iphmx.com [216.71.158.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE2586425
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 23:56:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=fujitsu.com; i=@fujitsu.com; q=dns/txt; s=fj1;
-  t=1645516603; x=1677052603;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=hxf+pz4tUi+RZgmZbCi/iUHfDtfPp88IPs2NyJpkJYw=;
-  b=OMaDotLxoTm83VabhlZ5Puhgf+hRLGrvUCPUybotEaHeEgFJgfTTN7Lm
-   sb4aQ77A0Wjw8zpicXqVPuBOt+LAU7/coVPVaJycp0UmDVXBqCmI6Dm5t
-   9sOjZP1xbQdvOSFofDWRTVZNfUeIp3OFFpxxJ3n0DXMprTiRoMorOAbNc
-   A9SMmxRaBZrQ+49+bONDCFCn+6itV1c+wjC0U9QqB0jvkPZgY44+2U/fo
-   Ntc/MeBVQCgMwDghZu9EDGeWcUpdn6qWVGnX03dH3y/wI+BV7Kb60Pybi
-   fOMMQzHuUxOwKVPVNB2UfgmhDh1YAooznqS4EsJ0J/EtaL4cTwVYEDbQ7
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10265"; a="50208839"
-X-IronPort-AV: E=Sophos;i="5.88,387,1635174000"; 
-   d="scan'208";a="50208839"
-Received: from mail-os0jpn01lp2110.outbound.protection.outlook.com (HELO JPN01-OS0-obe.outbound.protection.outlook.com) ([104.47.23.110])
-  by ob1.fujitsucc.c3s2.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2022 16:55:34 +0900
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=FlaYNx8RAPdowG2GpsNTxTGbzuKFkp9npk3PystKfjjJ62E7DmMzLscU6lSsjCAZ+UUb3gCyKRwlnU8qQzvGTTC1VZ4u3DiCdYlFnDDzyhmmC0suzQ8mnN1gX7fcSgvxL3ufO6gw2zCw1xUV9qfuW8sllIOcBF7z8Uo5dZAsMC4hA4pHyaQCLIDOLiEpEo7BMGD3DTlEjGSmjepTC0vH3L4p26h8RO2QeWg1tbMcqtHNGYMLwNnnPHHva8ikv9Ghlcxe7tBHVnzRlTq8sBx9gq8io52KDBLdqWZ/Wb84ouo+wroxFqbyVh63NLKCfzBv5fUYu/0qqRLLZkvv8VCUbQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=pYTP6jDoh8hnlEXABe+TFh6mgsMHrOS4F0ZMOTS3Aao=;
- b=h92/IXX3KJu2gQ/UojuSRkThv2+hygxfUpfnAVZfyuGX/IJA2mY7wp6C7RWHh9wH9TbX9D+P3j4HvuoAVZeU15BSX0r3j28/Lx+7EerL+I4mzQZixr8a52LVvhUeccmnWZTiQxpF9yq+d4naT3zjBja0sQjsXodYpNwStteMZvbYyyN1DPSrfxyerMuDMGz40D6LhmXWLNUljdYWnNmWClbOorw/tSTOZ3lo+3zAqw3gXfsIwQSVM3Wf2eg1rljnWZhilLlVxcelBvqWaf7lgznejsEu4lycqhE4iIFx1qY97sqJwmCbwN/FiLTEs5Z48056/d/Vlz68hEeThDddEw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=fujitsu.com; dmarc=pass action=none header.from=fujitsu.com;
- dkim=pass header.d=fujitsu.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=fujitsu.onmicrosoft.com; s=selector2-fujitsu-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=pYTP6jDoh8hnlEXABe+TFh6mgsMHrOS4F0ZMOTS3Aao=;
- b=cVQjEvGm6HK6v1QLq4Vsf71wrAGC8t7uyR2dG2xMmHR0ha3FxkMwe9QmRN5kCcQNjqOL7yKWnY4XJWoPkHH/KXRpmBa72Js8mKjsnbiOEBykjHzKtsw/BBDZGkL7zi34LIA0W0nD4RcFxTeNVlzCNwilp2F6WYnDg2Jo9N+LScE=
-Received: from TYAPR01MB6330.jpnprd01.prod.outlook.com (2603:1096:402:3e::12)
- by TYCPR01MB10119.jpnprd01.prod.outlook.com (2603:1096:400:1ef::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4995.16; Tue, 22 Feb
- 2022 07:55:28 +0000
-Received: from TYAPR01MB6330.jpnprd01.prod.outlook.com
- ([fe80::bddf:b81c:fc55:3bbb]) by TYAPR01MB6330.jpnprd01.prod.outlook.com
- ([fe80::bddf:b81c:fc55:3bbb%8]) with mapi id 15.20.4995.027; Tue, 22 Feb 2022
- 07:55:28 +0000
-From:   "tan.shaopeng@fujitsu.com" <tan.shaopeng@fujitsu.com>
-To:     'Shuah Khan' <skhan@linuxfoundation.org>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Shuah Khan <shuah@kernel.org>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
-Subject: RE: [PATCH v3 2/5] selftests/resctrl: Make resctrl_tests run using
- kselftest framework
-Thread-Topic: [PATCH v3 2/5] selftests/resctrl: Make resctrl_tests run using
- kselftest framework
-Thread-Index: AQHYItzk2ZSlsGQE1kGaxUOyn+5ZpayZxhMAgAV2X6A=
-Date:   Tue, 22 Feb 2022 07:55:28 +0000
-Message-ID: <TYAPR01MB63302321D2A50D9A690993AF8B3B9@TYAPR01MB6330.jpnprd01.prod.outlook.com>
-References: <20220216022641.2998318-1-tan.shaopeng@jp.fujitsu.com>
- <20220216022641.2998318-3-tan.shaopeng@jp.fujitsu.com>
- <1bbc4049-2c08-39be-d82b-9d98ee663e72@linuxfoundation.org>
-In-Reply-To: <1bbc4049-2c08-39be-d82b-9d98ee663e72@linuxfoundation.org>
-Accept-Language: ja-JP, en-US
-Content-Language: ja-JP
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_a7295cc1-d279-42ac-ab4d-3b0f4fece050_Enabled=true;
- MSIP_Label_a7295cc1-d279-42ac-ab4d-3b0f4fece050_SetDate=2022-02-22T07:52:06Z;
- MSIP_Label_a7295cc1-d279-42ac-ab4d-3b0f4fece050_Method=Standard;
- MSIP_Label_a7295cc1-d279-42ac-ab4d-3b0f4fece050_Name=FUJITSU-RESTRICTED?;
- MSIP_Label_a7295cc1-d279-42ac-ab4d-3b0f4fece050_SiteId=a19f121d-81e1-4858-a9d8-736e267fd4c7;
- MSIP_Label_a7295cc1-d279-42ac-ab4d-3b0f4fece050_ActionId=a964f082-3c59-4c37-9314-2e3e077f62e8;
- MSIP_Label_a7295cc1-d279-42ac-ab4d-3b0f4fece050_ContentBits=0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=fujitsu.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 8586735f-b36b-438b-f599-08d9f5d8b12b
-x-ms-traffictypediagnostic: TYCPR01MB10119:EE_
-x-microsoft-antispam-prvs: <TYCPR01MB10119D934E7CA13AC6C93D1E18B3B9@TYCPR01MB10119.jpnprd01.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: ueQiQfPSllUB1bzI4WdNbayLx9scK93YFt+C81GvePl7sqtZCSpUyfAnEwQnPRUb7ny1c8qI32zNUMfCfy9RO71TIVgHOmk+OFqVSVyiNZXliCZsW71LVFd/uLQB1ZLG4PVJW1cPgdU7iNKf+B4ECFEuJOhYoOGuLmuXW5TqZMFVuuhdin+QE1zSSffuUIys7r57a7109sg18I6/xvtvQ5ijAXGWKyFvbWGN3mi9/NPB6R6wKYyh68urJ+hA5FzVdS/gHmqRWzgczLdITD78XS5fIlRjt4ZF5fTey0lQBsYpJVSUQvVW8JrK0raelFyu0ef5Fz8iD4tk8e0vUZ1lWoPU74yUNV200cF2oId8NSQuxgQ3FuHKw8L3znFDV3YzqutpSjzNulXulJ+BVUZHNmYijEWbCQCA2vEv3pT9iUhoW7tCzi3msl0czbrHKCa++LNcwvAASi1D7QhZAtsridJLVQE4L7vM3nZ/Jw5bWTGDhLw5+z4m8S3Gxn/GWcturhtj9RjDR+SmQsdQMRO+s+L2x5D5n6D6waUGOpqBGihIzxqK3P3bj5vxktrrsIUj+QQHq9wMSG/lLpfv79WUHPgI8LO8UBFC+bR/gVcz0hoWauaizFzoOOVzVdkjOS6LT/jbpZRglHgb4A9DC2uOb+wu073ZBpbggaytCrNNww/3S7DvLLV+44YKLAFim9SbwjbE6tUhnwUfbxFnfcxGyg==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYAPR01MB6330.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(7696005)(508600001)(85182001)(4326008)(5660300002)(66556008)(76116006)(316002)(66946007)(6506007)(66446008)(64756008)(66476007)(110136005)(9686003)(966005)(83380400001)(26005)(186003)(33656002)(71200400001)(8676002)(52536014)(8936002)(55016003)(38100700002)(82960400001)(2906002)(122000001)(53546011)(54906003)(38070700005)(86362001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-2022-jp?B?QVZhNDdmRTFDZ0E2L0lnM3lDYmtSRnJNOTdhZ2V2YTFNN2JQaGgwd1Ny?=
- =?iso-2022-jp?B?WlRweXFzMzAxQXEyY3hmemZFOWY4VzhlMjhUQ1RSVFUzWE1aYmJKbVdp?=
- =?iso-2022-jp?B?Y3Z3cnR3YzJYcWswd1VCbnQzWHVEazcwOXNtZWtaUWVqTndkY3pyYnMw?=
- =?iso-2022-jp?B?ZjlWb2wzTUJPNzNlNFJKNVFlVldYWUpGT1dCczEwNWluNW1adldOOHlj?=
- =?iso-2022-jp?B?Z1JoMXRzdHcxUWNWL0NCY2pwQ2pUd1VqbFR6LzJjekRhcWRseThQRmxO?=
- =?iso-2022-jp?B?bXFmTWNSZ1Q3OWUzbjZmdW9la2tCNFNGb1RZRVRYVUcxT05QWlp3UFRB?=
- =?iso-2022-jp?B?NWlFT3dWZXBhTVpCRU1PeXdSUlNrWTNLSWF0SC9DVGYzVVNnUng5TnZV?=
- =?iso-2022-jp?B?NWQxOWZHalVRV1pVbWh1ZlI1OXpBQTZxWTlZbzFUVmJrZEYxdFc1UTM5?=
- =?iso-2022-jp?B?bzZiUmR6N2hHY0RJUEUzb0ZBSTdia3FHZHFsZ055bWkvSHF4QkV3SFM5?=
- =?iso-2022-jp?B?RDQzOWlILzhRZHQ1cEVtbXQ4QlprRWtCTGNya1JGVnRidWFuRE93L1Fr?=
- =?iso-2022-jp?B?TnpDUjQwMXZRMUVXRGMvT0ZmTFgvN21YeUVWWDRybnNGcFo3ZGFTdVI4?=
- =?iso-2022-jp?B?WWxwa0V3T29jbnE5aGtRZnNZNkQxYjFTMHlhQzI4YzhIZ3l3bzBYbkE0?=
- =?iso-2022-jp?B?cjlidEZTU0NFdzlzMzN5bGJFL3I0NDhMa3Q3SHdROXBmQ2g2Z0dDVmVh?=
- =?iso-2022-jp?B?Q2hOTjdIeGtOK1c1UW91WnpQeGN4RDlEdE1waWdkSUs5WGs1djBtRU5C?=
- =?iso-2022-jp?B?ajYrSkVXeTZKUGVJMGVENnhZVHlESXdxTVRUSzJILzBaMUZpbGlDVXVm?=
- =?iso-2022-jp?B?V3hoaERlRTZFS1V5Q0NSQXF3VnN3aVV5REFsUlVwb245ZDNwTk1mZ3hh?=
- =?iso-2022-jp?B?NklidXpHWSsycGpVU2FDdktFNHhZeFZQMjRTYzlteGhJSUkydWFza1pi?=
- =?iso-2022-jp?B?eXZFMFZZMkkwZjBJQWdyYUltTldlMytKdjZlNVNNNXBsV2hHVXNZODlK?=
- =?iso-2022-jp?B?TVBQTnhBR1VkZzN6dmFOcFRIWEhkNmhKUlpmTnBwQjQ3dTlNMkgxd3Vx?=
- =?iso-2022-jp?B?bXh0ZEJndGNvN3lBWFJ0SU5ZWTZaMVhhVFFvWTVqYWxhRjNHL084eDB0?=
- =?iso-2022-jp?B?RFFWc21nbzNzMFVMMmpuQ1FBakJscVUvN0ZVUFNIWk1XMnFLaGhwMUVt?=
- =?iso-2022-jp?B?WFZUOFlNeGcwU0p3QlZxT0FNVDdxdm5BaDI5UlU4c0h4d2hQaVpzcWdH?=
- =?iso-2022-jp?B?TjA2dThhbDF2N0hRY3lDME16ZHV5YW80TllrdEdrUE1SdVR3a3E0cW1h?=
- =?iso-2022-jp?B?TzZKVlRUU0RiaW96TlI1SVhPSnR6VkI4VjByQ1Fob3BWOTIvVTVCSmRy?=
- =?iso-2022-jp?B?bE9TSWFZUUMwUkF3dXU3b1d5V1NRT0tDYXQrcnNOOGpCNnAwVFZjTXFj?=
- =?iso-2022-jp?B?TjBSRDZDYktDRkFLQW1KREExZzZ1VW8zVEduZUVOTDNvY0hCbkM2aDhK?=
- =?iso-2022-jp?B?Y2txMGhXZVMyZll1TVY1NmJZNllFV1FYSmFFRi9NYWhKdHdtbjBjcEZP?=
- =?iso-2022-jp?B?ODdTNnZRMWxqdHQ1RWVQdDdRN0dzNTIvbkVTTGJBQ1F4QytOZW02SU1r?=
- =?iso-2022-jp?B?Kzl4VDFaczhTQ3pIclBZcGpLUEErWkV2RTljRFpOK1FkN0poMHJ1R0VX?=
- =?iso-2022-jp?B?c0pIamhuZmx4N3FueVRIWXlrdUFqbnBPeUkwMEVEQTZLMFlKK1YxdDhu?=
- =?iso-2022-jp?B?THZLTzVyeWQ0VU92eDlaMnBSaisrd1BKL2tzVitpUldwS0EwcUtYUWtW?=
- =?iso-2022-jp?B?OXVza2I5OCt3QVN6ZVFrYis3ODdiaEg4bWJSOHc5cFBOZ2dWQkZwOWtp?=
- =?iso-2022-jp?B?VnkvcXRSY3VKU2lWN0JweXdLd0xZYyt2ZzR3U1NOeFdNOVNaYWN3cTBr?=
- =?iso-2022-jp?B?VjdEbUluU0t2L2tIejlEKy9ta1JQeW9UQjRDZjNaRk9lbHhETWVpK0Zn?=
- =?iso-2022-jp?B?UVJtR1NIQ0Jqbm5zeFkxOE9UcU1aZXNicGpWWDFuOWprMzZHcm1SUDFt?=
- =?iso-2022-jp?B?cFFHK1NNWmdLdFpCRFlyRUtQcGJNL3J6ekRBWlFxU1FGbGlRYW9MUmY2?=
- =?iso-2022-jp?B?UGZhVjdqQ2JTcG1FQUVZNUxuNnArQ2FBR3FtQnVucklsNjkxYVVrT0Nr?=
- =?iso-2022-jp?B?K2pzOFMvQlRjVzNNTGF2MEZWbHVLdTJMTkJIT2o2U25wRHV5Tmd0Y2pw?=
- =?iso-2022-jp?B?N0ZRQ0lsbWFDdXh4ZFpiVCt2WEhNRnh3VC9tVmw3NFBkTHlLc25hWlc2?=
- =?iso-2022-jp?B?dEgwU2l2ZTlMcWVaMXBvNTdmUDg4WUlxY0FKWUloNlQ5MXdiNENWRmFj?=
- =?iso-2022-jp?B?UGhLN0F3PT0=?=
-Content-Type: text/plain; charset="iso-2022-jp"
-Content-Transfer-Encoding: quoted-printable
+        Tue, 22 Feb 2022 02:59:11 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79E0C1480EA
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 23:58:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=MIME-Version:Content-Type:References:
+        In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=u9+Hq6Ywv2F7ep+N0xKwzBuflZN5CcbrTiNCExFs3ZU=; b=J4t4IIgTvUgabZqRsBdbRcyH3H
+        PNpwwlIvGzxrJf+9KEfQlc2/pV0AoiQWf58CufhATtlipUTJ/SqDFJIVjoT+ISz4M9/lC2O/IBRZw
+        Xed1OiiT+MdDBO3pk1T36bZIrlDGS87xkzh12vV8u2Xj2JJxnj/ogItrKMcdL3Og393dVbrJNq/Wg
+        FG2/NKF00cUcDt2TQUI/f8mAAz9Bag94KtgRyi7o8qq+44F4taqnidGFT4aApuMdQ794W4qBuyV74
+        SxpAF1voi1gjzPu7tHGI4eSDFAshyzDcONj0qTL3mtm3nenzSTSZccud0GM+cMY1e6YEyE4POLu2u
+        y7DIrxMw==;
+Received: from [2001:8b0:10b:1::3ae] (helo=u3832b3a9db3152.ant.amazon.com)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nMQ4B-002ZHP-Je; Tue, 22 Feb 2022 07:58:35 +0000
+Message-ID: <8e60951973cab3a3d27a3c7f18d866cdb804e663.camel@infradead.org>
+Subject: Re: [PATCH] tools/virtio: Test virtual address range detection
+From:   David Woodhouse <dwmw2@infradead.org>
+To:     "Michael S. Tsirkin" <mst@redhat.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>
+Cc:     Stefano Garzarella <sgarzare@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        virtualization <virtualization@lists.linux-foundation.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Date:   Tue, 22 Feb 2022 07:58:33 +0000
+In-Reply-To: <20220222013121-mutt-send-email-mst@kernel.org>
+References: <c1895bcc240d413ff067f982b6e653996ace9887.camel@infradead.org>
+         <20220221170217.5bq7nhr3pvchku5x@sgarzare-redhat>
+         <75d5002ad505b476c81c0b92c0d624824e93d6ac.camel@infradead.org>
+         <20220222013121-mutt-send-email-mst@kernel.org>
+Content-Type: multipart/signed; micalg="sha-256"; protocol="application/pkcs7-signature";
+        boundary="=-vtw6qZo1KIVhXne8IEzV"
+User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
-X-OriginatorOrg: fujitsu.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: TYAPR01MB6330.jpnprd01.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8586735f-b36b-438b-f599-08d9f5d8b12b
-X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Feb 2022 07:55:28.3355
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: a19f121d-81e1-4858-a9d8-736e267fd4c7
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: S/0PhHxioZfws/luwPDrJZuWU9hO3AK7UppkIgYqiwr1bdbF9bx1Z3TkxpQe39MniACeMNCOKXNfyMD2NUcxHvEXFECbnAJHHZOnB1YEdZw=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYCPR01MB10119
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Khan,
 
-> On 2/15/22 7:26 PM, Shaopeng Tan wrote:
-> > In kselftest framework, all tests can be build/run at a time, and a
-> > sub test also can be build/run individually. As follows:
-> > $ make -C tools/testing/selftests run_tests $ make -C
-> > tools/testing/selftests TARGETS=3Dptrace run_tests
-> >
-> > However, resctrl_tests cannot be run using kselftest framework, users
-> > have to change directory to tools/testing/selftests/resctrl/, run
-> > "make" to build executable file "resctrl_tests", and run "sudo
-> > ./resctrl_tests" to execute the test.
-> >
-> > To build/run resctrl_tests using kselftest framework.
-> > Modify tools/testing/selftests/Makefile and
-> > tools/testing/selftests/resctrl/Makefile.
-> >
-> > Even after this change, users can still build/run resctrl_tests
-> > without using framework as before.
-> >
-> > Signed-off-by: Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>
-> > ---
-> > Some important feedbacks from v1&v2 are addressed as follows:
-> >
-> > - The changelog mentions that changes were made to the resctrl
-> >    selftest Makefile but it does not describe what the change accomplis=
-h
-> >    or why they are needed.
-> >    =3D> By changing the Makefile, resctrl_tests can use kselftest
-> >       framework like other sub tests. I described this in changelog.
-> >
-> > - The changelog did not describe how a user may use the kselftest
-> >    framework to run the resctrl tests nor the requested information
-> >    on how existing workflows are impacted.
-> >    =3D> I described how to build/run resctrl_tests with kselftest frame=
-work,
-> >       and described the existing workflows are not impacted that users =
-can
-> >       build/run resctrl_tests without using kselftest framework as befo=
-re.
-> >
-> > - tools/testing/selftests/resctrl/README should be updated.
-> >    =3D> I separate the update of README to a new patch.[patch v3 3/5]
-> >
-> > - Why is the meaning of "EXTRA_SOURCES" (i.e. what is "extra"?) and
-> >    why is "SRCS" no longer sufficient?
-> >    =3D> I referred to other Makefiles, and found "SRCS" is better
-> >       than "EXTRA_SOURCES". So, I updated it to use "SRCS".
-> >
-> >   tools/testing/selftests/Makefile         |  1 +
-> >   tools/testing/selftests/resctrl/Makefile | 20 ++++++--------------
-> >   2 files changed, 7 insertions(+), 14 deletions(-)
-> >
-> > diff --git a/tools/testing/selftests/Makefile
-> > b/tools/testing/selftests/Makefile
-> > index c852eb40c4f7..7df397c6893c 100644
-> > --- a/tools/testing/selftests/Makefile
-> > +++ b/tools/testing/selftests/Makefile
-> > @@ -51,6 +51,7 @@ TARGETS +=3D proc
-> >   TARGETS +=3D pstore
-> >   TARGETS +=3D ptrace
-> >   TARGETS +=3D openat2
-> > +TARGETS +=3D resctrl
-> >   TARGETS +=3D rlimits
-> >   TARGETS +=3D rseq
-> >   TARGETS +=3D rtc
-> > diff --git a/tools/testing/selftests/resctrl/Makefile
-> > b/tools/testing/selftests/resctrl/Makefile
-> > index 6bcee2ec91a9..de26638540ba 100644
-> > --- a/tools/testing/selftests/resctrl/Makefile
-> > +++ b/tools/testing/selftests/resctrl/Makefile
-> > @@ -1,17 +1,9 @@
-> > -CC =3D $(CROSS_COMPILE)gcc
-> > -CFLAGS =3D -g -Wall -O2 -D_FORTIFY_SOURCE=3D2 -SRCS=3D$(wildcard *.c)
-> > -OBJS=3D$(SRCS:.c=3D.o)
-> > +CFLAGS +=3D -g -Wall -O2 -D_FORTIFY_SOURCE=3D2
-> >
-> > -all: resctrl_tests
-> > +TEST_GEN_PROGS :=3D resctrl_tests
-> > +SRCS :=3D $(wildcard *.c)
-> >
-> > -$(OBJS): $(SRCS)
-> > -	$(CC) $(CFLAGS) -c $(SRCS)
-> > +all: $(TEST_GEN_PROGS)
-> >
-> > -resctrl_tests: $(OBJS)
-> > -	$(CC) $(CFLAGS) -o $@ $^
-> > -
-> > -.PHONY: clean
-> > -
-> > -clean:
-> > -	$(RM) $(OBJS) resctrl_tests
-> > +$(TEST_GEN_PROGS): $(SRCS)
+--=-vtw6qZo1KIVhXne8IEzV
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+On Tue, 2022-02-22 at 01:31 -0500, Michael S. Tsirkin wrote:
+> On Mon, Feb 21, 2022 at 05:18:48PM +0000, David Woodhouse wrote:
+> >=20
+> > [dwoodhou@i7 virtio]$ sudo ~/virtio_test
+> > Detected virtual address range 0x1000-0x7ffffffff000
+> > spurious wakeups: 0x0 started=3D0x100000 completed=3D0x100000
+> >=20
+> > Although in some circumstances I also see a different build failure:
+> >=20
+> > cc -g -O2 -Werror -Wno-maybe-uninitialized -Wall -I. -I../include/ -I .=
+./../usr/include/ -Wno-pointer-sign -fno-strict-overflow -fno-strict-aliasi=
+ng -fno-common -MMD -U_FORTIFY_SOURCE -include ../../include/linux/kconfig.=
+h   -c -o vringh_test.o vringh_test.c
+> > In file included from ./linux/uio.h:3,
+> >                  from ./linux/../../../include/linux/vringh.h:15,
+> >                  from ./linux/vringh.h:1,
+> >                  from vringh_test.c:9:
+> > ./linux/../../../include/linux/uio.h:10:10: fatal error: linux/mm_types=
+.h: No such file or directory
+> >    10 | #include <linux/mm_types.h>
+> >       |          ^~~~~~~~~~~~~~~~~~
+> > compilation terminated.
+> > make: *** [<builtin>: vringh_test.o] Error 1
 >=20
-> This patch breaks the test build - the below use-cases fail
->=20
-> make kselftest-all TARGETS=3Dresctrl
-> make -C  tools/testing/selftests/ TARGETS=3Dresctrl
->=20
-> Also a simple make in tools/testing/selftests/resctr
+> Which tree has this build failure? In mine linux/uio.h does not
+> include linux/mm_types.h.
 
-Thanks for your feedbacks.
-I applied these patches to the source below and built=20
-resctrl_tests successfully using above use-cases on x86/arm machine.
-(1)
- https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
- Tag: v5.16
-(2)
- https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
- Tag: next-20220217
+Strictly it's
+https://git.infradead.org/users/dwmw2/linux.git/shortlog/refs/heads/xen-evt=
+chn-kernel
+but I'm sure my part isn't relevant; it's just v5.17-rc5.
 
-Could you tell me which kernel source you used to build
-and what error message you got?
+ $ git blame include/linux/uio.h | grep mm_types.h
+d9c19d32d86fa (Matthew Wilcox (Oracle) 2021-10-18 10:39:06 -0400  10) #incl=
+ude <linux/mm_types.h>
+ $ git describe --tags d9c19d32d86fa
+v5.16-rc4-37-gd9c19d32d86f
 
-Best regards,=20
-Tan Shaopeng
+--=-vtw6qZo1KIVhXne8IEzV
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Transfer-Encoding: base64
+
+MIAGCSqGSIb3DQEHAqCAMIACAQExDzANBglghkgBZQMEAgEFADCABgkqhkiG9w0BBwEAAKCCEkQw
+ggYQMIID+KADAgECAhBNlCwQ1DvglAnFgS06KwZPMA0GCSqGSIb3DQEBDAUAMIGIMQswCQYDVQQG
+EwJVUzETMBEGA1UECBMKTmV3IEplcnNleTEUMBIGA1UEBxMLSmVyc2V5IENpdHkxHjAcBgNVBAoT
+FVRoZSBVU0VSVFJVU1QgTmV0d29yazEuMCwGA1UEAxMlVVNFUlRydXN0IFJTQSBDZXJ0aWZpY2F0
+aW9uIEF1dGhvcml0eTAeFw0xODExMDIwMDAwMDBaFw0zMDEyMzEyMzU5NTlaMIGWMQswCQYDVQQG
+EwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYD
+VQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50
+aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKC
+AQEAyjztlApB/975Rrno1jvm2pK/KxBOqhq8gr2+JhwpKirSzZxQgT9tlC7zl6hn1fXjSo5MqXUf
+ItMltrMaXqcESJuK8dtK56NCSrq4iDKaKq9NxOXFmqXX2zN8HHGjQ2b2Xv0v1L5Nk1MQPKA19xeW
+QcpGEGFUUd0kN+oHox+L9aV1rjfNiCj3bJk6kJaOPabPi2503nn/ITX5e8WfPnGw4VuZ79Khj1YB
+rf24k5Ee1sLTHsLtpiK9OjG4iQRBdq6Z/TlVx/hGAez5h36bBJMxqdHLpdwIUkTqT8se3ed0PewD
+ch/8kHPo5fZl5u1B0ecpq/sDN/5sCG52Ds+QU5O5EwIDAQABo4IBZDCCAWAwHwYDVR0jBBgwFoAU
+U3m/WqorSs9UgOHYm8Cd8rIDZsswHQYDVR0OBBYEFAnA8vwL2pTbX/4r36iZQs/J4K0AMA4GA1Ud
+DwEB/wQEAwIBhjASBgNVHRMBAf8ECDAGAQH/AgEAMB0GA1UdJQQWMBQGCCsGAQUFBwMCBggrBgEF
+BQcDBDARBgNVHSAECjAIMAYGBFUdIAAwUAYDVR0fBEkwRzBFoEOgQYY/aHR0cDovL2NybC51c2Vy
+dHJ1c3QuY29tL1VTRVJUcnVzdFJTQUNlcnRpZmljYXRpb25BdXRob3JpdHkuY3JsMHYGCCsGAQUF
+BwEBBGowaDA/BggrBgEFBQcwAoYzaHR0cDovL2NydC51c2VydHJ1c3QuY29tL1VTRVJUcnVzdFJT
+QUFkZFRydXN0Q0EuY3J0MCUGCCsGAQUFBzABhhlodHRwOi8vb2NzcC51c2VydHJ1c3QuY29tMA0G
+CSqGSIb3DQEBDAUAA4ICAQBBRHUAqznCFfXejpVtMnFojADdF9d6HBA4kMjjsb0XMZHztuOCtKF+
+xswhh2GqkW5JQrM8zVlU+A2VP72Ky2nlRA1GwmIPgou74TZ/XTarHG8zdMSgaDrkVYzz1g3nIVO9
+IHk96VwsacIvBF8JfqIs+8aWH2PfSUrNxP6Ys7U0sZYx4rXD6+cqFq/ZW5BUfClN/rhk2ddQXyn7
+kkmka2RQb9d90nmNHdgKrwfQ49mQ2hWQNDkJJIXwKjYA6VUR/fZUFeCUisdDe/0ABLTI+jheXUV1
+eoYV7lNwNBKpeHdNuO6Aacb533JlfeUHxvBz9OfYWUiXu09sMAviM11Q0DuMZ5760CdO2VnpsXP4
+KxaYIhvqPqUMWqRdWyn7crItNkZeroXaecG03i3mM7dkiPaCkgocBg0EBYsbZDZ8bsG3a08LwEsL
+1Ygz3SBsyECa0waq4hOf/Z85F2w2ZpXfP+w8q4ifwO90SGZZV+HR/Jh6rEaVPDRF/CEGVqR1hiuQ
+OZ1YL5ezMTX0ZSLwrymUE0pwi/KDaiYB15uswgeIAcA6JzPFf9pLkAFFWs1QNyN++niFhsM47qod
+x/PL+5jR87myx5uYdBEQkkDc+lKB1Wct6ucXqm2EmsaQ0M95QjTmy+rDWjkDYdw3Ms6mSWE3Bn7i
+5ZgtwCLXgAIe5W8mybM2JzCCBhQwggT8oAMCAQICEQDGvhmWZ0DEAx0oURL6O6l+MA0GCSqGSIb3
+DQEBCwUAMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVyMRAwDgYD
+VQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNlY3RpZ28g
+UlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBMB4XDTIyMDEwNzAw
+MDAwMFoXDTI1MDEwNjIzNTk1OVowJDEiMCAGCSqGSIb3DQEJARYTZHdtdzJAaW5mcmFkZWFkLm9y
+ZzCCAiIwDQYJKoZIhvcNAQEBBQADggIPADCCAgoCggIBALQ3GpC2bomUqk+91wLYBzDMcCj5C9m6
+oZaHwvmIdXftOgTbCJXADo6G9T7BBAebw2JV38EINgKpy/ZHh7htyAkWYVoFsFPrwHounto8xTsy
+SSePMiPlmIdQ10BcVSXMUJ3Juu16GlWOnAMJY2oYfEzmE7uT9YgcBqKCo65pTFmOnR/VVbjJk4K2
+xE34GC2nAdUQkPFuyaFisicc6HRMOYXPuF0DuwITEKnjxgNjP+qDrh0db7PAjO1D4d5ftfrsf+kd
+RR4gKVGSk8Tz2WwvtLAroJM4nXjNPIBJNT4w/FWWc/5qPHJy2U+eITZ5LLE5s45mX2oPFknWqxBo
+bQZ8a9dsZ3dSPZBvE9ZrmtFLrVrN4eo1jsXgAp1+p7bkfqd3BgBEmfsYWlBXO8rVXfvPgLs32VdV
+NZxb/CDWPqBsiYv0Hv3HPsz07j5b+/cVoWqyHDKzkaVbxfq/7auNVRmPB3v5SWEsH8xi4Bez2V9U
+KxfYCnqsjp8RaC2/khxKt0A552Eaxnz/4ly/2C7wkwTQnBmdlFYhAflWKQ03Ufiu8t3iBE3VJbc2
+5oMrglj7TRZrmKq3CkbFnX0fyulB+kHimrt6PIWn7kgyl9aelIl6vtbhMA+l0nfrsORMa4kobqQ5
+C5rveVgmcIad67EDa+UqEKy/GltUwlSh6xy+TrK1tzDvAgMBAAGjggHMMIIByDAfBgNVHSMEGDAW
+gBQJwPL8C9qU21/+K9+omULPyeCtADAdBgNVHQ4EFgQUzMeDMcimo0oz8o1R1Nver3ZVpSkwDgYD
+VR0PAQH/BAQDAgWgMAwGA1UdEwEB/wQCMAAwHQYDVR0lBBYwFAYIKwYBBQUHAwQGCCsGAQUFBwMC
+MEAGA1UdIAQ5MDcwNQYMKwYBBAGyMQECAQEBMCUwIwYIKwYBBQUHAgEWF2h0dHBzOi8vc2VjdGln
+by5jb20vQ1BTMFoGA1UdHwRTMFEwT6BNoEuGSWh0dHA6Ly9jcmwuc2VjdGlnby5jb20vU2VjdGln
+b1JTQUNsaWVudEF1dGhlbnRpY2F0aW9uYW5kU2VjdXJlRW1haWxDQS5jcmwwgYoGCCsGAQUFBwEB
+BH4wfDBVBggrBgEFBQcwAoZJaHR0cDovL2NydC5zZWN0aWdvLmNvbS9TZWN0aWdvUlNBQ2xpZW50
+QXV0aGVudGljYXRpb25hbmRTZWN1cmVFbWFpbENBLmNydDAjBggrBgEFBQcwAYYXaHR0cDovL29j
+c3Auc2VjdGlnby5jb20wHgYDVR0RBBcwFYETZHdtdzJAaW5mcmFkZWFkLm9yZzANBgkqhkiG9w0B
+AQsFAAOCAQEAyW6MUir5dm495teKqAQjDJwuFCi35h4xgnQvQ/fzPXmtR9t54rpmI2TfyvcKgOXp
+qa7BGXNFfh1JsqexVkIqZP9uWB2J+uVMD+XZEs/KYNNX2PvIlSPrzIB4Z2wyIGQpaPLlYflrrVFK
+v9CjT2zdqvy2maK7HKOQRt3BiJbVG5lRiwbbygldcALEV9ChWFfgSXvrWDZspnU3Gjw/rMHrGnql
+Htlyebp3pf3fSS9kzQ1FVtVIDrL6eqhTwJxe+pXSMMqFiN0whpBtXdyDjzBtQTaZJ7zTT/vlehc/
+tDuqZwGHm/YJy883Ll+GP3NvOkgaRGWEuYWJJ6hFCkXYjyR9IzCCBhQwggT8oAMCAQICEQDGvhmW
+Z0DEAx0oURL6O6l+MA0GCSqGSIb3DQEBCwUAMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3Jl
+YXRlciBNYW5jaGVzdGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0
+ZWQxPjA8BgNVBAMTNVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJl
+IEVtYWlsIENBMB4XDTIyMDEwNzAwMDAwMFoXDTI1MDEwNjIzNTk1OVowJDEiMCAGCSqGSIb3DQEJ
+ARYTZHdtdzJAaW5mcmFkZWFkLm9yZzCCAiIwDQYJKoZIhvcNAQEBBQADggIPADCCAgoCggIBALQ3
+GpC2bomUqk+91wLYBzDMcCj5C9m6oZaHwvmIdXftOgTbCJXADo6G9T7BBAebw2JV38EINgKpy/ZH
+h7htyAkWYVoFsFPrwHounto8xTsySSePMiPlmIdQ10BcVSXMUJ3Juu16GlWOnAMJY2oYfEzmE7uT
+9YgcBqKCo65pTFmOnR/VVbjJk4K2xE34GC2nAdUQkPFuyaFisicc6HRMOYXPuF0DuwITEKnjxgNj
+P+qDrh0db7PAjO1D4d5ftfrsf+kdRR4gKVGSk8Tz2WwvtLAroJM4nXjNPIBJNT4w/FWWc/5qPHJy
+2U+eITZ5LLE5s45mX2oPFknWqxBobQZ8a9dsZ3dSPZBvE9ZrmtFLrVrN4eo1jsXgAp1+p7bkfqd3
+BgBEmfsYWlBXO8rVXfvPgLs32VdVNZxb/CDWPqBsiYv0Hv3HPsz07j5b+/cVoWqyHDKzkaVbxfq/
+7auNVRmPB3v5SWEsH8xi4Bez2V9UKxfYCnqsjp8RaC2/khxKt0A552Eaxnz/4ly/2C7wkwTQnBmd
+lFYhAflWKQ03Ufiu8t3iBE3VJbc25oMrglj7TRZrmKq3CkbFnX0fyulB+kHimrt6PIWn7kgyl9ae
+lIl6vtbhMA+l0nfrsORMa4kobqQ5C5rveVgmcIad67EDa+UqEKy/GltUwlSh6xy+TrK1tzDvAgMB
+AAGjggHMMIIByDAfBgNVHSMEGDAWgBQJwPL8C9qU21/+K9+omULPyeCtADAdBgNVHQ4EFgQUzMeD
+Mcimo0oz8o1R1Nver3ZVpSkwDgYDVR0PAQH/BAQDAgWgMAwGA1UdEwEB/wQCMAAwHQYDVR0lBBYw
+FAYIKwYBBQUHAwQGCCsGAQUFBwMCMEAGA1UdIAQ5MDcwNQYMKwYBBAGyMQECAQEBMCUwIwYIKwYB
+BQUHAgEWF2h0dHBzOi8vc2VjdGlnby5jb20vQ1BTMFoGA1UdHwRTMFEwT6BNoEuGSWh0dHA6Ly9j
+cmwuc2VjdGlnby5jb20vU2VjdGlnb1JTQUNsaWVudEF1dGhlbnRpY2F0aW9uYW5kU2VjdXJlRW1h
+aWxDQS5jcmwwgYoGCCsGAQUFBwEBBH4wfDBVBggrBgEFBQcwAoZJaHR0cDovL2NydC5zZWN0aWdv
+LmNvbS9TZWN0aWdvUlNBQ2xpZW50QXV0aGVudGljYXRpb25hbmRTZWN1cmVFbWFpbENBLmNydDAj
+BggrBgEFBQcwAYYXaHR0cDovL29jc3Auc2VjdGlnby5jb20wHgYDVR0RBBcwFYETZHdtdzJAaW5m
+cmFkZWFkLm9yZzANBgkqhkiG9w0BAQsFAAOCAQEAyW6MUir5dm495teKqAQjDJwuFCi35h4xgnQv
+Q/fzPXmtR9t54rpmI2TfyvcKgOXpqa7BGXNFfh1JsqexVkIqZP9uWB2J+uVMD+XZEs/KYNNX2PvI
+lSPrzIB4Z2wyIGQpaPLlYflrrVFKv9CjT2zdqvy2maK7HKOQRt3BiJbVG5lRiwbbygldcALEV9Ch
+WFfgSXvrWDZspnU3Gjw/rMHrGnqlHtlyebp3pf3fSS9kzQ1FVtVIDrL6eqhTwJxe+pXSMMqFiN0w
+hpBtXdyDjzBtQTaZJ7zTT/vlehc/tDuqZwGHm/YJy883Ll+GP3NvOkgaRGWEuYWJJ6hFCkXYjyR9
+IzGCBMcwggTDAgEBMIGsMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVz
+dGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMT
+NVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBAhEA
+xr4ZlmdAxAMdKFES+jupfjANBglghkgBZQMEAgEFAKCCAeswGAYJKoZIhvcNAQkDMQsGCSqGSIb3
+DQEHATAcBgkqhkiG9w0BCQUxDxcNMjIwMjIyMDc1ODMzWjAvBgkqhkiG9w0BCQQxIgQg3miPfVTY
+yXF2roweTNmPO3rvAqsGVHjjEKdQ4Ag3TWEwgb0GCSsGAQQBgjcQBDGBrzCBrDCBljELMAkGA1UE
+BhMCR0IxGzAZBgNVBAgTEkdyZWF0ZXIgTWFuY2hlc3RlcjEQMA4GA1UEBxMHU2FsZm9yZDEYMBYG
+A1UEChMPU2VjdGlnbyBMaW1pdGVkMT4wPAYDVQQDEzVTZWN0aWdvIFJTQSBDbGllbnQgQXV0aGVu
+dGljYXRpb24gYW5kIFNlY3VyZSBFbWFpbCBDQQIRAMa+GZZnQMQDHShREvo7qX4wgb8GCyqGSIb3
+DQEJEAILMYGvoIGsMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVy
+MRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNl
+Y3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBAhEAxr4Z
+lmdAxAMdKFES+jupfjANBgkqhkiG9w0BAQEFAASCAgChXTOxDODalLYc4WPyVwifvhXi7C9IArEV
+ZkoPx1DUyxONcNJKNbrDNN+99IxVBujmlIzvbVmZ5RxoUZ1SNMtWjdeYKm5rA4WQKJVGl+x6VeBW
+BLKROG+XFxl0pXmoyO9fAoQ3utvFck7OsPP/Cj+/A3bMOdfB312jaDHcX5YMGoKKtGn3SSehCg9S
++u4mJfQ2Wwgs7+4Sirt04shsuZjWzgqH+/VC9I/CRXjV0cMTe+rvkWr8+0dva+UiBHELBz3/91Ys
+iIJB5JS+OBQPxEEplE03YvojM7Q+NvO0NvQELQO4tX+L8dEx+v509oblzmB1aYuDUo42Kpee8q6K
+9FBnug66aoFaiJzsQbEo2L0SvahFW2zyU550paPReMKAvIfnMhCIEv3S3pl7X48/UDkAt8PnePdE
++SJ/FkneFlx0LSjWccPKgQGTZp0mTi0ssct3LEZXGc8XhMovO7vdYd3i+czRKUCuf3x7wef+zepJ
+z0eSSpPB0JND4CxV5ScsYZcQdGcc21R6EuWzi9HMMbSLWlRbrSoSz7Dx5VcoVtN/hRHPqHDme+Qq
+VA5O/LSJaUGGfr41xfOuuT2nF1LggpIsdqPyZPSEjbTtw59+BPGM+v+iAQyG0tMfTGXhqy292hM/
+gw27BtCPlCoJXQbi4UNc1AYd4PliRBfAzqekC1LFCwAAAAAAAA==
+
+
+--=-vtw6qZo1KIVhXne8IEzV--
+

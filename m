@@ -2,108 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B351A4BF301
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 09:00:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AD844BF302
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 09:00:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229836AbiBVIAh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 03:00:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39650 "EHLO
+        id S229877AbiBVIAt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 03:00:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbiBVIAg (ORCPT
+        with ESMTP id S229437AbiBVIAr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 03:00:36 -0500
-Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C64A148910
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 00:00:11 -0800 (PST)
-Received: by mail-ej1-f45.google.com with SMTP id p14so40163344ejf.11
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 00:00:11 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=WVascUIens96/MVKuj9saTVjdfhsn9/8jgQmp41ig3k=;
-        b=d2gaokrDH3x1w4wUa5kkMg5hd0BFIBQCCuPFNTQOa/kfjKF3Z9gd9BUTLaNr4xd6hE
-         w//nJ+JTeUft3mPJKx7jGfLeENuSYngymtRb2/DxaMsT9uMdYtpYA33X1jLA0YoENc/A
-         GYCae23+37VcaLKORgWKlGJGVTHObf/CZVKj7mzqhXPkETFyGO+WR3zUvzZJLFLlgFpc
-         kav6wjvJR3RyWbtRZI1RN+8In+MF2vMWm8pJQ2JAhHfbUML9kVJioQ3ZQIq+gCMNt9WJ
-         I2tOeuykYJIkQrW9yIbxy2OLG2Hp0yy2hGGKzp4qgalUy/FEqHgpbjHjESExUiqOsNxy
-         twpA==
-X-Gm-Message-State: AOAM533zQ4LcMjvSJkiVgH6sIzTktQajzKZsOpaKmd+rXdmZrrZ526OF
-        lqrQzKL8FxrZr8QneaM4jkqXR3x2E0w=
-X-Google-Smtp-Source: ABdhPJzPve49HQ8hUQwZmUkb2OrOaX8S0eBecO5YlcOJ+bbS+44eKsQY6tQVQ6sWAYn8r/GK/eOq8Q==
-X-Received: by 2002:a17:906:d968:b0:6d0:fc05:bdc3 with SMTP id rp8-20020a170906d96800b006d0fc05bdc3mr10334065ejb.719.1645516809946;
-        Tue, 22 Feb 2022 00:00:09 -0800 (PST)
-Received: from ?IPV6:2a0b:e7c0:0:107::70f? ([2a0b:e7c0:0:107::70f])
-        by smtp.gmail.com with ESMTPSA id f1sm2612685ejq.74.2022.02.22.00.00.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 22 Feb 2022 00:00:09 -0800 (PST)
-Message-ID: <d83ae2d5-ac46-a3b8-ee9a-12615a48e9d9@kernel.org>
-Date:   Tue, 22 Feb 2022 09:00:08 +0100
+        Tue, 22 Feb 2022 03:00:47 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0993A14891A;
+        Tue, 22 Feb 2022 00:00:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=zmbM9xjZv/x2PiLgbnsox7WqEPCLtKRX3L96LPROHEc=; b=0jxxZRczjnnzihX6kbVsgO87eE
+        SZxfmJs8QwG38+tFxI1rdj1aF3a5ieXydLebaTKrzXHxlXj14UkIWnv0Hr1x6G19hz2X/CDAeMvkY
+        kFilE3Zo8D9B8W+cBVrKUTS22fi71l0ufBRzzSl7BeUCdHQdY+UzoYZlv+9Hyy/z2BJeez/HfkZM+
+        AG0CzCtZXRXIkiymb9VjVxGc65MxVAJm9ABtqilEr+0ZOzsgOtahaip9fns9HB/x7EcoWpEDjzv3Z
+        1R6Eppp5eQUHMiD64zR+NJsiLHlu0dZyiRaozwZUU1uK2/eM9FjvG4mcPIg0VtQ+UK5juOVUgNSpK
+        abv//ITg==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nMQ5k-008Qf8-W0; Tue, 22 Feb 2022 08:00:12 +0000
+Date:   Tue, 22 Feb 2022 00:00:12 -0800
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Finn Thain <fthain@linux-m68k.org>
+Cc:     "Juergen E. Fischer" <fischer@norbit.de>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] aha152x: Clean up struct scsi_pointer usage
+Message-ID: <YhSYDC4YMEx0XCYY@infradead.org>
+References: <4e17ff7295a96e31ed21ccb250c65b56c173b530.1645484982.git.fthain@linux-m68k.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [PATCH v1] vt_ioctl: fix potential spectre v1 in VT_DISALLOCATE
-Content-Language: en-US
-To:     Xiaomeng Tong <xiam0nd.tong@gmail.com>, gregkh@linuxfoundation.org
-Cc:     linux-kernel@vger.kernel.org
-References: <20220222073954.20212-1-xiam0nd.tong@gmail.com>
-From:   Jiri Slaby <jirislaby@kernel.org>
-In-Reply-To: <20220222073954.20212-1-xiam0nd.tong@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4e17ff7295a96e31ed21ccb250c65b56c173b530.1645484982.git.fthain@linux-m68k.org>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22. 02. 22, 8:39, Xiaomeng Tong wrote:
-> In VT_ACTIVATE an almost identical code path has been patched
-> with array_index_nospec. In the VT_DISALLOCATE path, the arg is
-> the user input from a system call argument and lately used as a index
-> for vc_cons[index].d access, which can be reached through path like
-> vt_disallocate->vc_busy or vt_disallocate->vc_deallocate.
-> For consistency both code paths should have the same mitigations
-> applied. Also, the code style is adjusted as suggested by Jiri.
+On Tue, Feb 22, 2022 at 10:09:42AM +1100, Finn Thain wrote:
+> Bring aha152x into line with 10 other drivers which assign
+> scsi_host_template.cmd_size = sizeof(struct scsi_pointer)
+> and avoid the "struct foo { struct bar; };" silliness.
 > 
-> Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
+> Remove a pointless scsi_pointer->have_data_in assignment.
 
-Reviewed-by: Jiri Slaby <jirislaby@kernel.org>
+I think this going in the wrong direction.  The scsi_pointer should
+go away entirelym and the fields actually used by the driver should move
+into the aha152x_cmd_priv structure instead.
 
-> ---
->   drivers/tty/vt/vt_ioctl.c | 10 ++++++----
->   1 file changed, 6 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/tty/vt/vt_ioctl.c b/drivers/tty/vt/vt_ioctl.c
-> index 580136986..8c685b501 100644
-> --- a/drivers/tty/vt/vt_ioctl.c
-> +++ b/drivers/tty/vt/vt_ioctl.c
-> @@ -898,11 +898,13 @@ int vt_ioctl(struct tty_struct *tty,
->   		if (arg > MAX_NR_CONSOLES)
->   			return -ENXIO;
->   
-> -		if (arg == 0)
-> +		if (arg == 0) {
->   			vt_disallocate_all();
-> -		else
-> -			return vt_disallocate(--arg);
-> -		break;
-> +			break;
-> +		}
-> +
-> +		arg = array_index_nospec(arg - 1, MAX_NR_CONSOLES);
-> +		return vt_disallocate(arg);
->   
->   	case VT_RESIZE:
->   	{
-
-
--- 
-js
-suse labs
+Same for all other drivers still using the scsi_pointer.

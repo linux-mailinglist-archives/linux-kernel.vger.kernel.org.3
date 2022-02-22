@@ -2,114 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EE824BF843
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 13:43:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E1F214BF84D
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 13:46:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232021AbiBVMn5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 07:43:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47366 "EHLO
+        id S231982AbiBVMqX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 07:46:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230466AbiBVMny (ORCPT
+        with ESMTP id S229524AbiBVMqW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 07:43:54 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5A6C122F77;
-        Tue, 22 Feb 2022 04:43:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645533808; x=1677069808;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version;
-  bh=V3OvJzcIYv9Xc/I5EnGnnaoV/n9suE3zy47qd9uxvdY=;
-  b=dq30ReBFRk1oDtE+KjAUesMwl76N53alJ8Yej0XpdSre37Nu8FDwMIpG
-   SUm/M2LqcxaqivsYBaWbbxkHb6QYMdRq1kAG8dUOzKTDg3pufM7du/kK4
-   mSJ/8pFngeTRVcDWl5Al6NTGxsncXCkROdkkNY2TGhpNOqOCccCebOGMW
-   9WzNYGBiU+WF3ERypsLDoe6cCsBNIlqlnGovz3IxbMMS9T4xnxoBU2kOb
-   TQ5fVJSsgm6pD97XOUsh2bGM5C8OdL2MhgmBS5x2r5Mw/AsEIoamMgkX8
-   S0GbLeHWzIWuGOoTCiq1vIC6t1Jy4YkvCgYigqdM/jGfBTVJI8UshsjgO
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10265"; a="251625687"
-X-IronPort-AV: E=Sophos;i="5.88,387,1635231600"; 
-   d="scan'208";a="251625687"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2022 04:43:28 -0800
-X-IronPort-AV: E=Sophos;i="5.88,387,1635231600"; 
-   d="scan'208";a="547725699"
-Received: from torta-mobl1.ger.corp.intel.com (HELO localhost) ([10.252.49.14])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2022 04:43:24 -0800
-From:   Jani Nikula <jani.nikula@linux.intel.com>
-To:     Colin Ian King <colin.i.king@gmail.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Vandita Kulkarni <vandita.kulkarni@intel.com>,
-        Manasi Navare <manasi.d.navare@intel.com>
-Subject: Re: [PATCH] drm/i915: make a handful of read-only arrays static const
-In-Reply-To: <20220222120323.86480-1-colin.i.king@gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-References: <20220222120323.86480-1-colin.i.king@gmail.com>
-Date:   Tue, 22 Feb 2022 14:43:22 +0200
-Message-ID: <87tucr6phx.fsf@intel.com>
+        Tue, 22 Feb 2022 07:46:22 -0500
+Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D407122F69;
+        Tue, 22 Feb 2022 04:45:57 -0800 (PST)
+Received: by mail-io1-xd2c.google.com with SMTP id m185so19907419iof.10;
+        Tue, 22 Feb 2022 04:45:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=U1ifEzLtc0/IOyR4lb+9b3bafVQrz8ZMVMZkGpwnl1U=;
+        b=i76dJOhkFq8SztC0GExmH1uRM2VwnD7q2OJnYWUJU/iF0PQU+x9lrc3+EmWBIFcGvL
+         J1bhvCIwvsnv+r5jvgSqbWFNMzDQi/fkoyfBpOyJlh7Yd3OwL8RlFsTO9YPJUbt9TmPx
+         9K4jZ+1tBdveWtBI0GJ5mEstrDASH6hsW4eaNCN3RVMymoTMdyMgeh1+JVS66iPXCwKv
+         PSwkKY8DdQIgLwZ7JwzxiIRu5wv49ZvFlxl98BuUdYd7rJHfJXzRxoccaxOK0erxR0fn
+         D5StrbL3o33jb/PnhcccOqu5oxyQ/iBagDoHrFPRR9YBWaPVc40IjlzQOdYdziGOtRSM
+         d2UQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=U1ifEzLtc0/IOyR4lb+9b3bafVQrz8ZMVMZkGpwnl1U=;
+        b=iwYli7yqnl8OD+RMOA+ZlsUmNPerlGqhOkg/HA4cTBDPlJvLMi/9R/7MVjtWZDkEaC
+         ffsTTmnYQZIO42BP4HalnzpRmQrDs9WWXUO3XaQVLIACzWmvt4JKwmwItLfVnv70EX7h
+         b+keZTZzu3ypUsjTRbMFb1gzimTCUi9dl8g89UcUHHwj5lsX6fs1Sirt9JDhc+7vqbgR
+         BuR0p0aFojHl0oTbL6Q0TtJV7hsYEl+Z42SJwQ7pzjhiCj5wvnELY1k9gJo+vnoAMUFV
+         T101J66zda79/4aglzi7Y4k5HHoYt6LTCVBnRE0ooFT6YtCqp2XO7Nsk/wh3ybh6XZJU
+         e0jg==
+X-Gm-Message-State: AOAM533eBCdFqsZSNHtIwd0PIBvDVcOgfaaAnRY3sLz3hpVgbf3FJcC4
+        a+LrFIh3b5jdAcFFcEzTTLJzvLGRaVU9h5LuRXU=
+X-Google-Smtp-Source: ABdhPJymHE6i7ESiN393PHVS6YIBpky1wMcpujNvwpJKoPffDiP/DnwSThAkfeJCZxjFtj2rDCsPAcGB3UOwdk7NQ0g=
+X-Received: by 2002:a5e:9248:0:b0:640:70ff:4e28 with SMTP id
+ z8-20020a5e9248000000b0064070ff4e28mr17211058iop.44.1645533956554; Tue, 22
+ Feb 2022 04:45:56 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220212130410.6901-1-ojeda@kernel.org> <20220212130410.6901-3-ojeda@kernel.org>
+ <YhScgnV+n7w75WH7@alley>
+In-Reply-To: <YhScgnV+n7w75WH7@alley>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Tue, 22 Feb 2022 13:45:45 +0100
+Message-ID: <CANiq72m77SNEGfxz4Ggi6Uth1-7NsDvT9D1XbCFByYHne1x6Cw@mail.gmail.com>
+Subject: Re: [PATCH v4 02/20] kallsyms: increase maximum kernel symbol length
+ to 512
+To:     Petr Mladek <pmladek@suse.com>
+Cc:     Miguel Ojeda <ojeda@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        rust-for-linux <rust-for-linux@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@google.com>,
+        Gary Guo <gary@garyguo.net>, Boqun Feng <boqun.feng@gmail.com>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        live-patching@vger.kernel.org, linux-perf-users@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 22 Feb 2022, Colin Ian King <colin.i.king@gmail.com> wrote:
-> Don't populate the read-only arrays on the stack but instead make
-> them static const. Also makes the object code a little smaller.
-> Reformat the statements to clear up checkpatch warning.
+Hi Petr,
+
+On Tue, Feb 22, 2022 at 9:19 AM Petr Mladek <pmladek@suse.com> wrote:
 >
-> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
-> ---
->  drivers/gpu/drm/i915/display/intel_vdsc.c | 16 ++++++++++++----
->  1 file changed, 12 insertions(+), 4 deletions(-)
+> The livepatch selftest still pass. Feel free to add:
 >
-> diff --git a/drivers/gpu/drm/i915/display/intel_vdsc.c b/drivers/gpu/drm/i915/display/intel_vdsc.c
-> index 3faea903b9ae..d49f66237ec3 100644
-> --- a/drivers/gpu/drm/i915/display/intel_vdsc.c
-> +++ b/drivers/gpu/drm/i915/display/intel_vdsc.c
-> @@ -378,10 +378,18 @@ calculate_rc_params(struct rc_parameters *rc,
->  {
->  	int bpc = vdsc_cfg->bits_per_component;
->  	int bpp = vdsc_cfg->bits_per_pixel >> 4;
-> -	int ofs_und6[] = { 0, -2, -2, -4, -6, -6, -8, -8, -8, -10, -10, -12, -12, -12, -12 };
-> -	int ofs_und8[] = { 2, 0, 0, -2, -4, -6, -8, -8, -8, -10, -10, -10, -12, -12, -12 };
-> -	int ofs_und12[] = { 2, 0, 0, -2, -4, -6, -8, -8, -8, -10, -10, -10, -12, -12, -12 };
-> -	int ofs_und15[] = { 10, 8, 6, 4, 2, 0, -2, -4, -6, -8, -10, -10, -12, -12, -12 };
-> +	static const int ofs_und6[] = {
-> +		0, -2, -2, -4, -6, -6, -8, -8, -8, -10, -10, -12, -12, -12, -12
-> +	};
-> +	static const int ofs_und8[] = {
-> +		2, 0, 0, -2, -4, -6, -8, -8, -8, -10, -10, -10, -12, -12, -12
-> +	};
-> +	static const int ofs_und12[] = {
-> +		2, 0, 0, -2, -4, -6, -8, -8, -8, -10, -10, -10, -12, -12, -12
-> +	};
+> Tested-by: Petr Mladek <pmladek@suse.com>       # livepatch
+> Acked-by: Petr Mladek <pmladek@suse.com>        # livepatch
 
-Hmm, I wonder why the same values are duplicated in ofs_und8 and
-ofs_und12. Cc: Vandita, Manasi.
+Thanks a lot for the test, Petr! I will add the tags.
 
-Regardless, the patch is sane.
-
-Reviewed-by: Jani Nikula <jani.nikula@intel.com>
-
-> +	static const int ofs_und15[] = {
-> +		10, 8, 6, 4, 2, 0, -2, -4, -6, -8, -10, -10, -12, -12, -12
-> +	};
->  	int qp_bpc_modifier = (bpc - 8) * 2;
->  	u32 res, buf_i, bpp_i;
-
--- 
-Jani Nikula, Intel Open Source Graphics Center
+Cheers,
+Miguel

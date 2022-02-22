@@ -2,97 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 704804BF3CC
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 09:38:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FAA04BF385
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 09:24:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229878AbiBVIiv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 03:38:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53526 "EHLO
+        id S229772AbiBVIYR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 03:24:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229515AbiBVIit (ORCPT
+        with ESMTP id S229528AbiBVIYQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 03:38:49 -0500
-Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F163F931A4;
-        Tue, 22 Feb 2022 00:38:21 -0800 (PST)
-Received: from relay1-d.mail.gandi.net (unknown [IPv6:2001:4b98:dc4:8::221])
-        by mslow1.mail.gandi.net (Postfix) with ESMTP id 53506D5FE5;
-        Tue, 22 Feb 2022 08:16:15 +0000 (UTC)
-Received: (Authenticated sender: clement.leger@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 9F63524000E;
-        Tue, 22 Feb 2022 08:16:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1645517768;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Natz2NWgWvho24fzbCnusdUGHKptahSa6WvIBwYrqSQ=;
-        b=VFqnw5A4k32g9vv1hZ1WxHt+0LScib2vaHxuNFrVQIzAbiNQvi9w9aozpXKFol2lRZqOVF
-        95IeseqOVi5x429kyWRL3YziWtD4op8InbwsyCh22H1/S+qxJAAQzfSnAqnO7yh9RiQMCh
-        dfcoOFtLIT6xK/3ZZdXAboxypJh81/YGzAKPdQ7WfrdEmAWrErp931dGktpL9wkV6aBF7Y
-        NAkjIKRKrcpclQvSdkMlhORlS5hdyAFJNQx2ktDQWdvHcnFI6GReL7Fp4fUVBeHjGpZAFj
-        7YV4vP2R0KG2+wv2089hfUC+xiBahzcZR5T0UpD7rEKQUg18k7/YjQ0c6ae6Ig==
-Date:   Tue, 22 Feb 2022 09:14:47 +0100
-From:   =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Wolfram Sang <wsa@kernel.org>, Peter Rosin <peda@axentia.se>,
-        Russell King <linux@armlinux.org.uk>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-acpi@vger.kernel.org, linux-i2c@vger.kernel.org,
-        netdev@vger.kernel.org,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-Subject: Re: [RFC 01/10] property: add fwnode_match_node()
-Message-ID: <20220222091447.4afa940a@fixe.home>
-In-Reply-To: <YhPPlFZGFvbNs+ZJ@smile.fi.intel.com>
-References: <20220221162652.103834-1-clement.leger@bootlin.com>
-        <20220221162652.103834-2-clement.leger@bootlin.com>
-        <YhPPlFZGFvbNs+ZJ@smile.fi.intel.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-pc-linux-gnu)
+        Tue, 22 Feb 2022 03:24:16 -0500
+X-Greylist: delayed 494 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 22 Feb 2022 00:23:50 PST
+Received: from mail1.perex.cz (mail1.perex.cz [77.48.224.245])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55597111DFD
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 00:23:50 -0800 (PST)
+Received: from mail1.perex.cz (localhost [127.0.0.1])
+        by smtp1.perex.cz (Perex's E-mail Delivery System) with ESMTP id 525C5A0040;
+        Tue, 22 Feb 2022 09:15:34 +0100 (CET)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.perex.cz 525C5A0040
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=perex.cz; s=default;
+        t=1645517734; bh=sSCPoD/RQHN+SwDKJfGd09BCH/QOzkFeSK7690X41mU=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=mb3GVzjRlYWtpTwmSQO0FB2KpUBf5GGwYhgajw10onla6aHBl4LOZ0NfgJNLlr2T1
+         Gj58DMJ9i+XEYIjwH5KKj3l+12mmCTGKIiVcQfk5knQnbjb1BGQlLTW8mjhlbkcgid
+         hVOWY2iEFOWwerYNQPGVdGZr+haXxwsC9+1SRbyQ=
+Received: from [192.168.100.98] (unknown [192.168.100.98])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: perex)
+        by mail1.perex.cz (Perex's E-mail Delivery System) with ESMTPSA;
+        Tue, 22 Feb 2022 09:15:23 +0100 (CET)
+Message-ID: <4bfa587f-3605-646c-8662-40c561beecc0@perex.cz>
+Date:   Tue, 22 Feb 2022 09:15:22 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 1/3] ASoC: amd: acp: Change card name for Guybrush Machine
+Content-Language: en-US
+To:     Ajit Kumar Pandey <AjitKumar.Pandey@amd.com>, broonie@kernel.org,
+        alsa-devel@alsa-project.org
+Cc:     Vijendar.Mukunda@amd.com, Alexander.Deucher@amd.com,
+        Basavaraj.Hiregoudar@amd.com, Sunil-kumar.Dommati@amd.com,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Takashi Iwai <tiwai@suse.com>,
+        V sujith kumar Reddy <vsujithkumar.reddy@amd.com>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20220222061128.719400-1-AjitKumar.Pandey@amd.com>
+ <20220222061128.719400-2-AjitKumar.Pandey@amd.com>
+From:   Jaroslav Kysela <perex@perex.cz>
+In-Reply-To: <20220222061128.719400-2-AjitKumar.Pandey@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le Mon, 21 Feb 2022 19:44:52 +0200,
-Andy Shevchenko <andriy.shevchenko@linux.intel.com> a =C3=A9crit :
+On 22. 02. 22 7:11, Ajit Kumar Pandey wrote:
+> Change sound card name for guybrush machine with rt5682 as primary
+> codec and rt1019 amp to align with names given in UCM config.
 
-> On Mon, Feb 21, 2022 at 05:26:43PM +0100, Cl=C3=A9ment L=C3=A9ger wrote:
-> > Add a function equivalent to of_match_node() which is usable for
-> > fwnode support. Matching is based on the compatible property and it
-> > returns the best matches for the node according to the compatible
-> > list ordering. =20
->=20
-> Not sure I understand the purpose of this API.
-> We have device_get_match_data(), maybe you want similar for fwnode?
->=20
+It's a Chrome OS UCM config? I don't have this config in upstream.
 
-Hi Andy,
+> Signed-off-by: Ajit Kumar Pandey <AjitKumar.Pandey@amd.com>
+> ---
+>   sound/soc/amd/acp/acp-legacy-mach.c | 4 ++--
+>   sound/soc/amd/acp/acp-renoir.c      | 2 +-
+>   2 files changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/sound/soc/amd/acp/acp-legacy-mach.c b/sound/soc/amd/acp/acp-legacy-mach.c
+> index 91140d15691b..50a5aa4d6da9 100644
+> --- a/sound/soc/amd/acp/acp-legacy-mach.c
+> +++ b/sound/soc/amd/acp/acp-legacy-mach.c
+> @@ -96,7 +96,7 @@ static int acp_asoc_probe(struct platform_device *pdev)
+>   
+>   static const struct platform_device_id board_ids[] = {
+>   	{
+> -		.name = "rn_rt5682_rt1019",
+> +		.name = "acp3xalc56821019",
+>   		.driver_data = (kernel_ulong_t)&rt5682_rt1019_data,
+>   	},
+>   	{ }
+> @@ -113,5 +113,5 @@ module_platform_driver(acp_asoc_audio);
+>   
+>   MODULE_IMPORT_NS(SND_SOC_AMD_MACH);
+>   MODULE_DESCRIPTION("ACP chrome audio support");
+> -MODULE_ALIAS("platform:rn_rt5682_rt1019");
+> +MODULE_ALIAS("platform:acp3xalc56821019");
+>   MODULE_LICENSE("GPL v2");
+> diff --git a/sound/soc/amd/acp/acp-renoir.c b/sound/soc/amd/acp/acp-renoir.c
+> index d06ad5ce7fec..b8dc25a1d31d 100644
+> --- a/sound/soc/amd/acp/acp-renoir.c
+> +++ b/sound/soc/amd/acp/acp-renoir.c
+> @@ -47,7 +47,7 @@ static struct snd_soc_acpi_codecs amp_rt1019 = {
+>   static struct snd_soc_acpi_mach snd_soc_acpi_amd_acp_machines[] = {
+>   	{
+>   		.id = "10EC5682",
+> -		.drv_name = "rn_rt5682_rt1019",
+> +		.drv_name = "acp3xalc56821019",
 
-Actually device_get_match_data() is calling the .device_get_match_data
-callback of the dev fwnode. This function is meant to be used by the
-next patch (fwnode_get_match_data()) to be used as a generic fwnode
-operation and thus be usable with software_node.
+I find this naming cryptic. Also, we have other ways to identify the exact 
+driver / hardware configuration. It may make sense to have one driver name 
+(like amd-acp3x) and use the sound card components to refine the hardware 
+configuration for the user space. Your way will introduce a lot of new drivers.
 
---=20
-Cl=C3=A9ment L=C3=A9ger,
-Embedded Linux and Kernel engineer at Bootlin
-https://bootlin.com
+				Jaroslav
+
+-- 
+Jaroslav Kysela <perex@perex.cz>
+Linux Sound Maintainer; ALSA Project; Red Hat, Inc.

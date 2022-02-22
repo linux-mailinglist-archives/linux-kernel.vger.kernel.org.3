@@ -2,133 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6986C4BF35E
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 09:19:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B9FE24BF36C
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 09:21:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229687AbiBVITe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 03:19:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42032 "EHLO
+        id S229761AbiBVIVA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 03:21:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229601AbiBVITc (ORCPT
+        with ESMTP id S229452AbiBVIU6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 03:19:32 -0500
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A9BB1533B2
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 00:19:07 -0800 (PST)
-Received: by mail-pj1-x1033.google.com with SMTP id iq13-20020a17090afb4d00b001bc4437df2cso1791791pjb.2
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 00:19:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=0RpgV13GqW4CH/NAM61Sb/P8WRwF6jsfgBYkU/X8494=;
-        b=BtIuxxaMmQ4jUX+ROZ7gUGZWW58HHgVzJrB+OgBrXYVCPp2YtV6aLeRyXAOV13nTzR
-         lAlubsr2GH6P2odnEPfZ/R9xr2Leulv4vj33Z4+XQnm0NTQlsaldrPkY+0eTxRVciqpY
-         IAIWbvRiOEWbjU51Di9PDZWjG4mrY0uKaBKh8iG787xgQckWaGtvbE1X02pQ9NAksvvm
-         GllzKQxdy/ef//tpZC+mcyVnPzmpISPFl6+Dp/TawR+wnOIbBu9MUBVMRrEN4vvL0oIA
-         LWzpcw+da+FHlX64StmwAyt/uQTjBQv4MhrC76lS+Ah4w0e0p4xnvEnBUpBC+69hzMeD
-         bwrg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=0RpgV13GqW4CH/NAM61Sb/P8WRwF6jsfgBYkU/X8494=;
-        b=vQQxJ9Q0c43nfTZVea8TW0F+WA3utrI/g+IZzXqRq0dLlDJJuq9pO+cROuM76+Dzl4
-         gBkUxvCEHCzgHULA14IQzwso1Dap1STkBSKLWLjSyWPeO3SecWM5dPfWVe63IGH6Jun3
-         245bhMvgf5CYilv8Tlj54orIFXqqXhDT8/77cSh8oHN1ISeidjWqvkPSRxlRhksAQR6T
-         TiutT7DEjJQpl1MHANODBKU4P9+1/aTykc00Uzj08nkACI1HoDDkd0/EVcShgOJjgYor
-         qFG3wBqf7w3g796y0t22Wh6LtLKNsHd7y5cBbCbV2N08n2U8RTXsC3sr8sbdIKgTYj92
-         tdrQ==
-X-Gm-Message-State: AOAM5309/SkigUXVHuUHm1aGnFRETOdJKhvV1lKF2PBT+NjjC19GM+RV
-        OYuCKthWSdcswkGFW3H0Xz0H
-X-Google-Smtp-Source: ABdhPJybsRJHlzEd7+S49/pHGp1xlz06OxOcLHQN9JsCUR67mXiwPUsgi7JH+R2/DWQC0eYR+hVo/A==
-X-Received: by 2002:a17:902:be0a:b0:14d:5db0:7a14 with SMTP id r10-20020a170902be0a00b0014d5db07a14mr21895118pls.155.1645517946688;
-        Tue, 22 Feb 2022 00:19:06 -0800 (PST)
-Received: from thinkpad ([117.217.186.202])
-        by smtp.gmail.com with ESMTPSA id d8sm15219894pfl.163.2022.02.22.00.19.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Feb 2022 00:19:06 -0800 (PST)
-Date:   Tue, 22 Feb 2022 13:48:59 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Alex Elder <elder@linaro.org>
-Cc:     mhi@lists.linux.dev, quic_hemantk@quicinc.com,
-        quic_bbhatt@quicinc.com, quic_jhugo@quicinc.com,
-        vinod.koul@linaro.org, bjorn.andersson@linaro.org,
-        dmitry.baryshkov@linaro.org, quic_vbadigan@quicinc.com,
-        quic_cang@quicinc.com, quic_skananth@quicinc.com,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 15/25] bus: mhi: ep: Add support for processing MHI
- endpoint interrupts
-Message-ID: <20220222081859.GC5029@thinkpad>
-References: <20220212182117.49438-1-manivannan.sadhasivam@linaro.org>
- <20220212182117.49438-16-manivannan.sadhasivam@linaro.org>
- <d5bf8b66-e9ec-4750-9d9d-deb55cbcee94@linaro.org>
+        Tue, 22 Feb 2022 03:20:58 -0500
+X-Greylist: delayed 260 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 22 Feb 2022 00:20:31 PST
+Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [IPv6:2001:4b98:dc4:8::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEAF3155C35;
+        Tue, 22 Feb 2022 00:20:30 -0800 (PST)
+Received: (Authenticated sender: clement.leger@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id E5C26100004;
+        Tue, 22 Feb 2022 08:20:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1645518026;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=W5Nefp6GfuNeDoo+g/v+e3/VXcVfBUoFmyuv8FL7z+4=;
+        b=OKkc8UOr8QCrah0F5Elkwb5Jme6SaZXNa0HvOfBn0RTpCv1hzn4ZH6F6HhjKiBtS2/E8YI
+        Afljgq/1rUjbZ/F6HDktUWOcYUeUieeQvSpeKWGDwQnocGrhcksTP3uKc/51o2vv9sdPuN
+        RkqSUQhC2qIafJJbZp+8pXYcV6h3lmFGKQ2VGKMyyjNDKTwRlx6mPpL8iIhgx+VQDO/WjQ
+        /KoUkGk9XLC6Gb/zdUigH/G/+dkrDK0z0BKpUbZUult4daeW/GkuG/7PQf+tZPwRh4B+uz
+        2hg3SBQlFoxtx04HUvdWhVcSVQIHFdo0NjsXKIvPEcCVmt2dnmhwQ4bQzMYLWw==
+Date:   Tue, 22 Feb 2022 09:19:02 +0100
+From:   =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Wolfram Sang <wsa@kernel.org>, Peter Rosin <peda@axentia.se>,
+        Russell King <linux@armlinux.org.uk>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-acpi@vger.kernel.org, linux-i2c@vger.kernel.org,
+        netdev@vger.kernel.org,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+Subject: Re: [RFC 02/10] property: add fwnode_get_match_data()
+Message-ID: <20220222091902.198ce809@fixe.home>
+In-Reply-To: <YhPP5GWt7XEv5xx8@smile.fi.intel.com>
+References: <20220221162652.103834-1-clement.leger@bootlin.com>
+        <20220221162652.103834-3-clement.leger@bootlin.com>
+        <YhPP5GWt7XEv5xx8@smile.fi.intel.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d5bf8b66-e9ec-4750-9d9d-deb55cbcee94@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 15, 2022 at 04:39:30PM -0600, Alex Elder wrote:
-> On 2/12/22 12:21 PM, Manivannan Sadhasivam wrote:
-> > Add support for processing MHI endpoint interrupts such as control
-> > interrupt, command interrupt and channel interrupt from the host.
-> > 
-> > The interrupts will be generated in the endpoint device whenever host
-> > writes to the corresponding doorbell registers. The doorbell logic
-> > is handled inside the hardware internally.
-> > 
-> > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> 
-> Unless I'm mistaken, you have some bugs here.
-> 
-> Beyond that, I question whether you should be using workqueues
-> for handling all interrupts.  For now, it's fine, but there
-> might be room for improvement after this is accepted upstream
-> (using threaded interrupt handlers, for example).
-> 
+Le Mon, 21 Feb 2022 19:46:12 +0200,
+Andy Shevchenko <andriy.shevchenko@linux.intel.com> a =C3=A9crit :
 
-Only reason I didn't use bottom halves is that the memory for TRE buffers need
-to be allocated each time, so essentially the caller should not sleep.
-
-This is currently a limitation of iATU where there are only 8 windows for
-mapping the host memory and each memory region size is also limited.
-
-> 					-Alex
-> 
-> > ---
-> >   drivers/bus/mhi/ep/main.c | 113 +++++++++++++++++++++++++++++++++++++-
-> >   include/linux/mhi_ep.h    |   2 +
-> >   2 files changed, 113 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/drivers/bus/mhi/ep/main.c b/drivers/bus/mhi/ep/main.c
-> > index ccb3c2795041..072b872e735b 100644
-> > --- a/drivers/bus/mhi/ep/main.c
-> > +++ b/drivers/bus/mhi/ep/main.c
-> > @@ -185,6 +185,56 @@ static void mhi_ep_ring_worker(struct work_struct *work)
-> >   	}
-> >   }
-> > +static void mhi_ep_queue_channel_db(struct mhi_ep_cntrl *mhi_cntrl,
-> > +				    unsigned long ch_int, u32 ch_idx)
+> On Mon, Feb 21, 2022 at 05:26:44PM +0100, Cl=C3=A9ment L=C3=A9ger wrote:
+> > Add fwnode_get_match_data() which is meant to be used as
+> > device_get_match_data for fwnode_operations. =20
+>=20
+> ...
+>=20
+> > +const void *fwnode_get_match_data(const struct fwnode_handle *fwnode,
+> > +				  const struct device *dev)
 > > +{
-> > +	struct device *dev = &mhi_cntrl->mhi_dev->dev;
-> > +	struct mhi_ep_ring_item *item;
-> > +	struct mhi_ep_ring *ring;
-> > +	unsigned int i;
-> 
-> Why not u32 i?  And why is the ch_int argument unsigned long?  The value
-> passed in is a u32.
-> 
+> > +	const struct of_device_id *match;
+> > +
+> > +	match =3D fwnode_match_node(fwnode, dev->driver->of_match_table);
+> > +	if (!match)
+> > +		return NULL;
+> > +
+> > +	return match->data;
+> > +} =20
+>=20
+> It's OF-centric API, why it has fwnode prefix? Can it leave in drivers/of=
+ instead?
+>=20
+>=20
 
-for_each_set_bit() expects the 2nd argument to be of type "unsigned long".
+The idea is to allow device with a software_node description to match
+with the content of the of_match_table. Without this, we would need a
+new type of match table that would probably duplicates part of the
+of_match_table to be able to match software_node against a driver.
+I did not found an other way to do it without modifying drivers
+individually to support software_nodes.
 
-Thanks,
-Mani
+--=20
+Cl=C3=A9ment L=C3=A9ger,
+Embedded Linux and Kernel engineer at Bootlin
+https://bootlin.com

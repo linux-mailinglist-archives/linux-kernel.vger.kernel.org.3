@@ -2,149 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F8204BF330
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 09:10:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E61814BF337
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 09:12:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229589AbiBVIKY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 03:10:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52284 "EHLO
+        id S229602AbiBVILE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 03:11:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbiBVIKW (ORCPT
+        with ESMTP id S229531AbiBVILC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 03:10:22 -0500
-Received: from mail-ua1-x92b.google.com (mail-ua1-x92b.google.com [IPv6:2607:f8b0:4864:20::92b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B9151516BC;
-        Tue, 22 Feb 2022 00:09:58 -0800 (PST)
-Received: by mail-ua1-x92b.google.com with SMTP id k5so3376959uao.2;
-        Tue, 22 Feb 2022 00:09:58 -0800 (PST)
+        Tue, 22 Feb 2022 03:11:02 -0500
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 455C1151C79
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 00:10:38 -0800 (PST)
+Received: by mail-pg1-x534.google.com with SMTP id 139so16415983pge.1
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 00:10:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=rNUlZ9WlMz/js+2zPgbd3d3iplRTIRckUNmfnnX+KWM=;
-        b=qcnTsYNOiGwWL/iGe1tnCtR305MAs7FNyolLmASeYF64GJ2m56jp1CoRHlcBe8KVLK
-         bIB2N6SVtq1sYhnyLWiXqp3Tnre+vXO+rGqxxd2QNBoXZ30sZ9/OtPmW2zPH3uCsSCfa
-         DgfNCn/dM1nksn/EXmn2NFUR44xwzK7treModBk3GeQbndBs3LRALDOuV5IRD6dwDSNk
-         Arrh1pm2RVeWJMQ6GXjpNCfiTmTVYZRFWTXpm7EJ9L/yYAUZW3myJUAUOkLRhAutR8NU
-         hlupIjaWqWb5ajde4U+/Usy5j06QJuKqgcusLyx0YMYePnfELzKWPiQPV5zYKdH6CVnE
-         qA3w==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=dLYMT+TbMwuVBEVL1LUh/1FaEDF3RiFVyuJ9ryG9pZQ=;
+        b=gUBGwwJmZWECPNwfVmegNKWUeav98YrSGHoSxgfJA/X2xB0S4dUuFT/Cj0845cc3Uq
+         UIsotgAA/bwX6PZeLkVO2Cba7onUIGg8Mh8a+1a9D2mYVvzp434EV/xS/ZhP/ux6fMlZ
+         Oo95xBBf9/VHpTG5XqOc6u9EqOmG0y36W53WlNRuhJR6GIX/320WyGOgejnzg8jXobLq
+         UhPi/duN116Svel90rbXIWYWRGeeIYs2my18Fdsm99xEnCuZgAixxW9gDflFXbQentrL
+         L2DgN05hfdZd2K/q4Y4r+W2IdMRpJJpyMn9GSL2dlEFBUhmqkIo/9fYvuMijZzFWH282
+         jSLQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=rNUlZ9WlMz/js+2zPgbd3d3iplRTIRckUNmfnnX+KWM=;
-        b=w2PtUdAfmMsyYcppsFzP0QA11ijpIyaSD4KjuLDQds/gamXsWSyHGx2XhpkcjS9jjz
-         cpW8Bn+/LoenlHEvUL3YErQvp2YrIbAsWHOaxlwAxcvBeb7AGmjIus/3mo0jULlJJK+y
-         zyfpS3lvkXp/dddhvl3c2E+qjyPx80jBOpfguy6gH9Cf6opHZwc6g9+qnj/yZBF5UPH2
-         ymyGAF+rP/uljzdvnhGxracIdbxW84Jx3V2Zkrq9p2kJq4g18BI54eo3rbADY9Yi2F+F
-         lEFVPBP1ZM/9RVkQglIUv0imNjSrI5lU+uXfNP8kO5l7XZ9SYgiSFrDm4aZpcheODc2Q
-         yXnQ==
-X-Gm-Message-State: AOAM532/r3/BNopHd6SOKkvpFMBQi2kxuA9wTBtdqZ4EImbm5A9iGy/h
-        5rcJsd6NjpLVtQKwhbnnU4tJ+iCYP6SqXLGeNlA=
-X-Google-Smtp-Source: ABdhPJz1ThsZFtrkOPkN5AmZWUPmOZsvHH4xj9LeYLtIVYaVVuDtwsRefSFkRtkSVase0gmBBg0gcbKi5LtBT17ELgw=
-X-Received: by 2002:ab0:16d9:0:b0:342:4791:1b86 with SMTP id
- g25-20020ab016d9000000b0034247911b86mr4010668uaf.82.1645517397183; Tue, 22
- Feb 2022 00:09:57 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=dLYMT+TbMwuVBEVL1LUh/1FaEDF3RiFVyuJ9ryG9pZQ=;
+        b=QfEpPqZrJHd9fsOL8Ixe9M5JBizNuzMjfbofcg/0Pw+4A+dwTMC8aj38AdiH/C9x5w
+         w0q/A7Auxi0S1AkZo4L3jHZL+MeV4AEojnzmpRZ+YAJQwQtCCZ37uz42K3Y16UNh16sM
+         3kppFkHw15kB8j890LWIMIX6C3rR9HOL0HB3dnDxO9Z7arrLGkP4224WaTC4zyTlGlhN
+         fixFYC6SvaLmOHRYEGq6ZmOsJm8OACcNy2MXgzvXZsslgiiKEjf7yl/Rjujc8DS9YrSw
+         r1kEiTBkb0a9IfSyZagZ8BmnWj0Z7U84gfMMZToz7COf7OJo4lPPBGcQo0eevZspQVaL
+         JNBw==
+X-Gm-Message-State: AOAM5335An4i3Q8K0ZsgsWwpmKlnPAbS5sFJUzrlz1+A5gDnyidtVsZg
+        gly7zY8zG1B1rCyNLgQJPnY=
+X-Google-Smtp-Source: ABdhPJwyJGpw6LufCqfBxI6fEupQpGufZ1VQiF9jqroL+pDp5EvzTwJhjlV5dsPSpCEsFPwVXiwGZw==
+X-Received: by 2002:a05:6a00:1a04:b0:4e1:786c:cce3 with SMTP id g4-20020a056a001a0400b004e1786ccce3mr23452111pfv.81.1645517437813;
+        Tue, 22 Feb 2022 00:10:37 -0800 (PST)
+Received: from ip-172-31-19-208.ap-northeast-1.compute.internal (ec2-18-181-137-102.ap-northeast-1.compute.amazonaws.com. [18.181.137.102])
+        by smtp.gmail.com with ESMTPSA id p4sm20092924pgh.53.2022.02.22.00.10.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Feb 2022 00:10:37 -0800 (PST)
+Date:   Tue, 22 Feb 2022 08:10:32 +0000
+From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     linux-mm@kvack.org, Roman Gushchin <guro@fb.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>, linux-kernel@vger.kernel.org,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        David Rientjes <rientjes@google.com>,
+        Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>
+Subject: Re: [PATCH 3/5] mm/slab: Do not call kmalloc_large() for unsupported
+ size
+Message-ID: <YhSaeKIBNbG81I07@ip-172-31-19-208.ap-northeast-1.compute.internal>
+References: <20220221105336.522086-1-42.hyeyoo@gmail.com>
+ <20220221105336.522086-4-42.hyeyoo@gmail.com>
+ <YhO1g3k00TeM8PTQ@casper.infradead.org>
 MIME-Version: 1.0
-References: <20220220144606.5695-1-jrdr.linux@gmail.com> <0a2e57ad-2973-ea01-ceda-3262cde1f5aa@gmx.com>
- <CAFqt6zZsv+bMwbdqrcOMCZE08O_q7DGa0ejVAbokLybsSch5fw@mail.gmail.com> <a1d126df-a5ee-d47d-bfaa-95b3b221e41a@suse.com>
-In-Reply-To: <a1d126df-a5ee-d47d-bfaa-95b3b221e41a@suse.com>
-From:   Souptick Joarder <jrdr.linux@gmail.com>
-Date:   Tue, 22 Feb 2022 13:39:45 +0530
-Message-ID: <CAFqt6zZQyA2TC=H7FemimaM++j6ncX43anOtWsOFEV9=46hONg@mail.gmail.com>
-Subject: Re: [PATCH] btrfs: Initialize ret to 0 in scrub_simple_mirror()
-To:     Qu Wenruo <wqu@suse.com>
-Cc:     Qu Wenruo <quwenruo.btrfs@gmx.com>, Chris Mason <clm@fb.com>,
-        Josef Bacik <josef@toxicpanda.com>, dsterba@suse.com,
-        nathan@kernel.org, Nick Desaulniers <ndesaulniers@google.com>,
-        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, kernel test robot <lkp@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YhO1g3k00TeM8PTQ@casper.infradead.org>
+X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 22, 2022 at 1:34 PM Qu Wenruo <wqu@suse.com> wrote:
->
->
->
-> On 2022/2/22 15:50, Souptick Joarder wrote:
-> > On Mon, Feb 21, 2022 at 5:46 AM Qu Wenruo <quwenruo.btrfs@gmx.com> wrote:
-> >>
-> >>
-> >>
-> >> On 2022/2/20 22:46, Souptick Joarder wrote:
-> >>> From: "Souptick Joarder (HPE)" <jrdr.linux@gmail.com>
-> >>>
-> >>> Kernel test robot reported below warning ->
-> >>> fs/btrfs/scrub.c:3439:2: warning: Undefined or garbage value
-> >>> returned to caller [clang-analyzer-core.uninitialized.UndefReturn]
-> >>>
-> >>> Initialize ret to 0.
-> >>>
-> >>> Reported-by: kernel test robot <lkp@intel.com>
-> >>> Signed-off-by: Souptick Joarder (HPE) <jrdr.linux@gmail.com>
-> >>
-> >> Although the patch is not yet merged, but I have to say, it's a false alert.
-> >
-> > Yes, I agree it is a false positive but this patch will at least keep
-> > kernel test robot happy :)
->
-> I'd say we should enhance the compiler to fix the false alert.
->
-> Thus adding LLVM list here is correct.
+On Mon, Feb 21, 2022 at 03:53:39PM +0000, Matthew Wilcox wrote:
+> On Mon, Feb 21, 2022 at 10:53:34AM +0000, Hyeonggon Yoo wrote:
+> > SLAB's kfree() does not support freeing an object that is allocated from
+> > kmalloc_large(). Fix this as SLAB do not pass requests larger than
+> > KMALLOC_MAX_CACHE_SIZE directly to page allocator.
+> 
+> I was wondering if we wanted to go in the other direction and get rid of
+> kmalloc cache sizes larger than, say, 64kB from the SLAB allocator.
 
-Hmm, kernel test robot reported similar false alert in few other
-modules as well.
+Good point.
 
->
->
-> To me, the root problem is that, we lack the hint to allow clang to know
-> that, @logical_length passed in would not cause u64 overflow.
->
-> Unfortunately the sanity check to prevent overflow is hidden far away
-> inside tree-checker.c.
->
-> Maybe some ASSERT() for overflow check would help LLVM to know that?
->
-> Thanks,
-> Qu
->
-> >>
-> >> Firstly, the while loop will always get at least one run.
-> >>
-> >> Secondly, in that loop, we either set ret to some error value and break,
-> >> or after at least one find_first_extent_item() and scrub_extent() call,
-> >> we increase cur_logical and reached the limit of the while loop and exit.
-> >>
-> >> So there is no possible routine to leave @ret uninitialized and returned
-> >> to caller.
-> >>
-> >> Thanks,
-> >> Qu
-> >>
-> >>> ---
-> >>>    fs/btrfs/scrub.c | 2 +-
-> >>>    1 file changed, 1 insertion(+), 1 deletion(-)
-> >>>
-> >>> diff --git a/fs/btrfs/scrub.c b/fs/btrfs/scrub.c
-> >>> index 4baa8e43d585..5ca7e5ffbc96 100644
-> >>> --- a/fs/btrfs/scrub.c
-> >>> +++ b/fs/btrfs/scrub.c
-> >>> @@ -3325,7 +3325,7 @@ static int scrub_simple_mirror(struct scrub_ctx *sctx,
-> >>>        const u32 max_length = SZ_64K;
-> >>>        struct btrfs_path path = {};
-> >>>        u64 cur_logical = logical_start;
-> >>> -     int ret;
-> >>> +     int ret = 0;
-> >>>
-> >>>        /* The range must be inside the bg */
-> >>>        ASSERT(logical_start >= bg->start &&
-> >
->
+Hmm.. I don't think SLAB is benefiting from queueing that large objects,
+and maximum size is still limited to what buddy allocator supports.
+
+I'll try reducing kmalloc caches up to order-1 page like SLUB.
+That would be easier to maintain.
+
+Thanks,
+Hyeonggon

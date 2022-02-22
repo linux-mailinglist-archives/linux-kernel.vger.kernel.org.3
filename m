@@ -2,96 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 741BB4C03D1
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 22:27:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C33C4C03CC
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 22:27:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235987AbiBVV15 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 16:27:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43992 "EHLO
+        id S235823AbiBVV1g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 16:27:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235794AbiBVV1b (ORCPT
+        with ESMTP id S235691AbiBVV12 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 16:27:31 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BC807B55B;
-        Tue, 22 Feb 2022 13:27:05 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: nfraprado)
-        with ESMTPSA id 85AAE1F43C9B
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1645565223;
-        bh=9taHBRKeDVk3pqAcIWviMl4FP9lPlYjt9sExErI2Two=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=OI6vcjXnKEAap1oo7yLdLSKaq/zJtCvz1L565DXez7v46BufwMQtbDe4C/cTevSFm
-         n95HxUQQcgERx76OqyKtISyrunX5ZASrc5P3luaIxgwBwc7MjnTLYvElFVa0sxso+B
-         qJMPcsTyvp2pn1g7AYMD+QNzZcI63z+a+xKQtM7m78+gpkoZ9/pBXvWte9O7zOBI7o
-         k6O70T3iFLIYkkgT8AxH1z5BuoD0S+eyIqxjWTBL/AfIuQVyNa7vSP75p28B9TEyzM
-         92KxVT4xPThFwEpkASPbuB6YCRc02wFTaKJb4qb4nfNGqtwCGkKwQw2vjWrZtEUQe+
-         442F7NoxtQdQQ==
-Date:   Tue, 22 Feb 2022 16:26:58 -0500
-From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
-        <nfraprado@collabora.com>
-To:     Allen-KH Cheng <allen-kh.cheng@mediatek.com>
-Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        --to=Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        Chen-Yu Tsai <wenst@chromium.org>,
-        Ryder Lee <ryder.lee@kernel.org>
-Subject: Re: [PATCH v2 14/23] arm64: dts: mt8192: Add mipi_tx node
-Message-ID: <20220222212658.xuau6t3xcvu7m4uz@notapiano>
-References: <20220218091633.9368-1-allen-kh.cheng@mediatek.com>
- <20220218091633.9368-15-allen-kh.cheng@mediatek.com>
+        Tue, 22 Feb 2022 16:27:28 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 703267B571;
+        Tue, 22 Feb 2022 13:27:02 -0800 (PST)
+Date:   Tue, 22 Feb 2022 21:26:59 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1645565220;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=A1KobKfROGuhaG2oaiPqWbvyFzgdo63Th7Q5VX3E4tE=;
+        b=4ymFaxAFdRHH+4EdFpJxibjuQXpVfvistSwS70skDZ2eewwzUVe5TGsaiFuqp103kCyTSv
+        a6AyciNHwlzC43lvLBwmXkZ0VmHn7KdBfyU21h4MCiedMnxx2Jv2e7Je/68d9YYMNnSDEC
+        KySUTTOwps5HKLFstSKGWnqaVbb+JwH5QFWCgDKcNrZ1U0iZkz7fGmQnESNJ/nQ5YCtI0y
+        XLupJP3uLwSRahrbuK3KO8Iwz9PHtf4Ef2f56O3VeiGCLuN+Kjt1nD8/yQmgdgmi/ZCw7j
+        SpoT5Xd141rCHNIsbj/iUK29x0h4ZN4IdP+Z4JiZICVIubI1eoovpdhJh+Smow==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1645565220;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=A1KobKfROGuhaG2oaiPqWbvyFzgdo63Th7Q5VX3E4tE=;
+        b=mPE4Fk6AAX3i48cQYM2m2khqwb33d39hBzTdt7FGHmX7K4NEdP3BUPIPsjW7rsb276ARyD
+        h582Fb2o0UdKzWCQ==
+From:   "tip-bot2 for Sebastian Andrzej Siewior" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: core/core] fork: Move memcg_charge_kernel_stack() into
+ CONFIG_VMAP_STACK
+Cc:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Andy Lutomirski <luto@kernel.org>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20220217102406.3697941-6-bigeasy@linutronix.de>
+References: <20220217102406.3697941-6-bigeasy@linutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220218091633.9368-15-allen-kh.cheng@mediatek.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Message-ID: <164556521986.16921.15713300732475801540.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 18, 2022 at 05:16:24PM +0800, Allen-KH Cheng wrote:
-> Add mipi_tx node for mt8192 SoC.
-> 
-> Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
-> ---
->  arch/arm64/boot/dts/mediatek/mt8192.dtsi | 10 ++++++++++
->  1 file changed, 10 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/mediatek/mt8192.dtsi b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
-> index cfc2db501108..f5e5af949f19 100644
-> --- a/arch/arm64/boot/dts/mediatek/mt8192.dtsi
-> +++ b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
-> @@ -1114,6 +1114,16 @@
->  			};
->  		};
->  
-> +		mipi_tx0: mipi-dphy@11e50000 {
+The following commit has been merged into the core/core branch of tip:
 
-According to Documentation/devicetree/bindings/phy/mediatek,dsi-phy.yaml, this
-node's name should be dsi-phy, not mipi-dphy.
+Commit-ID:     f1c1a9ee00e4c53c9ccc03ec1aff4792948a25eb
+Gitweb:        https://git.kernel.org/tip/f1c1a9ee00e4c53c9ccc03ec1aff4792948a25eb
+Author:        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+AuthorDate:    Thu, 17 Feb 2022 11:24:03 +01:00
+Committer:     Thomas Gleixner <tglx@linutronix.de>
+CommitterDate: Tue, 22 Feb 2022 22:25:01 +01:00
 
-> +			compatible = "mediatek,mt8183-mipi-tx";
-> +			reg = <0 0x11e50000 0 0x1000>;
-> +			clocks = <&apmixedsys CLK_APMIXED_MIPID26M>;
-> +			clock-names = "ref_clk";
-> +			#clock-cells = <0>;
-> +			#phy-cells = <0>;
-> +			clock-output-names = "mipi_tx0_pll";
-> +		};
-> +
->  		i2c0: i2c@11f00000 {
->  			compatible = "mediatek,mt8192-i2c";
->  			reg = <0 0x11f00000 0 0x1000>,
-> -- 
-> 2.18.0
-> 
-> 
+fork: Move memcg_charge_kernel_stack() into CONFIG_VMAP_STACK
+
+memcg_charge_kernel_stack() is only used in the CONFIG_VMAP_STACK case.
+
+Move memcg_charge_kernel_stack() into the CONFIG_VMAP_STACK block and
+invoke it from within alloc_thread_stack_node().
+
+Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+Acked-by: Andy Lutomirski <luto@kernel.org>
+Link: https://lore.kernel.org/r/20220217102406.3697941-6-bigeasy@linutronix.de
+
+---
+ kernel/fork.c | 69 ++++++++++++++++++++++++++------------------------
+ 1 file changed, 36 insertions(+), 33 deletions(-)
+
+diff --git a/kernel/fork.c b/kernel/fork.c
+index 875bd43..ac63e7f 100644
+--- a/kernel/fork.c
++++ b/kernel/fork.c
+@@ -211,6 +211,32 @@ static int free_vm_stack_cache(unsigned int cpu)
+ 	return 0;
+ }
+ 
++static int memcg_charge_kernel_stack(struct task_struct *tsk)
++{
++	struct vm_struct *vm = task_stack_vm_area(tsk);
++	int i;
++	int ret;
++
++	BUILD_BUG_ON(IS_ENABLED(CONFIG_VMAP_STACK) && PAGE_SIZE % 1024 != 0);
++	BUG_ON(vm->nr_pages != THREAD_SIZE / PAGE_SIZE);
++
++	for (i = 0; i < THREAD_SIZE / PAGE_SIZE; i++) {
++		ret = memcg_kmem_charge_page(vm->pages[i], GFP_KERNEL, 0);
++		if (ret)
++			goto err;
++	}
++	return 0;
++err:
++	/*
++	 * If memcg_kmem_charge_page() fails, page's memory cgroup pointer is
++	 * NULL, and memcg_kmem_uncharge_page() in free_thread_stack() will
++	 * ignore this page.
++	 */
++	for (i = 0; i < THREAD_SIZE / PAGE_SIZE; i++)
++		memcg_kmem_uncharge_page(vm->pages[i], 0);
++	return ret;
++}
++
+ static int alloc_thread_stack_node(struct task_struct *tsk, int node)
+ {
+ 	void *stack;
+@@ -230,6 +256,11 @@ static int alloc_thread_stack_node(struct task_struct *tsk, int node)
+ 		/* Clear stale pointers from reused stack. */
+ 		memset(s->addr, 0, THREAD_SIZE);
+ 
++		if (memcg_charge_kernel_stack(tsk)) {
++			vfree(s->addr);
++			return -ENOMEM;
++		}
++
+ 		tsk->stack_vm_area = s;
+ 		tsk->stack = s->addr;
+ 		return 0;
+@@ -247,6 +278,11 @@ static int alloc_thread_stack_node(struct task_struct *tsk, int node)
+ 				     0, node, __builtin_return_address(0));
+ 	if (!stack)
+ 		return -ENOMEM;
++
++	if (memcg_charge_kernel_stack(tsk)) {
++		vfree(stack);
++		return -ENOMEM;
++	}
+ 	/*
+ 	 * We can't call find_vm_area() in interrupt context, and
+ 	 * free_thread_stack() can be called in interrupt context,
+@@ -418,36 +454,6 @@ static void account_kernel_stack(struct task_struct *tsk, int account)
+ 	}
+ }
+ 
+-static int memcg_charge_kernel_stack(struct task_struct *tsk)
+-{
+-#ifdef CONFIG_VMAP_STACK
+-	struct vm_struct *vm = task_stack_vm_area(tsk);
+-	int ret;
+-
+-	BUILD_BUG_ON(IS_ENABLED(CONFIG_VMAP_STACK) && PAGE_SIZE % 1024 != 0);
+-
+-	if (vm) {
+-		int i;
+-
+-		BUG_ON(vm->nr_pages != THREAD_SIZE / PAGE_SIZE);
+-
+-		for (i = 0; i < THREAD_SIZE / PAGE_SIZE; i++) {
+-			/*
+-			 * If memcg_kmem_charge_page() fails, page's
+-			 * memory cgroup pointer is NULL, and
+-			 * memcg_kmem_uncharge_page() in free_thread_stack()
+-			 * will ignore this page.
+-			 */
+-			ret = memcg_kmem_charge_page(vm->pages[i], GFP_KERNEL,
+-						     0);
+-			if (ret)
+-				return ret;
+-		}
+-	}
+-#endif
+-	return 0;
+-}
+-
+ static void release_task_stack(struct task_struct *tsk)
+ {
+ 	if (WARN_ON(READ_ONCE(tsk->__state) != TASK_DEAD))
+@@ -909,9 +915,6 @@ static struct task_struct *dup_task_struct(struct task_struct *orig, int node)
+ 	if (err)
+ 		goto free_tsk;
+ 
+-	if (memcg_charge_kernel_stack(tsk))
+-		goto free_stack;
+-
+ #ifdef CONFIG_THREAD_INFO_IN_TASK
+ 	refcount_set(&tsk->stack_refcount, 1);
+ #endif

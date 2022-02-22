@@ -2,112 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 641A14C0559
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 00:28:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 411D34C055B
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 00:28:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236255AbiBVX2s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 18:28:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54310 "EHLO
+        id S236291AbiBVX3N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 18:29:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235305AbiBVX2q (ORCPT
+        with ESMTP id S236272AbiBVX3K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 18:28:46 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C703C2A25C;
-        Tue, 22 Feb 2022 15:28:19 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6B363B81CBB;
-        Tue, 22 Feb 2022 23:28:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DEAD6C340E8;
-        Tue, 22 Feb 2022 23:28:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645572497;
-        bh=0qNV1CqjAiQa3hQW/D/ZwwNUzvWSCy9eJtLIcIdCxrs=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=g1pv7mNxzgecQvF+0f1RHqUW0bELxM5HBmj7W1FWFa6mNU25UXIqF8hbMqPmmoq/7
-         ycQuKBfalklYdSJ8HIQtojou/3BRWksJ5E612TlDEtPtIsYm8sbqlkkZhlEQ9ZFA5N
-         3NrD6+mYdXx3yweOncUYRy/97Q9+wz8enNwg5GoEQD15ij5Q0NyDYaCjCB/DBmkl7Y
-         17+ERs5GTRsONevva5kHNRkBtqo7T/okD+IekYEcAz+qL90C/vM4xdHZQbGFWf9BqF
-         6thi9vvWOz13TdgBezOKC8tMyaPBZMFEcWarHtRaJj/HzR85yovWgrM+EUMxpjake5
-         sAswcTPJLy9gQ==
-Date:   Tue, 22 Feb 2022 15:28:15 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Guillaume Nault <gnault@redhat.com>
-Cc:     Eric Dumazet <edumazet@google.com>,
-        "Ziyang Xuan (William)" <william.xuanziyang@huawei.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        David Miller <davem@davemloft.net>,
-        netdev <netdev@vger.kernel.org>,
-        Vasily Averin <vvs@virtuozzo.com>,
-        Kees Cook <keescook@chromium.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH net] net: vlan: allow vlan device MTU change follow real
- device from smaller to bigger
-Message-ID: <20220222152815.1056ca24@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <20220222103733.GA3203@debian.home>
-References: <20220221124644.1146105-1-william.xuanziyang@huawei.com>
-        <CANn89iKyWWCbAdv8W26HwGpM9q5+6rrk9E-Lbd2aujFkD3GMaQ@mail.gmail.com>
-        <YhQ1KrtpEr3TgCwA@gondor.apana.org.au>
-        <8248d662-8ea5-7937-6e34-5f1f8e19190f@huawei.com>
-        <CANn89iLf2ira4XponYV91cbvcdK76ekU7fDW93fmuJ3iytFHcw@mail.gmail.com>
-        <20220222103733.GA3203@debian.home>
+        Tue, 22 Feb 2022 18:29:10 -0500
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED5A4A27B5
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 15:28:43 -0800 (PST)
+Received: by mail-ej1-x62f.google.com with SMTP id hw13so47366210ejc.9
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 15:28:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=0sDj0qMJJiN5G76triZ2YOQFF95CL0AvqXtgUFOJ/qk=;
+        b=hPpp7SkwemAPoCxUmzJK8Z9jEuz2Ipp1/bHRj8z9satZdk6aNRAmEZ1xsvLdbSt7Fj
+         CGTAEBI2ZwJ7tklGkS0Y4emJNlChkcpsrDDtHIIsI253bWpbBE3OtDR7USWHSUIlGxan
+         IiyjiQCNYab6YGCbWjIPcp8tUsuN2Qc20uPWtpzA+syN1WUN6D1ogO/8Ca14REDOzxem
+         cvHIcjGhdEQZvofhwdxgsOLguJF87p/WhFstfmPeTd5neXlk9uIKr6fiQQfaibKXN9X9
+         nCc/y+Wuw6LOgyKv5lTFUaivLmqGa9C3z/T05HMWVWQbxdo7dUXWrw2l/ePGBVMj1sp6
+         oUQg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=0sDj0qMJJiN5G76triZ2YOQFF95CL0AvqXtgUFOJ/qk=;
+        b=KUsbhX+NXvC7BG+lB0mC5pKl0KpXFU7bKi+E2yDGofGs5Ay5QAKDGU47DibMEiOB59
+         b4BTxjMZRyhKxHHrqb5EkvpStUmLW4mjD2L9uhJ1RyPQ7/8Woc13Kr3xE6ofyZx8h5Of
+         OW9Sjev2OWGMG71SeGMOmm0aXZUhjKs1Uo+/kqLQNtSkq/7C87xPHGl7PUu/EPfr0crK
+         r69QBuNbxiunzyPYIaydMMbGXcj4q4mucMuCltT89BT9nLzzkQX4o59WhdW8/9xcsEwh
+         1lTbMxNAaYVWplznxBjbH7vG5c8UpJevIZnwZf4rk2FDRJWZMzXK1t6/2olVVpNMw4sS
+         IUPQ==
+X-Gm-Message-State: AOAM531VVJq7iZ1/iOgdQpN8NADOUHnpIgcGjKKaMWi2uemLOqljxzVx
+        ZLfJZsdroxLSdhYkoggtALN/p9glbnEL0kzvq632
+X-Google-Smtp-Source: ABdhPJy51IWDBSElZ4OCACw6vfJARdAcG+E2xuozKMf80uepmG8u0le8bdcjGxHhoQ2VySs/aduZM0VYpM77G+KdSJU=
+X-Received: by 2002:a17:906:c318:b0:6cf:d118:59d8 with SMTP id
+ s24-20020a170906c31800b006cfd11859d8mr20829134ejz.112.1645572522506; Tue, 22
+ Feb 2022 15:28:42 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220221131533.74238-1-richard_c_haines@btinternet.com>
+In-Reply-To: <20220221131533.74238-1-richard_c_haines@btinternet.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Tue, 22 Feb 2022 18:28:31 -0500
+Message-ID: <CAHC9VhQnRQFrM-mTzUQ3UsyVp2JYw1wUh=7yrdjH7-QmHKidAg@mail.gmail.com>
+Subject: Re: [PATCH V2] security/selinux: Always allow FIOCLEX and FIONCLEX
+To:     Richard Haines <richard_c_haines@btinternet.com>
+Cc:     stephen.smalley.work@gmail.com, eparis@parisplace.org,
+        demiobenour@gmail.com, selinux@vger.kernel.org,
+        linux-kernel@vger.kernel.org, selinux-refpolicy@vger.kernel.org,
+        jeffv@google.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 22 Feb 2022 11:37:33 +0100 Guillaume Nault wrote:
-> What about an explicit option:
-> 
->   ip link add link eth1 dev eth1.100 type vlan id 100 follow-parent-mtu
-> 
-> 
-> Or for something more future proof, an option that can accept several
-> policies:
-> 
->   mtu-update <reduce-only,follow,...>
-> 
->       reduce-only (default):
->         update vlan's MTU only if the new MTU is smaller than the
->         current one (current behaviour).
-> 
->       follow:
->         always follow the MTU of the parent device.
-> 
-> Then if anyone wants more complex policies:
-> 
->       follow-if-not-modified:
->         follow the MTU of the parent device as long as the VLAN's MTU
->         was not manually changed. Otherwise only adjust the VLAN's MTU
->         when the parent's one is set to a smaller value.
-> 
->       follow-if-not-modified-but-not-quite:
->         like follow-if-not-modified but revert back to the VLAN's
->         last manually modified MTU, if any, whenever possible (that is,
->         when the parent device's MTU is set back to a higher value).
->         That probably requires the possibility to dump the last
->         modified MTU, so the administrator can anticipate the
->         consequences of modifying the parent device.
-> 
->      yet-another-policy (because people have a lot of imagination):
->        for example, keep the MTU 4 bytes lower than the parent device,
->        to account for VLAN overhead.
-> 
-> Of course feel free to suggest better names and policies :).
-> 
-> This way, we can keep the current behaviour and avoid unexpected
-> heuristics that are difficult to explain (and even more difficult for
-> network admins to figure out on their own).
+On Mon, Feb 21, 2022 at 8:15 AM Richard Haines
+<richard_c_haines@btinternet.com> wrote:
+>
+> These ioctls are equivalent to fcntl(fd, F_SETFD, flags), which SELinux
+> always allows too.  Furthermore, a failed FIOCLEX could result in a file
+> descriptor being leaked to a process that should not have access to it.
+>
+> As this patch removes access controls, a policy capability needs to be
+> enabled in policy to always allow these ioctls.
+>
+> Based-on-patch-by: Demi Marie Obenour <demiobenour@gmail.com>
+> Signed-off-by: Richard Haines <richard_c_haines@btinternet.com>
+> ---
+> V2 Change: Control via a policy capability. See this thread for discussion:
+> https://lore.kernel.org/selinux/CAHC9VhQEPxYP_KU56gAGNHKQaxucY8gSsHiUB42PVgADBAccRQ@mail.gmail.com/T/#t
+>
+> With this patch and the polcap enabled, the selinux-testsuite will fail:
+> ioctl/test at line 47 - Will need a fix.
+>
+>  security/selinux/hooks.c                   | 7 +++++++
+>  security/selinux/include/policycap.h       | 1 +
+>  security/selinux/include/policycap_names.h | 3 ++-
+>  security/selinux/include/security.h        | 7 +++++++
+>  4 files changed, 17 insertions(+), 1 deletion(-)
 
-My $0.02 would be that if we want to make changes that require new uAPI
-we should do it across uppers.
+Thanks Richard for putting together the v2 of this patch.
+
+As far as the test is concerned, it seems like the quick-n-dirty fix
+is to simply remove the ioctl(FIOCLEX) test in test_noioctl.c; is
+everyone okay with that?  At least that is what I'm going to do with
+my local copy that I use to validate the kernel-secnext builds unless
+someone has a better patch :)
+
+> diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
+> index 5b6895e4f..030c41652 100644
+> --- a/security/selinux/hooks.c
+> +++ b/security/selinux/hooks.c
+> @@ -3745,6 +3745,13 @@ static int selinux_file_ioctl(struct file *file, unsigned int cmd,
+>                                             CAP_OPT_NONE, true);
+>                 break;
+>
+> +       case FIOCLEX:
+> +       case FIONCLEX:
+> +               /* Must always succeed if polcap set, else default: */
+> +               if (selinux_policycap_ioctl_skip_cloexec())
+> +                       break;
+> +               fallthrough;
+> +
+
+The break/fallthrough looks like it might be a little more fragile
+than necessary, how about something like this:
+
+  case FIOCLEX:
+  case FIONCLEX:
+    if (!selinux_policycap_ioctl_skip_cloexec())
+      error = ioctl_has_perm(cred, file, FILE__IOCTL, (u16) cmd);
+      break;
+
+Yes, it does duplicate the default ioctl_has_perm() call, but since we
+are effectively deprecating this and locking the FIOCLEX/FIONCLEX
+behavior with this policy capability it seems okay to me (and
+preferable to relying on the fallthrough).
+
+Thoughts?
+
+-- 
+paul-moore.com

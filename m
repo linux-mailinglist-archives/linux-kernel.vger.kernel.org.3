@@ -2,139 +2,220 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EA504BFA7C
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 15:11:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF2774BFA83
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 15:13:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232754AbiBVOLl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 09:11:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47916 "EHLO
+        id S232755AbiBVONg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 09:13:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232715AbiBVOLj (ORCPT
+        with ESMTP id S232643AbiBVONe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 09:11:39 -0500
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C389115FC81;
-        Tue, 22 Feb 2022 06:11:13 -0800 (PST)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 21MEAxjP067667;
-        Tue, 22 Feb 2022 08:10:59 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1645539059;
-        bh=CszZ7b7p5altQ3N0IR46/M0Kc7F2va/NMGOvBxW49hg=;
-        h=Subject:To:CC:References:From:Date:In-Reply-To;
-        b=bE0rb2PzINSbqvn3IwMH2NpjHrx4xnfykv8x/0/whPY1PEWwT0i2xa7XL2XwvjhLL
-         ekT3njg72oEfkWDrSDzXmTZP21SdbvQCwVI/sIE5n3sKyJmfX/eN2CR/h+ojV0NZ9d
-         QZNVFSPQkLoTXHvZTqFXjDuw0QOEpmZg2PwW5118=
-Received: from DFLE109.ent.ti.com (dfle109.ent.ti.com [10.64.6.30])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 21MEAxeO090573
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 22 Feb 2022 08:10:59 -0600
-Received: from DFLE108.ent.ti.com (10.64.6.29) by DFLE109.ent.ti.com
- (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Tue, 22
- Feb 2022 08:10:58 -0600
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE108.ent.ti.com
- (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Tue, 22 Feb 2022 08:10:58 -0600
-Received: from [10.250.234.209] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 21MEAsO8042175;
-        Tue, 22 Feb 2022 08:10:55 -0600
-Subject: Re: [PATCH] PCI: cadence: respond to received PTM Requests
-To:     Bjorn Helgaas <helgaas@kernel.org>
-CC:     Christian Gmeiner <christian.gmeiner@gmail.com>,
-        <linux-kernel@vger.kernel.org>, Tom Joseph <tjoseph@cadence.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        <linux-pci@vger.kernel.org>
-References: <20220218132037.GA345784@bhelgaas>
-From:   Kishon Vijay Abraham I <kishon@ti.com>
-Message-ID: <116138f6-8f44-66be-c6b9-ccfbab6b8ca2@ti.com>
-Date:   Tue, 22 Feb 2022 19:40:54 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        Tue, 22 Feb 2022 09:13:34 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 25C47B1511
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 06:13:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1645539187;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=02ymn/XEvYvBzFbN4yBoqldynqVeEzBnhxvdpCXzyNc=;
+        b=YM3FbMgI2704PUih7sej6OJ+3oUOZGIBgjg26dSg+XrE62UihBGId8MbMaWubwrVe6h7aK
+        ku6wdY2xHRWi1HoJ3oFCU2x2NcT4HAdIcl8fAs/KjFEDDHz8adNFu3VeN0zUz0mmF3uf+8
+        AV1MTUXaXF3JaM6x1QrrtF+OyO7xMH8=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-396-9YgRhuWRM6-jVfCPzqAstw-1; Tue, 22 Feb 2022 09:13:05 -0500
+X-MC-Unique: 9YgRhuWRM6-jVfCPzqAstw-1
+Received: by mail-wm1-f69.google.com with SMTP id h82-20020a1c2155000000b003552c13626cso910680wmh.3
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 06:13:05 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=02ymn/XEvYvBzFbN4yBoqldynqVeEzBnhxvdpCXzyNc=;
+        b=eKeUVhUndB9Hq08JU5B7gc23gxkyvWawdjMGv3ZfNs9BDrAUGctJw5OwhNr+so5Hto
+         ryKvRaOI+7fZXGsFbxpFOkaHpTtrTEnnx/UgcH5petdbQzgl1dDl0377tnGbQKAKsSNj
+         7vpH4Oz4RRrxh4iT7AJ20VjqhkAEyXufAPtRm4Y7f3oZhes7h4Y9QdJNa03tR5mxqV0c
+         Ft2LG+fLylBhtpo/SmjB0AOXJqIYZRv38ktzhyDK/WblOFPna/vnU9g966FiF7H33WF5
+         GHThXgW5U5uBt2wjoDKSYN4FvsIGeZ/oAOFPUOjq2Qhn6mYb8i1zUJVjGM75ix1gBobF
+         g5sw==
+X-Gm-Message-State: AOAM53192NfYnqfs5sGLD70bQa8JAcou0Wy73ehxqxbjhsTnmEewscgn
+        t1Q2d8o4BqojgDmwWjF8aQ/uAOgVLZ5y0Vg3ObN7hHY3IpTgT/3vH+79V5fpyicSMUA8qvZbEKK
+        zJvtUf0EqH4e/xUAurs9Pxoc=
+X-Received: by 2002:adf:ea01:0:b0:1ea:8200:8ae5 with SMTP id q1-20020adfea01000000b001ea82008ae5mr3441177wrm.607.1645539184536;
+        Tue, 22 Feb 2022 06:13:04 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyPITrbu04/IMwADLxvvV/E4qGkQtr4RhbecqJ9WGvxB+gMYUjiFc/jqpBUoGgSNjcw0opXYw==
+X-Received: by 2002:adf:ea01:0:b0:1ea:8200:8ae5 with SMTP id q1-20020adfea01000000b001ea82008ae5mr3441153wrm.607.1645539184316;
+        Tue, 22 Feb 2022 06:13:04 -0800 (PST)
+Received: from localhost (cpc111743-lutn13-2-0-cust979.9-3.cable.virginm.net. [82.17.115.212])
+        by smtp.gmail.com with ESMTPSA id a17-20020a05600c069100b0037ddbe6da71sm2408103wmn.20.2022.02.22.06.13.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Feb 2022 06:13:03 -0800 (PST)
+From:   Aaron Tomlin <atomlin@redhat.com>
+To:     mcgrof@kernel.org, christophe.leroy@csgroup.eu
+Cc:     cl@linux.com, pmladek@suse.com, mbenes@suse.cz,
+        akpm@linux-foundation.org, jeyu@kernel.org,
+        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
+        void@manifault.com, atomlin@atomlin.com, allen.lkml@gmail.com,
+        joe@perches.com, msuchanek@suse.de, oleksandr@natalenko.name
+Subject: [PATCH v8 00/13] module: core code clean up
+Date:   Tue, 22 Feb 2022 14:12:50 +0000
+Message-Id: <20220222141303.1392190-1-atomlin@redhat.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-In-Reply-To: <20220218132037.GA345784@bhelgaas>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Bjorn,
+Hi Luis, Christophe,
 
-On 18/02/22 6:50 pm, Bjorn Helgaas wrote:
-> On Fri, Feb 18, 2022 at 04:26:48PM +0530, Kishon Vijay Abraham I wrote:
->> Hi Bjorn,
->>
->> On 01/02/22 3:35 am, Bjorn Helgaas wrote:
->>> Update subject line to match previous conventions ("git log --oneline
->>> drivers/pci/controller/cadence/pcie-cadence-host.c" to see).
->>>
->>> On Mon, Jan 31, 2022 at 01:08:27PM +0100, Christian Gmeiner wrote:
->>>> This enables the Controller [RP] to automatically respond
->>>> with Response/ResponseD messages.
->>>
-> 
->>>> +static void cdns_pcie_host_enable_ptm_response(struct cdns_pcie *pcie)
->>>> +{
->>>> +	u32 val;
->>>> +
->>>> +	val = cdns_pcie_readl(pcie, CDNS_PCIE_LM_PTM_CTRL);
->>>> +	cdns_pcie_writel(pcie, CDNS_PCIE_LM_PTM_CTRL, val | CDNS_PCIE_LM_TPM_CTRL_PTMRSEN);
->>>
->>> I assume this is some device-specific enable bit that is effectively
->>> ANDed with PCI_PTM_CTRL_ENABLE in the Precision Time Measurement
->>> Capability?
->>
->> That's correct. This bit enables Controller [RP] to respond to the
->> received PTM Requests.
-> 
-> Great!  Christian, can you update the commit log to reflect that
-> both this bit *and* PCI_PTM_CTRL_ENABLE must be set for the RP to
-> respond to received PTM Requests?
-> 
-> When CDNS_PCIE_LM_TPM_CTRL_PTMRSEN is cleared, do PCI_PTM_CAP_ROOT
-> and the PTM Responder Capable bit (for which we don't have a #define)
-> read as zero?
+As per your suggestion [1], this is an attempt to refactor and split
+optional code out of core module support code into separate components.
+This version is based on Linus' commit 7993e65fdd0f ("Merge tag
+'mtd/fixes-for-5.17-rc5' of
+git://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux").
 
-I see both PTM Responder Capable bit and PTM Root Capable is by-default set to '1'.
+Hopefully this iteration is all right. Please let me know your thoughts.
 
-root@am64xx-evm:~# devmem2 0xD000A24
+Changes since v7 [2]
+
+ - Removed redundant ifdef CONFIG_MODULES and endif pairing from
+   kernel/module/Makefile
+
+Changes since v6 [3]
+
+ - Moved KCOV_INSTRUMENT_module.o out of kernel/Makefile into
+   kernel/module/Makefile (Christophe Leroy)
+ - Moved kernel/module/signature.c back into kernel/
+   (Christophe Leroy)
+ - Fixed Oops in add_kallsyms() due to an invalid pointer assignment
+   (Christophe Leroy)
+
+Changes since v5 [4]:
+
+ - Updated MAINTAINERS to include the entire kernel/module/ directory
+   (Christophe Leroy)
+ - Reintroduce commit a97ac8cb24a3 ("module: fix signature check failures
+   when using in-kernel decompression") (Michal Suchánek)
+ - Refactored code to address some (i.e.
+   --ignore=MULTIPLE_ASSIGNMENTS,ASSIGN_IN_IF was used) style violations
+   e.g. "Alignment should match open parenthesis", reported by
+   scripts/checkpatch.pl --strict (Christophe Leroy)
+ - Used PAGE_ALIGN() and PAGE_ALIGNED() instead (Christophe Leroy)
+ - Removed sig_enforce from include/linux/module.h as it is only
+   used in kernel/module/signing.c (Christophe Leroy)
+ - Added static keyword for anything not used outside a source file
+   (Christophe Leroy)
+ - Moved mod_sysfs_teardown() to kernel/module/sysfs.c (Christophe Leroy)
+ - Removed kdb_modules from kernel/debug/kdb/kdb_private.h
+   (Christophe Leroy)
+
+Changes since v4 [5]:
+
+ - Moved is_livepatch_module() and set_livepatch_module() to
+   kernel/module/livepatch.c
+ - Addressed minor compiler warning concerning
+   kernel/module/internal.h (0-day)
+ - Resolved style violations reported by scripts/checkpatch.pl
+ - Dropped patch 5 [6] so external patch [7] can be applied at
+   a later date post merge into module-next (Christophe Leroy)
+
+Changes since v3 [8]:
+
+ - Refactored both is_livepatch_module() and set_livepatch_module(),
+   respectively, to use IS_ENABLED(CONFIG_LIVEPATCH) (Joe Perches)
+ - Addressed various compiler warnings e.g., no previous prototype (0-day)
+
+Changes since v2 [9]:
+
+ - Moved module decompress support to a separate file
+ - Made check_modinfo_livepatch() generic (Petr Mladek)
+ - Removed filename from each newly created file (Luis Chamberlain)
+ - Addressed some (i.e. --ignore=ASSIGN_IN_IF,AVOID_BUG was used)
+   minor scripts/checkpatch.pl concerns e.g., use strscpy over
+   strlcpy and missing a blank line after declarations (Allen)
+
+Changes since v1 [10]:
+
+  - Moved module version support code into a new file
+
+[1]: https://lore.kernel.org/lkml/YbEZ4HgSYQEPuRmS@bombadil.infradead.org/
+[2]: https://lore.kernel.org/lkml/20220222130911.1348513-1-atomlin@redhat.com/
+[3]: https://lore.kernel.org/lkml/20220218212511.887059-1-atomlin@redhat.com/
+[4]: https://lore.kernel.org/lkml/20220209170358.3266629-1-atomlin@redhat.com/
+[5]: https://lore.kernel.org/lkml/20220130213214.1042497-1-atomlin@redhat.com/
+[6]: https://lore.kernel.org/lkml/20220130213214.1042497-6-atomlin@redhat.com/
+[7]: https://lore.kernel.org/lkml/203348805c9ac9851d8939d15cb9802ef047b5e2.1643919758.git.christophe.leroy@csgroup.eu/
+[8]: https://lore.kernel.org/lkml/20220128203934.600247-1-atomlin@redhat.com/
+[9]: https://lore.kernel.org/lkml/20220106234319.2067842-1-atomlin@redhat.com/
+[10]: https://lore.kernel.org/lkml/20211228213041.1356334-1-atomlin@redhat.com/
+
+Aaron Tomlin (13):
+  module: Move all into module/
+  module: Simple refactor in preparation for split
+  module: Make internal.h and decompress.c more compliant
+  module: Move livepatch support to a separate file
+  module: Move latched RB-tree support to a separate file
+  module: Move strict rwx support to a separate file
+  module: Move extra signature support out of core code
+  module: Move kmemleak support to a separate file
+  module: Move kallsyms support into a separate file
+  module: Move procfs support into a separate file
+  module: Move sysfs support into a separate file
+  module: Move kdb_modules list out of core code
+  module: Move version support into a separate file
+
+ MAINTAINERS                                   |    2 +-
+ include/linux/module.h                        |    9 +-
+ kernel/Makefile                               |    5 +-
+ kernel/debug/kdb/kdb_main.c                   |    5 +
+ kernel/debug/kdb/kdb_private.h                |    4 -
+ kernel/module-internal.h                      |   50 -
+ kernel/module/Makefile                        |   20 +
+ kernel/module/debug_kmemleak.c                |   30 +
+ .../decompress.c}                             |    5 +-
+ kernel/module/internal.h                      |  275 +++
+ kernel/module/kallsyms.c                      |  506 +++++
+ kernel/module/livepatch.c                     |   74 +
+ kernel/{module.c => module/main.c}            | 1856 +----------------
+ kernel/module/procfs.c                        |  142 ++
+ kernel/module/signing.c                       |  122 ++
+ kernel/module/strict_rwx.c                    |   85 +
+ kernel/module/sysfs.c                         |  436 ++++
+ kernel/module/tree_lookup.c                   |  109 +
+ kernel/module/version.c                       |  109 +
+ kernel/module_signing.c                       |   45 -
+ 20 files changed, 2007 insertions(+), 1882 deletions(-)
+ delete mode 100644 kernel/module-internal.h
+ create mode 100644 kernel/module/Makefile
+ create mode 100644 kernel/module/debug_kmemleak.c
+ rename kernel/{module_decompress.c => module/decompress.c} (99%)
+ create mode 100644 kernel/module/internal.h
+ create mode 100644 kernel/module/kallsyms.c
+ create mode 100644 kernel/module/livepatch.c
+ rename kernel/{module.c => module/main.c} (64%)
+ create mode 100644 kernel/module/procfs.c
+ create mode 100644 kernel/module/signing.c
+ create mode 100644 kernel/module/strict_rwx.c
+ create mode 100644 kernel/module/sysfs.c
+ create mode 100644 kernel/module/tree_lookup.c
+ create mode 100644 kernel/module/version.c
+ delete mode 100644 kernel/module_signing.c
 
 
-/dev/mem opened.
-Memory mapped at address 0xffffa8980000.
-Read at address  0x0D000A24 (0xffffa8980a24): 0x00000406
+base-commit: 7993e65fdd0fe07beb9f36f998f9bbef2c0ee391
+-- 
+2.34.1
 
-And this bit can be programmed through the local management APB
-interface if required.
-
-But with this patch which enables PTM by default for RC, it wouldn't be required
-to clear those bits.
-
-Thanks,
-Kishon
-> 
-> I think that would be the correct behavior per PCIe r6.0, sec
-> 7.9.15.2, and it would avoid the confusion of having the PTM
-> Capability register advertise functionality that cannot be enabled via
-> the PTM Control register.
-> 
->>>> +/* PTM Control Register */
->>>> +#define CDNS_PCIE_LM_PTM_CTRL 	(CDNS_PCIE_LM_BASE + 0x0DA8)
-> 
-> Other #defines in this file use lower-case hex.
-> 
-> Bjorn
-> 

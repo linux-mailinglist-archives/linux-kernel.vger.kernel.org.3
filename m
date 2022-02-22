@@ -2,105 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02F734BFC54
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 16:21:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8766B4BFC58
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 16:21:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233413AbiBVPV7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 10:21:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53534 "EHLO
+        id S233329AbiBVPWJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 10:22:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233141AbiBVPV4 (ORCPT
+        with ESMTP id S233420AbiBVPWC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 10:21:56 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 54E08109F
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 07:21:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1645543290;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=t8l5PJCPnTCzVePHoOuB/aOhZkhMEfR0E0RLaLQlVdg=;
-        b=AXxHIW1owQOPKQDBCftf6a/Vkw1GtI2kXdQaqDyCVD1jzjYVQWojf1tCKZyQ09wXgBsyEX
-        zHOLJLDdO7Fn6vAv7fQcquayl6tVEOAtFY2etszfDtY6/aWo/QBrhNnbR3CPTyo4LKnRAt
-        glfAJXx5kiC/ugA8cbZNTEAif9fYNGI=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-377-xKHwA422MaeLWhd47z2LGw-1; Tue, 22 Feb 2022 10:21:29 -0500
-X-MC-Unique: xKHwA422MaeLWhd47z2LGw-1
-Received: by mail-wm1-f72.google.com with SMTP id j39-20020a05600c1c2700b0037becd18addso763975wms.4
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 07:21:29 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:user-agent:mime-version:content-transfer-encoding;
-        bh=t8l5PJCPnTCzVePHoOuB/aOhZkhMEfR0E0RLaLQlVdg=;
-        b=hByRljomTq2/JWEfrGLQ8Ep7DES1f1NIzetxpRK60y3wTeS/EXlXCmkTXcJ3vId2Ce
-         /n//8vveq4Tt2hg7NSftBBhf5y6BcCyfuk/j5Y8tP45VEDWmdBI7lLhZ4YYPsBV9rp/4
-         vqKZBaFOC6xLagRXjgtps9Fxuu5LI4c6sXyqO9X1xkDlK9bowzXPxHPul99K7KqK77dL
-         kNU4DwvQ2lqXhhbcA3uCLBxZl/H7Q2W7VF689EjmH3XnizOK6mmLekcawU03EHVjOgyK
-         3SZQCyhW/L8hivT9yvr9srM7W2u1sbRHZLtCOGPEtvhO4COGnQ6WYtl/Xdnfb2Pof6z6
-         G2SQ==
-X-Gm-Message-State: AOAM531gH/tuP0NIFIoZJZT6XmrJcM7kO1qkpjDyPb8kSuCTHDcSn6ZL
-        NOz+7G4BsDs3ZR6U4cVkwxFFRYdtfqf5ZcdmT8+E0e9Du9Crr4zXDSXJ72a0idV0FXtoq5Ipr6f
-        WVb8f1U2qZ8C/IL9O8HisSyNz
-X-Received: by 2002:adf:df12:0:b0:1ea:973f:9890 with SMTP id y18-20020adfdf12000000b001ea973f9890mr2341660wrl.65.1645543288129;
-        Tue, 22 Feb 2022 07:21:28 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzqJF32bzLsgYury03YWH5n07dggag/D6Bjoypm5aoTerwO+vp29KtNOGH1QDLtFs89EHtnDQ==
-X-Received: by 2002:adf:df12:0:b0:1ea:973f:9890 with SMTP id y18-20020adfdf12000000b001ea973f9890mr2341646wrl.65.1645543287955;
-        Tue, 22 Feb 2022 07:21:27 -0800 (PST)
-Received: from ?IPv6:2a0c:5a80:1204:1500:37e7:8150:d9df:36f? ([2a0c:5a80:1204:1500:37e7:8150:d9df:36f])
-        by smtp.gmail.com with ESMTPSA id d14-20020a05600c34ce00b0037bdd89e3a5sm4306164wmq.3.2022.02.22.07.21.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Feb 2022 07:21:27 -0800 (PST)
-Message-ID: <5f96c7e306546af4604cfaddb895a089811cb99b.camel@redhat.com>
-Subject: Re: [patch 1/2] mm: protect local lock sections with rcu_read_lock
- (on RT)
-From:   Nicolas Saenz Julienne <nsaenzju@redhat.com>
-To:     Marcelo Tosatti <mtosatti@redhat.com>, linux-kernel@vger.kernel.org
-Cc:     linux-mm@kvack.org, Minchan Kim <minchan@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Juri Lelli <juril@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        "Paul E. McKenney" <paulmck@kernel.org>
-Date:   Tue, 22 Feb 2022 16:21:26 +0100
-In-Reply-To: <20220222144907.023121407@redhat.com>
-References: <20220222144706.937848439@redhat.com>
-         <20220222144907.023121407@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
+        Tue, 22 Feb 2022 10:22:02 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8B7585AEF3;
+        Tue, 22 Feb 2022 07:21:36 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0E21CED1;
+        Tue, 22 Feb 2022 07:21:36 -0800 (PST)
+Received: from [10.57.9.152] (unknown [10.57.9.152])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9A6C23F5A1;
+        Tue, 22 Feb 2022 07:21:33 -0800 (PST)
+Message-ID: <9cfe84b0-01bf-6e20-9839-5f597e7fa588@arm.com>
+Date:   Tue, 22 Feb 2022 15:21:32 +0000
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [[PATCH v2 2/2] OPP: Add 'opp-microwatt' parsing for advanced EM
+ registration
+Content-Language: en-US
+To:     Matthias Kaehlcke <mka@chromium.org>
+Cc:     linux-kernel@vger.kernel.org, dietmar.eggemann@arm.com,
+        viresh.kumar@linaro.org, rafael@kernel.org,
+        daniel.lezcano@linaro.org, nm@ti.com, sboyd@kernel.org,
+        dianders@chromium.org, robh+dt@kernel.org,
+        devicetree@vger.kernel.org, linux-pm@vger.kernel.org
+References: <20220222140746.12293-1-lukasz.luba@arm.com>
+ <20220222140746.12293-3-lukasz.luba@arm.com> <YhT6EBzSE/7S3QqT@google.com>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <YhT6EBzSE/7S3QqT@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-02-22 at 11:47 -0300, Marcelo Tosatti wrote:
-> For the per-CPU LRU page vectors, augment the local lock protected
-> code sections with rcu_read_lock.
+Hi Matthias,
+
+On 2/22/22 14:58, Matthias Kaehlcke wrote:
+> On Tue, Feb 22, 2022 at 02:07:46PM +0000, Lukasz Luba wrote:
+
+[snip]
+
+>> +static int __maybe_unused
+>> +_get_dt_power(unsigned long *mW, unsigned long *kHz, struct device *dev)
 > 
-> This makes it possible to replace the queueing of work items on all 
-> CPUs by synchronize_rcu (which is necessary to run FIFO:1 applications
-> uninterrupted on isolated CPUs).
+> nit: the device is usually the first parameter. It's also the only true input
+> parameter of this function, most code puts input parameters first.
 
-I don't think this is needed. In RT local_locks use a spinlock. See
-kernel/locking/spinlock_rt.c:
+Good point. I have internal patch set under review changing this. It's
+going to be changed and the 'dev' would be the 1st arg. I'll send this
+patch set as soon as this one gets queued into pm tree.
 
-"The RT [spinlock] substitutions explicitly disable migration and take
-rcu_read_lock() across the lock held section."
+> 
+>> +{
+>> +	struct dev_pm_opp *opp;
+>> +	unsigned long opp_freq;
+>> +	u32 opp_power;
+>> +	int ret;
+>> +
+>> +	/* Find the right frequency and related OPP */
+>> +	opp_freq = *kHz * 1000;
+>> +	opp = dev_pm_opp_find_freq_ceil(dev, &opp_freq);
+>> +	if (IS_ERR(opp))
+>> +		return -EINVAL;
+>> +
+>> +	ret = of_property_read_u32(opp->np, "opp-microwatt", &opp_power);
+>> +	dev_pm_opp_put(opp);
+>> +	if (ret)
+>> +		return -EINVAL;
+>> +
+>> +	*kHz = opp_freq / 1000;
+>> +	*mW = opp_power / 1000;
+>> +
+>> +	return 0;
+>> +}
+>> +
+>>   /*
+>>    * Callback function provided to the Energy Model framework upon registration.
+>>    * This computes the power estimated by @dev at @kHz if it is the frequency
+>> @@ -1445,6 +1479,33 @@ static int __maybe_unused _get_power(unsigned long *mW, unsigned long *kHz,
+>>   	return 0;
+>>   }
+>>   
+>> +static int _of_find_opp_microwatt_property(struct device *dev)
+> 
+> this function doesn't retrurn the property like of_find_property() does,
+> _of_has_opp_microwatt_property() would be a be a better name IMO. I'd
+> also suggest to change the return type to bool, since callers don't
+> really care about the specific error (which with the current code is
+> -EINVAL) in all cases.
+
+Agree, I'll change the name and return type.
+
+> 
+> 
+>> +{
+>> +	unsigned long freq = 0;
+> 
+> Does the compiler complain when the initialization is skipped? The
+> value of the variable is never read, only it's address is passed to
+> dev_pm_opp_find_freq_ceil().
+
+It has to be 0, since under the hood the dev_pm_opp_find_freq_ceil()
+is going to find first freq which is equal or bigger than this one.
+We actually use that ptr value in the _find_freq_ceil().
+
+> 
+>> +	struct dev_pm_opp *opp;
+>> +	struct device_node *np;
+>> +	struct property *prop;
+>> +
+>> +	/* We only support "operating-points-v2" */
+>> +	np = dev_pm_opp_of_get_opp_desc_node(dev);
+>> +	if (!np)
+>> +		return -EINVAL;
+>> +
+>> +	of_node_put(np);
+>> +
+>> +	/* Check if an OPP has needed property */
+> 
+> The comment doesn't add much value IMO
+
+Well, it just stress the 'an' as in this case it's the 1st OPP,
+due to the fact freq = 0 and finding the 'ceiling' on it.
+I'll remove it.
+
+> 
+>> +	opp = dev_pm_opp_find_freq_ceil(dev, &freq);
+>> +	if (IS_ERR(opp))
+>> +		return -EINVAL;
+>> +
+>> +	prop = of_find_property(opp->np, "opp-microwatt", NULL);
+>> +	dev_pm_opp_put(opp);
+>> +	if (!prop)
+>> +		return -EINVAL;
+>> +
+>> +	return 0;
+>> +}
+>> +
+>>   /**
+>>    * dev_pm_opp_of_register_em() - Attempt to register an Energy Model
+>>    * @dev		: Device for which an Energy Model has to be registered
+>> @@ -1474,6 +1535,15 @@ int dev_pm_opp_of_register_em(struct device *dev, struct cpumask *cpus)
+>>   		goto failed;
+>>   	}
+>>   
+>> +	/* First, try to find more precised Energy Model in DT */
+>> +	if (!_of_find_opp_microwatt_property(dev)) {
+>> +		struct em_data_callback em_dt_cb = EM_DATA_CB(_get_dt_power);
+>> +
+>> +		ret = em_dev_register_perf_domain(dev, nr_opp, &em_dt_cb,
+>> +						  cpus, true);
+>> +		return ret;
+> 
+> just 'return em_dev_register_perf_domain(...);'?
+
+true
+
+Thanks for the review! I'll address these comments in v3 if Viresh
+agrees with this new approach.
 
 Regards,
-
--- 
-Nicolás Sáenz
-
+Lukasz

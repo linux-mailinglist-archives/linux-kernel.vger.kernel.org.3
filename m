@@ -2,85 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D5924BF8B4
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 14:05:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C5924BF8B5
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 14:05:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232124AbiBVNFm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 08:05:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57036 "EHLO
+        id S232133AbiBVNF6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 08:05:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230250AbiBVNFi (ORCPT
+        with ESMTP id S231364AbiBVNF5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 08:05:38 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7693212D0A4
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 05:05:11 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 162E4B81866
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 13:05:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6DF47C340E8;
-        Tue, 22 Feb 2022 13:05:08 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="E30iyLR8"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1645535106;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=4YbJtGQg0BkecnlLX0loQH7fn5kcMhVwUQrgGLGgH04=;
-        b=E30iyLR8UNu1m5GQjQMwGeWJxJJXv3AaQ0NQwNuqs7RL5Urg6WDk24yrl0nej5Svds9opw
-        HhU38hei82GsIXnWbRezBBNeW35ji7+JbmZ5G1GSb7MVZS4rsZpRDAYIwXn3X6Karb1SUY
-        /k/gsEsUAbIjONv3x1BhTxL9pZO3QJw=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 3b2df2e4 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Tue, 22 Feb 2022 13:05:06 +0000 (UTC)
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Theodore Ts'o <tytso@mit.edu>
-Subject: [PATCH] random: only wake up writers after zap if threshold was passed
-Date:   Tue, 22 Feb 2022 14:05:03 +0100
-Message-Id: <20220222130503.45043-1-Jason@zx2c4.com>
+        Tue, 22 Feb 2022 08:05:57 -0500
+Received: from mail-ot1-x32a.google.com (mail-ot1-x32a.google.com [IPv6:2607:f8b0:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90A08136ED6
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 05:05:31 -0800 (PST)
+Received: by mail-ot1-x32a.google.com with SMTP id j9-20020a9d7d89000000b005ad5525ba09so7263380otn.10
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 05:05:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=daynix-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=y01kJbrbcxAmMynqwHOhpegkdcYtXci9FUmRqGex7Vk=;
+        b=MYLIC1UuwnuT1lAmTqdLKxfPFzcJiWQU2Dy7VgzbPDvSgwmStLXeAxRIh9n8JPMWV8
+         XmMpMBQpxZwL4AT3xNJ6LR71Nu9IKuOGIo0O23r/qewTwRuOyI6ujQnPFpa2ZacYa7Xx
+         l1hfO4vid7eVt7ws4qJKTkGffb+K2MZduPRxRpis4x0Qh7otWBQ0o7HjkVcZgR+AmjoO
+         8K04zn0WmTi2HQAjEw+Qt3JmZEvqe3jYqWfdx31qMenF6Dqz8+Ce/mpgH8cBHXIV8wLA
+         emRghWmB0+UAYctbX9DT0on05ydMXNw8IfNpcTJ5T32GSKLpYFxhJUf+8bG6v4SDOneV
+         B/Xw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=y01kJbrbcxAmMynqwHOhpegkdcYtXci9FUmRqGex7Vk=;
+        b=FFg4QuljFH4PjXkWrcj3Ml2K2gvlprdBAPuGhrxmcWKMIwYv8tKuxxYEVC7zzZcQHc
+         sYxgq9PqeWJYJvKaUtKQgV+maIk8EHSSIiOWPOGp16+v/KkGjSApsANag7M0HdG46Rpn
+         xM8jmzZHlJREMELEqMEJd7VJrgd3b/pbQrjpsDM5kxvTXHYwY0eVRF8hANHMXFMDNKpX
+         r8WVvx1iv5FVXX9LDQUlDQVJEz6PNK2GdcBdKjBARz6lnf4FN5CzDg8oHsWG0VHemo4F
+         ot6OvIMJ0k8h3kWm2eSXf3U+h4y9rlSMp26ibK9kbEz+dHQQ4B0vr1y2kg108D7VVIxm
+         UTcQ==
+X-Gm-Message-State: AOAM530/TmlbItHBceVN6QQXm1XqrLEc4qvrv+QlD/LQoO8TITB/U6fA
+        DGVXioHlrzsGvtv1vBU0VUrdS8Jf2Jpcgvut2mnXQw==
+X-Google-Smtp-Source: ABdhPJz4oJQbfPa+jyB8PwWlxFFv+uK2vA7h3V8F0P2qHSPcHtxfpVfHkTBak96qlDXOkT/dhxGoWYCfAiK/NnGx1HQ=
+X-Received: by 2002:a05:6830:1dd2:b0:5a2:2d10:c3ba with SMTP id
+ a18-20020a0568301dd200b005a22d10c3bamr8282177otj.41.1645535130874; Tue, 22
+ Feb 2022 05:05:30 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220125084702.3636253-1-andrew@daynix.com> <1643183537.4001389-1-xuanzhuo@linux.alibaba.com>
+ <CAOEp5OcwLiLZuVOAxx+pt6uztP-cGTgqsUSQj7N7HKTZgmyN3w@mail.gmail.com>
+ <CABcq3pE43rYojwUCAmpW-FKv5=ABcS47B944Y-3kDqr-PeqLwQ@mail.gmail.com> <3ab523ac-0ab5-5011-5328-e119840e1c07@redhat.com>
+In-Reply-To: <3ab523ac-0ab5-5011-5328-e119840e1c07@redhat.com>
+From:   Andrew Melnichenko <andrew@daynix.com>
+Date:   Tue, 22 Feb 2022 15:05:19 +0200
+Message-ID: <CABcq3pG3c32b8uHdfNq2LkgCAo8hnOQcY-wQXEG58vPe4FBmUg@mail.gmail.com>
+Subject: Re: [RFC PATCH 0/5] TUN/VirtioNet USO features support.
+To:     Jason Wang <jasowang@redhat.com>
+Cc:     Yuri Benditovich <yuri.benditovich@daynix.com>,
+        Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+        Yan Vugenfirer <yan@daynix.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "Michael S . Tsirkin" <mst@redhat.com>,
+        Network Development <netdev@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        virtualization <virtualization@lists.linux-foundation.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The only time that we need to wake up /dev/random writers on
-RNDCLEARPOOL/RNDZAPPOOL is when we're changing from a value that is
-greater than or equal to POOL_MIN_BITS to zero, because if we're
-changing from below POOL_MIN_BITS to zero, the writers are already
-unblocked.
+Hi all,
 
-Cc: Dominik Brodowski <linux@dominikbrodowski.net>
-Cc: Theodore Ts'o <tytso@mit.edu>
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
----
- drivers/char/random.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Wed, Feb 9, 2022 at 7:41 AM Jason Wang <jasowang@redhat.com> wrote:
+>
+>
+> =E5=9C=A8 2022/2/8 =E4=B8=8B=E5=8D=889:09, Andrew Melnichenko =E5=86=99=
+=E9=81=93:
+> > Hi people,
+> > Can you please review this series?
+>
+>
+> Are there any performance number to demonstrate the difference?
+>
+> Thanks
+>
 
-diff --git a/drivers/char/random.c b/drivers/char/random.c
-index a4dedeea35e9..536237a0f073 100644
---- a/drivers/char/random.c
-+++ b/drivers/char/random.c
-@@ -1582,7 +1582,7 @@ static long random_ioctl(struct file *f, unsigned int cmd, unsigned long arg)
- 		 */
- 		if (!capable(CAP_SYS_ADMIN))
- 			return -EPERM;
--		if (xchg(&input_pool.entropy_count, 0)) {
-+		if (xchg(&input_pool.entropy_count, 0) >= POOL_MIN_BITS) {
- 			wake_up_interruptible(&random_write_wait);
- 			kill_fasync(&fasync, SIGIO, POLL_OUT);
- 		}
--- 
-2.35.1
+Yeah, I've used udpgso_bench from Linux to test.
+Here are some numbers:
 
+Sending packets with size 10000
+
+Without USO:
+```
+$ ./udpgso_bench_tx -4 -D 192.168.15.1 -s 10000 -S 1000
+random: crng init done
+random: 7 urandom warning(s) missed due to ratelimiting
+udp tx:     36 MB/s     3863 calls/s   3863 msg/s
+udp tx:     32 MB/s     3360 calls/s   3360 msg/s
+udp tx:     31 MB/s     3340 calls/s   3340 msg/s
+udp tx:     31 MB/s     3353 calls/s   3353 msg/s
+udp tx:     32 MB/s     3359 calls/s   3359 msg/s
+udp tx:     32 MB/s     3370 calls/s   3370 msg/s
+```
+
+With USO:
+```
+$ ./udpgso_bench_tx -4 -D 192.168.15.1 -s 10000 -S 1000
+random: crng init done
+random: 7 urandom warning(s) missed due to ratelimiting
+udp tx:    120 MB/s    12596 calls/s  12596 msg/s
+udp tx:    122 MB/s    12885 calls/s  12885 msg/s
+udp tx:    120 MB/s    12667 calls/s  12667 msg/s
+udp tx:    123 MB/s    12969 calls/s  12969 msg/s
+udp tx:    116 MB/s    12232 calls/s  12232 msg/s
+udp tx:    108 MB/s    11389 calls/s  11389 msg/s
+```
+
+
+>
+> >
+> > On Wed, Jan 26, 2022 at 10:32 AM Yuri Benditovich
+> > <yuri.benditovich@daynix.com> wrote:
+> >> On Wed, Jan 26, 2022 at 9:54 AM Xuan Zhuo <xuanzhuo@linux.alibaba.com>=
+ wrote:
+> >>> On Tue, 25 Jan 2022 10:46:57 +0200, Andrew Melnychenko <andrew@daynix=
+.com> wrote:
+> >>>> Added new offloads for TUN devices TUN_F_USO4 and TUN_F_USO6.
+> >>>> Technically they enable NETIF_F_GSO_UDP_L4
+> >>>> (and only if USO4 & USO6 are set simultaneously).
+> >>>> It allows to transmission of large UDP packets.
+> >>>>
+> >>>> Different features USO4 and USO6 are required for qemu where Windows=
+ guests can
+> >>>> enable disable USO receives for IPv4 and IPv6 separately.
+> >>>> On the other side, Linux can't really differentiate USO4 and USO6, f=
+or now.
+> >>>> For now, to enable USO for TUN it requires enabling USO4 and USO6 to=
+gether.
+> >>>> In the future, there would be a mechanism to control UDP_L4 GSO sepa=
+rately.
+> >>>>
+> >>>> Test it WIP Qemu https://github.com/daynix/qemu/tree/Dev_USOv2
+> >>>>
+> >>>> New types for VirtioNet already on mailing:
+> >>>> https://lists.oasis-open.org/archives/virtio-comment/202110/msg00010=
+.html
+> >>> Seems like this hasn't been upvoted yet.
+> >>>
+> >>>          https://github.com/oasis-tcs/virtio-spec#use-of-github-issue=
+s
+> >> Yes, correct. This is a reason why this series of patches is RFC.
+> >>
+> >>> Thanks.
+> >>>
+> >>>> Also, there is a known issue with transmitting packages between two =
+guests.
+> >>>> Without hacks with skb's GSO - packages are still segmented on the h=
+ost's postrouting.
+> >>>>
+> >>>> Andrew Melnychenko (5):
+> >>>>    uapi/linux/if_tun.h: Added new ioctl for tun/tap.
+> >>>>    driver/net/tun: Added features for USO.
+> >>>>    uapi/linux/virtio_net.h: Added USO types.
+> >>>>    linux/virtio_net.h: Added Support for GSO_UDP_L4 offload.
+> >>>>    drivers/net/virtio_net.c: Added USO support.
+> >>>>
+> >>>>   drivers/net/tap.c               | 18 ++++++++++++++++--
+> >>>>   drivers/net/tun.c               | 15 ++++++++++++++-
+> >>>>   drivers/net/virtio_net.c        | 22 ++++++++++++++++++----
+> >>>>   include/linux/virtio_net.h      | 11 +++++++++++
+> >>>>   include/uapi/linux/if_tun.h     |  3 +++
+> >>>>   include/uapi/linux/virtio_net.h |  4 ++++
+> >>>>   6 files changed, 66 insertions(+), 7 deletions(-)
+> >>>>
+> >>>> --
+> >>>> 2.34.1
+> >>>>
+> >>>> _______________________________________________
+> >>>> Virtualization mailing list
+> >>>> Virtualization@lists.linux-foundation.org
+> >>>> https://lists.linuxfoundation.org/mailman/listinfo/virtualization
+>

@@ -2,69 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2A614BF7F7
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 13:17:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A74714BF7FC
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 13:19:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231655AbiBVMST (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 07:18:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57478 "EHLO
+        id S231807AbiBVMUE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 07:20:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230218AbiBVMSS (ORCPT
+        with ESMTP id S231174AbiBVMUD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 07:18:18 -0500
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7300799EDB;
-        Tue, 22 Feb 2022 04:17:52 -0800 (PST)
-Received: by mail-wr1-x42e.google.com with SMTP id k1so32836829wrd.8;
-        Tue, 22 Feb 2022 04:17:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=JgLdi2meuFLJpL8uNWtBC1zuJoXMBF6NsvXnD2doIeY=;
-        b=kX+SGOoiqdzB+Xw5LMJ10rQhk4JeIqNTu3Cd18fdDI+IysPFISBqzPaNjEu9Vs1UYv
-         GmvkRFOCuf+4X+k0LOQjHzatUpP/40pUHohvyrTIGEx/vvDXRExgCYOk+lahtJCtVMgS
-         KEffB9PWFAFEs0ooD/J5gBS1kun6bR2pCdinOHAuaLhTBFquclzmDb/6ej6hCTsDGXac
-         GuxN2S7qqBy7fsTI6ye7wLk3XOb6j9Sxq0H8k1uHioeLoEzWzVTonWPyMYPdikWR31oU
-         er4Uaj8B7Y4Wwsv6Xny5fwbip1y1l+va5vGmYEoJPVeQA92Tvb3fLRMCMNStGFrgFLAt
-         /hvg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=JgLdi2meuFLJpL8uNWtBC1zuJoXMBF6NsvXnD2doIeY=;
-        b=Nqpp7sJeT4DHUZ2yvnCRppENujLcw3KcCeb/7Xxbjja1MHrzasbchPwYPZdY4k3WWN
-         ZG28i+PX3d5I+UjNFxVGaK/Zfde0H5+UlY7uideNWjnb8yL+RNApImdfNOa7BtjxJrrG
-         YFQHu5D4lnAZ/6TSHdR7Z2gwvssHND9s8NJz6+1VY2Sp1X4V36z+NYWWRvu90u4CwdgP
-         tbWBbWBHr/jZXMrSUgyoQO3dMjriqTbswjdryviWdI/GWVFrUyKCLOH3i62WfEYJQPlg
-         6A5FHQqvwXcpCBvSZFgLmvMzK+diJVGtLHQf6uwk7SM1QTEXzyGhiEjS8mSDtMTBugOA
-         j9Pg==
-X-Gm-Message-State: AOAM5320RIgxB1tchnV+IoqUF/68yZ6RRZMs1XCUKxV85B4PhgA/e/rV
-        Xu4qPYS9cvvQEPbJ/2zXQLQ=
-X-Google-Smtp-Source: ABdhPJwVQb9+cWnxQss89zNC1yfUKPK6lrRQb5gqdWK2hg3mVE/Ttlt8vJSgub9Vp7XN5MImK6G4Zw==
-X-Received: by 2002:a5d:4007:0:b0:1e6:3359:d0f with SMTP id n7-20020a5d4007000000b001e633590d0fmr19200436wrp.662.1645532270891;
-        Tue, 22 Feb 2022 04:17:50 -0800 (PST)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id z14sm1842806wrm.100.2022.02.22.04.17.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Feb 2022 04:17:50 -0800 (PST)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>,
-        Kalle Valo <kvalo@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] ath9k: make array voice_priority static const
-Date:   Tue, 22 Feb 2022 12:17:49 +0000
-Message-Id: <20220222121749.87513-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        Tue, 22 Feb 2022 07:20:03 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FEC59ADB0
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 04:19:37 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 361B4B819B4
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 12:19:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41E1FC340E8;
+        Tue, 22 Feb 2022 12:19:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645532374;
+        bh=K05Gw+mOTnjht4gvZE6R/Wicq4llHCpuYapSQpPm3f8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=rcFeMsq5cWiu+I8s9r6GsQz/jgiEuLJIOg4GF6K+1yDzxCgFPolQ7tF+WstwK6ZnC
+         1svpj4WfkYFo5OdHrAn+yLllbJfzfW4ucEbMVJmeXsGFZFCgRwEoJo6A97pGu32cvt
+         PfkZQd9j40H4YWC9Yoqux3Uknwcezc7pCWy2xo4rK24p4rw4ekM2i7hdvJC+Ms3Wds
+         Xa9oNVGxNZPFSDnTd/5Rd0Q6+OFHZ5sjG5uKW1iO1paQa6ollPqwVnyCUJ3fxRCFHe
+         3DIS37NKGNFlac42LbmaVeUfDTy4njEWBi5Dbkr4RWw9w+Y5K8/IsI6rj0uBlEiD/D
+         GcboOC5+cqMFQ==
+Date:   Tue, 22 Feb 2022 21:19:30 +0900
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Tzvetomir Stoyanov <tz.stoyanov@gmail.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>
+Subject: Re: [PATCH] eprobes: Remove redundant event type information
+Message-Id: <20220222211930.458224fe0499e036f3c5a06d@kernel.org>
+In-Reply-To: <20220218190057.2f5a19a8@gandalf.local.home>
+References: <20220218190057.2f5a19a8@gandalf.local.home>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,28 +59,179 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Don't populate the read-only array voice_priority on the stack but
-instead make it static const. Also makes the object code a little
-smaller.
+On Fri, 18 Feb 2022 19:00:57 -0500
+Steven Rostedt <rostedt@goodmis.org> wrote:
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- drivers/net/wireless/ath/ath9k/mci.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> From 3163c1db8bbde856367b9d4e132d1bac9ec26704 Mon Sep 17 00:00:00 2001
+> From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+> Date: Fri, 18 Feb 2022 18:52:38 -0500
+> Subject: [PATCH] eprobes: Remove redundant event type information
+> 
+> Currently, the event probes save the type of the event they are attached
+> to when recording the event. For example:
+> 
+>   # echo 'e:switch sched/sched_switch prev_state=$prev_state prev_prio=$prev_prio next_pid=$next_pid next_prio=$next_prio' > dynamic_events
+>   # cat events/eprobes/switch/format
+> 
+>  name: switch
+>  ID: 1717
+>  format:
+>         field:unsigned short common_type;       offset:0;       size:2; signed:0;
+>         field:unsigned char common_flags;       offset:2;       size:1; signed:0;
+>         field:unsigned char common_preempt_count;       offset:3;       size:1; signed:0;
+>         field:int common_pid;   offset:4;       size:4; signed:1;
+> 
+>         field:unsigned int __probe_type;        offset:8;       size:4; signed:0;
+>         field:u64 prev_state;   offset:12;      size:8; signed:0;
+>         field:u64 prev_prio;    offset:20;      size:8; signed:0;
+>         field:u64 next_pid;     offset:28;      size:8; signed:0;
+>         field:u64 next_prio;    offset:36;      size:8; signed:0;
+> 
+>  print fmt: "(%u) prev_state=0x%Lx prev_prio=0x%Lx next_pid=0x%Lx next_prio=0x%Lx", REC->__probe_type, REC->prev_state, REC->prev_prio, REC->next_pid, REC->next_prio
+> 
+> The __probe_type adds 4 bytes to every event.
+> 
+> One of the reasons for creating eprobes is to limit what is traced in an
+> event to be able to limit what is written into the ring buffer. Having
+> this redundant 4 bytes to every event takes away from this.
+> 
+> The event that is recorded can be retrieved from the event probe itself,
+> that is available when the trace is happening. For user space tools, it
+> could simply read the dynamic_event file to find the event they are for.
+> So there is really no reason to write this information into the ring
+> buffer for every event.
 
-diff --git a/drivers/net/wireless/ath/ath9k/mci.c b/drivers/net/wireless/ath/ath9k/mci.c
-index 39d46c203f6b..5e0ae7e6412f 100644
---- a/drivers/net/wireless/ath/ath9k/mci.c
-+++ b/drivers/net/wireless/ath/ath9k/mci.c
-@@ -43,7 +43,7 @@ static bool ath_mci_add_profile(struct ath_common *common,
- 				struct ath_mci_profile_info *info)
- {
- 	struct ath_mci_profile_info *entry;
--	u8 voice_priority[] = { 110, 110, 110, 112, 110, 110, 114, 116, 118 };
-+	static const u8 voice_priority[] = { 110, 110, 110, 112, 110, 110, 114, 116, 118 };
- 
- 	if ((mci->num_sco == ATH_MCI_MAX_SCO_PROFILE) &&
- 	    (info->type == MCI_GPM_COEX_PROFILE_VOICE))
+OK, This looks good to me.
+
+Acked-by: Masami Hiramatsu <mhiramat@kernel.org>
+
+Thank you,
+
+> 
+> Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+> ---
+>  kernel/trace/trace.h        |  1 -
+>  kernel/trace/trace_eprobe.c | 15 +++++++--------
+>  kernel/trace/trace_probe.c  | 10 +++++-----
+>  kernel/trace/trace_probe.h  |  1 -
+>  4 files changed, 12 insertions(+), 15 deletions(-)
+> 
+> diff --git a/kernel/trace/trace.h b/kernel/trace/trace.h
+> index 0f5e22238cd2..07d990270e2a 100644
+> --- a/kernel/trace/trace.h
+> +++ b/kernel/trace/trace.h
+> @@ -136,7 +136,6 @@ struct kprobe_trace_entry_head {
+>  
+>  struct eprobe_trace_entry_head {
+>  	struct trace_entry	ent;
+> -	unsigned int		type;
+>  };
+>  
+>  struct kretprobe_trace_entry_head {
+> diff --git a/kernel/trace/trace_eprobe.c b/kernel/trace/trace_eprobe.c
+> index 191db32dec46..02838d47129f 100644
+> --- a/kernel/trace/trace_eprobe.c
+> +++ b/kernel/trace/trace_eprobe.c
+> @@ -250,8 +250,6 @@ static int eprobe_event_define_fields(struct trace_event_call *event_call)
+>  	if (WARN_ON_ONCE(!tp))
+>  		return -ENOENT;
+>  
+> -	DEFINE_FIELD(unsigned int, type, FIELD_STRING_TYPE, 0);
+> -
+>  	return traceprobe_define_arg_fields(event_call, sizeof(field), tp);
+>  }
+>  
+> @@ -270,7 +268,9 @@ print_eprobe_event(struct trace_iterator *iter, int flags,
+>  	struct trace_event_call *pevent;
+>  	struct trace_event *probed_event;
+>  	struct trace_seq *s = &iter->seq;
+> +	struct trace_eprobe *ep;
+>  	struct trace_probe *tp;
+> +	unsigned int type;
+>  
+>  	field = (struct eprobe_trace_entry_head *)iter->ent;
+>  	tp = trace_probe_primary_from_call(
+> @@ -278,15 +278,18 @@ print_eprobe_event(struct trace_iterator *iter, int flags,
+>  	if (WARN_ON_ONCE(!tp))
+>  		goto out;
+>  
+> +	ep = container_of(tp, struct trace_eprobe, tp);
+> +	type = ep->event->event.type;
+> +
+>  	trace_seq_printf(s, "%s: (", trace_probe_name(tp));
+>  
+> -	probed_event = ftrace_find_event(field->type);
+> +	probed_event = ftrace_find_event(type);
+>  	if (probed_event) {
+>  		pevent = container_of(probed_event, struct trace_event_call, event);
+>  		trace_seq_printf(s, "%s.%s", pevent->class->system,
+>  				 trace_event_name(pevent));
+>  	} else {
+> -		trace_seq_printf(s, "%u", field->type);
+> +		trace_seq_printf(s, "%u", type);
+>  	}
+>  
+>  	trace_seq_putc(s, ')');
+> @@ -498,10 +501,6 @@ __eprobe_trace_func(struct eprobe_data *edata, void *rec)
+>  		return;
+>  
+>  	entry = fbuffer.entry = ring_buffer_event_data(fbuffer.event);
+> -	if (edata->ep->event)
+> -		entry->type = edata->ep->event->event.type;
+> -	else
+> -		entry->type = 0;
+>  	store_trace_args(&entry[1], &edata->ep->tp, rec, sizeof(*entry), dsize);
+>  
+>  	trace_event_buffer_commit(&fbuffer);
+> diff --git a/kernel/trace/trace_probe.c b/kernel/trace/trace_probe.c
+> index 73d90179b51b..80863c6508e5 100644
+> --- a/kernel/trace/trace_probe.c
+> +++ b/kernel/trace/trace_probe.c
+> @@ -871,15 +871,15 @@ static int __set_print_fmt(struct trace_probe *tp, char *buf, int len,
+>  	switch (ptype) {
+>  	case PROBE_PRINT_NORMAL:
+>  		fmt = "(%lx)";
+> -		arg = "REC->" FIELD_STRING_IP;
+> +		arg = ", REC->" FIELD_STRING_IP;
+>  		break;
+>  	case PROBE_PRINT_RETURN:
+>  		fmt = "(%lx <- %lx)";
+> -		arg = "REC->" FIELD_STRING_FUNC ", REC->" FIELD_STRING_RETIP;
+> +		arg = ", REC->" FIELD_STRING_FUNC ", REC->" FIELD_STRING_RETIP;
+>  		break;
+>  	case PROBE_PRINT_EVENT:
+> -		fmt = "(%u)";
+> -		arg = "REC->" FIELD_STRING_TYPE;
+> +		fmt = "";
+> +		arg = "";
+>  		break;
+>  	default:
+>  		WARN_ON_ONCE(1);
+> @@ -903,7 +903,7 @@ static int __set_print_fmt(struct trace_probe *tp, char *buf, int len,
+>  					parg->type->fmt);
+>  	}
+>  
+> -	pos += snprintf(buf + pos, LEN_OR_ZERO, "\", %s", arg);
+> +	pos += snprintf(buf + pos, LEN_OR_ZERO, "\"%s", arg);
+>  
+>  	for (i = 0; i < tp->nr_args; i++) {
+>  		parg = tp->args + i;
+> diff --git a/kernel/trace/trace_probe.h b/kernel/trace/trace_probe.h
+> index 99e7a5df025e..92cc149af0fd 100644
+> --- a/kernel/trace/trace_probe.h
+> +++ b/kernel/trace/trace_probe.h
+> @@ -38,7 +38,6 @@
+>  #define FIELD_STRING_IP		"__probe_ip"
+>  #define FIELD_STRING_RETIP	"__probe_ret_ip"
+>  #define FIELD_STRING_FUNC	"__probe_func"
+> -#define FIELD_STRING_TYPE	"__probe_type"
+>  
+>  #undef DEFINE_FIELD
+>  #define DEFINE_FIELD(type, item, name, is_signed)			\
+> -- 
+> 2.34.1
+> 
+
+
 -- 
-2.34.1
-
+Masami Hiramatsu <mhiramat@kernel.org>

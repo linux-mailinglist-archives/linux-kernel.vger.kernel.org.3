@@ -2,118 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C95474BF54A
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 10:59:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 422914BF529
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 10:53:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230094AbiBVJ75 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 04:59:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57576 "EHLO
+        id S229481AbiBVJyB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 04:54:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229613AbiBVJ7y (ORCPT
+        with ESMTP id S229659AbiBVJx7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 04:59:54 -0500
-X-Greylist: delayed 174 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 22 Feb 2022 01:59:28 PST
-Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9513D21FD
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 01:59:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1645523606;
-    s=strato-dkim-0002; d=fpond.eu;
-    h=Subject:References:In-Reply-To:Message-ID:Cc:To:From:Date:Cc:Date:
-    From:Subject:Sender;
-    bh=dWKZOFQ+HIvrBNvfir4obwb7uVDZZb0beIIECXtlDkQ=;
-    b=exfJhR7jvCtg4CEw/NPhwh4CrS/VHlNeZhrary/CFZIVX0kpWMYhA10vK6naSw4iMY
-    nYyBeUC8Afyiu/qE7odMcG7NAQIFB9J41nU7dVAbQVLO3QmiY9cqp8faFxXIuGMFbzYw
-    KziTMkmXEwB0XAmjIkyE1GVV2nH4Qns92uFRI3zyIg3TuW0nw4D9ww1mn7FyJAorGnHE
-    yhJOqiyDQWnA+5Ll8RxVVFOQynKJ4EfD8iKLZPtJud/ZaaItB2dsBwDSW1j7BsbqkEv2
-    vRPmVu+o5PWG/mzREGV0C/+iZQ7OS3P/V0Qs4GgJCXRDBdkQbYoJK/vPtVecD9MMkLpF
-    EA5A==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":OWANVUa4dPFUgKR/3dpvnYP0Np73amq+g13rqGzvv3qxio1R8fCs/87J2o0="
-X-RZG-CLASS-ID: mo00
-Received: from oxapp05-05.back.ox.d0m.de
-    by smtp-ox.front (RZmta 47.40.0 AUTH)
-    with ESMTPSA id 6c30c7y1M9rQ2KB
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
-        (Client did not present a certificate);
-    Tue, 22 Feb 2022 10:53:26 +0100 (CET)
-Date:   Tue, 22 Feb 2022 10:53:26 +0100 (CET)
-From:   Ulrich Hecht <uli@fpond.eu>
-To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, linux-can@vger.kernel.org,
-        Pavel Machek <pavel@denx.de>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        Ulrich Hecht <uli+renesas@fpond.eu>,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>
-Message-ID: <1103141484.974980.1645523606875@webmail.strato.com>
-In-Reply-To: <20220221225935.12300-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-References: <20220221225935.12300-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: Re: [PATCH] can: rcar_canfd: Register the CAN device when fully
- ready
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Priority: 3
-Importance: Normal
-X-Mailer: Open-Xchange Mailer v7.10.5-Rev38
-X-Originating-Client: open-xchange-appsuite
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Tue, 22 Feb 2022 04:53:59 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B02FFD10B8;
+        Tue, 22 Feb 2022 01:53:34 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5A6F8B81977;
+        Tue, 22 Feb 2022 09:53:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B258C340E8;
+        Tue, 22 Feb 2022 09:53:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645523612;
+        bh=T8Wutlu7mV5B3Pw57PVCDrO+l8i4LnewrOyADEDxSaI=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:From;
+        b=mRv6omeV8naZHtnpCUkhTWsGNgpIqfA3TjW0E3YplZIVa0KAA6UGvNFFZrMPqj9Ap
+         ARleDEaNRR0Bj6NGAMm8c8DnW0qjjp0MAU8hT7Bo5VDACT4TSQjY7yRRsDQDy4OW20
+         WL1nnyH729xq+5feCqoMVcz3b8j363aoXNQtQt5Ph5iwlfUy7BciwqjQzRB6QkmoKk
+         VZUgIu1Y86yc91OQI/+fkYs1bH8OdNbHHTSTIYzgj+QSNSUPBVX5SbDcBSfKNL0non
+         rP3OJEx7pUP8auNEINUcOHGC4FDoY6wXF+FdnzkyhlKzI6zhd0RgIWg7qlenLaXiZq
+         pmxGOrlW3WZ2Q==
+From:   SeongJae Park <sj@kernel.org>
+To:     Jonghyeon Kim <tome01@ajou.ac.kr>
+Cc:     akpm@linux-foundation.org, Jonathan.Cameron@Huawei.com,
+        amit@kernel.org, benh@kernel.crashing.org, corbet@lwn.net,
+        david@redhat.com, dwmw@amazon.com, elver@google.com,
+        foersleo@amazon.de, gthelen@google.com, markubo@amazon.de,
+        rientjes@google.com, shakeelb@google.com, shuah@kernel.org,
+        linux-damon@amazon.com, linux-mm@kvack.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH v1 2/3] mm/damon/core: Add damon_start_one()
+Date:   Tue, 22 Feb 2022 09:53:28 +0000
+Message-Id: <20220222095328.7962-1-sj@kernel.org>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20220218102611.31895-3-tome01@ajou.ac.kr>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello Jonghyeon,
 
-> On 02/21/2022 11:59 PM Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
+On Fri, 18 Feb 2022 19:26:10 +0900 Jonghyeon Kim <tome01@ajou.ac.kr> wrote:
+
+> damon_start() function is designed to start multiple damon monitoring
+> contexts. But, sometimes we need to start monitoring one context.
+> Although __damon_start() could be considered to start for one monitoring
+> context, it seems reasonable to adopt a new function that does not need
+> to handle 'damon_lock' from the caller.
 > 
->  
-> Register the CAN device only when all the necessary initialization
-> is completed. This patch makes sure all the data structures and locks are
-> initialized before registering the CAN device.
-> 
-> Reported-by: Pavel Machek <pavel@denx.de>
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> Signed-off-by: Jonghyeon Kim <tome01@ajou.ac.kr>
 > ---
->  drivers/net/can/rcar/rcar_canfd.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
+>  include/linux/damon.h |  1 +
+>  mm/damon/core.c       | 25 +++++++++++++++++++++++++
+>  2 files changed, 26 insertions(+)
 > 
-> diff --git a/drivers/net/can/rcar/rcar_canfd.c b/drivers/net/can/rcar/rcar_canfd.c
-> index 3ad3a6f6a1dd..8c378b20b2aa 100644
-> --- a/drivers/net/can/rcar/rcar_canfd.c
-> +++ b/drivers/net/can/rcar/rcar_canfd.c
-> @@ -1783,15 +1783,15 @@ static int rcar_canfd_channel_probe(struct rcar_canfd_global *gpriv, u32 ch,
+> diff --git a/include/linux/damon.h b/include/linux/damon.h
+> index c0adf1566603..069577477662 100644
+> --- a/include/linux/damon.h
+> +++ b/include/linux/damon.h
+> @@ -511,6 +511,7 @@ int damon_register_ops(struct damon_operations *ops);
+>  int damon_select_ops(struct damon_ctx *ctx, enum damon_ops_id id);
 >  
->  	netif_napi_add(ndev, &priv->napi, rcar_canfd_rx_poll,
->  		       RCANFD_NAPI_WEIGHT);
-> +	spin_lock_init(&priv->tx_lock);
-> +	devm_can_led_init(ndev);
-> +	gpriv->ch[priv->channel] = priv;
->  	err = register_candev(ndev);
->  	if (err) {
->  		dev_err(&pdev->dev,
->  			"register_candev() failed, error %d\n", err);
->  		goto fail_candev;
->  	}
-> -	spin_lock_init(&priv->tx_lock);
-> -	devm_can_led_init(ndev);
-> -	gpriv->ch[priv->channel] = priv;
->  	dev_info(&pdev->dev, "device registered (channel %u)\n", priv->channel);
->  	return 0;
+>  int damon_start(struct damon_ctx **ctxs, int nr_ctxs);
+> +int damon_start_one(struct damon_ctx *ctx);
+>  int damon_stop(struct damon_ctx **ctxs, int nr_ctxs);
 >  
+>  #endif	/* CONFIG_DAMON */
+> diff --git a/mm/damon/core.c b/mm/damon/core.c
+> index 290c9c0535ee..e43f138a3489 100644
+> --- a/mm/damon/core.c
+> +++ b/mm/damon/core.c
+> @@ -466,6 +466,31 @@ int damon_start(struct damon_ctx **ctxs, int nr_ctxs)
+>  	return err;
+>  }
+>  
+> +/**
+> + * damon_start_one() - Starts the monitorings for one context.
+> + * @ctx:	monitoring context
+> + *
+> + * This function starts one monitoring thread for only one monitoring context
+> + * handling damon_lock.
+> + *
+> + * Return: 0 on success, negative error code otherwise.
+> + */
+> +int damon_start_one(struct damon_ctx *ctx)
+> +{
+> +	int err = 0;
+> +
+> +	mutex_lock(&damon_lock);
+> +	err = __damon_start(ctx);
+> +	if (err) {
+> +		mutex_unlock(&damon_lock);
+> +		return err;
+> +	}
+> +	nr_running_ctxs++;
+> +	mutex_unlock(&damon_lock);
+> +
+> +	return err;
+> +}
+> +
+
+IMHO, this looks like an unnecessary duplication of code.  Unless this is
+needed for a real usecase, this change might unnecessarily make the code only a
+little bit more complicated.  And to my understanding of the next patch, this
+is not really needed for this patchset.  I will left comments on the patch.  If
+I'm missing something, please clarify why this is really needed.
+
+Furthermore, damon_start() starts a set of DAMON contexts in exclusive manner,
+to ensure there will be no interference.  This patch breaks the assumption.
+That is, contexts that started with damon_start() could be interfered by other
+contexts that started with damon_start_one().  I have a plan to make
+damon_start() also work for non-exclusive contexts group[1], though.
+
+[1] https://lore.kernel.org/linux-mm/20220217161938.8874-3-sj@kernel.org/
+
+
+Thanks,
+SJ
+
+>  /*
+>   * __damon_stop() - Stops monitoring of given context.
+>   * @ctx:	monitoring context
 > -- 
 > 2.17.1
-
-Reviewed-by: Ulrich Hecht <uli+renesas@fpond.eu>
-
-CU
-Uli
+> 

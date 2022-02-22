@@ -2,179 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E11744BFC3D
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 16:17:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC3194BFC34
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 16:17:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233379AbiBVPRm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 10:17:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41426 "EHLO
+        id S231300AbiBVPRZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 10:17:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233329AbiBVPRi (ORCPT
+        with ESMTP id S233313AbiBVPRV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 10:17:38 -0500
-Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1440A27B6;
-        Tue, 22 Feb 2022 07:17:01 -0800 (PST)
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-        by localhost (Postfix) with ESMTP id 4K32ny337Mz9sSh;
-        Tue, 22 Feb 2022 16:16:54 +0100 (CET)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id hr3sBhkH_tUP; Tue, 22 Feb 2022 16:16:54 +0100 (CET)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase2.c-s.fr (Postfix) with ESMTP id 4K32nw5ffHz9sSm;
-        Tue, 22 Feb 2022 16:16:52 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id AC9D88B764;
-        Tue, 22 Feb 2022 16:16:52 +0100 (CET)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id yC3wKZNzVqRj; Tue, 22 Feb 2022 16:16:52 +0100 (CET)
-Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.7.78])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 46AEC8B778;
-        Tue, 22 Feb 2022 16:16:52 +0100 (CET)
-Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 21MFGhoY1087722
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-        Tue, 22 Feb 2022 16:16:43 +0100
-Received: (from chleroy@localhost)
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 21MFGh7v1087721;
-        Tue, 22 Feb 2022 16:16:43 +0100
-X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Aaron Tomlin <atomlin@redhat.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        linux-modules@vger.kernel.org
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v3 4/4] module: Rename debug_align() as strict_align()
-Date:   Tue, 22 Feb 2022 16:16:34 +0100
-Message-Id: <d12505e70e60806d9e8ffa4e163715bcc33795e9.1645542893.git.christophe.leroy@csgroup.eu>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <cover.1645542893.git.christophe.leroy@csgroup.eu>
-References: <cover.1645542893.git.christophe.leroy@csgroup.eu>
+        Tue, 22 Feb 2022 10:17:21 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE0F32A721;
+        Tue, 22 Feb 2022 07:16:53 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id 1402E1F42D79
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1645543012;
+        bh=m6iks4nKShpjnvSQCg9oNY965h9zeoboZznnHfhpxKI=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=hWvPkhkzNvqzNuA/40T3XKUxHYa8HSRU4pVMNzoIFWC7rXAT0apDYLnpkMJhnqbJM
+         arssexAyQVcSVzvw5Amf+UBgH8G+8JAoeSIFcUxhxPNyzQMNZV+16CstcTP/iDH5Hg
+         8XKAw2ROpBcy+hVlpJZNGroDpoRV/m8w9fVh/Yl0wVhuV6RPtUoYvkLuG/iZUukwGC
+         bAX9ZZ15SJkfiUYauqLfQv5HFCFnR47Rx3FLe1eOLehFQPIJKIeNvBPRO6NReiqME2
+         u+ne7v0rhJH3lU010TKtdqa7o08BP9WgUrRIeePPFQWufHuOtvUjuDVVM8Ex9z5m24
+         I22HEnZSbhtaw==
+Message-ID: <1c791b60-935c-1e8e-dd1b-4b18fc273c1b@collabora.com>
+Date:   Tue, 22 Feb 2022 16:16:48 +0100
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1645542984; l=4185; s=20211009; h=from:subject:message-id; bh=AfRsGzNxNFEa6HyPLYyjXjVOnKsSzM6QrsC7nBlW+n4=; b=lty5TpBPBzKThsfPHAzdqJavmZi3qNnU3EHG1vzSxNsDKmHAtPgFbJcckb4SbInQ6XcyVl+FDd0o JqQMn5CUBNhPN3UebyIIo69EJD69OVx0705+6g+vxgqjh066zgOU
-X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [PATCH v8 04/19] video/hdmi: Add audio_infoframe packing for DP
+Content-Language: en-US
+To:     Guillaume Ranquet <granquet@baylibre.com>, chunkuang.hu@kernel.org,
+        p.zabel@pengutronix.de, airlied@linux.ie, daniel@ffwll.ch,
+        robh+dt@kernel.org, maarten.lankhorst@linux.intel.com,
+        mripard@kernel.org, tzimmermann@suse.de, matthias.bgg@gmail.com,
+        chunfeng.yun@mediatek.com, kishon@ti.com, vkoul@kernel.org,
+        deller@gmx.de, ck.hu@mediatek.com, jitao.shi@mediatek.com
+Cc:     dri-devel@lists.freedesktop.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-phy@lists.infradead.org, linux-fbdev@vger.kernel.org,
+        Markus Schneider-Pargmann <msp@baylibre.com>
+References: <20220218145437.18563-1-granquet@baylibre.com>
+ <20220218145437.18563-5-granquet@baylibre.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220218145437.18563-5-granquet@baylibre.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-debug_align() was added by commit 84e1c6bb38eb ("x86: Add RO/NX
-protection for loadable kernel modules")
+Il 18/02/22 15:54, Guillaume Ranquet ha scritto:
+> From: Markus Schneider-Pargmann <msp@baylibre.com>
+> 
+> Similar to HDMI, DP uses audio infoframes as well which are structured
+> very similar to the HDMI ones.
+> 
+> This patch adds a helper function to pack the HDMI audio infoframe for
+> DP, called hdmi_audio_infoframe_pack_for_dp().
+> hdmi_audio_infoframe_pack_only() is split into two parts. One of them
+> packs the payload only and can be used for HDMI and DP.
+> 
+> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
+> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
 
-At that time the config item was CONFIG_DEBUG_SET_MODULE_RONX.
+Hello Guillaume,
 
-But nowadays it has changed to CONFIG_STRICT_MODULE_RWX and
-debug_align() is confusing because it has nothing to do with
-DEBUG.
+I've just noticed that this patch will not apply against the latest linux-next,
+as the include/drm/drm_dp_helper.h header was moved to
+include/drm/dp/drm_dp_helper.h
 
-Rename it strict_align()
+Can you please rebase for v9?
 
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
----
- kernel/module/internal.h |  4 ++--
- kernel/module/kallsyms.c |  4 ++--
- kernel/module/main.c     | 14 +++++++-------
- 3 files changed, 11 insertions(+), 11 deletions(-)
+Thanks,
+Angelo
 
-diff --git a/kernel/module/internal.h b/kernel/module/internal.h
-index f3dcd40f300c..3e23bef5884d 100644
---- a/kernel/module/internal.h
-+++ b/kernel/module/internal.h
-@@ -30,9 +30,9 @@
-  * only when CONFIG_STRICT_MODULE_RWX=y
-  */
- #ifdef CONFIG_STRICT_MODULE_RWX
--# define debug_align(X) PAGE_ALIGN(X)
-+# define strict_align(X) PAGE_ALIGN(X)
- #else
--# define debug_align(X) (X)
-+# define strict_align(X) (X)
- #endif
- 
- extern struct mutex module_mutex;
-diff --git a/kernel/module/kallsyms.c b/kernel/module/kallsyms.c
-index 850cc66bb28c..c56de1686172 100644
---- a/kernel/module/kallsyms.c
-+++ b/kernel/module/kallsyms.c
-@@ -139,7 +139,7 @@ void layout_symtab(struct module *mod, struct load_info *info)
- 	mod->data_layout.size += strtab_size;
- 	info->core_typeoffs = mod->data_layout.size;
- 	mod->data_layout.size += ndst * sizeof(char);
--	mod->data_layout.size = debug_align(mod->data_layout.size);
-+	mod->data_layout.size = strict_align(mod->data_layout.size);
- 
- 	/* Put string table section at end of init part of module. */
- 	strsect->sh_flags |= SHF_ALLOC;
-@@ -154,7 +154,7 @@ void layout_symtab(struct module *mod, struct load_info *info)
- 	mod->init_layout.size += sizeof(struct mod_kallsyms);
- 	info->init_typeoffs = mod->init_layout.size;
- 	mod->init_layout.size += nsrc * sizeof(char);
--	mod->init_layout.size = debug_align(mod->init_layout.size);
-+	mod->init_layout.size = strict_align(mod->init_layout.size);
- }
- 
- /*
-diff --git a/kernel/module/main.c b/kernel/module/main.c
-index 4876e2beb5b6..ce0ef17662c9 100644
---- a/kernel/module/main.c
-+++ b/kernel/module/main.c
-@@ -1470,19 +1470,19 @@ static void layout_sections(struct module *mod, struct load_info *info)
- 		}
- 		switch (m) {
- 		case 0: /* executable */
--			mod->core_layout.size = debug_align(mod->core_layout.size);
-+			mod->core_layout.size = strict_align(mod->core_layout.size);
- 			mod->core_layout.text_size = mod->core_layout.size;
- 			break;
- 		case 1: /* RO: text and ro-data */
--			mod->data_layout.size = debug_align(mod->data_layout.size);
-+			mod->data_layout.size = strict_align(mod->data_layout.size);
- 			mod->data_layout.ro_size = mod->data_layout.size;
- 			break;
- 		case 2: /* RO after init */
--			mod->data_layout.size = debug_align(mod->data_layout.size);
-+			mod->data_layout.size = strict_align(mod->data_layout.size);
- 			mod->data_layout.ro_after_init_size = mod->data_layout.size;
- 			break;
- 		case 4: /* whole core */
--			mod->data_layout.size = debug_align(mod->data_layout.size);
-+			mod->data_layout.size = strict_align(mod->data_layout.size);
- 			break;
- 		}
- 	}
-@@ -1504,11 +1504,11 @@ static void layout_sections(struct module *mod, struct load_info *info)
- 		}
- 		switch (m) {
- 		case 0: /* executable */
--			mod->init_layout.size = debug_align(mod->init_layout.size);
-+			mod->init_layout.size = strict_align(mod->init_layout.size);
- 			mod->init_layout.text_size = mod->init_layout.size;
- 			break;
- 		case 1: /* RO: text and ro-data */
--			mod->init_layout.size = debug_align(mod->init_layout.size);
-+			mod->init_layout.size = strict_align(mod->init_layout.size);
- 			mod->init_layout.ro_size = mod->init_layout.size;
- 			break;
- 		case 2:
-@@ -1519,7 +1519,7 @@ static void layout_sections(struct module *mod, struct load_info *info)
- 			mod->init_layout.ro_after_init_size = mod->init_layout.ro_size;
- 			break;
- 		case 4: /* whole init */
--			mod->init_layout.size = debug_align(mod->init_layout.size);
-+			mod->init_layout.size = strict_align(mod->init_layout.size);
- 			break;
- 		}
- 	}
--- 
-2.34.1
-
+> ---
+>   drivers/video/hdmi.c        | 83 ++++++++++++++++++++++++++++---------
+>   include/drm/drm_dp_helper.h |  2 +
+>   include/linux/hdmi.h        |  7 +++-
+>   3 files changed, 72 insertions(+), 20 deletions(-)
+> 

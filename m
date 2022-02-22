@@ -2,71 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79CBB4C00D3
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 19:00:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB4054C00BF
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 18:58:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234839AbiBVSAk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 13:00:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53026 "EHLO
+        id S234792AbiBVR7G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 12:59:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234262AbiBVSAh (ORCPT
+        with ESMTP id S230466AbiBVR7B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 13:00:37 -0500
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87D6417225B
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 10:00:09 -0800 (PST)
-Received: by mail-wr1-x42a.google.com with SMTP id d17so77810wrc.9
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 10:00:09 -0800 (PST)
+        Tue, 22 Feb 2022 12:59:01 -0500
+Received: from mail-oo1-xc2c.google.com (mail-oo1-xc2c.google.com [IPv6:2607:f8b0:4864:20::c2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07FD617184E
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 09:58:36 -0800 (PST)
+Received: by mail-oo1-xc2c.google.com with SMTP id w10-20020a4ae08a000000b0031bdf7a6d76so18645913oos.10
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 09:58:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:from:in-reply-to:content-transfer-encoding;
-        bh=G+GM8RfUkIYQaKPhgzSaPQ7PCISARa7ZPGAAjEVpg/A=;
-        b=t4e1WDk22c+yVdoHNOHQ3dox+uqCTy2J48fujelIDG4OyOuAodvvbovrHRmSd6Y3Al
-         vcsuYiDyEIcu2MXsKV+SGUxk81isMNJQQHrg+iptHRIMDG5uguDtPUp6E8ueNfNrMPSU
-         1xb9iB4dHSklQvL3DnhZj4HYMaUOjKdeZBiHubSzUQ5dhAM8QbHAI83IUhDHwsmkbDsG
-         BdJaMHZHCPIF9r4L980MzVTEYfJAkzJMKBNSCh3YJuPqJSIcF3i0OBJFT9qt518oYE35
-         HYWHp7tqEZN54wfRs1owRQEsmtsWGu0VvuD1DyqLpQXL4SbIHormPj6/tRqFlxcNYZG/
-         hMEw==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=9Y2AqDKUpMQgTsOg3FI79lbQQePJo1iYlm+XyAflgx0=;
+        b=LmfyH44UGzXt6wILF+bnLCqYn5OW6LnPIuT7x/JfxAHL5ZgBH/SB0zz1GaU07zcKc/
+         4vYk85m6gonT+gcZxME1BSo79mzDwxWs/DQMWtRFmpqqANaKCNGtCNVWZYpUTvyW7pcJ
+         s2aiFwVT0mO15/chQySqSzZTEL6OTIoxG7sUkG0CHgcdu6qRTesl53RZEWD1iYvozm0e
+         I/ABk/YjAZeMhehY75hopIW0b+A1jb1wO0tDxGW+AoMDSRKNcaz3NsaH9+/dpPirWAT5
+         wdoLeS6F2wvtIjEkHbZjwUb3ePZ/CBKeWx4JUssJ9dzTW0PoBgqEI0gCOfbPsDGUL/UL
+         HbTw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=G+GM8RfUkIYQaKPhgzSaPQ7PCISARa7ZPGAAjEVpg/A=;
-        b=xc4DqOtb/qoOrzWjZ4wwdFei5LlVOQcDNucP8jOMEkOTAJMl2nAEpyRLzPti7uce5J
-         xGs15t5R0s3DVIeuzDpRsJ6/66L8zBE5zPCNt2ApuXxOAajOzGlxoEHDRIogiZG3dSRz
-         js1g+9Bp5/VNxev95ijRvX0mEIDwaUnLBtFa1xCGdpY+xl3WlKTAo72c4BpvXM0Jfu6p
-         SvyvRcXuc7gchd2TXXiN54klYVW6+jgH5bqZvgSAq06/FSeqeLG+W53J/2/dX/WMm/Nv
-         LwtOCcqKX8h7/550H5CAdxbKbQ3DfUkP2HV3JTFSrFi7jbPXqdu45EvwrZ5ptUciG6uL
-         Dddg==
-X-Gm-Message-State: AOAM531Z5brwYntQo2bloNN1b3U5mlnMkSoCnN1AhV36IrIhHpfz+Eiw
-        iASf2PE4YCdOdDJM6nRmJyntbwgjcHNGfA==
-X-Google-Smtp-Source: ABdhPJyxcQp8MOSypKDIU2F+SGzA6D4/LpK2JVw4eBNmXwUFORbPuRLGpy7MlMiEL+p8O8gxfYNOPw==
-X-Received: by 2002:a5d:6d8f:0:b0:1dd:1ced:4050 with SMTP id l15-20020a5d6d8f000000b001dd1ced4050mr20359373wrs.549.1645552808134;
-        Tue, 22 Feb 2022 10:00:08 -0800 (PST)
-Received: from [192.168.86.34] (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
-        by smtp.googlemail.com with ESMTPSA id f63sm1765012wma.17.2022.02.22.10.00.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 22 Feb 2022 10:00:07 -0800 (PST)
-Message-ID: <942eb442-ce48-52cb-6472-c15d048b29d7@linaro.org>
-Date:   Tue, 22 Feb 2022 18:00:06 +0000
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=9Y2AqDKUpMQgTsOg3FI79lbQQePJo1iYlm+XyAflgx0=;
+        b=jTE1yynDWoubvG7547hhzJbdQkzqMxM0k2LfN14pW++YPbDrY+OEQ8EVPl16Ry2D7A
+         oZt+jWZuy71v0fA4HPLocVYC5rkyPV9G6JaRViivlMQUdkzRcXsA//MI0cBYLGwb4ElR
+         nCYnHQ1rkAxAYq0EJiuL6zhMF5ok8L0mOx+5i0yQGf6BSXLbYYKrPLFykmNPdyQtnP/B
+         i2F+jB0xZaZFiWoB7ol+iCBQgfvrBxlDuO18MgTnoUk489D5h09NG7ZWrY9o6hBdAvkp
+         d8XbDlRyw8tjNef7z8Dpzlmk8D6XY7SXRi55QRIptz/tOnoVIB088HdM9I33jpVEStvq
+         P+9Q==
+X-Gm-Message-State: AOAM532sq59pkNZTaXsHw+K3x420L/xZEuhHWHwAYpML0TkW4W3TZ4hh
+        ZGAn4bYkxRFA+XREbfXtGSuwRQ==
+X-Google-Smtp-Source: ABdhPJyj87/YvJOCybKJXx1u/9jXrSrA/hbB7V18Hg9PLPl52iAsQhxw+fIIZM13P1F+EGTEAGWXrA==
+X-Received: by 2002:a05:6871:7a8:b0:c5:a1b3:43eb with SMTP id o40-20020a05687107a800b000c5a1b343ebmr2265517oap.103.1645552715430;
+        Tue, 22 Feb 2022 09:58:35 -0800 (PST)
+Received: from ripper ([2600:1700:a0:3dc8:205:1bff:fec0:b9b3])
+        by smtp.gmail.com with ESMTPSA id g18sm1751484otp.17.2022.02.22.09.58.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Feb 2022 09:58:34 -0800 (PST)
+Date:   Tue, 22 Feb 2022 10:00:34 -0800
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Satya Priya <quic_c_skakit@quicinc.com>
+Cc:     Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        Doug Anderson <dianders@chromium.org>
+Subject: Re: [PATCH V4 4/4] arm64: dts: qcom: Enable pm8350c pwm for
+ sc7280-idp2
+Message-ID: <YhUkwmis0ZY9gypR@ripper>
+References: <1645509309-16142-1-git-send-email-quic_c_skakit@quicinc.com>
+ <1645509309-16142-5-git-send-email-quic_c_skakit@quicinc.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v4 0/2] Add driver for OCOTP in Sunplus SP7021 SoC
-Content-Language: en-US
-To:     Vincent Shih <vincent.sunplus@gmail.com>,
-        linux-kernel@vger.kernel.org, robh+dt@kernel.org,
-        devicetree@vger.kernel.org, wells.lu@sunplus.com,
-        vincent.shih@sunplus.com
-References: <1640164346-26818-1-git-send-email-vincent.sunplus@gmail.com>
-From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-In-Reply-To: <1640164346-26818-1-git-send-email-vincent.sunplus@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1645509309-16142-5-git-send-email-quic_c_skakit@quicinc.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -75,34 +76,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon 21 Feb 21:55 PST 2022, Satya Priya wrote:
 
-
-On 22/12/2021 09:12, Vincent Shih wrote:
-> This is a patch series for OCOTP driver for Sunplus SP7021 SoC.
+> Enable pm8350c pmic pwm support for backlight on sc7280-idp2.
 > 
-> Sunplus SP7021 is an ARM Cortex A7 (4 cores) based SoC. It integrates
-> many peripherals (ex: UART, I2C, SPI, SDIO, eMMC, USB, SD Card and
-> etc.) into a single chip. It is designed for industrial control.
-> 
-> Refer to:
-> https://sunplus-tibbo.atlassian.net/wiki/spaces/doc/overview
-> https://tibbo.com/store/plus1.html
-> 
-> Vincent Shih (2):
->    nvmem: Add driver for OCOTP in Sunplus SP7021
->    dt-bindings: nvmem: Add bindings doc for Sunplus OCOTP driver
+> Signed-off-by: Satya Priya <quic_c_skakit@quicinc.com>
+> Reviewed-by: Stephen Boyd <swboyd@chromium.org>
 
+Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
 
-Applied thanks,
-
---srini
+> ---
+> Changes in V3:
+>  - New patch added in V3, to enable pwm support on sc7280-idp2 board.
 > 
->   .../bindings/nvmem/sunplus,sp7021-ocotp.yaml       |  86 ++++++++
->   MAINTAINERS                                        |   6 +
->   drivers/nvmem/Kconfig                              |  12 ++
->   drivers/nvmem/Makefile                             |   2 +
->   drivers/nvmem/sunplus-ocotp.c                      | 228 +++++++++++++++++++++
->   5 files changed, 334 insertions(+)
->   create mode 100644 Documentation/devicetree/bindings/nvmem/sunplus,sp7021-ocotp.yaml
->   create mode 100644 drivers/nvmem/sunplus-ocotp.c
+> Changes in V4:
+>  - No changes.
+> 
+>  arch/arm64/boot/dts/qcom/sc7280-idp2.dts | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sc7280-idp2.dts b/arch/arm64/boot/dts/qcom/sc7280-idp2.dts
+> index 73b9911..d4f7cab 100644
+> --- a/arch/arm64/boot/dts/qcom/sc7280-idp2.dts
+> +++ b/arch/arm64/boot/dts/qcom/sc7280-idp2.dts
+> @@ -34,3 +34,7 @@
+>  &nvme_3v3_regulator {
+>  	gpio = <&tlmm 51 GPIO_ACTIVE_HIGH>;
+>  };
+> +
+> +&pm8350c_pwm {
+> +	status = "okay";
+> +};
+> -- 
+> 2.7.4
 > 

@@ -2,117 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 194034BF6BA
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 11:55:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E1A94BF6C8
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 11:57:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231480AbiBVKzT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 05:55:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44774 "EHLO
+        id S231550AbiBVK4L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 05:56:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231533AbiBVKzR (ORCPT
+        with ESMTP id S231499AbiBVK4K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 05:55:17 -0500
-Received: from mail.kapsi.fi (mail.kapsi.fi [IPv6:2001:67c:1be8::25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95977158DA3;
-        Tue, 22 Feb 2022 02:54:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=kapsi.fi;
-         s=20161220; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=vCY3PKWG+UyDYeceDiVl2nmf3pfgqjVMkazFF1HRiGE=; b=fp+sOp2QXbG2fhZ5uSWJnQm0Od
-        r01zdLCfBd72Th7x54Og+EMBPIKs0Xyj5pPrny6ROjjN8iaBj8BkCw/oz6GOoTGgMT66EKRxdpqHD
-        hJVcyt55+nS3lSn7cs/GIDpxA+VVFNUeQ9Low30sxe/XaW70tIc+AK/MRL8OI0GdzOWd6Pa/Y5uyH
-        jEhHvlCQ7nFWJ/9KZorN6VPqr69Hkn5k9oq6eYRXK6S0TYPGOBAsrqgKBkzUx7vA3NE1IjNXIQF8J
-        /Bw0OtrIyZpf27R0izRIodNVmSjfeAnHLG7ry8gq0D7VTMoKsNfDtcCPlYw6qzh9/1hxpCLOT9Ir/
-        DXof/SLA==;
-Received: from 91-158-25-70.elisa-laajakaista.fi ([91.158.25.70] helo=[192.168.1.10])
-        by mail.kapsi.fi with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.89)
-        (envelope-from <cyndis@kapsi.fi>)
-        id 1nMSod-0000Po-2Q; Tue, 22 Feb 2022 12:54:43 +0200
-Message-ID: <b947e0b2-a78d-bacf-0d78-b5d57e821e6e@kapsi.fi>
-Date:   Tue, 22 Feb 2022 12:54:42 +0200
+        Tue, 22 Feb 2022 05:56:10 -0500
+Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F3EC158EA5;
+        Tue, 22 Feb 2022 02:55:45 -0800 (PST)
+Received: by mail-wr1-f45.google.com with SMTP id s13so3807402wrb.6;
+        Tue, 22 Feb 2022 02:55:45 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Y7HxMsThMoOBPkyDBh3eSq5/erLCvzApa8FVrrE65u8=;
+        b=v8eCPY5DK4RY+nIF8PJnkB9QIDMmROtPHSKLkrLic8dluD72FEYE0KfPJKGvlJCBck
+         547zQUVc6iF71l61BsAP1KxKjBJ8s976h68X7p8AuQnM7T3p7VbkvSFTbru03y+4gHvv
+         n12JMykqciFHJPN82tV/dVMfmoOHlpWaII2qj4yUnOxDvFnFN7xGrBFrVMIOvFbA74bl
+         X62s1buDVLpR5PA6PGbtbBd2Lfudf/2Ww6ToZVqxwp2ORWdCuhWovYdOIKxJ/GNQg/wG
+         e1QV+GQuaaRgzo5iMA+V/VZkdNtZY95leTbeLTsRdbG71R/uM4TtmRHC7RzhymEQP8IX
+         41aQ==
+X-Gm-Message-State: AOAM5338gZfq9ybJC9E/se3WOm4UXoQfXu9VfTUd1Z7GDldr9emmIDDQ
+        Fh3o9YlCCY5yTHcQaNiqHIk=
+X-Google-Smtp-Source: ABdhPJySef3HI9qExb8u5Jn6vqX6dL9kxqWyKmxkP7xqh3IGa/Q5u4Nn16bHmsqgIZwLOk9orkAGBg==
+X-Received: by 2002:a05:6000:257:b0:1e3:3a1b:d4ca with SMTP id m23-20020a056000025700b001e33a1bd4camr19155649wrz.112.1645527343828;
+        Tue, 22 Feb 2022 02:55:43 -0800 (PST)
+Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
+        by smtp.gmail.com with ESMTPSA id m12-20020a7bce0c000000b0037bed2a6fbfsm2011391wmc.37.2022.02.22.02.55.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Feb 2022 02:55:43 -0800 (PST)
+Date:   Tue, 22 Feb 2022 10:55:41 +0000
+From:   Wei Liu <wei.liu@kernel.org>
+To:     Tianyu Lan <ltykernel@gmail.com>
+Cc:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
+        wei.liu@kernel.org, decui@microsoft.com, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        x86@kernel.org, hpa@zytor.com, brijesh.singh@amd.com,
+        michael.roth@amd.com, jroedel@suse.de, Tianyu.Lan@microsoft.com,
+        thomas.lendacky@amd.com, michael.h.kelley@microsoft.com,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFC FATCH] x86/Hyper-V: Add SEV negotiate protocol support in
+ Isolation VM.
+Message-ID: <20220222105541.izv4psjychjx5ooq@liuwe-devbox-debian-v2>
+References: <20220207160928.111718-1-ltykernel@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: [PATCH v3 8/9] drm/tegra: vic: Implement get_streamid_offset
-Content-Language: en-US
-To:     Dmitry Osipenko <digetx@gmail.com>,
-        Mikko Perttunen <mperttunen@nvidia.com>,
-        thierry.reding@gmail.com, jonathanh@nvidia.com, joro@8bytes.org,
-        will@kernel.org, robh+dt@kernel.org, robin.murphy@arm.com
-Cc:     linux-tegra@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-References: <20220218113952.3077606-1-mperttunen@nvidia.com>
- <20220218113952.3077606-9-mperttunen@nvidia.com>
- <b1df816b-6838-c435-1a23-5029144e4cfe@gmail.com>
- <7f4e4c47-59f1-1def-36bf-a2ded912f76d@gmail.com>
- <5d1b6e82-2c9d-8388-697f-0d7305a1206f@kapsi.fi>
- <ee648994-b296-2ac4-a676-ddcac463a428@gmail.com>
- <30033f5b-3fd1-22c7-896b-af034a4041df@kapsi.fi>
- <4352fda7-ecb6-4a5e-7d6c-a50537d8eaff@gmail.com>
-From:   Mikko Perttunen <cyndis@kapsi.fi>
-In-Reply-To: <4352fda7-ecb6-4a5e-7d6c-a50537d8eaff@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 91.158.25.70
-X-SA-Exim-Mail-From: cyndis@kapsi.fi
-X-SA-Exim-Scanned: No (on mail.kapsi.fi); SAEximRunCond expanded to false
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220207160928.111718-1-ltykernel@gmail.com>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/22/22 12:46, Dmitry Osipenko wrote:
-> 22.02.2022 11:27, Mikko Perttunen пишет:
->> On 2/21/22 22:10, Dmitry Osipenko wrote:
->>> 21.02.2022 14:44, Mikko Perttunen пишет:
->>>> On 2/19/22 20:54, Dmitry Osipenko wrote:
->>>>> 19.02.2022 21:49, Dmitry Osipenko пишет:
->>>>>> 18.02.2022 14:39, Mikko Perttunen пишет:
->>>>>>> +static int vic_get_streamid_offset(struct tegra_drm_client *client)
->>>>>>> +{
->>>>>>> +    struct vic *vic = to_vic(client);
->>>>>>> +    int err;
->>>>>>> +
->>>>>>> +    err = vic_load_firmware(vic);
->>>>>>
->>>>>> You can't invoke vic_load_firmware() while RPM is suspended. Either
->>>>>> replace this with RPM get/put or do something else.
->>>>
->>>> Why not, I'm not seeing any HW accesses in vic_load_firmware? Although
->>>> it looks like it might race with the vic_load_firmware call in
->>>> vic_runtime_resume which probably needs to be fixed.
->>>
->>> It was not clear from the function's name that h/w is untouched, I read
->>> "load" as "upload" and then looked at vic_runtime_resume(). I'd rename
->>> vic_load_firmware() to vic_prepare_firmware_image().
->>>
->>> And yes, technically lock is needed.
->>
->> Yep, I'll consider renaming it.
+On Mon, Feb 07, 2022 at 11:09:28AM -0500, Tianyu Lan wrote:
+> From: Tianyu Lan <Tianyu.Lan@microsoft.com>
 > 
-> Looking at this all again, I'd suggest to change:
+> Hyper-V Isolation VM code uses sev_es_ghcb_hv_call() to read/write MSR
+> via ghcb page. The SEV-ES guest should call the sev_es_negotiate_protocol()
+> to negotiate the GHCB protocol version before establishing the GHCB. Call
+> sev_es_negotiate_protocol() in the hyperv_init_ghcb().
 > 
-> int get_streamid_offset(client)
+> Signed-off-by: Tianyu Lan <Tianyu.Lan@microsoft.com>
+> ---
+> This patch based on the "Add AMD Secure Nested Paging (SEV-SNP) Guest Support"
+> patchset. https://lore.kernel.org/lkml/20220128171804.569796-1-brijesh.singh@amd.com/
 > 
-> to:
+>  arch/x86/hyperv/hv_init.c    | 6 ++++++
+>  arch/x86/include/asm/sev.h   | 2 ++
+>  arch/x86/kernel/sev-shared.c | 2 +-
+>  arch/x86/kernel/sev.c        | 4 ++--
+>  4 files changed, 11 insertions(+), 3 deletions(-)
 > 
-> int get_streamid_offset(client, *offset)
-> 
-> and bail out if get_streamid_offset() returns error. It's never okay to
-> ignore errors.
+> diff --git a/arch/x86/hyperv/hv_init.c b/arch/x86/hyperv/hv_init.c
+> index 24f4a06ac46a..a22303fccf02 100644
+> --- a/arch/x86/hyperv/hv_init.c
+> +++ b/arch/x86/hyperv/hv_init.c
+> @@ -28,6 +28,7 @@
+>  #include <linux/syscore_ops.h>
+>  #include <clocksource/hyperv_timer.h>
+>  #include <linux/highmem.h>
+> +#include <asm/sev.h>
+>  
+>  int hyperv_init_cpuhp;
+>  u64 hv_current_partition_id = ~0ull;
+> @@ -69,6 +70,11 @@ static int hyperv_init_ghcb(void)
+>  	ghcb_base = (void **)this_cpu_ptr(hv_ghcb_pg);
+>  	*ghcb_base = ghcb_va;
+>  
+> +	sev_es_negotiate_protocol();
 
-Sure, seems reasonable. We'll still need some error code to indicate 
-that context isolation isn't available for the engine and continue on in 
-that case but that's better than just ignoring all of them.
+The return value should be checked, right?
 
-Mikko
+There is no logical connection between this function call and the wrmsrl
+below. Is there new information available after calling
+sev_es_negotiate_protocol?
+
+> +
+> +	/* Write ghcb page back after negotiating protocol. */
+> +	wrmsrl(MSR_AMD64_SEV_ES_GHCB, ghcb_gpa);
+> +	VMGEXIT();
+>  	return 0;
+>  }
+>  
+[...]
+> diff --git a/arch/x86/kernel/sev.c b/arch/x86/kernel/sev.c
+> index 3568b3303314..46c53c4885ee 100644
+> --- a/arch/x86/kernel/sev.c
+> +++ b/arch/x86/kernel/sev.c
+> @@ -167,12 +167,12 @@ void noinstr __sev_es_ist_exit(void)
+>  	this_cpu_write(cpu_tss_rw.x86_tss.ist[IST_INDEX_VC], *(unsigned long *)ist);
+>  }
+>  
+> -static inline u64 sev_es_rd_ghcb_msr(void)
+> +inline u64 sev_es_rd_ghcb_msr(void)
+>  {
+>  	return __rdmsr(MSR_AMD64_SEV_ES_GHCB);
+>  }
+>  
+> -static __always_inline void sev_es_wr_ghcb_msr(u64 val)
+> +__always_inline void sev_es_wr_ghcb_msr(u64 val)
+
+Why are these needed? They are not used anywhere in this patch.
+
+Thanks,
+Wei.
+
+>  {
+>  	u32 low, high;
+>  
+> -- 
+> 2.25.1
+> 

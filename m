@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D232B4C03CF
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 22:27:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5F7A4C03DB
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 22:29:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235844AbiBVV1p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 16:27:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43892 "EHLO
+        id S235890AbiBVV1t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 16:27:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235788AbiBVV1a (ORCPT
+        with ESMTP id S235793AbiBVV1a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 22 Feb 2022 16:27:30 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 068E27B55B;
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0AB68A30E;
         Tue, 22 Feb 2022 13:27:04 -0800 (PST)
-Date:   Tue, 22 Feb 2022 21:27:01 -0000
+Date:   Tue, 22 Feb 2022 21:27:02 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1645565222;
+        s=2020; t=1645565223;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=mKX2ehwQx1rBrOY9dgJejssquU0nQTuF5xjXIt4Zbmo=;
-        b=MMUcuWaGPR4kGXWGS821ZzKciXcBE06hkTt+8yLczoWfgvAC4benChoLvgU+3XOfh3xcmK
-        Sv9ssNaL6G0eVW+/HLRd1Hsebtm0O5eLZcingp9Ju6R9n7vrW+z5tJMPEsNq5ZXULGjSJJ
-        +r4aRxO6eZdv30/hWyoOkcLSyyc0TFpK5EFN2nx3XEr1LH4rZPvfmjacBqi4nBywXc+Kcw
-        ye/sWevZ9V3Rib6F7ESX9PQp6c+m4nvTfjS315CpmVHll8WBnK8QsCTRcr+4GzqCCi1y8H
-        QD8GdyAOl4DiBq4zIuXq9p/bYRCW3cqx4k1k0QhtT5hw+X/YjhmVQFS25D6CCw==
+        bh=G+VJ8ulndxSSdJqTNPIDLFDHjk0EkO8BYbPFXzYRGMg=;
+        b=RiSjBm9/s6zD978tU/9TKrJdoWb77+Xu2ZebW73WEDf8rGjFTV0RwNoCZtp1NQhl9ZAyr7
+        uARCE/yRW6EjvqXWiA4cn6G3Z/NiTQwXPy4wDWEgReynhJVg27yLUochxWO/c/cCxKZMKA
+        eZpvrpmy+YhDJULI2GL22zPy7xpRnhlVaNgABpMhae+/5rdXqJQeoWMmoFa+x6Wm8tITMp
+        PcoyGRV5nMuVFQZu1W37dVe3sWN47/R0X32rcNEKKlD7UbsrVsXhiPovJMCXFZADF/iHZm
+        69u3MFV7ZLgzPcdl8rQlBYrGLKNVK8F5VMubzZ+Hh5M6ozkgoHMHEtL1UTkHUQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1645565222;
+        s=2020e; t=1645565223;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=mKX2ehwQx1rBrOY9dgJejssquU0nQTuF5xjXIt4Zbmo=;
-        b=PYSYJ683y88FkbuOOagHA9EX06Uw16s0MDswapjw7UIz7blFlt3xQSCdOj//qj9mUUyT01
-        O5p4ZaSBxNkEsfCA==
+        bh=G+VJ8ulndxSSdJqTNPIDLFDHjk0EkO8BYbPFXzYRGMg=;
+        b=LiHzXxX7T3fBaHDskLVHHaU+MU7OjmmIqYyr8WjdIAuMW+TNBmENiHYWhPKpOzru4YXFu1
+        j5UsbeLfzmQBkrDQ==
 From:   "tip-bot2 for Sebastian Andrzej Siewior" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: core/core] fork, IA64: Provide alloc_thread_stack_node() for IA64
+Subject: [tip: core/core] fork: Duplicate task_struct before stack allocation
 Cc:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
         Thomas Gleixner <tglx@linutronix.de>,
         Andy Lutomirski <luto@kernel.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20220217102406.3697941-4-bigeasy@linutronix.de>
-References: <20220217102406.3697941-4-bigeasy@linutronix.de>
+In-Reply-To: <20220217102406.3697941-3-bigeasy@linutronix.de>
+References: <20220217102406.3697941-3-bigeasy@linutronix.de>
 MIME-Version: 1.0
-Message-ID: <164556522143.16921.2330247822699922897.tip-bot2@tip-bot2>
+Message-ID: <164556522231.16921.3149765477233178742.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -68,81 +68,62 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the core/core branch of tip:
 
-Commit-ID:     2bb0529c0bc0698f3baf3e88ffd61a18eef252a7
-Gitweb:        https://git.kernel.org/tip/2bb0529c0bc0698f3baf3e88ffd61a18eef252a7
+Commit-ID:     546c42b2c5c161619736dd730d3df709181999d0
+Gitweb:        https://git.kernel.org/tip/546c42b2c5c161619736dd730d3df709181999d0
 Author:        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-AuthorDate:    Thu, 17 Feb 2022 11:24:01 +01:00
+AuthorDate:    Thu, 17 Feb 2022 11:24:00 +01:00
 Committer:     Thomas Gleixner <tglx@linutronix.de>
 CommitterDate: Tue, 22 Feb 2022 22:25:01 +01:00
 
-fork, IA64: Provide alloc_thread_stack_node() for IA64
+fork: Duplicate task_struct before stack allocation
 
-Provide a generic alloc_thread_stack_node() for IA64 and
-CONFIG_ARCH_THREAD_STACK_ALLOCATOR which returns stack pointer and sets
-task_struct::stack so it behaves exactly like the other implementations.
+alloc_thread_stack_node() already populates the task_struct::stack
+member except on IA64. The stack pointer is saved and populated again
+because IA64 needs it and arch_dup_task_struct() overwrites it.
 
-Rename IA64's alloc_thread_stack_node() and add the generic version to the
-fork code so it is in one place _and_ to drastically lower the chances of
-fat fingering the IA64 code.  Do the same for free_thread_stack().
+Allocate thread's stack after task_struct has been duplicated as a
+preparation for further changes.
 
 Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 Acked-by: Andy Lutomirski <luto@kernel.org>
-Link: https://lore.kernel.org/r/20220217102406.3697941-4-bigeasy@linutronix.de
+Link: https://lore.kernel.org/r/20220217102406.3697941-3-bigeasy@linutronix.de
 
 ---
- arch/ia64/include/asm/thread_info.h |  6 +++---
- kernel/fork.c                       | 17 +++++++++++++++++
- 2 files changed, 20 insertions(+), 3 deletions(-)
+ kernel/fork.c |  9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
 
-diff --git a/arch/ia64/include/asm/thread_info.h b/arch/ia64/include/asm/thread_info.h
-index 51d20cb..1684716 100644
---- a/arch/ia64/include/asm/thread_info.h
-+++ b/arch/ia64/include/asm/thread_info.h
-@@ -55,15 +55,15 @@ struct thread_info {
- #ifndef ASM_OFFSETS_C
- /* how to get the thread information struct from C */
- #define current_thread_info()	((struct thread_info *) ((char *) current + IA64_TASK_SIZE))
--#define alloc_thread_stack_node(tsk, node)	\
-+#define arch_alloc_thread_stack_node(tsk, node)	\
- 		((unsigned long *) ((char *) (tsk) + IA64_TASK_SIZE))
- #define task_thread_info(tsk)	((struct thread_info *) ((char *) (tsk) + IA64_TASK_SIZE))
- #else
- #define current_thread_info()	((struct thread_info *) 0)
--#define alloc_thread_stack_node(tsk, node)	((unsigned long *) 0)
-+#define arch_alloc_thread_stack_node(tsk, node)	((unsigned long *) 0)
- #define task_thread_info(tsk)	((struct thread_info *) 0)
- #endif
--#define free_thread_stack(tsk)	/* nothing */
-+#define arch_free_thread_stack(tsk)	/* nothing */
- #define task_stack_page(tsk)	((void *)(tsk))
- 
- #define __HAVE_THREAD_FUNCTIONS
 diff --git a/kernel/fork.c b/kernel/fork.c
-index 30c01ce..7b70c47 100644
+index f5cc101..30c01ce 100644
 --- a/kernel/fork.c
 +++ b/kernel/fork.c
-@@ -330,6 +330,23 @@ void thread_stack_cache_init(void)
- }
+@@ -888,6 +888,10 @@ static struct task_struct *dup_task_struct(struct task_struct *orig, int node)
+ 	if (!tsk)
+ 		return NULL;
  
- # endif /* THREAD_SIZE >= PAGE_SIZE || defined(CONFIG_VMAP_STACK) */
-+#else /* CONFIG_ARCH_THREAD_STACK_ALLOCATOR */
++	err = arch_dup_task_struct(tsk, orig);
++	if (err)
++		goto free_tsk;
 +
-+static unsigned long *alloc_thread_stack_node(struct task_struct *tsk, int node)
-+{
-+	unsigned long *stack;
-+
-+	stack = arch_alloc_thread_stack_node(tsk, node);
-+	tsk->stack = stack;
-+	return stack;
-+}
-+
-+static void free_thread_stack(struct task_struct *tsk)
-+{
-+	arch_free_thread_stack(tsk);
-+	tsk->stack = NULL;
-+}
-+
- #endif /* !CONFIG_ARCH_THREAD_STACK_ALLOCATOR */
+ 	stack = alloc_thread_stack_node(tsk, node);
+ 	if (!stack)
+ 		goto free_tsk;
+@@ -897,8 +901,6 @@ static struct task_struct *dup_task_struct(struct task_struct *orig, int node)
  
- /* SLAB cache for signal_struct structures (tsk->signal) */
+ 	stack_vm_area = task_stack_vm_area(tsk);
+ 
+-	err = arch_dup_task_struct(tsk, orig);
+-
+ 	/*
+ 	 * arch_dup_task_struct() clobbers the stack-related fields.  Make
+ 	 * sure they're properly initialized before using any stack-related
+@@ -912,9 +914,6 @@ static struct task_struct *dup_task_struct(struct task_struct *orig, int node)
+ 	refcount_set(&tsk->stack_refcount, 1);
+ #endif
+ 
+-	if (err)
+-		goto free_stack;
+-
+ 	err = scs_prepare(tsk, node);
+ 	if (err)
+ 		goto free_stack;

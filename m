@@ -2,116 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61B224BF1D6
+	by mail.lfdr.de (Postfix) with ESMTP id AE7234BF1D7
 	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 07:02:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230042AbiBVF7f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 00:59:35 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:39230 "EHLO
+        id S230044AbiBVGBl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 01:01:41 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:47604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230058AbiBVF7c (ORCPT
+        with ESMTP id S230076AbiBVGBi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 00:59:32 -0500
-Received: from qproxy6-pub.mail.unifiedlayer.com (qproxy6-pub.mail.unifiedlayer.com [69.89.23.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43E69B1538
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 21:59:08 -0800 (PST)
-Received: from outbound-ss-761.bluehost.com (outbound-ss-761.bluehost.com [74.220.211.250])
-        by qproxy6.mail.unifiedlayer.com (Postfix) with ESMTP id 4BDDE80302F3
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 05:59:06 +0000 (UTC)
-Received: from cmgw15.mail.unifiedlayer.com (unknown [10.0.90.130])
-        by progateway8.mail.pro1.eigbox.com (Postfix) with ESMTP id 9858B100495B6
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 05:59:05 +0000 (UTC)
-Received: from box5620.bluehost.com ([162.241.219.59])
-        by cmsmtp with ESMTP
-        id MOCXnncbfkku4MOCXn50tD; Tue, 22 Feb 2022 05:59:05 +0000
-X-Authority-Reason: nr=8
-X-Authority-Analysis: v=2.4 cv=LOaj/La9 c=1 sm=1 tr=0 ts=62147ba9
- a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
- a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
- a=oGFeUVbbRNcA:10:nop_rcvd_month_year
- a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
- a=HaFmDPmJAAAA:8 a=49j0FZ7RFL9ueZfULrUA:9 a=QEXdDO2ut3YA:10:nop_charset_2
- a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
-        s=default; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=2gkaAUW8RUi5D7f16YE4uJ3ehtXAIcJwMOY1I55WnCs=; b=Rp7M+fXpBYVAqn/jn5RgkOgBt/
-        5573zeVxT8TkFzrp4p0SYDKNVfk359YwZtHQlnvECzu+WRcoIGfl7GZPJ4VEExkHAFq/Ra8Poo7lf
-        e8YKc23Hm+H4Nr1nLdh+Ra+BL;
-Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:55110 helo=[10.0.1.23])
-        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <re@w6rz.net>)
-        id 1nMOCW-0008YP-Kp; Mon, 21 Feb 2022 22:59:04 -0700
-Message-ID: <9a9aaa8b-d478-1b19-eb51-b6614e8c281c@w6rz.net>
-Date:   Mon, 21 Feb 2022 21:59:02 -0800
+        Tue, 22 Feb 2022 01:01:38 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 077EA8BE2C
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 22:01:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645509672; x=1677045672;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=NP9GtxO3ARoLz1k30qiRBR1BBI2kc5IQQLeUYxqbuZs=;
+  b=ihdBIFuJHbpsRjAnTTI3kmjbbJ7wSDJJWEDHfRvqcLMBsauQZJFZa8vT
+   nVQyeQhicf5jFKGgACY6fgRW2dGUH46y6bdGhv/ldkI/uoKfcduRrZPui
+   AXpNZNOTt8iw/XORkDWOxFwMygStYZfhZyzLZe+ld23Op6wgXzcOqewzI
+   bXoLgAeX8GSAKMc2Cun2qDsRnVfI3Zn2YXyuVs3qJYGWskP/D3sw4BHDx
+   aCQAtL+M/WUMkaAvaIffVg7qcELvssxWrhrpY8KWjoxycVfbUoVScQa+E
+   0WnMPp5S67606XqeXaLFBQ7rJ33YxqW8KSbuD/0L6+chAOEkzTbFTgbMA
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10265"; a="231585632"
+X-IronPort-AV: E=Sophos;i="5.88,387,1635231600"; 
+   d="scan'208";a="231585632"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2022 22:00:59 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,387,1635231600"; 
+   d="scan'208";a="547594422"
+Received: from lkp-server01.sh.intel.com (HELO da3212ac2f54) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 21 Feb 2022 22:00:53 -0800
+Received: from kbuild by da3212ac2f54 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nMOEH-0002OO-5Y; Tue, 22 Feb 2022 06:00:53 +0000
+Date:   Tue, 22 Feb 2022 14:00:24 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Ingo Molnar <mingo@kernel.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [mingo-tip:sched/headers 123/2541]
+ arch/arm64/kernel/../../../kernel/sched/per_task_area_struct_defs.h:13:13:
+ warning: no previous prototype for 'per_task_common'
+Message-ID: <202202221340.2LmNpMAg-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 5.15 000/196] 5.15.25-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
-References: <20220221084930.872957717@linuxfoundation.org>
-From:   Ron Economos <re@w6rz.net>
-In-Reply-To: <20220221084930.872957717@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - box5620.bluehost.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - w6rz.net
-X-BWhitelist: no
-X-Source-IP: 73.162.232.9
-X-Source-L: No
-X-Exim-ID: 1nMOCW-0008YP-Kp
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.23]) [73.162.232.9]:55110
-X-Source-Auth: re@w6rz.net
-X-Email-Count: 13
-X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
-X-Local-Domain: yes
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/21/22 00:47, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.25 release.
-> There are 196 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Wed, 23 Feb 2022 08:48:58 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.25-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git sched/headers
+head:   601144c0da5edfa67a9654158370da19c67e17e2
+commit: 70a45c203ea9662140afaa06885c49a69051eb21 [123/2541] headers/deps: per_task, arm64, x86: Convert task_struct::thread to a per_task() field
+config: arm64-buildonly-randconfig-r001-20220221 (https://download.01.org/0day-ci/archive/20220222/202202221340.2LmNpMAg-lkp@intel.com/config)
+compiler: aarch64-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=70a45c203ea9662140afaa06885c49a69051eb21
+        git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
+        git fetch --no-tags mingo-tip sched/headers
+        git checkout 70a45c203ea9662140afaa06885c49a69051eb21
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm64 prepare
 
-Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Tested-by: Ron Economos <re@w6rz.net>
+All warnings (new ones prefixed by >>):
 
+   In file included from arch/arm64/kernel/asm-offsets.c:29:
+>> arch/arm64/kernel/../../../kernel/sched/per_task_area_struct_defs.h:13:13: warning: no previous prototype for 'per_task_common' [-Wmissing-prototypes]
+      13 | void __used per_task_common(void)
+         |             ^~~~~~~~~~~~~~~
+--
+   In file included from arch/arm64/kernel/asm-offsets.c:29:
+>> arch/arm64/kernel/../../../kernel/sched/per_task_area_struct_defs.h:13:13: warning: no previous prototype for 'per_task_common' [-Wmissing-prototypes]
+      13 | void __used per_task_common(void)
+         |             ^~~~~~~~~~~~~~~
+   arch/arm64/kernel/vdso/vgettimeofday.c:9:5: warning: no previous prototype for '__kernel_clock_gettime' [-Wmissing-prototypes]
+       9 | int __kernel_clock_gettime(clockid_t clock,
+         |     ^~~~~~~~~~~~~~~~~~~~~~
+   arch/arm64/kernel/vdso/vgettimeofday.c:15:5: warning: no previous prototype for '__kernel_gettimeofday' [-Wmissing-prototypes]
+      15 | int __kernel_gettimeofday(struct __kernel_old_timeval *tv,
+         |     ^~~~~~~~~~~~~~~~~~~~~
+   arch/arm64/kernel/vdso/vgettimeofday.c:21:5: warning: no previous prototype for '__kernel_clock_getres' [-Wmissing-prototypes]
+      21 | int __kernel_clock_getres(clockid_t clock_id,
+         |     ^~~~~~~~~~~~~~~~~~~~~
+
+
+vim +/per_task_common +13 arch/arm64/kernel/../../../kernel/sched/per_task_area_struct_defs.h
+
+ce2d40bf8a7dba Ingo Molnar 2021-09-05  11  
+ce2d40bf8a7dba Ingo Molnar 2021-09-05  12  
+e6c00629263417 Ingo Molnar 2022-01-04 @13  void __used per_task_common(void)
+e6c00629263417 Ingo Molnar 2022-01-04  14  {
+e6c00629263417 Ingo Molnar 2022-01-04  15  #include "per_task_area_struct_template.h"
+e6c00629263417 Ingo Molnar 2022-01-04  16  }
+ce2d40bf8a7dba Ingo Molnar 2021-09-05  17  
+
+:::::: The code at line 13 was first introduced by commit
+:::::: e6c00629263417a49fc24ca6c70fad1d182fc3f9 headers/deps: per_task: Implement single template to define 'struct task_struct_per_task' fields and offsets
+
+:::::: TO: Ingo Molnar <mingo@kernel.org>
+:::::: CC: Ingo Molnar <mingo@kernel.org>
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

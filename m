@@ -2,55 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A15CA4BFF54
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 17:53:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E7BB4BFF58
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 17:53:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234379AbiBVQx2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 11:53:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57508 "EHLO
+        id S234372AbiBVQxz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 11:53:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234355AbiBVQx2 (ORCPT
+        with ESMTP id S231357AbiBVQxx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 11:53:28 -0500
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 74EB2340DF;
-        Tue, 22 Feb 2022 08:53:02 -0800 (PST)
-Received: from [192.168.254.32] (unknown [47.187.212.181])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 5677D20C319A;
-        Tue, 22 Feb 2022 08:53:01 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 5677D20C319A
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1645548782;
-        bh=eBE2w8R3jHrviJiZVR0GgUpvu31BZBoOrA+XHyhhM7E=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=hP5yscyobvLuXGG/CW09XIfWpvN9GhnQ3ML2ALJh/GNYMu44L/nUhAGV5YkrbFPla
-         SnowneC1XiyZS2vsL66zukzCqcGvwHpJHkw4C/OJL38jcNc7NkeZlewv8/IfmbHbB4
-         ZfPBICTT8edfcB90xy/3naof4q1RK764MezHYL5Y=
-Message-ID: <da34359e-bcd0-c5b8-635d-d70bfda03f3c@linux.microsoft.com>
-Date:   Tue, 22 Feb 2022 10:53:00 -0600
+        Tue, 22 Feb 2022 11:53:53 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 336A43334D;
+        Tue, 22 Feb 2022 08:53:28 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C32E560FFC;
+        Tue, 22 Feb 2022 16:53:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 708C8C340E8;
+        Tue, 22 Feb 2022 16:53:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645548807;
+        bh=TUxBIxRT0G5OuJaTd5jQshN1DOVr2xzMdhYOQd/l81o=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=bxKgcTT/Ulyk+/DiKVeNI0Iu9KLF1yhZAMLNIvFAFk4I7djaVVSUEGoRYodftm4Do
+         a6MVGkfo8w8fy294W88abJW/pEx0BJ2B5+XosRv6zkeAGOgKGkh7Vk3FFaKpFmTLGj
+         k0Nzr/67IVmShBwkOQ7HQYrgXFjMse9yNX5wLLO2m5qc1iBZepO+mEMzfNIV/2kjvv
+         v3RHMu6H5MkK14FhFzX7XUK9suxBf6+FNvKTYhJRxCkfJGZd1usfj7krFxhcHn1MVL
+         ychDpI4Ky+9RZqiWuOziRCjsV49aRYWQ81Afs2zJxbNE43iHGXFP4YUS7CWN8aXW65
+         mEapEZ6TKrvAg==
+Date:   Tue, 22 Feb 2022 22:23:23 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        David Collins <quic_collinsd@quicinc.com>
+Cc:     linux-arm-msm@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        David Dai <daidavid1@codeaurora.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 0/2] spmi: pmic-arb: Add support for PMIC v7
+Message-ID: <YhUVAwtfjuIdKrRQ@matsya>
+References: <20220201134108.2677578-1-vkoul@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v13 05/11] arm64: Copy the task argument to unwind_state
-Content-Language: en-US
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     broonie@kernel.org, jpoimboe@redhat.com, ardb@kernel.org,
-        nobuta.keiya@fujitsu.com, sjitindarsingh@gmail.com,
-        catalin.marinas@arm.com, will@kernel.org, jmorris@namei.org,
-        linux-arm-kernel@lists.infradead.org,
-        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <95691cae4f4504f33d0fc9075541b1e7deefe96f>
- <20220117145608.6781-1-madvenka@linux.microsoft.com>
- <20220117145608.6781-6-madvenka@linux.microsoft.com>
- <YgupIuJgL7nreT+1@FVFF77S0Q05N>
-From:   "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
-In-Reply-To: <YgupIuJgL7nreT+1@FVFF77S0Q05N>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220201134108.2677578-1-vkoul@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,180 +58,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It looks like I forgot to reply to this. Sorry about that.
-
-On 2/15/22 07:22, Mark Rutland wrote:
-> On Mon, Jan 17, 2022 at 08:56:02AM -0600, madvenka@linux.microsoft.com wrote:
->> From: "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
->>
->> Copy the task argument passed to arch_stack_walk() to unwind_state so that
->> it can be passed to unwind functions via unwind_state rather than as a
->> separate argument. The task is a fundamental part of the unwind state.
->>
->> Signed-off-by: Madhavan T. Venkataraman <madvenka@linux.microsoft.com>
->> ---
->>  arch/arm64/include/asm/stacktrace.h |  3 +++
->>  arch/arm64/kernel/stacktrace.c      | 29 ++++++++++++++++-------------
->>  2 files changed, 19 insertions(+), 13 deletions(-)
->>
->> diff --git a/arch/arm64/include/asm/stacktrace.h b/arch/arm64/include/asm/stacktrace.h
->> index 41ec360515f6..af423f5d7ad8 100644
->> --- a/arch/arm64/include/asm/stacktrace.h
->> +++ b/arch/arm64/include/asm/stacktrace.h
->> @@ -51,6 +51,8 @@ struct stack_info {
->>   * @kr_cur:      When KRETPROBES is selected, holds the kretprobe instance
->>   *               associated with the most recently encountered replacement lr
->>   *               value.
->> + *
->> + * @task:        Pointer to the task structure.
+On 01-02-22, 19:11, Vinod Koul wrote:
+> Hello,
 > 
-> Can we please say:
+> The is version 3 of support for PMIC v7. I have added a new property
+> qcom,bus-id for supporting v7 and then add driver changes for v7
 > 
-> 	@task:	The task being unwound.
-> 
+> This depends on yaml conversion patch:
+> https://lore.kernel.org/linux-arm-msm/20211227170151.73116-1-david@ixit.cz/
 
-Will do.
-
->>   */
->>  struct unwind_state {
->>  	unsigned long fp;
->> @@ -61,6 +63,7 @@ struct unwind_state {
->>  #ifdef CONFIG_KRETPROBES
->>  	struct llist_node *kr_cur;
->>  #endif
->> +	struct task_struct *task;
->>  };
->>  
->>  extern void dump_backtrace(struct pt_regs *regs, struct task_struct *tsk,
->> diff --git a/arch/arm64/kernel/stacktrace.c b/arch/arm64/kernel/stacktrace.c
->> index b2b568e5deba..1b32e55735aa 100644
->> --- a/arch/arm64/kernel/stacktrace.c
->> +++ b/arch/arm64/kernel/stacktrace.c
->> @@ -33,8 +33,10 @@
->>   */
->>  
->>  
->> -static void unwind_init_common(struct unwind_state *state)
->> +static void unwind_init_common(struct unwind_state *state,
->> +			       struct task_struct *task)
->>  {
->> +	state->task = task;
->>  #ifdef CONFIG_KRETPROBES
->>  	state->kr_cur = NULL;
->>  #endif
->> @@ -57,9 +59,10 @@ static void unwind_init_common(struct unwind_state *state)
->>   * TODO: document requirements here.
->>   */
->>  static inline void unwind_init_from_regs(struct unwind_state *state,
->> +					 struct task_struct *task,
-> 
-> Please drop the `task` parameter here ...
-
-OK.
+Any feedback on this...
 
 > 
->>  					 struct pt_regs *regs)
->>  {
->> -	unwind_init_common(state);
->> +	unwind_init_common(state, task);
+> Changes since v2:
+>  - Drop yaml conversion patch
+>  - Fix author for spmi patch
+> Changes since v1:
+>  - Add yaml conversion patch and new binding
+>  - fix driver bug report by Jonathan
 > 
-> ... and make this:
+> David Collins (1):
+>   spmi: pmic-arb: Add support for PMIC v7
 > 
-> 	unwind_init_common(state, current);
+> Vinod Koul (1):
+>   dt-bindings: spmi: Add qcom,bus-id
+> 
+>  .../bindings/spmi/qcom,spmi-pmic-arb.yaml     |  11 +
+>  drivers/spmi/spmi-pmic-arb.c                  | 233 ++++++++++++++++--
+>  2 files changed, 225 insertions(+), 19 deletions(-)
+> 
+> -- 
+> 2.31.1
 
-OK.
-
-> 
-> ... since that way it's *impossible* to have ismatched parameters, which is one
-> of the reasons for having separate functions in the first place.
-> 
->>  	state->fp = regs->regs[29];
->>  	state->pc = regs->pc;
->> @@ -71,9 +74,10 @@ static inline void unwind_init_from_regs(struct unwind_state *state,
->>   * Note: this is always inlined, and we expect our caller to be a noinline
->>   * function, such that this starts from our caller's caller.
->>   */
->> -static __always_inline void unwind_init_from_current(struct unwind_state *state)
->> +static __always_inline void unwind_init_from_current(struct unwind_state *state,
->> +						     struct task_struct *task)
->>  {
->> -	unwind_init_common(state);
->> +	unwind_init_common(state, task);
-> 
-> Same comments as for unwind_init_from_regs(): please drop the `task` parameter
-> and hard-code `current` in the call to unwind_init_common().
-> 
-
-OK.
-
->>  	state->fp = (unsigned long)__builtin_frame_address(1);
->>  	state->pc = (unsigned long)__builtin_return_address(0);
->> @@ -87,7 +91,7 @@ static __always_inline void unwind_init_from_current(struct unwind_state *state)
->>  static inline void unwind_init_from_task(struct unwind_state *state,
->>  					 struct task_struct *task)
->>  {
->> -	unwind_init_common(state);
->> +	unwind_init_common(state, task);
->>  
->>  	state->fp = thread_saved_fp(task);
->>  	state->pc = thread_saved_pc(task);
->> @@ -100,11 +104,11 @@ static inline void unwind_init_from_task(struct unwind_state *state,
->>   * records (e.g. a cycle), determined based on the location and fp value of A
->>   * and the location (but not the fp value) of B.
->>   */
->> -static int notrace unwind_next(struct task_struct *tsk,
->> -			       struct unwind_state *state)
->> +static int notrace unwind_next(struct unwind_state *state)
->>  {
->>  	unsigned long fp = state->fp;
->>  	struct stack_info info;
->> +	struct task_struct *tsk = state->task;
->>  
->>  	/* Final frame; nothing to unwind */
->>  	if (fp == (unsigned long)task_pt_regs(tsk)->stackframe)
->> @@ -176,8 +180,7 @@ static int notrace unwind_next(struct task_struct *tsk,
->>  }
->>  NOKPROBE_SYMBOL(unwind_next);
->>  
->> -static void notrace unwind(struct task_struct *tsk,
->> -			   struct unwind_state *state,
->> +static void notrace unwind(struct unwind_state *state,
->>  			   bool (*fn)(void *, unsigned long), void *data)
->>  {
->>  	while (1) {
->> @@ -185,7 +188,7 @@ static void notrace unwind(struct task_struct *tsk,
->>  
->>  		if (!fn(data, state->pc))
->>  			break;
->> -		ret = unwind_next(tsk, state);
->> +		ret = unwind_next(state);
->>  		if (ret < 0)
->>  			break;
->>  	}
->> @@ -232,11 +235,11 @@ noinline notrace void arch_stack_walk(stack_trace_consume_fn consume_entry,
->>  	struct unwind_state state;
->>  
->>  	if (regs)
->> -		unwind_init_from_regs(&state, regs);
->> +		unwind_init_from_regs(&state, task, regs);
->>  	else if (task == current)
->> -		unwind_init_from_current(&state);
->> +		unwind_init_from_current(&state, task);
->>  	else
->>  		unwind_init_from_task(&state, task);
-> 
-> As above we shouldn't need these two changes.
-> 
-> For the regs case we might want to sanity-check that task == current.
-> 
-
-Will do.
-
->> -	unwind(task, &state, consume_entry, cookie);
->> +	unwind(&state, consume_entry, cookie);
-> 
-> Otherwise, this looks good to me.
-
-Thanks.
-
-Madhavan
+-- 
+~Vinod

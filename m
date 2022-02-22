@@ -2,87 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD1044BF4C6
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 10:33:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B11E24BF4D9
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 10:36:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230199AbiBVJde (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 04:33:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55004 "EHLO
+        id S230241AbiBVJhC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 04:37:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbiBVJdb (ORCPT
+        with ESMTP id S229747AbiBVJg7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 04:33:31 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F26A4A2516
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 01:33:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=l3iLjqgJEnGAdr8zF+Sn6XYn8tIjrfh5Ii/qv9Svt0s=; b=S66n8VWTMAiqk9sMFOjJ/ng+Uj
-        zEf/fQwqAByQAsaVQKPUHNulLqK4kaxHYNpOF0VpjItDAqkmn5q5nbIEwpKVBWmtbfFS3cmHSHJ1K
-        ZRBwkULj/W9WUi0fd8xHEsA9Qs5VHmxBq4AwkyBR/Le7aUB/RihzZqHn6rdB+mrhEVwcQnpMp9gZP
-        Ki8Utdtiv+XOHeuQdnVz+BplaitcY2Q8PZTa09hT43JRqMla9GWFruvEnrPjZBAmZjcTN3eh/5jse
-        rkpl6W+t7pbaVZ+jRFQHxkehHowXVgVMqnK7iecjsfTrtYWytLFTCr5x0J1Uc5X9enFe7jAl6mTZ1
-        JMLti5pA==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nMRXM-002dJs-Ua; Tue, 22 Feb 2022 09:32:49 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 28E6E3005B2;
-        Tue, 22 Feb 2022 10:32:48 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 0AC18200D182B; Tue, 22 Feb 2022 10:32:48 +0100 (CET)
-Date:   Tue, 22 Feb 2022 10:32:48 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-Cc:     "Poimboe, Josh" <jpoimboe@redhat.com>,
-        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "joao@overdrivepizza.com" <joao@overdrivepizza.com>,
-        "Cooper, Andrew" <andrew.cooper3@citrix.com>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "mark.rutland@arm.com" <mark.rutland@arm.com>,
-        "samitolvanen@google.com" <samitolvanen@google.com>,
-        "ndesaulniers@google.com" <ndesaulniers@google.com>,
-        "Milburn, Alyssa" <alyssa.milburn@intel.com>
-Subject: Re: [PATCH 14/29] x86/ibt: Add IBT feature, MSR and #CP handling
-Message-ID: <YhStwI95PmMyxgqx@hirez.programming.kicks-ass.net>
-References: <20220218164902.008644515@infradead.org>
- <20220218171409.395399333@infradead.org>
- <6874fd181ad46cd48f12da6ff5c955a64e193564.camel@intel.com>
+        Tue, 22 Feb 2022 04:36:59 -0500
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6624C13D45
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 01:36:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645522594; x=1677058594;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=epDTGwXl0hnH02ZsDt1lDZBbtedZrOrSwE4ZeXvSN2A=;
+  b=GniTl7ITRytyyjaWKFkMcDrAXpBNxTqIHxjEfP8rxm2gH7gEZmoVtc7P
+   Rk1BD/IQJ6xCxUHmIL30VgUPflTuCkosJQHDeX41diOPvoKvFFwrxXXvz
+   4Cm1sVDEGkmF95qszUlgZp9e8VpKbIoFHvFzrHsyUzTA6GoT0wJbX8Iuo
+   yxZujRbzK8Yj01gcRp8jIeWmnDwGGFuIYmVvAIwexw8gEQ+BA4caLgjSw
+   aF/MZH7SjUn3b7/d8T29DNk1b8J+389vwp+YiyWQElixLMzenLk3GQFkm
+   zobHESJMXE18y1UiKsJ4ww9wIXBI5LGYzm/8U9ZQKbYVHQhwfw9xmIJjb
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10265"; a="251603503"
+X-IronPort-AV: E=Sophos;i="5.88,387,1635231600"; 
+   d="scan'208";a="251603503"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2022 01:36:34 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,387,1635231600"; 
+   d="scan'208";a="542878849"
+Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 22 Feb 2022 01:36:32 -0800
+Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nMRax-00005O-Ub; Tue, 22 Feb 2022 09:36:31 +0000
+Date:   Tue, 22 Feb 2022 17:35:30 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Samuel Holland <samuel@sholland.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Marc Zyngier <maz@kernel.org>
+Subject: drivers/irqchip/irq-sun6i-r.c:215:79: sparse: sparse: Using plain
+ integer as NULL pointer
+Message-ID: <202202221714.fORO2j1w-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <6874fd181ad46cd48f12da6ff5c955a64e193564.camel@intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 22, 2022 at 04:38:22AM +0000, Edgecombe, Rick P wrote:
-> On Fri, 2022-02-18 at 17:49 +0100, Peter Zijlstra wrote:
-> > +       cr4_set_bits(X86_CR4_CET);
-> > +
-> > +       rdmsrl(MSR_IA32_S_CET, msr);
-> > +       if (cpu_feature_enabled(X86_FEATURE_IBT))
-> > +               msr |= CET_ENDBR_EN;
-> > +       wrmsrl(MSR_IA32_S_CET, msr);
-> 
-> So I guess implicit in all of this is that MSR_IA32_S_CET will not be
-> managed by xsaves (makes sense).
-> 
-> But it still might be good to add the supervisor cet xfeature number to
-> XFEATURE_MASK_SUPERVISOR_UNSUPPORTED, with analogous reasoning to
-> XFEATURE_MASK_PT.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   038101e6b2cd5c55f888f85db42ea2ad3aecb4b6
+commit: 4e34614636b31747b190488240a95647c227021f irqchip/sun6i-r: Use a stacked irqchip driver
+date:   1 year, 1 month ago
+config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20220222/202202221714.fORO2j1w-lkp@intel.com/config)
+compiler: aarch64-linux-gcc (GCC) 11.2.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=4e34614636b31747b190488240a95647c227021f
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 4e34614636b31747b190488240a95647c227021f
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/gpu/drm/tegra/ drivers/gpu/host1x/ drivers/hid/ drivers/irqchip/ drivers/remoteproc/ drivers/scsi/hisi_sas/ security/integrity/ima/
 
-Yeah, no, I'm not touching that.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+
+sparse warnings: (new ones prefixed by >>)
+>> drivers/irqchip/irq-sun6i-r.c:215:79: sparse: sparse: Using plain integer as NULL pointer
+
+vim +215 drivers/irqchip/irq-sun6i-r.c
+
+   184	
+   185	static int sun6i_r_intc_domain_alloc(struct irq_domain *domain,
+   186					     unsigned int virq,
+   187					     unsigned int nr_irqs, void *arg)
+   188	{
+   189		struct irq_fwspec *fwspec = arg;
+   190		struct irq_fwspec gic_fwspec;
+   191		unsigned long hwirq;
+   192		unsigned int type;
+   193		int i, ret;
+   194	
+   195		ret = sun6i_r_intc_domain_translate(domain, fwspec, &hwirq, &type);
+   196		if (ret)
+   197			return ret;
+   198		if (hwirq + nr_irqs > SUN6I_NR_MUX_BITS)
+   199			return -EINVAL;
+   200	
+   201		/* Construct a GIC-compatible fwspec from this fwspec. */
+   202		gic_fwspec = (struct irq_fwspec) {
+   203			.fwnode      = domain->parent->fwnode,
+   204			.param_count = 3,
+   205			.param       = { GIC_SPI, hwirq, type },
+   206		};
+   207	
+   208		ret = irq_domain_alloc_irqs_parent(domain, virq, nr_irqs, &gic_fwspec);
+   209		if (ret)
+   210			return ret;
+   211	
+   212		for (i = 0; i < nr_irqs; ++i, ++hwirq, ++virq) {
+   213			if (hwirq == nmi_hwirq) {
+   214				irq_domain_set_hwirq_and_chip(domain, virq, hwirq,
+ > 215							      &sun6i_r_intc_nmi_chip, 0);
+   216				irq_set_handler(virq, handle_fasteoi_ack_irq);
+   217			} else {
+   218				/* Only the NMI is currently supported. */
+   219				return -EINVAL;
+   220			}
+   221		}
+   222	
+   223		return 0;
+   224	}
+   225	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

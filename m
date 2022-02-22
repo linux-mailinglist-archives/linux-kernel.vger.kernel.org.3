@@ -2,129 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A9174C03D4
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 22:28:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 525044C03C6
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 22:27:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235829AbiBVV2E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 16:28:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45180 "EHLO
+        id S235789AbiBVV1a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 16:27:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235832AbiBVV1l (ORCPT
+        with ESMTP id S231319AbiBVV11 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 16:27:41 -0500
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 519208E196
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 13:27:11 -0800 (PST)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 21MLQgJt094027;
-        Tue, 22 Feb 2022 15:26:42 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1645565202;
-        bh=4IgUtNPOVL10Vp/1imi/uYZI63freW9H4+vX2DPlXSY=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=LAiCT48cWfLm7s/Qi781s8RcKxLPuwos03bIGtQxAOiGatxkEHNkQX9tlLsVaLlA/
-         +gMHbBht/OQ26yNsOaS3bNUeKIhwKyvFWQNTKLjT3EO8okdbAqUrLiDGa0NBFFfy77
-         t4uiayVOEan2qDs1T2LWQHz9oP/9jPlcoq9qXJnQ=
-Received: from DFLE105.ent.ti.com (dfle105.ent.ti.com [10.64.6.26])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 21MLQgUv093354
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 22 Feb 2022 15:26:42 -0600
-Received: from DFLE115.ent.ti.com (10.64.6.36) by DFLE105.ent.ti.com
- (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Tue, 22
- Feb 2022 15:26:42 -0600
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE115.ent.ti.com
- (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Tue, 22 Feb 2022 15:26:42 -0600
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 21MLQgU8074960;
-        Tue, 22 Feb 2022 15:26:42 -0600
-Date:   Tue, 22 Feb 2022 15:26:42 -0600
-From:   Nishanth Menon <nm@ti.com>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-CC:     Rahul T R <r-ravikumar@ti.com>, <catalin.marinas@arm.com>,
-        <will@kernel.org>, <shawnguo@kernel.org>, <krzk@kernel.org>,
-        <geert+renesas@glider.be>, <marcel.ziswiler@toradex.com>,
-        <biju.das.jz@bp.renesas.com>, <vkoul@kernel.org>,
-        <enric.balletbo@collabora.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <tomi.valkeinen@ideasonboard.com>,
-        <laurent.pinchart@ideasonboard.com>
-Subject: Re: [PATCH] arm64: defconfig: Enable configs for DisplayPort on J721e
-Message-ID: <20220222212642.vwtw7xiz7cck63ea@zombie>
-References: <20220222180703.30401-1-r-ravikumar@ti.com>
- <20220222193930.sbc5xlsofhg3amgk@overrun>
- <YhVKSpMOKWzZy9a2@ripper>
+        Tue, 22 Feb 2022 16:27:27 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACD2D710CA;
+        Tue, 22 Feb 2022 13:27:00 -0800 (PST)
+Date:   Tue, 22 Feb 2022 21:26:57 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1645565218;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=6WiCZNydujctLgPnBX854JnldmTGegwlAAABgUfJddY=;
+        b=VskNhBmIrgTc4lx2JETDXkQwhn4L6Xw88l+EyjKfXMyxU14D2l1IuzDD5tjE3XZFUNwlUr
+        oLTzrmbdgMIHfGJ9mKmoht7K+Wx3JpIAs46NF3tV1giWMH78oOK811i+cLiV9287K51s2d
+        ZwbW6n1h5pt4aMDE+bP8krKaW/KHXYjZKjomwgVXBKMpsKgphMgBfOkT+43p0PQqY6uIWh
+        Dr3246h9XCEL/lntvIxwpBoXKnYqLmidlcFETgMsOybf8PYWLVNvaIihHGvae2hQ3S7RNK
+        DX4T/4cb6qCeOzjKOHRKDBkKLGsFlMBTV4iSVGC3eP7yndXl0Rpxf13wgwwpZw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1645565218;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=6WiCZNydujctLgPnBX854JnldmTGegwlAAABgUfJddY=;
+        b=uF+6FK8wJTGaGK2hMN+yO4rXmmyLaw701/SBhTnmHMIQgkj8WcmVAKEeR8uhC/WSZCC+XL
+        VyeFfCzCRAQaW8DA==
+From:   "tip-bot2 for Sebastian Andrzej Siewior" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: core/core] fork: Use IS_ENABLED() in account_kernel_stack()
+Cc:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Andy Lutomirski <luto@kernel.org>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20220217102406.3697941-9-bigeasy@linutronix.de>
+References: <20220217102406.3697941-9-bigeasy@linutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <YhVKSpMOKWzZy9a2@ripper>
-User-Agent: NeoMutt/20171215
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Message-ID: <164556521749.16921.5599945951709302903.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12:40-20220222, Bjorn Andersson wrote:
-> On Tue 22 Feb 11:39 PST 2022, Nishanth Menon wrote:
-> 
-> > On 23:37-20220222, Rahul T R wrote:
-> > > Enable DRM and PHY configs required for supporting
-> > > DisplayPort on J721e
-> > > 
-> > > Signed-off-by: Rahul T R <r-ravikumar@ti.com>
-> > > ---
-> > >  arch/arm64/configs/defconfig | 5 +++++
-> > >  1 file changed, 5 insertions(+)
-> > > 
-> > > diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-> > > index 9f23d7ec1232..b0cb894a392e 100644
-> > > --- a/arch/arm64/configs/defconfig
-> > > +++ b/arch/arm64/configs/defconfig
-> > > @@ -702,6 +702,9 @@ CONFIG_DRM_EXYNOS_DSI=y
-> > >  CONFIG_DRM_EXYNOS_HDMI=y
-> > >  CONFIG_DRM_EXYNOS_MIC=y
-> > >  CONFIG_DRM_ROCKCHIP=m
-> > > +CONFIG_DRM_TIDSS=m
-> > > +CONFIG_DRM_DISPLAY_CONNECTOR=m
-> > > +CONFIG_DRM_CDNS_MHDP8546=m
-> > 
-> > Please use savedefconfig to place the changes in the correct location
-> > 
-> 
-> Just to clarify the request, use "make savedefconfig" to generate a
-> defconfig, then based on that put _only_ the relevant changes in the
-> commit.
+The following commit has been merged into the core/core branch of tip:
 
-Yup, thanks for clarifying.
-> 
-> > Also indicate changes if any in vmlinux in commit message.
-> > 
-> 
-> Nishanth, what are you asking for here? Just a mentioning if this has
-> any impact to vmlinux (or is isolated to the modules selected), or are
-> you asking for anything specific?
+Commit-ID:     0ce055f85335e48bc571114d61a70ae217039362
+Gitweb:        https://git.kernel.org/tip/0ce055f85335e48bc571114d61a70ae217039362
+Author:        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+AuthorDate:    Thu, 17 Feb 2022 11:24:06 +01:00
+Committer:     Thomas Gleixner <tglx@linutronix.de>
+CommitterDate: Tue, 22 Feb 2022 22:25:02 +01:00
 
-In this case, just ensure to state that vmlinux size has'nt
-changed, in case where we see a =y, we should indicate via
-./scripts/bloat-o-meter change that is introduced and if yes, we
-should explain why this is fundamental to system boot.
+fork: Use IS_ENABLED() in account_kernel_stack()
 
-Why is this necessary? This is to prevent product specific
-configurations (such as early display banner, chime etc) from creeping
-and increasing vmlinux size which has an impact for all ARM SoCs.
+Not strickly needed but checking CONFIG_VMAP_STACK instead of
+task_stack_vm_area()' result allows the compiler the remove the else
+path in the CONFIG_VMAP_STACK case where the pointer can't be NULL.
 
+Check for CONFIG_VMAP_STACK in order to use the proper path.
 
-[...]
+Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+Acked-by: Andy Lutomirski <luto@kernel.org>
+Link: https://lore.kernel.org/r/20220217102406.3697941-9-bigeasy@linutronix.de
 
--- 
-Regards,
-Nishanth Menon
-Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
+---
+ kernel/fork.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/kernel/fork.c b/kernel/fork.c
+index 177bc64..1279b57 100644
+--- a/kernel/fork.c
++++ b/kernel/fork.c
+@@ -485,16 +485,16 @@ void vm_area_free(struct vm_area_struct *vma)
+ 
+ static void account_kernel_stack(struct task_struct *tsk, int account)
+ {
+-	void *stack = task_stack_page(tsk);
+-	struct vm_struct *vm = task_stack_vm_area(tsk);
+-
+-	if (vm) {
++	if (IS_ENABLED(CONFIG_VMAP_STACK)) {
++		struct vm_struct *vm = task_stack_vm_area(tsk);
+ 		int i;
+ 
+ 		for (i = 0; i < THREAD_SIZE / PAGE_SIZE; i++)
+ 			mod_lruvec_page_state(vm->pages[i], NR_KERNEL_STACK_KB,
+ 					      account * (PAGE_SIZE / 1024));
+ 	} else {
++		void *stack = task_stack_page(tsk);
++
+ 		/* All stack pages are in the same node. */
+ 		mod_lruvec_kmem_state(stack, NR_KERNEL_STACK_KB,
+ 				      account * (THREAD_SIZE / 1024));

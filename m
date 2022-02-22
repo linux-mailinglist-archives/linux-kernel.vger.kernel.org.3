@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED5B24BF792
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 13:00:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 70E7D4BF793
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 13:01:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231912AbiBVMBS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 07:01:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48298 "EHLO
+        id S231923AbiBVMBW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 07:01:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229801AbiBVMAa (ORCPT
+        with ESMTP id S231821AbiBVMAa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 22 Feb 2022 07:00:30 -0500
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CC59158D9E
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 04:00:02 -0800 (PST)
-Received: by mail-wm1-x32d.google.com with SMTP id x3-20020a05600c21c300b0037c01ad715bso1621508wmj.2
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 04:00:02 -0800 (PST)
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 644E3158DAA
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 04:00:03 -0800 (PST)
+Received: by mail-wr1-x42f.google.com with SMTP id s13so4184633wrb.6
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 04:00:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=aQBKVZb4u7024qTgLZ2s864oDNFbW3uHg+4te5BtCOE=;
-        b=NYMWNbipBHYZahgQldqX2PZzyaPbcRUJoLxmAPDUeUPfy5PNMVxXp0eSsSO2WzlHjO
-         Ebg5DrRYGU6SGuiK88+kTtiVolqzZbtTqH4KOxvVat6cVeLM0+zHnRCl+ED4GBpIFFaB
-         ARwwm+kk4Pd0P6FNhJDthT4UoPdUlzia+rVbbp6w2r2U075/4k3SS2PL3OBujcXZ8Zc+
-         mwYp2McLJSiJCzEVuZxeg2/H5b3gnZ9E6kY4PXGZE6Sro8a68IHIFI40yvDVHPvqSkI6
-         udI0pHlccfsH5bIi3uNUcV8bhIQ+0shbrzMfGV84lMYiGAOoy5y/cNDoNdE4Z5Y2bwQ7
-         vzYw==
+        bh=KcD87WuVqOE7wlGnuGasxFMiIGXUTo8Tdbjfbz+gy5A=;
+        b=x1SxOjEVDF/UusL/0LmmHYeP0Ofgtl2s6OI52+vXm+z6+SMO49T6Id0LmiWeUHvsDH
+         SpTiR+thuI4SqWpu2ywNUvbEfT1kEJJB8NtRY3bAZTJpg5aVcM4vc2G4SItQhBR5rr1b
+         Xx00hhIXMj+QrW19dcIzCIXRL5hDOSDKGIkSFrjH9hqd3LCeWKhyWXoK1qQTJCc77P9D
+         lr6ShwJhp2T/tmanl6XbQEDs/o1U5rbhgpT6m430LS2DnjIr8IBAbJLuNWbloc8wMBGc
+         UwdTqrsM/NkXi4PZRZXO46e9uUiarx856HcPfqfr2VHsrlhhFShpwOPEzcFQobtvEx5P
+         eWGg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=aQBKVZb4u7024qTgLZ2s864oDNFbW3uHg+4te5BtCOE=;
-        b=TB6Uue9GCOUBmh03i9XcZA/4+zKbB6UhZRVFTJDJfWrr1vubdkB6jlhNYsVwE8x0YH
-         A5wsW8UUSKCsTu0sSJi7ANAXpbiJ9oC/JlT2kIWf46nc9pyUqdwhiKC0Hm82INQlXCfX
-         XVsbMtrLFmrNI/h5/TTa5SW0xfcFpT3poh16KpaI5uJLVkvBmUZo/p+LLXtDPbLLPfUZ
-         wIoX4Pi59T4vw+83Pyku6ZmvdcsxR9LELOOAWCN8lJjW7/HIyJltuXgytOpN90VXyNz6
-         JZ5JUpdV2kkcM/1dam9o+KHNWJz+m2wasgJKSZoJx9s+XqQg7Fg9sKMMOIYVClwqQMCA
-         8+yA==
-X-Gm-Message-State: AOAM531Rl8adDSllGMP36SuWhcbaEA9xHRRxplYQdXWBtxBy8pJaXXbP
-        ytTxlFr3A2d4icAT7iNJ9AnOYw==
-X-Google-Smtp-Source: ABdhPJz7QFBQZkBwyxemqJekiErYbd5W8OP3oWFf3xc+jJ27/6at0TozdCdAYIg/aUnO/t13yodIqA==
-X-Received: by 2002:a05:600c:4e12:b0:37b:ebf6:3d17 with SMTP id b18-20020a05600c4e1200b0037bebf63d17mr3061640wmq.44.1645531200990;
-        Tue, 22 Feb 2022 04:00:00 -0800 (PST)
+        bh=KcD87WuVqOE7wlGnuGasxFMiIGXUTo8Tdbjfbz+gy5A=;
+        b=QPFoPxeFIXY/jacq7HFisLEcilXGund4GIVm3/GYDbeedrcCpUX73vz9un/pqpUw4p
+         DxaE60BPKWrTDoXJCZvT/NTflE1oaxKSVU2B6Uv/tubM5vs845IcM5SoLWi4KVJnmkH1
+         l3qImnYK36g6J7Z6SsQSZgdyPQU+SF4NV+gGQTAJdAxhcPcdLUuszCcFh4BGz1ZHmpP4
+         daBC827kHNP/GCWh+xEYK0NYr7w+1BO925P3iOXk6+XR/Ei91gxpgj5LX79Yjlx2MKzS
+         Szf74/3KmXNc+9eItn6WoVCD1GoKqr3Dr5BHITW3h5bjNHzzNv5J42hqHCYZfrWr2zM4
+         v8Ew==
+X-Gm-Message-State: AOAM530LOJOD2FcoD6KfZc+7/Xp/VvmMnr+aVYRlnrpdSd5NDc1xUiaf
+        G0/J7RWHMFl8Kz/DWCDk7UCy6w==
+X-Google-Smtp-Source: ABdhPJxmeBWo72PiNWEHoBgszTA9DNaXGtpZ+YmdIUWLfk09iBTb+c6uKkES/taiEMzmaAR2NhJlpA==
+X-Received: by 2002:a05:6000:2ae:b0:1ea:78a3:fe7e with SMTP id l14-20020a05600002ae00b001ea78a3fe7emr4284839wry.682.1645531201945;
+        Tue, 22 Feb 2022 04:00:01 -0800 (PST)
 Received: from srini-hackbox.lan (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
-        by smtp.gmail.com with ESMTPSA id a18sm50014661wrg.13.2022.02.22.04.00.00
+        by smtp.gmail.com with ESMTPSA id a18sm50014661wrg.13.2022.02.22.04.00.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Feb 2022 04:00:00 -0800 (PST)
+        Tue, 22 Feb 2022 04:00:01 -0800 (PST)
 From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 To:     broonie@kernel.org
 Cc:     lgirdwood@gmail.com, perex@perex.cz, tiwai@suse.com,
         pierre-louis.bossart@linux.intel.com, alsa-devel@alsa-project.org,
         linux-kernel@vger.kernel.org, quic_srivasam@quicinc.com,
         Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Subject: [PATCH 13/16] ASoC: codecs: wsa-macro: fix tlv min max range
-Date:   Tue, 22 Feb 2022 11:59:30 +0000
-Message-Id: <20220222115933.9114-14-srinivas.kandagatla@linaro.org>
+Subject: [PATCH 14/16] ASoC: codecs: wcd938x: fix tlv min max range
+Date:   Tue, 22 Feb 2022 11:59:31 +0000
+Message-Id: <20220222115933.9114-15-srinivas.kandagatla@linaro.org>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20220222115933.9114-1-srinivas.kandagatla@linaro.org>
 References: <20220222115933.9114-1-srinivas.kandagatla@linaro.org>
@@ -85,28 +85,131 @@ So fix this min max range correctly to
 SOC_SINGLE_S8_TLV("... Volume", ..,  0, 124, gain)
 so that users can now set gain correctly
 
-Fixes: 809bcbcecebf ("ASoC: codecs: lpass-wsa-macro: Add support to WSA Macro")
+Fixes: 1cde8b822332 ("ASoC: wcd934x: add basic controls")
 Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 ---
- sound/soc/codecs/lpass-wsa-macro.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ sound/soc/codecs/wcd934x.c | 62 +++++++++++++++++++-------------------
+ 1 file changed, 31 insertions(+), 31 deletions(-)
 
-diff --git a/sound/soc/codecs/lpass-wsa-macro.c b/sound/soc/codecs/lpass-wsa-macro.c
-index 7de09c46264b..b769fb2ef2f6 100644
---- a/sound/soc/codecs/lpass-wsa-macro.c
-+++ b/sound/soc/codecs/lpass-wsa-macro.c
-@@ -1929,9 +1929,9 @@ static const struct snd_kcontrol_new wsa_macro_snd_controls[] = {
- 			wsa_macro_soft_clip_enable_put),
+diff --git a/sound/soc/codecs/wcd934x.c b/sound/soc/codecs/wcd934x.c
+index ab580f37cf00..5e45d5eec7c2 100644
+--- a/sound/soc/codecs/wcd934x.c
++++ b/sound/soc/codecs/wcd934x.c
+@@ -3996,83 +3996,83 @@ static const struct snd_kcontrol_new wcd934x_snd_controls[] = {
+ 	SOC_SINGLE_TLV("ADC4 Volume", WCD934X_ANA_AMIC4, 0, 20, 0, analog_gain),
  
- 	SOC_SINGLE_S8_TLV("WSA_RX0 Digital Volume", CDC_WSA_RX0_RX_VOL_CTL,
+ 	SOC_SINGLE_S8_TLV("RX0 Digital Volume", WCD934X_CDC_RX0_RX_VOL_CTL,
+-			  -84, 40, digital_gain), /* -84dB min - 40dB max */
++			  0, 124, digital_gain), /* -84dB min - 40dB max */
+ 	SOC_SINGLE_S8_TLV("RX1 Digital Volume", WCD934X_CDC_RX1_RX_VOL_CTL,
 -			  -84, 40, digital_gain),
 +			  0, 124, digital_gain),
- 	SOC_SINGLE_S8_TLV("WSA_RX1 Digital Volume", CDC_WSA_RX1_RX_VOL_CTL,
+ 	SOC_SINGLE_S8_TLV("RX2 Digital Volume", WCD934X_CDC_RX2_RX_VOL_CTL,
+-			  -84, 40, digital_gain),
++			  0, 124, digital_gain),
+ 	SOC_SINGLE_S8_TLV("RX3 Digital Volume", WCD934X_CDC_RX3_RX_VOL_CTL,
+-			  -84, 40, digital_gain),
++			  0, 124, digital_gain),
+ 	SOC_SINGLE_S8_TLV("RX4 Digital Volume", WCD934X_CDC_RX4_RX_VOL_CTL,
+-			  -84, 40, digital_gain),
++			  0, 124, digital_gain),
+ 	SOC_SINGLE_S8_TLV("RX7 Digital Volume", WCD934X_CDC_RX7_RX_VOL_CTL,
+-			  -84, 40, digital_gain),
++			  0, 124, digital_gain),
+ 	SOC_SINGLE_S8_TLV("RX8 Digital Volume", WCD934X_CDC_RX8_RX_VOL_CTL,
+-			  -84, 40, digital_gain),
++			  0, 124, digital_gain),
+ 	SOC_SINGLE_S8_TLV("RX0 Mix Digital Volume",
+ 			  WCD934X_CDC_RX0_RX_VOL_MIX_CTL,
+-			  -84, 40, digital_gain),
++			  0, 124, digital_gain),
+ 	SOC_SINGLE_S8_TLV("RX1 Mix Digital Volume",
+ 			  WCD934X_CDC_RX1_RX_VOL_MIX_CTL,
+-			  -84, 40, digital_gain),
++			  0, 124, digital_gain),
+ 	SOC_SINGLE_S8_TLV("RX2 Mix Digital Volume",
+ 			  WCD934X_CDC_RX2_RX_VOL_MIX_CTL,
+-			  -84, 40, digital_gain),
++			  0, 124, digital_gain),
+ 	SOC_SINGLE_S8_TLV("RX3 Mix Digital Volume",
+ 			  WCD934X_CDC_RX3_RX_VOL_MIX_CTL,
+-			  -84, 40, digital_gain),
++			  0, 124, digital_gain),
+ 	SOC_SINGLE_S8_TLV("RX4 Mix Digital Volume",
+ 			  WCD934X_CDC_RX4_RX_VOL_MIX_CTL,
+-			  -84, 40, digital_gain),
++			  0, 124, digital_gain),
+ 	SOC_SINGLE_S8_TLV("RX7 Mix Digital Volume",
+ 			  WCD934X_CDC_RX7_RX_VOL_MIX_CTL,
+-			  -84, 40, digital_gain),
++			  0, 124, digital_gain),
+ 	SOC_SINGLE_S8_TLV("RX8 Mix Digital Volume",
+ 			  WCD934X_CDC_RX8_RX_VOL_MIX_CTL,
 -			  -84, 40, digital_gain),
 +			  0, 124, digital_gain),
  
- 	SOC_SINGLE("WSA_RX0 Digital Mute", CDC_WSA_RX0_RX_PATH_CTL, 4, 1, 0),
- 	SOC_SINGLE("WSA_RX1 Digital Mute", CDC_WSA_RX1_RX_PATH_CTL, 4, 1, 0),
+ 	SOC_SINGLE_S8_TLV("DEC0 Volume", WCD934X_CDC_TX0_TX_VOL_CTL,
+-			  -84, 40, digital_gain),
++			  0, 124, digital_gain),
+ 	SOC_SINGLE_S8_TLV("DEC1 Volume", WCD934X_CDC_TX1_TX_VOL_CTL,
+-			  -84, 40, digital_gain),
++			  0, 124, digital_gain),
+ 	SOC_SINGLE_S8_TLV("DEC2 Volume", WCD934X_CDC_TX2_TX_VOL_CTL,
+-			  -84, 40, digital_gain),
++			  0, 124, digital_gain),
+ 	SOC_SINGLE_S8_TLV("DEC3 Volume", WCD934X_CDC_TX3_TX_VOL_CTL,
+-			  -84, 40, digital_gain),
++			  0, 124, digital_gain),
+ 	SOC_SINGLE_S8_TLV("DEC4 Volume", WCD934X_CDC_TX4_TX_VOL_CTL,
+-			  -84, 40, digital_gain),
++			  0, 124, digital_gain),
+ 	SOC_SINGLE_S8_TLV("DEC5 Volume", WCD934X_CDC_TX5_TX_VOL_CTL,
+-			  -84, 40, digital_gain),
++			  0, 124, digital_gain),
+ 	SOC_SINGLE_S8_TLV("DEC6 Volume", WCD934X_CDC_TX6_TX_VOL_CTL,
+-			  -84, 40, digital_gain),
++			  0, 124, digital_gain),
+ 	SOC_SINGLE_S8_TLV("DEC7 Volume", WCD934X_CDC_TX7_TX_VOL_CTL,
+-			  -84, 40, digital_gain),
++			  0, 124, digital_gain),
+ 	SOC_SINGLE_S8_TLV("DEC8 Volume", WCD934X_CDC_TX8_TX_VOL_CTL,
+-			  -84, 40, digital_gain),
++			  0, 124, digital_gain),
+ 
+ 	SOC_SINGLE_S8_TLV("IIR0 INP0 Volume",
+-			  WCD934X_CDC_SIDETONE_IIR0_IIR_GAIN_B1_CTL, -84, 40,
++			  WCD934X_CDC_SIDETONE_IIR0_IIR_GAIN_B1_CTL, 0, 124,
+ 			  digital_gain),
+ 	SOC_SINGLE_S8_TLV("IIR0 INP1 Volume",
+-			  WCD934X_CDC_SIDETONE_IIR0_IIR_GAIN_B2_CTL, -84, 40,
++			  WCD934X_CDC_SIDETONE_IIR0_IIR_GAIN_B2_CTL, 0, 124,
+ 			  digital_gain),
+ 	SOC_SINGLE_S8_TLV("IIR0 INP2 Volume",
+-			  WCD934X_CDC_SIDETONE_IIR0_IIR_GAIN_B3_CTL, -84, 40,
++			  WCD934X_CDC_SIDETONE_IIR0_IIR_GAIN_B3_CTL, 0, 124,
+ 			  digital_gain),
+ 	SOC_SINGLE_S8_TLV("IIR0 INP3 Volume",
+-			  WCD934X_CDC_SIDETONE_IIR0_IIR_GAIN_B4_CTL, -84, 40,
++			  WCD934X_CDC_SIDETONE_IIR0_IIR_GAIN_B4_CTL, 0, 124,
+ 			  digital_gain),
+ 	SOC_SINGLE_S8_TLV("IIR1 INP0 Volume",
+-			  WCD934X_CDC_SIDETONE_IIR1_IIR_GAIN_B1_CTL, -84, 40,
++			  WCD934X_CDC_SIDETONE_IIR1_IIR_GAIN_B1_CTL, 0, 124,
+ 			  digital_gain),
+ 	SOC_SINGLE_S8_TLV("IIR1 INP1 Volume",
+-			  WCD934X_CDC_SIDETONE_IIR1_IIR_GAIN_B2_CTL, -84, 40,
++			  WCD934X_CDC_SIDETONE_IIR1_IIR_GAIN_B2_CTL, 0, 124,
+ 			  digital_gain),
+ 	SOC_SINGLE_S8_TLV("IIR1 INP2 Volume",
+-			  WCD934X_CDC_SIDETONE_IIR1_IIR_GAIN_B3_CTL, -84, 40,
++			  WCD934X_CDC_SIDETONE_IIR1_IIR_GAIN_B3_CTL, 0, 124,
+ 			  digital_gain),
+ 	SOC_SINGLE_S8_TLV("IIR1 INP3 Volume",
+-			  WCD934X_CDC_SIDETONE_IIR1_IIR_GAIN_B4_CTL, -84, 40,
++			  WCD934X_CDC_SIDETONE_IIR1_IIR_GAIN_B4_CTL, 0, 124,
+ 			  digital_gain),
+ 
+ 	SOC_ENUM("TX0 HPF cut off", cf_dec0_enum),
 -- 
 2.21.0
 

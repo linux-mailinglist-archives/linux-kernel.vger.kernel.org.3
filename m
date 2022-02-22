@@ -2,56 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBC864C0410
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 22:48:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F9684C041C
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 22:50:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235870AbiBVVs7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 16:48:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44650 "EHLO
+        id S235881AbiBVVuf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 16:50:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233604AbiBVVs4 (ORCPT
+        with ESMTP id S235874AbiBVVue (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 16:48:56 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBB7D74DCD;
-        Tue, 22 Feb 2022 13:48:29 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: nfraprado)
-        with ESMTPSA id A00891F42DED
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1645566507;
-        bh=AgYGHjexhKTkzbHlv7iW5IsUbYss5lL+060iqAyLlvA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=FIcY+qfugfCKqmY96XmKSLJ8t3CWTMJ04f9BSGhLdx2wGJr8JiSFHIHYA+tNV9itK
-         i/lz5Ll63lB5o3lxPPk3RvoQTBXgOg/EjyC4GcwRdCJifG37P3idfDtjIShLhOq7Ac
-         WYjA7pOBmBLQ5t2aKEw57Z6Ab4oYlz4Vyr5pQBWAxDc9/RSDzzZpWcuITE4ZCS3X3s
-         tmEu8wJuuydJhI29smm3Kyfrk6Ct8CGGcCuSptf5iLMZddoGdJJM3ozqOr+L6kNbc/
-         TnDglFIW/hiw9+lPlZ0LPlnFU5dBKCpI2CqfKFI0LqCJ3nfYEfenJ+ejqZniSQdTDC
-         hwK5I6SeWFLNw==
-Date:   Tue, 22 Feb 2022 16:48:22 -0500
-From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
-        <nfraprado@collabora.com>
-To:     Allen-KH Cheng <allen-kh.cheng@mediatek.com>
-Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        --to=Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        Chen-Yu Tsai <wenst@chromium.org>,
-        Ryder Lee <ryder.lee@kernel.org>
-Subject: Re: [PATCH v2 15/23] arm64: dts: mt8192: Add m4u and smi nodes
-Message-ID: <20220222214822.3sxsbjrtm6ild6rx@notapiano>
-References: <20220218091633.9368-1-allen-kh.cheng@mediatek.com>
- <20220218091633.9368-16-allen-kh.cheng@mediatek.com>
+        Tue, 22 Feb 2022 16:50:34 -0500
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7931A8021C
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 13:50:08 -0800 (PST)
+Received: by mail-ed1-x535.google.com with SMTP id s14so22857399edw.0
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 13:50:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=MDe1/XbZZwpMzP4Bd4iYW6ooJa1SuvyIIVKBTpf5jUo=;
+        b=JIbNmgkRgP4fmF8fqKDxZPoO3hitMDXsTDRzZdAS3R1lGW5Qw/2Pfw8K2nfHxZpCxZ
+         CMraYxwZL0nqKfhrIzAlWOz+jA4Q6lyHsTp9H2qhakiBhCRJmo2r7cSThBodJyHwFBhC
+         9sy0CGhOAlttN6NzFmMpVWtPN3xc3gm7AOi00=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=MDe1/XbZZwpMzP4Bd4iYW6ooJa1SuvyIIVKBTpf5jUo=;
+        b=toJfDhv+wPcouKguAtegrUCwr3H0LqcVzvNPo8eLckXcjD+enqpXNrgSuzoQa/tPrG
+         zJE4t0BCnCIqxV8fvgPSQb5XAEP33normWSVSrw7h201VBaJJKuM0n+b892P6UDGVyHo
+         MfJUdV8LD7moyzg6srmglq0srF2uy+D/ry6FCvmS3oSJoapPA61YNktEiJ6z6hdF+rlo
+         /k/S3rwQ9W/sd2r3gdsceeFAZqxJ0+4qLzaAlh21myz32ESCr4YPrhKW/0JtHjCDtSxi
+         p/xODBnG8l+6k+UWl08J2RIe7hAcdKzzwKSUGrB/5PIKfFSgmNCHPXkqqMBl7zkb8jOW
+         1lLg==
+X-Gm-Message-State: AOAM530GvgVV1eyMafI9UoCvOCJO4ZOJAPk98nsuPs/hBCpD0Y26kalA
+        e2imkSwRH3oO2L+uD/IdkA2Bnt5inJQpBBSseEc=
+X-Google-Smtp-Source: ABdhPJx7TqTIsajIMjJ8eMdnLJ4+aTOw1FpGvKl5K/2vTD7/nqMMJDVyqw6RsEhv0ObayJJJzd2tzQ==
+X-Received: by 2002:a05:6402:34d1:b0:410:fede:429b with SMTP id w17-20020a05640234d100b00410fede429bmr28400231edc.250.1645566606583;
+        Tue, 22 Feb 2022 13:50:06 -0800 (PST)
+Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com. [209.85.221.44])
+        by smtp.gmail.com with ESMTPSA id el5sm10392268edb.71.2022.02.22.13.50.04
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 22 Feb 2022 13:50:04 -0800 (PST)
+Received: by mail-wr1-f44.google.com with SMTP id f17so11135890wrh.7
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 13:50:04 -0800 (PST)
+X-Received: by 2002:a5d:64ea:0:b0:1ea:8148:6b97 with SMTP id
+ g10-20020a5d64ea000000b001ea81486b97mr4692080wri.679.1645566604132; Tue, 22
+ Feb 2022 13:50:04 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220218091633.9368-16-allen-kh.cheng@mediatek.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+References: <1645449126-17718-1-git-send-email-quic_vpolimer@quicinc.com>
+ <CAE-0n507XcYRz4=Uw-K37kPsLRqi_gN2L9y1wcu_X-UJP+6ySg@mail.gmail.com>
+ <CAD=FV=WvstZkDJcHJPAT0aez3X=uSKzDX0paQRHYD4DEktkMEQ@mail.gmail.com> <CAE-0n51V+bfDUb_heV_DVkS+KOzDcjYzxpU=E8cCGFESrUwpeg@mail.gmail.com>
+In-Reply-To: <CAE-0n51V+bfDUb_heV_DVkS+KOzDcjYzxpU=E8cCGFESrUwpeg@mail.gmail.com>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Tue, 22 Feb 2022 13:49:51 -0800
+X-Gmail-Original-Message-ID: <CAD=FV=XAvq5LuhZua3FU39RRsicC2dzGAZkG4NHYx8QaP7ov4A@mail.gmail.com>
+Message-ID: <CAD=FV=XAvq5LuhZua3FU39RRsicC2dzGAZkG4NHYx8QaP7ov4A@mail.gmail.com>
+Subject: Re: [v1] arm64/dts/qcom/sc7280: update mdp clk to max supported value
+ to support higher refresh rates
+To:     Stephen Boyd <swboyd@chromium.org>
+Cc:     Vinod Polimera <quic_vpolimer@quicinc.com>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        freedreno <freedreno@lists.freedesktop.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        quic_kalyant@quicinc.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,20 +84,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 18, 2022 at 05:16:25PM +0800, Allen-KH Cheng wrote:
-> +		larb16: larb@1a00f000 {
-> +			compatible = "mediatek,mt8192-smi-larb";
-> +			reg = <0 0x1a00f000 0 0x1000>;
-> +			mediatek,larb-id = <16>;
-> +			mediatek,smi = <&smi_common>;
-> +			clocks = <&camsys_rawa CLK_CAM_RAWA_CAM>,
-> +				 <&camsys_rawa CLK_CAM_RAWA_LARBX>;
-> +			clock-names = "apb", "smi";
-> +			mediatek,smi-id = <16>;
+Hi,
 
-This mediatek,smi-id property isn't handled in the driver or mentioned in the
-dt-binding, and seems redundant to mediatek,larb-id. So just drop it.
+On Tue, Feb 22, 2022 at 1:46 PM Stephen Boyd <swboyd@chromium.org> wrote:
+>
+> Quoting Doug Anderson (2022-02-22 13:25:05)
+> > Hi,
+> >
+> > On Tue, Feb 22, 2022 at 12:58 PM Stephen Boyd <swboyd@chromium.org> wrote:
+> > >
+> > > Quoting Vinod Polimera (2022-02-21 05:12:06)
+> > > > Panels with higher refresh rate will need mdp clk above 300Mhz.
+> > > > Select max frequency for mdp clock during bootup, dpu driver will
+> > > > scale down the clock as per usecase when first update from the framework is received.
+> > > >
+> > > > Signed-off-by: Vinod Polimera <quic_vpolimer@quicinc.com>
+> > >
+> > > Please add a Fixes tag.
+> > >
+> > > > ---
+> > > >  arch/arm64/boot/dts/qcom/sc7280.dtsi | 2 +-
+> > > >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > > >
+> > > > diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+> > > > index baf1653..7af96fc 100644
+> > > > --- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
+> > > > +++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+> > > > @@ -2895,7 +2895,7 @@
+> > > >                                 assigned-clocks = <&dispcc DISP_CC_MDSS_MDP_CLK>,
+> > > >                                                 <&dispcc DISP_CC_MDSS_VSYNC_CLK>,
+> > > >                                                 <&dispcc DISP_CC_MDSS_AHB_CLK>;
+> > > > -                               assigned-clock-rates = <300000000>,
+> > > > +                               assigned-clock-rates = <506666667>,
+> > >
+> > > Why not simply remove the clock assignment and set the rate based on the
+> > > OPP when the driver probes?
+> >
+> > I was curious so I dug. It turns out that it _is_ using the OPP. It's
+> > just that the kernel driver currently assumes that the initial rate is
+> > the max rate. :-P You can actually see in msm_dss_parse_clock() that
+> > it walks through each of its clocks at boot and records the boot rate
+> > and stashes it as the "max_rate". That's not a scheme I've seen done
+> > commonly, so if nothing else it deserves a comment in the commit
+> > message.
+>
+> That sounds like a scheme to detect the max frequency of the clk before
+> an OPP table is written. It would be better to convert that code to use
+> OPP tables if available and then drop this assigned clock property from
+> the DT (in both places).
 
-Other than that,
+Ah, good point! You could just check what the max OPP table rate is.
+Then you don't need to worry about specifying the same clock rate
+twice.
 
-Reviewed-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+
+> > One other note is that I think there are _two_ places in the dtsi that
+> > are setting this same clock rate, right? The parent node `mdss`, which
+> > you're not touching, and the child `mdss_mdp`, which you are touching.
+> > Seems like you should just do it in one place. If it needs to be done
+> > by the parent then the child could just assume that the clock has
+> > already been set by the parent.
+> >
+>
+> I see that it's this way on sc7180 too, which is sad but it seems nobody
+> noticed.
+
+Never too late to fix it! :-)
+
+-Doug

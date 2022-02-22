@@ -2,93 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAC544BF2B6
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 08:40:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F5544BF2AA
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 08:40:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231321AbiBVHbo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 02:31:44 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:60070 "EHLO
+        id S231325AbiBVHcR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 02:32:17 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:34300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231193AbiBVHbk (ORCPT
+        with ESMTP id S229688AbiBVHcP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 02:31:40 -0500
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E034939C1;
-        Mon, 21 Feb 2022 23:31:15 -0800 (PST)
-Received: by mail-pg1-x529.google.com with SMTP id 132so16341050pga.5;
-        Mon, 21 Feb 2022 23:31:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:from:subject:to:cc
-         :references:content-language:in-reply-to:content-transfer-encoding;
-        bh=88T01Xv11IQ7vnlMjdCLjMUwiY0xai49HxAj9U+k4mA=;
-        b=dvWsN85ePVKH9mqPejUMfjPsgCQRH5oyF4hQRpb1yCcdVYxu571HqfkIQ39CJTMTXb
-         th8pKfFZzY4j/qBjDPRg3QK2neRzbk5O9Ghf/yAlBDlLHmjA+p7rqrhaS9O9UMtnJVa8
-         UsaxRJGsmNPuFbj7BXxN3oVwSirX07MBVPrI8pfOwTz0XmNod1k8b8uGjzwtC+abReYr
-         MSvupE8JKJld/vwMdzgDxgrj6k6ZHYqRL4sT5SPqygTJ8gYwHnBexs2xg2qP3zxDg7YS
-         rEjyFzNX5piMoIiBdhcZaQVPtKquX6qRhlUaeSU9cX5SuiRC6IebZBPmHEi2f77DOwsi
-         mOoQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:from
-         :subject:to:cc:references:content-language:in-reply-to
-         :content-transfer-encoding;
-        bh=88T01Xv11IQ7vnlMjdCLjMUwiY0xai49HxAj9U+k4mA=;
-        b=h/yGiOlziBj4W8WgXtYe0zunpspIa6UKLXWgn53dxJ9bocYhx2mHXuO12fmmz46xwK
-         9cQ/rX5WNsEKCAvZ7XlzBGjLsMQ3gMTlAk+7krN+816OeZnYaWNwjIklNM2MfOu5iGip
-         3vV1+DRiDxlBN6uh3Zty14SMJei9HeXuYLg+G2IaeSeD2tWLrR1DIQLS1wh/LQO3AVY4
-         jc6dIFc6Td0dI1swqq8AjMmolzyL0Vivy0py0HI66oBOeVWTwF/NyJQjpNYCkmU8XD6i
-         t0JnPRz9l7QxEHI6lFnhH5tF9NSAeJog8p8EEy31rcVs9hCJD5LJrkKcMRDLNInOBTL9
-         IzlA==
-X-Gm-Message-State: AOAM532ulde89uc6bpFjvqgmb1zmzd1k/jEEt4t3gCmRB1cA4CtfKoal
-        /HsjOtxAwG3sCj3Xl0lAPUY=
-X-Google-Smtp-Source: ABdhPJwLlu5MyrG0vgrOWrQu8O3OeAyFPlCYVszWZqZOLHTFr4YDRZ/cbYKyZpEaDQpcMCxLYKmQng==
-X-Received: by 2002:a63:e5f:0:b0:374:62d8:c551 with SMTP id 31-20020a630e5f000000b0037462d8c551mr3711899pgo.129.1645515074852;
-        Mon, 21 Feb 2022 23:31:14 -0800 (PST)
-Received: from [192.168.43.80] (subs03-180-214-233-30.three.co.id. [180.214.233.30])
-        by smtp.gmail.com with ESMTPSA id oj5sm1429700pjb.29.2022.02.21.23.31.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Feb 2022 23:31:14 -0800 (PST)
-Message-ID: <48821503-5b9b-6459-bcdd-c0950d23ad94@gmail.com>
-Date:   Tue, 22 Feb 2022 14:31:09 +0700
+        Tue, 22 Feb 2022 02:32:15 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88FCB26565;
+        Mon, 21 Feb 2022 23:31:49 -0800 (PST)
+Received: from canpemm500006.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4K2rN53B6Pzbbfj;
+        Tue, 22 Feb 2022 15:27:17 +0800 (CST)
+Received: from [10.174.179.200] (10.174.179.200) by
+ canpemm500006.china.huawei.com (7.192.105.130) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Tue, 22 Feb 2022 15:31:46 +0800
+Subject: Re: [PATCH net] net: vlan: allow vlan device MTU change follow real
+ device from smaller to bigger
+To:     Eric Dumazet <edumazet@google.com>
+CC:     Herbert Xu <herbert@gondor.apana.org.au>,
+        David Miller <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        netdev <netdev@vger.kernel.org>,
+        Vasily Averin <vvs@virtuozzo.com>,
+        Kees Cook <keescook@chromium.org>,
+        LKML <linux-kernel@vger.kernel.org>
+References: <20220221124644.1146105-1-william.xuanziyang@huawei.com>
+ <CANn89iKyWWCbAdv8W26HwGpM9q5+6rrk9E-Lbd2aujFkD3GMaQ@mail.gmail.com>
+ <YhQ1KrtpEr3TgCwA@gondor.apana.org.au>
+ <8248d662-8ea5-7937-6e34-5f1f8e19190f@huawei.com>
+ <CANn89iLf2ira4XponYV91cbvcdK76ekU7fDW93fmuJ3iytFHcw@mail.gmail.com>
+From:   "Ziyang Xuan (William)" <william.xuanziyang@huawei.com>
+Message-ID: <124e1c43-95a8-1aad-c781-b43eba09984a@huawei.com>
+Date:   Tue, 22 Feb 2022 15:31:45 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-Subject: Re: [PATCH 5.16 000/227] 5.16.11-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
-References: <20220221084934.836145070@linuxfoundation.org>
+In-Reply-To: <CANn89iLf2ira4XponYV91cbvcdK76ekU7fDW93fmuJ3iytFHcw@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"
 Content-Language: en-US
-In-Reply-To: <20220221084934.836145070@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Originating-IP: [10.174.179.200]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ canpemm500006.china.huawei.com (7.192.105.130)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/02/22 15.46, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.16.11 release.
-> There are 227 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+> On Mon, Feb 21, 2022 at 6:06 PM Ziyang Xuan (William)
+> <william.xuanziyang@huawei.com> wrote:
+>>
+>>> On Mon, Feb 21, 2022 at 07:43:18AM -0800, Eric Dumazet wrote:
+>>>>
+>>>> Herbert, do you recall why only a decrease was taken into consideration ?
+>>>
+>>> Because we shouldn't override administrative settings of the MTU
+>>> on the vlan device, unless we have to because of an MTU reduction
+>>> on the underlying device.
+>>>
+>>> Yes this is not perfect if the admin never set an MTU to start with
+>>> but as we don't have a way of telling whether the admin has or has
+>>> not changed the MTU setting, the safest course of action is to do
+>>> nothing in that case.
+>> If the admin has changed the vlan device MTU smaller than the underlying
+>> device MTU firstly, then changed the underlying device MTU smaller than
+>> the vlan device MTU secondly. The admin's configuration has been overridden.
+>> Can we consider that the admin's configuration for the vlan device MTU has
+>> been invalid and disappeared after the second change? I think so.
 > 
+> The answer is no.
+> 
+> Herbert is saying:
+> 
+> ip link add link eth1 dev eth1.100 type vlan id 100
+> ...
+> ip link set eth1.100 mtu 800
+> ..
+> ip link set eth1 mtu 256
+> ip link set eth1 mtu 1500
+> 
+> -> we do not want eth1.100 mtu being set back to 1500, this might
+> break applications, depending on old kernel feature.
+>  Eventually, setting back to 800 seems ok.
 
-Successfully cross-compiled for arm64 (bcm2711_defconfig, gcc 10.2.0) and
-powerpc (ps3_defconfig, gcc 11.2.0).
+It seem that setting back to 800 more reasonable. We can record user
+setting MTU by interface ndo_change_mtu() in struct vlan_dev_priv.
 
-Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
-
--- 
-An old man doll... just what I always wanted! - Clara
+> 
+> If you want this new feature, we need to record in eth1.100 device
+> that no admin ever changed the mtu,
+> as Herbert suggested.
+> 
+> Then, it is okay to upgrade the vlan mtu (but still is a behavioral
+> change that _could_ break some scripts)
+> 
+> Thank you.
+> .
+> 

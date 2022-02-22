@@ -2,67 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA33A4BEE8D
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 02:14:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53AC24BEEB4
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 02:14:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237401AbiBVANS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 19:13:18 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59458 "EHLO
+        id S237536AbiBVAQH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 19:16:07 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229609AbiBVANP (ORCPT
+        with ESMTP id S229609AbiBVAQC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 19:13:15 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65A9B24BD3
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 16:12:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645488771; x=1677024771;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=B6bIyErw1V+ZT0CH7UnrGbi1bC79lwExnWzGKpIPTmM=;
-  b=TsiEb0c46OWIxqABmm5EEkMRJlpqbDWlnMGnKbXcWaFkainH/YOX2paW
-   ywg7HsgfiiC1uefAae6rSnp2HCALa8UQy+KInsyq8gzzt4Rf8UiYsGvA7
-   WiwqJjkpYtmFgppbbba/B7MK6ceDYaPxeiDjVAIbqGiMI70ogg1QP6QqM
-   9eBDjdZZfT6ETjtNGZXQuYD9yv8XcDeblF8gxfBodFN8KJssfxgBfPWfD
-   QybuK76NOgKCeGmxAkbhzi8JuVSQbxU0b0axLQh+j0oBvyJZWEOg/G94z
-   G0h1oiNUFWDAHGMrrt6FKpoVwcgf/Gyq4rGSTW9QfFt20+JOL+eoRA80C
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10265"; a="251350190"
-X-IronPort-AV: E=Sophos;i="5.88,386,1635231600"; 
-   d="scan'208";a="251350190"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2022 16:12:51 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,386,1635231600"; 
-   d="scan'208";a="505343046"
-Received: from lkp-server01.sh.intel.com (HELO da3212ac2f54) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 21 Feb 2022 16:12:46 -0800
-Received: from kbuild by da3212ac2f54 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nMInN-00028J-W6; Tue, 22 Feb 2022 00:12:45 +0000
-Date:   Tue, 22 Feb 2022 08:12:17 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Yongzhi Liu <lyz_cs@pku.edu.cn>, jani.nikula@linux.intel.com,
-        joonas.lahtinen@linux.intel.com, rodrigo.vivi@intel.com,
-        tvrtko.ursulin@linux.intel.com, airlied@linux.ie, daniel@ffwll.ch,
-        thomas.hellstrom@linux.intel.com,
-        maarten.lankhorst@linux.intel.com, matthew.auld@intel.com,
-        matthew.d.roper@intel.com, tzimmermann@suse.de,
-        michal.winiarski@intel.com
-Cc:     kbuild-all@lists.01.org, intel-gfx@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH] drm/i915: Check input parameter for NULL
-Message-ID: <202202220847.76w2eWNU-lkp@intel.com>
-References: <1645455221-38580-1-git-send-email-lyz_cs@pku.edu.cn>
+        Mon, 21 Feb 2022 19:16:02 -0500
+Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E164224BFC;
+        Mon, 21 Feb 2022 16:15:37 -0800 (PST)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.west.internal (Postfix) with ESMTP id EFD5E32020A4;
+        Mon, 21 Feb 2022 19:15:34 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute2.internal (MEProxy); Mon, 21 Feb 2022 19:15:35 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=rc93G4/qTvE1ZYiC5
+        yWr1O2C0TkaoFvvFLrkTcp0OiU=; b=Y69o6eJC81KbBulRopMzp6lUJuZ9AISxP
+        +1QcRCFA2Lymy2SX6QdNNij+bpUKjLI7JY4jk6B+bsTE4uvRYLBtYJQVtWxLXOF7
+        MC7BrgMjs73uOxKJd9JXq/llwO7LemYllNLWxpBII5AYt1DEKRPBJVbzniAl47EV
+        I9+klBHWuuqK0ub/hUfvoMiMtMxtH8+AXU2eUhu1qnegNWweYwBpOLP94gcFk3Ed
+        /xZmjxfMLtm6ggHg69s6N6iJbAvkHiohXHuNcbXTJ0JCAuGZGUMILtklyzt0pOtX
+        cCF3DmjcxDKdnzI5Gl1lgGvALIo1R+JX0RkT5U6LWasdG37Dbrdqw==
+X-ME-Sender: <xms:JisUYrJ7-Kx2Gz-DcSLX6JUni2MkM8yWYJQp4AoCgn2hvNSgKKT9zA>
+    <xme:JisUYvKy_JBBMxZSyUGE4ic2Ird8J5qQ0NkL0YVsZKDDDDr5YdhauOPKZEfTegD1y
+    GXHtTTeqwQ4Cw>
+X-ME-Received: <xmr:JisUYjv11Y6MM_noDbeYIUb00bL2l060gnp-_P2lzYgS7yb48dKXZo_tsjqwkhStKt7m7VELWr2YvwyH0hCdhxXSpyzovDUyiw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrkeejgddvtdcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvuffkfhggtggujgesghdtreertddtjeenucfhrhhomhepofgrrhgvkhcu
+    ofgrrhgtiiihkhhofihskhhiqdfikphrvggtkhhiuceomhgrrhhmrghrvghksehinhhvih
+    hsihgslhgvthhhihhnghhslhgrsgdrtghomheqnecuggftrfgrthhtvghrnhepteevffei
+    gffhkefhgfegfeffhfegveeikeettdfhheevieehieeitddugeefteffnecuvehluhhsth
+    gvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepmhgrrhhmrghrvghksehi
+    nhhvihhsihgslhgvthhhihhnghhslhgrsgdrtghomh
+X-ME-Proxy: <xmx:JisUYkbYs4yRQDuWPVpdWhTz-QMKtlgY3G4siF3Azf63M4nIiJq4Rg>
+    <xmx:JisUYia-rc0nv9Ddr695FsbNsEykqpokrW3ZBB2ZlTMV7xRwvbrssA>
+    <xmx:JisUYoC2vmtUkDy87UAuKxSdgXE1Y-PGs7AKNdt35uk5T5MudK5U5A>
+    <xmx:JisUYq7doJGgZO5OJpN9rhB7hPF6DYbyZo9JLQQtjrg4kaKuGWyz8w>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 21 Feb 2022 19:15:32 -0500 (EST)
+Date:   Tue, 22 Feb 2022 01:15:29 +0100
+From:   Marek =?utf-8?Q?Marczykowski-G=C3=B3recki?= 
+        <marmarek@invisiblethingslab.com>
+To:     Juergen Gross <jgross@suse.com>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Antoine Tenart <atenart@kernel.org>,
+        "moderated list:XEN HYPERVISOR INTERFACE" 
+        <xen-devel@lists.xenproject.org>,
+        "open list:NETWORKING DRIVERS" <netdev@vger.kernel.org>
+Subject: Re: [PATCH] xen/netfront: destroy queues before real_num_tx_queues
+ is zeroed
+Message-ID: <YhQrIWyJ4hhEVVNb@mail-itl>
+References: <20220220134202.2187485-1-marmarek@invisiblethingslab.com>
+ <3786b4ef-68e7-5735-0841-fcbae07f7e54@suse.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="+tkBggBQeIzPYW+u"
 Content-Disposition: inline
-In-Reply-To: <1645455221-38580-1-git-send-email-lyz_cs@pku.edu.cn>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+In-Reply-To: <3786b4ef-68e7-5735-0841-fcbae07f7e54@suse.com>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,91 +82,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Yongzhi,
 
-Thank you for the patch! Perhaps something to improve:
+--+tkBggBQeIzPYW+u
+Content-Type: text/plain; protected-headers=v1; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Date: Tue, 22 Feb 2022 01:15:29 +0100
+From: Marek =?utf-8?Q?Marczykowski-G=C3=B3recki?= <marmarek@invisiblethingslab.com>
+To: Juergen Gross <jgross@suse.com>
+Cc: linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+	Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+	Stefano Stabellini <sstabellini@kernel.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Antoine Tenart <atenart@kernel.org>,
+	"moderated list:XEN HYPERVISOR INTERFACE" <xen-devel@lists.xenproject.org>,
+	"open list:NETWORKING DRIVERS" <netdev@vger.kernel.org>
+Subject: Re: [PATCH] xen/netfront: destroy queues before real_num_tx_queues
+ is zeroed
 
-[auto build test WARNING on drm-intel/for-linux-next]
-[also build test WARNING on v5.17-rc5 next-20220217]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+On Mon, Feb 21, 2022 at 07:27:32AM +0100, Juergen Gross wrote:
+> I checked some of the call paths leading to xennet_close(), and all of
+> those contained an ASSERT_RTNL(), so it seems the rtnl_lock is already
+> taken here. Could you test with adding an ASSERT_RTNL() in
+> xennet_destroy_queues()?
 
-url:    https://github.com/0day-ci/linux/commits/Yongzhi-Liu/drm-i915-Check-input-parameter-for-NULL/20220221-225508
-base:   git://anongit.freedesktop.org/drm-intel for-linux-next
-config: x86_64-randconfig-a001-20220221 (https://download.01.org/0day-ci/archive/20220222/202202220847.76w2eWNU-lkp@intel.com/config)
-compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/0day-ci/linux/commit/c54be425a38b3f4cb82c5badecf6b343f9e24a90
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Yongzhi-Liu/drm-i915-Check-input-parameter-for-NULL/20220221-225508
-        git checkout c54be425a38b3f4cb82c5badecf6b343f9e24a90
-        # save the config file to linux build tree
-        mkdir build_dir
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/gpu/drm/i915/
+Tried that and no issues spotted.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+> In case your test with the added ASSERT_RTNL() doesn't show any
+> problem you can add my:
+>=20
+> Reviewed-by: Juergen Gross <jgross@suse.com>
 
-All warnings (new ones prefixed by >>):
+Thanks.
 
-   drivers/gpu/drm/i915/gem/i915_gem_phys.c: In function 'i915_gem_object_put_pages_phys':
->> drivers/gpu/drm/i915/gem/i915_gem_phys.c:100:2: warning: ISO C90 forbids mixed declarations and code [-Wdeclaration-after-statement]
-     100 |  dma_addr_t dma = sg_dma_address(pages->sgl);
-         |  ^~~~~~~~~~
+--=20
+Best Regards,
+Marek Marczykowski-G=C3=B3recki
+Invisible Things Lab
 
+--+tkBggBQeIzPYW+u
+Content-Type: application/pgp-signature; name="signature.asc"
 
-vim +100 drivers/gpu/drm/i915/gem/i915_gem_phys.c
+-----BEGIN PGP SIGNATURE-----
 
-f033428db28bdf Chris Wilson      2019-05-28   93  
-a61170975718d5 Maarten Lankhorst 2021-03-23   94  void
-f033428db28bdf Chris Wilson      2019-05-28   95  i915_gem_object_put_pages_phys(struct drm_i915_gem_object *obj,
-f033428db28bdf Chris Wilson      2019-05-28   96  			       struct sg_table *pages)
-f033428db28bdf Chris Wilson      2019-05-28   97  {
-c54be425a38b3f Yongzhi Liu       2022-02-21   98  	if (!pages)
-c54be425a38b3f Yongzhi Liu       2022-02-21   99  		return;
-c6790dc22312f5 Chris Wilson      2020-02-02 @100  	dma_addr_t dma = sg_dma_address(pages->sgl);
-c6790dc22312f5 Chris Wilson      2020-02-02  101  	void *vaddr = sg_page(pages->sgl);
-c6790dc22312f5 Chris Wilson      2020-02-02  102  
-f033428db28bdf Chris Wilson      2019-05-28  103  	__i915_gem_object_release_shmem(obj, pages, false);
-f033428db28bdf Chris Wilson      2019-05-28  104  
-f033428db28bdf Chris Wilson      2019-05-28  105  	if (obj->mm.dirty) {
-f033428db28bdf Chris Wilson      2019-05-28  106  		struct address_space *mapping = obj->base.filp->f_mapping;
-c6790dc22312f5 Chris Wilson      2020-02-02  107  		void *src = vaddr;
-f033428db28bdf Chris Wilson      2019-05-28  108  		int i;
-f033428db28bdf Chris Wilson      2019-05-28  109  
-f033428db28bdf Chris Wilson      2019-05-28  110  		for (i = 0; i < obj->base.size / PAGE_SIZE; i++) {
-f033428db28bdf Chris Wilson      2019-05-28  111  			struct page *page;
-f033428db28bdf Chris Wilson      2019-05-28  112  			char *dst;
-f033428db28bdf Chris Wilson      2019-05-28  113  
-f033428db28bdf Chris Wilson      2019-05-28  114  			page = shmem_read_mapping_page(mapping, i);
-f033428db28bdf Chris Wilson      2019-05-28  115  			if (IS_ERR(page))
-f033428db28bdf Chris Wilson      2019-05-28  116  				continue;
-f033428db28bdf Chris Wilson      2019-05-28  117  
-f033428db28bdf Chris Wilson      2019-05-28  118  			dst = kmap_atomic(page);
-c6790dc22312f5 Chris Wilson      2020-02-02  119  			drm_clflush_virt_range(src, PAGE_SIZE);
-c6790dc22312f5 Chris Wilson      2020-02-02  120  			memcpy(dst, src, PAGE_SIZE);
-f033428db28bdf Chris Wilson      2019-05-28  121  			kunmap_atomic(dst);
-f033428db28bdf Chris Wilson      2019-05-28  122  
-f033428db28bdf Chris Wilson      2019-05-28  123  			set_page_dirty(page);
-f033428db28bdf Chris Wilson      2019-05-28  124  			if (obj->mm.madv == I915_MADV_WILLNEED)
-f033428db28bdf Chris Wilson      2019-05-28  125  				mark_page_accessed(page);
-f033428db28bdf Chris Wilson      2019-05-28  126  			put_page(page);
-c6790dc22312f5 Chris Wilson      2020-02-02  127  
-c6790dc22312f5 Chris Wilson      2020-02-02  128  			src += PAGE_SIZE;
-f033428db28bdf Chris Wilson      2019-05-28  129  		}
-f033428db28bdf Chris Wilson      2019-05-28  130  		obj->mm.dirty = false;
-f033428db28bdf Chris Wilson      2019-05-28  131  	}
-f033428db28bdf Chris Wilson      2019-05-28  132  
-f033428db28bdf Chris Wilson      2019-05-28  133  	sg_free_table(pages);
-f033428db28bdf Chris Wilson      2019-05-28  134  	kfree(pages);
-f033428db28bdf Chris Wilson      2019-05-28  135  
-8ff5446a7ca47c Thomas Zimmermann 2021-01-28  136  	dma_free_coherent(obj->base.dev->dev,
-c6790dc22312f5 Chris Wilson      2020-02-02  137  			  roundup_pow_of_two(obj->base.size),
-c6790dc22312f5 Chris Wilson      2020-02-02  138  			  vaddr, dma);
-f033428db28bdf Chris Wilson      2019-05-28  139  }
-f033428db28bdf Chris Wilson      2019-05-28  140  
+iQEzBAEBCAAdFiEEhrpukzGPukRmQqkK24/THMrX1ywFAmIUKyEACgkQ24/THMrX
+1yzoYwf9Gx9pcUVHvqm8ndGiV2gIwVCSdgcmDurruCiP0HW8l4A1u6WAWRPs1qRH
+ZBdfn5OSBZwFZu0tVetXVnmWmMAKjqWAHNIF+DlptXue1GzEMa8QIy3NA5iplpOc
+E4xTNf2rn4tEhz4lunfATqTeLKtju19I0w8CD/szjq5CcqOTyHbOV5PodTF2ZdhY
+yAxGB/KTZUROG+8+orCaqmv9RTe0nob293WI8FpAGr4+QowJKuTsygIX+tryKzIA
+2baSea6s+ZjOg0d4NSGSEbU9u8o0NibNiiuT5cAVRHVkVpUNwn4bs3H7K7P25fZe
+RrtbyZfzDTeTV5TfKUQwWl9q6tORaw==
+=Kebw
+-----END PGP SIGNATURE-----
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+--+tkBggBQeIzPYW+u--

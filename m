@@ -2,233 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E59314BF928
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 14:22:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25ED64BF930
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 14:24:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232385AbiBVNWk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 08:22:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33442 "EHLO
+        id S232390AbiBVNZJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 08:25:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232285AbiBVNWi (ORCPT
+        with ESMTP id S231891AbiBVNZH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 08:22:38 -0500
-Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF6122E0AB
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 05:22:12 -0800 (PST)
-Received: by mail-oi1-x229.google.com with SMTP id i5so14437153oih.1
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 05:22:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=daynix-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=FbEG8VNWfAxsexRWaVP+3+Z7bPItdQUVdT+PMVmJerk=;
-        b=2DUgPhrNuz1pS7heHL7qiS+n14t06NuqIh9c+513mbJEMnRr0OZ4lyybjX20n8UJEp
-         a7Otk6bK+LBdmRFHp84bRyxoTSQcNmQh9Up3pSzs4Dw/BKXmxxBR65GZMecOuGndDUa6
-         T1QnzTo9IIOycIaK2usIpIIE77OYOA0b2l9g0INDbWuDDhNBwK33DKdxV6U99cAZ7d1u
-         8qaWgQZLxZ22uOAKdKlFq289oeahwbOmPITKaif7LWlbbBhfyO5+V2ZNJK5IZ/k3tyI7
-         pex0KZ7fnoG/SNzr+RnxRr/+NjXqk6EA7DJlYfwduD2LGk3hHQ3hGU//k9w/ECUS77CA
-         Prnw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=FbEG8VNWfAxsexRWaVP+3+Z7bPItdQUVdT+PMVmJerk=;
-        b=BnzP8PypvH/z1yUhyWXgeLszedu9rwusk/KybCn1GAKjF2EWku11b459521MRDgLbG
-         y4jKmmLBWmhXSQJsI1e4MoRUhcDR1a7dYSlv7GCi0w4gIcWFTe+qxkKGl4oR/9rKMEnp
-         hGm1USxwSNsi5xJb/FGEaAz4o6SyaSMCcpBEwCsvH/r/KUdR0ApI1oVv3DhIbYMqzj27
-         cosZfFAQvhlszwBuNqqQN7fFx43QER9JqYb0xg5USbRRxbSBZJbF6vULSYsUaNw34f9n
-         K05HEWpeun1DfawvidvaqZqoUUiwKGCaI7rLxgR4Xu4uLrau2YyicNpSBiweHSPhXUkk
-         5Jag==
-X-Gm-Message-State: AOAM530qBZJYGjaNM2T9gPWIMuVFO6P5xEenE9d15lcTdF3EqFsiKXzY
-        IHSK/fT5IF0w/9FT6WtMnk80hJgexSfrrEz1V3Q44A==
-X-Google-Smtp-Source: ABdhPJyOrHlBwgGx5qZTXhnCehHekXCBaR6rENqCa6E8lAtJ/4gDv9e9nBODLwxy3eXzpO5VbNRSxYON80doqy+Yi68=
-X-Received: by 2002:a05:6808:2128:b0:2d3:3ce1:6e12 with SMTP id
- r40-20020a056808212800b002d33ce16e12mr1891947oiw.279.1645536132034; Tue, 22
- Feb 2022 05:22:12 -0800 (PST)
+        Tue, 22 Feb 2022 08:25:07 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0C4D6E556;
+        Tue, 22 Feb 2022 05:24:41 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 30C74CE13E1;
+        Tue, 22 Feb 2022 13:24:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1BCEC340E8;
+        Tue, 22 Feb 2022 13:24:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645536278;
+        bh=Ljwz0VSQXW5190Zgm0T2BP+0b1W/O+Ow7Aa2IBiiJxI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=uDs7eL3GAGNXfHjTTA3hutWqTtkIDxMri5oGhDixQyLH/3rkzd+v/9MCkff3TqteF
+         Oo4GzhAtMAbonNR3KLa1h4DRUe4qjpCHyS0zlSIcl0ysltKsmrKvVMgD2v1oK6wii8
+         bampMKNu9HDz4zfsEbwDrPm9/3OXm32u6UDkj09bG7Gel3xxOyiaj3E8OxUgJr7s4m
+         WYM4+r5egIPUaxeV7+r9kCEI1DM8bvOwijdoYCJ/gBfoB9SyrEw7xoCSvbh6WDwyGI
+         1D/wwfZBi2qcggWNFVJ1LY4mzwQANydrKlggdDwicb0adz3uAQ4B8Uy6JefsWOKTNP
+         rK+Vrtu87TDtA==
+Date:   Tue, 22 Feb 2022 18:54:34 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     Kishon Vijay Abraham I <kishon@ti.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org
+Subject: Re: [PATCH 2/8] dt-bindings: phy: samsung: drop old Eynos5440 PCIe
+ phy
+Message-ID: <YhTkEvnSbomEMuTF@matsya>
+References: <20220129193646.372481-1-krzysztof.kozlowski@canonical.com>
+ <20220129193646.372481-2-krzysztof.kozlowski@canonical.com>
 MIME-Version: 1.0
-References: <20220125084702.3636253-1-andrew@daynix.com> <20220125084702.3636253-3-andrew@daynix.com>
- <5ac96035-2448-2a25-5bc9-677a7eb0a271@redhat.com>
-In-Reply-To: <5ac96035-2448-2a25-5bc9-677a7eb0a271@redhat.com>
-From:   Andrew Melnichenko <andrew@daynix.com>
-Date:   Tue, 22 Feb 2022 15:22:00 +0200
-Message-ID: <CABcq3pH-md7oTLZYTGvnhi0uhYcZifdWn_D2bAZVafT5d+YZcg@mail.gmail.com>
-Subject: Re: [RFC PATCH 2/5] driver/net/tun: Added features for USO.
-To:     Jason Wang <jasowang@redhat.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Network Development <netdev@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        virtualization <virtualization@lists.linux-foundation.org>,
-        Yuri Benditovich <yuri.benditovich@daynix.com>,
-        Yan Vugenfirer <yan@daynix.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220129193646.372481-2-krzysztof.kozlowski@canonical.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 9, 2022 at 6:39 AM Jason Wang <jasowang@redhat.com> wrote:
->
->
-> =E5=9C=A8 2022/1/25 =E4=B8=8B=E5=8D=884:46, Andrew Melnychenko =E5=86=99=
-=E9=81=93:
-> > Added support for USO4 and USO6, also added code for new ioctl TUNGETSU=
-PPORTEDOFFLOADS.
-> > For now, to "enable" USO, it's required to set both USO4 and USO6 simul=
-taneously.
-> > USO enables NETIF_F_GSO_UDP_L4.
-> >
-> > Signed-off-by: Andrew Melnychenko <andrew@daynix.com>
-> > ---
-> >   drivers/net/tap.c | 18 ++++++++++++++++--
-> >   drivers/net/tun.c | 15 ++++++++++++++-
-> >   2 files changed, 30 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/drivers/net/tap.c b/drivers/net/tap.c
-> > index 8e3a28ba6b28..82d742ba78b1 100644
-> > --- a/drivers/net/tap.c
-> > +++ b/drivers/net/tap.c
-> > @@ -940,6 +940,10 @@ static int set_offload(struct tap_queue *q, unsign=
-ed long arg)
-> >                       if (arg & TUN_F_TSO6)
-> >                               feature_mask |=3D NETIF_F_TSO6;
-> >               }
-> > +
-> > +             /* TODO: for now USO4 and USO6 should work simultaneously=
- */
-> > +             if (arg & (TUN_F_USO4 | TUN_F_USO6) =3D=3D (TUN_F_USO4 | =
-TUN_F_USO6))
-> > +                     features |=3D NETIF_F_GSO_UDP_L4;
->
->
-> If kernel doesn't want to split the GSO_UDP features, I wonder how much
-> value to keep separated features for TUN and virtio.
->
-> Thanks
->
+On 29-01-22, 20:36, Krzysztof Kozlowski wrote:
+> The Exynos5440 PCIe phy support was removed in commit 496db029142f
+> ("phy: samsung: phy-exynos-pcie: rework driver to support Exynos5433
+> PCIe PHY") (with its own bindings), so drop the old bindings.
 
-It's important for Windows guests that may request USO receive only
-for IPv4 or IPv6.
-Or there is possible to implement one feature and change its
-"meanings" when "split" happens.
-I think it's a good idea to implement an interface for iUSO4/USO6 and
-do it right away.
+Applied 2-8, thanks
 
->
-> >       }
-> >
-> >       /* tun/tap driver inverts the usage for TSO offloads, where
-> > @@ -950,7 +954,8 @@ static int set_offload(struct tap_queue *q, unsigne=
-d long arg)
-> >        * When user space turns off TSO, we turn off GSO/LRO so that
-> >        * user-space will not receive TSO frames.
-> >        */
-> > -     if (feature_mask & (NETIF_F_TSO | NETIF_F_TSO6))
-> > +     if (feature_mask & (NETIF_F_TSO | NETIF_F_TSO6) ||
-> > +         feature_mask & (TUN_F_USO4 | TUN_F_USO6) =3D=3D (TUN_F_USO4 |=
- TUN_F_USO6))
-> >               features |=3D RX_OFFLOADS;
-> >       else
-> >               features &=3D ~RX_OFFLOADS;
-> > @@ -979,6 +984,7 @@ static long tap_ioctl(struct file *file, unsigned i=
-nt cmd,
-> >       unsigned short u;
-> >       int __user *sp =3D argp;
-> >       struct sockaddr sa;
-> > +     unsigned int supported_offloads;
-> >       int s;
-> >       int ret;
-> >
-> > @@ -1074,7 +1080,8 @@ static long tap_ioctl(struct file *file, unsigned=
- int cmd,
-> >       case TUNSETOFFLOAD:
-> >               /* let the user check for future flags */
-> >               if (arg & ~(TUN_F_CSUM | TUN_F_TSO4 | TUN_F_TSO6 |
-> > -                         TUN_F_TSO_ECN | TUN_F_UFO))
-> > +                         TUN_F_TSO_ECN | TUN_F_UFO |
-> > +                         TUN_F_USO4 | TUN_F_USO6))
-> >                       return -EINVAL;
-> >
-> >               rtnl_lock();
-> > @@ -1082,6 +1089,13 @@ static long tap_ioctl(struct file *file, unsigne=
-d int cmd,
-> >               rtnl_unlock();
-> >               return ret;
-> >
-> > +     case TUNGETSUPPORTEDOFFLOADS:
-> > +             supported_offloads =3D TUN_F_CSUM | TUN_F_TSO4 | TUN_F_TS=
-O6 |
-> > +                                             TUN_F_TSO_ECN | TUN_F_UFO=
- | TUN_F_USO4 | TUN_F_USO6;
-> > +             if (copy_to_user(&arg, &supported_offloads, sizeof(suppor=
-ted_offloads)))
-> > +                     return -EFAULT;
-> > +             return 0;
-> > +
-> >       case SIOCGIFHWADDR:
-> >               rtnl_lock();
-> >               tap =3D tap_get_tap_dev(q);
-> > diff --git a/drivers/net/tun.c b/drivers/net/tun.c
-> > index fed85447701a..4f2105d1e6f1 100644
-> > --- a/drivers/net/tun.c
-> > +++ b/drivers/net/tun.c
-> > @@ -185,7 +185,7 @@ struct tun_struct {
-> >       struct net_device       *dev;
-> >       netdev_features_t       set_features;
-> >   #define TUN_USER_FEATURES (NETIF_F_HW_CSUM|NETIF_F_TSO_ECN|NETIF_F_TS=
-O| \
-> > -                       NETIF_F_TSO6)
-> > +                       NETIF_F_TSO6 | NETIF_F_GSO_UDP_L4)
-> >
-> >       int                     align;
-> >       int                     vnet_hdr_sz;
-> > @@ -2821,6 +2821,12 @@ static int set_offload(struct tun_struct *tun, u=
-nsigned long arg)
-> >               }
-> >
-> >               arg &=3D ~TUN_F_UFO;
-> > +
-> > +             /* TODO: for now USO4 and USO6 should work simultaneously=
- */
-> > +             if (arg & TUN_F_USO4 && arg & TUN_F_USO6) {
-> > +                     features |=3D NETIF_F_GSO_UDP_L4;
-> > +                     arg &=3D ~(TUN_F_USO4 | TUN_F_USO6);
-> > +             }
-> >       }
-> >
-> >       /* This gives the user a way to test for new features in future b=
-y
-> > @@ -2991,6 +2997,7 @@ static long __tun_chr_ioctl(struct file *file, un=
-signed int cmd,
-> >       int sndbuf;
-> >       int vnet_hdr_sz;
-> >       int le;
-> > +     unsigned int supported_offloads;
-> >       int ret;
-> >       bool do_notify =3D false;
-> >
-> > @@ -3154,6 +3161,12 @@ static long __tun_chr_ioctl(struct file *file, u=
-nsigned int cmd,
-> >       case TUNSETOFFLOAD:
-> >               ret =3D set_offload(tun, arg);
-> >               break;
-> > +     case TUNGETSUPPORTEDOFFLOADS:
-> > +             supported_offloads =3D TUN_F_CSUM | TUN_F_TSO4 | TUN_F_TS=
-O6 |
-> > +                             TUN_F_TSO_ECN | TUN_F_UFO | TUN_F_USO4 | =
-TUN_F_USO6;
-> > +             if (copy_to_user(&arg, &supported_offloads, sizeof(suppor=
-ted_offloads)))
-> > +                     ret =3D -EFAULT;
-> > +             break;
-> >
-> >       case TUNSETTXFILTER:
-> >               /* Can be set only for TAPs */
->
+-- 
+~Vinod

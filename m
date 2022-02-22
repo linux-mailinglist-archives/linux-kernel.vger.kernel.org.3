@@ -2,185 +2,583 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBDC54BF17E
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 06:42:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F9934BF1A0
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 06:42:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229940AbiBVFlQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 00:41:16 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:33082 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229826AbiBVFlD (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S229802AbiBVFlD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Tue, 22 Feb 2022 00:41:03 -0500
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 642569D0ED
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 21:40:38 -0800 (PST)
-Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21M2ZoeW006502;
-        Tue, 22 Feb 2022 05:40:33 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : content-type : in-reply-to :
- mime-version; s=corp-2021-07-09;
- bh=hwF5ePGSkMcboOK5Dlqv6ifyGMvo1IuadecpAsX4puM=;
- b=c48Ca6q0DNgqNI/HWt9iEzKlBw2FBFOOGXc/04L5uw8erHk3xuRLWKuOsjPYH19RPatt
- Y8O4OMPS9mtrFxcAhbre3vzAENWh4q1UCTS5C/UWjvwlrbHX3KfF1eJhbQQ++j3X1nGy
- 9ps0pvxT+dTyp+0RfMBzpct0+YvsZldAlpJidXXQcxddHFSSA2i8PVo1b+99EHNGtIeN
- 9UEWv90fSbDjIZt1zRMaK+GuY75nxUQBWMrV88JuKuohGCBiBvOCtW+bfOPHFoMQQd3B
- G5gqQKZcWAZqMaz/oiOBCG4MxzymERPYFhogUuAncV8o8+sfRY6TUSF1x800K6g68VaG ew== 
-Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3eapye5y9b-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 22 Feb 2022 05:40:33 +0000
-Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
-        by userp3030.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 21M5ZX2c193544;
-        Tue, 22 Feb 2022 05:40:32 GMT
-Received: from nam11-bn8-obe.outbound.protection.outlook.com (mail-bn8nam11lp2170.outbound.protection.outlook.com [104.47.58.170])
-        by userp3030.oracle.com with ESMTP id 3eannty9yv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 22 Feb 2022 05:40:32 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=X1Pspq2fp3nhYE7mGrD1NW/MbIgboPUQsqrsyA95/Fvhyo/GBtSiP1yxo34JVcixsp5rOrrmNJ0Ot6prTeCDYbK1dGMFmUOZ2tTx7/Fo37P95Gj2tLWP7u/6lSYwafuoUGEyNVoV1FIQu9ylLnDyf74oEwzjfXug1n1B8+nxTHuRf7NOaXsKH8Cvn0DE8Qu8IOSjkeKM5EaEoxWuVPG0nQrdhbfrXqeD1SzMARNpiTYvQjPf3rTw15Swc5+ekiU5/3Y+H20RvkaxO4YEULWEWS2kVEi61tzptKxoJ/fUm/DDJeIi+A8RUDPZiOMDo6YoDLo3qXIzZvaedPgN+5DDlg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=hwF5ePGSkMcboOK5Dlqv6ifyGMvo1IuadecpAsX4puM=;
- b=hasz0U3j8znQMo36MAUaPqLmZsOEZ4xvbA3Gng5Zgh2sZBYsY/5V5D/50wFgn20i7z8o5BUU3cG96keA/oIiV8684P/vtm2zyCHe/m7UAZQX2gRUicUqc7UXogC11tvioNZDVMtLg1g/ytOZuNfnm+TSpjxb6nKF6OnD1qp77NdLJya+yH8EewHdg+bY8CLrTD8ADfZe3QpoNY+uqxV8TM+phIh2K1wFNIi3qUmCRgY8QMp9gsF6we3/Cvr9jnymdwnN0GJkihOfCZtd9z7BJl3hcM4q3ARk105Klg9NcSVG9wIFH6OYjDcqbjkW5njkZgGeBKLIiiPHxzDnEsX23A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:32934 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229763AbiBVFk4 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 22 Feb 2022 00:40:56 -0500
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC4D19BB8F
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 21:40:30 -0800 (PST)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-2d74a0ff060so44802287b3.6
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 21:40:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=hwF5ePGSkMcboOK5Dlqv6ifyGMvo1IuadecpAsX4puM=;
- b=ARHFdCz1hJJO1ZZXl9egGOJTVnDClypboJq7NEzxhuGGrg6CCCuBwJUDBM+ju+ZG9VPZbS2E6IkNjSSIMM1mzIFTd+slMI0uO34xq0h3LhdlH5hbGr+KJDFIbHTZ7VwzQeh197hcB4FNBviB92qmt9bR/vjnQHAg46AcmhQTVAo=
-Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
- (2603:10b6:301:2d::28) by BN6PR10MB1986.namprd10.prod.outlook.com
- (2603:10b6:404:100::21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4995.14; Tue, 22 Feb
- 2022 05:40:30 +0000
-Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
- ([fe80::2c3d:92b5:42b3:c1c5]) by MWHPR1001MB2365.namprd10.prod.outlook.com
- ([fe80::2c3d:92b5:42b3:c1c5%4]) with mapi id 15.20.4995.027; Tue, 22 Feb 2022
- 05:40:30 +0000
-Date:   Tue, 22 Feb 2022 08:40:19 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     Pavel Skripkin <paskripkin@gmail.com>
-Cc:     Michael Straube <straube.linux@gmail.com>,
-        gregkh@linuxfoundation.org, Larry.Finger@lwfinger.net,
-        phil@philpotter.co.uk, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/3] staging: r8188eu: refactor rtw_ch2freq()
-Message-ID: <20220222054018.GD3943@kadam>
-References: <20220220154847.7521-1-straube.linux@gmail.com>
- <20220220154847.7521-3-straube.linux@gmail.com>
- <cb7db1ac-8e7e-d549-a5c0-fcd072ae815e@gmail.com>
- <94160654-ec16-cad2-3cc2-46628caaa17e@gmail.com>
- <20220221122250.GE3965@kadam>
- <32a2b74b-f541-ddf6-d8c9-6bd6ca0ad07b@gmail.com>
- <8d5cf235-27f0-9c7a-3659-d2b1fe7a02dd@gmail.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8d5cf235-27f0-9c7a-3659-d2b1fe7a02dd@gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-ClientProxiedBy: MR1P264CA0052.FRAP264.PROD.OUTLOOK.COM
- (2603:10a6:501:3e::27) To MWHPR1001MB2365.namprd10.prod.outlook.com
- (2603:10b6:301:2d::28)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 1f471045-ae09-4c6d-2464-08d9f5c5d5fd
-X-MS-TrafficTypeDiagnostic: BN6PR10MB1986:EE_
-X-Microsoft-Antispam-PRVS: <BN6PR10MB1986F0282736EFA0EB9DDA468E3B9@BN6PR10MB1986.namprd10.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: ccpWiQSMm18QIW3u1WcDnuJ8kZqyjVMj60v6d6S2KV75PkcIUTJxGak6sMHsXoJwMU6exVReKMop/pOOCcLI0RXEZnia8js5ToIn9vN0h121TXM6rUeBppOb5tiwXNq0squ9KzxxY/UzTgMDoj+Q0NwHIj4Zp9CinknVygw6KHhlqOaZ3/MqffyQzTxpiKj1iojIV4TE6WnpgHf8MI5PwWy8RRYyy7FCS4avNhtvNacbGNS0humcNwjHUeXnpelPbgyMq+anZJpCNst+MKLwIjtvEweXBOP9Ey8THF7Eo3ezis30plZ7AZ9vdFqmqoTiwcPsGNjANIx9fPg18ADhbWi4WB9HK2FfcR7Rp6WeZiwtVjw8p4bto7Dyuabb3cRUnuo3Pz3hdjR4liWqgbcFlMPqyDHhNlrMgDr/tJswkTN9ILyd2RjUrOtP+CDS8nVQuo4aEgVn4/v5mmlcfnY0DGX50Fb/c3MYo8E+ynhgjFPKxOqb+Fvx+eUCcrfXNSrVAQgBjVoovPgTqGWJk5gP3HtAgtU2qnPY7BY2jnF9B2im9z5kbhqEpUrz5tnUFJX8kBV0/q21+HhEkmXPFW4AO1TPLg3yv/C/+OjJkiRLykRjsJBruDTbcb9exZOuqY2oIaU/zjeJxJqrWWAIlsCWgkTFdjy6XAGud9m6J5OGk7JOQ54HCh8XpUa9RilxZojwy/61ijTbZl1/0obZiM8NMw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2365.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(7916004)(366004)(2906002)(33716001)(38100700002)(38350700002)(86362001)(52116002)(53546011)(6666004)(6506007)(6512007)(66946007)(66476007)(508600001)(6486002)(33656002)(9686003)(4326008)(66556008)(5660300002)(6916009)(1076003)(8676002)(44832011)(8936002)(83380400001)(316002)(26005)(186003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?yj8s2RuG3JZsPuUJHubUCBzVOaFpHajcpAHhrN5Fgf5ubqb9Mc/CmpwRP194?=
- =?us-ascii?Q?wNifH/STrDhQy9tHljXDrWEHggKu7XVlvQ0J/fZJvsSUAD7Rx6Araw+RkVoQ?=
- =?us-ascii?Q?BnP0dbMDHjpBhQIZU6qsjE+vqxqoneDNuqlYrHDQHmbtJHdjQxcM+zrFjNiQ?=
- =?us-ascii?Q?su4K9E28SaVnpu9s3eB7CD4NdRx4FAa/p4a5jCpVzFlYFLlr73athTYmvQUK?=
- =?us-ascii?Q?VlOBTFntezAhjSJOoQcxHpGbbwUvvso+fCSIql1kcFeUWki6TDrsrmy8TSde?=
- =?us-ascii?Q?NPqpz8olf2VQdlUXVkYfJb1awO998s9XbSJ7Cae0T1jVmOS6ERnZUM8fbyzg?=
- =?us-ascii?Q?chP6FSYAbjZ7JUilp3pca/2jKE4CLPBe5ZrTUNK6OrOWtPzxzN/4WKkb0Ae+?=
- =?us-ascii?Q?GFusbOj4KHs0vrjmQnrt4Udbo4YCJtW36ofzlNFl5gBCbstWOEr0rn0EDOcz?=
- =?us-ascii?Q?n0Ih+su+blPLbBF92LMZQdZPZlTC5zQRAp8ddODzaRyY3KrXvpBQeKAxiysS?=
- =?us-ascii?Q?3OHEXElfFSfUboHH9/BEmpwNx1bnL35TOwrXgYeBPuCjLiAxIeK+tYfxo6UY?=
- =?us-ascii?Q?To86h5ujLHIR1TO3Jj14Rt1n92n0e3rFDNG3NpBG0+K5ngyZTGPINF6f9BCx?=
- =?us-ascii?Q?+M5j8puZf+BlTkvInReUTaV1sqs3lj4OoCFcW5Pr2wFuipbsXirQ1fuzjgfj?=
- =?us-ascii?Q?xQdm45v63geGVGfQb/bjz44qNkkaZni7D+dgTR/Bto9wintgUNSTWyICd+P4?=
- =?us-ascii?Q?mVnG+UxS5LpfVVmlkOp/OCCQBhhjbxtkmZ34epClovxzdM9qkoYUUm6NoHd3?=
- =?us-ascii?Q?uUjX3Wjowe3kd8eGVAF5lVCiTAV1FQDYZd70VS/YULx/lZhEdphrZIFzO+GH?=
- =?us-ascii?Q?WrMHemfIxeaa0/G9+I1qXHIpzpp5rnkBKIYXCo2AtzgMCOXHAPAg4QiCLXaf?=
- =?us-ascii?Q?2sg1dbCftiIY94GSSZdlDjEE+HHpGsLNIFf7Uo38xZ51E4GOYGvNe1dvn5Q1?=
- =?us-ascii?Q?WZ30g5AZZ/O8JkupN1wjzE5bqCEh6OXZYSNyxywhUbldJiRNvb6YYk+vypcb?=
- =?us-ascii?Q?CdA8E3UPTI2RWzFh+UzTPvPM/V1W1l3rqGrdXVeqLIINyHEuBJggUgGneKI6?=
- =?us-ascii?Q?jD1iVVi2E3xhiLSgg6jgevjqPi+MTFKWZz0gvA2EZnjgNBZDZxmSgtHrVmBb?=
- =?us-ascii?Q?U3mwuUwMS3+KenQXNGtPkcFn7Hbm258voQbZDlwvBTij1ZRpbC0ARzsSx/tB?=
- =?us-ascii?Q?jyAew+F9sIAYzKjRyRYtSo1tb/woHr1XYZcxmPvzPAMKyfWGgUtUINgnMfwK?=
- =?us-ascii?Q?mu+fRr+6TplE/0mYDdmHzynYnGaiS2ydIU7Ye/Qn4PmvbJAqeOrQzkKRh29M?=
- =?us-ascii?Q?4ntDlqdAQNzF7pGXp0Gw0cOtZLLYwNMvbUV9bHN1U24tCLl/Zl78snvjqySB?=
- =?us-ascii?Q?GsIrTmwqdotX9bGNoeyfPKOxJLfOTLWCgu3ndbADe6pXf43HVXgyJY8YJ1kP?=
- =?us-ascii?Q?rTBXyhvSMk/T7n7QGi4KzB+TzrO6syTTTbUi1yy9hjyTyxZkrzq3183Lr4Vo?=
- =?us-ascii?Q?H+Clr9i0hV3yvmxbdDgfVPBLvDnxxW40vIrwUP5d+5gUxMOoAiaZK4vk/nmq?=
- =?us-ascii?Q?J0LWNSZ1MRkfHKduLnLIQSdgTISCjGokt+PqB16ySOAEXorl1sYFWkAx9y9O?=
- =?us-ascii?Q?LBezyg=3D=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1f471045-ae09-4c6d-2464-08d9f5c5d5fd
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2365.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Feb 2022 05:40:29.9947
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: c0x6LpJ+jaAJB6aVtD2Ma7Yjvou2tW/gXgrcnNb4CCcBBT1ZqqPwf7faBjgh70NP7wNcM9ZGTBZoOnLU1/5hrJxyPPUpqmZMuDJ4vy+ydLg=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR10MB1986
-X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10265 signatures=677614
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 suspectscore=0 adultscore=0
- malwarescore=0 phishscore=0 mlxlogscore=999 mlxscore=0 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2201110000
- definitions=main-2202220033
-X-Proofpoint-ORIG-GUID: CT0lcKAq5fozFMKYUjzIBHRkL83f7U9K
-X-Proofpoint-GUID: CT0lcKAq5fozFMKYUjzIBHRkL83f7U9K
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=PyCoBTuVnCCgGWzJAr27O1YS5hZPDa+2/ZY9Qp3jx0E=;
+        b=pVKsN6uoJTTW7d5y8Ow04h/N2xLRfXbsytaoZFLAt8NkNYe7iJtrunlLWlWG5P41aw
+         ujQ0w+u+kPlxSmHslv7fpyOCFHkz0aChiaFWxHbL9Y7kqWmrEOM9hbRaCeWJt0jFx/w6
+         STF9z7phyPLci+0jpEwvu24alh4xnHih95HMhT2u3N0S4A7zG2ra47psdruVAjnaQeq3
+         d497aGHv5vCowQ7010K//43nQqMjkl7QAxI5FqNhMct1BRW5jDLDRQLMlu1iJ86n8qW8
+         lKqtxWWknh5LkFlfMmvxgAOIKVAkEpHZ33k2u/oBTIhJa3R6hb6Q6M78Ljc9VNdbT/Hz
+         KNzg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=PyCoBTuVnCCgGWzJAr27O1YS5hZPDa+2/ZY9Qp3jx0E=;
+        b=dKcICG0aE1h9o+4UAxW05YVcRivuL9uHmPowGe0x4jXi3V4d0arPW2+TRXNd3p9Pnr
+         t5Tgikqt4Im0sFyDgp6hSKFzDyGf4atrXOO41hNxgQd7g9zMYvdJLKpABVb86ozn7ke8
+         Ay0+8Bn6P/M1F3RFqoZElDeGAXrUyyFNk1jq6y8ddhrYLS+rgWrmFUduenyAI9ksQ/9/
+         BHQzNyiHxclvDX1k5xiLrEoLv99CRJnd7dwEadMbKJq0EpJrWloEmrILmh7D9JmzAF8j
+         JhZazCWRXZszP7rPJWeAPtWjWDRfjBjJuXoLqNdzBeOAuLIjI4cGIt45BDZ3pR3FmtNL
+         0R1Q==
+X-Gm-Message-State: AOAM530NPBu6VSsz98J9c3eIWsjVopG7U9zGayKfUtgoIwMRhN9cmkjb
+        F3yvDtlaboEJFdFzfFP4ic99rFFIsy8=
+X-Google-Smtp-Source: ABdhPJzusLduYMb9MkqGSwaYKTlX17vUZOdoY4+DW5HRT6s3+1UAWAMN6c0idnPvIpH1ahiC7JQXwoekXzI=
+X-Received: from surenb-desktop.mtv.corp.google.com ([2620:15c:211:200:79c1:8a4c:5d17:670f])
+ (user=surenb job=sendgmr) by 2002:a81:120d:0:b0:2d7:7e79:e298 with SMTP id
+ 13-20020a81120d000000b002d77e79e298mr4244852yws.346.1645508429807; Mon, 21
+ Feb 2022 21:40:29 -0800 (PST)
+Date:   Mon, 21 Feb 2022 21:40:23 -0800
+Message-Id: <20220222054025.3412898-1-surenb@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.35.1.473.g83b2b277ed-goog
+Subject: [PATCH 1/3] mm: refactor vm_area_struct::anon_vma_name usage code
+From:   Suren Baghdasaryan <surenb@google.com>
+To:     akpm@linux-foundation.org
+Cc:     ccross@google.com, sumit.semwal@linaro.org, mhocko@suse.com,
+        dave.hansen@intel.com, keescook@chromium.org, willy@infradead.org,
+        kirill.shutemov@linux.intel.com, vbabka@suse.cz,
+        hannes@cmpxchg.org, ebiederm@xmission.com, brauner@kernel.org,
+        legion@kernel.org, ran.xiaokai@zte.com.cn, sashal@kernel.org,
+        chris.hyser@oracle.com, dave@stgolabs.net, pcc@google.com,
+        caoxiaofeng@yulong.com, david@redhat.com, gorcunov@gmail.com,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        kernel-team@android.com, surenb@google.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 21, 2022 at 11:54:50PM +0300, Pavel Skripkin wrote:
-> Hi Michael,
-> 
-> On 2/21/22 22:20, Michael Straube wrote:
-> > > I'm glad that Pavel noticed this change.  This is a risky thing and
-> > > should have been noted in the commit message.
-> > > 
-> > > Just from a review stand point it would be best to leave the original
-> > > behavior.
-> > > 
-> > 
-> > Do you mean to leave the whole original code including the 5 GHz
-> > frequencies? Or returning a default value if we have a channel value < 1
-> > or > 14?
-> > 
-> 
-> IMO, your version is much cleaner than previous one. This table walk seems
-> really unreasonable, since 5 GHz support is really redundant (I saw it in
-> other thread)
-> 
-> I'd put just sanity check and return the default value from previous
-> version. Maybe even wrapped with unlikely() if we sure, that in normal state
-> we won't hit it ;)
+Avoid mixing strings and their anon_vma_name referenced pointers
+by using struct anon_vma_name whenever possible. This simplifies
+the code and allows easier sharing of anon_vma_name structures when
+they represent the same name.
 
-Adding likely()/unlikely() annotations hurt readability.  Do not do that
-unless you have benchmark data to prove that it is worth it.  (Hint: it
-is not worth it here).
+Suggested-by: Matthew Wilcox <willy@infradead.org>
+Suggested-by: Michal Hocko <mhocko@suse.com>
+Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+---
+ fs/proc/task_mmu.c        |   4 +-
+ include/linux/mm.h        |   7 +--
+ include/linux/mm_inline.h |  75 ++++++++++++++++++----------
+ include/linux/mm_types.h  |   5 +-
+ kernel/sys.c              |  18 +++++--
+ mm/madvise.c              | 100 ++++++++++++++++----------------------
+ mm/mmap.c                 |  10 ++--
+ 7 files changed, 118 insertions(+), 101 deletions(-)
 
-regards,
-dan carpenter
+diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
+index 6e97ed775074..5bfcf24493ac 100644
+--- a/fs/proc/task_mmu.c
++++ b/fs/proc/task_mmu.c
+@@ -309,7 +309,7 @@ show_map_vma(struct seq_file *m, struct vm_area_struct *vma)
+ 
+ 	name = arch_vma_name(vma);
+ 	if (!name) {
+-		const char *anon_name;
++		struct anon_vma_name *anon_name;
+ 
+ 		if (!mm) {
+ 			name = "[vdso]";
+@@ -330,7 +330,7 @@ show_map_vma(struct seq_file *m, struct vm_area_struct *vma)
+ 		anon_name = vma_anon_name(vma);
+ 		if (anon_name) {
+ 			seq_pad(m, ' ');
+-			seq_printf(m, "[anon:%s]", anon_name);
++			seq_printf(m, "[anon:%s]", anon_name->name);
+ 		}
+ 	}
+ 
+diff --git a/include/linux/mm.h b/include/linux/mm.h
+index 213cc569b192..5744a3fc4716 100644
+--- a/include/linux/mm.h
++++ b/include/linux/mm.h
+@@ -2626,7 +2626,7 @@ static inline int vma_adjust(struct vm_area_struct *vma, unsigned long start,
+ extern struct vm_area_struct *vma_merge(struct mm_struct *,
+ 	struct vm_area_struct *prev, unsigned long addr, unsigned long end,
+ 	unsigned long vm_flags, struct anon_vma *, struct file *, pgoff_t,
+-	struct mempolicy *, struct vm_userfaultfd_ctx, const char *);
++	struct mempolicy *, struct vm_userfaultfd_ctx, struct anon_vma_name *);
+ extern struct anon_vma *find_mergeable_anon_vma(struct vm_area_struct *);
+ extern int __split_vma(struct mm_struct *, struct vm_area_struct *,
+ 	unsigned long addr, int new_below);
+@@ -3372,11 +3372,12 @@ static inline int seal_check_future_write(int seals, struct vm_area_struct *vma)
+ 
+ #ifdef CONFIG_ANON_VMA_NAME
+ int madvise_set_anon_name(struct mm_struct *mm, unsigned long start,
+-			  unsigned long len_in, const char *name);
++			  unsigned long len_in,
++			  struct anon_vma_name *anon_name);
+ #else
+ static inline int
+ madvise_set_anon_name(struct mm_struct *mm, unsigned long start,
+-		      unsigned long len_in, const char *name) {
++		      unsigned long len_in, struct anon_vma_name *anon_name) {
+ 	return 0;
+ }
+ #endif
+diff --git a/include/linux/mm_inline.h b/include/linux/mm_inline.h
+index b725839dfe71..70b619442d56 100644
+--- a/include/linux/mm_inline.h
++++ b/include/linux/mm_inline.h
+@@ -140,50 +140,73 @@ static __always_inline void del_page_from_lru_list(struct page *page,
+ 
+ #ifdef CONFIG_ANON_VMA_NAME
+ /*
+- * mmap_lock should be read-locked when calling vma_anon_name() and while using
+- * the returned pointer.
++ * mmap_lock should be read-locked when calling vma_anon_name(). Caller should
++ * either keep holding the lock while using the returned pointer or it should
++ * raise anon_vma_name refcount before releasing the lock.
+  */
+-extern const char *vma_anon_name(struct vm_area_struct *vma);
++extern struct anon_vma_name *vma_anon_name(struct vm_area_struct *vma);
++extern struct anon_vma_name *anon_vma_name_alloc(const char *name);
+ 
+-/*
+- * mmap_lock should be read-locked for orig_vma->vm_mm.
+- * mmap_lock should be write-locked for new_vma->vm_mm or new_vma should be
+- * isolated.
+- */
+-extern void dup_vma_anon_name(struct vm_area_struct *orig_vma,
+-			      struct vm_area_struct *new_vma);
++/* mmap_lock should be read-locked */
++static inline void anon_vma_name_get(struct anon_vma_name *anon_name)
++{
++	if (anon_name)
++		kref_get(&anon_name->kref);
++}
+ 
+-/*
+- * mmap_lock should be write-locked or vma should have been isolated under
+- * write-locked mmap_lock protection.
+- */
+-extern void free_vma_anon_name(struct vm_area_struct *vma);
++extern void anon_vma_name_put(struct anon_vma_name *anon_name);
+ 
+-/* mmap_lock should be read-locked */
+-static inline bool is_same_vma_anon_name(struct vm_area_struct *vma,
+-					 const char *name)
++static inline void dup_vma_anon_name(struct vm_area_struct *orig_vma,
++				     struct vm_area_struct *new_vma)
+ {
+-	const char *vma_name = vma_anon_name(vma);
++	struct anon_vma_name *anon_name = vma_anon_name(orig_vma);
+ 
+-	/* either both NULL, or pointers to same string */
+-	if (vma_name == name)
++	if (anon_name) {
++		anon_vma_name_get(anon_name);
++		new_vma->anon_name = anon_name;
++	}
++}
++
++static inline void free_vma_anon_name(struct vm_area_struct *vma)
++{
++	/* Can't use vma_anon_name because vma->vm_mm might not be held */
++	if (!vma->vm_file)
++		anon_vma_name_put(vma->anon_name);
++}
++
++static inline bool anon_vma_name_eq(struct anon_vma_name *anon_name1,
++				    struct anon_vma_name *anon_name2)
++{
++	if (anon_name1 == anon_name2)
+ 		return true;
+ 
+-	return name && vma_name && !strcmp(name, vma_name);
++	return anon_name1 && anon_name2 &&
++		!strcmp(anon_name1->name, anon_name2->name);
+ }
++
+ #else /* CONFIG_ANON_VMA_NAME */
+-static inline const char *vma_anon_name(struct vm_area_struct *vma)
++static inline struct anon_vma_name *vma_anon_name(struct vm_area_struct *vma)
+ {
+ 	return NULL;
+ }
++
++static inline struct anon_vma_name *anon_vma_name_alloc(const char *name)
++{
++	return NULL;
++}
++
++static inline void anon_vma_name_get(struct anon_vma_name *anon_name) {}
++static inline void anon_vma_name_put(struct anon_vma_name *anon_name) {}
+ static inline void dup_vma_anon_name(struct vm_area_struct *orig_vma,
+-			      struct vm_area_struct *new_vma) {}
++				     struct vm_area_struct *new_vma) {}
+ static inline void free_vma_anon_name(struct vm_area_struct *vma) {}
+-static inline bool is_same_vma_anon_name(struct vm_area_struct *vma,
+-					 const char *name)
++
++static inline bool anon_vma_name_eq(struct anon_vma_name *anon_name1,
++				    struct anon_vma_name *anon_name2)
+ {
+ 	return true;
+ }
++
+ #endif  /* CONFIG_ANON_VMA_NAME */
+ 
+ static inline void init_tlb_flush_pending(struct mm_struct *mm)
+diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
+index 5140e5feb486..1d298ff2e1d0 100644
+--- a/include/linux/mm_types.h
++++ b/include/linux/mm_types.h
+@@ -416,7 +416,10 @@ struct vm_area_struct {
+ 			struct rb_node rb;
+ 			unsigned long rb_subtree_last;
+ 		} shared;
+-		/* Serialized by mmap_sem. */
++		/*
++		 * Serialized by mmap_sem. Never use directly because it is
++		 * valid only when vm_file is NULL. Use vma_anon_name instead.
++		 */
+ 		struct anon_vma_name *anon_name;
+ 	};
+ 
+diff --git a/kernel/sys.c b/kernel/sys.c
+index ecc4cf019242..60c3f9eac9eb 100644
+--- a/kernel/sys.c
++++ b/kernel/sys.c
+@@ -7,6 +7,7 @@
+ 
+ #include <linux/export.h>
+ #include <linux/mm.h>
++#include <linux/mm_inline.h>
+ #include <linux/utsname.h>
+ #include <linux/mman.h>
+ #include <linux/reboot.h>
+@@ -2278,15 +2279,16 @@ static int prctl_set_vma(unsigned long opt, unsigned long addr,
+ {
+ 	struct mm_struct *mm = current->mm;
+ 	const char __user *uname;
+-	char *name, *pch;
++	struct anon_vma_name *anon_name;
+ 	int error;
+ 
+ 	switch (opt) {
+ 	case PR_SET_VMA_ANON_NAME:
+ 		uname = (const char __user *)arg;
+ 		if (uname) {
+-			name = strndup_user(uname, ANON_VMA_NAME_MAX_LEN);
++			char *name, *pch;
+ 
++			name = strndup_user(uname, ANON_VMA_NAME_MAX_LEN);
+ 			if (IS_ERR(name))
+ 				return PTR_ERR(name);
+ 
+@@ -2296,15 +2298,21 @@ static int prctl_set_vma(unsigned long opt, unsigned long addr,
+ 					return -EINVAL;
+ 				}
+ 			}
++			/* anon_vma has its own copy */
++			anon_name = anon_vma_name_alloc(name);
++			kfree(name);
++			if (!anon_name)
++				return -ENOMEM;
++
+ 		} else {
+ 			/* Reset the name */
+-			name = NULL;
++			anon_name = NULL;
+ 		}
+ 
+ 		mmap_write_lock(mm);
+-		error = madvise_set_anon_name(mm, addr, size, name);
++		error = madvise_set_anon_name(mm, addr, size, anon_name);
+ 		mmap_write_unlock(mm);
+-		kfree(name);
++		anon_vma_name_put(anon_name);
+ 		break;
+ 	default:
+ 		error = -EINVAL;
+diff --git a/mm/madvise.c b/mm/madvise.c
+index 5604064df464..f81d62d8ce9b 100644
+--- a/mm/madvise.c
++++ b/mm/madvise.c
+@@ -65,11 +65,14 @@ static int madvise_need_mmap_write(int behavior)
+ }
+ 
+ #ifdef CONFIG_ANON_VMA_NAME
+-static struct anon_vma_name *anon_vma_name_alloc(const char *name)
++struct anon_vma_name *anon_vma_name_alloc(const char *name)
+ {
+ 	struct anon_vma_name *anon_name;
+ 	size_t count;
+ 
++	if (!name)
++		return NULL;
++
+ 	/* Add 1 for NUL terminator at the end of the anon_name->name */
+ 	count = strlen(name) + 1;
+ 	anon_name = kmalloc(struct_size(anon_name, name, count), GFP_KERNEL);
+@@ -81,78 +84,55 @@ static struct anon_vma_name *anon_vma_name_alloc(const char *name)
+ 	return anon_name;
+ }
+ 
+-static void vma_anon_name_free(struct kref *kref)
++struct anon_vma_name *vma_anon_name(struct vm_area_struct *vma)
+ {
+-	struct anon_vma_name *anon_name =
+-			container_of(kref, struct anon_vma_name, kref);
+-	kfree(anon_name);
+-}
+-
+-static inline bool has_vma_anon_name(struct vm_area_struct *vma)
+-{
+-	return !vma->vm_file && vma->anon_name;
+-}
++	mmap_assert_locked(vma->vm_mm);
+ 
+-const char *vma_anon_name(struct vm_area_struct *vma)
+-{
+-	if (!has_vma_anon_name(vma))
++	if (vma->vm_file)
+ 		return NULL;
+ 
+-	mmap_assert_locked(vma->vm_mm);
+-
+-	return vma->anon_name->name;
++	return vma->anon_name;
+ }
+ 
+-void dup_vma_anon_name(struct vm_area_struct *orig_vma,
+-		       struct vm_area_struct *new_vma)
++static void vma_anon_name_free(struct kref *kref)
+ {
+-	if (!has_vma_anon_name(orig_vma))
+-		return;
+-
+-	kref_get(&orig_vma->anon_name->kref);
+-	new_vma->anon_name = orig_vma->anon_name;
++	struct anon_vma_name *anon_name =
++			container_of(kref, struct anon_vma_name, kref);
++	kfree(anon_name);
+ }
+ 
+-void free_vma_anon_name(struct vm_area_struct *vma)
++void anon_vma_name_put(struct anon_vma_name *anon_name)
+ {
+-	struct anon_vma_name *anon_name;
+-
+-	if (!has_vma_anon_name(vma))
+-		return;
+-
+-	anon_name = vma->anon_name;
+-	vma->anon_name = NULL;
+-	kref_put(&anon_name->kref, vma_anon_name_free);
++	if (anon_name)
++		kref_put(&anon_name->kref, vma_anon_name_free);
+ }
+ 
+ /* mmap_lock should be write-locked */
+-static int replace_vma_anon_name(struct vm_area_struct *vma, const char *name)
++static int replace_vma_anon_name(struct vm_area_struct *vma,
++				 struct anon_vma_name *anon_name)
+ {
+-	const char *anon_name;
++	struct anon_vma_name *orig_name = vma_anon_name(vma);
+ 
+-	if (!name) {
+-		free_vma_anon_name(vma);
++	if (!anon_name) {
++		vma->anon_name = NULL;
++		anon_vma_name_put(orig_name);
+ 		return 0;
+ 	}
+ 
+-	anon_name = vma_anon_name(vma);
+-	if (anon_name) {
+-		/* Same name, nothing to do here */
+-		if (!strcmp(name, anon_name))
+-			return 0;
++	if (anon_vma_name_eq(orig_name, anon_name))
++		return 0;
+ 
+-		free_vma_anon_name(vma);
+-	}
+-	vma->anon_name = anon_vma_name_alloc(name);
+-	if (!vma->anon_name)
+-		return -ENOMEM;
++	anon_vma_name_get(anon_name);
++	vma->anon_name = anon_name;
++	anon_vma_name_put(orig_name);
+ 
+ 	return 0;
+ }
+ #else /* CONFIG_ANON_VMA_NAME */
+-static int replace_vma_anon_name(struct vm_area_struct *vma, const char *name)
++static int replace_vma_anon_name(struct vm_area_struct *vma,
++				 struct anon_vma_name *anon_name)
+ {
+-	if (name)
++	if (anon_name)
+ 		return -EINVAL;
+ 
+ 	return 0;
+@@ -165,13 +145,13 @@ static int replace_vma_anon_name(struct vm_area_struct *vma, const char *name)
+ static int madvise_update_vma(struct vm_area_struct *vma,
+ 			      struct vm_area_struct **prev, unsigned long start,
+ 			      unsigned long end, unsigned long new_flags,
+-			      const char *name)
++			      struct anon_vma_name *anon_name)
+ {
+ 	struct mm_struct *mm = vma->vm_mm;
+ 	int error;
+ 	pgoff_t pgoff;
+ 
+-	if (new_flags == vma->vm_flags && is_same_vma_anon_name(vma, name)) {
++	if (new_flags == vma->vm_flags && anon_vma_name_eq(vma_anon_name(vma), anon_name)) {
+ 		*prev = vma;
+ 		return 0;
+ 	}
+@@ -179,7 +159,7 @@ static int madvise_update_vma(struct vm_area_struct *vma,
+ 	pgoff = vma->vm_pgoff + ((start - vma->vm_start) >> PAGE_SHIFT);
+ 	*prev = vma_merge(mm, *prev, start, end, new_flags, vma->anon_vma,
+ 			  vma->vm_file, pgoff, vma_policy(vma),
+-			  vma->vm_userfaultfd_ctx, name);
++			  vma->vm_userfaultfd_ctx, anon_name);
+ 	if (*prev) {
+ 		vma = *prev;
+ 		goto success;
+@@ -209,7 +189,7 @@ static int madvise_update_vma(struct vm_area_struct *vma,
+ 	 */
+ 	vma->vm_flags = new_flags;
+ 	if (!vma->vm_file) {
+-		error = replace_vma_anon_name(vma, name);
++		error = replace_vma_anon_name(vma, anon_name);
+ 		if (error)
+ 			return error;
+ 	}
+@@ -976,6 +956,7 @@ static int madvise_vma_behavior(struct vm_area_struct *vma,
+ {
+ 	int error;
+ 	unsigned long new_flags = vma->vm_flags;
++	struct anon_vma_name *anon_name;
+ 
+ 	switch (behavior) {
+ 	case MADV_REMOVE:
+@@ -1040,8 +1021,9 @@ static int madvise_vma_behavior(struct vm_area_struct *vma,
+ 		break;
+ 	}
+ 
++	anon_name = vma_anon_name(vma);
+ 	error = madvise_update_vma(vma, prev, start, end, new_flags,
+-				   vma_anon_name(vma));
++				   anon_name);
+ 
+ out:
+ 	/*
+@@ -1225,7 +1207,7 @@ int madvise_walk_vmas(struct mm_struct *mm, unsigned long start,
+ static int madvise_vma_anon_name(struct vm_area_struct *vma,
+ 				 struct vm_area_struct **prev,
+ 				 unsigned long start, unsigned long end,
+-				 unsigned long name)
++				 unsigned long anon_name)
+ {
+ 	int error;
+ 
+@@ -1234,7 +1216,7 @@ static int madvise_vma_anon_name(struct vm_area_struct *vma,
+ 		return -EBADF;
+ 
+ 	error = madvise_update_vma(vma, prev, start, end, vma->vm_flags,
+-				   (const char *)name);
++				   (struct anon_vma_name *)anon_name);
+ 
+ 	/*
+ 	 * madvise() returns EAGAIN if kernel resources, such as
+@@ -1246,7 +1228,7 @@ static int madvise_vma_anon_name(struct vm_area_struct *vma,
+ }
+ 
+ int madvise_set_anon_name(struct mm_struct *mm, unsigned long start,
+-			  unsigned long len_in, const char *name)
++			  unsigned long len_in, struct anon_vma_name *anon_name)
+ {
+ 	unsigned long end;
+ 	unsigned long len;
+@@ -1266,8 +1248,8 @@ int madvise_set_anon_name(struct mm_struct *mm, unsigned long start,
+ 	if (end == start)
+ 		return 0;
+ 
+-	return madvise_walk_vmas(mm, start, end, (unsigned long)name,
+-				 madvise_vma_anon_name);
++	return  madvise_walk_vmas(mm, start, end, (unsigned long)anon_name,
++				  madvise_vma_anon_name);
+ }
+ #endif /* CONFIG_ANON_VMA_NAME */
+ /*
+diff --git a/mm/mmap.c b/mm/mmap.c
+index 1e8fdb0b51ed..80d2ae204a98 100644
+--- a/mm/mmap.c
++++ b/mm/mmap.c
+@@ -1031,7 +1031,7 @@ int __vma_adjust(struct vm_area_struct *vma, unsigned long start,
+ static inline int is_mergeable_vma(struct vm_area_struct *vma,
+ 				struct file *file, unsigned long vm_flags,
+ 				struct vm_userfaultfd_ctx vm_userfaultfd_ctx,
+-				const char *anon_name)
++				struct anon_vma_name *anon_name)
+ {
+ 	/*
+ 	 * VM_SOFTDIRTY should not prevent from VMA merging, if we
+@@ -1049,7 +1049,7 @@ static inline int is_mergeable_vma(struct vm_area_struct *vma,
+ 		return 0;
+ 	if (!is_mergeable_vm_userfaultfd_ctx(vma, vm_userfaultfd_ctx))
+ 		return 0;
+-	if (!is_same_vma_anon_name(vma, anon_name))
++	if (!anon_vma_name_eq(vma_anon_name(vma), anon_name))
+ 		return 0;
+ 	return 1;
+ }
+@@ -1084,7 +1084,7 @@ can_vma_merge_before(struct vm_area_struct *vma, unsigned long vm_flags,
+ 		     struct anon_vma *anon_vma, struct file *file,
+ 		     pgoff_t vm_pgoff,
+ 		     struct vm_userfaultfd_ctx vm_userfaultfd_ctx,
+-		     const char *anon_name)
++		     struct anon_vma_name *anon_name)
+ {
+ 	if (is_mergeable_vma(vma, file, vm_flags, vm_userfaultfd_ctx, anon_name) &&
+ 	    is_mergeable_anon_vma(anon_vma, vma->anon_vma, vma)) {
+@@ -1106,7 +1106,7 @@ can_vma_merge_after(struct vm_area_struct *vma, unsigned long vm_flags,
+ 		    struct anon_vma *anon_vma, struct file *file,
+ 		    pgoff_t vm_pgoff,
+ 		    struct vm_userfaultfd_ctx vm_userfaultfd_ctx,
+-		    const char *anon_name)
++		    struct anon_vma_name *anon_name)
+ {
+ 	if (is_mergeable_vma(vma, file, vm_flags, vm_userfaultfd_ctx, anon_name) &&
+ 	    is_mergeable_anon_vma(anon_vma, vma->anon_vma, vma)) {
+@@ -1167,7 +1167,7 @@ struct vm_area_struct *vma_merge(struct mm_struct *mm,
+ 			struct anon_vma *anon_vma, struct file *file,
+ 			pgoff_t pgoff, struct mempolicy *policy,
+ 			struct vm_userfaultfd_ctx vm_userfaultfd_ctx,
+-			const char *anon_name)
++			struct anon_vma_name *anon_name)
+ {
+ 	pgoff_t pglen = (end - addr) >> PAGE_SHIFT;
+ 	struct vm_area_struct *area, *next;
+-- 
+2.35.1.473.g83b2b277ed-goog
 

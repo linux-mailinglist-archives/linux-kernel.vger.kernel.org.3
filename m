@@ -2,117 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89EBC4C01A3
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 19:52:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C9A6C4C01A8
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 19:53:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235082AbiBVSxX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 13:53:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52312 "EHLO
+        id S235088AbiBVSxt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 13:53:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234924AbiBVSxW (ORCPT
+        with ESMTP id S229747AbiBVSxr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 13:53:22 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BFF0113AD3;
-        Tue, 22 Feb 2022 10:52:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645555976; x=1677091976;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=uMEn3/RL/6dx3e9JgmoY9I85ruMCvWBhcJaWvAtSINE=;
-  b=CIr8beof42eYv3xqdCE6FY66DYnkUT22D4iZdkMSzdEvKbH/RuZduYFB
-   z/9oVgohVLYPK3JRrJoemnX89jNIumN/rtiWPfUuHNzhrg1MslG+6mV4h
-   iIrwWvaVcBYFlpIVV/UP6taFO/uP3DL07NGO6VFD3yFCmWZFX2gHCn1A+
-   eA4MELw1RLdzvL7UqPTOjYXdPxsUmRZECm4DyB/WynFbVfWXswq18D4eB
-   hI1xv00l4Jo4D7/99S1AC15WIh4Ei9SbMwVZwKA46f4TX6yZS5/qwz94+
-   3QyHZkSPF/gBRkaGGGvWkx9HmJIBzxmu+Z+rxHPsqX4hxeH9OfFSz/0+6
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10266"; a="251973588"
-X-IronPort-AV: E=Sophos;i="5.88,387,1635231600"; 
-   d="scan'208";a="251973588"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2022 10:52:56 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,387,1635231600"; 
-   d="scan'208";a="543042479"
-Received: from stinkpipe.fi.intel.com (HELO stinkbox) ([10.237.72.151])
-  by fmsmga007.fm.intel.com with SMTP; 22 Feb 2022 10:52:52 -0800
-Received: by stinkbox (sSMTP sendmail emulation); Tue, 22 Feb 2022 20:52:51 +0200
-Date:   Tue, 22 Feb 2022 20:52:51 +0200
-From:   Ville =?iso-8859-1?Q?Syrj=E4l=E4?= <ville.syrjala@linux.intel.com>
-To:     Colin Ian King <colin.i.king@gmail.com>
-Cc:     Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [Intel-gfx] [PATCH] drm/i915: make a handful of read-only arrays
- static const
-Message-ID: <YhUxA5NeTLYOBBWK@intel.com>
-References: <20220222120323.86480-1-colin.i.king@gmail.com>
+        Tue, 22 Feb 2022 13:53:47 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 43C0A113D9C
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 10:53:21 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0CE1F106F;
+        Tue, 22 Feb 2022 10:53:21 -0800 (PST)
+Received: from lakrids (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 98D7E3F66F;
+        Tue, 22 Feb 2022 10:53:18 -0800 (PST)
+Date:   Tue, 22 Feb 2022 18:53:16 +0000
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Kalesh Singh <kaleshsingh@google.com>
+Cc:     will@kernel.org, maz@kernel.org, qperret@google.com,
+        tabba@google.com, surenb@google.com, kernel-team@android.com,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Joey Gouly <joey.gouly@arm.com>,
+        Peter Collingbourne <pcc@google.com>,
+        Andrew Walbran <qwandor@google.com>,
+        Andrew Scull <ascull@google.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kvmarm@lists.cs.columbia.edu
+Subject: Re: [PATCH v2 1/9] KVM: arm64: Introduce hyp_alloc_private_va_range()
+Message-ID: <YhUxHNRxxepEmc8j@lakrids>
+References: <20220222165212.2005066-1-kaleshsingh@google.com>
+ <20220222165212.2005066-2-kaleshsingh@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220222120323.86480-1-colin.i.king@gmail.com>
-X-Patchwork-Hint: comment
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220222165212.2005066-2-kaleshsingh@google.com>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 22, 2022 at 12:03:23PM +0000, Colin Ian King wrote:
-> Don't populate the read-only arrays on the stack but instead make
-> them static const. Also makes the object code a little smaller.
-> Reformat the statements to clear up checkpatch warning.
+On Tue, Feb 22, 2022 at 08:51:02AM -0800, Kalesh Singh wrote:
+> hyp_alloc_private_va_range() can be used to reserve private VA ranges
+> in the nVHE hypervisor. Also update  __create_hyp_private_mapping()
+> to allow specifying an alignment for the private VA mapping.
 > 
-> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+> These will be used to implement stack guard pages for KVM nVHE hypervisor
+> (nVHE Hyp mode / not pKVM), in a subsequent patch in the series.
+> 
+> Signed-off-by: Kalesh Singh <kaleshsingh@google.com>
 > ---
->  drivers/gpu/drm/i915/display/intel_vdsc.c | 16 ++++++++++++----
->  1 file changed, 12 insertions(+), 4 deletions(-)
+>  arch/arm64/include/asm/kvm_mmu.h |  4 +++
+>  arch/arm64/kvm/mmu.c             | 61 +++++++++++++++++++++-----------
+>  2 files changed, 44 insertions(+), 21 deletions(-)
 > 
-> diff --git a/drivers/gpu/drm/i915/display/intel_vdsc.c b/drivers/gpu/drm/i915/display/intel_vdsc.c
-> index 3faea903b9ae..d49f66237ec3 100644
-> --- a/drivers/gpu/drm/i915/display/intel_vdsc.c
-> +++ b/drivers/gpu/drm/i915/display/intel_vdsc.c
-> @@ -378,10 +378,18 @@ calculate_rc_params(struct rc_parameters *rc,
->  {
->  	int bpc = vdsc_cfg->bits_per_component;
->  	int bpp = vdsc_cfg->bits_per_pixel >> 4;
-> -	int ofs_und6[] = { 0, -2, -2, -4, -6, -6, -8, -8, -8, -10, -10, -12, -12, -12, -12 };
-> -	int ofs_und8[] = { 2, 0, 0, -2, -4, -6, -8, -8, -8, -10, -10, -10, -12, -12, -12 };
-> -	int ofs_und12[] = { 2, 0, 0, -2, -4, -6, -8, -8, -8, -10, -10, -10, -12, -12, -12 };
-> -	int ofs_und15[] = { 10, 8, 6, 4, 2, 0, -2, -4, -6, -8, -10, -10, -12, -12, -12 };
-> +	static const int ofs_und6[] = {
-> +		0, -2, -2, -4, -6, -6, -8, -8, -8, -10, -10, -12, -12, -12, -12
-> +	};
-> +	static const int ofs_und8[] = {
-> +		2, 0, 0, -2, -4, -6, -8, -8, -8, -10, -10, -10, -12, -12, -12
-> +	};
-> +	static const int ofs_und12[] = {
-> +		2, 0, 0, -2, -4, -6, -8, -8, -8, -10, -10, -10, -12, -12, -12
-> +	};
-> +	static const int ofs_und15[] = {
-> +		10, 8, 6, 4, 2, 0, -2, -4, -6, -8, -10, -10, -12, -12, -12
-> +	};
-
-Please shrink to s8 while at it.
-
->  	int qp_bpc_modifier = (bpc - 8) * 2;
->  	u32 res, buf_i, bpp_i;
+> diff --git a/arch/arm64/include/asm/kvm_mmu.h b/arch/arm64/include/asm/kvm_mmu.h
+> index 81839e9a8a24..0b0c71302b92 100644
+> --- a/arch/arm64/include/asm/kvm_mmu.h
+> +++ b/arch/arm64/include/asm/kvm_mmu.h
+> @@ -153,6 +153,10 @@ static __always_inline unsigned long __kern_hyp_va(unsigned long v)
+>  int kvm_share_hyp(void *from, void *to);
+>  void kvm_unshare_hyp(void *from, void *to);
+>  int create_hyp_mappings(void *from, void *to, enum kvm_pgtable_prot prot);
+> +unsigned long hyp_alloc_private_va_range(size_t size, size_t align);
+> +int __create_hyp_private_mapping(phys_addr_t phys_addr, size_t size,
+> +				size_t align, unsigned long *haddr,
+> +				enum kvm_pgtable_prot prot);
+>  int create_hyp_io_mappings(phys_addr_t phys_addr, size_t size,
+>  			   void __iomem **kaddr,
+>  			   void __iomem **haddr);
+> diff --git a/arch/arm64/kvm/mmu.c b/arch/arm64/kvm/mmu.c
+> index bc2aba953299..e5abcce44ad0 100644
+> --- a/arch/arm64/kvm/mmu.c
+> +++ b/arch/arm64/kvm/mmu.c
+> @@ -457,22 +457,16 @@ int create_hyp_mappings(void *from, void *to, enum kvm_pgtable_prot prot)
+>  	return 0;
+>  }
 >  
-> -- 
-> 2.34.1
+> -static int __create_hyp_private_mapping(phys_addr_t phys_addr, size_t size,
+> -					unsigned long *haddr,
+> -					enum kvm_pgtable_prot prot)
+> +
+> +/*
+> + * Allocates a private VA range below io_map_base.
+> + *
+> + * @size:	The size of the VA range to reserve.
+> + * @align:	The required alignment for the allocation.
+> + */
+> +unsigned long hyp_alloc_private_va_range(size_t size, size_t align)
+>  {
+>  	unsigned long base;
+> -	int ret = 0;
+> -
+> -	if (!kvm_host_owns_hyp_mappings()) {
+> -		base = kvm_call_hyp_nvhe(__pkvm_create_private_mapping,
+> -					 phys_addr, size, prot);
+> -		if (IS_ERR_OR_NULL((void *)base))
+> -			return PTR_ERR((void *)base);
 
--- 
-Ville Syrjälä
-Intel
+There is a latent bug here; PTR_ERR() is not valid for NULL.
+
+Today on arm64 that will happen to return 0, which may or may not be
+what you want, but it's a bad pattern regardless.
+
+That applies to the two copies below that this has been transformed
+into.
+
+Thanks,
+Mark
+
+> -		*haddr = base;
+> -
+> -		return 0;
+> -	}
+>  
+>  	mutex_lock(&kvm_hyp_pgd_mutex);
+>  
+> @@ -484,8 +478,8 @@ static int __create_hyp_private_mapping(phys_addr_t phys_addr, size_t size,
+>  	 *
+>  	 * The allocated size is always a multiple of PAGE_SIZE.
+>  	 */
+> -	size = PAGE_ALIGN(size + offset_in_page(phys_addr));
+> -	base = io_map_base - size;
+> +	base = io_map_base - PAGE_ALIGN(size);
+> +	base = ALIGN_DOWN(base, align);
+>  
+>  	/*
+>  	 * Verify that BIT(VA_BITS - 1) hasn't been flipped by
+> @@ -493,20 +487,45 @@ static int __create_hyp_private_mapping(phys_addr_t phys_addr, size_t size,
+>  	 * overflowed the idmap/IO address range.
+>  	 */
+>  	if ((base ^ io_map_base) & BIT(VA_BITS - 1))
+> -		ret = -ENOMEM;
+> +		base = (unsigned long)ERR_PTR(-ENOMEM);
+>  	else
+>  		io_map_base = base;
+>  
+>  	mutex_unlock(&kvm_hyp_pgd_mutex);
+>  
+> +	return base;
+> +}
+> +
+> +int __create_hyp_private_mapping(phys_addr_t phys_addr, size_t size,
+> +				size_t align, unsigned long *haddr,
+> +				enum kvm_pgtable_prot prot)
+> +{
+> +	unsigned long addr;
+> +	int ret = 0;
+> +
+> +	if (!kvm_host_owns_hyp_mappings()) {
+> +		addr = kvm_call_hyp_nvhe(__pkvm_create_private_mapping,
+> +					 phys_addr, size, prot);
+> +		if (IS_ERR_OR_NULL((void *)addr))
+> +			return PTR_ERR((void *)addr);
+> +		*haddr = addr;
+> +
+> +		return 0;
+> +	}
+> +
+> +	size += offset_in_page(phys_addr);
+> +	addr = hyp_alloc_private_va_range(size, align);
+> +	if (IS_ERR_OR_NULL((void *)addr))
+> +		return PTR_ERR((void *)addr);
+> +
+>  	if (ret)
+>  		goto out;
+>  
+> -	ret = __create_hyp_mappings(base, size, phys_addr, prot);
+> +	ret = __create_hyp_mappings(addr, size, phys_addr, prot);
+>  	if (ret)
+>  		goto out;
+>  
+> -	*haddr = base + offset_in_page(phys_addr);
+> +	*haddr = addr + offset_in_page(phys_addr);
+>  out:
+>  	return ret;
+>  }
+> @@ -537,7 +556,7 @@ int create_hyp_io_mappings(phys_addr_t phys_addr, size_t size,
+>  		return 0;
+>  	}
+>  
+> -	ret = __create_hyp_private_mapping(phys_addr, size,
+> +	ret = __create_hyp_private_mapping(phys_addr, size, PAGE_SIZE,
+>  					   &addr, PAGE_HYP_DEVICE);
+>  	if (ret) {
+>  		iounmap(*kaddr);
+> @@ -564,7 +583,7 @@ int create_hyp_exec_mappings(phys_addr_t phys_addr, size_t size,
+>  
+>  	BUG_ON(is_kernel_in_hyp_mode());
+>  
+> -	ret = __create_hyp_private_mapping(phys_addr, size,
+> +	ret = __create_hyp_private_mapping(phys_addr, size, PAGE_SIZE,
+>  					   &addr, PAGE_HYP_EXEC);
+>  	if (ret) {
+>  		*haddr = NULL;
+> -- 
+> 2.35.1.473.g83b2b277ed-goog
+> 

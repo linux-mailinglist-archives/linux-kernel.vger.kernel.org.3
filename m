@@ -2,186 +2,233 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3218E4BF924
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 14:21:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E59314BF928
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 14:22:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232376AbiBVNVi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 08:21:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57184 "EHLO
+        id S232385AbiBVNWk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 08:22:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231599AbiBVNVi (ORCPT
+        with ESMTP id S232285AbiBVNWi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 08:21:38 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 615B2154D19;
-        Tue, 22 Feb 2022 05:21:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645536072; x=1677072072;
-  h=message-id:date:mime-version:subject:to:references:from:
-   in-reply-to:content-transfer-encoding;
-  bh=LlDTmjwS1WHEhK9J84iLZY/ntYEVzCRnQKxmqUeWpr8=;
-  b=YdtDwRHFcszOmnX4VnOOQUO8XWYR5gaO0Lf4oeuuCvh/TMklaMvYnUWV
-   wdhJjgxMjG65z1YN5QFP4COQo7XIk6LCfJUrgaRqmVSe7E+MegeyJ8ao7
-   Qf8WFi3mCQzwLhi85eAr7nQg0cCAk+GYtmi66+lXy/8N27bd22tRx+l06
-   ZNq6N1eUwlMp48Re1uZxSt3XS1wE8aGdNl+UWPWY4ZvywlDT4hWjvUmQQ
-   +HcEIBoS2/Eh+eeAObu1QBEsPFQhdy0PIKFJqyC4ja1OSizxmzTM2P/TD
-   fumIudtBzZ9u0oRGz8LA4FPoOsLvSzItOT33M9ejkRlW3wfgjlzRj2MuK
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10265"; a="276300640"
-X-IronPort-AV: E=Sophos;i="5.88,387,1635231600"; 
-   d="scan'208";a="276300640"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2022 05:21:12 -0800
-X-IronPort-AV: E=Sophos;i="5.88,387,1635231600"; 
-   d="scan'208";a="507983334"
-Received: from vchandol-mobl.gar.corp.intel.com (HELO [10.252.64.244]) ([10.252.64.244])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2022 05:21:09 -0800
-Message-ID: <4dec1984-b406-7b54-7f8e-7ac93d4eb6f0@linux.intel.com>
-Date:   Tue, 22 Feb 2022 18:50:51 +0530
+        Tue, 22 Feb 2022 08:22:38 -0500
+Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF6122E0AB
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 05:22:12 -0800 (PST)
+Received: by mail-oi1-x229.google.com with SMTP id i5so14437153oih.1
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 05:22:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=daynix-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=FbEG8VNWfAxsexRWaVP+3+Z7bPItdQUVdT+PMVmJerk=;
+        b=2DUgPhrNuz1pS7heHL7qiS+n14t06NuqIh9c+513mbJEMnRr0OZ4lyybjX20n8UJEp
+         a7Otk6bK+LBdmRFHp84bRyxoTSQcNmQh9Up3pSzs4Dw/BKXmxxBR65GZMecOuGndDUa6
+         T1QnzTo9IIOycIaK2usIpIIE77OYOA0b2l9g0INDbWuDDhNBwK33DKdxV6U99cAZ7d1u
+         8qaWgQZLxZ22uOAKdKlFq289oeahwbOmPITKaif7LWlbbBhfyO5+V2ZNJK5IZ/k3tyI7
+         pex0KZ7fnoG/SNzr+RnxRr/+NjXqk6EA7DJlYfwduD2LGk3hHQ3hGU//k9w/ECUS77CA
+         Prnw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=FbEG8VNWfAxsexRWaVP+3+Z7bPItdQUVdT+PMVmJerk=;
+        b=BnzP8PypvH/z1yUhyWXgeLszedu9rwusk/KybCn1GAKjF2EWku11b459521MRDgLbG
+         y4jKmmLBWmhXSQJsI1e4MoRUhcDR1a7dYSlv7GCi0w4gIcWFTe+qxkKGl4oR/9rKMEnp
+         hGm1USxwSNsi5xJb/FGEaAz4o6SyaSMCcpBEwCsvH/r/KUdR0ApI1oVv3DhIbYMqzj27
+         cosZfFAQvhlszwBuNqqQN7fFx43QER9JqYb0xg5USbRRxbSBZJbF6vULSYsUaNw34f9n
+         K05HEWpeun1DfawvidvaqZqoUUiwKGCaI7rLxgR4Xu4uLrau2YyicNpSBiweHSPhXUkk
+         5Jag==
+X-Gm-Message-State: AOAM530qBZJYGjaNM2T9gPWIMuVFO6P5xEenE9d15lcTdF3EqFsiKXzY
+        IHSK/fT5IF0w/9FT6WtMnk80hJgexSfrrEz1V3Q44A==
+X-Google-Smtp-Source: ABdhPJyOrHlBwgGx5qZTXhnCehHekXCBaR6rENqCa6E8lAtJ/4gDv9e9nBODLwxy3eXzpO5VbNRSxYON80doqy+Yi68=
+X-Received: by 2002:a05:6808:2128:b0:2d3:3ce1:6e12 with SMTP id
+ r40-20020a056808212800b002d33ce16e12mr1891947oiw.279.1645536132034; Tue, 22
+ Feb 2022 05:22:12 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [PATCH] hwmon: (pmbus) Clear pmbus fault/warning bits before read
-Content-Language: en-US
-To:     Guenter Roeck <linux@roeck-us.net>, iwona.winiarska@intel.com,
-        jdelvare@suse.com, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220210124154.1304852-1-vikash.chandola@linux.intel.com>
- <46684682-a718-ca9a-b502-2031afd3a756@roeck-us.net>
- <6b5b3d5b-68c9-3f04-d9b7-b58951f5557a@linux.intel.com>
- <91104ef8-de89-aeb3-91ef-8925260e8782@roeck-us.net>
- <56283791-4b82-ad66-174b-49f717d224eb@linux.intel.com>
- <ea859778-92ba-ce22-7c17-4a891d5466e8@roeck-us.net>
- <cfc47708-26a3-8836-2eef-5b5bfb809e71@roeck-us.net>
-From:   Vikash Chandola <vikash.chandola@linux.intel.com>
-In-Reply-To: <cfc47708-26a3-8836-2eef-5b5bfb809e71@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220125084702.3636253-1-andrew@daynix.com> <20220125084702.3636253-3-andrew@daynix.com>
+ <5ac96035-2448-2a25-5bc9-677a7eb0a271@redhat.com>
+In-Reply-To: <5ac96035-2448-2a25-5bc9-677a7eb0a271@redhat.com>
+From:   Andrew Melnichenko <andrew@daynix.com>
+Date:   Tue, 22 Feb 2022 15:22:00 +0200
+Message-ID: <CABcq3pH-md7oTLZYTGvnhi0uhYcZifdWn_D2bAZVafT5d+YZcg@mail.gmail.com>
+Subject: Re: [RFC PATCH 2/5] driver/net/tun: Added features for USO.
+To:     Jason Wang <jasowang@redhat.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Network Development <netdev@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        virtualization <virtualization@lists.linux-foundation.org>,
+        Yuri Benditovich <yuri.benditovich@daynix.com>,
+        Yan Vugenfirer <yan@daynix.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Feb 9, 2022 at 6:39 AM Jason Wang <jasowang@redhat.com> wrote:
+>
+>
+> =E5=9C=A8 2022/1/25 =E4=B8=8B=E5=8D=884:46, Andrew Melnychenko =E5=86=99=
+=E9=81=93:
+> > Added support for USO4 and USO6, also added code for new ioctl TUNGETSU=
+PPORTEDOFFLOADS.
+> > For now, to "enable" USO, it's required to set both USO4 and USO6 simul=
+taneously.
+> > USO enables NETIF_F_GSO_UDP_L4.
+> >
+> > Signed-off-by: Andrew Melnychenko <andrew@daynix.com>
+> > ---
+> >   drivers/net/tap.c | 18 ++++++++++++++++--
+> >   drivers/net/tun.c | 15 ++++++++++++++-
+> >   2 files changed, 30 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/drivers/net/tap.c b/drivers/net/tap.c
+> > index 8e3a28ba6b28..82d742ba78b1 100644
+> > --- a/drivers/net/tap.c
+> > +++ b/drivers/net/tap.c
+> > @@ -940,6 +940,10 @@ static int set_offload(struct tap_queue *q, unsign=
+ed long arg)
+> >                       if (arg & TUN_F_TSO6)
+> >                               feature_mask |=3D NETIF_F_TSO6;
+> >               }
+> > +
+> > +             /* TODO: for now USO4 and USO6 should work simultaneously=
+ */
+> > +             if (arg & (TUN_F_USO4 | TUN_F_USO6) =3D=3D (TUN_F_USO4 | =
+TUN_F_USO6))
+> > +                     features |=3D NETIF_F_GSO_UDP_L4;
+>
+>
+> If kernel doesn't want to split the GSO_UDP features, I wonder how much
+> value to keep separated features for TUN and virtio.
+>
+> Thanks
+>
 
+It's important for Windows guests that may request USO receive only
+for IPv4 or IPv6.
+Or there is possible to implement one feature and change its
+"meanings" when "split" happens.
+I think it's a good idea to implement an interface for iUSO4/USO6 and
+do it right away.
 
-On 2/11/2022 1:27 AM, Guenter Roeck wrote:
-> On 2/10/22 11:55, Guenter Roeck wrote:
->> On 2/10/22 10:29, Vikash Chandola wrote:
->>>
->>>
->>> On 2/10/2022 10:55 PM, Guenter Roeck wrote:
->>>> On 2/10/22 07:57, Vikash Chandola wrote:
->>>>>
->>>>>
->>>>> On 2/10/2022 8:14 PM, Guenter Roeck wrote:
->>>>>> On 2/10/22 04:41, Vikash Chandola wrote:
->>>>>>> pmbus fault and warning bits are not cleared by itself once 
->>>>>>> fault/warning
->>>>>>> condition is not valid anymore. As per pmbus datasheet faults 
->>>>>>> must be
->>>>>>> cleared by user.
->>>>>>> Modify hwmon behavior to clear latched status bytes if any bit in 
->>>>>>> status
->>>>>>> register is high prior to returning fresh data to userspace. If
->>>>>>> fault/warning conditions are still applicable fault/warning bits 
->>>>>>> will be
->>>>>>> set and we will get updated data in second read.
->>>>>>>
->>>>>>> Hwmon behavior is changed here. Now sysfs reads will reflect latest
->>>>>>> values from pmbus slave, not latched values.
->>>>>>> In case a transient warning/fault has happened in the past, it 
->>>>>>> will no
->>>>>>> longer be reported to userspace.
->>>>>>>
->>>>>>
->>>>>>
->>>>>> NACK.
->>>>>>
->>>>>> Reporting that information is exactly the point of the current code.
->>>>>> We _do_ want to report at least once that a problem occurred in 
->>>>>> the past,
->>>>>> and only clear the warning flag(s) afterwards.
->>>>>>
->>>>>> Guenter
->>>>>>
->>>>> But as per current implementation we will continue to report fault 
->>>>> even after fault condition is cleared. I could not find sysfs entry 
->>>>> or any other means by which user/kernel can clear the 
->>>>> faults/warnings after it is reported. Please point if I am missing 
->>>>> anything.
->>>>>
->>>>
->>>> Normally a chip should clear the status after the fault condition 
->>>> cleared
->>>> and the register was read. At least that was my experience so far.
->>>> What chip (or chips) don't do that ?
->>>>
->>>> Guenter
->>>
->>> I see that pmbus spec says that once fault/warning bits are set
->>> they won't be cleared by itself. Section 10.2.3 of
->>> "PMBus Specification Rev. 1.3.1 Part II 2015-03-13" from
->>> https://pmbus.org/specification-archives/   says
->>>
->>> "
->>> Almost all of the warning or fault bits set in the status registers 
->>> remain set, even if the fault or warning condition is removed
->>> or corrected, until one of the following occur:
->>> * The bit is individually cleared (Section 10.2.4),
->>> * The device receives a CLEAR_FAULTS command (Section 15.1),
->>> * A RESET signal (if one exists) is asserted,
->>> * The output is commanded through the CONTROL pin, the OPERATION 
->>> command, or the combined action of the CONTROL pin and OPERATION
->>> command, to turn off and then to turn back on, or
->>> * Bias power is removed from the PMBus device...
->>> "
->>>
->>>  From this I concluded that slave(PSU) following pmbus spec will not
->>> clear the fault/warning in status registers.
->>> I don't have exact chip details handy but I can get it by tomorrow.
->>> However this looks to be issue not related to specific chip ?
->>>
->>
->> Good point. Interesting that I have not seen this before.
->>
->>> If this is a problem, how should I approach this ? Shall I create a new
->>> sysfs entry that user space application can invoke and clear all faults
->>> or provide sysfs entry to clear individual fault/warning bits or
->>> something else ?
->>>
->>
->> No. What we need to do is to add code to pmbus_get_boolean() and 
->> selectively
->> write the reported status bit back into the status register. Something 
->> like
->>      ...
->>      regval = status & mask;
->>      if (regval) {
->>          ret = pmbus_write_status(client, page, reg, regval);
->>                        ^^^^^^^^^^^^^^^^^^ new function
->>          if (ret)
->>              goto unlock;
->>      }
->>
->> and that will need to be tested on a variety of real hardware.
-Hi Guenter,
-I see that there is already a method pmbus_write_byte_data that does
-same thing. I will post patch using that method to update one bit.
->>
-> 
-> Plus, of course, we need to confirm that there is at least one chip which
-> does follow the specification and does not auto-clear alarms.
-We observed above behavior SOLUM G36234-015 PSU.
-Apologies for delay. It took some time to get information from our PSU
-experts that PSU firmware itself is not broken here.
-> 
-> Guenter
-
--- 
-Vikash
+>
+> >       }
+> >
+> >       /* tun/tap driver inverts the usage for TSO offloads, where
+> > @@ -950,7 +954,8 @@ static int set_offload(struct tap_queue *q, unsigne=
+d long arg)
+> >        * When user space turns off TSO, we turn off GSO/LRO so that
+> >        * user-space will not receive TSO frames.
+> >        */
+> > -     if (feature_mask & (NETIF_F_TSO | NETIF_F_TSO6))
+> > +     if (feature_mask & (NETIF_F_TSO | NETIF_F_TSO6) ||
+> > +         feature_mask & (TUN_F_USO4 | TUN_F_USO6) =3D=3D (TUN_F_USO4 |=
+ TUN_F_USO6))
+> >               features |=3D RX_OFFLOADS;
+> >       else
+> >               features &=3D ~RX_OFFLOADS;
+> > @@ -979,6 +984,7 @@ static long tap_ioctl(struct file *file, unsigned i=
+nt cmd,
+> >       unsigned short u;
+> >       int __user *sp =3D argp;
+> >       struct sockaddr sa;
+> > +     unsigned int supported_offloads;
+> >       int s;
+> >       int ret;
+> >
+> > @@ -1074,7 +1080,8 @@ static long tap_ioctl(struct file *file, unsigned=
+ int cmd,
+> >       case TUNSETOFFLOAD:
+> >               /* let the user check for future flags */
+> >               if (arg & ~(TUN_F_CSUM | TUN_F_TSO4 | TUN_F_TSO6 |
+> > -                         TUN_F_TSO_ECN | TUN_F_UFO))
+> > +                         TUN_F_TSO_ECN | TUN_F_UFO |
+> > +                         TUN_F_USO4 | TUN_F_USO6))
+> >                       return -EINVAL;
+> >
+> >               rtnl_lock();
+> > @@ -1082,6 +1089,13 @@ static long tap_ioctl(struct file *file, unsigne=
+d int cmd,
+> >               rtnl_unlock();
+> >               return ret;
+> >
+> > +     case TUNGETSUPPORTEDOFFLOADS:
+> > +             supported_offloads =3D TUN_F_CSUM | TUN_F_TSO4 | TUN_F_TS=
+O6 |
+> > +                                             TUN_F_TSO_ECN | TUN_F_UFO=
+ | TUN_F_USO4 | TUN_F_USO6;
+> > +             if (copy_to_user(&arg, &supported_offloads, sizeof(suppor=
+ted_offloads)))
+> > +                     return -EFAULT;
+> > +             return 0;
+> > +
+> >       case SIOCGIFHWADDR:
+> >               rtnl_lock();
+> >               tap =3D tap_get_tap_dev(q);
+> > diff --git a/drivers/net/tun.c b/drivers/net/tun.c
+> > index fed85447701a..4f2105d1e6f1 100644
+> > --- a/drivers/net/tun.c
+> > +++ b/drivers/net/tun.c
+> > @@ -185,7 +185,7 @@ struct tun_struct {
+> >       struct net_device       *dev;
+> >       netdev_features_t       set_features;
+> >   #define TUN_USER_FEATURES (NETIF_F_HW_CSUM|NETIF_F_TSO_ECN|NETIF_F_TS=
+O| \
+> > -                       NETIF_F_TSO6)
+> > +                       NETIF_F_TSO6 | NETIF_F_GSO_UDP_L4)
+> >
+> >       int                     align;
+> >       int                     vnet_hdr_sz;
+> > @@ -2821,6 +2821,12 @@ static int set_offload(struct tun_struct *tun, u=
+nsigned long arg)
+> >               }
+> >
+> >               arg &=3D ~TUN_F_UFO;
+> > +
+> > +             /* TODO: for now USO4 and USO6 should work simultaneously=
+ */
+> > +             if (arg & TUN_F_USO4 && arg & TUN_F_USO6) {
+> > +                     features |=3D NETIF_F_GSO_UDP_L4;
+> > +                     arg &=3D ~(TUN_F_USO4 | TUN_F_USO6);
+> > +             }
+> >       }
+> >
+> >       /* This gives the user a way to test for new features in future b=
+y
+> > @@ -2991,6 +2997,7 @@ static long __tun_chr_ioctl(struct file *file, un=
+signed int cmd,
+> >       int sndbuf;
+> >       int vnet_hdr_sz;
+> >       int le;
+> > +     unsigned int supported_offloads;
+> >       int ret;
+> >       bool do_notify =3D false;
+> >
+> > @@ -3154,6 +3161,12 @@ static long __tun_chr_ioctl(struct file *file, u=
+nsigned int cmd,
+> >       case TUNSETOFFLOAD:
+> >               ret =3D set_offload(tun, arg);
+> >               break;
+> > +     case TUNGETSUPPORTEDOFFLOADS:
+> > +             supported_offloads =3D TUN_F_CSUM | TUN_F_TSO4 | TUN_F_TS=
+O6 |
+> > +                             TUN_F_TSO_ECN | TUN_F_UFO | TUN_F_USO4 | =
+TUN_F_USO6;
+> > +             if (copy_to_user(&arg, &supported_offloads, sizeof(suppor=
+ted_offloads)))
+> > +                     ret =3D -EFAULT;
+> > +             break;
+> >
+> >       case TUNSETTXFILTER:
+> >               /* Can be set only for TAPs */
+>

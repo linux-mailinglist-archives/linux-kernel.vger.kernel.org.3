@@ -2,114 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6FE94C01C6
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 19:59:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 616934C01CE
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 20:08:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235153AbiBVS7a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 13:59:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44800 "EHLO
+        id S235061AbiBVTIV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 14:08:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232614AbiBVS73 (ORCPT
+        with ESMTP id S232572AbiBVTIS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 13:59:29 -0500
-Received: from mail-ot1-x32e.google.com (mail-ot1-x32e.google.com [IPv6:2607:f8b0:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 055B4151343
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 10:59:03 -0800 (PST)
-Received: by mail-ot1-x32e.google.com with SMTP id a7-20020a9d5c87000000b005ad1467cb59so10311060oti.5
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 10:59:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=sr0bZ/IYx5fNgYIhrtES2Y53AQkSGkgSrNO7ZdZIC3Q=;
-        b=ZhqRZL1lIFwgAvx2B1EAPpwJgojg1Hi42R0xhoNL9F+8ADtR+J+GLx8Dyemeyz07bb
-         AKCjA1lLb6wiFn0GLKn2i3cUZpz9QhYKsXQb2P3c0cF5wyU9nt1sdZKqoWYXpR5HGLV0
-         cTFEGK5CmTSsZ2zEhqU4IKtoLYMINfiFDTJr0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=sr0bZ/IYx5fNgYIhrtES2Y53AQkSGkgSrNO7ZdZIC3Q=;
-        b=Ujq8P6dbugBVFLw1Fi3vVbhIEEnwd6R1gPr3EujodTDF+bvUWMNIiqsBdvxEzkJROc
-         B7k4wnlX7ncb9/Q25HzcgIvLuk74K9KKVumzp74jM6EjjDSko0/wsJUQt80GESDY+hrV
-         8R0nO2FqYP4LVckCmVNSCOldbxioDbCHgHRGY0CcO7yUtQ+s2WJ/1/IymhVTdlsuxlNV
-         swJTnZoyavhTsL79pQ9gyV54Rt0qEmFuF1YQxgL0h+MkribPdA75qOSjmO0Ht0zDHifc
-         FVTdKfxgqImG4K9miKK1cTP1+0CvbRy+sFTEig/NTgp0GJg+D3liw3duic1H63MZDdr+
-         t2Zg==
-X-Gm-Message-State: AOAM533lpXlLmjhDQ2uKdXI+28+9Pl5/4qX8kiWnMSNud+Wv0hAbc/Dk
-        K5i/C+AZxVFq/NiRMhdC7CVkEQ==
-X-Google-Smtp-Source: ABdhPJx43lTtrcAsV/EG4qlYsVml8Jq/qj9Hd4Y/C+i0e4zg3+UpdjivGCQxjYv7vBO59tVaan2CtA==
-X-Received: by 2002:a9d:715c:0:b0:5ad:3858:4d54 with SMTP id y28-20020a9d715c000000b005ad38584d54mr6872077otj.214.1645556342321;
-        Tue, 22 Feb 2022 10:59:02 -0800 (PST)
-Received: from [192.168.1.128] ([71.205.29.0])
-        by smtp.gmail.com with ESMTPSA id p13sm8964946oiv.23.2022.02.22.10.59.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 22 Feb 2022 10:59:02 -0800 (PST)
-Subject: Re: [PATCH 2/2] Documentation/vm/page_owner.rst: fix a phrase
-To:     Yixuan Cao <caoyixuan2019@email.szu.edu.cn>, corbet@lwn.net
-Cc:     akpm@linux-foundation.org, sfr@canb.auug.org.au,
-        hanshenghong2019@email.szu.edu.cn, vbabka@suse.cz,
-        georgi.djakov@linaro.org, weizhenliang@huawei.com,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20220220082932.2808-1-caoyixuan2019@email.szu.edu.cn>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <f27d2965-bd4d-bad3-4137-09c7f4214bd9@linuxfoundation.org>
-Date:   Tue, 22 Feb 2022 11:59:01 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        Tue, 22 Feb 2022 14:08:18 -0500
+Received: from fieldses.org (fieldses.org [IPv6:2600:3c00:e000:2f7::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37CC215929E;
+        Tue, 22 Feb 2022 11:07:52 -0800 (PST)
+Received: by fieldses.org (Postfix, from userid 2815)
+        id 9B3877210; Tue, 22 Feb 2022 14:07:51 -0500 (EST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 fieldses.org 9B3877210
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fieldses.org;
+        s=default; t=1645556871;
+        bh=e6LdvLmNOUpNyuvE+jmLUhatFS/jFx8h0/Y8LiEO7vE=;
+        h=Date:To:Cc:Subject:References:In-Reply-To:From:From;
+        b=wnoQ/kQLPj+AIhnFBPph5T0fT1LTM7zLEtuX+FlKPDYDuuLuiQy8QvUmP/qVGwxMS
+         TGlLQa0xL5U9eiSjmFWYgAVS0KQPGASumfCG/Q/9uCSItbT21XY2OrKC+XHz3QcLe7
+         1pz4jDkIbCORVjvTDU7lm+pyRKzzFfUbUdfGcL1g=
+Date:   Tue, 22 Feb 2022 14:07:51 -0500
+To:     NeilBrown <neilb@suse.de>
+Cc:     Al Viro <viro@zeniv.linux.org.uk>,
+        Linux NFS Mailing List <linux-nfs@vger.kernel.org>,
+        linux-fsdevel@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        Daire Byrne <daire@dneg.com>,
+        Andreas Dilger <adilger.kernel@dilger.ca>
+Subject: Re: [PATCH/RFC] VFS: support parallel updates in the one directory.
+Message-ID: <20220222190751.GA7766@fieldses.org>
+References: <164549669043.5153.2021348013072574365@noble.neil.brown.name>
 MIME-Version: 1.0
-In-Reply-To: <20220220082932.2808-1-caoyixuan2019@email.szu.edu.cn>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <164549669043.5153.2021348013072574365@noble.neil.brown.name>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+From:   bfields@fieldses.org (J. Bruce Fields)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/20/22 1:29 AM, Yixuan Cao wrote:
-> I think that using "by default" will be better.
-> 
-> Signed-off-by: Yixuan Cao <caoyixuan2019@email.szu.edu.cn>
+For what it's worth, I applied this to recent upstream (038101e6b2cd)
+and fed it through my usual scripts--tests all passed, but I did see
+this lockdep warning.
 
-While you are at it could you fix others as well:
+I'm not actually sure what was running at the time--probably just cthon.
 
-> ---
->   Documentation/vm/page_owner.rst | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/vm/page_owner.rst b/Documentation/vm/page_owner.rst
-> index 2b54e82b9fe1..5ac1c12fcfc2 100644
-> --- a/Documentation/vm/page_owner.rst
-> +++ b/Documentation/vm/page_owner.rst
-> @@ -26,7 +26,7 @@ fragmentation statistics can be obtained through gfp flag information of
->   each page. It is already implemented and activated if page owner is
->   enabled. Other usages are more than welcome.
->   
-> -page owner is disabled in default. So, if you'd like to use it, you need
-> +page owner is disabled by default. So, if you'd like to use it, you need
->   to add "page_owner=on" into your boot cmdline. If the kernel is built
+--b.
 
-page owner is disabled by default. So, if you'd like to use it, you need
-to add "page_owner=on" to your boot cmdline.
+[  142.679891] ======================================================
+[  142.680883] WARNING: possible circular locking dependency detected
+[  142.681999] 5.17.0-rc5-00005-g64e79f877311 #1778 Not tainted
+[  142.682970] ------------------------------------------------------
+[  142.684059] test1/4557 is trying to acquire lock:
+[  142.684881] ffff888023d85398 (DENTRY_PAR_UPDATE){+.+.}-{0:0}, at: d_lock_update_nested+0x5/0x6a0
+[  142.686421] 
+               but task is already holding lock:
+[  142.687171] ffff88801f618bd0 (&type->i_mutex_dir_key#6){++++}-{3:3}, at: path_openat+0x7cb/0x24a0
+[  142.689098] 
+               which lock already depends on the new lock.
 
->   with page owner and page owner is disabled in runtime due to no enabling
+[  142.690045] 
+               the existing dependency chain (in reverse order) is:
+[  142.691171] 
+               -> #1 (&type->i_mutex_dir_key#6){++++}-{3:3}:
+[  142.692285]        down_write+0x82/0x130
+[  142.692844]        vfs_rmdir+0xbd/0x560
+[  142.693351]        do_rmdir+0x33d/0x400
+[  142.693830]        __x64_sys_unlinkat+0xaf/0xe0
+[  142.694391]        do_syscall_64+0x43/0x90
+[  142.694900]        entry_SYSCALL_64_after_hwframe+0x44/0xae
+[  142.695609] 
+               -> #0 (DENTRY_PAR_UPDATE){+.+.}-{0:0}:
+[  142.696357]        __lock_acquire+0x2bfd/0x61b0
+[  142.696965]        lock_acquire+0x1a6/0x4b0
+[  142.697489]        d_lock_update_nested+0x8d/0x6a0
+[  142.698082]        lookup_open.isra.0+0x1305/0x1bf0
+[  142.698685]        path_openat+0x833/0x24a0
+[  142.699205]        do_filp_open+0x197/0x3c0
+[  142.699725]        do_sys_openat2+0xef/0x3d0
+[  142.700345]        __x64_sys_creat+0xb4/0xf0
+[  142.700915]        do_syscall_64+0x43/0x90
+[  142.701431]        entry_SYSCALL_64_after_hwframe+0x44/0xae
+[  142.702112] 
+               other info that might help us debug this:
 
-with page owner and page owner is disabled in runtime due to not enabling
+[  142.702872]  Possible unsafe locking scenario:
 
->   boot option, runtime overhead is marginal. If disabled in runtime, it
-> 
+[  142.703492]        CPU0                    CPU1
+[  142.704115]        ----                    ----
+[  142.704704]   lock(&type->i_mutex_dir_key#6);
+[  142.705296]                                lock(DENTRY_PAR_UPDATE);
+[  142.706065]                                lock(&type->i_mutex_dir_key#6);
+[  142.706911]   lock(DENTRY_PAR_UPDATE);
+[  142.707382] 
+                *** DEADLOCK ***
 
-With these fixed:
-
-Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
-
-thanks,
--- Shuah
+[  142.707978] 2 locks held by test1/4557:
+[  142.708485]  #0: ffff888011ef0438 (sb_writers#14){.+.+}-{0:0}, at: path_openat+0x1408/0x24a0
+[  142.709562]  #1: ffff88801f618bd0 (&type->i_mutex_dir_key#6){++++}-{3:3}, at: path_openat+0x7cb/0x24a0
+[  142.710757] 
+               stack backtrace:
+[  142.711187] CPU: 0 PID: 4557 Comm: test1 Not tainted 5.17.0-rc5-00005-g64e79f877311 #1778
+[  142.712275] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.15.0-1.fc35 04/01/2014
+[  142.713409] Call Trace:
+[  142.713717]  <TASK>
+[  142.713986]  dump_stack_lvl+0x45/0x59
+[  142.714449]  check_noncircular+0x23e/0x2e0
+[  142.714960]  ? print_circular_bug+0x450/0x450
+[  142.715502]  ? is_dynamic_key+0x1a0/0x1a0
+[  142.716061]  ? _raw_spin_unlock_irqrestore+0x38/0x50
+[  142.716706]  __lock_acquire+0x2bfd/0x61b0
+[  142.717246]  ? do_syscall_64+0x43/0x90
+[  142.717712]  ? entry_SYSCALL_64_after_hwframe+0x44/0xae
+[  142.718361]  ? lockdep_hardirqs_on_prepare+0x400/0x400
+[  142.719590]  ? mark_lock.part.0+0xe7/0x2e00
+[  142.720217]  lock_acquire+0x1a6/0x4b0
+[  142.720706]  ? d_lock_update_nested+0x5/0x6a0
+[  142.721293]  ? lock_release+0x6d0/0x6d0
+[  142.721774]  ? lock_downgrade+0x690/0x690
+[  142.722280]  ? do_raw_spin_unlock+0x54/0x220
+[  142.722814]  d_lock_update_nested+0x8d/0x6a0
+[  142.723350]  ? d_lock_update_nested+0x5/0x6a0
+[  142.723959]  ? d_alloc_anon+0x10/0x10
+[  142.724443]  ? kfree+0x110/0x250
+[  142.724887]  ? lockdep_hardirqs_on+0x79/0x100
+[  142.725454]  ? kfree+0x110/0x250
+[  142.725859]  ? nfs_lookup+0x55a/0xa80 [nfs]
+[  142.726410]  lookup_open.isra.0+0x1305/0x1bf0
+[  142.726952]  ? lookup_positive_unlocked+0x80/0x80
+[  142.727546]  ? rwsem_down_read_slowpath+0xaa0/0xaa0
+[  142.728239]  path_openat+0x833/0x24a0
+[  142.728700]  ? path_lookupat+0x6b0/0x6b0
+[  142.729233]  ? lockdep_hardirqs_on_prepare+0x400/0x400
+[  142.729867]  ? lockdep_hardirqs_on_prepare+0x400/0x400
+[  142.730502]  do_filp_open+0x197/0x3c0
+[  142.730955]  ? lock_is_held_type+0xd7/0x130
+[  142.731477]  ? may_open_dev+0xd0/0xd0
+[  142.731994]  ? do_raw_spin_lock+0x11e/0x240
+[  142.732545]  ? do_raw_spin_unlock+0x54/0x220
+[  142.733115]  ? getname_flags.part.0+0x8e/0x450
+[  142.733670]  do_sys_openat2+0xef/0x3d0
+[  142.734140]  ? mntput_no_expire+0x10f/0xad0
+[  142.734661]  ? build_open_flags+0x450/0x450
+[  142.735179]  ? dput+0x30/0xa10
+[  142.735565]  __x64_sys_creat+0xb4/0xf0
+[  142.736091]  ? __ia32_sys_openat2+0x260/0x260
+[  142.736656]  ? syscall_enter_from_user_mode+0x1d/0x50
+[  142.737325]  ? lockdep_hardirqs_on+0x79/0x100
+[  142.737885]  do_syscall_64+0x43/0x90
+[  142.738333]  entry_SYSCALL_64_after_hwframe+0x44/0xae
+[  142.738959] RIP: 0033:0x7f4c0f358e07
+[  142.739408] Code: 64 89 01 48 83 c8 ff c3 66 2e 0f 1f 84 00 00 00 00 00 90 f3 0f 1e fa 64 8b 04 25 18 00 00 00 85 c0 75 10 b8 55 00 00 00 0f 05 <48> 3d 00 f0 ff ff 77 41 c3 48 83 ec 18 89 74 24 0c 48 89 3c 24 e8
+[  142.741911] RSP: 002b:00007ffe31b33e48 EFLAGS: 00000246 ORIG_RAX: 0000000000000055
+[  142.742843] RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f4c0f358e07
+[  142.743718] RDX: 0000000000000000 RSI: 00000000000001b6 RDI: 00007ffe31b33e80
+[  142.744675] RBP: 00007ffe31b34e90 R08: 0000000000000000 R09: 00007ffe31b33be7
+[  142.745589] R10: fffffffffffff934 R11: 0000000000000246 R12: 0000000000401190
+[  142.746464] R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+[  142.747343]  </TASK>

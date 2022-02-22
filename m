@@ -2,73 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFB0E4BFDDC
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 16:57:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EAFA74BFDEC
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 16:59:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233590AbiBVP5d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 10:57:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53160 "EHLO
+        id S233851AbiBVQAC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 11:00:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231523AbiBVP5b (ORCPT
+        with ESMTP id S231794AbiBVP77 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 10:57:31 -0500
-Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FEEABF52
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 07:57:05 -0800 (PST)
-Received: by mail-yb1-xb31.google.com with SMTP id bt13so42102076ybb.2
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 07:57:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=4iDZ9H8inY+NDZ0HYQKmVnQ5HPOpNxH9x5TSVqE2tPM=;
-        b=QSq82TnQ0nQE6N8kyjOuBwFCSTCmC32PZVhG9xE5SXdbwJuXbp8Q5uVYD/zKSnlfbL
-         e+atEsS1GffladQeVh1ubCQ5owgNiqkgzMeRSr2NLa6BxM2AIARh7B7IAw5pFty4wwSd
-         nEanN79Fi42rtZnhSwUUnGbO5qXAn0Pi0870dO6q42s60xze1hlXSBQN3jaYvZhub4kO
-         M0ZZ20Yx8gF69hEqMNzge1OyOKf6pNtuokqTZ/fXZNGpH19nFH8OMdjSpH1EX+HXFG7n
-         SFPbkFBXIS5ulX+AbygzCntKyYtHZJnsWRfgWWluXmdSxC/GqdUsyih3fDwZAMTZpZbR
-         TNEA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=4iDZ9H8inY+NDZ0HYQKmVnQ5HPOpNxH9x5TSVqE2tPM=;
-        b=Kap1SMjVmIOSUReSiqo/k0fsR3WaIXGMK1+l9KXB9HcklsBbTuKvucHwO0Nua5tb2X
-         vD5cvl3+Lw2PljFrBgc/01MGNMysfXd/59GcFG4X90AtaL2L03Dc9Nnw02SY7rMpM1N2
-         X8zViRy46oXb/kHflF9grsQIZmV6BspF/KFmC85yvrkrZfoaPJqrOWuDE29H4YqDvkM5
-         oUvUuZk461g8cpLTAeRGLtDeXH8vQ9Xaq3cR69AhJHRJGlrWNSm61ZY7vJIO+ic1ko1E
-         7KdMVFNk1GMi2FqNE7FaKfeecL6pighX+MltHxafk7Q8DkwJtfkidT5hnGTKbjO8VuNk
-         cvRw==
-X-Gm-Message-State: AOAM532LCJ7sOq6FY5OeuR6EdSHdXs4CCUxVU8VqCEA59wyf6f1S7T8f
-        Pe0a5GrvlWGAhLdr3T/tdwiVWDrBG2LwvJOAWhkg3A==
-X-Google-Smtp-Source: ABdhPJzsG2l5hbH/rvKMzmec8uK19VoBN6hBM7s2DgZKr/9BsfAxIoyNXShwzMmISOUmqF/VOKKxsrcDrM5jrEgLCY8=
-X-Received: by 2002:a25:2693:0:b0:624:50a8:fee9 with SMTP id
- m141-20020a252693000000b0062450a8fee9mr17039255ybm.348.1645545424324; Tue, 22
- Feb 2022 07:57:04 -0800 (PST)
+        Tue, 22 Feb 2022 10:59:59 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B52A2D7625;
+        Tue, 22 Feb 2022 07:59:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1645545541;
+        bh=v9/boqjlEcMyJId9CIqJT5C3HYAS1X5pmHRpj5+LSPc=;
+        h=X-UI-Sender-Class:Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=cbzMWlssQz1//PF81imE5fp0P7GhAfIzopBnTdtSgpTFKkIIK0dcRYGairYstDVtA
+         fTumudGg1hHmC5mVNbopU7Y/ObW6RxAZQFDUXV2RNmrnd0O9CpQbZenoXTf5gC/lFG
+         zgo/bvwWAlDR0g4fwesrdJpFarVh2oVqkacLEUyo=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from longitude ([5.146.194.160]) by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1N1fis-1oOZK92U6C-0123sk; Tue, 22
+ Feb 2022 16:59:01 +0100
+Date:   Tue, 22 Feb 2022 16:58:55 +0100
+From:   Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
+To:     Tyrone Ting <warp5tw@gmail.com>
+Cc:     Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
+        venture@google.com, yuenn@google.com, benjaminfair@google.com,
+        robh+dt@kernel.org, krzysztof.kozlowski@canonical.com,
+        semen.protsenko@linaro.org, yangyicong@hisilicon.com,
+        wsa@kernel.org, jie.deng@intel.com, sven@svenpeter.dev,
+        bence98@sch.bme.hu, christophe.leroy@csgroup.eu,
+        lukas.bulwahn@gmail.com, olof@lixom.net, arnd@arndb.de,
+        digetx@gmail.com, andriy.shevchenko@linux.intel.com,
+        tali.perry@nuvoton.com, Avi.Fishman@nuvoton.com,
+        tomer.maimon@nuvoton.com, KWLIU@nuvoton.com, JJLIU0@nuvoton.com,
+        kfting@nuvoton.com, devicetree@vger.kernel.org,
+        openbmc@lists.ozlabs.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 05/11] i2c: npcm: Remove unused clock node
+Message-ID: <YhUIP4pvoGBUohCE@latitude>
+References: <20220220035321.3870-1-warp5tw@gmail.com>
+ <20220220035321.3870-6-warp5tw@gmail.com>
+ <YhN8OGIR9eSCus8E@latitude>
+ <CACD3sJbMZ-CT4htPUBqyswghAC+j8PgJ_z-VdA38yC+6HFrF+w@mail.gmail.com>
 MIME-Version: 1.0
-References: <20220222054025.3412898-1-surenb@google.com> <20220222054025.3412898-2-surenb@google.com>
- <YhSqDvSTN7nbz4C9@dhcp22.suse.cz>
-In-Reply-To: <YhSqDvSTN7nbz4C9@dhcp22.suse.cz>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Tue, 22 Feb 2022 07:56:53 -0800
-Message-ID: <CAJuCfpHr78By6p5sMhJZ3UohKXXSeA7Dxm_q-OA4y6KYL0L_pQ@mail.gmail.com>
-Subject: Re: [PATCH 2/3] mm: prevent vm_area_struct::anon_name refcount saturation
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     akpm@linux-foundation.org, ccross@google.com,
-        sumit.semwal@linaro.org, dave.hansen@intel.com,
-        keescook@chromium.org, willy@infradead.org,
-        kirill.shutemov@linux.intel.com, vbabka@suse.cz,
-        hannes@cmpxchg.org, ebiederm@xmission.com, brauner@kernel.org,
-        legion@kernel.org, ran.xiaokai@zte.com.cn, sashal@kernel.org,
-        chris.hyser@oracle.com, dave@stgolabs.net, pcc@google.com,
-        caoxiaofeng@yulong.com, david@redhat.com, gorcunov@gmail.com,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        kernel-team@android.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="BFV9RJgjJXy7GXVr"
+Content-Disposition: inline
+In-Reply-To: <CACD3sJbMZ-CT4htPUBqyswghAC+j8PgJ_z-VdA38yC+6HFrF+w@mail.gmail.com>
+X-Provags-ID: V03:K1:rkMLMEInh17Ve8XEjZGhyurP/kHhNyjyxMPqtUdDPcpxZOVYY84
+ txLbQ0ex8B7LbDZXCEOuqWbWr/BgbINmZ/my9cXBi5qZrwiU1ImYy0D7ahISGOQrPnpwxLs
+ 3QEMMXU/b6q2CuXyXDJPG/F5COM7fxchIRgR0t00uAF+ZePvhRcIPT/xfr51YVNNo2cJIwd
+ WpPA7p37qFwt1E8AOOVUQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:Yajh5NqeYhs=:yyQF5KUIf9keFlVIDVev0x
+ RMyiFIEKsJfAqDv8iScdFtsSbx9c/MXj/m38FFWZ+S5sl/fssdxvp4lXPZ8koIFyM9prrKW1B
+ rRCJQyicu6pUX/BKEk+uMk3FQPgJMYSrLCcScT284aJmSxzNRFfpoYAroQzaBwj2tqEAALX7x
+ DKICabara53MyEGB8jqDrOwXtiFzo/86prDPX4F+hRBYfVcTQwwseo9HhDRA8bZyKF1McWr09
+ wtDWzBGUJuFBgiw2GUnaaUcYkLxoghz0vvrhp+hVa+hnzedDc2kei1Xg2cUYfjOe+nFyoQx+D
+ Ms1XEO7kfmcfTGxxcbX+9VYs9Y5g85GkwZVucKV3ylfHJ0BwrYp+bYmcCAfQSslo25rduYcQs
+ ypL76f1f0DeMRzxAAn8B1Qw7i9d28oaGWFaToXs3isj6uJZTmRbNi77grVgW2H2nU+wDMoP0U
+ fwHUKD5RJxa6xB5o81FlTysBMFr50rPKJvV2mUbzQhJKh0qZXo949bfPhISF1eKTKag7U5zo1
+ 1yalgmzNtdIzQ1s3rQJk9r6yZT7D9RoKc4WkM08MDtmfZ+O+tzpfqJ25qhozdSZPwvvzwa6xj
+ HrFawC4U5la7dxnK2jwE3lo5DBQAHq6Djy8l21wdYptKID9vE9gaV7u6m7XkYwaj548HogTj+
+ 7bD/iMmStloFWhX4gkb5ZQlfxHfGt+zhBHtS7mIywqt1fOBTok/lbCtZni+yBmxi3XryFrt9h
+ cUbrpllS2XV9d0HYjFFs1NVHnm14FbqrIXl4pQ0THAtA27rtp3tYMpzM+vI6Aplf35fCYKK5Y
+ 4YppBHNBrKqhAK7MIUrMK4dExLZE5rOihrM8EoXcivXXX186d6jjqLsHjiMo7W3Mkt+mIRJF9
+ C/7AWQ8RKq11RCbzuOBykJk9R9HlBcKRiTU0hOslaGyhx0C/H46KBmRrx2Nj1uLN+O/VAauRT
+ QvPLVaP9V69b2JjrEKbx2CTILdWpBec/Tw/mQXVmtaqGP8JTj/yVI4/davAI7pNMHJT98aHgv
+ UC1k7vyg5x7KWlg4n2X4A1WIj8UD14m2Iq5UFcExEJoUAdTvyjqwX2jWj+4YbN+ONRKzsPZFR
+ GEvrUYzS4AsLnY=
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,102 +85,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 22, 2022 at 1:17 AM Michal Hocko <mhocko@suse.com> wrote:
->
-> On Mon 21-02-22 21:40:24, Suren Baghdasaryan wrote:
-> > A deep process chain with many vmas could grow really high.
->
-> This would really benefit from some numbers. With default
-> sysctl_max_map_count (64k) and default pid_max (32k) the INT_MAX could
-> be theoretically reached but I find it impractical because not all vmas
-> can be anonymous same as all available pids can be consumed for a
-> theoretical attack (if my counting is proper).
-> On the other hand any non-default configuration with any of the values
-> increased could hit this theoretically.
 
-re: This would really benefit from some numbers
-Should I just add the details you provided above into the description?
-Would that suffice?
+--BFV9RJgjJXy7GXVr
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
->
-> > kref
-> > refcounting interface used in anon_vma_name structure will detect
-> > a counter overflow when it reaches REFCOUNT_SATURATED value but will
-> > only generate a warning about broken refcounting.
-> > To ensure anon_vma_name refcount does not overflow, stop anon_vma_name
-> > sharing when the refcount reaches INT_MAX, which still leaves INT_MAX/2
-> > values before the counter reaches REFCOUNT_SATURATED. This should provide
-> > enough headroom for raising the refcounts temporarily.
+On Tue, Feb 22, 2022 at 10:15:04AM +0800, Tyrone Ting wrote:
+> Hi Jonathan:
+>=20
+> Thank you for your comments and please find my reply next to your comment=
+s.
+>=20
+> Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net> =E6=96=BC 2022=E5=B9=B42=
+=E6=9C=8821=E6=97=A5 =E9=80=B1=E4=B8=80 =E4=B8=8B=E5=8D=887:49=E5=AF=AB=E9=
+=81=93=EF=BC=9A
 > >
-> > Suggested-by: Michal Hocko <mhocko@suse.com>
-> > Signed-off-by: Suren Baghdasaryan <surenb@google.com>
-> > ---
-> >  include/linux/mm_inline.h | 18 ++++++++++++++----
-> >  mm/madvise.c              |  3 +--
-> >  2 files changed, 15 insertions(+), 6 deletions(-)
+> > On Sun, Feb 20, 2022 at 11:53:15AM +0800, Tyrone Ting wrote:
+> > > From: Tali Perry <tali.perry1@gmail.com>
+> > >
+> > > Remove unused npcm750-clk node.
 > >
-> > diff --git a/include/linux/mm_inline.h b/include/linux/mm_inline.h
-> > index 70b619442d56..b189e2638843 100644
-> > --- a/include/linux/mm_inline.h
-> > +++ b/include/linux/mm_inline.h
-> > @@ -156,15 +156,25 @@ static inline void anon_vma_name_get(struct anon_vma_name *anon_name)
+> > You're not actually removing a node, for example in the sense of removi=
+ng a
+> > devicetree node from a devicetree.
 > >
-> >  extern void anon_vma_name_put(struct anon_vma_name *anon_name);
+> > So, I think "Remove unused variable clk_regmap." would be a better
+> > description.
 > >
-> > +static inline
-> > +struct anon_vma_name *anon_vma_name_reuse(struct anon_vma_name *anon_name)
-> > +{
-> > +     /* Prevent anon_name refcount saturation early on */
-> > +     if (kref_read(&anon_name->kref) < INT_MAX) {
->
-> REFCOUNT_MAX seems to be defined by the kref framework.
+>=20
+> May I modify the description according to your input and attach
+> "Reviewed-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>"
+> onto this commit in the next version of the patch set?
 
-Ah, indeed. I missed that. Will change to use it.
+Yes!
 
->
-> Other than that looks good to me.
 
-Thanks for the review!
+Jonathan
 
->
-> > +             anon_vma_name_get(anon_name);
-> > +             return anon_name;
-> > +
-> > +     }
-> > +     return anon_vma_name_alloc(anon_name->name);
-> > +}
-> > +
-> >  static inline void dup_vma_anon_name(struct vm_area_struct *orig_vma,
-> >                                    struct vm_area_struct *new_vma)
-> >  {
-> >       struct anon_vma_name *anon_name = vma_anon_name(orig_vma);
-> >
-> > -     if (anon_name) {
-> > -             anon_vma_name_get(anon_name);
-> > -             new_vma->anon_name = anon_name;
-> > -     }
-> > +     if (anon_name)
-> > +             new_vma->anon_name = anon_vma_name_reuse(anon_name);
-> >  }
-> >
-> >  static inline void free_vma_anon_name(struct vm_area_struct *vma)
-> > diff --git a/mm/madvise.c b/mm/madvise.c
-> > index f81d62d8ce9b..a395884aeecb 100644
-> > --- a/mm/madvise.c
-> > +++ b/mm/madvise.c
-> > @@ -122,8 +122,7 @@ static int replace_vma_anon_name(struct vm_area_struct *vma,
-> >       if (anon_vma_name_eq(orig_name, anon_name))
-> >               return 0;
-> >
-> > -     anon_vma_name_get(anon_name);
-> > -     vma->anon_name = anon_name;
-> > +     vma->anon_name = anon_vma_name_reuse(anon_name);
-> >       anon_vma_name_put(orig_name);
-> >
-> >       return 0;
-> > --
-> > 2.35.1.473.g83b2b277ed-goog
->
-> --
-> Michal Hocko
-> SUSE Labs
+--BFV9RJgjJXy7GXVr
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEvHAHGBBjQPVy+qvDCDBEmo7zX9sFAmIVCBgACgkQCDBEmo7z
+X9vfqA//UCqVrHlOZvzDu7L0EyOn3evdp8KqQUPYp/8FSJD0Cb/Ak6HAByo7g0F3
+wss1Xu7kJvV5YDYJn92mCS6oyLH4av/702Ej4s6bfw5UudeW+Fe4tXiumerPTP+d
+0Af6kNPoVAv/JPxLzLaWOcuPqvQ7mSI/dXkJ67YjdPZ9K1uI3tOcP77Us864kBxh
+0BKcaDzcyuSeZXcw3fNMFj/wJAjemU3poSHsO6iiHaqJIb2BXQohyT8D+vX/VAVz
+RP3LJVsJWZDHbvXtjlKpXiCOEc3u7URTMaKCCqnGR5hUW+groLKqiWI4iltMk9eh
+M0OOi2PF9imId4UWTikbd6cB/0n/XUqQ5Cz3AF698sYiU/VVtsrEtekjH3Cabhj8
+j2kbzkPwPV0xSqeKrQohj7ARPsppynPxdoNUCQ3ebV0zBNxwqYQ1zXqtNj75nB/S
+ixt5cjacJ8/PW/3UYfBcvu2+gN3lVrILRi+nq584LI73NXOh0RHNlNI8qDaNB+MO
+waBjT0bk5BrgNTV8LO6xKtvOEMHQiccqzqGU7EouAm+qeu8gj/TibSK+T2mandcO
+17Wy6HHAZlwtGI/hSnlbTRF/+0y1RcRTQZ13iIPbiXU6QsFAEfDolgvDnHFTlwA4
+FbqAG/lIgWA5PtPerENLQkRH2mcoth8gFNZEO/CkVpQhr8g5vNs=
+=aOOj
+-----END PGP SIGNATURE-----
+
+--BFV9RJgjJXy7GXVr--

@@ -2,262 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8ACE4C023E
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 20:47:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FD3E4C0240
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 20:47:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235256AbiBVTr1 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 22 Feb 2022 14:47:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47924 "EHLO
+        id S235266AbiBVTrl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 14:47:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235199AbiBVTrY (ORCPT
+        with ESMTP id S233551AbiBVTrj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 14:47:24 -0500
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9436EB1AA9
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 11:46:57 -0800 (PST)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-306-2WeA3KeLOciB1wQtZYeJKA-1; Tue, 22 Feb 2022 19:46:54 +0000
-X-MC-Unique: 2WeA3KeLOciB1wQtZYeJKA-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.28; Tue, 22 Feb 2022 19:46:53 +0000
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.028; Tue, 22 Feb 2022 19:46:53 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     =?iso-8859-1?Q?=27Pali_Roh=E1r=27?= <pali@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>
-CC:     Armin Wolf <W_Armin@gmx.de>,
-        "jdelvare@suse.com" <jdelvare@suse.com>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "linux-assembly@vger.kernel.org" <linux-assembly@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v4] hwmon: (dell-smm) Improve assembly code
-Thread-Topic: [PATCH v4] hwmon: (dell-smm) Improve assembly code
-Thread-Index: AQHYKBTirAZeqAMZek+3xwZDQ1am1ayf9nqA
-Date:   Tue, 22 Feb 2022 19:46:53 +0000
-Message-ID: <b3cecea1376f4080929f47da2529685c@AcuMS.aculab.com>
-References: <20220220190851.17965-1-W_Armin@gmx.de>
- <20220222165432.GA255373@roeck-us.net> <20220222175150.qs32v4outislnqj6@pali>
-In-Reply-To: <20220222175150.qs32v4outislnqj6@pali>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Tue, 22 Feb 2022 14:47:39 -0500
+Received: from mail-vs1-xe35.google.com (mail-vs1-xe35.google.com [IPv6:2607:f8b0:4864:20::e35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A59E2B1AA6
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 11:47:13 -0800 (PST)
+Received: by mail-vs1-xe35.google.com with SMTP id w4so787579vsq.1
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 11:47:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=3OXelgpgEN6TKz3C8orHccpNYtVFASdQJguRZzrhCw4=;
+        b=Xmb1/NVtOZZnlcQeIzmTv9K64XnBoxbqbhWtBF7HzEM5ReTl05OlN0NkhauKMalSnD
+         aVKmB0bz0+Gm1d3Wc9HQB9+0NIvnz4G3jNeKcig1d+zYIAtoxhZ+Ag/E6GDdwghDQ2NH
+         uikMNsfl5lxInO6zpZzoiOeCJirM2uoXoJ6p458HO1h8EsiscBZSdGH7J5BOrbC0USmI
+         C7TO8fuKHE/u7veRNHsg7PHeFcKvCD6Kg56dj4YnoC74VeWPUoi+KkxFzPxedCLzpUBC
+         0xFYUuklqWaXFGBGN6wbTYEnF6MVofR++Ux3oERR5TARRSgCfAZZ4CsLVRb+ceVle3dU
+         oiuA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=3OXelgpgEN6TKz3C8orHccpNYtVFASdQJguRZzrhCw4=;
+        b=L6Xc3SUZdCKLeUnQ4kDJDprQvLySQA6RSA09wDjcFv4JCffRK+klQZL2eKEITGDATM
+         WC9dN344PhY4SaBplV5kRmkQb1O+/jivaBJt4zkwHkk8W3ipVK4fvzp1V4yCouwMN6CP
+         05b7o3LaTCcZYj4Iacn10JTgWGF+P4CvYPUeydSjqH6pE5828+vrtlJzPnUSL2u3TrBR
+         LeDMH9pjaZPTqLl/4mC2OnBQBcRxb/hjSZX3Z6X8UjlsUwj9M2s+A23wpZQwfn369Gor
+         qpJY/QaZ0y3QWEmabK3GivoKHeolYblpUzlMlFOdWV4BobUs+xjCTVey1HYB/J8OTxQ6
+         RbUA==
+X-Gm-Message-State: AOAM531Qxm3TJE4VXySj7bDaU2LghYV/Q6i2iUpHq/8aaaLV/zrgABQh
+        HM5lt5sAT3XZJ/1ZM6EQzqjj79ikq5ZyRxHDOFeQwA==
+X-Google-Smtp-Source: ABdhPJwH/SrX147JAYYJi48lKdfjSxyT5HuUX4VE7s0KYkofb5VKBePz/iWrfaDrwwqN4/iKJbV9+yuG619W3E2t+ng=
+X-Received: by 2002:a05:6102:53b:b0:31c:d:8d8b with SMTP id
+ m27-20020a056102053b00b0031c000d8d8bmr8321517vsa.22.1645559232490; Tue, 22
+ Feb 2022 11:47:12 -0800 (PST)
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20220219174940.2570901-1-surenb@google.com> <YhNTcM9XtqA1zUUi@dhcp22.suse.cz>
+In-Reply-To: <YhNTcM9XtqA1zUUi@dhcp22.suse.cz>
+From:   Tim Murray <timmurray@google.com>
+Date:   Tue, 22 Feb 2022 11:47:01 -0800
+Message-ID: <CAEe=Sxmow-jx60cDjFMY7qi7+KVc+BT++BTdwC5+G9E=1soMmQ@mail.gmail.com>
+Subject: Re: [PATCH 1/1] mm: count time in drain_all_pages during direct
+ reclaim as memory pressure
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     Suren Baghdasaryan <surenb@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Peter Zijlstra <peterz@infradead.org>, guro@fb.com,
+        Shakeel Butt <shakeelb@google.com>,
+        Minchan Kim <minchan@kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Android Kernel Team <kernel-team@android.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pali Rohár
-> Sent: 22 February 2022 17:52
-> 
-> On Tuesday 22 February 2022 08:54:32 Guenter Roeck wrote:
-> > On Sun, Feb 20, 2022 at 08:08:51PM +0100, Armin Wolf wrote:
-> > > The new assembly code works on both 32 bit and 64 bit
-> > > cpus and allows for more compiler optimisations.
-> > > Since clang runs out of registers on 32 bit x86 when
-> > > using CC_OUT, we need to execute "setc" ourself.
-> > > Also modify the debug message so we can still see
-> > > the result (eax) when the carry flag was set.
-> > >
-> > > Tested with 32 bit and 64 bit kernels on a Dell Inspiron 3505.
-> > >
-> > > Signed-off-by: Armin Wolf <W_Armin@gmx.de>
-> >
-> > It would be great if I can get some Tested-by/Acked-by/Reviewed-by
-> > tags for this patch.
-> 
-> Well, I know about this driver asm code for a long time and it since
-> beginning it was suspicious for me, why there is such huge code with
-> stack and registers manipulation and why it cannot be implemented easily
-> via just two "out" instructions. This patch is exactly doing it.
-> But question reminds why it was written in this simple way since
-> beginning.
-> 
-> If this change is correct then I have no problem with it.
-> 
-> But I would rather see review of this asm change by skilled x86 asm
-> developer. We are dealing here with CPU 0, SMM x86 mode, I/O ports and
-> stack manipulation in inline gcc asm which sounds like a trap. And I'm
-> not feeling skilled for reviewing this change.
-> 
-> May I ask somebody to review this change? Is there some linux x86 ML?
+On Mon, Feb 21, 2022 at 12:55 AM Michal Hocko <mhocko@suse.com> wrote:
+> It would be cool to have some numbers here.
 
-On the face of it the new asm code is basically the same as the old
-asm code - and both are probably equivalent to the reverse engineered
-windows code.
+Are there any numbers beyond what Suren mentioned that would be
+useful? As one example, in a trace of a camera workload that I opened
+at random to check for drain_local_pages stalls, I saw the kworker
+that ran drain_local_pages stay at runnable for 68ms before getting
+any CPU time. I could try to query our trace corpus to find more
+examples, but they're not hard to find in individual traces already.
 
-The real problem isn't the new code, it is more 'WTF is actually going on'.
-Somehow the pair of outb are generating a synchronous (or synchronous
-enough) trap that the trap handler (in the smm code in the bios)
-can change the registers before the code following the outb saves
-them back to memory.
+> If the draining is too slow and dependent on the current CPU/WQ
+> contention then we should address that. The original intention was that
+> having a dedicated WQ with WQ_MEM_RECLAIM would help to isolate the
+> operation from the rest of WQ activity. Maybe we need to fine tune
+> mm_percpu_wq. If that doesn't help then we should revise the WQ model
+> and use something else. Memory reclaim shouldn't really get stuck behind
+> other unrelated work.
 
-SMM mode is a semi-hidden cpu mode usually entered by an interrupt.
-It is horrid and nasty because it has access to the cpu memory and
-registers, but is hidden and unknown (I think in the bios).
+In my experience, workqueues are easy to misuse and should be
+approached with a lot of care. For many workloads, they work fine 99%+
+of the time, but once you run into problems with scheduling delays for
+that workqueue, the only option is to stop using workqueues. If you
+have work that is system-initiated with minimal latency requirements
+(eg, some driver heartbeat every so often, devfreq governors, things
+like that), workqueues are great. If you have userspace-initiated work
+that should respect priority (eg, GPU command buffer submission in the
+critical path of UI) or latency-critical system-initiated work (eg,
+display synchronization around panel refresh), workqueues are the
+wrong choice because there is no RT capability. WQ_HIGHPRI has a minor
+impact, but it won't solve the fundamental problem if the system is
+under heavy enough load or if RT threads are involved. As Petr
+mentioned, the best solution for those cases seems to be "convert the
+workqueue to an RT kthread_worker." I've done that many times on many
+different Android devices over the years for latency-critical work,
+especially around GPU, display, and camera.
 
-Normal bios calls can (usually) be executed using a cpu emulator
-(especially useful for doing real-mode call from 64bit mode) so
-the kernel can limit what they can do.
-
-But SMM mode is nearly as bad as the ME processor on newer systems.
-If you worry about security you really want it disabled - but you can't.
-
-As far as this patch goes I think I'd add a 'stc' (set carry)
-instruction before the first 'outb'.
-Then if the 'something magic happens here' doesn't happen (because
-you aren't on the right kind of motherboard) the action fails.
-
-	David
-
-> 
-> > Thanks,
-> > Guenter
-> >
-> > > ---
-> > > Changes in v4:
-> > > - reword commit message
-> > >
-> > > Changes in v3:
-> > > - make carry an unsigned char
-> > > - use "+a", ... for output registers
-> > > - drop "cc" from clobbered list
-> > >
-> > > Changes in v2:
-> > > - fix clang running out of registers on 32 bit x86
-> > > - modify debug message
-> > > ---
-> > >  drivers/hwmon/dell-smm-hwmon.c | 78 ++++++++--------------------------
-> > >  1 file changed, 18 insertions(+), 60 deletions(-)
-> > >
-> > > --
-> > > 2.30.2
-> > >
-> > > diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon.c
-> > > index c5939e68586d..38d23a8e83f2 100644
-> > > --- a/drivers/hwmon/dell-smm-hwmon.c
-> > > +++ b/drivers/hwmon/dell-smm-hwmon.c
-> > > @@ -119,7 +119,7 @@ struct smm_regs {
-> > >  	unsigned int edx;
-> > >  	unsigned int esi;
-> > >  	unsigned int edi;
-> > > -} __packed;
-> > > +};
-> > >
-> > >  static const char * const temp_labels[] = {
-> > >  	"CPU",
-> > > @@ -164,74 +164,32 @@ static int i8k_smm_func(void *par)
-> > >  	struct smm_regs *regs = par;
-> > >  	int eax = regs->eax;
-> > >  	int ebx = regs->ebx;
-> > > +	unsigned char carry;
-> > >  	long long duration;
-> > > -	int rc;
-> > >
-> > >  	/* SMM requires CPU 0 */
-> > >  	if (smp_processor_id() != 0)
-> > >  		return -EBUSY;
-> > >
-> > > -#if defined(CONFIG_X86_64)
-> > > -	asm volatile("pushq %%rax\n\t"
-> > > -		"movl 0(%%rax),%%edx\n\t"
-> > > -		"pushq %%rdx\n\t"
-> > > -		"movl 4(%%rax),%%ebx\n\t"
-> > > -		"movl 8(%%rax),%%ecx\n\t"
-> > > -		"movl 12(%%rax),%%edx\n\t"
-> > > -		"movl 16(%%rax),%%esi\n\t"
-> > > -		"movl 20(%%rax),%%edi\n\t"
-> > > -		"popq %%rax\n\t"
-> > > -		"out %%al,$0xb2\n\t"
-> > > -		"out %%al,$0x84\n\t"
-> > > -		"xchgq %%rax,(%%rsp)\n\t"
-> > > -		"movl %%ebx,4(%%rax)\n\t"
-> > > -		"movl %%ecx,8(%%rax)\n\t"
-> > > -		"movl %%edx,12(%%rax)\n\t"
-> > > -		"movl %%esi,16(%%rax)\n\t"
-> > > -		"movl %%edi,20(%%rax)\n\t"
-> > > -		"popq %%rdx\n\t"
-> > > -		"movl %%edx,0(%%rax)\n\t"
-> > > -		"pushfq\n\t"
-> > > -		"popq %%rax\n\t"
-> > > -		"andl $1,%%eax\n"
-> > > -		: "=a"(rc)
-> > > -		:    "a"(regs)
-> > > -		:    "%ebx", "%ecx", "%edx", "%esi", "%edi", "memory");
-> > > -#else
-> > > -	asm volatile("pushl %%eax\n\t"
-> > > -	    "movl 0(%%eax),%%edx\n\t"
-> > > -	    "push %%edx\n\t"
-> > > -	    "movl 4(%%eax),%%ebx\n\t"
-> > > -	    "movl 8(%%eax),%%ecx\n\t"
-> > > -	    "movl 12(%%eax),%%edx\n\t"
-> > > -	    "movl 16(%%eax),%%esi\n\t"
-> > > -	    "movl 20(%%eax),%%edi\n\t"
-> > > -	    "popl %%eax\n\t"
-> > > -	    "out %%al,$0xb2\n\t"
-> > > -	    "out %%al,$0x84\n\t"
-> > > -	    "xchgl %%eax,(%%esp)\n\t"
-> > > -	    "movl %%ebx,4(%%eax)\n\t"
-> > > -	    "movl %%ecx,8(%%eax)\n\t"
-> > > -	    "movl %%edx,12(%%eax)\n\t"
-> > > -	    "movl %%esi,16(%%eax)\n\t"
-> > > -	    "movl %%edi,20(%%eax)\n\t"
-> > > -	    "popl %%edx\n\t"
-> > > -	    "movl %%edx,0(%%eax)\n\t"
-> > > -	    "lahf\n\t"
-> > > -	    "shrl $8,%%eax\n\t"
-> > > -	    "andl $1,%%eax\n"
-> > > -	    : "=a"(rc)
-> > > -	    :    "a"(regs)
-> > > -	    :    "%ebx", "%ecx", "%edx", "%esi", "%edi", "memory");
-> > > -#endif
-> > > -	if (rc != 0 || (regs->eax & 0xffff) == 0xffff || regs->eax == eax)
-> > > -		rc = -EINVAL;
-> > > +	asm volatile("out %%al,$0xb2\n\t"
-> > > +		     "out %%al,$0x84\n\t"
-> > > +		     "setc %0\n"
-> > > +		     : "=mr" (carry),
-> > > +		       "+a" (regs->eax),
-> > > +		       "+b" (regs->ebx),
-> > > +		       "+c" (regs->ecx),
-> > > +		       "+d" (regs->edx),
-> > > +		       "+S" (regs->esi),
-> > > +		       "+D" (regs->edi));
-> > >
-> > >  	duration = ktime_us_delta(ktime_get(), calltime);
-> > > -	pr_debug("smm(0x%.4x 0x%.4x) = 0x%.4x  (took %7lld usecs)\n", eax, ebx,
-> > > -		 (rc ? 0xffff : regs->eax & 0xffff), duration);
-> > > +	pr_debug("smm(0x%.4x 0x%.4x) = 0x%.4x carry: %d (took %7lld usecs)\n",
-> > > +		 eax, ebx, regs->eax & 0xffff, carry, duration);
-> > >
-> > > -	return rc;
-> > > +	if (carry || (regs->eax & 0xffff) == 0xffff || regs->eax == eax)
-> > > +		return -EINVAL;
-> > > +
-> > > +	return 0;
-> > >  }
-> > >
-> > >  /*
-
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
-
+In the drain_local_pages case, I think it is triggered by userspace
+work and should respect priority; I don't think a prio 50 RT task
+should be blocked waiting on a prio 120 (or prio 100 if WQ_HIGHPRI)
+kworker to be scheduled so it can run drain_local_pages. If that's a
+reasonable claim, then I think moving drain_local_pages away from
+workqueues is the best choice.

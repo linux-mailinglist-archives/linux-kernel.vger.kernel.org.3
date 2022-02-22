@@ -2,64 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE3144C044E
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 23:04:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 35E0F4C0452
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 23:05:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235965AbiBVWEh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 17:04:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54946 "EHLO
+        id S235968AbiBVWGK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 17:06:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231225AbiBVWEd (ORCPT
+        with ESMTP id S231225AbiBVWGJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 17:04:33 -0500
-Received: from mail-oi1-f174.google.com (mail-oi1-f174.google.com [209.85.167.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EECEB27CD6;
-        Tue, 22 Feb 2022 14:04:07 -0800 (PST)
-Received: by mail-oi1-f174.google.com with SMTP id s5so16160912oic.10;
-        Tue, 22 Feb 2022 14:04:07 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=ZJIgkPazYMVFLLiCayOvQBp4dxbbz1/q0+2SKBUnq7o=;
-        b=agzZR1OZBjjrdZuUSb7BOmZCtHKlsHFQJryN5EifRM1fEF7qnRumt6TlQL6BDyd0VC
-         BIFeATm6CmMXLo52oQTpNNy7RhtshI381P8UKmzqGMTgWP1GAsMc6jr8HC3ZgCGit6q9
-         J8AQozEANDHFSqmR38R073diuLiyoQJgAK+89x7WZ04tNcG/PW2v4v6iEIsak/b7C8aH
-         F0+oziG/d4YrVYSqh78Xsw/S6+9k3ckPmx2gOOkqI7KNQ9yJMSk3nDRt4ffw6LswCvua
-         whij8lF6VLFNmurudlyGK1beW3ZE5jLZiuxZKX9C9NIZ0A1t+rMMy2Ya1r+GYo+doM5A
-         Gpbg==
-X-Gm-Message-State: AOAM533/AaSFa1M9Ippuw8J+cntS6FVZAywdVu0hZrFoJBA21j7MiDNj
-        Ttd69eDXP8xeMb8pEyzILw==
-X-Google-Smtp-Source: ABdhPJwf7/R5yUDTpF7lQ3A5JN4EudZmrZdxSkEYSXPIW6Turzd6Ou9niX+/eo46eJ+rqdMRs2APdQ==
-X-Received: by 2002:aca:744:0:b0:2ce:ffcf:e794 with SMTP id 65-20020aca0744000000b002ceffcfe794mr2976975oih.221.1645567447283;
-        Tue, 22 Feb 2022 14:04:07 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id u3sm30791518oao.25.2022.02.22.14.04.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Feb 2022 14:04:06 -0800 (PST)
-Received: (nullmailer pid 3671561 invoked by uid 1000);
-        Tue, 22 Feb 2022 22:04:05 -0000
-Date:   Tue, 22 Feb 2022 16:04:05 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     Rob Herring <robh+dt@kernel.org>, linux-phy@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        Vinod Koul <vkoul@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        devicetree@vger.kernel.org, Roger Quadros <rogerq@kernel.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>
-Subject: Re: [PATCH] dt-bindings: update Roger Quadros email
-Message-ID: <YhVd1e8cGidb/T6P@robh.at.kernel.org>
-References: <20220221100701.48593-1-krzysztof.kozlowski@canonical.com>
+        Tue, 22 Feb 2022 17:06:09 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 195982980D
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 14:05:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645567543; x=1677103543;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=zxDF6HeUMvOYrIjXmnqNecEiD08WjMI9/PEHYcz/Uc8=;
+  b=I6GiJIZEvEOZZsZld5FRgLODUcYQxZqAGUD6AnqQNuwYT3CTMy3hnZsl
+   BOQa96pyAka5I74ihktosM/Pz6DOWtFmkfApnU1TST/wu2ZPZEqkireDr
+   2moZc06Qd/hvFXUf8H2ErXeDx/4JLTOezJQiZzbN2mJDd3/PZPhL/QK26
+   F0jQvn8sRLQSRFhJhIiCd3dyOHui/Mb1Tz0nbWl7TacoYDSh+BjTJJHn4
+   RWHWGQ5+n/kNj7tgrrGDxte096onfRDtcLy/qLp7J2g38RTIYhtj59/gB
+   SIk6J4olrMCPfDIpWXSe1v/ZUXhD/8N0RwpaIbUqufPKegGYkQ/44GI11
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10266"; a="250650671"
+X-IronPort-AV: E=Sophos;i="5.88,389,1635231600"; 
+   d="scan'208";a="250650671"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2022 14:05:42 -0800
+X-IronPort-AV: E=Sophos;i="5.88,389,1635231600"; 
+   d="scan'208";a="543099817"
+Received: from psillosx-mobl.amr.corp.intel.com (HELO localhost) ([10.134.65.119])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2022 14:05:42 -0800
+Date:   Tue, 22 Feb 2022 14:05:42 -0800
+From:   Ira Weiny <ira.weiny@intel.com>
+To:     Dan Williams <dan.j.williams@intel.com>
+Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH V8 38/44] memremap_pages: Define
+ pgmap_mk_{readwrite|noaccess}() calls
+Message-ID: <YhVeNunIve9s2cwn@iweiny-desk3>
+References: <20220127175505.851391-1-ira.weiny@intel.com>
+ <20220127175505.851391-39-ira.weiny@intel.com>
+ <CAPcyv4iYOGD2XpmO3RH+wViuXx8EYrq-BK7vuKv6we+KR60YCg@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220221100701.48593-1-krzysztof.kozlowski@canonical.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+In-Reply-To: <CAPcyv4iYOGD2XpmO3RH+wViuXx8EYrq-BK7vuKv6we+KR60YCg@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,25 +65,92 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 21 Feb 2022 11:07:01 +0100, Krzysztof Kozlowski wrote:
-> Emails to Roger Quadros TI account bounce with:
->   550 Invalid recipient <rogerq@ti.com> (#5.1.1)
+On Fri, Feb 04, 2022 at 10:35:59AM -0800, Dan Williams wrote:
+> On Thu, Jan 27, 2022 at 9:55 AM <ira.weiny@intel.com> wrote:
+> >
+> > From: Ira Weiny <ira.weiny@intel.com>
+> >
+> > Users will need a way to flag valid access to pages which have been
+> > protected with PGMAP protections.  Provide this by defining pgmap_mk_*()
+> > accessor functions.
 > 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> I find the ambiguous use of "Users" not helpful to set the context. How about:
 > 
-> ---
+> A thread that wants to access memory protected by PGMAP protections
+> must first enable access, and then disable access when it is done.
 > 
-> Roger,
-> You should also add a mailmap entry for your inactive emails.
+> >
+> > pgmap_mk_{readwrite|noaccess}() take a struct page for convenience.
+> > They determine if the page is protected by dev_pagemap protections.  If
+> > so, they perform the requested operation.
+> >
+> > In addition, the lower level __pgmap_* functions are exported.  They
+> > take the dev_pagemap object directly for internal users who have
+> > knowledge of the of the dev_pagemap.
+> >
+> > All changes in the protections must be through the above calls.  They
+> > abstract the protection implementation (currently the PKS api) from the
+> > upper layer users.
+> >
+> > Furthermore, the calls are nestable by the use of a per task reference
+> > count.  This ensures that the first call to re-enable protection does
+> > not 'break' the last access of the device memory.
+> >
+> > Access to device memory during exceptions (#PF) is expected only from
+> > user faults.  Therefore there is no need to maintain the reference count
+> > when entering or exiting exceptions.  However, reference counting will
+> > occur during the exception.  Recall that protection is automatically
+> > enabled during exceptions by the PKS core.[1]
+> >
+> > NOTE: It is not anticipated that any code paths will directly nest these
+> > calls.  For this reason multiple reviewers, including Dan and Thomas,
+> > asked why this reference counting was needed at this level rather than
+> > in a higher level call such as kmap_{atomic,local_page}().  The reason
+> > is that pgmap_mk_readwrite() could nest with regards to other callers of
+> > pgmap_mk_*() such as kmap_{atomic,local_page}().  Therefore push this
+> > reference counting to the lower level and just ensure that these calls
+> > are nestable.
 > 
-> Best regards,
-> Krzysztof
-> ---
->  .../devicetree/bindings/mfd/ti,j721e-system-controller.yaml     | 2 +-
->  Documentation/devicetree/bindings/phy/ti,omap-usb2.yaml         | 2 +-
->  Documentation/devicetree/bindings/usb/ti,j721e-usb.yaml         | 2 +-
->  Documentation/devicetree/bindings/usb/ti,keystone-dwc3.yaml     | 2 +-
->  4 files changed, 4 insertions(+), 4 deletions(-)
+> I still don't think that explains why task struct has a role to play
+> here, see below.
+> 
+> Another missing bit of clarification, maybe I missed it, is why are
+> the protections toggled between read-write and noaccess. For
+> stray-write protection toggling between read-write and read-only is
+> sufficient. I can imagine speculative execution and debug rationales
+> for noaccess, but those should be called out explicitly.
 > 
 
-Applied, thanks!
+I'll clarify in the commit message but it is very simply providing consistent
+behavior for kmap'ing a page before and after this series.  kmap's allows for
+both read and write access.
+
+I know it was discussed to introduce the complexity of different mappings for
+read vs write.  But I think that is something which could be added later rather
+than being a requirement of this series.
+
+[snip]
+
+> 
+> The naming, which I had a hand in, is not aging well. When I see "mk"
+> I expect it to be building some value like a page table entry that
+> will be installed later. These helpers are directly enabling and
+> disabling access and are meant to be called symmetrically. So I would
+> expect symmetric names like:
+> 
+> pgmap_enable_access()
+> pgmap_disable_access()
+
+For this Dave requested s/pks_mk_*/pks_set_*/.  So I've followed that
+convention here.  New names are pgmap_set_*().  Although I'm not sure I'm happy
+with that name now...
+
+Enable may sound better but we had used 'enable_access' before and it got all
+confusing for some reason...  :-/
+
+pgmap_set_noaccess()
+pgmap_set_readwrite()
+
+Seems good I think.
+
+Ira

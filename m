@@ -2,88 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE8D44BF28A
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 08:26:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EAC544BF2B6
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 08:40:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231140AbiBVHXm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 02:23:42 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:54626 "EHLO
+        id S231321AbiBVHbo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 02:31:44 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:60070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230495AbiBVHXj (ORCPT
+        with ESMTP id S231193AbiBVHbk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 02:23:39 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5573EC4295;
-        Mon, 21 Feb 2022 23:23:15 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E4D95611C8;
-        Tue, 22 Feb 2022 07:23:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA9E1C340E8;
-        Tue, 22 Feb 2022 07:23:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645514594;
-        bh=lw9fy6EP1h2nUptSIDOirVphpvqPdsxFhmUtQZxs2B0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=sOGlSCAogaMh7NzeqJYs5YzeOcOA0uhY6Jy1te1KlgAs5DEvMt1L0aeXbCmGV7qjR
-         /QCHBeqAye9mcbW0UGXVYL40S1W2UmB3lRacQVKCFduYQMhoQA5VQb43YvLA2BCJno
-         IivFiSCoK10IkwdVNKQrvN7eh2xh1Pw4p0NY2W1/kqQTpQU124IHRpq4uQX3Srb/yv
-         IGBT+7by5twipzM+hmklfKDGiI4hTVPtfXTjGtItjJ9Kn+ou7kpTsweqbHYgM4L3M4
-         ra5GgwfLaCX+Sef4H64BgmnMFaVsOBCdwqrY0zlugsqma1/7aD5jx4WF1WdzHVmYEF
-         hawqnv6QKx37w==
-Date:   Tue, 22 Feb 2022 01:31:07 -0600
-From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
-To:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Adaptec OEM Raid Solutions <aacraid@microsemi.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        linux-hardening@vger.kernel.org,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Subject: [PATCH 8/8][next] scsi: aacraid: Replace one-element array with
- flexible-array member in struct aac_aifcmd
-Message-ID: <7d0571ef5dc87904008c325a942cfed24dbbf42e.1645513670.git.gustavoars@kernel.org>
-References: <cover.1645513670.git.gustavoars@kernel.org>
+        Tue, 22 Feb 2022 02:31:40 -0500
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E034939C1;
+        Mon, 21 Feb 2022 23:31:15 -0800 (PST)
+Received: by mail-pg1-x529.google.com with SMTP id 132so16341050pga.5;
+        Mon, 21 Feb 2022 23:31:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:from:subject:to:cc
+         :references:content-language:in-reply-to:content-transfer-encoding;
+        bh=88T01Xv11IQ7vnlMjdCLjMUwiY0xai49HxAj9U+k4mA=;
+        b=dvWsN85ePVKH9mqPejUMfjPsgCQRH5oyF4hQRpb1yCcdVYxu571HqfkIQ39CJTMTXb
+         th8pKfFZzY4j/qBjDPRg3QK2neRzbk5O9Ghf/yAlBDlLHmjA+p7rqrhaS9O9UMtnJVa8
+         UsaxRJGsmNPuFbj7BXxN3oVwSirX07MBVPrI8pfOwTz0XmNod1k8b8uGjzwtC+abReYr
+         MSvupE8JKJld/vwMdzgDxgrj6k6ZHYqRL4sT5SPqygTJ8gYwHnBexs2xg2qP3zxDg7YS
+         rEjyFzNX5piMoIiBdhcZaQVPtKquX6qRhlUaeSU9cX5SuiRC6IebZBPmHEi2f77DOwsi
+         mOoQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:from
+         :subject:to:cc:references:content-language:in-reply-to
+         :content-transfer-encoding;
+        bh=88T01Xv11IQ7vnlMjdCLjMUwiY0xai49HxAj9U+k4mA=;
+        b=h/yGiOlziBj4W8WgXtYe0zunpspIa6UKLXWgn53dxJ9bocYhx2mHXuO12fmmz46xwK
+         9cQ/rX5WNsEKCAvZ7XlzBGjLsMQ3gMTlAk+7krN+816OeZnYaWNwjIklNM2MfOu5iGip
+         3vV1+DRiDxlBN6uh3Zty14SMJei9HeXuYLg+G2IaeSeD2tWLrR1DIQLS1wh/LQO3AVY4
+         jc6dIFc6Td0dI1swqq8AjMmolzyL0Vivy0py0HI66oBOeVWTwF/NyJQjpNYCkmU8XD6i
+         t0JnPRz9l7QxEHI6lFnhH5tF9NSAeJog8p8EEy31rcVs9hCJD5LJrkKcMRDLNInOBTL9
+         IzlA==
+X-Gm-Message-State: AOAM532ulde89uc6bpFjvqgmb1zmzd1k/jEEt4t3gCmRB1cA4CtfKoal
+        /HsjOtxAwG3sCj3Xl0lAPUY=
+X-Google-Smtp-Source: ABdhPJwLlu5MyrG0vgrOWrQu8O3OeAyFPlCYVszWZqZOLHTFr4YDRZ/cbYKyZpEaDQpcMCxLYKmQng==
+X-Received: by 2002:a63:e5f:0:b0:374:62d8:c551 with SMTP id 31-20020a630e5f000000b0037462d8c551mr3711899pgo.129.1645515074852;
+        Mon, 21 Feb 2022 23:31:14 -0800 (PST)
+Received: from [192.168.43.80] (subs03-180-214-233-30.three.co.id. [180.214.233.30])
+        by smtp.gmail.com with ESMTPSA id oj5sm1429700pjb.29.2022.02.21.23.31.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 21 Feb 2022 23:31:14 -0800 (PST)
+Message-ID: <48821503-5b9b-6459-bcdd-c0950d23ad94@gmail.com>
+Date:   Tue, 22 Feb 2022 14:31:09 +0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1645513670.git.gustavoars@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+Subject: Re: [PATCH 5.16 000/227] 5.16.11-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
+References: <20220221084934.836145070@linuxfoundation.org>
+Content-Language: en-US
+In-Reply-To: <20220221084934.836145070@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Replace one-element array with flexible-array member in struct
-aac_aifcmd.
+On 21/02/22 15.46, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.16.11 release.
+> There are 227 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
 
-This issue was found with the help of Coccinelle and audited and fixed,
-manually.
+Successfully cross-compiled for arm64 (bcm2711_defconfig, gcc 10.2.0) and
+powerpc (ps3_defconfig, gcc 11.2.0).
 
-Link: https://www.kernel.org/doc/html/v5.16/process/deprecated.html#zero-length-and-one-element-arrays
-Link: https://github.com/KSPP/linux/issues/79
-Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
----
- drivers/scsi/aacraid/aacraid.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
 
-diff --git a/drivers/scsi/aacraid/aacraid.h b/drivers/scsi/aacraid/aacraid.h
-index 97948cd5f13c..447feabf5360 100644
---- a/drivers/scsi/aacraid/aacraid.h
-+++ b/drivers/scsi/aacraid/aacraid.h
-@@ -2616,7 +2616,7 @@ struct aac_hba_info {
- struct aac_aifcmd {
- 	__le32 command;		/* Tell host what type of notify this is */
- 	__le32 seqnum;		/* To allow ordering of reports (if necessary) */
--	u8 data[1];		/* Undefined length (from kernel viewpoint) */
-+	u8 data[];		/* Undefined length (from kernel viewpoint) */
- };
- 
- /**
 -- 
-2.27.0
-
+An old man doll... just what I always wanted! - Clara

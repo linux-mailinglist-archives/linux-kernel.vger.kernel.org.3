@@ -2,316 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B06314BF1AF
+	by mail.lfdr.de (Postfix) with ESMTP id 649824BF1AE
 	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 06:49:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229927AbiBVFpM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 00:45:12 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:49308 "EHLO
+        id S229941AbiBVFsi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 00:48:38 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:59844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229887AbiBVFpJ (ORCPT
+        with ESMTP id S229912AbiBVFsh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 00:45:09 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B060B26AC5;
-        Mon, 21 Feb 2022 21:44:43 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CD011106F;
-        Mon, 21 Feb 2022 21:44:42 -0800 (PST)
-Received: from [10.163.49.161] (unknown [10.163.49.161])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E838A3F66F;
-        Mon, 21 Feb 2022 21:44:39 -0800 (PST)
-Subject: Re: [PATCH V2 08/30] m68k/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Linux MM <linux-mm@kvack.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>
-References: <1645425519-9034-1-git-send-email-anshuman.khandual@arm.com>
- <1645425519-9034-9-git-send-email-anshuman.khandual@arm.com>
- <CAMuHMdUrA4u5BTRuqTSn++vXFNn0w=HRmp9ZD_8SNZ1wMUKwwQ@mail.gmail.com>
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-Message-ID: <5801fc8d-0046-8c08-0893-05dde66d48b1@arm.com>
-Date:   Tue, 22 Feb 2022 11:14:40 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Tue, 22 Feb 2022 00:48:37 -0500
+Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 693C813F77
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 21:48:12 -0800 (PST)
+Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-2d625082ae2so161421827b3.1
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 21:48:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=hw6aQJa1MO9WdpxwzimvLityGgLsFlQla0AXaHMQmt0=;
+        b=q//0ngBw/9CR5mrn8X0xPqPq9wEjbNjeSbSLQaR1T9XnxZ6n6eOU/zM9nTaILAgbDj
+         AbZb2CzrN8VVOPIZg8lcIqeo1AyHKbg9rHy33/6sqG+f6Jxs5gpFmcChMOkJzsrY3xgw
+         YcBPrAMipOn34XET6lfU5xmem/NSO6dn5bfVUzx3vXqrcq5J26cdP9DraWBw9kth9RM4
+         ZEoIhB30eylsyqC+bBwoned+sm1fvSG980njnWDcZO+XUhtDNalHnyPWclNCojmomU9r
+         pkQZkjfsXAbLe78VXjdYJzkjvpfaFQh7ffzpHoqI7ZmyMpfEntiQF9WrMYaJxrBknlJQ
+         w13w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=hw6aQJa1MO9WdpxwzimvLityGgLsFlQla0AXaHMQmt0=;
+        b=AKGH9rIZXWWpM+ITXjw/F8S8OdjvHl5cqQqq3B/8Yp0SYg9M5bZ4tk1xCms9xTGJKS
+         ZtDx/Y8DJDK1lXotMwqZMGgIchFoZfGgzhoGjos+Lef7zdjj5pG2diK6UUMMxevYXcJm
+         gQG4ihtzbYVtq7PRQg8jSdzt+SlUpUN1kOFLMRY4OuV2Qr8AaXb0+yQOrTbgzYiUzCJ1
+         4ezmpvOy6Kd00aCvWafelSIiDqvDhkbJMYEYhV5SU9SC5FQ0yYPqgD5kFwk5+PStwq5+
+         4enlFw64FPNv8J+sUxrO4nE2CTCyxkZZ2V04RqF1uid2eGpPIReg1GgUi79Hd6wPgw0z
+         LHXg==
+X-Gm-Message-State: AOAM5336Ps6NuoeF8odHhN53CG2WogTvnrQwOzFjacOjfJIGE7venY8H
+        D6A/G7Dlwd0wzWSH6bQ6L4yAchu2cMIiRj4mTruTUg==
+X-Google-Smtp-Source: ABdhPJyhDuclYQmodYIzN2CJ9eAgBf112KtTtES+r/ZuZFe3mtJx+Sv/y4TK/ne8vFOyQsWxtDM1mBcQMZ/Aa1QF7CM=
+X-Received: by 2002:a81:1748:0:b0:2d6:41ae:1384 with SMTP id
+ 69-20020a811748000000b002d641ae1384mr22200124ywx.293.1645508891454; Mon, 21
+ Feb 2022 21:48:11 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <CAMuHMdUrA4u5BTRuqTSn++vXFNn0w=HRmp9ZD_8SNZ1wMUKwwQ@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20220211013032.623763-1-surenb@google.com> <YgvONKdZ2T0PB2/0@dhcp22.suse.cz>
+ <YgwDa6rMHRdRTnzB@dhcp22.suse.cz> <YgwHhTN4P5yyZqBz@dhcp22.suse.cz>
+ <CAJuCfpGG9zwbvfH5UZkt6cG=woeO0RGE7QxjEpXn=gFhiaDdmQ@mail.gmail.com>
+ <YgywnF8l4Zu0aLtF@dhcp22.suse.cz> <CAJuCfpFOy_oRp=WWqtzE7bJR7p51FzzBPtbKhWeTGOKC-n41Cg@mail.gmail.com>
+In-Reply-To: <CAJuCfpFOy_oRp=WWqtzE7bJR7p51FzzBPtbKhWeTGOKC-n41Cg@mail.gmail.com>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Mon, 21 Feb 2022 21:48:00 -0800
+Message-ID: <CAJuCfpE+3OzM3h79ywWrNWHM3B2v7u3Z07MTt4cMtVD4OGi7pQ@mail.gmail.com>
+Subject: Re: [PATCH v3 1/1] mm: fix use-after-free when anon vma name is used
+ after vma is freed
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Colin Cross <ccross@google.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Kees Cook <keescook@chromium.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Christian Brauner <brauner@kernel.org>, legion@kernel.org,
+        ran.xiaokai@zte.com.cn, sashal@kernel.org,
+        Chris Hyser <chris.hyser@oracle.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Peter Collingbourne <pcc@google.com>, caoxiaofeng@yulong.com,
+        David Hildenbrand <david@redhat.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        linux-mm <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        kernel-team <kernel-team@android.com>,
+        syzbot+aa7b3d4b35f9dc46a366@syzkaller.appspotmail.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Feb 17, 2022 at 11:54 AM Suren Baghdasaryan <surenb@google.com> wrote:
+>
+> On Wed, Feb 16, 2022 at 12:06 AM Michal Hocko <mhocko@suse.com> wrote:
+> >
+> > On Tue 15-02-22 15:02:54, Suren Baghdasaryan wrote:
+> > > On Tue, Feb 15, 2022 at 12:05 PM Michal Hocko <mhocko@suse.com> wrote:
+> > > >
+> > > > One thing I was considering is to check agains ref counte overflo (a
+> > > > deep process chain with many vmas could grow really high. ref_count
+> > > > interface doesn't provide any easy way to check for overflows as far as
+> > > > I could see from a quick glance so I gave up there but the logic would
+> > > > be really straightforward. We just create a new anon_vma_name with the same
+> > > > content and use it when duplicating if the usage grow really
+> > > > (arbitrarily) high.
+> > >
+> > > I went over proposed changes. I see a couple small required fixes
+> > > (resetting the name to NULL seems to be missing and I think
+> > > dup_vma_anon_name needs some tweaking) but overall quite
+> > > straight-forward.
+> >
+> > OK, great that this makes sense to you. As I've said I didn't really go
+> > into details, not even dared to boot that to test. So it will very
+> > likely need some more work but I do not expect this to grow much.
+> >
+> > > I'll post a separate patch to do this refactoring.
+> > > The original patch is fixing the UAF issue, so I don't want to mix it
+> > > with refactoring. Please let me know if you see an issue with
+> > > separating it that way.
+> >
+> > Well, I am not sure TBH. Look at diffstats. Your fix
+> > 2 files changed, 63 insertions(+), 17 deletions(-)
+> > the refactoring which should fix this and potentially others that might
+> > be still lurking there (because mixing shared pointers and their internal
+> > objects just begs for problems) is
+> > 7 files changed, 63 insertions(+), 86 deletions(-)
+> >
+> > more files touched for sure but the net result is much more clear and a
+> > much more code removed.
+> > The overflow logic would make it bigger but I guess the existing scheme
+> > needs it as well.
+>
+> Ok, I'll see how to slice it after it's complete and tested.
+> Thanks for the input!
 
+I posted the new patchset that includes:
+1. refactoring of the code suggested by Michal:
+https://lore.kernel.org/all/20220222054025.3412898-1-surenb@google.com
+2. refcount overflow protection suggested by Michal:
+https://lore.kernel.org/all/20220222054025.3412898-2-surenb@google.com
+3. UAF fix (originally implemented by this patch) reimplemented after
+the first two changes:
+https://lore.kernel.org/all/20220222054025.3412898-3-surenb@google.com
+Hopefully this sequence makes sense.
+Thanks,
+Suren.
 
-On 2/21/22 5:24 PM, Geert Uytterhoeven wrote:
-> Hi Anshuman,
-> 
-> On Mon, Feb 21, 2022 at 9:45 AM Anshuman Khandual
-> <anshuman.khandual@arm.com> wrote:
->> This defines and exports a platform specific custom vm_get_page_prot() via
->> subscribing ARCH_HAS_VM_GET_PAGE_PROT. Subsequently all __SXXX and __PXXX
->> macros can be dropped which are no longer needed.
->>
->> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
->> Cc: linux-m68k@lists.linux-m68k.org
->> Cc: linux-kernel@vger.kernel.org
->> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
-> 
-> Thanks for your patch!
-> 
->> --- a/arch/m68k/mm/init.c
->> +++ b/arch/m68k/mm/init.c
->> @@ -128,3 +128,107 @@ void __init mem_init(void)
->>         memblock_free_all();
->>         init_pointer_tables();
->>  }
->> +
->> +#ifdef CONFIG_COLDFIRE
->> +/*
->> + * Page protections for initialising protection_map. See mm/mmap.c
->> + * for use. In general, the bit positions are xwr, and P-items are
->> + * private, the S-items are shared.
->> + */
->> +pgprot_t vm_get_page_prot(unsigned long vm_flags)
-> 
-> Wouldn't it make more sense to add this to arch/m68k/mm/mcfmmu.c?
-
-Sure, will move (#ifdef CONFIG_COLDFIRE will not be required anymore).
-
-> 
->> +{
->> +       switch (vm_flags & (VM_READ | VM_WRITE | VM_EXEC | VM_SHARED)) {
->> +       case VM_NONE:
->> +               return PAGE_NONE;
->> +       case VM_READ:
->> +               return __pgprot(CF_PAGE_VALID | CF_PAGE_ACCESSED |
->> +                               CF_PAGE_READABLE);
->> +       case VM_WRITE:
->> +               return __pgprot(CF_PAGE_VALID | CF_PAGE_ACCESSED |
->> +                               CF_PAGE_WRITABLE);
->> +       case VM_WRITE | VM_READ:
->> +               return __pgprot(CF_PAGE_VALID | CF_PAGE_ACCESSED |
->> +                               CF_PAGE_READABLE | CF_PAGE_WRITABLE);
->> +       case VM_EXEC:
->> +               return __pgprot(CF_PAGE_VALID | CF_PAGE_ACCESSED |
->> +                               CF_PAGE_EXEC);
->> +       case VM_EXEC | VM_READ:
->> +               return __pgprot(CF_PAGE_VALID | CF_PAGE_ACCESSED |
->> +                               CF_PAGE_READABLE | CF_PAGE_EXEC);
->> +       case VM_EXEC | VM_WRITE:
->> +               return __pgprot(CF_PAGE_VALID | CF_PAGE_ACCESSED |
->> +                               CF_PAGE_WRITABLE | CF_PAGE_EXEC);
->> +       case VM_EXEC | VM_WRITE | VM_READ:
->> +               return __pgprot(CF_PAGE_VALID | CF_PAGE_ACCESSED |
->> +                               CF_PAGE_READABLE | CF_PAGE_WRITABLE |
->> +                               CF_PAGE_EXEC);
->> +       case VM_SHARED:
->> +               return PAGE_NONE;
->> +       case VM_SHARED | VM_READ:
->> +               return __pgprot(CF_PAGE_VALID | CF_PAGE_ACCESSED |
->> +                               CF_PAGE_READABLE);
-> 
-> This is the same as the plain VM_READ case.
-> Perhaps they can be merged?
-
-IMHO, it is worth preserving the existing switch case sequence as vm_flags
-moves linearly from VM_NONE to (VM_SHARED|VM_EXEC|VM_WRITE|VM_READ). This
-proposal did not attempt to further optimize any common page prot values
-for various vm_flags combinations even on other platforms.
-
-> 
->> +       case VM_SHARED | VM_WRITE:
->> +               return PAGE_SHARED;
->> +       case VM_SHARED | VM_WRITE | VM_READ:
->> +               return __pgprot(CF_PAGE_VALID | CF_PAGE_ACCESSED |
->> +                               CF_PAGE_READABLE | CF_PAGE_SHARED);
->> +       case VM_SHARED | VM_EXEC:
->> +               return __pgprot(CF_PAGE_VALID | CF_PAGE_ACCESSED |
->> +                               CF_PAGE_EXEC);
-> 
-> Same as plain VM_EXEC.
-> 
->> +       case VM_SHARED | VM_EXEC | VM_READ:
->> +               return __pgprot(CF_PAGE_VALID | CF_PAGE_ACCESSED |
->> +                               CF_PAGE_READABLE | CF_PAGE_EXEC);
-> 
-> Same as plain VM_EXEC | VM_READ.
-> 
->> +       case VM_SHARED | VM_EXEC | VM_WRITE:
->> +               return __pgprot(CF_PAGE_VALID | CF_PAGE_ACCESSED |
->> +                               CF_PAGE_SHARED | CF_PAGE_EXEC);
->> +       case VM_SHARED | VM_EXEC | VM_WRITE | VM_READ:
->> +               return __pgprot(CF_PAGE_VALID | CF_PAGE_ACCESSED |
->> +                               CF_PAGE_READABLE | CF_PAGE_SHARED |
->> +                               CF_PAGE_EXEC);
->> +       default:
->> +               BUILD_BUG();
->> +       }
->> +}
->> +#endif
->> +
->> +#ifdef CONFIG_SUN3
->> +/*
->> + * Page protections for initialising protection_map. The sun3 has only two
->> + * protection settings, valid (implying read and execute) and writeable. These
->> + * are as close as we can get...
->> + */
->> +pgprot_t vm_get_page_prot(unsigned long vm_flags)
-> 
-> Wouldn't it make more sense to add this to arch/m68k/mm/sun3mmu.c?
-
-Sure, will move (#ifdef CONFIG_SUN3 will not be required anymore).
-
-> 
->> +{
->> +       switch (vm_flags & (VM_READ | VM_WRITE | VM_EXEC | VM_SHARED)) {
->> +       case VM_NONE:
->> +               return PAGE_NONE;
->> +       case VM_READ:
->> +               return PAGE_READONLY;
->> +       case VM_WRITE:
->> +       case VM_WRITE | VM_READ:
-> 
-> So you did merge some of them...
-
-Only when they follow vm_flags linear sequence.
-
-> 
->> +               return PAGE_COPY;
->> +       case VM_EXEC:
->> +       case VM_EXEC | VM_READ:
->> +               return PAGE_READONLY;
-> 
-> But not all? More below...
-
-Right, because did not want to shuffle up vm_flags linear sequence.
-
-> 
->> +       case VM_EXEC | VM_WRITE:
->> +       case VM_EXEC | VM_WRITE | VM_READ:
->> +               return PAGE_COPY;
->> +       case VM_SHARED:
->> +               return PAGE_NONE;
->> +       case VM_SHARED | VM_READ:
->> +               return PAGE_READONLY;
->> +       case VM_SHARED | VM_WRITE:
->> +       case VM_SHARED | VM_WRITE | VM_READ:
->> +               return PAGE_SHARED;
->> +       case VM_SHARED | VM_EXEC:
->> +       case VM_SHARED | VM_EXEC | VM_READ:
->> +               return PAGE_READONLY;
->> +       case VM_SHARED | VM_EXEC | VM_WRITE:
->> +       case VM_SHARED | VM_EXEC | VM_WRITE | VM_READ:
->> +               return PAGE_SHARED;
->> +       default:
->> +               BUILD_BUG();
->> +       }
->> +}
->> +#endif
->> +EXPORT_SYMBOL(vm_get_page_prot);
->> diff --git a/arch/m68k/mm/motorola.c b/arch/m68k/mm/motorola.c
->> index ecbe948f4c1a..495ba0ea083c 100644
->> --- a/arch/m68k/mm/motorola.c
->> +++ b/arch/m68k/mm/motorola.c
->> @@ -400,12 +400,9 @@ void __init paging_init(void)
->>
->>         /* Fix the cache mode in the page descriptors for the 680[46]0.  */
->>         if (CPU_IS_040_OR_060) {
->> -               int i;
->>  #ifndef mm_cachebits
->>                 mm_cachebits = _PAGE_CACHE040;
->>  #endif
->> -               for (i = 0; i < 16; i++)
->> -                       pgprot_val(protection_map[i]) |= _PAGE_CACHE040;
->>         }
->>
->>         min_addr = m68k_memory[0].addr;
->> @@ -483,3 +480,48 @@ void __init paging_init(void)
->>         max_zone_pfn[ZONE_DMA] = memblock_end_of_DRAM();
->>         free_area_init(max_zone_pfn);
->>  }
->> +
->> +/*
->> + * The m68k can't do page protection for execute, and considers that
->> + * the same are read. Also, write permissions imply read permissions.
->> + * This is the closest we can get..
->> + */
->> +pgprot_t vm_get_page_prot(unsigned long vm_flags)
-> 
-> Good, this one is in arch/m68k/mm/motorola.c :-)
-> 
->> +{
->> +       unsigned long cachebits = 0;
->> +
->> +       if (CPU_IS_040_OR_060)
->> +               cachebits = _PAGE_CACHE040;
-> 
-> If you would use the non-"_C"-variants (e.g. PAGE_NONE instead of
-> PAGE_NONE_C) below, you would get the cachebits handling for free!
-> After that, the "_C" variants are no longer used, and can be removed.
-> Cfr. arch/m68k/include/asm/motorola_pgtable.h:
-
-Right.
-
-> 
->     #define PAGE_NONE       __pgprot(_PAGE_PROTNONE | _PAGE_ACCESSED |
-> mm_cachebits)
->     #define PAGE_SHARED     __pgprot(_PAGE_PRESENT | _PAGE_ACCESSED |
-> mm_cachebits)
->     #define PAGE_COPY       __pgprot(_PAGE_PRESENT | _PAGE_RONLY |
-> _PAGE_ACCESSED | mm_cachebits)
->     #define PAGE_READONLY   __pgprot(_PAGE_PRESENT | _PAGE_RONLY |
-> _PAGE_ACCESSED | mm_cachebits)
->     #define PAGE_KERNEL     __pgprot(_PAGE_PRESENT | _PAGE_DIRTY |
-> _PAGE_ACCESSED | mm_cachebits)
-> 
->     /* Alternate definitions that are compile time constants, for
->        initializing protection_map.  The cachebits are fixed later.  */
->     #define PAGE_NONE_C     __pgprot(_PAGE_PROTNONE | _PAGE_ACCESSED)
->     #define PAGE_SHARED_C   __pgprot(_PAGE_PRESENT | _PAGE_ACCESSED)
->     #define PAGE_COPY_C     __pgprot(_PAGE_PRESENT | _PAGE_RONLY |
-> _PAGE_ACCESSED)
->     #define PAGE_READONLY_C __pgprot(_PAGE_PRESENT | _PAGE_RONLY |
-> _PAGE_ACCESSED)
-
-Will drop all _C definitions and change switch case as mentioned above.
-
-> 
-> BTW, this shows you left a reference in a comment to the now-gone
-> "protection_map".  There are several more across the tree.
-
-Right, will remove them all.
-
-> 
->> +
->> +       switch (vm_flags & (VM_READ | VM_WRITE | VM_EXEC | VM_SHARED)) {
->> +       case VM_NONE:
->> +               return __pgprot(pgprot_val(PAGE_NONE_C) | cachebits);
->> +       case VM_READ:
->> +               return __pgprot(pgprot_val(PAGE_READONLY_C) | cachebits);
->> +       case VM_WRITE:
->> +       case VM_WRITE | VM_READ:
->> +               return __pgprot(pgprot_val(PAGE_COPY_C) | cachebits);
->> +       case VM_EXEC:
->> +       case VM_EXEC | VM_READ:
->> +               return __pgprot(pgprot_val(PAGE_READONLY_C) | cachebits);
->> +       case VM_EXEC | VM_WRITE:
->> +       case VM_EXEC | VM_WRITE | VM_READ:
->> +               return __pgprot(pgprot_val(PAGE_COPY_C) | cachebits);
->> +       case VM_SHARED:
->> +               return __pgprot(pgprot_val(PAGE_NONE_C) | cachebits);
-> 
-> Same as the VM_NONE case.  More to be merged below...
-
-As explained earlier.
+>
+> >
+> > I would also claim that both approaches are really painful to review
+> > because the existing model spreads into several areas and it is not
+> > really clear you caught them all just by staring into the diff so both
+> > will be rather painful to backport to older kernels. Fortunately this
+> > would be only 5.17.
+> > --
+> > Michal Hocko
+> > SUSE Labs

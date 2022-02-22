@@ -2,54 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7D054BF446
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 10:01:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C6BE14BF449
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 10:01:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230071AbiBVJAd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 04:00:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41976 "EHLO
+        id S230055AbiBVJAZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 04:00:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230031AbiBVJAW (ORCPT
+        with ESMTP id S229944AbiBVJAV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 04:00:22 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBD9713D568;
-        Tue, 22 Feb 2022 00:59:57 -0800 (PST)
+        Tue, 22 Feb 2022 04:00:21 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A876B13D569;
+        Tue, 22 Feb 2022 00:59:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645520397; x=1677056397;
+  t=1645520396; x=1677056396;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=/LVjqrZirEsZLLpv0P9AR570c5V8rd61X/TBj3utK8o=;
-  b=DIhW+XcrI+ixfTwonO+f2MGT+OdMv67EfCcF7r6v8tLyUXkXMvYdCp+S
-   Wk2pO2Vm8+OqVzuzBoOSdAE+hiAyWP3kd7e2IkL6bNqBOmkdULLGg7VNc
-   BAuZKktSgZZeIMboTIz9+YRvKyHzNHUf2Sl9xXMRRXuEN5iyJKK3lnNdA
-   vzPw8nxqniytETHODTc2LDOXokB5pdtbj8Gw5neCDr4GMJzmbE2mZ/1zr
-   /cZrkxW3MUNpnY+yh7lWkmp96Z+d48XB6XH4BdA4UmBXvHmpjsCuYxAo4
-   TGgxDFb5DRVQBxr04VZ6K3EinElWqF8gXVUH/JWuYb65gTqDsW/re/eSt
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10265"; a="314907084"
+  bh=/CoOJYrIQXjl83nUCkZjGK7NC6sCc0jBYnDOtkCGkic=;
+  b=fPYPeQjWczrGB+Yh9mR8PKa6V/WUH9N7/UZpOyWGevSARhvvDvWyJn5K
+   8zBmk/1k/dw5qYgC3wxCXzISJtliyFoLHniqbG88Xdk8+5YZZhgYRP5Nz
+   4AwTre8KOLMnrURTfluurrc9I9a+RABLN5fEDgXH5Ks3Xn9GOBOIaFvW8
+   IN5+TJayf++Xqhy66WzHCbm0iZujprEOU+8XDdpZtC/T+3Xu7MSOKy2qd
+   2g9LOVvH7TG3H664cz1qf/4Hw6oTvHLSo1S49BI6axgkzksuKms8mOiAo
+   dI03tTTFNfa43h8lQaoq9fd+TGFgxY9iUchG6Bfw5BlDxwugZWG7WTicx
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10265"; a="338076726"
 X-IronPort-AV: E=Sophos;i="5.88,387,1635231600"; 
-   d="scan'208";a="314907084"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2022 00:59:56 -0800
+   d="scan'208";a="338076726"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2022 00:59:56 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,387,1635231600"; 
-   d="scan'208";a="778977599"
+   d="scan'208";a="591229128"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga005.fm.intel.com with ESMTP; 22 Feb 2022 00:59:54 -0800
+  by fmsmga008.fm.intel.com with ESMTP; 22 Feb 2022 00:59:54 -0800
 Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id BD68F2FC; Tue, 22 Feb 2022 11:00:10 +0200 (EET)
+        id C88B340D; Tue, 22 Feb 2022 11:00:10 +0200 (EET)
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     Lars-Peter Clausen <lars@metafoo.de>,
         Michael Hennerich <Michael.Hennerich@analog.com>,
         Jonathan Cameron <jic23@kernel.org>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>
-Subject: [PATCH v2 4/8] iio: accel: adxl345: Make use of device properties
-Date:   Tue, 22 Feb 2022 11:00:05 +0200
-Message-Id: <20220222090009.2060-4-andriy.shevchenko@linux.intel.com>
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>
+Subject: [PATCH v2 5/8] iio: accel: adxl345: Add ACPI HID table
+Date:   Tue, 22 Feb 2022 11:00:06 +0200
+Message-Id: <20220222090009.2060-5-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220222090009.2060-1-andriy.shevchenko@linux.intel.com>
 References: <20220222090009.2060-1-andriy.shevchenko@linux.intel.com>
@@ -65,117 +66,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert the module to be property provider agnostic and allow
-it to be used on non-OF platforms.
+From: Kai-Heng Feng <kai.heng.feng@canonical.com>
 
+x86 boards may use ACPI HID "ADS0345" for adxl345 device.
+
+Analog replied:
+"ADS034X is not a valid PNP ID. ADS0345 would be.
+I'm not aware that this ID is already taken.
+Feel free to submit a mainline Linux input mailing list patch."
+
+So add an ACPI match table for that accordingly.
+
+Since ACPI device may not match to any I2C ID, use the name and type
+directly from ACPI ID table in absence of I2C ID.
+
+Suggested-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
 Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
 v2: no changes
- drivers/iio/accel/adxl345.h      |  2 +-
- drivers/iio/accel/adxl345_core.c |  5 ++++-
- drivers/iio/accel/adxl345_i2c.c  | 11 ++++-------
- drivers/iio/accel/adxl345_spi.c  |  3 +--
- 4 files changed, 10 insertions(+), 11 deletions(-)
+ drivers/iio/accel/adxl345_i2c.c | 7 +++++++
+ drivers/iio/accel/adxl345_spi.c | 7 +++++++
+ 2 files changed, 14 insertions(+)
 
-diff --git a/drivers/iio/accel/adxl345.h b/drivers/iio/accel/adxl345.h
-index 9b0d4f487c43..d7e67cb08538 100644
---- a/drivers/iio/accel/adxl345.h
-+++ b/drivers/iio/accel/adxl345.h
-@@ -13,6 +13,6 @@ enum adxl345_device_type {
- 	ADXL375 = 2,
- };
- 
--int adxl345_core_probe(struct device *dev, struct regmap *regmap, enum adxl345_device_type type);
-+int adxl345_core_probe(struct device *dev, struct regmap *regmap);
- 
- #endif /* _ADXL345_H_ */
-diff --git a/drivers/iio/accel/adxl345_core.c b/drivers/iio/accel/adxl345_core.c
-index 0f34c349aa1e..315a408115b3 100644
---- a/drivers/iio/accel/adxl345_core.c
-+++ b/drivers/iio/accel/adxl345_core.c
-@@ -8,6 +8,7 @@
-  */
- 
- #include <linux/module.h>
-+#include <linux/property.h>
- #include <linux/regmap.h>
- 
- #include <linux/iio/iio.h>
-@@ -213,14 +214,16 @@ static void adxl345_powerdown(void *regmap)
- 	regmap_write(regmap, ADXL345_REG_POWER_CTL, ADXL345_POWER_CTL_STANDBY);
- }
- 
--int adxl345_core_probe(struct device *dev, struct regmap *regmap, enum adxl345_device_type type)
-+int adxl345_core_probe(struct device *dev, struct regmap *regmap)
- {
-+	enum adxl345_device_type type;
- 	struct adxl345_data *data;
- 	struct iio_dev *indio_dev;
- 	const char *name;
- 	u32 regval;
- 	int ret;
- 
-+	type = (uintptr_t)device_get_match_data(dev);
- 	switch (type) {
- 	case ADXL345:
- 		name = "adxl345";
 diff --git a/drivers/iio/accel/adxl345_i2c.c b/drivers/iio/accel/adxl345_i2c.c
-index 1e42cf3a2991..861d8477d799 100644
+index 861d8477d799..11ecff0e0405 100644
 --- a/drivers/iio/accel/adxl345_i2c.c
 +++ b/drivers/iio/accel/adxl345_i2c.c
-@@ -19,19 +19,16 @@ static const struct regmap_config adxl345_i2c_regmap_config = {
- 	.val_bits = 8,
- };
+@@ -47,10 +47,17 @@ static const struct of_device_id adxl345_of_match[] = {
  
--static int adxl345_i2c_probe(struct i2c_client *client,
--			     const struct i2c_device_id *id)
-+static int adxl345_i2c_probe(struct i2c_client *client)
- {
-+	enum adxl345_device_type type;
- 	struct regmap *regmap;
+ MODULE_DEVICE_TABLE(of, adxl345_of_match);
  
--	if (!id)
--		return -ENODEV;
--
- 	regmap = devm_regmap_init_i2c(client, &adxl345_i2c_regmap_config);
- 	if (IS_ERR(regmap))
- 		return dev_err_probe(&client->dev, PTR_ERR(regmap), "Error initializing regmap\n");
- 
--	return adxl345_core_probe(&client->dev, regmap, id->driver_data);
-+	return adxl345_core_probe(&client->dev, regmap);
- }
- 
- static const struct i2c_device_id adxl345_i2c_id[] = {
-@@ -55,7 +52,7 @@ static struct i2c_driver adxl345_i2c_driver = {
++static const struct acpi_device_id adxl345_acpi_match[] = {
++	{ "ADS0345", ADXL345 },
++	{ }
++};
++MODULE_DEVICE_TABLE(acpi, adxl345_acpi_match);
++
+ static struct i2c_driver adxl345_i2c_driver = {
+ 	.driver = {
  		.name	= "adxl345_i2c",
  		.of_match_table = adxl345_of_match,
++		.acpi_match_table = adxl345_acpi_match,
  	},
--	.probe		= adxl345_i2c_probe,
-+	.probe_new	= adxl345_i2c_probe,
+ 	.probe_new	= adxl345_i2c_probe,
  	.id_table	= adxl345_i2c_id,
- };
- 
 diff --git a/drivers/iio/accel/adxl345_spi.c b/drivers/iio/accel/adxl345_spi.c
-index 34b7001d519f..ee4c50c8a95b 100644
+index ee4c50c8a95b..850ac616d65e 100644
 --- a/drivers/iio/accel/adxl345_spi.c
 +++ b/drivers/iio/accel/adxl345_spi.c
-@@ -22,7 +22,6 @@ static const struct regmap_config adxl345_spi_regmap_config = {
+@@ -52,10 +52,17 @@ static const struct of_device_id adxl345_of_match[] = {
  
- static int adxl345_spi_probe(struct spi_device *spi)
- {
--	const struct spi_device_id *id = spi_get_device_id(spi);
- 	struct regmap *regmap;
+ MODULE_DEVICE_TABLE(of, adxl345_of_match);
  
- 	/* Bail out if max_speed_hz exceeds 5 MHz */
-@@ -34,7 +33,7 @@ static int adxl345_spi_probe(struct spi_device *spi)
- 	if (IS_ERR(regmap))
- 		return dev_err_probe(&spi->dev, PTR_ERR(regmap), "Error initializing regmap\n");
- 
--	return adxl345_core_probe(&spi->dev, regmap, id->driver_data);
-+	return adxl345_core_probe(&spi->dev, regmap);
- }
- 
- static const struct spi_device_id adxl345_spi_id[] = {
++static const struct acpi_device_id adxl345_acpi_match[] = {
++	{ "ADS0345", ADXL345 },
++	{ }
++};
++MODULE_DEVICE_TABLE(acpi, adxl345_acpi_match);
++
+ static struct spi_driver adxl345_spi_driver = {
+ 	.driver = {
+ 		.name	= "adxl345_spi",
+ 		.of_match_table = adxl345_of_match,
++		.acpi_match_table = adxl345_acpi_match,
+ 	},
+ 	.probe		= adxl345_spi_probe,
+ 	.id_table	= adxl345_spi_id,
 -- 
 2.34.1
 

@@ -2,80 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59C0D4BFEDA
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 17:35:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 283F44BFEDB
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 17:36:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234294AbiBVQft (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 11:35:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44482 "EHLO
+        id S232425AbiBVQgj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 11:36:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234268AbiBVQfd (ORCPT
+        with ESMTP id S231527AbiBVQgh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 11:35:33 -0500
-Received: from mail-qv1-xf33.google.com (mail-qv1-xf33.google.com [IPv6:2607:f8b0:4864:20::f33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3928816E7F2
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 08:34:21 -0800 (PST)
-Received: by mail-qv1-xf33.google.com with SMTP id ba20so452541qvb.1
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 08:34:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=2pjjU5zHuaxPJTKda8Jl5cHbMT8Mpw2hlMIdhnjkMTk=;
-        b=xGdwdrTr+PVvzHmGxLrfQ8lZ1kFry5pJlG+CnWsag0DswuSZIeyEJpz9s5RTAavQQd
-         d6d4Qe4t9ZeAC7AFQU2sIR6mt2d7E7657obKwwHSJP6BuMjaO1FuHA6jQBD2lEIMP/gv
-         KWZqSycsAvowxw65Xn0Dn0V5DCyKALHG/EZd5xEQQoryFGjVorGfD/ABH/tXbwpkfswg
-         VV7v03mSPCry5prSzvSCax4BA9XE6685uHcyRNqhwZR1DouitIV6urZ1WCK0Xn56Nc1T
-         C99SqVsj/ySVfrZrFFqyiU+cRnnsSfglQm9IiTElvkGSUPEWJT4EqD6/hXY3K381DYqI
-         u3/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=2pjjU5zHuaxPJTKda8Jl5cHbMT8Mpw2hlMIdhnjkMTk=;
-        b=rthBsAY1Y8dOmtUwbbt2K20nzpb774IZHBEG/jDGiBXyPVBhG+h1dauH9JpXOzgKFY
-         vdtUkIRdh8pjJ99yB3foFS2BfLZQPJvopdU/PpyRpg9hbS316vDjCCroC925EM+p17OI
-         cYlwzoxVAnf/dhPHSJqtp336+zlWQJaHdg3mAZRcyjo0PaRR3Mpoc1STRNgbV/xO5BAu
-         pIlpM/Sf4e8XFgGvWqk3n0/R2JkdVX+eP+0mHAFK65wixfBDvNq//TBc6DZP+UR3eH98
-         q45RSRRGEeaMOQRwtAJttQqwC92j66Pbd934rCTzu/pNDOX3bxX/K/cK0n4UAPBwcn4I
-         TfxQ==
-X-Gm-Message-State: AOAM530x7pTaWGFQ3IWx4f6FE81vPewy43TjArJgZC2d6232lNvFKisZ
-        93FjqhZ1zHTePRvxqUx68Ky0tQ==
-X-Google-Smtp-Source: ABdhPJyYjQ0swClJ5D1OlmgUW4KG7J4LAiCCD+RMaflR2hpgwXvv9ZP/fApy7yxOrmcfJJYlWwgziw==
-X-Received: by 2002:a05:622a:2c4:b0:2dd:2d86:3fe9 with SMTP id a4-20020a05622a02c400b002dd2d863fe9mr22824519qtx.624.1645547656242;
-        Tue, 22 Feb 2022 08:34:16 -0800 (PST)
-Received: from localhost (cpe-98-15-154-102.hvc.res.rr.com. [98.15.154.102])
-        by smtp.gmail.com with ESMTPSA id x17sm35291qtr.69.2022.02.22.08.34.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Feb 2022 08:34:15 -0800 (PST)
-Date:   Tue, 22 Feb 2022 11:34:15 -0500
-From:   Johannes Weiner <hannes@cmpxchg.org>
-To:     Huang Ying <ying.huang@intel.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Feng Tang <feng.tang@intel.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Michal Hocko <mhocko@suse.com>,
-        Rik van Riel <riel@surriel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Yang Shi <shy828301@gmail.com>, Zi Yan <ziy@nvidia.com>,
-        Wei Xu <weixugc@google.com>,
-        Oscar Salvador <osalvador@suse.de>,
-        Shakeel Butt <shakeelb@google.com>,
-        zhongjiang-ali <zhongjiang-ali@linux.alibaba.com>,
-        Randy Dunlap <rdunlap@infradead.org>
-Subject: Re: [PATCH -V13 2/3] NUMA balancing: optimize page placement for
- memory tiering system
-Message-ID: <YhUQh3DKpKeFqiXL@cmpxchg.org>
-References: <20220221084529.1052339-1-ying.huang@intel.com>
- <20220221084529.1052339-3-ying.huang@intel.com>
+        Tue, 22 Feb 2022 11:36:37 -0500
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9A859E579;
+        Tue, 22 Feb 2022 08:36:11 -0800 (PST)
+Received: from fraeml702-chm.china.huawei.com (unknown [172.18.147.201])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4K34XX356Sz67ws6;
+        Wed, 23 Feb 2022 00:35:24 +0800 (CST)
+Received: from lhreml710-chm.china.huawei.com (10.201.108.61) by
+ fraeml702-chm.china.huawei.com (10.206.15.51) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2308.21; Tue, 22 Feb 2022 17:36:08 +0100
+Received: from localhost (10.47.30.92) by lhreml710-chm.china.huawei.com
+ (10.201.108.61) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Tue, 22 Feb
+ 2022 16:36:07 +0000
+Date:   Tue, 22 Feb 2022 16:36:06 +0000
+From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To:     Nandor Han <nandor.han@vaisala.com>
+CC:     Jonathan Cameron <jic23@kernel.org>, <lars@metafoo.de>,
+        <linux-iio@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [RFC PATCH] iio: core: provide a default value `label` property
+Message-ID: <20220222163606.00005996@Huawei.com>
+In-Reply-To: <4f0c786f-e29c-4838-59e3-236a908e4431@vaisala.com>
+References: <20220216135604.3435769-1-nandor.han@vaisala.com>
+        <20220220131809.1bc184e0@jic23-huawei>
+        <4f0c786f-e29c-4838-59e3-236a908e4431@vaisala.com>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220221084529.1052339-3-ying.huang@intel.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.47.30.92]
+X-ClientProxiedBy: lhreml713-chm.china.huawei.com (10.201.108.64) To
+ lhreml710-chm.china.huawei.com (10.201.108.61)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,112 +55,113 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 21, 2022 at 04:45:28PM +0800, Huang Ying wrote:
-> With the advent of various new memory types, some machines will have
-> multiple types of memory, e.g. DRAM and PMEM (persistent memory).  The
-> memory subsystem of these machines can be called memory tiering
-> system, because the performance of the different types of memory are
-> usually different.
-> 
-> In such system, because of the memory accessing pattern changing etc,
-> some pages in the slow memory may become hot globally.  So in this
-> patch, the NUMA balancing mechanism is enhanced to optimize the page
-> placement among the different memory types according to hot/cold
-> dynamically.
-> 
-> In a typical memory tiering system, there are CPUs, fast memory and
-> slow memory in each physical NUMA node.  The CPUs and the fast memory
-> will be put in one logical node (called fast memory node), while the
-> slow memory will be put in another (faked) logical node (called slow
-> memory node).  That is, the fast memory is regarded as local while the
-> slow memory is regarded as remote.  So it's possible for the recently
-> accessed pages in the slow memory node to be promoted to the fast
-> memory node via the existing NUMA balancing mechanism.
-> 
-> The original NUMA balancing mechanism will stop to migrate pages if
-> the free memory of the target node becomes below the high watermark.
-> This is a reasonable policy if there's only one memory type.  But this
-> makes the original NUMA balancing mechanism almost do not work to
-> optimize page placement among different memory types.  Details are as
-> follows.
-> 
-> It's the common cases that the working-set size of the workload is
-> larger than the size of the fast memory nodes.  Otherwise, it's
-> unnecessary to use the slow memory at all.  So, there are almost
-> always no enough free pages in the fast memory nodes, so that the
-> globally hot pages in the slow memory node cannot be promoted to the
-> fast memory node.  To solve the issue, we have 2 choices as follows,
-> 
-> a. Ignore the free pages watermark checking when promoting hot pages
->    from the slow memory node to the fast memory node.  This will
->    create some memory pressure in the fast memory node, thus trigger
->    the memory reclaiming.  So that, the cold pages in the fast memory
->    node will be demoted to the slow memory node.
-> 
-> b. Make kswapd of the fast memory node to reclaim pages until the free
->    pages are a little more than the high watermark (named as promo
->    watermark).  Then, if the free pages of the fast memory node reaches
->    high watermark, and some hot pages need to be promoted, kswapd of the
->    fast memory node will be waken up to demote more cold pages in the
->    fast memory node to the slow memory node.  This will free some extra
->    space in the fast memory node, so the hot pages in the slow memory
->    node can be promoted to the fast memory node.
-> 
-> The choice "a" may create high memory pressure in the fast memory
-> node.  If the memory pressure of the workload is high, the memory
-> pressure may become so high that the memory allocation latency of the
-> workload is influenced, e.g. the direct reclaiming may be triggered.
-> 
-> The choice "b" works much better at this aspect.  If the memory
-> pressure of the workload is high, the hot pages promotion will stop
-> earlier because its allocation watermark is higher than that of the
-> normal memory allocation.  So in this patch, choice "b" is
-> implemented.  A new zone watermark (WMARK_PROMO) is added.  Which is
-> larger than the high watermark and can be controlled via
-> watermark_scale_factor.
-> 
-> In addition to the original page placement optimization among sockets,
-> the NUMA balancing mechanism is extended to be used to optimize page
-> placement according to hot/cold among different memory types.  So the
-> sysctl user space interface (numa_balancing) is extended in a backward
-> compatible way as follow, so that the users can enable/disable these
-> functionality individually.
-> 
-> The sysctl is converted from a Boolean value to a bits field.  The
-> definition of the flags is,
-> 
-> - 0: NUMA_BALANCING_DISABLED
-> - 1: NUMA_BALANCING_NORMAL
-> - 2: NUMA_BALANCING_MEMORY_TIERING
-> 
-> We have tested the patch with the pmbench memory accessing benchmark
-> with the 80:20 read/write ratio and the Gauss access address
-> distribution on a 2 socket Intel server with Optane DC Persistent
-> Memory Model.  The test results shows that the pmbench score can
-> improve up to 95.9%.
-> 
-> Thanks Andrew Morton to help fix the document format error.
-> 
-> Signed-off-by: "Huang, Ying" <ying.huang@intel.com>
-> Tested-by: Baolin Wang <baolin.wang@linux.alibaba.com>
-> Reviewed-by: Baolin Wang <baolin.wang@linux.alibaba.com>
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Cc: Michal Hocko <mhocko@suse.com>
-> Cc: Rik van Riel <riel@surriel.com>
-> Cc: Mel Gorman <mgorman@techsingularity.net>
-> Cc: Peter Zijlstra <peterz@infradead.org>
-> Cc: Dave Hansen <dave.hansen@linux.intel.com>
-> Cc: Yang Shi <shy828301@gmail.com>
-> Cc: Zi Yan <ziy@nvidia.com>
-> Cc: Wei Xu <weixugc@google.com>
-> Cc: Oscar Salvador <osalvador@suse.de>
-> Cc: Shakeel Butt <shakeelb@google.com>
-> Cc: zhongjiang-ali <zhongjiang-ali@linux.alibaba.com>
-> Cc: Randy Dunlap <rdunlap@infradead.org>
-> Cc: Johannes Weiner <hannes@cmpxchg.org>
-> Cc: linux-kernel@vger.kernel.org
-> Cc: linux-mm@kvack.org
+On Tue, 22 Feb 2022 09:42:12 +0200
+Nandor Han <nandor.han@vaisala.com> wrote:
 
-Looks good to me,
+> On 2/20/22 15:18, Jonathan Cameron wrote:
+> > On Wed, 16 Feb 2022 15:56:04 +0200
+> > Nandor Han <nandor.han@vaisala.com> wrote:
+> >   
+> 
+> Thanks for reviewing the patch and provide feed back.
+> 
+> >> The label property is used to correctly identify the same IIO device
+> >> over reboots. The implementation requires that a value will be provided
+> >> through device-tree. This sometime could requires many changes to
+> >> device-trees when multiple devices want to use the label property.
+> >> In order to prevent this, we could use the device-tree node
+> >> name as default value. The device-tree node name is unique and
+> >> also reflects the device which makes it a good choice as default value.
+> >> This change is backward compatible since doesn't affect the users that
+> >> do configure a label using the device-tree or the ones that are not
+> >> using the labels at all.
+> >>
+> >> Use the device-tree node name as a default value for `label` property,
+> >> in case there isn't one configured through device-tree.  
+> > 
+> > Interesting idea.  However a few concerns come to mind.
+> > 1) If we start having a default for this, then it will get used as ABI
+> >     and if a label is applied later to the DT then we will end up breaking
+> >     userspace scripts.  
+> 
+> When a label is explicitly configured means that the userspace expects 
+> to have that value available. Therefore, I don't see this as ABI change, 
+> given that this affects the property label content and not for example 
+> the property name.
 
-Acked-by: Johannes Weiner <hannes@cmpxchg.org>
+The potential issue is that with this userspace code may rely on the common
+option (matches device tree node name) and then get confused on it changing.
+
+If it wasn't there previously and appears (which is what happens when
+a label is added currently) userspace is unlikely to have in some fashion
+depended on it not being there...
+
+If someone modifies an existing label they can reasonably expect to break
+compatibility because they made something 'go away'.
+
+> 
+> > 2) If we do this it should be firmware agnostics (we need to fix
+> >     the existing code to be such as well).  
+> 
+> Not sure I understand this. If you could explain a bit more I would 
+> really appriciate.
+
+Typo in that didn't help. (agnostic).  Anyhow, basically it has to work
+for ACPI as well.
+
+> 
+> > 3) Is the node name always unique (think multiple accelerometers on
+> >     different i2c masters)?
+> > 3) I'm fairly sure this information is readily available anyway.
+> >     either via the of_node link for the iio\:deviceX
+> >     So why not have your usespace use that instead of label?
+> >     I'm not a fan of duplicating information that is readily available
+> >     anyway - be it as name and reg in the of_node directory.
+> >   
+> 
+> The node name supposed to be unique AFAIK and you're right it is 
+> available already in the userspace.
+
+It's not unique.  As per https://elinux.org/Device_Tree_Usage,
+"sibling nodes are expected to be unique".  If you have multiple
+i2c masters and the same device under each of them with the
+same i2c address they are not siblings (different parents) and
+will have the same node name. 
+
+
+> My point with this patch is to provide a default value for the label 
+> content and I'm open to suggestions related to content. The of_node name 
+> was something that I thought that is unique and easy to use, but if 
+> somebody has better suggestions I'm really open to these.
+
+I don't see why we want a default label. If it's not provided it's
+not there (no file) and userspace can go use something else for
+it's unique naming. Note that for older kernels they need to do
+that anyway because label never existed. So userspace will need
+to work with possibility of it being absent. As userspace is
+going to do that today, why add another option so we have:
+
+1) No label attribute.
+2) Label attribute == node name
+3) Label attribute something else
+
+vs having to handle 2 cases.
+
+1) No label attribute
+2) Label attribute present.
+
+So adding a default makes userspace code more complex, not less.
+
+Jonathan
+> 
+> > Thanks,
+> > 
+> > Jonathan
+> >   
+> 
+> <snip>
+> 
+> 
+> Thanks again and regards,
+>     Nandor
+

@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9F974BFE42
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 17:15:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C615C4BFE46
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 17:15:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233853AbiBVQQC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 11:16:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41302 "EHLO
+        id S233950AbiBVQQP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 11:16:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229530AbiBVQP5 (ORCPT
+        with ESMTP id S233487AbiBVQQN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 11:15:57 -0500
+        Tue, 22 Feb 2022 11:16:13 -0500
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 73E151662D9;
-        Tue, 22 Feb 2022 08:15:31 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3625B1662E2;
+        Tue, 22 Feb 2022 08:15:47 -0800 (PST)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3A3E61063;
-        Tue, 22 Feb 2022 08:15:31 -0800 (PST)
-Received: from bogus (unknown [10.57.3.200])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D843B3F70D;
-        Tue, 22 Feb 2022 08:15:29 -0800 (PST)
-Date:   Tue, 22 Feb 2022 16:14:40 +0000
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Krzysztof Kozlowski <krzk@kernel.org>
-Cc:     Oleksii Moisieiev <Oleksii_Moisieiev@epam.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Cristian Marussi <cristian.marussi@arm.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [RFC PATCH 0/1] dt-bindings: arm: Add scmi_devid paramter for
-Message-ID: <20220222161440.xadrgjftdyxenxgo@bogus>
-References: <cover.1645460043.git.oleksii_moisieiev@epam.com>
- <2546477f-4190-e838-3095-f47b31802445@kernel.org>
- <20220221213932.GA164964@EPUAKYIW015D>
- <7f17ab8f-429f-d2e0-8f5f-bfa2dd19cc49@kernel.org>
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id EF79A1063;
+        Tue, 22 Feb 2022 08:15:46 -0800 (PST)
+Received: from lpieralisi (e121166-lin.cambridge.arm.com [10.1.196.255])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A04133F70D;
+        Tue, 22 Feb 2022 08:15:45 -0800 (PST)
+Date:   Tue, 22 Feb 2022 16:15:39 +0000
+From:   Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+To:     Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>
+Cc:     Russell King <rmk+kernel@armlinux.org.uk>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Rob Herring <robh+dt@kernel.org>, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: (subset) [PATCH v4 00/12] PCI: mvebu: subsystem ids, AER and INTx
+Message-ID: <20220222161539.GA20114@lpieralisi>
+References: <20220222155030.988-1-pali@kernel.org>
+ <164554589988.5595.5091384618177225445.b4-ty@arm.com>
+ <20220222161143.6ryghgtfmhnmhpmz@pali>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <7f17ab8f-429f-d2e0-8f5f-bfa2dd19cc49@kernel.org>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220222161143.6ryghgtfmhnmhpmz@pali>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
@@ -50,69 +51,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 22, 2022 at 09:06:25AM +0100, Krzysztof Kozlowski wrote:
-> On 21/02/2022 22:39, Oleksii Moisieiev wrote:
-> > Hi Krzysztof,
+On Tue, Feb 22, 2022 at 05:11:43PM +0100, Pali Rohár wrote:
+> On Tuesday 22 February 2022 16:06:20 Lorenzo Pieralisi wrote:
+> > On Tue, 22 Feb 2022 16:50:18 +0100, Pali Rohár wrote:
+> > > This patch series extends pci-bridge-emul.c driver to emulate PCI Subsystem
+> > > Vendor ID capability and PCIe extended capabilities. And then implement
+> > > in pci-mvebu.c driver support for PCI Subsystem Vendor IDs, PCIe AER
+> > > registers, support for legacy INTx interrupts, configuration for X1/X4
+> > > mode and usage of new PCI child_ops API.
+> > > 
+> > > Changes in v4:
+> > > * rebased on c3bd7dc553eea5a3595ca3aa0adee9bf83622a1f
+> > > 
+> > > [...]
 > > 
-> > On Mon, Feb 21, 2022 at 10:01:43PM +0100, Krzysztof Kozlowski wrote:
-> >> On 21/02/2022 18:26, Oleksii Moisieiev wrote:
-> >>> Introducing new parameter called scmi_devid to the device-tree bindings.
-> >>> This parameter should be set for the device nodes, which has
-> >>> clocks/power-domains/resets working through SCMI.
-> >>> Given parameter should set the device_id, needed to set device
-> >>> permissions in the Firmware. This feature will be extremely useful for
-> >>> the virtualized systems, which has more that one Guests running on the
-> >>> system at the same time or for the syestems, which require several
-> >>> agents with different permissions. Trusted agent will use scmi_devid to
-> >>> set the Device permissions for the Firmware (See Section 4.2.2.10 [0]
-> >>> for details).
-> >>> Agents concept is described in Section 4.2.1 [0].
-> >>>
-> >>> scmi_devid in Device-tree node example:
-> >>> usb@e6590000
-> >>> {
-> >>>     scmi_devid = <19>;
-> >>>     clocks = <&scmi_clock 3>, <&scmi_clock 2>;
-> >>>     resets = <&scmi_reset 10>, <&scmi_reset 9>;
-> >>>     power-domains = <&scmi_power 0>;
-> >>> };
-> >>
-> >> And how do you prevent DT overlay adding such devid to any other node
-> >> thus allowing any other device to send requests with given devid?
-> >>
-> > Thank you for the quick response.
-> > scmi_devid value will be used only by Trusted Agent when the device
-> > permissions are set. Non-trusted agents, which in our case are
-> > represented as Guest OS are using scmi drivers, already present in linux
-> > kernel, ignores scmi_devid and uses scmi_clocks, scmi_power, scmi_reset
-> > nodes to access to SCMI protocol.
+> > I can't apply dts changes, patch 12 should go via the arm-soc tree.
 > 
-> Ah, ok.
+> Gregory already wrote about this dts change:
+> https://lore.kernel.org/linux-pci/87tud1jwpr.fsf@BL-laptop/
+> "So the easier is to let merge it through the PCI subsystem with the
+> other patches from this series."
 > 
-> > 
-> >> Plus few technicalities:
-> >> 1. Hyphen, not underscore in property name, so scmi-devid.
-> > 
-> > Thanks for the tip, I will change that in v2.
-> 
-> Few more thoughts:
-> 1. This looks specific to ARM SCMI, so you also need vendor prefix, so
-> something like:
-> arm,scmi-devid
-> arm,scmi-device-id
-> 
+> Are there any issues with applying this dts change via pci tree?
 
-Keeping the other discussion separate, I wanted to comment on this.
-I agree with Krzysztof on having vendor specific prefix if we decide to add
-this device id thing. However, I prefer not to use "arm,scmi-" here.
-It can be "xen,scmi-" as we had plans to introduce some concepts in SCMI
-spec that may use looks like this device-id. I would just like to avoid
-conflicting with that in the future. It may happen to be same in the future
-(i.e. this xen device-id matches 100% with definition of device-id we might
-introduce in the spec, but I want to make assumption otherwise and leave
-scope for divergence however small/little it can be). No issues even if
-they converge and match 100% later in the far future.
+I don't usually take dts changes through the PCI tree since they
+can conflict with arm-soc, that's the issue - dts changes should
+be managed by platform maintainers.
 
--- 
-Regards,
-Sudeep
+Thanks,
+Lorenzo
+
+> > Applied the others to pci/mvebu, thanks.
+> > 
+> > [01/12] PCI: pci-bridge-emul: Re-arrange register tests
+> >         https://git.kernel.org/lpieralisi/pci/c/c453bf6f9b
+> > [02/12] PCI: pci-bridge-emul: Add support for PCIe extended capabilities
+> >         https://git.kernel.org/lpieralisi/pci/c/c0bd419732
+> > [03/12] PCI: pci-bridge-emul: Add support for PCI Bridge Subsystem Vendor ID capability
+> >         https://git.kernel.org/lpieralisi/pci/c/3767a90242
+> > [04/12] dt-bindings: PCI: mvebu: Add num-lanes property
+> >         https://git.kernel.org/lpieralisi/pci/c/26b982ca83
+> > [05/12] PCI: mvebu: Correctly configure x1/x4 mode
+> >         https://git.kernel.org/lpieralisi/pci/c/2a81dd9fd9
+> > [06/12] PCI: mvebu: Add support for PCI Bridge Subsystem Vendor ID on emulated bridge
+> >         https://git.kernel.org/lpieralisi/pci/c/e3e13c9135
+> > [07/12] PCI: mvebu: Add support for Advanced Error Reporting registers on emulated bridge
+> >         https://git.kernel.org/lpieralisi/pci/c/2b6ee04c0a
+> > [08/12] PCI: mvebu: Use child_ops API
+> >         https://git.kernel.org/lpieralisi/pci/c/c099c2a761
+> > [09/12] dt-bindings: PCI: mvebu: Update information about intx interrupts
+> >         https://git.kernel.org/lpieralisi/pci/c/0124989220
+> > [10/12] PCI: mvebu: Fix macro names and comments about legacy interrupts
+> >         https://git.kernel.org/lpieralisi/pci/c/d00ea94e62
+> > [11/12] PCI: mvebu: Implement support for legacy INTx interrupts
+> >         https://git.kernel.org/lpieralisi/pci/c/ec07526264
+> > 
+> > Thanks,
+> > Lorenzo

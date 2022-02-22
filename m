@@ -2,98 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 151AC4BF26B
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 08:13:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 49C924BF273
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 08:13:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230385AbiBVHIr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 02:08:47 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:57418 "EHLO
+        id S230447AbiBVHLt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 02:11:49 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:36352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230369AbiBVHIo (ORCPT
+        with ESMTP id S230438AbiBVHLs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 02:08:44 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B564B0EBC;
-        Mon, 21 Feb 2022 23:08:18 -0800 (PST)
-Received: from dggeme758-chm.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4K2qrz1GCDzZfbC;
-        Tue, 22 Feb 2022 15:03:47 +0800 (CST)
-Received: from [127.0.0.1] (10.67.102.125) by dggeme758-chm.china.huawei.com
- (10.3.19.104) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.21; Tue, 22
- Feb 2022 15:08:16 +0800
-Message-ID: <62148BE0.7060501@hisilicon.com>
-Date:   Tue, 22 Feb 2022 15:08:16 +0800
-From:   Wei Xu <xuwei5@hisilicon.com>
-User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64; rv:24.0) Gecko/20100101 Thunderbird/24.2.0
+        Tue, 22 Feb 2022 02:11:48 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5772BB1098
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 23:11:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1645513882;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=7FSv/oEcapgvDoGQHzrlqg4yIRZgWGWLxeotDRNQuUU=;
+        b=QfYMeUWdbHNfKBqd2cikNJgC6ukjCBCDCH4DoFuZ8YCYw3eXgJEoFLMIz8op/hX9qqcqk6
+        aD6WjMYVqPg5hSreHPiFZ/+IbNP/l4j4ShxRgf+Kkc6BF76trHJbU6SIMX2Vh0Ou+nwzeF
+        9BGGFr2og7MkCum1ooZZdwraODGB5kM=
+Received: from mail-lj1-f197.google.com (mail-lj1-f197.google.com
+ [209.85.208.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-441-rla05-UmNcqZQGRcof4XkA-1; Tue, 22 Feb 2022 02:11:20 -0500
+X-MC-Unique: rla05-UmNcqZQGRcof4XkA-1
+Received: by mail-lj1-f197.google.com with SMTP id o1-20020a2eb301000000b0024640251ba9so2336410lja.12
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 23:11:20 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=7FSv/oEcapgvDoGQHzrlqg4yIRZgWGWLxeotDRNQuUU=;
+        b=HIRCeoy9JqYJYpi67Uld+Q4UYx3uUWd5Rb2tcGK3xN9KUXzQfdrNaDDe8BErksn801
+         g7Aro2Fu6wevCbUu/D956a8OGah3av3Yds3qDEdUbdm8Ek5v4bWd/gjHFFHp0kCIKtew
+         udDX0EH7Tj3Wh2WPvKC01m+SwseQd341zB74D3OATeNJ86vTKB5qGxaJ85DxvYVo1+gP
+         jJyjILqNSJcnEIw6m8GR3fJTtghSpBB/RtJiZe8DjlwpVERdxaoNML/9u8tH/tbjuKLw
+         T9QT2p5L/iIADK6Ec0Ynp7M4PwqHdaH8DWRTkDZCD/Ia5odo1MJgjmu9PtVAlCfKyURj
+         jKMg==
+X-Gm-Message-State: AOAM530nakpRQs5G+N6/LlkXWtGI9zz3gOX6fkOygXEeH67Sn5CigVHd
+        XAh/kgh7lrkEB2ctZnuMxqQZdsulvCiXmwr8Yd9vekpO5Rb3f3I8wp+5+RIG3aHOPscqMDS2WNt
+        tzjoUIaIH4pzZjUCfZEgBhSbqHlaoYPZxOL7P7hbe
+X-Received: by 2002:ac2:5dc9:0:b0:443:5db1:244c with SMTP id x9-20020ac25dc9000000b004435db1244cmr16719971lfq.84.1645513878929;
+        Mon, 21 Feb 2022 23:11:18 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxbMuAz/ix+dLAdMFMBvTxo0FVkU9ZlLpWgMVrgQgKR6osYaULNGWxhsEVLNufI0L2GR59y4OsFjZ9jVzrG5K8=
+X-Received: by 2002:ac2:5dc9:0:b0:443:5db1:244c with SMTP id
+ x9-20020ac25dc9000000b004435db1244cmr16719955lfq.84.1645513878661; Mon, 21
+ Feb 2022 23:11:18 -0800 (PST)
 MIME-Version: 1.0
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Roger Quadros <rogerq@ti.com>, <linux-usb@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     David Heidelberg <david@ixit.cz>, <xuwei5@hisilicon.com>
-Subject: Re: [PATCH 1/3] dt-bindings: vendor-prefixes: add second HiSilicon
- prefix
-References: <20220221082228.34407-1-krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20220221082228.34407-1-krzysztof.kozlowski@canonical.com>
-Content-Type: text/plain; charset="ISO-8859-1"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.102.125]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggeme758-chm.china.huawei.com (10.3.19.104)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220221195303.13560-1-mail@anirudhrb.com> <CACGkMEvLE=kV4PxJLRjdSyKArU+MRx6b_mbLGZHSUgoAAZ+-Fg@mail.gmail.com>
+ <YhRtQEWBF0kqWMsI@anirudhrb.com>
+In-Reply-To: <YhRtQEWBF0kqWMsI@anirudhrb.com>
+From:   Jason Wang <jasowang@redhat.com>
+Date:   Tue, 22 Feb 2022 15:11:07 +0800
+Message-ID: <CACGkMEvd7ETC_ANyrOSAVz_i64xqpYYazmm=+39E51=DMRFXdw@mail.gmail.com>
+Subject: Re: [PATCH] vhost: validate range size before adding to iotlb
+To:     Anirudh Rayabharam <mail@anirudhrb.com>
+Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
+        syzbot+0abd373e2e50d704db87@syzkaller.appspotmail.com,
+        kvm <kvm@vger.kernel.org>,
+        virtualization <virtualization@lists.linux-foundation.org>,
+        netdev <netdev@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof,
+On Tue, Feb 22, 2022 at 12:57 PM Anirudh Rayabharam <mail@anirudhrb.com> wrote:
+>
+> On Tue, Feb 22, 2022 at 10:50:20AM +0800, Jason Wang wrote:
+> > On Tue, Feb 22, 2022 at 3:53 AM Anirudh Rayabharam <mail@anirudhrb.com> wrote:
+> > >
+> > > In vhost_iotlb_add_range_ctx(), validate the range size is non-zero
+> > > before proceeding with adding it to the iotlb.
+> > >
+> > > Range size can overflow to 0 when start is 0 and last is (2^64 - 1).
+> > > One instance where it can happen is when userspace sends an IOTLB
+> > > message with iova=size=uaddr=0 (vhost_process_iotlb_msg). So, an
+> > > entry with size = 0, start = 0, last = (2^64 - 1) ends up in the
+> > > iotlb. Next time a packet is sent, iotlb_access_ok() loops
+> > > indefinitely due to that erroneous entry:
+> > >
+> > >         Call Trace:
+> > >          <TASK>
+> > >          iotlb_access_ok+0x21b/0x3e0 drivers/vhost/vhost.c:1340
+> > >          vq_meta_prefetch+0xbc/0x280 drivers/vhost/vhost.c:1366
+> > >          vhost_transport_do_send_pkt+0xe0/0xfd0 drivers/vhost/vsock.c:104
+> > >          vhost_worker+0x23d/0x3d0 drivers/vhost/vhost.c:372
+> > >          kthread+0x2e9/0x3a0 kernel/kthread.c:377
+> > >          ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
+> > >          </TASK>
+> > >
+> > > Reported by syzbot at:
+> > >         https://syzkaller.appspot.com/bug?extid=0abd373e2e50d704db87
+> > >
+> > > Reported-by: syzbot+0abd373e2e50d704db87@syzkaller.appspotmail.com
+> > > Tested-by: syzbot+0abd373e2e50d704db87@syzkaller.appspotmail.com
+> > > Signed-off-by: Anirudh Rayabharam <mail@anirudhrb.com>
+> > > ---
+> > >  drivers/vhost/iotlb.c | 6 ++++--
+> > >  1 file changed, 4 insertions(+), 2 deletions(-)
+> > >
+> > > diff --git a/drivers/vhost/iotlb.c b/drivers/vhost/iotlb.c
+> > > index 670d56c879e5..b9de74bd2f9c 100644
+> > > --- a/drivers/vhost/iotlb.c
+> > > +++ b/drivers/vhost/iotlb.c
+> > > @@ -53,8 +53,10 @@ int vhost_iotlb_add_range_ctx(struct vhost_iotlb *iotlb,
+> > >                               void *opaque)
+> > >  {
+> > >         struct vhost_iotlb_map *map;
+> > > +       u64 size = last - start + 1;
+> > >
+> > > -       if (last < start)
+> > > +       // size can overflow to 0 when start is 0 and last is (2^64 - 1).
+> > > +       if (last < start || size == 0)
+> > >                 return -EFAULT;
+> >
+> > I'd move this check to vhost_chr_iter_write(), then for the device who
+> > has its own msg handler (e.g vDPA) can benefit from it as well.
+>
+> Thanks for reviewing!
+>
+> I kept the check here thinking that all devices would benefit from it
+> because they would need to call vhost_iotlb_add_range() to add an entry
+> to the iotlb. Isn't that correct?
 
-On 2022/2/21 16:22, Krzysztof Kozlowski wrote:
-> There are few boards DTS using "hisi,rst-syscon" property -
-> undocumented "hisi" prefix.  The property will not be changed in DTS to
-> non-deprecated one, because of compatibility reasons.  Add deprecated
-> "hisi" prefix to silence DT schema warnings.
-> 
-> Cc: Wei Xu <xuwei5@hisilicon.com>
-> Cc: David Heidelberg <david@ixit.cz>
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Correct for now but not for the future, it's not guaranteed that the
+per device iotlb message handler will use vhost iotlb.
 
-Thanks!
-Reviewed-by: Wei Xu <xuwei5@hisilicon.com>
+But I agree that we probably don't need to care about it too much now.
 
-Best Regards,
-Wei
+> Do you see any other benefit in moving
+> it to vhost_chr_iter_write()?
+>
+> One concern I have is that if we move it out some future caller to
+> vhost_iotlb_add_range() might forget to handle this case.
 
-> 
-> ---
-> 
-> See:
-> https://lore.kernel.org/all/61AF1E3B.5060706@hisilicon.com/
-> https://www.spinics.net/lists/arm-kernel/msg887577.html
-> ---
->  Documentation/devicetree/bindings/vendor-prefixes.yaml | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-> index ebe294516937..79a172eaaaee 100644
-> --- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
-> +++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-> @@ -505,6 +505,9 @@ patternProperties:
->      description: Himax Technologies, Inc.
->    "^hirschmann,.*":
->      description: Hirschmann Automation and Control GmbH
-> +  "^hisi,.*":
-> +    description: HiSilicon Limited (deprecated, use hisilicon)
-> +    deprecated: true
->    "^hisilicon,.*":
->      description: HiSilicon Limited.
->    "^hit,.*":
-> 
+Yes.
+
+Rethink the whole fix, we're basically rejecting [0, ULONG_MAX] range
+which seems a little bit odd. I wonder if it's better to just remove
+the map->size. Having a quick glance at the the user, I don't see any
+blocker for this.
+
+Thanks
+
+>
+> Thanks!
+>
+>         - Anirudh.
+>
+> >
+> > Thanks
+> >
+> > >
+> > >         if (iotlb->limit &&
+> > > @@ -69,7 +71,7 @@ int vhost_iotlb_add_range_ctx(struct vhost_iotlb *iotlb,
+> > >                 return -ENOMEM;
+> > >
+> > >         map->start = start;
+> > > -       map->size = last - start + 1;
+> > > +       map->size = size;
+> > >         map->last = last;
+> > >         map->addr = addr;
+> > >         map->perm = perm;
+> > > --
+> > > 2.35.1
+> > >
+> >
+>
 

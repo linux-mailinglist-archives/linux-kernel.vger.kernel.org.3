@@ -2,69 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB2554BFE80
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 17:26:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 51A084BFE83
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 17:27:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234000AbiBVQ0w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 11:26:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50748 "EHLO
+        id S234005AbiBVQ1v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 11:27:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231831AbiBVQ0u (ORCPT
+        with ESMTP id S234003AbiBVQ1s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 11:26:50 -0500
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 699F5166E04;
-        Tue, 22 Feb 2022 08:26:24 -0800 (PST)
-Received: by mail-ed1-x535.google.com with SMTP id c6so35359503edk.12;
-        Tue, 22 Feb 2022 08:26:24 -0800 (PST)
+        Tue, 22 Feb 2022 11:27:48 -0500
+Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A8B9AC92D
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 08:27:20 -0800 (PST)
+Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-2d6d0cb5da4so125357317b3.10
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 08:27:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=tKklY/AvcPbu9qLUHQJPDKkDJ99GlN7DxWaF2JXSG7Q=;
-        b=dg41zbDo7Mw/8L1HB44QHqsyKU9y1rhyANV7R5/y1oWP/3Dbg1eNKa+G36u2DOKVbI
-         UtBK+wN17WK6M4ZCYyTgQ4gZnNrzeZ/BLRR29AcFNpQinKFCGTruTs6LLWdloVDbeffp
-         0uKcZNaGFlcQBbP0AD3qv5gtNEoFhNGnBa8F2U/Upgcq+V8HACA+W93T0UfOpKaovICu
-         bPOhW0Mx19qeMGuUMeE3otWQwnD11RoYzPBczTtlVtjEFnqA0hl4p9tOeFFAoETK3THZ
-         iioJq45p0bD1vGAU7yE7QLnK2X7+CpgacNwvCcr+nOxGAGd86PW1QxLmMKc8OscFpFic
-         oSCQ==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ORYINw67pQ5ZoOWHnhKhKbeE417mgacXszCqGXghifw=;
+        b=ZCt6TATiFHlYTc4SrTZQDV0dmODhoa/PcYUzaYZQ/ErkbsLoCq8wH8KsBjXtItT8cS
+         N8SANx/p0FDUp4stmJJ6X5vy+sc4d0MoWVvYqNKrZSPCDtTdfl7uNEPonKk1w2mb3hzk
+         ppng5/yLWk6vADRiH9gAlQb/IonUd/c5sifCkL34G040hUwt/v39rYBorFJZp3edrfCa
+         w0Tai028iJDsxKPrFr0YEFDqTKvwWy3XcJIrA2SSYQ8+CJyPWmNguGCDAJdo6bxzYFXq
+         aUMF9qDcBhmjcEw9jKhUe+KdZCVXb3g+dwY3RVhZiRnIuMiq/+veOV3u6w+wo3Ivxk9b
+         MPpA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=tKklY/AvcPbu9qLUHQJPDKkDJ99GlN7DxWaF2JXSG7Q=;
-        b=oV/LCM3fMibUF6Uwb+5SaekZg3+BHZKwgn2HSenCCkddnXcuspnbfsUg94K6QTQwO6
-         C6jNCNAioebHqRUH9ZbnX/I4HS2LxsQxiUK4Po29Mte3Xhnn9BjVBpmUApNyggEbOHEq
-         0igYtEUV43pRa0Mx/zEvobc/nNTh60S1hRm0WIcPz9KiM9jjWys0SKoOtGA0nIJkAeAv
-         fLcQe/2mmIMCQcTHbf8BDAWEEHHnFu4FQl2XEmkwX8SHY3NY3lsF9VEomyl05Besjs9S
-         gL3xGv13kwUud1jc/NhnTBhQjoBLpwEJy2jU3F9E3fi/2tZoE5Gl96Hn6cgeMOMjr/Wu
-         rn0A==
-X-Gm-Message-State: AOAM53270OfZsG80rnkz2NtqCbFZpCkBjNaA5LqXMYQ5IS8LZwItzlwW
-        ej9fwDCxQ2RGRS1yD8adasZxlvT5yLQ=
-X-Google-Smtp-Source: ABdhPJwzZ4KnVDlKMeSdCh+TOSR1HUo1tRsSPGilAD4NFf8d9Fb5ElIsCzOwzqK9jc31oEncafDvyg==
-X-Received: by 2002:a50:ef0b:0:b0:413:2c17:d967 with SMTP id m11-20020a50ef0b000000b004132c17d967mr1846353eds.307.1645547182763;
-        Tue, 22 Feb 2022 08:26:22 -0800 (PST)
-Received: from localhost.localdomain.info (62-178-82-229.cable.dynamic.surfer.at. [62.178.82.229])
-        by smtp.gmail.com with ESMTPSA id q7sm10005356edv.93.2022.02.22.08.26.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Feb 2022 08:26:22 -0800 (PST)
-From:   Christian Gmeiner <christian.gmeiner@gmail.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     kishon@ti.com, Christian Gmeiner <christian.gmeiner@gmail.com>,
-        Tom Joseph <tjoseph@cadence.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org
-Subject: [PATCH v2] PCI: cadence: Enable Controller to respond to received PTM Requests
-Date:   Tue, 22 Feb 2022 17:26:05 +0100
-Message-Id: <20220222162619.14645-1-christian.gmeiner@gmail.com>
-X-Mailer: git-send-email 2.35.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ORYINw67pQ5ZoOWHnhKhKbeE417mgacXszCqGXghifw=;
+        b=As6SA+1AIHFkGuqIcf6y9f/Fn7q50Vn0RhlNBIkjYcFpMhRXQy8UZPfx6acbQwSlFN
+         Lx39ItpRLmQcgP6sqOtZ9HJzPmS3gjkOQt8kgTFzBDiBxCuFFuTmXLXiQr7qGZWvqfFv
+         Ao5FSVxYSvRI4OO8bWDbvYVd9tqGGOOB1UTKONoxVXTreA4JPDBYTzy+UdlWXiIxGXTC
+         s+6VSK7XTcS5zDUAUFRVIFw/RoN9qehdemEunGiNssI6yZyCMMCiHdSonrmlt8gKeCY1
+         TrMMcUTECQyjaxL7fi85XnxcEHA/7YWLKThzAhaoQsKpEdLB6PDJ5gACRczTH+/yLvCQ
+         utPA==
+X-Gm-Message-State: AOAM5320tzssaiD4r+oXcUOwG/Cae1obxPFfUa3pVuZ35A+bv7OXxut6
+        cOKZkz8ut5ahHDdNO465KGY1VIGTjlg7NSiunqfQpw==
+X-Google-Smtp-Source: ABdhPJwPwPnelkp+i0QAJ4nyGB9oFEYLPVLrlCn0wrUtvfmdCopNBZdTZ8Wt8KBysg2sSDF7fTxQNI5EOo2AnHqkorQ=
+X-Received: by 2002:a81:6a0a:0:b0:2d0:c144:4be4 with SMTP id
+ f10-20020a816a0a000000b002d0c1444be4mr24759229ywc.332.1645547238650; Tue, 22
+ Feb 2022 08:27:18 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <20220221084911.895146879@linuxfoundation.org> <20220221084912.825972694@linuxfoundation.org>
+ <20220222153528.GA27262@amd>
+In-Reply-To: <20220222153528.GA27262@amd>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Tue, 22 Feb 2022 08:27:07 -0800
+Message-ID: <CANn89iLOiaan+CG94+6-RsMWH5pPLJ6snfAGQ3UJfRBLijTbsQ@mail.gmail.com>
+Subject: Re: [PATCH 4.19 29/58] bonding: fix data-races around agg_select_timer
+To:     Pavel Machek <pavel@ucw.cz>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-stable <stable@vger.kernel.org>,
+        syzbot <syzkaller@googlegroups.com>,
+        Jay Vosburgh <j.vosburgh@gmail.com>,
+        Veaceslav Falico <vfalico@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,59 +73,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This enables the Controller [RP] to automatically respond with
-Response/ResponseD messages if CDNS_PCIE_LM_TPM_CTRL_PTMRSEN
-and PCI_PTM_CTRL_ENABLE bits are both set.
+On Tue, Feb 22, 2022 at 7:35 AM Pavel Machek <pavel@ucw.cz> wrote:
+>
+> Hi!
+>
+> > syzbot reported that two threads might write over agg_select_timer
+> > at the same time. Make agg_select_timer atomic to fix the races.
+>
+> Ok, but:
+>
+> > --- a/drivers/net/bonding/bond_3ad.c
+> > +++ b/drivers/net/bonding/bond_3ad.c
+> > @@ -249,7 +249,7 @@ static inline int __check_agg_selection_
+> >       if (bond == NULL)
+> >               return 0;
+> >
+> > -     return BOND_AD_INFO(bond).agg_select_timer ? 1 : 0;
+> > +     return atomic_read(&BOND_AD_INFO(bond).agg_select_timer) ? 1 : 0;
+> >  }
+>
+> This could probably use !!.
 
-Signed-off-by: Christian Gmeiner <christian.gmeiner@gmail.com>
----
- drivers/pci/controller/cadence/pcie-cadence-host.c | 10 ++++++++++
- drivers/pci/controller/cadence/pcie-cadence.h      |  4 ++++
- 2 files changed, 14 insertions(+)
+Probably... I chose to not change code style in a bug fix.
 
-diff --git a/drivers/pci/controller/cadence/pcie-cadence-host.c b/drivers/pci/controller/cadence/pcie-cadence-host.c
-index fb96d37a135c..940c7dd701d6 100644
---- a/drivers/pci/controller/cadence/pcie-cadence-host.c
-+++ b/drivers/pci/controller/cadence/pcie-cadence-host.c
-@@ -123,6 +123,14 @@ static int cdns_pcie_retrain(struct cdns_pcie *pcie)
- 	return ret;
- }
- 
-+static void cdns_pcie_host_enable_ptm_response(struct cdns_pcie *pcie)
-+{
-+	u32 val;
-+
-+	val = cdns_pcie_readl(pcie, CDNS_PCIE_LM_PTM_CTRL);
-+	cdns_pcie_writel(pcie, CDNS_PCIE_LM_PTM_CTRL, val | CDNS_PCIE_LM_TPM_CTRL_PTMRSEN);
-+}
-+
- static int cdns_pcie_host_start_link(struct cdns_pcie_rc *rc)
- {
- 	struct cdns_pcie *pcie = &rc->pcie;
-@@ -501,6 +509,8 @@ int cdns_pcie_host_setup(struct cdns_pcie_rc *rc)
- 	if (rc->quirk_detect_quiet_flag)
- 		cdns_pcie_detect_quiet_min_delay_set(&rc->pcie);
- 
-+	cdns_pcie_host_enable_ptm_response(pcie);
-+
- 	ret = cdns_pcie_start_link(pcie);
- 	if (ret) {
- 		dev_err(dev, "Failed to start link\n");
-diff --git a/drivers/pci/controller/cadence/pcie-cadence.h b/drivers/pci/controller/cadence/pcie-cadence.h
-index c8a27b6290ce..1ffa8fa77a8a 100644
---- a/drivers/pci/controller/cadence/pcie-cadence.h
-+++ b/drivers/pci/controller/cadence/pcie-cadence.h
-@@ -116,6 +116,10 @@
- #define LM_RC_BAR_CFG_APERTURE(bar, aperture)		\
- 					(((aperture) - 2) << ((bar) * 8))
- 
-+/* PTM Control Register */
-+#define CDNS_PCIE_LM_PTM_CTRL 	(CDNS_PCIE_LM_BASE + 0x0da8)
-+#define CDNS_PCIE_LM_TPM_CTRL_PTMRSEN 	BIT(17)
-+
- /*
-  * Endpoint Function Registers (PCI configuration space for endpoint functions)
-  */
--- 
-2.35.1
+>
+> > +static bool bond_agg_timer_advance(struct bonding *bond)
+> > +{
+> > +     int val, nval;
+> > +
+> > +     while (1) {
+> > +             val = atomic_read(&BOND_AD_INFO(bond).agg_select_timer);
+> > +             if (!val)
+> > +                     return false;
+> > +             nval = val - 1;
+> > +             if (atomic_cmpxchg(&BOND_AD_INFO(bond).agg_select_timer,
+> > +                                val, nval) == val)
+> > +                     break;
+> > +     }
+> > +     return nval == 0;
+> > +}
+>
+> This should really be atomic_dec_if_positive, no?
 
+SGTM, please send a patch, thank you.

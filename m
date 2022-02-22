@@ -2,78 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 943694BF554
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 11:04:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D26D4BF556
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 11:05:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230378AbiBVKEL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 05:04:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33392 "EHLO
+        id S230389AbiBVKEi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 05:04:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229735AbiBVKEJ (ORCPT
+        with ESMTP id S229679AbiBVKEf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 05:04:09 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0F6EF5D1AE;
-        Tue, 22 Feb 2022 02:03:44 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B0A95106F;
-        Tue, 22 Feb 2022 02:03:43 -0800 (PST)
-Received: from [10.57.9.152] (unknown [10.57.9.152])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C61B83F5A1;
-        Tue, 22 Feb 2022 02:03:40 -0800 (PST)
-Message-ID: <c83ae91b-6901-de2b-913e-b28af73c52fa@arm.com>
-Date:   Tue, 22 Feb 2022 10:03:38 +0000
+        Tue, 22 Feb 2022 05:04:35 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71886A1BDC;
+        Tue, 22 Feb 2022 02:04:10 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 3133421114;
+        Tue, 22 Feb 2022 10:04:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1645524249; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=KGfyKWdEZJhA5+6FN5DHdSypDyy+shnNAH3syJfBIhw=;
+        b=fZBn/89ZZ6v6UmwwwdiXYAKlVaPaicKVlFrMRrjRsuIg+qha1jJe52hIbeUj/Ou8+FoxGn
+        1cxY8IvRDu6adoTND6bnEMzHGaPT4m1SN3y9b+dJp4u9TiTNfNJfB3iGiVi2GZwJSxIJQK
+        sxMy0MBE0iA1ofp773/AvwesyjMgtb8=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1645524249;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=KGfyKWdEZJhA5+6FN5DHdSypDyy+shnNAH3syJfBIhw=;
+        b=gUyIalokRoQw6vM3QJW4ZE4IYfyI+MvEfaOOT6h4z5naBLtUqhtzXIpz2AQEHPGX/uP8ME
+        Qr0jYJVeXr+qZYAg==
+Received: from quack3.suse.cz (unknown [10.100.200.198])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 21483A3B81;
+        Tue, 22 Feb 2022 10:04:09 +0000 (UTC)
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id B9607A0606; Tue, 22 Feb 2022 11:04:08 +0100 (CET)
+Date:   Tue, 22 Feb 2022 11:04:08 +0100
+From:   Jan Kara <jack@suse.cz>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        reiserfs-devel@vger.kernel.org, Jan Kara <jack@suse.cz>
+Subject: Re: Is it time to remove reiserfs?
+Message-ID: <20220222100408.cyrdjsv5eun5pzij@quack3.lan>
+References: <YhIwUEpymVzmytdp@casper.infradead.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [RFC][PATCH 1/2] dt-bindings: power: add Energy Model bindings
-Content-Language: en-US
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, dietmar.eggemann@arm.com,
-        rafael@kernel.org, daniel.lezcano@linaro.org, nm@ti.com,
-        sboyd@kernel.org, mka@chromium.org, dianders@chromium.org,
-        robh+dt@kernel.org, devicetree@vger.kernel.org,
-        linux-pm@vger.kernel.org
-References: <20220221225131.15836-1-lukasz.luba@arm.com>
- <20220221225131.15836-2-lukasz.luba@arm.com>
- <20220222030337.ijnfrh367illmidr@vireshk-i7>
- <147e48e5-e310-cd8f-ba8c-ff32e3094be3@arm.com>
- <20220222094547.tgj4bciq6rez62nk@vireshk-i7>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <20220222094547.tgj4bciq6rez62nk@vireshk-i7>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YhIwUEpymVzmytdp@casper.infradead.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello!
 
-
-On 2/22/22 09:45, Viresh Kumar wrote:
-> On 22-02-22, 08:06, Lukasz Luba wrote:
->> I'm not sure if that would be flexible enough to meet the requirement:
->> power for each OPP might be different in one board vs. other board.
+On Sun 20-02-22 12:13:04, Matthew Wilcox wrote:
+> Keeping reiserfs in the tree has certain costs.  For example, I would
+> very much like to remove the 'flags' argument to ->write_begin.  We have
+> the infrastructure in place to handle AOP_FLAG_NOFS differently, but
+> AOP_FLAG_CONT_EXPAND is still around, used only by reiserfs.
 > 
-> Don't DT files overload values from board files all the time ? Why wouldn't the
-> same apply for OPP table as well ?
-
-In that SoC and family of the boards, there are no such examples.
-It used to be popular in arm32 boards, but I'm not sure nowadays.
-
+> Looking over the patches to reiserfs over the past couple of years, there
+> are fixes for a few syzbot reports and treewide changes.  There don't
+> seem to be any fixes for user-spotted bugs since 2019.  Does reiserfs
+> still have a large install base that is just very happy with an old
+> stable filesystem?  Or have all its users migrated to new and exciting
+> filesystems with active feature development?
 > 
->> AFAIK the OPP definition is more SoC specific.
+> We've removed support for senescent filesystems before (ext, xiafs), so
+> it's not unprecedented.  But while I have a clear idea of the benefits to
+> other developers of removing reiserfs, I don't have enough information to
+> weigh the costs to users.  Maybe they're happy with having 5.15 support
+> for their reiserfs filesystems and can migrate to another filesystem
+> before they upgrade their kernel after 5.15.
 > 
-> This isn't about OPP definition as well, but just that if DT allows you to
-> override or not. I think it will.
+> Another possibility beyond outright removal would be to trim the kernel
+> code down to read-only support for reiserfs.  Most of the quirks of
+> reiserfs have to do with write support, so this could be a useful way
+> forward.  Again, I don't have a clear picture of how people actually
+> use reiserfs, so I don't know whether it is useful or not.
 > 
+> NB: Please don't discuss the personalities involved.  This is purely a
+> "we have old code using old APIs" discussion.
 
-Redefining the whole OPP table, when the freq, voltage, interconnect,
-and other old entries don't change isn't too messy?
+So from my distro experience installed userbase of reiserfs is pretty small
+and shrinking. We still do build reiserfs in openSUSE / SLES kernels but
+for enterprise offerings it is unsupported (for like 3-4 years) and the module
+is not in the default kernel rpm anymore.
 
-As I said, I would prefer something lightweight, not redefining all
-stuff from OPP in every board file.
+So clearly the filesystem is on the deprecation path, the question is
+whether it is far enough to remove it from the kernel completely. Maybe
+time to start deprecation by printing warnings when reiserfs gets mounted
+and then if nobody yells for year or two, we'll go ahead and remove it?
+
+								Honza
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR

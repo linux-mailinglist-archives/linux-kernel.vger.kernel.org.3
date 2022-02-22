@@ -2,122 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74DAE4BF5A2
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 11:21:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D2C9C4BF5A0
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 11:21:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230473AbiBVKVe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 05:21:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47052 "EHLO
+        id S230484AbiBVKVr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 05:21:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229772AbiBVKVa (ORCPT
+        with ESMTP id S230479AbiBVKVn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 05:21:30 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0231013EFB5;
-        Tue, 22 Feb 2022 02:21:01 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 611A8CE1316;
-        Tue, 22 Feb 2022 10:20:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4AE0BC340E8;
-        Tue, 22 Feb 2022 10:20:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645525257;
-        bh=c+MUjJQQSEz6EcrkGQwWMDKOpd6pQpqW5YnvVC432Ls=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gpJBpDdcB+qqUdfAoLh6lZyh+2gHjF8UO4QG+ufHTaisPt7A3i6lr6jdsxBU6G3FT
-         ECQwmhgctyORBzXN1ozJ/2+UXL8QwWyR0/m1yjtikrNtPmudn9JHg5BZUDdkRLZEgg
-         AUWkcrwQ4hB4XVRNR8gJk0WIhw72vseVvXZqzVZQ=
-Date:   Tue, 22 Feb 2022 11:20:54 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     =?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <clement.leger@bootlin.com>
-Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Wolfram Sang <wsa@kernel.org>, Peter Rosin <peda@axentia.se>,
-        Russell King <linux@armlinux.org.uk>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>,
+        Tue, 22 Feb 2022 05:21:43 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 39A9B143465;
+        Tue, 22 Feb 2022 02:21:18 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 01460106F;
+        Tue, 22 Feb 2022 02:21:18 -0800 (PST)
+Received: from lpieralisi (e121166-lin.cambridge.arm.com [10.1.196.255])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 63BF43F5A1;
+        Tue, 22 Feb 2022 02:21:16 -0800 (PST)
+Date:   Tue, 22 Feb 2022 10:21:06 +0000
+From:   Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+To:     Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>
+Cc:     robh+dt@kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
         Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-Subject: Re: [RFC 02/10] property: add fwnode_get_match_data()
-Message-ID: <YhS5BnvofimMReDE@kroah.com>
-References: <20220221162652.103834-1-clement.leger@bootlin.com>
- <20220221162652.103834-3-clement.leger@bootlin.com>
- <YhPP5GWt7XEv5xx8@smile.fi.intel.com>
- <20220222091902.198ce809@fixe.home>
- <CAHp75VdwfhGKOiGhJ1JsiG+R2ZdHa3N4hz6tyy5BmyFLripV5A@mail.gmail.com>
- <20220222094623.1f7166c3@fixe.home>
- <CAHp75VfduXwRvxkNg=At5jaN-tcP3=utiukEDL35PEv_grK4Pw@mail.gmail.com>
- <20220222104705.54a73165@fixe.home>
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>,
+        Russell King <rmk+kernel@armlinux.org.uk>,
+        Marc Zyngier <maz@kernel.org>, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v2 10/11] PCI: mvebu: Implement support for legacy INTx
+ interrupts
+Message-ID: <20220222102057.GA17238@lpieralisi>
+References: <20220105150239.9628-1-pali@kernel.org>
+ <20220112151814.24361-1-pali@kernel.org>
+ <20220112151814.24361-11-pali@kernel.org>
+ <20220211171917.GA740@lpieralisi>
+ <20220211175202.gku5pkwn5wmjo5al@pali>
+ <20220216234039.stxv5ndd6ai23sbb@pali>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220222104705.54a73165@fixe.home>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220216234039.stxv5ndd6ai23sbb@pali>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 22, 2022 at 10:47:05AM +0100, Clément Léger wrote:
-> Le Tue, 22 Feb 2022 10:24:13 +0100,
-> Andy Shevchenko <andy.shevchenko@gmail.com> a écrit :
-> 
-> > > > If you want to use the device on an ACPI based platform, you need to
-> > > > describe it in ACPI as much as possible. The rest we may discuss.  
-> > >
-> > > Agreed but the PCIe card might also be plugged in a system using a
-> > > device-tree description (ARM for instance). I should I do that without
-> > > duplicating the description both in DT and ACPI ?  
+On Thu, Feb 17, 2022 at 12:40:39AM +0100, Pali Rohár wrote:
+> On Friday 11 February 2022 18:52:02 Pali Rohár wrote:
+> > On Friday 11 February 2022 17:19:17 Lorenzo Pieralisi wrote:
+> > > On Wed, Jan 12, 2022 at 04:18:13PM +0100, Pali Rohár wrote:
+> > > > This adds support for legacy INTx interrupts received from other PCIe
+> > > > devices and which are reported by a new INTx irq chip.
+> > > > 
+> > > > With this change, kernel can distinguish between INTA, INTB, INTC and INTD
+> > > > interrupts.
+> > > > 
+> > > > Note that for this support, device tree files has to be properly adjusted
+> > > > to provide "interrupts" or "interrupts-extended" property with intx
+> > > > interrupt source, "interrupt-names" property with "intx" string and also
+> > > > 'interrupt-controller' subnode must be defined.
+> > > > 
+> > > > If device tree files do not provide these nodes then driver would work as
+> > > > before.
+> > > 
+> > > Nit: this information is not useful. DT rules are written in DT
+> > > bindings, not in kernel commit logs. All I am saying is that firmware
+> > > developers should not have to read this log to write firmware.
 > > 
-> > Why is it (duplication) a problem?
-> > Each platform has its own kind of description, so one needs to provide
-> > it in the format the platform accepts.
+> > It was not intended for firmware developers, but for reviewers of this
+> > patch to understand, what is happening in code and that with old DT
+> > files this patch does not change driver behavior (= work as before).
 > > 
+> > > > Signed-off-by: Pali Rohár <pali@kernel.org>
+> > > > ---
+> > > >  drivers/pci/controller/pci-mvebu.c | 185 +++++++++++++++++++++++++++--
+> > > >  1 file changed, 177 insertions(+), 8 deletions(-)
+> > > > 
+> > > > diff --git a/drivers/pci/controller/pci-mvebu.c b/drivers/pci/controller/pci-mvebu.c
+> > > > index 1e90ab888075..dbb6ecb4cb70 100644
+> > > > --- a/drivers/pci/controller/pci-mvebu.c
+> > > > +++ b/drivers/pci/controller/pci-mvebu.c
+> > > > @@ -54,9 +54,10 @@
+> > > >  	 PCIE_CONF_ADDR_EN)
+> > > >  #define PCIE_CONF_DATA_OFF	0x18fc
+> > > >  #define PCIE_INT_CAUSE_OFF	0x1900
+> > > > +#define PCIE_INT_UNMASK_OFF	0x1910
+> > > 
+> > > Nit: I understand it is tempting but here you are redefining or better
+> > > giving a proper label to a register. Separate patch please.
+> > 
+> > Ok!
+> > 
+> > > > +#define  PCIE_INT_INTX(i)		BIT(24+i)
+> > > >  #define  PCIE_INT_PM_PME		BIT(28)
+> > > > -#define PCIE_MASK_OFF		0x1910
+> > > 
+> > > See above.
+> > > 
+> > > > -#define  PCIE_MASK_ENABLE_INTS          0x0f000000
+> > > > +#define  PCIE_INT_ALL_MASK		GENMASK(31, 0)
+> > > >  #define PCIE_CTRL_OFF		0x1a00
+> > > >  #define  PCIE_CTRL_X1_MODE		0x0001
+> > > >  #define  PCIE_CTRL_RC_MODE		BIT(1)
+> > > > @@ -110,6 +111,9 @@ struct mvebu_pcie_port {
+> > > >  	struct mvebu_pcie_window iowin;
+> > > >  	u32 saved_pcie_stat;
+> > > >  	struct resource regs;
+> > > > +	struct irq_domain *intx_irq_domain;
+> > > > +	raw_spinlock_t irq_lock;
+> > > > +	int intx_irq;
+> > > >  };
+> > > >  
+> > > >  static inline void mvebu_writel(struct mvebu_pcie_port *port, u32 val, u32 reg)
+> > > > @@ -235,7 +239,7 @@ static void mvebu_pcie_setup_wins(struct mvebu_pcie_port *port)
+> > > >  
+> > > >  static void mvebu_pcie_setup_hw(struct mvebu_pcie_port *port)
+> > > >  {
+> > > > -	u32 ctrl, lnkcap, cmd, dev_rev, mask;
+> > > > +	u32 ctrl, lnkcap, cmd, dev_rev, unmask;
+> > > >  
+> > > >  	/* Setup PCIe controller to Root Complex mode. */
+> > > >  	ctrl = mvebu_readl(port, PCIE_CTRL_OFF);
+> > > > @@ -288,10 +292,30 @@ static void mvebu_pcie_setup_hw(struct mvebu_pcie_port *port)
+> > > >  	/* Point PCIe unit MBUS decode windows to DRAM space. */
+> > > >  	mvebu_pcie_setup_wins(port);
+> > > >  
+> > > > -	/* Enable interrupt lines A-D. */
+> > > > -	mask = mvebu_readl(port, PCIE_MASK_OFF);
+> > > > -	mask |= PCIE_MASK_ENABLE_INTS;
+> > > > -	mvebu_writel(port, mask, PCIE_MASK_OFF);
+> > > > +	/* Mask all interrupt sources. */
+> > > > +	mvebu_writel(port, ~PCIE_INT_ALL_MASK, PCIE_INT_UNMASK_OFF);
+> > > > +
+> > > > +	/* Clear all interrupt causes. */
+> > > > +	mvebu_writel(port, ~PCIE_INT_ALL_MASK, PCIE_INT_CAUSE_OFF);
+> > > > +
+> > > > +	if (port->intx_irq <= 0) {
+> > > > +		/*
+> > > > +		 * When neither "summary" interrupt, nor "intx" interrupt was
+> > > > +		 * specified in DT then unmask all legacy INTx interrupts as in
+> > > > +		 * this case driver does not provide a way for masking and
+> > > > +		 * unmasking of individual legacy INTx interrupts. In this case
+> > > > +		 * all interrupts, including legacy INTx are reported via one
+> > > > +		 * shared GIC source and therefore kernel cannot distinguish
+> > > > +		 * which individual legacy INTx was triggered. These interrupts
+> > > > +		 * are shared, so it should not cause any issue. Just
+> > > > +		 * performance penalty as every PCIe interrupt handler needs to
+> > > > +		 * be called when some interrupt is triggered.
+> > > > +		 */
+> > > 
+> > > This comment applies to current mainline right (ie it describes how
+> > > current mainline handles INTx) ? IMO you should split it out in a
+> > > separate patch.
+> > 
+> > This above comment describe what happens in if-branch when intx_irq is
+> > not set (as written in comment "when intx interrupt was not specified in
+> > DT"). You are right that this is also the behavior in the current
+> > mainline.
+> > 
+> > I'm not sure if this comment can be split out as support for "intx"
+> > interrupt is in this patch.
+> > 
+> > > I understand it is hard but a patch is a logical _change_, this
+> > > comment is a change per se, it is a clarification on current
+> > > behaviour.
+> > 
+> > Ok, I could try to split this comment into two patches, but part about
+> > if-branch comment needs to stay in "this" patch.
 > 
-> The problem that I see is not only duplication but also that the PCIe
-> card won't work out of the box and will need a specific SSDT overlays
-> each time it is used. According to your document about SSDT overlays,
-> there is no way to load this from the driver. This means that the user
-> will have to compile a platform specific .aml file to match its
-> platform configuration. If the user wants to change the PCIe port, than
-> I guess it will have to load another .aml file. I do not think a user
-> expect to do so when plugging a PCIe card.
+> I have done it locally.
 > 
-> Moreover, the APCI documentation [1] says the following:
-> 
-> "PCI devices, which are below the host bridge, generally do not need to
-> be described via ACPI. The OS can discover them via the standard PCI
-> enumeration mechanism, using config accesses to discover and identify
-> devices and read and size their BARs. However, ACPI may describe PCI
-> devices if it provides power management or hotplug functionality for
-> them or if the device has INTx interrupts connected by platform
-> interrupt controllers and a _PRT is needed to describe those
-> connections."
-> 
-> The device I want to use (a PCIe switch) does not fall into these
-> categories so there should be no need to describe it using ACPI.
+> Let me know when I should resend this patch series and I will include
+> into it also these changes.
 
-There should not be any need to describe it in any way, the device
-should provide all of the needed information.  PCIe devices do not need
-a DT entry, as that does not make sense.
+Hi,
 
-thanks,
+yes please resend it and I will merge it.
 
-greg k-h
+Thanks,
+Lorenzo

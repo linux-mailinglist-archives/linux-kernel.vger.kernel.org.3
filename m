@@ -2,109 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C0CC4BFE5A
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 17:20:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 847724BFE61
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 17:21:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233983AbiBVQUt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 11:20:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46612 "EHLO
+        id S233941AbiBVQWA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 11:22:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231785AbiBVQUr (ORCPT
+        with ESMTP id S230429AbiBVQV6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 11:20:47 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5132A166A5E;
-        Tue, 22 Feb 2022 08:20:22 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DF8E66174D;
-        Tue, 22 Feb 2022 16:20:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43D52C340E8;
-        Tue, 22 Feb 2022 16:20:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645546821;
-        bh=OLD5EfTmpMYiOEMJ3Q1Bnfs+3r7pcDmPmir3b5v+Jgk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=UXZKSJ6sdkdNBcq3biTSeDpciKeScfkVeChp0gjnPAoUU9REYgiOe9v5O0pzP7ZJs
-         nRWhO1RSTtgiWBXoKi7yb5nyK4oUEbKZoQqata9cbxpHP4XYri4YtWMgbg7v/GFfSH
-         TLr+uPe+faDrznLOQ5O8757i8dgCUEtQ0cxT4EXEpLmhhROzqncPdjOZlPUdD6GfZh
-         9Lu5UeXdp64LClJYcTrSon5EF21ik1OxUQda58NN84czi3UiOOX6n5j6D5JLz0Bdds
-         sV7ERxUZWd+NMrMIR1K6loVcGmofnVBif3svWjC6DQugjxfcyOAZq6ppuHpHtCYIeN
-         /YTQ3cUyXLXOQ==
-Date:   Tue, 22 Feb 2022 16:20:16 +0000
-From:   Will Deacon <will@kernel.org>
-To:     Liam Howlett <liam.howlett@oracle.com>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: [PATCH] arm64: Change elfcore for_each_mte_vma() to use VMA
- iterator
-Message-ID: <20220222162016.GA16436@willie-the-truck>
-References: <20220218014642.lop2ohx4ov6fekyl@revolver>
- <20220218023650.672072-1-Liam.Howlett@oracle.com>
- <YhPUuu+6TPMKjhwk@arm.com>
- <20220222142557.6oykxjz3j7fq4mrn@revolver>
+        Tue, 22 Feb 2022 11:21:58 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D779827B3C;
+        Tue, 22 Feb 2022 08:21:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=ev42OadWq8vJV+artW66Bqa32qEn5wnRjyQS5YnZUfA=; b=K85J3/EmImSwh8Nm5XOiFvEDhn
+        10fci+/n1GGjuKrYNG9qXk0EV8sGEgb51sAWMB+hp4Pe56CU4l1OyYkpdiSQw+3IaRB8Dq7CNzVVV
+        cKtLXyA7PaUtOFdiGX8PtGssDgZi3O04oAx3J0iK5vrJQUIYJB5ESrw1xSymRNJbTg2v3/iT3OobL
+        OFmKLXDV7AiNAiX/F63tCkivHIVYGv51ygmO6qZbbdVm0oAIWk66lU+Gpd2iqUhdF/UIpa6s5Cn5y
+        8gdTWUTyGvFgEjbA2/HN8DVe9tPEcGSfG0LVnWLWYEZavmOL885zA7WzTj5eHaFuKE42rJh/0zYc+
+        uuL2MGxg==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nMXuq-00AbjJ-8Z; Tue, 22 Feb 2022 16:21:28 +0000
+Date:   Tue, 22 Feb 2022 08:21:28 -0800
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Mikko Perttunen <mperttunen@nvidia.com>
+Cc:     thierry.reding@gmail.com, jonathanh@nvidia.com, joro@8bytes.org,
+        will@kernel.org, robh+dt@kernel.org, robin.murphy@arm.com,
+        linux-tegra@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v3 2/9] gpu: host1x: Add context bus
+Message-ID: <YhUNiHiYdQfxJybk@infradead.org>
+References: <20220218113952.3077606-1-mperttunen@nvidia.com>
+ <20220218113952.3077606-3-mperttunen@nvidia.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220222142557.6oykxjz3j7fq4mrn@revolver>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220218113952.3077606-3-mperttunen@nvidia.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 22, 2022 at 02:26:03PM +0000, Liam Howlett wrote:
-> * Catalin Marinas <catalin.marinas@arm.com> [220221 13:07]:
-> > On Fri, Feb 18, 2022 at 02:37:04AM +0000, Liam Howlett wrote:
-> > > diff --git a/arch/arm64/kernel/elfcore.c b/arch/arm64/kernel/elfcore.c
-> > > index 3455ee4acc04..930a0bc4cac4 100644
-> > > --- a/arch/arm64/kernel/elfcore.c
-> > > +++ b/arch/arm64/kernel/elfcore.c
-> > > @@ -8,9 +8,9 @@
-> > >  #include <asm/cpufeature.h>
-> > >  #include <asm/mte.h>
-> > >  
-> > > -#define for_each_mte_vma(tsk, vma)					\
-> > > +#define for_each_mte_vma(vmi, vma)					\
-> > >  	if (system_supports_mte())					\
-> > > -		for (vma = tsk->mm->mmap; vma; vma = vma->vm_next)	\
-> > > +		for_each_vma(vmi, vma)					\
-> > >  			if (vma->vm_flags & VM_MTE)
-> > >  
-> > >  static unsigned long mte_vma_tag_dump_size(struct vm_area_struct *vma)
-> > > @@ -65,8 +65,9 @@ Elf_Half elf_core_extra_phdrs(void)
-> > >  {
-> > >  	struct vm_area_struct *vma;
-> > >  	int vma_count = 0;
-> > > +	VMA_ITERATOR(vmi, current->mm, 0);
-> > >  
-> > > -	for_each_mte_vma(current, vma)
-> > > +	for_each_mte_vma(vmi, vma)
-> > >  		vma_count++;
-> > 
-> > I'm fine with the patch but it can't be applied to arm64 for-next/mte
-> > branch as it won't build and the maple tree doesn't have the MTE
-> > patches. Do you have a stable branch with the for_each_vma() iterator?
+On Fri, Feb 18, 2022 at 01:39:45PM +0200, Mikko Perttunen wrote:
+> The context bus is a "dummy" bus that contains struct devices that
+> correspond to IOMMU contexts assigned through Host1x to processes.
 > 
-> The vma iterator uses the maple tree, so this patch would resolve the
-> conflict but both branches are needed.
+> Even when host1x itself is built as a module, the bus is registered
+> in built-in code so that the built-in ARM SMMU driver is able to
+> reference it.
+> 
+> Signed-off-by: Mikko Perttunen <mperttunen@nvidia.com>
+> ---
+>  drivers/gpu/Makefile               |  3 +--
+>  drivers/gpu/host1x/Kconfig         |  5 +++++
+>  drivers/gpu/host1x/Makefile        |  1 +
+>  drivers/gpu/host1x/context_bus.c   | 31 ++++++++++++++++++++++++++++++
+>  include/linux/host1x_context_bus.h | 15 +++++++++++++++
+>  5 files changed, 53 insertions(+), 2 deletions(-)
+>  create mode 100644 drivers/gpu/host1x/context_bus.c
+>  create mode 100644 include/linux/host1x_context_bus.h
+> 
+> diff --git a/drivers/gpu/Makefile b/drivers/gpu/Makefile
+> index 835c88318cec..8997f0096545 100644
+> --- a/drivers/gpu/Makefile
+> +++ b/drivers/gpu/Makefile
+> @@ -2,7 +2,6 @@
+>  # drm/tegra depends on host1x, so if both drivers are built-in care must be
+>  # taken to initialize them in the correct order. Link order is the only way
+>  # to ensure this currently.
+> -obj-$(CONFIG_TEGRA_HOST1X)	+= host1x/
+> -obj-y			+= drm/ vga/
+> +obj-y			+= host1x/ drm/ vga/
+>  obj-$(CONFIG_IMX_IPUV3_CORE)	+= ipu-v3/
+>  obj-$(CONFIG_TRACE_GPU_MEM)		+= trace/
+> diff --git a/drivers/gpu/host1x/Kconfig b/drivers/gpu/host1x/Kconfig
+> index 6815b4db17c1..1861a8180d3f 100644
+> --- a/drivers/gpu/host1x/Kconfig
+> +++ b/drivers/gpu/host1x/Kconfig
+> @@ -1,8 +1,13 @@
+>  # SPDX-License-Identifier: GPL-2.0-only
+> +
+> +config TEGRA_HOST1X_CONTEXT_BUS
+> +	bool
+> +
+>  config TEGRA_HOST1X
+>  	tristate "NVIDIA Tegra host1x driver"
+>  	depends on ARCH_TEGRA || (ARM && COMPILE_TEST)
+>  	select DMA_SHARED_BUFFER
+> +	select TEGRA_HOST1X_CONTEXT_BUS
+>  	select IOMMU_IOVA
+>  	help
+>  	  Driver for the NVIDIA Tegra host1x hardware.
+> diff --git a/drivers/gpu/host1x/Makefile b/drivers/gpu/host1x/Makefile
+> index d2b6f7de0498..c891a3e33844 100644
+> --- a/drivers/gpu/host1x/Makefile
+> +++ b/drivers/gpu/host1x/Makefile
+> @@ -18,3 +18,4 @@ host1x-y = \
+>  	hw/host1x07.o
+>  
+>  obj-$(CONFIG_TEGRA_HOST1X) += host1x.o
+> +obj-$(CONFIG_TEGRA_HOST1X_CONTEXT_BUS) += context_bus.o
+> diff --git a/drivers/gpu/host1x/context_bus.c b/drivers/gpu/host1x/context_bus.c
+> new file mode 100644
+> index 000000000000..2625914f3c7d
+> --- /dev/null
+> +++ b/drivers/gpu/host1x/context_bus.c
+> @@ -0,0 +1,31 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Copyright (c) 2021, NVIDIA Corporation.
+> + */
+> +
+> +#include <linux/device.h>
+> +#include <linux/of.h>
+> +
+> +struct bus_type host1x_context_device_bus_type = {
+> +	.name = "host1x-context",
+> +};
+> +EXPORT_SYMBOL(host1x_context_device_bus_type);
 
-I'm not really sure what to do here, then. I think the conflict is nasty
-enough that we should resolve it before the trees reach Linus, but there
-doesn't seem to be a way forward other than one of us merging the other
-branch. I'd like to avoid having MTE coredump support depend on the maple
-tree work.
+EXPORT_SYMBOL_GPL, please.
 
-Is there some way you could provide a branch which implements
-for_each_vma() using the old vma list, and then the maple tree series
-could switch that over to the maple tree without breaking things?
-
-Will
+But the pattern that this copies in arm_smmu_bus_init is really
+ugly.  I think we need to figure out a way todo that without having
+to export all the low-level bus types.

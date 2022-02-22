@@ -2,92 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A3F34BF856
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 13:48:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CB0A4BF85B
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 13:50:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232013AbiBVMs6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 07:48:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51892 "EHLO
+        id S232039AbiBVMuq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 07:50:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229524AbiBVMsx (ORCPT
+        with ESMTP id S229524AbiBVMup (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 07:48:53 -0500
-Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A512128646;
-        Tue, 22 Feb 2022 04:48:28 -0800 (PST)
-Received: by mail-io1-xd2d.google.com with SMTP id w7so19919985ioj.5;
-        Tue, 22 Feb 2022 04:48:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=DSnVlm1pnvPlsXEUHsvfD8JkoYeM0OADeZxR4i9i5M8=;
-        b=pVwCQv5LBjsugdh+7vDCxpRlDakRlPHpcVYS8tNW8pAOjg+z5UXxPH9KtjReUVspDH
-         Xlfpr3EN3JWcTSBFJLdLS8u6YjZHlTk1L/OEJs4eLICN6n/ia+kkfMFtVXQeFLS23053
-         wLtnQEQ/YJessaHF9AdF+vjTTzcFA88aJQ9UGlvwOwHXx6htqafubgm49xR038VdF/c4
-         Q5AIMyTEtWe/TEpUOVtYJ4gu6lldqKNFLKp7gDYJK2YvUsstj08UQnEK1FnOnTGwDGfN
-         bErnvwYFMLOdqLwHtaDRJ9lYE4ABozPUPGe3hbaMQQgWKttIel+qOoqQE/bKTpgoNnWP
-         r6lA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=DSnVlm1pnvPlsXEUHsvfD8JkoYeM0OADeZxR4i9i5M8=;
-        b=qiF5qx4g1Z3suG9dL0ALMBcLeIVZyoQKYGRvjZMDueM/2g6ckb8Etw8lOSoa24fBe+
-         sVhGfzUvIH/5DgmiJMvWefcMTB7RvyMRKiHqvFGSr2UMvFglF0KXW635etsp9ROpi4Sc
-         bAp1EE7W3FyDrsLwCAKMHok583qLWhKFeckrdkVKTosY7rRQCUhFGUc1JKtv1tLHbSM1
-         BZKnaPZkU8W5zUdAXieKES3Tc6RW33web+BiN/iAE80ruYwD475Q/AjUVteuLbrFb/gE
-         N4jNYUMd/xG1ljU/g5E4PYtJlXUOtUIpEpivbxUYrDGlBKStIlgzhXVW8Ellw2joysYP
-         P6WA==
-X-Gm-Message-State: AOAM53183pK1j4Hb61IT5N+yKrEt1nwbLyOaxPoeWP4FWWXkGOzyHzOr
-        csXeIABkb/ZvFV/fH4o4SrTgLA2Xoxwd9BIFCHo=
-X-Google-Smtp-Source: ABdhPJyfjGzROAJYPQ75otU9qXSyZlq6fGWMQ1NrI71zYpxlJZGh8wVIUJ1plAwh/v24/ZvWPEvlbG+T2j9kl4CGRyY=
-X-Received: by 2002:a05:6638:1117:b0:30d:1e9f:26ca with SMTP id
- n23-20020a056638111700b0030d1e9f26camr19007788jal.256.1645534107755; Tue, 22
- Feb 2022 04:48:27 -0800 (PST)
+        Tue, 22 Feb 2022 07:50:45 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFBFA128658;
+        Tue, 22 Feb 2022 04:50:19 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7BC7360F03;
+        Tue, 22 Feb 2022 12:50:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D9ADC340E8;
+        Tue, 22 Feb 2022 12:50:18 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="CwpfKelM"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1645534216;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=bsr7k1VX0jPTqvG4+W4WO5K2SuNDxvJ5ic2w69NqzcU=;
+        b=CwpfKelM9cNWr/wD6TF0XWKCcBZQfF394sW/b4llOZ2MYTTF4AtCXVJX+GWH/IxfCM1NP6
+        zB3h8KZxqo/g/+P/CPwvgEKrbr0247nuz5SvFvQnenPTvksG5XiVUDesl+ypUoQhzQI2kJ
+        Fqa+55CNWKvW5OWVaPA6Y/6E3iK+/H8=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id bca041d7 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Tue, 22 Feb 2022 12:50:16 +0000 (UTC)
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Theodore Ts'o <tytso@mit.edu>
+Subject: [PATCH] random: round-robin registers as ulong, not u32
+Date:   Tue, 22 Feb 2022 13:50:08 +0100
+Message-Id: <20220222125008.42924-1-Jason@zx2c4.com>
 MIME-Version: 1.0
-References: <20220212130410.6901-1-ojeda@kernel.org> <20220212130410.6901-11-ojeda@kernel.org>
- <YhSnnHpIeDReK/eL@alley>
-In-Reply-To: <YhSnnHpIeDReK/eL@alley>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Tue, 22 Feb 2022 13:48:16 +0100
-Message-ID: <CANiq72n0sg_fizEk_kK=p8ROmWTrwdzqu1LD4SQdKUNLbK9ENA@mail.gmail.com>
-Subject: Re: [PATCH v4 10/20] rust: add `kernel` crate
-To:     Petr Mladek <pmladek@suse.com>
-Cc:     Miguel Ojeda <ojeda@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        rust-for-linux <rust-for-linux@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Wedson Almeida Filho <wedsonaf@google.com>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Geoffrey Thomas <geofft@ldpreload.com>,
-        Finn Behrens <me@kloenk.de>,
-        Adam Bratschi-Kaye <ark.email@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Sumera Priyadarsini <sylphrenadin@gmail.com>,
-        Sven Van Asbroeck <thesven73@gmail.com>,
-        Gary Guo <gary@garyguo.net>,
-        Boris-Chengbiao Zhou <bobo1239@web.de>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Fox Chen <foxhlchen@gmail.com>,
-        Dan Robertson <daniel.robertson@starlab.io>,
-        Viktor Garske <viktor@v-gar.de>,
-        Dariusz Sosnowski <dsosnowski@dsosnowski.pl>,
-        =?UTF-8?Q?L=C3=A9o_Lanteri_Thauvin?= <leseulartichaut@gmail.com>,
-        Niklas Mohrin <dev@niklasmohrin.de>,
-        Gioh Kim <gurugio@gmail.com>, Daniel Xu <dxu@dxuuu.xyz>,
-        Milan Landaverde <milan@mdaverde.com>,
-        Morgan Bartlett <mjmouse9999@gmail.com>,
-        Maciej Falkowski <m.falkowski@samsung.com>,
-        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        John Ogness <john.ogness@linutronix.de>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -95,64 +55,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Petr,
+When the interrupt handler does not have a valid cycle counter, it calls
+get_reg() to read a register from the irq stack, in round-robin.
+Currently it does this assuming that registers are 32-bit. This is
+_probably_ the case, and probably all platforms without cycle counters
+are in fact 32-bit platforms. But maybe not, and either way, it's not
+quite correct. This commit fixes that to deal with `unsigned long`
+rather than `u32`.
 
-On Tue, Feb 22, 2022 at 10:06 AM Petr Mladek <pmladek@suse.com> wrote:
->
-> What exactly should we keep in sync, please?
->
-> I see only handling of KERN_* prefix in print.rs. I do not see there
-> any counter part of LOG_LINE_MAX, CONSOLE_LOG_MAX, or PREFIX_MAX.
+Cc: Dominik Brodowski <linux@dominikbrodowski.net>
+Cc: Theodore Ts'o <tytso@mit.edu>
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+---
+ drivers/char/random.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-Good catch! We had a buffer on the Rust side in the past, but that is
-not the case anymore since commit 9e8bd679ecf2 ("Support Rust
-`core::fmt::Argument` in vsprintf") on our side, so we will remove the
-comment.
+diff --git a/drivers/char/random.c b/drivers/char/random.c
+index d73a75cbe82d..a4dedeea35e9 100644
+--- a/drivers/char/random.c
++++ b/drivers/char/random.c
+@@ -1261,15 +1261,15 @@ int random_online_cpu(unsigned int cpu)
+ }
+ #endif
+ 
+-static u32 get_reg(struct fast_pool *f, struct pt_regs *regs)
++static unsigned long get_reg(struct fast_pool *f, struct pt_regs *regs)
+ {
+-	u32 *ptr = (u32 *)regs;
++	unsigned long *ptr = (unsigned long *)regs;
+ 	unsigned int idx;
+ 
+ 	if (regs == NULL)
+ 		return 0;
+ 	idx = READ_ONCE(f->reg_idx);
+-	if (idx >= sizeof(struct pt_regs) / sizeof(u32))
++	if (idx >= sizeof(struct pt_regs) / sizeof(unsigned long))
+ 		idx = 0;
+ 	ptr += idx++;
+ 	WRITE_ONCE(f->reg_idx, idx);
+-- 
+2.35.1
 
-> I am sorry but I am not familiar with rust. What are these limits
-> 2 and 10 used for, please?
->
-> I guess that 2 is the size of a single KERN_* identifier.
-> But what is 10?
->
-> Note that printk() format prefix is typically just a single KERN_*
-> identifier. But there might be more. Well, in practice only the
-> following combination makes sense: KERN_CONT + KERN_<LEVEL>.
-
-What we are doing here is generating compile-time format strings that
-are then used by the `pr_*!` macros (which call the C side `printk()`
-with one of the strings).
-
-In other words, this is not parsing arbitrary `printk()` format
-strings (which I am guessing something like that is your concern --
-please let me know if I got it wrong).
-
-To clarify a bit what the code does and what the constants are:
-
-  - `generate()` is called at compile-time.
-
-  - The size of these generated strings is always 10.
-
-  - We compose those strings by using the first 2 bytes of `KERN_*`.
-However, we also take the chance to check (at compile-time) they have
-the contents we expect, including the third zero byte.
-
-  - Then other 8 bytes are used to complete the 10: either "%pA" plus
-0 padding (`CONT` level) or "%s: %pA" (otherwise).
-
-> Finally, is there any way to test whether any change in the printk
-> code breaks the rust support?
-
-One way is to compile the code, e.g. the `assert!`s in the `generate`
-function run at compile-time, thus they provide a first layer of
-defense.
-
-Another way is to use `samples/rust/print.rs` which we run in the CI
-as a black box test.
-
-Is that what you had in mind? Or something like unit tests or self tests?
-
-Thanks for taking a look!
-
-Cheers,
-Miguel

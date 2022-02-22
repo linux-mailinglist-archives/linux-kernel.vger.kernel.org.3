@@ -2,62 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92A484BFC1F
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 16:13:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A9764BFC21
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 16:14:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233252AbiBVPNM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 10:13:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35230 "EHLO
+        id S232245AbiBVPOb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 10:14:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230003AbiBVPNG (ORCPT
+        with ESMTP id S229620AbiBVPOa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 10:13:06 -0500
-Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A677B11E3C2;
-        Tue, 22 Feb 2022 07:12:40 -0800 (PST)
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-        by localhost (Postfix) with ESMTP id 4K32hz07bzz9sT4;
-        Tue, 22 Feb 2022 16:12:35 +0100 (CET)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id ehh-J2Jq36Vg; Tue, 22 Feb 2022 16:12:34 +0100 (CET)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase2.c-s.fr (Postfix) with ESMTP id 4K32hw5N7Mz9sSm;
-        Tue, 22 Feb 2022 16:12:32 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id A6B9B8B764;
-        Tue, 22 Feb 2022 16:12:32 +0100 (CET)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id 5C5N_sOOBsfq; Tue, 22 Feb 2022 16:12:32 +0100 (CET)
-Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.7.78])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 1A3298B77A;
-        Tue, 22 Feb 2022 16:12:32 +0100 (CET)
-Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 21MFCOB71087476
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-        Tue, 22 Feb 2022 16:12:24 +0100
-Received: (from chleroy@localhost)
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 21MFCOlg1087475;
-        Tue, 22 Feb 2022 16:12:24 +0100
-X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Luis Chamberlain <mcgrof@kernel.org>, linux-modules@vger.kernel.org
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 5/5] module: Rename debug_align() as strict_align()
-Date:   Tue, 22 Feb 2022 16:12:21 +0100
-Message-Id: <d12505e70e60806d9e8ffa4e163715bcc33795e9.1645542272.git.christophe.leroy@csgroup.eu>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <cover.1645542272.git.christophe.leroy@csgroup.eu>
-References: <cover.1645542272.git.christophe.leroy@csgroup.eu>
+        Tue, 22 Feb 2022 10:14:30 -0500
+Received: from ssl.serverraum.org (ssl.serverraum.org [176.9.125.105])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50EA41255AC;
+        Tue, 22 Feb 2022 07:14:05 -0800 (PST)
+Received: from mwalle01.kontron.local. (unknown [213.135.10.150])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by ssl.serverraum.org (Postfix) with ESMTPSA id 73F7422205;
+        Tue, 22 Feb 2022 16:14:03 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        t=1645542843;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=Q9OzFs0JT05sRe8mjCP51k7s1VvBDHqyuY2zEjl3qjs=;
+        b=Tv/aW2EDBj9bQZYZRJj0mSOHfSdOPwhB4lW+bY9zw7ew9SShLS7zlsrwDIUsmzhbzH5IUc
+        5h6AWxNOuVD0dCQW1s3fautnTZCM5Q+jcEX5qJDOBV+bylStW7GOxhbITm2QF1nldDbemX
+        GD7sROZ+lMxhOT6EOuJlqjtOJEYltHc=
+From:   Michael Walle <michael@walle.cc>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     devicetree@vger.kernel.org, Li Yang <leoyang.li@nxp.com>,
+        linux-kernel@vger.kernel.org, heiko.thiery@gmail.com,
+        Michael Walle <michael@walle.cc>
+Subject: [PATCH] dt-bindings: arm: fsl: add IMX8MN DDR3L eval board
+Date:   Tue, 22 Feb 2022 16:13:57 +0100
+Message-Id: <20220222151357.1710503-1-michael@walle.cc>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1645542740; l=4185; s=20211009; h=from:subject:message-id; bh=AfRsGzNxNFEa6HyPLYyjXjVOnKsSzM6QrsC7nBlW+n4=; b=L1CWJXem0KIumVRwLvvREnQOMxe17ZEZqC1E4VM6MXH9YjrUmcjYGgqumYYIwNDrx9hxZ1dMXPB/ 51ZCXn7qCvdWnJZcomYYLWqdPt8OkzFBg7oRYjAIwOcVRCozMcIz
-X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -66,113 +52,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-debug_align() was added by commit 84e1c6bb38eb ("x86: Add RO/NX
-protection for loadable kernel modules")
+Add a new compatible string for that eval board. It features an IMX8MN
+UltraLite and has DDR3L RAM. The product part number is 8MNANOD3L-EVK.
 
-At that time the config item was CONFIG_DEBUG_SET_MODULE_RONX.
-
-But nowadays it has changed to CONFIG_STRICT_MODULE_RWX and
-debug_align() is confusing because it has nothing to do with
-DEBUG.
-
-Rename it strict_align()
-
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+Signed-off-by: Michael Walle <michael@walle.cc>
 ---
- kernel/module/internal.h |  4 ++--
- kernel/module/kallsyms.c |  4 ++--
- kernel/module/main.c     | 14 +++++++-------
- 3 files changed, 11 insertions(+), 11 deletions(-)
+ Documentation/devicetree/bindings/arm/fsl.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/kernel/module/internal.h b/kernel/module/internal.h
-index f3dcd40f300c..3e23bef5884d 100644
---- a/kernel/module/internal.h
-+++ b/kernel/module/internal.h
-@@ -30,9 +30,9 @@
-  * only when CONFIG_STRICT_MODULE_RWX=y
-  */
- #ifdef CONFIG_STRICT_MODULE_RWX
--# define debug_align(X) PAGE_ALIGN(X)
-+# define strict_align(X) PAGE_ALIGN(X)
- #else
--# define debug_align(X) (X)
-+# define strict_align(X) (X)
- #endif
- 
- extern struct mutex module_mutex;
-diff --git a/kernel/module/kallsyms.c b/kernel/module/kallsyms.c
-index 850cc66bb28c..c56de1686172 100644
---- a/kernel/module/kallsyms.c
-+++ b/kernel/module/kallsyms.c
-@@ -139,7 +139,7 @@ void layout_symtab(struct module *mod, struct load_info *info)
- 	mod->data_layout.size += strtab_size;
- 	info->core_typeoffs = mod->data_layout.size;
- 	mod->data_layout.size += ndst * sizeof(char);
--	mod->data_layout.size = debug_align(mod->data_layout.size);
-+	mod->data_layout.size = strict_align(mod->data_layout.size);
- 
- 	/* Put string table section at end of init part of module. */
- 	strsect->sh_flags |= SHF_ALLOC;
-@@ -154,7 +154,7 @@ void layout_symtab(struct module *mod, struct load_info *info)
- 	mod->init_layout.size += sizeof(struct mod_kallsyms);
- 	info->init_typeoffs = mod->init_layout.size;
- 	mod->init_layout.size += nsrc * sizeof(char);
--	mod->init_layout.size = debug_align(mod->init_layout.size);
-+	mod->init_layout.size = strict_align(mod->init_layout.size);
- }
- 
- /*
-diff --git a/kernel/module/main.c b/kernel/module/main.c
-index 4876e2beb5b6..ce0ef17662c9 100644
---- a/kernel/module/main.c
-+++ b/kernel/module/main.c
-@@ -1470,19 +1470,19 @@ static void layout_sections(struct module *mod, struct load_info *info)
- 		}
- 		switch (m) {
- 		case 0: /* executable */
--			mod->core_layout.size = debug_align(mod->core_layout.size);
-+			mod->core_layout.size = strict_align(mod->core_layout.size);
- 			mod->core_layout.text_size = mod->core_layout.size;
- 			break;
- 		case 1: /* RO: text and ro-data */
--			mod->data_layout.size = debug_align(mod->data_layout.size);
-+			mod->data_layout.size = strict_align(mod->data_layout.size);
- 			mod->data_layout.ro_size = mod->data_layout.size;
- 			break;
- 		case 2: /* RO after init */
--			mod->data_layout.size = debug_align(mod->data_layout.size);
-+			mod->data_layout.size = strict_align(mod->data_layout.size);
- 			mod->data_layout.ro_after_init_size = mod->data_layout.size;
- 			break;
- 		case 4: /* whole core */
--			mod->data_layout.size = debug_align(mod->data_layout.size);
-+			mod->data_layout.size = strict_align(mod->data_layout.size);
- 			break;
- 		}
- 	}
-@@ -1504,11 +1504,11 @@ static void layout_sections(struct module *mod, struct load_info *info)
- 		}
- 		switch (m) {
- 		case 0: /* executable */
--			mod->init_layout.size = debug_align(mod->init_layout.size);
-+			mod->init_layout.size = strict_align(mod->init_layout.size);
- 			mod->init_layout.text_size = mod->init_layout.size;
- 			break;
- 		case 1: /* RO: text and ro-data */
--			mod->init_layout.size = debug_align(mod->init_layout.size);
-+			mod->init_layout.size = strict_align(mod->init_layout.size);
- 			mod->init_layout.ro_size = mod->init_layout.size;
- 			break;
- 		case 2:
-@@ -1519,7 +1519,7 @@ static void layout_sections(struct module *mod, struct load_info *info)
- 			mod->init_layout.ro_after_init_size = mod->init_layout.ro_size;
- 			break;
- 		case 4: /* whole init */
--			mod->init_layout.size = debug_align(mod->init_layout.size);
-+			mod->init_layout.size = strict_align(mod->init_layout.size);
- 			break;
- 		}
- 	}
+diff --git a/Documentation/devicetree/bindings/arm/fsl.yaml b/Documentation/devicetree/bindings/arm/fsl.yaml
+index 23e678232451..e11ffaa8721e 100644
+--- a/Documentation/devicetree/bindings/arm/fsl.yaml
++++ b/Documentation/devicetree/bindings/arm/fsl.yaml
+@@ -834,6 +834,7 @@ properties:
+               - bsh,imx8mn-bsh-smm-s2     # i.MX8MN BSH SystemMaster S2
+               - bsh,imx8mn-bsh-smm-s2pro  # i.MX8MN BSH SystemMaster S2 PRO
+               - fsl,imx8mn-ddr4-evk       # i.MX8MN DDR4 EVK Board
++              - fsl,imx8mn-ddr3l-evk      # i.MX8MN DDR3L EVK Board
+               - fsl,imx8mn-evk            # i.MX8MN LPDDR4 EVK Board
+               - gw,imx8mn-gw7902          # i.MX8MM Gateworks Board
+           - const: fsl,imx8mn
 -- 
-2.34.1
+2.30.2
 

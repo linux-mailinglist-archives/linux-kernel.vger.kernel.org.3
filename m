@@ -2,128 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E33604BFC43
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 16:18:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 83B294BFC3F
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 16:17:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233355AbiBVPSp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 10:18:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46126 "EHLO
+        id S233335AbiBVPSH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 10:18:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232357AbiBVPSl (ORCPT
+        with ESMTP id S233354AbiBVPRi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 10:18:41 -0500
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::223])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10E81149B86;
-        Tue, 22 Feb 2022 07:18:13 -0800 (PST)
-Received: (Authenticated sender: clement.leger@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id F2B0C60010;
-        Tue, 22 Feb 2022 15:18:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1645543091;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=sUKjasZW1jCb/3Z0/TiPJo6cUX+jFii8PUJTFIJ++ec=;
-        b=Cym6tuLgJkn0JINb6E0P3BCm5JYJO5LcLnW+87X5TlDByLTSsQrOya1GLhsi3ErKO2e/JR
-        SL/+16MGtqhjBdecsOzndAcOxz8HS7wbpX957VuwnLtSxw+BIP60R9VkO08nGyiBOz1AFS
-        9u3Z0DkjapXMLphV9k/Pbq82411V/84MqVMBWRNh8CqSRWnecTpPu1thW6TSW3Bxp6W12p
-        dx89ZCTS9IXKpdfdxrgbifOA6udZMZmfIUYXb35eXea9TBxbyL1VbUN7yzPYGzjBMVWW0S
-        Nqqyamnh+OsGqlKUA0Eh6wYiWsl3yHZCE2ACWyImcd521AYUazzgxeAtEypSjQ==
-Date:   Tue, 22 Feb 2022 16:16:50 +0100
-From:   =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Wolfram Sang <wsa@kernel.org>, Peter Rosin <peda@axentia.se>,
-        Russell King <linux@armlinux.org.uk>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-Subject: Re: [RFC 02/10] property: add fwnode_get_match_data()
-Message-ID: <20220222161650.1b75825b@fixe.home>
-In-Reply-To: <YhS5BnvofimMReDE@kroah.com>
-References: <20220221162652.103834-1-clement.leger@bootlin.com>
-        <20220221162652.103834-3-clement.leger@bootlin.com>
-        <YhPP5GWt7XEv5xx8@smile.fi.intel.com>
-        <20220222091902.198ce809@fixe.home>
-        <CAHp75VdwfhGKOiGhJ1JsiG+R2ZdHa3N4hz6tyy5BmyFLripV5A@mail.gmail.com>
-        <20220222094623.1f7166c3@fixe.home>
-        <CAHp75VfduXwRvxkNg=At5jaN-tcP3=utiukEDL35PEv_grK4Pw@mail.gmail.com>
-        <20220222104705.54a73165@fixe.home>
-        <YhS5BnvofimMReDE@kroah.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-pc-linux-gnu)
+        Tue, 22 Feb 2022 10:17:38 -0500
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E376CA88BA
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 07:17:04 -0800 (PST)
+Received: by mail-pl1-x636.google.com with SMTP id ay3so7037052plb.1
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 07:17:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=lcRYoN5Uf3rBH9v/7qdYElQaWmfVzREsyATDiT2CRiQ=;
+        b=WOnf61l0rum3il1zfoKqAJBV8UpvfqPLdVI2HNdp0/fkGZhP8BLuhXuHloYSx87D7i
+         vD/oiHYQhINsdy7aNuzrOQxnCtcwwQ7RNIkZoGImk22FmjdmEJzRpUmpP8WPfKfhnNCg
+         eNQsX7Ji9mOqEjLE3cxiValuU2L6vFsahcS9hlQ6Lh5rOKChD33zVFMX56mT2yhVuiGj
+         MgDfp3Pma4sl5hKjucCbSHn7WKfAwyMzAzn21cZ9xkRnFZUir5Fkht+vjpT4TCiQG+2t
+         ASN4hutVwU80e0OPrN21Y3fcUhw+NPPnQWFWqhN2oDGb22n/a7YkI5CHvry2Visg4w2y
+         DSyA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=lcRYoN5Uf3rBH9v/7qdYElQaWmfVzREsyATDiT2CRiQ=;
+        b=MgUBOYlOEz1OQGrmWP4qkOY9eUGZ+Nn3nEMvYUhmMYsxnMggYZ1hTwP4E4dDzADCDi
+         KEsFFaIGbcvv4bauBbJMd22k+08RAdNQTUyv6XU+RD0qV3RBU6pG7SgY1gyI91Te5Kpt
+         YaIvnMtDHsptCSeare4pAY685PHgwKPYieMkAJDxTD+6N0zvrD4DQ8YYm9NvYaxDIHSM
+         30d9uSSerKK0e4b6Fe6vyOm6kjtasG0fkD0jHc5Pg0GaChR0u7E67EqlyLbw2crv5doI
+         lwjE+bWLWCZUpLuyjkyGcnAca/X4TStJLcN3rm1zyfzb+knMzAr2tUgxq3mopfga7Ysk
+         n7Xw==
+X-Gm-Message-State: AOAM530JwqcDSbtQ9GiydwF3onC4yGYpv1Nt3stmdkZt+RtDy7HPKvIP
+        /yUl2Oe9lvpdFQQerwchuSG8vIZqy1/URg==
+X-Google-Smtp-Source: ABdhPJxOKcTBsgn4bM4lfQ6m0TCJ8CTWmoDGUwk8YW+5S3eaRB5CkZRKDnw3qqsiCVaVhGIcU8Bkrg==
+X-Received: by 2002:a17:90a:8d85:b0:1b8:a215:e3e4 with SMTP id d5-20020a17090a8d8500b001b8a215e3e4mr4520719pjo.175.1645543023501;
+        Tue, 22 Feb 2022 07:17:03 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id u9-20020a17090a450900b001b9b5ca299esm2962733pjg.54.2022.02.22.07.17.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Feb 2022 07:17:02 -0800 (PST)
+Date:   Tue, 22 Feb 2022 15:16:59 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Peng Hao <flyingpenghao@gmail.com>
+Cc:     pbonzini@redhat.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] KVM:VMX:Remove scratch 'cpu' variable that shadows an
+ identical scratch var
+Message-ID: <YhT+a4I0ytA7eVE5@google.com>
+References: <20220222103954.70062-1-flyingpeng@tencent.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220222103954.70062-1-flyingpeng@tencent.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le Tue, 22 Feb 2022 11:20:54 +0100,
-Greg Kroah-Hartman <gregkh@linuxfoundation.org> a =C3=A9crit :
+Needs a space between "KVM:" and "VMX:".  No need to resend, Paolo can fixup when
+applying.
 
-> >=20
-> > The problem that I see is not only duplication but also that the PCIe
-> > card won't work out of the box and will need a specific SSDT overlays
-> > each time it is used. According to your document about SSDT overlays,
-> > there is no way to load this from the driver. This means that the user
-> > will have to compile a platform specific .aml file to match its
-> > platform configuration. If the user wants to change the PCIe port, than
-> > I guess it will have to load another .aml file. I do not think a user
-> > expect to do so when plugging a PCIe card.
-> >=20
-> > Moreover, the APCI documentation [1] says the following:
-> >=20
-> > "PCI devices, which are below the host bridge, generally do not need to
-> > be described via ACPI. The OS can discover them via the standard PCI
-> > enumeration mechanism, using config accesses to discover and identify
-> > devices and read and size their BARs. However, ACPI may describe PCI
-> > devices if it provides power management or hotplug functionality for
-> > them or if the device has INTx interrupts connected by platform
-> > interrupt controllers and a _PRT is needed to describe those
-> > connections."
-> >=20
-> > The device I want to use (a PCIe switch) does not fall into these
-> > categories so there should be no need to describe it using ACPI. =20
->=20
-> There should not be any need to describe it in any way, the device
-> should provide all of the needed information.  PCIe devices do not need
-> a DT entry, as that does not make sense.
->=20
-> thanks,
->=20
-> greg k-h
-
-In my opinion, yes, there should be no need for an "external"
-description. Loading any kind of description (either with ACPI or DT)
-defeat the purpose of the PCI since the card won't be able to be
-plug-and-play anymore on multiple platform.
-
-The driver however should be self-contained and contain its own
-"description" of the hardware, no matter the platform on which the card
-is plugged. The PCIe card is independent of the platform, I do not
-think describing it with a platform specific description language is
-maintainable nor user acceptable for the user.
-
---=20
-Cl=C3=A9ment L=C3=A9ger,
-Embedded Linux and Kernel engineer at Bootlin
-https://bootlin.com
+On Tue, Feb 22, 2022, Peng Hao wrote:
+>  From: Peng Hao <flyingpeng@tencent.com> 
+> 
+>  Remove a redundant 'cpu' declaration from inside an if-statement that
+>  that shadows an identical declaration at function scope.  Both variables
+>  are used as scratch variables in for_each_*_cpu() loops, thus there's no
+>  harm in sharing a variable.
+> 
+> Reviewed-by: Sean Christopherson <seanjc@google.com>
+> Signed-off-by: Peng Hao <flyingpeng@tencent.com>
+> ---
+>  arch/x86/kvm/vmx/vmx.c | 1 -
+>  1 file changed, 1 deletion(-)
+> 
+> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+> index ba66c171d951..6101c2980a9c 100644
+> --- a/arch/x86/kvm/vmx/vmx.c
+> +++ b/arch/x86/kvm/vmx/vmx.c
+> @@ -7931,7 +7931,6 @@ static int __init vmx_init(void)
+>  	    ms_hyperv.hints & HV_X64_ENLIGHTENED_VMCS_RECOMMENDED &&
+>  	    (ms_hyperv.nested_features & HV_X64_ENLIGHTENED_VMCS_VERSION) >=
+>  	    KVM_EVMCS_VERSION) {
+> -		int cpu;
+>  
+>  		/* Check that we have assist pages on all online CPUs */
+>  		for_each_online_cpu(cpu) {
+> -- 
+> 2.27.0
+> 

@@ -2,187 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0C294BF025
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 05:10:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 84FFE4BF091
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 05:10:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240145AbiBVDuL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 22:50:11 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60200 "EHLO
+        id S240199AbiBVDsS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 22:48:18 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229789AbiBVDuK (ORCPT
+        with ESMTP id S229789AbiBVDsQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 22:50:10 -0500
-Received: from mail-ed1-x544.google.com (mail-ed1-x544.google.com [IPv6:2a00:1450:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A0F624BD7;
-        Mon, 21 Feb 2022 19:49:45 -0800 (PST)
-Received: by mail-ed1-x544.google.com with SMTP id bq11so12341569edb.2;
-        Mon, 21 Feb 2022 19:49:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=s2XSMVj1kILwt68WwMudYnmLz1ROeiH1LOdTavQMelo=;
-        b=oOHR9c5Wf55GRsvLNqdswIBJpUBSrMPSg/Ou0HlmCVg3+8TmzRHE/UrAYQVyUZK4ia
-         PeMeq+IddUMoWrYYqW1GFiJIZgOFcJSJJMwbWjxoPN8fMy1I/S/SVTyClbjCS0fkhPnv
-         5H5NpizsrTuknRRRBNSbJOCf6CINwgYZ1QIUSM2ursPxRP8am7hs5E6Auv0iGbqDvA4F
-         MOMkEDB8bLVO0QxqMPNixoLe/XA9AZiKakFXeZ+StN1UA5cJX5Ox6bnX8GFhTAc6aiIW
-         quke8hAzfnMNzocvLbiDdJ0zgA4WRA2FYgQqPoj/jj13aXHbOV9FgbzXufxrUlxAV8UV
-         k+lQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=s2XSMVj1kILwt68WwMudYnmLz1ROeiH1LOdTavQMelo=;
-        b=IQyEqMNCBoTAJYr2ynr6SMzH1iC97sz+BgxnfPMyYyo2aQMmeAVUnk4YkSUBudc9T/
-         28sZRRKnZpUdebLQ6aBL3xHmxQKsDy2OYCnVTaaauVPzCNLG3keZHe1Ca4FXpQbU6lJ3
-         xiqUVZl5z5vW07kv/d7naSaeyhuJsCNIkmdoANfKiWB/xGjjMkOol8IIut+cQknxbzWR
-         oFAFybGsT7WfgajD7Kur4kflJNsCOh9seR1gMz6tR7GYY5lYyM805Cp440mt6V18CIfd
-         1odtFiMCV5P5EWa9JOH7FYO0hsYjnnEMxG+YXd9lTjVsbVxYheoJrnr1gXKMrbVAPrRU
-         r04A==
-X-Gm-Message-State: AOAM533o4x0yNH+US3WZlhvOfg3BQwvxfKvxPu/DT6c8QsuamQASRRKi
-        0NoOHQwNGxeTnF1ApbNxXjPT47RlIUnk3jit0nE=
-X-Google-Smtp-Source: ABdhPJxgnDvWvb2diDocMe2RJQoCH11Grw1/0dR5EAwDrSr/Bu+/DWHw7xgWPaYTAGyIegHH88P11WecFKe62GKOOTM=
-X-Received: by 2002:a05:6402:17c8:b0:406:80a3:5cad with SMTP id
- s8-20020a05640217c800b0040680a35cadmr24039051edy.388.1645501783973; Mon, 21
- Feb 2022 19:49:43 -0800 (PST)
+        Mon, 21 Feb 2022 22:48:16 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F19524BD3
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 19:47:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645501672; x=1677037672;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=ay21XNpMYTX5RnLpflKexkXgUtuSuC5IhzNLm8m5hWI=;
+  b=Pr9EaY9Pw+ZnLv0Q4AjtU+OQYDwTQqsFvCvJr171Rq22R/eGGeaj4HjI
+   8xMZ5s6cTk+z3m9Qp5SMVfkUuUEUa4nmFFwBAkK4Cfxh7F8rg7oDCjIs/
+   q3bo6YSGr+NbXrtGOaLujYig3L1Ls7jyMRi2IV0rkc6hUgBMuuJlfgQop
+   8ndTt1a7kt+Z9/yOe4Dsw18m2F33fkxZ+lYceHfenxzQdDi8b2HQArgbV
+   DMFMcDH4ffXQJC+mehqfgmDfGyfLBF+SOMiX0s6npcaFvnlfnUqDXn2+U
+   BS0H3MzHYeHy7xE32IrB+NKpuYd0sKRzEiyZ5t3p3lhPJa20/BV6VjwL8
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10265"; a="239022882"
+X-IronPort-AV: E=Sophos;i="5.88,387,1635231600"; 
+   d="scan'208";a="239022882"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2022 19:47:52 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,387,1635231600"; 
+   d="scan'208";a="532062778"
+Received: from lkp-server01.sh.intel.com (HELO da3212ac2f54) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 21 Feb 2022 19:47:50 -0800
+Received: from kbuild by da3212ac2f54 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nMM9V-0002IG-P2; Tue, 22 Feb 2022 03:47:49 +0000
+Date:   Tue, 22 Feb 2022 11:46:59 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Prasad Sodagudi <psodagud@codeaurora.org>
+Cc:     kbuild-all@lists.01.org,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org,
+        Elliot Berman <eberman@codeaurora.org>
+Subject: [ammarfaizi2-block:google/android/kernel/common/android12-5.10-2021-11
+ 239/9999] drivers/android/debug_symbols.c:11:10: fatal error:
+ asm/stacktrace.h: No such file or directory
+Message-ID: <202202221136.tCMedR7t-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220220155705.194266-1-imagedong@tencent.com>
- <20220220155705.194266-2-imagedong@tencent.com> <3183c3c9-6644-b2de-885e-9e3699138102@kernel.org>
-In-Reply-To: <3183c3c9-6644-b2de-885e-9e3699138102@kernel.org>
-From:   Menglong Dong <menglong8.dong@gmail.com>
-Date:   Tue, 22 Feb 2022 11:44:24 +0800
-Message-ID: <CADxym3aMn_h_x0HYopDRu8y_sgRii+=myFtVr8iAYYxJuT2_JA@mail.gmail.com>
-Subject: Re: [PATCH net-next 1/3] net: ip: add skb drop reasons for ip egress path
-To:     David Ahern <dsahern@kernel.org>
-Cc:     Jakub Kicinski <kuba@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        David Miller <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Menglong Dong <imagedong@tencent.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Alexander Lobakin <alobakin@pm.me>,
-        Cong Wang <cong.wang@bytedance.com>, paulb@nvidia.com,
-        Talal Ahmad <talalahmad@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        flyingpeng@tencent.com, Mengen Sun <mengensun@tencent.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Yajun Deng <yajun.deng@linux.dev>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 22, 2022 at 11:13 AM David Ahern <dsahern@kernel.org> wrote:
->
-> On 2/20/22 8:57 AM, menglong8.dong@gmail.com wrote:
-> > From: Menglong Dong <imagedong@tencent.com>
-> >
-> > Replace kfree_skb() with kfree_skb_reason() in the packet egress path of
-> > IP layer (both IPv4 and IPv6 are considered).
-> >
-> > Following functions are involved:
-> >
-> > __ip_queue_xmit()
-> > ip_finish_output()
-> > ip_mc_finish_output()
-> > ip6_output()
-> > ip6_finish_output()
-> > ip6_finish_output2()
-> >
-> > Following new drop reasons are introduced:
-> >
-> > SKB_DROP_REASON_IP_OUTNOROUTES
-> > SKB_DROP_REASON_BPF_CGROUP_EGRESS
-> > SKB_DROP_REASON_IPV6DSIABLED
-> >
-> > Reviewed-by: Mengen Sun <mengensun@tencent.com>
-> > Reviewed-by: Hao Peng <flyingpeng@tencent.com>
-> > Signed-off-by: Menglong Dong <imagedong@tencent.com>
-> > ---
-> >  include/linux/skbuff.h     | 13 +++++++++++++
-> >  include/trace/events/skb.h |  4 ++++
-> >  net/ipv4/ip_output.c       |  6 +++---
-> >  net/ipv6/ip6_output.c      |  6 +++---
-> >  4 files changed, 23 insertions(+), 6 deletions(-)
-> >
-> > diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
-> > index a3e90efe6586..c310a4a8fc86 100644
-> > --- a/include/linux/skbuff.h
-> > +++ b/include/linux/skbuff.h
-> > @@ -380,6 +380,19 @@ enum skb_drop_reason {
-> >                                        * the ofo queue, corresponding to
-> >                                        * LINUX_MIB_TCPOFOMERGE
-> >                                        */
-> > +     SKB_DROP_REASON_IP_OUTNOROUTES, /* route lookup failed during
-> > +                                      * packet outputting
-> > +                                      */
->
-> This should be good enough since the name contains OUT.
->
-> /* route lookup failed */
->
-> > +     SKB_DROP_REASON_BPF_CGROUP_EGRESS,      /* dropped by eBPF program
-> > +                                              * with type of BPF_PROG_TYPE_CGROUP_SKB
-> > +                                              * and attach type of
-> > +                                              * BPF_CGROUP_INET_EGRESS
-> > +                                              * during packet sending
-> > +                                              */
->
-> /* dropped by BPF_CGROUP_INET_EGRESS eBPF program */
->
-> > +     SKB_DROP_REASON_IPV6DSIABLED,   /* IPv6 is disabled on the device,
-> > +                                      * see the doc for disable_ipv6
-> > +                                      * in ip-sysctl.rst for detail
-> > +                                      */
->
-> Just /* IPv6 is disabled on the device */
->
->
-> >       SKB_DROP_REASON_MAX,
-> >  };
-> >
->
-> > diff --git a/net/ipv4/ip_output.c b/net/ipv4/ip_output.c
-> > index 0c0574eb5f5b..df549b7415fb 100644
-> > --- a/net/ipv4/ip_output.c
-> > +++ b/net/ipv4/ip_output.c
->
-> This file has other relevant drops. e.g., ip_finish_output2 when a neigh
-> entry can not be created and after skb_gso_segment. The other set for
-> tun/tap devices has SKB_DROP_REASON_SKB_GSO_SEG which can be used for
-> the latter. That set also adds kfree_skb_list_reason for the frag drops.
->
+Hi Prasad,
 
-I tried to add a drop reason for neigh creating fail, but I found it's hard
-to find the root reason, as __neigh_create() can fail in many cases.
-And I'm not sure if there is any help when we get a
-'SKB_DROP_REASON_NEIGH_CREATEFAIL' message.
+FYI, the error/warning still remains.
 
-Seems it's hard to make every drop reason accurate, is it ok if we
-use the name 'SKB_DROP_REASON_NEIGH_CREATEFAIL' for
-this path?
+tree:   https://github.com/ammarfaizi2/linux-block google/android/kernel/common/android12-5.10-2021-11
+head:   6207e9121a093289b249b66385af719b68c4b889
+commit: 3fcbb15c1a91a318fb9367bee24603af24648a2d [239/9999] ANDROID: android: Create debug_symbols driver
+config: ia64-allmodconfig (https://download.01.org/0day-ci/archive/20220222/202202221136.tCMedR7t-lkp@intel.com/config)
+compiler: ia64-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/ammarfaizi2/linux-block/commit/3fcbb15c1a91a318fb9367bee24603af24648a2d
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block google/android/kernel/common/android12-5.10-2021-11
+        git checkout 3fcbb15c1a91a318fb9367bee24603af24648a2d
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=ia64 SHELL=/bin/bash drivers/
 
->
-> > diff --git a/net/ipv6/ip6_output.c b/net/ipv6/ip6_output.c
-> > index 0c6c971ce0a5..4cd9e5fd25e4 100644
-> > --- a/net/ipv6/ip6_output.c
-> > +++ b/net/ipv6/ip6_output.c
->
-> Similarly here. The other set should land in the next few days, so you
-> cna put this set on top of it.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Yeah, I can make use of it.
+All errors (new ones prefixed by >>):
 
->
+>> drivers/android/debug_symbols.c:11:10: fatal error: asm/stacktrace.h: No such file or directory
+      11 | #include <asm/stacktrace.h>
+         |          ^~~~~~~~~~~~~~~~~~
+   compilation terminated.
+
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for SND_VMASTER
+   Depends on SOUND && !UML && SND
+   Selected by
+   - GKI_HIDDEN_SND_CONFIGS
+   WARNING: unmet direct dependencies detected for SND_PCM_IEC958
+   Depends on SOUND && !UML && SND
+   Selected by
+   - GKI_HIDDEN_SND_SOC_CONFIGS
+   WARNING: unmet direct dependencies detected for SND_JACK
+   Depends on SOUND && !UML && SND
+   Selected by
+   - GKI_HIDDEN_SND_CONFIGS
+   WARNING: unmet direct dependencies detected for SND_JACK_INPUT_DEV
+   Depends on SOUND && !UML && SND && SND_JACK
+   Selected by
+   - GKI_HIDDEN_SND_CONFIGS
+   WARNING: unmet direct dependencies detected for SND_PCM_ELD
+   Depends on SOUND && !UML && SND
+   Selected by
+   - GKI_HIDDEN_SND_CONFIGS
+   WARNING: unmet direct dependencies detected for SND_INTEL_NHLT
+   Depends on SOUND && !UML && SND
+   Selected by
+   - GKI_HIDDEN_SND_CONFIGS && ACPI
+
+
+vim +11 drivers/android/debug_symbols.c
+
+     2	
+     3	/*
+     4	 * Copyright (c) 2021, The Linux Foundation. All rights reserved.
+     5	 */
+     6	
+     7	#include <linux/types.h>
+     8	#include <linux/kernel.h>
+     9	#include <linux/module.h>
+    10	#include <linux/android_debug_symbols.h>
+  > 11	#include <asm/stacktrace.h>
+    12	#include <asm/sections.h>
+    13	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

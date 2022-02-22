@@ -2,130 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 880424BEF68
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 03:22:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 73F7B4BEF6E
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 03:22:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231140AbiBVCPB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 21:15:01 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36418 "EHLO
+        id S238962AbiBVCPo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 21:15:44 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230436AbiBVCO7 (ORCPT
+        with ESMTP id S230436AbiBVCPm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 21:14:59 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A5121C12D;
-        Mon, 21 Feb 2022 18:14:35 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1AB4AB817F8;
-        Tue, 22 Feb 2022 02:14:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC38EC340E9;
-        Tue, 22 Feb 2022 02:14:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645496072;
-        bh=KqibIir4n8GGBG4Zyj0JQPp8upAMZezOjVYAX7/7D/0=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=aQ8vgFKTbc8fEzvCZvW4uEzI3uiFEVYJzqfbp2rdnhCvilW9QZM0/TeArOPfXbXcJ
-         /cIaFHbE/s0Hthwoau49V7tNl0TjULHzQfZv8XR7lVf2lIENFi2+vI9qqhUr20I/LL
-         cAiSHTgEPlKY/2U3WGeR2+wRpUPUyCdJh9Q00m/usPFsj4peijOXYpW/sRwagRAqJu
-         NQsca5467UPgWyE3CJ0UlIZbLcs1shzIqcGFTyxJYYTkzKTaMdu/OR24wOIfeLhp/A
-         jCitbecM9ejEuENjCjLc6ENKiwBYbKnNHr2PTIQHRwpnASt2BsGMEKZoW2wzos02/D
-         Ml6z70n6nNcWQ==
-Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-2d6d0cb5da4so102904367b3.10;
-        Mon, 21 Feb 2022 18:14:32 -0800 (PST)
-X-Gm-Message-State: AOAM531iVbQ9a6+NH5JSwH3QzSKwcJEAYE8D+vGTrb4HagcZ5Zz7KdzD
-        YjChbEapVI1IlWfvPHCVVMEdRkJ9sdDRMVP4RF8=
-X-Google-Smtp-Source: ABdhPJyAbe26v/2n6fVKLChZbz15YoE+ivjn//HNPARGdjBarXJdCsgXDG93/l5ndvOw0bHFCvNRfyu5nXfkwuAf3Qc=
-X-Received: by 2002:a81:9895:0:b0:2d7:7e75:9ba8 with SMTP id
- p143-20020a819895000000b002d77e759ba8mr3783733ywg.130.1645496071854; Mon, 21
- Feb 2022 18:14:31 -0800 (PST)
+        Mon, 21 Feb 2022 21:15:42 -0500
+Received: from mail-vs1-xe2d.google.com (mail-vs1-xe2d.google.com [IPv6:2607:f8b0:4864:20::e2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF1381D310;
+        Mon, 21 Feb 2022 18:15:17 -0800 (PST)
+Received: by mail-vs1-xe2d.google.com with SMTP id j3so5333484vsi.7;
+        Mon, 21 Feb 2022 18:15:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=BlI0MZtmyrupgAgtS84tifI22v5MszPHmzBYuMorQ2Q=;
+        b=Rk4wLpnzqfp8r0wTeL769g6XltdeX4nvtAxkmAP0nmzzlyzhVkBToHl6P9L3bbm82o
+         wPzymBMGB+rEQFwGR8DJwzTDHH1AfiXXQ4G3WVg8xyTg4rDw36f4a9vde+nrbZMLFRkN
+         obhvmz22sTRmEZQECLHBOUsWFeHDcv//ZAROlAsniLb64mNcoPrtPspOds/Cpc10zv9R
+         tlzoVoiVXTQzJeY37ud3nRWtGSRkVxkLPTrz+1IlnXy1RVuGZmbZw1EdUShCLfetw6XL
+         gmoyEgSqsicqdd0DcdTS5Hy6oWEk8F2THhQOIN57Em92cCrNL2y8X9cOknB9YN/SywK5
+         9dlQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=BlI0MZtmyrupgAgtS84tifI22v5MszPHmzBYuMorQ2Q=;
+        b=b9y63x8HTVKEJf5yKkizS0CukIOTLY38HxJOEVeKRDEAaUX9sCNie03gtZ9eJ3y9Tw
+         wOUqAxDEW7Wq+NDCWjGRGZ32RnoUT+MbqnJvlRsRwjKiFEq0CHrTR5IKIN06H4o4acuO
+         bagLqFn+NBcpIkgpjB16B5AvpbuxILEqPYfIMN/qF4KUSfrZW6jzppn5YiOUbM+r6/FX
+         HpVsVzBppFsCVy6ef7aSM8z7nbmWO482eK3LermpsKz4VOgfOsYFaARPt7xe4e8/lMxF
+         I4P/5yDJ2GI2jgbj4zIKyw8Sm+JdqRL8+FWXM495IugiB9nUjD9mWF5x28m96ViTnubq
+         S16Q==
+X-Gm-Message-State: AOAM5301fyBRgwJfNruCCDmnNzQUznvQDAaFgl2xVuv67ZyGrMzqhzyj
+        W1CBB4b5+6f6Mfh3NPxUZ7Tvu+NLAVqEdvB5iXYnmqlR0tY4
+X-Google-Smtp-Source: ABdhPJwP8hGkmey95OH9kMBmiXbTjANOhIk00QyYwbxVhv9uJZHDNcE4hSC4Qy5vlaQyfzrxkO0dro8txp6TgLSZrkQ=
+X-Received: by 2002:a05:6102:370f:b0:31b:60dc:4f76 with SMTP id
+ s15-20020a056102370f00b0031b60dc4f76mr9690133vst.2.1645496116704; Mon, 21 Feb
+ 2022 18:15:16 -0800 (PST)
 MIME-Version: 1.0
-References: <1645240502-13398-1-git-send-email-yangtiezhu@loongson.cn> <1645240502-13398-3-git-send-email-yangtiezhu@loongson.cn>
-In-Reply-To: <1645240502-13398-3-git-send-email-yangtiezhu@loongson.cn>
-From:   Song Liu <song@kernel.org>
-Date:   Mon, 21 Feb 2022 18:14:20 -0800
-X-Gmail-Original-Message-ID: <CAPhsuW5gbFXspvfFBmourDmkdVVhLN-iU-N=zLbm++GeNfM3Xw@mail.gmail.com>
-Message-ID: <CAPhsuW5gbFXspvfFBmourDmkdVVhLN-iU-N=zLbm++GeNfM3Xw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 2/2] bpf: Make BPF_JIT_DEFAULT_ON selectable
- in Kconfig
-To:     Tiezhu Yang <yangtiezhu@loongson.cn>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
+References: <20220220035321.3870-1-warp5tw@gmail.com> <20220220035321.3870-6-warp5tw@gmail.com>
+ <YhN8OGIR9eSCus8E@latitude>
+In-Reply-To: <YhN8OGIR9eSCus8E@latitude>
+From:   Tyrone Ting <warp5tw@gmail.com>
+Date:   Tue, 22 Feb 2022 10:15:04 +0800
+Message-ID: <CACD3sJbMZ-CT4htPUBqyswghAC+j8PgJ_z-VdA38yC+6HFrF+w@mail.gmail.com>
+Subject: Re: [PATCH v2 05/11] i2c: npcm: Remove unused clock node
+To:     =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
+Cc:     avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
+        venture@google.com, yuenn@google.com, benjaminfair@google.com,
+        robh+dt@kernel.org, krzysztof.kozlowski@canonical.com,
+        semen.protsenko@linaro.org, yangyicong@hisilicon.com,
+        wsa@kernel.org, jie.deng@intel.com, sven@svenpeter.dev,
+        bence98@sch.bme.hu, christophe.leroy@csgroup.eu,
+        lukas.bulwahn@gmail.com, olof@lixom.net, arnd@arndb.de,
+        digetx@gmail.com, andriy.shevchenko@linux.intel.com,
+        tali.perry@nuvoton.com, Avi.Fishman@nuvoton.com,
+        tomer.maimon@nuvoton.com, KWLIU@nuvoton.com, JJLIU0@nuvoton.com,
+        kfting@nuvoton.com, devicetree@vger.kernel.org,
+        openbmc@lists.ozlabs.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 18, 2022 at 7:15 PM Tiezhu Yang <yangtiezhu@loongson.cn> wrote:
->
-> Currently, only x86, arm64 and s390 select ARCH_WANT_DEFAULT_BPF_JIT,
-> the other archs do not select ARCH_WANT_DEFAULT_BPF_JIT. On the archs
-> without ARCH_WANT_DEFAULT_BPF_JIT, if we want to set bpf_jit_enable to
-> 1 by default, the only way is to enable CONFIG_BPF_JIT_ALWAYS_ON, then
-> the users can not change it to 0 or 2, it seems bad for some users. We
-> can select ARCH_WANT_DEFAULT_BPF_JIT for those archs if it is proper,
-> but at least for now, make BPF_JIT_DEFAULT_ON selectable can give them
-> a chance.
->
-> Additionally, with this patch, under !BPF_JIT_ALWAYS_ON, we can disable
-> BPF_JIT_DEFAULT_ON on the archs with ARCH_WANT_DEFAULT_BPF_JIT when make
-> menuconfig, it seems flexible for some developers.
->
-> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
-> ---
->  kernel/bpf/Kconfig | 13 +++++++++++--
->  1 file changed, 11 insertions(+), 2 deletions(-)
->
-> diff --git a/kernel/bpf/Kconfig b/kernel/bpf/Kconfig
-> index cbf3f65..461ac60 100644
-> --- a/kernel/bpf/Kconfig
-> +++ b/kernel/bpf/Kconfig
-> @@ -54,6 +54,7 @@ config BPF_JIT
->  config BPF_JIT_ALWAYS_ON
->         bool "Permanently enable BPF JIT and remove BPF interpreter"
->         depends on BPF_SYSCALL && HAVE_EBPF_JIT && BPF_JIT
-> +       select BPF_JIT_DEFAULT_ON
->         help
->           Enables BPF JIT and removes BPF interpreter to avoid speculative
->           execution of BPF instructions by the interpreter.
-> @@ -63,8 +64,16 @@ config BPF_JIT_ALWAYS_ON
->           in failure.
->
->  config BPF_JIT_DEFAULT_ON
-> -       def_bool ARCH_WANT_DEFAULT_BPF_JIT || BPF_JIT_ALWAYS_ON
-> -       depends on HAVE_EBPF_JIT && BPF_JIT
-> +       bool "Defaultly enable BPF JIT and remove BPF interpreter"
+Hi Jonathan:
 
-I think "remove BPF interpreter" is not accurate. I guess we can just say
-"Enable BPF JIT by default". (also "defaultly" sounds weird to me).
+Thank you for your comments and please find my reply next to your comments.
 
-> +       default y if ARCH_WANT_DEFAULT_BPF_JIT
-> +       depends on BPF_SYSCALL && HAVE_EBPF_JIT && BPF_JIT
-> +       help
-> +         Enables BPF JIT and removes BPF interpreter to avoid speculative
-> +         execution of BPF instructions by the interpreter.
-> +
-> +         When CONFIG_BPF_JIT_DEFAULT_ON is enabled but CONFIG_BPF_JIT_ALWAYS_ON
-> +         is disabled, /proc/sys/net/core/bpf_jit_enable is set to 1 by default
-> +         and can be changed to 0 or 2.
+Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net> =E6=96=BC 2022=E5=B9=B42=
+=E6=9C=8821=E6=97=A5 =E9=80=B1=E4=B8=80 =E4=B8=8B=E5=8D=887:49=E5=AF=AB=E9=
+=81=93=EF=BC=9A
 >
->  config BPF_UNPRIV_DEFAULT_OFF
->         bool "Disable unprivileged BPF by default"
-> --
-> 2.1.0
+> On Sun, Feb 20, 2022 at 11:53:15AM +0800, Tyrone Ting wrote:
+> > From: Tali Perry <tali.perry1@gmail.com>
+> >
+> > Remove unused npcm750-clk node.
 >
+> You're not actually removing a node, for example in the sense of removing=
+ a
+> devicetree node from a devicetree.
+>
+> So, I think "Remove unused variable clk_regmap." would be a better
+> description.
+>
+
+May I modify the description according to your input and attach
+"Reviewed-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>"
+onto this commit in the next version of the patch set?
+
+> >
+> > Fixes: 56a1485b102e ("i2c: npcm7xx: Add Nuvoton NPCM I2C controller dri=
+ver")
+> > Signed-off-by: Tali Perry <tali.perry1@gmail.com>
+> > Signed-off-by: Tyrone Ting <kfting@nuvoton.com>
+> > ---
+> >  drivers/i2c/busses/i2c-npcm7xx.c | 5 -----
+> >  1 file changed, 5 deletions(-)
+> >
+> > diff --git a/drivers/i2c/busses/i2c-npcm7xx.c b/drivers/i2c/busses/i2c-=
+npcm7xx.c
+> > index a51db3f50274..9ccb9958945e 100644
+> > --- a/drivers/i2c/busses/i2c-npcm7xx.c
+> > +++ b/drivers/i2c/busses/i2c-npcm7xx.c
+> > @@ -2233,7 +2233,6 @@ static int npcm_i2c_probe_bus(struct platform_dev=
+ice *pdev)
+> >       struct i2c_adapter *adap;
+> >       struct clk *i2c_clk;
+> >       static struct regmap *gcr_regmap;
+> > -     static struct regmap *clk_regmap;
+> >       int irq;
+> >       int ret;
+> >       struct device_node *np =3D pdev->dev.of_node;
+> > @@ -2256,10 +2255,6 @@ static int npcm_i2c_probe_bus(struct platform_de=
+vice *pdev)
+> >               return PTR_ERR(gcr_regmap);
+> >       regmap_write(gcr_regmap, NPCM_I2CSEGCTL, NPCM_I2CSEGCTL_INIT_VAL)=
+;
+> >
+> > -     clk_regmap =3D syscon_regmap_lookup_by_compatible("nuvoton,npcm75=
+0-clk");
+> > -     if (IS_ERR(clk_regmap))
+> > -             return PTR_ERR(clk_regmap);
+> > -
+>
+> The change itself looks good to me,
+>
+> Reviewed-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
+>
+> >       bus->reg =3D devm_platform_ioremap_resource(pdev, 0);
+> >       if (IS_ERR(bus->reg))
+> >               return PTR_ERR(bus->reg);
+> > --
+> > 2.17.1
+> >
+>
+>
+> Thanks,
+> Jonathan
+
+Best regards,
+Tyrone

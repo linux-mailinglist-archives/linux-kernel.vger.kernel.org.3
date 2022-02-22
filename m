@@ -2,49 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4706E4BFED0
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 17:33:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 050F94BFEC2
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 17:32:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234284AbiBVQeD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 11:34:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40368 "EHLO
+        id S234113AbiBVQdP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 11:33:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234123AbiBVQc4 (ORCPT
+        with ESMTP id S234056AbiBVQcp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 11:32:56 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C81F878067;
-        Tue, 22 Feb 2022 08:32:29 -0800 (PST)
+        Tue, 22 Feb 2022 11:32:45 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79C1C6E8E7;
+        Tue, 22 Feb 2022 08:32:19 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 656BA60A2B;
-        Tue, 22 Feb 2022 16:32:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2ABB8C340F7;
-        Tue, 22 Feb 2022 16:32:28 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id EEB6ACE1767;
+        Tue, 22 Feb 2022 16:32:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3DCF7C340E8;
+        Tue, 22 Feb 2022 16:32:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645547548;
-        bh=MXr1CB+2f7zErIupWj8eUwsUkwH/Er5u48x/Z+MX6W8=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vQzTb9OGBSNmG2FcWL4qeqTAvUP09WA+5stlfQkmWSk6BYjgYFl3yHCw7lSzDeJU+
-         pJlA6qbubFgGpfunSZBx3mAlihcShIVhEiQEkS6xMdmkaMIU1MYaol5IhstLDgYv/j
-         8JMEAJOIDRba5l0YlLKfqann0ktILJMu80tVxdQy6CmIjYXV2gvBO/XpcfxsTrtQm/
-         D6xviodDrvKvDu+GwV/wAwMxQphXCLqCayFEnHFaSsdgasyJ3G+mhARdbUIbu1Uu4D
-         Q8qpshB18c9cHwpvm24rXDxlyiW2HVQWffy/oLA61XhXL57KDmQgy9mGX1r5hzLOj6
-         lyuJPf1ixTrSw==
-From:   Keith Busch <kbusch@kernel.org>
-To:     linux-nvme@lists.infradead.org, linux-block@vger.kernel.org,
-        linux-crypto@vger.kernel.org, x86@kernel.org,
+        s=k20201202; t=1645547536;
+        bh=deQThiFosCfgbDDY9+kUsiyxUvwfdDyovhHUVd2d6Es=;
+        h=From:To:Cc:Subject:Date:From;
+        b=owqOXQsmE+DCQm/rkbWl89cTxGH6CkxC7SDpWtLvOdiSFd+pmRreHeb++Q27fRxJ5
+         8TVokOpf4FHh+KrCnrm5atIUkG83YW0TD0KbvxnBFB6AHGcgkwsU6rH1V2TIj23ufS
+         NBKNtGpynCuuzWK1a7cA37qcDr4HhFhkNqI8K2P4WmcIHIivFWBaKNe3qMzyIOf8xX
+         c7El312WoZotOkpJ4DcqkMYf+j3dDS+mCgIh2pFWgthQkGXTM3LVF8VpvKPGZLaHsx
+         +wH2uHfLmWr20lUPKhEJTNh3fYtiqM1oCId9QpRPMFENHdPYDGtFNPqlm47qiT6BNd
+         e9L/xRe4Nkp5Q==
+Received: by pali.im (Postfix)
+        id E2C85FDB; Tue, 22 Feb 2022 17:32:13 +0100 (CET)
+From:   =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>
+To:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Rob Herring <robh+dt@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
+        =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>,
+        Russell King <rmk+kernel@armlinux.org.uk>,
+        Gregory Clement <gregory.clement@bootlin.com>
+Cc:     linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org
-Cc:     axboe@kernel.dk, hch@lst.de, martin.petersen@oracle.com,
-        colyli@suse.de, Keith Busch <kbusch@kernel.org>
-Subject: [PATCHv3 10/10] x86/crypto: add pclmul acceleration for crc64
-Date:   Tue, 22 Feb 2022 08:31:44 -0800
-Message-Id: <20220222163144.1782447-11-kbusch@kernel.org>
-X-Mailer: git-send-email 2.25.4
-In-Reply-To: <20220222163144.1782447-1-kbusch@kernel.org>
-References: <20220222163144.1782447-1-kbusch@kernel.org>
+Subject: [PATCH 0/6] PCI: mvebu: Slot support
+Date:   Tue, 22 Feb 2022 17:31:52 +0100
+Message-Id: <20220222163158.1666-1-pali@kernel.org>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
@@ -56,404 +62,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The crc64 table lookup method is inefficient, using a significant number
-of CPU cycles in the block stack per IO. If available on x86, use a
-PCLMULQDQ implementation to accelerate the calculation.
+This patch series add slot support to pci-mvebu.c driver.
 
-The assembly from this patch was mostly generated by gcc from a C
-program using library functions provided by x86 intrinsics, and measures
-~20x faster than the table lookup.
+It is based on branch pci/mvebu of git repository:
+https://git.kernel.org/pub/scm/linux/kernel/git/lpieralisi/pci.git
 
-Signed-off-by: Keith Busch <kbusch@kernel.org>
----
- arch/x86/crypto/Makefile                  |   3 +
- arch/x86/crypto/crc64-rocksoft-pcl-asm.S  | 215 ++++++++++++++++++++++
- arch/x86/crypto/crc64-rocksoft-pcl_glue.c | 117 ++++++++++++
- crypto/Kconfig                            |  11 ++
- 4 files changed, 346 insertions(+)
- create mode 100644 arch/x86/crypto/crc64-rocksoft-pcl-asm.S
- create mode 100644 arch/x86/crypto/crc64-rocksoft-pcl_glue.c
+Some patches were reviewed in other patch series.
 
-diff --git a/arch/x86/crypto/Makefile b/arch/x86/crypto/Makefile
-index c3af959648e6..036520c59f0e 100644
---- a/arch/x86/crypto/Makefile
-+++ b/arch/x86/crypto/Makefile
-@@ -79,6 +79,9 @@ crc32-pclmul-y := crc32-pclmul_asm.o crc32-pclmul_glue.o
- obj-$(CONFIG_CRYPTO_CRCT10DIF_PCLMUL) += crct10dif-pclmul.o
- crct10dif-pclmul-y := crct10dif-pcl-asm_64.o crct10dif-pclmul_glue.o
- 
-+obj-$(CONFIG_CRYPTO_CRC64_ROCKSOFT_PCLMUL) += crc64-rocksoft-pclmul.o
-+crc64-rocksoft-pclmul-y := crc64-rocksoft-pcl-asm.o crc64-rocksoft-pcl_glue.o
-+
- obj-$(CONFIG_CRYPTO_POLY1305_X86_64) += poly1305-x86_64.o
- poly1305-x86_64-y := poly1305-x86_64-cryptogams.o poly1305_glue.o
- targets += poly1305-x86_64-cryptogams.S
-diff --git a/arch/x86/crypto/crc64-rocksoft-pcl-asm.S b/arch/x86/crypto/crc64-rocksoft-pcl-asm.S
-new file mode 100644
-index 000000000000..e3b633a776a9
---- /dev/null
-+++ b/arch/x86/crypto/crc64-rocksoft-pcl-asm.S
-@@ -0,0 +1,215 @@
-+########################################################################
-+# Implement fast Rocksoft CRC-64 computation with SSE and PCLMULQDQ instructions
-+#
-+
-+#include <linux/linkage.h>
-+
-+SYM_FUNC_START(crc_rocksoft_pcl)
-+	leaq	(%rsi,%rdx), %rcx
-+	movq	%rsi, %r10
-+	andl	$15, %esi
-+	movq	%rdi, %xmm3
-+	leaq	15(%rcx), %rax
-+	andq	$-16, %r10
-+	pxor	%xmm1, %xmm1
-+	andq	$-16, %rax
-+	movdqa	%xmm1, %xmm5
-+	movq	%rax, %r8
-+	subq	%r10, %rax
-+	subq	%rcx, %r8
-+	movl	$16, %ecx
-+	movq	%rax, %r11
-+	movq	%rcx, %r9
-+	sarq	$4, %r11
-+	subq	%rsi, %r9
-+	movdqu	shuffleMasks(%r9), %xmm4
-+	movdqa	%xmm4, %xmm0
-+	pblendvb	%xmm0, (%r10), %xmm5
-+	cmpq	$16, %rax
-+	je	.L12
-+	movdqa	16(%r10), %xmm2
-+	cmpq	$2, %r11
-+	je	.L13
-+	pcmpeqd	%xmm1, %xmm1
-+	leaq	-16(%rsi,%rdx), %rdi
-+	leaq	16(%r10), %r9
-+	pxor	%xmm1, %xmm4
-+	movdqa	%xmm3, %xmm1
-+	pshufb	%xmm0, %xmm3
-+	pshufb	%xmm4, %xmm1
-+	movdqa	%xmm3, %xmm0
-+	movdqa	.LC0(%rip), %xmm3
-+	pxor	%xmm5, %xmm1
-+	movdqa	%xmm1, %xmm4
-+	pclmulqdq	$0, %xmm3, %xmm1
-+	pclmulqdq	$17, %xmm3, %xmm4
-+	pxor	%xmm4, %xmm1
-+	pxor	%xmm1, %xmm0
-+	cmpq	$31, %rdi
-+	jbe	.L6
-+	leaq	-32(%rdi), %rax
-+	movq	%rax, %rsi
-+	andq	$-16, %rax
-+	leaq	32(%r10,%rax), %rcx
-+	shrq	$4, %rsi
-+	movq	%r9, %rax
-+	.p2align 4,,10
-+	.p2align 3
-+.L7:
-+	pxor	%xmm2, %xmm0
-+	movq	%rax, %rdx
-+	addq	$16, %rax
-+	movdqa	%xmm0, %xmm1
-+	pclmulqdq	$0, %xmm3, %xmm0
-+	movdqa	16(%rdx), %xmm2
-+	pclmulqdq	$17, %xmm3, %xmm1
-+	pxor	%xmm1, %xmm0
-+	cmpq	%rcx, %rax
-+	jne	.L7
-+	movq	%rsi, %rax
-+	addq	$1, %rsi
-+	negq	%rax
-+	salq	$4, %rsi
-+	salq	$4, %rax
-+	addq	%rsi, %r9
-+	leaq	-16(%rdi,%rax), %rdi
-+.L6:
-+	pxor	%xmm2, %xmm0
-+	cmpq	$16, %rdi
-+	je	.L9
-+	movl	$16, %eax
-+	pcmpeqd	%xmm2, %xmm2
-+	movdqa	%xmm0, %xmm7
-+	subq	%r8, %rax
-+	movdqu	shuffleMasks(%rax), %xmm4
-+	pxor	%xmm4, %xmm2
-+	pshufb	%xmm4, %xmm0
-+	movdqa	16(%r9), %xmm4
-+	pshufb	%xmm2, %xmm7
-+	pshufb	%xmm2, %xmm4
-+	movdqa	%xmm7, %xmm1
-+	movdqa	%xmm4, %xmm2
-+	movdqa	%xmm7, %xmm4
-+	pclmulqdq	$0, %xmm3, %xmm1
-+	pclmulqdq	$17, %xmm3, %xmm4
-+	por	%xmm2, %xmm0
-+	pxor	%xmm4, %xmm1
-+	pxor	%xmm1, %xmm0
-+.L9:
-+	movdqa	%xmm0, %xmm2
-+	pclmulqdq	$16, %xmm3, %xmm0
-+	psrldq	$8, %xmm2
-+	pxor	%xmm2, %xmm0
-+.L3:
-+	movdqa	.LC1(%rip), %xmm2
-+	movdqa	%xmm0, %xmm1
-+	pclmulqdq	$0, %xmm2, %xmm1
-+	movdqa	%xmm1, %xmm3
-+	pclmulqdq	$16, %xmm2, %xmm1
-+	pslldq	$8, %xmm3
-+	pxor	%xmm3, %xmm1
-+	pxor	%xmm1, %xmm0
-+	pextrd	$3, %xmm0, %eax
-+	salq	$32, %rax
-+	movq	%rax, %rdx
-+	pextrd	$2, %xmm0, %eax
-+	orq	%rdx, %rax
-+	notq	%rax
-+	ret
-+	.p2align 4,,10
-+	.p2align 3
-+.L13:
-+	subq	%r8, %rcx
-+	pcmpeqd	%xmm1, %xmm1
-+	movdqu	shuffleMasks(%rcx), %xmm7
-+	movdqa	%xmm7, %xmm6
-+	pxor	%xmm1, %xmm6
-+	cmpq	$7, %rdx
-+	ja	.L5
-+	movdqa	%xmm1, %xmm4
-+	pshufb	%xmm7, %xmm5
-+	movdqa	%xmm3, %xmm1
-+	movdqu	shuffleMasks(%rdx), %xmm8
-+	pshufb	%xmm6, %xmm2
-+	pxor	%xmm8, %xmm4
-+	pxor	%xmm5, %xmm2
-+	pshufb	%xmm8, %xmm3
-+	pshufb	%xmm4, %xmm1
-+	movdqa	%xmm3, %xmm0
-+	pxor	%xmm1, %xmm2
-+	pslldq	$8, %xmm0
-+	movdqa	%xmm2, %xmm3
-+	pclmulqdq	$16, .LC0(%rip), %xmm2
-+	psrldq	$8, %xmm3
-+	pxor	%xmm3, %xmm0
-+	pxor	%xmm2, %xmm0
-+	jmp	.L3
-+	.p2align 4,,10
-+	.p2align 3
-+.L12:
-+	movdqu	shuffleMasks(%rdx), %xmm2
-+	subq	%r8, %rcx
-+	movdqa	%xmm3, %xmm6
-+	pcmpeqd	%xmm4, %xmm4
-+	movdqa	%xmm2, %xmm0
-+	pshufb	%xmm2, %xmm3
-+	movdqu	shuffleMasks(%rcx), %xmm2
-+	pxor	%xmm4, %xmm0
-+	pslldq	$8, %xmm3
-+	pxor	%xmm4, %xmm2
-+	pshufb	%xmm0, %xmm6
-+	pshufb	%xmm2, %xmm5
-+	movdqa	%xmm5, %xmm1
-+	pxor	%xmm6, %xmm1
-+	movdqa	%xmm1, %xmm0
-+	pclmulqdq	$16, .LC0(%rip), %xmm1
-+	psrldq	$8, %xmm0
-+	pxor	%xmm3, %xmm0
-+	pxor	%xmm1, %xmm0
-+	jmp	.L3
-+	.p2align 4,,10
-+	.p2align 3
-+.L5:
-+	pxor	%xmm1, %xmm4
-+	movdqa	%xmm3, %xmm1
-+	pshufb	%xmm0, %xmm3
-+	pshufb	%xmm4, %xmm1
-+	pxor	%xmm3, %xmm2
-+	movdqa	.LC0(%rip), %xmm3
-+	pxor	%xmm5, %xmm1
-+	pshufb	%xmm6, %xmm2
-+	movdqa	%xmm1, %xmm5
-+	pshufb	%xmm7, %xmm1
-+	pshufb	%xmm6, %xmm5
-+	pxor	%xmm2, %xmm1
-+	movdqa	%xmm5, %xmm4
-+	movdqa	%xmm5, %xmm0
-+	pclmulqdq	$17, %xmm3, %xmm0
-+	pclmulqdq	$0, %xmm3, %xmm4
-+	pxor	%xmm0, %xmm4
-+	pxor	%xmm4, %xmm1
-+	movdqa	%xmm1, %xmm0
-+	pclmulqdq	$16, %xmm3, %xmm1
-+	psrldq	$8, %xmm0
-+	pxor	%xmm1, %xmm0
-+	jmp	.L3
-+SYM_FUNC_END(crc_rocksoft_pcl)
-+
-+.section	.rodata
-+.align 32
-+.type	shuffleMasks, @object
-+.size	shuffleMasks, 32
-+shuffleMasks:
-+	.string	""
-+	.ascii	"\001\002\003\004\005\006\007\b\t\n\013\f\r\016\017\217\216\215"
-+	.ascii	"\214\213\212\211\210\207\206\205\204\203\202\201\200"
-+
-+.section	.rodata.cst16,"aM",@progbits,16
-+.align 16
-+.LC0:
-+	.quad	-1523270018343381984
-+	.quad	2443614144669557164
-+	.align 16
-+.LC1:
-+	.quad	2876949357237608311
-+	.quad	3808117099328934763
-diff --git a/arch/x86/crypto/crc64-rocksoft-pcl_glue.c b/arch/x86/crypto/crc64-rocksoft-pcl_glue.c
-new file mode 100644
-index 000000000000..996780aa3d93
---- /dev/null
-+++ b/arch/x86/crypto/crc64-rocksoft-pcl_glue.c
-@@ -0,0 +1,117 @@
-+#include <linux/types.h>
-+#include <linux/module.h>
-+#include <linux/crc64.h>
-+#include <crypto/internal/hash.h>
-+#include <crypto/internal/simd.h>
-+#include <linux/init.h>
-+#include <linux/string.h>
-+#include <linux/kernel.h>
-+#include <asm/cpufeatures.h>
-+#include <asm/cpu_device_id.h>
-+#include <asm/simd.h>
-+
-+asmlinkage u64 crc_rocksoft_pcl(u64 init_crc, const u8 *buf, size_t len);
-+
-+struct chksum_desc_ctx {
-+	u64 crc;
-+};
-+
-+static int chksum_init(struct shash_desc *desc)
-+{
-+	struct chksum_desc_ctx *ctx = shash_desc_ctx(desc);
-+
-+	ctx->crc = 0;
-+
-+	return 0;
-+}
-+
-+static int chksum_update(struct shash_desc *desc, const u8 *data,
-+			 unsigned int length)
-+{
-+	struct chksum_desc_ctx *ctx = shash_desc_ctx(desc);
-+
-+	if (length >= 16 && crypto_simd_usable()) {
-+		kernel_fpu_begin();
-+		ctx->crc = crc_rocksoft_pcl(ctx->crc, data, length);
-+		kernel_fpu_end();
-+	} else
-+		ctx->crc = crc64_rocksoft_generic(ctx->crc, data, length);
-+	return 0;
-+}
-+
-+static int chksum_final(struct shash_desc *desc, u8 *out)
-+{
-+	struct chksum_desc_ctx *ctx = shash_desc_ctx(desc);
-+
-+	*(u64 *)out = ctx->crc;
-+	return 0;
-+}
-+
-+static int __chksum_finup(u64 crc, const u8 *data, unsigned int len, u8 *out)
-+{
-+	if (len >= 16 && crypto_simd_usable()) {
-+		kernel_fpu_begin();
-+		*(u64 *)out = crc_rocksoft_pcl(crc, data, len);
-+		kernel_fpu_end();
-+	} else
-+		*(u64 *)out = crc64_rocksoft_generic(crc, data, len);
-+	return 0;
-+}
-+
-+static int chksum_finup(struct shash_desc *desc, const u8 *data,
-+			unsigned int len, u8 *out)
-+{
-+	struct chksum_desc_ctx *ctx = shash_desc_ctx(desc);
-+
-+	return __chksum_finup(ctx->crc, data, len, out);
-+}
-+
-+static int chksum_digest(struct shash_desc *desc, const u8 *data,
-+			 unsigned int length, u8 *out)
-+{
-+	return __chksum_finup(0, data, length, out);
-+}
-+
-+static struct shash_alg alg = {
-+	.digestsize	= 	8,
-+	.init		=	chksum_init,
-+	.update		=	chksum_update,
-+	.final		=	chksum_final,
-+	.finup		=	chksum_finup,
-+	.digest		=	chksum_digest,
-+	.descsize	=	sizeof(struct chksum_desc_ctx),
-+	.base		=	{
-+		.cra_name		=	CRC64_ROCKSOFT_STRING,
-+		.cra_driver_name	=	"crc64-rocksoft-pclmul",
-+		.cra_priority		=	200,
-+		.cra_blocksize		=	1,
-+		.cra_module		=	THIS_MODULE,
-+	}
-+};
-+
-+static const struct x86_cpu_id crc64_rocksoft_cpu_id[] = {
-+	X86_MATCH_FEATURE(X86_FEATURE_PCLMULQDQ, NULL),
-+	{}
-+};
-+MODULE_DEVICE_TABLE(x86cpu, crc64_rocksoft_cpu_id);
-+
-+static int __init crc64_rocksoft_x86_mod_init(void)
-+{
-+	if (!x86_match_cpu(crc64_rocksoft_cpu_id))
-+		return -ENODEV;
-+
-+	return crypto_register_shash(&alg);
-+}
-+
-+static void __exit crc64_rocksoft_x86_mod_fini(void)
-+{
-+	crypto_unregister_shash(&alg);
-+}
-+
-+module_init(crc64_rocksoft_x86_mod_init);
-+module_exit(crc64_rocksoft_x86_mod_fini);
-+
-+MODULE_AUTHOR("Keith Busch <kbusch@kernel.org>");
-+MODULE_DESCRIPTION("Rocksoft CRC64 calculation accelerated with PCLMULQDQ.");
-+MODULE_LICENSE("GPL");
-+MODULE_ALIAS_CRYPTO("crc64-rocksoft-pclmul");
-diff --git a/crypto/Kconfig b/crypto/Kconfig
-index e343147b9f8f..d8861138f117 100644
---- a/crypto/Kconfig
-+++ b/crypto/Kconfig
-@@ -744,6 +744,17 @@ config CRYPTO_CRC64_ROCKSOFT
- 	  transform. This allows for faster crc64 transforms to be used
- 	  if they are available.
- 
-+config CRYPTO_CRC64_ROCKSOFT_PCLMUL
-+	tristate "Rocksoft model CRC64 PCLMULQDQ hardware acceleration"
-+	depends on X86 && 64BIT && CRC64
-+	select CRYPTO_HASH
-+	help
-+	  For x86_64 processors with SSE4.2 and PCLMULQDQ supported,
-+	  CRC64 PCLMULQDQ computation can be hardware accelerated PCLMULQDQ
-+	  instruction. This option will create 'crc64-rocksoft-pclmul'
-+	  module, which is faster when computing crc64 checksum compared
-+	  with the generic table implementation.
-+
- config CRYPTO_VPMSUM_TESTER
- 	tristate "Powerpc64 vpmsum hardware acceleration tester"
- 	depends on CRYPTO_CRCT10DIF_VPMSUM && CRYPTO_CRC32C_VPMSUM
+Pali Rohár (6):
+  PCI: Add PCI_EXP_SLTCTL_ASPL_DISABLE macro
+  PCI: Add PCI_EXP_SLTCAP_*_SHIFT macros
+  dt-bindings: Add 'slot-power-limit-milliwatt' PCIe port property
+  PCI: Add function for parsing 'slot-power-limit-milliwatt' DT property
+  PCI: mvebu: Add support for sending Set_Slot_Power_Limit message
+  ARM: dts: turris-omnia: Set PCIe slot-power-limit-milliwatt properties
+
+ Documentation/devicetree/bindings/pci/pci.txt |  6 ++
+ arch/arm/boot/dts/armada-385-turris-omnia.dts |  3 +
+ drivers/pci/controller/pci-mvebu.c            | 85 +++++++++++++++++--
+ drivers/pci/of.c                              | 64 ++++++++++++++
+ drivers/pci/pci.h                             | 15 ++++
+ include/uapi/linux/pci_regs.h                 |  4 +
+ 6 files changed, 172 insertions(+), 5 deletions(-)
+
 -- 
-2.25.4
+2.20.1
 

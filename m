@@ -2,57 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A1C04BFF72
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 17:57:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C30FE4BFF7A
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 17:58:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234421AbiBVQ5j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 11:57:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43388 "EHLO
+        id S234429AbiBVQ6z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 11:58:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233144AbiBVQ5i (ORCPT
+        with ESMTP id S231211AbiBVQ6x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 11:57:38 -0500
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC00716BFAD
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 08:57:11 -0800 (PST)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-2d07ae11460so145910127b3.7
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 08:57:11 -0800 (PST)
+        Tue, 22 Feb 2022 11:58:53 -0500
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 481E116C4C4
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 08:58:27 -0800 (PST)
+Received: by mail-yb1-xb4a.google.com with SMTP id i205-20020a2522d6000000b00622c778ac7cso24923379ybi.3
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 08:58:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:cc;
-        bh=knnzmuohJ2ih2y2NTiUEzUxj92qYLV4FmoYUekHSvUw=;
-        b=tazhhxtdUk3rQttzgDm+V0n+dY4v2ZnB4i8xG8ax2HZdSoHAffJo42UTzU3IHvzAqj
-         CzDDQtHudJDmOpjvt+NTOxsHiMMcd5AR1KeV4KZ04Anj9Hvg2wo5WdkKx0uhJOAuX1UG
-         DMG5h+1UR544FLvyjxNA1/VvkZavi0pxiwKfoHP3qdoBAJ8849pS8kTNoGD5QX5f9/Px
-         48yknJpXBRw8xvBSwtZigYe1MGyv8eQBBWwjuMT8BSujAmFufVqRsnYE2LCmZqywZs8i
-         wJddWj0UZSrpFMMQpEijc1j/Xch9CqJ1J2YUynBS8lvvuY7OGu4etP9u4qE8wqmUHhIw
-         yLwg==
+        bh=LdOkseL/SVBmCmTgjcnNq9QzVzqqoPlVFVsUav/JFK0=;
+        b=FNoLI1ytq66gPDfA9ohgBGXwe3ZXAMfQPU+vmETuazTxn1eRt4sfndjKQl5vNg1s6N
+         aKsNQ+NyKz9hsu+jiKv0znYXLeJd3n/+di/bVx097otwKJ+Pm8qhNs67V2lcMqwTVhI1
+         wW9Xhb5tkIIU2yAp/NzXxghYQ+kMzgy+o2wG8PnfZAZIib9of+6+4qFBo+n7HfiKcBUT
+         zgEVEI8Bx5lOplWa+VY0r+2kHSy9Bk1YC2Ipw+jivWuz7/saxNwcRLetDoqydMzCZ/+o
+         DlsgOQQ986VSJnpFZSHCEQu861DTK2XF2rz2ttpajHfiMXQ90DWFxCmT05fG0qHlS8Nr
+         E9dA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:cc;
-        bh=knnzmuohJ2ih2y2NTiUEzUxj92qYLV4FmoYUekHSvUw=;
-        b=Xe91ktN0nz4w2p6o9pV1v0wApCbo6UaLaeuPYe45EQbzSk64vQZvT72LAB9FO9RrmX
-         xN5Wg8mZ4aBISVHiinRGGt5aYR5PpjCCM40Zl/0+mwECR581bifkJyipKWhc2dZ4RNL6
-         kvpoz2aXJbfrXoguQ4ynICHKbbZ3xNv5kdigDG5vE82x1Qj7MawXuufXgpHG2X+jk+17
-         j+Wpnt9zwM9+0lpFs5dhtiT3W2h9ZjwbVSXUZHTnncr0RCGmQjLoeoY8ljVa6lgbciA8
-         tdSSdwDokx577mWJZ+sFc4ipEXCP56AVkN3QJZGPtE5l0QRMZP1sMIYa0TqfFfPpjHQ6
-         c9Tw==
-X-Gm-Message-State: AOAM533n76ItwTRSOBBPIpeh+7FaW4OiC4J7NMks7qREoj/z04nSlB16
-        OZMv4ni8o3w57ntUAI41J0IBjqRWNd3WoztbZg==
-X-Google-Smtp-Source: ABdhPJxsM9h50TZI3B0JLyBOhiXv0umcrv6dsBugtZNBeZtlKN8O9HTo3L2ie+qpRSFxA92HD2CPBV8kKYkIX9PJAQ==
+        bh=LdOkseL/SVBmCmTgjcnNq9QzVzqqoPlVFVsUav/JFK0=;
+        b=P5iEr0f8TTnbCkU9p3fC0NrZsPOvuP/tcgxLu7dXMMuTm7e+6s1fNbVfxs82gU/B8H
+         sk0168bIWP1Jzg4/yxaKC5xkmFXQgrPJV11eTD/cVB11GXi0g4Gvvso9zkLf2u57ge43
+         utTntKwW4WHkVj6lr260XMvOyesN7H2fzpAVnKM53F8PyC+WdnKkeYQyxE2OiDfeClqv
+         fUsFdZQCudLYvXSLdsbPKMFeaHL5HtMn32hr8LFQHgQRUXJ5xrJeF85oo6rNzfsCJjQO
+         0p0KXkOdTkau6A2e0/pD2QNWblUDacsODfhdfndHbThK11KrF3vws2pAuuH3r9Xov7iM
+         /oBg==
+X-Gm-Message-State: AOAM530wnHpdhOsOq718ZP46ZPdULo83PRerX5xXTcwVuiaW8wSchdN+
+        ixTapr5qIwMop7UlI5rld3S/1whvFD2T82nPSw==
+X-Google-Smtp-Source: ABdhPJxTMt4EP42XEzXDEACbHfSQnsjw9YnBj/jsWJgMJWkojIR6N0I/bKfbgjEHFp9OFaaN7ZlREpz8dxBvYs+xsg==
 X-Received: from kaleshsingh.mtv.corp.google.com ([2620:15c:211:200:5db7:1235:b3dd:cfcb])
- (user=kaleshsingh job=sendgmr) by 2002:a25:4cc1:0:b0:623:ca02:c1e5 with SMTP
- id z184-20020a254cc1000000b00623ca02c1e5mr22952503yba.95.1645549030879; Tue,
- 22 Feb 2022 08:57:10 -0800 (PST)
-Date:   Tue, 22 Feb 2022 08:51:05 -0800
+ (user=kaleshsingh job=sendgmr) by 2002:a81:b11:0:b0:2d7:3775:1eb9 with SMTP
+ id 17-20020a810b11000000b002d737751eb9mr10900452ywl.99.1645549106468; Tue, 22
+ Feb 2022 08:58:26 -0800 (PST)
+Date:   Tue, 22 Feb 2022 08:51:06 -0800
 In-Reply-To: <20220222165212.2005066-1-kaleshsingh@google.com>
-Message-Id: <20220222165212.2005066-5-kaleshsingh@google.com>
+Message-Id: <20220222165212.2005066-6-kaleshsingh@google.com>
 Mime-Version: 1.0
 References: <20220222165212.2005066-1-kaleshsingh@google.com>
 X-Mailer: git-send-email 2.35.1.473.g83b2b277ed-goog
-Subject: [PATCH v2 4/9] KVM: arm64: Add guard pages for pKVM (protected nVHE)
- hypervisor stack
+Subject: [PATCH v2 5/9] arm64: asm: Introduce test_sp_overflow macro
 From:   Kalesh Singh <kaleshsingh@google.com>
 Cc:     will@kernel.org, maz@kernel.org, qperret@google.com,
         tabba@google.com, surenb@google.com, kernel-team@android.com,
@@ -67,6 +66,7 @@ Cc:     will@kernel.org, maz@kernel.org, qperret@google.com,
         Joey Gouly <joey.gouly@arm.com>,
         Peter Collingbourne <pcc@google.com>,
         Andrew Scull <ascull@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         kvmarm@lists.cs.columbia.edu
 Content-Type: text/plain; charset="UTF-8"
@@ -81,53 +81,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Maps the stack pages in the flexible private VA range and allocates
-guard pages below the stack as unbacked VA space. The stack is aligned
-to twice its size to aid overflow detection (implemented in a subsequent
-patch in the series).
+From: Quentin Perret <qperret@google.com>
 
+The asm entry code in the kernel uses a trick to check if VMAP'd stacks
+have overflowed by aligning them at THREAD_SHIFT * 2 granularity and
+checking the SP's THREAD_SHIFT bit.
+
+Protected KVM will soon make use of a similar trick to detect stack
+overflows, so factor out the asm code in a re-usable macro.
+
+Signed-off-by: Quentin Perret <qperret@google.com>
+[Kalesh - Resolve minor conflicts]
 Signed-off-by: Kalesh Singh <kaleshsingh@google.com>
 ---
- arch/arm64/kvm/hyp/nvhe/setup.c | 25 +++++++++++++++++++++----
- 1 file changed, 21 insertions(+), 4 deletions(-)
+ arch/arm64/include/asm/assembler.h | 11 +++++++++++
+ arch/arm64/kernel/entry.S          |  7 +------
+ 2 files changed, 12 insertions(+), 6 deletions(-)
 
-diff --git a/arch/arm64/kvm/hyp/nvhe/setup.c b/arch/arm64/kvm/hyp/nvhe/setup.c
-index 27af337f9fea..69df21320b09 100644
---- a/arch/arm64/kvm/hyp/nvhe/setup.c
-+++ b/arch/arm64/kvm/hyp/nvhe/setup.c
-@@ -105,11 +105,28 @@ static int recreate_hyp_mappings(phys_addr_t phys, unsigned long size,
- 		if (ret)
- 			return ret;
+diff --git a/arch/arm64/include/asm/assembler.h b/arch/arm64/include/asm/assembler.h
+index e8bd0af0141c..ad40eb0eee83 100644
+--- a/arch/arm64/include/asm/assembler.h
++++ b/arch/arm64/include/asm/assembler.h
+@@ -850,4 +850,15 @@ alternative_endif
  
--		end = (void *)per_cpu_ptr(&kvm_init_params, i)->stack_hyp_va;
-+		/*
-+		 * Private mappings are allocated upwards from __io_map_base
-+		 * so allocate the guard page first then the stack.
-+		 */
-+		start = (void *)pkvm_alloc_private_va_range(PAGE_SIZE, PAGE_SIZE);
-+		if (IS_ERR_OR_NULL(start))
-+			return PTR_ERR(start);
-+
-+		/*
-+		 * The stack is aligned to twice its size to facilitate overflow
-+		 * detection.
-+		 */
-+		end = (void *)per_cpu_ptr(&kvm_init_params, i)->stack_pa;
- 		start = end - PAGE_SIZE;
--		ret = pkvm_create_mappings(start, end, PAGE_HYP);
--		if (ret)
--			return ret;
-+		start = (void *)__pkvm_create_private_mapping((phys_addr_t)start,
-+					PAGE_SIZE, PAGE_SIZE * 2, PAGE_HYP);
-+		if (IS_ERR_OR_NULL(start))
-+			return PTR_ERR(start);
-+		end = start + PAGE_SIZE;
-+
-+		/* Update stack_hyp_va to end of the stack's private VA range */
-+		per_cpu_ptr(&kvm_init_params, i)->stack_hyp_va = (unsigned long) end;
- 	}
+ #endif /* GNU_PROPERTY_AARCH64_FEATURE_1_DEFAULT */
  
++/*
++ * Test whether the SP has overflowed, without corrupting a GPR.
++ */
++.macro test_sp_overflow shift, label
++	add	sp, sp, x0			// sp' = sp + x0
++	sub	x0, sp, x0			// x0' = sp' - x0 = (sp + x0) - x0 = sp
++	tbnz	x0, #\shift, \label
++	sub	x0, sp, x0			// x0'' = sp' - x0' = (sp + x0) - sp = x0
++	sub	sp, sp, x0			// sp'' = sp' - x0 = (sp + x0) - x0 = sp
++.endm
++
+ #endif	/* __ASM_ASSEMBLER_H */
+diff --git a/arch/arm64/kernel/entry.S b/arch/arm64/kernel/entry.S
+index 772ec2ecf488..ce99ee30c77e 100644
+--- a/arch/arm64/kernel/entry.S
++++ b/arch/arm64/kernel/entry.S
+@@ -53,15 +53,10 @@ alternative_else_nop_endif
+ 	sub	sp, sp, #PT_REGS_SIZE
+ #ifdef CONFIG_VMAP_STACK
  	/*
+-	 * Test whether the SP has overflowed, without corrupting a GPR.
+ 	 * Task and IRQ stacks are aligned so that SP & (1 << THREAD_SHIFT)
+ 	 * should always be zero.
+ 	 */
+-	add	sp, sp, x0			// sp' = sp + x0
+-	sub	x0, sp, x0			// x0' = sp' - x0 = (sp + x0) - x0 = sp
+-	tbnz	x0, #THREAD_SHIFT, 0f
+-	sub	x0, sp, x0			// x0'' = sp' - x0' = (sp + x0) - sp = x0
+-	sub	sp, sp, x0			// sp'' = sp' - x0 = (sp + x0) - x0 = sp
++	test_sp_overflow THREAD_SHIFT, 0f
+ 	b	el\el\ht\()_\regsize\()_\label
+ 
+ 0:
 -- 
 2.35.1.473.g83b2b277ed-goog
 

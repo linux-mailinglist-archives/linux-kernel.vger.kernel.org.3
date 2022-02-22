@@ -2,182 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49C924BF273
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 08:13:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D9954BF27C
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 08:13:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230447AbiBVHLt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 02:11:49 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:36352 "EHLO
+        id S230411AbiBVHMy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 02:12:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230438AbiBVHLs (ORCPT
+        with ESMTP id S230401AbiBVHMx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 02:11:48 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5772BB1098
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 23:11:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1645513882;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=7FSv/oEcapgvDoGQHzrlqg4yIRZgWGWLxeotDRNQuUU=;
-        b=QfYMeUWdbHNfKBqd2cikNJgC6ukjCBCDCH4DoFuZ8YCYw3eXgJEoFLMIz8op/hX9qqcqk6
-        aD6WjMYVqPg5hSreHPiFZ/+IbNP/l4j4ShxRgf+Kkc6BF76trHJbU6SIMX2Vh0Ou+nwzeF
-        9BGGFr2og7MkCum1ooZZdwraODGB5kM=
-Received: from mail-lj1-f197.google.com (mail-lj1-f197.google.com
- [209.85.208.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-441-rla05-UmNcqZQGRcof4XkA-1; Tue, 22 Feb 2022 02:11:20 -0500
-X-MC-Unique: rla05-UmNcqZQGRcof4XkA-1
-Received: by mail-lj1-f197.google.com with SMTP id o1-20020a2eb301000000b0024640251ba9so2336410lja.12
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 23:11:20 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=7FSv/oEcapgvDoGQHzrlqg4yIRZgWGWLxeotDRNQuUU=;
-        b=HIRCeoy9JqYJYpi67Uld+Q4UYx3uUWd5Rb2tcGK3xN9KUXzQfdrNaDDe8BErksn801
-         g7Aro2Fu6wevCbUu/D956a8OGah3av3Yds3qDEdUbdm8Ek5v4bWd/gjHFFHp0kCIKtew
-         udDX0EH7Tj3Wh2WPvKC01m+SwseQd341zB74D3OATeNJ86vTKB5qGxaJ85DxvYVo1+gP
-         jJyjILqNSJcnEIw6m8GR3fJTtghSpBB/RtJiZe8DjlwpVERdxaoNML/9u8tH/tbjuKLw
-         T9QT2p5L/iIADK6Ec0Ynp7M4PwqHdaH8DWRTkDZCD/Ia5odo1MJgjmu9PtVAlCfKyURj
-         jKMg==
-X-Gm-Message-State: AOAM530nakpRQs5G+N6/LlkXWtGI9zz3gOX6fkOygXEeH67Sn5CigVHd
-        XAh/kgh7lrkEB2ctZnuMxqQZdsulvCiXmwr8Yd9vekpO5Rb3f3I8wp+5+RIG3aHOPscqMDS2WNt
-        tzjoUIaIH4pzZjUCfZEgBhSbqHlaoYPZxOL7P7hbe
-X-Received: by 2002:ac2:5dc9:0:b0:443:5db1:244c with SMTP id x9-20020ac25dc9000000b004435db1244cmr16719971lfq.84.1645513878929;
-        Mon, 21 Feb 2022 23:11:18 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxbMuAz/ix+dLAdMFMBvTxo0FVkU9ZlLpWgMVrgQgKR6osYaULNGWxhsEVLNufI0L2GR59y4OsFjZ9jVzrG5K8=
-X-Received: by 2002:ac2:5dc9:0:b0:443:5db1:244c with SMTP id
- x9-20020ac25dc9000000b004435db1244cmr16719955lfq.84.1645513878661; Mon, 21
- Feb 2022 23:11:18 -0800 (PST)
+        Tue, 22 Feb 2022 02:12:53 -0500
+Received: from smtpbg587.qq.com (smtpbg587.qq.com [113.96.223.105])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1865CEBAFF
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 23:12:24 -0800 (PST)
+X-QQ-mid: bizesmtp85t1645513927t16oxsxy
+Received: from localhost.localdomain (unknown [223.80.100.36])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Tue, 22 Feb 2022 15:12:06 +0800 (CST)
+X-QQ-SSF: 0120000000000040B000B00A0000000
+X-QQ-FEAT: NTS5Yb/oJHvoVHZCmsX9G9T5Gt7huud0SMOYOSnKw76UQdIjkDZYrYEz2bzlj
+        wLbiyD72pPy5MZyMs4nNm6X/Qg6xIl6zaPKnTb6tLscug+5E8P64QoyqhIvovZdHNiuP1+K
+        Up2PtffxapGW947GyIwun+vXI4gPiPdMHINDNWujRTGx4wJF754mplnUfMq4qw44HvRIV+Q
+        qxsFcAe8dDMbNEX2h03kHNI2amLqTJElw0aoO0Upq1UjumcLk8GxrwLwL97hKS0MuNys7FO
+        PnnFHKXejoHBNgqmz49smMjAW5C7yvqotUqr9+h/j1v5rB
+X-QQ-GoodBg: 0
+From:   Jialu Xu <xujialu@vimux.org>
+To:     masahiroy@kernel.org
+Cc:     linux-kernel@vger.kernel.org, gregkh@linuxfoundation.org,
+        akpm@linux-foundation.org, corbet@lwn.net, rkovhaev@gmail.com
+Subject: Re: Re: [PATCH] scripts/tags.sh: parse *.dts.tmp for compiled sources
+Date:   Tue, 22 Feb 2022 15:11:26 +0800
+Message-Id: <20220222071127.1956675-1-xujialu@vimux.org>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <CAK7LNAS=zPm6XxoUK=CQAiX6_0DbGtWY=kLG5nDQCPtfV36rQg@mail.gmail.com>
+References: <CAK7LNAS=zPm6XxoUK=CQAiX6_0DbGtWY=kLG5nDQCPtfV36rQg@mail.gmail.com>
 MIME-Version: 1.0
-References: <20220221195303.13560-1-mail@anirudhrb.com> <CACGkMEvLE=kV4PxJLRjdSyKArU+MRx6b_mbLGZHSUgoAAZ+-Fg@mail.gmail.com>
- <YhRtQEWBF0kqWMsI@anirudhrb.com>
-In-Reply-To: <YhRtQEWBF0kqWMsI@anirudhrb.com>
-From:   Jason Wang <jasowang@redhat.com>
-Date:   Tue, 22 Feb 2022 15:11:07 +0800
-Message-ID: <CACGkMEvd7ETC_ANyrOSAVz_i64xqpYYazmm=+39E51=DMRFXdw@mail.gmail.com>
-Subject: Re: [PATCH] vhost: validate range size before adding to iotlb
-To:     Anirudh Rayabharam <mail@anirudhrb.com>
-Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
-        syzbot+0abd373e2e50d704db87@syzkaller.appspotmail.com,
-        kvm <kvm@vger.kernel.org>,
-        virtualization <virtualization@lists.linux-foundation.org>,
-        netdev <netdev@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:vimux.org:qybgspam:qybgspam3
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        T_SPF_HELO_TEMPERROR autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 22, 2022 at 12:57 PM Anirudh Rayabharam <mail@anirudhrb.com> wrote:
->
-> On Tue, Feb 22, 2022 at 10:50:20AM +0800, Jason Wang wrote:
-> > On Tue, Feb 22, 2022 at 3:53 AM Anirudh Rayabharam <mail@anirudhrb.com> wrote:
-> > >
-> > > In vhost_iotlb_add_range_ctx(), validate the range size is non-zero
-> > > before proceeding with adding it to the iotlb.
-> > >
-> > > Range size can overflow to 0 when start is 0 and last is (2^64 - 1).
-> > > One instance where it can happen is when userspace sends an IOTLB
-> > > message with iova=size=uaddr=0 (vhost_process_iotlb_msg). So, an
-> > > entry with size = 0, start = 0, last = (2^64 - 1) ends up in the
-> > > iotlb. Next time a packet is sent, iotlb_access_ok() loops
-> > > indefinitely due to that erroneous entry:
-> > >
-> > >         Call Trace:
-> > >          <TASK>
-> > >          iotlb_access_ok+0x21b/0x3e0 drivers/vhost/vhost.c:1340
-> > >          vq_meta_prefetch+0xbc/0x280 drivers/vhost/vhost.c:1366
-> > >          vhost_transport_do_send_pkt+0xe0/0xfd0 drivers/vhost/vsock.c:104
-> > >          vhost_worker+0x23d/0x3d0 drivers/vhost/vhost.c:372
-> > >          kthread+0x2e9/0x3a0 kernel/kthread.c:377
-> > >          ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
-> > >          </TASK>
-> > >
-> > > Reported by syzbot at:
-> > >         https://syzkaller.appspot.com/bug?extid=0abd373e2e50d704db87
-> > >
-> > > Reported-by: syzbot+0abd373e2e50d704db87@syzkaller.appspotmail.com
-> > > Tested-by: syzbot+0abd373e2e50d704db87@syzkaller.appspotmail.com
-> > > Signed-off-by: Anirudh Rayabharam <mail@anirudhrb.com>
-> > > ---
-> > >  drivers/vhost/iotlb.c | 6 ++++--
-> > >  1 file changed, 4 insertions(+), 2 deletions(-)
-> > >
-> > > diff --git a/drivers/vhost/iotlb.c b/drivers/vhost/iotlb.c
-> > > index 670d56c879e5..b9de74bd2f9c 100644
-> > > --- a/drivers/vhost/iotlb.c
-> > > +++ b/drivers/vhost/iotlb.c
-> > > @@ -53,8 +53,10 @@ int vhost_iotlb_add_range_ctx(struct vhost_iotlb *iotlb,
-> > >                               void *opaque)
-> > >  {
-> > >         struct vhost_iotlb_map *map;
-> > > +       u64 size = last - start + 1;
-> > >
-> > > -       if (last < start)
-> > > +       // size can overflow to 0 when start is 0 and last is (2^64 - 1).
-> > > +       if (last < start || size == 0)
-> > >                 return -EFAULT;
 > >
-> > I'd move this check to vhost_chr_iter_write(), then for the device who
-> > has its own msg handler (e.g vDPA) can benefit from it as well.
->
-> Thanks for reviewing!
->
-> I kept the check here thinking that all devices would benefit from it
-> because they would need to call vhost_iotlb_add_range() to add an entry
-> to the iotlb. Isn't that correct?
-
-Correct for now but not for the future, it's not guaranteed that the
-per device iotlb message handler will use vhost iotlb.
-
-But I agree that we probably don't need to care about it too much now.
-
-> Do you see any other benefit in moving
-> it to vhost_chr_iter_write()?
->
-> One concern I have is that if we move it out some future caller to
-> vhost_iotlb_add_range() might forget to handle this case.
-
-Yes.
-
-Rethink the whole fix, we're basically rejecting [0, ULONG_MAX] range
-which seems a little bit odd. I wonder if it's better to just remove
-the map->size. Having a quick glance at the the user, I don't see any
-blocker for this.
-
-Thanks
-
->
-> Thanks!
->
->         - Anirudh.
->
+> > There are files listed in *.dts.tmp, parse them as *.cmd for compiled sources.
 > >
-> > Thanks
-> >
-> > >
-> > >         if (iotlb->limit &&
-> > > @@ -69,7 +71,7 @@ int vhost_iotlb_add_range_ctx(struct vhost_iotlb *iotlb,
-> > >                 return -ENOMEM;
-> > >
-> > >         map->start = start;
-> > > -       map->size = last - start + 1;
-> > > +       map->size = size;
-> > >         map->last = last;
-> > >         map->addr = addr;
-> > >         map->perm = perm;
-> > > --
-> > > 2.35.1
-> > >
-> >
->
+> > Signed-off-by: Jialu Xu <xujialu@vimux.org>
+> > ---
+> 
+> Why?
+
+Seems that i had a misunderstanding of this, the purpose of this
+function is to generate tags but not a file list, and files that
+this patch can get additionally are some device tree sources, so
+this patch is probabily not necessary. Sorry.
+
 

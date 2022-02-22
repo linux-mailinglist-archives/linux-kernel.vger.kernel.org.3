@@ -2,99 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80DB94BFC2D
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 16:16:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E8194BFC37
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 16:17:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233184AbiBVPRK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 10:17:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39822 "EHLO
+        id S233312AbiBVPR3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 10:17:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229943AbiBVPRI (ORCPT
+        with ESMTP id S233327AbiBVPRV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 10:17:08 -0500
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82FA6AE53;
-        Tue, 22 Feb 2022 07:16:36 -0800 (PST)
-Received: by mail-wr1-x42f.google.com with SMTP id p9so33919799wra.12;
-        Tue, 22 Feb 2022 07:16:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=+Xxj1ephrofWa18acovB/xXK0BSIpcA0u+PZS1W0btg=;
-        b=N/lnlsscdcE0PaM6lCz+OBJsJNfVYEfzXRYGoCP2WsRtHPJOI0UrRVg3WXkZgtsLO7
-         qRk/flJmSeYt+1pqJTFLFa0IC+AM285qCu+MGOzssoWj3OgEPmwFjOXA9uG8qGPbhjYP
-         DRdtTRT+UcFiZHOX6j2iMLIPk9WYfccGmULRZwPb3JVMQDHbF7F+iNA/CXbD0n0+8QbQ
-         Bdv3MDg6fgZHaqLsk9yFGVDlcR6KNQ7IrU/FTCUZVm4H60hZNlR4xFN0TnZTB+mdg3Rt
-         c+WrjFM63YmZ0ErsRvFP8XnC9pBRFkw7d/DEWVzsAh3yvPliKny91DffpRzOcHnaMCNj
-         RSMA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=+Xxj1ephrofWa18acovB/xXK0BSIpcA0u+PZS1W0btg=;
-        b=u2L7Yax5ZeqE5OfVrkZpVnkNhbiC9n9FtbKTeZ2bd0PVmUkbfC5DZafM0q05eQopJd
-         FKmlFgnY9bjY4mD11jnFYt+jvOiQhzlHfYRZq/xouiQAhCgvC0mvpcKtS87mGWQvEW0t
-         Wl6mgoIZt1LQvFTg/OpP9in4wKGQpbvcTZy6IvW5nQ2vTipKMBnPEkP0gFlrYrnIxmYO
-         lLZJ90xdzz3cmuIT1F4VFmunta5t1XemIRnHdfeFttdy3scjfS+NIGRKbceukphQfAsT
-         DTTHwJcTeMABNpiH9ywlF9+31fxG5raocWg6tZ0v/3ECVwr7s8YxDeNTfVi7Vnv8W14m
-         J1HA==
-X-Gm-Message-State: AOAM532YZDcFgVJaDf2Ch0VOPrdZ798XOzsToBDJeutpj/CXq2Jm7v/0
-        S3NMklMqSyuk8okGpyXIU2i6Cp9B1F3KPh2SB/WY+3Ip0Y8=
-X-Google-Smtp-Source: ABdhPJx9lgwLRb2ha6aRWJDdJQXCfNSBbYdDUiqyo/LX5KabZmZUM9EOVDC1tnECSzjofHjqWa3j73D+cGiuQAMbjzU=
-X-Received: by 2002:a05:6000:15c4:b0:1ea:80f8:dfee with SMTP id
- y4-20020a05600015c400b001ea80f8dfeemr3958538wry.542.1645542995136; Tue, 22
- Feb 2022 07:16:35 -0800 (PST)
-MIME-Version: 1.0
-References: <20220222151357.1710503-1-michael@walle.cc>
-In-Reply-To: <20220222151357.1710503-1-michael@walle.cc>
-From:   Heiko Thiery <heiko.thiery@gmail.com>
-Date:   Tue, 22 Feb 2022 16:16:23 +0100
-Message-ID: <CAEyMn7avcFD55+aEnX+jqym_f0q-p9DD5pgTC8WeaO27HUCCsg@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: arm: fsl: add IMX8MN DDR3L eval board
-To:     Michael Walle <michael@walle.cc>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        devicetree@vger.kernel.org, Li Yang <leoyang.li@nxp.com>,
+        Tue, 22 Feb 2022 10:17:21 -0500
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3577B6D192;
+        Tue, 22 Feb 2022 07:16:54 -0800 (PST)
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+        by localhost (Postfix) with ESMTP id 4K32nw6165z9sSr;
+        Tue, 22 Feb 2022 16:16:52 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id WgYKq8Sgp9fd; Tue, 22 Feb 2022 16:16:52 +0100 (CET)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase2.c-s.fr (Postfix) with ESMTP id 4K32nw5Fx8z9sSX;
+        Tue, 22 Feb 2022 16:16:52 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id A0E738B77C;
+        Tue, 22 Feb 2022 16:16:52 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id 7htoJC5EZX_Z; Tue, 22 Feb 2022 16:16:52 +0100 (CET)
+Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.7.78])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 4A0958B77A;
+        Tue, 22 Feb 2022 16:16:52 +0100 (CET)
+Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 21MFGgTZ1087705
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Tue, 22 Feb 2022 16:16:42 +0100
+Received: (from chleroy@localhost)
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 21MFGfXt1087704;
+        Tue, 22 Feb 2022 16:16:41 +0100
+X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Aaron Tomlin <atomlin@redhat.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        linux-modules@vger.kernel.org
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
         linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Subject: [PATCH v3 0/4] Miscellaneous cleanups
+Date:   Tue, 22 Feb 2022 16:16:30 +0100
+Message-Id: <cover.1645542893.git.christophe.leroy@csgroup.eu>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1645542983; l=1193; s=20211009; h=from:subject:message-id; bh=pmY6zc0jN0qdHfhzeIcJWO8uf2S3v3i7G32QX398RpQ=; b=05T1fkNXvM6i7/duiYk925TtV9O8tCWbpWu9g2UKczIhSzLOSQisWqD0a2OfECm4eil7KTESUNrJ DrFHfP/HD/ie34WPspGF4kNB1apXmlw5UHlMqVhyHhpm8SNuiNFO
+X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+This series applies on top of my series "Allocate module text and data separately" v5.
 
-Am Di., 22. Feb. 2022 um 16:14 Uhr schrieb Michael Walle <michael@walle.cc>:
->
-> Add a new compatible string for that eval board. It features an IMX8MN
-> UltraLite and has DDR3L RAM. The product part number is 8MNANOD3L-EVK.
->
-> Signed-off-by: Michael Walle <michael@walle.cc>
+It does some cleanup around the settling of modules's layout page flags:
+- Make module_enable_x() independent of CONFIG_ARCH_HAS_STRICT_MODULE_RWX
+- Reunify everything into strict_rwx.c
+- Change big hammer BUG_ON()s into WARN_ON()s
+- Change misleading debug_align() to strict_align()
 
-Reviewed-by: Heiko Thiery <heiko.thiery@gmail.com>
+Changes in v2/v3:
+- Rebased on top of my series "Allocate module text and data separately" v5
+- Moved the Kconfig patch out of this series, it is an independent change
 
-> ---
->  Documentation/devicetree/bindings/arm/fsl.yaml | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/Documentation/devicetree/bindings/arm/fsl.yaml b/Documentation/devicetree/bindings/arm/fsl.yaml
-> index 23e678232451..e11ffaa8721e 100644
-> --- a/Documentation/devicetree/bindings/arm/fsl.yaml
-> +++ b/Documentation/devicetree/bindings/arm/fsl.yaml
-> @@ -834,6 +834,7 @@ properties:
->                - bsh,imx8mn-bsh-smm-s2     # i.MX8MN BSH SystemMaster S2
->                - bsh,imx8mn-bsh-smm-s2pro  # i.MX8MN BSH SystemMaster S2 PRO
->                - fsl,imx8mn-ddr4-evk       # i.MX8MN DDR4 EVK Board
-> +              - fsl,imx8mn-ddr3l-evk      # i.MX8MN DDR3L EVK Board
->                - fsl,imx8mn-evk            # i.MX8MN LPDDR4 EVK Board
->                - gw,imx8mn-gw7902          # i.MX8MM Gateworks Board
->            - const: fsl,imx8mn
-> --
-> 2.30.2
->
+Sorry for the mess in v2.
+
+Christophe Leroy (4):
+  module: Make module_enable_x() independent of
+    CONFIG_ARCH_HAS_STRICT_MODULE_RWX
+  module: Move module_enable_x() and frob_text() in strict_rwx.c
+  module: Rework layout alignment to avoid BUG_ON()s
+  module: Rename debug_align() as strict_align()
+
+ kernel/module/Makefile     |  3 +-
+ kernel/module/internal.h   | 26 +++----------
+ kernel/module/kallsyms.c   |  4 +-
+ kernel/module/main.c       | 58 ++++++-----------------------
+ kernel/module/strict_rwx.c | 76 +++++++++++++++++++++++++++++++++-----
+ 5 files changed, 88 insertions(+), 79 deletions(-)
+
+-- 
+2.34.1
+

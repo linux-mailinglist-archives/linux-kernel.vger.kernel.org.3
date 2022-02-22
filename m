@@ -2,92 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 471BD4C0566
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 00:38:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA90E4C0569
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 00:40:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236215AbiBVXiz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 18:38:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51794 "EHLO
+        id S236267AbiBVXkx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 18:40:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235246AbiBVXix (ORCPT
+        with ESMTP id S235246AbiBVXkw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 18:38:53 -0500
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 756364B863
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 15:38:27 -0800 (PST)
-Received: by mail-pf1-x436.google.com with SMTP id y11so13637670pfa.6
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 15:38:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:in-reply-to:message-id:references
-         :mime-version;
-        bh=z14gdztNmeBCFYN6Nsa2blKh3AYnO4tYG9TJ7do4igA=;
-        b=P8gl+rGgObz5JsQXub2YaOttUkPyGb7i1SkmFpqxkIGdUAU4YRxZiisW87LG9VpuCb
-         4xpTct734i09Qzvlpxm2rsqYyXUeerHt09s8oTueO0vyy7cZq824/v8CE3tLThpYelvl
-         eGhZ7/kKZNE2OzXT2ZnCyxKGFSGiR2+9TGAg+1jte1PnDWyifvCjffRrTEx8WPNVXUQh
-         Ss0lTlHq8dKJpg115nPsBQWM6W9sHaYtYCXG5ghn91RI8pHSvR7KpVfQavU1lD7gLMkR
-         fHgjaNKyXXnLzLV5azir/FN8AoEUAlUNfS4x+XnLacwJ6pNtrFt334tlZsU2uR+7Lfv4
-         pT4A==
+        Tue, 22 Feb 2022 18:40:52 -0500
+Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1BA73A190
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 15:40:25 -0800 (PST)
+Received: by mail-io1-f70.google.com with SMTP id k10-20020a5d91ca000000b006414a00b160so3648102ior.18
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 15:40:25 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:in-reply-to:message-id
-         :references:mime-version;
-        bh=z14gdztNmeBCFYN6Nsa2blKh3AYnO4tYG9TJ7do4igA=;
-        b=7u1SscxDom399WG/XFzKDxYD3fsPoy50dLsynBje7j6Trugl+WKT0+aLa3m391UsBc
-         hUapik9snq49sXG7fvcKJ7hZBI7Fb9czcoFQbx4y3h/Jlueclc7G4+iwN4leBvqv/81I
-         GuRfk7rakPbdOWgbZuMvjhMcYRRQ1ht3pEpm+L/FzMGN7NzpB0x4+T5mQThYFex8ekN8
-         Vh3FoxMoATAWnJZnv3pTT0ZY2LO2g2g243cKYuTKspBKxWjEAhAf23AKx2HYOwDOmqgH
-         dadg1wJDZlhBU9ugcAlioDNiNIklUac2cNqck8d96MZy8gSa2W0if9ZUbD5OG02acNRA
-         f7Kw==
-X-Gm-Message-State: AOAM532r5URvWlHndxsM1IBewmSaCnqneDBJsw+BGoXdvlgM88xdZ7JI
-        OfJPYyqhcjPzHymAasu1n7OTog==
-X-Google-Smtp-Source: ABdhPJxooYUF3cMjgU9bh8ub5zJAQM7l/5INUFoLGNz1daFOw83ZQTajR0NlWO7J06goIxmoJ8O6Qg==
-X-Received: by 2002:a05:6a00:984:b0:4e1:5e1b:1e9b with SMTP id u4-20020a056a00098400b004e15e1b1e9bmr26851040pfg.71.1645573106467;
-        Tue, 22 Feb 2022 15:38:26 -0800 (PST)
-Received: from [2620:15c:29:204:6b0f:423a:fd82:4e05] ([2620:15c:29:204:6b0f:423a:fd82:4e05])
-        by smtp.gmail.com with ESMTPSA id c9sm19098644pfv.70.2022.02.22.15.38.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Feb 2022 15:38:26 -0800 (PST)
-Date:   Tue, 22 Feb 2022 15:38:25 -0800 (PST)
-From:   David Rientjes <rientjes@google.com>
-To:     Roman Gushchin <roman.gushchin@linux.dev>
-cc:     Vlastimil Babka <vbabka@suse.cz>, Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, patches@lists.linux.dev
-Subject: Re: [PATCH] MAINTAINERS, SLAB: Add Roman as reviewer, git tree
-In-Reply-To: <YhU7T//RK6E+1Nig@carbon.DHCP.thefacebook.com>
-Message-ID: <2c52e740-8373-4234-aeef-928abb41f521@google.com>
-References: <20220222103104.13241-1-vbabka@suse.cz> <YhU7T//RK6E+1Nig@carbon.DHCP.thefacebook.com>
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=OooVyoOgW3l6HohSHtsDC5MFtd8nu7N8NE3HmObQJ5o=;
+        b=hVPVDOJ5JlQyMuygUXUqdt9+VvWGg15Mz/b5e+Rd45ua8QL1O9VtJ/jxKKm7M/NQFZ
+         BsaMG4/cK8BWIY3b1LedPj6EnysTkrGRL9eyZP+LVRdJ8FC5MwSBcDltWdK7nrJ1abOd
+         hEMopSBvIC9M8BRd1YpeH1/l5bLj7y2ZGwBzLvtQajVxM+yODCW/mPrWe5XmqlBoqWI/
+         9xco3sbRCHGePjIj71oafBxthoZ4u8fCGvtM8YB4WS0TzuBEpO+XvJiVOg9iy/PFmC27
+         HP2IP2dMLBfYkg3OVNMpvwuejwjusT+vd+FDngeZtFvzab9x4hRn8oSSFNYjrZK2O49f
+         J8RQ==
+X-Gm-Message-State: AOAM532XcPNTFLsv4jFQNI/t9WCBoc7qP0OMtpwW0Kk0R/YPM3RpUnCK
+        ZgMq2rmGsWYvHON5FVzIMwy0Lfxg3PmCSGYo0FLrcnzzb9PO
+X-Google-Smtp-Source: ABdhPJz1Fn+Fc9twJUyPU6QWtzbHGw3fAKOtx1KnBpDPEkMKqEXzMWm6kEI3vtUc/FsqtVLZMEPaHKQ/tQu+tmerahxeUEwSCk1w
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a02:c772:0:b0:314:9319:9076 with SMTP id
+ k18-20020a02c772000000b0031493199076mr19486218jao.176.1645573224994; Tue, 22
+ Feb 2022 15:40:24 -0800 (PST)
+Date:   Tue, 22 Feb 2022 15:40:24 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000871dfa05d8a3df7c@google.com>
+Subject: [syzbot] memory leak in create_io_worker (2)
+From:   syzbot <syzbot+7085977fe51df63eb2bf@syzkaller.appspotmail.com>
+To:     asml.silence@gmail.com, axboe@kernel.dk, io-uring@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,LONGWORDS,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 22 Feb 2022, Roman Gushchin wrote:
+Hello,
 
-> On Tue, Feb 22, 2022 at 11:31:04AM +0100, Vlastimil Babka wrote:
-> > The slab code has an overlap with kmem accounting, where Roman has done
-> > a lot of work recently and it would be useful to make sure he's CC'd on
-> > patches that potentially affect it. Thus add him as a reviewer for the
-> > SLAB subsystem.
-> > 
-> > Also while at it, add the link to slab git tree.
-> > 
-> > Signed-off-by: Vlastimil Babka <vbabka@suse.cz>
-> 
-> Sorry, used the old e-mail. Here is the correct one:
-> 
-> Acked-by: Roman Gushchin <roman.gushchin@linux.dev>
-> 
+syzbot found the following issue on:
 
-Acked-by: David Rientjes <rientjes@google.com>
+HEAD commit:    7993e65fdd0f Merge tag 'mtd/fixes-for-5.17-rc5' of git://g..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=12b8d5bc700000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=6668288739b7ad26
+dashboard link: https://syzkaller.appspot.com/bug?extid=7085977fe51df63eb2bf
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=17eae25a700000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17a51236700000
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+7085977fe51df63eb2bf@syzkaller.appspotmail.com
+
+executing program
+executing program
+executing program
+executing program
+executing program
+BUG: memory leak
+unreferenced object 0xffff888112ec56c0 (size 192):
+  comm "syz-executor313", pid 30410, jiffies 4294958360 (age 18.100s)
+  hex dump (first 32 bytes):
+    01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+  backtrace:
+    [<ffffffff816515c6>] kmalloc_node include/linux/slab.h:599 [inline]
+    [<ffffffff816515c6>] kzalloc_node include/linux/slab.h:726 [inline]
+    [<ffffffff816515c6>] create_io_worker+0x46/0x250 fs/io-wq.c:812
+    [<ffffffff81652ab2>] create_worker_cb+0xd2/0xf0 fs/io-wq.c:331
+    [<ffffffff81273853>] task_work_run+0x73/0xb0 kernel/task_work.c:164
+    [<ffffffff8163dadd>] tracehook_notify_signal include/linux/tracehook.h:213 [inline]
+    [<ffffffff8163dadd>] io_run_task_work fs/io_uring.c:2595 [inline]
+    [<ffffffff8163dadd>] io_run_task_work fs/io_uring.c:2591 [inline]
+    [<ffffffff8163dadd>] io_run_task_work_sig+0x6d/0x110 fs/io_uring.c:7684
+    [<ffffffff8164ec75>] io_cqring_wait_schedule fs/io_uring.c:7701 [inline]
+    [<ffffffff8164ec75>] io_cqring_wait fs/io_uring.c:7770 [inline]
+    [<ffffffff8164ec75>] __do_sys_io_uring_enter+0x715/0xf60 fs/io_uring.c:10178
+    [<ffffffff844b4875>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+    [<ffffffff844b4875>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+    [<ffffffff84600068>] entry_SYSCALL_64_after_hwframe+0x44/0xae
+
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches

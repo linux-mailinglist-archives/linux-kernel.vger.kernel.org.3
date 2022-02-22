@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 197D94BF694
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 11:49:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E97AA4BF691
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 11:49:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231314AbiBVKtp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 05:49:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51708 "EHLO
+        id S231452AbiBVKtw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 05:49:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230008AbiBVKtn (ORCPT
+        with ESMTP id S231422AbiBVKtr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 05:49:43 -0500
+        Tue, 22 Feb 2022 05:49:47 -0500
 Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98EDDD5556
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 02:49:16 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 489B1156943
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 02:49:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645526956; x=1677062956;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=YpzkHInk1JdMvGDlbPDx+MfCePhgDZ7p6g/YywoiwfQ=;
-  b=n+F0hUZWWZd3doAGeX5+YnxCGHpI/ItCFzsdR3eBHntw5QcVfGzpL0Bs
-   mXiBTdVjZvKTPjgqzNNuYc+totqyQc6jxqNEFn1Y1C+Bn4bkLkqUunrtO
-   jjXGt0hl3IbTE/x2Un93aBK23nI0DJHWVBhzHMLt+lQrgDqHssdIhY/4G
-   6blWDsdzz1g/h8MPXbjo1hFzYt3kQYtjo9D6kImTZRj8VjtZVKWBiKuej
-   ljzIr/Kd8MKPYaGTLwMAegm1ei7hvrDG0Set6gbDTEpoUps+0gJOeROww
-   dKCuUs3oiEffKR5Zo29ZSgfawSwAs9XZGQfok9xHj5yf2x3fEWPlJNKFX
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10265"; a="232288526"
+  t=1645526962; x=1677062962;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=SsYyexNSuf2/lu44Z54F2/PLKKOWl5dU819XF1DWoKM=;
+  b=EyCT1t2783ZdhYg/gp8WXCBzpui327GgxNrcJ/gsZrDmpqT5PlwYiEZb
+   RY8RdipqVhi6CXQVmD6kNHYKSdefHGVoE1NBIm15AYgEpvBcgNuiiF5jU
+   LMCFvtTJIJKQ2i05uPPYO1NIspY4fzP/vNq1CVTffUsKJfqFFFpzpxckB
+   UQCp1q+3yf2U3JSIi0/JsvRF0ho0lTQuGJqXBhECTyp3S8aHSPog0T4xn
+   xy7qP0HP3DAKYK3fk5blG5VQwyUHlF1Z7dvPam71kx1vDOypxvedn/ijO
+   B604xAHXQIh4jp7FVeCHpbK4hIVG8ZdKWvLWyeznScTtNMvY7E/mYYgJx
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10265"; a="232288536"
 X-IronPort-AV: E=Sophos;i="5.88,387,1635231600"; 
-   d="scan'208";a="232288526"
+   d="scan'208";a="232288536"
 Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2022 02:49:16 -0800
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2022 02:49:21 -0800
 X-IronPort-AV: E=Sophos;i="5.88,387,1635231600"; 
-   d="scan'208";a="706569520"
+   d="scan'208";a="706569547"
 Received: from sannilnx.jer.intel.com ([10.12.231.79])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2022 02:49:13 -0800
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2022 02:49:17 -0800
 From:   Alexander Usyskin <alexander.usyskin@intel.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Jani Nikula <jani.nikula@linux.intel.com>,
@@ -49,10 +49,12 @@ Cc:     Tomas Winkler <tomas.winkler@intel.com>,
         Alexander Usyskin <alexander.usyskin@intel.com>,
         Vitaly Lubart <vitaly.lubart@intel.com>,
         intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 0/7] add support for GSC in XeHP SDV platform
-Date:   Tue, 22 Feb 2022 12:48:47 +0200
-Message-Id: <20220222104854.3188643-1-alexander.usyskin@intel.com>
+Subject: [PATCH 1/7] drm/i915/gsc: skip irq initialization if using polling
+Date:   Tue, 22 Feb 2022 12:48:48 +0200
+Message-Id: <20220222104854.3188643-2-alexander.usyskin@intel.com>
 X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20220222104854.3188643-1-alexander.usyskin@intel.com>
+References: <20220222104854.3188643-1-alexander.usyskin@intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -65,47 +67,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for GSC in XeHP SDV (Intel(R) dGPU without display).
+From: Vitaly Lubart <vitaly.lubart@intel.com>
+
+If we use polling instead of interrupts,
+irq initialization should be skipped.
+
+Signed-off-by: Vitaly Lubart <vitaly.lubart@intel.com>
+Signed-off-by: Tomas Winkler <tomas.winkler@intel.com>
+Signed-off-by: Alexander Usyskin <alexander.usyskin@intel.com>
+---
+ drivers/gpu/drm/i915/gt/intel_gsc.c | 10 +++++++---
+ 1 file changed, 7 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/gpu/drm/i915/gt/intel_gsc.c b/drivers/gpu/drm/i915/gt/intel_gsc.c
+index 152804e7c41a..db01cfda78f1 100644
+--- a/drivers/gpu/drm/i915/gt/intel_gsc.c
++++ b/drivers/gpu/drm/i915/gt/intel_gsc.c
+@@ -40,6 +40,7 @@ struct intel_gsc_def {
+ 	const char *name;
+ 	unsigned long bar;
+ 	size_t bar_size;
++	bool use_polling;
+ };
  
-XeHP SDV GSC controller uses the same hardware settings as DG1, but uses
-polling instead of interrupts and runs the firmware in slow pace due to
-hardware limitations.
-
-This series should be applied over "Add driver for GSC controller"
-patch series.
-
-Greg KH, please review and ACK the MEI patches.
-We are pushing all through gfx tree as the device belongs there.
-
-Alexander Usyskin (5):
-  drm/i915/gsc: add slow_fw flag to the mei auxiliary device
-  drm/i915/gsc: add slow_fw flag to the gsc device definition
-  drm/i915/gsc: add GSC XeHP SDV platform definition
-  mei: gsc: wait for reset thread on stop
-  mei: extend timeouts on slow devices.
-
-Tomas Winkler (1):
-  mei: gsc: use polling instead of interrupts
-
-Vitaly Lubart (1):
-  drm/i915/gsc: skip irq initialization if using polling
-
- drivers/gpu/drm/i915/gt/intel_gsc.c | 34 +++++++++--
- drivers/misc/mei/bus-fixup.c        |  3 +-
- drivers/misc/mei/client.c           | 14 ++---
- drivers/misc/mei/gsc-me.c           | 44 ++++++++++++---
- drivers/misc/mei/hbm.c              | 12 ++--
- drivers/misc/mei/hw-me.c            | 88 +++++++++++++++++++++++------
- drivers/misc/mei/hw-me.h            | 14 ++++-
- drivers/misc/mei/hw-txe.c           |  2 +-
- drivers/misc/mei/hw.h               |  5 ++
- drivers/misc/mei/init.c             | 21 ++++++-
- drivers/misc/mei/main.c             |  2 +-
- drivers/misc/mei/mei_dev.h          | 16 ++++++
- drivers/misc/mei/pci-me.c           |  2 +-
- include/linux/mei_aux.h             |  1 +
- 14 files changed, 208 insertions(+), 50 deletions(-)
-
+ /* gscfi (graphics system controller firmware interface) resources */
+@@ -97,6 +98,10 @@ static void intel_gsc_init_one(struct drm_i915_private *i915,
+ 		return;
+ 	}
+ 
++	/* skip irq initialization */
++	if (def->use_polling)
++		goto add_device;
++
+ 	intf->irq = irq_alloc_desc(0);
+ 	if (intf->irq < 0) {
+ 		drm_err(&i915->drm, "gsc irq error %d\n", intf->irq);
+@@ -109,6 +114,7 @@ static void intel_gsc_init_one(struct drm_i915_private *i915,
+ 		goto fail;
+ 	}
+ 
++add_device:
+ 	adev = kzalloc(sizeof(*adev), GFP_KERNEL);
+ 	if (!adev)
+ 		goto fail;
+@@ -162,10 +168,8 @@ static void gsc_irq_handler(struct intel_gt *gt, unsigned int intf_id)
+ 		return;
+ 	}
+ 
+-	if (gt->gsc.intf[intf_id].irq < 0) {
+-		drm_err_ratelimited(&gt->i915->drm, "GSC irq: irq not set");
++	if (gt->gsc.intf[intf_id].irq < 0)
+ 		return;
+-	}
+ 
+ 	ret = generic_handle_irq(gt->gsc.intf[intf_id].irq);
+ 	if (ret)
 -- 
 2.32.0
 

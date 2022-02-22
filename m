@@ -2,54 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8CA64C028D
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 20:57:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 09AB84C0292
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 20:58:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235351AbiBVT5c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 14:57:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58074 "EHLO
+        id S235345AbiBVT7A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 14:59:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235312AbiBVT53 (ORCPT
+        with ESMTP id S230522AbiBVT65 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 14:57:29 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4D1EA8EC8;
-        Tue, 22 Feb 2022 11:57:03 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8DFC2B81C64;
-        Tue, 22 Feb 2022 19:57:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E95C2C340E8;
-        Tue, 22 Feb 2022 19:57:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645559821;
-        bh=IRRUSdLETAOrVQqHjzSOULYJd8z2xUvczM2ffIfQJO8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=RprbaORm3tXLLYNuyG+hAlHiHwMGMzmWW+64ONeTyE+H7NyvjSA/HfcYkHJIILnfR
-         aZ6YA9SRbz7M9HsgSbsHLf7n7Q0wL76LTefx4iKLDhtn4nXSF/cnRzV13lL+uK1arP
-         DxS3KPBDDnPhbaD4oogYVGAUhl1Df+HneQYC3Ve0qG/KcSY+j/9N5T0+BV9eLG01CW
-         AJd+HRYMHOsC+mg5CvOkr0YTtvhl1BTNNEDhjgu8LvrftkOy+qzWYzmSsM2LIMPKIu
-         HAwVdxCdGKOJEvLKb5WnQIS8J5nz3sfagv1oFDXvIC0j9oS8Cn9OmY9J1075Gt+60w
-         1PLxYd10AtETA==
-Date:   Tue, 22 Feb 2022 11:56:59 -0800
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Keith Busch <kbusch@kernel.org>
-Cc:     linux-nvme@lists.infradead.org, linux-block@vger.kernel.org,
-        linux-crypto@vger.kernel.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, axboe@kernel.dk, hch@lst.de,
-        martin.petersen@oracle.com, colyli@suse.de
-Subject: Re: [PATCHv3 06/10] crypto: add rocksoft 64b crc framework
-Message-ID: <YhVACzTEylUg5LJx@sol.localdomain>
-References: <20220222163144.1782447-1-kbusch@kernel.org>
- <20220222163144.1782447-7-kbusch@kernel.org>
+        Tue, 22 Feb 2022 14:58:57 -0500
+Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D6781DE2D8;
+        Tue, 22 Feb 2022 11:58:30 -0800 (PST)
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1nMbIs-0006bB-00; Tue, 22 Feb 2022 20:58:30 +0100
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id 9ABD8C26B8; Tue, 22 Feb 2022 20:58:06 +0100 (CET)
+Date:   Tue, 22 Feb 2022 20:58:06 +0100
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     linux-mips <linux-mips@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] MIPS: Handle address errors for accesses above CPU max
+ virtual user address
+Message-ID: <20220222195806.GA17107@alpha.franken.de>
+References: <20220222155345.138861-1-tsbogend@alpha.franken.de>
+ <CAK8P3a0QV7y_gFv=VHGKVWjXyYmFFZRrXj3m52d21Fyydib4NQ@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220222163144.1782447-7-kbusch@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <CAK8P3a0QV7y_gFv=VHGKVWjXyYmFFZRrXj3m52d21Fyydib4NQ@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_HELO_PERMERROR autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,31 +44,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 22, 2022 at 08:31:40AM -0800, Keith Busch wrote:
-> Hardware specific features may be able to calculate a crc64, so provide
-> a framework for drivers to register their implementation. If nothing is
-> registered, fallback to the generic table lookup implementation. The
-> implementation is modeled after the crct10dif equivalent.
+On Tue, Feb 22, 2022 at 06:04:07PM +0100, Arnd Bergmann wrote:
+> On Tue, Feb 22, 2022 at 4:53 PM Thomas Bogendoerfer
+> <tsbogend@alpha.franken.de> wrote:
+> >
+> > Address errors have always been treated as unaliged accesses and handled
+> > as such. But address errors are also issued for illegal accesses like
+> > user to kernel space or accesses outside of implemented spaces. This
+> > change implements Linux exception handling for accesses to the illegal
+> > space above the CPU implemented maximum virtual user address and the
+> > MIPS 64bit architecture maximum. With this we can now use a fixed value
+> > for the maximum task size on every MIPS CPU and get a more optimized
+> > access_ok().
+> >
+> > Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 > 
-> Signed-off-by: Keith Busch <kbusch@kernel.org>
-> ---
->  crypto/Kconfig                  |   9 +++
->  crypto/Makefile                 |   1 +
->  crypto/crc64_rocksoft_generic.c | 104 +++++++++++++++++++++++++
->  include/linux/crc64.h           |   5 ++
->  lib/Kconfig                     |   9 +++
->  lib/Makefile                    |   1 +
->  lib/crc64-rocksoft.c            | 129 ++++++++++++++++++++++++++++++++
->  7 files changed, 258 insertions(+)
->  create mode 100644 crypto/crc64_rocksoft_generic.c
->  create mode 100644 lib/crc64-rocksoft.c
+> Thank you for addressing this. Should I add this patch to my series
+> ahead of "mips: use simpler access_ok()"? That way I can keep it all
+> in my asm-generic tree as a series for 5.18.
 
-I tried testing this, but I can't because it is missing a self-test:
+yes please add it to your series.
 
-[    0.736340] alg: No test for crc64-rocksoft (crc64-rocksoft-generic)
-[    5.440398] alg: No test for crc64-rocksoft (crc64-rocksoft-pclmul)
+> >  arch/mips/kernel/unaligned.c | 17 +++++++++++++++++
+> >  1 file changed, 17 insertions(+)
+> >
+> > diff --git a/arch/mips/kernel/unaligned.c b/arch/mips/kernel/unaligned.c
+> > index df4b708c04a9..7b5aba5df02e 100644
+> > --- a/arch/mips/kernel/unaligned.c
+> > +++ b/arch/mips/kernel/unaligned.c
+> > @@ -1480,6 +1480,23 @@ asmlinkage void do_ade(struct pt_regs *regs)
+> >         prev_state = exception_enter();
+> >         perf_sw_event(PERF_COUNT_SW_ALIGNMENT_FAULTS,
+> >                         1, regs, regs->cp0_badvaddr);
+> > +
+> > +#ifdef CONFIG_64BIT
+> > +       /*
+> > +        * check, if we are hitting space between CPU implemented maximum
+> > +        * virtual user address and 64bit maximum virtual user address
+> > +        * and do exception handling to get EFAULTs for get_user/put_user
+> > +        */
+> > +       if ((regs->cp0_badvaddr >= (1UL << cpu_vmbits)) &&
+> > +           (regs->cp0_badvaddr < XKSSEG)) {
+> 
+> It might be clearer to use TASK_SIZE_MAX here instead of XKSSEG,
+> to match the check in access_ok(). If you like, I can change that while
+> applying.
 
-All algorithms registered with the crypto API need to have a self-test
-(in crypto/testmgr.c).
+I had TASK_SIZE_MAX in an intermediate version, but decided to go with XKSSEG,
+because it's what this check is about. It's about checking what the MIPS
+architecture defined.
 
-- Eric
+Thomas.
+
+-- 
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]

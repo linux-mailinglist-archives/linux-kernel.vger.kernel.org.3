@@ -2,55 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAC4D4BF693
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 11:49:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE4444BF6A3
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 11:51:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231485AbiBVKtu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 05:49:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52158 "EHLO
+        id S229485AbiBVKu5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 05:50:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230008AbiBVKtq (ORCPT
+        with ESMTP id S231533AbiBVKuz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 05:49:46 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9F47C085A;
-        Tue, 22 Feb 2022 02:49:20 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id D8A971F41027
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1645526959;
-        bh=TpRiUd7AL73EBQsM0SJNQxUrB36YF2YMbGieardk/+k=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=cu9jRc8W3tQAgoKDyPqKIA00eaYPYaRG2nU5KgMaxhcZG9Hz3ZTWXLNhzq/SYtdIz
-         55ZWHqvIHS8HM9Qzxx14GBxEDxcRkQXDIc9J7vbRgz/p3hW2hyCxjnyrg9G531evir
-         J99v95OzGdgSJC6tz/G6+XpuN60Yxmr2rp2D6K8kmkGXOmnh9AbAnHLLAoD9aBgGJU
-         Y7xOjC1Ny/Fuh4miSKiqfZcrvfzMTUgS7hQ8eg8ahzoU9oHt3+nNx/lXgXiss1H4Zh
-         NUtObhA+fFB1tWP80eBMFMH4q3JLTbBtyskE9JJieJNdNxirxPR42uym4ZPvcrSut3
-         CN2f2QSntDrgQ==
-Message-ID: <2e994be0-8b60-a3dc-2ab7-34d93192dc09@collabora.com>
-Date:   Tue, 22 Feb 2022 11:49:16 +0100
+        Tue, 22 Feb 2022 05:50:55 -0500
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4925115C9F3
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 02:50:30 -0800 (PST)
+Received: by mail-pj1-x1035.google.com with SMTP id v4so18065989pjh.2
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 02:50:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=5xXqSAHagTJE559oaHlLg/c+Ad153OGfu++AbH4hfUg=;
+        b=OrsEBm7pYEKVo7jsPe5iEQgv05yoY6LM/3nzwZfwEc0v+O1p7b0nqzk1rpVF3+j3xe
+         jWqHh6tOYIuqpKa7TgO3hnCugDGGSAqLYOnoXMTemq4l6Y6vHSp5pVOWAGXWLBzO6EqA
+         mhvFHUJYwbvAuYmrLfBHDKdz66c/2vjQEWt35H01fAWsewYejDNjU7/gJUJ2OIKd/5CQ
+         KeYs81u+9yaLCon4PhyrQ+LpvXO4Fy54vfPvW2OZZYzOIRB/moqLPG2ssQR5vgXMP/Mp
+         0NDqIp/m5d26fo05wORFLxVQDJ5b6bKpPB9CIcusKEiGfiaiauIS1i2xyo9i2oEG/i7V
+         77Jg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=5xXqSAHagTJE559oaHlLg/c+Ad153OGfu++AbH4hfUg=;
+        b=Qx+gRNXNEzNATTByS9m6CWVYgLgiayYeT7eaLT6o1ghcyDd1Mu3rMWfSGS9DNz5Mse
+         OWcMOkRatNKO6hXIPluRf+0BU0X9sF3jvFl+qsaNPinJOgDHYF+HfoXzB0iwuIVKYdUN
+         bRm08fBlusvoWhNSbN7RD4KnrSRE0RJ4uX/Hs6yWCk90JDbm6nvljsRJm+4QnQ7pp4tt
+         rYBa8XQWaEBpwh7O2nEJMYRgKLmx7IC51GnUbHkm6pblEZ8vrre1sUPKpRAw5bGA2arC
+         PMqDLUOW4Ig4uHQ5NcRJ9uUO4e/rNO8KFicYbRCCAga8nDCgsJP72FnP5Z0YQSrg2w/N
+         7EGg==
+X-Gm-Message-State: AOAM532svDdg5ho4vtns8RvW8+kGNHAjqYKMYuW+6fYCCxgOZxT5Gjwv
+        X3Enh5rb62+wV2Bacs+v66e5
+X-Google-Smtp-Source: ABdhPJzZA3ZxDPNU12CTVzpzjl2/dqPRLeN5wlC8uzUVshTTZKvXpplM4yqxqutaEaPsHx19Mx065w==
+X-Received: by 2002:a17:90b:240e:b0:1b9:2963:d5a1 with SMTP id nr14-20020a17090b240e00b001b92963d5a1mr3495898pjb.227.1645527029752;
+        Tue, 22 Feb 2022 02:50:29 -0800 (PST)
+Received: from thinkpad ([117.217.186.202])
+        by smtp.gmail.com with ESMTPSA id c1sm8539189pfl.130.2022.02.22.02.50.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Feb 2022 02:50:29 -0800 (PST)
+Date:   Tue, 22 Feb 2022 16:20:23 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Alex Elder <elder@linaro.org>
+Cc:     mhi@lists.linux.dev, quic_hemantk@quicinc.com,
+        quic_bbhatt@quicinc.com, quic_jhugo@quicinc.com,
+        vinod.koul@linaro.org, bjorn.andersson@linaro.org,
+        dmitry.baryshkov@linaro.org, quic_vbadigan@quicinc.com,
+        quic_cang@quicinc.com, quic_skananth@quicinc.com,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 22/25] bus: mhi: ep: Add support for processing
+ transfer ring
+Message-ID: <20220222105023.GG5029@thinkpad>
+References: <20220212182117.49438-1-manivannan.sadhasivam@linaro.org>
+ <20220212182117.49438-23-manivannan.sadhasivam@linaro.org>
+ <f91de912-977b-4e78-2e8c-12f4c09134bd@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH V2 4/6] spi: mediatek: add spi memory support
-Content-Language: en-US
-To:     Leilk Liu <leilk.liu@mediatek.com>, Mark Brown <broonie@kernel.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
-        linux-mediatek@lists.infradead.org
-References: <20220221040717.3729-1-leilk.liu@mediatek.com>
- <20220221040717.3729-5-leilk.liu@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220221040717.3729-5-leilk.liu@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f91de912-977b-4e78-2e8c-12f4c09134bd@linaro.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,355 +77,113 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 21/02/22 05:07, Leilk Liu ha scritto:
-> this patch add the support of spi-mem.
+On Tue, Feb 15, 2022 at 04:40:18PM -0600, Alex Elder wrote:
+> On 2/12/22 12:21 PM, Manivannan Sadhasivam wrote:
+> > Add support for processing the transfer ring from host. For the transfer
+> > ring associated with DL channel, the xfer callback will simply invoked.
+> > For the case of UL channel, the ring elements will be read in a buffer
+> > till the write pointer and later passed to the client driver using the
+> > xfer callback.
+> > 
+> > The client drivers should provide the callbacks for both UL and DL
+> > channels during registration.
 > 
-> Signed-off-by: Leilk Liu <leilk.liu@mediatek.com>
-> ---
->   drivers/spi/spi-mt65xx.c | 310 ++++++++++++++++++++++++++++++++++++++-
->   1 file changed, 309 insertions(+), 1 deletion(-)
+> I think you already checked and guaranteed that.
 > 
-> diff --git a/drivers/spi/spi-mt65xx.c b/drivers/spi/spi-mt65xx.c
-> index 5fa677a589a4..852fc008329a 100644
-> --- a/drivers/spi/spi-mt65xx.c
-> +++ b/drivers/spi/spi-mt65xx.c
-> @@ -17,6 +17,7 @@
->   #include <linux/platform_data/spi-mt65xx.h>
->   #include <linux/pm_runtime.h>
->   #include <linux/spi/spi.h>
-> +#include <linux/spi/spi-mem.h>
->   #include <linux/dma-mapping.h>
->   
->   #define SPI_CFG0_REG                      0x0000
-> @@ -75,8 +76,21 @@
->   #define SPI_CMD_IPM_GET_TICKDLY_OFFSET    22
->   
->   #define SPI_CMD_IPM_GET_TICKDLY_MASK	GENMASK(24, 22)
-> +
-> +#define PIN_MODE_CFG(x)	((x) / 2)
-> +
-> +#define SPI_CFG3_IPM_PIN_MODE_OFFSET		0
->   #define SPI_CFG3_IPM_HALF_DUPLEX_DIR		BIT(2)
->   #define SPI_CFG3_IPM_HALF_DUPLEX_EN		BIT(3)
-> +#define SPI_CFG3_IPM_XMODE_EN			BIT(4)
-> +#define SPI_CFG3_IPM_NODATA_FLAG		BIT(5)
-> +#define SPI_CFG3_IPM_CMD_BYTELEN_OFFSET		8
-> +#define SPI_CFG3_IPM_ADDR_BYTELEN_OFFSET	12
-> +
-> +#define SPI_CFG3_IPM_CMD_PIN_MODE_MASK		GENMASK(1, 0)
-> +#define SPI_CFG3_IPM_CMD_BYTELEN_MASK		GENMASK(11, 8)
-> +#define SPI_CFG3_IPM_ADDR_BYTELEN_MASK		GENMASK(15, 12)
-> +
->   #define MT8173_SPI_MAX_PAD_SEL 3
->   
->   #define MTK_SPI_PAUSE_INT_STATUS 0x2
-> @@ -87,6 +101,8 @@
->   #define MTK_SPI_MAX_FIFO_SIZE 32U
->   #define MTK_SPI_PACKET_SIZE 1024
->   #define MTK_SPI_IPM_PACKET_SIZE SZ_64K
-> +#define MTK_SPI_IPM_PACKET_LOOP SZ_256
-> +
->   #define MTK_SPI_32BITS_MASK  (0xffffffff)
->   
->   #define DMA_ADDR_EXT_BITS (36)
-> @@ -104,7 +120,8 @@ struct mtk_spi_compatible {
->   	bool no_need_unprepare;
->   	/* IPM design improve some single mode features */
->   	bool ipm_design;
-> -
-> +	/* IPM design that support quad mode */
-> +	bool support_quad;
->   };
->   
->   struct mtk_spi {
-> @@ -120,6 +137,11 @@ struct mtk_spi {
->   	u32 tx_sgl_len, rx_sgl_len;
->   	const struct mtk_spi_compatible *dev_comp;
->   	u32 spi_clk_hz;
-> +	struct completion spimem_done;
-> +	bool use_spimem;
-> +	struct device *dev;
-> +	dma_addr_t tx_dma;
-> +	dma_addr_t rx_dma;
->   };
->   
->   static const struct mtk_spi_compatible mtk_common_compat;
-> @@ -134,6 +156,13 @@ static const struct mtk_spi_compatible ipm_compat_single = {
->   	.ipm_design = true,
->   };
->   
-> +static const struct mtk_spi_compatible ipm_compat_quad = {
-> +	.enhance_timing = true,
-> +	.dma_ext = true,
-> +	.ipm_design = true,
-> +	.support_quad = true,
-> +};
-> +
->   static const struct mtk_spi_compatible mt6765_compat = {
->   	.need_pad_sel = true,
->   	.must_tx = true,
-> @@ -178,6 +207,9 @@ static const struct of_device_id mtk_spi_of_match[] = {
->   	{ .compatible = "mediatek,ipm-spi-single",
->   		.data = (void *)&ipm_compat_single,
->   	},
-> +	{ .compatible = "mediatek,ipm-spi-quad",
-> +		.data = (void *)&ipm_compat_quad,
-> +	},
->   	{ .compatible = "mediatek,mt2701-spi",
->   		.data = (void *)&mtk_common_compat,
->   	},
-> @@ -694,6 +726,13 @@ static irqreturn_t mtk_spi_interrupt(int irq, void *dev_id)
->   	else
->   		mdata->state = MTK_SPI_IDLE;
->   
-> +	/* SPI-MEM ops */
-> +	if (mdata->use_spimem) {
-> +		complete(&mdata->spimem_done);
-> +
-> +		return IRQ_HANDLED;
-> +	}
-> +
+> I have a question and suggestion below.  But it could
+> be considered an optimization that could be implemented
+> in the future, so:
+> 
+> Reviewed-by: Alex Elder <elder@linaro.org>
+> 
+> > 
+> > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> > ---
+> >   drivers/bus/mhi/ep/main.c | 49 +++++++++++++++++++++++++++++++++++++++
+> >   1 file changed, 49 insertions(+)
+> > 
+> > diff --git a/drivers/bus/mhi/ep/main.c b/drivers/bus/mhi/ep/main.c
+> > index b937c6cda9ba..baf383a4857b 100644
+> > --- a/drivers/bus/mhi/ep/main.c
+> > +++ b/drivers/bus/mhi/ep/main.c
+> > @@ -439,6 +439,55 @@ static int mhi_ep_read_channel(struct mhi_ep_cntrl *mhi_cntrl,
+> >   	return 0;
+> >   }
+> > +int mhi_ep_process_tre_ring(struct mhi_ep_ring *ring, struct mhi_ep_ring_element *el)
+> > +{
+> > +	struct mhi_ep_cntrl *mhi_cntrl = ring->mhi_cntrl;
+> > +	struct mhi_result result = {};
+> > +	u32 len = MHI_EP_DEFAULT_MTU;
+> > +	struct mhi_ep_chan *mhi_chan;
+> > +	int ret;
+> > +
+> > +	mhi_chan = &mhi_cntrl->mhi_chan[ring->ch_id];
+> > +
+> > +	/*
+> > +	 * Bail out if transfer callback is not registered for the channel.
+> > +	 * This is most likely due to the client driver not loaded at this point.
+> > +	 */
+> > +	if (!mhi_chan->xfer_cb) {
+> > +		dev_err(&mhi_chan->mhi_dev->dev, "Client driver not available\n");
+> > +		return -ENODEV;
+> > +	}
+> > +
+> > +	if (ring->ch_id % 2) {
+> > +		/* DL channel */
+> > +		result.dir = mhi_chan->dir;
+> > +		mhi_chan->xfer_cb(mhi_chan->mhi_dev, &result);
+> > +	} else {
+> > +		/* UL channel */
+> > +		do {
+> > +			result.buf_addr = kzalloc(len, GFP_KERNEL);
+> 
+> So you allocate an 8KB buffer into which you copy
+> received data, then pass that to the ->xfer_cb()
+> function.  Then you free that buffer.  Repeatedly.
+> 
+> Two questions about this:
+> - This suggests that after copying the data in, the
+>   ->xfer_cb() function will copy it again, is that
+>   correct?
+> - If that is correct, why not just reuse the same 8KB
+>   buffer, allocated once outside the loop?
+> 
 
-I would instead make a new ISR for the SPI-MEM case... as you're bypassing the
-entire mtk_spi_interrupt() function like that.
+The allocation was moved into the loop so that the TRE length buffer could be
+allocated but I somehow decided to allocate the Max length buffer. So this could
+be moved outside of the loop.
 
-Example:
+Thanks,
+Mani
 
-static void mtk_spi_check_and_set_state(struct mtk_spi *mdata)
-{
-	u32 reg_val;
-
-	reg_val = readl(mdata->base + SPI_STATUS0_REG);
-
-	if (reg_val & MTK_SPI_PAUSE_INT_STATUS)
-
-		mdata->state = MTK_SPI_PAUSED;
-
-	else
-
-		mdata->state = MTK_SPI_IDLE;
-}
-
-static irqreturn_t mtk_spi_interrupt(int irq, void *dev_id)
-
-{
-	u32 cmd, reg_val, cnt, remainder, len;
-
-	struct spi_master *master = dev_id;
-
-	struct mtk_spi *mdata = spi_master_get_devdata(master);
-
-	struct spi_transfer *trans = mdata->cur_transfer;
-
-	mtk_spi_check_and_set_state(mdata);
-
-	if (!master->can_dma(........
-	.... blurb...
-}
-
-static irqreturn_t mtk_spimem_interrupt(int irq, void *dev_id)
-{
-	struct spi_master *master = dev_id;
-
-	struct mtk_spi *mdata = spi_master_get_devdata(master);
-
-	mtk_spi_check_and_set_state(mdata);
-	complete(&mdata->spimem_done);
-
-	return IRQ_HANDLED;
-}
-
-... of course, in mtk_spi_probe(), you would do something like
-
-if (mdata->use_spimem)
-	ret = devm_request_irq(&pdev->dev, irq, mtk_spimem_interrupt,
-		...... blah ......
-else
-	ret = devm_request_irq(&pdev->dev, irq, mtk_spi_interrupt,
-		..... blah ......
-
-This way, you're separating the two - increasing human readability and showing
-the simplifications (in that regard) in the IPM IP's SPI-MEM handling.
-
->   	if (!master->can_dma(master, NULL, trans)) {
->   		if (trans->rx_buf) {
->   			cnt = mdata->xfer_len / 4;
-> @@ -777,6 +816,266 @@ static irqreturn_t mtk_spi_interrupt(int irq, void *dev_id)
->   	return IRQ_HANDLED;
->   }
->   
-> +static int mtk_spi_mem_adjust_op_size(struct spi_mem *mem,
-> +				      struct spi_mem_op *op)
-> +{
-> +	int opcode_len;
-> +
-> +	if (op->data.dir != SPI_MEM_NO_DATA) {
-> +		opcode_len = 1 + op->addr.nbytes + op->dummy.nbytes;
-> +		if (opcode_len + op->data.nbytes > MTK_SPI_IPM_PACKET_SIZE) {
-> +			op->data.nbytes = MTK_SPI_IPM_PACKET_SIZE - opcode_len;
-> +			/* force data buffer dma-aligned. */
-> +			op->data.nbytes -= op->data.nbytes % 4;
-> +		}
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static bool mtk_spi_mem_supports_op(struct spi_mem *mem,
-> +				    const struct spi_mem_op *op)
-> +{
-> +	if (op->data.buswidth > 4 || op->addr.buswidth > 4 ||
-> +	    op->dummy.buswidth > 4 || op->cmd.buswidth > 4)
-> +		return false;
-> +
-> +	if (op->addr.nbytes && op->dummy.nbytes &&
-> +	    op->addr.buswidth != op->dummy.buswidth)
-> +		return false;
-> +
-> +	if (op->addr.nbytes + op->dummy.nbytes > 16)
-> +		return false;
-> +
-> +	if (op->data.nbytes > MTK_SPI_IPM_PACKET_SIZE) {
-> +		if (op->data.nbytes / MTK_SPI_IPM_PACKET_SIZE >
-> +		    MTK_SPI_IPM_PACKET_LOOP ||
-> +		    op->data.nbytes % MTK_SPI_IPM_PACKET_SIZE != 0)
-> +			return false;
-> +	}
-> +
-> +	return true;
-> +}
-> +
-> +static void mtk_spi_mem_setup_dma_xfer(struct spi_master *master,
-> +				       const struct spi_mem_op *op)
-> +{
-> +	struct mtk_spi *mdata = spi_master_get_devdata(master);
-> +
-> +	writel((u32)(mdata->tx_dma & MTK_SPI_32BITS_MASK),
-> +	       mdata->base + SPI_TX_SRC_REG);
-> +#ifdef CONFIG_ARCH_DMA_ADDR_T_64BIT
-> +	if (mdata->dev_comp->dma_ext)
-> +		writel((u32)(mdata->tx_dma >> 32),
-> +		       mdata->base + SPI_TX_SRC_REG_64);
-> +#endif
-> +
-> +	if (op->data.dir == SPI_MEM_DATA_IN) {
-> +		writel((u32)(mdata->rx_dma & MTK_SPI_32BITS_MASK),
-> +		       mdata->base + SPI_RX_DST_REG);
-> +#ifdef CONFIG_ARCH_DMA_ADDR_T_64BIT
-> +		if (mdata->dev_comp->dma_ext)
-> +			writel((u32)(mdata->rx_dma >> 32),
-> +			       mdata->base + SPI_RX_DST_REG_64);
-> +#endif
-> +	}
-> +}
-> +
-> +static int mtk_spi_transfer_wait(struct spi_mem *mem,
-> +				 const struct spi_mem_op *op)
-> +{
-> +	struct mtk_spi *mdata = spi_master_get_devdata(mem->spi->master);
-> +	unsigned long long ms = 1;
-
-Initializing ms to 1 here is useless, as you're anyway reinitializing it
-right after. I would do it as following:
-
-u64 ms = 8000LL;
-
-if (op->data.dir == SPI_MEM_NO_DATA)
-	ms *= 32;
-else
-	ms *= op->data.nbytes;
-
-Besides, can you please add a comment to the code explaining why the
-reason for the waits (why 8, why 1000, why 32)?
-
-> +
-> +	if (op->data.dir == SPI_MEM_NO_DATA)
-> +		ms = 8LL * 1000LL * 32;
-> +	else
-> +		ms = 8LL * 1000LL * op->data.nbytes;
-> +	do_div(ms, mem->spi->max_speed_hz);
-
-I appreciate the usage of safe division helpers, but this is the wrong one:
-you have a unsigned long long (64-bits) dividend and a u32 divisor, so the
-right function to use here is div_u64().
-
-	ms = div_u64(ms, mem->spi->max_speed_hz);
-
-> +	ms += ms + 1000; /* 1s tolerance */
-> +
-> +	if (ms > UINT_MAX)
-> +		ms = UINT_MAX;
-> +
-> +	if (!wait_for_completion_timeout(&mdata->spimem_done,
-> +					 msecs_to_jiffies(ms))) {
-> +		dev_err(mdata->dev, "spi-mem transfer timeout\n");
-> +		return -ETIMEDOUT;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static int mtk_spi_mem_exec_op(struct spi_mem *mem,
-> +			       const struct spi_mem_op *op)
-> +{
-> +	struct mtk_spi *mdata = spi_master_get_devdata(mem->spi->master);
-> +	u32 reg_val, nio = 1, tx_size;
-> +	char *tx_tmp_buf, *rx_tmp_buf;
-> +	int ret = 0;
-> +
-> +	mdata->use_spimem = true;
-> +	reinit_completion(&mdata->spimem_done);
-> +
-> +	mtk_spi_reset(mdata);
-> +	mtk_spi_hw_init(mem->spi->master, mem->spi);
-> +	mtk_spi_prepare_transfer(mem->spi->master, mem->spi->max_speed_hz);
-> +
-> +	reg_val = readl(mdata->base + SPI_CFG3_IPM_REG);
-> +	/* opcode byte len */
-> +	reg_val &= ~SPI_CFG3_IPM_CMD_BYTELEN_MASK;
-> +	reg_val |= 1 << SPI_CFG3_IPM_CMD_BYTELEN_OFFSET;
-> +
-> +	/* addr & dummy byte len */
-> +	reg_val &= ~SPI_CFG3_IPM_ADDR_BYTELEN_MASK;
-> +	if (op->addr.nbytes || op->dummy.nbytes)
-> +		reg_val |= (op->addr.nbytes + op->dummy.nbytes) <<
-> +			    SPI_CFG3_IPM_ADDR_BYTELEN_OFFSET;
-> +
-> +	/* data byte len */
-> +	if (op->data.dir == SPI_MEM_NO_DATA) {
-> +		reg_val |= SPI_CFG3_IPM_NODATA_FLAG;
-> +		writel(0, mdata->base + SPI_CFG1_REG);
-> +	} else {
-> +		reg_val &= ~SPI_CFG3_IPM_NODATA_FLAG;
-> +		mdata->xfer_len = op->data.nbytes;
-> +		mtk_spi_setup_packet(mem->spi->master);
-> +	}
-> +
-> +	if (op->addr.nbytes || op->dummy.nbytes) {
-> +		if (op->addr.buswidth == 1 || op->dummy.buswidth == 1)
-> +			reg_val |= SPI_CFG3_IPM_XMODE_EN;
-> +		else
-> +			reg_val &= ~SPI_CFG3_IPM_XMODE_EN;
-> +	}
-> +
-> +	if (op->addr.buswidth == 2 ||
-> +	    op->dummy.buswidth == 2 ||
-> +	    op->data.buswidth == 2)
-> +		nio = 2;
-> +	else if (op->addr.buswidth == 4 ||
-> +		 op->dummy.buswidth == 4 ||
-> +		 op->data.buswidth == 4)
-> +		nio = 4;
-
-	else
-		nio = 1;
-
-...so that you can avoid double initialization of the `nio` variable.
-
-> +
-> +	reg_val &= ~SPI_CFG3_IPM_CMD_PIN_MODE_MASK;
-> +	reg_val |= PIN_MODE_CFG(nio) << SPI_CFG3_IPM_PIN_MODE_OFFSET;
-> +
-
-Regards,
-Angelo
+> It might also be nice to consider whether you could
+> allocate the buffer here and have the ->xfer_cb()
+> function be responsible for freeing it (and ideally,
+> pass it along rather than copying it again).
+> 
+> > +			if (!result.buf_addr)
+> > +				return -ENOMEM;
+> > +
+> > +			ret = mhi_ep_read_channel(mhi_cntrl, ring, &result, len);
+> > +			if (ret < 0) {
+> > +				dev_err(&mhi_chan->mhi_dev->dev, "Failed to read channel\n");
+> > +				kfree(result.buf_addr);
+> > +				return ret;
+> > +			}
+> > +
+> > +			result.dir = mhi_chan->dir;
+> > +			mhi_chan->xfer_cb(mhi_chan->mhi_dev, &result);
+> > +			kfree(result.buf_addr);
+> > +			result.bytes_xferd = 0;
+> > +
+> > +			/* Read until the ring becomes empty */
+> > +		} while (!mhi_ep_queue_is_empty(mhi_chan->mhi_dev, DMA_TO_DEVICE));
+> > +	}
+> > +
+> > +	return 0;
+> > +}
+> > +
+> >   static int mhi_ep_cache_host_cfg(struct mhi_ep_cntrl *mhi_cntrl)
+> >   {
+> >   	struct device *dev = &mhi_cntrl->mhi_dev->dev;
+> 

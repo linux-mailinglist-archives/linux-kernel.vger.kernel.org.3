@@ -2,78 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABBA04BF3B6
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 09:33:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C32FE4BF3C1
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 09:35:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229728AbiBVIeM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 03:34:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35932 "EHLO
+        id S229867AbiBVIfg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 03:35:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbiBVIeK (ORCPT
+        with ESMTP id S229674AbiBVIff (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 03:34:10 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 96E64118615
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 00:33:44 -0800 (PST)
+        Tue, 22 Feb 2022 03:35:35 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A521C158EA9
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 00:35:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1645518823;
+        s=mimecast20190719; t=1645518909;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=ibCyDResb91RovUnBv8GIoexbZJ5js81Fq9QJozqMIw=;
-        b=dsMN4o8Eh2bwFeDVuP7R3Sy/ELPVwXgoAbMrcRe3g3zzIbRKDxA0mNGmpvSZ6wMpW2vq0K
-        w3VGy4Ft29YA3Rq4vn9uUWRwdQYZwwr27qVKb0DJl/oQ4+5ZYZX3CVQ6MpTtelusJqKxa2
-        xFS9aqlHRmhYQoAjJ8RSjPd0N+ytgFg=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=E30WgXgAZRS6lQUJeUsCZdCeBdcikCP7h9EfQ36uBTo=;
+        b=UJMzrzulJM+sJcwYbHJ7oHygzi6LHm2GPOWWkp8P9E2wBv6YBEGMbFbr4cFubqKiuUOdZZ
+        WWWs+4WvIobdLTQMQJuNtl2SRcTfep1422bJql3B1s/ySvb5xOwvpW+rBa7xovpQ9VBf7s
+        z8uJNIENFv1/EpH+NQ5+6BREwyFPGyA=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-645-TN4fW3xkMFGoH4DHpuiqFQ-1; Tue, 22 Feb 2022 03:33:41 -0500
-X-MC-Unique: TN4fW3xkMFGoH4DHpuiqFQ-1
-Received: by mail-wm1-f70.google.com with SMTP id i20-20020a05600c051400b00380d5eb51a7so233453wmc.3
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 00:33:41 -0800 (PST)
+ us-mta-280-M3tk53M-O7qor1BsREbWMg-1; Tue, 22 Feb 2022 03:35:08 -0500
+X-MC-Unique: M3tk53M-O7qor1BsREbWMg-1
+Received: by mail-wr1-f69.google.com with SMTP id g11-20020adfa48b000000b001e57dfb3c38so8583809wrb.2
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 00:35:07 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=ibCyDResb91RovUnBv8GIoexbZJ5js81Fq9QJozqMIw=;
-        b=eun3+VKLeapi2semajIcBcUh0+DyuaRjfTzClsaTwMaCYA0cQ9d02a8oqJDhcmLKWY
-         uA/gKNQwOPPO6UOUyGylC7KUlgBux1k87Yi4raKyUeNiLgETUu0hhsrKNY6BOgMyjSuq
-         9MlZNrp3lBMLq/5N7CarkTnrdGHIoTiNAuC5ZRN1knyvrY27bHMQ1XDs/l/g6/8848/2
-         rf+TDLai5wYGCRmRnpPeKVVXBKk1McYFLTJUDJvoCu7ksJLTQZc0E2clVVyZxHyYxZ6n
-         eV9dsTdFTa9IX63ZgUtwYlz96M+wiC4kFMQRYe5edJ52oV72y+QEutFpgy1fbQAmfFRl
-         wA9A==
-X-Gm-Message-State: AOAM533jxvfm0NPUcA6zUVK1B5MV00Ozyf6jTj7oFlosohYw4Xd1UeTz
-        M2VGUFtpBEux8X6I8NYMW8y619nSwg6yg1RdJnbQR+rdNbR/zTzW2BFK9UbqNde1pMYRRjbMkDN
-        4YaZ+gdZlLoFEamPdiAIcq/6O
-X-Received: by 2002:a5d:55cd:0:b0:1e3:30ee:858 with SMTP id i13-20020a5d55cd000000b001e330ee0858mr18442267wrw.344.1645518820687;
-        Tue, 22 Feb 2022 00:33:40 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwKfMUzK5YMtBy1acQZBftJ5rLQYuElo69SnZRmXeESvFpU7FrUCI8tnaYVz4XVm3hyg+m0JA==
-X-Received: by 2002:a5d:55cd:0:b0:1e3:30ee:858 with SMTP id i13-20020a5d55cd000000b001e330ee0858mr18442251wrw.344.1645518820486;
-        Tue, 22 Feb 2022 00:33:40 -0800 (PST)
+        bh=E30WgXgAZRS6lQUJeUsCZdCeBdcikCP7h9EfQ36uBTo=;
+        b=lyio5TnXYjT8nI5aHJM+FHT7dpugsq+qC/jczkI/T3Rrb3hnHqcEIjxEJPM6/cp42X
+         KUUp0E/0iyHstxZ8IVUdghv9/XpKUsVbQKPHQhRc4xVHq6YSISO7F9Suy7CwfJoEjbxD
+         QSINlbjyDYxs5Kf0LIjBvdZg0PuhctVwvKr7wfbXdX8n6ntX5RR+a9ObIXtwmORr3w82
+         WX9td00XGIRbF8ZDPlNb6W+ueAD4eNg5BJwcdrylTf3SIXIQBL6plet5Yyb7oXUXDyar
+         anyS1x64q/o49Y42aQ3gOaZHbR1L/yzgho6YtyuNzmrsQ5sNS5JZZv+7CZ7Y/aFdZ8GE
+         b97w==
+X-Gm-Message-State: AOAM533dcoqlzBRt/K4t1WvsMkJX3dQCpfcoL4cclpPPn90kNV6jQHwm
+        z4ala8lQ/p8WlJjtgzaSpeKlZaASr/M1NtafRZU48lS+vMmvLgqe8ScYT345dt2U8YwCpL83Gvf
+        i0Vz+WoXgXRRArtUct+r5EUHV
+X-Received: by 2002:a05:6000:1081:b0:1e3:16d0:1c47 with SMTP id y1-20020a056000108100b001e316d01c47mr18921369wrw.19.1645518906780;
+        Tue, 22 Feb 2022 00:35:06 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzTFqlbUoKjOmzD6tEVN0k7Dy726wJbHNF/nP2PKCvE89SzHXdNF5wf7IME2kP/sJ798r1zNg==
+X-Received: by 2002:a05:6000:1081:b0:1e3:16d0:1c47 with SMTP id y1-20020a056000108100b001e316d01c47mr18921343wrw.19.1645518906513;
+        Tue, 22 Feb 2022 00:35:06 -0800 (PST)
 Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
-        by smtp.googlemail.com with ESMTPSA id p12sm1712785wmg.36.2022.02.22.00.33.36
+        by smtp.googlemail.com with ESMTPSA id v5sm32603727wrr.7.2022.02.22.00.35.05
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 22 Feb 2022 00:33:39 -0800 (PST)
-Message-ID: <01ba8559-b6f9-cc75-2080-7308a04ce262@redhat.com>
-Date:   Tue, 22 Feb 2022 09:33:35 +0100
+        Tue, 22 Feb 2022 00:35:05 -0800 (PST)
+Message-ID: <53d4b30e-2563-c13b-eadc-8372ae965fcb@redhat.com>
+Date:   Tue, 22 Feb 2022 09:35:04 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
-Subject: Re: [PATCH] KVM: x86: Fix function address when kvm_x86_ops.func is
- NULL
+Subject: Re: [PATCH v4] KVM: Move VM's worker kthreads back to the original
+ cgroup before exiting.
 Content-Language: en-US
-To:     Like Xu <like.xu.linux@gmail.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Jim Mattson <jmattson@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Like Xu <likexu@tencent.com>
-References: <20220222062510.48592-1-likexu@tencent.com>
+To:     Vipin Sharma <vipinsh@google.com>, seanjc@google.com
+Cc:     mkoutny@suse.com, tj@kernel.org, lizefan.x@bytedance.com,
+        hannes@cmpxchg.org, dmatlack@google.com, jiangshanlai@gmail.com,
+        kvm@vger.kernel.org, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220222054848.563321-1-vipinsh@google.com>
 From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <20220222062510.48592-1-likexu@tencent.com>
+In-Reply-To: <20220222054848.563321-1-vipinsh@google.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -86,34 +84,100 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/22/22 07:25, Like Xu wrote:
-> From: Like Xu <likexu@tencent.com>
+On 2/22/22 06:48, Vipin Sharma wrote:
+> VM worker kthreads can linger in the VM process's cgroup for sometime
+> after KVM terminates the VM process.
 > 
-> Fix the function address for __static_call_return0() which is used by
-> static_call_update() when a func in struct kvm_x86_ops is NULL.
+> KVM terminates the worker kthreads by calling kthread_stop() which waits
+> on the 'exited' completion, triggered by exit_mm(), via mm_release(), in
+> do_exit() during the kthread's exit.  However, these kthreads are
+> removed from the cgroup using the cgroup_exit() which happens after the
+> exit_mm(). Therefore, A VM process can terminate in between the
+> exit_mm() and cgroup_exit() calls, leaving only worker kthreads in the
+> cgroup.
 > 
-> Fixes: 5be2226f417d ("KVM: x86: allow defining return-0 static calls")
-> Signed-off-by: Like Xu <likexu@tencent.com>
+> Moving worker kthreads back to the original cgroup (kthreadd_task's
+> cgroup) makes sure that the cgroup is empty as soon as the main VM
+> process is terminated.
+> 
+> Signed-off-by: Vipin Sharma <vipinsh@google.com>
+> Suggested-by: Sean Christopherson <seanjc@google.com>
+> ---
 
-Sorry for the stupid question, but what breaks?
+Queued, thanks.
 
 Paolo
 
-> ---
->   arch/x86/include/asm/kvm_host.h | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
+> Thanks Sean, for the example on how to use the real_parent outside of the RCU
+> critical region. I wrote your name in Suggested-by, I hope you are fine with
+> it and this is the right tag/way to give you the credit.
 > 
-> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-> index 713e08f62385..312f5ee19514 100644
-> --- a/arch/x86/include/asm/kvm_host.h
-> +++ b/arch/x86/include/asm/kvm_host.h
-> @@ -1548,7 +1548,7 @@ static inline void kvm_ops_static_call_update(void)
->   #define KVM_X86_OP_OPTIONAL __KVM_X86_OP
->   #define KVM_X86_OP_OPTIONAL_RET0(func) \
->   	static_call_update(kvm_x86_##func, kvm_x86_ops.func ? : \
-> -			   (void *) __static_call_return0);
-> +			   (void *)&__static_call_return0);
->   #include <asm/kvm-x86-ops.h>
->   #undef __KVM_X86_OP
+> v4:
+> - Read task's real_parent in the RCU critical section.
+> - Don't log error message from the cgroup_attach_task_all() API.
+> 
+> v3: https://lore.kernel.org/lkml/20220217061616.3303271-1-vipinsh@google.com/
+> - Use 'current->real_parent' (kthreadd_task) in the
+>    cgroup_attach_task_all() call.
+> - Revert cgroup APIs changes in v2. Now, patch does not touch cgroup
+>    APIs.
+> - Update commit and comment message
+> 
+> v2: https://lore.kernel.org/lkml/20211222225350.1912249-1-vipinsh@google.com/
+> - Use kthreadd_task in the cgroup API to avoid build issue.
+> 
+> v1: https://lore.kernel.org/lkml/20211214050708.4040200-1-vipinsh@google.com/
+> 
+>   virt/kvm/kvm_main.c | 22 +++++++++++++++++++++-
+>   1 file changed, 21 insertions(+), 1 deletion(-)
+> 
+> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+> index 83c57bcc6eb6..cdf1fa3c60ae 100644
+> --- a/virt/kvm/kvm_main.c
+> +++ b/virt/kvm/kvm_main.c
+> @@ -5810,6 +5810,7 @@ static int kvm_vm_worker_thread(void *context)
+>   	 * we have to locally copy anything that is needed beyond initialization
+>   	 */
+>   	struct kvm_vm_worker_thread_context *init_context = context;
+> +	struct task_struct *parent;
+>   	struct kvm *kvm = init_context->kvm;
+>   	kvm_vm_thread_fn_t thread_fn = init_context->thread_fn;
+>   	uintptr_t data = init_context->data;
+> @@ -5836,7 +5837,7 @@ static int kvm_vm_worker_thread(void *context)
+>   	init_context = NULL;
+>   
+>   	if (err)
+> -		return err;
+> +		goto out;
+>   
+>   	/* Wait to be woken up by the spawner before proceeding. */
+>   	kthread_parkme();
+> @@ -5844,6 +5845,25 @@ static int kvm_vm_worker_thread(void *context)
+>   	if (!kthread_should_stop())
+>   		err = thread_fn(kvm, data);
+>   
+> +out:
+> +	/*
+> +	 * Move kthread back to its original cgroup to prevent it lingering in
+> +	 * the cgroup of the VM process, after the latter finishes its
+> +	 * execution.
+> +	 *
+> +	 * kthread_stop() waits on the 'exited' completion condition which is
+> +	 * set in exit_mm(), via mm_release(), in do_exit(). However, the
+> +	 * kthread is removed from the cgroup in the cgroup_exit() which is
+> +	 * called after the exit_mm(). This causes the kthread_stop() to return
+> +	 * before the kthread actually quits the cgroup.
+> +	 */
+> +	rcu_read_lock();
+> +	parent = rcu_dereference(current->real_parent);
+> +	get_task_struct(parent);
+> +	rcu_read_unlock();
+> +	cgroup_attach_task_all(parent, current);
+> +	put_task_struct(parent);
+> +
+>   	return err;
 >   }
+>   
+> 
+> base-commit: 1bbc60d0c7e5728aced352e528ef936ebe2344c0
 

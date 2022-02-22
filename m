@@ -2,143 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FF774C0268
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 20:50:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E3A284C0269
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 20:51:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235317AbiBVTvO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 14:51:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51442 "EHLO
+        id S235299AbiBVTv1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 14:51:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233500AbiBVTvM (ORCPT
+        with ESMTP id S233500AbiBVTv0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 14:51:12 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE9C4BB097;
-        Tue, 22 Feb 2022 11:50:45 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5AE3D61638;
-        Tue, 22 Feb 2022 19:50:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B671C340F1;
-        Tue, 22 Feb 2022 19:50:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645559444;
-        bh=l639N21A2FrjSs/WG0rCtIuhybcq24CZv4Vtx+UKttk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Irx+SLoYYE4wGSeXxrVOr/7x0kf5CJU/O6kGp1PTQL0PoOg7Y8xTdt4gtt35pqirB
-         Fz/7MdwiISDDp7bKfySLsgjR8Qa9A1slwZId5NyeipA/9gw2FoOd3RUN5RBquwzmpW
-         TJdyT49+tR9n7os7o6Ksawv/yJzeePn+eb+zPG9rvtRz2JxF9+kpiSUeMHJeMK7vft
-         Az4u2xE12wvsP6fTqA2tNXevWSysmu1Bakcg8EC86sjmQEQy04gh+ECR+cm49X6eG4
-         y/xN1Z/ZQ5J+meMPKwY9oNMfgvLcirNzLkJ1a/FEK8Y3soyghpccFTKPMsaO61B7y9
-         UIo1jhARzPBEw==
-Date:   Tue, 22 Feb 2022 11:50:42 -0800
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Keith Busch <kbusch@kernel.org>
-Cc:     linux-nvme@lists.infradead.org, linux-block@vger.kernel.org,
-        linux-crypto@vger.kernel.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, axboe@kernel.dk, hch@lst.de,
-        martin.petersen@oracle.com, colyli@suse.de
-Subject: Re: [PATCHv3 06/10] crypto: add rocksoft 64b crc framework
-Message-ID: <YhU+kuMhueXVQvxe@sol.localdomain>
-References: <20220222163144.1782447-1-kbusch@kernel.org>
- <20220222163144.1782447-7-kbusch@kernel.org>
+        Tue, 22 Feb 2022 14:51:26 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5C250C12D9
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 11:51:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1645559459;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Hs65sHGE+MAg8ru2wq4oQPdOBMOVsHF1Qt4G5niT3/0=;
+        b=LvqwFclonVEV6neKkaMZNx9I7ZlGqyxy9nKutosQkVLp5H/AuZmlvF7iO6WXWGqFresVOk
+        dGENZu004NBIT/dPlcUJ4bUKaTR8c3r/2ConjE4CLvd87v4VD/+hoM8CqEVZLeaVL97cft
+        HCnI49xBB58oYbo/Tug9bDNv885Z6KQ=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-155-Lsyp4OtYPmKBJbB4HfBF-g-1; Tue, 22 Feb 2022 14:50:58 -0500
+X-MC-Unique: Lsyp4OtYPmKBJbB4HfBF-g-1
+Received: by mail-wm1-f69.google.com with SMTP id t2-20020a7bc3c2000000b003528fe59cb9so1068320wmj.5
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 11:50:58 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=Hs65sHGE+MAg8ru2wq4oQPdOBMOVsHF1Qt4G5niT3/0=;
+        b=eOmJ/RbTVY8IEwleh28xwu7lo3u3SccIZVB675QMSMWfzJmscdFVAoqsB0NYBE5N8U
+         oq+JSE7SveLnlYihZMGNKfISmc94Xt6O+p88PNaGuNFQzDUkLg8xLIlxMPZu/f3zDEAU
+         2AO6LVuxS7lztnQVrhTxlKQa3Y1hQ9cEtEXc6irhvmVMAWTE/nAlbq7k0ZpSFA3aICIY
+         ZtYjh08gDtk7trkfn8/T7xI7qY2bYK838/LeLeZLa9fN4/Day/vKyxf1JPGOzfqTSqmL
+         JHzY2t16TjE3vMtVwmpxDiIFLC+P+cjzn+dMYDdHn3OfQP4WzMwm9Nvny7PvWIEhI5MZ
+         RlXw==
+X-Gm-Message-State: AOAM530w/O1F4DUUx+8VEeizJFlAgRd17jD+GezpsYxL0pNpAnGsGjGW
+        uEkqLWQObetZOMBNf6q9urHyzi1u5wD7WOZ3UW0I2I3QD2NrbMCxnmOYuzngzWBRGzdYLLzEBux
+        D+2hMFLy8DZ2KzW3WzJr0QUSP
+X-Received: by 2002:adf:e10a:0:b0:1e3:3188:79c7 with SMTP id t10-20020adfe10a000000b001e3318879c7mr20737612wrz.329.1645559457112;
+        Tue, 22 Feb 2022 11:50:57 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJw7tphXEaOO1Fx4rA4sA8xDWi0f5QH4NP76Lls9shdn0Jr3YsOCHeYZIE82dpFv7tWJ4EMI6A==
+X-Received: by 2002:adf:e10a:0:b0:1e3:3188:79c7 with SMTP id t10-20020adfe10a000000b001e3318879c7mr20737594wrz.329.1645559456824;
+        Tue, 22 Feb 2022 11:50:56 -0800 (PST)
+Received: from ?IPV6:2003:cb:c706:7d00:477e:35d5:928f:9b7f? (p200300cbc7067d00477e35d5928f9b7f.dip0.t-ipconnect.de. [2003:cb:c706:7d00:477e:35d5:928f:9b7f])
+        by smtp.gmail.com with ESMTPSA id 3sm54196254wrz.86.2022.02.22.11.50.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 22 Feb 2022 11:50:56 -0800 (PST)
+Message-ID: <39e919dd-f73c-6698-dd4c-e42c5cbe1494@redhat.com>
+Date:   Tue, 22 Feb 2022 20:50:55 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220222163144.1782447-7-kbusch@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v1] drivers/base/memory: clarify adding and removing of
+ memory blocks
+Content-Language: en-US
+To:     Oscar Salvador <osalvador@suse.de>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Michal Hocko <mhocko@suse.com>
+References: <20220221154531.11382-1-david@redhat.com>
+ <YhR5coy7OGyjwQtx@localhost.localdomain>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <YhR5coy7OGyjwQtx@localhost.localdomain>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 22, 2022 at 08:31:40AM -0800, Keith Busch wrote:
-> +config CRYPTO_CRC64_ROCKSOFT
-> +	tristate "Rocksoft Model CRC64 algorithm"
-> +	depends on CRC64
-> +	select CRYPTO_HASH
-> +	help
-> +	  Rocksoft Model CRC64 computation is being cast as a crypto
-> +	  transform. This allows for faster crc64 transforms to be used
-> +	  if they are available.
+On 22.02.22 06:49, Oscar Salvador wrote:
+> On Mon, Feb 21, 2022 at 04:45:31PM +0100, David Hildenbrand wrote:
+>> Let's make it clearer at which places we actually add and remove memory
+>> blocks -- streamlining the terminology -- and highlight which memory
+>> block start out online and which start out as offline.
+>>
+>> * rename add_memory_block -> add_boot_memory_block
+>> * rename init_memory_block -> add_memory_block
+>> * rename unregister_memory -> remove_memory_block
+>> * rename register_memory -> __add_memory_block
+>> * add add_hotplug_memory_block
+>> * mark add_boot_memory_block with __init (suggested by Oscar)
+>>
+>> __add_memory_block() is  a pure helper for add_memory_block(), remove
+>> the somewhat obvious comment.
+>>
+>> Cc: Andrew Morton <akpm@linux-foundation.org>
+>> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+>> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+>> Cc: Michal Hocko <mhocko@suse.com>
+>> Cc: Oscar Salvador <osalvador@suse.de>
+>> Signed-off-by: David Hildenbrand <david@redhat.com>
+> 
+> Thanks for doing this, it makes the code much more clear.
+> 
+> Reviewed-by: Oscar Salvador <osalvador@suse.de>
+> 
+>> ---
+>>
+>> Based on v5.17-rc5 and:
+>> 	[PATCH v2 0/2] drivers/base/memory: determine and store zone for
+>> 	single-zone memory blocks [1]
+> 
+> Maybe just my thing, but I also had to pull in [1] in order to apply
+> this error-free. 
+> 
+> [1] https://patchwork.kernel.org/project/linux-mm/patch/20220128144540.153902-1-david@redhat.com/
 
-The first sentence of this help text doesn't make sense.
+Ah, yes, I forgot to mention that -- also already in -mm and -next.
 
-> diff --git a/crypto/crc64_rocksoft_generic.c b/crypto/crc64_rocksoft_generic.c
-> new file mode 100644
-> index 000000000000..55bad1939614
-> --- /dev/null
-> +++ b/crypto/crc64_rocksoft_generic.c
-> @@ -0,0 +1,104 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Cryptographic API.
+Thanks!
 
-The "Cryptographic API" line doesn't provide any helpful information.
+-- 
+Thanks,
 
-> +static int chksum_final(struct shash_desc *desc, u8 *out)
-> +{
-> +	struct chksum_desc_ctx *ctx = shash_desc_ctx(desc);
-> +
-> +	*(u64 *)out = ctx->crc;
-> +	return 0;
-> +}
-> +
-> +static int __chksum_finup(u64 crc, const u8 *data, unsigned int len, u8 *out)
-> +{
-> +	*(u64 *)out = crc64_rocksoft_generic(crc, data, len);
-> +	return 0;
-> +}
+David / dhildenb
 
-These 64-bit writes violate alignment rules and will give the wrong result on
-big endian CPUs.  They need to use put_unaligned_le64().
-
-> +static int __init crc64_rocksoft_x86_mod_init(void)
-> +{
-> +	return crypto_register_shash(&alg);
-> +}
-> +
-> +static void __exit crc64_rocksoft_x86_mod_fini(void)
-> +{
-> +	crypto_unregister_shash(&alg);
-> +}
-
-This has nothing to do with x86.
-
-> +config CRC64_ROCKSOFT
-> +	tristate "CRC calculation for the Rocksoft^TM model CRC64"
-
-I'm sure what the rules for trademarks are, but kernel source code usually
-doesn't have the trademark symbol/abbreviation scattered everywhere.
-
-> +	select CRYPTO
-> +	select CRYPTO_CRC64_ROCKSOFT
-> +	help
-> +	  This option is only needed if a module that's not in the
-> +	  kernel tree needs to calculate CRC checks for use with the
-> +	  rocksoft model parameters.
-
-Out-of-tree modules can't be the reason to have a kconfig option.  What is the
-real reason?
-
-> +u64 crc64_rocksoft(const unsigned char *buffer, size_t len)
-> +{
-> +	return crc64_rocksoft_update(~0ULL, buffer, len);
-> +}
-> +EXPORT_SYMBOL(crc64_rocksoft);
-
-Isn't this missing the bitwise inversion at the end?
-
-> +MODULE_AUTHOR("Keith Busch <kbusch@kernel.org>");
-> +MODULE_DESCRIPTION("Rocksoft model CRC64 calculation (library API)");
-> +MODULE_LICENSE("GPL");
-> +MODULE_SOFTDEP("pre: crc64");
-
-Shouldn't the MODULE_SOFTDEP be on crc64-rocksoft?
-
-- Eric

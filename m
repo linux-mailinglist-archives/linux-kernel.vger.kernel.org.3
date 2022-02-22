@@ -2,224 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 343964BFD45
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 16:42:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 171EA4BFD4A
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 16:43:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233096AbiBVPnB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 10:43:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39080 "EHLO
+        id S233328AbiBVPoU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 10:44:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231670AbiBVPm6 (ORCPT
+        with ESMTP id S231670AbiBVPoS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 10:42:58 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5FA532ECF;
-        Tue, 22 Feb 2022 07:42:32 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7A7F2B81B2C;
-        Tue, 22 Feb 2022 15:42:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4EA6C340E8;
-        Tue, 22 Feb 2022 15:42:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645544550;
-        bh=4//NcDkbCERxvJD9pSnHOA7+fCOtUfqFIgkJBXt7Bxw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=oMrjiGwzkNhehM5e/m5igP2WP2AFF48DTnt5KgURuJWQoSW3KSUPZxYZEKjOdQvjr
-         2gRO+dqerQYnVRHcs4q+V4IPU3VabswmccDV6Y4Vmfdyj2pIXUtMJ8ujt77+E+QKm2
-         8qCEQReDfP/OkW5TSicFrengRStVVwu7z9ewvSk320gtn3GByvTMVcwPAG5fXf+6v3
-         HFiLwcWg089FBzgoIe91tH9mx5lnjIOJetI+vnuhhaaqfp0Qc+iG6qoIv00sy+oAor
-         blJi/ZQnZ1iW1KkC7ceTCRHxqWxuWi2hptm9nl/5nfdO7VnLStsg9iTq4trG/IlpVz
-         Ug532c9ww8LgA==
-Received: by pali.im (Postfix)
-        id B9EBDFDB; Tue, 22 Feb 2022 16:42:26 +0100 (CET)
-Date:   Tue, 22 Feb 2022 16:42:26 +0100
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-Cc:     robh+dt@kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>,
-        Russell King <rmk+kernel@armlinux.org.uk>,
-        Marc Zyngier <maz@kernel.org>, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v2 10/11] PCI: mvebu: Implement support for legacy INTx
- interrupts
-Message-ID: <20220222154226.mwu7d3silgmwzeqc@pali>
-References: <20220105150239.9628-1-pali@kernel.org>
- <20220112151814.24361-1-pali@kernel.org>
- <20220112151814.24361-11-pali@kernel.org>
- <20220211171917.GA740@lpieralisi>
- <20220211175202.gku5pkwn5wmjo5al@pali>
- <20220216234039.stxv5ndd6ai23sbb@pali>
- <20220222102057.GA17238@lpieralisi>
- <20220222105129.jg5kwmhvhggsv72n@pali>
- <20220222152409.GA18799@lpieralisi>
+        Tue, 22 Feb 2022 10:44:18 -0500
+Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F13C836E09
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 07:43:52 -0800 (PST)
+Received: by mail-yb1-xb36.google.com with SMTP id u12so28012461ybd.7
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 07:43:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=LqXD7typxRqGUARnaw7Pj7LwfkKcjOGLF1BV+v9Ov4A=;
+        b=kMZdlDYteCJBNpP7EcodSyEFNNM33iTzouRYRZy4sNNvi8VL9QsFmswNh0yZFVFEka
+         H1ljgT3YeKJwxPUeLB1K4HLbyoWYwaNtP99vdqN9PgWc95ewSWy2R3yWFAzO0+ryDjrc
+         6ymKyHOrQy7YsjgJN19Hw1v9ZEoMVeY2ebjkmIU0C+neAlBxoGJ6tM7VyfzeYaLwo/BZ
+         cZivrUi0SL6vZ4mgk0DL4umpMzIcnQAxNnL0BqXqKFJuAeykbT2iv9XptRpRGy029lAt
+         8LCm6p606pKu3eaMboNMDBsb5Z0TQLMOwgCvg7hlimVYbONG9rLfsb/g8Y9KOuIHSq9P
+         fH3A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=LqXD7typxRqGUARnaw7Pj7LwfkKcjOGLF1BV+v9Ov4A=;
+        b=XVc+PylYRDL5Y25MEXNKz7SeM9qvY3pA3LR5xwgTDGgYIAoi+6u2AY1NwfxJLMaYv7
+         m0hKoHMlVuoPTEPx8J8rWgSBbrBNoRHbkIn8B2c2DDz/ktVpbORLaNTb9JnB97KJP7Re
+         pt7h63TJe/Gb3ztzIniZaDQND1BzpkphjYWgdZOMNgVt9UV2jr7C6V+0AMAK8hsXRvjS
+         QHD5fCNHyOjrVB84mrEsisS1vaFcpmlSIYDiE2DIoPO5kEslPPABcMh2rOn66oALLoXb
+         gln7Pxf3F5bS7Dt7aa4fD4d6ELcR6H73Ng1lpFj0csqMlQNkdfS4I80H8WMDNZqFvtkB
+         9SZA==
+X-Gm-Message-State: AOAM5310FNu2D6BT5WRbUsvjhEhFpAnmgZovadTgkr+T82/cNEJzdMLV
+        4AHxAng3+RNH/kj4wEYsl4x+zyzrUYZpt3o+BhhxBg==
+X-Google-Smtp-Source: ABdhPJy3N2oGtBnhBdp+zKpJljXWde4cxCC5OtRofJNJX4vcopfRezUgTy2sWe8nFNEYaQwaZhfaPsDeMZYnRh5bROg=
+X-Received: by 2002:a25:d986:0:b0:624:ddc:ff9 with SMTP id q128-20020a25d986000000b006240ddc0ff9mr23367040ybg.509.1645544631876;
+ Tue, 22 Feb 2022 07:43:51 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220222152409.GA18799@lpieralisi>
-User-Agent: NeoMutt/20180716
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220222054025.3412898-1-surenb@google.com> <20220222054025.3412898-3-surenb@google.com>
+ <YhSZhzUYlW6IAQT9@dhcp22.suse.cz>
+In-Reply-To: <YhSZhzUYlW6IAQT9@dhcp22.suse.cz>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Tue, 22 Feb 2022 07:43:40 -0800
+Message-ID: <CAJuCfpELxJ=7uuurKL9oRn1E_=rfL3aN8Duhqvi4Z2c1xHAT2w@mail.gmail.com>
+Subject: Re: [PATCH v4 3/3] mm: fix use-after-free when anon vma name is used
+ after vma is freed
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     akpm@linux-foundation.org, ccross@google.com,
+        sumit.semwal@linaro.org, dave.hansen@intel.com,
+        keescook@chromium.org, willy@infradead.org,
+        kirill.shutemov@linux.intel.com, vbabka@suse.cz,
+        hannes@cmpxchg.org, ebiederm@xmission.com, brauner@kernel.org,
+        legion@kernel.org, ran.xiaokai@zte.com.cn, sashal@kernel.org,
+        chris.hyser@oracle.com, dave@stgolabs.net, pcc@google.com,
+        caoxiaofeng@yulong.com, david@redhat.com, gorcunov@gmail.com,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        kernel-team@android.com,
+        syzbot+aa7b3d4b35f9dc46a366@syzkaller.appspotmail.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tuesday 22 February 2022 15:24:09 Lorenzo Pieralisi wrote:
-> On Tue, Feb 22, 2022 at 11:51:29AM +0100, Pali Rohár wrote:
-> > On Tuesday 22 February 2022 10:21:06 Lorenzo Pieralisi wrote:
-> > > On Thu, Feb 17, 2022 at 12:40:39AM +0100, Pali Rohár wrote:
-> > > > On Friday 11 February 2022 18:52:02 Pali Rohár wrote:
-> > > > > On Friday 11 February 2022 17:19:17 Lorenzo Pieralisi wrote:
-> > > > > > On Wed, Jan 12, 2022 at 04:18:13PM +0100, Pali Rohár wrote:
-> > > > > > > This adds support for legacy INTx interrupts received from other PCIe
-> > > > > > > devices and which are reported by a new INTx irq chip.
-> > > > > > > 
-> > > > > > > With this change, kernel can distinguish between INTA, INTB, INTC and INTD
-> > > > > > > interrupts.
-> > > > > > > 
-> > > > > > > Note that for this support, device tree files has to be properly adjusted
-> > > > > > > to provide "interrupts" or "interrupts-extended" property with intx
-> > > > > > > interrupt source, "interrupt-names" property with "intx" string and also
-> > > > > > > 'interrupt-controller' subnode must be defined.
-> > > > > > > 
-> > > > > > > If device tree files do not provide these nodes then driver would work as
-> > > > > > > before.
-> > > > > > 
-> > > > > > Nit: this information is not useful. DT rules are written in DT
-> > > > > > bindings, not in kernel commit logs. All I am saying is that firmware
-> > > > > > developers should not have to read this log to write firmware.
-> > > > > 
-> > > > > It was not intended for firmware developers, but for reviewers of this
-> > > > > patch to understand, what is happening in code and that with old DT
-> > > > > files this patch does not change driver behavior (= work as before).
-> > > > > 
-> > > > > > > Signed-off-by: Pali Rohár <pali@kernel.org>
-> > > > > > > ---
-> > > > > > >  drivers/pci/controller/pci-mvebu.c | 185 +++++++++++++++++++++++++++--
-> > > > > > >  1 file changed, 177 insertions(+), 8 deletions(-)
-> > > > > > > 
-> > > > > > > diff --git a/drivers/pci/controller/pci-mvebu.c b/drivers/pci/controller/pci-mvebu.c
-> > > > > > > index 1e90ab888075..dbb6ecb4cb70 100644
-> > > > > > > --- a/drivers/pci/controller/pci-mvebu.c
-> > > > > > > +++ b/drivers/pci/controller/pci-mvebu.c
-> > > > > > > @@ -54,9 +54,10 @@
-> > > > > > >  	 PCIE_CONF_ADDR_EN)
-> > > > > > >  #define PCIE_CONF_DATA_OFF	0x18fc
-> > > > > > >  #define PCIE_INT_CAUSE_OFF	0x1900
-> > > > > > > +#define PCIE_INT_UNMASK_OFF	0x1910
-> > > > > > 
-> > > > > > Nit: I understand it is tempting but here you are redefining or better
-> > > > > > giving a proper label to a register. Separate patch please.
-> > > > > 
-> > > > > Ok!
-> > > > > 
-> > > > > > > +#define  PCIE_INT_INTX(i)		BIT(24+i)
-> > > > > > >  #define  PCIE_INT_PM_PME		BIT(28)
-> > > > > > > -#define PCIE_MASK_OFF		0x1910
-> > > > > > 
-> > > > > > See above.
-> > > > > > 
-> > > > > > > -#define  PCIE_MASK_ENABLE_INTS          0x0f000000
-> > > > > > > +#define  PCIE_INT_ALL_MASK		GENMASK(31, 0)
-> > > > > > >  #define PCIE_CTRL_OFF		0x1a00
-> > > > > > >  #define  PCIE_CTRL_X1_MODE		0x0001
-> > > > > > >  #define  PCIE_CTRL_RC_MODE		BIT(1)
-> > > > > > > @@ -110,6 +111,9 @@ struct mvebu_pcie_port {
-> > > > > > >  	struct mvebu_pcie_window iowin;
-> > > > > > >  	u32 saved_pcie_stat;
-> > > > > > >  	struct resource regs;
-> > > > > > > +	struct irq_domain *intx_irq_domain;
-> > > > > > > +	raw_spinlock_t irq_lock;
-> > > > > > > +	int intx_irq;
-> > > > > > >  };
-> > > > > > >  
-> > > > > > >  static inline void mvebu_writel(struct mvebu_pcie_port *port, u32 val, u32 reg)
-> > > > > > > @@ -235,7 +239,7 @@ static void mvebu_pcie_setup_wins(struct mvebu_pcie_port *port)
-> > > > > > >  
-> > > > > > >  static void mvebu_pcie_setup_hw(struct mvebu_pcie_port *port)
-> > > > > > >  {
-> > > > > > > -	u32 ctrl, lnkcap, cmd, dev_rev, mask;
-> > > > > > > +	u32 ctrl, lnkcap, cmd, dev_rev, unmask;
-> > > > > > >  
-> > > > > > >  	/* Setup PCIe controller to Root Complex mode. */
-> > > > > > >  	ctrl = mvebu_readl(port, PCIE_CTRL_OFF);
-> > > > > > > @@ -288,10 +292,30 @@ static void mvebu_pcie_setup_hw(struct mvebu_pcie_port *port)
-> > > > > > >  	/* Point PCIe unit MBUS decode windows to DRAM space. */
-> > > > > > >  	mvebu_pcie_setup_wins(port);
-> > > > > > >  
-> > > > > > > -	/* Enable interrupt lines A-D. */
-> > > > > > > -	mask = mvebu_readl(port, PCIE_MASK_OFF);
-> > > > > > > -	mask |= PCIE_MASK_ENABLE_INTS;
-> > > > > > > -	mvebu_writel(port, mask, PCIE_MASK_OFF);
-> > > > > > > +	/* Mask all interrupt sources. */
-> > > > > > > +	mvebu_writel(port, ~PCIE_INT_ALL_MASK, PCIE_INT_UNMASK_OFF);
-> > > > > > > +
-> > > > > > > +	/* Clear all interrupt causes. */
-> > > > > > > +	mvebu_writel(port, ~PCIE_INT_ALL_MASK, PCIE_INT_CAUSE_OFF);
-> > > > > > > +
-> > > > > > > +	if (port->intx_irq <= 0) {
-> > > > > > > +		/*
-> > > > > > > +		 * When neither "summary" interrupt, nor "intx" interrupt was
-> > > > > > > +		 * specified in DT then unmask all legacy INTx interrupts as in
-> > > > > > > +		 * this case driver does not provide a way for masking and
-> > > > > > > +		 * unmasking of individual legacy INTx interrupts. In this case
-> > > > > > > +		 * all interrupts, including legacy INTx are reported via one
-> > > > > > > +		 * shared GIC source and therefore kernel cannot distinguish
-> > > > > > > +		 * which individual legacy INTx was triggered. These interrupts
-> > > > > > > +		 * are shared, so it should not cause any issue. Just
-> > > > > > > +		 * performance penalty as every PCIe interrupt handler needs to
-> > > > > > > +		 * be called when some interrupt is triggered.
-> > > > > > > +		 */
-> > > > > > 
-> > > > > > This comment applies to current mainline right (ie it describes how
-> > > > > > current mainline handles INTx) ? IMO you should split it out in a
-> > > > > > separate patch.
-> > > > > 
-> > > > > This above comment describe what happens in if-branch when intx_irq is
-> > > > > not set (as written in comment "when intx interrupt was not specified in
-> > > > > DT"). You are right that this is also the behavior in the current
-> > > > > mainline.
-> > > > > 
-> > > > > I'm not sure if this comment can be split out as support for "intx"
-> > > > > interrupt is in this patch.
-> > > > > 
-> > > > > > I understand it is hard but a patch is a logical _change_, this
-> > > > > > comment is a change per se, it is a clarification on current
-> > > > > > behaviour.
-> > > > > 
-> > > > > Ok, I could try to split this comment into two patches, but part about
-> > > > > if-branch comment needs to stay in "this" patch.
-> > > > 
-> > > > I have done it locally.
-> > > > 
-> > > > Let me know when I should resend this patch series and I will include
-> > > > into it also these changes.
-> > > 
-> > > Hi,
-> > > 
-> > > yes please resend it and I will merge it.
-> > 
-> > Done!
-> > https://lore.kernel.org/linux-pci/20220222104625.28461-1-pali@kernel.org/T/#u
-> 
-> Can you rebase it please on top of my pci/mvebu branch ?
-> 
-> https://git.kernel.org/pub/scm/linux/kernel/git/lpieralisi/pci.git/
-> 
-> Forgive me, I forgot to mention that, thanks.
-> 
-> Lorenzo
+On Tue, Feb 22, 2022 at 12:06 AM Michal Hocko <mhocko@suse.com> wrote:
+>
+> On Mon 21-02-22 21:40:25, Suren Baghdasaryan wrote:
+> > When adjacent vmas are being merged it can result in the vma that was
+> > originally passed to madvise_update_vma being destroyed.  In the current
+> > implementation, the name parameter passed to madvise_update_vma points
+> > directly to vma->anon_name->name and it is used after the call to
+> > vma_merge.  In the cases when vma_merge merges the original vma and
+> > destroys it, this will result in use-after-free bug as shown below:
+> >
+> > madvise_vma_behavior << passes vma->anon_name->name as name param
+> >   madvise_update_vma(name)
+> >     vma_merge
+> >       __vma_adjust
+> >         vm_area_free <-- frees the vma
+> >     replace_vma_anon_name(name) <-- UAF
+>
+> This seems to be stale because bare const char pointer is not passed in
+> the call chain. In fact I am not even sure there is any actual UAF here
+> after the rework.
+> Could you be more specific in describing the scenario?
 
-Ok! I rebased V3 on top of c3bd7dc553eea5a3595ca3aa0adee9bf83622a1f
-(pci/mvebu branch in your repo), fixed conflicts and pushed to my git
-repo https://git.kernel.org/pub/scm/linux/kernel/git/pali/linux.git/
-as commit 42402f0cfc362ffb0b7e464f420d6ead342dab2b (lpieralisi-pci-mvebu
-branch). It is enough? Or do you want me to resend it via emails?
+Yes, sorry, I need to update the part of the description talking about
+passing vma->anon_name->name directly.
+I think UAF is still there, it's just harder to reproduce (admittedly
+I could not reproduce it with the previous reproducer). The scenario
+would be when a vma with vma->anon_name->kref == 1 is being merged
+with another one and freed in the process:
+
+madvise_vma_behavior
+   anon_name = vma_anon_name(vma) <-- does not increase refcount
+   madvise_update_vma(anon_name)
+     *prev = vma_merge <-- returns another vma
+       __vma_adjust
+         vm_area_free(vma)
+           free_vma_anon_name
+             anon_vma_name_put
+               vma_anon_name_free <-- frees the vma->anon_name
+     vma = *prev <-- original vma was freed
+     replace_vma_anon_name(vma, >>anon_name<<) <-- UAF
+
+Does this make sense or did I miss something?
+Thanks,
+Suren.
+
+>
+> > Fix this by raising the name refcount and stabilizing it.
+> >
+> > Fixes: 9a10064f5625 ("mm: add a field to store names for private anonymous memory")
+> > Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+> > Reported-by: syzbot+aa7b3d4b35f9dc46a366@syzkaller.appspotmail.com
+> > ---
+> > changes in v3:
+> > - Reapplied the fix after code refactoring, per Michal Hocko
+> >
+> >  mm/madvise.c | 4 ++++
+> >  1 file changed, 4 insertions(+)
+> >
+> > diff --git a/mm/madvise.c b/mm/madvise.c
+> > index a395884aeecb..00e8105430e9 100644
+> > --- a/mm/madvise.c
+> > +++ b/mm/madvise.c
+> > @@ -140,6 +140,8 @@ static int replace_vma_anon_name(struct vm_area_struct *vma,
+> >  /*
+> >   * Update the vm_flags on region of a vma, splitting it or merging it as
+> >   * necessary.  Must be called with mmap_sem held for writing;
+> > + * Caller should ensure anon_name stability by raising its refcount even when
+> > + * anon_name belongs to a valid vma because this function might free that vma.
+> >   */
+> >  static int madvise_update_vma(struct vm_area_struct *vma,
+> >                             struct vm_area_struct **prev, unsigned long start,
+> > @@ -1021,8 +1023,10 @@ static int madvise_vma_behavior(struct vm_area_struct *vma,
+> >       }
+> >
+> >       anon_name = vma_anon_name(vma);
+> > +     anon_vma_name_get(anon_name);
+> >       error = madvise_update_vma(vma, prev, start, end, new_flags,
+> >                                  anon_name);
+> > +     anon_vma_name_put(anon_name);
+> >
+> >  out:
+> >       /*
+> > --
+> > 2.35.1.473.g83b2b277ed-goog
+>
+> --
+> Michal Hocko
+> SUSE Labs

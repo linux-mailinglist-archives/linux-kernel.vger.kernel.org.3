@@ -2,113 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 513114BF810
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 13:31:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F40A44BF812
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 13:31:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231940AbiBVMba (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 07:31:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39414 "EHLO
+        id S231958AbiBVMbz convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 22 Feb 2022 07:31:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231915AbiBVMb2 (ORCPT
+        with ESMTP id S231915AbiBVMbs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 07:31:28 -0500
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6D0A9A4DD;
-        Tue, 22 Feb 2022 04:31:01 -0800 (PST)
-Received: by mail-wr1-x42a.google.com with SMTP id f17so8046692wrh.7;
-        Tue, 22 Feb 2022 04:31:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Ytf3B0TUzpPjLZkjeVV4ovMnqxam63CdUAj7HAoJ+og=;
-        b=S4aJFdu7ESFjce26eB1MIRYSKt9cw58AJ01xnESYdhee6eGT1jF8awIfYw7gGqhz/U
-         T1qu5WuWvfpnr6p4QMts4lJr2jL+BhPIqMvWv8bifRQWSwqy5et5w5jn9/dSKcGwVJ9E
-         82E6f10ke0KhT7OiCZS/PIEGU4E8CNuAtNOiV1vLtvd7wFDSWefFtgXb+Jkj+jkZ2XTR
-         LWolTgZZXiwOjcPwacWzFHKMh8/ZTJxlk4iLuIJQl6qPbci9J0tgzCaEhoyTpYnquA84
-         VUhffwxUXIYGSeBzxFFn3fItrDlOqnJ9c3a6ySwIN6iTXj0g9KqzMhJ8y8MoRNL6c1NM
-         26nw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Ytf3B0TUzpPjLZkjeVV4ovMnqxam63CdUAj7HAoJ+og=;
-        b=u65zFaKPxwUqWoUlJBfyOKOdSQ7gPDEOz/O8Bc/NHImk6K51GysPphnaB3r24galGW
-         uyGSokVSunwOPJJlHBmxwbET1HPOyJQ5PgXGo3WUDyh0y1EexphewiyqaBMUTc1ggL+K
-         4Gppa0Od/9n/rJ7hcmy12LPo5F5qOfe68fHE6ZqIVTjzfHzC/xYWzxwVIgOIGGIvJ2Wq
-         O9tlulwIaCbTHFy+Zhqvb2802jVYHRyFd8QxmN1yuRlYRG5LC08wERkh9xemW4KYFD7e
-         vovhte0WiwN9cA6Lm5OnqOrtFpiXAmGb6kP38Tup0l510chEV+jEfPet6aWdRz9dTt4G
-         zjfQ==
-X-Gm-Message-State: AOAM531ZO7VU2nHQA5Lj/EQUDPdd06HyeI8LhyunjTq+Vgac+uvduEhK
-        newa0lwzVlhrIVPLOd+1Ju0=
-X-Google-Smtp-Source: ABdhPJzWwW8IcKTuPO9AOzq1sTPEbYVE7yBhhBnybH0UlJtZEfjXBvWQHvVLF4V5f06l8XkRCmNBDA==
-X-Received: by 2002:a05:6000:1ac7:b0:1e8:b550:a596 with SMTP id i7-20020a0560001ac700b001e8b550a596mr19112977wry.584.1645533060492;
-        Tue, 22 Feb 2022 04:31:00 -0800 (PST)
-Received: from debian (host-78-145-97-89.as13285.net. [78.145.97.89])
-        by smtp.gmail.com with ESMTPSA id g16-20020a7bc4d0000000b0037bbe255339sm2296177wmk.15.2022.02.22.04.30.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Feb 2022 04:30:59 -0800 (PST)
-Date:   Tue, 22 Feb 2022 12:30:58 +0000
-From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, slade@sladewatkins.com
-Subject: Re: [PATCH 5.15 000/196] 5.15.25-rc1 review
-Message-ID: <YhTXgiBmJqO1uh60@debian>
-References: <20220221084930.872957717@linuxfoundation.org>
+        Tue, 22 Feb 2022 07:31:48 -0500
+Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04E53109A49;
+        Tue, 22 Feb 2022 04:31:22 -0800 (PST)
+Authenticated-By: 
+X-SpamFilter-By: ArmorX SpamTrap 5.73 with qID 21MCVB9d8030888, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36504.realtek.com.tw[172.21.6.27])
+        by rtits2.realtek.com.tw (8.15.2/2.71/5.88) with ESMTPS id 21MCVB9d8030888
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Tue, 22 Feb 2022 20:31:11 +0800
+Received: from RTEXMBS03.realtek.com.tw (172.21.6.96) by
+ RTEXH36504.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Tue, 22 Feb 2022 20:31:11 +0800
+Received: from RTEXDAG01.realtek.com.tw (172.21.6.100) by
+ RTEXMBS03.realtek.com.tw (172.21.6.96) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Tue, 22 Feb 2022 20:31:10 +0800
+Received: from RTEXDAG01.realtek.com.tw ([fe80::5c14:59a9:7ec4:ef5]) by
+ RTEXDAG01.realtek.com.tw ([fe80::5c14:59a9:7ec4:ef5%6]) with mapi id
+ 15.01.2308.021; Tue, 22 Feb 2022 20:31:10 +0800
+From:   Ricky WU <ricky_wu@realtek.com>
+To:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
+CC:     "ulf.hansson@linaro.org" <ulf.hansson@linaro.org>,
+        "kai.heng.feng@canonical.com" <kai.heng.feng@canonical.com>,
+        "tommyhebb@gmail.com" <tommyhebb@gmail.com>,
+        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH] mmc: rtsx: add 74 Clocks in power on flow
+Thread-Topic: [PATCH] mmc: rtsx: add 74 Clocks in power on flow
+Thread-Index: AQHYJ7nTpeKajlBmYU+vTOb/+dRQe6yeqeWAgACTEED//4JngIAAveNw
+Date:   Tue, 22 Feb 2022 12:31:10 +0000
+Message-ID: <d28b6fb6649d472a809329876c3ac4bd@realtek.com>
+References: <fb7cda69c5c244dfa579229ee2f0da83@realtek.com>
+ <YhST32rsfl7MDv34@kroah.com> <90844cba1cb64571a8597a6e0afee01d@realtek.com>
+ <YhSl4WuE2Dpil/Zj@kroah.com>
+In-Reply-To: <YhSl4WuE2Dpil/Zj@kroah.com>
+Accept-Language: zh-TW, en-US
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.22.81.103]
+x-kse-serverinfo: RTEXMBS03.realtek.com.tw, 9
+x-kse-attachmentfiltering-interceptor-info: no applicable attachment filtering
+ rules found
+x-kse-antivirus-interceptor-info: scan successful
+x-kse-antivirus-info: =?us-ascii?Q?Clean,_bases:_2022/2/22_=3F=3F_10:05:00?=
+x-kse-bulkmessagesfiltering-scan-result: protection disabled
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220221084930.872957717@linuxfoundation.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-KSE-ServerInfo: RTEXH36504.realtek.com.tw, 9
+X-KSE-Attachment-Filter-Triggered-Rules: Clean
+X-KSE-Attachment-Filter-Triggered-Filters: Clean
+X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
-
-On Mon, Feb 21, 2022 at 09:47:12AM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.25 release.
-> There are 196 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+> -----Original Message-----
+> From: gregkh@linuxfoundation.org <gregkh@linuxfoundation.org>
+> Sent: Tuesday, February 22, 2022 4:59 PM
+> To: Ricky WU <ricky_wu@realtek.com>
+> Cc: ulf.hansson@linaro.org; kai.heng.feng@canonical.com;
+> tommyhebb@gmail.com; linux-mmc@vger.kernel.org;
+> linux-kernel@vger.kernel.org
+> Subject: Re: [PATCH] mmc: rtsx: add 74 Clocks in power on flow
 > 
-> Responses should be made by Wed, 23 Feb 2022 08:48:58 +0000.
-> Anything received after that time might be too late.
+> On Tue, Feb 22, 2022 at 08:48:30AM +0000, Ricky WU wrote:
+> > > -----Original Message-----
+> > > From: gregkh@linuxfoundation.org <gregkh@linuxfoundation.org>
+> > > Sent: Tuesday, February 22, 2022 3:42 PM
+> > > To: Ricky WU <ricky_wu@realtek.com>
+> > > Cc: ulf.hansson@linaro.org; kai.heng.feng@canonical.com;
+> > > tommyhebb@gmail.com; linux-mmc@vger.kernel.org;
+> > > linux-kernel@vger.kernel.org
+> > > Subject: Re: [PATCH] mmc: rtsx: add 74 Clocks in power on flow
+> > >
+> > > On Tue, Feb 22, 2022 at 07:27:52AM +0000, Ricky WU wrote:
+> > > > After 1ms stabilizing the voltage time add "Host provides at least
+> > > > 74 Clocks before issuing first command" that is spec definition
+> > >
+> > > You do have 72 columns to use here, no need to wrap this so tightly.
+> > >
+> >
+> > Ok...
+> > so I need to have next patch to fix this format?
+> 
+> Please do, because:
+> 
+> >
+> > > >
+> > > > Signed-off-by: Ricky Wu <ricky_wu@realtek.com>
+> > > > ---
+> > > >  drivers/mmc/host/rtsx_pci_sdmmc.c | 7 +++++++
+> > > >  1 file changed, 7 insertions(+)
+> > > >
+> > > > diff --git a/drivers/mmc/host/rtsx_pci_sdmmc.c
+> > > > b/drivers/mmc/host/rtsx_pci_sdmmc.c
+> > > > index 2a3f14afe9f8..e016d720e453 100644
+> > > > --- a/drivers/mmc/host/rtsx_pci_sdmmc.c
+> > > > +++ b/drivers/mmc/host/rtsx_pci_sdmmc.c
+> > > > @@ -940,10 +940,17 @@ static int sd_power_on(struct
+> > > > realtek_pci_sdmmc
+> > > *host)
+> > > >  	if (err < 0)
+> > > >  		return err;
+> > > >
+> > > > +	mdelay(1);
+> > >
+> > > What is this delay for?
+> > >
+> >
+> > Spec definition, need to wait 1ms for voltage stable and below
+> > mdelay(5) is our device send 74 Clocks time
+> 
+> Clock cycles and mdelay() are not going to always stay the same, right?
+> 
+> I really have no idea what "74 clocks time" means, is this some specific timing
+> value for this hardware?  What is the units?  This needs to be documented
+> better in both the changelog and in the code.
+> 
+> thanks,
+> 
 
-Build test:
-mips (gcc version 11.2.1 20220213): 62 configs -> no new failure
-arm (gcc version 11.2.1 20220213): 100 configs -> 1 new failure
-arm64 (gcc version 11.2.1 20220213): 3 configs -> 1 new failure
-x86_64 (gcc version 11.2.1 20220213): 4 configs -> no failure
+Please ref: https://www.sdcard.org/downloads/pls/ Version8
+And see the 6.4.1.2 Power Up Time of Host Figure 6-5: Power Up Diagram of Host
+mdelay(1) corresponds to Stable supply voltage
+mdelay(5) corresponds to Host provides at least 74 Clocks before issuing first command
+our device need 5ms to issue 74 Clocks
 
-Both arm and arm64 failed with the error:
-drivers/tee/optee/core.c: In function 'optee_probe':
-drivers/tee/optee/core.c:726:20: error: operation on 'rc' may be undefined [-Werror=sequence-point]
-  726 |                 rc = rc = PTR_ERR(ctx);
 
-Caused by: d7151f4ed49b ("optee: use driver internal tee_context for some rpc")
-
-Boot test:
-x86_64: Booted on my test laptop. No regression.
-x86_64: Booted on qemu. No regression. [1]
-arm64: Booted on rpi4b (4GB model). No regression. [2]
-mips: Booted on ci20 board. No regression. [3]
-
-[1]. https://openqa.qa.codethink.co.uk/tests/794
-[2]. https://openqa.qa.codethink.co.uk/tests/800
-[3]. https://openqa.qa.codethink.co.uk/tests/802
-
-Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
-
---
-Regards
-Sudip
+> greg k-h
+> ------Please consider the environment before printing this e-mail.

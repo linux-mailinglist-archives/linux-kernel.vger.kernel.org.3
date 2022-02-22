@@ -2,101 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 490D94C04D7
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 23:45:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE16E4C04DA
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 23:46:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236134AbiBVWqR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 17:46:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60534 "EHLO
+        id S236144AbiBVWqx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 17:46:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231479AbiBVWqP (ORCPT
+        with ESMTP id S231479AbiBVWqw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 17:46:15 -0500
-Received: from mail105.syd.optusnet.com.au (mail105.syd.optusnet.com.au [211.29.132.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 804D9128647;
-        Tue, 22 Feb 2022 14:45:49 -0800 (PST)
-Received: from dread.disaster.area (pa49-186-17-0.pa.vic.optusnet.com.au [49.186.17.0])
-        by mail105.syd.optusnet.com.au (Postfix) with ESMTPS id 57F1910E0F91;
-        Wed, 23 Feb 2022 09:45:46 +1100 (AEDT)
-Received: from dave by dread.disaster.area with local (Exim 4.92.3)
-        (envelope-from <david@fromorbit.com>)
-        id 1nMduk-00FEq0-BE; Wed, 23 Feb 2022 09:45:46 +1100
-Date:   Wed, 23 Feb 2022 09:45:46 +1100
-From:   Dave Chinner <david@fromorbit.com>
-To:     NeilBrown <neilb@suse.de>
-Cc:     Al Viro <viro@zeniv.linux.org.uk>,
-        Linux NFS Mailing List <linux-nfs@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        Daire Byrne <daire@dneg.com>,
-        Andreas Dilger <adilger.kernel@dilger.ca>
-Subject: Re: [PATCH/RFC] VFS: support parallel updates in the one directory.
-Message-ID: <20220222224546.GE3061737@dread.disaster.area>
-References: <164549669043.5153.2021348013072574365@noble.neil.brown.name>
+        Tue, 22 Feb 2022 17:46:52 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73BDA128654;
+        Tue, 22 Feb 2022 14:46:26 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BB140B81CBC;
+        Tue, 22 Feb 2022 22:46:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9ED9C340E8;
+        Tue, 22 Feb 2022 22:46:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645569983;
+        bh=LLT4WrCWsAxdRG3oj5sQHASvi7mABVFlwiXiKTc9jho=;
+        h=Date:Subject:To:References:From:In-Reply-To:From;
+        b=e7aVapXzFksl9tIgPeJVBB8c7ZxIRPTBHu6sxPIAk8mHXXpne/QsuiIgx0XI0Devs
+         GPfsinjjA7dvEYuWTbx1awvR4qoKVf1GT1Yu4E6otdfdD46OUkReKapV6Q0/WRA6w7
+         PiUpQuW9F5MqV83XUiEBjVSBHbbkvIM1E0mcV2nOzk+kDE2V5tCqWuPB1MhtJweahj
+         NtYZrLOo9eRxwd/jc51pfyRR18jWTmaRO0WRRUrSV76FkBS7svbUtOKmv12jQ51GyZ
+         Jo8JHMcZx+MduRsobWD56wl+V1Re5vwf0LP+c2cf7Yo37Qe+JTL3mB6sc9PAfQdQpz
+         BX8WeHD6ZB6EA==
+Message-ID: <64cbe961-30b9-7833-2be6-0c9661f02b2b@kernel.org>
+Date:   Tue, 22 Feb 2022 16:46:21 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <164549669043.5153.2021348013072574365@noble.neil.brown.name>
-X-Optus-CM-Score: 0
-X-Optus-CM-Analysis: v=2.4 cv=VuxAv86n c=1 sm=1 tr=0 ts=6215679c
-        a=+dVDrTVfsjPpH/ci3UuFng==:117 a=+dVDrTVfsjPpH/ci3UuFng==:17
-        a=kj9zAlcOel0A:10 a=oGFeUVbbRNcA:10 a=7-415B0cAAAA:8
-        a=yXyu7VD68H5JFmdjK-oA:9 a=CjuIK1q_8ugA:10 a=biEYGPWJfzWAr4FL6Ov7:22
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 1/4] dt-bindings: usb: dwc2: fix compatible of Intel
+ Agilex
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220218161522.52044-1-krzysztof.kozlowski@canonical.com>
+From:   Dinh Nguyen <dinguyen@kernel.org>
+In-Reply-To: <20220218161522.52044-1-krzysztof.kozlowski@canonical.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 22, 2022 at 01:24:50PM +1100, NeilBrown wrote:
+All patches applied!
+
+Thanks,
+Dinh
+
+On 2/18/22 10:15, Krzysztof Kozlowski wrote:
+> Intel Agilex USB DWC2 node is used as compatible with generic snps,dwc2
+> (just like Altera's Stratix10).
 > 
-> Hi Al,
->  I wonder if you might find time to have a look at this patch.  It
->  allows concurrent updates to a single directory.  This can result in
->  substantial throughput improvements when the application uses multiple
->  threads to create lots of files in the one directory, and there is
->  noticeable per-create latency, as there can be with NFS to a remote
->  server.
-> Thanks,
-> NeilBrown
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> ---
+>   Documentation/devicetree/bindings/usb/dwc2.yaml | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> Some filesystems can support parallel modifications to a directory,
-> either because the modification happen on a remote server which does its
-> own locking (e.g.  NFS) or because they can internally lock just a part
-> of a directory (e.g.  many local filesystems, with a bit of work - the
-> lustre project has patches for ext4 to support concurrent updates).
-> 
-> To allow this, we introduce VFS support for parallel modification:
-> unlink (including rmdir) and create.  Parallel rename is not (yet)
-> supported.
-
-Yay!
-
-> If a filesystem supports parallel modification in a given directory, it
-> sets S_PAR_UNLINK on the inode for that directory.  lookup_open() and
-> the new lookup_hash_modify() (similar to __lookup_hash()) notice the
-> flag and take a shared lock on the directory, and rely on a lock-bit in
-> d_flags, much like parallel lookup relies on DCACHE_PAR_LOOKUP.
-
-I suspect that you could enable this for XFS right now. XFS has internal
-directory inode locking that should serialise all reads and writes
-correctly regardless of what the VFS does. So while the VFS might
-use concurrent updates (e.g. inode_lock_shared() instead of
-inode_lock() on the dir inode), XFS has an internal metadata lock
-that will then serialise the concurrent VFS directory modifications
-correctly....
-
-Yeah, I know, this isn't true concurrent dir updates, but it should
-allow multiple implementations of the concurrent dir update VFS APIs
-across multiple filesystems and shake out any assumptions that might
-arise from a single implementation target (e.g. silly rename
-quirks).
-
-Cheers,
-
-Dave.
--- 
-Dave Chinner
-david@fromorbit.com
+> diff --git a/Documentation/devicetree/bindings/usb/dwc2.yaml b/Documentation/devicetree/bindings/usb/dwc2.yaml
+> index 481aaa09f3f2..048e352c531a 100644
+> --- a/Documentation/devicetree/bindings/usb/dwc2.yaml
+> +++ b/Documentation/devicetree/bindings/usb/dwc2.yaml
+> @@ -41,6 +41,7 @@ properties:
+>                 - amlogic,meson8b-usb
+>                 - amlogic,meson-gxbb-usb
+>                 - amlogic,meson-g12a-usb
+> +              - intel,socfpga-agilex-hsotg
+>             - const: snps,dwc2
+>         - const: amcc,dwc-otg
+>         - const: apm,apm82181-dwc-otg
+> @@ -53,7 +54,6 @@ properties:
+>             - const: st,stm32mp15-hsotg
+>             - const: snps,dwc2
+>         - const: samsung,s3c6400-hsotg
+> -      - const: intel,socfpga-agilex-hsotg
+>   
+>     reg:
+>       maxItems: 1

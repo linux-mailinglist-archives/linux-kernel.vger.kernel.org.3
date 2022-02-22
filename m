@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75AA84BF8FC
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 14:18:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F99A4BF8FF
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 14:18:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232341AbiBVNS3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 08:18:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41746 "EHLO
+        id S232332AbiBVNSk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 08:18:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232306AbiBVNS0 (ORCPT
+        with ESMTP id S232348AbiBVNSg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 08:18:26 -0500
-Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66B65BD8B6
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 05:18:01 -0800 (PST)
-Received: by mail-oi1-x229.google.com with SMTP id s5so14384864oic.10
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 05:18:01 -0800 (PST)
+        Tue, 22 Feb 2022 08:18:36 -0500
+Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B704C0842
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 05:18:08 -0800 (PST)
+Received: by mail-oi1-x22c.google.com with SMTP id 12so6386233oix.12
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 05:18:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=usp.br; s=usp-google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=ayEiTJoQMQ+jcjp3UMRNd5LwLeFycUhnaRc8GdLvEdk=;
-        b=Wqh8WVyaB3/ePOUVG3qDmLXtRM2V02SqDxNeuWJZyWdRv9S3nWuGPgBol8HVCWBq8s
-         DhdiEThHMeaf3oShHr2vzPZEF1glAHISZfrq3028oU3ta8gBcyG3ZW7qCSSEyHOTI3lB
-         BnxvSUxinY/c3tq9cibM8S6EyjPjwHVN8UdKR268Zwpzc9EZjOU39PEj/kwRRPUwIzMC
-         TJoaaWdEK9eQzLpnFNJIlDEy9QqLPUYMg7l3IH3RF7db55PMl9T1tKhWeuWn2GGMES0C
-         X+a0prpgsJLlkvgbGmBRL1Skefle02K+m9wUWk7PYw5kkYDqo0dRaW0HX71nR2+EcEzY
-         Q1og==
+        bh=ACyjILcPZ7NYc4LHqBI/xMepMYxZRqk3PuvZsYhS/Ak=;
+        b=v4JuF4eo37E18crpKjb/Gy2A7pJWq76VCa+SO0Yq2LZhwxQ80IckHLVEykfxl+nfW6
+         zOiTv4hSWHNOaMO3uESTI58NF+VpBtZ+ioz74gPPvRewBi5Wm/vNY4R76jnCGHoPc6H1
+         D4duIjjzalbpwjn4VmFoKeov9xAV/JkbSY0bME9CiQ5EoiVvI/bAL+3PvS4rK8pcTUer
+         fAL6Y8cQdpq2p3zQaGuE84a+1HeTzBv7Vxh8mUZFHbhT28l7rk9/7J139WxWOZ2t9UX0
+         QfoIZcl0NVgcSrenDt/ZlCfp0kbAjFMyzQUcxgYWD2P6bDQVYoBq0GMddHGGMJx8FiVi
+         Xkgw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=ayEiTJoQMQ+jcjp3UMRNd5LwLeFycUhnaRc8GdLvEdk=;
-        b=EBfx5lwYRMByZ/aVYLXWJhxWy0NrID+VMn6G4STeM9ML6PWSi81LqAS7ixYAWoAlJK
-         i7le6EmUIoIHHOA3VnY88h4/mZFlOaW+wdqfOnIOg5T4YHO0W2Q+LDylcx6JBC381GIt
-         TmLHi4qiSYFtOi5Ax5MoBWKNUVKAHU72+5DR4F03NxkCmLXComAD5A8CAAkrQRX1sWYT
-         9yTdej0NUFUYtltJ6UwxK7KbjuhiKautvbXigcviyh5khr7E1zVHg+hazioZVvMnkKL5
-         WVgk0OhEjm6KvOmSAb4Ka5pHs2gbbV1b8dISEtcbW7BPOsJINonq+CyMTVPalh8Wx0ct
-         MDTQ==
-X-Gm-Message-State: AOAM530cUkUukIYoYbAMpEVF+9SN8n22/PyQTIQpPjwqmAhK5PzcmUKU
-        6g+l9qLiQzYFHPTlphdvZZOg2A==
-X-Google-Smtp-Source: ABdhPJwWSQJbsP6uAkrMylNazH+1ImSjAqTPKRnK19++tCqd6JrQXsgHYiKgvyoSEEmR6fmGiVSzTQ==
-X-Received: by 2002:a05:6808:f0f:b0:2cf:3d64:2333 with SMTP id m15-20020a0568080f0f00b002cf3d642333mr1897906oiw.23.1645535880803;
-        Tue, 22 Feb 2022 05:18:00 -0800 (PST)
+        bh=ACyjILcPZ7NYc4LHqBI/xMepMYxZRqk3PuvZsYhS/Ak=;
+        b=5CnnKn2fWQskCatR4rDImlFuQawYVa1ZdK5Xq3E4jFLZmh1Vs5qkOhTQRDGtZwQuCA
+         9OxZ5A8SoAKR26mNtSddje9TUWrAKm5lCHaf4h3FE2VMxIm6ATQOUsctp9IZo/g8QYpb
+         62t3LsOVc4XXICQeIN11WH3qBa6pOZlR2B2LGfHaA3D7z/3JPy3RrJr/asHiJkbwzvYM
+         gHxLtBKwMLC8BIZvlkfqQEMBLpVtPZVuR6Jtg+mHj7vyYwi7JWqTy1UFy+f0Dg9cRRIY
+         fhRqj1FjFIubfiBaZWvoJdN9D2Q5z1jtAfqZskpnLEmW03beOfqpBwwauRtVHVrXdlkL
+         /raw==
+X-Gm-Message-State: AOAM531gt8mGVr0OfFyyKh2qpA4XZv4JVa31g+LEu6g5XCtEEATENFdn
+        6vDyhxRD0M8cDVu4AE8emhF7WulLnt7dAu2u
+X-Google-Smtp-Source: ABdhPJwPv6b/Py7a73THpCfPZnfM/8IqLsz85BzUx8kIjX3WPdbvzYq+DLAUFR44XYrhcXxQsPSCiA==
+X-Received: by 2002:a05:6808:238e:b0:2d4:fe08:9351 with SMTP id bp14-20020a056808238e00b002d4fe089351mr1835703oib.291.1645535887885;
+        Tue, 22 Feb 2022 05:18:07 -0800 (PST)
 Received: from fedora.. ([187.36.236.204])
-        by smtp.gmail.com with ESMTPSA id c9sm6325050otd.26.2022.02.22.05.17.53
+        by smtp.gmail.com with ESMTPSA id c9sm6325050otd.26.2022.02.22.05.18.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Feb 2022 05:18:00 -0800 (PST)
+        Tue, 22 Feb 2022 05:18:07 -0800 (PST)
 From:   =?UTF-8?q?Ma=C3=ADra=20Canal?= <maira.canal@usp.br>
 To:     alexander.deucher@amd.com, christian.koenig@amd.com,
         Xinhui.Pan@amd.com, Hawking.Zhang@amd.com, john.clements@amd.com,
@@ -59,9 +59,9 @@ Cc:     amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
         linux-kernel@vger.kernel.org, magalilemes00@gmail.com,
         mwen@igalia.com, isabbasso@riseup.net,
         =?UTF-8?q?Ma=C3=ADra=20Canal?= <maira.canal@usp.br>
-Subject: [PATCH 04/10] drm/amd/display: Remove unused temp variable
-Date:   Tue, 22 Feb 2022 10:16:55 -0300
-Message-Id: <20220222131701.356117-5-maira.canal@usp.br>
+Subject: [PATCH 05/10] drm/amd/display: Remove unused dcn316_smu_set_voltage_via_phyclk function
+Date:   Tue, 22 Feb 2022 10:16:56 -0300
+Message-Id: <20220222131701.356117-6-maira.canal@usp.br>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220222131701.356117-1-maira.canal@usp.br>
 References: <20220222131701.356117-1-maira.canal@usp.br>
@@ -78,39 +78,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove unused temp variable from the dmub_rb_flush_pending function by
-using arithmetic to remove the loop.
+Remove dcn316_smu_set_voltage_via_phyclk function, which is not used in the
+codebase.
 
-The -Wunused-but-set-variable warning was pointed out by Clang with the
-following warning:
+This was pointed by clang with the following warning:
 
-drivers/gpu/drm/amd/amdgpu/../display/dmub/inc/dmub_cmd.h:2921:12: warning:
-variable 'temp' set but not used [-Wunused-but-set-variable]
-    uint64_t temp;
-             ^
+drivers/gpu/drm/amd/amdgpu/../display/dc/clk_mgr/dcn316/dcn316_smu.c:171:5:
+warning: no previous prototype for function
+'dcn316_smu_set_voltage_via_phyclk' [-Wmissing-prototypes]
+int dcn316_smu_set_voltage_via_phyclk(struct clk_mgr_internal *clk_mgr, int
+requested_phyclk_khz)
+    ^
 
 Signed-off-by: Maíra Canal <maira.canal@usp.br>
 ---
- drivers/gpu/drm/amd/display/dmub/inc/dmub_cmd.h | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+ .../amd/display/dc/clk_mgr/dcn316/dcn316_smu.c   | 16 ----------------
+ 1 file changed, 16 deletions(-)
 
-diff --git a/drivers/gpu/drm/amd/display/dmub/inc/dmub_cmd.h b/drivers/gpu/drm/amd/display/dmub/inc/dmub_cmd.h
-index fb01ff49e655..d3088836d4e4 100644
---- a/drivers/gpu/drm/amd/display/dmub/inc/dmub_cmd.h
-+++ b/drivers/gpu/drm/amd/display/dmub/inc/dmub_cmd.h
-@@ -2918,11 +2918,8 @@ static inline void dmub_rb_flush_pending(const struct dmub_rb *rb)
- 	while (rptr != wptr) {
- 		uint64_t volatile *data = (uint64_t volatile *)((uint8_t *)(rb->base_address) + rptr);
- 		//uint64_t volatile *p = (uint64_t volatile *)data;
--		uint64_t temp;
--		uint8_t i;
+diff --git a/drivers/gpu/drm/amd/display/dc/clk_mgr/dcn316/dcn316_smu.c b/drivers/gpu/drm/amd/display/dc/clk_mgr/dcn316/dcn316_smu.c
+index b7f9e1b34c11..fd6497fd2dc5 100644
+--- a/drivers/gpu/drm/amd/display/dc/clk_mgr/dcn316/dcn316_smu.c
++++ b/drivers/gpu/drm/amd/display/dc/clk_mgr/dcn316/dcn316_smu.c
+@@ -168,22 +168,6 @@ int dcn316_smu_set_dispclk(struct clk_mgr_internal *clk_mgr, int requested_dispc
+ 	return actual_dispclk_set_mhz * 1000;
+ }
  
--		for (i = 0; i < DMUB_RB_CMD_SIZE / sizeof(uint64_t); i++)
--			temp = *data++;
-+		*data += DMUB_RB_CMD_SIZE / sizeof(uint64_t);
- 
- 		rptr += DMUB_RB_CMD_SIZE;
- 		if (rptr >= rb->capacity)
+-int dcn316_smu_set_voltage_via_phyclk(struct clk_mgr_internal *clk_mgr, int requested_phyclk_khz)
+-{
+-	int actual_phypclk_set_mhz = -1;
+-
+-	if (!clk_mgr->smu_present && requested_phyclk_khz)
+-		return requested_phyclk_khz;
+-
+-	/*  Unit of SMU msg parameter is Mhz */
+-	actual_phypclk_set_mhz = dcn316_smu_send_msg_with_param(
+-			clk_mgr,
+-			VBIOSSMC_MSG_SetPhyclkVoltageByFreq,
+-			khz_to_mhz_ceil(requested_phyclk_khz));
+-
+-	return actual_phypclk_set_mhz * 1000;
+-}
+-
+ int dcn316_smu_set_hard_min_dcfclk(struct clk_mgr_internal *clk_mgr, int requested_dcfclk_khz)
+ {
+ 	int actual_dcfclk_set_mhz = -1;
 -- 
 2.35.1
 

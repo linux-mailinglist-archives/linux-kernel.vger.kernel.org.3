@@ -2,157 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 649824BF1AE
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 06:49:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53F7D4BF1B1
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 06:49:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229941AbiBVFsi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 00:48:38 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:59844 "EHLO
+        id S229961AbiBVFtS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 00:49:18 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:33312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229912AbiBVFsh (ORCPT
+        with ESMTP id S229921AbiBVFtS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 00:48:37 -0500
-Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 693C813F77
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 21:48:12 -0800 (PST)
-Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-2d625082ae2so161421827b3.1
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 21:48:12 -0800 (PST)
+        Tue, 22 Feb 2022 00:49:18 -0500
+Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5961298F4E
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 21:48:53 -0800 (PST)
+Received: by mail-pj1-x1049.google.com with SMTP id a15-20020a17090ad80f00b001b8a1e1da50so1010405pjv.6
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 21:48:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=hw6aQJa1MO9WdpxwzimvLityGgLsFlQla0AXaHMQmt0=;
-        b=q//0ngBw/9CR5mrn8X0xPqPq9wEjbNjeSbSLQaR1T9XnxZ6n6eOU/zM9nTaILAgbDj
-         AbZb2CzrN8VVOPIZg8lcIqeo1AyHKbg9rHy33/6sqG+f6Jxs5gpFmcChMOkJzsrY3xgw
-         YcBPrAMipOn34XET6lfU5xmem/NSO6dn5bfVUzx3vXqrcq5J26cdP9DraWBw9kth9RM4
-         ZEoIhB30eylsyqC+bBwoned+sm1fvSG980njnWDcZO+XUhtDNalHnyPWclNCojmomU9r
-         pkQZkjfsXAbLe78VXjdYJzkjvpfaFQh7ffzpHoqI7ZmyMpfEntiQF9WrMYaJxrBknlJQ
-         w13w==
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=vYqEunhu/KkkvrCVtcAZ/IBktz7bD/y5RYmB+FXwm9M=;
+        b=l4pFyhnwPZYCiIGuD75Kd2iBJySA4ALu9YTOi7btZ4InnfPxYzI50wuTW6UN5529gH
+         rU8VSCHZ6nGma5hpopCaZ9FtHcZiHoefHIYbfHfIjLCUyS6Bjy5dlAXOxk2zmfCPHXyX
+         fvHv8aBK2tv+B/eY9K50OPpJPIWyerAph1wRy7Ngg8scbBigtPeKzzbWr6qvT1KOAcwj
+         jeOcDzf1hICZShCh4ja7GjqWMz8uRWPDDqoIZlCmCTkdKNBOoHmDXVcRaQO/jr51N8oZ
+         zoTPVnJm/J1PSsKDEYydGKgDLyE/iRPqSRl32mXEopj8EIzDydsBXXu1LwtnHNlu6bFM
+         /7Ew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=hw6aQJa1MO9WdpxwzimvLityGgLsFlQla0AXaHMQmt0=;
-        b=AKGH9rIZXWWpM+ITXjw/F8S8OdjvHl5cqQqq3B/8Yp0SYg9M5bZ4tk1xCms9xTGJKS
-         ZtDx/Y8DJDK1lXotMwqZMGgIchFoZfGgzhoGjos+Lef7zdjj5pG2diK6UUMMxevYXcJm
-         gQG4ihtzbYVtq7PRQg8jSdzt+SlUpUN1kOFLMRY4OuV2Qr8AaXb0+yQOrTbgzYiUzCJ1
-         4ezmpvOy6Kd00aCvWafelSIiDqvDhkbJMYEYhV5SU9SC5FQ0yYPqgD5kFwk5+PStwq5+
-         4enlFw64FPNv8J+sUxrO4nE2CTCyxkZZ2V04RqF1uid2eGpPIReg1GgUi79Hd6wPgw0z
-         LHXg==
-X-Gm-Message-State: AOAM5336Ps6NuoeF8odHhN53CG2WogTvnrQwOzFjacOjfJIGE7venY8H
-        D6A/G7Dlwd0wzWSH6bQ6L4yAchu2cMIiRj4mTruTUg==
-X-Google-Smtp-Source: ABdhPJyhDuclYQmodYIzN2CJ9eAgBf112KtTtES+r/ZuZFe3mtJx+Sv/y4TK/ne8vFOyQsWxtDM1mBcQMZ/Aa1QF7CM=
-X-Received: by 2002:a81:1748:0:b0:2d6:41ae:1384 with SMTP id
- 69-20020a811748000000b002d641ae1384mr22200124ywx.293.1645508891454; Mon, 21
- Feb 2022 21:48:11 -0800 (PST)
-MIME-Version: 1.0
-References: <20220211013032.623763-1-surenb@google.com> <YgvONKdZ2T0PB2/0@dhcp22.suse.cz>
- <YgwDa6rMHRdRTnzB@dhcp22.suse.cz> <YgwHhTN4P5yyZqBz@dhcp22.suse.cz>
- <CAJuCfpGG9zwbvfH5UZkt6cG=woeO0RGE7QxjEpXn=gFhiaDdmQ@mail.gmail.com>
- <YgywnF8l4Zu0aLtF@dhcp22.suse.cz> <CAJuCfpFOy_oRp=WWqtzE7bJR7p51FzzBPtbKhWeTGOKC-n41Cg@mail.gmail.com>
-In-Reply-To: <CAJuCfpFOy_oRp=WWqtzE7bJR7p51FzzBPtbKhWeTGOKC-n41Cg@mail.gmail.com>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Mon, 21 Feb 2022 21:48:00 -0800
-Message-ID: <CAJuCfpE+3OzM3h79ywWrNWHM3B2v7u3Z07MTt4cMtVD4OGi7pQ@mail.gmail.com>
-Subject: Re: [PATCH v3 1/1] mm: fix use-after-free when anon vma name is used
- after vma is freed
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Colin Cross <ccross@google.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Kees Cook <keescook@chromium.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Christian Brauner <brauner@kernel.org>, legion@kernel.org,
-        ran.xiaokai@zte.com.cn, sashal@kernel.org,
-        Chris Hyser <chris.hyser@oracle.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Peter Collingbourne <pcc@google.com>, caoxiaofeng@yulong.com,
-        David Hildenbrand <david@redhat.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        linux-mm <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        kernel-team <kernel-team@android.com>,
-        syzbot+aa7b3d4b35f9dc46a366@syzkaller.appspotmail.com
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=vYqEunhu/KkkvrCVtcAZ/IBktz7bD/y5RYmB+FXwm9M=;
+        b=MYI/9ptXqLYIQgy5d9VIqb6tXbEH0zkIIr9MBz7pgRujiPdL6k4GsG6rXaKyJ+zEz2
+         046sKYRYSqWNfNAdQiSn7fTvv/Jt8+/DC/IDkxVVDzgD9Z9Zh/KV78/xDPOCumKM6CF0
+         kz/UPvknElSZXvBE1tm5ZGgGZhj0ky9nQ8WtEPKuqW8V6LdSyAu2bpwghWeOuCLrAEGj
+         QT78oc9Iq0exHiWUskg6o9C+XezP40k56KGjJiJrsDBKPrgbW4nB7mLaRVwu9eUxZWs/
+         nOH8K0llGOR37xhFDGHnZWzeJ7IyFa/Q9Yk9DPWZAFmaL2Jzr+NblDf3iTDpe4+JjMGB
+         /tfA==
+X-Gm-Message-State: AOAM533Ktm6DShsdVniG8xCp+C4v8FNXtZPFwUhvNg7QDmMT7TdGozaX
+        eHFmMPVZXXladN1fKIi+hhvWap8f/xDi
+X-Google-Smtp-Source: ABdhPJx24KtHMYp7elwgwkTvRMMRg0uiLVvq5dDP7PfUsIQBi1+d2j1aY7UGpF6ytXdJwFqYOan3fDP3CAP9
+X-Received: from vipinsh.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:36b0])
+ (user=vipinsh job=sendgmr) by 2002:a62:7c56:0:b0:4f0:f268:ec03 with SMTP id
+ x83-20020a627c56000000b004f0f268ec03mr16839218pfc.8.1645508932777; Mon, 21
+ Feb 2022 21:48:52 -0800 (PST)
+Date:   Tue, 22 Feb 2022 05:48:48 +0000
+Message-Id: <20220222054848.563321-1-vipinsh@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.35.1.473.g83b2b277ed-goog
+Subject: [PATCH v4] KVM: Move VM's worker kthreads back to the original cgroup
+ before exiting.
+From:   Vipin Sharma <vipinsh@google.com>
+To:     pbonzini@redhat.com, seanjc@google.com
+Cc:     mkoutny@suse.com, tj@kernel.org, lizefan.x@bytedance.com,
+        hannes@cmpxchg.org, dmatlack@google.com, jiangshanlai@gmail.com,
+        kvm@vger.kernel.org, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Vipin Sharma <vipinsh@google.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 17, 2022 at 11:54 AM Suren Baghdasaryan <surenb@google.com> wrote:
->
-> On Wed, Feb 16, 2022 at 12:06 AM Michal Hocko <mhocko@suse.com> wrote:
-> >
-> > On Tue 15-02-22 15:02:54, Suren Baghdasaryan wrote:
-> > > On Tue, Feb 15, 2022 at 12:05 PM Michal Hocko <mhocko@suse.com> wrote:
-> > > >
-> > > > One thing I was considering is to check agains ref counte overflo (a
-> > > > deep process chain with many vmas could grow really high. ref_count
-> > > > interface doesn't provide any easy way to check for overflows as far as
-> > > > I could see from a quick glance so I gave up there but the logic would
-> > > > be really straightforward. We just create a new anon_vma_name with the same
-> > > > content and use it when duplicating if the usage grow really
-> > > > (arbitrarily) high.
-> > >
-> > > I went over proposed changes. I see a couple small required fixes
-> > > (resetting the name to NULL seems to be missing and I think
-> > > dup_vma_anon_name needs some tweaking) but overall quite
-> > > straight-forward.
-> >
-> > OK, great that this makes sense to you. As I've said I didn't really go
-> > into details, not even dared to boot that to test. So it will very
-> > likely need some more work but I do not expect this to grow much.
-> >
-> > > I'll post a separate patch to do this refactoring.
-> > > The original patch is fixing the UAF issue, so I don't want to mix it
-> > > with refactoring. Please let me know if you see an issue with
-> > > separating it that way.
-> >
-> > Well, I am not sure TBH. Look at diffstats. Your fix
-> > 2 files changed, 63 insertions(+), 17 deletions(-)
-> > the refactoring which should fix this and potentially others that might
-> > be still lurking there (because mixing shared pointers and their internal
-> > objects just begs for problems) is
-> > 7 files changed, 63 insertions(+), 86 deletions(-)
-> >
-> > more files touched for sure but the net result is much more clear and a
-> > much more code removed.
-> > The overflow logic would make it bigger but I guess the existing scheme
-> > needs it as well.
->
-> Ok, I'll see how to slice it after it's complete and tested.
-> Thanks for the input!
+VM worker kthreads can linger in the VM process's cgroup for sometime
+after KVM terminates the VM process.
 
-I posted the new patchset that includes:
-1. refactoring of the code suggested by Michal:
-https://lore.kernel.org/all/20220222054025.3412898-1-surenb@google.com
-2. refcount overflow protection suggested by Michal:
-https://lore.kernel.org/all/20220222054025.3412898-2-surenb@google.com
-3. UAF fix (originally implemented by this patch) reimplemented after
-the first two changes:
-https://lore.kernel.org/all/20220222054025.3412898-3-surenb@google.com
-Hopefully this sequence makes sense.
-Thanks,
-Suren.
+KVM terminates the worker kthreads by calling kthread_stop() which waits
+on the 'exited' completion, triggered by exit_mm(), via mm_release(), in
+do_exit() during the kthread's exit.  However, these kthreads are
+removed from the cgroup using the cgroup_exit() which happens after the
+exit_mm(). Therefore, A VM process can terminate in between the
+exit_mm() and cgroup_exit() calls, leaving only worker kthreads in the
+cgroup.
 
->
-> >
-> > I would also claim that both approaches are really painful to review
-> > because the existing model spreads into several areas and it is not
-> > really clear you caught them all just by staring into the diff so both
-> > will be rather painful to backport to older kernels. Fortunately this
-> > would be only 5.17.
-> > --
-> > Michal Hocko
-> > SUSE Labs
+Moving worker kthreads back to the original cgroup (kthreadd_task's
+cgroup) makes sure that the cgroup is empty as soon as the main VM
+process is terminated.
+
+Signed-off-by: Vipin Sharma <vipinsh@google.com>
+Suggested-by: Sean Christopherson <seanjc@google.com>
+---
+
+Thanks Sean, for the example on how to use the real_parent outside of the RCU
+critical region. I wrote your name in Suggested-by, I hope you are fine with
+it and this is the right tag/way to give you the credit.
+
+v4:
+- Read task's real_parent in the RCU critical section.
+- Don't log error message from the cgroup_attach_task_all() API.
+
+v3: https://lore.kernel.org/lkml/20220217061616.3303271-1-vipinsh@google.com/
+- Use 'current->real_parent' (kthreadd_task) in the
+  cgroup_attach_task_all() call.
+- Revert cgroup APIs changes in v2. Now, patch does not touch cgroup
+  APIs.
+- Update commit and comment message
+
+v2: https://lore.kernel.org/lkml/20211222225350.1912249-1-vipinsh@google.com/
+- Use kthreadd_task in the cgroup API to avoid build issue.
+
+v1: https://lore.kernel.org/lkml/20211214050708.4040200-1-vipinsh@google.com/
+
+ virt/kvm/kvm_main.c | 22 +++++++++++++++++++++-
+ 1 file changed, 21 insertions(+), 1 deletion(-)
+
+diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+index 83c57bcc6eb6..cdf1fa3c60ae 100644
+--- a/virt/kvm/kvm_main.c
++++ b/virt/kvm/kvm_main.c
+@@ -5810,6 +5810,7 @@ static int kvm_vm_worker_thread(void *context)
+ 	 * we have to locally copy anything that is needed beyond initialization
+ 	 */
+ 	struct kvm_vm_worker_thread_context *init_context = context;
++	struct task_struct *parent;
+ 	struct kvm *kvm = init_context->kvm;
+ 	kvm_vm_thread_fn_t thread_fn = init_context->thread_fn;
+ 	uintptr_t data = init_context->data;
+@@ -5836,7 +5837,7 @@ static int kvm_vm_worker_thread(void *context)
+ 	init_context = NULL;
+ 
+ 	if (err)
+-		return err;
++		goto out;
+ 
+ 	/* Wait to be woken up by the spawner before proceeding. */
+ 	kthread_parkme();
+@@ -5844,6 +5845,25 @@ static int kvm_vm_worker_thread(void *context)
+ 	if (!kthread_should_stop())
+ 		err = thread_fn(kvm, data);
+ 
++out:
++	/*
++	 * Move kthread back to its original cgroup to prevent it lingering in
++	 * the cgroup of the VM process, after the latter finishes its
++	 * execution.
++	 *
++	 * kthread_stop() waits on the 'exited' completion condition which is
++	 * set in exit_mm(), via mm_release(), in do_exit(). However, the
++	 * kthread is removed from the cgroup in the cgroup_exit() which is
++	 * called after the exit_mm(). This causes the kthread_stop() to return
++	 * before the kthread actually quits the cgroup.
++	 */
++	rcu_read_lock();
++	parent = rcu_dereference(current->real_parent);
++	get_task_struct(parent);
++	rcu_read_unlock();
++	cgroup_attach_task_all(parent, current);
++	put_task_struct(parent);
++
+ 	return err;
+ }
+ 
+
+base-commit: 1bbc60d0c7e5728aced352e528ef936ebe2344c0
+-- 
+2.35.1.473.g83b2b277ed-goog
+

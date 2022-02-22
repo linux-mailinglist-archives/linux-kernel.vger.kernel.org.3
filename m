@@ -2,144 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5660F4C03BF
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 22:26:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A9174C03D4
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 22:28:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235778AbiBVV01 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 16:26:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41554 "EHLO
+        id S235829AbiBVV2E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 16:28:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234356AbiBVV0Z (ORCPT
+        with ESMTP id S235832AbiBVV1l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 16:26:25 -0500
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 667C2111094
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 13:25:59 -0800 (PST)
-Received: by mail-pj1-x1034.google.com with SMTP id gi6so850209pjb.1
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 13:25:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
-        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
-         :content-transfer-encoding;
-        bh=3GMGpmsX5Sxh9Rowtyg+q5ai/Y4YeFDXutspTo0kPIY=;
-        b=DsglCOfTfDoGrxhojDR2OSvkMLectqlyMrwgCAEGegWACO8c2TO3vAZm5AvuDGbGB/
-         AfwU6PLsVNUCL9sjR8OiRWGPi4w6Mzn6aTt5qLRA31Z+7Vx5g7yvzVgn/2TGDmrXwXiR
-         tX9rxjEZWMPm4qrXxdcFSUA9q65lbl/3+7CWEkc1+dNLzw9Xgu9CtqgX8I0TdrWDtoZo
-         Pmw8yG1ve5uOR3VxbLyZeiSfoyP2HyAaDw2y39u7pKSZHBN4E3RsPhF6wymCys+IwJX9
-         0ydnrclVrc7ceNSE2nLgoxHYLEf/goG4zfja1UxHEfgz/ElcwjHLS9z8yGLuZ+Hws1Oy
-         cMDA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
-         :mime-version:content-transfer-encoding;
-        bh=3GMGpmsX5Sxh9Rowtyg+q5ai/Y4YeFDXutspTo0kPIY=;
-        b=FM36NXB4de157G71egEcfeiaNCpaBeShPPvNFjNnswx0aVZO/U15vzoSKSc+VqiTG1
-         4ssplBo/V7RqcCgUoWCa3NttQYnAMp278i/QxarVV7cufK0bSTVEJ9slErPnnWxVWTRo
-         rAoWRl2LYkdrcR9YaIgfYHr0HiH8q8zhDV8CHvsrjlqCbHaDUt+cRcsqu9ySSxFf0a9k
-         JES+fihzP0y/9JPgyRe2Bq03QxH8Q+YvVS+A0eUEDqwVHtYpNcdANwuXqYX3m7FrSpsR
-         pHh2g4ZgecT4/HU7wRhA9BrAdyBZq79Ia+BeAe7voY4Jv+wCU7rmzLYC82JypaB3ShEL
-         5PsA==
-X-Gm-Message-State: AOAM532mPiJ1g38CSKfk3i8bDFlNX8OraeQN9Ah1+EwsOglmoQmk4fC+
-        cfBEUR9hNVLqcA1YnlnLy5POJg==
-X-Google-Smtp-Source: ABdhPJypI0+UnxdX0K60WGxnqqz7+VBknfaZQj1jQNbPKlMSomWbVprZfDl6vXHOVBZEQqXoDneoCQ==
-X-Received: by 2002:a17:902:6b49:b0:149:7c73:bd6f with SMTP id g9-20020a1709026b4900b001497c73bd6fmr24550258plt.46.1645565158855;
-        Tue, 22 Feb 2022 13:25:58 -0800 (PST)
-Received: from localhost ([12.3.194.138])
-        by smtp.gmail.com with ESMTPSA id v22-20020a17090ad59600b001b7deb42251sm500928pju.15.2022.02.22.13.25.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Feb 2022 13:25:58 -0800 (PST)
-Date:   Tue, 22 Feb 2022 13:25:58 -0800 (PST)
-X-Google-Original-Date: Tue, 22 Feb 2022 13:25:00 PST (-0800)
-Subject:     Re: [PATCH] riscv: mm: Remove the copy operation of pmd
-In-Reply-To: <20220127100622.11856-1-hanchuanhua@oppo.com>
-CC:     Paul Walmsley <paul.walmsley@sifive.com>, aou@eecs.berkeley.edu,
-        jszhang@kernel.org, alexandre.ghiti@canonical.com,
-        wangkefeng.wang@huawei.com, zhengqi.arch@bytedance.com,
-        ebiederm@xmission.com, liushixin2@huawei.com,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        hanchuanhua@oppo.com
-From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     hanchuanhua@oppo.com
-Message-ID: <mhng-98c8a68c-ecb2-4db1-ab3e-3a35d5e764d0@palmer-ri-x1c9>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 22 Feb 2022 16:27:41 -0500
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 519208E196
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 13:27:11 -0800 (PST)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 21MLQgJt094027;
+        Tue, 22 Feb 2022 15:26:42 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1645565202;
+        bh=4IgUtNPOVL10Vp/1imi/uYZI63freW9H4+vX2DPlXSY=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=LAiCT48cWfLm7s/Qi781s8RcKxLPuwos03bIGtQxAOiGatxkEHNkQX9tlLsVaLlA/
+         +gMHbBht/OQ26yNsOaS3bNUeKIhwKyvFWQNTKLjT3EO8okdbAqUrLiDGa0NBFFfy77
+         t4uiayVOEan2qDs1T2LWQHz9oP/9jPlcoq9qXJnQ=
+Received: from DFLE105.ent.ti.com (dfle105.ent.ti.com [10.64.6.26])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 21MLQgUv093354
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 22 Feb 2022 15:26:42 -0600
+Received: from DFLE115.ent.ti.com (10.64.6.36) by DFLE105.ent.ti.com
+ (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Tue, 22
+ Feb 2022 15:26:42 -0600
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE115.ent.ti.com
+ (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Tue, 22 Feb 2022 15:26:42 -0600
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 21MLQgU8074960;
+        Tue, 22 Feb 2022 15:26:42 -0600
+Date:   Tue, 22 Feb 2022 15:26:42 -0600
+From:   Nishanth Menon <nm@ti.com>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+CC:     Rahul T R <r-ravikumar@ti.com>, <catalin.marinas@arm.com>,
+        <will@kernel.org>, <shawnguo@kernel.org>, <krzk@kernel.org>,
+        <geert+renesas@glider.be>, <marcel.ziswiler@toradex.com>,
+        <biju.das.jz@bp.renesas.com>, <vkoul@kernel.org>,
+        <enric.balletbo@collabora.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <tomi.valkeinen@ideasonboard.com>,
+        <laurent.pinchart@ideasonboard.com>
+Subject: Re: [PATCH] arm64: defconfig: Enable configs for DisplayPort on J721e
+Message-ID: <20220222212642.vwtw7xiz7cck63ea@zombie>
+References: <20220222180703.30401-1-r-ravikumar@ti.com>
+ <20220222193930.sbc5xlsofhg3amgk@overrun>
+ <YhVKSpMOKWzZy9a2@ripper>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <YhVKSpMOKWzZy9a2@ripper>
+User-Agent: NeoMutt/20171215
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 27 Jan 2022 02:06:22 PST (-0800), hanchuanhua@oppo.com wrote:
-> Since all processes share the kernel address space,
-> we only need to copy pgd in case of a vmalloc page
-> fault exception, the other levels of page tables are
-> shared, so the operation of copying pmd is unnecessary.
->
-> Signed-off-by: hanchuanhua <hanchuanhua@oppo.com>
-> ---
->  arch/riscv/mm/fault.c | 10 +++-------
->  1 file changed, 3 insertions(+), 7 deletions(-)
->
-> diff --git a/arch/riscv/mm/fault.c b/arch/riscv/mm/fault.c
-> index 4e9efbe..40694f0 100644
-> --- a/arch/riscv/mm/fault.c
-> +++ b/arch/riscv/mm/fault.c
-> @@ -102,9 +102,9 @@ static inline void bad_area(struct pt_regs *regs, struct mm_struct *mm, int code
->  static inline void vmalloc_fault(struct pt_regs *regs, int code, unsigned long addr)
->  {
->         pgd_t *pgd, *pgd_k;
-> -       pud_t *pud, *pud_k;
-> -       p4d_t *p4d, *p4d_k;
-> -       pmd_t *pmd, *pmd_k;
-> +       pud_t *pud_k;
-> +       p4d_t *p4d_k;
-> +       pmd_t *pmd_k;
->         pte_t *pte_k;
->         int index;
->         unsigned long pfn;
-> @@ -132,14 +132,12 @@ static inline void vmalloc_fault(struct pt_regs *regs, int code, unsigned long a
->         }
->         set_pgd(pgd, *pgd_k);
->
-> -       p4d = p4d_offset(pgd, addr);
->         p4d_k = p4d_offset(pgd_k, addr);
->         if (!p4d_present(*p4d_k)) {
->                 no_context(regs, addr);
->                 return;
->         }
->
-> -       pud = pud_offset(p4d, addr);
->         pud_k = pud_offset(p4d_k, addr);
->         if (!pud_present(*pud_k)) {
->                 no_context(regs, addr);
-> @@ -150,13 +148,11 @@ static inline void vmalloc_fault(struct pt_regs *regs, int code, unsigned long a
->          * Since the vmalloc area is global, it is unnecessary
->          * to copy individual PTEs
->          */
-> -       pmd = pmd_offset(pud, addr);
->         pmd_k = pmd_offset(pud_k, addr);
->         if (!pmd_present(*pmd_k)) {
->                 no_context(regs, addr);
->                 return;
->         }
-> -       set_pmd(pmd, *pmd_k);
->
->         /*
->          * Make sure the actual PTE exists as well to
+On 12:40-20220222, Bjorn Andersson wrote:
+> On Tue 22 Feb 11:39 PST 2022, Nishanth Menon wrote:
+> 
+> > On 23:37-20220222, Rahul T R wrote:
+> > > Enable DRM and PHY configs required for supporting
+> > > DisplayPort on J721e
+> > > 
+> > > Signed-off-by: Rahul T R <r-ravikumar@ti.com>
+> > > ---
+> > >  arch/arm64/configs/defconfig | 5 +++++
+> > >  1 file changed, 5 insertions(+)
+> > > 
+> > > diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
+> > > index 9f23d7ec1232..b0cb894a392e 100644
+> > > --- a/arch/arm64/configs/defconfig
+> > > +++ b/arch/arm64/configs/defconfig
+> > > @@ -702,6 +702,9 @@ CONFIG_DRM_EXYNOS_DSI=y
+> > >  CONFIG_DRM_EXYNOS_HDMI=y
+> > >  CONFIG_DRM_EXYNOS_MIC=y
+> > >  CONFIG_DRM_ROCKCHIP=m
+> > > +CONFIG_DRM_TIDSS=m
+> > > +CONFIG_DRM_DISPLAY_CONNECTOR=m
+> > > +CONFIG_DRM_CDNS_MHDP8546=m
+> > 
+> > Please use savedefconfig to place the changes in the correct location
+> > 
+> 
+> Just to clarify the request, use "make savedefconfig" to generate a
+> defconfig, then based on that put _only_ the relevant changes in the
+> commit.
 
-This looks good, but "Signed off by" lines are supposed to have real 
-names associated with them and this looks like a handle to me.  There 
-also seems to be something broken with the email, as this is causing git 
-to blow up, but for a small patch like this that's OK as I can resurrect 
-it by hand.
+Yup, thanks for clarifying.
+> 
+> > Also indicate changes if any in vmlinux in commit message.
+> > 
+> 
+> Nishanth, what are you asking for here? Just a mentioning if this has
+> any impact to vmlinux (or is isolated to the modules selected), or are
+> you asking for anything specific?
 
-Reviewed-by: Palmer Dabbelt <palmer@rivosinc.com> # aside from the name
+In this case, just ensure to state that vmlinux size has'nt
+changed, in case where we see a =y, we should indicate via
+./scripts/bloat-o-meter change that is introduced and if yes, we
+should explain why this is fundamental to system boot.
 
-Please send a v2 with the proper Signed off by line, as that's not 
-something I'm supposed to just fix up myself.
+Why is this necessary? This is to prevent product specific
+configurations (such as early display banner, chime etc) from creeping
+and increasing vmlinux size which has an impact for all ARM SoCs.
 
-Thanks!
+
+[...]
+
+-- 
+Regards,
+Nishanth Menon
+Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D

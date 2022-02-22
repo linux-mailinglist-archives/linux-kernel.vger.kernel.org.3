@@ -2,121 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF9814C0215
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 20:32:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D2DC14C0200
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 20:26:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235238AbiBVTcw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 14:32:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38556 "EHLO
+        id S235196AbiBVT02 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 14:26:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230467AbiBVTcv (ORCPT
+        with ESMTP id S231186AbiBVT0Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 14:32:51 -0500
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73B2C939C2
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 11:32:25 -0800 (PST)
-Received: by mail-ej1-x634.google.com with SMTP id a23so45885391eju.3
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 11:32:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=sxPYkxQ6mY3MfEsJx+8iE64/URTY/HAr2HMcmjeViMQ=;
-        b=V83V6RXAXvourhNVZvf2jgxzgWgbvwcqNI4r4pat82eR93ldTr1f7UnyLwwf2qycr7
-         a0xsJu4B7LJ0a8fb9YtI8NKspnKLSg3ZkC5edbZCl0z9GiEPzizCh1VTsL6b55uhFAT8
-         5XLvUxqQKyaIUvk9UTZ0CbvKc9mBw+5pp329s=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=sxPYkxQ6mY3MfEsJx+8iE64/URTY/HAr2HMcmjeViMQ=;
-        b=npkyVT25ICOaVtwHyVVGagxHqC2ZbzLKRT2zJ3rOUvl0zEh6R50K4oHx0GmR8no3SF
-         EBY6tP8aACwrotQ22RJBf70i1TCtaPlPwco9YYa5Rvx43k7WcBVn0PNPiKE/hFnvQG2L
-         WIqZbFXFobFzVLdSw4NsaliZ/zXWHNYWc6cY8XAnEge6VOWLnZi9Fymm0PlMFYJSS/1P
-         WOVBkW4extX7wuwqdWzmMOTLufrm1JUDDcXTaDYjnXmensD7CGx7bQkOnTneQYpBfUnB
-         34N8lPWOFfbqiOtnkxLLb/UNl+aGu7MVhl9eF98YxjvTOyY7eRRym/qbFW6xdpeaAhZB
-         EnCw==
-X-Gm-Message-State: AOAM5307dk9cZPsS9FD82U1kEa4LTXYs5opSqsGdc8oo4KWzkqPqzCN4
-        2+7OpW7aJe9NyHvh+h4qv0MNThSIQigDsF+5UIo=
-X-Google-Smtp-Source: ABdhPJwwtz/1tCA02ibWodeBzWo8RkC8ueCcBtcArw/7W4ue4ciZSkJqd0/h0iR5yQIyi/o5YyJNRw==
-X-Received: by 2002:a17:906:c788:b0:6ce:98db:d9eb with SMTP id cw8-20020a170906c78800b006ce98dbd9ebmr20894222ejb.139.1645558343684;
-        Tue, 22 Feb 2022 11:32:23 -0800 (PST)
-Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com. [209.85.218.46])
-        by smtp.gmail.com with ESMTPSA id eq6sm10210253edb.83.2022.02.22.11.32.23
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 22 Feb 2022 11:32:23 -0800 (PST)
-Received: by mail-ej1-f46.google.com with SMTP id gb39so46164880ejc.1
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 11:32:23 -0800 (PST)
-X-Received: by 2002:adf:e4c2:0:b0:1e3:3e5d:bd65 with SMTP id
- v2-20020adfe4c2000000b001e33e5dbd65mr21065461wrm.422.1645557950867; Tue, 22
- Feb 2022 11:25:50 -0800 (PST)
+        Tue, 22 Feb 2022 14:26:25 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9BDB674D0;
+        Tue, 22 Feb 2022 11:25:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645557959; x=1677093959;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=je6pxxUyucOKnuMDKEdXL57fjZykpHI9O7enNl2qahg=;
+  b=dIcq6AAHzVgb5fElyNsE0G6LIO3Kix6CGVD5xqFLx48XHPLcoOSgFLWF
+   4sXAtaZ7HVoEW5AaH97pS9hS6WK3Oewjgvo3wmFSKTxRp0KbolmnGHJIS
+   dWxi6YeOEZFDEJoLkFHwf/sQ8LrSMDt4yDeiU6VAMYl3b1X7cTAKWejY8
+   rqNs/neohk6LpZeSCXU/8QHLZdGzq5Yl0hzMeL/pCnZYRdC0UPvoTOvRY
+   p2ABUbrJjo0/lgJHFV1oot3YZdeF3msMB12CHazQhUBGK4oOpaPV+/FJW
+   CQGaiD9akg3BcxxwaUv/oM+JtDxoQZ/8NFetHzl55GM82hv8t2gJ6BceK
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10266"; a="276400870"
+X-IronPort-AV: E=Sophos;i="5.88,387,1635231600"; 
+   d="scan'208";a="276400870"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2022 11:25:59 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,387,1635231600"; 
+   d="scan'208";a="606801391"
+Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 22 Feb 2022 11:25:52 -0800
+Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nManH-0000XB-LZ; Tue, 22 Feb 2022 19:25:51 +0000
+Date:   Wed, 23 Feb 2022 03:25:44 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Byungchul Park <byungchul.park@lge.com>,
+        torvalds@linux-foundation.org
+Cc:     kbuild-all@lists.01.org, damien.lemoal@opensource.wdc.com,
+        linux-ide@vger.kernel.org, adilger.kernel@dilger.ca,
+        linux-ext4@vger.kernel.org, mingo@redhat.com,
+        linux-kernel@vger.kernel.org, peterz@infradead.org,
+        will@kernel.org, tglx@linutronix.de, rostedt@goodmis.org,
+        joel@joelfernandes.org, sashal@kernel.org, daniel.vetter@ffwll.ch,
+        chris@chris-wilson.co.uk, duyuyang@gmail.com,
+        johannes.berg@intel.com, tj@kernel.org, tytso@mit.edu,
+        willy@infradead.org, david@fromorbit.com, amir73il@gmail.com,
+        bfields@fieldses.org, gregkh@linuxfoundation.org,
+        kernel-team@lge.com, linux-mm@kvack.org, akpm@linux-foundation.org,
+        mhocko@kernel.org, minchan@kernel.org, hannes@cmpxchg.org
+Subject: Re: [PATCH v2 08/18] dept: Apply Dept to
+ wait_for_completion()/complete()
+Message-ID: <202202230329.dwOppOXY-lkp@intel.com>
+References: <1645268311-24222-9-git-send-email-byungchul.park@lge.com>
 MIME-Version: 1.0
-References: <1645455086-9359-1-git-send-email-quic_vpolimer@quicinc.com>
- <1645455086-9359-2-git-send-email-quic_vpolimer@quicinc.com> <CAA8EJppRUZ5OHSMS1NdFXDDvRXJFNsdoJDWgU7ZPUoAW9OD+eQ@mail.gmail.com>
-In-Reply-To: <CAA8EJppRUZ5OHSMS1NdFXDDvRXJFNsdoJDWgU7ZPUoAW9OD+eQ@mail.gmail.com>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Tue, 22 Feb 2022 11:25:37 -0800
-X-Gmail-Original-Message-ID: <CAD=FV=W2wi47egKmWDS+BZGSy85K+A8jX0gvi6CYhmFgoBBRmw@mail.gmail.com>
-Message-ID: <CAD=FV=W2wi47egKmWDS+BZGSy85K+A8jX0gvi6CYhmFgoBBRmw@mail.gmail.com>
-Subject: Re: [PATCH v2 1/4] drm/msm/dp: Add basic PSR support for eDP
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Vinod Polimera <quic_vpolimer@quicinc.com>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        freedreno <freedreno@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Sean Paul <seanpaul@chromium.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, quic_kalyant@quicinc.com,
-        Sankeerth Billakanti <quic_sbillaka@quicinc.com>,
-        quic_vproddut@quicinc.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1645268311-24222-9-git-send-email-byungchul.park@lge.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hi Byungchul,
 
-On Mon, Feb 21, 2022 at 7:12 PM Dmitry Baryshkov
-<dmitry.baryshkov@linaro.org> wrote:
->
-> > +static int dp_link_psr_status(struct dp_link_private *link)
-> > +{
-> > +       u8 status[2];
-> > +
-> > +       drm_dp_dpcd_read(link->aux, DP_PSR_ERROR_STATUS, status, 2);
-> > +
-> > +       if (status[0] & DP_PSR_LINK_CRC_ERROR)
-> > +               DRM_ERROR("PSR LINK CRC ERROR\n");
-> > +       else if (status[0] & DP_PSR_RFB_STORAGE_ERROR)
-> > +               DRM_ERROR("PSR RFB STORAGE ERROR\n");
-> > +       else if (status[0] & DP_PSR_VSC_SDP_UNCORRECTABLE_ERROR)
-> > +               DRM_ERROR("PSR VSC SDP UNCORRECTABLE ERROR\n");
-> > +       else if (status[1] & DP_PSR_CAPS_CHANGE)
-> > +               DRM_INFO("PSR Capability Change\n");
->
-> DRM_DEBUG_DP
+Thank you for the patch! Perhaps something to improve:
 
-Not sure I'll have time to go back and review the series, but one
-thing that caught my eye as this flashed through my inbox is that I
-think all of these "shouting" are deprecated. It's even officially
-documented now as of commit d2f0a8afc1be ("UPSTREAM: drm/print: Add
-deprecation notes to DRM_...() functions").
+[auto build test WARNING on tip/sched/core]
+[also build test WARNING on linux/master linus/master v5.17-rc5]
+[cannot apply to tip/locking/core hnaz-mm/master next-20220217]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
--Doug
+url:    https://github.com/0day-ci/linux/commits/Byungchul-Park/DEPT-Dependency-Tracker/20220220-185528
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git ed3b362d54f0038cafc985248350d301af7af686
+reproduce: make htmldocs
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> include/linux/completion.h:121: warning: expecting prototype for init_completion(). Prototype was for __init_completion() instead
+
+vim +121 include/linux/completion.h
+
+8b3db9c542e18b7 Ingo Molnar     2006-07-03  110  
+65eb3dc609dec17 Kevin Diggs     2008-08-26  111  /**
+ee2f154a598e96d Randy Dunlap    2010-10-26  112   * init_completion - Initialize a dynamically allocated completion
+c32f74ab2872994 Wolfram Sang    2013-11-14  113   * @x:  pointer to completion structure that is to be initialized
+65eb3dc609dec17 Kevin Diggs     2008-08-26  114   *
+65eb3dc609dec17 Kevin Diggs     2008-08-26  115   * This inline function will initialize a dynamically created completion
+65eb3dc609dec17 Kevin Diggs     2008-08-26  116   * structure.
+65eb3dc609dec17 Kevin Diggs     2008-08-26  117   */
+82b6a46bab5dcb0 Byungchul Park  2022-02-19  118  static inline void __init_completion(struct completion *x,
+82b6a46bab5dcb0 Byungchul Park  2022-02-19  119  				     struct dept_key *dkey,
+82b6a46bab5dcb0 Byungchul Park  2022-02-19  120  				     const char *name)
+^1da177e4c3f415 Linus Torvalds  2005-04-16 @121  {
+^1da177e4c3f415 Linus Torvalds  2005-04-16  122  	x->done = 0;
+82b6a46bab5dcb0 Byungchul Park  2022-02-19  123  	dept_wfc_init(&x->dmap, dkey, 0, name);
+a5c6234e10280b3 Thomas Gleixner 2020-03-21  124  	init_swait_queue_head(&x->wait);
+^1da177e4c3f415 Linus Torvalds  2005-04-16  125  }
+^1da177e4c3f415 Linus Torvalds  2005-04-16  126  
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

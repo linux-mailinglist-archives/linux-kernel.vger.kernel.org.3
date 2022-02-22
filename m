@@ -2,40 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DB664BFDCD
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 16:54:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 07BBC4BFDD5
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 16:56:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233204AbiBVPzP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 10:55:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49412 "EHLO
+        id S233800AbiBVP4O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 10:56:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231664AbiBVPzO (ORCPT
+        with ESMTP id S229774AbiBVP4K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 10:55:14 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C00725C645
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 07:54:48 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8C48B1063;
-        Tue, 22 Feb 2022 07:54:48 -0800 (PST)
-Received: from lakrids (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3AFD13F70D;
-        Tue, 22 Feb 2022 07:54:47 -0800 (PST)
-Date:   Tue, 22 Feb 2022 15:54:44 +0000
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Chengming Zhou <zhouchengming@bytedance.com>
-Cc:     rostedt@goodmis.org, mingo@redhat.com, catalin.marinas@arm.com,
-        will@kernel.org, broonie@kernel.org, songmuchun@bytedance.com,
-        qirui.001@bytedance.com, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] arm64/ftrace: Make function graph use ftrace directly
-Message-ID: <YhUHRIDaLqhAz0SV@lakrids>
-References: <20220222130049.81284-1-zhouchengming@bytedance.com>
+        Tue, 22 Feb 2022 10:56:10 -0500
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC51D5D655
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 07:55:44 -0800 (PST)
+Received: by mail-lf1-x133.google.com with SMTP id u20so25721982lff.2
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 07:55:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=oEpM0l8RPBE+aTAe3Uft8SyL6/gEsgm1pJ818FjUDds=;
+        b=dExvEXM8pER9YVnCtI5Lzn0OOPSgtm44ezIW80QG5zlCANJ/keZGvEKFlYtm+DAxA9
+         jwH3HtQpCQlNYFo1yWGKwR2lZjMIQmjpNwGQO6qOjeIvsCYgd4jtVWyGNl418vA2Ij5O
+         0NLA+dvX2SenBLgBFE16eti+PeQIIPwS3jzULs7IxP4o9hzxV/9aQtervAcCc31kJkz2
+         XQ5oGDLUk7h4IAotGVjkg9vc6XCL07KBmNqQM8ThWmoC2Ht3hdbpnN39+mLuVmwObXuA
+         gIQVCCD557qlWKn79t2yBuYNFiiOVjnOXGuRXg9MPOdFG/ALykbZNJMB9uDM3sQHCMTa
+         FrQA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=oEpM0l8RPBE+aTAe3Uft8SyL6/gEsgm1pJ818FjUDds=;
+        b=NIzyM6Q34Ec52UpuoCsIZMZJmDk3UDF/twjyWNG9qIuyDH4VJBjAm7idtYjWJ9baDL
+         I6QDtb6V9SEC43d7EnlUsYjjIT4v68Rzao7owm6Wyqs19WvPj54PrKGUE5IW4rzyrORI
+         qD/BFVwHZibVLia330r8HUDXplZzLy6PO1lG4E+FaldMBdOTv74eqVyDt4kMthx98xJB
+         PgWJ6BNW+Lbza039McvBlzijiUOuzp+MvOCPKfVXN0VlYFoxSREDK0RtVbjZnnVWS62S
+         /vh3bJihXcHCWAOhkQeEnU85y75QVvuQ5Yc2Y6jNTFSw7oLTSPl4USZJAIr2XGMT7n0Q
+         lSFw==
+X-Gm-Message-State: AOAM5327mGpwSmon5tX8Wa0fDl8y98o3Ed64n0ENJeh9XqA6lDFe6XoV
+        rTByyGzMqcBenRwk6GP6jfuUte8oz+d1n4dILDYDfg==
+X-Google-Smtp-Source: ABdhPJwPvMoG8GPN6SgbInhJ1ejmjActyS59kzL8HwsAPsdjpY6732byv4aBacE/Re92DjlW1tQcqUbybAP4xljBxTc=
+X-Received: by 2002:a05:6512:3604:b0:443:5d4b:3760 with SMTP id
+ f4-20020a056512360400b004435d4b3760mr17164644lfs.358.1645545342953; Tue, 22
+ Feb 2022 07:55:42 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220222130049.81284-1-zhouchengming@bytedance.com>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+References: <20220130210210.549877-1-daniel.lezcano@linaro.org>
+ <20220130210210.549877-3-daniel.lezcano@linaro.org> <CAPDyKFqV++g63Asax8TNSEgujxJ=uM9XG2_Advu34JidYBCGtg@mail.gmail.com>
+ <e44b9c4b-2ac4-4ea4-c771-bde13943af5f@linaro.org> <CAPDyKFr8Ycr2cbiD5MM9FSPc1qea+Yp9=cottcGAo7HmFR9Eaw@mail.gmail.com>
+ <cfbaefa5-fc7b-bd0f-e4ed-8f046de2a7cf@linaro.org> <CAPDyKFoWq+i09Ts_+SAz9ctC2a7-cqC71buDmvb-LZFTVSH+DQ@mail.gmail.com>
+ <41214f23-ddb1-f60c-5e2a-96ba161cf727@linaro.org>
+In-Reply-To: <41214f23-ddb1-f60c-5e2a-96ba161cf727@linaro.org>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Tue, 22 Feb 2022 16:55:06 +0100
+Message-ID: <CAPDyKFqo1vhhW994NsnWonTWW34qcSMU5xaBZyV76Njtr0ST4w@mail.gmail.com>
+Subject: Re: [PATCH v1 3/7] powercap/dtpm: Fixup kfree for virtual node
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     rjw@rjwysocki.net, heiko@sntech.de, lukasz.luba@arm.com,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        Daniel Lezcano <daniel.lezcano@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -44,126 +72,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 22, 2022 at 09:00:49PM +0800, Chengming Zhou wrote:
-> As we do in commit 0c0593b45c9b ("x86/ftrace: Make function graph
-> use ftrace directly"), we don't need special hook for graph tracer,
-> but instead we use graph_ops:func function to install return_hooker.
-> 
-> Since commit 3b23e4991fb6 ("arm64: implement ftrace with regs") add
-> implementation for FTRACE_WITH_REGS on arm64, we can easily adopt
-> the same optimization on arm64.
+On Fri, 18 Feb 2022 at 14:18, Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
+>
+> On 17/02/2022 16:45, Ulf Hansson wrote:
+>
+> [ ... ]
+>
+> > Does ops->release() also resets the "dtpm" pointer to NULL? If not,
+> > it's good practice that it should, right?
+> >
+> > In that case, we would be calling "kfree(NULL);" the second time,
+> > which is perfectly fine.
+>
+> So you suggest to replace:
+>
+> if (ops->release)
+>         ops->release(dtpm);
+> else
+>         kfree(dtpm);
+>
+> By:
+>
+> if (ops->release) {
+>         ops->release(dtpm);
+>         dtpm = NULL;
+> }
+>
 
-This is a nice cleanup/refactoring, but I don't think this is an
-optimization as such; we're still doing the same work, just in
-marginally different place. So I'd suggest s/optimization/cleanup/ here.
+I don't have a strong opinion how to code this.
 
-It's probably worth noting that this *only* changes the FTRACE_WITH_REGS
-implementation, and the mcount-based implementation is unaffected by
-this patch.
+What I was trying to point out was that if ->ops->release() frees the
+memory it could/should also reset the pointer to NULL.
 
-> Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
-> ---
->  arch/arm64/include/asm/ftrace.h  |  7 +++++++
->  arch/arm64/kernel/entry-ftrace.S |  6 ------
->  arch/arm64/kernel/ftrace.c       | 21 +++++++++++++++++++++
->  3 files changed, 28 insertions(+), 6 deletions(-)
-> 
-> diff --git a/arch/arm64/include/asm/ftrace.h b/arch/arm64/include/asm/ftrace.h
-> index 1494cfa8639b..dbc45a4157fa 100644
-> --- a/arch/arm64/include/asm/ftrace.h
-> +++ b/arch/arm64/include/asm/ftrace.h
-> @@ -80,8 +80,15 @@ static inline unsigned long ftrace_call_adjust(unsigned long addr)
->  
->  #ifdef CONFIG_DYNAMIC_FTRACE_WITH_REGS
->  struct dyn_ftrace;
-> +struct ftrace_ops;
-> +struct ftrace_regs;
-> +
->  int ftrace_init_nop(struct module *mod, struct dyn_ftrace *rec);
->  #define ftrace_init_nop ftrace_init_nop
-> +
-> +void ftrace_graph_func(unsigned long ip, unsigned long parent_ip,
-> +		       struct ftrace_ops *op, struct ftrace_regs *fregs);
-> +#define ftrace_graph_func ftrace_graph_func
->  #endif
->  
->  #define ftrace_return_address(n) return_address(n)
-> diff --git a/arch/arm64/kernel/entry-ftrace.S b/arch/arm64/kernel/entry-ftrace.S
-> index e535480a4069..eb4a69b1f84d 100644
-> --- a/arch/arm64/kernel/entry-ftrace.S
-> +++ b/arch/arm64/kernel/entry-ftrace.S
-> @@ -97,12 +97,6 @@ SYM_CODE_START(ftrace_common)
->  SYM_INNER_LABEL(ftrace_call, SYM_L_GLOBAL)
->  	bl	ftrace_stub
->  
-> -#ifdef CONFIG_FUNCTION_GRAPH_TRACER
-> -SYM_INNER_LABEL(ftrace_graph_call, SYM_L_GLOBAL) // ftrace_graph_caller();
-> -	nop				// If enabled, this will be replaced
-> -					// "b ftrace_graph_caller"
-> -#endif
-> -
+And if that is already done, the kfree below is harmless and there
+would be nothing to "fix".
 
-You should also be able to delete the FTRACE_WITH_REGS implementation of
-ftrace_graph_caller since that's now unused.
+> kfree(dtpm);
+>
+> ?
 
-Having that in the diff would also make it easier to compare to the
-logic in ftrace_graph_func().
-
->  /*
->   * At the callsite x0-x8 and x19-x30 were live. Any C code will have preserved
->   * x19-x29 per the AAPCS, and we created frame records upon entry, so we need
-> diff --git a/arch/arm64/kernel/ftrace.c b/arch/arm64/kernel/ftrace.c
-> index 4506c4a90ac1..1b5da231b1de 100644
-> --- a/arch/arm64/kernel/ftrace.c
-> +++ b/arch/arm64/kernel/ftrace.c
-> @@ -268,6 +268,26 @@ void prepare_ftrace_return(unsigned long self_addr, unsigned long *parent,
->  }
->  
->  #ifdef CONFIG_DYNAMIC_FTRACE
-> +#ifdef CONFIG_DYNAMIC_FTRACE_WITH_REGS
-> +int ftrace_enable_ftrace_graph_caller(void)
-> +{
-> +	return 0;
-> +}
-> +
-> +int ftrace_disable_ftrace_graph_caller(void)
-> +{
-> +	return 0;
-> +}
-
-It's a shame the core code doesn't provide this if we provide an
-implementation of ftrace_graph_func.
-
-> +
-> +void ftrace_graph_func(unsigned long ip, unsigned long parent_ip,
-> +		       struct ftrace_ops *op, struct ftrace_regs *fregs)
-> +{
-> +	struct pt_regs *regs = arch_ftrace_get_regs(fregs);
-> +	unsigned long *parent = (unsigned long *)&procedure_link_pointer(regs);
-> +
-> +	prepare_ftrace_return(ip, parent, frame_pointer(regs));
-> +}
-
-Other than my comments above, this looks about right, but I'd like to
-give this some testing before I give any tags.
-
-Could you respin this with the FTRACE_WITH_REGS ftrace_graph_caller asm
-removed?
-
-Thanks,
-Mark.
-
-> +#else
->  /*
->   * Turn on/off the call to ftrace_graph_caller() in ftrace_caller()
->   * depending on @enable.
-> @@ -297,5 +317,6 @@ int ftrace_disable_ftrace_graph_caller(void)
->  {
->  	return ftrace_modify_graph_caller(false);
->  }
-> +#endif /* CONFIG_DYNAMIC_FTRACE_WITH_REGS */
->  #endif /* CONFIG_DYNAMIC_FTRACE */
->  #endif /* CONFIG_FUNCTION_GRAPH_TRACER */
-> -- 
-> 2.20.1
-> 
+Kind regards
+Uffe

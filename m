@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 384334BFF00
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 17:40:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1184C4BFF0B
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 17:41:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234221AbiBVQk7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 11:40:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42276 "EHLO
+        id S234233AbiBVQln (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 11:41:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232671AbiBVQk5 (ORCPT
+        with ESMTP id S232671AbiBVQll (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 11:40:57 -0500
-Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54B0D160412
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 08:40:32 -0800 (PST)
-Received: by mail-oi1-x236.google.com with SMTP id x193so15188778oix.0
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 08:40:32 -0800 (PST)
+        Tue, 22 Feb 2022 11:41:41 -0500
+Received: from mail-oo1-xc30.google.com (mail-oo1-xc30.google.com [IPv6:2607:f8b0:4864:20::c30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFE2C168094
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 08:41:15 -0800 (PST)
+Received: by mail-oo1-xc30.google.com with SMTP id r41-20020a4a966c000000b0031bf85a4124so18394595ooi.0
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 08:41:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc:content-transfer-encoding;
-        bh=p40txYoRuDqRToAk//92DsV14CqomtL3Q8ARQVWa/nE=;
-        b=TkCFnrgW0aoLHODg9trdPkzSCZhWdz2TpEfAoMCyxt+YUGogRXWkGP51I4Pvac+mW1
-         lDSXdMyHaAnGC5BFOVYuGq7XQ0L9Smf8ey4INkOhItVXkekZQqk2BYpaX7elAkS/R01i
-         nF3Gj41+2U3ukwABWrB0UaoXZNcF5TSffK7YT4AF2nHAty6DEVRQ6OC6PHihbR8rjd4w
-         z914Z2jKY2lAuzRd6z6xcm178A7g9Liup+3zN+pYqHCqbt4NLhBY7+Rz7RUmhfp3oY7p
-         BGdY6U+9i774sAXJ1GNG0907qbMtwmq3lVw8AtF0fjTJuBwRmZigbZANGbyr5vFz6vRk
-         3V0g==
+        bh=YXHD+C0/B8yXZE8EfrgFtwcPwJgyLlmaD7cEYGEmRMM=;
+        b=fuBlPcCzxrvT7+ShgM3+W3qsp2u2V09DJmwqNLjX5fLhy8dc8j6/w2JhloLbmKInG8
+         XNqQmB8Rp+vR7/XvSAScTjH/URtFM43zt8LOmtmew8O5k5Y6dhZ1Dp/ePsMeph62HmWB
+         eurPiPNpYGp+qmwdrBhTqfwOCdl26C3gAd5+ayQ8HL6xO/tLZ/CNHzfatDwwpw8/if/d
+         ZVkgN14V5KAxCaesOfAUhsGGP8cUDJHD/d979cQFm8yTuVxSXW5Cl7Jl0wov3NwNVOET
+         YT2rO3Xdq+qTv1ItNrlgA7CYu/z48farfnqcgHkAIfwu0gYbGSRd98id1a3OtbiFR+Q0
+         EQQA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc:content-transfer-encoding;
-        bh=p40txYoRuDqRToAk//92DsV14CqomtL3Q8ARQVWa/nE=;
-        b=dmhWmlFuDUHaeXQoycMcOZ/hUXTL8ozlFSPP0xte0kpTu4DSGZox1Pq5Ycxz3s4/ZX
-         y72FUAHB3GSfaPbEL6dlmbrXxGgDH9FD8ZN1WyU0mZ/1SRahIBDo3RbVDe962tLUXn2f
-         /5P6lVLHVpfSzcP3k7sOCL7ogbFFW577z1uFzXxPPbigQwj8OydMmgq6SDcMRVbXoGUW
-         AvakiTFFjxHxPwCYEt2UUbu8z5fjYtv14ja4pss3ElcRb1YWqBqybRvHBP9m2UkZAjEE
-         pNTZK+McEsBTeLcz1fhB0wbOmjS6neg3EjBBAW8NBYoxEhYMl6kOg/TVLPJTi/EPwGZ+
-         ipaQ==
-X-Gm-Message-State: AOAM532ja3kO3eCzxHp3XLcWJY6f2HJ6OvchHdWYfbGthYzAzRNaLIp9
-        acITwlq2DumPLT+OUJFRuqZTiES6SRwBU8w7SuI=
-X-Google-Smtp-Source: ABdhPJzGgNDMe4B8iHx1OozJUpsE/fOo2XJZsl0TfO1F2smK9orBVi+gBIiiqvVg+AvsVwgn36rMJ9ruAYaTFI7pEXw=
-X-Received: by 2002:a05:6808:612:b0:2d5:1c6a:db4 with SMTP id
- y18-20020a056808061200b002d51c6a0db4mr2488935oih.199.1645548031784; Tue, 22
- Feb 2022 08:40:31 -0800 (PST)
+        bh=YXHD+C0/B8yXZE8EfrgFtwcPwJgyLlmaD7cEYGEmRMM=;
+        b=0AGWU3q6yDG/ptJYUm+rJZcxZSvXIHGR+4NP4mA0Mx9VGT58ro5nCZLtRGsian3Dho
+         g4PJYj13ea/rRu7E90UYILc+t/BKuVlQOPzGTmqTTcLwSNCQm+1M7IUhYSYDP4a9GHL6
+         eVssNLL/v8GvgsZTiAu7ntRuJLSPPEDGwyb5EIuVIcuQbtbpdGEAYJx1JspekN/68euR
+         +tVH760f6WZlwZwY8g/F/Rs1mgF1oUupJsXdUgwynvSRlz4PDX9+hWbVaLzrT1M0InjY
+         68dpeqho8qA+410unz5Ayd9ZvVaooao0svRWc1m4bQupUhioxaLQedYwUDYdPSNFuK83
+         SmFA==
+X-Gm-Message-State: AOAM531LRZYKDV0b/ScT58aR2RjzNcpNSGqR3ZroVQX4PpNe+qq+IvS9
+        bE5eGjCyHefzy7MVqY247ZqEx35idRd2fPvFWvw=
+X-Google-Smtp-Source: ABdhPJya4bay6XYFIZCyMsuysyg0pIii92FwYXZtsMNZ0psrVz6aeSWA23ZVot6d/3GAmeGPNEphCTWbuu8Dw2gDNWA=
+X-Received: by 2002:a05:6870:3e0d:b0:d3:fe6d:57c3 with SMTP id
+ lk13-20020a0568703e0d00b000d3fe6d57c3mr2042169oab.225.1645548075325; Tue, 22
+ Feb 2022 08:41:15 -0800 (PST)
 MIME-Version: 1.0
-References: <20220222131701.356117-1-maira.canal@usp.br> <20220222131701.356117-9-maira.canal@usp.br>
-In-Reply-To: <20220222131701.356117-9-maira.canal@usp.br>
+References: <20220222131701.356117-1-maira.canal@usp.br> <20220222131701.356117-10-maira.canal@usp.br>
+In-Reply-To: <20220222131701.356117-10-maira.canal@usp.br>
 From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Tue, 22 Feb 2022 11:40:20 -0500
-Message-ID: <CADnq5_MqzkkNaXRuEqx8oCdF=zL9GgAWF_UNR=21BO4MaojydA@mail.gmail.com>
-Subject: Re: [PATCH 08/10] drm/amd/display: Remove unused variable
+Date:   Tue, 22 Feb 2022 11:41:04 -0500
+Message-ID: <CADnq5_O-LmQ3qD7p0bHHhcc7BRpExahhtg9d4dcPx1_x3pDzUw@mail.gmail.com>
+Subject: Re: [PATCH 09/10] drm/amd/display: Add missing prototypes to dcn201_init
 To:     =?UTF-8?B?TWHDrXJhIENhbmFs?= <maira.canal@usp.br>
 Cc:     "Deucher, Alexander" <alexander.deucher@amd.com>,
         Christian Koenig <christian.koenig@amd.com>,
@@ -91,47 +91,34 @@ Applied.  Thanks!
 On Tue, Feb 22, 2022 at 8:18 AM Ma=C3=ADra Canal <maira.canal@usp.br> wrote=
 :
 >
-> Remove the variable clamshell_closed from the function
-> dcn10_align_pixel_clocks.
+> Include the header with the prototype to silence the following clang
+> warning:
 >
-> This was pointed by clang with the following warning:
->
-> drivers/gpu/drm/amd/amdgpu/../display/dc/dcn10/dcn10_hw_sequencer.c:2063:=
-7:
-> warning: variable 'clamshell_closed' set but not used
-> [-Wunused-but-set-variable]
->     bool clamshell_closed =3D false;
+> drivers/gpu/drm/amd/amdgpu/../display/dc/dcn201/dcn201_init.c:127:6:
+> warning: no previous prototype for function 'dcn201_hw_sequencer_construc=
+t'
+> [-Wmissing-prototypes]
+>     void dcn201_hw_sequencer_construct(struct dc *dc)
 >          ^
 >
 > Signed-off-by: Ma=C3=ADra Canal <maira.canal@usp.br>
 > ---
->  drivers/gpu/drm/amd/display/dc/dcn10/dcn10_hw_sequencer.c | 3 ---
->  1 file changed, 3 deletions(-)
+>  drivers/gpu/drm/amd/display/dc/dcn201/dcn201_init.c | 1 +
+>  1 file changed, 1 insertion(+)
 >
-> diff --git a/drivers/gpu/drm/amd/display/dc/dcn10/dcn10_hw_sequencer.c b/=
-drivers/gpu/drm/amd/display/dc/dcn10/dcn10_hw_sequencer.c
-> index 8dc1afc03961..559aa45f27e7 100644
-> --- a/drivers/gpu/drm/amd/display/dc/dcn10/dcn10_hw_sequencer.c
-> +++ b/drivers/gpu/drm/amd/display/dc/dcn10/dcn10_hw_sequencer.c
-> @@ -2060,14 +2060,11 @@ static int dcn10_align_pixel_clocks(struct dc *dc=
-, int group_size,
->         uint32_t embedded_pix_clk_100hz;
->         uint16_t embedded_h_total;
->         uint16_t embedded_v_total;
-> -       bool clamshell_closed =3D false;
->         uint32_t dp_ref_clk_100hz =3D
->                 dc->res_pool->dp_clock_source->ctx->dc->clk_mgr->dprefclk=
-_khz*10;
+> diff --git a/drivers/gpu/drm/amd/display/dc/dcn201/dcn201_init.c b/driver=
+s/gpu/drm/amd/display/dc/dcn201/dcn201_init.c
+> index f1f89f93603f..1826dd7f3da1 100644
+> --- a/drivers/gpu/drm/amd/display/dc/dcn201/dcn201_init.c
+> +++ b/drivers/gpu/drm/amd/display/dc/dcn201/dcn201_init.c
+> @@ -27,6 +27,7 @@
+>  #include "dcn10/dcn10_hw_sequencer.h"
+>  #include "dcn20/dcn20_hwseq.h"
+>  #include "dcn201_hwseq.h"
+> +#include "dcn201_init.h"
 >
->         if (dc->config.vblank_alignment_dto_params &&
->                 dc->res_pool->dp_clock_source->funcs->override_dp_pix_clk=
-) {
-> -               clamshell_closed =3D
-> -                       (dc->config.vblank_alignment_dto_params >> 63);
->                 embedded_h_total =3D
->                         (dc->config.vblank_alignment_dto_params >> 32) & =
-0x7FFF;
->                 embedded_v_total =3D
+>  static const struct hw_sequencer_funcs dcn201_funcs =3D {
+>         .program_gamut_remap =3D dcn10_program_gamut_remap,
 > --
 > 2.35.1
 >

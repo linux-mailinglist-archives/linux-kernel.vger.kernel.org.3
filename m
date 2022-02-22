@@ -2,206 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E3464BFBD5
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 16:03:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E12624BFBE6
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 16:05:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233405AbiBVPDo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 10:03:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48832 "EHLO
+        id S232143AbiBVPEw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 10:04:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233700AbiBVPDS (ORCPT
+        with ESMTP id S230204AbiBVPEu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 10:03:18 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3D19F103A
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 07:02:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1645542156;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=rdi/qxR3vXLdPYSOnT7lLR4Cj8YvfdXVSXReKwN9fr0=;
-        b=hvy8dN5hawx/78oN+f6qUiNwV4tliI3P7Jhjd7si/vfzIIiVUkxkJzmfbJiTHw7Trn7Nan
-        wc9+eBS4SQE5Sb4asISLwQTxtDvYC+0tjJbL2vE7TRxlNcvRJN7TqIj+p2ddQjqo3M2k+C
-        5TIUMO2zWai8aXTQZgDaA468wCdsasA=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-619-ycF0cDwUNOqVxMyIFYm87w-1; Tue, 22 Feb 2022 10:02:34 -0500
-X-MC-Unique: ycF0cDwUNOqVxMyIFYm87w-1
-Received: by mail-ed1-f71.google.com with SMTP id bq19-20020a056402215300b0040f276105a4so12118593edb.2
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 07:02:34 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=rdi/qxR3vXLdPYSOnT7lLR4Cj8YvfdXVSXReKwN9fr0=;
-        b=xgZIuOhTvGMsSVdlf/Rvl7rJvn4c1RdI5gziJXkW1y7IenT8Ny6EiTWDOwxeWcvNv2
-         cguAj8vcOH3RTkl7FQh5pC4OJEKFc/PlMhufzbrneVP8zLknMxXau/IDRgc8GfOa1Z0N
-         2YRlu0Nlj7ypREZY1Gq2hdwdxRWBxy8wupBFXoOJv42hluBZGqb/PcPUbTnotum2QUPk
-         sRq6wawofeXA5FDgFglawTpUQdiFjVvKEgQxnKkBl7qgQ7n0EXeE+QUHxWiE4N58DRpt
-         BKj2n7Z96VDVnd0Zc8LrO44xwlvEF4pCuw4fN+PYyArHuZK7Ga8TTjjHSjFsNphBa0Ng
-         g+QQ==
-X-Gm-Message-State: AOAM531gwE9XbtQvkODaw6MswVAf0FTXbgJU+Dy8zFNuLkzocKf6u0Fj
-        DU9RdVfE2euxuuYEi4KJdwEae57aLG+mzVMTVW5yWm5pTFoG1rL85sVcwenMyvbfSCwmC1S0iyd
-        uae72TiLgmy06bEB9Y2xh0vek
-X-Received: by 2002:a17:906:2991:b0:6cf:1fd4:39a3 with SMTP id x17-20020a170906299100b006cf1fd439a3mr19565081eje.21.1645542153504;
-        Tue, 22 Feb 2022 07:02:33 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwfs/vKQLHNEKKWfGdfWtjrGEHBFte8MvKz5Y50OjDrG513NxeN/Cw3t2XJvu4U4AxkMg15eQ==
-X-Received: by 2002:a17:906:2991:b0:6cf:1fd4:39a3 with SMTP id x17-20020a170906299100b006cf1fd439a3mr19565062eje.21.1645542153204;
-        Tue, 22 Feb 2022 07:02:33 -0800 (PST)
-Received: from redhat.com ([2.55.129.240])
-        by smtp.gmail.com with ESMTPSA id q16sm5998109ejc.21.2022.02.22.07.02.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Feb 2022 07:02:32 -0800 (PST)
-Date:   Tue, 22 Feb 2022 10:02:29 -0500
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Jason Wang <jasowang@redhat.com>
-Cc:     Anirudh Rayabharam <mail@anirudhrb.com>,
-        syzbot+0abd373e2e50d704db87@syzkaller.appspotmail.com,
-        kvm <kvm@vger.kernel.org>,
-        virtualization <virtualization@lists.linux-foundation.org>,
-        netdev <netdev@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] vhost: validate range size before adding to iotlb
-Message-ID: <20220222090511-mutt-send-email-mst@kernel.org>
-References: <20220221195303.13560-1-mail@anirudhrb.com>
- <CACGkMEvLE=kV4PxJLRjdSyKArU+MRx6b_mbLGZHSUgoAAZ+-Fg@mail.gmail.com>
- <YhRtQEWBF0kqWMsI@anirudhrb.com>
- <CACGkMEvd7ETC_ANyrOSAVz_i64xqpYYazmm=+39E51=DMRFXdw@mail.gmail.com>
+        Tue, 22 Feb 2022 10:04:50 -0500
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D15755BFA;
+        Tue, 22 Feb 2022 07:04:25 -0800 (PST)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 21MF44lv119918;
+        Tue, 22 Feb 2022 09:04:04 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1645542244;
+        bh=0TF0Nb9Xr5PW1Hve2ocmAZgfDz2+Q7g0gLda7jNucyM=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=c/u7yiiP9pt8BwViucg/xBL/03COWQQGBo3b+NASpfG0rTL8jTXs4jJseI1w2ncy5
+         Bmjtd1TMR4Ssy45tawqetRoXNOJvUHHGjk9jS1lYjczx6ktt+q2c+rLbOr10DggVj2
+         Ev6u5ld4toUt70X8aEdJrK+eszSdspQzTuThZoJA=
+Received: from DLEE104.ent.ti.com (dlee104.ent.ti.com [157.170.170.34])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 21MF44EH035003
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 22 Feb 2022 09:04:04 -0600
+Received: from DLEE113.ent.ti.com (157.170.170.24) by DLEE104.ent.ti.com
+ (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Tue, 22
+ Feb 2022 09:04:04 -0600
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE113.ent.ti.com
+ (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Tue, 22 Feb 2022 09:04:04 -0600
+Received: from [10.250.234.33] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 21MF408c028352;
+        Tue, 22 Feb 2022 09:04:01 -0600
+Message-ID: <7fb78e91-90a3-8c61-0584-0448c8936e75@ti.com>
+Date:   Tue, 22 Feb 2022 20:33:59 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CACGkMEvd7ETC_ANyrOSAVz_i64xqpYYazmm=+39E51=DMRFXdw@mail.gmail.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 1/2] arm64: dts: ti: k3-*: Fix whitespace around flash@0
+ nodes
+Content-Language: en-US
+To:     Pratyush Yadav <p.yadav@ti.com>, Nishanth Menon <nm@ti.com>
+CC:     Vignesh Raghavendra <vigneshr@ti.com>,
+        Tero Kristo <kristo@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20220217181025.1815118-1-p.yadav@ti.com>
+From:   Apurva Nandan <a-nandan@ti.com>
+In-Reply-To: <20220217181025.1815118-1-p.yadav@ti.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 22, 2022 at 03:11:07PM +0800, Jason Wang wrote:
-> On Tue, Feb 22, 2022 at 12:57 PM Anirudh Rayabharam <mail@anirudhrb.com> wrote:
-> >
-> > On Tue, Feb 22, 2022 at 10:50:20AM +0800, Jason Wang wrote:
-> > > On Tue, Feb 22, 2022 at 3:53 AM Anirudh Rayabharam <mail@anirudhrb.com> wrote:
-> > > >
-> > > > In vhost_iotlb_add_range_ctx(), validate the range size is non-zero
-> > > > before proceeding with adding it to the iotlb.
-> > > >
-> > > > Range size can overflow to 0 when start is 0 and last is (2^64 - 1).
-> > > > One instance where it can happen is when userspace sends an IOTLB
-> > > > message with iova=size=uaddr=0 (vhost_process_iotlb_msg). So, an
-> > > > entry with size = 0, start = 0, last = (2^64 - 1) ends up in the
-> > > > iotlb. Next time a packet is sent, iotlb_access_ok() loops
-> > > > indefinitely due to that erroneous entry:
-> > > >
-> > > >         Call Trace:
-> > > >          <TASK>
-> > > >          iotlb_access_ok+0x21b/0x3e0 drivers/vhost/vhost.c:1340
-> > > >          vq_meta_prefetch+0xbc/0x280 drivers/vhost/vhost.c:1366
-> > > >          vhost_transport_do_send_pkt+0xe0/0xfd0 drivers/vhost/vsock.c:104
-> > > >          vhost_worker+0x23d/0x3d0 drivers/vhost/vhost.c:372
-> > > >          kthread+0x2e9/0x3a0 kernel/kthread.c:377
-> > > >          ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
-> > > >          </TASK>
-> > > >
-> > > > Reported by syzbot at:
-> > > >         https://syzkaller.appspot.com/bug?extid=0abd373e2e50d704db87
-> > > >
-> > > > Reported-by: syzbot+0abd373e2e50d704db87@syzkaller.appspotmail.com
-> > > > Tested-by: syzbot+0abd373e2e50d704db87@syzkaller.appspotmail.com
-> > > > Signed-off-by: Anirudh Rayabharam <mail@anirudhrb.com>
-> > > > ---
-> > > >  drivers/vhost/iotlb.c | 6 ++++--
-> > > >  1 file changed, 4 insertions(+), 2 deletions(-)
-> > > >
-> > > > diff --git a/drivers/vhost/iotlb.c b/drivers/vhost/iotlb.c
-> > > > index 670d56c879e5..b9de74bd2f9c 100644
-> > > > --- a/drivers/vhost/iotlb.c
-> > > > +++ b/drivers/vhost/iotlb.c
-> > > > @@ -53,8 +53,10 @@ int vhost_iotlb_add_range_ctx(struct vhost_iotlb *iotlb,
-> > > >                               void *opaque)
-> > > >  {
-> > > >         struct vhost_iotlb_map *map;
-> > > > +       u64 size = last - start + 1;
-> > > >
-> > > > -       if (last < start)
-> > > > +       // size can overflow to 0 when start is 0 and last is (2^64 - 1).
-> > > > +       if (last < start || size == 0)
-> > > >                 return -EFAULT;
-> > >
-> > > I'd move this check to vhost_chr_iter_write(), then for the device who
-> > > has its own msg handler (e.g vDPA) can benefit from it as well.
-> >
-> > Thanks for reviewing!
-> >
-> > I kept the check here thinking that all devices would benefit from it
-> > because they would need to call vhost_iotlb_add_range() to add an entry
-> > to the iotlb. Isn't that correct?
-> 
-> Correct for now but not for the future, it's not guaranteed that the
-> per device iotlb message handler will use vhost iotlb.
-> 
-> But I agree that we probably don't need to care about it too much now.
-> 
-> > Do you see any other benefit in moving
-> > it to vhost_chr_iter_write()?
-> >
-> > One concern I have is that if we move it out some future caller to
-> > vhost_iotlb_add_range() might forget to handle this case.
-> 
-> Yes.
-> 
-> Rethink the whole fix, we're basically rejecting [0, ULONG_MAX] range
-> which seems a little bit odd.
 
-Well, I guess ideally we'd split this up as two entries - this kind of
-thing is after all one of the reasons we initially used first,last as
-the API - as opposed to first,size.
+On 17/02/22 23:40, Pratyush Yadav wrote:
+> The OSPI flash nodes are missing a space before the opening brace. Fix
+> that.
+>
+> Signed-off-by: Pratyush Yadav <p.yadav@ti.com>
 
-Anirudh, could you do it like this instead of rejecting?
+Reviewed-by: Apurva Nandan<a-nandan@ti.com>
 
-
-> I wonder if it's better to just remove
-> the map->size. Having a quick glance at the the user, I don't see any
-> blocker for this.
-> 
-> Thanks
-
-I think it's possible but won't solve the bug by itself, and we'd need
-to review and fix all users - a high chance of introducing
-another regression. And I think there's value of fitting under the
-stable rule of 100 lines with context.
-So sure, but let's fix the bug first.
-
-
-
-> >
-> > Thanks!
-> >
-> >         - Anirudh.
-> >
-> > >
-> > > Thanks
-> > >
-> > > >
-> > > >         if (iotlb->limit &&
-> > > > @@ -69,7 +71,7 @@ int vhost_iotlb_add_range_ctx(struct vhost_iotlb *iotlb,
-> > > >                 return -ENOMEM;
-> > > >
-> > > >         map->start = start;
-> > > > -       map->size = last - start + 1;
-> > > > +       map->size = size;
-> > > >         map->last = last;
-> > > >         map->addr = addr;
-> > > >         map->perm = perm;
-> > > > --
-> > > > 2.35.1
-> > > >
-> > >
-> >
-
+> ---
+>
+> Only compile-tested.
+>
+>   arch/arm64/boot/dts/ti/k3-am642-evm.dts               | 2 +-
+>   arch/arm64/boot/dts/ti/k3-am642-sk.dts                | 2 +-
+>   arch/arm64/boot/dts/ti/k3-j7200-som-p0.dtsi           | 2 +-
+>   arch/arm64/boot/dts/ti/k3-j721e-common-proc-board.dts | 2 +-
+>   arch/arm64/boot/dts/ti/k3-j721e-som-p0.dtsi           | 2 +-
+>   5 files changed, 5 insertions(+), 5 deletions(-)
+>
+> diff --git a/arch/arm64/boot/dts/ti/k3-am642-evm.dts b/arch/arm64/boot/dts/ti/k3-am642-evm.dts
+> index e94ae178b1ae..edf80e277267 100644
+> --- a/arch/arm64/boot/dts/ti/k3-am642-evm.dts
+> +++ b/arch/arm64/boot/dts/ti/k3-am642-evm.dts
+> @@ -498,7 +498,7 @@ &ospi0 {
+>   	pinctrl-names = "default";
+>   	pinctrl-0 = <&ospi0_pins_default>;
+>
+> -	flash@0{
+> +	flash@0 {
+>   		compatible = "jedec,spi-nor";
+>   		reg = <0x0>;
+>   		spi-tx-bus-width = <8>;
+> diff --git a/arch/arm64/boot/dts/ti/k3-am642-sk.dts b/arch/arm64/boot/dts/ti/k3-am642-sk.dts
+> index a9785bec12df..30b956276060 100644
+> --- a/arch/arm64/boot/dts/ti/k3-am642-sk.dts
+> +++ b/arch/arm64/boot/dts/ti/k3-am642-sk.dts
+> @@ -369,7 +369,7 @@ &ospi0 {
+>   	pinctrl-names = "default";
+>   	pinctrl-0 = <&ospi0_pins_default>;
+>
+> -	flash@0{
+> +	flash@0 {
+>   		compatible = "jedec,spi-nor";
+>   		reg = <0x0>;
+>   		spi-tx-bus-width = <8>;
+> diff --git a/arch/arm64/boot/dts/ti/k3-j7200-som-p0.dtsi b/arch/arm64/boot/dts/ti/k3-j7200-som-p0.dtsi
+> index 34724440171a..7d819f0db8df 100644
+> --- a/arch/arm64/boot/dts/ti/k3-j7200-som-p0.dtsi
+> +++ b/arch/arm64/boot/dts/ti/k3-j7200-som-p0.dtsi
+> @@ -256,7 +256,7 @@ &ospi0 {
+>   	pinctrl-names = "default";
+>   	pinctrl-0 = <&mcu_fss0_ospi0_pins_default>;
+>
+> -	flash@0{
+> +	flash@0 {
+>   		compatible = "jedec,spi-nor";
+>   		reg = <0x0>;
+>   		spi-tx-bus-width = <8>;
+> diff --git a/arch/arm64/boot/dts/ti/k3-j721e-common-proc-board.dts b/arch/arm64/boot/dts/ti/k3-j721e-common-proc-board.dts
+> index 2d7596911b27..2ecc4541f6d8 100644
+> --- a/arch/arm64/boot/dts/ti/k3-j721e-common-proc-board.dts
+> +++ b/arch/arm64/boot/dts/ti/k3-j721e-common-proc-board.dts
+> @@ -482,7 +482,7 @@ &ospi1 {
+>   	pinctrl-names = "default";
+>   	pinctrl-0 = <&mcu_fss0_ospi1_pins_default>;
+>
+> -	flash@0{
+> +	flash@0 {
+>   		compatible = "jedec,spi-nor";
+>   		reg = <0x0>;
+>   		spi-tx-bus-width = <1>;
+> diff --git a/arch/arm64/boot/dts/ti/k3-j721e-som-p0.dtsi b/arch/arm64/boot/dts/ti/k3-j721e-som-p0.dtsi
+> index 2fee2906183d..990dfcd61018 100644
+> --- a/arch/arm64/boot/dts/ti/k3-j721e-som-p0.dtsi
+> +++ b/arch/arm64/boot/dts/ti/k3-j721e-som-p0.dtsi
+> @@ -171,7 +171,7 @@ &ospi0 {
+>   	pinctrl-names = "default";
+>   	pinctrl-0 = <&mcu_fss0_ospi0_pins_default>;
+>
+> -	flash@0{
+> +	flash@0 {
+>   		compatible = "jedec,spi-nor";
+>   		reg = <0x0>;
+>   		spi-tx-bus-width = <8>;
+> --
+> 2.34.1
+>

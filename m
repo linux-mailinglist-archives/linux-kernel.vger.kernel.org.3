@@ -2,126 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB0714C0594
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 00:53:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 98A404C059B
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 00:54:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236326AbiBVXyR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 18:54:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40650 "EHLO
+        id S236424AbiBVXyo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 18:54:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236329AbiBVXyO (ORCPT
+        with ESMTP id S236347AbiBVXy3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 18:54:14 -0500
-Received: from out01.mta.xmission.com (out01.mta.xmission.com [166.70.13.231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F8452FFC3;
-        Tue, 22 Feb 2022 15:53:48 -0800 (PST)
-Received: from in01.mta.xmission.com ([166.70.13.51]:48792)
-        by out01.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1nMeyW-00D5Zz-O9; Tue, 22 Feb 2022 16:53:45 -0700
-Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:51066 helo=email.froward.int.ebiederm.org.xmission.com)
-        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1nMeyT-008QFE-Sj; Tue, 22 Feb 2022 16:53:44 -0700
-From:   "Eric W. Biederman" <ebiederm@xmission.com>
-To:     "Dr. Thomas Orgis" <thomas.orgis@uni-hamburg.de>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <linux-kernel@vger.kernel.org>, <stable@vger.kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        "Sudip Mukherjee" <sudipm.mukherjee@gmail.com>
-References: <20220221084915.554151737@linuxfoundation.org>
-        <20220221084916.628257481@linuxfoundation.org>
-        <20220221234610.0d23e2e0@plasteblaster>
-Date:   Tue, 22 Feb 2022 17:53:12 -0600
-In-Reply-To: <20220221234610.0d23e2e0@plasteblaster> (Thomas Orgis's message
-        of "Mon, 21 Feb 2022 23:46:10 +0100")
-Message-ID: <87sfsa8nmf.fsf@email.froward.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Tue, 22 Feb 2022 18:54:29 -0500
+Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAF1833A03
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 15:53:59 -0800 (PST)
+Received: by mail-yb1-xb32.google.com with SMTP id b35so16818312ybi.13
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 15:53:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=atishpatra.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=dpzVG0KOz8Fj+NV1zL23tj2BFq6GNDaGLyfBrIVD5jE=;
+        b=PyuvmgVYjrMy43NHY161nkmfLiq4r+5QP/M/Shz+icoZQO2uxkc4Db0hbBtw0ClTlS
+         0IgWnqOrCbCQQqeGkcvjXv8uP+NGTHWtzINHx3f726Fw+ZpgNJYYmMntVgzMqG/lz0zO
+         hC6O4gQkUYgxE7eBQgrN3fQuI8HquIa7HAgYw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=dpzVG0KOz8Fj+NV1zL23tj2BFq6GNDaGLyfBrIVD5jE=;
+        b=lXacP0HwHtsTvOsinZzKlRaAEtUQQyT9MfOkCw5bGYSXALXF0/6cckvaCstHF/ctyE
+         GNHl8M2H3TRpVrv1DBU9xJXz/X8MGlXSXEg8jFQguIzxua8I7q3AHPitQh9PGVR7zPyI
+         b4JAK9/m2PHd7rLtroP/j1nKtOcAT4jvBnlDLq0HzIQVyCtDY2uLUhdf188WCKbLtH7x
+         tgWfM1ihbqt2TyhVUbO1Z6RK/FPGoBl0hBhM+yFmVwP1Ndc3MFwNkk9GZDxkshyg9ajR
+         dqAXVIwMjXnx6c3CttCndCr5LJnH+KqdB4PbHs8DBjUB9CAZ+W9kmF6us8nlo1e+VhfR
+         442A==
+X-Gm-Message-State: AOAM532gYrnRqJJq24V3IUwihOf8RzOQElfpyGAgUHFkPiqGmnX7ZKHe
+        Ht+MqffCqf9teZs54y+reVKgUMvwlgxpj9bVCbDX
+X-Google-Smtp-Source: ABdhPJy6UzaGIddYbaCVbtXfioSbcvvSa1AporZq/9wCtEio4EIeXwWb/+d8dyiBe2FBgbDIAvz25JsnqNdgGunLs54=
+X-Received: by 2002:a25:d294:0:b0:61d:9809:9917 with SMTP id
+ j142-20020a25d294000000b0061d98099917mr25644565ybg.289.1645574038489; Tue, 22
+ Feb 2022 15:53:58 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1nMeyT-008QFE-Sj;;;mid=<87sfsa8nmf.fsf@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=neutral
-X-XM-AID: U2FsdGVkX18tO8ahZmJWbAsAz1uv1DwCxv6VHTabo0U=
-X-SA-Exim-Connect-IP: 68.227.174.4
-X-SA-Exim-Mail-From: ebiederm@xmission.com
+References: <20220201082227.361967-1-apatel@ventanamicro.com> <20220201082227.361967-2-apatel@ventanamicro.com>
+In-Reply-To: <20220201082227.361967-2-apatel@ventanamicro.com>
+From:   Atish Patra <atishp@atishpatra.org>
+Date:   Tue, 22 Feb 2022 15:53:47 -0800
+Message-ID: <CAOnJCUKKHVxRUA2kdrCRD3-q=DQWP=_gAJn8UovR3jXk3N-qOw@mail.gmail.com>
+Subject: Re: [PATCH 1/6] RISC-V: KVM: Upgrade SBI spec version to v0.3
+To:     Anup Patel <apatel@ventanamicro.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Alistair Francis <Alistair.Francis@wdc.com>,
+        Anup Patel <anup@brainfault.org>,
+        KVM General <kvm@vger.kernel.org>,
+        kvm-riscv@lists.infradead.org,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-DCC: XMission; sa07 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: *;"Dr. Thomas Orgis" <thomas.orgis@uni-hamburg.de>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 1594 ms - load_scoreonly_sql: 0.04 (0.0%),
-        signal_user_changed: 12 (0.7%), b_tie_ro: 10 (0.6%), parse: 1.14
-        (0.1%), extract_message_metadata: 20 (1.3%), get_uri_detail_list: 2.2
-        (0.1%), tests_pri_-1000: 18 (1.1%), tests_pri_-950: 1.32 (0.1%),
-        tests_pri_-900: 1.02 (0.1%), tests_pri_-90: 158 (9.9%), check_bayes:
-        145 (9.1%), b_tokenize: 7 (0.4%), b_tok_get_all: 7 (0.5%),
-        b_comp_prob: 2.4 (0.2%), b_tok_touch_all: 125 (7.8%), b_finish: 1.00
-        (0.1%), tests_pri_0: 1359 (85.3%), check_dkim_signature: 0.55 (0.0%),
-        check_dkim_adsp: 2.9 (0.2%), poll_dns_idle: 1.14 (0.1%), tests_pri_10:
-        3.5 (0.2%), tests_pri_500: 17 (1.0%), rewrite_mail: 0.00 (0.0%)
-Subject: Re: [PATCH 5.4 32/80] taskstats: Cleanup the use of task->exit_code
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-"Dr. Thomas Orgis" <thomas.orgis@uni-hamburg.de> writes:
-
-> Am Mon, 21 Feb 2022 09:49:12 +0100
-> schrieb Greg Kroah-Hartman <gregkh@linuxfoundation.org>: 
+On Tue, Feb 1, 2022 at 12:23 AM Anup Patel <apatel@ventanamicro.com> wrote:
 >
->> As best as I can figure the intent is to return task->exit_code after
->> a task exits.  The field is returned with per task fields, so the
->> exit_code of the entire process is not wanted.
+> We upgrade SBI spec version implemented by KVM RISC-V to v0.3 so
+> that Guest kernel can probe and use SBI extensions added by the
+> SBI v0.3 specification.
 >
-> I wondered about the use of exit_code, too, when preparing my patch
-> that introduces ac_tgid and the AGROUP flag to identify the first and
-> last tasks of a task group/process, see
+> Signed-off-by: Anup Patel <apatel@ventanamicro.com>
+> ---
+>  arch/riscv/include/asm/kvm_vcpu_sbi.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 >
-> 	https://lkml.org/lkml/2022/2/18/887
+> diff --git a/arch/riscv/include/asm/kvm_vcpu_sbi.h b/arch/riscv/include/asm/kvm_vcpu_sbi.h
+> index 76e4e17a3e00..04cd81f2ab5b 100644
+> --- a/arch/riscv/include/asm/kvm_vcpu_sbi.h
+> +++ b/arch/riscv/include/asm/kvm_vcpu_sbi.h
+> @@ -12,7 +12,7 @@
+>  #define KVM_SBI_IMPID 3
 >
-> With the information about the position of this task in the group,
-> users can take some meaning from the exit code (individual kills?). The
-> old style ensured that you got one exit code per process.
+>  #define KVM_SBI_VERSION_MAJOR 0
+> -#define KVM_SBI_VERSION_MINOR 2
+> +#define KVM_SBI_VERSION_MINOR 3
+>
+>  struct kvm_vcpu_sbi_extension {
+>         unsigned long extid_start;
+> --
+> 2.25.1
+>
 
-How do you figure?
 
-For single-threaded processes ac_exitcode would always be reasonable,
-and be what userspace passed to exit(3).
+Reviewed-by: Atish Patra <atishp@rivosinc.com>
 
-For multi-threaded processes ac_exitcode before my change was set to
-some completely arbitrary value for the thread whose tgid == tid.
-
-Frequently the thread whose tgid == tid is the last thread to
-exit and is brought down by a call to group_exit so it makes sense.
-Unfortunately there is no requirement for that to be the case.
-
-If the thread whose tgid == tid happens to call pthread_exit the value
-in ac_exitcode for that thread is pretty much undefined.
-
-The ac_exitcode for the other threads would be the useless value of 0
-that the field was initialized to.  With my change the value returned is
-at least well defined.
-
-But thread_group_leader in this context does nothing except limit the
-value that is returned.
-
-> I addressing ac_exitcode fits together with my patch, while increasing
-> the version of taskstats helps clients that then can know that
-> ac_exitcode now has a different meaning. Right now this is a change
-> under the hood and you can just guess (or have to know from the kernel
-> version).
-
-As best as I can tell I did not change the meaning of the field.  I
-change buggy code, and removed an arbitrary and senseless filter.
-
-Now maybe it would have been better to flag the bug fix with a version
-number.  Unfortunately I did not even realize taskstats had a version
-number.  I just know the code made no sense.
-
-Eric
+--
+Regards,
+Atish

@@ -2,98 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6650A4C0520
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 00:16:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 288364C052B
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 00:18:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236163AbiBVXRM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 18:17:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40146 "EHLO
+        id S236197AbiBVXS2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 18:18:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236096AbiBVXRJ (ORCPT
+        with ESMTP id S233405AbiBVXS0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 18:17:09 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 140387C142;
-        Tue, 22 Feb 2022 15:16:42 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: nfraprado)
-        with ESMTPSA id EC1691F42A25
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1645571801;
-        bh=r6PeHk2jtY6t4pgQWhoW5J6l8CZI1VG43nrak3LpCXU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=mUQ5gjZpK0k1MfDhWh4gwKuGJY8QtXR+gfjkIi1dSVHB/QfrzDXWAfgzpsJ4B4I+a
-         9qkZrZ+zW1YN51SUsZmIXglwH7ETI3pVBloGriz/FwcZADdJRjltvIx3PjSGRyu+ll
-         1lXbrg5UNPJqIiwF3nGcsizdzZmTn6sGgu9P9j3pSLFCvrypFg9f/7YPjSflujBcy0
-         jVVc+PmCxBYM9uJcYMt5tyrT2kcYyqEvK2FPHSIUBv4MruH2i7DCwo1kWIbXdmCtaR
-         RLeiz9o/K6/O7C4CjqgPeVNjZiHyoKD4+fXCjvpl11T7rsyC0Qr9dyMXQXn80l1f9b
-         MFA/IKqRamyWw==
-Date:   Tue, 22 Feb 2022 18:16:35 -0500
-From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
-        <nfraprado@collabora.com>
-To:     Allen-KH Cheng <allen-kh.cheng@mediatek.com>
-Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        --to=Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        Chen-Yu Tsai <wenst@chromium.org>,
-        Ryder Lee <ryder.lee@kernel.org>
-Subject: Re: [PATCH v2 21/23] arm64: dts: mt8192: Add dsi node
-Message-ID: <20220222231635.33cupieckldkzgzn@notapiano>
-References: <20220218091633.9368-1-allen-kh.cheng@mediatek.com>
- <20220218091633.9368-22-allen-kh.cheng@mediatek.com>
+        Tue, 22 Feb 2022 18:18:26 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5443D9027F;
+        Tue, 22 Feb 2022 15:17:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645571879; x=1677107879;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=sRi3Y0px8+ojBe6BJa3k8tR0XaiCszxkZ0yaIFLeAEE=;
+  b=Q9FpGganICMPmwANM53SvDjLaQPxZmfs2oMxTyo97qE0O2wZH7pXCupF
+   xMGw5MSib3rP7N5gqwgsU5owmfKMqr0DW8pXb81kfSBrcdEYnIgKaeQXY
+   +QTU+dbjyDDAqXfyOo/K5wzplWb3CvKocsxaw8e0/Scc8W4qEICB74jx6
+   bohVf8VMiKGEOa8QO2averLulF0F9cF/fiIRpa067aPdXBot9fNUJ3ZBs
+   80P35eQESAovgpY9O/rbaf4qQKWi6L3CbzS3PTZ9OkdXje87FyFskmpsb
+   njHtvbun3iER++yFQpMN5DGqwbP0jnn66+c/fNGioQ9qyBhierLCSFCGA
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10266"; a="231810092"
+X-IronPort-AV: E=Sophos;i="5.88,389,1635231600"; 
+   d="scan'208";a="231810092"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2022 15:17:59 -0800
+X-IronPort-AV: E=Sophos;i="5.88,389,1635231600"; 
+   d="scan'208";a="776476619"
+Received: from skoppolu-mobl4.amr.corp.intel.com (HELO skuppusw-desk1.amr.corp.intel.com) ([10.252.138.103])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2022 15:17:57 -0800
+From:   Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <mgross@linux.intel.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>
+Cc:     "H . Peter Anvin" <hpa@zytor.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan <knsathya@kernel.org>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>, linux-kernel@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+Subject: [PATCH v1 0/6] Add TDX Guest Attestation support
+Date:   Tue, 22 Feb 2022 15:17:29 -0800
+Message-Id: <20220222231735.268919-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220218091633.9368-22-allen-kh.cheng@mediatek.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 18, 2022 at 05:16:31PM +0800, Allen-KH Cheng wrote:
-> Add dsi ndoe for mt8192 SoC.
-> 
-> Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
-> ---
->  arch/arm64/boot/dts/mediatek/mt8192.dtsi | 13 +++++++++++++
->  1 file changed, 13 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/mediatek/mt8192.dtsi b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
-> index 026f2d8141b0..1f1555fd18f5 100644
-> --- a/arch/arm64/boot/dts/mediatek/mt8192.dtsi
-> +++ b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
-> @@ -1350,6 +1350,19 @@
->  			clocks = <&mmsys CLK_MM_DISP_DITHER0>;
->  		};
->  
-> +		dsi0: dsi@14010000 {
-> +			compatible = "mediatek,mt8183-dsi";
-> +			reg = <0 0x14010000 0 0x1000>;
-> +			interrupts = <GIC_SPI 265 IRQ_TYPE_LEVEL_HIGH 0>;
-> +			mediatek,syscon-dsi = <&mmsys 0x140>;
-> +			clocks = <&mmsys CLK_MM_DSI0>,
-> +				<&mmsys CLK_MM_DSI_DSI0>,
-> +				<&mipi_tx0>;
+Hi All,
 
-Please fix the indentation.
+Intel's Trust Domain Extensions (TDX) protect guest VMs from malicious
+hosts and some physical attacks. VM guest with TDX support is called
+as TD Guest.
 
-> +			clock-names = "engine", "digital", "hs";
-> +			phys = <&mipi_tx0>;
-> +			phy-names = "dphy";
-> +		};
-> +
->  		ovl_2l2: ovl@14014000 {
->  			compatible = "mediatek,mt8192-disp-ovl-2l";
->  			reg = <0 0x14014000 0 0x1000>;
-> -- 
-> 2.18.0
-> 
-> 
+In TD Guest, the attestation process is used to verify the 
+trustworthiness of TD guest to the 3rd party servers. Such attestation
+process is required by 3rd party servers before sending sensitive
+information to TD guests. One usage example is to get encryption keys
+from the key server for mounting the encrypted rootfs or secondary drive.
+    
+Following patches add the attestation support to TDX guest which
+includes attestation user interface driver, user agent example, and
+related hypercall support.
+
+In this series, only following patches are in arch/x86 and are
+intended for x86 maintainers review.
+
+* x86/tdx: Add TDREPORT TDX Module call support
+* x86/tdx: Add GetQuote TDX hypercall support
+* x86/tdx: Add SetupEventNotifyInterrupt TDX hypercall support
+* x86/tdx: Add TDX Guest event notify interrupt vector support
+
+Patch titled "platform/x86: intel_tdx_attest: Add TDX Guest attestation
+interface driver" adds the attestation driver support. This is supposed
+to be reviewed by platform-x86 maintainers.
+
+Also, patch titled "tools/tdx: Add a sample attestation user app" adds
+a testing app for attestation feature which needs review from
+bpf@vger.kernel.org.
+
+Dependencies:
+--------------
+
+This feature has dependency on TDX guest core patch set series.
+
+https://lore.kernel.org/all/20220218161718.67148-1-kirill.shutemov@linux.intel.com/T/
+
+History:
+----------
+
+Previously this patch set was sent under title "Add TDX Guest
+Support (Attestation support)". In the previous version, only the
+attestation driver patch was reviewed and got acked. Rest of the
+patches need to be reviewed freshly.
+
+https://lore.kernel.org/bpf/20210806000946.2951441-1-sathyanarayanan.kuppuswamy@linux.intel.com/
+
+Changes since previous submission:
+ * Updated commit log and error handling in TDREPORT, GetQuote and
+   SetupEventNotifyInterrupt support patches.
+ * Added locking support in attestation driver.
+
+Kuppuswamy Sathyanarayanan (6):
+  x86/tdx: Add tdx_mcall_tdreport() API support
+  x86/tdx: Add tdx_hcall_get_quote() API support
+  x86/tdx: Add SetupEventNotifyInterrupt TDX hypercall support
+  platform/x86: intel_tdx_attest: Add TDX Guest attestation interface
+    driver
+  x86/tdx: Add TDX Guest event notify interrupt vector support
+  tools/tdx: Add a sample attestation user app
+
+ arch/x86/coco/tdx.c                           | 170 ++++++++++++
+ arch/x86/include/asm/hardirq.h                |   4 +
+ arch/x86/include/asm/idtentry.h               |   4 +
+ arch/x86/include/asm/irq_vectors.h            |   7 +-
+ arch/x86/include/asm/tdx.h                    |   5 +
+ arch/x86/kernel/irq.c                         |   7 +
+ drivers/platform/x86/intel/Kconfig            |   1 +
+ drivers/platform/x86/intel/Makefile           |   1 +
+ drivers/platform/x86/intel/tdx/Kconfig        |  13 +
+ drivers/platform/x86/intel/tdx/Makefile       |   3 +
+ .../platform/x86/intel/tdx/intel_tdx_attest.c | 241 ++++++++++++++++++
+ include/uapi/misc/tdx.h                       |  37 +++
+ tools/Makefile                                |  13 +-
+ tools/tdx/Makefile                            |  19 ++
+ tools/tdx/attest/.gitignore                   |   2 +
+ tools/tdx/attest/Makefile                     |  24 ++
+ tools/tdx/attest/tdx-attest-test.c            | 240 +++++++++++++++++
+ 17 files changed, 784 insertions(+), 7 deletions(-)
+ create mode 100644 drivers/platform/x86/intel/tdx/Kconfig
+ create mode 100644 drivers/platform/x86/intel/tdx/Makefile
+ create mode 100644 drivers/platform/x86/intel/tdx/intel_tdx_attest.c
+ create mode 100644 include/uapi/misc/tdx.h
+ create mode 100644 tools/tdx/Makefile
+ create mode 100644 tools/tdx/attest/.gitignore
+ create mode 100644 tools/tdx/attest/Makefile
+ create mode 100644 tools/tdx/attest/tdx-attest-test.c
+
+-- 
+2.25.1
+

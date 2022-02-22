@@ -2,62 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4C304BF08B
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 05:10:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 60E854BF08C
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 05:10:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240483AbiBVDTy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 22:19:54 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46960 "EHLO
+        id S240289AbiBVDW3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 22:22:29 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240501AbiBVDTu (ORCPT
+        with ESMTP id S240513AbiBVDUU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 22:19:50 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACB8813CF5;
-        Mon, 21 Feb 2022 19:19:24 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 494FD6153A;
-        Tue, 22 Feb 2022 03:19:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6E39C340E9;
-        Tue, 22 Feb 2022 03:19:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645499963;
-        bh=XdSeylhfMOnuHS3UWpigy3vNcSxueHfx/6cezNReTuc=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=koKxbJeGQUeZNd2dhBgGxEQ8ZZWxGB5BmP7fL/QFZxNH7ZmC205cZmobP86c1dahE
-         T4Qp9++AGKKqyzwhI0lrASVHN13B7lM087FZ4igAspGeay8LqcpLrmNNjUjbTC5dqB
-         2veXEMrSmzToXQiGlJwArWpDHLWq7OGLoENIA35WjFwFjQW7snIEsE88VASXqQn4Sv
-         kbPEZuUzbHlUs1qtkKPVazwVjSohmNIsDbDwFCQHhGJmnC5igOFaVuGzBc12JHtNSe
-         824fODx2T8GPk1JGruoK1RCqee7jj7IQXDC9avp5cqLUxPfmcMPBYjkMNcOluebElm
-         m3a/442n/5TvQ==
-Message-ID: <3489899f-3521-133e-5184-1de828eb6309@kernel.org>
-Date:   Mon, 21 Feb 2022 20:19:22 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.6.0
-Subject: Re: [PATCH net-next 3/3] net: neigh: add skb drop reasons to
- arp_error_report()
-Content-Language: en-US
-To:     menglong8.dong@gmail.com, kuba@kernel.org
-Cc:     rostedt@goodmis.org, mingo@redhat.com, davem@davemloft.net,
-        yoshfuji@linux-ipv6.org, imagedong@tencent.com,
-        edumazet@google.com, alobakin@pm.me, cong.wang@bytedance.com,
-        paulb@nvidia.com, talalahmad@google.com, keescook@chromium.org,
-        ilias.apalodimas@linaro.org, memxor@gmail.com,
-        flyingpeng@tencent.com, mengensun@tencent.com,
-        daniel@iogearbox.net, yajun.deng@linux.dev, roopa@nvidia.com,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-References: <20220220155705.194266-1-imagedong@tencent.com>
- <20220220155705.194266-4-imagedong@tencent.com>
-From:   David Ahern <dsahern@kernel.org>
-In-Reply-To: <20220220155705.194266-4-imagedong@tencent.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        Mon, 21 Feb 2022 22:20:20 -0500
+Received: from new2-smtp.messagingengine.com (new2-smtp.messagingengine.com [66.111.4.224])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51088140F7;
+        Mon, 21 Feb 2022 19:19:43 -0800 (PST)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 10E28580183;
+        Mon, 21 Feb 2022 22:19:40 -0500 (EST)
+Received: from imap49 ([10.202.2.99])
+  by compute2.internal (MEProxy); Mon, 21 Feb 2022 22:19:40 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        sladewatkins.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm1; bh=eCDJze6QD00/gH
+        YfYhsVR8fpoe1ybo+eYeOBYvXih20=; b=coC5n4U6CSnH7E3DMHZcCPalY+0f/6
+        60PiWY9O0g/jH8YMSJluZJP3mZZQRquViWGKuAwJ3tOZdnZA1wNh5izuthO4BjbH
+        mgtpOCTUA5hBiAN+w6aijMD9p2A+7G5nCQ7uZW+6DycsAg42S9+4Pa27f9sh/tHp
+        SNU/chvwnQdVl5DE5PKF2O0hYcA046VEpS5KQIEe1oSyIPTxk+vtJYRD/wIWKxJk
+        xTo5opdBPYrTgUD/L+E2qJSLPShtqu5aEhu3iUdJ57aqq9z7MfVOEIkUn6XnB6CH
+        NqBSBMiDclaH03CQJsLPhtGipW3BlGxL8QV+0+jHgd0pZ/2xvYlHXusw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=eCDJze6QD00/gHYfY
+        hsVR8fpoe1ybo+eYeOBYvXih20=; b=HFYgkx0X6CO1XWycJOSLhLto0CNc8pinD
+        nKa9THYUkYJRffDJJR5tDs59GZoot3hXZ5NYK6Bqv5xDOlSMhtL6TgZB5gr0qA/D
+        dCoyXDYJ+i9ozd7MhgYKnHO4CSyLvNaAWqzGxeTJOSFpi1DQ4+O3V1xWcV1O1Xfu
+        5TbSAAEtzOhC+L5JjxMKS7RN9h5T0KYCJImFhROrM6nz+3TgSD2cYC/BHm0dSS2X
+        cooqAZgGrSLFWKFHWJ/R2P8x70q0KYm02avry954WuiOfGd6oV+n6nE3hIsnZWhu
+        JBWRZFyM01EG0Hs/UQkjM1YVlabgFycD+00V5BTPfhSdnMhwipu5Q==
+X-ME-Sender: <xms:S1YUYkM6C_TFb-qwVNRKohg25PuDCO4RTrYuDvkicMKC4zFGadTJcQ>
+    <xme:S1YUYq8c2hbiqS8evB0cDUx0dnl6y1eoyMMvcGlpwE_HromuTc_7gFrTAKwVqBpI8
+    08gr4NDIiPM6GJDFgk>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrkeejgdehiecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfgjfhffhffvufgtsehttdertderredtnecuhfhrohhmpedfufhlrggu
+    vgcuhggrthhkihhnshdfuceoshhlrgguvgesshhlrgguvgifrghtkhhinhhsrdgtohhmqe
+    enucggtffrrghtthgvrhhnpeeuieffteejieetgfevteelheevudehteeihffhteehtdet
+    leegtedtvdevvddugeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrih
+    hlfhhrohhmpehslhgruggvsehslhgruggvfigrthhkihhnshdrtghomh
+X-ME-Proxy: <xmx:S1YUYrTIV9vmYe77AqoLEtgpAfKERWriEBrjSOTuLXnhQpAjcYxf-w>
+    <xmx:S1YUYsuYhaVormwtWiOMrE6akjxqzikaKAljtHvuXlEGxC5YZJjVIw>
+    <xmx:S1YUYsc0kKLdMkXrNuEhCPFzxDm4RfpbeWginXkEnmJt_tWrG97UrA>
+    <xmx:S1YUYtWGmYEQj5TH5aAUqsJ5BxgfEnKZeWVxZMAGKKly-u9hSYnd4PGyrf4>
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 1D0EFF6007E; Mon, 21 Feb 2022 22:19:39 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.5.0-alpha0-4778-g14fba9972e-fm-20220217.001-g14fba997
+Mime-Version: 1.0
+Message-Id: <b5930805-fc05-4fde-a91b-a8c7e3eee1c0@www.fastmail.com>
+In-Reply-To: <20220221084915.554151737@linuxfoundation.org>
+References: <20220221084915.554151737@linuxfoundation.org>
+Date:   Mon, 21 Feb 2022 22:19:38 -0500
+From:   "Slade Watkins" <slade@sladewatkins.com>
+To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org,
+        "Linus Torvalds" <torvalds@linux-foundation.org>,
+        "Andrew Morton" <akpm@linux-foundation.org>,
+        "Guenter Roeck" <linux@roeck-us.net>, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org,
+        "Pavel Machek" <pavel@denx.de>,
+        "Jon Hunter" <jonathanh@nvidia.com>,
+        "Florian Fainelli" <f.fainelli@gmail.com>,
+        "Sudip Mukherjee" <sudipm.mukherjee@gmail.com>
+Subject: Re: [PATCH 5.4 00/80] 5.4.181-rc1 review
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,22 +89,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/20/22 8:57 AM, menglong8.dong@gmail.com wrote:
-> From: Menglong Dong <imagedong@tencent.com>
-> 
-> When neighbour become invalid or destroyed, neigh_invalidate() will be
-> called. neigh->ops->error_report() will be called if the neighbour's
-> state is NUD_FAILED, and seems here is the only use of error_report().
-> So we can tell that the reason of skb drops in arp_error_report() is
-> SKB_DROP_REASON_NEIGH_FAILED.
-> 
-> Replace kfree_skb() used in arp_error_report() with kfree_skb_reason().
-> 
-> Reviewed-by: Mengen Sun <mengensun@tencent.com>
-> Reviewed-by: Hao Peng <flyingpeng@tencent.com>
-> Signed-off-by: Menglong Dong <imagedong@tencent.com>
-> ---
->  net/ipv4/arp.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-Reviewed-by: David Ahern <dsahern@kernel.org>
+On Mon, Feb 21, 2022, at 3:48 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.4.181 release.
+> There are 80 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Wed, 23 Feb 2022 08:48:58 +0000.
+> Anything received after that time might be too late.
+
+5.4.181-rc1 compiled and booted with no errors or regressions on my x86_64 test system.
+
+Tested-by: Slade Watkins <slade@sladewatkins.com>
+
+Cheers, 
+Slade

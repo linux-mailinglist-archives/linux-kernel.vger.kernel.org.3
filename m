@@ -2,82 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D89994BF2C2
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 08:41:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BD504BF2AF
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 08:40:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231171AbiBVH1S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 02:27:18 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:42284 "EHLO
+        id S231197AbiBVH2g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 02:28:36 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:48202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231153AbiBVH1Q (ORCPT
+        with ESMTP id S231157AbiBVH2a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 02:27:16 -0500
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 632401DA6B
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 23:26:46 -0800 (PST)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 21M7Qdjl075627;
-        Tue, 22 Feb 2022 01:26:39 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1645514799;
-        bh=uAOMj38P8pOjPlUuS5NAg+a49yXN4bjvpjUmnN1uPTY=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=ekM+Fe1r10UotETHis3nL+oUkuyFHAXInllfE07xfy4S6B59IbMnLifyk+SwKxnNR
-         5nd/Pcu1Xdl3kYFH8MVE5Woe/2xGn5ACPWfO3EUpabZ6M5uOYqU4FtrMRr6PtvLRCo
-         oe3bApgmrcYmdcpchdi/BqEE7CdZoeh55gBikHA4=
-Received: from DLEE114.ent.ti.com (dlee114.ent.ti.com [157.170.170.25])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 21M7Qcgc060983
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 22 Feb 2022 01:26:38 -0600
-Received: from DLEE104.ent.ti.com (157.170.170.34) by DLEE114.ent.ti.com
- (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Tue, 22
- Feb 2022 01:26:38 -0600
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE104.ent.ti.com
- (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Tue, 22 Feb 2022 01:26:38 -0600
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 21M7QbrY013590;
-        Tue, 22 Feb 2022 01:26:38 -0600
-Date:   Tue, 22 Feb 2022 12:56:37 +0530
-From:   Pratyush Yadav <p.yadav@ti.com>
-To:     Michael Walle <michael@walle.cc>
-CC:     <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        <yaliang.wang@windriver.com>
-Subject: Re: [PATCH v4 20/32] mtd: spi-nor: guard _page_size parameter in
- S3AN_INFO()
-Message-ID: <20220222072637.pvw5elyucrq5ndfl@ti.com>
-References: <20220221120809.1531502-1-michael@walle.cc>
- <20220221120809.1531502-21-michael@walle.cc>
+        Tue, 22 Feb 2022 02:28:30 -0500
+Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2E30931BF;
+        Mon, 21 Feb 2022 23:28:04 -0800 (PST)
+Authenticated-By: 
+X-SpamFilter-By: ArmorX SpamTrap 5.73 with qID 21M7Rrh86004372, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36504.realtek.com.tw[172.21.6.27])
+        by rtits2.realtek.com.tw (8.15.2/2.71/5.88) with ESMTPS id 21M7Rrh86004372
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Tue, 22 Feb 2022 15:27:53 +0800
+Received: from RTEXMBS01.realtek.com.tw (172.21.6.94) by
+ RTEXH36504.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Tue, 22 Feb 2022 15:27:52 +0800
+Received: from RTEXMBS01.realtek.com.tw (172.21.6.94) by
+ RTEXMBS01.realtek.com.tw (172.21.6.94) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Tue, 22 Feb 2022 15:27:52 +0800
+Received: from RTEXMBS01.realtek.com.tw ([fe80::a0f1:14d7:38a1:7026]) by
+ RTEXMBS01.realtek.com.tw ([fe80::a0f1:14d7:38a1:7026%5]) with mapi id
+ 15.01.2308.021; Tue, 22 Feb 2022 15:27:52 +0800
+From:   Ricky WU <ricky_wu@realtek.com>
+To:     "ulf.hansson@linaro.org" <ulf.hansson@linaro.org>,
+        Ricky WU <ricky_wu@realtek.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "kai.heng.feng@canonical.com" <kai.heng.feng@canonical.com>,
+        "tommyhebb@gmail.com" <tommyhebb@gmail.com>,
+        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: [PATCH] mmc: rtsx: add 74 Clocks in power on flow
+Thread-Topic: [PATCH] mmc: rtsx: add 74 Clocks in power on flow
+Thread-Index: AQHYJ7nTpeKajlBmYU+vTOb/+dRQew==
+Date:   Tue, 22 Feb 2022 07:27:52 +0000
+Message-ID: <fb7cda69c5c244dfa579229ee2f0da83@realtek.com>
+Accept-Language: zh-TW, en-US
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.22.81.102]
+x-kse-serverinfo: RTEXMBS01.realtek.com.tw, 9
+x-kse-attachmentfiltering-interceptor-info: no applicable attachment filtering
+ rules found
+x-kse-antivirus-interceptor-info: scan successful
+x-kse-antivirus-info: =?big5?B?Q2xlYW4sIGJhc2VzOiAyMDIyLzIvMjIgpFekyCAwNjoyMzowMA==?=
+x-kse-bulkmessagesfiltering-scan-result: protection disabled
+Content-Type: text/plain; charset="big5"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20220221120809.1531502-21-michael@walle.cc>
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-KSE-ServerInfo: RTEXH36504.realtek.com.tw, 9
+X-KSE-Attachment-Filter-Triggered-Rules: Clean
+X-KSE-Attachment-Filter-Triggered-Filters: Clean
+X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/02/22 01:07PM, Michael Walle wrote:
-> The _page_size marco parameter was missing parentheses around it. Add
-> them.
-> 
-> Signed-off-by: Michael Walle <michael@walle.cc>
-
-Reviewed-by: Pratyush Yadav <p.yadav@ti.com>
-
--- 
-Regards,
-Pratyush Yadav
-Texas Instruments Inc.
+QWZ0ZXIgMW1zIHN0YWJpbGl6aW5nIHRoZSB2b2x0YWdlIHRpbWUNCmFkZCAiSG9zdCBwcm92aWRl
+cyBhdCBsZWFzdCA3NCBDbG9ja3MNCmJlZm9yZSBpc3N1aW5nIGZpcnN0IGNvbW1hbmQiIHRoYXQg
+aXMNCnNwZWMgZGVmaW5pdGlvbg0KDQpTaWduZWQtb2ZmLWJ5OiBSaWNreSBXdSA8cmlja3lfd3VA
+cmVhbHRlay5jb20+DQotLS0NCiBkcml2ZXJzL21tYy9ob3N0L3J0c3hfcGNpX3NkbW1jLmMgfCA3
+ICsrKysrKysNCiAxIGZpbGUgY2hhbmdlZCwgNyBpbnNlcnRpb25zKCspDQoNCmRpZmYgLS1naXQg
+YS9kcml2ZXJzL21tYy9ob3N0L3J0c3hfcGNpX3NkbW1jLmMgYi9kcml2ZXJzL21tYy9ob3N0L3J0
+c3hfcGNpX3NkbW1jLmMNCmluZGV4IDJhM2YxNGFmZTlmOC4uZTAxNmQ3MjBlNDUzIDEwMDY0NA0K
+LS0tIGEvZHJpdmVycy9tbWMvaG9zdC9ydHN4X3BjaV9zZG1tYy5jDQorKysgYi9kcml2ZXJzL21t
+Yy9ob3N0L3J0c3hfcGNpX3NkbW1jLmMNCkBAIC05NDAsMTAgKzk0MCwxNyBAQCBzdGF0aWMgaW50
+IHNkX3Bvd2VyX29uKHN0cnVjdCByZWFsdGVrX3BjaV9zZG1tYyAqaG9zdCkNCiAJaWYgKGVyciA8
+IDApDQogCQlyZXR1cm4gZXJyOw0KIA0KKwltZGVsYXkoMSk7DQorDQogCWVyciA9IHJ0c3hfcGNp
+X3dyaXRlX3JlZ2lzdGVyKHBjciwgQ0FSRF9PRSwgU0RfT1VUUFVUX0VOLCBTRF9PVVRQVVRfRU4p
+Ow0KIAlpZiAoZXJyIDwgMCkNCiAJCXJldHVybiBlcnI7DQogDQorCS8qIHNlbmQgaW5pdCA3NCBj
+bG9ja3MgKi8NCisJcnRzeF9wY2lfd3JpdGVfcmVnaXN0ZXIocGNyLCBTRF9CVVNfU1RBVCwgU0Rf
+Q0xLX1RPR0dMRV9FTiwgU0RfQ0xLX1RPR0dMRV9FTik7DQorCW1kZWxheSg1KTsNCisJcnRzeF9w
+Y2lfd3JpdGVfcmVnaXN0ZXIocGNyLCBTRF9CVVNfU1RBVCwgU0RfQ0xLX1RPR0dMRV9FTiwgMCk7
+DQorDQogCWlmIChQQ0lfUElEKHBjcikgPT0gUElEXzUyNjEpIHsNCiAJCS8qDQogCQkgKiBJZiB0
+ZXN0IG1vZGUgaXMgc2V0IHN3aXRjaCB0byBTRCBFeHByZXNzIG1hbmRhdG9yaWx5LA0KLS0gDQoy
+LjI1LjE=

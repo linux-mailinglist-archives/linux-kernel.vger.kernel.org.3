@@ -2,105 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3463B4BF548
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 10:59:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA5A74BF550
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 11:02:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230305AbiBVJ6l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 04:58:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56904 "EHLO
+        id S230375AbiBVKCU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 05:02:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230083AbiBVJ6k (ORCPT
+        with ESMTP id S230320AbiBVKCP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 04:58:40 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EACCD2259;
-        Tue, 22 Feb 2022 01:58:15 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 4564C1F399;
-        Tue, 22 Feb 2022 09:58:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1645523894; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=y5GiOCWyeRNu4Zx3wuj0p1rRKzfkl//8M11MTJzWbPg=;
-        b=04SsNXRuqTQ59cl74SWmtJZRgch/xzB3XgDzOibkkOQm6joOonjthNxieEOWcl+PvMnBya
-        vY17fywk0ZWPMGfy/LE/0aDLzBPJzn1RnRPgDw6i5exW7ZWlvQoRPPLF6oiowYuP8KFjzp
-        xnMml9FUs+j2HmVhgi4DD804ERfYogw=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1645523894;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=y5GiOCWyeRNu4Zx3wuj0p1rRKzfkl//8M11MTJzWbPg=;
-        b=P2gGhuZ/H+IDwA+9ZlGybz3E+8W0g2+ia41BqcPMh/kxhmLnvi2Zr7UOrB0x9WvP2QnviA
-        Tw0iW7zdCTPosZCA==
-Received: from pobox.suse.cz (pobox.suse.cz [10.100.2.14])
+        Tue, 22 Feb 2022 05:02:15 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31CEC4D9E1;
+        Tue, 22 Feb 2022 02:01:49 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id E01D2A3B81;
-        Tue, 22 Feb 2022 09:58:13 +0000 (UTC)
-Date:   Tue, 22 Feb 2022 10:58:13 +0100 (CET)
-From:   Miroslav Benes <mbenes@suse.cz>
-To:     Aaron Tomlin <atomlin@redhat.com>
-cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        "Luis R. Rodriguez" <mcgrof@kernel.org>,
-        "Lameter, Christoph" <cl@linux.com>,
-        Petr Mladek <pmladek@suse.com>,
-        Andrew Morton <akpm@linux-foundation.org>, jeyu@kernel.org,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-modules@vger.kernel.org, live-patching@vger.kernel.org,
-        Aaron Tomlin <atomlin@atomlin.com>,
-        Grzegorz Halat <ghalat@redhat.com>,
-        Allen <allen.lkml@gmail.com>, Joe Perches <joe@perches.com>,
-        Michal Suchanek <msuchanek@suse.de>, oleksandr@natalenko.name
-Subject: Re: [PATCH v6 09/13] module: Move kallsyms support into a separate
- file
-In-Reply-To: <CANfR36iGqX93rvv1M6AwGdR=C-Ev314iKCMpEzHOO0-LXAzJig@mail.gmail.com>
-Message-ID: <alpine.LSU.2.21.2202221055470.15071@pobox.suse.cz>
-References: <20220218212511.887059-1-atomlin@redhat.com> <20220218212511.887059-10-atomlin@redhat.com> <98cff67e-d2ca-705b-7c83-bd3f41df98d9@csgroup.eu> <0ea89614-9bab-99f5-47a8-2a2996c38966@csgroup.eu>
- <CANfR36iGqX93rvv1M6AwGdR=C-Ev314iKCMpEzHOO0-LXAzJig@mail.gmail.com>
-User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CB4E3B81979;
+        Tue, 22 Feb 2022 10:01:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 748F6C340F1;
+        Tue, 22 Feb 2022 10:01:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645524106;
+        bh=WlKysR3fh9cyTsBx7g4oItMVVN2tFxPCnNUbkhVb5nw=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=NF0HYkUOI0T/c3YEkbbhITM2wsz8a1nY+2BBS7Ae1Qq3VQlDKXDwweAiLgzY07a0D
+         CkamuFzar7TxDgxm+QX7I/1Fq1DUFGwnXlPyDla0GiaEX32655LtgKJLcX4zJTFjls
+         61Il/UAGUO7DOVokjixgZgiqpmyhPo1jYvg7/pAGch63DfOdl2iFR/rng+VPpn2ELs
+         xtC7Z1kwFlCUqvcnqxPJ9osES2woTYbxMPm+oOe4oBRJa2GDNGjQmvr70CX22+ay6d
+         vDTZuWldYKrdJnsT7LE8zzB82pPUU2Dr/XdVS2sUIOGL4KiX3Iste78hkfDogmOIH0
+         zRPc6i0BqFc6A==
+Received: by mail-yb1-f178.google.com with SMTP id v186so39969219ybg.1;
+        Tue, 22 Feb 2022 02:01:46 -0800 (PST)
+X-Gm-Message-State: AOAM533Zan2M52b4S0gar/jlnhE6g/l27hzEhWn7rRiAdM2DOCpyI3FT
+        lPxte3sYTSsuCD51QJNxGp1zSUR9DasvpfhiaZ8=
+X-Google-Smtp-Source: ABdhPJzlvtAFNBuRnF7Dm7wHjcBG42cmva1ven6sDLXUphEjMJfNZZBaJeENh17z+ZNcYmS98StpGZzI20vsmBNiZmw=
+X-Received: by 2002:a25:4214:0:b0:624:6215:4823 with SMTP id
+ p20-20020a254214000000b0062462154823mr13087478yba.432.1645524105607; Tue, 22
+ Feb 2022 02:01:45 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220216113323.53332-1-Jason@zx2c4.com> <164543897830.26423.13654986323403498456.kvalo@kernel.org>
+In-Reply-To: <164543897830.26423.13654986323403498456.kvalo@kernel.org>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Tue, 22 Feb 2022 11:01:34 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXFLx1xGexd5P9xnB-2=cFn1DScCa8U6a7AyRAxQPLCWLw@mail.gmail.com>
+Message-ID: <CAMj1kXFLx1xGexd5P9xnB-2=cFn1DScCa8U6a7AyRAxQPLCWLw@mail.gmail.com>
+Subject: Re: [PATCH v3] ath9k: use hw_random API instead of directly dumping
+ into random.c
+To:     Kalle Valo <kvalo@kernel.org>
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>, miaoqing@codeaurora.org,
+        Rui Salvaterra <rsalvaterra@gmail.com>,
+        =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@toke.dk>,
+        "Sepehrdad, Pouyan" <pouyans@qti.qualcomm.com>,
+        ath9k-devel <ath9k-devel@qca.qualcomm.com>,
+        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Netdev <netdev@vger.kernel.org>,
+        =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>,
+        Florian Fainelli <f.fainelli@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 21 Feb 2022, Aaron Tomlin wrote:
-
-> On Mon 2022-02-21 09:35 +0100, Christophe Leroy wrote:
-> > Fixup:
+On Mon, 21 Feb 2022 at 11:57, Kalle Valo <kvalo@kernel.org> wrote:
+>
+> "Jason A. Donenfeld" <Jason@zx2c4.com> wrote:
+>
+> > Hardware random number generators are supposed to use the hw_random
+> > framework. This commit turns ath9k's kthread-based design into a proper
+> > hw_random driver.
 > >
-> > diff --git a/kernel/module/kallsyms.c b/kernel/module/kallsyms.c
-> > index 6c8f1f390cf5..2ee8d2e67068 100644
-> > --- a/kernel/module/kallsyms.c
-> > +++ b/kernel/module/kallsyms.c
-> > @@ -171,8 +171,7 @@ void add_kallsyms(struct module *mod, const struct
-> > load_info *info)
-> >      Elf_Shdr *symsec = &info->sechdrs[info->index.sym];
-> >
-> >      /* Set up to point into init section. */
-> > -    mod->kallsyms = (struct mod_kallsyms __rcu *)mod->init_layout.base +
-> > -        info->mod_kallsyms_init_off;
-> > +    mod->kallsyms = (void __rcu *)mod->init_layout.base +
-> > info->mod_kallsyms_init_off;
-> >
-> >      /* The following is safe since this pointer cannot change */
-> >      rcu_dereference_sched(mod->kallsyms)->symtab = (void *)symsec->sh_addr;
-> 
-> Agreed.
+> > Cc: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
+> > Cc: Kalle Valo <kvalo@kernel.org>
+> > Cc: Rui Salvaterra <rsalvaterra@gmail.com>
+> > Cc: Dominik Brodowski <linux@dominikbrodowski.net>
+> > Cc: Herbert Xu <herbert@gondor.apana.org.au>
+> > Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+> > Tested-by: Rui Salvaterra <rsalvaterra@gmail.com>
+> > Acked-by: Toke H=C3=B8iland-J=C3=B8rgensen <toke@toke.dk>
+> > Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
+>
+> Patch applied to ath-next branch of ath.git, thanks.
+>
+> fcd09c90c3c5 ath9k: use hw_random API instead of directly dumping into ra=
+ndom.c
+>
 
-Could you split all of this to a follow-up patch, please? So that 9/13 is 
-really only about moving the code.
+With this patch, it seems we end up registering the hw_rng every time
+the link goes up, and unregister it again when the link goes down,
+right?
 
-Btw, the sparse warnings "dereference of noderef expression" appeared 
-after 5/13 of the series which moved latched RB-tree support, so it does 
-not belong here anyway.
-
-Miroslav
+Wouldn't it be better to split off this driver from the 802.11 link
+state handling?

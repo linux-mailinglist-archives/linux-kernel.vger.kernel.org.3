@@ -2,82 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5BA74BF6CA
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 11:57:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 197D94BF694
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 11:49:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231561AbiBVK4Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 05:56:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47686 "EHLO
+        id S231314AbiBVKtp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 05:49:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231499AbiBVK4P (ORCPT
+        with ESMTP id S230008AbiBVKtn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 05:56:15 -0500
-X-Greylist: delayed 427 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 22 Feb 2022 02:55:50 PST
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5D3C15DB1E;
-        Tue, 22 Feb 2022 02:55:50 -0800 (PST)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id 097C65C0194;
-        Tue, 22 Feb 2022 05:48:43 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute2.internal (MEProxy); Tue, 22 Feb 2022 05:48:43 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=DTcsRQMhHEsT227VK
-        XKHQyOwB4dIKR9vzR6umqoiTuA=; b=K8S59BhMrGaVw44sfUv7enmQYQ1OVuGmQ
-        lpQdCdIjz71gjc8sElBsakHzdjkF/fWn3d2LPUPcfAoivcwe+LV83yvizXy8vaL1
-        XfMNOT3uVokxiK0Dva1CKvI7FSrewINC6IUECvQlEIoHu9w78/f2s1fKyDF0INbC
-        HsSLcrmRrIJT5/+vRozrUSm9SO5w8lMCyFGd2ChhAXZh3hkFf0pXORVGYOZr7yVd
-        GeRS8M7Rk4riPYq9RsXhn/5WS8f2iwWDDgYwCpcC03bJO/hvHEar5Wn/qy+5Rshm
-        Z+nH9mO4qHq+ZgELZ0kT+6wttK1YoXw3Oispb/yo3+GGM8PXWifbQ==
-X-ME-Sender: <xms:ir8UYjuEXGwrbqKlY20yqYFrw4YF0iLQqOk0_PB3zXdNqaovd-AkCw>
-    <xme:ir8UYkdri5qEk2tUvb28L1LpdoqlMw3Iqe9DKG7bBlGIM6lMNdVAiaDTeCQO5UXoQ
-    tVSU7hQzf_V2A>
-X-ME-Received: <xmr:ir8UYmzPkn5aAbAi0LxhaIFC81fGs94iCGgv4Jo0uTDOx3FWBmZLEPbC2OdDIXU-pg-OrVu8cb-VucyP2GDx_yLlaJrXSNGQ0w>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrkeekgddulecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvuffkfhggtggujgesghdtreertddtjeenucfhrhhomhepofgrrhgvkhcu
-    ofgrrhgtiiihkhhofihskhhiqdfikphrvggtkhhiuceomhgrrhhmrghrvghksehinhhvih
-    hsihgslhgvthhhihhnghhslhgrsgdrtghomheqnecuggftrfgrthhtvghrnhepheevvdeu
-    veehkeehhfevgffggfevudegteeugfeliedvhefgueeiuefgteetieffnecuffhomhgrih
-    hnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhep
-    mhgrihhlfhhrohhmpehmrghrmhgrrhgvkhesihhnvhhishhisghlvghthhhinhhgshhlrg
-    gsrdgtohhm
-X-ME-Proxy: <xmx:ir8UYiPFUO_QAu-DIAtp-DLZkzErUXDnPkxfPLfVkL7M4yyF2MW6Gg>
-    <xmx:ir8UYj8mCcn8tt4pgKNdOjsz4w8sY_tRUU12rDq9Sf9EyA_QQo8JWg>
-    <xmx:ir8UYiV_PDaowG3PCoghYbuma6I3uze38hhFB1zjhmt03mAkH0A-xA>
-    <xmx:i78UYkNV0oJsrIv2nwuuYBiVrEqvXd97V9QI6DwUM69aJGRhHIPadg>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 22 Feb 2022 05:48:41 -0500 (EST)
-Date:   Tue, 22 Feb 2022 11:48:38 +0100
-From:   Marek =?utf-8?Q?Marczykowski-G=C3=B3recki?= 
-        <marmarek@invisiblethingslab.com>
-To:     Roger Pau =?utf-8?B?TW9ubsOp?= <roger.pau@citrix.com>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Michael Brown <mcb30@ipxe.org>, Wei Liu <wei.liu@kernel.org>,
-        Paul Durrant <paul@xen.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "moderated list:XEN NETWORK BACKEND DRIVER" 
-        <xen-devel@lists.xenproject.org>,
-        "open list:XEN NETWORK BACKEND DRIVER" <netdev@vger.kernel.org>
-Subject: Re: [PATCH v2 2/2] Revert "xen-netback: Check for hotplug-status
- existence before watching"
-Message-ID: <YhS/hvHQO335elw7@mail-itl>
-References: <20220222001817.2264967-1-marmarek@invisiblethingslab.com>
- <20220222001817.2264967-2-marmarek@invisiblethingslab.com>
- <YhSfYyh3xU4HZKek@Air-de-Roger>
+        Tue, 22 Feb 2022 05:49:43 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98EDDD5556
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 02:49:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645526956; x=1677062956;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=YpzkHInk1JdMvGDlbPDx+MfCePhgDZ7p6g/YywoiwfQ=;
+  b=n+F0hUZWWZd3doAGeX5+YnxCGHpI/ItCFzsdR3eBHntw5QcVfGzpL0Bs
+   mXiBTdVjZvKTPjgqzNNuYc+totqyQc6jxqNEFn1Y1C+Bn4bkLkqUunrtO
+   jjXGt0hl3IbTE/x2Un93aBK23nI0DJHWVBhzHMLt+lQrgDqHssdIhY/4G
+   6blWDsdzz1g/h8MPXbjo1hFzYt3kQYtjo9D6kImTZRj8VjtZVKWBiKuej
+   ljzIr/Kd8MKPYaGTLwMAegm1ei7hvrDG0Set6gbDTEpoUps+0gJOeROww
+   dKCuUs3oiEffKR5Zo29ZSgfawSwAs9XZGQfok9xHj5yf2x3fEWPlJNKFX
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10265"; a="232288526"
+X-IronPort-AV: E=Sophos;i="5.88,387,1635231600"; 
+   d="scan'208";a="232288526"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2022 02:49:16 -0800
+X-IronPort-AV: E=Sophos;i="5.88,387,1635231600"; 
+   d="scan'208";a="706569520"
+Received: from sannilnx.jer.intel.com ([10.12.231.79])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2022 02:49:13 -0800
+From:   Alexander Usyskin <alexander.usyskin@intel.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
+Cc:     Tomas Winkler <tomas.winkler@intel.com>,
+        Alexander Usyskin <alexander.usyskin@intel.com>,
+        Vitaly Lubart <vitaly.lubart@intel.com>,
+        intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 0/7] add support for GSC in XeHP SDV platform
+Date:   Tue, 22 Feb 2022 12:48:47 +0200
+Message-Id: <20220222104854.3188643-1-alexander.usyskin@intel.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="0J0yTdf+LQeqmBEg"
-Content-Disposition: inline
-In-Reply-To: <YhSfYyh3xU4HZKek@Air-de-Roger>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,77 +65,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Add support for GSC in XeHP SDV (Intel(R) dGPU without display).
+ 
+XeHP SDV GSC controller uses the same hardware settings as DG1, but uses
+polling instead of interrupts and runs the firmware in slow pace due to
+hardware limitations.
 
---0J0yTdf+LQeqmBEg
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 22 Feb 2022 11:48:38 +0100
-From: Marek =?utf-8?Q?Marczykowski-G=C3=B3recki?= <marmarek@invisiblethingslab.com>
-To: Roger Pau =?utf-8?B?TW9ubsOp?= <roger.pau@citrix.com>
-Cc: linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-	Michael Brown <mcb30@ipxe.org>, Wei Liu <wei.liu@kernel.org>,
-	Paul Durrant <paul@xen.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Jakub Kicinski <kuba@kernel.org>,
-	"moderated list:XEN NETWORK BACKEND DRIVER" <xen-devel@lists.xenproject.org>,
-	"open list:XEN NETWORK BACKEND DRIVER" <netdev@vger.kernel.org>
-Subject: Re: [PATCH v2 2/2] Revert "xen-netback: Check for hotplug-status
- existence before watching"
+This series should be applied over "Add driver for GSC controller"
+patch series.
 
-On Tue, Feb 22, 2022 at 09:31:31AM +0100, Roger Pau Monn=C3=A9 wrote:
-> On Tue, Feb 22, 2022 at 01:18:17AM +0100, Marek Marczykowski-G=C3=B3recki=
- wrote:
-> > This reverts commit 2afeec08ab5c86ae21952151f726bfe184f6b23d.
-> >=20
-> > The reasoning in the commit was wrong - the code expected to setup the
-> > watch even if 'hotplug-status' didn't exist. In fact, it relied on the
-> > watch being fired the first time - to check if maybe 'hotplug-status' is
-> > already set to 'connected'. Not registering a watch for non-existing
-> > path (which is the case if hotplug script hasn't been executed yet),
-> > made the backend not waiting for the hotplug script to execute. This in
-> > turns, made the netfront think the interface is fully operational, while
-> > in fact it was not (the vif interface on xen-netback side might not be
-> > configured yet).
-> >=20
-> > This was a workaround for 'hotplug-status' erroneously being removed.
-> > But since that is reverted now, the workaround is not necessary either.
-> >=20
-> > More discussion at
-> > https://lore.kernel.org/xen-devel/afedd7cb-a291-e773-8b0d-4db9b291fa98@=
-ipxe.org/T/#u
-> >=20
-> > Cc: stable@vger.kernel.org
-> > Signed-off-by: Marek Marczykowski-G=C3=B3recki <marmarek@invisiblething=
-slab.com>
-> > ---
-> > I believe this is the same issue as discussed at
-> > https://lore.kernel.org/xen-devel/20220113111946.GA4133739@dingwall.me.=
-uk/
->=20
-> Right - I believe we need to leave that workaround in place in libxl
-> in order to deal with bogus Linux netbacks?
+Greg KH, please review and ACK the MEI patches.
+We are pushing all through gfx tree as the device belongs there.
 
-I'm afraid so, yes.
+Alexander Usyskin (5):
+  drm/i915/gsc: add slow_fw flag to the mei auxiliary device
+  drm/i915/gsc: add slow_fw flag to the gsc device definition
+  drm/i915/gsc: add GSC XeHP SDV platform definition
+  mei: gsc: wait for reset thread on stop
+  mei: extend timeouts on slow devices.
 
---=20
-Best Regards,
-Marek Marczykowski-G=C3=B3recki
-Invisible Things Lab
+Tomas Winkler (1):
+  mei: gsc: use polling instead of interrupts
 
---0J0yTdf+LQeqmBEg
-Content-Type: application/pgp-signature; name="signature.asc"
+Vitaly Lubart (1):
+  drm/i915/gsc: skip irq initialization if using polling
 
------BEGIN PGP SIGNATURE-----
+ drivers/gpu/drm/i915/gt/intel_gsc.c | 34 +++++++++--
+ drivers/misc/mei/bus-fixup.c        |  3 +-
+ drivers/misc/mei/client.c           | 14 ++---
+ drivers/misc/mei/gsc-me.c           | 44 ++++++++++++---
+ drivers/misc/mei/hbm.c              | 12 ++--
+ drivers/misc/mei/hw-me.c            | 88 +++++++++++++++++++++++------
+ drivers/misc/mei/hw-me.h            | 14 ++++-
+ drivers/misc/mei/hw-txe.c           |  2 +-
+ drivers/misc/mei/hw.h               |  5 ++
+ drivers/misc/mei/init.c             | 21 ++++++-
+ drivers/misc/mei/main.c             |  2 +-
+ drivers/misc/mei/mei_dev.h          | 16 ++++++
+ drivers/misc/mei/pci-me.c           |  2 +-
+ include/linux/mei_aux.h             |  1 +
+ 14 files changed, 208 insertions(+), 50 deletions(-)
 
-iQEzBAEBCAAdFiEEhrpukzGPukRmQqkK24/THMrX1ywFAmIUv4YACgkQ24/THMrX
-1yyKoggAg6fLt83xdWaCGP1TaH51wysnBj1sxuSzFeh7BUVHdyWYYlfTAQ+Ytghr
-N4uCqUyXqTpheDM7BE/9pXSiuHH1WqmClAef7SF9MweHT0zvDkL0J7McMSqLBeG4
-Qj67yHz4/C1yAhN3dAdP8933l4nmzvzOGNdG77D3P1IvU+41xtyoZPVfH5DDNscG
-yfYwoeI/oYRNtvd1H7+UD3ANkwEjnmFIVGRtFcb7G+NH+d9vGQFbODww95oCbWWA
-PfKL7gBFGNDuNnIABFCoI/RsF523zRSSeBesdAImUM+531IRapB9J9FYp4E6M3RA
-Bt5hPaIrX6OFgur2u9aShGvIdH+FYQ==
-=0A40
------END PGP SIGNATURE-----
+-- 
+2.32.0
 
---0J0yTdf+LQeqmBEg--

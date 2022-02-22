@@ -2,94 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E17504BF2BE
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 08:41:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F0B44BF29C
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 08:26:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231187AbiBVH2d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 02:28:33 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:48172 "EHLO
+        id S230455AbiBVHUs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 02:20:48 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:43362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231153AbiBVH2a (ORCPT
+        with ESMTP id S230401AbiBVHUr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 02:28:30 -0500
-Received: from out30-56.freemail.mail.aliyun.com (out30-56.freemail.mail.aliyun.com [115.124.30.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8B1493981;
-        Mon, 21 Feb 2022 23:28:04 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R141e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04426;MF=jnwang@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0V5BrXYP_1645514881;
-Received: from 30.240.114.128(mailfrom:jnwang@linux.alibaba.com fp:SMTPD_---0V5BrXYP_1645514881)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Tue, 22 Feb 2022 15:28:02 +0800
-Message-ID: <8dc8eb43-b98c-c535-7f9e-a310ccad2a54@linux.alibaba.com>
-Date:   Tue, 22 Feb 2022 15:28:00 +0800
+        Tue, 22 Feb 2022 02:20:47 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48137DE2E3;
+        Mon, 21 Feb 2022 23:20:22 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DD7FCB8187E;
+        Tue, 22 Feb 2022 07:20:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F384DC340E8;
+        Tue, 22 Feb 2022 07:20:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645514419;
+        bh=OQSsfI/rYiou2N7ZTh0DUG0l24IHBrN7xdfpMv6qtaQ=;
+        h=Date:From:To:Cc:Subject:From;
+        b=SsVuZTBJoj5wKuFAawkg2OU5yO5c6sWFaeqD08ZWWIis0gyYFsK7gsHnP4qRbzPFJ
+         oandL0a/3muIDKbW38SIMYynY6N0zGI2TJU6oKe+d/QSUiWWHus6W/ybyXa//2PbVL
+         1Kp7bIQPYYi1LEoKIq203KJMvrEsBfU7SUwtRRhCKuCu4ksjYDpyTzR+6XkTGlHAW3
+         9GaIIKHI4pQ+a4G/wuwpjgjF83rPzK7nWLB8ypxV53iQPTcrK8S+pa8hf/sEn5OR3g
+         9OiG+Ddwc2RwcRXaI0wpbjtbBlO0VX6CzOcEHOGjGAugBIF1yAr4DrYqrcNqny5ivi
+         Rme5pryUm7hgQ==
+Date:   Tue, 22 Feb 2022 01:28:12 -0600
+From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
+To:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Adaptec OEM Raid Solutions <aacraid@microsemi.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-hardening@vger.kernel.org,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Subject: [PATCH 0/8] scsi: aacraid: Replace one-element arrays with
+ flexible-array members
+Message-ID: <cover.1645513670.git.gustavoars@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.6.1
-Subject: Re: [PATCH v2] [hpsa] Fix the wrong chars in comment section
-To:     Bart Van Assche <bvanassche@acm.org>, don.brace@microsemi.com,
-        jejb@linux.vnet.ibm.com, martin.petersen@oracle.com,
-        esc.storagedev@microsemi.com, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <974edf4d-37fa-b25a-d0ac-33ac502381d8@acm.org>
- <1644889961-61470-1-git-send-email-jnwang@linux.alibaba.com>
- <739e4ca0-ec2d-d39a-4c80-2b2e16435f49@acm.org>
-From:   James Wang <jnwang@linux.alibaba.com>
-In-Reply-To: <739e4ca0-ec2d-d39a-4c80-2b2e16435f49@acm.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This series aims to replace one-element arrays with flexible-array
+members in multiple structures in drivers/scsi/aacraid/aacraid.h.
 
-在 2022/2/16 上午1:37, Bart Van Assche 写道:
-> On 2/14/22 17:52, James Wang wrote:
->> These '+' should be redundant.
->>
->> Signed-off-by: James Wang <jnwang@linux.alibaba.com>
->> Reviewed-by: Bart Van Assche <bvanassche@acm.org>
->
-> Please do NOT add a Reviewed-by tag if a reviewer has not posted that 
-> tag himself.
->
-> I have the following additional comments on this patch:
-> - I am not convinced that this patch is useful since it does not help
->   users of the hpsa driver.
+There is a regular need in the kernel to provide a way to declare having
+a dynamically sized set of trailing elements in a structure. Kernel code
+should always use “flexible array members”[1] for these cases. The older
+style of one-element or zero-length arrays should no longer be used[2].
 
-Maybe the patch helps the coding style. ;-)
+This helps with the ongoing efforts to globally enable -Warray-bounds
+and get us closer to being able to tighten the FORTIFY_SOURCE routines
+on memcpy().
 
-James.W isn't a expert in storage system,  James.B should be;
+These issues were found with the help of Coccinelle and audited and fixed,
+manually.
 
-but I have to post the issue what I see as a kernel hacker(junior).
+[1] https://en.wikipedia.org/wiki/Flexible_array_member
+[2] https://www.kernel.org/doc/html/v5.16/process/deprecated.html#zero-length-and-one-element-arrays
 
+Link: https://github.com/KSPP/linux/issues/79
 
-> - The comment still does not conform to the Linux kernel coding style.
->   From coding-style.rst:
->
-OK; I have run the script to check the code style this patch;
+Gustavo A. R. Silva (8):
+  scsi: aacraid: Replace one-element array with flexible-array member
+  scsi: aacraid: Replace one-element array with flexible-array member in
+    struct sgmap
+  scsi: aacraid: Replace one-element array with flexible-array member in
+    struct user_sgmap
+  scsi: aacraid: Replace one-element array with flexible-array member in
+    struct sgmap64
+  scsi: aacraid: Replace one-element array with flexible-array member in
+    struct user_sgmap64
+  scsi: aacraid: Replace one-element array with flexible-array member in
+    struct sgmapraw
+  scsi: aacraid: Replace one-element array with flexible-array member in
+    struct user_sgmapraw
+  scsi: aacraid: Replace one-element array with flexible-array member in
+    struct aac_aifcmd
 
-I like to imporve this patch again, without reviewed-by;
+ drivers/scsi/aacraid/aachba.c   | 76 +++++++++++----------------------
+ drivers/scsi/aacraid/aacraid.h  | 16 +++----
+ drivers/scsi/aacraid/commctrl.c |  5 +--
+ drivers/scsi/aacraid/comminit.c |  3 +-
+ 4 files changed, 37 insertions(+), 63 deletions(-)
 
+-- 
+2.27.0
 
-James
-
-
-> The preferred style for long (multi-line) comments is:
->
-> .. code-block:: c
->
->     /*
->      * This is the preferred style for multi-line
->      * comments in the Linux kernel source code.
->      * Please use it consistently.
->      *
->      * Description:  A column of asterisks on the left side,
->      * with beginning and ending almost-blank lines.
->      */
->
-> Bart.

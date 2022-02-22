@@ -2,249 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E8F04BF180
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 06:42:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BFE9E4BF117
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 06:21:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229914AbiBVFlj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 00:41:39 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:35174 "EHLO
+        id S229532AbiBVFUI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 00:20:08 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:39060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229890AbiBVFlb (ORCPT
+        with ESMTP id S229379AbiBVFUG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 00:41:31 -0500
-Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFFB89F3BF
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 21:41:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645508461; x=1677044461;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=MzoXTT1RzSdqKEdOaK0Z7AnwJmvHtP1CWUEKHGvLrE8=;
-  b=F7MNEihUDGlzw+F5wUF+gEWpo/xFct/CwOBJNd5JIt8zdkiCQEOccIXw
-   pslbMp4eY6zu87lOLkG0b2APR/nkGrWigO6H7LTidpV/xfU/iMF30jP0g
-   uQTzoxiUzy7ClC1VpZa9cIKgYKq1M5J6TjmJIl1+WsDyCkFOyUOF4sffv
-   w16OXAWOZ8P94zIg9Na2DWfOMAYTPGvGSMJwdjeb1dK14pfq7D2feiyrA
-   EJeXcWVnNdCuaKUO3OMvr1d4XPiSnejvs7/zZdM+MTiYab7hTO6DhZw0q
-   d1rywXdvr4dnKjBdZC2q0pdtzcIiFg9UE4FM1S2sbDMHlWagATHUjsLaZ
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10265"; a="312356469"
-X-IronPort-AV: E=Sophos;i="5.88,387,1635231600"; 
-   d="scan'208";a="312356469"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2022 20:38:52 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,387,1635231600"; 
-   d="scan'208";a="507842543"
-Received: from lkp-server01.sh.intel.com (HELO da3212ac2f54) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 21 Feb 2022 20:38:51 -0800
-Received: from kbuild by da3212ac2f54 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nMMwt-0002Kc-2V; Tue, 22 Feb 2022 04:38:51 +0000
-Date:   Tue, 22 Feb 2022 12:38:29 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Vignesh Raghavendra <vigneshr@ti.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: drivers/net/ethernet/ti/am65-cpsw-nuss.c:2493:17: sparse: sparse:
- incorrect type in assignment (different base types)
-Message-ID: <202202221208.c53b6mBk-lkp@intel.com>
+        Tue, 22 Feb 2022 00:20:06 -0500
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D06213C384;
+        Mon, 21 Feb 2022 21:19:42 -0800 (PST)
+Received: by mail-pg1-x532.google.com with SMTP id z4so16083980pgh.12;
+        Mon, 21 Feb 2022 21:19:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=22C4cVx+wwRK5mM3PpCccFYagn1VQQoWygpX53OoDD8=;
+        b=Fitx7Rz21j0muIjVlHevlKW2uIPsKeArKu5llXn1ypgfZUWYeblPkj8+IjVwlSeIda
+         MR5Grczq8OppWjGPao4gL65cjecUmuL/AnTrfCUBSioRltkbbWYavBPbyu3VXia7tlWp
+         vJQwEQ7hlYZ0sQZkKXaUgz6Zxxyut1RdfVrxV1WrTjoJiGRQA4GO2OLfuUjzZXcUiICb
+         IpFYLVxh+ir2TnUT2taTJRhqqdHflnmwmdMnSEr0vjYSjsuwXKgcxqNngo6pzN2PFe1t
+         b8KBGJqfRVv/zPVgqdgt7f6SjxNq9PlB7NvPqKobDh6Bvg6opcXtoifeP1F/TjXtQvSL
+         qDzQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=22C4cVx+wwRK5mM3PpCccFYagn1VQQoWygpX53OoDD8=;
+        b=uY9O/8mf8pJCyh7BAkBaHAjPVSmKHYOldIylLX3SJavGiaAAr+Tt7bZma6vug43SLw
+         DG1QowSq+juRrB8WTbr9FvEfsnbvXNjG4VPUypmRFMvzta8SAIaPCJQrHZEzw0/GdBVV
+         slh8AiTfHs7otzICe+5R0vIAweJ0R0uk+ui586gctYhG47/QP5t69BGUYL8xn+Y/dlNh
+         r49nnUbkAHi8mnb/ssvbWtI+mX+1W21LjVb1VZHDd1531ZB4Hlfy2zLMAVsDWOqzPgBs
+         hrywCpNdX5Szgch1Ela+EgB0t5ckUOkZJItAx3pvLw6apvDyrzLuQD+E1YyA6mZ2gZ7A
+         uSTA==
+X-Gm-Message-State: AOAM530o4GTls5piFL6N9acV80gLiu6iNT1Qxdax3bDHUz4Y6B0GBmOT
+        F0LIZIuJTF9TRrHGI5d8o6b179wM09Xl1Srzh3GExWUnfRgDtQ==
+X-Google-Smtp-Source: ABdhPJx2nohtO7sqA42Cth7WpO+cxFz9XNQYZr102InHpoyzE3whglzftuYg4H3A+RIjeTvFVPP9yl5SvJjbd37QQRQ=
+X-Received: by 2002:a67:b34a:0:b0:31b:f0fd:fbe1 with SMTP id
+ b10-20020a67b34a000000b0031bf0fdfbe1mr9156792vsm.9.1645504800565; Mon, 21 Feb
+ 2022 20:40:00 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220222042700.385001-1-yusisamerican@gmail.com>
+In-Reply-To: <20220222042700.385001-1-yusisamerican@gmail.com>
+From:   Yusuf Khan <yusisamerican@gmail.com>
+Date:   Mon, 21 Feb 2022 20:39:48 -0800
+Message-ID: <CAJoG2+-97KyWrxym2NXECRtjT9OxVQE_=DcNkUfOsPm_Ax90Aw@mail.gmail.com>
+Subject: Re: [PATCH -next] pga: dfl: pci: Make sure DMA related error check is
+ not done twice
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-fpga@vger.kernel.org, yilun.xu@intel.com, mdf@kernel.org,
+        trix@redhat.com, hao.wu@intel.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   038101e6b2cd5c55f888f85db42ea2ad3aecb4b6
-commit: 58356eb31d60dd8994e5067096ef1a09e4d9ceda net: ti: am65-cpsw-nuss: Add devlink support
-date:   1 year ago
-config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20220222/202202221208.c53b6mBk-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 11.2.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=58356eb31d60dd8994e5067096ef1a09e4d9ceda
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 58356eb31d60dd8994e5067096ef1a09e4d9ceda
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/gpu/drm/tegra/ drivers/gpu/host1x/ drivers/hid/ drivers/irqchip/ drivers/net/ethernet/ti/ drivers/remoteproc/ drivers/scsi/hisi_sas/ security/integrity/ima/
+Note: This bug was introduced here:
+https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/patch/?id=ada3caabaf6135150077c3f729bb06e8f3b5b8f6
+I saw this commit inside the linux-next branch, it is not present in
+the mainline branch.
+The linux-next branch was last updated 5 days ago, so I am unsure
+about the state of that commit.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-
-sparse warnings: (new ones prefixed by >>)
-   drivers/net/ethernet/ti/am65-cpsw-nuss.c:1917:55: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected struct am65_cpsw_ndev_stats [noderef] __percpu *stats @@     got void *data @@
-   drivers/net/ethernet/ti/am65-cpsw-nuss.c:1917:55: sparse:     expected struct am65_cpsw_ndev_stats [noderef] __percpu *stats
-   drivers/net/ethernet/ti/am65-cpsw-nuss.c:1917:55: sparse:     got void *data
-   drivers/net/ethernet/ti/am65-cpsw-nuss.c:1974:49: sparse: sparse: incorrect type in argument 3 (different address spaces) @@     expected void *data @@     got struct am65_cpsw_ndev_stats [noderef] __percpu *stats @@
-   drivers/net/ethernet/ti/am65-cpsw-nuss.c:1974:49: sparse:     expected void *data
-   drivers/net/ethernet/ti/am65-cpsw-nuss.c:1974:49: sparse:     got struct am65_cpsw_ndev_stats [noderef] __percpu *stats
->> drivers/net/ethernet/ti/am65-cpsw-nuss.c:2493:17: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned long long [usertype] id_temp @@     got restricted __be64 [usertype] @@
-   drivers/net/ethernet/ti/am65-cpsw-nuss.c:2493:17: sparse:     expected unsigned long long [usertype] id_temp
-   drivers/net/ethernet/ti/am65-cpsw-nuss.c:2493:17: sparse:     got restricted __be64 [usertype]
-
-vim +2493 drivers/net/ethernet/ti/am65-cpsw-nuss.c
-
-  2462	
-  2463	static int am65_cpsw_nuss_probe(struct platform_device *pdev)
-  2464	{
-  2465		struct cpsw_ale_params ale_params = { 0 };
-  2466		const struct of_device_id *of_id;
-  2467		struct device *dev = &pdev->dev;
-  2468		struct am65_cpsw_common *common;
-  2469		struct device_node *node;
-  2470		struct resource *res;
-  2471		struct clk *clk;
-  2472		u64 id_temp;
-  2473		int ret, i;
-  2474	
-  2475		common = devm_kzalloc(dev, sizeof(struct am65_cpsw_common), GFP_KERNEL);
-  2476		if (!common)
-  2477			return -ENOMEM;
-  2478		common->dev = dev;
-  2479	
-  2480		of_id = of_match_device(am65_cpsw_nuss_of_mtable, dev);
-  2481		if (!of_id)
-  2482			return -EINVAL;
-  2483		common->pdata = *(const struct am65_cpsw_pdata *)of_id->data;
-  2484	
-  2485		am65_cpsw_nuss_apply_socinfo(common);
-  2486	
-  2487		res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "cpsw_nuss");
-  2488		common->ss_base = devm_ioremap_resource(&pdev->dev, res);
-  2489		if (IS_ERR(common->ss_base))
-  2490			return PTR_ERR(common->ss_base);
-  2491		common->cpsw_base = common->ss_base + AM65_CPSW_CPSW_NU_BASE;
-  2492		/* Use device's physical base address as switch id */
-> 2493		id_temp = cpu_to_be64(res->start);
-  2494		memcpy(common->switch_id, &id_temp, sizeof(res->start));
-  2495	
-  2496		node = of_get_child_by_name(dev->of_node, "ethernet-ports");
-  2497		if (!node)
-  2498			return -ENOENT;
-  2499		common->port_num = of_get_child_count(node);
-  2500		if (common->port_num < 1 || common->port_num > AM65_CPSW_MAX_PORTS)
-  2501			return -ENOENT;
-  2502		of_node_put(node);
-  2503	
-  2504		common->rx_flow_id_base = -1;
-  2505		init_completion(&common->tdown_complete);
-  2506		common->tx_ch_num = 1;
-  2507		common->pf_p0_rx_ptype_rrobin = false;
-  2508		common->default_vlan = 1;
-  2509	
-  2510		common->ports = devm_kcalloc(dev, common->port_num,
-  2511					     sizeof(*common->ports),
-  2512					     GFP_KERNEL);
-  2513		if (!common->ports)
-  2514			return -ENOMEM;
-  2515	
-  2516		clk = devm_clk_get(dev, "fck");
-  2517		if (IS_ERR(clk))
-  2518			return dev_err_probe(dev, PTR_ERR(clk), "getting fck clock\n");
-  2519		common->bus_freq = clk_get_rate(clk);
-  2520	
-  2521		pm_runtime_enable(dev);
-  2522		ret = pm_runtime_get_sync(dev);
-  2523		if (ret < 0) {
-  2524			pm_runtime_put_noidle(dev);
-  2525			pm_runtime_disable(dev);
-  2526			return ret;
-  2527		}
-  2528	
-  2529		node = of_get_child_by_name(dev->of_node, "mdio");
-  2530		if (!node) {
-  2531			dev_warn(dev, "MDIO node not found\n");
-  2532		} else if (of_device_is_available(node)) {
-  2533			struct platform_device *mdio_pdev;
-  2534	
-  2535			mdio_pdev = of_platform_device_create(node, NULL, dev);
-  2536			if (!mdio_pdev) {
-  2537				ret = -ENODEV;
-  2538				goto err_pm_clear;
-  2539			}
-  2540	
-  2541			common->mdio_dev =  &mdio_pdev->dev;
-  2542		}
-  2543		of_node_put(node);
-  2544	
-  2545		am65_cpsw_nuss_get_ver(common);
-  2546	
-  2547		/* init tx channels */
-  2548		ret = am65_cpsw_nuss_init_tx_chns(common);
-  2549		if (ret)
-  2550			goto err_of_clear;
-  2551		ret = am65_cpsw_nuss_init_rx_chns(common);
-  2552		if (ret)
-  2553			goto err_of_clear;
-  2554	
-  2555		ret = am65_cpsw_nuss_init_host_p(common);
-  2556		if (ret)
-  2557			goto err_of_clear;
-  2558	
-  2559		ret = am65_cpsw_nuss_init_slave_ports(common);
-  2560		if (ret)
-  2561			goto err_of_clear;
-  2562	
-  2563		/* init common data */
-  2564		ale_params.dev = dev;
-  2565		ale_params.ale_ageout = AM65_CPSW_ALE_AGEOUT_DEFAULT;
-  2566		ale_params.ale_ports = common->port_num + 1;
-  2567		ale_params.ale_regs = common->cpsw_base + AM65_CPSW_NU_ALE_BASE;
-  2568		ale_params.dev_id = common->pdata.ale_dev_id;
-  2569		ale_params.bus_freq = common->bus_freq;
-  2570	
-  2571		common->ale = cpsw_ale_create(&ale_params);
-  2572		if (IS_ERR(common->ale)) {
-  2573			dev_err(dev, "error initializing ale engine\n");
-  2574			ret = PTR_ERR(common->ale);
-  2575			goto err_of_clear;
-  2576		}
-  2577	
-  2578		ret = am65_cpsw_init_cpts(common);
-  2579		if (ret)
-  2580			goto err_of_clear;
-  2581	
-  2582		/* init ports */
-  2583		for (i = 0; i < common->port_num; i++)
-  2584			am65_cpsw_nuss_slave_disable_unused(&common->ports[i]);
-  2585	
-  2586		dev_set_drvdata(dev, common);
-  2587	
-  2588		common->is_emac_mode = true;
-  2589	
-  2590		ret = am65_cpsw_nuss_init_ndevs(common);
-  2591		if (ret)
-  2592			goto err_of_clear;
-  2593	
-  2594		ret = am65_cpsw_nuss_register_ndevs(common);
-  2595		if (ret)
-  2596			goto err_of_clear;
-  2597	
-  2598		pm_runtime_put(dev);
-  2599		return 0;
-  2600	
-  2601	err_of_clear:
-  2602		of_platform_device_destroy(common->mdio_dev, NULL);
-  2603	err_pm_clear:
-  2604		pm_runtime_put_sync(dev);
-  2605		pm_runtime_disable(dev);
-  2606		return ret;
-  2607	}
-  2608	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+On Mon, Feb 21, 2022 at 8:27 PM Yusuf Khan <yusisamerican@gmail.com> wrote:
+>
+> In the case that the DMA 64 bit bit mask error check does not fail,
+> the error check will be done twice, this patch fixed that.
+>
+> NOTE: This patch is only for use in the linux-next branch as the
+> commit that caused this bug happened there.
+>
+> Signed-off-by: Yusuf Khan <yusisamerican@gmail.com>
+> ---
+>  drivers/fpga/dfl-pci.c | 9 +++++----
+>  1 file changed, 5 insertions(+), 4 deletions(-)
+>
+> diff --git a/drivers/fpga/dfl-pci.c b/drivers/fpga/dfl-pci.c
+> index 717ac9715970..6222f18aed4b 100644
+> --- a/drivers/fpga/dfl-pci.c
+> +++ b/drivers/fpga/dfl-pci.c
+> @@ -356,11 +356,12 @@ int cci_pci_probe(struct pci_dev *pcidev, const struct pci_device_id *pcidevid)
+>         pci_set_master(pcidev);
+>
+>         ret = dma_set_mask_and_coherent(&pcidev->dev, DMA_BIT_MASK(64));
+> -       if (ret)
+> -               ret = dma_set_mask_and_coherent(&pcidev->dev, DMA_BIT_MASK(32));
+>         if (ret) {
+> -               dev_err(&pcidev->dev, "No suitable DMA support available.\n");
+> -               goto disable_error_report_exit;
+> +               ret = dma_set_mask_and_coherent(&pcidev->dev, DMA_BIT_MASK(32));
+> +               if (ret) {
+> +                       dev_err(&pcidev->dev, "No suitable DMA support available.\n");
+> +                       goto disable_error_report_exit;
+> +               }
+>         }
+>
+>         ret = cci_init_drvdata(pcidev);
+> --
+> 2.25.1
+>

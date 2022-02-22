@@ -2,77 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A16884BF220
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 07:36:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 707B84BF228
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 07:38:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229900AbiBVGce (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 01:32:34 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:36732 "EHLO
+        id S229885AbiBVGjA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 01:39:00 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:54932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229533AbiBVGcc (ORCPT
+        with ESMTP id S229475AbiBVGi6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 01:32:32 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E96F625E8C
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 22:32:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1645511526;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=O/oig1Hr2Zgb+hiYEUeq6XCTE+b6757ivsb+f39hvIQ=;
-        b=Hv+pSslPyLBGa3ssfs8uSeUC1lxnHD+vfXql+j6+NPx8QP15Id1asC9UNm+bi1+x8JtJYR
-        L2RmxU/bE4xpaPXX92Z8wJjbq1o7EG8hllBBVzhrPuau6M+WNFpmaqQMrdm4fyWFu9Hmwg
-        EhTuh1YcQiz0bH5VrCv2IYgU9xlOs+U=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-142-5xp3rFJSOS29TZYmTdonyw-1; Tue, 22 Feb 2022 01:32:02 -0500
-X-MC-Unique: 5xp3rFJSOS29TZYmTdonyw-1
-Received: by mail-wm1-f71.google.com with SMTP id p24-20020a05600c1d9800b0037be98d03a1so427716wms.0
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 22:32:02 -0800 (PST)
+        Tue, 22 Feb 2022 01:38:58 -0500
+Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 271A75B889
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 22:38:34 -0800 (PST)
+Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-2d646fffcc2so162639197b3.4
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 22:38:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=9JZGu7s6k48pgGptARpFNGKK6ukikwXRkWeRj4mkf6w=;
+        b=AAwUZ25AqwlCM2v5Ic1b1w/lFetp53PDZn8o9XHngoNprcgII8CPKcL7lbHyMX8IrW
+         f5dKQg3O6+l6b7GjDyCG/rGAYO03DJgz7Tj5qN8t856FZ34icqZ22VQTfEGUE6fWJP/K
+         cT2RU4fnUh/pXNTr8QWnQZexd5DB7Gq6/PRWU4uA2l3T5syZ5rHXUySKLeojRXz2f/cG
+         UXbF7RN6myR9V03F7iJ7BmPGUs8Wxam3tMDou3CdduNxTsSrTKswPczL+yUmjwiqTta/
+         rtEdxasHUMxGicci6mWi560+/++IteemomhFrupwAv06P8isbaouoGyo/sMi8q/H616P
+         0FWA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=O/oig1Hr2Zgb+hiYEUeq6XCTE+b6757ivsb+f39hvIQ=;
-        b=YzJ0TBkvxWld8MgB8e6vywhJI0SxCLipDcQlcCmVYnYOidEkvi02B3/RVQOoLVdlnJ
-         EGq5pYLAH3N41iLFjTOMCes3/fGvFaCH3eKPAlL2qr+N0tttor7dG+GMC44Fk4fei6oQ
-         FA3MWvNx68wOqHGkPsn95PNS0TFFjFBj39H0XB08uUT2OoX+YzPGTAmLzxvVmghXuOh9
-         AeY3Dtd6+86JAGYbeXJdoXt+7yNmSK+H44d1rFogvOoK2iI/aYMgMujyWqf1bb4AY4yE
-         2xnrY34hF9HdsfNfohzKJW1KRZ88k9992b6DuYZGESYo6+PQi1TrP10y8xMcnzWHok4L
-         lupA==
-X-Gm-Message-State: AOAM531jSwg4WZtMU2zlZ+PWORXGx+VrLEeEvJQp4gn3GfRUlDFhBEB0
-        f4lF9CHyy7fkQPa24UvWEW+33D470TH9BqRjCvCsEfK13ad1tzaSTLKY2a1IyNy9JfIVDUdIFwF
-        wE9pX+SIDnJ+nX8LLlyQ0DVq6
-X-Received: by 2002:a5d:53c4:0:b0:1e6:5b69:a25a with SMTP id a4-20020a5d53c4000000b001e65b69a25amr18421845wrw.341.1645511520893;
-        Mon, 21 Feb 2022 22:32:00 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxYOJh4GkMGTE2m37wnxk7zYf2DWYlSZDrFaNNuT8tW+F1P7wnt9uGo2yUs52mYcbnryj1Uhg==
-X-Received: by 2002:a5d:53c4:0:b0:1e6:5b69:a25a with SMTP id a4-20020a5d53c4000000b001e65b69a25amr18421834wrw.341.1645511520686;
-        Mon, 21 Feb 2022 22:32:00 -0800 (PST)
-Received: from redhat.com ([2.55.129.240])
-        by smtp.gmail.com with ESMTPSA id u7sm40984521wrm.15.2022.02.21.22.31.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Feb 2022 22:31:58 -0800 (PST)
-Date:   Tue, 22 Feb 2022 01:31:55 -0500
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     David Woodhouse <dwmw2@infradead.org>
-Cc:     Stefano Garzarella <sgarzare@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        virtualization <virtualization@lists.linux-foundation.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] tools/virtio: Test virtual address range detection
-Message-ID: <20220222013121-mutt-send-email-mst@kernel.org>
-References: <c1895bcc240d413ff067f982b6e653996ace9887.camel@infradead.org>
- <20220221170217.5bq7nhr3pvchku5x@sgarzare-redhat>
- <75d5002ad505b476c81c0b92c0d624824e93d6ac.camel@infradead.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=9JZGu7s6k48pgGptARpFNGKK6ukikwXRkWeRj4mkf6w=;
+        b=lT0mZ96b61v/voMBJ+ZZWCdoEmxfJs6xsg9HI+mJNXxHq8JfszVGViFKR/u89k17ak
+         iZ8V8WZ0qjs2ribqYPSaPXecBXkOFeiU3VqxZUgmxDYROIZWTnxFcsj7LMGPR1Hb2r0y
+         Ra5LDH6wtFnBZuxR4bp7AYq3qD5/IEG+5g8BwEUN/DfBTbf+ECX4y1eK64JGziQVP2fi
+         uOQxcBkjOZzah4UOuThWEJf/XN2TMuo99HS7RLXQt7JvZEbhLMKVgdwP7s7znoSPDVsz
+         hlBuxoy1fXGNefM/AR6N4bWznDQgyFe9342FbkQo30elZ/uRWf/lfk+opb1HLXSos9Os
+         Y+9w==
+X-Gm-Message-State: AOAM533MhFlhI3QoHgas9EY9jDydec1dHA57zG+8exPCYjgYk+1gXy5K
+        zVNW5Eb8GvYzDmWnXuEN2rUySwr0TdpTFpHDje8H1g==
+X-Google-Smtp-Source: ABdhPJzIAxw+So2hADbDa1PD9YD18Whgbf4zscgkoSarj8JoxT8oiLdBaWJDWuLhBmheGND6+rm8R8C9HOZYcEvOvUE=
+X-Received: by 2002:a81:7141:0:b0:2d3:d549:23f8 with SMTP id
+ m62-20020a817141000000b002d3d54923f8mr22877765ywc.87.1645511913159; Mon, 21
+ Feb 2022 22:38:33 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <75d5002ad505b476c81c0b92c0d624824e93d6ac.camel@infradead.org>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20220221084921.147454846@linuxfoundation.org>
+In-Reply-To: <20220221084921.147454846@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Tue, 22 Feb 2022 12:08:22 +0530
+Message-ID: <CA+G9fYsEJ=zLgAHjk7Fp4Tf7M330Tw0vPWHNoy7LGC4LfiYyzQ@mail.gmail.com>
+Subject: Re: [PATCH 5.10 000/121] 5.10.102-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,56 +71,192 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 21, 2022 at 05:18:48PM +0000, David Woodhouse wrote:
-> On Mon, 2022-02-21 at 18:02 +0100, Stefano Garzarella wrote:
-> > On Mon, Feb 21, 2022 at 04:15:22PM +0000, David Woodhouse wrote:
-> > > As things stand, an application which wants to use vhost with a trivial
-> > > 1:1 mapping of its virtual address space is forced to jump through hoops
-> > > to detect what the address range might be. The VHOST_SET_MEM_TABLE ioctl
-> > > helpfully doesn't fail immediately; you only get a failure *later* when
-> > > you attempt to set the backend, if the table *could* map to an address
-> > > which is out of range, even if no out-of-range address is actually
-> > > being referenced.
-> > > 
-> > > Since userspace is growing workarounds for this lovely kernel API, let's
-> > > ensure that we have a regression test that does things basically the same
-> > > way as 
-> > > https://gitlab.com/openconnect/openconnect/-/commit/443edd9d8826
-> > > 
-> > > does.
-> > > 
-> > > This is untested as I can't actually get virtio_test to work at all; it
-> > > just seems to deadlock on a spinlock. But it's getting the right answer
-> > > for the virtio range on x86_64 at least.
-> > 
-> > I had a similar issue with virtio_test and this simple patch [1] should 
-> > fix the deadlock.
-> > 
-> > [1] 
-> > https://lore.kernel.org/lkml/20220118150631.167015-1-sgarzare@redhat.com/=
-> 
-> Thanks.
-> 
-> [dwoodhou@i7 virtio]$ sudo ~/virtio_test
-> Detected virtual address range 0x1000-0x7ffffffff000
-> spurious wakeups: 0x0 started=0x100000 completed=0x100000
-> 
-> Although in some circumstances I also see a different build failure:
-> 
-> cc -g -O2 -Werror -Wno-maybe-uninitialized -Wall -I. -I../include/ -I ../../usr/include/ -Wno-pointer-sign -fno-strict-overflow -fno-strict-aliasing -fno-common -MMD -U_FORTIFY_SOURCE -include ../../include/linux/kconfig.h   -c -o vringh_test.o vringh_test.c
-> In file included from ./linux/uio.h:3,
->                  from ./linux/../../../include/linux/vringh.h:15,
->                  from ./linux/vringh.h:1,
->                  from vringh_test.c:9:
-> ./linux/../../../include/linux/uio.h:10:10: fatal error: linux/mm_types.h: No such file or directory
->    10 | #include <linux/mm_types.h>
->       |          ^~~~~~~~~~~~~~~~~~
-> compilation terminated.
-> make: *** [<builtin>: vringh_test.o] Error 1
+On Mon, 21 Feb 2022 at 14:32, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.10.102 release.
+> There are 121 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Wed, 23 Feb 2022 08:48:58 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
+5.10.102-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-5.10.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-Which tree has this build failure? In mine linux/uio.h does not
-include linux/mm_types.h.
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
--- 
-MST
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
+NOTE:
+Build warning noticed on arm and arm64.
+drivers/tee/optee/core.c: In function 'optee_probe':
+drivers/tee/optee/core.c:726:20: warning: operation on 'rc' may be
+undefined [-Wsequence-point]
+  726 |                 rc =3D rc =3D PTR_ERR(ctx);
+         |                 ~~~^~~~~~~~~~~~~~~~~~~
+
+## Build
+* kernel: 5.10.102-rc1
+* git: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-=
+rc.git
+* git branch: linux-5.10.y
+* git commit: 6c935cea31db8d0fa9dc4f765383345cc2ecafef
+* git describe: v5.10.101-122-g6c935cea31db
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.10.y/build/v5.10=
+.101-122-g6c935cea31db
+
+## Test Regressions (compared to v5.10.101)
+No test regressions found.
+
+## Metric Regressions (compared to v5.10.101)
+* arm, build warnings
+* arm64, build warnings
+
+drivers/tee/optee/core.c: In function 'optee_probe':
+drivers/tee/optee/core.c:726:20: warning: operation on 'rc' may be
+undefined [-Wsequence-point]
+  726 |                 rc =3D rc =3D PTR_ERR(ctx);
+      |                 ~~~^~~~~~~~~~~~~~~~~~~
+
+
+## Test Fixes (compared to v5.10.101)
+No test fixes found.
+
+## Metric Fixes (compared to v5.10.101)
+No metric fixes found.
+
+## Test result summary
+total: 96836, pass: 83846, fail: 529, skip: 11518, xfail: 943
+
+## Build Summary
+* arc: 10 total, 10 passed, 0 failed
+* arm: 291 total, 291 passed, 0 failed
+* arm64: 41 total, 39 passed, 2 failed
+* dragonboard-410c: 1 total, 1 passed, 0 failed
+* hi6220-hikey: 1 total, 1 passed, 0 failed
+* i386: 40 total, 40 passed, 0 failed
+* juno-r2: 1 total, 1 passed, 0 failed
+* mips: 37 total, 37 passed, 0 failed
+* parisc: 12 total, 12 passed, 0 failed
+* powerpc: 60 total, 46 passed, 14 failed
+* riscv: 27 total, 27 passed, 0 failed
+* s390: 21 total, 21 passed, 0 failed
+* sh: 24 total, 24 passed, 0 failed
+* sparc: 12 total, 12 passed, 0 failed
+* x15: 1 total, 1 passed, 0 failed
+* x86: 1 total, 1 passed, 0 failed
+* x86_64: 41 total, 41 passed, 0 failed
+
+## Test suites summary
+* fwts
+* igt-gpu-tools
+* kselftest-android
+* kselftest-bpf
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-net
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* linux-log-parser
+* ltp-cap_bounds-tests
+* ltp-commands-tests
+* ltp-containers-tests
+* ltp-controllers-tests
+* ltp-cpuhotplug-tests
+* ltp-crypto-tests
+* ltp-cve-tests
+* ltp-dio-tests
+* ltp-fcntl-locktests-tests
+* ltp-filecaps-tests
+* ltp-fs-tests
+* ltp-fs_bind-tests
+* ltp-fs_perms_simple-tests
+* ltp-fsx-tests
+* ltp-hugetlb-tests
+* ltp-io-tests
+* ltp-ipc-tests
+* ltp-math-tests
+* ltp-mm-tests
+* ltp-nptl-tests
+* ltp-open-posix-tests
+* ltp-pty-tests
+* ltp-sched-tests
+* ltp-securebits-tests
+* ltp-syscalls-tests
+* ltp-tracing-tests
+* network-basic-tests
+* packetdrill
+* perf
+* perf/Zstd-perf.data-compression
+* rcutorture
+* ssuite
+* v4l2-compliance
+
+--
+Linaro LKFT
+https://lkft.linaro.org

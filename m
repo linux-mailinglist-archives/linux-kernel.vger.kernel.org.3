@@ -2,90 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69F5D4BFACD
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 15:22:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E58E84BFAC0
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 15:18:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232704AbiBVOWX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 09:22:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54832 "EHLO
+        id S231851AbiBVOSi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 09:18:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232660AbiBVOWV (ORCPT
+        with ESMTP id S229523AbiBVOSe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 09:22:21 -0500
-X-Greylist: delayed 445 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 22 Feb 2022 06:21:56 PST
-Received: from mail.bitwise.fi (mail.bitwise.fi [109.204.228.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 895FDA278F;
-        Tue, 22 Feb 2022 06:21:56 -0800 (PST)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.bitwise.fi (Postfix) with ESMTP id 0E72D46001C;
-        Tue, 22 Feb 2022 16:14:30 +0200 (EET)
-X-Virus-Scanned: Debian amavisd-new at 
-Received: from mail.bitwise.fi ([127.0.0.1])
-        by localhost (mustetatti.dmz.bitwise.fi [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 6HK8W964f5TN; Tue, 22 Feb 2022 16:14:24 +0200 (EET)
-Received: from localhost.net (fw1.dmz.bitwise.fi [192.168.69.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Tue, 22 Feb 2022 09:18:34 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB1F910854B;
+        Tue, 22 Feb 2022 06:18:08 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: anssiha)
-        by mail.bitwise.fi (Postfix) with ESMTPSA id C51B546000C;
-        Tue, 22 Feb 2022 16:14:24 +0200 (EET)
-From:   Anssi Hannula <anssi.hannula@bitwise.fi>
-To:     "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>
-Cc:     linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] hv_balloon: rate-limit "Unhandled message" warning
-Date:   Tue, 22 Feb 2022 16:14:00 +0200
-Message-Id: <20220222141400.98160-1-anssi.hannula@bitwise.fi>
-X-Mailer: git-send-email 2.34.1
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5CA3EB81A2B;
+        Tue, 22 Feb 2022 14:18:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84629C340E8;
+        Tue, 22 Feb 2022 14:18:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1645539486;
+        bh=ArDLp9Yf09I1STzBMYLCq+XcO2PjHAI+AeehNM63oSs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=gh0M4Ghe7NMX+TLc/5+z8wVPV4e/YmRLZAyJL5X0FeeUhwnqZFSK2rOLXUJ43NucH
+         IOgDygEyj0i2vLHbu2HIiPu3xJ2lpRihS7rF3zllgRbs1w2mkhSYysQLDxLdWTWM+w
+         wIWVzgVuIE6IvqIyJn6RQZUEr+6iNXQZpFF9wBSg=
+Date:   Tue, 22 Feb 2022 15:18:03 +0100
+From:   "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
+To:     Ricky WU <ricky_wu@realtek.com>
+Cc:     "ulf.hansson@linaro.org" <ulf.hansson@linaro.org>,
+        "kai.heng.feng@canonical.com" <kai.heng.feng@canonical.com>,
+        "tommyhebb@gmail.com" <tommyhebb@gmail.com>,
+        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] mmc: rtsx: add 74 Clocks in power on flow
+Message-ID: <YhTwm9yDEhjEXt6H@kroah.com>
+References: <fb7cda69c5c244dfa579229ee2f0da83@realtek.com>
+ <YhST32rsfl7MDv34@kroah.com>
+ <90844cba1cb64571a8597a6e0afee01d@realtek.com>
+ <YhSl4WuE2Dpil/Zj@kroah.com>
+ <d28b6fb6649d472a809329876c3ac4bd@realtek.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d28b6fb6649d472a809329876c3ac4bd@realtek.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For a couple of times I have encountered a situation where
+On Tue, Feb 22, 2022 at 12:31:10PM +0000, Ricky WU wrote:
+> > -----Original Message-----
+> > From: gregkh@linuxfoundation.org <gregkh@linuxfoundation.org>
+> > Sent: Tuesday, February 22, 2022 4:59 PM
+> > To: Ricky WU <ricky_wu@realtek.com>
+> > Cc: ulf.hansson@linaro.org; kai.heng.feng@canonical.com;
+> > tommyhebb@gmail.com; linux-mmc@vger.kernel.org;
+> > linux-kernel@vger.kernel.org
+> > Subject: Re: [PATCH] mmc: rtsx: add 74 Clocks in power on flow
+> > 
+> > On Tue, Feb 22, 2022 at 08:48:30AM +0000, Ricky WU wrote:
+> > > > -----Original Message-----
+> > > > From: gregkh@linuxfoundation.org <gregkh@linuxfoundation.org>
+> > > > Sent: Tuesday, February 22, 2022 3:42 PM
+> > > > To: Ricky WU <ricky_wu@realtek.com>
+> > > > Cc: ulf.hansson@linaro.org; kai.heng.feng@canonical.com;
+> > > > tommyhebb@gmail.com; linux-mmc@vger.kernel.org;
+> > > > linux-kernel@vger.kernel.org
+> > > > Subject: Re: [PATCH] mmc: rtsx: add 74 Clocks in power on flow
+> > > >
+> > > > On Tue, Feb 22, 2022 at 07:27:52AM +0000, Ricky WU wrote:
+> > > > > After 1ms stabilizing the voltage time add "Host provides at least
+> > > > > 74 Clocks before issuing first command" that is spec definition
+> > > >
+> > > > You do have 72 columns to use here, no need to wrap this so tightly.
+> > > >
+> > >
+> > > Ok...
+> > > so I need to have next patch to fix this format?
+> > 
+> > Please do, because:
+> > 
+> > >
+> > > > >
+> > > > > Signed-off-by: Ricky Wu <ricky_wu@realtek.com>
+> > > > > ---
+> > > > >  drivers/mmc/host/rtsx_pci_sdmmc.c | 7 +++++++
+> > > > >  1 file changed, 7 insertions(+)
+> > > > >
+> > > > > diff --git a/drivers/mmc/host/rtsx_pci_sdmmc.c
+> > > > > b/drivers/mmc/host/rtsx_pci_sdmmc.c
+> > > > > index 2a3f14afe9f8..e016d720e453 100644
+> > > > > --- a/drivers/mmc/host/rtsx_pci_sdmmc.c
+> > > > > +++ b/drivers/mmc/host/rtsx_pci_sdmmc.c
+> > > > > @@ -940,10 +940,17 @@ static int sd_power_on(struct
+> > > > > realtek_pci_sdmmc
+> > > > *host)
+> > > > >  	if (err < 0)
+> > > > >  		return err;
+> > > > >
+> > > > > +	mdelay(1);
+> > > >
+> > > > What is this delay for?
+> > > >
+> > >
+> > > Spec definition, need to wait 1ms for voltage stable and below
+> > > mdelay(5) is our device send 74 Clocks time
+> > 
+> > Clock cycles and mdelay() are not going to always stay the same, right?
+> > 
+> > I really have no idea what "74 clocks time" means, is this some specific timing
+> > value for this hardware?  What is the units?  This needs to be documented
+> > better in both the changelog and in the code.
+> > 
+> > thanks,
+> > 
+> 
+> Please ref: https://www.sdcard.org/downloads/pls/ Version8
 
-  hv_balloon: Unhandled message: type: 12447
+I can not download those specifications according to the license that
+they ask me to abide by.
 
-is being flooded over 1 million times per second with various values,
-filling the log and consuming cycles, making debugging difficult.
+> And see the 6.4.1.2 Power Up Time of Host Figure 6-5: Power Up Diagram of Host
+> mdelay(1) corresponds to Stable supply voltage
+> mdelay(5) corresponds to Host provides at least 74 Clocks before issuing first command
+> our device need 5ms to issue 74 Clocks
 
-Add rate limiting to the message.
+What is a "clock"?  The kernel works with time units, how does "5" equal
+to 74?
 
-Most other Hyper-V drivers already have similar rate limiting in their
-message callbacks.
+thanks,
 
-The cause of the floods in my case was probably fixed by 96d9d1fa5cd5
-("Drivers: hv: balloon: account for vmbus packet header in
-max_pkt_size").
-
-Fixes: 9aa8b50b2b3d ("Drivers: hv: Add Hyper-V balloon driver")
-Signed-off-by: Anssi Hannula <anssi.hannula@bitwise.fi>
----
- drivers/hv/hv_balloon.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/hv/hv_balloon.c b/drivers/hv/hv_balloon.c
-index f2d05bff4245..439f99b8b5de 100644
---- a/drivers/hv/hv_balloon.c
-+++ b/drivers/hv/hv_balloon.c
-@@ -1563,7 +1563,7 @@ static void balloon_onchannelcallback(void *context)
- 			break;
- 
- 		default:
--			pr_warn("Unhandled message: type: %d\n", dm_hdr->type);
-+			pr_warn_ratelimited("Unhandled message: type: %d\n", dm_hdr->type);
- 
- 		}
- 	}
--- 
-2.34.1
-
+greg k-h

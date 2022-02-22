@@ -2,67 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 474314BF6ED
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 12:06:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FD164BF6FF
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 12:13:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231377AbiBVLHG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 06:07:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58598 "EHLO
+        id S231310AbiBVLL2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 06:11:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229485AbiBVLHC (ORCPT
+        with ESMTP id S229485AbiBVLL1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 06:07:02 -0500
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EB99F0A;
-        Tue, 22 Feb 2022 03:06:35 -0800 (PST)
-Received: from fraeml712-chm.china.huawei.com (unknown [172.18.147.200])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4K2xCv3G9cz67KXG;
-        Tue, 22 Feb 2022 19:05:31 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml712-chm.china.huawei.com (10.206.15.61) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Tue, 22 Feb 2022 12:06:32 +0100
-Received: from [10.47.92.123] (10.47.92.123) by lhreml724-chm.china.huawei.com
- (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Tue, 22 Feb
- 2022 11:06:31 +0000
-Message-ID: <c7d8cff4-b84e-1b73-1d54-2e221b90dac1@huawei.com>
-Date:   Tue, 22 Feb 2022 11:06:28 +0000
+        Tue, 22 Feb 2022 06:11:27 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83277B54EC
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 03:11:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645528262; x=1677064262;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=B2IQb4utuizq8KLjc41aVift6d3W5gPnAvZk1wsXDAw=;
+  b=IPXi1v4KppzzL457FZG1/FjNOTGtFc5/qHlDEK8EM4H0rlt9jdaTZgs1
+   amqLBk4WNPvXMrsBWXFaXfEHiEuso+s2TvKtBsuJwGon7catQRJWtmvSc
+   zNXQvoj6wZfBs8VwRLa22CUBMhjaFFQE8Bv43KGdHnghGc5LnoArTy8fZ
+   wYyDocyNy86jm96MB2D8PtuWNA3ppGdWYI/TuS4zX9741UUVXfsw1UJW1
+   4ZBUX19/8/fBgmk/bWWLo5wzO+4G/tBEbejcFul2fhzxWsXF1m65I/jdn
+   WFjdx+LpYWmmM1aUldF6fwRk8kenbx3lhBwOB+0VclMRaWj1fmDSYYfxF
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10265"; a="232293050"
+X-IronPort-AV: E=Sophos;i="5.88,387,1635231600"; 
+   d="scan'208";a="232293050"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2022 03:11:00 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,387,1635231600"; 
+   d="scan'208";a="638868685"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga004.jf.intel.com with ESMTP; 22 Feb 2022 03:10:54 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1000)
+        id ED7A9142; Tue, 22 Feb 2022 13:11:10 +0200 (EET)
+Date:   Tue, 22 Feb 2022 14:11:10 +0300
+From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+To:     Dingji Li <dj_lee@sjtu.edu.cn>
+Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@intel.com, luto@kernel.org, peterz@infradead.org,
+        sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
+        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
+        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
+        joro@8bytes.org, jpoimboe@redhat.com, knsathya@kernel.org,
+        pbonzini@redhat.com, sdeep@vmware.com, seanjc@google.com,
+        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
+        x86@kernel.org, linux-kernel@vger.kernel.org,
+        Sean Christopherson <sean.j.christopherson@intel.com>
+Subject: Re: [PATCHv3 08/32] x86/traps: Add #VE support for TDX guest
+Message-ID: <20220222111110.qe3bjqq6huomqqmi@black.fi.intel.com>
+References: <20220218161718.67148-1-kirill.shutemov@linux.intel.com>
+ <20220218161718.67148-9-kirill.shutemov@linux.intel.com>
+ <6A6FFE5E-16C3-4054-837D-77D28A490C85@sjtu.edu.cn>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH v4 2/8] hwtracing: Add trace function support for
- HiSilicon PCIe Tune and Trace device
-To:     Yicong Yang <yangyicong@hisilicon.com>,
-        <gregkh@linuxfoundation.org>, <helgaas@kernel.org>,
-        <alexander.shishkin@linux.intel.com>, <lorenzo.pieralisi@arm.com>,
-        <will@kernel.org>, <mark.rutland@arm.com>,
-        <mathieu.poirier@linaro.org>, <suzuki.poulose@arm.com>,
-        <mike.leach@linaro.org>, <leo.yan@linaro.org>,
-        <jonathan.cameron@huawei.com>, <daniel.thompson@linaro.org>,
-        <joro@8bytes.org>, <shameerali.kolothum.thodi@huawei.com>,
-        <robin.murphy@arm.com>, <peterz@infradead.org>, <mingo@redhat.com>,
-        <acme@kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <coresight@lists.linaro.org>, <linux-pci@vger.kernel.org>,
-        <linux-perf-users@vger.kernel.org>,
-        <iommu@lists.linux-foundation.org>
-CC:     <prime.zeng@huawei.com>, <liuqi115@huawei.com>,
-        <zhangshaokun@hisilicon.com>, <linuxarm@huawei.com>,
-        <song.bao.hua@hisilicon.com>
-References: <20220221084307.33712-1-yangyicong@hisilicon.com>
- <20220221084307.33712-3-yangyicong@hisilicon.com>
-From:   John Garry <john.garry@huawei.com>
-In-Reply-To: <20220221084307.33712-3-yangyicong@hisilicon.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.47.92.123]
-X-ClientProxiedBy: lhreml730-chm.china.huawei.com (10.201.108.81) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6A6FFE5E-16C3-4054-837D-77D28A490C85@sjtu.edu.cn>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,277 +72,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/02/2022 08:43, Yicong Yang wrote:
-> HiSilicon PCIe tune and trace device(PTT) is a PCIe Root Complex
-> integrated Endpoint(RCiEP) device, providing the capability
-> to dynamically monitor and tune the PCIe traffic, and trace
-> the TLP headers.
+On Tue, Feb 22, 2022 at 03:19:47PM +0800, Dingji Li wrote:
+> Hi all,
 > 
-> Add the driver for the device to enable the trace function.
-> This patch adds basic function of trace, including the device's
-> probe and initialization, functions for trace buffer allocation
-> and trace enable/disable, register an interrupt handler to
-> simply response to the DMA events. The user interface of trace
-> will be added in the following patch.
+> I hope it is appropriate to ask these questions here:
 > 
+> I'm wondering if there are any performance comparisons available between
+> TDX guests and VMX guests. The #VE processing adds non-trivial overhead
+> to various VM exits, but how does it affect the performance of
+> real-world applications? Existing patches have listed alternative
+> methods to avoid the #VE in the first place, but there are trade-offs
+> (e.g., bloated code, reduced generality). Besides, how much does the
+> time spent in the TDX module affect VM exits / applications? (I guess
+> the TDX module has a low overhead when compared to the #VE processing,
+> but there is no public data.) Maybe some performance data can help make
+> better trade-offs?
 
-Fill commit message lines upto 75 characters
+This is basic enabling of TDX guest support. The goal is to make TDX guest
+functional. Yes, #VE handling adds non-trivial overhead and we have plan
+to migrate it: there are patches in the queue that help to avoid bulk of
+#VE, like replacing #VE-based MMIO with direct hypercalls. TDX will still
+have performance penalty over plain VMX no matter what, but we aim to
+minimize it.
 
-> Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
-> ---
->   drivers/Makefile                 |   1 +
->   drivers/hwtracing/Kconfig        |   2 +
->   drivers/hwtracing/ptt/Kconfig    |  11 +
->   drivers/hwtracing/ptt/Makefile   |   2 +
->   drivers/hwtracing/ptt/hisi_ptt.c | 370 +++++++++++++++++++++++++++++++
->   drivers/hwtracing/ptt/hisi_ptt.h | 149 +++++++++++++
->   6 files changed, 535 insertions(+)
->   create mode 100644 drivers/hwtracing/ptt/Kconfig
->   create mode 100644 drivers/hwtracing/ptt/Makefile
->   create mode 100644 drivers/hwtracing/ptt/hisi_ptt.c
->   create mode 100644 drivers/hwtracing/ptt/hisi_ptt.h
-> 
-> diff --git a/drivers/Makefile b/drivers/Makefile
-> index a110338c860c..ab3411e4eba5 100644
-> --- a/drivers/Makefile
-> +++ b/drivers/Makefile
-> @@ -175,6 +175,7 @@ obj-$(CONFIG_USB4)		+= thunderbolt/
->   obj-$(CONFIG_CORESIGHT)		+= hwtracing/coresight/
->   obj-y				+= hwtracing/intel_th/
->   obj-$(CONFIG_STM)		+= hwtracing/stm/
-> +obj-$(CONFIG_HISI_PTT)		+= hwtracing/ptt/
->   obj-$(CONFIG_ANDROID)		+= android/
->   obj-$(CONFIG_NVMEM)		+= nvmem/
->   obj-$(CONFIG_FPGA)		+= fpga/
-> diff --git a/drivers/hwtracing/Kconfig b/drivers/hwtracing/Kconfig
-> index 13085835a636..911ee977103c 100644
-> --- a/drivers/hwtracing/Kconfig
-> +++ b/drivers/hwtracing/Kconfig
-> @@ -5,4 +5,6 @@ source "drivers/hwtracing/stm/Kconfig"
->   
->   source "drivers/hwtracing/intel_th/Kconfig"
->   
-> +source "drivers/hwtracing/ptt/Kconfig"
-> +
->   endmenu
-> diff --git a/drivers/hwtracing/ptt/Kconfig b/drivers/hwtracing/ptt/Kconfig
-> new file mode 100644
-> index 000000000000..41fa83921a07
-> --- /dev/null
-> +++ b/drivers/hwtracing/ptt/Kconfig
-> @@ -0,0 +1,11 @@
-> +# SPDX-License-Identifier: GPL-2.0-only
-> +config HISI_PTT
-> +	tristate "HiSilicon PCIe Tune and Trace Device"
-> +	depends on ARM64 && PCI && HAS_DMA && HAS_IOMEM
+I don't have any performance numbers to share at the moment.
 
-why no compile test support?
-
-> +	help
-> +	  HiSilicon PCIe Tune and Trace Device exists as a PCIe RCiEP
-> +	  device, and it provides support for PCIe traffic tuning and
-> +	  tracing TLP headers to the memory.
-> +
-> +	  This driver can also be built as a module. If so, the module
-> +	  will be called hisi_ptt.
-> diff --git a/drivers/hwtracing/ptt/Makefile b/drivers/hwtracing/ptt/Makefile
-> new file mode 100644
-> index 000000000000..908c09a98161
-> --- /dev/null
-> +++ b/drivers/hwtracing/ptt/Makefile
-> @@ -0,0 +1,2 @@
-> +# SPDX-License-Identifier: GPL-2.0
-> +obj-$(CONFIG_HISI_PTT) += hisi_ptt.o
-> diff --git a/drivers/hwtracing/ptt/hisi_ptt.c b/drivers/hwtracing/ptt/hisi_ptt.c
-> new file mode 100644
-> index 000000000000..a5b4f09ccd1e
-> --- /dev/null
-> +++ b/drivers/hwtracing/ptt/hisi_ptt.c
-> @@ -0,0 +1,370 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Driver for HiSilicon PCIe tune and trace device
-> + *
-> + * Copyright (c) 2022 HiSilicon Technologies Co., Ltd.
-> + * Author: Yicong Yang <yangyicong@hisilicon.com>
-> + */
-> +
-> +#include <linux/bitfield.h>
-> +#include <linux/bitops.h>
-> +#include <linux/delay.h>
-> +#include <linux/dma-iommu.h>
-> +#include <linux/dma-mapping.h>
-> +#include <linux/interrupt.h>
-> +#include <linux/io.h>
-> +#include <linux/iommu.h>
-> +#include <linux/iopoll.h>
-> +#include <linux/module.h>
-> +#include <linux/sysfs.h>
-> +
-> +#include "hisi_ptt.h"
-> +
-> +static u16 hisi_ptt_get_filter_val(struct pci_dev *pdev)
-> +{
-> +	if (pci_pcie_type(pdev) == PCI_EXP_TYPE_ROOT_PORT)
-> +		return BIT(HISI_PCIE_CORE_PORT_ID(PCI_SLOT(pdev->devfn)));
-> +
-> +	return PCI_DEVID(pdev->bus->number, pdev->devfn);
-> +}
-> +
-> +static int hisi_ptt_wait_trace_hw_idle(struct hisi_ptt *hisi_ptt)
-> +{
-> +	u32 val;
-> +
-> +	return readl_poll_timeout_atomic(hisi_ptt->iobase + HISI_PTT_TRACE_STS,
-> +					 val, val & HISI_PTT_TRACE_IDLE,
-> +					 HISI_PTT_WAIT_POLL_INTERVAL_US,
-> +					 HISI_PTT_WAIT_TIMEOUT_US);
-> +}
-> +
-> +static int hisi_ptt_wait_dma_reset_done(struct hisi_ptt *hisi_ptt)
-> +{
-> +	u32 val;
-> +
-> +	return readl_poll_timeout_atomic(hisi_ptt->iobase + HISI_PTT_TRACE_WR_STS,
-> +					 val, !val, HISI_PTT_RESET_POLL_INTERVAL_US,
-> +					 HISI_PTT_RESET_TIMEOUT_US);
-> +}
-> +
-> +static void hisi_ptt_free_trace_buf(struct hisi_ptt *hisi_ptt)
-> +{
-> +	struct hisi_ptt_trace_ctrl *ctrl = &hisi_ptt->trace_ctrl;
-> +	struct device *dev = &hisi_ptt->pdev->dev;
-> +	int i;
-> +
-> +	if (!ctrl->trace_buf)
-> +		return;
-> +
-> +	for (i = 0; i < HISI_PTT_TRACE_BUF_CNT; i++)
-
-it's good practice to use {} for if-else or similar in the loop
-
-> +		if (ctrl->trace_buf[i].addr)
-> +			dma_free_coherent(dev, HISI_PTT_TRACE_BUF_SIZE,
-> +					  ctrl->trace_buf[i].addr,
-> +					  ctrl->trace_buf[i].dma);
-> +
-> +	kfree(ctrl->trace_buf);
-> +	ctrl->trace_buf = NULL;
-> +}
-> +
-> +static int hisi_ptt_alloc_trace_buf(struct hisi_ptt *hisi_ptt)
-> +{
-> +	struct hisi_ptt_trace_ctrl *ctrl = &hisi_ptt->trace_ctrl;
-> +	struct device *dev = &hisi_ptt->pdev->dev;
-> +	int i;
-> +
-> +	hisi_ptt->trace_ctrl.buf_index = 0;
-> +
-> +	/* If the trace buffer has already been allocated, zero it. */
-> +	if (ctrl->trace_buf) {
-> +		for (i = 0; i < HISI_PTT_TRACE_BUF_CNT; i++)
-> +			memset(ctrl->trace_buf[i].addr, 0, HISI_PTT_TRACE_BUF_SIZE);
-> +		return 0;
-> +	}
-> +
-> +	ctrl->trace_buf = kcalloc(HISI_PTT_TRACE_BUF_CNT, sizeof(struct hisi_ptt_dma_buffer),
-> +				  GFP_KERNEL);
-> +	if (!ctrl->trace_buf)
-> +		return -ENOMEM;
-> +
-> +	for (i = 0; i < HISI_PTT_TRACE_BUF_CNT; ++i) {
-> +		ctrl->trace_buf[i].addr = dma_alloc_coherent(dev, HISI_PTT_TRACE_BUF_SIZE,
-> +							     &ctrl->trace_buf[i].dma,
-> +							     GFP_KERNEL);
-
-dmam_alloc_coherent() would mean that we can drop the manual frees
-
-> +		if (!ctrl->trace_buf[i].addr) {
-> +			hisi_ptt_free_trace_buf(hisi_ptt);
-> +			return -ENOMEM;
-> +		}
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static void hisi_ptt_trace_end(struct hisi_ptt *hisi_ptt)
-> +{
-> +	writel(0, hisi_ptt->iobase + HISI_PTT_TRACE_CTRL);
-> +	hisi_ptt->trace_ctrl.status = HISI_PTT_TRACE_STATUS_OFF;
-> +}
-> +
-> +static int hisi_ptt_trace_start(struct hisi_ptt *hisi_ptt)
-> +{
-> +	struct hisi_ptt_trace_ctrl *ctrl = &hisi_ptt->trace_ctrl;
-> +	u32 val;
-> +	int i;
-> +
-> +	/* Check device idle before start trace */
-> +	if (hisi_ptt_wait_trace_hw_idle(hisi_ptt)) {
-
-hisi_ptt_wait_trace_hw_idle() is a bit of an odd odd, as I would expect 
-it to return true when idle
-
-> +		pci_err(hisi_ptt->pdev, "Failed to start trace, the device is still busy.\n");
-> +		return -EBUSY;
-> +	}
-> +
-> +	/* Reset the DMA before start tracing */
-> +	val = readl(hisi_ptt->iobase + HISI_PTT_TRACE_CTRL);
-> +	val |= HISI_PTT_TRACE_CTRL_RST;
-> +	writel(val, hisi_ptt->iobase + HISI_PTT_TRACE_CTRL);
-> +
-> +	hisi_ptt_wait_dma_reset_done(hisi_ptt);
-> +
-> +	val = readl(hisi_ptt->iobase + HISI_PTT_TRACE_CTRL);
-> +	val &= ~HISI_PTT_TRACE_CTRL_RST;
-> +	writel(val, hisi_ptt->iobase + HISI_PTT_TRACE_CTRL);
-> +
-> +	/* Clear the interrupt status */
-> +	writel(HISI_PTT_TRACE_INT_STAT_MASK, hisi_ptt->iobase + HISI_PTT_TRACE_INT_STAT);
-> +	writel(0, hisi_ptt->iobase + HISI_PTT_TRACE_INT_MASK);
-> +
-> +	/* Configure the trace DMA buffer */
-> +	for (i = 0; i < HISI_PTT_TRACE_BUF_CNT; i++) {
-> +		writel(lower_32_bits(ctrl->trace_buf[i].dma),
-> +		       hisi_ptt->iobase + HISI_PTT_TRACE_ADDR_BASE_LO_0 +
-> +		       i * HISI_PTT_TRACE_ADDR_STRIDE);
-> +		writel(upper_32_bits(ctrl->trace_buf[i].dma),
-> +		       hisi_ptt->iobase + HISI_PTT_TRACE_ADDR_BASE_HI_0 +
-> +		       i * HISI_PTT_TRACE_ADDR_STRIDE);
-> +	}
-> +	writel(HISI_PTT_TRACE_BUF_SIZE, hisi_ptt->iobase + HISI_PTT_TRACE_ADDR_SIZE);
-> +
-> +	/* Set the trace control register */
-> +	val = FIELD_PREP(HISI_PTT_TRACE_CTRL_TYPE_SEL, ctrl->type);
-> +	val |= FIELD_PREP(HISI_PTT_TRACE_CTRL_RXTX_SEL, ctrl->direction);
-> +	val |= FIELD_PREP(HISI_PTT_TRACE_CTRL_DATA_FORMAT, ctrl->format);
-> +	val |= FIELD_PREP(HISI_PTT_TRACE_CTRL_TARGET_SEL, hisi_ptt->trace_ctrl.filter);
-> +	if (!hisi_ptt->trace_ctrl.is_port)
-> +		val |= HISI_PTT_TRACE_CTRL_FILTER_MODE;
-> +
-> +	/* Start the Trace */
-> +	val |= HISI_PTT_TRACE_CTRL_EN;
-> +	writel(val, hisi_ptt->iobase + HISI_PTT_TRACE_CTRL);
-> +
-> +	ctrl->status = HISI_PTT_TRACE_STATUS_ON;
-> +
-> +	return 0;
-> +}
-> +
-> +static irqreturn_t hisi_ptt_irq(int irq, void *context)
-
-as I said before (I forget the reply), it's odd to add an empty handler.
-
-> +{
-> +	struct hisi_ptt *hisi_ptt = context;
-> +	u32 status;
-> +
-> +	status = readl(hisi_ptt->iobase + HISI_PTT_TRACE_INT_STAT);
-> +	if (!(status & HISI_PTT_TRACE_INT_STAT_MASK))
-> +		return IRQ_NONE;
-> +
-> +	return IRQ_HANDLED;
-> +}
-> +
+-- 
+ Kirill A. Shutemov

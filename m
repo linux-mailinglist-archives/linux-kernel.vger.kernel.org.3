@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 386EB4BF902
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 14:18:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1070A4BF905
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 14:18:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232358AbiBVNSw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 08:18:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43616 "EHLO
+        id S232350AbiBVNTA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 08:19:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231934AbiBVNSt (ORCPT
+        with ESMTP id S232374AbiBVNS7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 08:18:49 -0500
-Received: from mail-ot1-x331.google.com (mail-ot1-x331.google.com [IPv6:2607:f8b0:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DECBC12D0
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 05:18:22 -0800 (PST)
-Received: by mail-ot1-x331.google.com with SMTP id l25-20020a9d7a99000000b005af173a2875so5096234otn.2
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 05:18:22 -0800 (PST)
+        Tue, 22 Feb 2022 08:18:59 -0500
+Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B503FC087C
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 05:18:30 -0800 (PST)
+Received: by mail-oi1-x236.google.com with SMTP id p15so14411274oip.3
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 05:18:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=usp.br; s=usp-google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=sDN/q36ne++w24m6ta6Mu8DvTucc3A8JRf+sG15A4uk=;
-        b=gwNgQ82BffFNGYRWppEJcVbH9lkHH4pDVyKTZaRhGLp+f2xO5A1Rx15s9yci3hHm4w
-         FR1uQhg8pvxh6Nres53U9+5PeQJjeY4FqukANXW+8jQxQv139/laPSL8d4aiynsMT7my
-         oM5Wamd+Hc1OYtVIoCGTe5UqhD9E3zG6UB+aAagv3NxkPhAqTy845/1Yegz+Ca/xHwmK
-         YaQM48FZyG/26ee4ISyofDBH3oxrbmeQdpILyFa49nlOGi9EKrN2uGD9mf6DccDzN5M1
-         DUU+/U+aSWi9pPrfoohDvEJclSE8CUZvlfVrqhZg4DwOkDj8i05D6c/wK2OrBZbxVyJ3
-         DXkw==
+        bh=mAHBtmtMrIy2W3kHZTCvcn0QTbxMEFt0geIwL6YcBKU=;
+        b=nwAqmSQ2vzkc3R4j/kHBj0KGZ82kOVGgV5IRWLnHakRqcnRlMTi9QWOODmUlZsR7Rn
+         o5IZ/CoGQE9VyVOfT0qR0kyflmOFoLDdau0bR8Qx7YSRA9/5elfqnOn/Db86bYKBkTeG
+         0FuUP7l9/VpIBYdcnESdf/CvwXHQQLYEOB0EVwZ28H8YarTK9fUla0EAV4crC8sBDwSK
+         vK5gyqkTUzozj5/qxd5GkZ5NhYLamohIpzpxY8vU8KW8athgQctX6BWp5EFF6/l+oZxt
+         TJKlTbCIQ94AB6watlHLY3iubMMGfwBc7yDlOMTMT2vEHeGzMGLD1S5iJBJVQ0MbIGtX
+         2MiA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=sDN/q36ne++w24m6ta6Mu8DvTucc3A8JRf+sG15A4uk=;
-        b=HQ2Ezb5aCrDwQZewMX5N5ZsCQe6hPZ6DnR2sY1SE0erTlIKss4HFWqfQp1Db7fp/k8
-         zpvlqf+CygR3ujTASel+0+JTbT/QZGP167FJMW6Fq2Uq0g0zHsA2WzBdayo9vTcvygHS
-         GdNfkNfPBJVvCMC8KFUtGjvX14Az9yVvFKvZtY+s9S2LJidGxNWbQCD2dK8K7+XnWZeJ
-         ssXIYe2ig1hg173qHAn1DpDF0HH2hILWXAmKP4wgjxzL5+ZBfiLVVqgWFROD+BfjzMaS
-         4ouRHyJKgS87ur+UW2CnsGXvWPyjekVH6cbw2OAAoyIGbWcxbG4CfjM5aIuiwWh0/tmT
-         CgGQ==
-X-Gm-Message-State: AOAM530+XFkACXgQiBdH298tEPBoNs3nrT84I/SQi0zy+X/JRDVFX4kT
-        +4wUAvDDrsk9d8A+y3t/0ZMc6Q==
-X-Google-Smtp-Source: ABdhPJyc2O86+E0dEG/No0hmALq+XxmG2EgDiNrBeWwpqJKHrw0001sfFqK9Y7CYkpxQ9BvdfQuGzg==
-X-Received: by 2002:a9d:714a:0:b0:5ad:f8f9:b50d with SMTP id y10-20020a9d714a000000b005adf8f9b50dmr4817459otj.47.1645535902206;
-        Tue, 22 Feb 2022 05:18:22 -0800 (PST)
+        bh=mAHBtmtMrIy2W3kHZTCvcn0QTbxMEFt0geIwL6YcBKU=;
+        b=ER2oXlG8/uGeHfhqxIbDGzTogOIyzD8lRerRPne8sYjW4yFoCINCqAEewoWA3EHRUx
+         g+Jqn9YBLA3Ivqaor1k/GvRoyozlrIUwYvB32+wTOaUJ98QHB6ZUI4xqFNZNZczS6Yzr
+         7g4c0tNRnySdA8oJQzsVOePHKZQXaJfda/myXVwLZndArhO3iH5lmGWT0smXdgLD5Z4r
+         2h0RgbXamxVyjjxCPfZr2xD3gzbrw+VPDsmUTDw39zDK1OXrpPe8mKdUktZYPqLzm/Zt
+         0WpSZFBB7TGPMxNrjnno/3zwYnIQMiTq2fh2czECNQk08b37oZjBMiEodQef8+C+ZDBw
+         kWxg==
+X-Gm-Message-State: AOAM532QUAvgb1zVSCqdQoQzqVGlIl5hl47EhsiVmiiSl/rr9OkMVKbL
+        aX5PSjZ3LqlnqyLsPGSGWKY5OA==
+X-Google-Smtp-Source: ABdhPJx8Rjrh7CF6sfeCwjuZInz6fzuEKQI/zgh6IVqdopcXaKbEaCWXyeks31/XR48U1/2OPddz9g==
+X-Received: by 2002:a05:6808:1646:b0:2d4:428c:659e with SMTP id az6-20020a056808164600b002d4428c659emr1885513oib.20.1645535910109;
+        Tue, 22 Feb 2022 05:18:30 -0800 (PST)
 Received: from fedora.. ([187.36.236.204])
-        by smtp.gmail.com with ESMTPSA id c9sm6325050otd.26.2022.02.22.05.18.15
+        by smtp.gmail.com with ESMTPSA id c9sm6325050otd.26.2022.02.22.05.18.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Feb 2022 05:18:21 -0800 (PST)
+        Tue, 22 Feb 2022 05:18:29 -0800 (PST)
 From:   =?UTF-8?q?Ma=C3=ADra=20Canal?= <maira.canal@usp.br>
 To:     alexander.deucher@amd.com, christian.koenig@amd.com,
         Xinhui.Pan@amd.com, Hawking.Zhang@amd.com, john.clements@amd.com,
@@ -59,9 +59,9 @@ Cc:     amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
         linux-kernel@vger.kernel.org, magalilemes00@gmail.com,
         mwen@igalia.com, isabbasso@riseup.net,
         =?UTF-8?q?Ma=C3=ADra=20Canal?= <maira.canal@usp.br>
-Subject: [PATCH 07/10] drm/amd/display: Remove unused dmub_outbox_irq_info_funcs variable
-Date:   Tue, 22 Feb 2022 10:16:58 -0300
-Message-Id: <20220222131701.356117-8-maira.canal@usp.br>
+Subject: [PATCH 08/10] drm/amd/display: Remove unused variable
+Date:   Tue, 22 Feb 2022 10:16:59 -0300
+Message-Id: <20220222131701.356117-9-maira.canal@usp.br>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220222131701.356117-1-maira.canal@usp.br>
 References: <20220222131701.356117-1-maira.canal@usp.br>
@@ -78,39 +78,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove the unused struct irq_source_info_funcs
-dmub_outbox_irq_info_funcs from the file, which was declared but never
-hooked up.
+Remove the variable clamshell_closed from the function
+dcn10_align_pixel_clocks.
 
 This was pointed by clang with the following warning:
 
-drivers/gpu/drm/amd/amdgpu/../display/dc/irq/dcn201/irq_service_dcn201.c:141:43:
-warning: unused variable 'dmub_outbox_irq_info_funcs'
-[-Wunused-const-variable]
-static const struct irq_source_info_funcs dmub_outbox_irq_info_funcs = {
-                                          ^
+drivers/gpu/drm/amd/amdgpu/../display/dc/dcn10/dcn10_hw_sequencer.c:2063:7:
+warning: variable 'clamshell_closed' set but not used
+[-Wunused-but-set-variable]
+    bool clamshell_closed = false;
+         ^
 
 Signed-off-by: Maíra Canal <maira.canal@usp.br>
 ---
- .../gpu/drm/amd/display/dc/irq/dcn201/irq_service_dcn201.c   | 5 -----
- 1 file changed, 5 deletions(-)
+ drivers/gpu/drm/amd/display/dc/dcn10/dcn10_hw_sequencer.c | 3 ---
+ 1 file changed, 3 deletions(-)
 
-diff --git a/drivers/gpu/drm/amd/display/dc/irq/dcn201/irq_service_dcn201.c b/drivers/gpu/drm/amd/display/dc/irq/dcn201/irq_service_dcn201.c
-index aa708b61142f..45f99351a0ab 100644
---- a/drivers/gpu/drm/amd/display/dc/irq/dcn201/irq_service_dcn201.c
-+++ b/drivers/gpu/drm/amd/display/dc/irq/dcn201/irq_service_dcn201.c
-@@ -138,11 +138,6 @@ static const struct irq_source_info_funcs vupdate_no_lock_irq_info_funcs = {
- 	.ack = NULL
- };
+diff --git a/drivers/gpu/drm/amd/display/dc/dcn10/dcn10_hw_sequencer.c b/drivers/gpu/drm/amd/display/dc/dcn10/dcn10_hw_sequencer.c
+index 8dc1afc03961..559aa45f27e7 100644
+--- a/drivers/gpu/drm/amd/display/dc/dcn10/dcn10_hw_sequencer.c
++++ b/drivers/gpu/drm/amd/display/dc/dcn10/dcn10_hw_sequencer.c
+@@ -2060,14 +2060,11 @@ static int dcn10_align_pixel_clocks(struct dc *dc, int group_size,
+ 	uint32_t embedded_pix_clk_100hz;
+ 	uint16_t embedded_h_total;
+ 	uint16_t embedded_v_total;
+-	bool clamshell_closed = false;
+ 	uint32_t dp_ref_clk_100hz =
+ 		dc->res_pool->dp_clock_source->ctx->dc->clk_mgr->dprefclk_khz*10;
  
--static const struct irq_source_info_funcs dmub_outbox_irq_info_funcs = {
--	.set = NULL,
--	.ack = NULL
--};
--
- #undef BASE_INNER
- #define BASE_INNER(seg) DMU_BASE__INST0_SEG ## seg
- 
+ 	if (dc->config.vblank_alignment_dto_params &&
+ 		dc->res_pool->dp_clock_source->funcs->override_dp_pix_clk) {
+-		clamshell_closed =
+-			(dc->config.vblank_alignment_dto_params >> 63);
+ 		embedded_h_total =
+ 			(dc->config.vblank_alignment_dto_params >> 32) & 0x7FFF;
+ 		embedded_v_total =
 -- 
 2.35.1
 

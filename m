@@ -2,169 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B0DD4BF192
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 06:42:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E8F04BF180
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 06:42:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229875AbiBVFlI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 00:41:08 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:33082 "EHLO
+        id S229914AbiBVFlj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 00:41:39 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:35174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229789AbiBVFk7 (ORCPT
+        with ESMTP id S229890AbiBVFlb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 00:40:59 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C7499D079
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 21:40:34 -0800 (PST)
+        Tue, 22 Feb 2022 00:41:31 -0500
+Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFFB89F3BF
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 21:41:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645508434; x=1677044434;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=5hsgZzy3lB0WIW8eWncPXII1s9XbXylNIj2zWIn6aLM=;
-  b=jukHAOE7dDzW5Cb76p24/dp2HbrR3kUY4LAnDG0vz90owm3Amgg2XLup
-   k9pfLqI3BRRsPN5+agINmqOHrXHRw4PnXlzvsTJYMmKEDgOxD7Xwc4wD/
-   IYoHeOQ1xq2EMhEGcICuaxhlP+I6mE6roS7pHI1Tgfb6fBY+1LlDx+9pI
-   y61CHluCWihqCdsFloZfWSnDSUy7bbaDBNeizKkEbGeR0sClEfolYGWjc
-   O6gw7zAfLhvDFlKzVKyCsXHWPc4oqgg+lZMikhLV47a3xIOhIlgwfRy34
-   YXs8Ss5yAMJnDmJ39g8G7tEt5FYYniu7ffOo+PP4l1EUxGRpo/ZRY2XyW
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10265"; a="231577769"
+  t=1645508461; x=1677044461;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=MzoXTT1RzSdqKEdOaK0Z7AnwJmvHtP1CWUEKHGvLrE8=;
+  b=F7MNEihUDGlzw+F5wUF+gEWpo/xFct/CwOBJNd5JIt8zdkiCQEOccIXw
+   pslbMp4eY6zu87lOLkG0b2APR/nkGrWigO6H7LTidpV/xfU/iMF30jP0g
+   uQTzoxiUzy7ClC1VpZa9cIKgYKq1M5J6TjmJIl1+WsDyCkFOyUOF4sffv
+   w16OXAWOZ8P94zIg9Na2DWfOMAYTPGvGSMJwdjeb1dK14pfq7D2feiyrA
+   EJeXcWVnNdCuaKUO3OMvr1d4XPiSnejvs7/zZdM+MTiYab7hTO6DhZw0q
+   d1rywXdvr4dnKjBdZC2q0pdtzcIiFg9UE4FM1S2sbDMHlWagATHUjsLaZ
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10265"; a="312356469"
 X-IronPort-AV: E=Sophos;i="5.88,387,1635231600"; 
-   d="scan'208";a="231577769"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2022 20:38:26 -0800
+   d="scan'208";a="312356469"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2022 20:38:52 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,387,1635231600"; 
-   d="scan'208";a="778866839"
-Received: from fmsmsx604.amr.corp.intel.com ([10.18.126.84])
-  by fmsmga005.fm.intel.com with ESMTP; 21 Feb 2022 20:38:26 -0800
-Received: from fmsmsx605.amr.corp.intel.com (10.18.126.85) by
- fmsmsx604.amr.corp.intel.com (10.18.126.84) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Mon, 21 Feb 2022 20:38:26 -0800
-Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
- fmsmsx605.amr.corp.intel.com (10.18.126.85) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20 via Frontend Transport; Mon, 21 Feb 2022 20:38:26 -0800
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.176)
- by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2308.20; Mon, 21 Feb 2022 20:38:25 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=m/+SZWRbBse5Q36+GiIr20EwqjSNbCHzy7zEOJkVcCWqgPOo+sc1t0tNWiqBFBQ7rHU1p8/fkhRHPoGxF6vFHV4GgCoDjru86lJqoHmNtj05MxeOP1PGxPUv2r02zJlMA9M8XV/PsjEd5fKLfIPuN1h+0SjNx2RYyDYwAqXhbqCv+iSsNJD13AITL0FGSDmhRY7JyHqQ3JAYbEduDRWUVslUs3czoWkjcANuofI1nGgXdrEsxWKrYIppwhI3ZYlG7QJbmb17pG+r+39leKfhZg8xABDQ8kns05h9NuesqrL5KHW8LwyVMLWqWM+VoQj5D4CwEqro3Mfxztt5JP55Jg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=5hsgZzy3lB0WIW8eWncPXII1s9XbXylNIj2zWIn6aLM=;
- b=J2AbFDfG+BD3mQZ47aAManfDvhj5W0rhEoIKoRtEjFvxkudHRsDDkYZgm6bpWHVKkwJwiTb7sX5JJsclToAoen+oow9fW36xaa0r+e3aZxiwB1Qhmaynmh8jypuO32uRcKsVY75qMZKhBFlsin3ZkM6YhVorG/vOwOGGIP8eEdkDDe4Dml3+sK9mj89RrGL+Xj/sc1crp8OyNHiE1Th1s60a+nzd2QakzL3rMmG+aMcVmq4cY82DaRIDK7DNgKZQx9QHXCvQuASHvuKsQRTlFK6HXFzonEhxZXCyZf8J8dt8moz3/QnpYTRwiVKu4SZPl+GmnHHYkFEXOTJoXKvODQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from MWHPR11MB1392.namprd11.prod.outlook.com (2603:10b6:300:24::14)
- by DM6PR11MB4705.namprd11.prod.outlook.com (2603:10b6:5:2a9::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4995.15; Tue, 22 Feb
- 2022 04:38:22 +0000
-Received: from MWHPR11MB1392.namprd11.prod.outlook.com
- ([fe80::250a:7e8f:1f3d:de15]) by MWHPR11MB1392.namprd11.prod.outlook.com
- ([fe80::250a:7e8f:1f3d:de15%4]) with mapi id 15.20.4995.027; Tue, 22 Feb 2022
- 04:38:22 +0000
-From:   "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-To:     "Poimboe, Josh" <jpoimboe@redhat.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "joao@overdrivepizza.com" <joao@overdrivepizza.com>,
-        "Cooper, Andrew" <andrew.cooper3@citrix.com>
-CC:     "keescook@chromium.org" <keescook@chromium.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "mark.rutland@arm.com" <mark.rutland@arm.com>,
-        "samitolvanen@google.com" <samitolvanen@google.com>,
-        "ndesaulniers@google.com" <ndesaulniers@google.com>,
-        "Milburn, Alyssa" <alyssa.milburn@intel.com>
-Subject: Re: [PATCH 14/29] x86/ibt: Add IBT feature, MSR and #CP handling
-Thread-Topic: [PATCH 14/29] x86/ibt: Add IBT feature, MSR and #CP handling
-Thread-Index: AQHYJSo1enFjW+ybRU+dZ/yIhjqUVayfAbWA
-Date:   Tue, 22 Feb 2022 04:38:22 +0000
-Message-ID: <6874fd181ad46cd48f12da6ff5c955a64e193564.camel@intel.com>
-References: <20220218164902.008644515@infradead.org>
-         <20220218171409.395399333@infradead.org>
-In-Reply-To: <20220218171409.395399333@infradead.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: bb3d6a8d-cfc2-4755-39c1-08d9f5bd2835
-x-ms-traffictypediagnostic: DM6PR11MB4705:EE_
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-microsoft-antispam-prvs: <DM6PR11MB4705AB3FCC3BD38EE4E7EF5CC93B9@DM6PR11MB4705.namprd11.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: gBmJiqhwitejHGB/ZKiXD/gOOw8/mY6dZLoYHZmTut2w2Rq5YWhpo7+J+4TwziiJ+3ePgNpVkAv0s/X4Smv/3XMGv6t0xmOiPctNIsDQSUVm0Ep7Iam4to9sJuBa+vmYa7XTUzGXMzCJt1+GyiT6XCF7P3W8Q/VwKSVvm2P3PMIbjesQYXO41jICFHY5I/qLW2iPWoSse9rSSsAj2QatwxpL7yNrQ9WdbEoLF4Wo4lEIK4j7++fDJ//YZcdZXr3IKzhF4onJLUaYAwBU+TELUCF6WKig8/EuEC0Lc2+zyXqpZbr+nMeorlYss42adeOsfY3P0hjMxv6HSH4kqsckTp0N4OUwqzfupred+6aKDZPymDD7CX6wUUkjvltJ8jnzTMnRyry+Jbq9QBzhAyExQQqhKvJTpEQi3/LkiQlOGJ5HoZEtdFhikPlM99X1Atfqc1JWs4w9F3aHhyCZ7lSnwpkw/t7kBirYp09FcWM9pTApDjpNlxi0IBKp9C6u7uan4bGPZtFRHrg5yq9vGuFiHqQh8XzmZjXeqFfbquIMYe8kaX0Vb1Wh+ejjh/T/PU3Jvnm1HHJ/Qms6KJbh7IT3lg2SagiEmSFgrRvNwjFxxhiC997+K6AZOP1CIyIRUEAyIWUWfGFLYDJJi1QwPVPgl429zWmzLOs9xjtOmR1BGL6FerxWHOFLEFLYjCv4ewYchq9oh1va3YW+KPs2unK9k7bsPIh2wyqpYUzSTswWJmg=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR11MB1392.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(86362001)(66556008)(38100700002)(66446008)(6486002)(64756008)(38070700005)(82960400001)(122000001)(66476007)(8676002)(66946007)(5660300002)(4326008)(316002)(110136005)(54906003)(76116006)(2906002)(8936002)(4744005)(7416002)(36756003)(2616005)(107886003)(26005)(71200400001)(186003)(508600001)(6512007)(6506007)(99106002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?UExTNDdyK3BURkNlYVRPQnNYQlpUbkVHMUVmbWYvWjJVR0tuMytpOERlRUhS?=
- =?utf-8?B?U2xzR2JGeFQrZWx4NmRXTTNVSktIUGRXL0R0Nm5ZS2prUTY2eXE4QVE3MzBG?=
- =?utf-8?B?NVFhRjRZOVFDNytFMkhYeWRzbVVuVkJNb3AvNlBXaUFnZEM2WDRZOVZJR0ND?=
- =?utf-8?B?bityUmxYd0NDZHdpOXhUVGw3UU9wMzJhTGFjMk92Q0g4b3VCeHJBR1pKckJl?=
- =?utf-8?B?SWFUVTRHdWxhMmI4WjJ5YnUrOUZHY1k4b1Bka0YxRkUxY1pXSWxUdk1qancv?=
- =?utf-8?B?S1JLK0JQOW5VUUFTbWU2NVBpQ08vcDFJMTl6YjhpTkI0ZEErZXRubjZoVjVQ?=
- =?utf-8?B?Uk84S3hCRkxlZVpvT0VHdTVKMU1TdGJZR0RqdFdjOWxSNnNQa3hINllPL2VC?=
- =?utf-8?B?YXRFdHJsdWowejBiRktBZ1N4V1BDUjlwUkVDdkZGaDNRaWlUZnFHL1RHdGww?=
- =?utf-8?B?ZjlDUi9iRE9xMzhTWllnM2V5QlRBeUNjZitob25BcTBMeEFHbGNjdzNDallD?=
- =?utf-8?B?WnMwSEdUYXRoVmZDTHpIMjZpcjFJZzlNQVZld3VoMUU2T3Bkdk12aXh1NGdu?=
- =?utf-8?B?d2dIeTIxQ3krMDJnYS81NzdpOHFDWUhnNXhrbEFua3d1YlFTVjNoYnlUN2ZW?=
- =?utf-8?B?N0pKbFZPNnhsZCtlT3JEaVN5bUJDc09tOUFqN0R6bGNmOExOeW8yV2FpaGJD?=
- =?utf-8?B?dmZ5b3RTc1lIbnAvM09iRG1ZZTJUbytCQWRLMmorYVkzUnVBenJpbWNya1JZ?=
- =?utf-8?B?N0pXMENBdU9KYVQyZGtXQ09mNWRRb0U2L0M3ZllZMDVNWE52WmxNdXc1dFNG?=
- =?utf-8?B?VDArRGhqKzVRQTNiNndYZzFLaTF5c2w3dEg2bWpCZEt4YVA5dlUxSXVmcXNG?=
- =?utf-8?B?ZXdQclZkY3dTcjRXODRTTzI4YVBDQ0U3YUd5R2FEaG1SQlR3TytIRHFaQVJ5?=
- =?utf-8?B?YjNtTXkzSUZqR2o3VExUOURXQ3l4MU45dnJDWUFHekNpdVFmNC9YbGw5STJ3?=
- =?utf-8?B?R09WdkxvVEdLU3pCZVZORURwRmhqTWhmTFFwMEJQT3VydDBvVE5uTnR2ZkNQ?=
- =?utf-8?B?S3JjZ2tOSmMyQkRsQm53YW9vL1hISzJOOEpybCtNYVNia2RDaDBsNzVtV1Iw?=
- =?utf-8?B?SHlIWUVXRTY1MTREenhkVDRvSDd6UEhhby9peXVFcUhBTE1BVFBJLys1a0FW?=
- =?utf-8?B?TERXMTRPNFlDZkRTQ2MvUjFNcXp2cjhRZDB5ZnU0UVdjR1NkWWFISXZhcUw4?=
- =?utf-8?B?WWl1M3Bma0JZeGg4L1A4dDhUdE9BWFVDVElsV2YvQ1ZvSTFOSkNqK1F0RFZ1?=
- =?utf-8?B?M001WE5DVG8zbndzWnhLVmdEMHNDZE9LSy9saWtmTmlEMVh3dEZMQ0FTWUxY?=
- =?utf-8?B?Y25wbi95b09aLzBicExvUHpVckUrdzE2VDdsRWRWU0M4OWNDOWFFQmZ6bVZ5?=
- =?utf-8?B?VzFzV1NNUjhITnhtbWN6UEtWMGV5ZCtrSUZMRE1aMHJwbnhqUm1xMVBpVGlX?=
- =?utf-8?B?UVgvMklnYzVJYVNycWZOQzIzR2pSWEJmSEJLRHc0ajNVWEZaUmJydEI4QmJ5?=
- =?utf-8?B?RmpBcnM0Wm5MT2IyOER5SDVjbzlwMUtzZFB3TzRVNi95WUN3TFo1TXdGQ3ZK?=
- =?utf-8?B?Qy9XcUx2TkE2M2M2WWhVU0dVU0xPLy9PeDd3MHE2aWF0Z2w4emVtZGk1elVG?=
- =?utf-8?B?dTlJdW44NlUzc2tUNk9SVHp1Q3NhV21jK050RTRXRnl3Yit0TGt1ZG9YVW55?=
- =?utf-8?B?c1RTbkUvYklCSVZqYWNwOEFyNmd5UndST2oyL3NSaGFBcGxUeENTbmwzVkto?=
- =?utf-8?B?MDRudllLa09KdjNQa1phWDBOek5aYzQxVjVZeElZLytDMStGdW9xWWttaEpk?=
- =?utf-8?B?cktybG80RHgxRjFlN3hmWUpHU3ZYVkx4KzNjYkJQZXd4U0JtQU1qTnFkUUZR?=
- =?utf-8?B?Tk9QNUk2dWJiYXI2bnFReXR5OWhKbUkyYnFwZ2hTWWhDc1Jta1k5TEhNK0U0?=
- =?utf-8?B?NTNNR3gzTmtJc1VYWTkzQnRJNU1ZZWp4M2RkYXRYUnpaZjBMWXRMU25QWTda?=
- =?utf-8?B?cGhKcVhteG9KRlpBKytxejFhY2pFdklMUExVZnZyYVJZYnlPYVBMc3hNV1Nx?=
- =?utf-8?B?dE03M1VUZzAybHhTYm1VU1JYVktmUGlvY3R3ZTFoVUdNTXA1TG9JVnNRSmZ0?=
- =?utf-8?B?c0hCS1JVRCtlVy9wYStsU29Pcll4VkJOTmRLZnFlRGpVempwOHo4YzhqekNs?=
- =?utf-8?Q?TOZh/XP/5WXVTGndNroVA5vqDu6BJHnVOBkWNrHuE8=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <55CEE0757C9BD64F8202E007D9D0071A@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+   d="scan'208";a="507842543"
+Received: from lkp-server01.sh.intel.com (HELO da3212ac2f54) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 21 Feb 2022 20:38:51 -0800
+Received: from kbuild by da3212ac2f54 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nMMwt-0002Kc-2V; Tue, 22 Feb 2022 04:38:51 +0000
+Date:   Tue, 22 Feb 2022 12:38:29 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Vignesh Raghavendra <vigneshr@ti.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: drivers/net/ethernet/ti/am65-cpsw-nuss.c:2493:17: sparse: sparse:
+ incorrect type in assignment (different base types)
+Message-ID: <202202221208.c53b6mBk-lkp@intel.com>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR11MB1392.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: bb3d6a8d-cfc2-4755-39c1-08d9f5bd2835
-X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Feb 2022 04:38:22.0743
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: lvNw5wP2OjqYxTNXWGpK5vb4vQLjWpkYfqSiNyd88iWh9+0S7hSjITTAJXnCdbX7lW0jjeezXiwFI329UvjqA9kWsc+6pioPNQ6mytUsqfg=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR11MB4705
-X-OriginatorOrg: intel.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -172,13 +61,190 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gRnJpLCAyMDIyLTAyLTE4IGF0IDE3OjQ5ICswMTAwLCBQZXRlciBaaWpsc3RyYSB3cm90ZToN
-Cj4gKyAgICAgICBjcjRfc2V0X2JpdHMoWDg2X0NSNF9DRVQpOw0KPiArDQo+ICsgICAgICAgcmRt
-c3JsKE1TUl9JQTMyX1NfQ0VULCBtc3IpOw0KPiArICAgICAgIGlmIChjcHVfZmVhdHVyZV9lbmFi
-bGVkKFg4Nl9GRUFUVVJFX0lCVCkpDQo+ICsgICAgICAgICAgICAgICBtc3IgfD0gQ0VUX0VOREJS
-X0VOOw0KPiArICAgICAgIHdybXNybChNU1JfSUEzMl9TX0NFVCwgbXNyKTsNCg0KU28gSSBndWVz
-cyBpbXBsaWNpdCBpbiBhbGwgb2YgdGhpcyBpcyB0aGF0IE1TUl9JQTMyX1NfQ0VUIHdpbGwgbm90
-IGJlDQptYW5hZ2VkIGJ5IHhzYXZlcyAobWFrZXMgc2Vuc2UpLg0KDQpCdXQgaXQgc3RpbGwgbWln
-aHQgYmUgZ29vZCB0byBhZGQgdGhlIHN1cGVydmlzb3IgY2V0IHhmZWF0dXJlIG51bWJlciB0bw0K
-WEZFQVRVUkVfTUFTS19TVVBFUlZJU09SX1VOU1VQUE9SVEVELCB3aXRoIGFuYWxvZ291cyByZWFz
-b25pbmcgdG8NClhGRUFUVVJFX01BU0tfUFQuDQoNCg==
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   038101e6b2cd5c55f888f85db42ea2ad3aecb4b6
+commit: 58356eb31d60dd8994e5067096ef1a09e4d9ceda net: ti: am65-cpsw-nuss: Add devlink support
+date:   1 year ago
+config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20220222/202202221208.c53b6mBk-lkp@intel.com/config)
+compiler: aarch64-linux-gcc (GCC) 11.2.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=58356eb31d60dd8994e5067096ef1a09e4d9ceda
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 58356eb31d60dd8994e5067096ef1a09e4d9ceda
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/gpu/drm/tegra/ drivers/gpu/host1x/ drivers/hid/ drivers/irqchip/ drivers/net/ethernet/ti/ drivers/remoteproc/ drivers/scsi/hisi_sas/ security/integrity/ima/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+
+sparse warnings: (new ones prefixed by >>)
+   drivers/net/ethernet/ti/am65-cpsw-nuss.c:1917:55: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected struct am65_cpsw_ndev_stats [noderef] __percpu *stats @@     got void *data @@
+   drivers/net/ethernet/ti/am65-cpsw-nuss.c:1917:55: sparse:     expected struct am65_cpsw_ndev_stats [noderef] __percpu *stats
+   drivers/net/ethernet/ti/am65-cpsw-nuss.c:1917:55: sparse:     got void *data
+   drivers/net/ethernet/ti/am65-cpsw-nuss.c:1974:49: sparse: sparse: incorrect type in argument 3 (different address spaces) @@     expected void *data @@     got struct am65_cpsw_ndev_stats [noderef] __percpu *stats @@
+   drivers/net/ethernet/ti/am65-cpsw-nuss.c:1974:49: sparse:     expected void *data
+   drivers/net/ethernet/ti/am65-cpsw-nuss.c:1974:49: sparse:     got struct am65_cpsw_ndev_stats [noderef] __percpu *stats
+>> drivers/net/ethernet/ti/am65-cpsw-nuss.c:2493:17: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned long long [usertype] id_temp @@     got restricted __be64 [usertype] @@
+   drivers/net/ethernet/ti/am65-cpsw-nuss.c:2493:17: sparse:     expected unsigned long long [usertype] id_temp
+   drivers/net/ethernet/ti/am65-cpsw-nuss.c:2493:17: sparse:     got restricted __be64 [usertype]
+
+vim +2493 drivers/net/ethernet/ti/am65-cpsw-nuss.c
+
+  2462	
+  2463	static int am65_cpsw_nuss_probe(struct platform_device *pdev)
+  2464	{
+  2465		struct cpsw_ale_params ale_params = { 0 };
+  2466		const struct of_device_id *of_id;
+  2467		struct device *dev = &pdev->dev;
+  2468		struct am65_cpsw_common *common;
+  2469		struct device_node *node;
+  2470		struct resource *res;
+  2471		struct clk *clk;
+  2472		u64 id_temp;
+  2473		int ret, i;
+  2474	
+  2475		common = devm_kzalloc(dev, sizeof(struct am65_cpsw_common), GFP_KERNEL);
+  2476		if (!common)
+  2477			return -ENOMEM;
+  2478		common->dev = dev;
+  2479	
+  2480		of_id = of_match_device(am65_cpsw_nuss_of_mtable, dev);
+  2481		if (!of_id)
+  2482			return -EINVAL;
+  2483		common->pdata = *(const struct am65_cpsw_pdata *)of_id->data;
+  2484	
+  2485		am65_cpsw_nuss_apply_socinfo(common);
+  2486	
+  2487		res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "cpsw_nuss");
+  2488		common->ss_base = devm_ioremap_resource(&pdev->dev, res);
+  2489		if (IS_ERR(common->ss_base))
+  2490			return PTR_ERR(common->ss_base);
+  2491		common->cpsw_base = common->ss_base + AM65_CPSW_CPSW_NU_BASE;
+  2492		/* Use device's physical base address as switch id */
+> 2493		id_temp = cpu_to_be64(res->start);
+  2494		memcpy(common->switch_id, &id_temp, sizeof(res->start));
+  2495	
+  2496		node = of_get_child_by_name(dev->of_node, "ethernet-ports");
+  2497		if (!node)
+  2498			return -ENOENT;
+  2499		common->port_num = of_get_child_count(node);
+  2500		if (common->port_num < 1 || common->port_num > AM65_CPSW_MAX_PORTS)
+  2501			return -ENOENT;
+  2502		of_node_put(node);
+  2503	
+  2504		common->rx_flow_id_base = -1;
+  2505		init_completion(&common->tdown_complete);
+  2506		common->tx_ch_num = 1;
+  2507		common->pf_p0_rx_ptype_rrobin = false;
+  2508		common->default_vlan = 1;
+  2509	
+  2510		common->ports = devm_kcalloc(dev, common->port_num,
+  2511					     sizeof(*common->ports),
+  2512					     GFP_KERNEL);
+  2513		if (!common->ports)
+  2514			return -ENOMEM;
+  2515	
+  2516		clk = devm_clk_get(dev, "fck");
+  2517		if (IS_ERR(clk))
+  2518			return dev_err_probe(dev, PTR_ERR(clk), "getting fck clock\n");
+  2519		common->bus_freq = clk_get_rate(clk);
+  2520	
+  2521		pm_runtime_enable(dev);
+  2522		ret = pm_runtime_get_sync(dev);
+  2523		if (ret < 0) {
+  2524			pm_runtime_put_noidle(dev);
+  2525			pm_runtime_disable(dev);
+  2526			return ret;
+  2527		}
+  2528	
+  2529		node = of_get_child_by_name(dev->of_node, "mdio");
+  2530		if (!node) {
+  2531			dev_warn(dev, "MDIO node not found\n");
+  2532		} else if (of_device_is_available(node)) {
+  2533			struct platform_device *mdio_pdev;
+  2534	
+  2535			mdio_pdev = of_platform_device_create(node, NULL, dev);
+  2536			if (!mdio_pdev) {
+  2537				ret = -ENODEV;
+  2538				goto err_pm_clear;
+  2539			}
+  2540	
+  2541			common->mdio_dev =  &mdio_pdev->dev;
+  2542		}
+  2543		of_node_put(node);
+  2544	
+  2545		am65_cpsw_nuss_get_ver(common);
+  2546	
+  2547		/* init tx channels */
+  2548		ret = am65_cpsw_nuss_init_tx_chns(common);
+  2549		if (ret)
+  2550			goto err_of_clear;
+  2551		ret = am65_cpsw_nuss_init_rx_chns(common);
+  2552		if (ret)
+  2553			goto err_of_clear;
+  2554	
+  2555		ret = am65_cpsw_nuss_init_host_p(common);
+  2556		if (ret)
+  2557			goto err_of_clear;
+  2558	
+  2559		ret = am65_cpsw_nuss_init_slave_ports(common);
+  2560		if (ret)
+  2561			goto err_of_clear;
+  2562	
+  2563		/* init common data */
+  2564		ale_params.dev = dev;
+  2565		ale_params.ale_ageout = AM65_CPSW_ALE_AGEOUT_DEFAULT;
+  2566		ale_params.ale_ports = common->port_num + 1;
+  2567		ale_params.ale_regs = common->cpsw_base + AM65_CPSW_NU_ALE_BASE;
+  2568		ale_params.dev_id = common->pdata.ale_dev_id;
+  2569		ale_params.bus_freq = common->bus_freq;
+  2570	
+  2571		common->ale = cpsw_ale_create(&ale_params);
+  2572		if (IS_ERR(common->ale)) {
+  2573			dev_err(dev, "error initializing ale engine\n");
+  2574			ret = PTR_ERR(common->ale);
+  2575			goto err_of_clear;
+  2576		}
+  2577	
+  2578		ret = am65_cpsw_init_cpts(common);
+  2579		if (ret)
+  2580			goto err_of_clear;
+  2581	
+  2582		/* init ports */
+  2583		for (i = 0; i < common->port_num; i++)
+  2584			am65_cpsw_nuss_slave_disable_unused(&common->ports[i]);
+  2585	
+  2586		dev_set_drvdata(dev, common);
+  2587	
+  2588		common->is_emac_mode = true;
+  2589	
+  2590		ret = am65_cpsw_nuss_init_ndevs(common);
+  2591		if (ret)
+  2592			goto err_of_clear;
+  2593	
+  2594		ret = am65_cpsw_nuss_register_ndevs(common);
+  2595		if (ret)
+  2596			goto err_of_clear;
+  2597	
+  2598		pm_runtime_put(dev);
+  2599		return 0;
+  2600	
+  2601	err_of_clear:
+  2602		of_platform_device_destroy(common->mdio_dev, NULL);
+  2603	err_pm_clear:
+  2604		pm_runtime_put_sync(dev);
+  2605		pm_runtime_disable(dev);
+  2606		return ret;
+  2607	}
+  2608	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

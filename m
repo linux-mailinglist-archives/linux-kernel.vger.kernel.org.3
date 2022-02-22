@@ -2,137 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D512D4BFBD9
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 16:03:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E3464BFBD5
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 16:03:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233251AbiBVPD7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 10:03:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48978 "EHLO
+        id S233405AbiBVPDo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 10:03:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233435AbiBVPC7 (ORCPT
+        with ESMTP id S233700AbiBVPDS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 10:02:59 -0500
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CB8F10DA67
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 07:01:49 -0800 (PST)
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com [209.85.218.69])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 7871B3FCAB
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 15:01:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1645542108;
-        bh=HtdrJ3I4lOo9P+o7lWSeEHgMO5/UUG8VsgHgTsClLgE=;
-        h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-         In-Reply-To:Content-Type;
-        b=G+PMQ6V4Q5in6kK6rSduCkvGNHTtH+X25bfzi4EQKTEGYL2UaIAxtYU7TZnqBh49l
-         v7Yt4WGFM5fBf038GUvq20EPjmfg4kG59j2HkCrisb9aV+f36+HXOrFrUdXkeQBD6D
-         OuVyVGbdGwGATWXtS9bkM6DCW4oAvTptqzUxZz5ZWBTO2+CFASoT60Ng7EkwBVqwf2
-         iaNnYpLLwionXg74HKRub/LqIfvP2BYMalwNZ593fuTbzA1TRbjy8mCkF+FWhrmHJa
-         x/nBB7uWI2mBzw4KBqK8UK46vTIMBisnesHdKrMVC7VZ9r0+PttR8L6krPtv8pjlTs
-         B/fy0EWWyZiqQ==
-Received: by mail-ej1-f69.google.com with SMTP id m4-20020a170906160400b006be3f85906eso5864030ejd.23
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 07:01:48 -0800 (PST)
+        Tue, 22 Feb 2022 10:03:18 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3D19F103A
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 07:02:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1645542156;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=rdi/qxR3vXLdPYSOnT7lLR4Cj8YvfdXVSXReKwN9fr0=;
+        b=hvy8dN5hawx/78oN+f6qUiNwV4tliI3P7Jhjd7si/vfzIIiVUkxkJzmfbJiTHw7Trn7Nan
+        wc9+eBS4SQE5Sb4asISLwQTxtDvYC+0tjJbL2vE7TRxlNcvRJN7TqIj+p2ddQjqo3M2k+C
+        5TIUMO2zWai8aXTQZgDaA468wCdsasA=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-619-ycF0cDwUNOqVxMyIFYm87w-1; Tue, 22 Feb 2022 10:02:34 -0500
+X-MC-Unique: ycF0cDwUNOqVxMyIFYm87w-1
+Received: by mail-ed1-f71.google.com with SMTP id bq19-20020a056402215300b0040f276105a4so12118593edb.2
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 07:02:34 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=HtdrJ3I4lOo9P+o7lWSeEHgMO5/UUG8VsgHgTsClLgE=;
-        b=5+DFQA12JweB+cQKf0+sNrSWmMWDUaWI7/J5eGDULrW4+lM/ZE1R8/e7KZrH/HHS1s
-         F5euZu7SninjsTBL2q+rSBfvY/pzU7PRkT4Ce2zOP307yDq9h5yAz7MJ1XS3bqDEFFkP
-         mf9p2vgF7hiKL3nfyRkR59xrDtbMG7sIwNd4M42RVe4STQWJuKClu+rPDet7PWF6ldK0
-         Bv47JszDl/PTAZ8IPiuhMSqevg5rhQ90UcPelQyL6zaNhgzmtA7Kc0+8gN5/q5LjFOhR
-         9f4O5fvQHw3xRw0v8FbjLW0PAY9VFhL0PdPcVhInJoNpyrCBycbMdUvmBWqSeu2zIEEZ
-         CVeQ==
-X-Gm-Message-State: AOAM530C1LAsPgaGqsh2X+10UByePsE/Ea0OC8hdIMky1IINZ5VUs76W
-        RMNlj0elsbZ+X7zD3ZC6/2yMTYBnZLA3rR3J2fPzT1OnCWFJyB1Wc3NiQQ2Sy24Bla6n//vzoeL
-        398XbulsZB/7bQj33fZaOnl54IiAiGTevoJMFWLumgA==
-X-Received: by 2002:a17:906:b005:b0:6b4:8861:597b with SMTP id v5-20020a170906b00500b006b48861597bmr19372043ejy.238.1645542107955;
-        Tue, 22 Feb 2022 07:01:47 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyl5ajALOLJhstZXNm4FFrBok2iV4kiyLbSmxL7nyMkd0sVGKDRLluG1qlnkwVf1Pl3ETi9Pw==
-X-Received: by 2002:a17:906:b005:b0:6b4:8861:597b with SMTP id v5-20020a170906b00500b006b48861597bmr19372009ejy.238.1645542107580;
-        Tue, 22 Feb 2022 07:01:47 -0800 (PST)
-Received: from [192.168.0.124] (xdsl-188-155-181-108.adslplus.ch. [188.155.181.108])
-        by smtp.gmail.com with ESMTPSA id ci16sm6345629ejb.128.2022.02.22.07.01.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 22 Feb 2022 07:01:47 -0800 (PST)
-Message-ID: <4e459bbb-ca6c-4ca2-efe9-8ab4d4f3b648@canonical.com>
-Date:   Tue, 22 Feb 2022 16:01:45 +0100
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=rdi/qxR3vXLdPYSOnT7lLR4Cj8YvfdXVSXReKwN9fr0=;
+        b=xgZIuOhTvGMsSVdlf/Rvl7rJvn4c1RdI5gziJXkW1y7IenT8Ny6EiTWDOwxeWcvNv2
+         cguAj8vcOH3RTkl7FQh5pC4OJEKFc/PlMhufzbrneVP8zLknMxXau/IDRgc8GfOa1Z0N
+         2YRlu0Nlj7ypREZY1Gq2hdwdxRWBxy8wupBFXoOJv42hluBZGqb/PcPUbTnotum2QUPk
+         sRq6wawofeXA5FDgFglawTpUQdiFjVvKEgQxnKkBl7qgQ7n0EXeE+QUHxWiE4N58DRpt
+         BKj2n7Z96VDVnd0Zc8LrO44xwlvEF4pCuw4fN+PYyArHuZK7Ga8TTjjHSjFsNphBa0Ng
+         g+QQ==
+X-Gm-Message-State: AOAM531gwE9XbtQvkODaw6MswVAf0FTXbgJU+Dy8zFNuLkzocKf6u0Fj
+        DU9RdVfE2euxuuYEi4KJdwEae57aLG+mzVMTVW5yWm5pTFoG1rL85sVcwenMyvbfSCwmC1S0iyd
+        uae72TiLgmy06bEB9Y2xh0vek
+X-Received: by 2002:a17:906:2991:b0:6cf:1fd4:39a3 with SMTP id x17-20020a170906299100b006cf1fd439a3mr19565081eje.21.1645542153504;
+        Tue, 22 Feb 2022 07:02:33 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwfs/vKQLHNEKKWfGdfWtjrGEHBFte8MvKz5Y50OjDrG513NxeN/Cw3t2XJvu4U4AxkMg15eQ==
+X-Received: by 2002:a17:906:2991:b0:6cf:1fd4:39a3 with SMTP id x17-20020a170906299100b006cf1fd439a3mr19565062eje.21.1645542153204;
+        Tue, 22 Feb 2022 07:02:33 -0800 (PST)
+Received: from redhat.com ([2.55.129.240])
+        by smtp.gmail.com with ESMTPSA id q16sm5998109ejc.21.2022.02.22.07.02.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Feb 2022 07:02:32 -0800 (PST)
+Date:   Tue, 22 Feb 2022 10:02:29 -0500
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Jason Wang <jasowang@redhat.com>
+Cc:     Anirudh Rayabharam <mail@anirudhrb.com>,
+        syzbot+0abd373e2e50d704db87@syzkaller.appspotmail.com,
+        kvm <kvm@vger.kernel.org>,
+        virtualization <virtualization@lists.linux-foundation.org>,
+        netdev <netdev@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] vhost: validate range size before adding to iotlb
+Message-ID: <20220222090511-mutt-send-email-mst@kernel.org>
+References: <20220221195303.13560-1-mail@anirudhrb.com>
+ <CACGkMEvLE=kV4PxJLRjdSyKArU+MRx6b_mbLGZHSUgoAAZ+-Fg@mail.gmail.com>
+ <YhRtQEWBF0kqWMsI@anirudhrb.com>
+ <CACGkMEvd7ETC_ANyrOSAVz_i64xqpYYazmm=+39E51=DMRFXdw@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v2 05/15] dt-bindings: ufs: qcom,ufs: convert to dtschema
-Content-Language: en-US
-To:     Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Wei Xu <xuwei5@hisilicon.com>, Nishanth Menon <nm@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Tero Kristo <kristo@kernel.org>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Jan Kotas <jank@cadence.com>, Li Wei <liwei213@huawei.com>,
-        Stanley Chu <stanley.chu@mediatek.com>,
-        Yaniv Gardi <ygardi@codeaurora.org>,
-        linux-scsi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org,
-        linux-mediatek@lists.infradead.org
-References: <20220222145854.358646-1-krzysztof.kozlowski@canonical.com>
- <20220222145854.358646-6-krzysztof.kozlowski@canonical.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20220222145854.358646-6-krzysztof.kozlowski@canonical.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CACGkMEvd7ETC_ANyrOSAVz_i64xqpYYazmm=+39E51=DMRFXdw@mail.gmail.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/02/2022 15:58, Krzysztof Kozlowski wrote:
-> Convert the Qualcomm Universal Flash Storage (UFS) Controller to DT
-> schema format.
+On Tue, Feb 22, 2022 at 03:11:07PM +0800, Jason Wang wrote:
+> On Tue, Feb 22, 2022 at 12:57 PM Anirudh Rayabharam <mail@anirudhrb.com> wrote:
+> >
+> > On Tue, Feb 22, 2022 at 10:50:20AM +0800, Jason Wang wrote:
+> > > On Tue, Feb 22, 2022 at 3:53 AM Anirudh Rayabharam <mail@anirudhrb.com> wrote:
+> > > >
+> > > > In vhost_iotlb_add_range_ctx(), validate the range size is non-zero
+> > > > before proceeding with adding it to the iotlb.
+> > > >
+> > > > Range size can overflow to 0 when start is 0 and last is (2^64 - 1).
+> > > > One instance where it can happen is when userspace sends an IOTLB
+> > > > message with iova=size=uaddr=0 (vhost_process_iotlb_msg). So, an
+> > > > entry with size = 0, start = 0, last = (2^64 - 1) ends up in the
+> > > > iotlb. Next time a packet is sent, iotlb_access_ok() loops
+> > > > indefinitely due to that erroneous entry:
+> > > >
+> > > >         Call Trace:
+> > > >          <TASK>
+> > > >          iotlb_access_ok+0x21b/0x3e0 drivers/vhost/vhost.c:1340
+> > > >          vq_meta_prefetch+0xbc/0x280 drivers/vhost/vhost.c:1366
+> > > >          vhost_transport_do_send_pkt+0xe0/0xfd0 drivers/vhost/vsock.c:104
+> > > >          vhost_worker+0x23d/0x3d0 drivers/vhost/vhost.c:372
+> > > >          kthread+0x2e9/0x3a0 kernel/kthread.c:377
+> > > >          ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
+> > > >          </TASK>
+> > > >
+> > > > Reported by syzbot at:
+> > > >         https://syzkaller.appspot.com/bug?extid=0abd373e2e50d704db87
+> > > >
+> > > > Reported-by: syzbot+0abd373e2e50d704db87@syzkaller.appspotmail.com
+> > > > Tested-by: syzbot+0abd373e2e50d704db87@syzkaller.appspotmail.com
+> > > > Signed-off-by: Anirudh Rayabharam <mail@anirudhrb.com>
+> > > > ---
+> > > >  drivers/vhost/iotlb.c | 6 ++++--
+> > > >  1 file changed, 4 insertions(+), 2 deletions(-)
+> > > >
+> > > > diff --git a/drivers/vhost/iotlb.c b/drivers/vhost/iotlb.c
+> > > > index 670d56c879e5..b9de74bd2f9c 100644
+> > > > --- a/drivers/vhost/iotlb.c
+> > > > +++ b/drivers/vhost/iotlb.c
+> > > > @@ -53,8 +53,10 @@ int vhost_iotlb_add_range_ctx(struct vhost_iotlb *iotlb,
+> > > >                               void *opaque)
+> > > >  {
+> > > >         struct vhost_iotlb_map *map;
+> > > > +       u64 size = last - start + 1;
+> > > >
+> > > > -       if (last < start)
+> > > > +       // size can overflow to 0 when start is 0 and last is (2^64 - 1).
+> > > > +       if (last < start || size == 0)
+> > > >                 return -EFAULT;
+> > >
+> > > I'd move this check to vhost_chr_iter_write(), then for the device who
+> > > has its own msg handler (e.g vDPA) can benefit from it as well.
+> >
+> > Thanks for reviewing!
+> >
+> > I kept the check here thinking that all devices would benefit from it
+> > because they would need to call vhost_iotlb_add_range() to add an entry
+> > to the iotlb. Isn't that correct?
 > 
-> Except the conversion, add also properties already present in DTS:
-> iommus, interconnects and power-domains.
+> Correct for now but not for the future, it's not guaranteed that the
+> per device iotlb message handler will use vhost iotlb.
 > 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-> ---
->  .../devicetree/bindings/ufs/qcom,ufs.yaml     | 241 ++++++++++++++++++
->  .../devicetree/bindings/ufs/ufshcd-pltfrm.txt |  90 -------
->  2 files changed, 241 insertions(+), 90 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/ufs/qcom,ufs.yaml
->  delete mode 100644 Documentation/devicetree/bindings/ufs/ufshcd-pltfrm.txt
+> But I agree that we probably don't need to care about it too much now.
 > 
-> diff --git a/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml b/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml
-> new file mode 100644
-> index 000000000000..356217124222
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml
-> @@ -0,0 +1,241 @@
-> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/ufs/qcom,ufs.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Qualcomm Universal Flash Storage (UFS) Controller
-> +
-> +maintainers:
-> +  - Yaniv Gardi <ygardi@codeaurora.org>
+> > Do you see any other benefit in moving
+> > it to vhost_chr_iter_write()?
+> >
+> > One concern I have is that if we move it out some future caller to
+> > vhost_iotlb_add_range() might forget to handle this case.
+> 
+> Yes.
+> 
+> Rethink the whole fix, we're basically rejecting [0, ULONG_MAX] range
+> which seems a little bit odd.
 
-This email bounces ("User doesn't exist: ygardi@codeaurora.org"), so
-maintainer is needed for Qualcomm UFS bindings.
+Well, I guess ideally we'd split this up as two entries - this kind of
+thing is after all one of the reasons we initially used first,last as
+the API - as opposed to first,size.
 
-Best regards,
-Krzysztof
+Anirudh, could you do it like this instead of rejecting?
+
+
+> I wonder if it's better to just remove
+> the map->size. Having a quick glance at the the user, I don't see any
+> blocker for this.
+> 
+> Thanks
+
+I think it's possible but won't solve the bug by itself, and we'd need
+to review and fix all users - a high chance of introducing
+another regression. And I think there's value of fitting under the
+stable rule of 100 lines with context.
+So sure, but let's fix the bug first.
+
+
+
+> >
+> > Thanks!
+> >
+> >         - Anirudh.
+> >
+> > >
+> > > Thanks
+> > >
+> > > >
+> > > >         if (iotlb->limit &&
+> > > > @@ -69,7 +71,7 @@ int vhost_iotlb_add_range_ctx(struct vhost_iotlb *iotlb,
+> > > >                 return -ENOMEM;
+> > > >
+> > > >         map->start = start;
+> > > > -       map->size = last - start + 1;
+> > > > +       map->size = size;
+> > > >         map->last = last;
+> > > >         map->addr = addr;
+> > > >         map->perm = perm;
+> > > > --
+> > > > 2.35.1
+> > > >
+> > >
+> >
+

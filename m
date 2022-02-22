@@ -2,117 +2,239 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AED54BFAE9
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 15:27:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 505FC4BFAED
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 15:30:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232860AbiBVO2N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 09:28:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45786 "EHLO
+        id S232842AbiBVOa1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 09:30:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230322AbiBVO2M (ORCPT
+        with ESMTP id S231273AbiBVOaY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 09:28:12 -0500
-Received: from ssl.serverraum.org (ssl.serverraum.org [IPv6:2a01:4f8:151:8464::1:2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D0ABC248A;
-        Tue, 22 Feb 2022 06:27:46 -0800 (PST)
-Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id 6FFDE22205;
-        Tue, 22 Feb 2022 15:27:44 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1645540064;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=8dj0piB+942CQbs7XIdKdDi92gQwu/L2SA425BJSZIw=;
-        b=ktuPX8BKiZqDpYwucvTcKBislX13mpMQ+qRPl2YCsKBgJ7lC9fxFZtsETlzyl7sNWWtTkP
-        VV37FTzWj3GngcMe/KCdXOSn5dkIo/qR5uJBlK81gMsRWZegjuwhPyEkdbCh5Zcjz/pPIM
-        AG5HZLtdFM5XS5xImsEXMgP1b3pHdkQ=
+        Tue, 22 Feb 2022 09:30:24 -0500
+Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57C1B151C66
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 06:29:59 -0800 (PST)
+Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-2d6923bca1aso166915987b3.9
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 06:29:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=ex7IMBlE4ONDpsQe5AW/htxkuLyXiLoSJUGFoz3TYiA=;
+        b=RAbSzio6CQUMlZvch5mL0Vyahb0A4DtHPl5lgYT7GKPaAWbjvQt30z0mO0btZf4AUY
+         0bkr+PWx2m3HeK600X0usYZLjK1SG//3pNsp3hQxcq9AiP4L5hJ8mjELqO40RmHUi6zX
+         q0j8RZr92RoklahyrT7o5HUjASqOCDSGCR48O3Aofzh8dIamZiCCjvX6/rfRiplBk6iR
+         FdnV/lJBT6uenm9MsIQl3dfRhid0BCXBHE4Ax4UuqKS+GZqmH/Qr/Id4/Yi2hXToi6po
+         r5yMgNF1ue05zPgBBDbjbBDFY2xWoqhG1qMnTLcyWFIanRGKcYu/sWFPkjUcVrzPn9w3
+         47Uw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=ex7IMBlE4ONDpsQe5AW/htxkuLyXiLoSJUGFoz3TYiA=;
+        b=grpg6KOAKKsIUabDb6ne8EviAwD+dTuZ33RxCzTuo4dIJ1tjdv6Vd81jcIWAN4sw/c
+         eq2+Kv+8HnRZnyZI0JUzIuTHTAh3rK7s2M1v09INYUX0mv7eiBy/2DCQFE0OC5Vzi+FG
+         67VKxIZf3r1RWIw6sQpNsEwZ7U/hj+JCDYINyALhnnbkrCqqV0pzW2odYOrFqiZDE4qi
+         0yZEbiYQR1KAxbh1gDLVXihz6x1tiAf56q+JEmS5Eb89oU8TuV9FskY0hJNFmRRgI3yr
+         eI78SWlCznXEPUNBqxHOWZBP3ndfCDuKPacvwTrioHBR8imdGuvzpqkG+4cTP0T/jIcI
+         xZ8g==
+X-Gm-Message-State: AOAM531o6+NHeYwFjL43IY7OUUvEojelIP74iBRKDaV3ll5tzJVzdjYY
+        QtrmW7NztH1AIGv3oCxRwdT4onfhy4cEzq3DkJTN6g==
+X-Google-Smtp-Source: ABdhPJx4ijkW7EXThE7IEUkuoMX94fseTVCvyL5IB0jVI7NHFnm8gUlDuA7v0EB1SpUWMQV6fGMeZ8hrRuUQP8TDxTU=
+X-Received: by 2002:a81:1008:0:b0:2d6:58bf:80d5 with SMTP id
+ 8-20020a811008000000b002d658bf80d5mr23462032ywq.441.1645540198361; Tue, 22
+ Feb 2022 06:29:58 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Tue, 22 Feb 2022 15:27:44 +0100
-From:   Michael Walle <michael@walle.cc>
-To:     Tudor.Ambarus@microchip.com
-Cc:     p.yadav@ti.com, broonie@kernel.org, miquel.raynal@bootlin.com,
-        richard@nod.at, vigneshr@ti.com, linux-mtd@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
-        Nicolas.Ferre@microchip.com, zhengxunli@mxic.com.tw,
-        jaimeliao@mxic.com.tw
-Subject: Re: [PATCH 0/4] spi-mem: Allow specifying the byte order in DTR mode
-In-Reply-To: <7cd74ef3-5a7d-4e65-3436-ee3399ca56a3@microchip.com>
-References: <20220218145900.1440045-1-tudor.ambarus@microchip.com>
- <44f655d027b49b87065915f6ba2744d2@walle.cc>
- <81d7c569-d6c2-9167-e007-eda72f34842b@microchip.com>
- <23fbbf2dde387e3832b4ca23d46816c0@walle.cc>
- <7cd74ef3-5a7d-4e65-3436-ee3399ca56a3@microchip.com>
-User-Agent: Roundcube Webmail/1.4.12
-Message-ID: <e39d06684b8f3a63103f40f0e99e030e@walle.cc>
-X-Sender: michael@walle.cc
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220221084908.568970525@linuxfoundation.org>
+In-Reply-To: <20220221084908.568970525@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Tue, 22 Feb 2022 19:59:47 +0530
+Message-ID: <CA+G9fYuXOjvWhfxP7tCP+K764kC2nFMwO5mDzHtrEGFzEprBtw@mail.gmail.com>
+Subject: Re: [PATCH 4.9 00/33] 4.9.303-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        Anna Schumaker <anna.schumaker@netapp.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 2022-02-22 15:23, schrieb Tudor.Ambarus@microchip.com:
-> On 2/22/22 16:13, Michael Walle wrote:
->> EXTERNAL EMAIL: Do not click links or open attachments unless you know 
->> the content is safe
->> 
->> Am 2022-02-22 14:54, schrieb Tudor.Ambarus@microchip.com:
->>> On 2/21/22 09:44, Michael Walle wrote:
->>>> EXTERNAL EMAIL: Do not click links or open attachments unless you 
->>>> know
->>>> the content is safe
->>>> 
->>>> Am 2022-02-18 15:58, schrieb Tudor Ambarus:
->>>>> Fortunately there are controllers
->>>>> that can swap back the bytes at runtime, fixing the endiannesses.
->>>>> Provide
->>>>> a way for the upper layers to specify the byte order in DTR mode.
->>>> 
->>>> Are there any patches for the atmel-quadspi yet? What happens if
->>> 
->>> not public, but will publish them these days.
->>> 
->>>> the controller doesn't support it? Will there be a software 
->>>> fallback?
->>> 
->>> no need for a fallback, the controller can ignore 
->>> op->data.dtr_bswap16
->>> if
->>> it can't swap bytes.
->> 
->> I don't understand. If the controller doesn't swap the 16bit values,
->> you will read the wrong content, no?
->> 
-> 
-> In linux no, because macronix swaps bytes on a 2 byte boundary both on
-> reads and on page program. The problem is when you mix 8D-8D-8D mode 
-> and
-> 1-1-1 mode along the boot stages. Let's assume you write all boot 
-> binaries
-> in 1-1-1 mode. When reaching u-boot if you enable 8D-8D-8D mode, when 
-> u-boot
-> will try to get the kernel it will fail, as the flash swaps the bytes 
-> compared
-> to what was written with 1-1-1 mode. You write D0 D1 D2 D3 in 1-1-1 
-> mode and
-> when reaching u-boot you will read D1 D0 D3 D2 and it will mess the
-> kernel image.
+On Mon, 21 Feb 2022 at 14:22, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 4.9.303 release.
+> There are 33 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Wed, 23 Feb 2022 08:48:58 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-=
+4.9.303-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-4.9.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-But you have to consider also 3rd parties, like an external programmer 
-or
-another OS. So, there has to be *one correct* way of writing/reading 
-these
-bytes.
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
--michael
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
+NOTE:
+This build warning found on all architectures,
+
+> Trond Myklebust <trond.myklebust@hammerspace.com>
+>     NFS: Do not report writeback errors in nfs_getattr()
+
+fs/nfs/inode.c: In function 'nfs_getattr':
+fs/nfs/inode.c:693:1: warning: label 'out' defined but not used [-Wunused-l=
+abel]
+  693 | out:
+      | ^~~
+
+
+## Build
+* kernel: 4.9.303-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-4.9.y
+* git commit: 6686f147d38ff2b3ffc43718976bb9ff43c5fcc5
+* git describe: v4.9.302-34-g6686f147d38f
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.9.y/build/v4.9.3=
+02-34-g6686f147d38f
+
+## Test Regressions (compared to v4.9.302-27-ge4a64678c410)
+No test regressions found.
+
+## Metric Regressions (compared to v4.9.302-27-ge4a64678c410)
+Build warning found on all architectures
+fs/nfs/inode.c: In function 'nfs_getattr':
+fs/nfs/inode.c:693:1: warning: label 'out' defined but not used [-Wunused-l=
+abel]
+  693 | out:
+      | ^~~
+
+## Test Fixes (compared to v4.9.302-27-ge4a64678c410)
+No test fixes found.
+
+## Metric Fixes (compared to v4.9.302-27-ge4a64678c410)
+No metric fixes found.
+
+## Test result summary
+total: 55842, pass: 45907, fail: 274, skip: 8635, xfail: 1026
+
+## Build Summary
+* arm: 130 total, 130 passed, 0 failed
+* arm64: 32 total, 32 passed, 0 failed
+* dragonboard-410c: 1 total, 1 passed, 0 failed
+* hi6220-hikey: 1 total, 1 passed, 0 failed
+* i386: 19 total, 19 passed, 0 failed
+* juno-r2: 1 total, 1 passed, 0 failed
+* mips: 22 total, 22 passed, 0 failed
+* sparc: 12 total, 12 passed, 0 failed
+* x15: 2 total, 1 passed, 1 failed
+* x86: 1 total, 1 passed, 0 failed
+* x86_64: 30 total, 30 passed, 0 failed
+
+## Test suites summary
+* fwts
+* kselftest-android
+* kselftest-bpf
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kvm-unit-tests
+* libhugetlbfs
+* linux-log-parser
+* ltp-cap_bounds-tests
+* ltp-commands-tests
+* ltp-containers-tests
+* ltp-controllers-tests
+* ltp-cpuhotplug-tests
+* ltp-crypto-tests
+* ltp-cve-tests
+* ltp-dio-tests
+* ltp-fcntl-locktests-tests
+* ltp-filecaps-tests
+* ltp-fs-tests
+* ltp-fs_bind-tests
+* ltp-fs_perms_simple-tests
+* ltp-fsx-tests
+* ltp-hugetlb-tests
+* ltp-io-tests
+* ltp-ipc-tests
+* ltp-math-tests
+* ltp-mm-tests
+* ltp-nptl-tests
+* ltp-open-posix-tests
+* ltp-pty-tests
+* ltp-sched-tests
+* ltp-securebits-tests
+* ltp-syscalls-tests
+* ltp-tracing-tests
+* network-basic-tests
+* packetdrill
+* perf
+* ssuite
+* v4l2-compliance
+
+--
+Linaro LKFT
+https://lkft.linaro.org

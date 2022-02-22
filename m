@@ -2,122 +2,388 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFDA14C019D
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 19:48:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 197C54C01A0
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 19:50:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235059AbiBVStT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 13:49:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45200 "EHLO
+        id S235074AbiBVSui (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 13:50:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232867AbiBVStS (ORCPT
+        with ESMTP id S234925AbiBVSug (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 13:49:18 -0500
-Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CD061323EE
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 10:48:52 -0800 (PST)
-Received: by mail-yb1-xb31.google.com with SMTP id e140so43109116ybh.9
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 10:48:52 -0800 (PST)
+        Tue, 22 Feb 2022 13:50:36 -0500
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF1F513295C
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 10:50:09 -0800 (PST)
+Received: by mail-wr1-x42e.google.com with SMTP id d28so7432322wra.4
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 10:50:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=GEvSCVwL/A3X3tCkaLLRRca+X+c7l6RWUROLPaM/Tx8=;
-        b=rXGJIwjZlw3ACce5I3PFgeBjPS4fxuCYFOC2yx/AzU0OAp27JOu69nttt75RbiM0Rq
-         +EFdpKhNyDOttFvq/XDfKuL3YIMcHnKFAdnwkxKPdELzMw/Fb/RajpsO0Q0Gw2gHBFLw
-         dkUQxjNbQ4LU/8W/DMJLa/aan6kw01C//FtMYXz6gxOZkUJBtH2ATHdDucOM2Xsb1s3O
-         WC505All0OB8eiocoWY8OAWdS7ec05vcs+Fbv5FNmamEZ43iDLEBykTFUKBQYghe+LyQ
-         UBlTpXwVtJL25BPaVuhObMxdLZpW6bfM+4qZd8OCHTO7K2RJKzSUPbENzcLxp0s4snyN
-         YBvA==
+        d=arista.com; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=cEeMW15JH3+YV/B4DePfoz/ob0B0l6VDDpHXJ6xjfBo=;
+        b=F8CX+p5FcG++1upoPOplcqNDA6JRNZMBvYAbcGavBLyZvz2ojG7PZr3lJGSV/QSZG5
+         FNJpL/NMOJNh4Ap/oUyTRpfMnD1OI+i9J3H5EoViV33sznzXwuEvplw+Sr0/8RdsQhQT
+         /Dea40C/nC21uAvS4khmGX8Ej5wAxYeioZu6W3bZdxHm4tBFceUS+GagR4F8emBeiN3L
+         w9e/FPxHMa7Elj2ILAqGZV2bVqijeGqy5g7rzNXo5Q5iKeCAuaJINQguJ265OPmhZwtM
+         3jHD7XpO01fmfeIduhpZhUXr+Ay8xa0JNMicF5tkfewdv3907zyknbqj0SfRTO55Ke7+
+         L3Dw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=GEvSCVwL/A3X3tCkaLLRRca+X+c7l6RWUROLPaM/Tx8=;
-        b=eC7wvI7qBtoDWUYz79wo2stltFUZH7JzUYi8mx0jiYvXj2o7/fdFqssST7DhQt1RZH
-         mkev7t0+HrxvQYcG5WCYoq2Gd48ukPboAbU3KJPK7sQCCtRI4qyqjAQu8U9Bf9rYCqHx
-         vCfwA6xUqMp9Fx/sn0DiAfS7BNKMe7H4l9kT0A3M2SRH3r5aGtQN7HJZPnDDex3olPpH
-         Op/JW87+wtCZ1eprQr4yXUrZov9uXQgteoPbKWdOgUDbwXmqBgvGVfANfhtXZVuTdGYD
-         UnfOn34andIlZXFukJ4tRNH+vJeEqmfArYwdMe9Ji1xXVDwZ1mFQ65StKle9quiShhox
-         Qfeg==
-X-Gm-Message-State: AOAM530faGSU4ybEuhLg33WJEuYvIb4hPyZZRAaSwuTGk6Ql6lyhrhdM
-        vB4QzlmchZWv9glZ5609dCxnK8joQAan8YSuH6vI9Q==
-X-Google-Smtp-Source: ABdhPJxC870BtNHWuFMIKLAeUWoVPt9DVgjg6YJTPrNb7Bn3HlGLHMIuVlPY/D4jk4/S+sixqxL+tjs2qEaIgMtLxRo=
-X-Received: by 2002:a25:3542:0:b0:622:caf1:2c88 with SMTP id
- c63-20020a253542000000b00622caf12c88mr20154405yba.625.1645555731413; Tue, 22
- Feb 2022 10:48:51 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=cEeMW15JH3+YV/B4DePfoz/ob0B0l6VDDpHXJ6xjfBo=;
+        b=NPiRgbDBuKrjeawpkspAqF3Q0uOG7j5y7zIE34CPzBZd9tU9HQIO6grBWuRFDBHL21
+         Wjoi5bFz3bz3otqJcpMLPcjLAcB1vm04dItpZN7Pcc0TbV1S5HlkMBDSPlrT1fZl4HqM
+         fw3ZdoAPvL7Vdv6lLjv4FY9FRQtDm52ggnhK9piFmeXAmDf1HJdWHgVz6pbqbZH+lyJO
+         3BnYpc5Fz8GTFhMThBSMMTINQ8pLlNYp4Vzs5TbOUDVIHiTqg/Au0DkubkQagGUwVjzo
+         Wk5kaHVNH6dp/iOwUJIMH2cR8v0x2OELHEKYKY4d3i2sLwd8WLg+wnA1aXkT4hQaZMj+
+         XauA==
+X-Gm-Message-State: AOAM530bidIJ3vjZDN3iMxk1q5nfoxv9fDh36SpklF9J9YgCGAajxin1
+        VPS2hZRxWx9Qd4Aev7YyFSoum43/78xS6w==
+X-Google-Smtp-Source: ABdhPJw4TVQqL8U58e7qoKs9BT+TNFeo4FRhtVc97BDkAgy5kn1x+sw51fATWiUnqU+16OVBq7mYIw==
+X-Received: by 2002:a5d:6488:0:b0:1ea:7ff1:93e with SMTP id o8-20020a5d6488000000b001ea7ff1093emr4938773wri.284.1645555808165;
+        Tue, 22 Feb 2022 10:50:08 -0800 (PST)
+Received: from localhost.localdomain ([2a02:8084:e84:2480:228:f8ff:fe6f:83a8])
+        by smtp.gmail.com with ESMTPSA id d2sm25796326wro.49.2022.02.22.10.50.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Feb 2022 10:50:07 -0800 (PST)
+From:   Dmitry Safonov <dima@arista.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Dmitry Safonov <0x7f454c46@gmail.com>,
+        Dmitry Safonov <dima@arista.com>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>, netdev@vger.kernel.org
+Subject: [PATCH] net/tcp: Merge TCP-MD5 inbound callbacks
+Date:   Tue, 22 Feb 2022 18:50:06 +0000
+Message-Id: <20220222185006.337620-1-dima@arista.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-References: <019ac41602e0c4a7dfe96dc8158a95097c2b2ebd.1645554036.git.andreyknvl@google.com>
-In-Reply-To: <019ac41602e0c4a7dfe96dc8158a95097c2b2ebd.1645554036.git.andreyknvl@google.com>
-From:   Marco Elver <elver@google.com>
-Date:   Tue, 22 Feb 2022 19:48:40 +0100
-Message-ID: <CANpmjNNhvxEnjkq_s9DRyFd-r0hDnxGST6ommX3anTY+fBcLaA@mail.gmail.com>
-Subject: Re: [PATCH mm v2] another fix for "kasan: improve vmalloc tests"
-To:     andrey.konovalov@linux.dev
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Alexander Potapenko <glider@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        kasan-dev@googlegroups.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Andrey Konovalov <andreyknvl@google.com>,
-        kernel test robot <lkp@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 22 Feb 2022 at 19:26, <andrey.konovalov@linux.dev> wrote:
->
-> From: Andrey Konovalov <andreyknvl@google.com>
->
-> set_memory_rw/ro() are not exported to be used in modules and thus
-> cannot be used in KUnit-compatible KASAN tests.
->
-> Do the checks that rely on these functions only when the tests are
-> built-in.
->
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
+The functions do essentially the same work to verify TCP-MD5 sign.
+Code can be merged into one family-independent function in order to
+reduce copy'n'paste and generated code.
+Later with TCP-AO option added, this will allow to create one function
+that's responsible for segment verification, that will have all the
+different checks for MD5/AO/non-signed packets, which in turn will help
+to see checks for all corner-cases in one function, rather than spread
+around different families and functions.
 
-Looks reasonable, thanks.
+Cc: Eric Dumazet <edumazet@google.com>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>
+Cc: David Ahern <dsahern@kernel.org>
+Cc: netdev@vger.kernel.org
+Signed-off-by: Dmitry Safonov <dima@arista.com>
+---
+ include/net/tcp.h   | 11 +++++++
+ net/ipv4/tcp.c      | 66 ++++++++++++++++++++++++++++++++++++++++
+ net/ipv4/tcp_ipv4.c | 73 ++++-----------------------------------------
+ net/ipv6/tcp_ipv6.c | 57 +++--------------------------------
+ 4 files changed, 86 insertions(+), 121 deletions(-)
 
-Reviewed-by: Marco Elver <elver@google.com>
+diff --git a/include/net/tcp.h b/include/net/tcp.h
+index b9fc978fb2ca..598f89ef9546 100644
+--- a/include/net/tcp.h
++++ b/include/net/tcp.h
+@@ -1673,6 +1673,10 @@ tcp_md5_do_lookup(const struct sock *sk, int l3index,
+ 		return NULL;
+ 	return __tcp_md5_do_lookup(sk, l3index, addr, family);
+ }
++bool tcp_inbound_md5_hash(const struct sock *sk, const struct sk_buff *skb,
++			  const void *saddr, const void *daddr,
++			  int family, int dif, int sdif);
++
+ 
+ #define tcp_twsk_md5_key(twsk)	((twsk)->tw_md5_key)
+ #else
+@@ -1682,6 +1686,13 @@ tcp_md5_do_lookup(const struct sock *sk, int l3index,
+ {
+ 	return NULL;
+ }
++static inline bool tcp_inbound_md5_hash(const struct sock *sk,
++					const struct sk_buff *skb,
++					const void *saddr, const void *daddr,
++					int family, int dif, int sdif)
++{
++	return false;
++}
+ #define tcp_twsk_md5_key(twsk)	NULL
+ #endif
+ 
+diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
+index 02cb275e5487..546647534381 100644
+--- a/net/ipv4/tcp.c
++++ b/net/ipv4/tcp.c
+@@ -4432,6 +4432,72 @@ int tcp_md5_hash_key(struct tcp_md5sig_pool *hp, const struct tcp_md5sig_key *ke
+ }
+ EXPORT_SYMBOL(tcp_md5_hash_key);
+ 
++/* Called with rcu_read_lock() */
++bool tcp_inbound_md5_hash(const struct sock *sk, const struct sk_buff *skb,
++			  const void *saddr, const void *daddr,
++			  int family, int dif, int sdif)
++{
++	/*
++	 * This gets called for each TCP segment that arrives
++	 * so we want to be efficient.
++	 * We have 3 drop cases:
++	 * o No MD5 hash and one expected.
++	 * o MD5 hash and we're not expecting one.
++	 * o MD5 hash and its wrong.
++	 */
++	const __u8 *hash_location = NULL;
++	struct tcp_md5sig_key *hash_expected;
++	const struct tcphdr *th = tcp_hdr(skb);
++	struct tcp_sock *tp = tcp_sk(sk);
++	int genhash, l3index;
++	u8 newhash[16];
++
++	/* sdif set, means packet ingressed via a device
++	 * in an L3 domain and dif is set to the l3mdev
++	 */
++	l3index = sdif ? dif : 0;
++
++	hash_expected = tcp_md5_do_lookup(sk, l3index, saddr, family);
++	hash_location = tcp_parse_md5sig_option(th);
++
++	/* We've parsed the options - do we have a hash? */
++	if (!hash_expected && !hash_location)
++		return false;
++
++	if (hash_expected && !hash_location) {
++		NET_INC_STATS(sock_net(sk), LINUX_MIB_TCPMD5NOTFOUND);
++		return true;
++	}
++
++	if (!hash_expected && hash_location) {
++		NET_INC_STATS(sock_net(sk), LINUX_MIB_TCPMD5UNEXPECTED);
++		return true;
++	}
++
++	/* check the signature */
++	genhash = tp->af_specific->calc_md5_hash(newhash, hash_expected,
++						 NULL, skb);
++
++	if (genhash || memcmp(hash_location, newhash, 16) != 0) {
++		NET_INC_STATS(sock_net(sk), LINUX_MIB_TCPMD5FAILURE);
++		if (family == AF_INET) {
++			net_info_ratelimited("MD5 Hash failed for (%pI4, %d)->(%pI4, %d)%s L3 index %d\n",
++					saddr, ntohs(th->source),
++					daddr, ntohs(th->dest),
++					genhash ? " tcp_v4_calc_md5_hash failed"
++					: "", l3index);
++		} else {
++			net_info_ratelimited("MD5 Hash %s for [%pI6c]:%u->[%pI6c]:%u L3 index %d\n",
++					genhash ? "failed" : "mismatch",
++					saddr, ntohs(th->source),
++					daddr, ntohs(th->dest), l3index);
++		}
++		return true;
++	}
++	return false;
++}
++EXPORT_SYMBOL(tcp_inbound_md5_hash);
++
+ #endif
+ 
+ void tcp_done(struct sock *sk)
+diff --git a/net/ipv4/tcp_ipv4.c b/net/ipv4/tcp_ipv4.c
+index fec656f5a39e..bf2f6aff146d 100644
+--- a/net/ipv4/tcp_ipv4.c
++++ b/net/ipv4/tcp_ipv4.c
+@@ -1403,72 +1403,6 @@ EXPORT_SYMBOL(tcp_v4_md5_hash_skb);
+ 
+ #endif
+ 
+-/* Called with rcu_read_lock() */
+-static bool tcp_v4_inbound_md5_hash(const struct sock *sk,
+-				    const struct sk_buff *skb,
+-				    int dif, int sdif)
+-{
+-#ifdef CONFIG_TCP_MD5SIG
+-	/*
+-	 * This gets called for each TCP segment that arrives
+-	 * so we want to be efficient.
+-	 * We have 3 drop cases:
+-	 * o No MD5 hash and one expected.
+-	 * o MD5 hash and we're not expecting one.
+-	 * o MD5 hash and its wrong.
+-	 */
+-	const __u8 *hash_location = NULL;
+-	struct tcp_md5sig_key *hash_expected;
+-	const struct iphdr *iph = ip_hdr(skb);
+-	const struct tcphdr *th = tcp_hdr(skb);
+-	const union tcp_md5_addr *addr;
+-	unsigned char newhash[16];
+-	int genhash, l3index;
+-
+-	/* sdif set, means packet ingressed via a device
+-	 * in an L3 domain and dif is set to the l3mdev
+-	 */
+-	l3index = sdif ? dif : 0;
+-
+-	addr = (union tcp_md5_addr *)&iph->saddr;
+-	hash_expected = tcp_md5_do_lookup(sk, l3index, addr, AF_INET);
+-	hash_location = tcp_parse_md5sig_option(th);
+-
+-	/* We've parsed the options - do we have a hash? */
+-	if (!hash_expected && !hash_location)
+-		return false;
+-
+-	if (hash_expected && !hash_location) {
+-		NET_INC_STATS(sock_net(sk), LINUX_MIB_TCPMD5NOTFOUND);
+-		return true;
+-	}
+-
+-	if (!hash_expected && hash_location) {
+-		NET_INC_STATS(sock_net(sk), LINUX_MIB_TCPMD5UNEXPECTED);
+-		return true;
+-	}
+-
+-	/* Okay, so this is hash_expected and hash_location -
+-	 * so we need to calculate the checksum.
+-	 */
+-	genhash = tcp_v4_md5_hash_skb(newhash,
+-				      hash_expected,
+-				      NULL, skb);
+-
+-	if (genhash || memcmp(hash_location, newhash, 16) != 0) {
+-		NET_INC_STATS(sock_net(sk), LINUX_MIB_TCPMD5FAILURE);
+-		net_info_ratelimited("MD5 Hash failed for (%pI4, %d)->(%pI4, %d)%s L3 index %d\n",
+-				     &iph->saddr, ntohs(th->source),
+-				     &iph->daddr, ntohs(th->dest),
+-				     genhash ? " tcp_v4_calc_md5_hash failed"
+-				     : "", l3index);
+-		return true;
+-	}
+-	return false;
+-#endif
+-	return false;
+-}
+-
+ static void tcp_v4_init_req(struct request_sock *req,
+ 			    const struct sock *sk_listener,
+ 			    struct sk_buff *skb)
+@@ -2019,7 +1953,9 @@ int tcp_v4_rcv(struct sk_buff *skb)
+ 		struct sock *nsk;
+ 
+ 		sk = req->rsk_listener;
+-		if (unlikely(tcp_v4_inbound_md5_hash(sk, skb, dif, sdif))) {
++		if (unlikely(tcp_inbound_md5_hash(sk, skb,
++						  &iph->saddr, &iph->daddr,
++						  AF_INET, dif, sdif))) {
+ 			sk_drops_add(sk, skb);
+ 			reqsk_put(req);
+ 			goto discard_it;
+@@ -2089,7 +2025,8 @@ int tcp_v4_rcv(struct sk_buff *skb)
+ 	if (!xfrm4_policy_check(sk, XFRM_POLICY_IN, skb))
+ 		goto discard_and_relse;
+ 
+-	if (tcp_v4_inbound_md5_hash(sk, skb, dif, sdif))
++	if (tcp_inbound_md5_hash(sk, skb, &iph->saddr, &iph->daddr,
++				AF_INET, dif, sdif))
+ 		goto discard_and_relse;
+ 
+ 	nf_reset_ct(skb);
+diff --git a/net/ipv6/tcp_ipv6.c b/net/ipv6/tcp_ipv6.c
+index 075ee8a2df3b..30cd0a074c2c 100644
+--- a/net/ipv6/tcp_ipv6.c
++++ b/net/ipv6/tcp_ipv6.c
+@@ -772,57 +772,6 @@ static int tcp_v6_md5_hash_skb(char *md5_hash,
+ 
+ #endif
+ 
+-static bool tcp_v6_inbound_md5_hash(const struct sock *sk,
+-				    const struct sk_buff *skb,
+-				    int dif, int sdif)
+-{
+-#ifdef CONFIG_TCP_MD5SIG
+-	const __u8 *hash_location = NULL;
+-	struct tcp_md5sig_key *hash_expected;
+-	const struct ipv6hdr *ip6h = ipv6_hdr(skb);
+-	const struct tcphdr *th = tcp_hdr(skb);
+-	int genhash, l3index;
+-	u8 newhash[16];
+-
+-	/* sdif set, means packet ingressed via a device
+-	 * in an L3 domain and dif is set to the l3mdev
+-	 */
+-	l3index = sdif ? dif : 0;
+-
+-	hash_expected = tcp_v6_md5_do_lookup(sk, &ip6h->saddr, l3index);
+-	hash_location = tcp_parse_md5sig_option(th);
+-
+-	/* We've parsed the options - do we have a hash? */
+-	if (!hash_expected && !hash_location)
+-		return false;
+-
+-	if (hash_expected && !hash_location) {
+-		NET_INC_STATS(sock_net(sk), LINUX_MIB_TCPMD5NOTFOUND);
+-		return true;
+-	}
+-
+-	if (!hash_expected && hash_location) {
+-		NET_INC_STATS(sock_net(sk), LINUX_MIB_TCPMD5UNEXPECTED);
+-		return true;
+-	}
+-
+-	/* check the signature */
+-	genhash = tcp_v6_md5_hash_skb(newhash,
+-				      hash_expected,
+-				      NULL, skb);
+-
+-	if (genhash || memcmp(hash_location, newhash, 16) != 0) {
+-		NET_INC_STATS(sock_net(sk), LINUX_MIB_TCPMD5FAILURE);
+-		net_info_ratelimited("MD5 Hash %s for [%pI6c]:%u->[%pI6c]:%u L3 index %d\n",
+-				     genhash ? "failed" : "mismatch",
+-				     &ip6h->saddr, ntohs(th->source),
+-				     &ip6h->daddr, ntohs(th->dest), l3index);
+-		return true;
+-	}
+-#endif
+-	return false;
+-}
+-
+ static void tcp_v6_init_req(struct request_sock *req,
+ 			    const struct sock *sk_listener,
+ 			    struct sk_buff *skb)
+@@ -1676,7 +1625,8 @@ INDIRECT_CALLABLE_SCOPE int tcp_v6_rcv(struct sk_buff *skb)
+ 		struct sock *nsk;
+ 
+ 		sk = req->rsk_listener;
+-		if (tcp_v6_inbound_md5_hash(sk, skb, dif, sdif)) {
++		if (tcp_inbound_md5_hash(sk, skb, &hdr->saddr, &hdr->daddr,
++					 AF_INET6, dif, sdif)) {
+ 			sk_drops_add(sk, skb);
+ 			reqsk_put(req);
+ 			goto discard_it;
+@@ -1743,7 +1693,8 @@ INDIRECT_CALLABLE_SCOPE int tcp_v6_rcv(struct sk_buff *skb)
+ 	if (!xfrm6_policy_check(sk, XFRM_POLICY_IN, skb))
+ 		goto discard_and_relse;
+ 
+-	if (tcp_v6_inbound_md5_hash(sk, skb, dif, sdif))
++	if (tcp_inbound_md5_hash(sk, skb, &hdr->saddr, &hdr->daddr,
++				 AF_INET6, dif, sdif))
+ 		goto discard_and_relse;
+ 
+ 	if (tcp_filter(sk, skb))
 
+base-commit: 038101e6b2cd5c55f888f85db42ea2ad3aecb4b6
+-- 
+2.35.1
 
-> ---
->
-> Changes v1->v2:
-> - Hide checks under #if instead of dropping.
-> ---
->  lib/test_kasan.c | 2 ++
->  1 file changed, 2 insertions(+)
->
-> diff --git a/lib/test_kasan.c b/lib/test_kasan.c
-> index ef99d81fe8b3..c4b7eb2bad77 100644
-> --- a/lib/test_kasan.c
-> +++ b/lib/test_kasan.c
-> @@ -1083,11 +1083,13 @@ static void vmalloc_helpers_tags(struct kunit *test)
->         KUNIT_ASSERT_TRUE(test, is_vmalloc_addr(ptr));
->         KUNIT_ASSERT_NOT_ERR_OR_NULL(test, vmalloc_to_page(ptr));
->
-> +#if !IS_MODULE(CONFIG_KASAN_KUNIT_TEST)
->         /* Make sure vmalloc'ed memory permissions can be changed. */
->         rv = set_memory_ro((unsigned long)ptr, 1);
->         KUNIT_ASSERT_GE(test, rv, 0);
->         rv = set_memory_rw((unsigned long)ptr, 1);
->         KUNIT_ASSERT_GE(test, rv, 0);
-> +#endif
->
->         vfree(ptr);
->  }
-> --
-> 2.25.1
->

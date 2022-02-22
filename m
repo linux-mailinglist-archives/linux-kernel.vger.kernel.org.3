@@ -2,68 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64F724C0008
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 18:19:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AAD134C000A
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 18:20:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234624AbiBVRTf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 12:19:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51420 "EHLO
+        id S234121AbiBVRVP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 12:21:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234622AbiBVRTc (ORCPT
+        with ESMTP id S233441AbiBVRVO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 12:19:32 -0500
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E540916E7E6;
-        Tue, 22 Feb 2022 09:19:06 -0800 (PST)
-Received: by mail-pl1-x62d.google.com with SMTP id 4so7582718pll.6;
-        Tue, 22 Feb 2022 09:19:06 -0800 (PST)
+        Tue, 22 Feb 2022 12:21:14 -0500
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C093B16EAA7
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 09:20:48 -0800 (PST)
+Received: by mail-pg1-x533.google.com with SMTP id w37so11203031pga.7
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 09:20:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=o2k6/+KfPNpdk5T6WckK4aM0wg0CQdVevzUCwQjOYec=;
-        b=fYU6kji1ZrL/UM8QiviELjj1rz8qgQXsK09+ZW7IyBmIspyeLLKeKUPy34CGAcrNYA
-         iCV3ZGrIqnyokl57aLCA+4LeuFJ5Iibvicca6HfzmpYqpT2uruIU/pvNih4dcsx+CPtj
-         yVdZgPFxxApVBaRP6jPt6tcspLvCoDpAqLeEAim775wGesrWexQahkD93CEA1J0lY8Pn
-         G7gWHSq/kVnYe+07LgdpiX+L/rZlCUrURzwLcv4HAnVLfqkPtcA+JRiAfFI9FPP0sFGD
-         ftr1Rugm4zFjC0TkAk6MTPGeLnRYKdEqjl4WDEzjiRSK0WzbnhvZBZ+sBxI+yXA1iBfA
-         HnPg==
+        bh=0Kdmt3ze8hhv2ohAv917Xh8Gl81wMXYQqTjTVOulWto=;
+        b=i3hDE5w5/2c64xKaly5BmvmYqGgj0/JjmjBTcJzSJ/KiLIQg8QwnIbzG12JWva4k3Q
+         XuxpOQzRLlkEPTjx41WACDPY4F2W1zAJ1ERUpvOw1/eLvxTyNtf+a70Gn71aX1Y5LbQ6
+         kvboUXJ9zsRs1SQv3F3L50jDtpmaoLVLmkx0Hh0PUwVjyYnSFs6MUKnUUngLAlpDZRID
+         kF/odbbK+kCFPbrsq5K5yoZOn6LeNvim2JDU9fVhjEx3XnbHbKNUQlRRFl/gBarwHhU3
+         YLVcSJ0h+7QbN053XZtkBVxLNI73s3yUjZVq4N5EnXihjxuGFMlk/AqYVIDZ2e2UwTAQ
+         hufw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
          :references:mime-version:content-disposition:in-reply-to;
-        bh=o2k6/+KfPNpdk5T6WckK4aM0wg0CQdVevzUCwQjOYec=;
-        b=l0NLquS+hYvGFe3sOwLV8ACN/PDk3V0hspCTn8jI20gVVjfcZxlR0i6Twgd+YAcRHA
-         6dI+tsPxj+ZQAGeOdYXvQ5SddWYcEzEkynFC3j9mGtbEylhLLjHTrVXoNMiKgsQrRex5
-         8O4C2WFgJp4c1jyR79Im5b6FLeVgSUIkrHoaPzRWwaO3rXwyYoquVwgSDc2UrwCUC83H
-         PsO/IUPPR59fLlMswwng6XuXdfRtPf5/6LIgCvYm1qhgKHwBEjGzifgneQXEpMmaCMFW
-         h1rdcUfUnrLYtjNNmgp0BJZhvNT20o0WjW0rTgjExvnlDZAg/5APGLM0GZAHHz5ZPHuO
-         Qrsw==
-X-Gm-Message-State: AOAM533i3Szk+yO/Pf3OfMjpFkLiHhMYrkXRLvRNGdU5pbIiS3eZb4nB
-        u5VVpOoEwgfxPGrSE5iJTsU=
-X-Google-Smtp-Source: ABdhPJz7bD5KcjAQk0S0uVDoPz73lkVV1P9mfHv9AmX3Aw4bd4K85cknXyefY48ye3VnCZ1R+/ObPQ==
-X-Received: by 2002:a17:90a:b396:b0:1bc:588a:c130 with SMTP id e22-20020a17090ab39600b001bc588ac130mr5098283pjr.97.1645550346230;
-        Tue, 22 Feb 2022 09:19:06 -0800 (PST)
+        bh=0Kdmt3ze8hhv2ohAv917Xh8Gl81wMXYQqTjTVOulWto=;
+        b=CNve3mWPO4xb9h7bq2KChNURYyfnLpgeo40dJTGKejZDLDkvL9AzKzPxfbGoAbEawI
+         sfj5GRKnCQ85Fz/Imu/OrLIpXYoY76OB+aKtkJARYZ31RHbQGbuk7PvhcsZAhPIRfhEC
+         MwJN44S5OTkRKJrLsimJxF55b532T8W62voWYg8Mj5zs2US86Lwmw3sSdmR8aSiEnVq4
+         sdT6yzo/+Y+uc/x2NnXXi40Xo8t9bX4BD6xNqTVXVVEM6uJ6zuhZgxJkU6zoNgzNJswc
+         eP/BA858MEbugCBOICYtvoQYc/+U1aGZBXunmOmE3nVN5xB8Gbck1RLKFtuPiXCjUjaf
+         yfcw==
+X-Gm-Message-State: AOAM532Ww3WUo6p0NdvRpf2bDGs71Di8EG/OrBvaRtvgdBdaH6PpyqJ1
+        RwM3S8F1RvRMRlOCvfOA5Fs=
+X-Google-Smtp-Source: ABdhPJxPSQWc5i3N0LAjK9HLEOGM6ROYSQy2OM8vZFchfrfAKztYmxRAaN++5EJuvG/dZvrf+Vrm9g==
+X-Received: by 2002:a05:6a00:1a04:b0:4e1:294:e1e5 with SMTP id g4-20020a056a001a0400b004e10294e1e5mr25373400pfv.51.1645550448173;
+        Tue, 22 Feb 2022 09:20:48 -0800 (PST)
 Received: from localhost (2603-800c-1a02-1bae-e24f-43ff-fee6-449f.res6.spectrum.com. [2603:800c:1a02:1bae:e24f:43ff:fee6:449f])
-        by smtp.gmail.com with ESMTPSA id ob12sm81608pjb.5.2022.02.22.09.19.05
+        by smtp.gmail.com with ESMTPSA id f3sm10563153pgi.57.2022.02.22.09.20.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Feb 2022 09:19:05 -0800 (PST)
+        Tue, 22 Feb 2022 09:20:47 -0800 (PST)
 Sender: Tejun Heo <htejun@gmail.com>
-Date:   Tue, 22 Feb 2022 07:19:04 -1000
+Date:   Tue, 22 Feb 2022 07:20:46 -1000
 From:   Tejun Heo <tj@kernel.org>
-To:     "Wang Jianchao (Kuaishou)" <jianchao.wan9@gmail.com>
-Cc:     Jens Axboe <axboe@kernel.dk>, Josef Bacik <jbacik@fb.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [RFC V4 1/6] blk: prepare to make blk-rq-qos pluggable and
- modular
-Message-ID: <YhUbCH+dhKkgMirE@slm.duckdns.org>
-References: <20220217031349.98561-1-jianchao.wan9@gmail.com>
- <20220217031349.98561-2-jianchao.wan9@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, Imran Khan <imran.f.khan@oracle.com>
+Subject: Re: [PATCH] kernfs: move struct kernfs_root out of the public view.
+Message-ID: <YhUbblMhjDBH5X+x@slm.duckdns.org>
+References: <20220222070713.3517679-1-gregkh@linuxfoundation.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220217031349.98561-2-jianchao.wan9@gmail.com>
+In-Reply-To: <20220222070713.3517679-1-gregkh@linuxfoundation.org>
 X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
@@ -75,17 +71,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Tue, Feb 22, 2022 at 08:07:13AM +0100, Greg Kroah-Hartman wrote:
+> There is no need to have struct kernfs_root be part of kernfs.h for
+> the whole kernel to see and poke around it.  Move it internal to kernfs
+> code and provide a helper function, kernfs_root_to_node(), to handle the
+> one field that kernfs users were directly accessing from the structure.
+> 
+> Cc: Tejun Heo <tj@kernel.org>
+> Cc: Imran Khan <imran.f.khan@oracle.com>
+> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-On Thu, Feb 17, 2022 at 11:13:44AM +0800, Wang Jianchao (Kuaishou) wrote:
-> (3) Add /sys/block/x/queue/qos
->     We can use '+name' or "-name" to open or close the blk-rq-qos
->     policy.
-
-I don't understand why we're modularizing rq-qos in this non-standard way
-instead of modprobing to enable a policy and rmmoding to disable. Why are we
-building in qos names into the kernel and adding an extra module handling
-interface?
+Acked-by: Tejun Heo <tj@kernel.org>
 
 Thanks.
 

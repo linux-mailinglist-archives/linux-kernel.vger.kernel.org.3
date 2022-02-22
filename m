@@ -2,47 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C27984BF9DB
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 14:52:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A3BD44BF99D
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 14:42:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232600AbiBVNwa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 08:52:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50748 "EHLO
+        id S232473AbiBVNmY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 08:42:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232561AbiBVNwX (ORCPT
+        with ESMTP id S232438AbiBVNmU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 08:52:23 -0500
-Received: from mail.bitwise.fi (mail.bitwise.fi [109.204.228.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A294692D04;
-        Tue, 22 Feb 2022 05:51:57 -0800 (PST)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.bitwise.fi (Postfix) with ESMTP id B53D446002C;
-        Tue, 22 Feb 2022 15:42:27 +0200 (EET)
-X-Virus-Scanned: Debian amavisd-new at 
-Received: from mail.bitwise.fi ([127.0.0.1])
-        by localhost (mustetatti.dmz.bitwise.fi [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id jWeATQLHLol0; Tue, 22 Feb 2022 15:42:25 +0200 (EET)
-Received: from localhost.net (fw1.dmz.bitwise.fi [192.168.69.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Tue, 22 Feb 2022 08:42:20 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BBD6A8B6EC
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 05:41:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1645537313;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=yMzIBslOmEwLm1+JPMEGfd0LnE8itJitz00d+JQMTH0=;
+        b=Bj1UDYqFCl5TxAe0dUyCLGQGUGQyLmRTFoZ8b4rd1rU/rZNzrdNlDh4UgW//pdqKm8aMmL
+        HXp128uE9mcxkGK0XLxDxoUDLHbc3050hU6GeNs6SR0369Z97/XKpCdPS/abA8HE3fmKiU
+        zPMSjo3rHlBbirLkZnPzSDKEAVDtBC0=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-251-FAtRKxoTPCSI4BkRN1m69A-1; Tue, 22 Feb 2022 08:41:50 -0500
+X-MC-Unique: FAtRKxoTPCSI4BkRN1m69A-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: anssiha)
-        by mail.bitwise.fi (Postfix) with ESMTPSA id A602D46000C;
-        Tue, 22 Feb 2022 15:42:25 +0200 (EET)
-From:   Anssi Hannula <anssi.hannula@bitwise.fi>
-To:     Mathias Nyman <mathias.nyman@intel.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] xhci: fix uninitialized string returned by xhci_decode_ctrl_ctx()
-Date:   Tue, 22 Feb 2022 15:41:17 +0200
-Message-Id: <20220222134117.34844-2-anssi.hannula@bitwise.fi>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220222134117.34844-1-anssi.hannula@bitwise.fi>
-References: <20220222134117.34844-1-anssi.hannula@bitwise.fi>
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id ED30A1006AA5;
+        Tue, 22 Feb 2022 13:41:46 +0000 (UTC)
+Received: from localhost (ovpn-12-122.pek2.redhat.com [10.72.12.122])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 145E96FAFE;
+        Tue, 22 Feb 2022 13:41:46 +0000 (UTC)
+Date:   Tue, 22 Feb 2022 21:41:43 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        akpm@linux-foundation.org, cl@linux.com, 42.hyeyoo@gmail.com,
+        penberg@kernel.org, rientjes@google.com, iamjoonsoo.kim@lge.com,
+        vbabka@suse.cz, David.Laight@aculab.com, david@redhat.com,
+        herbert@gondor.apana.org.au, davem@davemloft.net,
+        linux-crypto@vger.kernel.org, steffen.klassert@secunet.com,
+        netdev@vger.kernel.org, hca@linux.ibm.com, gor@linux.ibm.com,
+        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
+        svens@linux.ibm.com, linux-s390@vger.kernel.org, michael@walle.cc,
+        linux-i2c@vger.kernel.org, wsa@kernel.org
+Subject: [PATCH 1/2] dma-mapping: check dma_mask for streaming mapping allocs
+Message-ID: <YhToFzlSufrliUsi@MiWiFi-R3L-srv>
+References: <20220219005221.634-1-bhe@redhat.com>
+ <20220219005221.634-22-bhe@redhat.com>
+ <20220219071730.GG26711@lst.de>
+ <20220220084044.GC93179@MiWiFi-R3L-srv>
+ <20220222084530.GA6210@lst.de>
+ <YhSpaGfiQV8Nmxr+@MiWiFi-R3L-srv>
+ <20220222131120.GB10093@lst.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220222131120.GB10093@lst.de>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,37 +75,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-xhci_decode_ctrl_ctx() returns the untouched buffer as-is if both "drop"
-and "add" parameters are zero.
+For newly added streaming mapping APIs, the internal core function
+__dma_alloc_pages() should check dev->dma_mask, but not
+ev->coherent_dma_mask which is for coherent mapping.
 
-Fix the function to return an empty string in that case.
+Meanwhile, just filter out gfp flags if they are any of
+__GFP_DMA, __GFP_DMA32 and __GFP_HIGHMEM, but not fail it. This change
+makes it  consistent with coherent mapping allocs.
 
-It was not immediately clear from the possible call chains whether this
-issue is currently actually triggerable or not.
-
-Note that before 4843b4b5ec64 ("xhci: fix even more unsafe memory usage
-in xhci tracing") the result effect in the failure case was different as
-a static buffer was used here, but the code still worked incorrectly.
-
-Fixes: 90d6d5731da7 ("xhci: Add tracing for input control context")
-Signed-off-by: Anssi Hannula <anssi.hannula@bitwise.fi>
+Signed-off-by: Baoquan He <bhe@redhat.com>
 ---
- drivers/usb/host/xhci.h | 2 ++
- 1 file changed, 2 insertions(+)
+ kernel/dma/mapping.c | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
-index ac91647195f6..a2fcefb5a0bb 100644
---- a/drivers/usb/host/xhci.h
-+++ b/drivers/usb/host/xhci.h
-@@ -2465,6 +2465,8 @@ static inline const char *xhci_decode_ctrl_ctx(char *str,
- 	unsigned int	bit;
- 	int		ret = 0;
+diff --git a/kernel/dma/mapping.c b/kernel/dma/mapping.c
+index 9478eccd1c8e..e66847aeac67 100644
+--- a/kernel/dma/mapping.c
++++ b/kernel/dma/mapping.c
+@@ -543,10 +543,11 @@ static struct page *__dma_alloc_pages(struct device *dev, size_t size,
+ {
+ 	const struct dma_map_ops *ops = get_dma_ops(dev);
  
-+	str[0] = '\0';
+-	if (WARN_ON_ONCE(!dev->coherent_dma_mask))
+-		return NULL;
+-	if (WARN_ON_ONCE(gfp & (__GFP_DMA | __GFP_DMA32 | __GFP_HIGHMEM)))
+-		return NULL;
++	if (WARN_ON_ONCE(!dev->dma_mask))
++                return NULL;
 +
- 	if (drop) {
- 		ret = sprintf(str, "Drop:");
- 		for_each_set_bit(bit, &drop, 32)
++	/* let the implementation decide on the zone to allocate from: */
++        gfp &= ~(__GFP_DMA | __GFP_DMA32 | __GFP_HIGHMEM);
+ 
+ 	size = PAGE_ALIGN(size);
+ 	if (dma_alloc_direct(dev, ops))
 -- 
-2.34.1
+2.31.1
 

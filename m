@@ -2,239 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 505FC4BFAED
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 15:30:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 54F774BFAF0
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 15:30:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232842AbiBVOa1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 09:30:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55206 "EHLO
+        id S232874AbiBVOau (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 09:30:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231273AbiBVOaY (ORCPT
+        with ESMTP id S231273AbiBVOas (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 09:30:24 -0500
-Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57C1B151C66
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 06:29:59 -0800 (PST)
-Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-2d6923bca1aso166915987b3.9
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 06:29:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=ex7IMBlE4ONDpsQe5AW/htxkuLyXiLoSJUGFoz3TYiA=;
-        b=RAbSzio6CQUMlZvch5mL0Vyahb0A4DtHPl5lgYT7GKPaAWbjvQt30z0mO0btZf4AUY
-         0bkr+PWx2m3HeK600X0usYZLjK1SG//3pNsp3hQxcq9AiP4L5hJ8mjELqO40RmHUi6zX
-         q0j8RZr92RoklahyrT7o5HUjASqOCDSGCR48O3Aofzh8dIamZiCCjvX6/rfRiplBk6iR
-         FdnV/lJBT6uenm9MsIQl3dfRhid0BCXBHE4Ax4UuqKS+GZqmH/Qr/Id4/Yi2hXToi6po
-         r5yMgNF1ue05zPgBBDbjbBDFY2xWoqhG1qMnTLcyWFIanRGKcYu/sWFPkjUcVrzPn9w3
-         47Uw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=ex7IMBlE4ONDpsQe5AW/htxkuLyXiLoSJUGFoz3TYiA=;
-        b=grpg6KOAKKsIUabDb6ne8EviAwD+dTuZ33RxCzTuo4dIJ1tjdv6Vd81jcIWAN4sw/c
-         eq2+Kv+8HnRZnyZI0JUzIuTHTAh3rK7s2M1v09INYUX0mv7eiBy/2DCQFE0OC5Vzi+FG
-         67VKxIZf3r1RWIw6sQpNsEwZ7U/hj+JCDYINyALhnnbkrCqqV0pzW2odYOrFqiZDE4qi
-         0yZEbiYQR1KAxbh1gDLVXihz6x1tiAf56q+JEmS5Eb89oU8TuV9FskY0hJNFmRRgI3yr
-         eI78SWlCznXEPUNBqxHOWZBP3ndfCDuKPacvwTrioHBR8imdGuvzpqkG+4cTP0T/jIcI
-         xZ8g==
-X-Gm-Message-State: AOAM531o6+NHeYwFjL43IY7OUUvEojelIP74iBRKDaV3ll5tzJVzdjYY
-        QtrmW7NztH1AIGv3oCxRwdT4onfhy4cEzq3DkJTN6g==
-X-Google-Smtp-Source: ABdhPJx4ijkW7EXThE7IEUkuoMX94fseTVCvyL5IB0jVI7NHFnm8gUlDuA7v0EB1SpUWMQV6fGMeZ8hrRuUQP8TDxTU=
-X-Received: by 2002:a81:1008:0:b0:2d6:58bf:80d5 with SMTP id
- 8-20020a811008000000b002d658bf80d5mr23462032ywq.441.1645540198361; Tue, 22
- Feb 2022 06:29:58 -0800 (PST)
+        Tue, 22 Feb 2022 09:30:48 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0E06015DDF6;
+        Tue, 22 Feb 2022 06:30:23 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CD73D139F;
+        Tue, 22 Feb 2022 06:30:22 -0800 (PST)
+Received: from [10.57.9.152] (unknown [10.57.9.152])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id AF56D3F5A1;
+        Tue, 22 Feb 2022 06:30:20 -0800 (PST)
+Message-ID: <38a2f694-3dd9-8d3f-68bd-986006499000@arm.com>
+Date:   Tue, 22 Feb 2022 14:30:19 +0000
 MIME-Version: 1.0
-References: <20220221084908.568970525@linuxfoundation.org>
-In-Reply-To: <20220221084908.568970525@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Tue, 22 Feb 2022 19:59:47 +0530
-Message-ID: <CA+G9fYuXOjvWhfxP7tCP+K764kC2nFMwO5mDzHtrEGFzEprBtw@mail.gmail.com>
-Subject: Re: [PATCH 4.9 00/33] 4.9.303-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com,
-        Trond Myklebust <trond.myklebust@hammerspace.com>,
-        Anna Schumaker <anna.schumaker@netapp.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [RFC][PATCH 1/2] dt-bindings: power: add Energy Model bindings
+Content-Language: en-US
+To:     Rob Herring <robh@kernel.org>
+Cc:     dianders@chromium.org, viresh.kumar@linaro.org, nm@ti.com,
+        rafael@kernel.org, robh+dt@kernel.org, sboyd@kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dietmar.eggemann@arm.com, devicetree@vger.kernel.org,
+        daniel.lezcano@linaro.org, mka@chromium.org
+References: <20220221225131.15836-1-lukasz.luba@arm.com>
+ <20220221225131.15836-2-lukasz.luba@arm.com>
+ <1645539763.088690.3016157.nullmailer@robh.at.kernel.org>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <1645539763.088690.3016157.nullmailer@robh.at.kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 21 Feb 2022 at 14:22, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 4.9.303 release.
-> There are 33 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Wed, 23 Feb 2022 08:48:58 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-=
-4.9.303-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-4.9.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
-
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
-
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-NOTE:
-This build warning found on all architectures,
-
-> Trond Myklebust <trond.myklebust@hammerspace.com>
->     NFS: Do not report writeback errors in nfs_getattr()
-
-fs/nfs/inode.c: In function 'nfs_getattr':
-fs/nfs/inode.c:693:1: warning: label 'out' defined but not used [-Wunused-l=
-abel]
-  693 | out:
-      | ^~~
+Hi Rob,
 
 
-## Build
-* kernel: 4.9.303-rc1
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-4.9.y
-* git commit: 6686f147d38ff2b3ffc43718976bb9ff43c5fcc5
-* git describe: v4.9.302-34-g6686f147d38f
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.9.y/build/v4.9.3=
-02-34-g6686f147d38f
+On 2/22/22 14:22, Rob Herring wrote:
+> On Mon, 21 Feb 2022 22:51:30 +0000, Lukasz Luba wrote:
+>> Add DT bindings for the Energy Model information.
+>>
+>> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
+>> ---
+>>   .../bindings/power/energy-model.yaml          | 51 +++++++++++++++++++
+>>   1 file changed, 51 insertions(+)
+>>   create mode 100644 Documentation/devicetree/bindings/power/energy-model.yaml
+>>
+> 
+> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+> on your patch (DT_CHECKER_FLAGS is new in v5.13):
+> 
+> yamllint warnings/errors:
+> ./Documentation/devicetree/bindings/power/energy-model.yaml:34:5: [warning] wrong indentation: expected 2 but found 4 (indentation)
+> ./Documentation/devicetree/bindings/power/energy-model.yaml:35:8: [warning] wrong indentation: expected 6 but found 7 (indentation)
+> ./Documentation/devicetree/bindings/power/energy-model.yaml:36:16: [warning] wrong indentation: expected 9 but found 15 (indentation)
+> ./Documentation/devicetree/bindings/power/energy-model.yaml:35:39: [error] syntax error: expected ',' or '}', but got '{' (syntax)
+> 
+> dtschema/dtc warnings/errors:
+> make[1]: *** Deleting file 'Documentation/devicetree/bindings/power/energy-model.example.dts'
+> Traceback (most recent call last):
+>    File "/usr/local/bin/dt-extract-example", line 46, in <module>
+>      binding = yaml.load(open(args.yamlfile, encoding='utf-8').read())
+>    File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/main.py", line 434, in load
+>      return constructor.get_single_data()
+>    File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/constructor.py", line 119, in get_single_data
+>      node = self.composer.get_single_node()
+>    File "_ruamel_yaml.pyx", line 706, in _ruamel_yaml.CParser.get_single_node
+>    File "_ruamel_yaml.pyx", line 724, in _ruamel_yaml.CParser._compose_document
+>    File "_ruamel_yaml.pyx", line 775, in _ruamel_yaml.CParser._compose_node
+>    File "_ruamel_yaml.pyx", line 889, in _ruamel_yaml.CParser._compose_mapping_node
+>    File "_ruamel_yaml.pyx", line 775, in _ruamel_yaml.CParser._compose_node
+>    File "_ruamel_yaml.pyx", line 891, in _ruamel_yaml.CParser._compose_mapping_node
+>    File "_ruamel_yaml.pyx", line 904, in _ruamel_yaml.CParser._parse_next_event
+> ruamel.yaml.parser.ParserError: while parsing a flow mapping
+>    in "<unicode string>", line 34, column 5
+> did not find expected ',' or '}'
+>    in "<unicode string>", line 35, column 39
+> make[1]: *** [Documentation/devicetree/bindings/Makefile:25: Documentation/devicetree/bindings/power/energy-model.example.dts] Error 1
+> make[1]: *** Waiting for unfinished jobs....
+> ./Documentation/devicetree/bindings/power/energy-model.yaml:  while parsing a flow mapping
+>    in "<unicode string>", line 34, column 5
+> did not find expected ',' or '}'
+>    in "<unicode string>", line 35, column 39
+> /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/power/energy-model.yaml: ignoring, error parsing file
+> make: *** [Makefile:1398: dt_binding_check] Error 2
+> 
+> doc reference errors (make refcheckdocs):
+> 
+> See https://patchwork.ozlabs.org/patch/1595776
+> 
+> This check can fail if there are any dependencies. The base for a patch
+> series is generally the most recent rc1.
+> 
+> If you already ran 'make dt_binding_check' and didn't see the above
+> error(s), then make sure 'yamllint' is installed and dt-schema is up to
+> date:
+> 
+> pip3 install dtschema --upgrade
+> 
+> Please check and re-submit.
+> 
 
-## Test Regressions (compared to v4.9.302-27-ge4a64678c410)
-No test regressions found.
+This new dt bindings idea is abandoned. We would go for
+a new entry in the OPP node: "opp-microwatt".
+I've sent a v2.
 
-## Metric Regressions (compared to v4.9.302-27-ge4a64678c410)
-Build warning found on all architectures
-fs/nfs/inode.c: In function 'nfs_getattr':
-fs/nfs/inode.c:693:1: warning: label 'out' defined but not used [-Wunused-l=
-abel]
-  693 | out:
-      | ^~~
+BTW, I've tried to run this check, but for some reason my python failed
+when I tried to upgrade the dtschema:
 
-## Test Fixes (compared to v4.9.302-27-ge4a64678c410)
-No test fixes found.
+'Could not find a version that satisfies the requirement 
+jsonschema>=4.1.2 (from dtschema)'
 
-## Metric Fixes (compared to v4.9.302-27-ge4a64678c410)
-No metric fixes found.
+It used to work. I'll probaby have to invest more time and figure
+out why my pip3 fails.
 
-## Test result summary
-total: 55842, pass: 45907, fail: 274, skip: 8635, xfail: 1026
-
-## Build Summary
-* arm: 130 total, 130 passed, 0 failed
-* arm64: 32 total, 32 passed, 0 failed
-* dragonboard-410c: 1 total, 1 passed, 0 failed
-* hi6220-hikey: 1 total, 1 passed, 0 failed
-* i386: 19 total, 19 passed, 0 failed
-* juno-r2: 1 total, 1 passed, 0 failed
-* mips: 22 total, 22 passed, 0 failed
-* sparc: 12 total, 12 passed, 0 failed
-* x15: 2 total, 1 passed, 1 failed
-* x86: 1 total, 1 passed, 0 failed
-* x86_64: 30 total, 30 passed, 0 failed
-
-## Test suites summary
-* fwts
-* kselftest-android
-* kselftest-bpf
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-* kvm-unit-tests
-* libhugetlbfs
-* linux-log-parser
-* ltp-cap_bounds-tests
-* ltp-commands-tests
-* ltp-containers-tests
-* ltp-controllers-tests
-* ltp-cpuhotplug-tests
-* ltp-crypto-tests
-* ltp-cve-tests
-* ltp-dio-tests
-* ltp-fcntl-locktests-tests
-* ltp-filecaps-tests
-* ltp-fs-tests
-* ltp-fs_bind-tests
-* ltp-fs_perms_simple-tests
-* ltp-fsx-tests
-* ltp-hugetlb-tests
-* ltp-io-tests
-* ltp-ipc-tests
-* ltp-math-tests
-* ltp-mm-tests
-* ltp-nptl-tests
-* ltp-open-posix-tests
-* ltp-pty-tests
-* ltp-sched-tests
-* ltp-securebits-tests
-* ltp-syscalls-tests
-* ltp-tracing-tests
-* network-basic-tests
-* packetdrill
-* perf
-* ssuite
-* v4l2-compliance
-
---
-Linaro LKFT
-https://lkft.linaro.org
+Regards,
+Lukasz

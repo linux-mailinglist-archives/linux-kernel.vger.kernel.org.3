@@ -2,108 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCC494BF819
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 13:34:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B61684BF81E
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 13:38:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231965AbiBVMfC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 07:35:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42120 "EHLO
+        id S231971AbiBVMjI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 07:39:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbiBVMfB (ORCPT
+        with ESMTP id S229453AbiBVMjH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 07:35:01 -0500
-Received: from mail-yb1-f174.google.com (mail-yb1-f174.google.com [209.85.219.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D4D2120E81
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 04:34:32 -0800 (PST)
-Received: by mail-yb1-f174.google.com with SMTP id u12so26752977ybd.7
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 04:34:32 -0800 (PST)
+        Tue, 22 Feb 2022 07:39:07 -0500
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38F6A10C531
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 04:38:39 -0800 (PST)
+Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com [209.85.218.70])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id D4BDE3FCAC
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 12:38:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1645533517;
+        bh=tCoZe2yzRkWx7YBNb8KVNP+e9eczVEpZUbOGuRodh+c=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=E1cyq17LN9Gbq6HFbjl0wlrrZ9GSSuV/g8M6d/YVuyFCKEhfS6oIxkqJN1kC2Dprh
+         IWzirtTidad3oZnB8EtGIR3E+FDBQGlC1zvq++jTfDpZyDyXyy1dHFd/UKtqA6BH5j
+         J9vGSWRMojzrRMw0t5g+xn0EGF/aumJDG13d4wYe0xLheVSv05isf8Rp+AcQkNynWH
+         K4y7J0GdmyMKMg22ELXjOM/WUXL7YFlpoVPiczVq9jTOD4of5mwqu9hi4rn+wytFk/
+         63EiCxe7nBHc3qcZX/Yg/iewFpIvx69bXw9yMVYd8hBNFk4Z7lqrdy05LtsJeb2qep
+         rHUF7uWpjWlIA==
+Received: by mail-ej1-f70.google.com with SMTP id kw5-20020a170907770500b006ba314a753eso5685485ejc.21
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 04:38:37 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=xQTOgc/LLcovnMJ3XI2DYar0j+/5XSpX89mzJAqEmDk=;
-        b=sAaFGaFjLJfBS8vPGvEwmtO5K9v6ZYgkxfPjpFUdQN+YVpF9JXvuhs7d6wHh74HI2U
-         ODXwCeRex8cm6P59sFwCaQNN39sToLTxSVEVxLUWmi0NAtZetz4QQT7ce8cGYys2kkOR
-         2hxNm6vhkNQLfmD6pmo/mquA01BZihKcDr0QkBEhixo7boNYIAnfyPWd5csCLjhY5FB7
-         W5jxTrUTvxzv8q42vPmFhOFWI1/iMk7dkjSeoRk0CVvgvrx9Ra5t5gXlJ9nepwm28LN+
-         Hm3sACTXlX13B+VREuQm0Uf9IrL57ROnB9adwdHazaKVqhUsu88SRKlhtIgv6WK9CYQU
-         lxmA==
-X-Gm-Message-State: AOAM530QlfRkz0RLgXrWZN9InhBUwwHFhgFuGnZ8e5NBnuk6nrQ9vnCH
-        rYoTEgwN9n2nrKwbT7gW5tFZsIMf8XkOnqWm4H4=
-X-Google-Smtp-Source: ABdhPJw7uQG6yBKichLPQ3CDTufYxTtlsyfaMjI9aGfrueGe3PuCKtQXY/GY4HunKd5+WFrhI5dbRxMj5md/H6eQJSI=
-X-Received: by 2002:a25:da16:0:b0:624:64e1:35b with SMTP id
- n22-20020a25da16000000b0062464e1035bmr13124544ybf.153.1645533271376; Tue, 22
- Feb 2022 04:34:31 -0800 (PST)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=tCoZe2yzRkWx7YBNb8KVNP+e9eczVEpZUbOGuRodh+c=;
+        b=tURnebzIDR1g08r/IHrntVrzsgFVP+nFtem8Sxw0rQod2gFxDaV88Vr/lDVDIszTcv
+         cwH1vMCEpgYG/QyXXP90h28R2sjQAWHj3yeklSEty8y9BWk/RxDrwx++OHKYIvypQiUh
+         DFLtX3Yo28/AttjEyLIwnSE3rxDPmcMT7gd9/sonMBiRydDsGIH/18rNdOgrwiJEAGAJ
+         8gPgXcoVKVYUbsONHHp16ZPxJljXDo6cKxKX1XikPrBiUZFDPpp8FNhJ0DCG72p3XOcq
+         J6KBWoYqeTTaABKnP7DytY4T7IFVZPuNcbwTic+6beep5A/FejQMHrJ+VH+BaF5h4wdW
+         Rw5A==
+X-Gm-Message-State: AOAM533jFeXxU49YmXaDi1YbxcKPjRrVP73UwHwHPxkoYbvjZ1eZnbTp
+        FLrZ+vD92gUiXNDqRBu22UNS0vY6DQvQpLpzTrqHtiBsVg3L+xFx6HnnKXFMsjhwUAzDE1+Ft8b
+        toh1fwN0U3nffp9xDDpeSBDPcw3kgacqRYg8a76x7Lg==
+X-Received: by 2002:a50:f159:0:b0:411:29b9:1323 with SMTP id z25-20020a50f159000000b0041129b91323mr25718217edl.258.1645533517381;
+        Tue, 22 Feb 2022 04:38:37 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxZVSJL6nHxnMssJcXHLs+QBrBhBgOHNGm9aPdXJN3nivIczMccX7Nia80GPAGsF7xhGVVojg==
+X-Received: by 2002:a50:f159:0:b0:411:29b9:1323 with SMTP id z25-20020a50f159000000b0041129b91323mr25718207edl.258.1645533517239;
+        Tue, 22 Feb 2022 04:38:37 -0800 (PST)
+Received: from [192.168.0.124] (xdsl-188-155-181-108.adslplus.ch. [188.155.181.108])
+        by smtp.gmail.com with ESMTPSA id s11sm6401498edt.10.2022.02.22.04.38.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 22 Feb 2022 04:38:36 -0800 (PST)
+Message-ID: <83aa53cb-e444-9397-96d2-eaeb92db6492@canonical.com>
+Date:   Tue, 22 Feb 2022 13:38:36 +0100
 MIME-Version: 1.0
-References: <20220222020021.19640-1-chuansheng.liu@intel.com>
-In-Reply-To: <20220222020021.19640-1-chuansheng.liu@intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 22 Feb 2022 13:34:19 +0100
-Message-ID: <CAJZ5v0hziz4Eyk7qFgYMM4YYEZTpd_faukMczg7hnou9yP9yiQ@mail.gmail.com>
-Subject: Re: [PATCH] thermal: int340x: fix memory leak in int3400_notify()
-To:     Chuansheng Liu <chuansheng.liu@intel.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        "Zhang, Rui" <rui.zhang@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] ASoC: samsung: i2s: check the return value of kstrdup()
+Content-Language: en-US
+To:     xkernel.wang@foxmail.com, tiwai@suse.com, perex@perex.cz
+Cc:     s.nawrocki@samsung.com, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org
+References: <tencent_5F9F4223DC44A9ECBF02649AF934F786E305@qq.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <tencent_5F9F4223DC44A9ECBF02649AF934F786E305@qq.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Please resend this with a CC to linux-pm@vger.kernel.org.  Thanks!
-
-On Tue, Feb 22, 2022 at 3:13 AM Chuansheng Liu <chuansheng.liu@intel.com> wrote:
->
-> It is easy to hit the below memory leaks in my TigerLake platform:
->
-> --
-> unreferenced object 0xffff927c8b91dbc0 (size 32):
->   comm "kworker/0:2", pid 112, jiffies 4294893323 (age 83.604s)
->   hex dump (first 32 bytes):
->     4e 41 4d 45 3d 49 4e 54 33 34 30 30 20 54 68 65  NAME=INT3400 The
->     72 6d 61 6c 00 6b 6b 6b 6b 6b 6b 6b 6b 6b 6b a5  rmal.kkkkkkkkkk.
->   backtrace:
->     [<ffffffff9c502c3e>] __kmalloc_track_caller+0x2fe/0x4a0
->     [<ffffffff9c7b7c15>] kvasprintf+0x65/0xd0
->     [<ffffffff9c7b7d6e>] kasprintf+0x4e/0x70
->     [<ffffffffc04cb662>] int3400_notify+0x82/0x120 [int3400_thermal]
->     [<ffffffff9c8b7358>] acpi_ev_notify_dispatch+0x54/0x71
->     [<ffffffff9c88f1a7>] acpi_os_execute_deferred+0x17/0x30
->     [<ffffffff9c2c2c0a>] process_one_work+0x21a/0x3f0
->     [<ffffffff9c2c2e2a>] worker_thread+0x4a/0x3b0
->     [<ffffffff9c2cb4dd>] kthread+0xfd/0x130
->     [<ffffffff9c201c1f>] ret_from_fork+0x1f/0x30
+On 22/02/2022 12:53, xkernel.wang@foxmail.com wrote:
+> From: Xiaoke Wang <xkernel.wang@foxmail.com>
+> 
+> kstrdup() is a memory allocation function which can return NULL when
+> some internal memory errors happen. It is better to check the return
+> value of it to catch the error in time.
+> 
+> Signed-off-by: Xiaoke Wang <xkernel.wang@foxmail.com>
 > ---
->
-> Fix it by calling kfree() accordingly.
->
-> Signed-off-by: Chuansheng Liu <chuansheng.liu@intel.com>
-> ---
->  drivers/thermal/intel/int340x_thermal/int3400_thermal.c | 4 ++++
+>  sound/soc/samsung/i2s.c | 4 ++++
 >  1 file changed, 4 insertions(+)
->
-> diff --git a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-> index 72acb1f61849..4f478812cb51 100644
-> --- a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-> +++ b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-> @@ -404,6 +404,10 @@ static void int3400_notify(acpi_handle handle,
->         thermal_prop[3] = kasprintf(GFP_KERNEL, "EVENT=%d", therm_event);
->         thermal_prop[4] = NULL;
->         kobject_uevent_env(&priv->thermal->device.kobj, KOBJ_CHANGE, thermal_prop);
-> +       kfree(thermal_prop[0]);
-> +       kfree(thermal_prop[1]);
-> +       kfree(thermal_prop[2]);
-> +       kfree(thermal_prop[3]);
->  }
->
->  static int int3400_thermal_get_temp(struct thermal_zone_device *thermal,
-> --
-> 2.25.0.rc2
->
+> 
+
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+
+
+Best regards,
+Krzysztof

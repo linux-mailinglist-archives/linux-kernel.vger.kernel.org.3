@@ -2,137 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B11E24BF4D9
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 10:36:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE9814BF4D1
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 10:35:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230241AbiBVJhC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 04:37:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34944 "EHLO
+        id S230224AbiBVJgR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 04:36:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229747AbiBVJg7 (ORCPT
+        with ESMTP id S229489AbiBVJgP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 04:36:59 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6624C13D45
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 01:36:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645522594; x=1677058594;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=epDTGwXl0hnH02ZsDt1lDZBbtedZrOrSwE4ZeXvSN2A=;
-  b=GniTl7ITRytyyjaWKFkMcDrAXpBNxTqIHxjEfP8rxm2gH7gEZmoVtc7P
-   Rk1BD/IQJ6xCxUHmIL30VgUPflTuCkosJQHDeX41diOPvoKvFFwrxXXvz
-   4Cm1sVDEGkmF95qszUlgZp9e8VpKbIoFHvFzrHsyUzTA6GoT0wJbX8Iuo
-   yxZujRbzK8Yj01gcRp8jIeWmnDwGGFuIYmVvAIwexw8gEQ+BA4caLgjSw
-   aF/MZH7SjUn3b7/d8T29DNk1b8J+389vwp+YiyWQElixLMzenLk3GQFkm
-   zobHESJMXE18y1UiKsJ4ww9wIXBI5LGYzm/8U9ZQKbYVHQhwfw9xmIJjb
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10265"; a="251603503"
-X-IronPort-AV: E=Sophos;i="5.88,387,1635231600"; 
-   d="scan'208";a="251603503"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2022 01:36:34 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,387,1635231600"; 
-   d="scan'208";a="542878849"
-Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 22 Feb 2022 01:36:32 -0800
-Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nMRax-00005O-Ub; Tue, 22 Feb 2022 09:36:31 +0000
-Date:   Tue, 22 Feb 2022 17:35:30 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Samuel Holland <samuel@sholland.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Marc Zyngier <maz@kernel.org>
-Subject: drivers/irqchip/irq-sun6i-r.c:215:79: sparse: sparse: Using plain
- integer as NULL pointer
-Message-ID: <202202221714.fORO2j1w-lkp@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 22 Feb 2022 04:36:15 -0500
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EB36156C71;
+        Tue, 22 Feb 2022 01:35:49 -0800 (PST)
+Received: by mail-pl1-x632.google.com with SMTP id u5so15125731ple.3;
+        Tue, 22 Feb 2022 01:35:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=kSokq3mwNVmEXiv+4+dH+H1BL4icCF0v47issCuCpjc=;
+        b=WRSbUkBKdl/FP1flca2/Wpw4wj4IHKFGsTx3im4n2aKZlaVE789JPtYpB2944u7hKH
+         ZqDc8aFFYOx+Uj5Ui7qUdw6YXw6ikvOghnqYJfvfr+Pp05GseVmJQrKlNfYUkjs+fu43
+         guL9AWOUVQuc0NJMADK7wJ22VpcSULxuaU0GLfmfiVSf4+d4kM4QcqMHPPcKJDD7Uka3
+         bZvOwiy1sUpsq8h18uMXlwMl64+9fmaIeevyeArCPnOhGwFMYblZh+Nfp5Xxy/nFpSaX
+         kauMVcsO+dkhaFHEUCQ7/+A2afN0DCJ8KC0SUfRae7y6JLTNpozOr8DnWBfYqGIb+fvy
+         Sg1A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=kSokq3mwNVmEXiv+4+dH+H1BL4icCF0v47issCuCpjc=;
+        b=rHeQphLyjRFQ50srZ5Y4MT0jGwZ5GGEZ3MCvZFw+S/ml6l9k9KAEcMDRbc08kH6ra1
+         MF+lbb8LB/QPq1jncG7h53Gc83de00Cw9zZQ7eMsJiBbzSfsUt+FKWznTwFuX0jRFQdl
+         o0CX1yrA+IlN7VLPnm0i/rcO3ipt4ia04mudlgQgd1vL8szxnD7eckxzo52PuW39C3dF
+         +ispT/qU0wEMMmnzXNMhr6HaVXVhCbY9Odq4HYjPz9NbJWUNOGY1lxHTdWd3OGxmMgVW
+         BH8kYU8ZwchuhZspsdlIuD2oH4jtkuK6CoLh/QUHUHK4KSyBb11LZfr+pnw14sal1OHb
+         PPDg==
+X-Gm-Message-State: AOAM530mA+0WRtWCj0B7wM+3tL6+K9m9HEP5c8doVY4GpC8scVzzsNuU
+        VeRt/GrLPtRvSY0l4Nd0JC1YaZ7mwV2VIQ==
+X-Google-Smtp-Source: ABdhPJxfCexfzOzl1CTDM3NcW43b6drAGbnWvxMeL2MWrmBM15psiBD+tYHMZMAeaXtvXhhkgk5UYw==
+X-Received: by 2002:a17:90a:db90:b0:1bc:529f:7071 with SMTP id h16-20020a17090adb9000b001bc529f7071mr3237535pjv.40.1645522548580;
+        Tue, 22 Feb 2022 01:35:48 -0800 (PST)
+Received: from scdiu3.sunplus.com ([113.196.136.192])
+        by smtp.googlemail.com with ESMTPSA id h20sm15390650pfq.162.2022.02.22.01.35.46
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 22 Feb 2022 01:35:48 -0800 (PST)
+From:   Hammer Hsieh <hammerh0314@gmail.com>
+To:     gregkh@linuxfoundation.org, robh+dt@kernel.org,
+        linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, jirislaby@kernel.org,
+        p.zabel@pengutronix.de
+Cc:     wells.lu@sunplus.com, hammer.hsieh@sunplus.com,
+        Hammer Hsieh <hammerh0314@gmail.com>
+Subject: [PATCH v9 0/2] Add UART driver for Suplus SP7021 SoC
+Date:   Tue, 22 Feb 2022 17:36:01 +0800
+Message-Id: <1645522563-17183-1-git-send-email-hammerh0314@gmail.com>
+X-Mailer: git-send-email 2.7.4
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   038101e6b2cd5c55f888f85db42ea2ad3aecb4b6
-commit: 4e34614636b31747b190488240a95647c227021f irqchip/sun6i-r: Use a stacked irqchip driver
-date:   1 year, 1 month ago
-config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20220222/202202221714.fORO2j1w-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 11.2.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=4e34614636b31747b190488240a95647c227021f
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 4e34614636b31747b190488240a95647c227021f
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/gpu/drm/tegra/ drivers/gpu/host1x/ drivers/hid/ drivers/irqchip/ drivers/remoteproc/ drivers/scsi/hisi_sas/ security/integrity/ima/
+This is a patch series for UART driver for Suplus SP7021 SoC.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Sunplus SP7021 is an ARM Cortex A7 (4 cores) based SoC. It integrates
+many peripherals (ex: UART. I2C, SPI, SDIO, eMMC, USB, SD card and
+etc.) into a single chip. It is designed for industrial control.
 
+Refer to:
+https://sunplus-tibbo.atlassian.net/wiki/spaces/doc/overview
+https://tibbo.com/store/plus1.html
 
-sparse warnings: (new ones prefixed by >>)
->> drivers/irqchip/irq-sun6i-r.c:215:79: sparse: sparse: Using plain integer as NULL pointer
+Refer to (UART):
+https://sunplus.atlassian.net/wiki/spaces/doc/pages/1873412290/13.+Universal+Asynchronous+Receiver+Transmitter+UART
 
-vim +215 drivers/irqchip/irq-sun6i-r.c
+Hammer Hsieh (2):
+  dt-bindings:serial:Add bindings doc for Sunplus SoC UART Driver
+  serial:sunplus-uart:Add Sunplus SoC UART Driver
 
-   184	
-   185	static int sun6i_r_intc_domain_alloc(struct irq_domain *domain,
-   186					     unsigned int virq,
-   187					     unsigned int nr_irqs, void *arg)
-   188	{
-   189		struct irq_fwspec *fwspec = arg;
-   190		struct irq_fwspec gic_fwspec;
-   191		unsigned long hwirq;
-   192		unsigned int type;
-   193		int i, ret;
-   194	
-   195		ret = sun6i_r_intc_domain_translate(domain, fwspec, &hwirq, &type);
-   196		if (ret)
-   197			return ret;
-   198		if (hwirq + nr_irqs > SUN6I_NR_MUX_BITS)
-   199			return -EINVAL;
-   200	
-   201		/* Construct a GIC-compatible fwspec from this fwspec. */
-   202		gic_fwspec = (struct irq_fwspec) {
-   203			.fwnode      = domain->parent->fwnode,
-   204			.param_count = 3,
-   205			.param       = { GIC_SPI, hwirq, type },
-   206		};
-   207	
-   208		ret = irq_domain_alloc_irqs_parent(domain, virq, nr_irqs, &gic_fwspec);
-   209		if (ret)
-   210			return ret;
-   211	
-   212		for (i = 0; i < nr_irqs; ++i, ++hwirq, ++virq) {
-   213			if (hwirq == nmi_hwirq) {
-   214				irq_domain_set_hwirq_and_chip(domain, virq, hwirq,
- > 215							      &sun6i_r_intc_nmi_chip, 0);
-   216				irq_set_handler(virq, handle_fasteoi_ack_irq);
-   217			} else {
-   218				/* Only the NMI is currently supported. */
-   219				return -EINVAL;
-   220			}
-   221		}
-   222	
-   223		return 0;
-   224	}
-   225	
+ .../bindings/serial/sunplus,sp7021-uart.yaml       |  56 ++
+ MAINTAINERS                                        |   6 +
+ drivers/tty/serial/Kconfig                         |  25 +
+ drivers/tty/serial/Makefile                        |   1 +
+ drivers/tty/serial/sunplus-uart.c                  | 770 +++++++++++++++++++++
+ include/uapi/linux/serial_core.h                   |   3 +
+ 6 files changed, 861 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/serial/sunplus,sp7021-uart.yaml
+ create mode 100644 drivers/tty/serial/sunplus-uart.c
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+-- 
+2.7.4
+

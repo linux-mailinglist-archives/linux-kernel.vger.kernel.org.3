@@ -2,153 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9AB34BF839
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 13:42:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EE824BF843
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 13:43:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232000AbiBVMm7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 07:42:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46236 "EHLO
+        id S232021AbiBVMn5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 07:43:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231993AbiBVMm4 (ORCPT
+        with ESMTP id S230466AbiBVMny (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 07:42:56 -0500
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C9FC122216;
-        Tue, 22 Feb 2022 04:42:31 -0800 (PST)
-Received: by mail-ed1-x534.google.com with SMTP id u18so36620008edt.6;
-        Tue, 22 Feb 2022 04:42:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=sZOLEDaGh1SF5st8EQEk8EIqOeyAcu0epbvUe7EMQfA=;
-        b=CtrlfUHtFIlffb9GrntCIKuLT7AfygnrZ9E5h3v2+48NWGW4ICXVWoOLZQHj1qffo9
-         NqmIXx3Mx/vKWRVk128yFnu44Mvpou1nrNMGLgffaVKOKS0Jr/eT89S2vyjmMzq27vzl
-         /AUi1eYf8/8DperuLUE9ujZRdAqXWsNpLztjUcdVebtEZj1PWaMIgtBuZPBrlpSDn+XI
-         /AJUQN2/hDlYrF/BJT+VUIqW8wHeOQxF02Xn572Dui+NodPgR4hlH2aiGwwo08lwcB2X
-         ANlHFqZ6FNXzoXYiZZsNuZgQwSywEwkdh4kuEVfKVO2QgaoNop+eYCIbArP3vod/QkhT
-         2W3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=sZOLEDaGh1SF5st8EQEk8EIqOeyAcu0epbvUe7EMQfA=;
-        b=eL3k29rCvoA4ymi+bQSEtcCJk1vgwozQmNtPBrBfjjk9XhiQa6NIzLvDFkZe/n6jb6
-         CNhuhckUzdyI6l1AGXZb0VUDmapGmZiQJNwdsSxFYvbOvOdfspdMIuoOQGuixo0WEaWe
-         zu1LFVfTNbPM2/DBU/nGmq0NcAq1gOnL8j0DvnviWi9+jDlGiP3pxiEOfMdOccE+OenJ
-         5EclWcDsvwhcOyI/EN4TsmhwmxuuDOR99rG6Xncx4jcyJHQ0YVp1hNcsBywnarqY4qM4
-         8zVrSEkXUSR7BXxvfnlkLMd5RA5EqPYco+VBc3F6t6RWwBrgKHRx2yKJtqxzrmgsB4cl
-         jU3w==
-X-Gm-Message-State: AOAM531Uh7bKbuMoJYCi9jpxIXMK4NigE3cuKGwh3WwDeSKOgQ6bHH/r
-        bJSgH8K4fVuwOxjGfM+sPiU=
-X-Google-Smtp-Source: ABdhPJxlzd38Mt5rRXYGTndmCY97WTXfiKT01qrwU2HkDalGwQg9uM1GFn1icvDOOboroyLwMZt0Zw==
-X-Received: by 2002:a50:9b12:0:b0:410:b926:d2d3 with SMTP id o18-20020a509b12000000b00410b926d2d3mr26282285edi.331.1645533749972;
-        Tue, 22 Feb 2022 04:42:29 -0800 (PST)
-Received: from krava ([83.240.63.118])
-        by smtp.gmail.com with ESMTPSA id bn15sm6301853ejb.93.2022.02.22.04.42.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Feb 2022 04:42:29 -0800 (PST)
-Date:   Tue, 22 Feb 2022 13:42:26 +0100
-From:   Jiri Olsa <olsajiri@gmail.com>
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>, lkml <linux-kernel@vger.kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>
-Subject: Re: [PATCH 0/8] bpf: Add fprobe link
-Message-ID: <YhTaMi9BN7p5FPGX@krava>
-References: <YfvvfLlM1FOTgvDm@krava>
- <20220204094619.2784e00c0b7359356458ca57@kernel.org>
- <CAADnVQJYY0Xm6M9O02E5rOkdQPX39NOOS4tM2jpwRLQvP-qDBg@mail.gmail.com>
- <20220204110704.7c6eaf43ff9c8f5fe9bf3179@kernel.org>
- <CAADnVQJfq_10H0V+u0w0rzyZ9uy7vq=T-3BMDANjEN8A3-prsQ@mail.gmail.com>
- <20220203211954.67c20cd3@gandalf.local.home>
- <CAADnVQKjNJjZDs+ZV7vcusEkKuDq+sWhSD3M5GtvNeZMx3Fcmg@mail.gmail.com>
- <20220204125942.a4bda408f536c2e3248955e1@kernel.org>
- <Yguo4v7c+3A0oW/h@krava>
- <CAEf4BzYO_B51TPgUnDXUPUsK55RSczwcnhuLz9DMbfO5JCj=Cw@mail.gmail.com>
+        Tue, 22 Feb 2022 07:43:54 -0500
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5A6C122F77;
+        Tue, 22 Feb 2022 04:43:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645533808; x=1677069808;
+  h=from:to:cc:subject:in-reply-to:references:date:
+   message-id:mime-version;
+  bh=V3OvJzcIYv9Xc/I5EnGnnaoV/n9suE3zy47qd9uxvdY=;
+  b=dq30ReBFRk1oDtE+KjAUesMwl76N53alJ8Yej0XpdSre37Nu8FDwMIpG
+   SUm/M2LqcxaqivsYBaWbbxkHb6QYMdRq1kAG8dUOzKTDg3pufM7du/kK4
+   mSJ/8pFngeTRVcDWl5Al6NTGxsncXCkROdkkNY2TGhpNOqOCccCebOGMW
+   9WzNYGBiU+WF3ERypsLDoe6cCsBNIlqlnGovz3IxbMMS9T4xnxoBU2kOb
+   TQ5fVJSsgm6pD97XOUsh2bGM5C8OdL2MhgmBS5x2r5Mw/AsEIoamMgkX8
+   S0GbLeHWzIWuGOoTCiq1vIC6t1Jy4YkvCgYigqdM/jGfBTVJI8UshsjgO
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10265"; a="251625687"
+X-IronPort-AV: E=Sophos;i="5.88,387,1635231600"; 
+   d="scan'208";a="251625687"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2022 04:43:28 -0800
+X-IronPort-AV: E=Sophos;i="5.88,387,1635231600"; 
+   d="scan'208";a="547725699"
+Received: from torta-mobl1.ger.corp.intel.com (HELO localhost) ([10.252.49.14])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2022 04:43:24 -0800
+From:   Jani Nikula <jani.nikula@linux.intel.com>
+To:     Colin Ian King <colin.i.king@gmail.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Vandita Kulkarni <vandita.kulkarni@intel.com>,
+        Manasi Navare <manasi.d.navare@intel.com>
+Subject: Re: [PATCH] drm/i915: make a handful of read-only arrays static const
+In-Reply-To: <20220222120323.86480-1-colin.i.king@gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <20220222120323.86480-1-colin.i.king@gmail.com>
+Date:   Tue, 22 Feb 2022 14:43:22 +0200
+Message-ID: <87tucr6phx.fsf@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAEf4BzYO_B51TPgUnDXUPUsK55RSczwcnhuLz9DMbfO5JCj=Cw@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 16, 2022 at 10:27:19AM -0800, Andrii Nakryiko wrote:
+On Tue, 22 Feb 2022, Colin Ian King <colin.i.king@gmail.com> wrote:
+> Don't populate the read-only arrays on the stack but instead make
+> them static const. Also makes the object code a little smaller.
+> Reformat the statements to clear up checkpatch warning.
+>
+> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+> ---
+>  drivers/gpu/drm/i915/display/intel_vdsc.c | 16 ++++++++++++----
+>  1 file changed, 12 insertions(+), 4 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/i915/display/intel_vdsc.c b/drivers/gpu/drm/i915/display/intel_vdsc.c
+> index 3faea903b9ae..d49f66237ec3 100644
+> --- a/drivers/gpu/drm/i915/display/intel_vdsc.c
+> +++ b/drivers/gpu/drm/i915/display/intel_vdsc.c
+> @@ -378,10 +378,18 @@ calculate_rc_params(struct rc_parameters *rc,
+>  {
+>  	int bpc = vdsc_cfg->bits_per_component;
+>  	int bpp = vdsc_cfg->bits_per_pixel >> 4;
+> -	int ofs_und6[] = { 0, -2, -2, -4, -6, -6, -8, -8, -8, -10, -10, -12, -12, -12, -12 };
+> -	int ofs_und8[] = { 2, 0, 0, -2, -4, -6, -8, -8, -8, -10, -10, -10, -12, -12, -12 };
+> -	int ofs_und12[] = { 2, 0, 0, -2, -4, -6, -8, -8, -8, -10, -10, -10, -12, -12, -12 };
+> -	int ofs_und15[] = { 10, 8, 6, 4, 2, 0, -2, -4, -6, -8, -10, -10, -12, -12, -12 };
+> +	static const int ofs_und6[] = {
+> +		0, -2, -2, -4, -6, -6, -8, -8, -8, -10, -10, -12, -12, -12, -12
+> +	};
+> +	static const int ofs_und8[] = {
+> +		2, 0, 0, -2, -4, -6, -8, -8, -8, -10, -10, -10, -12, -12, -12
+> +	};
+> +	static const int ofs_und12[] = {
+> +		2, 0, 0, -2, -4, -6, -8, -8, -8, -10, -10, -10, -12, -12, -12
+> +	};
 
-SNIP
+Hmm, I wonder why the same values are duplicated in ofs_und8 and
+ofs_und12. Cc: Vandita, Manasi.
 
-> >
-> > hi,
-> > tying to kick things further ;-) I was thinking about bpf side of this
-> > and we could use following interface:
-> >
-> >   enum bpf_attach_type {
-> >     ...
-> >     BPF_TRACE_KPROBE_MULTI
-> >   };
-> >
-> >   enum bpf_link_type {
-> >     ...
-> >     BPF_LINK_TYPE_KPROBE_MULTI
-> >   };
-> >
-> >   union bpf_attr {
-> >
-> >     struct {
-> >       ...
-> >       struct {
-> >         __aligned_u64   syms;
-> >         __aligned_u64   addrs;
-> >         __aligned_u64   cookies;
-> >         __u32           cnt;
-> >         __u32           flags;
-> >       } kprobe_multi;
-> >     } link_create;
-> >   }
-> >
-> > because from bpf user POV it's new link for attaching multiple kprobes
-> > and I agree new 'fprobe' type name in here brings more confusion, using
-> > kprobe_multi is straightforward
-> >
-> > thoguhts?
-> 
-> I think this makes sense. We do need new type of link to store ip ->
-> cookie mapping anyways.
-> 
-> Is there any chance to support this fast multi-attach for uprobe? If
-> yes, we might want to reuse the same link for both (so should we name
-> it more generically? on the other hand BPF program type for uprobe is
-> BPF_PROG_TYPE_KPROBE anyway, so keeping it as "kprobe" also would be
-> consistent with what we have today).
-> 
-> But yeah, the main question is whether there is something preventing
-> us from supporting multi-attach uprobe as well? It would be really
-> great for USDT use case.
+Regardless, the patch is sane.
 
-I need to check with uprobes, my understanding ends at perf/trace
-code calling uprobe_register ;-)
+Reviewed-by: Jani Nikula <jani.nikula@intel.com>
 
-maybe I should first try if uprobes suffer the same performance issue
+> +	static const int ofs_und15[] = {
+> +		10, 8, 6, 4, 2, 0, -2, -4, -6, -8, -10, -10, -12, -12, -12
+> +	};
+>  	int qp_bpc_modifier = (bpc - 8) * 2;
+>  	u32 res, buf_i, bpp_i;
 
-I'll send another version with above interface, because there's
-tons of other fixes, and by the time for next version we might
-have answer for the interface change
-
-jirka
+-- 
+Jani Nikula, Intel Open Source Graphics Center

@@ -2,253 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A7614C03AA
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 22:18:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 81C654C03AF
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 22:19:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235744AbiBVVTK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 16:19:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51310 "EHLO
+        id S235751AbiBVVUT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 16:20:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234047AbiBVVTI (ORCPT
+        with ESMTP id S235735AbiBVVUS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 16:19:08 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 342F510BBC9;
-        Tue, 22 Feb 2022 13:18:37 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9C670139F;
-        Tue, 22 Feb 2022 13:18:36 -0800 (PST)
-Received: from [10.57.40.147] (unknown [10.57.40.147])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6E55F3F70D;
-        Tue, 22 Feb 2022 13:18:32 -0800 (PST)
-Message-ID: <3d4c3bf1-fed6-f640-dc20-36d667de7461@arm.com>
-Date:   Tue, 22 Feb 2022 21:18:23 +0000
+        Tue, 22 Feb 2022 16:20:18 -0500
+Received: from mail-oo1-xc2d.google.com (mail-oo1-xc2d.google.com [IPv6:2607:f8b0:4864:20::c2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B925E124C10
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 13:19:51 -0800 (PST)
+Received: by mail-oo1-xc2d.google.com with SMTP id k13-20020a4a948d000000b003172f2f6bdfso19498833ooi.1
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 13:19:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to:cc;
+        bh=PZXGdH7QOkFGdyZL9vslSSuJH2T6cBvsFBVFd42Xdko=;
+        b=RwQ1qfHBX5YIxEy+KPyWxkJlAkJ/VTS081sLpYhZ0tAeKOngBOgBWhMOaTMHHoekQ5
+         seKF/z0Zlz2Lmun8lOKI8aBPHiQZHtZ9LDVAQTPhoRLdCa/L+35K1WP4BjQa1fRMMs0l
+         CQ8EwktT9W/rqR0ixUMXRnp8SEpUEob+vtQLY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to:cc;
+        bh=PZXGdH7QOkFGdyZL9vslSSuJH2T6cBvsFBVFd42Xdko=;
+        b=aiNi3z0e5x2MH2htMoy3fZ6+d5Ip9uhc8tYZiPJqhCRrbO87KBN7Sycucog9B9QLe8
+         pDc0upa7sgPJ/o/8G5/Bbve7boK7TXtoRFxu/WKI/qBsEMIHkDH5r1Cqlf65Kt2RwG4F
+         nrNAOXtzFpe+7H4yYxvOkUID3lU0L5qPtzvOmR0WMVL/Su+veDqM6MfSoC+QQfJY9eu6
+         oBatyv4YyOL7FFbt1LTLCyMRRYIWKT2wnrBBdhYjoZqfdyWUIbe8tHwDyNMGBGq7FXsW
+         W3KFASsyYMonASy1P0cMF+EboPFQMkNZlSY5JOtz/po+Gm2mQSsUg6eVy7ZESlK5XwRk
+         DzLg==
+X-Gm-Message-State: AOAM532ruZkScswTwqyFYxBxjq4OZi7hK+YkhzLdoLKS0H3/mSF5pWZh
+        s9nOK4K0U+exeVaIQ3zUbXTKnQ0ohR3Serq5qpD/7g==
+X-Google-Smtp-Source: ABdhPJy7r6Dp6z5t3lrBYpzhD+7i1xvLB2uoHm7Qkx145lEhXBxvO1W68wKoliw01/Yq59Ok3PUuUtXn3CmG57UGp7U=
+X-Received: by 2002:a05:6870:5829:b0:c8:9f42:f919 with SMTP id
+ r41-20020a056870582900b000c89f42f919mr2737701oap.54.1645564791160; Tue, 22
+ Feb 2022 13:19:51 -0800 (PST)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Tue, 22 Feb 2022 21:19:50 +0000
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH v6 02/11] driver core: Add dma_cleanup callback in
- bus_type
-Content-Language: en-GB
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        Lu Baolu <baolu.lu@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Joerg Roedel <joro@8bytes.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, kvm@vger.kernel.org,
-        rafael@kernel.org, David Airlie <airlied@linux.ie>,
-        linux-pci@vger.kernel.org,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Diana Craciun <diana.craciun@oss.nxp.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Will Deacon <will@kernel.org>,
-        Stuart Yoder <stuyoder@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        linux-kernel@vger.kernel.org, Li Yang <leoyang.li@nxp.com>,
-        iommu@lists.linux-foundation.org,
-        Jacob jun Pan <jacob.jun.pan@intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-References: <20220218005521.172832-1-baolu.lu@linux.intel.com>
- <20220218005521.172832-3-baolu.lu@linux.intel.com>
- <YhCdEmC2lYStmUSL@infradead.org>
- <1d8004d3-1887-4fc7-08d2-0e2ee6b5fdcb@arm.com>
- <20220221234837.GA10061@nvidia.com>
- <1acb8748-8d44-688d-2380-f39ec820776f@arm.com>
- <20220222151632.GB10061@nvidia.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <20220222151632.GB10061@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <1645455086-9359-3-git-send-email-quic_vpolimer@quicinc.com>
+References: <1645455086-9359-1-git-send-email-quic_vpolimer@quicinc.com> <1645455086-9359-3-git-send-email-quic_vpolimer@quicinc.com>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date:   Tue, 22 Feb 2022 21:19:50 +0000
+Message-ID: <CAE-0n53a5akPXSJjkD4SvnparcxBpN2LaGt_7J=6petTPukHeQ@mail.gmail.com>
+Subject: Re: [PATCH v2 2/4] drm/bridge: use atomic enable/disable for bridge callbacks
+To:     Vinod Polimera <quic_vpolimer@quicinc.com>, agross@kernel.org,
+        airlied@linux.ie, bjorn.andersson@linaro.org, daniel@ffwll.ch,
+        devicetree@vger.kernel.org, dianders@chromium.org,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        krzysztof.kozlowski@canonical.com, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, robdclark@gmail.com,
+        robh+dt@kernel.org, sam@ravnborg.org, seanpaul@chromium.org,
+        thierry.reding@gmail.com
+Cc:     quic_kalyant@quicinc.com, quic_sbillaka@quicinc.com,
+        quic_vproddut@quicinc.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-02-22 15:16, Jason Gunthorpe wrote:
-> On Tue, Feb 22, 2022 at 10:58:37AM +0000, Robin Murphy wrote:
->> On 2022-02-21 23:48, Jason Gunthorpe wrote:
->>> On Mon, Feb 21, 2022 at 08:43:33PM +0000, Robin Murphy wrote:
->>>> On 2022-02-19 07:32, Christoph Hellwig wrote:
->>>>> So we are back to the callback madness instead of the nice and simple
->>>>> flag?  Sigh.
->>>>
->>>> TBH, I *think* this part could be a fair bit simpler. It looks like this
->>>> whole callback mess is effectively just to decrement
->>>> group->owner_cnt, but
->>>
->>> Right, the new callback is because of Greg's push to put all the work
->>> into the existing bus callback. Having symetrical callbacks is
->>> cleaner.
->>
->> I'll continue to disagree that having tons more code purely for the sake of
->> it is cleaner. The high-level requirements are fundamentally asymmetrical -
->> ownership has to be actively claimed by the bus code at a point during probe
->> where it can block probing if necessary, but it can be released anywhere at
->> all during remove since that cannot fail. I don't personally see the value
->> in a bunch of code bloat for no reason other than trying to pretend that an
->> asymmetrical thing isn't.
-> 
-> Then we should put this in the share core code like most of us want.
-> 
-> If we are doing this distorted thing then it may as well make some
-> kind of self consistent sense with a configure/unconfigure op pair.
-> 
->> group->owner?  Walking the list would only have to be done for *releasing*
->> ownership and I'm pretty sure all the races there are benign - only
->> probe/remove of the driver (or DMA API token) matching a current non-NULL
->> owner matter; if two removes race, the first might end up releasing
->> ownership "early", but the second is waiting to do that anyway so it's OK;
->> if a remove races with a probe, the remove may end up leaving the owner set,
->> but the probe is waiting to do that anyway so it's OK.
-> 
-> With a lockless algorithm the race is probably wrongly releasing an
-> ownership that probe just set in the multi-device group case.
-> 
-> Still not sure I see what you are thinking though..
+Quoting Vinod Polimera (2022-02-21 06:51:24)
+> diff --git a/drivers/gpu/drm/bridge/panel.c b/drivers/gpu/drm/bridge/panel.c
+> index b32295a..5c7dc82 100644
+> --- a/drivers/gpu/drm/bridge/panel.c
+> +++ b/drivers/gpu/drm/bridge/panel.c
+> @@ -102,30 +136,82 @@ static void panel_bridge_detach(struct drm_bridge *bridge)
+>                 drm_connector_cleanup(connector);
+>  }
+>
+> -static void panel_bridge_pre_enable(struct drm_bridge *bridge)
+> +static void panel_bridge_pre_enable(struct drm_bridge *bridge,
+> +               struct drm_bridge_state *old_bridge_state)
+>  {
+>         struct panel_bridge *panel_bridge = drm_bridge_to_panel_bridge(bridge);
+> +       struct drm_atomic_state *old_state = old_bridge_state->base.state;
+> +       struct drm_encoder *encoder = bridge->encoder;
+> +       struct drm_crtc *crtc;
+> +       struct drm_crtc_state *old_crtc_state;
+> +
+> +       crtc = bridge_drm_get_new_connector_crtc(encoder, old_state);
+> +       if (!crtc)
+> +               return;
+> +
+> +       old_crtc_state = drm_atomic_get_old_crtc_state(old_state, crtc);
+> +       if (old_crtc_state && old_crtc_state->self_refresh_active)
 
-What part of "How hard is it to hold group->mutex when reading or 
-writing group->owner?" sounded like "complex lockless algorithm", exactly?
+Can you please add some comment about why self_refresh_active means we
+should bail out from this function? Such a comment would be helpful to
+understand the code quickly vs. having to figure out what the intention
+of the logic is. The analogix driver has
 
-To spell it out, the scheme I'm proposing looks like this:
+/* Don't touch the panel if we're coming back from PSR */
 
-probe/claim:
-	void *owner = driver_or_DMA_API_token(dev);//oversimplification!
-	if (owner) {
-		mutex_lock(group->mutex);
-		if (!group->owner)
-			group->owner = owner;
-		else if (group->owner != owner);
-			ret = -EBUSY;
-		mutex_unlock(group->mutex);
-	}
-
-remove:
-	bool still_owned = false;
-	mutex_lock(group->mutex);
-	list_for_each_entry(tmp, &group->devices, list) {
-		void *owner = driver_or_DMA_API_token(tmp);
-		if (tmp == dev || !owner || owner != group->owner)
-			continue;
-		still_owned = true;
-		break;
-	}
-	if (!still_owned)
-		group->owner = NULL;
-	mutex_unlock(group->mutex);
-
-Of course now that I've made it more concrete I realise that the remove 
-hook does need to run *after* dev->driver is cleared, so not quite 
-"anywhere at all", but the main point remains: as long as actual changes 
-of ownership are always serialised, even if the list walk in the remove 
-hook sees "future" information WRT other devices' drivers, at worst it 
-should merely short-cut to a corresponding pending reclaim of ownership.
-
-> How did we get from adding a few simple lines to dd.c into building
-> some complex lockless algorithm and hoping we did it right?
-
-Because the current alternative to adding a few simple lines to dd.c is 
-adding loads of lines all over the place to end up calling back into 
-common IOMMU code, to do something I'm 99% certain the common IOMMU code 
-could do for itself in private. That said, having worked through the 
-above, it does start looking like a bit of a big change for this series 
-at this point, so I'm happy to keep it on the back burner for when I 
-have to rip .dma_configure to pieces anyway.
-
-According to lockdep, I think I've solved the VFIO locking issue 
-provided vfio_group_viable() goes away, so I'm certainly keen not to 
-delay that for another cycle!
-
->>>> It has to be s It should be pretty straightforward for
->>>> iommu_bus_notifier to clear group->owner automatically upon an
->>>> unbind of the matching driver when it's no longer bound to any other
->>>> devices in the group either.
->>>
->>> That not_bound/unbind notifier isn't currently triggred during
->>> necessary failure paths of really_probe().
->>
->> Eh? Just look at the context of patch #2, let alone the rest of the
->> function, and tell me how, if we can't rely on BUS_NOTIFY_DRIVER_NOT_BOUND,
->> calling .dma_cleanup *from the exact same place* is somehow more reliable?
-> 
-> Yeah, OK
-> 
->> AFAICS, a notifier handling both BUS_NOTIFY_UNBOUND_DRIVER and
->> BUS_NOTIFY_DRIVER_NOT_BOUND would be directly equivalent to the callers of
->> .dma_cleanup here.
-> 
-> Yes, but why hide this in a notifier, it is still spaghetti
-
-Quick quiz!
-
-1: The existing IOMMU group management has spent the last 10 years being 
-driven from:
-
-   A - All over random bits of bus code and the driver core
-   B - A private bus notifier
-
-
-2: The functionality that this series replaces and improves upon was 
-split between VFIO and...
-
-   A - Random bits of bus code and the driver core
-   B - The same private bus notifier
-
->>>> use-case) then it should be up to VFIO to decide when it's finally
->>>> finished with the whole group, rather than pretending we can keep
->>>> track of nested ownership claims from inside the API.
->>>
->>> What nesting?
->>
->> The current implementation of iommu_group_claim_dma_owner() allows owner_cnt
->> to increase beyond 1, and correspondingly requires
->> iommu_group_release_dma_owner() to be called the same number of times. It
->> doesn't appear that VFIO needs that, and I'm not sure I'd trust any other
->> potential users to get it right either.
-> 
-> That isn't for "nesting" it is keeping track of multi-device
-> groups. Each count represents a device, not a nest.
-
-I was originally going to say "recursion", but then thought that might 
-carry too much risk of misinterpretation, oh well. Hold your favourite 
-word for "taking a mutual-exclusion token that you already hold" in mind 
-and read my paragraph quoted above again. I'm not talking about 
-automatic DMA API claiming, that clearly happens per-device; I'm talking 
-about explicit callers of iommu_group_claim_dma_owner(). Does VFIO call 
-that multiple times for individual devices? No. Should it? No. Is it 
-reasonable that any other future callers should need to? I don't think 
-so. Would things be easier to reason about if we just disallowed it 
-outright? For sure.
-
->>>> FWIW I have some ideas for re-converging .dma_configure in future
->>>> which I think should probably be able to subsume this into a
->>>> completely generic common path, given a common flag.
->>>
->>> This would be great!
->>
->> Indeed, so if we're enthusiastic about future cleanup that necessitates a
->> generic flag, why not make the flag generic to start with?
-> 
-> Maybe when someone has patches to delete the bus ops completely they
-> can convince Greg. The good news is that it isn't much work to flip
-> the flag, Lu has already done it 3 times in the previous versions..
-> 
-> It has already been 8 weeks on this point, lets just move on please.
-
-Sure, if it was rc7 with the merge window looming I'd be saying "this is 
-close enough, let's get it in now and fix the small stuff next cycle". 
-However while there's still potentially time to get things right first 
-time, I for one am going to continue to point them out because I'm not a 
-fan of avoidable churn. I'm sorry I haven't had a chance to look 
-properly at this series between v1 and v6, but that's just how things 
-have been.
-
-Robin.
+so even mentioning PSR here would be helpful.

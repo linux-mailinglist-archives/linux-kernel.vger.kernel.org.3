@@ -2,139 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54D304BF67B
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 11:49:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A5BA74BF6CA
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 11:57:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231440AbiBVKsp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 05:48:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43610 "EHLO
+        id S231561AbiBVK4Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 05:56:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231513AbiBVKsm (ORCPT
+        with ESMTP id S231499AbiBVK4P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 05:48:42 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 91C00155C0B
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 02:48:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1645526894;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Brgp+fMdi1oCT47PODY2VNbqyXNOgHYpjuXrN5V3CFA=;
-        b=ClOLj60VkZIwqDCCJv6UhRISrV23zuh22lq2GGjI/vjNT69wbM9sexQ+wRnb8Gkh3zTKfc
-        FllHJEQIovJODCjd+ap8m4Nbe2JrmXGhwR3l0NK6tBVTOBfCy7jw0rhtdgSYyZGP9ADMvY
-        mT+cz+MhLiOsWe2WNvWuCoLotbNYbbM=
-Received: from mail-lj1-f200.google.com (mail-lj1-f200.google.com
- [209.85.208.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-367-EewTtbPjPAu69Q5vgeALow-1; Tue, 22 Feb 2022 05:48:13 -0500
-X-MC-Unique: EewTtbPjPAu69Q5vgeALow-1
-Received: by mail-lj1-f200.google.com with SMTP id 185-20020a2e05c2000000b002463aff775aso3455863ljf.17
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 02:48:12 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=Brgp+fMdi1oCT47PODY2VNbqyXNOgHYpjuXrN5V3CFA=;
-        b=b9QT8dvpkbrcA21jomLoMzfAfcgVzLpZxYzZN1tUAvpK6oRFbdJY6MGxiTafo/Z0xK
-         mDVPh/0dhouL1O51yonlgZL7G5J2jrGLAHy16iqA8VOE4Z8uWGGjIOn+sW9LQB3JB7Qy
-         I/aCT6Fk54OEiOIFf9YYX/fnMJrKAN88tR31o3SSSIMPaJHkkyzcCv43jbSCQTGy8zLW
-         FuhfM+ABhfv27Q0+M6pEisZgPggB2wbjbY6t4bVkotMIYz5NiRj25jtTQbLoAfw7ze0m
-         TUkacWEfFAVovTs8cFf27mKgLmhj5vl4ZqjLOuGIwXiEOPe5xm+/Z7FQiC/UoaYnR9qx
-         CV8A==
-X-Gm-Message-State: AOAM530HEEnZ3ccnx4CUYNMhLD7vkGwjOFHS9U+JSSh1MtHDSXOLWijE
-        zvF346j+dMIciHFplAbdpOdPkuudsuDVvI7W0Ji9x+/D2hvEchcMafhkUU+bbQPVDmy1e/+fA7O
-        ZTyHaOqnG/P6vEkRRebylU0wNgt7nltqqUpad/Zg=
-X-Received: by 2002:a05:651c:386:b0:244:e2ab:87f9 with SMTP id e6-20020a05651c038600b00244e2ab87f9mr16845185ljp.201.1645526891468;
-        Tue, 22 Feb 2022 02:48:11 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyq/qtQrdadU6dXvqmqudQ/GJmIpBpSMhD58JRIHjIpHtPwrVmZjOlfNJRFUUCYYJk/WJ2CRWVA5ZqWdWAlVEI=
-X-Received: by 2002:a05:651c:386:b0:244:e2ab:87f9 with SMTP id
- e6-20020a05651c038600b00244e2ab87f9mr16845165ljp.201.1645526891281; Tue, 22
- Feb 2022 02:48:11 -0800 (PST)
+        Tue, 22 Feb 2022 05:56:15 -0500
+X-Greylist: delayed 427 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 22 Feb 2022 02:55:50 PST
+Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5D3C15DB1E;
+        Tue, 22 Feb 2022 02:55:50 -0800 (PST)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id 097C65C0194;
+        Tue, 22 Feb 2022 05:48:43 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute2.internal (MEProxy); Tue, 22 Feb 2022 05:48:43 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=DTcsRQMhHEsT227VK
+        XKHQyOwB4dIKR9vzR6umqoiTuA=; b=K8S59BhMrGaVw44sfUv7enmQYQ1OVuGmQ
+        lpQdCdIjz71gjc8sElBsakHzdjkF/fWn3d2LPUPcfAoivcwe+LV83yvizXy8vaL1
+        XfMNOT3uVokxiK0Dva1CKvI7FSrewINC6IUECvQlEIoHu9w78/f2s1fKyDF0INbC
+        HsSLcrmRrIJT5/+vRozrUSm9SO5w8lMCyFGd2ChhAXZh3hkFf0pXORVGYOZr7yVd
+        GeRS8M7Rk4riPYq9RsXhn/5WS8f2iwWDDgYwCpcC03bJO/hvHEar5Wn/qy+5Rshm
+        Z+nH9mO4qHq+ZgELZ0kT+6wttK1YoXw3Oispb/yo3+GGM8PXWifbQ==
+X-ME-Sender: <xms:ir8UYjuEXGwrbqKlY20yqYFrw4YF0iLQqOk0_PB3zXdNqaovd-AkCw>
+    <xme:ir8UYkdri5qEk2tUvb28L1LpdoqlMw3Iqe9DKG7bBlGIM6lMNdVAiaDTeCQO5UXoQ
+    tVSU7hQzf_V2A>
+X-ME-Received: <xmr:ir8UYmzPkn5aAbAi0LxhaIFC81fGs94iCGgv4Jo0uTDOx3FWBmZLEPbC2OdDIXU-pg-OrVu8cb-VucyP2GDx_yLlaJrXSNGQ0w>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrkeekgddulecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvuffkfhggtggujgesghdtreertddtjeenucfhrhhomhepofgrrhgvkhcu
+    ofgrrhgtiiihkhhofihskhhiqdfikphrvggtkhhiuceomhgrrhhmrghrvghksehinhhvih
+    hsihgslhgvthhhihhnghhslhgrsgdrtghomheqnecuggftrfgrthhtvghrnhepheevvdeu
+    veehkeehhfevgffggfevudegteeugfeliedvhefgueeiuefgteetieffnecuffhomhgrih
+    hnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhep
+    mhgrihhlfhhrohhmpehmrghrmhgrrhgvkhesihhnvhhishhisghlvghthhhinhhgshhlrg
+    gsrdgtohhm
+X-ME-Proxy: <xmx:ir8UYiPFUO_QAu-DIAtp-DLZkzErUXDnPkxfPLfVkL7M4yyF2MW6Gg>
+    <xmx:ir8UYj8mCcn8tt4pgKNdOjsz4w8sY_tRUU12rDq9Sf9EyA_QQo8JWg>
+    <xmx:ir8UYiV_PDaowG3PCoghYbuma6I3uze38hhFB1zjhmt03mAkH0A-xA>
+    <xmx:i78UYkNV0oJsrIv2nwuuYBiVrEqvXd97V9QI6DwUM69aJGRhHIPadg>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 22 Feb 2022 05:48:41 -0500 (EST)
+Date:   Tue, 22 Feb 2022 11:48:38 +0100
+From:   Marek =?utf-8?Q?Marczykowski-G=C3=B3recki?= 
+        <marmarek@invisiblethingslab.com>
+To:     Roger Pau =?utf-8?B?TW9ubsOp?= <roger.pau@citrix.com>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Michael Brown <mcb30@ipxe.org>, Wei Liu <wei.liu@kernel.org>,
+        Paul Durrant <paul@xen.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "moderated list:XEN NETWORK BACKEND DRIVER" 
+        <xen-devel@lists.xenproject.org>,
+        "open list:XEN NETWORK BACKEND DRIVER" <netdev@vger.kernel.org>
+Subject: Re: [PATCH v2 2/2] Revert "xen-netback: Check for hotplug-status
+ existence before watching"
+Message-ID: <YhS/hvHQO335elw7@mail-itl>
+References: <20220222001817.2264967-1-marmarek@invisiblethingslab.com>
+ <20220222001817.2264967-2-marmarek@invisiblethingslab.com>
+ <YhSfYyh3xU4HZKek@Air-de-Roger>
 MIME-Version: 1.0
-References: <20220218212511.887059-1-atomlin@redhat.com> <20220218212511.887059-2-atomlin@redhat.com>
- <69fcaad3-e48c-11ca-ed50-7a18831e3e91@csgroup.eu>
-In-Reply-To: <69fcaad3-e48c-11ca-ed50-7a18831e3e91@csgroup.eu>
-From:   Aaron Tomlin <atomlin@redhat.com>
-Date:   Tue, 22 Feb 2022 10:48:00 +0000
-Message-ID: <CANfR36js06qG8HkQBPPz8bnYzcBRUtiZJAqhynt4XJcfcFXAQg@mail.gmail.com>
-Subject: Re: [PATCH v6 01/13] module: Move all into module/
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        "mcgrof@kernel.org" <mcgrof@kernel.org>
-Cc:     "cl@linux.com" <cl@linux.com>,
-        "pmladek@suse.com" <pmladek@suse.com>,
-        "mbenes@suse.cz" <mbenes@suse.cz>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "jeyu@kernel.org" <jeyu@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
-        "live-patching@vger.kernel.org" <live-patching@vger.kernel.org>,
-        "atomlin@atomlin.com" <atomlin@atomlin.com>,
-        "ghalat@redhat.com" <ghalat@redhat.com>,
-        "allen.lkml@gmail.com" <allen.lkml@gmail.com>,
-        "joe@perches.com" <joe@perches.com>,
-        "msuchanek@suse.de" <msuchanek@suse.de>,
-        "oleksandr@natalenko.name" <oleksandr@natalenko.name>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="0J0yTdf+LQeqmBEg"
+Content-Disposition: inline
+In-Reply-To: <YhSfYyh3xU4HZKek@Air-de-Roger>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 2022-02-21 12:21 +0000, Christophe Leroy wrote:
->
->
-> Le 18/02/2022 =C3=A0 22:24, Aaron Tomlin a =C3=A9crit :
-> > No functional changes.
-> >
-> > This patch moves all module related code into a separate directory,
-> > modifies each file name and creates a new Makefile. Note: this effort
-> > is in preparation to refactor core module code.
-> >
-> > Signed-off-by: Aaron Tomlin <atomlin@redhat.com>
+
+--0J0yTdf+LQeqmBEg
+Content-Type: text/plain; protected-headers=v1; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Date: Tue, 22 Feb 2022 11:48:38 +0100
+From: Marek =?utf-8?Q?Marczykowski-G=C3=B3recki?= <marmarek@invisiblethingslab.com>
+To: Roger Pau =?utf-8?B?TW9ubsOp?= <roger.pau@citrix.com>
+Cc: linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+	Michael Brown <mcb30@ipxe.org>, Wei Liu <wei.liu@kernel.org>,
+	Paul Durrant <paul@xen.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Jakub Kicinski <kuba@kernel.org>,
+	"moderated list:XEN NETWORK BACKEND DRIVER" <xen-devel@lists.xenproject.org>,
+	"open list:XEN NETWORK BACKEND DRIVER" <netdev@vger.kernel.org>
+Subject: Re: [PATCH v2 2/2] Revert "xen-netback: Check for hotplug-status
+ existence before watching"
+
+On Tue, Feb 22, 2022 at 09:31:31AM +0100, Roger Pau Monn=C3=A9 wrote:
+> On Tue, Feb 22, 2022 at 01:18:17AM +0100, Marek Marczykowski-G=C3=B3recki=
+ wrote:
+> > This reverts commit 2afeec08ab5c86ae21952151f726bfe184f6b23d.
+> >=20
+> > The reasoning in the commit was wrong - the code expected to setup the
+> > watch even if 'hotplug-status' didn't exist. In fact, it relied on the
+> > watch being fired the first time - to check if maybe 'hotplug-status' is
+> > already set to 'connected'. Not registering a watch for non-existing
+> > path (which is the case if hotplug script hasn't been executed yet),
+> > made the backend not waiting for the hotplug script to execute. This in
+> > turns, made the netfront think the interface is fully operational, while
+> > in fact it was not (the vif interface on xen-netback side might not be
+> > configured yet).
+> >=20
+> > This was a workaround for 'hotplug-status' erroneously being removed.
+> > But since that is reverted now, the workaround is not necessary either.
+> >=20
+> > More discussion at
+> > https://lore.kernel.org/xen-devel/afedd7cb-a291-e773-8b0d-4db9b291fa98@=
+ipxe.org/T/#u
+> >=20
+> > Cc: stable@vger.kernel.org
+> > Signed-off-by: Marek Marczykowski-G=C3=B3recki <marmarek@invisiblething=
+slab.com>
 > > ---
-> >   MAINTAINERS                                         | 2 +-
-> >   kernel/Makefile                                     | 5 +----
-> >   kernel/module/Makefile                              | 9 +++++++++
-> >   kernel/{module_decompress.c =3D> module/decompress.c} | 2 +-
-> >   kernel/{module-internal.h =3D> module/internal.h}     | 0
-> >   kernel/{module.c =3D> module/main.c}                  | 2 +-
-> >   kernel/{module_signature.c =3D> module/signature.c}   | 0
-> >   kernel/{module_signing.c =3D> module/signing.c}       | 2 +-
-> >   8 files changed, 14 insertions(+), 8 deletions(-)
-> >   create mode 100644 kernel/module/Makefile
-> >   rename kernel/{module_decompress.c =3D> module/decompress.c} (99%)
-> >   rename kernel/{module-internal.h =3D> module/internal.h} (100%)
-> >   rename kernel/{module.c =3D> module/main.c} (99%)
-> >   rename kernel/{module_signature.c =3D> module/signature.c} (100%)
-> >   rename kernel/{module_signing.c =3D> module/signing.c} (97%)
-> >
->
-> I'm wondering whether we should avoid moving module_signature.c and
-> leave it in kernel/ as this file is used even when CONFIG_MODULES is not
-> selected, and he is the only one like this.
->
-> Keeping it outside of kernel/module/ would allow to conditionaly build
-> entire kernel/module/ based of CONFIG_MODULES and then avoid all checks
-> against CONFIG_MODULES which look misleading at times.
+> > I believe this is the same issue as discussed at
+> > https://lore.kernel.org/xen-devel/20220113111946.GA4133739@dingwall.me.=
+uk/
+>=20
+> Right - I believe we need to leave that workaround in place in libxl
+> in order to deal with bogus Linux netbacks?
 
-Luis,
-
-What is your opinion on this? Indeed, mod_check_sig() is used by code
-outside of kernel/module/ too i.e. ima_read_modsig(); albeit, I believe it
-does make sense to keep it under kernel/module/ since the function in
-question is used to review a given module's signature anyway.
-
-Kind regards,
+I'm afraid so, yes.
 
 --=20
-Aaron Tomlin
+Best Regards,
+Marek Marczykowski-G=C3=B3recki
+Invisible Things Lab
 
+--0J0yTdf+LQeqmBEg
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEEhrpukzGPukRmQqkK24/THMrX1ywFAmIUv4YACgkQ24/THMrX
+1yyKoggAg6fLt83xdWaCGP1TaH51wysnBj1sxuSzFeh7BUVHdyWYYlfTAQ+Ytghr
+N4uCqUyXqTpheDM7BE/9pXSiuHH1WqmClAef7SF9MweHT0zvDkL0J7McMSqLBeG4
+Qj67yHz4/C1yAhN3dAdP8933l4nmzvzOGNdG77D3P1IvU+41xtyoZPVfH5DDNscG
+yfYwoeI/oYRNtvd1H7+UD3ANkwEjnmFIVGRtFcb7G+NH+d9vGQFbODww95oCbWWA
+PfKL7gBFGNDuNnIABFCoI/RsF523zRSSeBesdAImUM+531IRapB9J9FYp4E6M3RA
+Bt5hPaIrX6OFgur2u9aShGvIdH+FYQ==
+=0A40
+-----END PGP SIGNATURE-----
+
+--0J0yTdf+LQeqmBEg--

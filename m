@@ -2,69 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAF714C058C
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 00:49:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FA464C058F
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 00:52:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236391AbiBVXto (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 18:49:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50622 "EHLO
+        id S236300AbiBVXxF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 18:53:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236435AbiBVXth (ORCPT
+        with ESMTP id S236293AbiBVXxE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 18:49:37 -0500
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D02EE3E5E8
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 15:49:02 -0800 (PST)
-Received: by mail-pf1-x431.google.com with SMTP id z15so7904046pfe.7
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 15:49:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=k4qXAFqi0ySdR1Aw0Ol4TjEnW6pDCjdujI4uqf/WnnU=;
-        b=ZmrKv5e3LteilLdgvO0riCg56HCfXHzS5Oo12KO3OkOWIYQXyGiLi5XNNrLgp7YCf8
-         l5gxN2WmuRZRBBtn709j//Go662IvHPvA09LL+YE0r/+SjxWQ1G/4wdDPRIWlAeSKINo
-         DdZK8E6mAVsQ3HcXj2qgWqTojpwo1DHXZrcEc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=k4qXAFqi0ySdR1Aw0Ol4TjEnW6pDCjdujI4uqf/WnnU=;
-        b=jlqCOT8bdDTQJziUDt7uBNeFzko28D1loKcq/XJBgfMDXekXnEvE9IrdWIwTqULD56
-         mRD+2KY4CmPnuA5WhQ6SE+n/nHP4qwPQrUrVGiPb+EPsTx2nezqWSp7+ZTTpgsR9bjN4
-         BO2h/B0thjPcvzkN+PM3GepeTA0kuMkM//NAB3j35Xa/3NdbF4Y0wrCRy6jKhm6LRhDJ
-         Aj9cL2wRoepmo3xI+dL7rJ2Ztog0mWMMCPm1idsBXqqbaUFVIsw7sZm5lJ4jzxvE7V9Q
-         o0E1JnoRDWwhbwMIXL1hLf/cr6f1++w7GcSee9OcQFUqqncV+IgiCkivuN8QKIDZEHNo
-         xJpA==
-X-Gm-Message-State: AOAM533/o1nq7j8gxTNRgcjWs3rx8nBVD3ZBC6hnAngLIs+TAUgt/QCG
-        Wu+3FbiCtDel/h6xlVbaXkIl9g==
-X-Google-Smtp-Source: ABdhPJwO85XCsJ5U7aygs5T7n4qrv8cEaxFM6h8IIKkhSD3i+A4YChQvIGP8qo+3GKsOKcHea9z9KA==
-X-Received: by 2002:a63:224c:0:b0:372:9ec7:e7e4 with SMTP id t12-20020a63224c000000b003729ec7e7e4mr21075101pgm.385.1645573742144;
-        Tue, 22 Feb 2022 15:49:02 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id z14sm19080775pfe.30.2022.02.22.15.49.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Feb 2022 15:49:01 -0800 (PST)
-Date:   Tue, 22 Feb 2022 15:49:00 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Juxin Gao <gaojuxin@loongson.cn>, linux-mips@vger.kernel.org,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-kernel@vger.kernel.org, clang-built-linux@googlegroups.com,
-        linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] MIPS: Modernize READ_IMPLIES_EXEC
-Message-ID: <202202221548.40C0AA5E@keescook>
-References: <20210901194208.2420671-1-keescook@chromium.org>
+        Tue, 22 Feb 2022 18:53:04 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B22D3337D;
+        Tue, 22 Feb 2022 15:52:37 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 122EF611C8;
+        Tue, 22 Feb 2022 23:52:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F5C0C340E8;
+        Tue, 22 Feb 2022 23:52:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645573956;
+        bh=UwaC5xY+ZaDH26vO4EYbimVhcqyY47M9XO1A6/S8skU=;
+        h=From:To:Cc:Subject:Date:From;
+        b=nwo8uyYMIf7IAKkP0j1TRdG9qYY7wE3B4N3HLA9pPUzcHg3OPHdWNUmcvaZMqSF+g
+         Maj0fyyV9zvDUBUfEpJUiVHylcqnVcLLR8tffz4bhAi0UOMlVKtZksiYDYuhIXoj3r
+         dPNDSvxPXHDHbCHzpCxU1GOHNF9aON8r+m9ClNqZcFqy4wTTxTwCL79iJWjFP6l8yJ
+         VEb5jg9TGS/npKWFpZ6xPG69lOduKtv7SUThsHrqF1w2cHRZDYBJiEUMa/iQBiQ54V
+         5uzNJRY0E3ozKci48z2oBL43lKvttrxvr5vdlRUB5ND4CIP/r254QqoxfvuD6okRH+
+         rBbHCFUusM6Ag==
+From:   broonie@kernel.org
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        sujiaxun <sujiaxun@uniontech.com>,
+        tangmeng <tangmeng@uniontech.com>,
+        zhanglianjie <zhanglianjie@uniontech.com>,
+        Zhen Ni <nizhen@uniontech.com>
+Subject: linux-next: manual merge of the sysctl tree with the tip tree
+Date:   Tue, 22 Feb 2022 23:52:18 +0000
+Message-Id: <20220222235218.906101-1-broonie@kernel.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210901194208.2420671-1-keescook@chromium.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,106 +58,201 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Friendly ping. :)
+Hi all,
 
-On Wed, Sep 01, 2021 at 12:42:08PM -0700, Kees Cook wrote:
-> I'm doing some thread necromancy of
-> https://lore.kernel.org/lkml/202007081624.82FA0CC1EA@keescook/
-> 
-> x86, arm64, and arm32 adjusted their READ_IMPLIES_EXEC logic to better
-> align with the safer defaults and the interactions with other mappings,
-> which I illustrated with this comment on x86:
-> 
-> /*
->  * An executable for which elf_read_implies_exec() returns TRUE will
->  * have the READ_IMPLIES_EXEC personality flag set automatically.
->  *
->  * The decision process for determining the results are:
->  *
->  *                 CPU: | lacks NX*  | has NX, ia32     | has NX, x86_64 |
->  * ELF:                 |            |                  |                |
->  * ---------------------|------------|------------------|----------------|
->  * missing PT_GNU_STACK | exec-all   | exec-all         | exec-none      |
->  * PT_GNU_STACK == RWX  | exec-stack | exec-stack       | exec-stack     |
->  * PT_GNU_STACK == RW   | exec-none  | exec-none        | exec-none      |
->  *
->  *  exec-all  : all PROT_READ user mappings are executable, except when
->  *              backed by files on a noexec-filesystem.
->  *  exec-none : only PROT_EXEC user mappings are executable.
->  *  exec-stack: only the stack and PROT_EXEC user mappings are
->  *  executable.
->  *
->  *  *this column has no architectural effect: NX markings are ignored by
->  *   hardware, but may have behavioral effects when "wants X" collides with
->  *   "cannot be X" constraints in memory permission flags, as in
->  *   https://lkml.kernel.org/r/20190418055759.GA3155@mellanox.com
->  *
->  */
-> 
-> For MIPS, the "lacks NX" above is the "!cpu_has_rixi" check. On x86,
-> we decided that the READ_IMPLIES_EXEC flag needed to reflect the
-> expectations, not the architectural behavior due to bad interactions
-> as noted above, as always returning "1" on non-NX hardware breaks
-> some mappings.
-> 
-> The other part of the issue is "what does the MIPS toolchain do for
-> PT_GNU_STACK?" The answer seems to be "by default, include PT_GNU_STACK,
-> but mark it executable" (likely due to concerns over non-NX hardware):
-> 
-> $ mipsel-linux-gnu-gcc -o hello_world hello_world.c
-> $ llvm-readelf -lW hellow_world | grep GNU_STACK
->   GNU_STACK      0x000000 0x00000000 0x00000000 0x00000 0x00000 RWE 0x10
-> 
-> Given that older hardware doesn't support non-executable memory, it
-> seems safe to make the "PT_GNU_STACK is absent" logic mean "assume
-> non-executable", but this might break very old software running on
-> modern MIPS. This situation matches the ia32-on-x86_64 logic x86
-> uses (which assumes needing READ_IMPLIES_EXEC in that situation). But
-> modern toolchains on modern MIPS hardware should follow a safer default
-> (assume NX stack).
-> 
-> A follow-up to this change would be to switch the MIPS toolchain to emit
-> a non-executable PT_GNU_STACK, as this seems to be unneeded.
-> 
-> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-> Cc: Tiezhu Yang <yangtiezhu@loongson.cn>
-> Cc: Xuefeng Li <lixuefeng@loongson.cn>
-> Cc: Juxin Gao <gaojuxin@loongson.cn>
-> Cc: linux-mips@vger.kernel.org
-> Signed-off-by: Kees Cook <keescook@chromium.org>
-> ---
->  arch/mips/kernel/elf.c | 16 +++++-----------
->  1 file changed, 5 insertions(+), 11 deletions(-)
-> 
-> diff --git a/arch/mips/kernel/elf.c b/arch/mips/kernel/elf.c
-> index 7b045d2a0b51..5582a4ca1e9e 100644
-> --- a/arch/mips/kernel/elf.c
-> +++ b/arch/mips/kernel/elf.c
-> @@ -328,16 +328,10 @@ void mips_set_personality_nan(struct arch_elf_state *state)
->  
->  int mips_elf_read_implies_exec(void *elf_ex, int exstack)
->  {
-> -	if (exstack != EXSTACK_DISABLE_X) {
-> -		/* The binary doesn't request a non-executable stack */
-> -		return 1;
-> -	}
-> -
-> -	if (!cpu_has_rixi) {
-> -		/* The CPU doesn't support non-executable memory */
-> -		return 1;
-> -	}
-> -
-> -	return 0;
-> +	/*
-> +	 * Set READ_IMPLIES_EXEC only on non-NX systems that
-> +	 * do not request a specific state via PT_GNU_STACK.
-> +	 */
-> +	return (!cpu_has_rixi && exstack == EXSTACK_DEFAULT);
->  }
->  EXPORT_SYMBOL(mips_elf_read_implies_exec);
-> -- 
-> 2.30.2
-> 
+Today's linux-next merge of the sysctl tree got conflicts in:
 
--- 
-Kees Cook
+  include/linux/sched/sysctl.h
+  kernel/sysctl.c
+
+between commit:
+
+  c8eaf6ac76f40 ("sched: move autogroup sysctls into its own file")
+
+from the tip tree and commits:
+
+  fc12aa67daba8 ("kernel/do_mount_initrd: move real_root_dev sysctls to its own file")
+  97d4da3bab169 ("kernel/delayacct: move delayacct sysctls to its own file")
+  c7c1839c3c942 ("kernel/acct: move acct sysctls to its own file")
+  b5fefe080be0f ("kernel/panic: move panic sysctls to its own file")
+  3831fb33e3f35 ("kernel/lockdep: move lockdep sysctls to its own file")
+  f31483d6edf09 ("sched: Move energy_aware sysctls to topology.c")
+  301ee4d2abae7 ("sched: Move cfs_bandwidth_slice sysctls to fair.c")
+  eb862b3dc6dbf ("sched: Move uclamp_util sysctls to core.c")
+  4925401d06dc2 ("sched: Move rr_timeslice sysctls to rt.c")
+  ebb891f03580b ("sched: Move deadline_period sysctls to deadline.c")
+  5f6e55c2485c8 ("sched: Move rt_period/runtime sysctls to rt.c")
+
+from the sysctl tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+diff --cc include/linux/sched/sysctl.h
+index 3f2b70f8d32ce,187d8c1eade69..0000000000000
+--- a/include/linux/sched/sysctl.h
++++ b/include/linux/sched/sysctl.h
+@@@ -23,46 -21,11 +21,7 @@@ enum sched_tunable_scaling 
+  	SCHED_TUNABLESCALING_END,
+  };
+  
+- /*
+-  *  control realtime throttling:
+-  *
+-  *  /proc/sys/kernel/sched_rt_period_us
+-  *  /proc/sys/kernel/sched_rt_runtime_us
+-  */
+- extern unsigned int sysctl_sched_rt_period;
+- extern int sysctl_sched_rt_runtime;
+- 
+- extern unsigned int sysctl_sched_dl_period_max;
+- extern unsigned int sysctl_sched_dl_period_min;
+- 
+- #ifdef CONFIG_UCLAMP_TASK
+- extern unsigned int sysctl_sched_uclamp_util_min;
+- extern unsigned int sysctl_sched_uclamp_util_max;
+- extern unsigned int sysctl_sched_uclamp_util_min_rt_default;
+- #endif
+- 
+- #ifdef CONFIG_CFS_BANDWIDTH
+- extern unsigned int sysctl_sched_cfs_bandwidth_slice;
+ -#ifdef CONFIG_SCHED_AUTOGROUP
+ -extern unsigned int sysctl_sched_autogroup_enabled;
+--#endif
+- 
+- extern int sysctl_sched_rr_timeslice;
+- extern int sched_rr_timeslice;
+--
+- int sched_rr_handler(struct ctl_table *table, int write, void *buffer,
+- 		size_t *lenp, loff_t *ppos);
+- int sched_rt_handler(struct ctl_table *table, int write, void *buffer,
+- 		size_t *lenp, loff_t *ppos);
+- int sysctl_sched_uclamp_handler(struct ctl_table *table, int write,
+- 		void *buffer, size_t *lenp, loff_t *ppos);
+  int sysctl_numa_balancing(struct ctl_table *table, int write, void *buffer,
+  		size_t *lenp, loff_t *ppos);
+- int sysctl_schedstats(struct ctl_table *table, int write, void *buffer,
+- 		size_t *lenp, loff_t *ppos);
+- 
+- #if defined(CONFIG_ENERGY_MODEL) && defined(CONFIG_CPU_FREQ_GOV_SCHEDUTIL)
+- extern unsigned int sysctl_sched_energy_aware;
+- int sched_energy_aware_handler(struct ctl_table *table, int write,
+- 		void *buffer, size_t *lenp, loff_t *ppos);
+- #endif
+  
+  #endif /* _LINUX_SCHED_SYSCTL_H */
+diff --cc kernel/sysctl.c
+index 6a494ab55beaf,22037f03cd2bc..0000000000000
+--- a/kernel/sysctl.c
++++ b/kernel/sysctl.c
+@@@ -1701,103 -1654,17 +1663,6 @@@ static struct ctl_table kern_table[] = 
+  		.extra2		= SYSCTL_ONE,
+  	},
+  #endif /* CONFIG_NUMA_BALANCING */
+- 	{
+- 		.procname	= "sched_rt_period_us",
+- 		.data		= &sysctl_sched_rt_period,
+- 		.maxlen		= sizeof(unsigned int),
+- 		.mode		= 0644,
+- 		.proc_handler	= sched_rt_handler,
+- 	},
+- 	{
+- 		.procname	= "sched_rt_runtime_us",
+- 		.data		= &sysctl_sched_rt_runtime,
+- 		.maxlen		= sizeof(int),
+- 		.mode		= 0644,
+- 		.proc_handler	= sched_rt_handler,
+- 	},
+- 	{
+- 		.procname	= "sched_deadline_period_max_us",
+- 		.data		= &sysctl_sched_dl_period_max,
+- 		.maxlen		= sizeof(unsigned int),
+- 		.mode		= 0644,
+- 		.proc_handler	= proc_dointvec,
+- 	},
+- 	{
+- 		.procname	= "sched_deadline_period_min_us",
+- 		.data		= &sysctl_sched_dl_period_min,
+- 		.maxlen		= sizeof(unsigned int),
+- 		.mode		= 0644,
+- 		.proc_handler	= proc_dointvec,
+- 	},
+- 	{
+- 		.procname	= "sched_rr_timeslice_ms",
+- 		.data		= &sysctl_sched_rr_timeslice,
+- 		.maxlen		= sizeof(int),
+- 		.mode		= 0644,
+- 		.proc_handler	= sched_rr_handler,
+- 	},
+- #ifdef CONFIG_UCLAMP_TASK
+- 	{
+- 		.procname	= "sched_util_clamp_min",
+- 		.data		= &sysctl_sched_uclamp_util_min,
+- 		.maxlen		= sizeof(unsigned int),
+- 		.mode		= 0644,
+- 		.proc_handler	= sysctl_sched_uclamp_handler,
+- 	},
+- 	{
+- 		.procname	= "sched_util_clamp_max",
+- 		.data		= &sysctl_sched_uclamp_util_max,
+- 		.maxlen		= sizeof(unsigned int),
+- 		.mode		= 0644,
+- 		.proc_handler	= sysctl_sched_uclamp_handler,
+- 	},
+- 	{
+- 		.procname	= "sched_util_clamp_min_rt_default",
+- 		.data		= &sysctl_sched_uclamp_util_min_rt_default,
+- 		.maxlen		= sizeof(unsigned int),
+- 		.mode		= 0644,
+- 		.proc_handler	= sysctl_sched_uclamp_handler,
+- 	},
+- #endif
+- #ifdef CONFIG_CFS_BANDWIDTH
+ -#ifdef CONFIG_SCHED_AUTOGROUP
+--	{
+- 		.procname	= "sched_cfs_bandwidth_slice_us",
+- 		.data		= &sysctl_sched_cfs_bandwidth_slice,
+ -		.procname	= "sched_autogroup_enabled",
+ -		.data		= &sysctl_sched_autogroup_enabled,
+--		.maxlen		= sizeof(unsigned int),
+--		.mode		= 0644,
+--		.proc_handler	= proc_dointvec_minmax,
+- 		.extra1		= SYSCTL_ONE,
+- 	},
+- #endif
+- #if defined(CONFIG_ENERGY_MODEL) && defined(CONFIG_CPU_FREQ_GOV_SCHEDUTIL)
+- 	{
+- 		.procname	= "sched_energy_aware",
+- 		.data		= &sysctl_sched_energy_aware,
+- 		.maxlen		= sizeof(unsigned int),
+- 		.mode		= 0644,
+- 		.proc_handler	= sched_energy_aware_handler,
+--		.extra1		= SYSCTL_ZERO,
+--		.extra2		= SYSCTL_ONE,
+- 	},
+- #endif
+- #ifdef CONFIG_PROVE_LOCKING
+- 	{
+- 		.procname	= "prove_locking",
+- 		.data		= &prove_locking,
+- 		.maxlen		= sizeof(int),
+- 		.mode		= 0644,
+- 		.proc_handler	= proc_dointvec,
+- 	},
+- #endif
+- #ifdef CONFIG_LOCK_STAT
+- 	{
+- 		.procname	= "lock_stat",
+- 		.data		= &lock_stat,
+- 		.maxlen		= sizeof(int),
+- 		.mode		= 0644,
+- 		.proc_handler	= proc_dointvec,
+--	},
+--#endif
+  	{
+  		.procname	= "panic",
+  		.data		= &panic_timeout,

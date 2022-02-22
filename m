@@ -2,79 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB8644C0460
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 23:10:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 794CF4C0462
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 23:11:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236015AbiBVWKu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 17:10:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60234 "EHLO
+        id S236014AbiBVWLX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 17:11:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230097AbiBVWKr (ORCPT
+        with ESMTP id S230097AbiBVWLV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 17:10:47 -0500
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B130512D231
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 14:10:21 -0800 (PST)
-Received: by mail-ed1-x52a.google.com with SMTP id i11so38630066eda.9
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 14:10:21 -0800 (PST)
+        Tue, 22 Feb 2022 17:11:21 -0500
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62F24106C81
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 14:10:55 -0800 (PST)
+Received: by mail-wr1-x42d.google.com with SMTP id v21so814459wrv.5
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 14:10:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=MwFKzwhh8vOvVeS07pTWz4ZTdQ5Z+NLOUhpyVBv4D9Q=;
-        b=O/jITcbrb5aoH7sPwYaBWxEd+YJ1x5KXbkQkrtCB64fkBBeXrwXPwYjpNDLLVqLhLE
-         6P0xsF4mDd7F1fKigupRlFmDpfR0WeyGmbS0FOt+X0dNG1Hek8yTglcMvfFxiWjE0hib
-         JI1CvKC/XX+jb6fFHdB6lGrJYWiPMqlROrssQ=
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=9PhuirZKyrshj2xzHwCPB3sNg2460aymkJZ+uzZPvWk=;
+        b=P0OXyR3tjWDnONisqSw6uveH5aNEA7juRm8wsr25YYN+lco/41Y6+NYuCev6mxb+8S
+         v61wZ9UKqGk1CqH/4J8dGRpt4Jdx9GUAepLFtVSW0WxyHFSAhnxvN3XJm7pwgE6nfh8L
+         Gf6LG5/OYl4ItRd81z8i+Iufoz9nYao73AdqQ9/RJd43lWGNcUhexZZURnRPO4dFr+/S
+         +oSpVoRvtJpn0dPAVm4o4nO+88IlsJ676R4ZqXdgIBKd8Cb2eZPx4ljSNV+0n8Hfma3U
+         RQM10X/MfKlJrc3rdipcG6qxxge4VtHrpN5sOdKkXoDV6UsVEz5hasbYcKqXI+wHHMuj
+         V/UQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=MwFKzwhh8vOvVeS07pTWz4ZTdQ5Z+NLOUhpyVBv4D9Q=;
-        b=sm1qJeVYpMMhf9BwsMFWavFk+0UKcInEmIFYSVJIFos2yYjP2q1TbR9wrVMw+63oKT
-         ppK5D7hVXmLJN0DYnhEp1nMnXwrp6iAkRZuYp5IfBYNpobYfj6+9aMNo30rwerrrtdTr
-         aGMUQqemWElSOKRm6ONtDbXZay0NyXXM5O2SsggLQX4MtNS2ThqnP7A7hxc/T9gfxvAL
-         IBMScc1UiuEhTXWUe9M5VvbTXq1eh10RuQG/Vvp/Lusjztc7ypd+2QL60OxqsMi2qkPU
-         EXWRPwDgVxpbqeNxJJqWy2ghrb4sjVmVSojCRsLPe/gTj2FKLWA8vu96R08fBamrmy0K
-         2Klw==
-X-Gm-Message-State: AOAM5328OWyjRIU9MASCzZo1r9zb33oaHpd32SgsssUyRw7WdH+8cHT/
-        t3Md0cuPRmpY8sAq451k6N04X0MncEH/e+tqhjA=
-X-Google-Smtp-Source: ABdhPJyU4wIog87s6zJsJPyX64yatyU89mkAeGsyEQHKwG5ZzGrOuD5r3e3T+d8iBPoO/dFhAv/TtA==
-X-Received: by 2002:a50:ba8e:0:b0:410:a99c:4c3b with SMTP id x14-20020a50ba8e000000b00410a99c4c3bmr29274671ede.427.1645567820027;
-        Tue, 22 Feb 2022 14:10:20 -0800 (PST)
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com. [209.85.128.47])
-        by smtp.gmail.com with ESMTPSA id j9sm6741875ejo.87.2022.02.22.14.10.18
-        for <linux-kernel@vger.kernel.org>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=9PhuirZKyrshj2xzHwCPB3sNg2460aymkJZ+uzZPvWk=;
+        b=hQqKeDL2yPGDybiKBt8nwoFZbRUdD5yUB4ibC/Ju9vayQEG9oZjxx5CbIgsV5LFu14
+         oUCS9lHels5erZmzBzyoWWryXGlt0oaJGPvCAJVzQWMOfFP+FvFOJyu9NgOzFjUf96ye
+         zRlRpG4YHpLe9e5GyuhxkL1HSR8sJtJ0iR8UMqRL/RRps/HiNWs4XlfIL95v/1EN8Kd5
+         dE0cBn3OijcN9F444xCwpkSsbnPsMELK963k7irEHlnjIEqpHWQcBbWeBxUcIu20w6bo
+         JCjANQQmzLmiSzsBpNtYrLmNYQxd6JEWqwwL75YdwEyDnsFYhcE6vLxND2KC1Hd6dVuE
+         rXXA==
+X-Gm-Message-State: AOAM530+LGi5XKN6iKOF0snm4bIXVa1fNc7ReUI7AYLDN2PC/fVFNQMc
+        xex4WuyQ4mrECl6FSEu5cYMU9g==
+X-Google-Smtp-Source: ABdhPJz3ulqHBA1Cr5EV+1p6FBOU7Brv4CPwBTwuB/14UXzeY8poOnZKzeZgSVOpWsEqhwudjG1+ZQ==
+X-Received: by 2002:a5d:6f0b:0:b0:1ed:aac8:2853 with SMTP id ay11-20020a5d6f0b000000b001edaac82853mr277180wrb.260.1645567853818;
+        Tue, 22 Feb 2022 14:10:53 -0800 (PST)
+Received: from ?IPV6:2a01:e34:ed2f:f020:7f69:edd5:61dd:b18a? ([2a01:e34:ed2f:f020:7f69:edd5:61dd:b18a])
+        by smtp.googlemail.com with ESMTPSA id v9sm15814953wrx.27.2022.02.22.14.10.51
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 22 Feb 2022 14:10:18 -0800 (PST)
-Received: by mail-wm1-f47.google.com with SMTP id y5so2051250wmi.0
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 14:10:18 -0800 (PST)
-X-Received: by 2002:a05:600c:228e:b0:37c:2eef:7bf with SMTP id
- 14-20020a05600c228e00b0037c2eef07bfmr4903688wmf.73.1645567818110; Tue, 22 Feb
- 2022 14:10:18 -0800 (PST)
+        Tue, 22 Feb 2022 14:10:53 -0800 (PST)
+Message-ID: <a5730ce7-a24c-0738-e76f-e06d56601408@linaro.org>
+Date:   Tue, 22 Feb 2022 23:10:51 +0100
 MIME-Version: 1.0
-References: <20220217144136.v3.1.I773a08785666ebb236917b0c8e6c05e3de471e75@changeid>
-In-Reply-To: <20220217144136.v3.1.I773a08785666ebb236917b0c8e6c05e3de471e75@changeid>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Tue, 22 Feb 2022 14:10:04 -0800
-X-Gmail-Original-Message-ID: <CAD=FV=XmqG13QuyxpcS9sN2UCtPWDyhD_T1xjkDf8tp-_bSOWw@mail.gmail.com>
-Message-ID: <CAD=FV=XmqG13QuyxpcS9sN2UCtPWDyhD_T1xjkDf8tp-_bSOWw@mail.gmail.com>
-Subject: Re: [PATCH v3 1/2] drm/bridge: analogix_dp: Grab runtime PM reference
- for DP-AUX
-To:     Brian Norris <briannorris@chromium.org>
-Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
-        Sean Paul <sean@poorly.run>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        "# 4.0+" <stable@vger.kernel.org>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 1/2] thermal: cooling: Check Energy Model type in
+ cpufreq_cooling and devfreq_cooling
+Content-Language: en-US
+To:     Lukasz Luba <lukasz.luba@arm.com>
+Cc:     amit.kachhap@gmail.com, viresh.kumar@linaro.org, rafael@kernel.org,
+        amitk@kernel.org, rui.zhang@intel.com, dietmar.eggemann@arm.com,
+        Pierre.Gondois@arm.com, Matthias Kaehlcke <mka@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220207073036.14901-1-lukasz.luba@arm.com>
+ <20220207073036.14901-2-lukasz.luba@arm.com>
+ <4e090ffe-c19b-8e2c-0396-72dc33361f35@arm.com>
+ <211a3606-2f4c-227b-33aa-177ef68a49a3@arm.com>
+ <3d1719ca-d4a4-f904-e284-b857414669ba@linaro.org>
+ <27df4e4f-b6d7-9a58-f2dd-d6afa748e217@arm.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <27df4e4f-b6d7-9a58-f2dd-d6afa748e217@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -83,40 +83,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
 
-On Thu, Feb 17, 2022 at 2:42 PM Brian Norris <briannorris@chromium.org> wrote:
->
-> If the display is not enable()d, then we aren't holding a runtime PM
-> reference here. Thus, it's easy to accidentally cause a hang, if user
-> space is poking around at /dev/drm_dp_aux0 at the "wrong" time.
->
-> Let's get a runtime PM reference, and check that we "see" the panel.
-> Don't force any panel power-up, etc., because that can be intrusive, and
-> that's not what other drivers do (see
-> drivers/gpu/drm/bridge/ti-sn65dsi86.c and
-> drivers/gpu/drm/bridge/parade-ps8640.c.)
->
-> Fixes: 0d97ad03f422 ("drm/bridge: analogix_dp: Remove duplicated code")
-> Cc: <stable@vger.kernel.org>
-> Cc: Tomeu Vizoso <tomeu.vizoso@collabora.com>
-> Signed-off-by: Brian Norris <briannorris@chromium.org>
-> ---
->
-> Changes in v3:
-> - Avoid panel power-up; just check for HPD state, and let the rest
->   happen "as-is" (e.g., time out, if the caller hasn't prepared things
->   properly)
->
-> Changes in v2:
-> - Fix spelling in Subject
-> - DRM_DEV_ERROR() -> drm_err()
-> - Propagate errors from un-analogix_dp_prepare_panel()
->
->  drivers/gpu/drm/bridge/analogix/analogix_dp_core.c | 13 ++++++++++++-
->  1 file changed, 12 insertions(+), 1 deletion(-)
+Hi Lukasz,
 
-Reviewed-by: Douglas Anderson <dianders@chromium.org>
+On 22/02/2022 19:31, Lukasz Luba wrote:
+> 
+> 
+> On 2/22/22 18:12, Daniel Lezcano wrote:
+>>
+>> Hi Lukasz,
+>>
+>> I don't think it makes sense to remove the support of the energy model 
+>> if the units are abstracts.
+>>
+>> IIUC, regarding your previous answer, we don't really know what will 
+>> do the SoC vendor with these numbers and likely they will provide 
+>> consistent abstract values which won't prevent a correct behavior.
+>>
+>> What would be the benefit of giving inconsistent abstract values which 
+>> will be unusable except of giving a broken energy model?
+> 
+> The power values in the EM which has abstract scale, would make sense to 
+> EAS, but not for IPA or DTPM. Those platforms which want to enable EAS,
+> but don't need IPA, would register such '<a_good_name_here>' EM.
+
+Sorry, but I don't understand why DTPM can not deal with abstract values?
 
 
--Doug
+>> Your proposed changes would be acceptable if the energy model has a 
+>> broken flag IMO
+> 
+> That is doable. I can add that flag, so we can call it 'artificial' EM
+> (when this new flag is set).
+
+It is too soon IMO, I would like to see the numbers first so we can take 
+an enlighten decision. Right now, it is unclear what the numbers will be.
+
+
+> Let me craft the RFC patch with this new flag proposal then.
+> Do you agree? Can I also add you as 'Suggested-by'?
+> 
+> Thank you for coming back to me with the comments.
+
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog

@@ -2,37 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F0B44BF29C
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 08:26:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D8CE14BF298
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 08:26:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230455AbiBVHUs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 02:20:48 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:43362 "EHLO
+        id S230501AbiBVHV3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 02:21:29 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:44080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230401AbiBVHUr (ORCPT
+        with ESMTP id S230457AbiBVHV2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 02:20:47 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48137DE2E3;
-        Mon, 21 Feb 2022 23:20:22 -0800 (PST)
+        Tue, 22 Feb 2022 02:21:28 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDCA2116283;
+        Mon, 21 Feb 2022 23:21:03 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DD7FCB8187E;
-        Tue, 22 Feb 2022 07:20:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F384DC340E8;
-        Tue, 22 Feb 2022 07:20:18 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 82B20B81887;
+        Tue, 22 Feb 2022 07:21:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8FF44C340E8;
+        Tue, 22 Feb 2022 07:21:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645514419;
-        bh=OQSsfI/rYiou2N7ZTh0DUG0l24IHBrN7xdfpMv6qtaQ=;
-        h=Date:From:To:Cc:Subject:From;
-        b=SsVuZTBJoj5wKuFAawkg2OU5yO5c6sWFaeqD08ZWWIis0gyYFsK7gsHnP4qRbzPFJ
-         oandL0a/3muIDKbW38SIMYynY6N0zGI2TJU6oKe+d/QSUiWWHus6W/ybyXa//2PbVL
-         1Kp7bIQPYYi1LEoKIq203KJMvrEsBfU7SUwtRRhCKuCu4ksjYDpyTzR+6XkTGlHAW3
-         9GaIIKHI4pQ+a4G/wuwpjgjF83rPzK7nWLB8ypxV53iQPTcrK8S+pa8hf/sEn5OR3g
-         9OiG+Ddwc2RwcRXaI0wpbjtbBlO0VX6CzOcEHOGjGAugBIF1yAr4DrYqrcNqny5ivi
-         Rme5pryUm7hgQ==
-Date:   Tue, 22 Feb 2022 01:28:12 -0600
+        s=k20201202; t=1645514461;
+        bh=SjGYmTvLuGxpF6c1ZqY3bkENDPqYxpdfVh3sFIBch68=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=nqWpOcW24adstDslnETNO2vFjjYqK4MMLH5y4UXr05HgLEF/7UexG/6E21GFxCJ+c
+         7Rj1MKB3vEfpTOyq/ndTSN60oawhXlg8W0y/OmNEpxfVmJJw1X0oUt7B5Pq2yFFKcH
+         8Yty02GN6JGPBmpxlWVmW0J3SB41uY/Ang3sghMOT5vUcPnYc/5K7GDRRsr96FD4vA
+         yuJPHeNBuWedDSkRZVGVqKWkFgY/FoQkGVEh1QpD4c2bkqBF+Bb0LER8cfaoIa/C6h
+         LlKaP89wCttGS+cbSnsd7z2soRM0qj66tIufI4UlJ+Mdesmx7UT6CRqCOuY530+aKT
+         GugIgZOu4Gv6g==
+Date:   Tue, 22 Feb 2022 01:28:54 -0600
 From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
 To:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     Adaptec OEM Raid Solutions <aacraid@microsemi.com>,
@@ -40,13 +40,14 @@ Cc:     Adaptec OEM Raid Solutions <aacraid@microsemi.com>,
         "Martin K. Petersen" <martin.petersen@oracle.com>,
         linux-hardening@vger.kernel.org,
         "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Subject: [PATCH 0/8] scsi: aacraid: Replace one-element arrays with
- flexible-array members
-Message-ID: <cover.1645513670.git.gustavoars@kernel.org>
+Subject: [PATCH 1/8][next] scsi: aacraid: Replace one-element array with
+ flexible-array member
+Message-ID: <1fb4b0263611e3a28d94c5aba4b7c3d7c7791675.1645513670.git.gustavoars@kernel.org>
+References: <cover.1645513670.git.gustavoars@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <cover.1645513670.git.gustavoars@kernel.org>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -57,49 +58,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This series aims to replace one-element arrays with flexible-array
-members in multiple structures in drivers/scsi/aacraid/aacraid.h.
+Replace one-element array with flexible-array member in struct
+aac_ciss_phys_luns_resp.
 
-There is a regular need in the kernel to provide a way to declare having
-a dynamically sized set of trailing elements in a structure. Kernel code
-should always use “flexible array members”[1] for these cases. The older
-style of one-element or zero-length arrays should no longer be used[2].
+Also, use the struct_size() helper to properly calculate the total size
+for allocation.
 
-This helps with the ongoing efforts to globally enable -Warray-bounds
-and get us closer to being able to tighten the FORTIFY_SOURCE routines
-on memcpy().
-
-These issues were found with the help of Coccinelle and audited and fixed,
+This issue was found with the help of Coccinelle and audited and fixed,
 manually.
 
-[1] https://en.wikipedia.org/wiki/Flexible_array_member
-[2] https://www.kernel.org/doc/html/v5.16/process/deprecated.html#zero-length-and-one-element-arrays
-
+Link: https://www.kernel.org/doc/html/v5.16/process/deprecated.html#zero-length-and-one-element-arrays
 Link: https://github.com/KSPP/linux/issues/79
+Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+---
+ drivers/scsi/aacraid/aachba.c  | 5 ++---
+ drivers/scsi/aacraid/aacraid.h | 2 +-
+ 2 files changed, 3 insertions(+), 4 deletions(-)
 
-Gustavo A. R. Silva (8):
-  scsi: aacraid: Replace one-element array with flexible-array member
-  scsi: aacraid: Replace one-element array with flexible-array member in
-    struct sgmap
-  scsi: aacraid: Replace one-element array with flexible-array member in
-    struct user_sgmap
-  scsi: aacraid: Replace one-element array with flexible-array member in
-    struct sgmap64
-  scsi: aacraid: Replace one-element array with flexible-array member in
-    struct user_sgmap64
-  scsi: aacraid: Replace one-element array with flexible-array member in
-    struct sgmapraw
-  scsi: aacraid: Replace one-element array with flexible-array member in
-    struct user_sgmapraw
-  scsi: aacraid: Replace one-element array with flexible-array member in
-    struct aac_aifcmd
-
- drivers/scsi/aacraid/aachba.c   | 76 +++++++++++----------------------
- drivers/scsi/aacraid/aacraid.h  | 16 +++----
- drivers/scsi/aacraid/commctrl.c |  5 +--
- drivers/scsi/aacraid/comminit.c |  3 +-
- 4 files changed, 37 insertions(+), 63 deletions(-)
-
+diff --git a/drivers/scsi/aacraid/aachba.c b/drivers/scsi/aacraid/aachba.c
+index b04d039da276..98100e28e95e 100644
+--- a/drivers/scsi/aacraid/aachba.c
++++ b/drivers/scsi/aacraid/aachba.c
+@@ -1823,13 +1823,12 @@ static inline void aac_free_safw_ciss_luns(struct aac_dev *dev)
+ static int aac_get_safw_ciss_luns(struct aac_dev *dev)
+ {
+ 	int rcode = -ENOMEM;
+-	int datasize;
++	size_t datasize;
+ 	struct aac_srb *srbcmd;
+ 	struct aac_srb_unit srbu;
+ 	struct aac_ciss_phys_luns_resp *phys_luns;
+ 
+-	datasize = sizeof(struct aac_ciss_phys_luns_resp) +
+-		(AAC_MAX_TARGETS - 1) * sizeof(struct _ciss_lun);
++	datasize = struct_size(phys_luns, lun, AAC_MAX_TARGETS);
+ 	phys_luns = kmalloc(datasize, GFP_KERNEL);
+ 	if (phys_luns == NULL)
+ 		goto out;
+diff --git a/drivers/scsi/aacraid/aacraid.h b/drivers/scsi/aacraid/aacraid.h
+index 3733df77bc65..704440a96daa 100644
+--- a/drivers/scsi/aacraid/aacraid.h
++++ b/drivers/scsi/aacraid/aacraid.h
+@@ -321,7 +321,7 @@ struct aac_ciss_phys_luns_resp {
+ 		u8	level3[2];
+ 		u8	level2[2];
+ 		u8	node_ident[16];	/* phys. node identifier */
+-	} lun[1];			/* List of phys. devices */
++	} lun[];			/* List of phys. devices */
+ };
+ 
+ /*
 -- 
 2.27.0
 

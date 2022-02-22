@@ -2,133 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2934C4C00A4
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 18:57:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AAB94C00A9
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 18:57:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234746AbiBVR5b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 12:57:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36638 "EHLO
+        id S234771AbiBVR5m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 12:57:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234726AbiBVR52 (ORCPT
+        with ESMTP id S234765AbiBVR5j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 12:57:28 -0500
-Received: from mail-oo1-f53.google.com (mail-oo1-f53.google.com [209.85.161.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0463E9F3AB;
-        Tue, 22 Feb 2022 09:56:48 -0800 (PST)
-Received: by mail-oo1-f53.google.com with SMTP id i10-20020a4aab0a000000b002fccf890d5fso18694899oon.5;
-        Tue, 22 Feb 2022 09:56:48 -0800 (PST)
+        Tue, 22 Feb 2022 12:57:39 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D0ED8B16DD
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 09:57:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1645552629;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=hJzZgeDzNY7zmhhmPD8Ts6QhadgVuW+LtnZrIEdFmk4=;
+        b=T1Y9hBwCAp+Zn3JT6xpWEyfR1QnIkNsNMbNa0BCflRWedtGlB462I+lGaEoHcP4V1TJhZP
+        Y/fNCDutTY6NhAhdkWT4fTVio5jQVUpuUgVhph/TgUp+maViTvhK5FviAofX6b0fK7h1Pn
+        LxXWOO54mMx53cPpxdj5kuGVmMfpA3I=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-363-BrnfhZnFNfStLgExgCTjhA-1; Tue, 22 Feb 2022 12:57:07 -0500
+X-MC-Unique: BrnfhZnFNfStLgExgCTjhA-1
+Received: by mail-wr1-f71.google.com with SMTP id t8-20020adfa2c8000000b001e8f6889404so7251573wra.0
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 09:57:07 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=d0c5eaekgCsd/2MB/A2s3Yr0/x87WiLkg0ydsvjSbdg=;
-        b=X5ln7daP7x36ZsQwdFB3GPGWMZbyrSw1tImIzf0EpnnNkjrt1zBa4+uwoixGuyE8Ko
-         bgEhFZvEVl2Czxutg1OAhZv3S8fqJUs/N4onWCRB64yda9IFuA51xoRfmvpjOStBZJRX
-         WpvqmsJ6KjKYrq6kCllipG9O0s0wU3cyM+WJIzkW/fJv/gQzTa9x/kIPaidKAUdVRytm
-         ktqCiORrcA4/2xPE44Lc7tKu0jZAPLxKM8f+5F7qbMiBmLhdqjmQ4WacS2HzKqEOqqp7
-         P2nJtXHWoHTLNwiPlgV7ufu5whS81R+jvaKHMkDzgLl4kEa19v4Dt0tig5u8IOvquaip
-         z1Iw==
-X-Gm-Message-State: AOAM531G135hW3DBrg/Gjr7+0Jfvy9GGgzveZRGjOgN0qEZI+tkLFVVT
-        n0tOMbBMxyrShGVHpdKgDw==
-X-Google-Smtp-Source: ABdhPJzyCoIdb4zb2XlsBbH2K09wgxaBCtYwIdcE2Yqsud2oVcKlTNvKGVY6PBPFKAl9JjY+BPTX8g==
-X-Received: by 2002:a05:6870:790c:b0:d2:8591:d4a5 with SMTP id hg12-20020a056870790c00b000d28591d4a5mr2255509oab.265.1645552607973;
-        Tue, 22 Feb 2022 09:56:47 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id o15sm6387844ooi.31.2022.02.22.09.56.46
+        bh=hJzZgeDzNY7zmhhmPD8Ts6QhadgVuW+LtnZrIEdFmk4=;
+        b=DIQ4ozBjDtTGxpo5hvUvuliIFPEokbimG/qQQC7X6p3kxZGneJrGbZkdZwNUuZlMZM
+         ehbAPYtDBNZ1i+LCY9wakR4IbY5nsf+ylsQa99xw/DZlnhYa0SvxkyX0kxt26eCFtnUB
+         /aHxlO9Yo7xlNsksA8gr642KyLsJTJSIDkdbuR84NZAa+ffCBlakcO4Wq8rF2fjuqvFB
+         PTCggHuFuS7QMnkcB8YVPARwp6dZoNarcSM+U/VANbWHyd0VDAT7/fG/EdkMJ1I/pSgd
+         IPZkkB/rQAW1ASfc5mJ093oPJw8FEzPz/hVv6jm0OVDLaJ/xfFTVYfQ+kPnyCdf/toMf
+         rrLQ==
+X-Gm-Message-State: AOAM5330sd711GFiQNu9CIXAH7XK/joFBKve4ZLgIHmSExYPvau5jiP5
+        aHbe35WvgeoTIavH9fl+XpE5ClnKQZ9jR3gyHiTQqEAXK66HJEllEoFca+8BUZZD9fAX+THYJey
+        vBO0VN1t48daXZhWKbZhB3qM=
+X-Received: by 2002:adf:e10a:0:b0:1e3:3188:79c7 with SMTP id t10-20020adfe10a000000b001e3318879c7mr20431444wrz.329.1645552626670;
+        Tue, 22 Feb 2022 09:57:06 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxBLqieyLWhR9YxZvOyFiDe21CGa5pv2+OROhVCjx6WLj1pEI28rUPcGkTq6FUILDxoAizVhQ==
+X-Received: by 2002:adf:e10a:0:b0:1e3:3188:79c7 with SMTP id t10-20020adfe10a000000b001e3318879c7mr20431432wrz.329.1645552626509;
+        Tue, 22 Feb 2022 09:57:06 -0800 (PST)
+Received: from localhost (cpc111743-lutn13-2-0-cust979.9-3.cable.virginm.net. [82.17.115.212])
+        by smtp.gmail.com with ESMTPSA id e7sm33021244wrg.44.2022.02.22.09.57.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Feb 2022 09:56:47 -0800 (PST)
-Received: (nullmailer pid 3307024 invoked by uid 1000);
-        Tue, 22 Feb 2022 17:56:46 -0000
-Date:   Tue, 22 Feb 2022 11:56:46 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Tyrone Ting <warp5tw@gmail.com>
-Cc:     avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
-        venture@google.com, yuenn@google.com, benjaminfair@google.com,
-        krzysztof.kozlowski@canonical.com, semen.protsenko@linaro.org,
-        yangyicong@hisilicon.com, wsa@kernel.org, jie.deng@intel.com,
-        sven@svenpeter.dev, bence98@sch.bme.hu,
-        christophe.leroy@csgroup.eu, lukas.bulwahn@gmail.com,
-        olof@lixom.net, arnd@arndb.de, digetx@gmail.com,
-        andriy.shevchenko@linux.intel.com, tali.perry@nuvoton.com,
-        Avi.Fishman@nuvoton.com, tomer.maimon@nuvoton.com,
-        KWLIU@nuvoton.com, JJLIU0@nuvoton.com, kfting@nuvoton.com,
-        openbmc@lists.ozlabs.org, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 02/11] dt-bindings: i2c: npcm: support NPCM845
-Message-ID: <YhUj3uRQinOVF4eM@robh.at.kernel.org>
-References: <20220220035321.3870-1-warp5tw@gmail.com>
- <20220220035321.3870-3-warp5tw@gmail.com>
+        Tue, 22 Feb 2022 09:57:06 -0800 (PST)
+Date:   Tue, 22 Feb 2022 17:57:05 +0000
+From:   Aaron Tomlin <atomlin@redhat.com>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     Luis Chamberlain <mcgrof@kernel.org>, linux-kernel@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org,
+        kgdb-bugreport@lists.sourceforge.net, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-modules@vger.kernel.org
+Subject: Re: [PATCH v5 1/6] module: Always have struct mod_tree_root
+Message-ID: <20220222175705.ryqmhhrpokx7xbgv@ava.usersys.com>
+X-PGP-Key: http://pgp.mit.edu/pks/lookup?search=atomlin%40redhat.com
+X-PGP-Fingerprint: 7906 84EB FA8A 9638 8D1E  6E9B E2DE 9658 19CC 77D6
+References: <cover.1645541930.git.christophe.leroy@csgroup.eu>
+ <c9584f48abce748e62e65e6757ceb23800f15380.1645541930.git.christophe.leroy@csgroup.eu>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220220035321.3870-3-warp5tw@gmail.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <c9584f48abce748e62e65e6757ceb23800f15380.1645541930.git.christophe.leroy@csgroup.eu>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Feb 20, 2022 at 11:53:12AM +0800, Tyrone Ting wrote:
-> From: Tyrone Ting <kfting@nuvoton.com>
+On Tue 2022-02-22 16:00 +0100, Christophe Leroy wrote:
+> In order to separate text and data, we need to setup
+> two rb trees.
 > 
-> Add compatible and nuvoton,sys-mgr description for NPCM i2c module.
+> This means that struct mod_tree_root is required even without
+> MODULES_TREE_LOOKUP.
 > 
-> Signed-off-by: Tyrone Ting <kfting@nuvoton.com>
-> Signed-off-by: Tali Perry <tali.perry1@gmail.com>
+> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
 > ---
->  .../bindings/i2c/nuvoton,npcm7xx-i2c.yaml       | 17 ++++++++++++-----
->  1 file changed, 12 insertions(+), 5 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/i2c/nuvoton,npcm7xx-i2c.yaml b/Documentation/devicetree/bindings/i2c/nuvoton,npcm7xx-i2c.yaml
-> index 128444942aec..809c51ac32fe 100644
-> --- a/Documentation/devicetree/bindings/i2c/nuvoton,npcm7xx-i2c.yaml
-> +++ b/Documentation/devicetree/bindings/i2c/nuvoton,npcm7xx-i2c.yaml
-> @@ -7,17 +7,18 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
->  title: nuvoton NPCM7XX I2C Controller Device Tree Bindings
->  
->  description: |
-> -  The NPCM750x includes sixteen I2C bus controllers. All Controllers support
-> -  both master and slave mode. Each controller can switch between master and slave
-> -  at run time (i.e. IPMB mode). Each controller has two 16 byte HW FIFO for TX and
-> -  RX.
-> +  I2C bus controllers of the NPCM series support both master and
-> +  slave mode. Each controller can switch between master and slave at run time
-> +  (i.e. IPMB mode). HW FIFO for TX and RX are supported.
->  
->  maintainers:
->    - Tali Perry <tali.perry1@gmail.com>
->  
->  properties:
->    compatible:
-> -    const: nuvoton,npcm750-i2c
-> +     enum:
-> +      - nuvoton,npcm750-i2c
-> +      - nuvoton,npcm845-i2c
->  
->    reg:
->      maxItems: 1
-> @@ -36,11 +37,16 @@ properties:
->      default: 100000
->      enum: [100000, 400000, 1000000]
->  
-> +  nuvoton,sys-mgr:
-> +    $ref: "/schemas/types.yaml#/definitions/phandle"
-> +    description: The phandle of system manager register node.
-> +
->  required:
->    - compatible
->    - reg
->    - interrupts
->    - clocks
-> +  - nuvoton,sys-mgr
+>  kernel/module/internal.h | 4 +++-
+>  kernel/module/main.c     | 5 -----
+>  2 files changed, 3 insertions(+), 6 deletions(-)
 
-You can't make nuvoton,sys-mgr required for existing users. You can add 
-an if/then schema for nuvoton,npcm845-i2c if you want to make it 
-required in that case.
+Reviewed-by: Aaron Tomlin <atomlin@atomlin.com>
 
-Rob
+-- 
+Aaron Tomlin
+

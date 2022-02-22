@@ -2,84 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8D4E4BF2D8
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 08:46:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 748AD4BF2CF
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 08:46:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231234AbiBVHnC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 02:43:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44058 "EHLO
+        id S229526AbiBVHpM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 02:45:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231266AbiBVHmw (ORCPT
+        with ESMTP id S229843AbiBVHpE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 02:42:52 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37C5459A56;
-        Mon, 21 Feb 2022 23:42:27 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C83FF61224;
-        Tue, 22 Feb 2022 07:42:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2F5BC340E8;
-        Tue, 22 Feb 2022 07:42:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645515746;
-        bh=dBeDgEG5rHIyM94zUzickINy/WRIcWRAB6nD1Yps1Q0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=mrEJXmP/SYcYGeltdY4YDilJhpCswQPVZNDGsHreyT49gk+uJjqBTLR4yjhBv404v
-         C2CckRQ49qZWvWB+NiofVM6D0QOF9FZcYpXCjl2C5Qp1sHRuMqbK6KSXXcgcbsvnT/
-         H0FzQDSnMol40aft1+v0pM5tN7x0W95TMWJtqESs=
-Date:   Tue, 22 Feb 2022 08:42:23 +0100
-From:   "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
-To:     Ricky WU <ricky_wu@realtek.com>
-Cc:     "ulf.hansson@linaro.org" <ulf.hansson@linaro.org>,
-        "kai.heng.feng@canonical.com" <kai.heng.feng@canonical.com>,
-        "tommyhebb@gmail.com" <tommyhebb@gmail.com>,
-        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] mmc: rtsx: add 74 Clocks in power on flow
-Message-ID: <YhST32rsfl7MDv34@kroah.com>
-References: <fb7cda69c5c244dfa579229ee2f0da83@realtek.com>
+        Tue, 22 Feb 2022 02:45:04 -0500
+Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD1B2133966;
+        Mon, 21 Feb 2022 23:44:28 -0800 (PST)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id 636185C0154;
+        Tue, 22 Feb 2022 02:44:25 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute5.internal (MEProxy); Tue, 22 Feb 2022 02:44:25 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; bh=yfRp+YUFI/2FMxEFyLbvDWA7xuEPRQXxUvM5Ey
+        G2eSw=; b=eCj08t+VA37FE46gUvOLnZwouqcohh6wP21mmjBrD1zQTZBRL3Mvlo
+        RRbsQmsMpi6qOVCvDSZoC55QILNLiGWNluAZLUeEylTcNz8npVsklxO+L5BCx884
+        Ru3ATtKuIaAgT+AZ1Ib2wnIieXtqFY1ZxBYrp+7SmVR2Zw5mxl+2Sg3GS6S1Fd47
+        ej8/WeIOEFcvw3O+Q9nCbJpqEU+cu3Vdt9dZtx9Bxrx1kn19iaZrYcu2LMoUnPBG
+        3bmTvGR6mftjxcRUbcqkEcSm14WZaE0oN2Dm9mQZkSm16YShQDo39bkX/9Hr8ZM6
+        E2FifGUMsEv6QB53LnI/rWhq6GCJZsEA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=yfRp+YUFI/2FMxEFy
+        LbvDWA7xuEPRQXxUvM5EyG2eSw=; b=B3UFwwF1JJKl1U+UQUqzteo7azATfEOwH
+        nX+ec47d0VaH/fGr6IvaozijawxsJeE9Z3GKKSbcC6YaEExX7J8I/lTqHp5rxGmd
+        EyRmm3EHCdNkEzhNUVGrtQGLPQc6i/y286hCQapMnMB1HZUKmOhRKNRmiocG7g+B
+        yZT52ANhuvvrDOuARDUwSDE0j2BdNrydU7g8O1Ja4n+bIqV1wc2UFcHPUwMeeSHV
+        88OjdAuNcTNVakMkDfXi0Ve8ObtoU9YomzheJgX5PbOAdfM+eN4GULlotQT6a0Zc
+        G3A5g2Bc2Hjf2GWne0ZL6ZhjXsNrbsMwmyo2yEc5Ao4OFCzHLNSkA==
+X-ME-Sender: <xms:WZQUYplkFnjm8d2n-TmJ1hl81z3rW7HHZyqtopj3HdZpAsEjifQX4w>
+    <xme:WZQUYk1n7PK1TYKf9CQ91aqC5xrAgc3iIGLV4BhN-G8no-A0m6FDGwEhYavSYaYi4
+    gqugZw1lY2v7w>
+X-ME-Received: <xmr:WZQUYvqB08vSfg3ZlfhGyHq1Mz_P6LX264nydNkQjltPL397K4UBsqPIF8-2db-5CNKzhZJnKTSMYDz1K1BPb4gMqyXHAJ48>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrkeejgddutdelucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvffukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefirhgvghcu
+    mffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpeevueehje
+    fgfffgiedvudekvdektdelleelgefhleejieeugeegveeuuddukedvteenucevlhhushht
+    vghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgvgheskhhrohgrhh
+    drtghomh
+X-ME-Proxy: <xmx:WZQUYplfMLMMDUMhUv1glyF_TByhiPdMsI50ofGhByaA7VOgzPO_iw>
+    <xmx:WZQUYn3uy8z7NB6meP4GMnVwW-BMituosVoQMMBGT0i5Brogb4MjCw>
+    <xmx:WZQUYot1Oy2CmE7vBtywTl5BVJvgN5CSqRQwbrnlh4Nos2CZYUr9Xg>
+    <xmx:WZQUYhoiOkvsEc4dt7u1NTrocvrGVqEgQaw9w8olCG4Mzr31NZDjNg>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 22 Feb 2022 02:44:24 -0500 (EST)
+Date:   Tue, 22 Feb 2022 08:44:22 +0100
+From:   Greg KH <greg@kroah.com>
+To:     broonie@kernel.org
+Cc:     Hans de Goede <hdegoede@redhat.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: manual merge of the usb tree with the usb.current
+ tree
+Message-ID: <YhSUVkm/lIm1x3ks@kroah.com>
+References: <20220221203917.1899359-1-broonie@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <fb7cda69c5c244dfa579229ee2f0da83@realtek.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220221203917.1899359-1-broonie@kernel.org>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 22, 2022 at 07:27:52AM +0000, Ricky WU wrote:
-> After 1ms stabilizing the voltage time
-> add "Host provides at least 74 Clocks
-> before issuing first command" that is
-> spec definition
-
-You do have 72 columns to use here, no need to wrap this so tightly.
-
+On Mon, Feb 21, 2022 at 08:39:17PM +0000, broonie@kernel.org wrote:
+> Hi all,
 > 
-> Signed-off-by: Ricky Wu <ricky_wu@realtek.com>
-> ---
->  drivers/mmc/host/rtsx_pci_sdmmc.c | 7 +++++++
->  1 file changed, 7 insertions(+)
+> Today's linux-next merge of the usb tree got a conflict in:
 > 
-> diff --git a/drivers/mmc/host/rtsx_pci_sdmmc.c b/drivers/mmc/host/rtsx_pci_sdmmc.c
-> index 2a3f14afe9f8..e016d720e453 100644
-> --- a/drivers/mmc/host/rtsx_pci_sdmmc.c
-> +++ b/drivers/mmc/host/rtsx_pci_sdmmc.c
-> @@ -940,10 +940,17 @@ static int sd_power_on(struct realtek_pci_sdmmc *host)
->  	if (err < 0)
->  		return err;
->  
-> +	mdelay(1);
+>   drivers/usb/dwc3/dwc3-pci.c
+> 
+> between commit:
+> 
+>   d7c93a903f33f ("usb: dwc3: pci: Add "snps,dis_u2_susphy_quirk" for Intel Bay Trail")
+> 
+> from the usb.current tree and commit:
+> 
+>   582ab24e096fd ("usb: dwc3: pci: Set "linux,phy_charger_detect" property on some Bay Trail boards")
+> 
+> from the usb tree.
+> 
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
+> 
+> diff --cc arch/arm64/boot/dts/qcom/ipq6018.dtsi
+> index 4e7efa97724bd,a614b9f73e2cd..0000000000000
+> --- a/arch/arm64/boot/dts/qcom/ipq6018.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/ipq6018.dtsi
+> diff --cc drivers/usb/dwc3/dwc3-pci.c
+> index 06d0e88ec8af9,4330c974b31ba..0000000000000
+> --- a/drivers/usb/dwc3/dwc3-pci.c
+> +++ b/drivers/usb/dwc3/dwc3-pci.c
+> @@@ -120,13 -119,14 +120,21 @@@ static const struct property_entry dwc3
+>   	{}
+>   };
+>   
+>  +static const struct property_entry dwc3_pci_intel_byt_properties[] = {
+>  +	PROPERTY_ENTRY_STRING("dr_mode", "peripheral"),
+>  +	PROPERTY_ENTRY_BOOL("snps,dis_u2_susphy_quirk"),
+>  +	PROPERTY_ENTRY_BOOL("linux,sysdev_is_parent"),
+>  +	{}
+>  +};
+>  +
+> + static const struct property_entry dwc3_pci_intel_phy_charger_detect_properties[] = {
+> + 	PROPERTY_ENTRY_STRING("dr_mode", "peripheral"),
+> + 	PROPERTY_ENTRY_BOOL("snps,dis_u2_susphy_quirk"),
+> + 	PROPERTY_ENTRY_BOOL("linux,phy_charger_detect"),
+> + 	PROPERTY_ENTRY_BOOL("linux,sysdev_is_parent"),
+> + 	{}
+> + };
+> + 
+>   static const struct property_entry dwc3_pci_mrfld_properties[] = {
+>   	PROPERTY_ENTRY_STRING("dr_mode", "otg"),
+>   	PROPERTY_ENTRY_STRING("linux,extcon-name", "mrfld_bcove_pwrsrc"),
+> @@@ -169,10 -169,10 +177,14 @@@ static const struct software_node dwc3_
+>   	.properties = dwc3_pci_intel_properties,
+>   };
+>   
+>  +static const struct software_node dwc3_pci_intel_byt_swnode = {
+>  +	.properties = dwc3_pci_intel_byt_properties,
+>  +};
+>  +
+> + static const struct software_node dwc3_pci_intel_phy_charger_detect_swnode = {
+> + 	.properties = dwc3_pci_intel_phy_charger_detect_properties,
+> + };
+> + 
+>   static const struct software_node dwc3_pci_intel_mrfld_swnode = {
+>   	.properties = dwc3_pci_mrfld_properties,
+>   };
 
-What is this delay for?
-
-thanks,
+Looks good, thanks!
 
 greg k-h

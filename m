@@ -2,186 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07F194BF288
+	by mail.lfdr.de (Postfix) with ESMTP id 53AC04BF289
 	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 08:26:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230461AbiBVHVP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 02:21:15 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:43742 "EHLO
+        id S231146AbiBVHYA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 02:24:00 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:56432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230401AbiBVHVM (ORCPT
+        with ESMTP id S230495AbiBVHX7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 02:21:12 -0500
-Received: from out30-45.freemail.mail.aliyun.com (out30-45.freemail.mail.aliyun.com [115.124.30.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6003EDEA07;
-        Mon, 21 Feb 2022 23:20:47 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R281e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04426;MF=haoxu@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0V5CE4Mj_1645514444;
-Received: from 30.226.12.35(mailfrom:haoxu@linux.alibaba.com fp:SMTPD_---0V5CE4Mj_1645514444)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Tue, 22 Feb 2022 15:20:45 +0800
-Message-ID: <54b21f27-2c0d-1b3d-b35f-a88bdb766c54@linux.alibaba.com>
-Date:   Tue, 22 Feb 2022 15:20:44 +0800
+        Tue, 22 Feb 2022 02:23:59 -0500
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6016FC7D6D
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 23:23:34 -0800 (PST)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 21M7NHjr074417;
+        Tue, 22 Feb 2022 01:23:17 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1645514597;
+        bh=nv7NPh44teDYlLiUgC3GNulgXRSRHldpoTxnUlUK4RE=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=YhoVi78z40TPxlOg0oyfoIWGXWWyhCXYY6ptd47S63rWEiOX3y8ltZsojkznthTPi
+         IqjADgV70MclLywsJU+lsdf57X9MFI7gPMI97IqIsdghTe1MDREssyJmGUrO5YcgKg
+         mqrnUkR5MwmKZssH08xKi07dLC0BhbCfr3uDxQBI=
+Received: from DLEE115.ent.ti.com (dlee115.ent.ti.com [157.170.170.26])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 21M7NHfd038553
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 22 Feb 2022 01:23:17 -0600
+Received: from DLEE106.ent.ti.com (157.170.170.36) by DLEE115.ent.ti.com
+ (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Tue, 22
+ Feb 2022 01:23:15 -0600
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE106.ent.ti.com
+ (157.170.170.36) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Tue, 22 Feb 2022 01:23:15 -0600
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 21M7NFhd012614;
+        Tue, 22 Feb 2022 01:23:15 -0600
+Date:   Tue, 22 Feb 2022 12:53:14 +0530
+From:   Pratyush Yadav <p.yadav@ti.com>
+To:     Michael Walle <michael@walle.cc>
+CC:     <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        <yaliang.wang@windriver.com>
+Subject: Re: [PATCH v4 01/32] mtd: spi-nor: atmel: unify function names
+Message-ID: <20220222072314.tk4bw5sngwnk6zwr@ti.com>
+References: <20220221120809.1531502-1-michael@walle.cc>
+ <20220221120809.1531502-2-michael@walle.cc>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v2 4/4] io_uring: pre-increment f_pos on rw
-Content-Language: en-US
-To:     Pavel Begunkov <asml.silence@gmail.com>,
-        Dylan Yudaken <dylany@fb.com>, Jens Axboe <axboe@kernel.dk>,
-        io-uring@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, kernel-team@fb.com
-References: <20220221141649.624233-1-dylany@fb.com>
- <20220221141649.624233-5-dylany@fb.com>
- <ec1647f3-2c37-04be-bdbd-ab78b9f07a03@gmail.com>
-From:   Hao Xu <haoxu@linux.alibaba.com>
-In-Reply-To: <ec1647f3-2c37-04be-bdbd-ab78b9f07a03@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20220221120809.1531502-2-michael@walle.cc>
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 21/02/22 01:07PM, Michael Walle wrote:
+> To avoid name clashes unify all the function and static object names and
+> use one of the following prefixes which should be sufficiently unique:
+>  - <vendor>_nor_
+>  - <flash_family>_nor_
+>  - <flash_part>_
 
-On 2/22/22 02:00, Pavel Begunkov wrote:
-> On 2/21/22 14:16, Dylan Yudaken wrote:
->> In read/write ops, preincrement f_pos when no offset is specified, and
->> then attempt fix up the position after IO completes if it completed less
->> than expected. This fixes the problem where multiple queued up IO 
->> will all
->> obtain the same f_pos, and so perform the same read/write.
->>
->> This is still not as consistent as sync r/w, as it is able to advance 
->> the
->> file offset past the end of the file. It seems it would be quite a
->> performance hit to work around this limitation - such as by keeping 
->> track
->> of concurrent operations - and the downside does not seem to be too
->> problematic.
->>
->> The attempt to fix up the f_pos after will at least mean that in 
->> situations
->> where a single operation is run, then the position will be consistent.
->>
->> Co-developed-by: Jens Axboe <axboe@kernel.dk>
->> Signed-off-by: Jens Axboe <axboe@kernel.dk>
->> Signed-off-by: Dylan Yudaken <dylany@fb.com>
->> ---
->>   fs/io_uring.c | 81 ++++++++++++++++++++++++++++++++++++++++++---------
->>   1 file changed, 68 insertions(+), 13 deletions(-)
->>
->> diff --git a/fs/io_uring.c b/fs/io_uring.c
->> index abd8c739988e..a951d0754899 100644
->> --- a/fs/io_uring.c
->> +++ b/fs/io_uring.c
->> @@ -3066,21 +3066,71 @@ static inline void io_rw_done(struct kiocb 
->> *kiocb, ssize_t ret)
->
-> [...]
->
->> +            return false;
->>           }
->>       }
->> -    return is_stream ? NULL : &kiocb->ki_pos;
->> +    *ppos = is_stream ? NULL : &kiocb->ki_pos;
->> +    return false;
->> +}
->> +
->> +static inline void
->> +io_kiocb_done_pos(struct io_kiocb *req, struct kiocb *kiocb, u64 
->> actual)
->
-> That's a lot of inlining, I wouldn't be surprised if the compiler
-> will even refuse to do that.
->
-> io_kiocb_done_pos() {
->     // rest of it
-> }
->
-> inline io_kiocb_done_pos() {
->     if (!(flags & CUR_POS));
->         return;
->     __io_kiocb_done_pos();
-> }
->
-> io_kiocb_update_pos() is huge as well
->
->> +{
->> +    u64 expected;
->> +
->> +    if (likely(!(req->flags & REQ_F_CUR_POS)))
->> +        return;
->> +
->> +    expected = req->rw.len;
->> +    if (actual >= expected)
->> +        return;
->> +
->> +    /*
->> +     * It's not definitely safe to lock here, and the assumption is,
->> +     * that if we cannot lock the position that it will be changing,
->> +     * and if it will be changing - then we can't update it anyway
->> +     */
->> +    if (req->file->f_mode & FMODE_ATOMIC_POS
->> +        && !mutex_trylock(&req->file->f_pos_lock))
->> +        return;
->> +
->> +    /*
->> +     * now we want to move the pointer, but only if everything is 
->> consistent
->> +     * with how we left it originally
->> +     */
->> +    if (req->file->f_pos == kiocb->ki_pos + (expected - actual))
->> +        req->file->f_pos = kiocb->ki_pos;
->
-> I wonder, is it good enough / safe to just assign it considering that
-> the request was executed outside of locks? vfs_seek()?
->
->> +
->> +    /* else something else messed with f_pos and we can't do 
->> anything */
->> +
->> +    if (req->file->f_mode & FMODE_ATOMIC_POS)
->> +        mutex_unlock(&req->file->f_pos_lock);
->>   }
->
-> Do we even care about races while reading it? E.g.
-> pos = READ_ONCE();
->
->>   -    ppos = io_kiocb_update_pos(req, kiocb);
->> -
->>       ret = rw_verify_area(READ, req->file, ppos, req->result);
->>       if (unlikely(ret)) {
->>           kfree(iovec);
->> +        io_kiocb_done_pos(req, kiocb, 0);
->
-> Why do we update it on failure?
-It seems like a fallback, if no pos change, fallback file->f_pos to the 
-original place
->
-> [...]
->
->> -    ppos = io_kiocb_update_pos(req, kiocb);
->> -
->>       ret = rw_verify_area(WRITE, req->file, ppos, req->result);
->>       if (unlikely(ret))
->>           goto out_free;
->> @@ -3858,6 +3912,7 @@ static int io_write(struct io_kiocb *req, 
->> unsigned int issue_flags)
->>           return ret ?: -EAGAIN;
->>       }
->>   out_free:
->> +    io_kiocb_done_pos(req, kiocb, 0);
->
-> Looks weird. It appears we don't need it on failure and
-> successes are covered by kiocb_done() / ->ki_complete
->
->>       /* it's reportedly faster than delegating the null check to 
->> kfree() */
->>       if (iovec)
->>           kfree(iovec);
->
+Shouldn't this be "<flash_part>_nor_"?
+
+-- 
+Regards,
+Pratyush Yadav
+Texas Instruments Inc.

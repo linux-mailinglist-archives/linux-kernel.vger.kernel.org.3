@@ -2,146 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5726E4C0134
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 19:25:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2947A4C0138
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 19:26:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234864AbiBVSZ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 13:25:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45958 "EHLO
+        id S234955AbiBVS0X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 13:26:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230325AbiBVSZ1 (ORCPT
+        with ESMTP id S230325AbiBVS0V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 13:25:27 -0500
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8B45EAC8C;
-        Tue, 22 Feb 2022 10:25:01 -0800 (PST)
-Received: by mail-ed1-x536.google.com with SMTP id q17so39235250edd.4;
-        Tue, 22 Feb 2022 10:25:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=LeuBg4dOuh5JH3e3jvl1u82+i4KgmUWsl9hqSaPqdVs=;
-        b=eGutWihD+Ld7dXfTSK4HpFHNWgyC915Sn/OxmxZwaO0MadBFi0DfhUYgPGrEkZvPLi
-         NfmXyZ7DlkyHThFli/HDpOLQZq8nF/d+1q0DuBUxBhPBFadfAOT3pQegs8S0VYRuRZ3S
-         Npin/21oE2k8gERsUAS7pZ3Dg9af+GQR+AU1eHtvOuS3Rl/99JVXXnMrFH3z9geabAff
-         nVE2M1sL96hghm9nc+alhJAVaVbZTxY5TfSwBZ0MC4LoY1aiTbt5PA9u5hEKjWoUSGPR
-         TvGfUNCEorD5JXlybq9gBpGieiEVQG/DvGXz2UncuMuYuZPcqNyE/xYERQMxSK1hLnsl
-         bOiA==
+        Tue, 22 Feb 2022 13:26:21 -0500
+Received: from mail-ot1-f43.google.com (mail-ot1-f43.google.com [209.85.210.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A5DAEB159;
+        Tue, 22 Feb 2022 10:25:55 -0800 (PST)
+Received: by mail-ot1-f43.google.com with SMTP id g6-20020a9d6486000000b005acf9a0b644so10212588otl.12;
+        Tue, 22 Feb 2022 10:25:55 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=LeuBg4dOuh5JH3e3jvl1u82+i4KgmUWsl9hqSaPqdVs=;
-        b=EPzXsNUzA8cxbmGb0UwUdgyO4Nfn9XzNRPmAub4sAsgPuG1qMjsMw/jWfbNTym/0Nt
-         yoSW05V/rMxyFW9mQvpFULqFb+ZYH0B+HuvooF2NrRVJ3BeoS+sZu46UbWmZ2bdQ97KG
-         S7jFsfOHV/LzJWmd4o955CWDnOkhk6tf5ReMyhlime5JwIKhilsnFzarjiUGrvmESZ3e
-         4A9pwDAHb4BlpMuS76yUzhFN+7VV8x41RjXZSvmWNJQLCU4RxYOmS6zu66BuD/dsqRY6
-         Ral21b90hsHfh+eJ/Bmb/cluhBswAm2gsqvrrNeMNSTJPYhHNnq6JJ0JNBpQmGCHF1bq
-         2c7A==
-X-Gm-Message-State: AOAM533XnmBbSjVxBc2hhLxKZ59vLJExVclU0ieEguwUAYGIeY5PCJT7
-        arr15ZSK8QrRaU/FFwVbTi8=
-X-Google-Smtp-Source: ABdhPJxoyMZ8ZfL/45gLF23XftB2tGAsBn5C+bSzH3BEgsPFAqAj4Wy+s5Dv07GAAkizLi/ajIJZHw==
-X-Received: by 2002:a05:6402:f04:b0:410:f0a5:5b02 with SMTP id i4-20020a0564020f0400b00410f0a55b02mr28509835eda.209.1645554300299;
-        Tue, 22 Feb 2022 10:25:00 -0800 (PST)
-Received: from Ansuel-xps.localdomain (93-42-71-246.ip85.fastwebnet.it. [93.42.71.246])
-        by smtp.gmail.com with ESMTPSA id j19sm6624244ejo.202.2022.02.22.10.24.59
+         :mime-version:content-disposition:in-reply-to;
+        bh=wnlhZOUsuCTZiCLLFfPFXU7KusFpj+npdpqQIuQ4k3g=;
+        b=8DAaIWGfcCsXiudZW1/oCE4e0BWc6/ZNGj9WrMMrBw1fe6hfXiGN+YxQwbxJJC0GI4
+         xDciu102+P00QS+Gq2vKJGxWNCRKJFa7WY2WWs3ip9nwpzAV5UOryxczP768fT068C4M
+         GgCSUa6ymQ5StqQ2Xz4ObMELDiliTY9I2zWD86MlUlDwRq+FsUgARKWWTwnea0xS4isG
+         S0V1fvrZkAcL/ed90xNYGhZsIaIVte7J8naMHRoyn9hdtxFeACeIOOMSBvUx/a4h3coE
+         a4wv4fj5a13qlNBtgwamrQK74U5NlStBHI4WbJZmGOoSbbkktUBzFfW8t2Sb5Y1DktQ6
+         a0mQ==
+X-Gm-Message-State: AOAM530HyWbl9/OFbCYN0GSdrBwlGx+9f1onXE9mCHcx5hk/ofKq9NM1
+        3UGhZ0jBXLqkA5nyflYYAz2mGQqXVw==
+X-Google-Smtp-Source: ABdhPJxvH797INbh52DiaCXhOaAp7w6upp9EG0yIg8XsfUWjjE4v7chcy22T1xv/nwCVP7pshlNA6A==
+X-Received: by 2002:a05:6830:44e:b0:5af:3b50:8a2a with SMTP id d14-20020a056830044e00b005af3b508a2amr3533718otc.129.1645554354421;
+        Tue, 22 Feb 2022 10:25:54 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id i14sm3500075oig.24.2022.02.22.10.25.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Feb 2022 10:24:59 -0800 (PST)
-Date:   Tue, 22 Feb 2022 19:24:58 +0100
-From:   Ansuel Smith <ansuelsmth@gmail.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC RFT PATCH v2 1/2] dt-bindings: mtd: partitions: Document
- new partition-dynamic nodes
-Message-ID: <YhUqemzE42oNfwiU@Ansuel-xps.localdomain>
-References: <20220220173905.14165-1-ansuelsmth@gmail.com>
- <20220220173905.14165-2-ansuelsmth@gmail.com>
- <YhUpEOgMBX4iL2CB@robh.at.kernel.org>
+        Tue, 22 Feb 2022 10:25:54 -0800 (PST)
+Received: (nullmailer pid 3351185 invoked by uid 1000);
+        Tue, 22 Feb 2022 18:25:53 -0000
+Date:   Tue, 22 Feb 2022 12:25:53 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Oleksii Moisieiev <Oleksii_Moisieiev@epam.com>
+Cc:     Cristian Marussi <cristian.marussi@arm.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [RFC PATCH 1/1] dt-bindings: arm: Add scmi_devid property
+ description for SCMI
+Message-ID: <YhUqsWRldHcVVmre@robh.at.kernel.org>
+References: <cover.1645460043.git.oleksii_moisieiev@epam.com>
+ <c751add9b54e9661e463ae265d8d5f0314eac33e.1645460043.git.oleksii_moisieiev@epam.com>
+ <1645539763.068794.3016153.nullmailer@robh.at.kernel.org>
+ <20220222145116.GA2024457@EPUAKYIW015D>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YhUpEOgMBX4iL2CB@robh.at.kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220222145116.GA2024457@EPUAKYIW015D>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 22, 2022 at 12:18:56PM -0600, Rob Herring wrote:
-> On Sun, Feb 20, 2022 at 06:39:04PM +0100, Ansuel Smith wrote:
-> > Document new partition-dynamic nodes used to provide an OF node for
-> > partition registred at runtime by parsers. This is required for nvmem
-> > system to declare and detect nvmem-cells.
+On Tue, Feb 22, 2022 at 02:51:16PM +0000, Oleksii Moisieiev wrote:
+> On Tue, Feb 22, 2022 at 08:22:43AM -0600, Rob Herring wrote:
+> > On Mon, 21 Feb 2022 17:26:47 +0000, Oleksii Moisieiev wrote:
+> > > Document scmi_devid property for the devices, using SCMI protocol
+> > > to work with clocks/resets/power-domains etc. This property is intended
+> > > to set the device id, which should be used to manage device permissions
+> > > in the firmware. Device permissions management is descibed in DEN 0056,
+> > > Section 4.2.2.10 [0].
+> > > 
+> > > This property is useful for the virtualized systems, when several agents
+> > > are running on the same platform. Agent term is descibed in Section
+> > > 4.1.1 [0].
+> > > 
+> > > [0] https://urldefense.com/v3/__https://developer.arm.com/documentation/den0056/latest__;!!GF_29dbcQIUBPA!m_dudHGSVg6mys2GtScvkfHNbQ1mv2kCGeU2GEdcV_C0cqHoWuknIkJPdLTaKiq6Ed9f$ [developer[.]arm[.]com]
+> > > 
+> > > Signed-off-by: Oleksii Moisieiev <oleksii_moisieiev@epam.com>
+> > > ---
+> > >  .../bindings/firmware/arm,scmi-devid.yaml     | 41 +++++++++++++++++++
+> > >  1 file changed, 41 insertions(+)
+> > >  create mode 100644 Documentation/devicetree/bindings/firmware/arm,scmi-devid.yaml
+> > > 
 > > 
-> > With these special partitions, only the label is required as the parser
-> > will provide reg and offset of the mtd. NVMEM will use the data from the
-> > parser and provide the NVMEM cells declared in the DTS, "connecting" the
-> > dynamic partition with a static declaration of cells in them.
+> > My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+> > on your patch (DT_CHECKER_FLAGS is new in v5.13):
 > > 
-> > Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
-> > ---
-> >  .../mtd/partitions/partition-dynamic.yaml     | 54 +++++++++++++++++++
-> >  1 file changed, 54 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/mtd/partitions/partition-dynamic.yaml
+> > yamllint warnings/errors:
 > > 
-> > diff --git a/Documentation/devicetree/bindings/mtd/partitions/partition-dynamic.yaml b/Documentation/devicetree/bindings/mtd/partitions/partition-dynamic.yaml
-> > new file mode 100644
-> > index 000000000000..945128e754ac
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/mtd/partitions/partition-dynamic.yaml
-> > @@ -0,0 +1,54 @@
-> > +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/mtd/partitions/partition-dynamic.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: Dynamic Partition
-> > +
-> > +description: |
-> > +  This binding describes a single flash partition that is dynamically allocated
-> > +  by a dedicated parser that is not a fixed-partition parser. To declare a
-> > +  partition the label is required. This can be used to give a dynamic partition
-> > +  an OF node so that subsystems like NVMEM can work and provide NVMEM Cells to
+> > dtschema/dtc warnings/errors:
+> > /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/firmware/arm,scmi-devid.example.dt.yaml: example-0: usb@ee0a0000:reg:0: [0, 3993632768, 0, 256] is too long
+> > 	From schema: /usr/local/lib/python3.8/dist-packages/dtschema/schemas/reg.yaml
+> > 
+> > doc reference errors (make refcheckdocs):
+> > 
+> > See https://urldefense.com/v3/__https://patchwork.ozlabs.org/patch/1595720__;!!GF_29dbcQIUBPA!m_dudHGSVg6mys2GtScvkfHNbQ1mv2kCGeU2GEdcV_C0cqHoWuknIkJPdLTaKsRHUfCS$ [patchwork[.]ozlabs[.]org]
+> > 
+> > This check can fail if there are any dependencies. The base for a patch
+> > series is generally the most recent rc1.
+> > 
+> > If you already ran 'make dt_binding_check' and didn't see the above
+> > error(s), then make sure 'yamllint' is installed and dt-schema is up to
+> > date:
+> > 
+> > pip3 install dtschema --upgrade
+> > 
+> > Please check and re-submit.
+> > 
 > 
-> 'subsystems like NVMEM' is a Linux detail that shouldn't be in bindings.
+> Hi Rob,
 > 
-> > +  the system. An example is declaring the partition label and all the NVMEM
-> > +  cells in it. The parser will detect the correct reg and offset and the NVMEM
-> > +  will register the cells in it based on the data extracted by the parser.
-> > +
-> > +maintainers:
-> > +  - Ansuel Smith <ansuelsmth@gmail.com>
-> > +
-> > +properties:
-> > +  label:
-> > +    description: The label / name for the partition assigned by the parser at
-> > +      runtime. This is needed for sybsystem like NVMEM to define cells and
-> > +      register with this OF node.
-> 
-> 'label' is generally for human consumption and should be opaque to the 
-> OS (or at least the kernel). Perhaps node name should be used like 
-> Rafał is doing for nvmem[1]. That appears to be the same problem at the 
-> next level down.
-> 
-> Rob
-> 
-> [1] https://lore.kernel.org/all/20220218070729.3256-1-zajec5@gmail.com/
+> Thank you. I will recheck on my side.
 
-Ok will add support for node name. Problem is that properties is mandatory
-in Documentation and can't be None... so how should I handle this? Keep
-label but set it as not required?
+The default address and size cell size for examples are 1 cell.
 
--- 
-	Ansuel
+Rob

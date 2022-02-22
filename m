@@ -2,164 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BD9A4BFF67
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 17:56:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 974064BFF42
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 17:51:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234401AbiBVQ4c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 11:56:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39500 "EHLO
+        id S234358AbiBVQvf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 11:51:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230519AbiBVQ4a (ORCPT
+        with ESMTP id S234344AbiBVQvd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 11:56:30 -0500
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 604A116BCF5
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 08:56:05 -0800 (PST)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-2d61b4ef6cdso145981507b3.11
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 08:56:05 -0800 (PST)
+        Tue, 22 Feb 2022 11:51:33 -0500
+Received: from mail-qv1-xf33.google.com (mail-qv1-xf33.google.com [IPv6:2607:f8b0:4864:20::f33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3739516AA7C;
+        Tue, 22 Feb 2022 08:51:07 -0800 (PST)
+Received: by mail-qv1-xf33.google.com with SMTP id x3so511919qvd.8;
+        Tue, 22 Feb 2022 08:51:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:cc;
-        bh=R7NUgyhmz2Vzm1IbfrrDYD1qNpQGYjcjDbFVXUaMLH8=;
-        b=KI3O3p6WIXcE6n5c1xlRqNCzstNa7C+hluEFjVsr0MOzveDFLD2VUOGSWGeKG0RHJy
-         T/yqV6+ri+p/3rX+b1pYMjSNo3Ovj9yyZbKA1607HqCA3kbya8vyKQ2GDgWlYG9l1znh
-         rWdySSjzOH0K6sfRsXIWIRMQFAHMD5jl44ausSef3FnfQgFOmyhWcQwfQoMj6etEc/LI
-         hJHRQ66bszx5zigZGXaE9ntUDiXKmNtjFdm5S5h0xTnO2PAF2yNKcyiTDlX9Dq5Ziu1q
-         t3RdfNDzIKa7Bq1TCGBRbeYsC4mW70m5JWLL7NBzuv6XS1rF0YDiOJcHIe7I88ZhGfi5
-         7YDA==
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=7lwww6qytMHobo/IrTZR1dCVgaY8SomLUb6wdjfR/YU=;
+        b=XEm4WkG0oOgN8AUZzTVDbHzgu0/VcD27pX2Zf07bKZN6JejHr9JLwlByKexE7+JKyb
+         3OtNgcJb1jefCbzI4oG77LpcI5JOBxmAZ1nP95MrR7+NFJeP0u/UrVkxzHE+9QDcwvMW
+         YAPsKvEn1ZArVMPvnDUTQCXlLkLtkPiLHjhydgHLK+fakg8veEo2B8R/Jv2JsGIw11Fg
+         FvvzTdV0RMP8W0Gy3e6Gt1e2Y/Baf5RQ/BS5wElA26uzSd+NpzcRVfqCASIADP+th5XR
+         wfHc8Z1mXHKeSdYq3X39YHXHLYqmZQRj50bIeVvrnRyfBLRRpaCmXMV/j+v8nD+3ne2M
+         gPQQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:cc;
-        bh=R7NUgyhmz2Vzm1IbfrrDYD1qNpQGYjcjDbFVXUaMLH8=;
-        b=5pCIMjBHoSmDnMdhJCa9qPw4/phSfhou2ejPaTQbYvBvjD8oexTgTklZ5EsHOCrrLE
-         jboPtOVHi8hHCkUJsmE7kM6oU8imr00nHtQGKigOnolY/eXVH/e5GXUtHC4FM+b5ZFrP
-         cv/EhWU7teJrZJW++CKnNBPlbbYORnPejUbR9epRnPZ8onCFuCw9AMkfjLX01eVYosm7
-         /r1oyglsnK57OiGYfhrGvqtD6FugIzN0pLKWHvD4FcewLhLcbn19gkYPuCVAOUQHlA5F
-         5zYXe4G6AxXPEMsL2bEit+Mje57RUmI0s7uKw/BXyTEDEAoJ/pY/6NQ3sRgxXUeWoZjm
-         UYOA==
-X-Gm-Message-State: AOAM53186SQ2x/v/TWXkEmnGuJre0+hiBk1jutePYuPU8FFfSYCo1PPW
-        LmjBESxkzZgUva0ICIh9O+ikF4NOIHWvjCqAlg==
-X-Google-Smtp-Source: ABdhPJzj4uTOWudxzzJokeTZXJ0Xc+OcxmAl9Nm7IKWdiyC4Dj/qqu6z+Dkz3NZLlc5P6ZEzL8Pz6NCeaRU6Ltd2cA==
-X-Received: from kaleshsingh.mtv.corp.google.com ([2620:15c:211:200:5db7:1235:b3dd:cfcb])
- (user=kaleshsingh job=sendgmr) by 2002:a05:6902:ca:b0:5ff:5f2d:b533 with SMTP
- id i10-20020a05690200ca00b005ff5f2db533mr23967292ybs.606.1645548964571; Tue,
- 22 Feb 2022 08:56:04 -0800 (PST)
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=7lwww6qytMHobo/IrTZR1dCVgaY8SomLUb6wdjfR/YU=;
+        b=8LFfLp6TApoVzVuNWLoRZ17rXgMO0KLLauGMWiQneLWbJfTxfYRwKtntzX0LMQEyH9
+         Hi0/IQ4bb4dT1E4QaIKCO4AtGqDjdQ0ciyCs7MMbnDOpJd3SnWrwlD5rBljcJIrd/3/V
+         f0FMPQ714ly4UPlgK49oACxaJvfF12nY/h/wevws17vW48W1p2lzOSqH5kXcZWNby3lW
+         NIcacefZ5/qJXmUA7O5wijV3vjjQq9/pgbLkY+5FXEN/SbqdAaucXVPlizhCFgMXSHkt
+         jU7ciMXcS8uaeoQbfGuxeESKDrSo1+jLTF4sijOeCADsAAIVzgYZ2Wdi8Y7eE6vrgH7L
+         mFGw==
+X-Gm-Message-State: AOAM531DQePtmUp6e7trF7wMb1DeuACw4Y5agCFVDxFDDMQeA5UDwGLZ
+        hGdNRBgnH1sbrzSDnjU7EFU=
+X-Google-Smtp-Source: ABdhPJzZcvVD+NCKZ0vruo8lkGr1oAcRpmZERWxk29emUz6sQM6wb/kwUTfw9zfwMbcuR7DKh7bbLg==
+X-Received: by 2002:a05:622a:153:b0:2de:4ddc:8a73 with SMTP id v19-20020a05622a015300b002de4ddc8a73mr3393641qtw.636.1645548666401;
+        Tue, 22 Feb 2022 08:51:06 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id bs39sm80972qkb.24.2022.02.22.08.51.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Feb 2022 08:51:05 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
 Date:   Tue, 22 Feb 2022 08:51:04 -0800
-In-Reply-To: <20220222165212.2005066-1-kaleshsingh@google.com>
-Message-Id: <20220222165212.2005066-4-kaleshsingh@google.com>
-Mime-Version: 1.0
-References: <20220222165212.2005066-1-kaleshsingh@google.com>
-X-Mailer: git-send-email 2.35.1.473.g83b2b277ed-goog
-Subject: [PATCH v2 3/9] KVM: arm64: Add guard pages for KVM nVHE hypervisor stack
-From:   Kalesh Singh <kaleshsingh@google.com>
-Cc:     will@kernel.org, maz@kernel.org, qperret@google.com,
-        tabba@google.com, surenb@google.com, kernel-team@android.com,
-        Kalesh Singh <kaleshsingh@google.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Joey Gouly <joey.gouly@arm.com>,
-        Peter Collingbourne <pcc@google.com>,
-        Andrew Scull <ascull@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kvmarm@lists.cs.columbia.edu
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,MISSING_HEADERS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        USER_IN_DEF_DKIM_WL autolearn=no autolearn_force=no version=3.4.6
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Marcello Sylvester Bauer <sylv@sylv.io>
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org,
+        Patrick Rudolph <patrick.rudolph@9elements.com>
+Subject: Re: [PATCH v2 1/1] hwmon: (pmbus) Add regulator supply into macro
+Message-ID: <20220222165104.GA255067@roeck-us.net>
+References: <cover.1645437439.git.sylv@sylv.io>
+ <58f2ff7b90233fad3d7ae2e9d66d5192e2c1ac01.1645437439.git.sylv@sylv.io>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <58f2ff7b90233fad3d7ae2e9d66d5192e2c1ac01.1645437439.git.sylv@sylv.io>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Maps the stack pages in the flexible private VA range and allocates
-guard pages below the stack as unbacked VA space. The stack is aligned
-to twice its size to aid overflow detection (implemented in a subsequent
-patch in the series).
+On Mon, Feb 21, 2022 at 12:09:56PM +0100, Marcello Sylvester Bauer wrote:
+> Add regulator supply into PWBUS_REGULATOR macro. This makes it optional
+> to define a vin-supply in DT. Not defining a supply will add a dummy
+> regulator supply instead and only cause the following debug output:
+> 
+> ```
+> Looking up vin-supply property in node [...] failed
+> ```
+> 
+> Signed-off-by: Marcello Sylvester Bauer <sylv@sylv.io>
 
-Signed-off-by: Kalesh Singh <kaleshsingh@google.com>
----
- arch/arm64/include/asm/kvm_asm.h |  1 +
- arch/arm64/kvm/arm.c             | 32 +++++++++++++++++++++++++++++---
- 2 files changed, 30 insertions(+), 3 deletions(-)
+Applied to hwmon-next. That should give it some time to mature,
+and we can pull or modify it if it causes any problems.
 
-diff --git a/arch/arm64/include/asm/kvm_asm.h b/arch/arm64/include/asm/kvm_asm.h
-index d5b0386ef765..2e277f2ed671 100644
---- a/arch/arm64/include/asm/kvm_asm.h
-+++ b/arch/arm64/include/asm/kvm_asm.h
-@@ -169,6 +169,7 @@ struct kvm_nvhe_init_params {
- 	unsigned long tcr_el2;
- 	unsigned long tpidr_el2;
- 	unsigned long stack_hyp_va;
-+	unsigned long stack_pa;
- 	phys_addr_t pgd_pa;
- 	unsigned long hcr_el2;
- 	unsigned long vttbr;
-diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
-index ecc5958e27fe..7e2e680c3ffb 100644
---- a/arch/arm64/kvm/arm.c
-+++ b/arch/arm64/kvm/arm.c
-@@ -1541,7 +1541,6 @@ static void cpu_prepare_hyp_mode(int cpu)
- 	tcr |= (idmap_t0sz & GENMASK(TCR_TxSZ_WIDTH - 1, 0)) << TCR_T0SZ_OFFSET;
- 	params->tcr_el2 = tcr;
- 
--	params->stack_hyp_va = kern_hyp_va(per_cpu(kvm_arm_hyp_stack_page, cpu) + PAGE_SIZE);
- 	params->pgd_pa = kvm_mmu_get_httbr();
- 	if (is_protected_kvm_enabled())
- 		params->hcr_el2 = HCR_HOST_NVHE_PROTECTED_FLAGS;
-@@ -1990,14 +1989,41 @@ static int init_hyp_mode(void)
- 	 * Map the Hyp stack pages
- 	 */
- 	for_each_possible_cpu(cpu) {
-+		struct kvm_nvhe_init_params *params = per_cpu_ptr_nvhe_sym(kvm_init_params, cpu);
- 		char *stack_page = (char *)per_cpu(kvm_arm_hyp_stack_page, cpu);
--		err = create_hyp_mappings(stack_page, stack_page + PAGE_SIZE,
--					  PAGE_HYP);
-+		unsigned long stack_hyp_va, guard_hyp_va;
- 
-+		/*
-+		 * Private mappings are allocated downwards from io_map_base
-+		 * so allocate the stack first then the guard page.
-+		 *
-+		 * The stack is aligned to twice its size to facilitate overflow
-+		 * detection.
-+		 */
-+		err = __create_hyp_private_mapping(__pa(stack_page), PAGE_SIZE,
-+						PAGE_SIZE * 2, &stack_hyp_va, PAGE_HYP);
- 		if (err) {
- 			kvm_err("Cannot map hyp stack\n");
- 			goto out_err;
- 		}
-+
-+		/* Allocate unbacked private VA range for stack guard page */
-+		guard_hyp_va = hyp_alloc_private_va_range(PAGE_SIZE, PAGE_SIZE);
-+		if (IS_ERR((void *)guard_hyp_va)) {
-+			err = PTR_ERR((void *)guard_hyp_va);
-+			kvm_err("Cannot allocate hyp stack guard page\n");
-+			goto out_err;
-+		}
-+
-+		/*
-+		 * Save the stack PA in nvhe_init_params. This will be needed to recreate
-+		 * the stack mapping in protected nVHE mode. __hyp_pa() won't do the right
-+		 * thing there, since the stack has been mapped in the flexible private
-+		 * VA space.
-+		 */
-+		params->stack_pa = __pa(stack_page) + PAGE_SIZE;
-+
-+		params->stack_hyp_va = stack_hyp_va + PAGE_SIZE;
- 	}
- 
- 	for_each_possible_cpu(cpu) {
--- 
-2.35.1.473.g83b2b277ed-goog
+Thanks,
+Guenter
 
+> ---
+>  drivers/hwmon/pmbus/pmbus.h | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/hwmon/pmbus/pmbus.h b/drivers/hwmon/pmbus/pmbus.h
+> index e0aa8aa46d8c..38f049d68d32 100644
+> --- a/drivers/hwmon/pmbus/pmbus.h
+> +++ b/drivers/hwmon/pmbus/pmbus.h
+> @@ -464,6 +464,7 @@ extern const struct regulator_ops pmbus_regulator_ops;
+>  #define PMBUS_REGULATOR(_name, _id)				\
+>  	[_id] = {						\
+>  		.name = (_name # _id),				\
+> +		.supply_name = "vin",				\
+>  		.id = (_id),					\
+>  		.of_match = of_match_ptr(_name # _id),		\
+>  		.regulators_node = of_match_ptr("regulators"),	\

@@ -2,148 +2,229 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB8284C0320
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 21:35:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80A474C032E
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 21:36:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235609AbiBVUff (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 15:35:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49592 "EHLO
+        id S235679AbiBVUgN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 15:36:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235529AbiBVUfZ (ORCPT
+        with ESMTP id S235592AbiBVUfg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 15:35:25 -0500
-Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam08on2079.outbound.protection.outlook.com [40.107.101.79])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 636B613EF84;
-        Tue, 22 Feb 2022 12:34:51 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=hqp6wvaR5oJuTVhUFcgw1SN9ubq34GB74K0TuWJ4yZKDIPQsUixZ4THhw44TikwTtWzhI1gTV73cA5S7Xym6XHf8tcy3vmfIlLnETKo7khRzXLGm2X0OMEwqFXes7Nd2PVxn4KDfN1w1j5HfJpJfUA9/nVQcEws0km/5AfYVKcOxkU//hQDxEcSBXwLkch31KxgtBkKCLoCOE79zWTFZdfxSBpnWulrDvCag7664qRAEE1fAuor4bsBRcNWxDOn9LDwJF6CzBULqXlnVgYXypFqYurvhNXrrrufB3m6aDi04ui/3dlpvy0NrhEdcgscW2zDaTGCNLuRRtRl6LVC2Lg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=aXqBx7hAB+lnrFeNA/9p8OZ/eGH6ilOxBc9JjO6cSrE=;
- b=TOBcQi8Dc2hi5hUqimJseBmdAzJ96I1P2cQ0R1YyKKH4wvnyKoWBlmUjuMsfO/C7KIEZ1Nci82DhX0A1aWWnDv3QkqDOAh5l6ApOHw2oY9SkyT6beFUJZop0rRHQLIZWk+lowTH1nqSqpo4rynStFW63vamHNnl6eSzRLpIDaGvvEMYNclJ3OLYeGNhFFeplu4bpKfdAruZgRviAXg0vqlObbmOnxJQvVTT4XWxs/cNGNPSxd7nIkB775MOUtATVdX5fSbZOA5tbDD8T4IPp5mFWYTueGkFIGd3xINUq9Ha30ne96U2omvSLfscv+O5rWwp5pbnznwBX964mMkbg7Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=aXqBx7hAB+lnrFeNA/9p8OZ/eGH6ilOxBc9JjO6cSrE=;
- b=Dut4TBZ7GMR920+9iKK3W3Muq5WgWaJ3P8yKCYcnRBHWh6+BIzjZnHsbBXf+cwNH3hPYywJnNQo/6hEtfM5ZtyPmDg78+Uxopp3ljWahFNqEDtJY/hDTw+4XTTCO0PsGzQE5ckiw0a2kw04qu02da6C8kqEBQm/lcNfOWz32D7c=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DM6PR12MB2876.namprd12.prod.outlook.com (2603:10b6:5:15d::21)
- by BL0PR12MB4867.namprd12.prod.outlook.com (2603:10b6:208:17e::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4995.16; Tue, 22 Feb
- 2022 20:34:49 +0000
-Received: from DM6PR12MB2876.namprd12.prod.outlook.com
- ([fe80::50:f1fb:173c:23b8]) by DM6PR12MB2876.namprd12.prod.outlook.com
- ([fe80::50:f1fb:173c:23b8%5]) with mapi id 15.20.4995.027; Tue, 22 Feb 2022
- 20:34:49 +0000
-Subject: Re: [PATCH v3 1/4] x86/mce: Define function to extract ErrorAddr from
- MCA_ADDR
-To:     Borislav Petkov <bp@alien8.de>,
-        Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
-Cc:     x86@kernel.org, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Tony Luck <tony.luck@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        James Morse <james.morse@arm.com>,
-        Robert Richter <rric@kernel.org>,
-        Yazen Ghannam <yazen.ghannam@amd.com>
-References: <20220211223442.254489-1-Smita.KoralahalliChannabasappa@amd.com>
- <20220211223442.254489-2-Smita.KoralahalliChannabasappa@amd.com>
- <YhUCsT/WQIrFi94R@zn.tnic>
-From:   "Koralahalli Channabasappa, Smita" <skoralah@amd.com>
-Message-ID: <5cd763b3-9ee2-b26d-95b0-a4b018d7f484@amd.com>
-Date:   Tue, 22 Feb 2022 14:34:45 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.2.1
-In-Reply-To: <YhUCsT/WQIrFi94R@zn.tnic>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-ClientProxiedBy: BYAPR01CA0025.prod.exchangelabs.com (2603:10b6:a02:80::38)
- To DM6PR12MB2876.namprd12.prod.outlook.com (2603:10b6:5:15d::21)
+        Tue, 22 Feb 2022 15:35:36 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89ECA13F896;
+        Tue, 22 Feb 2022 12:35:09 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: nfraprado)
+        with ESMTPSA id 18B751F433BC
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1645562108;
+        bh=KWkBmtNLJcWwrlrj1/Uv+K+VhcT3/3TdLTKZ/vKm7V0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=bjE6sjU4fM0pK3Dltr1i5dH7svCLm1ihqBsFld1i98ORStZ/3rNLITIL3xwqDQRVZ
+         jzjcwvtiKZzZIM/o3+LbhTUXqsMVS+TTcCSnHUXLNTWQ/Y2RvFgOTTbx3jA1OhJV1W
+         1FDG+P0rGS0p0cNnfXzbidp7sB7qNg3x6XPYLYmsYcyo8aoMdPP6ezf5NYddXU7/Ef
+         a1P6DrGAyFaYm6q7tAyS4wwRv2n55GEnP3dzi2aMwU8fjY7fLnZrLDnXbI1+34zAD9
+         wjKkJgb5pfbmV/vdadDRdOkR4yL46OroqRCwRQ4WUQ8FcSlzT2afAdYpkgUBMD6IN7
+         iW1hXmEM0ZsSQ==
+Date:   Tue, 22 Feb 2022 15:35:03 -0500
+From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
+        <nfraprado@collabora.com>
+To:     Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        --to=Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        Chen-Yu Tsai <wenst@chromium.org>,
+        Ryder Lee <ryder.lee@kernel.org>
+Subject: Re: [PATCH v2 08/23] arm64: dts: mt8192: Add audio-related nodes
+Message-ID: <20220222203503.ni4qsgv75pdzaz2c@notapiano>
+References: <20220218091633.9368-1-allen-kh.cheng@mediatek.com>
+ <20220218091633.9368-9-allen-kh.cheng@mediatek.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 3817afb8-8964-417b-0de9-08d9f642c589
-X-MS-TrafficTypeDiagnostic: BL0PR12MB4867:EE_
-X-Microsoft-Antispam-PRVS: <BL0PR12MB48676A1AB7AC8CE9DA6EB283903B9@BL0PR12MB4867.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: vCv8gYmUcCMoNnwKQzvqlOnlWV4JGBRekg2wUzPPrzGnMP4ephN/NqPLafnISt9EBMdf1OrH7xTn5iCdx3NIRlz8AAH/poEIk1jjQvPguuXGCd100uDZOlQpIHlL2Fxv20NTxl7s9uqZDcYgvCpvBQHV/ZwANq9eY3Vx9wnsdQ80/lYjERVMpYXDNDL2k8FH+QhdiiLz8yDBUdPH3sFIPBSiyJ0gS6E8xxwz2xTsDYqAGC/vWlk5bSoTw3zD7bHikCDCgNn6Jd0g3/tD7wP2nMGg9J2wyxEJ8oGXrCnF7GvfxwXro1C2KMXPlusuAW/FYiXtmfYEoVLVWXIZTElvTpqW7fEh7cTc8gtP52Kmu1JPfHd0jDXtWyY8W/gyJO3EdR9mFxcOC9ht3x0g/Box28lB5ZM0ZzKyG2kELxSNkD3FnG/EMn2aeUum+GP8h/KiwIrYtbxC/83ikpTrcDSRBuElWU1qCZQSfLcW7NQUEKp2jhcxYRalLVa9CPIxkA155E6V74V+seqwvB5JwwRRtGskKDq9fa9h5Vv6VjPzx5kyNco5r31umhNSuRNdEUARfTBIaTwJvf3jeLMq0Uj7H4b+87EI2W2l1FzkVOVeQGIBRF1RhAVLLG+Jk/9gFZwigbyiSm99wyNaMV2nX9ap/dreQdIfOsVINop+EVK4aAJ3G8bgN7MpPdr/tM4Cfpj7krknmvQRWFlDmOj3YbAb+d9bNEo5vtB+wNWGHilFSyU=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB2876.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(66476007)(6506007)(36756003)(8936002)(6512007)(2906002)(31686004)(66556008)(6666004)(31696002)(53546011)(4326008)(186003)(8676002)(508600001)(6486002)(66946007)(38100700002)(4744005)(2616005)(5660300002)(83380400001)(6636002)(316002)(110136005)(54906003)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Z3FYMDFYVUZDMDJ3dXhFczZSbktrVVZiTUkwbHBlejhrMENvUTJYcnVvaTZw?=
- =?utf-8?B?RkhyUkdubUhjZDNOdVhCK2xkUlIzd3NjZ2x1VVZ1eTNhaDFCL0cvVXFqK3Rj?=
- =?utf-8?B?Y08vYmxlcW8yV3VhU3lGaEthTGJXWmpFR1lmS3dQcmhGaFdPRlhqS1VMY3d5?=
- =?utf-8?B?ai9pei9SVTZscWpaRnRTSmlHaEIxbHloam9TT0RpMWo0TVIyamZaRnNYK1JM?=
- =?utf-8?B?ZUt2dmk3ZnJEeDFEVFJNT2tFWFR2VU5rcW1WZE5RTmNydUw4dlJJdWRwWEZO?=
- =?utf-8?B?ZUljQjdVRUtXYlRLMDFWYlRCd0NjTmYvYjRSekJIZ3Vwcmt5QUtJMmkvSGVD?=
- =?utf-8?B?K1l1QkZLeW9pSWFhMG9tdklaREFZN1NGdDQ0NXNidExTcXdkRnZrN0krYXE2?=
- =?utf-8?B?aDcwcGswSTZiVzYwWTI4ZzJvQ1ZvRE03ancyc01neUJmeXdrODZmM1M3Y2xt?=
- =?utf-8?B?RERrMFlhZDA0SGZIdTJMcmIrMDRHWmVubFN2cHJGczVKZFNJWGlJZDd1SVM0?=
- =?utf-8?B?dzZIWnNlVC90Qmo5MFdHTFpIWTRRU0hKS0MwdEk2TWJVWE1uWUhKSnNkc3hj?=
- =?utf-8?B?MmxkRzlHNXIvN1c0aWVNTmozZWxkVWpaY1ViMEVGMEFsTG1ETmJUNGZ0SkVu?=
- =?utf-8?B?S3VWVTNyeTl5U3VMV2ZlWEFQMTkvUFRmaG1WT2Jad3k5NlZsVHpMM0NoZGla?=
- =?utf-8?B?SFVvK1JJVWUxY1VpWlA2ZnpSZ1lrY1ZlSkJDZkw3TDQxbG5QQnNvQ2ZsQmNZ?=
- =?utf-8?B?OVZzVjZwS0p3ZnhCdE9xT2xaK2FLMmRpR1NaWDgwQ3drdlZXREhzYXRRbFY0?=
- =?utf-8?B?aE1YNnNRL0FxZ2I0Z0VCbmxYUnNGOU1ub1YwNXdtRTNERXYyWnpxbElueTFp?=
- =?utf-8?B?bTJ1b01WelhVdzVBZFV3RnVWa1kxaXBLaXNxWEVLZWlyMmZnNlVmU0hqQnlT?=
- =?utf-8?B?T3NiZE5OWUVQV2MwR1dWUUtSNWNLaVpBR3JwTElzNGt6OTVYamNYeWVybEJw?=
- =?utf-8?B?YzA4VmlsNGx2YmNMM0RMcXlqblpVTElyWDQyL08yU2dMOHFsTHU2U3hkSHB4?=
- =?utf-8?B?emd5TytFNjNsaDZMejVwY0UvTjdVbEJaU1hldysva3QzSk9lWjJhWDBmOExT?=
- =?utf-8?B?c1JDS0dOeDJNKzNxVk05blA0YitOTzJpWFhTOURGb2tOR1J1a1ZWUXI1MnR4?=
- =?utf-8?B?RGZ0c2ZEMzByNjh0K29Ebk11c0NlWVFzWmw5aUR2TldKSFFuS1dGTG91bUsx?=
- =?utf-8?B?VEwzN29DWmNaMjNUblpkNTVjT0lYSUk1aGxhN1NwTGdnYlhYNEZYSVFyV2kv?=
- =?utf-8?B?S05sTFQ4M3U2TTMxZXNKRzJxazNpckR0WE1NVDRnVlRGc3pFbHQwL1ZOSUpz?=
- =?utf-8?B?VE5USXY5QTZ6WnQ4Yjhzc3UyQXprOHRidngzTG5yckRIZDB2YkhEM1loT3RW?=
- =?utf-8?B?eUdrZyt0U1NyT0pSc2Rhcis0YzdHSUZ5SmgvQlZ4OVF0dklzZDlSOHV2NU9B?=
- =?utf-8?B?V0todm96NUkxcjNZVGdpNThkSTVFN3B1ZlE5ZlUyNExGeDU3bC9Lajl0WFU4?=
- =?utf-8?B?bFJBbS85ZVdNOUxtbzVvYXpTQjExeW1HTkJWb1VUaUw0bEJBQlp5RlVKTnZ4?=
- =?utf-8?B?OXRVTTNSb3BOT2ZLM1ZnYnRXNXNWVGRFdlBTMnBWdnZIRXljMW5jMG5Qakhk?=
- =?utf-8?B?bFoyVTNSVG02MFdsN21xS250NEJ1bTBnTGdseHU4bUZnL3FGMExuQVE4SzBC?=
- =?utf-8?B?aEV3ak5PRG9XTitQc0I1QlEwb1VKMmYyTEhXTTlWVkgzWEcrVFk2SFBlRUxy?=
- =?utf-8?B?Lys1NXUreTk4VUpnQ01EOXJaUG5mQ3cvbElPUkZ1ZS9lcUZRZHQzTVEzeVZo?=
- =?utf-8?B?b01nckhwbDQ5R0dBdGVYQjZ6RjJYa2RDcnBsc01Wd21hTDlzY0ViT3JBdjFL?=
- =?utf-8?B?WmUrMjBzM2l2cmNzVmtsMEdpZkFhNHB1RzVnZ0sxSXcydGp0Wi94Z1dLbXha?=
- =?utf-8?B?dkdrWDhHMGZKamJaeU14L25OTEc3ZWpiSWVGNk1Wb3hlUUp0RzAvaXhRYUtv?=
- =?utf-8?B?L3ZaOFFVMHlselBhazN2MEZyaXp2ejB1QkZpMWVPUmVHOFRla2VWYThYVkZ5?=
- =?utf-8?B?amJIVGtyNU1weWpYTVAvWDEyYjlYVG8vUk1QclZDRDFBelBmWW94TEFLYmpE?=
- =?utf-8?B?bjd5dWUvS2dqY2daTjVKMExrMTV2Y09Wb3VlS2FyTnVzajVha2pKMUZZd1NJ?=
- =?utf-8?Q?PijfqtLZq2LWA3fzcg2tRG9Ljg7vMzY3wdTUeEeXeA=3D?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3817afb8-8964-417b-0de9-08d9f642c589
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB2876.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Feb 2022 20:34:49.4347
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: y4Ro6rF1INfC4FcIXvYC0tTVZNv4KScRVO6B+9oL+LnEV4FfwSLZOkhAICs6zskaZYYudz6sJ0duoqw5GkSb5g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR12MB4867
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220218091633.9368-9-allen-kh.cheng@mediatek.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/22/22 9:35 AM, Borislav Petkov wrote:
-> On Fri, Feb 11, 2022 at 04:34:39PM -0600, Smita Koralahalli wrote:
->> Move MCA_ADDR[ErrorAddr] extraction into a separate helper function. This
->> will be further refactored in the next patch.
-> The concept of "next patch" can mean different commits in git so pls
-> reword your commit message to be void of the patch linearity concept.
->
-Will correct.
+On Fri, Feb 18, 2022 at 05:16:18PM +0800, Allen-KH Cheng wrote:
+> Add audio-related nodes in audsys for mt8192 SoC.
+> Move audsys node in ascending order.
+> 
+> Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+> ---
+>  arch/arm64/boot/dts/mediatek/mt8192.dtsi | 135 ++++++++++++++++++++++-
+>  1 file changed, 129 insertions(+), 6 deletions(-)
+> 
+> diff --git a/arch/arm64/boot/dts/mediatek/mt8192.dtsi b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
+> index 08c7c1c772f5..f93fe3779161 100644
+> --- a/arch/arm64/boot/dts/mediatek/mt8192.dtsi
+> +++ b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
+> @@ -743,6 +743,135 @@
+>  			#size-cells = <2>;
+>  		};
+>  
+> +		audsys: syscon@11210000 {
+> +			compatible = "mediatek,mt8192-audsys", "syscon";
+> +			reg = <0 0x11210000 0 0x2000>;
 
-Thanks,
-Smita
+You should mention in the commit message that the address range's length was
+increased as well (from 0x1000 to 0x2000).
 
+> +			#clock-cells = <1>;
+> +
+> +			afe: mt8192-afe-pcm {
+> +				compatible = "mediatek,mt8192-audio";
+> +				interrupts = <GIC_SPI 202 IRQ_TYPE_LEVEL_HIGH 0>;
+> +				resets = <&watchdog 17>;
+> +				reset-names = "audiosys";
+> +				mediatek,apmixedsys = <&apmixedsys>;
+> +				mediatek,infracfg = <&infracfg>;
+> +				mediatek,topckgen = <&topckgen>;
+> +				power-domains = <&spm MT8192_POWER_DOMAIN_AUDIO>;
+> +				clocks = <&audsys CLK_AUD_AFE>,
+> +					 <&audsys CLK_AUD_DAC>,
+> +					 <&audsys CLK_AUD_DAC_PREDIS>,
+> +					 <&audsys CLK_AUD_ADC>,
+> +					 <&audsys CLK_AUD_ADDA6_ADC>,
+> +					 <&audsys CLK_AUD_22M>,
+> +					 <&audsys CLK_AUD_24M>,
+> +					 <&audsys CLK_AUD_APLL_TUNER>,
+> +					 <&audsys CLK_AUD_APLL2_TUNER>,
+> +					 <&audsys CLK_AUD_TDM>,
+> +					 <&audsys CLK_AUD_TML>,
+> +					 <&audsys CLK_AUD_NLE>,
+> +					 <&audsys CLK_AUD_DAC_HIRES>,
+> +					 <&audsys CLK_AUD_ADC_HIRES>,
+> +					 <&audsys CLK_AUD_ADC_HIRES_TML>,
+> +					 <&audsys CLK_AUD_ADDA6_ADC_HIRES>,
+> +					 <&audsys CLK_AUD_3RD_DAC>,
+> +					 <&audsys CLK_AUD_3RD_DAC_PREDIS>,
+> +					 <&audsys CLK_AUD_3RD_DAC_TML>,
+> +					 <&audsys CLK_AUD_3RD_DAC_HIRES>,
+> +					 <&infracfg CLK_INFRA_AUDIO>,
+> +					 <&infracfg CLK_INFRA_AUDIO_26M_B>,
+> +					 <&topckgen CLK_TOP_AUDIO_SEL>,
+> +					 <&topckgen CLK_TOP_AUD_INTBUS_SEL>,
+> +					 <&topckgen CLK_TOP_MAINPLL_D4_D4>,
+> +					 <&topckgen CLK_TOP_AUD_1_SEL>,
+> +					 <&topckgen CLK_TOP_APLL1>,
+> +					 <&topckgen CLK_TOP_AUD_2_SEL>,
+> +					 <&topckgen CLK_TOP_APLL2>,
+> +					 <&topckgen CLK_TOP_AUD_ENGEN1_SEL>,
+> +					 <&topckgen CLK_TOP_APLL1_D4>,
+> +					 <&topckgen CLK_TOP_AUD_ENGEN2_SEL>,
+> +					 <&topckgen CLK_TOP_APLL2_D4>,
+> +					 <&topckgen CLK_TOP_APLL_I2S0_M_SEL>,
+> +					 <&topckgen CLK_TOP_APLL_I2S1_M_SEL>,
+> +					 <&topckgen CLK_TOP_APLL_I2S2_M_SEL>,
+> +					 <&topckgen CLK_TOP_APLL_I2S3_M_SEL>,
+> +					 <&topckgen CLK_TOP_APLL_I2S4_M_SEL>,
+> +					 <&topckgen CLK_TOP_APLL_I2S5_M_SEL>,
+> +					 <&topckgen CLK_TOP_APLL_I2S6_M_SEL>,
+> +					 <&topckgen CLK_TOP_APLL_I2S7_M_SEL>,
+> +					 <&topckgen CLK_TOP_APLL_I2S8_M_SEL>,
+> +					 <&topckgen CLK_TOP_APLL_I2S9_M_SEL>,
+> +					 <&topckgen CLK_TOP_APLL12_DIV0>,
+> +					 <&topckgen CLK_TOP_APLL12_DIV1>,
+> +					 <&topckgen CLK_TOP_APLL12_DIV2>,
+> +					 <&topckgen CLK_TOP_APLL12_DIV3>,
+> +					 <&topckgen CLK_TOP_APLL12_DIV4>,
+> +					 <&topckgen CLK_TOP_APLL12_DIVB>,
+> +					 <&topckgen CLK_TOP_APLL12_DIV5>,
+> +					 <&topckgen CLK_TOP_APLL12_DIV6>,
+> +					 <&topckgen CLK_TOP_APLL12_DIV7>,
+> +					 <&topckgen CLK_TOP_APLL12_DIV8>,
+> +					 <&topckgen CLK_TOP_APLL12_DIV9>,
+> +					 <&topckgen CLK_TOP_AUDIO_H_SEL>,
+> +					 <&clk26m>;
+> +				clock-names = "aud_afe_clk",
+> +					      "aud_dac_clk",
+> +					      "aud_dac_predis_clk",
+> +					      "aud_adc_clk",
+> +					      "aud_adda6_adc_clk",
+> +					      "aud_apll22m_clk",
+> +					      "aud_apll24m_clk",
+> +					      "aud_apll1_tuner_clk",
+> +					      "aud_apll2_tuner_clk",
+> +					      "aud_tdm_clk",
+> +					      "aud_tml_clk",
+> +					      "aud_nle",
+> +					      "aud_dac_hires_clk",
+> +					      "aud_adc_hires_clk",
+> +					      "aud_adc_hires_tml",
+> +					      "aud_adda6_adc_hires_clk",
+> +					      "aud_3rd_dac_clk",
+> +					      "aud_3rd_dac_predis_clk",
+> +					      "aud_3rd_dac_tml",
+> +					      "aud_3rd_dac_hires_clk",
+> +					      "aud_infra_clk",
+> +					      "aud_infra_26m_clk",
+> +					      "top_mux_audio",
+> +					      "top_mux_audio_int",
+> +					      "top_mainpll_d4_d4",
+> +					      "top_mux_aud_1",
+> +					      "top_apll1_ck",
+> +					      "top_mux_aud_2",
+> +					      "top_apll2_ck",
+> +					      "top_mux_aud_eng1",
+> +					      "top_apll1_d4",
+> +					      "top_mux_aud_eng2",
+> +					      "top_apll2_d4",
+> +					      "top_i2s0_m_sel",
+> +					      "top_i2s1_m_sel",
+> +					      "top_i2s2_m_sel",
+> +					      "top_i2s3_m_sel",
+> +					      "top_i2s4_m_sel",
+> +					      "top_i2s5_m_sel",
+> +					      "top_i2s6_m_sel",
+> +					      "top_i2s7_m_sel",
+> +					      "top_i2s8_m_sel",
+> +					      "top_i2s9_m_sel",
+> +					      "top_apll12_div0",
+> +					      "top_apll12_div1",
+> +					      "top_apll12_div2",
+> +					      "top_apll12_div3",
+> +					      "top_apll12_div4",
+> +					      "top_apll12_divb",
+> +					      "top_apll12_div5",
+> +					      "top_apll12_div6",
+> +					      "top_apll12_div7",
+> +					      "top_apll12_div8",
+> +					      "top_apll12_div9",
+> +					      "top_mux_audio_h",
+> +					      "top_clk26m_clk";
+> +			};
+> +		};
+> +
+>  		nor_flash: spi@11234000 {
+>  			compatible = "mediatek,mt8192-nor";
+>  			reg = <0 0x11234000 0 0xe0>;
+> @@ -758,12 +887,6 @@
+>  			status = "disable";
+>  		};
+>  
+> -		audsys: clock-controller@11210000 {
+> -			compatible = "mediatek,mt8192-audsys", "syscon";
+> -			reg = <0 0x11210000 0 0x1000>;
+> -			#clock-cells = <1>;
+> -		};
+> -
+>  		i2c3: i2c@11cb0000 {
+>  			compatible = "mediatek,mt8192-i2c";
+>  			reg = <0 0x11cb0000 0 0x1000>,
+> -- 
+> 2.18.0
+> 
+> 

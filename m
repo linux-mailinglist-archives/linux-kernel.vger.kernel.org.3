@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E989E4BFA71
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 15:09:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CCE5B4BFA76
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 15:11:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232795AbiBVOJg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 09:09:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45920 "EHLO
+        id S232206AbiBVOKa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 09:10:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232734AbiBVOJ0 (ORCPT
+        with ESMTP id S230047AbiBVOK3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 09:09:26 -0500
-Received: from mail-qv1-xf2c.google.com (mail-qv1-xf2c.google.com [IPv6:2607:f8b0:4864:20::f2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E75B015F617
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 06:09:00 -0800 (PST)
-Received: by mail-qv1-xf2c.google.com with SMTP id h13so362653qvk.12
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 06:09:00 -0800 (PST)
+        Tue, 22 Feb 2022 09:10:29 -0500
+Received: from mail-qv1-xf34.google.com (mail-qv1-xf34.google.com [IPv6:2607:f8b0:4864:20::f34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8A5115F606
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 06:10:03 -0800 (PST)
+Received: by mail-qv1-xf34.google.com with SMTP id ba20so11260421qvb.1
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 06:10:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=Xqy5QKYZUVik+xQ3v/BV4Q233CuzTNH+f5Hje8r4UrI=;
-        b=aGIIG0timJUg6GqBs7BQEga6tkXr3leN8qS/gdipqyzpUFCqQkhRhM7UZe2pVyLcgm
-         NOb3dsFsdJciYIMXJuNhQY2WUhYIwifHoKXAxGkcT+WEJUP6rAWREQ8BsToWjyfTPIrv
-         1Gia/lwpYFtICvwKofZOdKvajWAV0p2Yj6N4JVAbKmVeu1/iV0LKcPwccNE71C6LFLrI
-         1UL2sV6UmJqsZt9jsrcCgwaKVMRq3o3rBAMI85FQ/PZRZZ3ywz5wKyIOOlqhsHSRTe/y
-         b20BwfwS8h8HFx5aY6uAhL/6Ug/B65sontRAmVB2YUKzm9kzcsNjicDtP4SeQiYeumNs
-         VAzQ==
+        bh=XR5FZFGaIIKTzVrtc+qtDeldPYFhK+vnor66vP4A6qE=;
+        b=d2PXqmoJdsG3+AVpuPryy+/yq70x6q2BsCW0wo1sZ2XTr6NKseHqDZJFWBX5EdjBaj
+         lUh2Q62sr7Z6VEHYqQZ9bZeQLO5HNGcAldRPjVodDIoO/jUnZXQIWaH9KqdlHqqZN5bZ
+         m6CsUUE5mShjmYVas/8ImoZiaDWRUg0Sbl4UKOLiIDFkFGxD4reVTeEP0U9l8D5TTemm
+         apZVoAWDK42QHzKM9M2M8FtvZl2CIxrF516twZ+oet52mrU3UEJZ6a0iIdT1O+lVPX1L
+         1ealdeBBMSt62qEBjdRqwPJNYxRyqGgEcRpfAgNobS7zu2sqEY0jNdK+VvnbDrwOyAu2
+         WgKA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=Xqy5QKYZUVik+xQ3v/BV4Q233CuzTNH+f5Hje8r4UrI=;
-        b=OlT6LN9rwQHk1zKznN5NFRMnwMHtb+6vwQVhX/tbiIbngZPubeFM9TVOwdn152iU4Y
-         FWzW2TjT/CzvpuC4S2LC+5fJMBtdZ1ar7Cx2Kda1C4J7VQVOBjePGopDRpl1RMtDG9Vi
-         FgdJPPRgwgZQeZIg3xibahokP+zsqOcT+hbVCYASe+vK3QaeU+0XJ4K74rafH63WgBeZ
-         0yidq7TTVa1yOkPkJNHsnaCxE5kF5YmMXaIsSir3KKJC7tMvuyiFgA1JQSQNrmgkIvSq
-         +3xea7gp0QgyZDfaWh90DWx28qbkiCp1W57KZBd1rmLSE7iAM5iuxpBMZLbgItCLeNjE
-         72oA==
-X-Gm-Message-State: AOAM532Qvi9OgG6EpIvRaoWTbQqrAzX8IPLFXxQB3mloMXIq0I2wYaKn
-        ebZIMYh9ugOfQ7EqIGonU7FMWg==
-X-Google-Smtp-Source: ABdhPJyu9Jgp+cBMPis6i+EmxSqRp8Qurp/ec9d0f6KFWdqDr/xI0wAEwk7qjS45pCIqzW1QSNPz9Q==
-X-Received: by 2002:a05:622a:607:b0:2d7:35db:81e4 with SMTP id z7-20020a05622a060700b002d735db81e4mr21875783qta.281.1645538939986;
-        Tue, 22 Feb 2022 06:08:59 -0800 (PST)
+        bh=XR5FZFGaIIKTzVrtc+qtDeldPYFhK+vnor66vP4A6qE=;
+        b=Cyw/+eegaCGY4bk2HdgBRnmZNvj5bNm6qWIf4wHvg2S44k5jvRPE7lS+dUVfz5VxhN
+         17N0HZBRdbhfXqwihw/y+v4lDDtl7yFLRlk56/9q8m5PT1Y/7IkWADFelxBbA17tNDEQ
+         3ZtXuXGYESEgzGxyVCbFLo/rGtry+aRlFWlDZEgmLha9Pu+Xr+qtgYK9S+x+ARo6yiNA
+         R/T473lacQtJkj6dzTAcW+MVuvUno+bR0/vNhxSXKARMioLJ2GvU3Ewd8pdk0erEQQnK
+         XM2ZlProptogRm0LdU84MEWXLrs+qJ91EqOd3ONYSyyp2VEqozVV1kKv4OvKtgZ3/kzq
+         XXBg==
+X-Gm-Message-State: AOAM5302Dlnt1poI5Pw+k+i1NLxeKWQ9FyvGahAkN51kcZwB3tVf160p
+        St1Noutm2tO9ADGqMKqHrCI/Ag==
+X-Google-Smtp-Source: ABdhPJwWqciVne655CNWHtCM8/p9iRCfk7DpJuRiXA0dp7NT/73hA5DeKFBPUvXQ25aZwkNYKL2lVA==
+X-Received: by 2002:a05:622a:206:b0:2dd:dbdb:f598 with SMTP id b6-20020a05622a020600b002dddbdbf598mr13521885qtx.138.1645539002901;
+        Tue, 22 Feb 2022 06:10:02 -0800 (PST)
 Received: from [172.22.22.26] (c-73-185-129-58.hsd1.mn.comcast.net. [73.185.129.58])
-        by smtp.googlemail.com with ESMTPSA id m5sm6184543qkd.36.2022.02.22.06.08.58
+        by smtp.googlemail.com with ESMTPSA id e9sm306676qkm.27.2022.02.22.06.10.01
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 22 Feb 2022 06:08:59 -0800 (PST)
-Message-ID: <72118049-0ae0-69a9-97de-2c132e5f3b6c@linaro.org>
-Date:   Tue, 22 Feb 2022 08:08:57 -0600
+        Tue, 22 Feb 2022 06:10:02 -0800 (PST)
+Message-ID: <a1e26159-f27e-e55f-d376-e43a13294246@linaro.org>
+Date:   Tue, 22 Feb 2022 08:10:00 -0600
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
-Subject: Re: [PATCH v3 15/25] bus: mhi: ep: Add support for processing MHI
- endpoint interrupts
+Subject: Re: [PATCH v3 16/25] bus: mhi: ep: Add support for powering up the
+ MHI endpoint stack
 Content-Language: en-US
 To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 Cc:     mhi@lists.linux.dev, quic_hemantk@quicinc.com,
@@ -65,11 +65,11 @@ Cc:     mhi@lists.linux.dev, quic_hemantk@quicinc.com,
         quic_cang@quicinc.com, quic_skananth@quicinc.com,
         linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
 References: <20220212182117.49438-1-manivannan.sadhasivam@linaro.org>
- <20220212182117.49438-16-manivannan.sadhasivam@linaro.org>
- <d5bf8b66-e9ec-4750-9d9d-deb55cbcee94@linaro.org>
- <20220222081859.GC5029@thinkpad>
+ <20220212182117.49438-17-manivannan.sadhasivam@linaro.org>
+ <10240bc5-ef9f-7555-402e-57ca2b0b0a14@linaro.org>
+ <20220222090816.GD5029@thinkpad>
 From:   Alex Elder <elder@linaro.org>
-In-Reply-To: <20220222081859.GC5029@thinkpad>
+In-Reply-To: <20220222090816.GD5029@thinkpad>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -82,70 +82,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/22/22 2:18 AM, Manivannan Sadhasivam wrote:
-> On Tue, Feb 15, 2022 at 04:39:30PM -0600, Alex Elder wrote:
+On 2/22/22 3:08 AM, Manivannan Sadhasivam wrote:
+> On Tue, Feb 15, 2022 at 04:39:37PM -0600, Alex Elder wrote:
 >> On 2/12/22 12:21 PM, Manivannan Sadhasivam wrote:
->>> Add support for processing MHI endpoint interrupts such as control
->>> interrupt, command interrupt and channel interrupt from the host.
->>>
->>> The interrupts will be generated in the endpoint device whenever host
->>> writes to the corresponding doorbell registers. The doorbell logic
->>> is handled inside the hardware internally.
+>>> Add support for MHI endpoint power_up that includes initializing the MMIO
+>>> and rings, caching the host MHI registers, and setting the MHI state to M0.
+>>> After registering the MHI EP controller, the stack has to be powered up
+>>> for usage.
 >>>
 >>> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 >>
->> Unless I'm mistaken, you have some bugs here.
->>
->> Beyond that, I question whether you should be using workqueues
->> for handling all interrupts.  For now, it's fine, but there
->> might be room for improvement after this is accepted upstream
->> (using threaded interrupt handlers, for example).
->>
-> 
-> Only reason I didn't use bottom halves is that the memory for TRE buffers need
-> to be allocated each time, so essentially the caller should not sleep.
-
-Threaded interrupt handlers can sleep.  If scheduled, they run
-immediately after hard interrupt handlers.  For receive buffers,
-yes, replacing a receive buffer just consumed would require an
-allocation, but for transmit I think it might be possible to
-avoid the need to do a memory allocation.  (Things to think
-about at some future date.)
-
-> This is currently a limitation of iATU where there are only 8 windows for
-> mapping the host memory and each memory region size is also limited.
-
-Those are hard limitations, and probably what constrains you the most.
-
-					-Alex
-> 
->> 					-Alex
+>> Very little to say on this one.		-Alex
 >>
 >>> ---
->>>    drivers/bus/mhi/ep/main.c | 113 +++++++++++++++++++++++++++++++++++++-
->>>    include/linux/mhi_ep.h    |   2 +
->>>    2 files changed, 113 insertions(+), 2 deletions(-)
+>>>    drivers/bus/mhi/ep/internal.h |   6 +
+>>>    drivers/bus/mhi/ep/main.c     | 229 ++++++++++++++++++++++++++++++++++
+>>>    include/linux/mhi_ep.h        |  22 ++++
+>>>    3 files changed, 257 insertions(+)
 >>>
+>>> diff --git a/drivers/bus/mhi/ep/internal.h b/drivers/bus/mhi/ep/internal.h
+>>> index e4e8f06c2898..ee8c5974f0c0 100644
+>>> --- a/drivers/bus/mhi/ep/internal.h
+>>> +++ b/drivers/bus/mhi/ep/internal.h
+>>> @@ -242,4 +242,10 @@ int mhi_ep_set_m0_state(struct mhi_ep_cntrl *mhi_cntrl);
+>>>    int mhi_ep_set_m3_state(struct mhi_ep_cntrl *mhi_cntrl);
+>>>    int mhi_ep_set_ready_state(struct mhi_ep_cntrl *mhi_cntrl);
+>>> +/* MHI EP memory management functions */
+>>> +int mhi_ep_alloc_map(struct mhi_ep_cntrl *mhi_cntrl, u64 pci_addr, size_t size,
+>>> +		     phys_addr_t *phys_ptr, void __iomem **virt);
+>>> +void mhi_ep_unmap_free(struct mhi_ep_cntrl *mhi_cntrl, u64 pci_addr, phys_addr_t phys,
+>>> +		       void __iomem *virt, size_t size);
+>>> +
+>>>    #endif
 >>> diff --git a/drivers/bus/mhi/ep/main.c b/drivers/bus/mhi/ep/main.c
->>> index ccb3c2795041..072b872e735b 100644
->>> --- a/drivers/bus/mhi/ep/main.c
->>> +++ b/drivers/bus/mhi/ep/main.c
->>> @@ -185,6 +185,56 @@ static void mhi_ep_ring_worker(struct work_struct *work)
->>>    	}
->>>    }
->>> +static void mhi_ep_queue_channel_db(struct mhi_ep_cntrl *mhi_cntrl,
->>> +				    unsigned long ch_int, u32 ch_idx)
+> 
+> [...]
+> 
+>>> +
+>>> +static void mhi_ep_enable_int(struct mhi_ep_cntrl *mhi_cntrl)
 >>> +{
->>> +	struct device *dev = &mhi_cntrl->mhi_dev->dev;
->>> +	struct mhi_ep_ring_item *item;
->>> +	struct mhi_ep_ring *ring;
->>> +	unsigned int i;
 >>
->> Why not u32 i?  And why is the ch_int argument unsigned long?  The value
->> passed in is a u32.
+>> Are channel doorbell interrupts enabled separately now?
+>> (There was previously an enable_chdb_interrupts() call.)
 >>
 > 
-> for_each_set_bit() expects the 2nd argument to be of type "unsigned long".
+> Doorbell interrupts are enabled when the corresponding channel gets started.
+> Enabling all interrupts here triggers spurious irqs as some of the interrupts
+> associated with hw channels always get triggered.
+
+This is excellent.  Thanks for the explanation.	-Alex
+
 > 
 > Thanks,
 > Mani

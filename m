@@ -2,116 +2,248 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BEE44BF06D
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 05:10:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C9A724BF0BE
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 05:10:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232560AbiBVDYk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 22:24:40 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37218 "EHLO
+        id S233940AbiBVD0A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 22:26:00 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230154AbiBVDYi (ORCPT
+        with ESMTP id S230154AbiBVDZ6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 22:24:38 -0500
-Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9250D5F90;
-        Mon, 21 Feb 2022 19:24:14 -0800 (PST)
-Received: by mail-io1-xd2a.google.com with SMTP id m185so18440834iof.10;
-        Mon, 21 Feb 2022 19:24:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=t9pbxXf5AxDJimERyAK/g611uy98VuNWmmEmuXc8qEw=;
-        b=cQGwRIJzviZF9BcUrpncofuqGASKjdKjS1dBrbatBcOJd+O3l02b0Z301JZGkarEm+
-         15zz8FOCluPEQI6cwB/sOGYFv1SC4APKpE2Pxv2zZDs5AztiNNp1dn4JjR2dkO91okTO
-         1BrgUjfzkTXGjmTCqJNfOGFUfhx+Xeo3VaONlKhYpNh9px33vLRoDjfMXGZ1vJAA1hTN
-         ANPJuFxm8lwLLQy3wJjFGpCwJaW6A62j3FZYxzw+/ukRJOex5tzy+gNmzqg3Dbqh+Pv1
-         uY6i8C8Rm/RQg5VsDK0Yyw9CXylZB1J/xRPtP5KDQfIsTg6r2w4IF3N1SHOxojf+oyS7
-         dUow==
+        Mon, 21 Feb 2022 22:25:58 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 375771D0F4
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 19:25:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1645500331;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=LxxD0HcoaZKzQBhxL2/4ZeGyUXomH65XBCY4hjiGwFA=;
+        b=HcEbZn9zwNix+37/R6iqHbJGg4QMQJcD0UcmAud0qKHNi1JkEpTQXCeVovvwBb4RB55/P1
+        QGz8mJSDRzbhD/PoAmnP7gyjilt9GMLKH9420KgQZgoaW4MzDLnEiaBcUaLjp2xhfA8M+G
+        BXEU+BkLiTuAnvhNTtciDmiWOtDnGQE=
+Received: from mail-lf1-f69.google.com (mail-lf1-f69.google.com
+ [209.85.167.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-115-nFC5nErJO8aIACj7sMS2hg-1; Mon, 21 Feb 2022 22:25:29 -0500
+X-MC-Unique: nFC5nErJO8aIACj7sMS2hg-1
+Received: by mail-lf1-f69.google.com with SMTP id m24-20020a056512359800b00442b6ff7a0eso2663295lfr.1
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 19:25:29 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=t9pbxXf5AxDJimERyAK/g611uy98VuNWmmEmuXc8qEw=;
-        b=lU4W98uiJ9x0Rb4Bcq1HevpmrG2nXeHKAffHIvJlnpZaRp0W/dudfCjlFnTCZMrAVR
-         RvoO8J1MhdMiMINqU4LW6s6rfHzww9+Zrdx2h82DvGyH808mnRAV3gKLaJoxJ/EBhUgk
-         2BwG6RP6jnfkxZM8eWVaLHWhX3c+/XXg4QmpgbNwqvjjaEIwPJEcC7hpuYqbAhWuxI6X
-         Eb0zBaWVUVan89nCXeLFxK61MLQh/aXUNKT6DWmuHzHu/N6wmKj/iSzJ1namcxIREacF
-         qr6qPNB15BNQ1OAn2H112wrUohmXRggz59eSsk6BRpPndiEzr9mZZgu4EN0KYPl8OyQa
-         56qQ==
-X-Gm-Message-State: AOAM530H/FrByKWo7h8RQJl7/rdUGdFjConMiIoh0ANNNXuT0fTmQmt2
-        OqAadU6szeoFQ6ZEFeoq+4t77c/AeZGs5w==
-X-Google-Smtp-Source: ABdhPJzZUKeg4Rm9p/szzjf9rOL8deIbDZKIYA1aPXEuZ8oBrxaWO0OEV4M3p3jSTHvvqVNFc0i4lw==
-X-Received: by 2002:a02:6d04:0:b0:306:3f0c:6e2f with SMTP id m4-20020a026d04000000b003063f0c6e2fmr16890708jac.306.1645500254031;
-        Mon, 21 Feb 2022 19:24:14 -0800 (PST)
-Received: from ?IPV6:2601:284:8200:b700:fc7f:e53f:676e:280d? ([2601:284:8200:b700:fc7f:e53f:676e:280d])
-        by smtp.googlemail.com with ESMTPSA id e14sm1973816ilu.13.2022.02.21.19.24.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Feb 2022 19:24:13 -0800 (PST)
-Message-ID: <cac945fa-ec67-4bbf-8893-323adf0836d8@gmail.com>
-Date:   Mon, 21 Feb 2022 20:24:12 -0700
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=LxxD0HcoaZKzQBhxL2/4ZeGyUXomH65XBCY4hjiGwFA=;
+        b=gVVI73cbjnSz82MgLxf0wQxqdLSHgq2FYYV36ziO/x2eedUiK6kZVHYfUHe3RpSBdb
+         LAzwuwQ5gfjvyPuAn7qptikO97f5MxH6LF/UOCki2JETdRhBFJ9ruPm70sMl545uRxQN
+         foIUEPEq77xZv/AYErJJPr5eUGmrH5tXLluOn8upm0/8i+84fWGzo/Xx7gmVDlLWo9kM
+         lwjDn6wnso8AbIST1LSYUf90AxqXauowvGKmK/Wev1j+KpNTWywYnDDk5Jcag7/a7uiY
+         MunQZQCeUi03ETD9hgFBnbbrjr8j/Z4vmrcCStJxEnsBOdptwsYDBquEJsGsssS7f4lA
+         yiTA==
+X-Gm-Message-State: AOAM532SaXX+gOkdaIT0slxuzK1U/r1AzjJuOMmkKlGbbDfU0PR+hpqT
+        1JZ5AHDTNLpbeSRDxoS9YA2QPbHDRFrCnK+2gMGxH411ufVI+MDs4W5TgtKtP/5Pu6EDpP50g2f
+        zttf6te7NnvsjIQ+AbFHNj7UXShSOFaMVdovPFe+i
+X-Received: by 2002:ac2:5dc9:0:b0:443:5db1:244c with SMTP id x9-20020ac25dc9000000b004435db1244cmr16260344lfq.84.1645500328169;
+        Mon, 21 Feb 2022 19:25:28 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzgclXkZ4so+3pHZp3beg+SMuuvNf+mQCavH/1HthOChAx9iEQFRetN/+EmIDBrnSE47bn8vJcbii0Wu+Z0MDg=
+X-Received: by 2002:ac2:5dc9:0:b0:443:5db1:244c with SMTP id
+ x9-20020ac25dc9000000b004435db1244cmr16260331lfq.84.1645500327952; Mon, 21
+ Feb 2022 19:25:27 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.6.0
-Subject: Re: [PATCH net-next v3 2/4] net: tap: track dropped skb via
- kfree_skb_reason()
-Content-Language: en-US
-To:     Dongli Zhang <dongli.zhang@oracle.com>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
-        rostedt@goodmis.org, mingo@redhat.com, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org, imagedong@tencent.com,
-        joao.m.martins@oracle.com, joe.jin@oracle.com, edumazet@google.com
-References: <20220221053440.7320-1-dongli.zhang@oracle.com>
- <20220221053440.7320-3-dongli.zhang@oracle.com>
-From:   David Ahern <dsahern@gmail.com>
-In-Reply-To: <20220221053440.7320-3-dongli.zhang@oracle.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <c1895bcc240d413ff067f982b6e653996ace9887.camel@infradead.org>
+In-Reply-To: <c1895bcc240d413ff067f982b6e653996ace9887.camel@infradead.org>
+From:   Jason Wang <jasowang@redhat.com>
+Date:   Tue, 22 Feb 2022 11:25:16 +0800
+Message-ID: <CACGkMEuXOuXqJPouDkGSm=4uZTSQf6cA+W+vPeM8gEDSKGiP5Q@mail.gmail.com>
+Subject: Re: [PATCH] tools/virtio: Test virtual address range detection
+To:     David Woodhouse <dwmw2@infradead.org>
+Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
+        virtualization <virtualization@lists.linux-foundation.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/20/22 10:34 PM, Dongli Zhang wrote:
-> The TAP can be used as vhost-net backend. E.g., the tap_handle_frame() is
-> the interface to forward the skb from TAP to vhost-net/virtio-net.
-> 
-> However, there are many "goto drop" in the TAP driver. Therefore, the
-> kfree_skb_reason() is involved at each "goto drop" to help userspace
-> ftrace/ebpf to track the reason for the loss of packets.
-> 
-> The below reasons are introduced:
-> 
-> - SKB_DROP_REASON_SKB_CSUM
-> - SKB_DROP_REASON_SKB_COPY_DATA
-> - SKB_DROP_REASON_SKB_GSO_SEG
-> - SKB_DROP_REASON_DEV_HDR
-> - SKB_DROP_REASON_FULL_RING
-> 
-> Cc: Joao Martins <joao.m.martins@oracle.com>
-> Cc: Joe Jin <joe.jin@oracle.com>
-> Signed-off-by: Dongli Zhang <dongli.zhang@oracle.com>
+On Tue, Feb 22, 2022 at 12:17 AM David Woodhouse <dwmw2@infradead.org> wrote:
+>
+> As things stand, an application which wants to use vhost with a trivial
+> 1:1 mapping of its virtual address space is forced to jump through hoops
+> to detect what the address range might be. The VHOST_SET_MEM_TABLE ioctl
+> helpfully doesn't fail immediately; you only get a failure *later* when
+> you attempt to set the backend, if the table *could* map to an address
+> which is out of range, even if no out-of-range address is actually
+> being referenced.
+>
+> Since userspace is growing workarounds for this lovely kernel API, let's
+> ensure that we have a regression test that does things basically the same
+> way as https://gitlab.com/openconnect/openconnect/-/commit/443edd9d8826
+> does.
+
+I wonder if it's useful to have a small library that wraps vhost
+kernel uAPI somewhere.
+
+(In the future, we may want to let the kernel accept 1:1 mapping by
+figuring out the illegal range by itself?)
+
+Thanks
+
+>
+> This is untested as I can't actually get virtio_test to work at all; it
+> just seems to deadlock on a spinlock. But it's getting the right answer
+> for the virtio range on x86_64 at least.
+>
+> Signed-off-by: David Woodhouse <dwmw2@infradead.org>
 > ---
-> Changed since v1:
->   - revise the reason name
-> Changed since v2:
->   - declare drop_reason as type "enum skb_drop_reason"
->   - handle the drop in skb_list_walk_safe() case
-> 
->  drivers/net/tap.c          | 35 +++++++++++++++++++++++++----------
->  include/linux/skbuff.h     |  9 +++++++++
->  include/trace/events/skb.h |  5 +++++
->  3 files changed, 39 insertions(+), 10 deletions(-)
-> 
+>
+> Please, tell me I don't need to do this. But if I *do*, it needs a
+> regression test in-kernel.
+>
+>  tools/virtio/virtio_test.c | 109 ++++++++++++++++++++++++++++++++++++-
+>  1 file changed, 106 insertions(+), 3 deletions(-)
+>
+> diff --git a/tools/virtio/virtio_test.c b/tools/virtio/virtio_test.c
+> index cb3f29c09aff..e40eeeb05b71 100644
+> --- a/tools/virtio/virtio_test.c
+> +++ b/tools/virtio/virtio_test.c
+> @@ -11,6 +11,7 @@
+>  #include <sys/ioctl.h>
+>  #include <sys/stat.h>
+>  #include <sys/types.h>
+> +#include <sys/mman.h>
+>  #include <fcntl.h>
+>  #include <stdbool.h>
+>  #include <linux/virtio_types.h>
+> @@ -124,6 +125,109 @@ static void vq_info_add(struct vdev_info *dev, int num)
+>         dev->nvqs++;
+>  }
+>
+> +/*
+> + * This is awful. The kernel doesn't let us just ask for a 1:1 mapping of
+> + * our virtual address space; we have to *know* the minimum and maximum
+> + * addresses. We can't test it directly with VHOST_SET_MEM_TABLE because
+> + * that actually succeeds, and the failure only occurs later when we try
+> + * to use a buffer at an address that *is* valid, but our memory table
+> + * *could* point to addresses that aren't. Ewww.
+> + *
+> + * So... attempt to work out what TASK_SIZE is for the kernel we happen
+> + * to be running on right now...
+> + */
+> +
+> +static int testaddr(unsigned long addr)
+> +{
+> +       void *res = mmap((void *)addr, getpagesize(), PROT_NONE,
+> +                        MAP_FIXED|MAP_ANONYMOUS, -1, 0);
+> +       if (res == MAP_FAILED) {
+> +               if (errno == EEXIST || errno == EINVAL)
+> +                       return 1;
+> +
+> +               /* We get ENOMEM for a bad virtual address */
+> +               return 0;
+> +       }
+> +       /* It shouldn't actually succeed without either MAP_SHARED or
+> +        * MAP_PRIVATE in the flags, but just in case... */
+> +       munmap((void *)addr, getpagesize());
+> +       return 1;
+> +}
+> +
+> +static int find_vmem_range(struct vhost_memory *vmem)
+> +{
+> +       const unsigned long page_size = getpagesize();
+> +       unsigned long top;
+> +       unsigned long bottom;
+> +
+> +       top = -page_size;
+> +
+> +       if (testaddr(top)) {
+> +               vmem->regions[0].memory_size = top;
+> +               goto out;
+> +       }
+> +
+> +       /* 'top' is the lowest address known *not* to work */
+> +       bottom = top;
+> +       while (1) {
+> +               bottom >>= 1;
+> +               bottom &= ~(page_size - 1);
+> +               assert(bottom);
+> +
+> +               if (testaddr(bottom))
+> +                       break;
+> +               top = bottom;
+> +       }
+> +
+> +       /* It's often a page or two below the boundary */
+> +       top -= page_size;
+> +       if (testaddr(top)) {
+> +               vmem->regions[0].memory_size = top;
+> +               goto out;
+> +       }
+> +       top -= page_size;
+> +       if (testaddr(top)) {
+> +               vmem->regions[0].memory_size = top;
+> +               goto out;
+> +       }
+> +
+> +       /* Now, bottom is the highest address known to work,
+> +          and we must search between it and 'top' which is
+> +          the lowest address known not to. */
+> +       while (bottom + page_size != top) {
+> +               unsigned long test = bottom + (top - bottom) / 2;
+> +               test &= ~(page_size - 1);
+> +
+> +               if (testaddr(test)) {
+> +                       bottom = test;
+> +                       continue;
+> +               }
+> +               test -= page_size;
+> +               if (testaddr(test)) {
+> +                       vmem->regions[0].memory_size = test;
+> +                       goto out;
+> +               }
+> +
+> +               test -= page_size;
+> +               if (testaddr(test)) {
+> +                       vmem->regions[0].memory_size = test;
+> +                       goto out;
+> +               }
+> +               top = test;
+> +       }
+> +       vmem->regions[0].memory_size = bottom;
+> +
+> + out:
+> +       vmem->regions[0].guest_phys_addr = page_size;
+> +       vmem->regions[0].userspace_addr = page_size;
+> +       printf("Detected virtual address range 0x%lx-0x%lx\n",
+> +              page_size,
+> +              (unsigned long)(page_size + vmem->regions[0].memory_size));
+> +
+> +       return 0;
+> +}
+> +
+> +
+>  static void vdev_info_init(struct vdev_info* dev, unsigned long long features)
+>  {
+>         int r;
+> @@ -143,9 +247,8 @@ static void vdev_info_init(struct vdev_info* dev, unsigned long long features)
+>         memset(dev->mem, 0, offsetof(struct vhost_memory, regions) +
+>                            sizeof dev->mem->regions[0]);
+>         dev->mem->nregions = 1;
+> -       dev->mem->regions[0].guest_phys_addr = (long)dev->buf;
+> -       dev->mem->regions[0].userspace_addr = (long)dev->buf;
+> -       dev->mem->regions[0].memory_size = dev->buf_size;
+> +       r = find_vmem_range(dev->mem);
+> +       assert(r >= 0);
+>         r = ioctl(dev->control, VHOST_SET_MEM_TABLE, dev->mem);
+>         assert(r >= 0);
+>  }
+>
+>
 
-couple of places where the new reason should be in reverse xmas order;
-logic wise:
-
-Reviewed-by: David Ahern <dsahern@kernel.org>

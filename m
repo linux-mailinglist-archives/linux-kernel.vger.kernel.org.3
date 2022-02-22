@@ -2,102 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FD274BFA72
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 15:09:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E989E4BFA71
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 15:09:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232730AbiBVOJ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 09:09:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45292 "EHLO
+        id S232795AbiBVOJg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 09:09:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232712AbiBVOJU (ORCPT
+        with ESMTP id S232734AbiBVOJ0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 09:09:20 -0500
-Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FE4215F377
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 06:08:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=Gft2vksxvg2p7hlkEZC2wTxmWAXTizdIoqfd+83pKUA=; b=CkILlN47FdZ0e1Eg5VfGrMMbyY
-        M9kCxxlSC5GNSBy/hdl1vhI6vtZGxpwaC5eCSiu2rIZ0DEesCAZlsZ4QKbQPU93q3s466Ak0JVyO3
-        icK1Vjbr8gHCpE6SVWJkymogGsQnoAY76tdHQ4XeIJ8c9lShy/3ZQLdV3brtYbOKUOD4RjT39NzYL
-        qB0vK8Hds/5cgA10EXUmSdJQXGWBlJipPTqMcK10VXWgJmezbxUFSD9ox6Uj9VM7MNllTXFJQRTRm
-        iSXL65nDF+s6QNkhfNQD602+pTMK10nyZnquU5y69c4721yAvwujRLT+x5DlI0igPtbPX9HM3lYK9
-        z0LLNdHg==;
-Received: from [189.79.213.38] (helo=[192.168.1.60])
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-        id 1nMVqJ-000A22-5x; Tue, 22 Feb 2022 15:08:40 +0100
-Message-ID: <7702bdc2-78ce-00f5-d5a4-c06527c3ae72@igalia.com>
-Date:   Tue, 22 Feb 2022 11:08:22 -0300
+        Tue, 22 Feb 2022 09:09:26 -0500
+Received: from mail-qv1-xf2c.google.com (mail-qv1-xf2c.google.com [IPv6:2607:f8b0:4864:20::f2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E75B015F617
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 06:09:00 -0800 (PST)
+Received: by mail-qv1-xf2c.google.com with SMTP id h13so362653qvk.12
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 06:09:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=Xqy5QKYZUVik+xQ3v/BV4Q233CuzTNH+f5Hje8r4UrI=;
+        b=aGIIG0timJUg6GqBs7BQEga6tkXr3leN8qS/gdipqyzpUFCqQkhRhM7UZe2pVyLcgm
+         NOb3dsFsdJciYIMXJuNhQY2WUhYIwifHoKXAxGkcT+WEJUP6rAWREQ8BsToWjyfTPIrv
+         1Gia/lwpYFtICvwKofZOdKvajWAV0p2Yj6N4JVAbKmVeu1/iV0LKcPwccNE71C6LFLrI
+         1UL2sV6UmJqsZt9jsrcCgwaKVMRq3o3rBAMI85FQ/PZRZZ3ywz5wKyIOOlqhsHSRTe/y
+         b20BwfwS8h8HFx5aY6uAhL/6Ug/B65sontRAmVB2YUKzm9kzcsNjicDtP4SeQiYeumNs
+         VAzQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Xqy5QKYZUVik+xQ3v/BV4Q233CuzTNH+f5Hje8r4UrI=;
+        b=OlT6LN9rwQHk1zKznN5NFRMnwMHtb+6vwQVhX/tbiIbngZPubeFM9TVOwdn152iU4Y
+         FWzW2TjT/CzvpuC4S2LC+5fJMBtdZ1ar7Cx2Kda1C4J7VQVOBjePGopDRpl1RMtDG9Vi
+         FgdJPPRgwgZQeZIg3xibahokP+zsqOcT+hbVCYASe+vK3QaeU+0XJ4K74rafH63WgBeZ
+         0yidq7TTVa1yOkPkJNHsnaCxE5kF5YmMXaIsSir3KKJC7tMvuyiFgA1JQSQNrmgkIvSq
+         +3xea7gp0QgyZDfaWh90DWx28qbkiCp1W57KZBd1rmLSE7iAM5iuxpBMZLbgItCLeNjE
+         72oA==
+X-Gm-Message-State: AOAM532Qvi9OgG6EpIvRaoWTbQqrAzX8IPLFXxQB3mloMXIq0I2wYaKn
+        ebZIMYh9ugOfQ7EqIGonU7FMWg==
+X-Google-Smtp-Source: ABdhPJyu9Jgp+cBMPis6i+EmxSqRp8Qurp/ec9d0f6KFWdqDr/xI0wAEwk7qjS45pCIqzW1QSNPz9Q==
+X-Received: by 2002:a05:622a:607:b0:2d7:35db:81e4 with SMTP id z7-20020a05622a060700b002d735db81e4mr21875783qta.281.1645538939986;
+        Tue, 22 Feb 2022 06:08:59 -0800 (PST)
+Received: from [172.22.22.26] (c-73-185-129-58.hsd1.mn.comcast.net. [73.185.129.58])
+        by smtp.googlemail.com with ESMTPSA id m5sm6184543qkd.36.2022.02.22.06.08.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 22 Feb 2022 06:08:59 -0800 (PST)
+Message-ID: <72118049-0ae0-69a9-97de-2c132e5f3b6c@linaro.org>
+Date:   Tue, 22 Feb 2022 08:08:57 -0600
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH V6] panic: Move panic_print before kmsg dumpers
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v3 15/25] bus: mhi: ep: Add support for processing MHI
+ endpoint interrupts
 Content-Language: en-US
-To:     Sergey Senozhatsky <senozhatsky@chromium.org>, bhe@redhat.com,
-        pmladek@suse.com
-Cc:     linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
-        anton@enomsg.org, ccross@android.com, dyoung@redhat.com,
-        feng.tang@intel.com, john.ogness@linutronix.de,
-        keescook@chromium.org, kernel@gpiccoli.net,
-        kexec@lists.infradead.org, rostedt@goodmis.org,
-        tony.luck@intel.com, vgoyal@redhat.com
-References: <20220214141308.841525-1-gpiccoli@igalia.com>
- <YhRAOQbH15E7y9s8@google.com>
-From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-In-Reply-To: <YhRAOQbH15E7y9s8@google.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc:     mhi@lists.linux.dev, quic_hemantk@quicinc.com,
+        quic_bbhatt@quicinc.com, quic_jhugo@quicinc.com,
+        vinod.koul@linaro.org, bjorn.andersson@linaro.org,
+        dmitry.baryshkov@linaro.org, quic_vbadigan@quicinc.com,
+        quic_cang@quicinc.com, quic_skananth@quicinc.com,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220212182117.49438-1-manivannan.sadhasivam@linaro.org>
+ <20220212182117.49438-16-manivannan.sadhasivam@linaro.org>
+ <d5bf8b66-e9ec-4750-9d9d-deb55cbcee94@linaro.org>
+ <20220222081859.GC5029@thinkpad>
+From:   Alex Elder <elder@linaro.org>
+In-Reply-To: <20220222081859.GC5029@thinkpad>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/02/2022 22:45, Sergey Senozhatsky wrote:
-> [...]
-> Yeah, if Petr is fine with that then I'm OK. But at the same time,
-> we have `panic_print' which is a bit mask of what panic_print_sys_info()
-> should do. And now we also have a boolean `console_flush` flag that tells
-> panic_print_sys_info() to ignore some (one as of now) bits of `panic_print'.
+On 2/22/22 2:18 AM, Manivannan Sadhasivam wrote:
+> On Tue, Feb 15, 2022 at 04:39:30PM -0600, Alex Elder wrote:
+>> On 2/12/22 12:21 PM, Manivannan Sadhasivam wrote:
+>>> Add support for processing MHI endpoint interrupts such as control
+>>> interrupt, command interrupt and channel interrupt from the host.
+>>>
+>>> The interrupts will be generated in the endpoint device whenever host
+>>> writes to the corresponding doorbell registers. The doorbell logic
+>>> is handled inside the hardware internally.
+>>>
+>>> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+>>
+>> Unless I'm mistaken, you have some bugs here.
+>>
+>> Beyond that, I question whether you should be using workqueues
+>> for handling all interrupts.  For now, it's fine, but there
+>> might be room for improvement after this is accepted upstream
+>> (using threaded interrupt handlers, for example).
+>>
 > 
-> So _maybe_ panic_print_sys_info() can just accept panic_print as
-> its parameter and then we can do something like this (as an example)
-> 
-> 	panic_print_sys_info(panic_print & ~PANIC_PRINT_ALL_PRINTK_MSG);
-> 
-> 
->>  	if (panic_print & PANIC_PRINT_ALL_CPU_BT)
->>  		trigger_all_cpu_backtrace();
->> @@ -286,6 +289,8 @@ void panic(const char *fmt, ...)
->>  	 */
->>  	atomic_notifier_call_chain(&panic_notifier_list, 0, buf);
-> 
-> [..]
-> 
->> +	panic_print_sys_info(false);
-> 
-> Merely because `panic_print_sys_info(false);` doesn't tell much to a reader.
-> Like what is print sys info false?
-> 
-> Or did you already discuss this?
+> Only reason I didn't use bottom halves is that the memory for TRE buffers need
+> to be allocated each time, so essentially the caller should not sleep.
 
-Hi Sergey, thanks for your feedback. So, personally I prefer having the
-flag - for me it's clear, it's just a matter of reading the prototype -
-either we print the info _or_ we console_flush.
+Threaded interrupt handlers can sleep.  If scheduled, they run
+immediately after hard interrupt handlers.  For receive buffers,
+yes, replacing a receive buffer just consumed would require an
+allocation, but for transmit I think it might be possible to
+avoid the need to do a memory allocation.  (Things to think
+about at some future date.)
 
-But let's see if others have a preference - if the preference is to use
-the bitmask as you suggest, we can do it in a next version.
+> This is currently a limitation of iATU where there are only 8 windows for
+> mapping the host memory and each memory region size is also limited.
 
-Cheers,
+Those are hard limitations, and probably what constrains you the most.
 
+					-Alex
+> 
+>> 					-Alex
+>>
+>>> ---
+>>>    drivers/bus/mhi/ep/main.c | 113 +++++++++++++++++++++++++++++++++++++-
+>>>    include/linux/mhi_ep.h    |   2 +
+>>>    2 files changed, 113 insertions(+), 2 deletions(-)
+>>>
+>>> diff --git a/drivers/bus/mhi/ep/main.c b/drivers/bus/mhi/ep/main.c
+>>> index ccb3c2795041..072b872e735b 100644
+>>> --- a/drivers/bus/mhi/ep/main.c
+>>> +++ b/drivers/bus/mhi/ep/main.c
+>>> @@ -185,6 +185,56 @@ static void mhi_ep_ring_worker(struct work_struct *work)
+>>>    	}
+>>>    }
+>>> +static void mhi_ep_queue_channel_db(struct mhi_ep_cntrl *mhi_cntrl,
+>>> +				    unsigned long ch_int, u32 ch_idx)
+>>> +{
+>>> +	struct device *dev = &mhi_cntrl->mhi_dev->dev;
+>>> +	struct mhi_ep_ring_item *item;
+>>> +	struct mhi_ep_ring *ring;
+>>> +	unsigned int i;
+>>
+>> Why not u32 i?  And why is the ch_int argument unsigned long?  The value
+>> passed in is a u32.
+>>
+> 
+> for_each_set_bit() expects the 2nd argument to be of type "unsigned long".
+> 
+> Thanks,
+> Mani
 
-Guilherme

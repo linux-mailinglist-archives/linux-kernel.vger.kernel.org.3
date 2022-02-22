@@ -2,239 +2,229 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F34CA4BFBE3
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 16:05:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D67E4BFBEA
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 16:05:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233113AbiBVPFJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 10:05:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55534 "EHLO
+        id S232873AbiBVPF7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 10:05:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232898AbiBVPFG (ORCPT
+        with ESMTP id S230307AbiBVPF5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 10:05:06 -0500
-Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5428210E06A
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 07:04:41 -0800 (PST)
-Received: by mail-io1-xd32.google.com with SMTP id s1so20425839iob.9
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 07:04:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=HdNpOmeSgnI7mfqUNa90eQdVAGuPCOTlAwzEsXD4SxU=;
-        b=J1rl5TbrK0atsPRYIWKXqbrB8lIOPQzmfhxp/qZxbpbSFuV/S7PAcTbaJOZPQ/8J5I
-         0sqrwYsF0h9KIfqkM0e/m1onqYNkTtwxSUUJxdgKYZfQtTJosPl1/0Fhg4FaAVnbR3CQ
-         1iqpSRahaIIYZN9wSQywVPNtqY/jNwSfd8e8Q=
+        Tue, 22 Feb 2022 10:05:57 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A68B410E05B
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 07:05:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1645542330;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=BMyEEXf8ImD/PSnAQUSmvDiDS2I/otKWXaxekjUtwkM=;
+        b=XJEzM4wC/CRVQGXNn3P8Um//KwhVCp1m7f/H8hcloTD/rMidO6bQ66TWdAcWPfb1XpxOWs
+        uom9hl/xrGnCAltS1WLD0M8XB+yT4EBuPYVhcvZa3ZRguiu/ffK9jDkYwGbMQgsOABVnWQ
+        lSCM2gzNmSbZXeDTeKe46GMbQyhUMFU=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-629-Oa3wgshwN5GOqYV8FoXY7g-1; Tue, 22 Feb 2022 10:05:29 -0500
+X-MC-Unique: Oa3wgshwN5GOqYV8FoXY7g-1
+Received: by mail-ed1-f71.google.com with SMTP id e10-20020a056402190a00b00410f20467abso12099997edz.14
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 07:05:29 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=HdNpOmeSgnI7mfqUNa90eQdVAGuPCOTlAwzEsXD4SxU=;
-        b=7APDiK9VUoz4mG+i+BjJQ1Jx5Hjze47c6XR20ef2hJ99cVJ91qbxzS1ttoR39MHQWC
-         TTwticypHO7u7Y+gFxpx1oRjfDXK9X04sM0tVrE4jm4fKYZhSM+LUF6u6pwDcRd0M6O5
-         88ZhPAPBdQnLV5izBqyNO7ZhPi2RNAL9ArKtbBay21BA+IKIeoKgWttsiJaxP10ydIDU
-         Gp991SxcbDyzudA3JTA0gY8wgrKg4dnYnOXN9wIKnjl5MEbbAYAc4jz3E/Nyf5L5im7R
-         QoKjUVEi1uqDdNT4BQHbzyR0R/fAwfzAd4L7q+aLZE5YC/CvFHeQl8l/tFPCKj3Zv+Mi
-         1iIQ==
-X-Gm-Message-State: AOAM533xRKu1iF5eSlEqHlkg77eZoFrIIN8mXKrMFBguTaFCbQ2raqzG
-        2HjyohFzGEyZnjRAPYsL0iZWDGsNa6lgRnpBywptcA==
-X-Google-Smtp-Source: ABdhPJzd4f57jwjdG/UIoZCyFOzO3Wz0Jj2YKkBRPVZBd25F35AGayNJ/ixhIkUz2a1xWtd7dOmlycPutise6iC9W/E=
-X-Received: by 2002:a05:6638:a8f:b0:313:f8d3:efe9 with SMTP id
- 15-20020a0566380a8f00b00313f8d3efe9mr18986426jas.304.1645542280613; Tue, 22
- Feb 2022 07:04:40 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=BMyEEXf8ImD/PSnAQUSmvDiDS2I/otKWXaxekjUtwkM=;
+        b=ULgGfKbYWgmuTvMjfPwzpJoU5HQ5rOlvtapI0vjBdEzW9wDQfR9+gS5zj+2ByVkpuM
+         ly68ADgXJt1lnp148WYX0I9YJfVjSTes96/lhBb+ynoEWhw9l+Fvv/EQl/3tb/yzxpYQ
+         9h4/fuLVA/v7cynSsw1zUiD0WsHVh70zS09c6CJQQ0OnGbm+MrLIW++h3UnjYKVLwEFj
+         0eVB7PHwz3FwDy72fAqRg/7hPj/LbzSz8igLvxo2ZY4IR9gjDndXq5KWaW2SZVGKu5bz
+         jZqjfbUv9d6SSSIgUfJ66xr6L3blILZSMgDWsMapQKI7XyLJAN7VtZxWn/Vm/eCuGQim
+         BU9w==
+X-Gm-Message-State: AOAM530ULqIgCjuvLvaN8VmsokyqhBLNpJLdRntW/3dpFYabIDER++vm
+        zYAyNxs1+JdAf6u4kg+w4vwXUny7rYZUuvJc/26LILYbMoHQLuqD1xyUaMVRLghvBzm/1cILdSm
+        hLyb2O5bcwU55HnVfLKxlFFbO
+X-Received: by 2002:a17:906:b2c6:b0:6cf:e599:6b81 with SMTP id cf6-20020a170906b2c600b006cfe5996b81mr19181087ejb.578.1645542328139;
+        Tue, 22 Feb 2022 07:05:28 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJy1KJPfCHkAFDmEoSxesHnytFaMWyys7pSySGit2iNIkGs8qHqhLn5Ow49sRO57tzqWjQtkYw==
+X-Received: by 2002:a17:906:b2c6:b0:6cf:e599:6b81 with SMTP id cf6-20020a170906b2c600b006cfe5996b81mr19181055ejb.578.1645542327839;
+        Tue, 22 Feb 2022 07:05:27 -0800 (PST)
+Received: from [10.39.193.15] (5920ab7b.static.cust.trined.nl. [89.32.171.123])
+        by smtp.gmail.com with ESMTPSA id ay16sm3760460ejb.61.2022.02.22.07.05.27
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 22 Feb 2022 07:05:27 -0800 (PST)
+From:   Eelco Chaudron <echaudro@redhat.com>
+To:     Jiri Olsa <olsajiri@gmail.com>
+Cc:     peterz@infradead.org, mingo@redhat.com, acme@kernel.org,
+        mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
+        jolsa@redhat.com, namhyung@kernel.org,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] perf scripting python: expose symbol offset and source information
+Date:   Tue, 22 Feb 2022 16:05:26 +0100
+X-Mailer: MailMate (1.14r5870)
+Message-ID: <3D8DDD29-A919-4E3C-8256-B7F1DC4CFFED@redhat.com>
+In-Reply-To: <YgTENKDfI/2+DZhJ@krava>
+References: <164389947295.382219.17025049915445689710.stgit@wsfd-netdev64.ntdv.lab.eng.bos.redhat.com>
+ <YgTENKDfI/2+DZhJ@krava>
 MIME-Version: 1.0
-References: <20220218190057.2f5a19a8@gandalf.local.home>
-In-Reply-To: <20220218190057.2f5a19a8@gandalf.local.home>
-From:   Joel Fernandes <joel@joelfernandes.org>
-Date:   Tue, 22 Feb 2022 10:04:29 -0500
-Message-ID: <CAEXW_YSGa7a1UgYdiE7wcMsvsYnYB-jW3mQ=KRHSoU95gruS7g@mail.gmail.com>
-Subject: Re: [PATCH] eprobes: Remove redundant event type information
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Tzvetomir Stoyanov <tz.stoyanov@gmail.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 18, 2022 at 7:01 PM Steven Rostedt <rostedt@goodmis.org> wrote:
->
-> From 3163c1db8bbde856367b9d4e132d1bac9ec26704 Mon Sep 17 00:00:00 2001
-> From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
-> Date: Fri, 18 Feb 2022 18:52:38 -0500
-> Subject: [PATCH] eprobes: Remove redundant event type information
-
-Thanks!
-
-Reviewed-by: Joel Fernandes <joel@joelfernandes.org>
-
-Joel
 
 
+On 10 Feb 2022, at 8:52, Jiri Olsa wrote:
+
+> On Thu, Feb 03, 2022 at 09:44:33AM -0500, Eelco Chaudron wrote:
+>> This change adds the symbol offset to the data exported for each
+>> call-chain entry. This can not be calculated from the script and
+>> only the ip value, and no related mmap information.
+>>
+>> In addition, also export the source file and line information, if
+>> available, to avoid an external lookup if this information is needed.
 >
-> Currently, the event probes save the type of the event they are attached
-> to when recording the event. For example:
+> could you please update Documentation/perf-script-python.txt with that?=
+
 >
->   # echo 'e:switch sched/sched_switch prev_state=$prev_state prev_prio=$prev_prio next_pid=$next_pid next_prio=$next_prio' > dynamic_events
->   # cat events/eprobes/switch/format
+> any example script under scripts/python would be great
+
+Looks like there is no documentation at all regarding the call chains, on=
+ly the auto-generate script.
+So rather than trying to describe this, I decided to update the auto-gene=
+rated script to include this information as an example.
+
+The current output, if it included a callchain is:
+
+        [ffffffff99e03f0e] syscall_trace_enter
+        [ffffffff99e03f0e] syscall_trace_enter
+        [ffffffff99e043a9] do_syscall_64
+        [ffffffff9a8000ad] entry_SYSCALL_64_after_hwframe
+        [7f5b552280db] __GI_getrusage
+        [17a4d78] getrusage_thread
+        [17a4d78] refresh_rusage
+        [17a4d78] time_poll
+        [178f683] poll_block
+        [16bceb5] udpif_revalidator
+        [177b71c] ovsthread_wrapper
+        [7f5b57a66179] start_thread
+        [7f5b55231dc2] __GI___clone
+
+The new output will be (dependend on the information available):
+
+        [ffffffff99e0392f] syscall_slow_exit_work+0xaf ([kernel.kallsyms]=
+)
+        [ffffffff99e0392f] syscall_slow_exit_work+0xaf ([kernel.kallsyms]=
+)
+        [ffffffff99e043d0] do_syscall_64+0x170 ([kernel.kallsyms])
+        [ffffffff9a8000ad] entry_SYSCALL_64_after_hwframe+0x65 ([kernel.k=
+allsyms])
+        [7f5b55226a41] __GI___poll+0x51 (/usr/lib64/libc-2.28.so)
+        [17a4c50] time_poll+0x190 (/usr/sbin/ovs-vswitchd) timeval.c:326
+        [178f683] poll_block+0x83 (/usr/sbin/ovs-vswitchd) poll-loop.c:36=
+4
+        [16bceb5] udpif_revalidator+0x185 (/usr/sbin/ovs-vswitchd) ofprot=
+o-dpif-upcall.c:1024
+        [177b71c] ovsthread_wrapper+0x5c (/usr/sbin/ovs-vswitchd) ovs-thr=
+ead.c:422
+        [7f5b57a66179] start_thread+0xe9 (/usr/lib64/libpthread-2.28.so)
+        [7f5b55231dc2] __GI___clone+0x42 (/usr/lib64/libc-2.28.so)
+
+I will send out the v2 soon.
+
+>>
+>> Signed-off-by: Eelco Chaudron <echaudro@redhat.com>
+>> ---
+>>  .../util/scripting-engines/trace-event-python.c    |   42 +++++++++++=
++++------
+>>  1 file changed, 30 insertions(+), 12 deletions(-)
+>>
+>> diff --git a/tools/perf/util/scripting-engines/trace-event-python.c b/=
+tools/perf/util/scripting-engines/trace-event-python.c
+>> index e752e1f4a5f0..0f392b4ff663 100644
+>> --- a/tools/perf/util/scripting-engines/trace-event-python.c
+>> +++ b/tools/perf/util/scripting-engines/trace-event-python.c
+>> @@ -392,6 +392,18 @@ static const char *get_dsoname(struct map *map)
+>>  	return dsoname;
+>>  }
+>>
+>> +static unsigned long get_offset(struct symbol *sym, struct addr_locat=
+ion *al)
+>> +{
+>> +	unsigned long offset;
+>> +
+>> +	if (al->addr < sym->end)
+>> +		offset =3D al->addr - sym->start;
+>> +	else
+>> +		offset =3D al->addr - al->map->start - sym->start;
+>> +
+>> +	return offset;
+>> +}
+>> +
+>>  static PyObject *python_process_callchain(struct perf_sample *sample,=
+
+>>  					 struct evsel *evsel,
+>>  					 struct addr_location *al)
+>> @@ -443,6 +455,24 @@ static PyObject *python_process_callchain(struct =
+perf_sample *sample,
+>>  					_PyUnicode_FromStringAndSize(node->ms.sym->name,
+>>  							node->ms.sym->namelen));
+>>  			pydict_set_item_string_decref(pyelem, "sym", pysym);
+>> +
+>> +			if (node->ms.map) {
+>> +				struct map *map =3D node->ms.map;
+>> +				struct addr_location node_al;
+>> +				unsigned long offset;
+>> +
+>> +				node_al.addr =3D map->map_ip(map, node->ip);
+>> +				node_al.map  =3D map;
+>> +				offset =3D get_offset(node->ms.sym, &node_al);
+>> +
+>> +				pydict_set_item_string_decref(
+>> +					pyelem, "sym_off",
+>> +					PyLong_FromUnsignedLongLong(offset));
+>> +			}
+>> +			if (node->srcline && strcmp(":0", node->srcline))
+>> +				pydict_set_item_string_decref(
+>> +					pyelem, "sym_srcline",
+>> +					_PyUnicode_FromString(node->srcline));
 >
->  name: switch
->  ID: 1717
->  format:
->         field:unsigned short common_type;       offset:0;       size:2; signed:0;
->         field:unsigned char common_flags;       offset:2;       size:1; signed:0;
->         field:unsigned char common_preempt_count;       offset:3;       size:1; signed:0;
->         field:int common_pid;   offset:4;       size:4; signed:1;
+> nit missing { } for multiline if code
 >
->         field:unsigned int __probe_type;        offset:8;       size:4; signed:0;
->         field:u64 prev_state;   offset:12;      size:8; signed:0;
->         field:u64 prev_prio;    offset:20;      size:8; signed:0;
->         field:u64 next_pid;     offset:28;      size:8; signed:0;
->         field:u64 next_prio;    offset:36;      size:8; signed:0;
->
->  print fmt: "(%u) prev_state=0x%Lx prev_prio=0x%Lx next_pid=0x%Lx next_prio=0x%Lx", REC->__probe_type, REC->prev_state, REC->prev_prio, REC->next_pid, REC->next_prio
->
-> The __probe_type adds 4 bytes to every event.
->
-> One of the reasons for creating eprobes is to limit what is traced in an
-> event to be able to limit what is written into the ring buffer. Having
-> this redundant 4 bytes to every event takes away from this.
->
-> The event that is recorded can be retrieved from the event probe itself,
-> that is available when the trace is happening. For user space tools, it
-> could simply read the dynamic_event file to find the event they are for.
-> So there is really no reason to write this information into the ring
-> buffer for every event.
->
-> Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-> ---
->  kernel/trace/trace.h        |  1 -
->  kernel/trace/trace_eprobe.c | 15 +++++++--------
->  kernel/trace/trace_probe.c  | 10 +++++-----
->  kernel/trace/trace_probe.h  |  1 -
->  4 files changed, 12 insertions(+), 15 deletions(-)
->
-> diff --git a/kernel/trace/trace.h b/kernel/trace/trace.h
-> index 0f5e22238cd2..07d990270e2a 100644
-> --- a/kernel/trace/trace.h
-> +++ b/kernel/trace/trace.h
-> @@ -136,7 +136,6 @@ struct kprobe_trace_entry_head {
->
->  struct eprobe_trace_entry_head {
->         struct trace_entry      ent;
-> -       unsigned int            type;
->  };
->
->  struct kretprobe_trace_entry_head {
-> diff --git a/kernel/trace/trace_eprobe.c b/kernel/trace/trace_eprobe.c
-> index 191db32dec46..02838d47129f 100644
-> --- a/kernel/trace/trace_eprobe.c
-> +++ b/kernel/trace/trace_eprobe.c
-> @@ -250,8 +250,6 @@ static int eprobe_event_define_fields(struct trace_event_call *event_call)
->         if (WARN_ON_ONCE(!tp))
->                 return -ENOENT;
->
-> -       DEFINE_FIELD(unsigned int, type, FIELD_STRING_TYPE, 0);
-> -
->         return traceprobe_define_arg_fields(event_call, sizeof(field), tp);
->  }
->
-> @@ -270,7 +268,9 @@ print_eprobe_event(struct trace_iterator *iter, int flags,
->         struct trace_event_call *pevent;
->         struct trace_event *probed_event;
->         struct trace_seq *s = &iter->seq;
-> +       struct trace_eprobe *ep;
->         struct trace_probe *tp;
-> +       unsigned int type;
->
->         field = (struct eprobe_trace_entry_head *)iter->ent;
->         tp = trace_probe_primary_from_call(
-> @@ -278,15 +278,18 @@ print_eprobe_event(struct trace_iterator *iter, int flags,
->         if (WARN_ON_ONCE(!tp))
->                 goto out;
->
-> +       ep = container_of(tp, struct trace_eprobe, tp);
-> +       type = ep->event->event.type;
-> +
->         trace_seq_printf(s, "%s: (", trace_probe_name(tp));
->
-> -       probed_event = ftrace_find_event(field->type);
-> +       probed_event = ftrace_find_event(type);
->         if (probed_event) {
->                 pevent = container_of(probed_event, struct trace_event_call, event);
->                 trace_seq_printf(s, "%s.%s", pevent->class->system,
->                                  trace_event_name(pevent));
->         } else {
-> -               trace_seq_printf(s, "%u", field->type);
-> +               trace_seq_printf(s, "%u", type);
->         }
->
->         trace_seq_putc(s, ')');
-> @@ -498,10 +501,6 @@ __eprobe_trace_func(struct eprobe_data *edata, void *rec)
->                 return;
->
->         entry = fbuffer.entry = ring_buffer_event_data(fbuffer.event);
-> -       if (edata->ep->event)
-> -               entry->type = edata->ep->event->event.type;
-> -       else
-> -               entry->type = 0;
->         store_trace_args(&entry[1], &edata->ep->tp, rec, sizeof(*entry), dsize);
->
->         trace_event_buffer_commit(&fbuffer);
-> diff --git a/kernel/trace/trace_probe.c b/kernel/trace/trace_probe.c
-> index 73d90179b51b..80863c6508e5 100644
-> --- a/kernel/trace/trace_probe.c
-> +++ b/kernel/trace/trace_probe.c
-> @@ -871,15 +871,15 @@ static int __set_print_fmt(struct trace_probe *tp, char *buf, int len,
->         switch (ptype) {
->         case PROBE_PRINT_NORMAL:
->                 fmt = "(%lx)";
-> -               arg = "REC->" FIELD_STRING_IP;
-> +               arg = ", REC->" FIELD_STRING_IP;
->                 break;
->         case PROBE_PRINT_RETURN:
->                 fmt = "(%lx <- %lx)";
-> -               arg = "REC->" FIELD_STRING_FUNC ", REC->" FIELD_STRING_RETIP;
-> +               arg = ", REC->" FIELD_STRING_FUNC ", REC->" FIELD_STRING_RETIP;
->                 break;
->         case PROBE_PRINT_EVENT:
-> -               fmt = "(%u)";
-> -               arg = "REC->" FIELD_STRING_TYPE;
-> +               fmt = "";
-> +               arg = "";
->                 break;
->         default:
->                 WARN_ON_ONCE(1);
-> @@ -903,7 +903,7 @@ static int __set_print_fmt(struct trace_probe *tp, char *buf, int len,
->                                         parg->type->fmt);
->         }
->
-> -       pos += snprintf(buf + pos, LEN_OR_ZERO, "\", %s", arg);
-> +       pos += snprintf(buf + pos, LEN_OR_ZERO, "\"%s", arg);
->
->         for (i = 0; i < tp->nr_args; i++) {
->                 parg = tp->args + i;
-> diff --git a/kernel/trace/trace_probe.h b/kernel/trace/trace_probe.h
-> index 99e7a5df025e..92cc149af0fd 100644
-> --- a/kernel/trace/trace_probe.h
-> +++ b/kernel/trace/trace_probe.h
-> @@ -38,7 +38,6 @@
->  #define FIELD_STRING_IP                "__probe_ip"
->  #define FIELD_STRING_RETIP     "__probe_ret_ip"
->  #define FIELD_STRING_FUNC      "__probe_func"
-> -#define FIELD_STRING_TYPE      "__probe_type"
->
->  #undef DEFINE_FIELD
->  #define DEFINE_FIELD(type, item, name, is_signed)                      \
-> --
-> 2.34.1
->
+
+Will fix in v2
+>>  		}
+>>
+>>  		if (node->ms.map) {
+>> @@ -520,18 +550,6 @@ static PyObject *python_process_brstack(struct pe=
+rf_sample *sample,
+>>  	return pylist;
+>>  }
+>>
+>> -static unsigned long get_offset(struct symbol *sym, struct addr_locat=
+ion *al)
+>> -{
+>> -	unsigned long offset;
+>> -
+>> -	if (al->addr < sym->end)
+>> -		offset =3D al->addr - sym->start;
+>> -	else
+>> -		offset =3D al->addr - al->map->start - sym->start;
+>> -
+>> -	return offset;
+>> -}
+>> -
+>>  static int get_symoff(struct symbol *sym, struct addr_location *al,
+>>  		      bool print_off, char *bf, int size)
+>>  {
+>>
+

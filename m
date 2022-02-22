@@ -2,226 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CCA14BF589
+	by mail.lfdr.de (Postfix) with ESMTP id F31664BF58B
 	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 11:14:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230428AbiBVKN6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 05:13:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42666 "EHLO
+        id S230455AbiBVKOX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 05:14:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229526AbiBVKN4 (ORCPT
+        with ESMTP id S229526AbiBVKOU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 05:13:56 -0500
-Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 618E213A1CC
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 02:13:31 -0800 (PST)
-Received: by mail-yb1-xb2a.google.com with SMTP id bt13so39987707ybb.2
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 02:13:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=84dXbZa7FvRhAmFpDM+EJhx/CIk7pvjB9aAjf09n/9Q=;
-        b=IMpNfUYxm3fFLMnjQgJBYE0ijoWXTrBfNkBIBs4+hO5FHTTUbHQq1OmCWEGHtl5dh3
-         q+js3oQxbwLJ98JX2dewwNXPaAy0ksN4MwPfr8bgtZixKpzX47YTty5t7jiioAb+9I9H
-         LgqjkZ9V7PiTguCyU0ixIM6N1qJd/viBcIa446unedLlZ782tLbfJmIrj5qMYv51HJeU
-         G1Ta0u2rU2j1YNtxRDpFU6fCjwQnUiAWlA0W5d5LeCwojTJkdisw902gz/vBN/rDunvT
-         WI1PZektPqT/I4GWUxPG+1tFqB5VPsUCyteVOOnqwIehFQyKxT7agxs82MpnpdjyGXEL
-         8gZw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=84dXbZa7FvRhAmFpDM+EJhx/CIk7pvjB9aAjf09n/9Q=;
-        b=A5qgcYVS0H5Yyl+MfdAy5P73IN95uyAfHqAyCdqV+n6M1uLVNkMF6jzVTBPnflb5FG
-         iXPKEb/MM5uKMoAazF6nhjN67M8z7PcPC187bF4ibnifoxLQ42klZldiecA3tMEF+sQB
-         zeDdpZ0B7DQ/ZjXBLtVgirqbybzmGN7fC71H/qX0fN5pdaW8Wgq7L8+HWsen3Bf0FsgD
-         ybcuMKmhYzUyxu1AuJewP1jPyUtUVH2e2PN/JE360kzbwDRCqt/EpQg2/4sB21eyXqUf
-         zoo4l6Jddq7TJdKidtzoAZ6xPqPd89yvsaYG916CaM4IJxtL76R6PCJ/TrWKTzYPX6q9
-         uHew==
-X-Gm-Message-State: AOAM533nIgfWXft0D+RE0dgqnzDmfgavfdT0Z93PeCp2rMqqje7hePSY
-        ebnee8mYz9ebySQZ3Eil0Vn9nEgwgXKLI7gjxWRe1Q==
-X-Google-Smtp-Source: ABdhPJwgjiHVx907RUaNJfNsG9EYVM95DuMREZLU1D/CaeT7yOBkhrF69Bdg1+cU9rQu8te78WNdwrXokBG36BORXQ8=
-X-Received: by 2002:a25:6642:0:b0:61a:8a17:f0a2 with SMTP id
- z2-20020a256642000000b0061a8a17f0a2mr21783242ybm.608.1645524810474; Tue, 22
- Feb 2022 02:13:30 -0800 (PST)
+        Tue, 22 Feb 2022 05:14:20 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A46C13A1CC;
+        Tue, 22 Feb 2022 02:13:55 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id A995DCE13AA;
+        Tue, 22 Feb 2022 10:13:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53D8BC340E8;
+        Tue, 22 Feb 2022 10:13:51 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="FyK4kZ8b"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1645524828;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=kpDNdh5isxkhK3fXHymqHlY32XR18j5hKDN11bOdsv8=;
+        b=FyK4kZ8bGV4PEH+8Gf6cTC5RQDFt8yAOFU6Hae9J9xnblTTAd66xo/xC74DbOFAF2r9/2v
+        Z88dlW+7z9e56u4Wjm3Q2UNiD8V1aFXHFaCuUBjw+KGmhfKWCE8fGsBQ4V/+mLApIV7Aoo
+        hkXWpA3t5/rRmIeVtg7koKdXcJJo0E8=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id d3cb9608 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Tue, 22 Feb 2022 10:13:48 +0000 (UTC)
+Received: by mail-yb1-f173.google.com with SMTP id j12so39943948ybh.8;
+        Tue, 22 Feb 2022 02:13:47 -0800 (PST)
+X-Gm-Message-State: AOAM532+X2f37tTKzZwMi7X1/fJ+fmQcRAeOOlnM9L75nrVuhjpskoGQ
+        DL7lomPItxxnMRQFOP2elb/T6RI+somjBLQKecg=
+X-Google-Smtp-Source: ABdhPJwWpiFGMVhm1YI6hSWqRxcYa0Kq8ueTB8UmBj9lC6mB8/xFLLPBtY0rg6XsLGvngvkkWASPOukLydtudnPxKNY=
+X-Received: by 2002:a05:6902:693:b0:613:7f4f:2e63 with SMTP id
+ i19-20020a056902069300b006137f4f2e63mr21470625ybt.271.1645524826098; Tue, 22
+ Feb 2022 02:13:46 -0800 (PST)
 MIME-Version: 1.0
-References: <20220221084910.454824160@linuxfoundation.org>
-In-Reply-To: <20220221084910.454824160@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Tue, 22 Feb 2022 15:43:19 +0530
-Message-ID: <CA+G9fYtDtjQbW850pxxUv+SpYsincVpVapZHh5Uh8_9T5HaQNw@mail.gmail.com>
-Subject: Re: [PATCH 4.14 00/45] 4.14.268-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
+Received: by 2002:a05:7110:71a8:b0:167:24f9:2d40 with HTTP; Tue, 22 Feb 2022
+ 02:13:45 -0800 (PST)
+In-Reply-To: <CAMj1kXFLx1xGexd5P9xnB-2=cFn1DScCa8U6a7AyRAxQPLCWLw@mail.gmail.com>
+References: <20220216113323.53332-1-Jason@zx2c4.com> <164543897830.26423.13654986323403498456.kvalo@kernel.org>
+ <CAMj1kXFLx1xGexd5P9xnB-2=cFn1DScCa8U6a7AyRAxQPLCWLw@mail.gmail.com>
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date:   Tue, 22 Feb 2022 11:13:45 +0100
+X-Gmail-Original-Message-ID: <CAHmME9rOWOki8fpMC=wNr=4En8iN4DhWm8XVOquprnUUh62yqA@mail.gmail.com>
+Message-ID: <CAHmME9rOWOki8fpMC=wNr=4En8iN4DhWm8XVOquprnUUh62yqA@mail.gmail.com>
+Subject: Re: [PATCH v3] ath9k: use hw_random API instead of directly dumping
+ into random.c
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     Kalle Valo <kvalo@kernel.org>, miaoqing@codeaurora.org,
+        Rui Salvaterra <rsalvaterra@gmail.com>,
+        =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@toke.dk>,
+        "Sepehrdad, Pouyan" <pouyans@qti.qualcomm.com>,
+        ath9k-devel <ath9k-devel@qca.qualcomm.com>,
+        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Netdev <netdev@vger.kernel.org>,
+        =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>,
+        Florian Fainelli <f.fainelli@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 21 Feb 2022 at 14:24, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
+On 2/22/22, Ard Biesheuvel <ardb@kernel.org> wrote:
+> On Mon, 21 Feb 2022 at 11:57, Kalle Valo <kvalo@kernel.org> wrote:
+>>
+>> "Jason A. Donenfeld" <Jason@zx2c4.com> wrote:
+>>
+>> > Hardware random number generators are supposed to use the hw_random
+>> > framework. This commit turns ath9k's kthread-based design into a prope=
+r
+>> > hw_random driver.
+>> >
+>> > Cc: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
+>> > Cc: Kalle Valo <kvalo@kernel.org>
+>> > Cc: Rui Salvaterra <rsalvaterra@gmail.com>
+>> > Cc: Dominik Brodowski <linux@dominikbrodowski.net>
+>> > Cc: Herbert Xu <herbert@gondor.apana.org.au>
+>> > Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+>> > Tested-by: Rui Salvaterra <rsalvaterra@gmail.com>
+>> > Acked-by: Toke H=C3=B8iland-J=C3=B8rgensen <toke@toke.dk>
+>> > Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
+>>
+>> Patch applied to ath-next branch of ath.git, thanks.
+>>
+>> fcd09c90c3c5 ath9k: use hw_random API instead of directly dumping into
+>> random.c
+>>
 >
-> This is the start of the stable review cycle for the 4.14.268 release.
-> There are 45 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+> With this patch, it seems we end up registering the hw_rng every time
+> the link goes up, and unregister it again when the link goes down,
+> right?
 >
-> Responses should be made by Wed, 23 Feb 2022 08:48:58 +0000.
-> Anything received after that time might be too late.
+> Wouldn't it be better to split off this driver from the 802.11 link
+> state handling?
 >
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-=
-4.14.268-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-4.14.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
-
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-## Build
-* kernel: 4.14.268-rc1
-* git: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-=
-rc.git
-* git branch: linux-4.14.y
-* git commit: 94b121cc896af77a7f03efce5e404bb61bd913db
-* git describe: v4.14.267-46-g94b121cc896a
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.14.y/build/v4.14=
-.267-46-g94b121cc896a
-
-## Test Regressions (compared to v4.14.267-33-g871c9e115feb)
-No test regressions found.
-
-## Metric Regressions (compared to v4.14.267-33-g871c9e115feb)
-No metric regressions found.
-
-## Test Fixes (compared to v4.14.267-33-g871c9e115feb)
-No test fixes found.
-
-## Metric Fixes (compared to v4.14.267-33-g871c9e115feb)
-No metric fixes found.
-
-## Test result summary
-total: 58341, pass: 48541, fail: 310, skip: 8482, xfail: 1008
-
-## Build Summary
-* arm: 280 total, 270 passed, 10 failed
-* arm64: 35 total, 35 passed, 0 failed
-* dragonboard-410c: 1 total, 1 passed, 0 failed
-* hi6220-hikey: 1 total, 1 passed, 0 failed
-* i386: 19 total, 19 passed, 0 failed
-* juno-r2: 1 total, 1 passed, 0 failed
-* mips: 22 total, 22 passed, 0 failed
-* powerpc: 60 total, 12 passed, 48 failed
-* sparc: 12 total, 12 passed, 0 failed
-* x15: 1 total, 1 passed, 0 failed
-* x86: 1 total, 1 passed, 0 failed
-* x86_64: 34 total, 34 passed, 0 failed
-
-## Test suites summary
-* fwts
-* kselftest-android
-* kselftest-bpf
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-net
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-* kvm-unit-tests
-* libhugetlbfs
-* linux-log-parser
-* ltp-cap_bounds-tests
-* ltp-commands-tests
-* ltp-containers-tests
-* ltp-controllers-tests
-* ltp-cpuhotplug-tests
-* ltp-crypto-tests
-* ltp-cve-tests
-* ltp-dio-tests
-* ltp-fcntl-locktests-tests
-* ltp-filecaps-tests
-* ltp-fs-tests
-* ltp-fs_bind-tests
-* ltp-fs_perms_simple-tests
-* ltp-fsx-tests
-* ltp-hugetlb-tests
-* ltp-io-tests
-* ltp-ipc-tests
-* ltp-math-tests
-* ltp-mm-tests
-* ltp-nptl-tests
-* ltp-open-posix-tests
-* ltp-pty-tests
-* ltp-sched-tests
-* ltp-securebits-tests
-* ltp-syscalls-tests
-* ltp-tracing-tests
-* network-basic-tests
-* packetdrill
-* perf
-* rcutorture
-* ssuite
-* v4l2-compliance
-
---
-Linaro LKFT
-https://lkft.linaro.org
+I really have no idea how this thing works, and I tried hard to change
+as little as possible in converting it to the API. You may want to
+send some follow-up patches if you have hardware to experiment with.
+One consideration does leap out, which is that in my experience wifi
+cards use a lot less power when they're set "down", as though a decent
+amount of hardware is being switched off. I think this ath9k rng call
+might be using the ADC to gather samples of ether from somewhere. I
+imagine this gets shutdown too as part of that dame circuitry.

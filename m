@@ -2,81 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 739484BFE03
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 17:02:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CC804BFE0D
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 17:05:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232545AbiBVQCk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 11:02:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59142 "EHLO
+        id S233329AbiBVQFt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 11:05:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230118AbiBVQCi (ORCPT
+        with ESMTP id S230118AbiBVQFp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 11:02:38 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD2FADD448;
-        Tue, 22 Feb 2022 08:02:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=9m4cMreK6aPEf6IXzAjTwvFEykLgaWCLX4P1Mp4IYqk=; b=nKiwtEF3AXY1vka0hrIOLTFz5p
-        DvofSC2o424bOtldtoP/jTakbkBD+h2sKszDiPVn3J/hxoVrDaxwsipkYOtn+/xksyzA+aAvEj6YY
-        bBHkG+ekWSVg1MfyjKRqXM9MZJSbDGXDzpH53n7D4N8/zZe/Eg8BXYOcRSDqxXazUnhxMnFMJusO9
-        KBjNgX25794FwS9ajA0oMCCaM9Zry4iLbWwkseIXlBqP+dOiPyRnAREo+06I0FF6RQV0CkZSkgIl9
-        XyhndJ1+HNMMEyWHw/UcicGNfvJcma3sWZcu/5GYUtdeDUv5COExcZ8g/Z7F4xWOO6U/S1UEM7dMk
-        B1ds/luw==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nMXcA-00AV7O-6n; Tue, 22 Feb 2022 16:02:10 +0000
-Date:   Tue, 22 Feb 2022 08:02:10 -0800
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Jiri Slaby <jirislaby@kernel.org>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH v2 2/2] serial: 8250_lpss: Switch to pcim_iomap() instead
- of pci_ioremap_bar()
-Message-ID: <YhUJAl5JpCoXik7X@infradead.org>
-References: <20220215134359.78169-1-andriy.shevchenko@linux.intel.com>
- <20220215134359.78169-2-andriy.shevchenko@linux.intel.com>
- <Ygy7dNqFLZF9XYiH@infradead.org>
- <d8336f83-9f31-e168-1ed7-29e97189e233@kernel.org>
+        Tue, 22 Feb 2022 11:05:45 -0500
+Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 453C410C509
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 08:05:20 -0800 (PST)
+Received: by mail-io1-xd2e.google.com with SMTP id s1so20697165iob.9
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 08:05:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language
+         :from:to:cc:references:in-reply-to:content-transfer-encoding;
+        bh=NDozPatV6Z0U3upLRoA8/0EfvFCyJgU33xu9RXKtnXw=;
+        b=qlBo4TNyIiMsjvCisuZQsfrUIdv8juJl7jtH5huUm9T+yenzjxsR383FFe/T9PFGjF
+         rYIWLMfTazeq3TEx12AtcTncKpXfRJg5hkt5Yl565taGFtaRViwGUD+KIvTL2tlM3gm+
+         5TQI5NFrSO3d0T13GQdRFokkd5cnDL7Lidys0nDgndjhRU1h4oN+r0F17TuDd6SQDccN
+         cH/c4ejzG3ugG/1lgRAbO7jX6jO3TGclk09F1MbZXz2jvik4UhHhsK/gZs5fRr/Zs+kG
+         7Y7qQpbIw7zUPCeDfyonjiRfjHyTNfawlki2vuVEgZZNbjFlCm6cquQq9/o4b5wSM0QB
+         PT3w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:from:to:cc:references:in-reply-to
+         :content-transfer-encoding;
+        bh=NDozPatV6Z0U3upLRoA8/0EfvFCyJgU33xu9RXKtnXw=;
+        b=y8A7Yi7nnqGFvRbGmv57+w9AcnRAT9HqS7wnok3MPRl7wez3XtTha3AM27PslUIS9g
+         2WsqqKmR/cYC4XRBsXGwlyVjaE0EhZwYygde6/nUZPgqJVp4iug1btKBfknz0gR2aJxw
+         PfwfgVOr5uMQDnpdUcdqy+aXAITXjyz7WdORCNtOBlMPgJOSPSpRyCvdIWEV09nDsu4S
+         KSIaUPopB4H4CYOnODrzLuliS3kMkYlGd1hMcFXWLpG4ZiHhwrF/AZYmzHLa4RDvNdhK
+         mfmss45v5stGz/VDUvKrbCty7G+Hbi9p/TbvOgl3vK2gPnNIsFk5DJIFmR9Tg6ofNq38
+         jSag==
+X-Gm-Message-State: AOAM531lW/Dqygz2NgmFicIqDWozmSWw6u/B0JG3WMK79Ojt08kgrV0G
+        LvHscRhzfEEsN4qC7zRvnEtSwg==
+X-Google-Smtp-Source: ABdhPJz92BIziZiDFI/R2bhFKyeYRHuN1m718LzwtNyEXyTlVhT2O0XMp3NG/WcY1cOYjEY645t8Hg==
+X-Received: by 2002:a05:6638:3045:b0:308:ed08:e744 with SMTP id u5-20020a056638304500b00308ed08e744mr20499419jak.253.1645545919672;
+        Tue, 22 Feb 2022 08:05:19 -0800 (PST)
+Received: from [172.22.22.4] (c-73-185-129-58.hsd1.mn.comcast.net. [73.185.129.58])
+        by smtp.googlemail.com with ESMTPSA id c5sm1964435ilu.77.2022.02.22.08.05.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 22 Feb 2022 08:05:18 -0800 (PST)
+Message-ID: <4ec997ab-8a6f-76e7-20e7-b7f778124c87@linaro.org>
+Date:   Tue, 22 Feb 2022 10:05:17 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d8336f83-9f31-e168-1ed7-29e97189e233@kernel.org>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v3 23/25] bus: mhi: ep: Add support for queueing SKBs to
+ the host
+Content-Language: en-US
+From:   Alex Elder <elder@linaro.org>
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc:     mhi@lists.linux.dev, quic_hemantk@quicinc.com,
+        quic_bbhatt@quicinc.com, quic_jhugo@quicinc.com,
+        vinod.koul@linaro.org, bjorn.andersson@linaro.org,
+        dmitry.baryshkov@linaro.org, quic_vbadigan@quicinc.com,
+        quic_cang@quicinc.com, quic_skananth@quicinc.com,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220212182117.49438-1-manivannan.sadhasivam@linaro.org>
+ <20220212182117.49438-24-manivannan.sadhasivam@linaro.org>
+ <766e6568-0b80-c745-dd8f-7f401fb0422d@linaro.org>
+ <20220222143825.GH5029@thinkpad>
+ <f3248103-9450-dcf0-719d-77c6dcd85bfe@linaro.org>
+In-Reply-To: <f3248103-9450-dcf0-719d-77c6dcd85bfe@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 22, 2022 at 10:14:16AM +0100, Jiri Slaby wrote:
-> On 16. 02. 22, 9:53, Christoph Hellwig wrote:
-> > On Tue, Feb 15, 2022 at 03:43:59PM +0200, Andy Shevchenko wrote:
-> > > The pci_iounmap() doesn't cover all the cases where resource should
-> > > be unmapped. Instead of spreading it more, replace the pci_ioremap_bar()
-> > > with pcim_iomap() which uses managed resource approach.
-> > 
-> > pcim_iomap requires the use of ioreadX/iowriteX and thus runtime
-> > overhead.  So in doubt please add a pcim_ioremap_bar instead of forcing
-> > the legacy iomap/ioread/iowrite API onto modern drivers tht can't
-> > support legacy port I/O.
+On 2/22/22 9:18 AM, Alex Elder wrote:
 > 
-> Hmm, the driver combines pci_ioremap_bar with pci_iounmap. pci_iounmap does
-> the right thing after all, but is that correct? And this driver is not
-> alone, this shows more:
-> git grep -E 'pci_iounmap|pci_ioremap_bar' `git grep -l pci_iounmap \`git
-> grep -l pci_ioremap_bar\``
+>> But anyway, there is no need to check for CHAIN flag while writing to 
+>> host.
+>> CHAIN flag is only used or even make sense when host writes data to 
+>> device, so
+> 
+> I'm not sure that's correct, but I don't want to get into that issue here.
+> We can talk about that separately.
 
-I think it is wrong.  It is not actively harmful unlike the the
-combination of pci_iomap and then later use of accessors from the
-ioremap family, but still not exactly a good idea.
+I just wanted to send a short followup here.  My comments
+were based on a misunderstanding, and Mani cleared it up
+for me.  For host receives, the MHI specification states
+that a packet that requires more than the size of the
+buffer in a single TRE leads to an overflow event being
+generated from the device to the host.  The buffer on
+the TRE is filled, and subsequent packet data is written
+to the next TRE's buffer (assuming it's present).
 
-In a perfect world we'd have some different annotation from __iomem
-for the whole iomap family of functions.
+This differs from one feature of IPA and its GSI transfer
+rings.  I won't explain that here, to avoid any confusion.
+
+Mani explained things to me, and he's going to send an
+updated series, which I'll review.
+
+					-Alex

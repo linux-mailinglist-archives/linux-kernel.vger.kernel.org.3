@@ -2,105 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F9634BEF78
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 03:22:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9935B4BEF64
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 03:22:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238934AbiBVCNw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 21:13:52 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59498 "EHLO
+        id S238891AbiBVCG4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 21:06:56 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238911AbiBVCNu (ORCPT
+        with ESMTP id S229873AbiBVCGy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 21:13:50 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9318C12AD8
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 18:13:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645496006; x=1677032006;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=BDTLsUAWuprzHLATa1TYRxv6ZIA0bJgq5t/PRPMCMYw=;
-  b=oJ6aNRSNZfYqp9Vxer1NLThhgXmV8SbTC0pJSuOTP57JOeAg8/0nZV2I
-   iBxTC+T3ZmfniVKy/Ep2u9OXYXugW8StXsssgjuLnztdOXCf7utI0ZDGG
-   COZO6hKRnl9DXq2ZyUowdtQhkA4OpnpiSZGhtoLf7pKj9pcq58eqZOtZv
-   4fhze6C5pFu6Y1EFOJmHBNy24ADbCw0cXlYPigJ2IvkRcgGoGz8bwjmrT
-   O5Qr/MH1AwYiyx52ZnIbbRCAluaX6/gV7QKUWVrEmSQff47ikPNWnXoxI
-   vUnjTre+J45dG1KHcgGXxFalJeVvSvAPOxYQPzgbGlScGDKKB735WI/Mb
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10265"; a="314857655"
-X-IronPort-AV: E=Sophos;i="5.88,387,1635231600"; 
-   d="scan'208";a="314857655"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2022 18:13:26 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,387,1635231600"; 
-   d="scan'208";a="627528941"
-Received: from cliu38-mobl3.sh.intel.com ([10.239.147.47])
-  by FMSMGA003.fm.intel.com with ESMTP; 21 Feb 2022 18:13:24 -0800
-From:   Chuansheng Liu <chuansheng.liu@intel.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     rafael@kernel.org, srinivas.pandruvada@linux.intel.com,
-        rui.zhang@intel.com
-Subject: [PATCH] thermal: int340x: fix memory leak in int3400_notify()
-Date:   Tue, 22 Feb 2022 10:00:21 +0800
-Message-Id: <20220222020021.19640-1-chuansheng.liu@intel.com>
-X-Mailer: git-send-email 2.25.0.rc2
+        Mon, 21 Feb 2022 21:06:54 -0500
+Received: from out203-205-221-209.mail.qq.com (out203-205-221-209.mail.qq.com [203.205.221.209])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D4E9240B2
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 18:06:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+        s=s201512; t=1645495584;
+        bh=uGSXRskyGSjCdegTSUAsPooBnCz/sf0teMn+TYg1BzM=;
+        h=From:To:Cc:Subject:Date;
+        b=inMSIudDGEc/UQfadcjArDoIN3pYkQLH15wc6CjL6J10Zac+KTRZT+ppRcOKLT0jk
+         S/GZwgNg4b/5uhaqobP/+tRzAMhRfN96xcVk0cFUCUt/GHFpicTfxxUEQCBUZrqlPe
+         v45VUq4s8zrmFRI9hYjzxPKVn8gOMV9ZVnr2FBxI=
+Received: from localhost.localdomain ([218.197.153.188])
+        by newxmesmtplogicsvrszc11.qq.com (NewEsmtp) with SMTP
+        id 89BF689; Tue, 22 Feb 2022 10:02:09 +0800
+X-QQ-mid: xmsmtpt1645495329twjjodjhi
+Message-ID: <tencent_D9887936F780A393C232DC48C9EC3F1D4405@qq.com>
+X-QQ-XMAILINFO: NIbHSc2ysKlDIVpcczwrsD6Mk3E7W3mD0aSsBerJF+SdT1oIkxVMzSQMrWwRhg
+         hoOwvP10MXXW/nsY0PXGEL8AKPsvXxqA9p/IUU/0kKMvz9UJiUoW5CJRCSn1DwfDCvaX+070h4aG
+         9kCmmAfHtDvLcaWgkfetTwxSiuOxAUeQco0OPPf2fQgbXbkiyJ1ljZZpyIC3I5z440xmmOKjf3ql
+         Jdlu8qJQJuyWkOk4n6QuRDaX8f77cauGW6YRi1tlJkbEfk+jOeoedaUPR5RJP/eKK3ejiD4r6xcd
+         kEOSUDdwQ6njieO4GOkXOnDVzUnG7cDaBTRDGJbLcXYJgq/6mXKRsjPuz+cSxNzDscsk/t0FiYIh
+         cc172OQBwxLI3vwMYdIGY5a6MP+mIQshXjFFJJA/nvF6He7U1an4eO+o4BaUoxHM/HHwa9AW76nF
+         24/kUUAtUT1hm6MAqar58ORv7ThXbRSYX2jVhkw28DEAFgJY4EYXWv7h9AgLWMpcwy3rnMMsPIqJ
+         awSVKhckn5FHPuHe26vw3Mv+olvHQJ+kKiHKfAp3AWMEgAaKAjLOFSr1gu1iEcrgTXJv/EyRvasT
+         fi1Ljrg6vRnrIZ2fHqot9qZXKkZw4AFp08MCboyd7GDcHW9A5NbWhc9eeGYBMtX75vTc1eKmLzSX
+         G+Fe/SPNW0BBlq1ip4H6FVnX2zqhwEzigzuEhOLhNsIa0f3vYfvgcLftbGG33pMZcAsVs/plONZG
+         1IPp7GScdU41+WOGa9fJ536nqx9C6qZ2LbTQ7c8Hu2iNBE2tqX2iFovX40f+bfGw7OgxE1+cEZRN
+         LZfiVcpqThcJ82mAtzCyw9fBsaBH53JKTwvdH1FoGR6zOuMbfhwKTSi1AP8IKJv/GAqauk6Bo8EE
+         hVr7FCSv8h+l6OXlKj7OM=
+From:   xkernel.wang@foxmail.com
+To:     gregkh@linuxfoundation.org
+Cc:     dan.carpenter@oracle.com, jerome.pouiller@silabs.com,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Xiaoke Wang <xkernel.wang@foxmail.com>
+Subject: [PATCH v3 2/2] staging: wfx: check the return value of devm_kmalloc()
+Date:   Tue, 22 Feb 2022 10:00:24 +0800
+X-OQ-MSGID: <20220222020024.3620-1-xkernel.wang@foxmail.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RDNS_DYNAMIC,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It is easy to hit the below memory leaks in my TigerLake platform:
+From: Xiaoke Wang <xkernel.wang@foxmail.com>
 
---
-unreferenced object 0xffff927c8b91dbc0 (size 32):
-  comm "kworker/0:2", pid 112, jiffies 4294893323 (age 83.604s)
-  hex dump (first 32 bytes):
-    4e 41 4d 45 3d 49 4e 54 33 34 30 30 20 54 68 65  NAME=INT3400 The
-    72 6d 61 6c 00 6b 6b 6b 6b 6b 6b 6b 6b 6b 6b a5  rmal.kkkkkkkkkk.
-  backtrace:
-    [<ffffffff9c502c3e>] __kmalloc_track_caller+0x2fe/0x4a0
-    [<ffffffff9c7b7c15>] kvasprintf+0x65/0xd0
-    [<ffffffff9c7b7d6e>] kasprintf+0x4e/0x70
-    [<ffffffffc04cb662>] int3400_notify+0x82/0x120 [int3400_thermal]
-    [<ffffffff9c8b7358>] acpi_ev_notify_dispatch+0x54/0x71
-    [<ffffffff9c88f1a7>] acpi_os_execute_deferred+0x17/0x30
-    [<ffffffff9c2c2c0a>] process_one_work+0x21a/0x3f0
-    [<ffffffff9c2c2e2a>] worker_thread+0x4a/0x3b0
-    [<ffffffff9c2cb4dd>] kthread+0xfd/0x130
-    [<ffffffff9c201c1f>] ret_from_fork+0x1f/0x30
+devm_kmalloc() returns a pointer to allocated memory on success, NULL
+on failure. While there is a memory allocation of devm_kmalloc()
+without proper check. It is better to check the return value of it to
+prevent wrong memory access.
+And I use the err label which is introduced by the previous patch to
+handle the error.
+
+Link: https://lore.kernel.org/r/tencent_24A24A3EFF61206ECCC4B94B1C5C1454E108@qq.com
+Reviewed-by: Dan Carpenter <dan.carpenter@oracle.com>
+Reviewed-by: Jérôme Pouiller <jerome.pouiller@silabs.com>
+Signed-off-by: Xiaoke Wang <xkernel.wang@foxmail.com>
 ---
+Note:
+I only send this one as the another patch had been applied.
+And I put the Link of the applied patch as a reference.
+Changelog:
+v1->v2 update the description.
+v2->v3 resolve a conflict with the staging-testing tree.
+ drivers/staging/wfx/main.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Fix it by calling kfree() accordingly.
-
-Signed-off-by: Chuansheng Liu <chuansheng.liu@intel.com>
----
- drivers/thermal/intel/int340x_thermal/int3400_thermal.c | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-index 72acb1f61849..4f478812cb51 100644
---- a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-+++ b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-@@ -404,6 +404,10 @@ static void int3400_notify(acpi_handle handle,
- 	thermal_prop[3] = kasprintf(GFP_KERNEL, "EVENT=%d", therm_event);
- 	thermal_prop[4] = NULL;
- 	kobject_uevent_env(&priv->thermal->device.kobj, KOBJ_CHANGE, thermal_prop);
-+	kfree(thermal_prop[0]);
-+	kfree(thermal_prop[1]);
-+	kfree(thermal_prop[2]);
-+	kfree(thermal_prop[3]);
- }
+diff --git a/drivers/staging/wfx/main.c b/drivers/staging/wfx/main.c
+index c4b062b..23ae7d4 100644
+--- a/drivers/staging/wfx/main.c
++++ b/drivers/staging/wfx/main.c
+@@ -293,6 +293,9 @@ struct wfx_dev *wfx_init_common(struct device *dev, const struct wfx_platform_da
+ 	hw->wiphy->n_iface_combinations = ARRAY_SIZE(wfx_iface_combinations);
+ 	hw->wiphy->iface_combinations = wfx_iface_combinations;
+ 	hw->wiphy->bands[NL80211_BAND_2GHZ] = devm_kmalloc(dev, sizeof(wfx_band_2ghz), GFP_KERNEL);
++	if (!hw->wiphy->bands[NL80211_BAND_2GHZ])
++		goto err;
++
+ 	/* FIXME: also copy wfx_rates and wfx_2ghz_chantable */
+ 	memcpy(hw->wiphy->bands[NL80211_BAND_2GHZ], &wfx_band_2ghz, sizeof(wfx_band_2ghz));
  
- static int int3400_thermal_get_temp(struct thermal_zone_device *thermal,
 -- 
-2.25.0.rc2
-

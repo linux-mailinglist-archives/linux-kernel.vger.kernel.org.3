@@ -2,66 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9FE24BF36C
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 09:21:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3196C4BF360
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 09:19:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229761AbiBVIVA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 03:21:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44104 "EHLO
+        id S229739AbiBVITq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 03:19:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbiBVIU6 (ORCPT
+        with ESMTP id S229730AbiBVITo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 03:20:58 -0500
-X-Greylist: delayed 260 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 22 Feb 2022 00:20:31 PST
-Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [IPv6:2001:4b98:dc4:8::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEAF3155C35;
-        Tue, 22 Feb 2022 00:20:30 -0800 (PST)
-Received: (Authenticated sender: clement.leger@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id E5C26100004;
-        Tue, 22 Feb 2022 08:20:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1645518026;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
+        Tue, 22 Feb 2022 03:19:44 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BC18154706;
+        Tue, 22 Feb 2022 00:19:19 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 9BF2221112;
+        Tue, 22 Feb 2022 08:19:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1645517957; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=W5Nefp6GfuNeDoo+g/v+e3/VXcVfBUoFmyuv8FL7z+4=;
-        b=OKkc8UOr8QCrah0F5Elkwb5Jme6SaZXNa0HvOfBn0RTpCv1hzn4ZH6F6HhjKiBtS2/E8YI
-        Afljgq/1rUjbZ/F6HDktUWOcYUeUieeQvSpeKWGDwQnocGrhcksTP3uKc/51o2vv9sdPuN
-        RkqSUQhC2qIafJJbZp+8pXYcV6h3lmFGKQ2VGKMyyjNDKTwRlx6mPpL8iIhgx+VQDO/WjQ
-        /KoUkGk9XLC6Gb/zdUigH/G/+dkrDK0z0BKpUbZUult4daeW/GkuG/7PQf+tZPwRh4B+uz
-        2hg3SBQlFoxtx04HUvdWhVcSVQIHFdo0NjsXKIvPEcCVmt2dnmhwQ4bQzMYLWw==
-Date:   Tue, 22 Feb 2022 09:19:02 +0100
-From:   =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        bh=Djpi2wqg5KZNuxo5tXaJwLf7ivkdFtpr27BC3EwWuGg=;
+        b=UWKGI6yvKyZY26UvlDfM3wsvaAujuAK4TrF9o82hgRQEUaCpds/6xAs2YERbuyn9gK2gLl
+        XLf9Wp96tvXbWlRb/D3YJEx/Ty7WRlSl1aYE8SG8+9NbMhEDRk8cSDIqc1QVl+IyV2/M1x
+        trWI3sEP0GWo5DTyAk4usGMG58quqKA=
+Received: from suse.cz (unknown [10.100.224.162])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 65AEAA3B84;
+        Tue, 22 Feb 2022 08:19:17 +0000 (UTC)
+Date:   Tue, 22 Feb 2022 09:19:14 +0100
+From:   Petr Mladek <pmladek@suse.com>
+To:     Miguel Ojeda <ojeda@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Wolfram Sang <wsa@kernel.org>, Peter Rosin <peda@axentia.se>,
-        Russell King <linux@armlinux.org.uk>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-acpi@vger.kernel.org, linux-i2c@vger.kernel.org,
-        netdev@vger.kernel.org,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-Subject: Re: [RFC 02/10] property: add fwnode_get_match_data()
-Message-ID: <20220222091902.198ce809@fixe.home>
-In-Reply-To: <YhPP5GWt7XEv5xx8@smile.fi.intel.com>
-References: <20220221162652.103834-1-clement.leger@bootlin.com>
-        <20220221162652.103834-3-clement.leger@bootlin.com>
-        <YhPP5GWt7XEv5xx8@smile.fi.intel.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-pc-linux-gnu)
+        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@google.com>,
+        Gary Guo <gary@garyguo.net>, Boqun Feng <boqun.feng@gmail.com>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        live-patching@vger.kernel.org, linux-perf-users@vger.kernel.org
+Subject: Re: [PATCH v4 02/20] kallsyms: increase maximum kernel symbol length
+ to 512
+Message-ID: <YhScgnV+n7w75WH7@alley>
+References: <20220212130410.6901-1-ojeda@kernel.org>
+ <20220212130410.6901-3-ojeda@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220212130410.6901-3-ojeda@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -70,40 +71,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le Mon, 21 Feb 2022 19:46:12 +0200,
-Andy Shevchenko <andriy.shevchenko@linux.intel.com> a =C3=A9crit :
+On Sat 2022-02-12 14:03:28, Miguel Ojeda wrote:
+> Rust symbols can become quite long due to namespacing introduced
+> by modules, types, traits, generics, etc. For instance,
+> the following code:
+> 
+>     pub mod my_module {
+>         pub struct MyType;
+>         pub struct MyGenericType<T>(T);
+> 
+>         pub trait MyTrait {
+>             fn my_method() -> u32;
+>         }
+> 
+>         impl MyTrait for MyGenericType<MyType> {
+>             fn my_method() -> u32 {
+>                 42
+>             }
+>         }
+>     }
+> 
+> generates a symbol of length 96 when using the upcoming v0 mangling scheme:
+> 
+>     _RNvXNtCshGpAVYOtgW1_7example9my_moduleINtB2_13MyGenericTypeNtB2_6MyTypeENtB2_7MyTrait9my_method
+> 
+> At the moment, Rust symbols may reach up to 300 in length.
+> Setting 512 as the maximum seems like a reasonable choice to
+> keep some headroom.
+> 
+> Co-developed-by: Alex Gaynor <alex.gaynor@gmail.com>
+> Signed-off-by: Alex Gaynor <alex.gaynor@gmail.com>
+> Co-developed-by: Wedson Almeida Filho <wedsonaf@google.com>
+> Signed-off-by: Wedson Almeida Filho <wedsonaf@google.com>
+> Co-developed-by: Gary Guo <gary@garyguo.net>
+> Signed-off-by: Gary Guo <gary@garyguo.net>
+> Co-developed-by: Boqun Feng <boqun.feng@gmail.com>
+> Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
+> Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
 
-> On Mon, Feb 21, 2022 at 05:26:44PM +0100, Cl=C3=A9ment L=C3=A9ger wrote:
-> > Add fwnode_get_match_data() which is meant to be used as
-> > device_get_match_data for fwnode_operations. =20
->=20
-> ...
->=20
-> > +const void *fwnode_get_match_data(const struct fwnode_handle *fwnode,
-> > +				  const struct device *dev)
-> > +{
-> > +	const struct of_device_id *match;
-> > +
-> > +	match =3D fwnode_match_node(fwnode, dev->driver->of_match_table);
-> > +	if (!match)
-> > +		return NULL;
-> > +
-> > +	return match->data;
-> > +} =20
->=20
-> It's OF-centric API, why it has fwnode prefix? Can it leave in drivers/of=
- instead?
->=20
->=20
+The livepatch selftest still pass. Feel free to add:
 
-The idea is to allow device with a software_node description to match
-with the content of the of_match_table. Without this, we would need a
-new type of match table that would probably duplicates part of the
-of_match_table to be able to match software_node against a driver.
-I did not found an other way to do it without modifying drivers
-individually to support software_nodes.
+Tested-by: Petr Mladek <pmladek@suse.com>	# livepatch
+Acked-by: Petr Mladek <pmladek@suse.com>	# livepatch
 
---=20
-Cl=C3=A9ment L=C3=A9ger,
-Embedded Linux and Kernel engineer at Bootlin
-https://bootlin.com
+Best Regards,
+Petr

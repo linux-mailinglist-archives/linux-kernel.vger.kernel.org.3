@@ -2,122 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 062964BF409
+	by mail.lfdr.de (Postfix) with ESMTP id 9C07C4BF40B
 	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 09:49:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229902AbiBVItM convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 22 Feb 2022 03:49:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58606 "EHLO
+        id S229802AbiBVItG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 03:49:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbiBVItK (ORCPT
+        with ESMTP id S229449AbiBVItF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 03:49:10 -0500
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0AE3A2F36;
-        Tue, 22 Feb 2022 00:48:42 -0800 (PST)
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.73 with qID 21M8mVGO1021748, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
-        by rtits2.realtek.com.tw (8.15.2/2.71/5.88) with ESMTPS id 21M8mVGO1021748
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Tue, 22 Feb 2022 16:48:31 +0800
-Received: from RTEXMBS03.realtek.com.tw (172.21.6.96) by
- RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Tue, 22 Feb 2022 16:48:31 +0800
-Received: from RTEXMBS01.realtek.com.tw (172.21.6.94) by
- RTEXMBS03.realtek.com.tw (172.21.6.96) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Tue, 22 Feb 2022 16:48:31 +0800
-Received: from RTEXMBS01.realtek.com.tw ([fe80::a0f1:14d7:38a1:7026]) by
- RTEXMBS01.realtek.com.tw ([fe80::a0f1:14d7:38a1:7026%5]) with mapi id
- 15.01.2308.021; Tue, 22 Feb 2022 16:48:31 +0800
-From:   Ricky WU <ricky_wu@realtek.com>
-To:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
-CC:     "ulf.hansson@linaro.org" <ulf.hansson@linaro.org>,
-        "kai.heng.feng@canonical.com" <kai.heng.feng@canonical.com>,
-        "tommyhebb@gmail.com" <tommyhebb@gmail.com>,
-        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH] mmc: rtsx: add 74 Clocks in power on flow
-Thread-Topic: [PATCH] mmc: rtsx: add 74 Clocks in power on flow
-Thread-Index: AQHYJ7nTpeKajlBmYU+vTOb/+dRQe6yeqeWAgACTEEA=
-Date:   Tue, 22 Feb 2022 08:48:30 +0000
-Message-ID: <90844cba1cb64571a8597a6e0afee01d@realtek.com>
-References: <fb7cda69c5c244dfa579229ee2f0da83@realtek.com>
- <YhST32rsfl7MDv34@kroah.com>
-In-Reply-To: <YhST32rsfl7MDv34@kroah.com>
-Accept-Language: zh-TW, en-US
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.22.81.103]
-x-kse-serverinfo: RTEXMBS03.realtek.com.tw, 9
-x-kse-attachmentfiltering-interceptor-info: no applicable attachment filtering
- rules found
-x-kse-antivirus-interceptor-info: scan successful
-x-kse-antivirus-info: =?us-ascii?Q?Clean,_bases:_2022/2/22_=3F=3F_06:23:00?=
-x-kse-bulkmessagesfiltering-scan-result: protection disabled
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        Tue, 22 Feb 2022 03:49:05 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A44D4A2F32;
+        Tue, 22 Feb 2022 00:48:40 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3EF6D61459;
+        Tue, 22 Feb 2022 08:48:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83CE9C340E8;
+        Tue, 22 Feb 2022 08:48:37 +0000 (UTC)
+Message-ID: <de212d97-538f-f25c-5211-8606901cef00@xs4all.nl>
+Date:   Tue, 22 Feb 2022 09:48:36 +0100
 MIME-Version: 1.0
-X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
-X-KSE-Attachment-Filter-Triggered-Rules: Clean
-X-KSE-Attachment-Filter-Triggered-Filters: Clean
-X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [PATCH v3] media: imx-jpeg: Set V4L2_BUF_FLAG_LAST at eos
+Content-Language: en-US
+To:     Ming Qian <ming.qian@nxp.com>, mchehab@kernel.org,
+        shawnguo@kernel.org, s.hauer@pengutronix.de,
+        mirela.rabulea@oss.nxp.com
+Cc:     kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+References: <20220222084116.5619-1-ming.qian@nxp.com>
+From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
+In-Reply-To: <20220222084116.5619-1-ming.qian@nxp.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> -----Original Message-----
-> From: gregkh@linuxfoundation.org <gregkh@linuxfoundation.org>
-> Sent: Tuesday, February 22, 2022 3:42 PM
-> To: Ricky WU <ricky_wu@realtek.com>
-> Cc: ulf.hansson@linaro.org; kai.heng.feng@canonical.com;
-> tommyhebb@gmail.com; linux-mmc@vger.kernel.org;
-> linux-kernel@vger.kernel.org
-> Subject: Re: [PATCH] mmc: rtsx: add 74 Clocks in power on flow
-> 
-> On Tue, Feb 22, 2022 at 07:27:52AM +0000, Ricky WU wrote:
-> > After 1ms stabilizing the voltage time add "Host provides at least 74
-> > Clocks before issuing first command" that is spec definition
-> 
-> You do have 72 columns to use here, no need to wrap this so tightly.
->
+What changed in v3?
 
-Ok...
-so I need to have next patch to fix this format?
+The v2 is already part of a PR, so if the changes are just of the cleanup
+type, then I prefer to have a diff on top of the v2. Otherwise I need to
+respin the PR.
 
-> >
-> > Signed-off-by: Ricky Wu <ricky_wu@realtek.com>
-> > ---
-> >  drivers/mmc/host/rtsx_pci_sdmmc.c | 7 +++++++
-> >  1 file changed, 7 insertions(+)
-> >
-> > diff --git a/drivers/mmc/host/rtsx_pci_sdmmc.c
-> > b/drivers/mmc/host/rtsx_pci_sdmmc.c
-> > index 2a3f14afe9f8..e016d720e453 100644
-> > --- a/drivers/mmc/host/rtsx_pci_sdmmc.c
-> > +++ b/drivers/mmc/host/rtsx_pci_sdmmc.c
-> > @@ -940,10 +940,17 @@ static int sd_power_on(struct realtek_pci_sdmmc
-> *host)
-> >  	if (err < 0)
-> >  		return err;
-> >
-> > +	mdelay(1);
-> 
-> What is this delay for?
->
+Regards,
 
-Spec definition, need to wait 1ms for voltage stable
-and below mdelay(5) is our device send 74 Clocks time
- 
-> thanks,
+	Hans
+
+On 2/22/22 09:41, Ming Qian wrote:
+> The V4L2_EVENT_EOS event is a deprecated behavior,
+> the V4L2_BUF_FLAG_LAST buffer flag should be used instead.
 > 
-> greg k-h
-> ------Please consider the environment before printing this e-mail.
+> Signed-off-by: Ming Qian <ming.qian@nxp.com>
+> Reviewed-by: Mirela Rabulea <mirela.rabulea@nxp.com>
+> ---
+>  drivers/media/platform/imx-jpeg/mxc-jpeg.c | 41 ++++++++++++++++++++--
+>  drivers/media/platform/imx-jpeg/mxc-jpeg.h |  1 +
+>  2 files changed, 40 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/media/platform/imx-jpeg/mxc-jpeg.c b/drivers/media/platform/imx-jpeg/mxc-jpeg.c
+> index ec5a326affd6..1de0400750aa 100644
+> --- a/drivers/media/platform/imx-jpeg/mxc-jpeg.c
+> +++ b/drivers/media/platform/imx-jpeg/mxc-jpeg.c
+> @@ -997,6 +997,20 @@ static void mxc_jpeg_device_run(void *priv)
+>  	spin_unlock_irqrestore(&ctx->mxc_jpeg->hw_lock, flags);
+>  }
+>  
+> +static void mxc_jpeg_set_last_buffer_dequeued(struct mxc_jpeg_ctx *ctx)
+> +{
+> +	struct vb2_queue *q;
+> +
+> +	ctx->stopped = 1;
+> +	q = v4l2_m2m_get_dst_vq(ctx->fh.m2m_ctx);
+> +	if (!list_empty(&q->done_list))
+> +		return;
+> +
+> +	q->last_buffer_dequeued = true;
+> +	wake_up(&q->done_wq);
+> +	ctx->stopped = 0;
+> +}
+> +
+>  static int mxc_jpeg_decoder_cmd(struct file *file, void *priv,
+>  				struct v4l2_decoder_cmd *cmd)
+>  {
+> @@ -1014,6 +1028,7 @@ static int mxc_jpeg_decoder_cmd(struct file *file, void *priv,
+>  		if (v4l2_m2m_num_src_bufs_ready(fh->m2m_ctx) == 0) {
+>  			/* No more src bufs, notify app EOS */
+>  			notify_eos(ctx);
+> +			mxc_jpeg_set_last_buffer_dequeued(ctx);
+>  		} else {
+>  			/* will send EOS later*/
+>  			ctx->stopping = 1;
+> @@ -1040,6 +1055,7 @@ static int mxc_jpeg_encoder_cmd(struct file *file, void *priv,
+>  		if (v4l2_m2m_num_src_bufs_ready(fh->m2m_ctx) == 0) {
+>  			/* No more src bufs, notify app EOS */
+>  			notify_eos(ctx);
+> +			mxc_jpeg_set_last_buffer_dequeued(ctx);
+>  		} else {
+>  			/* will send EOS later*/
+>  			ctx->stopping = 1;
+> @@ -1116,6 +1132,10 @@ static void mxc_jpeg_stop_streaming(struct vb2_queue *q)
+>  		v4l2_m2m_buf_done(vbuf, VB2_BUF_STATE_ERROR);
+>  	}
+>  	pm_runtime_put_sync(&ctx->mxc_jpeg->pdev->dev);
+> +	if (V4L2_TYPE_IS_OUTPUT(q->type)) {
+> +		ctx->stopping = 0;
+> +		ctx->stopped = 0;
+> +	}
+>  }
+>  
+>  static int mxc_jpeg_valid_comp_id(struct device *dev,
+> @@ -1407,12 +1427,29 @@ static int mxc_jpeg_buf_prepare(struct vb2_buffer *vb)
+>  	return 0;
+>  }
+>  
+> +static void mxc_jpeg_buf_finish(struct vb2_buffer *vb)
+> +{
+> +	struct vb2_v4l2_buffer *vbuf = to_vb2_v4l2_buffer(vb);
+> +	struct mxc_jpeg_ctx *ctx = vb2_get_drv_priv(vb->vb2_queue);
+> +	struct vb2_queue *q = vb->vb2_queue;
+> +
+> +	if (V4L2_TYPE_IS_OUTPUT(vb->type))
+> +		return;
+> +	if (!ctx->stopped)
+> +		return;
+> +	if (list_empty(&q->done_list)) {
+> +		vbuf->flags |= V4L2_BUF_FLAG_LAST;
+> +		ctx->stopped = 0;
+> +	}
+> +}
+> +
+>  static const struct vb2_ops mxc_jpeg_qops = {
+>  	.queue_setup		= mxc_jpeg_queue_setup,
+>  	.wait_prepare		= vb2_ops_wait_prepare,
+>  	.wait_finish		= vb2_ops_wait_finish,
+>  	.buf_out_validate	= mxc_jpeg_buf_out_validate,
+>  	.buf_prepare		= mxc_jpeg_buf_prepare,
+> +	.buf_finish             = mxc_jpeg_buf_finish,
+>  	.start_streaming	= mxc_jpeg_start_streaming,
+>  	.stop_streaming		= mxc_jpeg_stop_streaming,
+>  	.buf_queue		= mxc_jpeg_buf_queue,
+> @@ -1848,14 +1885,14 @@ static int mxc_jpeg_dqbuf(struct file *file, void *priv,
+>  	int ret;
+>  
+>  	dev_dbg(dev, "DQBUF type=%d, index=%d", buf->type, buf->index);
+> -	if (ctx->stopping == 1	&& num_src_ready == 0) {
+> +	if (ctx->stopping == 1 && num_src_ready == 0) {
+>  		/* No more src bufs, notify app EOS */
+>  		notify_eos(ctx);
+>  		ctx->stopping = 0;
+> +		mxc_jpeg_set_last_buffer_dequeued(ctx);
+>  	}
+>  
+>  	ret = v4l2_m2m_dqbuf(file, fh->m2m_ctx, buf);
+> -
+>  	return ret;
+>  }
+>  
+> diff --git a/drivers/media/platform/imx-jpeg/mxc-jpeg.h b/drivers/media/platform/imx-jpeg/mxc-jpeg.h
+> index 9fb2a5aaa941..f53f004ba851 100644
+> --- a/drivers/media/platform/imx-jpeg/mxc-jpeg.h
+> +++ b/drivers/media/platform/imx-jpeg/mxc-jpeg.h
+> @@ -91,6 +91,7 @@ struct mxc_jpeg_ctx {
+>  	struct v4l2_fh			fh;
+>  	enum mxc_jpeg_enc_state		enc_state;
+>  	unsigned int			stopping;
+> +	unsigned int			stopped;
+>  	unsigned int			slot;
+>  };
+>  

@@ -2,134 +2,376 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A1464BF8D1
+	by mail.lfdr.de (Postfix) with ESMTP id 1E5304BF8D0
 	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 14:09:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232305AbiBVNKM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 08:10:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43482 "EHLO
+        id S232255AbiBVNKH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 08:10:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232214AbiBVNJ6 (ORCPT
+        with ESMTP id S232203AbiBVNJy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 08:09:58 -0500
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2042.outbound.protection.outlook.com [40.107.92.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6675C1520DF;
-        Tue, 22 Feb 2022 05:09:24 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=iS9R9VCp7qb+mzZhJLjWubQiW5JptMgKaWK69lLfLQt69Ai4j79PwWpgbuapM/vPe7hGLuYjGhInapWRpdC/Yh5af5qTrujoiJYqeJ3HEewKtVVJb3/BDn3+lAAjKT/OJewF3xVxLAvljZGWXlH8BRySxpatYW2qszoKoADbG98ltI6ymXWXbwF1TbNo2dohBR9W8rDiFyiQ4h70eS/V/Gnd8l9uI/blCNPus/tkyi8gE6ttmxx/fYRrtAWwGJKmh0BcQXg+5bKH6meHYc7ksP7F/ZLEgSv0DS+u2kUvWrjfcZZDDQppU9c2riCDu0hXfJ6eZHVZJN9XkvfaYHZqDg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=+bxMI2TyLPQoMRYxAZ0w5ehWzJpBjH+Ba6t2LrRFs4g=;
- b=hopS6cbT5/jlGjCl6rdHzgoPyieT9qV55jVyx4QdYye7qyjKJLCPh6X9E36X8AoJ2k4rHitHaaawHS3OJL1DRfR4gWRJwC8DC7OJ090P60AbBwe1w9A9990G+8pue32XV+RqDYUA2GwOR9WMZBCkZvj7Ov/DY8kDX/hcWWgAZ3rHgyFPmjVHG1gYHytj7ts3+0PW/XYf0cnue5MxzmJz3x8m9hMj5Xrm+XUTQHmNa6LBouXJQsXLXnHjUUO1glejvut/eUgTxAzzrkcsrj6HHnfCd+vHgSSH5f/5zNiuJl8wBUL40tPzHsQI94MpcmBTuz2enaakoWF0NT4xycwQRw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 149.199.62.198) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=xilinx.com;
- dmarc=pass (p=none sp=none pct=100) action=none header.from=xilinx.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=+bxMI2TyLPQoMRYxAZ0w5ehWzJpBjH+Ba6t2LrRFs4g=;
- b=kXtQNU4PfEKEKOiq2okUPR4sW2TrJC6WOszStJblnoEy459LAVNkuZILVI2m1/yao7uVF95u5V5D04Pj8tnG6vRCOmRABy9v+ekSWwHPT2GbAeaFRd+Kgs7E22CJjFlmn1YKkVCxo0ALhDj29/f/nt4B4o07i+R6fcBr2NRlfR8=
-Received: from DS7PR05CA0100.namprd05.prod.outlook.com (2603:10b6:8:56::23) by
- BL3PR02MB8161.namprd02.prod.outlook.com (2603:10b6:208:35c::6) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.4995.24; Tue, 22 Feb 2022 13:09:22 +0000
-Received: from DM3NAM02FT037.eop-nam02.prod.protection.outlook.com
- (2603:10b6:8:56:cafe::22) by DS7PR05CA0100.outlook.office365.com
- (2603:10b6:8:56::23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5017.7 via Frontend
- Transport; Tue, 22 Feb 2022 13:09:22 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
- smtp.mailfrom=xilinx.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=xilinx.com;
-Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
- 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
- client-ip=149.199.62.198; helo=xsj-pvapexch02.xlnx.xilinx.com;
-Received: from xsj-pvapexch02.xlnx.xilinx.com (149.199.62.198) by
- DM3NAM02FT037.mail.protection.outlook.com (10.13.4.166) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.4995.19 via Frontend Transport; Tue, 22 Feb 2022 13:09:22 +0000
-Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
- xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.14; Tue, 22 Feb 2022 05:09:20 -0800
-Received: from smtp.xilinx.com (172.19.127.96) by
- xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
- 15.1.2176.14 via Frontend Transport; Tue, 22 Feb 2022 05:09:20 -0800
-Envelope-to: git@xilinx.com,
- linux-clk@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Received: from [10.140.6.59] (port=35690 helo=xhdshubhraj40.xilinx.com)
-        by smtp.xilinx.com with esmtp (Exim 4.90)
-        (envelope-from <shubhrajyoti.datta@xilinx.com>)
-        id 1nMUut-000Eql-T9; Tue, 22 Feb 2022 05:09:20 -0800
-From:   Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
-To:     <linux-clk@vger.kernel.org>
-CC:     <git@xilinx.com>, <michal.simek@xilinx.com>,
-        <linux-kernel@vger.kernel.org>,
-        Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
-Subject: [PATCH 1/2] clk: zynq: trivial warning fix
-Date:   Tue, 22 Feb 2022 18:39:02 +0530
-Message-ID: <20220222130903.17235-2-shubhrajyoti.datta@xilinx.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220222130903.17235-1-shubhrajyoti.datta@xilinx.com>
-References: <20220222130903.17235-1-shubhrajyoti.datta@xilinx.com>
+        Tue, 22 Feb 2022 08:09:54 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3ECDD1520CC
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 05:09:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1645535360;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=5keTvKkU1k8E6tGIx7wnPZ/Uz5HkgJOzcsmlYm0pFTk=;
+        b=VzsQinN8tE+wfhmOQLnazmHouGnR4Fxr8leFCSfex4H9xq08lHrNHFGlh57+Bd0rT8JOD9
+        tvSlrd7JUbrMIHbRY+G/8YM6Uu4j+VY1P65zZk8vUAqNmGsr+mWZZ/n+4Y/JQk9vDAdwe2
+        X9JFp7dTNkgVS3IrqwiXW4/pFSvsVbs=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-344-xVV9tkOWOei9oS7s_r8D2w-1; Tue, 22 Feb 2022 08:09:19 -0500
+X-MC-Unique: xVV9tkOWOei9oS7s_r8D2w-1
+Received: by mail-wm1-f71.google.com with SMTP id u14-20020a05600c210e00b0037bddd0562eso589202wml.1
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 05:09:18 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=5keTvKkU1k8E6tGIx7wnPZ/Uz5HkgJOzcsmlYm0pFTk=;
+        b=m+aQ+K82lS1ON/mlOQr9tRfAJ6G8glSE755L7ZWUg7UoqrYvfcQkMXvF3HGHZsmAau
+         pmAHgYI4zJ54il8YZqKMvA8A7BhOUCOfFZdFNbMhWCAarDKfMcoA++2cCFCszW/WlQSB
+         Rgm6gWEcOhpcwgIqAG0J2x9M+1nYubBz/aLu67NK75aWpKG9iiueLCuXkM8BQCetUmDN
+         nYtvwN1UuA1fuQkBO9v7gaEsEPEMHxh/oxWmzMg+M+4fKE3Jed+oUJKEVZUBhSI/SI5E
+         sU+X+hdlve5yVb5vwFv4efjJ43Rnz7AyTeVMajslJMA9uUS8/WXYWbVB2SlPvab6WAM6
+         K3Qw==
+X-Gm-Message-State: AOAM531EfyM2YkXEX3ETmAEvlPd0ctOEBkw4ikmTmRhSqd6AbUsr1hvD
+        kQoQlPBUQmUK5GSGAr3vI57Ksb2u/VuOx0be814soSYDr+BEwwzzria9FGF1HZG4s+JLzlDz27V
+        i/NVVPa1de1j5K6HMBCXXfH4=
+X-Received: by 2002:a05:6000:1acc:b0:1e8:6df6:bb54 with SMTP id i12-20020a0560001acc00b001e86df6bb54mr19311876wry.295.1645535357783;
+        Tue, 22 Feb 2022 05:09:17 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzTUw03u8MjSY/he3X1FVrCWMDjiyVXD0zJf3iZ08uaOj8vSe1N4f8YiN4mUpdNa5uNj8CvCg==
+X-Received: by 2002:a05:6000:1acc:b0:1e8:6df6:bb54 with SMTP id i12-20020a0560001acc00b001e86df6bb54mr19311858wry.295.1645535357567;
+        Tue, 22 Feb 2022 05:09:17 -0800 (PST)
+Received: from localhost (cpc111743-lutn13-2-0-cust979.9-3.cable.virginm.net. [82.17.115.212])
+        by smtp.gmail.com with ESMTPSA id u12sm53842215wrs.2.2022.02.22.05.09.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Feb 2022 05:09:17 -0800 (PST)
+From:   Aaron Tomlin <atomlin@redhat.com>
+To:     mcgrof@kernel.org, christophe.leroy@csgroup.eu
+Cc:     cl@linux.com, pmladek@suse.com, mbenes@suse.cz,
+        akpm@linux-foundation.org, jeyu@kernel.org,
+        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
+        void@manifault.com, atomlin@atomlin.com, allen.lkml@gmail.com,
+        joe@perches.com, msuchanek@suse.de, oleksandr@natalenko.name
+Subject: [PATCH v7 04/13] module: Move livepatch support to a separate file
+Date:   Tue, 22 Feb 2022 13:09:02 +0000
+Message-Id: <20220222130911.1348513-5-atomlin@redhat.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220222130911.1348513-1-atomlin@redhat.com>
+References: <20220222130911.1348513-1-atomlin@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 8aaa6c4c-959e-457a-8d83-08d9f6048b17
-X-MS-TrafficTypeDiagnostic: BL3PR02MB8161:EE_
-X-Microsoft-Antispam-PRVS: <BL3PR02MB81619224F5D2B1CD70593086AA3B9@BL3PR02MB8161.namprd02.prod.outlook.com>
-X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: YgzIRVeCXASFs9L9etvqCVtV7EBr0z6LgQqdF30MSC4sYEaeLM4ys7YL4Xt72w8O867x5iHHZ+6YXd5kWQvQ3cl5LUTXijVp6dUHiUN9L9fI0OV1IBMa1ZbSOxfsoinVu62zkB6OD66or2uvRSAdYSmYSEl4HIxzI7JL0sEHOFFoSURxvm4EAYXjIu95ysrczZ+fzxGc7Qp6Ggt227DlQzIFhe9v1xek82StP2eG+lqSi63i+qUBsnyCOiV5ZrQfBaSEMqtou9aywldOstbhFzoeiC3FxJrqGnAXRk2kKqagsIbCaOzT0L/NMBIfK8OdVSFBZQOAaA14iIEOTxU34P9rbwAajxiXNfpJXZ52OynobAqi6nBXrzTiKxGqCJNzS2KU84brkG9Qb3gBBD0YL4ncYMEEBOM0GkPvJQa8DBr2sz6ulFJ6C6U0yZ7GHiRrE2h5gWZvDQP9hrcLPNWoC7xRqm6s7ExLU9/0heKmM+4iQU6LjpBJ/RRAO6ZgqWuhPYZvnkWOhxvoppJX4CKwlnBiK32qfanW5vzjXTm5C94FvC4rh69KbbljcLl8SxGNzq7yAO2XKnoX0NhAoYynGkNyXZXH/QDhm6qFnYMTGgsWAvj2pHKDe45VJN5Eau0GUioAxifvjgoT1NlbhhwHcOei2coX8vOQ/pDJs0RDjCpP/QHiz0l9K3xZlcX62Bau
-X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch02.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(13230001)(4636009)(46966006)(36840700001)(47076005)(6916009)(54906003)(6666004)(316002)(8936002)(9786002)(36756003)(107886003)(508600001)(450100002)(2616005)(7696005)(70586007)(336012)(4326008)(82310400004)(426003)(186003)(26005)(1076003)(4744005)(44832011)(36860700001)(8676002)(5660300002)(356005)(7636003)(70206006)(83380400001)(2906002)(102446001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: xilinx.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Feb 2022 13:09:22.2577
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8aaa6c4c-959e-457a-8d83-08d9f6048b17
-X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch02.xlnx.xilinx.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM3NAM02FT037.eop-nam02.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL3PR02MB8161
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix the below warning
+No functional change.
 
-WARNING: Missing a blank line after declarations
-+               int enable = !!(fclk_enable & BIT(i - fclk0));
-+               zynq_clk_register_fclk(i, clk_output_name[i],
+This patch migrates livepatch support (i.e. used during module
+add/or load and remove/or deletion) from core module code into
+kernel/module/livepatch.c. At the moment it contains code to
+persist Elf information about a given livepatch module, only.
 
-Signed-off-by: Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
+Signed-off-by: Aaron Tomlin <atomlin@redhat.com>
 ---
- drivers/clk/zynq/clkc.c | 1 +
- 1 file changed, 1 insertion(+)
+ include/linux/module.h    |   9 ++--
+ kernel/module/Makefile    |   1 +
+ kernel/module/internal.h  |  22 ++++++++
+ kernel/module/livepatch.c |  74 +++++++++++++++++++++++++++
+ kernel/module/main.c      | 102 ++++----------------------------------
+ 5 files changed, 110 insertions(+), 98 deletions(-)
+ create mode 100644 kernel/module/livepatch.c
 
-diff --git a/drivers/clk/zynq/clkc.c b/drivers/clk/zynq/clkc.c
-index 204b83d911b9..434511dcf5cb 100644
---- a/drivers/clk/zynq/clkc.c
-+++ b/drivers/clk/zynq/clkc.c
-@@ -349,6 +349,7 @@ static void __init zynq_clk_setup(struct device_node *np)
- 	/* Peripheral clocks */
- 	for (i = fclk0; i <= fclk3; i++) {
- 		int enable = !!(fclk_enable & BIT(i - fclk0));
+diff --git a/include/linux/module.h b/include/linux/module.h
+index 1e135fd5c076..7ec9715de7dc 100644
+--- a/include/linux/module.h
++++ b/include/linux/module.h
+@@ -663,17 +663,14 @@ static inline bool module_requested_async_probing(struct module *module)
+ 	return module && module->async_probe_requested;
+ }
+ 
+-#ifdef CONFIG_LIVEPATCH
+ static inline bool is_livepatch_module(struct module *mod)
+ {
++#ifdef CONFIG_LIVEPATCH
+ 	return mod->klp;
+-}
+-#else /* !CONFIG_LIVEPATCH */
+-static inline bool is_livepatch_module(struct module *mod)
+-{
++#else
+ 	return false;
++#endif
+ }
+-#endif /* CONFIG_LIVEPATCH */
+ 
+ bool is_module_sig_enforced(void);
+ void set_module_sig_enforced(void);
+diff --git a/kernel/module/Makefile b/kernel/module/Makefile
+index cdd5c61b8c7f..ed3aacb04f17 100644
+--- a/kernel/module/Makefile
++++ b/kernel/module/Makefile
+@@ -10,3 +10,4 @@ KCOV_INSTRUMENT_module.o := n
+ obj-y += main.o
+ obj-$(CONFIG_MODULE_DECOMPRESS) += decompress.o
+ obj-$(CONFIG_MODULE_SIG) += signing.o
++obj-$(CONFIG_LIVEPATCH) += livepatch.o
+diff --git a/kernel/module/internal.h b/kernel/module/internal.h
+index e0775e66bcf7..ad7a444253ed 100644
+--- a/kernel/module/internal.h
++++ b/kernel/module/internal.h
+@@ -57,6 +57,28 @@ struct load_info {
+ 
+ int mod_verify_sig(const void *mod, struct load_info *info);
+ 
++#ifdef CONFIG_LIVEPATCH
++int copy_module_elf(struct module *mod, struct load_info *info);
++void free_module_elf(struct module *mod);
++#else /* !CONFIG_LIVEPATCH */
++static inline int copy_module_elf(struct module *mod, struct load_info *info)
++{
++	return 0;
++}
 +
- 		zynq_clk_register_fclk(i, clk_output_name[i],
- 				SLCR_FPGA0_CLK_CTRL + 0x10 * (i - fclk0),
- 				periph_parents, enable);
++static inline void free_module_elf(struct module *mod) { }
++#endif /* CONFIG_LIVEPATCH */
++
++static inline bool set_livepatch_module(struct module *mod)
++{
++#ifdef CONFIG_LIVEPATCH
++	mod->klp = true;
++	return true;
++#else
++	return false;
++#endif
++}
++
+ #ifdef CONFIG_MODULE_DECOMPRESS
+ int module_decompress(struct load_info *info, const void *buf, size_t size);
+ void module_decompress_cleanup(struct load_info *info);
+diff --git a/kernel/module/livepatch.c b/kernel/module/livepatch.c
+new file mode 100644
+index 000000000000..486d4ff92719
+--- /dev/null
++++ b/kernel/module/livepatch.c
+@@ -0,0 +1,74 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
++/*
++ * Module livepatch support
++ *
++ * Copyright (C) 2016 Jessica Yu <jeyu@redhat.com>
++ */
++
++#include <linux/module.h>
++#include <linux/string.h>
++#include <linux/slab.h>
++#include "internal.h"
++
++/*
++ * Persist Elf information about a module. Copy the Elf header,
++ * section header table, section string table, and symtab section
++ * index from info to mod->klp_info.
++ */
++int copy_module_elf(struct module *mod, struct load_info *info)
++{
++	unsigned int size, symndx;
++	int ret;
++
++	size = sizeof(*mod->klp_info);
++	mod->klp_info = kmalloc(size, GFP_KERNEL);
++	if (!mod->klp_info)
++		return -ENOMEM;
++
++	/* Elf header */
++	size = sizeof(mod->klp_info->hdr);
++	memcpy(&mod->klp_info->hdr, info->hdr, size);
++
++	/* Elf section header table */
++	size = sizeof(*info->sechdrs) * info->hdr->e_shnum;
++	mod->klp_info->sechdrs = kmemdup(info->sechdrs, size, GFP_KERNEL);
++	if (!mod->klp_info->sechdrs) {
++		ret = -ENOMEM;
++		goto free_info;
++	}
++
++	/* Elf section name string table */
++	size = info->sechdrs[info->hdr->e_shstrndx].sh_size;
++	mod->klp_info->secstrings = kmemdup(info->secstrings, size, GFP_KERNEL);
++	if (!mod->klp_info->secstrings) {
++		ret = -ENOMEM;
++		goto free_sechdrs;
++	}
++
++	/* Elf symbol section index */
++	symndx = info->index.sym;
++	mod->klp_info->symndx = symndx;
++
++	/*
++	 * For livepatch modules, core_kallsyms.symtab is a complete
++	 * copy of the original symbol table. Adjust sh_addr to point
++	 * to core_kallsyms.symtab since the copy of the symtab in module
++	 * init memory is freed at the end of do_init_module().
++	 */
++	mod->klp_info->sechdrs[symndx].sh_addr = (unsigned long)mod->core_kallsyms.symtab;
++
++	return 0;
++
++free_sechdrs:
++	kfree(mod->klp_info->sechdrs);
++free_info:
++	kfree(mod->klp_info);
++	return ret;
++}
++
++void free_module_elf(struct module *mod)
++{
++	kfree(mod->klp_info->sechdrs);
++	kfree(mod->klp_info->secstrings);
++	kfree(mod->klp_info);
++}
+diff --git a/kernel/module/main.c b/kernel/module/main.c
+index 5f5e21f972dd..3596ebf3a6c3 100644
+--- a/kernel/module/main.c
++++ b/kernel/module/main.c
+@@ -2043,81 +2043,6 @@ static int module_enforce_rwx_sections(Elf_Ehdr *hdr, Elf_Shdr *sechdrs,
+ }
+ #endif /*  CONFIG_STRICT_MODULE_RWX */
+ 
+-#ifdef CONFIG_LIVEPATCH
+-/*
+- * Persist Elf information about a module. Copy the Elf header,
+- * section header table, section string table, and symtab section
+- * index from info to mod->klp_info.
+- */
+-static int copy_module_elf(struct module *mod, struct load_info *info)
+-{
+-	unsigned int size, symndx;
+-	int ret;
+-
+-	size = sizeof(*mod->klp_info);
+-	mod->klp_info = kmalloc(size, GFP_KERNEL);
+-	if (mod->klp_info == NULL)
+-		return -ENOMEM;
+-
+-	/* Elf header */
+-	size = sizeof(mod->klp_info->hdr);
+-	memcpy(&mod->klp_info->hdr, info->hdr, size);
+-
+-	/* Elf section header table */
+-	size = sizeof(*info->sechdrs) * info->hdr->e_shnum;
+-	mod->klp_info->sechdrs = kmemdup(info->sechdrs, size, GFP_KERNEL);
+-	if (mod->klp_info->sechdrs == NULL) {
+-		ret = -ENOMEM;
+-		goto free_info;
+-	}
+-
+-	/* Elf section name string table */
+-	size = info->sechdrs[info->hdr->e_shstrndx].sh_size;
+-	mod->klp_info->secstrings = kmemdup(info->secstrings, size, GFP_KERNEL);
+-	if (mod->klp_info->secstrings == NULL) {
+-		ret = -ENOMEM;
+-		goto free_sechdrs;
+-	}
+-
+-	/* Elf symbol section index */
+-	symndx = info->index.sym;
+-	mod->klp_info->symndx = symndx;
+-
+-	/*
+-	 * For livepatch modules, core_kallsyms.symtab is a complete
+-	 * copy of the original symbol table. Adjust sh_addr to point
+-	 * to core_kallsyms.symtab since the copy of the symtab in module
+-	 * init memory is freed at the end of do_init_module().
+-	 */
+-	mod->klp_info->sechdrs[symndx].sh_addr = \
+-		(unsigned long) mod->core_kallsyms.symtab;
+-
+-	return 0;
+-
+-free_sechdrs:
+-	kfree(mod->klp_info->sechdrs);
+-free_info:
+-	kfree(mod->klp_info);
+-	return ret;
+-}
+-
+-static void free_module_elf(struct module *mod)
+-{
+-	kfree(mod->klp_info->sechdrs);
+-	kfree(mod->klp_info->secstrings);
+-	kfree(mod->klp_info);
+-}
+-#else /* !CONFIG_LIVEPATCH */
+-static int copy_module_elf(struct module *mod, struct load_info *info)
+-{
+-	return 0;
+-}
+-
+-static void free_module_elf(struct module *mod)
+-{
+-}
+-#endif /* CONFIG_LIVEPATCH */
+-
+ void __weak module_memfree(void *module_region)
+ {
+ 	/*
+@@ -3092,30 +3017,23 @@ static int copy_chunked_from_user(void *dst, const void __user *usrc, unsigned l
+ 	return 0;
+ }
+ 
+-#ifdef CONFIG_LIVEPATCH
+ static int check_modinfo_livepatch(struct module *mod, struct load_info *info)
+ {
+-	if (get_modinfo(info, "livepatch")) {
+-		mod->klp = true;
++	if (!get_modinfo(info, "livepatch"))
++		/* Nothing more to do */
++		return 0;
++
++	if (set_livepatch_module(mod)) {
+ 		add_taint_module(mod, TAINT_LIVEPATCH, LOCKDEP_STILL_OK);
+ 		pr_notice_once("%s: tainting kernel with TAINT_LIVEPATCH\n",
+-			       mod->name);
+-	}
+-
+-	return 0;
+-}
+-#else /* !CONFIG_LIVEPATCH */
+-static int check_modinfo_livepatch(struct module *mod, struct load_info *info)
+-{
+-	if (get_modinfo(info, "livepatch")) {
+-		pr_err("%s: module is marked as livepatch module, but livepatch support is disabled",
+-		       mod->name);
+-		return -ENOEXEC;
++				mod->name);
++		return 0;
+ 	}
+ 
+-	return 0;
++	pr_err("%s: module is marked as livepatch module, but livepatch support is disabled",
++	       mod->name);
++	return -ENOEXEC;
+ }
+-#endif /* CONFIG_LIVEPATCH */
+ 
+ static void check_modinfo_retpoline(struct module *mod, struct load_info *info)
+ {
 -- 
-2.17.1
+2.34.1
 

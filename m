@@ -2,111 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A732D4C02D2
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 21:06:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 089234C02D7
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 21:08:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235414AbiBVUHN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 15:07:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55420 "EHLO
+        id S235430AbiBVUIc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 15:08:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235396AbiBVUHK (ORCPT
+        with ESMTP id S235422AbiBVUIb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 15:07:10 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CA58A41BD;
-        Tue, 22 Feb 2022 12:06:44 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Tue, 22 Feb 2022 15:08:31 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3D02F4629
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 12:08:04 -0800 (PST)
+Received: from zn.tnic (dslb-088-067-221-104.088.067.pools.vodafone-ip.de [88.67.221.104])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0499DB81C5F;
-        Tue, 22 Feb 2022 20:06:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56812C340E8;
-        Tue, 22 Feb 2022 20:06:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645560401;
-        bh=uI0Fg70JQsRjF8A280UxeWyrTx+BSIhEvWBXFTuCqvc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=oV94Lm4dBzwnapWO4YqkF1+FiDKUOgNPNsAaPRtqEp7aUERF9fx5An9GvUGCIbjdO
-         ml75/8hKPJIpMkKR/BBixoM9MlWszX9BQJEKLvkbdOzd5Y/MFnIaVoZs8X+7cHzmIR
-         KVog4RCIGsRxnnU5t+0SXRfTXag3ZmA4C7G2mVIhYTQtQpmD8Fi2lnPAPAjGORG1/H
-         NXOsNZ6yLBw/2p5WTdH9a/+NLBV7UFhzavqHlsVPAk3ftgHAe79bNPhSvhWaqizg+P
-         i+q/0tgKBideH8K1N+4kBi0MLYEDFCy0cUuJC5JX6ZbkLDR4FOp4iDlw0bKrCJ4VBZ
-         EIzYowpTp8JVA==
-Date:   Tue, 22 Feb 2022 12:06:39 -0800
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Keith Busch <kbusch@kernel.org>
-Cc:     David Laight <David.Laight@aculab.com>,
-        "linux-nvme@lists.infradead.org" <linux-nvme@lists.infradead.org>,
-        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "axboe@kernel.dk" <axboe@kernel.dk>, "hch@lst.de" <hch@lst.de>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-        "colyli@suse.de" <colyli@suse.de>
-Subject: Re: [PATCHv3 10/10] x86/crypto: add pclmul acceleration for crc64
-Message-ID: <YhVCTzUOUHZnze4x@sol.localdomain>
-References: <20220222163144.1782447-1-kbusch@kernel.org>
- <20220222163144.1782447-11-kbusch@kernel.org>
- <a7e806ed3c074534a24b74f827bcc914@AcuMS.aculab.com>
- <20220222171405.GA1782521@dhcp-10-100-145-180.wdc.com>
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 049B41EC053C;
+        Tue, 22 Feb 2022 21:07:59 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1645560479;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=x9SgovmG8b0LJ5OXt5gAodu8VwpoC+S25KIyfpr4uZ8=;
+        b=mR5x0zpEPUftfOFLRiwtx3DFy7GfYGFOx7t7+RiOJN+0NcYzZDzDLTodTfmVdzqM2m5zF+
+        p/NjE4MByvvM2qHbSHC4wID+NgUWjELAo6H4UkYndHCPHmyzd0rA77AP9IYczGtBP4Co4o
+        VOvORaZYbPqeysohkNtQy6mO9d6sKM4=
+Date:   Tue, 22 Feb 2022 21:08:02 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Wei Liu <wei.liu@kernel.org>
+Cc:     tglx@linutronix.de, mingo@redhat.com, dave.hansen@intel.com,
+        luto@kernel.org, peterz@infradead.org,
+        sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
+        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
+        hpa@zytor.com, jmattson@google.com, seanjc@google.com,
+        thomas.lendacky@amd.com, brijesh.singh@amd.com, x86@kernel.org,
+        linux-kernel@vger.kernel.org,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Dexuan Cui <decui@microsoft.com>,
+        Tianyu Lan <Tianyu.Lan@microsoft.com>
+Subject: Re: [PATCH 1/4] x86/hyperv: Add missing ARCH_HAS_CC_PLATFORM
+ dependency
+Message-ID: <YhVCoveTwsDZXE5G@zn.tnic>
+References: <20220222185740.26228-1-kirill.shutemov@linux.intel.com>
+ <20220222185740.26228-2-kirill.shutemov@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220222171405.GA1782521@dhcp-10-100-145-180.wdc.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220222185740.26228-2-kirill.shutemov@linux.intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 22, 2022 at 09:14:05AM -0800, Keith Busch wrote:
-> On Tue, Feb 22, 2022 at 05:02:16PM +0000, David Laight wrote:
-> > From: Keith Busch
-> > > Sent: 22 February 2022 16:32
-> > > 
-> > > The crc64 table lookup method is inefficient, using a significant number
-> > > of CPU cycles in the block stack per IO. If available on x86, use a
-> > > PCLMULQDQ implementation to accelerate the calculation.
-> > > 
-> > > The assembly from this patch was mostly generated by gcc from a C
-> > > program using library functions provided by x86 intrinsics, and measures
-> > > ~20x faster than the table lookup.
-> > 
-> > I think I'd like to see the C code and compiler options used to
-> > generate the assembler as comments in the committed source file.
-> > Either that or reasonable comments in the assembler.
+On Tue, Feb 22, 2022 at 09:57:37PM +0300, Kirill A. Shutemov wrote:
+> On x86, cc_platform_has(CC_ATTR_GUEST_MEM_ENCRYPT) supposes to return
+> true for HyperV if isolation is supported. But it only does it if the
+> kernel is compiled with AMD_MEM_ENCRYPT enabled.
 > 
-> The C code, compiled as "gcc -O3 -msse4 -mpclmul -S", was adapted from
-> this found on the internet:
+> It happens due to missed ARCH_HAS_CC_PLATFORM dependency. Without
+> ARCH_HAS_CC_PLATFORM enabled, cc_platform_has() always returns false.
 > 
->   https://github.com/rawrunprotected/crc/blob/master/crc64.c
+> Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+> Cc: "K. Y. Srinivasan" <kys@microsoft.com>
+> Cc: Haiyang Zhang <haiyangz@microsoft.com>
+> Cc: Stephen Hemminger <sthemmin@microsoft.com>
+> Cc: Wei Liu <wei.liu@kernel.org>
+> Cc: Dexuan Cui <decui@microsoft.com>
+> Cc: Tianyu Lan <Tianyu.Lan@microsoft.com>
+> ---
+>  drivers/hv/Kconfig | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> I just ported it to linux, changed the poly parameters and removed the
-> unnecessary stuff. 
->  
-> I'm okay with dropping this patch from the series for now since I don't
-> think I'm qualified to write it. :) I just needed something to test the
-> crytpo module registration.
+> diff --git a/drivers/hv/Kconfig b/drivers/hv/Kconfig
+> index 0747a8f1fcee..424d3f0751dc 100644
+> --- a/drivers/hv/Kconfig
+> +++ b/drivers/hv/Kconfig
+> @@ -8,6 +8,7 @@ config HYPERV
+>  		|| (ARM64 && !CPU_BIG_ENDIAN))
+>  	select PARAVIRT
+>  	select X86_HV_CALLBACK_VECTOR if X86
+> +	select ARCH_HAS_CC_PLATFORM if x86
+>  	select VMAP_PFN
+>  	help
+>  	  Select this option to run Linux as a Hyper-V client operating
+> -- 
 
-Is the license of that code compatible with the kernel's license?
+Good catch.
 
-In any case, adding uncommented generated assembly isn't acceptable.  The most
-common convention for Linux kernel crypto is to use hand-written assembly that
-is properly commented.
+I'm guessing this needs
 
-There is some precedent for using compiler intrinsics instead, e.g.
-crypto/aegis128-neon-inner.c.  (I'm not sure why they aren't used more often.)
+Fixes: c789b90a6904 ("x86/hyper-v: Add hyperv Isolation VM check in the cc_platform_has()")
 
-There are also some files where a Perl script generates the assembly code.
-(This is a bit ugly IMO, but it's what the author of much of OpenSSL's crypto
-assembly code does, and it was desired to reuse that code.)
+which added hyperv_cc_platform_has() and which needs to go to Linus now,
+as an urgent fix for 5.17 as that patch came into 5.17-rc1.
 
-Anyway, those are the available options.  Checking in some uncommented generated
-assembly isn't one of them.
+Wei?
 
-- Eric
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette

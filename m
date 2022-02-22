@@ -2,69 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D59544BF155
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 06:32:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C6F554BF1D2
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 07:02:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229645AbiBVFa6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 00:30:58 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:54478 "EHLO
+        id S230136AbiBVF6G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 00:58:06 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:33318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229683AbiBVFa3 (ORCPT
+        with ESMTP id S230086AbiBVF6C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 00:30:29 -0500
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23DCE7084E;
-        Mon, 21 Feb 2022 21:30:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1645507804; x=1677043804;
-  h=subject:to:cc:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=dyGCqEWolvHRVduWhviEQyQaBM1jwneMhkEEEZgRg3s=;
-  b=Q+H4CnPYpO3k1/j0tItfEbW4nOwV5EPuHE54o7wM9187M6bxH8SbB3Gw
-   BWGXoc0uibP8yorS/Rs09qbF4BGl32SW3wJhq+hYzpfgF9lJFqunlGOPq
-   n+HkMlKSYe8M47eqiHqXlCLW9YfiyTs5zzLYbB9YqvponjhgANzO1+Fp0
-   A=;
-Received: from unknown (HELO ironmsg02-sd.qualcomm.com) ([10.53.140.142])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 21 Feb 2022 20:45:56 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg02-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2022 20:45:55 -0800
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.15; Mon, 21 Feb 2022 20:45:55 -0800
-Received: from [10.216.54.2] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.15; Mon, 21 Feb
- 2022 20:45:51 -0800
-Subject: Re: [PATCH V3 2/4] leds: Add pm8350c support to Qualcomm LPG driver
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-CC:     Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>, <mka@chromium.org>,
-        <swboyd@chromium.org>, <linux-leds@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-msm@vger.kernel.org>,
-        satya priya <skakit@codeaurora.org>
-References: <1635507893-25490-1-git-send-email-quic_c_skakit@quicinc.com>
- <1635507893-25490-3-git-send-email-quic_c_skakit@quicinc.com>
- <Yg7LjJFi51cmDUQr@ripper>
-From:   "Satya Priya Kakitapalli (Temp)" <quic_c_skakit@quicinc.com>
-Message-ID: <d6dada9f-3b81-01c4-47a6-0750dafa2864@quicinc.com>
-Date:   Tue, 22 Feb 2022 10:15:47 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Tue, 22 Feb 2022 00:58:02 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 484D98E192;
+        Mon, 21 Feb 2022 21:57:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645509458; x=1677045458;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=7bEcFXv/PBrDnpJkRJDcOGeL+LDolQ6d+dndBSOh350=;
+  b=K6lG22bBANh7vO+MZkeL9DQEOQvHvzY1CHN2nxl1iL8SuCJtiJ6zS+x7
+   loZmz4zG9cGn03doJDazMIVlrOcmZFhb56+/5a7SoPTFbQGnNAuO0AZwA
+   ujpE2bT/mlMYD54qlaYAlqAYeuQzo5DiI/b3XQxQkSbGnVeO0+FYLI1aB
+   FZTxv6EB0jn9LUda5nxGa232om7at/Jxh7Re0KMR7zhHvAW2hXUmZGHsh
+   rg6sbToORhbJQZqKrTzYjCbViaV9WitlJeC/JJAeuvhRan9dnr8mcRzWe
+   IF8ny2bF+fqCBnqVs94g+e+UEain4na0fxZJTa8kdDp//TPlxdPIz5hNy
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10265"; a="250432165"
+X-IronPort-AV: E=Sophos;i="5.88,387,1635231600"; 
+   d="scan'208";a="250432165"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2022 20:50:12 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,387,1635231600"; 
+   d="scan'208";a="683385469"
+Received: from allen-box.sh.intel.com (HELO [10.239.159.118]) ([10.239.159.118])
+  by fmsmga001.fm.intel.com with ESMTP; 21 Feb 2022 20:50:06 -0800
+Message-ID: <c212094a-399e-1038-99e0-7a08d0da2a61@linux.intel.com>
+Date:   Tue, 22 Feb 2022 12:48:39 +0800
 MIME-Version: 1.0
-In-Reply-To: <Yg7LjJFi51cmDUQr@ripper>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 7bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Cc:     baolu.lu@linux.intel.com, Christoph Hellwig <hch@infradead.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Joerg Roedel <joro@8bytes.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>, kvm@vger.kernel.org,
+        rafael@kernel.org, David Airlie <airlied@linux.ie>,
+        linux-pci@vger.kernel.org,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Diana Craciun <diana.craciun@oss.nxp.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Will Deacon <will@kernel.org>,
+        Stuart Yoder <stuyoder@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        linux-kernel@vger.kernel.org, Li Yang <leoyang.li@nxp.com>,
+        iommu@lists.linux-foundation.org,
+        Jacob jun Pan <jacob.jun.pan@intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>
+Subject: Re: [PATCH v6 02/11] driver core: Add dma_cleanup callback in
+ bus_type
 Content-Language: en-US
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+To:     Jason Gunthorpe <jgg@nvidia.com>,
+        Robin Murphy <robin.murphy@arm.com>
+References: <20220218005521.172832-1-baolu.lu@linux.intel.com>
+ <20220218005521.172832-3-baolu.lu@linux.intel.com>
+ <YhCdEmC2lYStmUSL@infradead.org>
+ <1d8004d3-1887-4fc7-08d2-0e2ee6b5fdcb@arm.com>
+ <20220221234837.GA10061@nvidia.com>
+From:   Lu Baolu <baolu.lu@linux.intel.com>
+In-Reply-To: <20220221234837.GA10061@nvidia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,83 +89,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/18/2022 3:56 AM, Bjorn Andersson wrote:
+On 2/22/22 7:48 AM, Jason Gunthorpe wrote:
+>> since we should only care about ownership at probe, hotplug, and other
+>> places well outside critical fast-paths, I'm not sure we really need to keep
+>> track of that anyway - it can always be recalculated by walking the
+>> group->devices list,
+> It has to be locked against concurrent probe, and there isn't
+> currently any locking scheme that can support this. The owner_cnt is
+> effectively a new lock for this purpose. It is the same issue we
+> talked about with that VFIO patch you showed me.
+> 
+> So, using the group->device_list would require adding something else
+> somewhere - which I think should happen when someone has
+> justification for another use of whatever that something else is.
 
-> On Fri 29 Oct 04:44 PDT 2021, Satya Priya wrote:
->
->> From: satya priya <skakit@codeaurora.org>
->>
->> Add pm8350c compatible and lpg_data to the driver.
->>
->> Signed-off-by: satya priya <skakit@codeaurora.org>
-> Sorry for the OCD, but I would really like for you to capitalize 's' and
-> 'p' in your name.
+This series was originated from the similar idea by adding some fields
+in driver structure and intercepting it in iommu core. We stopped doing
+that due to the lack of lock mechanism between iommu and driver core.
+It then evolved into what it is today.
 
-
-I had corrected this in the v3-resend version.
-
-https://patchwork.kernel.org/project/linux-arm-msm/patch/1637917920-22041-3-git-send-email-quic_c_skakit@quicinc.com/
-
-
->
->> Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
->> ---
->> Changes in V2:
->>   - Added const for lpg_channel_data[] struct.
->>
->> Changes in V3:
->>   - Correct the num_channels and add respective base addresses.
->>
->>   drivers/leds/rgb/leds-qcom-lpg.c | 13 +++++++++++++
->>   1 file changed, 13 insertions(+)
->>
->> diff --git a/drivers/leds/rgb/leds-qcom-lpg.c b/drivers/leds/rgb/leds-qcom-lpg.c
->> index 45ef4ec..ad99a9b 100644
->> --- a/drivers/leds/rgb/leds-qcom-lpg.c
->> +++ b/drivers/leds/rgb/leds-qcom-lpg.c
->> @@ -1275,9 +1275,22 @@ static const struct lpg_data pm8150l_lpg_data = {
->>   	},
->>   };
->>   
->> +static const struct lpg_data pm8350c_pwm_data = {
->> +	.pwm_9bit_mask = BIT(2),
-> As you might have seen in v12 I dropped pwm_9bit_mask.
-
-
-Yeah, I'll drop this.
-
-
->> +
-> Afaict there's a tri-channel current sink in pm8350c as well, so you
-> should have:
->
->          .triled_base = 0xef00,
->
-> And then associated .triled_mask in the relevant channels.
-
-
-Okay, I'll add them.
-
-
-> Regards,
-> Bjorn
->
->> +	.num_channels = 4,
->> +	.channels = (const struct lpg_channel_data[]) {
->> +		{ .base = 0xe800 },
->> +		{ .base = 0xe900 },
->> +		{ .base = 0xea00 },
->> +		{ .base = 0xeb00 },
->> +	},
->> +};
->> +
->>   static const struct of_device_id lpg_of_table[] = {
->>   	{ .compatible = "qcom,pm8150b-lpg", .data = &pm8150b_lpg_data },
->>   	{ .compatible = "qcom,pm8150l-lpg", .data = &pm8150l_lpg_data },
->> +	{ .compatible = "qcom,pm8350c-pwm", .data = &pm8350c_pwm_data },
->>   	{ .compatible = "qcom,pm8916-pwm", .data = &pm8916_pwm_data },
->>   	{ .compatible = "qcom,pm8941-lpg", .data = &pm8941_lpg_data },
->>   	{ .compatible = "qcom,pm8994-lpg", .data = &pm8994_lpg_data },
->> -- 
->> 2.7.4
->>
+Best regards,
+baolu

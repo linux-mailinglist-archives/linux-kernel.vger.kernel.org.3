@@ -2,122 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 512EB4BF739
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 12:25:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B481F4BF73D
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 12:28:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231628AbiBVLZm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 06:25:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50912 "EHLO
+        id S231688AbiBVL2o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 06:28:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230268AbiBVLZl (ORCPT
+        with ESMTP id S230203AbiBVL2m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 06:25:41 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42084130185
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 03:25:16 -0800 (PST)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[127.0.0.1])
-        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
-        (envelope-from <a.fatoum@pengutronix.de>)
-        id 1nMTHb-0000ST-9t; Tue, 22 Feb 2022 12:24:39 +0100
-Message-ID: <db76da34-a40d-4746-5810-316b052acf16@pengutronix.de>
-Date:   Tue, 22 Feb 2022 12:24:33 +0100
+        Tue, 22 Feb 2022 06:28:42 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B31F119F26
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 03:28:17 -0800 (PST)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4K2xhm2jdHzdZSs;
+        Tue, 22 Feb 2022 19:27:04 +0800 (CST)
+Received: from huawei.com (10.175.124.27) by canpemm500002.china.huawei.com
+ (7.192.104.244) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Tue, 22 Feb
+ 2022 19:28:14 +0800
+From:   Miaohe Lin <linmiaohe@huawei.com>
+To:     <akpm@linux-foundation.org>, <mike.kravetz@oracle.com>
+CC:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
+        <linmiaohe@huawei.com>
+Subject: [PATCH] mm/hugetlb: use helper macro __ATTR_RW
+Date:   Tue, 22 Feb 2022 19:27:31 +0800
+Message-ID: <20220222112731.33479-1-linmiaohe@huawei.com>
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
-Subject: Re: [EXT] Re: [PATCH v4 5/5] KEYS: trusted: Introduce support for NXP
- CAAM-based trusted keys
-To:     Pankaj Gupta <pankaj.gupta@nxp.com>,
-        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
-Cc:     David Gstir <david@sigma-star.at>,
-        Aymen Sghaier <aymen.sghaier@nxp.com>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Jan Luebbe <j.luebbe@pengutronix.de>,
-        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
-        Udit Agarwal <udit.agarwal@nxp.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Horia Geanta <horia.geanta@nxp.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Richard Weinberger <richard@nod.at>,
-        James Morris <jmorris@namei.org>,
-        Eric Biggers <ebiggers@kernel.org>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        James Bottomley <jejb@linux.ibm.com>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        "tharvey@gateworks.com" <tharvey@gateworks.com>,
-        Franck Lenormand <franck.lenormand@nxp.com>,
-        Sumit Garg <sumit.garg@linaro.org>,
-        David Howells <dhowells@redhat.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "David S. Miller" <davem@davemloft.net>
-References: <cover.8f40b6d1b93adc80aed2cac29a134f7a7fb5ee98.1633946449.git-series.a.fatoum@pengutronix.de>
- <a0f1d14af8ac8bae16dd29ad1073f7143ba28f26.1633946449.git-series.a.fatoum@pengutronix.de>
- <b9283c8a4b3b04c7ee9f525208cbb32d798d4439.camel@ew.tq-group.com>
- <59f1f3e6-fcf1-794d-610c-674b826822bf@pengutronix.de>
- <4decdfb7d4395e967e1bf6c65212616400c8064a.camel@ew.tq-group.com>
- <DU2PR04MB8630EA7DB3AAD9F582EDB75C953B9@DU2PR04MB8630.eurprd04.prod.outlook.com>
-Content-Language: en-US
-In-Reply-To: <DU2PR04MB8630EA7DB3AAD9F582EDB75C953B9@DU2PR04MB8630.eurprd04.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.124.27]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Pankaj,
+Use helper macro __ATTR_RW to define HSTATE_ATTR to make code more
+clear. Minor readability improvement.
 
-On 22.02.22 05:30, Pankaj Gupta wrote:
-> Hi Ahmad,
-> 
-> 
->> -----Original Message-----
->> From: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
->> Sent: Monday, December 13, 2021 7:11 PM
->> To: Ahmad Fatoum <a.fatoum@pengutronix.de>
->>
->>> For now, this is pointed out in the documentation. If you have a
->>> suggestion on a specific condition we should check and issue a
->>> diagnostic on, I can incorporate it. An exhaustive if
->>> WARN_ON(!secure()) is impossible, but having some warning for
->>> unsuspecting users would indeed be nice.
->>
->> I don't know of any condition that doesn't involve looking at SoC- specific OTP
->> registers - that's what U-Boot does to determine whether HAB is enabled...
->>
-> 
-> Check the value fetched from the SEC Status Register (SSTA) (Offset 0xFD4h, bit 8,9 => 00b - Non-Secure, 01b - Secure, 10b - Trusted, 11b - Fail), for MOO (Mode of Operation).
-> And the warning can be issued accordingly.
-> 
-> It is to be noted that this register is part of CAAM page0, which might not be accessible to Linux, for all the iMX SoC(s).
-> 
-> For other SoC(s), this can be added.
+Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+---
+ mm/hugetlb.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-Thanks for the pointer. I am only testing this with i.MX, so I'd prefer this
-be left as a future exercise for a Layerscape user.
-
-Thanks for your reviews. I collected them on Patches 2/5 and 4/5 for v5.
-
-Cheers,
-Ahmad
-
-
+diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+index 1f0cca036f7f..c0405f3c8413 100644
+--- a/mm/hugetlb.c
++++ b/mm/hugetlb.c
+@@ -3498,8 +3498,7 @@ static int demote_pool_huge_page(struct hstate *h, nodemask_t *nodes_allowed)
+ 	static struct kobj_attribute _name##_attr = __ATTR_WO(_name)
+ 
+ #define HSTATE_ATTR(_name) \
+-	static struct kobj_attribute _name##_attr = \
+-		__ATTR(_name, 0644, _name##_show, _name##_store)
++	static struct kobj_attribute _name##_attr = __ATTR_RW(_name)
+ 
+ static struct kobject *hugepages_kobj;
+ static struct kobject *hstate_kobjs[HUGE_MAX_HSTATE];
 -- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+2.23.0
+

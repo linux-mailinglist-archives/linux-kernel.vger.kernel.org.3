@@ -2,69 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EB6C4C051E
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 00:15:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 311754C0522
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 00:16:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235489AbiBVXP5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 18:15:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38732 "EHLO
+        id S235317AbiBVXRQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 18:17:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231319AbiBVXPy (ORCPT
+        with ESMTP id S236096AbiBVXRN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 18:15:54 -0500
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 481C88BF6F
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 15:15:28 -0800 (PST)
-Received: by mail-pj1-x1031.google.com with SMTP id ck4-20020a17090afe0400b001bc64ee7d3cso1017957pjb.4
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 15:15:28 -0800 (PST)
+        Tue, 22 Feb 2022 18:17:13 -0500
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22AC48CDA9
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 15:16:46 -0800 (PST)
+Received: by mail-ej1-x635.google.com with SMTP id r13so24493322ejd.5
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 15:16:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
-        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
-         :content-transfer-encoding;
-        bh=5pE50TTDWFLueJKrt7WZSWbPDAQlxEYigig8ufnxSqw=;
-        b=MomlBqvzX/EV4d871QSkrxnPcNmppWaV+rJ5eU0e7Zw3bAOk01v1rBmpiWbTUT9VH5
-         BOtWmYtrGqVHpApv9N2nYi7AmBk5kNAH5vhT8k7DyGgeSyDvdMfN1p7qIXDw45Nx28ps
-         Yg1gWSViHyjbxkE7Y8hmm1rsMV05a3io++T+1HgLp8ZIeZgQ6zS049SyP8s2fQhV25I1
-         zHNdfoR2d7nzrwqXP5+Jh88vRj/Iq8wqiLRSYSCCrClUEK20e7HvBCq+2U2zos9KtiUa
-         A4u6m6iHcuGFdPCRZuS7/GeAQZIAhL61rvkByDSvMD73FkAsVvC4QF+7wxrQugiShAz7
-         koPw==
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=KzvH9ZQaXdUgSyIdwCtFzNEtbBoZxdQVld6HVvqC3h0=;
+        b=S/IydQVZc46d4zetWnmQ5U0e/PzMQNOi9DIjYeoinrNryqb/zeu17/TuDGbIX/KWpC
+         72p/RUQcIO43sVlxpFBZmQdfy6WJtCivMolKcubjDm1vgXMy8k/BPNGr/UPBh9C4W41h
+         4OMcW3ugJLilxrgRaLIAK4YLgo1M1xTJxv0gptrzQotyWQ8BVbQgyOuu/RAZGlM5Bw8P
+         JmKxduxWoEh8ZNP3EI0O00LrNVhJlX3v4Rw2jBvCxgmBre2DuzWvIcOX5LuS+YxoHWGU
+         YdMkjRgsLGwFaosBa6vzrp7EVsu7uc8gPip0/Bri8/5SM/66BSW/Pl4hxH3OB0jOdfoL
+         rEiQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
-         :mime-version:content-transfer-encoding;
-        bh=5pE50TTDWFLueJKrt7WZSWbPDAQlxEYigig8ufnxSqw=;
-        b=yomD89elAVl/6ET+cMoJ/IYJ0QcWEcvQJKc+jI0aevWwOr2elb2lQxTRzzYEre9Wxj
-         kmYyKXCwLKt+SA51OTc7GUI0PpFQCnGpZqtKxUnKLR6lr969R24pCyuuh4dzDxv8B4S+
-         moPrvXGs0OHvPTfn/6qQsX2bt1IkGIYi0JSuf09HEexo3iklMv4Qbu+5ejLrJ5kDuxXx
-         3hY9LiCDdiUkA9u6ujbN88ZyXgl5QkPFUlQLmzPfNqPrXmmBGF1UF0u2ClNatQQyYIBP
-         bkvmIkRY8ZCzhw9CNuWIl2biGpVrLmf8MH4nF8h6iHEM5lxsLsZKyXw9kmGLHVeKntgh
-         gvTQ==
-X-Gm-Message-State: AOAM532u6K4mmSBknZn9o4JC9Ndqbzf9YvhL6vpHxLQKeYSClN+wXsUP
-        8vryCnAwIZznUwgqXFi1ZGkVSw==
-X-Google-Smtp-Source: ABdhPJyyATbltkiRInaszXFhi6tfmEasdHLKV+OMPMQ0rqqSD4GjJ3HZPfOe27ft9wDuT8FYyHr8ow==
-X-Received: by 2002:a17:90b:4cc6:b0:1bc:210d:b6fa with SMTP id nd6-20020a17090b4cc600b001bc210db6famr6416375pjb.104.1645571727708;
-        Tue, 22 Feb 2022 15:15:27 -0800 (PST)
-Received: from localhost ([12.3.194.138])
-        by smtp.gmail.com with ESMTPSA id h21sm17640393pfo.12.2022.02.22.15.15.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Feb 2022 15:15:26 -0800 (PST)
-Date:   Tue, 22 Feb 2022 15:15:26 -0800 (PST)
-X-Google-Original-Date: Tue, 22 Feb 2022 15:14:36 PST (-0800)
-Subject:     Re: [PATCH v2 0/7] Module relocation fixes and asm/insn.h header
-In-Reply-To: <20220131182720.236065-1-kernel@esmil.dk>
-CC:     linux-riscv@lists.infradead.org, kernel@esmil.dk,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        aou@eecs.berkeley.edu, peterz@infradead.org, jpoimboe@redhat.com,
-        jbaron@akamai.com, rostedt@goodmis.org, ardb@kernel.org,
-        alex@ghiti.fr, jszhang@kernel.org, linux-kernel@vger.kernel.org
-From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     kernel@esmil.dk
-Message-ID: <mhng-8e6926b7-c690-4398-a70a-072b11d7e6fa@palmer-ri-x1c9>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=KzvH9ZQaXdUgSyIdwCtFzNEtbBoZxdQVld6HVvqC3h0=;
+        b=Hb2d3BKrnh+k0LyynM3KOWiO6MZACbFGdo54Pcyy3ZcYiyUup4ZNJv7rt8G+JY9MD3
+         z1tv4VShGYCCGGsgv4onuZF5UAGKvoWSI1MEVU84+KAI2QmnZIJlgY1zL40+HCpS9MBd
+         VEyiMIVjJwVA8AeTKSp8J2BSQ/GPuT2+/66n1yb7tbKCWDQEQsHrpoH8z3qeb7C4DEPP
+         lTkKLIkFDa1kL9keK3tibqu/OFdDyjtK2qf+xOb1mGk2b7h0cDaSVQupdTM1huguUb1s
+         J6KltsbGryP0jSDouv5+n+/D1vpP8AcE1kqP+9zxJIpD42QqA4dzv0Vq5//RqiNexnog
+         SJhg==
+X-Gm-Message-State: AOAM532TWom5Zd38bbreYYWsKTf6gbZ2mQO85vY1pphsSsuFBkrXspEX
+        RLQtLOIJz9yYXIxcEtEYM5jYcN1rmX+aOq/Eio+9
+X-Google-Smtp-Source: ABdhPJyC5JfFslCe0iSc7dk6uE4kYr0sXtIjOP3+4cJ8OXdGFLZZdB3wUVrWstGC2q8isedVNDR8Em5of/ldksyZE6c=
+X-Received: by 2002:a17:907:2a54:b0:6d5:879d:aca4 with SMTP id
+ fe20-20020a1709072a5400b006d5879daca4mr419389ejc.29.1645571804662; Tue, 22
+ Feb 2022 15:16:44 -0800 (PST)
+MIME-Version: 1.0
+References: <20220217142133.72205-1-cgzones@googlemail.com>
+ <20220217142133.72205-3-cgzones@googlemail.com> <CAHC9VhT77Ft4+5LmNP0dwtaeNzF+r0b=9M5vh7qA1poY9jesJA@mail.gmail.com>
+ <CAKwvOdkioR+7aebgzPu2Exe0oD9rwAeHK=CgM6vAkpBWdHnF2Q@mail.gmail.com>
+In-Reply-To: <CAKwvOdkioR+7aebgzPu2Exe0oD9rwAeHK=CgM6vAkpBWdHnF2Q@mail.gmail.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Tue, 22 Feb 2022 18:16:33 -0500
+Message-ID: <CAHC9VhSKZes9g_GHMKJdhd_BEt7GT4FKOLeMJ=o=FU8TtOZ-gg@mail.gmail.com>
+Subject: Re: [PATCH 4/5] selinux: declare data arrays const
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     =?UTF-8?Q?Christian_G=C3=B6ttsche?= <cgzones@googlemail.com>,
+        selinux@vger.kernel.org,
+        Stephen Smalley <stephen.smalley.work@gmail.com>,
+        Eric Paris <eparis@parisplace.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Ondrej Mosnacek <omosnace@redhat.com>,
+        Jeremy Kerr <jk@codeconstruct.com.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
+        Yang Li <yang.lee@linux.alibaba.com>,
+        Austin Kim <austin.kim@lge.com>, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,53 +78,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 31 Jan 2022 10:27:13 PST (-0800), kernel@esmil.dk wrote:
-> Apologies! I messed up v1. Please consider this patch set only.
+On Fri, Feb 18, 2022 at 12:24 PM Nick Desaulniers
+<ndesaulniers@google.com> wrote:
+> On Fri, Feb 18, 2022 at 8:13 AM Paul Moore <paul@paul-moore.com> wrote:
+> > On Thu, Feb 17, 2022 at 9:21 AM Christian G=C3=B6ttsche
+> > <cgzones@googlemail.com> wrote:
+> > >
+> > > diff --git a/security/selinux/include/initial_sid_to_string.h b/secur=
+ity/selinux/include/initial_sid_to_string.h
+> > > index 5d332aeb8b6c..915283cd89bd 100644
+> > > --- a/security/selinux/include/initial_sid_to_string.h
+> > > +++ b/security/selinux/include/initial_sid_to_string.h
+> > > @@ -1,5 +1,12 @@
+> > >  /* SPDX-License-Identifier: GPL-2.0 */
+> > > -static const char *initial_sid_to_string[] =3D
+> > > +
+> > > +#ifdef __SELINUX_GENHEADERS__
+> > > +# define const_qual
+> > > +#else
+> > > +# define const_qual const
+> > > +#endif
+> > > +
+> > > +static const char *const_qual initial_sid_to_string[] =3D
+> > >  {
+> > >         NULL,
+> > >         "kernel",
+> >
+> > Thanks for this Christian.  I generally like when we can const'ify
+> > things like this, but I'm not excited about the const_qual hack on
+> > core SELinux kernel code to satisfy genheaders.c.  I understand why it
+> > is needed, but I would rather clutter the genheaders.c code than the
+> > core SELinux kernel code.  If we can't cast away the const'ification
+> > in genheaders.c could we simply allocate duplicate arrays in
+> > genheaders.c and store the transformed strings into the new arrays?
 >
-> The first patch removes a bunch of code from the asm/module.h which is
-> included in almost all drivers through linux/module.h. Next are two
-> patches to fix unaligned access when doing module relocations and do
-> proper range checks for auipc+jalr offsets.
->
-> I'm a little less confident about the following patches, so consider
-> this more of an RFC for those. The idea is to consolidate the RISC-V
-> instruction generation and manipulation similar to arm64's asm/insn.h
-> header.
->
-> /Emil
->
-> Emil Renner Berthing (7):
->   riscv: Remove unneeded definitions from asm/module.h
->   riscv: Avoid unaligned access when relocating modules
->   riscv: Fix auipc+jalr relocation range checks
->   riscv: Add asm/insn.h header
->   riscv: Use asm/insn.h for module relocations
->   riscv: Use asm/insn.h to generate plt entries
->   riscv: Use asm/insn.h for jump labels
->
->  arch/riscv/include/asm/insn.h       | 121 ++++++++++++++
->  arch/riscv/include/asm/module.h     |  87 ----------
->  arch/riscv/kernel/jump_label.c      |  12 +-
->  arch/riscv/kernel/module-sections.c |  71 +++++++++
->  arch/riscv/kernel/module.c          | 237 +++++++++++++---------------
->  5 files changed, 306 insertions(+), 222 deletions(-)
->  create mode 100644 arch/riscv/include/asm/insn.h
+> Note: casting off const is UB. I've had to fix multiple bugs where
+> clang will drop writes to variables declared const but had const'ness
+> casted away.
 
-These generally look good to me, though there's a lot of bit-field 
-twiddling so I'll take another look before merging it.  There's a 
-handful of minor issues:
+Then let's just memcpy the array in genheaders.c.  I'm okay with
+genheaders being a little ugly if it helps keep the core code cleaner.
 
-* There's a fix in here, mixed into the cleanups.  It's generally best 
-  to split those out.
-* There's another copy of the insn patterns in our BPF JIT, it'd be nice 
-  to clean that up too.  That can be a follow-on, though.
-* It's 2022, but there's some 2020 copyrights.  If this really is old 
-  stuff that's OK, I just wanted to check.
-
-I'm usually OK just re-ordering patches myself, but I figured I'd have 
-to ask about the copyright dates anyway.  LMK if you want to send a v2 
-with the fix pulled to the front, and what you want me to do about the 
-copyright dates (if you're going to send a v2 then just fix them, but if 
-you're not then just telling me is OK).
-
-Thanks!
+--=20
+paul-moore.com

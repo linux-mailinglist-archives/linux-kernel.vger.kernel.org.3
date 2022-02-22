@@ -2,137 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACDF44BF3C8
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 09:37:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C95CD4BF3CF
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 09:39:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229742AbiBVIhk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 03:37:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47352 "EHLO
+        id S229890AbiBVIjO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 03:39:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229515AbiBVIhj (ORCPT
+        with ESMTP id S229503AbiBVIjL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 03:37:39 -0500
-Received: from mail.kapsi.fi (mail.kapsi.fi [IPv6:2001:67c:1be8::25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2483C8F61E;
-        Tue, 22 Feb 2022 00:37:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=kapsi.fi;
-         s=20161220; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=7Y5Q0bIv6KCJJMw/T06DdwsQiFx+TO703WYBc0RO2zg=; b=1BASgC2ZmAp7Yuf1iRh/CZrpM+
-        fUes0bn2kS7zkMDCz1SLhO7N2+FCpEpAiKn1Y3+EZMMlwpwQ7R7NKXAtcCaom+H6pkDtZWlW+wIx/
-        8hnwMmQ+V4dv//mER9Yle4tcbymSC3T5g6HMT7YDP0pzHTb1rEQsuTX0nosAUfeIn5lJe9hHKKvwP
-        gbcThs7e1pUbiiiK+Ye8R9KPzRr9nggO5p5zj1XuaZIiSuXK3c662c0q+M02SlRwvTranKvMD6sQg
-        4LKm0IlHl2rJElKURPmgu6a80acIsyj3EnNIVWxgkO1mETmOJBImYmwsQDTT6qReeeXHHXyYZegpV
-        81lXv4Pg==;
-Received: from 91-158-25-70.elisa-laajakaista.fi ([91.158.25.70] helo=[192.168.1.10])
-        by mail.kapsi.fi with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.89)
-        (envelope-from <cyndis@kapsi.fi>)
-        id 1nMQfS-00063Y-Iy; Tue, 22 Feb 2022 10:37:06 +0200
-Message-ID: <134c4a28-4331-deed-a374-75c9711168f0@kapsi.fi>
-Date:   Tue, 22 Feb 2022 10:37:05 +0200
+        Tue, 22 Feb 2022 03:39:11 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5BA539A9B0
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 00:38:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1645519125;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=6Tu9QL7WsIDCY+RdsCeRWYUzvZbj9M0i130tiIYSbeY=;
+        b=UiWo4H6sYNO/2FNhl57jdaniD6YyoOVepolESBY+hroReXQgUqW9M9p6ZklVbRNzFjjyp6
+        j6cM2EHzr/gnSFkdcBYe77n9HfF1UA+hSZadg3gIG4hDeSPi7nj4icYC+3hxocNaGkVj6b
+        YbBRBEzPfvyWXhAkN10KFmIDTzrUITg=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-279-ulJXWzjDPtC9xZLRWoOOig-1; Tue, 22 Feb 2022 03:38:44 -0500
+X-MC-Unique: ulJXWzjDPtC9xZLRWoOOig-1
+Received: by mail-wr1-f70.google.com with SMTP id g15-20020adfbc8f000000b001e9506e27ddso5587332wrh.22
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 00:38:44 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=6Tu9QL7WsIDCY+RdsCeRWYUzvZbj9M0i130tiIYSbeY=;
+        b=MoOMFfrl4o8S1kVhogV5IFdaE7q1pDj7Fhh0ncdbmHHcoJGUqenvuWALBuDTU0unt/
+         7FA8fHCYvCJCkevENBCsuEjIAde2oa06Li6YCy6RPM+lPXkDJlFp3BHB4mcl/MGRk3Ff
+         qws6TE5VIMzQpHvsZgy+Pap0FDNR4+qD12ye2WyD0hHsUw+wSWiFwqBFawABXI05Dhhs
+         FsRtanqd7/i/JgsjSrwK3myYnSeRMF8/Or9Ar9Lxidb8Tol4i31tybG6F/JWbUb6Wk6V
+         Zl/jiZKgiJ0fl3NHr/1umPMUEUXC8edZiK26xAN6cedJZhpYz4R3ZK4r7eICZ9FeLDe1
+         2+/g==
+X-Gm-Message-State: AOAM532Vxs2lZ13YJKvHo4OFjGIBSF86uKaN/Z8ty5/26+SiX1uHOpvv
+        3VD2PniT2qE7JDYnaDVASMOGjoKkuOBvwzKBoHV3CAgZrTmQhvkM1HECKhqhKmjMmO3szwEMWtk
+        Ap80t1i/YfX8PxVxhjUu+Nc+s
+X-Received: by 2002:a5d:55cd:0:b0:1e3:30ee:858 with SMTP id i13-20020a5d55cd000000b001e330ee0858mr18458334wrw.344.1645519121336;
+        Tue, 22 Feb 2022 00:38:41 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJz/mAZMdOCZ/IMsBJhsAEB0jkNUK7UB2S6eckGyYvOxdQbYedfTRllJRw+vuCBCiIytz3kuLA==
+X-Received: by 2002:a5d:55cd:0:b0:1e3:30ee:858 with SMTP id i13-20020a5d55cd000000b001e330ee0858mr18458314wrw.344.1645519121089;
+        Tue, 22 Feb 2022 00:38:41 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
+        by smtp.googlemail.com with ESMTPSA id u7sm41296850wrm.15.2022.02.22.00.38.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 22 Feb 2022 00:38:40 -0800 (PST)
+Message-ID: <6b5b8f01-6676-e7e4-d6d6-55c69f99a86d@redhat.com>
+Date:   Tue, 22 Feb 2022 09:38:38 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: [PATCH v3 9/9] drm/tegra: Support context isolation
+ Thunderbird/91.5.0
+Subject: Re: [RESEND PATCH] KVM: x86/mmu: make apf token non-zero to fix bug
 Content-Language: en-US
-To:     Dmitry Osipenko <digetx@gmail.com>,
-        Mikko Perttunen <mperttunen@nvidia.com>,
-        thierry.reding@gmail.com, jonathanh@nvidia.com, joro@8bytes.org,
-        will@kernel.org, robh+dt@kernel.org, robin.murphy@arm.com
-Cc:     linux-tegra@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-References: <20220218113952.3077606-1-mperttunen@nvidia.com>
- <20220218113952.3077606-10-mperttunen@nvidia.com>
- <2b4dd244-f918-4d26-2322-00a0bb226ccf@gmail.com>
- <ea65fcd6-9451-7f5b-f4a9-57b8575f09ff@kapsi.fi>
- <bb533634-6cde-3835-db11-7b6191385294@gmail.com>
-From:   Mikko Perttunen <cyndis@kapsi.fi>
-In-Reply-To: <bb533634-6cde-3835-db11-7b6191385294@gmail.com>
+To:     Liang Zhang <zhangliang5@huawei.com>, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        x86@kernel.org
+Cc:     seanjc@google.com, vkuznets@redhat.com, wanpengli@tencent.com,
+        jmattson@google.com, joro@8bytes.org, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, wangzhigang17@huawei.com
+References: <20220222031239.1076682-1-zhangliang5@huawei.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <20220222031239.1076682-1-zhangliang5@huawei.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 91.158.25.70
-X-SA-Exim-Mail-From: cyndis@kapsi.fi
-X-SA-Exim-Scanned: No (on mail.kapsi.fi); SAEximRunCond expanded to false
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/21/22 22:02, Dmitry Osipenko wrote:
-> 21.02.2022 15:06, Mikko Perttunen пишет:
->> On 2/19/22 20:35, Dmitry Osipenko wrote:
->>> 18.02.2022 14:39, Mikko Perttunen пишет:
->>>> +    if (context->memory_context &&
->>>> context->client->ops->get_streamid_offset) {
->>>               ^^^
->>>> +        int offset =
->>>> context->client->ops->get_streamid_offset(context->client);
->>>> +
->>>> +        if (offset >= 0) {
->>>> +            job->context = context->memory_context;
->>>> +            job->engine_streamid_offset = offset;
->>>> +            host1x_context_get(job->context);
->>>> +        }
->>>
->>> You should bump refcount unconditionally or you'll get refcnt underflow
->>> on put, when offset < 0.
->>
->> This refcount is intended to be dropped from 'release_job', where it's
->> dropped if job->context is set, which it is from this path.
->>
->>>
->>>> +    }
->>>> +
->>>>        /*
->>>>         * job_data is now part of job reference counting, so don't
->>>> release
->>>>         * it from here.
->>>> diff --git a/drivers/gpu/drm/tegra/uapi.c b/drivers/gpu/drm/tegra/uapi.c
->>>> index 9ab9179d2026..be33da54d12c 100644
->>>> --- a/drivers/gpu/drm/tegra/uapi.c
->>>> +++ b/drivers/gpu/drm/tegra/uapi.c
->>>> @@ -33,6 +33,9 @@ static void tegra_drm_channel_context_close(struct
->>>> tegra_drm_context *context)
->>>>        struct tegra_drm_mapping *mapping;
->>>>        unsigned long id;
->>>>    +    if (context->memory_context)
->>>> +        host1x_context_put(context->memory_context);
->>>
->>> The "if (context->memory_context &&
->>> context->client->ops->get_streamid_offset)" above doesn't match the "if
->>> (context->memory_context)". You'll get refcount underflow.
->>
->> And this drop is for the refcount implicitly added when allocating the
->> memory context through host1x_context_alloc; so these two places should
->> be independent.
->>
->> Please elaborate if I missed something.
+On 2/22/22 04:12, Liang Zhang wrote:
+> In current async pagefault logic, when a page is ready, KVM relies on
+> kvm_arch_can_dequeue_async_page_present() to determine whether to deliver
+> a READY event to the Guest. This function test token value of struct
+> kvm_vcpu_pv_apf_data, which must be reset to zero by Guest kernel when a
+> READY event is finished by Guest. If value is zero meaning that a READY
+> event is done, so the KVM can deliver another.
+> But the kvm_arch_setup_async_pf() may produce a valid token with zero
+> value, which is confused with previous mention and may lead the loss of
+> this READY event.
 > 
-> You named context as memory_context and then have
-> context=context->memory_context. Please try to improve the variable
-> names, like drm_ctx->host1x_ctx for example.
+> This bug may cause task blocked forever in Guest:
+>   INFO: task stress:7532 blocked for more than 1254 seconds.
+>         Not tainted 5.10.0 #16
+>   "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+>   task:stress          state:D stack:    0 pid: 7532 ppid:  1409
+>   flags:0x00000080
+>   Call Trace:
+>    __schedule+0x1e7/0x650
+>    schedule+0x46/0xb0
+>    kvm_async_pf_task_wait_schedule+0xad/0xe0
+>    ? exit_to_user_mode_prepare+0x60/0x70
+>    __kvm_handle_async_pf+0x4f/0xb0
+>    ? asm_exc_page_fault+0x8/0x30
+>    exc_page_fault+0x6f/0x110
+>    ? asm_exc_page_fault+0x8/0x30
+>    asm_exc_page_fault+0x1e/0x30
+>   RIP: 0033:0x402d00
+>   RSP: 002b:00007ffd31912500 EFLAGS: 00010206
+>   RAX: 0000000000071000 RBX: ffffffffffffffff RCX: 00000000021a32b0
+>   RDX: 000000000007d011 RSI: 000000000007d000 RDI: 00000000021262b0
+>   RBP: 00000000021262b0 R08: 0000000000000003 R09: 0000000000000086
+>   R10: 00000000000000eb R11: 00007fefbdf2baa0 R12: 0000000000000000
+>   R13: 0000000000000002 R14: 000000000007d000 R15: 0000000000001000
 > 
-> I'm also not a big fan of the "if (ref) put(ref)" pattern. Won't be
-> better to move all the "if (!NULL)" checks inside of get()/put() and
-> make the invocations unconditional?
+> Signed-off-by: Liang Zhang <zhangliang5@huawei.com>
+> ---
+>   arch/x86/kvm/mmu/mmu.c | 13 ++++++++++++-
+>   1 file changed, 12 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> index 593093b52395..8e24f73bf60b 100644
+> --- a/arch/x86/kvm/mmu/mmu.c
+> +++ b/arch/x86/kvm/mmu/mmu.c
+> @@ -3889,12 +3889,23 @@ static void shadow_page_table_clear_flood(struct kvm_vcpu *vcpu, gva_t addr)
+>   	walk_shadow_page_lockless_end(vcpu);
+>   }
+>   
+> +static u32 alloc_apf_token(struct kvm_vcpu *vcpu)
+> +{
+> +	/* make sure the token value is not 0 */
+> +	u32 id = vcpu->arch.apf.id;
+> +
+> +	if (id << 12 == 0)
+> +		vcpu->arch.apf.id = 1;
+> +
+> +	return (vcpu->arch.apf.id++ << 12) | vcpu->vcpu_id;
+> +}
+> +
+>   static bool kvm_arch_setup_async_pf(struct kvm_vcpu *vcpu, gpa_t cr2_or_gpa,
+>   				    gfn_t gfn)
+>   {
+>   	struct kvm_arch_async_pf arch;
+>   
+> -	arch.token = (vcpu->arch.apf.id++ << 12) | vcpu->vcpu_id;
+> +	arch.token = alloc_apf_token(vcpu);
+>   	arch.gfn = gfn;
+>   	arch.direct_map = vcpu->arch.mmu->direct_map;
+>   	arch.cr3 = vcpu->arch.mmu->get_guest_pgd(vcpu);
 
-I agree that the naming here is confusing with different kinds of 
-contexts flying around, though I would prefer not to change the original 
-'struct tegra_drm_context *context' since it's used all around the code. 
-But I'll try to make it clearer.
+Queued, thanks.
 
-Regarding moving NULL checks inside get/put, I personally dislike that 
-pattern (also with e.g. kfree) since when reading the code, it makes it 
-more difficult to see that the pointer can be NULL.
+Paolo
 
-Mikko

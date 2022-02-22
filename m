@@ -2,116 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55B5A4BFF96
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 18:02:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FCDF4BFF9B
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 18:04:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233305AbiBVRCx convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 22 Feb 2022 12:02:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60678 "EHLO
+        id S234498AbiBVREe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 12:04:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232240AbiBVRCv (ORCPT
+        with ESMTP id S230527AbiBVREc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 12:02:51 -0500
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 866663C4AD
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 09:02:25 -0800 (PST)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-164-i5Yi4IRPO7OQJB0p3ITDCA-1; Tue, 22 Feb 2022 17:02:18 +0000
-X-MC-Unique: i5Yi4IRPO7OQJB0p3ITDCA-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.28; Tue, 22 Feb 2022 17:02:16 +0000
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.028; Tue, 22 Feb 2022 17:02:16 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Keith Busch' <kbusch@kernel.org>,
-        "linux-nvme@lists.infradead.org" <linux-nvme@lists.infradead.org>,
-        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-CC:     "axboe@kernel.dk" <axboe@kernel.dk>, "hch@lst.de" <hch@lst.de>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-        "colyli@suse.de" <colyli@suse.de>
-Subject: RE: [PATCHv3 10/10] x86/crypto: add pclmul acceleration for crc64
-Thread-Topic: [PATCHv3 10/10] x86/crypto: add pclmul acceleration for crc64
-Thread-Index: AQHYKAoDxC35E9Q8uUaW/UAMQuY/zKyfybxw
-Date:   Tue, 22 Feb 2022 17:02:16 +0000
-Message-ID: <a7e806ed3c074534a24b74f827bcc914@AcuMS.aculab.com>
-References: <20220222163144.1782447-1-kbusch@kernel.org>
- <20220222163144.1782447-11-kbusch@kernel.org>
-In-Reply-To: <20220222163144.1782447-11-kbusch@kernel.org>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Tue, 22 Feb 2022 12:04:32 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC98E527D9
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 09:04:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645549447; x=1677085447;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=sx7ZDd4yve8/hycQpnhPyjjsrJ5wn74yFs7QKPdiHTE=;
+  b=UhDZOj5wWvyqGgg9ZAExxY7cHygqDJn1JE9n33fGMY6R8WM0183LB4AD
+   Tvb7hEH4n2nK51rryqRJllJHY2b7S3wDlz9UuRZbYL5OnUSxi5ekD/mhR
+   +7U1sMQbxNMTy/TmhWshZEPGsbzqjxdN1Mk0/Snfp1KvkKlnm2l0aHwuB
+   8yqtSbhLnTAjCO0dta/FDOdRu5K4hUIDXYHarzqAUNPkDRCjnHG3mzpXO
+   5nsOFVKD8r68bUt5DrRpMq/J+vUEv9NJosqotCZVrzqpbjXSSHRVKTgtl
+   MwtDAxNjcvau7YgHCICdm/BgTM+CflaA5LwdBhz/ujDaLLquFWThfV/TJ
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10266"; a="314988916"
+X-IronPort-AV: E=Sophos;i="5.88,387,1635231600"; 
+   d="scan'208";a="314988916"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2022 09:03:48 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,387,1635231600"; 
+   d="scan'208";a="508063290"
+Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 22 Feb 2022 09:03:46 -0800
+Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nMYZm-0000Pp-6R; Tue, 22 Feb 2022 17:03:46 +0000
+Date:   Wed, 23 Feb 2022 01:03:08 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [peterz-queue:x86/wip.ibt 39/39]
+ arch/x86/crypto/chacha-x86_64.lto.o: warning: objtool:
+ chacha_2block_xor_avx512vl() falls through to next function
+ chacha_8block_xor_avx512vl()
+Message-ID: <202202230017.1CJQVqhv-lkp@intel.com>
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Keith Busch
-> Sent: 22 February 2022 16:32
-> 
-> The crc64 table lookup method is inefficient, using a significant number
-> of CPU cycles in the block stack per IO. If available on x86, use a
-> PCLMULQDQ implementation to accelerate the calculation.
-> 
-> The assembly from this patch was mostly generated by gcc from a C
-> program using library functions provided by x86 intrinsics, and measures
-> ~20x faster than the table lookup.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git x86/wip.ibt
+head:   1436dce5f32d577e8cef693e09f4bb1faa0e2692
+commit: 1436dce5f32d577e8cef693e09f4bb1faa0e2692 [39/39] x86/alternative: Use .ibt_endbr_sites to seal indirect calls
+config: x86_64-allmodconfig (https://download.01.org/0day-ci/archive/20220223/202202230017.1CJQVqhv-lkp@intel.com/config)
+compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
+reproduce (this is a W=1 build):
+        # https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git/commit/?id=1436dce5f32d577e8cef693e09f4bb1faa0e2692
+        git remote add peterz-queue https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git
+        git fetch --no-tags peterz-queue x86/wip.ibt
+        git checkout 1436dce5f32d577e8cef693e09f4bb1faa0e2692
+        # save the config file to linux build tree
+        mkdir build_dir
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/
 
-I think I'd like to see the C code and compiler options used to
-generate the assembler as comments in the committed source file.
-Either that or reasonable comments in the assembler.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-It is also quite a lot of code.
-What is the break-even length for 'cold cache' including the FPU saves.
+All warnings (new ones prefixed by >>):
 
-...
-> +.section	.rodata
-> +.align 32
-> +.type	shuffleMasks, @object
-> +.size	shuffleMasks, 32
-> +shuffleMasks:
-> +	.string	""
-> +	.ascii	"\001\002\003\004\005\006\007\b\t\n\013\f\r\016\017\217\216\215"
-> +	.ascii	"\214\213\212\211\210\207\206\205\204\203\202\201\200"
+>> arch/x86/crypto/chacha-x86_64.lto.o: warning: objtool: chacha_2block_xor_avx512vl() falls through to next function chacha_8block_xor_avx512vl()
+>> arch/x86/crypto/chacha-x86_64.lto.o: warning: objtool: chacha_4block_xor_avx512vl() falls through to next function chacha_8block_xor_avx512vl()
 
-That has to be the worst way to define 32 bytes.
-
-> +.section	.rodata.cst16,"aM",@progbits,16
-> +.align 16
-> +.LC0:
-> +	.quad	-1523270018343381984
-> +	.quad	2443614144669557164
-> +	.align 16
-> +.LC1:
-> +	.quad	2876949357237608311
-> +	.quad	3808117099328934763
-
-Not sure what those are, but I bet there are better ways to
-define/describe them.
-
-	David
-
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
-
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

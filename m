@@ -2,101 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D00F4BF216
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 07:28:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 89CDD4BF214
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 07:28:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230263AbiBVGZr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 01:25:47 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:52692 "EHLO
+        id S230270AbiBVG0B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 01:26:01 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:53044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230249AbiBVGZq (ORCPT
+        with ESMTP id S230266AbiBVGZ6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 01:25:46 -0500
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AF7EF41;
-        Mon, 21 Feb 2022 22:25:21 -0800 (PST)
-Received: by mail-pj1-x1034.google.com with SMTP id gf13-20020a17090ac7cd00b001bbfb9d760eso1404778pjb.2;
-        Mon, 21 Feb 2022 22:25:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=EXIviZBFa0roKyh42LUJ3zl7p19OISm2ntSverQdUJI=;
-        b=GWMk/2qo7wq8+StKOI9p6fdIRRP8rfFC/BKhB9jWPqXp8bR71jZlkdE2UzznR6rdQr
-         rRTxKrYaJ7MLoxCGZ3rcSYyG7uX0uhOY8e3PENuO8BogHYsPqX0/8f6JnbWB1T52RJwx
-         dg3AVowgFmD0dw4hZoRmuLrRBbgJFPQmkANatWBC8vgN2uDkIKutXWjxRKBMqrGDZa74
-         kIC4SiZxpWmvWEIHk0CG9IZvMDIycXwbgSWX27JGm1e9AJU7EBWZ6DQ7jkFz1ziQnlOo
-         QpiK16tvPte2Sd0svpxy6g4DoAF/TFLRqLUqm4zTjt/JyATaMFyRnQlV28imTNsoPyXl
-         2S/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=EXIviZBFa0roKyh42LUJ3zl7p19OISm2ntSverQdUJI=;
-        b=wORK75ARWOj956PK+y7UNFLEE7jrV4wHSAego1GBOsFXD/sgciL4lu0ED+qeK68p6X
-         //pfsahg0+wbmcNTATFNqIdqS9WcTVi/NAcjs7TQZ2nkHB7SAPiPlDzeAYgndcAVaXSY
-         9FFPv7KARoeMHz4TDzED4C+n3dINXiFLvHJRKIfcNi85v77fWhk0gCor3Wy9xUfrlf76
-         Nc+WPcC72khcB2pHcOOxhqnNgQD0xWequo7rNRLdtQpWUdmnRW51lvKhhToWwSosslKm
-         OupiHM4q1AEBhjc4f9LbQYS200GhQ2hcoNDd7fBTPCT48N5SmxSffltp6THsvSOiReg3
-         YvLA==
-X-Gm-Message-State: AOAM5303x2uId2hx6RPID9129kn394mAQi0lZjQwAxiouoKCbYzXiOjt
-        D0huV625Z3dyxSLQLDBR/mM=
-X-Google-Smtp-Source: ABdhPJwgJmJ7+1iUAqCpgtNcr5GpMo9SmxEMZp37UaoNOLP/zctOG14kOsrjhI5bk2SKGg293403uw==
-X-Received: by 2002:a17:902:b204:b0:14f:26a7:9f61 with SMTP id t4-20020a170902b20400b0014f26a79f61mr21997285plr.97.1645511120964;
-        Mon, 21 Feb 2022 22:25:20 -0800 (PST)
-Received: from localhost.localdomain ([103.7.29.32])
-        by smtp.gmail.com with ESMTPSA id l17sm15389954pfu.61.2022.02.21.22.25.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Feb 2022 22:25:20 -0800 (PST)
-From:   Like Xu <like.xu.linux@gmail.com>
-X-Google-Original-From: Like Xu <likexu@tencent.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Jim Mattson <jmattson@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Like Xu <likexu@tencent.com>
-Subject: [PATCH] KVM: x86: Fix function address when kvm_x86_ops.func is NULL
-Date:   Tue, 22 Feb 2022 14:25:10 +0800
-Message-Id: <20220222062510.48592-1-likexu@tencent.com>
-X-Mailer: git-send-email 2.35.0
+        Tue, 22 Feb 2022 01:25:58 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70094A88B2;
+        Mon, 21 Feb 2022 22:25:33 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id F0810210EA;
+        Tue, 22 Feb 2022 06:25:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1645511131;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=8mXNy2ZGAp2Ja9zmX6N0w6VpJEeypsh21PHsFDq/2cc=;
+        b=ssuwdb1H2avFzcR6LMCzyTNONGwI0kQ+vt7rqYsJO8M5OZckoUOvud5bKMbfk7ny208ts8
+        wbAKOjjtqnNEt7vHck3I8mijUwWKbCp0HPVc4SWgATenH7TULl3ErQE/2NY2QRAwzf45q5
+        gADKzcoSTIzNH/yHnOK9Ysbq7wvDoAE=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1645511131;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=8mXNy2ZGAp2Ja9zmX6N0w6VpJEeypsh21PHsFDq/2cc=;
+        b=x2vwuREL2In82KRro5cL0mTcky8hUIwOhulSSEA3+bWWBfbKF1hLXVl2MdAF9WNSHn1b9w
+        9h4RoiqcBOIYekDw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B87DF13BB5;
+        Tue, 22 Feb 2022 06:25:31 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id kNqaK9uBFGIYEQAAMHmgww
+        (envelope-from <pvorel@suse.cz>); Tue, 22 Feb 2022 06:25:31 +0000
+Date:   Tue, 22 Feb 2022 07:25:30 +0100
+From:   Petr Vorel <pvorel@suse.cz>
+To:     Mimi Zohar <zohar@linux.ibm.com>
+Cc:     Paul Menzel <pmenzel@molgen.mpg.de>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        linux-integrity@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: init_ima() adds 8 % to boot time
+Message-ID: <YhSB2vwzjZ555lco@pevik>
+Reply-To: Petr Vorel <pvorel@suse.cz>
+References: <32f90c33-eeb9-64a0-b2e2-9258ba2e1820@molgen.mpg.de>
+ <7d84425f36e3b04ab1adabed23f98b478b53b770.camel@linux.ibm.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <7d84425f36e3b04ab1adabed23f98b478b53b770.camel@linux.ibm.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Like Xu <likexu@tencent.com>
+Hi Mimi,
 
-Fix the function address for __static_call_return0() which is used by
-static_call_update() when a func in struct kvm_x86_ops is NULL.
+> [Cc'ing Jarkko, Petr Vorel]
+Thanks!
 
-Fixes: 5be2226f417d ("KVM: x86: allow defining return-0 static calls")
-Signed-off-by: Like Xu <likexu@tencent.com>
----
- arch/x86/include/asm/kvm_host.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> Hi Paul,
 
-diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-index 713e08f62385..312f5ee19514 100644
---- a/arch/x86/include/asm/kvm_host.h
-+++ b/arch/x86/include/asm/kvm_host.h
-@@ -1548,7 +1548,7 @@ static inline void kvm_ops_static_call_update(void)
- #define KVM_X86_OP_OPTIONAL __KVM_X86_OP
- #define KVM_X86_OP_OPTIONAL_RET0(func) \
- 	static_call_update(kvm_x86_##func, kvm_x86_ops.func ? : \
--			   (void *) __static_call_return0);
-+			   (void *)&__static_call_return0);
- #include <asm/kvm-x86-ops.h>
- #undef __KVM_X86_OP
- }
--- 
-2.35.0
+> On Sat, 2022-02-19 at 10:44 +0100, Paul Menzel wrote:
+> > Dear Linux folks,
+
+
+> > Debian builds its Linux kernel image with `CONFIG_IMA=y` since version 
+> > 5.13.9 [1]. Unfortunately, on the Dell Latitude E7250 `init_ima` takes 
+> > around 33 ms, adding 8 % to the boot time up to loading the initrd.
+
+> >      [    0.000000] Linux version 5.17.0-rc4-amd64 
+> > (debian-kernel@lists.debian.org) (gcc-11 (Debian 11.2.0-16) 11.2.0, GNU 
+> > ld (GNU Binutils for Debian) 2.38) #1 SMP PREEMPT Debian 5.17~rc4-1~exp1 
+> > (2022-02-18)
+> >      […]
+> >      [    0.238520] calling  init_tis+0x0/0xde @ 1
+> >      [    0.254749] tpm_tis 00:08: 1.2 TPM (device-id 0x3205, rev-id 80)
+> >      [    0.285665] initcall init_tis+0x0/0xde returned 0 after 46038 usecs
+> >      […]
+> >      [    0.301327] calling  init_ima+0x0/0xb5 @ 1
+> >      [    0.301332] ima: Allocated hash algorithm: sha256
+> >      [    0.335502] ima: No architecture policies found
+> >      [    0.335520] initcall init_ima+0x0/0xb5 returned 0 after 33389 usecs
+> >      […]
+> >      [    0.447312] Run /init as init process
+
+> > Tracing `init_ima` with a depth of 5 shows 
+> > `ima_calc_boot_aggregate_tfm()` takes 24 ms, and 
+> > `ima_add_template_entry()` takes 10 ms.
+
+> >          1.282630 |   1)   swapper-1    |               | 
+> > ima_add_boot_aggregate() {
+> >          1.282631 |   1)   swapper-1    |               | 
+> > ima_calc_boot_agg:0regate() {
+> >          1.282631 |   1)   swapper-1    |   0.153 us    | 
+> > ima_alloc_tfm();
+> >          1.282631 |   1)   swapper-1    | * 24404.59 us | 
+> > ima_calc_boot_aggregate_tfm();
+> >          1.307037 |   1)   swapper-1    |   0.482 us    | 
+> > ima_free_tfm.part.0();
+> >          1.307038 |   1)   swapper-1    | * 24407.06 us |        } /* 
+> > ima_calc_boot_aggregate */
+> >          1.307038 |   1)   swapper-1    |               | 
+> > ima_alloc_init_template() {
+> >          1.307038 |   1)   swapper-1    |   0.173 us    | 
+> > ima_template_desc_current();
+> >          1.307039 |   1)   swapper-1    |   0.836 us    | 
+> > __kmalloc();
+> >          1.307040 |   1)   swapper-1    |   0.580 us    | 
+> > __kmalloc();
+> >          1.307041 |   1)   swapper-1    |   1.555 us    | 
+> > ima_eventdigest_ng_init();
+> >          1.307043 |   1)   swapper-1    |   1.275 us    | 
+> > ima_eventname_ng_init();
+> >          1.307044 |   1)   swapper-1    |   0.256 us    | 
+> > ima_eventsig_init();
+> >          1.307045 |   1)   swapper-1    |   6.618 us    |        } /* 
+> > ima_alloc_init_template */
+> >          1.307045 |   1)   swapper-1    |               | 
+> > ima_store_template() {
+> >          1.307045 |   1)   swapper-1    |   5.049 us    | 
+> > ima_calc_field_array_hash();
+> >          1.307051 |   1)   swapper-1    | # 9316.953 us | 
+> > ima_add_template_entry();
+> >          1.316369 |   1)   swapper-1    | # 9323.728 us |        } /* 
+> > ima_store_template */
+> >          1.316369 |   1)   swapper-1    | * 33738.54 us |      } /* 
+> > ima_add_boot_aggregate */
+
+> > Tracing `ima_calc_boot_aggregate_tfm()` (attached) shows that the first 
+> > `tpm1_pcr_read()` takes 16 ms in `tpm_transmit()`. Is communicating with 
+> > the TPM supposed to be that slow?
+
+> > In the last years, Linux decreased it’s boot time a lot, so do you see a 
+> > way to move things out of the hot path and get `init_ima` well below 10 
+> > ms? (As systems get faster and faster, having systems with standard 
+> > distributions to be up below two seconds after pressing the power button 
+> > should be a reasonable goal (500 ms firmware (like coreboot) + 500 ms 
+> > Linux kernel + 1 s user space).
+
+
+> > [1]: 
+> > https://salsa.debian.org/kernel-team/linux/-/commit/6e679322d7d98d30b4a8a3d1b659c899a6e9d4df
+
+> Thank you including the initial and other TPM delays.  The main reason
+> for the "boot_aggregate" is to tie the pre-OS measurements to the post
+> OS measurement list.  Without the TPM based 'boot_aggregate', any IMA
+> measurement list could be used to verify a TPM quote.  The
+> 'boot_aggregate' is calculated, originally, based on PCRs 0 - 7 and
+> more recently may include PCRs 8 & 9 as well.  The 'boot_aggregate' is
+> the first record in the IMA measurement list and the first record after
+> a soft reboot (kexec).  It is the one and only IMA measurement record
+> not dependent on policy.
+
+> There are TPM 1.2 & 2.0 standards' requirements, but there are also
+> buggy TPMs which don't adhere to them to such an extent that IMA goes
+> into 'TPM-bypass' mode. Perhaps for those not interested in extending
+> the concepts of trusted boot to the running OS, defining a new boot
+> command line option to force IMA into this 'TPM-bypass' mode would be
+> an acceptable alternative to the delay.  The IMA measurement list would
+> still include a 'boot_aggregate' record, but one containing 0's.
+This sounds reasonable.
+
+Kind regards,
+Petr
+
+> thanks,
+
+> Mimi
 

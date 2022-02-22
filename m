@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9F4E4BFECE
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 17:33:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0126F4BFECF
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 17:33:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234204AbiBVQdw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 11:33:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40080 "EHLO
+        id S234102AbiBVQdz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 11:33:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234102AbiBVQcv (ORCPT
+        with ESMTP id S234108AbiBVQcw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 11:32:51 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 073DF78067;
+        Tue, 22 Feb 2022 11:32:52 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E92D9AA2FC;
         Tue, 22 Feb 2022 08:32:26 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9703A60AC7;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 85EF760A2B;
+        Tue, 22 Feb 2022 16:32:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 409E3C340F7;
         Tue, 22 Feb 2022 16:32:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 600CEC36AE3;
-        Tue, 22 Feb 2022 16:32:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645547545;
-        bh=+bksq82EWG4DPQF5He2+UK6Ijs21MOUIsumo6lMS0KI=;
+        s=k20201202; t=1645547546;
+        bh=K6Y7PoEX/ei0aWx5jBUIAMLJ24UZ5DFTNrAOH1STYEg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ljP7Ie4GrzIN0lIaBR5agO7/mXKRjOOc81879FpzME0Iy3hkiIkKFVjxoAhrVEPnh
-         q2sryIdUa4Nb6urdnYGaxi0VlRRKgiVh4HzZz4q6IkJrhiOYCHKIDOkSq3zHLzhjeP
-         YFGdSFgyZ9dtqWoKHNdGe6172focCHFu/HRLwEo3ajYAtVfAVaPhcH7CgAQBuULOGP
-         ND27abvdEzDQM+mpexPq20Gz53LR9hgU5QfDwbyzNlnds+8MKIlDfxJ1NbBNst1DkK
-         tWk2bH1s2ZLZbywtBmvJRPfxKtYWnBm/lMxg3pcQnGsqIAEemFvWG33mpxo9ItYlQr
-         dQ2WG4FIsxmKQ==
+        b=u9njbRhtam4tj7EVawuiEHrQK/nvvMc1jbYszicWb68JbDLKKiZBRuK69/HrTdhYc
+         h08qvcJoobCsKto8s1Y/9yUVkuqMZlqdE0u3qY31ALVTM1bWbKVS37YrfO7HFh36Ig
+         I+1nEV2P4pH7YWFwfmUWx5Qrks60mddWWGEwexufBzWoMapCpKLv4FiZrs+Qq/mgF3
+         dyQ01Ax3ziLdSxeKN7gv7YcPWYJbb8PSkTR/+DIUpYAMrhHHOgQAIRJDx0S841hSYh
+         iQ1l5MHVRFFZZRj2F9CBwEOSHIYIobaMC/1XjexedLGcnPPteETqHPX+L81vaQVOSI
+         JLrke3jmgBwCg==
 From:   Keith Busch <kbusch@kernel.org>
 To:     linux-nvme@lists.infradead.org, linux-block@vger.kernel.org,
         linux-crypto@vger.kernel.org, x86@kernel.org,
         linux-kernel@vger.kernel.org
 Cc:     axboe@kernel.dk, hch@lst.de, martin.petersen@oracle.com,
         colyli@suse.de, Keith Busch <kbusch@kernel.org>
-Subject: [PATCHv3 06/10] crypto: add rocksoft 64b crc framework
-Date:   Tue, 22 Feb 2022 08:31:40 -0800
-Message-Id: <20220222163144.1782447-7-kbusch@kernel.org>
+Subject: [PATCHv3 07/10] lib: add crc64 tests
+Date:   Tue, 22 Feb 2022 08:31:41 -0800
+Message-Id: <20220222163144.1782447-8-kbusch@kernel.org>
 X-Mailer: git-send-email 2.25.4
 In-Reply-To: <20220222163144.1782447-1-kbusch@kernel.org>
 References: <20220222163144.1782447-1-kbusch@kernel.org>
@@ -56,350 +56,185 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hardware specific features may be able to calculate a crc64, so provide
-a framework for drivers to register their implementation. If nothing is
-registered, fallback to the generic table lookup implementation. The
-implementation is modeled after the crct10dif equivalent.
+Provide a module to test the rocksoft crc64 calculations with well known
+inputs and exepected values. Check the generic table implementation and
+whatever module is registered from the crypto library, and compare their
+speeds.
 
 Signed-off-by: Keith Busch <kbusch@kernel.org>
 ---
- crypto/Kconfig                  |   9 +++
- crypto/Makefile                 |   1 +
- crypto/crc64_rocksoft_generic.c | 104 +++++++++++++++++++++++++
- include/linux/crc64.h           |   5 ++
- lib/Kconfig                     |   9 +++
- lib/Makefile                    |   1 +
- lib/crc64-rocksoft.c            | 129 ++++++++++++++++++++++++++++++++
- 7 files changed, 258 insertions(+)
- create mode 100644 crypto/crc64_rocksoft_generic.c
- create mode 100644 lib/crc64-rocksoft.c
+ lib/Kconfig.debug |   4 ++
+ lib/Makefile      |   1 +
+ lib/test_crc64.c  | 133 ++++++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 138 insertions(+)
+ create mode 100644 lib/test_crc64.c
 
-diff --git a/crypto/Kconfig b/crypto/Kconfig
-index 442765219c37..e343147b9f8f 100644
---- a/crypto/Kconfig
-+++ b/crypto/Kconfig
-@@ -735,6 +735,15 @@ config CRYPTO_CRCT10DIF_VPMSUM
- 	  multiply-sum (vpmsum) instructions, introduced in POWER8. Enable on
- 	  POWER8 and newer processors for improved performance.
+diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+index 14b89aa37c5c..149de11ae903 100644
+--- a/lib/Kconfig.debug
++++ b/lib/Kconfig.debug
+@@ -2214,6 +2214,10 @@ config TEST_UUID
+ config TEST_XARRAY
+ 	tristate "Test the XArray code at runtime"
  
-+config CRYPTO_CRC64_ROCKSOFT
-+	tristate "Rocksoft Model CRC64 algorithm"
++config TEST_CRC64
 +	depends on CRC64
-+	select CRYPTO_HASH
-+	help
-+	  Rocksoft Model CRC64 computation is being cast as a crypto
-+	  transform. This allows for faster crc64 transforms to be used
-+	  if they are available.
++	tristate "Test the crc64 code at runtime"
 +
- config CRYPTO_VPMSUM_TESTER
- 	tristate "Powerpc64 vpmsum hardware acceleration tester"
- 	depends on CRYPTO_CRCT10DIF_VPMSUM && CRYPTO_CRC32C_VPMSUM
-diff --git a/crypto/Makefile b/crypto/Makefile
-index d76bff8d0ffd..f754c4d17d6b 100644
---- a/crypto/Makefile
-+++ b/crypto/Makefile
-@@ -152,6 +152,7 @@ obj-$(CONFIG_CRYPTO_MICHAEL_MIC) += michael_mic.o
- obj-$(CONFIG_CRYPTO_CRC32C) += crc32c_generic.o
- obj-$(CONFIG_CRYPTO_CRC32) += crc32_generic.o
- obj-$(CONFIG_CRYPTO_CRCT10DIF) += crct10dif_common.o crct10dif_generic.o
-+obj-$(CONFIG_CRYPTO_CRC64_ROCKSOFT) += crc64_rocksoft_generic.o
- obj-$(CONFIG_CRYPTO_AUTHENC) += authenc.o authencesn.o
- obj-$(CONFIG_CRYPTO_LZO) += lzo.o lzo-rle.o
- obj-$(CONFIG_CRYPTO_LZ4) += lz4.o
-diff --git a/crypto/crc64_rocksoft_generic.c b/crypto/crc64_rocksoft_generic.c
-new file mode 100644
-index 000000000000..55bad1939614
---- /dev/null
-+++ b/crypto/crc64_rocksoft_generic.c
-@@ -0,0 +1,104 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Cryptographic API.
-+ *
-+ * Rocksoft^TM model CRC64 Crypto Transform
-+ */
-+
-+#include <linux/types.h>
-+#include <linux/module.h>
-+#include <linux/crc64.h>
-+#include <crypto/internal/hash.h>
-+#include <crypto/internal/simd.h>
-+#include <linux/init.h>
-+#include <linux/string.h>
-+#include <linux/kernel.h>
-+#include <asm/cpufeatures.h>
-+#include <asm/cpu_device_id.h>
-+#include <asm/simd.h>
-+
-+struct chksum_desc_ctx {
-+	u64 crc;
-+};
-+
-+static int chksum_init(struct shash_desc *desc)
-+{
-+	struct chksum_desc_ctx *ctx = shash_desc_ctx(desc);
-+
-+	ctx->crc = 0;
-+
-+	return 0;
-+}
-+
-+static int chksum_update(struct shash_desc *desc, const u8 *data,
-+			 unsigned int length)
-+{
-+	struct chksum_desc_ctx *ctx = shash_desc_ctx(desc);
-+
-+	ctx->crc = crc64_rocksoft_generic(ctx->crc, data, length);
-+	return 0;
-+}
-+
-+static int chksum_final(struct shash_desc *desc, u8 *out)
-+{
-+	struct chksum_desc_ctx *ctx = shash_desc_ctx(desc);
-+
-+	*(u64 *)out = ctx->crc;
-+	return 0;
-+}
-+
-+static int __chksum_finup(u64 crc, const u8 *data, unsigned int len, u8 *out)
-+{
-+	*(u64 *)out = crc64_rocksoft_generic(crc, data, len);
-+	return 0;
-+}
-+
-+static int chksum_finup(struct shash_desc *desc, const u8 *data,
-+			unsigned int len, u8 *out)
-+{
-+	struct chksum_desc_ctx *ctx = shash_desc_ctx(desc);
-+
-+	return __chksum_finup(ctx->crc, data, len, out);
-+}
-+
-+static int chksum_digest(struct shash_desc *desc, const u8 *data,
-+			 unsigned int length, u8 *out)
-+{
-+	return __chksum_finup(0, data, length, out);
-+}
-+
-+static struct shash_alg alg = {
-+	.digestsize	= 	8,
-+	.init		=	chksum_init,
-+	.update		=	chksum_update,
-+	.final		=	chksum_final,
-+	.finup		=	chksum_finup,
-+	.digest		=	chksum_digest,
-+	.descsize	=	sizeof(struct chksum_desc_ctx),
-+	.base		=	{
-+		.cra_name		=	CRC64_ROCKSOFT_STRING,
-+		.cra_driver_name	=	"crc64-rocksoft-generic",
-+		.cra_priority		=	200,
-+		.cra_blocksize		=	1,
-+		.cra_module		=	THIS_MODULE,
-+	}
-+};
-+
-+static int __init crc64_rocksoft_x86_mod_init(void)
-+{
-+	return crypto_register_shash(&alg);
-+}
-+
-+static void __exit crc64_rocksoft_x86_mod_fini(void)
-+{
-+	crypto_unregister_shash(&alg);
-+}
-+
-+module_init(crc64_rocksoft_x86_mod_init);
-+module_exit(crc64_rocksoft_x86_mod_fini);
-+
-+MODULE_AUTHOR("Keith Busch <kbusch@kernel.org>");
-+MODULE_DESCRIPTION("Rocksoft model CRC64 calculation.");
-+MODULE_LICENSE("GPL");
-+MODULE_ALIAS_CRYPTO("crc64-rocksoft");
-+MODULE_ALIAS_CRYPTO("crc64-rocksoft-generic");
-diff --git a/include/linux/crc64.h b/include/linux/crc64.h
-index 9480f38cc7cf..e044c60d1e61 100644
---- a/include/linux/crc64.h
-+++ b/include/linux/crc64.h
-@@ -7,7 +7,12 @@
+ config TEST_OVERFLOW
+ 	tristate "Test check_*_overflow() functions at runtime"
  
- #include <linux/types.h>
- 
-+#define CRC64_ROCKSOFT_STRING "crc64-rocksoft"
-+
- u64 __pure crc64_be(u64 crc, const void *p, size_t len);
- u64 __pure crc64_rocksoft_generic(u64 crc, const void *p, size_t len);
- 
-+u64 crc64_rocksoft(const unsigned char *buffer, size_t len);
-+u64 crc64_rocksoft_update(u64 crc, const unsigned char *buffer, size_t len);
-+
- #endif /* _LINUX_CRC64_H */
-diff --git a/lib/Kconfig b/lib/Kconfig
-index c80fde816a7e..d4a46d635cb1 100644
---- a/lib/Kconfig
-+++ b/lib/Kconfig
-@@ -146,6 +146,15 @@ config CRC_T10DIF
- 	  kernel tree needs to calculate CRC checks for use with the
- 	  SCSI data integrity subsystem.
- 
-+config CRC64_ROCKSOFT
-+	tristate "CRC calculation for the Rocksoft^TM model CRC64"
-+	select CRYPTO
-+	select CRYPTO_CRC64_ROCKSOFT
-+	help
-+	  This option is only needed if a module that's not in the
-+	  kernel tree needs to calculate CRC checks for use with the
-+	  rocksoft model parameters.
-+
- config CRC_ITU_T
- 	tristate "CRC ITU-T V.41 functions"
- 	help
 diff --git a/lib/Makefile b/lib/Makefile
-index 300f569c626b..130bed83cdf2 100644
+index 130bed83cdf2..0895a3fc3f5a 100644
 --- a/lib/Makefile
 +++ b/lib/Makefile
-@@ -177,6 +177,7 @@ obj-$(CONFIG_LIBCRC32C)	+= libcrc32c.o
- obj-$(CONFIG_CRC8)	+= crc8.o
- obj-$(CONFIG_XXHASH)	+= xxhash.o
- obj-$(CONFIG_GENERIC_ALLOCATOR) += genalloc.o
-+obj-$(CONFIG_CRC64_ROCKSOFT) += crc64-rocksoft.o
- 
- obj-$(CONFIG_842_COMPRESS) += 842/
- obj-$(CONFIG_842_DECOMPRESS) += 842/
-diff --git a/lib/crc64-rocksoft.c b/lib/crc64-rocksoft.c
+@@ -103,6 +103,7 @@ obj-$(CONFIG_TEST_HMM) += test_hmm.o
+ obj-$(CONFIG_TEST_FREE_PAGES) += test_free_pages.o
+ obj-$(CONFIG_KPROBES_SANITY_TEST) += test_kprobes.o
+ obj-$(CONFIG_TEST_REF_TRACKER) += test_ref_tracker.o
++obj-$(CONFIG_TEST_CRC64) += test_crc64.o
+ #
+ # CFLAGS for compiling floating point code inside the kernel. x86/Makefile turns
+ # off the generation of FPU/SSE* instructions for kernel proper but FPU_FLAGS
+diff --git a/lib/test_crc64.c b/lib/test_crc64.c
 new file mode 100644
-index 000000000000..49d7418ea827
+index 000000000000..281aacd20f0a
 --- /dev/null
-+++ b/lib/crc64-rocksoft.c
-@@ -0,0 +1,129 @@
-+// SPDX-License-Identifier: GPL-2.0-only
++++ b/lib/test_crc64.c
+@@ -0,0 +1,133 @@
++// SPDX-License-Identifier: GPL-2.0+
 +/*
-+ * Rocksoft^TM model CRC64 calculation
++ * Tests were selected from NVM Express NVM Command Set Specification 1.0a,
++ * section 5.2.1.3.5 "64b CRC Test Cases" available here:
++ *
++ *   https://nvmexpress.org/wp-content/uploads/NVMe-NVM-Command-Set-Specification-1.0a-2021.07.26-Ratified.pdf
++ *
++ * Copyright 2022 Keith Busch <kbusch@kernel.org>
 + */
 +
-+#include <linux/types.h>
-+#include <linux/module.h>
 +#include <linux/crc64.h>
-+#include <linux/err.h>
-+#include <linux/init.h>
-+#include <crypto/hash.h>
-+#include <crypto/algapi.h>
-+#include <linux/static_key.h>
-+#include <linux/notifier.h>
++#include <linux/module.h>
++#include <linux/vmalloc.h>
++#include <linux/random.h>
 +
-+static struct crypto_shash __rcu *crc64_rocksoft_tfm;
-+static DEFINE_STATIC_KEY_TRUE(crc64_rocksoft_fallback);
-+static DEFINE_MUTEX(crc64_rocksoft_mutex);
-+static struct work_struct crc64_rocksoft_rehash_work;
++static unsigned int tests_passed;
++static unsigned int tests_run;
 +
-+static int crc64_rocksoft_notify(struct notifier_block *self, unsigned long val, void *data)
++#define ALL_ZEROS 0x6482D367EB22B64EULL
++#define ALL_FFS 0xC0DDBA7302ECA3ACULL
++#define INC 0x3E729F5F6750449CULL
++#define DEC 0x9A2DF64B8E9E517EULL
++
++static u8 buffer[4096];
++
++#define CRC_CHECK(c, v) do {					\
++	tests_run++;						\
++	if (c != v)						\
++		printk("BUG at %s:%d expected:%llx got:%llx\n", \
++			__func__, __LINE__, v, c);		\
++	else							\
++		tests_passed++;					\
++} while (0)
++
++static void randomize(u64 *b, int size)
 +{
-+	struct crypto_alg *alg = data;
++	int i;
 +
-+	if (val != CRYPTO_MSG_ALG_LOADED ||
-+	    strcmp(alg->cra_name, CRC64_ROCKSOFT_STRING))
-+		return NOTIFY_DONE;
-+
-+	schedule_work(&crc64_rocksoft_rehash_work);
-+	return NOTIFY_OK;
++	for (i = 0; i < size / 8; i++)
++		b[i] = get_random_u64();
 +}
 +
-+static void crc64_rocksoft_rehash(struct work_struct *work)
++static void crc_speed_tests(void)
 +{
-+	struct crypto_shash *new, *old;
++	unsigned long size = 1 << 20;
++	unsigned test_size;
++	void *b;
 +
-+	mutex_lock(&crc64_rocksoft_mutex);
-+	old = rcu_dereference_protected(crc64_rocksoft_tfm,
-+					lockdep_is_held(&crc64_rocksoft_mutex));
-+	new = crypto_alloc_shash(CRC64_ROCKSOFT_STRING, 0, 0);
-+	if (IS_ERR(new)) {
-+		mutex_unlock(&crc64_rocksoft_mutex);
++	b = vmalloc(size);
++	if (!b)
 +		return;
++
++	test_size = 512;
++	while (test_size <= size) {
++		ktime_t start_time, end_time;
++		u64 crc1, crc2;
++		s64 t1, t2;
++		int i;
++
++		randomize(b, test_size);
++		crc1 = crc2 = ~0ULL;
++
++		start_time = ktime_get();
++		for (i = 0; i < 1024; i++)
++			crc1 = crc64_rocksoft_generic(crc1, b, test_size);
++		end_time = ktime_get();
++		t1 = ktime_us_delta(end_time, start_time);
++
++		start_time = ktime_get();
++		for (i = 0; i < 1024; i++)
++			crc2 = crc64_rocksoft_update(crc2, b, test_size);
++		end_time = ktime_get();
++		t2 = ktime_us_delta(end_time, start_time);
++
++		printk("Size:%-7u Generic:%-7lld Library:%lld\n", test_size,
++			t1, t2);
++		CRC_CHECK(crc1, crc2);
++
++		test_size <<= 1;
 +	}
-+	rcu_assign_pointer(crc64_rocksoft_tfm, new);
-+	mutex_unlock(&crc64_rocksoft_mutex);
 +
-+	if (old) {
-+		synchronize_rcu();
-+		crypto_free_shash(old);
-+	} else {
-+		static_branch_disable(&crc64_rocksoft_fallback);
-+	}
++        vfree(b);
 +}
 +
-+static struct notifier_block crc64_rocksoft_nb = {
-+	.notifier_call = crc64_rocksoft_notify,
-+};
-+
-+u64 crc64_rocksoft_update(u64 crc, const unsigned char *buffer, size_t len)
++static int crc_tests(void)
 +{
-+	struct {
-+		struct shash_desc shash;
-+		u64 crc;
-+	} desc;
-+	int err;
++	__u64 crc;
++	int i;
 +
-+	if (static_branch_unlikely(&crc64_rocksoft_fallback))
-+		return crc64_rocksoft_generic(crc, buffer, len);
++	memset(buffer, 0, sizeof(buffer));
++	crc = crc64_rocksoft_generic(~0ULL, buffer, 4096);
++	CRC_CHECK(crc, ALL_ZEROS);
 +
-+	rcu_read_lock();
-+	desc.shash.tfm = rcu_dereference(crc64_rocksoft_tfm);
-+	desc.crc = crc;
-+	err = crypto_shash_update(&desc.shash, buffer, len);
-+	rcu_read_unlock();
++	crc = crc64_rocksoft(buffer, 4096);
++	CRC_CHECK(crc, ALL_ZEROS);
 +
-+	BUG_ON(err);
++	memset(buffer, 0xff, sizeof(buffer));
++	crc = crc64_rocksoft_generic(~0ULL, buffer, 4096);
++	CRC_CHECK(crc, ALL_FFS);
 +
-+	return desc.crc;
++	crc = crc64_rocksoft(buffer, 4096);
++	CRC_CHECK(crc, ALL_FFS);
++
++	for (i = 0; i < 4096; i++)
++		buffer[i] = i & 0xff;
++	crc = crc64_rocksoft_generic(~0ULL, buffer, 4096);
++	CRC_CHECK(crc, INC);
++
++	crc = crc64_rocksoft(buffer, 4096);
++	CRC_CHECK(crc, INC);
++
++	for (i = 0; i < 4096; i++)
++		buffer[i] = 0xff - (i & 0xff);
++	crc = crc64_rocksoft_generic(~0ULL, buffer, 4096);
++	CRC_CHECK(crc, DEC);
++
++	crc = crc64_rocksoft(buffer, 4096);
++	CRC_CHECK(crc, DEC);
++
++	crc_speed_tests();
++
++	printk("CRC64: %u of %u tests passed\n", tests_passed, tests_run);
++	return (tests_run == tests_passed) ? 0 : -EINVAL;
 +}
-+EXPORT_SYMBOL(crc64_rocksoft_update);
 +
-+u64 crc64_rocksoft(const unsigned char *buffer, size_t len)
++static void crc_exit(void)
 +{
-+	return crc64_rocksoft_update(~0ULL, buffer, len);
-+}
-+EXPORT_SYMBOL(crc64_rocksoft);
-+
-+static int __init crc64_rocksoft_mod_init(void)
-+{
-+	INIT_WORK(&crc64_rocksoft_rehash_work, crc64_rocksoft_rehash);
-+	crypto_register_notifier(&crc64_rocksoft_nb);
-+	crc64_rocksoft_rehash(&crc64_rocksoft_rehash_work);
-+	return 0;
 +}
 +
-+static void __exit crc64_rocksoft_mod_fini(void)
-+{
-+	crypto_unregister_notifier(&crc64_rocksoft_nb);
-+	cancel_work_sync(&crc64_rocksoft_rehash_work);
-+	crypto_free_shash(rcu_dereference_protected(crc64_rocksoft_tfm, 1));
-+}
-+
-+module_init(crc64_rocksoft_mod_init);
-+module_exit(crc64_rocksoft_mod_fini);
-+
-+static int crc64_rocksoft_transform_show(char *buffer, const struct kernel_param *kp)
-+{
-+	struct crypto_shash *tfm;
-+	int len;
-+
-+	if (static_branch_unlikely(&crc64_rocksoft_fallback))
-+		return sprintf(buffer, "fallback\n");
-+
-+	rcu_read_lock();
-+	tfm = rcu_dereference(crc64_rocksoft_tfm);
-+	len = snprintf(buffer, PAGE_SIZE, "%s\n",
-+		       crypto_shash_driver_name(tfm));
-+	rcu_read_unlock();
-+
-+	return len;
-+}
-+
-+module_param_call(transform, NULL, crc64_rocksoft_transform_show, NULL, 0444);
-+
++module_init(crc_tests);
++module_exit(crc_exit);
 +MODULE_AUTHOR("Keith Busch <kbusch@kernel.org>");
-+MODULE_DESCRIPTION("Rocksoft model CRC64 calculation (library API)");
 +MODULE_LICENSE("GPL");
-+MODULE_SOFTDEP("pre: crc64");
 -- 
 2.25.4
 

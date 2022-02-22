@@ -2,74 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE4444BF6A3
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 11:51:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CE1B4BF6A7
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 11:52:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229485AbiBVKu5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 05:50:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55738 "EHLO
+        id S231497AbiBVKwC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 05:52:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231533AbiBVKuz (ORCPT
+        with ESMTP id S230519AbiBVKwA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 05:50:55 -0500
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4925115C9F3
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 02:50:30 -0800 (PST)
-Received: by mail-pj1-x1035.google.com with SMTP id v4so18065989pjh.2
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 02:50:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=5xXqSAHagTJE559oaHlLg/c+Ad153OGfu++AbH4hfUg=;
-        b=OrsEBm7pYEKVo7jsPe5iEQgv05yoY6LM/3nzwZfwEc0v+O1p7b0nqzk1rpVF3+j3xe
-         jWqHh6tOYIuqpKa7TgO3hnCugDGGSAqLYOnoXMTemq4l6Y6vHSp5pVOWAGXWLBzO6EqA
-         mhvFHUJYwbvAuYmrLfBHDKdz66c/2vjQEWt35H01fAWsewYejDNjU7/gJUJ2OIKd/5CQ
-         KeYs81u+9yaLCon4PhyrQ+LpvXO4Fy54vfPvW2OZZYzOIRB/moqLPG2ssQR5vgXMP/Mp
-         0NDqIp/m5d26fo05wORFLxVQDJ5b6bKpPB9CIcusKEiGfiaiauIS1i2xyo9i2oEG/i7V
-         77Jg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=5xXqSAHagTJE559oaHlLg/c+Ad153OGfu++AbH4hfUg=;
-        b=Qx+gRNXNEzNATTByS9m6CWVYgLgiayYeT7eaLT6o1ghcyDd1Mu3rMWfSGS9DNz5Mse
-         OWcMOkRatNKO6hXIPluRf+0BU0X9sF3jvFl+qsaNPinJOgDHYF+HfoXzB0iwuIVKYdUN
-         bRm08fBlusvoWhNSbN7RD4KnrSRE0RJ4uX/Hs6yWCk90JDbm6nvljsRJm+4QnQ7pp4tt
-         rYBa8XQWaEBpwh7O2nEJMYRgKLmx7IC51GnUbHkm6pblEZ8vrre1sUPKpRAw5bGA2arC
-         PMqDLUOW4Ig4uHQ5NcRJ9uUO4e/rNO8KFicYbRCCAga8nDCgsJP72FnP5Z0YQSrg2w/N
-         7EGg==
-X-Gm-Message-State: AOAM532svDdg5ho4vtns8RvW8+kGNHAjqYKMYuW+6fYCCxgOZxT5Gjwv
-        X3Enh5rb62+wV2Bacs+v66e5
-X-Google-Smtp-Source: ABdhPJzZA3ZxDPNU12CTVzpzjl2/dqPRLeN5wlC8uzUVshTTZKvXpplM4yqxqutaEaPsHx19Mx065w==
-X-Received: by 2002:a17:90b:240e:b0:1b9:2963:d5a1 with SMTP id nr14-20020a17090b240e00b001b92963d5a1mr3495898pjb.227.1645527029752;
-        Tue, 22 Feb 2022 02:50:29 -0800 (PST)
-Received: from thinkpad ([117.217.186.202])
-        by smtp.gmail.com with ESMTPSA id c1sm8539189pfl.130.2022.02.22.02.50.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Feb 2022 02:50:29 -0800 (PST)
-Date:   Tue, 22 Feb 2022 16:20:23 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Alex Elder <elder@linaro.org>
-Cc:     mhi@lists.linux.dev, quic_hemantk@quicinc.com,
-        quic_bbhatt@quicinc.com, quic_jhugo@quicinc.com,
-        vinod.koul@linaro.org, bjorn.andersson@linaro.org,
-        dmitry.baryshkov@linaro.org, quic_vbadigan@quicinc.com,
-        quic_cang@quicinc.com, quic_skananth@quicinc.com,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 22/25] bus: mhi: ep: Add support for processing
- transfer ring
-Message-ID: <20220222105023.GG5029@thinkpad>
-References: <20220212182117.49438-1-manivannan.sadhasivam@linaro.org>
- <20220212182117.49438-23-manivannan.sadhasivam@linaro.org>
- <f91de912-977b-4e78-2e8c-12f4c09134bd@linaro.org>
+        Tue, 22 Feb 2022 05:52:00 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8EC49ADAB;
+        Tue, 22 Feb 2022 02:51:34 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4246BB8196F;
+        Tue, 22 Feb 2022 10:51:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E4DBC340E8;
+        Tue, 22 Feb 2022 10:51:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645527091;
+        bh=fvuaMqV3d9mDWZIn0oy48dn/LDKGxkmDPSOkXGC4qPw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=HaK2U600cZKYfQ3Qq9jdSg4iVLLpfRPAVLs6i+mjLGqCkWoTOjMglUl+N4Pqeunav
+         zxUYtVizbbV4rbMiLFc9Gk46HZ0cDuRSPm23GmA2G91i9T4YR6W9WyQsUV6nS3av15
+         umkEJsGr2PiTFDjp9h6veSbHVzKt7tMayovxD3ADGMnRW5ShbCs6eKbFsp1RFAdFoK
+         YebBN5/S+w8aYuiwsrHJ9k9cmJch0BoCvU3S7NHLBK+gewSE6ESon4KSqycoAr65Ll
+         JbFgbUGTUxZqFxGidD1IMLJ39/LeWc+JAaDXHDZXNkYsTwUJZo3C/FT34Y1NHIJTrD
+         qhuGZDzc6/gpg==
+Received: by pali.im (Postfix)
+        id 4424AFDB; Tue, 22 Feb 2022 11:51:29 +0100 (CET)
+Date:   Tue, 22 Feb 2022 11:51:29 +0100
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+Cc:     robh+dt@kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>,
+        Russell King <rmk+kernel@armlinux.org.uk>,
+        Marc Zyngier <maz@kernel.org>, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v2 10/11] PCI: mvebu: Implement support for legacy INTx
+ interrupts
+Message-ID: <20220222105129.jg5kwmhvhggsv72n@pali>
+References: <20220105150239.9628-1-pali@kernel.org>
+ <20220112151814.24361-1-pali@kernel.org>
+ <20220112151814.24361-11-pali@kernel.org>
+ <20220211171917.GA740@lpieralisi>
+ <20220211175202.gku5pkwn5wmjo5al@pali>
+ <20220216234039.stxv5ndd6ai23sbb@pali>
+ <20220222102057.GA17238@lpieralisi>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <f91de912-977b-4e78-2e8c-12f4c09134bd@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220222102057.GA17238@lpieralisi>
+User-Agent: NeoMutt/20180716
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,113 +70,142 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 15, 2022 at 04:40:18PM -0600, Alex Elder wrote:
-> On 2/12/22 12:21 PM, Manivannan Sadhasivam wrote:
-> > Add support for processing the transfer ring from host. For the transfer
-> > ring associated with DL channel, the xfer callback will simply invoked.
-> > For the case of UL channel, the ring elements will be read in a buffer
-> > till the write pointer and later passed to the client driver using the
-> > xfer callback.
+On Tuesday 22 February 2022 10:21:06 Lorenzo Pieralisi wrote:
+> On Thu, Feb 17, 2022 at 12:40:39AM +0100, Pali Rohár wrote:
+> > On Friday 11 February 2022 18:52:02 Pali Rohár wrote:
+> > > On Friday 11 February 2022 17:19:17 Lorenzo Pieralisi wrote:
+> > > > On Wed, Jan 12, 2022 at 04:18:13PM +0100, Pali Rohár wrote:
+> > > > > This adds support for legacy INTx interrupts received from other PCIe
+> > > > > devices and which are reported by a new INTx irq chip.
+> > > > > 
+> > > > > With this change, kernel can distinguish between INTA, INTB, INTC and INTD
+> > > > > interrupts.
+> > > > > 
+> > > > > Note that for this support, device tree files has to be properly adjusted
+> > > > > to provide "interrupts" or "interrupts-extended" property with intx
+> > > > > interrupt source, "interrupt-names" property with "intx" string and also
+> > > > > 'interrupt-controller' subnode must be defined.
+> > > > > 
+> > > > > If device tree files do not provide these nodes then driver would work as
+> > > > > before.
+> > > > 
+> > > > Nit: this information is not useful. DT rules are written in DT
+> > > > bindings, not in kernel commit logs. All I am saying is that firmware
+> > > > developers should not have to read this log to write firmware.
+> > > 
+> > > It was not intended for firmware developers, but for reviewers of this
+> > > patch to understand, what is happening in code and that with old DT
+> > > files this patch does not change driver behavior (= work as before).
+> > > 
+> > > > > Signed-off-by: Pali Rohár <pali@kernel.org>
+> > > > > ---
+> > > > >  drivers/pci/controller/pci-mvebu.c | 185 +++++++++++++++++++++++++++--
+> > > > >  1 file changed, 177 insertions(+), 8 deletions(-)
+> > > > > 
+> > > > > diff --git a/drivers/pci/controller/pci-mvebu.c b/drivers/pci/controller/pci-mvebu.c
+> > > > > index 1e90ab888075..dbb6ecb4cb70 100644
+> > > > > --- a/drivers/pci/controller/pci-mvebu.c
+> > > > > +++ b/drivers/pci/controller/pci-mvebu.c
+> > > > > @@ -54,9 +54,10 @@
+> > > > >  	 PCIE_CONF_ADDR_EN)
+> > > > >  #define PCIE_CONF_DATA_OFF	0x18fc
+> > > > >  #define PCIE_INT_CAUSE_OFF	0x1900
+> > > > > +#define PCIE_INT_UNMASK_OFF	0x1910
+> > > > 
+> > > > Nit: I understand it is tempting but here you are redefining or better
+> > > > giving a proper label to a register. Separate patch please.
+> > > 
+> > > Ok!
+> > > 
+> > > > > +#define  PCIE_INT_INTX(i)		BIT(24+i)
+> > > > >  #define  PCIE_INT_PM_PME		BIT(28)
+> > > > > -#define PCIE_MASK_OFF		0x1910
+> > > > 
+> > > > See above.
+> > > > 
+> > > > > -#define  PCIE_MASK_ENABLE_INTS          0x0f000000
+> > > > > +#define  PCIE_INT_ALL_MASK		GENMASK(31, 0)
+> > > > >  #define PCIE_CTRL_OFF		0x1a00
+> > > > >  #define  PCIE_CTRL_X1_MODE		0x0001
+> > > > >  #define  PCIE_CTRL_RC_MODE		BIT(1)
+> > > > > @@ -110,6 +111,9 @@ struct mvebu_pcie_port {
+> > > > >  	struct mvebu_pcie_window iowin;
+> > > > >  	u32 saved_pcie_stat;
+> > > > >  	struct resource regs;
+> > > > > +	struct irq_domain *intx_irq_domain;
+> > > > > +	raw_spinlock_t irq_lock;
+> > > > > +	int intx_irq;
+> > > > >  };
+> > > > >  
+> > > > >  static inline void mvebu_writel(struct mvebu_pcie_port *port, u32 val, u32 reg)
+> > > > > @@ -235,7 +239,7 @@ static void mvebu_pcie_setup_wins(struct mvebu_pcie_port *port)
+> > > > >  
+> > > > >  static void mvebu_pcie_setup_hw(struct mvebu_pcie_port *port)
+> > > > >  {
+> > > > > -	u32 ctrl, lnkcap, cmd, dev_rev, mask;
+> > > > > +	u32 ctrl, lnkcap, cmd, dev_rev, unmask;
+> > > > >  
+> > > > >  	/* Setup PCIe controller to Root Complex mode. */
+> > > > >  	ctrl = mvebu_readl(port, PCIE_CTRL_OFF);
+> > > > > @@ -288,10 +292,30 @@ static void mvebu_pcie_setup_hw(struct mvebu_pcie_port *port)
+> > > > >  	/* Point PCIe unit MBUS decode windows to DRAM space. */
+> > > > >  	mvebu_pcie_setup_wins(port);
+> > > > >  
+> > > > > -	/* Enable interrupt lines A-D. */
+> > > > > -	mask = mvebu_readl(port, PCIE_MASK_OFF);
+> > > > > -	mask |= PCIE_MASK_ENABLE_INTS;
+> > > > > -	mvebu_writel(port, mask, PCIE_MASK_OFF);
+> > > > > +	/* Mask all interrupt sources. */
+> > > > > +	mvebu_writel(port, ~PCIE_INT_ALL_MASK, PCIE_INT_UNMASK_OFF);
+> > > > > +
+> > > > > +	/* Clear all interrupt causes. */
+> > > > > +	mvebu_writel(port, ~PCIE_INT_ALL_MASK, PCIE_INT_CAUSE_OFF);
+> > > > > +
+> > > > > +	if (port->intx_irq <= 0) {
+> > > > > +		/*
+> > > > > +		 * When neither "summary" interrupt, nor "intx" interrupt was
+> > > > > +		 * specified in DT then unmask all legacy INTx interrupts as in
+> > > > > +		 * this case driver does not provide a way for masking and
+> > > > > +		 * unmasking of individual legacy INTx interrupts. In this case
+> > > > > +		 * all interrupts, including legacy INTx are reported via one
+> > > > > +		 * shared GIC source and therefore kernel cannot distinguish
+> > > > > +		 * which individual legacy INTx was triggered. These interrupts
+> > > > > +		 * are shared, so it should not cause any issue. Just
+> > > > > +		 * performance penalty as every PCIe interrupt handler needs to
+> > > > > +		 * be called when some interrupt is triggered.
+> > > > > +		 */
+> > > > 
+> > > > This comment applies to current mainline right (ie it describes how
+> > > > current mainline handles INTx) ? IMO you should split it out in a
+> > > > separate patch.
+> > > 
+> > > This above comment describe what happens in if-branch when intx_irq is
+> > > not set (as written in comment "when intx interrupt was not specified in
+> > > DT"). You are right that this is also the behavior in the current
+> > > mainline.
+> > > 
+> > > I'm not sure if this comment can be split out as support for "intx"
+> > > interrupt is in this patch.
+> > > 
+> > > > I understand it is hard but a patch is a logical _change_, this
+> > > > comment is a change per se, it is a clarification on current
+> > > > behaviour.
+> > > 
+> > > Ok, I could try to split this comment into two patches, but part about
+> > > if-branch comment needs to stay in "this" patch.
 > > 
-> > The client drivers should provide the callbacks for both UL and DL
-> > channels during registration.
-> 
-> I think you already checked and guaranteed that.
-> 
-> I have a question and suggestion below.  But it could
-> be considered an optimization that could be implemented
-> in the future, so:
-> 
-> Reviewed-by: Alex Elder <elder@linaro.org>
-> 
+> > I have done it locally.
 > > 
-> > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> > ---
-> >   drivers/bus/mhi/ep/main.c | 49 +++++++++++++++++++++++++++++++++++++++
-> >   1 file changed, 49 insertions(+)
-> > 
-> > diff --git a/drivers/bus/mhi/ep/main.c b/drivers/bus/mhi/ep/main.c
-> > index b937c6cda9ba..baf383a4857b 100644
-> > --- a/drivers/bus/mhi/ep/main.c
-> > +++ b/drivers/bus/mhi/ep/main.c
-> > @@ -439,6 +439,55 @@ static int mhi_ep_read_channel(struct mhi_ep_cntrl *mhi_cntrl,
-> >   	return 0;
-> >   }
-> > +int mhi_ep_process_tre_ring(struct mhi_ep_ring *ring, struct mhi_ep_ring_element *el)
-> > +{
-> > +	struct mhi_ep_cntrl *mhi_cntrl = ring->mhi_cntrl;
-> > +	struct mhi_result result = {};
-> > +	u32 len = MHI_EP_DEFAULT_MTU;
-> > +	struct mhi_ep_chan *mhi_chan;
-> > +	int ret;
-> > +
-> > +	mhi_chan = &mhi_cntrl->mhi_chan[ring->ch_id];
-> > +
-> > +	/*
-> > +	 * Bail out if transfer callback is not registered for the channel.
-> > +	 * This is most likely due to the client driver not loaded at this point.
-> > +	 */
-> > +	if (!mhi_chan->xfer_cb) {
-> > +		dev_err(&mhi_chan->mhi_dev->dev, "Client driver not available\n");
-> > +		return -ENODEV;
-> > +	}
-> > +
-> > +	if (ring->ch_id % 2) {
-> > +		/* DL channel */
-> > +		result.dir = mhi_chan->dir;
-> > +		mhi_chan->xfer_cb(mhi_chan->mhi_dev, &result);
-> > +	} else {
-> > +		/* UL channel */
-> > +		do {
-> > +			result.buf_addr = kzalloc(len, GFP_KERNEL);
+> > Let me know when I should resend this patch series and I will include
+> > into it also these changes.
 > 
-> So you allocate an 8KB buffer into which you copy
-> received data, then pass that to the ->xfer_cb()
-> function.  Then you free that buffer.  Repeatedly.
+> Hi,
 > 
-> Two questions about this:
-> - This suggests that after copying the data in, the
->   ->xfer_cb() function will copy it again, is that
->   correct?
-> - If that is correct, why not just reuse the same 8KB
->   buffer, allocated once outside the loop?
-> 
+> yes please resend it and I will merge it.
 
-The allocation was moved into the loop so that the TRE length buffer could be
-allocated but I somehow decided to allocate the Max length buffer. So this could
-be moved outside of the loop.
+Done!
+https://lore.kernel.org/linux-pci/20220222104625.28461-1-pali@kernel.org/T/#u
 
-Thanks,
-Mani
-
-> It might also be nice to consider whether you could
-> allocate the buffer here and have the ->xfer_cb()
-> function be responsible for freeing it (and ideally,
-> pass it along rather than copying it again).
 > 
-> > +			if (!result.buf_addr)
-> > +				return -ENOMEM;
-> > +
-> > +			ret = mhi_ep_read_channel(mhi_cntrl, ring, &result, len);
-> > +			if (ret < 0) {
-> > +				dev_err(&mhi_chan->mhi_dev->dev, "Failed to read channel\n");
-> > +				kfree(result.buf_addr);
-> > +				return ret;
-> > +			}
-> > +
-> > +			result.dir = mhi_chan->dir;
-> > +			mhi_chan->xfer_cb(mhi_chan->mhi_dev, &result);
-> > +			kfree(result.buf_addr);
-> > +			result.bytes_xferd = 0;
-> > +
-> > +			/* Read until the ring becomes empty */
-> > +		} while (!mhi_ep_queue_is_empty(mhi_chan->mhi_dev, DMA_TO_DEVICE));
-> > +	}
-> > +
-> > +	return 0;
-> > +}
-> > +
-> >   static int mhi_ep_cache_host_cfg(struct mhi_ep_cntrl *mhi_cntrl)
-> >   {
-> >   	struct device *dev = &mhi_cntrl->mhi_dev->dev;
-> 
+> Thanks,
+> Lorenzo

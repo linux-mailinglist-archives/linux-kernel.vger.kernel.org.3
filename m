@@ -2,183 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 801A94C02F0
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 21:20:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 569704C02FB
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 21:27:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235452AbiBVUU7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 15:20:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39750 "EHLO
+        id S235463AbiBVU1o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 15:27:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234016AbiBVUU6 (ORCPT
+        with ESMTP id S231694AbiBVU1l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 15:20:58 -0500
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6088012A76C
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 12:20:32 -0800 (PST)
-Received: by mail-wm1-x330.google.com with SMTP id y6-20020a7bc186000000b0037bdc5a531eso1606882wmi.0
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 12:20:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=wOey4rPC2TeiOe1tuJcJnl76pBFzOll2hU5Aq8ViVuo=;
-        b=Z0MMnMKZ8ChPYc9QvuVfaVyvcvMHdxyCx7Is/qVaUayOmS0S1TjILQ8IvSCnBsBDbx
-         Uu7SeMoZNephvMZZVlrLGOE8iXzf3Vs3JQqJexz+9cWxhY7I0l7BrQG6VNnjyy8YKiWI
-         sGq2n1zU0bXPpVmAHWQixJ5KWIOO9CsM2UenDDVcRVkkXLqBKeNkUon5zYp2N0B9kMpt
-         56uk2w5vx0mMlwrdlMeMmUcXIPz68sBx0I5mPa/5eEw2eHD3c9bse/ULzM0f51yFNly6
-         MDe+LiFQFyhnTBXWaXJ+B/XWFwARwHsJyF4r6J+zNz59UQPgHHKonmCN1x5eqfB1Urb/
-         RpEw==
+        Tue, 22 Feb 2022 15:27:41 -0500
+Received: from mail-ot1-f42.google.com (mail-ot1-f42.google.com [209.85.210.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E2949D051;
+        Tue, 22 Feb 2022 12:27:15 -0800 (PST)
+Received: by mail-ot1-f42.google.com with SMTP id j3-20020a9d7683000000b005aeed94f4e9so7087423otl.6;
+        Tue, 22 Feb 2022 12:27:15 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=wOey4rPC2TeiOe1tuJcJnl76pBFzOll2hU5Aq8ViVuo=;
-        b=0PmdpDBYiVp3rEOg6tRDm/iDD/Ao3HkQd981QIzY5cmOKbEYvuTc74vdQq9yb+xusD
-         K3VFRBGOEqXqSKRyd2TD53neDZIMEuMoN44x4SsEix1Ps4WH7t6RHLijp/3M00P9tX7n
-         4ssjslkFbQITSEUUMCWBGDV3NbJ7CkRpxpJTC4HdYQoZMj0H8aY62AGBKowbBwoAkC9B
-         MaTiNYyuUXK0QZ+yjaUO0ryEoQOmT+MhKneAXtTKlqBoHX10a3p8C8Ps5eYWZnlcq1Y+
-         cL//Cw13cPf6KpQ2GS3nWpTQcmhDcCac64nyObrebF5XCoMpLA196iVWW4zLjsGdPIoL
-         10/w==
-X-Gm-Message-State: AOAM533YnDHPyWZoQnxTHUV6VILHoscedZG7lkLJXD2y/PahXDgn7Z3r
-        9qOTMRi5ALaRXbaBzOBFQR55BCaJzpTjOJZsSOw++w==
-X-Google-Smtp-Source: ABdhPJwB6dHixzfnFB/aFW5sbmzpMc+ZugeT0IDT1VPile7+mVN6XZnPjFDa4fuF2gd1rm7gYsaquR4HrkRhYX6DvtY=
-X-Received: by 2002:a05:600c:4fc4:b0:37c:9116:ef3d with SMTP id
- o4-20020a05600c4fc400b0037c9116ef3dmr4551689wmq.167.1645561230799; Tue, 22
- Feb 2022 12:20:30 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=uPnUbQrAlFPwBsKQK/FHM3ApbVo/5s8mNMNmKnxO5co=;
+        b=pDTbECdoXBX2cqC8oVNUUqqjOGWAVH4pLzUAvipZ8k9W83WRIMED3yT9gtG3ht36NF
+         Ij3noHsARUbGZsyJrTjtfwiGnVogBse8aMrmyo1jdjgDjbKytslPxkn2D+QsravFzSzW
+         Q6aoZoCAEGsKmieO1JH4qkHCgmqHTaLtHiIS8HnuC6b5svbh9LjeC18DrL76j5CmCp/7
+         ShdDjSYXXi/go/eEG7DRl6mKF4o7by4d3VBfuuAnCYG0IaAL4xopX4TFFGReZpmDQmro
+         1WNwinmz33OOGRLZKNVwh1XG9Q3PdccrIxn4hbn9TVXFSFVY2KUlthccOdv1ho2Ed97o
+         XqNg==
+X-Gm-Message-State: AOAM532jSGXm5mc1hgsUgdI02zL8gfKKbzhQBJnG/qk3mBYg84VwgQCm
+        xCy47cePMP069yA8lPjc62Okc694SQ==
+X-Google-Smtp-Source: ABdhPJzu1Y7MfdsZBnFKD4tdGj0xn3CXifVlJN/265Lw6Z6FbCDdeAP5RHP7woKaVlQzblKUciWqww==
+X-Received: by 2002:a9d:5e92:0:b0:59e:28db:41cf with SMTP id f18-20020a9d5e92000000b0059e28db41cfmr9175612otl.366.1645561634834;
+        Tue, 22 Feb 2022 12:27:14 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id j2sm4716448ooi.39.2022.02.22.12.27.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Feb 2022 12:27:14 -0800 (PST)
+Received: (nullmailer pid 3527901 invoked by uid 1000);
+        Tue, 22 Feb 2022 20:27:13 -0000
+Date:   Tue, 22 Feb 2022 14:27:13 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Krishna Yarlagadda <kyarlagadda@nvidia.com>
+Cc:     broonie@kernel.org, thierry.reding@gmail.com, jonathanh@nvidia.com,
+        linux-spi@vger.kernel.org, linux-tegra@vger.kernel.org,
+        skomatineni@nvidia.com, ldewangan@nvidia.com,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        p.zabel@pengutronix.de
+Subject: Re: [PATCH v2 2/5] dt-bindings: spi: Tegra234 QUAD SPI compatible
+Message-ID: <YhVHIVJlCwhbVAH7@robh.at.kernel.org>
+References: <20220222175611.58051-1-kyarlagadda@nvidia.com>
+ <20220222175611.58051-3-kyarlagadda@nvidia.com>
 MIME-Version: 1.0
-References: <20220222165212.2005066-1-kaleshsingh@google.com>
- <20220222165212.2005066-6-kaleshsingh@google.com> <YhUsQZUqgb94EjmD@lakrids>
-In-Reply-To: <YhUsQZUqgb94EjmD@lakrids>
-From:   Kalesh Singh <kaleshsingh@google.com>
-Date:   Tue, 22 Feb 2022 12:20:19 -0800
-Message-ID: <CAC_TJvdo2UwrZwKGhZUTnCF--CNsKJFKe+tZOQWgs0=BhpBF0g@mail.gmail.com>
-Subject: Re: [PATCH v2 5/9] arm64: asm: Introduce test_sp_overflow macro
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Quentin Perret <qperret@google.com>,
-        Fuad Tabba <tabba@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        "Cc: Android Kernel" <kernel-team@android.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Joey Gouly <joey.gouly@arm.com>,
-        Peter Collingbourne <pcc@google.com>,
-        Andrew Scull <ascull@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        "moderated list:ARM64 PORT (AARCH64 ARCHITECTURE)" 
-        <linux-arm-kernel@lists.infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>, kvmarm@lists.cs.columbia.edu
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220222175611.58051-3-kyarlagadda@nvidia.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 22, 2022 at 10:32 AM Mark Rutland <mark.rutland@arm.com> wrote:
->
-> On Tue, Feb 22, 2022 at 08:51:06AM -0800, Kalesh Singh wrote:
-> > From: Quentin Perret <qperret@google.com>
-> >
-> > The asm entry code in the kernel uses a trick to check if VMAP'd stacks
-> > have overflowed by aligning them at THREAD_SHIFT * 2 granularity and
-> > checking the SP's THREAD_SHIFT bit.
-> >
-> > Protected KVM will soon make use of a similar trick to detect stack
-> > overflows, so factor out the asm code in a re-usable macro.
-> >
-> > Signed-off-by: Quentin Perret <qperret@google.com>
-> > [Kalesh - Resolve minor conflicts]
-> > Signed-off-by: Kalesh Singh <kaleshsingh@google.com>
-> > ---
-> >  arch/arm64/include/asm/assembler.h | 11 +++++++++++
-> >  arch/arm64/kernel/entry.S          |  7 +------
-> >  2 files changed, 12 insertions(+), 6 deletions(-)
-> >
-> > diff --git a/arch/arm64/include/asm/assembler.h b/arch/arm64/include/asm/assembler.h
-> > index e8bd0af0141c..ad40eb0eee83 100644
-> > --- a/arch/arm64/include/asm/assembler.h
-> > +++ b/arch/arm64/include/asm/assembler.h
-> > @@ -850,4 +850,15 @@ alternative_endif
-> >
-> >  #endif /* GNU_PROPERTY_AARCH64_FEATURE_1_DEFAULT */
-> >
-> > +/*
-> > + * Test whether the SP has overflowed, without corrupting a GPR.
-> > + */
-> > +.macro test_sp_overflow shift, label
-> > +     add     sp, sp, x0                      // sp' = sp + x0
-> > +     sub     x0, sp, x0                      // x0' = sp' - x0 = (sp + x0) - x0 = sp
-> > +     tbnz    x0, #\shift, \label
-> > +     sub     x0, sp, x0                      // x0'' = sp' - x0' = (sp + x0) - sp = x0
-> > +     sub     sp, sp, x0                      // sp'' = sp' - x0 = (sp + x0) - x0 = sp
-> > +.endm
->
-> I'm a little unhappy about factoring this out, since it's not really
-> self-contained and leaves sp and x0 partially-swapped when it branches
-> to the label. You can't really make that clear with comments on the
-> macro, and you need comments at each use-sire, so I'd ratehr we just
-> open-coded a copy of this.
->
-> > +
-> >  #endif       /* __ASM_ASSEMBLER_H */
-> > diff --git a/arch/arm64/kernel/entry.S b/arch/arm64/kernel/entry.S
-> > index 772ec2ecf488..ce99ee30c77e 100644
-> > --- a/arch/arm64/kernel/entry.S
-> > +++ b/arch/arm64/kernel/entry.S
-> > @@ -53,15 +53,10 @@ alternative_else_nop_endif
-> >       sub     sp, sp, #PT_REGS_SIZE
-> >  #ifdef CONFIG_VMAP_STACK
-> >       /*
-> > -      * Test whether the SP has overflowed, without corrupting a GPR.
-> >        * Task and IRQ stacks are aligned so that SP & (1 << THREAD_SHIFT)
-> >        * should always be zero.
-> >        */
-> > -     add     sp, sp, x0                      // sp' = sp + x0
-> > -     sub     x0, sp, x0                      // x0' = sp' - x0 = (sp + x0) - x0 = sp
-> > -     tbnz    x0, #THREAD_SHIFT, 0f
-> > -     sub     x0, sp, x0                      // x0'' = sp' - x0' = (sp + x0) - sp = x0
-> > -     sub     sp, sp, x0                      // sp'' = sp' - x0 = (sp + x0) - x0 = sp
-> > +     test_sp_overflow THREAD_SHIFT, 0f
-> >       b       el\el\ht\()_\regsize\()_\label
-> >
-> >  0:
->
-> Further to my comment above, immediately after this we have:
->
->         /* Stash the original SP (minus PT_REGS_SIZE) in tpidr_el0. */
->         msr     tpidr_el0, x0
->
->         /* Recover the original x0 value and stash it in tpidrro_el0 */
->         sub     x0, sp, x0
->         msr     tpidrro_el0, x0
->
-> ... which is really surprising with the `test_sp_overflow` macro because
-> it's not clear that modifies x0 and sp in this way.
+On Tue, Feb 22, 2022 at 11:26:08PM +0530, Krishna Yarlagadda wrote:
+> Add compatible string for Tegra234 for Tegra QUAD SPI
+> 
+> Signed-off-by: Krishna Yarlagadda <kyarlagadda@nvidia.com>
+> ---
+>  Documentation/devicetree/bindings/spi/nvidia,tegra210-quad.yaml | 1 +
+>  1 file changed, 1 insertion(+)
 
-Hi Mark,
+Please add Acked-by/Reviewed-by tags when posting new versions. However,
+there's no need to repost patches *only* to add the tags. The upstream
+maintainer will do that for acks received on the version they apply.
 
-I agree the macro hides the fact that sp and x0 are left in an
-'corrupt' state if the branch happens. Not a problem in this case but
-it could be misleading to new users. I'll remove this per your
-suggestion in the next version.
-
-Thanks,
-Kalesh
->
-> Thanks,
-> Mark.
-> ...
->
-> > --
-> > 2.35.1.473.g83b2b277ed-goog
-> >
+If a tag was not added on purpose, please state why and what changed.

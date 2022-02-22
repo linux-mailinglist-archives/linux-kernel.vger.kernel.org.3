@@ -2,121 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF2074C02CE
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 21:06:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A732D4C02D2
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 21:06:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235398AbiBVUG4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 15:06:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54300 "EHLO
+        id S235414AbiBVUHN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 15:07:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231683AbiBVUGw (ORCPT
+        with ESMTP id S235396AbiBVUHK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 15:06:52 -0500
-Received: from the.earth.li (the.earth.li [IPv6:2a00:1098:86:4d:c0ff:ee:15:900d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17D76F210A;
-        Tue, 22 Feb 2022 12:06:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=earth.li;
-        s=the; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:Subject:
-        Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=GZ/WSWgJBiEHXHtoaYeS23vkf3k0hR1lrwLvk6dfqQY=; b=C3sRnNBZ9WphMIrOCeHKtbYK1Z
-        4BUp8uWwLjKHugkczVmwkQFLYAx32RzaAOuAsJ6Gh6phWD7HlRwWlnBjafl60VWYMSRz13GuMmPDU
-        ltYUt4ur4nth7jHVgdhIDTts6ppa7lV9BiwwJk6cpBlSlCtqLRhiCTkq9MqW3qkbAT8ptGwvr8ffy
-        8JylfP3UpLceoAQoW/vFlVrCfa7eqwZ/i3+OMMxXe4FX1bS42h2aeek65DCEnX/kwZUv8RCZw/jbM
-        iX6deNsMoWnKQhDtMPcd+mbCnDdiGkv2jR3Z+pgE81jKbbFhMiPc/c4T8RlP/WadtJmyEqcC+ZEyh
-        fA1pedyA==;
-Received: from noodles by the.earth.li with local (Exim 4.94.2)
-        (envelope-from <noodles@earth.li>)
-        id 1nMbQU-00CR3y-GA; Tue, 22 Feb 2022 20:06:22 +0000
-Date:   Tue, 22 Feb 2022 20:06:22 +0000
-From:   Jonathan McDowell <noodles@earth.li>
-To:     Ansuel Smith <ansuelsmth@gmail.com>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 00/18] Multiple addition to ipq8064 dtsi
-Message-ID: <YhVCPiBr+aEwQqkG@earth.li>
-References: <20220218002956.6590-1-ansuelsmth@gmail.com>
+        Tue, 22 Feb 2022 15:07:10 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CA58A41BD;
+        Tue, 22 Feb 2022 12:06:44 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0499DB81C5F;
+        Tue, 22 Feb 2022 20:06:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56812C340E8;
+        Tue, 22 Feb 2022 20:06:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645560401;
+        bh=uI0Fg70JQsRjF8A280UxeWyrTx+BSIhEvWBXFTuCqvc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=oV94Lm4dBzwnapWO4YqkF1+FiDKUOgNPNsAaPRtqEp7aUERF9fx5An9GvUGCIbjdO
+         ml75/8hKPJIpMkKR/BBixoM9MlWszX9BQJEKLvkbdOzd5Y/MFnIaVoZs8X+7cHzmIR
+         KVog4RCIGsRxnnU5t+0SXRfTXag3ZmA4C7G2mVIhYTQtQpmD8Fi2lnPAPAjGORG1/H
+         NXOsNZ6yLBw/2p5WTdH9a/+NLBV7UFhzavqHlsVPAk3ftgHAe79bNPhSvhWaqizg+P
+         i+q/0tgKBideH8K1N+4kBi0MLYEDFCy0cUuJC5JX6ZbkLDR4FOp4iDlw0bKrCJ4VBZ
+         EIzYowpTp8JVA==
+Date:   Tue, 22 Feb 2022 12:06:39 -0800
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     Keith Busch <kbusch@kernel.org>
+Cc:     David Laight <David.Laight@aculab.com>,
+        "linux-nvme@lists.infradead.org" <linux-nvme@lists.infradead.org>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "axboe@kernel.dk" <axboe@kernel.dk>, "hch@lst.de" <hch@lst.de>,
+        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
+        "colyli@suse.de" <colyli@suse.de>
+Subject: Re: [PATCHv3 10/10] x86/crypto: add pclmul acceleration for crc64
+Message-ID: <YhVCTzUOUHZnze4x@sol.localdomain>
+References: <20220222163144.1782447-1-kbusch@kernel.org>
+ <20220222163144.1782447-11-kbusch@kernel.org>
+ <a7e806ed3c074534a24b74f827bcc914@AcuMS.aculab.com>
+ <20220222171405.GA1782521@dhcp-10-100-145-180.wdc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220218002956.6590-1-ansuelsmth@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220222171405.GA1782521@dhcp-10-100-145-180.wdc.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 18, 2022 at 01:29:38AM +0100, Ansuel Smith wrote:
-> This try to complete the ipq8064 dtsi and introduce 2 new dtsi
-> ipq8064-v2 and ipq8065. While some node are still missing (cpufreq node,
-> l2 scale node, fab scale node) this would add most of the missing node
-> to make ipq8064 actually usable.
+On Tue, Feb 22, 2022 at 09:14:05AM -0800, Keith Busch wrote:
+> On Tue, Feb 22, 2022 at 05:02:16PM +0000, David Laight wrote:
+> > From: Keith Busch
+> > > Sent: 22 February 2022 16:32
+> > > 
+> > > The crc64 table lookup method is inefficient, using a significant number
+> > > of CPU cycles in the block stack per IO. If available on x86, use a
+> > > PCLMULQDQ implementation to accelerate the calculation.
+> > > 
+> > > The assembly from this patch was mostly generated by gcc from a C
+> > > program using library functions provided by x86 intrinsics, and measures
+> > > ~20x faster than the table lookup.
+> > 
+> > I think I'd like to see the C code and compiler options used to
+> > generate the assembler as comments in the committed source file.
+> > Either that or reasonable comments in the assembler.
 > 
-> Some of the changes are the fix for the pci IO that cause any secondary
-> wifi card with ath10k to fail init.
-> Adds regulators definition for RPM.
-> Adds many missing gsbi nodes used by all the devices.
-> Enable the usb phy by default as they are actually enabled internally by
-> xlate only if the dwc3 driver is used.
-> Add opp table and declare idle state for ipq8064.
-> Fix some dtc warning.
+> The C code, compiled as "gcc -O3 -msse4 -mpclmul -S", was adapted from
+> this found on the internet:
 > 
-> This also add the ipq8064-v2.0 dtsi and the ipq8065 dtsi used by more
-> recent devices based on this SoC.
+>   https://github.com/rawrunprotected/crc/blob/master/crc64.c
+> 
+> I just ported it to linux, changed the poly parameters and removed the
+> unnecessary stuff. 
+>  
+> I'm okay with dropping this patch from the series for now since I don't
+> think I'm qualified to write it. :) I just needed something to test the
+> crytpo module registration.
 
-A couple of comments directly on 2 patches, but otherwise for the set:
+Is the license of that code compatible with the kernel's license?
 
-Tested-by: Jonathan McDowell <noodles@earth.li>
+In any case, adding uncommented generated assembly isn't acceptable.  The most
+common convention for Linux kernel crypto is to use hand-written assembly that
+is properly commented.
 
-> v2:
-> - Added missing patch
-> - Added additional gsbi6 spi
-> - Added extra description for L2 cache opp
-> - Fxied smb208 enabled by default that is problematic for rb3011 devices
-> 
-> Ansuel Smith (18):
->   ARM: dts: qcom: add multiple missing pin definition for ipq8064
->   ARM: dts: qcom: add gsbi6 missing definition for ipq8064
->   ARM: dts: qcom: add missing rpm regulators and cells for ipq8064
->   ARM: dts: qcom: disable smb208 regulators for ipq8064-rb3011
->   ARM: dts: qcom: add missing snps,dwmac compatible for gmac ipq8064
->   ARM: dts: qcom: enable usb phy by default for ipq8064
->   ARM: dts: qcom: reduce pci IO size to 64K for ipq8064
->   ARM: dts: qcom: fix dtc warning for missing #address-cells for ipq8064
->   ARM: dts: qcom: add smem node for ipq8064
->   ARM: dts: qcom: add saw for l2 cache and kraitcc for ipq8064
->   ARM: dts: qcom: add sic non secure node for ipq8064
->   ARM: dts: qcom: fix and add some missing gsbi node for ipq8064
->   ARM: dts: qcom: add opp table for cpu and l2 for ipq8064
->   ARM: dts: qcom: add speedbin efuse nvmem binding
->   ARM: dts: qcom: add multiple missing binding for cpu and l2 for
->     ipq8064
->   ARM: dts: qcom: remove redundant binding from ipq8064 rb3011 dts
->   ARM: dts: qcom: add ipq8064-v2.0 dtsi
->   ARM: dts: qcom: add ipq8065 dtsi
-> 
->  arch/arm/boot/dts/qcom-ipq8064-rb3011.dts |  21 +-
->  arch/arm/boot/dts/qcom-ipq8064-v2.0.dtsi  |  70 ++++
->  arch/arm/boot/dts/qcom-ipq8064.dtsi       | 375 +++++++++++++++++++++-
->  arch/arm/boot/dts/qcom-ipq8065.dtsi       | 168 ++++++++++
->  4 files changed, 603 insertions(+), 31 deletions(-)
->  create mode 100644 arch/arm/boot/dts/qcom-ipq8064-v2.0.dtsi
->  create mode 100644 arch/arm/boot/dts/qcom-ipq8065.dtsi
-> 
-> -- 
-> 2.34.1
-> 
+There is some precedent for using compiler intrinsics instead, e.g.
+crypto/aegis128-neon-inner.c.  (I'm not sure why they aren't used more often.)
 
-J.
+There are also some files where a Perl script generates the assembly code.
+(This is a bit ugly IMO, but it's what the author of much of OpenSSL's crypto
+assembly code does, and it was desired to reuse that code.)
 
--- 
-"evilwm - we sold our souls to the window manager" --
-http://www.6809.org.uk/evilwm/
+Anyway, those are the available options.  Checking in some uncommented generated
+assembly isn't one of them.
+
+- Eric

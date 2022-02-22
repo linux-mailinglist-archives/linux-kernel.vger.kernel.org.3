@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D58C4BF6A0
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 11:51:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4529F4BF6A4
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 11:51:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231305AbiBVKud (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 05:50:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54232 "EHLO
+        id S231529AbiBVKuT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 05:50:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231536AbiBVKuH (ORCPT
+        with ESMTP id S231553AbiBVKuI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 05:50:07 -0500
-Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D4FC15D3BD
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 02:49:34 -0800 (PST)
+        Tue, 22 Feb 2022 05:50:08 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 366F315DB0E
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 02:49:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645526974; x=1677062974;
+  t=1645526976; x=1677062976;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=CJaVHk7pq1piWj3OOHpdgpcurcwUUzead39PyDmUoWg=;
-  b=edu8fAd7ZqrU3a/C5Ln/1b7ElKnyTFhFwnbBbKPZNzH7JjWGi6wIzuwY
-   B0iXA1bgNZHennC45Nie1f1Ue3Te2xlY0T4CNRePdawZ0mkgJOxD141yn
-   8VtIrhDVxBaQ8YzuHNTeGx3ss5s6OfRJCtf9J4pxtvSQwn9Or+rvJ58Wm
-   pyOrRkTt63Da0Z/wWpM6lKkjoUIjKhgeibz/nLjHwYnguKB86fnsIBswe
-   4vJARhWNCPeyVT48NKtg+Ds5Tpedqh4T/K/IWEIBmeCyu3JZ4yUmMhbj8
-   jSBu4rwvikAIdQKKO2f9/PNmndwc9lNQEvOAgAfide1+ljkXNe/otagEr
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10265"; a="312405410"
+  bh=ZENWWqsj2fN6okt+gRsSlHSHETcuIYiXT7ufQXThyLs=;
+  b=G5TYYObGdtQnfQemVMIruYEjA8bIfWe09P8osxji+mcHMOTybBNDQQJF
+   qWEXgRSoOMGwSCvC0Rru9WDp82NZ0Qwe5WyxzKbm7GXK9XUReRf7g23cL
+   j5W4mCYylAbEoFEXgZLxL+0DCCQv/SVznqj/Vjm7Xer7ISlLpxz/B1Ybo
+   ppkwwRz8hELRP8TbyQvbPVYrw2Teo8I54z6CPRGJtXbs0iusP7Q/mVX8b
+   MiYsz5dt8pHzE5UWIp9l++im7UtVvnuXfo2YcIWOlGKLPRpI2pGZ7duJW
+   iN/f+lqQfuUH511elK/q6Zi3r2bsTYPO6JIs0+5WPbxCc2p7mLv253+q9
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10265"; a="250489640"
 X-IronPort-AV: E=Sophos;i="5.88,387,1635231600"; 
-   d="scan'208";a="312405410"
+   d="scan'208";a="250489640"
 Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2022 02:49:31 -0800
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2022 02:49:35 -0800
 X-IronPort-AV: E=Sophos;i="5.88,387,1635231600"; 
-   d="scan'208";a="706569591"
+   d="scan'208";a="706569600"
 Received: from sannilnx.jer.intel.com ([10.12.231.79])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2022 02:49:28 -0800
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2022 02:49:32 -0800
 From:   Alexander Usyskin <alexander.usyskin@intel.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Jani Nikula <jani.nikula@linux.intel.com>,
@@ -49,9 +49,9 @@ Cc:     Tomas Winkler <tomas.winkler@intel.com>,
         Alexander Usyskin <alexander.usyskin@intel.com>,
         Vitaly Lubart <vitaly.lubart@intel.com>,
         intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 3/7] drm/i915/gsc: add slow_fw flag to the gsc device definition
-Date:   Tue, 22 Feb 2022 12:48:50 +0200
-Message-Id: <20220222104854.3188643-4-alexander.usyskin@intel.com>
+Subject: [PATCH 4/7] drm/i915/gsc: add GSC XeHP SDV platform definition
+Date:   Tue, 22 Feb 2022 12:48:51 +0200
+Message-Id: <20220222104854.3188643-5-alexander.usyskin@intel.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220222104854.3188643-1-alexander.usyskin@intel.com>
 References: <20220222104854.3188643-1-alexander.usyskin@intel.com>
@@ -67,34 +67,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add slow_fw flag to the gsc device definition
-and pass it to mei auxiliary device.
+Define GSC on XeHP SDV (Intel(R) dGPU without display)
 
+XeHP SDV uses the same hardware settings as DG1, but uses polling
+instead of interrupts and runs the firmware in slow pace due to
+hardware limitations.
+
+Signed-off-by: Vitaly Lubart <vitaly.lubart@intel.com>
+Signed-off-by: Tomas Winkler <tomas.winkler@intel.com>
 Signed-off-by: Alexander Usyskin <alexander.usyskin@intel.com>
 ---
- drivers/gpu/drm/i915/gt/intel_gsc.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/gpu/drm/i915/gt/intel_gsc.c | 22 +++++++++++++++++++++-
+ 1 file changed, 21 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/gpu/drm/i915/gt/intel_gsc.c b/drivers/gpu/drm/i915/gt/intel_gsc.c
-index db01cfda78f1..1cbad9248f7c 100644
+index 1cbad9248f7c..2d6c871140d8 100644
 --- a/drivers/gpu/drm/i915/gt/intel_gsc.c
 +++ b/drivers/gpu/drm/i915/gt/intel_gsc.c
-@@ -41,6 +41,7 @@ struct intel_gsc_def {
- 	unsigned long bar;
- 	size_t bar_size;
- 	bool use_polling;
-+	bool slow_fw;
+@@ -56,6 +56,19 @@ static const struct intel_gsc_def intel_gsc_def_dg1[] = {
+ 	}
  };
  
- /* gscfi (graphics system controller firmware interface) resources */
-@@ -125,6 +126,7 @@ static void intel_gsc_init_one(struct drm_i915_private *i915,
- 	adev->bar.end = adev->bar.start + def->bar_size - 1;
- 	adev->bar.flags = IORESOURCE_MEM;
- 	adev->bar.desc = IORES_DESC_NONE;
-+	adev->slow_fw = def->slow_fw;
++static const struct intel_gsc_def intel_gsc_def_xehpsdv[] = {
++	{
++		/* HECI1 not enabled on the device. */
++	},
++	{
++		.name = "mei-gscfi",
++		.bar = GSC_DG1_HECI2_BASE,
++		.bar_size = GSC_BAR_LENGTH,
++		.use_polling = true,
++		.slow_fw = true,
++	}
++};
++
+ static void intel_gsc_release_dev(struct device *dev)
+ {
+ 	struct auxiliary_device *aux_dev = to_auxiliary_dev(dev);
+@@ -92,7 +105,14 @@ static void intel_gsc_init_one(struct drm_i915_private *i915,
+ 	if (intf_id == 0 && !HAS_HECI_PXP(i915))
+ 		return;
  
- 	aux_dev = &adev->aux_dev;
- 	aux_dev->name = def->name;
+-	def = &intel_gsc_def_dg1[intf_id];
++	if (IS_DG1(i915)) {
++		def = &intel_gsc_def_dg1[intf_id];
++	} else if (IS_XEHPSDV(i915)) {
++		def = &intel_gsc_def_xehpsdv[intf_id];
++	} else {
++		drm_warn_once(&i915->drm, "Unknown platform\n");
++		return;
++	}
+ 
+ 	if (!def->name) {
+ 		drm_warn_once(&i915->drm, "HECI%d is not implemented!\n", intf_id + 1);
 -- 
 2.32.0
 

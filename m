@@ -2,116 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97F0B4C0310
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 21:34:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D5CF74C0311
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 21:34:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235516AbiBVUfJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 15:35:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49008 "EHLO
+        id S235527AbiBVUfO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 15:35:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235499AbiBVUfF (ORCPT
+        with ESMTP id S235501AbiBVUfG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 15:35:05 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1601C78042;
+        Tue, 22 Feb 2022 15:35:06 -0500
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8462112D93E;
         Tue, 22 Feb 2022 12:34:40 -0800 (PST)
-Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21MJD9DF012161;
-        Tue, 22 Feb 2022 20:34:36 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=SP7TYCkFuUgqL05OnrexEjpvggwJ6zue3tveP/eZRro=;
- b=MFBl/YfiTDZhau9Z7fJTOY1YfRM5x/moZC+9J9HKRRI6u+x0voTY90pQWV+EHoDEW3fI
- vJRZmo2PZhOfpujqSXttIKXWKskoCGOkyDV10Po2gzUKTCvDd8+5eLrJHFRSqiJz3U/S
- Olg+LtfM3WUoPyoHPrd2nGOf8gUFi9+xFIzIhbGnKTyXnFSKSnbk2hNiCxa5HM9sy2RA
- +99r7TRpZrD5Lxt8pI0041GqHmEjdgcpJwlJDwTWsM3A68nZHb1EmFl269OBHT4fRdQT
- o6RMQwwCRgQnXndpbYINsjw8aTvkILb0hgXKCGKO5aWIQLBGZeprbYql9wGnqo/hrGZp ow== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3ed3jv5njc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 22 Feb 2022 20:34:35 +0000
-Received: from m0098394.ppops.net (m0098394.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 21MKCd5W023541;
-        Tue, 22 Feb 2022 20:34:35 GMT
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3ed3jv5nhr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 22 Feb 2022 20:34:35 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 21MKJTfV020902;
-        Tue, 22 Feb 2022 20:34:33 GMT
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
-        by ppma06ams.nl.ibm.com with ESMTP id 3eaqtj5r4n-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 22 Feb 2022 20:34:33 +0000
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 21MKYUxk55640482
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 22 Feb 2022 20:34:30 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B6A4C52052;
-        Tue, 22 Feb 2022 20:34:30 +0000 (GMT)
-Received: from localhost (unknown [9.43.75.136])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 9790952051;
-        Tue, 22 Feb 2022 20:34:29 +0000 (GMT)
-From:   Ritesh Harjani <riteshh@linux.ibm.com>
-To:     linux-ext4@vger.kernel.org
-Cc:     Harshad Shirwadkar <harshadshirwadkar@gmail.com>,
-        "Theodore Ts'o" <tytso@mit.edu>, Jan Kara <jack@suse.cz>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Ritesh Harjani <riteshh@linux.ibm.com>
-Subject: [RFC 1/9] ext4: Remove unused enum EXT4_FC_COMMIT_FAILED
-Date:   Wed, 23 Feb 2022 02:04:09 +0530
-Message-Id: <a1e9902e84595a2088bcf4882691a8330640246b.1645558375.git.riteshh@linux.ibm.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <cover.1645558375.git.riteshh@linux.ibm.com>
-References: <cover.1645558375.git.riteshh@linux.ibm.com>
+Received: by mail-ej1-x62d.google.com with SMTP id bg10so46520851ejb.4;
+        Tue, 22 Feb 2022 12:34:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=zJjW40gRYjxp9MOc6prbOQbeJQ4Y96DDyPM3W2oQ0zQ=;
+        b=LopXt5kB3hxGK0aA50DzHk+5tKlxBFD9uSUtVWerRLtJSjayu4367XM1r5cIPFx+Sq
+         c7R4HaBJSrHWKruQItW+p5U4+D7gdLHfm4lyOROOXL+7LHH+F39SWgQ0XpaS0731nRZd
+         w0svFDzd5lt1KhGVvPfz1BgU36ugsCUoYlluYMxvKYH7Irn8VjYxWrlGZxyX7nYfNSPM
+         0oRC0t/L9CzbqWisTVsMbW/QXQcgfU3Z4NRby95+ND3dPSTcj31BmCQLodu6VllVag3H
+         3m66m5/vRzsl9wSiY0ZTrBcWYgKQRRDUgng0hzxTkErcwcf4S3Tc6MQmRh5o0HI1E3W8
+         +PtA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=zJjW40gRYjxp9MOc6prbOQbeJQ4Y96DDyPM3W2oQ0zQ=;
+        b=MnMpN5x2xISQ9Qx6kn91IPGsB53S0ms3iQd83STvXrbnt33B3TSYHraweNo590tDRm
+         iKkW76iASZ7q2WD/lVJFcj5fwcTM2CEAN6hdUiwuFaHx/2qYC8JGy7TCUonAmF8kTlt/
+         5WEgUVYM0wpr+semN5/dAIe6UWwDWaoanQVrzPUnj65DbE6k6oYReqo5dmRSqu874CqI
+         sZxuhkGrASrrWJydKUZXZbkxtAJrSry9HxZSWqXiu3JhdTwTJgBjmaJdELfp3FlWeqmZ
+         JTvTpVWQB/VKyCH+JiIgLKauizPBg405EAvDliwb4GWK5Fj6Q43YWY+u/v/1p5Q+xRbd
+         rmig==
+X-Gm-Message-State: AOAM531AFUgKptQ+yipXT6andfbV9bFzIMmQUBEmjZV1JJ+Kw9gdnzHt
+        e7/D4PWb1JRdfbUjCS1atmFL2atbpKsNIttr
+X-Google-Smtp-Source: ABdhPJz3JHOgC8ANlkEN+8VPzW64fK4g9/h4wZ9C+XjBPur7Es5FiJFR1e3OQobDQmjhGKChv/7BLg==
+X-Received: by 2002:a17:907:1183:b0:6cf:ce2f:51c1 with SMTP id uz3-20020a170907118300b006cfce2f51c1mr20466998ejb.209.1645562078864;
+        Tue, 22 Feb 2022 12:34:38 -0800 (PST)
+Received: from nergzd-desktop.localdomain ([62.122.67.26])
+        by smtp.gmail.com with ESMTPSA id ec37sm10358388edb.19.2022.02.22.12.34.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Feb 2022 12:34:38 -0800 (PST)
+From:   Markuss Broks <markuss.broks@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
+        Markuss Broks <markuss.broks@gmail.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Henrik Rydberg <rydberg@bitmath.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        linux-input@vger.kernel.org, devicetree@vger.kernel.org
+Subject: [PATCH v6 0/2] Add support for Imagis touchscreens
+Date:   Tue, 22 Feb 2022 22:34:09 +0200
+Message-Id: <20220222203414.8656-1-markuss.broks@gmail.com>
+X-Mailer: git-send-email 2.35.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: qWBX_5CYFkJ00MLBqWbBWFhKKHGKlBQa
-X-Proofpoint-ORIG-GUID: J7RDR4QNi2ivRx2ehS4CbroM2WbAoTww
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-02-22_07,2022-02-21_02,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 suspectscore=0
- lowpriorityscore=0 bulkscore=0 mlxscore=0 mlxlogscore=801 phishscore=0
- clxscore=1015 adultscore=0 priorityscore=1501 impostorscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2201110000 definitions=main-2202220126
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Below commit removed all references of EXT4_FC_COMMIT_FAILED.
-commit 0915e464cb274 ("ext4: simplify updating of fast commit stats")
+Add support for Imagis touchscreens, used on various mobile
+devices such as Samsung Galaxy J5 (2015), J3 (2015), J5 (2016).
 
-Just remove it since it is not used anymore.
+v2: rebase on top of the correct tree
+v3:
+- prefix all defines as IST3038C
+- use two tabs for all defines
+- add missing <linux/regulator/consumer.h> header
+- drop ADDR_LEN and DATA_LEN defines; use sizeof(reg_be) instead
+- use __be32 type for reg_be
+- add a comment about i2c read not being successful on first try
+- use "ret" instead of "res" in read_reg function
+- don't use the internal __cpu_to_be32 function, use cpu_to_be32 instead
+- use "error" instead of "ret" in interrupt handler
+- pass the slot state directly, without ternary operator
+- drop the dev_err in init_input_dev function
+- reorder the functions in _probe so that the chipid command is read as fast 
+as possible
+- don't use imagis_start in probe
+- initialize the irq after the chip is powered
+- save the return value in imagis_resume
+- drop WIDTH_MAJOR since only TOUCH_MAJOR is reported
+- the "chip detected" message is now dev_dbg
+- reorder headers so they are in alphabetic order
+- use GENMASK to generate masks for getting the X and Y coordinates and touch area
+- drop *_pressure from device tree bindings since the driver doesn't
+support reporting pressure
+- fix the typo with i2c address in device treee bindings (48 instead of 50)
+- add IRQF_NO_AUTOEN flag to avoid unbalanced irq enable
+v4:
+- alphabetically order MAINTAINERS entry
+- alphabetically order Kconfig and Makefile
+- drop the error message in init_regulators
+- disable regulators on probe error
+- drop IRQF_TRIGGER_FALLING
+- @ is not optional (device tree bindings)
+- don't use items for compatible
+- add maxItems property to reg, drop the comment
+v5:
+- compatible enum is not an item of the list, drop "-"
+v6:
+- add _MS suffix to the delay define, drop the comment
+- change the reason for retry comment
+- add imagis_power_off and imagis_power_on functions to turn regulators
+on and off
+- use imagis_power_on/off in imagis_start and imagis_stop as well as in probe function
+- use error instead of ret in calls to functions which only return 0 or -errno
+- include linux/bits.h
+- proper indentation in Kconfig
+- drop the dev_dbg chip id message
+- MODULE_DEVICE_TABLE(of, ...);
+- no extra tabs in i2c_driver struct
+- save the return value in imagis_suspend
 
-Signed-off-by: Ritesh Harjani <riteshh@linux.ibm.com>
----
- fs/ext4/fast_commit.h | 1 -
- 1 file changed, 1 deletion(-)
+Markuss Broks (2):
+  dt-bindings: input/touchscreen: bindings for Imagis
+  Input: add Imagis touchscreen driver
 
-diff --git a/fs/ext4/fast_commit.h b/fs/ext4/fast_commit.h
-index 02afa52e8e41..80414dcba6e1 100644
---- a/fs/ext4/fast_commit.h
-+++ b/fs/ext4/fast_commit.h
-@@ -93,7 +93,6 @@ enum {
- 	EXT4_FC_REASON_RENAME_DIR,
- 	EXT4_FC_REASON_FALLOC_RANGE,
- 	EXT4_FC_REASON_INODE_JOURNAL_DATA,
--	EXT4_FC_COMMIT_FAILED,
- 	EXT4_FC_REASON_MAX
- };
- 
+ .../input/touchscreen/imagis,ist3038c.yaml    |  78 +++++
+ .../devicetree/bindings/vendor-prefixes.yaml  |   2 +
+ MAINTAINERS                                   |   6 +
+ drivers/input/touchscreen/Kconfig             |  10 +
+ drivers/input/touchscreen/Makefile            |   1 +
+ drivers/input/touchscreen/imagis.c            | 329 ++++++++++++++++++
+ 6 files changed, 426 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/input/touchscreen/imagis,ist3038c.yaml
+ create mode 100644 drivers/input/touchscreen/imagis.c
+
 -- 
-2.31.1
+2.35.0
 

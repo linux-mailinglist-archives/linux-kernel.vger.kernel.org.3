@@ -2,105 +2,238 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83B294BFC3F
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 16:17:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF4434BFC46
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 16:18:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233335AbiBVPSH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 10:18:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41728 "EHLO
+        id S233373AbiBVPTB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 10:19:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233354AbiBVPRi (ORCPT
+        with ESMTP id S233370AbiBVPSq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 10:17:38 -0500
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E376CA88BA
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 07:17:04 -0800 (PST)
-Received: by mail-pl1-x636.google.com with SMTP id ay3so7037052plb.1
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 07:17:04 -0800 (PST)
+        Tue, 22 Feb 2022 10:18:46 -0500
+Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B227614A075
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 07:18:20 -0800 (PST)
+Received: by mail-io1-xd31.google.com with SMTP id c14so16734943ioa.12
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 07:18:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=lcRYoN5Uf3rBH9v/7qdYElQaWmfVzREsyATDiT2CRiQ=;
-        b=WOnf61l0rum3il1zfoKqAJBV8UpvfqPLdVI2HNdp0/fkGZhP8BLuhXuHloYSx87D7i
-         vD/oiHYQhINsdy7aNuzrOQxnCtcwwQ7RNIkZoGImk22FmjdmEJzRpUmpP8WPfKfhnNCg
-         eNQsX7Ji9mOqEjLE3cxiValuU2L6vFsahcS9hlQ6Lh5rOKChD33zVFMX56mT2yhVuiGj
-         MgDfp3Pma4sl5hKjucCbSHn7WKfAwyMzAzn21cZ9xkRnFZUir5Fkht+vjpT4TCiQG+2t
-         ASN4hutVwU80e0OPrN21Y3fcUhw+NPPnQWFWqhN2oDGb22n/a7YkI5CHvry2Visg4w2y
-         DSyA==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=xBV5CfTYWd1OPj8rDibNSsYE0rmrF2IsLJinLQ/4VQk=;
+        b=Hm8SzBkNIXZgJ9JetW86MwmzMLxbeT5wbqrh9AG1ecTuQQMYvLCHy0Mrnblhek+uQ7
+         5vN46g40HF6mIgtlX6UwIbDDwfyLHeZfIfM9pF9QHSo+8AaPKRRWWnL+I0oNnck1L1cL
+         VG2Af7J4IXpDS/VEuv3HyJ64JIVLYIxiOvcDHmflxGooyRQa/2EkctT4xBrWzt0PNLtk
+         CUaN6O5LEw+W1VZ7IU+IfzK0db41N7tcAAGUtcNYDz9fvGTAP4xsjH99YVVo6p1YoAiQ
+         lIJcgCKvA6ueFhDCMg+NT/usYUx0O6QSUm3A9d3A2YeWR7NsF16OKl2S/RkEhbZE345u
+         SJVA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=lcRYoN5Uf3rBH9v/7qdYElQaWmfVzREsyATDiT2CRiQ=;
-        b=MgUBOYlOEz1OQGrmWP4qkOY9eUGZ+Nn3nEMvYUhmMYsxnMggYZ1hTwP4E4dDzADCDi
-         KEsFFaIGbcvv4bauBbJMd22k+08RAdNQTUyv6XU+RD0qV3RBU6pG7SgY1gyI91Te5Kpt
-         YaIvnMtDHsptCSeare4pAY685PHgwKPYieMkAJDxTD+6N0zvrD4DQ8YYm9NvYaxDIHSM
-         30d9uSSerKK0e4b6Fe6vyOm6kjtasG0fkD0jHc5Pg0GaChR0u7E67EqlyLbw2crv5doI
-         lwjE+bWLWCZUpLuyjkyGcnAca/X4TStJLcN3rm1zyfzb+knMzAr2tUgxq3mopfga7Ysk
-         n7Xw==
-X-Gm-Message-State: AOAM530JwqcDSbtQ9GiydwF3onC4yGYpv1Nt3stmdkZt+RtDy7HPKvIP
-        /yUl2Oe9lvpdFQQerwchuSG8vIZqy1/URg==
-X-Google-Smtp-Source: ABdhPJxOKcTBsgn4bM4lfQ6m0TCJ8CTWmoDGUwk8YW+5S3eaRB5CkZRKDnw3qqsiCVaVhGIcU8Bkrg==
-X-Received: by 2002:a17:90a:8d85:b0:1b8:a215:e3e4 with SMTP id d5-20020a17090a8d8500b001b8a215e3e4mr4520719pjo.175.1645543023501;
-        Tue, 22 Feb 2022 07:17:03 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id u9-20020a17090a450900b001b9b5ca299esm2962733pjg.54.2022.02.22.07.17.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Feb 2022 07:17:02 -0800 (PST)
-Date:   Tue, 22 Feb 2022 15:16:59 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Peng Hao <flyingpenghao@gmail.com>
-Cc:     pbonzini@redhat.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] KVM:VMX:Remove scratch 'cpu' variable that shadows an
- identical scratch var
-Message-ID: <YhT+a4I0ytA7eVE5@google.com>
-References: <20220222103954.70062-1-flyingpeng@tencent.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=xBV5CfTYWd1OPj8rDibNSsYE0rmrF2IsLJinLQ/4VQk=;
+        b=PFhhJj1AdwcHFkgZILbavMLIWRQaCx2rXKxvRkBfWU+KOWd0lcVRTVAZnvwvisf+L9
+         t2KtzR/iDGIAbLt0JQ4bKEX3GpTQRsSq2MAXTZEbzuO2SPJvTD2aTdbvQVhb5dEWV/ZO
+         Umt9Tb/GzZ9gsDLx4zllymkDbVdmmvfRwMO7XQaYAByhDuiQPhnZHGF14qIjE0M1Dwda
+         TNyY1H9XGQaEHZah73N3I+I7Ph62w0q6grTuIjTfdhCyoqwWRgp5Kj+iSg8RWNtgX+fs
+         aB77iOwgnNua6v5xkv34aS2xBwrqBrVIVJ+5wjk1wuGiM4+PETv2nHZBTs8DBpRbq3Di
+         czXg==
+X-Gm-Message-State: AOAM5331FY7HI3+H+cURHStxa4H3J0SQOoYdCxPlKpC2rDxwnJtsOCzu
+        r6im/QV22fAmNJAhPez+/n8Eug==
+X-Google-Smtp-Source: ABdhPJyMvIEt4P/tuJaiYPOYcuZuTEcosqlAjiBFoPqe4vzK4hj8jmvdHrMpZt9qMBLSbpg2p6Rn3Q==
+X-Received: by 2002:a05:6638:1405:b0:30d:69cd:f44 with SMTP id k5-20020a056638140500b0030d69cd0f44mr18926507jad.208.1645543100023;
+        Tue, 22 Feb 2022 07:18:20 -0800 (PST)
+Received: from [172.22.22.26] (c-73-185-129-58.hsd1.mn.comcast.net. [73.185.129.58])
+        by smtp.googlemail.com with ESMTPSA id r7sm7860220ilc.24.2022.02.22.07.18.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 22 Feb 2022 07:18:19 -0800 (PST)
+Message-ID: <f3248103-9450-dcf0-719d-77c6dcd85bfe@linaro.org>
+Date:   Tue, 22 Feb 2022 09:18:18 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220222103954.70062-1-flyingpeng@tencent.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v3 23/25] bus: mhi: ep: Add support for queueing SKBs to
+ the host
+Content-Language: en-US
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc:     mhi@lists.linux.dev, quic_hemantk@quicinc.com,
+        quic_bbhatt@quicinc.com, quic_jhugo@quicinc.com,
+        vinod.koul@linaro.org, bjorn.andersson@linaro.org,
+        dmitry.baryshkov@linaro.org, quic_vbadigan@quicinc.com,
+        quic_cang@quicinc.com, quic_skananth@quicinc.com,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220212182117.49438-1-manivannan.sadhasivam@linaro.org>
+ <20220212182117.49438-24-manivannan.sadhasivam@linaro.org>
+ <766e6568-0b80-c745-dd8f-7f401fb0422d@linaro.org>
+ <20220222143825.GH5029@thinkpad>
+From:   Alex Elder <elder@linaro.org>
+In-Reply-To: <20220222143825.GH5029@thinkpad>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Needs a space between "KVM:" and "VMX:".  No need to resend, Paolo can fixup when
-applying.
+On 2/22/22 8:38 AM, Manivannan Sadhasivam wrote:
+> On Tue, Feb 15, 2022 at 04:40:29PM -0600, Alex Elder wrote:
+>> On 2/12/22 12:21 PM, Manivannan Sadhasivam wrote:
+>>> Add support for queueing SKBs to the host over the transfer ring of the
+>>> relevant channel. The mhi_ep_queue_skb() API will be used by the client
+>>> networking drivers to queue the SKBs to the host over MHI bus.
+>>>
+>>> The host will add ring elements to the transfer ring periodically for
+>>> the device and the device will write SKBs to the ring elements. If a
+>>> single SKB doesn't fit in a ring element (TRE), it will be placed in
+>>> multiple ring elements and the overflow event will be sent for all ring
+>>> elements except the last one. For the last ring element, the EOT event
+>>> will be sent indicating the packet boundary.
+>>>
+>>> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+>>
+>> I'm a little confused by this, so maybe you can provide
+>> a better explanation somehow.
+>>
+>> 					-Alex
+>>
+>>> ---
+>>>    drivers/bus/mhi/ep/main.c | 102 ++++++++++++++++++++++++++++++++++++++
+>>>    include/linux/mhi_ep.h    |  13 +++++
+>>>    2 files changed, 115 insertions(+)
+>>>
+>>> diff --git a/drivers/bus/mhi/ep/main.c b/drivers/bus/mhi/ep/main.c
+>>> index baf383a4857b..e4186b012257 100644
+>>> --- a/drivers/bus/mhi/ep/main.c
+>>> +++ b/drivers/bus/mhi/ep/main.c
+>>> @@ -488,6 +488,108 @@ int mhi_ep_process_tre_ring(struct mhi_ep_ring *ring, struct mhi_ep_ring_element
+>>>    	return 0;
+>>>    }
+>>> +int mhi_ep_queue_skb(struct mhi_ep_device *mhi_dev, enum dma_data_direction dir,
+>>> +		     struct sk_buff *skb, size_t len, enum mhi_flags mflags)
+>>
+>> Why are both skb and len supplied?  Will an skb be supplied
+>> without wanting to send all of it?  Must len be less than
+>> skb->len?  I'm a little confused about the interface.
+>>
+>> Also, the data direction is *out*, right?  You'll never
+>> be queueing a "receive" SKB?
+>>
+> 
+> This was done to be compatible with the MHI host API where the host can queue
+> SKBs in both directions. But I think I should stop doing this.
 
-On Tue, Feb 22, 2022, Peng Hao wrote:
->  From: Peng Hao <flyingpeng@tencent.com> 
+
+OK.
+
+>>> +{
+>>> +	struct mhi_ep_chan *mhi_chan = (dir == DMA_FROM_DEVICE) ? mhi_dev->dl_chan :
+>>> +								mhi_dev->ul_chan;
+>>> +	struct mhi_ep_cntrl *mhi_cntrl = mhi_dev->mhi_cntrl;
+>>> +	struct device *dev = &mhi_chan->mhi_dev->dev;
+>>> +	struct mhi_ep_ring_element *el;
+>>> +	struct mhi_ep_ring *ring;
+>>> +	size_t bytes_to_write;
+>>> +	enum mhi_ev_ccs code;
+>>> +	void *read_from_loc;
+>>> +	u32 buf_remaining;
+>>> +	u64 write_to_loc;
+>>> +	u32 tre_len;
+>>> +	int ret = 0;
+>>> +
+>>> +	if (dir == DMA_TO_DEVICE)
+>>> +		return -EINVAL;
+>>
+>> Can't you just preclude this from happening, or
+>> know it won't happen by inspection?
+>>
+>>> +
+>>> +	buf_remaining = len;
+>>> +	ring = &mhi_cntrl->mhi_chan[mhi_chan->chan].ring;
+>>> +
+>>> +	mutex_lock(&mhi_chan->lock);
+>>> +
+>>> +	do {
+>>> +		/* Don't process the transfer ring if the channel is not in RUNNING state */
+>>> +		if (mhi_chan->state != MHI_CH_STATE_RUNNING) {
+>>> +			dev_err(dev, "Channel not available\n");
+>>> +			ret = -ENODEV;
+>>> +			goto err_exit;
+>>> +		}
+>>> +
+>>
+>> It would be nice if the caller could know whether there
+>> was enough room *before* you start transferring things.
+>> It's probably a lot of work to get to that point though.
+>>
 > 
->  Remove a redundant 'cpu' declaration from inside an if-statement that
->  that shadows an identical declaration at function scope.  Both variables
->  are used as scratch variables in for_each_*_cpu() loops, thus there's no
->  harm in sharing a variable.
+> No, the caller will do this check but the check is included here so that we
+> don't run out of buffers when the packet needs to be splitted.
 > 
-> Reviewed-by: Sean Christopherson <seanjc@google.com>
-> Signed-off-by: Peng Hao <flyingpeng@tencent.com>
-> ---
->  arch/x86/kvm/vmx/vmx.c | 1 -
->  1 file changed, 1 deletion(-)
+>>> +		if (mhi_ep_queue_is_empty(mhi_dev, dir)) {
+>>> +			dev_err(dev, "TRE not available!\n");
+>>> +			ret = -EINVAL;
+>>> +			goto err_exit;
+>>> +		}
+>>> +
+>>> +		el = &ring->ring_cache[ring->rd_offset];
+>>> +		tre_len = MHI_EP_TRE_GET_LEN(el);
+>>> +		if (skb->len > tre_len) {
+>>> +			dev_err(dev, "Buffer size (%d) is too large for TRE (%d)!\n",
+>>> +				skb->len, tre_len);
+>>
+>> This means the receive buffer must be big enough to hold
+>> any incoming SKB.  This is *without* checking for the
+>> CHAIN flag in the TRE, so what you describe in the
+>> patch description seems not to be true.  I.e., multiple
+>> TREs in a TRD will *not* be consumed if the SKB data
+>> requires more than what's left in the current TRE.
+>>
 > 
-> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-> index ba66c171d951..6101c2980a9c 100644
-> --- a/arch/x86/kvm/vmx/vmx.c
-> +++ b/arch/x86/kvm/vmx/vmx.c
-> @@ -7931,7 +7931,6 @@ static int __init vmx_init(void)
->  	    ms_hyperv.hints & HV_X64_ENLIGHTENED_VMCS_RECOMMENDED &&
->  	    (ms_hyperv.nested_features & HV_X64_ENLIGHTENED_VMCS_VERSION) >=
->  	    KVM_EVMCS_VERSION) {
-> -		int cpu;
->  
->  		/* Check that we have assist pages on all online CPUs */
->  		for_each_online_cpu(cpu) {
-> -- 
-> 2.27.0
+> I think I removed this check for v3 but somehow the change got lost :/
+
+Looking at this now, it's possible I got confused about
+which direction the data was moving; but I'm not really
+sure.
+
+ From the perspective of the endpoint device, this is the
+*transmit* function.  But when the device is transmitting,
+it is moving data into the *receive* buffers that the host
+has allocated and supplied via the transfer ring.
+
+My statement seems to be correct though, with this logic,
+the host must supply a buffer large enough to receive the
+entire next SKB, or it will get an error back.  I no longer
+know what happens when this function (mhi_ep_queue_skb())
+returns an error--is the skb dropped?
+
+> But anyway, there is no need to check for CHAIN flag while writing to host.
+> CHAIN flag is only used or even make sense when host writes data to device, so
+
+I'm not sure that's correct, but I don't want to get into that issue here.
+We can talk about that separately.
+
+> that it knows the packet boundary and could use the CHAIN flag to tell the
+> device where the boundary lies.
+
+This doesn't sound to me like what the purpose of the CHAIN flag is,
+but perhaps I'm misunderstanding you.  Let's have a quick private
+chat about this so we don't waste any more e-mail bandwidth.
+
+					-Alex
+
+> But when the device writes to host, it already has the pre-queued elements from
+> host that has no idea where the packet boundary lies. So the host would've set
+> only EOT on all TREs and expects the device to send OVERFLOW event for TREs that
+> don't have the complete packet. Then finally, when device sends EOT event, the
+> host will detect the boundary.
 > 
+> Thanks,
+> Mani
+

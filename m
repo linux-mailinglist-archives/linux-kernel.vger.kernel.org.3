@@ -2,64 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04BC64BF4BF
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 10:31:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F4DE4BF4C5
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 10:32:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230219AbiBVJ3i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 04:29:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45712 "EHLO
+        id S230160AbiBVJbb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 04:31:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230209AbiBVJ3h (ORCPT
+        with ESMTP id S229509AbiBVJba (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 04:29:37 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 982781598D8;
-        Tue, 22 Feb 2022 01:29:12 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 4F38E210EE;
-        Tue, 22 Feb 2022 09:29:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1645522151; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=8KO9eSAjyIM0oRKAVo7/HRTrFsIPM0SoTnTaPPETnAI=;
-        b=gWr9jFCVNMp0NS6myO8IsSwi8Su0xubP8F9Vp/bHj/ai0BWW0aY5D+2bajebQBiFTBviZL
-        2O2hsnQv8l3A7/aus7rSDeAuMVy+TwS4/Tk0uXN3QWPmPIDTr8S1I1eC0j2qH4r9BVSMmf
-        n+TU4aQxXk1oDl6eGA/jV/P05lOAMVc=
-Received: from suse.cz (unknown [10.100.224.162])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id E5477A3B83;
-        Tue, 22 Feb 2022 09:29:10 +0000 (UTC)
-Date:   Tue, 22 Feb 2022 10:29:09 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Cc:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        rust-for-linux <rust-for-linux@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Gary Guo <gary@garyguo.net>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@google.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>
-Subject: Re: [PATCH v4 12/20] vsprintf: add new `%pA` format specifier
-Message-ID: <YhSs5ZTL9ixdCCU9@alley>
-References: <20220212130410.6901-1-ojeda@kernel.org>
- <20220212130410.6901-13-ojeda@kernel.org>
- <YgosclY9ebD3t020@smile.fi.intel.com>
- <dc9054f2-5e2b-0ae2-1022-23421668dd05@rasmusvillemoes.dk>
- <CANiq72=mNh415UG_nxDQc=9SCSVSPnqcAbgFZKzavnmsim_L0Q@mail.gmail.com>
+        Tue, 22 Feb 2022 04:31:30 -0500
+Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3721C15721C;
+        Tue, 22 Feb 2022 01:31:04 -0800 (PST)
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id 58E191C0B8D; Tue, 22 Feb 2022 10:31:02 +0100 (CET)
+Date:   Tue, 22 Feb 2022 10:31:01 +0100
+From:   Pavel Machek <pavel@denx.de>
+To:     Jonathan McDowell <noodles@fb.com>
+Cc:     "greg@kroah.com" <greg@kroah.com>,
+        Dmitrii Okunev <xaionaro@fb.com>,
+        "qiaowei.ren@intel.com" <qiaowei.ren@intel.com>,
+        "mjg59@srcf.ucam.org" <mjg59@srcf.ucam.org>,
+        "xiaoyan.zhang@intel.com" <xiaoyan.zhang@intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "gang.wei@intel.com" <gang.wei@intel.com>,
+        "platform-driver-x86@vger.kernel.org" 
+        <platform-driver-x86@vger.kernel.org>
+Subject: Re: [discuss] Improve and merge a driver proposed in 2013: sysfs
+ interfaces to access TXT config space
+Message-ID: <20220222093101.GA23654@amd>
+References: <1368465884-14779-1-git-send-email-qiaowei.ren@intel.com>
+ <1368465884-14779-3-git-send-email-qiaowei.ren@intel.com>
+ <20130516160311.GA12299@amd.pavel.ucw.cz>
+ <4febd50da7e5007a2797e0f4c969fa5edd0bf725.camel@fb.com>
+ <Yg5A4Mupue0V9diu@kroah.com>
+ <20220217123753.GA21849@duo.ucw.cz>
+ <0cf678e0b01bf421f3db6693a15ac4060501a80a.camel@fb.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="k1lZvvs/B4yU6o8G"
 Content-Disposition: inline
-In-Reply-To: <CANiq72=mNh415UG_nxDQc=9SCSVSPnqcAbgFZKzavnmsim_L0Q@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+In-Reply-To: <0cf678e0b01bf421f3db6693a15ac4060501a80a.camel@fb.com>
+User-Agent: Mutt/1.5.23 (2014-03-12)
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NEUTRAL,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,42 +54,124 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 2022-02-14 13:12:24, Miguel Ojeda wrote:
-> On Mon, Feb 14, 2022 at 11:52 AM Rasmus Villemoes
-> <linux@rasmusvillemoes.dk> wrote:
-> >
-> > I think the point is for vsnprintf() to call (back) into Rust code.
-> 
-> Indeed, this is the case.
-> 
-> > That said, I don't like the !CONFIG_RUST version to return NULL, that
-> > will surely crash moments later.
-> >
-> > So I prefer something like
-> >
-> > [rust.h]
-> > // no CONFIG_RUST conditional
-> > +char *rust_fmt_argument(char* buf, char* end, void *ptr);
-> >
-> > [vsprintf.c]
-> > +       case 'A':
-> > +               if (IS_ENABLED(CONFIG_RUST))
-> > +                   return rust_fmt_argument(buf, end, ptr);
-> > +               else
-> > +                   return string_nocheck(buf, end, "[%pA in non-Rust
-> > code?!]", default_str_spec);
 
-Any long message might cause buffer overflow when the caller expects
-fixed short string.
+--k1lZvvs/B4yU6o8G
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> Sounds good. Or perhaps simply `break` and let it print the pointer
-> (to be consistent with `g` case and non-error `e` case).
+On Fri 2022-02-18 18:05:47, Jonathan McDowell wrote:
+> On Thu, 2022-02-17 at 13:37 +0100, Pavel Machek wrote:
+> > On Thu 2022-02-17 13:34:40, greg@kroah.com=A0wrote:
+> > > On Thu, Feb 17, 2022 at 11:47:21AM +0000, Dmitrii Okunev wrote:
+> > > > Hello!
+> > > >=20
+> > > > As far as I see the patch wasn't merged. And I see that this is
+> > > > the only unsolved thread in the discussion:
+> > > >=20
+> > > > On Thu, 2013-05-16 at 18:03 +0200, Pavel Machek wrote:
+> > > > > On Tue 2013-05-14 01:24:43, Qiaowei Ren wrote:
+> > > > > > These interfaces are located in
+> > > > > > /sys/devices/platform/intel_txt/config,
+> > > > > > and including totally 37 files, providing access to Intel TXT
+> > > > > > configuration registers.
+> > > > >=20
+> > > > > This looks like very wrong interface... equivalent of /dev/mem.
+> > > >=20
+> > > > As an active user of these registers I hope it will be merged, so
+> > > > I would like to improve this patch (or rewrite it from scratch)
+> > > > to make that happen. Otherwise one have to do hackery around
+> > > > `/dev/mem`, which also creates problems with proper access
+> > > > control.
+> > > >=20
+> > > > To be able to improve the patch, could somebody clarify why
+> > > > exactly this is a "very wrong interface"?
+> > > >=20
+> > > > > > +What:=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0/sys/devices/platform/intel=
+_txt/config/STS_ra
+> > > > > > w
+> > > > > > +Date:=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0May 2013
+> > > > > > +KernelVersion:=A03.9
+> > > > > > +Contact:=A0=A0=A0=A0=A0=A0=A0"Qiaowei Ren" <qiaowei.ren@intel.=
+com>
+> > > > > > +Description:=A0=A0=A0TXT.STS is the general status register. T=
+his
+> > > > > > read-
+> > > > > > only register
+> > > > > > +=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0is used by AC mod=
+ules and the MLE to get the
+> > > > > > status
+> > > > > > of various
+> > > > > > +=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0Intel TXT feature=
+s.
+> > > > >=20
+> > > > > This is not enough to allow people to understand what this
+> > > > > does/should do, nor does it allow (for example) ARM people to
+> > > > > implement something compatible.
+> > > > >=20
+> > > > > Is there specific reason why "better" interface is impossible?
+> > > >=20
+> > > > I would love to reuse Intel's public documentation [1] to provide
+> > > > a proper description (with bit layout of the value).
+> > > >=20
+> > > > [1] https://cdrdv2.intel.com/v1/dl/getContent/315168
+> > > >=20
+> > > > > [...], nor does it allow (for example) ARM people to
+> > > > > implement something compatible.
+> > > >=20
+> > > > Do I understand correctly that a proper documentation of the
+> > > > registers solves the problem?
+> > > >=20
+> > > > > Is there specific reason why "better" interface is impossible?
+> > > >=20
+> > > > What are specific problems with the current interface?
+> > >=20
+> > > What do you mean by "current" here?=A0 You are referring to an email
+> > > from 2013, 9 years ago.
+> > >=20
+> > > If you want to propose the change again, correctly update the patch
+> > > and submit it that way.
+> >=20
+> > I don't believe taking hardware registers and exposing them 1-to-1 in
+> > sysfs is the way to go.
+> >=20
+> > We would like same /sys interface on different hardware, and simply
+> > exposing Intel's registers in /sys will not do the job.
+>=20
+> So, for our particular use case what we want to be able to see is the
+> status of the TXT device, so when attestation fails it's possible to
+> diagnose where that might have happened. At a minimum=A0details from the
+> status register are folded into the first measurement, and the error
+> register can provide valuable insight as to what the TXT device thinks
+> failed.
+>=20
+> At present these details are retrieved from /dev/mem, but this is less
+> than ideal and prevents the use of, say, kernel lockdown. As a result
+> we'd like to export the appropriate details via sysfs. These are likely
+> to be extremely security block implementation specific, so I'm not
+> clear that a generic agnostic interface is appropriate to retrieve
+> these details.
 
-Also this might cause buffer overflow.
+> Do you have the same objection to a read only set of information
+> (rather than the full control offered by the initial submission)?
 
-The most safe solution would be to use WARN_ONCE(). The only drawback
-is that it might cause panic() when using "panic_on_warn" kernel
-parameter. But it will not open security hole.
+Might be a job for debugfs?
+							Pavel
 
-Best Regards,
-Petr
+--=20
+DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
+HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
+
+--k1lZvvs/B4yU6o8G
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: Digital signature
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1
+
+iEYEARECAAYFAmIUrVUACgkQMOfwapXb+vKgrQCghttXJ7nTqOcDXJPclG6dbVcv
+hJsAoJGS6x8u/CYDqk2yNOu2JrH38ell
+=zuhO
+-----END PGP SIGNATURE-----
+
+--k1lZvvs/B4yU6o8G--

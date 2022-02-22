@@ -2,122 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EC6D4BF1E9
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 07:10:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 869EC4BF1EC
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 07:12:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230178AbiBVGLA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 01:11:00 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:54264 "EHLO
+        id S230229AbiBVGLZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 01:11:25 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:55900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230157AbiBVGK5 (ORCPT
+        with ESMTP id S230182AbiBVGLU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 01:10:57 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96AC6C331C;
-        Mon, 21 Feb 2022 22:10:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
-        :In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=9q3yjh9uLyNjxrhUerp6IhTsxF93kG7KHpu4Olz4eNE=; b=jOWoVkAQBFZORRr8wm1BxB7JNG
-        DN2pz7usUpggsTA5poxAj943t3ZFbTfMBTJcSJJ/XIUVpTSc+5LPf27xPNqMapVDkckno2so6rlih
-        izVuubkI7ueepLIc3Qdz0gGN0jZBPAGq02VttXybRBcT54EkDilw5lP1bhJMOYxJd1yUtmumjsjRO
-        5abU/wkABYXFgq4bzeg6J1Y4QqyTKE8G+81GOHPTk7T0h/TLpogsKQm9kapAw2XqUKd9gJHvJ2Cps
-        2lixE0FoSlOqzNhyLERg0E350+Sg+oEnrKBtU21C68p/SOGdznHoq04MDYdDXDx67v5ItTHdSjfRW
-        /BIjYLLw==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nMONX-00BsFN-91; Tue, 22 Feb 2022 06:10:27 +0000
-Message-ID: <7852b505-a65a-6cdd-29a8-3bc966dfc750@infradead.org>
-Date:   Mon, 21 Feb 2022 22:10:22 -0800
+        Tue, 22 Feb 2022 01:11:20 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0E88C3331
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 22:10:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645510255; x=1677046255;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=9ilr9rbsDwfjmR9iFtIV52yKRpeR9y4HwxI7wXpXrB8=;
+  b=GWMOSDK/DfO4k5DLJgwPk1L8wQ9Qy94hEawHDFHqwDC0u0reP1WTJiib
+   n8jVaq8nEC/Va7oHBUDA7umPjExjNDn7uUYh9xezwQyOzjkGb6ngKWpk7
+   xo6gAmWtWnOVDR00sQDHV3CLVke6PEXWAtv3XC317RYB2bUAslV6dvSJF
+   ll0viYGpxbSNEDc+pV7phDFrHObqf4ragHrZYv2JeF6nr4XxacUjTSMXm
+   8IxaU0C1GrrQQwvljHteJdnPUlUURS9WwHGWy/WdzPhEPiwLXNQyhKTCY
+   nFlMK3ozwU0z+W65IVmqu1jRGjnpjpF7QhYRMIzW4w1NbBbjfDLHyZ5DE
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10265"; a="276217983"
+X-IronPort-AV: E=Sophos;i="5.88,387,1635231600"; 
+   d="scan'208";a="276217983"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2022 22:10:55 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,387,1635231600"; 
+   d="scan'208";a="532099330"
+Received: from lkp-server01.sh.intel.com (HELO da3212ac2f54) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 21 Feb 2022 22:10:54 -0800
+Received: from kbuild by da3212ac2f54 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nMONx-0002Oa-CP; Tue, 22 Feb 2022 06:10:53 +0000
+Date:   Tue, 22 Feb 2022 14:10:41 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Ingo Molnar <mingo@kernel.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [mingo-tip:sched/headers 2122/2541]
+ arch/s390/include/asm/processor.h:307:13: error: use of undeclared
+ identifier '_THIS_IP_'
+Message-ID: <202202221415.RGRWi3xN-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH v4 01/11] scripts: kernel-doc: Add the basic POD sections
-Content-Language: en-US
-To:     =?UTF-8?B?VG9tYXN6IFdhcm5pZcWCxYJv?= <tomasz.warniello@gmail.com>,
-        corbet@lwn.net
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220218181628.1411551-1-tomasz.warniello@gmail.com>
- <20220218181628.1411551-2-tomasz.warniello@gmail.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20220218181628.1411551-2-tomasz.warniello@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git sched/headers
+head:   601144c0da5edfa67a9654158370da19c67e17e2
+commit: 58809689cf88dc9300f57d8a653053ae3d36acbd [2122/2541] headers/deps: Add header dependencies to .h files: <linux/xarray_api.h>
+config: s390-randconfig-r044-20220221 (https://download.01.org/0day-ci/archive/20220222/202202221415.RGRWi3xN-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install s390 cross compiling tool for clang build
+        # apt-get install binutils-s390x-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=58809689cf88dc9300f57d8a653053ae3d36acbd
+        git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
+        git fetch --no-tags mingo-tip sched/headers
+        git checkout 58809689cf88dc9300f57d8a653053ae3d36acbd
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 prepare
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   In file included from arch/s390/kernel/asm-offsets.c:11:
+   In file included from include/linux/kvm_host.h:6:
+   In file included from include/linux/xarray_api.h:15:
+   In file included from include/linux/lockdep_api.h:27:
+   In file included from include/linux/smp_api.h:15:
+   In file included from arch/s390/include/asm/smp.h:13:
+>> arch/s390/include/asm/processor.h:307:13: error: use of undeclared identifier '_THIS_IP_'
+           psw.addr = _THIS_IP_;
+                      ^
+   In file included from arch/s390/kernel/asm-offsets.c:11:
+   In file included from include/linux/kvm_host.h:6:
+   In file included from include/linux/xarray_api.h:15:
+   In file included from include/linux/lockdep_api.h:27:
+   In file included from include/linux/smp_api.h:15:
+   arch/s390/include/asm/smp.h:20:30: error: expected ';' after top level declarator
+   extern __vector128 __initdata boot_cpu_vector_save_area[__NUM_VXRS];
+                                ^
+                                ;
+   In file included from arch/s390/kernel/asm-offsets.c:11:
+   In file included from include/linux/kvm_host.h:6:
+   In file included from include/linux/xarray_api.h:19:
+   In file included from include/linux/rcupdate.h:35:
+   include/linux/sched/per_task.h:48:11: fatal error: 'generated/asm-offsets.h' file not found
+   # include <generated/asm-offsets.h>
+             ^~~~~~~~~~~~~~~~~~~~~~~~~
+   3 errors generated.
+   make[2]: *** [scripts/Makefile.build:121: arch/s390/kernel/asm-offsets.s] Error 1
+   make[2]: Target '__build' not remade because of errors.
+   make[1]: *** [Makefile:1191: prepare0] Error 2
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:219: __sub-make] Error 2
+   make: Target 'prepare' not remade because of errors.
 
 
-On 2/18/22 10:16, Tomasz Warniełło wrote:
-> The NAME section provides the doc title, while SYNOPSIS contains
-> the basic syntax and usage description, which will be printed
-> in the help document and in the error output produced on wrong script
-> usage.
-> 
-> The rationale is to give users simple and succinct enlightment,
-> at the same time structuring the script internally for the maintainers.
-> 
-> In the synopsis, Rst-only options are grouped around rst, and the rest is
-> arranged as in the OPTIONS subsections (yet to be translated into POD,
-> check at the end of the series).
-> 
-> The third of the basic sections, DESCRIPTION, is added separately.
-> 
-> Signed-off-by: Tomasz Warniełło <tomasz.warniello@gmail.com>
-> ---
->  scripts/kernel-doc | 25 +++++++++++++++++++++++++
->  1 file changed, 25 insertions(+)
-> 
-> diff --git a/scripts/kernel-doc b/scripts/kernel-doc
-> index 3106b7536b89..c8fbf1d3d5aa 100755
-> --- a/scripts/kernel-doc
-> +++ b/scripts/kernel-doc
-> @@ -16,6 +16,31 @@ use strict;
->  ## This software falls under the GNU General Public License.     ##
->  ## Please read the COPYING file for more information             ##
->  
-> +=head1 NAME
-> +
-> +kernel-doc - Print formatted kernel documentation to stdout
-> +
-> +=head1 SYNOPSIS
-> +
-> + kernel-doc [-h] [-v] [-Werror]
-> +   [ -man |
-> +     -rst [-sphinx-version VERSION] [-enable-lineno] |
-> +     -none
-> +   ]
-> +   [
-> +     -export |
-> +     -internal |
-> +     [-function NAME] ... |
-> +     [-nosymbol NAME] ...
-> +   ]
-> +   [-no-doc-sections]
-> +   [-export-file FILE] ...
-> +   FILE ...
-> +
-> +Run `kernel-doc -h` for details.
+vim +/_THIS_IP_ +307 arch/s390/include/asm/processor.h
 
-Nit:
-$ ./scripts/kernel-doc -h
-says:
-    Run `kernel-doc -h` for details.
+ccf45cafb08059 arch/s390/include/asm/processor.h Martin Schwidefsky 2011-10-30  298  
+^1da177e4c3f41 include/asm-s390/processor.h      Linus Torvalds     2005-04-16  299  /*
+^1da177e4c3f41 include/asm-s390/processor.h      Linus Torvalds     2005-04-16  300   * Function to drop a processor into disabled wait state
+^1da177e4c3f41 include/asm-s390/processor.h      Linus Torvalds     2005-04-16  301   */
+c2e06e15ad92ba arch/s390/include/asm/processor.h Vasily Gorbik      2019-11-22  302  static __always_inline void __noreturn disabled_wait(void)
+^1da177e4c3f41 include/asm-s390/processor.h      Linus Torvalds     2005-04-16  303  {
+f9e6edfb9cf780 arch/s390/include/asm/processor.h Heiko Carstens     2015-10-12  304  	psw_t psw;
+^1da177e4c3f41 include/asm-s390/processor.h      Linus Torvalds     2005-04-16  305  
+f9e6edfb9cf780 arch/s390/include/asm/processor.h Heiko Carstens     2015-10-12  306  	psw.mask = PSW_MASK_BASE | PSW_MASK_WAIT | PSW_MASK_BA | PSW_MASK_EA;
+98587c2d894c34 arch/s390/include/asm/processor.h Martin Schwidefsky 2019-04-30 @307  	psw.addr = _THIS_IP_;
+f9e6edfb9cf780 arch/s390/include/asm/processor.h Heiko Carstens     2015-10-12  308  	__load_psw(psw);
+edd5378740fe77 arch/s390/include/asm/processor.h Heiko Carstens     2008-12-25  309  	while (1);
+^1da177e4c3f41 include/asm-s390/processor.h      Linus Torvalds     2005-04-16  310  }
+^1da177e4c3f41 include/asm-s390/processor.h      Linus Torvalds     2005-04-16  311  
 
-> +
-> +=cut
-> +
->  # 18/01/2001 - 	Cleanups
->  # 		Functions prototyped as foo(void) same as foo()
->  # 		Stop eval'ing where we don't need to.
+:::::: The code at line 307 was first introduced by commit
+:::::: 98587c2d894c34c9af5cd84ca169e1cd493aa692 s390: simplify disabled_wait
 
--- 
-~Randy
+:::::: TO: Martin Schwidefsky <schwidefsky@de.ibm.com>
+:::::: CC: Martin Schwidefsky <schwidefsky@de.ibm.com>
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

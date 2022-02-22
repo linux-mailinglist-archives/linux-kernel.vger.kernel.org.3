@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02D454BF786
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 13:00:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 629F14BF787
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 13:00:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231849AbiBVMAk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 07:00:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47340 "EHLO
+        id S231856AbiBVMAm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 07:00:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231438AbiBVMAT (ORCPT
+        with ESMTP id S231784AbiBVMAU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 07:00:19 -0500
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 273A5156C65
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 03:59:53 -0800 (PST)
-Received: by mail-wm1-x32c.google.com with SMTP id o62-20020a1ca541000000b00380e3cc26b7so226009wme.0
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 03:59:53 -0800 (PST)
+        Tue, 22 Feb 2022 07:00:20 -0500
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BD07156C67
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 03:59:54 -0800 (PST)
+Received: by mail-wm1-x32e.google.com with SMTP id n29-20020a05600c3b9d00b00380e379bae2so211617wms.3
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 03:59:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=b/RMewZRNdO9Wc+5bCNqy1Hhh9vonM3PUYPjxzgWe6c=;
-        b=SanxqFiRWVCfz2tMk6aRuN8EEWVdZcWBZqQ/p98luZkdfvMRIOd/tTpvxbWWTEU53M
-         +K2TVExVtW+/JyRFknezKVtcO5x12s/Yn17Y9baJmceusyiSFROq1sIowVFwhAXaQjre
-         J/bQdVKvT3CfbuacjV/caOuz/9GQLYDwX4q3y4G4KTC7uVgy29Bt5TEv41mAKt1uV0bD
-         bu8hEpEzxqK5v0nBIJfN3ilaTQ+3BGT49GMN7JYKt76nx3cJViR9l+yyEIWABmRTFw9e
-         lHwVf1OhEGAGt+5qkdF0ggw+czKMt2L7rJZvogJtHTRbqr5DM8A0aPvizAnMNJi9TJxz
-         ztEA==
+        bh=F4+KoWOLDfBWBNmg8ATzKj3dgQDIuJh9SiDFM0VqDsI=;
+        b=BFcQ0xeGjkb5gAjr4AmA0Upb6D/t5gZ3sgiwyOwFnOPwn7x3emUhI03zW9x9tKD9gI
+         XhZcTlsxhpPG756DZ4gni1co0nrdMBbo9jTz/H0WsiBSyskEsiKG8jWaROZiOaZ+UONI
+         o1ywDWRZqTdZDrb8uuU3dFlLb0E9wTgK21wlnNyClrSvZgt2CpkgteBG1MhxcUavVKie
+         yNTf+OT0eaJFVzXCUT5G+JstVJvzlk1f1r0S6zwH3n/vl0rfBQK9AZ5+9hd8329QWaMW
+         BWyFMVbrEnnmYz8GL70pMisVsQpkqxveoYDWvgppJKDE+8dK4GIW3Kts4NPiAEwKzyof
+         5TPA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=b/RMewZRNdO9Wc+5bCNqy1Hhh9vonM3PUYPjxzgWe6c=;
-        b=GcA311oGPa5rDFWTSY63dKT4+5IVxpV4e8IjnrrRx7+pslaAt7bJqwlCTuppmp3qX0
-         yWZtkUTHa5mQvIkc45K9Dsf/l+JRtUoJiyOu2MUw6gtXHTZS9FCC/at0HmvbSIFon3bu
-         0VaKdugxbUHfyXoMd+G3oc9MEWECJHsA8/qtdqX5ceqG/fkYwqSFcb6JqyAhU7ebYUPi
-         2gxkfwVL6yU5FLGLFabX/MCKL3tU9drGHVnikdZm1InJHQUN50MaR5hJMoPaG7vgnbZr
-         5fLa+8Uq3qKORrFPPmueVM6u87ToqJ8wnag6oBWXTUpgegmhjPYLo2/VlUT+xZ4XErG3
-         dWUA==
-X-Gm-Message-State: AOAM5307RMboT52NMeyDxBTiIshKotJNkBEG/jy9YLlUXlZHjG1x3EYk
-        Oe6F/nJyRZ1kcgkuNIkgxGS1oQ==
-X-Google-Smtp-Source: ABdhPJxzgULSLUP2pqn4tukUw2n0gKmU+1hjzQ8HM08B5i+0uUMqJIsF0uL6zc5my2JKVFxfGP6fJQ==
-X-Received: by 2002:a05:600c:354c:b0:380:dec4:10ac with SMTP id i12-20020a05600c354c00b00380dec410acmr1382242wmq.62.1645531191766;
-        Tue, 22 Feb 2022 03:59:51 -0800 (PST)
+        bh=F4+KoWOLDfBWBNmg8ATzKj3dgQDIuJh9SiDFM0VqDsI=;
+        b=4nwwKTAt4q6sv+k8RaRWtIUZ+c0chWxROqHHweKNEMl4iel1iQsjV/KIOcJuwjTAeZ
+         mqByUF26BmYstoolHRhCgDi8kwEe71Xye7CGfaUq0uwduuQyXTDSUPOYING6zKQJywbT
+         XVF6ozfq+x82BlkRmLyNhdS9hnzSBHFD9+jcE4ar814JyTFayFQ20fxOfNqAOPuJKA7y
+         61Jr2qJTwmeGdPfTm4n30ZKctXI5O3zVypu3JQd40HzbTkUda6SZrMNTYM13hKRCRdi5
+         6rXqBXkQOLD38qmarFCJ0v7rQb5J25ZKXn3bqaNVHo8QZ5PV597BoTa+jdji1ePwHUtG
+         f8ZA==
+X-Gm-Message-State: AOAM532MxPkLNl8q6HEK/30v3VR5H2PvjMOdkSjW/DBsSHbEZ6qrg1Gq
+        A/24mZzJGm0LEwf7gkHYGbKTBw==
+X-Google-Smtp-Source: ABdhPJxq6HIDurY9AQGuguDuGeBZZw3FpNl85sCDgC+WPGHKegdDi8iHlSvjQXET7sL/ND1r74vreg==
+X-Received: by 2002:a05:600c:230d:b0:37d:5882:ec9b with SMTP id 13-20020a05600c230d00b0037d5882ec9bmr3053532wmo.162.1645531192803;
+        Tue, 22 Feb 2022 03:59:52 -0800 (PST)
 Received: from srini-hackbox.lan (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
-        by smtp.gmail.com with ESMTPSA id a18sm50014661wrg.13.2022.02.22.03.59.50
+        by smtp.gmail.com with ESMTPSA id a18sm50014661wrg.13.2022.02.22.03.59.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Feb 2022 03:59:51 -0800 (PST)
+        Tue, 22 Feb 2022 03:59:52 -0800 (PST)
 From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 To:     broonie@kernel.org
 Cc:     lgirdwood@gmail.com, perex@perex.cz, tiwai@suse.com,
         pierre-louis.bossart@linux.intel.com, alsa-devel@alsa-project.org,
         linux-kernel@vger.kernel.org, quic_srivasam@quicinc.com,
         Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Subject: [PATCH 04/16] ASoC: codecs: va-macro: fix accessing array out of bounds for enum type
-Date:   Tue, 22 Feb 2022 11:59:21 +0000
-Message-Id: <20220222115933.9114-5-srinivas.kandagatla@linaro.org>
+Subject: [PATCH 05/16] ASoC: codecs: wsa-macro: fix accessing array out of bounds for enum type
+Date:   Tue, 22 Feb 2022 11:59:22 +0000
+Message-Id: <20220222115933.9114-6-srinivas.kandagatla@linaro.org>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20220222115933.9114-1-srinivas.kandagatla@linaro.org>
 References: <20220222115933.9114-1-srinivas.kandagatla@linaro.org>
@@ -76,34 +76,64 @@ Accessing enums using integer would result in array out of bounds access
 on platforms like aarch64 where sizeof(long) is 8 compared to enum size
 which is 4 bytes.
 
-Fixes: 908e6b1df26e ("ASoC: codecs: lpass-va-macro: Add support to VA Macro")
+Also fix return value of put function, so that change notifications are
+sent correctly.
+
+Fixes: 2c4066e5d428 ("ASoC: codecs: lpass-wsa-macro: add dapm widgets and route")
 Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 ---
- sound/soc/codecs/lpass-va-macro.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ sound/soc/codecs/lpass-wsa-macro.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/sound/soc/codecs/lpass-va-macro.c b/sound/soc/codecs/lpass-va-macro.c
-index 803e4dca0538..0fd0139e8229 100644
---- a/sound/soc/codecs/lpass-va-macro.c
-+++ b/sound/soc/codecs/lpass-va-macro.c
-@@ -781,7 +781,7 @@ static int va_macro_dec_mode_get(struct snd_kcontrol *kcontrol,
- 	struct soc_enum *e = (struct soc_enum *)kcontrol->private_value;
- 	int path = e->shift_l;
+diff --git a/sound/soc/codecs/lpass-wsa-macro.c b/sound/soc/codecs/lpass-wsa-macro.c
+index 05bf18ae10e7..7de09c46264b 100644
+--- a/sound/soc/codecs/lpass-wsa-macro.c
++++ b/sound/soc/codecs/lpass-wsa-macro.c
+@@ -1806,7 +1806,7 @@ static int wsa_macro_ear_spkr_pa_gain_get(struct snd_kcontrol *kcontrol,
+ 	struct snd_soc_component *component = snd_soc_kcontrol_component(kcontrol);
+ 	struct wsa_macro *wsa = snd_soc_component_get_drvdata(component);
  
--	ucontrol->value.integer.value[0] = va->dec_mode[path];
-+	ucontrol->value.enumerated.item[0] = va->dec_mode[path];
+-	ucontrol->value.integer.value[0] = wsa->ear_spkr_gain;
++	ucontrol->value.enumerated.item[0] = wsa->ear_spkr_gain;
  
  	return 0;
  }
-@@ -790,7 +790,7 @@ static int va_macro_dec_mode_put(struct snd_kcontrol *kcontrol,
- 				 struct snd_ctl_elem_value *ucontrol)
- {
- 	struct snd_soc_component *comp = snd_soc_kcontrol_component(kcontrol);
--	int value = ucontrol->value.integer.value[0];
-+	int value = ucontrol->value.enumerated.item[0];
+@@ -1817,7 +1817,7 @@ static int wsa_macro_ear_spkr_pa_gain_put(struct snd_kcontrol *kcontrol,
+ 	struct snd_soc_component *component = snd_soc_kcontrol_component(kcontrol);
+ 	struct wsa_macro *wsa = snd_soc_component_get_drvdata(component);
+ 
+-	wsa->ear_spkr_gain =  ucontrol->value.integer.value[0];
++	wsa->ear_spkr_gain =  ucontrol->value.enumerated.item[0];
+ 
+ 	return 0;
+ }
+@@ -1831,7 +1831,7 @@ static int wsa_macro_rx_mux_get(struct snd_kcontrol *kcontrol,
+ 				snd_soc_dapm_to_component(widget->dapm);
+ 	struct wsa_macro *wsa = snd_soc_component_get_drvdata(component);
+ 
+-	ucontrol->value.integer.value[0] =
++	ucontrol->value.enumerated.item[0] =
+ 			wsa->rx_port_value[widget->shift];
+ 	return 0;
+ }
+@@ -1845,7 +1845,7 @@ static int wsa_macro_rx_mux_put(struct snd_kcontrol *kcontrol,
+ 				snd_soc_dapm_to_component(widget->dapm);
  	struct soc_enum *e = (struct soc_enum *)kcontrol->private_value;
- 	int path = e->shift_l;
- 	struct va_macro *va = snd_soc_component_get_drvdata(comp);
+ 	struct snd_soc_dapm_update *update = NULL;
+-	u32 rx_port_value = ucontrol->value.integer.value[0];
++	u32 rx_port_value = ucontrol->value.enumerated.item[0];
+ 	u32 bit_input;
+ 	u32 aif_rst;
+ 	struct wsa_macro *wsa = snd_soc_component_get_drvdata(component);
+@@ -1888,7 +1888,7 @@ static int wsa_macro_rx_mux_put(struct snd_kcontrol *kcontrol,
+ 
+ 	snd_soc_dapm_mux_update_power(widget->dapm, kcontrol,
+ 					rx_port_value, e, update);
+-	return 0;
++	return 1;
+ }
+ 
+ static int wsa_macro_soft_clip_enable_get(struct snd_kcontrol *kcontrol,
 -- 
 2.21.0
 

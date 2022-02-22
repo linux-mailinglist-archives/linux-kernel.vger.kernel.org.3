@@ -2,26 +2,26 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9822E4BEE7D
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 02:14:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B7DD4BEEA5
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 02:14:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237785AbiBVA2Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 19:28:25 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37674 "EHLO
+        id S237778AbiBVA2S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 19:28:18 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234020AbiBVA2U (ORCPT
+        with ESMTP id S234020AbiBVA2Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 19:28:20 -0500
-Received: from EUR02-AM5-obe.outbound.protection.outlook.com (mail-eopbgr00074.outbound.protection.outlook.com [40.107.0.74])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E244F24F23
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 16:27:56 -0800 (PST)
+        Mon, 21 Feb 2022 19:28:16 -0500
+Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2066.outbound.protection.outlook.com [40.107.21.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F42924F23
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 16:27:52 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ONS46JxU8IbAyjTMavZ17lGPKs0j0Zn0YdZBzWHVF4fNNqfFp7UJNTkakFoZbJQCJdtS2YSuhST69Qp5kH7U6c5u3aShf4vnq6HFp6+0Yn4jzpUg87xYwvuX7QTOj4O74YEiMwzZISTBS/kSJd3UgT1cLXoGGtlcyisGilWAczg/2Sa4CuSk6gVIfpWt6xCaZ/b3gVdlbqNlIrbEhs5Av/tiqiIqy7QB9llPozRMEZ7r3BkbNojQt2SSwzkulDiWlj3SGtOKEUwX+E8LMRpb0rFf5hdeOlw+nVr86wlOP9gUPpOW9bGVLpg2i1Z6hdDyRQC6XF4M3z3iSHtDzWFTnA==
+ b=FXspz0K4pmIkmjUVBlBbrDN6TBnj4PNX5pZAWkA9HL+WqdZ1QWRo+sPBkfUvVQAc7gLL0j8My6jypARWWjdlcVBFDicLrcEHLnmN0lU4gL04ZYRRSem9+VonPzYXnZJLbUqvoprxlu0e2v8mi+s1E0PHyAt9x7/1PVx9Ug+9nZOBO8RIrN4ynQTFogw5mjnBQnXxSbwDwfSYtUdNdpL09s2L9AzksDkvvc3PBoaqdlOm6dVCikgoKAjMegRVo2/ZXTUYRGfBySA+Tk4dOSz4+f8kny6KXLVh/AhZ/8Kobt6gJo86xOF8qFXaloHg6f/WUZLMTp/5b72I/Z9NbQFbbA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=SZzKrlZvv22gLSnXEnz4pVhOkOJ7CJIyRuVXTVbyr94=;
- b=Q5GuKkx40meGd41R/Uaan91X9hAHWDjAHpE5stIa/fo4+V4qEYtSsiViwwmTM7tX6l9dxYOzF8sFOUAj0G4eM2LGBOJrtVfuhaUQ+dp72UuSh5SdKm2Px+Sh/TN/tlzckaYmp7o8WyopwNzC8SAmivBY7SOO2cIkan0DQFNj5lu8mVG4gjTjLw8z+YN7tPXW5y1jZe1OQPN2o8k/4FkZxTNv5UhQFbPMAso6WrpqtGqyAVxWfv2rLL1HbMwzQp9L3Ohg5lok6LU3bF4R+zDxMBLr3lOXXBZk0agETOql0RWT7//Pxg/Vg6YHmuxWBHFY0vDGnzleI9acoasZR0VKpg==
+ bh=K8JBmXEpvT42GipaoZZPRni61jzU1a81+OacjF622O0=;
+ b=W7bg9WBzZmiYvRvQiHsYDYEExsmaKmubplXJsBj+CMKFj7+tkbsv28KJIFg8OLOsRwCN06Mt1gHDqDrQfVatFasJBUyYpEDglBMhYXZ+hbmAcfrRCOmhE96I4QUe/VML3v/gY9fM4vOO6YQiaAggS88OSW++YotEfE4jKoREHRHrPU2XQQNB2fiaoPuKtulNymaLFTChfUKb0sbBAnCZtXTAGL3VSGdT0Zf6FLmuStOtHmVVyB9p4yCteUaRv2b+RHcx9axAb4ivBFidc7FWVMuCoWzgfkJnITjrKUQ5Te/w6G1EM56FERl3jx6NJ0ca5N4D2sh9K1mcv0KhRuqiuw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=softfail (sender ip
  is 193.240.239.45) smtp.rcpttodomain=gmail.com smtp.mailfrom=diasemi.com;
  dmarc=none action=none header.from=diasemi.com; dkim=none (message not
@@ -30,18 +30,18 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=dialogsemiconductor.onmicrosoft.com;
  s=selector1-dialogsemiconductor-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=SZzKrlZvv22gLSnXEnz4pVhOkOJ7CJIyRuVXTVbyr94=;
- b=j+zcajsTLKrfkW6Nm5EjH5YBubHUQQDxM40BnKQ6ag51Cx0aLF4g2a/qhSKH+IpAWJQzaW5npSfT9P1+QhEt11BGXIS/4KFBM4QG3ADuKUReTPyGlnKw9/yBgJWpupG4r15a3eyYjgaFNc6+ejhpS8XqYG/Dt46LVEqSuhw72TE=
-Received: from OL1P279CA0009.NORP279.PROD.OUTLOOK.COM (2603:10a6:e10:12::14)
- by DB8PR10MB3660.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:10:138::17) with
+ bh=K8JBmXEpvT42GipaoZZPRni61jzU1a81+OacjF622O0=;
+ b=w4cFr0cCaX2AciJedbNXO4N6/1lVlaG4+nELG4ivC2VR6UlSRdpPjGLhSU3F1aJPvZwU5v4iEcTphG9KT7dLZZ+RI41J15ZK2j/ZOx7trypl7bs8Laz9nrUPT7sRDE/qz5ShwS6IR2c0NijntnZQZM1HRvY+aDlBDAdbHBrraIQ=
+Received: from OL1P279CA0010.NORP279.PROD.OUTLOOK.COM (2603:10a6:e10:12::15)
+ by AM9PR10MB4434.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:20b:273::12) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4995.14; Tue, 22 Feb
- 2022 00:27:48 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4995.16; Tue, 22 Feb
+ 2022 00:27:49 +0000
 Received: from HE1EUR02FT031.eop-EUR02.prod.protection.outlook.com
- (2603:10a6:e10:12:cafe::4b) by OL1P279CA0009.outlook.office365.com
- (2603:10a6:e10:12::14) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4995.16 via Frontend
- Transport; Tue, 22 Feb 2022 00:27:48 +0000
+ (2603:10a6:e10:12:cafe::86) by OL1P279CA0010.outlook.office365.com
+ (2603:10a6:e10:12::15) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4995.14 via Frontend
+ Transport; Tue, 22 Feb 2022 00:27:49 +0000
 X-MS-Exchange-Authentication-Results: spf=softfail (sender IP is
  193.240.239.45) smtp.mailfrom=diasemi.com; dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=diasemi.com;
@@ -50,20 +50,22 @@ Received-SPF: SoftFail (protection.outlook.com: domain of transitioning
 Received: from mailrelay1.diasemi.com (193.240.239.45) by
  HE1EUR02FT031.mail.protection.outlook.com (10.152.10.141) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.4995.20 via Frontend Transport; Tue, 22 Feb 2022 00:27:47 +0000
+ 15.20.4995.20 via Frontend Transport; Tue, 22 Feb 2022 00:27:49 +0000
 Received: from nbsrvex-01v.diasemi.com (10.1.17.243) by
  nbsrvex-01v.diasemi.com (10.1.17.243) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Tue, 22 Feb 2022 01:27:41 +0100
+ 15.1.2176.2; Tue, 22 Feb 2022 01:27:42 +0100
 Received: from slsrvapps-01.diasemi.com (10.24.28.40) by
  nbsrvex-01v.diasemi.com (10.1.17.243) with Microsoft SMTP Server id
- 15.1.2176.2 via Frontend Transport; Tue, 22 Feb 2022 01:27:41 +0100
+ 15.1.2176.2 via Frontend Transport; Tue, 22 Feb 2022 01:27:42 +0100
 Received: by slsrvapps-01.diasemi.com (Postfix, from userid 23378)
-        id 2098980007F; Tue, 22 Feb 2022 00:27:41 +0000 (UTC)
-Message-ID: <cover.1645489455.git.Adam.Ward.opensource@diasemi.com>
+        id 26B8080007F; Tue, 22 Feb 2022 00:27:42 +0000 (UTC)
+Message-ID: <cd5732c5061ce49dcfbcebb306d12ba1664b4ea6.1645489455.git.Adam.Ward.opensource@diasemi.com>
+In-Reply-To: <cover.1645489455.git.Adam.Ward.opensource@diasemi.com>
+References: <cover.1645489455.git.Adam.Ward.opensource@diasemi.com>
 From:   Adam Ward <Adam.Ward.opensource@diasemi.com>
-Date:   Tue, 22 Feb 2022 00:27:41 +0000
-Subject: [PATCH 0/3] regulator: da9121: update DA914x support
+Date:   Tue, 22 Feb 2022 00:27:42 +0000
+Subject: [PATCH 1/3] regulator: da9121: Fix DA914x current values
 To:     Mark Brown <broonie@kernel.org>
 CC:     Liam Girdwood <lgirdwood@gmail.com>,
         <linux-kernel@vger.kernel.org>,
@@ -72,50 +74,66 @@ MIME-Version: 1.0
 Content-Type: text/plain
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: b2ac211c-7678-484c-de66-08d9f59a2718
-X-MS-TrafficTypeDiagnostic: DB8PR10MB3660:EE_
-X-Microsoft-Antispam-PRVS: <DB8PR10MB36609AC09518C9526E2501C0CB3B9@DB8PR10MB3660.EURPRD10.PROD.OUTLOOK.COM>
+X-MS-Office365-Filtering-Correlation-Id: 626901eb-a648-40e4-0bf8-08d9f59a27ce
+X-MS-TrafficTypeDiagnostic: AM9PR10MB4434:EE_
+X-Microsoft-Antispam-PRVS: <AM9PR10MB44349038D8063BF15BC9D960CB3B9@AM9PR10MB4434.EURPRD10.PROD.OUTLOOK.COM>
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: gAps+GjMkOoF7/3HMwoEhmoInl85LAjvPavu2b+kgwSst8TBYtC9D3UdmOoqsEBBukotP1HJl9Y8SFsYNtunFSev0gFhIKxXb6NRfi+WvjFOWTqyopUTrx7cmXmR7yQD5R2SXQTec5lFwIH9c5/TZQEMJyHaKhfzYcNMRLG3uEe0ZZUtwJSm6L585iJsbvGylYUMS1TQLZdGYKYrwljcGChHbO2KjlnyfAgZl1giQk2irhjQeMTW+TiNMicqAj7W/Mtaiz4+ctlatLYEiHLq7iOJkZ5Kg71Q/VoDjPLBMIpV+AGHjD9WctyUSc/D8Cym0BBSFTJqsV0sgm2Z8IXqDOr33z8SuJop5pnA4+5RTMA0bDbE+ESunnwuXNXodjTSyiIV673hIvOMUi2Vb7WxXhaEqHvc3G2OAopZqSa4cZtQJOrPy+ZZ0jL+avLoeosOqIYWDu8D+NFDU+arngKLzIOd4lrvRG+MgfgfPJOm/+KagluiB15NoLWrhPabQOQazncT2C9CFtWovmKoCAvO1Tf3fsO5OZYXc57XSbmWWB8Mll9/VwHd5ddNgoSrxeNhOMgqVxh7YZzDRfk06hoMefSZchmDfJdekwB3I8ZUfGOQla3ZDQVU4blT4ZN6IJmskqkIFAbUWwAcnfz35gr8HOXwBt69IqWjb1O90yFf7Otkb1QceGXpfifLzRd+Wv8QU88xMewDn3IwCxHtEGN5EA==
-X-Forefront-Antispam-Report: CIP:193.240.239.45;CTRY:GB;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mailrelay1.diasemi.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(40470700004)(46966006)(36756003)(426003)(2906002)(4326008)(107886003)(86362001)(26005)(186003)(8676002)(6266002)(70586007)(15650500001)(2616005)(4744005)(5660300002)(82310400004)(336012)(508600001)(70206006)(356005)(8936002)(81166007)(83380400001)(47076005)(6916009)(316002)(36860700001)(42186006)(40460700003)(54906003)(36900700001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: P4jiwWR64iYIO/7mvnvH3p+wuZmfCRvFZgtdbJyVqLkx/jRLi8a3WEPO6JgBa5rmjAP3V4l+Dtx9AdTW41DGEc0a7atWdaVjwSUeulwcqXbJYwthh8ZgvyTj9kDJD4KQt/UDt2kJ9oRM760m2M8hnTVBdVsGLSzanvXMMD9G31GTM39MDUAu64iznd6csir+A9MI3vrkPWwLCcrdQlVrqGifTSxYDZPxB9prm+qv9AOKNYiiAQ/YRHBQaSZgCF+29gWH7+bzJdT9zvqrL3suFxecSlvji6Rt3zcIfwXQ1EgWJYrqRVNk9t9spScSEai0QkvX1otQA2EXSz19bAgXuBzwzIP+MV8dFg+HTgqu+Mv+gsOQ6jHZwPJKdMawsUmbag2XhvVtoCa17ddIvMhMO7apIqLKqq8kJQIhwe2NA4mpxzOYRkQspNcJAtaQ+hBvF072LSp42uGqd6cc10Uf9MFQ5ESY59CsWBz7F3vVQdelWT8UmAMFqrJLQC0Fs4SfS/aNQdw2CDmiVvfxIgejb50MJR1OdoFBJrwV+58NlhXggwygVfW5o3hDl4oyCIdAQ6/ajgszXNrlXJtaoS1TaTAbQCYNe3agGegKPyW3MP8D60+bxqZi2FiOBOqVNBj0eCmN1QiB+xILjQ/AqmOYsBatdmk+M9xaFU9WuKpynet1BH23wui0YJDdlxOaUuqOjxaSkUtYRMCtWleGFLFXfQ==
+X-Forefront-Antispam-Report: CIP:193.240.239.45;CTRY:GB;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mailrelay1.diasemi.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(40470700004)(36840700001)(46966006)(8936002)(6916009)(2616005)(54906003)(107886003)(5660300002)(82310400004)(86362001)(508600001)(42186006)(4326008)(316002)(8676002)(70586007)(36756003)(36860700001)(70206006)(40460700003)(47076005)(336012)(2906002)(81166007)(4744005)(26005)(83380400001)(356005)(426003)(6266002)(186003)(36900700001);DIR:OUT;SFP:1101;
 X-OriginatorOrg: diasemi.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Feb 2022 00:27:47.8252
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Feb 2022 00:27:49.0282
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: b2ac211c-7678-484c-de66-08d9f59a2718
+X-MS-Exchange-CrossTenant-Network-Message-Id: 626901eb-a648-40e4-0bf8-08d9f59a27ce
 X-MS-Exchange-CrossTenant-Id: 511e3c0e-ee96-486e-a2ec-e272ffa37b7c
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=511e3c0e-ee96-486e-a2ec-e272ffa37b7c;Ip=[193.240.239.45];Helo=[mailrelay1.diasemi.com]
 X-MS-Exchange-CrossTenant-AuthSource: HE1EUR02FT031.eop-EUR02.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB8PR10MB3660
-X-Spam-Status: No, score=1.1 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
-        DKIM_SIGNED,DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: *
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR10MB4434
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This series applies corrections and updates to DA914x support in the DA9121 driver
+Update DA9141/2 ranges to correct errors
 
-  - correct errors in current range
-  - update maximum voltage to spec update
-  - remove unwanted settings
+Signed-off-by: Adam Ward <Adam.Ward.opensource@diasemi.com>
+---
+ drivers/regulator/da9121-regulator.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-
-Adam Ward (3):
-  regulator: da9121: Fix DA914x current values
-  regulator: da9121: Fix DA914x voltage value
-  regulator: da9121: Remove surplus DA9141 parameters
-
- drivers/regulator/da9121-regulator.c | 16 ++++++----------
- 1 file changed, 6 insertions(+), 10 deletions(-)
-
+diff --git a/drivers/regulator/da9121-regulator.c b/drivers/regulator/da9121-regulator.c
+index 6f21223a488e..39d77726970c 100644
+--- a/drivers/regulator/da9121-regulator.c
++++ b/drivers/regulator/da9121-regulator.c
+@@ -87,16 +87,16 @@ static struct da9121_range da9121_3A_1phase_current = {
+ };
+ 
+ static struct da9121_range da914x_40A_4phase_current = {
+-	.val_min = 14000000,
+-	.val_max = 80000000,
+-	.val_stp =  2000000,
++	.val_min = 26000000,
++	.val_max = 78000000,
++	.val_stp =  4000000,
+ 	.reg_min = 1,
+ 	.reg_max = 14,
+ };
+ 
+ static struct da9121_range da914x_20A_2phase_current = {
+-	.val_min =  7000000,
+-	.val_max = 40000000,
++	.val_min = 13000000,
++	.val_max = 39000000,
+ 	.val_stp =  2000000,
+ 	.reg_min = 1,
+ 	.reg_max = 14,
 -- 
 2.25.1
 

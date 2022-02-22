@@ -2,179 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8766B4BFC58
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 16:21:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F21824BFC67
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 16:23:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233329AbiBVPWJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 10:22:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53998 "EHLO
+        id S233439AbiBVPX7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 10:23:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233420AbiBVPWC (ORCPT
+        with ESMTP id S230322AbiBVPX6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 10:22:02 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8B7585AEF3;
-        Tue, 22 Feb 2022 07:21:36 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0E21CED1;
-        Tue, 22 Feb 2022 07:21:36 -0800 (PST)
-Received: from [10.57.9.152] (unknown [10.57.9.152])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9A6C23F5A1;
-        Tue, 22 Feb 2022 07:21:33 -0800 (PST)
-Message-ID: <9cfe84b0-01bf-6e20-9839-5f597e7fa588@arm.com>
-Date:   Tue, 22 Feb 2022 15:21:32 +0000
+        Tue, 22 Feb 2022 10:23:58 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF9AD113DAC
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 07:23:32 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5B8BB61624
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 15:23:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00490C340E8;
+        Tue, 22 Feb 2022 15:23:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645543411;
+        bh=36C5XSTwUOyfNvIcqQ9TuoXhkklJD5exPe/8nUTTeMo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=urLBibFGvdPJvEFgJ9BsfC5Bsg1TMwd4yAIQItElZeHpfxbBUwiq+uVBZ6rCsy5nZ
+         DxRN/Jf4b9JFwNA19WCikuBAWnLuwy60r33trFBY6LkxYWmfxJ8bA41GzTQQejHvh2
+         fDBuky1YfbotkK4ulW8pGdbsQlt4kaC+F/21xSno517Mn2E/8owx36fe3zGd1KsiQO
+         mDU/XdDw89zUgNRcgJNnSfNFcD3mlI1zeNB1MP2mCkVJUlkw4uToyxzF6+J1Ty58Vz
+         PBIJOjNCNVBFgiubAridjRXeowbCoQdTPM5+iqTddQJ90VTYucnhiCMhOIYYXu750w
+         bkLWBMZnUmJJA==
+Date:   Tue, 22 Feb 2022 08:23:27 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Philippe CORNU <philippe.cornu@foss.st.com>
+Cc:     Nick Desaulniers <ndesaulniers@google.com>,
+        Yannick Fertre <yannick.fertre@foss.st.com>,
+        Benjamin Gaignard <benjamin.gaignard@linaro.org>,
+        dri-devel@lists.freedesktop.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+Subject: Re: [PATCH] drm/stm: Avoid using val uninitialized in
+ ltdc_set_ycbcr_config()
+Message-ID: <YhT/73ZM7IytO3+Q@dev-arch.archlinux-ax161>
+References: <20220207165304.1046867-1-nathan@kernel.org>
+ <CAKwvOdkXe8CB3QGe2e6Fhz8_SLOsOpcMumoKBiAzGE_VTXCkVg@mail.gmail.com>
+ <430ee06d-04e7-3b8b-bf11-48a7b62eaf18@foss.st.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [[PATCH v2 2/2] OPP: Add 'opp-microwatt' parsing for advanced EM
- registration
-Content-Language: en-US
-To:     Matthias Kaehlcke <mka@chromium.org>
-Cc:     linux-kernel@vger.kernel.org, dietmar.eggemann@arm.com,
-        viresh.kumar@linaro.org, rafael@kernel.org,
-        daniel.lezcano@linaro.org, nm@ti.com, sboyd@kernel.org,
-        dianders@chromium.org, robh+dt@kernel.org,
-        devicetree@vger.kernel.org, linux-pm@vger.kernel.org
-References: <20220222140746.12293-1-lukasz.luba@arm.com>
- <20220222140746.12293-3-lukasz.luba@arm.com> <YhT6EBzSE/7S3QqT@google.com>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <YhT6EBzSE/7S3QqT@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <430ee06d-04e7-3b8b-bf11-48a7b62eaf18@foss.st.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Matthias,
-
-On 2/22/22 14:58, Matthias Kaehlcke wrote:
-> On Tue, Feb 22, 2022 at 02:07:46PM +0000, Lukasz Luba wrote:
-
-[snip]
-
->> +static int __maybe_unused
->> +_get_dt_power(unsigned long *mW, unsigned long *kHz, struct device *dev)
-> 
-> nit: the device is usually the first parameter. It's also the only true input
-> parameter of this function, most code puts input parameters first.
-
-Good point. I have internal patch set under review changing this. It's
-going to be changed and the 'dev' would be the 1st arg. I'll send this
-patch set as soon as this one gets queued into pm tree.
-
-> 
->> +{
->> +	struct dev_pm_opp *opp;
->> +	unsigned long opp_freq;
->> +	u32 opp_power;
->> +	int ret;
->> +
->> +	/* Find the right frequency and related OPP */
->> +	opp_freq = *kHz * 1000;
->> +	opp = dev_pm_opp_find_freq_ceil(dev, &opp_freq);
->> +	if (IS_ERR(opp))
->> +		return -EINVAL;
->> +
->> +	ret = of_property_read_u32(opp->np, "opp-microwatt", &opp_power);
->> +	dev_pm_opp_put(opp);
->> +	if (ret)
->> +		return -EINVAL;
->> +
->> +	*kHz = opp_freq / 1000;
->> +	*mW = opp_power / 1000;
->> +
->> +	return 0;
->> +}
->> +
->>   /*
->>    * Callback function provided to the Energy Model framework upon registration.
->>    * This computes the power estimated by @dev at @kHz if it is the frequency
->> @@ -1445,6 +1479,33 @@ static int __maybe_unused _get_power(unsigned long *mW, unsigned long *kHz,
->>   	return 0;
->>   }
->>   
->> +static int _of_find_opp_microwatt_property(struct device *dev)
-> 
-> this function doesn't retrurn the property like of_find_property() does,
-> _of_has_opp_microwatt_property() would be a be a better name IMO. I'd
-> also suggest to change the return type to bool, since callers don't
-> really care about the specific error (which with the current code is
-> -EINVAL) in all cases.
-
-Agree, I'll change the name and return type.
-
+On Tue, Feb 22, 2022 at 11:54:04AM +0100, Philippe CORNU wrote:
 > 
 > 
->> +{
->> +	unsigned long freq = 0;
+> On 2/7/22 8:44 PM, Nick Desaulniers wrote:
+> > On Mon, Feb 7, 2022 at 8:53 AM Nathan Chancellor <nathan@kernel.org> wrote:
+> > > 
+> > > Clang warns:
+> > > 
+> > >    drivers/gpu/drm/stm/ltdc.c:625:2: warning: variable 'val' is used uninitialized whenever switch default is taken [-Wsometimes-uninitialized]
+> > >            default:
+> > >            ^~~~~~~
+> > >    drivers/gpu/drm/stm/ltdc.c:635:2: note: uninitialized use occurs here
+> > >            val |= LxPCR_YCEN;
+> > >            ^~~
+> > >    drivers/gpu/drm/stm/ltdc.c:600:9: note: initialize the variable 'val' to silence this warning
+> > >            u32 val;
+> > >                   ^
+> > >                    = 0
+> > >    1 warning generated.
+> > > 
+> > > Use a return instead of break in the default case to fix the warning.
+> > > Add an error message so that this return is not silent, which could hide
+> > > issues in the future.
+> > > 
+> > > Fixes: 484e72d3146b ("drm/stm: ltdc: add support of ycbcr pixel formats")
+> > > Link: https://github.com/ClangBuiltLinux/linux/issues/1575
+> > > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> > > ---
+> > >   drivers/gpu/drm/stm/ltdc.c | 3 ++-
+> > >   1 file changed, 2 insertions(+), 1 deletion(-)
+> > > 
+> > > diff --git a/drivers/gpu/drm/stm/ltdc.c b/drivers/gpu/drm/stm/ltdc.c
+> > > index 5eeb32c9c9ce..447ddde1786c 100644
+> > > --- a/drivers/gpu/drm/stm/ltdc.c
+> > > +++ b/drivers/gpu/drm/stm/ltdc.c
+> > > @@ -624,7 +624,8 @@ static inline void ltdc_set_ycbcr_config(struct drm_plane *plane, u32 drm_pix_fm
+> > >                  break;
+> > >          default:
+> > >                  /* RGB or not a YCbCr supported format */
+> > > -               break;
+> > > +               drm_err(plane->dev, "Unsupported pixel format: %u\n", drm_pix_fmt);
+> > 
+> > This is fine, but in the future you should add an explicit
+> > #include <drm/drm_print.h>
+> > to avoid implicit header dependencies (like the ones that Mingo is
+> > trying to detangle) for the declaration of drm_err. `drm_vprintf`
+> > needs it, too.
+> > 
+> > Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+> > 
 > 
-> Does the compiler complain when the initialization is skipped? The
-> value of the variable is never read, only it's address is passed to
-> dev_pm_opp_find_freq_ceil().
-
-It has to be 0, since under the hood the dev_pm_opp_find_freq_ceil()
-is going to find first freq which is equal or bigger than this one.
-We actually use that ptr value in the _find_freq_ceil().
-
+> Hi Nick,
+> and thank you for having pointing this.
 > 
->> +	struct dev_pm_opp *opp;
->> +	struct device_node *np;
->> +	struct property *prop;
->> +
->> +	/* We only support "operating-points-v2" */
->> +	np = dev_pm_opp_of_get_opp_desc_node(dev);
->> +	if (!np)
->> +		return -EINVAL;
->> +
->> +	of_node_put(np);
->> +
->> +	/* Check if an OPP has needed property */
+> Hi Nathan,
+> May I ask you please to update your patch changing drm_err(plane->dev, )
+> with DRM_ERROR().
+
+Sure thing, v2 has been sent:
+
+https://lore.kernel.org/r/20220222152045.484610-1-nathan@kernel.org/
+
+I used drm_err() as I saw DRM_ERROR() was deprecated but I get internal
+driver consistency is important.
+
+Cheers,
+Nathan
+
+> Big thank you,
 > 
-> The comment doesn't add much value IMO
-
-Well, it just stress the 'an' as in this case it's the 1st OPP,
-due to the fact freq = 0 and finding the 'ceiling' on it.
-I'll remove it.
-
+> Philippe :-)
 > 
->> +	opp = dev_pm_opp_find_freq_ceil(dev, &freq);
->> +	if (IS_ERR(opp))
->> +		return -EINVAL;
->> +
->> +	prop = of_find_property(opp->np, "opp-microwatt", NULL);
->> +	dev_pm_opp_put(opp);
->> +	if (!prop)
->> +		return -EINVAL;
->> +
->> +	return 0;
->> +}
->> +
->>   /**
->>    * dev_pm_opp_of_register_em() - Attempt to register an Energy Model
->>    * @dev		: Device for which an Energy Model has to be registered
->> @@ -1474,6 +1535,15 @@ int dev_pm_opp_of_register_em(struct device *dev, struct cpumask *cpus)
->>   		goto failed;
->>   	}
->>   
->> +	/* First, try to find more precised Energy Model in DT */
->> +	if (!_of_find_opp_microwatt_property(dev)) {
->> +		struct em_data_callback em_dt_cb = EM_DATA_CB(_get_dt_power);
->> +
->> +		ret = em_dev_register_perf_domain(dev, nr_opp, &em_dt_cb,
->> +						  cpus, true);
->> +		return ret;
 > 
-> just 'return em_dev_register_perf_domain(...);'?
-
-true
-
-Thanks for the review! I'll address these comments in v3 if Viresh
-agrees with this new approach.
-
-Regards,
-Lukasz
+> 
+> > > +               return;
+> > >          }
+> > > 
+> > >          /* Enable limited range */
+> > > 
+> > > base-commit: 542898c5aa5c6a3179dffb1d1606884a63f75fed
+> > > --
+> > > 2.35.1
+> > > 
+> > 
+> > 

@@ -2,203 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75F434BFB00
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 15:38:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 066664BFB03
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 15:39:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232880AbiBVOjA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 09:39:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58506 "EHLO
+        id S232893AbiBVOkU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 09:40:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232151AbiBVOi6 (ORCPT
+        with ESMTP id S231901AbiBVOkT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 09:38:58 -0500
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A994E4DF6E
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 06:38:32 -0800 (PST)
-Received: by mail-pj1-x102e.google.com with SMTP id v4so18705595pjh.2
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 06:38:32 -0800 (PST)
+        Tue, 22 Feb 2022 09:40:19 -0500
+Received: from mail-oo1-xc36.google.com (mail-oo1-xc36.google.com [IPv6:2607:f8b0:4864:20::c36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96B934EA20;
+        Tue, 22 Feb 2022 06:39:53 -0800 (PST)
+Received: by mail-oo1-xc36.google.com with SMTP id x6-20020a4a4106000000b003193022319cso17812904ooa.4;
+        Tue, 22 Feb 2022 06:39:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=GdNESGAYnggKJpJiijh4S9vzX+uCdLNrQ6NluL3JdoA=;
-        b=IEon9R3z+ocvwbvLWf0JV8sifD88RrbTiR6iamfDR8lButPGg9lzCX5nlgsN2kFu/p
-         PRhcLkBR04Z6nAyOHwecnCGkiXOQxovkuow5vY/JPwdoJAt1wU9jF5B6xiTlGAD7Y1f5
-         BRZZyEIZN+ckJVqkQtsQL9sJKOGa4xC61omEHyyAZeQW+FFhYNbqMHmdu2VXwUpIZv/a
-         FV7iQe6sSFsdq/UT5f8cyPfYyT1SI787HV+SSeCtoznlk7GXhkfFe+6f9sUoJKgp5lcT
-         1SNvnJSPFPmrgjhCpD/klGlveW/Ml8dlujlCrwAi1R88pfBG6O5rdR54xzFPrKB4prBC
-         Mgaw==
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=8HtKvgP9c8lj3jdXox7eFQAQfru0ANSsDmI/ula35HM=;
+        b=K1/FSrEvZlwbJ/z/izSGBjxSvAz+Ov/+WhAFdL0w2lu4DckhJQcJhyo+hPTDyiwcc/
+         6qj6gB6J2nMVKk/7KxNqTYYy1FcIT8xa/7TiT41wajv1mkgbQ+ZjthPuABl0O3JgLvbr
+         tw/7E89yOgxYPJv4fT7de76OWEndbpyy5TnG9Y/35mQzoeuvWlXQ71Ut1jNmmiIKsg3h
+         tE/0BsFC2O4c5qhxej0N92XVW4bJd3rH7Y/ajPByTETe5hQ1Pkyxt2k7l37nbnZAn5Mj
+         lCthilDQc+vJwXzZOUhwpo8aIp6dYcsgEb92l9V16l87XkjVPBWU7eXqXvc2Nk4Ezn5n
+         62Aw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=GdNESGAYnggKJpJiijh4S9vzX+uCdLNrQ6NluL3JdoA=;
-        b=Uy+P0y/plh9Ih4K0Fmhb3TmW8aw5JEdN7weuA9utEG6WNMDLuUtDthhBFsDL8V7bUM
-         qdj4M3QysFrcPyp0EkJtwQojRhf5TcRV8zEyi7tmDEkyVxfB13JMyTAl7IdOJPfcbbs5
-         4kLbGG5KoAKaA4+Q0clgyogL+iRAf7uUBdMG2Ruh+mBaWxClmlISsHacuxmBOQffmyAl
-         clR570BA/0XfXl76D0VsSlTe4LW7dYAGy6xRkon8rLVMrqBThnhR3cb9249R8g/nSrqH
-         j6VB3yC0+KxLjxY4zZEoherVohKv/rlDOWd/VQ6jrvMIYeOkNIB+zQUSafZE5chbzA+u
-         OLJA==
-X-Gm-Message-State: AOAM533moeliPho95K2zjo3yw+BX8Wu61wbQREsjaPTmU2Blq82PIFqi
-        kGKK3Ls/ujCpSQLhNLvn091p
-X-Google-Smtp-Source: ABdhPJxVL1yJ+jHsMKViEQIZWuX+YqfYVcdCnfbo+s68aK+kiS6owg/rfxJ+w7tDrAPpKNoLpZ8/PA==
-X-Received: by 2002:a17:903:2451:b0:14f:b91:fe3c with SMTP id l17-20020a170903245100b0014f0b91fe3cmr24146090pls.120.1645540712069;
-        Tue, 22 Feb 2022 06:38:32 -0800 (PST)
-Received: from thinkpad ([117.217.186.202])
-        by smtp.gmail.com with ESMTPSA id l8sm21942913pgt.77.2022.02.22.06.38.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Feb 2022 06:38:31 -0800 (PST)
-Date:   Tue, 22 Feb 2022 20:08:25 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Alex Elder <elder@linaro.org>
-Cc:     mhi@lists.linux.dev, quic_hemantk@quicinc.com,
-        quic_bbhatt@quicinc.com, quic_jhugo@quicinc.com,
-        vinod.koul@linaro.org, bjorn.andersson@linaro.org,
-        dmitry.baryshkov@linaro.org, quic_vbadigan@quicinc.com,
-        quic_cang@quicinc.com, quic_skananth@quicinc.com,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 23/25] bus: mhi: ep: Add support for queueing SKBs to
- the host
-Message-ID: <20220222143825.GH5029@thinkpad>
-References: <20220212182117.49438-1-manivannan.sadhasivam@linaro.org>
- <20220212182117.49438-24-manivannan.sadhasivam@linaro.org>
- <766e6568-0b80-c745-dd8f-7f401fb0422d@linaro.org>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=8HtKvgP9c8lj3jdXox7eFQAQfru0ANSsDmI/ula35HM=;
+        b=5i1u5bqbLl3DvOR4UaBtecsdMGDdtlau2EZra+QFZlIw8eE9+/tdyw4mlqpHhcvzSx
+         55zUQwtAHnZ+0K+8nCZsAcoOyJC1IUS9cggkzta81EWOOoY3vvyIYON3PSD2hegpHtew
+         8fBaRtjB3XjSDpAYnJdgt5VXtvnytSeJqqh+CHGeHkXKUCPY6R1rxJJJOXltteU8rMwO
+         lfI/FHur7mC/9lLFZHdPuuJsKETvytztzU7tkPKXCvyYHrh8jR7uBe/T9O1mu5hKR9pl
+         SX4+f79vuBqsZ/vEd1AGHbYwUXXEBpP3L7gKArAGvpdIj+82DZtNR9GPIm+7kiJhOdNi
+         LhdQ==
+X-Gm-Message-State: AOAM532HIwSRQndfYbjIx6bKSu0CZutS2h+JzR0mZ2QytJMmmcnLur95
+        TQ9RnNboWKidaDap8olsaEpA8AtaGgDKsw==
+X-Google-Smtp-Source: ABdhPJzfy25BuAvr3cX+8+YLBL3ixm9jGl9YvPyO8dvdhgtGhb51HzuTSioLS1yWrFonG9T3BjKq5g==
+X-Received: by 2002:a05:6870:a702:b0:d3:5740:1d61 with SMTP id g2-20020a056870a70200b000d357401d61mr1813353oam.340.1645540792919;
+        Tue, 22 Feb 2022 06:39:52 -0800 (PST)
+Received: from ?IPV6:2601:284:8200:b700:fc7f:e53f:676e:280d? ([2601:284:8200:b700:fc7f:e53f:676e:280d])
+        by smtp.googlemail.com with ESMTPSA id r131sm6241358oor.7.2022.02.22.06.39.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 22 Feb 2022 06:39:52 -0800 (PST)
+Message-ID: <c25691a0-96ab-34de-4739-524cd3ab1875@gmail.com>
+Date:   Tue, 22 Feb 2022 07:39:49 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <766e6568-0b80-c745-dd8f-7f401fb0422d@linaro.org>
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.6.0
+Subject: Re: [PATCH net-next v3 4/4] net: tun: track dropped skb via
+ kfree_skb_reason()
+Content-Language: en-US
+To:     Dongli Zhang <dongli.zhang@oracle.com>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
+        rostedt@goodmis.org, mingo@redhat.com, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, imagedong@tencent.com,
+        joao.m.martins@oracle.com, joe.jin@oracle.com, edumazet@google.com
+References: <20220221053440.7320-1-dongli.zhang@oracle.com>
+ <20220221053440.7320-5-dongli.zhang@oracle.com>
+ <877dfc5d-c3a1-463f-3abc-15e5827cfdb6@gmail.com>
+ <6eab223b-028d-c822-01ad-47e5869e0fe8@oracle.com>
+From:   David Ahern <dsahern@gmail.com>
+In-Reply-To: <6eab223b-028d-c822-01ad-47e5869e0fe8@oracle.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 15, 2022 at 04:40:29PM -0600, Alex Elder wrote:
-> On 2/12/22 12:21 PM, Manivannan Sadhasivam wrote:
-> > Add support for queueing SKBs to the host over the transfer ring of the
-> > relevant channel. The mhi_ep_queue_skb() API will be used by the client
-> > networking drivers to queue the SKBs to the host over MHI bus.
-> > 
-> > The host will add ring elements to the transfer ring periodically for
-> > the device and the device will write SKBs to the ring elements. If a
-> > single SKB doesn't fit in a ring element (TRE), it will be placed in
-> > multiple ring elements and the overflow event will be sent for all ring
-> > elements except the last one. For the last ring element, the EOT event
-> > will be sent indicating the packet boundary.
-> > 
-> > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+On 2/21/22 9:45 PM, Dongli Zhang wrote:
+> Hi David,
 > 
-> I'm a little confused by this, so maybe you can provide
-> a better explanation somehow.
+> On 2/21/22 7:28 PM, David Ahern wrote:
+>> On 2/20/22 10:34 PM, Dongli Zhang wrote:
+>>> diff --git a/drivers/net/tun.c b/drivers/net/tun.c
+>>> index aa27268..bf7d8cd 100644
+>>> --- a/drivers/net/tun.c
+>>> +++ b/drivers/net/tun.c
+>>> @@ -1062,13 +1062,16 @@ static netdev_tx_t tun_net_xmit(struct sk_buff *skb, struct net_device *dev)
+>>>  	struct netdev_queue *queue;
+>>>  	struct tun_file *tfile;
+>>>  	int len = skb->len;
+>>> +	enum skb_drop_reason drop_reason;
+>>
+>> this function is already honoring reverse xmas tree style, so this needs
+>> to be moved up.
 > 
-> 					-Alex
+> I will move this up to before "int txq = skb->queue_mapping;".
 > 
-> > ---
-> >   drivers/bus/mhi/ep/main.c | 102 ++++++++++++++++++++++++++++++++++++++
-> >   include/linux/mhi_ep.h    |  13 +++++
-> >   2 files changed, 115 insertions(+)
-> > 
-> > diff --git a/drivers/bus/mhi/ep/main.c b/drivers/bus/mhi/ep/main.c
-> > index baf383a4857b..e4186b012257 100644
-> > --- a/drivers/bus/mhi/ep/main.c
-> > +++ b/drivers/bus/mhi/ep/main.c
-> > @@ -488,6 +488,108 @@ int mhi_ep_process_tre_ring(struct mhi_ep_ring *ring, struct mhi_ep_ring_element
-> >   	return 0;
-> >   }
-> > +int mhi_ep_queue_skb(struct mhi_ep_device *mhi_dev, enum dma_data_direction dir,
-> > +		     struct sk_buff *skb, size_t len, enum mhi_flags mflags)
+>>
+>>>  
+>>>  	rcu_read_lock();
+>>>  	tfile = rcu_dereference(tun->tfiles[txq]);
+>>>  
+>>>  	/* Drop packet if interface is not attached */
+>>> -	if (!tfile)
+>>> +	if (!tfile) {
+>>> +		drop_reason = SKB_DROP_REASON_DEV_READY;
+>>>  		goto drop;
+>>> +	}
+>>>  
+>>>  	if (!rcu_dereference(tun->steering_prog))
+>>>  		tun_automq_xmit(tun, skb);
+>>> @@ -1078,22 +1081,32 @@ static netdev_tx_t tun_net_xmit(struct sk_buff *skb, struct net_device *dev)
+>>>  	/* Drop if the filter does not like it.
+>>>  	 * This is a noop if the filter is disabled.
+>>>  	 * Filter can be enabled only for the TAP devices. */
+>>> -	if (!check_filter(&tun->txflt, skb))
+>>> +	if (!check_filter(&tun->txflt, skb)) {
+>>> +		drop_reason = SKB_DROP_REASON_DEV_FILTER;
+>>>  		goto drop;
+>>> +	}
+>>>  
+>>>  	if (tfile->socket.sk->sk_filter &&
+>>> -	    sk_filter(tfile->socket.sk, skb))
+>>> +	    sk_filter(tfile->socket.sk, skb)) {
+>>> +		drop_reason = SKB_DROP_REASON_SOCKET_FILTER;
+>>>  		goto drop;
+>>> +	}
+>>>  
+>>>  	len = run_ebpf_filter(tun, skb, len);
+>>> -	if (len == 0)
+>>> +	if (len == 0) {
+>>> +		drop_reason = SKB_DROP_REASON_BPF_FILTER;
+>>
+>> how does this bpf filter differ from SKB_DROP_REASON_SOCKET_FILTER? I
+>> think the reason code needs to be a little clearer on the distinction.
+>>
 > 
-> Why are both skb and len supplied?  Will an skb be supplied
-> without wanting to send all of it?  Must len be less than
-> skb->len?  I'm a little confused about the interface.
 > 
-> Also, the data direction is *out*, right?  You'll never
-> be queueing a "receive" SKB?
+> While there is a diff between BPF_FILTER (here) and SOCKET_FILTER ...
 > 
-
-This was done to be compatible with the MHI host API where the host can queue
-SKBs in both directions. But I think I should stop doing this.
-
-> > +{
-> > +	struct mhi_ep_chan *mhi_chan = (dir == DMA_FROM_DEVICE) ? mhi_dev->dl_chan :
-> > +								mhi_dev->ul_chan;
-> > +	struct mhi_ep_cntrl *mhi_cntrl = mhi_dev->mhi_cntrl;
-> > +	struct device *dev = &mhi_chan->mhi_dev->dev;
-> > +	struct mhi_ep_ring_element *el;
-> > +	struct mhi_ep_ring *ring;
-> > +	size_t bytes_to_write;
-> > +	enum mhi_ev_ccs code;
-> > +	void *read_from_loc;
-> > +	u32 buf_remaining;
-> > +	u64 write_to_loc;
-> > +	u32 tre_len;
-> > +	int ret = 0;
-> > +
-> > +	if (dir == DMA_TO_DEVICE)
-> > +		return -EINVAL;
+> ... indeed the issue is: there is NO diff between BPF_FILTER (here) and
+> DEV_FILTER (introduced by the patch).
 > 
-> Can't you just preclude this from happening, or
-> know it won't happen by inspection?
 > 
-> > +
-> > +	buf_remaining = len;
-> > +	ring = &mhi_cntrl->mhi_chan[mhi_chan->chan].ring;
-> > +
-> > +	mutex_lock(&mhi_chan->lock);
-> > +
-> > +	do {
-> > +		/* Don't process the transfer ring if the channel is not in RUNNING state */
-> > +		if (mhi_chan->state != MHI_CH_STATE_RUNNING) {
-> > +			dev_err(dev, "Channel not available\n");
-> > +			ret = -ENODEV;
-> > +			goto err_exit;
-> > +		}
-> > +
+> The run_ebpf_filter() is to run the bpf filter attached to the TUN device (not
+> socket). This is similar to DEV_FILTER, which is to run a device specific filter.
 > 
-> It would be nice if the caller could know whether there
-> was enough room *before* you start transferring things.
-> It's probably a lot of work to get to that point though.
+> Initially, I would use DEV_FILTER at both locations. This makes trouble to me as
+> there would be two places with same reason=DEV_FILTER. I will not be able to
+> tell where the skb is dropped.
 > 
-
-No, the caller will do this check but the check is included here so that we
-don't run out of buffers when the packet needs to be splitted.
-
-> > +		if (mhi_ep_queue_is_empty(mhi_dev, dir)) {
-> > +			dev_err(dev, "TRE not available!\n");
-> > +			ret = -EINVAL;
-> > +			goto err_exit;
-> > +		}
-> > +
-> > +		el = &ring->ring_cache[ring->rd_offset];
-> > +		tre_len = MHI_EP_TRE_GET_LEN(el);
-> > +		if (skb->len > tre_len) {
-> > +			dev_err(dev, "Buffer size (%d) is too large for TRE (%d)!\n",
-> > +				skb->len, tre_len);
 > 
-> This means the receive buffer must be big enough to hold
-> any incoming SKB.  This is *without* checking for the
-> CHAIN flag in the TRE, so what you describe in the
-> patch description seems not to be true.  I.e., multiple
-> TREs in a TRD will *not* be consumed if the SKB data
-> requires more than what's left in the current TRE.
+> I was thinking about to introduce a SKB_DROP_REASON_DEV_BPF. While I have
+> limited experience in device specific bpf, the TUN is the only device I know
+> that has a device specific ebpf filter (by commit aff3d70a07ff ("tun: allow to
+> attach ebpf socket filter")). The SKB_DROP_REASON_DEV_BPF is not generic enough
+> to be re-used by other drivers.
+> 
+> 
+> Would you mind sharing your suggestion if I would re-use (1)
+> SKB_DROP_REASON_DEV_FILTER or (2) introduce a new SKB_DROP_REASON_DEV_BPF, which
+> is for sk_buff dropped by ebpf attached to device (not socket).
+> 
+> 
+> To answer your question, the SOCKET_FILTER is for filter attached to socket, the
+> BPF_FILTER was supposed for ebpf filter attached to device (tun->filter_prog).
+> 
 > 
 
-I think I removed this check for v3 but somehow the change got lost :/
+tun/tap does have some unique filtering options. The other sets focused
+on the core networking stack is adding a drop reason of
+SKB_DROP_REASON_BPF_CGROUP_EGRESS for cgroup based egress filters.
 
-But anyway, there is no need to check for CHAIN flag while writing to host.
-CHAIN flag is only used or even make sense when host writes data to device, so
-that it knows the packet boundary and could use the CHAIN flag to tell the
-device where the boundary lies.
-
-But when the device writes to host, it already has the pre-queued elements from
-host that has no idea where the packet boundary lies. So the host would've set
-only EOT on all TREs and expects the device to send OVERFLOW event for TREs that
-don't have the complete packet. Then finally, when device sends EOT event, the
-host will detect the boundary.
-
-Thanks,
-Mani
+For tun unique filters, how about using a shortened version of the ioctl
+name used to set the filter.

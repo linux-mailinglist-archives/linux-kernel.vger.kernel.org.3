@@ -2,86 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE25C4BFBF0
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 16:07:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BD4C4BFBF8
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 16:10:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233108AbiBVPIF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 10:08:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59258 "EHLO
+        id S232950AbiBVPLK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 10:11:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232956AbiBVPHz (ORCPT
+        with ESMTP id S232031AbiBVPLJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 10:07:55 -0500
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE76F10A7FA;
-        Tue, 22 Feb 2022 07:07:29 -0800 (PST)
-Received: by mail-pj1-x102d.google.com with SMTP id v8-20020a17090a634800b001bb78857ccdso2835207pjs.1;
-        Tue, 22 Feb 2022 07:07:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=A0la35tNJG/t3KT4ifjVJqnO2+6KZI4cizqAVsM0shA=;
-        b=Z+UShjS78aAT5Tl3+/AV+OD6pcYvg0Lhm0mNhZBRILwY71LwT0JOYNJt0BTHlItsLx
-         AB5YQ9KmBE1O08Uku5rCaKzNG3iupQ0oT9IwMu2loGgSy3NuWG2md/M6cC6/+zzF58XC
-         gHNfRLi4HKzrIUna5mBUo7DzQ1JS5v+JmzO21IkD227FdBMX24MgRyeqmG7EdGlTg5B1
-         rjGvhfccoDS0TrhVAJx5BaYAca7lEbbeB+UNaSrkKOt1D2qonEtK98NSlY2dtwp+BqOu
-         J4BCndcEzAcAj0t43P7FlIaFqLqaIQC37JNEmZ60QeOdZcLYlkyCkZlXVz+0V7VVNgnf
-         fAdQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=A0la35tNJG/t3KT4ifjVJqnO2+6KZI4cizqAVsM0shA=;
-        b=Np8Hi9hHxkiIziEoMW3ewekiPMcUoV03cTZaAxHJ8jGOAShDEBOgqcs0ELWgnUZjEf
-         dlICUSexqC0nfN4IrateE3KYXS40xb2RoKCT6mZVU6BKt8ENDg42+bfyI0ZU171fiFif
-         UJM4PI0eeJFLMFA3Jiqn0ow5Xk5CRG9Mp8gRafInzA3gErX3OLRxyDXUev7AJXMu7lbU
-         jr+uQ5OehPdhf7mfjY3AYqZPQHiv+5MWWlI9o5JPmvxHIspoqrJJOWIe9+ubacpswVHA
-         ca7rbn82T9E6qEHWdZQzyhYUnmh/ymgEj3qyMSFEnHSUTyM71DhdpFNoTkDr/ABOZ5Ls
-         zFCw==
-X-Gm-Message-State: AOAM531vEFw0QUn8TAJNWvYew7QZGWOq94FioRCzISvvMnyiYE6QIg51
-        wwyN+Efj06yX7w7Zk6pKrbc=
-X-Google-Smtp-Source: ABdhPJxjZkuvhI0jYoEUrZ80PpIgvPyPzdJ2YaYFn255LvM62G54tIqeHQLdgJWP9o8kfhl7eScsWA==
-X-Received: by 2002:a17:90b:4b92:b0:1b7:aca7:b2f3 with SMTP id lr18-20020a17090b4b9200b001b7aca7b2f3mr4632014pjb.169.1645542449216;
-        Tue, 22 Feb 2022 07:07:29 -0800 (PST)
-Received: from ?IPV6:2404:f801:0:5:8000::754? ([2404:f801:9000:18:efec::754])
-        by smtp.gmail.com with ESMTPSA id m17-20020a17090a859100b001bc20ddcc67sm2949253pjn.34.2022.02.22.07.07.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 22 Feb 2022 07:07:28 -0800 (PST)
-Message-ID: <00112505-4999-ac41-877e-49c4cc45312e@gmail.com>
-Date:   Tue, 22 Feb 2022 23:07:19 +0800
+        Tue, 22 Feb 2022 10:11:09 -0500
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 638A810EC4A
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 07:10:43 -0800 (PST)
+Received: (Authenticated sender: clement.leger@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id CE615FF814;
+        Tue, 22 Feb 2022 15:10:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1645542642;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=pOM4wfrMDqeY9Bjg00fwOoESa/b377YpBh4HMF9LC7U=;
+        b=PBZW3zUOBneAa37PdtDkkBmmlqzZ+F0sMBsOq35Il849SxHeOBi/jjgF6/2sRa/gLqrpUy
+        3GuF1geQaadYfXv0CvaRHUl2za8rZHUYX8zYIReuSk5biUaNIsUaRsuOtKteOdrdcDWMSz
+        UvuwJeRTsjtTpWtCbkUSVQRyi6p/lVVllIIbUj0EgZPkSczDbavW59zso+0pu5VfXLBbVo
+        lC7+MWXeXRl6Y0XCuDguvId07/4tgHCq/bOw1Oq+xD2n6OU8BHqJaMRKmogPKEvA9M88J7
+        jfnXccbc3u7/IObuKhhn6h7h/yv+ImW7GjjGPP2fAxL1omJkd5PqD8LmPfcOUQ==
+From:   =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <clement.leger@bootlin.com>
+To:     Russell King <linux@armlinux.org.uk>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Ludovic Desroches <ludovic.desroches@microchip.com>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <clement.leger@bootlin.com>
+Subject: [PATCH 0/4] ARM: at91: add support for secure suspend on sama5d2
+Date:   Tue, 22 Feb 2022 16:08:42 +0100
+Message-Id: <20220222150846.255307-1-clement.leger@bootlin.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [PATCH V2 1/2] Swiotlb: Add swiotlb_alloc_from_low_pages switch
-Content-Language: en-US
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
-        wei.liu@kernel.org, decui@microsoft.com, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        x86@kernel.org, hpa@zytor.com, hch@infradead.org,
-        m.szyprowski@samsung.com, robin.murphy@arm.com,
-        michael.h.kelley@microsoft.com,
-        Tianyu Lan <Tianyu.Lan@microsoft.com>,
-        iommu@lists.linux-foundation.org, linux-hyperv@vger.kernel.org,
-        linux-kernel@vger.kernel.org, vkuznets@redhat.com,
-        brijesh.singh@amd.com, konrad.wilk@oracle.com,
-        parri.andrea@gmail.com, thomas.lendacky@amd.com
-References: <20220209122302.213882-1-ltykernel@gmail.com>
- <20220209122302.213882-2-ltykernel@gmail.com> <20220214081919.GA18337@lst.de>
- <4f433f07-05be-f81f-43e8-55c3f1af23b3@gmail.com>
- <20220214135834.GA30150@lst.de>
- <8d052867-ccff-f00f-7c89-cc26a4bfa347@gmail.com>
- <23f4a64d-5977-1816-8faa-fe7691ace2ff@gmail.com>
- <20220222080543.GA5412@lst.de>
-From:   Tianyu Lan <ltykernel@gmail.com>
-In-Reply-To: <20220222080543.GA5412@lst.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,31 +54,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Now that OP-TEE support for sama5d2 is more complete, add support to
+execute SMC calls and to set suspend mode. This series adds new files
+to be able to execute SMC calls targeting OP-TEE secure monitor and
+secure suspend support uses it.
 
+Clément Léger (4):
+  ARM: at91: add code to handle secure calls
+  ARM: at91: pm: move "atmel.pm_modes" parsing into a common file
+  ARM: at91: pm: add support for sama5d2 secure suspend
+  ARM: at91: pm: fix defines to select *_pm_init functions
 
-On 2/22/2022 4:05 PM, Christoph Hellwig wrote:
-> On Mon, Feb 21, 2022 at 11:14:58PM +0800, Tianyu Lan wrote:
->> Sorry. The boot failure is not related with these patches and the issue
->> has been fixed in the latest upstream code.
->>
->> There is a performance bottleneck due to io tlb mem's spin lock during
->> performance test. All devices'io queues uses same io tlb mem entry
->> and the spin lock of io tlb mem introduce overheads. There is a fix patch
->> from Andi Kleen in the github. Could you have a look?
->>
->> https://github.com/intel/tdx/commit/4529b5784c141782c72ec9bd9a92df2b68cb7d45
-> 
-> Please post these things to the list.
-> 
-> But I suspect the right answer for the "secure" hypervisor case is to
-> use the per-device swiotlb regions that we've recently added.
+ arch/arm/mach-at91/Kconfig          | 14 ++++++-
+ arch/arm/mach-at91/Makefile         |  5 ++-
+ arch/arm/mach-at91/generic.h        |  2 +-
+ arch/arm/mach-at91/pm.c             | 31 +-------------
+ arch/arm/mach-at91/pm.h             |  7 ++++
+ arch/arm/mach-at91/pm_common.c      | 39 ++++++++++++++++++
+ arch/arm/mach-at91/pm_secure.c      | 64 +++++++++++++++++++++++++++++
+ arch/arm/mach-at91/sam_secure.c     | 46 +++++++++++++++++++++
+ arch/arm/mach-at91/sam_secure.h     | 18 ++++++++
+ arch/arm/mach-at91/sama5.c          |  2 +
+ include/linux/platform_data/atmel.h |  2 +-
+ 11 files changed, 195 insertions(+), 35 deletions(-)
+ create mode 100644 arch/arm/mach-at91/pm_common.c
+ create mode 100644 arch/arm/mach-at91/pm_secure.c
+ create mode 100644 arch/arm/mach-at91/sam_secure.c
+ create mode 100644 arch/arm/mach-at91/sam_secure.h
 
-Thanks for your comment. That means we need to expose an 
-swiotlb_device_init() interface to allocate bounce buffer and initialize
-io tlb mem entry. DMA API Current  rmem_swiotlb_device_init() only works
-for platform with device tree. The new API should be called in the bus
-driver or new DMA API. Could you check whether this is a right way 
-before we start the work.
-
-Thanks.
+-- 
+2.34.1
 

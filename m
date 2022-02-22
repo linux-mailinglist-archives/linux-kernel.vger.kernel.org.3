@@ -2,136 +2,236 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 563EB4BFF53
+	by mail.lfdr.de (Postfix) with ESMTP id A15CA4BFF54
 	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 17:53:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234375AbiBVQxQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 11:53:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55832 "EHLO
+        id S234379AbiBVQx2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 11:53:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234355AbiBVQxK (ORCPT
+        with ESMTP id S234355AbiBVQx2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 11:53:10 -0500
-Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CE733298A;
-        Tue, 22 Feb 2022 08:52:45 -0800 (PST)
-Received: by mail-qk1-x72c.google.com with SMTP id q4so270414qki.11;
-        Tue, 22 Feb 2022 08:52:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=qDlxs6btPVbIiuFqjfw9xhRirAx7l7nHCBZbNvwfBDs=;
-        b=nE+XsWJssq97lkRRt7D+sTYGnLt7E4ELsnHWX+ShfxXLLvlsxv8lef2XtGsnDl8OsO
-         bwKwVYwUDrLMFxh58g2T8atqrHQn2/BMO/3KzJMpT/kcZCwkqH5neBceKrYHorY+oWGA
-         rIoObq0LGSEiPsL1pFFP0dM1wU0qoIAcra2tcpH+DOQ8YaiGFcc3sdW194KMh5xCB5zs
-         NjC+kMDJ+VcUUHDX0K+Lbk4tYuog4XfPpKaMO7wTrqF//uSOr9SWFPMgz4/Kf8mMlSj7
-         6gMt4uwji1H3BU3of+SY4Pnbao8G2TNQqxMa++PWBO1Xq6+YavxSz+I6nee8KXbOyh0S
-         FQUA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=qDlxs6btPVbIiuFqjfw9xhRirAx7l7nHCBZbNvwfBDs=;
-        b=oYE+gAAeMhuprqd+Hb+6Zy8TrYUYozPrMgyvKIXUlYKAhOauAdVnGHBt9pjymTdj3o
-         pvkqzKgjI8FwMPCW4saDJgX6vMqfeoEYJBXsGTELpisyc6tvbZhyk1QuLWIaF1eCOd1P
-         dbzt8FJm0mBU++vtRAwlWcAUzu2y2Y5ZqyYWS71Q584MgXkTdCblg5gQrEvet5Xvl2AX
-         E8fnBjvBrTJKsRfC6l8nfzZlehKj/zE1OchaFYCKKSTnk/1y2bSPI3pQ1SGQ7BwCrsM7
-         QzdAgFnOhzWgcsXzVgmvPzWzkDD/WEcNUgO3E9OZBM1tFGkg7+SQf0YPAgsYbX1PVY87
-         wpsA==
-X-Gm-Message-State: AOAM532svskU9zcC8VW+BksLIhEtmakWVeqUeaYAl3NzHkE631Cagyyq
-        jBw/GaqGbIrUvCf0mdLe+YZMeDMFk7Ktqw==
-X-Google-Smtp-Source: ABdhPJweq1FpYWzA483hwO+mF9xFyUsaiCB1YFavrqC4ucP7urMXgKaCMGUTukL7z432qmS2r5El9w==
-X-Received: by 2002:a05:620a:56b:b0:62c:eff4:fe8d with SMTP id p11-20020a05620a056b00b0062ceff4fe8dmr11606218qkp.459.1645548764393;
-        Tue, 22 Feb 2022 08:52:44 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id z23sm80873qtn.40.2022.02.22.08.52.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Feb 2022 08:52:43 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 22 Feb 2022 08:52:42 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Eddie James <eajames@linux.ibm.com>
-Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jdelvare@suse.com, joel@jms.id.au
-Subject: Re: [PATCH 4/4] hwmon: (occ) Add soft minimum power cap attribute
-Message-ID: <20220222165242.GA255329@roeck-us.net>
-References: <20220215151022.7498-1-eajames@linux.ibm.com>
- <20220215151022.7498-5-eajames@linux.ibm.com>
+        Tue, 22 Feb 2022 11:53:28 -0500
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 74EB2340DF;
+        Tue, 22 Feb 2022 08:53:02 -0800 (PST)
+Received: from [192.168.254.32] (unknown [47.187.212.181])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 5677D20C319A;
+        Tue, 22 Feb 2022 08:53:01 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 5677D20C319A
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1645548782;
+        bh=eBE2w8R3jHrviJiZVR0GgUpvu31BZBoOrA+XHyhhM7E=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=hP5yscyobvLuXGG/CW09XIfWpvN9GhnQ3ML2ALJh/GNYMu44L/nUhAGV5YkrbFPla
+         SnowneC1XiyZS2vsL66zukzCqcGvwHpJHkw4C/OJL38jcNc7NkeZlewv8/IfmbHbB4
+         ZfPBICTT8edfcB90xy/3naof4q1RK764MezHYL5Y=
+Message-ID: <da34359e-bcd0-c5b8-635d-d70bfda03f3c@linux.microsoft.com>
+Date:   Tue, 22 Feb 2022 10:53:00 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220215151022.7498-5-eajames@linux.ibm.com>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v13 05/11] arm64: Copy the task argument to unwind_state
+Content-Language: en-US
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     broonie@kernel.org, jpoimboe@redhat.com, ardb@kernel.org,
+        nobuta.keiya@fujitsu.com, sjitindarsingh@gmail.com,
+        catalin.marinas@arm.com, will@kernel.org, jmorris@namei.org,
+        linux-arm-kernel@lists.infradead.org,
+        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <95691cae4f4504f33d0fc9075541b1e7deefe96f>
+ <20220117145608.6781-1-madvenka@linux.microsoft.com>
+ <20220117145608.6781-6-madvenka@linux.microsoft.com>
+ <YgupIuJgL7nreT+1@FVFF77S0Q05N>
+From:   "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
+In-Reply-To: <YgupIuJgL7nreT+1@FVFF77S0Q05N>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 15, 2022 at 09:10:22AM -0600, Eddie James wrote:
-> Export the power caps data for the soft minimum power cap through hwmon.
+It looks like I forgot to reply to this. Sorry about that.
+
+On 2/15/22 07:22, Mark Rutland wrote:
+> On Mon, Jan 17, 2022 at 08:56:02AM -0600, madvenka@linux.microsoft.com wrote:
+>> From: "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
+>>
+>> Copy the task argument passed to arch_stack_walk() to unwind_state so that
+>> it can be passed to unwind functions via unwind_state rather than as a
+>> separate argument. The task is a fundamental part of the unwind state.
+>>
+>> Signed-off-by: Madhavan T. Venkataraman <madvenka@linux.microsoft.com>
+>> ---
+>>  arch/arm64/include/asm/stacktrace.h |  3 +++
+>>  arch/arm64/kernel/stacktrace.c      | 29 ++++++++++++++++-------------
+>>  2 files changed, 19 insertions(+), 13 deletions(-)
+>>
+>> diff --git a/arch/arm64/include/asm/stacktrace.h b/arch/arm64/include/asm/stacktrace.h
+>> index 41ec360515f6..af423f5d7ad8 100644
+>> --- a/arch/arm64/include/asm/stacktrace.h
+>> +++ b/arch/arm64/include/asm/stacktrace.h
+>> @@ -51,6 +51,8 @@ struct stack_info {
+>>   * @kr_cur:      When KRETPROBES is selected, holds the kretprobe instance
+>>   *               associated with the most recently encountered replacement lr
+>>   *               value.
+>> + *
+>> + * @task:        Pointer to the task structure.
 > 
-> Signed-off-by: Eddie James <eajames@linux.ibm.com>
-> Reviewed-by: Joel Stanley <joel@jms.id.au>
-
-Applied to hwmon-next.
-
-Thanks,
-Guenter
-
-> ---
->  drivers/hwmon/occ/common.c | 19 ++++++++++++++++---
->  1 file changed, 16 insertions(+), 3 deletions(-)
+> Can we please say:
 > 
-> diff --git a/drivers/hwmon/occ/common.c b/drivers/hwmon/occ/common.c
-> index 0cb4a0a6cbc1..f00cd59f1d19 100644
-> --- a/drivers/hwmon/occ/common.c
-> +++ b/drivers/hwmon/occ/common.c
-> @@ -674,6 +674,9 @@ static ssize_t occ_show_caps_3(struct device *dev,
->  	case 7:
->  		val = caps->user_source;
->  		break;
-> +	case 8:
-> +		val = get_unaligned_be16(&caps->soft_min) * 1000000ULL;
-> +		break;
->  	default:
->  		return -EINVAL;
->  	}
-> @@ -835,12 +838,13 @@ static int occ_setup_sensor_attrs(struct occ *occ)
->  	case 1:
->  		num_attrs += (sensors->caps.num_sensors * 7);
->  		break;
-> -	case 3:
-> -		show_caps = occ_show_caps_3;
-> -		fallthrough;
->  	case 2:
->  		num_attrs += (sensors->caps.num_sensors * 8);
->  		break;
-> +	case 3:
-> +		show_caps = occ_show_caps_3;
-> +		num_attrs += (sensors->caps.num_sensors * 9);
-> +		break;
->  	default:
->  		sensors->caps.num_sensors = 0;
->  	}
-> @@ -1047,6 +1051,15 @@ static int occ_setup_sensor_attrs(struct occ *occ)
->  			attr->sensor = OCC_INIT_ATTR(attr->name, 0444,
->  						     show_caps, NULL, 7, 0);
->  			attr++;
-> +
-> +			if (sensors->caps.version > 2) {
-> +				snprintf(attr->name, sizeof(attr->name),
-> +					 "power%d_cap_min_soft", s);
-> +				attr->sensor = OCC_INIT_ATTR(attr->name, 0444,
-> +							     show_caps, NULL,
-> +							     8, 0);
-> +				attr++;
-> +			}
->  		}
->  	}
->  
+> 	@task:	The task being unwound.
+> 
+
+Will do.
+
+>>   */
+>>  struct unwind_state {
+>>  	unsigned long fp;
+>> @@ -61,6 +63,7 @@ struct unwind_state {
+>>  #ifdef CONFIG_KRETPROBES
+>>  	struct llist_node *kr_cur;
+>>  #endif
+>> +	struct task_struct *task;
+>>  };
+>>  
+>>  extern void dump_backtrace(struct pt_regs *regs, struct task_struct *tsk,
+>> diff --git a/arch/arm64/kernel/stacktrace.c b/arch/arm64/kernel/stacktrace.c
+>> index b2b568e5deba..1b32e55735aa 100644
+>> --- a/arch/arm64/kernel/stacktrace.c
+>> +++ b/arch/arm64/kernel/stacktrace.c
+>> @@ -33,8 +33,10 @@
+>>   */
+>>  
+>>  
+>> -static void unwind_init_common(struct unwind_state *state)
+>> +static void unwind_init_common(struct unwind_state *state,
+>> +			       struct task_struct *task)
+>>  {
+>> +	state->task = task;
+>>  #ifdef CONFIG_KRETPROBES
+>>  	state->kr_cur = NULL;
+>>  #endif
+>> @@ -57,9 +59,10 @@ static void unwind_init_common(struct unwind_state *state)
+>>   * TODO: document requirements here.
+>>   */
+>>  static inline void unwind_init_from_regs(struct unwind_state *state,
+>> +					 struct task_struct *task,
+> 
+> Please drop the `task` parameter here ...
+
+OK.
+
+> 
+>>  					 struct pt_regs *regs)
+>>  {
+>> -	unwind_init_common(state);
+>> +	unwind_init_common(state, task);
+> 
+> ... and make this:
+> 
+> 	unwind_init_common(state, current);
+
+OK.
+
+> 
+> ... since that way it's *impossible* to have ismatched parameters, which is one
+> of the reasons for having separate functions in the first place.
+> 
+>>  	state->fp = regs->regs[29];
+>>  	state->pc = regs->pc;
+>> @@ -71,9 +74,10 @@ static inline void unwind_init_from_regs(struct unwind_state *state,
+>>   * Note: this is always inlined, and we expect our caller to be a noinline
+>>   * function, such that this starts from our caller's caller.
+>>   */
+>> -static __always_inline void unwind_init_from_current(struct unwind_state *state)
+>> +static __always_inline void unwind_init_from_current(struct unwind_state *state,
+>> +						     struct task_struct *task)
+>>  {
+>> -	unwind_init_common(state);
+>> +	unwind_init_common(state, task);
+> 
+> Same comments as for unwind_init_from_regs(): please drop the `task` parameter
+> and hard-code `current` in the call to unwind_init_common().
+> 
+
+OK.
+
+>>  	state->fp = (unsigned long)__builtin_frame_address(1);
+>>  	state->pc = (unsigned long)__builtin_return_address(0);
+>> @@ -87,7 +91,7 @@ static __always_inline void unwind_init_from_current(struct unwind_state *state)
+>>  static inline void unwind_init_from_task(struct unwind_state *state,
+>>  					 struct task_struct *task)
+>>  {
+>> -	unwind_init_common(state);
+>> +	unwind_init_common(state, task);
+>>  
+>>  	state->fp = thread_saved_fp(task);
+>>  	state->pc = thread_saved_pc(task);
+>> @@ -100,11 +104,11 @@ static inline void unwind_init_from_task(struct unwind_state *state,
+>>   * records (e.g. a cycle), determined based on the location and fp value of A
+>>   * and the location (but not the fp value) of B.
+>>   */
+>> -static int notrace unwind_next(struct task_struct *tsk,
+>> -			       struct unwind_state *state)
+>> +static int notrace unwind_next(struct unwind_state *state)
+>>  {
+>>  	unsigned long fp = state->fp;
+>>  	struct stack_info info;
+>> +	struct task_struct *tsk = state->task;
+>>  
+>>  	/* Final frame; nothing to unwind */
+>>  	if (fp == (unsigned long)task_pt_regs(tsk)->stackframe)
+>> @@ -176,8 +180,7 @@ static int notrace unwind_next(struct task_struct *tsk,
+>>  }
+>>  NOKPROBE_SYMBOL(unwind_next);
+>>  
+>> -static void notrace unwind(struct task_struct *tsk,
+>> -			   struct unwind_state *state,
+>> +static void notrace unwind(struct unwind_state *state,
+>>  			   bool (*fn)(void *, unsigned long), void *data)
+>>  {
+>>  	while (1) {
+>> @@ -185,7 +188,7 @@ static void notrace unwind(struct task_struct *tsk,
+>>  
+>>  		if (!fn(data, state->pc))
+>>  			break;
+>> -		ret = unwind_next(tsk, state);
+>> +		ret = unwind_next(state);
+>>  		if (ret < 0)
+>>  			break;
+>>  	}
+>> @@ -232,11 +235,11 @@ noinline notrace void arch_stack_walk(stack_trace_consume_fn consume_entry,
+>>  	struct unwind_state state;
+>>  
+>>  	if (regs)
+>> -		unwind_init_from_regs(&state, regs);
+>> +		unwind_init_from_regs(&state, task, regs);
+>>  	else if (task == current)
+>> -		unwind_init_from_current(&state);
+>> +		unwind_init_from_current(&state, task);
+>>  	else
+>>  		unwind_init_from_task(&state, task);
+> 
+> As above we shouldn't need these two changes.
+> 
+> For the regs case we might want to sanity-check that task == current.
+> 
+
+Will do.
+
+>> -	unwind(task, &state, consume_entry, cookie);
+>> +	unwind(&state, consume_entry, cookie);
+> 
+> Otherwise, this looks good to me.
+
+Thanks.
+
+Madhavan

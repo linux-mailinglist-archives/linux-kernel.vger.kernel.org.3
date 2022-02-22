@@ -2,74 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A04F4BF070
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 05:10:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 428D84BF02A
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 05:10:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241096AbiBVDUt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 22:20:49 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51044 "EHLO
+        id S241314AbiBVDVS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 22:21:18 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241014AbiBVDUo (ORCPT
+        with ESMTP id S241390AbiBVDVJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 22:20:44 -0500
-Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6BEB193F8;
-        Mon, 21 Feb 2022 19:20:10 -0800 (PST)
-Received: by mail-io1-xd2d.google.com with SMTP id c18so15914340ioc.6;
-        Mon, 21 Feb 2022 19:20:10 -0800 (PST)
+        Mon, 21 Feb 2022 22:21:09 -0500
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A82617065
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 19:20:40 -0800 (PST)
+Received: by mail-pf1-x42f.google.com with SMTP id y11so10596276pfa.6
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 19:20:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=byRYyFHF1RfzOq4HLIneApDEfH4u8IiUuf/rJRXw2TE=;
-        b=TJ07BWtF6OCGG5MEaK5reraVvmo57yyHKf2yxmjI9eRrja9HJpCqAp8i3Hpil+raCc
-         8x2A/EEjne4doxfSgMAnZkRDTogvda4grCCvc4kMUFh3ZSJAXf5tlxaGbiYgGll9RWjs
-         M9A8geSWxEKq7AzJ5MSBB5g1lo/u7uEO2jiZ/AchKD8+4G4uGGZ2Ba4ea87TX7889fqS
-         5dd3GTQIKNAaCeu+4Ex7i3imcakT23x9oFmfCJjECz5weZSQvpvitrCGRimV8Xqzkro/
-         vLhCCjkMsNphSvXuSShaKqQXcYwlfTIMfIRw5Knd7qjS8MGth/H01vGOAI80nVyr23/S
-         jAkQ==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=RfVO0n5bxGhQlU0yKBog2OCZbfoJHnMeC+GhXjg5mv4=;
+        b=SH76wCmHAE4xRc5mXtEW+6VYb3V3K1zqQ494/IhTi3jJbNKEvFqAOjhvl6zaS6dexo
+         YLbyDtZIEwGpnaCrvizwyDLA4Rqf7zWTg01HzLXJGqQrKWW+kHr6lpukA2KmqfhVy4jN
+         OFlLQFJt/I2Iut7OUqHd3dKuTddkZnVACvBzjAb5wRtyom/Fvk9vxEF3qmO8cHvuI0Xf
+         YoFv0LjI33Jfa9X8pOM7qA8uPoiA5QoNCgPrahllfKIwN8iZMEJXInPCqAqWiN+9Meq8
+         9sk+GQHUJ8zCOUAbQYSxEGOm4RG3kNlkQU7SrRi+BCekHUGX+QTb96Q1aNS82CnkDFfv
+         N8aw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=byRYyFHF1RfzOq4HLIneApDEfH4u8IiUuf/rJRXw2TE=;
-        b=VvZZPCPNQgsH2CR2q0p5LyAJEuC/5xqlvLOGYhWoUJRTcPAtvoZN4PHdM1sBFn2COX
-         3rl8Vq/4evDOG7f6xDSKkyxGHLlvZg9DgnYUGHwf6mE+nrss0qZO1Gjfpy28ERJDxHsP
-         zDqtWXePs/B0jBsMJxuzkVpcXS7xNmTOPzPnTO5RjuXqz0et3bQg8V69TVovPu3hgHxw
-         VBEXdJuq8gaZPZ9b2OO1kWbtg67KzafvUFq7uY/EMLTrmhXx2sBIQq3boG+fHAydUtwZ
-         puMr9KHpFrTXdU8EuZ3qCP+dTF4Upn7Mo2Z8RnZja48cEyRPDwMMi4amUzoMZmUYNtWN
-         P4Iw==
-X-Gm-Message-State: AOAM53266iDVNJXLxHubUFhlgX1oxRgdvkwcaqppitlQQ4LHYzuvlVvC
-        Hj/RImTYHcX742I7ZtdRSlAL+zPdGwSPyQ==
-X-Google-Smtp-Source: ABdhPJyN2Mwd+CudxyzholjEEEfvuTP0QZs8IL1dNYZ66tk1WVh9ViGhrbbkXImRcctbAwcKH8ykAQ==
-X-Received: by 2002:a02:bb05:0:b0:314:57b4:6af3 with SMTP id y5-20020a02bb05000000b0031457b46af3mr16831289jan.244.1645500005052;
-        Mon, 21 Feb 2022 19:20:05 -0800 (PST)
-Received: from ?IPV6:2601:284:8200:b700:fc7f:e53f:676e:280d? ([2601:284:8200:b700:fc7f:e53f:676e:280d])
-        by smtp.googlemail.com with ESMTPSA id e6sm8400023ile.49.2022.02.21.19.20.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Feb 2022 19:20:04 -0800 (PST)
-Message-ID: <3a81db69-2900-f750-6ac2-d2f4fc710768@gmail.com>
-Date:   Mon, 21 Feb 2022 20:20:03 -0700
+        bh=RfVO0n5bxGhQlU0yKBog2OCZbfoJHnMeC+GhXjg5mv4=;
+        b=5sLPzPyHNmC/qKVji4DG/mfqcdRReXMFbU7cjhlWfVHMxsCFgQ6D6goCCorw2OI729
+         6v9A8DC3uHz/Du3RFFnhs7XTH8GGyKc6OAu9jiJkdz5qCduflfEFmFnOlN/Cmd0bgcL4
+         U072N0p0MjdTgq0NbwAJlLiWLql5gi4hHZnElefnzXEJuXh1hYqXhVYvH/SyiMrys8lp
+         n9lmr+GiDTtZJQEdsnRFn+f1dOJ5OgtyYLY/dw4qVPoREuWM9ncUA/2OpQIv+iqjpA+k
+         +rr6FGlbKWwtV9tEDcbgmyU/3Cng8dcDmG2giDFkjvcJlFBsPqM9dpXDS7QHuhiGHfk0
+         yBsA==
+X-Gm-Message-State: AOAM5301ReQBR3+6aRxKcV6ZXRImGCfpz9Z0vf+zkuIOhAwQLUl/5IQY
+        TUXD+GNqMh2bhvkTGOBz9oA=
+X-Google-Smtp-Source: ABdhPJxvczvkokFGOaiFlyoYc3FwWVNkDJOfBNWtbgSpyWXBFuLXVkcpbqBoy7Etht8H+XybHJqfQA==
+X-Received: by 2002:a05:6a00:1795:b0:4e1:6e1f:5aed with SMTP id s21-20020a056a00179500b004e16e1f5aedmr22837139pfg.70.1645500039340;
+        Mon, 21 Feb 2022 19:20:39 -0800 (PST)
+Received: from 7YHHR73.igp.broadcom.net (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
+        by smtp.gmail.com with ESMTPSA id x12sm19068111pgp.25.2022.02.21.19.20.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 21 Feb 2022 19:20:38 -0800 (PST)
+From:   Florian Fainelli <f.fainelli@gmail.com>
+To:     linux-mtd@lists.infradead.org
+Cc:     david regan <dregan@mail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Brian Norris <computersforpeace@gmail.com>,
+        Kamal Dasu <kdasu.kdev@gmail.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        bcm-kernel-feedback-list@broadcom.com (open list:BROADCOM STB NAND
+        FLASH DRIVER), linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH stable 4.19] mtd: rawnand: brcmnand: Fixed incorrect sub-page ECC status
+Date:   Mon, 21 Feb 2022 19:20:22 -0800
+Message-Id: <20220222032024.10220-1-f.fainelli@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.6.0
-Subject: Re: [PATCH net-next v3 1/4] skbuff: introduce kfree_skb_list_reason()
-Content-Language: en-US
-To:     Dongli Zhang <dongli.zhang@oracle.com>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
-        rostedt@goodmis.org, mingo@redhat.com, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org, imagedong@tencent.com,
-        joao.m.martins@oracle.com, joe.jin@oracle.com, edumazet@google.com
-References: <20220221053440.7320-1-dongli.zhang@oracle.com>
- <20220221053440.7320-2-dongli.zhang@oracle.com>
-From:   David Ahern <dsahern@gmail.com>
-In-Reply-To: <20220221053440.7320-2-dongli.zhang@oracle.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -78,20 +75,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/20/22 10:34 PM, Dongli Zhang wrote:
-> This is to introduce kfree_skb_list_reason() to drop a list of sk_buff with
-> a specific reason.
-> 
-> Cc: Joao Martins <joao.m.martins@oracle.com>
-> Cc: Joe Jin <joe.jin@oracle.com>
-> Signed-off-by: Dongli Zhang <dongli.zhang@oracle.com>
-> ---
->  include/linux/skbuff.h |  2 ++
->  net/core/skbuff.c      | 11 +++++++++--
->  2 files changed, 11 insertions(+), 2 deletions(-)
-> 
->
+From: david regan <dregan@mail.com>
 
-Reviewed-by: David Ahern <dsahern@kernel.org>
+commit 36415a7964711822e63695ea67fede63979054d9 upstream
 
+The brcmnand driver contains a bug in which if a page (example 2k byte)
+is read from the parallel/ONFI NAND and within that page a subpage (512
+byte) has correctable errors which is followed by a subpage with
+uncorrectable errors, the page read will return the wrong status of
+correctable (as opposed to the actual status of uncorrectable.)
+
+The bug is in function brcmnand_read_by_pio where there is a check for
+uncorrectable bits which will be preempted if a previous status for
+correctable bits is detected.
+
+The fix is to stop checking for bad bits only if we already have a bad
+bits status.
+
+Fixes: 27c5b17cd1b1 ("mtd: nand: add NAND driver "library" for Broadcom STB NAND controller")
+Signed-off-by: david regan <dregan@mail.com>
+Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
+Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
+Link: https://lore.kernel.org/linux-mtd/trinity-478e0c09-9134-40e8-8f8c-31c371225eda-1643237024774@3c-app-mailcom-lxa02
+[florian: make patch apply to 4.19]
+Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+---
+ drivers/mtd/nand/raw/brcmnand/brcmnand.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/mtd/nand/raw/brcmnand/brcmnand.c b/drivers/mtd/nand/raw/brcmnand/brcmnand.c
+index 774ffa9e23f3..2b02f558b5e1 100644
+--- a/drivers/mtd/nand/raw/brcmnand/brcmnand.c
++++ b/drivers/mtd/nand/raw/brcmnand/brcmnand.c
+@@ -1637,7 +1637,7 @@ static int brcmnand_read_by_pio(struct mtd_info *mtd, struct nand_chip *chip,
+ 					mtd->oobsize / trans,
+ 					host->hwcfg.sector_size_1k);
+ 
+-		if (!ret) {
++		if (ret != -EBADMSG) {
+ 			*err_addr = brcmnand_read_reg(ctrl,
+ 					BRCMNAND_UNCORR_ADDR) |
+ 				((u64)(brcmnand_read_reg(ctrl,
+-- 
+2.25.1
 

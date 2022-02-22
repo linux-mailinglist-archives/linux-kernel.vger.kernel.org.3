@@ -2,108 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 974064BFF42
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 17:51:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A1C04BFF72
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 17:57:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234358AbiBVQvf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 11:51:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49360 "EHLO
+        id S234421AbiBVQ5j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 11:57:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234344AbiBVQvd (ORCPT
+        with ESMTP id S233144AbiBVQ5i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 11:51:33 -0500
-Received: from mail-qv1-xf33.google.com (mail-qv1-xf33.google.com [IPv6:2607:f8b0:4864:20::f33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3739516AA7C;
-        Tue, 22 Feb 2022 08:51:07 -0800 (PST)
-Received: by mail-qv1-xf33.google.com with SMTP id x3so511919qvd.8;
-        Tue, 22 Feb 2022 08:51:07 -0800 (PST)
+        Tue, 22 Feb 2022 11:57:38 -0500
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC00716BFAD
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 08:57:11 -0800 (PST)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-2d07ae11460so145910127b3.7
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 08:57:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=7lwww6qytMHobo/IrTZR1dCVgaY8SomLUb6wdjfR/YU=;
-        b=XEm4WkG0oOgN8AUZzTVDbHzgu0/VcD27pX2Zf07bKZN6JejHr9JLwlByKexE7+JKyb
-         3OtNgcJb1jefCbzI4oG77LpcI5JOBxmAZ1nP95MrR7+NFJeP0u/UrVkxzHE+9QDcwvMW
-         YAPsKvEn1ZArVMPvnDUTQCXlLkLtkPiLHjhydgHLK+fakg8veEo2B8R/Jv2JsGIw11Fg
-         FvvzTdV0RMP8W0Gy3e6Gt1e2Y/Baf5RQ/BS5wElA26uzSd+NpzcRVfqCASIADP+th5XR
-         wfHc8Z1mXHKeSdYq3X39YHXHLYqmZQRj50bIeVvrnRyfBLRRpaCmXMV/j+v8nD+3ne2M
-         gPQQ==
+        d=google.com; s=20210112;
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:cc;
+        bh=knnzmuohJ2ih2y2NTiUEzUxj92qYLV4FmoYUekHSvUw=;
+        b=tazhhxtdUk3rQttzgDm+V0n+dY4v2ZnB4i8xG8ax2HZdSoHAffJo42UTzU3IHvzAqj
+         CzDDQtHudJDmOpjvt+NTOxsHiMMcd5AR1KeV4KZ04Anj9Hvg2wo5WdkKx0uhJOAuX1UG
+         DMG5h+1UR544FLvyjxNA1/VvkZavi0pxiwKfoHP3qdoBAJ8849pS8kTNoGD5QX5f9/Px
+         48yknJpXBRw8xvBSwtZigYe1MGyv8eQBBWwjuMT8BSujAmFufVqRsnYE2LCmZqywZs8i
+         wJddWj0UZSrpFMMQpEijc1j/Xch9CqJ1J2YUynBS8lvvuY7OGu4etP9u4qE8wqmUHhIw
+         yLwg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=7lwww6qytMHobo/IrTZR1dCVgaY8SomLUb6wdjfR/YU=;
-        b=8LFfLp6TApoVzVuNWLoRZ17rXgMO0KLLauGMWiQneLWbJfTxfYRwKtntzX0LMQEyH9
-         Hi0/IQ4bb4dT1E4QaIKCO4AtGqDjdQ0ciyCs7MMbnDOpJd3SnWrwlD5rBljcJIrd/3/V
-         f0FMPQ714ly4UPlgK49oACxaJvfF12nY/h/wevws17vW48W1p2lzOSqH5kXcZWNby3lW
-         NIcacefZ5/qJXmUA7O5wijV3vjjQq9/pgbLkY+5FXEN/SbqdAaucXVPlizhCFgMXSHkt
-         jU7ciMXcS8uaeoQbfGuxeESKDrSo1+jLTF4sijOeCADsAAIVzgYZ2Wdi8Y7eE6vrgH7L
-         mFGw==
-X-Gm-Message-State: AOAM531DQePtmUp6e7trF7wMb1DeuACw4Y5agCFVDxFDDMQeA5UDwGLZ
-        hGdNRBgnH1sbrzSDnjU7EFU=
-X-Google-Smtp-Source: ABdhPJzZcvVD+NCKZ0vruo8lkGr1oAcRpmZERWxk29emUz6sQM6wb/kwUTfw9zfwMbcuR7DKh7bbLg==
-X-Received: by 2002:a05:622a:153:b0:2de:4ddc:8a73 with SMTP id v19-20020a05622a015300b002de4ddc8a73mr3393641qtw.636.1645548666401;
-        Tue, 22 Feb 2022 08:51:06 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id bs39sm80972qkb.24.2022.02.22.08.51.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Feb 2022 08:51:05 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 22 Feb 2022 08:51:04 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Marcello Sylvester Bauer <sylv@sylv.io>
-Cc:     Jean Delvare <jdelvare@suse.com>, linux-kernel@vger.kernel.org,
-        linux-hwmon@vger.kernel.org,
-        Patrick Rudolph <patrick.rudolph@9elements.com>
-Subject: Re: [PATCH v2 1/1] hwmon: (pmbus) Add regulator supply into macro
-Message-ID: <20220222165104.GA255067@roeck-us.net>
-References: <cover.1645437439.git.sylv@sylv.io>
- <58f2ff7b90233fad3d7ae2e9d66d5192e2c1ac01.1645437439.git.sylv@sylv.io>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <58f2ff7b90233fad3d7ae2e9d66d5192e2c1ac01.1645437439.git.sylv@sylv.io>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:cc;
+        bh=knnzmuohJ2ih2y2NTiUEzUxj92qYLV4FmoYUekHSvUw=;
+        b=Xe91ktN0nz4w2p6o9pV1v0wApCbo6UaLaeuPYe45EQbzSk64vQZvT72LAB9FO9RrmX
+         xN5Wg8mZ4aBISVHiinRGGt5aYR5PpjCCM40Zl/0+mwECR581bifkJyipKWhc2dZ4RNL6
+         kvpoz2aXJbfrXoguQ4ynICHKbbZ3xNv5kdigDG5vE82x1Qj7MawXuufXgpHG2X+jk+17
+         j+Wpnt9zwM9+0lpFs5dhtiT3W2h9ZjwbVSXUZHTnncr0RCGmQjLoeoY8ljVa6lgbciA8
+         tdSSdwDokx577mWJZ+sFc4ipEXCP56AVkN3QJZGPtE5l0QRMZP1sMIYa0TqfFfPpjHQ6
+         c9Tw==
+X-Gm-Message-State: AOAM533n76ItwTRSOBBPIpeh+7FaW4OiC4J7NMks7qREoj/z04nSlB16
+        OZMv4ni8o3w57ntUAI41J0IBjqRWNd3WoztbZg==
+X-Google-Smtp-Source: ABdhPJxsM9h50TZI3B0JLyBOhiXv0umcrv6dsBugtZNBeZtlKN8O9HTo3L2ie+qpRSFxA92HD2CPBV8kKYkIX9PJAQ==
+X-Received: from kaleshsingh.mtv.corp.google.com ([2620:15c:211:200:5db7:1235:b3dd:cfcb])
+ (user=kaleshsingh job=sendgmr) by 2002:a25:4cc1:0:b0:623:ca02:c1e5 with SMTP
+ id z184-20020a254cc1000000b00623ca02c1e5mr22952503yba.95.1645549030879; Tue,
+ 22 Feb 2022 08:57:10 -0800 (PST)
+Date:   Tue, 22 Feb 2022 08:51:05 -0800
+In-Reply-To: <20220222165212.2005066-1-kaleshsingh@google.com>
+Message-Id: <20220222165212.2005066-5-kaleshsingh@google.com>
+Mime-Version: 1.0
+References: <20220222165212.2005066-1-kaleshsingh@google.com>
+X-Mailer: git-send-email 2.35.1.473.g83b2b277ed-goog
+Subject: [PATCH v2 4/9] KVM: arm64: Add guard pages for pKVM (protected nVHE)
+ hypervisor stack
+From:   Kalesh Singh <kaleshsingh@google.com>
+Cc:     will@kernel.org, maz@kernel.org, qperret@google.com,
+        tabba@google.com, surenb@google.com, kernel-team@android.com,
+        Kalesh Singh <kaleshsingh@google.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Joey Gouly <joey.gouly@arm.com>,
+        Peter Collingbourne <pcc@google.com>,
+        Andrew Scull <ascull@google.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kvmarm@lists.cs.columbia.edu
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,MISSING_HEADERS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        USER_IN_DEF_DKIM_WL autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 21, 2022 at 12:09:56PM +0100, Marcello Sylvester Bauer wrote:
-> Add regulator supply into PWBUS_REGULATOR macro. This makes it optional
-> to define a vin-supply in DT. Not defining a supply will add a dummy
-> regulator supply instead and only cause the following debug output:
-> 
-> ```
-> Looking up vin-supply property in node [...] failed
-> ```
-> 
-> Signed-off-by: Marcello Sylvester Bauer <sylv@sylv.io>
+Maps the stack pages in the flexible private VA range and allocates
+guard pages below the stack as unbacked VA space. The stack is aligned
+to twice its size to aid overflow detection (implemented in a subsequent
+patch in the series).
 
-Applied to hwmon-next. That should give it some time to mature,
-and we can pull or modify it if it causes any problems.
+Signed-off-by: Kalesh Singh <kaleshsingh@google.com>
+---
+ arch/arm64/kvm/hyp/nvhe/setup.c | 25 +++++++++++++++++++++----
+ 1 file changed, 21 insertions(+), 4 deletions(-)
 
-Thanks,
-Guenter
+diff --git a/arch/arm64/kvm/hyp/nvhe/setup.c b/arch/arm64/kvm/hyp/nvhe/setup.c
+index 27af337f9fea..69df21320b09 100644
+--- a/arch/arm64/kvm/hyp/nvhe/setup.c
++++ b/arch/arm64/kvm/hyp/nvhe/setup.c
+@@ -105,11 +105,28 @@ static int recreate_hyp_mappings(phys_addr_t phys, unsigned long size,
+ 		if (ret)
+ 			return ret;
+ 
+-		end = (void *)per_cpu_ptr(&kvm_init_params, i)->stack_hyp_va;
++		/*
++		 * Private mappings are allocated upwards from __io_map_base
++		 * so allocate the guard page first then the stack.
++		 */
++		start = (void *)pkvm_alloc_private_va_range(PAGE_SIZE, PAGE_SIZE);
++		if (IS_ERR_OR_NULL(start))
++			return PTR_ERR(start);
++
++		/*
++		 * The stack is aligned to twice its size to facilitate overflow
++		 * detection.
++		 */
++		end = (void *)per_cpu_ptr(&kvm_init_params, i)->stack_pa;
+ 		start = end - PAGE_SIZE;
+-		ret = pkvm_create_mappings(start, end, PAGE_HYP);
+-		if (ret)
+-			return ret;
++		start = (void *)__pkvm_create_private_mapping((phys_addr_t)start,
++					PAGE_SIZE, PAGE_SIZE * 2, PAGE_HYP);
++		if (IS_ERR_OR_NULL(start))
++			return PTR_ERR(start);
++		end = start + PAGE_SIZE;
++
++		/* Update stack_hyp_va to end of the stack's private VA range */
++		per_cpu_ptr(&kvm_init_params, i)->stack_hyp_va = (unsigned long) end;
+ 	}
+ 
+ 	/*
+-- 
+2.35.1.473.g83b2b277ed-goog
 
-> ---
->  drivers/hwmon/pmbus/pmbus.h | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/hwmon/pmbus/pmbus.h b/drivers/hwmon/pmbus/pmbus.h
-> index e0aa8aa46d8c..38f049d68d32 100644
-> --- a/drivers/hwmon/pmbus/pmbus.h
-> +++ b/drivers/hwmon/pmbus/pmbus.h
-> @@ -464,6 +464,7 @@ extern const struct regulator_ops pmbus_regulator_ops;
->  #define PMBUS_REGULATOR(_name, _id)				\
->  	[_id] = {						\
->  		.name = (_name # _id),				\
-> +		.supply_name = "vin",				\
->  		.id = (_id),					\
->  		.of_match = of_match_ptr(_name # _id),		\
->  		.regulators_node = of_match_ptr("regulators"),	\

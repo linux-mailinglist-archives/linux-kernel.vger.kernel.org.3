@@ -2,163 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6E844BF8AD
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 14:01:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D41E84BF8B0
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 14:02:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231267AbiBVNB2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 08:01:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41958 "EHLO
+        id S232002AbiBVNB7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 08:01:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229590AbiBVNBY (ORCPT
+        with ESMTP id S229590AbiBVNB5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 08:01:24 -0500
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E422AA2FC
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 05:00:59 -0800 (PST)
-Received: by mail-pg1-x52b.google.com with SMTP id 195so16952978pgc.6
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 05:00:59 -0800 (PST)
+        Tue, 22 Feb 2022 08:01:57 -0500
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A90C1558F
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 05:01:31 -0800 (PST)
+Received: by mail-ej1-x629.google.com with SMTP id lw4so42691450ejb.12
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 05:01:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=nUt0EmZnAjWhiw3ria3c4mQpo/dgjgtowmwpyAc1Cbo=;
-        b=IP8F2yfh8d9HOTDVcoFaajwYozjX6JSyXP3lHDNGD3uvbAQVChed6Pz/o8d3z4BNRs
-         MQK37Phm7nbNzeUZ+cXLmxGBsiQ72zVhnyAWEqSe2D2o9aVHg9eUXvIykPldJaOHOmfd
-         CjE2cQMjYIqPRckAM3+o+BGDt25/XhJsKE4CnwE6adTKuZoU/GiMBSde94S1m+bSN7Qf
-         CZtgSdF5JIC7t6i4xns3a4pzTam5nUyPhwg/QGgzpx/CLBrm07+bT06ZHdz4Hc+YpLWa
-         KuXk8qhaTBWulKv1AHGOjWNnadxF/sUbuP9lebmDv2CkFBjxUDQVNeCiohTE2WhHnVa6
-         zflQ==
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
+        bh=9YLfdLDX50M/ZkhtC5IB+zCV0i6JtJQXN7NqFd+CRpY=;
+        b=i8pfb9alhkTcpLZj0VvRWw/SByHorpH2HXvfuMZjGoh0KKG0Vhepn7lR2NSf2v6bBs
+         dxZrjMmM3LzSvKkkfIHKKT9MhOub4+fHYWtfcajasoGut28hS4ddFrX0DEEyBxqTSpZS
+         8AmOb4HCThgAlUmdvwC4ywVwJ+3jp3ZNtqKiPHv/edcW6y6LLdZtM8dXt4i+SvOPAjUn
+         vIL7Y8oHT9HjQuUFXx+3kjtF0WqlMDdZfmf75WeHUySDsjTAfnA2EXYLRyqlYyG+rYz6
+         H0XBCTwxUaN9U7y5y7Tp0iK6XOSBX3xwdVwoYLmE257N9gLUfXF50Yxdyy20ooX8V4Zg
+         t1Ag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=nUt0EmZnAjWhiw3ria3c4mQpo/dgjgtowmwpyAc1Cbo=;
-        b=Rk3uQkJC1JBacOKztp26KQo53DLSk636895O/Wd9d2E9OHCuc6uqLzesbLsLTFy1sg
-         /+16CSM0hrnvy7H4eziIPr5oTUj4Iy09KgJngRDLxABXJLiJJ6y7qeECSEHAZanVnApp
-         72ydqzNYz034h6z9F6oouCNGXN5bqPeBmpWgcp1u1dCFRYYlXRWcL01ysyloLIhktHUw
-         IgJlv4lx2wocI9M1L7/qhpBuTydeOF9mibxSsla4lEw8/i6/5oghx/EYuld8EuN1X+XW
-         /boNhy08drqy5tR/+EERRjG9hgFTvAXCaqqk+O9HkFHsoQBw6CrfhsDBU8zZMrf76EyT
-         ghnQ==
-X-Gm-Message-State: AOAM532jCx2t5OCYZEmnC38BNlrvTCxYlk8oqkxGsC+Knot9ImNprzK9
-        v+r4m1xfxk1OUyK8dg6G851NZg==
-X-Google-Smtp-Source: ABdhPJzCf/hDKsVXtxWWr8kywPLuoA+ON50H4nU4G+0ivdzrlLu+RLrQDET6/Rcu1f60yUg8oVBCpQ==
-X-Received: by 2002:aa7:9f5b:0:b0:4cc:964c:99dd with SMTP id h27-20020aa79f5b000000b004cc964c99ddmr24960894pfr.42.1645534858709;
-        Tue, 22 Feb 2022 05:00:58 -0800 (PST)
-Received: from C02CV1DAMD6P.bytedance.net ([139.177.225.236])
-        by smtp.gmail.com with ESMTPSA id j15sm18125567pfj.102.2022.02.22.05.00.54
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=9YLfdLDX50M/ZkhtC5IB+zCV0i6JtJQXN7NqFd+CRpY=;
+        b=JfLOiFzHxRQoNKDsOChfLEiRnlYG8Qy6MogiEnt9FqGM/0gLSPey6NMOf1wSo6RqKP
+         LBpSFucTuvVzhRw8KKZSe8S9YNqTS9lEJOK3aKMvgJDkfMFcskIW8CkdoZDYJcJGTlsB
+         fCgbZ5jUaB0i438xM1XeIRp9CkUe8uOEgl2w0AM1p9045ooep3WhlalYlGcFYWca1vbU
+         163JQgGvRaFqfMNn6YaAAMCZqT8tKu724P8wZmw20+Gn2xyRJ8Tc6CKmTYlOhlAQ/rXf
+         0oA6iewnEV3hvLh+RilP8qJePwH23i6HGfUeQvsEqAdZ4vO7VKjTgAncnqOH8djG2jBI
+         jxjg==
+X-Gm-Message-State: AOAM533JIfTniB5pcn5B1vC6x1wIvtc/UJg0dXaqH9n1AY2TO1EQkOpd
+        HZaRmrxX+dGD+iHyp93d8g==
+X-Google-Smtp-Source: ABdhPJzneJDSRlyptDo027tAxgL8Jf7Ldl0E5HRf6E2QMhw4MnNh/vfaCAgpzooFtZe+EkJWk0ydow==
+X-Received: by 2002:a17:907:9691:b0:6d1:711d:9050 with SMTP id hd17-20020a170907969100b006d1711d9050mr8154251ejc.755.1645534890128;
+        Tue, 22 Feb 2022 05:01:30 -0800 (PST)
+Received: from localhost.localdomain ([46.53.254.189])
+        by smtp.gmail.com with ESMTPSA id s15sm6291542ejj.84.2022.02.22.05.01.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Feb 2022 05:00:58 -0800 (PST)
-From:   Chengming Zhou <zhouchengming@bytedance.com>
-To:     rostedt@goodmis.org, mingo@redhat.com, catalin.marinas@arm.com,
-        will@kernel.org, mark.rutland@arm.com, broonie@kernel.org
-Cc:     songmuchun@bytedance.com, qirui.001@bytedance.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Chengming Zhou <zhouchengming@bytedance.com>
-Subject: [PATCH] arm64/ftrace: Make function graph use ftrace directly
-Date:   Tue, 22 Feb 2022 21:00:49 +0800
-Message-Id: <20220222130049.81284-1-zhouchengming@bytedance.com>
-X-Mailer: git-send-email 2.35.1
+        Tue, 22 Feb 2022 05:01:29 -0800 (PST)
+Date:   Tue, 22 Feb 2022 16:01:27 +0300
+From:   Alexey Dobriyan <adobriyan@gmail.com>
+To:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, hpa@zytor.com
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] x86, alternative: record .altinstructions section entity size
+Message-ID: <YhTep9uK8kLdTOsY@localhost.localdomain>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As we do in commit 0c0593b45c9b ("x86/ftrace: Make function graph
-use ftrace directly"), we don't need special hook for graph tracer,
-but instead we use graph_ops:func function to install return_hooker.
+.altinstructions entry was 12 bytes in size, then it was 13 bytes,
+now it is 12 again. Record this information as section sh_entsize value
+so that tools which parse .altinstructions have easier time.
 
-Since commit 3b23e4991fb6 ("arm64: implement ftrace with regs") add
-implementation for FTRACE_WITH_REGS on arm64, we can easily adopt
-the same optimization on arm64.
+Dividing section size by 12 or 13 and looking at the remainder doesn't
+work because the number of alternative entries itself can be multiple of
+entry size.
 
-Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
+Signed-off-by: Alexey Dobriyan (CloudLinux) <adobriyan@gmail.com>
 ---
- arch/arm64/include/asm/ftrace.h  |  7 +++++++
- arch/arm64/kernel/entry-ftrace.S |  6 ------
- arch/arm64/kernel/ftrace.c       | 21 +++++++++++++++++++++
- 3 files changed, 28 insertions(+), 6 deletions(-)
 
-diff --git a/arch/arm64/include/asm/ftrace.h b/arch/arm64/include/asm/ftrace.h
-index 1494cfa8639b..dbc45a4157fa 100644
---- a/arch/arm64/include/asm/ftrace.h
-+++ b/arch/arm64/include/asm/ftrace.h
-@@ -80,8 +80,15 @@ static inline unsigned long ftrace_call_adjust(unsigned long addr)
- 
- #ifdef CONFIG_DYNAMIC_FTRACE_WITH_REGS
- struct dyn_ftrace;
-+struct ftrace_ops;
-+struct ftrace_regs;
-+
- int ftrace_init_nop(struct module *mod, struct dyn_ftrace *rec);
- #define ftrace_init_nop ftrace_init_nop
-+
-+void ftrace_graph_func(unsigned long ip, unsigned long parent_ip,
-+		       struct ftrace_ops *op, struct ftrace_regs *fregs);
-+#define ftrace_graph_func ftrace_graph_func
- #endif
- 
- #define ftrace_return_address(n) return_address(n)
-diff --git a/arch/arm64/kernel/entry-ftrace.S b/arch/arm64/kernel/entry-ftrace.S
-index e535480a4069..eb4a69b1f84d 100644
---- a/arch/arm64/kernel/entry-ftrace.S
-+++ b/arch/arm64/kernel/entry-ftrace.S
-@@ -97,12 +97,6 @@ SYM_CODE_START(ftrace_common)
- SYM_INNER_LABEL(ftrace_call, SYM_L_GLOBAL)
- 	bl	ftrace_stub
- 
--#ifdef CONFIG_FUNCTION_GRAPH_TRACER
--SYM_INNER_LABEL(ftrace_graph_call, SYM_L_GLOBAL) // ftrace_graph_caller();
--	nop				// If enabled, this will be replaced
--					// "b ftrace_graph_caller"
--#endif
--
- /*
-  * At the callsite x0-x8 and x19-x30 were live. Any C code will have preserved
-  * x19-x29 per the AAPCS, and we created frame records upon entry, so we need
-diff --git a/arch/arm64/kernel/ftrace.c b/arch/arm64/kernel/ftrace.c
-index 4506c4a90ac1..1b5da231b1de 100644
---- a/arch/arm64/kernel/ftrace.c
-+++ b/arch/arm64/kernel/ftrace.c
-@@ -268,6 +268,26 @@ void prepare_ftrace_return(unsigned long self_addr, unsigned long *parent,
- }
- 
- #ifdef CONFIG_DYNAMIC_FTRACE
-+#ifdef CONFIG_DYNAMIC_FTRACE_WITH_REGS
-+int ftrace_enable_ftrace_graph_caller(void)
-+{
-+	return 0;
-+}
-+
-+int ftrace_disable_ftrace_graph_caller(void)
-+{
-+	return 0;
-+}
-+
-+void ftrace_graph_func(unsigned long ip, unsigned long parent_ip,
-+		       struct ftrace_ops *op, struct ftrace_regs *fregs)
-+{
-+	struct pt_regs *regs = arch_ftrace_get_regs(fregs);
-+	unsigned long *parent = (unsigned long *)&procedure_link_pointer(regs);
-+
-+	prepare_ftrace_return(ip, parent, frame_pointer(regs));
-+}
-+#else
- /*
-  * Turn on/off the call to ftrace_graph_caller() in ftrace_caller()
-  * depending on @enable.
-@@ -297,5 +317,6 @@ int ftrace_disable_ftrace_graph_caller(void)
- {
- 	return ftrace_modify_graph_caller(false);
- }
-+#endif /* CONFIG_DYNAMIC_FTRACE_WITH_REGS */
- #endif /* CONFIG_DYNAMIC_FTRACE */
- #endif /* CONFIG_FUNCTION_GRAPH_TRACER */
--- 
-2.20.1
+ arch/x86/include/asm/alternative.h |   13 ++++++++-----
+ 1 file changed, 8 insertions(+), 5 deletions(-)
 
+--- a/arch/x86/include/asm/alternative.h
++++ b/arch/x86/include/asm/alternative.h
+@@ -9,6 +9,8 @@
+ #define ALTINSTR_FLAG_INV	(1 << 15)
+ #define ALT_NOT(feat)		((feat) | ALTINSTR_FLAG_INV)
+ 
++#define sizeof_struct_alt_instr 12
++
+ #ifndef __ASSEMBLY__
+ 
+ #include <linux/stddef.h>
+@@ -66,6 +68,7 @@ struct alt_instr {
+ 	u8  instrlen;		/* length of original instruction */
+ 	u8  replacementlen;	/* length of new instruction */
+ } __packed;
++_Static_assert(sizeof(struct alt_instr) == sizeof_struct_alt_instr);
+ 
+ /*
+  * Debug flag that can be tested to see whether alternative
+@@ -159,7 +162,7 @@ static inline int alternatives_text_reserved(void *start, void *end)
+ /* alternative assembly primitive: */
+ #define ALTERNATIVE(oldinstr, newinstr, feature)			\
+ 	OLDINSTR(oldinstr, 1)						\
+-	".pushsection .altinstructions,\"a\"\n"				\
++	".pushsection .altinstructions,\"aM\",@progbits," __stringify(sizeof_struct_alt_instr) "\n"\
+ 	ALTINSTR_ENTRY(feature, 1)					\
+ 	".popsection\n"							\
+ 	".pushsection .altinstr_replacement, \"ax\"\n"			\
+@@ -168,7 +171,7 @@ static inline int alternatives_text_reserved(void *start, void *end)
+ 
+ #define ALTERNATIVE_2(oldinstr, newinstr1, feature1, newinstr2, feature2)\
+ 	OLDINSTR_2(oldinstr, 1, 2)					\
+-	".pushsection .altinstructions,\"a\"\n"				\
++	".pushsection .altinstructions,\"aM\",@progbits," __stringify(sizeof_struct_alt_instr) "\n"\
+ 	ALTINSTR_ENTRY(feature1, 1)					\
+ 	ALTINSTR_ENTRY(feature2, 2)					\
+ 	".popsection\n"							\
+@@ -184,7 +187,7 @@ static inline int alternatives_text_reserved(void *start, void *end)
+ 
+ #define ALTERNATIVE_3(oldinsn, newinsn1, feat1, newinsn2, feat2, newinsn3, feat3) \
+ 	OLDINSTR_3(oldinsn, 1, 2, 3)						\
+-	".pushsection .altinstructions,\"a\"\n"					\
++	".pushsection .altinstructions,\"aM\",@progbits," __stringify(sizeof_struct_alt_instr) "\n"\
+ 	ALTINSTR_ENTRY(feat1, 1)						\
+ 	ALTINSTR_ENTRY(feat2, 2)						\
+ 	ALTINSTR_ENTRY(feat3, 3)						\
+@@ -331,7 +334,7 @@ static inline int alternatives_text_reserved(void *start, void *end)
+ 	.skip -(((144f-143f)-(141b-140b)) > 0) * ((144f-143f)-(141b-140b)),0x90
+ 142:
+ 
+-	.pushsection .altinstructions,"a"
++	.pushsection .altinstructions,"aM",@progbits,sizeof_struct_alt_instr
+ 	altinstruction_entry 140b,143f,\feature,142b-140b,144f-143f
+ 	.popsection
+ 
+@@ -368,7 +371,7 @@ static inline int alternatives_text_reserved(void *start, void *end)
+ 		(alt_max_short(new_len1, new_len2) - (old_len)),0x90
+ 142:
+ 
+-	.pushsection .altinstructions,"a"
++	.pushsection .altinstructions,"aM",@progbits,sizeof_struct_alt_instr
+ 	altinstruction_entry 140b,143f,\feature1,142b-140b,144f-143f
+ 	altinstruction_entry 140b,144f,\feature2,142b-140b,145f-144f
+ 	.popsection

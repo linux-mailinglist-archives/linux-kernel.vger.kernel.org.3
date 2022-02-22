@@ -2,62 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAC634BF782
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 13:00:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BDA94BF783
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 13:00:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231530AbiBVMAT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 07:00:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46954 "EHLO
+        id S231812AbiBVMA3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 07:00:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229801AbiBVMAN (ORCPT
+        with ESMTP id S230377AbiBVMAP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 07:00:13 -0500
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 823ED156C56
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 03:59:47 -0800 (PST)
-Received: by mail-wr1-x436.google.com with SMTP id p9so32694006wra.12
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 03:59:47 -0800 (PST)
+        Tue, 22 Feb 2022 07:00:15 -0500
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF440156C60
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 03:59:49 -0800 (PST)
+Received: by mail-wm1-x335.google.com with SMTP id o62-20020a1ca541000000b00380e3cc26b7so225887wme.0
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 03:59:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=8LObSTXu1qlvqbb+LZZSTBp/s15WbJsY+tJE4L4+0TQ=;
-        b=S6zirMZaeJTYUQYI2jWpRibl0LEcLY97o0F/lBgr4W2yeXj8NN1Pi/kAwyhdS2ZcaP
-         3DLiquqKlXA331x2wqCsuUiFrBZ9rLzfPEdj7mQEN6h4KzbrQMVoNikBVqrz0544PFdc
-         5qkFQ2t5VR0T3qvV06OeHSVvAzK5ST26dUdgbspj1CLxCWCAXDBb5zZpjXhpjMaZ0zdY
-         5Wz+ibvKKAaikmbQ1jouCJeai0JpQwQgk5VKkVMlNcUrFgAoU04o77KA+mrBbPzAbq/r
-         n+DYzAB47J1mBABZqg7toakfxHLVtDb/Lc6L5sHtU0JSARf/mImQZLqp5dmPvwySKgd3
-         +pog==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=HYM5KhvV8cAY2xeJWd0M65Y2tn1Q2u3N1GUicP98cl8=;
+        b=RX6X4lmjUY/h74tOHBTweptlgfLuFmBZXV8kDh2RmGzLeHzQ1u8tX6ZCvYEtccu4xQ
+         HDE9G6MNBk9HNR+SajG7pQzZdjFm0r67Nunqg/UVJnUCN2CbZpLjLDUlDFZtZnYjNzfq
+         Z3zwno2Ykj4Sld3+FXEO0uOwjcVctBiD0cvjfm+O/+WywJgfmbAUvej5JRLmwvqJ7EN4
+         S2oaW8N4IX+XJtROIFJSlARsVfqzcBW/5U0cHVTULCTgfbDMCB6hJt54sDFM+Z4ws3WN
+         4fY5UycCJvCdpNSsRatWPKCJ/qwZILJzH9jmJPjjVdWjuXBA7FDNZsZ8FLGwGLK3M9E+
+         mzhw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=8LObSTXu1qlvqbb+LZZSTBp/s15WbJsY+tJE4L4+0TQ=;
-        b=pNXx5ecu8w5HpH++LY+tf3UVKNfk7eaLtpX0+yO7BZhQl21BdQ0n3OGbACLm4V/9ti
-         gdXrOXXaPCNBakkUU2npXh61usp6jzGARA5hRnfa/HIhM5ltzkuK0SgcPiTFENNcQYQY
-         TCtxGJgMLxlemnUb5UKIOJV741r0p+JHsbSgPlIO6YCG0yz325CWvovsS29SYaA9I3/W
-         uyFG+92LIjz4tbnzdCqwTjlOi7j/GJe+HeKavvTQjI0Ee50hk3yWBuUqCHLrzbnolr06
-         D8CM8ZW3IaM4uVwLMuxiewfeYuAHxqs+q3IAV91n7lTk+SlIwy6Q45Wv7/asYoFKum79
-         LgBQ==
-X-Gm-Message-State: AOAM5336YgT1AW7Pjbf1U4MkpxqajU7twoXE4LVNpxo2vwb1awsXHL7o
-        t+3elBTK8CgCNIQEMLQqHcbKkQ==
-X-Google-Smtp-Source: ABdhPJz1Enfc0BgEL2zeXIbO97OxrujoZTbIOpVYZlAuLV7/llYGqgTXIg4Ba/LIcakGF4OQzNs9WQ==
-X-Received: by 2002:a5d:5986:0:b0:1ea:75c6:3d0a with SMTP id n6-20020a5d5986000000b001ea75c63d0amr4633484wri.166.1645531186102;
-        Tue, 22 Feb 2022 03:59:46 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=HYM5KhvV8cAY2xeJWd0M65Y2tn1Q2u3N1GUicP98cl8=;
+        b=m6VWIiWBkdaj5Ao/F1dUYkYmYOLSw052QlY6QIZNheDNWveCGPCGr1j96kjUWsGfVM
+         Y6Pc7PTQA13G3z9RulRfmuDLq3BOuxzBsID6RgwWThDUF41JSkWMoi7re6ULERPg//Is
+         FR+yrWNHRQGNf62zGChxhPFjEFBiOMoFHcEAUIp70ZU8P5APczKo1IA/3n9V/l/Pcm3A
+         taS5ioMQjIQl4hUbA1WDVOJX1cs2D3VDDATDUTGMhAHP5nIj+MZPPVjHkZlbrd2DqoNB
+         Wwx8f05nM0Tq7IW6Ppcq2IiY4gWZ7uhRgnk+PtmNnQdi1MR4/R+VZbhelIANdZ3f9bmi
+         Qn4A==
+X-Gm-Message-State: AOAM530/lqllCjbpMJZatVrEla8nLMtuwSPfufngpEULgVqh3ZnCtR5C
+        M1DAbMcO1mJerxudx1D+N//Dqg==
+X-Google-Smtp-Source: ABdhPJzLhrz3DxbtX9yGvLu3mqXzHXSgCBONoNArMwvkRmF9SNZLw5cuOed4dssa5O1/3S/74GG3Aw==
+X-Received: by 2002:a05:600c:2e02:b0:380:d7dc:5530 with SMTP id o2-20020a05600c2e0200b00380d7dc5530mr1856598wmf.115.1645531188467;
+        Tue, 22 Feb 2022 03:59:48 -0800 (PST)
 Received: from srini-hackbox.lan (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
-        by smtp.gmail.com with ESMTPSA id a18sm50014661wrg.13.2022.02.22.03.59.44
+        by smtp.gmail.com with ESMTPSA id a18sm50014661wrg.13.2022.02.22.03.59.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Feb 2022 03:59:45 -0800 (PST)
+        Tue, 22 Feb 2022 03:59:48 -0800 (PST)
 From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 To:     broonie@kernel.org
 Cc:     lgirdwood@gmail.com, perex@perex.cz, tiwai@suse.com,
         pierre-louis.bossart@linux.intel.com, alsa-devel@alsa-project.org,
         linux-kernel@vger.kernel.org, quic_srivasam@quicinc.com,
         Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Subject: [PATCH 00/16] ASoC: codecs: qcom fix validation failures
-Date:   Tue, 22 Feb 2022 11:59:17 +0000
-Message-Id: <20220222115933.9114-1-srinivas.kandagatla@linaro.org>
+Subject: [PATCH 01/16] ASoC: codecs: rx-macro: fix accessing compander for aux
+Date:   Tue, 22 Feb 2022 11:59:18 +0000
+Message-Id: <20220222115933.9114-2-srinivas.kandagatla@linaro.org>
 X-Mailer: git-send-email 2.21.0
+In-Reply-To: <20220222115933.9114-1-srinivas.kandagatla@linaro.org>
+References: <20220222115933.9114-1-srinivas.kandagatla@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -70,52 +72,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks for pointing out to mixer kselftest and VALIDATION Kconfig.
+AUX interpolator does not have compander, so check before accessing
+compander data for this.
 
-This patchset addresses some of the issues in Qualcomm codecs that are
-discovered with recent mixer kselftest and validations added to ASoC.
+Without this checkan array of out bounds access will be made in
+comp_enabled[] array.
 
-Mostly these are under
-1. accessing integer value type for enum controls, which is clearly an array out of bounds access.
-2. Fix incorrect ranges.
-3. Fix incorrect min max for tlv controls. (I can see that other codecs also suffer same issue)
-4. Fix return values for put functions.
+Fixes: 4f692926f562 ("ASoC: codecs: lpass-rx-macro: add dapm widgets and route")
+Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+---
+ sound/soc/codecs/lpass-rx-macro.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-thanks,
-srini
-
-Srinivas Kandagatla (9):
-  ASoC: codecs: rx-macro: fix accessing compander for aux
-  ASoC: codecs: rx-macro: fix accessing array out of bounds for enum
-    type
-  ASoC: codecs: tx-macro: fix accessing array out of bounds for enum
-    type
-  ASoC: codecs: va-macro: fix accessing array out of bounds for enum
-    type
-  ASoC: codecs: wsa-macro: fix accessing array out of bounds for enum
-    type
-  ASoC: codecs: wc938x: fix accessing array out of bounds for enum type
-  ASoC: codecs: wcd938x: fix kcontrol max values
-  ASoC: codecs: wcd934x: fix kcontrol max values
-  ASoC: codecs: wcd934x: fix return value of wcd934x_rx_hph_mode_put
-  ASoC: codecs: rx-macro: fix tlv min max range
-  ASoC: codecs: tx-macro: fix tlv min max range
-  ASoC: codecs: va-macro: fix tlv min max range
-  ASoC: codecs: wsa-macro: fix tlv min max range
-  ASoC: codecs: wcd938x: fix tlv min max range
-  ASoC: codecs: wcd9335: fix tlv min max range
-  ASoC: codecs: msm8916-wcd-digital: fix tlv min max range
-
- sound/soc/codecs/lpass-rx-macro.c      | 40 ++++++++-------
- sound/soc/codecs/lpass-tx-macro.c      | 24 ++++-----
- sound/soc/codecs/lpass-va-macro.c      | 12 ++---
- sound/soc/codecs/lpass-wsa-macro.c     | 14 +++---
- sound/soc/codecs/msm8916-wcd-digital.c | 14 +++---
- sound/soc/codecs/wcd9335.c             | 36 ++++++-------
- sound/soc/codecs/wcd934x.c             | 70 +++++++++++++-------------
- sound/soc/codecs/wcd938x.c             | 10 ++--
- 8 files changed, 112 insertions(+), 108 deletions(-)
-
+diff --git a/sound/soc/codecs/lpass-rx-macro.c b/sound/soc/codecs/lpass-rx-macro.c
+index fadf3c99c89d..a7f86b094a4f 100644
+--- a/sound/soc/codecs/lpass-rx-macro.c
++++ b/sound/soc/codecs/lpass-rx-macro.c
+@@ -2040,6 +2040,10 @@ static int rx_macro_load_compander_coeff(struct snd_soc_component *component,
+ 	int i;
+ 	int hph_pwr_mode;
+ 
++	/* AUX does not have compander */
++	if (comp == INTERP_AUX)
++		return 0;
++
+ 	if (!rx->comp_enabled[comp])
+ 		return 0;
+ 
 -- 
 2.21.0
 

@@ -2,60 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38F1D4BFB89
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 16:02:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C84844BFB8D
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 16:02:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233250AbiBVPCU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 10:02:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48888 "EHLO
+        id S233194AbiBVPCZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 10:02:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233182AbiBVPCA (ORCPT
+        with ESMTP id S233199AbiBVPCF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 10:02:00 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1270E14EF74
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 07:00:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=3m8N/pbSaW7IFq5Zg9KAiVLIQW/cSc9Z6gH3HL38bvM=; b=pruQPWEnrDH6n+wMF9FJQxB0ek
-        zMnZf/+56aZavVGp2P8XWHAiMmLe72015warxfujwagX3xTjBsLvUJXFB7V/rJe2rlQALbXw+ejOo
-        IXU4I07/dAThjMCiYbIs21318EH3wODNh5MUSli6/cNqlLaKa/oNtyMtnE4Uapp0K9PNSk62jhgnJ
-        6dIE6Q0ENpeTYssHMzqD/9BxqCax/xajmz1KKthAruzmw3K8FCaOls9QrXeFolAGSvWAc3Fo4z59W
-        bAMc/U3B3T1C4+lq55IvRtp+s9wdkgyrh2heX6jqJcYVxORzf1P7C8XpcYAVrl92g1mP2NLP9A2ng
-        3dQ4Z5UQ==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nMWeK-00ByR4-I2; Tue, 22 Feb 2022 15:00:20 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 62B553001C0;
-        Tue, 22 Feb 2022 16:00:18 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 2BED722149159; Tue, 22 Feb 2022 16:00:18 +0100 (CET)
+        Tue, 22 Feb 2022 10:02:05 -0500
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C799D15DB03;
+        Tue, 22 Feb 2022 07:00:42 -0800 (PST)
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+        by localhost (Postfix) with ESMTP id 4K32RF1vXMz9sSX;
+        Tue, 22 Feb 2022 16:00:41 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id aHsBMPXbzwiE; Tue, 22 Feb 2022 16:00:41 +0100 (CET)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase2.c-s.fr (Postfix) with ESMTP id 4K32RF16bkz9sSP;
+        Tue, 22 Feb 2022 16:00:41 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 15D7D8B783;
+        Tue, 22 Feb 2022 16:00:41 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id Rfqs5P2jSmQ5; Tue, 22 Feb 2022 16:00:41 +0100 (CET)
+Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.7.78])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id BB7CB8B764;
+        Tue, 22 Feb 2022 16:00:40 +0100 (CET)
+Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 21MF0VhI1087063
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Tue, 22 Feb 2022 16:00:31 +0100
+Received: (from chleroy@localhost)
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 21MF0V8O1087062;
+        Tue, 22 Feb 2022 16:00:31 +0100
+X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Luis Chamberlain <mcgrof@kernel.org>,
+        Aaron Tomlin <atomlin@redhat.com>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        kgdb-bugreport@lists.sourceforge.net, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-modules@vger.kernel.org
+Subject: [PATCH v5 1/6] module: Always have struct mod_tree_root
 Date:   Tue, 22 Feb 2022 16:00:18 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Josh Poimboeuf <jpoimboe@redhat.com>
-Cc:     x86@kernel.org, joao@overdrivepizza.com, hjl.tools@gmail.com,
-        andrew.cooper3@citrix.com, linux-kernel@vger.kernel.org,
-        ndesaulniers@google.com, keescook@chromium.org,
-        samitolvanen@google.com, mark.rutland@arm.com,
-        alyssa.milburn@intel.com
-Subject: Re: [PATCH 16/29] x86/bugs: Disable Retpoline when IBT
-Message-ID: <YhT6gthym/jCUME4@hirez.programming.kicks-ass.net>
-References: <20220218164902.008644515@infradead.org>
- <20220218171409.520731494@infradead.org>
- <20220219021530.hq6po7uexc4w36qo@treble>
+Message-Id: <c9584f48abce748e62e65e6757ceb23800f15380.1645541930.git.christophe.leroy@csgroup.eu>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <cover.1645541930.git.christophe.leroy@csgroup.eu>
+References: <cover.1645541930.git.christophe.leroy@csgroup.eu>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220219021530.hq6po7uexc4w36qo@treble>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1645542019; l=1894; s=20211009; h=from:subject:message-id; bh=LdQW7knw8SonM6V3x5dRanGW0RmzQuevemJoFaoAVWs=; b=Gf7wC7QYemkicc/NhrBdTVD+qjc4lnhJtPWXAc0YJAgZbJFTXdX6gN0m5lURY+4t4MD8nfsJoIVg SGmcTtOhARaEy/nlBipLNhQMxcFRT4kiZqtuWEy4h3O5bzlknr5V
+X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,42 +69,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 18, 2022 at 06:15:30PM -0800, Josh Poimboeuf wrote:
+In order to separate text and data, we need to setup
+two rb trees.
 
-> This code is confusing, not helped by the fact that the existing code
-> already looks like spaghetti.
+This means that struct mod_tree_root is required even without
+MODULES_TREE_LOOKUP.
 
-I'd say that's an insult to spaghetti.
+Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+---
+ kernel/module/internal.h | 4 +++-
+ kernel/module/main.c     | 5 -----
+ 2 files changed, 3 insertions(+), 6 deletions(-)
 
-> Assuming IBT systems also have eIBRS (right?), I don't think the above
-> SPECTRE_V2_CMD_{FORCE,AUTO} cases would be possible.
+diff --git a/kernel/module/internal.h b/kernel/module/internal.h
+index 3fc139d5074b..743b598e7cc2 100644
+--- a/kernel/module/internal.h
++++ b/kernel/module/internal.h
+@@ -143,15 +143,17 @@ static inline void module_decompress_cleanup(struct load_info *info)
+ }
+ #endif
+ 
+-#ifdef CONFIG_MODULES_TREE_LOOKUP
+ struct mod_tree_root {
++#ifdef CONFIG_MODULES_TREE_LOOKUP
+ 	struct latch_tree_root root;
++#endif
+ 	unsigned long addr_min;
+ 	unsigned long addr_max;
+ };
+ 
+ extern struct mod_tree_root mod_tree;
+ 
++#ifdef CONFIG_MODULES_TREE_LOOKUP
+ void mod_tree_insert(struct module *mod);
+ void mod_tree_remove_init(struct module *mod);
+ void mod_tree_remove(struct module *mod);
+diff --git a/kernel/module/main.c b/kernel/module/main.c
+index 0749afdc34b5..3b75cb97f8c2 100644
+--- a/kernel/module/main.c
++++ b/kernel/module/main.c
+@@ -74,7 +74,6 @@ static void do_free_init(struct work_struct *w);
+ static DECLARE_WORK(init_free_wq, do_free_init);
+ static LLIST_HEAD(init_free_list);
+ 
+-#ifdef CONFIG_MODULES_TREE_LOOKUP
+ struct mod_tree_root mod_tree __cacheline_aligned = {
+ 	.addr_min = -1UL,
+ };
+@@ -82,10 +81,6 @@ struct mod_tree_root mod_tree __cacheline_aligned = {
+ #define module_addr_min mod_tree.addr_min
+ #define module_addr_max mod_tree.addr_max
+ 
+-#else /* !CONFIG_MODULES_TREE_LOOKUP */
+-static unsigned long module_addr_min = -1UL, module_addr_max;
+-#endif /* CONFIG_MODULES_TREE_LOOKUP */
+-
+ struct symsearch {
+ 	const struct kernel_symbol *start, *stop;
+ 	const s32 *crcs;
+-- 
+2.34.1
 
-Virt FTW.. if I don't handle it, some idiot will create a virtual
-machine that doesn't expose eIBRS but does do IBT just to spite me.
-
-> AFAICT, if execution reached the retpoline_generic label, the user
-> specified either RETPOLINE or RETPOLINE_GENERIC.
-
-Only RETPOLINE_GENERIC;
-
-> I'm not sure it makes sense to put RETPOLINE in the "silent" list.  If
-> the user boots an Intel system with spectre_v2=retpoline on the cmdline,
-> they're probably expecting a traditional retpoline and should be warned
-> if that changes, especially if it's a "demotion".
-
-too friggin bad as to expectations; retpoline == auto. Not saying that
-makes sense, just saying that's what it does.
-
-> In that case the switch statement isn't even needed.  It can instead
-> just unconditinoally print the warning.
-> 
-> 
-> Also, why "demote" retpoline to LFENCE rather than attempting to
-> "promote" it to eIBRS?  Maybe there's a good reason but it probably at
-> least deserves some mention in the commit log.
-
-The current code will never select retpoline if eibrs is available.
-
-
-The alternative is doing this in apply_retpolines(), but that might be
-even more nasty.

@@ -2,127 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BCAB4BEED4
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 02:15:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 434134BEEB7
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 02:14:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237758AbiBVA2m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 19:28:42 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37862 "EHLO
+        id S237819AbiBVA3q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 19:29:46 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230407AbiBVA2j (ORCPT
+        with ESMTP id S237805AbiBVA3o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 19:28:39 -0500
-Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2044.outbound.protection.outlook.com [40.107.21.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58C97255AB
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 16:28:15 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=YePU6rd6EMAYdMP2oEgCftS+6rQJ8zB5eZKbhMt3+cyISfORAl0+xmuFfSXgSXdYvype3dpdHbTptf5nz/vSxV+nzNi1Hh30u9YiG84MkaW/+Q5k0WueRrzuMjXM14CL6cCXACidnUcDuGI2+irPv2DUzNtfo4lXF5aBicVEti3zvVhSfZjKWkuYTPKyo1AQvkDLA21jE9aB0UaVbrhm+2oBS1WnCzmiHCnKU6Uky9Bt7Mbr1SuuopEMEJwQbJ+MhugxwkELnP7zOs3BpH7adbDo/KNFmdL0+ENcMsJZiOP/mF6nlb0Q1GiZIg221zdtOhdkhE2ri+szimgLe0gkow==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=u1+KNbD9w0qf2EFG5U045EY4NauZoku3kx90wdiqzMk=;
- b=jqsNN34D/FqItAKRQo7AgJy66Rqfk+NV6oLneyTSV58gKzxG54p5IFBiEDfsKVov8K7pwDnreOiIGI/AMZpNlZt9JTAAjvzDxF7LZnKHDRAQw8PZaU9Pya2vsdBucvH/QkncfcYe6la6VdihT1iF9B9Fl2ecIoNYzO0Xc7VlceFPMBhw4fQDkbYzTaXziaAACDyjhInswJJzREO71iZEXT1Q46rNSmHcrO/pRmPOESTCquOqimMWoV592/pLqUkosyDZz8v7l8xOyR1YriYIkwCeIB6nlGhCevXO0l6XvLIAwn0HDrNQz3cNpfWXuxcrYU6NAOzZ5lBZzigo0ET/PQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=softfail (sender ip
- is 193.240.239.45) smtp.rcpttodomain=gmail.com smtp.mailfrom=diasemi.com;
- dmarc=none action=none header.from=diasemi.com; dkim=none (message not
- signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=dialogsemiconductor.onmicrosoft.com;
- s=selector1-dialogsemiconductor-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=u1+KNbD9w0qf2EFG5U045EY4NauZoku3kx90wdiqzMk=;
- b=MTnK4JslpolafVyeBMsRm2iqz7t2BXqXEEMocYVNGdOM8Jp31PdUqsZzPBGe35IQHC0Emxs5eq+ljIQCrTK2HnnTsJoblOOfkE7DOh4jzKwXIawCBn+xkmp98/cQBST9lARhpwFA/+CRMDXW37JudrZtyhmPdk4sAcr9ppVjvc0=
-Received: from OL1P279CA0007.NORP279.PROD.OUTLOOK.COM (2603:10a6:e10:12::12)
- by VI1PR10MB2783.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:803:eb::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4995.24; Tue, 22 Feb
- 2022 00:28:08 +0000
-Received: from HE1EUR02FT031.eop-EUR02.prod.protection.outlook.com
- (2603:10a6:e10:12:cafe::fa) by OL1P279CA0007.outlook.office365.com
- (2603:10a6:e10:12::12) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4995.16 via Frontend
- Transport; Tue, 22 Feb 2022 00:28:08 +0000
-X-MS-Exchange-Authentication-Results: spf=softfail (sender IP is
- 193.240.239.45) smtp.mailfrom=diasemi.com; dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=diasemi.com;
-Received-SPF: SoftFail (protection.outlook.com: domain of transitioning
- diasemi.com discourages use of 193.240.239.45 as permitted sender)
-Received: from mailrelay1.diasemi.com (193.240.239.45) by
- HE1EUR02FT031.mail.protection.outlook.com (10.152.10.141) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.4995.20 via Frontend Transport; Tue, 22 Feb 2022 00:28:08 +0000
-Received: from nbsrvex-01v.diasemi.com (10.1.17.243) by
- nbsrvex-01v.diasemi.com (10.1.17.243) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Tue, 22 Feb 2022 01:27:44 +0100
-Received: from slsrvapps-01.diasemi.com (10.24.28.40) by
- nbsrvex-01v.diasemi.com (10.1.17.243) with Microsoft SMTP Server id
- 15.1.2176.2 via Frontend Transport; Tue, 22 Feb 2022 01:27:44 +0100
-Received: by slsrvapps-01.diasemi.com (Postfix, from userid 23378)
-        id 3438380007F; Tue, 22 Feb 2022 00:27:44 +0000 (UTC)
-Message-ID: <a175201b4a7ea323c6a70d77f7f6d2124bfc0bed.1645489455.git.Adam.Ward.opensource@diasemi.com>
-In-Reply-To: <cover.1645489455.git.Adam.Ward.opensource@diasemi.com>
-References: <cover.1645489455.git.Adam.Ward.opensource@diasemi.com>
-From:   Adam Ward <Adam.Ward.opensource@diasemi.com>
-Date:   Tue, 22 Feb 2022 00:27:44 +0000
-Subject: [PATCH 3/3] regulator: da9121: Remove surplus DA9141 parameters
-To:     Mark Brown <broonie@kernel.org>
-CC:     Liam Girdwood <lgirdwood@gmail.com>,
-        <linux-kernel@vger.kernel.org>,
-        Support Opensource <support.opensource@diasemi.com>
+        Mon, 21 Feb 2022 19:29:44 -0500
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8036A255B2
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 16:29:19 -0800 (PST)
+Received: by mail-il1-f200.google.com with SMTP id a3-20020a923303000000b002c249c14e2cso2083763ilf.9
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 16:29:19 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=0BZwrNloClntFMswwx+cnpzCRFfY9U/Eu/+IXatkajU=;
+        b=B38AqhWNxaz8Olf3jQSRZ/+ilBbY8+NRJR3bxo9K4CmRzdgYY5rbt+Iv9k56sZ99h9
+         wyZr7cr0ONbgyVxt75nZX4QfNQRX/HtZUlhD5O4nIzoDzvZHHuij/PNI8E0Rzpx/oH9A
+         pCyM3ZH5O2a8rEtLoeNLYpKDTLNlBEi4ibrzmFUPugaoml9QqBg/Nl6ENpMy0aXd/zH5
+         pF4k8yVclIUmH3z/ZH6eM3KptoXpfPGjkErjPPe8NMZ5UeC57K5okTn2rEIbi8k1ULuw
+         8SvSsMZhnLZFmAskZQvKvYJ8bzpmWFRhnoupzDXTKD/uK7Q2QcAkeCmvHFqvJ3ipPqa3
+         PSTQ==
+X-Gm-Message-State: AOAM533bPQmoJ30rNRA8mymHaLqRtMM5QyxY60K3zCK7f4/E8hq2+OK6
+        Fe9T9IeNDAw+vtO39CV97iR2ffLxTrvGsJPfFdn0GBRtGjnc
+X-Google-Smtp-Source: ABdhPJxAxRYMrEcUINLoSv3fvwzOA8DoG69h5G/pu1ZS4VjLCHJw9JVGDFu4NcW3tBRJ5ppM1UJ/UNIm5sXjVOegZPq38xj0DBvy
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: da145e6c-afdc-4f3a-0a1b-08d9f59a3347
-X-MS-TrafficTypeDiagnostic: VI1PR10MB2783:EE_
-X-Microsoft-Antispam-PRVS: <VI1PR10MB2783267A1D5E7B75BDCACEEFCB3B9@VI1PR10MB2783.EURPRD10.PROD.OUTLOOK.COM>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: LwvWnX1i+QpzyrPzvlen8RyYmm/plLZGIyrwc01iyeBQMJzj1thoa4q6oID95QRSSlbaVfzjE6zeVkRz69h52OtUFvyCo/pCLA1yraRyuMhShnkESkjb+CKDr2PRlSA663bMZDlwqiAzNVk5oogaobBCn6HEkoPk5msxX2aLHTwW44cFkwZTMtWUiv31fayfTa7HtXLGOpAIxFOmYWorHrLKO/Yft/a1MLz+gJnSyOO+LTU9zBYGYpwLgWJfnFSAkmwX+EH+9MhGgybnWHNVhFJ70oxm7E27aIiBMbOHpZeKoMsffmZWCmAM1t1RoayanyjQd5wqwSpwMBh+htv8hh5FzZL5aTR2qzOruycU8KhyTw/9PHG2r2RNmiy5xscWD50udPfwSWo3cMuf5d5pgbZeeH3kgDIoSOlVN64WWbHHIX73pyXFLT4nvyTTYkWiFbXJVHIdMwpPzG+YHko2wLkM4LkNJfHx0RYatgfkorxrhuxNu5tKAxpsExuTMV7rZ3JylrQiK6EwXMg9C7r54NP1TaGSS1WG86jkdC+PerjxhK/DTEljsdGUdamgAwTNs8dkfI6t5pe3Qt8OWW2xCAjwW2hmz10u85p6Dp49U6+igyEhuEB0ScLEPTbOg/GSQlEp7BzWaryOt00I+3Jp0Qf1pairGcAOOPYxdBl3t36UbeMq9eEhXQ3zJm29adXR
-X-Forefront-Antispam-Report: CIP:193.240.239.45;CTRY:GB;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mailrelay1.diasemi.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(46966006)(42186006)(316002)(83380400001)(54906003)(47076005)(6916009)(36860700001)(426003)(107886003)(8936002)(2906002)(36756003)(508600001)(70206006)(356005)(5660300002)(4744005)(81166007)(86362001)(26005)(186003)(336012)(70586007)(6266002)(2616005)(82310400004)(8676002)(4326008)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: diasemi.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Feb 2022 00:28:08.2760
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: da145e6c-afdc-4f3a-0a1b-08d9f59a3347
-X-MS-Exchange-CrossTenant-Id: 511e3c0e-ee96-486e-a2ec-e272ffa37b7c
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=511e3c0e-ee96-486e-a2ec-e272ffa37b7c;Ip=[193.240.239.45];Helo=[mailrelay1.diasemi.com]
-X-MS-Exchange-CrossTenant-AuthSource: HE1EUR02FT031.eop-EUR02.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR10MB2783
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a5e:c24a:0:b0:640:97be:f792 with SMTP id
+ w10-20020a5ec24a000000b0064097bef792mr12138085iop.15.1645489758890; Mon, 21
+ Feb 2022 16:29:18 -0800 (PST)
+Date:   Mon, 21 Feb 2022 16:29:18 -0800
+In-Reply-To: <000000000000264b2a05d44bca80@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000008f71e305d89070bb@google.com>
+Subject: Re: [syzbot] WARNING in cpuset_write_resmask
+From:   syzbot <syzbot+568dc81cd20b72d4a49f@syzkaller.appspotmail.com>
+To:     cgroups@vger.kernel.org, hannes@cmpxchg.org,
+        linux-kernel@vger.kernel.org, lizefan.x@bytedance.com,
+        netdev@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        tj@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove ramp_delay/enable_time values - subject to OTP, incorrect
+syzbot has found a reproducer for the following issue on:
 
-Signed-off-by: Adam Ward <Adam.Ward.opensource@diasemi.com>
----
- drivers/regulator/da9121-regulator.c | 4 ----
- 1 file changed, 4 deletions(-)
+HEAD commit:    e5313968c41b Merge branch 'Split bpf_sk_lookup remote_port..
+git tree:       bpf-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=113aeefa700000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=c40b67275bfe2a58
+dashboard link: https://syzkaller.appspot.com/bug?extid=568dc81cd20b72d4a49f
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13bb97ce700000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=12062c8e700000
 
-diff --git a/drivers/regulator/da9121-regulator.c b/drivers/regulator/da9121-regulator.c
-index f16649dec17e..eb9df485bd8a 100644
---- a/drivers/regulator/da9121-regulator.c
-+++ b/drivers/regulator/da9121-regulator.c
-@@ -585,10 +585,6 @@ static const struct regulator_desc da9141_reg = {
- 	.vsel_mask = DA9121_MASK_BUCK_BUCKx_5_CHx_A_VOUT,
- 	.enable_reg = DA9121_REG_BUCK_BUCK1_0,
- 	.enable_mask = DA9121_MASK_BUCK_BUCKx_0_CHx_EN,
--	/* Default value of BUCK_BUCK1_0.CH1_SRC_DVC_UP */
--	.ramp_delay = 20000,
--	/* tBUCK_EN */
--	.enable_time = 20,
- };
- 
- static const struct regulator_desc da9142_reg = {
--- 
-2.25.1
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+568dc81cd20b72d4a49f@syzkaller.appspotmail.com
+
+------------[ cut here ]------------
+WARNING: CPU: 1 PID: 3647 at kernel/cgroup/cpuset.c:1817 update_nodemasks_hier kernel/cgroup/cpuset.c:1817 [inline]
+WARNING: CPU: 1 PID: 3647 at kernel/cgroup/cpuset.c:1817 update_nodemask kernel/cgroup/cpuset.c:1890 [inline]
+WARNING: CPU: 1 PID: 3647 at kernel/cgroup/cpuset.c:1817 cpuset_write_resmask+0x167b/0x20f0 kernel/cgroup/cpuset.c:2457
+Modules linked in:
+CPU: 0 PID: 3647 Comm: syz-executor287 Not tainted 5.16.0-syzkaller-11655-ge5313968c41b #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+RIP: 0010:update_nodemasks_hier kernel/cgroup/cpuset.c:1817 [inline]
+RIP: 0010:update_nodemask kernel/cgroup/cpuset.c:1890 [inline]
+RIP: 0010:cpuset_write_resmask+0x167b/0x20f0 kernel/cgroup/cpuset.c:2457
+Code: 3c 08 00 0f 85 ed 08 00 00 49 8b 9c 24 38 01 00 00 48 89 ef 48 89 de e8 63 4a 04 00 48 39 dd 0f 84 dd ef ff ff e8 e5 46 04 00 <0f> 0b e9 d1 ef ff ff e8 d9 46 04 00 e8 b4 a5 ef ff e8 cf 46 04 00
+RSP: 0018:ffffc90003acfb18 EFLAGS: 00010293
+RAX: 0000000000000000 RBX: 0000000000000001 RCX: 0000000000000000
+RDX: ffff88801e193a00 RSI: ffffffff81740f0b RDI: 0000000000000003
+RBP: 0000000000000003 R08: 0000000000000003 R09: ffffffff8fdeca17
+R10: ffffffff81740efd R11: 0000000000000001 R12: ffff888074f2e000
+R13: ffff888074f2e054 R14: ffff888074f2e138 R15: 0000000000000000
+FS:  00007fee62f33700(0000) GS:ffff8880b9c00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007ffcf8240960 CR3: 0000000072ae3000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ cgroup_file_write+0x1de/0x760 kernel/cgroup/cgroup.c:3877
+ kernfs_fop_write_iter+0x342/0x500 fs/kernfs/file.c:296
+ call_write_iter include/linux/fs.h:2086 [inline]
+ new_sync_write+0x431/0x660 fs/read_write.c:503
+ vfs_write+0x7cd/0xae0 fs/read_write.c:590
+ ksys_write+0x12d/0x250 fs/read_write.c:643
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x7fee62f82b79
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 b1 15 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007fee62f33308 EFLAGS: 00000246 ORIG_RAX: 0000000000000001
+RAX: ffffffffffffffda RBX: 00007fee6300c4c8 RCX: 00007fee62f82b79
+RDX: 0000000000000001 RSI: 0000000020000080 RDI: 0000000000000006
+RBP: 00007fee6300c4c0 R08: 0000000000000012 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 00007fee6300c4cc
+R13: 00007fee62fd92b0 R14: 6d2e746573757063 R15: 0000000000022000
+ </TASK>
 

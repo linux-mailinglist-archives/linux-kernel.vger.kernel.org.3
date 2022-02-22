@@ -2,275 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45EC54BEEC7
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 02:14:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA33A4BEE8D
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 02:14:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237523AbiBVAIu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 19:08:50 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57692 "EHLO
+        id S237401AbiBVANS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 19:13:18 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237510AbiBVAIp (ORCPT
+        with ESMTP id S229609AbiBVANP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 19:08:45 -0500
-Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8D82245BC
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 16:08:21 -0800 (PST)
-Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-2d625082ae2so155487217b3.1
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 16:08:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=qva2eVchuG91mMO8NiXPQBiXDN67++/1UcHENhMZQPg=;
-        b=J1i7ma7EIJzTK+LmOTZCElMH3Vqr8OabMw/6BAsutkzErJb/HGHk+UbMuVoqX1PtUK
-         L20RwffKCybGGLZvT7Ij+Nh7LwA4KLNW00bC9v823avgBahOuMiY6/+hpcnynTo2OgBP
-         dtPLCLHKRMHTJ6txY/Hz2nxDDoF5VkcBYw9nThAVkLx/YhhAQScR2fC/8dzp+Y99yplQ
-         /apP8DkwuST4esSv/MvIYM7AiqIXUmZw0yyAYsNjij/IEcMWz5A+BAk8juT6Tlr6EFi3
-         QIiqoELTn9qwWVuuW01H7aLD8Io/tlqf3ERZz4wXEPj/+Zg8EV+Oc7ebmPEc2kjWCTAn
-         BFsQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=qva2eVchuG91mMO8NiXPQBiXDN67++/1UcHENhMZQPg=;
-        b=tGRPEx46pqXa+JGMjwAXqJBC2O9sf1AUOk/OAZivSJq/+pBZx7n1Oya6kPRQiqb5p6
-         Quwd8pkW86TfdhumyGqzD569jf4e4hmaRlrGFSUgG23y9dLsBhhdewID1JHtWAFECn48
-         BbsB5Q5+aACxL6+dVzM1Q7BTyZvHpahFnab1gVvAEbAE+jIhZSu+LrMidIxk3NOzFjVL
-         0bf3y6WPnYcBQM+DohhlZHNGLWLm2zEK1BVaiVk5f4tflqpHxjygVNgTzBXksrEvJXf0
-         On13WOUhPA+rznr9sz/+E6iIwCGRor4xgDdtLPXtIUovx/Xjw3QGUTLRrMTQyruHasNK
-         MLXw==
-X-Gm-Message-State: AOAM5302+UcVQzFIwOphfWwlq3pEtf4peMXLjiCG0YNcneY//5ZhVVtl
-        Q7tlGqcvHleibKs8d43+TDN5XIbi2M3/MAHjqPjqrSmn1ax1lQ1+
-X-Google-Smtp-Source: ABdhPJynSfOIQkEOMtXYr81F8ybIWpEzANR6Yr+GnGAd+gTQAFkEgW3l8LZQxeRXwFU/mvr8+vv85qhg/KaXVlOVX/M=
-X-Received: by 2002:a81:1d5:0:b0:2d0:e2aa:1ae0 with SMTP id
- 204-20020a8101d5000000b002d0e2aa1ae0mr21685288ywb.278.1645488500522; Mon, 21
- Feb 2022 16:08:20 -0800 (PST)
+        Mon, 21 Feb 2022 19:13:15 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65A9B24BD3
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 16:12:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645488771; x=1677024771;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=B6bIyErw1V+ZT0CH7UnrGbi1bC79lwExnWzGKpIPTmM=;
+  b=TsiEb0c46OWIxqABmm5EEkMRJlpqbDWlnMGnKbXcWaFkainH/YOX2paW
+   ywg7HsgfiiC1uefAae6rSnp2HCALa8UQy+KInsyq8gzzt4Rf8UiYsGvA7
+   WiwqJjkpYtmFgppbbba/B7MK6ceDYaPxeiDjVAIbqGiMI70ogg1QP6QqM
+   9eBDjdZZfT6ETjtNGZXQuYD9yv8XcDeblF8gxfBodFN8KJssfxgBfPWfD
+   QybuK76NOgKCeGmxAkbhzi8JuVSQbxU0b0axLQh+j0oBvyJZWEOg/G94z
+   G0h1oiNUFWDAHGMrrt6FKpoVwcgf/Gyq4rGSTW9QfFt20+JOL+eoRA80C
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10265"; a="251350190"
+X-IronPort-AV: E=Sophos;i="5.88,386,1635231600"; 
+   d="scan'208";a="251350190"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2022 16:12:51 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,386,1635231600"; 
+   d="scan'208";a="505343046"
+Received: from lkp-server01.sh.intel.com (HELO da3212ac2f54) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 21 Feb 2022 16:12:46 -0800
+Received: from kbuild by da3212ac2f54 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nMInN-00028J-W6; Tue, 22 Feb 2022 00:12:45 +0000
+Date:   Tue, 22 Feb 2022 08:12:17 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Yongzhi Liu <lyz_cs@pku.edu.cn>, jani.nikula@linux.intel.com,
+        joonas.lahtinen@linux.intel.com, rodrigo.vivi@intel.com,
+        tvrtko.ursulin@linux.intel.com, airlied@linux.ie, daniel@ffwll.ch,
+        thomas.hellstrom@linux.intel.com,
+        maarten.lankhorst@linux.intel.com, matthew.auld@intel.com,
+        matthew.d.roper@intel.com, tzimmermann@suse.de,
+        michal.winiarski@intel.com
+Cc:     kbuild-all@lists.01.org, intel-gfx@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
+Subject: Re: [PATCH] drm/i915: Check input parameter for NULL
+Message-ID: <202202220847.76w2eWNU-lkp@intel.com>
+References: <1645455221-38580-1-git-send-email-lyz_cs@pku.edu.cn>
 MIME-Version: 1.0
-References: <20220221232542.1481315-1-andrzej.hajda@intel.com> <20220221232542.1481315-6-andrzej.hajda@intel.com>
-In-Reply-To: <20220221232542.1481315-6-andrzej.hajda@intel.com>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Mon, 21 Feb 2022 16:08:09 -0800
-Message-ID: <CANn89iJxaPqTLY0BaD79Ubxx55RMtWzZk_jkpuF1cp3Wsy2RzA@mail.gmail.com>
-Subject: Re: [PATCH v3 05/11] lib/ref_tracker: __ref_tracker_dir_print improve printing
-To:     Andrzej Hajda <andrzej.hajda@intel.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        netdev <netdev@vger.kernel.org>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Lucas De Marchi <lucas.demarchi@intel.com>,
-        Chris Wilson <chris.p.wilson@intel.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1645455221-38580-1-git-send-email-lyz_cs@pku.edu.cn>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 21, 2022 at 3:26 PM Andrzej Hajda <andrzej.hajda@intel.com> wrote:
->
-> To improve readibility of ref_tracker printing following changes
+Hi Yongzhi,
 
-   readability
+Thank you for the patch! Perhaps something to improve:
 
-> have been performed:
-> - reports are printed per stack_handle - log is more compact,
-> - added display name for ref_tracker_dir,
-> - stack trace is printed indented, in the same printk call,
-> - total number of references is printed every time,
-> - print info about dropped references.
->
-> Signed-off-by: Andrzej Hajda <andrzej.hajda@intel.com>
-> ---
->  include/linux/ref_tracker.h | 15 +++++--
->  lib/ref_tracker.c           | 90 ++++++++++++++++++++++++++++++++-----
->  2 files changed, 91 insertions(+), 14 deletions(-)
->
-> diff --git a/include/linux/ref_tracker.h b/include/linux/ref_tracker.h
-> index 3e9e9df2a41f5..a2cf1f6309adb 100644
-> --- a/include/linux/ref_tracker.h
-> +++ b/include/linux/ref_tracker.h
-> @@ -17,12 +17,19 @@ struct ref_tracker_dir {
->         bool                    dead;
->         struct list_head        list; /* List of active trackers */
->         struct list_head        quarantine; /* List of dead trackers */
-> +       char                    name[32];
->  #endif
->  };
->
->  #ifdef CONFIG_REF_TRACKER
-> -static inline void ref_tracker_dir_init(struct ref_tracker_dir *dir,
-> -                                       unsigned int quarantine_count)
-> +
-> +// Temporary allow two and three arguments, until consumers are converted
-> +#define ref_tracker_dir_init(_d, _q, args...) _ref_tracker_dir_init(_d, _q, ##args, #_d)
-> +#define _ref_tracker_dir_init(_d, _q, _n, ...) __ref_tracker_dir_init(_d, _q, _n)
-> +
-> +static inline void __ref_tracker_dir_init(struct ref_tracker_dir *dir,
-> +                                       unsigned int quarantine_count,
-> +                                       const char *name)
->  {
->         INIT_LIST_HEAD(&dir->list);
->         INIT_LIST_HEAD(&dir->quarantine);
-> @@ -31,6 +38,7 @@ static inline void ref_tracker_dir_init(struct ref_tracker_dir *dir,
->         dir->dead = false;
->         refcount_set(&dir->untracked, 1);
->         refcount_set(&dir->no_tracker, 1);
-> +       strlcpy(dir->name, name, sizeof(dir->name));
->         stack_depot_init();
->  }
->
-> @@ -51,7 +59,8 @@ int ref_tracker_free(struct ref_tracker_dir *dir,
->  #else /* CONFIG_REF_TRACKER */
->
->  static inline void ref_tracker_dir_init(struct ref_tracker_dir *dir,
-> -                                       unsigned int quarantine_count)
-> +                                       unsigned int quarantine_count,
-> +                                       ...)
->  {
->  }
->
-> diff --git a/lib/ref_tracker.c b/lib/ref_tracker.c
-> index 5e9f90bbf771b..ab1253fde244e 100644
-> --- a/lib/ref_tracker.c
-> +++ b/lib/ref_tracker.c
-> @@ -1,11 +1,16 @@
->  // SPDX-License-Identifier: GPL-2.0-or-later
-> +
-> +#define pr_fmt(fmt) "ref_tracker: " fmt
-> +
->  #include <linux/export.h>
-> +#include <linux/list_sort.h>
->  #include <linux/ref_tracker.h>
->  #include <linux/slab.h>
->  #include <linux/stacktrace.h>
->  #include <linux/stackdepot.h>
->
->  #define REF_TRACKER_STACK_ENTRIES 16
-> +#define STACK_BUF_SIZE 1024
->
->  struct ref_tracker {
->         struct list_head        head;   /* anchor into dir->list or dir->quarantine */
-> @@ -14,24 +19,87 @@ struct ref_tracker {
->         depot_stack_handle_t    free_stack_handle;
->  };
->
-> -void __ref_tracker_dir_print(struct ref_tracker_dir *dir,
-> -                          unsigned int display_limit)
-> +struct ref_tracker_dir_stats {
-> +       int total;
-> +       int count;
-> +       struct {
-> +               depot_stack_handle_t stack_handle;
-> +               unsigned int count;
-> +       } stacks[];
-> +};
-> +
-> +static struct ref_tracker_dir_stats *
-> +ref_tracker_get_stats(struct ref_tracker_dir *dir, unsigned int limit)
->  {
-> +       struct ref_tracker_dir_stats *stats;
->         struct ref_tracker *tracker;
-> -       unsigned int i = 0;
->
-> -       lockdep_assert_held(&dir->lock);
-> +       stats = kmalloc(struct_size(stats, stacks, limit),
-> +                       GFP_NOWAIT | __GFP_NOWARN);
+[auto build test WARNING on drm-intel/for-linux-next]
+[also build test WARNING on v5.17-rc5 next-20220217]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-I would be more comfortable if the allocation was done by the caller,
-possibly using GFP_KERNEL and evenutally kvmalloc(),
-instead of under dir->lock ?
+url:    https://github.com/0day-ci/linux/commits/Yongzhi-Liu/drm-i915-Check-input-parameter-for-NULL/20220221-225508
+base:   git://anongit.freedesktop.org/drm-intel for-linux-next
+config: x86_64-randconfig-a001-20220221 (https://download.01.org/0day-ci/archive/20220222/202202220847.76w2eWNU-lkp@intel.com/config)
+compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/0day-ci/linux/commit/c54be425a38b3f4cb82c5badecf6b343f9e24a90
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Yongzhi-Liu/drm-i915-Check-input-parameter-for-NULL/20220221-225508
+        git checkout c54be425a38b3f4cb82c5badecf6b343f9e24a90
+        # save the config file to linux build tree
+        mkdir build_dir
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/gpu/drm/i915/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   drivers/gpu/drm/i915/gem/i915_gem_phys.c: In function 'i915_gem_object_put_pages_phys':
+>> drivers/gpu/drm/i915/gem/i915_gem_phys.c:100:2: warning: ISO C90 forbids mixed declarations and code [-Wdeclaration-after-statement]
+     100 |  dma_addr_t dma = sg_dma_address(pages->sgl);
+         |  ^~~~~~~~~~
 
 
-> +       if (!stats)
-> +               return ERR_PTR(-ENOMEM);
-> +       stats->total = 0;
-> +       stats->count = 0;
->
->         list_for_each_entry(tracker, &dir->list, head) {
-> -               if (i < display_limit) {
-> -                       pr_err("leaked reference.\n");
-> -                       if (tracker->alloc_stack_handle)
-> -                               stack_depot_print(tracker->alloc_stack_handle);
-> -                       i++;
-> -               } else {
-> -                       break;
-> +               depot_stack_handle_t stack = tracker->alloc_stack_handle;
-> +               int i;
-> +
-> +               ++stats->total;
-> +               for (i = 0; i < stats->count; ++i)
-> +                       if (stats->stacks[i].stack_handle == stack)
-> +                               break;
-> +               if (i >= limit)
-> +                       continue;
-> +               if (i >= stats->count) {
-> +                       stats->stacks[i].stack_handle = stack;
-> +                       stats->stacks[i].count = 0;
-> +                       ++stats->count;
->                 }
-> +               ++stats->stacks[i].count;
-> +       }
-> +
-> +       return stats;
-> +}
-> +
-> +void __ref_tracker_dir_print(struct ref_tracker_dir *dir,
-> +                          unsigned int display_limit)
-> +{
-> +       struct ref_tracker_dir_stats *stats;
-> +       unsigned int i = 0, skipped;
-> +       depot_stack_handle_t stack;
-> +       char *sbuf;
-> +
-> +       lockdep_assert_held(&dir->lock);
-> +
-> +       if (list_empty(&dir->list))
-> +               return;
-> +
-> +       stats = ref_tracker_get_stats(dir, display_limit);
-> +       if (IS_ERR(stats)) {
-> +               pr_err("%s@%pK: couldn't get stats, error %pe\n",
-> +                      dir->name, dir, stats);
-> +               return;
->         }
-> +
+vim +100 drivers/gpu/drm/i915/gem/i915_gem_phys.c
 
-> +       sbuf = kmalloc(STACK_BUF_SIZE, GFP_NOWAIT | __GFP_NOWARN);
+f033428db28bdf Chris Wilson      2019-05-28   93  
+a61170975718d5 Maarten Lankhorst 2021-03-23   94  void
+f033428db28bdf Chris Wilson      2019-05-28   95  i915_gem_object_put_pages_phys(struct drm_i915_gem_object *obj,
+f033428db28bdf Chris Wilson      2019-05-28   96  			       struct sg_table *pages)
+f033428db28bdf Chris Wilson      2019-05-28   97  {
+c54be425a38b3f Yongzhi Liu       2022-02-21   98  	if (!pages)
+c54be425a38b3f Yongzhi Liu       2022-02-21   99  		return;
+c6790dc22312f5 Chris Wilson      2020-02-02 @100  	dma_addr_t dma = sg_dma_address(pages->sgl);
+c6790dc22312f5 Chris Wilson      2020-02-02  101  	void *vaddr = sg_page(pages->sgl);
+c6790dc22312f5 Chris Wilson      2020-02-02  102  
+f033428db28bdf Chris Wilson      2019-05-28  103  	__i915_gem_object_release_shmem(obj, pages, false);
+f033428db28bdf Chris Wilson      2019-05-28  104  
+f033428db28bdf Chris Wilson      2019-05-28  105  	if (obj->mm.dirty) {
+f033428db28bdf Chris Wilson      2019-05-28  106  		struct address_space *mapping = obj->base.filp->f_mapping;
+c6790dc22312f5 Chris Wilson      2020-02-02  107  		void *src = vaddr;
+f033428db28bdf Chris Wilson      2019-05-28  108  		int i;
+f033428db28bdf Chris Wilson      2019-05-28  109  
+f033428db28bdf Chris Wilson      2019-05-28  110  		for (i = 0; i < obj->base.size / PAGE_SIZE; i++) {
+f033428db28bdf Chris Wilson      2019-05-28  111  			struct page *page;
+f033428db28bdf Chris Wilson      2019-05-28  112  			char *dst;
+f033428db28bdf Chris Wilson      2019-05-28  113  
+f033428db28bdf Chris Wilson      2019-05-28  114  			page = shmem_read_mapping_page(mapping, i);
+f033428db28bdf Chris Wilson      2019-05-28  115  			if (IS_ERR(page))
+f033428db28bdf Chris Wilson      2019-05-28  116  				continue;
+f033428db28bdf Chris Wilson      2019-05-28  117  
+f033428db28bdf Chris Wilson      2019-05-28  118  			dst = kmap_atomic(page);
+c6790dc22312f5 Chris Wilson      2020-02-02  119  			drm_clflush_virt_range(src, PAGE_SIZE);
+c6790dc22312f5 Chris Wilson      2020-02-02  120  			memcpy(dst, src, PAGE_SIZE);
+f033428db28bdf Chris Wilson      2019-05-28  121  			kunmap_atomic(dst);
+f033428db28bdf Chris Wilson      2019-05-28  122  
+f033428db28bdf Chris Wilson      2019-05-28  123  			set_page_dirty(page);
+f033428db28bdf Chris Wilson      2019-05-28  124  			if (obj->mm.madv == I915_MADV_WILLNEED)
+f033428db28bdf Chris Wilson      2019-05-28  125  				mark_page_accessed(page);
+f033428db28bdf Chris Wilson      2019-05-28  126  			put_page(page);
+c6790dc22312f5 Chris Wilson      2020-02-02  127  
+c6790dc22312f5 Chris Wilson      2020-02-02  128  			src += PAGE_SIZE;
+f033428db28bdf Chris Wilson      2019-05-28  129  		}
+f033428db28bdf Chris Wilson      2019-05-28  130  		obj->mm.dirty = false;
+f033428db28bdf Chris Wilson      2019-05-28  131  	}
+f033428db28bdf Chris Wilson      2019-05-28  132  
+f033428db28bdf Chris Wilson      2019-05-28  133  	sg_free_table(pages);
+f033428db28bdf Chris Wilson      2019-05-28  134  	kfree(pages);
+f033428db28bdf Chris Wilson      2019-05-28  135  
+8ff5446a7ca47c Thomas Zimmermann 2021-01-28  136  	dma_free_coherent(obj->base.dev->dev,
+c6790dc22312f5 Chris Wilson      2020-02-02  137  			  roundup_pow_of_two(obj->base.size),
+c6790dc22312f5 Chris Wilson      2020-02-02  138  			  vaddr, dma);
+f033428db28bdf Chris Wilson      2019-05-28  139  }
+f033428db28bdf Chris Wilson      2019-05-28  140  
 
-Same remark. These allocations are most probably going to happen from process
-context, I think GFP_KERNEL is more robust.
-
-This is debugging infra, it would be sad if we give up at this point,
-after storing MB of traces :)
-
-> +
-> +       for (i = 0, skipped = stats->total; i < stats->count; ++i) {
-> +               stack = stats->stacks[i].stack_handle;
-> +               if (sbuf && !stack_depot_snprint(stack, sbuf, STACK_BUF_SIZE, 4))
-> +                       sbuf[0] = 0;
-> +               pr_err("%s@%pK has %d/%d users at\n%s\n", dir->name, dir,
-> +                      stats->stacks[i].count, stats->total, sbuf);
-> +               skipped -= stats->stacks[i].count;
-> +       }
-> +
-> +       if (skipped)
-> +               pr_err("%s@%pK skipped reports about %d/%d users.\n",
-> +                      dir->name, dir, skipped, stats->total);
-> +
-> +       kfree(sbuf);
-> +
-> +       kfree(stats);
->  }
->  EXPORT_SYMBOL(__ref_tracker_dir_print);
->
-> --
-> 2.25.1
->
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

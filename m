@@ -2,104 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87D564BF339
+	by mail.lfdr.de (Postfix) with ESMTP id 3CF524BF338
 	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 09:12:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229616AbiBVILd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 03:11:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53176 "EHLO
+        id S229645AbiBVILq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 03:11:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229604AbiBVILd (ORCPT
+        with ESMTP id S229641AbiBVILm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 03:11:33 -0500
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 319C6151D03
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 00:11:08 -0800 (PST)
-Received: by mail-pg1-x532.google.com with SMTP id 12so12841061pgd.0
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 00:11:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=1ewwsYJzbOlGrRg/5LtBaFSLY+YVPW6LvHzITLWMd+M=;
-        b=a/XzAzT5Iy3cExR3bLhwAr9dB5ILxwEivpVpU0xEJzXgL71wwn1t5U/+Bhsfxz8URV
-         XOUu0laoAJpZga5y2JZgFtY+YbZUU/WRsbhL2RIDkjD5zHob1Y/BhPNtA1g/kCbP0i7j
-         TK0OBKV7zPTcV5Dj1wUNa72bYXn/m3V9h6sROKkRMLpQFGB46NopD1URys/3aBMtjNov
-         Dbltds12jzJ5CAK6S16cv+Twc1Dwg7DjJXXL13Hqxwb2KcpVHeDtMWu2HWr4pSimxUeg
-         JhBxFS9CBznZ2hN532lK2xk19GuyXc1dFtf/6o3JMv2RIcFfP/5+1eXp+OpCPhafV2Vj
-         K9qQ==
+        Tue, 22 Feb 2022 03:11:42 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 86C84151D10
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 00:11:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1645517474;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=G0GfwrcLD4lf4ANifuaF1OYMcDG4+GeX0AlNzDkoZxA=;
+        b=GPGPbJ8g9m5ZNPRlCjNidVBUlgY+hGZagwh7L1qGGuvb0JpRSmPKWz+rQh6EskDlXKCw92
+        0ieNXpPp3bnuaC+y7gOsxD9F279JNOwyn/IoAvCz5jKlNT7Lhn1qnjajt8ziygF1WBNb9h
+        3hyCovAZNadPFiIaiZLOS257/SGRPHI=
+Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
+ [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-649-UE2Uv2rNPqmq66h1FZpQfg-1; Tue, 22 Feb 2022 03:11:12 -0500
+X-MC-Unique: UE2Uv2rNPqmq66h1FZpQfg-1
+Received: by mail-qv1-f72.google.com with SMTP id fq2-20020a056214258200b0042c39c09e5dso20086272qvb.18
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 00:11:12 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=1ewwsYJzbOlGrRg/5LtBaFSLY+YVPW6LvHzITLWMd+M=;
-        b=rYq3wnDTSIhQ33A4500og0cpuglrC8vf8KnC7f6y/LImUxE+cWK24wQZVNtTSkZ0me
-         ANMqkwdg33btWU+ye3lnkyA/nBx3dVJN4aQL6MZWfzXMILXBYucBbmh77GiT1gitdYmo
-         LD4nhVeDCKtvPe0tqAJ721UhlDTkQmqNKdal9ukbnHqzpJzWFfG29DeLVvRDrD9q24jK
-         A2lMLaA2BRcxvimuDRibtyIcYvBCwxXjONVnzfkJ2AFfk+dHBiSjRTuMGfBvNZfInLI7
-         B7SIBxCBMbHZAi6sw4ktdQ08dOJrc3GfZvOWFs7tZLK/QIi/81fgNHpmNhx15vnVbTQ7
-         bSZA==
-X-Gm-Message-State: AOAM532tLj3OX6npVKJvn/v87YbVAyJ55KS2yaaufT5AZnXBOOuQVzuM
-        mfOqdLOoyqngKWtCjcklXiQ=
-X-Google-Smtp-Source: ABdhPJw6OTUtX6GZj2IzCgZBLnhDm741qs5KZgxLmc3O/+HinVZu03+1uiPRVi0gdPIckuJtxHZ4YA==
-X-Received: by 2002:a63:de46:0:b0:364:cad7:bf3b with SMTP id y6-20020a63de46000000b00364cad7bf3bmr18961824pgi.491.1645517467680;
-        Tue, 22 Feb 2022 00:11:07 -0800 (PST)
-Received: from ubuntu.huawei.com ([119.3.119.21])
-        by smtp.googlemail.com with ESMTPSA id w198sm16101185pff.96.2022.02.22.00.11.05
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=G0GfwrcLD4lf4ANifuaF1OYMcDG4+GeX0AlNzDkoZxA=;
+        b=1jA9jAdrgWtDjuX8qEPa4V1c5w1KOIp8KAJoBYJdleetlNFKTpZ7AD8NuPzjjBAQ/M
+         Fx78NZq5Lg52dXiLWp6h30McLs0g97s3o8XoPopuJiSyhrBq4B+bjEEOtsOnDh4F8FNV
+         MUldwKrspwaP/hUh4BvN4qpdzHiLVrn8OqdKiSPpmVEnDYwNImpzexBMJGXBVYGzYA2P
+         PSnSEvq4ivlU/LGOf7OQH/Ydwtz0W20ImbkhG7Qz7UNuw+hEfL9/k8B1fFmGf3WtM1ya
+         uUGg9+7IAiJV6ZW2r9CGND3EoFruf7CYSWtVt0YINLB1qVLdxkGAjMD/Y3H+Z+5AvarU
+         YwLQ==
+X-Gm-Message-State: AOAM531LOv+xBGQFRy+OfIF+Dc7m+zhwWXCYRgs7E1uSB080tjjsWHX/
+        8GgXd7GOj5Fs5iT6Yrea+ovEudJP/a39Y51vE4k1T7JrKJ1ObnpC4NEyx367yvCsXVhHJ+LhpAm
+        0e2Gz3BUCAcSVL9dN2xI+3xaL
+X-Received: by 2002:a05:620a:3706:b0:648:afb4:5794 with SMTP id de6-20020a05620a370600b00648afb45794mr8516393qkb.433.1645517471387;
+        Tue, 22 Feb 2022 00:11:11 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJz6pPGdI38EWvdExU9PjVYF+abcYYxcjPH+D5uHZtUns1W/zgUWgRUc58bwXKp5JDZUPsdCOQ==
+X-Received: by 2002:a05:620a:3706:b0:648:afb4:5794 with SMTP id de6-20020a05620a370600b00648afb45794mr8516386qkb.433.1645517471142;
+        Tue, 22 Feb 2022 00:11:11 -0800 (PST)
+Received: from sgarzare-redhat (host-95-248-229-156.retail.telecomitalia.it. [95.248.229.156])
+        by smtp.gmail.com with ESMTPSA id n16sm5744274qkn.115.2022.02.22.00.11.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Feb 2022 00:11:07 -0800 (PST)
-From:   Xiaomeng Tong <xiam0nd.tong@gmail.com>
-To:     gregkh@linuxfoundation.org, jirislaby@kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Xiaomeng Tong <xiam0nd.tong@gmail.com>
-Subject: [PATCH v2] vt_ioctl: fix potential spectre v1 in VT_DISALLOCATE
-Date:   Tue, 22 Feb 2022 16:11:01 +0800
-Message-Id: <20220222081101.21233-1-xiam0nd.tong@gmail.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 22 Feb 2022 00:11:10 -0800 (PST)
+Date:   Tue, 22 Feb 2022 09:11:04 +0100
+From:   Stefano Garzarella <sgarzare@redhat.com>
+To:     Dan Carpenter <dan.carpenter@oracle.com>
+Cc:     kbuild@lists.01.org, "Michael S. Tsirkin" <mst@redhat.com>,
+        lkp@intel.com, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org,
+        Mike Christie <michael.christie@oracle.com>,
+        Jason Wang <jasowang@redhat.com>, netdev@vger.kernel.org,
+        Asias He <asias@redhat.com>,
+        virtualization@lists.linux-foundation.org,
+        Stefan Hajnoczi <stefanha@redhat.com>, kvm@vger.kernel.org
+Subject: Re: [PATCH] vhost/vsock: don't check owner in vhost_vsock_stop()
+ while releasing
+Message-ID: <20220222081104.a2woahjgno2iv7yl@sgarzare-redhat>
+References: <20220221114916.107045-1-sgarzare@redhat.com>
+ <202202220707.AM3rKUcP-lkp@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <202202220707.AM3rKUcP-lkp@intel.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In VT_ACTIVATE an almost identical code path has been patched
-with array_index_nospec. In the VT_DISALLOCATE path, the arg is
-the user input from a system call argument and lately used as a index
-for vc_cons[index].d access, which can be reached through path like
-vt_disallocate->vc_busy or vt_disallocate->vc_deallocate.
-For consistency both code paths should have the same mitigations
-applied. Also, the code style is adjusted as suggested by Jiri.
+On Tue, Feb 22, 2022 at 08:30:17AM +0300, Dan Carpenter wrote:
+>Hi Stefano,
+>
+>url:    https://github.com/0day-ci/linux/commits/Stefano-Garzarella/vhost-vsock-don-t-check-owner-in-vhost_vsock_stop-while-releasing/20220221-195038
+>base:   https://git.kernel.org/pub/scm/linux/kernel/git/mst/vhost.git linux-next
+>config: x86_64-randconfig-m031-20220221 (https://download.01.org/0day-ci/archive/20220222/202202220707.AM3rKUcP-lkp@intel.com/config)
+>compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
+>
+>If you fix the issue, kindly add following tag as appropriate
+>Reported-by: kernel test robot <lkp@intel.com>
+>Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+>
+>smatch warnings:
+>drivers/vhost/vsock.c:655 vhost_vsock_stop() error: uninitialized symbol 'ret'.
+>
+>vim +/ret +655 drivers/vhost/vsock.c
+>
+>3ace84c91bfcde Stefano Garzarella 2022-02-21  632  static int vhost_vsock_stop(struct vhost_vsock *vsock, bool check_owner)
+>433fc58e6bf2c8 Asias He           2016-07-28  633  {
+>433fc58e6bf2c8 Asias He           2016-07-28  634  	size_t i;
+>433fc58e6bf2c8 Asias He           2016-07-28  635  	int ret;
+>433fc58e6bf2c8 Asias He           2016-07-28  636
+>433fc58e6bf2c8 Asias He           2016-07-28  637  	mutex_lock(&vsock->dev.mutex);
+>433fc58e6bf2c8 Asias He           2016-07-28  638
+>3ace84c91bfcde Stefano Garzarella 2022-02-21  639  	if (check_owner) {
+>433fc58e6bf2c8 Asias He           2016-07-28  640  		ret = vhost_dev_check_owner(&vsock->dev);
+>433fc58e6bf2c8 Asias He           2016-07-28  641  		if (ret)
+>433fc58e6bf2c8 Asias He           2016-07-28  642  			goto err;
+>3ace84c91bfcde Stefano Garzarella 2022-02-21  643  	}
+>
+>"ret" not initialized on else path.
 
-Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
-Reviewed-by: Jiri Slaby <jirislaby@kernel.org>
----
- drivers/tty/vt/vt_ioctl.c | 10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
+Oooops, I was testing with vhost_vsock_dev_release() where we don't 
+check the ret value, but of course we need to initialize it to 0 for the 
+vhost_vsock_dev_ioctl() use case.
 
-diff --git a/drivers/tty/vt/vt_ioctl.c b/drivers/tty/vt/vt_ioctl.c
-index 580136986..8c685b501 100644
---- a/drivers/tty/vt/vt_ioctl.c
-+++ b/drivers/tty/vt/vt_ioctl.c
-@@ -898,11 +898,13 @@ int vt_ioctl(struct tty_struct *tty,
- 		if (arg > MAX_NR_CONSOLES)
- 			return -ENXIO;
- 
--		if (arg == 0)
-+		if (arg == 0) {
- 			vt_disallocate_all();
--		else
--			return vt_disallocate(--arg);
--		break;
-+			break;
-+		}
-+
-+		arg = array_index_nospec(arg - 1, MAX_NR_CONSOLES);
-+		return vt_disallocate(arg);
- 
- 	case VT_RESIZE:
- 	{
--- 
-2.17.1
+I'll fix in the v2.
+
+Thanks for the report,
+Stefano
 

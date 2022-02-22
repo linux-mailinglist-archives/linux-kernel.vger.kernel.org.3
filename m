@@ -2,73 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25ED64BF930
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 14:24:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A33A4BF935
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 14:26:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232390AbiBVNZJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 08:25:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44814 "EHLO
+        id S232341AbiBVN1E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 08:27:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231891AbiBVNZH (ORCPT
+        with ESMTP id S229766AbiBVN1C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 08:25:07 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0C4D6E556;
-        Tue, 22 Feb 2022 05:24:41 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 30C74CE13E1;
-        Tue, 22 Feb 2022 13:24:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1BCEC340E8;
-        Tue, 22 Feb 2022 13:24:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645536278;
-        bh=Ljwz0VSQXW5190Zgm0T2BP+0b1W/O+Ow7Aa2IBiiJxI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=uDs7eL3GAGNXfHjTTA3hutWqTtkIDxMri5oGhDixQyLH/3rkzd+v/9MCkff3TqteF
-         Oo4GzhAtMAbonNR3KLa1h4DRUe4qjpCHyS0zlSIcl0ysltKsmrKvVMgD2v1oK6wii8
-         bampMKNu9HDz4zfsEbwDrPm9/3OXm32u6UDkj09bG7Gel3xxOyiaj3E8OxUgJr7s4m
-         WYM4+r5egIPUaxeV7+r9kCEI1DM8bvOwijdoYCJ/gBfoB9SyrEw7xoCSvbh6WDwyGI
-         1D/wwfZBi2qcggWNFVJ1LY4mzwQANydrKlggdDwicb0adz3uAQ4B8Uy6JefsWOKTNP
-         rK+Vrtu87TDtA==
-Date:   Tue, 22 Feb 2022 18:54:34 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     Kishon Vijay Abraham I <kishon@ti.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org
-Subject: Re: [PATCH 2/8] dt-bindings: phy: samsung: drop old Eynos5440 PCIe
- phy
-Message-ID: <YhTkEvnSbomEMuTF@matsya>
-References: <20220129193646.372481-1-krzysztof.kozlowski@canonical.com>
- <20220129193646.372481-2-krzysztof.kozlowski@canonical.com>
+        Tue, 22 Feb 2022 08:27:02 -0500
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C56F13DD3;
+        Tue, 22 Feb 2022 05:26:35 -0800 (PST)
+Received: (Authenticated sender: clement.leger@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 2E0F62000C;
+        Tue, 22 Feb 2022 13:26:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1645536393;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=+IeCrIvtHEXj+/TrckXq5Glou6qAet2MevCs2vi9JaY=;
+        b=I8E4xgDu9bdg2csxyff9myhmdP9T8H3rRW7JiKdPYxnMHQuPETlACfrGDksH3L4Clzyki6
+        OvL3hPaJIH8Mafgst2chAKdQ8DXNoOqfSrZoCotmQST48nAphr1z3mRqbUyp2pflX/p+Fh
+        NR3iw/S2RJkcieGSrJvV6KKN1wV8/DdKQe+3WM1A0F6fMZesKf9e+UrHNWRGqmRXXTRZAG
+        YSQKEU0RaA20Ys88kbiomOEhwnSOr3v8v+PUykfxCxDRKf42mzpkHGsxiPp3fGXJ5aLVvc
+        c0P7IoCsDjQxoBHIjmwXDadzIcgPIxTudOGChfxezymkbnylZoxt4bOF/W6UCQ==
+Date:   Tue, 22 Feb 2022 14:25:13 +0100
+From:   =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Wolfram Sang <wsa@kernel.org>, Peter Rosin <peda@axentia.se>,
+        Russell King <linux@armlinux.org.uk>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-acpi@vger.kernel.org, linux-i2c@vger.kernel.org,
+        netdev@vger.kernel.org,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+Subject: Re: [RFC 10/10] net: sfp: add support for fwnode
+Message-ID: <20220222142513.026ad98c@fixe.home>
+In-Reply-To: <YhPSkz8+BIcdb72R@smile.fi.intel.com>
+References: <20220221162652.103834-1-clement.leger@bootlin.com>
+        <20220221162652.103834-11-clement.leger@bootlin.com>
+        <YhPSkz8+BIcdb72R@smile.fi.intel.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220129193646.372481-2-krzysztof.kozlowski@canonical.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29-01-22, 20:36, Krzysztof Kozlowski wrote:
-> The Exynos5440 PCIe phy support was removed in commit 496db029142f
-> ("phy: samsung: phy-exynos-pcie: rework driver to support Exynos5433
-> PCIe PHY") (with its own bindings), so drop the old bindings.
+Le Mon, 21 Feb 2022 19:57:39 +0200,
+Andy Shevchenko <andriy.shevchenko@linux.intel.com> a =C3=A9crit :
 
-Applied 2-8, thanks
+> On Mon, Feb 21, 2022 at 05:26:52PM +0100, Cl=C3=A9ment L=C3=A9ger wrote:
+> > Add support to retrieve a i2c bus in sfp with a fwnode. This support
+> > is using the fwnode API which also works with device-tree and ACPI.
+> > For this purpose, the device-tree and ACPI code handling the i2c
+> > adapter retrieval was factorized with the new code. This also allows
+> > i2c devices using a software_node description to be used by sfp code. =
+=20
+>=20
+> If I'm not mistaken this patch can even go separately right now, since al=
+l used
+> APIs are already available.
+>=20
 
--- 
-~Vinod
+This patches uses fwnode_find_i2c_adapter_by_node() which is introduced
+by "i2c: fwnode: add fwnode_find_i2c_adapter_by_node()" but they can
+probably be contributed both in a separate series.
+
+--=20
+Cl=C3=A9ment L=C3=A9ger,
+Embedded Linux and Kernel engineer at Bootlin
+https://bootlin.com

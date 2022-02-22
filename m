@@ -2,135 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E886F4BFBBA
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 16:02:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 795D64BFBCF
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 16:03:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232659AbiBVPCD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 10:02:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48740 "EHLO
+        id S233067AbiBVPDV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 10:03:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233111AbiBVPBP (ORCPT
+        with ESMTP id S233219AbiBVPC2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 10:01:15 -0500
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 711C510F201
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 07:00:11 -0800 (PST)
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com [209.85.208.72])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id E303B41270
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 15:00:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1645542006;
-        bh=LfKEooVWXSt0X9amI75MXA0ImuzcwyjqGr8txR6hCCo=;
-        h=From:To:Subject:Date:Message-Id:In-Reply-To:References:
-         MIME-Version;
-        b=Xpq+NWbyj+VlCotybwRWDbRayC5t9YCiN5vr/RhTjDkb9JfEuIWlrZD+ahkx78qVE
-         0gvfA4pi5IyOrqMpgVVCfmZeVFP+e2+fmXobZAnqcrV2s3Ulk8qS1MDJYP7/i3aISw
-         MIhC83Z6Z4oeith0Ju/BnFccxxsOTEhoqv2X2BDORP/cCNqRuKOCVOhG6wz+uP+Ht0
-         LZxkDMXIEm3jLmESBwmYT3iZ5K7to2i4FqCZFpEYIDNJAJgI1qlA8qAJITrPTy5IK4
-         bH2YSHoVaw1ZuIpn8UPPKNP8UJhmBE2o4B0qBVBEJcZC/MsLjqGZO6dvS5NZ+A8Zob
-         +DX5F3bqnz9xA==
-Received: by mail-ed1-f72.google.com with SMTP id d11-20020a50c88b000000b00410ba7a14acso12094751edh.6
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 07:00:06 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=LfKEooVWXSt0X9amI75MXA0ImuzcwyjqGr8txR6hCCo=;
-        b=otc55xra9RbhELV3NhGgoveOwJRgY2xm1LLb3osbfeRnnFRSutbmKhOdPgGNqztvig
-         jwDIAg6TeuSllGNuqLfLdTz4J/yMZYNt1/80Ho5AzDuBko3pCPDreOAu76bjAFSreENT
-         GjEcmbcYqpIXADD4SAMVJnf/DZgLMN5fzuPPP0dNVgPUC7Ok/c41qStlhoK3w0tcSecv
-         6c1YC2v6QkcANBpT4zEam7IspxbzRzMoYdgXYdWDqpihsVahUOzoO9lTSuIzk8PO6wEY
-         8qGgHzvYPyo2SZahw7izS+tK6MqTzu8W08hfWpEgdthxruD3IOCtY7rhXFYhuBFvFqj8
-         zaCA==
-X-Gm-Message-State: AOAM531WL1sa/HmEKqAyGlXWsFg9BnralOHuF0kHc82Cndx3k2ziAaSl
-        HJUzfd5y8ukirMwSBUE4mxhLi1X7/NYtzcWI/NK4bVkcPYdFxvs1Nxvha7en/0EJ5+vSli9MGiW
-        w3BDkHiJcMzt5V4E23iq9NBhLz6mcqlLf20BDF0/UrA==
-X-Received: by 2002:a17:906:70c2:b0:6cf:e1cc:4d8c with SMTP id g2-20020a17090670c200b006cfe1cc4d8cmr20090154ejk.696.1645542004850;
-        Tue, 22 Feb 2022 07:00:04 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyR3qbd+Iftv6XGp15bvvgUICPOPWMYZg+AzIuOxdejdmzbh/iz1wm8C/0MI15ezn8MGt0S6w==
-X-Received: by 2002:a17:906:70c2:b0:6cf:e1cc:4d8c with SMTP id g2-20020a17090670c200b006cfe1cc4d8cmr20090120ejk.696.1645542004625;
-        Tue, 22 Feb 2022 07:00:04 -0800 (PST)
-Received: from localhost.localdomain (xdsl-188-155-181-108.adslplus.ch. [188.155.181.108])
-        by smtp.gmail.com with ESMTPSA id m2sm2467960ejb.20.2022.02.22.07.00.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Feb 2022 07:00:04 -0800 (PST)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-To:     Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Wei Xu <xuwei5@hisilicon.com>, Nishanth Menon <nm@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Tero Kristo <kristo@kernel.org>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Jan Kotas <jank@cadence.com>, Li Wei <liwei213@huawei.com>,
-        Stanley Chu <stanley.chu@mediatek.com>,
-        Yaniv Gardi <ygardi@codeaurora.org>,
-        linux-scsi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org,
-        linux-mediatek@lists.infradead.org
-Subject: [PATCH v2 15/15] arm64: dts: qcom: sm8350: drop duplicated ref_clk in UFS
-Date:   Tue, 22 Feb 2022 15:58:54 +0100
-Message-Id: <20220222145854.358646-16-krzysztof.kozlowski@canonical.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220222145854.358646-1-krzysztof.kozlowski@canonical.com>
-References: <20220222145854.358646-1-krzysztof.kozlowski@canonical.com>
+        Tue, 22 Feb 2022 10:02:28 -0500
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C6B6160429;
+        Tue, 22 Feb 2022 07:01:05 -0800 (PST)
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+        by localhost (Postfix) with ESMTP id 4K32RN4Yt5z9sSX;
+        Tue, 22 Feb 2022 16:00:48 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id jUS-I58NIWE3; Tue, 22 Feb 2022 16:00:48 +0100 (CET)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase2.c-s.fr (Postfix) with ESMTP id 4K32RF4Tbmz9sSq;
+        Tue, 22 Feb 2022 16:00:41 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 89CBD8B778;
+        Tue, 22 Feb 2022 16:00:41 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id twoxT6Wk121T; Tue, 22 Feb 2022 16:00:41 +0100 (CET)
+Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.7.78])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id CA66A8B77C;
+        Tue, 22 Feb 2022 16:00:40 +0100 (CET)
+Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 21MF0V3h1087059
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Tue, 22 Feb 2022 16:00:31 +0100
+Received: (from chleroy@localhost)
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 21MF0UWY1087057;
+        Tue, 22 Feb 2022 16:00:30 +0100
+X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Luis Chamberlain <mcgrof@kernel.org>,
+        Aaron Tomlin <atomlin@redhat.com>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        kgdb-bugreport@lists.sourceforge.net, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-modules@vger.kernel.org
+Subject: [PATCH v5 0/6] Allocate module text and data separately
+Date:   Tue, 22 Feb 2022 16:00:17 +0100
+Message-Id: <cover.1645541930.git.christophe.leroy@csgroup.eu>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1645542019; l=2069; s=20211009; h=from:subject:message-id; bh=vT+HtZuIc4tR/dCOg1oXL5RYCzAmw2cfyGL9n79gTuw=; b=N9aK/3o0a2abh6NrLLGjWLf0bPQndtrvH5N4Z/A3ykaTzXTaLBTGHurSFdAaIaXhVlQokNvjCQ5D dV2wrKrkDxj7IZ9KQ/SsIfBVEKB/1EmR6Sn9k07enWxpz+QWXS40
+X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ref_clk clock in UFS node is already there with a <0 0> frequency, which
-matches other DTSI files.
+This series applies on top of Aaron's series "module: core code clean up" v8.
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
----
- arch/arm64/boot/dts/qcom/sm8350.dtsi | 3 ---
- 1 file changed, 3 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/qcom/sm8350.dtsi b/arch/arm64/boot/dts/qcom/sm8350.dtsi
-index a26bd3f13d4a..cb6442c9e761 100644
---- a/arch/arm64/boot/dts/qcom/sm8350.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm8350.dtsi
-@@ -1916,7 +1916,6 @@ ufs_mem_hc: ufshc@1d84000 {
- 			iommus = <&apps_smmu 0xe0 0x0>;
- 
- 			clock-names =
--				"ref_clk",
- 				"core_clk",
- 				"bus_aggr_clk",
- 				"iface_clk",
-@@ -1926,7 +1925,6 @@ ufs_mem_hc: ufshc@1d84000 {
- 				"rx_lane0_sync_clk",
- 				"rx_lane1_sync_clk";
- 			clocks =
--				<&rpmhcc RPMH_CXO_CLK>,
- 				<&gcc GCC_UFS_PHY_AXI_CLK>,
- 				<&gcc GCC_AGGRE_UFS_PHY_AXI_CLK>,
- 				<&gcc GCC_UFS_PHY_AHB_CLK>,
-@@ -1936,7 +1934,6 @@ ufs_mem_hc: ufshc@1d84000 {
- 				<&gcc GCC_UFS_PHY_RX_SYMBOL_0_CLK>,
- 				<&gcc GCC_UFS_PHY_RX_SYMBOL_1_CLK>;
- 			freq-table =
--				<75000000 300000000>,
- 				<75000000 300000000>,
- 				<0 0>,
- 				<0 0>,
+This series allow architectures to request having modules data in
+vmalloc area instead of module area.
+
+This is required on powerpc book3s/32 in order to set data non
+executable, because it is not possible to set executability on page
+basis, this is done per 256 Mbytes segments. The module area has exec
+right, vmalloc area has noexec. Without this change module data
+remains executable regardless of CONFIG_STRICT_MODULES_RWX.
+
+This can also be useful on other powerpc/32 in order to maximize the
+chance of code being close enough to kernel core to avoid branch
+trampolines.
+
+Changes in v5:
+- Rebased on top of Aaron's series "module: core code clean up" v8
+
+Changes in v4:
+- Rebased on top of Aaron's series "module: core code clean up" v6
+
+Changes in v3:
+- Fixed the tree for data_layout at one place (Thanks Miroslav)
+- Moved removal of module_addr_min/module_addr_max macro out of patch 1 in a new patch at the end of the series to reduce churn.
+
+Changes in v2:
+- Dropped first two patches which are not necessary. They may be added back later as a follow-up series.
+- Fixed the printks in GDB
+
+Christophe Leroy (6):
+  module: Always have struct mod_tree_root
+  module: Prepare for handling several RB trees
+  module: Introduce data_layout
+  module: Add CONFIG_ARCH_WANTS_MODULES_DATA_IN_VMALLOC
+  module: Remove module_addr_min and module_addr_max
+  powerpc: Select ARCH_WANTS_MODULES_DATA_IN_VMALLOC on book3s/32 and
+    8xx
+
+ arch/Kconfig                |   6 +++
+ arch/powerpc/Kconfig        |   1 +
+ include/linux/module.h      |   8 +++
+ kernel/debug/kdb/kdb_main.c |  10 +++-
+ kernel/module/internal.h    |  13 +++--
+ kernel/module/kallsyms.c    |  18 +++----
+ kernel/module/main.c        | 103 +++++++++++++++++++++++++++---------
+ kernel/module/procfs.c      |   8 ++-
+ kernel/module/strict_rwx.c  |  10 ++--
+ kernel/module/tree_lookup.c |  28 ++++++----
+ 10 files changed, 149 insertions(+), 56 deletions(-)
+
 -- 
-2.32.0
+2.34.1
 

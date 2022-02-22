@@ -2,57 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83CEF4BFC19
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 16:13:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B65B4BFC15
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 16:13:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233302AbiBVPNX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 10:13:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35712 "EHLO
+        id S233291AbiBVPNf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 10:13:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233284AbiBVPNU (ORCPT
+        with ESMTP id S233301AbiBVPNV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 10:13:20 -0500
+        Tue, 22 Feb 2022 10:13:21 -0500
 Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8DDF128DC3;
-        Tue, 22 Feb 2022 07:12:49 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3311D121682;
+        Tue, 22 Feb 2022 07:12:53 -0800 (PST)
 Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-        by localhost (Postfix) with ESMTP id 4K32j26cVzz9sSq;
-        Tue, 22 Feb 2022 16:12:38 +0100 (CET)
+        by localhost (Postfix) with ESMTP id 4K32j32l8Cz9sSr;
+        Tue, 22 Feb 2022 16:12:39 +0100 (CET)
 X-Virus-Scanned: amavisd-new at c-s.fr
 Received: from pegase2.c-s.fr ([172.26.127.65])
         by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id MCWT0e3TqUio; Tue, 22 Feb 2022 16:12:38 +0100 (CET)
+        with ESMTP id bCFQlHknZ6iX; Tue, 22 Feb 2022 16:12:39 +0100 (CET)
 Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase2.c-s.fr (Postfix) with ESMTP id 4K32hw65M6z9sSy;
+        by pegase2.c-s.fr (Postfix) with ESMTP id 4K32hw5fwSz9sSs;
         Tue, 22 Feb 2022 16:12:32 +0100 (CET)
 Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id C16708B778;
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id AD9128B779;
         Tue, 22 Feb 2022 16:12:32 +0100 (CET)
 X-Virus-Scanned: amavisd-new at c-s.fr
 Received: from messagerie.si.c-s.fr ([127.0.0.1])
         by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id ZJy2lnn-NPtI; Tue, 22 Feb 2022 16:12:32 +0100 (CET)
+        with ESMTP id 0FhXGwjMjfgr; Tue, 22 Feb 2022 16:12:32 +0100 (CET)
 Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.7.78])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 26A578B783;
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 27B5B8B786;
         Tue, 22 Feb 2022 16:12:32 +0100 (CET)
 Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 21MFCN5K1087440
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 21MFCN2W1087444
         (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
         Tue, 22 Feb 2022 16:12:23 +0100
 Received: (from chleroy@localhost)
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 21MFCMJv1087439;
-        Tue, 22 Feb 2022 16:12:22 +0100
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 21MFCN0n1087443;
+        Tue, 22 Feb 2022 16:12:23 +0100
 X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
 From:   Christophe Leroy <christophe.leroy@csgroup.eu>
 To:     Luis Chamberlain <mcgrof@kernel.org>, linux-modules@vger.kernel.org
 Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v2 0/4] Miscellaneous cleanups
-Date:   Tue, 22 Feb 2022 16:12:12 +0100
-Message-Id: <cover.1645542447.git.christophe.leroy@csgroup.eu>
+Subject: [PATCH v2 1/4] module: Make module_enable_x() independent of CONFIG_ARCH_HAS_STRICT_MODULE_RWX
+Date:   Tue, 22 Feb 2022 16:12:13 +0100
+Message-Id: <bc2fca7e1d7cc58cd23d92c2579341be18f3619a.1645542447.git.christophe.leroy@csgroup.eu>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <cover.1645542447.git.christophe.leroy@csgroup.eu>
+References: <cover.1645542447.git.christophe.leroy@csgroup.eu>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1645542739; l=1161; s=20211009; h=from:subject:message-id; bh=yWnidpNwQqTmogbI6NL0MkqckePag1l3+nftVvrPgA8=; b=q6qUG/KlVPJ2FhLjI5+PqvTMEO94z9i+VbliaN/BEc/ZKgZNb2XCtqCYjoOrIa2S3y/imoT78/Q5 q4Es8nsmDiJ8f4UY06SOk7zpB06EcDSdv0M7BJPxiIRm46biUyDk
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1645542740; l=3326; s=20211009; h=from:subject:message-id; bh=slcWvL5mfhhgv6JxVWYF47o6CNCENkz5Vmk0v6Zd5Ww=; b=6B0ou/PtSekXyWzzcZ8pNyPBwYLoDYk9NN78sVUWkc51QX+j8VBPxbAjYD5idKHjhSwb7mceP5RX kCVL4r8uCLIwfjsnhpylAoHKM3EozEpPH3WRC6K/AJ5k0CEX2519
 X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
@@ -64,32 +66,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This series applies on top of my series "Allocate module text and data separately" v5.
+module_enable_x() has nothing to do with CONFIG_ARCH_HAS_STRICT_MODULE_RWX
+allthough by coincidence architectures who need module_enable_x() are
+selection CONFIG_ARCH_HAS_STRICT_MODULE_RWX.
 
-It does some cleanup around the settling of modules's layout page flags:
-- Make module_enable_x() independent of CONFIG_ARCH_HAS_STRICT_MODULE_RWX
-- Reunify everything into strict_rwx.c
-- Change big hammer BUG_ON()s into WARN_ON()s
-- Change misleading debug_align() to strict_align()
+Enable module_enable_x() for everyone everytime. If an architecture
+already has module text set executable, it's a no-op.
 
-Changes in v2:
-- Rebased on top of my series "Allocate module text and data separately" v5
-- Moved the Kconfig patch out of this series, it is an independent change
+Don't check text_size alignment. When CONFIG_STRICT_MODULE_RWX is set
+the verification is already done in frob_rodata(). When
+CONFIG_STRICT_MODULE_RWX is not set it is not a big deal to have the
+start of data as executable. Just make sure we entirely get the last
+page when the boundary is not aligned.
 
-Christophe Leroy (4):
-  module: Make module_enable_x() independent of
-    CONFIG_ARCH_HAS_STRICT_MODULE_RWX
-  module: Move module_enable_x() and frob_text() in strict_rwx.c
-  module: Rework layout alignment to avoid BUG_ON()s
-  module: Rename debug_align() as strict_align()
+And don't BUG on misaligned base as some architectures like nios2
+use kmalloc() for allocating modules. So just bail out in that case.
+If that's a problem, a page fault will occur later anyway.
 
- kernel/module/Makefile     |  3 +-
- kernel/module/internal.h   | 26 +++----------
- kernel/module/kallsyms.c   |  4 +-
- kernel/module/main.c       | 58 ++++++-----------------------
- kernel/module/strict_rwx.c | 76 +++++++++++++++++++++++++++++++++-----
- 5 files changed, 88 insertions(+), 79 deletions(-)
+Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+---
+ kernel/module/internal.h |  6 ++----
+ kernel/module/main.c     | 12 +++++-------
+ 2 files changed, 7 insertions(+), 11 deletions(-)
 
+diff --git a/kernel/module/internal.h b/kernel/module/internal.h
+index 6911c7533ede..7178b7c09cdd 100644
+--- a/kernel/module/internal.h
++++ b/kernel/module/internal.h
+@@ -27,9 +27,9 @@
+ /*
+  * Modules' sections will be aligned on page boundaries
+  * to ensure complete separation of code and data, but
+- * only when CONFIG_ARCH_HAS_STRICT_MODULE_RWX=y
++ * only when CONFIG_STRICT_MODULE_RWX=y
+  */
+-#ifdef CONFIG_ARCH_HAS_STRICT_MODULE_RWX
++#ifdef CONFIG_STRICT_MODULE_RWX
+ # define debug_align(X) PAGE_ALIGN(X)
+ #else
+ # define debug_align(X) (X)
+@@ -182,10 +182,8 @@ static inline struct module *mod_find(unsigned long addr, struct mod_tree_root *
+ }
+ #endif /* CONFIG_MODULES_TREE_LOOKUP */
+ 
+-#ifdef CONFIG_ARCH_HAS_STRICT_MODULE_RWX
+ void frob_text(const struct module_layout *layout, int (*set_memory)(unsigned long start,
+ 								     int num_pages));
+-#endif /* CONFIG_ARCH_HAS_STRICT_MODULE_RWX */
+ 
+ #ifdef CONFIG_STRICT_MODULE_RWX
+ void module_enable_ro(const struct module *mod, bool after_init);
+diff --git a/kernel/module/main.c b/kernel/module/main.c
+index db503a212532..be3b31ba6e16 100644
+--- a/kernel/module/main.c
++++ b/kernel/module/main.c
+@@ -1162,24 +1162,22 @@ resolve_symbol_wait(struct module *mod,
+  * CONFIG_STRICT_MODULE_RWX block below because they are needed regardless of
+  * whether we are strict.
+  */
+-#ifdef CONFIG_ARCH_HAS_STRICT_MODULE_RWX
+ void frob_text(const struct module_layout *layout,
+ 	       int (*set_memory)(unsigned long start, int num_pages))
+ {
+-	BUG_ON((unsigned long)layout->base & (PAGE_SIZE-1));
+-	BUG_ON((unsigned long)layout->text_size & (PAGE_SIZE-1));
+ 	set_memory((unsigned long)layout->base,
+-		   layout->text_size >> PAGE_SHIFT);
++		   PAGE_ALIGN(layout->text_size) >> PAGE_SHIFT);
+ }
+ 
+ static void module_enable_x(const struct module *mod)
+ {
++	if (!PAGE_ALIGNED(mod->core_layout.base) ||
++	    !PAGE_ALIGNED(mod->init_layout.base))
++		return;
++
+ 	frob_text(&mod->core_layout, set_memory_x);
+ 	frob_text(&mod->init_layout, set_memory_x);
+ }
+-#else /* !CONFIG_ARCH_HAS_STRICT_MODULE_RWX */
+-static void module_enable_x(const struct module *mod) { }
+-#endif /* CONFIG_ARCH_HAS_STRICT_MODULE_RWX */
+ 
+ void __weak module_memfree(void *module_region)
+ {
 -- 
 2.34.1
 

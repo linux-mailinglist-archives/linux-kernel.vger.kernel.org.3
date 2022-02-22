@@ -2,60 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06D324C020F
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 20:31:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 551B34C0211
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 20:31:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235224AbiBVTcI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 14:32:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36938 "EHLO
+        id S235233AbiBVTcR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 14:32:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231702AbiBVTcF (ORCPT
+        with ESMTP id S231702AbiBVTcO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 14:32:05 -0500
+        Tue, 22 Feb 2022 14:32:14 -0500
 Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84E891117B;
-        Tue, 22 Feb 2022 11:31:37 -0800 (PST)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 21MJVU3I032251;
-        Tue, 22 Feb 2022 13:31:30 -0600
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AACD83CA53;
+        Tue, 22 Feb 2022 11:31:48 -0800 (PST)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 21MJVgiR032351;
+        Tue, 22 Feb 2022 13:31:42 -0600
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1645558290;
-        bh=et6Q9JV+s7xgLri9yT9GAgu/wEXrc4LxPUkUSJpNyMM=;
+        s=ti-com-17Q1; t=1645558302;
+        bh=fJN1oYa3XToyh1Sxwy1ZAbKlDyBkS1XToPQnJvq85yU=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=T6TM88Oax0gCZCsbZDjOt/kY6paZ4LrMBCIIrzJnOimskuXhtU1kZ8vO2UsKyMN5J
-         IEH2Sg7TQdF03yw5MWjanUcVi+r/HNzBazZqRUJs5rOgL6p+TUDAArmaRF2dFOjj3j
-         uKJvIx4VPpj6V65owWUrX60vEp7oiaEI8dUkjUrc=
-Received: from DFLE104.ent.ti.com (dfle104.ent.ti.com [10.64.6.25])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 21MJVU6i004686
+        b=WvSrKxyercfQ6lV1ZmpX2gxUQyaQwPlIq3+ots6Z25J/lmh9kJdnjJP+iWetdGKM8
+         qTRniUWAxcVfLm0oGprrsaPQiTnzOGWcXPXWrCPr9D/dHbD3r0xs+O4wBUXf8Xh0t4
+         7Hl+qigVGgsBd3MMu2GrzCkgdDTS24KydNk+39xY=
+Received: from DLEE113.ent.ti.com (dlee113.ent.ti.com [157.170.170.24])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 21MJVgqu045317
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 22 Feb 2022 13:31:30 -0600
-Received: from DFLE108.ent.ti.com (10.64.6.29) by DFLE104.ent.ti.com
- (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
+        Tue, 22 Feb 2022 13:31:42 -0600
+Received: from DLEE100.ent.ti.com (157.170.170.30) by DLEE113.ent.ti.com
+ (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Tue, 22
- Feb 2022 13:31:30 -0600
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE108.ent.ti.com
- (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
+ Feb 2022 13:31:42 -0600
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE100.ent.ti.com
+ (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Tue, 22 Feb 2022 13:31:30 -0600
+ Frontend Transport; Tue, 22 Feb 2022 13:31:42 -0600
 Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 21MJVUlw116092;
-        Tue, 22 Feb 2022 13:31:30 -0600
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 21MJVgtg022105;
+        Tue, 22 Feb 2022 13:31:42 -0600
 From:   Nishanth Menon <nm@ti.com>
-To:     Aswath Govindraju <a-govindraju@ti.com>
-CC:     Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
+To:     Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>
+CC:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
         <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Keerthy <j-keerthy@ti.com>
-Subject: Re: [PATCH] arm64: dts: ti: k3-j721s2-mcu-wakeup: Fix the interrupt-parent for wkup_gpioX instances
-Date:   Tue, 22 Feb 2022 13:31:29 -0600
-Message-ID: <164555827284.27077.12331801868213475553.b4-ty@ti.com>
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 0/5] arm64: dts: ti: k3*: Fix gic-v3 compatible regs
+Date:   Tue, 22 Feb 2022 13:31:41 -0600
+Message-ID: <164555829763.27188.1899521132083967069.b4-ty@ti.com>
 X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20220203132647.11314-1-a-govindraju@ti.com>
-References: <20220203132647.11314-1-a-govindraju@ti.com>
+In-Reply-To: <20220215201008.15235-1-nm@ti.com>
+References: <20220215201008.15235-1-nm@ti.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -70,21 +68,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Aswath Govindraju,
+Hi Nishanth Menon,
 
-On Thu, 3 Feb 2022 18:56:47 +0530, Aswath Govindraju wrote:
-> From: Keerthy <j-keerthy@ti.com>
+On Tue, 15 Feb 2022 14:10:03 -0600, Nishanth Menon wrote:
+> This series was triggered by the discussion in [1], and we realized we
+> need to cleanup the definitions in K3 SoC. Usage of kvm with gic-v2
+> compatibility is a bit niche usecase, but valid and possible with A53
+> and A72 even though the GIC500 instantiation is done with no backward
+> compatibility.
 > 
-> The interrupt-parent for wkup_gpioX instances are wrongly assigned as
-> main_gpio_intr instead of wkup_gpio_intr. Fix it.
+> Nishanth Menon (5):
+>   arm64: dts: ti: k3-am65: Fix gic-v3 compatible regs
+>   arm64: dts: ti: k3-j721e: Fix gic-v3 compatible regs
+>   arm64: dts: ti: k3-j7200: Fix gic-v3 compatible regs
+>   arm64: dts: ti: k3-am64: Fix gic-v3 compatible regs
+>   arm64: dts: ti: k3-j721s2: Fix gic-v3 compatible regs
 > 
-> 
+> [...]
 
 I have applied the following to branch ti-k3-dts-next on [1].
 Thank you!
 
-[1/1] arm64: dts: ti: k3-j721s2-mcu-wakeup: Fix the interrupt-parent for wkup_gpioX instances
-      commit: 223d9ac45efb9311e7b2b0494c3ed25c701c6a5d
+[1/5] arm64: dts: ti: k3-am65: Fix gic-v3 compatible regs
+      commit: 8cae268b70f387ff9e697ccd62fb2384079124e7
+[2/5] arm64: dts: ti: k3-j721e: Fix gic-v3 compatible regs
+      commit: a06ed27f3bc63ab9e10007dc0118d910908eb045
+[3/5] arm64: dts: ti: k3-j7200: Fix gic-v3 compatible regs
+      commit: 1a307cc299430dd7139d351a3b8941f493dfa885
+[4/5] arm64: dts: ti: k3-am64: Fix gic-v3 compatible regs
+      commit: de60edf1be3d42d4a1b303b41c7c53b2f865726e
+[5/5] arm64: dts: ti: k3-j721s2: Fix gic-v3 compatible regs
+      commit: a966803781fc5e1875511db9392b0d16174c5dd2
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent up the chain during

@@ -2,117 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 157614C046E
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 23:16:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C32F24C0473
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 23:17:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236019AbiBVWQq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 17:16:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35166 "EHLO
+        id S236031AbiBVWSD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 17:18:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230097AbiBVWQo (ORCPT
+        with ESMTP id S230097AbiBVWSB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 17:16:44 -0500
-Received: from mail105.syd.optusnet.com.au (mail105.syd.optusnet.com.au [211.29.132.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 008A7C3351;
-        Tue, 22 Feb 2022 14:16:17 -0800 (PST)
-Received: from dread.disaster.area (pa49-186-17-0.pa.vic.optusnet.com.au [49.186.17.0])
-        by mail105.syd.optusnet.com.au (Postfix) with ESMTPS id 0586C10E1034;
-        Wed, 23 Feb 2022 09:16:15 +1100 (AEDT)
-Received: from dave by dread.disaster.area with local (Exim 4.92.3)
-        (envelope-from <david@fromorbit.com>)
-        id 1nMdSA-00FEJg-J2; Wed, 23 Feb 2022 09:16:14 +1100
-Date:   Wed, 23 Feb 2022 09:16:14 +1100
-From:   Dave Chinner <david@fromorbit.com>
-To:     Jan Kara <jack@suse.cz>
-Cc:     Matthew Wilcox <willy@infradead.org>, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, reiserfs-devel@vger.kernel.org
-Subject: Re: Is it time to remove reiserfs?
-Message-ID: <20220222221614.GC3061737@dread.disaster.area>
-References: <YhIwUEpymVzmytdp@casper.infradead.org>
- <20220222100408.cyrdjsv5eun5pzij@quack3.lan>
+        Tue, 22 Feb 2022 17:18:01 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B249EB6D19;
+        Tue, 22 Feb 2022 14:17:34 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2BC89B81A2C;
+        Tue, 22 Feb 2022 22:17:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4211DC340E8;
+        Tue, 22 Feb 2022 22:17:31 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="lXMDj8r4"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1645568244;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=vCnYHLy2ZxLW1+1wKyxbDfmohEew3lEiJPknv0zMRYw=;
+        b=lXMDj8r4Yr5uWWxTJyy9JlZE8dPd9P561SOdb0cphGNYx4uYOF0/QjtLjtN93FcOp6uNlQ
+        VupvtVgoxdsTRr0yiFFc/3WGr0DAPUbxmounmYEQjVl0cokQYpe4Am0KzYJUUjkCaqDOIk
+        WVlMfbOqLv3Owc1ux6xbpSelgoQb0Mw=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id fedef2a4 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Tue, 22 Feb 2022 22:17:24 +0000 (UTC)
+Received: by mail-yb1-f177.google.com with SMTP id c6so44223237ybk.3;
+        Tue, 22 Feb 2022 14:17:23 -0800 (PST)
+X-Gm-Message-State: AOAM531a+v7B3JZn2f1FkbCZysTrcKGDwCqOUsj0vxEbI44kVeDuXi8m
+        +u+4nDmpUmFpnqugFrgIm8U8BQpdfRbuyzR90/k=
+X-Google-Smtp-Source: ABdhPJwlIOwo+38zIXLd6Qx86vOEC2pTybWrAlF+D1no8DxGsVb1DkoOkHcofqIhHbVsWXHFvpYK/Ea3CPmEoMWT/g0=
+X-Received: by 2002:a05:6902:693:b0:613:7f4f:2e63 with SMTP id
+ i19-20020a056902069300b006137f4f2e63mr24281380ybt.271.1645568240101; Tue, 22
+ Feb 2022 14:17:20 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220222100408.cyrdjsv5eun5pzij@quack3.lan>
-X-Optus-CM-Score: 0
-X-Optus-CM-Analysis: v=2.4 cv=e9dl9Yl/ c=1 sm=1 tr=0 ts=621560b0
-        a=+dVDrTVfsjPpH/ci3UuFng==:117 a=+dVDrTVfsjPpH/ci3UuFng==:17
-        a=_MjYSGqaCGpKE7YW:21 a=kj9zAlcOel0A:10 a=oGFeUVbbRNcA:10 a=7-415B0cAAAA:8
-        a=EH5YdbLGPw6z9d0QqZoA:9 a=CjuIK1q_8ugA:10 a=aebnku51ZD03SSuSuSm5:22
-        a=biEYGPWJfzWAr4FL6Ov7:22
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <1614156452-17311-1-git-send-email-acatan@amazon.com>
+ <1614156452-17311-3-git-send-email-acatan@amazon.com> <CAHmME9o6cjZT1Cj1g5w5WQE83YxJNqB7eUCWn74FA9Pbb3Y6nQ@mail.gmail.com>
+In-Reply-To: <CAHmME9o6cjZT1Cj1g5w5WQE83YxJNqB7eUCWn74FA9Pbb3Y6nQ@mail.gmail.com>
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date:   Tue, 22 Feb 2022 23:17:09 +0100
+X-Gmail-Original-Message-ID: <CAHmME9poYgfoniexZ2dvpEEvnWGLQTOjOvB2bck-Whhy9h+Hjw@mail.gmail.com>
+Message-ID: <CAHmME9poYgfoniexZ2dvpEEvnWGLQTOjOvB2bck-Whhy9h+Hjw@mail.gmail.com>
+Subject: Re: [PATCH v7 2/2] drivers/virt: vmgenid: add vm generation id driver
+To:     adrian@parity.io
+Cc:     "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        QEMU Developers <qemu-devel@nongnu.org>,
+        KVM list <kvm@vger.kernel.org>, linux-s390@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        graf@amazon.com, Randy Dunlap <rdunlap@infradead.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Mike Rapoport <rppt@kernel.org>, 0x7f454c46@gmail.com,
+        borntraeger@de.ibm.com, Jann Horn <jannh@google.com>,
+        Willy Tarreau <w@1wt.eu>,
+        Colm MacCarthaigh <colmmacc@amazon.com>,
+        Andrew Lutomirski <luto@kernel.org>,
+        "Theodore Ts'o" <tytso@mit.edu>,
+        Eric Biggers <ebiggers@kernel.org>,
+        "Woodhouse, David" <dwmw@amazon.co.uk>, bonzini@gnu.org,
+        "Singh, Balbir" <sblbir@amazon.com>,
+        "Weiss, Radu" <raduweis@amazon.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>,
+        Michael Ellerman <mpe@ellerman.id.au>, areber@redhat.com,
+        ovzxemul@gmail.com, avagin@gmail.com, ptikhomirov@virtuozzo.com,
+        gil@azul.com, asmehra@redhat.com, dgunigun@redhat.com,
+        vijaysun@ca.ibm.com, oridgar@gmail.com, ghammer@redhat.com,
+        Adrian Catangiu <acatan@amazon.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 22, 2022 at 11:04:08AM +0100, Jan Kara wrote:
-> Hello!
-> 
-> On Sun 20-02-22 12:13:04, Matthew Wilcox wrote:
-> > Keeping reiserfs in the tree has certain costs.  For example, I would
-> > very much like to remove the 'flags' argument to ->write_begin.  We have
-> > the infrastructure in place to handle AOP_FLAG_NOFS differently, but
-> > AOP_FLAG_CONT_EXPAND is still around, used only by reiserfs.
-> > 
-> > Looking over the patches to reiserfs over the past couple of years, there
-> > are fixes for a few syzbot reports and treewide changes.  There don't
-> > seem to be any fixes for user-spotted bugs since 2019.  Does reiserfs
-> > still have a large install base that is just very happy with an old
-> > stable filesystem?  Or have all its users migrated to new and exciting
-> > filesystems with active feature development?
-> > 
-> > We've removed support for senescent filesystems before (ext, xiafs), so
-> > it's not unprecedented.  But while I have a clear idea of the benefits to
-> > other developers of removing reiserfs, I don't have enough information to
-> > weigh the costs to users.  Maybe they're happy with having 5.15 support
-> > for their reiserfs filesystems and can migrate to another filesystem
-> > before they upgrade their kernel after 5.15.
-> > 
-> > Another possibility beyond outright removal would be to trim the kernel
-> > code down to read-only support for reiserfs.  Most of the quirks of
-> > reiserfs have to do with write support, so this could be a useful way
-> > forward.  Again, I don't have a clear picture of how people actually
-> > use reiserfs, so I don't know whether it is useful or not.
-> > 
-> > NB: Please don't discuss the personalities involved.  This is purely a
-> > "we have old code using old APIs" discussion.
-> 
-> So from my distro experience installed userbase of reiserfs is pretty small
-> and shrinking. We still do build reiserfs in openSUSE / SLES kernels but
-> for enterprise offerings it is unsupported (for like 3-4 years) and the module
-> is not in the default kernel rpm anymore.
-> 
-> So clearly the filesystem is on the deprecation path, the question is
-> whether it is far enough to remove it from the kernel completely. Maybe
-> time to start deprecation by printing warnings when reiserfs gets mounted
-> and then if nobody yells for year or two, we'll go ahead and remove it?
+Hey again,
 
-Yup, I'd say we should deprecate it and add it to the removal
-schedule. The less poorly tested legacy filesystem code we have to
-maintain the better.
+On Tue, Feb 22, 2022 at 10:24 PM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
+> This thread seems to be long dead, but I couldn't figure out what
+> happened to the ideas in it. I'm specifically interested in this part:
+>
+> On Wed, Feb 24, 2021 at 9:48 AM Adrian Catangiu <acatan@amazon.com> wrote:
+> > +static void vmgenid_acpi_notify(struct acpi_device *device, u32 event)
+> > +{
+> > +       uuid_t old_uuid;
+> > +
+> > +       if (!device || acpi_driver_data(device) != &vmgenid_data) {
+> > +               pr_err("VMGENID notify with unexpected driver private data\n");
+> > +               return;
+> > +       }
+> > +
+> > +       /* update VM Generation UUID */
+> > +       old_uuid = vmgenid_data.uuid;
+> > +       memcpy_fromio(&vmgenid_data.uuid, vmgenid_data.uuid_iomap, sizeof(uuid_t));
+> > +
+> > +       if (memcmp(&old_uuid, &vmgenid_data.uuid, sizeof(uuid_t))) {
+> > +               /* HW uuid updated */
+> > +               sysgenid_bump_generation();
+> > +               add_device_randomness(&vmgenid_data.uuid, sizeof(uuid_t));
+> > +       }
+> > +}
+>
+> As Jann mentioned in an earlier email, we probably want this to
+> immediately reseed the crng, not just dump it into
+> add_device_randomness alone. But either way, the general idea seems
+> interesting to me. As far as I can tell, QEMU still supports this. Was
+> it not deemed to be sufficiently interesting?
+>
+> Thanks,
+> Jason
 
-Along those lines, I think we really need to be more aggressive
-about deprecating and removing filesystems that cannot (or will not)
-be made y2038k compliant in the new future. We're getting to close
-to the point where long term distro and/or product development life
-cycles will overlap with y2038k, so we should be thinking of
-deprecating and removing such filesystems before they end up in
-products that will still be in use in 15 years time.
+Well I cleaned up this v7 and refactored it into something along the
+lines of what I'm thinking. I don't yet know enough about this general
+problem space to propose the patch and I haven't tested it either, but
+in case you're curious, something along the lines of what I'm thinking
+about lives at https://git.kernel.org/pub/scm/linux/kernel/git/crng/random.git/commit/?h=jd/vmgenid
+if you (or somebody else) feels inclined to pick this up.
 
-And just so everyone in the discussion is aware: XFS already has a
-deprecation and removal schedule for the non-y2038k-compliant v4
-filesystem format. It's officially deprecated right now, we'll stop
-building kernels with v4 support enabled by default in 2025, and
-we're removing the code that supports the v4 format entirely in
-2030.
+Looking forward to learning more from you in general, though, about
+what the deal is with the VM gen ID, and if this is a real thing or
+not.
 
-Cheers,
-
-Dave.
--- 
-Dave Chinner
-david@fromorbit.com
+Regards,
+Jason

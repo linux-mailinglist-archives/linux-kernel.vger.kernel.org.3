@@ -2,211 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 927FB4BF72A
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 12:23:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 01F204BF730
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 12:24:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231688AbiBVLXs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 06:23:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49502 "EHLO
+        id S231690AbiBVLYF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 06:24:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231682AbiBVLXn (ORCPT
+        with ESMTP id S231666AbiBVLYD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 06:23:43 -0500
-Received: from mail-qv1-xf2b.google.com (mail-qv1-xf2b.google.com [IPv6:2607:f8b0:4864:20::f2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70B6A130185;
-        Tue, 22 Feb 2022 03:23:18 -0800 (PST)
-Received: by mail-qv1-xf2b.google.com with SMTP id bu6so4253917qvb.10;
-        Tue, 22 Feb 2022 03:23:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=5HsbQV9ScwzASe1X9e3s4pz3SR1RiwJqEbzvWPMyR0E=;
-        b=KLJyH52hOPOXoRD9so2gARkzEoVGENAUgdx1dQFi7LLdS1ohq+Bcv4myHL2uoeWo60
-         Wbj0iGa7LEcmfve8Bel5J5oB4HYvO/wlh4HOATaimmbsYeyP5snISEltT+Wl8qEQcp9Z
-         xOnUxzabGTKjDhjkqPbB8ysnJgvGmzsrUDL+h4ujF3jv18TR/dCUVm+V7035XwB2TSFE
-         Uq9JWTERxTGalBFJBNhmUCvNrilv8DK0u3GrGqOqByzkJubf23aWdTEboRFt95PWnGZo
-         rYmiLxz+keIQZm6aSmijg3xYmguLLLP+t6+X6zf4DSjey59u5teSC8gBw5O2piSut7sm
-         d0sw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition
-         :content-transfer-encoding:in-reply-to;
-        bh=5HsbQV9ScwzASe1X9e3s4pz3SR1RiwJqEbzvWPMyR0E=;
-        b=cLmMMeXaiuOtKjhg02HaqL4oAEpkopjfsDZGncmSO9yyZxfyP7In64RwIf61niIIhL
-         Pal/Nf1cDd/0ZrEvLfAFFLoiDCi+gIA49rGLHdAd6b3NqQ3dYjFvXTtqk8QDa67WdxvD
-         rsQHtqcIJ/ETdp1ws6PcNFEdqH/f6FOwRTrOoZ1KWP46FrbDy7GNZybvJOpWz+t8O9ag
-         8ondVBoYjXsCvBXxExHc019LqBWHJNhxt09g3mu/IDDdsX8X3Afkp7HdLGl01wgl+5NH
-         JSkxRK8rY0KJXChVlwKW9RMhEV1pfIxc3RY7IfVoR1LZTgBgBnA19kIVVxFjiT7gFSLb
-         c84A==
-X-Gm-Message-State: AOAM531CzenC0RIRPNMDMQKiFTwTbVYtEYbhWgowxtN7wEVF74GDZEta
-        1pHSB14itj+rvg4jCw35mww=
-X-Google-Smtp-Source: ABdhPJznmAoAgsnj0xI2MwUfbbSCmGXzBImvAZw/zCxLKRO78cHlxJfooxIBFbSI+1F0RnKhDmFWrA==
-X-Received: by 2002:ac8:5a53:0:b0:2d2:b6cd:6d59 with SMTP id o19-20020ac85a53000000b002d2b6cd6d59mr21659197qta.203.1645528997472;
-        Tue, 22 Feb 2022 03:23:17 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id c21sm30924298qtx.89.2022.02.22.03.23.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Feb 2022 03:23:16 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 22 Feb 2022 03:23:15 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Krzysztof Adamski <krzysztof.adamski@nokia.com>
-Cc:     Rob Herring <robh+dt@kernel.org>, linux-hwmon@vger.kernel.org,
-        Agathe Porte <agathe.porte@nokia.com>,
-        Jean Delvare <jdelvare@suse.com>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 1/2] dt-bindings: hwmon: add tmp464.yaml
-Message-ID: <20220222112315.GA1702745@roeck-us.net>
-References: <20220218150908.1947772-1-linux@roeck-us.net>
- <YhNWVLHYVtCvdGhi@localhost.localdomain>
- <66e6b131-274f-454b-44f6-17df879d71a9@roeck-us.net>
- <YhQDGHD3S0qwP2OB@localhost.localdomain>
- <238e6fb0-cd77-4772-3e92-23941dc74403@roeck-us.net>
- <YhSPd79vHLO+73ln@localhost.localdomain>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YhSPd79vHLO+73ln@localhost.localdomain>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        Tue, 22 Feb 2022 06:24:03 -0500
+Received: from so254-9.mailgun.net (so254-9.mailgun.net [198.61.254.9])
+        by lindbergh.monkeyblade.net (Postfix) with UTF8SMTPS id 25508130185
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 03:23:38 -0800 (PST)
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1645529018; h=Content-Transfer-Encoding: Content-Type:
+ In-Reply-To: From: References: Cc: To: Subject: MIME-Version: Date:
+ Message-ID: Sender; bh=ykOz9QTcSokzbehPDZ8vrVEtjNsi5wpt4JO8Bvanv2M=; b=ZkdRZdQsB/dIHM5/n8+TnP/4qhjMr9VTe/ERht3V+izx1/UUPmBJJXHnh7hlaTaVNEeHEoHD
+ NUWYrSg4EnpjlDJR+3ymZOn6WRowSazw4qBFJrDY+u5MOS6UUH+YjzGI/glrekEExKUf+4f+
+ EUWrbKUh6fStvL9RvaV7xjPPlac=
+X-Mailgun-Sending-Ip: 198.61.254.9
+X-Mailgun-Sid: WyI0MWYwYSIsICJsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n03.prod.us-west-2.postgun.com with SMTP id
+ 6214c7b8afeb9481f5366978 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 22 Feb 2022 11:23:36
+ GMT
+Sender: tdas=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 8958BC4361A; Tue, 22 Feb 2022 11:23:36 +0000 (UTC)
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
+Received: from [192.168.0.102] (unknown [49.204.183.34])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: tdas)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id CFFD8C4338F;
+        Tue, 22 Feb 2022 11:23:32 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.codeaurora.org CFFD8C4338F
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=codeaurora.org
+Message-ID: <99454f74-9166-b20a-cb3a-44bad30eed1b@codeaurora.org>
+Date:   Tue, 22 Feb 2022 16:53:29 +0530
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [v1 1/2] clk: qcom: gdsc: Use the default transition delay for
+ GDSCs
+Content-Language: en-US
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Rajendra Nayak <rnayak@codeaurora.org>,
+        linux-arm-msm@vger.kernel.org, linux-soc@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220209172513.17873-1-tdas@codeaurora.org>
+ <YgRBnExwlzI+lPlR@builder.lan> <20220210072842.3E796C004E1@smtp.kernel.org>
+ <9f343332-9a0e-cbf9-9fb1-17127036b0b6@codeaurora.org>
+ <YhP5MD+d8btWBUl8@ripper>
+From:   Taniya Das <tdas@codeaurora.org>
+In-Reply-To: <YhP5MD+d8btWBUl8@ripper>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 22, 2022 at 08:23:35AM +0100, Krzysztof Adamski wrote:
-> Dnia Mon, Feb 21, 2022 at 02:11:17PM -0800, Guenter Roeck napisał(a):
-> > On 2/21/22 13:24, Krzysztof Adamski wrote:
-> > > Dnia Mon, Feb 21, 2022 at 08:16:15AM -0800, Guenter Roeck napisał(a):
-> > > > > I still thing we should have the same format here and in tmp421, for
-> > > > > consistency. If use the same property name, "ti,n-factor" but on tmp421
-> > > > > you have use 32bit value while here you have to use 8bit (which is weird
-> > > > > in DT, BTW), it might be confusing.
-> > > > > Back when we did this for TMP421, there was some discussion and we
-> > > > > settled on this approach, why do it differently now?
-> > > > > 
-> > > > 
-> > > > I seem to recall from that discussion that there was supposedly no way to
-> > > > express negative numbers in devicetree. Obviously that is incorrect.
-> > > 
-> > > Well, I would still argue it *is* correct. DT only support unsigned
-> > > numbers and, really, only 32 or 64 bit. See the chapter 2.2.4 Properties
-> > > in:
-> > > https://github.com/devicetree-org/devicetree-specification/releases/download/v0.4-rc1/devicetree-specification-v0.4-rc1.pdf
-> > > 
-> > > Devicetree also supports array of bytes, and this is how we get the
-> > > /bits/ magic but this is just a syntactic suggar. The same is true about
-> > > negative values. Just decompile your compiled DTB and you will see.
-> > > To put it in other words - DTS does support negative values, DTB don't.j
-> > > 
-> > > > In addition to that, I strongly suspect that the tmp421 code as written
-> > > > does not work. Its value range is specified as 0..255, but it is read with
-> > > >     err = of_property_read_s32(child, "ti,n-factor", &val);
-> > > > and range checked with
-> > > >     if (val > 127 || val < -128) {
-> > > >                dev_err(dev, "n-factor for channel %d invalid (%d)\n",
-> > > >                       i, val);
-> > > >                return -EINVAL;
-> > > >        }
-> > > > 
-> > > > That just looks wrong. Either the value range is 0..255 and checked
-> > > > as 0 .. 255, or it is -128 .. 127 and must be both checked and specified
-> > > > accordingly. This made me look into the code and I found how negative
-> > > > numbers are supposed to be handled.
-> > > 
-> > > It worked for me when I tested that. I could redo the test, if you are
-> > > unsure. The code also looks good to me. I wasn't convinced for this
-> > > format in yaml but after the whole discussion we had, we settled on
-> > > that, with Robs blessing :)
-> > > 
-> > 
-> > It is hard for me to believe that you can enter, say, 255 into the dts file
-> > and of_property_read_s32() reads it as -1. If so, of_property_read_s32()
-> > could never support values of 128 and above, which seems unlikely.
-> > 
-> > Now, I can imagine that one can enter 0xffffffff and of_property_read_s32()
-> > returns -1, but that isn't what is documented for tmp421.
-> > 
-> 
-> Yes, you are correct, you have to enter either <(-1)> or <0xffffffff>
-> (which is the same thing). I was quite confused on how to specify that
-> in DT bindings and apparently maybe we did not understand each other
-> well enough back when the patch was submitted. The code and the
-> description is correct, though, so the question is how to properly set
+Hello Bjorn,
 
-Here is where we disagree. The bindings say:
+Thanks for your comments.
 
-    items:
-      minimum: 0
-      maximum: 255
-
-Based on this, the following devicetree configuration should be correct.
-
-        tmp423a@4c {
-                compatible = "ti,tmp423";
-                reg = <0x4c>;
-		#address-cells = <1>;
-                #size-cells = <0>;
- 
-                channel@1 {
-                    reg = <1>;
-                    ti,n-factor = <255>;
-                };
-        };
-
-However, it results in:
-
-tmp421 4-004c: n-factor for channel 1 invalid (255)
-tmp421: probe of 4-004c failed with error -22
-
-Either the range is 0 ... 255 and we need to accept 0 ... 255,
-or the range is -128 ... 127 and we need to accept -128 ... 127.
-
-> "minimum" and "maximum" value.
+On 2/22/2022 2:12 AM, Bjorn Andersson wrote:
+> On Mon 21 Feb 08:55 PST 2022, Taniya Das wrote:
 > 
-> I think I should at least update the example of tmp421 in the binding to
-> use <(-1)> notation to make it obvious that it works this way. But I
-> guess we need Rob to help us understand how this should be specified.
+>> Hi Stephen, Bjorn,
+>>
+>> Thanks for your comments.
+>>
+>> On 2/10/2022 12:58 PM, Stephen Boyd wrote:
+>>> Quoting Bjorn Andersson (2022-02-09 14:35:08)
+>>>> On Wed 09 Feb 11:25 CST 2022, Taniya Das wrote:
+>>>>
+>>>>> Do not update the transition delay and use the default reset values.
+>>>>>
+>>>>> Fixes: 45dd0e55317cc ("clk: qcom: Add support for GDSCs)
+>>>>> Signed-off-by: Taniya Das <tdas@codeaurora.org>
+>>>>> ---
+>>>>>    drivers/clk/qcom/gdsc.c | 6 +++++-
+>>>>>    drivers/clk/qcom/gdsc.h | 1 +
+>>>>>    2 files changed, 6 insertions(+), 1 deletion(-)
+>>>>>
+>>>>> diff --git a/drivers/clk/qcom/gdsc.c b/drivers/clk/qcom/gdsc.c
+>>>>> index 7e1dd8ccfa38..e7b213450640 100644
+>>>>> --- a/drivers/clk/qcom/gdsc.c
+>>>>> +++ b/drivers/clk/qcom/gdsc.c
+>>>>> @@ -380,7 +380,11 @@ static int gdsc_init(struct gdsc *sc)
+>>>>>          */
+>>>>>         mask = HW_CONTROL_MASK | SW_OVERRIDE_MASK |
+>>>>>                EN_REST_WAIT_MASK | EN_FEW_WAIT_MASK | CLK_DIS_WAIT_MASK;
+>>>>> -     val = EN_REST_WAIT_VAL | EN_FEW_WAIT_VAL | CLK_DIS_WAIT_VAL;
+>>>>> +
+>>>>> +     regmap_read(sc->regmap, sc->gdscr, &val);
+>>>>> +
+>>>>> +     if (!(sc->flags & DEFAULT_TRANSITION_DELAY))
+>>>>
+>>>> I dug a little bit more into this and noticed that on various platforms
+>>>> CLK_DIS_WAIT_VAL for the GPU_CX GDSC is supposed to be 8 (whereas both
+>>>> hw default and CLK_DIS_WAIT_VAL is 2).
+>>>>
+>>
+>> Yes, only for certain GPU_CC these would be updated and that too in case the
+>> design team suggests. Downstream we would set the value from probe itself,
+>> or we can pick these from device tree as required and suggested.
+>>
 > 
-> In any case, if you drop usage of /bits 8/ and keep the property naitive
-> 32 bit, both tmp421 and tmp464 bindings will be compatible with each
-> other.
+> I don't expect that value to be "configurable", so pushing it to DT
+> doesn't seem like the proper solution.
 > 
-> @Rob, if I want a property ti,n-factor be in in range from <(-128)> to
-> <127>, so that we can use of_property_read_s32() and then use just one
-> byte of that, how to specify that in yaml file? For TMP421, we currently
-> have:
+>>>> I'm not able to find anything helpful in the git log describing what the
+>>>> value does, but it seems that a "just use hw default" flag won't cut it
+>>>> for this scenario.
+>>>>
+>>
+>> This value is used for the number of clock cycles it would wait before the
+>> GDSCR ACK signals/halting the clock.
+>>
 > 
->  ti,n-factor:
->    description: |
->      The value (two's complement) to be programmed in the channel specific N correction register.
->      For remote channels only.
->    $ref: /schemas/types.yaml#/definitions/uint32
->    items:
->      minimum: 0
->      maximum: 255
+> That makes sense.
 > 
-> which is confusing.
+>>>
+>>> I'd prefer we invert the logic so that we don't need to litter this flag
+>>> all over the place. I recall that the wait values were incorrect a long
+>>> time ago on early gdsc using designs but hopefully they've been fixed
+>>> now and we can simply use the default power on reset (POR) values.
+>>
+>> I am okay to invert the logic, but I am not sure if they could cause any
+>> issues to the older targets. They were broken in HW design long back, but
+>> got fixed in most families of target and most GDSCs.
+>>
 > 
-> Guenter is proposing to use
->  $ref: /schemas/types.yaml#/definitions/int8
->  items:
->    minimum: -128
->    maximum: 127
+> I don't fancy us having a flag with the purpose of "don't set the
+> timings to 2, 8 and 2" and then rely on open coded writes in probe to
+> set it to something else where needed.
 > 
-> and of_property_read_u8() for the same property on another driver, so
-> usage of /bits/ 8 is required. Which approach is better in your opinion?
+> So I definitely would prefer to flip this around, to make the cases
+> where we want to write different values explicit.
+> 
+> But as you say, unless we make sure that all existing platforms do write
+> 2, 8 and 2 we risk introducing regressions from the current behavior.
+> 
+>> As mentioned if explicitly they need to be updated, it is best to do from
+>> the probe.
+>> This was done in SC7180 GPUCC driver.
+>>          /* Configure clk_dis_wait for gpu_cx_gdsc */
+>>          regmap_update_bits(regmap, 0x106c, CLK_DIS_WAIT_MASK,
+>>                                          8 << CLK_DIS_WAIT_SHIFT);
+> 
+> But we call regmap_update_bits() from probe, which sets the CLK_DIS_WAIT
+> to 8, then we call qcom_cc_really_probe() which will end up in
+> gdsc_init() which replaces that with a 2.
+> 
+> Perhaps I'm missing something?
 > 
 
-I could declare the property as int32, use of_property_read_s32, and
-validate the range in the driver. However, the range still needs
-to match the documentation.
+It was my miss when I did a cleanup to move the DIS_WAIT_VAL before 
+registering the clocks.
 
-Guenter
+>>
+>>
+>> Please let me know if we are okay to add the invert logic.
+>>
+> 
+> I'm still favoring a scheme where we add 3 integers to struct gdsc and
+> in gdsc_init() we check if they are non-zero we write the value to the
+> register.
+> 
+Sure, will update the gdsc_init() to default "2, 8, 2" in case of 
+non-zero value.
+
+> Although being a big patch, we could maintain the existing behaviour by
+> giving all existing struct gdsc definitions the values 2, 8 and 2 to
+> avoid regressions and we (everyone) can then go through the platforms
+> one by one and remove the unnecessary assignments - but more
+> importantly, double check with downstream if they need a different
+> value.
+> 
+
+Sure, that would help.
+
+> This will also have the side effect going forward that it will be more
+> explicit and people writing gdsc definitions should double check these
+> values.
+> 
+> Regards,
+> Bjorn
+
+-- 
+QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member
+of Code Aurora Forum, hosted by The Linux Foundation.
+
+--

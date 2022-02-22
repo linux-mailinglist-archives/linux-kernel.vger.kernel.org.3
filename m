@@ -2,44 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7A944C01E2
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 20:15:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BD224C0281
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 20:55:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235174AbiBVTQI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 14:16:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38004 "EHLO
+        id S235347AbiBVT4D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 14:56:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235165AbiBVTQF (ORCPT
+        with ESMTP id S235313AbiBVTz5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 14:16:05 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 46AE115E6FE
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 11:15:38 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 11B871042;
-        Tue, 22 Feb 2022 11:15:38 -0800 (PST)
-Received: from bogus (unknown [10.57.3.200])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A833C3F66F;
-        Tue, 22 Feb 2022 11:15:36 -0800 (PST)
-Date:   Tue, 22 Feb 2022 19:14:47 +0000
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Szymon Balcerak <sbalcerak@marvell.com>
-Cc:     "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Souvik Chakravarty <Souvik.Chakravarty@arm.com>,
-        Wojciech Bartczak <wbartczak@marvell.com>
-Subject: Re: Using SCMI driver to prepare data for controlling cores via ACPI
- CPPC (_CPC) and PCCT.
-Message-ID: <20220222191447.sol3wkdamaxlvm43@bogus>
-References: <MN2PR18MB3358B61B4B5777FB35B42733BA3A9@MN2PR18MB3358.namprd18.prod.outlook.com>
+        Tue, 22 Feb 2022 14:55:57 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 834B6C5DB1;
+        Tue, 22 Feb 2022 11:55:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645559730; x=1677095730;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=eE5Y6NJ98wT5byN8TvBoZ9imyKf4VK62w4kqwTGFROw=;
+  b=mpbvUGbVtps1bc47Hh2Z4WnP5TIsILB7VGkJpqsHaOxo1QEVEXmXryt2
+   6XsDbw5OFRRr7bBIJdMYgQZWIsMi77saRdmlo6xC4IlPQ0vYO5jMUJIvk
+   HSyUswGhp6GM8cET9QBMb1WmrbATK2MvOxO6M822SxeALDGpT5VhNbV59
+   cjnTgm8xSb4RFTq5Chff0HRZAwa3NMPamBybhAc1XGLGMEKCz5NGvgFy/
+   Lq3AB4U+BuAf64WqTi6Pa8g3WbvSOJr70Y7gULvIq160PB9DmifOPFb3S
+   96HbngMt4YMGT90ramJiYwofETs9HlG3dUW6exkOUsjGkjBk+dXXo00sW
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10266"; a="231772624"
+X-IronPort-AV: E=Sophos;i="5.88,387,1635231600"; 
+   d="scan'208";a="231772624"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2022 11:55:17 -0800
+X-IronPort-AV: E=Sophos;i="5.88,387,1635231600"; 
+   d="scan'208";a="639032047"
+Received: from mjpatel-mobl.amr.corp.intel.com (HELO [10.212.37.223]) ([10.212.37.223])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2022 11:55:16 -0800
+Message-ID: <70db9c01-104e-e081-198e-0b6d8a1c17da@linux.intel.com>
+Date:   Tue, 22 Feb 2022 13:15:06 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <MN2PR18MB3358B61B4B5777FB35B42733BA3A9@MN2PR18MB3358.namprd18.prod.outlook.com>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.5.0
+Subject: Re: [PATCH 1/3] soundwire: qcom: add runtime pm support
+Content-Language: en-US
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        robh+dt@kernel.org, vkoul@kernel.org,
+        yung-chuan.liao@linux.intel.com
+Cc:     devicetree@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org, quic_srivasam@quicinc.com
+References: <20220221104127.15670-1-srinivas.kandagatla@linaro.org>
+ <20220221104127.15670-2-srinivas.kandagatla@linaro.org>
+From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+In-Reply-To: <20220221104127.15670-2-srinivas.kandagatla@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -47,114 +65,143 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-(Please cc linux-acpi too for ACPI related topics next time)
 
-On Mon, Feb 21, 2022 at 01:39:56PM +0000, Szymon Balcerak wrote:
-> Hi Folks,
->
-> This is a continuation of previously discussed topics:
-> 1. "Mixing SCMI and ACPI" topic discussed here
-> https://lore.kernel.org/linux-arm-kernel/20220207101024.rpcbbhtd6y6g7ykc@bogus/T/
-> 2. "ACPI support for System Control and Management Interface (SCMI)"
-> discussed here https://www.spinics.net/lists/arm-kernel/msg798464.html.
->
 
-Thanks for the reference, helps to refresh the memory quicker.
+On 2/21/22 04:41, Srinivas Kandagatla wrote:
+> Add support to runtime PM using SoundWire clock stop on supported instances
+> and bus reset on instances that require full reset.
 
-> We did further research in regards to ACPI specification, SCMI specification
-> and ARM requirements.
-> Considering above, in ACPI we defined PCCT table together with PCC subspace
-> type 3, according to SCMI specification ("The SCMI transport is represented
-> as a standard ACPI Platform Communications Channel (PCC) of Type 3").
+This commit message and code are a bit confusing, e.g. you have a
+boolean state
 
-Correct the transport compatibility is present but be aware not the protocol
-itself. It doesn't matter as the protocol specific details are abstracted/
-hidden in the firmware but I must admit CPPC diverges here.
+ctrl->clk_stop_bus_reset = true;
 
-> This PCCT table describes "mailbox" between System Control Processor (SCP)
-> and the Application Processors (AP) on our system (i.e. shared memory area,
-> doorbell register, etc.).
-> As a result PCC kernel driver (drivers/mailbox/pcc.c) was able to gather all
-> required information out of ACPI PCCT table and thus was successfully
-> probed.
->
+Does this mean bus reset on exiting clock stop? or just that clock stop
+is not supported and bus reset is required with complete re-enumeration.
 
-Good.
+It would be good to try and explain using SoundWire 1.x terminology what
+actions are taken on resume.
 
-> We also defined some sample ACPI _CPC objects for each processor core, so
-> that CPPC kernel driver (drivers/cpufreq/cppc_cpufreq.c) could use those
-> information.
-> Within _CPC object we added specific registers offsets of PCC subspace
-> defined in PCCT (ONLY example: ResourceTemplate(){Register(PCC, 32, 0,
-> 0x124, 0) -> Desired Performance Register})
->
 
-Hold on for a minute here. The CPPC(via direct PCC) is quite a different
-protocol compared the SCMI performance protocol. The latter follows the
-standard SCMI protocol header and payload structure used across several
-other SCMI protocols. However the former(CPPC via PCC) has a simple protocol.
-It maps the specific offset in the Communication subspace within the PCC
-Subspace Shared Memory Region as registers to obtain the CPPC information.
-There are 2 commands(one for read(0) and one for write(1)) to get/set the
-updated values in the PCC subspace.
+> @@ -1267,6 +1305,7 @@ static int qcom_swrm_probe(struct platform_device *pdev)
+>  	ctrl->bus.ops = &qcom_swrm_ops;
+>  	ctrl->bus.port_ops = &qcom_swrm_port_ops;
+>  	ctrl->bus.compute_params = &qcom_swrm_compute_params;
+> +	ctrl->bus.clk_stop_timeout = 300;
+>  
+>  	ret = qcom_swrm_get_port_config(ctrl);
+>  	if (ret)
+> @@ -1319,6 +1358,21 @@ static int qcom_swrm_probe(struct platform_device *pdev)
+>  		 (ctrl->version >> 24) & 0xff, (ctrl->version >> 16) & 0xff,
+>  		 ctrl->version & 0xffff);
+>  
+> +	pm_runtime_set_autosuspend_delay(dev, 3000);
+> +	pm_runtime_use_autosuspend(dev);
+> +	pm_runtime_mark_last_busy(dev);
+> +	pm_runtime_set_active(dev);
+> +	pm_runtime_enable(dev);
+> +
+> +	/* Clk stop is not supported on WSA Soundwire masters */
+> +	if (ctrl->version <= 0x01030000) {
+> +		ctrl->clk_stop_bus_reset = true;
+> +	} else {
+> +		ctrl->reg_read(ctrl, SWRM_COMP_MASTER_ID, &val);
+> +		if (val == MASTER_ID_WSA)
+> +			ctrl->clk_stop_bus_reset = true;
+> +	}
 
-This simply doesn't align with SCMI performance protocol and we are aware
-of that. You can implement the CPPC protocol as it is quite simple if you
-have SCMI performance protocol implemented already.
+I think this means clock_stop_not_supported?
 
-However, being aware of this difference, and also for other valid requirements
-we introduced the concept of Fastchannels in SCMI for performance protocol
-mainly to bypass the PCC/mailbox overhead. It also aligns well with CPPC.
-You just need to implement fastchannels in SCMI and specify those as
-system memory GAS instead of PCC GAS in CPPC tables. Hope that helps, happy
-to provide more details once you get familiarised with SCMI Fastchannels.
+> +static int swrm_runtime_resume(struct device *dev)
+> +{
+> +	struct qcom_swrm_ctrl *ctrl = dev_get_drvdata(dev);
+> +	int ret;
+> +
+> +	clk_prepare_enable(ctrl->hclk);
+> +
+> +	if (ctrl->clk_stop_bus_reset) {
+> +		reinit_completion(&ctrl->enumeration);
+> +		ctrl->reg_write(ctrl, SWRM_COMP_SW_RESET, 0x01);
+> +		qcom_swrm_get_device_status(ctrl);
 
-> Having above setup, execution flow for getting desired core performance
-> (drivers/cpufreq/cppc_cpufreq.c -> cppc_get_desired_perf()) would look like:
-> 1. ring the doorbell register (defined in PCCT)
-> 2. wait for command completion indicated within PCC status field (status is
-> part of shared memory defined within PCCT);
-> 3. read the desired performance register (defined in _CPC object as specific
-> PCC register).
->
-> Now comes the problem: without preparing valid frame according to SCMI spec
-> we will not get any valid response from SCP, even if we will ring a
-> doorbell.
+don't you need some sort of delay before checking the controller and
+device status? The bus reset sequence takes 4096 bits, that's a non-zero
+time.
 
-Expected and I have provided details above.
+> +		sdw_handle_slave_status(&ctrl->bus, ctrl->status);
+> +		qcom_swrm_init(ctrl);
+> +		wait_for_completion_timeout(&ctrl->enumeration,
+> +					    msecs_to_jiffies(TIMEOUT_MS));
+> +	} else {
+> +		ctrl->reg_write(ctrl, SWRM_MCP_BUS_CTRL, SWRM_MCP_BUS_CLK_START);
+> +		ctrl->reg_write(ctrl, SWRM_INTERRUPT_CLEAR,
+> +			SWRM_INTERRUPT_STATUS_MASTER_CLASH_DET);
+> +
+> +		ctrl->intr_mask |= SWRM_INTERRUPT_STATUS_MASTER_CLASH_DET;
+> +		ctrl->reg_write(ctrl, SWRM_INTERRUPT_MASK_ADDR, ctrl->intr_mask);
+> +		ctrl->reg_write(ctrl, SWRM_INTERRUPT_CPU_EN, ctrl->intr_mask);
+> +
+> +		usleep_range(100, 105);
+> +	}
+> +
+> +	if (!swrm_wait_for_frame_gen_enabled(ctrl))
+> +		dev_err(ctrl->dev, "link failed to connect\n");
+> +
+> +	usleep_range(300, 305);
+> +	ret = sdw_bus_exit_clk_stop(&ctrl->bus);
+> +	if (ret < 0)
+> +		dev_err(ctrl->dev, "bus failed to exit clock stop %d\n", ret);
+> +
+> +	return 0;
+> +}
+> +
+> +static int __maybe_unused swrm_runtime_suspend(struct device *dev)
+> +{
+> +	struct qcom_swrm_ctrl *ctrl = dev_get_drvdata(dev);
+> +	int ret;
+> +
+> +	if (!ctrl->clk_stop_bus_reset) {
+> +		/* Mask bus clash interrupt */
+> +		ctrl->intr_mask &= ~SWRM_INTERRUPT_STATUS_MASTER_CLASH_DET;
+> +		ctrl->reg_write(ctrl, SWRM_INTERRUPT_MASK_ADDR, ctrl->intr_mask);
+> +		ctrl->reg_write(ctrl, SWRM_INTERRUPT_CPU_EN, ctrl->intr_mask);
+> +	}
+> +	/* Prepare slaves for clock stop */
+> +	ret = sdw_bus_prep_clk_stop(&ctrl->bus);
+> +	if (ret < 0) {
 
-> Considering above, we came to conclusion that existing SCMI kernel driver
-> (drivers/cpufreq/scmi-cpufreq.c) could be used to "prepare" valid SCMI frame
-> and write it to shared memory before ringing the doorbell.
+if a device has lost sync and reports -ENODATA, you want still want to
+go ahead and not prevent the suspend operation from happening.
 
-No, definitely not a good idea.
-
-> This way SCP could "understand" SCPI request (e.g. get desired performance)
-> and return valid data back within shared memory (within specific offset of
-> PCC subspace).
-> Do you think it might be a good direction to achieve the goal (monitoring
-> and controlling cores)?
->
-
-No. You can either add CPPC protocol on top of your current SCMI perf
-implementation or you could add support for fast channels and use them in
-CPPC.
-
-> Main problem we currently see is that SCMI kernel driver will never be
-> probed on ACPI systems as first of all arm_scmi (.compatible = "arm,scmi")
-> will never be probed successfully. There is no DT on ACPI system at all.
-> Do you plan to add ACPI support for arm-scmi, so that it's properly probed
-> on ACPI systems and thus scmi-cpufreq is also probed?
-
-As mentioned earlier, no we don't have plans and I don't think it is needed
-for CPPC/cpufreq requirements atleast.
->
-> Finally, assuming arm-scmi  and scmi-cpufreq are probed: how could we
-> accomplish preparing SCMI frame before ringing a doorbell?
->
-
-Not applicable.
-
---
-Regards,
-Sudeep
+> +		dev_err(dev, "prepare clock stop failed %d", ret);
+> +		return ret;
+> +	}
+> +
+> +	ret = sdw_bus_clk_stop(&ctrl->bus);
+> +	if (ret < 0 && ret != -ENODATA) {
+> +		dev_err(dev, "bus clock stop failed %d", ret);
+> +		return ret;
+> +	}
+> +
+> +	clk_disable_unprepare(ctrl->hclk);
+> +
+> +	usleep_range(300, 305);
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct dev_pm_ops swrm_dev_pm_ops = {
+> +	SET_RUNTIME_PM_OPS(swrm_runtime_suspend, swrm_runtime_resume, NULL)
+> +};
+> +
+>  static const struct of_device_id qcom_swrm_of_match[] = {
+>  	{ .compatible = "qcom,soundwire-v1.3.0", .data = &swrm_v1_3_data },
+>  	{ .compatible = "qcom,soundwire-v1.5.1", .data = &swrm_v1_5_data },
+> @@ -1359,6 +1506,7 @@ static struct platform_driver qcom_swrm_driver = {
+>  	.driver = {
+>  		.name	= "qcom-soundwire",
+>  		.of_match_table = qcom_swrm_of_match,
+> +		.pm = &swrm_dev_pm_ops,
+>  	}
+>  };
+>  module_platform_driver(qcom_swrm_driver);

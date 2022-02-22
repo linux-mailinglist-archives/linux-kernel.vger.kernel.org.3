@@ -2,79 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1F214BF84D
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 13:46:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A3F34BF856
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 13:48:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231982AbiBVMqX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 07:46:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48994 "EHLO
+        id S232013AbiBVMs6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 07:48:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229524AbiBVMqW (ORCPT
+        with ESMTP id S229524AbiBVMsx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 07:46:22 -0500
-Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D407122F69;
-        Tue, 22 Feb 2022 04:45:57 -0800 (PST)
-Received: by mail-io1-xd2c.google.com with SMTP id m185so19907419iof.10;
-        Tue, 22 Feb 2022 04:45:57 -0800 (PST)
+        Tue, 22 Feb 2022 07:48:53 -0500
+Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A512128646;
+        Tue, 22 Feb 2022 04:48:28 -0800 (PST)
+Received: by mail-io1-xd2d.google.com with SMTP id w7so19919985ioj.5;
+        Tue, 22 Feb 2022 04:48:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=U1ifEzLtc0/IOyR4lb+9b3bafVQrz8ZMVMZkGpwnl1U=;
-        b=i76dJOhkFq8SztC0GExmH1uRM2VwnD7q2OJnYWUJU/iF0PQU+x9lrc3+EmWBIFcGvL
-         J1bhvCIwvsnv+r5jvgSqbWFNMzDQi/fkoyfBpOyJlh7Yd3OwL8RlFsTO9YPJUbt9TmPx
-         9K4jZ+1tBdveWtBI0GJ5mEstrDASH6hsW4eaNCN3RVMymoTMdyMgeh1+JVS66iPXCwKv
-         PSwkKY8DdQIgLwZ7JwzxiIRu5wv49ZvFlxl98BuUdYd7rJHfJXzRxoccaxOK0erxR0fn
-         D5StrbL3o33jb/PnhcccOqu5oxyQ/iBagDoHrFPRR9YBWaPVc40IjlzQOdYdziGOtRSM
-         d2UQ==
+        bh=DSnVlm1pnvPlsXEUHsvfD8JkoYeM0OADeZxR4i9i5M8=;
+        b=pVwCQv5LBjsugdh+7vDCxpRlDakRlPHpcVYS8tNW8pAOjg+z5UXxPH9KtjReUVspDH
+         Xlfpr3EN3JWcTSBFJLdLS8u6YjZHlTk1L/OEJs4eLICN6n/ia+kkfMFtVXQeFLS23053
+         wLtnQEQ/YJessaHF9AdF+vjTTzcFA88aJQ9UGlvwOwHXx6htqafubgm49xR038VdF/c4
+         Q5AIMyTEtWe/TEpUOVtYJ4gu6lldqKNFLKp7gDYJK2YvUsstj08UQnEK1FnOnTGwDGfN
+         bErnvwYFMLOdqLwHtaDRJ9lYE4ABozPUPGe3hbaMQQgWKttIel+qOoqQE/bKTpgoNnWP
+         r6lA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=U1ifEzLtc0/IOyR4lb+9b3bafVQrz8ZMVMZkGpwnl1U=;
-        b=iwYli7yqnl8OD+RMOA+ZlsUmNPerlGqhOkg/HA4cTBDPlJvLMi/9R/7MVjtWZDkEaC
-         ffsTTmnYQZIO42BP4HalnzpRmQrDs9WWXUO3XaQVLIACzWmvt4JKwmwItLfVnv70EX7h
-         b+keZTZzu3ypUsjTRbMFb1gzimTCUi9dl8g89UcUHHwj5lsX6fs1Sirt9JDhc+7vqbgR
-         BuR0p0aFojHl0oTbL6Q0TtJV7hsYEl+Z42SJwQ7pzjhiCj5wvnELY1k9gJo+vnoAMUFV
-         T101J66zda79/4aglzi7Y4k5HHoYt6LTCVBnRE0ooFT6YtCqp2XO7Nsk/wh3ybh6XZJU
-         e0jg==
-X-Gm-Message-State: AOAM533eBCdFqsZSNHtIwd0PIBvDVcOgfaaAnRY3sLz3hpVgbf3FJcC4
-        a+LrFIh3b5jdAcFFcEzTTLJzvLGRaVU9h5LuRXU=
-X-Google-Smtp-Source: ABdhPJymHE6i7ESiN393PHVS6YIBpky1wMcpujNvwpJKoPffDiP/DnwSThAkfeJCZxjFtj2rDCsPAcGB3UOwdk7NQ0g=
-X-Received: by 2002:a5e:9248:0:b0:640:70ff:4e28 with SMTP id
- z8-20020a5e9248000000b0064070ff4e28mr17211058iop.44.1645533956554; Tue, 22
- Feb 2022 04:45:56 -0800 (PST)
+        bh=DSnVlm1pnvPlsXEUHsvfD8JkoYeM0OADeZxR4i9i5M8=;
+        b=qiF5qx4g1Z3suG9dL0ALMBcLeIVZyoQKYGRvjZMDueM/2g6ckb8Etw8lOSoa24fBe+
+         sVhGfzUvIH/5DgmiJMvWefcMTB7RvyMRKiHqvFGSr2UMvFglF0KXW635etsp9ROpi4Sc
+         bAp1EE7W3FyDrsLwCAKMHok583qLWhKFeckrdkVKTosY7rRQCUhFGUc1JKtv1tLHbSM1
+         BZKnaPZkU8W5zUdAXieKES3Tc6RW33web+BiN/iAE80ruYwD475Q/AjUVteuLbrFb/gE
+         N4jNYUMd/xG1ljU/g5E4PYtJlXUOtUIpEpivbxUYrDGlBKStIlgzhXVW8Ellw2joysYP
+         P6WA==
+X-Gm-Message-State: AOAM53183pK1j4Hb61IT5N+yKrEt1nwbLyOaxPoeWP4FWWXkGOzyHzOr
+        csXeIABkb/ZvFV/fH4o4SrTgLA2Xoxwd9BIFCHo=
+X-Google-Smtp-Source: ABdhPJyfjGzROAJYPQ75otU9qXSyZlq6fGWMQ1NrI71zYpxlJZGh8wVIUJ1plAwh/v24/ZvWPEvlbG+T2j9kl4CGRyY=
+X-Received: by 2002:a05:6638:1117:b0:30d:1e9f:26ca with SMTP id
+ n23-20020a056638111700b0030d1e9f26camr19007788jal.256.1645534107755; Tue, 22
+ Feb 2022 04:48:27 -0800 (PST)
 MIME-Version: 1.0
-References: <20220212130410.6901-1-ojeda@kernel.org> <20220212130410.6901-3-ojeda@kernel.org>
- <YhScgnV+n7w75WH7@alley>
-In-Reply-To: <YhScgnV+n7w75WH7@alley>
+References: <20220212130410.6901-1-ojeda@kernel.org> <20220212130410.6901-11-ojeda@kernel.org>
+ <YhSnnHpIeDReK/eL@alley>
+In-Reply-To: <YhSnnHpIeDReK/eL@alley>
 From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Tue, 22 Feb 2022 13:45:45 +0100
-Message-ID: <CANiq72m77SNEGfxz4Ggi6Uth1-7NsDvT9D1XbCFByYHne1x6Cw@mail.gmail.com>
-Subject: Re: [PATCH v4 02/20] kallsyms: increase maximum kernel symbol length
- to 512
+Date:   Tue, 22 Feb 2022 13:48:16 +0100
+Message-ID: <CANiq72n0sg_fizEk_kK=p8ROmWTrwdzqu1LD4SQdKUNLbK9ENA@mail.gmail.com>
+Subject: Re: [PATCH v4 10/20] rust: add `kernel` crate
 To:     Petr Mladek <pmladek@suse.com>
 Cc:     Miguel Ojeda <ojeda@kernel.org>,
         Linus Torvalds <torvalds@linux-foundation.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         rust-for-linux <rust-for-linux@vger.kernel.org>,
         linux-kernel <linux-kernel@vger.kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
         Wedson Almeida Filho <wedsonaf@google.com>,
-        Gary Guo <gary@garyguo.net>, Boqun Feng <boqun.feng@gmail.com>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        live-patching@vger.kernel.org, linux-perf-users@vger.kernel.org
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Geoffrey Thomas <geofft@ldpreload.com>,
+        Finn Behrens <me@kloenk.de>,
+        Adam Bratschi-Kaye <ark.email@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Sumera Priyadarsini <sylphrenadin@gmail.com>,
+        Sven Van Asbroeck <thesven73@gmail.com>,
+        Gary Guo <gary@garyguo.net>,
+        Boris-Chengbiao Zhou <bobo1239@web.de>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Fox Chen <foxhlchen@gmail.com>,
+        Dan Robertson <daniel.robertson@starlab.io>,
+        Viktor Garske <viktor@v-gar.de>,
+        Dariusz Sosnowski <dsosnowski@dsosnowski.pl>,
+        =?UTF-8?Q?L=C3=A9o_Lanteri_Thauvin?= <leseulartichaut@gmail.com>,
+        Niklas Mohrin <dev@niklasmohrin.de>,
+        Gioh Kim <gurugio@gmail.com>, Daniel Xu <dxu@dxuuu.xyz>,
+        Milan Landaverde <milan@mdaverde.com>,
+        Morgan Bartlett <mjmouse9999@gmail.com>,
+        Maciej Falkowski <m.falkowski@samsung.com>,
+        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        John Ogness <john.ogness@linutronix.de>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
@@ -88,14 +97,62 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hi Petr,
 
-On Tue, Feb 22, 2022 at 9:19 AM Petr Mladek <pmladek@suse.com> wrote:
+On Tue, Feb 22, 2022 at 10:06 AM Petr Mladek <pmladek@suse.com> wrote:
 >
-> The livepatch selftest still pass. Feel free to add:
+> What exactly should we keep in sync, please?
 >
-> Tested-by: Petr Mladek <pmladek@suse.com>       # livepatch
-> Acked-by: Petr Mladek <pmladek@suse.com>        # livepatch
+> I see only handling of KERN_* prefix in print.rs. I do not see there
+> any counter part of LOG_LINE_MAX, CONSOLE_LOG_MAX, or PREFIX_MAX.
 
-Thanks a lot for the test, Petr! I will add the tags.
+Good catch! We had a buffer on the Rust side in the past, but that is
+not the case anymore since commit 9e8bd679ecf2 ("Support Rust
+`core::fmt::Argument` in vsprintf") on our side, so we will remove the
+comment.
+
+> I am sorry but I am not familiar with rust. What are these limits
+> 2 and 10 used for, please?
+>
+> I guess that 2 is the size of a single KERN_* identifier.
+> But what is 10?
+>
+> Note that printk() format prefix is typically just a single KERN_*
+> identifier. But there might be more. Well, in practice only the
+> following combination makes sense: KERN_CONT + KERN_<LEVEL>.
+
+What we are doing here is generating compile-time format strings that
+are then used by the `pr_*!` macros (which call the C side `printk()`
+with one of the strings).
+
+In other words, this is not parsing arbitrary `printk()` format
+strings (which I am guessing something like that is your concern --
+please let me know if I got it wrong).
+
+To clarify a bit what the code does and what the constants are:
+
+  - `generate()` is called at compile-time.
+
+  - The size of these generated strings is always 10.
+
+  - We compose those strings by using the first 2 bytes of `KERN_*`.
+However, we also take the chance to check (at compile-time) they have
+the contents we expect, including the third zero byte.
+
+  - Then other 8 bytes are used to complete the 10: either "%pA" plus
+0 padding (`CONT` level) or "%s: %pA" (otherwise).
+
+> Finally, is there any way to test whether any change in the printk
+> code breaks the rust support?
+
+One way is to compile the code, e.g. the `assert!`s in the `generate`
+function run at compile-time, thus they provide a first layer of
+defense.
+
+Another way is to use `samples/rust/print.rs` which we run in the CI
+as a black box test.
+
+Is that what you had in mind? Or something like unit tests or self tests?
+
+Thanks for taking a look!
 
 Cheers,
 Miguel

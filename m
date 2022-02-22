@@ -2,115 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 089224BF543
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 10:57:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 72D594BF546
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 10:59:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230405AbiBVJ54 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 04:57:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55268 "EHLO
+        id S229929AbiBVJ6V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 04:58:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230397AbiBVJ5l (ORCPT
+        with ESMTP id S230317AbiBVJ6R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 04:57:41 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 862BCD2249;
-        Tue, 22 Feb 2022 01:57:14 -0800 (PST)
-Received: from linux.localdomain (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxmMhzsxRiHa8EAA--.4515S4;
-        Tue, 22 Feb 2022 17:57:08 +0800 (CST)
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>
-Cc:     Xuefeng Li <lixuefeng@loongson.cn>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next v3 2/2] bpf: Make BPF_JIT_DEFAULT_ON selectable in Kconfig
-Date:   Tue, 22 Feb 2022 17:57:06 +0800
-Message-Id: <1645523826-18149-3-git-send-email-yangtiezhu@loongson.cn>
-X-Mailer: git-send-email 2.1.0
-In-Reply-To: <1645523826-18149-1-git-send-email-yangtiezhu@loongson.cn>
-References: <1645523826-18149-1-git-send-email-yangtiezhu@loongson.cn>
-X-CM-TRANSID: AQAAf9DxmMhzsxRiHa8EAA--.4515S4
-X-Coremail-Antispam: 1UD129KBjvJXoW7KF1kuw4UKw13uFykAF1rtFb_yoW8Zw4Dpw
-        4jqw1rKr92gr1fKayxCa47WF45G34UWr1UCFsxJ347ZF93AasrZr4ktr12qF17Zr92ga1Y
-        qrZ5uF1kXa1Uu37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUPG14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_Jryl82xGYIkIc2
-        x26xkF7I0E14v26ryj6s0DM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0
-        Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_Gr1UM2
-        8EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq3wAS
-        0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2
-        IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0
-        Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628vn2kIc2
-        xKxwCY02Avz4vE14v_GFWl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l
-        x2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14
-        v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IY
-        x2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87
-        Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIF
-        yTuYvjfUYJ5rUUUUU
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Tue, 22 Feb 2022 04:58:17 -0500
+Received: from out30-44.freemail.mail.aliyun.com (out30-44.freemail.mail.aliyun.com [115.124.30.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3009ECC7E;
+        Tue, 22 Feb 2022 01:57:50 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R151e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04423;MF=ashimida@linux.alibaba.com;NM=1;PH=DS;RN=21;SR=0;TI=SMTPD_---0V5CSWke_1645523857;
+Received: from localhost(mailfrom:ashimida@linux.alibaba.com fp:SMTPD_---0V5CSWke_1645523857)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Tue, 22 Feb 2022 17:57:46 +0800
+From:   Dan Li <ashimida@linux.alibaba.com>
+To:     catalin.marinas@arm.com, will@kernel.org, nathan@kernel.org,
+        ndesaulniers@google.com, keescook@chromium.org,
+        masahiroy@kernel.org, tglx@linutronix.de,
+        akpm@linux-foundation.org, mark.rutland@arm.com,
+        samitolvanen@google.com, npiggin@gmail.com, linux@roeck-us.net,
+        mhiramat@kernel.org, ojeda@kernel.org, luc.vanoostenryck@gmail.com,
+        elver@google.com
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        llvm@lists.linux.dev, linux-hardening@vger.kernel.org,
+        Dan Li <ashimida@linux.alibaba.com>
+Subject: [PATCH] [PATCH] AARCH64: Add gcc Shadow Call Stack support
+Date:   Tue, 22 Feb 2022 01:57:36 -0800
+Message-Id: <20220222095736.24898-1-ashimida@linux.alibaba.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, only x86, arm64 and s390 select ARCH_WANT_DEFAULT_BPF_JIT,
-the other archs do not select ARCH_WANT_DEFAULT_BPF_JIT. On the archs
-without ARCH_WANT_DEFAULT_BPF_JIT, if we want to set bpf_jit_enable to
-1 by default, the only way is to enable CONFIG_BPF_JIT_ALWAYS_ON, then
-the users can not change it to 0 or 2, it seems bad for some users. We
-can select ARCH_WANT_DEFAULT_BPF_JIT for those archs if it is proper,
-but at least for now, make BPF_JIT_DEFAULT_ON selectable can give them
-a chance.
+Shadow call stack is available in GCC > 11.2.0, this patch makes
+the corresponding kernel configuration available when compiling
+the kernel with gcc.
 
-Additionally, with this patch, under !BPF_JIT_ALWAYS_ON, we can disable
-BPF_JIT_DEFAULT_ON on the archs with ARCH_WANT_DEFAULT_BPF_JIT when make
-menuconfig, it seems flexible for some developers.
+Note that the implementation in GCC is slightly different from Clang.
+With SCS enabled, functions will only pop x30 once in the epilogue,
+like:
 
-Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+   str     x30, [x18], #8
+   stp     x29, x30, [sp, #-16]!
+   ......
+-  ldp     x29, x30, [sp], #16	  //clang
++  ldr     x29, [sp], #16	  //GCC
+   ldr     x30, [x18, #-8]!
+
+Link: https://gcc.gnu.org/git/?p=gcc.git;a=commit;h=ce09ab17ddd21f73ff2caf6eec3b0ee9b0e1a11e
+
+Signed-off-by: Dan Li <ashimida@linux.alibaba.com>
 ---
- kernel/bpf/Kconfig | 13 +++++++++++--
- 1 file changed, 11 insertions(+), 2 deletions(-)
+FYI:
+This function can be used to test if the shadow call stack works:
+//noinline void __noscs scs_test(void)
+noinline void scs_test(void)
+{
+    register unsigned long *sp asm("sp");
+    unsigned long * lr = sp + 1;
 
-diff --git a/kernel/bpf/Kconfig b/kernel/bpf/Kconfig
-index f3db15a..8521874 100644
---- a/kernel/bpf/Kconfig
-+++ b/kernel/bpf/Kconfig
-@@ -54,6 +54,7 @@ config BPF_JIT
- config BPF_JIT_ALWAYS_ON
- 	bool "Permanently enable BPF JIT and remove BPF interpreter"
- 	depends on BPF_SYSCALL && HAVE_EBPF_JIT && BPF_JIT
-+	select BPF_JIT_DEFAULT_ON
+    asm volatile("":::"x30");
+    *lr = 0;
+}
+
+ffff800008012704:       d503233f        paciasp
+ffff800008012708:       f800865e        str     x30, [x18], #8
+ffff80000801270c:       a9bf7bfd        stp     x29, x30, [sp, #-16]!
+ffff800008012710:       910003fd        mov     x29, sp
+ffff800008012714:       910003e0        mov     x0, sp
+ffff800008012718:       f900041f        str     xzr, [x0, #8]
+ffff80000801271c:       f85f8e5e        ldr     x30, [x18, #-8]!
+ffff800008012720:       f84107fd        ldr     x29, [sp], #16
+ffff800008012724:       d50323bf        autiasp
+ffff800008012728:       d65f03c0        ret
+
+If SCS protection is enabled, this function will return normally.
+If the function has __noscs attribute (scs disabled), it will crash due to 0
+address access.
+
+ arch/Kconfig                 | 6 +++---
+ arch/arm64/Kconfig           | 2 +-
+ include/linux/compiler-gcc.h | 4 ++++
+ 3 files changed, 8 insertions(+), 4 deletions(-)
+
+diff --git a/arch/Kconfig b/arch/Kconfig
+index 678a80713b21..35db7b72bdb0 100644
+--- a/arch/Kconfig
++++ b/arch/Kconfig
+@@ -604,11 +604,11 @@ config ARCH_SUPPORTS_SHADOW_CALL_STACK
+ 	  switching.
+ 
+ config SHADOW_CALL_STACK
+-	bool "Clang Shadow Call Stack"
+-	depends on CC_IS_CLANG && ARCH_SUPPORTS_SHADOW_CALL_STACK
++	bool "Shadow Call Stack"
++	depends on ARCH_SUPPORTS_SHADOW_CALL_STACK
+ 	depends on DYNAMIC_FTRACE_WITH_REGS || !FUNCTION_GRAPH_TRACER
  	help
- 	  Enables BPF JIT and removes BPF interpreter to avoid speculative
- 	  execution of BPF instructions by the interpreter.
-@@ -63,8 +64,16 @@ config BPF_JIT_ALWAYS_ON
- 	  failure.
+-	  This option enables Clang's Shadow Call Stack, which uses a
++	  This option enables Clang/GCC's Shadow Call Stack, which uses a
+ 	  shadow stack to protect function return addresses from being
+ 	  overwritten by an attacker. More information can be found in
+ 	  Clang's documentation:
+diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+index 09b885cc4db5..a48a604301aa 100644
+--- a/arch/arm64/Kconfig
++++ b/arch/arm64/Kconfig
+@@ -1255,7 +1255,7 @@ config HW_PERF_EVENTS
+ config ARCH_HAS_FILTER_PGPROT
+ 	def_bool y
  
- config BPF_JIT_DEFAULT_ON
--	def_bool ARCH_WANT_DEFAULT_BPF_JIT || BPF_JIT_ALWAYS_ON
--	depends on HAVE_EBPF_JIT && BPF_JIT
-+	bool "Enable BPF JIT by default"
-+	default y if ARCH_WANT_DEFAULT_BPF_JIT
-+	depends on BPF_SYSCALL && HAVE_EBPF_JIT && BPF_JIT
-+	help
-+	  Enables BPF JIT by default to avoid speculative execution of BPF
-+	  instructions by the interpreter.
+-# Supported by clang >= 7.0
++# Supported by clang >= 7.0 or GCC > 11.2.0
+ config CC_HAVE_SHADOW_CALL_STACK
+ 	def_bool $(cc-option, -fsanitize=shadow-call-stack -ffixed-x18)
+ 
+diff --git a/include/linux/compiler-gcc.h b/include/linux/compiler-gcc.h
+index ccbbd31b3aae..deff5b308470 100644
+--- a/include/linux/compiler-gcc.h
++++ b/include/linux/compiler-gcc.h
+@@ -97,6 +97,10 @@
+ #define KASAN_ABI_VERSION 4
+ #endif
+ 
++#ifdef CONFIG_SHADOW_CALL_STACK
++#define __noscs __attribute__((__no_sanitize__("shadow-call-stack")))
++#endif
 +
-+	  When CONFIG_BPF_JIT_DEFAULT_ON is enabled but CONFIG_BPF_JIT_ALWAYS_ON
-+	  is disabled, /proc/sys/net/core/bpf_jit_enable is set to 1 by default
-+	  and can be changed to 0 or 2.
- 
- config BPF_UNPRIV_DEFAULT_OFF
- 	bool "Disable unprivileged BPF by default"
+ #if __has_attribute(__no_sanitize_address__)
+ #define __no_sanitize_address __attribute__((no_sanitize_address))
+ #else
 -- 
-2.1.0
+2.17.1
 

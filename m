@@ -2,95 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A7494BF51D
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 10:50:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9977D4BF525
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 10:53:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230315AbiBVJuD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 04:50:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57576 "EHLO
+        id S229825AbiBVJxh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 04:53:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230344AbiBVJuA (ORCPT
+        with ESMTP id S229481AbiBVJxg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 04:50:00 -0500
-Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 475B5119419;
-        Tue, 22 Feb 2022 01:49:34 -0800 (PST)
-Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-2d66f95f1d1so166882247b3.0;
-        Tue, 22 Feb 2022 01:49:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=I+1ybMhNBxeJhewJGPotloa4lDDMgSvpF+wqTddYHZM=;
-        b=FGj1/Fsy03td8VFZ0StvJLn5LyXeBDYJmtHceMh7Xh1TPTUdKJIMjmcfYkM3l05s8M
-         Hwyy9sWDVtLb1nO75pimabsv8yf4Op+LZrmAyRJ/0xj68Cy/iv/YcIpt9dBKhEmYQTTF
-         9Na7AyztQPF9GNEMAhsmmqYmGLcPj9uTGHvrUXVxo3tJlJsIp3vgbEtf1uhjXVHYFEHG
-         56GN3VSvvRiXHpcSM2u044Q7BN118kSZNxaib8A5zLBwNubq05KJgTFY4HjX/89FxQc8
-         ZHy+uQOtMDzUAoYNXpvrTyBQtKxM2U44RvJIlQun0yQ/MIZgQNG0KBDO9qp3WEbOpsPz
-         yFZA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=I+1ybMhNBxeJhewJGPotloa4lDDMgSvpF+wqTddYHZM=;
-        b=CrtPOIcktO2KAEuQkODTMUMDODJBwr75we1fD80wx0pCmfURgPnoI3TZd5QjruuArj
-         nPH9GUB5zuAm67EQPHrMWUT6M1ArV5WxP51gS5/WUTmCFvEvBXiX01BURnQb53vNGFwq
-         bJ4O28RW+dqL0mTNeLP7JTFdMgK/y7doJDN+ClGlWp+N1sAT/3i/O+fXKKUDjDwTwZaP
-         NFe+NsvnyWTQaCNgWQyzO2vW8B1AACxfOsb3WpDP82Vpsdd69EWS4yv8xaTLj92k6efD
-         gDOTdX6xsknOCuwnxD9EYGaVJwMPEarhpDFSVsj3WG7hI04v068uBXlWnL3mAqpaG7zt
-         4goQ==
-X-Gm-Message-State: AOAM532+iZFuSPogorYXkOMpZ39iy6ecjWt80f6PQHNFRbLK8tZ6RDYq
-        p7a7OqjLlt+ZAn8rigg2FHbacIrIQ7V3V0fjhKo=
-X-Google-Smtp-Source: ABdhPJxAPHayjDTcrE2Q32HSf/efRSQMSrMjyxlIKw91qY1WplFcblk7uJXq7RGfhsaoWnxwVIGf8c12RxmMx15271k=
-X-Received: by 2002:a81:5f8a:0:b0:2d0:ccb1:9c9c with SMTP id
- t132-20020a815f8a000000b002d0ccb19c9cmr23818472ywb.265.1645523372069; Tue, 22
- Feb 2022 01:49:32 -0800 (PST)
-MIME-Version: 1.0
-References: <20220221222450.5393-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <CAMuHMdVb38_nhxVqUdtedyP0wMWmgkC-4K+OgbY0bOO8Hw4w4Q@mail.gmail.com>
- <OS0PR01MB59226DF1128AE3BBAEA2E96E863B9@OS0PR01MB5922.jpnprd01.prod.outlook.com>
- <CAMuHMdXzz1szS=6aY7RKRo1YAGqQ_AjmkXk6x4CryRtoSADfcw@mail.gmail.com>
-In-Reply-To: <CAMuHMdXzz1szS=6aY7RKRo1YAGqQ_AjmkXk6x4CryRtoSADfcw@mail.gmail.com>
-From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date:   Tue, 22 Feb 2022 09:49:06 +0000
-Message-ID: <CA+V-a8ucX_G04wU-pvUtQ7HxDdgp0sguU=x663xvXaE1RaZ8+A@mail.gmail.com>
-Subject: Re: [PATCH] soc: renesas: Kconfig: Explicitly select PM and
- PM_GENERIC_DOMAINS configs
-To:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Biju Das <biju.das.jz@bp.renesas.com>
-Cc:     Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 22 Feb 2022 04:53:36 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7462D10B8;
+        Tue, 22 Feb 2022 01:53:10 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6FE9EB8187E;
+        Tue, 22 Feb 2022 09:53:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B471AC340E8;
+        Tue, 22 Feb 2022 09:53:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645523588;
+        bh=dcLPqQqzFfwhFwJ9Kn/RubyJyNfK8yswScv0W6K2bpc=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:From;
+        b=CqexYHz+BllH8K7Fc97pdhI+aS+BB4l4VG/ur/7rHWWW82c5F5KntSVsGV6h7oRrI
+         WhAMIW1hnkD5gai7s9k6PfuMgElbaf2s5ELrUgQZW/TxmLc5tdJ5O3cPufdr2ppBNH
+         LjJ5lfLwvnQ6mDVZzGLcX2H288n9FxCvC51hjnhvs7PKiGNgQAvw2KJ5uIXZ2Yfnk6
+         XHg+GIMuzKeODORR4nZycBCzc8du9e9aoOPQanBb1QVF1doPEOzHgoJf1dXNtKYBX5
+         VyDu7z+V/hLgtJPxxXqr48MXzB2ALbYVlK/GVsdYc6n7/CgrTRTs7IcBPPdnTMU0ad
+         T469gBrvdu45A==
+From:   SeongJae Park <sj@kernel.org>
+To:     Jonghyeon Kim <tome01@ajou.ac.kr>
+Cc:     akpm@linux-foundation.org, Jonathan.Cameron@Huawei.com,
+        amit@kernel.org, benh@kernel.crashing.org, corbet@lwn.net,
+        david@redhat.com, dwmw@amazon.com, elver@google.com,
+        foersleo@amazon.de, gthelen@google.com, markubo@amazon.de,
+        rientjes@google.com, shakeelb@google.com, shuah@kernel.org,
+        linux-damon@amazon.com, linux-mm@kvack.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH v1 0/3] Rebase DAMON_RECALIM for NUMA system
+Date:   Tue, 22 Feb 2022 09:53:02 +0000
+Message-Id: <20220222095302.7859-1-sj@kernel.org>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20220218102611.31895-1-tome01@ajou.ac.kr>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 22, 2022 at 8:31 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
->
-> Hi Biju,
->
-> On Tue, Feb 22, 2022 at 9:30 AM Biju Das <biju.das.jz@bp.renesas.com> wrote:
-> > > Subject: Re: [PATCH] soc: renesas: Kconfig: Explicitly select PM and
-> > > PM_GENERIC_DOMAINS configs
-> > >
-> > > On Mon, Feb 21, 2022 at 11:25 PM Lad Prabhakar <prabhakar.mahadev-
-> > > lad.rj@bp.renesas.com> wrote:
-> > > > Explicitly select PM and PM_GENERIC_DOMAINS configs for ARCH_R9A07G044
-> > > > and ARCH_R9A07G045 configs. PM and PM_GENERIC_DOMAINS configs are
-> >
-> > Typo ARCH_R9A07G054 configs
->
-> Thanks, will fix while applying.
->
-Thanks Biju & Geert.
+Hello Jonghyeon,
 
-Cheers,
-Prabhakar
+On Fri, 18 Feb 2022 19:26:08 +0900 Jonghyeon Kim <tome01@ajou.ac.kr> wrote:
+
+> 
+> Current DAMON_RECALIM is not compatible with the NUMA memory system. To
+> proactively reclaim memory, DAMON_RECLAIM kernel thread(kdamond) has to wake up
+> before kswapd does reclaim memory. However, the current watermark for proactive
+> reclamation is based on entire system free memory. So, though the one memory
+> node is fully used, kdamond is not waked up.
+> 
+> These patches clarify watermarks of DAMOS and enable monitoring per NUMA node
+> proactive reclamation on DAMON_RECLAIM.
+
+The high level concept of this patchset looks good to me.  Nevertheless, maybe
+there is some rooms for improvement.  I left some comments on patches.
+
+
+Thanks,
+SJ
+
+> 
+> Jonghyeon Kim (3):
+>   mm/damon: Rebase damos watermarks for NUMA systems
+>   mm/damon/core: Add damon_start_one()
+>   mm/damon/reclaim: Add per NUMA node proactive reclamation by
+>     DAMON_RECLAIM.
+> 
+>  include/linux/damon.h |   3 +
+>  mm/damon/core.c       |  39 +++++++++--
+>  mm/damon/reclaim.c    | 147 ++++++++++++++++++++++++++++++------------
+>  3 files changed, 140 insertions(+), 49 deletions(-)
+> 
+> -- 
+> 2.17.1

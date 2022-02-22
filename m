@@ -2,98 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68A524BEF20
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 02:53:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9060A4BEF12
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 02:53:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238099AbiBVBQE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 20:16:04 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52226 "EHLO
+        id S238433AbiBVBQk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 20:16:40 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235035AbiBVBQC (ORCPT
+        with ESMTP id S238206AbiBVBQQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 20:16:02 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7793C24F2E;
-        Mon, 21 Feb 2022 17:15:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1645492512;
-        bh=lEGAOtzgMEFzQKENfjNLVN0s0ToEzWqdhUuUbTO2bGM=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=ge/7Uk7V/IzQamDgNXDVZvVyKqd5insicDzvapDhXavvi3qo4FYW7M0nyZDFh+YSj
-         4Qwj/k0FxGe1jZ6UvIQcW0bLgf+sp3SpexFk6m8CAWRzKw2p3RA3b9gMPBhyHMx+WI
-         kEqu29XU9YXG34Hytbz2bNt/WzYUAx2Mtxjr+PEE=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from Venus.fritz.box ([149.172.237.68]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MiJV6-1nqh301gSk-00fT5W; Tue, 22
- Feb 2022 02:15:12 +0100
-From:   Lino Sanfilippo <LinoSanfilippo@gmx.de>
-To:     gregkh@linuxfoundation.org, jirislaby@kernel.org,
-        u.kleine-koenig@pengutronix.de
-Cc:     linux@armlinux.org.uk, richard.genoud@gmail.com,
-        nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
-        ludovic.desroches@microchip.com, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
-        linux-imx@nxp.com, mcoquelin.stm32@gmail.com,
-        alexandre.torgue@foss.st.com, linux-serial@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com, lukas@wunner.de,
-        p.rosenberger@kunbus.com, Lino Sanfilippo <LinoSanfilippo@gmx.de>
-Subject: [PATCH v3 9/9] serial: atmel: remove redundant assignment in rs485_config
-Date:   Tue, 22 Feb 2022 02:14:33 +0100
-Message-Id: <20220222011433.8761-10-LinoSanfilippo@gmx.de>
+        Mon, 21 Feb 2022 20:16:16 -0500
+Received: from m-r2.th.seeweb.it (m-r2.th.seeweb.it [IPv6:2001:4b7a:2000:18::171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D2EC24F2E;
+        Mon, 21 Feb 2022 17:15:50 -0800 (PST)
+Received: from localhost.localdomain (abxh33.neoplus.adsl.tpnet.pl [83.9.1.33])
+        by m-r2.th.seeweb.it (Postfix) with ESMTPA id 97EDB3F586;
+        Tue, 22 Feb 2022 02:15:46 +0100 (CET)
+From:   Konrad Dybcio <konrad.dybcio@somainline.org>
+To:     ~postmarketos/upstreaming@lists.sr.ht
+Cc:     martin.botka@somainline.org,
+        angelogioacchino.delregno@somainline.org,
+        marijn.suijten@somainline.org, jamipkettunen@somainline.org,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 1/4] dt-bindings: clock: add QCOM SM6350 display clock bindings
+Date:   Tue, 22 Feb 2022 02:15:28 +0100
+Message-Id: <20220222011534.3502-1-konrad.dybcio@somainline.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220222011433.8761-1-LinoSanfilippo@gmx.de>
-References: <20220222011433.8761-1-LinoSanfilippo@gmx.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: base64
-X-Provags-ID: V03:K1:bv2z3mAXWdpqELROOyojpjGAFmvhd9PZYl442nj8R122IfdOqxk
- 1tQpzRuLC7Fsyr4HxbpC8xSGSSJHPnaHWcP4ketFZsBdZ5ZpmJoJmpMFHvfiTa1YR5BLMzh
- cfNM0W9I/MenOtYzJSnXNdBIbrdvZCHwMLNyc46qbPHuLRSY9O0m1lANaZ2AMk/4P8bzpvz
- hDZOOPRadR7oxCIq2jwcA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:b9iQb2TqwS0=:FMH99wrfQQGCjY2UNaGD8t
- 3voyfBU2YiqBxOp/7Yjfl2vovYpoCeU4ao/AaLL/+2nLHggL8MvxrfsV1TXfUVdbJrKoUKacv
- kPN6DWZCwxRxRLzRS+lp9ZWRMWTZm2GO3aqdIpg+PbLOQbgFwQw6+ExGr3p156V06egM+zO43
- dkgkvJ/zOgjrU5MYbj5XpZgqz1evF9WVcmwSPDLWrIRxYluq9LRbKdOVOOUMMCElkRophkndl
- 24N0xjtpeHQcRTU5pAKT0Mnava7kvxfR2dkHC3vM7aZlvtfqzs9bcHerOEqKGtRZJTkTbW6PY
- usu2rMEp3XCwaz3c8O9lod7B8MLkUv7vn5r7QqlmXtaNQ1cVqZyQlVmbOoFG62U5i+e9nmaPs
- GK7NneVEHN2X29x6l8NybWkH8eABylVpfOH2F3NzWpTq7KSf8u0Xu0d63ysu55x1u2cxLZ3tH
- 3Di1L3VI8ATgULFDI6rEoLFgP6sO0EcRq8SvWrLe89cL5BjKeSOx7xZ1GKirIu1oQURjGL5Bd
- jMV6pr+MwTkvbIR5aiXYDeGLiQ6ZUajH9qsbEva0eyVE8vMR+rhrJjauTJM3K5DtnlG44pNQV
- RjMUySGhd2HPDgrihsWL7zSjRV8C/GZYEoTXs3AajN8SW7rFy67+U8w7SLN/0TrXjh6eEGdVj
- IhtC4TPPCI7QjVmSsoBZVBDh+O/XFeyYValvhxPawUnapL+KhS4OvfKx242TGSaRtXbfljkSq
- u+NGDicXrwBmfLR/N17ikCmzk1W1H4Fmd1mF/94OtJYkKN/byg1i46wu5vHFS8Dsnwj4SW8Gm
- GMYnCqFu51V/PoVc1j6H91y51YPBwvU+OZMn/vksJaqmM4jx72xw6jccBaz4htVPEP1N81U46
- DNTgV08Sm97yuXLHNrjbahlziAbVliddDHmrn/XOMmaGlhgYj5LvWUwFJB3qstdYeN4a6V1ll
- VghyGPa2GQJN8YCKf9ttyj3NLv7IgNiUZZPaEcDurG+VkljkOBc8JGChXI7sncidPvV3kqhMr
- j03vWp3jusvtN4jtqLqWxdnPXXlEz/dA/a/g4lQMK3X9pO2/VKUPh/NktmVkyMtBReul/hzoE
- DIlSFzITkj95kI=
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FREEMAIL_FROM,MIME_BASE64_TEXT,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SW4gdWFydF9zZXRfcnM0ODVfY29uZmlnKCkgdGhlIHNlcmlhbCBjb3JlIGFscmVhZHkgYXNzaWdu
-cyB0aGUgcGFzc2VkCnNlcmlhbF9yczQ4NSBzdHJ1Y3QgdG8gdGhlIHVhcnQgcG9ydC4KClNvIHJl
-bW92ZSB0aGUgYXNzaWdubWVudCBmcm9tIHRoZSBkcml2ZXJzIHJzNDg1X2NvbmZpZygpIGZ1bmN0
-aW9uIHRvIGF2b2lkCnJlZHVuZGFuY3kuCgpBY2tlZC1ieTogUmljaGFyZCBHZW5vdWQgPHJpY2hh
-cmQuZ2Vub3VkQGdtYWlsLmNvbT4KU2lnbmVkLW9mZi1ieTogTGlubyBTYW5maWxpcHBvIDxMaW5v
-U2FuZmlsaXBwb0BnbXguZGU+Ci0tLQogZHJpdmVycy90dHkvc2VyaWFsL2F0bWVsX3NlcmlhbC5j
-IHwgNCArLS0tCiAxIGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRpb24oKyksIDMgZGVsZXRpb25zKC0p
-CgpkaWZmIC0tZ2l0IGEvZHJpdmVycy90dHkvc2VyaWFsL2F0bWVsX3NlcmlhbC5jIGIvZHJpdmVy
-cy90dHkvc2VyaWFsL2F0bWVsX3NlcmlhbC5jCmluZGV4IDczZDQzOTE5ODk4ZC4uMThkM2JiZGNi
-N2EyIDEwMDY0NAotLS0gYS9kcml2ZXJzL3R0eS9zZXJpYWwvYXRtZWxfc2VyaWFsLmMKKysrIGIv
-ZHJpdmVycy90dHkvc2VyaWFsL2F0bWVsX3NlcmlhbC5jCkBAIC0yOTksMTEgKzI5OSw5IEBAIHN0
-YXRpYyBpbnQgYXRtZWxfY29uZmlnX3JzNDg1KHN0cnVjdCB1YXJ0X3BvcnQgKnBvcnQsCiAJLyog
-UmVzZXR0aW5nIHNlcmlhbCBtb2RlIHRvIFJTMjMyICgweDApICovCiAJbW9kZSAmPSB+QVRNRUxf
-VVNfVVNNT0RFOwogCi0JcG9ydC0+cnM0ODUgPSAqcnM0ODVjb25mOwotCiAJaWYgKHJzNDg1Y29u
-Zi0+ZmxhZ3MgJiBTRVJfUlM0ODVfRU5BQkxFRCkgewogCQlkZXZfZGJnKHBvcnQtPmRldiwgIlNl
-dHRpbmcgVUFSVCB0byBSUzQ4NVxuIik7Ci0JCWlmIChwb3J0LT5yczQ4NS5mbGFncyAmIFNFUl9S
-UzQ4NV9SWF9EVVJJTkdfVFgpCisJCWlmIChyczQ4NWNvbmYtPmZsYWdzICYgU0VSX1JTNDg1X1JY
-X0RVUklOR19UWCkKIAkJCWF0bWVsX3BvcnQtPnR4X2RvbmVfbWFzayA9IEFUTUVMX1VTX1RYUkRZ
-OwogCQllbHNlCiAJCQlhdG1lbF9wb3J0LT50eF9kb25lX21hc2sgPSBBVE1FTF9VU19UWEVNUFRZ
-OwotLSAKMi4zNS4xCgo=
+Add device tree bindings for display clock controller for
+Qualcomm Technology Inc's SM6350 SoC.
+
+Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
+---
+ .../bindings/clock/qcom,dispcc-sm6350.yaml    | 86 +++++++++++++++++++
+ .../dt-bindings/clock/qcom,dispcc-sm6350.h    | 48 +++++++++++
+ 2 files changed, 134 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/clock/qcom,dispcc-sm6350.yaml
+ create mode 100644 include/dt-bindings/clock/qcom,dispcc-sm6350.h
+
+diff --git a/Documentation/devicetree/bindings/clock/qcom,dispcc-sm6350.yaml b/Documentation/devicetree/bindings/clock/qcom,dispcc-sm6350.yaml
+new file mode 100644
+index 000000000000..e706678b353a
+--- /dev/null
++++ b/Documentation/devicetree/bindings/clock/qcom,dispcc-sm6350.yaml
+@@ -0,0 +1,86 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/clock/qcom,dispcc-sm6350.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Qualcomm Display Clock & Reset Controller Binding for SM6350
++
++maintainers:
++  - Konrad Dybcio <konrad.dybcio@somainline.org>
++
++description: |
++  Qualcomm display clock control module which supports the clocks, resets and
++  power domains on SM6350.
++
++  See also dt-bindings/clock/qcom,dispcc-sm6350.h.
++
++properties:
++  compatible:
++    const: qcom,sm6350-dispcc
++
++  clocks:
++    items:
++      - description: Board XO source
++      - description: GPLL0 source from GCC
++      - description: Byte clock from DSI PHY
++      - description: Pixel clock from DSI PHY
++      - description: Link clock from DP PHY
++      - description: VCO DIV clock from DP PHY
++
++  clock-names:
++    items:
++      - const: bi_tcxo
++      - const: gcc_disp_gpll0_clk
++      - const: dsi0_phy_pll_out_byteclk
++      - const: dsi0_phy_pll_out_dsiclk
++      - const: dp_phy_pll_link_clk
++      - const: dp_phy_pll_vco_div_clk
++
++  '#clock-cells':
++    const: 1
++
++  '#reset-cells':
++    const: 1
++
++  '#power-domain-cells':
++    const: 1
++
++  reg:
++    maxItems: 1
++
++required:
++  - compatible
++  - reg
++  - clocks
++  - clock-names
++  - '#clock-cells'
++  - '#reset-cells'
++  - '#power-domain-cells'
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/clock/qcom,gcc-sm6350.h>
++    #include <dt-bindings/clock/qcom,rpmh.h>
++    clock-controller@af00000 {
++      compatible = "qcom,sm6350-dispcc";
++      reg = <0x0af00000 0x20000>;
++      clocks = <&rpmhcc RPMH_CXO_CLK>,
++               <&gcc GCC_DISP_GPLL0_CLK>,
++               <&dsi_phy 0>,
++               <&dsi_phy 1>,
++               <&dp_phy 0>,
++               <&dp_phy 1>;
++      clock-names = "bi_tcxo",
++                    "gcc_disp_gpll0_clk",
++                    "dsi0_phy_pll_out_byteclk",
++                    "dsi0_phy_pll_out_dsiclk",
++                    "dp_phy_pll_link_clk",
++                    "dp_phy_pll_vco_div_clk";
++      #clock-cells = <1>;
++      #reset-cells = <1>;
++      #power-domain-cells = <1>;
++    };
++...
+diff --git a/include/dt-bindings/clock/qcom,dispcc-sm6350.h b/include/dt-bindings/clock/qcom,dispcc-sm6350.h
+new file mode 100644
+index 000000000000..cb54aae2723e
+--- /dev/null
++++ b/include/dt-bindings/clock/qcom,dispcc-sm6350.h
+@@ -0,0 +1,48 @@
++/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
++/*
++ * Copyright (c) 2021, The Linux Foundation. All rights reserved.
++ * Copyright (c) 2021, Konrad Dybcio <konrad.dybcio@somainline.org>
++ */
++
++#ifndef _DT_BINDINGS_CLK_QCOM_DISP_CC_SM6350_H
++#define _DT_BINDINGS_CLK_QCOM_DISP_CC_SM6350_H
++
++/* DISP_CC clocks */
++#define DISP_CC_PLL0				0
++#define DISP_CC_MDSS_AHB_CLK			1
++#define DISP_CC_MDSS_AHB_CLK_SRC		2
++#define DISP_CC_MDSS_BYTE0_CLK			3
++#define DISP_CC_MDSS_BYTE0_CLK_SRC		4
++#define DISP_CC_MDSS_BYTE0_DIV_CLK_SRC		5
++#define DISP_CC_MDSS_BYTE0_INTF_CLK		6
++#define DISP_CC_MDSS_DP_AUX_CLK			7
++#define DISP_CC_MDSS_DP_AUX_CLK_SRC		8
++#define DISP_CC_MDSS_DP_CRYPTO_CLK		9
++#define DISP_CC_MDSS_DP_CRYPTO_CLK_SRC		10
++#define DISP_CC_MDSS_DP_LINK_CLK		11
++#define DISP_CC_MDSS_DP_LINK_CLK_SRC		12
++#define DISP_CC_MDSS_DP_LINK_DIV_CLK_SRC	13
++#define DISP_CC_MDSS_DP_LINK_INTF_CLK		14
++#define DISP_CC_MDSS_DP_PIXEL_CLK		15
++#define DISP_CC_MDSS_DP_PIXEL_CLK_SRC		16
++#define DISP_CC_MDSS_ESC0_CLK			17
++#define DISP_CC_MDSS_ESC0_CLK_SRC		18
++#define DISP_CC_MDSS_MDP_CLK			19
++#define DISP_CC_MDSS_MDP_CLK_SRC		20
++#define DISP_CC_MDSS_MDP_LUT_CLK		21
++#define DISP_CC_MDSS_NON_GDSC_AHB_CLK		22
++#define DISP_CC_MDSS_PCLK0_CLK			23
++#define DISP_CC_MDSS_PCLK0_CLK_SRC		24
++#define DISP_CC_MDSS_ROT_CLK			25
++#define DISP_CC_MDSS_ROT_CLK_SRC		26
++#define DISP_CC_MDSS_RSCC_AHB_CLK		27
++#define DISP_CC_MDSS_RSCC_VSYNC_CLK		28
++#define DISP_CC_MDSS_VSYNC_CLK			29
++#define DISP_CC_MDSS_VSYNC_CLK_SRC		30
++#define DISP_CC_SLEEP_CLK			31
++#define DISP_CC_XO_CLK				32
++
++/* GDSCs */
++#define MDSS_GDSC				0
++
++#endif
+-- 
+2.35.1
+

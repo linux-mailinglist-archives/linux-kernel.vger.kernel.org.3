@@ -2,53 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45EB44BFCA0
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 16:31:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 393574BFCA7
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 16:32:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233481AbiBVPbh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 10:31:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56950 "EHLO
+        id S233486AbiBVPdI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 10:33:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233469AbiBVPbg (ORCPT
+        with ESMTP id S230478AbiBVPdH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 10:31:36 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D139D16304A;
-        Tue, 22 Feb 2022 07:31:10 -0800 (PST)
+        Tue, 22 Feb 2022 10:33:07 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E92FEC792D;
+        Tue, 22 Feb 2022 07:32:41 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8786CB81AB0;
-        Tue, 22 Feb 2022 15:31:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0B84C340E8;
-        Tue, 22 Feb 2022 15:31:05 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A357BB81899;
+        Tue, 22 Feb 2022 15:32:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C803C340F4;
+        Tue, 22 Feb 2022 15:32:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645543868;
-        bh=9i4xuAv3MAiVPzxe+5g/FOn2ai3P/TMo7VhrUW14K+E=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=O2IFr1uJQF5P3+BH4KDnb3lCGnQ0dO4zVDFzNwNAOsBSyd0vdUO7zOqKcw6jnU86d
-         +N/SDg0tbXP4GZNAfMsypnDtvYGLx1c/qxngV9EEEA+YC5G9XXexTXFWGgQVx53L9s
-         Ylf1QA9YmFhnLjCv5BHlCi/Qk7iGdBbBmQXpuj3GCXROcqQesURsx4THmKpjKWIpYE
-         ZzOhm0DVEm2wh9/9vDB8hrQN7xCdXuEsbJFK8Khm3XxSAzntG6ZSWLRx5fnqxmDxiJ
-         ZGVhEeTfBksBamVcq3uB/3HOztGYZ4wHbI8S37wg0nwO95p2Z3V7LuWF2kxNX3Csof
-         xe/VCRFUeJJZg==
-Date:   Tue, 22 Feb 2022 08:31:03 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Akhil R <akhilrajeev@nvidia.com>
-Cc:     devicetree@vger.kernel.org, dmaengine@vger.kernel.org,
-        jonathanh@nvidia.com, kyarlagadda@nvidia.com, ldewangan@nvidia.com,
-        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
-        p.zabel@pengutronix.de, rgumasta@nvidia.com, robh+dt@kernel.org,
-        thierry.reding@gmail.com, vkoul@kernel.org,
-        Pavan Kunapuli <pkunapuli@nvidia.com>
-Subject: Re: [PATCH v20 2/2] dmaengine: tegra: Add tegra gpcdma driver
-Message-ID: <YhUBt20I471s9Bhv@dev-arch.archlinux-ax161>
-References: <20220221153934.5226-1-akhilrajeev@nvidia.com>
- <20220221153934.5226-3-akhilrajeev@nvidia.com>
+        s=k20201202; t=1645543959;
+        bh=faAoL7FirSWjNy55jYu7eqkfiUMVq2Vo5OiepkX3N08=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=bl+UEg5QaJZxoajp2TaskeWeTKSrLzWyByqmHkRk1Km7HkHqMwDqQiw9GaHleloTU
+         oTcnGOP6qt5aQB1NRQhifAF+GXjzL5MWPP68puZ7HG4IZE3+qsghyK1oLk6SMrRtlx
+         zl/VjUm0bgy5n78ywoMGHz2oBvQAGi0g7gxR9lsyuCMbHvQzJ9SpmDt2CAhBFFM2UQ
+         xRoPPLxE7oHJ9Ysmt2rb6jGt+g6Y44njJBPk18lNXVrK0aHe62IjJh9ldfkS0kUBZl
+         LS+yWz18iqtbx+wXDEeCoIWn+FnJHmHqHBihLrxgnniq5WP8QjsgTG11jzSGbFsrDP
+         KhaweSV8YFPcA==
+From:   Mark Brown <broonie@kernel.org>
+To:     Ahmad Fatoum <a.fatoum@pengutronix.de>,
+        Alain Volmat <alain.volmat@foss.st.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>
+Cc:     kernel@pengutronix.de, linux-arm-kernel@lists.infradead.org,
+        Dillon Min <dillon.minfei@gmail.com>,
+        linux-spi@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20220201115142.3999860-1-a.fatoum@pengutronix.de>
+References: <20220201115142.3999860-1-a.fatoum@pengutronix.de>
+Subject: Re: [RFT PATCH] spi: stm32: ignore Rx queue not empty in stm32f4 Tx only mode
+Message-Id: <164554395470.3556326.18373522553071948963.b4-ty@kernel.org>
+Date:   Tue, 22 Feb 2022 15:32:34 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220221153934.5226-3-akhilrajeev@nvidia.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -59,65 +60,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Akhil,
-
-On Mon, Feb 21, 2022 at 09:09:34PM +0530, Akhil R wrote:
-> Adding GPC DMA controller driver for Tegra. The driver supports dma
-> transfers between memory to memory, IO peripheral to memory and
-> memory to IO peripheral.
+On Tue, 1 Feb 2022 12:51:41 +0100, Ahmad Fatoum wrote:
+> STM32F4_SPI_SR_RXNE and STM32F4_SPI_SR_OVR are distinct bits in the same
+> status register.  ~STM32F4_SPI_SR_OVR | STM32F4_SPI_SR_RXNE is thus
+> equal to ~STM32F4_SPI_SR_OVR.
 > 
-> Co-developed-by: Pavan Kunapuli <pkunapuli@nvidia.com>
-> Signed-off-by: Pavan Kunapuli <pkunapuli@nvidia.com>
-> Co-developed-by: Rajesh Gumasta <rgumasta@nvidia.com>
-> Signed-off-by: Rajesh Gumasta <rgumasta@nvidia.com>
-> Signed-off-by: Akhil R <akhilrajeev@nvidia.com>
-> Reviewed-by: Jon Hunter <jonathanh@nvidia.com>
-> Reviewed-by: Dmitry Osipenko <digetx@gmail.com>
-> ---
->  drivers/dma/Kconfig            |   11 +
->  drivers/dma/Makefile           |    1 +
->  drivers/dma/tegra186-gpc-dma.c | 1507 ++++++++++++++++++++++++++++++++
->  3 files changed, 1519 insertions(+)
->  create mode 100644 drivers/dma/tegra186-gpc-dma.c
-
-<snip>
-
-> +static const struct __maybe_unused dev_pm_ops tegra_dma_dev_pm_ops = {
-
-The __maybe_unused cannot split the type ("struct dev_pm_ops") otherwise
-it causes a clang warning:
-
-https://lore.kernel.org/r/202202221207.lQ53BwKp-lkp@intel.com/
-
-static const struct dev_pm_ops tegra_dma_dev_pm_ops __maybe_unused = {
-
-would look a litle better I think. However, is this attribute even
-needed? The variable is unconditionally used below, so there should be
-no warning about it being unused?
-
-Cheers,
-Nathan
-
-> +	SET_SYSTEM_SLEEP_PM_OPS(tegra_dma_pm_suspend, tegra_dma_pm_resume)
-> +};
-> +
-> +static struct platform_driver tegra_dma_driver = {
-> +	.driver = {
-> +		.name	= "tegra-gpcdma",
-> +		.pm	= &tegra_dma_dev_pm_ops,
-> +		.of_match_table = tegra_dma_of_match,
-> +	},
-> +	.probe		= tegra_dma_probe,
-> +	.remove		= tegra_dma_remove,
-> +};
-> +
-> +module_platform_driver(tegra_dma_driver);
-> +
-> +MODULE_DESCRIPTION("NVIDIA Tegra GPC DMA Controller driver");
-> +MODULE_AUTHOR("Pavan Kunapuli <pkunapuli@nvidia.com>");
-> +MODULE_AUTHOR("Rajesh Gumasta <rgumasta@nvidia.com>");
-> +MODULE_LICENSE("GPL");
-> -- 
-> 2.17.1
+> The original intention was likely for transmission-only transfers to
+> ignore interrupts both for when the Rx queue has bytes (RXNE) as well
+> as when these bytes haven't been read in time (OVR).
 > 
-> 
+> [...]
+
+Applied to
+
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+
+Thanks!
+
+[1/1] spi: stm32: ignore Rx queue not empty in stm32f4 Tx only mode
+      commit: 5741150c808b2bbeb1017609f3029daf6651b7d5
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark

@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB9484C0160
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 19:33:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A4844C0166
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 19:33:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232031AbiBVSdL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 13:33:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52578 "EHLO
+        id S235080AbiBVSdP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 13:33:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235021AbiBVSc7 (ORCPT
+        with ESMTP id S235037AbiBVSdB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 13:32:59 -0500
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3B2B9E9EE
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 10:32:33 -0800 (PST)
-Received: by mail-wm1-x335.google.com with SMTP id c192so12166513wma.4
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 10:32:33 -0800 (PST)
+        Tue, 22 Feb 2022 13:33:01 -0500
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDF83B65FB
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 10:32:34 -0800 (PST)
+Received: by mail-wr1-x436.google.com with SMTP id u1so35073167wrg.11
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 10:32:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=ht2zsDCw6mTpQAlwd9QIJhSI+uSP7rAlJbSv+42FdW4=;
-        b=LXUOfvYcs0kbsRz+8veIC8emfQuSsGfkrwhm84FAWeP9sc3AI+0gN0owZNz+Zr72pY
-         cIAKJyS4Gub9M71Vn2dsP4KurE2gzAozuSkzWPopWbzIIIDVrCC9lo5yVnRmZyuv8apq
-         bq3hSG/PvG/efxwji5GBYA0YoTOaPOIau9kF2l3M8rR6QoJxNxkzQvnuA+QUVWZTiRem
-         Q0GcIFB73m2Wyh3aTZJKXEE+jhJwEpG1rDVCnI3V/SxWCAlaWl5yaI07DOGu2z4B+LzX
-         N0hB1DBPZ/RIpP7cWo20uCgw6RSQp/JCb/U3jONsszLTAbYxKt22RZ7Oird9AZ4rvs76
-         BGyQ==
+        bh=Gs0UQYeLXZEFiZSAa7cijQLwxToifauUEWbaq2HVPLo=;
+        b=SG8yKfuDMo92Gj+ppDPWnH5Z/qVOKABWnTVjTMNpa5Blh2Lh7NmjPfENG/wwsBjGym
+         gZQTS7fycdhAyz/lVF7KAqAjbpy8a/or4Dk3cQC7HAxo1Yzmj9oreNJtPBHiQkUxvVVD
+         gOMKXgrFD+VD1YeWaBjA0x65zJlhaX4olAuUpJm9M4s8rnrPhFgaX43CjdyFYtX43SLo
+         2B/FiQyuL8+6ALRpNVzEDqT1dM3rsOFDR1jzvPi0tYx2NIdAJnOnAODkHSu4bwWcInLW
+         4jPwv+ULu9yNl/Tzl+dqpBDGLrS6p+/9hSaLT5U5hxtBEa71KZv4if7zn/87DjG7j5TB
+         Cq0g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=ht2zsDCw6mTpQAlwd9QIJhSI+uSP7rAlJbSv+42FdW4=;
-        b=rSwLYFGdvLFiyVch15yJVYY0cnZaGHiKHbdYw1Vh53wEmks8s9kQhbWu8U6jaL4zvF
-         uPsVDlFu5nXliEZgbqY8D0Gb6MY/dkpTIKchjmWryriwgZ9n+OCOi8rx7bViD/4A6Eh8
-         2eIEu3S+OQwRpS0Mv4a3WGvepsPJizl6NzIqvzZtTK1688TmGlSOnqUmBXVtaDzWfgv7
-         o36B32+EsG0+IldmiwdmhyeB+wklgb2F8aqmTO4X/b1EIOWhqEiV+6ysVfkq4KKAjgL7
-         0JebOCsDf+dXp0u04VC8ZTmOxxEhgNtNWAvsp8J0+g4daebz2hIjs3/kS+j6lB7zMwuA
-         WC0g==
-X-Gm-Message-State: AOAM533KcrpKia/jY/ym/W3kOGJBeSOyIvsUyCw0+pMDmAusxF40OXlc
-        8/jadSh4fEy0HxrK3qLICCem2w==
-X-Google-Smtp-Source: ABdhPJyRSJz2xS81gFD3nqaVdA3VppkmlAX5k2fgyY5ea3oCaj0wITSJje5BPCTZboDEjS4yLjtmyg==
-X-Received: by 2002:a05:600c:a03:b0:37b:daff:6146 with SMTP id z3-20020a05600c0a0300b0037bdaff6146mr4479777wmp.85.1645554752394;
-        Tue, 22 Feb 2022 10:32:32 -0800 (PST)
+        bh=Gs0UQYeLXZEFiZSAa7cijQLwxToifauUEWbaq2HVPLo=;
+        b=3H6rzdC6yVFW23FLRD9Y80dYGacVMZFPEng3Hlx1Fi5cWaTCe+auUVOlHA4wmLfAJ1
+         RWP+rqVX3z3PfCQif6Us/o6ewqWAAekAJkBh2Vajdl2Ij854uPKsmy56q+vXomujZApO
+         axHxIqIRrFHpNyDnxrDoy5OUfzb6AFgIEzWw0OJ5bgoGmYLqF+w5P86PoXTBA/U0eal1
+         kS3hMpEbnY2/hREjbPPYsbs3cfPX29CckagPZxaCZVyFaCZn4SfMyG4hwJCuoyExRVTV
+         +XjLigU7WYgMiaHJfikdML4NM2wkRpHNWU+JJrDZbFWJ0FIHeRKrM02QeVtt+rD0n86q
+         hh8g==
+X-Gm-Message-State: AOAM530fCkbV9k/Bd/AgTOsVxIWIPwNSsyWtGkuZvHBTleCCPMC61FbB
+        wC0Q9XUrG3jwRlPaZgt2tpu/9w==
+X-Google-Smtp-Source: ABdhPJx9ufhte9u4mOwDexPtu1IQtPstNEvnTrTxaGq3xRUlczgS5HyGu7VLb7Ai7VgEWDiOd3HhMA==
+X-Received: by 2002:a5d:45ca:0:b0:1ea:9bf9:ce5a with SMTP id b10-20020a5d45ca000000b001ea9bf9ce5amr2408659wrs.620.1645554753408;
+        Tue, 22 Feb 2022 10:32:33 -0800 (PST)
 Received: from srini-hackbox.lan (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
-        by smtp.gmail.com with ESMTPSA id l28sm57642165wrz.90.2022.02.22.10.32.31
+        by smtp.gmail.com with ESMTPSA id l28sm57642165wrz.90.2022.02.22.10.32.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Feb 2022 10:32:31 -0800 (PST)
+        Tue, 22 Feb 2022 10:32:33 -0800 (PST)
 From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 To:     broonie@kernel.org
 Cc:     lgirdwood@gmail.com, perex@perex.cz, tiwai@suse.com,
         pierre-louis.bossart@linux.intel.com, alsa-devel@alsa-project.org,
         linux-kernel@vger.kernel.org, quic_srivasam@quicinc.com,
         Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Subject: [PATCH v2 6/9] ASoC: codecs: wc938x: fix accessing array out of bounds for enum type
-Date:   Tue, 22 Feb 2022 18:32:09 +0000
-Message-Id: <20220222183212.11580-7-srinivas.kandagatla@linaro.org>
+Subject: [PATCH v2 7/9] ASoC: codecs: wcd938x: fix kcontrol max values
+Date:   Tue, 22 Feb 2022 18:32:10 +0000
+Message-Id: <20220222183212.11580-8-srinivas.kandagatla@linaro.org>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20220222183212.11580-1-srinivas.kandagatla@linaro.org>
 References: <20220222183212.11580-1-srinivas.kandagatla@linaro.org>
@@ -72,40 +72,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Accessing enums using integer would result in array out of bounds access
-on platforms like aarch64 where sizeof(long) is 8 compared to enum size
-which is 4 bytes.
+set "HPH Type" Kcontrol max value of WCD_MBHC_HPH_STEREO instead of UINT_MAX.
+set "HPHL/R Impedance" Kcontrols max value to INT_MAX instead of UINT_MAX as
+max field is integer type.
 
-Fix this by using enumerated items instead of integers.
+Without this patch amixer for these controls will show -1 as max value to userspace.
 
-Fixes: e8ba1e05bdc0 ("ASoC: codecs: wcd938x: add basic controls")
+Fixes: bcee7ed09b8e ("ASoC: codecs: wcd938x: add Multi Button Headset Control support")
 Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 ---
- sound/soc/codecs/wcd938x.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ sound/soc/codecs/wcd938x.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/sound/soc/codecs/wcd938x.c b/sound/soc/codecs/wcd938x.c
-index cf61d23bfb1c..deecc83eb592 100644
+index deecc83eb592..782877db8c3c 100644
 --- a/sound/soc/codecs/wcd938x.c
 +++ b/sound/soc/codecs/wcd938x.c
-@@ -2506,7 +2506,7 @@ static int wcd938x_tx_mode_get(struct snd_kcontrol *kcontrol,
- 	struct soc_enum *e = (struct soc_enum *)kcontrol->private_value;
- 	int path = e->shift_l;
- 
--	ucontrol->value.integer.value[0] = wcd938x->tx_mode[path];
-+	ucontrol->value.enumerated.item[0] = wcd938x->tx_mode[path];
- 
- 	return 0;
+@@ -3577,14 +3577,14 @@ static int wcd938x_hph_impedance_get(struct snd_kcontrol *kcontrol,
  }
-@@ -2530,7 +2530,7 @@ static int wcd938x_rx_hph_mode_get(struct snd_kcontrol *kcontrol,
- 	struct snd_soc_component *component = snd_soc_kcontrol_component(kcontrol);
- 	struct wcd938x_priv *wcd938x = snd_soc_component_get_drvdata(component);
  
--	ucontrol->value.integer.value[0] = wcd938x->hph_mode;
-+	ucontrol->value.enumerated.item[0] = wcd938x->hph_mode;
+ static const struct snd_kcontrol_new hph_type_detect_controls[] = {
+-	SOC_SINGLE_EXT("HPH Type", 0, 0, UINT_MAX, 0,
++	SOC_SINGLE_EXT("HPH Type", 0, 0, WCD_MBHC_HPH_STEREO, 0,
+ 		       wcd938x_get_hph_type, NULL),
+ };
  
- 	return 0;
- }
+ static const struct snd_kcontrol_new impedance_detect_controls[] = {
+-	SOC_SINGLE_EXT("HPHL Impedance", 0, 0, UINT_MAX, 0,
++	SOC_SINGLE_EXT("HPHL Impedance", 0, 0, INT_MAX, 0,
+ 		       wcd938x_hph_impedance_get, NULL),
+-	SOC_SINGLE_EXT("HPHR Impedance", 0, 1, UINT_MAX, 0,
++	SOC_SINGLE_EXT("HPHR Impedance", 0, 1, INT_MAX, 0,
+ 		       wcd938x_hph_impedance_get, NULL),
+ };
+ 
 -- 
 2.21.0
 

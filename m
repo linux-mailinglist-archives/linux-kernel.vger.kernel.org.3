@@ -2,60 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65FBB4BF0A3
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 05:10:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F10D4BF0E7
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 05:29:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231319AbiBVEJA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 21 Feb 2022 23:09:00 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:55036 "EHLO
+        id S229765AbiBVE2X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 21 Feb 2022 23:28:23 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:52840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229970AbiBVEIt (ORCPT
+        with ESMTP id S229736AbiBVE2U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 21 Feb 2022 23:08:49 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EB3E6D867
-        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 20:08:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645502895; x=1677038895;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=sIg6rHCpyaGgX3nasthW2UeeCFofFiz4fYa70nm7zjQ=;
-  b=m7eCJKBmuQcxn8uomzOdHrru9/7F7pK54uOEJegiiTskL0rxqe+pezso
-   kyESP8M6WiRHX/uvSqsN1gUNdQ6fhOZwp8xQor7l8NToEdJEVJFiZ8xHS
-   /S8RujfCdz7dklfSF4dNPnJ4m75Lq7u3zaqBFZ11NLt2w5UX5iONFEoEN
-   yun1IGKFhu6u3+BahZEW8kpqD246O2eHOVIs8hJqZP97x9j0oI8gemZJ/
-   HSiJH5vqweLa7p38pk6I9WNOk1o5vmFC8R/B2CDyiSyB2941Rl6AA9gPT
-   H5WmUSPA2Npr3aTKk/ZHAekRCUmMl0GvLxsYm3ndMmXKOF2YQ/PorIEkl
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10265"; a="249186967"
-X-IronPort-AV: E=Sophos;i="5.88,387,1635231600"; 
-   d="scan'208";a="249186967"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2022 20:07:52 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,387,1635231600"; 
-   d="scan'208";a="542804030"
-Received: from lkp-server01.sh.intel.com (HELO da3212ac2f54) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 21 Feb 2022 20:07:51 -0800
-Received: from kbuild by da3212ac2f54 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nMMSs-0002JC-CG; Tue, 22 Feb 2022 04:07:50 +0000
-Date:   Tue, 22 Feb 2022 12:07:39 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Ingo Molnar <mingo@kernel.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: [mingo-tip:sched/headers 2011/2541]
- drivers/infiniband/ulp/srp/ib_srp.c:75:9: warning:
- 'DEFINE_DYNAMIC_DEBUG_METADATA' macro redefined
-Message-ID: <202202221244.iiBnlXUy-lkp@intel.com>
+        Mon, 21 Feb 2022 23:28:20 -0500
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60743DD4;
+        Mon, 21 Feb 2022 20:16:59 -0800 (PST)
+Received: by mail-pj1-x1036.google.com with SMTP id gf13-20020a17090ac7cd00b001bbfb9d760eso1145160pjb.2;
+        Mon, 21 Feb 2022 20:16:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=jfpIxD+KaSxv34lCCZ7aGFYTW+mlXLrR33Q8/YJDPXU=;
+        b=LLoj9ApbW1rK97Utau+BEqp7Gw/fM4YAbkRx+VbHphRdnVH+ImQqz/mDSqer03Cz2E
+         8/W3tQ6ThiGcFlYQiArF0Wx3vy8/3RnIHu0TuSAWOPYwGHzjitnX0z/9Hc7jjLDf5Yvg
+         kWJYwqqgswjs6L8yaUjWgRLhyGja1rCDYeD5rmR4jeTz1Ad/FPGhOxoZps1VxExcCjkI
+         FuGIcCmbgE6Enzn5d0z16XLz/UIvBcWmdzG4ErqrVlV/JdrfJFgKknTQFGNJ4yF854aO
+         I9S1zwioYKGyYhm58oYgH+MICcPwEiuoFG5G3phF14nU2M0dfoOrJZnU0jIpfOZrh89t
+         sIsA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=jfpIxD+KaSxv34lCCZ7aGFYTW+mlXLrR33Q8/YJDPXU=;
+        b=uKDQtMh1bwAFq55Dx0eAU5b+z/FG/hsl8oWFlVxjouvMKSxPuEdMMYjOVjas4iZ7e8
+         4w9MICHKjAeSO7datGhFHPnE129a1OoHuEh2VDssOGsHHN6/btN9BJ/1DBg2OMuDKgeG
+         rHPGx53NoXEy1XSSo13SQw75KaGghs/zY4LJWJ1963oQdzWlqVQl26+enFcH48xv8uMp
+         Q1FVkA3uE9/d56IK82oV0WtKDxbOg4MOOBzHYAsZAEsysedlP3I4RLx6+b6OeSt66TWB
+         BMALlgLAQqCdKjDShsvLZ46CBvSxswEILpbXkNdoXS4Ux+uSFxYQVG52D0jONj2AbJas
+         cZxA==
+X-Gm-Message-State: AOAM5308+v6ZeFIiS+QYSfwcteOxCKJLIab5uUXfpZm3S2vrXPj+Ll+c
+        umUEc8Ym2E7eHenMpdbFCsY=
+X-Google-Smtp-Source: ABdhPJyixELDka3l4WzPf7E0NF+9RRLFI/QRCOwYue85b6HVL/dTKPIuRQiLjJTBr+Dmbm0ql+5D8g==
+X-Received: by 2002:a17:902:7b8d:b0:14b:8884:b4ad with SMTP id w13-20020a1709027b8d00b0014b8884b4admr21405863pll.120.1645503418833;
+        Mon, 21 Feb 2022 20:16:58 -0800 (PST)
+Received: from [192.168.1.3] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
+        by smtp.gmail.com with ESMTPSA id q1sm14053775pfs.112.2022.02.21.20.16.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 21 Feb 2022 20:16:58 -0800 (PST)
+Message-ID: <c5bf7fa4-fb7a-8b20-1a78-64be2266c008@gmail.com>
+Date:   Mon, 21 Feb 2022 20:16:56 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Subject: Re: [PATCH 5.16 000/227] 5.16.11-rc1 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+References: <20220221084934.836145070@linuxfoundation.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20220221084934.836145070@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,57 +78,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git sched/headers
-head:   601144c0da5edfa67a9654158370da19c67e17e2
-commit: 851f9d758cf215ebf131c634c6ec7bf12e91f19f [2011/2541] headers/deps: Optimize <linux/jump_label.h>, remove the <linux/atomic_api.h> inclusion in the CONFIG_JUMP_LABEL=y case
-config: i386-randconfig-a012-20220221 (https://download.01.org/0day-ci/archive/20220222/202202221244.iiBnlXUy-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=851f9d758cf215ebf131c634c6ec7bf12e91f19f
-        git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
-        git fetch --no-tags mingo-tip sched/headers
-        git checkout 851f9d758cf215ebf131c634c6ec7bf12e91f19f
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/infiniband/ulp/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> drivers/infiniband/ulp/srp/ib_srp.c:75:9: warning: 'DEFINE_DYNAMIC_DEBUG_METADATA' macro redefined [-Wmacro-redefined]
-   #define DEFINE_DYNAMIC_DEBUG_METADATA(name, fmt)
-           ^
-   include/linux/dynamic_debug.h:90:9: note: previous definition is here
-   #define DEFINE_DYNAMIC_DEBUG_METADATA(name, fmt)                \
-           ^
->> drivers/infiniband/ulp/srp/ib_srp.c:76:9: warning: 'DYNAMIC_DEBUG_BRANCH' macro redefined [-Wmacro-redefined]
-   #define DYNAMIC_DEBUG_BRANCH(descriptor) false
-           ^
-   include/linux/dynamic_debug.h:125:9: note: previous definition is here
-   #define DYNAMIC_DEBUG_BRANCH(descriptor) \
-           ^
-   2 warnings generated.
 
 
-vim +/DEFINE_DYNAMIC_DEBUG_METADATA +75 drivers/infiniband/ulp/srp/ib_srp.c
+On 2/21/2022 12:46 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.16.11 release.
+> There are 227 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Wed, 23 Feb 2022 08:48:58 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.16.11-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.16.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
-aef9ec39c47f0c Roland Dreier   2005-11-02  73  
-1a1faf7a8a251d Bart Van Assche 2016-11-21  74  #if !defined(CONFIG_DYNAMIC_DEBUG)
-1a1faf7a8a251d Bart Van Assche 2016-11-21 @75  #define DEFINE_DYNAMIC_DEBUG_METADATA(name, fmt)
-1a1faf7a8a251d Bart Van Assche 2016-11-21 @76  #define DYNAMIC_DEBUG_BRANCH(descriptor) false
-1a1faf7a8a251d Bart Van Assche 2016-11-21  77  #endif
-1a1faf7a8a251d Bart Van Assche 2016-11-21  78  
+On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels:
 
-:::::: The code at line 75 was first introduced by commit
-:::::: 1a1faf7a8a251d134d375b7783a614ee79e932f2 IB/srp: Fix CONFIG_DYNAMIC_DEBUG=n build
-
-:::::: TO: Bart Van Assche <bart.vanassche@sandisk.com>
-:::::: CC: Doug Ledford <dledford@redhat.com>
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+-- 
+Florian

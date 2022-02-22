@@ -2,125 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A5CB4C03B9
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 22:24:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C3214C03BE
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 22:25:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235769AbiBVVZN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 16:25:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39724 "EHLO
+        id S235774AbiBVVZv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 16:25:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233010AbiBVVZK (ORCPT
+        with ESMTP id S235734AbiBVVZt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 16:25:10 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D967BE1B66;
-        Tue, 22 Feb 2022 13:24:43 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8C12FB81A2C;
-        Tue, 22 Feb 2022 21:24:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C27C8C340EF;
-        Tue, 22 Feb 2022 21:24:40 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="eOQgnPCp"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1645565074;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=JVDKbWuQaqEUhqppE+Xa9vvhTXzWjrw/6DnshvBmlO0=;
-        b=eOQgnPCpWRl5TMMpaPVhvbX6lq+sLxdAY8XQgNIujD8GpCWeghLZw1cOioWX9ZHqZq42aJ
-        0U6KNQ0GbKy4KAbjj8gUNeGqbxnOPJ8h3rLImgPORyI8JEFRqKDXCdWFJyb/Yrkm7tWc0V
-        OU1nnLROMDx67R/QmiMkZKbSlou8ISc=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 1ec5e406 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Tue, 22 Feb 2022 21:24:34 +0000 (UTC)
-Received: by mail-yb1-f174.google.com with SMTP id p19so43940630ybc.6;
-        Tue, 22 Feb 2022 13:24:32 -0800 (PST)
-X-Gm-Message-State: AOAM533rByRKf3PzatJuSPHFsa5T6Ry4V1y9miuCSBaQord//8uPntne
-        UJsk8EOMvAE7yVOoOKhmIbNj2+7zVT3mf4aP780=
-X-Google-Smtp-Source: ABdhPJwvfehACY5olNLdLYWx+1mbRCA/UudBhvxotju5WcW8qrMaLZ7L0JYyK5Hf2olVo7SAOkvPTIjxZVLW1My2qho=
-X-Received: by 2002:a5b:d11:0:b0:623:fbda:40f4 with SMTP id
- y17-20020a5b0d11000000b00623fbda40f4mr25771486ybp.398.1645565070061; Tue, 22
- Feb 2022 13:24:30 -0800 (PST)
+        Tue, 22 Feb 2022 16:25:49 -0500
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B698F10F20A
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 13:25:22 -0800 (PST)
+Received: by mail-ed1-x534.google.com with SMTP id bq11so18787654edb.2
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 13:25:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ncH9c7SiYmN6itdECS9f8vr7OT3dx9aRl+ruQf7+yUg=;
+        b=bie/EqstQq7cMH+SvIyYScs9hMbdl5FmT1j31NstckurYsN72clBvZSAs4si7yh9wD
+         r/miD7WgoTgKOsFCyHBeU2c8gQTdgqSJy1y26X892UgDwNWsMNYp9/ub7c2lCI6GZ3co
+         KlMSphSYJYjvpWZcfeXWn0GgJ+1a1Y3QNMTE0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ncH9c7SiYmN6itdECS9f8vr7OT3dx9aRl+ruQf7+yUg=;
+        b=6o7tb+hbFaRzySNGMcN2+c6wB93NE9kfzEKp8oSz2iuCJEQNHQApNr/q62owJo0wBn
+         c8BtfNoJuvj/BUE1lPNIG+AL/rgipcnp8QD45Hgcqn2fniwMVnTBwbRTDcLa2bd09Plh
+         X7BheSegFv5yTN2ZtMfY6T68veg5ETz81eq8OWx6MEozvS4uBhNtxD/OWuhmASOKVwv8
+         te2qPvm8gqKUHM0FdwHRD5SRzEkM+FUrnBBY9ExZxSROt9RNCcgCT38GA5J+rXb9xRRL
+         KCzWg61T+JVzehIzzLsjaMSiayI7BmMHOVh0XBVJ4eyAwO9NcwV5tc500HVrBaX8idfu
+         OwVg==
+X-Gm-Message-State: AOAM533y20s4QBktS4aQ0am4iO5hYrjUbIUl8Fjsz5e9j/vxf5TOHH9A
+        QVpzXcF886X8UeUowT49j8BbH+I4doYUIhuGsRI=
+X-Google-Smtp-Source: ABdhPJzsMkl6uVuHBAYV703O8UPRN0VONEUcZpKatA7PIEnRP35tcuFpFV8ah6sw7Gg+xS3CJKjS3w==
+X-Received: by 2002:a50:fd16:0:b0:410:82ea:7911 with SMTP id i22-20020a50fd16000000b0041082ea7911mr28040178eds.315.1645565121067;
+        Tue, 22 Feb 2022 13:25:21 -0800 (PST)
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com. [209.85.128.49])
+        by smtp.gmail.com with ESMTPSA id u27sm6614694ejc.220.2022.02.22.13.25.19
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 22 Feb 2022 13:25:19 -0800 (PST)
+Received: by mail-wm1-f49.google.com with SMTP id az26-20020a05600c601a00b0037c078db59cso2846455wmb.4
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 13:25:19 -0800 (PST)
+X-Received: by 2002:a05:600c:228e:b0:37c:2eef:7bf with SMTP id
+ 14-20020a05600c228e00b0037c2eef07bfmr4792688wmf.73.1645565118969; Tue, 22 Feb
+ 2022 13:25:18 -0800 (PST)
 MIME-Version: 1.0
-References: <1614156452-17311-1-git-send-email-acatan@amazon.com> <1614156452-17311-3-git-send-email-acatan@amazon.com>
-In-Reply-To: <1614156452-17311-3-git-send-email-acatan@amazon.com>
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date:   Tue, 22 Feb 2022 22:24:19 +0100
-X-Gmail-Original-Message-ID: <CAHmME9o6cjZT1Cj1g5w5WQE83YxJNqB7eUCWn74FA9Pbb3Y6nQ@mail.gmail.com>
-Message-ID: <CAHmME9o6cjZT1Cj1g5w5WQE83YxJNqB7eUCWn74FA9Pbb3Y6nQ@mail.gmail.com>
-Subject: Re: [PATCH v7 2/2] drivers/virt: vmgenid: add vm generation id driver
-To:     Adrian Catangiu <acatan@amazon.com>
-Cc:     "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+References: <1645449126-17718-1-git-send-email-quic_vpolimer@quicinc.com> <CAE-0n507XcYRz4=Uw-K37kPsLRqi_gN2L9y1wcu_X-UJP+6ySg@mail.gmail.com>
+In-Reply-To: <CAE-0n507XcYRz4=Uw-K37kPsLRqi_gN2L9y1wcu_X-UJP+6ySg@mail.gmail.com>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Tue, 22 Feb 2022 13:25:05 -0800
+X-Gmail-Original-Message-ID: <CAD=FV=WvstZkDJcHJPAT0aez3X=uSKzDX0paQRHYD4DEktkMEQ@mail.gmail.com>
+Message-ID: <CAD=FV=WvstZkDJcHJPAT0aez3X=uSKzDX0paQRHYD4DEktkMEQ@mail.gmail.com>
+Subject: Re: [v1] arm64/dts/qcom/sc7280: update mdp clk to max supported value
+ to support higher refresh rates
+To:     Stephen Boyd <swboyd@chromium.org>
+Cc:     Vinod Polimera <quic_vpolimer@quicinc.com>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        freedreno <freedreno@lists.freedesktop.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
         LKML <linux-kernel@vger.kernel.org>,
-        QEMU Developers <qemu-devel@nongnu.org>,
-        KVM list <kvm@vger.kernel.org>, linux-s390@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        graf@amazon.com, Randy Dunlap <rdunlap@infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Mike Rapoport <rppt@kernel.org>, 0x7f454c46@gmail.com,
-        borntraeger@de.ibm.com, Jann Horn <jannh@google.com>,
-        Willy Tarreau <w@1wt.eu>,
-        Colm MacCarthaigh <colmmacc@amazon.com>,
-        Andrew Lutomirski <luto@kernel.org>,
-        "Theodore Ts'o" <tytso@mit.edu>,
-        Eric Biggers <ebiggers@kernel.org>,
-        "Woodhouse, David" <dwmw@amazon.co.uk>, bonzini@gnu.org,
-        "Singh, Balbir" <sblbir@amazon.com>,
-        "Weiss, Radu" <raduweis@amazon.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>,
-        Michael Ellerman <mpe@ellerman.id.au>, areber@redhat.com,
-        ovzxemul@gmail.com, avagin@gmail.com, ptikhomirov@virtuozzo.com,
-        gil@azul.com, asmehra@redhat.com, dgunigun@redhat.com,
-        vijaysun@ca.ibm.com, oridgar@gmail.com, ghammer@redhat.com
+        Rob Clark <robdclark@gmail.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        quic_kalyant@quicinc.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Adrian,
+Hi,
 
-This thread seems to be long dead, but I couldn't figure out what
-happened to the ideas in it. I'm specifically interested in this part:
+On Tue, Feb 22, 2022 at 12:58 PM Stephen Boyd <swboyd@chromium.org> wrote:
+>
+> Quoting Vinod Polimera (2022-02-21 05:12:06)
+> > Panels with higher refresh rate will need mdp clk above 300Mhz.
+> > Select max frequency for mdp clock during bootup, dpu driver will
+> > scale down the clock as per usecase when first update from the framework is received.
+> >
+> > Signed-off-by: Vinod Polimera <quic_vpolimer@quicinc.com>
+>
+> Please add a Fixes tag.
+>
+> > ---
+> >  arch/arm64/boot/dts/qcom/sc7280.dtsi | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+> > index baf1653..7af96fc 100644
+> > --- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
+> > +++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+> > @@ -2895,7 +2895,7 @@
+> >                                 assigned-clocks = <&dispcc DISP_CC_MDSS_MDP_CLK>,
+> >                                                 <&dispcc DISP_CC_MDSS_VSYNC_CLK>,
+> >                                                 <&dispcc DISP_CC_MDSS_AHB_CLK>;
+> > -                               assigned-clock-rates = <300000000>,
+> > +                               assigned-clock-rates = <506666667>,
+>
+> Why not simply remove the clock assignment and set the rate based on the
+> OPP when the driver probes?
 
-On Wed, Feb 24, 2021 at 9:48 AM Adrian Catangiu <acatan@amazon.com> wrote:
-> +static void vmgenid_acpi_notify(struct acpi_device *device, u32 event)
-> +{
-> +       uuid_t old_uuid;
-> +
-> +       if (!device || acpi_driver_data(device) != &vmgenid_data) {
-> +               pr_err("VMGENID notify with unexpected driver private data\n");
-> +               return;
-> +       }
-> +
-> +       /* update VM Generation UUID */
-> +       old_uuid = vmgenid_data.uuid;
-> +       memcpy_fromio(&vmgenid_data.uuid, vmgenid_data.uuid_iomap, sizeof(uuid_t));
-> +
-> +       if (memcmp(&old_uuid, &vmgenid_data.uuid, sizeof(uuid_t))) {
-> +               /* HW uuid updated */
-> +               sysgenid_bump_generation();
-> +               add_device_randomness(&vmgenid_data.uuid, sizeof(uuid_t));
-> +       }
-> +}
+I was curious so I dug. It turns out that it _is_ using the OPP. It's
+just that the kernel driver currently assumes that the initial rate is
+the max rate. :-P You can actually see in msm_dss_parse_clock() that
+it walks through each of its clocks at boot and records the boot rate
+and stashes it as the "max_rate". That's not a scheme I've seen done
+commonly, so if nothing else it deserves a comment in the commit
+message.
 
-As Jann mentioned in an earlier email, we probably want this to
-immediately reseed the crng, not just dump it into
-add_device_randomness alone. But either way, the general idea seems
-interesting to me. As far as I can tell, QEMU still supports this. Was
-it not deemed to be sufficiently interesting?
+One other note is that I think there are _two_ places in the dtsi that
+are setting this same clock rate, right? The parent node `mdss`, which
+you're not touching, and the child `mdss_mdp`, which you are touching.
+Seems like you should just do it in one place. If it needs to be done
+by the parent then the child could just assume that the clock has
+already been set by the parent.
 
-Thanks,
-Jason
+-Doug

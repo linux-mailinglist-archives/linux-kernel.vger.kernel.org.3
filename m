@@ -2,135 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12B314BFE9B
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 17:31:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B2814BFEC3
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 17:33:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234038AbiBVQcH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 11:32:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35886 "EHLO
+        id S234173AbiBVQdb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 11:33:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230003AbiBVQb6 (ORCPT
+        with ESMTP id S234085AbiBVQcs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 11:31:58 -0500
-Received: from mail-oo1-xc2b.google.com (mail-oo1-xc2b.google.com [IPv6:2607:f8b0:4864:20::c2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8406C6266
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 08:31:32 -0800 (PST)
-Received: by mail-oo1-xc2b.google.com with SMTP id p206-20020a4a2fd7000000b0031bfec11983so18276863oop.13
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 08:31:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=dtYXm2hT3lcm5wvRcUbNMDyXlIE45DADQhitf3Rlc88=;
-        b=LLMAhUgwrk/DYdWw6wgJuwrPS/o2NfgI10xeypJfrum8mmbBBX7d3r55885xcA0GSs
-         N/0qnhPz6EDwjfCDK9EZLNApIQzBOjUAMTbhqcUrBws8r9XcYI+ZsjrQ1ackTdFYnXca
-         KSe0mNO3CmeSvS7ItohT2P9sU7Dj+jbiFaynHZLO0MRk1EWBfi4n3U+MDt0xN/KgkRbR
-         PUNRwRCH7/I5NqRt3zdTxI5yt4hkikKqm97sSwd5jrXi84dTOOy6v7mgYho9MtQZxmcW
-         QzXsp71CoMubPYHdfyu53sEstrFfcN6QNLP2z/JN+YpWcau4FD4aw1cQMev20HollGSz
-         gEvQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=dtYXm2hT3lcm5wvRcUbNMDyXlIE45DADQhitf3Rlc88=;
-        b=AxD7P8Us1RDgjZ2bJ0k7dEIx7GY2dJE8oPP/MIdQfdUFM5UKzjNCR1gFHtLZRF+jGH
-         QXgFqhzZPsSox/d1S8tLLqVxpZDr7Ibg34jnJKQ3nZ9VoUj9ysX883FRWfviD0R2+nKa
-         4VMcYEieGwvy+UY8o4rYBondwkXLef8DxWRTrsqTMJq7Zx+N18m5jtlvEGKceWfAcv8g
-         iTy5yZwbtdNbNcizn6X7W+JgvhFSwg2ABvC3or9VZaWVKp96ORwFyxvSlfq1WPbeRLGK
-         0u9Ci9766W6jn5sZUxwqIjYh515kmIbZMWm/g9rIGq6BE2WfPoaIFkCqhykXAErWaG/e
-         3+dA==
-X-Gm-Message-State: AOAM530hLVWF8EKuxmyn2p0KVxYgMaw8sOkHaVY1YEl7paCzGNkMOvLK
-        OvPfeLdjeTmT0WmA2X1SZQyam1mZg66BPZf08/A=
-X-Google-Smtp-Source: ABdhPJwfj6FZ41K/ClOtZcMS0gc0gQWKuRYKXqqfYle6jHWNbXIrWRxGaQ1cQvTxxQ6ZhiRII8f7GBeUIdvBRT/zdf8=
-X-Received: by 2002:a05:6870:3e0d:b0:d3:fe6d:57c3 with SMTP id
- lk13-20020a0568703e0d00b000d3fe6d57c3mr2020968oab.225.1645547491928; Tue, 22
- Feb 2022 08:31:31 -0800 (PST)
+        Tue, 22 Feb 2022 11:32:48 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62FA6113AF4;
+        Tue, 22 Feb 2022 08:32:22 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id CB23ACE17B2;
+        Tue, 22 Feb 2022 16:32:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9012BC340F5;
+        Tue, 22 Feb 2022 16:32:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645547539;
+        bh=GJp5srIWu1c79tiofwNLlNLZx6fG9DBOwi7z0tds3LI=;
+        h=From:To:Cc:Subject:Date:From;
+        b=XdA8/bxNpbpVX6QJl+I/qhRyqv6XOhDuEMTsHWEumj7DeyznddJGH/53kesCj5+K1
+         l5bFGUXHsk9D7Ls0v6wkM/b/469AUrJmpD0FSDRE81CyfTqi0meX209dvMYqTwOcs4
+         kjZ/AbLbmfWj9n5fycJOWsrBlFqcgyB7rCKVn+/vx85iqnmkgOgIp2D8j/QBLKKxep
+         7csetHDCTeThLrtJbfN725lc3epyEvIvq99XhPv3jZMD9eQanGBsQ421geAa1YHv+i
+         jCyRK9FT6zBfcitT1n09gHoSmbfIDOqAozALpu63mZ05b7lOnC4ru5R4fTiJUlbsPY
+         uWWoyp/8P36Hg==
+From:   Keith Busch <kbusch@kernel.org>
+To:     linux-nvme@lists.infradead.org, linux-block@vger.kernel.org,
+        linux-crypto@vger.kernel.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     axboe@kernel.dk, hch@lst.de, martin.petersen@oracle.com,
+        colyli@suse.de, Keith Busch <kbusch@kernel.org>
+Subject: [PATCHv3 00/10] 64-bit data integrity field support
+Date:   Tue, 22 Feb 2022 08:31:34 -0800
+Message-Id: <20220222163144.1782447-1-kbusch@kernel.org>
+X-Mailer: git-send-email 2.25.4
 MIME-Version: 1.0
-References: <20220222131701.356117-1-maira.canal@usp.br> <20220222131701.356117-5-maira.canal@usp.br>
-In-Reply-To: <20220222131701.356117-5-maira.canal@usp.br>
-From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Tue, 22 Feb 2022 11:31:20 -0500
-Message-ID: <CADnq5_NSMvOUuLo936pbs+J7ajMCn3zDV5knYQo5t1f94KYW-w@mail.gmail.com>
-Subject: Re: [PATCH 04/10] drm/amd/display: Remove unused temp variable
-To:     =?UTF-8?B?TWHDrXJhIENhbmFs?= <maira.canal@usp.br>
-Cc:     "Deucher, Alexander" <alexander.deucher@amd.com>,
-        Christian Koenig <christian.koenig@amd.com>,
-        xinhui pan <Xinhui.Pan@amd.com>,
-        Hawking Zhang <Hawking.Zhang@amd.com>,
-        John Clements <john.clements@amd.com>,
-        Tao Zhou <tao.zhou1@amd.com>,
-        "Chai, Thomas" <YiPeng.Chai@amd.com>,
-        "Tuikov, Luben" <luben.tuikov@amd.com>,
-        "Stanley.Yang" <Stanley.Yang@amd.com>,
-        Dennis Li <Dennis.Li@amd.com>,
-        "Joshi, Mukul" <mukul.joshi@amd.com>,
-        "Wentland, Harry" <harry.wentland@amd.com>,
-        "Leo (Sunpeng) Li" <sunpeng.li@amd.com>,
-        "Siqueira, Rodrigo" <Rodrigo.Siqueira@amd.com>,
-        Anthony Koo <Anthony.Koo@amd.com>,
-        Magali Lemes <magalilemes00@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Maling list - DRI developers 
-        <dri-devel@lists.freedesktop.org>, mwen@igalia.com,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>,
-        Isabella Basso <isabbasso@riseup.net>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Applied.  Thanks!
+The NVM Express protocol added enhancements to the data integrity field
+formats beyond the T10 defined protection information. A detailed
+description of the new formats can be found in the NVMe's NVM Command
+Set Specification, section 5.2, available at:
 
-Alex
+  https://nvmexpress.org/wp-content/uploads/NVM-Command-Set-Specification-1.0b-2021.12.18-Ratified.pdf
 
-On Tue, Feb 22, 2022 at 8:18 AM Ma=C3=ADra Canal <maira.canal@usp.br> wrote=
-:
->
-> Remove unused temp variable from the dmub_rb_flush_pending function by
-> using arithmetic to remove the loop.
->
-> The -Wunused-but-set-variable warning was pointed out by Clang with the
-> following warning:
->
-> drivers/gpu/drm/amd/amdgpu/../display/dmub/inc/dmub_cmd.h:2921:12: warnin=
-g:
-> variable 'temp' set but not used [-Wunused-but-set-variable]
->     uint64_t temp;
->              ^
->
-> Signed-off-by: Ma=C3=ADra Canal <maira.canal@usp.br>
-> ---
->  drivers/gpu/drm/amd/display/dmub/inc/dmub_cmd.h | 5 +----
->  1 file changed, 1 insertion(+), 4 deletions(-)
->
-> diff --git a/drivers/gpu/drm/amd/display/dmub/inc/dmub_cmd.h b/drivers/gp=
-u/drm/amd/display/dmub/inc/dmub_cmd.h
-> index fb01ff49e655..d3088836d4e4 100644
-> --- a/drivers/gpu/drm/amd/display/dmub/inc/dmub_cmd.h
-> +++ b/drivers/gpu/drm/amd/display/dmub/inc/dmub_cmd.h
-> @@ -2918,11 +2918,8 @@ static inline void dmub_rb_flush_pending(const str=
-uct dmub_rb *rb)
->         while (rptr !=3D wptr) {
->                 uint64_t volatile *data =3D (uint64_t volatile *)((uint8_=
-t *)(rb->base_address) + rptr);
->                 //uint64_t volatile *p =3D (uint64_t volatile *)data;
-> -               uint64_t temp;
-> -               uint8_t i;
->
-> -               for (i =3D 0; i < DMUB_RB_CMD_SIZE / sizeof(uint64_t); i+=
-+)
-> -                       temp =3D *data++;
-> +               *data +=3D DMUB_RB_CMD_SIZE / sizeof(uint64_t);
->
->                 rptr +=3D DMUB_RB_CMD_SIZE;
->                 if (rptr >=3D rb->capacity)
-> --
-> 2.35.1
->
+This series implements one possible new format: the CRC64 guard with
+48-bit reference tags. This does not add support for the variable
+"storage tag" field, or any potential hardware acceleration.
+
+Changes since v2:
+
+  Introduced lower_48_bits() (Bart)
+
+  Added "64" suffix to crc names to distinguish from other crc
+  calculations (Martin)
+
+  Added module support to crypto library, and have the integrity
+  generate/verify use that instead of directly calling the generic table
+  lookup implementation. This is modeled after the t10 implementation.
+
+  Added an x86 pclmul accelerated crc64 calculation
+
+  Added speed tests to the test module so that the generic and library
+  function could be compared.
+
+  Bug fix in nvme to select the correct integrity profile.
+
+  Added reviews
+
+Note, I am not particularly well versed with x86 assembly, so I'm reasonably
+sure that the pcl implementation could be improved. It currently is
+about 20x faster than the generic implementation, but I believe it could
+be over 30x faster if done more efficiently.
+
+Keith Busch (10):
+  block: support pi with extended metadata
+  nvme: allow integrity on extended metadata formats
+  asm-generic: introduce be48 unaligned accessors
+  linux/kernel: introduce lower_48_bits macro
+  lib: add rocksoft model crc64
+  crypto: add rocksoft 64b crc guard tag framework
+  lib: add crc64 tests
+  block: add pi for nvme enhanced integrity
+  nvme: add support for enhanced metadata
+  x86/crypto: add pclmul acceleration for crc64
+
+ arch/x86/crypto/Makefile                  |   3 +
+ arch/x86/crypto/crc64-rocksoft-pcl-asm.S  | 215 ++++++++++++++++++++++
+ arch/x86/crypto/crc64-rocksoft-pcl_glue.c | 117 ++++++++++++
+ block/Kconfig                             |   1 +
+ block/bio-integrity.c                     |   1 +
+ block/t10-pi.c                            | 198 +++++++++++++++++++-
+ crypto/Kconfig                            |  20 ++
+ crypto/Makefile                           |   1 +
+ crypto/crc64_rocksoft_generic.c           | 104 +++++++++++
+ drivers/nvme/host/core.c                  | 175 ++++++++++++++----
+ drivers/nvme/host/nvme.h                  |   4 +-
+ include/asm-generic/unaligned.h           |  26 +++
+ include/linux/blk-integrity.h             |   1 +
+ include/linux/crc64.h                     |   7 +
+ include/linux/kernel.h                    |   6 +
+ include/linux/nvme.h                      |  53 +++++-
+ include/linux/t10-pi.h                    |  20 ++
+ lib/Kconfig                               |   9 +
+ lib/Kconfig.debug                         |   4 +
+ lib/Makefile                              |   2 +
+ lib/crc64-rocksoft.c                      | 129 +++++++++++++
+ lib/crc64.c                               |  26 +++
+ lib/gen_crc64table.c                      |  51 +++--
+ lib/test_crc64.c                          | 133 +++++++++++++
+ 24 files changed, 1252 insertions(+), 54 deletions(-)
+ create mode 100644 arch/x86/crypto/crc64-rocksoft-pcl-asm.S
+ create mode 100644 arch/x86/crypto/crc64-rocksoft-pcl_glue.c
+ create mode 100644 crypto/crc64_rocksoft_generic.c
+ create mode 100644 lib/crc64-rocksoft.c
+ create mode 100644 lib/test_crc64.c
+
+-- 
+2.25.4
+

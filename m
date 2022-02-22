@@ -2,63 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32CCF4BF9A2
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 14:42:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F3E004BF9A1
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 14:42:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232530AbiBVNmh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 08:42:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42874 "EHLO
+        id S232503AbiBVNm3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 08:42:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232481AbiBVNmZ (ORCPT
+        with ESMTP id S232444AbiBVNmV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 08:42:25 -0500
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84C588D68B
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 05:41:59 -0800 (PST)
-Received: by mail-lf1-x133.google.com with SMTP id y24so12489680lfg.1
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 05:41:59 -0800 (PST)
+        Tue, 22 Feb 2022 08:42:21 -0500
+Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20DC68BE16
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 05:41:55 -0800 (PST)
+Received: by mail-io1-xd31.google.com with SMTP id t11so14334722ioi.7
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 05:41:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=dYjRWsW9pcEcQ2t56kY0xhwAZ/vjldT5YxHAgh3ZMy8=;
-        b=pd2VrkzjJ4DBKAhv8/hr9VAZh4WjtLOx7ruO96wujvdkx/wDgPKZa5mu60uS6OIePa
-         Sa9iKw2/HEoCvRBUHHhYkkzuacsAL6Z6rJoNPxvLQuzftqPq74Q85SThu6HaspZs1IuE
-         MpP4w255u+2HMw6vlJJjXSkvrtoL7TJL5rptqS72lZ5ap0OofJHvmEZd4UANtlq8tUTv
-         5mRJFuS97fwv7YoArKXUtkOC02JRz8GSO5+N4d5b8f5hRdJgMiNCTTeoQeXYC1ZiqPUn
-         4u+g5xMJwyogUDEcRQy2wZ3AU3S+ZcmdrYMdvBT6jeQx05vhucub6pJwijTBQKGpd7nG
-         fLjA==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=rqvvnvokXkoku3Es5PfYdus6e0X0eMIUBESKSyd+1kg=;
+        b=smwgEOHrMzHvWEqQZpCYnR1qnmPv0h05cUoWdwwjXgT8rgeVVQ0m07fclL3Ojk0j0d
+         ES/mFVmFimqCDzAMrxJcnV1gIuCyNHkLDqZro3f27LIQOYbDJyUBhc7kUHQkNsQTCaBG
+         B4hDSNeoz2GWyDQ5FzWLlWjAk0/ubs0J4wHZqifWx5nyn15pIwbmfk71PqwwkmbV9MYv
+         KnRpviNhcntmnIl6lzorZ+jJPw5lHSvpkWQdGb7h/J4EER4SvGwFPVOFFAO2LVqE9x/U
+         u3GrAVFPjbtTJoXSFaev58sEjOgsydjikhcw52U9KgagY+bTrFLSOXUt3e/dHLHeyTMq
+         Xehw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=dYjRWsW9pcEcQ2t56kY0xhwAZ/vjldT5YxHAgh3ZMy8=;
-        b=gzAqD5zDd9rPPXPI/+tF610WLe4W8/5Jxcjfx776PZtd+fJSapjcYGwakwbNv2Vjhe
-         O48iOnhxBx67fGW+1YzKYxCnOME0bLXIoIdLCEgi84gtIKuveU8pMGAApN2lIx+h2AkB
-         QZpvEe5iQdGBDf5tb9X7IJSjlJopu9Vco54nQI1IQFHlWsU6BmR2qjw9Jg9j9zmEYm60
-         EKTMew9W8tOxi7IA5veqlwoFl2fpJwhaWeHGJ70iSaOrFD4BPBldbxBYJprsBFvFVgxI
-         cq6+TQ7JseJx4s1RD58VGfkyHkJ9vtPXAfewP72wkJ7X8dx96cexEXEfmiKNdK5FWIem
-         jqGA==
-X-Gm-Message-State: AOAM533lqeQLLkGTotSwIM6Gd7E3Pl6cyhgWwX34be0x9lE2MhRRO+Pk
-        pqzDfwJp/Fm1ZKKbzzzKMJYHfIRjNpof2rQ9/4Z0iw==
-X-Google-Smtp-Source: ABdhPJxt9zV8dVY/0aDDpkL90WGgkd5FN2NEf8alpUvu7/9ecS098UHve0gpczfD3R14rIkO5fSzXtB8tRbj+L3iREs=
-X-Received: by 2002:a19:ee17:0:b0:443:5f2c:289e with SMTP id
- g23-20020a19ee17000000b004435f2c289emr17236703lfb.57.1645537317803; Tue, 22
- Feb 2022 05:41:57 -0800 (PST)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=rqvvnvokXkoku3Es5PfYdus6e0X0eMIUBESKSyd+1kg=;
+        b=6tJQvTSeABPtvjVjRXyLuc8LR3qI4BcWt5oMtTNlJjZ5DvFj22Xbx1Vd6Tum0zuG/2
+         oEraPbhBPzdtrYKwGbfcghk66ti5C5grPOdARkfUfYpqwWu8J/fg6g+M7ZUcmJk99ApE
+         +TfWBsRoE7YW5ZDOMi943t4xFwmXBVZXIQN+IfxBXFLrIEDcQkZvLOczV4kl/J6uc3fX
+         RJEGzeB35sKhzkXXHI9lEeSt0FTqdckSo6Rgki3O8XJR3bWwIyoMH+eLoKMAYw/B0Vtr
+         Dz+cmtlKJAWgbxtSM4b+VPv/5UNbQWM1WO2Ydg9Vpi3C1FL95aY8j/xkVtURP973dcss
+         9h1Q==
+X-Gm-Message-State: AOAM530rRrJw1u6ilqNTorAkwuCBquwIJL+w7TrJdXLGHynEE19dWMlu
+        K+IOrOgvOsZ70XogQkR2ANaufQ==
+X-Google-Smtp-Source: ABdhPJyS8s+X/O86KU0cqJ9e+X8mtTTAvSrkzsQ/nrfb2OMCon5y8J/eGZGek/ghBTVNvPlWuUzRfQ==
+X-Received: by 2002:a02:c551:0:b0:314:ac09:428d with SMTP id g17-20020a02c551000000b00314ac09428dmr16309457jaj.0.1645537313552;
+        Tue, 22 Feb 2022 05:41:53 -0800 (PST)
+Received: from [172.22.22.26] (c-73-185-129-58.hsd1.mn.comcast.net. [73.185.129.58])
+        by smtp.googlemail.com with ESMTPSA id x11sm840461ilg.22.2022.02.22.05.41.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 22 Feb 2022 05:41:52 -0800 (PST)
+Message-ID: <0fa2922e-ad3c-6ca3-f6c2-b8838d0cafcf@linaro.org>
+Date:   Tue, 22 Feb 2022 07:41:51 -0600
 MIME-Version: 1.0
-References: <tencent_22C6C2E595DEFED1417A98A5736539482809@qq.com>
-In-Reply-To: <tencent_22C6C2E595DEFED1417A98A5736539482809@qq.com>
-From:   Sumit Semwal <sumit.semwal@linaro.org>
-Date:   Tue, 22 Feb 2022 19:11:46 +0530
-Message-ID: <CAO_48GGSPnQzo2D3zK-TuWHSdHn6XGV0=9MuF2d06XSAn1isVQ@mail.gmail.com>
-Subject: Re: [PATCH] dma-buf: check the return value of kstrdup()
-To:     xkernel.wang@foxmail.com
-Cc:     christian.koenig@amd.com, linux-media@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v3 13/25] bus: mhi: ep: Add support for sending events to
+ the host
+Content-Language: en-US
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc:     mhi@lists.linux.dev, quic_hemantk@quicinc.com,
+        quic_bbhatt@quicinc.com, quic_jhugo@quicinc.com,
+        vinod.koul@linaro.org, bjorn.andersson@linaro.org,
+        dmitry.baryshkov@linaro.org, quic_vbadigan@quicinc.com,
+        quic_cang@quicinc.com, quic_skananth@quicinc.com,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220212182117.49438-1-manivannan.sadhasivam@linaro.org>
+ <20220212182117.49438-14-manivannan.sadhasivam@linaro.org>
+ <3396cc98-8640-8f5a-fad3-c7a913faaa58@linaro.org>
+ <20220222060623.GA5029@thinkpad>
+From:   Alex Elder <elder@linaro.org>
+In-Reply-To: <20220222060623.GA5029@thinkpad>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -67,41 +82,117 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Xiaoke,
+On 2/22/22 12:06 AM, Manivannan Sadhasivam wrote:
+> On Tue, Feb 15, 2022 at 04:39:17PM -0600, Alex Elder wrote:
+>> On 2/12/22 12:21 PM, Manivannan Sadhasivam wrote:
+>>> Add support for sending the events to the host over MHI bus from the
+>>> endpoint. Following events are supported:
+>>>
+>>> 1. Transfer completion event
+>>> 2. Command completion event
+>>> 3. State change event
+>>> 4. Execution Environment (EE) change event
+>>>
+>>> An event is sent whenever an operation has been completed in the MHI EP
+>>> device. Event is sent using the MHI event ring and additionally the host
+>>> is notified using an IRQ if required.
+>>>
+>>> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+>>
+>> A few things can be simplified here.
+>>
+>> 					-Alex
+>>
+>>> ---
+>>>    drivers/bus/mhi/common.h      |  15 ++++
+>>>    drivers/bus/mhi/ep/internal.h |   8 ++-
+>>>    drivers/bus/mhi/ep/main.c     | 126 ++++++++++++++++++++++++++++++++++
+>>>    include/linux/mhi_ep.h        |   8 +++
+>>>    4 files changed, 155 insertions(+), 2 deletions(-)
+>>>
+>>> diff --git a/drivers/bus/mhi/common.h b/drivers/bus/mhi/common.h
+>>> index 728c82928d8d..26d94ed52b34 100644
+>>> --- a/drivers/bus/mhi/common.h
+>>> +++ b/drivers/bus/mhi/common.h
+>>> @@ -176,6 +176,21 @@
+>>>    #define MHI_TRE_GET_EV_LINKSPEED(tre)			((MHI_TRE_GET_DWORD(tre, 1) >> 24) & 0xFF)
+>>>    #define MHI_TRE_GET_EV_LINKWIDTH(tre)			(MHI_TRE_GET_DWORD(tre, 0) & 0xFF)
+>>> +/* State change event */
+>>> +#define MHI_SC_EV_PTR					0
+>>> +#define MHI_SC_EV_DWORD0(state)				cpu_to_le32(state << 24)
+>>> +#define MHI_SC_EV_DWORD1(type)				cpu_to_le32(type << 16)
+>>> +
+>>> +/* EE event */
+>>> +#define MHI_EE_EV_PTR					0
+>>> +#define MHI_EE_EV_DWORD0(ee)				cpu_to_le32(ee << 24)
+>>> +#define MHI_EE_EV_DWORD1(type)				cpu_to_le32(type << 16)
+>>> +
+>>> +/* Command Completion event */
+>>> +#define MHI_CC_EV_PTR(ptr)				cpu_to_le64(ptr)
+>>> +#define MHI_CC_EV_DWORD0(code)				cpu_to_le32(code << 24)
+>>> +#define MHI_CC_EV_DWORD1(type)				cpu_to_le32(type << 16)
+>>> +
+>>>    /* Transfer descriptor macros */
+>>>    #define MHI_TRE_DATA_PTR(ptr)				cpu_to_le64(ptr)
+>>>    #define MHI_TRE_DATA_DWORD0(len)			cpu_to_le32(len & MHI_MAX_MTU)
+>>> diff --git a/drivers/bus/mhi/ep/internal.h b/drivers/bus/mhi/ep/internal.h
+>>> index 48d6e9667d55..fd63f79c6aec 100644
+>>> --- a/drivers/bus/mhi/ep/internal.h
+>>> +++ b/drivers/bus/mhi/ep/internal.h
+>>> @@ -131,8 +131,8 @@ enum mhi_ep_ring_type {
+>>>    };
+>>>    struct mhi_ep_ring_element {
+>>> -	u64 ptr;
+>>> -	u32 dword[2];
+>>> +	__le64 ptr;
+>>> +	__le32 dword[2];
+>>
+>> Yay!
+>>
+>>>    };
+>>>    /* Ring element */
+>>> @@ -227,4 +227,8 @@ void mhi_ep_mmio_get_mhi_state(struct mhi_ep_cntrl *mhi_cntrl, enum mhi_state *s
+>>>    void mhi_ep_mmio_init(struct mhi_ep_cntrl *mhi_cntrl);
+>>>    void mhi_ep_mmio_update_ner(struct mhi_ep_cntrl *mhi_cntrl);
+>>> +/* MHI EP core functions */
+>>> +int mhi_ep_send_state_change_event(struct mhi_ep_cntrl *mhi_cntrl, enum mhi_state state);
+>>> +int mhi_ep_send_ee_event(struct mhi_ep_cntrl *mhi_cntrl, enum mhi_ep_execenv exec_env);
+>>> +
+>>>    #endif
+>>> diff --git a/drivers/bus/mhi/ep/main.c b/drivers/bus/mhi/ep/main.c
+>>> index 2c8045766292..61f066c6286b 100644
+>>> --- a/drivers/bus/mhi/ep/main.c
+>>> +++ b/drivers/bus/mhi/ep/main.c
+> 
+> [...]
+> 
+>>> +static int mhi_ep_send_completion_event(struct mhi_ep_cntrl *mhi_cntrl,
+>>> +					struct mhi_ep_ring *ring, u32 len,
+>>> +					enum mhi_ev_ccs code)
+>>> +{
+>>> +	struct mhi_ep_ring_element event = {};
+>>> +	__le32 tmp;
+>>> +
+>>> +	event.ptr = le64_to_cpu(ring->ring_ctx->generic.rbase) +
+>>> +			ring->rd_offset * sizeof(struct mhi_ep_ring_element);
+>>
+>> I'm not sure at the moment where this will be called.  But
+>> it might be easier to pass in the transfer channel pointer
+>> rather than compute its address here.
 
-On Tue, 22 Feb 2022 at 17:00, <xkernel.wang@foxmail.com> wrote:
->
-> From: Xiaoke Wang <xkernel.wang@foxmail.com>
->
-> kstrdup() is a memory allocation function which can return NULL when
-> some internaly memory errors happen. It is better to check the return
-> value of it to prevent further wrong memory access.
-Thanks for the patch; looks sane.
->
-> Signed-off-by: Xiaoke Wang <xkernel.wang@foxmail.com>
-Acked-by: Sumit Semwal <sumit.semwal@linaro.org>
+As I recall, I made this comment thinking that in the context of
+the caller, the ring element address might be known; but I didn't
+look at those calling locations to see.
 
-Will queue it up.
-> ---
->  drivers/dma-buf/selftest.c | 3 +++
->  1 file changed, 3 insertions(+)
->
-> diff --git a/drivers/dma-buf/selftest.c b/drivers/dma-buf/selftest.c
-> index c60b694..2c29e2a 100644
-> --- a/drivers/dma-buf/selftest.c
-> +++ b/drivers/dma-buf/selftest.c
-> @@ -50,6 +50,9 @@ static bool apply_subtest_filter(const char *caller, const char *name)
->         bool result = true;
->
->         filter = kstrdup(__st_filter, GFP_KERNEL);
-> +       if (!filter)
-> +               return false;
-> +
->         for (sep = filter; (tok = strsep(&sep, ","));) {
->                 bool allow = true;
->                 char *sl;
-> --
+In any case, what you do here looks correct, so that's fine.
 
+					-Alex
 
-Best,
-Sumit.
+> Passing the ring element to these functions won't help. Because, the ring
+> element only has the address of the buffer it points to. But what we need here
+> is the address of the ring element itself and that can only be found in ring
+> context.
+> 
+> Thanks,
+> Mani
+

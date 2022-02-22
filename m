@@ -2,135 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6606E4BF43E
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 10:01:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DDAD04BF44F
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 10:04:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230084AbiBVJAk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 04:00:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42008 "EHLO
+        id S229908AbiBVJDX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 04:03:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230043AbiBVJAY (ORCPT
+        with ESMTP id S229629AbiBVJDT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 04:00:24 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8913813D577;
-        Tue, 22 Feb 2022 00:59:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645520399; x=1677056399;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=1c9hIlH3yPx51Kr/6d+A+9A79GZySCBX2XnqF73Hkz8=;
-  b=jF5QNGZGd+X1D/dX3n9OBgMaWuBPGFynra6XY6K+Z3z1iGkOAZs3J382
-   0HMfBhJVDBSbTKexkfppTMhhfdSsPCbRWt3z1419NTwMR/dLI5Q3ucn2u
-   HjWLoEVDhdAQ5bzN2uqKPVFYdB2bJySiNcvKXNwwRiKUdNEnyLYSL0QmC
-   QxBfVXYMKW8YTIzJg3sXaQH7CUasC2FNQGh0b8oNsH/utvo59TwtLprQK
-   YSUvQN+5fuEeDA0663UzfAhvFPfJKYQxwt3js1PAltE2PqWYk8vhx/1Wv
-   rbA6VvG3/2ysxBuYgGPZDtlc8M7/LiIpOruluN4XS/JWrkDpfOljAtfyS
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10265"; a="338076734"
-X-IronPort-AV: E=Sophos;i="5.88,387,1635231600"; 
-   d="scan'208";a="338076734"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2022 00:59:59 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,387,1635231600"; 
-   d="scan'208";a="606621831"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga004.fm.intel.com with ESMTP; 22 Feb 2022 00:59:57 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id EB82D811; Tue, 22 Feb 2022 11:00:10 +0200 (EET)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Lars-Peter Clausen <lars@metafoo.de>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>
-Subject: [PATCH v2 8/8] iio: accel: adxl345: Remove unneeded blank lines
-Date:   Tue, 22 Feb 2022 11:00:09 +0200
-Message-Id: <20220222090009.2060-8-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220222090009.2060-1-andriy.shevchenko@linux.intel.com>
-References: <20220222090009.2060-1-andriy.shevchenko@linux.intel.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Tue, 22 Feb 2022 04:03:19 -0500
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A81913777C;
+        Tue, 22 Feb 2022 01:02:54 -0800 (PST)
+Received: by mail-pj1-x1032.google.com with SMTP id gf13-20020a17090ac7cd00b001bbfb9d760eso1768565pjb.2;
+        Tue, 22 Feb 2022 01:02:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=LFEBBwpcqufEdu+q4gVGD+04Yq0W1F2dDxbkizD2bWk=;
+        b=BWemOTsBscBhV4ThWCBrrOnCqwTRaNGnhDLaWa96svYwp6M96MYMytnPTLsudQxuh7
+         4UAARUgjdigtjOTKbHqNd0JralJgj+Jgt8pnosn5MNGtajEvW/btl47ui8ySmxkRmU91
+         V+B0cx0kLxw6mcbidz7NzTWwXAZrnFnzZTBTvyJ22brIrar3VsGE5lQqDnRuekB2QLG0
+         wIi+XY3QQn+4//q2N2JZcpO+v29tk6VaQsLwv2Q9kLHvq73r6aVOlF/lYmMeURihUZDk
+         SjKT706QuSRuDjGW/lEOV0GnPVh1dHir03vOHemutQqLamhgKc1cE4Cdt581Ua1Xq44R
+         HtpQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=LFEBBwpcqufEdu+q4gVGD+04Yq0W1F2dDxbkizD2bWk=;
+        b=eD0aQ98Bdl6FCC5IpWYdR3XMCaMR+g3j24xnyzIzh3h0Wr7OZ0UQnUep7eTsERJUKd
+         sxmPFrSze7GVuFCV2GiXa+GxASimPcBExAa2l67xMcBtKtOXQiGRoMtH4v4WdRw/oE/E
+         dr6fu+y90kkHqO8E72EWG5Ippu8tDhtSubRWt0bassdSCDqdOsrNpcLz8cFtm80vIdDj
+         WIYivQTCaM4SNeBb5czECRjTk/Cwwts/Ki4LEsTn1TfgsBN+h2VriLqpc+A19sK49dE8
+         QaQxG7GyKAzg0o+eTtjh9CNUxWnGDzS2N+Udg6+cn2wIIpc+DjLn0eDsQYy2Q6v7kTM3
+         f4jQ==
+X-Gm-Message-State: AOAM530545ac2Ivk/6pmL+1KKLdeSq0oa6K0BCePt68rGTATUIwHd2qA
+        CmoZTLbBOZ3QapBVZmzwbKrrgguTHjI=
+X-Google-Smtp-Source: ABdhPJzaVzFiuqKQy6BOqzvOW3D+kURtS5vjmHf83HpRWKWgPwCRKV2VmOiRoS29sqIOFrwJRz6rBA==
+X-Received: by 2002:a17:902:b204:b0:14d:a8c8:af37 with SMTP id t4-20020a170902b20400b0014da8c8af37mr22586018plr.108.1645520573902;
+        Tue, 22 Feb 2022 01:02:53 -0800 (PST)
+Received: from localhost.localdomain ([203.205.141.110])
+        by smtp.googlemail.com with ESMTPSA id k24sm15785290pfi.174.2022.02.22.01.02.51
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 22 Feb 2022 01:02:53 -0800 (PST)
+From:   Wanpeng Li <kernellwp@gmail.com>
+X-Google-Original-From: Wanpeng Li <wanpengli@tencent.com>
+To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>
+Subject: [PATCH] x86/kvm: Don't waste memory if kvmclock is disabled
+Date:   Tue, 22 Feb 2022 01:02:03 -0800
+Message-Id: <1645520523-30814-1-git-send-email-wanpengli@tencent.com>
+X-Mailer: git-send-email 2.7.4
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove unneeded blank lines where they separate the data type definitions
-and the macros which are using them.
+From: Wanpeng Li <wanpengli@tencent.com>
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Even if "no-kvmclock" is passed in cmdline parameter, the guest kernel 
+still allocates hvclock_mem which is scaled by the number of vCPUs, 
+let's check kvmclock enable in advance to avoid this memory waste.
+
+Signed-off-by: Wanpeng Li <wanpengli@tencent.com>
 ---
-v2: no changes
- drivers/iio/accel/adxl345_i2c.c | 3 ---
- drivers/iio/accel/adxl345_spi.c | 3 ---
- 2 files changed, 6 deletions(-)
+ arch/x86/kernel/kvmclock.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/iio/accel/adxl345_i2c.c b/drivers/iio/accel/adxl345_i2c.c
-index 1ceb9be13cdf..0d0b34cf2b69 100644
---- a/drivers/iio/accel/adxl345_i2c.c
-+++ b/drivers/iio/accel/adxl345_i2c.c
-@@ -36,7 +36,6 @@ static const struct i2c_device_id adxl345_i2c_id[] = {
- 	{ "adxl375", ADXL375 },
- 	{ }
- };
--
- MODULE_DEVICE_TABLE(i2c, adxl345_i2c_id);
+diff --git a/arch/x86/kernel/kvmclock.c b/arch/x86/kernel/kvmclock.c
+index a35cbf9107af..44ed677d401f 100644
+--- a/arch/x86/kernel/kvmclock.c
++++ b/arch/x86/kernel/kvmclock.c
+@@ -239,6 +239,9 @@ static void __init kvmclock_init_mem(void)
  
- static const struct of_device_id adxl345_of_match[] = {
-@@ -44,7 +43,6 @@ static const struct of_device_id adxl345_of_match[] = {
- 	{ .compatible = "adi,adxl375", .data = (const void *)ADXL375 },
- 	{ }
- };
--
- MODULE_DEVICE_TABLE(of, adxl345_of_match);
+ static int __init kvm_setup_vsyscall_timeinfo(void)
+ {
++	if (!kvmclock)
++		return 0;
++
+ 	kvmclock_init_mem();
  
- static const struct acpi_device_id adxl345_acpi_match[] = {
-@@ -62,7 +60,6 @@ static struct i2c_driver adxl345_i2c_driver = {
- 	.probe_new	= adxl345_i2c_probe,
- 	.id_table	= adxl345_i2c_id,
- };
--
- module_i2c_driver(adxl345_i2c_driver);
- 
- MODULE_AUTHOR("Eva Rachel Retuya <eraretuya@gmail.com>");
-diff --git a/drivers/iio/accel/adxl345_spi.c b/drivers/iio/accel/adxl345_spi.c
-index 2f5fc565f1f4..aaade5808657 100644
---- a/drivers/iio/accel/adxl345_spi.c
-+++ b/drivers/iio/accel/adxl345_spi.c
-@@ -41,7 +41,6 @@ static const struct spi_device_id adxl345_spi_id[] = {
- 	{ "adxl375", ADXL375 },
- 	{ }
- };
--
- MODULE_DEVICE_TABLE(spi, adxl345_spi_id);
- 
- static const struct of_device_id adxl345_of_match[] = {
-@@ -49,7 +48,6 @@ static const struct of_device_id adxl345_of_match[] = {
- 	{ .compatible = "adi,adxl375", .data = (const void *)ADXL375 },
- 	{ }
- };
--
- MODULE_DEVICE_TABLE(of, adxl345_of_match);
- 
- static const struct acpi_device_id adxl345_acpi_match[] = {
-@@ -67,7 +65,6 @@ static struct spi_driver adxl345_spi_driver = {
- 	.probe		= adxl345_spi_probe,
- 	.id_table	= adxl345_spi_id,
- };
--
- module_spi_driver(adxl345_spi_driver);
- 
- MODULE_AUTHOR("Eva Rachel Retuya <eraretuya@gmail.com>");
+ #ifdef CONFIG_X86_64
 -- 
-2.34.1
+2.25.1
 

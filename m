@@ -2,216 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 727234BF1E5
-	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 07:07:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E08894BF1E0
+	for <lists+linux-kernel@lfdr.de>; Tue, 22 Feb 2022 07:07:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230146AbiBVGEE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 01:04:04 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:55368 "EHLO
+        id S230198AbiBVGHA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 01:07:00 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:38320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230078AbiBVGEB (ORCPT
+        with ESMTP id S230191AbiBVGG5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 01:04:01 -0500
-Received: from out30-57.freemail.mail.aliyun.com (out30-57.freemail.mail.aliyun.com [115.124.30.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4CED8A30E;
-        Mon, 21 Feb 2022 22:03:35 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R191e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04395;MF=xueshuai@linux.alibaba.com;NM=1;PH=DS;RN=15;SR=0;TI=SMTPD_---0V5BrHyw_1645509810;
-Received: from 30.240.116.247(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0V5BrHyw_1645509810)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Tue, 22 Feb 2022 14:03:32 +0800
-Message-ID: <dfa2c9ca-cb5a-a067-65c4-6f6588bed095@linux.alibaba.com>
-Date:   Tue, 22 Feb 2022 14:03:30 +0800
+        Tue, 22 Feb 2022 01:06:57 -0500
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E86D86380
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 22:06:31 -0800 (PST)
+Received: by mail-pl1-x62d.google.com with SMTP id w20so14692434plq.12
+        for <linux-kernel@vger.kernel.org>; Mon, 21 Feb 2022 22:06:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=qgHTWYmGSpSQewssga0wRsMEIRFp9xeMp+WIkFk7p5A=;
+        b=nMfJb0FTo0WK1hPaiPc6ulx2U5XLhgf6QXbUiC/UwK+BnIYEeyE5ywWITJj3THcNcd
+         Ule/6v2avPFqd4e4MoDxoUwmjtFOS0kkHtxSOyKgrl1Utg5rZ/mz+CRB4F4Ndy9uPLQh
+         3K4tKqrfwkuqKKt26VjRgR2r1GTwiXvqcS7Q1eG9AjND+rN0LswAMzuaBgfTe7djm6n9
+         KkQg/O9lFxfI9uyrpUKIzY475uqyxYdBETuvsu/A7hkR3G8Rbf5lJNGJERa4FZZpEVH+
+         ykhXRlZA/xeSgh2BpzgcK+IfFfBrwfN8QahenGPLEWF4jP/toTjZdJHwchwLfRxGfBEM
+         H3dQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=qgHTWYmGSpSQewssga0wRsMEIRFp9xeMp+WIkFk7p5A=;
+        b=aXHi70+BZxjw2dDlN/bO1aEpwhujXTOCr4WU4SNxHrcLj9HWIeRx1GViOliJLTKsYw
+         p5En0FGPKu/0ti/OUSHuIWrr3DrjGmmJW3G3XdSzXfYyv9Xs9DiZ13itPDz04rY/KkgV
+         VJmlD5vUvMIM+Z/iYAcEMYDY/qyDxKzcnN45BeakYaLUKyO9NeQDNNPyvw85Tqrl4b2p
+         kDbv28gVf4itQlQqknQA1CoL95Kf0vRiMgkZaHBq2rAUHbVsfpSI+L1CHwI8PfLaBqsU
+         /63fZNvoI0CKIjavsZqQTpXNMMuC/+OAVLrJ9FGEXL7OkT0ai1AYHmq0VkcS9jKIoQRA
+         6Rqw==
+X-Gm-Message-State: AOAM533DEGWPhUqzBRXEDOO6sR4+XOGKEOA4mYdIZENKJrFqgt7gQJJC
+        bUF2xJYocJ0HANevP0N0J5T6
+X-Google-Smtp-Source: ABdhPJz4P4fmg8n8s9VjF3Evdup+GYQ2pd94Qpr1uLHIF36Jzk2LaJFZSmO+9IR63s55ftOqRh8NFg==
+X-Received: by 2002:a17:902:8f8b:b0:149:6639:4b86 with SMTP id z11-20020a1709028f8b00b0014966394b86mr22081150plo.60.1645509991315;
+        Mon, 21 Feb 2022 22:06:31 -0800 (PST)
+Received: from thinkpad ([117.217.186.202])
+        by smtp.gmail.com with ESMTPSA id g21-20020a17090a7d1500b001b968e82819sm1197687pjl.10.2022.02.21.22.06.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 21 Feb 2022 22:06:30 -0800 (PST)
+Date:   Tue, 22 Feb 2022 11:36:23 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Alex Elder <elder@linaro.org>
+Cc:     mhi@lists.linux.dev, quic_hemantk@quicinc.com,
+        quic_bbhatt@quicinc.com, quic_jhugo@quicinc.com,
+        vinod.koul@linaro.org, bjorn.andersson@linaro.org,
+        dmitry.baryshkov@linaro.org, quic_vbadigan@quicinc.com,
+        quic_cang@quicinc.com, quic_skananth@quicinc.com,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 13/25] bus: mhi: ep: Add support for sending events to
+ the host
+Message-ID: <20220222060623.GA5029@thinkpad>
+References: <20220212182117.49438-1-manivannan.sadhasivam@linaro.org>
+ <20220212182117.49438-14-manivannan.sadhasivam@linaro.org>
+ <3396cc98-8640-8f5a-fad3-c7a913faaa58@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.6.1
-Subject: Re: [PATCH v7 1/2] ACPI: APEI: explicit init HEST and GHES in
- apci_init
-Content-Language: en-US
-To:     Nathan Chancellor <nathan@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     helgaas@kernel.org, bp@alien8.de, tony.luck@intel.com,
-        james.morse@arm.com, lenb@kernel.org, rjw@rjwysocki.net,
-        bhelgaas@google.com, zhangliguang@linux.alibaba.com,
-        zhuo.song@linux.alibaba.com, linux-kernel@vger.kernel.org,
-        linux-acpi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-pci@vger.kernel.org
-References: <20211126070422.73234-1-xueshuai@linux.alibaba.com>
- <20220122052618.1074-1-xueshuai@linux.alibaba.com>
- <YhPXX+CSoK++9MP6@dev-arch.archlinux-ax161>
-From:   Shuai Xue <xueshuai@linux.alibaba.com>
-In-Reply-To: <YhPXX+CSoK++9MP6@dev-arch.archlinux-ax161>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3396cc98-8640-8f5a-fad3-c7a913faaa58@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Nathan and Rafael,
+On Tue, Feb 15, 2022 at 04:39:17PM -0600, Alex Elder wrote:
+> On 2/12/22 12:21 PM, Manivannan Sadhasivam wrote:
+> > Add support for sending the events to the host over MHI bus from the
+> > endpoint. Following events are supported:
+> > 
+> > 1. Transfer completion event
+> > 2. Command completion event
+> > 3. State change event
+> > 4. Execution Environment (EE) change event
+> > 
+> > An event is sent whenever an operation has been completed in the MHI EP
+> > device. Event is sent using the MHI event ring and additionally the host
+> > is notified using an IRQ if required.
+> > 
+> > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> 
+> A few things can be simplified here.
+> 
+> 					-Alex
+> 
+> > ---
+> >   drivers/bus/mhi/common.h      |  15 ++++
+> >   drivers/bus/mhi/ep/internal.h |   8 ++-
+> >   drivers/bus/mhi/ep/main.c     | 126 ++++++++++++++++++++++++++++++++++
+> >   include/linux/mhi_ep.h        |   8 +++
+> >   4 files changed, 155 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/drivers/bus/mhi/common.h b/drivers/bus/mhi/common.h
+> > index 728c82928d8d..26d94ed52b34 100644
+> > --- a/drivers/bus/mhi/common.h
+> > +++ b/drivers/bus/mhi/common.h
+> > @@ -176,6 +176,21 @@
+> >   #define MHI_TRE_GET_EV_LINKSPEED(tre)			((MHI_TRE_GET_DWORD(tre, 1) >> 24) & 0xFF)
+> >   #define MHI_TRE_GET_EV_LINKWIDTH(tre)			(MHI_TRE_GET_DWORD(tre, 0) & 0xFF)
+> > +/* State change event */
+> > +#define MHI_SC_EV_PTR					0
+> > +#define MHI_SC_EV_DWORD0(state)				cpu_to_le32(state << 24)
+> > +#define MHI_SC_EV_DWORD1(type)				cpu_to_le32(type << 16)
+> > +
+> > +/* EE event */
+> > +#define MHI_EE_EV_PTR					0
+> > +#define MHI_EE_EV_DWORD0(ee)				cpu_to_le32(ee << 24)
+> > +#define MHI_EE_EV_DWORD1(type)				cpu_to_le32(type << 16)
+> > +
+> > +/* Command Completion event */
+> > +#define MHI_CC_EV_PTR(ptr)				cpu_to_le64(ptr)
+> > +#define MHI_CC_EV_DWORD0(code)				cpu_to_le32(code << 24)
+> > +#define MHI_CC_EV_DWORD1(type)				cpu_to_le32(type << 16)
+> > +
+> >   /* Transfer descriptor macros */
+> >   #define MHI_TRE_DATA_PTR(ptr)				cpu_to_le64(ptr)
+> >   #define MHI_TRE_DATA_DWORD0(len)			cpu_to_le32(len & MHI_MAX_MTU)
+> > diff --git a/drivers/bus/mhi/ep/internal.h b/drivers/bus/mhi/ep/internal.h
+> > index 48d6e9667d55..fd63f79c6aec 100644
+> > --- a/drivers/bus/mhi/ep/internal.h
+> > +++ b/drivers/bus/mhi/ep/internal.h
+> > @@ -131,8 +131,8 @@ enum mhi_ep_ring_type {
+> >   };
+> >   struct mhi_ep_ring_element {
+> > -	u64 ptr;
+> > -	u32 dword[2];
+> > +	__le64 ptr;
+> > +	__le32 dword[2];
+> 
+> Yay!
+> 
+> >   };
+> >   /* Ring element */
+> > @@ -227,4 +227,8 @@ void mhi_ep_mmio_get_mhi_state(struct mhi_ep_cntrl *mhi_cntrl, enum mhi_state *s
+> >   void mhi_ep_mmio_init(struct mhi_ep_cntrl *mhi_cntrl);
+> >   void mhi_ep_mmio_update_ner(struct mhi_ep_cntrl *mhi_cntrl);
+> > +/* MHI EP core functions */
+> > +int mhi_ep_send_state_change_event(struct mhi_ep_cntrl *mhi_cntrl, enum mhi_state state);
+> > +int mhi_ep_send_ee_event(struct mhi_ep_cntrl *mhi_cntrl, enum mhi_ep_execenv exec_env);
+> > +
+> >   #endif
+> > diff --git a/drivers/bus/mhi/ep/main.c b/drivers/bus/mhi/ep/main.c
+> > index 2c8045766292..61f066c6286b 100644
+> > --- a/drivers/bus/mhi/ep/main.c
+> > +++ b/drivers/bus/mhi/ep/main.c
 
-在 2022/2/22 AM2:18, Nathan Chancellor 写道:
-> Hi Shuai,
-> 
-> On Sat, Jan 22, 2022 at 01:26:17PM +0800, Shuai Xue wrote:
->> From commit e147133a42cb ("ACPI / APEI: Make hest.c manage the estatus
->> memory pool") was merged, ghes_init() relies on acpi_hest_init() to manage
->> the estatus memory pool. On the other hand, ghes_init() relies on
->> sdei_init() to detect the SDEI version and (un)register events. The
->> dependencies are as follows:
->>
->>     ghes_init() => acpi_hest_init() => acpi_bus_init() => acpi_init()
->>     ghes_init() => sdei_init()
->>
->> HEST is not PCI-specific and initcall ordering is implicit and not
->> well-defined within a level.
->>
->> Based on above, remove acpi_hest_init() from acpi_pci_root_init() and
->> convert ghes_init() and sdei_init() from initcalls to explicit calls in the
->> following order:
->>
->>     acpi_hest_init()
->>     ghes_init()
->>         sdei_init()
->>
->> Signed-off-by: Shuai Xue <xueshuai@linux.alibaba.com>
->> ---
->>  drivers/acpi/apei/ghes.c    | 19 ++++++++-----------
->>  drivers/acpi/bus.c          |  2 ++
->>  drivers/acpi/pci_root.c     |  3 ---
->>  drivers/firmware/Kconfig    |  1 +
->>  drivers/firmware/arm_sdei.c | 13 ++-----------
->>  include/acpi/apei.h         |  4 +++-
->>  include/linux/arm_sdei.h    |  2 ++
->>  7 files changed, 18 insertions(+), 26 deletions(-)
->>
->> diff --git a/drivers/acpi/apei/ghes.c b/drivers/acpi/apei/ghes.c
->> index 0c5c9acc6254..aadc0a972f18 100644
->> --- a/drivers/acpi/apei/ghes.c
->> +++ b/drivers/acpi/apei/ghes.c
->> @@ -1457,33 +1457,35 @@ static struct platform_driver ghes_platform_driver = {
->>  	.remove		= ghes_remove,
->>  };
->>  
->> -static int __init ghes_init(void)
->> +void __init ghes_init(void)
->>  {
->>  	int rc;
->>  
->> +	sdei_init();
->> +
->>  	if (acpi_disabled)
->> -		return -ENODEV;
->> +		return;
->>  
->>  	switch (hest_disable) {
->>  	case HEST_NOT_FOUND:
->> -		return -ENODEV;
->> +		return;
->>  	case HEST_DISABLED:
->>  		pr_info(GHES_PFX "HEST is not enabled!\n");
->> -		return -EINVAL;
->> +		return;
->>  	default:
->>  		break;
->>  	}
->>  
->>  	if (ghes_disable) {
->>  		pr_info(GHES_PFX "GHES is not enabled!\n");
->> -		return -EINVAL;
->> +		return;
->>  	}
->>  
->>  	ghes_nmi_init_cxt();
->>  
->>  	rc = platform_driver_register(&ghes_platform_driver);
->>  	if (rc)
->> -		goto err;
->> +		return;
->>  
->>  	rc = apei_osc_setup();
->>  	if (rc == 0 && osc_sb_apei_support_acked)
->> @@ -1494,9 +1496,4 @@ static int __init ghes_init(void)
->>  		pr_info(GHES_PFX "APEI firmware first mode is enabled by APEI bit.\n");
->>  	else
->>  		pr_info(GHES_PFX "Failed to enable APEI firmware first mode.\n");
->> -
->> -	return 0;
->> -err:
->> -	return rc;
->>  }
->> -device_initcall(ghes_init);
->> diff --git a/drivers/acpi/bus.c b/drivers/acpi/bus.c
->> index 07f604832fd6..3f403db20f69 100644
->> --- a/drivers/acpi/bus.c
->> +++ b/drivers/acpi/bus.c
->> @@ -1331,6 +1331,8 @@ static int __init acpi_init(void)
->>  
->>  	pci_mmcfg_late_init();
->>  	acpi_iort_init();
->> +	acpi_hest_init();
->> +	ghes_init();
->>  	acpi_scan_init();
->>  	acpi_ec_init();
->>  	acpi_debugfs_init();
->> diff --git a/drivers/acpi/pci_root.c b/drivers/acpi/pci_root.c
->> index b76db99cced3..6f9e75d14808 100644
->> --- a/drivers/acpi/pci_root.c
->> +++ b/drivers/acpi/pci_root.c
->> @@ -22,8 +22,6 @@
->>  #include <linux/slab.h>
->>  #include <linux/dmi.h>
->>  #include <linux/platform_data/x86/apple.h>
->> -#include <acpi/apei.h>	/* for acpi_hest_init() */
->> -
->>  #include "internal.h"
->>  
->>  #define ACPI_PCI_ROOT_CLASS		"pci_bridge"
->> @@ -943,7 +941,6 @@ struct pci_bus *acpi_pci_root_create(struct acpi_pci_root *root,
->>  
->>  void __init acpi_pci_root_init(void)
->>  {
->> -	acpi_hest_init();
->>  	if (acpi_pci_disabled)
->>  		return;
->>  
->> diff --git a/drivers/firmware/Kconfig b/drivers/firmware/Kconfig
->> index 75cb91055c17..ad114d9cdf8e 100644
->> --- a/drivers/firmware/Kconfig
->> +++ b/drivers/firmware/Kconfig
->> @@ -40,6 +40,7 @@ config ARM_SCPI_POWER_DOMAIN
->>  config ARM_SDE_INTERFACE
->>  	bool "ARM Software Delegated Exception Interface (SDEI)"
->>  	depends on ARM64
->> +	select ACPI_APEI_GHES
-> 
-> As the kernel test robot pointed out [1], you cannot do this.
-> CONFIG_ACPI_APEI_GHES is a user selectable symbol that has dependencies,
-> which 'select' completely overrides, resulting in build failures when
-> CONFIG_ACPI_APEI is not enabled.
-> 
-> If CONFIG_ARM_SDE_INTERFACE truly requires CONFIG_ACPI_APEI_GHES, you
-> should have "depends on ACPI_APEI_GHES".
-> 
-> If CONFIG_ARM_SDE_INTERFACE soft depends on CONFIG_ACPI_APEI_GHES for
-> functionality but can work without it, you could use
-> "imply ACPI_APEI_GHES", which will enable CONFIG_ACPI_APEI_GHES if its
-> dependencies are met.
-> 
-> I noticed the same error with Alpine Linux's aarch64 configuration [2]
-> if you wanted a quick configuration to test with.
-> 
-> [1]: https://lore.kernel.org/r/202202151504.jWpZGPaH-lkp@intel.com/
-> [2]: https://git.alpinelinux.org/aports/plain/community/linux-edge/config-edge.aarch64
+[...]
 
-Thank you for explaining the difference among 'select', 'depends on' and 'imply'.
-I was wrong to use 'select'. sdei_init() is called in ghes_init() now, in other words,
-CONFIG_ARM_SDE_INTERFACE truly requires CONFIG_ACPI_APEI_GHES, so we should use
-'depends on'. I will send a new patch set to fix this problem.
+> > +static int mhi_ep_send_completion_event(struct mhi_ep_cntrl *mhi_cntrl,
+> > +					struct mhi_ep_ring *ring, u32 len,
+> > +					enum mhi_ev_ccs code)
+> > +{
+> > +	struct mhi_ep_ring_element event = {};
+> > +	__le32 tmp;
+> > +
+> > +	event.ptr = le64_to_cpu(ring->ring_ctx->generic.rbase) +
+> > +			ring->rd_offset * sizeof(struct mhi_ep_ring_element);
+> 
+> I'm not sure at the moment where this will be called.  But
+> it might be easier to pass in the transfer channel pointer
+> rather than compute its address here.
+> 
 
-Best Regards,
-Shuai
+Passing the ring element to these functions won't help. Because, the ring
+element only has the address of the buffer it points to. But what we need here
+is the address of the ring element itself and that can only be found in ring
+context.
+
+Thanks,
+Mani

@@ -2,69 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EB684C0D25
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 08:18:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A0BD54C0D2A
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 08:23:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238613AbiBWHSd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 02:18:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46602 "EHLO
+        id S238617AbiBWHYH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 02:24:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235279AbiBWHSc (ORCPT
+        with ESMTP id S235001AbiBWHYG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 02:18:32 -0500
-Received: from mail-qv1-xf36.google.com (mail-qv1-xf36.google.com [IPv6:2607:f8b0:4864:20::f36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A81936EB1F
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 23:18:04 -0800 (PST)
-Received: by mail-qv1-xf36.google.com with SMTP id p7so6707168qvk.11
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 23:18:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=N4B4mDV8JjOEepG6T/J1kqCdNA6meuh9hg3A+Zp29gE=;
-        b=RdNA7DnyXJ0Kj2AabN0MN0vv3aq2M+MRO9h0RW5u2gTg9981Wf0Hca/JInQujvMgno
-         EImY6M1EXq8OPeEyCmJUidLPPOOR0zBXqx3S25Tj5AXT6ASVsVQQD8UYd41UU/28JyBK
-         mmzKrPRDc/QNxLqbkDJY6LQqPEv1O7FVm7zohDe0CLlg8azXbgq5LGJjDxgTORrxCdeS
-         VFc8W7lAQzd3289YqTD2RO9Q1V2D7kPcsYls3xQggSCIMOATg0aUQsg9V4sJo/gaaggi
-         bRm4EmAXyR5uS7vi1Orb3gGkqNxJXaJCkUI7M+4RPgbW3ivOG8hyJyJUquxu2sdTyG5V
-         6GjA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=N4B4mDV8JjOEepG6T/J1kqCdNA6meuh9hg3A+Zp29gE=;
-        b=U+v+Bm//ratSvcUBYqYz4VaNhBFnEx7ZQ5llemj7J5w9+WUKijUnFtWLmP8groi5r6
-         ULxgSJ+zs2j+yf6+SEyIBsdlHu0bK1TLKPy+9h5iOgMwtbUS+EMe9m4RNcPe4CeCHu8W
-         gqy+HVAcdx0Gmw2HLLuBawosF6FmiM096nLuLa9t3C3kMIGcm5E3vY/lg1O+JY7zwSi4
-         xezs3c1nmjLAExM/DHnGN0aPMExBkUtQy6h7EM40USOWZLlY1EhRRBz135RG5tompwim
-         3BGQdBfir+pKMUx9rlKJuxOvCK2wgYKk5oS6//jUe97XlUOxwQrdhZVLOmkpNM0sU3cm
-         H+5w==
-X-Gm-Message-State: AOAM5317bk2KXPer4EUHuMq8aJjZjtBDfBuumiogVwwv+P/O240r85Qz
-        y5W0RdXhwRuZT39yso4S2g4=
-X-Google-Smtp-Source: ABdhPJzVtkkin3VXw+8xInWXnKF2npxYawCcZotHdHJ/NCI86+mLuRdcPM7TFAzf+eeQsR2QpBU5sw==
-X-Received: by 2002:ad4:5948:0:b0:42d:7abd:7f9c with SMTP id eo8-20020ad45948000000b0042d7abd7f9cmr21986732qvb.80.1645600683799;
-        Tue, 22 Feb 2022 23:18:03 -0800 (PST)
-Received: from mail.google.com ([207.246.89.135])
-        by smtp.gmail.com with ESMTPSA id x134sm1246948qkb.92.2022.02.22.23.18.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Feb 2022 23:18:03 -0800 (PST)
-Date:   Wed, 23 Feb 2022 15:18:01 +0800
-From:   Changbin Du <changbin.du@gmail.com>
-To:     Palmer Dabbelt <palmer@dabbelt.com>
-Cc:     changbin.du@gmail.com, Paul Walmsley <paul.walmsley@sifive.com>,
-        aou@eecs.berkeley.edu, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] riscv: patch: remove lockdep assertion on lock text_mutex
-Message-ID: <20220223071801.2gyv23lyf6gumpau@mail.google.com>
-References: <20210417023532.354714-1-changbin.du@gmail.com>
- <mhng-6a0fd653-64f8-4d0d-a265-d80cecdc1b84@palmerdabbelt-glaptop>
+        Wed, 23 Feb 2022 02:24:06 -0500
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2057.outbound.protection.outlook.com [40.107.223.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 019A66C97C
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 23:23:37 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=byYcToTQkqYE2uvYxOScd0puLQZlLV9x9rkmFU5YgaMJi25/iVRlGOrFNCmBpNglo0XcJQ7PdTGO/IF8utnmqd9rOn768KzOtkIC1eHE/z6UhNUmc1UhMo/SBKWUs+jQeY/0AcOpEzsoWy9zwZUQjC0lr9ZSE5oeSsdOjlpJkwLW6V4mYXe09M0k89fkKHkuiiWAYLxhuqOnnotX2q+3OCmQdwxcbpG0Cs8MLJ3mcsbdAt2bCh3IOJO3nsbpumqnPQk0o0HbFtWvUgAMfjdLhlb8iLBGzxhMt5F5sbzXfuJuNkc3QZLtItL1Knx2tB/95Ory7g6uxbPegBD0JppStg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=fSLPIoyCoYNuCv031q6KvtizgGgQUbbVBnrTpN1trrA=;
+ b=a/pyGLNScTMs1QTzIAbqZ2ZvBJzt54NYyrUaasplavgEkGLi6KwfEAdMsqrmSuBR5DeKZxoowaTm70rYu71n09b5Lvfk1FZ9Tx2HcnQJ9CmZbW0/8FPs+V0rVSRS30hV4PcWxL+7aa9K0WirK5RZ3/KUR0nxE5vvp18U9Aw7vB5KvcKLgmfu6OKkP2qknpMXo9kcnn1PNwHqgYNkfo2S/RrfUobbTYaTgVHqhHGjdIGAmC6hSSEanNQGfXxJVadvQGio+Z+qQD1V+HznV1o6FHLcyn2n+b5sHi0XzbT8tU7BbgMbYoO9MfuvakAZLtqkCgV8j30Q6g/6qPP6YVWh+A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=fSLPIoyCoYNuCv031q6KvtizgGgQUbbVBnrTpN1trrA=;
+ b=btVK9KS5D6EFc+sp0Ctw3i2cKNsOeNf0KzlWUfn55kyrrf5xNiNrXH5uWcX/QPWs6LYYNEDszhMDwqbJa9boY0MPMkClWC4/6iAr7Pv5+q2yxj+CS0jowkm3s61Ond/h2S/m61PqXNzMVqEN4gydLDDHjNJKIxkeFV5AMqcAoig=
+Received: from BN9PR03CA0507.namprd03.prod.outlook.com (2603:10b6:408:130::32)
+ by MW2PR12MB2348.namprd12.prod.outlook.com (2603:10b6:907:e::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4995.16; Wed, 23 Feb
+ 2022 07:23:35 +0000
+Received: from BN8NAM11FT039.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:130:cafe::c5) by BN9PR03CA0507.outlook.office365.com
+ (2603:10b6:408:130::32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5017.21 via Frontend
+ Transport; Wed, 23 Feb 2022 07:23:34 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB03.amd.com;
+Received: from SATLEXMB03.amd.com (165.204.84.17) by
+ BN8NAM11FT039.mail.protection.outlook.com (10.13.177.169) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5017.22 via Frontend Transport; Wed, 23 Feb 2022 07:23:34 +0000
+Received: from SATLEXMB05.amd.com (10.181.40.146) by SATLEXMB03.amd.com
+ (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Wed, 23 Feb
+ 2022 01:23:34 -0600
+Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB05.amd.com
+ (10.181.40.146) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Wed, 23 Feb
+ 2022 01:23:33 -0600
+Received: from LinuxHost.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server id 15.1.2375.18 via Frontend
+ Transport; Wed, 23 Feb 2022 01:23:30 -0600
+From:   Vijendar Mukunda <Vijendar.Mukunda@amd.com>
+To:     <broonie@kernel.org>, <alsa-devel@alsa-project.org>
+CC:     <Alexander.Deucher@amd.com>, <Sunil-kumar.Dommati@amd.com>,
+        <krisman@collabora.com>, <wtli@nuvoton.com>,
+        Vijendar Mukunda <Vijendar.Mukunda@amd.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        "Jaroslav Kysela" <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: [PATCH 1/9] ASoC: amd: vg: fix for pm resume callback sequence
+Date:   Wed, 23 Feb 2022 12:49:30 +0530
+Message-ID: <20220223071959.13539-1-Vijendar.Mukunda@amd.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <mhng-6a0fd653-64f8-4d0d-a265-d80cecdc1b84@palmerdabbelt-glaptop>
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 97ec166d-e9fe-48df-65f6-08d9f69d66f3
+X-MS-TrafficTypeDiagnostic: MW2PR12MB2348:EE_
+X-Microsoft-Antispam-PRVS: <MW2PR12MB23488A22BA653982DC15926F973C9@MW2PR12MB2348.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: qjoTapz/IusMGuYJqufDOw4N2Dgzt91zvtht8NvvNo5waYxd4yxU0xR2wLXUYK6rdV8eq+6eE//dBQUzYcgcQAYdBBn3/L2vIMJcktToIj+vMn9X1YrjaN4mPuAvgP0o77eIedcGRaBEPCGJQFUJqShGhiQ/NeFkcwVJFqb3DWhDDOvAB84zSraNb2KTd63An8UYxqG74smggdbLmfJxKZx1Hy7edGdlouRCHUq+AzCIAOJG73H5dohPm3Ot+rJMnfLnm8cxCju6u1Pgx1jQHHL/hqj74cqOvxcd/tGcyiXfeXGoWEe+XyZsYHZ3fho5vljkG2xefqwp05PpKkQsP7QH79APGvnsFgGh8ucIi79RBaoedFD8IuAh+8bAJt2ckTIM7ImuqZWJlpy0aV+lhvkSD/51VxGdkQcOV8fldl3WySFcH0OqUw4qtjxm3wzRUz/2N0ZoYICIq+h50HK1CpLVWFvxww5ABGk2IEhuN+XZKMExqGjcBaTI+wNQjMgYYDfKHUJgJfvRPz8h+bFuBele4zq51sSibG7tqhPxCpLDFCHMrHvDgkaGCMz1yGAZBk+dxMXgmjxIsXAMglpSR6Sl4Mrj/8DiyUnRwK20mLwiyb+uBeJ8DMae87DQxyS+w3f6+6qIoNaNFEV6xkfjzDltJh9LEdqAC2gefblIwWaNTVunL74NJk/PguqbYFL6dGWDbDsQpmC0z0Oz7FCfWg==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(46966006)(36840700001)(40470700004)(8936002)(2616005)(336012)(7696005)(186003)(26005)(508600001)(356005)(86362001)(40460700003)(1076003)(70586007)(70206006)(4326008)(8676002)(81166007)(5660300002)(82310400004)(36860700001)(47076005)(54906003)(83380400001)(316002)(36756003)(110136005)(2906002)(426003)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Feb 2022 07:23:34.6536
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 97ec166d-e9fe-48df-65f6-08d9f69d66f3
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB03.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT039.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW2PR12MB2348
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,89 +106,104 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 28, 2021 at 11:20:20PM -0700, Palmer Dabbelt wrote:
-> On Fri, 16 Apr 2021 19:35:32 PDT (-0700), changbin.du@gmail.com wrote:
-> > The function patch_insn_write() expects that the text_mutex is already
-> > held. There's a case that text_mutex is acquired by ftrace_run_update_code()
-> > under syscall context but then patch_insn_write() will be executed under the
-> > migration kthread context as we involves stop machine. So we should remove
-> > the assertion, or it can cause warning storm in kernel message.
-> > 
-> > [  104.641978] ------------[ cut here ]------------
-> > [  104.642327] WARNING: CPU: 0 PID: 13 at arch/riscv/kernel/patch.c:63 patch_insn_write+0x166/0x17c
-> > [  104.643587] Modules linked in:
-> > [  104.644691] CPU: 0 PID: 13 Comm: migration/0 Not tainted 5.12.0-rc7-00067-g9cdbf6467424 #102
-> > [  104.644907] Hardware name: riscv-virtio,qemu (DT)
-> > [  104.645068] Stopper: multi_cpu_stop+0x0/0x17e <- 0x0
-> > [  104.645349] epc : patch_insn_write+0x166/0x17c
-> > [  104.645467]  ra : patch_insn_write+0x162/0x17c
-> > [  104.645534] epc : ffffffe0000059c6 ra : ffffffe0000059c2 sp : ffffffe002a33c70
-> > [  104.645580]  gp : ffffffe0019e5518 tp : ffffffe002a232c0 t0 : ffffffe01295e8a8
-> > [  104.645622]  t1 : 0000000000000001 t2 : 0000000000000000 s0 : ffffffe002a33cc0
-> > [  104.645675]  s1 : ffffffe000007f72 a0 : 0000000000000000 a1 : ffffffffffffffff
-> > [  104.645716]  a2 : 0000000000000001 a3 : 0000000000000000 a4 : 0000000000000001
-> > [  104.645757]  a5 : ffffffe0799e45c8 a6 : 00000000000ca097 a7 : 0000000000000000
-> > [  104.645798]  s2 : 0000000000000008 s3 : 0000000000000f72 s4 : ffffffe002a33ce0
-> > [  104.645839]  s5 : 0000000000000f7a s6 : 0000000000000003 s7 : 0000000000000003
-> > [  104.645880]  s8 : 0000000000000004 s9 : 0000000000000002 s10: 0000000000000000
-> > [  104.645920]  s11: 0000000000000002 t3 : 0000000000000001 t4 : ffffffe000c615c8
-> > [  104.645958]  t5 : 0000000000007fff t6 : 0000000000000380
-> > [  104.645998] status: 0000000000000100 badaddr: 0000000000000000 cause: 0000000000000003
-> > [  104.646081] Call Trace:
-> > [  104.646147] [<ffffffe0000059c6>] patch_insn_write+0x166/0x17c
-> > [  104.646280] [<ffffffe0000059ec>] patch_text_nosync+0x10/0x32
-> > [  104.646317] [<ffffffe000007d0c>] ftrace_update_ftrace_func+0x74/0xac
-> > [  104.646352] [<ffffffe0000d338a>] ftrace_modify_all_code+0x9c/0x144
-> > [  104.646387] [<ffffffe0000d3444>] __ftrace_modify_code+0x12/0x1c
-> > [  104.646420] [<ffffffe0000c4c2c>] multi_cpu_stop+0xa8/0x17e
-> > [  104.646451] [<ffffffe0000c4474>] cpu_stopper_thread+0xb2/0x156
-> > [  104.646489] [<ffffffe00003645e>] smpboot_thread_fn+0x102/0x1ea
-> > [  104.646524] [<ffffffe0000311b0>] kthread+0x132/0x148
-> > [  104.646556] [<ffffffe000002e02>] ret_from_exception+0x0/0x14
-> > [  104.646657] ---[ end trace ccf71babb9de4d5b ]---
-> > [  104.647444] ------------[ cut here ]------------
-> > 
-> > Signed-off-by: Changbin Du <changbin.du@gmail.com>
-> > ---
-> >  arch/riscv/kernel/patch.c | 13 ++++++-------
-> >  1 file changed, 6 insertions(+), 7 deletions(-)
-> > 
-> > diff --git a/arch/riscv/kernel/patch.c b/arch/riscv/kernel/patch.c
-> > index 0b552873a577..6d2ed9c15065 100644
-> > --- a/arch/riscv/kernel/patch.c
-> > +++ b/arch/riscv/kernel/patch.c
-> > @@ -49,19 +49,18 @@ static void patch_unmap(int fixmap)
-> >  }
-> >  NOKPROBE_SYMBOL(patch_unmap);
-> > 
-> > +
-> > +/*
-> > + * Before reaching here, it was expected to lock the text_mutex
-> > + * already, so we don't need to give another lock here and could
-> > + * ensure that it was safe between each cores.
-> > + */
-> >  static int patch_insn_write(void *addr, const void *insn, size_t len)
-> >  {
-> >  	void *waddr = addr;
-> >  	bool across_pages = (((uintptr_t) addr & ~PAGE_MASK) + len) > PAGE_SIZE;
-> >  	int ret;
-> > 
-> > -	/*
-> > -	 * Before reaching here, it was expected to lock the text_mutex
-> > -	 * already, so we don't need to give another lock here and could
-> > -	 * ensure that it was safe between each cores.
-> > -	 */
-> > -	lockdep_assert_held(&text_mutex);
-> > -
-> >  	if (across_pages)
-> >  		patch_map(addr + len, FIX_TEXT_POKE1);
-> 
-> Well, we definately need the lock -- otherwise concurrent callers will
-> install conflicting maps for FIX_TEXT_POKE*, step on each other, and install
-> the wrong patch.  I just sent out a patch to use an explicit lock here, as
-> sharing text_mutex doesn't seem safe.
+The previous condition is used to cross check only the active
+stream status for I2S HS instance playback and capture use cases.
 
-Just a note that this issue still exist on mainline. 
+Modified logic to invoke sequence for two i2s controller instances.
+
+Signed-off-by: Vijendar Mukunda <Vijendar.Mukunda@amd.com>
+---
+ sound/soc/amd/vangogh/acp5x-pcm-dma.c | 62 ++++++++++++++-------------
+ 1 file changed, 32 insertions(+), 30 deletions(-)
+
+diff --git a/sound/soc/amd/vangogh/acp5x-pcm-dma.c b/sound/soc/amd/vangogh/acp5x-pcm-dma.c
+index f10de38976cb..17853d8d56d3 100644
+--- a/sound/soc/amd/vangogh/acp5x-pcm-dma.c
++++ b/sound/soc/amd/vangogh/acp5x-pcm-dma.c
+@@ -426,6 +426,7 @@ static int acp5x_audio_remove(struct platform_device *pdev)
+ static int __maybe_unused acp5x_pcm_resume(struct device *dev)
+ {
+ 	struct i2s_dev_data *adata;
++	struct i2s_stream_instance *rtd;
+ 	u32 val, reg_val, frmt_val;
+ 
+ 	reg_val = 0;
+@@ -433,44 +434,45 @@ static int __maybe_unused acp5x_pcm_resume(struct device *dev)
+ 	adata = dev_get_drvdata(dev);
+ 
+ 	if (adata->play_stream && adata->play_stream->runtime) {
+-		struct i2s_stream_instance *rtd =
+-			adata->play_stream->runtime->private_data;
++		rtd = adata->play_stream->runtime->private_data;
+ 		config_acp5x_dma(rtd, SNDRV_PCM_STREAM_PLAYBACK);
+-		switch (rtd->i2s_instance) {
+-		case I2S_HS_INSTANCE:
+-			reg_val = ACP_HSTDM_ITER;
+-			frmt_val = ACP_HSTDM_TXFRMT;
+-			break;
+-		case I2S_SP_INSTANCE:
+-		default:
+-			reg_val = ACP_I2STDM_ITER;
+-			frmt_val = ACP_I2STDM_TXFRMT;
++		acp_writel((rtd->xfer_resolution  << 3), rtd->acp5x_base + ACP_HSTDM_ITER);
++		if (adata->tdm_mode == TDM_ENABLE) {
++			acp_writel(adata->tdm_fmt, adata->acp5x_base + ACP_HSTDM_TXFRMT);
++			val = acp_readl(adata->acp5x_base + ACP_HSTDM_ITER);
++			acp_writel(val | 0x2, adata->acp5x_base + ACP_HSTDM_ITER);
++		}
++	}
++	if (adata->i2ssp_play_stream && adata->i2ssp_play_stream->runtime) {
++		rtd = adata->i2ssp_play_stream->runtime->private_data;
++		config_acp5x_dma(rtd, SNDRV_PCM_STREAM_PLAYBACK);
++		acp_writel((rtd->xfer_resolution  << 3), rtd->acp5x_base + ACP_I2STDM_ITER);
++		if (adata->tdm_mode == TDM_ENABLE) {
++			acp_writel(adata->tdm_fmt, adata->acp5x_base + ACP_I2STDM_TXFRMT);
++			val = acp_readl(adata->acp5x_base + ACP_I2STDM_ITER);
++			acp_writel(val | 0x2, adata->acp5x_base + ACP_I2STDM_ITER);
+ 		}
+-		acp_writel((rtd->xfer_resolution  << 3),
+-			   rtd->acp5x_base + reg_val);
+ 	}
+ 
+ 	if (adata->capture_stream && adata->capture_stream->runtime) {
+-		struct i2s_stream_instance *rtd =
+-			adata->capture_stream->runtime->private_data;
++		rtd = adata->capture_stream->runtime->private_data;
+ 		config_acp5x_dma(rtd, SNDRV_PCM_STREAM_CAPTURE);
+-		switch (rtd->i2s_instance) {
+-		case I2S_HS_INSTANCE:
+-			reg_val = ACP_HSTDM_IRER;
+-			frmt_val = ACP_HSTDM_RXFRMT;
+-			break;
+-		case I2S_SP_INSTANCE:
+-		default:
+-			reg_val = ACP_I2STDM_IRER;
+-			frmt_val = ACP_I2STDM_RXFRMT;
++		acp_writel((rtd->xfer_resolution  << 3), rtd->acp5x_base + ACP_HSTDM_IRER);
++		if (adata->tdm_mode == TDM_ENABLE) {
++			acp_writel(adata->tdm_fmt, adata->acp5x_base + ACP_HSTDM_RXFRMT);
++			val = acp_readl(adata->acp5x_base + ACP_HSTDM_IRER);
++			acp_writel(val | 0x2, adata->acp5x_base + ACP_HSTDM_IRER);
+ 		}
+-		acp_writel((rtd->xfer_resolution  << 3),
+-			   rtd->acp5x_base + reg_val);
+ 	}
+-	if (adata->tdm_mode == TDM_ENABLE) {
+-		acp_writel(adata->tdm_fmt, adata->acp5x_base + frmt_val);
+-		val = acp_readl(adata->acp5x_base + reg_val);
+-		acp_writel(val | 0x2, adata->acp5x_base + reg_val);
++	if (adata->i2ssp_capture_stream && adata->i2ssp_capture_stream->runtime) {
++		rtd = adata->i2ssp_capture_stream->runtime->private_data;
++		config_acp5x_dma(rtd, SNDRV_PCM_STREAM_CAPTURE);
++		acp_writel((rtd->xfer_resolution  << 3), rtd->acp5x_base + ACP_I2STDM_IRER);
++		if (adata->tdm_mode == TDM_ENABLE) {
++			acp_writel(adata->tdm_fmt, adata->acp5x_base + ACP_I2STDM_RXFRMT);
++			val = acp_readl(adata->acp5x_base + ACP_I2STDM_IRER);
++			acp_writel(val | 0x2, adata->acp5x_base + ACP_I2STDM_IRER);
++		}
+ 	}
+ 	acp_writel(1, adata->acp5x_base + ACP_EXTERNAL_INTR_ENB);
+ 	return 0;
 -- 
-Cheers,
-Changbin Du
+2.17.1
+

@@ -2,151 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1981B4C1C11
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 20:20:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 06C084C1C14
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 20:20:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244341AbiBWTTk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 14:19:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38500 "EHLO
+        id S244355AbiBWTUF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 14:20:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244328AbiBWTTi (ORCPT
+        with ESMTP id S233668AbiBWTUD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 14:19:38 -0500
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAE4B46155
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 11:19:09 -0800 (PST)
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com [209.85.218.69])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 6A3F63FCA5
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 19:19:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1645643948;
-        bh=OsmDWPse4xUb7lllvZErJnLq536hKmJqOuDcEnXswgI=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=Pyi3ZOsftRe4LCarU+sJ6V9zOGZ1f2csY6Ye3gN++YLm0D91rrcv3GRDbrIdPrAnU
-         KossIc9JSbE3oNYq6ku9O22UXEO2o2js/uhDaaSAFBroR6N+CrTI/y/flxACvVQSJA
-         p5ssWrFAJRdX+kf44kuNx52Pw0M3CpZukl/3jNw0NeLCSrwEMP9OhCyukUHmiR4y95
-         Fan33RM5XlgKofNgCWBgba5PBrP14Gp8EyXk4U6qmHYOHNBhgBqMyioyXfH6br3b3s
-         abHNwAngTxkyadwJGAbvWHg+wWYKiKnRjwgBY4xrSKK2WM2hiAL+jCgBxPBMMjwT4X
-         77C5OzygbQjmg==
-Received: by mail-ej1-f69.google.com with SMTP id gn20-20020a1709070d1400b006cf1fcb4c8dso7514380ejc.12
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 11:19:08 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=OsmDWPse4xUb7lllvZErJnLq536hKmJqOuDcEnXswgI=;
-        b=nBWLlv2oJumTnS3z+8G96JElBb50EVyBxYKwztcgJ9akTi5+pfcwaMza616vOdFE3m
-         Ct9htoNcfD8JFqXRQORIzKh6glAEJJxbtSavV/IirWFiZbhEByiDK8K1zY9CR3aVqtxF
-         pCGkehr/eHcPdoednLuQdbrq2Z7Iv5QA/WZTEh6bTGSrEzdwQQATEdHhQvgbtq37CZYO
-         RD2hbfgOqVKXbIyzm8WseYTzoQDR7fJXigoC4g+/ZsTyc9pD5o/cPsdm78UX3eA75Sbf
-         Z/v42Qzs2xbwYtjy6Xo8gDEhn5v8yup5hajbk1OaDrvlbLj02NnGTv/Xu4aSgLfZ7+Hn
-         6Adw==
-X-Gm-Message-State: AOAM533mY4SeQv8wdavQM50AfXhzq8lwWTt0cBHaGdA6Eid1TpMrhYwY
-        6KstfYbcRTq+wgyfttaN81d6RXt77Q4XMWS0OsoQqMnSwlEZBIziDgDoZr95SC6t6Zv6RCWB8/f
-        3epi1cn17yYLNzLAhgY6JcCzVxPmkSTgIbXQ2WQUsWg==
-X-Received: by 2002:a17:906:6b8e:b0:6b9:1f27:73e with SMTP id l14-20020a1709066b8e00b006b91f27073emr863421ejr.361.1645643947954;
-        Wed, 23 Feb 2022 11:19:07 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyJ9QUyPanWfiXE6vKIo8o+c2pwl8ckmaYif3CteDvcltA9YiJZAZD09dYlCxpl8UKoIvZBag==
-X-Received: by 2002:a17:906:6b8e:b0:6b9:1f27:73e with SMTP id l14-20020a1709066b8e00b006b91f27073emr863390ejr.361.1645643947743;
-        Wed, 23 Feb 2022 11:19:07 -0800 (PST)
-Received: from [192.168.0.127] (xdsl-188-155-181-108.adslplus.ch. [188.155.181.108])
-        by smtp.gmail.com with ESMTPSA id x14sm302707edd.63.2022.02.23.11.19.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 23 Feb 2022 11:19:07 -0800 (PST)
-Message-ID: <31c4f987-6480-278f-1d49-02bd611b521c@canonical.com>
-Date:   Wed, 23 Feb 2022 20:19:05 +0100
+        Wed, 23 Feb 2022 14:20:03 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF95245AEF;
+        Wed, 23 Feb 2022 11:19:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645643974; x=1677179974;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=pDgw7OCRc/lpOELn0dBUMVTTBUjbmk7Aeld/Q7TbFbM=;
+  b=ifPg2ITfJn1N1xRI35ZFLc1ASMPsJLWrNAIFyD94yX2uh6mrupkTajqf
+   223bzkA+T+XGswVoZNnVYKWZf2cS3kTNIYm2H0HI9BAW/UeJm9qSReMEc
+   Sz+9gP8yyfnmhwjgL5iRNySG5oVEg0hEL2SA4WcqzZ87ge17wbz5c24qa
+   PAmqo3kpvA30cCV8k1JO+NbHLRTEpUbyOnugupTSpJsIHKhcLBaLc5J9J
+   JR4h2BPgkmMFfHPzKx1HljTRuv8yBAbOtt/amKAl7Vhk5nSUM5DaNmJFJ
+   YXzb8uSkpL79wChEHVpv8zDyIwruznKspH4QB/d1Tt0QzDdYbBwY0Hu/U
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10267"; a="249642364"
+X-IronPort-AV: E=Sophos;i="5.88,391,1635231600"; 
+   d="scan'208";a="249642364"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2022 11:19:34 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,391,1635231600"; 
+   d="scan'208";a="591820678"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga008.fm.intel.com with ESMTP; 23 Feb 2022 11:19:32 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 32D6894; Wed, 23 Feb 2022 21:19:49 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Mark Brown <broonie@kernel.org>
+Subject: [PATCH v1 1/1] spi: pxa2xx-pci: Do not dereference fwnode in struct device
+Date:   Wed, 23 Feb 2022 21:19:48 +0200
+Message-Id: <20220223191948.31325-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v2 09/11] clk: imx: scu: fix kfree() of static memory on
- setting driver_override
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Stuart Yoder <stuyoder@gmail.com>,
-        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
-        Abel Vesa <abel.vesa@nxp.com>, Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Vineeth Vijayan <vneethv@linux.ibm.com>,
-        Peter Oberparleiter <oberpar@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Andy Gross <agross@kernel.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, NXP Linux Team <linux-imx@nxp.com>,
-        linux-arm-kernel@lists.infradead.org, linux-hyperv@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        linux-s390@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-spi@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Rasmus Villemoes <linux@rasmusvillemoes.dk>, stable@vger.kernel.org
-References: <20220223191310.347669-1-krzysztof.kozlowski@canonical.com>
- <20220223191441.348109-3-krzysztof.kozlowski@canonical.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20220223191441.348109-3-krzysztof.kozlowski@canonical.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23/02/2022 20:14, Krzysztof Kozlowski wrote:
-> The driver_override field from platform driver should not be initialized
-> from static memory (string literal) because the core later kfree() it,
-> for example when driver_override is set via sysfs.
-> 
-> Use dedicated helper to set driver_override properly.
-> 
-> Fixes: 77d8f3068c63 ("clk: imx: scu: add two cells binding support")
-> Cc: <stable@vger.kernel.org>
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-> ---
->  drivers/clk/imx/clk-scu.c | 7 ++++++-
->  1 file changed, 6 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/clk/imx/clk-scu.c b/drivers/clk/imx/clk-scu.c
-> index 083da31dc3ea..15e1d670e51f 100644
-> --- a/drivers/clk/imx/clk-scu.c
-> +++ b/drivers/clk/imx/clk-scu.c
-> @@ -683,7 +683,12 @@ struct clk_hw *imx_clk_scu_alloc_dev(const char *name,
->  		return ERR_PTR(ret);
->  	}
->  
-> -	pdev->driver_override = "imx-scu-clk";
-> +	ret = driver_set_override(&pdev->dev, &pdev->driver_override,
-> +				  "imx-scu-clk");
-> +	if (ret) {
-> +		platform_device_put(pdev);
-> +		return ret;
+In order to make the underneath API easier to change in the future,
+prevent users from dereferencing fwnode from struct device.
+Instead, use the specific dev_fwnode() API for that.
 
-This is wrong - should be ERR_PTR.
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/spi/spi-pxa2xx-pci.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/drivers/spi/spi-pxa2xx-pci.c b/drivers/spi/spi-pxa2xx-pci.c
+index 6502fda6243e..6d60972e4e20 100644
+--- a/drivers/spi/spi-pxa2xx-pci.c
++++ b/drivers/spi/spi-pxa2xx-pci.c
+@@ -276,7 +276,7 @@ static int pxa2xx_spi_pci_probe(struct pci_dev *dev,
+ 		return PTR_ERR(ssp->clk);
+ 
+ 	memset(&pi, 0, sizeof(pi));
+-	pi.fwnode = dev->dev.fwnode;
++	pi.fwnode = dev_fwnode(&dev->dev);
+ 	pi.parent = &dev->dev;
+ 	pi.name = "pxa2xx-spi";
+ 	pi.id = ssp->port_id;
+-- 
+2.34.1
 
-Best regards,
-Krzysztof

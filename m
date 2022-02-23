@@ -2,158 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B761F4C184F
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 17:16:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B7D14C1821
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 17:07:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242678AbiBWQQa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 11:16:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48894 "EHLO
+        id S242269AbiBWQHl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 11:07:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236228AbiBWQQ1 (ORCPT
+        with ESMTP id S234332AbiBWQHj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 11:16:27 -0500
-X-Greylist: delayed 522 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 23 Feb 2022 08:15:58 PST
-Received: from wnew2-smtp.messagingengine.com (wnew2-smtp.messagingengine.com [64.147.123.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45E5FC4E12;
-        Wed, 23 Feb 2022 08:15:58 -0800 (PST)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailnew.west.internal (Postfix) with ESMTP id 70C702B0014E;
-        Wed, 23 Feb 2022 11:07:15 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute4.internal (MEProxy); Wed, 23 Feb 2022 11:07:16 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yotsuba.nl; h=cc
-        :cc:content-transfer-encoding:date:date:from:from:in-reply-to
-        :message-id:mime-version:reply-to:sender:subject:subject:to:to;
-         s=fm2; bh=6WaAJK5lyFLmcmFKJl+0M+d6NIX9M8qY6UrRrz5b9zI=; b=eEh3k
-        eL6El0y2BpWdZVivRqzzJikfGRKEww/41gQZgykXPMQv/2oIPH4jh/m+SdBtTLtI
-        20cI43uQwFWMG1lPao0tT9IaZhDgZzO006IgK0JadDHIDwrbpN1qvkysLlEq5KvW
-        jw9kOEekgM6R0MDKNgRFUmcwmZDwbyLGlMhxurpBdrmhFVeh/NWqEEpKjQJljr6i
-        qsayVve8o/OXRFwFwYfFeb3Yky2TRss3QVCWfF4Dn+WIJqUOqMGjw1Ux6oU1V34+
-        0SO9WeQ4pVBtN2yDF8Fol7Gy7hjN6v1ISces9Oin0WJSwfCtg0DZnTdBA+Y5JXT0
-        m3OHSW5j1JwtuC8uw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
-        :from:from:in-reply-to:message-id:mime-version:reply-to:sender
-        :subject:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender
-        :x-me-sender:x-sasl-enc; s=fm2; bh=6WaAJK5lyFLmcmFKJl+0M+d6NIX9M
-        8qY6UrRrz5b9zI=; b=HaRTHEgCGe+caz2sQsKoHHme3UB6NQ8YbcSovGCrxHKjP
-        otSNGsM1gqQjhEUwIhsTaW2JZGiGGAD/EQ2DyBM5VRgLeJyennBIReyJ8PFmEMz+
-        5LmtqrXgPXYI2qt9YNXFAqT4fTTLWgsvDvlL5lc7X/oJAq2YXMfmCBuN6q2urLPr
-        Bo35z3leobrdjuvCkLKZM/6UUfaiGfqEnR+pZl9LNdCxiOsvyPPmDDuSuXEYK4y+
-        splUPU5JIH0Fktta/JahNbcRtogxuEaglJNkId7ld/0BxJwKXOuoJHcOoYPLp+ol
-        kFkcTgIhTQGPeWSPoTSsZx8U14CdkfN/3eC6F+cdg==
-X-ME-Sender: <xms:slsWYqoNzUbmSnbWW7HIlb2tFL6XSTWqfv65Cwl0GecxMi_v-hd4kg>
-    <xme:slsWYoqpQ6zRqqoWOY8UcZQ_N-wmlPrBO0AYYrmm82V-NLhRS0nC120D8_asCvAZT
-    n4mcyX2QpN_clVeGu8>
-X-ME-Received: <xmr:slsWYvODuRF8D_NadyrzUYhSy1ILTh4crYtOv-3CFF51J3QrE2GNsJOSZJHISosO9AXBvA51uE_B6h0o0ElVy1mCrjcVEGauS1uUMYbsyjH7gjY8s88KxR06nQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrledtgdekfecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefhvffufffkofgggfestdekredtredttdenucfhrhhomhepofgrrhhkucevihhl
-    ihhsshgvnhcuoehmrghrkheshihothhsuhgsrgdrnhhlqeenucggtffrrghtthgvrhhnpe
-    ehudevhedtleefkefgjeduvefhgffhhedvteffhefgleetleehleegffdtffduheenucev
-    lhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehmrghrkheshi
-    hothhsuhgsrgdrnhhl
-X-ME-Proxy: <xmx:slsWYp7scNv8-zCXV2_wfWEtpBe4EREL41uJKSxlz_WF53wEm71ZHw>
-    <xmx:slsWYp53lkUiJ3SJyTslX0hhOWwBL3TqGnAVs9GqQjUahn7ApZHQRQ>
-    <xmx:slsWYph-F5uFCM5U8OXixZfnx5dqcJhJoarPmW3ENc-3VsXQ5JGUhQ>
-    <xmx:s1sWYmwtItwewWO-_NDnIP7WYAHxiVs5MzRLDAyijwIWBwlfOrXm6nH2lic>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 23 Feb 2022 11:07:12 -0500 (EST)
-From:   Mark Cilissen <mark@yotsuba.nl>
-To:     linux-acpi@vger.kernel.org, x86@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Hans de Goede <hdegoede@redhat.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <len.brown@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Mark Cilissen <mark@yotsuba.nl>
-Subject: [PATCH] x86/acpi: Work around broken XSDT on SEGA AALE board
-Date:   Wed, 23 Feb 2022 17:07:08 +0100
-Message-Id: <20220223160708.88100-1-mark@yotsuba.nl>
-X-Mailer: git-send-email 2.28.0
+        Wed, 23 Feb 2022 11:07:39 -0500
+Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CBC3427FA
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 08:07:12 -0800 (PST)
+Received: by mail-oi1-x22c.google.com with SMTP id z7so2821344oid.4
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 08:07:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=Zr7FJr/ROqrH3KPFcIbpCq/ZL9h+i4UX28KOdEhJPUU=;
+        b=I8GL9KB17GANpNg8Fgm7/L8CRlyNCmfFa5dkquALuJK0aAIXjnYwyqO86pS8lOPFwo
+         O6iNMoeSPK8GrBLwviWwFrBBCcd/guMNo9umy+ZNsAg63fx8X6zADtGrserGRt1I11+c
+         3qr0VU5aNNfAe7vavGn+Z/ySedywX8JL4FKjR9SzimlvV4fonQQX7XYYsKCuoCer959E
+         v7+7NWyxUwzGynnnDeQa676djQGR654f6ode7KUSj/Qzri7ymMh19QL4WeHxhG4EW8C8
+         sex2XoI4R3Beg7MKnKvt79vdOk8EkqJGsV7FhdjguCG3/3a/QGlvzM4ILlXuZriEW2wj
+         ONjg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=Zr7FJr/ROqrH3KPFcIbpCq/ZL9h+i4UX28KOdEhJPUU=;
+        b=AQeT3MDBGy82FBDS5tYyPlQJNQ2eaP+Bd/XmPFQbrHmjieQJtz8872m4X6KqBNhV+r
+         fBgct9VAqmRDQkYav7oz9E5cz6+XPPEna8Ocl0vbltOQCdxsfKzKOGzP8ZORuUYNMN7E
+         iJjy6VGoiKlXoeGMBlaPSWjO0KY1Vi5DcQnBJsmFrtDw2w1Nzi6tyyivLhnI3b1xBs81
+         xPxV7x63brRiedbHJiEeA1ixfBuI4uWWMryBg4+l+3uQkUEPqd5QvU/+j7Xnljxbyear
+         6uH40FrWoG75o129Xd+8CozaBqxAMLitR0LeX3WXBnut/eR1IuUVt5iDp3i9v84IlBRR
+         Oz/Q==
+X-Gm-Message-State: AOAM532u0pZBvwLZIeDtNrZF0hkqOGl8XpoIuFAIhwqIqSz/Ad1bpcoB
+        BF7gmH+Ueffs0SBawYK+2HjyPL7Kwv/qbZR9CuI=
+X-Google-Smtp-Source: ABdhPJwcNI7lOdaTnCrjhaIUsHSuWgr5Mpgydbx+/f+sxOo3TP4RNpQ0GWKJjUbuQqmBTLX46Af2tAbX5SY4d8wloN0=
+X-Received: by 2002:a05:6808:ec6:b0:2ce:6ee7:2ccc with SMTP id
+ q6-20020a0568080ec600b002ce6ee72cccmr4725236oiv.250.1645632431304; Wed, 23
+ Feb 2022 08:07:11 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Received: by 2002:a4a:b912:0:0:0:0:0 with HTTP; Wed, 23 Feb 2022 08:07:10
+ -0800 (PST)
+Reply-To: mariam002musa@gmail.com
+From:   "Miss. Mariam Musa" <abelphillip243@gmail.com>
+Date:   Wed, 23 Feb 2022 08:07:10 -0800
+Message-ID: <CAFYUzGM0XdrCqKPsnx+mYRivPQ7d4m5TW8ofJ6ak_CDHcaNX9w@mail.gmail.com>
+Subject: Please I need your help my name is Mariam.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.3 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_HK_NAME_FM_MR_MRS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:22c listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.4376]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [abelphillip243[at]gmail.com]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [abelphillip243[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
+        *  3.5 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On this board the ACPI RSDP structure points to both a RSDT and an XSDT,
-but the XSDT points to a truncated FADT. This causes all sorts of trouble
-and usually a complete failure to boot after the following error occurs:
+Good day,
 
-  ACPI Error: Unsupported address space: 0x20 (*/hwregs-*)
-  ACPI Error: AE_SUPPORT, Unable to initialize fixed events (*/evevent-*)
-  ACPI: Unable to start ACPI Interpreter
+Can I write you here? I have urgent information for you here, With
+utmost good faith?, as you know that my country have been in deep
+crisis due to the war,
 
-This leaves the ACPI implementation in such a broken state that subsequent
-kernel subsystem initialisations go wrong, resulting in among others
-mismapped PCI memory, SATA and USB enumeration failures, and freezes.
-
-As this is an older embedded platform that will likely never see any BIOS
-updates to address this issue and its default shipping OS only complies to
-ACPI 1.0, work around this by forcing `acpi=rsdt`. This patch, applied on
-top of Linux 5.10.102, was confirmed on real hardware to fix the issue.
-
-Signed-off-by: Mark Cilissen <mark@yotsuba.nl>
-Cc: stable@vger.kernel.org
----
- arch/x86/kernel/acpi/boot.c | 25 +++++++++++++++++++++++++
- 1 file changed, 25 insertions(+)
-
-diff --git a/arch/x86/kernel/acpi/boot.c b/arch/x86/kernel/acpi/boot.c
-index 5b6d1a95776f..7caf4da075cd 100644
---- a/arch/x86/kernel/acpi/boot.c
-+++ b/arch/x86/kernel/acpi/boot.c
-@@ -1328,6 +1328,17 @@ static int __init disable_acpi_pci(const struct dmi_system_id *d)
- 	return 0;
- }
- 
-+static int __init disable_acpi_xsdt(const struct dmi_system_id *d)
-+{
-+	if (!acpi_force) {
-+		pr_notice("%s detected: force use of acpi=rsdt\n", d->ident);
-+		acpi_gbl_do_not_use_xsdt = TRUE;
-+	} else {
-+		pr_notice("Warning: DMI blacklist says broken, but acpi XSDT forced\n");
-+	}
-+	return 0;
-+}
-+
- static int __init dmi_disable_acpi(const struct dmi_system_id *d)
- {
- 	if (!acpi_force) {
-@@ -1451,6 +1462,20 @@ static const struct dmi_system_id acpi_dmi_table[] __initconst = {
- 		     DMI_MATCH(DMI_PRODUCT_NAME, "TravelMate 360"),
- 		     },
- 	 },
-+	/*
-+	 * Boxes that need ACPI XSDT use disabled due to corrupted tables
-+	 */
-+	{
-+	 .callback = disable_acpi_xsdt,
-+	 .ident = "SEGA AALE",
-+	 .matches = {
-+		     DMI_MATCH(DMI_SYS_VENDOR, "NEC"),
-+		     DMI_MATCH(DMI_PRODUCT_NAME, "Bearlake CRB Board"),
-+		     DMI_MATCH(DMI_BIOS_VENDOR, "Phoenix Technologies LTD"),
-+		     DMI_MATCH(DMI_BIOS_VERSION, "V1.12"),
-+		     DMI_MATCH(DMI_BIOS_DATE, "02/01/2011"),
-+		     },
-+	},
- 	{}
- };
- 
-
-base-commit: cfb92440ee71adcc2105b0890bb01ac3cddb8507
--- 
-2.28.0
-
+Miss. Mariam Musa.

@@ -2,104 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 099934C13A0
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 14:11:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C9924C13AA
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 14:13:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240735AbiBWNMO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 08:12:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34844 "EHLO
+        id S240749AbiBWNN0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 08:13:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240727AbiBWNMH (ORCPT
+        with ESMTP id S238766AbiBWNNX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 08:12:07 -0500
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D81015FF23
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 05:11:38 -0800 (PST)
-Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com [209.85.218.70])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Wed, 23 Feb 2022 08:13:23 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF8DA5FF17;
+        Wed, 23 Feb 2022 05:12:55 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 77A7E3FCA8
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 13:11:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1645621897;
-        bh=6ItdzAIC73ba61SL64woNZZ4z8ugfh6dQKurjioqyaA=;
-        h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-         MIME-Version:Content-Type;
-        b=qzX3zyq6FDUpmt9Z+UyAlUTqAONdi3E+Cro7BbQq2noecR+uw7ZiCc4zk1IqcWLyp
-         J5GadaKX4lABewfAvfybqsdGCdrVCswvxokrgPHHZcLYsElteZl298Zeg2aGKi9cbH
-         JuIDsc+CfEkLpx+X1H6kklRlIAufHrxKZraHL8CkHItI+qrFFsjTvsSpvo9djA2Ay0
-         6nrQ00t07wnoG7cMvsU2euDbC2/ubyFHCw/18FctoEC/U54EM/qnBhOs/5pJh7ug/X
-         djAM698n3OWg6nlmwyd7tbfsExSqNJhQcMZR2T5UqBGuJpxKMCc4VJpywtVpySjXTR
-         HStD3YAk+Br/A==
-Received: by mail-ej1-f70.google.com with SMTP id go11-20020a1709070d8b00b006cf0d933739so7115398ejc.5
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 05:11:37 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=6ItdzAIC73ba61SL64woNZZ4z8ugfh6dQKurjioqyaA=;
-        b=H0JzQLvIeIlCM3w+ao9FsPG3mib4RIEf7dFsYvFpkdTzUAOw+s7xUTkKd6lKqkPLSu
-         yJa23on7w9YoX9G3UcMqnL7McQrKNmc8zS99+E8alWvSOL4j5cN7VNhfeWDxW0Yr5hfM
-         zMhHg7OQcf6OGbcd1HPDJ8+gymyeYH4fJNXL6ZJYBFNsyNiRrPk1e12zuGuwmiiMGdZR
-         gH1mt46agJwPrzUg1eMYWUoHVZIaBIc7zQ1Ajzivn4q1NpnLHorAtvT1pI2JcwSiURBd
-         y3iy6ba0r8vzIbMb5EevFwNrU1bE/QibqER1cTpjzzx4aZnpGpN6hzUfNRIgGd3bfBZ1
-         oWYQ==
-X-Gm-Message-State: AOAM530Q7cSj15vrzVNwM5LzKaDPFR81WPvGSViR6yp9LEofX99Ks8NR
-        2UCD6F4HjZ8r7bNwGUcBwTiV1gDSyeUgPhYgHRH3m3WaTLA2/rG3iOZRMc366IRWKRni6VvPXr7
-        IFurX/3ojGK6wQSjHdOVVnDOLzeCKHQqcRbFJkD6/2Q==
-X-Received: by 2002:a17:906:e13:b0:6ce:21ca:1b91 with SMTP id l19-20020a1709060e1300b006ce21ca1b91mr23486660eji.193.1645621893963;
-        Wed, 23 Feb 2022 05:11:33 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzqN7LLprVP7W7VK/4Uq3spoFQPaiet9FLARrRJrnw6k3jKocmQL3RLligIlXMbw8qEbieF2Q==
-X-Received: by 2002:a17:906:e13:b0:6ce:21ca:1b91 with SMTP id l19-20020a1709060e1300b006ce21ca1b91mr23486648eji.193.1645621893757;
-        Wed, 23 Feb 2022 05:11:33 -0800 (PST)
-Received: from localhost.localdomain (xdsl-188-155-181-108.adslplus.ch. [188.155.181.108])
-        by smtp.gmail.com with ESMTPSA id h7sm11800293ede.66.2022.02.23.05.11.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Feb 2022 05:11:33 -0800 (PST)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-To:     David Virag <virag.david003@gmail.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Sam Protsenko <semen.protsenko@linaro.org>,
-        phone-devel@vger.kernel.org, Alim Akhtar <alim.akhtar@samsung.com>,
-        linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6 0/1] Initial Samsung Galaxy A8 (2018) support
-Date:   Wed, 23 Feb 2022 14:10:58 +0100
-Message-Id: <164562185401.52450.9639221721231378939.b4-ty@canonical.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220221194958.117361-1-virag.david003@gmail.com>
-References: <20220221194958.117361-1-virag.david003@gmail.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6478B6117F;
+        Wed, 23 Feb 2022 13:12:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 533DEC340F0;
+        Wed, 23 Feb 2022 13:12:53 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="p2uLwLyr"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1645621971;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=yDH6L5SfKXyei5pTTzcAk9yjz7NgT/Zl7Px1eWnwpqQ=;
+        b=p2uLwLyrNMQ8HTaqGPewS3XX209s7oJqJ9miRcoY1DtAZT8hviF4SxAj5On0Im2pbnBr3p
+        qozPAZOFG4amHtvVOWAclMD5HdWA5Oi9z78mYqPXXrH2JsBBaqdcZS4CZ649Pcqn51y//z
+        udUOOwgOLtSyOIgtQw8+TrDExV8xsig=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 57f5dfd0 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Wed, 23 Feb 2022 13:12:50 +0000 (UTC)
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
+        qemu-devel@nongnu.org, kvm@vger.kernel.org,
+        linux-s390@vger.kernel.org, adrian@parity.io
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>, dwmw@amazon.co.uk,
+        acatan@amazon.com, graf@amazon.com, colmmacc@amazon.com,
+        sblbir@amazon.com, raduweis@amazon.com, jannh@google.com,
+        gregkh@linuxfoundation.org, tytso@mit.edu
+Subject: [PATCH RFC v1 0/2] VM fork detection for RNG
+Date:   Wed, 23 Feb 2022 14:12:29 +0100
+Message-Id: <20220223131231.403386-1-Jason@zx2c4.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 21 Feb 2022 20:49:55 +0100, David Virag wrote:
-> Add basic initial support for the Samsung Galaxy A8 (2018) smartphone.
-> This phone is also known as "jackpotlte" and under the model name
-> "SM-A530F". In its current state this should work on most if not all
-> Exynos7885 phones/devices released.
-> 
-> As of now, it supports I2C nodes (all disabled by default) and UART
-> console with basic clock support in place.
-> 
-> [...]
+This small series picks up work from Amazon that seems to have stalled
+out later year around this time: listening for the vmgenid ACPI
+notification, and using it to "do something." Last year, that something
+involved a complicated userspace mmap chardev, which seems frought with
+difficulty. This year, I have something much simpler in mind: simply
+using those ACPI notifications to tell the RNG to reinitialize safely,
+so we don't repeat random numbers in cloned, forked, or rolled-back VM
+instances.
 
-Applied, thanks!
+This series consists of two patches. The first is a rather
+straightforward addition to random.c, which I feel fine about. The
+second patch is the reason this is just an RFC: it's a cleanup of the
+ACPI driver from last year, and I don't really have much experience
+writing, testing, debugging, or maintaining these types of drivers.
+Ideally this thread would yield somebody saying, "I see the intent of
+this; I'm happy to take over ownership of this part." That way, I can
+focus on the RNG part, and whoever steps up for the paravirt ACPI part
+can focus on that.
 
-[1/1] arm64: dts: exynos: Add initial device tree support for Exynos7885 SoC
-      commit: 06874015327ba7bf6aae49ca825a492a2679237f
+As a final note, this series intentionally does _not_ focus on
+notification of these events to userspace or to other kernel consumers.
+Since these VM fork detection events first need to hit the RNG, we can
+later talk about what sorts of notifications or mmap'd counters the RNG
+should be making accessible to elsewhere. But that's a different sort of
+project and ties into a lot of more complicated concerns beyond this
+more basic patchset. So hopefully we can keep the discussion rather
+focused here to this ACPI business.
 
-Best regards,
+Cc: dwmw@amazon.co.uk
+Cc: acatan@amazon.com
+Cc: graf@amazon.com
+Cc: colmmacc@amazon.com
+Cc: sblbir@amazon.com
+Cc: raduweis@amazon.com
+Cc: jannh@google.com
+Cc: gregkh@linuxfoundation.org
+Cc: tytso@mit.edu
+
+Jason A. Donenfeld (2):
+  random: add mechanism for VM forks to reinitialize crng
+  drivers/virt: add vmgenid driver for reinitializing RNG
+
+ drivers/char/random.c  |  58 ++++++++++++++++++
+ drivers/virt/Kconfig   |   8 +++
+ drivers/virt/Makefile  |   1 +
+ drivers/virt/vmgenid.c | 133 +++++++++++++++++++++++++++++++++++++++++
+ include/linux/random.h |   1 +
+ 5 files changed, 201 insertions(+)
+ create mode 100644 drivers/virt/vmgenid.c
+
 -- 
-Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+2.35.1
+

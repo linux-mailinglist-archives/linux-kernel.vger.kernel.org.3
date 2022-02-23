@@ -2,124 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBF834C0B42
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 05:43:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC63C4C0B4C
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 05:56:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237968AbiBWEnq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 23:43:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54770 "EHLO
+        id S235872AbiBWE5O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 23:57:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237927AbiBWEno (ORCPT
+        with ESMTP id S229674AbiBWE5N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 23:43:44 -0500
-Received: from mail-oo1-xc33.google.com (mail-oo1-xc33.google.com [IPv6:2607:f8b0:4864:20::c33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4CA066635
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 20:43:17 -0800 (PST)
-Received: by mail-oo1-xc33.google.com with SMTP id r15-20020a4ae5cf000000b002edba1d3349so20712132oov.3
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 20:43:17 -0800 (PST)
+        Tue, 22 Feb 2022 23:57:13 -0500
+Received: from mail-qv1-xf36.google.com (mail-qv1-xf36.google.com [IPv6:2607:f8b0:4864:20::f36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96D3A483BB
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 20:56:46 -0800 (PST)
+Received: by mail-qv1-xf36.google.com with SMTP id j5so6040936qvs.13
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 20:56:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=bNhRlACxy2aufThO0hLWVItxYuhke+gYQQ/WXwtufY8=;
-        b=kKPKkb9UWRCXh5s8pqyecoVDUfpJBoEebNDqO5baIS3XHk23sQRMFVGe0Rw0VEOb/9
-         S0hS1nDWtPJEOhX1bcvTF6h2mvbvl7VscbsY3yWY3NWTdlCsiGQ1xRGs4Nqa1wYACqDz
-         ACGFHbXEhWAJ/YycNKOBnUSYUC9eTPrwDSRoJk4cBqONtxfuwS1ndinZfJ9FGctoCeTH
-         weui4mCLY7okSfFEWsfsfc0Qs9ra/WtXIi1PDzlxQAHuF455RiMfzNI1BPA7xT6IhmC2
-         HpfK4BUr6zaZbUZmxtpwZARoe1z09jyLQnfgBD0PttRDo6bfmNg3ncbrPMvUvwIaGBxw
-         5UJg==
+        bh=GRsWtuYPVtPE9giQevMBeF9cuFJK/NvIt7pyCSw7hDs=;
+        b=khJDE2iVvaglQeQ9LXMCz6SMrTJJkiLvNqBliBXOjiVSkmbE0fh9SqGgEBmv3MVW1Y
+         zJJY6OdkCBe7oKFRmakwPUdhMOfv7G/BzUnyjG3tn1OLARgoW9m00aIBwZ2LqItgUSFZ
+         wl8MwBHbk8fVAdFqRX4ZogseAeQ6+Je/QNn5Eclr/RELyXfhWWgGSmYgIFEK7kbY7gLV
+         1x8sbmoI1QZcm5x5ms9Y7+dW2Hz7KHiqVLwfYwC/XTRIMLv4VgDiZG87nixRmf7YoJ8o
+         b7qOo5QwXazdfDJzCBHJI0CUYiCdFD3FlF6temGs6Hs/rlQjzqQGn2EEuolGfWoIEhsd
+         Sa8A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=bNhRlACxy2aufThO0hLWVItxYuhke+gYQQ/WXwtufY8=;
-        b=Wv+tgsLPA75NKuAuXPjK6Iik7MYFvS/nQ1J6ImCSg5MBV5p1Qx/TlzVy5gVPtd+/+q
-         IX+YuO5BoToCC2L1XxTUOjiZ3AHYktbRgaRdjVO64uFFFGq1yv1HjVUorcd+CxXhHKyW
-         ZCvDDVINzx5OVUc4MWLmDyJTJI0cco5dOiUrlDICUkb2ZwfYNQJeI7OveMCwoF66drAT
-         ZCgeJ7a6+ns0KtKxuNKhSH7vuT81j9T4mBjW/VmW9LcXXedLILP70vA/OHptAGekSIcj
-         PSB7CGXNRLPEXOCUjOPKvYgvtYrY82hf/UK0csqYSlFNQsHjBIuoMEg9ZksING8k4Og9
-         I6pg==
-X-Gm-Message-State: AOAM53213bq01PK4amkKC+mVV2kOTALUlU8lDBmVUJ9+WWvSuFGRODHS
-        cBlpa+AqK8PIqsC84KJtpOabFw==
-X-Google-Smtp-Source: ABdhPJxUmsS7LgM5xfLdKiun0arpDAiRqf3D/VggoI4K08YZqlQqsoAsNP+wfA5swiCyJKdXHewi4w==
-X-Received: by 2002:a05:6870:60a0:b0:d3:a3f7:8b59 with SMTP id t32-20020a05687060a000b000d3a3f78b59mr3056772oae.94.1645591396944;
-        Tue, 22 Feb 2022 20:43:16 -0800 (PST)
-Received: from ripper.. ([2600:1700:a0:3dc8:205:1bff:fec0:b9b3])
-        by smtp.gmail.com with ESMTPSA id i20sm115251ota.71.2022.02.22.20.43.16
+        bh=GRsWtuYPVtPE9giQevMBeF9cuFJK/NvIt7pyCSw7hDs=;
+        b=C0rjMcdZFyu/Ifr5/hRz7nf/3EUFAYqEJ+c8S9mUPrsoK1LQj4pxHuUspD79e/oP7J
+         Rpl+TiDO1Uk+bwBewqxXikX61lAtRXXUlJuhSrLW+JfUxlFPOWecoknJMSKLJnI4xE6b
+         /IhDbclEGFCm7nfbJmtse4xk2EdELSOCcwFNNc4xrSm9+tE0KwUMVfdlnav0aHekp1aw
+         /YSEFp1ikC+u11qFlYCm+euUbjFzbGZ9srykd0Pk57j6UFYLT2cEkJEQNVfgdzNpniLW
+         OTYtSBj02oy6QiLhOBnri6ETJtZ0jKjdxupnXHvBy/6tNiSPeIjiyUVELFi69myupiy+
+         NrQw==
+X-Gm-Message-State: AOAM532J8W/VIuIpONKlMKjPEnD/MMuPYRd5mmIhWU49EEMNz+wV53tG
+        b1yuS+HJn3A65r0AhAET1I8r1n8+BoU=
+X-Google-Smtp-Source: ABdhPJwnF6BD9X6na/b400ybzxEnuRIEgmqgiA2Yc0f2crveMrPvg8r4nJnufal5GsBBQE4eQnFQGA==
+X-Received: by 2002:ad4:5aef:0:b0:42c:3b31:86bf with SMTP id c15-20020ad45aef000000b0042c3b3186bfmr22102689qvh.72.1645592205740;
+        Tue, 22 Feb 2022 20:56:45 -0800 (PST)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id 15sm398444qtz.89.2022.02.22.20.56.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Feb 2022 20:43:16 -0800 (PST)
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Taniya Das <tdas@codeaurora.org>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] clk: qcom: rpmhcc: add sc8280xp support to the RPMh clock controller
-Date:   Tue, 22 Feb 2022 20:45:16 -0800
-Message-Id: <20220223044516.3776637-2-bjorn.andersson@linaro.org>
-X-Mailer: git-send-email 2.33.1
-In-Reply-To: <20220223044516.3776637-1-bjorn.andersson@linaro.org>
-References: <20220223044516.3776637-1-bjorn.andersson@linaro.org>
+        Tue, 22 Feb 2022 20:56:44 -0800 (PST)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: xu.xin16@zte.com.cn
+To:     ebiederm@xmission.com
+Cc:     akpm@linux-foundation.org, balbir@linux.vnet.ibm.com,
+        bsingharora@gmail.com, cgel.zte@gmail.com,
+        containers@lists.linux.dev, deng.changcheng@zte.com.cn,
+        linux-kernel@vger.kernel.org, xu.xin16@zte.com.cn
+Subject: Re: [PATCH resend] kernel: Make taskstats available via genetlink per namespace
+Date:   Wed, 23 Feb 2022 04:56:39 +0000
+Message-Id: <20220223045639.1932955-1-xu.xin16@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <87v8x678ph.fsf@email.froward.int.ebiederm.org>
+References: <87v8x678ph.fsf@email.froward.int.ebiederm.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Qualcomm SC8280XP platform exposes 5 clocks through the RPMh clock
-controller. Add these, and the relates active-only variants, to the RPMh
-clock controller driver.
+>> -sh-4.4# ./getdelays -d -p 186 -v
+>> print delayacct stats ON
+>> debug on
+>> Error getting family id, errno 0
+>>
+>> As more and more applications are deployed in containers like Docker,
+>> it is necessary to support getdelays to be used in net namespace.
+>> Taskstats is safe for use per namespace as genetlink checks the
+>> capability of namespace message by netlink_ns_capable().
+>>
+>> Make taskstats available via genetlink per namespace.
+>
+> Let me add a polite nack to this patch.
 
-Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
----
- drivers/clk/qcom/clk-rpmh.c | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
+> Taskstats is completely senseless in a network namespace.  There is no
+> translation of identifiers into the context of the receiver of the
+> message.
 
-diff --git a/drivers/clk/qcom/clk-rpmh.c b/drivers/clk/qcom/clk-rpmh.c
-index 74e57c84f60a..aed907982344 100644
---- a/drivers/clk/qcom/clk-rpmh.c
-+++ b/drivers/clk/qcom/clk-rpmh.c
-@@ -512,6 +512,23 @@ static const struct clk_rpmh_desc clk_rpmh_sm8350 = {
- 	.num_clks = ARRAY_SIZE(sm8350_rpmh_clocks),
- };
- 
-+DEFINE_CLK_RPMH_VRM(sc8280xp, ln_bb_clk3, ln_bb_clk3_ao, "lnbclka3", 2);
-+
-+static struct clk_hw *sc8280xp_rpmh_clocks[] = {
-+	[RPMH_CXO_CLK]		= &sdm845_bi_tcxo.hw,
-+	[RPMH_CXO_CLK_A]	= &sdm845_bi_tcxo_ao.hw,
-+	[RPMH_LN_BB_CLK3]       = &sc8280xp_ln_bb_clk3.hw,
-+	[RPMH_LN_BB_CLK3_A]     = &sc8280xp_ln_bb_clk3_ao.hw,
-+	[RPMH_IPA_CLK]          = &sdm845_ipa.hw,
-+	[RPMH_PKA_CLK]          = &sm8350_pka.hw,
-+	[RPMH_HWKM_CLK]         = &sm8350_hwkm.hw,
-+};
-+
-+static const struct clk_rpmh_desc clk_rpmh_sc8280xp = {
-+	.clks = sc8280xp_rpmh_clocks,
-+	.num_clks = ARRAY_SIZE(sc8280xp_rpmh_clocks),
-+};
-+
- /* Resource name must match resource id present in cmd-db */
- DEFINE_CLK_RPMH_ARC(sc7280, bi_tcxo, bi_tcxo_ao, "xo.lvl", 0x3, 4);
- 
-@@ -691,6 +708,7 @@ static int clk_rpmh_probe(struct platform_device *pdev)
- static const struct of_device_id clk_rpmh_match_table[] = {
- 	{ .compatible = "qcom,sc7180-rpmh-clk", .data = &clk_rpmh_sc7180},
- 	{ .compatible = "qcom,sc8180x-rpmh-clk", .data = &clk_rpmh_sc8180x},
-+	{ .compatible = "qcom,sc8280xp-rpmh-clk", .data = &clk_rpmh_sc8280xp},
- 	{ .compatible = "qcom,sdm845-rpmh-clk", .data = &clk_rpmh_sdm845},
- 	{ .compatible = "qcom,sdx55-rpmh-clk",  .data = &clk_rpmh_sdx55},
- 	{ .compatible = "qcom,sdx65-rpmh-clk",  .data = &clk_rpmh_sdx65},
--- 
-2.33.1
+The interface of taskstats is genetlink that is sensible in net namsespace.
 
+> To make this work requires updating the taskstats code to do something
+> sensible when in a pid namespace, as well as when in a network
+> namespace.
+
+Yes. Taskstats already does convert the input process ID into the task in the
+correspoding pid namsespace. Do you mean to add some check of current user's
+capability like SYS_ADMIN or else?

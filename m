@@ -2,189 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B4DE4C19DE
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 18:24:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 560A84C19E5
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 18:27:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243381AbiBWRYe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 12:24:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35716 "EHLO
+        id S243399AbiBWR1c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 12:27:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240321AbiBWRYd (ORCPT
+        with ESMTP id S239033AbiBWR1a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 12:24:33 -0500
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C802750060
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 09:24:04 -0800 (PST)
-Received: by mail-lf1-x131.google.com with SMTP id g39so32350710lfv.10
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 09:24:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=txwRzy7T4FJEAmlc/vFopAVCAIZ4Qfp20yRwWgSyO3s=;
-        b=j0cHyeokrvGSdSOMVvUffbMZ1PNzlDlia9sNhuaqCCffwEs4uuUPeA4tln6yQKf5UU
-         TwEPXkBYzXuv5OZkVcZOBC//bdZ9WKy0Lg+GeNAwawqAoIZYbC0Q0HSdetImJLx5OiQz
-         OPAHCG1vtpEQ2V7W4jViq4cVJVMcl64ANPvSBq1CyrI9QFNlA837toKKfgOb+9ol4jPj
-         OVArJ3ubVIcqtadb9uoLRXBqOrnQzFoSVvrxt9sJHOuOFvA6OgDkomZ1J+Ixagd4pJsp
-         BPLOhaifK42WxAK6MSYTrzS0QI0L7Qw5Jhu1oI/aENqOqcrAo2YkOq7OqEuH39X+HqMe
-         b/9g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=txwRzy7T4FJEAmlc/vFopAVCAIZ4Qfp20yRwWgSyO3s=;
-        b=c2KBLE/BtDra1VcpmEJ4O5V30TiaOSdEDgW/MWjiNvyJwtsoUAMPcyBbA1sGVpMWDB
-         wP1L7ywo0q5eWJ+gkw4AXLxRYbtR0BWLdvVM6s/0CTu/dMlqE1OdwQSvgKjmgRjK9v7m
-         rG0gOdxaAlNNsnWTMt/vc3PEsGGSUakERITLNC8vuCl+OXUY8oG5NOvn+LGMfW65aVwY
-         0dZYVdfjpe6KCojdsPKoVZJW2BlTZPO1gN5dFx+y41601cD351R9w4FfSfhYhZA07m5C
-         AcJBR3xamMZEEUBFNOWA9UphTQoxS5lpCDyG9ErnMbodZQQouk0ae7mo6yqwnjzdlzwf
-         U6cQ==
-X-Gm-Message-State: AOAM530z00Dd0bTL3wNp21pB/HsS8rU6tmYguMmOPdtnjiqUK15dF69n
-        TExExY0hzh/LeEzOIPWOQsYjiZkM5Sm+CPJI4tr+rw==
-X-Google-Smtp-Source: ABdhPJz6Ft5ggj6z3GeCxFAGa08kB+UKwIacB3HCcKP7sJlAxWYUgPkx2I7L61KOPHu+zQqMFjuWKaiaVw6/Lilzik0=
-X-Received: by 2002:a05:6512:36c5:b0:437:93ad:8725 with SMTP id
- e5-20020a05651236c500b0043793ad8725mr457794lfs.645.1645637042994; Wed, 23 Feb
- 2022 09:24:02 -0800 (PST)
+        Wed, 23 Feb 2022 12:27:30 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21B451E6;
+        Wed, 23 Feb 2022 09:27:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1645637214;
+        bh=LPsjSmV0AW6oNRFK93v2KYQmZ22UPSkf9MaEPo7lXQU=;
+        h=X-UI-Sender-Class:Date:From:To:Subject;
+        b=E3Jk6KIMAqNpbIIBIcjuP0ahrnYMQNE97EUmmDfaUS6iLo8KQO7BBETbeYN5aSZhc
+         ZtHzCZOhBk+BMkVC4l6aL+JsRxkTTbn9KW0Nnt+0SbIddByvSUC39QqIIA28WKzHk6
+         jAyl5uBmGTNH3A52Tmi+y5ipRuyqUS7ARyiH5LgA=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from ls3530 ([92.116.191.154]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MMGRK-1ncnZT3pIs-00JL2y; Wed, 23
+ Feb 2022 18:26:53 +0100
+Date:   Wed, 23 Feb 2022 18:26:51 +0100
+From:   Helge Deller <deller@gmx.de>
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-parisc@vger.kernel.org,
+        James Bottomley <James.Bottomley@hansenpartnership.com>,
+        John David Anglin <dave.anglin@bell.net>,
+        Sven Schnelle <svens@stackframe.org>
+Subject: [GIT PULL] parisc unaligned handler fixes for v5.17-rc6
+Message-ID: <YhZuW0o9A4qhfdZ5@ls3530>
 MIME-Version: 1.0
-References: <20220215164639.GC8458@willie-the-truck> <CAKfTPtAFsL+uqQiGcuh+JJZB=rPrez0=kotq76CVRcBQhcPefg@mail.gmail.com>
- <YgvjtsOZuxzbgBBl@fedora> <CAKfTPtCHrZCp1Uth4odyT721wE8zoNVY3Mh+DSyuTkqPafm0Hg@mail.gmail.com>
- <YgwHhxy/uGafQsak@fedora> <CAKfTPtAR2+bY8QpyaCCJfezsVkB62n8XZjL9c5_mPO3iyDnp4w@mail.gmail.com>
- <Yg0lULy5TmHKIHFv@fedora> <CAKfTPtB1Vt75ciX_V=8T3e5fgW-X7ybRk6VZvy4uXzjazjx9ZA@mail.gmail.com>
- <YhWlDUzFeG0d7z6C@fedora> <CAKfTPtAjnRGc9c1Ni0ru6Xz9wKLPoBY4wdPkN0uFBzR-_iurPg@mail.gmail.com>
- <YhZjPviteu4v8Fdf@fedora>
-In-Reply-To: <YhZjPviteu4v8Fdf@fedora>
-From:   Vincent Guittot <vincent.guittot@linaro.org>
-Date:   Wed, 23 Feb 2022 18:23:51 +0100
-Message-ID: <CAKfTPtD9Tb97iKkqP-R7Qhy4vSAxmCqidAEm=5qQdOfLJe5GPg@mail.gmail.com>
-Subject: Re: [PATCH] arm64: smp: Skip MC domain for SoCs without shared cache
-To:     Darren Hart <darren@os.amperecomputing.com>
-Cc:     Will Deacon <will@kernel.org>,
-        "Song Bao Hua (Barry Song)" <song.bao.hua@hisilicon.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux Arm <linux-arm-kernel@lists.infradead.org>,
-        Catalin Marinas <Catalin.Marinas@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Valentin Schneider <Valentin.Schneider@arm.com>,
-        "D . Scott Phillips" <scott@os.amperecomputing.com>,
-        Ilkka Koskinen <ilkka@os.amperecomputing.com>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Provags-ID: V03:K1:OKAG+fF1F81XlSTqFe02e38imDLCbDPCIbNqJSCCHmlK6pkJDk6
+ YvfmCCJyFLM++lsSmxhdwhodHm6xCDK0yTZp/BmZI76GRV2ySbxI0rnFCnlZz/ZDag/XDd7
+ WrpyziN7e8eL5JZEX8CSLw3zcDTkFkDKcsBzNj8NraRosRY2HqVFULMns8+/hsGpvwI+R8y
+ 6iNIG05MLvjjX03B5B49w==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:YZesXhFq358=:EWA2cRoXmJPRn89Z3HeAkr
+ UDA/t2BE83CTFqbrvyvRCpJso+jg48E2OxHGoY2ifSPtBLfWYUg2xzkDRgNU7qvP7Vj2CSAMK
+ A2TvdAHpdpV5km4MNY6TLrLK8v0Hs0N9iwu76fSK5A0XJL5qD47ZhPCkemy0lIhCqtsD6Icwi
+ lJCJ6rRt0m+jXqfxQcLpcTAMacg6lKA7+OFIr8vB8irVgEoNsfo+IO4dQ3W5q/afktqAS5Itn
+ MYFdIvjYftnO3DhrktlTpvbWP/2khwHScNALkWIUzRAh5Y2Pa15JYi01NxIbAEK7YDDDbfKm5
+ KTDNEDH83/lCeZXqvHwz4CkfD7BgoaM8hfRhw4s9g86IQ/Pbzl0cRZqR0Z9u3vQa4Yg3L8mKi
+ v3gANIhDfHeKHJopdNEMZQ+l+Q4wg8SUQ8VXf/QYPHSeH00EiXIutct1Ubo361Wqcoc0uj0sx
+ p2bBgy/o5uek2mWldg4+d1xvESKvHAwrVN65GEaQ/dN5Kk9kV9NM5YnARIAuGiNmyxrAnuBDo
+ wt1W4XlVm00Nn3nnTFUjmN/QAPs32it7t+Qdyxk8XSS7e5jQpIQc3gPfN3vearHAXOvuuvwFS
+ wY54mfUiERULM+2ASY+aU+ohlDB81SPOwIn6LQWddG42Bw7/6LdFL/C2rmw5eAwE+QqrDQESa
+ RoROBqWbhhGYd9cuMKdvXJph3HugzGa8tXH8B164QA/1wtlRU8ra3qUrGCMcTlyS3W8SgtwpW
+ nU8FL1TXGaKP3KmgvXvzg60MTpCAFk5MIAVnuHwo02YXObEgCD7JdRD8fnfQCp4irqTBQ2uaw
+ sDjW+lZCU3ID+hlsVlVKwlxd/TjggOF8j4AIxk0Jykpv+dF4us860pP3Q2SK1pgj+Nxw40vfj
+ 2ASkcMRoTT42zRf179e4R4iRnjDOxKUnIqsEm4wujTtFc+/qGrj/VagE9q3FMCQ3FevG+S2jO
+ PapSb5/IoHW1fRFu18yo0/k6LwwNYicGFy1/ZDYNtypO71Pli0IFnPDVCxXuBZ1g6KpR+pX6H
+ zFyggi74dC4U/J43sICnuOe66AiChp5eQksddcYl61vySojpgwNgmZ7wZIVbxhZpLNPzua2AJ
+ QLTr1jXSsUN2uk=
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 23 Feb 2022 at 17:39, Darren Hart <darren@os.amperecomputing.com> wrote:
->
-> On Wed, Feb 23, 2022 at 09:19:17AM +0100, Vincent Guittot wrote:
->
-> ...
->
-> > > > AFAICT, this CLUSTER level is only supported by ACPI. In
-> > > > parse_acpi_topology() you should be able to know if cluster level is
-> > > > above or below the level returned by acpi_find_last_cache_level() and
-> > > > set the correct topology table accordingly
-> > > >
-> > >
-> > > Thanks Vincent,
-> > >
-> > > This made sense as a place to start to me. The more I dug into the ACPI PPTT
-> > > code, I kept running into conflicts with the API which would require extending
-> > > it in ways that seems contrary to its intent. e.g. the exposed API uses Kernel
-> > > logical CPUs rather than the topology ids (needed for working with processor
-> > > containers). The cpu_topology masks haven't been populated yet, and
-> > > acpi_find_last_cache_level is decoupled from the CPU topology level. So what
-> > > we're really testing for is if the cluster cpumask is a subset of the coregroup
-> > > cpumask or not, and it made the most sense to me to keep that in smp.c after the
-> > > cpumasks have been updated and stored.
-> >
-> > I'm not sure why you want to compare cpumask when you can directly
-> > compare topology level which is exactly what we are looking for in
-> > order to correctly order the scheduler topology. I was expecting
-> > something like the below to be enough. acpi_find_cluster_level() needs
-> > to be created and should be similar to
-> > find_acpi_cpu_topology_cluster() but return level instead of id. The
-> > main advantage is that everything is contained in topology.c which
-> > makes sense as we are playing with topology
->
-> Hi Vincent,
->
-> This was my thinking as well before I dug into the acpi pptt interfaces.
->
-> The cpu topology levels and the cache levels are independent and assuming I've
-> not misunderstood the implementation, acpi_find_cache_level() returns the
-> highest *cache* level described in the PPTT for a given CPU.
->
-> For the Ampere Altra, for example:
->
-> CPU Topo  1       System
->  Level    2         Package
->    |      3           Cluster
->    |      4             Processor --- L1 I Cache \____ L2 U Cache -x
->   \/                              --- L1 D Cache /
->
->           4             Processor --- L1 I Cache \____ L2 U Cache -x
->                                   --- L1 D Cache /
->
->                   Cache Level ---->    1                2
->
-> acpi_find_cache_level() returns "2" for any logical cpu, but this doesn't tell
-> us anything about the CPU topology level across which this cache is shared.
+The following changes since commit 8b97cae315cafd7debf3601f88621e2aa8956ef3:
 
-yeah, I have wrongly assumed that we can directly compare cache level
-with cluster level because find_acpi_cpu_cache_topology() returns a
-cpu node id but find_acpi_cpu_cache_topology walks the cpu topo to
-find the cpu node which maps the cache level. This means that we would
-have to walk the cpu topology until we find either cluster node id or
-cache node id to know which one belongs to the other
+  Merge tag 'net-5.17-rc5' of git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net (2022-02-17 11:33:59 -0800)
 
->
-> This is what drove me out of topology.c and up into smp.c after the various
-> topologies are populated and comparing masks. I'll spend a bit more time before
-> sending a cpumask implementation to see if there is a better point to do this
-> where the cpu topology level with shared cache is more readily available.
->
-> >
-> > diff --git a/arch/arm64/kernel/topology.c b/arch/arm64/kernel/topology.c
-> > index 9ab78ad826e2..4dac0491b7e3 100644
-> > --- a/arch/arm64/kernel/topology.c
-> > +++ b/arch/arm64/kernel/topology.c
-> > @@ -84,6 +84,7 @@ static bool __init acpi_cpu_is_threaded(int cpu)
-> >  int __init parse_acpi_topology(void)
-> >  {
-> >         int cpu, topology_id;
-> > +       bool default_cluster_topology = true;
-> >
-> >         if (acpi_disabled)
-> >                 return 0;
-> > @@ -119,8 +120,16 @@ int __init parse_acpi_topology(void)
-> >                         if (cache_id > 0)
-> >                                 cpu_topology[cpu].llc_id = cache_id;
-> >                 }
-> > +
-> > +               if (default_cluster_topology &&
-> > +                   (i < acpi_find_cluster_level(cpu))) {
->
-> Per above, from what I understand, this is comparing cpu topology levels with
-> cache levels, which are independent from each other.
->
-> > +                       default_cluster_topology = false;
-> > +               }
-> >         }
-> >
-> > +       if (!default_cluster_topology)
-> > +               set_sched_topology(arm64_no_mc_topology);
-> > +
-> >         return 0;
-> >  }
->
-> Thanks,
->
-> --
-> Darren Hart
-> Ampere Computing / OS and Kernel
+are available in the Git repository at:
+
+  http://git.kernel.org/pub/scm/linux/kernel/git/deller/parisc-linux.git tags/for-5.17/parisc-4
+
+for you to fetch changes up to a97279836867b1cb50a3d4f0b1bf60e0abe6d46c:
+
+  parisc/unaligned: Fix ldw() and stw() unalignment handlers (2022-02-23 18:01:06 +0100)
+
+----------------------------------------------------------------
+parisc unaligned handler fixes
+
+Two patches which fix a few bugs in the unalignment handlers.  The fldd
+and fstd instructions weren't handled at all on 32-bit kernels, the stw
+instruction didn't checked for fault errors and the fldw_l and ldw_m
+were handled wrongly as integer vs. floating point instructions.
+Both patches are tagged for stable series.
+
+----------------------------------------------------------------
+Helge Deller (2):
+      parisc/unaligned: Fix fldd and fstd unaligned handlers on 32-bit kernel
+      parisc/unaligned: Fix ldw() and stw() unalignment handlers
+
+ arch/parisc/kernel/unaligned.c | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)

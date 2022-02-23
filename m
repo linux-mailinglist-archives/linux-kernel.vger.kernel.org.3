@@ -2,155 +2,247 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 044D04C1A96
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 19:03:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E8CC4C1A9B
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 19:05:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243752AbiBWSDS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 13:03:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32944 "EHLO
+        id S243767AbiBWSGM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 13:06:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241883AbiBWSDP (ORCPT
+        with ESMTP id S236935AbiBWSGK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 13:03:15 -0500
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2089.outbound.protection.outlook.com [40.107.93.89])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F99635856;
-        Wed, 23 Feb 2022 10:02:48 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=mgBxJl9dzMJ31aEfSGEwDTheZq3rQAolVybqMgptU/Yyhhou9V8w48t/3zTQZZjyMDmgHj+j1xenKaJpdCcXWPBEaRcsmdbRko9ogKw+f+FotEHc4W0lN1O+kdo2WABa2iqFZKbCbp5kGyabqrerHbBqZYeZGIcQPktfNDAlad/KgaqmPXLQacZEORNEH1H962Un9eyl8oVDQLeXytnSX1RIiEsucIaIPeeRQIW8YjBvlozn5ErCeC2uu/oFRe7UWJUPmGIQKQIMNcm6rfcK52sgobd9dOLG6vReWcVAg56vNwSAA4WaasAZ8VFy6jjBhwc3L338jaIPDmUrjttS9Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=3g4AM9cByxCJ17rp5AHZ6bmXXTAvtmB0GIGSMl95+0Y=;
- b=epo6bKqVgNqC4CYLZoUwo/75L7jCWGr6TjZeY+oq/PH+c63cxPpvL1Qymqx9Aaclle8brVlMaTtQwCeUhOmsGKb3q1nXzHt7/4gebLd0Y35FCjy3B+NdpSoGcurtQdvxDif7nM/DK8toJjdgEL5ya0XSFWbUteCRCx0JOLnsCbCQvXILsF4QfnWrZdih2oXFXGlDS9Zx3i+Bz1dalQuOcRTxbnI4Ez6FKL9IEDrWy8K06vtu+4feNOtKSW88vqnDayjZdo0F0ZsTJZYrALFYxJI64YPw5wOW+heJnzUPywpbxztf7/+MC6e3SYO/iB+xXVBJ3rDjnHb0Bi6SlHLhkw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=3g4AM9cByxCJ17rp5AHZ6bmXXTAvtmB0GIGSMl95+0Y=;
- b=Ul8TIca+IfabmX6S5VeLRtL4sMPWOZsu38z+zir55F2O5tMCZKX1bqeRWc3SB69jFmCaywHU0wEUUbtVfSW1+xmYubP7D6PObli830hJPB7hGhMykdUHyGECxNRL/LMVVoj1qabl06Ng9O/+dTQBuzqxJUYF4JK1EvMArIJXx/sO+tmG2BkEx5F2Vwa6Ft4q9uJgSOtuPEujVff34tXYrJvzzr6erS56vltYvGjYEYUWtmHh/nmDt9lgqzXhiY6UU3wPSLYDth2zgZGNz5T92TMKA7dYmWpJaEku29ovRE4l2l+HgfiClDfAPCUseXY5qdv/jHOfWjty4ga/Wconxw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
- by SA0PR12MB4542.namprd12.prod.outlook.com (2603:10b6:806:73::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5017.22; Wed, 23 Feb
- 2022 18:02:45 +0000
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::e8f4:9793:da37:1bd3]) by MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::e8f4:9793:da37:1bd3%4]) with mapi id 15.20.5017.022; Wed, 23 Feb 2022
- 18:02:45 +0000
-Date:   Wed, 23 Feb 2022 14:02:44 -0400
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Robin Murphy <robin.murphy@arm.com>
-Cc:     Lu Baolu <baolu.lu@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Joerg Roedel <joro@8bytes.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>, rafael@kernel.org,
-        Diana Craciun <diana.craciun@oss.nxp.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Eric Auger <eric.auger@redhat.com>,
-        Liu Yi L <yi.l.liu@intel.com>,
-        Jacob jun Pan <jacob.jun.pan@intel.com>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        Stuart Yoder <stuyoder@gmail.com>,
-        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Li Yang <leoyang.li@nxp.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        iommu@lists.linux-foundation.org, linux-pci@vger.kernel.org,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6 01/11] iommu: Add dma ownership management interfaces
-Message-ID: <20220223180244.GA390403@nvidia.com>
-References: <20220218005521.172832-1-baolu.lu@linux.intel.com>
- <20220218005521.172832-2-baolu.lu@linux.intel.com>
- <f830c268-daca-8e8f-a429-0c80496a7273@arm.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f830c268-daca-8e8f-a429-0c80496a7273@arm.com>
-X-ClientProxiedBy: MN2PR04CA0028.namprd04.prod.outlook.com
- (2603:10b6:208:d4::41) To MN2PR12MB4192.namprd12.prod.outlook.com
- (2603:10b6:208:1d5::15)
+        Wed, 23 Feb 2022 13:06:10 -0500
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A4BE4474A;
+        Wed, 23 Feb 2022 10:05:42 -0800 (PST)
+Received: by mail-pf1-x436.google.com with SMTP id w2so3892968pfu.11;
+        Wed, 23 Feb 2022 10:05:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language
+         :from:to:cc:references:in-reply-to:content-transfer-encoding;
+        bh=wPKvdG9MiJl4UoPQrMZNghdi08S94Vr/cTBvfiJr0xQ=;
+        b=atgWdBG06KiOZ+3oYOl+6hFMkIX+ANUyyqeaREhChcPH5YfUbtQUoon4XfXpPdNGYs
+         bw3ZpNNClIoIApgcgVQn2I8ns0Lt/J5dTUVD3TJFlB2t9rVlOluo93+eI0mZesYpkfqL
+         agUrapqO17vZTSQk7LxX34x+WZy58Kn+KslzroSVS3uSbTngD+CBSKkHphq6DUiqMcfH
+         AJQ5dOEz4I3ucKLrA1xLERh3bchPGrCLxNSgRLAG+30kSWcxaXxlMJXSHC4cAS753LqS
+         SIp1z5pmZ9+3oRePFdP8d03z5/BOKunThwb1khHEEpmNE6rIzzdQYAjlpFMA/9SXZlbr
+         DKDQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:from:to:cc:references:in-reply-to
+         :content-transfer-encoding;
+        bh=wPKvdG9MiJl4UoPQrMZNghdi08S94Vr/cTBvfiJr0xQ=;
+        b=H7KIKSp7WKQ8nZyQYlWqC3H8lrXXjJmawq+lTNR3MJLtoKyXMEXJhVoI2x9gE3IPY0
+         ljgjORhek8OCUMIoaDZwJKzsVfxtxKP+X/l47XCpvl286rsqNLy+PgCWsVXgoJgrP877
+         8h/ApB7sQpM5kUqZ1av73YrHfOaUw8nH4B34vobI5CSds/n3lCSDWxPHNQG02zAHi3GA
+         +FQjjsRMmgi0RKx5kP2NbiDVXXtN/HSOgUiUCP9NHIv1aRQd4RUJIvlJmaRdCusQkMlH
+         cfse56NDry3J9ivdRCLExybTgv+L+Kk5/gNLMZsILcdJRmhw8tviU5bX2g6DnBGKPJX3
+         kwyw==
+X-Gm-Message-State: AOAM533Fy8C13T3pdbU7Gp2OKl9sqM30QzuAL4uthFWLrcnEYVCxTm7b
+        3ciHLn/IbtuS+/3AnlFLhy4=
+X-Google-Smtp-Source: ABdhPJx9f5FGyNqIZirZw9BaxyVnHr59J9ebvt0SancrJd+HwJdJChZIWngDR3CC8PemJr9S3dYLgQ==
+X-Received: by 2002:a63:1456:0:b0:373:c08c:124d with SMTP id 22-20020a631456000000b00373c08c124dmr594328pgu.363.1645639542006;
+        Wed, 23 Feb 2022 10:05:42 -0800 (PST)
+Received: from [192.168.1.3] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
+        by smtp.gmail.com with ESMTPSA id m126sm136913pga.94.2022.02.23.10.05.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 23 Feb 2022 10:05:40 -0800 (PST)
+Message-ID: <3b14ad6f-f8a5-bc8c-f0be-d0fda8e908a1@gmail.com>
+Date:   Wed, 23 Feb 2022 10:05:39 -0800
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: e6c71bf6-ba50-4fcb-a11a-08d9f6f6b1aa
-X-MS-TrafficTypeDiagnostic: SA0PR12MB4542:EE_
-X-Microsoft-Antispam-PRVS: <SA0PR12MB4542FCBEB5EB3D661EB7FDBDC23C9@SA0PR12MB4542.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: TdMa0cgVZF5kEoZ3d/gR+bVUN72Xe6yLAKXP6xE9g4BsixzakpecCA4AS7ANOibneiRl70e8CjQx8Zk8PtbslXYqSd1t99N90vMMHVP+X+40dmk5E+mSBMDc6gpdWyxrufwXQvx/RHqMiWg9XKSK5dc7dLu19SDJP+hEOA/4cqYq6IaXRKJQZtb7Ff+5y5JCTKetAUSG3ADsrznPoiSa1ecWhIo9nz3t0apd9Jf9ScbafUItRH5f9IEuUWMBIMflR4idyF+cs1thSDsQO7U7vsh1JMmeDs0YIoWhbflMrjzFW+LymtIrSBigNQmyYVYAkHfBxNjbG7dZYtTdTggvWyMKkkymJz49K2iQsI51nTW1hxr85WVD2HZialVzLzF+kgqZNsp2HlNjvGUXi3+HxJqCH6IrVHk3Ch7PGR7fSODTOJeaACKUmubeyEqICfL7g9dvtqleerURHh9qrJakrccNZDl/wLhhOPBqQvG2wz2eW4g0ovcjLkqOiMQ3Oy7wMSteXkU7nMgJLaAkAVdr0tB9EFu/oPR3+7PyoNVwveUU7YjkpC3i9oTY2ja+CDmGRAfsxsOpfvXGIDXlZpvSyuBxNEJXUt+42SqjWnf6IA08yhLsfvwLk2WWMe85zEf2QbuoHT65oNHnHq5CybURRIo2PnLVAtBrG9YF2yjriz5SO/I3vTPIP0Qpr3NnHBXE9rXzafvDgWQHA7E9HhKnTw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(6486002)(4744005)(4326008)(6506007)(6512007)(5660300002)(86362001)(36756003)(508600001)(2616005)(2906002)(186003)(8936002)(7416002)(26005)(1076003)(316002)(33656002)(54906003)(6916009)(8676002)(66476007)(66946007)(66556008)(38100700002)(27376004);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Ai/v6zAHKGrVbPy6v876WjOX4aJ3IHK+p/E59I5x3Q+GR9k+sV1mQy2KRRJz?=
- =?us-ascii?Q?fUBaEgFWzYQF6W+FiZznx9kKCeYuzh10feH9aC1jmN4Xf+OSKyLbzGkXLQxX?=
- =?us-ascii?Q?LL3Kc5Bkk/lFc8pJNkkoPjX7gzx0CFNQzl4VOwSQbvwU53mN+7T/KQaTx9NN?=
- =?us-ascii?Q?/R2WjY7QigocTJtsIVSwPA/AVccxjXdp45KH5tHPIW30SGGfU+jUZrz95o9D?=
- =?us-ascii?Q?zelQ6cgHvxUZOwTkXKNgkpT7sPMd5yBdd6VFe/SeT26ofi0XfsYQQmZCtWsC?=
- =?us-ascii?Q?aljv8TWiC+uI9wkEJNGzObRjckZNhiSaMM8WHUItuY6UxmfWsZcHYIrAtyAo?=
- =?us-ascii?Q?YWUiaAQvrbJj7bCTDmriX5Gcewv0zAKwb5vL4z97YPPxBlNmeiFBgUVFyNyA?=
- =?us-ascii?Q?NThFP8FlayLIxVoUPYgbm26ovirQvAFAEcR3uQGQoVz6qx7Wxi0n9j/9Vd6l?=
- =?us-ascii?Q?li9O/efbM5/+bK3/Ec3DKxUe0mMDBL0u+VbinoYXbahJtXEmBiNtMPsGF3EH?=
- =?us-ascii?Q?8xGyAq7Jm89gxOsArFE/wesVY8GHcSYLZdv2O3+U4JxBq8mwyHmcjV3ElPJW?=
- =?us-ascii?Q?I2+4/zZaxUXvA6cDpy7yG+2Znb04855e4lIX/QqkEIEdaeTQOeOGe2GlvTc4?=
- =?us-ascii?Q?OS0YtUmtA7+GS9Vs7jRHV0QzU+qjqqOIv7HQRYL7gWx8I/OA+MZ4Qfrn6J0s?=
- =?us-ascii?Q?lp2uZl9gGMgXJXpk3c30OK5vX19MQeSqSqhHA1sDv0g08pNVcK7Q1Vuntusj?=
- =?us-ascii?Q?JzWeOpF2UkuGgSEsHnt8baxN6LQb7K4T9HPK+kXbR4AKF4tf0zTRkFJ9wHI6?=
- =?us-ascii?Q?IT9BPIrWMzieBYaTb5SfEPfLWegkf2N6UNhHNxwG+95PLYDtCqKZqMjR26vn?=
- =?us-ascii?Q?ENsp1A0KNkQvGPk+NAl/0M8saU1rDJ2kyFOZSLDQJrQUZQKA40RYGONW/JCu?=
- =?us-ascii?Q?RIQjiedBGwpsA/oMu/BrA3UZYNCceDuqfasRWo6swThbsLAJSEce1Tjk8Sap?=
- =?us-ascii?Q?IcoLi1lijXedsbMjt/1wYxBFrgUhAI6jlmCmWv0jdKDql90fUFnu7d4VZ7vl?=
- =?us-ascii?Q?UhvL9EhhLV4399zCGLJ2aYyeDcRubfLgVIBWC2uaQl+Dit5ocXyDl516+sPb?=
- =?us-ascii?Q?ts3GINieePYDwiAmId4Y9PvqO4zynTkMd9MHtXGGbSbcK23h0sLPT9mypi1D?=
- =?us-ascii?Q?fVMupUtfGZLeyXYRQNvBemm0pdGLTLvTwOvKF5gTBLdXL0q1MofScNuqDn1I?=
- =?us-ascii?Q?lwMTkdUeucbR07Wm3CcfqxjYfvEPpgruh84DQj9DMi2oMM5ct/sHXNEF7cjo?=
- =?us-ascii?Q?LgHUgQHAp4a1UFKYK2K5gOdyUSfqNQ8ZaD0TR0X87jOm7AU2zYPGo3D3/Was?=
- =?us-ascii?Q?TSLA8zftohHCkU7Y6NjtqsE1iwu7SX76iZISiVDfHNiIuhamT/RHd3G7CXxW?=
- =?us-ascii?Q?59WrQAiqnwO/bZkzxdF0rBIN3rn4SToErl5004ubV3fLfx7egptQFEn3U8PE?=
- =?us-ascii?Q?Pp8/QPvERC+KIF3IDO2kDGWHy53AxDrNtkPEQnPUCCvCXwl4Uu1XXtw52NZi?=
- =?us-ascii?Q?S9aVpTXcLDjspvIba4w=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e6c71bf6-ba50-4fcb-a11a-08d9f6f6b1aa
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Feb 2022 18:02:45.4022
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: GQYeKOi99G7AzSQ0D7uJzrzv7yhdogu1acN7H4FUe2/U3G84c8NSp5r6XLUTbPtX
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR12MB4542
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Subject: Re: [PATCH 3/3] drivers/net/ftgmac100: fix DHCP potential failure
+ with systemd
+Content-Language: en-US
+From:   Florian Fainelli <f.fainelli@gmail.com>
+To:     Heyi Guo <guoheyi@linux.alibaba.com>, linux-kernel@vger.kernel.org
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Guangbin Huang <huangguangbin2@huawei.com>,
+        Hao Chen <chenhao288@hisilicon.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Dylan Hung <dylan_hung@aspeedtech.com>, netdev@vger.kernel.org
+References: <20220223031436.124858-1-guoheyi@linux.alibaba.com>
+ <20220223031436.124858-4-guoheyi@linux.alibaba.com>
+ <1675a52d-a270-d768-5ccc-35b1e82e56d2@gmail.com>
+ <5cdf5d09-9b32-ec98-cbd1-c05365ec01fa@linux.alibaba.com>
+ <91e2d4ad-7544-784b-defe-3a76577462f1@gmail.com>
+In-Reply-To: <91e2d4ad-7544-784b-defe-3a76577462f1@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 23, 2022 at 06:00:06PM +0000, Robin Murphy wrote:
 
-> ...and equivalently just set owner_cnt directly to 0 here. I don't see a
-> realistic use-case for any driver to claim the same group more than once,
-> and allowing it in the API just feels like opening up various potential
-> corners for things to get out of sync.
 
-I am Ok if we toss it out to get this merged, as there is no in-kernel
-user right now.
+On 2/23/2022 9:55 AM, Florian Fainelli wrote:
+> 
+> 
+> On 2/23/2022 3:39 AM, Heyi Guo wrote:
+>> Hi Florian,
+>>
+>> 在 2022/2/23 下午1:00, Florian Fainelli 写道:
+>>>
+>>>
+>>> On 2/22/2022 7:14 PM, Heyi Guo wrote:
+>>>> DHCP failures were observed with systemd 247.6. The issue could be
+>>>> reproduced by rebooting Aspeed 2600 and then running ifconfig ethX
+>>>> down/up.
+>>>>
+>>>> It is caused by below procedures in the driver:
+>>>>
+>>>> 1. ftgmac100_open() enables net interface and call phy_start()
+>>>> 2. When PHY is link up, it calls netif_carrier_on() and then
+>>>> adjust_link callback
+>>>> 3. ftgmac100_adjust_link() will schedule the reset task
+>>>> 4. ftgmac100_reset_task() will then reset the MAC in another schedule
+>>>>
+>>>> After step 2, systemd will be notified to send DHCP discover packet,
+>>>> while the packet might be corrupted by MAC reset operation in step 4.
+>>>>
+>>>> Call ftgmac100_reset() directly instead of scheduling task to fix the
+>>>> issue.
+>>>>
+>>>> Signed-off-by: Heyi Guo <guoheyi@linux.alibaba.com>
+>>>> ---
+>>>> Cc: Andrew Lunn <andrew@lunn.ch>
+>>>> Cc: "David S. Miller" <davem@davemloft.net>
+>>>> Cc: Jakub Kicinski <kuba@kernel.org>
+>>>> Cc: Joel Stanley <joel@jms.id.au>
+>>>> Cc: Guangbin Huang <huangguangbin2@huawei.com>
+>>>> Cc: Hao Chen <chenhao288@hisilicon.com>
+>>>> Cc: Arnd Bergmann <arnd@arndb.de>
+>>>> Cc: Dylan Hung <dylan_hung@aspeedtech.com>
+>>>> Cc: netdev@vger.kernel.org
+>>>>
+>>>>
+>>>> ---
+>>>>   drivers/net/ethernet/faraday/ftgmac100.c | 13 +++++++++++--
+>>>>   1 file changed, 11 insertions(+), 2 deletions(-)
+>>>>
+>>>> diff --git a/drivers/net/ethernet/faraday/ftgmac100.c 
+>>>> b/drivers/net/ethernet/faraday/ftgmac100.c
+>>>> index c1deb6e5d26c5..d5356db7539a4 100644
+>>>> --- a/drivers/net/ethernet/faraday/ftgmac100.c
+>>>> +++ b/drivers/net/ethernet/faraday/ftgmac100.c
+>>>> @@ -1402,8 +1402,17 @@ static void ftgmac100_adjust_link(struct 
+>>>> net_device *netdev)
+>>>>       /* Disable all interrupts */
+>>>>       iowrite32(0, priv->base + FTGMAC100_OFFSET_IER);
+>>>>   -    /* Reset the adapter asynchronously */
+>>>> -    schedule_work(&priv->reset_task);
+>>>> +    /* Release phy lock to allow ftgmac100_reset to aquire it, 
+>>>> keeping lock
+>>>
+>>> typo: acquire
+>>>
+>> Thanks for the catch :)
+>>>> +     * order consistent to prevent dead lock.
+>>>> +     */
+>>>> +    if (netdev->phydev)
+>>>> +        mutex_unlock(&netdev->phydev->lock);
+>>>> +
+>>>> +    ftgmac100_reset(priv);
+>>>> +
+>>>> +    if (netdev->phydev)
+>>>> +        mutex_lock(&netdev->phydev->lock);
+>>>
+>>> Do you really need to perform a full MAC reset whenever the link goes 
+>>> up or down? Instead cannot you just extract the maccr configuration 
+>>> which adjusts the speed and be done with it?
+>>
+>> This is the original behavior and not changed in this patch set, and 
+>> I'm not familiar with the hardware design of ftgmac100, so I'd like to 
+>> limit the changes to the code which really causes practical issues.
+> 
+> This unlocking and re-locking seems superfluous when you could introduce 
+> a version of ftgmac100_reset() which does not acquire the PHY device 
+> mutex, and have that version called from ftgmac100_adjust_link(). For 
+> every other call site, you would acquire it. Something like this for 
+> instance:
+> 
+> 
+> diff --git a/drivers/net/ethernet/faraday/ftgmac100.c 
+> b/drivers/net/ethernet/faraday/ftgmac100.c
+> index 691605c15265..98179c3fd9ee 100644
+> --- a/drivers/net/ethernet/faraday/ftgmac100.c
+> +++ b/drivers/net/ethernet/faraday/ftgmac100.c
+> @@ -1038,7 +1038,7 @@ static void ftgmac100_adjust_link(struct 
+> net_device *netdev)
+>          iowrite32(0, priv->base + FTGMAC100_OFFSET_IER);
+> 
+>          /* Reset the adapter asynchronously */
+> -       schedule_work(&priv->reset_task);
+> +       ftgmac100_reset(priv, false);
+>   }
+> 
+>   static int ftgmac100_mii_probe(struct net_device *netdev)
+> @@ -1410,10 +1410,8 @@ static int ftgmac100_init_all(struct ftgmac100 
+> *priv, bool ignore_alloc_err)
+>          return err;
+>   }
+> 
+> -static void ftgmac100_reset_task(struct work_struct *work)
+> +static void ftgmac100_reset_task(struct ftgmac100_priv *priv, bool 
+> lock_phy)
+>   {
+> -       struct ftgmac100 *priv = container_of(work, struct ftgmac100,
+> -                                             reset_task);
+>          struct net_device *netdev = priv->netdev;
+>          int err;
+> 
+> @@ -1421,7 +1419,7 @@ static void ftgmac100_reset_task(struct 
+> work_struct *work)
+> 
+>          /* Lock the world */
+>          rtnl_lock();
+> -       if (netdev->phydev)
+> +       if (netdev->phydev && lock_phy)
+>                  mutex_lock(&netdev->phydev->lock);
+>          if (priv->mii_bus)
+>                  mutex_lock(&priv->mii_bus->mdio_lock);
+> @@ -1454,11 +1452,19 @@ static void ftgmac100_reset_task(struct 
+> work_struct *work)
+>    bail:
+>          if (priv->mii_bus)
+>                  mutex_unlock(&priv->mii_bus->mdio_lock);
+> -       if (netdev->phydev)
+> +       if (netdev->phydev && lock_phy)
+>                  mutex_unlock(&netdev->phydev->lock);
+>          rtnl_unlock();
+>   }
+> 
+> +static void ftgmac100_reset_task(struct work_struct *work)
+> +{
+> +       struct ftgmac100 *priv = container_of(work, struct ftgmac100,
+> +                                             reset_task);
+> +
+> +       ftgmac100_reset(priv, true);
+> +}
+> +
+>   static int ftgmac100_open(struct net_device *netdev)
+>   {
+>          struct ftgmac100 *priv = netdev_priv(netdev)
 
-Something will have to come back for iommufd, but we can look at what
-is best suited then.
+Well this whole patch series has been applied already so I guess those 
+comments are partially or totally moot now.
 
-Thanks,
-Jason
+I have not received my notification about these patches being applied, 
+unless when Jakub applies them, so either it is another vger/gmail lag 
+that is absolutely unnerving or it is a difference of process between 
+David and Jakub, in which case it really ought to be fixed such that it 
+is consistent.
+-- 
+Florian

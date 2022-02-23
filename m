@@ -2,133 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70B484C1B3D
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 19:56:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F3794C1B3F
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 19:57:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238686AbiBWS5E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 13:57:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42634 "EHLO
+        id S244023AbiBWS5T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 13:57:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244070AbiBWS5C (ORCPT
+        with ESMTP id S244091AbiBWS5N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 13:57:02 -0500
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D250338AD
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 10:56:33 -0800 (PST)
-Received: by mail-pf1-x42d.google.com with SMTP id z15so10489163pfe.7
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 10:56:33 -0800 (PST)
+        Wed, 23 Feb 2022 13:57:13 -0500
+Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com [IPv6:2607:f8b0:4864:20::f29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F08E02DABC
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 10:56:44 -0800 (PST)
+Received: by mail-qv1-xf29.google.com with SMTP id h13so9947146qvk.12
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 10:56:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
         h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=WO10LZXV2/UIWFExeWc5y4Axog2LtDZPkQsLOSvWfIQ=;
-        b=D8TkVS0SFNlR75Wec0ztTxmXYaKBMsKoUqb/Nhs2hNUiK/oaDz71s6bWwqHwBV1Wjz
-         cslgksXqAs492hjk4W5fOe6HJmIx2jOGr42dklLADLnuAj6O7rlxzR4je1EbsPrOP8wk
-         weGsjLeFnSuR/7vT+UaNHlsfv8241RQA0ZB5g3tenBZ3jhcHWHEPO1lvjP6HPgoGmptr
-         iscT1tlwsb64dhL/wSDAaCJ/0x3uLXRTToo1xd1dpg2OSIUJMis8ITDrAWCTvY2C72SG
-         xThZMVdYqHwxBZkQnHbX5lJxFn9v35CY9ZtkqKIMMIPzO/6GSf6aJeMr/VWZ4lkhrzKF
-         +BNg==
+         :content-disposition:in-reply-to;
+        bh=Q3Lu5wb8EhpAgZDSk61zW+lqHYQM4+j9HTgU1DVV1Sw=;
+        b=l1InJ+X31LDWy2jTVnSPnQDi+B49kLksRpH4cPiS6MLy41mkrhC68E0V2/4z3oezcb
+         63eEmZS13IQSySaYk3+lzAZEGeJp27DvdSeDfSedL++SVmCPcLn9dPcXj1vfri3WfV0F
+         2J005jcW/xELjO3UEXFIK2EDjOyeV400zYDDrNmKkcXvj02/tydEuCYNFcAoq7Uet+sR
+         602UokOf4rOVUOJRS5/S+28PpA9pCvv6sQa0SUL4vZUKzhv55iJzCxyUIncBfgEwhfk5
+         bAM1DdbeHuOj1/BHIuzcK+sVkHmk/2EKFmasXWBZImFrucmFvOQMJ58uPe07fxioFYOG
+         lwtA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=WO10LZXV2/UIWFExeWc5y4Axog2LtDZPkQsLOSvWfIQ=;
-        b=tnx9hqtQbeZFejEKta4pYejGphaDe1TU/E5K6VeYdUiteErihu/+VLWrEurlQcMvzX
-         Qul3kIDf4bvRL2oty++eFFjcB0u/BIeD4w9/gHB43MiyWQjLl5OZui1F57OKhxPwE3sO
-         ZXwlAktU+MP/KLJWyUyQ1ZMgynX3KVuuR70sN9fYMNEfWZx8asDrWuZDbyyrZOYuMVxa
-         t11agQ0X7iujWDo6Yj6ILC6zi1vWNV6bMfZqGQu7FkBT6NS2cND0p7U5rR2UqvXfPZk2
-         R+xF2CB8OntL/Y/Kjc2s1YY/MYgTuUPupsYzfB6NW0nYdc7YKc6F6eiDcSqBZrkmrj28
-         hW9w==
-X-Gm-Message-State: AOAM532gBStfYfKp9jHdAu7zbu4paMN19MUABTl3g/qDk4CMI2EPsAO8
-        KpEv/OcNC/Fp+yNV5TPzKKfq7WjF4qfzXw==
-X-Google-Smtp-Source: ABdhPJxWzseRIGwjKlr0g3XO7WPLxpsY657PyUA0i4zsqM9a8QWHzQK5Zdw5cIoRSvIs8eDmqn0I2g==
-X-Received: by 2002:a63:31ce:0:b0:34e:4052:1bce with SMTP id x197-20020a6331ce000000b0034e40521bcemr735240pgx.459.1645642592668;
-        Wed, 23 Feb 2022 10:56:32 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id i11sm231887pgs.58.2022.02.23.10.56.31
+         :mime-version:content-disposition:in-reply-to;
+        bh=Q3Lu5wb8EhpAgZDSk61zW+lqHYQM4+j9HTgU1DVV1Sw=;
+        b=RC01JvfK6xymlY0YD87iyR/RaIz4Xmpdpd/VjaTM6nwtPakgZQDj04nIXjo6+BYkzl
+         Y4Axi+PMbDyJH6LeQwwurDr/UpvvYJCOfinJySWjBkk5WJM4M2NV9sfwHE8hU+CujbZh
+         iQjGELx3yUFZa5/FjQbtAV+d/uOa6oE2HuQI4DkGs4vpLSmTGu+qP10FkxNsxpnmzw3D
+         xsq85A8UswiBvxJY1xUyFdI8FwuDroY3cYv5mlSDlnUxMThwcUjEHUonIyG6hTECwxPt
+         6pp4gyEOhlk+f6OKavjKs0NTAViiAh1b+/fYfd/Jr0qUv19p4skXnT2TRuoDeE1mTekE
+         f1ZQ==
+X-Gm-Message-State: AOAM531sU1mEiLx0OcmXch8fMuQQOrI9arBBRnrz8DbDRSzXfW1b+cp2
+        zxhzWN01Pz+YnXhyaTuRBMlZa7xIxI4NYw==
+X-Google-Smtp-Source: ABdhPJz5HctQWHrpQKBVleNNu+26U1JjeMO0f43E8EYK8hE+TjsP+jdzljicZPNAaEmTkczGytDXGQ==
+X-Received: by 2002:a05:6214:1d05:b0:42c:a98e:6201 with SMTP id e5-20020a0562141d0500b0042ca98e6201mr663380qvd.122.1645642604107;
+        Wed, 23 Feb 2022 10:56:44 -0800 (PST)
+Received: from localhost (cpe-98-15-154-102.hvc.res.rr.com. [98.15.154.102])
+        by smtp.gmail.com with ESMTPSA id 5sm305559qtp.81.2022.02.23.10.56.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Feb 2022 10:56:31 -0800 (PST)
-Date:   Wed, 23 Feb 2022 18:56:28 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Like Xu <like.xu.linux@gmail.com>
-Subject: Re: [PATCH] KVM: x86: Fix pointer mistmatch warning when patching
- RET0 static calls
-Message-ID: <YhaDXDfLBQtkmbtV@google.com>
-References: <20220223162355.3174907-1-seanjc@google.com>
- <YhZuk8eA6rsDuJkd@dev-arch.archlinux-ax161>
- <YhZ16cMMcHQIvS9d@google.com>
- <YhZ5Q8DNoGGWUBLh@dev-arch.archlinux-ax161>
+        Wed, 23 Feb 2022 10:56:43 -0800 (PST)
+Date:   Wed, 23 Feb 2022 13:56:43 -0500
+From:   Johannes Weiner <hannes@cmpxchg.org>
+To:     Roman Gushchin <roman.gushchin@linux.dev>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, Michal Hocko <mhocko@kernel.org>,
+        Vladimir Davydov <vdavydov.dev@gmail.com>
+Subject: Re: [PATCH] MAINTAINERS: add myself as a memcg co-maintainer
+Message-ID: <YhaDa1CfPyQ/laup@cmpxchg.org>
+References: <20220221233951.659048-1-roman.gushchin@linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YhZ5Q8DNoGGWUBLh@dev-arch.archlinux-ax161>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <20220221233951.659048-1-roman.gushchin@linux.dev>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 23, 2022, Nathan Chancellor wrote:
-> On Wed, Feb 23, 2022 at 05:59:05PM +0000, Sean Christopherson wrote:
-> > On Wed, Feb 23, 2022, Nathan Chancellor wrote:
-> > > Hi Sean,
-> > > 
-> > > On Wed, Feb 23, 2022 at 04:23:55PM +0000, Sean Christopherson wrote:
-> > > > Cast kvm_x86_ops.func to 'void *' when updating KVM static calls that are
-> > > > conditionally patched to __static_call_return0().  clang complains about
-> > > > using mismatching pointers in the ternary operator, which breaks the
-> > > > build when compiling with CONFIG_KVM_WERROR=y.
-> > > > 
-> > > >   >> arch/x86/include/asm/kvm-x86-ops.h:82:1: warning: pointer type mismatch
-> > > >   ('bool (*)(struct kvm_vcpu *)' and 'void *') [-Wpointer-type-mismatch]
-> > > > 
-> > > > Fixes: 5be2226f417d ("KVM: x86: allow defining return-0 static calls")
-> > > > Reported-by: Like Xu <like.xu.linux@gmail.com>
-> > > > Reported-by: kernel test robot <lkp@intel.com>
-> > > > Signed-off-by: Sean Christopherson <seanjc@google.com>
-> > > 
-> > > Thank you for the patch! Is this a bug in clang?
-> > 
-> > IMO, no.  I think it's completely reasonable for the compiler to complain that KVM
-> > is generating two different pointer types out of a ternary operator.
-> > 
-> > clang is somewhat inconsistent, though it may be deliberate.  clang doesn't complain
-> > about implicitly casting a 'void *' to another data type, e.g. this complies clean,
-> > where "data" is a 'void *'
-> > 
-> > 	struct kvm_vcpu *x = vcpu ? : data;
+On Mon, Feb 21, 2022 at 03:39:51PM -0800, Roman Gushchin wrote:
+> Add myself as a memcg co-maintainer. My primary focus over last few
+> years was the kernel memory accounting stack, but I do work on some
+> other parts of the memory controller as well.
 > 
-> Right, I would assume this is deliberate. I think warning in this case
-> might be quite noisy, as the kernel implicitly converts 'void *' to
-> typed pointers for certain function pointer callbacks (although this
-> particular case is probably pretty rare).
+> Signed-off-by: Roman Gushchin <roman.gushchin@linux.dev>
+> Cc: Johannes Weiner <hannes@cmpxchg.org>
+> Cc: Michal Hocko <mhocko@kernel.org>
+> Cc: Vladimir Davydov <vdavydov.dev@gmail.com>
 
-Aha!  Looks like clang's behavior is correct, assuming a function is not considered
-an "object".  From C99 "6.5.15 Conditional operator":
-
-  One of the following shall hold for the second and third operands:
-    — both operands have arithmetic type;
-    — both operands have the same structure or union type;
-    — both operands have void type;
-    — both operands are pointers to qualified or unqualified versions of compatible types;
-    — one operand is a pointer and the other is a null pointer constant; or
-    — one operand is a pointer to an object or incomplete type and the other is a pointer to a
-      qualified or unqualified version of void.
-
-That last case would explain why clang warns about a function pointer but not a
-object pointer when the third operand is a 'void *'.
+Acked-by: Johannes Weiner <hannes@cmpxchg.org>

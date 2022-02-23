@@ -2,122 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4715C4C0D1A
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 08:13:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C23A4C0D1C
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 08:13:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238607AbiBWHNW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 02:13:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43332 "EHLO
+        id S238609AbiBWHNm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 02:13:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238604AbiBWHNU (ORCPT
+        with ESMTP id S237755AbiBWHNk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 02:13:20 -0500
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2CD3593AF
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 23:12:52 -0800 (PST)
-Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com [209.85.218.72])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Wed, 23 Feb 2022 02:13:40 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92AB259A43
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 23:13:13 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 6DEA23FCA5
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 07:12:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1645600371;
-        bh=Yk2F1aFfW1Ld0LeoUO0G0aplUyclczODbC5pm0OWl08=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=tuMoEEexilKAJCag4Oa4X7HG4D1gH1YTi2FJ6f95ZPhKrU2Ifoa0gtP4+ZBuBjN4Q
-         PUIlmB9lJKj1J4KKmlNDalCxI5Mg5ao5H3KYiHRPXZIJfSmEsaDOClT2HLuGwI9uQl
-         gQwT0sKfRL+Fzi35ccMy6QjmlmEnQBlr+BqGFLjAmnQ/2L+5pBl503sXPpgxvzgAiE
-         DgTICnktUGpbquVK74lgnbI6EtyXBX0frvKsJEv7SZk1kjWkFWQ6B0jDGFB/DLPcPB
-         Y5jncCAcQCvX1pzvGF54IqTxtJNftFRL+Wf9UGC+S/tmpGNtN9iKH4z7Ktru9Y/3qx
-         JeS9eHz8lYBEg==
-Received: by mail-ej1-f72.google.com with SMTP id 13-20020a170906328d00b006982d0888a4so6655986ejw.9
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 23:12:51 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Yk2F1aFfW1Ld0LeoUO0G0aplUyclczODbC5pm0OWl08=;
-        b=XUENLNa2ry969Am2gbllVcpKZ5sb52UfrhzF5WkN3TIAs9yX6L6PeAVaLY5WoSSvjp
-         u8nyexN6hlXQGa5wbn0kdBO2+8MPP7fjnJBcvyLyaGEAE+25Esv7yDvwy1lvV0Wv2fqo
-         RMBNX1OXzM3GNxS5I3gdQ8SqQEMz5lZl+cK0uwKD5QpDTNkiqYD5RIeUNkx/zx3Ahjzy
-         iAO2NBVVSu+MqN37xWH/vHBuSl8177INqL/cVyeMI9V3G51q8jrsEHP6tsLWuneRZyU5
-         CkmHzxpP3DOtRIwJ7KeH6YGiAm9ZHqJhb+oaKcnLvw4QKt4i4nUvYjjSDSnl7YX3NCc7
-         Agag==
-X-Gm-Message-State: AOAM532KqZbSnMppyK7oJsd5Q9QFewIEiaEK4got2BEyY2Q90J5PmMPs
-        y8mh/IMuBpqURauCQ8yG9qxQu287G5GGzWFgni1UF/g0Bhf1ptxwk8C7KdSEXSlTKkz6FZcPThY
-        0GtPRDum8FF2lNBURZd+A8+LOY+ziqsHByW3iaIgbbA==
-X-Received: by 2002:a17:906:64e:b0:6ce:36ae:7ab5 with SMTP id t14-20020a170906064e00b006ce36ae7ab5mr22053176ejb.192.1645600371112;
-        Tue, 22 Feb 2022 23:12:51 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzmck5fg5WgUrwFyTS+l2MRKX24yg2vyux+78JbFW201Iyi4ERfI4O0zm2hCcKJyNLWo8yoPA==
-X-Received: by 2002:a17:906:64e:b0:6ce:36ae:7ab5 with SMTP id t14-20020a170906064e00b006ce36ae7ab5mr22053144ejb.192.1645600370934;
-        Tue, 22 Feb 2022 23:12:50 -0800 (PST)
-Received: from [192.168.0.124] (xdsl-188-155-181-108.adslplus.ch. [188.155.181.108])
-        by smtp.gmail.com with ESMTPSA id g16sm6978683ejf.218.2022.02.22.23.12.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 22 Feb 2022 23:12:50 -0800 (PST)
-Message-ID: <65edc257-82ec-e100-7a44-5c510aba51ce@canonical.com>
-Date:   Wed, 23 Feb 2022 08:12:49 +0100
+        by ams.source.kernel.org (Postfix) with ESMTPS id 422A8B81E7E
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 07:13:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67540C340E7;
+        Wed, 23 Feb 2022 07:13:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1645600390;
+        bh=+DGzvPHAQ6IbmlzSXeG2hbFfqt/5MKzb+1UR8+c8x2M=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=vVRpKs37RLe7EKJJcUhi6ISAKPOxEM8zefmXwVShM7O73mfcBh9LQqz6pArS3RpDS
+         os5uNQroDZSb899RphtEMb/lex5UYTuHcWUHeXr/yUWGxDCA+qjE7AqAliHh1tqh5F
+         4sphX46ismj2+0I02g4s7iDedivUz/hOx5e6hXzs=
+Date:   Wed, 23 Feb 2022 08:13:08 +0100
+From:   "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
+To:     "Zhang, Qiang1" <qiang1.zhang@intel.com>
+Cc:     syzbot <syzbot+348b571beb5eeb70a582@syzkaller.appspotmail.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "rafael@kernel.org" <rafael@kernel.org>,
+        "syzkaller-bugs@googlegroups.com" <syzkaller-bugs@googlegroups.com>,
+        "balbi@kernel.org" <balbi@kernel.org>
+Subject: Re: [syzbot] KASAN: use-after-free Read in dev_uevent
+Message-ID: <YhXehCLx9LVwCIO6@kroah.com>
+References: <0000000000005a991a05a86970bb@google.com>
+ <00000000000033314805d8765175@google.com>
+ <PH0PR11MB5880C431590170767B4BACFEDA3C9@PH0PR11MB5880.namprd11.prod.outlook.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v7 05/11] dt-bindings: pwm: add microchip corepwm binding
-Content-Language: en-US
-To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        conor.dooley@microchip.com
-Cc:     linus.walleij@linaro.org, brgl@bgdev.pl, robh+dt@kernel.org,
-        jassisinghbrar@gmail.com, thierry.reding@gmail.com,
-        lee.jones@linaro.org, a.zummo@towertech.it,
-        alexandre.belloni@bootlin.com, paul.walmsley@sifive.com,
-        palmer@dabbelt.com, aou@eecs.berkeley.edu, geert@linux-m68k.org,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pwm@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-riscv@lists.infradead.org,
-        lewis.hanly@microchip.com, daire.mcnamara@microchip.com,
-        ivan.griffin@microchip.com, atishp@rivosinc.com,
-        Rob Herring <robh@kernel.org>,
-        Palmer Dabbelt <palmer@rivosinc.com>
-References: <20220214135840.168236-1-conor.dooley@microchip.com>
- <20220214135840.168236-6-conor.dooley@microchip.com>
- <20220223062018.nbgidqxgh2soz625@pengutronix.de>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20220223062018.nbgidqxgh2soz625@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <PH0PR11MB5880C431590170767B4BACFEDA3C9@PH0PR11MB5880.namprd11.prod.outlook.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23/02/2022 07:20, Uwe Kleine-König wrote:
-> On Mon, Feb 14, 2022 at 01:58:35PM +0000, conor.dooley@microchip.com wrote:
->> From: Conor Dooley <conor.dooley@microchip.com>
->>
->> Add device tree bindings for the Microchip fpga fabric based "core" PWM
->> controller.
->>
->> Reviewed-by: Rob Herring <robh@kernel.org>
->> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
->> Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
+On Wed, Feb 23, 2022 at 06:51:10AM +0000, Zhang, Qiang1 wrote:
 > 
-> I like it:
+> HEAD commit:    4f12b742eb2b Merge tag 'nfs-for-5.17-3' of git://git.linux..
+> git tree:       upstream
+> console output: https://syzkaller.appspot.com/x/log.txt?x=110a6df2700000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=f6a069ed94a1ed1d
+> dashboard link: https://syzkaller.appspot.com/bug?extid=348b571beb5eeb70a582
+> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12377296700000
 > 
-> Acked-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+348b571beb5eeb70a582@syzkaller.appspotmail.com
 > 
-> nitpick: Put your S-o-b last in the commit log. (This doesn't justify a
-> resend IMHO)
+> ==================================================================
+> BUG: KASAN: use-after-free in dev_uevent+0x712/0x780 drivers/base/core.c:2320 Read of size 8 at addr ffff88802b934098 by task udevd/3689
+> 
+> CPU: 2 PID: 3689 Comm: udevd Not tainted 5.17.0-rc4-syzkaller-00229-g4f12b742eb2b #0 Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-2 04/01/2014 Call Trace:
+>  <TASK>
+>  __dump_stack lib/dump_stack.c:88 [inline]
+>  dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+>  print_address_description.constprop.0.cold+0x8d/0x303 mm/kasan/report.c:255  __kasan_report mm/kasan/report.c:442 [inline]  kasan_report.cold+0x83/0xdf mm/kasan/report.c:459
+>  dev_uevent+0x712/0x780 drivers/base/core.c:2320
+>  uevent_show+0x1b8/0x380 drivers/base/core.c:2391
+>  dev_attr_show+0x4b/0x90 drivers/base/core.c:2094
+>  sysfs_kf_seq_show+0x219/0x3d0 fs/sysfs/file.c:59
+>  seq_read_iter+0x4f5/0x1280 fs/seq_file.c:230
+>  kernfs_fop_read_iter+0x514/0x6f0 fs/kernfs/file.c:241  call_read_iter include/linux/fs.h:2068 [inline]
+>  new_sync_read+0x429/0x6e0 fs/read_write.c:400
+>  vfs_read+0x35c/0x600 fs/read_write.c:481
+>  ksys_read+0x12d/0x250 fs/read_write.c:619
+>  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80  entry_SYSCALL_64_after_hwframe+0x44/0xae
+> RIP: 0033:0x7f964cc558fe
+> Code: c0 e9 e6 fe ff ff 50 48 8d 3d 0e c7 09 00 e8 c9 cf 01 00 66 0f 1f 84 00 00 00 00 00 64 8b 04 25 18 00 00 00 85 c0 75 14 0f 05 <48> 3d 00 f0 ff ff 77 5a c3 66 0f 1f 84 00 00 00 00 00 48 83 ec 28
+> RSP: 002b:00007ffc0133d258 EFLAGS: 00000246 ORIG_RAX: 0000000000000000
+> RAX: ffffffffffffffda RBX: 000056497b21a140 RCX: 00007f964cc558fe
+> RDX: 0000000000001000 RSI: 000056497b218650 RDI: 0000000000000008
+> RBP: 00007f964cd22380 R08: 0000000000000008 R09: 00007f964cd25a60
+> R10: 0000000000000008 R11: 0000000000000246 R12: 000056497b21a140
+> R13: 0000000000000d68 R14: 00007f964cd21780 R15: 0000000000000d68  </TASK>
+> 
+> 
+> Hi All 
+> 
+> This should be because when the raw_dev is released, the 'driver' address has expired,
+> although the usb_gadget_remove_driver() empty 'dev.driver ' NULL, but UAF cannot be avoided.
+> 
+> static int dev_uevent(struct kobject *kobj, struct kobj_uevent_env *env) {
+> .....
+>          if (dev->driver)
+> 2320                 add_uevent_var(env, "DRIVER=%s", dev->driver->name);
+> .....
+> }
+> 
+> Whether protection can be added when operating 'dev->driver'?
 
-It should be the opposite - the first. First author signs the patch,
-then comes review and finally an ack. Putting SoB at then suggests that
-tags were accumulated before sending patch, out of mailing list.
+When the driver structure is unbound, this should be set to NULL.  Why
+isn't that happening?
 
+thanks,
 
-Best regards,
-Krzysztof
+greg k-h

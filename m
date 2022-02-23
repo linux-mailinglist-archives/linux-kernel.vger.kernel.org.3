@@ -2,145 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9269B4C194A
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 18:04:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 196644C1944
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 18:04:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243121AbiBWRFE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 12:05:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54234 "EHLO
+        id S243113AbiBWREy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 12:04:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243098AbiBWRFD (ORCPT
+        with ESMTP id S243098AbiBWREu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 12:05:03 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12D794B413;
-        Wed, 23 Feb 2022 09:04:35 -0800 (PST)
-Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21NGc2SE019566;
-        Wed, 23 Feb 2022 17:04:20 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=V5ouTWLw3zk6L0EVif2Rdg9rNy4H1yV7hnOvL3gnssM=;
- b=qKluLf1I42VBFBFvldWEObuDNHYijYkC8+mr9xAwczW1RReL0F4cDFtfgWskQ3d3yXJU
- rv+knf+XheW06Z/6W3m3IJr/QhwMCDDg7LvZ4S5qqnlJACtEKONMmhVMuaB2PpdkxNNk
- 7NtgpUrstwuQJUm2tUUsDrimdMDApkrEy65mJftMVfNKIAVUrS7tBWv+BZmvSpd0hU68
- TUXEwxTuztvt72yiRzAwVxs+Zi4hbQv19E219DKOO5enHJ3zzUaBDzgF9bPtp+RpXc1h
- sf9LXE7xMjLndBgv0aVfdGp47amcefnVuYbLAExSIJJmqrQ2Xa+WavudcFrh6fo6kcqB VQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3edpjum5qt-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 23 Feb 2022 17:04:20 +0000
-Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 21NGqQ0x025906;
-        Wed, 23 Feb 2022 17:04:19 GMT
-Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3edpjum5p8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 23 Feb 2022 17:04:19 +0000
-Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
-        by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 21NGwa8P004970;
-        Wed, 23 Feb 2022 17:04:16 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma03fra.de.ibm.com with ESMTP id 3ear69a27c-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 23 Feb 2022 17:04:16 +0000
-Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 21NGrX2N50201010
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 23 Feb 2022 16:53:33 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 3A2534203F;
-        Wed, 23 Feb 2022 17:04:13 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D3E3742041;
-        Wed, 23 Feb 2022 17:04:10 +0000 (GMT)
-Received: from sig-9-65-80-154.ibm.com (unknown [9.65.80.154])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed, 23 Feb 2022 17:04:10 +0000 (GMT)
-Message-ID: <8a4f9cb6cab5ba04eb61e346d0fca16efa4c6703.camel@linux.ibm.com>
-Subject: Re: [PATCH v10 26/27] ima: Limit number of policy rules in
- non-init_ima_ns
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Stefan Berger <stefanb@linux.ibm.com>,
-        linux-integrity@vger.kernel.org
-Cc:     serge@hallyn.com, christian.brauner@ubuntu.com,
-        containers@lists.linux.dev, dmitry.kasatkin@gmail.com,
-        ebiederm@xmission.com, krzysztof.struczynski@huawei.com,
-        roberto.sassu@huawei.com, mpeters@redhat.com, lhinds@redhat.com,
-        lsturman@redhat.com, puiterwi@redhat.com, jejb@linux.ibm.com,
-        jamjoom@us.ibm.com, linux-kernel@vger.kernel.org,
-        paul@paul-moore.com, rgb@redhat.com,
-        linux-security-module@vger.kernel.org, jmorris@namei.org
-Date:   Wed, 23 Feb 2022 12:04:10 -0500
-In-Reply-To: <479f09e7-0d39-0281-45ef-5cce4861d24d@linux.ibm.com>
-References: <20220201203735.164593-1-stefanb@linux.ibm.com>
-         <20220201203735.164593-27-stefanb@linux.ibm.com>
-         <5e4a862917785972281bbcb483404da01b71e801.camel@linux.ibm.com>
-         <479f09e7-0d39-0281-45ef-5cce4861d24d@linux.ibm.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
+        Wed, 23 Feb 2022 12:04:50 -0500
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D0CA5046F
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 09:04:22 -0800 (PST)
+Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com [209.85.218.70])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 0021C407BE
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 17:04:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1645635861;
+        bh=RoNX8EzuGJlB3iCJ6r1tFSNiwtZPxPTTbVDAWTvRXkY=;
+        h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+         In-Reply-To:Content-Type;
+        b=Ve8bDJDjxrsED0j9k/eV+Da6f5g88CczawtjS2qRJtLeV2KPpGrYN6xR5NUhhRDLl
+         JLLxc8cO223hZnwzUXi0mgCzHowplV9vUlzP5V11F6OiFKzq7oE6Mf2x0Rhvvvl3Tn
+         ZDzdBHalQ40p6616pGzMfU+TCVgMGQ/PLUTGWI8aiPrNZDqLPLdu6/lvBbhrAzuHmc
+         ET2VgHDtAQxi32z2po52MuYsH+OLOm7uFOQbBt4ojEV1/CNhcfocCLehr+ZRA8UmJy
+         Rm3LVjfOmP9jiQ/8FirrCdoKD8enBqLGERq2fiCazdxD2ffBPHhTdM57ANdBaFdw8n
+         zWdgeOVv3ohGA==
+Received: by mail-ej1-f70.google.com with SMTP id kw5-20020a170907770500b006ba314a753eso7330715ejc.21
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 09:04:20 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=RoNX8EzuGJlB3iCJ6r1tFSNiwtZPxPTTbVDAWTvRXkY=;
+        b=bj+05BuninDxaKKXC1xU+nUOxU6hJd9NnEJ4kbilkedDUdoredwDqKKGsGCkpUBXJ9
+         OaGXstHTwS2yqZTKyTo0nipBpR/kw2EL39BNE/nKiXTFGqOqvdqacsPnNAfc2PQYdPJI
+         MEJj+v0pdjxSi0uqx0k32unpKqynZeo1vQ3Kwiw6YF27NZOam2rHqNnSC22ThKrhYuvZ
+         /02BmQYHb/4Z2zC4hKLk4WEU0uC1FFDaFfxv0RmWaoVEvtrkJqLDy547vNJdDCwc6zVO
+         u/NtlQv8VPgm23e0CJW7gSsAt4qW3ErYWCSu3+hm6pMyevwE55Kqj/loTa/M7Nv9lZ17
+         5yvw==
+X-Gm-Message-State: AOAM530sSQqkxdPHH9SU6bXqDgq2g7G3MjbAb5HErDuGawwPf6ymYBG9
+        yAwEbzXXs2y7y3NVK4Z2tfQMJ8eitaf+H0KFukDVOhaFzpApqTb/OtcbTyt2m4/ALuK6FQkggn+
+        bTaH8uxcCn75N9hvPsWPUeoujBBSYr+iuZE0hyS6UBw==
+X-Received: by 2002:a05:6402:5209:b0:412:7cd8:a8fc with SMTP id s9-20020a056402520900b004127cd8a8fcmr343340edd.51.1645635859398;
+        Wed, 23 Feb 2022 09:04:19 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwKr+v6ocNLmVN3Di+yw0uJzDvkvv4Lb5lc33wOhtzJOFkvu7xL2E/jifTka6zh9g0DFLs/uA==
+X-Received: by 2002:a05:6402:5209:b0:412:7cd8:a8fc with SMTP id s9-20020a056402520900b004127cd8a8fcmr343312edd.51.1645635859189;
+        Wed, 23 Feb 2022 09:04:19 -0800 (PST)
+Received: from [192.168.0.126] (xdsl-188-155-181-108.adslplus.ch. [188.155.181.108])
+        by smtp.gmail.com with ESMTPSA id fy37sm73162ejc.219.2022.02.23.09.04.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 23 Feb 2022 09:04:17 -0800 (PST)
+Message-ID: <7fcd5ed9-4577-950a-0cdc-22917e8e26af@canonical.com>
+Date:   Wed, 23 Feb 2022 18:04:16 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [RFT PATCH 0/3] Fix kfree() of const memory on setting
+ driver_override
+Content-Language: en-US
+To:     Robin Murphy <robin.murphy@arm.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Abel Vesa <abel.vesa@nxp.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, alsa-devel@alsa-project.org
+References: <20220222132707.266883-1-krzysztof.kozlowski@canonical.com>
+ <708eabb1-7b35-d525-d4c3-451d4a3de84f@rasmusvillemoes.dk>
+ <afa7001d-901e-55bf-b8dc-77051b1e7f78@canonical.com>
+ <0442526f-b6d9-8868-ac1c-dd11a2d3b2ab@arm.com>
+ <636e5b92-8ed8-35a1-d6e9-516d5b35be91@canonical.com>
+ <e0bc8dd2-bea9-354b-3b48-3123e0bbf717@arm.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <e0bc8dd2-bea9-354b-3b48-3123e0bbf717@arm.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: 7GjEqBC8iEN-xACjWX1NgiL5exLKGVfp
-X-Proofpoint-GUID: phrRRm-ldqaBJQBzSZpKnWQVULfAUjcv
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-02-23_09,2022-02-23_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- lowpriorityscore=0 suspectscore=0 adultscore=0 clxscore=1015 mlxscore=0
- malwarescore=0 bulkscore=0 spamscore=0 phishscore=0 mlxlogscore=999
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2201110000 definitions=main-2202230097
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-02-23 at 11:37 -0500, Stefan Berger wrote:
-> On 2/23/22 10:38, Mimi Zohar wrote:
-> > On Tue, 2022-02-01 at 15:37 -0500, Stefan Berger wrote:
-> >> Limit the number of policy rules one can set in non-init_ima_ns to a
-> >> hardcoded 1024 rules. If the user attempts to exceed this limit by
-> >> setting too many additional rules, emit an audit message with the cause
-> >> 'too-many-rules' and simply ignore the newly added rules.
-> > This paragraph describes 'what' you're doing, not 'why'.  Please prefix
-> > this paragraph with a short, probably one sentence, reason for the
-> > change.
-> >> Switch the accounting for the memory allocated for IMA policy rules to
-> >> GFP_KERNEL_ACCOUNT so that cgroups kernel memory accounting takes effect.
-> > Does this change affect the existing IMA policy rules for init_ima_ns?
+On 23/02/2022 16:08, Robin Murphy wrote:
+> On 2022-02-23 14:22, Krzysztof Kozlowski wrote:
+>> On 23/02/2022 15:04, Robin Murphy wrote:
+>>> On 2022-02-22 14:06, Krzysztof Kozlowski wrote:
+>>>> On 22/02/2022 14:51, Rasmus Villemoes wrote:
+>>>>> On 22/02/2022 14.27, Krzysztof Kozlowski wrote:
+>>>>>> Hi,
+>>>>>>
+>>>>>> Drivers still seem to use driver_override incorrectly. Perhaps my old
+>>>>>> patch makes sense now?
+>>>>>> https://lore.kernel.org/all/1550484960-2392-3-git-send-email-krzk@kernel.org/
+>>>>>>
+>>>>>> Not tested - please review and test (e.g. by writing to dirver_override
+>>>>>> sysfs entry with KASAN enabled).
+>>>>>
+>>>>> Perhaps it would make sense to update the core code to release using
+>>>>> kfree_const(), allowing drivers to set the initial value with
+>>>>> kstrdup_const(). Drivers that currently use kstrdup() or kasprintf()
+>>>>> will continue to work [but if they kstrdup() a string literal they could
+>>>>> be changed to use kstrdup_const].
+>>>>
+>>>> The core here means several buses, so the change would not be that
+>>>> small. However I don't see the reason why "driver_override" is special
+>>>> and should be freed with kfree_const() while most of other places don't
+>>>> use it.
+>>>>
+>>>> The driver_override field definition is here obvious: "char *", so any
+>>>> assignments of "const char *" are logically wrong (although GCC does not
+>>>> warn of this literal string const discarding). Adding kfree_const() is
+>>>> hiding the problem - someone did not read the definition of assigned field.
+>>>
+>>> That's not the issue, though, is it? If I take the struct
+>>> platform_device definition at face value, this should be perfectly valid:
+>>>
+>>> 	static char foo[] = "foo";
+>>> 	pdev->driver_override = &foo;
+>>
+>>
+>> Yes, that's not the issue. It's rather about the interface. By
+>> convention we do not modify string literals but "char *driver_override"
+>> indicates that this is modifiable memory. I would argue that it even
+>> means that ownership is passed. Therefore passing string literal to
+>> "char *driver_override" is wrong from logical point of view.
+>>
+>> Plus, as you mentioned later, can lead to undefined behavior.
 > 
-> There's typically no cgroup for the int_ima_ns, so not effect on 
-> init_ima_ns.
+> But does anything actually need to modify a driver_override string? I 
+> wouldn't have thought so. I see at least two buses that *do* define 
+> theirs as const char *, but still assume to kfree() them.
+
+I think the drivers/clk/imx/clk-scu.c (fixed here) does not actually
+need it. It uses the feature to create multiple platform devices for
+each clock, with unique names matching the clock (e.g. pwm0_clk,
+pwm1_clk) and then bind all them via common clock driver.
+
+It looks therefore like something for convenience of debugging or going
+through sysfs devices.
+
+Removal of driver_override from such drivers is a bit too much here,
+because I would not be able to test it.
+
 > 
-> Here's the updated text:
+>>> And in fact that's effectively how the direct assignment form works
+>>> anyway - string literals are static arrays of type char (or wchar_t),
+>>> *not* const char, however trying to modify them is undefined behaviour.
+>>>
+>>> There's a big difference between "non-const" and "kfree()able", and
+>>> AFAICS there's no obvious clue that the latter is actually a requirement.
+>>
+>> Then maybe kfreeable should be made a requirement? Or at least clearly
+>> documented?
 > 
-> Limit the number of policy rules one can set in non-init_ima_ns to a
-> hardcoded 1024 rules to restrict the amount of memory used for IMA's
-> policy.
+> Indeed, there's clearly some room for improvement still. And I'm not 
+> suggesting that these changes aren't already sensible as they are, just 
+> that the given justification seems a little unfair :)
 
-The question is "why" there should be a difference between the
-init_ima_ns and non-init_ima_ns cases.  Perhaps something like, "Only
-host root with CAP_SYS_ADMIN may write init_ima_ns policy rules, but in
-the non-init_ima_ns case root in the namespace with CAP_MAC_ADMIN
-privileges may write IMA policy rules.  Limit the total number of IMA
-policy rules per namespace."
+Yeah, maybe also my "const" in the title and commit is not accurate. I
+think that literal strings are part of .rodata (and objdump confirm)
+thus are considered const.
 
->  Ignore the added rules if the user attempts to exceed this
-> limit by setting too many additional rules.
-> 
-> Switch the accounting for the memory allocated for IMA policy rules to
-> GFP_KERNEL_ACCOUNT so that cgroups kernel memory accounting takes effect.
-> This switch has no effect on the init_ima_ns.
+> Even kfree_const() can't help if someone has put their string in the 
+> middle of some larger block of kmalloc()ed memory, so perhaps 
+> encouraging a dedicated setter function rather than just exposing a raw 
+> string pointer is the ideal solution in the long term.
 
-thanks,
 
-Mimi
-
+Best regards,
+Krzysztof

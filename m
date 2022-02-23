@@ -2,90 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 361E84C0C3A
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 06:36:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F98E4C0C32
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 06:31:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237219AbiBWFhB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 00:37:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51090 "EHLO
+        id S238425AbiBWFby (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 00:31:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235021AbiBWFg4 (ORCPT
+        with ESMTP id S238495AbiBWFbj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 00:36:56 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E02C3AA4A;
-        Tue, 22 Feb 2022 21:27:04 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 2EDA9CE13B5;
-        Wed, 23 Feb 2022 05:26:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9BC17C340F8;
-        Wed, 23 Feb 2022 05:26:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645594011;
-        bh=RpQ+yXG3WFaffUN6V0S3i2gI2RX67GakuK4ftCRhl4U=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=Fpa7IScXDsqk4ECKhcoTOYPxb0jIoj+13R+KevQRg78oaEY9jTJGymNzCAv2JRrSa
-         +7FWqta9tHZ5T7PmpBlQcbu/c1JZFx4LbwsYA/5ZM6fbyUyeZh3EdWg1M6yZ/fyozF
-         G/aBkk2/QuLR6aeVxxBKrwx0OmYuUSeCXV2i1vjEOxatqRcWNqyv0y0i4kDSDfydKP
-         PFrCbq1B2NzdboETdiCwYYTlwrfYsaX0J62cUmo5yCdnU4oi6L8rDifiW+G1jyMdQL
-         bz1f0DIJaD7N3ODopsDhucvNFAr97h+0ZcjBsa2ggKEfE+cPLcuwAvxmL45KZD1ojh
-         qpIdpilxoOtrw==
-Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-2d625082ae2so198333347b3.1;
-        Tue, 22 Feb 2022 21:26:51 -0800 (PST)
-X-Gm-Message-State: AOAM533tQIaIoJii/On3HMzc3/e/zg9hQSIsQxv/i9ukljZqkEHrldKr
-        2vaKLX8owWWZOnevzw869iyIIkXcp8m45jdaC5U=
-X-Google-Smtp-Source: ABdhPJyfshd1gVhgC3vT8dx9/92eRD19V4ZvzuTAr6QYZ+Zc+JlY31XDj0BqcEtQhmq8ohDT+WD5JxLT1FNuWFWTGFk=
-X-Received: by 2002:a81:c47:0:b0:2d6:beec:b381 with SMTP id
- 68-20020a810c47000000b002d6beecb381mr22698552ywm.148.1645594010676; Tue, 22
- Feb 2022 21:26:50 -0800 (PST)
+        Wed, 23 Feb 2022 00:31:39 -0500
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D47456D942;
+        Tue, 22 Feb 2022 21:30:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1645594245; x=1677130245;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version;
+  bh=v44Gg2Pi51r7C5Yz0LglEBe7K1Ubw4buBZxC3226XpA=;
+  b=kazKmxAFupOl/tUMRjhxJqGshBUJeh9xLNdkDg5qg8swLaDEZDHnW3st
+   Pp3uw0rFRhIw0siyZ88X1JJubsmxKvUpjKkWslXZLoA79Go2a3vo3gCT7
+   bfyiKSKP/+Wdj1TEPVBvdGkFdeuWI2mp0ChyQYvnzEVq2GokV/m5yLX/3
+   g=;
+Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 22 Feb 2022 21:29:48 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2022 21:29:47 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.15; Tue, 22 Feb 2022 21:29:15 -0800
+Received: from c-skakit-linux.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.15; Tue, 22 Feb 2022 21:29:11 -0800
+From:   Satya Priya <quic_c_skakit@quicinc.com>
+To:     <bjorn.andersson@linaro.org>
+CC:     <corbet@lwn.net>, <devicetree@vger.kernel.org>,
+        <dianders@chromium.org>, <lee.jones@linaro.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-leds@vger.kernel.org>,
+        <linux-pwm@vger.kernel.org>, <luca@z3ntu.xyz>, <pavel@ucw.cz>,
+        <robh+dt@kernel.org>, <thierry.reding@gmail.com>,
+        <u.kleine-koenig@pengutronix.de>
+Subject: Re: [PATCH v13 2/2] leds: Add driver for Qualcomm LPG
+Date:   Wed, 23 Feb 2022 10:58:54 +0530
+Message-ID: <1645594134-16082-1-git-send-email-quic_c_skakit@quicinc.com>
+X-Mailer: git-send-email 2.7.4
+In-Reply-To: <20220218183116.2261770-2-bjorn.andersson@linaro.org>
+References: <20220218183116.2261770-2-bjorn.andersson@linaro.org>
 MIME-Version: 1.0
-References: <1645523826-18149-1-git-send-email-yangtiezhu@loongson.cn> <1645523826-18149-3-git-send-email-yangtiezhu@loongson.cn>
-In-Reply-To: <1645523826-18149-3-git-send-email-yangtiezhu@loongson.cn>
-From:   Song Liu <song@kernel.org>
-Date:   Tue, 22 Feb 2022 21:26:39 -0800
-X-Gmail-Original-Message-ID: <CAPhsuW6UHZYr49gSMo6bo_F9dd14SBDN=GGM4PeTTxJQPUCEPw@mail.gmail.com>
-Message-ID: <CAPhsuW6UHZYr49gSMo6bo_F9dd14SBDN=GGM4PeTTxJQPUCEPw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3 2/2] bpf: Make BPF_JIT_DEFAULT_ON selectable
- in Kconfig
-To:     Tiezhu Yang <yangtiezhu@loongson.cn>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 22, 2022 at 1:57 AM Tiezhu Yang <yangtiezhu@loongson.cn> wrote:
->
-> Currently, only x86, arm64 and s390 select ARCH_WANT_DEFAULT_BPF_JIT,
-> the other archs do not select ARCH_WANT_DEFAULT_BPF_JIT. On the archs
-> without ARCH_WANT_DEFAULT_BPF_JIT, if we want to set bpf_jit_enable to
-> 1 by default, the only way is to enable CONFIG_BPF_JIT_ALWAYS_ON, then
-> the users can not change it to 0 or 2, it seems bad for some users. We
-> can select ARCH_WANT_DEFAULT_BPF_JIT for those archs if it is proper,
-> but at least for now, make BPF_JIT_DEFAULT_ON selectable can give them
-> a chance.
->
-> Additionally, with this patch, under !BPF_JIT_ALWAYS_ON, we can disable
-> BPF_JIT_DEFAULT_ON on the archs with ARCH_WANT_DEFAULT_BPF_JIT when make
-> menuconfig, it seems flexible for some developers.
->
-> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+From: Bjorn Andersson <bjorn.andersson@linaro.org>
 
-Acked-by: Song Liu <songliubraving@fb.com>
+The Light Pulse Generator (LPG) is a PWM-block found in a wide range of
+PMICs from Qualcomm. These PMICs typically comes with 1-8 LPG instances,
+with their output being routed to various other components, such as
+current sinks or GPIOs.
+
+Each LPG instance can operate on fixed parameters or based on a shared
+lookup-table, altering the duty cycle over time. This provides the means
+for hardware assisted transitions of LED brightness.
+
+A typical use case for the fixed parameter mode is to drive a PWM
+backlight control signal, the driver therefor allows each LPG instance
+to be exposed to the kernel either through the LED framework or the PWM
+framework.
+
+A typical use case for the LED configuration is to drive RGB LEDs in
+smartphones etc, for which the driver supports multiple channels to be
+ganged up to a MULTICOLOR LED. In this configuration the pattern
+generators will be synchronized, to allow for multi-color patterns.
+
+The idea of modelling this as a LED driver ontop of a PWM driver was
+considered, but setting the properties related to patterns does not fit
+in the PWM API. Similarly the idea of just duplicating the lower bits in
+a PWM and LED driver separately was considered, but this would not allow
+the PWM channels and LEDs to be configured on a per-board basis. The
+driver implements the more complex LED interface, and provides a PWM
+interface on the side of that, in the same driver.
+
+Tested-by: Luca Weiss <luca@z3ntu.xyz>
+Tested-by: Doug Anderson <dianders@chromium.org>
+Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+---
+
+Tested-by: Satya Priya <quic_c_skakit@quicinc.com>
+
+ Documentation/leds/leds-qcom-lpg.rst |   76 ++
+ drivers/leds/Kconfig                 |    3 +
+ drivers/leds/Makefile                |    3 +
+ drivers/leds/rgb/Kconfig             |   18 +
+ drivers/leds/rgb/Makefile            |    3 +
+ drivers/leds/rgb/leds-qcom-lpg.c     | 1401 ++++++++++++++++++++++++++++++++++
+ 6 files changed, 1504 insertions(+)
+ create mode 100644 Documentation/leds/leds-qcom-lpg.rst
+ create mode 100644 drivers/leds/rgb/Kconfig
+ create mode 100644 drivers/leds/rgb/Makefile
+ create mode 100644 drivers/leds/rgb/leds-qcom-lpg.c
+

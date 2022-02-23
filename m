@@ -2,103 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD06F4C0F4E
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 10:37:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 119394C0F4F
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 10:37:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239324AbiBWJhr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 04:37:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33494 "EHLO
+        id S239330AbiBWJiO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 04:38:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239318AbiBWJhn (ORCPT
+        with ESMTP id S236736AbiBWJiM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 04:37:43 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F116496AB;
-        Wed, 23 Feb 2022 01:37:15 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 472992114D;
-        Wed, 23 Feb 2022 09:37:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1645609034; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=vkNKhnI3Z4RqRaZWsTmnjavlstvLrtTeTG7qCNbsiZc=;
-        b=DZ4x99N+/+0AEa+8XMcKiLhDGfCtlrlBGG6mbmQTWkwkZRtF7wFbn1VmgG6gUO0VSCC/ih
-        JL0LnlYOKsWQSUV7J51D40KNrHwpSMvsH+g7qKdjlD+93lZeEocuUtL8Dr52ByD/lccSMf
-        ksAPETt0tMNm9J80JoeGpl0cSqEzSNs=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1645609034;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=vkNKhnI3Z4RqRaZWsTmnjavlstvLrtTeTG7qCNbsiZc=;
-        b=qxX4/ycl1lYcZ5yOgm+InbnPdUtq6N86t/rBuaYd6sEIEBm7ZRTPRgke+/4HqsYSCuelPn
-        okR0EOVnNeN+ZIBg==
-Received: from quack3.suse.cz (unknown [10.163.28.18])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 36E04A3B83;
-        Wed, 23 Feb 2022 09:37:14 +0000 (UTC)
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id E0A3DA0605; Wed, 23 Feb 2022 10:37:13 +0100 (CET)
-Date:   Wed, 23 Feb 2022 10:37:13 +0100
-From:   Jan Kara <jack@suse.cz>
-To:     Ritesh Harjani <riteshh@linux.ibm.com>
-Cc:     linux-ext4@vger.kernel.org,
-        Harshad Shirwadkar <harshadshirwadkar@gmail.com>,
-        Theodore Ts'o <tytso@mit.edu>, Jan Kara <jack@suse.cz>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [RFC 1/9] ext4: Remove unused enum EXT4_FC_COMMIT_FAILED
-Message-ID: <20220223093713.fw7c54xmllxrmmld@quack3.lan>
-References: <cover.1645558375.git.riteshh@linux.ibm.com>
- <a1e9902e84595a2088bcf4882691a8330640246b.1645558375.git.riteshh@linux.ibm.com>
+        Wed, 23 Feb 2022 04:38:12 -0500
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EDB65A0BF
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 01:37:45 -0800 (PST)
+Received: by mail-lj1-x22f.google.com with SMTP id v22so21808792ljh.7
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 01:37:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=IjMUCjiPoBwvZY4LPgThLM6FoxJ7wQ3fXZU9VFqm1tI=;
+        b=fF7zn+RcEzxi5D8flAwOc5on5mwzPtk2y8xNUG1EU2sbaBd6i0gpXGUoI33/3p63mA
+         u2hZ4tFuQhaA5KUqEDEC908E0CPgSyXEUrXmDtUYKOjI0xmT86ZyZEeEFkjEYtqeEIBh
+         S0jm/rf1hHynZ6KfKiSzUwtKONyFmWU9OTygrCzcJOuOwb7nyLpMUsBH4z7lSjHlHXyV
+         Xnpq4kwlkjhRedjr+cUdQFpY2mUnLv1AkKrjEzWDGqBhx5GxYQXnJ2gbhxXIlIDQVCkj
+         JUsVk6zIFv4++ECoMPg16c2V0jNjnLyzoLSBPneLeDy4N06b9RREruUnzwd9xVa65sKm
+         EBUQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=IjMUCjiPoBwvZY4LPgThLM6FoxJ7wQ3fXZU9VFqm1tI=;
+        b=p6KSqwHouQg52Xl3tiw9ussc37jYwHMb8gOJxY2efOOnS0yVsm9Be/sHolrhaKTWh/
+         rLZBDCfuR9OeJqwRMc4MMuenkrN1yL/Ly4i+8ugWs6oWx2KiBy4BwfoYWl7i0daTPHDf
+         ECYx6am26m6gYUwZ5YTKW83L3FcFMO26Q264bsl9R8An/4mcJGx4Zm8AOJnaSfN2tj2U
+         ojwub/YYgOECh016zpUdAz5hY+xI8E1jwv8VZRR8Hxp0F54GgnqKsBjnPqPeuE4Imv23
+         PL3eCCI2/6BcYYzOQqFTrmEEfDRjoTK5fnUs6kAeg+5pig7fPon9hfJ/d4R9/HYezyOv
+         LM9g==
+X-Gm-Message-State: AOAM533AcHN87L/PEUvUsIvAXd5qqMl3ycEBDbcAZgsicOyxXds245Lr
+        RORG6TiPkbGHhaOTFM4Ke6U=
+X-Google-Smtp-Source: ABdhPJy526t9D119CPsDWgI4y9/8uS0UBdtDaA2H+7efd3LFUYpfXS1mTSlJy7IMzepjW5AUw4zDjw==
+X-Received: by 2002:a05:651c:c7:b0:246:12a0:25e2 with SMTP id 7-20020a05651c00c700b0024612a025e2mr20247101ljr.471.1645609063810;
+        Wed, 23 Feb 2022 01:37:43 -0800 (PST)
+Received: from gmail.com ([46.38.44.117])
+        by smtp.gmail.com with ESMTPSA id k1sm1594675lfu.136.2022.02.23.01.37.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Feb 2022 01:37:43 -0800 (PST)
+From:   Vladimir Davydov <vdavydov.dev@gmail.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>
+Subject: [PATCH] MAINTAINERS: remove myself from memcg maintainers
+Date:   Wed, 23 Feb 2022 12:37:42 +0300
+Message-Id: <4ad1f8da49d7b71c84a0c15bd5347f5ce704e730.1645608825.git.vdavydov.dev@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a1e9902e84595a2088bcf4882691a8330640246b.1645558375.git.riteshh@linux.ibm.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 23-02-22 02:04:09, Ritesh Harjani wrote:
-> Below commit removed all references of EXT4_FC_COMMIT_FAILED.
-> commit 0915e464cb274 ("ext4: simplify updating of fast commit stats")
-> 
-> Just remove it since it is not used anymore.
-> 
-> Signed-off-by: Ritesh Harjani <riteshh@linux.ibm.com>
+Signed-off-by: Vladimir Davydov <vdavydov.dev@gmail.com>
+Cc: Roman Gushchin <roman.gushchin@linux.dev>
+Cc: Johannes Weiner <hannes@cmpxchg.org>
+Cc: Michal Hocko <mhocko@kernel.org>
+---
+ MAINTAINERS | 1 -
+ 1 file changed, 1 deletion(-)
 
-Sure. Feel free to add:
-
-Reviewed-by: Jan Kara <jack@suse.cz>
-
-									Honza
-
-> ---
->  fs/ext4/fast_commit.h | 1 -
->  1 file changed, 1 deletion(-)
-> 
-> diff --git a/fs/ext4/fast_commit.h b/fs/ext4/fast_commit.h
-> index 02afa52e8e41..80414dcba6e1 100644
-> --- a/fs/ext4/fast_commit.h
-> +++ b/fs/ext4/fast_commit.h
-> @@ -93,7 +93,6 @@ enum {
->  	EXT4_FC_REASON_RENAME_DIR,
->  	EXT4_FC_REASON_FALLOC_RANGE,
->  	EXT4_FC_REASON_INODE_JOURNAL_DATA,
-> -	EXT4_FC_COMMIT_FAILED,
->  	EXT4_FC_REASON_MAX
->  };
->  
-> -- 
-> 2.31.1
-> 
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 777cd6fa2b3d..cbadcffbff50 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -4913,7 +4913,6 @@ F:	kernel/cgroup/cpuset.c
+ CONTROL GROUP - MEMORY RESOURCE CONTROLLER (MEMCG)
+ M:	Johannes Weiner <hannes@cmpxchg.org>
+ M:	Michal Hocko <mhocko@kernel.org>
+-M:	Vladimir Davydov <vdavydov.dev@gmail.com>
+ L:	cgroups@vger.kernel.org
+ L:	linux-mm@kvack.org
+ S:	Maintained
 -- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+2.25.1
+

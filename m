@@ -2,82 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 904DE4C0EDF
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 10:09:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E3EFE4C0EE3
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 10:10:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238634AbiBWJJk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 04:09:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55446 "EHLO
+        id S239203AbiBWJKp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 04:10:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234770AbiBWJJi (ORCPT
+        with ESMTP id S238054AbiBWJKm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 04:09:38 -0500
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E12128021C
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 01:09:10 -0800 (PST)
-Received: by mail-wr1-x42b.google.com with SMTP id x15so4042665wrg.8
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 01:09:10 -0800 (PST)
+        Wed, 23 Feb 2022 04:10:42 -0500
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A006C8021F
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 01:10:14 -0800 (PST)
+Received: by mail-pg1-x532.google.com with SMTP id f8so19338737pgc.8
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 01:10:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=uhQ2XTHzgwwh3IfSpyyiABP4apEdC3n0uRKIA365nw8=;
-        b=yX7IDc6xgr2DIKYR1fbQdrsvoUEjEPM1JMICqwirtbbhG6Kkujf20LxovE/4LyHp86
-         WRTevNNne+t4clDGmaDCAoCdMUC/M3I8wEtIhi1huBATspu/YvOfPPGXKES+9IlrA65w
-         EXoVM6ESTjP9rO5vMWBYxQCFnWTAruvdxZNUDQFmuPR8eRcRdAQK2GehMRaXRZvx8lHL
-         X7scUpwu7mdXWM8MWFPjsjQB5ji6ERhWdJFnQOMjEa0/CW6aB/A8Z+0X/UK+apIoPao5
-         sfMnODhvNAUrgOqsX08SWAqSFTPhm3wk6PxcYF5Xl9lSSE2zpYYEzi6qZd0hSRnIBSjm
-         6oaQ==
+         :content-disposition:in-reply-to:user-agent;
+        bh=wwEeIbVKRAFJc1IUROvg7itOrJyqhQC3kCceTm88ch8=;
+        b=xoEiNPwmXke/nkZ+DHLML+rqVhZKfA5g2eNwCprpOPWpsB2mBdhm3r7fZWJm77ipkp
+         vrMwX13qNO4zEY1fMqN/y0g0HIfiRkJlRB+JF7WVnmRR07Y7S8dnSjlfx4W3T2FjGywb
+         lSvSAfrbHA3lDrBiL487sp/sc12pqGXt2qrhzgwQsl9UUaI0hLjJGLEGp75Xi4Y8Z5Za
+         kbShy8E4rW66PdUgdyQCUgnTxUo0QFQNSdlIwWLybJYpYwm9OLT69Mo6vZAvNMDID8Yb
+         sCwinct0dhRRhj+KkmJmQymMr3zrpInDNOgrkE7K8oakKrzmIMvORby4TNYYrmqM28u7
+         YhZg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=uhQ2XTHzgwwh3IfSpyyiABP4apEdC3n0uRKIA365nw8=;
-        b=uaZ0OyC7gKgLXNt7e4Ej/Gco6XhaRY4zaImJFSnWeamq04svpVLnrXvnp5LW+x32Tt
-         qRFqhHQXMSYO8xZzafu3bgFXE1/b4/nZIZ2vNt8GFDd8zvR8yDYlOXSfnkz07P/ts+XT
-         wY8UviTULcfY2wbPTddFERNOIMI2wNV+Tc1sD/260ELlYe33GFZ0BVPBxkbBzpqCwCDa
-         6Y8PD5Bb9zClF4gor7av/3x0GEsTbU7qF2mJtmafGoMSWkU224Ms5DyCYU1eSb7HeK9D
-         FjgS9EG3zHf3q8LFB5HRaJzF0NYnTzgoTj4pLzE4lenDJozPMzRYxuH7w+lv48KPFsj9
-         wOng==
-X-Gm-Message-State: AOAM530T7gS1ytzgwT038yXzNtZ04TAOnQvmG1QQnAtfecfzcsZ0uR4E
-        MyQLDVRSr6CS2MFOnL4OkptYFg==
-X-Google-Smtp-Source: ABdhPJz4aTObHNoB5pQsllecyuXgnwlJz4HBUpJXFkjadBwKL0W5K/YET+9QFNOJiVbsLvUssTBxUA==
-X-Received: by 2002:a5d:4b4c:0:b0:1dc:f34a:548 with SMTP id w12-20020a5d4b4c000000b001dcf34a0548mr22346654wrs.554.1645607349429;
-        Wed, 23 Feb 2022 01:09:09 -0800 (PST)
-Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
-        by smtp.gmail.com with ESMTPSA id x2-20020a7bc762000000b00380fd1ba4ebsm526819wmk.9.2022.02.23.01.09.08
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=wwEeIbVKRAFJc1IUROvg7itOrJyqhQC3kCceTm88ch8=;
+        b=y5aD+GDceyMluxU4aL44HmGNoXM/POMlPzlHlKm7F9B5J3o3fIT9KnRY5KaWhfG3Kv
+         We68aKGztEJEWw8sUCB/iyUbDwGSqy2O9tojmmtAgWI9yCmOtXDrY+bBDZYWxW0T7Ffi
+         P0A9RIOLQhPBuDHIydmZ08fNSNwFhcYjiPgZY1lSOUFdxq6ha67zJ8l0T6uI3NXINqgI
+         RedFJKWd7a2bqWnNMHPV5MMn3kotVZG2zpDXiNIi+RP1QdDEUv9rNY7h/nbMrpWF2eI2
+         obBYf83ReDkdfh+YABMKp4LpV0IeKJYGctnKR0mfMkBvvjDosYMrWaMJTFK20arCJ4C1
+         4o9g==
+X-Gm-Message-State: AOAM530xkEb4bJL9PK/xiWJXSd6tK1MTipXzborjkiNv9youOh7dhK4r
+        ZDLDJnAhkadBGqjvjipiLTV9dQ==
+X-Google-Smtp-Source: ABdhPJxY3zmpRDrdJPFVLfKKYjvYzCca+xNI3tbn213m0TTlPNQfpWhFGnb77TgCu1ptREKSDnDGVw==
+X-Received: by 2002:a63:9845:0:b0:375:5cc8:7d34 with SMTP id l5-20020a639845000000b003755cc87d34mr1002442pgo.124.1645607414211;
+        Wed, 23 Feb 2022 01:10:14 -0800 (PST)
+Received: from localhost ([223.184.83.228])
+        by smtp.gmail.com with ESMTPSA id h4sm6269241pfo.81.2022.02.23.01.10.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Feb 2022 01:09:08 -0800 (PST)
-Date:   Wed, 23 Feb 2022 09:09:06 +0000
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        conor.dooley@microchip.com, linus.walleij@linaro.org,
-        brgl@bgdev.pl, robh+dt@kernel.org, jassisinghbrar@gmail.com,
-        thierry.reding@gmail.com, a.zummo@towertech.it,
-        alexandre.belloni@bootlin.com, paul.walmsley@sifive.com,
-        palmer@dabbelt.com, aou@eecs.berkeley.edu, geert@linux-m68k.org,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pwm@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-riscv@lists.infradead.org,
-        lewis.hanly@microchip.com, daire.mcnamara@microchip.com,
-        ivan.griffin@microchip.com, atishp@rivosinc.com,
-        Rob Herring <robh@kernel.org>,
-        Palmer Dabbelt <palmer@rivosinc.com>
-Subject: Re: [PATCH v7 05/11] dt-bindings: pwm: add microchip corepwm binding
-Message-ID: <YhX5suBeOgHKqcVa@google.com>
-References: <20220214135840.168236-1-conor.dooley@microchip.com>
- <20220214135840.168236-6-conor.dooley@microchip.com>
- <20220223062018.nbgidqxgh2soz625@pengutronix.de>
- <65edc257-82ec-e100-7a44-5c510aba51ce@canonical.com>
- <20220223082018.degrftmxpk5uc6xn@pengutronix.de>
+        Wed, 23 Feb 2022 01:10:13 -0800 (PST)
+Date:   Wed, 23 Feb 2022 14:40:12 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Lukasz Luba <lukasz.luba@arm.com>
+Cc:     linux-kernel@vger.kernel.org, dietmar.eggemann@arm.com,
+        rafael@kernel.org, daniel.lezcano@linaro.org, nm@ti.com,
+        sboyd@kernel.org, mka@chromium.org, dianders@chromium.org,
+        robh+dt@kernel.org, devicetree@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Subject: Re: [[PATCH v2 2/2] OPP: Add 'opp-microwatt' parsing for advanced EM
+ registration
+Message-ID: <20220223091012.w3flzpye6z55jnwd@vireshk-i7>
+References: <20220222140746.12293-1-lukasz.luba@arm.com>
+ <20220222140746.12293-3-lukasz.luba@arm.com>
+ <20220223055357.t3wulpla64vt3xus@vireshk-i7>
+ <b6682d6f-a6ae-8a82-68c3-13840c02d178@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220223082018.degrftmxpk5uc6xn@pengutronix.de>
+In-Reply-To: <b6682d6f-a6ae-8a82-68c3-13840c02d178@arm.com>
+User-Agent: NeoMutt/20180716-391-311a52
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
@@ -88,54 +78,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 23 Feb 2022, Uwe Kleine-König wrote:
+On 23-02-22, 08:59, Lukasz Luba wrote:
+> OK, so you want to have this available for the whole system. I can do
+> that. I would go for one value of power 
 
-> On Wed, Feb 23, 2022 at 08:12:49AM +0100, Krzysztof Kozlowski wrote:
-> > On 23/02/2022 07:20, Uwe Kleine-König wrote:
-> > > On Mon, Feb 14, 2022 at 01:58:35PM +0000, conor.dooley@microchip.com wrote:
-> > >> From: Conor Dooley <conor.dooley@microchip.com>
-> > >>
-> > >> Add device tree bindings for the Microchip fpga fabric based "core" PWM
-> > >> controller.
-> > >>
-> > >> Reviewed-by: Rob Herring <robh@kernel.org>
-> > >> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
-> > >> Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
-> > > 
-> > > I like it:
-> > > 
-> > > Acked-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-> > > 
-> > > nitpick: Put your S-o-b last in the commit log. (This doesn't justify a
-> > > resend IMHO)
-> > 
-> > It should be the opposite - the first. First author signs the patch,
-> > then comes review and finally an ack. Putting SoB at then suggests that
-> > tags were accumulated before sending patch, out of mailing list.
-> 
-> well, or in an earlier revision of this patch as is the case here. One
-> of the ideas of S-o-b is that the order shows the flow of the patch
-> states and if this patch ends in git with:
-> 
-> 	Referred-by: Rob Herring <robh@kernel.org>
-> 	Singed-off-by: Conor Dooley <conor.dooley@microchip.com>
-> 	Backed-by: Palmer Dabbelt <palmer@rivosinc.com>
-> 	Singed-off-by: Peter Maintainer <pm@example.com>
-> 
-> I'd expect that Backed-by was added by Peter, not Conor.
-> (Modified the tags on purpose to not interfere with b4's tag pickup, I
-> guess you humans still get the point.)
+One value per supply, right ?
 
-I tend to like *-by tags to appear chronologically.
+> and try to fit into the
+> opp_parse_supplies() code.
 
-  Suggested              (suggested-by)
-  Authored               (signed-off-by)
-  Co-Authored            (signed-off-by/co-developed-by)
-  Reviewed/Acked/Tested  (reviewed-by/acked-by/tested-by)
-  Committed              (signed-off-by)
+Correct.
+
+> As far as I can see in the
+> dev_pm_opp_get_voltage() the simple solution: supplier[0] and u_volt
+> is used. I would go for similar solution for u_watt.
+> There is even a single u_amp and no _max, _min variants, so should be
+> good..
+
+Yes, I don't think we need min/max/target kind of naming here. Just a single
+value per supply is enough.
 
 -- 
-Lee Jones [李琼斯]
-Principal Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+viresh

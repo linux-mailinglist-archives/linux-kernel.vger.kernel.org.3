@@ -2,189 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B25D4C0F5E
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 10:41:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 147B94C0F5F
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 10:41:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239354AbiBWJl3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 04:41:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35442 "EHLO
+        id S239357AbiBWJlr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 04:41:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238560AbiBWJl1 (ORCPT
+        with ESMTP id S239330AbiBWJlp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 04:41:27 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 284B55B8BA;
-        Wed, 23 Feb 2022 01:40:58 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 784D51F3A8;
-        Wed, 23 Feb 2022 09:40:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1645609257; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=2/cCKw5BJZWLcNjwvBk6BwS8hu5S4/oabc2zMRr1ruQ=;
-        b=s9eFaBF0QEya+5LYiLmwzdRjbs4czu/mj+8T0S0b6t+xmaLz3uUChNXud8FTcIjAro0P/3
-        8326zMqkl3ovDTL+yKeaCJ2iJd+f5YHS1ICbA3W9P3mytxUOra0qjw4F95vH8T4uOuOvH8
-        xdBdRKriluu41R8UMNrGuekpnRWNOXQ=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1645609257;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=2/cCKw5BJZWLcNjwvBk6BwS8hu5S4/oabc2zMRr1ruQ=;
-        b=t3dhcuoU01aIFH4P8jRBPp73eOCXZEkzR6VIoW1EIM2YKfNX2LqYPKzsNc+F8HHLhWWKdH
-        vfzDQOc2CpeBeZBQ==
-Received: from quack3.suse.cz (unknown [10.163.28.18])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 6834FA3B84;
-        Wed, 23 Feb 2022 09:40:57 +0000 (UTC)
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 2A260A0605; Wed, 23 Feb 2022 10:40:57 +0100 (CET)
-Date:   Wed, 23 Feb 2022 10:40:57 +0100
-From:   Jan Kara <jack@suse.cz>
-To:     Ritesh Harjani <riteshh@linux.ibm.com>
-Cc:     linux-ext4@vger.kernel.org,
-        Harshad Shirwadkar <harshadshirwadkar@gmail.com>,
-        Theodore Ts'o <tytso@mit.edu>, Jan Kara <jack@suse.cz>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [RFC 3/9] ext4: Add couple of more fast_commit tracepoints
-Message-ID: <20220223094057.53zcovnazrqwbngw@quack3.lan>
-References: <cover.1645558375.git.riteshh@linux.ibm.com>
- <90608d31b7ad8500c33d875d3a7fa50e3456dc1a.1645558375.git.riteshh@linux.ibm.com>
+        Wed, 23 Feb 2022 04:41:45 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59DF65B8BA
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 01:41:18 -0800 (PST)
+Received: from dggeme762-chm.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4K3WC12n9Tzbbmn;
+        Wed, 23 Feb 2022 17:36:45 +0800 (CST)
+Received: from ubuntu1804.huawei.com (10.67.174.44) by
+ dggeme762-chm.china.huawei.com (10.3.19.108) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2308.21; Wed, 23 Feb 2022 17:41:16 +0800
+From:   Gaosheng Cui <cuigaosheng1@huawei.com>
+To:     <paul@paul-moore.com>, <eparis@redhat.com>
+CC:     <linux-audit@redhat.com>, <linux-kernel@vger.kernel.org>,
+        <wangweiyang2@huawei.com>, <xiujianfeng@huawei.com>
+Subject: [PATCH -next] audit: only print records that will be dropped via printk()
+Date:   Wed, 23 Feb 2022 17:41:09 +0800
+Message-ID: <20220223094109.192510-1-cuigaosheng1@huawei.com>
+X-Mailer: git-send-email 2.30.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <90608d31b7ad8500c33d875d3a7fa50e3456dc1a.1645558375.git.riteshh@linux.ibm.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.67.174.44]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggeme762-chm.china.huawei.com (10.3.19.108)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 23-02-22 02:04:11, Ritesh Harjani wrote:
-> This adds two more tracepoints for ext4_fc_track_template() &
-> ext4_fc_cleanup() which are helpful in debugging some fast_commit issues.
-> 
-> Signed-off-by: Ritesh Harjani <riteshh@linux.ibm.com>
+When an admin enables audit at early boot via the "audit=1" kernel
+command line, netlink send errors seen will cause the audit subsystem
+to drop some records or return records to the queue. And all records
+will be printed via printk() in the kauditd_hold_skb(), but actually
+only the records that will be dropped need to be printed via printk().
 
-So why is this more useful than trace_ext4_fc_track_range() and other
-tracepoints? I don't think it provides any more information? What am I
-missing?
+Signed-off-by: Gaosheng Cui <cuigaosheng1@huawei.com>
+---
+ kernel/audit.c | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
-								Honza
-
-> ---
->  fs/ext4/fast_commit.c       |  3 ++
->  include/trace/events/ext4.h | 67 +++++++++++++++++++++++++++++++++++++
->  2 files changed, 70 insertions(+)
-> 
-> diff --git a/fs/ext4/fast_commit.c b/fs/ext4/fast_commit.c
-> index 5ac594e03402..bf70879bb4fe 100644
-> --- a/fs/ext4/fast_commit.c
-> +++ b/fs/ext4/fast_commit.c
-> @@ -386,6 +386,8 @@ static int ext4_fc_track_template(
->  	if (ext4_test_mount_flag(inode->i_sb, EXT4_MF_FC_INELIGIBLE))
->  		return -EINVAL;
->  
-> +	trace_ext4_fc_track_template(handle, inode, __fc_track_fn, enqueue);
-> +
->  	tid = handle->h_transaction->t_tid;
->  	mutex_lock(&ei->i_fc_lock);
->  	if (tid == ei->i_sync_tid) {
-> @@ -1241,6 +1243,7 @@ static void ext4_fc_cleanup(journal_t *journal, int full, tid_t tid)
->  	if (full && sbi->s_fc_bh)
->  		sbi->s_fc_bh = NULL;
->  
-> +	trace_ext4_fc_cleanup(journal, full, tid);
->  	jbd2_fc_release_bufs(journal);
->  
->  	spin_lock(&sbi->s_fc_lock);
-> diff --git a/include/trace/events/ext4.h b/include/trace/events/ext4.h
-> index 17fb9c506e8a..cd09dccea502 100644
-> --- a/include/trace/events/ext4.h
-> +++ b/include/trace/events/ext4.h
-> @@ -2855,6 +2855,73 @@ TRACE_EVENT(ext4_fc_track_range,
->  		      __entry->end)
->  	);
->  
-> +TRACE_EVENT(ext4_fc_track_template,
-> +	TP_PROTO(handle_t *handle, struct inode *inode,
-> +		 void *__fc_track_fn, int enqueue),
-> +
-> +	TP_ARGS(handle, inode, __fc_track_fn, enqueue),
-> +
-> +	TP_STRUCT__entry(
-> +		__field(dev_t, dev)
-> +		__field(tid_t, t_tid)
-> +		__field(ino_t, i_ino)
-> +		__field(tid_t, i_sync_tid)
-> +		__field(void *, __fc_track_fn)
-> +		__field(int, enqueue)
-> +		__field(bool, jbd2_ongoing)
-> +		__field(bool, fc_ongoing)
-> +	),
-> +
-> +	TP_fast_assign(
-> +		struct ext4_sb_info *sbi = EXT4_SB(inode->i_sb);
-> +		struct ext4_inode_info *ei = EXT4_I(inode);
-> +
-> +		__entry->dev = inode->i_sb->s_dev;
-> +		__entry->t_tid = handle->h_transaction->t_tid;
-> +		__entry->i_ino = inode->i_ino;
-> +		__entry->i_sync_tid = ei->i_sync_tid;
-> +		__entry->__fc_track_fn = __fc_track_fn;
-> +		__entry->enqueue = enqueue;
-> +		__entry->jbd2_ongoing =
-> +		    sbi->s_journal->j_flags & JBD2_FULL_COMMIT_ONGOING;
-> +		__entry->fc_ongoing =
-> +		    sbi->s_journal->j_flags & JBD2_FAST_COMMIT_ONGOING;
-> +	),
-> +
-> +	TP_printk("dev %d,%d, t_tid %u, ino %lu, i_sync_tid %u, "
-> +		  "track_fn %pS, enqueue %d, jbd2_ongoing %d, fc_ongoing %d",
-> +		  MAJOR(__entry->dev), MINOR(__entry->dev),
-> +		  __entry->t_tid, __entry->i_ino, __entry->i_sync_tid,
-> +		  (void *)__entry->__fc_track_fn, __entry->enqueue,
-> +		  __entry->jbd2_ongoing, __entry->fc_ongoing)
-> +	);
-> +
-> +TRACE_EVENT(ext4_fc_cleanup,
-> +	TP_PROTO(journal_t *journal, int full, tid_t tid),
-> +
-> +	TP_ARGS(journal, full, tid),
-> +
-> +	TP_STRUCT__entry(
-> +		__field(dev_t, dev)
-> +		__field(int, j_fc_off)
-> +		__field(int, full)
-> +		__field(tid_t, tid)
-> +	),
-> +
-> +	TP_fast_assign(
-> +		struct super_block *sb = journal->j_private;
-> +
-> +		__entry->dev = sb->s_dev;
-> +		__entry->j_fc_off = journal->j_fc_off;
-> +		__entry->full = full;
-> +		__entry->tid = tid;
-> +	),
-> +
-> +	TP_printk("dev %d,%d, j_fc_off %d, full %d, tid %u",
-> +		  MAJOR(__entry->dev), MINOR(__entry->dev),
-> +		  __entry->j_fc_off, __entry->full, __entry->tid)
-> +	);
-> +
->  TRACE_EVENT(ext4_update_sb,
->  	TP_PROTO(struct super_block *sb, ext4_fsblk_t fsblk,
->  		 unsigned int flags),
-> -- 
-> 2.31.1
-> 
+diff --git a/kernel/audit.c b/kernel/audit.c
+index 7690c29d4ee4..eb3e44c849be 100644
+--- a/kernel/audit.c
++++ b/kernel/audit.c
+@@ -568,10 +568,6 @@ static void kauditd_rehold_skb(struct sk_buff *skb, __always_unused int error)
+  */
+ static void kauditd_hold_skb(struct sk_buff *skb, int error)
+ {
+-	/* at this point it is uncertain if we will ever send this to auditd so
+-	 * try to send the message via printk before we go any further */
+-	kauditd_printk_skb(skb);
+-
+ 	/* can we just silently drop the message? */
+ 	if (!audit_default)
+ 		goto drop;
+@@ -600,6 +596,11 @@ static void kauditd_hold_skb(struct sk_buff *skb, int error)
+ 	/* we have no other options - drop the message */
+ 	audit_log_lost("kauditd hold queue overflow");
+ drop:
++	/* at this point it is uncertain if we will ever send this to auditd so
++	 * try to send the message via printk before we go any further
++	 */
++	kauditd_printk_skb(skb);
++
+ 	kfree_skb(skb);
+ }
+ 
 -- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+2.30.0
+

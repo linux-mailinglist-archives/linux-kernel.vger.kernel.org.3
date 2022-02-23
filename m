@@ -2,148 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 784074C110E
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 12:12:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 51FC34C1113
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 12:13:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239778AbiBWLM0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 06:12:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48816 "EHLO
+        id S239780AbiBWLNn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 06:13:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229533AbiBWLMX (ORCPT
+        with ESMTP id S229533AbiBWLNl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 06:12:23 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 458FA60A89;
-        Wed, 23 Feb 2022 03:11:56 -0800 (PST)
-Received: from dggpeml500024.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4K3YHP6pc4zdZWM;
-        Wed, 23 Feb 2022 19:10:41 +0800 (CST)
-Received: from Linux-SUSE12SP5.huawei.com (10.67.132.207) by
- dggpeml500024.china.huawei.com (7.185.36.10) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Wed, 23 Feb 2022 19:11:53 +0800
-From:   Wei Xiao <xiaowei66@huawei.com>
-To:     <rostedt@goodmis.org>, <mingo@redhat.com>, <mcgrof@kernel.org>,
-        <keescook@chromium.org>, <yzaikin@google.com>
-CC:     <linux-kernel@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
-        <young.liuyang@huawei.com>, <zengweilin@huawei.com>,
-        <nixiaoming@huawei.com>, <xiaowei66@huawei.com>
-Subject: [PATCH v2 sysctl-next] ftrace: move sysctl_ftrace_enabled to ftrace.c
-Date:   Wed, 23 Feb 2022 19:11:53 +0800
-Message-ID: <20220223111153.234411-1-xiaowei66@huawei.com>
-X-Mailer: git-send-email 2.22.0
+        Wed, 23 Feb 2022 06:13:41 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67B9088B0F;
+        Wed, 23 Feb 2022 03:13:11 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DE6846176E;
+        Wed, 23 Feb 2022 11:13:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BABDAC340E7;
+        Wed, 23 Feb 2022 11:13:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1645614790;
+        bh=x4CqfBO+Ku65aP/NgFz0azng71ok8liNJQAZPFIG1AE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=qFDOConG/Pg5NvBlGLmzk7yc8Tg7TdRy4PMwrb3fPMxhDiutZOyWRKABOCLGyxjZm
+         K24P/Lx4wO53hFn/mvhKpitIQv8NIw5xm2keSqYWzRjv7D5M8rdsU/k1brf1nKuoOL
+         md73SYa1S0Z4IHkhJfLOhhRBvA6Fnu4jVVKomiX8=
+Date:   Wed, 23 Feb 2022 12:13:07 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] serial: 8250_lpss: Switch to pcim_iomap() instead
+ of pci_ioremap_bar()
+Message-ID: <YhYWw/yEaYJFR1/y@kroah.com>
+References: <20220215134359.78169-1-andriy.shevchenko@linux.intel.com>
+ <20220215134359.78169-2-andriy.shevchenko@linux.intel.com>
+ <Ygy7dNqFLZF9XYiH@infradead.org>
+ <d8336f83-9f31-e168-1ed7-29e97189e233@kernel.org>
+ <YhUJAl5JpCoXik7X@infradead.org>
+ <YhYVl9YaoPDwAXO4@smile.fi.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.67.132.207]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpeml500024.china.huawei.com (7.185.36.10)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YhYVl9YaoPDwAXO4@smile.fi.intel.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This moves ftrace_enabled to trace/ftrace.c.
+On Wed, Feb 23, 2022 at 01:08:07PM +0200, Andy Shevchenko wrote:
+> On Tue, Feb 22, 2022 at 08:02:10AM -0800, Christoph Hellwig wrote:
+> > On Tue, Feb 22, 2022 at 10:14:16AM +0100, Jiri Slaby wrote:
+> > > On 16. 02. 22, 9:53, Christoph Hellwig wrote:
+> > > > On Tue, Feb 15, 2022 at 03:43:59PM +0200, Andy Shevchenko wrote:
+> > > > > The pci_iounmap() doesn't cover all the cases where resource should
+> > > > > be unmapped. Instead of spreading it more, replace the pci_ioremap_bar()
+> > > > > with pcim_iomap() which uses managed resource approach.
+> > > > 
+> > > > pcim_iomap requires the use of ioreadX/iowriteX and thus runtime
+> > > > overhead.  So in doubt please add a pcim_ioremap_bar instead of forcing
+> > > > the legacy iomap/ioread/iowrite API onto modern drivers tht can't
+> > > > support legacy port I/O.
+> > > 
+> > > Hmm, the driver combines pci_ioremap_bar with pci_iounmap. pci_iounmap does
+> > > the right thing after all, but is that correct? And this driver is not
+> > > alone, this shows more:
+> > > git grep -E 'pci_iounmap|pci_ioremap_bar' `git grep -l pci_iounmap \`git
+> > > grep -l pci_ioremap_bar\``
+> > 
+> > I think it is wrong.  It is not actively harmful unlike the the
+> > combination of pci_iomap and then later use of accessors from the
+> > ioremap family, but still not exactly a good idea.
+> > 
+> > In a perfect world we'd have some different annotation from __iomem
+> > for the whole iomap family of functions.
+> 
+> So, what would be your suggestion for a) backportable change b) cleanup for
+> the current and future drivers?
 
-We move sysctls to places where features actually belong to improve
-the readability of the code and reduce the risk of code merge conflicts.
-At the same time, the proc-sysctl maintainers do not want to know what
-sysctl knobs you wish to add for your owner piece of code, we just care
-about the core logic.
+Worry about getting it right first.  Only after that should you even
+consider stable tree backports.  There's usually no reason you can't
+just take the same change there as well.  And if not, we will work
+through it :)
 
-Signed-off-by: Wei Xiao <xiaowei66@huawei.com>
+thanks,
 
----
-v2:
-Add subject-prefix of sysctl-next and add the explanation to the commit log 
-to help patch review and subsystem maintainers better understand the context/logic 
-behind the migration.
-
-v1: https://lore.kernel.org/lkml/20220223012311.134314-1-xiaowei66@huawei.com/
-1. Lack subject-prefix of sysctl-next to avoid conflicts better.
-2. Lack more informations in the commit log to help patch review better.
----
- include/linux/ftrace.h |  3 ---
- kernel/sysctl.c        |  9 ---------
- kernel/trace/ftrace.c  | 22 +++++++++++++++++++++-
- 3 files changed, 21 insertions(+), 13 deletions(-)
-
-diff --git a/include/linux/ftrace.h b/include/linux/ftrace.h
-index 9999e29187de..659b2840563a 100644
---- a/include/linux/ftrace.h
-+++ b/include/linux/ftrace.h
-@@ -94,9 +94,6 @@ static inline int ftrace_mod_get_kallsym(unsigned int symnum, unsigned long *val
- #ifdef CONFIG_FUNCTION_TRACER
- 
- extern int ftrace_enabled;
--extern int
--ftrace_enable_sysctl(struct ctl_table *table, int write,
--		     void *buffer, size_t *lenp, loff_t *ppos);
- 
- #ifndef CONFIG_HAVE_DYNAMIC_FTRACE_WITH_ARGS
- 
-diff --git a/kernel/sysctl.c b/kernel/sysctl.c
-index 5ae443b2882e..55279ec66b28 100644
---- a/kernel/sysctl.c
-+++ b/kernel/sysctl.c
-@@ -1906,15 +1906,6 @@ static struct ctl_table kern_table[] = {
- 		.mode		= 0644,
- 		.proc_handler	= proc_dointvec,
- 	},
--#ifdef CONFIG_FUNCTION_TRACER
--	{
--		.procname	= "ftrace_enabled",
--		.data		= &ftrace_enabled,
--		.maxlen		= sizeof(int),
--		.mode		= 0644,
--		.proc_handler	= ftrace_enable_sysctl,
--	},
--#endif
- #ifdef CONFIG_STACK_TRACER
- 	{
- 		.procname	= "stack_tracer_enabled",
-diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
-index f9feb197b2da..4a5b4d6996a4 100644
---- a/kernel/trace/ftrace.c
-+++ b/kernel/trace/ftrace.c
-@@ -7846,7 +7846,8 @@ static bool is_permanent_ops_registered(void)
- 	return false;
- }
- 
--int
-+#ifdef CONFIG_SYSCTL
-+static int
- ftrace_enable_sysctl(struct ctl_table *table, int write,
- 		     void *buffer, size_t *lenp, loff_t *ppos)
- {
-@@ -7889,3 +7890,22 @@ ftrace_enable_sysctl(struct ctl_table *table, int write,
- 	mutex_unlock(&ftrace_lock);
- 	return ret;
- }
-+
-+static struct ctl_table ftrace_sysctls[] = {
-+	{
-+		.procname       = "ftrace_enabled",
-+		.data           = &ftrace_enabled,
-+		.maxlen         = sizeof(int),
-+		.mode           = 0644,
-+		.proc_handler   = ftrace_enable_sysctl,
-+	},
-+	{}
-+};
-+
-+static int __init ftrace_sysctl_init(void)
-+{
-+	register_sysctl_init("kernel", ftrace_sysctls);
-+	return 0;
-+}
-+late_initcall(ftrace_sysctl_init);
-+#endif
--- 
-2.19.1
-
+greg k-h

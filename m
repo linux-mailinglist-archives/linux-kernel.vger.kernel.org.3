@@ -2,74 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C9BC4C1142
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 12:27:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D34924C1143
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 12:29:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239854AbiBWL2D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 06:28:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38464 "EHLO
+        id S239855AbiBWL3k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 06:29:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239848AbiBWL15 (ORCPT
+        with ESMTP id S235644AbiBWL3j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 06:27:57 -0500
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CAB73CA5A
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 03:27:30 -0800 (PST)
-Received: by mail-pg1-x52c.google.com with SMTP id p23so19647146pgj.2
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 03:27:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=SHFYegUo03DjCxdS0Gu5tYZKm6OzwquBbzLjVdntcXk=;
-        b=i5LJtE7uwG6kpWKGBodkWlbpgX52o368X518RNlIpeyHlkCkynvrx1At+yOSAeufGu
-         djbOWwiuFNCqUPu/DzSMpmlkx3ahZk1v84UBd4Xpd9cfrlPJLpLJDx+B1WjFmoQc28t3
-         TTMnPkEhHpMiyFNjcb2iSxpfx257y/sytifC29WTguckha8pyjJm18ehKx0R1YyyjO8K
-         b2YuU3eUXamZQWnFmCxK7SYxKY1yskcxVmj2+CtUrTMy44XpEVJD4rgLHZY8rwSEcrLV
-         sfT/UqzKJg6JzPZe6LX0fqYWwGwPoSReLugxvjlq0J1DsLdh5D/7cFO8tN1kXglJCVAE
-         OPuQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=SHFYegUo03DjCxdS0Gu5tYZKm6OzwquBbzLjVdntcXk=;
-        b=U5Y99p+MjxaOc9OSJfgOTBle0/4dQ4Bew7n8H7KpZtT78PU/jMq7BnLQ6VWa8fF5tK
-         vh+X4Tw4rSte4VX6Z7hMKMtb5Q1jlAm5dCM995ZW7aL1VxODtNJgPVbARlC32kFLZLq7
-         jV1yNIooawSXNXiYtGW9UjNwZE2/iRllC4X8H1cv2Zvvtp26Iw6KTCXsYtgsCcePHq0S
-         fHuFyNM3iOytSihbgl2lteUBu3qFE5tl6ctyJEeZaNNWftV/QizkbvDtO+3UuPeMBtEd
-         EzaM/6zj2GSIqqaOgdbJ+TPyc3W73tSH8CZ/K0q/0UAEWJB7JyLI16m66OURj+rsvsfN
-         bXTg==
-X-Gm-Message-State: AOAM532Zt9XiCtuJSt9L4AN38IZ9xQvMi95SkrCiZy4dHyH4OiaRNAEh
-        n5GB/edSnxKkjooHVs6r1lSG3g==
-X-Google-Smtp-Source: ABdhPJw3BRAmUjieArpqYJc7cltWKssHfIhl6hTr4Mo8DxuN4xlikUgPz9OL2RIHSoi4ljl0vP/BOw==
-X-Received: by 2002:a63:6c43:0:b0:373:7202:6e13 with SMTP id h64-20020a636c43000000b0037372026e13mr23738814pgc.110.1645615649506;
-        Wed, 23 Feb 2022 03:27:29 -0800 (PST)
-Received: from localhost ([223.184.83.228])
-        by smtp.gmail.com with ESMTPSA id j4sm14582389pfj.218.2022.02.23.03.27.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Feb 2022 03:27:29 -0800 (PST)
-Date:   Wed, 23 Feb 2022 16:57:27 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Lukasz Luba <lukasz.luba@arm.com>
-Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        linux-kernel@vger.kernel.org, dietmar.eggemann@arm.com,
-        rafael@kernel.org, nm@ti.com, sboyd@kernel.org, mka@chromium.org,
-        dianders@chromium.org, robh+dt@kernel.org,
-        devicetree@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v2 0/2] Introduce 'advanced' Energy Model in DT
-Message-ID: <20220223112727.akprxqglyr7ostqh@vireshk-i7>
-References: <20220222140746.12293-1-lukasz.luba@arm.com>
- <467a7de4-df84-8e9e-a26a-80449ca55950@linaro.org>
- <20220223104341.jh5hjcv6ugaexgoa@vireshk-i7>
- <94d3f2a3-4145-afdc-d810-61f2120df579@arm.com>
+        Wed, 23 Feb 2022 06:29:39 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6D658BE27
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 03:29:09 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 44D87B81E90
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 11:29:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E52EC340EC;
+        Wed, 23 Feb 2022 11:29:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1645615747;
+        bh=3+TKJBP+0/cfGbXLRImmLTQIX5KdSRN6vrHnNX0/RWM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=R014DC4zaXCUwyOec8ES6tMl+M2P6jhGBMQDXgSW/KulpO1ooFjM3CY/2HG49zHhT
+         8ZXJoM3x3zUvaubWCv5f8+XtmlvPnvllMtPDCDU6f/er6V5Gdfn57vWePtJjj+K/Po
+         hshVAi8r4s0RlHboqdwFFonglLQonyAJD3HBo5Xw=
+Date:   Wed, 23 Feb 2022 12:29:03 +0100
+From:   "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
+To:     "Zhang, Qiang1" <qiang1.zhang@intel.com>
+Cc:     syzbot <syzbot+348b571beb5eeb70a582@syzkaller.appspotmail.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "rafael@kernel.org" <rafael@kernel.org>,
+        "syzkaller-bugs@googlegroups.com" <syzkaller-bugs@googlegroups.com>,
+        "balbi@kernel.org" <balbi@kernel.org>,
+        "stern@rowland.harvard.edu" <stern@rowland.harvard.edu>
+Subject: Re: [syzbot] KASAN: use-after-free Read in dev_uevent
+Message-ID: <YhYafwiwUV2Sbn5t@kroah.com>
+References: <0000000000005a991a05a86970bb@google.com>
+ <00000000000033314805d8765175@google.com>
+ <PH0PR11MB58805E3C4CF7D4C41D49BFCFDA3C9@PH0PR11MB5880.namprd11.prod.outlook.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <94d3f2a3-4145-afdc-d810-61f2120df579@arm.com>
-User-Agent: NeoMutt/20180716-391-311a52
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+In-Reply-To: <PH0PR11MB58805E3C4CF7D4C41D49BFCFDA3C9@PH0PR11MB5880.namprd11.prod.outlook.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,35 +57,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23-02-22, 11:22, Lukasz Luba wrote:
-> On 2/23/22 10:43, Viresh Kumar wrote:
-> > On 23-02-22, 10:52, Daniel Lezcano wrote:
-> > > why not extend the energy model to any kind of devices?
-> > 
-> > FWIW, the OPP core supports a wide range of devices now, not just CPUs.
-
-There are many other devices which still use Freq.
-
-> Is that the "opp-level" thing which would allow that?
-
-For power supplies/regulators, we don't have freq and they use level, right.
-
-Also for interconnect we use bandwidth, in a similar way.
-
-> I can see some DT files with regulators(?) using it e.g. [1].
-> It looks flexible, the opp-hz is not hard requirement,
-> the opp-level can be used instead IIUC.
-
-Right.
-
-> It might be a next step which might meet Daniel's needs.
-> If that 'level' can be any number and frequency is not available
-> then EM must have 'level' filed in the struct em_perf_state
-> for this kind of new devices. I'm open for such change.
-> We can discuss this as a next step. We would need to find some examples
-> how this new thing would be used.
+On Wed, Feb 23, 2022 at 11:17:07AM +0000, Zhang, Qiang1 wrote:
 > 
-> [1] https://elixir.bootlin.com/linux/v5.17-rc5/source/arch/arm/boot/dts/tegra20-peripherals-opp.dtsi#L4
+> syzbot has found a reproducer for the following issue on:
+> 
+> HEAD commit:    4f12b742eb2b Merge tag 'nfs-for-5.17-3' of git://git.linux..
+> git tree:       upstream
+> console output: https://syzkaller.appspot.com/x/log.txt?x=110a6df2700000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=f6a069ed94a1ed1d
+> dashboard link: https://syzkaller.appspot.com/bug?extid=348b571beb5eeb70a582
+> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12377296700000
+> 
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+348b571beb5eeb70a582@syzkaller.appspotmail.com
+> 
+> ==================================================================
+> BUG: KASAN: use-after-free in dev_uevent+0x712/0x780 drivers/base/core.c:2320 Read of size 8 at addr ffff88802b934098 by task udevd/3689
+> 
+> CPU: 2 PID: 3689 Comm: udevd Not tainted 5.17.0-rc4-syzkaller-00229-g4f12b742eb2b #0 Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-2 04/01/2014 Call Trace:
+>  <TASK>
+>  __dump_stack lib/dump_stack.c:88 [inline]
+>  dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+>  print_address_description.constprop.0.cold+0x8d/0x303 mm/kasan/report.c:255  __kasan_report mm/kasan/report.c:442 [inline]  kasan_report.cold+0x83/0xdf mm/kasan/report.c:459
+>  dev_uevent+0x712/0x780 drivers/base/core.c:2320
+>  uevent_show+0x1b8/0x380 drivers/base/core.c:2391
+>  dev_attr_show+0x4b/0x90 drivers/base/core.c:2094
+>  sysfs_kf_seq_show+0x219/0x3d0 fs/sysfs/file.c:59
+>  seq_read_iter+0x4f5/0x1280 fs/seq_file.c:230
+>  kernfs_fop_read_iter+0x514/0x6f0 fs/kernfs/file.c:241  call_read_iter include/linux/fs.h:2068 [inline]
+>  new_sync_read+0x429/0x6e0 fs/read_write.c:400
+>  vfs_read+0x35c/0x600 fs/read_write.c:481
+>  ksys_read+0x12d/0x250 fs/read_write.c:619
+>  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80  entry_SYSCALL_64_after_hwframe+0x44/0xae
+> RIP: 0033:0x7f964cc558fe
+> Code: c0 e9 e6 fe ff ff 50 48 8d 3d 0e c7 09 00 e8 c9 cf 01 00 66 0f 1f 84 00 00 00 00 00 64 8b 04 25 18 00 00 00 85 c0 75 14 0f 05 <48> 3d 00 f0 ff ff 77 5a c3 66 0f 1f 84 00 00 00 00 00 48 83 ec 28
+> RSP: 002b:00007ffc0133d258 EFLAGS: 00000246 ORIG_RAX: 0000000000000000
+> RAX: ffffffffffffffda RBX: 000056497b21a140 RCX: 00007f964cc558fe
+> RDX: 0000000000001000 RSI: 000056497b218650 RDI: 0000000000000008
+> RBP: 00007f964cd22380 R08: 0000000000000008 R09: 00007f964cd25a60
+> R10: 0000000000000008 R11: 0000000000000246 R12: 000056497b21a140
+> R13: 0000000000000d68 R14: 00007f964cd21780 R15: 0000000000000d68  </TASK>
+> 
+> Cc: Alan Stern 
+>        Felipe Balbi
+> 
+> Hello syzbot, Please try it:
+> 
+> From 574d45ff924e2d2f9b9f5cc3e846f8004498a811 Mon Sep 17 00:00:00 2001
+> From: Zqiang <qiang1.zhang@intel.com>
+> Date: Wed, 23 Feb 2022 18:18:22 +0800
+> Subject: [PATCH] driver core: Fix use-after-free in dev_uevent()
+> 
+> In dev_uevent(), if the "dev->driver" is valid, the "dev->driver->name"
+> be accessed, there may be a window period between these two operations.
 
--- 
-viresh
+There should not be any such window period.  The bus locks should
+prevent this, unless some driver is doing odd things with the pointers
+that it should not be doing.
+
+> in this window period if the "dev->driver" is set to null
+> (in usb_gadget_unregister_driver function), when the "dev->driver->name"
+> is accessed again, invalid address will be accessed. fix it by checking
+> "dev->driver" again.
+> 
+> Signed-off-by: Zqiang <qiang1.zhang@intel.com>
+> ---
+>  drivers/base/core.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/base/core.c b/drivers/base/core.c
+> index 3d6430eb0c6a..a45b927ee76e 100644
+> --- a/drivers/base/core.c
+> +++ b/drivers/base/core.c
+> @@ -2317,7 +2317,7 @@ static int dev_uevent(struct kobject *kobj, struct kobj_uevent_env *env)
+>                 add_uevent_var(env, "DEVTYPE=%s", dev->type->name);
+> 
+>         if (dev->driver)
+> -               add_uevent_var(env, "DRIVER=%s", dev->driver->name);
+> +               add_uevent_var(env, "DRIVER=%s", dev_driver_string(dev));
+
+What's to prevent the "window" from happening in the middle of the
+dev_driver_string() call?
+
+thanks,
+
+greg k-h

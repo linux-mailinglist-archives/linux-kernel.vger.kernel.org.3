@@ -2,120 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B4D84C0B8F
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 06:15:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BF0D4C0B91
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 06:15:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236604AbiBWFP7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 00:15:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47504 "EHLO
+        id S237038AbiBWFQV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 00:16:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233406AbiBWFP5 (ORCPT
+        with ESMTP id S233406AbiBWFQT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 00:15:57 -0500
-Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B283D50442
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 21:15:30 -0800 (PST)
-Received: by mail-qv1-xf2f.google.com with SMTP id o5so6194316qvm.3
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 21:15:30 -0800 (PST)
+        Wed, 23 Feb 2022 00:16:19 -0500
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF7715BD2C;
+        Tue, 22 Feb 2022 21:15:52 -0800 (PST)
+Received: by mail-pj1-x1029.google.com with SMTP id gl14-20020a17090b120e00b001bc2182c3d5so2782796pjb.1;
+        Tue, 22 Feb 2022 21:15:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
+        h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=G63u4OKNMj8eNzKeIVpADNINRio3u60ure+LjTnbgfU=;
-        b=Kz98UGCwqJywOSZm1WDP4Tsth1PPCZZbDL1DBQgAvEFCspQpkY1tlX7AOEkKNuRLtW
-         aNkVZZEI7RArI1Hms2N3gquiGWmkwE5QzcPwlu5vGwsEiL1WrKVo4wiMYjeAirHvJGuS
-         2MaZFVIo0/A9509KnS8xr7j436Fpu/iNcszt9rh4Z0LaBU22Kg/W5S/bEx/JWwLwT91w
-         xiUV94U6C6uCEhonJGOpIoZqmfsFz62YH2SVzkGO/ICnaTm+Yh7/G1g1vTUEn6ydWnXa
-         MNxBC53I1fwP6STWRWkc1Vmb6VFsdPGo3FHzIrwwU50BExmKeZ1oCm5eQI7eK4wFofsk
-         U/DA==
+        bh=J9X2+n6KpehChnxp9Tmr1fZodcY/pATSFKo49PZQzwo=;
+        b=k574kVhYSfhs2DWwMEDbrHsvrqIW0+aaLPJq1etRIjE/u48bb+8A8BDFoV4U4lHkQv
+         LqBzrHvwM5MTiopD28tV4xjllOpq7/DItVI8qC0lRhtVgM0GwIecvYwgAqwL5nDBhwKT
+         VxVybKr1hVblKHgMzY4OSw8A6txxLAzqFQDZk8zY1ymwFPXSCXQ/O61+mze30QSiWB41
+         b28/eA7CgYxyhL4TqnSoE029e14EhZBCvUQ/kPewVzaJkt/NIl8SynhloVmzS8iu7g36
+         HB5i2efoCr1XmjCmXhcimX1Dv65dnTJDaAZRHDl99OgPdbx8O3u6Lbe4SzlRiPr1Nonb
+         Z3Ug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=G63u4OKNMj8eNzKeIVpADNINRio3u60ure+LjTnbgfU=;
-        b=BjWJzq5kI61NR/0YMEIUK3uT8n4ZBn2aKjIpai9uI719u1jDQcB9EvWmaO3R2zvXeZ
-         IaD1JQXgV3320jSw+CMIN1vDXAI/JhgiqR4VPxvgoBeBm6Gb38bjblg1wQvaHMItgV0M
-         TmU2iVLt/yEw9Mjzgcf+tWpjMI/fymTLpFeAx8XwVBpolXN9SfSOgeu1HOU2OGt3dNgI
-         4MVmhR8heHZS8rXmgSNTF9dMTEYa06Qa5XIrhraGltQBPuddkLXodFbmMffdWqC3/1aV
-         fXxQtWzBrcGZt1QkifieUFhhA4yx17XYNKkxixjdJAEDmR38nzoZfCJMTimM/yEVLG4b
-         WIdA==
-X-Gm-Message-State: AOAM5334wgP8OyGRefpk/76c4ih1iam3rOo+F1Qicrz10njGp0Vln7JT
-        exs9FaMpdDFJUvyAsOJjfcj9vuFg59utpXGNIas=
-X-Google-Smtp-Source: ABdhPJxGA/hVip07fd4+x5LzRygu1wXLCAZ1gyGmuXPudTwcU+TJbBlv+K2+SEGZ5HaEqy29oS+T+Zv0euFbCbiWY44=
-X-Received: by 2002:a05:622a:607:b0:2dc:e1e1:c3bf with SMTP id
- z7-20020a05622a060700b002dce1e1c3bfmr25090836qta.43.1645593329748; Tue, 22
- Feb 2022 21:15:29 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=J9X2+n6KpehChnxp9Tmr1fZodcY/pATSFKo49PZQzwo=;
+        b=rddoVwrpWTw0a6Ucogz+x/G8EJlBKXhXP0qdNjgkjYCMfmOoL/VGqSUzfIYGxHWpHC
+         QxTWGBepLmRux7bvmabf+js4/mqMOvMv0MdC/dXnHu0l38NxOC/Q5CDGj36gKA4wULV5
+         0BS0oGuudIWHirudK5Q1LHeNLwkwRcNWo/jvkTziAA5rbzYcptVfq7yd2Vxty4tb+zvf
+         zCZ8yfKUzeWi/bIv1bgonMTiaO7SJ0ncnuUr9OyOi/dntgYk5i/UEH63jk3YEWHlX69D
+         nGGknGQg3DLKObOhavRZQLmBoPS20jCZAoLby2WpOncoTjrEyLjJmQ4SZNlpQnLAh4+f
+         ZX9Q==
+X-Gm-Message-State: AOAM531cMNazyMca/ioi6frUGf9B5/OplmL35gFK52FEwFtiiUA12Bh4
+        f3GmPm9sIMZCJKMneL7fo4eiDS1bWBnf0Eo4
+X-Google-Smtp-Source: ABdhPJxrG3DsbCwd9Vb5y+rszL2ndDj9F/tggumUkZ8XkIFacRXlfciOX0sa2oh1KdKvhkXsDzS/DA==
+X-Received: by 2002:a17:90a:178d:b0:1b9:75ce:34d8 with SMTP id q13-20020a17090a178d00b001b975ce34d8mr7549693pja.228.1645593352238;
+        Tue, 22 Feb 2022 21:15:52 -0800 (PST)
+Received: from yusufkhan-a.lan ([24.17.200.29])
+        by smtp.gmail.com with ESMTPSA id a22sm15191334pfv.73.2022.02.22.21.15.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Feb 2022 21:15:51 -0800 (PST)
+From:   Yusuf Khan <yusisamerican@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-pci@vger.kernel.org, tiwai@suse.com, perex@perex.cz,
+        alex.bou9@gmail.com, mporter@kernel.crashing.org,
+        logang@deltatee.com, kurt.schwemmer@microsemi.com,
+        bhelgaas@google.com, kw@linux.com, robh@kernel.org,
+        lorenzo.pieralisi@arm.com, jonathan.derrick@linux.dev,
+        nirmal.patel@linux.intel.com, Yusuf Khan <yusisamerican@gmail.com>
+Subject: [PATCH] Removed some usages of the deprecated "pci-dma-compat.h" KPI
+Date:   Tue, 22 Feb 2022 21:15:45 -0800
+Message-Id: <20220223051545.572235-1-yusisamerican@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Received: by 2002:a0c:80c1:0:0:0:0:0 with HTTP; Tue, 22 Feb 2022 21:15:29
- -0800 (PST)
-Reply-To: gabrieledgal79@gmail.com
-From:   gabriel <yacoubounimatou@gmail.com>
-Date:   Wed, 23 Feb 2022 05:15:29 +0000
-Message-ID: <CADJYvPMKVS=dghPNfOnCT_LNkNk+=0YMHfqM-WF=X+=BXGTNcQ@mail.gmail.com>
-Subject: HOLA
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: Yes, score=5.3 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:f2f listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [gabrieledgal79[at]gmail.com]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [yacoubounimatou[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  3.5 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---
-Estimat amic
+The inspiration for this commit comes from Christophe
+JAILLET in [1], you can find reasons for why this was removed
+linked there. This removes the use of the KPI in some pci
+components and rapidio(whatever that is) devices.
 
-S=C3=B3c el Sr. Gabriel Edgal, s=C3=B3c Auditor intern del nostre banc, vul=
-l
-us llegiu per rebre la transfer=C3=A8ncia de 9,5 milions de d=C3=B2lars que
-es compartir=C3=A0 entre dos de 50:50. El fons es va dipositar al nostre ba=
-nc
-per un dels meus clients difunts, que porta el mateix cognom amb tu i amb e=
-ll
-va morir amb tota la seva fam=C3=ADlia en un accident de tr=C3=A0nsit. La r=
-a=C3=B3
-per la qual tinc
-contactat amb tu =C3=A9s perqu=C3=A8 portes el mateix nom amb el client dif=
-unt
-i vull convidar-vos com a soci estranger a ser el seg=C3=BCent de
-familiar del client mort, de manera que reclamarem el
-fons dipositat i compartir-lo entre dos de nosaltres 50: 50 cadascun. vull
-per tornar a contactar amb mi aqu=C3=AD a trav=C3=A9s de la meva adre=C3=A7=
-a de
-correu electr=C3=B2nic
-(gabrieledgal79@gmail.com) per a m=C3=A9s detalls
+[1]: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux
+-next.git/patch/?id=ada3caabaf6135150077c3f729bb06e8f3b5b8f6
 
-  Salutacions cordials,
+Signed-off-by: Yusuf Khan <yusisamerican@gmail.com>
+---
+ drivers/pci/controller/vmd.c     | 1 +
+ drivers/pci/switch/switchtec.c   | 1 +
+ drivers/rapidio/devices/tsi721.c | 8 ++++----
+ sound/pci/asihpi/hpios.c         | 1 +
+ 4 files changed, 7 insertions(+), 4 deletions(-)
 
-Sr. Gabriel Edgal
+diff --git a/drivers/pci/controller/vmd.c b/drivers/pci/controller/vmd.c
+index cc166c683638..244dc0f2f71e 100644
+--- a/drivers/pci/controller/vmd.c
++++ b/drivers/pci/controller/vmd.c
+@@ -17,6 +17,7 @@
+ #include <linux/srcu.h>
+ #include <linux/rculist.h>
+ #include <linux/rcupdate.h>
++#include <linux/dma-mapping.h>
+ 
+ #include <asm/irqdomain.h>
+ 
+diff --git a/drivers/pci/switch/switchtec.c b/drivers/pci/switch/switchtec.c
+index c36c1238c604..05a876ec1463 100644
+--- a/drivers/pci/switch/switchtec.c
++++ b/drivers/pci/switch/switchtec.c
+@@ -15,6 +15,7 @@
+ #include <linux/wait.h>
+ #include <linux/io-64-nonatomic-lo-hi.h>
+ #include <linux/nospec.h>
++#include <linux/dma-mapping.h>
+ 
+ MODULE_DESCRIPTION("Microsemi Switchtec(tm) PCIe Management Driver");
+ MODULE_VERSION("0.1");
+diff --git a/drivers/rapidio/devices/tsi721.c b/drivers/rapidio/devices/tsi721.c
+index 4dd31dd9feea..b3134744fb55 100644
+--- a/drivers/rapidio/devices/tsi721.c
++++ b/drivers/rapidio/devices/tsi721.c
+@@ -2836,17 +2836,17 @@ static int tsi721_probe(struct pci_dev *pdev,
+ 	}
+ 
+ 	/* Configure DMA attributes. */
+-	if (pci_set_dma_mask(pdev, DMA_BIT_MASK(64))) {
+-		err = pci_set_dma_mask(pdev, DMA_BIT_MASK(32));
++	if (dma_set_mask(&pdev->dev, DMA_BIT_MASK(64))) {
++		err = dma_set_mask(&pdev->dev, DMA_BIT_MASK(32));
+ 		if (err) {
+ 			tsi_err(&pdev->dev, "Unable to set DMA mask");
+ 			goto err_unmap_bars;
+ 		}
+ 
+-		if (pci_set_consistent_dma_mask(pdev, DMA_BIT_MASK(32)))
++		if (dma_set_coherent_mask(&pdev->dev, DMA_BIT_MASK(32)))
+ 			tsi_info(&pdev->dev, "Unable to set consistent DMA mask");
+ 	} else {
+-		err = pci_set_consistent_dma_mask(pdev, DMA_BIT_MASK(64));
++		err = dma_set_coherent_mask(&pdev->dev, DMA_BIT_MASK(64));
+ 		if (err)
+ 			tsi_info(&pdev->dev, "Unable to set consistent DMA mask");
+ 	}
+diff --git a/sound/pci/asihpi/hpios.c b/sound/pci/asihpi/hpios.c
+index 6fe60d13e24b..08757c92aee5 100644
+--- a/sound/pci/asihpi/hpios.c
++++ b/sound/pci/asihpi/hpios.c
+@@ -10,6 +10,7 @@ HPI Operating System function implementation for Linux
+ (C) Copyright AudioScience Inc. 1997-2003
+ ******************************************************************************/
+ #define SOURCEFILE_NAME "hpios.c"
++#include <linux/dma-mapping.h>
+ #include "hpi_internal.h"
+ #include "hpidebug.h"
+ #include <linux/delay.h>
+-- 
+2.25.1
+

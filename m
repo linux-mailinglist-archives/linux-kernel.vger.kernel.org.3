@@ -2,186 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A35514C10DD
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 11:58:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 103D34C10E0
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 12:00:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239739AbiBWK7O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 05:59:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36712 "EHLO
+        id S239742AbiBWLAY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 06:00:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233910AbiBWK7N (ORCPT
+        with ESMTP id S233910AbiBWLAW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 05:59:13 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C711C8BF5E;
-        Wed, 23 Feb 2022 02:58:45 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5CBCE617B9;
-        Wed, 23 Feb 2022 10:58:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04DEBC340F4;
-        Wed, 23 Feb 2022 10:58:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645613924;
-        bh=fycgXos7ocYwX+GsKmH5ZzLGjwvqgn7YbCBECVBjK74=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Ydp5TxtbLmb1PQ/ZAjFAs7FEpMXgXw6IlA4dJIZhOyfrjeOvUYUoPgnaX7Miwl3Gr
-         Mg0PJNfQmpQ2USPiRhL2TBUDN8/k5VY2D2Y68PD2qIRqzJAoXG33USdGD+l2YTACK7
-         /org/XusQ2P+GCSBvXjO8LL13cDQ09pcLBvvP7HXF2j/RMUcHRgB7V2A76JxDmNxLE
-         zNl5n4BEamMc4F4NmyhUti1McRFVHc9TTcF12oRMCq57+iqjg4o7O67RtiMyBGr2fo
-         TTMAGahBbX3GigGCiFMb1/Y13U3jn5FbgHSQBCSPWbrh9HO1k6cAM4rL3OFqGylfz4
-         Sfg8Ghb1meM9g==
-Date:   Wed, 23 Feb 2022 12:58:27 +0200
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Yu Zhao <yuzhao@google.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Mel Gorman <mgorman@suse.de>, Michal Hocko <mhocko@kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
-        Barry Song <21cnbao@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
-        Jesse Barnes <jsbarnes@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Michael Larabel <Michael@michaellarabel.com>,
-        Rik van Riel <riel@surriel.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Will Deacon <will@kernel.org>,
-        Ying Huang <ying.huang@intel.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        Kernel Page Reclaim v2 <page-reclaim@google.com>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        Brian Geffon <bgeffon@google.com>,
-        Jan Alexander Steffens <heftig@archlinux.org>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        Steven Barrett <steven@liquorix.net>,
-        Suleiman Souhlal <suleiman@google.com>,
-        Daniel Byrne <djbyrne@mtu.edu>,
-        Donald Carr <d@chaos-reins.com>,
-        Holger =?iso-8859-1?Q?Hoffst=E4tte?= 
-        <holger@applied-asynchrony.com>,
-        Konstantin Kharlamov <Hi-Angel@yandex.ru>,
-        Shuang Zhai <szhai2@cs.rochester.edu>,
-        Sofia Trinh <sofia.trinh@edi.works>
-Subject: Re: [PATCH v7 12/12] mm: multigenerational LRU: documentation
-Message-ID: <YhYTU3B7cdwV+YrW@kernel.org>
-References: <20220208081902.3550911-1-yuzhao@google.com>
- <20220208081902.3550911-13-yuzhao@google.com>
- <Ygou6Gq79XY3mFK7@kernel.org>
- <Ygxt4iR9ZMYEbV78@google.com>
- <YhNVAUM7H7PF7j7j@kernel.org>
- <CAOUHufbZOuXtFvTULArtQjrdrzUkRw71byKQap1Cf=Mm3U7T5g@mail.gmail.com>
+        Wed, 23 Feb 2022 06:00:22 -0500
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AE5C8C7D1;
+        Wed, 23 Feb 2022 02:59:54 -0800 (PST)
+Received: from mail-wr1-f52.google.com ([209.85.221.52]) by
+ mrelayeu.kundenserver.de (mreue009 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1MlfCk-1o4Ra6312w-00inTg; Wed, 23 Feb 2022 11:59:52 +0100
+Received: by mail-wr1-f52.google.com with SMTP id o4so2135193wrf.3;
+        Wed, 23 Feb 2022 02:59:52 -0800 (PST)
+X-Gm-Message-State: AOAM532w0I/FQasSXoRn7paj/0r708sN7Hcll05a600icEtPzbVFW5nu
+        NA3gFKSoZzvNLofXWNFCuRR21wXtMvkt8QI7GtY=
+X-Google-Smtp-Source: ABdhPJz3tjc3IejYq+UPcpb0b0B/1/NsttPG6/6KnMrBytsQxjHYO0/p2daBPMgz1AgVYfLNcxR3Ydw+Oyz4L5S8GiA=
+X-Received: by 2002:adf:90c1:0:b0:1e4:ad27:22b9 with SMTP id
+ i59-20020adf90c1000000b001e4ad2722b9mr23150986wri.219.1645613992251; Wed, 23
+ Feb 2022 02:59:52 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAOUHufbZOuXtFvTULArtQjrdrzUkRw71byKQap1Cf=Mm3U7T5g@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220201150545.1512822-1-guoren@kernel.org> <mhng-36783ff3-37c2-454b-9337-8cb124195255@palmer-ri-x1c9>
+In-Reply-To: <mhng-36783ff3-37c2-454b-9337-8cb124195255@palmer-ri-x1c9>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Wed, 23 Feb 2022 11:59:36 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a1W3Ns1WYiSGXb3Qn6-p+SPsx1UGqXdTkk2taPB72OZUA@mail.gmail.com>
+Message-ID: <CAK8P3a1W3Ns1WYiSGXb3Qn6-p+SPsx1UGqXdTkk2taPB72OZUA@mail.gmail.com>
+Subject: Re: [PATCH V5 00/21] riscv: compat: Add COMPAT mode support for rv64
+To:     Palmer Dabbelt <palmer@dabbelt.com>
+Cc:     Guo Ren <guoren@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Anup Patel <anup@brainfault.org>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        liush <liush@allwinnertech.com>, Wei Fu <wefu@redhat.com>,
+        Drew Fustini <drew@beagleboard.org>,
+        Wang Junqiang <wangjunqiang@iscas.ac.cn>,
+        Christoph Hellwig <hch@lst.de>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        linux-csky@vger.kernel.org,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        sparclinux <sparclinux@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Parisc List <linux-parisc@vger.kernel.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Guo Ren <guoren@linux.alibaba.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:fDj8UNVRV8r/eEkDy+HCLSo5oTnkzwOoBxcvqklwcRxXRwi6wUV
+ 6SE5GCBES+rEkqbaFiHz6aGc/CNcIz7j4g51nG2OX1z+qqp19c2xUqQAOlXIpbA/+vI2jCi
+ 66nCed0HrHG8pKuBjTvpQfJ7mhp2uPg7qBZSY37R2iNdBB0GFnk2uzfcY2yijMhTM9tVR5a
+ 82jnAWH9+MAZlTC76Larg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:VYpzYxJP3NU=:KiMJ/01sPAWeZQz4PFOQPd
+ EUCgAbE0c2Cin8EOQRowCayryy7BPpe5bQgq2432OdqeY3VSVKI/wNylTiMVyAmj6FT2ytEiM
+ gL1j8GQTU/d4DIa8yFaX2cUj/wMx2326wezaZ/Eg+xrmMuJ22WbnjY/4ERGhOlKbe2ajo2q4j
+ nB1wwbuu2/KVd3tKlRy0wp6mdIDFpfpVGcEqCqwAj/hP5wu4Bpxj+rAKgQYaWLjMjB0i8h7OV
+ ODpdELWbpwXtYHT1HK6t4KipCMhxoWeyfSxoLNNTG+0iakeWXjAJm7KH4geyKsF5/dBiVLve9
+ MKzdUoMmTtdVLU0sMdKfHKhCsTfnPdYQbHoCzlVJOPOWfiUsbKZBWyaJbNPiDikGERCSzNAAX
+ C4eXdL1FU/X0/uSzrmBOisTs1d7tFnm4TPPjLwuvkpTeDoFyCotroxkVLOwXyLoW/6Mtt2A5L
+ f7HnXCuoCVK9NDA56rC8hmP4fvF5PgPXfZ53EjoRa0KAXhkeOt6hjiioccWF8GB3wtpYCSz2Q
+ x/w188d2UL8fdFCA4/qcA93GYKxVDxtyijHEs2fv4X9cjVSLS1xofqo82uQlZNOld5oQD8grR
+ 9xl/STptXx2jNltgonnEIU+jCcw8/C7Gq4wQYgpPWV4qU+vacJZX3kzdQKa4ngeO+Nmodh57z
+ d51eBFgsR+V899w2wccXBgAg4hC1fCn0bVJEkBD2re7ZZKS51/XEGqsuqHdGgdz0vP3FvtHR9
+ q8gtkkCIZPBMtMVsq/zXp0ciSyWaDJ1PcchbymzduRV9j0RoDYiuZAkhzcXQdeR8TUPw23V9y
+ gjOWaejEBuP9kA/k1Ei5FfLOuljURkZ8ilqRlxgTSyUIVJnqi4=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 21, 2022 at 06:47:25PM -0700, Yu Zhao wrote:
-> On Mon, Feb 21, 2022 at 2:02 AM Mike Rapoport <rppt@kernel.org> wrote:
+On Wed, Feb 23, 2022 at 2:43 AM Palmer Dabbelt <palmer@dabbelt.com> wrote:
+>
+> On Tue, 01 Feb 2022 07:05:24 PST (-0800), guoren@kernel.org wrote:
+> > From: Guo Ren <guoren@linux.alibaba.com>
 > >
-> > On Tue, Feb 15, 2022 at 08:22:10PM -0700, Yu Zhao wrote:
-> > > > Please consider splitting "enable" and "features" attributes.
-> > >
-> > > How about s/Features/Components/?
-> >
-> > I meant to use two attributes:
-> >
-> > /sys/kernel/mm/lru_gen/enable for the main breaker, and
-> > /sys/kernel/mm/lru_gen/features (or components) for the branch breakers
-> 
-> It's a bit superfluous for my taste. I generally consider multiple
-> items to fall into the same category if they can be expressed by a
-> type of array, and I usually pack an array into a single file.
-> 
-> From your last review, I gauged this would be too overloaded for your
-> taste. So I'd be happy to make the change if you think two files look
-> more intuitive from user's perspective.
- 
-I do think that two attributes are more user-friendly, but I don't feel
-strongly about it.
+> > Currently, most 64-bit architectures (x86, parisc, powerpc, arm64,
+> > s390, mips, sparc) have supported COMPAT mode. But they all have
+> > history issues and can't use standard linux unistd.h. RISC-V would
+> > be first standard __SYSCALL_COMPAT user of include/uapi/asm-generic
+> > /unistd.h.
+>
+> TBH, I'd always sort of hoped we wouldn't have to do this: it's a lot of
+> ABI surface to keep around for a use case I'm not really sure is ever
+> going to get any traction (it's not like we have legacy 32-bit
+> userspaces floating around, the 32-bit userspace is newer than the
+> 64-bit userspace).
 
-> > > > As for the descriptions, what is the user-visible effect of these features?
-> > > > How different modes of clearing the access bit are reflected in, say, GUI
-> > > > responsiveness, database TPS, or probability of OOM?
-> > >
-> > > These remain to be seen :) I just added these switches in v7, per Mel's
-> > > request from the meeting we had. These were never tested in the field.
-> >
-> > I see :)
-> >
-> > It would be nice to have a description or/and examples of user-visible
-> > effects when there will be some insight on what these features do.
-> 
-> How does the following sound?
-> 
-> Clearing the accessed bit in large batches can theoretically cause
-> lock contention (mmap_lock), and if it happens the 0x0002 switch can
-> disable this feature. In this case the multigenerational LRU suffers a
-> minor performance degradation.
-> Clearing the accessed bit in non-leaf page table entries was only
-> verified on Intel and AMD, and if it causes problems on other x86
-> varieties the 0x0004 switch can disable this feature. In this case the
-> multigenerational LRU suffers a negligible performance degradation.
- 
-LGTM
+The low-end embedded market isn't usually that newsworthy, but the
+machines ship in huge quantities, and they all run 32-bit user
+space for good reasons:
 
-> > > > > +:Debugfs interface: ``/sys/kernel/debug/lru_gen`` has the following
-> > > >
-> > > > Is debugfs interface relevant only for datacenters?
-> > >
-> > > For the moment, yes.
-> >
-> > And what will happen if somebody uses these interfaces outside
-> > datacenters? As soon as there is a sysfs intefrace, somebody will surely
-> > play with it.
-> >
-> > I think the job schedulers might be the most important user of that
-> > interface, but the documentation should not presume it is the only user.
-> 
-> Other ideas are more like brainstorming than concrete use cases, e.g.,
-> for desktop users, these interface can in theory speed up hibernation
-> (suspend to disk); for VM users, they can again in theory support auto
-> ballooning. These niches are really minor and less explored compared
-> with the data center use cases which have been dominant.
-> 
-> I was hoping we could focus on the essential and take one step at a
-> time. Later on, if there is additional demand and resource, then we
-> expand to cover more use cases.
+The cheapest Linux systems at the moment use a low-end MIPS or
+Arm core with a single DDR2 (32MB to 128MB) or DDR3 (128MB
+to 512MB) memory chip that for now is a bit cheaper than a larger
+LP-DDR4 (256MB+). The smaller configurations will go away over
+time as they get outpriced by systems with LP-DDR4, but a 32-bit
+system with 256MB will keep beating a 64-bit-only system with
+512MB on price, and will run most workloads better than a 64-bit
+system with the same amount of RAM.
 
-Apparently I was not clear :)
+On the Arm side, I hope that these systems will migrate to Armv8
+based designs (Cortex-A53/A35 or newer) running 64-bit kernel
+with 32-bit user space to replace the currently dominant but aging
+32-bit Cortex-A7 cores. As you say, RISC-V is at a disadvantage
+here because there is no existing 32-bit ecosystem, but it may take
+a chunk of that market anyway based on licensing cost. Between
+doing this using pure 32-bit cores or on mixed 32/64-bit cores,
+I found Guo Ren's explanation very sensible, it lets you use the
+same chip both as a low-end embedded version with SiP
+memory, or using an external DDR3/LPDDR4 chip with enough
+capacity to run a generic 64-bit distro.
 
-I didn't mean that you should describe other use-cases, I rather suggested
-to make the documentation more neutral, e.g. using "a user writes to this
-file ..." instead of "job scheduler writes to a file ...". Or maybe add a
-sentence in the beginning of the "Data centers" section, for instance:
+> My assumption is that users who actually wanted the
+> memory savings (likely a very small number) would be better served with
+> rv64/ilp32, as that'll allow the larger registers that the hardware
+> supports.  From some earlier discussions it looks like rv64/ilp32 isn't
+> going to be allowed, though, so this seems like the only way to go.
 
-Data centers
-------------
+Right, between rv32 user space and a hypothetical rv64-ilp32 target,
+I think it's clear that the former is better because it means introducing
+only one fringe ABI rather than two incompatible ones with minor
+performance differences.
 
-+ A representative example of multigenerational LRU users are job
-schedulers.
-
-Data centers want to optimize job scheduling (bin packing) to improve
-memory utilizations. Job schedulers need to estimate whether a server
-
-
--- 
-Sincerely yours,
-Mike.
+        Arnd

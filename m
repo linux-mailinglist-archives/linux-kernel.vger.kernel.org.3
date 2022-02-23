@@ -2,142 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5663D4C1F7A
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 00:16:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E38C4C1F83
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 00:18:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244779AbiBWXQr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 18:16:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34612 "EHLO
+        id S244801AbiBWXS2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 18:18:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244770AbiBWXQo (ORCPT
+        with ESMTP id S244783AbiBWXS1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 18:16:44 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70D8858E54;
-        Wed, 23 Feb 2022 15:16:14 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 22F6EB82249;
-        Wed, 23 Feb 2022 23:16:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4EA67C340E7;
-        Wed, 23 Feb 2022 23:16:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645658171;
-        bh=dKUEp8Ja5zuNdUtklDNOmkRUIMIrk0tU73atuFZaF1A=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=NZYN4igKqV7hfvfXieNsnoEnfNnyOiaPzX5FHj5YExv/OqHhuVQ1pJdApX/wV/eLM
-         Ps+w12Su2eSEWxTt0pVq8o34Yc7zylU4GZvsj+vL4CiJYxEiUeUXG57/ZS86+tHrzJ
-         wvod45GXJZyAj6CwQTdFqQ71m/SnJTvuHiw3XVHiZV8RXOgKnV7vEp02s2ThNBFCpy
-         p6TMyWu7+jWIi0y/UHwFA92zpUaY9PRazUlBSq3vc7NueUHSEjAueCtP/knNIq+LaW
-         cYK6e6uFDz1qHUEueYgRiv6nfR5qvZMXgpUlqjbWxAuTRltYERxcmAtlJfyTiqqAyk
-         SemuTINnMhS3w==
-Date:   Wed, 23 Feb 2022 15:16:09 -0800
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
-        qemu-devel@nongnu.org, kvm@vger.kernel.org,
-        linux-s390@vger.kernel.org, adrian@parity.io, dwmw@amazon.co.uk,
-        acatan@amazon.com, graf@amazon.com, colmmacc@amazon.com,
-        sblbir@amazon.com, raduweis@amazon.com, jannh@google.com,
-        gregkh@linuxfoundation.org, tytso@mit.edu
-Subject: Re: [PATCH RFC v1 1/2] random: add mechanism for VM forks to
- reinitialize crng
-Message-ID: <YhbAOW/KbFW1CFkQ@sol.localdomain>
-References: <20220223131231.403386-1-Jason@zx2c4.com>
- <20220223131231.403386-2-Jason@zx2c4.com>
+        Wed, 23 Feb 2022 18:18:27 -0500
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 224D854190;
+        Wed, 23 Feb 2022 15:17:59 -0800 (PST)
+Received: by mail-pj1-x1031.google.com with SMTP id nh8-20020a17090b364800b001bc023c6f34so4075764pjb.3;
+        Wed, 23 Feb 2022 15:17:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=X4Hc3H6C7uhRqzAyT0iw9Lo49T1Lu66SQ9hcyKWnV4o=;
+        b=qYlvMCjBaD2BuPwXnC5wsAO5zGYaLTug/Sxsrj6VSV0cOPcWfwBG3BlcdvowvjRAkk
+         W9RqhXM1NX0rPUgMTjTpNKijxEs/colOSmZ9ENaSk4KJUaROd93sai4xGcyovWU4obTV
+         iuP2kQJfIDxIe0HdIPxycOiMWG6qtWsHEKeurldznNwob6CMyDxFavzEIu4VS/ClG4Yc
+         DAqMCpt7YNumPzpcEt5V+Taj8hhdr8VUtIgGSyhfmAfena+AUcI1DWCR8xAeQlSSzXkV
+         iKyVC6CvCUe0xcRY+Eayd4cx9yNT0gSuitv3dfYBW2M+PW012K0PZuSSzeiCZc95bSd/
+         Ggsg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=X4Hc3H6C7uhRqzAyT0iw9Lo49T1Lu66SQ9hcyKWnV4o=;
+        b=GrwS8XGljl+BPf9bmcZxfw5KrFoEbdqcDIRhEK3lXWonUtT3WtqYKRgCIGCBA0vfpC
+         e6ZlH38I57+pTr8MgO8Nowew7ActMRnNoG541UoYUe+JWfo9AZj+99pfGKAOJSm+7Y7e
+         6WlGWpQhdVfOQZ059+ae+BUkv2s41LELB+f8ry5TijWV2AxRZUl+GgyPzh3cJnztOeyk
+         5fINkjmV99tBB08Q02b2lF4r/SBkadajJ8kHw75o3P6rq9IVcnoGg1VGm7y6sTAKleqO
+         sJuoKjUjoFqPUCgGUwrN0cOFYGBDf+TSrh0GEkD1YDpuJ9Vvc1NVeY6h0xbPvf1lLRbD
+         Wixw==
+X-Gm-Message-State: AOAM532DM4CVGMK8FIJtC+x7ExrI4orwgfiUeSVTBd6SyGHTr4EiDGv4
+        kbP1DFFB1bL3cRAayMqj6KCPsHbwlK8sPg==
+X-Google-Smtp-Source: ABdhPJyoy5coDRQfUY9K5shvH1Tf8ZSDzoEUYocrjA/1PHekvfuJT3S81cM5jXWZ8f+HBez0BbgXsg==
+X-Received: by 2002:a17:90a:4306:b0:1b9:80b3:7a3d with SMTP id q6-20020a17090a430600b001b980b37a3dmr11387497pjg.66.1645658278439;
+        Wed, 23 Feb 2022 15:17:58 -0800 (PST)
+Received: from localhost.localdomain ([211.226.85.205])
+        by smtp.gmail.com with ESMTPSA id x3-20020a17090ad68300b001b8bcd47c35sm4056074pju.6.2022.02.23.15.17.56
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Wed, 23 Feb 2022 15:17:58 -0800 (PST)
+From:   Levi Yun <ppbuk5246@gmail.com>
+To:     keescook@chromium.org, ebiederm@xmission.com,
+        viro@zeniv.linux.org.uk
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Levi Yun <ppbuk5246@gmail.com>
+Subject: [PATCH] fs/exec.c: Avoid a race in formats
+Date:   Thu, 24 Feb 2022 08:17:52 +0900
+Message-Id: <20220223231752.52241-1-ppbuk5246@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220223131231.403386-2-Jason@zx2c4.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 23, 2022 at 02:12:30PM +0100, Jason A. Donenfeld wrote:
-> When a VM forks, we must immediately mix in additional information to
-> the stream of random output so that two forks or a rollback don't
-> produce the same stream of random numbers, which could have catastrophic
-> cryptographic consequences. This commit adds a simple API, add_vmfork_
-> randomness(), for that.
-> 
-> Cc: Theodore Ts'o <tytso@mit.edu>
-> Cc: Jann Horn <jannh@google.com>
-> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
-> ---
->  drivers/char/random.c  | 58 ++++++++++++++++++++++++++++++++++++++++++
->  include/linux/random.h |  1 +
->  2 files changed, 59 insertions(+)
-> 
-> diff --git a/drivers/char/random.c b/drivers/char/random.c
-> index 536237a0f073..29d6ce484d15 100644
-> --- a/drivers/char/random.c
-> +++ b/drivers/char/random.c
-> @@ -344,6 +344,46 @@ static void crng_reseed(void)
->  	}
->  }
->  
-> +/*
-> + * This mixes unique_vm_id directly into the base_crng key as soon as
-> + * possible, similarly to crng_pre_init_inject(), even if the crng is
-> + * already running, in order to immediately branch streams from prior
-> + * VM instances.
-> + */
-> +static void crng_vm_fork_inject(const void *unique_vm_id, size_t len)
-> +{
-> +	unsigned long flags, next_gen;
-> +	struct blake2s_state hash;
-> +
-> +	/*
-> +	 * Unlike crng_reseed(), we take the lock as early as possible,
-> +	 * since we don't want the RNG to be used until it's updated.
-> +	 */
-> +	spin_lock_irqsave(&base_crng.lock, flags);
-> +
-> +	/*
-> +	 * Also update the generation, while locked, as early as
-> +	 * possible. This will mean unlocked reads of the generation
-> +	 * will cause a reseeding of per-cpu crngs, and those will
-> +	 * spin on the base_crng lock waiting for the rest of this
-> +	 * operation to complete, which achieves the goal of blocking
-> +	 * the production of new output until this is done.
-> +	 */
-> +	next_gen = base_crng.generation + 1;
-> +	if (next_gen == ULONG_MAX)
-> +		++next_gen;
-> +	WRITE_ONCE(base_crng.generation, next_gen);
-> +	WRITE_ONCE(base_crng.birth, jiffies);
-> +
-> +	/* This is the same formulation used by crng_pre_init_inject(). */
-> +	blake2s_init(&hash, sizeof(base_crng.key));
-> +	blake2s_update(&hash, base_crng.key, sizeof(base_crng.key));
-> +	blake2s_update(&hash, unique_vm_id, len);
-> +	blake2s_final(&hash, base_crng.key);
-> +
-> +	spin_unlock_irqrestore(&base_crng.lock, flags);
-> +}
-[...]
-> +/*
-> + * Handle a new unique VM ID, which is unique, not secret, so we
-> + * don't credit it, but we do mix it into the entropy pool and
-> + * inject it into the crng.
-> + */
-> +void add_vmfork_randomness(const void *unique_vm_id, size_t size)
-> +{
-> +	add_device_randomness(unique_vm_id, size);
-> +	crng_vm_fork_inject(unique_vm_id, size);
-> +}
-> +EXPORT_SYMBOL_GPL(add_vmfork_randomness);
+Suppose a module registers its own binfmt (custom) and formats is like:
 
-I think we should be removing cases where the base_crng key is changed directly
-besides extraction from the input_pool, not adding new ones.  Why not implement
-this as add_device_randomness() followed by crng_reseed(force=true), where the
-'force' argument forces a reseed to occur even if the entropy_count is too low?
++---------+    +----------+    +---------+
+| custom  | -> |  format1 | -> | format2 |
++---------+    +----------+    +---------+
 
-- Eric
+and try to call unregister_binfmt with custom NOT in __exit stage.
+
+In that situation, below race scenario can happen.
+
+CPU 0						CPU1
+search_binary_handler				...
+	read_lock				unregister_binfmt(custom)
+	list_for_each_entry			< wait >
+	(get custom binfmt)			...
+	read_unlock				...
+	...					list_del
+	custom binfmt return -ENOEXEC
+	get next fmt entry (LIST_POISON1)
+
+Because CPU1 set the fmt->lh.next as LIST_POISON1,
+CPU 0 get next binfmt as LIST_POISON1.
+In that situation, CPU0 try to dereference LIST_POISON1 address and
+makes PANIC.
+
+To avoid this situation, check the fmt is valid.
+And if it isn't valid, return -EAGAIN.
+
+Signed-off-by: Levi Yun <ppbuk5246@gmail.com>
+---
+ fs/exec.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/fs/exec.c b/fs/exec.c
+index 79f2c9483302..2042a1232656 100644
+--- a/fs/exec.c
++++ b/fs/exec.c
+@@ -1720,6 +1720,12 @@ static int search_binary_handler(struct linux_binprm *bprm)
+  retry:
+ 	read_lock(&binfmt_lock);
+ 	list_for_each_entry(fmt, &formats, lh) {
++		if (fmt == LIST_POISON1) {
++			read_unlock(&binfmt_lock);
++			retval = -EAGAIN;
++			break;
++		}
++
+ 		if (!try_module_get(fmt->module))
+ 			continue;
+ 		read_unlock(&binfmt_lock);
+-- 
+2.34.1
+

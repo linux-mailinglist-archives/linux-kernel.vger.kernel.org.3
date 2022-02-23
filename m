@@ -2,99 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A54D4C180B
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 17:02:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 98AE24C1811
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 17:04:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242571AbiBWQDB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 11:03:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56314 "EHLO
+        id S242595AbiBWQEW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 11:04:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242583AbiBWQCs (ORCPT
+        with ESMTP id S242589AbiBWQEO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 11:02:48 -0500
-Received: from mail-oo1-f42.google.com (mail-oo1-f42.google.com [209.85.161.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D4F86D39C;
-        Wed, 23 Feb 2022 08:02:19 -0800 (PST)
-Received: by mail-oo1-f42.google.com with SMTP id s203-20020a4a3bd4000000b003191c2dcbe8so22888785oos.9;
-        Wed, 23 Feb 2022 08:02:19 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=SnHAJ2jXJaVVjE1oqZGwvuQytS4K0cKMmmVsJjHc5pk=;
-        b=cmlhd8svXculh72aqZrwvwv6LDzoc9l7X83KA0mIFJ4nMQjNbB8GJnZhWINfmOrWIu
-         RQy9GCoVDo3uT0bRQeWm+E+2Z09aQKKwlWP/veik3B5DFaoLYiRjIpJEt65B6nYXILqm
-         G/vF5ihXJ5sWir1ddrSob6MqeKmbCvPNtf7avkvLaHgGDMEtq9OT+Xew2zbxapmSAOkB
-         pbPcaqJ8e+0gAhamdhyeazmMNNwhJ+FVKukhRFliWJUzJd7skDzNezN13RMaFbAeE+e6
-         Gf4VCpa0oBKAbLhn/yTrOaTvEqUc9MJUUQqvTg0HiOrqiZvOVvH3j2+4ZJM7CvFRs1IO
-         l9VQ==
-X-Gm-Message-State: AOAM531tlxHzGRjv8HnFaPaA5G9FJ9i86nHViIyIC8to8z+82oxZoYZL
-        zyp20uIg5/r6rTgCUY/fLQ==
-X-Google-Smtp-Source: ABdhPJw8XWn4z29aClQvUF5kk1BY9mwbXLVBQPAYTLP4JVYBwZtzfi//QgYZpCES82OuILp12HV5sQ==
-X-Received: by 2002:a4a:a8c2:0:b0:319:4f4:18ea with SMTP id r2-20020a4aa8c2000000b0031904f418eamr65183oom.20.1645632138616;
-        Wed, 23 Feb 2022 08:02:18 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id w28sm9647ott.14.2022.02.23.08.02.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Feb 2022 08:02:17 -0800 (PST)
-Received: (nullmailer pid 1012060 invoked by uid 1000);
-        Wed, 23 Feb 2022 16:02:16 -0000
-Date:   Wed, 23 Feb 2022 10:02:16 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org, Agathe Porte <agathe.porte@nokia.com>,
-        Jean Delvare <jdelvare@suse.com>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Krzysztof Adamski <krzysztof.adamski@nokia.com>,
-        Rob Herring <robh+dt@kernel.org>
-Subject: Re: [PATCH v6 1/2] dt-bindings: hwmon: add tmp464.yaml
-Message-ID: <YhZaiAIq7xUig+Wj@robh.at.kernel.org>
-References: <20220222220937.18728-1-linux@roeck-us.net>
+        Wed, 23 Feb 2022 11:04:14 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4107AC1149;
+        Wed, 23 Feb 2022 08:03:46 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 02341B81E07;
+        Wed, 23 Feb 2022 16:03:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0674DC340E7;
+        Wed, 23 Feb 2022 16:03:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1645632223;
+        bh=jWeqBXnmhv/yp6ESTH9OA8NuBmEWEyuUdhFPVPzAZGc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Hdc0lrA5dZRtIeA1RbNiQdoue/GFBd1uExyV5sEiImDGn9g8/0gnRnDq0hvxi4n2r
+         v9O0f1M7TmK0c8lx+ozjSuDDz9e8c1PY0MtvWUMMlDY8fxkcE+//9igW8MESSZn74/
+         uRYM/PUkLjQMaLa4jGCskJB1lUymU+lOib7KSWxA=
+Date:   Wed, 23 Feb 2022 17:03:40 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     Robin Murphy <robin.murphy@arm.com>,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Joerg Roedel <joro@8bytes.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>, kvm@vger.kernel.org,
+        rafael@kernel.org, David Airlie <airlied@linux.ie>,
+        linux-pci@vger.kernel.org,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Diana Craciun <diana.craciun@oss.nxp.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Will Deacon <will@kernel.org>,
+        Stuart Yoder <stuyoder@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        linux-kernel@vger.kernel.org, Li Yang <leoyang.li@nxp.com>,
+        iommu@lists.linux-foundation.org,
+        Jacob jun Pan <jacob.jun.pan@intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>
+Subject: Re: [PATCH v6 02/11] driver core: Add dma_cleanup callback in
+ bus_type
+Message-ID: <YhZa3D5Xwv5oZm7L@kroah.com>
+References: <1acb8748-8d44-688d-2380-f39ec820776f@arm.com>
+ <20220222151632.GB10061@nvidia.com>
+ <3d4c3bf1-fed6-f640-dc20-36d667de7461@arm.com>
+ <20220222235353.GF10061@nvidia.com>
+ <171bec90-5ea6-b35b-f027-1b5e961f5ddf@linux.intel.com>
+ <880a269d-d39d-bab3-8d19-b493e874ec99@arm.com>
+ <20220223134627.GO10061@nvidia.com>
+ <YhY/a9wTjmYXsuwt@kroah.com>
+ <20220223140901.GP10061@nvidia.com>
+ <20220223143011.GQ10061@nvidia.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220222220937.18728-1-linux@roeck-us.net>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20220223143011.GQ10061@nvidia.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 22 Feb 2022 14:09:36 -0800, Guenter Roeck wrote:
-> From: Agathe Porte <agathe.porte@nokia.com>
+On Wed, Feb 23, 2022 at 10:30:11AM -0400, Jason Gunthorpe wrote:
+> On Wed, Feb 23, 2022 at 10:09:01AM -0400, Jason Gunthorpe wrote:
+> > On Wed, Feb 23, 2022 at 03:06:35PM +0100, Greg Kroah-Hartman wrote:
+> > > On Wed, Feb 23, 2022 at 09:46:27AM -0400, Jason Gunthorpe wrote:
+> > > > On Wed, Feb 23, 2022 at 01:04:00PM +0000, Robin Murphy wrote:
+> > > > 
+> > > > > 1 - tmp->driver is non-NULL because tmp is already bound.
+> > > > >   1.a - If tmp->driver->driver_managed_dma == 0, the group must currently be
+> > > > > DMA-API-owned as a whole. Regardless of what driver dev has unbound from,
+> > > > > its removal does not release someone else's DMA API (co-)ownership.
+> > > > 
+> > > > This is an uncommon locking pattern, but it does work. It relies on
+> > > > the mutex being an effective synchronization barrier for an unlocked
+> > > > store:
+> > > > 
+> > > > 				      WRITE_ONCE(dev->driver, NULL)
+> > > 
+> > > Only the driver core should be messing with the dev->driver pointer as
+> > > when it does so, it already has the proper locks held.  Do I need to
+> > > move that to a "private" location so that nothing outside of the driver
+> > > core can mess with it?
+> > 
+> > It would be nice, I've seen a abuse and mislocking of it in drivers
 > 
-> Add basic description of the tmp464 driver DT bindings.
-> 
-> Signed-off-by: Agathe Porte <agathe.porte@nokia.com>
-> Cc: Krzysztof Adamski <krzysztof.adamski@nokia.com>
-> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
-> ---
-> v6:
-> - Model ti,n-factor as int32 instead of int8.
-> 
-> v5:
-> - Dropped ti,n-factor from channel@0 example. Added additional
->   channel to examples to show positive ti,n-factor property.
-> 
-> v4:
-> - No changes
-> 
-> v3:
-> - Addedd support for TMP468.
-> - Changed number of channels from 0..3 (which was wrong anyway) to 0..8.
-> - Changed value range for ti,n-factor to int8, with an example for
->   a negative value.
-> - Added myself as driver maintainer.
-> 
->  .../devicetree/bindings/hwmon/ti,tmp464.yaml  | 114 ++++++++++++++++++
->  MAINTAINERS                                   |   7 ++
->  2 files changed, 121 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/hwmon/ti,tmp464.yaml
-> 
+> Though to be clear, what Robin is describing is still keeping the
+> dev->driver stores in dd.c, just reading it in a lockless way from
+> other modules.
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+"other modules" should never care if a device has a driver bound to it
+because instantly after the check happens, it can change so what ever
+logic it wanted to do with that knowledge is gone.
+
+Unless the bus lock is held that the device is on, but that should be
+only accessable from within the driver core as it controls that type of
+stuff, not any random other part of the kernel.
+
+And in looking at this, ick, there are loads of places in the kernel
+that are thinking that this pointer being set to something actually
+means something.  Sometimes it does, but lots of places, it doesn't as
+it can change.
+
+In a semi-related incident right now, we currently have a syzbot failure
+in the usb gadget code where it was manipulating the ->driver pointer
+directly and other parts of the kernel are crashing.  See
+https://lore.kernel.org/r/PH0PR11MB58805E3C4CF7D4C41D49BFCFDA3C9@PH0PR11MB5880.namprd11.prod.outlook.com
+for the thread.
+
+I'll poke at this as a background task to try to clean up over time.
+
+thanks,
+
+greg k-h

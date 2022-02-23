@@ -2,86 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 386B44C1EA8
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 23:36:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E09A34C1EB6
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 23:40:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244519AbiBWWf7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 17:35:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42350 "EHLO
+        id S234947AbiBWWlB convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 23 Feb 2022 17:41:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244205AbiBWWfq (ORCPT
+        with ESMTP id S229948AbiBWWlA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 17:35:46 -0500
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2B89B50E15
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 14:35:15 -0800 (PST)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-317-KFU4k30iPlqkQIaat-4inA-1; Wed, 23 Feb 2022 22:35:12 +0000
-X-MC-Unique: KFU4k30iPlqkQIaat-4inA-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.28; Wed, 23 Feb 2022 22:35:11 +0000
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.028; Wed, 23 Feb 2022 22:35:11 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Armin Wolf' <W_Armin@gmx.de>,
-        =?utf-8?B?J1BhbGkgUm9ow6FyJw==?= <pali@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>
-CC:     "jdelvare@suse.com" <jdelvare@suse.com>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "linux-assembly@vger.kernel.org" <linux-assembly@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v4] hwmon: (dell-smm) Improve assembly code
-Thread-Topic: [PATCH v4] hwmon: (dell-smm) Improve assembly code
-Thread-Index: AQHYKBTirAZeqAMZek+3xwZDQ1am1ayf9nqAgAG05QCAAA5MMA==
-Date:   Wed, 23 Feb 2022 22:35:11 +0000
-Message-ID: <63a04993864f4c08923ed753d83cdf37@AcuMS.aculab.com>
-References: <20220220190851.17965-1-W_Armin@gmx.de>
- <20220222165432.GA255373@roeck-us.net> <20220222175150.qs32v4outislnqj6@pali>
- <b3cecea1376f4080929f47da2529685c@AcuMS.aculab.com>
- <4b5ca065-06a4-c1ff-ed16-3bbb038ee6e0@gmx.de>
-In-Reply-To: <4b5ca065-06a4-c1ff-ed16-3bbb038ee6e0@gmx.de>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Wed, 23 Feb 2022 17:41:00 -0500
+Received: from mxchg04.rrz.uni-hamburg.de (mxchg04.rrz.uni-hamburg.de [134.100.38.114])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37E8828D;
+        Wed, 23 Feb 2022 14:40:30 -0800 (PST)
+X-Virus-Scanned: by University of Hamburg ( RRZ / mgw04.rrz.uni-hamburg.de )
+Received: from exchange.uni-hamburg.de (UN-EX-MR08.uni-hamburg.de [134.100.84.75])
+        by mxchg04.rrz.uni-hamburg.de (Postfix) with ESMTPS;
+        Wed, 23 Feb 2022 23:40:28 +0100 (CET)
+Received: from plasteblaster (89.244.207.27) by UN-EX-MR08.uni-hamburg.de
+ (134.100.84.75) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2375.18; Wed, 23 Feb
+ 2022 23:40:28 +0100
+Date:   Wed, 23 Feb 2022 23:40:27 +0100
+From:   "Dr. Thomas Orgis" <thomas.orgis@uni-hamburg.de>
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        <linux-kernel@vger.kernel.org>, <stable@vger.kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+Subject: Re: [PATCH 5.4 32/80] taskstats: Cleanup the use of task->exit_code
+Message-ID: <20220223234027.30566235@plasteblaster>
+In-Reply-To: <87sfsa8nmf.fsf@email.froward.int.ebiederm.org>
+References: <20220221084915.554151737@linuxfoundation.org>
+        <20220221084916.628257481@linuxfoundation.org>
+        <20220221234610.0d23e2e0@plasteblaster>
+        <87sfsa8nmf.fsf@email.froward.int.ebiederm.org>
+Organization: =?UTF-8?B?VW5pdmVyc2l0w6R0?= Hamburg
+X-Mailer: Claws Mail (x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Originating-IP: [89.244.207.27]
+X-ClientProxiedBy: UN-EX-MR02.uni-hamburg.de (134.100.84.69) To
+ UN-EX-MR08.uni-hamburg.de (134.100.84.75)
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RnJvbTogQXJtaW4gV29sZg0KPiBTZW50OiAyMyBGZWJydWFyeSAyMDIyIDIxOjM5DQouLi4NCj4g
-PiBBcyBmYXIgYXMgdGhpcyBwYXRjaCBnb2VzIEkgdGhpbmsgSSdkIGFkZCBhICdzdGMnIChzZXQg
-Y2FycnkpDQo+ID4gaW5zdHJ1Y3Rpb24gYmVmb3JlIHRoZSBmaXJzdCAnb3V0YicuDQo+ID4gVGhl
-biBpZiB0aGUgJ3NvbWV0aGluZyBtYWdpYyBoYXBwZW5zIGhlcmUnIGRvZXNuJ3QgaGFwcGVuIChi
-ZWNhdXNlDQo+ID4geW91IGFyZW4ndCBvbiB0aGUgcmlnaHQga2luZCBvZiBtb3RoZXJib2FyZCkg
-dGhlIGFjdGlvbiBmYWlscy4NCj4gPg0KPiA+IAlEYXZpZA0KPiANCj4gV2UgYWxyZWFkeSBjaGVj
-ayBmb3Igc3VjaCBzY2VuYXJpb3MgYnkgY2hlY2tpbmcgaWYgZWF4IGNoYW5nZWQuDQo+IEkgd291
-bGQgbm90IHNldCB0aGUgY2FycnkgZmxhZyBiZWZvcmUgZG9pbmcgYSBTTU0gY2FsbCBzaW5jZSBp
-bQ0KPiBub3Qgc3VyZSBpZiB0aGUgZmlybXdhcmUgY29kZSBhbHdheXMgY2xlYXJzIHRoZSBjYXJy
-eSBmbGFnIHdoZW4NCj4gdGhlIGNhbGwgd2FzIHN1Y2Nlc3NmdWwuDQo+IElmIGZvciBleGFtcGxl
-IHRoZSBmaXJtd2FyZSBjb2RlIG9ubHkgc2V0cyB0aGUgY2FycnkgZmxhZyBvbg0KPiBlcnJvciBh
-bmQgb3RoZXJ3aXNlIGlnbm9yZXMgdGhlIGNhcnJ5IGZsYWcsIHdlIG1pZ2h0IGNyZWF0ZSBzb21l
-DQo+IGZhbHNlIG5lZ2F0aXZlcyB3aGVuIGEgc3VjY2Vzc2Z1bCBTTU0gY2FsbCBsZWF2ZXMgdGhl
-IGNhcnJ5IGZsYWcgc2V0Lg0KDQpJZiB5b3UgYXJlIHdvcnJpZWQgYWJvdXQgdGhhdCB5b3Ugc2hv
-dWxkIGJlIGNsZWFyaW5nIGNhcnJ5IG9uIGVudHJ5Lg0KDQoJRGF2aWQNCg0KLQ0KUmVnaXN0ZXJl
-ZCBBZGRyZXNzIExha2VzaWRlLCBCcmFtbGV5IFJvYWQsIE1vdW50IEZhcm0sIE1pbHRvbiBLZXlu
-ZXMsIE1LMSAxUFQsIFVLDQpSZWdpc3RyYXRpb24gTm86IDEzOTczODYgKFdhbGVzKQ0K
+Am Tue, 22 Feb 2022 17:53:12 -0600
+schrieb "Eric W. Biederman" <ebiederm@xmission.com>: 
 
+> How do you figure?
+
+I admit that I am struggling with understanding where exit codes come
+from in the non-usual cases. During my taskstats tests, I played with
+writing a multithreaded application that does call pthread_exit() in
+the main thread (pid==tgid), for example. I slowly had to learn just
+how messy this can be …
+
+Is it clearly defined what the exitcode of a task as part of a process
+is/should/can mean, as opposed to the process as a whole?
+
+> For single-threaded processes ac_exitcode would always be reasonable,
+> and be what userspace passed to exit(3).
+
+Yes. That is the one case where we all know what we are dealing with;-)
+
+> For multi-threaded processes ac_exitcode before my change was set to
+> some completely arbitrary value for the thread whose tgid == tid.
+
+Isn't the only place where it really makes sense to set the exitcode
+when the last task of the process exits? I guess that was the intention
+of the earlier code — with the same wrong assumption that I fell victim
+to for quite some time: That the group leader (first task, tgid == pid)
+always exits last.
+
+I do not know in which cases group member threads have meaningful exit
+codes different from the last one (which is the one returned for the
+process in whole … ?). I'd love to see the exact reasoning on how
+multithreading got mapped into kernel tasks which used to track only
+single-threaded processes before.
+
+> With my change the value returned
+> is at least well defined.
+
+But defined to what?
+
+> Now maybe it would have been better to flag the bug fix with a version
+> number.  Unfortunately I did not even realize taskstats had a version
+> number.  I just know the code made no sense.
+
+Well, fixing a bug that has been there from the beginning (of adding
+multithreading, at least) is a significant change that one might want
+to know about. And I do think that it fits to thouroughly fix these
+issues that relate to identifying threads and processes (the shameless
+plug of my taskstats patch that I'm working on since 2018, and only got
+right in 2022, finally — I hope), while at that.
+
+
+Alrighty then,
+
+Thomas
+
+-- 
+Dr. Thomas Orgis
+HPC @ Universität Hamburg

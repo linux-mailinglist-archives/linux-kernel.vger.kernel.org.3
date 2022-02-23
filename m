@@ -2,89 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8C2C4C0A5D
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 04:38:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C5044C0A60
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 04:39:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236866AbiBWDi4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 22:38:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38580 "EHLO
+        id S236943AbiBWDjb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 22:39:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237925AbiBWDir (ORCPT
+        with ESMTP id S236199AbiBWDj3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 22:38:47 -0500
-Received: from new2-smtp.messagingengine.com (new2-smtp.messagingengine.com [66.111.4.224])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5E643D4B8;
-        Tue, 22 Feb 2022 19:38:20 -0800 (PST)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 543F7580209;
-        Tue, 22 Feb 2022 22:38:17 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute2.internal (MEProxy); Tue, 22 Feb 2022 22:38:17 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
-        cc:cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; bh=oWdrlKGF1NWtcC
-        xtncJT3dMTsSPn/4SNUwtDAP8s094=; b=WmKlJIecYXldLnuTQkF3fQ+rDgnbxM
-        PndaTMe0JL8/bQi2B0KEW9m7QVbYSBKbuRm/OgkC20PSmWybJvUy1Rsxf5WAzlqE
-        Da893Neus6o1VOfEWWqZSyPngnal2Ds0C991oXXwrtyThoUx54SM0iHLLmj2ZIO/
-        5SvCZZCYN3IVTaUNebPGs0vdiHVrUF6izjM2ONcTkOWTljdHbPeOVVIVGrO59XQA
-        1n8jlih4ufPm+t7WZR0ViDqsaAhj42Iy760ExDcVZnMXVbtGDDpjUAssgAWLZlor
-        YcpM4VJIlNSkUjUHlmiJIkzjZuUMseEqmcVMkGSZotJUxauVwpwJ62Vg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; bh=oWdrlKGF1NWtcCxtncJT3dMTsSPn/4SNUwtDAP8s0
-        94=; b=Dk5I5bhMoKG0LwVTVmOJi4mFCM2abdDIVHVyQLV8UThRojqVgT6FtP6y1
-        Nw0h6wfCUUfTR72MqTDvF00RUqjultaI2C8i5QMuCrQteqt2w5stzDJkVVj6n+1w
-        riii+/oAE6OvI5Fq29J9xvxnwaGSyBA41cvhPOxwUKT5eUovFUQkbEXSDQSCM0vz
-        6aVCz0/duHGZMUDLA1QNa3/RGOKahvzJi7rHCjboKABdGJXsy9vwfwjsz0lRkEFR
-        kH1UT0paGmrHFvmqBPbb2Ui81qw33DX0IEc+Xdtbvd4+QGcX9V6HwLWdh/OFEPER
-        WQyl8aU3FXapkKDTlQwzIzZck1IDg==
-X-ME-Sender: <xms:KKwVYhn8YIsfyF01rhsH18ZaIwXk6DXfyYA3shP6RqVtMkagpm4jPg>
-    <xme:KKwVYs3oy9cHpZq7ZK0tq-X9o-JU2M4yYzwobni-opgSYeQnA3TlEalcbS4YC3x7j
-    XBcybw4eVGshrN4xA>
-X-ME-Received: <xmr:KKwVYnqlVm9Nt6aqIaDzhdRdHDtcOCiVV7j98tko8EXF7mwIoeypiKa5hLRZXTMor-Wkb8_WA8GpJZJyVgbM34fDnGoG09aB-i0Mgt1uW5Ine0bRm_Fkymb3uQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrkeelgdeitdcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefuvfhfhffkffgfgggjtgfgsehtjeertddtfeejnecuhfhrohhmpefurghmuhgv
-    lhcujfholhhlrghnugcuoehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgqeenucggtf
-    frrghtthgvrhhnpefgveffteelheffjeeukedvkedviedtheevgeefkeehueeiieeuteeu
-    gfettdeggeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
-    hmpehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhg
-X-ME-Proxy: <xmx:KawVYhl9692HpbV-WvrBsol48vcKd087_7VoSGw_x_d7w1IQiPpKFA>
-    <xmx:KawVYv19-EzbZqUdyxn9u5e4kheNj-YA7kbbPDuSuCb8y0Kz0oyi9A>
-    <xmx:KawVYguPIRM4aUbqQitloEChQl7dNMplyLKBA_cAi5q8jIErwlCgFg>
-    <xmx:KawVYhwWLlzFb0XCEKPon3VyeYkprQLdtCaGvqVFJc_g0NC2oy7w_g>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 22 Feb 2022 22:38:16 -0500 (EST)
-Subject: Re: [PATCH v10 08/18] dt-bindings: arm: sunxi: Add two H616 board
- compatible strings
-To:     Andre Przywara <andre.przywara@arm.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>
-Cc:     Maxime Ripard <mripard@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
-        Rob Herring <robh@kernel.org>,
-        Ondrej Jirman <megous@megous.com>,
-        Icenowy Zheng <icenowy@aosc.io>,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-References: <20220211122643.1343315-1-andre.przywara@arm.com>
- <20220211122643.1343315-9-andre.przywara@arm.com>
-From:   Samuel Holland <samuel@sholland.org>
-Message-ID: <1d6d8f0f-c528-f1e2-2be5-a844776aade4@sholland.org>
-Date:   Tue, 22 Feb 2022 21:38:15 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.6.0
+        Tue, 22 Feb 2022 22:39:29 -0500
+Received: from mail-vs1-xe29.google.com (mail-vs1-xe29.google.com [IPv6:2607:f8b0:4864:20::e29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D8903D4AC;
+        Tue, 22 Feb 2022 19:39:01 -0800 (PST)
+Received: by mail-vs1-xe29.google.com with SMTP id j3so1774106vsi.7;
+        Tue, 22 Feb 2022 19:39:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=LvRpWJinftwqb1VQH9ytrPGNaXqDypv0JPsj78l9+FY=;
+        b=eyOfnPKtUVgM0Mz7hg2JjW4Pk/cOsbb3Md/CMGUoOB6YmvT4mWNt+HKzTz4ai5IMj4
+         NnyWY5PzJxHtn1xXyW2OPkEgSG7DYn+zaC9ZWRwjK2jqiJN8Yugp+oKw+re8Q/0Lfr+q
+         /aB+Lz0oBq9VJvVBsKnlUhFITt66Pm4TQgrAD6o5HJm98Lbe/iRriGEiN+vZvfTLMlQf
+         3P53F77Zyl3kNK4bGdYDdawYfykRZcz0M7zYJSi6sMGRcKEyuQMqN3+SydppMRGUmwL+
+         d6KCoMSQX+abiZ7sWPWU29QNTpYf0uobYQSCeABP5bxxfvMytyScizk4f+vb8nMa2+5S
+         mnZw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=LvRpWJinftwqb1VQH9ytrPGNaXqDypv0JPsj78l9+FY=;
+        b=D4Dp6yVvsBXegekXzLtD/16MDNnar5Z81rtE5EaiQH3uHa0HLM40jDVWgp9wjfmXAn
+         G760GD1pJ44tA4vEjOX4vWh1jjLcTrWP1hlDzSjCfkACpJcQ+kZeioWRoZybrXiWlKc1
+         mYmei8HZ+sXUFOUzvujVSoCHiqWhWCr4BBaEAzUHRvMYRUYvWHwL2ZbrxEeTpJnUK2l4
+         1qhx74hohEbrKuMqG6p1ghm8ozgG5zwMdsh2tewYsjU4rbZKJNgcvuBWveQwYdnHOKal
+         uhXOwh19LQyKFPYbzwOOscWXw47Z3AqyaPkTybtWeWCA6hirT+YXFUOPzVkuSQ6ym/0q
+         Idyg==
+X-Gm-Message-State: AOAM532AvV0twYSW4nxaaDI3f88K2Vaz2ROrkfa51yUFGvog8kqgAb+P
+        bKwtibF+8v1x0tE4xArlYoNsXbZ+TiicUIFFXw==
+X-Google-Smtp-Source: ABdhPJz9tQfelHz+P+qJV477ABXt4WJYhC7UjoC/2gG4A4NNsfZVAU8hDEjpRLH19nxzc+D6GfYbeIYfdqQfZmCrLpk=
+X-Received: by 2002:a05:6102:370f:b0:31b:60dc:4f76 with SMTP id
+ s15-20020a056102370f00b0031b60dc4f76mr12203672vst.2.1645587540488; Tue, 22
+ Feb 2022 19:39:00 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20220211122643.1343315-9-andre.przywara@arm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <20220220035321.3870-1-warp5tw@gmail.com> <20220220035321.3870-6-warp5tw@gmail.com>
+ <YhN8OGIR9eSCus8E@latitude> <CACD3sJbMZ-CT4htPUBqyswghAC+j8PgJ_z-VdA38yC+6HFrF+w@mail.gmail.com>
+ <YhUIP4pvoGBUohCE@latitude>
+In-Reply-To: <YhUIP4pvoGBUohCE@latitude>
+From:   Tyrone Ting <warp5tw@gmail.com>
+Date:   Wed, 23 Feb 2022 11:38:47 +0800
+Message-ID: <CACD3sJZtJ_vrd=xQQ5P1c1L8dZ9LgjZhE2-76SFyQ+jX9NPNVg@mail.gmail.com>
+Subject: Re: [PATCH v2 05/11] i2c: npcm: Remove unused clock node
+To:     =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
+Cc:     avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
+        venture@google.com, yuenn@google.com, benjaminfair@google.com,
+        robh+dt@kernel.org, krzysztof.kozlowski@canonical.com,
+        semen.protsenko@linaro.org, yangyicong@hisilicon.com,
+        wsa@kernel.org, jie.deng@intel.com, sven@svenpeter.dev,
+        bence98@sch.bme.hu, christophe.leroy@csgroup.eu,
+        lukas.bulwahn@gmail.com, olof@lixom.net, arnd@arndb.de,
+        digetx@gmail.com, andriy.shevchenko@linux.intel.com,
+        tali.perry@nuvoton.com, Avi.Fishman@nuvoton.com,
+        tomer.maimon@nuvoton.com, KWLIU@nuvoton.com, JJLIU0@nuvoton.com,
+        kfting@nuvoton.com, devicetree@vger.kernel.org,
+        openbmc@lists.ozlabs.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -92,45 +80,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/11/22 6:26 AM, Andre Przywara wrote:
-> Signed-off-by: Andre Przywara <andre.przywara@arm.com>
-> Acked-by: Rob Herring <robh@kernel.org>
-> ---
->  Documentation/devicetree/bindings/arm/sunxi.yaml | 10 ++++++++++
->  1 file changed, 10 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/arm/sunxi.yaml b/Documentation/devicetree/bindings/arm/sunxi.yaml
-> index c8a3102c0fde..185ced5da6b8 100644
-> --- a/Documentation/devicetree/bindings/arm/sunxi.yaml
-> +++ b/Documentation/devicetree/bindings/arm/sunxi.yaml
-> @@ -853,6 +853,11 @@ properties:
->            - const: yones-toptech,bs1078-v2
->            - const: allwinner,sun6i-a31s
->  
-> +      - description: X96 Mate TV box
-> +        items:
-> +          - const: hechuang,x96-mate
+Hi Jonathan:
 
-I don't see this vendor in vendor-prefixes.yaml. I would have expected
-checkpatch.pl to warn about this.
+Got it and thank you.
 
-Regards,
-Samuel
+Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net> =E6=96=BC 2022=E5=B9=B42=
+=E6=9C=8822=E6=97=A5 =E9=80=B1=E4=BA=8C =E4=B8=8B=E5=8D=8811:59=E5=AF=AB=E9=
+=81=93=EF=BC=9A
+>
+> On Tue, Feb 22, 2022 at 10:15:04AM +0800, Tyrone Ting wrote:
+> > Hi Jonathan:
+> >
+> > Thank you for your comments and please find my reply next to your comme=
+nts.
+> >
+> > Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net> =E6=96=BC 2022=E5=B9=
+=B42=E6=9C=8821=E6=97=A5 =E9=80=B1=E4=B8=80 =E4=B8=8B=E5=8D=887:49=E5=AF=AB=
+=E9=81=93=EF=BC=9A
+> > >
+> > > On Sun, Feb 20, 2022 at 11:53:15AM +0800, Tyrone Ting wrote:
+> > > > From: Tali Perry <tali.perry1@gmail.com>
+> > > >
+> > > > Remove unused npcm750-clk node.
+> > >
+> > > You're not actually removing a node, for example in the sense of remo=
+ving a
+> > > devicetree node from a devicetree.
+> > >
+> > > So, I think "Remove unused variable clk_regmap." would be a better
+> > > description.
+> > >
+> >
+> > May I modify the description according to your input and attach
+> > "Reviewed-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>"
+> > onto this commit in the next version of the patch set?
+>
+> Yes!
+>
+>
+> Jonathan
 
-> +          - const: allwinner,sun50i-h616
-> +
->        - description: Xunlong OrangePi
->          items:
->            - const: xunlong,orangepi
-> @@ -953,4 +958,9 @@ properties:
->            - const: xunlong,orangepi-zero-plus2-h3
->            - const: allwinner,sun8i-h3
->  
-> +      - description: Xunlong OrangePi Zero 2
-> +        items:
-> +          - const: xunlong,orangepi-zero2
-> +          - const: allwinner,sun50i-h616
-> +
->  additionalProperties: true
-> 
-
+Best regards,
+Tyrone

@@ -2,115 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F23CC4C151A
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 15:07:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A3784C151C
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 15:07:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241389AbiBWOHp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 09:07:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57056 "EHLO
+        id S241394AbiBWOII (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 09:08:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241028AbiBWOHn (ORCPT
+        with ESMTP id S241415AbiBWOHy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 09:07:43 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 543B8BF51;
-        Wed, 23 Feb 2022 06:07:15 -0800 (PST)
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21NBkkoI005347;
-        Wed, 23 Feb 2022 14:06:57 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=giAP6wf/sHfU/F8R0GQ7i0F9uvxdMVq7CyEOMnyvgjM=;
- b=An/wMY7C7rNrohXrlxMe4zHiQEVeLpsuGmN+KTnFWCe4kQQYXVBXL6uoHdq7lERCx4cY
- xS3ZtwWxouy9OS6uD8gOHqE+h74OCFiXGc4RgXgtzRa9C6kq0/OSVbd8+fA166VT3G9z
- FS7APCZO/AhJ/4pTRFayAKYx3t2PwKjp08DYejxn5eLvmlSiMl51ATuVJjVxRmmNKNRz
- pkppY8r9ltMjUr9ssTC+kRi63vqPw9z36AzEGgazL3T3MImfokd03tnPnF88+BaFR5YW
- B1Wp1YVz01FtY1cBbf/rJ5VWQ3v8iuZJAvCdZm2q41wrXFAxldWiohT0q67TqkanZvsG Dw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3edmbrb1ne-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 23 Feb 2022 14:06:57 +0000
-Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 21NCg33S015007;
-        Wed, 23 Feb 2022 14:06:57 GMT
-Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3edmbrb1mh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 23 Feb 2022 14:06:56 +0000
-Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
-        by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 21NE34fu019543;
-        Wed, 23 Feb 2022 14:06:55 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma01fra.de.ibm.com with ESMTP id 3ear698wu3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 23 Feb 2022 14:06:55 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 21NE6pM546530994
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 23 Feb 2022 14:06:51 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A137611C054;
-        Wed, 23 Feb 2022 14:06:51 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4E16711C05C;
-        Wed, 23 Feb 2022 14:06:49 +0000 (GMT)
-Received: from sig-9-65-80-154.ibm.com (unknown [9.65.80.154])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed, 23 Feb 2022 14:06:49 +0000 (GMT)
-Message-ID: <959c990eaaea1521424e5a4a9132d4460b8ed4aa.camel@linux.ibm.com>
-Subject: Re: [PATCH v10 25/27] ima: Show owning user namespace's uid and gid
- when displaying policy
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Stefan Berger <stefanb@linux.ibm.com>,
-        linux-integrity@vger.kernel.org
-Cc:     serge@hallyn.com, christian.brauner@ubuntu.com,
-        containers@lists.linux.dev, dmitry.kasatkin@gmail.com,
-        ebiederm@xmission.com, krzysztof.struczynski@huawei.com,
-        roberto.sassu@huawei.com, mpeters@redhat.com, lhinds@redhat.com,
-        lsturman@redhat.com, puiterwi@redhat.com, jejb@linux.ibm.com,
-        jamjoom@us.ibm.com, linux-kernel@vger.kernel.org,
-        paul@paul-moore.com, rgb@redhat.com,
-        linux-security-module@vger.kernel.org, jmorris@namei.org
-Date:   Wed, 23 Feb 2022 09:06:48 -0500
-In-Reply-To: <20220201203735.164593-26-stefanb@linux.ibm.com>
-References: <20220201203735.164593-1-stefanb@linux.ibm.com>
-         <20220201203735.164593-26-stefanb@linux.ibm.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
+        Wed, 23 Feb 2022 09:07:54 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5685612638
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 06:07:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1645625245;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=4k1PzZK1Kax3nbhknai2MMEy80MJCvgpY9X9cvLB3sE=;
+        b=fmr681ha/kryzQNBuo0B79W7EwdKBatSiBkqdecIo7ySphvWLggo+0o+2dTD0Odk1khpSa
+        t5vRk2gc8dX2d/Y3uN7PCoA8eVhA/3YcrXaQio/vTw9L55NcTPj9z6OMK3wm0A7jrRkhyp
+        4oSzG/sCRpTTR5Wwu6unhVU1WOc4xXQ=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-517-APKG05gpPSSfCuA75QqXiw-1; Wed, 23 Feb 2022 09:07:22 -0500
+X-MC-Unique: APKG05gpPSSfCuA75QqXiw-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 307311091DA4;
+        Wed, 23 Feb 2022 14:07:21 +0000 (UTC)
+Received: from starship (unknown [10.40.195.190])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id CBE387DE37;
+        Wed, 23 Feb 2022 14:07:19 +0000 (UTC)
+Message-ID: <7d0787b44a484941964c2e5d4e85c1a60c73602c.camel@redhat.com>
+Subject: Re: [PATCH v2 02/18] KVM: x86: do not deliver asynchronous page
+ faults if CR0.PG=0
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+Cc:     seanjc@google.com
+Date:   Wed, 23 Feb 2022 16:07:18 +0200
+In-Reply-To: <20220217210340.312449-3-pbonzini@redhat.com>
+References: <20220217210340.312449-1-pbonzini@redhat.com>
+         <20220217210340.312449-3-pbonzini@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: x1xQIQAq2Ug6LkXLkKhAQBkRwZvH6XOG
-X-Proofpoint-GUID: soBUUwd1EP1GCojYK5iAOjtBZhvXDqhv
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-02-23_06,2022-02-23_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0 mlxscore=0
- impostorscore=0 phishscore=0 adultscore=0 clxscore=1015 suspectscore=0
- priorityscore=1501 mlxlogscore=937 bulkscore=0 malwarescore=0 spamscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2201110000
- definitions=main-2202230081
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-02-01 at 15:37 -0500, Stefan Berger wrote:
-> Show the uid and gid values relative to the user namespace that is
-> currently active. The effect of this changes is that when one displays
-> the policy from the user namespace that originally set the policy,
-> the same uid and gid values are shown in the policy as those that were
-> used when the policy was set.
+On Thu, 2022-02-17 at 16:03 -0500, Paolo Bonzini wrote:
+> Enabling async page faults is nonsensical if paging is disabled, but
+> it is allowed because CR0.PG=0 does not clear the async page fault
+> MSR.  Just ignore them and only use the artificial halt state,
+> similar to what happens in guest mode if async #PF vmexits are disabled.
+
+Well in theory someone could use KVM for emulating DOS programs, and
+use async #PF for on demand paging. I would question sanity of author
+of such hypervisor though...
+
+
+The only thing I would add is to add a mention of the CR0.PG=1 restriction in 
+Documentation/virt/kvm/msr.rst.
+
+Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
+
+Best regards,
+	Maxim Levitsky
+
 > 
-> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+> Given the increasingly complex logic, and the nicer code if the new
+> "if" is placed last, opportunistically change the "||" into a chain
+> of "if (...) return false" statements.
+> 
+> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+> ---
+>  arch/x86/kvm/x86.c | 22 ++++++++++++++++++----
+>  1 file changed, 18 insertions(+), 4 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> index 99a58c25f5c2..b912eef5dc1a 100644
+> --- a/arch/x86/kvm/x86.c
+> +++ b/arch/x86/kvm/x86.c
+> @@ -12270,14 +12270,28 @@ static inline bool apf_pageready_slot_free(struct kvm_vcpu *vcpu)
+>  
+>  static bool kvm_can_deliver_async_pf(struct kvm_vcpu *vcpu)
+>  {
+> -	if (!vcpu->arch.apf.delivery_as_pf_vmexit && is_guest_mode(vcpu))
+> +
+> +	if (!kvm_pv_async_pf_enabled(vcpu))
+>  		return false;
+>  
+> -	if (!kvm_pv_async_pf_enabled(vcpu) ||
+> -	    (vcpu->arch.apf.send_user_only && static_call(kvm_x86_get_cpl)(vcpu) == 0))
+> +	if (vcpu->arch.apf.send_user_only &&
+> +	    static_call(kvm_x86_get_cpl)(vcpu) == 0)
+>  		return false;
+>  
+> -	return true;
+> +	if (is_guest_mode(vcpu)) {
+> +		/*
+> +		 * L1 needs to opt into the special #PF vmexits that are
+> +		 * used to deliver async page faults.
+> +		 */
+> +		return vcpu->arch.apf.delivery_as_pf_vmexit;
+> +	} else {
+> +		/*
+> +		 * Play it safe in case the guest does a quick real mode
+> +		 * foray.  The real mode IDT is unlikely to have a #PF
+> +		 * exception setup.
+> +		 */
+> +		return is_paging(vcpu);
+> +	}
+>  }
+>  
+>  bool kvm_can_do_async_pf(struct kvm_vcpu *vcpu)
 
-thanks,
-
-Reviewed-by:  Mimi Zohar <zohar@linux.ibm.com>
 

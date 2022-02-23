@@ -2,114 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF3A64C1B8C
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 20:13:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 442F74C1B8D
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 20:13:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244172AbiBWTM4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 14:12:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54946 "EHLO
+        id S244178AbiBWTOE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 14:14:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237932AbiBWTMy (ORCPT
+        with ESMTP id S233231AbiBWTOA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 14:12:54 -0500
-Received: from mail-qv1-xf2c.google.com (mail-qv1-xf2c.google.com [IPv6:2607:f8b0:4864:20::f2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA26331213
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 11:12:25 -0800 (PST)
-Received: by mail-qv1-xf2c.google.com with SMTP id ba20so10280768qvb.1
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 11:12:25 -0800 (PST)
+        Wed, 23 Feb 2022 14:14:00 -0500
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44A1931213
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 11:13:31 -0800 (PST)
+Received: by mail-ej1-x635.google.com with SMTP id hw13so54227491ejc.9
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 11:13:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=nWjAURTXXFUt4V9KPu3K0BgdcVkHvnbRCLY8V8ZLyTQ=;
-        b=gmhsmcTiDoYU7aSdGVFyN+rym7mHAfe/gELsswwblGvGEyBAIz3xKmzfy0IUiOaPvk
-         gvexjsWRALM3JhcrEUssGZ/CYBEKRPcbCWMIwiXtpGu/XwNWzWjauS33ywJ8jTFM/FdH
-         GTUbIauA+5k3WLUweM12er+GPgsxrcuHzYO+nMOYln6CPBbTc6LkjWMgzj0/fSQrVNgR
-         zDOEiBGeAsgKh2FRY0rwYCBMEQyJegVvSG/URKwYo1dDBWjoDBCfpqIRF2ycshUmtDS8
-         xxwQp9PJEJHGdFdYEZ9Q+3YIqo6vDmwJ2bfYkpba60bWkW4dYizaW6YHW8ZhdZ0JdXtx
-         3hfw==
+        d=gmail.com; s=20210112;
+        h=sender:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=KvNxmsK7om4nL0g4ISMz7hk28jUTX9RGKaudCuq0JlY=;
+        b=qvK/o2neNOE9fwRjjEgYLKlvcTiSSxUZMrznc5hxZwocp9ffqx2apCHysxGbeqGDi7
+         mH+RG4Wjj0AtY3gnZi2ySafbFWXK1qtl3uDAYuuaI3zMn7bzqLJptTrtySFiPKJr90Md
+         MmsNZNYMcgiWrabAktg9+MJENZ0B/SVsoZGG9GPaYZVoFsmG8DoLqgcb2LU1yWjIOwZI
+         iw1j6PSOpeWkcOhC7wFGKT7V1f3yDEw42P14B7kB549S5la2deEY19Op8vpkieCxXUj+
+         bJ6vl7EjMpwiogGguNzTckZRVTyDZspXb6NNEnAVuhl/6QYfj70OJ48w0GvhGigu2UiE
+         da8A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=nWjAURTXXFUt4V9KPu3K0BgdcVkHvnbRCLY8V8ZLyTQ=;
-        b=xQNmLXRxvQhYrr1rjhm+5YE2j61/J2fxqU6+kBzTv95ZdZBn12B7yJySktuKRm/ofG
-         KD8XC7RajcUyYpX0Rkn8JGPIb8uvnZ1xvLoSdjRppTNkWSusvCohPgreAkb1Jyc0ClL4
-         NNHH+P6M+P4rUcKuuYa/eWuowMcyThRnWlrjrOOSAGeAuID5jOrCuXicMcf8ZzKs883G
-         db70NBJ3iTIc3o2bBljav2coXytcHbB7nIdAOX275TVo0FIK+JuIMXtQN5BxCYTkaoQ6
-         HXFDHweAQMQV1lFwE5UigXKku/Fm3rc5zmkRhunJ9SpG3S526OJyoNNURRTUcSGSr3k1
-         HYmA==
-X-Gm-Message-State: AOAM532VcjZMblT6grM3bYIW1hWJhcLRCTOrHY4TTFC6ieYyi7cwWcMP
-        HwwGAAQ1iq1tCmkK4hh8ROnm2A==
-X-Google-Smtp-Source: ABdhPJxzoEo9EUkOhZuahOgNwguvUhyWayCfkdT5Cqa71z8iHTlwb9JaXlbVKc1MXzozbYCnwZBuRg==
-X-Received: by 2002:a0c:a9d7:0:b0:432:662d:e1b6 with SMTP id c23-20020a0ca9d7000000b00432662de1b6mr989319qvb.73.1645643544832;
-        Wed, 23 Feb 2022 11:12:24 -0800 (PST)
-Received: from ziepe.ca (hlfxns017vw-142-162-113-129.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.113.129])
-        by smtp.gmail.com with ESMTPSA id h18sm205742qke.61.2022.02.23.11.12.23
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
+         :mime-version:content-transfer-encoding;
+        bh=KvNxmsK7om4nL0g4ISMz7hk28jUTX9RGKaudCuq0JlY=;
+        b=a6RTmUhm2KbMIwmWHDKdrbQg993MyHp9euCLqajKVe5DwoFjTZJZ7hHh55F6UU0hYV
+         XGJEOGPjb3IQFLQYDU3ylmnjKa2epRCbNyKrCE0TuUg77vdHK5ft7AwFit288rolm3TO
+         ivhirUf9lha+t2VxMbO7x3tE40XnhgTzQmX7ZyHULkBEBaV8/lsNQubUUA7C/7+3FhCK
+         EgP0bMkjNSZuL24pqYFxsddGOiL+7Sbzx34GvxA4NsxJfb0C2u69DQc9+F/RPVyCw4Hd
+         lhMSqcQeuH/lBCz5OHK3P7MGeCm3dtW7ZmDuw/HrB088tUwmunaaj5nG/7YvjHEitvGx
+         kMCw==
+X-Gm-Message-State: AOAM530MuSPyX7J37lDtPlURgIPTnBIo2eWEa6e5ZXz0b8kAk+iNPZWK
+        6QB5cEFq99UeXuIiFCvf8jw=
+X-Google-Smtp-Source: ABdhPJyjtTfEFnQp3At+KO8m88JiOl5OJKsTdy/54iBndqcYTE66kpgLLNFrjFkUjL5zNNBDKQ4+ZA==
+X-Received: by 2002:a17:906:8a5b:b0:6ce:2a05:813b with SMTP id gx27-20020a1709068a5b00b006ce2a05813bmr864005ejc.589.1645643609692;
+        Wed, 23 Feb 2022 11:13:29 -0800 (PST)
+Received: from stitch.. ([2a01:4262:1ab:c:6aa:aa1e:3637:3a48])
+        by smtp.gmail.com with ESMTPSA id z22sm304172edd.45.2022.02.23.11.13.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Feb 2022 11:12:23 -0800 (PST)
-Received: from jgg by mlx with local (Exim 4.94)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1nMx3m-001hEw-Qg; Wed, 23 Feb 2022 15:12:22 -0400
-Date:   Wed, 23 Feb 2022 15:12:22 -0400
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Jakob <jakobkoschel@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Arnd Bergman <arnd@arndb.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
-        Cristiano Giuffrida <c.giuffrida@vu.nl>,
-        "Bos, H.J." <h.j.bos@vu.nl>
-Subject: Re: [RFC PATCH 04/13] vfio/mdev: remove the usage of the list
- iterator after the loop
-Message-ID: <20220223191222.GC10361@ziepe.ca>
-References: <20220217184829.1991035-1-jakobkoschel@gmail.com>
- <20220217184829.1991035-5-jakobkoschel@gmail.com>
- <20220218151216.GE1037534@ziepe.ca>
- <6BA40980-554F-45E2-914D-5E4CD02FF21C@gmail.com>
- <CAHk-=wir=xabJ73Upk1dsuoMKWTTjTfeLFJ=p2S0yRYYaxW4fA@mail.gmail.com>
+        Wed, 23 Feb 2022 11:13:29 -0800 (PST)
+Sender: Emil Renner Berthing <emil.renner.berthing@gmail.com>
+From:   Emil Renner Berthing <kernel@esmil.dk>
+To:     linux-riscv@lists.infradead.org
+Cc:     Emil Renner Berthing <kernel@esmil.dk>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Alexandre Ghiti <alex@ghiti.fr>,
+        Jisheng Zhang <jszhang@kernel.org>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] riscv: Fix auipc+jalr relocation range checks
+Date:   Wed, 23 Feb 2022 20:12:57 +0100
+Message-Id: <20220223191257.143694-1-kernel@esmil.dk>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wir=xabJ73Upk1dsuoMKWTTjTfeLFJ=p2S0yRYYaxW4fA@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 23, 2022 at 11:06:03AM -0800, Linus Torvalds wrote:
+RISC-V can do PC-relative jumps with a 32bit range using the following
+two instructions:
 
-> And as such, you not only can't dereference it, but you also shouldn't
-> even compare pointer values - because the pointer arithmetic that was
-> valid for loop entries is not valid for the HEAD entry that is
-> embedded in another type. So the pointer arithmetic might have turned
-> it into a pointer outside the real container of the HEAD, and might
-> actually match something else.
+	auipc	t0, imm20	; t0 = PC + imm20 * 2^12
+	jalr	ra, t0, imm12	; ra = PC + 4, PC = t0 + imm12
 
-Yes, this is what I had put together as well about this patch, and I
-think it is OK as-is. In this case the list head is in the .bss of a
-module so I don't think it is very likely that the type confused
-container_of() will alias a kalloc result, but it is certainly
-technically wrong as-is.
+Crucially both the 20bit immediate imm20 and the 12bit immediate imm12
+are treated as two's-complement signed values. For this reason the
+immediates are usually calculated like this:
 
-> So elsewhere I suggested that the fix to "you can't use the pointer
-> outside the loop" be made to literally disallow it (using C99 for-loop
-> variables seems the cleanest model), and have the compiler refuse to
-> touch code that tries to use the loop iterator outside.
+	imm20 = (offset + 0x800) >> 12
+	imm12 = offset & 0xfff
 
-Oh yes, that would be really nice solution.
+..where offset is the signed offset from the auipc instruction. When
+the 11th bit of offset is 0 the addition of 0x800 doesn't change the top
+20 bits and imm12 considered positive. When the 11th bit is 1 the carry
+of the addition by 0x800 means imm20 is one higher, but since imm12 is
+then considered negative the two's complement representation means it
+all cancels out nicely.
 
-Jason 
+However, this addition by 0x800 (2^11) means an offset greater than or
+equal to 2^31 - 2^11 would overflow so imm20 is considered negative and
+result in a backwards jump. Similarly the lower range of offset is also
+moved down by 2^11 and hence the true 32bit range is
+
+	[-2^31 - 2^11, 2^31 - 2^11)
+
+Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
+---
+ arch/riscv/kernel/module.c | 21 ++++++++++++++++-----
+ 1 file changed, 16 insertions(+), 5 deletions(-)
+
+diff --git a/arch/riscv/kernel/module.c b/arch/riscv/kernel/module.c
+index 68a9e3d1fe16..4a48287513c3 100644
+--- a/arch/riscv/kernel/module.c
++++ b/arch/riscv/kernel/module.c
+@@ -13,6 +13,19 @@
+ #include <linux/pgtable.h>
+ #include <asm/sections.h>
+ 
++/*
++ * The auipc+jalr instruction pair can reach any PC-relative offset
++ * in the range [-2^31 - 2^11, 2^31 - 2^11)
++ */
++static bool riscv_insn_valid_32bit_offset(ptrdiff_t val)
++{
++#ifdef CONFIG_32BIT
++	return true;
++#else
++	return (-(1L << 31) - (1L << 11)) <= val && val < ((1L << 31) - (1L << 11));
++#endif
++}
++
+ static int apply_r_riscv_32_rela(struct module *me, u32 *location, Elf_Addr v)
+ {
+ 	if (v != (u32)v) {
+@@ -95,7 +108,7 @@ static int apply_r_riscv_pcrel_hi20_rela(struct module *me, u32 *location,
+ 	ptrdiff_t offset = (void *)v - (void *)location;
+ 	s32 hi20;
+ 
+-	if (offset != (s32)offset) {
++	if (!riscv_insn_valid_32bit_offset(offset)) {
+ 		pr_err(
+ 		  "%s: target %016llx can not be addressed by the 32-bit offset from PC = %p\n",
+ 		  me->name, (long long)v, location);
+@@ -197,10 +210,9 @@ static int apply_r_riscv_call_plt_rela(struct module *me, u32 *location,
+ 				       Elf_Addr v)
+ {
+ 	ptrdiff_t offset = (void *)v - (void *)location;
+-	s32 fill_v = offset;
+ 	u32 hi20, lo12;
+ 
+-	if (offset != fill_v) {
++	if (!riscv_insn_valid_32bit_offset(offset)) {
+ 		/* Only emit the plt entry if offset over 32-bit range */
+ 		if (IS_ENABLED(CONFIG_MODULE_SECTIONS)) {
+ 			offset = module_emit_plt_entry(me, v);
+@@ -224,10 +236,9 @@ static int apply_r_riscv_call_rela(struct module *me, u32 *location,
+ 				   Elf_Addr v)
+ {
+ 	ptrdiff_t offset = (void *)v - (void *)location;
+-	s32 fill_v = offset;
+ 	u32 hi20, lo12;
+ 
+-	if (offset != fill_v) {
++	if (!riscv_insn_valid_32bit_offset(offset)) {
+ 		pr_err(
+ 		  "%s: target %016llx can not be addressed by the 32-bit offset from PC = %p\n",
+ 		  me->name, (long long)v, location);
+-- 
+2.35.1
+

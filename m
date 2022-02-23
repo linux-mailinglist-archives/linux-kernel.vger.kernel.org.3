@@ -2,101 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D687F4C1D4F
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 21:45:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E3844C1D61
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 21:54:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241625AbiBWUqS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 15:46:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42234 "EHLO
+        id S241892AbiBWUzK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 15:55:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234184AbiBWUqR (ORCPT
+        with ESMTP id S241838AbiBWUzI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 15:46:17 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0E8B4DF42;
-        Wed, 23 Feb 2022 12:45:48 -0800 (PST)
-Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21NKF4qL025832;
-        Wed, 23 Feb 2022 20:45:33 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=P9w0LjnRQCmW7EIl3CKX1esvC4RSB5f2OeuFKGEk13c=;
- b=g6KGVONqoR3epSR3Sk66IR8orfxzPjeOotsnFTpRs7+3dIYV1ITLfSo89Kjyfa4E18N5
- jhoVGW+F/0mRKKq7azCingFJLIk6gzk7x2TN2LT6nkA4eYyYttA0lKALn+G1AiafyKrv
- pQvvQ+PdMxsQ2KutXWK1vQ7M3Q9E9OtKGfd1c4uTzi7sfybvl1UEuSjOpNpUKUw5W6xS
- JwsggxjwduLXrLmJuHfqFqk5HEkF8TKcOHIcuDxyBUbXff8rEC1ocryd80CtXyYIV7op
- DYJCXbnzEbOTzojJYL4hJCbK3RZBzaFtUtVxQGKqtXZv6XBRkWkJ9kmhrjqkrFyqOoGY Sw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3edq0j8awa-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 23 Feb 2022 20:45:32 +0000
-Received: from m0098393.ppops.net (m0098393.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 21NJhCRd002967;
-        Wed, 23 Feb 2022 20:45:32 GMT
-Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3edq0j8avw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 23 Feb 2022 20:45:32 +0000
-Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
-        by ppma04dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 21NKi590010487;
-        Wed, 23 Feb 2022 20:45:31 GMT
-Received: from b03cxnp07029.gho.boulder.ibm.com (b03cxnp07029.gho.boulder.ibm.com [9.17.130.16])
-        by ppma04dal.us.ibm.com with ESMTP id 3ear6bgqwv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 23 Feb 2022 20:45:31 +0000
-Received: from b03ledav005.gho.boulder.ibm.com (b03ledav005.gho.boulder.ibm.com [9.17.130.236])
-        by b03cxnp07029.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 21NKjRJo34537964
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 23 Feb 2022 20:45:27 GMT
-Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B615EBE063;
-        Wed, 23 Feb 2022 20:45:27 +0000 (GMT)
-Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 97F11BE058;
-        Wed, 23 Feb 2022 20:45:26 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-        by b03ledav005.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Wed, 23 Feb 2022 20:45:26 +0000 (GMT)
-Message-ID: <46156a90-d6a6-a0cc-247a-3ceb29f1cf75@linux.ibm.com>
-Date:   Wed, 23 Feb 2022 15:45:26 -0500
+        Wed, 23 Feb 2022 15:55:08 -0500
+X-Greylist: delayed 330 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 23 Feb 2022 12:54:37 PST
+Received: from mx02.puc.rediris.es (outbound3sev.lav.puc.rediris.es [130.206.19.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C35B64DF7E
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 12:54:37 -0800 (PST)
+Received: from mta-out03.sim.rediris.es (mta-out03.sim.rediris.es [130.206.24.45])
+        by mx02.puc.rediris.es  with ESMTP id 21NKmHO5005544-21NKmHO7005544
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
+        Wed, 23 Feb 2022 21:48:17 +0100
+Received: from mta-out03.sim.rediris.es (localhost.localdomain [127.0.0.1])
+        by mta-out03.sim.rediris.es (Postfix) with ESMTPS id 6237930004B1;
+        Wed, 23 Feb 2022 21:48:17 +0100 (CET)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by mta-out03.sim.rediris.es (Postfix) with ESMTP id 4F364306B1F1;
+        Wed, 23 Feb 2022 21:48:17 +0100 (CET)
+X-Amavis-Modified: Mail body modified (using disclaimer) -
+        mta-out03.sim.rediris.es
+Received: from mta-out03.sim.rediris.es ([127.0.0.1])
+        by localhost (mta-out03.sim.rediris.es [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id SWZS_Scr0pjj; Wed, 23 Feb 2022 21:48:17 +0100 (CET)
+Received: from lt-gp.iram.es (haproxy02.sim.rediris.es [130.206.24.70])
+        by mta-out03.sim.rediris.es (Postfix) with ESMTPA id 33B8430004B1;
+        Wed, 23 Feb 2022 21:48:16 +0100 (CET)
+Date:   Wed, 23 Feb 2022 21:48:09 +0100
+From:   Gabriel Paubert <paubert@iram.es>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] powerpc/32: Clear volatile regs on syscall exit
+Message-ID: <YhadiVbwao/p2N7o@lt-gp.iram.es>
+References: <28b040bd2357a1879df0ca1b74094323f778a472.1645636285.git.christophe.leroy@csgroup.eu>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v10 26/27] ima: Limit number of policy rules in
- non-init_ima_ns
-Content-Language: en-US
-To:     Mimi Zohar <zohar@linux.ibm.com>, linux-integrity@vger.kernel.org
-Cc:     serge@hallyn.com, christian.brauner@ubuntu.com,
-        containers@lists.linux.dev, dmitry.kasatkin@gmail.com,
-        ebiederm@xmission.com, krzysztof.struczynski@huawei.com,
-        roberto.sassu@huawei.com, mpeters@redhat.com, lhinds@redhat.com,
-        lsturman@redhat.com, puiterwi@redhat.com, jejb@linux.ibm.com,
-        jamjoom@us.ibm.com, linux-kernel@vger.kernel.org,
-        paul@paul-moore.com, rgb@redhat.com,
-        linux-security-module@vger.kernel.org, jmorris@namei.org
-References: <20220201203735.164593-1-stefanb@linux.ibm.com>
- <20220201203735.164593-27-stefanb@linux.ibm.com>
- <5e4a862917785972281bbcb483404da01b71e801.camel@linux.ibm.com>
- <479f09e7-0d39-0281-45ef-5cce4861d24d@linux.ibm.com>
- <8a4f9cb6cab5ba04eb61e346d0fca16efa4c6703.camel@linux.ibm.com>
-From:   Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <8a4f9cb6cab5ba04eb61e346d0fca16efa4c6703.camel@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: YT3eMPXUv5ygLu07mnIhImeTmpUHMT9V
-X-Proofpoint-GUID: SGRKohjMfnoameOg4zdckiqP5pmL7WYe
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-02-23_09,2022-02-23_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
- priorityscore=1501 phishscore=0 adultscore=0 lowpriorityscore=0
- malwarescore=0 bulkscore=0 clxscore=1015 mlxscore=0 impostorscore=0
- spamscore=0 mlxlogscore=999 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2201110000 definitions=main-2202230116
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <28b040bd2357a1879df0ca1b74094323f778a472.1645636285.git.christophe.leroy@csgroup.eu>
+X-FE-Policy-ID: 23:8:0:SYSTEM
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; d=iram.es; s=DKIM; c=relaxed/relaxed;
+ h=date:from:to:cc:subject:message-id:references:mime-version:content-type;
+ bh=bz6Q3MCl84at11A0B3YpTI0E5vC6G8qpl+kHI5iMXXA=;
+ b=EDuB3ZsP42vMN0Hn/eWIC0hn2u5caeCWIsjU5g6NFDBpt+ZoFWaW+M6QLurdDP5epHqd1ixNrV18
+        P0L9k0KpCQ4UGRA2eAe3kUkafu82cXab5JA5gUZ4d9toOaJMb/V6PqCATIcjL7OdBElWbxSUPG9F
+        g8MfNbEvjJqx7/9zaSlXdrAWwl1a+V96yAsgoSnEw3YG6Q7jfEkFxtEQ8eHnQ90G+PGzRdokM6lU
+        /baXqEFOXkWYpqTOuLALCmRq8RjbOj0/ilwsXpa+IxkvbhoY5GLmFpYnLfrA3uAEY5qg8m6FxOB9
+        SJOUDbTkTo82sUSMAk2nrz2HwnX5zQj4uk+tQA==
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,
         RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -105,55 +68,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Feb 23, 2022 at 06:11:36PM +0100, Christophe Leroy wrote:
+> Commit a82adfd5c7cb ("hardening: Introduce CONFIG_ZERO_CALL_USED_REGS")
+> added zeroing of used registers at function exit.
+> 
+> At the time being, PPC64 clears volatile registers on syscall exit but
+> PPC32 doesn't do it for performance reason.
+> 
+> Add that clearing in PPC32 syscall exit as well, but only when
+> CONFIG_ZERO_CALL_USED_REGS is selected.
+> 
+> On an 8xx, the null_syscall selftest gives:
+> - Without CONFIG_ZERO_CALL_USED_REGS		: 288 cycles
+> - With CONFIG_ZERO_CALL_USED_REGS		: 305 cycles
+> - With CONFIG_ZERO_CALL_USED_REGS + this patch	: 319 cycles
+> 
+> Note that (independent of this patch), with pmac32_defconfig,
+> vmlinux size is as follows with/without CONFIG_ZERO_CALL_USED_REGS:
+> 
+>    text	   	data	    bss	    dec	    hex		filename
+> 9578869		2525210	 194400	12298479	bba8ef	vmlinux.without
+> 10318045	2525210  194400	13037655	c6f057	vmlinux.with
+> 
+> That is a 7.7% increase on text size, 6.0% on overall size.
+> 
+> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+> ---
+>  arch/powerpc/kernel/entry_32.S | 15 +++++++++++++++
+>  1 file changed, 15 insertions(+)
+> 
+> diff --git a/arch/powerpc/kernel/entry_32.S b/arch/powerpc/kernel/entry_32.S
+> index 7748c278d13c..199f23092c02 100644
+> --- a/arch/powerpc/kernel/entry_32.S
+> +++ b/arch/powerpc/kernel/entry_32.S
+> @@ -151,6 +151,21 @@ syscall_exit_finish:
+>  	bne	3f
+>  	mtcr	r5
+>  
+> +#ifdef CONFIG_ZERO_CALL_USED_REGS
+> +	/* Zero volatile regs that may contain sensitive kernel data */
+> +	li	r0,0
+> +	li	r4,0
+> +	li	r5,0
+> +	li	r6,0
+> +	li	r7,0
+> +	li	r8,0
+> +	li	r9,0
+> +	li	r10,0
+> +	li	r11,0
+> +	li	r12,0
+> +	mtctr	r0
+> +	mtxer	r0
 
-On 2/23/22 12:04, Mimi Zohar wrote:
-> On Wed, 2022-02-23 at 11:37 -0500, Stefan Berger wrote:
->> On 2/23/22 10:38, Mimi Zohar wrote:
->>> On Tue, 2022-02-01 at 15:37 -0500, Stefan Berger wrote:
->>>> Limit the number of policy rules one can set in non-init_ima_ns to a
->>>> hardcoded 1024 rules. If the user attempts to exceed this limit by
->>>> setting too many additional rules, emit an audit message with the cause
->>>> 'too-many-rules' and simply ignore the newly added rules.
->>> This paragraph describes 'what' you're doing, not 'why'.  Please prefix
->>> this paragraph with a short, probably one sentence, reason for the
->>> change.
->>>> Switch the accounting for the memory allocated for IMA policy rules to
->>>> GFP_KERNEL_ACCOUNT so that cgroups kernel memory accounting takes effect.
->>> Does this change affect the existing IMA policy rules for init_ima_ns?
->> There's typically no cgroup for the int_ima_ns, so not effect on
->> init_ima_ns.
->>
->> Here's the updated text:
->>
->> Limit the number of policy rules one can set in non-init_ima_ns to a
->> hardcoded 1024 rules to restrict the amount of memory used for IMA's
->> policy.
-> The question is "why" there should be a difference between the
-> init_ima_ns and non-init_ima_ns cases.  Perhaps something like, "Only
+Here, I'm almost sure that on some processors, it would be better to
+separate mtctr form mtxer. mtxer is typically very expensive (pipeline
+flush) but I don't know what's the best ordering for the average core.
 
+And what about lr? Should it also be cleared?
 
-Chistian had suggested it to not have the number of policy rules unbounded.
+	Gabriel
 
+> +#endif
+>  1:	lwz	r2,GPR2(r1)
+>  	lwz	r1,GPR1(r1)
+>  	rfi
+> -- 
+> 2.34.1
+> 
+ 
 
-> host root with CAP_SYS_ADMIN may write init_ima_ns policy rules, but in
-> the non-init_ima_ns case root in the namespace with CAP_MAC_ADMIN
-> privileges may write IMA policy rules.  Limit the total number of IMA
-> policy rules per namespace."
-
-What does it have to do with CAP_SYS_ADMIN and CAP_MAC_ADMIN and why 
-mention these here? It seem primarily a limit of number of rules to 
-avoid huge kernel memory consumption in the case that a cgroup limit for 
-memory was not set up.
-
-
->
->>   Ignore the added rules if the user attempts to exceed this
->> limit by setting too many additional rules.
->>
->> Switch the accounting for the memory allocated for IMA policy rules to
->> GFP_KERNEL_ACCOUNT so that cgroups kernel memory accounting takes effect.
->> This switch has no effect on the init_ima_ns.
-> thanks,
->
-> Mimi
->

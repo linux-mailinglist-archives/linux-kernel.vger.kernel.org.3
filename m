@@ -2,71 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBAF64C1A13
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 18:45:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D1754C1A0F
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 18:44:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243484AbiBWRpT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 12:45:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34202 "EHLO
+        id S243441AbiBWRpG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 12:45:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243470AbiBWRpM (ORCPT
+        with ESMTP id S243436AbiBWRpF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 12:45:12 -0500
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EA4C41FA6;
-        Wed, 23 Feb 2022 09:44:44 -0800 (PST)
-Received: by mail-pf1-x436.google.com with SMTP id d17so16074561pfl.0;
-        Wed, 23 Feb 2022 09:44:44 -0800 (PST)
+        Wed, 23 Feb 2022 12:45:05 -0500
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41DA241334;
+        Wed, 23 Feb 2022 09:44:37 -0800 (PST)
+Received: by mail-ej1-x62f.google.com with SMTP id r13so30979629ejd.5;
+        Wed, 23 Feb 2022 09:44:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=It4RGSp99XFUqiUGEzXdClglbEaTDz0QTVwNHQyEiwQ=;
-        b=Y2CbrD5i5hegSugvrCKPHNPj29y8yZMoMRlLD0Wa8YKfeyXV3iIA9/W/w4QhNQCnvb
-         nRCsJYfZPlNwk/+TREo0CqyVtZDAIgVRKn3UvyW1YcLtnU8nKtkimcfr2ZI4fJOs7aC3
-         hOcltgb26dFihXregXwTYOspYF2buy36P3VCq6mmcWMgXJRI7nqcCKzz9vTIxtWnMbxh
-         83OyF+aOj9tIJ706ZuM4kOGuiEoMt41L4DFQAzo7cNJC2cRoDQPuoqB/twJlmojud1wO
-         GnMzlmdHQ+DuZGRZr/udfxmNHO28HBEhTM9Mg9vVxTDyQfGBCEX4G03dTEPSSh0pi9+f
-         HV4w==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=zltyPlxW3uDjVlzYzIgB3L+AcBjct0C7Tq5+1WnfdfA=;
+        b=MtL9zxsAt5x8IvEGyjWYZzL7bO2nEo7tbm4EPwvey0Od7Qeyny+KlyEtLYAYnCFAOo
+         IwsMc0QKTjRIdxwVUClWJT4KmDm3p44THHMXBcIuRX4btcVlNgyeeEP5BcFisGQ5kEz3
+         /Ij3ZlCgTAHJSyWo96klCsI9AfWVhyTzFBIPApiGy7BiErsisOuO3E42zPBoIW2aQORv
+         +PSThX5C2dl9Cr2rVVG/nUKjccqI6BcNeWP2MlCFGUp3v4VtR/FJBx4YFQe5Ef6CPdAH
+         jA29k3g695S5sUSgsIUXRxEQsDpLYoCUSQ07z+1Z5xVWcdPHaBza3luRLdSklXNr+ea7
+         XxBQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=It4RGSp99XFUqiUGEzXdClglbEaTDz0QTVwNHQyEiwQ=;
-        b=Lc50exEBMbVw5wqiNXXj/XOocfpCPXiu1WGoAzFvNz3SHvp9v40Lg/3Oh43xOaopmk
-         YbwjNgwg8CX2pqJBKsm/bANVRZmCXONXmtlS0xWJjaeoo+iu5n7hVK0YhdFUgeDELRsu
-         PfGFQrEsoYtaNvL/vK9zxI2ySVD73Bmn2X++hDnQyZQVit1CiPhJ4IKxs88tLRveV/uN
-         QAhTBgh6LjadD00DpTKZW4lEa62NCoYe2UFmJimHhMULsGzyLi+r7BJ8sA7/wzuAXo6q
-         5XNB+hwcnchRd2cQtUEGRDH4WAPGQ21Tnq69NZl+yz4raA6H0r0MPqRXh8FNCg1HyRof
-         K7bQ==
-X-Gm-Message-State: AOAM530ecwB4w6yCp0IQiWLpP/a5Xqx1Is/rLzcwgkRD5WoO7Z+/9llI
-        TVUp0DNFOmZYXhSZbqY1TgRkziIKTS4=
-X-Google-Smtp-Source: ABdhPJw0SEQoMfxCDE2uBJBGJz4DQcbPvWLFTM/332KGvcRXUyWWAaCmjPtmpPPswO+vrYKctJjDPw==
-X-Received: by 2002:a63:5945:0:b0:375:799a:281d with SMTP id j5-20020a635945000000b00375799a281dmr513413pgm.605.1645638283593;
-        Wed, 23 Feb 2022 09:44:43 -0800 (PST)
-Received: from 7YHHR73.igp.broadcom.net (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
-        by smtp.gmail.com with ESMTPSA id g18sm127422pfc.108.2022.02.23.09.44.41
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=zltyPlxW3uDjVlzYzIgB3L+AcBjct0C7Tq5+1WnfdfA=;
+        b=0phdmWKBAzoq1j7629JEEXx6LbBtAeFjJ6YYSYycTLZBHb2cc1qyTPN3uMOd/6OqVT
+         ao5nVRgbGX7kwp7F6BJreL3cghjUNwh+G86iMb9V551mKDtZyjMIDnPyyXpqA3Bv7T5X
+         7cqVPe/r0VLvZpy3f2SyGTxWPUvP4IFzY8kKGf2kN7XZTO+yJMH8M99lxKWdj75DSW3q
+         jNWXDG3LnNYuAcyxUJFQLgcE6h5Lf8BSDwBbV8KxPQNkVhjZX5aVkmJjr6aKcSAqVA/W
+         Sd6r/PZLaMmTFRaxfE6uyABHL40T9h7Mix2daITvrrs/oe7mP6R8Y0/7chi9mF9Nf8fp
+         yL/Q==
+X-Gm-Message-State: AOAM530cyo0Q/NVPMLfDVlLTw86q5m9qu6mQm1q7TYY8tJrvw9XRG/9d
+        DEDb1r71IQTI2lbH/of62cI=
+X-Google-Smtp-Source: ABdhPJwLpI4uj3x+MhFJtBONe9+bf12BVfOHGoZcMd1saToiRSokzyqCBoS52vq5G3Bkf53sbIrJug==
+X-Received: by 2002:a17:906:4313:b0:6b8:b3e5:a46 with SMTP id j19-20020a170906431300b006b8b3e50a46mr618427ejm.417.1645638275698;
+        Wed, 23 Feb 2022 09:44:35 -0800 (PST)
+Received: from krava (ip-89-102-25-98.net.upcbroadband.cz. [89.102.25.98])
+        by smtp.gmail.com with ESMTPSA id m18sm130578eje.145.2022.02.23.09.44.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Feb 2022 09:44:42 -0800 (PST)
-From:   Florian Fainelli <f.fainelli@gmail.com>
-To:     stable@vger.kernel.org
-Cc:     gregkh@linuxfoundation.org, sashal@kernel.org,
-        david regan <dregan@mail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Brian Norris <computersforpeace@gmail.com>,
-        linux-mtd@lists.infradead.org (open list:NAND FLASH SUBSYSTEM),
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH RESEND stable 4.9] mtd: rawnand: brcmnand: Fixed incorrect sub-page ECC status
-Date:   Wed, 23 Feb 2022 09:44:31 -0800
-Message-Id: <20220223174431.1083-3-f.fainelli@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220223174431.1083-1-f.fainelli@gmail.com>
-References: <20220223174431.1083-1-f.fainelli@gmail.com>
+        Wed, 23 Feb 2022 09:44:35 -0800 (PST)
+Date:   Wed, 23 Feb 2022 18:44:33 +0100
+From:   Jiri Olsa <olsajiri@gmail.com>
+To:     Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     Jiri Olsa <jolsa@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, lkml <linux-kernel@vger.kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>
+Subject: Re: [PATCH 02/10] bpf: Add multi kprobe link
+Message-ID: <YhZygR9AMtJmo1mJ@krava>
+References: <20220222170600.611515-1-jolsa@kernel.org>
+ <20220222170600.611515-3-jolsa@kernel.org>
+ <20220223145840.64f708ed2357c89039f55f07@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220223145840.64f708ed2357c89039f55f07@kernel.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -77,47 +79,96 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: david regan <dregan@mail.com>
+On Wed, Feb 23, 2022 at 02:58:40PM +0900, Masami Hiramatsu wrote:
+> Hi Jiri,
+> 
+> On Tue, 22 Feb 2022 18:05:52 +0100
+> Jiri Olsa <jolsa@kernel.org> wrote:
+> 
+> [snip]
+> > +
+> > +static void
+> > +kprobe_multi_link_handler(struct fprobe *fp, unsigned long entry_ip,
+> > +			  struct pt_regs *regs)
+> > +{
+> > +	unsigned long saved_ip = instruction_pointer(regs);
+> > +	struct bpf_kprobe_multi_link *link;
+> > +
+> > +	/*
+> > +	 * Because fprobe's regs->ip is set to the next instruction of
+> > +	 * dynamic-ftrace instruction, correct entry ip must be set, so
+> > +	 * that the bpf program can access entry address via regs as same
+> > +	 * as kprobes.
+> > +	 */
+> > +	instruction_pointer_set(regs, entry_ip);
+> 
+> This is true for the entry_handler, but false for the exit_handler,
+> because entry_ip points the probed function address, not the
+> return address. Thus, when this is done in the exit_handler,
+> the bpf prog seems to be called from the entry of the function,
+> not return.
+> 
+> If it is what you expected, please explictly comment it to
+> avoid confusion. Or, make another handler function for exit
+> probing.
 
-commit 36415a7964711822e63695ea67fede63979054d9 upstream
+yes we want the ip of the function we are tracing, so it's correct,
+I'll adjust the comment
 
-The brcmnand driver contains a bug in which if a page (example 2k byte)
-is read from the parallel/ONFI NAND and within that page a subpage (512
-byte) has correctable errors which is followed by a subpage with
-uncorrectable errors, the page read will return the wrong status of
-correctable (as opposed to the actual status of uncorrectable.)
+> 
+> > +
+> > +	link = container_of(fp, struct bpf_kprobe_multi_link, fp);
+> > +	kprobe_multi_link_prog_run(link, regs);
+> > +
+> > +	instruction_pointer_set(regs, saved_ip);
+> > +}
+> > +
+> > +static int
+> > +kprobe_multi_resolve_syms(const void *usyms, u32 cnt,
+> > +			  unsigned long *addrs)
+> > +{
+> > +	unsigned long addr, size;
+> > +	const char **syms;
+> > +	int err = -ENOMEM;
+> > +	unsigned int i;
+> > +	char *func;
+> > +
+> > +	size = cnt * sizeof(*syms);
+> > +	syms = kvzalloc(size, GFP_KERNEL);
+> > +	if (!syms)
+> > +		return -ENOMEM;
+> > +
+> > +	func = kmalloc(KSYM_NAME_LEN, GFP_KERNEL);
+> > +	if (!func)
+> > +		goto error;
+> > +
+> > +	if (copy_from_user(syms, usyms, size)) {
+> > +		err = -EFAULT;
+> > +		goto error;
+> > +	}
+> > +
+> > +	for (i = 0; i < cnt; i++) {
+> > +		err = strncpy_from_user(func, syms[i], KSYM_NAME_LEN);
+> > +		if (err == KSYM_NAME_LEN)
+> > +			err = -E2BIG;
+> > +		if (err < 0)
+> > +			goto error;
+> > +
+> > +		err = -EINVAL;
+> > +		if (func[0] == '\0')
+> > +			goto error;
+> > +		addr = kallsyms_lookup_name(func);
+> > +		if (!addr)
+> > +			goto error;
+> > +		if (!kallsyms_lookup_size_offset(addr, &size, NULL))
+> > +			size = MCOUNT_INSN_SIZE;
+> 
+> Note that this is good for x86, but may not be good for other arch
+> which use some preparation instructions before mcount call.  Maybe you
+> can just reject it if kallsyms_lookup_size_offset() fails.
 
-The bug is in function brcmnand_read_by_pio where there is a check for
-uncorrectable bits which will be preempted if a previous status for
-correctable bits is detected.
+I 'borrowed' this from fprobe's get_ftrace_locations function,
+and it still seems to match.. do you plan to change that?
 
-The fix is to stop checking for bad bits only if we already have a bad
-bits status.
-
-Fixes: 27c5b17cd1b1 ("mtd: nand: add NAND driver "library" for Broadcom STB NAND controller")
-Signed-off-by: david regan <dregan@mail.com>
-Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
-Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
-Link: https://lore.kernel.org/linux-mtd/trinity-478e0c09-9134-40e8-8f8c-31c371225eda-1643237024774@3c-app-mailcom-lxa02
-[florian: make patch apply to 4.14, file was renamed]
-Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
----
- drivers/mtd/nand/brcmnand/brcmnand.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/mtd/nand/brcmnand/brcmnand.c b/drivers/mtd/nand/brcmnand/brcmnand.c
-index 40fdc9d267b9..1c8e95cf29d2 100644
---- a/drivers/mtd/nand/brcmnand/brcmnand.c
-+++ b/drivers/mtd/nand/brcmnand/brcmnand.c
-@@ -1637,7 +1637,7 @@ static int brcmnand_read_by_pio(struct mtd_info *mtd, struct nand_chip *chip,
- 					mtd->oobsize / trans,
- 					host->hwcfg.sector_size_1k);
- 
--		if (!ret) {
-+		if (ret != -EBADMSG) {
- 			*err_addr = brcmnand_read_reg(ctrl,
- 					BRCMNAND_UNCORR_ADDR) |
- 				((u64)(brcmnand_read_reg(ctrl,
--- 
-2.25.1
-
+thanks,
+jirka

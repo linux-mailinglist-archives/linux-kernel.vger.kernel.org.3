@@ -2,79 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD87B4C0E72
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 09:47:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 586BA4C0E5A
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 09:39:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239057AbiBWIr0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 03:47:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54238 "EHLO
+        id S238999AbiBWIjj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 03:39:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235494AbiBWIrY (ORCPT
+        with ESMTP id S233549AbiBWIjh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 03:47:24 -0500
-Received: from inva020.nxp.com (inva020.nxp.com [92.121.34.13])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34159340F7;
-        Wed, 23 Feb 2022 00:46:57 -0800 (PST)
-Received: from inva020.nxp.com (localhost [127.0.0.1])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id B92941A0CF0;
-        Wed, 23 Feb 2022 09:46:55 +0100 (CET)
-Received: from aprdc01srsp001v.ap-rdc01.nxp.com (aprdc01srsp001v.ap-rdc01.nxp.com [165.114.16.16])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 8A2951A0CDA;
-        Wed, 23 Feb 2022 09:46:55 +0100 (CET)
-Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
-        by aprdc01srsp001v.ap-rdc01.nxp.com (Postfix) with ESMTP id 1487E183AC96;
-        Wed, 23 Feb 2022 16:46:54 +0800 (+08)
-From:   Richard Zhu <hongxing.zhu@nxp.com>
-To:     l.stach@pengutronix.de, bhelgaas@google.com,
-        lorenzo.pieralisi@arm.com
-Cc:     linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, kernel@pengutronix.de,
-        linux-imx@nxp.com, Richard Zhu <hongxing.zhu@nxp.com>
-Subject: [PATCH] PCI: imx6: Override the CLKREQ low in the initialization
-Date:   Wed, 23 Feb 2022 16:38:33 +0800
-Message-Id: <1645605513-7731-1-git-send-email-hongxing.zhu@nxp.com>
-X-Mailer: git-send-email 2.7.4
-X-Virus-Scanned: ClamAV using ClamSMTP
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 23 Feb 2022 03:39:37 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 425254CD4A;
+        Wed, 23 Feb 2022 00:39:10 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0CAF1ED1;
+        Wed, 23 Feb 2022 00:39:10 -0800 (PST)
+Received: from [10.57.9.184] (unknown [10.57.9.184])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 14F233F5A1;
+        Wed, 23 Feb 2022 00:39:07 -0800 (PST)
+Message-ID: <ae28b0be-5b71-d53e-31ee-49d4d01a0910@arm.com>
+Date:   Wed, 23 Feb 2022 08:39:06 +0000
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [[PATCH v2 1/2] dt-bindings: opp: Add 'opp-microwatt' entry in
+ the OPP
+Content-Language: en-US
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, dietmar.eggemann@arm.com,
+        rafael@kernel.org, daniel.lezcano@linaro.org, nm@ti.com,
+        sboyd@kernel.org, mka@chromium.org, dianders@chromium.org,
+        robh+dt@kernel.org, devicetree@vger.kernel.org,
+        linux-pm@vger.kernel.org
+References: <20220222140746.12293-1-lukasz.luba@arm.com>
+ <20220222140746.12293-2-lukasz.luba@arm.com>
+ <20220223055006.zlcwco7oducggxjw@vireshk-i7>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <20220223055006.zlcwco7oducggxjw@vireshk-i7>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The CLKREQ# signal is an open drain, active low signal that is driven
-low by the remote Endpoint device. But it might not be driven low if no
-Endpoint device is connected.
 
-On i.MX8MM PCIe, phy_init() would be failed and system boot hang if the
-reference clock is not toggled.
 
-Follow with i.MX8MQ PCIe, to make sure the reference clock on, override
-the CLKREQ# low during initialization to fix this issue.
+On 2/23/22 05:50, Viresh Kumar wrote:
+> On 22-02-22, 14:07, Lukasz Luba wrote:
+>> Add new entry for the OPP which provides information about power
+>> expressed in micro-Watts. It is useful for the Energy Model framework.
+>>
+>> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
+>> ---
+>>   Documentation/devicetree/bindings/opp/opp-v2-base.yaml | 7 +++++++
+>>   1 file changed, 7 insertions(+)
+>>
+>> diff --git a/Documentation/devicetree/bindings/opp/opp-v2-base.yaml b/Documentation/devicetree/bindings/opp/opp-v2-base.yaml
+>> index 15a76bcd6d42..3f07a279ed2a 100644
+>> --- a/Documentation/devicetree/bindings/opp/opp-v2-base.yaml
+>> +++ b/Documentation/devicetree/bindings/opp/opp-v2-base.yaml
+>> @@ -93,6 +93,13 @@ patternProperties:
+>>           minItems: 1
+>>           maxItems: 8   # Should be enough regulators
+>>   
+>> +      opp-microwatt:
+>> +        description:
+>> +          Power for the OPP
+>> +
+>> +          A value representing power for the OPP in micro-Watts.
+>> +        $ref: /schemas/types.yaml#/definitions/uint32
+>> +
+> 
+> I was expecting a much larger change here. Look at how opp-microvolt and
+> opp-microamp is defined in this file.
+> 
+> Should this value be made per-supply/regulator, just like voltage/current ?
+> 
 
-Fixes: 178e244cb6e2 ("PCI: imx: Add the imx8mm pcie support")
-Signed-off-by: Richard Zhu <hongxing.zhu@nxp.com>
----
- drivers/pci/controller/dwc/pci-imx6.c | 4 ----
- 1 file changed, 4 deletions(-)
-
-diff --git a/drivers/pci/controller/dwc/pci-imx6.c b/drivers/pci/controller/dwc/pci-imx6.c
-index d7f0db01f3c3..a334341a1789 100644
---- a/drivers/pci/controller/dwc/pci-imx6.c
-+++ b/drivers/pci/controller/dwc/pci-imx6.c
-@@ -447,10 +447,6 @@ static int imx6_pcie_enable_ref_clk(struct imx6_pcie *imx6_pcie)
- 	case IMX7D:
- 		break;
- 	case IMX8MM:
--		ret = clk_prepare_enable(imx6_pcie->pcie_aux);
--		if (ret)
--			dev_err(dev, "unable to enable pcie_aux clock\n");
--		break;
- 	case IMX8MQ:
- 		ret = clk_prepare_enable(imx6_pcie->pcie_aux);
- 		if (ret) {
--- 
-2.25.1
-
+For the EM we need only one value. If there would be some other users
+of this field in future we might add the multiple power values support.
+Currently there is no need I would say, unless it's a hard requirement
+to be aligned with opp-microvolt.

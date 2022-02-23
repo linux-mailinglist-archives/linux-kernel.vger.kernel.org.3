@@ -2,35 +2,35 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AC804C148D
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 14:45:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B6C554C1487
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 14:45:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237614AbiBWNpt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 08:45:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42458 "EHLO
+        id S241220AbiBWNp2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 08:45:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241072AbiBWNot (ORCPT
+        with ESMTP id S241078AbiBWNov (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 08:44:49 -0500
-Received: from ssl.serverraum.org (ssl.serverraum.org [176.9.125.105])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AA77AC91E
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 05:44:13 -0800 (PST)
+        Wed, 23 Feb 2022 08:44:51 -0500
+Received: from ssl.serverraum.org (ssl.serverraum.org [IPv6:2a01:4f8:151:8464::1:2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C4ACAC922
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 05:44:14 -0800 (PST)
 Received: from mwalle01.kontron.local. (unknown [213.135.10.150])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id AAE7B22456;
-        Wed, 23 Feb 2022 14:44:11 +0100 (CET)
+        by ssl.serverraum.org (Postfix) with ESMTPSA id 355182245C;
+        Wed, 23 Feb 2022 14:44:12 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1645623851;
+        t=1645623852;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=FPwyUqw9bIye7MTeMw3+l2+GgFM/jhis7VAg9kKcJLA=;
-        b=PlAXWhAEJ4bl6ttd0i5BJfrgjJ5g+AwEUcovpu7oaBWPOGcwupeW5s0zWbVwZJKE8M1YEZ
-        xZVl/rnvyXS9Gn5yWUP36cBxOpAJCFbmCfSebyGKDBJvPWwSoF8VaTL3ay6nczucK2D+Bg
-        ua3jANmxVh2qqUcRYApGrCo8I137PAs=
+        bh=hXOPL5cPITB5pX8C9uT9seIIQT64+6BMqwNdfPuDNQU=;
+        b=DbjKo8dsPWkQtCCu8eWB0m8tXqheMabXvmk9yM+ZiobdO+1SZnfq6BqoZZOSBLFCYgaSjY
+        gNz6EVsTw/6KpAiqjyBG1ic4PbZLpahUxPQ/8iZwXUTOuNOVKNR4diOQXGnOX/UUczbp6n
+        3sBevsMWo+gLNLamEUChQQruhMUfYuU=
 From:   Michael Walle <michael@walle.cc>
 To:     linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org
 Cc:     Tudor Ambarus <tudor.ambarus@microchip.com>,
@@ -39,9 +39,9 @@ Cc:     Tudor Ambarus <tudor.ambarus@microchip.com>,
         Richard Weinberger <richard@nod.at>,
         Vignesh Raghavendra <vigneshr@ti.com>,
         yaliang.wang@windriver.com, Michael Walle <michael@walle.cc>
-Subject: [PATCH v5 17/32] mtd: spi-nor: slightly refactor the spi_nor_setup()
-Date:   Wed, 23 Feb 2022 14:43:43 +0100
-Message-Id: <20220223134358.1914798-18-michael@walle.cc>
+Subject: [PATCH v5 18/32] mtd: spi-nor: allow a flash to define its own ready() function
+Date:   Wed, 23 Feb 2022 14:43:44 +0100
+Message-Id: <20220223134358.1914798-19-michael@walle.cc>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220223134358.1914798-1-michael@walle.cc>
 References: <20220223134358.1914798-1-michael@walle.cc>
@@ -57,68 +57,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Instead of always using a function pointer (and initializing it to our
-default), just call the default function if the flash didn't set its own
-one. That will make the call flow easier to follow.
-
-Also mark the parameter as optional now.
+Xilinx and Micron flashes have their own implementation of the
+spi_nor_ready() function. At the moment, the core will figure out
+which one to call according to some flags. Lay the foundation to
+make it possible that a flash can register its own ready()
+function.
 
 Signed-off-by: Michael Walle <michael@walle.cc>
 Reviewed-by: Tudor Ambarus <tudor.ambarus@microchip.com>
 Reviewed-by: Pratyush Yadav <p.yadav@ti.com>
 ---
- drivers/mtd/spi-nor/core.c | 10 +++++-----
- drivers/mtd/spi-nor/core.h |  8 ++++----
- 2 files changed, 9 insertions(+), 9 deletions(-)
+ drivers/mtd/spi-nor/core.c | 4 ++++
+ drivers/mtd/spi-nor/core.h | 4 ++++
+ 2 files changed, 8 insertions(+)
 
 diff --git a/drivers/mtd/spi-nor/core.c b/drivers/mtd/spi-nor/core.c
-index 04ea180118e3..4d2036cdce42 100644
+index 4d2036cdce42..390a9ab413b7 100644
 --- a/drivers/mtd/spi-nor/core.c
 +++ b/drivers/mtd/spi-nor/core.c
-@@ -2532,11 +2532,12 @@ static int spi_nor_setup(struct spi_nor *nor,
+@@ -794,6 +794,10 @@ static int spi_nor_ready(struct spi_nor *nor)
  {
- 	int ret;
+ 	int sr, fsr;
  
--	if (nor->params->setup) {
-+	if (nor->params->setup)
- 		ret = nor->params->setup(nor, hwcaps);
--		if (ret)
--			return ret;
--	}
-+	else
-+		ret = spi_nor_default_setup(nor, hwcaps);
-+	if (ret)
-+		return ret;
- 
- 	return spi_nor_set_addr_width(nor);
- }
-@@ -2786,7 +2787,6 @@ static void spi_nor_init_default_params(struct spi_nor *nor)
- 
- 	params->quad_enable = spi_nor_sr2_bit1_quad_enable;
- 	params->set_4byte_addr_mode = spansion_set_4byte_addr_mode;
--	params->setup = spi_nor_default_setup;
- 	params->otp.org = &info->otp_org;
- 
- 	/* Default to 16-bit Write Status (01h) Command */
++	/* Flashes might override the standard routine. */
++	if (nor->params->ready)
++		return nor->params->ready(nor);
++
+ 	if (nor->flags & SNOR_F_READY_XSR_RDY)
+ 		sr = spi_nor_xsr_ready(nor);
+ 	else
 diff --git a/drivers/mtd/spi-nor/core.h b/drivers/mtd/spi-nor/core.h
-index 2afb610853a9..4fe16b5aa3f5 100644
+index 4fe16b5aa3f5..fdc8c0f31f5c 100644
 --- a/drivers/mtd/spi-nor/core.h
 +++ b/drivers/mtd/spi-nor/core.h
-@@ -257,10 +257,10 @@ struct spi_nor_otp {
-  * @convert_addr:	converts an absolute address into something the flash
-  *                      will understand. Particularly useful when pagesize is
-  *                      not a power-of-2.
-- * @setup:              configures the SPI NOR memory. Useful for SPI NOR
-- *                      flashes that have peculiarities to the SPI NOR standard
-- *                      e.g. different opcodes, specific address calculation,
-- *                      page size, etc.
-+ * @setup:		(optional) configures the SPI NOR memory. Useful for
-+ *			SPI NOR flashes that have peculiarities to the SPI NOR
-+ *			standard e.g. different opcodes, specific address
-+ *			calculation, page size, etc.
+@@ -261,6 +261,9 @@ struct spi_nor_otp {
+  *			SPI NOR flashes that have peculiarities to the SPI NOR
+  *			standard e.g. different opcodes, specific address
+  *			calculation, page size, etc.
++ * @ready:		(optional) flashes might use a different mechanism
++ *			than reading the status register to indicate they
++ *			are ready for a new command
   * @locking_ops:	SPI NOR locking methods.
   */
  struct spi_nor_flash_parameter {
+@@ -282,6 +285,7 @@ struct spi_nor_flash_parameter {
+ 	int (*set_4byte_addr_mode)(struct spi_nor *nor, bool enable);
+ 	u32 (*convert_addr)(struct spi_nor *nor, u32 addr);
+ 	int (*setup)(struct spi_nor *nor, const struct spi_nor_hwcaps *hwcaps);
++	int (*ready)(struct spi_nor *nor);
+ 
+ 	const struct spi_nor_locking_ops *locking_ops;
+ };
 -- 
 2.30.2
 

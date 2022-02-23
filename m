@@ -2,88 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A9454C1046
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 11:26:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E3EB4C104C
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 11:28:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239516AbiBWK1Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 05:27:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34560 "EHLO
+        id S239596AbiBWK3S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 05:29:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235662AbiBWK1O (ORCPT
+        with ESMTP id S233965AbiBWK3Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 05:27:14 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5F3A82E0BB
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 02:26:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1645612006;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Dc7XLh6K2KrBr7j9Ohe2YtIT5ilZsSkfLQurBsKqNYk=;
-        b=Rz5zDT8U7rer0YShnMwguuVHWW8bFIUbq7g8DbzBK9TpI27sixsbQ5i5vKsOmx5ngmyo8C
-        xQrNhn1L+K2O0SSg49PffNWmrG6GRabEDzzEJNrATBXrIucR8KBR6nR0kIQO73VuTFk1sJ
-        Fhv5D1kvkGcqes+Tu+pfyziL+POAuh0=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-448-L544UElrM8iAQ36cIJMnQg-1; Wed, 23 Feb 2022 05:26:43 -0500
-X-MC-Unique: L544UElrM8iAQ36cIJMnQg-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 9553EFC80;
-        Wed, 23 Feb 2022 10:26:40 +0000 (UTC)
-Received: from starship (unknown [10.40.195.190])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 5FC771038AC1;
-        Wed, 23 Feb 2022 10:26:32 +0000 (UTC)
-Message-ID: <7e7d16f2919f4bc708a0da3237161b4325a867c5.camel@redhat.com>
-Subject: Re: [PATCH v5 7/8] KVM: VMX: Update PID-pointer table entry when
- APIC ID is changed
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Chao Gao <chao.gao@intel.com>,
-        Sean Christopherson <seanjc@google.com>
-Cc:     Zeng Guang <guang.zeng@intel.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "Luck, Tony" <tony.luck@intel.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Kim Phillips <kim.phillips@amd.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Jethro Beekman <jethro@fortanix.com>,
-        "Huang, Kai" <kai.huang@intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Hu, Robert" <robert.hu@intel.com>
-Date:   Wed, 23 Feb 2022 12:26:31 +0200
-In-Reply-To: <20220223061037.GA21263@gao-cwp>
-References: <640e82f3-489d-60af-1d31-25096bef1a46@amd.com>
-         <4eee5de5-ab76-7094-17aa-adc552032ba0@intel.com>
-         <aa86022c-2816-4155-8d77-f4faf6018255@amd.com>
-         <aa7db6d2-8463-2517-95ce-c0bba22e80d4@intel.com>
-         <d058f7464084cadc183bd9dbf02c7f525bb9f902.camel@redhat.com>
-         <20220110074523.GA18434@gao-cwp>
-         <1ff69ed503faa4c5df3ad1b5abe8979d570ef2b8.camel@redhat.com>
-         <YeClaZWM1cM+WLjH@google.com> <YfsSjvnoQcfzdo68@google.com>
-         <Yfw5ddGNOnDqxMLs@google.com> <20220223061037.GA21263@gao-cwp>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+        Wed, 23 Feb 2022 05:29:16 -0500
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B0548C7DF;
+        Wed, 23 Feb 2022 02:28:47 -0800 (PST)
+Received: from dggeme762-chm.china.huawei.com (unknown [172.30.72.54])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4K3XH23xk5z9sGb;
+        Wed, 23 Feb 2022 18:25:18 +0800 (CST)
+Received: from linux-suse12sp5.huawei.com (10.67.133.175) by
+ dggeme762-chm.china.huawei.com (10.3.19.108) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2308.21; Wed, 23 Feb 2022 18:28:43 +0800
+From:   Yan Zhu <zhuyan34@huawei.com>
+To:     <mcgrof@kernel.org>
+CC:     <andrii@kernel.org>, <ast@kernel.org>, <bpf@vger.kernel.org>,
+        <daniel@iogearbox.net>, <john.fastabend@gmail.com>, <kafai@fb.com>,
+        <keescook@chromium.org>, <kpsingh@kernel.org>,
+        <linux-fsdevel@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <liucheng32@huawei.com>, <netdev@vger.kernel.org>,
+        <nixiaoming@huawei.com>, <songliubraving@fb.com>,
+        <xiechengliang1@huawei.com>, <yhs@fb.com>, <yzaikin@google.com>,
+        <zengweilin@huawei.com>, <zhuyan34@huawei.com>
+Subject: [PATCH v2 sysctl-next] bpf: move the bpf syscall sysctl table to bpf module
+Date:   Wed, 23 Feb 2022 18:28:08 +0800
+Message-ID: <20220223102808.80846-1-zhuyan34@huawei.com>
+X-Mailer: git-send-email 2.12.3
+In-Reply-To: <YhWQ+0qPorcJ/Z8l@bombadil.infradead.org>
+References: <YhWQ+0qPorcJ/Z8l@bombadil.infradead.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+Content-Type: text/plain
+X-Originating-IP: [10.67.133.175]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggeme762-chm.china.huawei.com (10.3.19.108)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -91,46 +53,198 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-02-23 at 14:10 +0800, Chao Gao wrote:
-> On Thu, Feb 03, 2022 at 08:22:13PM +0000, Sean Christopherson wrote:
-> > i.e. ACPI_NUMA gets priority and thus amd_numa_init() will never be reached if
-> > the NUMA topology is enumerated in the ACPI tables.  Furthermore, the VMM would
-> > have to actually emulate an old AMD northbridge, which is also extremely unlikely.
-> > 
-> > The odds of breaking a guest are further diminised given that KVM doesn't emulate
-> > the xAPIC ID => x2APIC ID hilarity on AMD CPUs and no one has complained.
-> > 
-> > So, rather than tie this to IPI virtualization, I think we should either make
-> > the xAPIC ID read-only across the board,
-> 
-> We will go this way and defer the introduction of "xapic_id_writable" to the
-> emergence of the "crazy" use case.
-> 
-> Levitsky, we plan to revise your patch 13 "[PATCH RESEND 13/30] KVM: x86: lapic:
-> don't allow to change APIC ID when apic acceleration is enabled" to make xAPIC
-> ID read-only regardless of APICv/AVIC and include it into IPI virtualization
-> series (to eliminate the dependency on your AVIC series). Is it fine with you?
+Aggregating the code of the feature in the code file of the feature
+itself can improve readability and reduce merge conflicts. So move
+the bpf syscall sysctl table to kernel/bpf/syscall.c
 
+Signed-off-by: Yan Zhu <zhuyan34@huawei.com>
 
-Absolutely!
-> And does this patch 13 depend on other patches in your fixes?
+---
+v1->v2:
+  1.Added patch branch identifier sysctl-next.
+  2.Re-describe the reason for the patch submission.
+---
+ kernel/bpf/syscall.c | 80 ++++++++++++++++++++++++++++++++++++++++++++++++++++
+ kernel/sysctl.c      | 71 ----------------------------------------------
+ 2 files changed, 80 insertions(+), 71 deletions(-)
 
-This patch doesn't depend on anything.
-
-There is also patch 14 in this series which closes a case where malicious userspace
-could upload non default _x2apic id_. I  haven't yet written a unit test
-to demonstrate this, but I will soon.
-
-You don't need that patch for now IMHO.
-
-> 
-> > or if we want to hedge in case someone
-> > has a crazy use case, make the xAPIC ID read-only by default, add a module param
-> > to let userspace opt-in to a writable xAPIC ID, and report x2APIC and APICv as
-> > unsupported if the xAPIC ID is writable.  E.g. rougly this, plus your AVIC patches
-> > if we want to hedge.
-
-
-Best regards,
-	Maxim Levitsky
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index 35646db3d950..50f85b47d478 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -4888,3 +4888,83 @@ const struct bpf_verifier_ops bpf_syscall_verifier_ops = {
+ const struct bpf_prog_ops bpf_syscall_prog_ops = {
+ 	.test_run = bpf_prog_test_run_syscall,
+ };
++
++#ifdef CONFIG_SYSCTL
++static int bpf_stats_handler(struct ctl_table *table, int write,
++			     void *buffer, size_t *lenp, loff_t *ppos)
++{
++	struct static_key *key = (struct static_key *)table->data;
++	static int saved_val;
++	int val, ret;
++	struct ctl_table tmp = {
++		.data   = &val,
++		.maxlen = sizeof(val),
++		.mode   = table->mode,
++		.extra1 = SYSCTL_ZERO,
++		.extra2 = SYSCTL_ONE,
++	};
++
++	if (write && !capable(CAP_SYS_ADMIN))
++		return -EPERM;
++
++	mutex_lock(&bpf_stats_enabled_mutex);
++	val = saved_val;
++	ret = proc_dointvec_minmax(&tmp, write, buffer, lenp, ppos);
++	if (write && !ret && val != saved_val) {
++		if (val)
++			static_key_slow_inc(key);
++		else
++			static_key_slow_dec(key);
++		saved_val = val;
++	}
++	mutex_unlock(&bpf_stats_enabled_mutex);
++	return ret;
++}
++
++static int bpf_unpriv_handler(struct ctl_table *table, int write,
++			      void *buffer, size_t *lenp, loff_t *ppos)
++{
++	int ret, unpriv_enable = *(int *)table->data;
++	bool locked_state = unpriv_enable == 1;
++	struct ctl_table tmp = *table;
++
++	if (write && !capable(CAP_SYS_ADMIN))
++		return -EPERM;
++
++	tmp.data = &unpriv_enable;
++	ret = proc_dointvec_minmax(&tmp, write, buffer, lenp, ppos);
++	if (write && !ret) {
++		if (locked_state && unpriv_enable != 1)
++			return -EPERM;
++		*(int *)table->data = unpriv_enable;
++	}
++	return ret;
++}
++
++static struct ctl_table bpf_syscall_table[] = {
++	{
++		.procname	= "unprivileged_bpf_disabled",
++		.data		= &sysctl_unprivileged_bpf_disabled,
++		.maxlen		= sizeof(sysctl_unprivileged_bpf_disabled),
++		.mode		= 0644,
++		.proc_handler	= bpf_unpriv_handler,
++		.extra1		= SYSCTL_ZERO,
++		.extra2		= SYSCTL_TWO,
++	},
++	{
++		.procname	= "bpf_stats_enabled",
++		.data		= &bpf_stats_enabled_key.key,
++		.maxlen		= sizeof(bpf_stats_enabled_key),
++		.mode		= 0644,
++		.proc_handler	= bpf_stats_handler,
++	},
++	{ }
++};
++
++static int __init bpf_syscall_sysctl_init(void)
++{
++	register_sysctl_init("kernel", bpf_syscall_table);
++	return 0;
++}
++late_initcall(bpf_syscall_sysctl_init);
++#endif /* CONFIG_SYSCTL */
+diff --git a/kernel/sysctl.c b/kernel/sysctl.c
+index ae5e59396b5d..c64db3755d9c 100644
+--- a/kernel/sysctl.c
++++ b/kernel/sysctl.c
+@@ -146,59 +146,6 @@ static const int max_extfrag_threshold = 1000;
+ 
+ #endif /* CONFIG_SYSCTL */
+ 
+-#if defined(CONFIG_BPF_SYSCALL) && defined(CONFIG_SYSCTL)
+-static int bpf_stats_handler(struct ctl_table *table, int write,
+-			     void *buffer, size_t *lenp, loff_t *ppos)
+-{
+-	struct static_key *key = (struct static_key *)table->data;
+-	static int saved_val;
+-	int val, ret;
+-	struct ctl_table tmp = {
+-		.data   = &val,
+-		.maxlen = sizeof(val),
+-		.mode   = table->mode,
+-		.extra1 = SYSCTL_ZERO,
+-		.extra2 = SYSCTL_ONE,
+-	};
+-
+-	if (write && !capable(CAP_SYS_ADMIN))
+-		return -EPERM;
+-
+-	mutex_lock(&bpf_stats_enabled_mutex);
+-	val = saved_val;
+-	ret = proc_dointvec_minmax(&tmp, write, buffer, lenp, ppos);
+-	if (write && !ret && val != saved_val) {
+-		if (val)
+-			static_key_slow_inc(key);
+-		else
+-			static_key_slow_dec(key);
+-		saved_val = val;
+-	}
+-	mutex_unlock(&bpf_stats_enabled_mutex);
+-	return ret;
+-}
+-
+-static int bpf_unpriv_handler(struct ctl_table *table, int write,
+-			      void *buffer, size_t *lenp, loff_t *ppos)
+-{
+-	int ret, unpriv_enable = *(int *)table->data;
+-	bool locked_state = unpriv_enable == 1;
+-	struct ctl_table tmp = *table;
+-
+-	if (write && !capable(CAP_SYS_ADMIN))
+-		return -EPERM;
+-
+-	tmp.data = &unpriv_enable;
+-	ret = proc_dointvec_minmax(&tmp, write, buffer, lenp, ppos);
+-	if (write && !ret) {
+-		if (locked_state && unpriv_enable != 1)
+-			return -EPERM;
+-		*(int *)table->data = unpriv_enable;
+-	}
+-	return ret;
+-}
+-#endif /* CONFIG_BPF_SYSCALL && CONFIG_SYSCTL */
+-
+ /*
+  * /proc/sys support
+  */
+@@ -2188,24 +2135,6 @@ static struct ctl_table kern_table[] = {
+ 		.extra2		= SYSCTL_ONE,
+ 	},
+ #endif
+-#ifdef CONFIG_BPF_SYSCALL
+-	{
+-		.procname	= "unprivileged_bpf_disabled",
+-		.data		= &sysctl_unprivileged_bpf_disabled,
+-		.maxlen		= sizeof(sysctl_unprivileged_bpf_disabled),
+-		.mode		= 0644,
+-		.proc_handler	= bpf_unpriv_handler,
+-		.extra1		= SYSCTL_ZERO,
+-		.extra2		= SYSCTL_TWO,
+-	},
+-	{
+-		.procname	= "bpf_stats_enabled",
+-		.data		= &bpf_stats_enabled_key.key,
+-		.maxlen		= sizeof(bpf_stats_enabled_key),
+-		.mode		= 0644,
+-		.proc_handler	= bpf_stats_handler,
+-	},
+-#endif
+ #if defined(CONFIG_TREE_RCU)
+ 	{
+ 		.procname	= "panic_on_rcu_stall",
+-- 
+2.12.3
 

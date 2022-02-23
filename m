@@ -2,167 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E80D4C1C6A
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 20:40:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A687A4C1C6C
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 20:40:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244489AbiBWTkx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 14:40:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35022 "EHLO
+        id S244494AbiBWTlC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 14:41:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235576AbiBWTkw (ORCPT
+        with ESMTP id S235576AbiBWTk7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 14:40:52 -0500
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE79849248
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 11:40:23 -0800 (PST)
-Received: by mail-yb1-xb49.google.com with SMTP id d17-20020a253611000000b006244e94b7b4so16142380yba.4
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 11:40:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=3O2OEu4eUhR3YtOUni3RQudnfEWV+vLSeR/9NTfWNyU=;
-        b=jzC9fz4TzuA54IP+E5K9YaKUQaPNmQ/lvm3NX2pb3OKYpT8t0JaPn6bAt2BddJkswc
-         CaDH8o0HuYAtisKR5ccNJFhqnT9crftdUBByiSgZ28y3XbzO3EdQaGScOTjoQ8alXMwB
-         JBrL6fQH+JWTaChQwvObiF7Wze08of9eeQzNJBGqa58pXjb8fI0wFM01INm2APxTcq6d
-         0/z1QuNzzNqvlMbZmvPurZn/8lu9y9/XNtMjiBk+FAPQ0V4eXsbYDNvjkoDuhePHNvGO
-         UffScw890HXGZdnsEUbyecWHYB9Sntgl8fkx0DrcJkg0q5QFExj/O81celFzUTPqIBKJ
-         3tzg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=3O2OEu4eUhR3YtOUni3RQudnfEWV+vLSeR/9NTfWNyU=;
-        b=Qs3UFNxASB0IAFea75PGUrg4t44rHb4mjtoygzOrALru1oo78UpVC46oruumwSfcRf
-         44VeoA9KI1WUP0AZzVcOLUv3kTRTqpKdq2XTn4Ax5yYxtc9tnzhpPa/hjMHqxVED615G
-         BiIJwOH1ZGVFbLaUccYbWAWtOGwf3xT2YcDolrL+u2lH1Ig1YLUPHrlrY9UdabZ+zsQr
-         aW5FCsFmDOaSRAA1On3+iK8mAD4qFarxKhElnrDmCkA+UJUmlxe6we2FzH1+vjvzGx04
-         zi6GmiLmL/3J+24v9GzsZ07xgdkMSwqVdUyKYhoMnkKy1POcM80VcFW8/E2n+1liKcqS
-         0pjA==
-X-Gm-Message-State: AOAM531yP53Bgcnisjhz+dOlpnKnkjmbhl4MhmDg62MF2wAqjfJNTJe1
-        Ew+LQAm2EMGBMwoAYAEIpNX6OEk1/A0=
-X-Google-Smtp-Source: ABdhPJw7+FhbLt4ftGqCh3/S46XA43RnDHK0Jo9UuVmyeO3SvFEivpVsPC0K8bjqax6iJuYtGWwMzLT1f5k=
-X-Received: from surenb-desktop.mtv.corp.google.com ([2620:15c:211:200:5093:9fb5:d0ba:a5f])
- (user=surenb job=sendgmr) by 2002:a25:db8d:0:b0:624:5e99:1665 with SMTP id
- g135-20020a25db8d000000b006245e991665mr1151004ybf.524.1645645223005; Wed, 23
- Feb 2022 11:40:23 -0800 (PST)
-Date:   Wed, 23 Feb 2022 11:40:18 -0800
-Message-Id: <20220223194018.1296629-1-surenb@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.35.1.473.g83b2b277ed-goog
-Subject: [PATCH v2 1/1] mm: count time in drain_all_pages during direct
- reclaim as memory pressure
-From:   Suren Baghdasaryan <surenb@google.com>
-To:     akpm@linux-foundation.org
-Cc:     hannes@cmpxchg.org, mhocko@suse.com, pmladek@suse.com,
-        peterz@infradead.org, guro@fb.com, shakeelb@google.com,
-        minchan@kernel.org, timmurray@google.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, kernel-team@android.com,
-        surenb@google.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 23 Feb 2022 14:40:59 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B25794926E
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 11:40:31 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 5B4711F37E;
+        Wed, 23 Feb 2022 19:40:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1645645230; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=TQdQR1QsAdjXQt7JrztOQCAiqY/72PRrLZCvRbOPvx4=;
+        b=rrpPvvwSNaX2d3E3XFt2An2C3vLZSbZVBBPMDY1Bm6yl53DFb/ha44NwYCSJAX+IRkZg7k
+        qmvxzc7eHKRMqPipy2HNoxVqD4DlBGkXWO/FAOEmhlGuCjSWFq7YMFpdyz+oNDLZP3GUPc
+        I8gdPl02MY0fWj//2ZAuqeuIkF6//OQ=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1645645230;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=TQdQR1QsAdjXQt7JrztOQCAiqY/72PRrLZCvRbOPvx4=;
+        b=HTUQVlSBN0r6md2wxMYD7yoeAOhwp5KhshuyTYxnH5V3FJQSFHAy2Pjctk0P55QW8Bj8JQ
+        FyH6CwobiKghHoBg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 2777F13C7B;
+        Wed, 23 Feb 2022 19:40:30 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id rgn6B66NFmKPUwAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Wed, 23 Feb 2022 19:40:30 +0000
+Message-ID: <6335cf1d-41fc-1854-3916-2cdbd1337c1c@suse.de>
+Date:   Wed, 23 Feb 2022 20:40:29 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH] drm/repaper: Use format helper for xrgb8888 to monochrome
+ conversion
+Content-Language: en-US
+To:     Javier Martinez Canillas <javierm@redhat.com>,
+        linux-kernel@vger.kernel.org
+Cc:     David Airlie <airlied@linux.ie>, dri-devel@lists.freedesktop.org,
+        =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
+References: <20220223193735.213185-1-javierm@redhat.com>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <20220223193735.213185-1-javierm@redhat.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------p181beNo2AE1YkJcylZbk1Z6"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When page allocation in direct reclaim path fails, the system will
-make one attempt to shrink per-cpu page lists and free pages from
-high alloc reserves. Draining per-cpu pages into buddy allocator can
-be a very slow operation because it's done using workqueues and the
-task in direct reclaim waits for all of them to finish before
-proceeding. Currently this time is not accounted as psi memory stall.
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------p181beNo2AE1YkJcylZbk1Z6
+Content-Type: multipart/mixed; boundary="------------JCQH3f06HLrW0ZxwNUZvbO0D";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Javier Martinez Canillas <javierm@redhat.com>,
+ linux-kernel@vger.kernel.org
+Cc: David Airlie <airlied@linux.ie>, dri-devel@lists.freedesktop.org,
+ =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
+Message-ID: <6335cf1d-41fc-1854-3916-2cdbd1337c1c@suse.de>
+Subject: Re: [PATCH] drm/repaper: Use format helper for xrgb8888 to monochrome
+ conversion
+References: <20220223193735.213185-1-javierm@redhat.com>
+In-Reply-To: <20220223193735.213185-1-javierm@redhat.com>
 
-While testing mobile devices under extreme memory pressure, when
-allocations are failing during direct reclaim, we notices that psi
-events which would be expected in such conditions were not triggered.
-After profiling these cases it was determined that the reason for
-missing psi events was that a big chunk of time spent in direct
-reclaim is not accounted as memory stall, therefore psi would not
-reach the levels at which an event is generated. Further investigation
-revealed that the bulk of that unaccounted time was spent inside
-drain_all_pages call.
+--------------JCQH3f06HLrW0ZxwNUZvbO0D
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-A typical captured case when drain_all_pages path gets activated:
+SGkNCg0KQW0gMjMuMDIuMjIgdW0gMjA6Mzcgc2NocmllYiBKYXZpZXIgTWFydGluZXogQ2Fu
+aWxsYXM6DQo+IFRoZXJlIGlzIG5vdyBhIGRybV9mYl94cmdiODg4OF90b19tb25vX3JldmVy
+c2VkKCkgaGVscGVyIGZ1bmN0aW9uIHRvIGRvDQo+IGZvcm1hdCBjb252ZXJzaW9uIGZyb20g
+WFJHQjg4ODggdG8gcmV2ZXJzZWQgbW9ub2Nocm9tZS4NCj4gDQo+IFVzZSB0aGF0IGhlbHBl
+ciBhbmQgcmVtb3ZlIHRoZSBvcGVuIGNvZGVkIHZlcnNpb24gaW4gdGhlIHJlcGFwZXIgZHJp
+dmVyLg0KPiANCj4gU2lnbmVkLW9mZi1ieTogSmF2aWVyIE1hcnRpbmV6IENhbmlsbGFzIDxq
+YXZpZXJtQHJlZGhhdC5jb20+DQoNCkxvb2tzIGdvb2QuDQoNCkFja2VkLWJ5OiBUaG9tYXMg
+WmltbWVybWFubiA8dHppbW1lcm1hbm5Ac3VzZS5kZT4NCg0KPiAtLS0NCj4gDQo+IFRoaXMg
+d2FzIG9ubHkgYnVpbHQgdGVzdGVkIGJlY2F1c2UgSSBkb24ndCBoYXZlIGFjY2VzcyB0byB0
+aGUgaGFyZHdhcmUuDQo+IA0KPiAgIGRyaXZlcnMvZ3B1L2RybS90aW55L3JlcGFwZXIuYyB8
+IDI0ICstLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQ0KPiAgIDEgZmlsZSBjaGFuZ2VkLCAxIGlu
+c2VydGlvbigrKSwgMjMgZGVsZXRpb25zKC0pDQo+IA0KPiBkaWZmIC0tZ2l0IGEvZHJpdmVy
+cy9ncHUvZHJtL3RpbnkvcmVwYXBlci5jIGIvZHJpdmVycy9ncHUvZHJtL3RpbnkvcmVwYXBl
+ci5jDQo+IGluZGV4IDk3YTc3NWM0OGNlYS4uNWM3NGUyMzZiMTZkIDEwMDY0NA0KPiAtLS0g
+YS9kcml2ZXJzL2dwdS9kcm0vdGlueS9yZXBhcGVyLmMNCj4gKysrIGIvZHJpdmVycy9ncHUv
+ZHJtL3RpbnkvcmVwYXBlci5jDQo+IEBAIC01MDgsMjYgKzUwOCw2IEBAIHN0YXRpYyB2b2lk
+IHJlcGFwZXJfZ2V0X3RlbXBlcmF0dXJlKHN0cnVjdCByZXBhcGVyX2VwZCAqZXBkKQ0KPiAg
+IAllcGQtPmZhY3RvcmVkX3N0YWdlX3RpbWUgPSBlcGQtPnN0YWdlX3RpbWUgKiBmYWN0b3Ix
+MHggLyAxMDsNCj4gICB9DQo+ICAgDQo+IC1zdGF0aWMgdm9pZCByZXBhcGVyX2dyYXk4X3Rv
+X21vbm9fcmV2ZXJzZWQodTggKmJ1ZiwgdTMyIHdpZHRoLCB1MzIgaGVpZ2h0KQ0KPiAtew0K
+PiAtCXU4ICpncmF5OCA9IGJ1ZiwgKm1vbm8gPSBidWY7DQo+IC0JaW50IHksIHhiLCBpOw0K
+PiAtDQo+IC0JZm9yICh5ID0gMDsgeSA8IGhlaWdodDsgeSsrKQ0KPiAtCQlmb3IgKHhiID0g
+MDsgeGIgPCB3aWR0aCAvIDg7IHhiKyspIHsNCj4gLQkJCXU4IGJ5dGUgPSAweDAwOw0KPiAt
+DQo+IC0JCQlmb3IgKGkgPSAwOyBpIDwgODsgaSsrKSB7DQo+IC0JCQkJaW50IHggPSB4YiAq
+IDggKyBpOw0KPiAtDQo+IC0JCQkJYnl0ZSA+Pj0gMTsNCj4gLQkJCQlpZiAoZ3JheThbeSAq
+IHdpZHRoICsgeF0gPj4gNykNCj4gLQkJCQkJYnl0ZSB8PSBCSVQoNyk7DQo+IC0JCQl9DQo+
+IC0JCQkqbW9ubysrID0gYnl0ZTsNCj4gLQkJfQ0KPiAtfQ0KPiAtDQo+ICAgc3RhdGljIGlu
+dCByZXBhcGVyX2ZiX2RpcnR5KHN0cnVjdCBkcm1fZnJhbWVidWZmZXIgKmZiKQ0KPiAgIHsN
+Cj4gICAJc3RydWN0IGRybV9nZW1fY21hX29iamVjdCAqY21hX29iaiA9IGRybV9mYl9jbWFf
+Z2V0X2dlbV9vYmooZmIsIDApOw0KPiBAQCAtNTYwLDEyICs1NDAsMTAgQEAgc3RhdGljIGlu
+dCByZXBhcGVyX2ZiX2RpcnR5KHN0cnVjdCBkcm1fZnJhbWVidWZmZXIgKmZiKQ0KPiAgIAlp
+ZiAocmV0KQ0KPiAgIAkJZ290byBvdXRfZnJlZTsNCj4gICANCj4gLQlkcm1fZmJfeHJnYjg4
+ODhfdG9fZ3JheTgoYnVmLCAwLCBjbWFfb2JqLT52YWRkciwgZmIsICZjbGlwKTsNCj4gKwlk
+cm1fZmJfeHJnYjg4ODhfdG9fbW9ub19yZXZlcnNlZChidWYsIDAsIGNtYV9vYmotPnZhZGRy
+LCBmYiwgJmNsaXApOw0KPiAgIA0KPiAgIAlkcm1fZ2VtX2ZiX2VuZF9jcHVfYWNjZXNzKGZi
+LCBETUFfRlJPTV9ERVZJQ0UpOw0KPiAgIA0KPiAtCXJlcGFwZXJfZ3JheThfdG9fbW9ub19y
+ZXZlcnNlZChidWYsIGZiLT53aWR0aCwgZmItPmhlaWdodCk7DQo+IC0NCj4gICAJaWYgKGVw
+ZC0+cGFydGlhbCkgew0KPiAgIAkJcmVwYXBlcl9mcmFtZV9kYXRhX3JlcGVhdChlcGQsIGJ1
+ZiwgZXBkLT5jdXJyZW50X2ZyYW1lLA0KPiAgIAkJCQkJICBSRVBBUEVSX05PUk1BTCk7DQoN
+Ci0tIA0KVGhvbWFzIFppbW1lcm1hbm4NCkdyYXBoaWNzIERyaXZlciBEZXZlbG9wZXINClNV
+U0UgU29mdHdhcmUgU29sdXRpb25zIEdlcm1hbnkgR21iSA0KTWF4ZmVsZHN0ci4gNSwgOTA0
+MDkgTsO8cm5iZXJnLCBHZXJtYW55DQooSFJCIDM2ODA5LCBBRyBOw7xybmJlcmcpDQpHZXNj
+aMOkZnRzZsO8aHJlcjogSXZvIFRvdGV2DQo=
 
-__alloc_pages_slowpath  took 44.644.613ns
-    __perform_reclaim   took    751.668ns (1.7%)
-    drain_all_pages     took 43.887.167ns (98.3%)
+--------------JCQH3f06HLrW0ZxwNUZvbO0D--
 
-PSI in this case records the time spent in __perform_reclaim but
-ignores drain_all_pages, IOW it misses 98.3% of the time spent in
-__alloc_pages_slowpath.
+--------------p181beNo2AE1YkJcylZbk1Z6
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
-Annotate __alloc_pages_direct_reclaim in its entirety so that delays
-from handling page allocation failure in the direct reclaim path are
-accounted as memory stall.
+-----BEGIN PGP SIGNATURE-----
 
-Reported-by: Tim Murray <timmurray@google.com>
-Signed-off-by: Suren Baghdasaryan <surenb@google.com>
-Acked-by: Johannes Weiner <hannes@cmpxchg.org>
----
-changes in v2:
-- Added captured sample case to show the delay numbers, per Michal Hocko
-- Moved annotation from __perform_reclaim into __alloc_pages_direct_reclaim,
-per Minchan Kim
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmIWja0FAwAAAAAACgkQlh/E3EQov+DN
+/A//VmgJS8XZJOZsaPRnxci5vIObjbmuEH4GNgjFfB7ewBlvBtw7v0wAijgaVuExffmihv9KNaB8
+6QjQVXrBNDI+LUHMZ0YP/66KiynM54pQLA5z0dsYonsbx4Jx1OjKwvJV9KDXGdJW//23Y9H9qHy5
+0T/4myWJ2vMxybo8udsU9DTipNhvnHtQl8BYn3LGJAZ7UCrhYZLf+6/HRAZURRMA7+B5gh9ibE1J
+xhxJMjpEBJCYyJetKfskHlx+ov/UAVjnjfTa2RaojwqDyT5FDIU88+jn/jT5hOLfAuJ7AvuyY3iE
+rUAfmk2ZMBq3h4nfOHhYT5e8jP9JWb5DDJ4Nl0+yBW+xYBwKIXeNTNDUZPO0VMevC3yiI4iSm4cH
+eOnfaNCTid5pJX+ZSqJQd8AOp83TnqClZ+ZrpDzlUEj7r7QrG0hxLNpA0l5+HBNwivgJYdQ8/HBC
+wtGRJFM1o75VYfq4j877WUOp69DRQYsry4navU/rguokU+teAhnrhE/e2zKUffLYlR5X3R1HkDGS
+U6oq7VyO4+BNoXPD4ioQoBZMB8ESJBd6gB1L9vL6kfzJZSM3MeFBuBDgN3GF2yx+gy07gJ/NKfQv
+KzAELMj7J27HBQ2eigUTADD6xTdeDS/AWS8s0LWL8NYBVkbdQZjMZ9NLcGPsP8ep+8oWr98Nul8A
+mfg=
+=j+JC
+-----END PGP SIGNATURE-----
 
- mm/page_alloc.c | 11 ++++++-----
- 1 file changed, 6 insertions(+), 5 deletions(-)
-
-diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-index 3589febc6d31..2e9fbf28938f 100644
---- a/mm/page_alloc.c
-+++ b/mm/page_alloc.c
-@@ -4595,13 +4595,12 @@ __perform_reclaim(gfp_t gfp_mask, unsigned int order,
- 					const struct alloc_context *ac)
- {
- 	unsigned int noreclaim_flag;
--	unsigned long pflags, progress;
-+	unsigned long progress;
- 
- 	cond_resched();
- 
- 	/* We now go into synchronous reclaim */
- 	cpuset_memory_pressure_bump();
--	psi_memstall_enter(&pflags);
- 	fs_reclaim_acquire(gfp_mask);
- 	noreclaim_flag = memalloc_noreclaim_save();
- 
-@@ -4610,7 +4609,6 @@ __perform_reclaim(gfp_t gfp_mask, unsigned int order,
- 
- 	memalloc_noreclaim_restore(noreclaim_flag);
- 	fs_reclaim_release(gfp_mask);
--	psi_memstall_leave(&pflags);
- 
- 	cond_resched();
- 
-@@ -4624,11 +4622,13 @@ __alloc_pages_direct_reclaim(gfp_t gfp_mask, unsigned int order,
- 		unsigned long *did_some_progress)
- {
- 	struct page *page = NULL;
-+	unsigned long pflags;
- 	bool drained = false;
- 
-+	psi_memstall_enter(&pflags);
- 	*did_some_progress = __perform_reclaim(gfp_mask, order, ac);
- 	if (unlikely(!(*did_some_progress)))
--		return NULL;
-+		goto out;
- 
- retry:
- 	page = get_page_from_freelist(gfp_mask, order, alloc_flags, ac);
-@@ -4644,7 +4644,8 @@ __alloc_pages_direct_reclaim(gfp_t gfp_mask, unsigned int order,
- 		drained = true;
- 		goto retry;
- 	}
--
-+	psi_memstall_leave(&pflags);
-+out:
- 	return page;
- }
- 
--- 
-2.35.1.473.g83b2b277ed-goog
-
+--------------p181beNo2AE1YkJcylZbk1Z6--

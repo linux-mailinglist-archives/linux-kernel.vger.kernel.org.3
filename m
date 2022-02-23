@@ -2,59 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55A3F4C0BB0
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 06:24:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BBBB4C0BAC
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 06:24:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238128AbiBWFY3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 00:24:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56484 "EHLO
+        id S238142AbiBWFYc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 00:24:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237834AbiBWFYU (ORCPT
+        with ESMTP id S237954AbiBWFYW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 00:24:20 -0500
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60354694AE
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 21:23:53 -0800 (PST)
-Received: by mail-yb1-xb4a.google.com with SMTP id o5-20020a25d705000000b0062499d760easo8076106ybg.7
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 21:23:53 -0800 (PST)
+        Wed, 23 Feb 2022 00:24:22 -0500
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 597A7694B1
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 21:23:55 -0800 (PST)
+Received: by mail-yb1-xb49.google.com with SMTP id x1-20020a25a001000000b0061c64ee0196so26706840ybh.9
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 21:23:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=o+K8zCWcV59JiWXD4aWine0/FDtELjiPI/RbdPNAHQc=;
-        b=gL62Qc22CZ6FeqYe4RTaen0CJKVsVLhWP6XuIpy8wtIhquKE7Hq2aAgjM0cnFrMx//
-         B9jyIFrBZPnR4ZblulS8U7l5+BX78tipmOGn+uNc7HwBgNSyCtAgwmuxuLupc9yf33fw
-         sG7BRSGiBqlxsiI4E0nPILyGbfSDlu+DOPd9cNUxoIqlK1SF5LShFZNMYNQ5wWc1UUUq
-         JRgPAlM6n7K8F/7k32Qk1plHhKLU8qRnhntMmXKxbAFtecCJ3vVWG8s4ryjAHjKMNW6w
-         HoGY4yajLvjwNYPSxXLVJpFkRwFJsLHr1WAWSZWkzlHrdQQ5OWrVIF2pqwZ0e1qUQPaz
-         mArQ==
+        bh=kBbjpsiAT8t80DB/Hae/sSQvzOy4duVi7ttnmtZT7iU=;
+        b=cvWzSg8yZgLUgWZKUIjW5TSN+BW3VTrtVOKpGEnHmCq9LFApxaz2ug4Y6Y4TweNu1W
+         f9E1LiZV7paz48nIFQ58vfAnH1K6o0bvbWTXyZRNy2eoNt9EF9GseVfZcFrpOMpaAZsv
+         YfeUwK9fKdGDUIC+bPsLXVrJ/dI3zlbx7hzpBmIG2MmUKT7no3dFhQFnuWlscR6nzDpw
+         D94zRcBAw6obzNOLADy5DNW08Hz9FTyO1IWbrJxXtBCcNGZOBsCLR5Y7BX69Ut6ugHh9
+         /ICUNuePn6v0tNGb7si9lPoIGDB/04KZ4aNfI9KEiCrUUlX4abSfJJXZ09+2AJGxuoWO
+         1yZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=o+K8zCWcV59JiWXD4aWine0/FDtELjiPI/RbdPNAHQc=;
-        b=qB79eIGhGkIiwG/GqSgomgsUKyuG1p8+DUfbxDAH7adv/R4SMjFSPVxjDRzMsxb5XS
-         SwdnXvA4VoecpgZNsjujMkyIBYM/yunBTsfweWNNGazbkvpxf0b5Cut1BZu5+YXAIYGu
-         Ju/sIhRwUZVdu8Au4hWofoERAyUm4zkd8/2FQhhD/A0vlrLFV1FrxefhED4nsontyMzk
-         gwL8mdpjBG4G7XmX9uwzI5rXt1AXEJJYp1rkSVJSLR2unh+u8OL+4HsCSqwzGkH5SrkA
-         +RfarES+h3idZid3wKOmH0D3MEqlIW9gy88X4GfXlIMQ4OikG4mjN1abjEW1GAzideaW
-         VJHw==
-X-Gm-Message-State: AOAM530qL3SONp6ezmLt09BaADB0bs+jj8jmmI8fxHOz68fy+pnMSAHl
-        iRDSOonVGbILmJd0TubN3BOMO13u6DLmQlW7fnuFcmjVKo+36QvQJW+GsnoEevA8qPDXdNpenGr
-        3/lClCtdG3TxLmIrX/juqdbZ5+m4x8eXxgcNyhQx6Raxh4R2HRJu7cwntmgBXvhOGuMImOGOO
-X-Google-Smtp-Source: ABdhPJyhZCUKb1E/Ab+htpmdItbzaBqk6IfSNwdQ2cMPET/cQ9m/cxN2+Idkkun2NTapLkyPe3v/k6Dz4k/E
+        bh=kBbjpsiAT8t80DB/Hae/sSQvzOy4duVi7ttnmtZT7iU=;
+        b=sgtaVo2O35rn+RnYqQwtFViQcppC0gYpQ6bAzqPNTYevFshnfxWxPYv5Afx1bJdkiS
+         ddv7Jv+7jvvesZYHUCK2N0gX9ZzGDvTHGOAjBUk0ajxY3MnLqLtq8KoFG9MXl7Afa0xn
+         rQwRcenxy0UliQ7mG7Hfv561Wc0QGEVpEJdbmba3GbS55Zgw3PE7pMp26LnmFotuIJiq
+         K1F1K73btt68VrlxplkeMYd+L7c6pUPvsiH48wYtZF+hzR94ptDp3HHWuyzqHoQKb/8s
+         17e/yZwgMrCkwBRg2WX6QDrcHUqLd3cceqvE5s8D+k6/JrObn4yfsxmVbAXwopsuTAOI
+         F6kw==
+X-Gm-Message-State: AOAM530g7LoJ/v0F6YriCAgKsTUbc350M3Rzykq6rFUu6vbakzxGdiQE
+        4zVg4qB67BgGKiXSu07r0tV+d4DTZnmQUpTsfTTDM1LBsDhS6fO/dqNCqfbB3jXxhjRYKGufLbo
+        h+Rb2onH5BqKhfjamg+WeEQms5NXSxTULgZoADX8aiFZ4RsLqwvuzGcWBRLxEnBcHSFgRnSkW
+X-Google-Smtp-Source: ABdhPJyBLtJwVHx/eQ2H1TXtGc5CWguV1DYKie3D2boh+nhOh7RhoskWr4B/mahF4dAK4TfkpcUJJeAOMAIF
 X-Received: from js-desktop.svl.corp.google.com ([2620:15c:2cd:202:ccbe:5d15:e2e6:322])
- (user=junaids job=sendgmr) by 2002:a25:a486:0:b0:61d:a523:acd0 with SMTP id
- g6-20020a25a486000000b0061da523acd0mr25432547ybi.203.1645593832574; Tue, 22
- Feb 2022 21:23:52 -0800 (PST)
-Date:   Tue, 22 Feb 2022 21:21:39 -0800
+ (user=junaids job=sendgmr) by 2002:a05:6902:1ca:b0:624:e2a1:2856 with SMTP id
+ u10-20020a05690201ca00b00624e2a12856mr4238491ybh.389.1645593834551; Tue, 22
+ Feb 2022 21:23:54 -0800 (PST)
+Date:   Tue, 22 Feb 2022 21:21:40 -0800
 In-Reply-To: <20220223052223.1202152-1-junaids@google.com>
-Message-Id: <20220223052223.1202152-4-junaids@google.com>
+Message-Id: <20220223052223.1202152-5-junaids@google.com>
 Mime-Version: 1.0
 References: <20220223052223.1202152-1-junaids@google.com>
 X-Mailer: git-send-email 2.35.1.473.g83b2b277ed-goog
-Subject: [RFC PATCH 03/47] mm: asi: Switch to unrestricted address space when
- entering scheduler
+Subject: [RFC PATCH 04/47] mm: asi: ASI support in interrupts/exceptions
 From:   Junaid Shahid <junaids@google.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     kvm@vger.kernel.org, pbonzini@redhat.com, jmattson@google.com,
@@ -66,46 +65,261 @@ Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-To keep things simpler, we run the scheduler only in the full
-unrestricted address space for the time being.
+Add support for potentially switching address spaces from within
+interrupts/exceptions/NMIs etc. An interrupt does not automatically
+switch to the unrestricted address space. It can switch if needed to
+access some memory not available in the restricted address space, using
+the normal asi_exit call.
+
+On return from the outermost interrupt, if the target address space was
+the restricted address space (e.g. we were in the critical code path
+between ASI Enter and VM Enter), the restricted address space will be
+automatically restored. Otherwise, execution will continue in the
+unrestricted address space until the next explicit ASI Enter.
+
+In order to keep track of when to restore the restricted address space,
+an interrupt/exception nesting depth counter is maintained per-task.
+An alternative implementation without needing this counter is also
+possible, but the counter unlocks an additional nice-to-have benefit by
+allowing detection of whether or not we are currently executing inside
+an exception context, which would be useful in a later patch.
 
 Signed-off-by: Junaid Shahid <junaids@google.com>
 
 
 ---
- kernel/sched/core.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ arch/x86/include/asm/asi.h       | 35 ++++++++++++++++++++++++++++++++
+ arch/x86/include/asm/idtentry.h  | 25 +++++++++++++++++++++--
+ arch/x86/include/asm/processor.h |  5 +++++
+ arch/x86/kernel/process.c        |  2 ++
+ arch/x86/kernel/traps.c          |  2 ++
+ arch/x86/mm/asi.c                |  3 ++-
+ kernel/entry/common.c            |  6 ++++++
+ 7 files changed, 75 insertions(+), 3 deletions(-)
 
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index 77563109c0ea..44ea197c16ea 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -19,6 +19,7 @@
+diff --git a/arch/x86/include/asm/asi.h b/arch/x86/include/asm/asi.h
+index 0a4af23ed0eb..7702332c62e8 100644
+--- a/arch/x86/include/asm/asi.h
++++ b/arch/x86/include/asm/asi.h
+@@ -4,6 +4,8 @@
  
- #include <asm/switch_to.h>
- #include <asm/tlb.h>
+ #include <asm-generic/asi.h>
+ 
++#include <linux/sched.h>
++
+ #include <asm/pgtable_types.h>
+ #include <asm/percpu.h>
+ #include <asm/cpufeature.h>
+@@ -51,6 +53,11 @@ void asi_destroy(struct asi *asi);
+ void asi_enter(struct asi *asi);
+ void asi_exit(void);
+ 
++static inline void asi_init_thread_state(struct thread_struct *thread)
++{
++	thread->intr_nest_depth = 0;
++}
++
+ static inline void asi_set_target_unrestricted(void)
+ {
+ 	if (static_cpu_has(X86_FEATURE_ASI)) {
+@@ -85,6 +92,34 @@ static inline bool asi_is_target_unrestricted(void)
+ 
+ #define static_asi_enabled() cpu_feature_enabled(X86_FEATURE_ASI)
+ 
++static inline void asi_intr_enter(void)
++{
++	if (static_cpu_has(X86_FEATURE_ASI)) {
++		current->thread.intr_nest_depth++;
++		barrier();
++	}
++}
++
++static inline void asi_intr_exit(void)
++{
++	void __asi_enter(void);
++
++	if (static_cpu_has(X86_FEATURE_ASI)) {
++		barrier();
++
++		if (--current->thread.intr_nest_depth == 0)
++			__asi_enter();
++	}
++}
++
++#else	/* CONFIG_ADDRESS_SPACE_ISOLATION */
++
++static inline void asi_intr_enter(void) { }
++
++static inline void asi_intr_exit(void) { }
++
++static inline void asi_init_thread_state(struct thread_struct *thread) { }
++
+ #endif	/* CONFIG_ADDRESS_SPACE_ISOLATION */
+ 
+ #endif
+diff --git a/arch/x86/include/asm/idtentry.h b/arch/x86/include/asm/idtentry.h
+index 1345088e9902..ea5cdc90403d 100644
+--- a/arch/x86/include/asm/idtentry.h
++++ b/arch/x86/include/asm/idtentry.h
+@@ -10,6 +10,7 @@
+ #include <linux/hardirq.h>
+ 
+ #include <asm/irq_stack.h>
 +#include <asm/asi.h>
  
- #include "../workqueue_internal.h"
- #include "../../fs/io-wq.h"
-@@ -6141,6 +6142,10 @@ static void __sched notrace __schedule(unsigned int sched_mode)
- 	rq = cpu_rq(cpu);
- 	prev = rq->curr;
+ /**
+  * DECLARE_IDTENTRY - Declare functions for simple IDT entry points
+@@ -133,7 +134,16 @@ static __always_inline void __##func(struct pt_regs *regs,		\
+  * is required before the enter/exit() helpers are invoked.
+  */
+ #define DEFINE_IDTENTRY_RAW(func)					\
+-__visible noinstr void func(struct pt_regs *regs)
++static __always_inline void __##func(struct pt_regs *regs);		\
++									\
++__visible noinstr void func(struct pt_regs *regs)			\
++{									\
++	asi_intr_enter();						\
++	__##func (regs);						\
++	asi_intr_exit();						\
++}									\
++									\
++static __always_inline void __##func(struct pt_regs *regs)
  
-+	/* This could possibly be delayed to just before the context switch. */
-+	VM_WARN_ON(!asi_is_target_unrestricted());
-+	asi_exit();
+ /**
+  * DECLARE_IDTENTRY_RAW_ERRORCODE - Declare functions for raw IDT entry points
+@@ -161,7 +171,18 @@ __visible noinstr void func(struct pt_regs *regs)
+  * is required before the enter/exit() helpers are invoked.
+  */
+ #define DEFINE_IDTENTRY_RAW_ERRORCODE(func)				\
+-__visible noinstr void func(struct pt_regs *regs, unsigned long error_code)
++static __always_inline void __##func(struct pt_regs *regs,		\
++				     unsigned long error_code);		\
++									\
++__visible noinstr void func(struct pt_regs *regs, unsigned long error_code)\
++{									\
++	asi_intr_enter();						\
++	__##func (regs, error_code);					\
++	asi_intr_exit();						\
++}									\
++									\
++static __always_inline void __##func(struct pt_regs *regs,		\
++				     unsigned long error_code)
+ 
+ /**
+  * DECLARE_IDTENTRY_IRQ - Declare functions for device interrupt IDT entry
+diff --git a/arch/x86/include/asm/processor.h b/arch/x86/include/asm/processor.h
+index 355d38c0cf60..20116efd2756 100644
+--- a/arch/x86/include/asm/processor.h
++++ b/arch/x86/include/asm/processor.h
+@@ -519,6 +519,11 @@ struct thread_struct {
+ 	unsigned int		iopl_warn:1;
+ 	unsigned int		sig_on_uaccess_err:1;
+ 
++#ifdef CONFIG_ADDRESS_SPACE_ISOLATION
++	/* The nesting depth of exceptions/interrupts */
++	int			intr_nest_depth;
++#endif
 +
- 	schedule_debug(prev, !!sched_mode);
+ 	/*
+ 	 * Protection Keys Register for Userspace.  Loaded immediately on
+ 	 * context switch. Store it in thread_struct to avoid a lookup in
+diff --git a/arch/x86/kernel/process.c b/arch/x86/kernel/process.c
+index 04143a653a8a..c8d4a00a4de7 100644
+--- a/arch/x86/kernel/process.c
++++ b/arch/x86/kernel/process.c
+@@ -90,6 +90,8 @@ int arch_dup_task_struct(struct task_struct *dst, struct task_struct *src)
+ #ifdef CONFIG_VM86
+ 	dst->thread.vm86 = NULL;
+ #endif
++	asi_init_thread_state(&dst->thread);
++
+ 	/* Drop the copied pointer to current's fpstate */
+ 	dst->thread.fpu.fpstate = NULL;
  
- 	if (sched_feat(HRTICK) || sched_feat(HRTICK_DL))
+diff --git a/arch/x86/kernel/traps.c b/arch/x86/kernel/traps.c
+index c9d566dcf89a..acf675ddda96 100644
+--- a/arch/x86/kernel/traps.c
++++ b/arch/x86/kernel/traps.c
+@@ -61,6 +61,7 @@
+ #include <asm/insn.h>
+ #include <asm/insn-eval.h>
+ #include <asm/vdso.h>
++#include <asm/asi.h>
+ 
+ #ifdef CONFIG_X86_64
+ #include <asm/x86_init.h>
+@@ -413,6 +414,7 @@ DEFINE_IDTENTRY_DF(exc_double_fault)
+ 	}
+ #endif
+ 
++	asi_exit();
+ 	irqentry_nmi_enter(regs);
+ 	instrumentation_begin();
+ 	notify_die(DIE_TRAP, str, regs, error_code, X86_TRAP_DF, SIGSEGV);
+diff --git a/arch/x86/mm/asi.c b/arch/x86/mm/asi.c
+index d274c86f89b7..2453124f221d 100644
+--- a/arch/x86/mm/asi.c
++++ b/arch/x86/mm/asi.c
+@@ -107,12 +107,13 @@ void asi_destroy(struct asi *asi)
+ }
+ EXPORT_SYMBOL_GPL(asi_destroy);
+ 
+-static void __asi_enter(void)
++void __asi_enter(void)
+ {
+ 	u64 asi_cr3;
+ 	struct asi *target = this_cpu_read(asi_cpu_state.target_asi);
+ 
+ 	VM_BUG_ON(preemptible());
++	VM_BUG_ON(current->thread.intr_nest_depth != 0);
+ 
+ 	if (!target || target == this_cpu_read(asi_cpu_state.curr_asi))
+ 		return;
+diff --git a/kernel/entry/common.c b/kernel/entry/common.c
+index d5a61d565ad5..9064253085c7 100644
+--- a/kernel/entry/common.c
++++ b/kernel/entry/common.c
+@@ -9,6 +9,8 @@
+ 
+ #include "common.h"
+ 
++#include <asm/asi.h>
++
+ #define CREATE_TRACE_POINTS
+ #include <trace/events/syscalls.h>
+ 
+@@ -321,6 +323,8 @@ noinstr irqentry_state_t irqentry_enter(struct pt_regs *regs)
+ 		.exit_rcu = false,
+ 	};
+ 
++	asi_intr_enter();
++
+ 	if (user_mode(regs)) {
+ 		irqentry_enter_from_user_mode(regs);
+ 		return ret;
+@@ -416,6 +420,7 @@ noinstr void irqentry_exit(struct pt_regs *regs, irqentry_state_t state)
+ 			instrumentation_end();
+ 			rcu_irq_exit();
+ 			lockdep_hardirqs_on(CALLER_ADDR0);
++			asi_intr_exit();
+ 			return;
+ 		}
+ 
+@@ -438,6 +443,7 @@ noinstr void irqentry_exit(struct pt_regs *regs, irqentry_state_t state)
+ 		if (state.exit_rcu)
+ 			rcu_irq_exit();
+ 	}
++	asi_intr_exit();
+ }
+ 
+ irqentry_state_t noinstr irqentry_nmi_enter(struct pt_regs *regs)
 -- 
 2.35.1.473.g83b2b277ed-goog
 

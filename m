@@ -2,120 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 472F24C0E94
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 09:54:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 701214C0EAF
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 09:59:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239099AbiBWIzE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 03:55:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34196 "EHLO
+        id S239130AbiBWI7r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 03:59:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237307AbiBWIzD (ORCPT
+        with ESMTP id S239125AbiBWI7o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 03:55:03 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 737177B56D;
-        Wed, 23 Feb 2022 00:54:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645606476; x=1677142476;
-  h=to:cc:references:from:subject:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=0ZZp86S8zQ5HRoamd0As4WUEpt/6C+J08F7o2V0U4gk=;
-  b=EHAK1YAEBfgGW5W16QdkjnT2QadwGdpb73Irr0Xn8aDtd+kv3AuEmt3V
-   40Xsfi88ofknXcx4G6eTcDC5BS/rvoatrMyQNoBC++4yVHBv9RpP6Hztn
-   a7XJx6iW6Sp6LeXTbFFMUmbqcZNde4Lsz35vVTdC1ktXV0jyL2sSA0f8S
-   jL4amqeNPWauqs8gNfZ49ijjAyZ0xDRbpKpGw94pSn9mcOq42Ao46Vuwi
-   3j0zYM/kYFJDRXOk8ZeCsG4R5eWH2IWmo72qaz5luH+HchU4SRLwlJEWO
-   sk/aP59fAL41wM5OQ3hBSE8AXrO1HmoL9rnk1n+4jxM44FSqJXNnFu+I/
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10266"; a="251653875"
-X-IronPort-AV: E=Sophos;i="5.88,390,1635231600"; 
-   d="scan'208";a="251653875"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2022 00:54:36 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,390,1635231600"; 
-   d="scan'208";a="573743475"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by orsmga001.jf.intel.com with ESMTP; 23 Feb 2022 00:54:34 -0800
-To:     Anssi Hannula <anssi.hannula@bitwise.fi>,
-        Mathias Nyman <mathias.nyman@intel.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220222134117.34844-1-anssi.hannula@bitwise.fi>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: Re: [PATCH 1/2] xhci: fix garbage USBSTS being logged in some cases
-Message-ID: <fe7381b1-19bc-3b1e-50f3-0ed5c7c39e5e@linux.intel.com>
-Date:   Wed, 23 Feb 2022 10:56:14 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.14.0
+        Wed, 23 Feb 2022 03:59:44 -0500
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB2887C79E
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 00:59:16 -0800 (PST)
+Received: by mail-pj1-x1030.google.com with SMTP id q8-20020a17090a178800b001bc299b8de1so2097814pja.1
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 00:59:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=w2to3BP7Hk9Rhn4a/m99kEi4zOalhc4jbVth64Ox8bo=;
+        b=Ioq3fZdQL5Go7nNoKOTcI6UkzVDslzikWseU5l/a6xLGDiYT2bcUe9ivpcNzD7K1Tv
+         T03nES8J7htJdgJBrqq8sXjU3Qmx0RE90QkgNxV5QBgzUXXkQGndMG2n/ZDtTN39AUjc
+         uBBxrkCjdwZrFE6qaODTqqvrTGXRaRD6i4/DzHhc/Rt+0VqiiyE/v3g4p8KIj1cL1ovV
+         atI3/aEzA0lHOAWLTfrPiPQEEow8/gm+sCOAg7/HxWsTPJdWswhCLoj+zhReCoEgBbeC
+         lla/EdI7SfKzDSHpVuUgdIOr18CcF3E51B/+tPq+GO8XUdrjEaaL821NGrzPGBPaKcUJ
+         qMmA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=w2to3BP7Hk9Rhn4a/m99kEi4zOalhc4jbVth64Ox8bo=;
+        b=4eoI9TQTKYGx5zkzK21yMQ7Mfwj4AZ77hdwF6qIRJv8PrSXGTcIBRfSkAVQ1B8n/oJ
+         aCpeGReJ0CYOOJmI3tVI0Tqp1ZCgz6d/2Mfn27vU/YOtjKXGkBfV3EDZACs9WiZsXCm/
+         zZ4KygxVhmtlpvTWW13i/hDhe48luraKtFFV9W8D2t5OkqE44Jawejs44iNRMgW349O7
+         slLYtE6axJmg0dAgrKBoKA0yPChQ9uhAVmorHJwhlfyWUuAR5rwzZiZuHcRWoKTzuDLH
+         r1rTFVl2iDp65rE8R7T3QzRcnf+P9yu0E2hliA1A4HtyrB9Uh56vri7m+gp5d8yVo7b7
+         +KYA==
+X-Gm-Message-State: AOAM530QmdY5iszN+CGzrAQa48DldEPoPX/mUMTjpC5yY6RfWMEaYM0h
+        /rKUMsEY/i3E2wi8Nn5/yMY=
+X-Google-Smtp-Source: ABdhPJxEbCWZhD20rDjbo+ruunHnyo4end5hE45bLbvCFRkuf+jTx5gSE41diVYb+XaE7XFzcnTTMw==
+X-Received: by 2002:a17:902:ea02:b0:14f:fd0e:e433 with SMTP id s2-20020a170902ea0200b0014ffd0ee433mr1073572plg.24.1645606756292;
+        Wed, 23 Feb 2022 00:59:16 -0800 (PST)
+Received: from localhost ([103.220.76.197])
+        by smtp.gmail.com with ESMTPSA id u17sm16834351pfi.99.2022.02.23.00.59.14
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Wed, 23 Feb 2022 00:59:15 -0800 (PST)
+Date:   Wed, 23 Feb 2022 16:57:40 +0800
+From:   Yue Hu <zbestahu@gmail.com>
+To:     Gao Xiang <hsiangkao@linux.alibaba.com>
+Cc:     linux-erofs@lists.ozlabs.org, Chao Yu <chao@kernel.org>,
+        Yue Hu <huyue2@yulong.com>,
+        LKML <linux-kernel@vger.kernel.org>, zhangwen@coolpad.com,
+        shaojunjun@coolpad.com
+Subject: Re: [PATCH] erofs: fix ztailpacking on > 4GiB filesystems
+Message-ID: <20220223165740.0000067a.zbestahu@gmail.com>
+In-Reply-To: <20220222033118.20540-1-hsiangkao@linux.alibaba.com>
+References: <20220222033118.20540-1-hsiangkao@linux.alibaba.com>
+X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; i686-w64-mingw32)
 MIME-Version: 1.0
-In-Reply-To: <20220222134117.34844-1-anssi.hannula@bitwise.fi>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22.2.2022 15.41, Anssi Hannula wrote:
-> xhci_decode_usbsts() is expected to return a zero-terminated string by
-> its only caller, xhci_stop_endpoint_command_watchdog(), which directly
-> logs the return value:
+On Tue, 22 Feb 2022 11:31:18 +0800
+Gao Xiang <hsiangkao@linux.alibaba.com> wrote:
+
+> z_idataoff here is an absolute physical offset, so it should use
+> erofs_off_t (64 bits at least). Otherwise, it'll get trimmed and
+> cause the decompresion failure.
 > 
->   xhci_warn(xhci, "USBSTS:%s\n", xhci_decode_usbsts(str, usbsts));
-> 
-> However, if no recognized bits are set in usbsts, the function will
-> return without having called any sprintf() and therefore return an
-> untouched non-zero-terminated caller-provided buffer, causing garbage
-> to be output to log.
-> 
-> Fix that by always including the raw value in the output.
-> 
-> Note that before 4843b4b5ec64 ("xhci: fix even more unsafe memory usage
-> in xhci tracing") the result effect in the failure case was different as
-> a static buffer was used here, but the code still worked incorrectly.
-> 
-> Fixes: 9c1aa36efdae ("xhci: Show host status when watchdog triggers and host is assumed dead.")
-> Signed-off-by: Anssi Hannula <anssi.hannula@bitwise.fi>
+> Fixes: ab92184ff8f1 ("erofs: add on-disk compressed tail-packing inline support")
+> Signed-off-by: Gao Xiang <hsiangkao@linux.alibaba.com>
 > ---
+>  fs/erofs/internal.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> Noticed this while debugging a USB issue. Let me know if you prefer a
-> different fix.
-> 
->  drivers/usb/host/xhci.h | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
-> index 8a0026ee9524..ac91647195f6 100644
-> --- a/drivers/usb/host/xhci.h
-> +++ b/drivers/usb/host/xhci.h
-> @@ -2642,6 +2642,7 @@ static inline const char *xhci_decode_usbsts(char *str, u32 usbsts)
->  		ret += sprintf(str + ret, " CNR");
->  	if (usbsts & STS_HCE)
->  		ret += sprintf(str + ret, " HCE");
-> +	ret += sprintf(str + ret, " (0x%08x)", usbsts);
+> diff --git a/fs/erofs/internal.h b/fs/erofs/internal.h
+> index b8272fb95fd6..5aa2cf2c2f80 100644
+> --- a/fs/erofs/internal.h
+> +++ b/fs/erofs/internal.h
+> @@ -325,7 +325,7 @@ struct erofs_inode {
+>  			unsigned char  z_algorithmtype[2];
+>  			unsigned char  z_logical_clusterbits;
+>  			unsigned long  z_tailextent_headlcn;
+> -			unsigned int   z_idataoff;
+> +			erofs_off_t    z_idataoff;
+>  			unsigned short z_idata_size;
+>  		};
+>  #endif	/* CONFIG_EROFS_FS_ZIP */
 
-Thanks, nice catch.
-
-Maybe this could be the first thing printed out, something like (untested):
-
-@@ -2697,8 +2697,11 @@ static inline const char *xhci_decode_usbsts(char *str, u32 usbsts)
- {
-        int ret = 0;
- 
-+       ret = sprintf(str, " 0x%08x", usbsts);
-+
-        if (usbsts == ~(u32)0)
--               return " 0xffffffff";
-+               return str;
-+
-
--Mathias
-
+Reviewed-by: Yue Hu <huyue2@yulong.com>

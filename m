@@ -2,129 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B92EB4C1DD3
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 22:35:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4484E4C1DD7
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 22:37:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242694AbiBWVgI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 16:36:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34122 "EHLO
+        id S242846AbiBWVhc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 16:37:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233926AbiBWVgF (ORCPT
+        with ESMTP id S241103AbiBWVhb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 16:36:05 -0500
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D250A4F471
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 13:35:37 -0800 (PST)
-Received: by mail-pf1-x42c.google.com with SMTP id i21so55950pfd.13
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 13:35:37 -0800 (PST)
+        Wed, 23 Feb 2022 16:37:31 -0500
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEE1942A00
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 13:37:00 -0800 (PST)
+Received: by mail-ed1-x52c.google.com with SMTP id c6so149670edk.12
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 13:37:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Ac/BcOmu5MdCFvS6JemgJvEoEjf0jHjFl+jOA9n59Gc=;
-        b=N/wTJKNAsZAb2+DXd9uj0Oou2P7XETVHuE1paOj0Y2ML35z//aC0r2GJr2MClR45rT
-         psUelX9t/gf+vG1bABjgortKasTe6wAnmupXsSu/4KcTbxxVICoUAubvvdtii7xUimVc
-         8C4S8d4njpOej0HVoqsGPUQfZE8YrknKb7f1sAz4nm/Ktor/SJqUj0vEc/FU6E5Zvu0O
-         4Kem6g2f7Et8fjdHNgEQZFvJg3YG/xxhXy6rZJjFlWPucfwsvmYFkHIhomLnV7grI4ZH
-         LxAr7q5qUVwdPN8kuX5Vp4AiLcjrqqz5yogchFGVxCk2ht/xGRHMhvwX/lAU+L5K2YPn
-         gYvA==
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=5a38AcDGlULeizv+EnYpYzbUdgQ8NvBfm031ilv5PP0=;
+        b=fBbrdGBqV4P1Iyp4pwMlXbAztmG/njOLjZ2rbrniYRN9oxIh4pgfk6mm5NReO/C4HU
+         CEvHB89LVaC936ftMVOTUQHk3TwA66Uik2AROrqdg+ierKDP+AHqjHJA3+D/cVb9APXo
+         uH0xvhTt/LhloQ5pOv4ym6qNqOUaQ9rJcv1j5j8/doMsIn37eAzMgsLzUfb9L6TSbo80
+         9Q+PkItjssd9WDNbz/qSoSO8/K2XE3Q++126AieLLnY0mKC8y7Zbv6rlwT7I4PKVmoe2
+         xF4VrO8mIMKQ9U0yCqrIyvscc58kSKWc9vSqBdJquXZ1Tml07kYn1OcZLNKelXAQFDN7
+         aN8A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=Ac/BcOmu5MdCFvS6JemgJvEoEjf0jHjFl+jOA9n59Gc=;
-        b=i4987E8PLh3zv/E7arKHIlgviH1zsbqvIjdZbZag4CL8Y3EKPrmAAcKccOdKIB2FJc
-         O+B26jFDJ4u4Ry38zvVtxpnEODxSHMylUSDBg/3BukSFaP2weAdX2MqCVAosIhffzd31
-         QBZKTIWgIOWHfgMJ7dbsrno31oQmBkctitxnHxd5g/pIVSZU6vCYKn9edY8Ukkwoiucf
-         6wekWza1orKDa9KbugcRI5OiSQ1InNZFMBL/839aAzZPD440QJ5OaWJVBNYcxl2Vy5YM
-         hN2rU5foZpQVHFEqWKvLyqtClU/sdBWJ50XOwAmpdHMvU0KN237EnxQ7T8tE7aD4pl2q
-         saWQ==
-X-Gm-Message-State: AOAM533H6bAErEn1uqTakGUzWbPZvFzLYB3A0TVfTJsGmUet9BeoZKH7
-        d9YStQgYzt5FLN+hythDlV3+UfUtnNw=
-X-Google-Smtp-Source: ABdhPJymrFlposXdBgHft7TUiaq7uyEHdUjCbKVRK+0wR1l8SoJwKXsQ28HBNk21IZoHVJX0D6QP+g==
-X-Received: by 2002:a63:af02:0:b0:375:57f0:8af1 with SMTP id w2-20020a63af02000000b0037557f08af1mr1247422pge.188.1645652137012;
-        Wed, 23 Feb 2022 13:35:37 -0800 (PST)
-Received: from localhost (2603-800c-1a02-1bae-e24f-43ff-fee6-449f.res6.spectrum.com. [2603:800c:1a02:1bae:e24f:43ff:fee6:449f])
-        by smtp.gmail.com with ESMTPSA id m13sm518443pfk.202.2022.02.23.13.35.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Feb 2022 13:35:36 -0800 (PST)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Wed, 23 Feb 2022 11:35:35 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Marek Szyprowski <m.szyprowski@samsung.com>
-Cc:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-        linux-rpi-kernel <linux-rpi-kernel@lists.infradead.org>,
-        Bart Van Assche <bvanassche@acm.org>, jgg@ziepe.ca,
-        linux-kernel@vger.kernel.org,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Haakon Bugge <haakon.bugge@oracle.com>,
-        DRI mailing list <dri-devel@lists.freedesktop.org>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>
-Subject: Re: [PATCH v2] workqueue: Warn flush attempt using system-wide
- workqueues
-Message-ID: <Yhaop3T53bHo7v2I@slm.duckdns.org>
-References: <71d6f14e-46af-cc5a-bc70-af1cdc6de8d5@acm.org>
- <309c86b7-2a4c-1332-585f-7bcd59cfd762@I-love.SAKURA.ne.jp>
- <aa2bf24e-981a-a811-c5d8-a75f0b8f693a@acm.org>
- <2959649d-cfbc-bdf2-02ac-053b8e7af030@I-love.SAKURA.ne.jp>
- <YgnQGZWT/n3VAITX@slm.duckdns.org>
- <8ebd003c-f748-69b4-3a4f-fb80a3f39d36@I-love.SAKURA.ne.jp>
- <YgqSsuSN5C7StvKx@slm.duckdns.org>
- <2f887679-c783-bf18-a2aa-aa9a709bfb38@I-love.SAKURA.ne.jp>
- <CGME20220223212048eucas1p1fab5e35ff398eff57808a8f1125dd15f@eucas1p1.samsung.com>
- <4e5fe60d-abbb-6e73-b8cc-c3e1a314fbce@samsung.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=5a38AcDGlULeizv+EnYpYzbUdgQ8NvBfm031ilv5PP0=;
+        b=AyGUyZIo8nf/+zqMkG22UlGRww5JYAt4HSosBNHW7dB/c5SD77MGY9CJ2FSMg3hRA1
+         yyJVgdN1GjeLULTcO4f+t8z60OD6w1fx+Ziz+JSmh3JDaYMdufPYG8koE7dCU3MObdsz
+         OkqUsbwzpSDrFL3cwEdJ0dmYd2CK0zUaci5azzTMz4rcvP7rvCkadAsaGKc356QvX8AZ
+         o+1gRI8BFXGQxCikskJ9aAROkWhzdeUj3vBsnga7of7HYg6pSEH+j66scP7zM2LBOqlp
+         pa4N8N5PAoqhAjrjeTJqIYbxZsdTi/HSqOnVeUM9IfO+KzN/2dIC5xqoEHl+pdju9cOb
+         DsOw==
+X-Gm-Message-State: AOAM530ETczSNPdkSN82N6o+WkIWvFoJCu7BYxeEvZz87LVWN0sgjZrx
+        TnrrY5XkActKNHvNMW+9eDMrHKqeY0BAORPb8AeJ
+X-Google-Smtp-Source: ABdhPJw0X+MoNWQ7FDxL3gL75dC/StudsMpEmpggdeA+St1S67D7g9NbXeHDH+g+Se1J4Ppv5218Hb0YjTU0PjKYiD8=
+X-Received: by 2002:a50:e004:0:b0:410:a39b:e30c with SMTP id
+ e4-20020a50e004000000b00410a39be30cmr1275208edl.198.1645652219317; Wed, 23
+ Feb 2022 13:36:59 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4e5fe60d-abbb-6e73-b8cc-c3e1a314fbce@samsung.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+References: <20220221131533.74238-1-richard_c_haines@btinternet.com>
+ <CAHC9VhQnRQFrM-mTzUQ3UsyVp2JYw1wUh=7yrdjH7-QmHKidAg@mail.gmail.com>
+ <20396305e71619dbee4fa3c612925b57f4bb0a4b.camel@btinternet.com>
+ <CAFqZXNuf5J35Jb3nmQ6YRrc6C2f5rk-30U0rB4wTMd-+SBQhEQ@mail.gmail.com> <2b45951fceea5f535550f8ab3f3d25c3ff12a8c5.camel@btinternet.com>
+In-Reply-To: <2b45951fceea5f535550f8ab3f3d25c3ff12a8c5.camel@btinternet.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Wed, 23 Feb 2022 16:36:48 -0500
+Message-ID: <CAHC9VhSDavBRxWEp2frY_dkSaxSBHfiCZ1zF2YNNoq6+-+GTjA@mail.gmail.com>
+Subject: Re: [PATCH V2] security/selinux: Always allow FIOCLEX and FIONCLEX
+To:     Richard Haines <richard_c_haines@btinternet.com>
+Cc:     Ondrej Mosnacek <omosnace@redhat.com>,
+        Stephen Smalley <stephen.smalley.work@gmail.com>,
+        Eric Paris <eparis@parisplace.org>, demiobenour@gmail.com,
+        SElinux list <selinux@vger.kernel.org>,
+        Linux kernel mailing list <linux-kernel@vger.kernel.org>,
+        selinux-refpolicy@vger.kernel.org,
+        Jeff Vander Stoep <jeffv@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 23, 2022 at 10:20:47PM +0100, Marek Szyprowski wrote:
-> Hi All,
-> 
-> On 17.02.2022 12:22, Tetsuo Handa wrote:
-> > syzbot found a circular locking dependency which is caused by flushing
-> > system_long_wq WQ [1]. Tejun Heo commented that it makes no sense at all
-> > to call flush_workqueue() on the shared workqueues as the caller has no
-> > idea what it's gonna end up waiting for.
+On Wed, Feb 23, 2022 at 7:43 AM Richard Haines
+<richard_c_haines@btinternet.com> wrote:
+> On Wed, 2022-02-23 at 13:12 +0100, Ondrej Mosnacek wrote:
+> > On Wed, Feb 23, 2022 at 12:58 PM Richard Haines
+> > <richard_c_haines@btinternet.com> wrote:
+> > > On Tue, 2022-02-22 at 18:28 -0500, Paul Moore wrote:
+> > > > On Mon, Feb 21, 2022 at 8:15 AM Richard Haines
+> > > > <richard_c_haines@btinternet.com> wrote:
+> > > > >
+> > > > > These ioctls are equivalent to fcntl(fd, F_SETFD, flags), which
+> > > > > SELinux
+> > > > > always allows too.  Furthermore, a failed FIOCLEX could result
+> > > > > in a
+> > > > > file
+> > > > > descriptor being leaked to a process that should not have
+> > > > > access to
+> > > > > it.
+> > > > >
+> > > > > As this patch removes access controls, a policy capability
+> > > > > needs to
+> > > > > be
+> > > > > enabled in policy to always allow these ioctls.
+> > > > >
+> > > > > Based-on-patch-by: Demi Marie Obenour <demiobenour@gmail.com>
+> > > > > Signed-off-by: Richard Haines <richard_c_haines@btinternet.com>
+> > > > > ---
+> > > > > V2 Change: Control via a policy capability. See this thread for
+> > > > > discussion:
+> > > > > https://lore.kernel.org/selinux/CAHC9VhQEPxYP_KU56gAGNHKQaxucY8gSsHiUB42PVgADBAccRQ@mail.gmail.com/T/#t
+> > > > >
+> > > > > With this patch and the polcap enabled, the selinux-testsuite
+> > > > > will
+> > > > > fail:
+> > > > > ioctl/test at line 47 - Will need a fix.
+> > > > >
+> > > > >  security/selinux/hooks.c                   | 7 +++++++
+> > > > >  security/selinux/include/policycap.h       | 1 +
+> > > > >  security/selinux/include/policycap_names.h | 3 ++-
+> > > > >  security/selinux/include/security.h        | 7 +++++++
+> > > > >  4 files changed, 17 insertions(+), 1 deletion(-)
+> > > >
+> > > > Thanks Richard for putting together the v2 of this patch.
+> > > >
+> > > > As far as the test is concerned, it seems like the quick-n-dirty
+> > > > fix
+> > > > is to simply remove the ioctl(FIOCLEX) test in test_noioctl.c; is
+> > > > everyone okay with that?  At least that is what I'm going to do
+> > > > with
+> > > > my local copy that I use to validate the kernel-secnext builds
+> > > > unless
+> > > > someone has a better patch :)
+> > >
+> > > To fix this I was planning to submit a patch that would change the
+> > > ioctl(FIOCLEX) tests to ioctl(FS_IOC_GETFSLABEL) as that would
+> > > continue
+> > > to test the xperms.
 > >
-> > Although there is flush_scheduled_work() which flushes system_wq WQ with
-> > "Think twice before calling this function! It's very easy to get into
-> > trouble if you don't take great care." warning message, it will be too
-> > difficult to guarantee that all users safely flush system-wide WQs.
-> >
-> > Therefore, let's change the direction to that developers had better use
-> > their own WQs if flushing is inevitable. To give developers time to update
-> > their modules, for now just emit a warning message when flush_workqueue()
-> > or flush_work() is called on system-wide WQs. We will eventually convert
-> > this warning message into WARN_ON() and kill flush_scheduled_work().
-> >
-> > Link: https://syzkaller.appspot.com/bug?extid=831661966588c802aae9 [1]
-> > Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-> 
-> This patch landed in linux next-20220222 as commit 4a6a0ce060e4 
-> ("workqueue: Warn flush attempt using system-wide workqueues"). As it 
-> might be expected it exposed some calls to flush work. However it also 
-> causes boot failure of the Raspberry Pi 3 and 4 boards (kernel compiled 
-> from arm64/defconfig). In the log I see one call from the 
-> deferred_probe_initcall(), but it isn't critical for the boot process. 
-> The deadlock occurs when DRM registers emulated framebuffer on RPi4. 
-> RPi3 boots a bit further, to the shell prompt, but then the console is 
-> freezed. Reverting this patch on top of linux-next 'fixes' the boot.
+> > That one seems to be implemented only by some filesystems. Is there
+> > any more generic one we could use?
+>
+> What about  FS_IOC_GETFLAGS
 
-Tetsuo, can you please revert the patch? The patch is incorrect in that it's
-triggering also on work item flushes, not just workqueue flushes.
+Unless I'm mistaken, FIGETBSZ should be largely fs independent.
 
-Thanks.
+> > > > > diff --git a/security/selinux/hooks.c
+> > > > > b/security/selinux/hooks.c
+> > > > > index 5b6895e4f..030c41652 100644
+> > > > > --- a/security/selinux/hooks.c
+> > > > > +++ b/security/selinux/hooks.c
+> > > > > @@ -3745,6 +3745,13 @@ static int selinux_file_ioctl(struct
+> > > > > file
+> > > > > *file, unsigned int cmd,
+> > > > >                                             CAP_OPT_NONE,
+> > > > > true);
+> > > > >                 break;
+> > > > >
+> > > > > +       case FIOCLEX:
+> > > > > +       case FIONCLEX:
+> > > > > +               /* Must always succeed if polcap set, else
+> > > > > default:
+> > > > > */
+> > > > > +               if (selinux_policycap_ioctl_skip_cloexec())
+> > > > > +                       break;
+> > > > > +               fallthrough;
+> > > > > +
+> > > >
+> > > > The break/fallthrough looks like it might be a little more
+> > > > fragile
+> > > > than necessary, how about something like this:
+> > > >
+> > > >   case FIOCLEX:
+> > > >   case FIONCLEX:
+> > > >     if (!selinux_policycap_ioctl_skip_cloexec())
+> > > >       error = ioctl_has_perm(cred, file, FILE__IOCTL, (u16) cmd);
+> > > >       break;
+> > > >
+> > > > Yes, it does duplicate the default ioctl_has_perm() call, but
+> > > > since
+> > > > we
+> > > > are effectively deprecating this and locking the FIOCLEX/FIONCLEX
+> > > > behavior with this policy capability it seems okay to me (and
+> > > > preferable to relying on the fallthrough).
+> > > >
+> > > > Thoughts?
+> > >
+> > > Yes I did ponder this and in my first attempt I had this before the
+> > > switch():
+> > >
+> > >         /* Must always succeed if polcap set */
+> > >         if (selinux_policycap_ioctl_skip_cloexec() &&
+> > >             (cmd == FIOCLEX || cmd == FIONCLEX))
+> > >                 return 0;
+> > >
+> > >         switch (cmd) {
+> > >         case FIONREAD:
+> > >         case FIBMAP:
+> > >
+> > > but changed to within the switch(), anyway I'm happy to resubmit a
+> > > patch either way.
+> >
+> > I agree with Paul's suggestion. Better to duplicate the simple call
+> > than to complicate the code flow.
+>
+> Okay will use Paul's.
+
+Thanks guys.
 
 -- 
-tejun
+paul-moore.com

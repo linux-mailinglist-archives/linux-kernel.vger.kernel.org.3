@@ -2,97 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06D844C2057
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 00:59:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D7D4C4C2059
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 01:00:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245109AbiBXAAC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 19:00:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52684 "EHLO
+        id S245119AbiBXAAm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 19:00:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233871AbiBXAAA (ORCPT
+        with ESMTP id S233871AbiBXAAk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 19:00:00 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0F4B5D657;
-        Wed, 23 Feb 2022 15:59:31 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6C29B60A55;
-        Wed, 23 Feb 2022 23:59:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD387C340E7;
-        Wed, 23 Feb 2022 23:59:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645660770;
-        bh=thHgt/K72Jttx/LjbDIHME53oNDeGLCvbtX3/Bav+cc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=IDDRBw1pNjpDJI/BnS53NnM1SXbPs4eSHEIBOqoj9d97x2c5f89+9rv0+qaLPyl5+
-         gD8HAQiMp6iY/cv9BMSxn94vgd4r1Yu/i4NDAj0/aRpZwyug9hlyhUo0241Wl5rlYi
-         C+6QRig0gM/fP2F0zroOgZaAVgVXqAUjCbGidBdHSj3v/MhnByo9dwK76E0phr8AnW
-         X3Mjv6hyeFzjQVh6vV8q6bmUG2D8sDV0PxNhpoPEhOLxgbhY6iPjcKv4nOtvpoFyJF
-         SPh/r9w0teerII0a80gntlALBLMk5GPAovrmKo+bQZmDfB+zYzgMlwkOIlS4HK7KzW
-         d6mV85co2lP4A==
-Date:   Wed, 23 Feb 2022 15:59:29 -0800
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Mimi Zohar <zohar@linux.ibm.com>
-Cc:     linux-integrity@vger.kernel.org,
-        Stefan Berger <stefanb@linux.ibm.com>,
-        linux-fscrypt@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 3/8] fs-verity: define a function to return the
- integrity protected file digest
-Message-ID: <YhbKYZcWxmi4auJU@sol.localdomain>
-References: <20220211214310.119257-1-zohar@linux.ibm.com>
- <20220211214310.119257-4-zohar@linux.ibm.com>
+        Wed, 23 Feb 2022 19:00:40 -0500
+Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DFD45E147;
+        Wed, 23 Feb 2022 16:00:11 -0800 (PST)
+Received: by mail-yb1-xb2d.google.com with SMTP id u12so537605ybd.7;
+        Wed, 23 Feb 2022 16:00:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=djoY2wGo8Bskf3+H2QGMHgodNIrrUDznDojPM3Z5KCM=;
+        b=TEiq5QkD0Pl37RTkVTqlCRlV6YKVYsYu/wCcfutLS/EB/bm3giMtsgoQNr6gve8ZKH
+         V8lTH8chQAbx2axZpZYQNfuHNHRtw1Sl4svvF0R4GQUf7rJolYr5p5e7aUggdiL4RNSK
+         hkBwe0uKkG4qhoig+dOWUPaQ2XshdD1yuo7F6v7M/hKYVL0koIOtPWDCBcZgDp5c+2Ae
+         8POjP+u57Mdq+3f4UIRugZ+CBrSRe0bLZYRGyznvmVzhVIb/kXf3/oFzzhv0Z8AwSwFb
+         NTYXSI4AiMA+ZgviOXY+n4BqR0PIi90KOkIHl+fhzksVjX2jiWccIjI6ijQMa6ZoPSrP
+         XipQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=djoY2wGo8Bskf3+H2QGMHgodNIrrUDznDojPM3Z5KCM=;
+        b=nSaUJ5oUPCrP2V7NPkLcuAyCvE64qZoQqZjwZtqtVfVTNcJLm1G3u4+e2e84jtKTjD
+         jbLsuHcqI2LxKd1pPa1GEfF79MwwT27WKVieYNeXmaQtlHLPkotXn6bs2BVASx49NYx6
+         qSfnrWPOzRNoLJQYmjzTwpa/NALoqOom5fzbARnA+CtOkQ6zcKq2uZdhsi6MuVkEjJC9
+         BkvLMoGw0f9Xch5e7c/197he3Z4fKFftuMs74tRugSRn4ejeTaj6qst46SDmB1W9D9Fd
+         zMSmuy5iMf64AptokkwlHisriMKc3R4AYT/8ZxgzBl98erkpUw6HwE8fIjV0+2L99yia
+         YVsw==
+X-Gm-Message-State: AOAM530vIA5/p7nF1jAHdw65xmkSFuU4BrwKNk3Sh/0JGxDkfTaezRnk
+        5VoEXEGECVb01c8ZzJLHVZdM8PFz8wlozNQAAqk=
+X-Google-Smtp-Source: ABdhPJxnPNJgf+YrSnqXFBDyu5QCocMrL/CC8kWrzc1DMjw26LnV4Jda9nnJpQ9bDsAsnicYxRD9HGYgTuiYuWFQWkk=
+X-Received: by 2002:a5b:489:0:b0:623:a73e:3818 with SMTP id
+ n9-20020a5b0489000000b00623a73e3818mr171822ybp.358.1645660810561; Wed, 23 Feb
+ 2022 16:00:10 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220211214310.119257-4-zohar@linux.ibm.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220223231752.52241-1-ppbuk5246@gmail.com> <YhbCGDzlTWp2OJzI@zeniv-ca.linux.org.uk>
+In-Reply-To: <YhbCGDzlTWp2OJzI@zeniv-ca.linux.org.uk>
+From:   Yun Levi <ppbuk5246@gmail.com>
+Date:   Thu, 24 Feb 2022 08:59:59 +0900
+Message-ID: <CAM7-yPTM6FNuT4vs2EuKAKitTWMTHw_XzKVggxQJzn5hqbBHpw@mail.gmail.com>
+Subject: Re: [PATCH] fs/exec.c: Avoid a race in formats
+To:     Al Viro <viro@zeniv.linux.org.uk>
+Cc:     Kees Cook <keescook@chromium.org>, ebiederm@xmission.com,
+        linux-fsdevel@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 11, 2022 at 04:43:05PM -0500, Mimi Zohar wrote:
-> +/**
-> + * fsverity_get_digest() - get a verity file's digest
-> + * @inode: inode to get digest of
-> + * @digest: (out) pointer to the digest
-> + * @alg: (out) pointer to the hash algorithm enumeration
-> + *
-> + * Return the file hash algorithm and digest of an fsverity protected file.
-> + *
-> + * Return: 0 on success, -errno on failure
-> + */
-> +int fsverity_get_digest(struct inode *inode,
-> +			u8 digest[FS_VERITY_MAX_DIGEST_SIZE],
-> +			enum hash_algo *alg)
-> +{
-> +	const struct fsverity_info *vi;
-> +	const struct fsverity_hash_alg *hash_alg;
-> +	int i;
-> +
-> +	vi = fsverity_get_info(inode);
-> +	if (!vi)
-> +		return -ENODATA; /* not a verity file */
+On Thu, Feb 24, 2022 at 8:24 AM Al Viro <viro@zeniv.linux.org.uk> wrote:
+>
+> On Thu, Feb 24, 2022 at 08:17:52AM +0900, Levi Yun wrote:
+> > Suppose a module registers its own binfmt (custom) and formats is like:
+> >
+> > +---------+    +----------+    +---------+
+> > | custom  | -> |  format1 | -> | format2 |
+> > +---------+    +----------+    +---------+
+> >
+> > and try to call unregister_binfmt with custom NOT in __exit stage.
+>
+> Explain, please.  Why would anyone do that?  And how would such
+> module decide when it's safe to e.g. dismantle data structures
+> used by methods of that binfmt, etc.?
+> Could you give more detailed example?
 
-Sorry for the slow reviews; I'm taking a look again now.  One question about
-something I missed earlier: is the file guaranteed to have been opened before
-this is called?  fsverity_get_info() only returns a non-NULL value if the file
-has been opened at least once since the inode has been loaded into memory.  If
-the inode has just been loaded into memory without being opened, for example due
-to a call to stat(), then fsverity_get_info() will return NULL.
+I think if someone wants to control their own binfmt via "ioctl" not
+on time on LOAD.
+For example, someone wants to control exec (notification,
+allow/disallow and etc..)
+and want to enable and disable own's control exec via binfmt reg / unreg
+In that situation, While the module is loaded, binfmt is still live
+and can be reused by
+reg/unreg to enable/disable his exec' control.
 
-If the file is guaranteed to have been opened, then the code is fine, but the
-comment for fsverity_get_digest() perhaps should be updated to mention this
-assumption, given that it takes a struct inode rather than a struct file.
+module can decide it's safe to unload by tracing the stack and
+confirming whether some tasks in the custom binfmt's function after it
+unregisters its own binfmt.
 
-If the file is *not* guaranteed to have been opened, then it would be necessary
-to make fsverity_get_digest() call ensure_verity_info() to set up the
-fsverity_info.
+> Because it looks like papering over an inherently unsafe use of binfmt interfaces..
 
-- Eric
+I think the above example it's quite a trick and stupid.  it's quite
+unsafe to use as you mention.
+But, misuse allows that situation to happen without any warning.
+As a robustness, I just try to avoid above situation But,
+I think it's better to restrict unregister binfmt unregister only when
+there is no module usage.

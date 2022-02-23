@@ -2,99 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F00634C1A18
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 18:45:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E370D4C1A1E
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 18:46:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243482AbiBWRpn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 12:45:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35124 "EHLO
+        id S243495AbiBWRqJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 12:46:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237498AbiBWRpl (ORCPT
+        with ESMTP id S243478AbiBWRqH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 12:45:41 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAE3A41989;
-        Wed, 23 Feb 2022 09:45:12 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 788E6B82120;
-        Wed, 23 Feb 2022 17:45:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AAB1EC340EF;
-        Wed, 23 Feb 2022 17:45:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645638310;
-        bh=1r9SfSx7/nO9MV6j5ddvX/n3LarVOe+sjHrIT6ZK9fA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=VVBkCk7w/c4DZVbeBicjFjK5olhg87LsvDpdxtSV11yKd8ELyw4uWw3wLS20jFKte
-         e1ME+a8aaC0c73K9bRmen1AFPBg0fpNUCoo2yjZDl8koygGXGGjdzJ56v+jkp5YleB
-         NvFxzo3wkzF2vw0E2IexCTK4LZppG5bFOeM7zEuIza45c1+9SvBqPntPD1tAq4Xn3I
-         wDpxUiloXysvO7piilxpfnjpbgRI3WiTO5wIAPTy11vUvs1wW1+X2AwzS6uNp98UxO
-         AqvHyCUOf1nFyKrRUTwD9l/puj0h0dLVDVeBGw3coh3qOIK7cpY+00385iV4K8oGLw
-         aZnVXv2GPdXJg==
-Date:   Wed, 23 Feb 2022 17:45:02 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-Cc:     agross@kernel.org, bjorn.andersson@linaro.org, lgirdwood@gmail.com,
-        robh+dt@kernel.org, quic_plai@quicinc.com, bgoswami@codeaurora.org,
-        perex@perex.cz, tiwai@suse.com, srinivas.kandagatla@linaro.org,
-        rohitkr@codeaurora.org, linux-arm-msm@vger.kernel.org,
-        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, swboyd@chromium.org,
-        judyhsiao@chromium.org,
-        Venkata Prasad Potturu <quic_potturu@quicinc.com>
-Subject: Re: [PATCH v15 01/10] ASoC: qcom: SC7280: Update config for building
- codec dma drivers
-Message-ID: <YhZynroGqrGZXeek@sirena.org.uk>
-References: <1645630745-25051-1-git-send-email-quic_srivasam@quicinc.com>
- <1645630745-25051-2-git-send-email-quic_srivasam@quicinc.com>
+        Wed, 23 Feb 2022 12:46:07 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AFC241331;
+        Wed, 23 Feb 2022 09:45:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645638340; x=1677174340;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=aeb0qt4wCCz7I/mFg9ArXVeLtAeRSHAS90P4rnXgYoM=;
+  b=IUOYbsZyWf1EQ8t/DZKZsUQGBm4pOgCkBYU7SWXnYKBXY0BBV4O1hbTf
+   E5+NufXT+Ohz7qsqAV0Y7Qn0oFvSNWmCVo4g6xRC3TOxWcnq5E/in6pQY
+   E+QK/VNbpiIUCUIiviEckaajJR4/YGD2NAYwHmXYmGHAm6e9WCQVBSVYX
+   LybPuRDAVjakFr+5EO3lYwtsZfO7apQGva61WPSKbFzUvZR/1Zhu3jfY2
+   gPtRC+ISd64H3uY1KtM+wdqkERoxHqqHkWhr79CFqiIpwr8jL1XMh1Xng
+   u4pScKU7A9LbhBdmqoStVM4b3NXhe+zfc6o0wRUL7yqHKAmysKdzs+zej
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10267"; a="251774224"
+X-IronPort-AV: E=Sophos;i="5.88,391,1635231600"; 
+   d="scan'208";a="251774224"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2022 09:45:17 -0800
+X-IronPort-AV: E=Sophos;i="5.88,391,1635231600"; 
+   d="scan'208";a="491292157"
+Received: from chakanog-mobl.amr.corp.intel.com (HELO [10.212.198.215]) ([10.212.198.215])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2022 09:45:17 -0800
+Message-ID: <04080c88-3e69-b4e6-0af2-0690accaa02f@intel.com>
+Date:   Wed, 23 Feb 2022 09:45:12 -0800
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="BgxGnRv0ITTKSGV7"
-Content-Disposition: inline
-In-Reply-To: <1645630745-25051-2-git-send-email-quic_srivasam@quicinc.com>
-X-Cookie: I smell a wumpus.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v5 00/12] x86: Trenchboot secure dynamic launch Linux
+ kernel support
+Content-Language: en-US
+To:     Ross Philipson <ross.philipson@oracle.com>,
+        linux-kernel@vger.kernel.org, x86@kernel.org,
+        linux-integrity@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-crypto@vger.kernel.org, kexec@lists.infradead.org
+Cc:     iommu@lists.linux-foundation.org, dpsmith@apertussolutions.com,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, hpa@zytor.com,
+        luto@amacapital.net, nivedita@alum.mit.edu,
+        kanth.ghatraju@oracle.com, trenchboot-devel@googlegroups.com
+References: <1645070085-14255-1-git-send-email-ross.philipson@oracle.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <1645070085-14255-1-git-send-email-ross.philipson@oracle.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 2/16/22 19:54, Ross Philipson wrote:
+> The larger focus of the TrenchBoot project (https://github.com/TrenchBoot) is to
+> enhance the boot security and integrity in a unified manner. The first area of
+> focus has been on the Trusted Computing Group's Dynamic Launch for establishing
+> a hardware Root of Trust for Measurement, also know as DRTM (Dynamic Root of
+> Trust for Measurement). The project has been and continues to work on providing
+> a unified means to Dynamic Launch that is a cross-platform (Intel and AMD) and
+> cross-architecture (x86 and Arm), with our recent involvment in the upcoming
+> Arm DRTM specification. The order of introducing DRTM to the Linux kernel
+> follows the maturity of DRTM in the architectures. Intel's Trusted eXecution
+> Technology (TXT) is present today and only requires a preamble loader, e.g. a
+> boot loader, and an OS kernel that is TXT-aware. AMD DRTM implementation has
+> been present since the introduction of AMD-V but requires an additional
+> component that is AMD specific and referred to in the specification as the
+> Secure Loader, which the TrenchBoot project has an active prototype in
+> development. Finally Arm's implementation is in specification development stage
+> and the project is looking to support it when it becomes available.
 
---BgxGnRv0ITTKSGV7
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-
-On Wed, Feb 23, 2022 at 09:08:56PM +0530, Srinivasa Rao Mandadapu wrote:
-
-> +snd-soc-lpass-cdc-dma-objs := lpass-cdc-dma.o
->  snd-soc-lpass-hdmi-objs := lpass-hdmi.o
->  snd-soc-lpass-platform-objs := lpass-platform.o
->  snd-soc-lpass-ipq806x-objs := lpass-ipq806x.o
->  snd-soc-lpass-apq8016-objs := lpass-apq8016.o
->  snd-soc-lpass-sc7180-objs := lpass-sc7180.o
-> +snd-soc-lpass-sc7280-objs := lpass-sc7280.o
-
-This will break the build given that neither of these source files are
-present yet?
-
---BgxGnRv0ITTKSGV7
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmIWcp0ACgkQJNaLcl1U
-h9CNAgf/fgT85WLXUxvPTW+bdBxpXXG4xGbT3a/xOpeZwtb9IGS8T8CEhrNyMMUy
-M3Hugbmecjtc9uJkjidtB6gtcdDfSBdBndnS2a0GrbHUxF64xHsa5D/Af3zVVXzo
-UgS4RSolole5NP1bZbCBLtp0PHiAqpEezwCNX46YPjtOyF+Z7Tq1hwJv6tI1DLda
-t1lVDT3nN601EguQf/A0nzZXl7Iu0868+Eln49TGhVSHibUt3qE5w2kDSiElaWQ9
-D8Dx/MhzXIAu7aQc9nsMHAa2xGX/7nEFdNmWMRFAT060DjaWFCAqvAade9y3HUGI
-rSPDjjvk7U0+l+xqc9V/1Axp/NZSbg==
-=LxWV
------END PGP SIGNATURE-----
-
---BgxGnRv0ITTKSGV7--
+What problem is this patch series solving?  Is the same problem solved
+in a different way in the kernel today?  What is wrong with that
+solution?  What effects will end users see if they apply this series?

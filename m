@@ -2,155 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FBF94C1DE5
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 22:44:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 732024C1DF6
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 22:51:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240938AbiBWVpG convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 23 Feb 2022 16:45:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43520 "EHLO
+        id S241955AbiBWVvt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 16:51:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236610AbiBWVpF (ORCPT
+        with ESMTP id S235875AbiBWVvs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 16:45:05 -0500
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 20E8E3E5FC
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 13:44:36 -0800 (PST)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-27-hCb7lGpjNMCFd8pZEvh5ow-1; Wed, 23 Feb 2022 21:44:34 +0000
-X-MC-Unique: hCb7lGpjNMCFd8pZEvh5ow-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.28; Wed, 23 Feb 2022 21:44:32 +0000
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.028; Wed, 23 Feb 2022 21:44:32 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Andy Shevchenko' <andriy.shevchenko@linux.intel.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-CC:     Mike Marciniszyn <mike.marciniszyn@cornelisnetworks.com>,
-        "Dennis Dalessandro" <dennis.dalessandro@cornelisnetworks.com>
-Subject: RE: [PATCH v1 1/1] IB/hfi1: Don't cast parameter in bit operations
-Thread-Topic: [PATCH v1 1/1] IB/hfi1: Don't cast parameter in bit operations
-Thread-Index: AQHYKOavPScLVMZqEkOT//Q3noWC2qyhqG0w
-Date:   Wed, 23 Feb 2022 21:44:32 +0000
-Message-ID: <e39730af26cc4a4d944fa3205fa17b3c@AcuMS.aculab.com>
-References: <20220223185353.51370-1-andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20220223185353.51370-1-andriy.shevchenko@linux.intel.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Wed, 23 Feb 2022 16:51:48 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A30E65044C;
+        Wed, 23 Feb 2022 13:51:19 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 56978B821BE;
+        Wed, 23 Feb 2022 21:51:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE649C340E7;
+        Wed, 23 Feb 2022 21:51:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645653077;
+        bh=EOsLY0xS49T9DSDZaspJWFLqMIPottB/vHuCZHn9gRc=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=ahhwtyxMEpCMobEOsqsInnTB54HNvEQ6GtBmi9Pbads3CBGXv3HugVhnSog9F8o/e
+         ivV0EdPE2BUK6TnJhBe3j+4lVCC9rXDQnkWsSLE39We5LPQwqxPigAexZ79Cnl3s4B
+         rNHqXxjoVaHLCkU5BuV7KvHty99EiDdh+MAzrJt5TYIBMGr8EWMQY7h5KZZAO+881E
+         5r9UAiifkq5EzBV8uygdBejuW3dyuB89wAaBBP3+AJgQ/rXohe9dKeUnXP0zdTaFkk
+         lfm1EHCugtgIzsLPpr5/CugEAZ9J1veD7nNl57sP6l07KQOXA5tmaKZkJScpcbJRHQ
+         wWzvXTETPgAfQ==
+Date:   Wed, 23 Feb 2022 15:51:15 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Stuart Yoder <stuyoder@gmail.com>,
+        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
+        Abel Vesa <abel.vesa@nxp.com>, Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Vineeth Vijayan <vneethv@linux.ibm.com>,
+        Peter Oberparleiter <oberpar@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Andy Gross <agross@kernel.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, NXP Linux Team <linux-imx@nxp.com>,
+        linux-arm-kernel@lists.infradead.org, linux-hyperv@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-spi@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Subject: Re: [PATCH v2 05/11] pci: use helper for safer setting of
+ driver_override
+Message-ID: <20220223215115.GA155125@bhelgaas>
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220223191310.347669-6-krzysztof.kozlowski@canonical.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andy Shevchenko
-> Sent: 23 February 2022 18:54
-> 
-> While in this particular case it would not be a (critical) issue,
-> the pattern itself is bad and error prone in case somebody blindly
-> copies to their code.
+In subject, to match drivers/pci/ convention, do something like:
 
-It is horribly wrong on BE systems.
+  PCI: Use driver_set_override() instead of open-coding
 
-> Don't cast parameter to unsigned long pointer in the bit operations.
-> Instead copy to a local variable on stack of a proper type and use.
-> 
-> Fixes: 7724105686e7 ("IB/hfi1: add driver files")
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+On Wed, Feb 23, 2022 at 08:13:04PM +0100, Krzysztof Kozlowski wrote:
+> Use a helper for seting driver_override to reduce amount of duplicated
+> code.
+
+s/seting/setting/
+
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 > ---
->  drivers/infiniband/hw/hfi1/chip.c | 29 ++++++++++++++---------------
->  1 file changed, 14 insertions(+), 15 deletions(-)
+>  drivers/pci/pci-sysfs.c | 24 ++++--------------------
+>  1 file changed, 4 insertions(+), 20 deletions(-)
 > 
-> diff --git a/drivers/infiniband/hw/hfi1/chip.c b/drivers/infiniband/hw/hfi1/chip.c
-> index f1245c94ae26..100274b926d3 100644
-> --- a/drivers/infiniband/hw/hfi1/chip.c
-> +++ b/drivers/infiniband/hw/hfi1/chip.c
-> @@ -8286,34 +8286,33 @@ static void is_interrupt(struct hfi1_devdata *dd, unsigned int source)
->  irqreturn_t general_interrupt(int irq, void *data)
+> diff --git a/drivers/pci/pci-sysfs.c b/drivers/pci/pci-sysfs.c
+> index 602f0fb0b007..16a163d4623e 100644
+> --- a/drivers/pci/pci-sysfs.c
+> +++ b/drivers/pci/pci-sysfs.c
+> @@ -567,31 +567,15 @@ static ssize_t driver_override_store(struct device *dev,
+>  				     const char *buf, size_t count)
 >  {
->  	struct hfi1_devdata *dd = data;
-> -	u64 regs[CCE_NUM_INT_CSRS];
-> +	DECLARE_BITMAP(pending, CCE_NUM_INT_CSRS * 64);
-> +	u64 value;
->  	u32 bit;
->  	int i;
-> -	irqreturn_t handled = IRQ_NONE;
-> 
->  	this_cpu_inc(*dd->int_counter);
-> 
->  	/* phase 1: scan and clear all handled interrupts */
->  	for (i = 0; i < CCE_NUM_INT_CSRS; i++) {
-> -		if (dd->gi_mask[i] == 0) {
-> -			regs[i] = 0;	/* used later */
-> -			continue;
-> -		}
-> -		regs[i] = read_csr(dd, CCE_INT_STATUS + (8 * i)) &
-> -				dd->gi_mask[i];
-> +		if (dd->gi_mask[i] == 0)
-> +			value = 0;	/* used later */
-> +		else
-> +			value = read_csr(dd, CCE_INT_STATUS + (8 * i)) & dd->gi_mask[i];
-> +
-> +		/* save for further use */
-> +		bitmap_from_u64(&pending[BITS_TO_LONGS(i * 64)], value);
-> +
->  		/* only clear if anything is set */
-> -		if (regs[i])
-> -			write_csr(dd, CCE_INT_CLEAR + (8 * i), regs[i]);
-> +		if (value)
-> +			write_csr(dd, CCE_INT_CLEAR + (8 * i), value);
->  	}
+>  	struct pci_dev *pdev = to_pci_dev(dev);
+> -	char *driver_override, *old, *cp;
+> +	int ret;
+>  
+>  	/* We need to keep extra room for a newline */
+>  	if (count >= (PAGE_SIZE - 1))
+>  		return -EINVAL;
 
-I think I'd leave all that alone.
+This check makes no sense in the new function.  Michael alluded to
+this as well.
 
->  	/* phase 2: call the appropriate handler */
-> -	for_each_set_bit(bit, (unsigned long *)&regs[0],
-> -			 CCE_NUM_INT_CSRS * 64) {
-> +	for_each_set_bit(bit, pending, CCE_NUM_INT_CSRS * 64)
-
-And do something else for that loop instead.
-
->  		is_interrupt(dd, bit);
-> -		handled = IRQ_HANDLED;
+> -	driver_override = kstrndup(buf, count, GFP_KERNEL);
+> -	if (!driver_override)
+> -		return -ENOMEM;
+> -
+> -	cp = strchr(driver_override, '\n');
+> -	if (cp)
+> -		*cp = '\0';
+> -
+> -	device_lock(dev);
+> -	old = pdev->driver_override;
+> -	if (strlen(driver_override)) {
+> -		pdev->driver_override = driver_override;
+> -	} else {
+> -		kfree(driver_override);
+> -		pdev->driver_override = NULL;
 > -	}
-> 
-> -	return handled;
-> +	return IRQ_RETVAL(!bitmap_empty(pending, CCE_NUM_INT_CSRS * 64));
-
-You really don't want to scan the bitmap again.
-
-Actually, of the face of it, you could merge the two loops.
-Provided you clear the status bit before calling the relevant
-handler I expect it will all work.
-
-	David
-
+> -	device_unlock(dev);
+> -
+> -	kfree(old);
+> +	ret = driver_set_override(dev, &pdev->driver_override, buf);
+> +	if (ret)
+> +		return ret;
+>  
+>  	return count;
 >  }
+> -- 
+> 2.32.0
 > 
->  irqreturn_t sdma_interrupt(int irq, void *data)
-> --
-> 2.34.1
-
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
-
+> 
+> _______________________________________________
+> linux-arm-kernel mailing list
+> linux-arm-kernel@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel

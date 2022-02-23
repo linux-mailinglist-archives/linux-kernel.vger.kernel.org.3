@@ -2,74 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA1DA4C1293
+	by mail.lfdr.de (Postfix) with ESMTP id 8F4A64C1292
 	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 13:17:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240401AbiBWMRy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 07:17:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53150 "EHLO
+        id S240406AbiBWMSE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 07:18:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238642AbiBWMRu (ORCPT
+        with ESMTP id S240385AbiBWMRw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 07:17:50 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78FB7517E6
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 04:17:23 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 125F6212B8;
-        Wed, 23 Feb 2022 12:17:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1645618642; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=RCTn1wtAYKsqIpLotJVAPK/XJ5F77c4RNzGbAdvDnk0=;
-        b=sdhszPEKJfA6zVcPpF5CRDue+pHJhDJoG9jfBC6w3SfqsEP7C1j0YLOv0uVnNrs1LN53XJ
-        Hg3PRZcVnWyN4NRPIKi4EqFlzZPfNWA8PDtMda7FkFhv9JC571QmopAuEH5hABrZ5VLjID
-        3jQj7AieU4WF1CuhrRxNx4DbCgdP2tg=
-Received: from suse.cz (unknown [10.100.216.66])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id E0EF3A3B81;
-        Wed, 23 Feb 2022 12:17:21 +0000 (UTC)
-Date:   Wed, 23 Feb 2022 13:17:19 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     John Ogness <john.ogness@linutronix.de>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH printk v1 12/13] printk: remove @console_locked
-Message-ID: <YhYlz8l0jZVeUXrq@alley>
-References: <20220207194323.273637-1-john.ogness@linutronix.de>
- <20220207194323.273637-13-john.ogness@linutronix.de>
+        Wed, 23 Feb 2022 07:17:52 -0500
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21A47522EA
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 04:17:24 -0800 (PST)
+Received: by mail-wr1-x430.google.com with SMTP id s13so10758498wrb.6
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 04:17:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=arista.com; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=3EvTLjCE04FQaQLZNcKs5KtscjgLIzQ7nMdfZDgRHBM=;
+        b=eTr+NNbH39z8mQh66PwnzEUUT5N8bFmssFPlh6IO8x8ZybrDQBfgFTqUfuKABanS9M
+         kTWBq8Itgk+MnG0UgtkwMgtYyaI4O4pAwj/g7nujwzoxOxTaKtFrVAdMeWMBcrKYld69
+         uSbvfBKa2zZo8RjwkJ2kvy9zGtH3KE6sM8Qs4E2vnTmGDOmiQvWBU1fCSkpm9XLoiRUE
+         rUT0i7z3Hi09hjlC84hMb2dkQ0a1I0l6CkHDruUdjeGddOeIAd7ucNd2uBvKC/rPEILv
+         3OAZgNUr9UwwDTN+aEhWejdGhSb1uP61BtAUgq/FXQh9puAvE8XK8e1NxXT9mRGVD9s/
+         RSHA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=3EvTLjCE04FQaQLZNcKs5KtscjgLIzQ7nMdfZDgRHBM=;
+        b=375srrEQAwwWhNS4SS3VARWm9SFy4gS175Ub4emDMDuGNI3pgLs/RI8BTbXAxSNN9t
+         g71HWq5pB47Z80c62gvn5Ez0Qe537i+9E835lpZXdTqDLKPKWCcnG3oDy/iNukzS0B5X
+         8MiSRu9dAO+5IffrDYRUNOr32ORikJxw2kQlHR9qPHMdTQ9OY0C6WGDhYIjt+BDrkeC4
+         ff4cOfRuF3280VU7Yc4rQiLMtk0fw6+f/14xhpedQYM4UR80SMMXU8b+MTqovWkrEdBY
+         wVm2URFX/FPE7w6mLg+zndndAir21DM9y/Ocp8kRuCEcsGz5hHq4xLzHjm4msWtRYaLX
+         8nSQ==
+X-Gm-Message-State: AOAM531sOcz2I15yT5MHtGg8fwCd4pWXkMPN0UyM5Zr3eAj6VBZp2gW+
+        GqY/qX26lQA88IT7flCNxuEKp9TO4diCsw==
+X-Google-Smtp-Source: ABdhPJzQiDhJE1vFn+HALta5NlrpPTVn0P/LvhkrP+LUCGZwYGeGU0cvgzWhvwW2q3q6yYYxUQHMoQ==
+X-Received: by 2002:a05:6000:1863:b0:1ed:9e8a:9413 with SMTP id d3-20020a056000186300b001ed9e8a9413mr3605301wri.282.1645618642470;
+        Wed, 23 Feb 2022 04:17:22 -0800 (PST)
+Received: from localhost.localdomain ([2a02:8084:e84:2480:228:f8ff:fe6f:83a8])
+        by smtp.gmail.com with ESMTPSA id l12sm54230867wrs.11.2022.02.23.04.17.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Feb 2022 04:17:22 -0800 (PST)
+From:   Dmitry Safonov <dima@arista.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Dmitry Safonov <0x7f454c46@gmail.com>,
+        Dmitry Safonov <dima@arista.com>,
+        Mobashshera Rasool <mobash.rasool.linux@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org
+Subject: [PATCH net-next] net/ip6mr: Fix build with !CONFIG_IPV6_PIMSM_V2
+Date:   Wed, 23 Feb 2022 12:17:21 +0000
+Message-Id: <20220223121721.421247-1-dima@arista.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220207194323.273637-13-john.ogness@linutronix.de>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 2022-02-07 20:49:22, John Ogness wrote:
-> The static global variable @console_locked is used to help debug VT
-> code to make sure that certain code paths are running with the
-> console_lock held. However, this information is also available with
-> the static global variable @consoles_paused (for locking via
-> console_lock()), and the static global variable @console_lock_count
-> (for locking via console_trylock()).
-> 
-> Remove @console_locked and update is_console_locked() to use the
-> alternative variables.
+The following build-error on my config:
+net/ipv6/ip6mr.c: In function ‘ip6_mroute_setsockopt’:
+net/ipv6/ip6mr.c:1656:14: error: unused variable ‘do_wrmifwhole’ [-Werror=unused-variable]
+ 1656 |         bool do_wrmifwhole;
+      |              ^
 
-It is great that we are also removing something ;-)
+Cc: Mobashshera Rasool <mobash.rasool.linux@gmail.com>
+Cc: David S. Miller <davem@davemloft.net>
+Cc: Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>
+Cc: David Ahern <dsahern@kernel.org>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: netdev@vger.kernel.org
+Fixes: 4b340a5a726d
+Signed-off-by: Dmitry Safonov <dima@arista.com>
+---
+ net/ipv6/ip6mr.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Reviewed-by: Petr Mladek <pmladek@suse.com>
+diff --git a/net/ipv6/ip6mr.c b/net/ipv6/ip6mr.c
+index a9775c830194..4e74bc61a3db 100644
+--- a/net/ipv6/ip6mr.c
++++ b/net/ipv6/ip6mr.c
+@@ -1653,7 +1653,6 @@ int ip6_mroute_setsockopt(struct sock *sk, int optname, sockptr_t optval,
+ 	mifi_t mifi;
+ 	struct net *net = sock_net(sk);
+ 	struct mr_table *mrt;
+-	bool do_wrmifwhole;
+ 
+ 	if (sk->sk_type != SOCK_RAW ||
+ 	    inet_sk(sk)->inet_num != IPPROTO_ICMPV6)
+@@ -1761,6 +1760,7 @@ int ip6_mroute_setsockopt(struct sock *sk, int optname, sockptr_t optval,
+ #ifdef CONFIG_IPV6_PIMSM_V2
+ 	case MRT6_PIM:
+ 	{
++		bool do_wrmifwhole;
+ 		int v;
+ 
+ 		if (optlen != sizeof(v))
 
-Best Regards,
-Petr
+base-commit: 922ea87ff6f2b63f413c6afa2c25b287dce76639
+-- 
+2.35.1
+

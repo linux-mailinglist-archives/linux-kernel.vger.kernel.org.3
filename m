@@ -2,118 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F4A64C1292
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 13:17:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 90FBB4C1294
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 13:18:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240406AbiBWMSE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 07:18:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53366 "EHLO
+        id S240418AbiBWMSN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 07:18:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240385AbiBWMRw (ORCPT
+        with ESMTP id S237095AbiBWMSM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 07:17:52 -0500
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21A47522EA
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 04:17:24 -0800 (PST)
-Received: by mail-wr1-x430.google.com with SMTP id s13so10758498wrb.6
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 04:17:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=arista.com; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=3EvTLjCE04FQaQLZNcKs5KtscjgLIzQ7nMdfZDgRHBM=;
-        b=eTr+NNbH39z8mQh66PwnzEUUT5N8bFmssFPlh6IO8x8ZybrDQBfgFTqUfuKABanS9M
-         kTWBq8Itgk+MnG0UgtkwMgtYyaI4O4pAwj/g7nujwzoxOxTaKtFrVAdMeWMBcrKYld69
-         uSbvfBKa2zZo8RjwkJ2kvy9zGtH3KE6sM8Qs4E2vnTmGDOmiQvWBU1fCSkpm9XLoiRUE
-         rUT0i7z3Hi09hjlC84hMb2dkQ0a1I0l6CkHDruUdjeGddOeIAd7ucNd2uBvKC/rPEILv
-         3OAZgNUr9UwwDTN+aEhWejdGhSb1uP61BtAUgq/FXQh9puAvE8XK8e1NxXT9mRGVD9s/
-         RSHA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=3EvTLjCE04FQaQLZNcKs5KtscjgLIzQ7nMdfZDgRHBM=;
-        b=375srrEQAwwWhNS4SS3VARWm9SFy4gS175Ub4emDMDuGNI3pgLs/RI8BTbXAxSNN9t
-         g71HWq5pB47Z80c62gvn5Ez0Qe537i+9E835lpZXdTqDLKPKWCcnG3oDy/iNukzS0B5X
-         8MiSRu9dAO+5IffrDYRUNOr32ORikJxw2kQlHR9qPHMdTQ9OY0C6WGDhYIjt+BDrkeC4
-         ff4cOfRuF3280VU7Yc4rQiLMtk0fw6+f/14xhpedQYM4UR80SMMXU8b+MTqovWkrEdBY
-         wVm2URFX/FPE7w6mLg+zndndAir21DM9y/Ocp8kRuCEcsGz5hHq4xLzHjm4msWtRYaLX
-         8nSQ==
-X-Gm-Message-State: AOAM531sOcz2I15yT5MHtGg8fwCd4pWXkMPN0UyM5Zr3eAj6VBZp2gW+
-        GqY/qX26lQA88IT7flCNxuEKp9TO4diCsw==
-X-Google-Smtp-Source: ABdhPJzQiDhJE1vFn+HALta5NlrpPTVn0P/LvhkrP+LUCGZwYGeGU0cvgzWhvwW2q3q6yYYxUQHMoQ==
-X-Received: by 2002:a05:6000:1863:b0:1ed:9e8a:9413 with SMTP id d3-20020a056000186300b001ed9e8a9413mr3605301wri.282.1645618642470;
-        Wed, 23 Feb 2022 04:17:22 -0800 (PST)
-Received: from localhost.localdomain ([2a02:8084:e84:2480:228:f8ff:fe6f:83a8])
-        by smtp.gmail.com with ESMTPSA id l12sm54230867wrs.11.2022.02.23.04.17.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Feb 2022 04:17:22 -0800 (PST)
-From:   Dmitry Safonov <dima@arista.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Dmitry Safonov <0x7f454c46@gmail.com>,
-        Dmitry Safonov <dima@arista.com>,
-        Mobashshera Rasool <mobash.rasool.linux@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org
-Subject: [PATCH net-next] net/ip6mr: Fix build with !CONFIG_IPV6_PIMSM_V2
-Date:   Wed, 23 Feb 2022 12:17:21 +0000
-Message-Id: <20220223121721.421247-1-dima@arista.com>
-X-Mailer: git-send-email 2.35.1
+        Wed, 23 Feb 2022 07:18:12 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1B7D9E57D;
+        Wed, 23 Feb 2022 04:17:44 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id AF7AD212B8;
+        Wed, 23 Feb 2022 12:17:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1645618663; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=z25zmfa1BH9FbZAkPcAjAOIvBZxhio/HEtOcbGxkK2s=;
+        b=iBLlmwQKBfdGXCAAeg3wvlnrV4J7/udoMQQsDdu2Cee3a60Gai9m9bpGPUSAITEkoMaU8s
+        1//GkQuJVdkXZW2F3rLTgCANQjuKMwtQWqcfgugd/zWATYwJ3OL5tTae/rSTpI2MgrUQn2
+        85bOgy9hMuJpJjjUpIHA/9zHbWWnRZ4=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1645618663;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=z25zmfa1BH9FbZAkPcAjAOIvBZxhio/HEtOcbGxkK2s=;
+        b=XIUgtLKy3brznIghNde4scldLLjKyFNVYfgKgSPS1OgKLfn3fJyCKSDJsMuABr1N7A2HJi
+        gggIq5wSLuuz1jCw==
+Received: from quack3.suse.cz (unknown [10.163.28.18])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id A0D3BA3B83;
+        Wed, 23 Feb 2022 12:17:43 +0000 (UTC)
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id E6B50A0605; Wed, 23 Feb 2022 13:17:37 +0100 (CET)
+Date:   Wed, 23 Feb 2022 13:17:37 +0100
+From:   Jan Kara <jack@suse.cz>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Jan Kara <jack@suse.cz>,
+        Edward Shishkin <edward.shishkin@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        reiserfs-devel@vger.kernel.org
+Subject: Re: [PATCH] reiserfs: get rid of AOP_FLAG_CONT_EXPAND flag
+Message-ID: <20220223121737.bsyoih6rt63pev54@quack3.lan>
+References: <fbc744c9-e22f-138c-2da3-f76c3edfcc3d@gmail.com>
+ <20220220232219.1235-1-edward.shishkin@gmail.com>
+ <20220222102727.2sqf4wfdtjaxrqat@quack3.lan>
+ <YhTnSwmHVRe5AzJQ@casper.infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YhTnSwmHVRe5AzJQ@casper.infradead.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following build-error on my config:
-net/ipv6/ip6mr.c: In function ‘ip6_mroute_setsockopt’:
-net/ipv6/ip6mr.c:1656:14: error: unused variable ‘do_wrmifwhole’ [-Werror=unused-variable]
- 1656 |         bool do_wrmifwhole;
-      |              ^
+On Tue 22-02-22 13:38:19, Matthew Wilcox wrote:
+> On Tue, Feb 22, 2022 at 11:27:27AM +0100, Jan Kara wrote:
+> > On Mon 21-02-22 00:22:19, Edward Shishkin wrote:
+> > > Signed-off-by: Edward Shishkin <edward.shishkin@gmail.com>
+> > > ---
+> > >  fs/reiserfs/inode.c | 16 +++++-----------
+> > >  1 file changed, 5 insertions(+), 11 deletions(-)
+> > 
+> > Thanks! I have queued this patch into my tree.
+> 
+> I added the following commit message to it for my tree:
+> 
+> Author: Edward Shishkin <edward.shishkin@gmail.com>
+> Date:   Mon Feb 21 00:22:19 2022 +0100
+> 
+>     reiserfs: Stop using AOP_FLAG_CONT_EXPAND flag
+> 
+>     We can simplify write_begin() and write_end() by handling the
+>     cont_expand case in reiserfs_setattr().
+> 
+>     Signed-off-by: Edward Shishkin <edward.shishkin@gmail.com>
+>     Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
 
-Cc: Mobashshera Rasool <mobash.rasool.linux@gmail.com>
-Cc: David S. Miller <davem@davemloft.net>
-Cc: Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>
-Cc: David Ahern <dsahern@kernel.org>
-Cc: Jakub Kicinski <kuba@kernel.org>
-Cc: netdev@vger.kernel.org
-Fixes: 4b340a5a726d
-Signed-off-by: Dmitry Safonov <dima@arista.com>
----
- net/ipv6/ip6mr.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Yeah, I have written some changelog as well :) Something like:
 
-diff --git a/net/ipv6/ip6mr.c b/net/ipv6/ip6mr.c
-index a9775c830194..4e74bc61a3db 100644
---- a/net/ipv6/ip6mr.c
-+++ b/net/ipv6/ip6mr.c
-@@ -1653,7 +1653,6 @@ int ip6_mroute_setsockopt(struct sock *sk, int optname, sockptr_t optval,
- 	mifi_t mifi;
- 	struct net *net = sock_net(sk);
- 	struct mr_table *mrt;
--	bool do_wrmifwhole;
- 
- 	if (sk->sk_type != SOCK_RAW ||
- 	    inet_sk(sk)->inet_num != IPPROTO_ICMPV6)
-@@ -1761,6 +1760,7 @@ int ip6_mroute_setsockopt(struct sock *sk, int optname, sockptr_t optval,
- #ifdef CONFIG_IPV6_PIMSM_V2
- 	case MRT6_PIM:
- 	{
-+		bool do_wrmifwhole;
- 		int v;
- 
- 		if (optlen != sizeof(v))
+    reiserfs: get rid of AOP_FLAG_CONT_EXPAND flag
+    
+    Remove usage of AOP_FLAG_CONT_EXPAND flag. Reiserfs is the only user of
+    it and it is easy to avoid.
+    
+    Link: https://lore.kernel.org/r/20220220232219.1235-1-edward.shishkin@gmail.com
+    Signed-off-by: Edward Shishkin <edward.shishkin@gmail.com>
+    Signed-off-by: Jan Kara <jack@suse.cz>
 
-base-commit: 922ea87ff6f2b63f413c6afa2c25b287dce76639
+> I don't object if it goes via your tree; I doubt I'll get the AOP_FLAG
+> removal finished in time for the next merge window.
+
+OK, I'll keep it in my tree then and push it to Linus for the merge window.
+
+								Honza
 -- 
-2.35.1
-
+Jan Kara <jack@suse.com>
+SUSE Labs, CR

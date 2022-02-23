@@ -2,227 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AD294C0A28
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 04:22:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A02FC4C0A2E
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 04:24:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237786AbiBWDWt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 22:22:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42852 "EHLO
+        id S235688AbiBWDZB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 22:25:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237736AbiBWDWq (ORCPT
+        with ESMTP id S231799AbiBWDZA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 22:22:46 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9586F31352;
-        Tue, 22 Feb 2022 19:22:19 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4D2DBB81E34;
-        Wed, 23 Feb 2022 03:22:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B888C340E8;
-        Wed, 23 Feb 2022 03:22:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645586537;
-        bh=lg6yqO7Dr/3RAU+AMRY7QoG1UsSGE09TyZ94UM1qbQQ=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=gCo9uwVLP4d1JlkpHfuMRUUH+KKwB1Clv7DYGri21erCtgjkh4WNX4vJKUu9nuFUC
-         cZP3P9Og6LPCevG07qnGgH249bdUjqhQOvYzqse9k9emzI42iVwwW5K3x+uZJ1i6E2
-         MxBzA5N1n3liFCEK5B1/4q90ADLfNa59lH+YChtKwfpLU8EUnQbT1G0C91EeQ35qWr
-         hDZTE1/Sdn8Eh2uDKTqB0Ypu06EUeKrWIogEz6eUQFRaIvqgqgcJcEm2yOn07j1mDw
-         J/JU3DjF7bTjDpugAiv8Ztj11rc3bkH62i/J3aLY50ZJhbdQs3NlDwmYIPNw7ikWqd
-         QnNMmZE5K39tw==
-Date:   Wed, 23 Feb 2022 12:22:11 +0900
-From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     Jiri Olsa <jolsa@kernel.org>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        lkml <linux-kernel@vger.kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>
-Subject: Re: [PATCH 01/10] lib/sort: Add priv pointer to swap function
-Message-Id: <20220223122211.f1cf0bf0d019d79322c19957@kernel.org>
-In-Reply-To: <20220222170600.611515-2-jolsa@kernel.org>
-References: <20220222170600.611515-1-jolsa@kernel.org>
-        <20220222170600.611515-2-jolsa@kernel.org>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 22 Feb 2022 22:25:00 -0500
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E21751E41
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 19:24:33 -0800 (PST)
+Received: by mail-pg1-x534.google.com with SMTP id c1so3952131pgk.11
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 19:24:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=UBCffEif1jdF0yN7RTCvuEffHuLFPiypPx80tPtta4U=;
+        b=mNTTSYB1a354+R9HJGidtEfr7ne1yp0eayHsfwMLZJDhOGJhc4VV+7fB55RYZIxjbP
+         6bRPDuJiP4RjCnPyPqtS4SEefRz6oZs46FS25aJDClb5yum2vH+cZ0RPaCTnp5VevHXr
+         YGogeT6K4jMFFz7QFxy1ZEz/Ya/LnbdanwQNM5X6onIBXupCfYEN/bvNHO/ktGSoRCp+
+         kdCwYvDXcXxjm5pWP2P3m2HqihAUB57ENIH57nyXabRUPs4eHBbt8ioV7XDzWyZGrP8G
+         uwnf9FULfuiE3TXZYu550wxcYMrdL3INEv3jusx9KZ75NFI7B+sbZQCqGmi+0sll/uRW
+         XJiQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=UBCffEif1jdF0yN7RTCvuEffHuLFPiypPx80tPtta4U=;
+        b=sLNRmIqi5zvEr6aPkO8w+8uZznTcAFAc38lQ0aLhq3oP6jo4IXAH5vql8PvM72uiRO
+         cWR7rymELelj1M9B3NcK4QJa6hoT6vWsYDWhQcg/njICZ8AC//4nXgOAiH2aZkgidA/6
+         xaOEhDCw/eAr775GkNmMMBB25yQ/+Nff7g5lPdSiDX/3RiqlU4Luxadt1EYfgymNSdhE
+         biCDbvUP+XTNYeKql4j8QuptmaReA7EbIp41tihMTkTrKSjaCNCV83SZbigrbCBuUVnM
+         cZLrmAs2N+rzLWVET3P9Go+dfikme6Y9f846sDSzii4KI/MuDoNqPinYQwScxvalEJwj
+         /RYg==
+X-Gm-Message-State: AOAM532Rbi3Lf1msqVEkuvE/EH6LOPlR/jZ8hvKlrgMKq2jog1sT94l8
+        kODdU4Ok9qlHxjQ1zn6y9qI=
+X-Google-Smtp-Source: ABdhPJy02H/cvtT8Xyn+UrRfVn92L2YEnqS2a9gDo7C5tgl/TPssQnnupPpwy2mA8feNjw/UIlEk+w==
+X-Received: by 2002:a63:e817:0:b0:373:8abb:2c51 with SMTP id s23-20020a63e817000000b003738abb2c51mr22196666pgh.185.1645586672598;
+        Tue, 22 Feb 2022 19:24:32 -0800 (PST)
+Received: from ip-172-31-19-208.ap-northeast-1.compute.internal (ec2-18-181-137-102.ap-northeast-1.compute.amazonaws.com. [18.181.137.102])
+        by smtp.gmail.com with ESMTPSA id w2sm18224124pfb.139.2022.02.22.19.24.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Feb 2022 19:24:32 -0800 (PST)
+Date:   Wed, 23 Feb 2022 03:24:27 +0000
+From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     linux-mm@kvack.org, Roman Gushchin <guro@fb.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>, linux-kernel@vger.kernel.org,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        David Rientjes <rientjes@google.com>,
+        Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>
+Subject: Re: [PATCH 3/5] mm/slab: Do not call kmalloc_large() for unsupported
+ size
+Message-ID: <YhWo6yKaHHE2O1xc@ip-172-31-19-208.ap-northeast-1.compute.internal>
+References: <20220221105336.522086-1-42.hyeyoo@gmail.com>
+ <20220221105336.522086-4-42.hyeyoo@gmail.com>
+ <YhO1g3k00TeM8PTQ@casper.infradead.org>
+ <YhSaeKIBNbG81I07@ip-172-31-19-208.ap-northeast-1.compute.internal>
+ <YhVAjMqYPNUBC4rY@casper.infradead.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YhVAjMqYPNUBC4rY@casper.infradead.org>
+X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 22 Feb 2022 18:05:51 +0100
-Jiri Olsa <jolsa@kernel.org> wrote:
-
-> Adding support to have priv pointer in swap callback function.
+On Tue, Feb 22, 2022 at 07:59:08PM +0000, Matthew Wilcox wrote:
+> On Tue, Feb 22, 2022 at 08:10:32AM +0000, Hyeonggon Yoo wrote:
+> > On Mon, Feb 21, 2022 at 03:53:39PM +0000, Matthew Wilcox wrote:
+> > > On Mon, Feb 21, 2022 at 10:53:34AM +0000, Hyeonggon Yoo wrote:
+> > > > SLAB's kfree() does not support freeing an object that is allocated from
+> > > > kmalloc_large(). Fix this as SLAB do not pass requests larger than
+> > > > KMALLOC_MAX_CACHE_SIZE directly to page allocator.
+> > > 
+> > > I was wondering if we wanted to go in the other direction and get rid of
+> > > kmalloc cache sizes larger than, say, 64kB from the SLAB allocator.
+> > 
+> > Good point.
+> > 
+> > Hmm.. I don't think SLAB is benefiting from queueing that large objects,
+> > and maximum size is still limited to what buddy allocator supports.
+> > 
+> > I'll try reducing kmalloc caches up to order-1 page like SLUB.
+> > That would be easier to maintain.
 > 
-> Following the initial change on cmp callback functions [1]
-> and adding SWAP_WRAPPER macro to identify sort call of sort_r.
-> 
+> If you have time to investigate these kinds of things, I think SLUB would
+> benefit from caching order-2 and order-3 slabs as well.  Maybe not so much
+> now that Mel included order-2 and order-3 caching in the page allocator.
+> But it'd be interesting to have numbers.
 
-This looks good to me.
+That's interesting topic. But I think this is slightly different topic.
+AFAIK It's rare that a workload would benefit more from using slab for
+large size objects (8K, 16K, ... etc) than using page allocator.
 
-Reviewed-by: Masami Hiramatsu <mhiramat@kernel.org>
+And yeah, caching high order slabs may affect the numbers even if page
+allocator caches high order pages. SLUB already caches them and SLUB can
+cache more slabs by tuning number of cpu partial slabs (s->cpu_partial_slabs)
+and number of node partial slabs. (s->min_partial)
 
-Thank you,
+I need to investigate what actually Mel did and learn how it affects
+SLUB. So it will take some time. Thanks!
 
-> Cc: Rasmus Villemoes <linux@rasmusvillemoes.dk>
-> [1] 4333fb96ca10 ("media: lib/sort.c: implement sort() variant taking context argument")
-> Signed-off-by: Jiri Olsa <jolsa@kernel.org>
-> ---
->  include/linux/sort.h  |  2 +-
->  include/linux/types.h |  1 +
->  lib/sort.c            | 40 ++++++++++++++++++++++++++++++----------
->  3 files changed, 32 insertions(+), 11 deletions(-)
-> 
-> diff --git a/include/linux/sort.h b/include/linux/sort.h
-> index b5898725fe9d..e163287ac6c1 100644
-> --- a/include/linux/sort.h
-> +++ b/include/linux/sort.h
-> @@ -6,7 +6,7 @@
->  
->  void sort_r(void *base, size_t num, size_t size,
->  	    cmp_r_func_t cmp_func,
-> -	    swap_func_t swap_func,
-> +	    swap_r_func_t swap_func,
->  	    const void *priv);
->  
->  void sort(void *base, size_t num, size_t size,
-> diff --git a/include/linux/types.h b/include/linux/types.h
-> index ac825ad90e44..ea8cf60a8a79 100644
-> --- a/include/linux/types.h
-> +++ b/include/linux/types.h
-> @@ -226,6 +226,7 @@ struct callback_head {
->  typedef void (*rcu_callback_t)(struct rcu_head *head);
->  typedef void (*call_rcu_func_t)(struct rcu_head *head, rcu_callback_t func);
->  
-> +typedef void (*swap_r_func_t)(void *a, void *b, int size, const void *priv);
->  typedef void (*swap_func_t)(void *a, void *b, int size);
->  
->  typedef int (*cmp_r_func_t)(const void *a, const void *b, const void *priv);
-> diff --git a/lib/sort.c b/lib/sort.c
-> index aa18153864d2..b399bf10d675 100644
-> --- a/lib/sort.c
-> +++ b/lib/sort.c
-> @@ -122,16 +122,27 @@ static void swap_bytes(void *a, void *b, size_t n)
->   * a pointer, but small integers make for the smallest compare
->   * instructions.
->   */
-> -#define SWAP_WORDS_64 (swap_func_t)0
-> -#define SWAP_WORDS_32 (swap_func_t)1
-> -#define SWAP_BYTES    (swap_func_t)2
-> +#define SWAP_WORDS_64 (swap_r_func_t)0
-> +#define SWAP_WORDS_32 (swap_r_func_t)1
-> +#define SWAP_BYTES    (swap_r_func_t)2
-> +#define SWAP_WRAPPER  (swap_r_func_t)3
-> +
-> +struct wrapper {
-> +	cmp_func_t cmp;
-> +	swap_func_t swap;
-> +};
->  
->  /*
->   * The function pointer is last to make tail calls most efficient if the
->   * compiler decides not to inline this function.
->   */
-> -static void do_swap(void *a, void *b, size_t size, swap_func_t swap_func)
-> +static void do_swap(void *a, void *b, size_t size, swap_r_func_t swap_func, const void *priv)
->  {
-> +	if (swap_func == SWAP_WRAPPER) {
-> +		((const struct wrapper *)priv)->swap(a, b, (int)size);
-> +		return;
-> +	}
-> +
->  	if (swap_func == SWAP_WORDS_64)
->  		swap_words_64(a, b, size);
->  	else if (swap_func == SWAP_WORDS_32)
-> @@ -139,7 +150,7 @@ static void do_swap(void *a, void *b, size_t size, swap_func_t swap_func)
->  	else if (swap_func == SWAP_BYTES)
->  		swap_bytes(a, b, size);
->  	else
-> -		swap_func(a, b, (int)size);
-> +		swap_func(a, b, (int)size, priv);
->  }
->  
->  #define _CMP_WRAPPER ((cmp_r_func_t)0L)
-> @@ -147,7 +158,7 @@ static void do_swap(void *a, void *b, size_t size, swap_func_t swap_func)
->  static int do_cmp(const void *a, const void *b, cmp_r_func_t cmp, const void *priv)
->  {
->  	if (cmp == _CMP_WRAPPER)
-> -		return ((cmp_func_t)(priv))(a, b);
-> +		return ((const struct wrapper *)priv)->cmp(a, b);
->  	return cmp(a, b, priv);
->  }
->  
-> @@ -198,7 +209,7 @@ static size_t parent(size_t i, unsigned int lsbit, size_t size)
->   */
->  void sort_r(void *base, size_t num, size_t size,
->  	    cmp_r_func_t cmp_func,
-> -	    swap_func_t swap_func,
-> +	    swap_r_func_t swap_func,
->  	    const void *priv)
->  {
->  	/* pre-scale counters for performance */
-> @@ -208,6 +219,10 @@ void sort_r(void *base, size_t num, size_t size,
->  	if (!a)		/* num < 2 || size == 0 */
->  		return;
->  
-> +	/* called from 'sort' without swap function, let's pick the default */
-> +	if (swap_func == SWAP_WRAPPER && !((struct wrapper *)priv)->swap)
-> +		swap_func = NULL;
-> +
->  	if (!swap_func) {
->  		if (is_aligned(base, size, 8))
->  			swap_func = SWAP_WORDS_64;
-> @@ -230,7 +245,7 @@ void sort_r(void *base, size_t num, size_t size,
->  		if (a)			/* Building heap: sift down --a */
->  			a -= size;
->  		else if (n -= size)	/* Sorting: Extract root to --n */
-> -			do_swap(base, base + n, size, swap_func);
-> +			do_swap(base, base + n, size, swap_func, priv);
->  		else			/* Sort complete */
->  			break;
->  
-> @@ -257,7 +272,7 @@ void sort_r(void *base, size_t num, size_t size,
->  		c = b;			/* Where "a" belongs */
->  		while (b != a) {	/* Shift it into place */
->  			b = parent(b, lsbit, size);
-> -			do_swap(base + b, base + c, size, swap_func);
-> +			do_swap(base + b, base + c, size, swap_func, priv);
->  		}
->  	}
->  }
-> @@ -267,6 +282,11 @@ void sort(void *base, size_t num, size_t size,
->  	  cmp_func_t cmp_func,
->  	  swap_func_t swap_func)
->  {
-> -	return sort_r(base, num, size, _CMP_WRAPPER, swap_func, cmp_func);
-> +	struct wrapper w = {
-> +		.cmp  = cmp_func,
-> +		.swap = swap_func,
-> +	};
-> +
-> +	return sort_r(base, num, size, _CMP_WRAPPER, SWAP_WRAPPER, &w);
->  }
->  EXPORT_SYMBOL(sort);
-> -- 
-> 2.35.1
-> 
-
-
--- 
-Masami Hiramatsu <mhiramat@kernel.org>
+--
+Hyeonggon

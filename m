@@ -2,61 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEDD34C166A
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 16:20:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DCEC4C1671
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 16:21:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241775AbiBWPUz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 10:20:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57706 "EHLO
+        id S241818AbiBWPVv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 10:21:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232357AbiBWPUv (ORCPT
+        with ESMTP id S232357AbiBWPVt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 10:20:51 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8ECE39698;
-        Wed, 23 Feb 2022 07:20:23 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: nfraprado)
-        with ESMTPSA id C18CE1F44A52
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1645629621;
-        bh=jdy98UlpZp4yYyNgJgTnj63KiB3Y1ffMm1m1vA+HNuk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=WzKloTRB2XvEBA4y+u09U1ZlRrBoMkal3rajxL1xbBRiChBpJgO4UshC+8GcqtZ87
-         IVYDTYaISfOwenkbWeJZwk/COcmPKYI4QgbPW6VLS4vd5FmKe83KkVIO4iPRRe/zjf
-         NuXEssJQsc6EKnfWuXz3hvmS8jzXcEYGXydpDFVMc3sLEJ2yuaViUjVa15+NXCAwID
-         /g4KOtca9e94SvcqOP8w/XHr6shwyQ9XtLWLrnl0mF2RzMZ6X+zjAEE9Hps2KO1XwK
-         lR9+WFlqWdjaJC3zIyGlgKiavlNw9Xy7CKgTF4y9vaioDK1KCyZVHWikWBiKMBPJDc
-         8YgFE5sDFSnnQ==
-Date:   Wed, 23 Feb 2022 10:20:15 -0500
-From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
-        <nfraprado@collabora.com>
-To:     "allen-kh.cheng" <allen-kh.cheng@mediatek.com>
-Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        --to=Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        Chen-Yu Tsai <wenst@chromium.org>,
-        Ryder Lee <ryder.lee@kernel.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Subject: Re: [PATCH v2 22/23] arm64: dts: mt8192: Add gce info for display
- nodes
-Message-ID: <20220223152015.vsuuycfvmgm5yi3x@notapiano>
-References: <20220218091633.9368-1-allen-kh.cheng@mediatek.com>
- <20220218091633.9368-23-allen-kh.cheng@mediatek.com>
- <20220222232439.dhsvnut3phudlsls@notapiano>
- <d82cd71f06c803d15c1f2b86123c0ba63e7c5ed7.camel@mediatek.com>
+        Wed, 23 Feb 2022 10:21:49 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DCF7A9942;
+        Wed, 23 Feb 2022 07:21:21 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 296CF61767;
+        Wed, 23 Feb 2022 15:21:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95711C340E7;
+        Wed, 23 Feb 2022 15:21:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645629680;
+        bh=VSQR+hx02n7ejqcnmXQ4srcfdfDnZENuxQVT/EaK31A=;
+        h=From:To:Cc:Subject:Date:From;
+        b=gA5a3UNquyhltWkY1aMDYPpOIwRgGUfagIY7vYRNdG4Xtod8tfIuKS+xpOXvqJQHI
+         gzQLOWlrhvPvB4lnQzzqjcWA7W0xSclVmKkrM2Yb3MbkRXNZDxtcdi/bxptpdnx7O6
+         JA3HZj5mqEk1u1CGAt4Yy1Hx/bq3Vs/BDDIi3r6a9Ii8zHHkXbYi0VtNdDqS213h6+
+         idlRWwZw+vcis6dNNkOWpJn87whlrGKQYGGzw42jXUEnZ+64c6867nd7whU1LIsLR1
+         FPiIHdD/3jmcKHekDDGLNHcH7Um7TyOyTEA/ZdS3kSWVo8yFyAWN8rSUV/4uJsWJ8R
+         h6brnx4CXQPDg==
+From:   SeongJae Park <sj@kernel.org>
+To:     akpm@linux-foundation.org
+Cc:     corbet@lwn.net, skhan@linuxfoundation.org, rientjes@google.com,
+        xhao@linux.alibaba.com, linux-damon@amazon.com, linux-mm@kvack.org,
+        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, SeongJae Park <sj@kernel.org>
+Subject: [PATCH 00/12] Introduce DAMON sysfs interface
+Date:   Wed, 23 Feb 2022 15:20:39 +0000
+Message-Id: <20220223152051.22936-1-sj@kernel.org>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <d82cd71f06c803d15c1f2b86123c0ba63e7c5ed7.camel@mediatek.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,49 +55,172 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 23, 2022 at 09:12:37PM +0800, allen-kh.cheng wrote:
-> On Tue, 2022-02-22 at 18:24 -0500, N�colas F. R. A. Prado wrote:
-> > On Fri, Feb 18, 2022 at 05:16:32PM +0800, Allen-KH Cheng wrote:
-> > > Add gce info for display nodes.
-> > > 
-> > > Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
-> > > ---
-> > >  arch/arm64/boot/dts/mediatek/mt8192.dtsi | 16 ++++++++++++++++
-> > >  1 file changed, 16 insertions(+)
-> > > 
-> > > diff --git a/arch/arm64/boot/dts/mediatek/mt8192.dtsi
-> > > b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
-> > > index 1f1555fd18f5..df884c48669e 100644
-> > > --- a/arch/arm64/boot/dts/mediatek/mt8192.dtsi
-> > > +++ b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
-> > > @@ -1226,6 +1226,9 @@
-> > >  		mmsys: syscon@14000000 {
-> > >  			compatible = "mediatek,mt8192-mmsys", "syscon";
-> > >  			reg = <0 0x14000000 0 0x1000>;
-> > > +			mboxes = <&gce 0 CMDQ_THR_PRIO_HIGHEST 1>,
-> > > +				 <&gce 1 CMDQ_THR_PRIO_HIGHEST 1>;
-> > > +			mediatek,gce-client-reg = <&gce SUBSYS_1400XXXX
-> > > 0 0x1000>;
-> > 
-> > As a side note, the current mmsys dt-binding,
-> > Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys.yaml,
-> > doesn't
-> > define mboxes or mediatek,gce-client-reg, but looks like there's
-> > already a patch
-> > in the ML adding those:
-> > 
-> > 
-> https://urldefense.com/v3/__https://lore.kernel.org/all/20220126071932.32615-2-jason-jh.lin@mediatek.com/__;!!CTRNKA9wMg0ARbw!zNfQkN-YYjiqPCd5m9DsLhrQDymgEZJoY4oSl24nC3R95P0gIXEmNjyJMhjQZXkWX7mZPa5QS7KIMlGXMbDjDA1_2A$
-> > 
-> 
-> Hi N�colas,
-> 
-> Thanks for your reminding, Should I need to remove this patch from
-> series?
-> 
-> or I can add this ML to base and mention it in cover letter.
+Chages from Previous Version (RFC)
+==================================
 
-I think it should be OK to just mention it in the cover letter.
+Compared to the RFC version of this patchset
+(https://lore.kernel.org/linux-mm/20220217161938.8874-1-sj@kernel.org/), this
+version contains below changes.
 
-Thanks,
-N�colas
+- Implement all DAMON debugfs interface providing features
+- Writeup documents
+- Add more selftests
+
+Introduction
+============
+
+DAMON's debugfs-based user interface (DAMON_DBGFS) served very well, so far.
+However, it unnecessarily depends on debugfs, while DAMON is not aimed to be
+used for only debugging.  Also, the interface receives multiple values via one
+file.  For example, schemes file receives 18 values.  As a result, it is
+inefficient, hard to be used, and difficult to be extended.  Especially,
+keeping backward compatibility of user space tools is getting only challenging.
+It would be better to implement another reliable and flexible interface and
+deprecate DAMON_DBGFS in long term.
+
+For the reason, this patchset introduces a sysfs-based new user interface of
+DAMON.  The idea of the new interface is, using directory hierarchies and
+having one dedicated file for each value.  For a short example, users can do
+the virtual address monitoring via the interface as below:
+
+    # cd /sys/kernel/mm/damon/admin/
+    # echo 1 > kdamonds/nr
+    # echo 1 > kdamonds/0/contexts/nr
+    # echo vaddr > kdamonds/0/contexts/0/operations
+    # echo 1 > kdamonds/0/contexts/0/targets/nr
+    # echo $(pidof <workload>) > kdamonds/0/contexts/0/targets/0/pid
+    # echo on > kdamonds/0/state
+
+A brief representation of the files hierarchy of DAMON sysfs interface is as
+below.  Childs are represented with indentation, directories are having '/'
+suffix, and files in each directory are separated by comma.
+
+    /sys/kernel/mm/damon/admin
+    │ kdamonds/nr
+    │ │ 0/state,pid
+    │ │ │ contexts/nr
+    │ │ │ │ 0/operations
+    │ │ │ │ │ monitoring_attrs/
+    │ │ │ │ │ │ intervals/sample_us,aggr_us,update_us
+    │ │ │ │ │ │ nr_regions/min,max
+    │ │ │ │ │ targets/nr
+    │ │ │ │ │ │ 0/pid
+    │ │ │ │ │ │ │ regions/nr
+    │ │ │ │ │ │ │ │ 0/start,end
+    │ │ │ │ │ │ │ │ ...
+    │ │ │ │ │ │ ...
+    │ │ │ │ │ schemes/nr
+    │ │ │ │ │ 0/action
+    │ │ │ │ │ │ access_pattern/
+    │ │ │ │ │ │ │ sz/min,max
+    │ │ │ │ │ │ │ nr_accesses/min,max
+    │ │ │ │ │ │ │ age/min,max
+    │ │ │ │ │ │ quotas/ms,sz,reset_interval_ms
+    │ │ │ │ │ │ │ weights/sz,nr_accesses,age
+    │ │ │ │ │ │ watermarks/metric,interval_us,high,mid,low
+    │ │ │ │ │ │ stats/nr_tried,sz_tried,nr_applied,sz_applied,qt_exceeds
+    │ │ │ │ │ ...
+    │ │ ...
+
+Detailed usage of the files will be described in the final Documentation patch
+of this patchset.
+
+Main Difference Between DAMON_DBGFS and DAMON_SYSFS
+---------------------------------------------------
+
+At the moment, DAMON_DBGFS and DAMON_SYSFS provides same features.  One
+important difference between them is their exclusiveness.  DAMON_DBGFS works in
+an exclusive manner, so that no DAMON worker thread (kdamond) in the system can
+run concurrently and interfere somehow.  For the reason, DAMON_DBGFS asks users
+to construct all monitoring contexts and start them at once.  It's not a big
+problem but makes the operation a little bit complex and unflexible.
+
+For more flexible usage, DAMON_SYSFS moves the responsibility of preventing any
+possible interference to the admins and work in a non-exclusive manner.  That
+is, users can configure and start contexts one by one.  Note that DAMON
+respects both exclusive groups and non-exclusive groups of contexts, in a
+manner similar to that of reader-writer locks.  That is, if any exclusive
+monitoring contexts (e.g., contexts that started via DAMON_DBGFS) are running,
+DAMON_SYSFS does not start new contexts, and vice versa.
+
+Future Plan of DAMON_DBGFS Deprecation
+======================================
+
+Once this patchset is merged, DAMON_DBGFS development will be frozen.  That is,
+we will maintain it to work as is now so that no users will be break.  But, it
+will not be extended to provide any new feature of DAMON.  The support will be
+continued only until next LTS release.  After that, we will drop DAMON_DBGFS.
+
+User-space Tooling Compatibility
+--------------------------------
+
+As DAMON_SYSFS provides all features of DAMON_DBGFS, all user space tooling can
+move to DAMON_SYSFS.  As we will continue supporting DAMON_DBGFS until next LTS
+kernel release, user space tools would have enough time to move to DAMON_SYSFS.
+
+The official user space tool, damo[1], is already supporting both DAMON_SYSFS
+and DAMON_DBGFS.  Both correctness tests[2] and performance tests[3] of DAMON
+using DAMON_SYSFS also passed.
+
+[1] https://github.com/awslabs/damo
+[2] https://github.com/awslabs/damon-tests/tree/master/corr
+[3] https://github.com/awslabs/damon-tests/tree/master/perf
+
+Complete Git Tree
+=================
+
+You can get the complete git tree from
+https://git.kernel.org/sj/h/damon/sysfs/patches/v1.
+
+Sequence of Patches
+===================
+
+First two patches (patches 1-2) make core changes for DAMON_SYSFS.  The first
+one (patch 1) allows non-exclusive DAMON contexts so that DAMON_SYSFS can work
+in non-exclusive mode, while the second one (patch 2) adds size of DAMON enum
+types so that DAMON API users can safely iterate the enums.
+
+Third patch (patch 3) implements basic sysfs stub for virtual address spaces
+monitoring.  Note that this implements only sysfs files and DAMON is not
+linked.  Fourth patch (patch 4) links the DAMON_SYSFS to DAMON so that users
+can control DAMON using the sysfs files.
+
+Following six patches (patches 5-10) implements other DAMON features that
+DAMON_DBGFS supports one by one (physical address space monitoring, DAMON-based
+operation schemes, schemes quotas, schemes prioritization weights, schemes
+watermarks, and schemes stats).
+
+Following patch (patch 11) adds a simple selftest for DAMON_SYSFS, and the
+final one (patch 12) documents DAMON_SYSFS.
+
+SeongJae Park (12):
+  mm/damon/core: Allow non-exclusive DAMON start/stop
+  mm/damon/core: Add number of each enum type values
+  mm/damon: Implement a minimal stub for sysfs-based DAMON interface
+  mm/damon/sysfs: Link DAMON for virtual address spaces monitoring
+  mm/damon/sysfs: Support physical address space monitoring
+  mm/damon/sysfs: Support DAMON-based Operation Schemes
+  mm/damon/sysfs: Support DAMOS quotas
+  mm/damon/sysfs: Support schemes prioritization weights
+  mm/damon/sysfs: Support DAMOS watermarks
+  mm/damon/sysfs: Support DAMOS stats
+  selftests/damon: Add a test for DAMON sysfs interface
+  Docs/admin-guide/mm/damon/usage: Document DAMON sysfs interface
+
+ Documentation/admin-guide/mm/damon/usage.rst |  349 ++-
+ include/linux/damon.h                        |    6 +-
+ mm/damon/Kconfig                             |    7 +
+ mm/damon/Makefile                            |    1 +
+ mm/damon/core.c                              |   23 +-
+ mm/damon/dbgfs.c                             |    2 +-
+ mm/damon/reclaim.c                           |    2 +-
+ mm/damon/sysfs.c                             | 2684 ++++++++++++++++++
+ tools/testing/selftests/damon/Makefile       |    1 +
+ tools/testing/selftests/damon/sysfs.sh       |  306 ++
+ 10 files changed, 3364 insertions(+), 17 deletions(-)
+ create mode 100644 mm/damon/sysfs.c
+ create mode 100755 tools/testing/selftests/damon/sysfs.sh
+
+-- 
+2.17.1
+

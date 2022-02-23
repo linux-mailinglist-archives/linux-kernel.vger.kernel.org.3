@@ -2,150 +2,268 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76C604C1751
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 16:42:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A94F4C1740
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 16:41:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242296AbiBWPnL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 10:43:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55084 "EHLO
+        id S242100AbiBWPmM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 10:42:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242262AbiBWPnI (ORCPT
+        with ESMTP id S241099AbiBWPmI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 10:43:08 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 210D42D1E5;
-        Wed, 23 Feb 2022 07:42:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645630960; x=1677166960;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=e4iUHA2a+l+KhADALNLZscJEFxyySLAdMRx9NxqUlUY=;
-  b=GNHIh5uRR7RcnJ11FeOqgVCXkLbsF+4dd992sq4ECeK+3VqBWb3PS83T
-   eSuZ5Is/xdBVdm/JNA1Cc5AiCPurRdkWlIy9SREcP78D6FHSa/J/hPsbx
-   Gmz0XvvgEy1Wig14Ei9c/nPNDEzdGbjS9B+XYm01GxUmAzKb+o+YdQwxV
-   ZxlgiVMW9JJJKGW5uvtKbeM/g09SZ05sUpNBHCSSSD/XpL6UzuFJLyTBY
-   bbHZL/OCuqPjNt1p7fENqaNCagBGFPfmLP0BtK6mnBNzSB56Z8+idasSS
-   jBPY+8O9ceNE9zpOSDukQGCHvOsxflf2sugfaDHaB1EcWY26Fff38tAvp
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10266"; a="235500200"
-X-IronPort-AV: E=Sophos;i="5.88,391,1635231600"; 
-   d="scan'208";a="235500200"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2022 07:42:39 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,391,1635231600"; 
-   d="scan'208";a="591739627"
-Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 23 Feb 2022 07:42:36 -0800
-Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nMtml-0001ZQ-W6; Wed, 23 Feb 2022 15:42:35 +0000
-Date:   Wed, 23 Feb 2022 23:41:41 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Markuss Broks <markuss.broks@gmail.com>,
-        linux-kernel@vger.kernel.org
-Cc:     kbuild-all@lists.01.org, phone-devel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        Markuss Broks <markuss.broks@gmail.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Henrik Rydberg <rydberg@bitmath.org>,
-        linux-input@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v6 2/2] Input: add Imagis touchscreen driver
-Message-ID: <202202232342.Ew209GPR-lkp@intel.com>
-References: <20220222203414.8656-3-markuss.broks@gmail.com>
+        Wed, 23 Feb 2022 10:42:08 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DFEB2D1E5;
+        Wed, 23 Feb 2022 07:41:39 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1B2C161862;
+        Wed, 23 Feb 2022 15:41:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ADB7AC340E7;
+        Wed, 23 Feb 2022 15:41:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645630898;
+        bh=NZe27FiksAdBZXf8fS4So/v4Gr+hUDChWjiqPXizi/w=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=N864KPKn/FiNfDgwrITmul1xlnHr/itNlmzpEW53Rocwdvl4cfxmMrHFMGJyOjJv9
+         XdPUkyl1v6simh6/CdwypbTpGKPKT4w2iAcC5PrPy+nUf9C0sy7G2Xg7WVv2CUhS/L
+         Af+nQAXeo0bPQN2/peCXfMHqNADBk+iv17dts3a/eFU+mslmfmOx3foF+5W5m8Xn5h
+         MyOAJt8fcQ9Zh297yFK1ZQHyBqsYsNelwQz0fjrD0spoTz/wZ3usUQJQpwpmDiC9gt
+         Sg8rQE5Lm8vcj+1Sh72TyDoFufM53hlGegue9uWk9YzVG3hMGvrAj3IQmSY9PzB7iO
+         v/2IMfOL+cOPQ==
+Date:   Wed, 23 Feb 2022 16:42:14 +0100
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Ahmad Fatoum <a.fatoum@pengutronix.de>
+Cc:     James Bottomley <jejb@linux.ibm.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        David Howells <dhowells@redhat.com>, kernel@pengutronix.de,
+        Sumit Garg <sumit.garg@linaro.org>,
+        David Gstir <david@sigma-star.at>,
+        Pankaj Gupta <pankaj.gupta@nxp.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Horia =?utf-8?Q?Geant=C4=83?= <horia.geanta@nxp.com>,
+        Aymen Sghaier <aymen.sghaier@nxp.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jan Luebbe <j.luebbe@pengutronix.de>,
+        Eric Biggers <ebiggers@kernel.org>,
+        Richard Weinberger <richard@nod.at>,
+        Franck LENORMAND <franck.lenormand@nxp.com>,
+        Tim Harvey <tharvey@gateworks.com>,
+        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
+        keyrings@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Subject: Re: [PATCH v5 2/5] KEYS: trusted: allow users to use kernel RNG for
+ key material
+Message-ID: <YhZV1g0kvXfBOZ06@iki.fi>
+References: <20220222195819.2313913-1-a.fatoum@pengutronix.de>
+ <20220222195819.2313913-3-a.fatoum@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220222203414.8656-3-markuss.broks@gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220222195819.2313913-3-a.fatoum@pengutronix.de>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Markuss,
+On Tue, Feb 22, 2022 at 08:58:16PM +0100, Ahmad Fatoum wrote:
+> The two existing trusted key sources don't make use of the kernel RNG,
+> but instead let the hardware doing the sealing/unsealing also
+> generate the random key material. However, users may want to place
+> less trust into the quality of the trust source's random number
+> generator and instead use the kernel entropy pool, which can be
+> seeded from multiple entropy sources.
+> 
+> Make this possible by adding a new trusted.kernel_rng parameter,
+> that will force use of the kernel RNG. In its absence, it's up
+> to the trust source to decide, which random numbers to use,
+> maintaining the existing behavior.
+> 
+> Suggested-by: Jarkko Sakkinen <jarkko@kernel.org>
+> Acked-by: Sumit Garg <sumit.garg@linaro.org>
+> Reviewed-by: David Gstir <david@sigma-star.at>
+> Reviewed-by: Pankaj Gupta <pankaj.gupta@nxp.com>
+> Signed-off-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
+> ---
+> To: James Bottomley <jejb@linux.ibm.com>
+> To: Jarkko Sakkinen <jarkko@kernel.org>
+> To: Mimi Zohar <zohar@linux.ibm.com>
+> To: David Howells <dhowells@redhat.com>
+> Cc: James Morris <jmorris@namei.org>
+> Cc: "Serge E. Hallyn" <serge@hallyn.com>
+> Cc: "Horia Geantă" <horia.geanta@nxp.com>
+> Cc: Aymen Sghaier <aymen.sghaier@nxp.com>
+> Cc: Herbert Xu <herbert@gondor.apana.org.au>
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: Jan Luebbe <j.luebbe@pengutronix.de>
+> Cc: Eric Biggers <ebiggers@kernel.org>
+> Cc: David Gstir <david@sigma-star.at>
+> Cc: Richard Weinberger <richard@nod.at>
+> Cc: Franck LENORMAND <franck.lenormand@nxp.com>
+> Cc: Sumit Garg <sumit.garg@linaro.org>
+> Cc: Tim Harvey <tharvey@gateworks.com>
+> Cc: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+> Cc: Pankaj Gupta <pankaj.gupta@nxp.com>
+> Cc: keyrings@vger.kernel.org
+> Cc: linux-crypto@vger.kernel.org
+> Cc: linux-integrity@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Cc: linux-security-module@vger.kernel.org
+> ---
+>  .../admin-guide/kernel-parameters.txt         | 10 ++++++
+>  .../security/keys/trusted-encrypted.rst       | 20 ++++++-----
+>  security/keys/trusted-keys/trusted_core.c     | 35 ++++++++++++++++++-
+>  3 files changed, 56 insertions(+), 9 deletions(-)
+> 
+> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+> index f5a27f067db9..844c883ca9d8 100644
+> --- a/Documentation/admin-guide/kernel-parameters.txt
+> +++ b/Documentation/admin-guide/kernel-parameters.txt
+> @@ -5880,6 +5880,16 @@
+>  			first trust source as a backend which is initialized
+>  			successfully during iteration.
+>  
+> +	trusted.rng=	[KEYS]
+> +			Format: <string>
+> +			The RNG used to generate key material for trusted keys.
+> +			Can be one of:
+> +			- "kernel"
+> +			- the same value as trusted.source: "tpm" or "tee"
+> +			- "default"
+> +			If not specified, "default" is used. In this case,
+> +			the RNG's choice is left to each individual trust source.
+> +
+>  	tsc=		Disable clocksource stability checks for TSC.
+>  			Format: <string>
+>  			[x86] reliable: mark tsc clocksource as reliable, this
+> diff --git a/Documentation/security/keys/trusted-encrypted.rst b/Documentation/security/keys/trusted-encrypted.rst
+> index 80d5a5af62a1..99cf34d7c025 100644
+> --- a/Documentation/security/keys/trusted-encrypted.rst
+> +++ b/Documentation/security/keys/trusted-encrypted.rst
+> @@ -87,22 +87,26 @@ Key Generation
+>  Trusted Keys
+>  ------------
+>  
+> -New keys are created from random numbers generated in the trust source. They
+> -are encrypted/decrypted using a child key in the storage key hierarchy.
+> -Encryption and decryption of the child key must be protected by a strong
+> -access control policy within the trust source.
+> +New keys are created from random numbers. They are encrypted/decrypted using
+> +a child key in the storage key hierarchy. Encryption and decryption of the
+> +child key must be protected by a strong access control policy within the
+> +trust source. The random number generator in use differs according to the
+> +selected trust source:
+>  
+> -  *  TPM (hardware device) based RNG
+> +  *  TPM: hardware device based RNG
+>  
+> -     Strength of random numbers may vary from one device manufacturer to
+> -     another.
+> +     Keys are generated within the TPM. Strength of random numbers may vary
+> +     from one device manufacturer to another.
+>  
+> -  *  TEE (OP-TEE based on Arm TrustZone) based RNG
+> +  *  TEE: OP-TEE based on Arm TrustZone based RNG
+>  
+>       RNG is customizable as per platform needs. It can either be direct output
+>       from platform specific hardware RNG or a software based Fortuna CSPRNG
+>       which can be seeded via multiple entropy sources.
+>  
+> +Users may override this by specifying ``trusted.rng=kernel`` on the kernel
+> +command-line to override the used RNG with the kernel's random number pool.
+> +
+>  Encrypted Keys
+>  --------------
+>  
+> diff --git a/security/keys/trusted-keys/trusted_core.c b/security/keys/trusted-keys/trusted_core.c
+> index 7cdbd16aed30..9235fb7d0ec9 100644
+> --- a/security/keys/trusted-keys/trusted_core.c
+> +++ b/security/keys/trusted-keys/trusted_core.c
+> @@ -16,12 +16,17 @@
+>  #include <linux/key-type.h>
+>  #include <linux/module.h>
+>  #include <linux/parser.h>
+> +#include <linux/random.h>
+>  #include <linux/rcupdate.h>
+>  #include <linux/slab.h>
+>  #include <linux/static_call.h>
+>  #include <linux/string.h>
+>  #include <linux/uaccess.h>
+>  
+> +static char *trusted_rng = "default";
+> +module_param_named(rng, trusted_rng, charp, 0);
+> +MODULE_PARM_DESC(rng, "Select trusted key RNG");
+> +
+>  static char *trusted_key_source;
+>  module_param_named(source, trusted_key_source, charp, 0);
+>  MODULE_PARM_DESC(source, "Select trusted keys source (tpm or tee)");
+> @@ -312,8 +317,14 @@ struct key_type key_type_trusted = {
+>  };
+>  EXPORT_SYMBOL_GPL(key_type_trusted);
+>  
+> +static int kernel_get_random(unsigned char *key, size_t key_len)
+> +{
+> +	return get_random_bytes_wait(key, key_len) ?: key_len;
+> +}
+> +
+>  static int __init init_trusted(void)
+>  {
+> +	int (*get_random)(unsigned char *key, size_t key_len);
+>  	int i, ret = 0;
+>  
+>  	for (i = 0; i < ARRAY_SIZE(trusted_key_sources); i++) {
+> @@ -322,6 +333,28 @@ static int __init init_trusted(void)
+>  			    strlen(trusted_key_sources[i].name)))
+>  			continue;
+>  
+> +		/*
+> +		 * We always support trusted.rng="kernel" and "default" as
+> +		 * well as trusted.rng=$trusted.source if the trust source
+> +		 * defines its own get_random callback.
+> +		 */
+> +		get_random = trusted_key_sources[i].ops->get_random;
+> +		if (trusted_rng && strcmp(trusted_rng, "default")) {
+> +			if (!strcmp(trusted_rng, "kernel")) {
+> +				get_random = kernel_get_random;
+> +			} else if (strcmp(trusted_rng, trusted_key_sources[i].name) ||
+> +				   !get_random) {
+> +				pr_warn("Unsupported RNG. Supported: kernel");
+> +				if (get_random)
+> +					pr_cont(", %s", trusted_key_sources[i].name);
+> +				pr_cont(", default\n");
+> +				return -EINVAL;
+> +			}
+> +		}
+> +
+> +		if (!get_random)
+> +			get_random = kernel_get_random;
+> +
+>  		static_call_update(trusted_key_init,
+>  				   trusted_key_sources[i].ops->init);
+>  		static_call_update(trusted_key_seal,
+> @@ -329,7 +362,7 @@ static int __init init_trusted(void)
+>  		static_call_update(trusted_key_unseal,
+>  				   trusted_key_sources[i].ops->unseal);
+>  		static_call_update(trusted_key_get_random,
+> -				   trusted_key_sources[i].ops->get_random);
+> +				   get_random);
+>  		static_call_update(trusted_key_exit,
+>  				   trusted_key_sources[i].ops->exit);
+>  		migratable = trusted_key_sources[i].ops->migratable;
+> -- 
+> 2.30.2
+> 
 
-I love your patch! Perhaps something to improve:
+Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
 
-[auto build test WARNING on dtor-input/next]
-[also build test WARNING on linux/master robh/for-next linus/master v5.17-rc5 next-20220222]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/Markuss-Broks/Add-support-for-Imagis-touchscreens/20220223-043645
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/dtor/input.git next
-config: arm-randconfig-s031-20220223 (https://download.01.org/0day-ci/archive/20220223/202202232342.Ew209GPR-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 11.2.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-dirty
-        # https://github.com/0day-ci/linux/commit/bc77ee5e0d7309edca7d65925c6afa05334b0b01
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Markuss-Broks/Add-support-for-Imagis-touchscreens/20220223-043645
-        git checkout bc77ee5e0d7309edca7d65925c6afa05334b0b01
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm SHELL=/bin/bash drivers/input/touchscreen/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-
-sparse warnings: (new ones prefixed by >>)
->> drivers/input/touchscreen/imagis.c:65:35: sparse: sparse: cast to restricted __be32
-
-vim +65 drivers/input/touchscreen/imagis.c
-
-    40	
-    41	static int imagis_i2c_read_reg(struct imagis_ts *ts,
-    42				       unsigned int reg, unsigned int *buffer)
-    43	{
-    44		__be32 reg_be = cpu_to_be32(reg);
-    45		struct i2c_msg msg[] = {
-    46			{
-    47				.addr = ts->client->addr,
-    48				.flags = 0,
-    49				.buf = (unsigned char *)&reg_be,
-    50				.len = sizeof(reg_be),
-    51			}, {
-    52				.addr = ts->client->addr,
-    53				.flags = I2C_M_RD,
-    54				.buf = (unsigned char *)buffer,
-    55				.len = sizeof(reg_be),
-    56			},
-    57		};
-    58		int ret, error;
-    59		int retry = IST3038C_I2C_RETRY_COUNT;
-    60	
-    61		/* Retry in case the controller fails to respond */
-    62		do {
-    63			ret = i2c_transfer(ts->client->adapter, msg, ARRAY_SIZE(msg));
-    64			if (ret == ARRAY_SIZE(msg)) {
-  > 65				*buffer = be32_to_cpu(*buffer);
-    66				return 0;
-    67			}
-    68	
-    69			error = ret < 0 ? ret : -EIO;
-    70			dev_err(&ts->client->dev,
-    71				"%s - i2c_transfer failed: %d (%d)\n",
-    72				__func__, error, ret);
-    73		} while (--retry);
-    74	
-    75		return error;
-    76	}
-    77	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+BR, Jarkko

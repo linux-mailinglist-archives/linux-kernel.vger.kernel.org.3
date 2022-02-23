@@ -2,118 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95DB34C1605
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 16:00:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D6BA04C160F
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 16:02:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232218AbiBWPAp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 10:00:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56076 "EHLO
+        id S241872AbiBWPDT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 10:03:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236093AbiBWPAo (ORCPT
+        with ESMTP id S233778AbiBWPDS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 10:00:44 -0500
-Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5548AB7176;
-        Wed, 23 Feb 2022 07:00:16 -0800 (PST)
-Received: by mail-oi1-x235.google.com with SMTP id y7so18565501oih.5;
-        Wed, 23 Feb 2022 07:00:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=AxVydygDoB9KTpxxDGgWfkoHyxwpvYNL1uFIW7uwN1w=;
-        b=lTGdl/IjKd1CebEr17BY47QhDP1zLUGRlrNb4JUA20msKqpC0eIs0bScZ1Yrq0lCh3
-         +lj5ewBnoDk09zS4a6+G1UjekJ/x3PemeHcLmzA2pqEgn6vjcdz4w6BEk1b6LqeEhzuw
-         PADD8OmaHzFDytolJGcqZqKUlubWcngWNBLwwmodZlvs5gzhwBO93fBypB7zL46DQTun
-         8FRIWoed4V81/MpXZ4oW+8Mu5Y3/gXyeIGuQVbkVnsSqUpIrT0jvCjQPBE5Io5EsCcnU
-         oVsSbKGUuK2sM+21sboBFNJqVyXMzMf6+sf3zWBriAkPD7BwDLhK7vJlqlHXr6nPpISk
-         c6Ow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
-         :mime-version:content-transfer-encoding;
-        bh=AxVydygDoB9KTpxxDGgWfkoHyxwpvYNL1uFIW7uwN1w=;
-        b=q3DRbFQQjdwlN8zqRyVf7JjFFXZnbWxDNLWZOaLM7/gBFKbL0gbxtKVWoZxVV9sec0
-         ORnC5Te6n5mq5XUGne0kFATFqf6I9vxvmxTDVvHW/JBu4JSHoKB/c/Nk1Mv03u7ifOFZ
-         kuxWyMn3b5DTx7ZWvhsdJyXElm2qn4kLo6mWlL5nZ+hcjUpt9quKzimsw/eBhmTFR7M2
-         S/zynOY7E7fIj3E/V7Xj/pGRsSzFvwMH9HAuOSsaf0GtAnZDNZD/PjJZztMbR3WnLTjV
-         /beUXp/u1juqXb2B0Jkkosuo4cJ6u0As6Dut0ruv+A09s+GEOHCZRujOx1COJInCAz09
-         HfVA==
-X-Gm-Message-State: AOAM530MCFEsaBxLE+Z0y3nttWUmepnVFP8l4c6BYcFoIqueJnU3x76Q
-        3y99wK+6186jnu8GgLEw7+QCAW4U9HpFaQ==
-X-Google-Smtp-Source: ABdhPJyEnb6Y1KQkd9rcyq+ivzqptP9ziB5RoAj4I9Kzqk9ed84vZeaj1Bbcpu0z6moFcXz4DqZkgA==
-X-Received: by 2002:a05:6808:1693:b0:2d2:4d84:5220 with SMTP id bb19-20020a056808169300b002d24d845220mr4849950oib.146.1645628414718;
-        Wed, 23 Feb 2022 07:00:14 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id q32sm6745422oiw.25.2022.02.23.07.00.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Feb 2022 07:00:14 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] hwmon fixes for v5.17-rc6
-Date:   Wed, 23 Feb 2022 07:00:12 -0800
-Message-Id: <20220223150012.2176490-1-linux@roeck-us.net>
-X-Mailer: git-send-email 2.35.1
+        Wed, 23 Feb 2022 10:03:18 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AA83F60CEF
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 07:02:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1645628569;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=exzpM2LSG9f05DEW2rVqdo8gegc7G06w4mF6UEiw0ho=;
+        b=D7QpVSEiqPF2kT1cs0isZZa3Qa2WaapHrTcA5dYhE5xxIIq43ftcbNWHhLUfNCYT/TnNa4
+        ollvIej5MJ3J1iokRP2X0j4Dhb5f0MudOkJMRegMacfAOUwigvxdd+H8nKFvnVa3Z7lyw3
+        NyLcqrp9/wQjJ+dA0u0xUmGOLKuL3bc=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-270-tTCdhBjuNFOB5XnGGGSZkQ-1; Wed, 23 Feb 2022 10:02:47 -0500
+X-MC-Unique: tTCdhBjuNFOB5XnGGGSZkQ-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 3C886800425;
+        Wed, 23 Feb 2022 15:02:45 +0000 (UTC)
+Received: from starship (unknown [10.40.195.190])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 6C7F210631FB;
+        Wed, 23 Feb 2022 15:02:43 +0000 (UTC)
+Message-ID: <9af820b8deecf3b6ea31db0993e83f746221634d.camel@redhat.com>
+Subject: Re: [PATCH v2 07/18] KVM: x86/mmu: Do not use guest root level in
+ audit
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Lai Jiangshan <laijs@linux.alibaba.com>
+Date:   Wed, 23 Feb 2022 17:02:42 +0200
+In-Reply-To: <219937f8-6b49-47db-4ecf-f354b110da1c@redhat.com>
+References: <20220217210340.312449-1-pbonzini@redhat.com>
+         <20220217210340.312449-8-pbonzini@redhat.com> <Yg/nc1jjtUD2fhOR@google.com>
+         <219937f8-6b49-47db-4ecf-f354b110da1c@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On Fri, 2022-02-18 at 19:46 +0100, Paolo Bonzini wrote:
+> On 2/18/22 19:37, Sean Christopherson wrote:
+> > Since I keep bringing it up...
+> > 
+> > From: Sean Christopherson<seanjc@google.com>
+> > Date: Fri, 18 Feb 2022 09:43:05 -0800
+> > Subject: [PATCH] KVM: x86/mmu: Remove MMU auditing
+> > 
+> > Remove mmu_audit.c and all its collateral, the auditing code has suffered
+> > severe bitrot, ironically partly due to shadow paging being more stable
+> > and thus not benefiting as much from auditing, but mostly due to TDP
+> > supplanting shadow paging for non-nested guests and shadowing of nested
+> > TDP not heavily stressing the logic that is being audited.
+> > 
+> > Signed-off-by: Sean Christopherson<seanjc@google.com>
+> 
+> Queued, thanks. O:-)
 
-Please pull hwmon fixes for Linux v5.17-rc6 from signed tag:
+I once kind of played with it.
 
-    git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-for-v5.17-rc6
+Note that shadow mmu does have bugs - I can easily crash L1/L2 when
+doing repeated migrations when I disable NPT either in L0 or L1,
+and when I force the mmu to be always sync (see my strict_mmu patch),
+the crashes go away.
 
-Thanks,
-Guenter
-------
+mmu audit maybe could have helped with that.
 
-The following changes since commit 754e0b0e35608ed5206d6a67a791563c631cec07:
+But I won't argue too much about this.
 
-  Linux 5.17-rc4 (2022-02-13 12:13:30 -0800)
+Best regards,
+	Maxim Levitsky
 
-are available in the Git repository at:
+> 
+> Paolo
+> 
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git tags/hwmon-for-v5.17-rc6
 
-for you to fetch changes up to 35f165f08950a876f1b95a61d79c93678fba2fd6:
-
-  hwmon: (pmbus) Clear pmbus fault/warning bits after read (2022-02-22 08:15:39 -0800)
-
-----------------------------------------------------------------
-hwmon fixes for v5.17-rc6
-
-Fix two old bugs and one new bug in hwmon subsystem.
-
-- In pmbus core, clear pmbus fault/warning status bits after read
-  to follow PMBus standard
-- In hwmon core, handle failure to register sensor with thermal
-  zone correctly
-- In ntc_thermal driver, use valid thermistor names for Samsung
-  thermistors
-
-----------------------------------------------------------------
-Guenter Roeck (1):
-      hwmon: Handle failure to register sensor with thermal zone correctly
-
-Linus Walleij (1):
-      hwmon: (ntc_thermistor) Underscore Samsung thermistor
-
-Vikash Chandola (1):
-      hwmon: (pmbus) Clear pmbus fault/warning bits after read
-
- drivers/hwmon/hwmon.c            | 14 ++++++++------
- drivers/hwmon/ntc_thermistor.c   |  2 +-
- drivers/hwmon/pmbus/pmbus_core.c |  5 +++++
- 3 files changed, 14 insertions(+), 7 deletions(-)

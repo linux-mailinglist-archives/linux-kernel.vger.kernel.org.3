@@ -2,156 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5791D4C0FA2
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 10:55:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A3FC14C0FA0
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 10:55:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239429AbiBWJzf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 04:55:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47248 "EHLO
+        id S239415AbiBWJz0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 04:55:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234327AbiBWJzd (ORCPT
+        with ESMTP id S234327AbiBWJzY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 04:55:33 -0500
-Received: from mail-vs1-xe30.google.com (mail-vs1-xe30.google.com [IPv6:2607:f8b0:4864:20::e30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 546075004B;
-        Wed, 23 Feb 2022 01:55:06 -0800 (PST)
-Received: by mail-vs1-xe30.google.com with SMTP id y4so2488110vsd.11;
-        Wed, 23 Feb 2022 01:55:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=xESpIlqylwshhgf0/wvYklxZg/TWVOJPa6Nw972G0rQ=;
-        b=dBeT2Mvft8gvdXts2zr4S2+q+1M/Oahxhdnung7mVq26tJL1j2oERA8IDHrKg8ezoV
-         PnWid1vNNavAHHztMfYqqehhjQ2PtXvJ5jlmNHosfrJOwOIN91FQVMZQbFVad3z1EZXe
-         rl3rU9JRzVvmi55qXf4X+fZOjd1L8YCXP1M6jvxim6s03V2yuBu93DRw3xsw8nAOrRbS
-         5p24EdSz7fv4fBlDqv/qMMIAejrhbOnQ3S2ivqXKKMDPO9p86FrUWwGVjWUmTRfLgLw0
-         WD6pzvIGEMwr9y8GpRqQVVarfE+uqloPEXHfEICv+Xk3n/MVDJEn3Gj15AhH41oNAmrd
-         oyTQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=xESpIlqylwshhgf0/wvYklxZg/TWVOJPa6Nw972G0rQ=;
-        b=KRYb39WWNPyGzxrniLfeP7KdyxSUPh82QaZkSfYuo7SH7YtLdJPb+/wKaXkTRCoGwK
-         RaM+eW4kbDA7O6gr0ZFkiUpWJkycNFJXhKvY9OMBppWU0G2pC6qP1YIiOk6bkBjLHTWw
-         GiYHoFREApGSqOOYiTisf6NZ0BPQJTm+1I3YbpH5L1ho8k9PAOzRnd6lXoZKe7sqQ8qT
-         pKHblAL3KzOcdVpylV3LqJ6+zKBX0TVkEVVVq2NyIWqHHC+M7/Qeo8GNb1/n9EOrwLlq
-         T9FVNCjOraa0adG/9sfNk1iApN4M16ylrrPJGMQbL/rihGdAhJVEMxYX/0o+MGW0qC49
-         GxIA==
-X-Gm-Message-State: AOAM532ea4nvNRzjz+2Dfh/ud6EIYyp+pLNE3L35c6JzSUL595HAnQto
-        iVKaQRausuEnQNxOc4V29fTlTVdZq0v+tlu228o6/i3Kf79UfzJN
-X-Google-Smtp-Source: ABdhPJxcWY8U1I4kaEFrpnAAV9pnwAerS1BrWSivgDJEIflnconnGztYSrjGObcE0H9ymtzbMgWmSwQuicaef50QWYk=
-X-Received: by 2002:a67:f645:0:b0:31b:916e:8d92 with SMTP id
- u5-20020a67f645000000b0031b916e8d92mr12115514vso.72.1645610105224; Wed, 23
- Feb 2022 01:55:05 -0800 (PST)
+        Wed, 23 Feb 2022 04:55:24 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 293235004B;
+        Wed, 23 Feb 2022 01:54:57 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id D8747212BD;
+        Wed, 23 Feb 2022 09:54:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1645610095; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=T2/idSB9fXW+xmw1hg7OGuisyq7dxhKOhhTInLEtK2s=;
+        b=wZPKSmiSCZcskzrP3tVzE45X9E3kgf6W3OO+e+hR/cqh6E6vt2xL3uvJySuboktXVtFdNy
+        lKPbTUQWEvyJYNOTh4us+OA05SL2FQW2JpqVVJJ7+BR1deQGKXtq6Qve+mncrYj7Ya1knt
+        rVuiELESq1zm6l/nF7ZV7wRhLaL6m1g=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1645610095;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=T2/idSB9fXW+xmw1hg7OGuisyq7dxhKOhhTInLEtK2s=;
+        b=jfouwePjGbWiHoVN7+wBr0W02UT0inBsUVHW11iSSePTu7PhnRCM99rGV0pE2hUFCTPXOL
+        yr0ngDk3w3v0mBAg==
+Received: from quack3.suse.cz (unknown [10.163.28.18])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id A98CBA3B81;
+        Wed, 23 Feb 2022 09:54:55 +0000 (UTC)
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 612A8A0605; Wed, 23 Feb 2022 10:54:55 +0100 (CET)
+Date:   Wed, 23 Feb 2022 10:54:55 +0100
+From:   Jan Kara <jack@suse.cz>
+To:     Ritesh Harjani <riteshh@linux.ibm.com>
+Cc:     linux-ext4@vger.kernel.org,
+        Harshad Shirwadkar <harshadshirwadkar@gmail.com>,
+        Theodore Ts'o <tytso@mit.edu>, Jan Kara <jack@suse.cz>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Steven Rostedt <rostedt@goodmis.org>
+Subject: Re: [RFC 2/9] ext4: Fix ext4_fc_stats trace point
+Message-ID: <20220223095455.3nlxqkem5y7dsniq@quack3.lan>
+References: <cover.1645558375.git.riteshh@linux.ibm.com>
+ <9a8c359270a6330ed384ea0a75441e367ecde924.1645558375.git.riteshh@linux.ibm.com>
 MIME-Version: 1.0
-References: <20220223051545.572235-1-yusisamerican@gmail.com>
-In-Reply-To: <20220223051545.572235-1-yusisamerican@gmail.com>
-From:   Yusuf Khan <yusisamerican@gmail.com>
-Date:   Wed, 23 Feb 2022 01:54:54 -0800
-Message-ID: <CAJoG2+9Tp4ZW4tqTVSgp7wukduEFKHiqOXJO-Yn17OwTvn+a+w@mail.gmail.com>
-Subject: Re: [PATCH] Removed some usages of the deprecated "pci-dma-compat.h" KPI
-To:     linux-kernel@vger.kernel.org
-Cc:     linux-pci@vger.kernel.org, tiwai@suse.com, perex@perex.cz,
-        alex.bou9@gmail.com, mporter@kernel.crashing.org,
-        logang@deltatee.com, kurt.schwemmer@microsemi.com,
-        Bjorn Helgaas <bhelgaas@google.com>, kw@linux.com,
-        robh@kernel.org, lorenzo.pieralisi@arm.com,
-        jonathan.derrick@linux.dev, nirmal.patel@linux.intel.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <9a8c359270a6330ed384ea0a75441e367ecde924.1645558375.git.riteshh@linux.ibm.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-See https://lkml.org/lkml/2022/2/23/11 Before you think of this commit!
+On Wed 23-02-22 02:04:10, Ritesh Harjani wrote:
+> ftrace's __print_symbolic() requires that any enum values used in the
+> symbol to string translation table be wrapped in a TRACE_DEFINE_ENUM
+> so that the enum value can be encoded in the ftrace ring buffer.
+> 
+> This patch also fixes few other problems found in this trace point.
+> e.g. dereferencing structures in TP_printk which should not be done
+> at any cost.
+> 
+> Also to avoid checkpatch warnings, this patch removes those
+> whitespaces/tab stops issues.
+> 
+> Fixes: commit aa75f4d3daae ("ext4: main fast-commit commit path")
+> Reported-by: Steven Rostedt <rostedt@goodmis.org>
+> Signed-off-by: Ritesh Harjani <riteshh@linux.ibm.com>
 
-On Tue, Feb 22, 2022 at 9:15 PM Yusuf Khan <yusisamerican@gmail.com> wrote:
->
-> The inspiration for this commit comes from Christophe
-> JAILLET in [1], you can find reasons for why this was removed
-> linked there. This removes the use of the KPI in some pci
-> components and rapidio(whatever that is) devices.
->
-> [1]: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux
-> -next.git/patch/?id=ada3caabaf6135150077c3f729bb06e8f3b5b8f6
->
-> Signed-off-by: Yusuf Khan <yusisamerican@gmail.com>
+Looks good (modulo Steven's nit). Feel free to add:
+
+Reviewed-by: Jan Kara <jack@suse.cz>
+
+								Honza
+
+
 > ---
->  drivers/pci/controller/vmd.c     | 1 +
->  drivers/pci/switch/switchtec.c   | 1 +
->  drivers/rapidio/devices/tsi721.c | 8 ++++----
->  sound/pci/asihpi/hpios.c         | 1 +
->  4 files changed, 7 insertions(+), 4 deletions(-)
->
-> diff --git a/drivers/pci/controller/vmd.c b/drivers/pci/controller/vmd.c
-> index cc166c683638..244dc0f2f71e 100644
-> --- a/drivers/pci/controller/vmd.c
-> +++ b/drivers/pci/controller/vmd.c
-> @@ -17,6 +17,7 @@
->  #include <linux/srcu.h>
->  #include <linux/rculist.h>
->  #include <linux/rcupdate.h>
-> +#include <linux/dma-mapping.h>
->
->  #include <asm/irqdomain.h>
->
-> diff --git a/drivers/pci/switch/switchtec.c b/drivers/pci/switch/switchtec.c
-> index c36c1238c604..05a876ec1463 100644
-> --- a/drivers/pci/switch/switchtec.c
-> +++ b/drivers/pci/switch/switchtec.c
-> @@ -15,6 +15,7 @@
->  #include <linux/wait.h>
->  #include <linux/io-64-nonatomic-lo-hi.h>
->  #include <linux/nospec.h>
-> +#include <linux/dma-mapping.h>
->
->  MODULE_DESCRIPTION("Microsemi Switchtec(tm) PCIe Management Driver");
->  MODULE_VERSION("0.1");
-> diff --git a/drivers/rapidio/devices/tsi721.c b/drivers/rapidio/devices/tsi721.c
-> index 4dd31dd9feea..b3134744fb55 100644
-> --- a/drivers/rapidio/devices/tsi721.c
-> +++ b/drivers/rapidio/devices/tsi721.c
-> @@ -2836,17 +2836,17 @@ static int tsi721_probe(struct pci_dev *pdev,
->         }
->
->         /* Configure DMA attributes. */
-> -       if (pci_set_dma_mask(pdev, DMA_BIT_MASK(64))) {
-> -               err = pci_set_dma_mask(pdev, DMA_BIT_MASK(32));
-> +       if (dma_set_mask(&pdev->dev, DMA_BIT_MASK(64))) {
-> +               err = dma_set_mask(&pdev->dev, DMA_BIT_MASK(32));
->                 if (err) {
->                         tsi_err(&pdev->dev, "Unable to set DMA mask");
->                         goto err_unmap_bars;
->                 }
->
-> -               if (pci_set_consistent_dma_mask(pdev, DMA_BIT_MASK(32)))
-> +               if (dma_set_coherent_mask(&pdev->dev, DMA_BIT_MASK(32)))
->                         tsi_info(&pdev->dev, "Unable to set consistent DMA mask");
->         } else {
-> -               err = pci_set_consistent_dma_mask(pdev, DMA_BIT_MASK(64));
-> +               err = dma_set_coherent_mask(&pdev->dev, DMA_BIT_MASK(64));
->                 if (err)
->                         tsi_info(&pdev->dev, "Unable to set consistent DMA mask");
->         }
-> diff --git a/sound/pci/asihpi/hpios.c b/sound/pci/asihpi/hpios.c
-> index 6fe60d13e24b..08757c92aee5 100644
-> --- a/sound/pci/asihpi/hpios.c
-> +++ b/sound/pci/asihpi/hpios.c
-> @@ -10,6 +10,7 @@ HPI Operating System function implementation for Linux
->  (C) Copyright AudioScience Inc. 1997-2003
->  ******************************************************************************/
->  #define SOURCEFILE_NAME "hpios.c"
-> +#include <linux/dma-mapping.h>
->  #include "hpi_internal.h"
->  #include "hpidebug.h"
->  #include <linux/delay.h>
-> --
-> 2.25.1
->
+>  include/trace/events/ext4.h | 76 +++++++++++++++++++++++--------------
+>  1 file changed, 47 insertions(+), 29 deletions(-)
+> 
+> diff --git a/include/trace/events/ext4.h b/include/trace/events/ext4.h
+> index 19e957b7f941..17fb9c506e8a 100644
+> --- a/include/trace/events/ext4.h
+> +++ b/include/trace/events/ext4.h
+> @@ -95,6 +95,16 @@ TRACE_DEFINE_ENUM(ES_REFERENCED_B);
+>  	{ FALLOC_FL_COLLAPSE_RANGE,	"COLLAPSE_RANGE"},	\
+>  	{ FALLOC_FL_ZERO_RANGE,		"ZERO_RANGE"})
+>  
+> +TRACE_DEFINE_ENUM(EXT4_FC_REASON_XATTR);
+> +TRACE_DEFINE_ENUM(EXT4_FC_REASON_CROSS_RENAME);
+> +TRACE_DEFINE_ENUM(EXT4_FC_REASON_JOURNAL_FLAG_CHANGE);
+> +TRACE_DEFINE_ENUM(EXT4_FC_REASON_NOMEM);
+> +TRACE_DEFINE_ENUM(EXT4_FC_REASON_SWAP_BOOT);
+> +TRACE_DEFINE_ENUM(EXT4_FC_REASON_RESIZE);
+> +TRACE_DEFINE_ENUM(EXT4_FC_REASON_RENAME_DIR);
+> +TRACE_DEFINE_ENUM(EXT4_FC_REASON_FALLOC_RANGE);
+> +TRACE_DEFINE_ENUM(EXT4_FC_REASON_INODE_JOURNAL_DATA);
+> +
+>  #define show_fc_reason(reason)						\
+>  	__print_symbolic(reason,					\
+>  		{ EXT4_FC_REASON_XATTR,		"XATTR"},		\
+> @@ -2723,41 +2733,49 @@ TRACE_EVENT(ext4_fc_commit_stop,
+>  
+>  #define FC_REASON_NAME_STAT(reason)					\
+>  	show_fc_reason(reason),						\
+> -	__entry->sbi->s_fc_stats.fc_ineligible_reason_count[reason]
+> +	__entry->fc_ineligible_rc[reason]
+>  
+>  TRACE_EVENT(ext4_fc_stats,
+> -	    TP_PROTO(struct super_block *sb),
+> -
+> -	    TP_ARGS(sb),
+> +	TP_PROTO(struct super_block *sb),
+>  
+> -	    TP_STRUCT__entry(
+> -		    __field(dev_t, dev)
+> -		    __field(struct ext4_sb_info *, sbi)
+> -		    __field(int, count)
+> -		    ),
+> +	TP_ARGS(sb),
+>  
+> -	    TP_fast_assign(
+> -		    __entry->dev = sb->s_dev;
+> -		    __entry->sbi = EXT4_SB(sb);
+> -		    ),
+> +	TP_STRUCT__entry(
+> +		__field(dev_t, dev)
+> +		__array(unsigned int, fc_ineligible_rc, EXT4_FC_REASON_MAX)
+> +		__field(unsigned long, fc_commits)
+> +		__field(unsigned long, fc_ineligible_commits)
+> +		__field(unsigned long, fc_numblks)
+> +	),
+>  
+> -	    TP_printk("dev %d:%d fc ineligible reasons:\n"
+> -		      "%s:%d, %s:%d, %s:%d, %s:%d, %s:%d, %s:%d, %s:%d, %s:%d, %s:%d; "
+> -		      "num_commits:%ld, ineligible: %ld, numblks: %ld",
+> -		      MAJOR(__entry->dev), MINOR(__entry->dev),
+> -		      FC_REASON_NAME_STAT(EXT4_FC_REASON_XATTR),
+> -		      FC_REASON_NAME_STAT(EXT4_FC_REASON_CROSS_RENAME),
+> -		      FC_REASON_NAME_STAT(EXT4_FC_REASON_JOURNAL_FLAG_CHANGE),
+> -		      FC_REASON_NAME_STAT(EXT4_FC_REASON_NOMEM),
+> -		      FC_REASON_NAME_STAT(EXT4_FC_REASON_SWAP_BOOT),
+> -		      FC_REASON_NAME_STAT(EXT4_FC_REASON_RESIZE),
+> -		      FC_REASON_NAME_STAT(EXT4_FC_REASON_RENAME_DIR),
+> -		      FC_REASON_NAME_STAT(EXT4_FC_REASON_FALLOC_RANGE),
+> -		      FC_REASON_NAME_STAT(EXT4_FC_REASON_INODE_JOURNAL_DATA),
+> -		      __entry->sbi->s_fc_stats.fc_num_commits,
+> -		      __entry->sbi->s_fc_stats.fc_ineligible_commits,
+> -		      __entry->sbi->s_fc_stats.fc_numblks)
+> +	TP_fast_assign(
+> +		int i;
+>  
+> +		__entry->dev = sb->s_dev;
+> +		for (i = 0; i < EXT4_FC_REASON_MAX; i++)
+> +			__entry->fc_ineligible_rc[i] =
+> +			EXT4_SB(sb)->s_fc_stats.fc_ineligible_reason_count[i];
+> +		__entry->fc_commits = EXT4_SB(sb)->s_fc_stats.fc_num_commits;
+> +		__entry->fc_ineligible_commits =
+> +			EXT4_SB(sb)->s_fc_stats.fc_ineligible_commits;
+> +		__entry->fc_numblks = EXT4_SB(sb)->s_fc_stats.fc_numblks;
+> +	),
+> +
+> +	TP_printk("dev %d,%d fc ineligible reasons:\n"
+> +		  "%s:%u, %s:%u, %s:%u, %s:%u, %s:%u, %s:%u, %s:%u, %s:%u, %s:%u "
+> +		  "num_commits:%lu, ineligible: %lu, numblks: %lu",
+> +		  MAJOR(__entry->dev), MINOR(__entry->dev),
+> +		  FC_REASON_NAME_STAT(EXT4_FC_REASON_XATTR),
+> +		  FC_REASON_NAME_STAT(EXT4_FC_REASON_CROSS_RENAME),
+> +		  FC_REASON_NAME_STAT(EXT4_FC_REASON_JOURNAL_FLAG_CHANGE),
+> +		  FC_REASON_NAME_STAT(EXT4_FC_REASON_NOMEM),
+> +		  FC_REASON_NAME_STAT(EXT4_FC_REASON_SWAP_BOOT),
+> +		  FC_REASON_NAME_STAT(EXT4_FC_REASON_RESIZE),
+> +		  FC_REASON_NAME_STAT(EXT4_FC_REASON_RENAME_DIR),
+> +		  FC_REASON_NAME_STAT(EXT4_FC_REASON_FALLOC_RANGE),
+> +		  FC_REASON_NAME_STAT(EXT4_FC_REASON_INODE_JOURNAL_DATA),
+> +		  __entry->fc_commits, __entry->fc_ineligible_commits,
+> +		  __entry->fc_numblks)
+>  );
+>  
+>  #define DEFINE_TRACE_DENTRY_EVENT(__type)				\
+> -- 
+> 2.31.1
+> 
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR

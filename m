@@ -2,318 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5C084C1C02
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 20:17:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 218134C1C07
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 20:20:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244431AbiBWTSN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 14:18:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35198 "EHLO
+        id S244305AbiBWTTP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 14:19:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243846AbiBWTRt (ORCPT
+        with ESMTP id S235662AbiBWTTN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 14:17:49 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDCCB43EF5
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 11:17:20 -0800 (PST)
-Received: from zn.tnic (dslb-088-067-221-104.088.067.pools.vodafone-ip.de [88.67.221.104])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 541101EC056D;
-        Wed, 23 Feb 2022 20:17:19 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1645643839;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=4TSlfEcAAiw+muhysQGu3rKLampw/6MDqWwAYBnkVqo=;
-        b=qJab654wx15rKIos6g6drr+dM7CxDybDNbon7KKGl6BlpMq/aPenVPgpm6yNSrZGu3VQjp
-        bzLcAmsUIpFx6wjKs868RvW99gzvwUEPr31c9okjzMc28Yq3l59Epnf3MTdSZZ5wifAy5n
-        xXM2UOsYi2mA7Z3N1XXJQufV5yzWzoc=
-From:   Borislav Petkov <bp@alien8.de>
-To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Brijesh Singh <brijesh.singh@amd.com>
-Cc:     X86 ML <x86@kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
-        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
-        hpa@zytor.com, jmattson@google.com, seanjc@google.com,
-        thomas.lendacky@amd.com
-Subject: [PATCH 4/4] x86/mm/cpa: Generalize __set_memory_enc_pgtable()
-Date:   Wed, 23 Feb 2022 20:17:23 +0100
-Message-Id: <20220223191723.22937-4-bp@alien8.de>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <YhaGuEgG9+UlGwIU@zn.tnic>
-References: <YhaGuEgG9+UlGwIU@zn.tnic>
+        Wed, 23 Feb 2022 14:19:13 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2028045ADC;
+        Wed, 23 Feb 2022 11:18:45 -0800 (PST)
+Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21NJ9PeK008330;
+        Wed, 23 Feb 2022 19:18:18 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pp1; bh=4M7keEVwA9K+g1bmFw59BD8lXOkD/TAviruIu4QgsWM=;
+ b=A4jSVxJ8psUNkRPXXpGO2BUHOR470CByPj2dqKa2gE03i47W5Lkubta7w3kR4ptQZGaJ
+ IL6YR8QcCmQZgAuFHL8CuVBRP2445uiyVpcW+MZS2tZ1cuRxr2Qoqfz7AV1+0funeIVc
+ e0xgHF3MbH7ApK9ic0xp7UIKWogRZUj08EMyqamPM3beFX8B2VWVZ0xT6PjGoishFo1f
+ 9NuQO9QK39RGceWeiBQpkNYh3YcP/4wZ25ihoJXrhu9/kfzCj2lEJnpdu6LbPfI6k704
+ fQ5x38+brQOPcMMQVOvIdD/jp6LSNWmOy2oSW6XdpJtOlfctVyhTTUTtxKLCQhiKIfbO 3w== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3ede6t1mvs-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 23 Feb 2022 19:18:18 +0000
+Received: from m0098394.ppops.net (m0098394.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 21NJHVXY015629;
+        Wed, 23 Feb 2022 19:18:17 GMT
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3ede6t1muq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 23 Feb 2022 19:18:17 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 21NJBlaT029428;
+        Wed, 23 Feb 2022 19:18:14 GMT
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
+        by ppma04ams.nl.ibm.com with ESMTP id 3ear69c9cr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 23 Feb 2022 19:18:14 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 21NJIB4t26018054
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 23 Feb 2022 19:18:11 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 42DA3AE04D;
+        Wed, 23 Feb 2022 19:18:11 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 47C52AE051;
+        Wed, 23 Feb 2022 19:18:10 +0000 (GMT)
+Received: from osiris (unknown [9.145.31.42])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Wed, 23 Feb 2022 19:18:10 +0000 (GMT)
+Date:   Wed, 23 Feb 2022 20:18:08 +0100
+From:   Heiko Carstens <hca@linux.ibm.com>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Baoquan He <bhe@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, akpm@linux-foundation.org, cl@linux.com,
+        42.hyeyoo@gmail.com, penberg@kernel.org, rientjes@google.com,
+        iamjoonsoo.kim@lge.com, vbabka@suse.cz, David.Laight@aculab.com,
+        david@redhat.com, herbert@gondor.apana.org.au, davem@davemloft.net,
+        linux-crypto@vger.kernel.org, steffen.klassert@secunet.com,
+        netdev@vger.kernel.org, gor@linux.ibm.com, agordeev@linux.ibm.com,
+        borntraeger@linux.ibm.com, svens@linux.ibm.com,
+        linux-s390@vger.kernel.org, michael@walle.cc,
+        linux-i2c@vger.kernel.org, wsa@kernel.org,
+        Halil Pasic <pasic@linux.ibm.com>,
+        Vineeth Vijayan <vneethv@linux.ibm.com>
+Subject: Re: [PATCH 00/22] Don't use kmalloc() with GFP_DMA
+Message-ID: <YhaIcPmc8qi1zmnj@osiris>
+References: <20220219005221.634-1-bhe@redhat.com>
+ <YhOaTsWUKO0SWsh7@osiris>
+ <20220222084422.GA6139@lst.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220222084422.GA6139@lst.de>
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: TJSaBEB9Lulpk4sdWf3aymM3sOHqNnmS
+X-Proofpoint-ORIG-GUID: RQrgHuEksbIzwLY-XstVcce5JZQWh0wb
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-02-23_09,2022-02-23_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0
+ priorityscore=1501 phishscore=0 impostorscore=0 mlxlogscore=632
+ clxscore=1015 mlxscore=0 malwarescore=0 adultscore=0 suspectscore=0
+ spamscore=0 lowpriorityscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2201110000 definitions=main-2202230108
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Brijesh Singh <brijesh.singh@amd.com>
+On Tue, Feb 22, 2022 at 09:44:22AM +0100, Christoph Hellwig wrote:
+> On Mon, Feb 21, 2022 at 02:57:34PM +0100, Heiko Carstens wrote:
+> > > 1) Kmalloc(GFP_DMA) in s390 platform, under arch/s390 and drivers/s390;
+> > 
+> > So, s390 partially requires GFP_DMA allocations for memory areas which
+> > are required by the hardware to be below 2GB. There is not necessarily
+> > a device associated when this is required. E.g. some legacy "diagnose"
+> > calls require buffers to be below 2GB.
+> > 
+> > How should something like this be handled? I'd guess that the
+> > dma_alloc API is not the right thing to use in such cases. Of course
+> > we could say, let's waste memory and use full pages instead, however
+> > I'm not sure this is a good idea.
+> 
+> Yeah, I don't think the DMA API is the right thing for that.  This
+> is one of the very rare cases where a raw allocation makes sense.
+> 
+> That being said being able to drop kmalloc support for GFP_DMA would
+> be really useful. How much memory would we waste if switching to the
+> page allocator?
 
-The kernel provides infrastructure to set or clear the encryption mask
-from the pages for AMD SEV, but TDX requires few tweaks.
+At a first glance this would not waste much memory, since most callers
+seem to allocate such memory pieces only temporarily.
 
-- TDX and SEV have different requirements to the cache and TLB
-  flushing.
+> > The question is: what would this buy us? As stated above I'd assume
+> > this comes with quite some code churn, so there should be a good
+> > reason to do this.
+> 
+> There is two steps here.  One is to remove GFP_DMA support from
+> kmalloc, which would help to cleanup the slab allocator(s) very nicely,
+> as at that point it can stop to be zone aware entirely.
 
-- TDX has own routine to notify VMM about page encryption status change.
+Well, looking at slub.c it looks like there is only a very minimal
+maintenance burden for GPF_DMA/GFP_DMA32 support.
 
-Modify __set_memory_enc_pgtable() and make it flexible enough to cover
-both AMD SEV and Intel TDX. The AMD-specific behavior is isolated in the
-callbacks under x86_platform.guest. TDX will provide own version of said
-callbacks.
+> The long term goal is to remove ZONE_DMA entirely at least for
+> architectures that only use the small 16MB ISA-style one.  It can
+> then be replaced with for example a CMA area and fall into a movable
+> zone.  I'd have to prototype this first and see how it applies to the
+> s390 case.  It might not be worth it and maybe we should replace
+> ZONE_DMA and ZONE_DMA32 with a ZONE_LIMITED for those use cases as
+> the amount covered tends to not be totally out of line for what we
+> built the zone infrastructure.
 
-  [ bp: Beat into submission. ]
+So probably I'm missing something; but for small systems where we
+would only have ZONE_DMA, how would a CMA area within this zone
+improve things?
 
-Signed-off-by: Brijesh Singh <brijesh.singh@amd.com>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Acked-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-Link: https://lore.kernel.org/r/20220223043528.2093214-1-brijesh.singh@amd.com
----
- arch/x86/include/asm/set_memory.h |  1 -
- arch/x86/include/asm/x86_init.h   | 16 +++++++
- arch/x86/kernel/x86_init.c        | 16 ++++++-
- arch/x86/mm/mem_encrypt_amd.c     | 72 +++++++++++++++++++++----------
- arch/x86/mm/pat/set_memory.c      | 20 +++++----
- 5 files changed, 91 insertions(+), 34 deletions(-)
+If I'm not mistaken then the page allocator will not fallback to any
+CMA area for GFP_KERNEL allocations. That is: we would somehow need to
+find "the right size" for the CMA area, depending on memory size. This
+looks like a new problem class which currently does not exist.
 
-diff --git a/arch/x86/include/asm/set_memory.h b/arch/x86/include/asm/set_memory.h
-index ff0f2d90338a..ce8dd215f5b3 100644
---- a/arch/x86/include/asm/set_memory.h
-+++ b/arch/x86/include/asm/set_memory.h
-@@ -84,7 +84,6 @@ int set_pages_rw(struct page *page, int numpages);
- int set_direct_map_invalid_noflush(struct page *page);
- int set_direct_map_default_noflush(struct page *page);
- bool kernel_page_present(struct page *page);
--void notify_range_enc_status_changed(unsigned long vaddr, int npages, bool enc);
- 
- extern int kernel_set_to_readonly;
- 
-diff --git a/arch/x86/include/asm/x86_init.h b/arch/x86/include/asm/x86_init.h
-index 22b7412c08f6..e9170457697e 100644
---- a/arch/x86/include/asm/x86_init.h
-+++ b/arch/x86/include/asm/x86_init.h
-@@ -141,6 +141,21 @@ struct x86_init_acpi {
- 	void (*reduced_hw_early_init)(void);
- };
- 
-+/**
-+ * struct x86_guest - Functions used by misc guest incarnations like SEV, TDX, etc.
-+ *
-+ * @enc_status_change_prepare	Notify HV before the encryption status of a range is changed
-+ * @enc_status_change_finish	Notify HV after the encryption status of a range is changed
-+ * @enc_tlb_flush_required	Returns true if a TLB flush is needed before changing page encryption status
-+ * @enc_cache_flush_required	Returns true if a cache flush is needed before changing page encryption status
-+ */
-+struct x86_guest {
-+	void (*enc_status_change_prepare)(unsigned long vaddr, int npages, bool enc);
-+	bool (*enc_status_change_finish)(unsigned long vaddr, int npages, bool enc);
-+	bool (*enc_tlb_flush_required)(bool enc);
-+	bool (*enc_cache_flush_required)(void);
-+};
-+
- /**
-  * struct x86_init_ops - functions for platform specific setup
-  *
-@@ -287,6 +302,7 @@ struct x86_platform_ops {
- 	struct x86_legacy_features legacy;
- 	void (*set_legacy_features)(void);
- 	struct x86_hyper_runtime hyper;
-+	struct x86_guest guest;
- };
- 
- struct x86_apic_ops {
-diff --git a/arch/x86/kernel/x86_init.c b/arch/x86/kernel/x86_init.c
-index 7d20c1d34a3c..e84ee5cdbd8c 100644
---- a/arch/x86/kernel/x86_init.c
-+++ b/arch/x86/kernel/x86_init.c
-@@ -129,6 +129,11 @@ struct x86_cpuinit_ops x86_cpuinit = {
- 
- static void default_nmi_init(void) { };
- 
-+static void enc_status_change_prepare_noop(unsigned long vaddr, int npages, bool enc) { }
-+static bool enc_status_change_finish_noop(unsigned long vaddr, int npages, bool enc) { return false; }
-+static bool enc_tlb_flush_required_noop(bool enc) { return false; }
-+static bool enc_cache_flush_required_noop(void) { return false; }
-+
- struct x86_platform_ops x86_platform __ro_after_init = {
- 	.calibrate_cpu			= native_calibrate_cpu_early,
- 	.calibrate_tsc			= native_calibrate_tsc,
-@@ -138,9 +143,16 @@ struct x86_platform_ops x86_platform __ro_after_init = {
- 	.is_untracked_pat_range		= is_ISA_range,
- 	.nmi_init			= default_nmi_init,
- 	.get_nmi_reason			= default_get_nmi_reason,
--	.save_sched_clock_state 	= tsc_save_sched_clock_state,
--	.restore_sched_clock_state 	= tsc_restore_sched_clock_state,
-+	.save_sched_clock_state		= tsc_save_sched_clock_state,
-+	.restore_sched_clock_state	= tsc_restore_sched_clock_state,
- 	.hyper.pin_vcpu			= x86_op_int_noop,
-+
-+	.guest = {
-+		.enc_status_change_prepare = enc_status_change_prepare_noop,
-+		.enc_status_change_finish  = enc_status_change_finish_noop,
-+		.enc_tlb_flush_required	   = enc_tlb_flush_required_noop,
-+		.enc_cache_flush_required  = enc_cache_flush_required_noop,
-+	},
- };
- 
- EXPORT_SYMBOL_GPL(x86_platform);
-diff --git a/arch/x86/mm/mem_encrypt_amd.c b/arch/x86/mm/mem_encrypt_amd.c
-index 2b2d018ea345..6169053c2854 100644
---- a/arch/x86/mm/mem_encrypt_amd.c
-+++ b/arch/x86/mm/mem_encrypt_amd.c
-@@ -177,25 +177,6 @@ void __init sme_map_bootdata(char *real_mode_data)
- 	__sme_early_map_unmap_mem(__va(cmdline_paddr), COMMAND_LINE_SIZE, true);
- }
- 
--void __init sme_early_init(void)
--{
--	unsigned int i;
--
--	if (!sme_me_mask)
--		return;
--
--	early_pmd_flags = __sme_set(early_pmd_flags);
--
--	__supported_pte_mask = __sme_set(__supported_pte_mask);
--
--	/* Update the protection map with memory encryption mask */
--	for (i = 0; i < ARRAY_SIZE(protection_map); i++)
--		protection_map[i] = pgprot_encrypted(protection_map[i]);
--
--	if (cc_platform_has(CC_ATTR_GUEST_MEM_ENCRYPT))
--		swiotlb_force = SWIOTLB_FORCE;
--}
--
- void __init sev_setup_arch(void)
- {
- 	phys_addr_t total_mem = memblock_phys_mem_size();
-@@ -256,7 +237,17 @@ static unsigned long pg_level_to_pfn(int level, pte_t *kpte, pgprot_t *ret_prot)
- 	return pfn;
- }
- 
--void notify_range_enc_status_changed(unsigned long vaddr, int npages, bool enc)
-+static bool amd_enc_tlb_flush_required(bool enc)
-+{
-+	return true;
-+}
-+
-+static bool amd_enc_cache_flush_required(void)
-+{
-+	return !cpu_feature_enabled(X86_FEATURE_SME_COHERENT);
-+}
-+
-+static void enc_dec_hypercall(unsigned long vaddr, int npages, bool enc)
- {
- #ifdef CONFIG_PARAVIRT
- 	unsigned long sz = npages << PAGE_SHIFT;
-@@ -287,6 +278,19 @@ void notify_range_enc_status_changed(unsigned long vaddr, int npages, bool enc)
- #endif
- }
- 
-+static void amd_enc_status_change_prepare(unsigned long vaddr, int npages, bool enc)
-+{
-+}
-+
-+/* Return true unconditionally: return value doesn't matter for the SEV side */
-+static bool amd_enc_status_change_finish(unsigned long vaddr, int npages, bool enc)
-+{
-+	if (!cc_platform_has(CC_ATTR_HOST_MEM_ENCRYPT))
-+		enc_dec_hypercall(vaddr, npages, enc);
-+
-+	return true;
-+}
-+
- static void __init __set_clr_pte_enc(pte_t *kpte, int level, bool enc)
- {
- 	pgprot_t old_prot, new_prot;
-@@ -392,7 +396,7 @@ static int __init early_set_memory_enc_dec(unsigned long vaddr,
- 
- 	ret = 0;
- 
--	notify_range_enc_status_changed(start, PAGE_ALIGN(size) >> PAGE_SHIFT, enc);
-+	early_set_mem_enc_dec_hypercall(start, PAGE_ALIGN(size) >> PAGE_SHIFT, enc);
- out:
- 	__flush_tlb_all();
- 	return ret;
-@@ -410,7 +414,31 @@ int __init early_set_memory_encrypted(unsigned long vaddr, unsigned long size)
- 
- void __init early_set_mem_enc_dec_hypercall(unsigned long vaddr, int npages, bool enc)
- {
--	notify_range_enc_status_changed(vaddr, npages, enc);
-+	enc_dec_hypercall(vaddr, npages, enc);
-+}
-+
-+void __init sme_early_init(void)
-+{
-+	unsigned int i;
-+
-+	if (!sme_me_mask)
-+		return;
-+
-+	early_pmd_flags = __sme_set(early_pmd_flags);
-+
-+	__supported_pte_mask = __sme_set(__supported_pte_mask);
-+
-+	/* Update the protection map with memory encryption mask */
-+	for (i = 0; i < ARRAY_SIZE(protection_map); i++)
-+		protection_map[i] = pgprot_encrypted(protection_map[i]);
-+
-+	if (cc_platform_has(CC_ATTR_GUEST_MEM_ENCRYPT))
-+		swiotlb_force = SWIOTLB_FORCE;
-+
-+	x86_platform.guest.enc_status_change_prepare = amd_enc_status_change_prepare;
-+	x86_platform.guest.enc_status_change_finish  = amd_enc_status_change_finish;
-+	x86_platform.guest.enc_tlb_flush_required    = amd_enc_tlb_flush_required;
-+	x86_platform.guest.enc_cache_flush_required  = amd_enc_cache_flush_required;
- }
- 
- void __init mem_encrypt_free_decrypted_mem(void)
-diff --git a/arch/x86/mm/pat/set_memory.c b/arch/x86/mm/pat/set_memory.c
-index 1441db69cea5..3b75262cfb27 100644
---- a/arch/x86/mm/pat/set_memory.c
-+++ b/arch/x86/mm/pat/set_memory.c
-@@ -2008,10 +2008,12 @@ static int __set_memory_enc_pgtable(unsigned long addr, int numpages, bool enc)
- 	kmap_flush_unused();
- 	vm_unmap_aliases();
- 
--	/*
--	 * Before changing the encryption attribute, we need to flush caches.
--	 */
--	cpa_flush(&cpa, !this_cpu_has(X86_FEATURE_SME_COHERENT));
-+	/* Flush the caches as needed before changing the encryption attribute. */
-+	if (x86_platform.guest.enc_tlb_flush_required(enc))
-+		cpa_flush(&cpa, x86_platform.guest.enc_cache_flush_required());
-+
-+	/* Notify hypervisor that we are about to set/clr encryption attribute. */
-+	x86_platform.guest.enc_status_change_prepare(addr, numpages, enc);
- 
- 	ret = __change_page_attr_set_clr(&cpa, 1);
- 
-@@ -2024,11 +2026,11 @@ static int __set_memory_enc_pgtable(unsigned long addr, int numpages, bool enc)
- 	 */
- 	cpa_flush(&cpa, 0);
- 
--	/*
--	 * Notify hypervisor that a given memory range is mapped encrypted
--	 * or decrypted.
--	 */
--	notify_range_enc_status_changed(addr, numpages, enc);
-+	/* Notify hypervisor that we have successfully set/clr encryption attribute. */
-+	if (!ret) {
-+		if (!x86_platform.guest.enc_status_change_finish(addr, numpages, enc))
-+			ret = -EIO;
-+	}
- 
- 	return ret;
- }
--- 
-2.29.2
+Besides that we would also not have all the debugging options provided
+by the slab allocator anymore.
 
+Anyway, maybe it would make more sense if you would send your patch
+and then we can see where we would end up.

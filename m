@@ -2,51 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F29F04C19F9
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 18:40:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D4E44C19FF
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 18:41:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243423AbiBWRkv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 12:40:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58564 "EHLO
+        id S243430AbiBWRmM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 12:42:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240809AbiBWRkq (ORCPT
+        with ESMTP id S236603AbiBWRmJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 12:40:46 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9298FA19B;
-        Wed, 23 Feb 2022 09:40:17 -0800 (PST)
+        Wed, 23 Feb 2022 12:42:09 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07DDF15A07;
+        Wed, 23 Feb 2022 09:41:40 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2965961483;
-        Wed, 23 Feb 2022 17:40:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B72DC340E7;
-        Wed, 23 Feb 2022 17:40:16 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3B975B8211B;
+        Wed, 23 Feb 2022 17:41:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96CE5C340E7;
+        Wed, 23 Feb 2022 17:41:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645638016;
-        bh=vdNxr48kXvnOvyGZXeXUt9F8EvQ0/KBfD8xz+E+eWzQ=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=Sygr+3AqUbbfFMiGflScjFAz1W52Di4MmF0D0l2kQMvn2JhrwmdY9yJkV79q9+VWp
-         j17Sirc+t3iRW5seOsuj15K0pgP5Yl8omqqV+cdwH2WeztviMmdR5tMFuHQTpyVap1
-         Z4t+jPZwWmb7AnIHcH1D0dKZBj4hFvKHr3Nz7q/OSSK6/D1mc+lyphro88kPSchX8h
-         LdDASysYmj4PV5kn1SjzzI9fJQAdKaEf0jUaM6N4JWzkNeVX+8CFHTGhW3HcL6BO41
-         LMsD2e0HFXYmKWDXtc/pWIDzRNSajCA2yOqLtDZnbG/oz2y03r01+F1JMxHH24ARaY
-         2/XCNahlftZgw==
-Date:   Wed, 23 Feb 2022 11:40:14 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Richard Zhu <hongxing.zhu@nxp.com>
-Cc:     l.stach@pengutronix.de, bhelgaas@google.com, broonie@kernel.org,
-        lorenzo.pieralisi@arm.com, jingoohan1@gmail.com,
-        festevam@gmail.com, francesco.dolcini@toradex.com,
-        linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, kernel@pengutronix.de,
-        linux-imx@nxp.com
-Subject: Re: [PATCH v7 8/8] PCI: imx6: Add the compliance tests mode support
-Message-ID: <20220223174014.GA139367@bhelgaas>
+        s=k20201202; t=1645638097;
+        bh=H8/kL6fZmOVt00+PvcoBOqNgrbzq1+buIdvb6O9tj4Y=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=vHjOWG4IfqW9w3F2UpUjc8yEVLKvTetZHhZA4ZjWIYy4rRLq/hAs2r0rzaE1BYQin
+         uL2zu2iev7iO/4/EnRaqCeObTnm53OOvv7GpUOH9angl4oLp+0eteZQK3wN46HKMjV
+         TTPfFoRDQT/F1TP/Cn9r4s8BJj2BiEkB2Am3nByJt2AKfwmnxuTnW9LTDkbMNICKQE
+         9wy5u/O8hL+VTiHuW68TnvpCBy0AbbbD7i30mBoezqr0YZ7TdUtpZMoaSbLE1Qu6WF
+         DGjrX80Z+d6Mwj3XUOCWxXqNGH2zTZmBfgtl8U53VZs0ROS60cFvS87f7mOk3vZiv+
+         K5Ut30x+oD99Q==
+Date:   Wed, 23 Feb 2022 17:41:30 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     =?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <clement.leger@bootlin.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Enrico Weigelt <info@metux.net>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Wolfram Sang <wsa@kernel.org>, Peter Rosin <peda@axentia.se>,
+        Russell King <linux@armlinux.org.uk>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-acpi@vger.kernel.org, linux-i2c@vger.kernel.org,
+        netdev@vger.kernel.org,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+Subject: Re: [RFC 00/10] add support for fwnode in i2c mux system and sfp
+Message-ID: <YhZxyluc7gYhmAuh@sirena.org.uk>
+Mail-Followup-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        =?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <clement.leger@bootlin.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Enrico Weigelt <info@metux.net>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Wolfram Sang <wsa@kernel.org>, Peter Rosin <peda@axentia.se>,
+        Russell King <linux@armlinux.org.uk>, Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-acpi@vger.kernel.org, linux-i2c@vger.kernel.org,
+        netdev@vger.kernel.org,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+References: <20220221162652.103834-1-clement.leger@bootlin.com>
+ <YhPOxL++yhNHh+xH@smile.fi.intel.com>
+ <20220222173019.2380dcaf@fixe.home>
+ <YhZI1XImMNJgzORb@smile.fi.intel.com>
+ <20220223161150.664aa5e6@fixe.home>
+ <YhZRtads7MGzPEEL@smile.fi.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="slYx1ncARWyiKVPi"
 Content-Disposition: inline
-In-Reply-To: <1644992463-14467-9-git-send-email-hongxing.zhu@nxp.com>
+In-Reply-To: <YhZRtads7MGzPEEL@smile.fi.intel.com>
+X-Cookie: I smell a wumpus.
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -57,69 +95,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In subject:
 
-s/Add the/Add/
+--slYx1ncARWyiKVPi
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Feb 16, 2022 at 02:21:03PM +0800, Richard Zhu wrote:
-> Refer to the system board signal Quality of PCIe archiecture PHY test
-> specification. Signal quality tests(for example: jitters,  differential
-> eye opening and so on ) can be executed with devices in the
-> polling.compliance state.
+On Wed, Feb 23, 2022 at 05:24:37PM +0200, Andy Shevchenko wrote:
+> On Wed, Feb 23, 2022 at 04:11:50PM +0100, Cl=E9ment L=E9ger wrote:
+> > Le Wed, 23 Feb 2022 16:46:45 +0200,
+> > Andy Shevchenko <andriy.shevchenko@linux.intel.com> a =E9crit :
 
-s/archiecture/architecture/
-s/tests(for/tests (for/
-s/jitters,  /jitter, /              (remove double space)
-s/so on )/so on)/
+> > > And here is the problem. We have a few different resource providers
+> > > (a.k.a. firmware interfaces) which we need to cope with.
 
-Is this a reference to a spec?  If so, I can't tell the name of the
-spec, the revision, or the section number.
+> > Understood that but does adding fwnode support means it should work
+> > as-is with both DT and ACPI ? ACPI code is still in place and only the
+> > of part was converted. But maybe you expect the fwnode prot to be
+> > conformant with ACPI.
 
-> To let the device support polling.compliance stat, the clocks and powers
-> shouldn't be turned off when the probe of device driver is failed.
+> Not only me, I believe Mark also was against using pure DT approach on
+> ACPI enabled platforms.
 
-s/stat/state/
-s/powers/power/
-s/driver is failed/driver fails/
+I'm not 100% clear on the context here (I did dig about a bit in the
+thread on lore but it looks like there's some extra context here) but in
+general I don't think there's any enthusiasm for trying to mix different
+firmware interfaces on a single system.  Certainly in the case of ACPI
+and DT they have substantial differences in system model and trying to
+paper over those cracks and integrate the two is a route to trouble.
+This doesn't look like it's trying to use a DT on an ACPI system though?
 
-> Based on CLB(Compliance Load Board) Test Fixture and so on test
-> equipments, the PHY link would be down during the compliance tests.
-> Refer to this scenario, add the i.MX PCIe compliance tests mode enable
-> support, and keep the clocks and powers on, and finish the driver probe
-> without error return.
+There's been some discussion on how to handle loadable descriptions for
+things like FPGA but I don't recall it ever having got anywhere concrete
+- I could have missed something.  Those are dynamic cases which are more
+trouble though.  For something that's a PCI card it's not clear that we
+can't just statically instanitate the devices from kernel code, that was
+how the MFD subsystem started off although it's now primarily applied to
+other applications.  That looks to be what's going on here?
 
-s/CLB(Compliance/CLB (Compliance/
+There were separately some issues with people trying to create
+completely swnode based enumeration mechanisms for things that required
+totally independent code for handling swnodes which seemed very
+concerning but it's not clear to me if that's what's going on here.
 
-> Use the "pci_imx6.compliance=1" in kernel command line to enable the
-> compliance tests mode.
+> > As I said in the cover-letter, this approach is the only one that I did
+> > found acceptable without being tied to some firmware description. If you
+> > have another more portable approach, I'm ok with that. But this
+> > solution should ideally work with pinctrl, gpio, clk, reset, phy, i2c,
+> > i2c-mux without rewriting half of the code. And also allows to easily
+> > swap the PCIe card to other slots/computer without having to modify the
+> > description.
 
-Thanks for including this in the commit log!
+> My proposal is to use overlays that card provides with itself.
+> These are supported mechanisms by Linux kernel.
 
->  	ret = dw_pcie_host_init(&pci->pp);
-> -	if (ret < 0)
-> +	if (ret < 0) {
-> +		if (imx6_pcie_cmp_mode) {
-> +			dev_info(dev, "Driver loaded with compliance test mode enabled.\n");
+We have code for DT overlays in the kernel but it's not generically
+available.  There's issues with binding onto the platform device tree,
+though they're less of a problem with something like this where it seems
+to be a separate card with no cross links.
 
-To match other messages:
+--slYx1ncARWyiKVPi
+Content-Type: application/pgp-signature; name="signature.asc"
 
-s/Driver loaded/driver loaded/
-s/enabled./enabled/
+-----BEGIN PGP SIGNATURE-----
 
-> +			ret = 0;
-> +		} else {
-> +			dev_err(dev, "Unable to add pcie port.\n");
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmIWcckACgkQJNaLcl1U
+h9Db4gf+M8HtK75KY/lDyO6mHOnHCTi9s2TYFSv9g6+jgHHMvIJGXRwPi0+TZkLs
+NygKC2BM5Vxp7RDB0mvlDUPlil7DtraK4enNmgg8e98bhU8yK1l8QGG5jtuyRHqB
+egoqec4s7kmvNvbORlnnX9xPatICuYh1N6775GrntXlLPpasafB41pJbbTP0/uqj
+FEAFWx8LSR5bWJhNIHZT3m7e9v2eejbSm8bXcDwOds/lq0GvDoHNspE9+yYKJcwe
+0A9HpLte/mJqpLIi5Uah+oiV3epuRF5wba3kwB8vLpUToEX7XR7oUm7NnUEBGETf
+lmTR6DPJ/VrBnm6Bh3A0Y2mahC+zBA==
+=PA4U
+-----END PGP SIGNATURE-----
 
-s/Unable/unable/
-s/pcie/PCIe/
-s/port./port/
-
-> +		}
->  		return ret;
-> +	}
->  
->  	if (pci_msi_enabled()) {
->  		u8 offset = dw_pcie_find_capability(pci, PCI_CAP_ID_MSI);
-> -- 
-> 2.25.1
-> 
+--slYx1ncARWyiKVPi--

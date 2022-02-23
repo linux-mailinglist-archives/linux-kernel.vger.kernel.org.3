@@ -2,89 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31E084C12BE
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 13:30:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 14AB64C12BF
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 13:31:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240462AbiBWMap (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 07:30:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37460 "EHLO
+        id S240461AbiBWMbl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 07:31:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233949AbiBWMal (ORCPT
+        with ESMTP id S238654AbiBWMbj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 07:30:41 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4396498F4D;
-        Wed, 23 Feb 2022 04:30:14 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EF468B81EFF;
-        Wed, 23 Feb 2022 12:30:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 89133C340F0;
-        Wed, 23 Feb 2022 12:30:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645619411;
-        bh=j6CSj4b1i1i+lc+QnW4RLhYbTDN4Ia6gc9LCGe9XfR0=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=VBaGnmdyh/CNqp1y0kpU/cTGi3aI0PKfF7sfKotgdkPtDKr9XoWRz0lzMKmHG+lOX
-         WZ6J9Vq9kjnPIJig0oeNiixEqdwVSqru4xK6UgaDRCnNsyVhk2qatEKMTcFxHLcppl
-         nO5luH7kTt8JAODNQM8AKrfBDU3zU/Tnmbo8afwnd7WBto69VIwnKd5JsM0Oh0Ew+r
-         zQa/5X4UY8xykyXB/YzwWYjGB9FQkFDAI7jkzVJgoHdPqulbm3/FyGnNajuBblrjf1
-         kI7EpA6meRzC+odYUnwzV+AAFsiTzia6c8So5tT8Agye/D21/OUqeIAh99JJtTMtid
-         3UH6IYJ/piVsw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 6BE9BE6D4BA;
-        Wed, 23 Feb 2022 12:30:11 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Wed, 23 Feb 2022 07:31:39 -0500
+Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF4EB99EFF
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 04:31:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=sTSSDe4IJOkHZIbaqdrBiwjneU8aircmvEk/fy7O5PM=; b=b1CC5kJCIdB+ONSYpI4fQ1d6zc
+        0LdD7OLX/vpU+mVFyDvhu7xTn+lpI4ckUlc2783K84gYh2mpRBsmlRHB/qD1fD1A5mzAAd8MC1oCT
+        AVlLmyV7cmq/29T0T9WUnC+wG58HRQ3lUQkVEEJqgAUr2CpKDYtP52MCm5qM7co+9i4Q+jr5SiXTc
+        WFca8qG1kuupfnVjYANhVlHqE3AN+aFc5aGq2peuLvctMfVDPBLFOxjQn2jy5aaw98kZ2zc5N8eBZ
+        TIBRaiOT6noPCBgKt7npUuDlPz+0Ous2in8kdYlHNgDGYuO4RoAvsbimCN1Ue3vykjXmP3HBrLR4n
+        TqkcNmuA==;
+Received: from [189.79.213.38] (helo=[192.168.1.60])
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+        id 1nMqnP-000A55-2e; Wed, 23 Feb 2022 13:31:03 +0100
+Message-ID: <7ea61d75-c924-0ef8-e2a9-463540ce1450@igalia.com>
+Date:   Wed, 23 Feb 2022 09:30:41 -0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v2 net-next 0/2] net: dsa: realtek: fix PHY register read
- corruption
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <164561941143.20664.9166640246094519424.git-patchwork-notify@kernel.org>
-Date:   Wed, 23 Feb 2022 12:30:11 +0000
-References: <20220221184631.252308-1-alvin@pqrs.dk>
-In-Reply-To: <20220221184631.252308-1-alvin@pqrs.dk>
-To:     =?utf-8?b?QWx2aW4gxaBpcHJhZ2EgPGFsdmluQHBxcnMuZGs+?=@ci.codeaurora.org
-Cc:     linus.walleij@linaro.org, andrew@lunn.ch, vivien.didelot@gmail.com,
-        f.fainelli@gmail.com, olteanv@gmail.com, davem@davemloft.net,
-        kuba@kernel.org, mir@bang-olufsen.dk, alsi@bang-olufsen.dk,
-        luizluca@gmail.com, arinc.unal@arinc9.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH V6] panic: Move panic_print before kmsg dumpers
+Content-Language: en-US
+To:     Sergey Senozhatsky <senozhatsky@chromium.org>,
+        akpm@linux-foundation.org
+Cc:     linux-kernel@vger.kernel.org, bhe@redhat.com, anton@enomsg.org,
+        ccross@android.com, dyoung@redhat.com, feng.tang@intel.com,
+        john.ogness@linutronix.de, keescook@chromium.org,
+        kernel@gpiccoli.net, kexec@lists.infradead.org,
+        rostedt@goodmis.org, tony.luck@intel.com, vgoyal@redhat.com,
+        Petr Mladek <pmladek@suse.com>
+References: <20220214141308.841525-1-gpiccoli@igalia.com>
+ <YgvRe92hEvj5mEUS@alley> <YhYdVYYapkaVdvZE@google.com>
+From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+In-Reply-To: <YhYdVYYapkaVdvZE@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
-
-This series was applied to netdev/net-next.git (master)
-by David S. Miller <davem@davemloft.net>:
-
-On Mon, 21 Feb 2022 19:46:29 +0100 you wrote:
-> From: Alvin Šipraga <alsi@bang-olufsen.dk>
+On 23/02/2022 08:41, Sergey Senozhatsky wrote:
+> On (22/02/15 17:14), Petr Mladek wrote:
+>> Makes sense and looks good to me.
+>>
+>> Reviewed-by: Petr Mladek <pmladek@suse.com>
 > 
-> These two patches fix the issue reported by Arınç where PHY register
-> reads sometimes return garbage data.
+> FWIW
 > 
-> v1 -> v2:
-> 
-> [...]
+> Reviewed-by: Sergey Senozhatsky <senozhatsky@chromium.org>
 
-Here is the summary with links:
-  - [v2,net-next,1/2] net: dsa: realtek: allow subdrivers to externally lock regmap
-    https://git.kernel.org/netdev/net-next/c/907e772f6f6d
-  - [v2,net-next,2/2] net: dsa: realtek: rtl8365mb: serialize indirect PHY register access
-    https://git.kernel.org/netdev/net-next/c/2796728460b8
+Thanks a lot Sergey, for your review =)
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Andrew, do I need to send a V7 with the above tag or this is
+incorporated when patch gets into your tree?
 
-
+Thanks!

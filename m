@@ -2,55 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 971DF4C0E09
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 09:09:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AB524C0E18
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 09:14:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238956AbiBWIJf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 03:09:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52024 "EHLO
+        id S238844AbiBWIPA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 03:15:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238889AbiBWIJ3 (ORCPT
+        with ESMTP id S232535AbiBWIO6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 03:09:29 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC65A6D961
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 00:09:01 -0800 (PST)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <sha@pengutronix.de>)
-        id 1nMmho-0000Jh-01; Wed, 23 Feb 2022 09:09:00 +0100
-Received: from sha by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <sha@pengutronix.de>)
-        id 1nMmhm-0003eW-SF; Wed, 23 Feb 2022 09:08:58 +0100
-Date:   Wed, 23 Feb 2022 09:08:58 +0100
-From:   Sascha Hauer <s.hauer@pengutronix.de>
-To:     linux-pm@vger.kernel.org
-Cc:     Kevin Hilman <khilman@kernel.org>,
-        Ahmad Fatoum <a.fatoum@pengutronix.de>,
-        linux-kernel@vger.kernel.org, kernel@pengutronix.de,
-        "Rafael J . Wysocki" <rafael@kernel.org>
-Subject: Re: [PATCH] PM: domains: use dev_err_probe() to simplify error
- handling
-Message-ID: <20220223080858.GJ9136@pengutronix.de>
-References: <20220223080323.3717853-1-s.hauer@pengutronix.de>
+        Wed, 23 Feb 2022 03:14:58 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D59E536305;
+        Wed, 23 Feb 2022 00:14:30 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5B8A1B80B3E;
+        Wed, 23 Feb 2022 08:14:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C364C340E7;
+        Wed, 23 Feb 2022 08:14:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645604068;
+        bh=ORM81g/BJs6DqcF1RJUtYk0o42tX/xtNTRjiaCRrSJI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=uT6lcksV5+Ne5ixwr7lmetDdy+xY58hO5AeCSF+CW4YCneaY9TnMgC0DFV4uRDtD5
+         /pyXqmJQDAuI0pJgik5QK/0FH/z2/Xx1EVBKgN+YveRiw8k6UKW8sb6qmoLfnrJlht
+         D7xFLTXgyaY5J/04jXlaqkDZIotqjDNS18I0gmLurZ/1ngWVoMuehiBucYNprQxpIx
+         r8unlVaTrbmeWKNzf87FSbKFemUgweeScb7ZXbpkFCaB7/asmcpGKv0aPWz6rK6hfo
+         2FtNq8lKvIhcOInfBHsm/cFZKPBmcEoW2dPHuxTIKJ9jFvPpbW9kDPTArtHCKbmV7v
+         tQOAJzmr0QYaA==
+Date:   Wed, 23 Feb 2022 09:14:20 +0100
+From:   Christian Brauner <brauner@kernel.org>
+To:     Mimi Zohar <zohar@linux.ibm.com>
+Cc:     Stefan Berger <stefanb@linux.ibm.com>,
+        linux-integrity@vger.kernel.org, serge@hallyn.com,
+        containers@lists.linux.dev, dmitry.kasatkin@gmail.com,
+        ebiederm@xmission.com, krzysztof.struczynski@huawei.com,
+        roberto.sassu@huawei.com, mpeters@redhat.com, lhinds@redhat.com,
+        lsturman@redhat.com, puiterwi@redhat.com, jejb@linux.ibm.com,
+        jamjoom@us.ibm.com, linux-kernel@vger.kernel.org,
+        paul@paul-moore.com, rgb@redhat.com,
+        linux-security-module@vger.kernel.org, jmorris@namei.org,
+        James Bottomley <James.Bottomley@HansenPartnership.com>
+Subject: Re: [PATCH v10 22/27] securityfs: Extend securityfs with namespacing
+ support
+Message-ID: <20220223081420.7mthf3rfxb3n5gvs@wittgenstein>
+References: <20220201203735.164593-1-stefanb@linux.ibm.com>
+ <20220201203735.164593-23-stefanb@linux.ibm.com>
+ <177baf827c4dbf9a225b14552725360066af6471.camel@linux.ibm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220223080323.3717853-1-s.hauer@pengutronix.de>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-IRC:  #ptxdist @freenode
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-Uptime: 09:07:26 up 74 days, 16:53, 83 users,  load average: 0.19, 0.27,
- 0.22
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: sha@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+In-Reply-To: <177baf827c4dbf9a225b14552725360066af6471.camel@linux.ibm.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -59,82 +65,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 23, 2022 at 09:03:23AM +0100, Sascha Hauer wrote:
-> From: Ahmad Fatoum <a.fatoum@pengutronix.de>
+On Tue, Feb 22, 2022 at 08:48:47PM -0500, Mimi Zohar wrote:
+> On Tue, 2022-02-01 at 15:37 -0500, Stefan Berger wrote:
+> > Enable multiple instances of securityfs by keying each instance with a
+> > pointer to the user namespace it belongs to.
+> > 
+> > Since we do not need the pinning of the filesystem for the virtualization
 > 
-> dev_err_probe() can reduce code size, makes the code easier to read
-> and has the added benefit of recording the defer reason for later
-> read out. Use it where appropriate.
+> ^namespacing case
 > 
-> This also fixes an issue, where an error message in __genpd_dev_pm_attach
-> was not terminated by a line break.
+> > case, limit the usage of simple_pin_fs() and simpe_release_fs() to the
 > 
-> Signed-off-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
-> ---
->  drivers/base/power/domain.c | 21 ++++++---------------
->  1 file changed, 6 insertions(+), 15 deletions(-)
+> ^simple_release_fs
+> 
+> > case when the init_user_ns is active. This simplifies the cleanup for the
+> > virtualization case where usage of securityfs_remove() to free dentries
+> 
+> ^namespacing 
+> 
+> > is therefore not needed anymore.
+> > 
+> > For the initial securityfs, i.e. the one mounted in the host userns mount,
+> > nothing changes. The rules for securityfs_remove() are as before and it is
+> > still paired with securityfs_create(). Specifically, a file created via
+> > securityfs_create_dentry() in the initial securityfs mount still needs to
+> > be removed by a call to securityfs_remove(). Creating a new dentry in the
+> > initial securityfs mount still pins the filesystem like it always did.
+> > Consequently, the initial securityfs mount is not destroyed on
+> > umount/shutdown as long as at least one user of it still has dentries that
+> > it hasn't removed with a call to securityfs_remove().
+> > 
+> > Prevent mounting of an instance of securityfs in another user namespace
+> > than it belongs to. Also, prevent accesses to files and directories by
+> > a user namespace that is neither the user namespace it belongs to
+> > nor an ancestor of the user namespace that the instance of securityfs
+> > belongs to. Do not prevent access if securityfs was bind-mounted and
+> > therefore the init_user_ns is the owning user namespace.
+> > 
+> > Suggested-by: Christian Brauner <brauner@kernel.org>
+> > Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+> > Signed-off-by: James Bottomley <James.Bottomley@HansenPartnership.com>
+> 
+> Christian, I understand that "[PATCH v10 23/27] ima: Setup securityfs
+> for IMA namespace" needs to be deferred, but is there a reason for
+> deferring  "[PATCH v10 22/27] securityfs: Extend securityfs with
+> namespacing support"?   As the securityfs patches are really
+> independent of IMA namespacing, I would have thought  "[PATCH v10
+> 04/27] securityfs: rework dentry creation" and this patch should be co-
+> located at the beginning of the patch set.
 
-And of course:
-
-Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>
-
-Sascha
-
-> 
-> diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
-> index 5db704f02e712..29428ae91349d 100644
-> --- a/drivers/base/power/domain.c
-> +++ b/drivers/base/power/domain.c
-> @@ -2248,12 +2248,8 @@ int of_genpd_add_provider_simple(struct device_node *np,
->  	/* Parse genpd OPP table */
->  	if (genpd->set_performance_state) {
->  		ret = dev_pm_opp_of_add_table(&genpd->dev);
-> -		if (ret) {
-> -			if (ret != -EPROBE_DEFER)
-> -				dev_err(&genpd->dev, "Failed to add OPP table: %d\n",
-> -					ret);
-> -			return ret;
-> -		}
-> +		if (ret)
-> +			return dev_err_probe(&genpd->dev, ret, "Failed to add OPP table\n");
->  
->  		/*
->  		 * Save table for faster processing while setting performance
-> @@ -2312,9 +2308,8 @@ int of_genpd_add_provider_onecell(struct device_node *np,
->  		if (genpd->set_performance_state) {
->  			ret = dev_pm_opp_of_add_table_indexed(&genpd->dev, i);
->  			if (ret) {
-> -				if (ret != -EPROBE_DEFER)
-> -					dev_err(&genpd->dev, "Failed to add OPP table for index %d: %d\n",
-> -						i, ret);
-> +				dev_err_probe(&genpd->dev, ret,
-> +					      "Failed to add OPP table for index %d\n", i);
->  				goto error;
->  			}
->  
-> @@ -2672,12 +2667,8 @@ static int __genpd_dev_pm_attach(struct device *dev, struct device *base_dev,
->  	ret = genpd_add_device(pd, dev, base_dev);
->  	mutex_unlock(&gpd_list_lock);
->  
-> -	if (ret < 0) {
-> -		if (ret != -EPROBE_DEFER)
-> -			dev_err(dev, "failed to add to PM domain %s: %d",
-> -				pd->name, ret);
-> -		return ret;
-> -	}
-> +	if (ret < 0)
-> +		return dev_err_probe(dev, ret, "failed to add to PM domain %s\n", pd->name);
->  
->  	dev->pm_domain->detach = genpd_dev_pm_detach;
->  	dev->pm_domain->sync = genpd_dev_pm_sync;
-> -- 
-> 2.30.2
-> 
-> 
-> 
-
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+It felt more natural to me to defer it until the end but I have no
+strong thoughts on this as of right now. Since Stefan has mentioned
+moving this earlier already himself and you seem to agree as well, feel
+free to do so.

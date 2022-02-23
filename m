@@ -2,150 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5AE54C1F78
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 00:16:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5663D4C1F7A
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 00:16:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244754AbiBWXQj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 18:16:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34454 "EHLO
+        id S244779AbiBWXQr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 18:16:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235836AbiBWXQi (ORCPT
+        with ESMTP id S244770AbiBWXQo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 18:16:38 -0500
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E56358387
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 15:16:09 -0800 (PST)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-2d7eaa730d9so5523577b3.13
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 15:16:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=BhJUsoTK5aV5hMXGrbNckKjnY5JAB55Pq/ekvjk0Clw=;
-        b=Wx79eJ0cagmUtytYmD+wFDQpVmtPNTNGkehmvpo4FpB/mI9qc9+PW/iD+6d1oU32bm
-         bghAq2mffsQJarF80M5rq4CwlbzA3n9mDcHuk78DjliwqSLBvxDHnIGyPI5+nuif/cAe
-         CS4Hf3HolDnznBSVTAaQulpYp1MHm3gFhCdEG/YRSozm2JGK0EkfL7YEV7lsskDTn0MP
-         tkUoZuA2HV/qgKlyZyCA2uPdHW1cOcUPpd/XX9Dr4xIaKaifCS1v6XmmlyBJ8oUFoXYi
-         sJMbDKUEK/V9NWsDPxTDvR1XPCPNIb4xUk1eZW4OwLzq2mUYYgb1jJxGEmVDoi++7k2K
-         nB4w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=BhJUsoTK5aV5hMXGrbNckKjnY5JAB55Pq/ekvjk0Clw=;
-        b=zBxk/TTbgzYSs335934S+WRd7P9gmZ/WLRiYEvhvgxQQbqgaAbpRjmY49bqkK80mbb
-         zONNfxu6k5vBE3OrcvNuG42OdjoBqpR9Rru94QFMrA8Fr2pjiSqPDLvHqm6azt8OyL+G
-         0qlcnM3f5gPCJZYVwO1XxaoSKPjQKrSB7jRNpmDKMo9sTzrAPKPmm3mTjOPww1vMNu14
-         iLk0wli2jbJkUWLCkls9G6WRXOGZrASzGLTz4BtPKqkBBCIPsknREUtOKZaEPlViqfVZ
-         lm0mgDD9SHcjzPMAx3jzLvMTbhO7Qk6T5ZpRjqxr7Z1SHzGJhqFLU81mE5cZdS3Y3eIg
-         9v9w==
-X-Gm-Message-State: AOAM5331g0xUI36Xo4naETLu/6Y6Bvke8io7vS/8TkpeWPSS8ZhSPQhn
-        eimgBRNBVo0MU4S8naYSuEl1pEUrp83Y
-X-Google-Smtp-Source: ABdhPJyjbkOhm+d3Qo5rFFcxETx/mv1oPTm67GgShybJP9Gq4GEZRAfpRd8aZXD6Scb4/ZrTVK9r79DI0beC
-X-Received: from gthelen2.svl.corp.google.com ([2620:15c:2cd:202:26ef:3969:d6e5:31f])
- (user=gthelen job=sendgmr) by 2002:a5b:342:0:b0:624:9b29:979f with SMTP id
- q2-20020a5b0342000000b006249b29979fmr39735ybp.599.1645658168592; Wed, 23 Feb
- 2022 15:16:08 -0800 (PST)
-Date:   Wed, 23 Feb 2022 15:16:06 -0800
-In-Reply-To: <CAEf4BzbjxwEukaZfW9qCLwXeyS32WeNQ_8MvUqRd-JA7cZzuGw@mail.gmail.com>
-Message-Id: <xr9335k918eh.fsf@gthelen2.svl.corp.google.com>
-Mime-Version: 1.0
-References: <20220223222002.1085114-1-haoluo@google.com> <CAEf4BzbjxwEukaZfW9qCLwXeyS32WeNQ_8MvUqRd-JA7cZzuGw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] bpf: Cache the last valid build_id.
-From:   Greg Thelen <gthelen@google.com>
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Hao Luo <haoluo@google.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Song Liu <songliubraving@fb.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Blake Jones <blakejones@google.com>, bpf <bpf@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 23 Feb 2022 18:16:44 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70D8858E54;
+        Wed, 23 Feb 2022 15:16:14 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 22F6EB82249;
+        Wed, 23 Feb 2022 23:16:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4EA67C340E7;
+        Wed, 23 Feb 2022 23:16:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645658171;
+        bh=dKUEp8Ja5zuNdUtklDNOmkRUIMIrk0tU73atuFZaF1A=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=NZYN4igKqV7hfvfXieNsnoEnfNnyOiaPzX5FHj5YExv/OqHhuVQ1pJdApX/wV/eLM
+         Ps+w12Su2eSEWxTt0pVq8o34Yc7zylU4GZvsj+vL4CiJYxEiUeUXG57/ZS86+tHrzJ
+         wvod45GXJZyAj6CwQTdFqQ71m/SnJTvuHiw3XVHiZV8RXOgKnV7vEp02s2ThNBFCpy
+         p6TMyWu7+jWIi0y/UHwFA92zpUaY9PRazUlBSq3vc7NueUHSEjAueCtP/knNIq+LaW
+         cYK6e6uFDz1qHUEueYgRiv6nfR5qvZMXgpUlqjbWxAuTRltYERxcmAtlJfyTiqqAyk
+         SemuTINnMhS3w==
+Date:   Wed, 23 Feb 2022 15:16:09 -0800
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
+        qemu-devel@nongnu.org, kvm@vger.kernel.org,
+        linux-s390@vger.kernel.org, adrian@parity.io, dwmw@amazon.co.uk,
+        acatan@amazon.com, graf@amazon.com, colmmacc@amazon.com,
+        sblbir@amazon.com, raduweis@amazon.com, jannh@google.com,
+        gregkh@linuxfoundation.org, tytso@mit.edu
+Subject: Re: [PATCH RFC v1 1/2] random: add mechanism for VM forks to
+ reinitialize crng
+Message-ID: <YhbAOW/KbFW1CFkQ@sol.localdomain>
+References: <20220223131231.403386-1-Jason@zx2c4.com>
+ <20220223131231.403386-2-Jason@zx2c4.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220223131231.403386-2-Jason@zx2c4.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Andrii Nakryiko <andrii.nakryiko@gmail.com> wrote:
+On Wed, Feb 23, 2022 at 02:12:30PM +0100, Jason A. Donenfeld wrote:
+> When a VM forks, we must immediately mix in additional information to
+> the stream of random output so that two forks or a rollback don't
+> produce the same stream of random numbers, which could have catastrophic
+> cryptographic consequences. This commit adds a simple API, add_vmfork_
+> randomness(), for that.
+> 
+> Cc: Theodore Ts'o <tytso@mit.edu>
+> Cc: Jann Horn <jannh@google.com>
+> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+> ---
+>  drivers/char/random.c  | 58 ++++++++++++++++++++++++++++++++++++++++++
+>  include/linux/random.h |  1 +
+>  2 files changed, 59 insertions(+)
+> 
+> diff --git a/drivers/char/random.c b/drivers/char/random.c
+> index 536237a0f073..29d6ce484d15 100644
+> --- a/drivers/char/random.c
+> +++ b/drivers/char/random.c
+> @@ -344,6 +344,46 @@ static void crng_reseed(void)
+>  	}
+>  }
+>  
+> +/*
+> + * This mixes unique_vm_id directly into the base_crng key as soon as
+> + * possible, similarly to crng_pre_init_inject(), even if the crng is
+> + * already running, in order to immediately branch streams from prior
+> + * VM instances.
+> + */
+> +static void crng_vm_fork_inject(const void *unique_vm_id, size_t len)
+> +{
+> +	unsigned long flags, next_gen;
+> +	struct blake2s_state hash;
+> +
+> +	/*
+> +	 * Unlike crng_reseed(), we take the lock as early as possible,
+> +	 * since we don't want the RNG to be used until it's updated.
+> +	 */
+> +	spin_lock_irqsave(&base_crng.lock, flags);
+> +
+> +	/*
+> +	 * Also update the generation, while locked, as early as
+> +	 * possible. This will mean unlocked reads of the generation
+> +	 * will cause a reseeding of per-cpu crngs, and those will
+> +	 * spin on the base_crng lock waiting for the rest of this
+> +	 * operation to complete, which achieves the goal of blocking
+> +	 * the production of new output until this is done.
+> +	 */
+> +	next_gen = base_crng.generation + 1;
+> +	if (next_gen == ULONG_MAX)
+> +		++next_gen;
+> +	WRITE_ONCE(base_crng.generation, next_gen);
+> +	WRITE_ONCE(base_crng.birth, jiffies);
+> +
+> +	/* This is the same formulation used by crng_pre_init_inject(). */
+> +	blake2s_init(&hash, sizeof(base_crng.key));
+> +	blake2s_update(&hash, base_crng.key, sizeof(base_crng.key));
+> +	blake2s_update(&hash, unique_vm_id, len);
+> +	blake2s_final(&hash, base_crng.key);
+> +
+> +	spin_unlock_irqrestore(&base_crng.lock, flags);
+> +}
+[...]
+> +/*
+> + * Handle a new unique VM ID, which is unique, not secret, so we
+> + * don't credit it, but we do mix it into the entropy pool and
+> + * inject it into the crng.
+> + */
+> +void add_vmfork_randomness(const void *unique_vm_id, size_t size)
+> +{
+> +	add_device_randomness(unique_vm_id, size);
+> +	crng_vm_fork_inject(unique_vm_id, size);
+> +}
+> +EXPORT_SYMBOL_GPL(add_vmfork_randomness);
 
-> On Wed, Feb 23, 2022 at 2:20 PM Hao Luo <haoluo@google.com> wrote:
->>
->> For binaries that are statically linked, consecutive stack frames are
->> likely to be in the same VMA and therefore have the same build id.
->> As an optimization for this case, we can cache the previous frame's
->> VMA, if the new frame has the same VMA as the previous one, reuse the
->> previous one's build id. We are holding the MM locks as reader across
->> the entire loop, so we don't need to worry about VMA going away.
->>
->> Tested through "stacktrace_build_id" and "stacktrace_build_id_nmi" in
->> test_progs.
->>
->> Suggested-by: Greg Thelen <gthelen@google.com>
->> Signed-off-by: Hao Luo <haoluo@google.com>
->> ---
->>  kernel/bpf/stackmap.c | 11 ++++++++++-
->>  1 file changed, 10 insertions(+), 1 deletion(-)
->>
->> diff --git a/kernel/bpf/stackmap.c b/kernel/bpf/stackmap.c
->> index 22c8ae94e4c1..280b9198af27 100644
->> --- a/kernel/bpf/stackmap.c
->> +++ b/kernel/bpf/stackmap.c
->> @@ -132,7 +132,8 @@ static void stack_map_get_build_id_offset(struct bpf_stack_build_id *id_offs,
->>         int i;
->>         struct mmap_unlock_irq_work *work = NULL;
->>         bool irq_work_busy = bpf_mmap_unlock_get_irq_work(&work);
->> -       struct vm_area_struct *vma;
->> +       struct vm_area_struct *vma, *prev_vma = NULL;
->> +       const char *prev_build_id;
->>
->>         /* If the irq_work is in use, fall back to report ips. Same
->>          * fallback is used for kernel stack (!user) on a stackmap with
->> @@ -151,6 +152,11 @@ static void stack_map_get_build_id_offset(struct bpf_stack_build_id *id_offs,
->>
->>         for (i = 0; i < trace_nr; i++) {
->>                 vma = find_vma(current->mm, ips[i]);
->
-> as a further optimization, shouldn't we first check if ips[i] is
-> within prev_vma and avoid rbtree walk altogether? Would this work:
->
-> if (prev_vma && range_in_vma(prev_vma, ips[i])) {
->    /* reuse build_id */
-> }
-> vma = find_vma(current->mm, ips[i]);
->
->
-> ?
+I think we should be removing cases where the base_crng key is changed directly
+besides extraction from the input_pool, not adding new ones.  Why not implement
+this as add_device_randomness() followed by crng_reseed(force=true), where the
+'force' argument forces a reseed to occur even if the entropy_count is too low?
 
-Yes, that's a nice addition. Good idea.
-
->> +               if (vma && vma == prev_vma) {
->> +                       memcpy(id_offs[i].build_id, prev_build_id,
->> +                              BUILD_ID_SIZE_MAX);
->> +                       goto build_id_valid;
->> +               }
->>                 if (!vma || build_id_parse(vma, id_offs[i].build_id, NULL)) {
->>                         /* per entry fall back to ips */
->>                         id_offs[i].status = BPF_STACK_BUILD_ID_IP;
->> @@ -158,9 +164,12 @@ static void stack_map_get_build_id_offset(struct bpf_stack_build_id *id_offs,
->>                         memset(id_offs[i].build_id, 0, BUILD_ID_SIZE_MAX);
->>                         continue;
->>                 }
->> +build_id_valid:
->>                 id_offs[i].offset = (vma->vm_pgoff << PAGE_SHIFT) + ips[i]
->>                         - vma->vm_start;
->>                 id_offs[i].status = BPF_STACK_BUILD_ID_VALID;
->> +               prev_vma = vma;
->> +               prev_build_id = id_offs[i].build_id;
->>         }
->>         bpf_mmap_unlock_mm(work, current->mm);
->>  }
->> --
->> 2.35.1.473.g83b2b277ed-goog
->>
+- Eric

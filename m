@@ -2,110 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 780244C0D9A
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 08:50:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AE674C0D9F
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 08:50:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238776AbiBWHuZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 02:50:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48190 "EHLO
+        id S238807AbiBWHuw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 02:50:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234276AbiBWHuY (ORCPT
+        with ESMTP id S236455AbiBWHuu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 02:50:24 -0500
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C6A86D1B9
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 23:49:58 -0800 (PST)
-Received: by mail-pj1-x1034.google.com with SMTP id j10-20020a17090a94ca00b001bc2a9596f6so1940111pjw.5
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 23:49:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:user-agent:in-reply-to:references
-         :message-id:mime-version:content-transfer-encoding;
-        bh=E627RUNZI8BVu7aKzkB9EQU+HaYuIF8E1n5hAwi8GVI=;
-        b=UhqSJ2zS5M8ZUtUHuH6t9qQu4lgWEU8YXCYrKcOaIeEMUDWkreFKvOOHIZu+3397hg
-         RmMYQiZubfgjjm14Zk6D4fhr5sUY0f+1bdT2v7QCDpLQwZlGx7eTXJRc3FLW/l9lLA4a
-         60opWRg2r3Y+fSFqq31WqhOUpbpJH+jbO3C1s=
+        Wed, 23 Feb 2022 02:50:50 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 415ED6D391
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 23:50:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1645602622;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=18/7L9IlK0MUSWEpBnnED7xfRcmw6buBtiFVEVIoIww=;
+        b=MqeUYzTmyCeOzIYBmDHKdR9yS4eUGdhgF+Fs4t6p3/wQMZwAeHYvexQWlSuB9truomnE6E
+        39Rot1gt7aLp+BTsOQCtHrA9PAcK3umaiJE7Dd/DNcYkYZ4dgVvFgYJTjMF6hz/76VuZHK
+        Sy2tfKaD9sQrCk34WuGse31I7JkCqHI=
+Received: from mail-lj1-f198.google.com (mail-lj1-f198.google.com
+ [209.85.208.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-517-g2rggbaDMzSmx44vL6MDSQ-1; Wed, 23 Feb 2022 02:50:20 -0500
+X-MC-Unique: g2rggbaDMzSmx44vL6MDSQ-1
+Received: by mail-lj1-f198.google.com with SMTP id q17-20020a2e7511000000b0023c95987502so6939090ljc.16
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 23:50:20 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:user-agent:in-reply-to
-         :references:message-id:mime-version:content-transfer-encoding;
-        bh=E627RUNZI8BVu7aKzkB9EQU+HaYuIF8E1n5hAwi8GVI=;
-        b=zE7brgI/+dYjR0O/0GWvbAQVseAkZzed0C2WML0bD7Wb3LuZY6/UOsHFb3q3DeFyId
-         rWkmsvOfjyERrWuHWAsHU4Ch3g22PiiqQpGYVY1rjwW/MmzjQyKy5npJfvnaYm3k2ZNL
-         F2WeLvttk7zi12jxTyXmpxRBnlbnn0Q+sGD2lab5h+CoXWcvqbj52nypKzM+Bnhk1nLY
-         MZB8gPIQ7sVf8xX47WuXDpf2GmUQ8BhXijby9cSbNN53H4MQLDdsVlo4Nlj5G0X/NyDk
-         zdSJwDS963bhmB6nu99sbtX6T5MoZYPfFlGqxOZEpj/Dmjd31yTM1/1UPMmwtbIJ2L9V
-         pfpA==
-X-Gm-Message-State: AOAM533lvkjT3sDTfsAqCRtZp8ySxZ7vZCtAZJzv+30UXKKWzmpIuvIu
-        MYZwKh5N1RCUx5QxLJ+WAZNang==
-X-Google-Smtp-Source: ABdhPJzZcoICgoXFEPRWRrS1CdNR8/GchBf+zvOrVpytglbEK2XtyhsZd1JBznLxucmnfNejVvFwFw==
-X-Received: by 2002:a17:90b:197:b0:1bc:5037:7c52 with SMTP id t23-20020a17090b019700b001bc50377c52mr7964776pjs.174.1645602597667;
-        Tue, 22 Feb 2022 23:49:57 -0800 (PST)
-Received: from [127.0.0.1] (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id e10sm5221699pgw.16.2022.02.22.23.49.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 22 Feb 2022 23:49:57 -0800 (PST)
-Date:   Tue, 22 Feb 2022 23:49:54 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Jann Horn <jannh@google.com>, Anton Vorontsov <anton@enomsg.org>,
-        Colin Cross <ccross@android.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Ard Biesheuvel <ardb@kernel.org>
-CC:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_v2=5D_pstore=3A_Don=27t_use_sem?= =?US-ASCII?Q?aphores_in_always-atomic-context_code?=
-User-Agent: K-9 Mail for Android
-In-Reply-To: <20220218181950.1438236-1-jannh@google.com>
-References: <20220218181950.1438236-1-jannh@google.com>
-Message-ID: <8D85619E-99BD-4DB5-BDDB-A205B057C910@chromium.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=18/7L9IlK0MUSWEpBnnED7xfRcmw6buBtiFVEVIoIww=;
+        b=okdIZTS16Jm1VT0T+mMuruzf26b/jf4HMQpRsctguT9pWt5nPJ+MBVcFS1+ECWPH9L
+         n0vwHPU7SBL00Nd4n+D6LDEjfiUVBEcdfAzt+kvlar6FuPEIP+KgrXAFsWRy/wMqMsIk
+         a4HfuT3Q03LeH996ZiHftU5h5aFtAfQXmhUhrRyDJTFmtGA310zsNPFqp/ktCZcW6GgW
+         G3DC7HawS1cHPqcG4ftjOCgtJOEI56ASPqMmtcZZxr6YcdB0G2bi42Cx6P2KcEQXdq4g
+         TppIWb7Fkcybm3rnYpZLkY+337BGbKahFds3fgd2tVtkx3+jB1uf5YyL/p1J4Qzpsv5c
+         NrGg==
+X-Gm-Message-State: AOAM5330B9PDHSYLU5OUKeM3VrxHDywQeDczJCA0iCL4EsR+y4cIzyIK
+        c8MErEVGDbmks2ujgkga05SRfgy45+fmg9D250jVR6RaUckRE7szLjvzRG6Jw3PC1Wepss6KeYA
+        FHdKJUEL3JZpMKSFBb//0a/oR7amzepP3PefdQ96O
+X-Received: by 2002:a2e:7a15:0:b0:236:deb2:1f74 with SMTP id v21-20020a2e7a15000000b00236deb21f74mr20100098ljc.315.1645602619241;
+        Tue, 22 Feb 2022 23:50:19 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxXtXvHLakBc+SCeksBjaI5IBz4p+vdxHIOsU2WxMxmALaRHcCUrxNy5WT1Szp6b8RDwuFVxayNMXj5FW9I3GA=
+X-Received: by 2002:a2e:7a15:0:b0:236:deb2:1f74 with SMTP id
+ v21-20020a2e7a15000000b00236deb21f74mr20100087ljc.315.1645602619006; Tue, 22
+ Feb 2022 23:50:19 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20211108081324.14204-1-jasowang@redhat.com> <CACGkMEucnZPt_dhaSXCegeFE0gs=dSDfv7CJSq4HCW_4a4XfGg@mail.gmail.com>
+ <20220223020452-mutt-send-email-mst@kernel.org> <CACGkMEu2UkOpGHJyKGzjJHMa3RmOoCmqD1iD_nh+pVcT63BQqA@mail.gmail.com>
+In-Reply-To: <CACGkMEu2UkOpGHJyKGzjJHMa3RmOoCmqD1iD_nh+pVcT63BQqA@mail.gmail.com>
+From:   Jason Wang <jasowang@redhat.com>
+Date:   Wed, 23 Feb 2022 15:50:07 +0800
+Message-ID: <CACGkMEuu-Q83aBm0ijGr8AhP9C0tjxzvuHKvnY4HaArL5d2eoQ@mail.gmail.com>
+Subject: Re: [PATCH] virtio_ring: aovid reading flag from the descriptor ring
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     virtualization <virtualization@lists.linux-foundation.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Feb 23, 2022 at 3:34 PM Jason Wang <jasowang@redhat.com> wrote:
+>
+> On Wed, Feb 23, 2022 at 3:08 PM Michael S. Tsirkin <mst@redhat.com> wrote:
+> >
+> > On Wed, Feb 23, 2022 at 11:19:03AM +0800, Jason Wang wrote:
+> > > On Mon, Nov 8, 2021 at 4:13 PM Jason Wang <jasowang@redhat.com> wrote:
+> > > >
+> > > > Commit 72b5e8958738 ("virtio-ring: store DMA metadata in desc_extra
+> > > > for split virtqueue") tries to make it possible for the driver to not
+> > > > read from the descriptor ring to prevent the device from corrupting
+> > > > the descriptor ring. But it still read the descriptor flag from the
+> > > > descriptor ring during buffer detach.
+> > > >
+> > > > This patch fixes by always store the descriptor flag no matter whether
+> > > > DMA API is used and then we can avoid reading descriptor flag from the
+> > > > descriptor ring. This eliminates the possibly of unexpected next
+> > > > descriptor caused by the wrong flag (e.g the next flag).
+> > > >
+> > > > Signed-off-by: Jason Wang <jasowang@redhat.com>
+> > >
+> > > Michael, any comment for this?
+> > >
+> > > Thanks
+> >
+> > I don't exactly see why we should care without DMA API, it seems
+> > cleaner not to poke at the array one extra time.
+>
+> I think the answer is that we have any special care about the DMA API
 
+I meant "we haven't had" actually.
 
-On February 18, 2022 10:19:50 AM PST, Jann Horn <jannh@google=2Ecom> wrote=
-:
->pstore_dump() is *always* invoked in atomic context (nowadays in an RCU
->read-side critical section, before that under a spinlock)=2E
->It doesn't make sense to try to use semaphores here=2E
+Thanks
 
-Ah, very nice=2E Thanks for the analysis!
+> for all other places that are using desc_extra.
+>
+> Thanks
+>
+>
+> >
+> > > > ---
+> > > >  drivers/virtio/virtio_ring.c | 4 ++--
+> > > >  1 file changed, 2 insertions(+), 2 deletions(-)
+> > > >
+> > > > diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/virtio_ring.c
+> > > > index 00f64f2f8b72..28734f4e57d3 100644
+> > > > --- a/drivers/virtio/virtio_ring.c
+> > > > +++ b/drivers/virtio/virtio_ring.c
+> > > > @@ -583,7 +583,7 @@ static inline int virtqueue_add_split(struct virtqueue *_vq,
+> > > >         }
+> > > >         /* Last one doesn't continue. */
+> > > >         desc[prev].flags &= cpu_to_virtio16(_vq->vdev, ~VRING_DESC_F_NEXT);
+> > > > -       if (!indirect && vq->use_dma_api)
+> > > > +       if (!indirect)
+> > > >                 vq->split.desc_extra[prev & (vq->split.vring.num - 1)].flags &=
+> > > >                         ~VRING_DESC_F_NEXT;
+> > > >
+> > > > @@ -713,7 +713,7 @@ static void detach_buf_split(struct vring_virtqueue *vq, unsigned int head,
+> > > >         /* Put back on free list: unmap first-level descriptors and find end */
+> > > >         i = head;
+> > > >
+> > > > -       while (vq->split.vring.desc[i].flags & nextflag) {
+> > > > +       while (vq->split.desc_extra[i].flags & nextflag) {
+> > > >                 vring_unmap_one_split(vq, i);
+> > > >                 i = vq->split.desc_extra[i].next;
+> > > >                 vq->vq.num_free++;
+> > > > --
+> > > > 2.25.1
+> > > >
+> >
 
->[=2E=2E=2E]
->-static bool pstore_cannot_wait(enum kmsg_dump_reason reason)
->+bool pstore_cannot_block_path(enum kmsg_dump_reason reason)
-
-Why the rename, extern, and EXPORT? This appears to still only have the sa=
-me single caller?
-
-> [=2E=2E=2E]
->-			pr_err("dump skipped in %s path: may corrupt error record\n",
->-				in_nmi() ? "NMI" : why);
->-			return;
->-		}
->-		if (down_interruptible(&psinfo->buf_lock)) {
->-			pr_err("could not grab semaphore?!\n");
->+	if (pstore_cannot_block_path(reason)) {
->+		if (!spin_trylock_irqsave(&psinfo->buf_lock, flags)) {
->+			pr_err("dump skipped in %s path because of concurrent dump\n"
->+				       , in_nmi() ? "NMI" : why);
-
-The pr_err had the comma following the format string moved, and the note a=
-bout corruption removed=2E Is that no longer accurate?
-
-Otherwise looks good; thank you!
-
---=20
-Kees Cook

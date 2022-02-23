@@ -2,127 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2904E4C19B8
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 18:15:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 277194C19C1
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 18:17:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243336AbiBWRPu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 12:15:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44824 "EHLO
+        id S243343AbiBWRRo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 12:17:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243334AbiBWRPq (ORCPT
+        with ESMTP id S238195AbiBWRRn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 12:15:46 -0500
-Received: from mail-oo1-xc33.google.com (mail-oo1-xc33.google.com [IPv6:2607:f8b0:4864:20::c33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AE75C4B;
-        Wed, 23 Feb 2022 09:15:18 -0800 (PST)
-Received: by mail-oo1-xc33.google.com with SMTP id i6-20020a4ac506000000b0031c5ac6c078so15413724ooq.6;
-        Wed, 23 Feb 2022 09:15:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=e4PkCxDqNZ/QNBws8yJs/gm4z10jVlnTI6wI3moUCvc=;
-        b=fx+O8m5n7s2A5JqHGkBhEkDiW04hRd4xBdT5703AH9H5RrUD8+z3k6+/9OKLMZbLpB
-         N/+5JTdkXTIAGqhPlxTYdBp7g/a1sArHs3O9dN1+r0igm175tljkAxA06E9Yqpr2ShjQ
-         UCnJyuCFuuJMCwg6TgvCRMhSAo3rMLlNwgBlSlBHqCket5RRptbBhWYbnsO312StXQgV
-         +td1vgpR3Gi+0MPdn9lGVCgCHA1aEAPgDWokWABMswHW3m2vIxh6Khka+IbltxOUSwCl
-         hqY2sr2nExY9D2rygiIQno/9qpem/t87LcpsaJTDlD6hTdl+5PUoIgna+7wUtGqn1Jcs
-         PNuQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=e4PkCxDqNZ/QNBws8yJs/gm4z10jVlnTI6wI3moUCvc=;
-        b=cvxyC0cxxU7Lq/9xUpKx8QrU6yziJ4eFn97lZ5su0sJfHMWhckcAm3eEU8e33myK+n
-         oq/4s8RNlc6PVGu4iv6F+Km+O3SkQOKQ4FiI+SBX5RKWyo5xvrlUF5AkAJi5ib/K2XEI
-         HHjcn2R5yqGVsFBbn1ZbcB0ge0dWUOEvWr05ZEdpPbjOsUaOfsvM3sh0Yfq91mAiE6/5
-         cJwM/lOPDzfzNgzA23kCVJAujSDoGIgjq0n4Cc/3RAQ21PETyjzb40HrcNDb7/C+4j+C
-         8MrqspNYkd7LDpM7YaZENOerxrkngPxDFwU7RtBba9LUx+ksaaq7P5GlxI7cJzX60uP1
-         ceJA==
-X-Gm-Message-State: AOAM532UcYyhlleSRD+OMPA5KXpV47ZE6fvE6qtjbnzRH0NCUFs6Wj8W
-        /Hc6PIbcJ5GBYpEhWreH9hE=
-X-Google-Smtp-Source: ABdhPJyIacNAaS70KnNLivW2KllJHtrp3Dos32bi4WqtFbNf55pQYTaG+wQSW4NjbohjRBEbXXX7kQ==
-X-Received: by 2002:a05:6870:f29a:b0:b4:4825:58ab with SMTP id u26-20020a056870f29a00b000b4482558abmr286616oap.98.1645636517643;
-        Wed, 23 Feb 2022 09:15:17 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id w18sm94303otm.45.2022.02.23.09.15.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 23 Feb 2022 09:15:17 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <a4df2b86-528f-1cad-6d35-737ea28cdc79@roeck-us.net>
-Date:   Wed, 23 Feb 2022 09:15:15 -0800
+        Wed, 23 Feb 2022 12:17:43 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A3302DFD;
+        Wed, 23 Feb 2022 09:17:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
+        :In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:
+        Sender:Reply-To:Content-ID:Content-Description;
+        bh=5q1kQq7kOHd8ZWgMJKMpOyWpguieS1gKC/28ABG7S5s=; b=ITqVZ6SBZNt7r5a0FtOu25UNTB
+        TCIQtfwU2JUD+OdJibHE4wP8yyfUFXVm/ASinwWBG8y7WRCYQ9KJl9exV+C5B/Tlk/Su0RNsoOLrt
+        hKDPBMP9o6rj+JcbMuD+7cl2JfZZWAVIqMpoJFFmL4wtayE+4iDgJ9jNKgADcfarPLnlkrdc6MlT/
+        M3CW/d9AzcBtToAZqFIMR/d5vPscLDmjeEW9uVzXosBgJFtQ7o9CPzIzcyWBKAsu8eqj69btLdSOW
+        uzflFPSc9IZX1En/80rj82wmfQz6jiq4t4IP6wntePJAb4REGYGC6EakuBs1lGOySwvMTYHUmOeHG
+        cp8qBRXg==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nMvFl-00CKDV-G6; Wed, 23 Feb 2022 17:16:38 +0000
+Message-ID: <1b6fe797-4d85-610e-7b7b-8c8295cc307d@infradead.org>
+Date:   Wed, 23 Feb 2022 09:16:30 -0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 2/2] dt-bindings: hwmon: Add sample averaging property for
- ADM1275
+ Thunderbird/91.6.1
+Subject: Re: [PATCH] Documentation/vm/page_owner.rst: fix commends
 Content-Language: en-US
-To:     Potin Lai <potin.lai@quantatw.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>
-Cc:     Patrick Williams <patrick@stwcx.xyz>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-References: <20220223163817.30583-1-potin.lai@quantatw.com>
- <20220223163817.30583-3-potin.lai@quantatw.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20220223163817.30583-3-potin.lai@quantatw.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Yixuan Cao <caoyixuan2019@email.szu.edu.cn>, corbet@lwn.net
+Cc:     akpm@linux-foundation.org, sfr@canb.auug.org.au,
+        hanshenghong2019@email.szu.edu.cn, weizhenliang@huawei.com,
+        georgi.djakov@linaro.org, skhan@linuxfoundation.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220223134104.2663-1-caoyixuan2019@email.szu.edu.cn>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20220223134104.2663-1-caoyixuan2019@email.szu.edu.cn>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/23/22 08:38, Potin Lai wrote:
-> Add binding information for "pwr-avg" and "vi-avg" properties
+Hi,
+
+On 2/23/22 05:41, Yixuan Cao wrote:
+> There are some commends that need to be fixed.
 > 
-> Signed-off-by: Potin Lai <potin.lai@quantatw.com>
+> Thanks for Shuah Khan's constructive suggestions.
+> The commends have been fixed as follows.
+> 
+> a. So, if you'd like to use it, you need
+> to add "page_owner=on" into your boot cmdline.
+> 
+> Here, "into" has been replaced with "to".
+> 
+> b. ...page owner is disabled in runtime due to no
+> enabling, boot option, runtime overhead is marginal.
+> 
+> Here, "no" has been replaced with "not".
+> 
+> Signed-off-by: Yixuan Cao <caoyixuan2019@email.szu.edu.cn>
+
+The file changes look good.
+The Subject and patch description should use "comments"
+instead of "commends".
+
+thanks.
+
+Acked-by: Randy Dunlap <rdunlap@infradead.org>
+
 > ---
->   .../devicetree/bindings/hwmon/adi,adm1275.yaml         | 10 ++++++++++
->   1 file changed, 10 insertions(+)
+>  Documentation/vm/page_owner.rst | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
 > 
-> diff --git a/Documentation/devicetree/bindings/hwmon/adi,adm1275.yaml b/Documentation/devicetree/bindings/hwmon/adi,adm1275.yaml
-> index 223393d7cafd..2525a67a880e 100644
-> --- a/Documentation/devicetree/bindings/hwmon/adi,adm1275.yaml
-> +++ b/Documentation/devicetree/bindings/hwmon/adi,adm1275.yaml
-> @@ -37,6 +37,14 @@ properties:
->       description:
->         Shunt resistor value in micro-Ohm.
->   
-> +  vi-avg:
-> +    description:
-> +      Sample averaging for current and voltage.
-> +
-> +  pwr-avg:
-> +    description:
-> +      Sample averaging for power.
-> +
+> diff --git a/Documentation/vm/page_owner.rst b/Documentation/vm/page_owner.rst
+> index 2b54e82b9fe1..aec1906976f4 100644
+> --- a/Documentation/vm/page_owner.rst
+> +++ b/Documentation/vm/page_owner.rst
+> @@ -26,9 +26,9 @@ fragmentation statistics can be obtained through gfp flag information of
+>  each page. It is already implemented and activated if page owner is
+>  enabled. Other usages are more than welcome.
+>  
+> -page owner is disabled in default. So, if you'd like to use it, you need
+> -to add "page_owner=on" into your boot cmdline. If the kernel is built
+> -with page owner and page owner is disabled in runtime due to no enabling
+> +page owner is disabled by default. So, if you'd like to use it, you need
+> +to add "page_owner=on" to your boot cmdline. If the kernel is built
+> +with page owner and page owner is disabled in runtime due to not enabling
+>  boot option, runtime overhead is marginal. If disabled in runtime, it
+>  doesn't require memory to store owner information, so there is no runtime
+>  memory overhead. And, page owner inserts just two unlikely branches into
 
-Properties need a better name, prefixed with chip vendor, and the valid range
-needs to be provided. Also, the description could be better, eg "Number of samples
-to be used to report power values". Also, the chips actually supporting power
-sampling need to be listed.
-
-Guenter
-
->   required:
->     - compatible
->     - reg
-> @@ -53,5 +61,7 @@ examples:
->               compatible = "adi,adm1272";
->               reg = <0x10>;
->               shunt-resistor-micro-ohms = <500>;
-> +            vi-avg = <128>;
-> +            pwr-avg = <128>;
->           };
->       };
-
+-- 
+~Randy

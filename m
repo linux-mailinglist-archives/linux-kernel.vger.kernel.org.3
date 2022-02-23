@@ -2,156 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAE7F4C1CCF
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 21:05:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 85A844C1CD5
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 21:08:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237509AbiBWUGD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 15:06:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37912 "EHLO
+        id S238032AbiBWUIZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 15:08:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231267AbiBWUF7 (ORCPT
+        with ESMTP id S231953AbiBWUIQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 15:05:59 -0500
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A7DC4C40A
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 12:05:27 -0800 (PST)
-Received: by mail-lj1-x22a.google.com with SMTP id t14so26299333ljh.8
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 12:05:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=+S6BFzj6o5ckty5iXSThNrfkPsdFE94/fVb8NP4+aFs=;
-        b=F/2f/aEUKxSuzDdCknAbug+t8clrlE0v7gj9NkhphhHftuFg6XGIjvpJXVx+ZHKhn9
-         jOIdz4l7lK+/F1JhXkxR/PARyehOhzu1/S93ijWQKe7fGKOKTiRs9R81aIq3OYNVOgnf
-         G4UcKLBEtMgH8cssPIzV42vV3R64/Z0YRVhdY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=+S6BFzj6o5ckty5iXSThNrfkPsdFE94/fVb8NP4+aFs=;
-        b=NiMr5psxsJB3IZ2auamJab5cLGvWYKJZGhL1hQOA92DgzjMP4OTp95cgDYH6OQkENL
-         abHN95mMUroOM6HWpaFZaEpTPJhJ7iCG9VNPzv7/774rKMvMMukDyqmMEv2oEVlAsIJ8
-         TWPwZ5hlH1hdU+fYqDGzfh+E/W7TEvu45YFiR4DI9yiCs6BTqhtF3MCBMzHoLsv0wuzr
-         L2yz5AP/if4s1p5s2r8ez+Zs13zp+CmwEARNgWH1PLX8h08x5wURQlNhEK63348m+3Pa
-         gVuOoAFQqBOMAwv/YSnkzAsVcKmPgL/7I9J/5hxSC5PO8JPG1kaZ603g0uyIagxs9naw
-         wPEg==
-X-Gm-Message-State: AOAM533I5fqwWUnq90PXZu0+1KIUNb6aPmMj5ikeNZUJThimjnQmSPvI
-        WIERHD1YJWQ75yhHn+BqGK9TeWNYcQ7VdHks1+w=
-X-Google-Smtp-Source: ABdhPJxR4BFouoxJXXZ00MdF4eswCOBS5XHb1bGGS7+SYZaF8Ibbf3QG1L1t+EyccOrgbuv/A7iqGw==
-X-Received: by 2002:a2e:9ad5:0:b0:244:c85f:d546 with SMTP id p21-20020a2e9ad5000000b00244c85fd546mr705558ljj.303.1645646724756;
-        Wed, 23 Feb 2022 12:05:24 -0800 (PST)
-Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com. [209.85.167.45])
-        by smtp.gmail.com with ESMTPSA id a17sm41472lfs.35.2022.02.23.12.05.20
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 23 Feb 2022 12:05:21 -0800 (PST)
-Received: by mail-lf1-f45.google.com with SMTP id i11so216787lfu.3
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 12:05:20 -0800 (PST)
-X-Received: by 2002:a05:6512:130b:b0:443:c2eb:399d with SMTP id
- x11-20020a056512130b00b00443c2eb399dmr822016lfu.27.1645646720244; Wed, 23 Feb
- 2022 12:05:20 -0800 (PST)
+        Wed, 23 Feb 2022 15:08:16 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E86984C79D
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 12:07:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645646868; x=1677182868;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=qq/Uj/oanOOnM1hq1nBDWXIWp/d/ZOT1rfxnh3bhqLg=;
+  b=Nlqa+Jd1RnDeFlXPMHApzH24yGb8YF10Fy+ZtgaUgGHOG2NBBR4J3+ut
+   0SA8Plw/7tti/WwC8pR4PrfRlXn/N9FinkRUsHFh6yk65r+yI98G6kxis
+   +OsgrMfeDadWvarnGyBZmWBiQ5+HR49TJp6QHR3K1YLUhsjJSa9QTEE9M
+   jq0BL9Vs4H0tcuk+KMWyKa0pDWCjNw0QvC8CL7cNBI+8OwBGGxlM2lmsr
+   0uEMQqDuDo3fMuUBC05qDdALbrh/n5zid3kXBn4JFXxBPSONb+vCK6IyZ
+   A43IEe4vCY7R1B0YBZ2qp6EqGhE5xxmhfuBTEj9MlrewvxkM59Rosj5TJ
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10267"; a="249650749"
+X-IronPort-AV: E=Sophos;i="5.88,391,1635231600"; 
+   d="scan'208";a="249650749"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2022 12:07:48 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,391,1635231600"; 
+   d="scan'208";a="639447901"
+Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 23 Feb 2022 12:07:46 -0800
+Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nMxvN-0001mZ-Rb; Wed, 23 Feb 2022 20:07:45 +0000
+Date:   Thu, 24 Feb 2022 04:07:20 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Volodymyr Mytnyk <vmytnyk@marvell.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Vadym Kochan <vkochan@marvell.com>,
+        Yevhen Orlov <yevhen.orlov@plvision.eu>,
+        Taras Chornyi <tchornyi@marvell.com>
+Subject: include/linux/compiler_types.h:322:45: error: call to
+ '__compiletime_assert_365' declared with attribute error: BUILD_BUG_ON
+ failed: sizeof(struct prestera_msg_event_fdb) != 20
+Message-ID: <202202240334.RwxcQUfp-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220216131332.1489939-1-arnd@kernel.org> <20220216131332.1489939-10-arnd@kernel.org>
- <20220221132456.GA7139@alpha.franken.de>
-In-Reply-To: <20220221132456.GA7139@alpha.franken.de>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Wed, 23 Feb 2022 12:05:04 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wjdHz6OU3M9T5zE9Fc9SNdDs52iOE+eVn-wuUT6UDpBLg@mail.gmail.com>
-Message-ID: <CAHk-=wjdHz6OU3M9T5zE9Fc9SNdDs52iOE+eVn-wuUT6UDpBLg@mail.gmail.com>
-Subject: Re: [PATCH v2 09/18] mips: use simpler access_ok()
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     Arnd Bergmann <arnd@kernel.org>, Christoph Hellwig <hch@lst.de>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        Linux API <linux-api@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Russell King - ARM Linux <linux@armlinux.org.uk>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        Brian Cain <bcain@codeaurora.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Michal Simek <monstr@monstr.eu>,
-        Nick Hu <nickhu@andestech.com>,
-        Greentime Hu <green.hu@gmail.com>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Stafford Horne <shorne@gmail.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Rich Felker <dalias@libc.org>,
-        David Miller <davem@davemloft.net>,
-        Richard Weinberger <richard@nod.at>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        alpha <linux-alpha@vger.kernel.org>,
-        "open list:SYNOPSYS ARC ARCHITECTURE" 
-        <linux-snps-arc@lists.infradead.org>, linux-csky@vger.kernel.org,
-        linux-hexagon <linux-hexagon@vger.kernel.org>,
-        linux-ia64@vger.kernel.org,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Openrisc <openrisc@lists.librecores.org>,
-        linux-parisc <linux-parisc@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        Linux-sh list <linux-sh@vger.kernel.org>,
-        linux-sparc <sparclinux@vger.kernel.org>,
-        linux-um <linux-um@lists.infradead.org>,
-        "open list:TENSILICA XTENSA PORT (xtensa)" 
-        <linux-xtensa@linux-xtensa.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 21, 2022 at 5:25 AM Thomas Bogendoerfer
-<tsbogend@alpha.franken.de> wrote:
->
-> With this patch
-[ .. snip snip ..]
-> I at least get my simple test cases fixed, but I'm not sure this is
-> correct.
+Hi Volodymyr,
 
-I think you really want to do that anyway, just to get things like
-wild kernel pointers right (ie think get_kernel_nofault() and friends
-for ftrace etc).
+FYI, the error/warning still remains.
 
-They shouldn't happen in any normal situation, but those kinds of
-unverified pointers is why we _have_ get_kernel_nofault() in the first
-place.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   5c1ee569660d4a205dced9cb4d0306b907fb7599
+commit: bb5dbf2cc64d5cfa696765944c784c0010c48ae8 net: marvell: prestera: add firmware v4.0 support
+date:   4 months ago
+config: arm-buildonly-randconfig-r002-20220223 (https://download.01.org/0day-ci/archive/20220224/202202240334.RwxcQUfp-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=bb5dbf2cc64d5cfa696765944c784c0010c48ae8
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout bb5dbf2cc64d5cfa696765944c784c0010c48ae8
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm SHELL=/bin/bash drivers/net/ethernet/marvell/prestera/
 
-On x86-64, the roughly equivalent situation is that addresses that
-aren't in canonical format do not take a #PF (page fault), they take a
-#GP (general protection) fault.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-So I think you want to do that fixup_exception() for any possible addresses.
+All errors (new ones prefixed by >>):
 
-> Is there a reason to not also #define TASK_SIZE_MAX   __UA_LIMIT like
-> for the 32bit case ?
+   drivers/net/ethernet/marvell/prestera/prestera_hw.c:284:1: warning: alignment 1 of 'union prestera_msg_port_param' is less than 4 [-Wpacked-not-aligned]
+     284 | } __packed;
+         | ^
+   In file included from <command-line>:
+   In function 'prestera_hw_build_tests',
+       inlined from 'prestera_hw_switch_init' at drivers/net/ethernet/marvell/prestera/prestera_hw.c:788:2:
+>> include/linux/compiler_types.h:322:45: error: call to '__compiletime_assert_365' declared with attribute error: BUILD_BUG_ON failed: sizeof(struct prestera_msg_event_fdb) != 20
+     322 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |                                             ^
+   include/linux/compiler_types.h:303:25: note: in definition of macro '__compiletime_assert'
+     303 |                         prefix ## suffix();                             \
+         |                         ^~~~~~
+   include/linux/compiler_types.h:322:9: note: in expansion of macro '_compiletime_assert'
+     322 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |         ^~~~~~~~~~~~~~~~~~~
+   include/linux/build_bug.h:39:37: note: in expansion of macro 'compiletime_assert'
+      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+         |                                     ^~~~~~~~~~~~~~~~~~
+   include/linux/build_bug.h:50:9: note: in expansion of macro 'BUILD_BUG_ON_MSG'
+      50 |         BUILD_BUG_ON_MSG(condition, "BUILD_BUG_ON failed: " #condition)
+         |         ^~~~~~~~~~~~~~~~
+   drivers/net/ethernet/marvell/prestera/prestera_hw.c:531:9: note: in expansion of macro 'BUILD_BUG_ON'
+     531 |         BUILD_BUG_ON(sizeof(struct prestera_msg_event_fdb) != 20);
+         |         ^~~~~~~~~~~~
 
-I would suggest against using a non-constant TASK_SIZE_MAX. Being
-constant is literally one reason why it exists, when TASK_SIZE itself
-has often been about other things (ie "32-bit process").
 
-Having to load variables for things like get_user() is annoying, if
-you could do it with a simple constant instead (where that "simple"
-part is to avoid having to load big values from a constant pool -
-often constants like "high bit set" can be loaded and compared against
-more efficiently).
+vim +/__compiletime_assert_365 +322 include/linux/compiler_types.h
 
-               Linus
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  308  
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  309  #define _compiletime_assert(condition, msg, prefix, suffix) \
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  310  	__compiletime_assert(condition, msg, prefix, suffix)
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  311  
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  312  /**
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  313   * compiletime_assert - break build and emit msg if condition is false
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  314   * @condition: a compile-time constant condition to check
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  315   * @msg:       a message to emit if condition is false
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  316   *
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  317   * In tradition of POSIX assert, this macro will break the build if the
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  318   * supplied condition is *false*, emitting the supplied error message if the
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  319   * compiler has support to do so.
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  320   */
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  321  #define compiletime_assert(condition, msg) \
+eb5c2d4b45e3d2 Will Deacon 2020-07-21 @322  	_compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  323  
+
+:::::: The code at line 322 was first introduced by commit
+:::::: eb5c2d4b45e3d2d5d052ea6b8f1463976b1020d5 compiler.h: Move compiletime_assert() macros into compiler_types.h
+
+:::::: TO: Will Deacon <will@kernel.org>
+:::::: CC: Will Deacon <will@kernel.org>
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

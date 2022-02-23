@@ -2,301 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 005864C1571
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 15:32:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA2CD4C1573
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 15:33:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238631AbiBWOdJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 09:33:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49822 "EHLO
+        id S239659AbiBWOd5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 09:33:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232769AbiBWOdG (ORCPT
+        with ESMTP id S229964AbiBWOdz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 09:33:06 -0500
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 532E666AF3;
-        Wed, 23 Feb 2022 06:32:38 -0800 (PST)
-Received: by mail-ed1-x531.google.com with SMTP id w3so44527795edu.8;
-        Wed, 23 Feb 2022 06:32:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=5yDwvnVvF3Ri8hbsgcn8ZzyDXWcvBThDKwOkxiO5izg=;
-        b=Bd0wbX1sJXYNwqD8ZBR8S8GKG+Porv7ZpszLDmq8iCZA/y5nNzAJ1ZQ9Gvybu7b/OX
-         XkNfVjmc3DxZx5Xl2+W/OIgVlMxL8i1XSovUlEsBLKPc+MHOXQdwqA2AjHuZS2hdw1wz
-         VSx9m/K3lru41coqVY61rXlQv2H+GBnNaHOg8nWTOKrZcrrI5fB6A+AYHk0Q/szUfWDU
-         s3oZj8H0/XWgNF1msPg7Zp42Fca1KkvUR3M6eoIxui+s2gtO5wVS9zLJu+7LJfA+FdbF
-         LHKHRw7ooJRWN/Bef6N0NaIgZODDG6FLvX3ODHQmz0uQLUE0xqe6d73XCip8Bw4u+ANm
-         /93g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=5yDwvnVvF3Ri8hbsgcn8ZzyDXWcvBThDKwOkxiO5izg=;
-        b=SSDnyaJhKVQUHZpMQEnEeDy0kF7OLMeSQmEQaWbzPLOfUhFkvr2ELLgk9T4EkhtvIu
-         Ltyx9ltulktdxMPEWWYBpV20be8+n5Vs8G0ts2O7P5++03y9Rj2npsr1e0xjzCa0wp+K
-         9O8RpV4KOCMNo76lCxqEHwA8ujGhQMUrlTr4VbqSyGvR23x2H72b6MUP7QXid69IwmY2
-         g5c3XY5quZfphvKrEKm8Ii/Fu8CG96pa7SMFmWubSAyoPA1tos6UL24rH35HSqbwtgWN
-         m3Vj/jkefHqEa2gV8NOAEnDRBt0RpmrsD1HSw7bg7JANoRQw5/Q70KorTF3g1wRtX4bR
-         CH0Q==
-X-Gm-Message-State: AOAM530ybcvbHkkxsrcAosyz1CLEzUR051z+lXW3WNcqjqoavdIs+Lyw
-        M5dykHZ/D4TKyd+eqsMlK3c=
-X-Google-Smtp-Source: ABdhPJx/J6zOmuSf1yT4tLIo4Ajv+BCdAEd5UeYqt4gszujEqXuWff7qUTFTRkC4hc/d8qlPjRwUXw==
-X-Received: by 2002:aa7:d2d5:0:b0:410:8765:d2de with SMTP id k21-20020aa7d2d5000000b004108765d2demr12797244edr.148.1645626756630;
-        Wed, 23 Feb 2022 06:32:36 -0800 (PST)
-Received: from smtpclient.apple (dhcp-077-250-038-153.chello.nl. [77.250.38.153])
-        by smtp.gmail.com with ESMTPSA id c22sm7661637ejp.146.2022.02.23.06.32.35
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 23 Feb 2022 06:32:36 -0800 (PST)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 15.0 \(3693.60.0.1.1\))
-Subject: Re: [RFC PATCH 01/13] list: introduce speculative safe
- list_for_each_entry()
-From:   Jakob <jakobkoschel@gmail.com>
-In-Reply-To: <CAG48ez0m6V12dPVwZMQ9gi0ig7ELf_+KbLArE02SD5cYrZvH-w@mail.gmail.com>
-Date:   Wed, 23 Feb 2022 15:32:34 +0100
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Arnd Bergman <arnd@arndb.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
-        Cristiano Giuffrida <c.giuffrida@vu.nl>,
-        "Bos, H.J." <h.j.bos@vu.nl>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <B50C7C66-0D24-48E7-9F04-F5BAD277DF7A@gmail.com>
-References: <20220217184829.1991035-1-jakobkoschel@gmail.com>
- <20220217184829.1991035-2-jakobkoschel@gmail.com>
- <CAG48ez0m6V12dPVwZMQ9gi0ig7ELf_+KbLArE02SD5cYrZvH-w@mail.gmail.com>
-To:     Jann Horn <jannh@google.com>
-X-Mailer: Apple Mail (2.3693.60.0.1.1)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 23 Feb 2022 09:33:55 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B72FB23A7;
+        Wed, 23 Feb 2022 06:33:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=DSsaUYTnIRiB2PzfiQOl8KPGCRZn4AtjbzhZ9aqhhS4=; b=IQXhNyh1bKgWXPOCghk7P8JhIZ
+        Mmd6lvW0zsac2ttbddPyjChwCJi0fwY11aiclzI7Hw4eOXo941yYLwzZ4l0DN2fScjO5sXGiFzUN3
+        iU3RobPREFLg/76kC/9ItXvzISIgAyscJP3J4kTWyBY33FNOuXdUI0J0ZWz4nI43BMNnJ0hq1/FMi
+        /8l+lnWfO+OiYGNlKu1HF0CnrDgh2FOMzMcamPw8jR4k0I25IYdRd1RVpGBHoCh1YA64BuuwwxOrB
+        wQi70Q48ot93pNp5hAkHX5SSswz6mpay0u2xuCbhLiDX5xT252IvieyYolC40c5bVgwikxh0cxx3s
+        62tuPSSg==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nMshj-003pS2-ML; Wed, 23 Feb 2022 14:33:19 +0000
+Date:   Wed, 23 Feb 2022 14:33:19 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Vlastimil Babka <vbabka@suse.cz>
+Cc:     "stable@vger.kernel.org" <stable@vger.kernel.org>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Christoph Hellwig <hch@infradead.org>, Jan Kara <jack@suse.cz>,
+        Takashi Iwai <tiwai@suse.de>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>, patches@lists.linux.dev,
+        LKML <linux-kernel@vger.kernel.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Subject: Re: read() data corruption with CONFIG_READ_ONLY_THP_FOR_FS=y
+Message-ID: <YhZFr+kXIJFgiMaf@casper.infradead.org>
+References: <df3b5d1c-a36b-2c73-3e27-99e74983de3a@suse.cz>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <df3b5d1c-a36b-2c73-3e27-99e74983de3a@suse.cz>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Feb 23, 2022 at 02:54:43PM +0100, Vlastimil Babka wrote:
+> we have found a bug involving CONFIG_READ_ONLY_THP_FOR_FS=y, introduced in
+> 5.12 by cbd59c48ae2b ("mm/filemap: use head pages in
+> generic_file_buffered_read")
+> and apparently fixed in 5.17-rc1 by 6b24ca4a1a8d ("mm: Use multi-index
+> entries in the page cache")
+> The latter commit is part of folio rework so likely not stable material, so
+> it would be nice to have a small fix for e.g. 5.15 LTS. Preferably from
+> someone who understands xarray :)
 
+[...]
 
-> On 18. Feb 2022, at 17:29, Jann Horn <jannh@google.com> wrote:
->=20
-> On Thu, Feb 17, 2022 at 7:48 PM Jakob Koschel <jakobkoschel@gmail.com> =
-wrote:
->> list_for_each_entry() selects either the correct value (pos) or a =
-safe
->> value for the additional mispredicted iteration (NULL) for the list
->> iterator.
->> list_for_each_entry() calls select_nospec(), which performs
->> a branch-less select.
->>=20
->> On x86, this select is performed via a cmov. Otherwise, it's =
-performed
->> via various shift/mask/etc. operations.
->>=20
->> Kasper Acknowledgements: Jakob Koschel, Brian Johannesmeyer, Kaveh
->> Razavi, Herbert Bos, Cristiano Giuffrida from the VUSec group at VU
->> Amsterdam.
->>=20
->> Co-developed-by: Brian Johannesmeyer <bjohannesmeyer@gmail.com>
->> Signed-off-by: Brian Johannesmeyer <bjohannesmeyer@gmail.com>
->> Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
->=20
-> Yeah, I think this is the best way to do this without deeply intrusive
-> changes to how lists are represented in memory.
->=20
-> Some notes on the specific implementation:
->=20
->> arch/x86/include/asm/barrier.h | 12 ++++++++++++
->> include/linux/list.h           |  3 ++-
->> include/linux/nospec.h         | 16 ++++++++++++++++
->> 3 files changed, 30 insertions(+), 1 deletion(-)
->>=20
->> diff --git a/arch/x86/include/asm/barrier.h =
-b/arch/x86/include/asm/barrier.h
->> index 35389b2af88e..722797ad74e2 100644
->> --- a/arch/x86/include/asm/barrier.h
->> +++ b/arch/x86/include/asm/barrier.h
->> @@ -48,6 +48,18 @@ static inline unsigned long =
-array_index_mask_nospec(unsigned long index,
->> /* Override the default implementation from linux/nospec.h. */
->> #define array_index_mask_nospec array_index_mask_nospec
->>=20
->> +/* Override the default implementation from linux/nospec.h. */
->> +#define select_nospec(cond, exptrue, expfalse)                       =
-  \
->> +({                                                                   =
-  \
->> +       typeof(exptrue) _out =3D (exptrue);                           =
-    \
->> +                                                                     =
-  \
->> +       asm volatile("test %1, %1\n\t"                                =
-  \
->=20
-> This shouldn't need "volatile", because it is only necessary if _out
-> is actually used. Using "volatile" here could prevent optimizing out
-> useless code. OPTIMIZER_HIDE_VAR() also doesn't use "volatile".
->=20
->> +           "cmove %2, %0"                                            =
-  \
->> +           : "+r" (_out)                                             =
-  \
->> +           : "r" (cond), "r" (expfalse));                            =
-  \
->> +       _out;                                                         =
-  \
->> +})
->=20
-> I guess the idea is probably to also add code like this for other
-> important architectures, in particular arm64?
+> I've hacked some printk on top 5.16 (attached debug.patch)
+> which gives this output:
+> 
+> i=0 page=ffffea0004340000 page_offset=0 uoff=0 bytes=2097152
+> i=1 page=ffffea0004340000 page_offset=0 uoff=0 bytes=2097152
+> i=2 page=ffffea0004340000 page_offset=0 uoff=0 bytes=0
+> i=3 page=ffffea0004340000 page_offset=0 uoff=0 bytes=0
+> i=4 page=ffffea0004340000 page_offset=0 uoff=0 bytes=0
+> i=5 page=ffffea0004340000 page_offset=0 uoff=0 bytes=0
+> i=6 page=ffffea0004340000 page_offset=0 uoff=0 bytes=0
+> i=7 page=ffffea0004340000 page_offset=0 uoff=0 bytes=0
+> i=8 page=ffffea0004470000 page_offset=2097152 uoff=0 bytes=0
+> i=9 page=ffffea0004470000 page_offset=2097152 uoff=0 bytes=0
+> i=10 page=ffffea0004470000 page_offset=2097152 uoff=0 bytes=0
+> i=11 page=ffffea0004470000 page_offset=2097152 uoff=0 bytes=0
+> i=12 page=ffffea0004470000 page_offset=2097152 uoff=0 bytes=0
+> i=13 page=ffffea0004470000 page_offset=2097152 uoff=0 bytes=0
+> i=14 page=ffffea0004470000 page_offset=2097152 uoff=0 bytes=0
+> 
+> It seems filemap_get_read_batch() should be returning pages ffffea0004340000
+> and ffffea0004470000 consecutively in the pvec, but returns the first one 8
+> times, so it's read twice and then the rest is just skipped over as it's
+> beyond the requested read size.
+> 
+> I suspect these lines:
+>   xas.xa_index = head->index + thp_nr_pages(head) - 1;
+>   xas.xa_offset = (xas.xa_index >> xas.xa_shift) & XA_CHUNK_MASK;
+> 
+> commit 6b24ca4a1a8d changes those to xas_advance() (introduced one patch
+> earlier), so some self-contained fix should be possible for prior kernels?
+> But I don't understand xarray well enough.
 
-yes indeed, with a fallback of using the shifting/masking mechanism for
-other archs.
+I figured it out!
 
->=20
->=20
-> It might also be a good idea to rename the arch-overridable macro to
-> something like "arch_select_nospec" and then have a wrapper macro in
-> include/linux/nospec.h that takes care of type safety issues.
->=20
-> The current definition of the macro doesn't warn if you pass in
-> incompatible pointer types, like this:
->=20
-> int *bogus_pointer_mix(int cond, int *a, long *b) {
->  return select_nospec(cond, a, b);
-> }
->=20
-> and if you pass in integers of different sizes, it may silently
-> truncate to the size of the smaller one - this C code:
->=20
-> long wrong_int_conversion(int cond, int a, long b) {
->  return select_nospec(cond, a, b);
-> }
->=20
-> generates this assembly:
->=20
-> wrong_int_conversion:
->  test %edi, %edi
->  cmove %rdx, %esi
->  movslq %esi, %rax
->  ret
->=20
-> It might be a good idea to add something like a
-> static_assert(__same_type(...), ...) to protect against that.
+In v5.15 (indeed, everything before commit 6b24ca4a1a8d), an order-9
+page is stored in 512 consecutive slots.  The XArray stores 64 entries
+per level.  So what happens is we start looking at index 0 and we walk
+down to the bottom of the tree and find the THP at index 0.
 
-These are good points, thank you for your input. Will be good to =
-incorporate.
->=20
->> /* Prevent speculative execution past this barrier. */
->> #define barrier_nospec() alternative("", "lfence", =
-X86_FEATURE_LFENCE_RDTSC)
->>=20
->> diff --git a/include/linux/list.h b/include/linux/list.h
->> index dd6c2041d09c..1a1b39fdd122 100644
->> --- a/include/linux/list.h
->> +++ b/include/linux/list.h
->> @@ -636,7 +636,8 @@ static inline void list_splice_tail_init(struct =
-list_head *list,
->>  */
->> #define list_for_each_entry(pos, head, member)                        =
- \
->>        for (pos =3D list_first_entry(head, typeof(*pos), member);     =
-   \
->> -            !list_entry_is_head(pos, head, member);                  =
-  \
->> +           ({ bool _cond =3D !list_entry_is_head(pos, head, member); =
-    \
->> +            pos =3D select_nospec(_cond, pos, NULL); _cond; }); \
->>             pos =3D list_next_entry(pos, member))
->=20
-> I wonder if it'd look nicer to write it roughly like this:
->=20
-> #define NOSPEC_TYPE_CHECK(_guarded_var, _cond)                  \
-> ({                                                              \
->  bool __cond =3D (_cond);                                        \
->  typeof(_guarded_var) *__guarded_var =3D &(_guarded_var);        \
->  *__guarded_var =3D select_nospec(__cond, *__guarded_var, NULL); \
->  __cond;                                                       \
-> })
->=20
-> #define list_for_each_entry(pos, head, member)                         =
-       \
->        for (pos =3D list_first_entry(head, typeof(*pos), member);      =
-        \
->             NOSPEC_TYPE_CHECK(head, !list_entry_is_head(pos, head, =
-member)); \
->             pos =3D list_next_entry(pos, member))
->=20
-> I think having a NOSPEC_TYPE_CHECK() like this makes it semantically
-> clearer, and easier to add in other places? But I don't know if the
-> others agree...
+                xas.xa_index = head->index + thp_nr_pages(head) - 1;
+                xas.xa_offset = (xas.xa_index >> xas.xa_shift) & XA_CHUNK_MASK;
 
-That sounds like a good idea. I wonder if the pointer and dereference in=20=
+So we've advanced xas.xa_index to 511, but advanced xas.xa_offset to 63.
+Then we call xas_next() which calls __xas_next(), which moves us along to
+array index 64 while we think we're looking at index 512.
 
-NOSPEC_TYPE_CHECK() simply get optimized away. Or why you can't simply
-use _guarded_var directly instead of a pointer to it.
+We could make __xas_next() more resistant to this kind of abuse (by
+extracting the correct offset in the parent node from xa_index), but
+as you say, we're looking for a small fix for LTS.  I suggest this
+will probably do the right thing:
 
->=20
->> /**
->> diff --git a/include/linux/nospec.h b/include/linux/nospec.h
->> index c1e79f72cd89..ca8ed81e4f9e 100644
->> --- a/include/linux/nospec.h
->> +++ b/include/linux/nospec.h
->> @@ -67,4 +67,20 @@ int arch_prctl_spec_ctrl_set(struct task_struct =
-*task, unsigned long which,
->> /* Speculation control for seccomp enforced mitigation */
->> void arch_seccomp_spec_mitigate(struct task_struct *task);
->>=20
->> +/**
->> + * select_nospec - select a value without using a branch; equivalent =
-to:
->> + * cond ? exptrue : expfalse;
->> + */
->> +#ifndef select_nospec
->> +#define select_nospec(cond, exptrue, expfalse)                       =
-  \
->> +({                                                                   =
-  \
->> +       unsigned long _t =3D (unsigned long) (exptrue);               =
-    \
->> +       unsigned long _f =3D (unsigned long) (expfalse);              =
-    \
->> +       unsigned long _c =3D (unsigned long) (cond);                  =
-    \
->> +       OPTIMIZER_HIDE_VAR(_c);                                       =
-  \
->> +       unsigned long _m =3D -((_c | -_c) >> (BITS_PER_LONG - 1));    =
-    \
->> +       (typeof(exptrue)) ((_t & _m) | (_f & ~_m));                   =
-  \
->> +})
->> +#endif
->=20
-> (As a sidenote, it might be easier to implement a conditional zeroing
-> primitive than a generic conditional select primitive if that's all
-> you need, something like:
->=20
-> #define cond_nullptr_nospec(_cond, _exp)          \
-> ({                                             \
->  unsigned long __exp =3D (unsigned long)(_exp); \
->  unsigned long _mask =3D 0UL - !(_cond);       \
->  OPTIMIZER_HIDE_VAR(_mask);                   \
->  (typeof(_exp)) (_mask & __exp);              \
-> })
->=20
-> )
++++ b/mm/filemap.c
+@@ -2354,8 +2354,7 @@ static void filemap_get_read_batch(struct address_space *mapping,
+                        break;
+                if (PageReadahead(head))
+                        break;
+-               xas.xa_index = head->index + thp_nr_pages(head) - 1;
+-               xas.xa_offset = (xas.xa_index >> xas.xa_shift) & XA_CHUNK_MASK;
++               xas_set(&xas, head->index + thp_nr_pages(head) - 1);
+                continue;
+ put_page:
+                put_page(head);
 
-Ah yes, if NULL is actually the value to choose, this might be good =
-enough.
+but I'll start trying the reproducer now.
 

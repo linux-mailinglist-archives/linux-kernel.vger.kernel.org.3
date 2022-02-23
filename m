@@ -2,248 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C7C94C1A5A
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 18:59:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 03E0A4C1A63
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 19:00:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243628AbiBWR7Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 12:59:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54320 "EHLO
+        id S243655AbiBWR7w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 12:59:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233244AbiBWR7Y (ORCPT
+        with ESMTP id S243654AbiBWR7u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 12:59:24 -0500
-X-Greylist: delayed 452 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 23 Feb 2022 09:58:55 PST
-Received: from mail.hallyn.com (mail.hallyn.com [178.63.66.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC6323CA6A;
-        Wed, 23 Feb 2022 09:58:55 -0800 (PST)
-Received: by mail.hallyn.com (Postfix, from userid 1001)
-        id 65D2BA1C; Wed, 23 Feb 2022 11:58:54 -0600 (CST)
-Date:   Wed, 23 Feb 2022 11:58:54 -0600
-From:   "Serge E. Hallyn" <serge@hallyn.com>
-To:     Stefan Berger <stefanb@linux.ibm.com>
-Cc:     linux-integrity@vger.kernel.org, zohar@linux.ibm.com,
-        serge@hallyn.com, christian.brauner@ubuntu.com,
-        containers@lists.linux.dev, dmitry.kasatkin@gmail.com,
-        ebiederm@xmission.com, krzysztof.struczynski@huawei.com,
-        roberto.sassu@huawei.com, mpeters@redhat.com, lhinds@redhat.com,
-        lsturman@redhat.com, puiterwi@redhat.com, jejb@linux.ibm.com,
-        jamjoom@us.ibm.com, linux-kernel@vger.kernel.org,
-        paul@paul-moore.com, rgb@redhat.com,
-        linux-security-module@vger.kernel.org, jmorris@namei.org
-Subject: Re: [PATCH v10 27/27] ima: Enable IMA namespaces
-Message-ID: <20220223175854.GB10272@mail.hallyn.com>
-References: <20220201203735.164593-1-stefanb@linux.ibm.com>
- <20220201203735.164593-28-stefanb@linux.ibm.com>
+        Wed, 23 Feb 2022 12:59:50 -0500
+Received: from hostingweb31-40.netsons.net (hostingweb31-40.netsons.net [89.40.174.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 791EF3DDDC;
+        Wed, 23 Feb 2022 09:59:19 -0800 (PST)
+Received: from [77.244.183.192] (port=62116 helo=melee.fritz.box)
+        by hostingweb31.netsons.net with esmtpa (Exim 4.94.2)
+        (envelope-from <luca@lucaceresoli.net>)
+        id 1nMvv3-00039p-3o; Wed, 23 Feb 2022 18:59:17 +0100
+From:   Luca Ceresoli <luca@lucaceresoli.net>
+To:     linux-kernel@vger.kernel.org
+Cc:     Luca Ceresoli <luca@lucaceresoli.net>,
+        Lee Jones <lee.jones@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>, devicetree@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-watchdog@vger.kernel.org
+Subject: [PATCH v6 0/8] Add MAX77714 PMIC minimal driver (RTC and watchdog only)
+Date:   Wed, 23 Feb 2022 18:59:00 +0100
+Message-Id: <20220223175908.191618-1-luca@lucaceresoli.net>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220201203735.164593-28-stefanb@linux.ibm.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - hostingweb31.netsons.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - lucaceresoli.net
+X-Get-Message-Sender-Via: hostingweb31.netsons.net: authenticated_id: luca+lucaceresoli.net/only user confirmed/virtual account not confirmed
+X-Authenticated-Sender: hostingweb31.netsons.net: luca@lucaceresoli.net
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 01, 2022 at 03:37:35PM -0500, Stefan Berger wrote:
-> Introduce the IMA_NS in Kconfig for IMA namespace enablement.
-> 
-> Enable the lazy initialization of an IMA namespace when a user mounts
-> SecurityFS and writes '1' into IMA's 'active' securityfs file. A
-> user_namespace will now get a pointer to an ima_namespace and therefore
-> implement get_current_ns() for the namespacing case that returns this
-> pointer. Use get_current_ns() in those places that require access to the
-> current IMA namespace. In some places, primarily those related to
-> IMA-appraisal and changes to file attributes, keep the pointer to
-> init_ima_ns, since there flags related to file measurements may be
-> affected, which are not supported in IMA namespaces, yet.
-> 
-> Before using the ima_namespace pointer test it with ns_is_active()
-> to check whether it is NULL and whether the ima_namespace is active.
-> If it's not active, it cannot be used, yet. Therefore, return early
-> from those functions that may now get either get a NULL pointer from
-> this call or where ns->active is still 0. The init_ima_ns is always
-> set to be active, thus passing the check.
-> 
-> Implement ima_ns_from_file() for SecurityFS-related files where we can
-> now get the IMA namespace via the user namespace pointer associated
-> with the superblock of the SecurityFS filesystem instance.
-> 
-> Return -EACCES to IMA's securityfs files, except for the 'active' file,
-> until the IMA namespace has been set to active.
-> 
-> Switch access to userns->ima_ns to use acquire/release semantics to ensure
-> that a newly created ima_namespace structure is fully visible upon access.
-> 
-> Only emit the kernel log message 'policy update completed' for the
-> init_ima_ns.
-> 
-> When parsing an IMA policy rule use the user namespace of the opener
-> to translate uid and gid values to kernel values rather than the user
-> namespace of the writer.
-> 
-> Gate access to ima_appraise variable to init_ima_ns in ima_load_data()
-> and ima_write_policy().
-> 
-> Gate access to temp_ima_appraise variable to init_ima_ns in
-> ima_delete_rules().
-> 
-> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
-> 
-> ---
-> v10:
->  - dropped ima_ns_to_user_ns(); using current_user_ns() instead
->  - Pass user_namespace of file opener into ima_parse_rule and propagate
->    this parameter back all the way to the initial caller in the chain
->  - Gate access to ima_appraise to init_ima_ns in ima_write_policy()
-> 
-> v9:
->  - ima_post_key_create_or_update: Only handle key if in init_ima_ns
->  - Removed ns == NULL checks where user_namespace is now passed
->  - Defer setting of user_ns->ima_ns until end of ima_fs_ns_init();
->    required new ima_free_imans() and new user_ns_set_ima_ns()
->  - Only emit log message 'policy update completed' for init_ima_ns
->  - Introduce get_current_ns() only in this patch
->  - Check for ns == &init_ima_ns in ima_load_data()
-> ---
->  include/linux/ima.h                          |  1 +
->  init/Kconfig                                 | 13 +++
->  kernel/user_namespace.c                      |  2 +
->  security/integrity/ima/ima.h                 | 55 +++++++++++--
->  security/integrity/ima/ima_appraise.c        |  3 +
->  security/integrity/ima/ima_asymmetric_keys.c |  6 +-
->  security/integrity/ima/ima_fs.c              | 87 ++++++++++++++++----
->  security/integrity/ima/ima_init.c            |  2 +-
->  security/integrity/ima/ima_init_ima_ns.c     |  2 +
->  security/integrity/ima/ima_main.c            | 34 +++++---
->  security/integrity/ima/ima_ns.c              | 15 +++-
->  security/integrity/ima/ima_policy.c          | 43 ++++++----
->  12 files changed, 202 insertions(+), 61 deletions(-)
-> 
-> diff --git a/include/linux/ima.h b/include/linux/ima.h
-> index c584527c0f47..a8cb2c269f61 100644
-> --- a/include/linux/ima.h
-> +++ b/include/linux/ima.h
-> @@ -11,6 +11,7 @@
->  #include <linux/fs.h>
->  #include <linux/security.h>
->  #include <linux/kexec.h>
-> +#include <linux/user_namespace.h>
->  #include <crypto/hash_info.h>
->  struct linux_binprm;
->  
-> diff --git a/init/Kconfig b/init/Kconfig
-> index 4b7bac10c72d..e27155e0ddba 100644
-> --- a/init/Kconfig
-> +++ b/init/Kconfig
-> @@ -1247,6 +1247,19 @@ config NET_NS
->  	  Allow user space to create what appear to be multiple instances
->  	  of the network stack.
->  
-> +config IMA_NS
-> +	bool "IMA namespace"
-> +	depends on USER_NS
-> +	depends on IMA
-> +	default n
-> +	help
-> +	  Allow the creation of an IMA namespace for each user namespace.
-> +	  Namespaced IMA enables having IMA features work separately
-> +	  in each IMA namespace.
-> +	  Currently, only the audit status flags are stored in the namespace,
-> +	  which allows the same file to be audited each time it is accessed
-> +	  in a new namespace.
-> +
->  endif # NAMESPACES
->  
->  config CHECKPOINT_RESTORE
-> diff --git a/kernel/user_namespace.c b/kernel/user_namespace.c
-> index 6b2e3ca7ee99..653f8fa83b69 100644
-> --- a/kernel/user_namespace.c
-> +++ b/kernel/user_namespace.c
-> @@ -20,6 +20,7 @@
->  #include <linux/fs_struct.h>
->  #include <linux/bsearch.h>
->  #include <linux/sort.h>
-> +#include <linux/ima.h>
->  
->  static struct kmem_cache *user_ns_cachep __read_mostly;
->  static DEFINE_MUTEX(userns_state_mutex);
-> @@ -196,6 +197,7 @@ static void free_user_ns(struct work_struct *work)
->  			kfree(ns->projid_map.forward);
->  			kfree(ns->projid_map.reverse);
->  		}
-> +		free_ima_ns(ns);
->  		retire_userns_sysctls(ns);
->  		key_free_user_ns(ns);
->  		ns_free_inum(&ns->ns);
-> diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
-> index 05e2de7697da..73df1d8a2ece 100644
-> --- a/security/integrity/ima/ima.h
-> +++ b/security/integrity/ima/ima.h
-> @@ -337,10 +337,10 @@ int ima_match_policy(struct ima_namespace *ns,
->  		     int mask, int flags, int *pcr,
->  		     struct ima_template_desc **template_desc,
->  		     const char *func_data, unsigned int *allowed_algos);
-> -void ima_init_policy(struct ima_namespace *ns);
-> +void ima_init_policy(struct user_namespace *user_ns);
->  void ima_update_policy(struct ima_namespace *ns);
->  void ima_update_policy_flags(struct ima_namespace *ns);
-> -ssize_t ima_parse_add_rule(struct ima_namespace *ns, char *rule);
-> +ssize_t ima_parse_add_rule(struct user_namespace *user_ns, char *rule);
->  void ima_delete_rules(struct ima_namespace *ns);
->  int ima_check_policy(struct ima_namespace *ns);
->  void ima_free_policy_rules(struct ima_namespace *ns);
-> @@ -538,32 +538,70 @@ struct user_namespace *ima_user_ns_from_file(const struct file *filp)
->  	return file_inode(filp)->i_sb->s_user_ns;
->  }
->  
-> +#ifdef CONFIG_IMA_NS
-> +
->  static inline struct ima_namespace
->  *ima_ns_from_user_ns(struct user_namespace *user_ns)
->  {
-> -	if (user_ns == &init_user_ns)
-> -		return &init_ima_ns;
-> -	return NULL;
-> +	/* Pairs with smp_store_releases() in user_ns_set_ima_ns(). */
-> +	return smp_load_acquire(&user_ns->ima_ns);
->  }
->  
-> -#ifdef CONFIG_IMA_NS
-> +static inline void user_ns_set_ima_ns(struct user_namespace *user_ns,
-> +				      struct ima_namespace *ns)
-> +{
-> +	/* Pairs with smp_load_acquire() in ima_ns_from_user_ns() */
-> +	smp_store_release(&user_ns->ima_ns, ns);
-> +}
-> +
-> +static inline struct ima_namespace *get_current_ns(void)
-> +{
-> +	return ima_ns_from_user_ns(current_user_ns());
-> +}
->  
->  struct ima_namespace *create_ima_ns(void);
->  
-> +void ima_free_ima_ns(struct ima_namespace *ns);
-> +
->  struct ns_status *ima_get_ns_status(struct ima_namespace *ns,
->  				    struct inode *inode,
->  				    struct integrity_iint_cache *iint);
->  
->  void ima_free_ns_status_tree(struct ima_namespace *ns);
->  
-> +static inline struct ima_namespace *ima_ns_from_file(const struct file *filp)
-> +{
+Hi,
 
-Why is it ok here to dereference userns->ima_ns without
-going through ima_ns_from_user_ns() to do the smp_load_acquire()?
+this series adds minimal drivers for the Maxim Semiconductor MAX77714
+(https://www.maximintegrated.com/en/products/power/power-management-ics/MAX77714.html).
+Only RTC and watchdog are implemented by these patches.
 
-> +	return ima_user_ns_from_file(filp)->ima_ns;
-> +}
-> +
->  #else
+This is almost a bare resend of v5. Changes are minimal, trivial and only
+in comments (see list below).
 
--serge
+All implemented functionality is tested and working: RTC read/write,
+watchdog start/stop/ping/set_timeout.
+
+Patches 1-3 are trivial cleanups to the max77686 drivers.
+
+Patches 4-8 add dt bindings, mfd driver, watchdog driver and rtc driver.
+
+Changes in v6:
+ - patch 6: removed, now in mainline
+ - patch 5: describe as "Core driver", not "MFD driver" in comment
+   (Lee Jones)
+ - update copyright years
+ - add review tags
+
+Changes in v5:
+ - patch 7: fix (and simplify) watchdog_info code
+ - patch 8: remove amibguity in comment
+
+Changes in v4:
+ - do not add a new wdog driver for MAX77714, extend the MAX77620 wdog
+   driver; this means removing v3 patch 7, now replaced by patches 7+8
+ - added review tags
+
+Changes in v3:
+ - fixed all issues reported on v1 patches
+ - removed patch 1 of v2, already applied
+   ("mfd: max77686: Correct tab-based alignment of register addresses")
+
+Changes in v2:
+ - fixed all issues reported on v1 patches
+ - added patch 7 ("watchdog: Kconfig: fix help text indentation")
+ - additional minor improvements
+
+Luca
+
+Luca Ceresoli (8):
+  rtc: max77686: convert comments to kernel-doc format
+  rtc: max77686: rename day-of-month defines
+  rtc: max77686: remove unused code to read in 12-hour mode
+  dt-bindings: mfd: add Maxim MAX77714 PMIC
+  mfd: max77714: Add driver for Maxim MAX77714 PMIC
+  watchdog: max77620: add support for the max77714 variant
+  watchdog: max77620: add comment to clarify set_timeout procedure
+  rtc: max77686: add MAX77714 support
+
+ .../bindings/mfd/maxim,max77714.yaml          |  68 ++++++++
+ MAINTAINERS                                   |   7 +
+ drivers/mfd/Kconfig                           |  14 ++
+ drivers/mfd/Makefile                          |   1 +
+ drivers/mfd/max77686.c                        |   2 +-
+ drivers/mfd/max77714.c                        | 152 ++++++++++++++++++
+ drivers/rtc/Kconfig                           |   2 +-
+ drivers/rtc/rtc-max77686.c                    |  75 +++++----
+ drivers/watchdog/Kconfig                      |   2 +-
+ drivers/watchdog/max77620_wdt.c               |  85 ++++++++--
+ include/linux/mfd/max77686-private.h          |   4 +-
+ include/linux/mfd/max77714.h                  |  60 +++++++
+ 12 files changed, 421 insertions(+), 51 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/mfd/maxim,max77714.yaml
+ create mode 100644 drivers/mfd/max77714.c
+ create mode 100644 include/linux/mfd/max77714.h
+
+-- 
+2.25.1
+

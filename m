@@ -2,90 +2,219 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7B0F4C1CB2
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 20:57:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D9A74C1CB0
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 20:57:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244555AbiBWT6T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 14:58:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33456 "EHLO
+        id S244559AbiBWT6K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 14:58:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244562AbiBWT6Q (ORCPT
+        with ESMTP id S244555AbiBWT6I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 14:58:16 -0500
-Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C960C3153B
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 11:57:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645646267; x=1677182267;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=rZ3ZnZW5S6mbLFIAzboD0o9V0WHiGiUpp7BNZHLCMno=;
-  b=gaM3oHYhWJCkYnyaIy8Fu1qGJulYVt2KOOBnL5V6hpO6KPdvek+nb+YW
-   HyMhITryThCzFHAnWAxA7H4SCKiQyozuVK05ZjMNbxceFFH694aLDAMdM
-   CfYEhgtU0u4RTFmntbYNKV1ReGfnAUxZYDKwPELKjCYydk67Zp6jcWaQ9
-   sUnjVjKqj2fS56g/Lsb5dO0AnLJfSjYUKQkArctB2lmFygLxqZt2RSdU8
-   +3Xkk0PYP1QUnRifpyEOW+kZdxEEvdN7y+3aAk4xAkPcGz7QFou3kKP0d
-   eFaTdW+HVo1HV5NE/mFy7AT3S8xCY2iOTIjb9HbZNcJFSHvA2Wrjap9+a
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10267"; a="312784648"
-X-IronPort-AV: E=Sophos;i="5.88,391,1635231600"; 
-   d="scan'208";a="312784648"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2022 11:57:47 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,391,1635231600"; 
-   d="scan'208";a="573955976"
-Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 23 Feb 2022 11:57:46 -0800
-Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nMxlh-0001lu-HA; Wed, 23 Feb 2022 19:57:45 +0000
-Date:   Thu, 24 Feb 2022 03:56:58 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Daniel Palmer <daniel@0x0f.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [chenxing:msc313_mainlining 77/93] Error:
- arch/arm/boot/dts/mstar-infinity2m-ssd201-wirelesstag-ido-som2d01.dtsi:18.1-9
- Label or path pm_uart not found
-Message-ID: <202202240309.fSFamJiu-lkp@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 23 Feb 2022 14:58:08 -0500
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 682C82655C
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 11:57:40 -0800 (PST)
+Received: from linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net (linux.microsoft.com [13.77.154.182])
+        by linux.microsoft.com (Postfix) with ESMTPSA id F3E0020C30E6;
+        Wed, 23 Feb 2022 11:57:39 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com F3E0020C30E6
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1645646260;
+        bh=AubFU/DDFpEt7WMgdww7RXAhRAMd/Qzs/Nhi5iNAxDo=;
+        h=From:To:Cc:Subject:Date:From;
+        b=QzqTlkS2vkdazSn5oC4NjyQkDGwWeJ1SuS8bS8Q4kwbrwJyZ5jLFtUZifyKGwiC9x
+         fYp7p3cE3wVYucci3vCjO30HAlISCsXsYkigMKn0JKR7zRRjEajiCdjaz2vja5g/EH
+         licruoDmC8010cYN+VWOLK4haEof6NfNWNL/bjoM=
+From:   Vijay Balakrishna <vijayb@linux.microsoft.com>
+To:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
+Cc:     Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Pavel Tatashin <pasha.tatashin@soleen.com>,
+        Vijay Balakrishna <vijayb@linux.microsoft.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: [PATCH v2] arm64: Do not defer reserve_crashkernel() for platforms with no DMA memory zones
+Date:   Wed, 23 Feb 2022 11:57:33 -0800
+Message-Id: <1645646253-16072-1-git-send-email-vijayb@linux.microsoft.com>
+X-Mailer: git-send-email 1.8.3.1
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://github.com/linux-chenxing/linux.git msc313_mainlining
-head:   99a396728dcff78ca3eddcbd2085f11eeb8a01b8
-commit: 89e6d5a9a03b2a20d94fd0c2027fbe89ccb84c83 [77/93] ARM: dts: mstar: Add top level dts for ssd201-som2d01
-config: arm-defconfig (https://download.01.org/0day-ci/archive/20220224/202202240309.fSFamJiu-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/linux-chenxing/linux/commit/89e6d5a9a03b2a20d94fd0c2027fbe89ccb84c83
-        git remote add chenxing git://github.com/linux-chenxing/linux.git
-        git fetch --no-tags chenxing msc313_mainlining
-        git checkout 89e6d5a9a03b2a20d94fd0c2027fbe89ccb84c83
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm SHELL=/bin/bash
+The following patches resulted in deferring crash kernel reservation to
+mem_init(), mainly aimed at platforms with DMA memory zones (no IOMMU),
+in particular Raspberry Pi 4.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+commit 1a8e1cef7603 ("arm64: use both ZONE_DMA and ZONE_DMA32")
+commit 8424ecdde7df ("arm64: mm: Set ZONE_DMA size based on devicetree's dma-ranges")
+commit 0a30c53573b0 ("arm64: mm: Move reserve_crashkernel() into mem_init()")
+commit 2687275a5843 ("arm64: Force NO_BLOCK_MAPPINGS if crashkernel reservation is required")
 
-All errors (new ones prefixed by >>):
+Above changes introduced boot slowdown due to linear map creation for
+all the memory banks with NO_BLOCK_MAPPINGS, see discussion[1].  The proposed
+changes restore crash kernel reservation to earlier behavior thus avoids
+slow boot, particularly for platforms with IOMMU (no DMA memory zones).
 
->> Error: arch/arm/boot/dts/mstar-infinity2m-ssd201-wirelesstag-ido-som2d01.dtsi:18.1-9 Label or path pm_uart not found
-   FATAL ERROR: Syntax error parsing input tree
+Tested changes to confirm no ~150ms boot slowdown on our SoC with IOMMU
+and 8GB memory.  Also tested with ZONE_DMA and/or ZONE_DMA32 configs to confirm
+no regression to deferring scheme of crash kernel memory reservation.
+In both cases successfully collected kernel crash dump.
 
+[1] https://lore.kernel.org/all/9436d033-579b-55fa-9b00-6f4b661c2dd7@linux.microsoft.com/
+
+Signed-off-by: Vijay Balakrishna <vijayb@linux.microsoft.com>
+Cc: stable@vger.kernel.org
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Changes from v1 -> v2
+---------------------
+- replaced '!crashk_res.end' with IS_ENABLED(ZONE_DMA/DMA32) (Nicolas's comment)
+- minor change to make it uniform -- replaced #if defined(..) -> #if IS_ENABLED(..)
+- added new comment in arch/arm64/mm/init.c to ease future maintenance (Nicolas's comment)
+- test performed comment moved to commit message
+
+[v1] https://lore.kernel.org/all/1645056294-6509-1-git-send-email-vijayb@linux.microsoft.com/
+---
+ arch/arm64/mm/init.c | 36 +++++++++++++++++++++++++++++++++---
+ arch/arm64/mm/mmu.c  | 29 ++++++++++++++++++++++++++++-
+ 2 files changed, 61 insertions(+), 4 deletions(-)
+
+diff --git a/arch/arm64/mm/init.c b/arch/arm64/mm/init.c
+index db63cc885771..51869f9dfc33 100644
+--- a/arch/arm64/mm/init.c
++++ b/arch/arm64/mm/init.c
+@@ -61,8 +61,34 @@ EXPORT_SYMBOL(memstart_addr);
+  * unless restricted on specific platforms (e.g. 30-bit on Raspberry Pi 4).
+  * In such case, ZONE_DMA32 covers the rest of the 32-bit addressable memory,
+  * otherwise it is empty.
++ *
++ * Memory reservation for crash kernel either done early or deferred
++ * depending on DMA memory zones configs (ZONE_DMA) --
++ *
++ * In absence of ZONE_DMA configs arm64_dma_phys_limit initialized
++ * here instead of max_zone_phys().  This lets early reservation of
++ * crash kernel memory which has a dependency on arm64_dma_phys_limit.
++ * Reserving memory early for crash kernel allows linear creation of block
++ * mappings (greater than page-granularity) for all the memory bank rangs.
++ * In this scheme a comparatively quicker boot is observed.
++ *
++ * If ZONE_DMA configs are defined, crash kernel memory reservation
++ * is delayed until DMA zone memory range size initilazation performed in
++ * zone_sizes_init().  The defer is necessary to steer clear of DMA zone
++ * memory range to avoid overlap allocation.  So crash kernel memory boundaries
++ * are not known when mapping all bank memory ranges, which otherwise means
++ * not possible to exclude crash kernel range from creating block mappings
++ * so page-granularity mappings are created for the entire memory range.
++ * Hence a slightly slower boot is observed.
++ *
++ * Note: Page-granularity mapppings are necessary for crash kernel memory
++ * range for shrinking its size via /sys/kernel/kexec_crash_size interface.
+  */
+-phys_addr_t arm64_dma_phys_limit __ro_after_init;
++#if IS_ENABLED(CONFIG_ZONE_DMA) || IS_ENABLED(CONFIG_ZONE_DMA32)
++phys_addr_t __ro_after_init arm64_dma_phys_limit;
++#else
++phys_addr_t __ro_after_init arm64_dma_phys_limit = PHYS_MASK + 1;
++#endif
+ 
+ #ifdef CONFIG_KEXEC_CORE
+ /*
+@@ -153,8 +179,6 @@ static void __init zone_sizes_init(unsigned long min, unsigned long max)
+ 	if (!arm64_dma_phys_limit)
+ 		arm64_dma_phys_limit = dma32_phys_limit;
+ #endif
+-	if (!arm64_dma_phys_limit)
+-		arm64_dma_phys_limit = PHYS_MASK + 1;
+ 	max_zone_pfns[ZONE_NORMAL] = max;
+ 
+ 	free_area_init(max_zone_pfns);
+@@ -315,6 +339,10 @@ void __init arm64_memblock_init(void)
+ 
+ 	early_init_fdt_scan_reserved_mem();
+ 
++#if !IS_ENABLED(CONFIG_ZONE_DMA) && !IS_ENABLED(CONFIG_ZONE_DMA32)
++	reserve_crashkernel();
++#endif
++
+ 	high_memory = __va(memblock_end_of_DRAM() - 1) + 1;
+ }
+ 
+@@ -357,11 +385,13 @@ void __init bootmem_init(void)
+ 	 */
+ 	dma_contiguous_reserve(arm64_dma_phys_limit);
+ 
++#if IS_ENABLED(CONFIG_ZONE_DMA) || IS_ENABLED(CONFIG_ZONE_DMA32)
+ 	/*
+ 	 * request_standard_resources() depends on crashkernel's memory being
+ 	 * reserved, so do it here.
+ 	 */
+ 	reserve_crashkernel();
++#endif
+ 
+ 	memblock_dump_all();
+ }
+diff --git a/arch/arm64/mm/mmu.c b/arch/arm64/mm/mmu.c
+index acfae9b41cc8..884b2c6d6cd9 100644
+--- a/arch/arm64/mm/mmu.c
++++ b/arch/arm64/mm/mmu.c
+@@ -517,7 +517,7 @@ static void __init map_mem(pgd_t *pgdp)
+ 	 */
+ 	BUILD_BUG_ON(pgd_index(direct_map_end - 1) == pgd_index(direct_map_end));
+ 
+-	if (can_set_direct_map() || crash_mem_map || IS_ENABLED(CONFIG_KFENCE))
++	if (can_set_direct_map() || IS_ENABLED(CONFIG_KFENCE))
+ 		flags |= NO_BLOCK_MAPPINGS | NO_CONT_MAPPINGS;
+ 
+ 	/*
+@@ -528,6 +528,18 @@ static void __init map_mem(pgd_t *pgdp)
+ 	 */
+ 	memblock_mark_nomap(kernel_start, kernel_end - kernel_start);
+ 
++#if IS_ENABLED(CONFIG_KEXEC_CORE)
++
++#if IS_ENABLED(CONFIG_ZONE_DMA) || IS_ENABLED(CONFIG_ZONE_DMA32)
++	if (crash_mem_map)
++		flags |= NO_BLOCK_MAPPINGS | NO_CONT_MAPPINGS;
++#else
++	if (crashk_res.end)
++		memblock_mark_nomap(crashk_res.start,
++				    resource_size(&crashk_res));
++#endif
++
++#endif
+ 	/* map all the memory banks */
+ 	for_each_mem_range(i, &start, &end) {
+ 		if (start >= end)
+@@ -554,6 +566,21 @@ static void __init map_mem(pgd_t *pgdp)
+ 	__map_memblock(pgdp, kernel_start, kernel_end,
+ 		       PAGE_KERNEL, NO_CONT_MAPPINGS);
+ 	memblock_clear_nomap(kernel_start, kernel_end - kernel_start);
++#if IS_ENABLED(CONFIG_KEXEC_CORE) && \
++    !IS_ENABLED(CONFIG_ZONE_DMA) && !IS_ENABLED(CONFIG_ZONE_DMA32)
++	/*
++	 * Use page-level mappings here so that we can shrink the region
++	 * in page granularity and put back unused memory to buddy system
++	 * through /sys/kernel/kexec_crash_size interface.
++	 */
++	if (crashk_res.end) {
++		__map_memblock(pgdp, crashk_res.start, crashk_res.end + 1,
++			       PAGE_KERNEL,
++			       NO_BLOCK_MAPPINGS | NO_CONT_MAPPINGS);
++		memblock_clear_nomap(crashk_res.start,
++				     resource_size(&crashk_res));
++	}
++#endif
+ }
+ 
+ void mark_rodata_ro(void)
+-- 
+2.35.1
+

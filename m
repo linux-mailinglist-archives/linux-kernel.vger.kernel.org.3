@@ -2,96 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C674F4C1CBC
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 21:00:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 798084C1CBE
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 21:00:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244591AbiBWUA6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 15:00:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35018 "EHLO
+        id S244598AbiBWUBP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 15:01:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234260AbiBWUAy (ORCPT
+        with ESMTP id S244590AbiBWUBN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 15:00:54 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89DCD27FC4;
-        Wed, 23 Feb 2022 12:00:26 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D03D5617A4;
-        Wed, 23 Feb 2022 20:00:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0123C340E7;
-        Wed, 23 Feb 2022 20:00:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645646425;
-        bh=DNaS5nEsaghqF5/p/pvOR81erUDcQR6ZRHgWGUSoSUE=;
-        h=From:To:Cc:Subject:Date:From;
-        b=RMZjxwhTDl5y3mpkk24R6+2nCsCs56AjgVjmRNJHsUp3IBpqMFANmIYL34eHucMcB
-         XYQis2gr/78mwJftWTkXZfjKUT4AOlnjDI4+uM6RPwUu8VtuMpRxzoSqI/Uh1Z/rec
-         XCXH+cDyMHrl57rGAkKaNXiqZoEzywJATcKxs/7BjGKrXDzQvIWjHA3Q/l+23cWCKQ
-         0DRTBjZJsMyeWlsLztJkXrdVK5angB8yaTZPEJgX0YaUNFgvqdZppXEsp0H485dTRR
-         DTDeIxYDX5+lNUJxjVGX8zlFvgHlRgpCvkkks7RePeGv+h99yzYe//pl36rl5L9PBW
-         9CUlZD7atb5+g==
-From:   broonie@kernel.org
-To:     Paolo Bonzini <pbonzini@redhat.com>, KVM <kvm@vger.kernel.org>
-Cc:     Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janis Schoetterl-Glausch <scgl@linux.ibm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Nicholas Piggin <npiggin@gmail.com>
-Subject: linux-next: manual merge of the kvm tree with the kvm-fixes tree
-Date:   Wed, 23 Feb 2022 20:00:19 +0000
-Message-Id: <20220223200019.1891646-1-broonie@kernel.org>
-X-Mailer: git-send-email 2.30.2
+        Wed, 23 Feb 2022 15:01:13 -0500
+Received: from smtp.smtpout.orange.fr (smtp08.smtpout.orange.fr [80.12.242.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 913D735DCB
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 12:00:44 -0800 (PST)
+Received: from [192.168.1.18] ([90.126.236.122])
+        by smtp.orange.fr with ESMTPA
+        id MxoSnoXxX41cbMxoSnhzlJ; Wed, 23 Feb 2022 21:00:42 +0100
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
+X-ME-Date: Wed, 23 Feb 2022 21:00:42 +0100
+X-ME-IP: 90.126.236.122
+Message-ID: <7ce2df48-b876-0c30-d003-32275c5a9f65@wanadoo.fr>
+Date:   Wed, 23 Feb 2022 21:00:36 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [RFC PATCH 07/13] udp_tunnel: remove the usage of the list
+ iterator after the loop
+Content-Language: fr
+To:     Jakob Koschel <jakobkoschel@gmail.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     linux-arch@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Arnd Bergman <arnd@arndb.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
+        Cristiano Giuffrida <c.giuffrida@vu.nl>,
+        "Bos, H.J." <h.j.bos@vu.nl>,
+        Dan Carpenter <dan.carpenter@oracle.com>
+References: <20220217184829.1991035-1-jakobkoschel@gmail.com>
+ <20220217184829.1991035-8-jakobkoschel@gmail.com>
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <20220217184829.1991035-8-jakobkoschel@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi all,
+Le 17/02/2022 à 19:48, Jakob Koschel a écrit :
+> The usage of node->dev after the loop body is a legitimate type
+> confusion if the break was not hit. It will compare an undefined
+> memory location with dev that could potentially be equal. The value
+> of node->dev in this case could either be a random struct member of the
+> head element or an out-of-bounds value.
+> 
+> Therefore it is more safe to use the found variable. With the
+> introduction of speculative safe list iterator this check could be
+> replaced with if (!node).
+> 
+> Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
+> ---
+>   net/ipv4/udp_tunnel_nic.c | 7 +++++--
+>   1 file changed, 5 insertions(+), 2 deletions(-)
+> 
+> diff --git a/net/ipv4/udp_tunnel_nic.c b/net/ipv4/udp_tunnel_nic.c
+> index b91003538d87..c47f9fb36d29 100644
+> --- a/net/ipv4/udp_tunnel_nic.c
+> +++ b/net/ipv4/udp_tunnel_nic.c
+> @@ -842,11 +842,14 @@ udp_tunnel_nic_unregister(struct net_device *dev, struct udp_tunnel_nic *utn)
+>   	 */
+>   	if (info->shared) {
+>   		struct udp_tunnel_nic_shared_node *node, *first;
+> +		bool found = false;
+>   
+>   		list_for_each_entry(node, &info->shared->devices, list)
+> -			if (node->dev == dev)
+> +			if (node->dev == dev) {
+> +				found = true;
+>   				break;
+> -		if (node->dev != dev)
+> +			}
+> +		if (!found)
+>   			return;
+>   
+>   		list_del(&node->list);
 
-FIXME: Add owner of second tree to To:
-       Add author(s)/SOB of conflicting commits.
+Hi,
 
-Today's linux-next merge of the kvm tree got a conflict in:
+just in case, see Dan Carpeter's patch for the same issue with another 
+fix at:
+https://lore.kernel.org/kernel-janitors/20220222134251.GA2271@kili/
 
-  include/uapi/linux/kvm.h
-
-between commit:
-
-  93b71801a8274 ("KVM: PPC: reserve capability 210 for KVM_CAP_PPC_AIL_MODE_3")
-
-from the kvm-fixes tree and commit:
-
-  d004079edc166 ("KVM: s390: Add capability for storage key extension of MEM_OP IOCTL")
-
-from the kvm tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
-diff --cc include/uapi/linux/kvm.h
-index 507ee1f2aa96b,dbc550bbd9fa3..0000000000000
---- a/include/uapi/linux/kvm.h
-+++ b/include/uapi/linux/kvm.h
-@@@ -1134,7 -1140,7 +1140,8 @@@ struct kvm_ppc_resize_hpt 
-  #define KVM_CAP_VM_GPA_BITS 207
-  #define KVM_CAP_XSAVE2 208
-  #define KVM_CAP_SYS_ATTRIBUTES 209
- -#define KVM_CAP_S390_MEM_OP_EXTENSION 210
- +#define KVM_CAP_PPC_AIL_MODE_3 210
-++#define KVM_CAP_S390_MEM_OP_EXTENSION 211
-  
-  #ifdef KVM_CAP_IRQ_ROUTING
-  
+CJ

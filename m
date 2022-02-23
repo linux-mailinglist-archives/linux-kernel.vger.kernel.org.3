@@ -2,69 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 039864C141E
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 14:28:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 146754C1435
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 14:32:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240906AbiBWN3L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 08:29:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53734 "EHLO
+        id S237711AbiBWNcY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 08:32:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234708AbiBWN3J (ORCPT
+        with ESMTP id S235189AbiBWNcW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 08:29:09 -0500
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2EF3AA023
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 05:28:41 -0800 (PST)
-Received: by mail-wr1-x42a.google.com with SMTP id d28so11877763wra.4
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 05:28:41 -0800 (PST)
+        Wed, 23 Feb 2022 08:32:22 -0500
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C25139BB83
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 05:31:54 -0800 (PST)
+Received: by mail-lj1-x234.google.com with SMTP id u7so17136346ljk.13
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 05:31:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=pSKuz9BJS/Qwel4yBJUKsJP++c1z8gtIosTtEbMtN5I=;
-        b=OFnpZaWUe1aj3quu8873cjK2E4SCrW3jC+uJ5IdQ8OFBWaJqb1qtvX35eq6AzwZSOL
-         Uo7tZ1bEiqcpGqWUHAaxFasSotwhTi/yMfwW1vHh+5+1rhC/0/EM2cPMmCdiBwNUAn6D
-         Fjh2uIYNAGqZgGOPghNV+MqGpI9TT2Q7u7qoTAzg8jAIxMcBIbsDO5wYjk6YUEuR3KLT
-         sSGUh+PZY82YFx4ceFP3KXcQlizafaN0fOVUXXqdVwlyaf10VMJWO3MmIWubxC252Zer
-         P3EfkGQV4MxglyVYy/aLJNnugrwayzdNPbbHdW24HpVCbBSeFkT20JzTHokGiGGDTOhR
-         thXQ==
+        d=daynix-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=7dnyHmrO36rrHyXARPRiGQlAPqAL/RPhHWzq7NmeXFU=;
+        b=DCpZuBYw1K5GBm3Yf8oboPq/eMpixfVzGH8pD4UEALwU6Piq0DHgYQgOt/7CAvI306
+         Dcz50R2TMDksWKMuLwdtBmupzNUlRGkvZEr3wrUGXHDsry2cMM5zBquEuUE/lGQio3cy
+         dQioRFt9XmtopGgUlNHRhYJyo7M9qv/QhTJs7H/sBz6Y+d0QTU8BHf6TQuNWtwwlfHVy
+         CsK3Xgbm2ngEooxg6hRKNJbBTvfjYRUDLlL01JPPYENYx80hxKuFn8POj2bETak/AHLu
+         Za/hbi5Gqnd8nDCavCmWhSt5NPE4zh7m8WDnAJZpqs6lI7TkKUByTA7ZENXTV7ySlrYX
+         jQDg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=pSKuz9BJS/Qwel4yBJUKsJP++c1z8gtIosTtEbMtN5I=;
-        b=0ItQhp0MMsVNoO353Z1ULV1TbGsGZd4AxgvDtXJua6JICcvETynsWbyTJwuN1+7fVz
-         vBMypq2kVFtGL5EKA7VvdPru4aTErnyXmSCR5KTnSY3i5p7Tg63Q1ZTdcybVyQl5kAdL
-         XdTEUMRUb8wlrmAynhzYoryPHqn+/t0ZX2dktBmLJO4grfhkHHo3C9uYMOExj31xM7tQ
-         nt3jeV3sx3QflgTqF4rlUpyOf8G8VbYTmodSWa/c6lcxLqg59i/+YArYF4ZsplcB+IY5
-         BJpuxEAyoHc4c7e2orBjM1QEy+4Jitemzi+HBXdeCnIUR5+LcDe8wC+p+JB9dUrTvhDM
-         407g==
-X-Gm-Message-State: AOAM53268Cge1I92FoLiEVCOcYQP2b0G3t7MN6F1wrdlOZ3zSvMhcz1P
-        8P2E/oZRs3dRRaNO+rAmSaGHL7Bcu2dBjW3V6eU=
-X-Google-Smtp-Source: ABdhPJxaS3glusJ90vEklcmE3OoVGBWrat6v4bOpgc89thvvaLzRPcmLbpB6Z0z7eGkhSHgk16GeGZxR1mQlLI2VXFI=
-X-Received: by 2002:a5d:4bc8:0:b0:1e4:a4a2:63b0 with SMTP id
- l8-20020a5d4bc8000000b001e4a4a263b0mr22062511wrt.596.1645622920503; Wed, 23
- Feb 2022 05:28:40 -0800 (PST)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=7dnyHmrO36rrHyXARPRiGQlAPqAL/RPhHWzq7NmeXFU=;
+        b=SB3LdakCylx97Wbhs7nUs/h3twsUkv2quY20/nHfImlZm4HyZlPAbnItIAeiCgBBx0
+         JL2UPSSsvvx60rK0OskEUOzahrL7i8wGvA/OXRJfxX4cqUdQCiZBaHzQTy9z3ZayY60T
+         Xpm2cndGeWmFt6S7OnCqnHvGQCiPXONLSKx15YArFRZWG+Z5vPOcvwIp75TClPwQIFx3
+         7/EXakG7iAcbFPJEqj2Hxst266aQHm0H7hZPGDB4AM6Mvs63XURiqH1FRs6y9CJdJwPP
+         4jUkFsb1j+rtBOoWxJzS/Qojtn5S8bTt3gbpce6aDnjTyzzgh7rucPS8CU31uqnHGq+7
+         JqCQ==
+X-Gm-Message-State: AOAM530nsfgeATdh6wWvKq0uGXv9dtgnh2lhmhsaDAXlQL/dzysDaLhy
+        8S+4sSJn5Z7taoz8U0PEU8Dcs5hq7Yl+4dpGCANeQw==
+X-Google-Smtp-Source: ABdhPJwJY+a32PVbCbOr6F7WLpIRa1HJ6cmeP7R7LTqqu3aAVT2hhZelkzr7J95bPvGGBDkYywmSkJE5OgieO0xkm/Q=
+X-Received: by 2002:a05:651c:1509:b0:246:5f82:eed2 with SMTP id
+ e9-20020a05651c150900b002465f82eed2mr1509589ljf.271.1645623113097; Wed, 23
+ Feb 2022 05:31:53 -0800 (PST)
 MIME-Version: 1.0
-Received: by 2002:a05:6020:c266:b0:19d:b465:fa86 with HTTP; Wed, 23 Feb 2022
- 05:28:40 -0800 (PST)
-Reply-To: davidnelson7702626@gmail.com
-From:   ADELEKE ADEROGBA <jamiuadeleke821@gmail.com>
-Date:   Wed, 23 Feb 2022 14:28:40 +0100
-Message-ID: <CACFefoGeJp3n_fkj2P2UCz27euwDsqdOnBX7WMo-OBVC2T=AAA@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
+References: <20220125084702.3636253-1-andrew@daynix.com> <20220125084702.3636253-2-andrew@daynix.com>
+ <06a90de0-57ae-9315-dc2c-03cc74b4ae0c@redhat.com> <CABcq3pH7HnH_-nCHcX7eet_ouqocQEptp6A9GCbs3=9guArhPA@mail.gmail.com>
+ <CACGkMEu3biQ+BM29nDu82jP8y+p4iiL4K=GzM6px+yktU5Zqjw@mail.gmail.com>
+In-Reply-To: <CACGkMEu3biQ+BM29nDu82jP8y+p4iiL4K=GzM6px+yktU5Zqjw@mail.gmail.com>
+From:   Yuri Benditovich <yuri.benditovich@daynix.com>
+Date:   Wed, 23 Feb 2022 15:31:41 +0200
+Message-ID: <CAOEp5OeGNezTasp7zsvpFHGfjkM4bWRbbFY7WEWc7hRYVDSxdA@mail.gmail.com>
+Subject: Re: [RFC PATCH 1/5] uapi/linux/if_tun.h: Added new ioctl for tun/tap.
+To:     Jason Wang <jasowang@redhat.com>
+Cc:     Andrew Melnichenko <andrew@daynix.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Network Development <netdev@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        virtualization <virtualization@lists.linux-foundation.org>,
+        Yan Vugenfirer <yan@daynix.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: **
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello friend, I want to send money to you to enable me invest in your
-country get back to me if you are interested.
+Hi Jason,
+We agree that the same can be done also using the old way, i.e. try to
+set specific offload - if failed, probably it is not supported.
+We think this is a little not scalable and we suggest adding the ioctl
+that will allow us to query allo the supported features in a single
+call.
+We think this will make QEMU code more simple also in future.
+Do I understand correctly that you suggest to skip this new ioctl and
+use the old way of query for this (USO) feature and all future
+extensions?
+
+Thanks
+
+
+On Wed, Feb 23, 2022 at 5:53 AM Jason Wang <jasowang@redhat.com> wrote:
+>
+> On Tue, Feb 22, 2022 at 9:28 PM Andrew Melnichenko <andrew@daynix.com> wr=
+ote:
+> >
+> > Hi all,
+> >
+> > On Wed, Feb 9, 2022 at 6:26 AM Jason Wang <jasowang@redhat.com> wrote:
+> > >
+> > >
+> > > =E5=9C=A8 2022/1/25 =E4=B8=8B=E5=8D=884:46, Andrew Melnychenko =E5=86=
+=99=E9=81=93:
+> > > > Added TUNGETSUPPORTEDOFFLOADS that should allow
+> > > > to get bits of supported offloads.
+> > >
+> > >
+> > > So we don't use dedicated ioctls in the past, instead, we just probin=
+g
+> > > by checking the return value of TUNSETOFFLOADS.
+> > >
+> > > E.g qemu has the following codes:
+> > >
+> > > int tap_probe_has_ufo(int fd)
+> > > {
+> > >      unsigned offload;
+> > >
+> > >      offload =3D TUN_F_CSUM | TUN_F_UFO;
+> > >
+> > >      if (ioctl(fd, TUNSETOFFLOAD, offload) < 0)
+> > >          return 0;
+> > >
+> > >      return 1;
+> > > }
+> > >
+> > > Any reason we can't keep using that?
+> > >
+> > > Thanks
+> > >
+> >
+> > Well, even in this example. To check the ufo feature, we trying to set =
+it.
+> > What if we don't need to "enable" UFO and/or do not change its state?
+>
+> So at least Qemu doesn't have such a requirement since during the
+> probe the virtual networking backend is not even started.
+>
+> > I think it's a good idea to have the ability to get supported offloads
+> > without changing device behavior.
+>
+> Do you see a real user for this?
+>
+> Btw, we still need to probe this new ioctl anyway.
+>
+> Thanks
+>
+> >
+> > >
+> > > > Added 2 additional offlloads for USO(IPv4 & IPv6).
+> > > > Separate offloads are required for Windows VM guests,
+> > > > g.e. Windows may set USO rx only for IPv4.
+> > > >
+> > > > Signed-off-by: Andrew Melnychenko <andrew@daynix.com>
+> > > > ---
+> > > >   include/uapi/linux/if_tun.h | 3 +++
+> > > >   1 file changed, 3 insertions(+)
+> > > >
+> > > > diff --git a/include/uapi/linux/if_tun.h b/include/uapi/linux/if_tu=
+n.h
+> > > > index 454ae31b93c7..07680fae6e18 100644
+> > > > --- a/include/uapi/linux/if_tun.h
+> > > > +++ b/include/uapi/linux/if_tun.h
+> > > > @@ -61,6 +61,7 @@
+> > > >   #define TUNSETFILTEREBPF _IOR('T', 225, int)
+> > > >   #define TUNSETCARRIER _IOW('T', 226, int)
+> > > >   #define TUNGETDEVNETNS _IO('T', 227)
+> > > > +#define TUNGETSUPPORTEDOFFLOADS _IOR('T', 228, unsigned int)
+> > > >
+> > > >   /* TUNSETIFF ifr flags */
+> > > >   #define IFF_TUN             0x0001
+> > > > @@ -88,6 +89,8 @@
+> > > >   #define TUN_F_TSO6  0x04    /* I can handle TSO for IPv6 packets =
+*/
+> > > >   #define TUN_F_TSO_ECN       0x08    /* I can handle TSO with ECN =
+bits. */
+> > > >   #define TUN_F_UFO   0x10    /* I can handle UFO packets */
+> > > > +#define TUN_F_USO4   0x20    /* I can handle USO for IPv4 packets =
+*/
+> > > > +#define TUN_F_USO6   0x40    /* I can handle USO for IPv6 packets =
+*/
+> > > >
+> > > >   /* Protocol info prepended to the packets (when IFF_NO_PI is not =
+set) */
+> > > >   #define TUN_PKT_STRIP       0x0001
+> > >
+> >
+>

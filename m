@@ -2,151 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E2C24C0FFA
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 11:15:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A8BB64C1001
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 11:16:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239515AbiBWKPZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 05:15:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41262 "EHLO
+        id S239525AbiBWKQr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 05:16:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239507AbiBWKPX (ORCPT
+        with ESMTP id S238870AbiBWKQp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 05:15:23 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D5738B6FF
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 02:14:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645611296; x=1677147296;
-  h=subject:to:cc:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=GEeRFSShKzYY8tFuEfoPFCgJneXpRJu3TdpZNO2m87s=;
-  b=Jycp59cmnVofMf/WANnGadP/oI/B1L7/CmjI/4beCt6KYe5am5vMktXZ
-   YAoS0vUXoaqkW0FaQAUTxDPG+Ejxnw3mYvP8jQwSiuCIjhGRs8Rd9v1jH
-   jUODdZgUN/p9XuD6egfhygO8+qSR8SZKqfuTxY2OTtOWq/I2/Sg6zvtm0
-   S81KxYIKedFn1HHlmSvVs+ZIaetBRonfDeJg2fXDtYuejLk/HuiSqyA44
-   HH817hVxwbwUHRL+tJ5XxPmU++YPb8Dk8tFDhq0Qj6/SgUcplwHpajdzn
-   lhPbylqiJmFQjx44tbs8xBSET3PE5295VWpgmn18cZSZE1bOtSiqvJ10B
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10266"; a="239319750"
-X-IronPort-AV: E=Sophos;i="5.88,390,1635231600"; 
-   d="scan'208";a="239319750"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2022 02:14:56 -0800
-X-IronPort-AV: E=Sophos;i="5.88,390,1635231600"; 
-   d="scan'208";a="505859818"
-Received: from rongch2-mobl.ccr.corp.intel.com (HELO [10.249.171.198]) ([10.249.171.198])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2022 02:14:54 -0800
-Subject: Re: [kbuild-all] Re: [paulmck-rcu:dev.2022.02.17a 73/73] make[3]: ***
- No rule to make target 'kernel/rcu/typesafe.o', needed by
- 'kernel/rcu/built-in.a'.
-To:     paulmck@kernel.org
-Cc:     kernel test robot <lkp@intel.com>, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-References: <202202220308.TNib9D2v-lkp@intel.com>
- <20220221214736.GE4285@paulmck-ThinkPad-P17-Gen-1>
- <b481fd02-7b4f-7752-8852-d1a61b4916f1@intel.com>
- <20220222145349.GH4285@paulmck-ThinkPad-P17-Gen-1>
-From:   "Chen, Rong A" <rong.a.chen@intel.com>
-Message-ID: <19aa4b7f-d2ef-b94f-026e-1a0318f7f50c@intel.com>
-Date:   Wed, 23 Feb 2022 18:14:52 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.12.0
+        Wed, 23 Feb 2022 05:16:45 -0500
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38F758B6DC
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 02:16:16 -0800 (PST)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 21NAFpwu004634;
+        Wed, 23 Feb 2022 04:15:51 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1645611351;
+        bh=ukWLwaLL7K6cWyANGk/b8vaKKMtL9ul3qu2qxXXL59I=;
+        h=From:To:CC:Subject:Date;
+        b=sGzy/BXV7DubYZyheyMTS+dEOT+K9xrCGvOo7ALpSiJRjhFNUbcwrpw5KwDhaQIxK
+         cZzvx4AachD1audwVWTIsCn0I1P2y6yUVPIQoTCnM5lp0IlYow5m7mMGKj2RPAq73v
+         ToD5RwVkNg5BZoX4QssRnrFUFcBFX5uXFuzYurR4=
+Received: from DFLE102.ent.ti.com (dfle102.ent.ti.com [10.64.6.23])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 21NAFp7g005166
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 23 Feb 2022 04:15:51 -0600
+Received: from DFLE110.ent.ti.com (10.64.6.31) by DFLE102.ent.ti.com
+ (10.64.6.23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Wed, 23
+ Feb 2022 04:15:50 -0600
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE110.ent.ti.com
+ (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Wed, 23 Feb 2022 04:15:50 -0600
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 21NAFnxe126829;
+        Wed, 23 Feb 2022 04:15:50 -0600
+From:   Rahul T R <r-ravikumar@ti.com>
+To:     <bjorn.andersson@linaro.org>, <catalin.marinas@arm.com>,
+        <will@kernel.org>, <shawnguo@kernel.org>, <krzk@kernel.org>,
+        <geert+renesas@glider.be>, <marcel.ziswiler@toradex.com>
+CC:     <biju.das.jz@bp.renesas.com>, <vkoul@kernel.org>,
+        <enric.balletbo@collabora.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <tomi.valkeinen@ideasonboard.com>,
+        <laurent.pinchart@ideasonboard.com>, <nm@ti.com>,
+        <r-ravikumar@ti.com>
+Subject: [PATCH v2] arm64: defconfig: Enable configs for DisplayPort on J721e
+Date:   Wed, 23 Feb 2022 15:45:39 +0530
+Message-ID: <20220223101539.4734-1-r-ravikumar@ti.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-In-Reply-To: <20220222145349.GH4285@paulmck-ThinkPad-P17-Gen-1>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Enable DRM and PHY configs required for supporting
+DisplayPort on J721e
 
+Signed-off-by: Rahul T R <r-ravikumar@ti.com>
+---
 
-On 2/22/2022 10:53 PM, Paul E. McKenney wrote:
-> On Tue, Feb 22, 2022 at 04:30:40PM +0800, Chen, Rong A wrote:
->>
->>
->> On 2/22/2022 5:47 AM, Paul E. McKenney wrote:
->>> On Tue, Feb 22, 2022 at 03:05:27AM +0800, kernel test robot wrote:
->>>> Hi Paul,
->>>>
->>>> First bad commit (maybe != root cause):
->>>>
->>>> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git dev.2022.02.17a
->>>> head:   f5b2eaf791ebbd6af881947ab7c40ed70681e534
->>>> commit: f5b2eaf791ebbd6af881947ab7c40ed70681e534 [73/73] EXP torture: Add tests demoing SLAB_TYPESAFE_BY_RCU
->>>> config: arc-allyesconfig (https://download.01.org/0day-ci/archive/20220222/202202220308.TNib9D2v-lkp@intel.com/config)
->>>> compiler: arceb-elf-gcc (GCC) 11.2.0
->>>> reproduce (this is a W=1 build):
->>>>           wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->>>>           chmod +x ~/bin/make.cross
->>>>           # https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git/commit/?id=f5b2eaf791ebbd6af881947ab7c40ed70681e534
->>>>           git remote add paulmck-rcu https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git
->>>>           git fetch --no-tags paulmck-rcu dev.2022.02.17a
->>>>           git checkout f5b2eaf791ebbd6af881947ab7c40ed70681e534
->>>>           # save the config file to linux build tree
->>>>           mkdir build_dir
->>>>           COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arc SHELL=/bin/bash
->>>>
->>>> If you fix the issue, kindly add following tag as appropriate
->>>> Reported-by: kernel test robot <lkp@intel.com>
->>>>
->>>> All errors (new ones prefixed by >>):
->>>>
->>>>>> make[3]: *** No rule to make target 'kernel/rcu/typesafe.o', needed by 'kernel/rcu/built-in.a'.
->>>>      make[3]: Target '__build' not remade because of errors.
->>>
->>> This is the only commit involving kernel/rcu/typesafe.o, so...
->>>
->>> One the one hand, I do not plan to upstream this, so maybe it doesn't
->>> matter.
->>>
->>> I have been building this using the rcutorture scripting for some time,
->>> same RCU-related .config as you are using.  But when I pulled it into
->>> a clone in a neighboring directory, it failed just as it did for you.
->>> The problem was that the update to kernel/rcu/Makefile somehow didn't
->>> come across, so this line was missing:
->>>
->>> 	obj-$(CONFIG_RCU_TYPESAFE_TEST) += typesafe.o
->>>
->>> Which of course explains the build failure.
->>>
->>> I blew away that clone and re-cloned it.  And it still failed, both
->>> with "make" from the commandline and under rcutorture.
->>>
->>> Hahahahahahaahaha!!!
->>>
->>> I forgot "git add kernel/rcu/typesafe.c".
->>>
->>> There is now a new typesafe.2022.02.21a tag with this file added.
->>>
->>> Good catch!  That file happened to still be lying around.  The first
->>> "git reset --hard" would have destroyed.  Thank you!!!
->>>
->>> And with that fixed, my clone now builds correctly.  Does this fix
->>> it for you?
->>
->> Hi Paul,
->>
->> I can't find the tag 'typesafe.2022.02.21a' from https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git/refs/tags
-> 
-> That would be because I failed to push it out.  :-/
-> 
-> Which I just now did, apologies for my confusion.
-> 
-> 							Thanx, Paul
+Notes:
+    v2:
+    	Fixed the places using savedefconfig
+    	Added more info in notes
+    
+    No change in vmlinux:
+    
+    	add/remove: 0/0 grow/shrink: 0/0 up/down: 0/0 (0)
+    	Function                                     old     new   delta
+    	Total: Before=24042991, After=24042991, chg +0.00%
+    
+    Diffstat of bootlogs:
+    
+    	after_boot.log |   46 ++++++++++++++++++++++++++--------------------
+    	1 file changed, 26 insertions(+), 20 deletions(-)
 
-Hi Paul,
+ arch/arm64/configs/defconfig | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-I have tested the tag, yes, it's fixed.
+diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
+index 9f23d7ec1232..56d4c126f6da 100644
+--- a/arch/arm64/configs/defconfig
++++ b/arch/arm64/configs/defconfig
+@@ -736,6 +736,7 @@ CONFIG_DRM_THINE_THC63LVD1024=m
+ CONFIG_DRM_TI_SN65DSI86=m
+ CONFIG_DRM_I2C_ADV7511=m
+ CONFIG_DRM_I2C_ADV7511_AUDIO=y
++CONFIG_DRM_CDNS_MHDP8546=m
+ CONFIG_DRM_DW_HDMI_AHB_AUDIO=m
+ CONFIG_DRM_DW_HDMI_CEC=m
+ CONFIG_DRM_IMX_DCSS=m
+@@ -750,6 +751,7 @@ CONFIG_DRM_MESON=m
+ CONFIG_DRM_PL111=m
+ CONFIG_DRM_LIMA=m
+ CONFIG_DRM_PANFROST=m
++CONFIG_DRM_TIDSS=m
+ CONFIG_FB=y
+ CONFIG_FB_MODE_HELPERS=y
+ CONFIG_FB_EFI=y
+@@ -1151,6 +1153,7 @@ CONFIG_RESET_RZG2L_USBPHY_CTRL=y
+ CONFIG_RESET_TI_SCI=y
+ CONFIG_PHY_XGENE=y
+ CONFIG_PHY_SUN4I_USB=y
++CONFIG_PHY_CADENCE_TORRENT=m
+ CONFIG_PHY_MIXEL_MIPI_DPHY=m
+ CONFIG_PHY_FSL_IMX8M_PCIE=y
+ CONFIG_PHY_HI6220_USB=y
+@@ -1175,6 +1178,7 @@ CONFIG_PHY_SAMSUNG_UFS=y
+ CONFIG_PHY_UNIPHIER_USB2=y
+ CONFIG_PHY_UNIPHIER_USB3=y
+ CONFIG_PHY_TEGRA_XUSB=y
++CONFIG_PHY_J721E_WIZ=m
+ CONFIG_ARM_SMMU_V3_PMU=m
+ CONFIG_FSL_IMX8_DDR_PMU=m
+ CONFIG_QCOM_L2_PMU=y
+-- 
+2.17.1
 
-Best Regards,
-Rong Chen

@@ -2,210 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 419764C0790
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 03:05:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D04194C0798
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 03:07:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236716AbiBWCGF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 21:06:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35590 "EHLO
+        id S236728AbiBWCIB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 21:08:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236696AbiBWCGE (ORCPT
+        with ESMTP id S236690AbiBWCIA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 21:06:04 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EA983403D2
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 18:05:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1645581936;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=buzVwsZLq0iXCXG61A4X5ZxneH6xdRKfjx8nNyDkCvI=;
-        b=Td0l9e/wYtCV79TYo93Lvp+EBlUf77o1/fZHWmNaf+fICOcUcnryMcL7phTe3VZoFbBROT
-        ayCKI1woWGQ63CcAI6m9EbniJq9rwg6EG5OBHuxsBvFbM8nY+87RewoUW6GAZ8Wrl49AFd
-        jjvn1HNugnfEDlfDLoF0tUgggoRw8vs=
-Received: from mail-lf1-f69.google.com (mail-lf1-f69.google.com
- [209.85.167.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-563-4lxsxhUlOk-18uFT3AQIlQ-1; Tue, 22 Feb 2022 21:05:34 -0500
-X-MC-Unique: 4lxsxhUlOk-18uFT3AQIlQ-1
-Received: by mail-lf1-f69.google.com with SMTP id c25-20020a056512325900b0043fc8f2e1f6so3022343lfr.6
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 18:05:34 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=buzVwsZLq0iXCXG61A4X5ZxneH6xdRKfjx8nNyDkCvI=;
-        b=ggIjMEFliEC3d9BypwrEb3Q09lXh96GrMZnUD9Cmtg2/FG3KCn4HRm5HC4mJvpyJlt
-         vthHoEho/Ltalxek6Bby9t7HEcflK5vWC3Fi6SpDi/P5SVle4CUDol1J5b2tiKt3j6hP
-         r0YWZJwdSaB1Xmf6CKnecrbTySO+wsXJI2lurHnqfE6/OiXHrZFiqziWEKCnFFHmUTpQ
-         kPOFScZOOwEtb/XklCYpQwXa0IXGGdHcZMMS2xVlA6ms7tp+h3nX7vhNTZFOFz4iXPCD
-         IDE5p5hIuokseA9hTP5YoqYNfcZAR9u8llT4OgpBcnYPgSCA4egmEbvfPAvM0VPdCDo7
-         HCGg==
-X-Gm-Message-State: AOAM531oL9SCPpdoQEv2MQ+BorD8E8ip4JNgVWrH7xpBAOMqa3H+Wvhy
-        IDpS2DqQvjocBP723/PCaIqskc8WbHFOoYzkg1GAEMB5L3sOrEh89aY1G7sKogUQvhkSw+enzxV
-        lC9UZfGioON6w2y8xs3YBrHpRXJiVZrGW6/baWjdp
-X-Received: by 2002:ac2:5f68:0:b0:438:6751:6b83 with SMTP id c8-20020ac25f68000000b0043867516b83mr18922169lfc.376.1645581933100;
-        Tue, 22 Feb 2022 18:05:33 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxAHX+x2jwWdLU2x8SL6Qst3i9MqySV/buhDdfIJdvq9F0y/5J2MvOgBJXvw97jTjnOtyWiXmfjF5o4Wdrm/Uk=
-X-Received: by 2002:ac2:5f68:0:b0:438:6751:6b83 with SMTP id
- c8-20020ac25f68000000b0043867516b83mr18922150lfc.376.1645581932830; Tue, 22
- Feb 2022 18:05:32 -0800 (PST)
+        Tue, 22 Feb 2022 21:08:00 -0500
+Received: from zg8tmty1ljiyny4xntqumjca.icoremail.net (zg8tmty1ljiyny4xntqumjca.icoremail.net [165.227.154.27])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id BD9E242A32;
+        Tue, 22 Feb 2022 18:07:31 -0800 (PST)
+Received: by ajax-webmail-mail-app3 (Coremail) ; Wed, 23 Feb 2022 10:06:48
+ +0800 (GMT+08:00)
+X-Originating-IP: [180.169.129.130]
+Date:   Wed, 23 Feb 2022 10:06:48 +0800 (GMT+08:00)
+X-CM-HeaderCharset: UTF-8
+From:   "Jing Leng" <3090101217@zju.edu.cn>
+To:     "Greg KH" <gregkh@linuxfoundation.org>
+Cc:     balbi@kernel.org, bilbao@vt.edu, corbet@lwn.net,
+        laurent.pinchart@ideasonboard.com, mchehab+huawei@kernel.org,
+        pawell@cadence.com, rdunlap@infradead.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        "Jing Leng" <jleng@ambarella.com>
+Subject: Re: Re: [PATCH v2] usb: gadget: uvc: add framebased stream support
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20210104(ab8c30b6)
+ Copyright (c) 2002-2022 www.mailtech.cn zju.edu.cn
+In-Reply-To: <Yg5pb1A9QlgoKYnm@kroah.com>
+References: <20220216081651.9089-1-3090101217@zju.edu.cn>
+ <20220217104450.14372-1-3090101217@zju.edu.cn> <Yg5pb1A9QlgoKYnm@kroah.com>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=UTF-8
 MIME-Version: 1.0
-References: <20220221195303.13560-1-mail@anirudhrb.com> <CACGkMEvLE=kV4PxJLRjdSyKArU+MRx6b_mbLGZHSUgoAAZ+-Fg@mail.gmail.com>
- <YhRtQEWBF0kqWMsI@anirudhrb.com> <CACGkMEvd7ETC_ANyrOSAVz_i64xqpYYazmm=+39E51=DMRFXdw@mail.gmail.com>
- <20220222090511-mutt-send-email-mst@kernel.org>
-In-Reply-To: <20220222090511-mutt-send-email-mst@kernel.org>
-From:   Jason Wang <jasowang@redhat.com>
-Date:   Wed, 23 Feb 2022 10:05:21 +0800
-Message-ID: <CACGkMEu9mxo8sqPuymXzEOJbv8=fKq7TAScV2yrCM-bMozPibA@mail.gmail.com>
-Subject: Re: [PATCH] vhost: validate range size before adding to iotlb
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     Anirudh Rayabharam <mail@anirudhrb.com>,
-        syzbot+0abd373e2e50d704db87@syzkaller.appspotmail.com,
-        kvm <kvm@vger.kernel.org>,
-        virtualization <virtualization@lists.linux-foundation.org>,
-        netdev <netdev@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Message-ID: <7b3d8dad.b85c3.17f2454bf49.Coremail.3090101217@zju.edu.cn>
+X-Coremail-Locale: en_US
+X-CM-TRANSID: cC_KCgDnX_O4lhViJo65DQ--.13863W
+X-CM-SenderInfo: qtqziiyqrsilo62m3hxhgxhubq/1tbiAwUKBVNG3FoJcQABsj
+X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
+        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
+        daVFxhVjvjDU=
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 22, 2022 at 11:02 PM Michael S. Tsirkin <mst@redhat.com> wrote:
->
-> On Tue, Feb 22, 2022 at 03:11:07PM +0800, Jason Wang wrote:
-> > On Tue, Feb 22, 2022 at 12:57 PM Anirudh Rayabharam <mail@anirudhrb.com> wrote:
-> > >
-> > > On Tue, Feb 22, 2022 at 10:50:20AM +0800, Jason Wang wrote:
-> > > > On Tue, Feb 22, 2022 at 3:53 AM Anirudh Rayabharam <mail@anirudhrb.com> wrote:
-> > > > >
-> > > > > In vhost_iotlb_add_range_ctx(), validate the range size is non-zero
-> > > > > before proceeding with adding it to the iotlb.
-> > > > >
-> > > > > Range size can overflow to 0 when start is 0 and last is (2^64 - 1).
-> > > > > One instance where it can happen is when userspace sends an IOTLB
-> > > > > message with iova=size=uaddr=0 (vhost_process_iotlb_msg). So, an
-> > > > > entry with size = 0, start = 0, last = (2^64 - 1) ends up in the
-> > > > > iotlb. Next time a packet is sent, iotlb_access_ok() loops
-> > > > > indefinitely due to that erroneous entry:
-> > > > >
-> > > > >         Call Trace:
-> > > > >          <TASK>
-> > > > >          iotlb_access_ok+0x21b/0x3e0 drivers/vhost/vhost.c:1340
-> > > > >          vq_meta_prefetch+0xbc/0x280 drivers/vhost/vhost.c:1366
-> > > > >          vhost_transport_do_send_pkt+0xe0/0xfd0 drivers/vhost/vsock.c:104
-> > > > >          vhost_worker+0x23d/0x3d0 drivers/vhost/vhost.c:372
-> > > > >          kthread+0x2e9/0x3a0 kernel/kthread.c:377
-> > > > >          ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
-> > > > >          </TASK>
-> > > > >
-> > > > > Reported by syzbot at:
-> > > > >         https://syzkaller.appspot.com/bug?extid=0abd373e2e50d704db87
-> > > > >
-> > > > > Reported-by: syzbot+0abd373e2e50d704db87@syzkaller.appspotmail.com
-> > > > > Tested-by: syzbot+0abd373e2e50d704db87@syzkaller.appspotmail.com
-> > > > > Signed-off-by: Anirudh Rayabharam <mail@anirudhrb.com>
-> > > > > ---
-> > > > >  drivers/vhost/iotlb.c | 6 ++++--
-> > > > >  1 file changed, 4 insertions(+), 2 deletions(-)
-> > > > >
-> > > > > diff --git a/drivers/vhost/iotlb.c b/drivers/vhost/iotlb.c
-> > > > > index 670d56c879e5..b9de74bd2f9c 100644
-> > > > > --- a/drivers/vhost/iotlb.c
-> > > > > +++ b/drivers/vhost/iotlb.c
-> > > > > @@ -53,8 +53,10 @@ int vhost_iotlb_add_range_ctx(struct vhost_iotlb *iotlb,
-> > > > >                               void *opaque)
-> > > > >  {
-> > > > >         struct vhost_iotlb_map *map;
-> > > > > +       u64 size = last - start + 1;
-> > > > >
-> > > > > -       if (last < start)
-> > > > > +       // size can overflow to 0 when start is 0 and last is (2^64 - 1).
-> > > > > +       if (last < start || size == 0)
-> > > > >                 return -EFAULT;
-> > > >
-> > > > I'd move this check to vhost_chr_iter_write(), then for the device who
-> > > > has its own msg handler (e.g vDPA) can benefit from it as well.
-> > >
-> > > Thanks for reviewing!
-> > >
-> > > I kept the check here thinking that all devices would benefit from it
-> > > because they would need to call vhost_iotlb_add_range() to add an entry
-> > > to the iotlb. Isn't that correct?
-> >
-> > Correct for now but not for the future, it's not guaranteed that the
-> > per device iotlb message handler will use vhost iotlb.
-> >
-> > But I agree that we probably don't need to care about it too much now.
-> >
-> > > Do you see any other benefit in moving
-> > > it to vhost_chr_iter_write()?
-> > >
-> > > One concern I have is that if we move it out some future caller to
-> > > vhost_iotlb_add_range() might forget to handle this case.
-> >
-> > Yes.
-> >
-> > Rethink the whole fix, we're basically rejecting [0, ULONG_MAX] range
-> > which seems a little bit odd.
->
-> Well, I guess ideally we'd split this up as two entries - this kind of
-> thing is after all one of the reasons we initially used first,last as
-> the API - as opposed to first,size.
->
-> Anirudh, could you do it like this instead of rejecting?
->
->
-> > I wonder if it's better to just remove
-> > the map->size. Having a quick glance at the the user, I don't see any
-> > blocker for this.
-> >
-> > Thanks
->
-> I think it's possible but won't solve the bug by itself, and we'd need
-> to review and fix all users - a high chance of introducing
-> another regression. And I think there's value of fitting under the
-> stable rule of 100 lines with context.
-> So sure, but let's fix the bug first.
-
-Ok, I agree.
-
-Thanks
-
->
->
->
-> > >
-> > > Thanks!
-> > >
-> > >         - Anirudh.
-> > >
-> > > >
-> > > > Thanks
-> > > >
-> > > > >
-> > > > >         if (iotlb->limit &&
-> > > > > @@ -69,7 +71,7 @@ int vhost_iotlb_add_range_ctx(struct vhost_iotlb *iotlb,
-> > > > >                 return -ENOMEM;
-> > > > >
-> > > > >         map->start = start;
-> > > > > -       map->size = last - start + 1;
-> > > > > +       map->size = size;
-> > > > >         map->last = last;
-> > > > >         map->addr = addr;
-> > > > >         map->perm = perm;
-> > > > > --
-> > > > > 2.35.1
-> > > > >
-> > > >
-> > >
->
-
+SGkgR3JlZyBLSCwKCj4gV2h5IG5vdCB1c2UgYSB1bmlvbiBoZXJlIGFzIHRoaXMgaXMgY29taW5n
+IGZyb20gdGhlIGhhcmR3YXJlLCByaWdodD8KPgoKSSB1c2VkIGEgdW5pb24gaW4gUEFUQ0ggdjEK
+KGh0dHBzOi8vcGF0Y2h3b3JrLmtlcm5lbC5vcmcvcHJvamVjdC9saW51eC11c2IvcGF0Y2gvMjAy
+MjAyMTYwODE2NTEuOTA4OS0xLTMwOTAxMDEyMTdAemp1LmVkdS5jbi8pLApJIGNvbXBpbGVkIGl0
+IHRvIGFybTY0IGJpbmFyeSB3aXRoIEdDQyAxMS4yLjEsIHRoZSBiaW5hcnkgd29ya3MgcHJvcGVy
+bHkuCkJ1dCAia2VybmVsIHRlc3Qgcm9ib3QgPGxrcEBpbnRlbC5jb20+IiByZXBvcnRlZCBhIHdh
+cm5pbmdzOgogPj4gZHJpdmVycy91c2IvZ2FkZ2V0L2Z1bmN0aW9uL3V2Y19jb25maWdmcy5jOjEw
+OTE6Mzogd2FybmluZzogCiBmaWVsZCAgd2l0aGluICdzdHJ1Y3QgdXZjZ19mcmFtZTo6KHVubmFt
+ZWQgYXQgZHJpdmVycy91c2IvZ2FkZ2V0L2Z1bmN0aW9uL3V2Y19jb25maWdmcy5jOjEwNjg6Mikn
+IAogaXMgbGVzcyBhbGlnbmVkIHRoYW4gJ3VuaW9uIHV2Y2dfZnJhbWU6Oihhbm9ueW1vdXMgYXQg
+ZHJpdmVycy91c2IvZ2FkZ2V0L2Z1bmN0aW9uL3V2Y19jb25maWdmcy5jOjEwOTE6MyknIAogYW5k
+IGlzIHVzdWFsbHkgZHVlIHRvICdzdHJ1Y3QgdXZjZ19mcmFtZTo6KHVubmFtZWQgYXQgZHJpdmVy
+cy91c2IvZ2FkZ2V0L2Z1bmN0aW9uL3V2Y19jb25maWdmcy5jOjEwNjg6MiknIAogYmVpbmcgcGFj
+a2VkLCB3aGljaCBjYW4gbGVhZCB0byB1bmFsaWduZWQgYWNjZXNzZXMgWy1XdW5hbGlnbmVkLWFj
+Y2Vzc10KICAgICAgICAgICAgICAgICAgIHVuaW9uIHsKICAgICAgICAgICAgICAgICAgIF4KICAg
+MSB3YXJuaW5nIGdlbmVyYXRlZC4KU28gSSB1c2UgYW5vdGhlciB3YXkgdG8gaGFuZGxlIHRoZSBm
+cmFtZSBzdHJ1Y3R1cmUuCgo+IFdoeSBpcyB0aGlzIHdyaXRhYmxlLCBidXQgdGhlIG90aGVyIHZh
+cmlhYmxlcyBhcmUgbm90Pwo+IAoKMS4gYkZvcm1hdEluZGV4IGlzIGF1dG9tYXRpYyBhdXRvIGNh
+bGN1bGF0ZWQgYnkgdGhlIGRyaXZlci4KICAgU28gaXQgaXMgcmVhZC1vbmx5LgoyLiBJIGRvbid0
+IGtub3cgd2h5ICJiX2FzcGVjdF9yYXRpb194IC8gYl9hc3BlY3RfcmF0aW9feSAvIGJtX2ludGVy
+ZmFjZV9mbGFncyIKICAgYXJlIHJlYWQtb25seS4gUGVyaGFwcyB0aGVzZSBwYXJhbWV0ZXJzIGNh
+biBiZSBvYnRhaW5lZCBkaXJlY3RseSBmcm9tIAogICB0aGUgYWN0dWFsIHN0cmVhbSwgc28gZHJp
+dmVyIGRvZXNuJ3QgbmVlZCB0byB0YWtlIGNhcmUgb2YgdGhlc2UgcGFyYW1ldGVycy4KMy4gSWYg
+YlZhcmlhYmxlU2l6ZSBpcyAxLCB0aGVuIGR3Qnl0ZXNQZXJMaW5lIG11c3QgYmUgc2V0dGVkIHRv
+IHplcm8gKDApLgogICBJZiBiVmFyaWFibGVTaXplIGlzIDAsIHRoZW4gZHdCeXRlc1BlckxpbmUg
+Y2FuIGJlIHNldHRlZCB0byBvdGhlciB2YWx1ZS4KICAgU28gaXQgaXMgd3JpdGFibGUuCgo+ID4g
+LQkJKnNpemUgKz0gc2l6ZW9mKGZybS0+ZnJhbWUpOwo+ID4gKwkJKnNpemUgKz0gc2l6ZW9mKGZy
+bS0+ZnJhbWUpIC0gNDsKPiAKPiBXaGVyZSBkaWQgIjQiIGNvbWUgZnJvbT8KPgoKVW5jb21wcmVz
+c2VkIGZyYW1lIGRvZXNuJ3QgaGF2ZSAidTMyIGR3X2J5dGVzX3BlcmxpbmUiLgpGcmFtZWJhc2Vk
+IGZyYW1lIGRvZXNuJ3QgaGF2ZSAidTMyIGR3X21heF92aWRlb19mcmFtZV9idWZmZXJfc2l6ZSIu
+CklmIHdlIHVzZSBhIHVuaW9uIGxpa2UgUEFUQ0ggdjEsIHRoZXJlJ3Mgbm8gbmVlZCB0byBkbyB0
+aGlzLgpNYXliZSB3ZSBjYW4gYWRkICIjZGVmaW5lIFVWQ0dfU1VCX0ZSQU1FX1BBWUxPQURfTEVO
+R1RIIDI2IiwgYW5kIHVzZQoiVVZDR19TVUJfRlJBTUVfUEFZTE9BRF9MRU5HVEgiIHRvIHJlcGxh
+Y2UgInNpemVvZihmcm0tPmZyYW1lKSAtIDQiCmZvciB0aGUgbmV3IFBBVENILgoKPiA+ICsJLyog
+YlZhcmlhYmxlU2l6ZSBpcyBvbmx5IGZvciBmcmFtZWJhc2VkIGZvcm1hdC4gKi8KPiA+ICsJX191
+OCAgYlZhcmlhYmxlU2l6ZTsKPiAKPiBUaGlzIGp1c3QgY2hhbmdlZCBhIHVzZXIgdmlzYWJsZSBz
+dHJ1Y3R1cmUgc2l6ZS4gIFdoYXQgYnJva2Ugd2hlbiBkb2luZwo+IHRoaXM/ICBXaGF0IHRvb2wg
+dXNlcyB0aGlzPwo+IAoKQXMgbG9uZyBhcyB1c2VycyB1c2UgIlVWQ19EVF9GT1JNQVRfVU5DT01Q
+UkVTU0VEX1NJWkUiIGluc3RlYWQgb2YKInNpemVvZihzdHJ1Y3QgdXZjX2Zvcm1hdF91bmNvbXBy
+ZXNzZWQpIiB0byBnZXQgdGhlIGxlbmd0aCwgdGhlcmUgaXMKbm8gcHJvYmxlbS4gU28gSSBoYXZl
+IHRoZSBmb2xsb3dpbmcgbW9kaWZpY2F0aW9uczoKICAgIC0JCQkqc2l6ZSArPSBzaXplb2YodS0+
+ZGVzYyk7CiAgICArCQkJKnNpemUgKz0gdS0+ZGVzYy5iTGVuZ3RoOwoKQ3VycmVudGx5IHRoaXMg
+Y2hhbmdlIGRvZXMgbm90IGJyZWFrIHRoZSBrZXJuZWwsIGFuZCB1dmMgc3RyZWFtIEFQUApiYXNl
+ZCBvbiBVVkMgZ2FkZ2V0IGRvZXNuJ3QgbmVlZCB0byB1c2UgInN0cnVjdCB1dmNfZm9ybWF0X3Vu
+Y29tcHJlc3NlZCIuCgpUaGVyZSBtYXkgYmUgc29tZSB0b29scyB3aGljaCB1c2UgaXQsIHRoZXkg
+Y2FuIHVzZSAKIlVWQ19EVF9GT1JNQVRfVU5DT01QUkVTU0VEX1NJWkUiIHRvIGNvdmVyIHRoZSBt
+b2RpZmljYXRpb24uCkluIGFkZGl0aW9uLCB3ZSBkb24ndCBuZWVkICJjb3B5IGFsbCB1bmNvbXBy
+ZXNzZWQgY29kZSwgcmVuYW1lCnVuY29tcHJlc3NlZCBhcyBmcmFtZWJhc2VkLCBhbmQgbWFrZSBh
+IGxpdHRsZSBjaGFuZ2UiIHRvIGFjY2VzcyBmcmFtZWJhc2VkCnN0cmVhbSBzdXBwb3J0LgoKVGhh
+bmtzLApKaW5nIExlbmcK

@@ -2,89 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DA954C13EE
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 14:20:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A58054C1401
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 14:22:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240854AbiBWNUl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 08:20:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43298 "EHLO
+        id S240880AbiBWNWP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 08:22:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240851AbiBWNUk (ORCPT
+        with ESMTP id S238995AbiBWNWL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 08:20:40 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94EA0AA02B;
-        Wed, 23 Feb 2022 05:20:12 -0800 (PST)
+        Wed, 23 Feb 2022 08:22:11 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A3B74EA34;
+        Wed, 23 Feb 2022 05:21:43 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3044B6153D;
-        Wed, 23 Feb 2022 13:20:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 8A385C340F1;
-        Wed, 23 Feb 2022 13:20:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645622411;
-        bh=4MINalVsLypM4gQLR9Y0Ac8CSDvIEk7Or3pxAcAHrp8=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=HV3GKjiAoVKlfbobREUE3hGsHRDqzsmzlyL6o5mMSqbKX6IyY79VoWM3Qzs1adTt+
-         LkM9R6Je7Nngy4QtNvhmvT6T7pNjV5Dy4/br1Sg3OxHES0FDEi37iLWe5U1nTm1A0g
-         Fk+uWWn9uekrNHdyn3fqu17941JuiD0iZkpinXQipSKRkRk4EeTGTutow0eYKGip7Y
-         Dttc+6C2xKBF1iq4wZWEaEQblmDcmje7g+sbNmyYkyNYfZbA3fhsoC2SMGwMAwXJJU
-         PAx/RmL186qNt6pJUJvaSyI6CxDPgyimzTNvhDJLNHD1WnNdDOJ1fIGB3BLxn1xkAo
-         XQ3XQgDRzy7Jw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 78F24E6D598;
-        Wed, 23 Feb 2022 13:20:11 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        by ams.source.kernel.org (Postfix) with ESMTPS id 38746B81FB3;
+        Wed, 23 Feb 2022 13:21:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B918C340F7;
+        Wed, 23 Feb 2022 13:21:40 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="B1edNqIi"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1645622496;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=jNCqwRVwwnl2Hzkwee6ETCjLUlSGOZ/h+OLPPjOrc0Y=;
+        b=B1edNqIi5b5HctHZNPAaowU88lVryawcFNGYjSp85vHovokqADjt+gCUWQtoL8L26HfDe3
+        nl8aJAMIZYBIy8qi3ZYXwTdRr82nWHV60r4P2Uyim3JETbtJFhkxCHI+ueWTYKGJ0iBXol
+        RuYemuRnCCuF1yTAFE6Dp8d6Oaed8fM=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id a513edf2 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Wed, 23 Feb 2022 13:21:36 +0000 (UTC)
+Received: by mail-yb1-f178.google.com with SMTP id p19so47897896ybc.6;
+        Wed, 23 Feb 2022 05:21:34 -0800 (PST)
+X-Gm-Message-State: AOAM531YdcEAtdHu9cUGecLEDyPn3C8xhmWF158beDmndhHqdGevvuli
+        5wIWEU20p5eqUvigc/UxUAZ4sBdyTB7e+Z+1OLE=
+X-Google-Smtp-Source: ABdhPJyPz4I/fVrE2hAwlxEjASOoJgctbxsl4Sw1b3At1gDlRAwGMq/v/jtx+mRgcRGA5d7YgSWANySbbRg9ZZzPO00=
+X-Received: by 2002:a05:6902:693:b0:613:7f4f:2e63 with SMTP id
+ i19-20020a056902069300b006137f4f2e63mr26519604ybt.271.1645622492226; Wed, 23
+ Feb 2022 05:21:32 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH 0/3] drivers/net/ftgmac100: fix occasional DHCP failure
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <164562241149.17147.7259955928729255752.git-patchwork-notify@kernel.org>
-Date:   Wed, 23 Feb 2022 13:20:11 +0000
-References: <20220223031436.124858-1-guoheyi@linux.alibaba.com>
-In-Reply-To: <20220223031436.124858-1-guoheyi@linux.alibaba.com>
-To:     Heyi Guo <guoheyi@linux.alibaba.com>
-Cc:     linux-kernel@vger.kernel.org, andrew@lunn.ch, davem@davemloft.net,
-        kuba@kernel.org, joel@jms.id.au, huangguangbin2@huawei.com,
-        chenhao288@hisilicon.com, arnd@arndb.de, dylan_hung@aspeedtech.com,
-        netdev@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <1614156452-17311-1-git-send-email-acatan@amazon.com>
+ <1614156452-17311-3-git-send-email-acatan@amazon.com> <CAHmME9o6cjZT1Cj1g5w5WQE83YxJNqB7eUCWn74FA9Pbb3Y6nQ@mail.gmail.com>
+ <CAHmME9poYgfoniexZ2dvpEEvnWGLQTOjOvB2bck-Whhy9h+Hjw@mail.gmail.com>
+In-Reply-To: <CAHmME9poYgfoniexZ2dvpEEvnWGLQTOjOvB2bck-Whhy9h+Hjw@mail.gmail.com>
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date:   Wed, 23 Feb 2022 14:21:21 +0100
+X-Gmail-Original-Message-ID: <CAHmME9pFZKtBP7R8St03544nHc=7ztFsK1q9fKPGKXZgjHckVw@mail.gmail.com>
+Message-ID: <CAHmME9pFZKtBP7R8St03544nHc=7ztFsK1q9fKPGKXZgjHckVw@mail.gmail.com>
+Subject: Re: [PATCH v7 2/2] drivers/virt: vmgenid: add vm generation id driver
+To:     adrian@parity.io
+Cc:     "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        QEMU Developers <qemu-devel@nongnu.org>,
+        KVM list <kvm@vger.kernel.org>, linux-s390@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        graf@amazon.com, Randy Dunlap <rdunlap@infradead.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Mike Rapoport <rppt@kernel.org>, 0x7f454c46@gmail.com,
+        borntraeger@de.ibm.com, Jann Horn <jannh@google.com>,
+        Willy Tarreau <w@1wt.eu>,
+        Colm MacCarthaigh <colmmacc@amazon.com>,
+        Andrew Lutomirski <luto@kernel.org>,
+        "Theodore Ts'o" <tytso@mit.edu>,
+        Eric Biggers <ebiggers@kernel.org>,
+        "Woodhouse, David" <dwmw@amazon.co.uk>, bonzini@gnu.org,
+        "Singh, Balbir" <sblbir@amazon.com>,
+        "Weiss, Radu" <raduweis@amazon.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>,
+        Michael Ellerman <mpe@ellerman.id.au>, areber@redhat.com,
+        ovzxemul@gmail.com, avagin@gmail.com, ptikhomirov@virtuozzo.com,
+        gil@azul.com, asmehra@redhat.com, dgunigun@redhat.com,
+        vijaysun@ca.ibm.com, oridgar@gmail.com, ghammer@redhat.com,
+        Adrian Catangiu <acatan@amazon.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+On Tue, Feb 22, 2022 at 11:17 PM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
+> Well I cleaned up this v7 and refactored it into something along the
+> lines of what I'm thinking. I don't yet know enough about this general
+> problem space to propose the patch and I haven't tested it either
 
-This series was applied to netdev/net.git (master)
-by David S. Miller <davem@davemloft.net>:
+A little further along, there's now this series:
+https://lore.kernel.org/lkml/20220223131231.403386-1-Jason@zx2c4.com/T/
+We can resume discussion there.
 
-On Wed, 23 Feb 2022 11:14:33 +0800 you wrote:
-> This patch set is to fix the issues discussed in the mail thread:
-> https://lore.kernel.org/netdev/51f5b7a7-330f-6b3c-253d-10e45cdb6805@linux.alibaba.com/
-> and follows the advice from Andrew Lunn.
-> 
-> The first 2 patches refactors the code to enable adjust_link calling reset
-> function directly.
-> 
-> [...]
-
-Here is the summary with links:
-  - [1/3] drivers/net/ftgmac100: refactor ftgmac100_reset_task to enable direct function call
-    https://git.kernel.org/netdev/net/c/4f1e72850d45
-  - [2/3] drivers/net/ftgmac100: adjust code place for function call dependency
-    https://git.kernel.org/netdev/net/c/3c773dba8182
-  - [3/3] drivers/net/ftgmac100: fix DHCP potential failure with systemd
-    https://git.kernel.org/netdev/net/c/1baf2e50e48f
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Jason

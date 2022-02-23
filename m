@@ -2,94 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD6874C1189
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 12:41:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 09BEB4C11A6
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 12:43:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240072AbiBWLlW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 06:41:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36714 "EHLO
+        id S240149AbiBWLmC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 06:42:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240051AbiBWLlO (ORCPT
+        with ESMTP id S240129AbiBWLls (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 06:41:14 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61E1B95A12
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 03:40:47 -0800 (PST)
-Received: from benjamin-XPS-13-9310.. (unknown [IPv6:2a01:e0a:120:3210:995c:f547:d294:e4ca])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: benjamin.gaignard)
-        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 979691F44691;
-        Wed, 23 Feb 2022 11:40:45 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1645616445;
-        bh=Odo6dvcrTCaffyGv6tM4ZI49Z1HSi/r7+/fGLyy6ilA=;
-        h=From:To:Cc:Subject:Date:From;
-        b=RWeVp9Gavp0lThklna33hXdbWAxCRZXV1r+YOyxptw/+meIzZXsqtSHu7lhFDX1tH
-         kq1k+RCEYJEbgChrnRqVY4c9FS6E846qnr4EHCGjYT+DPA3fbgjZUKYzH1UMx02Lx3
-         7c1zYUDeERg7Neg+kLfm+ahP7yOm2LbfIEI6lIbnRKQozKSr5RsdkcczOSG83JNRiy
-         34Y8XISpN09wCjxMaDtFenP4Ur6YgCtNQ/WzeEXf5Mb/OmZLfzcGF6e+Qf75dNYI7H
-         WzD2RGr+mx34zGqKSPfdgHtSAnoMewOiuxqc297yZRNfjgPlOSyvpzZCxXf5Uc/weM
-         HCKablplqE32A==
-From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
-To:     thierry.reding@gmail.com, sam@ravnborg.org, airlied@linux.ie,
-        daniel@ffwll.ch
-Cc:     yangcong5@huaqin.corp-partner.google.com,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        kernel@collabora.com,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Subject: [PATCH] drm/panel: boe-tv101wum-nl6: Fix errors cases handling in prepare function
-Date:   Wed, 23 Feb 2022 12:40:36 +0100
-Message-Id: <20220223114036.445845-1-benjamin.gaignard@collabora.com>
-X-Mailer: git-send-email 2.32.0
+        Wed, 23 Feb 2022 06:41:48 -0500
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EC5398594
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 03:41:16 -0800 (PST)
+Received: by mail-pj1-x1030.google.com with SMTP id m22so2422317pja.0
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 03:41:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=2FdpJtwwptOqf9HZS4rYWvt/1fNJrXfcPdRcbqchc9A=;
+        b=X2fNNniPtOIIm9CDvNXZh5lyGbvsRJGvOF/n0CLswxgJ/CzMPKNkAPld4djZqv/ioX
+         Uzm2CAMBk3pA19cmDysAKvaErW3p3oUVFRUZ59uV4PtR0oA5xQ13eSfjlwqnn3vAkWHo
+         Unv1kFIJoKvI7fs4kUZJnwWzg/XnwLpJCp3Qs=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=2FdpJtwwptOqf9HZS4rYWvt/1fNJrXfcPdRcbqchc9A=;
+        b=z2FFdqiSLcxAaRYOjQl+ouRocX7iiqLkNXslKfKBTbd7f5nqaAlt0L0BB+eVnaT/pe
+         8bJROoWKHxgapZrlNvixiBTdUfEpvr01DmfJeziMoIgiDwdxZCiG3HFAE/eBcWJHbAg1
+         5BqJVabfXNbMTpusiHXmn4bkkrUk2D1UgUF3yG8Qz5jb3Oh6qx85flp68F46ZeM+V+fT
+         0O50b7VZYmL9EpRLp8Tf/yFMDbkfgBK/V+dpP0EwJ8ktXSZA/Q06hdH/tJ7V05qMcbqa
+         CebvX2ek2U1qq8srt86lkVddrysEhoTuk9xRdtTgu5APCdoyAYTkEZCMBBxCLCLWoYYN
+         u5Kg==
+X-Gm-Message-State: AOAM532lkkzWM0lFOxaieqehwwhEqrVOp9JlL/Vv+io7eYzThIKeylph
+        /BuNHPMat5549DkGNe6J6r7QDg==
+X-Google-Smtp-Source: ABdhPJzAvBfKYhgVJwO+GzBK5Q6lxoYGCvV1OIKMlKQnwiWxMUYcDVdQosyf4QhvhTpuw4ls4Xhd1g==
+X-Received: by 2002:a17:902:e94e:b0:14d:85a1:c846 with SMTP id b14-20020a170902e94e00b0014d85a1c846mr27585145pll.120.1645616476128;
+        Wed, 23 Feb 2022 03:41:16 -0800 (PST)
+Received: from google.com ([240f:75:7537:3187:d2bd:9913:3c85:9aca])
+        by smtp.gmail.com with ESMTPSA id o3sm17936752pfu.50.2022.02.23.03.41.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Feb 2022 03:41:15 -0800 (PST)
+Date:   Wed, 23 Feb 2022 11:41:09 +0000
+From:   Sergey Senozhatsky <senozhatsky@chromium.org>
+To:     Petr Mladek <pmladek@suse.com>
+Cc:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+        linux-kernel@vger.kernel.org, bhe@redhat.com,
+        akpm@linux-foundation.org, anton@enomsg.org, ccross@android.com,
+        dyoung@redhat.com, feng.tang@intel.com, john.ogness@linutronix.de,
+        keescook@chromium.org, kernel@gpiccoli.net,
+        kexec@lists.infradead.org, rostedt@goodmis.org,
+        senozhatsky@chromium.org, tony.luck@intel.com, vgoyal@redhat.com
+Subject: Re: [PATCH V6] panic: Move panic_print before kmsg dumpers
+Message-ID: <YhYdVYYapkaVdvZE@google.com>
+References: <20220214141308.841525-1-gpiccoli@igalia.com>
+ <YgvRe92hEvj5mEUS@alley>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YgvRe92hEvj5mEUS@alley>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Make sure that pp3300 regulator and enable gpio are cleaned before
-leave in error cases.
+On (22/02/15 17:14), Petr Mladek wrote:
+> Makes sense and looks good to me.
+> 
+> Reviewed-by: Petr Mladek <pmladek@suse.com>
 
-Fixes: 18c58153b8c62 ("drm/panel: boe-tv101wum-nl6: Support enabling a 3.3V rail")
-Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
----
- drivers/gpu/drm/panel/panel-boe-tv101wum-nl6.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+FWIW
 
-diff --git a/drivers/gpu/drm/panel/panel-boe-tv101wum-nl6.c b/drivers/gpu/drm/panel/panel-boe-tv101wum-nl6.c
-index 5fcbde789ddb..382a17bb96d8 100644
---- a/drivers/gpu/drm/panel/panel-boe-tv101wum-nl6.c
-+++ b/drivers/gpu/drm/panel/panel-boe-tv101wum-nl6.c
-@@ -1245,11 +1245,11 @@ static int boe_panel_prepare(struct drm_panel *panel)
- 
- 	ret = regulator_enable(boe->pp3300);
- 	if (ret < 0)
--		return ret;
-+		goto disablegpio;
- 
- 	ret = regulator_enable(boe->pp1800);
- 	if (ret < 0)
--		return ret;
-+		goto poweroff3v3;
- 
- 	usleep_range(3000, 5000);
- 
-@@ -1286,6 +1286,9 @@ static int boe_panel_prepare(struct drm_panel *panel)
- poweroff1v8:
- 	usleep_range(5000, 7000);
- 	regulator_disable(boe->pp1800);
-+poweroff3v3:
-+	regulator_disable(boe->pp3300);
-+disablegpio:
- 	gpiod_set_value(boe->enable_gpio, 0);
- 
- 	return ret;
--- 
-2.32.0
-
+Reviewed-by: Sergey Senozhatsky <senozhatsky@chromium.org>

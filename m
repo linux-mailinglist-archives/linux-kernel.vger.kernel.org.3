@@ -2,141 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D00F4C06E0
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 02:29:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E02EF4C06E4
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 02:29:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236557AbiBWB34 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 20:29:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57346 "EHLO
+        id S236583AbiBWBaF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 20:30:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236555AbiBWB3z (ORCPT
+        with ESMTP id S235941AbiBWBaE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 20:29:55 -0500
-Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6716749CBE
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 17:29:26 -0800 (PST)
-Received: by mail-pj1-x104a.google.com with SMTP id x17-20020a17090ab01100b001bbffb2c5f3so434165pjq.9
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 17:29:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc
-         :content-transfer-encoding;
-        bh=XJt7E+/TbSWO+R4K5yrVaKdlcnMjFDGRebGSqWZKoOM=;
-        b=VUYknfLXL+unn/6VXtDwyrULYfWLDjOsZa0fJmThc66yI1NsTFLXS6HOfPxjE13UR0
-         wfmwCx/GaDmK8g9Seq1lutlHlvAv2/YRiwYFbBvOXJw2ZEj/WB9DTgIoDA84dsTiF24A
-         /6zLKmpQbnTLC4tgp3e6zNGrOFs9syvzaoDMq5miys2dfVDHVuNhilHNQDsMksd6p5pP
-         9rSvP4TH5Ih9Nu9GwP0qxEdeCOVbDBSUbpgHqa7zjE/+PTlmyizMdoKp5f+kdjciUQXS
-         h5sUUYrb2DvtR2As0ASss2/vfKVYUvuCWAOvppGcllXLKnyuYinNIAjYK1oVtKeRqYtc
-         hTAg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc
-         :content-transfer-encoding;
-        bh=XJt7E+/TbSWO+R4K5yrVaKdlcnMjFDGRebGSqWZKoOM=;
-        b=knfOm+eULZDdgLsAo9Ruef6M/kGQuORspf/GcZPggNzK/KDAVO+yQlKYXciXfMGXex
-         oOLSS6O7dipnJK6C+T4FpWsxr0F4/70cT1wn+SDwrv7g0x0vqevMn7yZKwHhKK2MEop4
-         Q8SDZFFMxIgJNd5BZiYFwrsEvmSpPnyETD3NyKVxGBwgh3/oQBL8GdsGuxWs+NtJsqqp
-         DepjPQAltqMXLOGBU7/ZAVq6dFaqUJooXa2kLUoykIkZak97J4DhcqCwLNt1Fn43T/0o
-         VngnjtvazPjbDe66bB+pyPzXmuGqjnuM9eQUQyF5cZAJw96Td/E7WbINAyjMey/GVC9r
-         SxkQ==
-X-Gm-Message-State: AOAM530kXwrsoQDoOpeCud6VEyCjrp4HG695+CDZ22As67lS4554dSQF
-        zFZUT0+P/VO2/CDstdR3wbg5YdWfV86x
-X-Google-Smtp-Source: ABdhPJwok/zYeBv9iYgH5TNm6XOpbgEypuRH1+BE3TzucfcQU2CHSzz99Lv+LdxirpLHnB05kLsrDfGCDg4o
-X-Received: from connoro.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:a99])
- (user=connoro job=sendgmr) by 2002:a17:902:e34b:b0:14f:af20:4b3c with SMTP id
- p11-20020a170902e34b00b0014faf204b3cmr12782893plc.56.1645579765763; Tue, 22
- Feb 2022 17:29:25 -0800 (PST)
-Date:   Wed, 23 Feb 2022 01:28:14 +0000
-Message-Id: <20220223012814.1898677-1-connoro@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.35.1.473.g83b2b277ed-goog
-Subject: [PATCH bpf-next] bpf: add config to allow loading modules with BTF mismatches
-From:   "Connor O'Brien" <connoro@google.com>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>
-Cc:     Martin KaFai Lau <kafai@fb.com>, Song Liu <songliubraving@fb.com>,
-        Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Shung-Hsi Yu <shung-hsi.yu@suse.com>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "Connor O'Brien" <connoro@google.com>,
-        "=?UTF-8?q?Michal=20Such=C3=A1nek?=" <msuchanek@suse.de>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 22 Feb 2022 20:30:04 -0500
+Received: from esa1.hgst.iphmx.com (esa1.hgst.iphmx.com [68.232.141.245])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6A1149F8C
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 17:29:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1645579777; x=1677115777;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=nSHdp0a4GmD+jXxAqqT79DZ6hE1s0OTI3GXP9NWFpG4=;
+  b=XPpJkkJSqmgvw/aTng12BFgVhNIRyDQJacySEeSCq6eqzp8U7weaGiz4
+   +PVYpOR+MvNGORHJ1xefPs/BbCHyrn0/n2bzhOPxxjne4phc9zoSVmGHo
+   TjC03OHRycCzV3132Al7hykREXoy5wJT7YxwiXsy7f2UMm7b5dT9nhub5
+   qI2cdsnSw7ip0ho/HGzJ3GQ+Qk6PkNwjL+ewbStsb7AN0lmtYWU57iJmN
+   LHCsFEYrK9Dnw7CQ8d6L7uNSAAw677YT1ZGTtPRaxj3uasQfqe/IyHcgc
+   iYU0tRw0/xJD8jYzu7YSkFrqXIsBaNpVFmV106MI5MlqOidNYD7gSHhuT
+   w==;
+X-IronPort-AV: E=Sophos;i="5.88,389,1635177600"; 
+   d="scan'208";a="305621091"
+Received: from uls-op-cesaip01.wdc.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
+  by ob1.hgst.iphmx.com with ESMTP; 23 Feb 2022 09:29:28 +0800
+IronPort-SDR: 4gL+062fycb9kWZ56rdd5bHCKPdeZhf7hRqkI/2zlQpULrnbh/XI00qMG+CHyTKtI4pYq1uOqk
+ KbOBS2gKfCS83r7DMfsDJJNwY+gXm8lH1Jl99tbpllraATQSYbs26IBMawHE+/ooXklPoLkYhi
+ 95WbiLSUoJksQ6Vwkt7Ja/5pO9v3MjcnVh/jeEuKq5vc+96edF3hovBsb7bg3afVgfnZpKEOEt
+ DekmoLqUnLJbPB65XpMF80wOCDfKbQ5mqvJo5stcpTJ3CGH6Si0kxGtRt0uq3crT9gQvLAoh2G
+ CjR9gdKeqyC1opNcgjvsIbuT
+Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
+  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2022 17:02:05 -0800
+IronPort-SDR: 484FZL3jGgQ2zWnDwqphdjpogSE5bEx2hVzBlngI/ALizG3XeejIqGJKvGYUWYGTzIkzD6/r82
+ xWSw+BRX5tyKZLeO096PQV/uNM4qVMBlnEn9C1uVVbgsQXhqtxLiJAvYkzHjhBwxG+dqyPF/jv
+ /8HzacOq7swxeF/hUlntL61E0LffrSGApu/ese5DXzfijg2ggmLYcI264BcdgDIorOzlgO4WWM
+ pwLGh31iYqs1XnyTjrnNy8TIFlLcaswEVrmt7+UlbLjyWpBe8AvMKJkBibDNi3OTKo+kgmFukY
+ Qj8=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2022 17:29:28 -0800
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4K3JNl28dCz1SVnx
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 17:29:27 -0800 (PST)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:references:to:content-language
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1645579766; x=1648171767; bh=nSHdp0a4GmD+jXxAqqT79DZ6hE1s0OTI3GX
+        P9NWFpG4=; b=KKQVRAyjau51Pr3UeBfi5TuayEPGl++8gnnXlp2g8aNDH6xeOvW
+        U918Vy4SwenFuFF97KR2qLFDtoyJBtfphmAwLab247cfnberH6iiUD3dycLIpt6t
+        sIDCi6XfagreGWjzq9T7wNbZGtCf+l6+EmtwJRUTOpGVnYbmIJlzwwoP5zqknv2S
+        VEyGa5CaA6qAaKi3/GPnVIdGL7Zisv7gCccVmKT0COg0gMsGh9ZA+yZiQxrnDxIC
+        ktsRh2afLTZIvPcntL1GAH5Yt4xLheVnrWrw3baxC8UakDHI5XXOmJDGadGvQyYJ
+        WMmDdFKJkSF3FCBu0qcFds0P3w2kS1oapRw==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id 0Nrmc6diZpkF for <linux-kernel@vger.kernel.org>;
+        Tue, 22 Feb 2022 17:29:26 -0800 (PST)
+Received: from [10.225.163.81] (unknown [10.225.163.81])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4K3JNb3h1Dz1Rvlx;
+        Tue, 22 Feb 2022 17:29:19 -0800 (PST)
+Message-ID: <98ddab1b-6702-f121-9fef-0ce185888a1a@opensource.wdc.com>
+Date:   Wed, 23 Feb 2022 10:29:18 +0900
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v3 02/10] block: Introduce queue limits for copy-offload
+ support
+Content-Language: en-US
+To:     Luis Chamberlain <mcgrof@kernel.org>,
+        Nitesh Shetty <nj.shetty@samsung.com>
+Cc:     hch@lst.de, javier@javigon.com, chaitanyak@nvidia.com,
+        linux-block@vger.kernel.org, linux-scsi@vger.kernel.org,
+        dm-devel@redhat.com, linux-nvme@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, axboe@kernel.dk,
+        msnitzer@redhat.com, bvanassche@acm.org,
+        martin.petersen@oracle.com, hare@suse.de, kbusch@kernel.org,
+        Frederick.Knight@netapp.com, osandov@fb.com,
+        lsf-pc@lists.linux-foundation.org, djwong@kernel.org,
+        josef@toxicpanda.com, clm@fb.com, dsterba@suse.com, tytso@mit.edu,
+        jack@suse.com, joshi.k@samsung.com, arnav.dawn@samsung.com,
+        nitheshshetty@gmail.com, SelvaKumar S <selvakuma.s1@samsung.com>,
+        Alasdair Kergon <agk@redhat.com>,
+        Mike Snitzer <snitzer@redhat.com>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        James Smart <james.smart@broadcom.com>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        linux-kernel@vger.kernel.org
+References: <20220214080002.18381-1-nj.shetty@samsung.com>
+ <CGME20220214080605epcas5p16868dae515a6355cf9fecf22df4f3c3d@epcas5p1.samsung.com>
+ <20220214080002.18381-3-nj.shetty@samsung.com>
+ <20220217090700.b7n33vbkx5s4qbfq@garbanzo> <20220217125901.GA3781@test-zns>
+ <YhWGDUyQkUcE6itt@bombadil.infradead.org>
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <YhWGDUyQkUcE6itt@bombadil.infradead.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-BTF mismatch can occur for a separately-built module even when the ABI
-is otherwise compatible and nothing else would prevent successfully
-loading. Add a new config to control how mismatches are handled. By
-default, preserve the current behavior of refusing to load the
-module. If MODULE_ALLOW_BTF_MISMATCH is enabled, load the module but
-ignore its BTF information.
+On 2/23/22 09:55, Luis Chamberlain wrote:
+> On Thu, Feb 17, 2022 at 06:29:01PM +0530, Nitesh Shetty wrote:
+>>  Thu, Feb 17, 2022 at 01:07:00AM -0800, Luis Chamberlain wrote:
+>>> The subject says limits for copy-offload...
+>>>
+>>> On Mon, Feb 14, 2022 at 01:29:52PM +0530, Nitesh Shetty wrote:
+>>>> Add device limits as sysfs entries,
+>>>>         - copy_offload (RW)
+>>>>         - copy_max_bytes (RW)
+>>>>         - copy_max_hw_bytes (RO)
+>>>>         - copy_max_range_bytes (RW)
+>>>>         - copy_max_range_hw_bytes (RO)
+>>>>         - copy_max_nr_ranges (RW)
+>>>>         - copy_max_nr_ranges_hw (RO)
+>>>
+>>> Some of these seem like generic... and also I see a few more max_hw ones
+>>> not listed above...
+>>>
+>> queue_limits and sysfs entries are differently named.
+>> All sysfs entries start with copy_* prefix. Also it makes easy to lookup
+>> all copy sysfs.
+>> For queue limits naming, I tried to following existing queue limit
+>> convention (like discard).
+> 
+> My point was that your subject seems to indicate the changes are just
+> for copy-offload, but you seem to be adding generic queue limits as
+> well. Is that correct? If so then perhaps the subject should be changed
+> or the patch split up.
+> 
+>>>> +static ssize_t queue_copy_offload_store(struct request_queue *q,
+>>>> +				       const char *page, size_t count)
+>>>> +{
+>>>> +	unsigned long copy_offload;
+>>>> +	ssize_t ret = queue_var_store(&copy_offload, page, count);
+>>>> +
+>>>> +	if (ret < 0)
+>>>> +		return ret;
+>>>> +
+>>>> +	if (copy_offload && !q->limits.max_hw_copy_sectors)
+>>>> +		return -EINVAL;
+>>>
+>>>
+>>> If the kernel schedules, copy_offload may still be true and
+>>> max_hw_copy_sectors may be set to 0. Is that an issue?
+>>>
+>>
+>> This check ensures that, we dont enable offload if device doesnt support
+>> offload. I feel it shouldn't be an issue.
+> 
+> My point was this:
+> 
+> CPU1                                       CPU2
+> Time
+> 1) if (copy_offload 
+> 2)    ---> preemption so it schedules      
+> 3)    ---> some other high priority task  Sets q->limits.max_hw_copy_sectors to 0
+> 4) && !q->limits.max_hw_copy_sectors)
+> 
+> Can something bad happen if we allow for this?
 
-Suggested-by: Yonghong Song <yhs@fb.com>
-Suggested-by: Michal Such=C3=A1nek <msuchanek@suse.de>
-Signed-off-by: Connor O'Brien <connoro@google.com>
----
-Hello,
+max_hw_copy_sectors describes the device capability to offload copy. So
+this is read-only and "max_hw_copy_sectors != 0" means that the device
+supports copy offload (this attribute should really be named
+max_hw_copy_offload_sectors).
 
-In the discussion regarding BTF compatibility & modules, there seemed
-to be broad agreement that an option to ignore mismatches would be
-reasonable. Currently the only option for handling this problem seems
-to be to disable BTF entirely, so this would at least be an
-incremental improvement.
+The actual loop to issue copy offload BIOs, however, must use the soft
+version of the attribute: max_copy_sectors, which defaults to
+max_hw_copy_sectors if copy offload is truned on and I guess to
+max_sectors for the emulation case.
 
-Thanks,
-Connor
+Now, with this in mind, I do not see how allowing max_copy_sectors to be
+0 makes sense. I fail to see why that should be allowed since:
+1) If copy_offload is true, we will rely on the device and chunk copy
+offload BIOs up to max_copy_sectors
+2) If copy_offload is false (or device does not support it), emulation
+will be used by issuing read/write BIOs of up to max_copy_sectors.
 
- kernel/bpf/btf.c  |  3 ++-
- lib/Kconfig.debug | 10 ++++++++++
- 2 files changed, 12 insertions(+), 1 deletion(-)
+Thus max_copy_sectors must always be at least equal to the device
+minimum IO size, that is, the logical block size.
 
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index 11740b300de9..1a21f24105b3 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -6397,7 +6397,8 @@ static int btf_module_notify(struct notifier_block *n=
-b, unsigned long op,
- 			pr_warn("failed to validate module [%s] BTF: %ld\n",
- 				mod->name, PTR_ERR(btf));
- 			kfree(btf_mod);
--			err =3D PTR_ERR(btf);
-+			if (!IS_ENABLED(CONFIG_MODULE_ALLOW_BTF_MISMATCH))
-+				err =3D PTR_ERR(btf);
- 			goto out;
- 		}
- 		err =3D btf_alloc_id(btf);
-diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-index 1555da672275..ff857bb7d633 100644
---- a/lib/Kconfig.debug
-+++ b/lib/Kconfig.debug
-@@ -339,6 +339,16 @@ config DEBUG_INFO_BTF_MODULES
- 	help
- 	  Generate compact split BTF type information for kernel modules.
-=20
-+config MODULE_ALLOW_BTF_MISMATCH
-+	bool "Allow loading modules with non-matching BTF type info"
-+	depends on DEBUG_INFO_BTF_MODULES
-+	help
-+	  For modules whose split BTF does not match vmlinux, load without
-+	  BTF rather than refusing to load. The default behavior with
-+	  module BTF enabled is to reject modules with such mismatches;
-+	  this option will still load module BTF where possible but ignore
-+	  it when a mismatch is found.
-+
- config GDB_SCRIPTS
- 	bool "Provide GDB scripts for kernel debugging"
- 	help
---=20
-2.35.1.473.g83b2b277ed-goog
 
+-- 
+Damien Le Moal
+Western Digital Research

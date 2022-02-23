@@ -2,54 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 883B04C0781
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 03:00:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C0E124C078D
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 03:05:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236659AbiBWCAb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 21:00:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58654 "EHLO
+        id S236659AbiBWCFo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 21:05:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236648AbiBWCA3 (ORCPT
+        with ESMTP id S231338AbiBWCFn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 21:00:29 -0500
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67B8E3C497;
-        Tue, 22 Feb 2022 18:00:01 -0800 (PST)
-X-UUID: a3ebf72856e14b61825f4502429fd69b-20220223
-X-UUID: a3ebf72856e14b61825f4502429fd69b-20220223
-Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw02.mediatek.com
-        (envelope-from <leilk.liu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 985703712; Wed, 23 Feb 2022 09:59:52 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Wed, 23 Feb 2022 09:59:51 +0800
-Received: from mhfsdcap04 (10.17.3.154) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 23 Feb 2022 09:59:50 +0800
-Message-ID: <2c1a0925aeb1f3ba640a29e0f6f9765eb609293b.camel@mediatek.com>
-Subject: Re: [PATCH V2 4/6] spi: mediatek: add spi memory support
-From:   Leilk Liu <leilk.liu@mediatek.com>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Mark Brown <broonie@kernel.org>
-CC:     Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-spi@vger.kernel.org>, <linux-mediatek@lists.infradead.org>
-Date:   Wed, 23 Feb 2022 09:59:50 +0800
-In-Reply-To: <2e994be0-8b60-a3dc-2ab7-34d93192dc09@collabora.com>
-References: <20220221040717.3729-1-leilk.liu@mediatek.com>
-         <20220221040717.3729-5-leilk.liu@mediatek.com>
-         <2e994be0-8b60-a3dc-2ab7-34d93192dc09@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Tue, 22 Feb 2022 21:05:43 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AED3910D0
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 18:05:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645581916; x=1677117916;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=hijXHNoJz4XA0M+7ZFzjHKzc//6MWWg3TV351e6dqnM=;
+  b=jUZ0i/34f7fhusopBrMoxvPRWgDoICManbPIwmJoWoaBOcWVfxWtajyb
+   3zXoIrpnyuzOGW/+bWLeHa3g1GiBc7ohyfo1KHkgpeNsxfymtllOY0Q5J
+   jFZpc2xnRPPEBrYsKqlbXBTqPy0EZq7+As0tvdIKFvBsF+oNSf0iiiLZr
+   n37GnupF4IMeqUe+N4X81VbJEkdWW6g4a8X5HHH5WXJM2DgRePS5Fm0Ww
+   3oYakFZRi+EyAueKh4hlnDj1Kl+snN/LhAHjwqvBckj0nYuDMIB4mSHkv
+   8YXEjQJE4UR1+LMdszxL++jJktBGRUJbGANkaBv2WxZdpANPrcZqFrnCc
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10266"; a="250688810"
+X-IronPort-AV: E=Sophos;i="5.88,389,1635231600"; 
+   d="scan'208";a="250688810"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2022 18:05:16 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,389,1635231600"; 
+   d="scan'208";a="543159958"
+Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 22 Feb 2022 18:05:11 -0800
+Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nMh1i-0000qd-Ot; Wed, 23 Feb 2022 02:05:10 +0000
+Date:   Wed, 23 Feb 2022 10:04:26 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Kalesh Singh <kaleshsingh@google.com>
+Cc:     kbuild-all@lists.01.org, will@kernel.org, maz@kernel.org,
+        qperret@google.com, tabba@google.com, surenb@google.com,
+        kernel-team@android.com, Kalesh Singh <kaleshsingh@google.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Joey Gouly <joey.gouly@arm.com>,
+        Peter Collingbourne <pcc@google.com>,
+        Andrew Scull <ascull@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Zenghui Yu <yuzenghui@huawei.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kvmarm@lists.cs.columbia.edu
+Subject: Re: [PATCH v2 6/9] KVM: arm64: Detect and handle hypervisor stack
+ overflows
+Message-ID: <202202230932.BKc5SFqd-lkp@intel.com>
+References: <20220222165212.2005066-7-kaleshsingh@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220222165212.2005066-7-kaleshsingh@google.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,383 +80,104 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-02-22 at 11:49 +0100, AngeloGioacchino Del Regno wrote:
-> Il 21/02/22 05:07, Leilk Liu ha scritto:
-> > this patch add the support of spi-mem.
-> > 
-> > Signed-off-by: Leilk Liu <leilk.liu@mediatek.com>
-> > ---
-> >   drivers/spi/spi-mt65xx.c | 310
-> > ++++++++++++++++++++++++++++++++++++++-
-> >   1 file changed, 309 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/spi/spi-mt65xx.c b/drivers/spi/spi-mt65xx.c
-> > index 5fa677a589a4..852fc008329a 100644
-> > --- a/drivers/spi/spi-mt65xx.c
-> > +++ b/drivers/spi/spi-mt65xx.c
-> > @@ -17,6 +17,7 @@
-> >   #include <linux/platform_data/spi-mt65xx.h>
-> >   #include <linux/pm_runtime.h>
-> >   #include <linux/spi/spi.h>
-> > +#include <linux/spi/spi-mem.h>
-> >   #include <linux/dma-mapping.h>
-> >   
-> >   #define SPI_CFG0_REG                      0x0000
-> > @@ -75,8 +76,21 @@
-> >   #define SPI_CMD_IPM_GET_TICKDLY_OFFSET    22
-> >   
-> >   #define SPI_CMD_IPM_GET_TICKDLY_MASK	GENMASK(24, 22)
-> > +
-> > +#define PIN_MODE_CFG(x)	((x) / 2)
-> > +
-> > +#define SPI_CFG3_IPM_PIN_MODE_OFFSET		0
-> >   #define SPI_CFG3_IPM_HALF_DUPLEX_DIR		BIT(2)
-> >   #define SPI_CFG3_IPM_HALF_DUPLEX_EN		BIT(3)
-> > +#define SPI_CFG3_IPM_XMODE_EN			BIT(4)
-> > +#define SPI_CFG3_IPM_NODATA_FLAG		BIT(5)
-> > +#define SPI_CFG3_IPM_CMD_BYTELEN_OFFSET		8
-> > +#define SPI_CFG3_IPM_ADDR_BYTELEN_OFFSET	12
-> > +
-> > +#define SPI_CFG3_IPM_CMD_PIN_MODE_MASK		GENMASK(1, 0)
-> > +#define SPI_CFG3_IPM_CMD_BYTELEN_MASK		GENMASK(11, 8)
-> > +#define SPI_CFG3_IPM_ADDR_BYTELEN_MASK		GENMASK(15, 12)
-> > +
-> >   #define MT8173_SPI_MAX_PAD_SEL 3
-> >   
-> >   #define MTK_SPI_PAUSE_INT_STATUS 0x2
-> > @@ -87,6 +101,8 @@
-> >   #define MTK_SPI_MAX_FIFO_SIZE 32U
-> >   #define MTK_SPI_PACKET_SIZE 1024
-> >   #define MTK_SPI_IPM_PACKET_SIZE SZ_64K
-> > +#define MTK_SPI_IPM_PACKET_LOOP SZ_256
-> > +
-> >   #define MTK_SPI_32BITS_MASK  (0xffffffff)
-> >   
-> >   #define DMA_ADDR_EXT_BITS (36)
-> > @@ -104,7 +120,8 @@ struct mtk_spi_compatible {
-> >   	bool no_need_unprepare;
-> >   	/* IPM design improve some single mode features */
-> >   	bool ipm_design;
-> > -
-> > +	/* IPM design that support quad mode */
-> > +	bool support_quad;
-> >   };
-> >   
-> >   struct mtk_spi {
-> > @@ -120,6 +137,11 @@ struct mtk_spi {
-> >   	u32 tx_sgl_len, rx_sgl_len;
-> >   	const struct mtk_spi_compatible *dev_comp;
-> >   	u32 spi_clk_hz;
-> > +	struct completion spimem_done;
-> > +	bool use_spimem;
-> > +	struct device *dev;
-> > +	dma_addr_t tx_dma;
-> > +	dma_addr_t rx_dma;
-> >   };
-> >   
-> >   static const struct mtk_spi_compatible mtk_common_compat;
-> > @@ -134,6 +156,13 @@ static const struct mtk_spi_compatible
-> > ipm_compat_single = {
-> >   	.ipm_design = true,
-> >   };
-> >   
-> > +static const struct mtk_spi_compatible ipm_compat_quad = {
-> > +	.enhance_timing = true,
-> > +	.dma_ext = true,
-> > +	.ipm_design = true,
-> > +	.support_quad = true,
-> > +};
-> > +
-> >   static const struct mtk_spi_compatible mt6765_compat = {
-> >   	.need_pad_sel = true,
-> >   	.must_tx = true,
-> > @@ -178,6 +207,9 @@ static const struct of_device_id
-> > mtk_spi_of_match[] = {
-> >   	{ .compatible = "mediatek,ipm-spi-single",
-> >   		.data = (void *)&ipm_compat_single,
-> >   	},
-> > +	{ .compatible = "mediatek,ipm-spi-quad",
-> > +		.data = (void *)&ipm_compat_quad,
-> > +	},
-> >   	{ .compatible = "mediatek,mt2701-spi",
-> >   		.data = (void *)&mtk_common_compat,
-> >   	},
-> > @@ -694,6 +726,13 @@ static irqreturn_t mtk_spi_interrupt(int irq,
-> > void *dev_id)
-> >   	else
-> >   		mdata->state = MTK_SPI_IDLE;
-> >   
-> > +	/* SPI-MEM ops */
-> > +	if (mdata->use_spimem) {
-> > +		complete(&mdata->spimem_done);
-> > +
-> > +		return IRQ_HANDLED;
-> > +	}
-> > +
-> 
-> I would instead make a new ISR for the SPI-MEM case... as you're
-> bypassing the
-> entire mtk_spi_interrupt() function like that.
-> 
-> Example:
-> 
-> static void mtk_spi_check_and_set_state(struct mtk_spi *mdata)
-> {
-> 	u32 reg_val;
-> 
-> 	reg_val = readl(mdata->base + SPI_STATUS0_REG);
-> 
-> 	if (reg_val & MTK_SPI_PAUSE_INT_STATUS)
-> 
-> 		mdata->state = MTK_SPI_PAUSED;
-> 
-> 	else
-> 
-> 		mdata->state = MTK_SPI_IDLE;
-> }
-> 
-> static irqreturn_t mtk_spi_interrupt(int irq, void *dev_id)
-> 
-> {
-> 	u32 cmd, reg_val, cnt, remainder, len;
-> 
-> 	struct spi_master *master = dev_id;
-> 
-> 	struct mtk_spi *mdata = spi_master_get_devdata(master);
-> 
-> 	struct spi_transfer *trans = mdata->cur_transfer;
-> 
-> 	mtk_spi_check_and_set_state(mdata);
-> 
-> 	if (!master->can_dma(........
-> 	.... blurb...
-> }
-> 
-> static irqreturn_t mtk_spimem_interrupt(int irq, void *dev_id)
-> {
-> 	struct spi_master *master = dev_id;
-> 
-> 	struct mtk_spi *mdata = spi_master_get_devdata(master);
-> 
-> 	mtk_spi_check_and_set_state(mdata);
-> 	complete(&mdata->spimem_done);
-> 
-> 	return IRQ_HANDLED;
-> }
-> 
-> ... of course, in mtk_spi_probe(), you would do something like
-> 
-> if (mdata->use_spimem)
-> 	ret = devm_request_irq(&pdev->dev, irq, mtk_spimem_interrupt,
-> 		...... blah ......
-> else
-> 	ret = devm_request_irq(&pdev->dev, irq, mtk_spi_interrupt,
-> 		..... blah ......
-> 
-> This way, you're separating the two - increasing human readability
-> and showing
-> the simplifications (in that regard) in the IPM IP's SPI-MEM
-> handling.
-> 
-thanks for your advise, I'll do it in the next version.
+Hi Kalesh,
 
-> >   	if (!master->can_dma(master, NULL, trans)) {
-> >   		if (trans->rx_buf) {
-> >   			cnt = mdata->xfer_len / 4;
-> > @@ -777,6 +816,266 @@ static irqreturn_t mtk_spi_interrupt(int irq,
-> > void *dev_id)
-> >   	return IRQ_HANDLED;
-> >   }
-> >   
-> > +static int mtk_spi_mem_adjust_op_size(struct spi_mem *mem,
-> > +				      struct spi_mem_op *op)
-> > +{
-> > +	int opcode_len;
-> > +
-> > +	if (op->data.dir != SPI_MEM_NO_DATA) {
-> > +		opcode_len = 1 + op->addr.nbytes + op->dummy.nbytes;
-> > +		if (opcode_len + op->data.nbytes >
-> > MTK_SPI_IPM_PACKET_SIZE) {
-> > +			op->data.nbytes = MTK_SPI_IPM_PACKET_SIZE -
-> > opcode_len;
-> > +			/* force data buffer dma-aligned. */
-> > +			op->data.nbytes -= op->data.nbytes % 4;
-> > +		}
-> > +	}
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +static bool mtk_spi_mem_supports_op(struct spi_mem *mem,
-> > +				    const struct spi_mem_op *op)
-> > +{
-> > +	if (op->data.buswidth > 4 || op->addr.buswidth > 4 ||
-> > +	    op->dummy.buswidth > 4 || op->cmd.buswidth > 4)
-> > +		return false;
-> > +
-> > +	if (op->addr.nbytes && op->dummy.nbytes &&
-> > +	    op->addr.buswidth != op->dummy.buswidth)
-> > +		return false;
-> > +
-> > +	if (op->addr.nbytes + op->dummy.nbytes > 16)
-> > +		return false;
-> > +
-> > +	if (op->data.nbytes > MTK_SPI_IPM_PACKET_SIZE) {
-> > +		if (op->data.nbytes / MTK_SPI_IPM_PACKET_SIZE >
-> > +		    MTK_SPI_IPM_PACKET_LOOP ||
-> > +		    op->data.nbytes % MTK_SPI_IPM_PACKET_SIZE != 0)
-> > +			return false;
-> > +	}
-> > +
-> > +	return true;
-> > +}
-> > +
-> > +static void mtk_spi_mem_setup_dma_xfer(struct spi_master *master,
-> > +				       const struct spi_mem_op *op)
-> > +{
-> > +	struct mtk_spi *mdata = spi_master_get_devdata(master);
-> > +
-> > +	writel((u32)(mdata->tx_dma & MTK_SPI_32BITS_MASK),
-> > +	       mdata->base + SPI_TX_SRC_REG);
-> > +#ifdef CONFIG_ARCH_DMA_ADDR_T_64BIT
-> > +	if (mdata->dev_comp->dma_ext)
-> > +		writel((u32)(mdata->tx_dma >> 32),
-> > +		       mdata->base + SPI_TX_SRC_REG_64);
-> > +#endif
-> > +
-> > +	if (op->data.dir == SPI_MEM_DATA_IN) {
-> > +		writel((u32)(mdata->rx_dma & MTK_SPI_32BITS_MASK),
-> > +		       mdata->base + SPI_RX_DST_REG);
-> > +#ifdef CONFIG_ARCH_DMA_ADDR_T_64BIT
-> > +		if (mdata->dev_comp->dma_ext)
-> > +			writel((u32)(mdata->rx_dma >> 32),
-> > +			       mdata->base + SPI_RX_DST_REG_64);
-> > +#endif
-> > +	}
-> > +}
-> > +
-> > +static int mtk_spi_transfer_wait(struct spi_mem *mem,
-> > +				 const struct spi_mem_op *op)
-> > +{
-> > +	struct mtk_spi *mdata = spi_master_get_devdata(mem->spi-
-> > >master);
-> > +	unsigned long long ms = 1;
-> 
-> Initializing ms to 1 here is useless, as you're anyway reinitializing
-> it
-> right after. I would do it as following:
-> 
-> u64 ms = 8000LL;
-> 
-> if (op->data.dir == SPI_MEM_NO_DATA)
-> 	ms *= 32;
-> else
-> 	ms *= op->data.nbytes;
-> 
-OK,I'll fix it.
+Thank you for the patch! Perhaps something to improve:
 
-> Besides, can you please add a comment to the code explaining why the
-> reason for the waits (why 8, why 1000, why 32)?
-> 
-OK,THANKS
+[auto build test WARNING on cfb92440ee71adcc2105b0890bb01ac3cddb8507]
 
-> > +
-> > +	if (op->data.dir == SPI_MEM_NO_DATA)
-> > +		ms = 8LL * 1000LL * 32;
-> > +	else
-> > +		ms = 8LL * 1000LL * op->data.nbytes;
-> > +	do_div(ms, mem->spi->max_speed_hz);
-> 
-> I appreciate the usage of safe division helpers, but this is the
-> wrong one:
-> you have a unsigned long long (64-bits) dividend and a u32 divisor,
-> so the
-> right function to use here is div_u64().
-> 
-OK, I'll fix it. thanks!
+url:    https://github.com/0day-ci/linux/commits/Kalesh-Singh/KVM-arm64-Hypervisor-stack-enhancements/20220223-010522
+base:   cfb92440ee71adcc2105b0890bb01ac3cddb8507
+config: arm64-defconfig (https://download.01.org/0day-ci/archive/20220223/202202230932.BKc5SFqd-lkp@intel.com/config)
+compiler: aarch64-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/7fe99fd40f7c4b2973218045ca5b9c9160524db1
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Kalesh-Singh/KVM-arm64-Hypervisor-stack-enhancements/20220223-010522
+        git checkout 7fe99fd40f7c4b2973218045ca5b9c9160524db1
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/
 
-> 	ms = div_u64(ms, mem->spi->max_speed_hz);
-> 
-> > +	ms += ms + 1000; /* 1s tolerance */
-> > +
-> > +	if (ms > UINT_MAX)
-> > +		ms = UINT_MAX;
-> > +
-> > +	if (!wait_for_completion_timeout(&mdata->spimem_done,
-> > +					 msecs_to_jiffies(ms))) {
-> > +		dev_err(mdata->dev, "spi-mem transfer timeout\n");
-> > +		return -ETIMEDOUT;
-> > +	}
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +static int mtk_spi_mem_exec_op(struct spi_mem *mem,
-> > +			       const struct spi_mem_op *op)
-> > +{
-> > +	struct mtk_spi *mdata = spi_master_get_devdata(mem->spi-
-> > >master);
-> > +	u32 reg_val, nio = 1, tx_size;
-> > +	char *tx_tmp_buf, *rx_tmp_buf;
-> > +	int ret = 0;
-> > +
-> > +	mdata->use_spimem = true;
-> > +	reinit_completion(&mdata->spimem_done);
-> > +
-> > +	mtk_spi_reset(mdata);
-> > +	mtk_spi_hw_init(mem->spi->master, mem->spi);
-> > +	mtk_spi_prepare_transfer(mem->spi->master, mem->spi-
-> > >max_speed_hz);
-> > +
-> > +	reg_val = readl(mdata->base + SPI_CFG3_IPM_REG);
-> > +	/* opcode byte len */
-> > +	reg_val &= ~SPI_CFG3_IPM_CMD_BYTELEN_MASK;
-> > +	reg_val |= 1 << SPI_CFG3_IPM_CMD_BYTELEN_OFFSET;
-> > +
-> > +	/* addr & dummy byte len */
-> > +	reg_val &= ~SPI_CFG3_IPM_ADDR_BYTELEN_MASK;
-> > +	if (op->addr.nbytes || op->dummy.nbytes)
-> > +		reg_val |= (op->addr.nbytes + op->dummy.nbytes) <<
-> > +			    SPI_CFG3_IPM_ADDR_BYTELEN_OFFSET;
-> > +
-> > +	/* data byte len */
-> > +	if (op->data.dir == SPI_MEM_NO_DATA) {
-> > +		reg_val |= SPI_CFG3_IPM_NODATA_FLAG;
-> > +		writel(0, mdata->base + SPI_CFG1_REG);
-> > +	} else {
-> > +		reg_val &= ~SPI_CFG3_IPM_NODATA_FLAG;
-> > +		mdata->xfer_len = op->data.nbytes;
-> > +		mtk_spi_setup_packet(mem->spi->master);
-> > +	}
-> > +
-> > +	if (op->addr.nbytes || op->dummy.nbytes) {
-> > +		if (op->addr.buswidth == 1 || op->dummy.buswidth == 1)
-> > +			reg_val |= SPI_CFG3_IPM_XMODE_EN;
-> > +		else
-> > +			reg_val &= ~SPI_CFG3_IPM_XMODE_EN;
-> > +	}
-> > +
-> > +	if (op->addr.buswidth == 2 ||
-> > +	    op->dummy.buswidth == 2 ||
-> > +	    op->data.buswidth == 2)
-> > +		nio = 2;
-> > +	else if (op->addr.buswidth == 4 ||
-> > +		 op->dummy.buswidth == 4 ||
-> > +		 op->data.buswidth == 4)
-> > +		nio = 4;
-> 
-> 	else
-> 		nio = 1;
-> 
-> ...so that you can avoid double initialization of the `nio` variable.
-> 
-OK, I'll fix it,thanks
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-> > +
-> > +	reg_val &= ~SPI_CFG3_IPM_CMD_PIN_MODE_MASK;
-> > +	reg_val |= PIN_MODE_CFG(nio) << SPI_CFG3_IPM_PIN_MODE_OFFSET;
-> > +
-> 
-> Regards,
-> Angelo
+All warnings (new ones prefixed by >>):
 
+   arch/arm64/kvm/hyp/nvhe/switch.c:197:43: warning: initialized field overwritten [-Woverride-init]
+     197 |         [ESR_ELx_EC_CP15_32]            = kvm_hyp_handle_cp15_32,
+         |                                           ^~~~~~~~~~~~~~~~~~~~~~
+   arch/arm64/kvm/hyp/nvhe/switch.c:197:43: note: (near initialization for 'hyp_exit_handlers[3]')
+   arch/arm64/kvm/hyp/nvhe/switch.c:198:43: warning: initialized field overwritten [-Woverride-init]
+     198 |         [ESR_ELx_EC_SYS64]              = kvm_hyp_handle_sysreg,
+         |                                           ^~~~~~~~~~~~~~~~~~~~~
+   arch/arm64/kvm/hyp/nvhe/switch.c:198:43: note: (near initialization for 'hyp_exit_handlers[24]')
+   arch/arm64/kvm/hyp/nvhe/switch.c:199:43: warning: initialized field overwritten [-Woverride-init]
+     199 |         [ESR_ELx_EC_SVE]                = kvm_hyp_handle_fpsimd,
+         |                                           ^~~~~~~~~~~~~~~~~~~~~
+   arch/arm64/kvm/hyp/nvhe/switch.c:199:43: note: (near initialization for 'hyp_exit_handlers[25]')
+   arch/arm64/kvm/hyp/nvhe/switch.c:200:43: warning: initialized field overwritten [-Woverride-init]
+     200 |         [ESR_ELx_EC_FP_ASIMD]           = kvm_hyp_handle_fpsimd,
+         |                                           ^~~~~~~~~~~~~~~~~~~~~
+   arch/arm64/kvm/hyp/nvhe/switch.c:200:43: note: (near initialization for 'hyp_exit_handlers[7]')
+   arch/arm64/kvm/hyp/nvhe/switch.c:201:43: warning: initialized field overwritten [-Woverride-init]
+     201 |         [ESR_ELx_EC_IABT_LOW]           = kvm_hyp_handle_iabt_low,
+         |                                           ^~~~~~~~~~~~~~~~~~~~~~~
+   arch/arm64/kvm/hyp/nvhe/switch.c:201:43: note: (near initialization for 'hyp_exit_handlers[32]')
+   arch/arm64/kvm/hyp/nvhe/switch.c:202:43: warning: initialized field overwritten [-Woverride-init]
+     202 |         [ESR_ELx_EC_DABT_LOW]           = kvm_hyp_handle_dabt_low,
+         |                                           ^~~~~~~~~~~~~~~~~~~~~~~
+   arch/arm64/kvm/hyp/nvhe/switch.c:202:43: note: (near initialization for 'hyp_exit_handlers[36]')
+   arch/arm64/kvm/hyp/nvhe/switch.c:203:43: warning: initialized field overwritten [-Woverride-init]
+     203 |         [ESR_ELx_EC_PAC]                = kvm_hyp_handle_ptrauth,
+         |                                           ^~~~~~~~~~~~~~~~~~~~~~
+   arch/arm64/kvm/hyp/nvhe/switch.c:203:43: note: (near initialization for 'hyp_exit_handlers[9]')
+   arch/arm64/kvm/hyp/nvhe/switch.c:208:43: warning: initialized field overwritten [-Woverride-init]
+     208 |         [ESR_ELx_EC_SYS64]              = kvm_handle_pvm_sys64,
+         |                                           ^~~~~~~~~~~~~~~~~~~~
+   arch/arm64/kvm/hyp/nvhe/switch.c:208:43: note: (near initialization for 'pvm_exit_handlers[24]')
+   arch/arm64/kvm/hyp/nvhe/switch.c:209:43: warning: initialized field overwritten [-Woverride-init]
+     209 |         [ESR_ELx_EC_SVE]                = kvm_handle_pvm_restricted,
+         |                                           ^~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/arm64/kvm/hyp/nvhe/switch.c:209:43: note: (near initialization for 'pvm_exit_handlers[25]')
+   arch/arm64/kvm/hyp/nvhe/switch.c:210:43: warning: initialized field overwritten [-Woverride-init]
+     210 |         [ESR_ELx_EC_FP_ASIMD]           = kvm_handle_pvm_fpsimd,
+         |                                           ^~~~~~~~~~~~~~~~~~~~~
+   arch/arm64/kvm/hyp/nvhe/switch.c:210:43: note: (near initialization for 'pvm_exit_handlers[7]')
+   arch/arm64/kvm/hyp/nvhe/switch.c:211:43: warning: initialized field overwritten [-Woverride-init]
+     211 |         [ESR_ELx_EC_IABT_LOW]           = kvm_hyp_handle_iabt_low,
+         |                                           ^~~~~~~~~~~~~~~~~~~~~~~
+   arch/arm64/kvm/hyp/nvhe/switch.c:211:43: note: (near initialization for 'pvm_exit_handlers[32]')
+   arch/arm64/kvm/hyp/nvhe/switch.c:212:43: warning: initialized field overwritten [-Woverride-init]
+     212 |         [ESR_ELx_EC_DABT_LOW]           = kvm_hyp_handle_dabt_low,
+         |                                           ^~~~~~~~~~~~~~~~~~~~~~~
+   arch/arm64/kvm/hyp/nvhe/switch.c:212:43: note: (near initialization for 'pvm_exit_handlers[36]')
+   arch/arm64/kvm/hyp/nvhe/switch.c:213:43: warning: initialized field overwritten [-Woverride-init]
+     213 |         [ESR_ELx_EC_PAC]                = kvm_hyp_handle_ptrauth,
+         |                                           ^~~~~~~~~~~~~~~~~~~~~~
+   arch/arm64/kvm/hyp/nvhe/switch.c:213:43: note: (near initialization for 'pvm_exit_handlers[9]')
+   arch/arm64/kvm/hyp/nvhe/switch.c:350:17: warning: no previous prototype for 'hyp_panic' [-Wmissing-prototypes]
+     350 | void __noreturn hyp_panic(void)
+         |                 ^~~~~~~~~
+>> arch/arm64/kvm/hyp/nvhe/switch.c:372:17: warning: no previous prototype for 'hyp_panic_bad_stack' [-Wmissing-prototypes]
+     372 | void __noreturn hyp_panic_bad_stack(void)
+         |                 ^~~~~~~~~~~~~~~~~~~
+   arch/arm64/kvm/hyp/nvhe/switch.c:377:17: warning: no previous prototype for 'kvm_unexpected_el2_exception' [-Wmissing-prototypes]
+     377 | asmlinkage void kvm_unexpected_el2_exception(void)
+         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+vim +/hyp_panic_bad_stack +372 arch/arm64/kvm/hyp/nvhe/switch.c
+
+   371	
+ > 372	void __noreturn hyp_panic_bad_stack(void)
+   373	{
+   374		hyp_panic();
+   375	}
+   376	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

@@ -2,178 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A62474C1A65
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 19:00:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B1E84C1A5D
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 18:59:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243687AbiBWSAC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 13:00:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54848 "EHLO
+        id S242422AbiBWR7n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 12:59:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243662AbiBWR7z (ORCPT
+        with ESMTP id S243642AbiBWR7i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 12:59:55 -0500
-Received: from hostingweb31-40.netsons.net (hostingweb31-40.netsons.net [89.40.174.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C0EC3DA45;
-        Wed, 23 Feb 2022 09:59:27 -0800 (PST)
-Received: from [77.244.183.192] (port=62116 helo=melee.fritz.box)
-        by hostingweb31.netsons.net with esmtpa (Exim 4.94.2)
-        (envelope-from <luca@lucaceresoli.net>)
-        id 1nMvvB-00039p-JM; Wed, 23 Feb 2022 18:59:25 +0100
-From:   Luca Ceresoli <luca@lucaceresoli.net>
-To:     linux-kernel@vger.kernel.org
-Cc:     Luca Ceresoli <luca@lucaceresoli.net>,
-        Lee Jones <lee.jones@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>, devicetree@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        Rob Herring <robh@kernel.org>
-Subject: [PATCH v6 4/8] dt-bindings: mfd: add Maxim MAX77714 PMIC
-Date:   Wed, 23 Feb 2022 18:59:04 +0100
-Message-Id: <20220223175908.191618-5-luca@lucaceresoli.net>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220223175908.191618-1-luca@lucaceresoli.net>
-References: <20220223175908.191618-1-luca@lucaceresoli.net>
+        Wed, 23 Feb 2022 12:59:38 -0500
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 079B33DA7A
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 09:59:11 -0800 (PST)
+Received: by mail-pg1-x535.google.com with SMTP id z4so20792905pgh.12
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 09:59:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=i9ZmGUIwkyC7vjnII3cOeTZiB9a3MACRa2J9UXGI/ow=;
+        b=XJHhTu/IhJCZ37/XrmsRBgCMoxE7LQi7Lo2Wi2s9PrXp0NKXlVd6zNTxZYdlTEDAqx
+         L/j6e0Yamrbm7MLR3xgUc3Lw2+IT950x0WmnqU5OXUM//6aHcMBdwkA7rIK6YFT0JUhc
+         sZvfycmuBlW+7vxVI4IDjx+/5a+Tmn8tspepbIAylqOg5aUfL+ulyJwBswjF0ItOtVKO
+         97WUPmaUab1x3mwDYSGjTBxch3l8b3hxugErDO2pW1LUwJTeMVzMA6djZdYgR5ys3I6O
+         QnwB+tBGJWUDAijMLK5HnyZoR8nHcsOuSTEBguK42TJ00sTtcT0wbBla4qArjLsIo/nN
+         0v+g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=i9ZmGUIwkyC7vjnII3cOeTZiB9a3MACRa2J9UXGI/ow=;
+        b=C2pHRGStfA+DuC0tA98OR6umSAylNS7Ar1o30f45wAZqsLZhTmvKKt/gJUtsHvFADE
+         RsRNZFm2VN7xIh2wQuCNFvk3tOggJ6t2NQxkiqRfnVbh6RKnA4L5C4VRUIL5kdqoEPvx
+         UHE80QLum3ZxO0UTKOmKL8agaOv5UrtKbjfO950vTw9EP6NboD0n98k+MraFTq+bGU+O
+         W8VKntf0miYNRdN0T1V6NRZnSvX6zFtqIZAO2Hdp7mUjiMde0Yzfaj0fAwoEoNY1Hubl
+         P086KqtMtOsmJYI5cgGaBW0mcasQDvpjSYWN8R0zyYdxU6DF4VVixPZpAEDglcCtEImt
+         aQXw==
+X-Gm-Message-State: AOAM53043wXvWLk8gbOETNA+qKdvqeNqtVUZIqV//AiC9VUNswjz7xmx
+        KRFMPRkDKBzfOFZ1HFTmywue+g==
+X-Google-Smtp-Source: ABdhPJyWY8cS3LAxq9EqCzdtTUyda9OxIuVZO+b/1nALlGyO7RfH+5KzoRu/A7B8I7ghZ74CG6Bi7Q==
+X-Received: by 2002:a05:6a00:174e:b0:4e1:7cfb:7a26 with SMTP id j14-20020a056a00174e00b004e17cfb7a26mr928875pfc.50.1645639150179;
+        Wed, 23 Feb 2022 09:59:10 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id h27sm170144pgb.20.2022.02.23.09.59.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Feb 2022 09:59:09 -0800 (PST)
+Date:   Wed, 23 Feb 2022 17:59:05 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Like Xu <like.xu.linux@gmail.com>
+Subject: Re: [PATCH] KVM: x86: Fix pointer mistmatch warning when patching
+ RET0 static calls
+Message-ID: <YhZ16cMMcHQIvS9d@google.com>
+References: <20220223162355.3174907-1-seanjc@google.com>
+ <YhZuk8eA6rsDuJkd@dev-arch.archlinux-ax161>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - hostingweb31.netsons.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - lucaceresoli.net
-X-Get-Message-Sender-Via: hostingweb31.netsons.net: authenticated_id: luca+lucaceresoli.net/only user confirmed/virtual account not confirmed
-X-Authenticated-Sender: hostingweb31.netsons.net: luca@lucaceresoli.net
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YhZuk8eA6rsDuJkd@dev-arch.archlinux-ax161>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add bindings for the MAX77714 PMIC with GPIO, RTC and watchdog.
+On Wed, Feb 23, 2022, Nathan Chancellor wrote:
+> Hi Sean,
+> 
+> On Wed, Feb 23, 2022 at 04:23:55PM +0000, Sean Christopherson wrote:
+> > Cast kvm_x86_ops.func to 'void *' when updating KVM static calls that are
+> > conditionally patched to __static_call_return0().  clang complains about
+> > using mismatching pointers in the ternary operator, which breaks the
+> > build when compiling with CONFIG_KVM_WERROR=y.
+> > 
+> >   >> arch/x86/include/asm/kvm-x86-ops.h:82:1: warning: pointer type mismatch
+> >   ('bool (*)(struct kvm_vcpu *)' and 'void *') [-Wpointer-type-mismatch]
+> > 
+> > Fixes: 5be2226f417d ("KVM: x86: allow defining return-0 static calls")
+> > Reported-by: Like Xu <like.xu.linux@gmail.com>
+> > Reported-by: kernel test robot <lkp@intel.com>
+> > Signed-off-by: Sean Christopherson <seanjc@google.com>
+> 
+> Thank you for the patch! Is this a bug in clang?
 
-Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-Reviewed-by: Rob Herring <robh@kernel.org>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+IMO, no.  I think it's completely reasonable for the compiler to complain that KVM
+is generating two different pointer types out of a ternary operator.
 
----
+clang is somewhat inconsistent, though it may be deliberate.  clang doesn't complain
+about implicitly casting a 'void *' to another data type, e.g. this complies clean,
+where "data" is a 'void *'
 
-Changes in v6: none
+	struct kvm_vcpu *x = vcpu ? : data;
 
-Changes in v5: none
+But changing it to a function on the lhs triggers the warn:
 
-Changes in v4: none
+	typeof(kvm_x86_ops.vcpu_run) x = kvm_x86_ops.vcpu_run ? : data;
 
-Changes in v3:
- - add 'regulators' node (Krzysztof Kozlowski, Rob Herring)
-
-Changes in v2: none
----
- .../bindings/mfd/maxim,max77714.yaml          | 68 +++++++++++++++++++
- MAINTAINERS                                   |  5 ++
- 2 files changed, 73 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/mfd/maxim,max77714.yaml
-
-diff --git a/Documentation/devicetree/bindings/mfd/maxim,max77714.yaml b/Documentation/devicetree/bindings/mfd/maxim,max77714.yaml
-new file mode 100644
-index 000000000000..74a6867d3c82
---- /dev/null
-+++ b/Documentation/devicetree/bindings/mfd/maxim,max77714.yaml
-@@ -0,0 +1,68 @@
-+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/mfd/maxim,max77714.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: MAX77714 PMIC with GPIO, RTC and watchdog from Maxim Integrated.
-+
-+maintainers:
-+  - Luca Ceresoli <luca@lucaceresoli.net>
-+
-+description: |
-+  MAX77714 is a Power Management IC with 4 buck regulators, 9
-+  low-dropout regulators, 8 GPIOs, RTC and watchdog.
-+
-+properties:
-+  compatible:
-+    const: maxim,max77714
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  interrupt-controller: true
-+
-+  "#interrupt-cells":
-+    const: 2
-+    description:
-+      The first cell is the IRQ number, the second cell is the trigger type.
-+
-+  regulators:
-+    type: object
-+    additionalProperties: false
-+
-+    patternProperties:
-+      '^(buck[0-3]|ldo[0-8])$':
-+        type: object
-+        unevaluatedProperties: false
-+        $ref: /schemas/regulator/regulator.yaml#
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+  - interrupt-controller
-+  - "#interrupt-cells"
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+    i2c {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        pmic@1c {
-+            compatible = "maxim,max77714";
-+            reg = <0x1c>;
-+            interrupt-parent = <&gpio2>;
-+            interrupts = <3 IRQ_TYPE_LEVEL_LOW>;
-+
-+            interrupt-controller;
-+            #interrupt-cells = <2>;
-+        };
-+    };
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 777cd6fa2b3d..e112ca549c5d 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -11720,6 +11720,11 @@ F:	drivers/power/supply/max77650-charger.c
- F:	drivers/regulator/max77650-regulator.c
- F:	include/linux/mfd/max77650.h
- 
-+MAXIM MAX77714 PMIC MFD DRIVER
-+M:	Luca Ceresoli <luca@lucaceresoli.net>
-+S:	Maintained
-+F:	Documentation/devicetree/bindings/mfd/maxim,max77714.yaml
-+
- MAXIM MAX77802 PMIC REGULATOR DEVICE DRIVER
- M:	Javier Martinez Canillas <javier@dowhile0.org>
- L:	linux-kernel@vger.kernel.org
--- 
-2.25.1
-
+Again, complaining in the function pointer case seems reasonable.

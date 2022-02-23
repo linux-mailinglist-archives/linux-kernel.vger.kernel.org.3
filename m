@@ -2,219 +2,225 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D9A74C1CB0
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 20:57:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D07504C1CB7
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 20:59:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244559AbiBWT6K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 14:58:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33352 "EHLO
+        id S244575AbiBWUAV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 15:00:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244555AbiBWT6I (ORCPT
+        with ESMTP id S234260AbiBWUAU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 14:58:08 -0500
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 682C82655C
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 11:57:40 -0800 (PST)
-Received: from linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net (linux.microsoft.com [13.77.154.182])
-        by linux.microsoft.com (Postfix) with ESMTPSA id F3E0020C30E6;
-        Wed, 23 Feb 2022 11:57:39 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com F3E0020C30E6
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1645646260;
-        bh=AubFU/DDFpEt7WMgdww7RXAhRAMd/Qzs/Nhi5iNAxDo=;
-        h=From:To:Cc:Subject:Date:From;
-        b=QzqTlkS2vkdazSn5oC4NjyQkDGwWeJ1SuS8bS8Q4kwbrwJyZ5jLFtUZifyKGwiC9x
-         fYp7p3cE3wVYucci3vCjO30HAlISCsXsYkigMKn0JKR7zRRjEajiCdjaz2vja5g/EH
-         licruoDmC8010cYN+VWOLK4haEof6NfNWNL/bjoM=
-From:   Vijay Balakrishna <vijayb@linux.microsoft.com>
-To:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>
-Cc:     Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Pavel Tatashin <pasha.tatashin@soleen.com>,
-        Vijay Balakrishna <vijayb@linux.microsoft.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v2] arm64: Do not defer reserve_crashkernel() for platforms with no DMA memory zones
-Date:   Wed, 23 Feb 2022 11:57:33 -0800
-Message-Id: <1645646253-16072-1-git-send-email-vijayb@linux.microsoft.com>
-X-Mailer: git-send-email 1.8.3.1
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 23 Feb 2022 15:00:20 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3C8412AC3;
+        Wed, 23 Feb 2022 11:59:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=4zIYZUfnCUJ42jAF/bPLTGZTUb50qciw4hI/4NRH8l4=; b=ReKMO7izG6nJBLOQR3BluNmlNF
+        gmxqRneHzVlRPGdeJUglpxb7HeyZoWJ85fK5tjoTGIM02iwuF0zkmtsMUxYQ4pVYLFk/WGTJ6teHT
+        V42q/naus0jOAtMgY8uVz9GMNFC9YhY6MLeeZ5Dla2NtaFKvdRtC2anUfYQpAt/OyR7ps4UlAUGML
+        hIHKP+wqYLc0hm55fGdGSEuRNPg4L7qjVBjgzESu69ty7bavR1pK+WqtMvwNMwa1gIEuQ9nSjN9Uq
+        aSw+ql30A1ib36cXxGci0RWX7JYY1VFUfr7gAEtm1Ken5ecxQJ+hxZv6jEJHCIAXPE0pI/R8UfqvR
+        vH4bC0hA==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nMxnX-0045Nw-HR; Wed, 23 Feb 2022 19:59:39 +0000
+Date:   Wed, 23 Feb 2022 19:59:39 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Dave Chinner <david@fromorbit.com>
+Cc:     kernel test robot <oliver.sang@intel.com>, lkp@lists.01.org,
+        lkp@intel.com, LKML <linux-kernel@vger.kernel.org>,
+        "Darrick J. Wong" <darrick.wong@oracle.com>,
+        linux-xfs@vger.kernel.org, Christoph Hellwig <hch@infradead.org>
+Subject: Re: [mm/readahead]  a0b99df1aa: xfstests.xfs.421.fail
+Message-ID: <YhaSK5C9rGVD+7OQ@casper.infradead.org>
+References: <20220221080217.GB835@xsang-OptiPlex-9020>
+ <YhOaJ4cZU/1MiNI2@casper.infradead.org>
+ <20220221205529.GH59715@dread.disaster.area>
+ <YhP/vPUcm4lUHzrg@casper.infradead.org>
+ <20220221214355.GI59715@dread.disaster.area>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220221214355.GI59715@dread.disaster.area>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following patches resulted in deferring crash kernel reservation to
-mem_init(), mainly aimed at platforms with DMA memory zones (no IOMMU),
-in particular Raspberry Pi 4.
+On Tue, Feb 22, 2022 at 08:43:55AM +1100, Dave Chinner wrote:
+> On Mon, Feb 21, 2022 at 09:10:20PM +0000, Matthew Wilcox wrote:
+> > On Tue, Feb 22, 2022 at 07:55:29AM +1100, Dave Chinner wrote:
+> > > On Mon, Feb 21, 2022 at 01:56:55PM +0000, Matthew Wilcox wrote:
+> > > > On Mon, Feb 21, 2022 at 04:02:18PM +0800, kernel test robot wrote:
+> > > > > commit: a0b99df1aa37d714eb80be5fb54efd56c88a3336 ("mm/readahead: Add large folio readahead")
+> > > > 
+> > > > > xfs/420	- output mismatch (see /lkp/benchmarks/xfstests/results//xfs/420.out.bad)
+> > > > >     --- tests/xfs/420.out	2022-02-17 11:55:00.000000000 +0000
+> > > > >     +++ /lkp/benchmarks/xfstests/results//xfs/420.out.bad	2022-02-20 20:34:22.430378506 +0000
+> > > > >     @@ -13,9 +13,7 @@
+> > > > >      Seek holes and data in file2
+> > > > >      Whence	Result
+> > > > >      DATA	0
+> > > > >     -HOLE	131072
+> > > > >     -DATA	196608
+> > > > >     -HOLE	262144
+> > > > >     +HOLE	524288
+> > > > 
+> > > > Confirm this test now fails.  I don't think it's actually a bug,
+> > > > though.  I think the test is now using larger pages to cache the
+> > > > file, and it fails to report that there's a hole in the file.
+> > > > Maybe there actually isn't a hole in the file any more; using
+> > > > larger pages to cache the file means we'll now write more data
+> > > > than we used to.
+> > > > 
+> > > > Adding XFS people for their thoughts.
+> > > > 
+> > > > Complete output:
+> > > > 
+> > > > $ diff -u ../ktest/tests/xfstests/tests/xfs/420.out ktest-out/xfstests/xfs/420.out.bad
+> > > > --- ../ktest/tests/xfstests/tests/xfs/420.out	2021-07-05 15:49:45.539887305 -0400
+> > > > +++ ktest-out/xfstests/xfs/420.out.bad	2022-02-21 08:14:40.000000000 -0500
+> > > > @@ -13,9 +13,7 @@
+> > > >  Seek holes and data in file2
+> > > >  Whence	Result
+> > > >  DATA	0
+> > > > -HOLE	131072
+> > > > -DATA	196608
+> > > > -HOLE	262144
+> > > > +HOLE	524288
+> > > >  Compare files
+> > > >  c2803804acc9936eef8aab42c119bfac  SCRATCH_MNT/test-420/file1
+> > > >  017c08a9320aad844ce86aa9631afb98  SCRATCH_MNT/test-420/file2
+> > > > @@ -28,9 +26,7 @@
+> > > >  Seek holes and data in file2
+> > > >  Whence	Result
+> > > >  DATA	0
+> > > > -HOLE	131072
+> > > > -DATA	196608
+> > > > -HOLE	262144
+> > > > +HOLE	524288
+> > > >  Compare files
+> > > >  c2803804acc9936eef8aab42c119bfac  SCRATCH_MNT/test-420/file1
+> > > >  017c08a9320aad844ce86aa9631afb98  SCRATCH_MNT/test-420/file2
+> > > > 
+> > > > So the file checksums are right, which means I didn't break the COW
+> > > > functionality.  But we're no longer reporting a hole at 128k.
+> > > 
+> > > Can you post the contents of the 420.full output file so we can see
+> > > what the output of the various commands that are run are? e.g.
+> > > things like cowextsize that is configured, etc?
+> > 
+> > Sure!  It's short, so I've included it inline.
+> 
+> Ok, I'll cut this up so it makes sense...
+> 
+> > 
+> > 
+> > meta-data=/dev/sdc               isize=512    agcount=4, agsize=3670016 blks
+> >          =                       sectsz=512   attr=2, projid32bit=1
+> >          =                       crc=1        finobt=1, sparse=1, rmapbt=1
+> >          =                       reflink=1    bigtime=0
+> > data     =                       bsize=1024   blocks=14680064, imaxpct=25
+> >          =                       sunit=0      swidth=0 blks
+> > naming   =version 2              bsize=4096   ascii-ci=0, ftype=1
+> > log      =internal log           bsize=1024   blocks=10240, version=2
+> >          =                       sectsz=512   sunit=0 blks, lazy-count=1
+> > realtime =none                   extsz=4096   blocks=0, rtextents=0
+> > Discarding blocks...Done.
+> > [0] /mnt/scratch/test-420
+> > [524288] /mnt/scratch/test-420
+> > wrote 131072/131072 bytes at offset 0
+> > 128 KiB, 128 ops; 0.0000 sec (1.327 GiB/sec and 1391304.3478 ops/sec)
+> > wrote 524288/524288 bytes at offset 0
+> > 512 KiB, 512 ops; 0.0003 sec (1.341 GiB/sec and 1406593.4066 ops/sec)
+> > wrote 131072/131072 bytes at offset 0
+> > 128 KiB, 128 ops; 0.0000 sec (1.822 GiB/sec and 1910447.7612 ops/sec)
+> > CoW the shared part then write into the empty part
+> > [524288] /mnt/scratch/test-420/file1
+> > [524288] /mnt/scratch/test-420/file2
+> > wrote 65536/65536 bytes at offset 0
+> > 64 KiB, 64 ops; 0.0001 sec (416.667 MiB/sec and 426666.6667 ops/sec)
+> > wrote 65536/65536 bytes at offset 196608
+> > 64 KiB, 64 ops; 0.0000 sec (1.695 GiB/sec and 1777777.7778 ops/sec)
+> > wrote 65536/65536 bytes at offset 0
+> > 64 KiB, 64 ops; 0.0000 sec (1.387 GiB/sec and 1454545.4545 ops/sec)
+> > wrote 65536/65536 bytes at offset 196608
+> > 64 KiB, 64 ops; 0.0000 sec (1.526 GiB/sec and 1600000.0000 ops/sec)
+> > xfs_io: xfsctl(XFS_IOC_GETBMAPX) iflags=0x28 ["/mnt/scratch/test-420/file1"]: Invalid argument
+> > /mnt/scratch/test-420/file1:
+> >  EXT: FILE-OFFSET      BLOCK-RANGE      AG AG-OFFSET        TOTAL
+> >    0: [0..255]:        128..383          0 (128..383)         256 100000
+> >    1: [256..1023]:     hole                                   768
+> > xfs_io: xfsctl(XFS_IOC_GETBMAPX) iflags=0x28 ["/mnt/scratch/test-420/file2"]: Invalid argument
+> > /mnt/scratch/test-420/file2:
+> >  EXT: FILE-OFFSET      BLOCK-RANGE      AG AG-OFFSET        TOTAL
+> >    0: [0..255]:        128..383          0 (128..383)         256 100000
+> >    1: [256..1023]:     hole                                   768
+> 
+> So this is the extent list for file2 after the reflink. Note the
+> hole at 128-512kB. The flags tell us the 128kB data extent is
+> shared. There are no unwritten extents at all.
 
-commit 1a8e1cef7603 ("arm64: use both ZONE_DMA and ZONE_DMA32")
-commit 8424ecdde7df ("arm64: mm: Set ZONE_DMA size based on devicetree's dma-ranges")
-commit 0a30c53573b0 ("arm64: mm: Move reserve_crashkernel() into mem_init()")
-commit 2687275a5843 ("arm64: Force NO_BLOCK_MAPPINGS if crashkernel reservation is required")
+My debugging indicates otherwise:
 
-Above changes introduced boot slowdown due to linear map creation for
-all the memory banks with NO_BLOCK_MAPPINGS, see discussion[1].  The proposed
-changes restore crash kernel reservation to earlier behavior thus avoids
-slow boot, particularly for platforms with IOMMU (no DMA memory zones).
++++ b/fs/iomap/seek.c
+@@ -15,6 +15,7 @@ static loff_t iomap_seek_hole_iter(const struct iomap_iter *it
+er,
+ {
+        loff_t length = iomap_length(iter);
 
-Tested changes to confirm no ~150ms boot slowdown on our SoC with IOMMU
-and 8GB memory.  Also tested with ZONE_DMA and/or ZONE_DMA32 configs to confirm
-no regression to deferring scheme of crash kernel memory reservation.
-In both cases successfully collected kernel crash dump.
++printk("%s %ld %d:%lld,%lld\n", __func__, iter->inode->i_ino, iter->iomap.type, iter->iomap.length);
+        switch (iter->iomap.type) {
+        case IOMAP_UNWRITTEN:
+                *hole_pos = mapping_seek_hole_data(iter->inode->i_mapping,
+@@ -61,6 +62,7 @@ static loff_t iomap_seek_data_iter(const struct iomap_iter *iter,
+ {
+        loff_t length = iomap_length(iter);
 
-[1] https://lore.kernel.org/all/9436d033-579b-55fa-9b00-6f4b661c2dd7@linux.microsoft.com/
++printk("%s %ld %d:%lld,%lld\n", __func__, iter->inode->i_ino, iter->iomap.type, iter->iomap.length);
+        switch (iter->iomap.type) {
+        case IOMAP_HOLE:
+                return length;
 
-Signed-off-by: Vijay Balakrishna <vijayb@linux.microsoft.com>
-Cc: stable@vger.kernel.org
----
-Changes from v1 -> v2
----------------------
-- replaced '!crashk_res.end' with IS_ENABLED(ZONE_DMA/DMA32) (Nicolas's comment)
-- minor change to make it uniform -- replaced #if defined(..) -> #if IS_ENABLED(..)
-- added new comment in arch/arm64/mm/init.c to ease future maintenance (Nicolas's comment)
-- test performed comment moved to commit message
+gives me output:
 
-[v1] https://lore.kernel.org/all/1645056294-6509-1-git-send-email-vijayb@linux.microsoft.com/
----
- arch/arm64/mm/init.c | 36 +++++++++++++++++++++++++++++++++---
- arch/arm64/mm/mmu.c  | 29 ++++++++++++++++++++++++++++-
- 2 files changed, 61 insertions(+), 4 deletions(-)
+00016 iomap_seek_hole_iter 68 2:131072,-131387284454392
+00016 iomap_seek_hole_iter 68 0:393216,-131387284454392
+00016 iomap_seek_data_iter 68 2:131072,-131387284454392
+00016 iomap_seek_hole_iter 68 2:131072,-131387284454392
+00016 iomap_seek_hole_iter 68 0:393216,-131387284454392
+00016 iomap_seek_data_iter 68 0:393216,-131387284454392
+00016 iomap_seek_hole_iter 69 2:131072,-131387284455352
+00016 iomap_seek_hole_iter 69 3:393216,4503599627239424
+00016 iomap_seek_data_iter 69 2:131072,-131387284455352
+00016 iomap_seek_hole_iter 69 2:131072,-131387284455352
+00016 iomap_seek_hole_iter 69 3:393216,4503599627239424
 
-diff --git a/arch/arm64/mm/init.c b/arch/arm64/mm/init.c
-index db63cc885771..51869f9dfc33 100644
---- a/arch/arm64/mm/init.c
-+++ b/arch/arm64/mm/init.c
-@@ -61,8 +61,34 @@ EXPORT_SYMBOL(memstart_addr);
-  * unless restricted on specific platforms (e.g. 30-bit on Raspberry Pi 4).
-  * In such case, ZONE_DMA32 covers the rest of the 32-bit addressable memory,
-  * otherwise it is empty.
-+ *
-+ * Memory reservation for crash kernel either done early or deferred
-+ * depending on DMA memory zones configs (ZONE_DMA) --
-+ *
-+ * In absence of ZONE_DMA configs arm64_dma_phys_limit initialized
-+ * here instead of max_zone_phys().  This lets early reservation of
-+ * crash kernel memory which has a dependency on arm64_dma_phys_limit.
-+ * Reserving memory early for crash kernel allows linear creation of block
-+ * mappings (greater than page-granularity) for all the memory bank rangs.
-+ * In this scheme a comparatively quicker boot is observed.
-+ *
-+ * If ZONE_DMA configs are defined, crash kernel memory reservation
-+ * is delayed until DMA zone memory range size initilazation performed in
-+ * zone_sizes_init().  The defer is necessary to steer clear of DMA zone
-+ * memory range to avoid overlap allocation.  So crash kernel memory boundaries
-+ * are not known when mapping all bank memory ranges, which otherwise means
-+ * not possible to exclude crash kernel range from creating block mappings
-+ * so page-granularity mappings are created for the entire memory range.
-+ * Hence a slightly slower boot is observed.
-+ *
-+ * Note: Page-granularity mapppings are necessary for crash kernel memory
-+ * range for shrinking its size via /sys/kernel/kexec_crash_size interface.
-  */
--phys_addr_t arm64_dma_phys_limit __ro_after_init;
-+#if IS_ENABLED(CONFIG_ZONE_DMA) || IS_ENABLED(CONFIG_ZONE_DMA32)
-+phys_addr_t __ro_after_init arm64_dma_phys_limit;
-+#else
-+phys_addr_t __ro_after_init arm64_dma_phys_limit = PHYS_MASK + 1;
-+#endif
- 
- #ifdef CONFIG_KEXEC_CORE
- /*
-@@ -153,8 +179,6 @@ static void __init zone_sizes_init(unsigned long min, unsigned long max)
- 	if (!arm64_dma_phys_limit)
- 		arm64_dma_phys_limit = dma32_phys_limit;
- #endif
--	if (!arm64_dma_phys_limit)
--		arm64_dma_phys_limit = PHYS_MASK + 1;
- 	max_zone_pfns[ZONE_NORMAL] = max;
- 
- 	free_area_init(max_zone_pfns);
-@@ -315,6 +339,10 @@ void __init arm64_memblock_init(void)
- 
- 	early_init_fdt_scan_reserved_mem();
- 
-+#if !IS_ENABLED(CONFIG_ZONE_DMA) && !IS_ENABLED(CONFIG_ZONE_DMA32)
-+	reserve_crashkernel();
-+#endif
-+
- 	high_memory = __va(memblock_end_of_DRAM() - 1) + 1;
- }
- 
-@@ -357,11 +385,13 @@ void __init bootmem_init(void)
- 	 */
- 	dma_contiguous_reserve(arm64_dma_phys_limit);
- 
-+#if IS_ENABLED(CONFIG_ZONE_DMA) || IS_ENABLED(CONFIG_ZONE_DMA32)
- 	/*
- 	 * request_standard_resources() depends on crashkernel's memory being
- 	 * reserved, so do it here.
- 	 */
- 	reserve_crashkernel();
-+#endif
- 
- 	memblock_dump_all();
- }
-diff --git a/arch/arm64/mm/mmu.c b/arch/arm64/mm/mmu.c
-index acfae9b41cc8..884b2c6d6cd9 100644
---- a/arch/arm64/mm/mmu.c
-+++ b/arch/arm64/mm/mmu.c
-@@ -517,7 +517,7 @@ static void __init map_mem(pgd_t *pgdp)
- 	 */
- 	BUILD_BUG_ON(pgd_index(direct_map_end - 1) == pgd_index(direct_map_end));
- 
--	if (can_set_direct_map() || crash_mem_map || IS_ENABLED(CONFIG_KFENCE))
-+	if (can_set_direct_map() || IS_ENABLED(CONFIG_KFENCE))
- 		flags |= NO_BLOCK_MAPPINGS | NO_CONT_MAPPINGS;
- 
- 	/*
-@@ -528,6 +528,18 @@ static void __init map_mem(pgd_t *pgdp)
- 	 */
- 	memblock_mark_nomap(kernel_start, kernel_end - kernel_start);
- 
-+#if IS_ENABLED(CONFIG_KEXEC_CORE)
-+
-+#if IS_ENABLED(CONFIG_ZONE_DMA) || IS_ENABLED(CONFIG_ZONE_DMA32)
-+	if (crash_mem_map)
-+		flags |= NO_BLOCK_MAPPINGS | NO_CONT_MAPPINGS;
-+#else
-+	if (crashk_res.end)
-+		memblock_mark_nomap(crashk_res.start,
-+				    resource_size(&crashk_res));
-+#endif
-+
-+#endif
- 	/* map all the memory banks */
- 	for_each_mem_range(i, &start, &end) {
- 		if (start >= end)
-@@ -554,6 +566,21 @@ static void __init map_mem(pgd_t *pgdp)
- 	__map_memblock(pgdp, kernel_start, kernel_end,
- 		       PAGE_KERNEL, NO_CONT_MAPPINGS);
- 	memblock_clear_nomap(kernel_start, kernel_end - kernel_start);
-+#if IS_ENABLED(CONFIG_KEXEC_CORE) && \
-+    !IS_ENABLED(CONFIG_ZONE_DMA) && !IS_ENABLED(CONFIG_ZONE_DMA32)
-+	/*
-+	 * Use page-level mappings here so that we can shrink the region
-+	 * in page granularity and put back unused memory to buddy system
-+	 * through /sys/kernel/kexec_crash_size interface.
-+	 */
-+	if (crashk_res.end) {
-+		__map_memblock(pgdp, crashk_res.start, crashk_res.end + 1,
-+			       PAGE_KERNEL,
-+			       NO_BLOCK_MAPPINGS | NO_CONT_MAPPINGS);
-+		memblock_clear_nomap(crashk_res.start,
-+				     resource_size(&crashk_res));
-+	}
-+#endif
- }
- 
- void mark_rodata_ro(void)
--- 
-2.35.1
+This is after the first call to drop_caches, so in userspace, we're
+doing:
+echo 1 > /proc/sys/vm/drop_caches
 
+echo "CoW the shared part then write into the empty part" | tee -a $seqres.full
+$XFS_IO_PROG -c "cowextsize" $testdir/file1 >> $seqres.full
+grep 'order=[^0]' /sys/kernel/debug/tracing/trace
+$XFS_IO_PROG -c "cowextsize" $testdir/file2 >> $seqres.full
+grep 'order=[^0]' /sys/kernel/debug/tracing/trace
+$XFS_IO_PROG -c "pwrite -S 0x63 0 $blksz" $testdir/file2 >> $seqres.full
+grep 'order=[^0]' /sys/kernel/debug/tracing/trace
+$XFS_IO_PROG -c "pwrite -S 0x63 $((blksz * 3)) $blksz" $testdir/file2 >> $seqres.full
+grep 'order=[^0]' /sys/kernel/debug/tracing/trace
+
+The calls to grep were added by me, and should show any order>0 pages
+added to the page cache.  There are none, which seems like it would
+exonerate large folios.  Of course, it must be this commit, so there
+must be large pages.
+
+Debugging continues ...

@@ -2,103 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 308DD4C1AD4
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 19:20:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B77CE4C1AD9
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 19:20:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243807AbiBWSVD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 13:21:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51440 "EHLO
+        id S243815AbiBWSVQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 13:21:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241030AbiBWSVB (ORCPT
+        with ESMTP id S243811AbiBWSVN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 13:21:01 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FAD149FB8;
-        Wed, 23 Feb 2022 10:20:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645640434; x=1677176434;
-  h=date:from:to:subject:message-id:references:mime-version:
-   in-reply-to;
-  bh=rzWuqP3ripaxaKT5al8d/OWqGFWPXcQTpyLBZCqsFqE=;
-  b=aE7fMxpLR9cxMhAsHhdWfgjjsOnjnsUTa6gQg9JjA0UJfa6nzUytNqQm
-   zub/mdHiKB8FAHQFrXRvvVdf7Wseyf2IU2JRyx2nOTkzN/fycJY51WD2K
-   VAmRMPyCp4NRKeP1Y7xJO1tpwjKQcayt/Lrxof5qmnqoY8laPyOJPsdc/
-   IXGYlO1okwN6aU5bNnpqXA5U+ooFO/57w9sb9Pr1pl/kj3QWFMfZkj+AJ
-   3cr2pTd3gBM73s9UA9y/hM3H41OU81LanqIahiagi4OiJgcxs6ypJMGU8
-   FhAcXhAqi7mXdhMMCEg5LFweS4IJ8Oj9qFBMkyzKlX4Wfk2NaDm7sPT6W
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10267"; a="250876053"
-X-IronPort-AV: E=Sophos;i="5.88,391,1635231600"; 
-   d="scan'208";a="250876053"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2022 10:20:33 -0800
-X-IronPort-AV: E=Sophos;i="5.88,391,1635231600"; 
-   d="scan'208";a="506020647"
-Received: from smile.fi.intel.com ([10.237.72.59])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2022 10:20:28 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1nMwEi-007WTl-Ku;
-        Wed, 23 Feb 2022 20:19:36 +0200
-Date:   Wed, 23 Feb 2022 20:19:36 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     =?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <clement.leger@bootlin.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Enrico Weigelt <info@metux.net>,
-        Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Wolfram Sang <wsa@kernel.org>, Peter Rosin <peda@axentia.se>,
-        Russell King <linux@armlinux.org.uk>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-acpi@vger.kernel.org, linux-i2c@vger.kernel.org,
-        netdev@vger.kernel.org,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-Subject: Re: [RFC 00/10] add support for fwnode in i2c mux system and sfp
-Message-ID: <YhZ6uAmGcVjvNZy6@smile.fi.intel.com>
-References: <20220221162652.103834-1-clement.leger@bootlin.com>
- <YhPOxL++yhNHh+xH@smile.fi.intel.com>
- <20220222173019.2380dcaf@fixe.home>
- <YhZI1XImMNJgzORb@smile.fi.intel.com>
- <20220223161150.664aa5e6@fixe.home>
- <YhZRtads7MGzPEEL@smile.fi.intel.com>
- <YhZxyluc7gYhmAuh@sirena.org.uk>
+        Wed, 23 Feb 2022 13:21:13 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0AA804A3DF;
+        Wed, 23 Feb 2022 10:20:45 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B22C8D6E;
+        Wed, 23 Feb 2022 10:20:44 -0800 (PST)
+Received: from [10.57.40.147] (unknown [10.57.40.147])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 23D623F70D;
+        Wed, 23 Feb 2022 10:20:41 -0800 (PST)
+Message-ID: <2114e6e6-68cc-4552-8781-0a824de2c0de@arm.com>
+Date:   Wed, 23 Feb 2022 18:20:36 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YhZxyluc7gYhmAuh@sirena.org.uk>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH v6 01/11] iommu: Add dma ownership management interfaces
+Content-Language: en-GB
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     Stuart Yoder <stuyoder@gmail.com>, rafael@kernel.org,
+        David Airlie <airlied@linux.ie>, linux-pci@vger.kernel.org,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Diana Craciun <diana.craciun@oss.nxp.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Will Deacon <will@kernel.org>, Ashok Raj <ashok.raj@intel.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        kvm@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Cornelia Huck <cohuck@redhat.com>,
+        linux-kernel@vger.kernel.org, Li Yang <leoyang.li@nxp.com>,
+        iommu@lists.linux-foundation.org,
+        Jacob jun Pan <jacob.jun.pan@intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>
+References: <20220218005521.172832-1-baolu.lu@linux.intel.com>
+ <20220218005521.172832-2-baolu.lu@linux.intel.com>
+ <f830c268-daca-8e8f-a429-0c80496a7273@arm.com>
+ <20220223180244.GA390403@nvidia.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <20220223180244.GA390403@nvidia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 23, 2022 at 05:41:30PM +0000, Mark Brown wrote:
-> On Wed, Feb 23, 2022 at 05:24:37PM +0200, Andy Shevchenko wrote:
+On 2022-02-23 18:02, Jason Gunthorpe via iommu wrote:
+> On Wed, Feb 23, 2022 at 06:00:06PM +0000, Robin Murphy wrote:
+> 
+>> ...and equivalently just set owner_cnt directly to 0 here. I don't see a
+>> realistic use-case for any driver to claim the same group more than once,
+>> and allowing it in the API just feels like opening up various potential
+>> corners for things to get out of sync.
+> 
+> I am Ok if we toss it out to get this merged, as there is no in-kernel
+> user right now.
+> 
+> Something will have to come back for iommufd, but we can look at what
+> is best suited then.
 
-...
+If iommufd plans to be too dumb to keep track of whether it already owns 
+a given group or not, I can't see it dealing with attaching that group 
+to a single domain no more than once, either ;)
 
-> There were separately some issues with people trying to create
-> completely swnode based enumeration mechanisms for things that required
-> totally independent code for handling swnodes which seemed very
-> concerning but it's not clear to me if that's what's going on here.
-
-This is the case IIUC.
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+Robin.

@@ -2,92 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC7934C0E9E
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 09:55:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F3D574C0EA0
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 09:56:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239084AbiBWI4O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 03:56:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34996 "EHLO
+        id S239110AbiBWI41 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 03:56:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbiBWI4N (ORCPT
+        with ESMTP id S229437AbiBWI4Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 03:56:13 -0500
-Received: from out30-54.freemail.mail.aliyun.com (out30-54.freemail.mail.aliyun.com [115.124.30.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9D557C149;
-        Wed, 23 Feb 2022 00:55:45 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R181e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04394;MF=ashimida@linux.alibaba.com;NM=1;PH=DS;RN=20;SR=0;TI=SMTPD_---0V5HULum_1645606540;
-Received: from 192.168.193.152(mailfrom:ashimida@linux.alibaba.com fp:SMTPD_---0V5HULum_1645606540)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Wed, 23 Feb 2022 16:55:41 +0800
-Message-ID: <769ae7ad-e860-722d-59b7-cd7be5f6f1ee@linux.alibaba.com>
-Date:   Wed, 23 Feb 2022 00:55:40 -0800
+        Wed, 23 Feb 2022 03:56:25 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC5DA7C162
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 00:55:58 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 4EF7A21119;
+        Wed, 23 Feb 2022 08:55:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1645606557; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=rSWEIXnuQwpAk+MXHN8ZsAjaODfoEUy8DAhjKKDK/28=;
+        b=lC6VZFYW0mGAsEmT5L6fmOa08ga+ZVyisgDMw3BbvZrTaWThVfRu/4FYG2ktsZB7sQflVe
+        IOkYvhzDSqSYsOMhspba/y3tCILrDymeWXWoNnFFMXEa5p3FUtd9xlFZnP1PvxTQWqqzTG
+        3gBTDpdfKIwqNgBKvTK1qsYw1jipMbQ=
+Received: from suse.cz (unknown [10.100.201.86])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 69A7EA3B85;
+        Wed, 23 Feb 2022 08:55:56 +0000 (UTC)
+Date:   Wed, 23 Feb 2022 09:55:54 +0100
+From:   Michal Hocko <mhocko@suse.com>
+To:     Suren Baghdasaryan <surenb@google.com>
+Cc:     akpm@linux-foundation.org, ccross@google.com,
+        sumit.semwal@linaro.org, dave.hansen@intel.com,
+        keescook@chromium.org, willy@infradead.org,
+        kirill.shutemov@linux.intel.com, vbabka@suse.cz,
+        hannes@cmpxchg.org, ebiederm@xmission.com, brauner@kernel.org,
+        legion@kernel.org, ran.xiaokai@zte.com.cn, sashal@kernel.org,
+        chris.hyser@oracle.com, dave@stgolabs.net, pcc@google.com,
+        caoxiaofeng@yulong.com, david@redhat.com, gorcunov@gmail.com,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        kernel-team@android.com,
+        syzbot+aa7b3d4b35f9dc46a366@syzkaller.appspotmail.com
+Subject: Re: [PATCH v4 3/3] mm: fix use-after-free when anon vma name is used
+ after vma is freed
+Message-ID: <YhX2mkb327KkZR2/@dhcp22.suse.cz>
+References: <20220222054025.3412898-1-surenb@google.com>
+ <20220222054025.3412898-3-surenb@google.com>
+ <YhSZhzUYlW6IAQT9@dhcp22.suse.cz>
+ <CAJuCfpELxJ=7uuurKL9oRn1E_=rfL3aN8Duhqvi4Z2c1xHAT2w@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [PATCH] [PATCH] AARCH64: Add gcc Shadow Call Stack support
-Content-Language: en-US
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Nathan Chancellor <nathan@kernel.org>
-Cc:     catalin.marinas@arm.com, will@kernel.org, ndesaulniers@google.com,
-        keescook@chromium.org, masahiroy@kernel.org, tglx@linutronix.de,
-        akpm@linux-foundation.org, mark.rutland@arm.com,
-        samitolvanen@google.com, npiggin@gmail.com, mhiramat@kernel.org,
-        ojeda@kernel.org, luc.vanoostenryck@gmail.com, elver@google.com,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        llvm@lists.linux.dev, linux-hardening@vger.kernel.org
-References: <20220222095736.24898-1-ashimida@linux.alibaba.com>
- <YhUMRoLDan7tJRiL@dev-arch.archlinux-ax161>
- <f44612ce-5bb1-da45-d6cb-39464898c4ff@roeck-us.net>
-From:   Dan Li <ashimida@linux.alibaba.com>
-In-Reply-To: <f44612ce-5bb1-da45-d6cb-39464898c4ff@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJuCfpELxJ=7uuurKL9oRn1E_=rfL3aN8Duhqvi4Z2c1xHAT2w@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2/22/22 08:47, Guenter Roeck wrote:
-> On 2/22/22 08:16, Nathan Chancellor wrote:
->> On Tue, Feb 22, 2022 at 01:57:36AM -0800, Dan Li wrote:
->>> Shadow call stack is available in GCC > 11.2.0, this patch makes
+On Tue 22-02-22 07:43:40, Suren Baghdasaryan wrote:
+> On Tue, Feb 22, 2022 at 12:06 AM Michal Hocko <mhocko@suse.com> wrote:
+> >
+> > On Mon 21-02-22 21:40:25, Suren Baghdasaryan wrote:
+> > > When adjacent vmas are being merged it can result in the vma that was
+> > > originally passed to madvise_update_vma being destroyed.  In the current
+> > > implementation, the name parameter passed to madvise_update_vma points
+> > > directly to vma->anon_name->name and it is used after the call to
+> > > vma_merge.  In the cases when vma_merge merges the original vma and
+> > > destroys it, this will result in use-after-free bug as shown below:
+> > >
+> > > madvise_vma_behavior << passes vma->anon_name->name as name param
+> > >   madvise_update_vma(name)
+> > >     vma_merge
+> > >       __vma_adjust
+> > >         vm_area_free <-- frees the vma
+> > >     replace_vma_anon_name(name) <-- UAF
+> >
+> > This seems to be stale because bare const char pointer is not passed in
+> > the call chain. In fact I am not even sure there is any actual UAF here
+> > after the rework.
+> > Could you be more specific in describing the scenario?
 > 
-> The above suggests that the option will be available with gcc 11.3.0.
-> Information available in public suggests that it will be introduced
-> with gcc 12.0.
+> Yes, sorry, I need to update the part of the description talking about
+> passing vma->anon_name->name directly.
+> I think UAF is still there, it's just harder to reproduce (admittedly
+> I could not reproduce it with the previous reproducer). The scenario
+> would be when a vma with vma->anon_name->kref == 1 is being merged
+> with another one and freed in the process:
 > 
+> madvise_vma_behavior
+>    anon_name = vma_anon_name(vma) <-- does not increase refcount
+>    madvise_update_vma(anon_name)
+>      *prev = vma_merge <-- returns another vma
+>        __vma_adjust
+>          vm_area_free(vma)
+>            free_vma_anon_name
+>              anon_vma_name_put
+>                vma_anon_name_free <-- frees the vma->anon_name
+>      vma = *prev <-- original vma was freed
 
-Ah, yes, I think we could use "gcc >= 12.0.0" here.
+How come this is not a UAF in the first place?
 
-> The point here, I think, is to list the minimum gcc version.
-> It is going to be a long time until gcc 12.0 is the minimum version,
-> so I think it makes sense to list the minimum version number for
-> each compiler here.
+>      replace_vma_anon_name(vma, >>anon_name<<) <-- UAF
 > 
-> However, it may make sense to add some reference indicating that
-> support will indeed be added with gcc 11.3.0, and not only starting
+> Does this make sense or did I miss something?
 
-I took a quick look at the gcc description, and it seems like the
-y in x.y.z is usually used to fix bugs, and new features should be
-added directly to the trunk.
-
-Link: https://gcc.gnu.org/develop.html
-
-> with gcc 12.0 (and maybe wait with applying this patch until it is
-> actually available in gcc and can be confirmed to work as intended).
-> 
-
-It's also fine to wait for gcc 12 to be released, and I thought maybe
-I could submit the "final" version of this patch to the community (or
-mailing list) first so maybe more people would test it and if there
-were any issues, it could be fixed before GCC 12 is released :)
-
-Thanks,
-Dan.
+Sorry for being dense but I still do not see it. If *prev has been freed
+then we already have a different UAF. Admittedly, I am not really fluent
+at vma_merge code path so I am not really sure your chain above is
+really possible. I will try to double check later.
+-- 
+Michal Hocko
+SUSE Labs

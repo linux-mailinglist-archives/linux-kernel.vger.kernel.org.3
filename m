@@ -2,117 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DE3F4C193B
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 18:03:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD9EA4C193D
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 18:03:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243087AbiBWRDt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 12:03:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53250 "EHLO
+        id S243094AbiBWRER (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 12:04:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241607AbiBWRDr (ORCPT
+        with ESMTP id S242901AbiBWREP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 12:03:47 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9967F4ECF4;
-        Wed, 23 Feb 2022 09:03:17 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 48D1DB82117;
-        Wed, 23 Feb 2022 17:03:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76CD2C340F6;
-        Wed, 23 Feb 2022 17:03:14 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="CDnOLrRM"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1645635788;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Pp12ena6dYDhd7GMsoT5AC0lytZr3q+Tcps8HSwUknA=;
-        b=CDnOLrRMtk4VRy2HmVtFBTs/Gbq3hrc0eMc9ePBYzEqT6grdqpdnNipnlYVZf6F4Vk0SHW
-        UBQv2m2COWqYCowr3DsdzXxn0vhuP6gQQGak8DDHGqSPEvUdh4/AM8Yx8yjWa1bZLEBZ8R
-        Dd+0HBkIG2pLvh7UELcEVRGSKfRHDjw=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id dd0a54aa (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Wed, 23 Feb 2022 17:03:07 +0000 (UTC)
-Received: by mail-yb1-f179.google.com with SMTP id w63so28048122ybe.10;
-        Wed, 23 Feb 2022 09:03:06 -0800 (PST)
-X-Gm-Message-State: AOAM531s7hJD0rB4w0QrH/mhacpYiJzfuDv05Xe+rwHYV9wz2ZyrMotI
-        oR7hN9EUKngAMLui61Z0frjP0/OLK0ReMztertk=
-X-Google-Smtp-Source: ABdhPJwPRBaPOjS3KtoDamJStmC6n2tfcA0U7gkU1wr5DyfkQa76VS2mekyDcU8DDIo2C3IK2X3TBhpqi9a0bun2Qt0=
-X-Received: by 2002:a05:6902:693:b0:613:7f4f:2e63 with SMTP id
- i19-20020a056902069300b006137f4f2e63mr567022ybt.271.1645635783597; Wed, 23
- Feb 2022 09:03:03 -0800 (PST)
-MIME-Version: 1.0
-References: <20220217162848.303601-1-Jason@zx2c4.com> <6e117393-9c2f-441c-9c72-62c209643622@www.fastmail.com>
-In-Reply-To: <6e117393-9c2f-441c-9c72-62c209643622@www.fastmail.com>
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date:   Wed, 23 Feb 2022 18:02:52 +0100
-X-Gmail-Original-Message-ID: <CAHmME9qcUM+G8E3ag5iPfowUF4-iYATODGK+MoLjkfaipnkgjA@mail.gmail.com>
-Message-ID: <CAHmME9qcUM+G8E3ag5iPfowUF4-iYATODGK+MoLjkfaipnkgjA@mail.gmail.com>
-Subject: Re: [PATCH v1] random: block in /dev/urandom
-To:     Andy Lutomirski <luto@kernel.org>
+        Wed, 23 Feb 2022 12:04:15 -0500
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 291AC4F451
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 09:03:47 -0800 (PST)
+Received: by mail-wr1-x436.google.com with SMTP id v21so5428278wrv.5
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 09:03:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=ElO9QEbGLtnu2p6W3GD9GPPjHEDjjQB7rKG2MNcXjTo=;
+        b=G+xOg7T+04bMRKlVUgToQEK2c/ffsPvL110Jz+fIMvwsLWu1ybRtq+t6PQSAhLQ8j0
+         7sTVUBMHyai1goZZ/dQ9gJvv7UzwsoirhukYn8nEdNtQor6B+lpLFYK+kjx6mb/3m48+
+         zot+BKoAuxzx/k2KSnOKZVt+bN9NjfU6xVPMvZ9GXYygvUevYvDnNK52FFEyOIMZlKoS
+         GPDtGZNklJaMuN0Bu5H1dd09/ydEP8hUyWICcbBA/x0vNLo4BdrUaLuNmZQOiH4Wubis
+         1YpygnqH5Dm01r9RV4uMCizKBI6mlf7xccD8U9cbKDo6LJBJXzqSnmz7CLxzL8bdzh3t
+         yf4g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=ElO9QEbGLtnu2p6W3GD9GPPjHEDjjQB7rKG2MNcXjTo=;
+        b=AIF4fACDMWLbajuMpPKI2kfB6h+x5TiM7+tan+8dl/wZ52n29C4GnKS3ZQCvVrybcc
+         ny+RqT33uRnD/voDnGDmxdMQVhZpryxG/H/Bo3rSaerLsyKeTI8xAfw0Y1nGTyB+Kj0b
+         +17ZtRFFvRQY5Laz6g5jLd5lNHod4EN76cEhJLpTKgBNX/yp6g9ISzdzAF+d4NroL8wj
+         kuyzgs0BWocavNp88TUUuYIKX3teBZkV4/KduQtsvnPdOguje44YR4mENSMsC7+j+B+q
+         r0KRSBOzYOsgGmPSWkLOH8sztf5hBQJsfTX9AVuFoJegQiNY7QqrSo+fS2+fBsc9xr/W
+         Slvw==
+X-Gm-Message-State: AOAM532g1ZC/Infyui7MdC5LTApurZti4NVeL0y6R8WsH362DHy/8abU
+        ztal2h145IXHc9o02d9O+LHqc6WZNd7lYg==
+X-Google-Smtp-Source: ABdhPJyXVCWuB+rFR5nYOFMwxEw+dZda/CgCF6/Cv/qMMYwhuOZgxxqIXnasLFlN38UTBKvwgnH9bQ==
+X-Received: by 2002:a5d:65cc:0:b0:1e5:a360:cb06 with SMTP id e12-20020a5d65cc000000b001e5a360cb06mr385847wrw.713.1645635825662;
+        Wed, 23 Feb 2022 09:03:45 -0800 (PST)
+Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
+        by smtp.gmail.com with ESMTPSA id x17sm69353wrv.107.2022.02.23.09.03.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Feb 2022 09:03:45 -0800 (PST)
+Date:   Wed, 23 Feb 2022 17:03:43 +0000
+From:   Lee Jones <lee.jones@linaro.org>
+To:     broonie@kernel.org
 Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Nick Hu <nickhu@andestech.com>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Michal Simek <monstr@monstr.eu>,
-        Borislav Petkov <bp@alien8.de>, Guo Ren <guoren@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Joshua Kinard <kumba@gentoo.org>,
-        David Laight <David.Laight@aculab.com>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Eric Biggers <ebiggers@google.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Kees Cook <keescook@chromium.org>,
-        Lennart Poettering <mzxreary@0pointer.de>,
-        Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Theodore Ts'o" <tytso@mit.edu>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the mfd tree
+Message-ID: <YhZo7xnNRKz8U1Lf@google.com>
+References: <20220223165416.2359767-1-broonie@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220223165416.2359767-1-broonie@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andy,
+On Wed, 23 Feb 2022, broonie@kernel.org wrote:
 
-I think your analysis is a bit mismatched from the reality of the
-situation. That reality is that cryptographic users still find
-themselves using /dev/urandom, as that's been the "standard good
-advice" for a very long time. And people are still encouraged to do
-that, either out of ignorance or out of "compatibility". The
-cryptographic problem is not going away.
+> Hi all,
+> 
+> After merging the mfd tree, today's linux-next build (KCONFIG_NAME)
+> failed like this:
+> 
+> /tmp/next/build/drivers/mfd/sprd-sc27xx-spi.c:255:35: error: redefinition of 'sprd_pmic_spi_ids'
+>   255 | static const struct spi_device_id sprd_pmic_spi_ids[] = {
+>       |                                   ^~~~~~~~~~~~~~~~~
+> /tmp/next/build/drivers/mfd/sprd-sc27xx-spi.c:242:35: note: previous definition of 'sprd_pmic_spi_ids' was here
+>   242 | static const struct spi_device_id sprd_pmic_spi_ids[] = {
+>       |                                   ^~~~~~~~~~~~~~~~~
+> 
+> Caused by commit
+> 
+>   6fc90b92e9c7ef348 ("mfd: sprd: Add SPI device ID table")
+> 
+> I used the MFD tree from yesterday instead.
 
-Fixing this issue means, yes, adding a 1 second delay to the small
-group of init system users who haven't switched to using
-getrandom(GRND_INSECURE) for that less common usage (who even are
-those users actually?). That's not breaking compatibility or breaking
-userspace or breaking anything; that's accepting the reality of _how_
-/dev/urandom is mostly used -- for crypto -- and making that usage
-finally secure, at the expense of a 1 second delay for those other
-users who haven't switched to getrandom(GRND_INSECURE) yet. That seems
-like a _very_ small price to pay for eliminating a footgun.
+Thanks.
 
-And in general, deemphasizing the rare performance of the less common
-usage in favor of fixing a commonly triggered footgun seems on par
-with how things morph and change over time. There's no actual
-breakage. There's no ABI change violation. What you're saying simply
-isn't so.
+Will fix for tomorrow.
 
-In other words, I'm not really at all convinced by what you're saying.
-
-Jason
+-- 
+Lee Jones [李琼斯]
+Principal Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog

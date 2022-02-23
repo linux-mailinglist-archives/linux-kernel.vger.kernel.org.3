@@ -2,123 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E38C4C1F83
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 00:18:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB9184C1F8B
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 00:20:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244801AbiBWXS2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 18:18:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40322 "EHLO
+        id S244774AbiBWXUo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 18:20:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244783AbiBWXS1 (ORCPT
+        with ESMTP id S239454AbiBWXUl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 18:18:27 -0500
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 224D854190;
-        Wed, 23 Feb 2022 15:17:59 -0800 (PST)
-Received: by mail-pj1-x1031.google.com with SMTP id nh8-20020a17090b364800b001bc023c6f34so4075764pjb.3;
-        Wed, 23 Feb 2022 15:17:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=X4Hc3H6C7uhRqzAyT0iw9Lo49T1Lu66SQ9hcyKWnV4o=;
-        b=qYlvMCjBaD2BuPwXnC5wsAO5zGYaLTug/Sxsrj6VSV0cOPcWfwBG3BlcdvowvjRAkk
-         W9RqhXM1NX0rPUgMTjTpNKijxEs/colOSmZ9ENaSk4KJUaROd93sai4xGcyovWU4obTV
-         iuP2kQJfIDxIe0HdIPxycOiMWG6qtWsHEKeurldznNwob6CMyDxFavzEIu4VS/ClG4Yc
-         DAqMCpt7YNumPzpcEt5V+Taj8hhdr8VUtIgGSyhfmAfena+AUcI1DWCR8xAeQlSSzXkV
-         iKyVC6CvCUe0xcRY+Eayd4cx9yNT0gSuitv3dfYBW2M+PW012K0PZuSSzeiCZc95bSd/
-         Ggsg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=X4Hc3H6C7uhRqzAyT0iw9Lo49T1Lu66SQ9hcyKWnV4o=;
-        b=GrwS8XGljl+BPf9bmcZxfw5KrFoEbdqcDIRhEK3lXWonUtT3WtqYKRgCIGCBA0vfpC
-         e6ZlH38I57+pTr8MgO8Nowew7ActMRnNoG541UoYUe+JWfo9AZj+99pfGKAOJSm+7Y7e
-         6WlGWpQhdVfOQZ059+ae+BUkv2s41LELB+f8ry5TijWV2AxRZUl+GgyPzh3cJnztOeyk
-         5fINkjmV99tBB08Q02b2lF4r/SBkadajJ8kHw75o3P6rq9IVcnoGg1VGm7y6sTAKleqO
-         sJuoKjUjoFqPUCgGUwrN0cOFYGBDf+TSrh0GEkD1YDpuJ9Vvc1NVeY6h0xbPvf1lLRbD
-         Wixw==
-X-Gm-Message-State: AOAM532DM4CVGMK8FIJtC+x7ExrI4orwgfiUeSVTBd6SyGHTr4EiDGv4
-        kbP1DFFB1bL3cRAayMqj6KCPsHbwlK8sPg==
-X-Google-Smtp-Source: ABdhPJyoy5coDRQfUY9K5shvH1Tf8ZSDzoEUYocrjA/1PHekvfuJT3S81cM5jXWZ8f+HBez0BbgXsg==
-X-Received: by 2002:a17:90a:4306:b0:1b9:80b3:7a3d with SMTP id q6-20020a17090a430600b001b980b37a3dmr11387497pjg.66.1645658278439;
-        Wed, 23 Feb 2022 15:17:58 -0800 (PST)
-Received: from localhost.localdomain ([211.226.85.205])
-        by smtp.gmail.com with ESMTPSA id x3-20020a17090ad68300b001b8bcd47c35sm4056074pju.6.2022.02.23.15.17.56
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Wed, 23 Feb 2022 15:17:58 -0800 (PST)
-From:   Levi Yun <ppbuk5246@gmail.com>
-To:     keescook@chromium.org, ebiederm@xmission.com,
-        viro@zeniv.linux.org.uk
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Levi Yun <ppbuk5246@gmail.com>
-Subject: [PATCH] fs/exec.c: Avoid a race in formats
-Date:   Thu, 24 Feb 2022 08:17:52 +0900
-Message-Id: <20220223231752.52241-1-ppbuk5246@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Wed, 23 Feb 2022 18:20:41 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 012E658E49;
+        Wed, 23 Feb 2022 15:20:13 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 94459B82257;
+        Wed, 23 Feb 2022 23:20:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 26AC6C340F0;
+        Wed, 23 Feb 2022 23:20:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645658410;
+        bh=xc6wLZfo8m4QTzQ1PiZ9jo7DXq6dVwZ5z54Of9ZzEa8=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=FBxKOgS5v3hm2FShxDqSWovaapxZ+32q3IZTjH8xKDGgnSyzdwp8qAYzejThwdxf7
+         /5qQ1f/FAJUYZIXc1J1RqT0T4bKHA1+CKwGgIoGPkL83AJkJCU1XMOscGrFcRjA3cv
+         IOHCTtGAS/wFj+t4bMBm3hgNkaPy4/nWPWSjn1qDKD+QyHtOGDUm74EdYgAfEDsBek
+         U5JvXxu4jTT7lEPWCYFEkOfd8nNqX74v3RduKCkMHIPNgNB0Gux8ZwNJk3YkLcaRpG
+         B9xSojlT9R+rGGzFxYfQ6W51RwjXZ5szWA5V+QYLvlKkA7gsWRHXjKvT5QaxM/L3iO
+         xXthv+tZHAi9A==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 0954AE5D09D;
+        Wed, 23 Feb 2022 23:20:10 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH] bpf: cleanup comments
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <164565841003.1025.17613333501406510.git-patchwork-notify@kernel.org>
+Date:   Wed, 23 Feb 2022 23:20:10 +0000
+References: <20220220184055.3608317-1-trix@redhat.com>
+In-Reply-To: <20220220184055.3608317-1-trix@redhat.com>
+To:     Tom Rix <trix@redhat.com>
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Suppose a module registers its own binfmt (custom) and formats is like:
+Hello:
 
-+---------+    +----------+    +---------+
-| custom  | -> |  format1 | -> | format2 |
-+---------+    +----------+    +---------+
+This patch was applied to bpf/bpf-next.git (master)
+by Andrii Nakryiko <andrii@kernel.org>:
 
-and try to call unregister_binfmt with custom NOT in __exit stage.
+On Sun, 20 Feb 2022 10:40:55 -0800 you wrote:
+> From: Tom Rix <trix@redhat.com>
+> 
+> Add leading space to spdx tag
+> Use // for spdx c file comment
+> 
+> Replacements
+> resereved to reserved
+> inbetween to in between
+> everytime to every time
+> intutivie to intuitive
+> currenct to current
+> encontered to encountered
+> referenceing to referencing
+> upto to up to
+> exectuted to executed
+> 
+> [...]
 
-In that situation, below race scenario can happen.
+Here is the summary with links:
+  - bpf: cleanup comments
+    https://git.kernel.org/bpf/bpf-next/c/c561d1106300
 
-CPU 0						CPU1
-search_binary_handler				...
-	read_lock				unregister_binfmt(custom)
-	list_for_each_entry			< wait >
-	(get custom binfmt)			...
-	read_unlock				...
-	...					list_del
-	custom binfmt return -ENOEXEC
-	get next fmt entry (LIST_POISON1)
-
-Because CPU1 set the fmt->lh.next as LIST_POISON1,
-CPU 0 get next binfmt as LIST_POISON1.
-In that situation, CPU0 try to dereference LIST_POISON1 address and
-makes PANIC.
-
-To avoid this situation, check the fmt is valid.
-And if it isn't valid, return -EAGAIN.
-
-Signed-off-by: Levi Yun <ppbuk5246@gmail.com>
----
- fs/exec.c | 6 ++++++
- 1 file changed, 6 insertions(+)
-
-diff --git a/fs/exec.c b/fs/exec.c
-index 79f2c9483302..2042a1232656 100644
---- a/fs/exec.c
-+++ b/fs/exec.c
-@@ -1720,6 +1720,12 @@ static int search_binary_handler(struct linux_binprm *bprm)
-  retry:
- 	read_lock(&binfmt_lock);
- 	list_for_each_entry(fmt, &formats, lh) {
-+		if (fmt == LIST_POISON1) {
-+			read_unlock(&binfmt_lock);
-+			retval = -EAGAIN;
-+			break;
-+		}
-+
- 		if (!try_module_get(fmt->module))
- 			continue;
- 		read_unlock(&binfmt_lock);
+You are awesome, thank you!
 -- 
-2.34.1
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 

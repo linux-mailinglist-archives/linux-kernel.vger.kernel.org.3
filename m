@@ -2,213 +2,438 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C01404C0778
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 02:55:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 883B04C0781
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 03:00:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236648AbiBWB4N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 20:56:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52442 "EHLO
+        id S236659AbiBWCAb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 21:00:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231817AbiBWB4L (ORCPT
+        with ESMTP id S236648AbiBWCA3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 20:56:11 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDFC6140D0;
-        Tue, 22 Feb 2022 17:55:44 -0800 (PST)
-Received: from canpemm500006.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4K3Jx34jmPz9snW;
-        Wed, 23 Feb 2022 09:53:59 +0800 (CST)
-Received: from [10.174.179.200] (10.174.179.200) by
- canpemm500006.china.huawei.com (7.192.105.130) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Wed, 23 Feb 2022 09:55:42 +0800
-Subject: Re: [PATCH net] net: vlan: allow vlan device MTU change follow real
- device from smaller to bigger
-From:   "Ziyang Xuan (William)" <william.xuanziyang@huawei.com>
-To:     Eric Dumazet <edumazet@google.com>
-CC:     Herbert Xu <herbert@gondor.apana.org.au>,
-        David Miller <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        netdev <netdev@vger.kernel.org>,
-        Vasily Averin <vvs@virtuozzo.com>,
-        Kees Cook <keescook@chromium.org>,
-        LKML <linux-kernel@vger.kernel.org>
-References: <20220221124644.1146105-1-william.xuanziyang@huawei.com>
- <CANn89iKyWWCbAdv8W26HwGpM9q5+6rrk9E-Lbd2aujFkD3GMaQ@mail.gmail.com>
- <YhQ1KrtpEr3TgCwA@gondor.apana.org.au>
- <8248d662-8ea5-7937-6e34-5f1f8e19190f@huawei.com>
- <CANn89iLf2ira4XponYV91cbvcdK76ekU7fDW93fmuJ3iytFHcw@mail.gmail.com>
- <124e1c43-95a8-1aad-c781-b43eba09984a@huawei.com>
-Message-ID: <07a69043-8a8a-814e-0cb8-de2fe1557bc5@huawei.com>
-Date:   Wed, 23 Feb 2022 09:55:41 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        Tue, 22 Feb 2022 21:00:29 -0500
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67B8E3C497;
+        Tue, 22 Feb 2022 18:00:01 -0800 (PST)
+X-UUID: a3ebf72856e14b61825f4502429fd69b-20220223
+X-UUID: a3ebf72856e14b61825f4502429fd69b-20220223
+Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw02.mediatek.com
+        (envelope-from <leilk.liu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 985703712; Wed, 23 Feb 2022 09:59:52 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Wed, 23 Feb 2022 09:59:51 +0800
+Received: from mhfsdcap04 (10.17.3.154) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Wed, 23 Feb 2022 09:59:50 +0800
+Message-ID: <2c1a0925aeb1f3ba640a29e0f6f9765eb609293b.camel@mediatek.com>
+Subject: Re: [PATCH V2 4/6] spi: mediatek: add spi memory support
+From:   Leilk Liu <leilk.liu@mediatek.com>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Mark Brown <broonie@kernel.org>
+CC:     Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-spi@vger.kernel.org>, <linux-mediatek@lists.infradead.org>
+Date:   Wed, 23 Feb 2022 09:59:50 +0800
+In-Reply-To: <2e994be0-8b60-a3dc-2ab7-34d93192dc09@collabora.com>
+References: <20220221040717.3729-1-leilk.liu@mediatek.com>
+         <20220221040717.3729-5-leilk.liu@mediatek.com>
+         <2e994be0-8b60-a3dc-2ab7-34d93192dc09@collabora.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-In-Reply-To: <124e1c43-95a8-1aad-c781-b43eba09984a@huawei.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.179.200]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- canpemm500006.china.huawei.com (7.192.105.130)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->> On Mon, Feb 21, 2022 at 6:06 PM Ziyang Xuan (William)
->> <william.xuanziyang@huawei.com> wrote:
->>>
->>>> On Mon, Feb 21, 2022 at 07:43:18AM -0800, Eric Dumazet wrote:
->>>>>
->>>>> Herbert, do you recall why only a decrease was taken into consideration ?
->>>>
->>>> Because we shouldn't override administrative settings of the MTU
->>>> on the vlan device, unless we have to because of an MTU reduction
->>>> on the underlying device.
->>>>
->>>> Yes this is not perfect if the admin never set an MTU to start with
->>>> but as we don't have a way of telling whether the admin has or has
->>>> not changed the MTU setting, the safest course of action is to do
->>>> nothing in that case.
->>> If the admin has changed the vlan device MTU smaller than the underlying
->>> device MTU firstly, then changed the underlying device MTU smaller than
->>> the vlan device MTU secondly. The admin's configuration has been overridden.
->>> Can we consider that the admin's configuration for the vlan device MTU has
->>> been invalid and disappeared after the second change? I think so.
->>
->> The answer is no.
->>
->> Herbert is saying:
->>
->> ip link add link eth1 dev eth1.100 type vlan id 100
->> ...
->> ip link set eth1.100 mtu 800
->> ..
->> ip link set eth1 mtu 256
->> ip link set eth1 mtu 1500
->>
->> -> we do not want eth1.100 mtu being set back to 1500, this might
->> break applications, depending on old kernel feature.
->>  Eventually, setting back to 800 seems ok.
+On Tue, 2022-02-22 at 11:49 +0100, AngeloGioacchino Del Regno wrote:
+> Il 21/02/22 05:07, Leilk Liu ha scritto:
+> > this patch add the support of spi-mem.
+> > 
+> > Signed-off-by: Leilk Liu <leilk.liu@mediatek.com>
+> > ---
+> >   drivers/spi/spi-mt65xx.c | 310
+> > ++++++++++++++++++++++++++++++++++++++-
+> >   1 file changed, 309 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/spi/spi-mt65xx.c b/drivers/spi/spi-mt65xx.c
+> > index 5fa677a589a4..852fc008329a 100644
+> > --- a/drivers/spi/spi-mt65xx.c
+> > +++ b/drivers/spi/spi-mt65xx.c
+> > @@ -17,6 +17,7 @@
+> >   #include <linux/platform_data/spi-mt65xx.h>
+> >   #include <linux/pm_runtime.h>
+> >   #include <linux/spi/spi.h>
+> > +#include <linux/spi/spi-mem.h>
+> >   #include <linux/dma-mapping.h>
+> >   
+> >   #define SPI_CFG0_REG                      0x0000
+> > @@ -75,8 +76,21 @@
+> >   #define SPI_CMD_IPM_GET_TICKDLY_OFFSET    22
+> >   
+> >   #define SPI_CMD_IPM_GET_TICKDLY_MASK	GENMASK(24, 22)
+> > +
+> > +#define PIN_MODE_CFG(x)	((x) / 2)
+> > +
+> > +#define SPI_CFG3_IPM_PIN_MODE_OFFSET		0
+> >   #define SPI_CFG3_IPM_HALF_DUPLEX_DIR		BIT(2)
+> >   #define SPI_CFG3_IPM_HALF_DUPLEX_EN		BIT(3)
+> > +#define SPI_CFG3_IPM_XMODE_EN			BIT(4)
+> > +#define SPI_CFG3_IPM_NODATA_FLAG		BIT(5)
+> > +#define SPI_CFG3_IPM_CMD_BYTELEN_OFFSET		8
+> > +#define SPI_CFG3_IPM_ADDR_BYTELEN_OFFSET	12
+> > +
+> > +#define SPI_CFG3_IPM_CMD_PIN_MODE_MASK		GENMASK(1, 0)
+> > +#define SPI_CFG3_IPM_CMD_BYTELEN_MASK		GENMASK(11, 8)
+> > +#define SPI_CFG3_IPM_ADDR_BYTELEN_MASK		GENMASK(15, 12)
+> > +
+> >   #define MT8173_SPI_MAX_PAD_SEL 3
+> >   
+> >   #define MTK_SPI_PAUSE_INT_STATUS 0x2
+> > @@ -87,6 +101,8 @@
+> >   #define MTK_SPI_MAX_FIFO_SIZE 32U
+> >   #define MTK_SPI_PACKET_SIZE 1024
+> >   #define MTK_SPI_IPM_PACKET_SIZE SZ_64K
+> > +#define MTK_SPI_IPM_PACKET_LOOP SZ_256
+> > +
+> >   #define MTK_SPI_32BITS_MASK  (0xffffffff)
+> >   
+> >   #define DMA_ADDR_EXT_BITS (36)
+> > @@ -104,7 +120,8 @@ struct mtk_spi_compatible {
+> >   	bool no_need_unprepare;
+> >   	/* IPM design improve some single mode features */
+> >   	bool ipm_design;
+> > -
+> > +	/* IPM design that support quad mode */
+> > +	bool support_quad;
+> >   };
+> >   
+> >   struct mtk_spi {
+> > @@ -120,6 +137,11 @@ struct mtk_spi {
+> >   	u32 tx_sgl_len, rx_sgl_len;
+> >   	const struct mtk_spi_compatible *dev_comp;
+> >   	u32 spi_clk_hz;
+> > +	struct completion spimem_done;
+> > +	bool use_spimem;
+> > +	struct device *dev;
+> > +	dma_addr_t tx_dma;
+> > +	dma_addr_t rx_dma;
+> >   };
+> >   
+> >   static const struct mtk_spi_compatible mtk_common_compat;
+> > @@ -134,6 +156,13 @@ static const struct mtk_spi_compatible
+> > ipm_compat_single = {
+> >   	.ipm_design = true,
+> >   };
+> >   
+> > +static const struct mtk_spi_compatible ipm_compat_quad = {
+> > +	.enhance_timing = true,
+> > +	.dma_ext = true,
+> > +	.ipm_design = true,
+> > +	.support_quad = true,
+> > +};
+> > +
+> >   static const struct mtk_spi_compatible mt6765_compat = {
+> >   	.need_pad_sel = true,
+> >   	.must_tx = true,
+> > @@ -178,6 +207,9 @@ static const struct of_device_id
+> > mtk_spi_of_match[] = {
+> >   	{ .compatible = "mediatek,ipm-spi-single",
+> >   		.data = (void *)&ipm_compat_single,
+> >   	},
+> > +	{ .compatible = "mediatek,ipm-spi-quad",
+> > +		.data = (void *)&ipm_compat_quad,
+> > +	},
+> >   	{ .compatible = "mediatek,mt2701-spi",
+> >   		.data = (void *)&mtk_common_compat,
+> >   	},
+> > @@ -694,6 +726,13 @@ static irqreturn_t mtk_spi_interrupt(int irq,
+> > void *dev_id)
+> >   	else
+> >   		mdata->state = MTK_SPI_IDLE;
+> >   
+> > +	/* SPI-MEM ops */
+> > +	if (mdata->use_spimem) {
+> > +		complete(&mdata->spimem_done);
+> > +
+> > +		return IRQ_HANDLED;
+> > +	}
+> > +
 > 
-> It seem that setting back to 800 more reasonable. We can record user
-> setting MTU by interface ndo_change_mtu() in struct vlan_dev_priv.
+> I would instead make a new ISR for the SPI-MEM case... as you're
+> bypassing the
+> entire mtk_spi_interrupt() function like that.
 > 
-
-I attempt to record user setting MTU for vlan device. Use the recorded
-MTU to restore when uderlying device change the MTU from smaller to
-bigger than recorded vlan device MTU. The modification as following:
-
-diff --git a/include/linux/if_vlan.h b/include/linux/if_vlan.h
-index 2be4dd7e90a9..b8970e90a279 100644
---- a/include/linux/if_vlan.h
-+++ b/include/linux/if_vlan.h
-@@ -163,6 +163,7 @@ struct netpoll;
-  *     @vlan_proto: VLAN encapsulation protocol
-  *     @vlan_id: VLAN identifier
-  *     @flags: device flags
-+ *     @mtu: user setting MTU
-  *     @real_dev: underlying netdevice
-  *     @dev_tracker: refcount tracker for @real_dev reference
-  *     @real_dev_addr: address of underlying netdevice
-@@ -179,6 +180,8 @@ struct vlan_dev_priv {
-        u16                                     vlan_id;
-        u16                                     flags;
-
-+       u32                                     mtu;
-+
-        struct net_device                       *real_dev;
-        netdevice_tracker                       dev_tracker;
-
-diff --git a/net/8021q/vlan.c b/net/8021q/vlan.c
-index 788076b002b3..492ef88923c2 100644
---- a/net/8021q/vlan.c
-+++ b/net/8021q/vlan.c
-@@ -365,6 +365,7 @@ static int vlan_device_event(struct notifier_block *unused, unsigned long event,
-        struct net_device *dev = netdev_notifier_info_to_dev(ptr);
-        struct vlan_group *grp;
-        struct vlan_info *vlan_info;
-+       unsigned int new_mtu;
-        int i, flgs;
-        struct net_device *vlandev;
-        struct vlan_dev_priv *vlan;
-@@ -419,10 +420,10 @@ static int vlan_device_event(struct notifier_block *unused, unsigned long event,
-
-        case NETDEV_CHANGEMTU:
-                vlan_group_for_each_dev(grp, i, vlandev) {
--                       if (vlandev->mtu <= dev->mtu)
--                               continue;
-+                       vlan = vlan_dev_priv(vlandev);
-+                       new_mtu = (!vlan->mtu || dev->mtu < vlan->mtu) ? dev->mtu : vlan->mtu;
-
--                       dev_set_mtu(vlandev, dev->mtu);
-+                       dev_set_mtu(vlandev, new_mtu);
-                }
-                break;
-
-diff --git a/net/8021q/vlan_dev.c b/net/8021q/vlan_dev.c
-index d1902828a18a..66c2b64d1ece 100644
---- a/net/8021q/vlan_dev.c
-+++ b/net/8021q/vlan_dev.c
-@@ -140,7 +140,8 @@ static netdev_tx_t vlan_dev_hard_start_xmit(struct sk_buff *skb,
-
- static int vlan_dev_change_mtu(struct net_device *dev, int new_mtu)
- {
--       struct net_device *real_dev = vlan_dev_priv(dev)->real_dev;
-+       struct vlan_dev_priv *vlan = vlan_dev_priv(dev);
-+       struct net_device *real_dev = vlan->real_dev;
-        unsigned int max_mtu = real_dev->mtu;
-
-        if (netif_reduces_vlan_mtu(real_dev))
-@@ -148,8 +149,15 @@ static int vlan_dev_change_mtu(struct net_device *dev, int new_mtu)
-        if (max_mtu < new_mtu)
-                return -ERANGE;
-
--       dev->mtu = new_mtu;
-+       /* Identify user MTU change different from the underlying devcie
-+        * NETDEV_CHANGEMTU event. Record user setting MTU in mtu member
-+        * of struct vlan_dev_priv.
-+        */
-+       if ((!vlan->mtu && new_mtu != real_dev->mtu) ||
-+           (dev->mtu == vlan->mtu && vlan->mtu < real_dev->mtu))
-+               vlan->mtu = new_mtu;
-
-+       dev->mtu = new_mtu;
-        return 0;
- }
-
-
-I test it  in various combination scenarios. I found it can not cover one
-scenario because user setting can not arrive vlan module codes. For example:
-
-ip link add link eth1 dev eth1.100 type vlan id 100 // eth1.100 MTU 1500
-ip link set eth1.100 mtu 1500 // success no error
-
-When new_mtu equal to orig_mtu, user setting operation can not arrive lower
-vlan module, vlan module can not perceive, so we can not record the setting.
-
-Before my colleague point that the above setting is not error for user, I
-always think that it is invalid setting. But I think his opinion makes sense.
-
-So what do you think about the above setting?
-
->>
->> If you want this new feature, we need to record in eth1.100 device
->> that no admin ever changed the mtu,
->> as Herbert suggested.
->>
->> Then, it is okay to upgrade the vlan mtu (but still is a behavioral
->> change that _could_ break some scripts)
->>
->> Thank you.
->> .
->>
-> .
+> Example:
 > 
+> static void mtk_spi_check_and_set_state(struct mtk_spi *mdata)
+> {
+> 	u32 reg_val;
+> 
+> 	reg_val = readl(mdata->base + SPI_STATUS0_REG);
+> 
+> 	if (reg_val & MTK_SPI_PAUSE_INT_STATUS)
+> 
+> 		mdata->state = MTK_SPI_PAUSED;
+> 
+> 	else
+> 
+> 		mdata->state = MTK_SPI_IDLE;
+> }
+> 
+> static irqreturn_t mtk_spi_interrupt(int irq, void *dev_id)
+> 
+> {
+> 	u32 cmd, reg_val, cnt, remainder, len;
+> 
+> 	struct spi_master *master = dev_id;
+> 
+> 	struct mtk_spi *mdata = spi_master_get_devdata(master);
+> 
+> 	struct spi_transfer *trans = mdata->cur_transfer;
+> 
+> 	mtk_spi_check_and_set_state(mdata);
+> 
+> 	if (!master->can_dma(........
+> 	.... blurb...
+> }
+> 
+> static irqreturn_t mtk_spimem_interrupt(int irq, void *dev_id)
+> {
+> 	struct spi_master *master = dev_id;
+> 
+> 	struct mtk_spi *mdata = spi_master_get_devdata(master);
+> 
+> 	mtk_spi_check_and_set_state(mdata);
+> 	complete(&mdata->spimem_done);
+> 
+> 	return IRQ_HANDLED;
+> }
+> 
+> ... of course, in mtk_spi_probe(), you would do something like
+> 
+> if (mdata->use_spimem)
+> 	ret = devm_request_irq(&pdev->dev, irq, mtk_spimem_interrupt,
+> 		...... blah ......
+> else
+> 	ret = devm_request_irq(&pdev->dev, irq, mtk_spi_interrupt,
+> 		..... blah ......
+> 
+> This way, you're separating the two - increasing human readability
+> and showing
+> the simplifications (in that regard) in the IPM IP's SPI-MEM
+> handling.
+> 
+thanks for your advise, I'll do it in the next version.
+
+> >   	if (!master->can_dma(master, NULL, trans)) {
+> >   		if (trans->rx_buf) {
+> >   			cnt = mdata->xfer_len / 4;
+> > @@ -777,6 +816,266 @@ static irqreturn_t mtk_spi_interrupt(int irq,
+> > void *dev_id)
+> >   	return IRQ_HANDLED;
+> >   }
+> >   
+> > +static int mtk_spi_mem_adjust_op_size(struct spi_mem *mem,
+> > +				      struct spi_mem_op *op)
+> > +{
+> > +	int opcode_len;
+> > +
+> > +	if (op->data.dir != SPI_MEM_NO_DATA) {
+> > +		opcode_len = 1 + op->addr.nbytes + op->dummy.nbytes;
+> > +		if (opcode_len + op->data.nbytes >
+> > MTK_SPI_IPM_PACKET_SIZE) {
+> > +			op->data.nbytes = MTK_SPI_IPM_PACKET_SIZE -
+> > opcode_len;
+> > +			/* force data buffer dma-aligned. */
+> > +			op->data.nbytes -= op->data.nbytes % 4;
+> > +		}
+> > +	}
+> > +
+> > +	return 0;
+> > +}
+> > +
+> > +static bool mtk_spi_mem_supports_op(struct spi_mem *mem,
+> > +				    const struct spi_mem_op *op)
+> > +{
+> > +	if (op->data.buswidth > 4 || op->addr.buswidth > 4 ||
+> > +	    op->dummy.buswidth > 4 || op->cmd.buswidth > 4)
+> > +		return false;
+> > +
+> > +	if (op->addr.nbytes && op->dummy.nbytes &&
+> > +	    op->addr.buswidth != op->dummy.buswidth)
+> > +		return false;
+> > +
+> > +	if (op->addr.nbytes + op->dummy.nbytes > 16)
+> > +		return false;
+> > +
+> > +	if (op->data.nbytes > MTK_SPI_IPM_PACKET_SIZE) {
+> > +		if (op->data.nbytes / MTK_SPI_IPM_PACKET_SIZE >
+> > +		    MTK_SPI_IPM_PACKET_LOOP ||
+> > +		    op->data.nbytes % MTK_SPI_IPM_PACKET_SIZE != 0)
+> > +			return false;
+> > +	}
+> > +
+> > +	return true;
+> > +}
+> > +
+> > +static void mtk_spi_mem_setup_dma_xfer(struct spi_master *master,
+> > +				       const struct spi_mem_op *op)
+> > +{
+> > +	struct mtk_spi *mdata = spi_master_get_devdata(master);
+> > +
+> > +	writel((u32)(mdata->tx_dma & MTK_SPI_32BITS_MASK),
+> > +	       mdata->base + SPI_TX_SRC_REG);
+> > +#ifdef CONFIG_ARCH_DMA_ADDR_T_64BIT
+> > +	if (mdata->dev_comp->dma_ext)
+> > +		writel((u32)(mdata->tx_dma >> 32),
+> > +		       mdata->base + SPI_TX_SRC_REG_64);
+> > +#endif
+> > +
+> > +	if (op->data.dir == SPI_MEM_DATA_IN) {
+> > +		writel((u32)(mdata->rx_dma & MTK_SPI_32BITS_MASK),
+> > +		       mdata->base + SPI_RX_DST_REG);
+> > +#ifdef CONFIG_ARCH_DMA_ADDR_T_64BIT
+> > +		if (mdata->dev_comp->dma_ext)
+> > +			writel((u32)(mdata->rx_dma >> 32),
+> > +			       mdata->base + SPI_RX_DST_REG_64);
+> > +#endif
+> > +	}
+> > +}
+> > +
+> > +static int mtk_spi_transfer_wait(struct spi_mem *mem,
+> > +				 const struct spi_mem_op *op)
+> > +{
+> > +	struct mtk_spi *mdata = spi_master_get_devdata(mem->spi-
+> > >master);
+> > +	unsigned long long ms = 1;
+> 
+> Initializing ms to 1 here is useless, as you're anyway reinitializing
+> it
+> right after. I would do it as following:
+> 
+> u64 ms = 8000LL;
+> 
+> if (op->data.dir == SPI_MEM_NO_DATA)
+> 	ms *= 32;
+> else
+> 	ms *= op->data.nbytes;
+> 
+OK,I'll fix it.
+
+> Besides, can you please add a comment to the code explaining why the
+> reason for the waits (why 8, why 1000, why 32)?
+> 
+OK,THANKS
+
+> > +
+> > +	if (op->data.dir == SPI_MEM_NO_DATA)
+> > +		ms = 8LL * 1000LL * 32;
+> > +	else
+> > +		ms = 8LL * 1000LL * op->data.nbytes;
+> > +	do_div(ms, mem->spi->max_speed_hz);
+> 
+> I appreciate the usage of safe division helpers, but this is the
+> wrong one:
+> you have a unsigned long long (64-bits) dividend and a u32 divisor,
+> so the
+> right function to use here is div_u64().
+> 
+OK, I'll fix it. thanks!
+
+> 	ms = div_u64(ms, mem->spi->max_speed_hz);
+> 
+> > +	ms += ms + 1000; /* 1s tolerance */
+> > +
+> > +	if (ms > UINT_MAX)
+> > +		ms = UINT_MAX;
+> > +
+> > +	if (!wait_for_completion_timeout(&mdata->spimem_done,
+> > +					 msecs_to_jiffies(ms))) {
+> > +		dev_err(mdata->dev, "spi-mem transfer timeout\n");
+> > +		return -ETIMEDOUT;
+> > +	}
+> > +
+> > +	return 0;
+> > +}
+> > +
+> > +static int mtk_spi_mem_exec_op(struct spi_mem *mem,
+> > +			       const struct spi_mem_op *op)
+> > +{
+> > +	struct mtk_spi *mdata = spi_master_get_devdata(mem->spi-
+> > >master);
+> > +	u32 reg_val, nio = 1, tx_size;
+> > +	char *tx_tmp_buf, *rx_tmp_buf;
+> > +	int ret = 0;
+> > +
+> > +	mdata->use_spimem = true;
+> > +	reinit_completion(&mdata->spimem_done);
+> > +
+> > +	mtk_spi_reset(mdata);
+> > +	mtk_spi_hw_init(mem->spi->master, mem->spi);
+> > +	mtk_spi_prepare_transfer(mem->spi->master, mem->spi-
+> > >max_speed_hz);
+> > +
+> > +	reg_val = readl(mdata->base + SPI_CFG3_IPM_REG);
+> > +	/* opcode byte len */
+> > +	reg_val &= ~SPI_CFG3_IPM_CMD_BYTELEN_MASK;
+> > +	reg_val |= 1 << SPI_CFG3_IPM_CMD_BYTELEN_OFFSET;
+> > +
+> > +	/* addr & dummy byte len */
+> > +	reg_val &= ~SPI_CFG3_IPM_ADDR_BYTELEN_MASK;
+> > +	if (op->addr.nbytes || op->dummy.nbytes)
+> > +		reg_val |= (op->addr.nbytes + op->dummy.nbytes) <<
+> > +			    SPI_CFG3_IPM_ADDR_BYTELEN_OFFSET;
+> > +
+> > +	/* data byte len */
+> > +	if (op->data.dir == SPI_MEM_NO_DATA) {
+> > +		reg_val |= SPI_CFG3_IPM_NODATA_FLAG;
+> > +		writel(0, mdata->base + SPI_CFG1_REG);
+> > +	} else {
+> > +		reg_val &= ~SPI_CFG3_IPM_NODATA_FLAG;
+> > +		mdata->xfer_len = op->data.nbytes;
+> > +		mtk_spi_setup_packet(mem->spi->master);
+> > +	}
+> > +
+> > +	if (op->addr.nbytes || op->dummy.nbytes) {
+> > +		if (op->addr.buswidth == 1 || op->dummy.buswidth == 1)
+> > +			reg_val |= SPI_CFG3_IPM_XMODE_EN;
+> > +		else
+> > +			reg_val &= ~SPI_CFG3_IPM_XMODE_EN;
+> > +	}
+> > +
+> > +	if (op->addr.buswidth == 2 ||
+> > +	    op->dummy.buswidth == 2 ||
+> > +	    op->data.buswidth == 2)
+> > +		nio = 2;
+> > +	else if (op->addr.buswidth == 4 ||
+> > +		 op->dummy.buswidth == 4 ||
+> > +		 op->data.buswidth == 4)
+> > +		nio = 4;
+> 
+> 	else
+> 		nio = 1;
+> 
+> ...so that you can avoid double initialization of the `nio` variable.
+> 
+OK, I'll fix it,thanks
+
+> > +
+> > +	reg_val &= ~SPI_CFG3_IPM_CMD_PIN_MODE_MASK;
+> > +	reg_val |= PIN_MODE_CFG(nio) << SPI_CFG3_IPM_PIN_MODE_OFFSET;
+> > +
+> 
+> Regards,
+> Angelo
+

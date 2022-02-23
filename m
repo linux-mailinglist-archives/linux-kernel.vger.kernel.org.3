@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 297504C0F69
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 10:43:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A1FE4C0F74
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 10:44:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239359AbiBWJn2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 04:43:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37346 "EHLO
+        id S239389AbiBWJo4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 04:44:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231618AbiBWJnY (ORCPT
+        with ESMTP id S239365AbiBWJot (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 04:43:24 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DEDB5B8BA;
-        Wed, 23 Feb 2022 01:42:56 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 3D2A221136;
-        Wed, 23 Feb 2022 09:42:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1645609375; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=56pA+CGuLQdgLd1qYOFFRNIzWIldSybof2H4l1KI8t4=;
-        b=0gNDoIaoLdEU2IMCVzAidRu5UH2wcGsj0GzEaCOft0i/o29VhqfuIn4GuXAmVBs8zEt1uF
-        4tJRDE0ohUrnUbTmkP4pfkvXCQiX+4rHql1as9hY/4dCiGZvnS7AyYqhvBNKPycRNxnBR5
-        FCqaRJf0pCFhsDE2Ex7k1XfUBdi/lJs=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1645609375;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=56pA+CGuLQdgLd1qYOFFRNIzWIldSybof2H4l1KI8t4=;
-        b=OcFi/ubLrrHGvOI5ACYacYG2EUj/BoRvkQeFxGQcNy5/87ltEnGBxHgT7DizcKpVqNw+tl
-        M5rLo33EGBCJULCQ==
-Received: from quack3.suse.cz (unknown [10.163.28.18])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 3059CA3B81;
-        Wed, 23 Feb 2022 09:42:55 +0000 (UTC)
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id E3D7DA0605; Wed, 23 Feb 2022 10:42:54 +0100 (CET)
-Date:   Wed, 23 Feb 2022 10:42:54 +0100
-From:   Jan Kara <jack@suse.cz>
-To:     Ritesh Harjani <riteshh@linux.ibm.com>
-Cc:     linux-ext4@vger.kernel.org,
-        Harshad Shirwadkar <harshadshirwadkar@gmail.com>,
-        Theodore Ts'o <tytso@mit.edu>, Jan Kara <jack@suse.cz>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [RFC 5/9] ext4: Add commit_tid info in jbd debug log
-Message-ID: <20220223094254.fmowjdq4dbig5elz@quack3.lan>
-References: <cover.1645558375.git.riteshh@linux.ibm.com>
- <60daf324eec64f2be0b9ce0e240294d36411037c.1645558375.git.riteshh@linux.ibm.com>
+        Wed, 23 Feb 2022 04:44:49 -0500
+Received: from mail.kapsi.fi (mail.kapsi.fi [IPv6:2001:67c:1be8::25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9582A70F4A;
+        Wed, 23 Feb 2022 01:44:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=kapsi.fi;
+         s=20161220; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=uD+YdSB7BK2YZwHIlrFrUTb1ozQHZ1Cv2M2UMS1FjFg=; b=ddUFMN63QJ6TBX1ryUpKDsU/sP
+        +7bMajKfZDclWj9HZR+nZqarXuhOYEc6+hQbWxMk1nIPbkJT3HthlJ+E3J7gP+aY9mkI12PxJTwVz
+        j5o4v0FG6u/gMKV4m/QztKGHnt4kpcUZrULZUio4pv6LvX8W9HuQ+EaSsI9UA1MTfYL2wRR0+siSb
+        8+VsToOmQMrcizomZAYvuvXA1fqbsA30K5w1Xbfa/4JFtCLIOP4S5Sxd+MR15CRsWy1QPPk6NaoIz
+        OXPOpzYJ93NSv7xV6y6zIGnswVRXmhe45W0UBnXxJV4IBbSb9j4ZVAbXKcNb7/9F5yjdZDB2l8pd9
+        Aid3wUXg==;
+Received: from 91-158-25-70.elisa-laajakaista.fi ([91.158.25.70] helo=[192.168.1.10])
+        by mail.kapsi.fi with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.89)
+        (envelope-from <cyndis@kapsi.fi>)
+        id 1nMoBn-0003QL-UA; Wed, 23 Feb 2022 11:44:03 +0200
+Message-ID: <d2579e10-e5c2-0d99-4233-19318a1db6c1@kapsi.fi>
+Date:   Wed, 23 Feb 2022 11:44:02 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <60daf324eec64f2be0b9ce0e240294d36411037c.1645558375.git.riteshh@linux.ibm.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.1
+Subject: Re: [PATCH v3 3/9] gpu: host1x: Add context device management code
+Content-Language: en-US
+To:     Christoph Hellwig <hch@infradead.org>,
+        Mikko Perttunen <mperttunen@nvidia.com>
+Cc:     thierry.reding@gmail.com, jonathanh@nvidia.com, joro@8bytes.org,
+        will@kernel.org, robh+dt@kernel.org, robin.murphy@arm.com,
+        linux-tegra@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+References: <20220218113952.3077606-1-mperttunen@nvidia.com>
+ <20220218113952.3077606-4-mperttunen@nvidia.com>
+ <YhUOKaoCA7dyAZAh@infradead.org>
+From:   Mikko Perttunen <cyndis@kapsi.fi>
+In-Reply-To: <YhUOKaoCA7dyAZAh@infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 91.158.25.70
+X-SA-Exim-Mail-From: cyndis@kapsi.fi
+X-SA-Exim-Scanned: No (on mail.kapsi.fi); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -66,80 +66,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 23-02-22 02:04:13, Ritesh Harjani wrote:
-> This adds commit_tid argument in ext4_fc_update_stats()
-> so that we can add this information too in jbd_debug logs.
-> This is also required in a later patch to pass the commit_tid info in
-> ext4_fc_commit_start/stop() trace events.
+On 2/22/22 18:24, Christoph Hellwig wrote:
+> On Fri, Feb 18, 2022 at 01:39:46PM +0200, Mikko Perttunen wrote:
+>> +
+>> +/*
+>> + * Due to an issue with T194 NVENC, only 38 bits can be used.
+>> + * Anyway, 256GiB of IOVA ought to be enough for anyone.
+>> + */
+>> +static dma_addr_t context_device_dma_mask = DMA_BIT_MASK(38);
 > 
-> Signed-off-by: Ritesh Harjani <riteshh@linux.ibm.com>
-
-Looks good. Feel free to add:
-
-Reviewed-by: Jan Kara <jack@suse.cz>
-
-								Honza
-
-> ---
->  fs/ext4/fast_commit.c | 15 +++++++++------
->  1 file changed, 9 insertions(+), 6 deletions(-)
+> You need a mask per device.  Please don't share the same variable
+> for multiple masks.
 > 
-> diff --git a/fs/ext4/fast_commit.c b/fs/ext4/fast_commit.c
-> index 7fb1eceef30c..ee32aac0cbbf 100644
-> --- a/fs/ext4/fast_commit.c
-> +++ b/fs/ext4/fast_commit.c
-> @@ -1127,11 +1127,12 @@ static int ext4_fc_perform_commit(journal_t *journal)
->  }
->  
->  static void ext4_fc_update_stats(struct super_block *sb, int status,
-> -				 u64 commit_time, int nblks)
-> +				 u64 commit_time, int nblks, tid_t commit_tid)
->  {
->  	struct ext4_fc_stats *stats = &EXT4_SB(sb)->s_fc_stats;
->  
-> -	jbd_debug(1, "Fast commit ended with status = %d", status);
-> +	jbd_debug(1, "Fast commit ended with status = %d for tid %u",
-> +			status, commit_tid);
->  	if (status == EXT4_FC_STATUS_OK) {
->  		stats->fc_num_commits++;
->  		stats->fc_numblks += nblks;
-> @@ -1181,14 +1182,16 @@ int ext4_fc_commit(journal_t *journal, tid_t commit_tid)
->  		if (atomic_read(&sbi->s_fc_subtid) <= subtid &&
->  			commit_tid > journal->j_commit_sequence)
->  			goto restart_fc;
-> -		ext4_fc_update_stats(sb, EXT4_FC_STATUS_SKIPPED, 0, 0);
-> +		ext4_fc_update_stats(sb, EXT4_FC_STATUS_SKIPPED, 0, 0,
-> +				commit_tid);
->  		return 0;
->  	} else if (ret) {
->  		/*
->  		 * Commit couldn't start. Just update stats and perform a
->  		 * full commit.
->  		 */
-> -		ext4_fc_update_stats(sb, EXT4_FC_STATUS_FAILED, 0, 0);
-> +		ext4_fc_update_stats(sb, EXT4_FC_STATUS_FAILED, 0, 0,
-> +				commit_tid);
->  		return jbd2_complete_transaction(journal, commit_tid);
->  	}
->  
-> @@ -1220,12 +1223,12 @@ int ext4_fc_commit(journal_t *journal, tid_t commit_tid)
->  	 * don't react too strongly to vast changes in the commit time
->  	 */
->  	commit_time = ktime_to_ns(ktime_sub(ktime_get(), start_time));
-> -	ext4_fc_update_stats(sb, status, commit_time, nblks);
-> +	ext4_fc_update_stats(sb, status, commit_time, nblks, commit_tid);
->  	return ret;
->  
->  fallback:
->  	ret = jbd2_fc_end_commit_fallback(journal);
-> -	ext4_fc_update_stats(sb, status, 0, 0);
-> +	ext4_fc_update_stats(sb, status, 0, 0, commit_tid);
->  	return ret;
->  }
->  
-> -- 
-> 2.31.1
+>> +EXPORT_SYMBOL(host1x_context_alloc);
 > 
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+> All this low-level code really should be EXPORT_SYMBOL_GPL.
+
+Thanks, will fix (and same for patch 2).
+
+Mikko

@@ -2,98 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3ADE74C11C7
+	by mail.lfdr.de (Postfix) with ESMTP id 860CA4C11C8
 	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 12:46:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235675AbiBWLqn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 06:46:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47296 "EHLO
+        id S237778AbiBWLq7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 06:46:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229492AbiBWLqk (ORCPT
+        with ESMTP id S236216AbiBWLq4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 06:46:40 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B37298F67;
-        Wed, 23 Feb 2022 03:46:13 -0800 (PST)
-Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21NAgfXi002921;
-        Wed, 23 Feb 2022 11:45:53 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=mflh59XXUGLuQUJiyd5xbLSaDlOcJaruC9siPCIGWjE=;
- b=Inloe1OmkL9iUmLnKQSuRR1ou//thR9oMz1wvUh74UoLnTjZ6OCakXJlvCm7USBcMKXH
- 5jpt9RNrRW1VRsqY42FhwnE49orK5iovmo/Yl82F2DIkZZl/68lxhNkNLvLhNTKLdU7G
- Yb7wGtkZJchucSrvi1k/ami/9VGod5R35Cd1mL3Iv7XhC2Ge4gcxv7E+Ko9uolyqa8id
- dFxo45uATJwjkTDWVhFvJTGc1bvLBR90CJrs9ZozgRkOACwQU1/2Kjk19A69navEejTU
- 8XNs3X3GDilUEgzEWk5ZiL2Z0PJfwrhC+EOwc3Y8wR4yNDcJLh92u4I1IYbZz2g5DUPR 6Q== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3edkdqs4rx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 23 Feb 2022 11:45:53 +0000
-Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 21NBf7WL026979;
-        Wed, 23 Feb 2022 11:45:52 GMT
-Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3edkdqs4rb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 23 Feb 2022 11:45:52 +0000
-Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
-        by ppma05fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 21NBbpnX000317;
-        Wed, 23 Feb 2022 11:45:50 GMT
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-        by ppma05fra.de.ibm.com with ESMTP id 3ear69fxpw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 23 Feb 2022 11:45:50 +0000
-Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 21NBjk5o50790904
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 23 Feb 2022 11:45:46 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id CCD864204C;
-        Wed, 23 Feb 2022 11:45:46 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7328B42049;
-        Wed, 23 Feb 2022 11:45:44 +0000 (GMT)
-Received: from sig-9-65-80-154.ibm.com (unknown [9.65.80.154])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed, 23 Feb 2022 11:45:44 +0000 (GMT)
-Message-ID: <edc472a977f40dc254d3cf9c8be5f3a5147f26ad.camel@linux.ibm.com>
-Subject: Re: [PATCH v10 23/27] ima: Setup securityfs for IMA namespace
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Stefan Berger <stefanb@linux.ibm.com>,
-        linux-integrity@vger.kernel.org
-Cc:     serge@hallyn.com, christian.brauner@ubuntu.com,
-        containers@lists.linux.dev, dmitry.kasatkin@gmail.com,
-        ebiederm@xmission.com, krzysztof.struczynski@huawei.com,
-        roberto.sassu@huawei.com, mpeters@redhat.com, lhinds@redhat.com,
-        lsturman@redhat.com, puiterwi@redhat.com, jejb@linux.ibm.com,
-        jamjoom@us.ibm.com, linux-kernel@vger.kernel.org,
-        paul@paul-moore.com, rgb@redhat.com,
-        linux-security-module@vger.kernel.org, jmorris@namei.org,
-        James Bottomley <James.Bottomley@HansenPartnership.com>,
-        Christian Brauner <brauner@kernel.org>
-Date:   Wed, 23 Feb 2022 06:45:43 -0500
-In-Reply-To: <20220201203735.164593-24-stefanb@linux.ibm.com>
-References: <20220201203735.164593-1-stefanb@linux.ibm.com>
-         <20220201203735.164593-24-stefanb@linux.ibm.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: _I-iTB139F16lISvYRV-S9UF49_RYgqP
-X-Proofpoint-GUID: 1_gzps_LXdPzqss6EOQborTJl4X_nsVu
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-02-23_03,2022-02-23_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 mlxscore=0
- mlxlogscore=999 priorityscore=1501 clxscore=1015 spamscore=0 adultscore=0
- lowpriorityscore=0 phishscore=0 malwarescore=0 suspectscore=0 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2201110000
- definitions=main-2202230064
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        Wed, 23 Feb 2022 06:46:56 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0621598F67;
+        Wed, 23 Feb 2022 03:46:29 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C5235106F;
+        Wed, 23 Feb 2022 03:46:28 -0800 (PST)
+Received: from lpieralisi (e121166-lin.cambridge.arm.com [10.1.196.255])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A84113F70D;
+        Wed, 23 Feb 2022 03:46:27 -0800 (PST)
+Date:   Wed, 23 Feb 2022 11:46:22 +0000
+From:   Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+To:     Jisheng Zhang <jszhang@kernel.org>
+Cc:     Jingoo Han <jingoohan1@gmail.com>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] PCI: dwc: Fix integrated MSI Receiver mask reg setting
+ during resume
+Message-ID: <20220223114622.GA27645@lpieralisi>
+References: <20211226074019.2556-1-jszhang@kernel.org>
+ <Ye1D4lYAIpDe7qAN@xhacker>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Ye1D4lYAIpDe7qAN@xhacker>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -102,56 +49,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-02-01 at 15:37 -0500, Stefan Berger wrote:
-> Setup securityfs with symlinks, directories, and files for IMA
-> namespacing support. The same directory structure that IMA uses on the
-> host is also created for the namespacing case.
+On Sun, Jan 23, 2022 at 08:02:42PM +0800, Jisheng Zhang wrote:
+> On Sun, Dec 26, 2021 at 03:40:19PM +0800, Jisheng Zhang wrote:
+> > If the host which makes use of the IP's integrated MSI Receiver losts
+> > power during suspend, we call dw_pcie_setup_rc() to reinit the RC. But
+> > dw_pcie_setup_rc() always set the pp->irq_mask[ctrl] as ~0, so the mask
+> > register is always set as 0xffffffff incorrectly, thus the MSI can't
+> > work after resume.
+> > 
+> > Fix this issue by moving pp->irq_mask[ctrl] initialization to
+> > dw_pcie_host_init(), so we can correctly set the mask reg during both
+> > boot and resume.
+> > 
+> > Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
 > 
-> The securityfs file and directory ownerships cannot be set when the
-> IMA namespace is initialized. Therefore, delay the setup of the file
-> system to a later point when securityfs is in securityfs_fill_super.
+> Hi all,
 > 
-> Introduce a variable ima_policy_removed in ima_namespace that is used to
-> remember whether the policy file has previously been removed and thus
-> should not be created again in case of unmounting and again mounting
-> securityfs inside an IMA namespace.
+> This patch can still be applied to the latest linus tree. Do you want
+> me to rebase and send out a new version?
+> 
+> Without this patch, dwc host MSI interrupt(if use the IP's integrated
+> MSI receiver) can't work after resume. Could it be picked up as a fix
+> for v5.17?
 
-When the ability of extending the custom IMA policy was added, support
-for displaying  the policy was added.  (Refer to the IMA_READ_POLICY
-Kconfig.)  This patch set adds support for a user, true root in the
-namespace, to be able to write a custom policy.   If the
-IMA_READ_POLICY is not enabled, then nobody, including host root, will
-be able to view it.
+The tricky bit with this patch is that it is not clear what piece of
+logic is lost on power down and what not. IIUC MSI interrupt controller
+logic is kept so it does not need to be saved/restored (but in
+dw_pcie_setup_rc() we overwrite PCIE_MSI_INTR0_ENABLE even if it
+is not needed on resume - actually, it can even be destructive).
 
-Instead of continuing to support not being able to read the IMA policy,
-updating the IMA_READ_POLICY Kconfig for the IMA_NS case to require it
-seems preferable.
+Maybe we need to write suspend/resume hooks for the dwc core instead
+of moving code around to fix these bugs ?
 
-> This filesystem can now be mounted as follows:
-> 
-> mount -t securityfs /sys/kernel/security/ /sys/kernel/security/
-> 
-> The following directories, symlinks, and files are available
-> when IMA namespacing is enabled, otherwise it will be empty:
-> 
-> $ ls -l sys/kernel/security/
-> total 0
-> lr--r--r--. 1 root root 0 Dec  2 00:18 ima -> integrity/ima
-> drwxr-xr-x. 3 root root 0 Dec  2 00:18 integrity
-> 
-> $ ls -l sys/kernel/security/ima/
-> total 0
-> -r--r-----. 1 root root 0 Dec  2 00:18 ascii_runtime_measurements
-> -r--r-----. 1 root root 0 Dec  2 00:18 binary_runtime_measurements
-> -rw-------. 1 root root 0 Dec  2 00:18 policy
-> -r--r-----. 1 root root 0 Dec  2 00:18 runtime_measurements_count
-> -r--r-----. 1 root root 0 Dec  2 00:18 violations
-> 
-> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
-> Signed-off-by: James Bottomley <James.Bottomley@HansenPartnership.com>
-> Acked-by: Christian Brauner <brauner@kernel.org>
+Lorenzo
 
-Otherwise,
-
-Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
-
+> 
+> Thanks
+> 
+> > ---
+> >  drivers/pci/controller/dwc/pcie-designware-host.c | 7 ++++++-
+> >  1 file changed, 6 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/pci/controller/dwc/pcie-designware-host.c b/drivers/pci/controller/dwc/pcie-designware-host.c
+> > index f4755f3a03be..2fa86f32d964 100644
+> > --- a/drivers/pci/controller/dwc/pcie-designware-host.c
+> > +++ b/drivers/pci/controller/dwc/pcie-designware-host.c
+> > @@ -362,6 +362,12 @@ int dw_pcie_host_init(struct pcie_port *pp)
+> >  			if (ret < 0)
+> >  				return ret;
+> >  		} else if (pp->has_msi_ctrl) {
+> > +			u32 ctrl, num_ctrls;
+> > +
+> > +			num_ctrls = pp->num_vectors / MAX_MSI_IRQS_PER_CTRL;
+> > +			for (ctrl = 0; ctrl < num_ctrls; ctrl++)
+> > +				pp->irq_mask[ctrl] = ~0;
+> > +
+> >  			if (!pp->msi_irq) {
+> >  				pp->msi_irq = platform_get_irq_byname_optional(pdev, "msi");
+> >  				if (pp->msi_irq < 0) {
+> > @@ -541,7 +547,6 @@ void dw_pcie_setup_rc(struct pcie_port *pp)
+> >  
+> >  		/* Initialize IRQ Status array */
+> >  		for (ctrl = 0; ctrl < num_ctrls; ctrl++) {
+> > -			pp->irq_mask[ctrl] = ~0;
+> >  			dw_pcie_writel_dbi(pci, PCIE_MSI_INTR0_MASK +
+> >  					    (ctrl * MSI_REG_CTRL_BLOCK_SIZE),
+> >  					    pp->irq_mask[ctrl]);
+> > -- 
+> > 2.34.1
+> > 

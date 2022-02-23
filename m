@@ -2,187 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 417934C1D0C
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 21:21:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 078104C1D11
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 21:22:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241001AbiBWUVf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 15:21:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48780 "EHLO
+        id S241035AbiBWUW7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 15:22:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232105AbiBWUVc (ORCPT
+        with ESMTP id S241097AbiBWUW5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 15:21:32 -0500
-X-Greylist: delayed 18142 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 23 Feb 2022 12:21:00 PST
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB6094D24F;
-        Wed, 23 Feb 2022 12:21:00 -0800 (PST)
-Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 25761FF806;
-        Wed, 23 Feb 2022 20:20:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1645647659;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Kppx7Y3HjhzvN/0jitv+VoeGh8Sofe2wA4Rh6vVi4nc=;
-        b=i/1fOodDKjajA7oMrrhNGuIu5sn0knGb8CS5vjJRRF7pgR6lo5Ax8zNhM85PKuJUiuuMMJ
-        F0ge0zIXNiPi+gichbf04LURreif0+ASM4CWWywE/KCI6lilVoJDvfZMYiuii5a4mRbP4Y
-        AUv8ltZiNhwC1Ql3jZABl97QRZdG2LeBIC7pGp17YhCDjdnwi+MxSbUwKYL84UFDGbQIgx
-        cscriGuvt8D1yBksk8WwgtAfGxiTH/2OeFLQtKidR0tQoG6rQw94NpHYVw/pgoiQ8+W72f
-        qmrsyQSEpelVR7uovNn5/lleH0xAvDpEEZO2utZV2oJeePAOqWCmWRRSuV7qVg==
-Date:   Wed, 23 Feb 2022 21:20:54 +0100
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Conor.Dooley@microchip.com
-Cc:     a.zummo@towertech.it, Lewis.Hanly@microchip.com,
-        Daire.McNamara@microchip.com, Ivan.Griffin@microchip.com,
-        atishp@rivosinc.com, palmer@rivosinc.com, robh@kernel.org,
-        linus.walleij@linaro.org, brgl@bgdev.pl, robh+dt@kernel.org,
-        jassisinghbrar@gmail.com, thierry.reding@gmail.com,
-        u.kleine-koenig@pengutronix.de, lee.jones@linaro.org,
-        paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, geert@linux-m68k.org,
-        krzysztof.kozlowski@canonical.com, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v7 03/11] dt-bindings: rtc: add bindings for microchip
- mpfs rtc
-Message-ID: <YhaXJofTTTgaoEsn@piout.net>
-References: <20220214135840.168236-1-conor.dooley@microchip.com>
- <20220214135840.168236-4-conor.dooley@microchip.com>
- <5b0681a0-ff46-7eb4-3644-0d1173c1f0d4@microchip.com>
- <YhZQRqHib2+GR7Ma@piout.net>
- <3483b6c4-67a7-5ed5-2953-728ea8ba5874@microchip.com>
+        Wed, 23 Feb 2022 15:22:57 -0500
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E45E4D251
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 12:22:29 -0800 (PST)
+Received: by mail-lj1-x231.google.com with SMTP id u11so5771521lju.4
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 12:22:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=J3H2+NYtTtjeGTQYVonE+hBzT55dUXsQnd/qXFVfW9U=;
+        b=FJYeflWGBh0cbxz8hlGeGMD3+L4e4hFc/0jlzVwyFG+y4B4WF9+QCmtYl7JL34CB+2
+         mXfO6w03DriGF514W5BCsF8o5mGA/NKs5uDMPQr+h6Wo6xHSlepZe0EdBcXyGBiW1XrG
+         id6hqr0iWW0az6wyMpunwbHhqvhKopWPc3twU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=J3H2+NYtTtjeGTQYVonE+hBzT55dUXsQnd/qXFVfW9U=;
+        b=C0jKOJzdwZzeHvZB4iYTi7AYzKZy9mvoqtYc/arSWhO6GloEF0bvFablpVejhNyPkU
+         cOr44A3+Jb7o4RJsv7Sl7lGs6+DZ5dBhQFwg1m23MfTchauQpWO0JlKCIo+HTRum9SFr
+         BLHIwMHRIynPuQs7VIg9uknVCP0gMYkY/N1Mm/V2BEYkTvpK4tB8IZ6oljZO+39zOMpQ
+         WqtFjEirGo4JWI3qi1ZioRbALTkNeE1C98af9Gh5rEG7uB8U9EYU3olMZgXlT7RTwdTA
+         S5JbC0EVbXFTgPg51hohQ47XrjKoPF8+d6VDHWkJ3Kxg4hodyC2xuzuxXiPuKVXd2sWs
+         Hw2g==
+X-Gm-Message-State: AOAM533ueU4c7FT9pRJswchNXDyGwYrwIEYDHeEpsc0nlWDjZvhddSyy
+        F6bH8+lUwgZtcu4Z4UyF89jMtmcrW+KQulJbhsQ=
+X-Google-Smtp-Source: ABdhPJzEihtyl5goPF0iEDTH0kVzIi8IDXPsGvSdziSV/l4L5S3Swf11TlmprQxi5pwld1WcclG4Cg==
+X-Received: by 2002:a2e:91d4:0:b0:23f:2ae2:2898 with SMTP id u20-20020a2e91d4000000b0023f2ae22898mr743130ljg.429.1645647747499;
+        Wed, 23 Feb 2022 12:22:27 -0800 (PST)
+Received: from mail-lj1-f170.google.com (mail-lj1-f170.google.com. [209.85.208.170])
+        by smtp.gmail.com with ESMTPSA id w23sm43247lfu.96.2022.02.23.12.22.25
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 23 Feb 2022 12:22:25 -0800 (PST)
+Received: by mail-lj1-f170.google.com with SMTP id t14so26359356ljh.8
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 12:22:25 -0800 (PST)
+X-Received: by 2002:a2e:b8cc:0:b0:246:4767:7a29 with SMTP id
+ s12-20020a2eb8cc000000b0024647677a29mr803446ljp.152.1645647744896; Wed, 23
+ Feb 2022 12:22:24 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3483b6c4-67a7-5ed5-2953-728ea8ba5874@microchip.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220217184829.1991035-1-jakobkoschel@gmail.com>
+ <20220217184829.1991035-5-jakobkoschel@gmail.com> <20220218151216.GE1037534@ziepe.ca>
+ <6BA40980-554F-45E2-914D-5E4CD02FF21C@gmail.com> <CAHk-=wir=xabJ73Upk1dsuoMKWTTjTfeLFJ=p2S0yRYYaxW4fA@mail.gmail.com>
+ <20220223191222.GC10361@ziepe.ca> <CAHk-=widDQUjQS2tpaw3j_+Yz8rAY3P0qdqpz+nTNu4-3LaU3w@mail.gmail.com>
+ <F9A66F89-66C2-4322-808B-275384C4CC9D@gmail.com>
+In-Reply-To: <F9A66F89-66C2-4322-808B-275384C4CC9D@gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Wed, 23 Feb 2022 12:22:08 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wgRr_D8CB-D9Kg-c=EHreAsk5SqXPwr9Y7k9sA6cWXJ6w@mail.gmail.com>
+Message-ID: <CAHk-=wgRr_D8CB-D9Kg-c=EHreAsk5SqXPwr9Y7k9sA6cWXJ6w@mail.gmail.com>
+Subject: Re: [RFC PATCH 04/13] vfio/mdev: remove the usage of the list
+ iterator after the loop
+To:     Jakob <jakobkoschel@gmail.com>
+Cc:     Jason Gunthorpe <jgg@ziepe.ca>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Arnd Bergman <arnd@arndb.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
+        Cristiano Giuffrida <c.giuffrida@vu.nl>,
+        "Bos, H.J." <h.j.bos@vu.nl>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23/02/2022 15:25:00+0000, Conor.Dooley@microchip.com wrote:
-> On 23/02/2022 15:18, Alexandre Belloni wrote:
-> > EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
-> > 
-> > On 23/02/2022 07:41:27+0000, Conor.Dooley@microchip.com wrote:
-> >> Hi Alessandro, Alexandre,
-> >> If one of you could take a look at this, that'd be great.
-> > 
-> > I actually expected someone else to apply this, what is your plan?
-> 
-> I was going to ask Palmer to take the series via riscv. Since I have
-> Rob's R-b, I was just looking for a subsystem maintainer ack/R-b before
-> actually asking him.
-> 
+On Wed, Feb 23, 2022 at 12:15 PM Jakob <jakobkoschel@gmail.com> wrote:
+>
+> in such a case you would still have to set the iterator value to
+> NULL when reaching the terminating condition or am I missing something?
 
-Rob's review is enough for a DT binding, no need to wait for me. but
-FWIW:
+No.
 
-Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Make the rule be "you never use the iterator outside the loop".
 
+IOW, the code sequence is
 
-> Thanks,
-> Conor.
-> 
-> > 
-> >> Thanks,
-> >> Conor.
-> >>
-> >> On 14/02/2022 13:58, conor.dooley@microchip.com wrote:
-> >>> From: Conor Dooley <conor.dooley@microchip.com>
-> >>>
-> >>> Add device tree bindings for the real time clock on
-> >>> the Microchip PolarFire SoC.
-> >>>
-> >>> Signed-off-by: Daire McNamara <daire.mcnamara@microchip.com>
-> >>> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
-> >>> Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
-> >>> Reviewed-by: Rob Herring <robh@kernel.org>
-> >>> ---
-> >>>    .../bindings/rtc/microchip,mfps-rtc.yaml      | 58 +++++++++++++++++++
-> >>>    1 file changed, 58 insertions(+)
-> >>>    create mode 100644 Documentation/devicetree/bindings/rtc/microchip,mfps-rtc.yaml
-> >>>
-> >>> diff --git a/Documentation/devicetree/bindings/rtc/microchip,mfps-rtc.yaml b/Documentation/devicetree/bindings/rtc/microchip,mfps-rtc.yaml
-> >>> new file mode 100644
-> >>> index 000000000000..a2e984ea3553
-> >>> --- /dev/null
-> >>> +++ b/Documentation/devicetree/bindings/rtc/microchip,mfps-rtc.yaml
-> >>> @@ -0,0 +1,58 @@
-> >>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> >>> +%YAML 1.2
-> >>> +---
-> >>> +$id: http://devicetree.org/schemas/rtc/microchip,mfps-rtc.yaml#
-> >>> +
-> >>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> >>> +
-> >>> +title: Microchip PolarFire Soc (MPFS) RTC Device Tree Bindings
-> >>> +
-> >>> +allOf:
-> >>> +  - $ref: rtc.yaml#
-> >>> +
-> >>> +maintainers:
-> >>> +  - Daire McNamara <daire.mcnamara@microchip.com>
-> >>> +  - Lewis Hanly <lewis.hanly@microchip.com>
-> >>> +
-> >>> +properties:
-> >>> +  compatible:
-> >>> +    enum:
-> >>> +      - microchip,mpfs-rtc
-> >>> +
-> >>> +  reg:
-> >>> +    maxItems: 1
-> >>> +
-> >>> +  interrupts:
-> >>> +    items:
-> >>> +      - description: |
-> >>> +          RTC_WAKEUP interrupt
-> >>> +      - description: |
-> >>> +          RTC_MATCH, asserted when the content of the Alarm register is equal
-> >>> +          to that of the RTC's count register.
-> >>> +
-> >>> +  clocks:
-> >>> +    maxItems: 1
-> >>> +
-> >>> +  clock-names:
-> >>> +    items:
-> >>> +      - const: rtc
-> >>> +
-> >>> +required:
-> >>> +  - compatible
-> >>> +  - reg
-> >>> +  - interrupts
-> >>> +  - clocks
-> >>> +  - clock-names
-> >>> +
-> >>> +additionalProperties: false
-> >>> +
-> >>> +examples:
-> >>> +  - |
-> >>> +    rtc@20124000 {
-> >>> +        compatible = "microchip,mpfs-rtc";
-> >>> +        reg = <0x20124000 0x1000>;
-> >>> +        clocks = <&clkcfg 21>;
-> >>> +        clock-names = "rtc";
-> >>> +        interrupts = <80>, <81>;
-> >>> +    };
-> >>> +...
-> >>
-> > 
-> > --
-> > Alexandre Belloni, co-owner and COO, Bootlin
-> > Embedded Linux and Kernel engineering
-> > https://bootlin.com
-> 
+        some_struct *ptr, *iter;
 
--- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+        ptr = NULL;
+        list_for_each_entry(iter, ...) {
+                if (iter_matches_condition(iter)) {
+                        ptr = iter;
+                        break;
+                }
+        }
+
+        .. never use 'iter' here - you use 'ptr' and check it for NULL ..
+
+See? Same number of variables as using a separate 'bool found' flag,
+but simpler code, and it matches the rule of 'don't use iter outside
+the loop'.
+
+This is how you'd have to do it anyway if we start using a C99 style
+'declare iter _in_ the loop' model.
+
+And as mentioned, it actually tends to lead to better code, since the
+code outside the loop only has one variable live, not two.
+
+Of course, compilers can do a lot of optimizations, so a 'found'
+variable can be made to generate good code too - if the compiler just
+tracks it and notices, and turns the 'break' into a 'goto found', and
+the fallthrough into the 'goto not_found'.
+
+So 'better code generation' is debatable, but even if the compiler can
+do as good a job with a separate 'bool' variable and some cleverness,
+I think we should strive for code where we make it easy for the
+compiler to DTRT - and where the generated code is easier to match up
+with what we wrote.
+
+                  Linus

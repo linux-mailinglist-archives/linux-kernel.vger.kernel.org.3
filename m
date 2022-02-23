@@ -2,136 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 918DF4C16C7
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 16:28:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 23BEB4C16CC
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 16:29:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242067AbiBWP3L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 10:29:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39384 "EHLO
+        id S242075AbiBWPaM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 10:30:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232535AbiBWP3H (ORCPT
+        with ESMTP id S242073AbiBWPaJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 10:29:07 -0500
-Received: from winds.org (winds.org [68.75.195.9])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6432959A57;
-        Wed, 23 Feb 2022 07:28:39 -0800 (PST)
-Received: by winds.org (Postfix, from userid 100)
-        id 10DA01CA58FD; Wed, 23 Feb 2022 10:28:39 -0500 (EST)
-Received: from localhost (localhost [127.0.0.1])
-        by winds.org (Postfix) with ESMTP id 0F110124B482;
-        Wed, 23 Feb 2022 10:28:39 -0500 (EST)
-Date:   Wed, 23 Feb 2022 10:28:39 -0500 (EST)
-From:   Byron Stanoszek <gandalf@winds.org>
-To:     Dave Chinner <david@fromorbit.com>
-cc:     Jan Kara <jack@suse.cz>, Matthew Wilcox <willy@infradead.org>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        reiserfs-devel@vger.kernel.org
-Subject: Re: Is it time to remove reiserfs?
-In-Reply-To: <3ce45c23-2721-af6e-6cd7-648dc399597@winds.org>
-Message-ID: <1a5cd8ce-e7c7-5aa8-e475-ad7810e2f057@winds.org>
-References: <YhIwUEpymVzmytdp@casper.infradead.org> <20220222100408.cyrdjsv5eun5pzij@quack3.lan> <20220222221614.GC3061737@dread.disaster.area> <3ce45c23-2721-af6e-6cd7-648dc399597@winds.org>
+        Wed, 23 Feb 2022 10:30:09 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C364D74DDE
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 07:29:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1645630181;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=lDvsZLGMcy42Kz83/SKdUVLKGuw2EB/u2DP8NSmc4HU=;
+        b=P8oARu0hJ3H75CfI7bownX32KRYMcMmJdbrSXZE3QYIGtmuk5L+m946wFlfuvB2eNZHEGj
+        bHA79wBhmG/7QUxGlWuWovR0BSySNBkMR4BclbjQy3ADrvMsjLVr/mk6pCGQuTJGUHFQjN
+        YGHcPBa48fYM+Kv/qHJr1OK+DF5DBsc=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-112-_ftGpdz6NIqOzdWzTM9_eg-1; Wed, 23 Feb 2022 10:29:39 -0500
+X-MC-Unique: _ftGpdz6NIqOzdWzTM9_eg-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 5D847804311;
+        Wed, 23 Feb 2022 15:29:38 +0000 (UTC)
+Received: from lorien.usersys.redhat.com (unknown [10.22.10.120])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 570791077CB9;
+        Wed, 23 Feb 2022 15:28:43 +0000 (UTC)
+Date:   Wed, 23 Feb 2022 10:28:41 -0500
+From:   Phil Auld <pauld@redhat.com>
+To:     Carlos Bilbao <carlos.bilbao@amd.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, mingo@redhat.com,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] kernel/sched: Update schedstats when migrating threads
+Message-ID: <YhZSqd+d03oWUPP6@lorien.usersys.redhat.com>
+References: <20220126152222.5429-1-carlos.bilbao@amd.com>
+ <YhYKL4hxx4TNKHGD@hirez.programming.kicks-ass.net>
+ <aac8f860-c01f-bda0-9f1b-029b234213c2@amd.com>
 MIME-Version: 1.0
-Content-Type: text/plain; format=flowed; charset=US-ASCII
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <aac8f860-c01f-bda0-9f1b-029b234213c2@amd.com>
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 23 Feb 2022, Byron Stanoszek wrote:
-> On Wed, 23 Feb 2022, Dave Chinner wrote:
->>  On Tue, Feb 22, 2022 at 11:04:08AM +0100, Jan Kara wrote:
->>>  Hello!
->>>
->>>  On Sun 20-02-22 12:13:04, Matthew Wilcox wrote:
->>>>  Keeping reiserfs in the tree has certain costs.  For example, I would
->>>>  very much like to remove the 'flags' argument to ->write_begin.  We have
->>>>  the infrastructure in place to handle AOP_FLAG_NOFS differently, but
->>>>  AOP_FLAG_CONT_EXPAND is still around, used only by reiserfs.
->>>>
->>>>  Looking over the patches to reiserfs over the past couple of years,
->>>>  there
->>>>  are fixes for a few syzbot reports and treewide changes.  There don't
->>>>  seem to be any fixes for user-spotted bugs since 2019.  Does reiserfs
->>>>  still have a large install base that is just very happy with an old
->>>>  stable filesystem?  Or have all its users migrated to new and exciting
->>>>  filesystems with active feature development?
->>>>
->>>>  We've removed support for senescent filesystems before (ext, xiafs), so
->>>>  it's not unprecedented.  But while I have a clear idea of the benefits
->>>>  to
->>>>  other developers of removing reiserfs, I don't have enough information
->>>>  to
->>>>  weigh the costs to users.  Maybe they're happy with having 5.15 support
->>>>  for their reiserfs filesystems and can migrate to another filesystem
->>>>  before they upgrade their kernel after 5.15.
->>>>
->>>>  Another possibility beyond outright removal would be to trim the kernel
->>>>  code down to read-only support for reiserfs.  Most of the quirks of
->>>>  reiserfs have to do with write support, so this could be a useful way
->>>>  forward.  Again, I don't have a clear picture of how people actually
->>>>  use reiserfs, so I don't know whether it is useful or not.
->>>>
->>>>  NB: Please don't discuss the personalities involved.  This is purely a
->>>>  "we have old code using old APIs" discussion.
->>>
->>>  So from my distro experience installed userbase of reiserfs is pretty
->>>  small
->>>  and shrinking. We still do build reiserfs in openSUSE / SLES kernels but
->>>  for enterprise offerings it is unsupported (for like 3-4 years) and the
->>>  module
->>>  is not in the default kernel rpm anymore.
->>>
->>>  So clearly the filesystem is on the deprecation path, the question is
->>>  whether it is far enough to remove it from the kernel completely. Maybe
->>>  time to start deprecation by printing warnings when reiserfs gets mounted
->>>  and then if nobody yells for year or two, we'll go ahead and remove it?
->>
->>  Yup, I'd say we should deprecate it and add it to the removal
->>  schedule. The less poorly tested legacy filesystem code we have to
->>  maintain the better.
->>
->>  Along those lines, I think we really need to be more aggressive
->>  about deprecating and removing filesystems that cannot (or will not)
->>  be made y2038k compliant in the new future. We're getting to close
->>  to the point where long term distro and/or product development life
->>  cycles will overlap with y2038k, so we should be thinking of
->>  deprecating and removing such filesystems before they end up in
->>  products that will still be in use in 15 years time.
->>
->>  And just so everyone in the discussion is aware: XFS already has a
->>  deprecation and removal schedule for the non-y2038k-compliant v4
->>  filesystem format. It's officially deprecated right now, we'll stop
->>  building kernels with v4 support enabled by default in 2025, and
->>  we're removing the code that supports the v4 format entirely in
->>  2030.
+On Wed, Feb 23, 2022 at 09:14:45AM -0600 Carlos Bilbao wrote:
+> On 2/23/2022 4:19 AM, Peter Zijlstra wrote:
+> > On Wed, Jan 26, 2022 at 09:22:23AM -0600, Carlos Bilbao wrote:
+> >> The kernel manages per-task scheduler statistics or schedstats. Such
+> >> counters should be reinitialized when the thread is migrated to a
+> >> different core rq, except for the values recording number of migrations.
+> > 
+> > I'm confused, why should we reset schedstats on migrate? I'm thinking
+> > this breaks per-task, since tasks tend to bounce around quite a lot.
+> > 
+> 
+> Thanks for your comments, Peter. 
+> 
+> Looking at the documentation of schedstats I see that most values are 
+> actually linked to the particular CPU: time spent on the cpu, timeslices 
+> run on this cpu, number of times _something_ was called when the cpu was 
+> idle, and so forth. Those values lose their meaning after migration and we 
+> should reinitialize their counters. However, reviewing sched_statistics I 
+> identify two fields that we should definitely keep increasing even after 
+> migration (nr_migrations_cold, nr_forced_migrations).
 >
-> For what it's worth, I have a number of production servers still using
-> Reiserfs, which I regularly maintain by upgrading to the latest Linux kernel
-> annually (mostly to apply security patches). I figured this filesystem would
-> still be available for several more years, since it's not quite y2038k yet.
->
-> I originally installed Reiserfs on these systems as early as 2005 due to the
-> tail-packing feature, which saved space with many small files on older
-> harddrives. Since then, I witnessed the development of ext4, and then btrfs.
-> For a long time, these newer filesystems had occasional reports of
-> instabilities and lost data, and so I shied away from using them. Meanwhile,
-> Reiserfs reached a level of maturity and no longer had active development on
-> it, except for the occasional bugfix. I felt this was a filesystem I could
-> trust going forward (despite its relative slowness), even after popular Linux
-> distributions eventually dropped it from being installed by default.
->
-> I have only recently begun to use XFS on newer installs, only since the XFS
-> developers added bigtime support for y2038k. But for existing installs, I ask
-> that we keep Reiserfs supported in the kernel a little longer. Perhaps use
-> the same deprecation schedule that was picked for XFS v4 (roughly 10 years of
-> deprecation before eventual removal)?
 
-Sorry, I meant to say 5 years here, not 10.
+The documentation is a little off. I think it should say "any cpu" instead
+of "this cpu".  If you reset these per task counters (time on cpu, number
+of timeslices etc) on every migration then they become meaningless (and
+useless).
 
-Thanks,
-  -Byron
+
+Cheers,
+Phil
+
+> So this patch will have to be upgraded if there's some other value(s) in
+> schedstats that we do not want to reinitialize either.
+> 
+> >> Signed-off-by: Carlos Bilbao <carlos.bilbao@amd.com>
+> >> ---
+> >>  kernel/sched/core.c | 10 +++++++++-
+> >>  1 file changed, 9 insertions(+), 1 deletion(-)
+> >>
+> >> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+> >> index fe53e510e711..d64c2a290176 100644
+> >> --- a/kernel/sched/core.c
+> >> +++ b/kernel/sched/core.c
+> >> @@ -8757,6 +8757,7 @@ bool sched_smp_initialized __read_mostly;
+> >>  int migrate_task_to(struct task_struct *p, int target_cpu)
+> >>  {
+> >>  	struct migration_arg arg = { p, target_cpu };
+> >> +	uint64_t forced_migrations, migrations_cold;
+> >>  	int curr_cpu = task_cpu(p);
+> >>  
+> >>  	if (curr_cpu == target_cpu)
+> >> @@ -8765,7 +8766,14 @@ int migrate_task_to(struct task_struct *p, int target_cpu)
+> >>  	if (!cpumask_test_cpu(target_cpu, p->cpus_ptr))
+> >>  		return -EINVAL;
+> >>  
+> >> -	/* TODO: This is not properly updating schedstats */
+> >> +	if (schedstat_enabled()) {
+> >> +		forced_migrations = schedstat_val(p->stats.nr_forced_migrations);
+> >> +		migrations_cold = schedstat_val(p->stats.nr_migrations_cold);
+> >> +		memset(&p->stats, 0, sizeof(p->stats));
+> >> +		schedstat_set(p->stats.nr_forced_migrations, forced_migrations);
+> >> +		schedstat_set(p->stats.nr_migrations_cold, migrations_cold);
+> >> +		schedstat_inc(p->stats.nr_migrations_cold);
+> >> +	}
+> >>  
+> >>  	trace_sched_move_numa(p, curr_cpu, target_cpu);
+> >>  	return stop_one_cpu(curr_cpu, migration_cpu_stop, &arg);
+> >> -- 
+> >> 2.27.0
+> >>
+> 
+> Thanks,
+> Carlos
+> 
+
+-- 
 

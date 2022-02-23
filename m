@@ -2,149 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 896C64C1530
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 15:13:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E3EF4C1535
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 15:16:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241446AbiBWONw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 09:13:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34442 "EHLO
+        id S241459AbiBWOQe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 09:16:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241433AbiBWONu (ORCPT
+        with ESMTP id S239991AbiBWOQc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 09:13:50 -0500
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CE6A58E61;
-        Wed, 23 Feb 2022 06:13:23 -0800 (PST)
-Received: by mail-ej1-x635.google.com with SMTP id gb39so52842764ejc.1;
-        Wed, 23 Feb 2022 06:13:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=sk3EKu2n8A3lB1TBZNR6LFIu5Y28hGEYtP8FhYL7krM=;
-        b=UjwnJSchAJBzunfzc3V9nwiSju/yw4FX242TSa5LNAfqNf3dN2pjZe0GWA3SklQAMe
-         hbxVatHL/TPzONThWuK+mZpZCsRqqRqAk9vuf1UL4Hj7XBSuMh9RPTxQvqbmXvRrY3tA
-         QPEfwD3q3lv9KGYt1/gC9OKFb0b4kN1ZusK4BJ2EOE5Ak1rpzZ/H4u8i8b9WT07jgBKa
-         osX9OxO5PNt+H6qqbrqgN2KGwsIxWZdEHQRASGSmH+7+GjI3yQFL0fvJ51h7gFVJdYLR
-         6jMBK16QS3Nyyzy3ucl+dq3hIvY6FCVDi9GDv34qaDTg42f8VTQfU9J20ZtMTmaWhp6W
-         PsJA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=sk3EKu2n8A3lB1TBZNR6LFIu5Y28hGEYtP8FhYL7krM=;
-        b=bW4G0Ws2SCU0H1Y1ckDcPFVlreOfOnzez6Ifz2Sdc8q6QFhqETtkQeEZJYyLi5yyPf
-         JttTnb3TNwOF8GysOnhAMAErgADkDKSboREtubcBJ7MAe4SbZ2Vcw3Cb4N5bdqMyfrVo
-         bSBewpH13MMYxoCLI9bVkq7QysgQyPjKv6/x9eSSUr/JckOu8oviXbCEddYRYXWH7pix
-         mAdzj7pTtLMLa5S/YNQopuscfTN6KMHN7AXxlNTkrtehAt6Bvme3EKDjKQ2Tfc80ZWZm
-         LDS6mw0QXlbEhnHVuCxiC83oO/9ezMSS6zzNN36tRdF51rj7hj2hFeIrJ5rCb0Gw7ng/
-         +Q5w==
-X-Gm-Message-State: AOAM533yohPML8vFDpxuyyWjRbc8hMuvl629KcYkoAoNmH57V/Z3RmnT
-        d5BFLcjCjUXxXWBo4TmDsH0=
-X-Google-Smtp-Source: ABdhPJznanM6NcAAN1Vn4Qug+zFjoQcwAYXMvpqTbOgsPTOtDoQ3KmNGl0mTPrV1mQHZC6hbDWFwkA==
-X-Received: by 2002:a17:907:765a:b0:6d1:bc6:df10 with SMTP id kj26-20020a170907765a00b006d10bc6df10mr14891861ejc.254.1645625601536;
-        Wed, 23 Feb 2022 06:13:21 -0800 (PST)
-Received: from smtpclient.apple (dhcp-077-250-038-153.chello.nl. [77.250.38.153])
-        by smtp.gmail.com with ESMTPSA id ej19sm9227076edb.108.2022.02.23.06.13.20
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 23 Feb 2022 06:13:20 -0800 (PST)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 15.0 \(3693.60.0.1.1\))
-Subject: Re: [RFC PATCH 03/13] usb: remove the usage of the list iterator
- after the loop
-From:   Jakob <jakobkoschel@gmail.com>
-In-Reply-To: <CAHk-=wg1RdFQ6OGb_H4ZJoUwEr-gk11QXeQx63n91m0tvVUdZw@mail.gmail.com>
-Date:   Wed, 23 Feb 2022 15:13:19 +0100
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Arnd Bergman <arnd@arndb.de>,
+        Wed, 23 Feb 2022 09:16:32 -0500
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [217.70.183.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D437BB0EB4;
+        Wed, 23 Feb 2022 06:15:59 -0800 (PST)
+Received: (Authenticated sender: clement.leger@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id F08CF2000A;
+        Wed, 23 Feb 2022 14:15:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1645625758;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=K0LLpFNSYlgLgGZDQ4Kn9BMjM80jq/ZjR7pVaVA3M80=;
+        b=YOpttUoec2Q3yrM5nfTur2T10hkCCSSXULyFzPRxf4cCqscNd16U5/XUnqd5T6fJCjX9pr
+        mGlW2a6e4Lnhb86fGPQXBRzTN6zMOf3hj4N8RXQcStBRlmuN5qT0l6GnGIsSIsZeaGBr0t
+        PyFhrKFWTOXvnywkyVR1ahHohjkWbth8+QUMqxrG4BMb2l01EvGZlhYN1NDS/AzaveoX8T
+        WE2EMfyuWDl3r0nZ1vvqW935wFEW8bgmQMpSPg252Fi+M/caHt7uYGI57r+6oCyrKYcN4f
+        aX+dGpL2vEqLLmuntM2WhdbEM5qDvh0KvnnH2zgFYtYGAE+klAdFk6+9ZvZZuw==
+Date:   Wed, 23 Feb 2022 15:14:36 +0100
+From:   =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     "Russell King (Oracle)" <linux@armlinux.org.uk>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
-        Cristiano Giuffrida <c.giuffrida@vu.nl>,
-        "Bos, H.J." <h.j.bos@vu.nl>
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Wolfram Sang <wsa@kernel.org>, Peter Rosin <peda@axentia.se>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-acpi@vger.kernel.org, linux-i2c@vger.kernel.org,
+        netdev@vger.kernel.org,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+Subject: Re: [RFC 10/10] net: sfp: add support for fwnode
+Message-ID: <20220223151436.4798e5ad@fixe.home>
+In-Reply-To: <4d611fe8-b82a-1709-507a-56be94263688@redhat.com>
+References: <20220221162652.103834-1-clement.leger@bootlin.com>
+        <20220221162652.103834-11-clement.leger@bootlin.com>
+        <YhPSkz8+BIcdb72R@smile.fi.intel.com>
+        <20220222142513.026ad98c@fixe.home>
+        <YhYZAc5+Q1rN3vhk@smile.fi.intel.com>
+        <888f9f1a-ca5a-1250-1423-6c012ec773e2@redhat.com>
+        <YhYriwvHJKjrDQRf@shell.armlinux.org.uk>
+        <4d611fe8-b82a-1709-507a-56be94263688@redhat.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-pc-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
-Message-Id: <6DFD3D91-B82C-469C-8771-860C09BD8623@gmail.com>
-References: <20220217184829.1991035-1-jakobkoschel@gmail.com>
- <20220217184829.1991035-4-jakobkoschel@gmail.com>
- <CAHk-=wg1RdFQ6OGb_H4ZJoUwEr-gk11QXeQx63n91m0tvVUdZw@mail.gmail.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-X-Mailer: Apple Mail (2.3693.60.0.1.1)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Le Wed, 23 Feb 2022 14:39:27 +0100,
+Hans de Goede <hdegoede@redhat.com> a =C3=A9crit :
 
+> > I think what we need is both approaches. We need a way for the SFP
+> > driver (which is a platform_driver) to be used _without_ needing
+> > descriptions in firmware. I think we have that for GPIOs, but for an
+> > I2C bus, We have i2c_get_adapter() for I2C buses, but that needs the
+> > bus number - we could either pass the i2c_adapter or the adapter
+> > number through platform data to the SFP driver.
+> >=20
+> > Or is there another solution to being able to reuse multi-driver
+> > based infrastructure that we have developed based on DT descriptions
+> > in situations such as an add-in PCI card? =20
+>=20
+> The use of software fwnode-s as proposed in this patch-set is another
+> way to deal with this. There has been work to abstract ACPI vs
+> of/dt firmware-nodes into a generic fwnode concept and software-nodes
+> are a third way to define fwnode-s for "struct device" devices.
+>=20
+> Software nodes currently are mainly used as so called secondary
+> fwnodes which means they can e.g. add extra properties to cover
+> for the firmware description missing some info (which at least
+> on ACPI happens more often then we would like).
+>=20
+> But a software-node can also be used as the primary fwnode for
+> a device. So what this patch-set does is move the i2c of/dt
+> enumeration code over to the fwnode abstraction (1). This allows
+> the driver for the SPF card to attach a software fwnode to the
+> device for the i2c-controller which describes the hotplug pins +
+> any other always present hw in the same way as it would be done
+> in a devicetree fwnode and then the existing of/dt based SPF
+> code can be re-used as is.
+>=20
+> At least that is my understanding of this patch-set.
+>=20
+> Regards,
+>=20
+> Hans
 
-> On 17. Feb 2022, at 20:28, Linus Torvalds =
-<torvalds@linux-foundation.org> wrote:
->=20
-> On Thu, Feb 17, 2022 at 10:50 AM Jakob Koschel =
-<jakobkoschel@gmail.com> wrote:
->>=20
->> It is unsafe to assume that &req->req !=3D _req can only evaluate
->> to false if the break within the list iterator is hit.
->=20
-> I don't understand what problem you are trying to fix.
->=20
-> Since "req" absolutely *has* to be stable for any of this code to be
-> valid, then "&req->req" is stable and unambiguous too. The *only* way
-> _req can point to it would be if we finished the iteration properly.
->=20
-> So I don't see the unsafeness.
->=20
-> Note that all this work with "speculative" execution fundamentally CAN
-> NOT affect semantics of the code, yet this patch makes statements
-> about exactly that.
+Hello Hans, your understanding is totally correct.
 
-I'm sorry for having created the confusion. I made this patch to support
-the speculative safe list_for_each_entry() version but it is not =
-actually
-related to that. I do believe that this an actual bug and *could*
-*potentially* be misused. I'll follow up with an example to illustrate =
-that.
+This PCIe device actually embeds much more than just a I2C controller.
+I should have made that clearer in the cover letter, sorry for the
+confusion. The PCIe card is actually using a lan9662x SoC which is
+meant to be used as an ethernet switch with 4 ports (2 RJ45 and two
+SFPS). In order to use this switch, the following drivers can be reused:
+ - lan966x-switch
+ - reset-microchip-sparx5
+ - lan966x_serdes
+ - reset-microchip-lan966x-phy
+ - mdio-mscc-miim
+ - pinctrl-lan966x
+ - atmel-flexcom
+ - i2c-at91
+ - i2c-mux
+ - i2c-mux-pinctrl
+ - sfp
+ - clk-lan966x
+ - lan966x-pci-mfd
 
-I agree that this has nothing to do with the speculative execution =
-iterator
-(apart from making it work) and should best be discussed separately.
+All theses drivers are using of_* API and as such only works with a DT
+description. One solution that did seems acceptable to me (although
+not great)was to use mfd_cells and software_node description
+as primary node.
 
-I'll attach an example on how I think this code *can* become a problem.
-Note that this highly depends on the used compiler and how the struct
-offsets are laid out.
+Since I wanted to convert these to be software_node compatible, I had
+to modify many subsystems (pinctrl, gpio, i2c, clocks, reset, etc).
+This is why I stated in the cover letter that "This series is part of a
+larger changeset that touches multiple subsystems". But clearly, it
+lacks more context and namely the list of subsystems that needed to be
+modify as well as the PCIe card type. I will modify this cover-letter to
+add more informations.
 
->=20
-> That's not how CPU speculation works.
->=20
-> CPU speculation can expose hidden information that is not
-> "semantically important" (typically through cache access patterns, but
-> that's not the only way). So it might be exposing information it
-> shouldn't.
->=20
-> But if speculation is actually changing semantics, then it's no longer
-> "speculation" - it's just a bug, plain and simple (either a software
-> bug due to insufficient serialization, or an actual hardware bug).
->=20
-> IOW, I don't want to see these kinds of apparently pointless changes
-> to list walking. The patches should explain what that SECONDARY hidden
-> value you try to protect actually is for each case.
->=20
-> This patch is basically not sensible. It just moves code around in a
-> way that the compiler could have done anyway (or the compiler could
-> decide to undo). It doesn't explain what the magic protected value is
-> that shouldn't be leaked, and it leaves the code just looking odd and
-> pointless.
->=20
->                   Linus
+So indeed, this series is targetting at using devices which uses a
+software_node as a primary node and modifying subsystems to use the
+fwnode API in order to make that compatible with these software nodes.
+As you said, in order to avoid redefining the match tables and allow
+device_get_match_data to work with software_node, the trick was to
+reuse the of_table_id
 
+However, I'm not totally happy with that as it seems we are doing what
+was done with the "old" platform_data (a bit cleaner maybe since it
+allows to reuse the driver with the fwnode API).
+
+As Russell asked, I'm also really interested if someone has a solution
+to reuse device-tree description (overlays ?) to describe such
+hardware. However, the fact that CONFIG_OF isn't enabled on x86 config
+seems a bit complicated on this side. This also requires to load a
+device-tree overlay from the filesystem to describe the card, but that
+might be something that could be made generic to allow other uses-cases.
+
+--=20
+Cl=C3=A9ment L=C3=A9ger,
+Embedded Linux and Kernel engineer at Bootlin
+https://bootlin.com

@@ -2,131 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 032954C0D55
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 08:33:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C6A4A4C0D59
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 08:34:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238633AbiBWHeH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 02:34:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57534 "EHLO
+        id S238660AbiBWHez (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 02:34:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238618AbiBWHeG (ORCPT
+        with ESMTP id S237287AbiBWHex (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 02:34:06 -0500
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BBFE50472
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 23:33:37 -0800 (PST)
-Received: by mail-lf1-x12d.google.com with SMTP id j7so29500702lfu.6
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 23:33:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=lDlvFrajDqrQchn6w54uabpCbRnHwQwOc/C3bGmlO0U=;
-        b=dPv5BYrzN39pPB63DQ2U4vLv0nOlr98gwht+Zo4QATaTg5q7prK52shXjsR/AXna6U
-         k71RPBMDx5GsG8mV17b87tTN3iAWOTahxvggmsaI0oMlsVgEiZoXtDR87rqcGCLj6DI5
-         Msk2/lY5YZo0wR4NNR2sUeLocDFc3Kpo8TpPo23Ye2kg3mFHuHr14max0+aI3TyZvlOF
-         8/MHL9x9RtHFgI1bjFWYygEWBld8kk8y3weK7HbCIlbe9QeLYfl/cWhrdhEiwzJh2s+d
-         gpokPBntHpV5rlru4h165pnoUlQhr32QsgOK4yvG8nWcE8dA1duH6MCTXNjLtpdQ1fOp
-         IODg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=lDlvFrajDqrQchn6w54uabpCbRnHwQwOc/C3bGmlO0U=;
-        b=cTgDECOaar4DKPxwZwQudEWWTAge4Y3wW92tEtnsD6qYQxoQxDZSs+0qtT3K6omlN3
-         Rf9litAJrtPDnGGAFfFEefYkoyooL4h376NfKWYEoUC4ci7QUMs9Rg/TQBO3nuryPYLm
-         vb0PDH/3i5xqFDbFR9NV4L9deI9WBrxgyT+pUUvhHIIMruDR3DKt7JF7tLzbBXwumdBj
-         Ggzd4eSZBbh7VggqyIzGvSC3jD0kS8GnpeQxxjRDFgonXtenqEB6IN0hHEV3/7Tfmbyv
-         6ytKo06cRsPQoubz3m7qF4AdXs43C57qOuGAXoXKqxFzVtxTkRpAfGtdYHP0OuX8gVBd
-         HHgQ==
-X-Gm-Message-State: AOAM530/HpYjqtrkYoRm4AwegRK+/rAhGu11wZt1B4/0/W+HA5N9sDnw
-        S900AOuqnq5YHgMOYv2nfvkF8uKyDYJefoD7cIPfEQ==
-X-Google-Smtp-Source: ABdhPJw/GJqPBESH0NTsrjpQmSPMVgGSEkmdayQA8+Ukdar13GPBEALRgM9upMK7jU0EafwCI3f8KY3Ur+qVWLFe8VA=
-X-Received: by 2002:a05:6512:710:b0:443:7fb6:5223 with SMTP id
- b16-20020a056512071000b004437fb65223mr19200205lfs.223.1645601615597; Tue, 22
- Feb 2022 23:33:35 -0800 (PST)
+        Wed, 23 Feb 2022 02:34:53 -0500
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 546B970CD0;
+        Tue, 22 Feb 2022 23:34:26 -0800 (PST)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 21N7YM5Q002893;
+        Wed, 23 Feb 2022 01:34:22 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1645601662;
+        bh=KmBWwGPqmoJGkq/QnEJwIuI5M/v2TuCCfT5yA2AkKZA=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=EkAIBUOi4TYlV8+uxWlN3Kcz14lxgL1E31P0v8/Bw4763mgJcOP6PD/DwZ6xH+9zz
+         2ade5zxxkgOtQP5+GOrMWf1u8ilU8HvtLcti0TAegHinP5AhSbvMrWVeKT8NQdQSIV
+         lya22YzRng1jDao5pL0zWqYkO8xoSAjt4HRLU7XE=
+Received: from DLEE103.ent.ti.com (dlee103.ent.ti.com [157.170.170.33])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 21N7YMKZ130341
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 23 Feb 2022 01:34:22 -0600
+Received: from DLEE104.ent.ti.com (157.170.170.34) by DLEE103.ent.ti.com
+ (157.170.170.33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Wed, 23
+ Feb 2022 01:34:21 -0600
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE104.ent.ti.com
+ (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Wed, 23 Feb 2022 01:34:21 -0600
+Received: from [10.24.69.236] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 21N7YInK104532;
+        Wed, 23 Feb 2022 01:34:19 -0600
+Subject: Re: [PATCH] usb: dwc3: drd: Add support for extcon drd notifier even
+ with usb role switch config enabled
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+CC:     Kishon Vijay Abraham I <kishon@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Andrey Smirnov <andrew.smirnov@gmail.com>
+References: <20220218093348.1098-1-a-govindraju@ti.com>
+ <273c9e6d-4fa3-52d9-e978-8f2be81dd6f6@synopsys.com>
+From:   Aswath Govindraju <a-govindraju@ti.com>
+Message-ID: <3792f301-1d94-0c72-87ff-c0683870bea1@ti.com>
+Date:   Wed, 23 Feb 2022 13:04:18 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-References: <cover.1642582832.git.zong.li@sifive.com> <mhng-ffd770d4-8f8a-417a-a589-f14d09f55282@palmer-ri-x1c9>
- <CANXhq0pYHfsa4T1t=FK2=jM4OEfgXD=sDS5vVV4EKCpkwTz6og@mail.gmail.com> <20220218222339.9BF5CC340E9@smtp.kernel.org>
-In-Reply-To: <20220218222339.9BF5CC340E9@smtp.kernel.org>
-From:   Zong Li <zong.li@sifive.com>
-Date:   Wed, 23 Feb 2022 15:33:24 +0800
-Message-ID: <CANXhq0qbjBpRPMP51cK9QsvQj-uvG_czPgLw+cjrWXhWEibcDw@mail.gmail.com>
-Subject: Re: [PATCH 0/4] Refactor the PRCI driver to reduce the complexity
-To:     Stephen Boyd <sboyd@kernel.org>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS 
-        <devicetree@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <273c9e6d-4fa3-52d9-e978-8f2be81dd6f6@synopsys.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Feb 19, 2022 at 6:23 AM Stephen Boyd <sboyd@kernel.org> wrote:
->
-> Quoting Zong Li (2022-02-06 21:21:50)
-> > On Sat, Feb 5, 2022 at 2:56 AM Palmer Dabbelt <palmer@dabbelt.com> wrote:
-> > >
-> > > On Wed, 19 Jan 2022 01:28:37 PST (-0800), zong.li@sifive.com wrote:
-> > > > This patch set tries to improve the PRCI driver to reduce the
-> > > > complexity, we remove the SoCs C files by putting putting all stuff in
-> > > > each SoCs header file, and include these SoCs-specific header files in
-> > > > core of PRCI. It can also avoid the W=1 kernel build warnings about
-> > > > variable defined but not used [-Wunused-const-variable=], like 'commit
-> > > > 487dc7bb6a0c ("clk: sifive:fu540-prci: Declare static const variable
-> > > > 'prci_clk_fu540' where it's used")' does.
-> > > >
-> > > > This patch set also contains the dt-bindings and dts change, because
-> > > > we change the macro name for fu540 and fu740 by adding the prefix
-> > > > respectively.
-> > > >
-> > > > Thanks all for your review and suggestions.
-> > > >
-> > > > Zong Li (4):
-> > > >   dt-bindings: change the macro name of prci in header files and example
-> > > >   riscv: dts: Change the macro name of prci in each device node
-> > > >   clk: sifive: Add SoCs prefix in each SoCs-dependent data
-> > >
-> > > IIUC these there aren't bisectable: the bindings change will break
-> > > builds of the DTs and drivers.  I'm not sure what's generally the way to
-> > > go with these, but I always try to avoid broken builds in the middle of
-> > > patch sets.
-> > >
-> > > Aside from that this generally looks good to me, but the DT and clock
-> > > folks are probably a better bet for a proper review here.  Happy to take
-> > > this through the RISC-V tree, but IMO it's a better candidate for the
-> > > clock tree so
-> > >
-> > > Acked-by: Palmer Dabbelt <palmer@rivosinc.com> # aside from breaking bisect
-> > >
-> > > Thanks!
-> > >
-> >
-> > Many thanks for your review and reminding, and yes, it seems a bit
-> > hard there since the DT binding docs and includes need to be a
-> > separate patch.
-> >
->
-> Why not add new defines with the same numbers in a different file? Then
-> a cycle or two later the conflicting defines can be removed? The driver
-> can include the new file with the new defines while the old defines can
-> be changed in parallel?
+Hi Thinh,
 
-Hi Stephon, many thanks for your tips. I'm afraid that I don't
-completely understand, does it mean that I can create a new temporary
-file to define these numbers for the driver, and add a patch to remove
-this file in the same patch set. If I understand correctly, let me
-prepare the next version for doing that. Thanks.
+On 23/02/22 6:33 am, Thinh Nguyen wrote:
+> Hi,
+> 
+> Aswath Govindraju wrote:
+>> In AM62x SoC, the USB controller supports USB role switching by using the
+>> extcon drd notifiers. The current implementation does not accommodate this.
+>> If usb role switching is enabled then drd notifiers are not added. If usb
+>> role switching is not enabled then the dr_mode is forced to peripheral
+>> (dwc3_get_dr_mode) and role switching will not be possible(dwc3_set_mode).
+>>
+>> Therefore, rearrange the "if else" logic such that extcon drd notifiers can
+>> be added even with usb role switching enabled.
+>>
+>> Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
+>> ---
+>>  drivers/usb/dwc3/drd.c | 16 +++++++++-------
+>>  1 file changed, 9 insertions(+), 7 deletions(-)
+>>
+>> diff --git a/drivers/usb/dwc3/drd.c b/drivers/usb/dwc3/drd.c
+>> index b919ea3d87f2..0e86b1d8b50c 100644
+>> --- a/drivers/usb/dwc3/drd.c
+>> +++ b/drivers/usb/dwc3/drd.c
+>> @@ -583,12 +583,7 @@ int dwc3_drd_init(struct dwc3 *dwc)
+>>  	if (IS_ERR(dwc->edev))
+>>  		return PTR_ERR(dwc->edev);
+>>  
+>> -	if (ROLE_SWITCH &&
+>> -	    device_property_read_bool(dwc->dev, "usb-role-switch")) {
+>> -		ret = dwc3_setup_role_switch(dwc);
+>> -		if (ret < 0)
+>> -			return ret;
+>> -	} else if (dwc->edev) {
+>> +	if (dwc->edev) {
+>>  		dwc->edev_nb.notifier_call = dwc3_drd_notifier;
+>>  		ret = extcon_register_notifier(dwc->edev, EXTCON_USB_HOST,
+>>  					       &dwc->edev_nb);
+>> @@ -598,7 +593,14 @@ int dwc3_drd_init(struct dwc3 *dwc)
+>>  		}
+>>  
+>>  		dwc3_drd_update(dwc);
+>> -	} else {
+>> +	}
+>> +
+>> +	if (ROLE_SWITCH &&
+>> +	    device_property_read_bool(dwc->dev, "usb-role-switch")) {
+>> +		ret = dwc3_setup_role_switch(dwc);
+>> +		if (ret < 0)
+>> +			return ret;
+>> +	} else if (!dwc->edev) {
+>>  		dwc3_set_prtcap(dwc, DWC3_GCTL_PRTCAP_OTG);
+>>  
+>>  		/* use OTG block to get ID event */
+> 
+> 
+> Please check the patch by Andrey Smirnov and see if it works for you:
+> https://lore.kernel.org/linux-usb/20220221192020.346622-1-andrew.smirnov@gmail.com/
+> 
+
+Thank you for pointing me this patch. I does solve my issue.
+
+
+Regards,
+Aswath
+
+> Thanks,
+> Thinh
+> 
+
+
+

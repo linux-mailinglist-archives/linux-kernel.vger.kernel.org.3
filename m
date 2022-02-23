@@ -2,95 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8FFB4C12AE
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 13:22:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4379D4C12B1
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 13:25:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240449AbiBWMXJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 07:23:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58840 "EHLO
+        id S240378AbiBWMZ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 07:25:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237783AbiBWMXI (ORCPT
+        with ESMTP id S231725AbiBWMZY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 07:23:08 -0500
-Received: from ssl.serverraum.org (ssl.serverraum.org [176.9.125.105])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F5509AE4E;
-        Wed, 23 Feb 2022 04:22:39 -0800 (PST)
-Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id 4819F22247;
-        Wed, 23 Feb 2022 13:22:37 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1645618957;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=y/v/ob3j7CFTOeneTUJXiDczC4fyDRPdARdepXg2BXQ=;
-        b=jmDXKC04r4mEmRgvnMeuHII2cZJWavo/wBoupyMiLIYBUZ7L+efgGmKnkF8sGi7bKQ8RqZ
-        j2j3wgRgdUqk48TlVsqWXPYUnALIGNYUAn48nQ/gj1hlFmiemFsPBIt4sjMl7mYGapWj0S
-        5mWrYdsS3jnmi2kEfB7k+4N/byjDQ5E=
+        Wed, 23 Feb 2022 07:25:24 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFE7F9E57A;
+        Wed, 23 Feb 2022 04:24:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645619097; x=1677155097;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=zk0Q5i+bK10PCCeKqTaU8DiX28bSdfCtroqlbdMjIsw=;
+  b=VzF59Pdw9GCOhByXXwRYpHoq2zlGY7fUAzbJJ9uDYQslGDcd5ZfVkTLa
+   LK336AgK54bZjV4VedRmwWTjfAi8WfD1FBh336AdGAIk4UyH+1I1Bbxnj
+   O5WzNC5pTSvTeQao3oUbtlqQInWlA81OoTPocUWCyRKPl1/L/uolRl9t9
+   HJVBJYMvLzWwh6Lbr2oTPpn9gajLplY63YspJwQBa+TWx6MJnCtgxQ0kP
+   zU+USK9A6zmP9FEdb+3ibx/7CTo09bQJFatKu4VZa0fqT2WP1va7b5RWW
+   nO5HqVdAp1haNrQr7AGJ6NcRC3Phray8me+EuLc9Jl2ItlZHWiUshdBYU
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10266"; a="251686667"
+X-IronPort-AV: E=Sophos;i="5.88,390,1635231600"; 
+   d="scan'208";a="251686667"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2022 04:24:56 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,390,1635231600"; 
+   d="scan'208";a="781813629"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga005.fm.intel.com with ESMTP; 23 Feb 2022 04:24:51 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1000)
+        id 1BB0B143; Wed, 23 Feb 2022 14:25:08 +0200 (EET)
+Date:   Wed, 23 Feb 2022 15:25:08 +0300
+From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     Brijesh Singh <brijesh.singh@amd.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-coco@lists.linux.dev, Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Peter Gonda <pgonda@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        David Rientjes <rientjes@google.com>,
+        Michael Roth <michael.roth@amd.com>,
+        Andi Kleen <ak@linux.intel.com>
+Subject: Re: [PATCH] x86/mm/cpa: Generalize __set_memory_enc_pgtable()
+Message-ID: <20220223122508.3nvvz4b7fj2fsr2a@black.fi.intel.com>
+References: <20220222185740.26228-1-kirill.shutemov@linux.intel.com>
+ <20220223043528.2093214-1-brijesh.singh@amd.com>
+ <YhYbLDTFLIksB/qp@zn.tnic>
+ <20220223115539.pqk7624xku2qwhlu@black.fi.intel.com>
+ <YhYkz7wMON1o64Ba@zn.tnic>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Wed, 23 Feb 2022 13:22:37 +0100
-From:   Michael Walle <michael@walle.cc>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Peng Fan <peng.fan@nxp.com>, Anson Huang <Anson.Huang@nxp.com>
-Cc:     Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        Li Yang <leoyang.li@nxp.com>, linux-kernel@vger.kernel.org,
-        heiko.thiery@gmail.com
-Subject: Re: [PATCH] dt-bindings: arm: fsl: add IMX8MN DDR3L eval board
-In-Reply-To: <96f7a28b-81b9-a05f-e8f5-a4fb377476fc@canonical.com>
-References: <20220222151357.1710503-1-michael@walle.cc>
- <96f7a28b-81b9-a05f-e8f5-a4fb377476fc@canonical.com>
-User-Agent: Roundcube Webmail/1.4.12
-Message-ID: <e45e6fd29b5c91e1413247aa50d6d809@walle.cc>
-X-Sender: michael@walle.cc
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YhYkz7wMON1o64Ba@zn.tnic>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 2022-02-23 12:32, schrieb Krzysztof Kozlowski:
-> On 22/02/2022 16:13, Michael Walle wrote:
->> Add a new compatible string for that eval board. It features an IMX8MN
->> UltraLite and has DDR3L RAM. The product part number is 8MNANOD3L-EVK.
->> 
->> Signed-off-by: Michael Walle <michael@walle.cc>
->> ---
->>  Documentation/devicetree/bindings/arm/fsl.yaml | 1 +
->>  1 file changed, 1 insertion(+)
->> 
->> diff --git a/Documentation/devicetree/bindings/arm/fsl.yaml 
->> b/Documentation/devicetree/bindings/arm/fsl.yaml
->> index 23e678232451..e11ffaa8721e 100644
->> --- a/Documentation/devicetree/bindings/arm/fsl.yaml
->> +++ b/Documentation/devicetree/bindings/arm/fsl.yaml
->> @@ -834,6 +834,7 @@ properties:
->>                - bsh,imx8mn-bsh-smm-s2     # i.MX8MN BSH SystemMaster 
->> S2
->>                - bsh,imx8mn-bsh-smm-s2pro  # i.MX8MN BSH SystemMaster 
->> S2 PRO
->>                - fsl,imx8mn-ddr4-evk       # i.MX8MN DDR4 EVK Board
->> +              - fsl,imx8mn-ddr3l-evk      # i.MX8MN DDR3L EVK Board
+On Wed, Feb 23, 2022 at 01:13:03PM +0100, Borislav Petkov wrote:
+> On Wed, Feb 23, 2022 at 02:55:39PM +0300, Kirill A. Shutemov wrote:
+> > This operation can fail for TDX. We need to be able to return error code
+> > here:
+> > 	/* Notify hypervisor that we have successfully set/clr encryption attribute. */
+> > 	if (!ret)
+> > 		ret = x86_platform.guest.enc_status_change_finish(addr, numpages, enc);
 > 
-> Looks good, just please put it in alphabetical order, so before ddr4,
-> 
-> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-> 
-> 
-> Best regards,
-> Krzysztof
+> bool to state failure/success or you need to return a specific value?
 
-Thanks, I actually forgot to put Anson on CC as he has added the
-other entries. Doing that now, also adding Peng Fan. Maybe they
-have an opinion on the choosen name.
+So far it is only success or failure. I used int and -EIO as failure.
+bool is enough, but I don't see a reason not to use int.
 
--michael
+-- 
+ Kirill A. Shutemov

@@ -2,97 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3F664C16EB
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 16:35:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B0F284C16EC
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 16:36:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242113AbiBWPgS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 10:36:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43930 "EHLO
+        id S242116AbiBWPgZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 10:36:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236344AbiBWPgP (ORCPT
+        with ESMTP id S242117AbiBWPgU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 10:36:15 -0500
-Received: from 189.cn (ptr.189.cn [183.61.185.104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2CFCCB91DF;
-        Wed, 23 Feb 2022 07:35:45 -0800 (PST)
-HMM_SOURCE_IP: 10.64.8.41:56548.2055228999
-HMM_ATTACHE_NUM: 0000
-HMM_SOURCE_TYPE: SMTP
-Received: from clientip-114.242.206.180 (unknown [10.64.8.41])
-        by 189.cn (HERMES) with SMTP id 1F2A8100226;
-        Wed, 23 Feb 2022 23:35:42 +0800 (CST)
-Received: from  ([114.242.206.180])
-        by gateway-151646-dep-b7fbf7d79-9vctg with ESMTP id 9c00df451d474c3f8e318f922b3767e2 for robh@kernel.org;
-        Wed, 23 Feb 2022 23:35:44 CST
-X-Transaction-ID: 9c00df451d474c3f8e318f922b3767e2
-X-Real-From: 15330273260@189.cn
-X-Receive-IP: 114.242.206.180
-X-MEDUSA-Status: 0
-Sender: 15330273260@189.cn
-Message-ID: <72e3790f-088d-1a70-a5f7-3a18c14a6eae@189.cn>
-Date:   Wed, 23 Feb 2022 23:35:40 +0800
+        Wed, 23 Feb 2022 10:36:20 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 844BFBB57B;
+        Wed, 23 Feb 2022 07:35:52 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: nfraprado)
+        with ESMTPSA id 76B041F429B9
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1645630549;
+        bh=tP0g/xufzKKvhWPi4v/n2vm5kmuNUItMFZ3CsZ84rbI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=FsqqG4jtdYxdTUGEACf3J8GFzjVQsjSqjIr4GVNPFl/fgoeETax4lz1Z7FK4i8cgl
+         b35wyK80nEnrFeup3RAGiyqzRaAJsdWWB3cpYiIwhe6TZJOc3R7fVVnpJd3p1RGW/2
+         +BzBu0YDgwgbqGfy2sdcerbr9H1c1MNl8Gf4+UZn7rZ8ACPV7qWIt6d3NI9/Nv7KDF
+         XvPmmIgRM/7oLDCR3PKnThmABiuBbmDOgae+7ekPPodV3CqCaSE/8kiUAjJHburRA+
+         1WNfFRS1SFnGCkuNq7x/4aJYWrUl/f1Xo6xR4dXy9tG41OHFyFIt9IsESFNL+bF8KM
+         MSHMfwZut4Dbw==
+Date:   Wed, 23 Feb 2022 10:35:44 -0500
+From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
+        <nfraprado@collabora.com>
+To:     Chen-Yu Tsai <wenst@chromium.org>
+Cc:     Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        --to=Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        Ryder Lee <ryder.lee@kernel.org>
+Subject: Re: [PATCH v2 20/23] arm64: dts: mt8192: Add display nodes
+Message-ID: <20220223153544.nmaufqixkchp5zkq@notapiano>
+References: <20220218091633.9368-1-allen-kh.cheng@mediatek.com>
+ <20220218091633.9368-21-allen-kh.cheng@mediatek.com>
+ <CAGXv+5H8WY6=qvcz1CARfjf5UREH7i7v2Uz99frby5S=eqV6gQ@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v10 2/4] Documentation/dt: Add descriptions for loongson
- display controller
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>
-Cc:     Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Roland Scheidegger <sroland@vmware.com>,
-        Zack Rusin <zackr@vmware.com>,
-        Christian Gmeiner <christian.gmeiner@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Ilia Mirkin <imirkin@alum.mit.edu>,
-        Qing Zhang <zhangqing@loongson.cn>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-References: <20220220145554.117854-1-15330273260@189.cn>
- <20220220145554.117854-3-15330273260@189.cn>
- <YhVrigEnXTiNgk67@robh.at.kernel.org>
- <720f940e.5ac.17f26de3a5b.Coremail.suijingfeng@loongson.cn>
-From:   Sui Jingfeng <15330273260@189.cn>
-In-Reply-To: <720f940e.5ac.17f26de3a5b.Coremail.suijingfeng@loongson.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FROM_LOCAL_DIGITS,
-        FROM_LOCAL_HEX,NICE_REPLY_A,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <CAGXv+5H8WY6=qvcz1CARfjf5UREH7i7v2Uz99frby5S=eqV6gQ@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Feb 22, 2022 at 06:24:29PM +0800, Chen-Yu Tsai wrote:
+> Hi,
+> 
+> On Fri, Feb 18, 2022 at 5:16 PM Allen-KH Cheng
+> <allen-kh.cheng@mediatek.com> wrote:
+> >
+> > Add display nodes for mt8192 SoC.
+> >
+> > Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+> > ---
+> >  arch/arm64/boot/dts/mediatek/mt8192.dtsi | 115 +++++++++++++++++++++++
+> >  1 file changed, 115 insertions(+)
+> >
+> > diff --git a/arch/arm64/boot/dts/mediatek/mt8192.dtsi b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
+> > index e3314cdc7c1a..026f2d8141b0 100644
+> > --- a/arch/arm64/boot/dts/mediatek/mt8192.dtsi
+> > +++ b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
+> > @@ -32,6 +32,11 @@
+> >                 i2c7 = &i2c7;
+> >                 i2c8 = &i2c8;
+> >                 i2c9 = &i2c9;
+> > +               ovl0 = &ovl0;
+> > +               ovl-2l0 = &ovl_2l0;
+> > +               ovl-2l2 = &ovl_2l2;
+> > +               rdma0 = &rdma0;
+> > +               rdma4 = &rdma4;
+> >         };
+> >
+> >         clk26m: oscillator0 {
+> > @@ -1224,6 +1229,13 @@
+> >                         #clock-cells = <1>;
+> >                 };
+> >
+> > +               mutex: mutex@14001000 {
+> > +                       compatible = "mediatek,mt8192-disp-mutex";
+> > +                       reg = <0 0x14001000 0 0x1000>;
+> > +                       interrupts = <GIC_SPI 252 IRQ_TYPE_LEVEL_HIGH 0>;
+> > +                       clocks = <&mmsys CLK_MM_DISP_MUTEX0>;
+> > +               };
+> > +
+> >                 smi_common: smi@14002000 {
+> >                         compatible = "mediatek,mt8192-smi-common";
+> >                         reg = <0 0x14002000 0 0x1000>;
+> > @@ -1255,6 +1267,109 @@
+> >                         power-domains = <&spm MT8192_POWER_DOMAIN_DISP>;
+> >                 };
+> >
+> > +               ovl0: ovl@14005000 {
+> > +                       compatible = "mediatek,mt8192-disp-ovl";
+> > +                       reg = <0 0x14005000 0 0x1000>;
+> > +                       interrupts = <GIC_SPI 254 IRQ_TYPE_LEVEL_HIGH 0>;
+> > +                       clocks = <&mmsys CLK_MM_DISP_OVL0>;
+> > +                       iommus = <&iommu0 M4U_PORT_L0_OVL_RDMA0>,
+> > +                                <&iommu0 M4U_PORT_L0_OVL_RDMA0_HDR>;
+> > +                       power-domains = <&spm MT8192_POWER_DOMAIN_DISP>;
+> > +               };
+> > +
+> > +               ovl_2l0: ovl@14006000 {
+> > +                       compatible = "mediatek,mt8192-disp-ovl-2l";
+> > +                       reg = <0 0x14006000 0 0x1000>;
+> > +                       interrupts = <GIC_SPI 255 IRQ_TYPE_LEVEL_HIGH 0>;
+> > +                       power-domains = <&spm MT8192_POWER_DOMAIN_DISP>;
+> > +                       clocks = <&mmsys CLK_MM_DISP_OVL0_2L>;
+> > +                       iommus = <&iommu0 M4U_PORT_L1_OVL_2L_RDMA0>,
+> > +                                <&iommu0 M4U_PORT_L1_OVL_2L_RDMA0_HDR>;
+> > +               };
+> > +
+> > +               rdma0: rdma@14007000 {
+> > +                       compatible = "mediatek,mt8192-disp-rdma";
+> > +                       reg = <0 0x14007000 0 0x1000>;
+> > +                       interrupts = <GIC_SPI 256 IRQ_TYPE_LEVEL_HIGH 0>;
+> > +                       clocks = <&mmsys CLK_MM_DISP_RDMA0>;
+> > +                       iommus = <&iommu0 M4U_PORT_L0_DISP_RDMA0>;
+> > +                       mediatek,larb = <&larb0>;
+> > +                       mediatek,rdma-fifo-size = <5120>;
+> > +                       power-domains = <&spm MT8192_POWER_DOMAIN_DISP>;
+> > +               };
+> > +
+> > +               color0: color@14009000 {
+> > +                       compatible = "mediatek,mt8192-disp-color",
+> > +                                    "mediatek,mt8173-disp-color";
+> > +                       reg = <0 0x14009000 0 0x1000>;
+> > +                       interrupts = <GIC_SPI 258 IRQ_TYPE_LEVEL_HIGH 0>;
+> > +                       power-domains = <&spm MT8192_POWER_DOMAIN_DISP>;
+> > +                       clocks = <&mmsys CLK_MM_DISP_COLOR0>;
+> > +               };
+> > +
+> > +               ccorr0: ccorr@1400a000 {
+> > +                       compatible = "mediatek,mt8192-disp-ccorr";
+> > +                       reg = <0 0x1400a000 0 0x1000>;
+> > +                       interrupts = <GIC_SPI 259 IRQ_TYPE_LEVEL_HIGH 0>;
+> > +                       power-domains = <&spm MT8192_POWER_DOMAIN_DISP>;
+> > +                       clocks = <&mmsys CLK_MM_DISP_CCORR0>;
+> > +               };
+> > +
+> > +               aal0: aal@1400b000 {
+> > +                       compatible = "mediatek,mt8192-disp-aal";
+> 
+> git.kernel.org/chunkuang.hu/c/4ed545e7d10049b5492afc184e61a67e478a2cfd
+> 
+> suggests that there should be a fallback compatible? Otherwise this
+> doesn't probe.
 
-On 2022/2/23 21:56, 隋景峰 wrote:
-> Something like this:
->   
-> dt-bindings: display: Add Loongson display controller
+Indeed, the "mediatek,mt8173-disp-aal" compatible should be appended here for
+the node to probe.
 
-Hi,
-
-We are not a platform device driver, there is no
-of_device_id defined in my driver. In other word,
-my driver will not bind against devices whose compatible
-is "loongson,ls7a1000-dc". We just parse the device tree
-actively, find necessary information of interest.
-
-What's the meaning of dt-bindings by definition ?
-In this case, can I use the word "dt-bindings" in the commit title?
-
-I want to follow the conventions, but get some push back,
-Krzysztof say that he can not see any bindings, these are not bindings.
-
+Thanks,
+N�colas

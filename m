@@ -2,141 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CED94C1183
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 12:41:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 431B44C118A
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 12:41:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240047AbiBWLks (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 06:40:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36426 "EHLO
+        id S240066AbiBWLlA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 06:41:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239700AbiBWLkp (ORCPT
+        with ESMTP id S240059AbiBWLkx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 06:40:45 -0500
-Received: from m-r2.th.seeweb.it (m-r2.th.seeweb.it [5.144.164.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F14595A14
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 03:40:16 -0800 (PST)
-Received: from Marijn-Arch-PC.localdomain (94-209-165-62.cable.dynamic.v4.ziggo.nl [94.209.165.62])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 8C2B33F78B;
-        Wed, 23 Feb 2022 12:40:12 +0100 (CET)
-From:   Marijn Suijten <marijn.suijten@somainline.org>
-To:     phone-devel@vger.kernel.org
-Cc:     ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        Pavel Dubrova <pashadubrova@gmail.com>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Bernard <bernard@vivo.com>,
-        Zhen Lei <thunder.leizhen@huawei.com>,
-        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] drm/msm/dpu: Bind pingpong block to intf on active ctls in cmd encoder
-Date:   Wed, 23 Feb 2022 12:40:10 +0100
-Message-Id: <20220223114011.219044-1-marijn.suijten@somainline.org>
-X-Mailer: git-send-email 2.35.1
+        Wed, 23 Feb 2022 06:40:53 -0500
+Received: from out30-56.freemail.mail.aliyun.com (out30-56.freemail.mail.aliyun.com [115.124.30.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0292E9680E;
+        Wed, 23 Feb 2022 03:40:22 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R111e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04394;MF=guoheyi@linux.alibaba.com;NM=1;PH=DS;RN=10;SR=0;TI=SMTPD_---0V5JES-R_1645616419;
+Received: from 30.225.139.254(mailfrom:guoheyi@linux.alibaba.com fp:SMTPD_---0V5JES-R_1645616419)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Wed, 23 Feb 2022 19:40:19 +0800
+Message-ID: <f2223288-ef86-1712-6b24-087d7e741b8b@linux.alibaba.com>
+Date:   Wed, 23 Feb 2022 19:40:18 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.6.0
+Subject: Re: [PATCH 3/3] drivers/net/ftgmac100: fix DHCP potential failure
+ with systemd
+Content-Language: en-US
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     linux-kernel@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Guangbin Huang <huangguangbin2@huawei.com>,
+        Hao Chen <chenhao288@hisilicon.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Dylan Hung <dylan_hung@aspeedtech.com>, netdev@vger.kernel.org
+References: <20220223031436.124858-1-guoheyi@linux.alibaba.com>
+ <20220223031436.124858-4-guoheyi@linux.alibaba.com>
+ <YhYQ6jGQv39rSsDU@lunn.ch>
+From:   Heyi Guo <guoheyi@linux.alibaba.com>
+In-Reply-To: <YhYQ6jGQv39rSsDU@lunn.ch>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As per the specification of DPU_CTL_ACTIVE_CFG the configuration of
-active blocks should be proactively specified, and the pingpong block is
-no different.
 
-The downstream display driver [1] confirms this by also calling
-bind_pingpong_blk on CTL_ACTIVE_CFG.  Note that this else-if is always
-entered, as setup_intf_cfg - unlike this mainline dpu driver that
-combines both behind the same function pointer - is left NULL in favour
-of using setup_intf_cfg_v1 when CTL_ACTIVE_CFG is set.
+在 2022/2/23 下午6:48, Andrew Lunn 写道:
+>> diff --git a/drivers/net/ethernet/faraday/ftgmac100.c b/drivers/net/ethernet/faraday/ftgmac100.c
+>> index c1deb6e5d26c5..d5356db7539a4 100644
+>> --- a/drivers/net/ethernet/faraday/ftgmac100.c
+>> +++ b/drivers/net/ethernet/faraday/ftgmac100.c
+>> @@ -1402,8 +1402,17 @@ static void ftgmac100_adjust_link(struct net_device *netdev)
+>>   	/* Disable all interrupts */
+>>   	iowrite32(0, priv->base + FTGMAC100_OFFSET_IER);
+>>   
+>> -	/* Reset the adapter asynchronously */
+>> -	schedule_work(&priv->reset_task);
+>> +	/* Release phy lock to allow ftgmac100_reset to aquire it, keeping lock
+>> +	 * order consistent to prevent dead lock.
+>> +	 */
+>> +	if (netdev->phydev)
+>> +		mutex_unlock(&netdev->phydev->lock);
+> No need to do this test. The fact that adjust_link is being called
+> indicates there must be a PHY.
 
-This solves continuous timeouts on at least the Qualcomm sm6125 SoC:
+OK, will remove the check in v2.
 
-    [drm:dpu_encoder_frame_done_timeout:2091] [dpu error]enc31 frame done timeout
-    [drm:_dpu_encoder_phys_cmd_handle_ppdone_timeout.isra.0] *ERROR* id:31 pp:0 kickoff timeout 0 cnt 1 koff_cnt 1
-    [drm:dpu_encoder_phys_cmd_prepare_for_kickoff] *ERROR* failed wait_for_idle: id:31 ret:-110 pp:0
+Thanks,
 
-In the same way this pingpong block should also be unbound followed by
-an interface flush when the encoder is disabled, according to the
-downstream display driver [2].
+Heyi
 
-[1]: https://source.codeaurora.org/quic/la/platform/vendor/opensource/display-drivers/tree/msm/sde/sde_encoder_phys_cmd.c?h=LA.UM.9.16.r1-08500-MANNAR.0#n167
-[2]: https://source.codeaurora.org/quic/la/platform/vendor/opensource/display-drivers/tree/msm/sde/sde_encoder.c?h=LA.UM.9.16.r1-08500-MANNAR.0#n2986
-
-Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
----
-
-Changes since v1:
-- Always unbind the pingpong block in dpu_encoder_phys_cmd_disable,
-  instead of only if this encoder is the master.
-
-v1: https://lore.kernel.org/lkml/20211222105513.44860-1-marijn.suijten@somainline.org/
-
- .../drm/msm/disp/dpu1/dpu_encoder_phys_cmd.c  | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
-
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_cmd.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_cmd.c
-index 8e433af7aea4..1be01cbd960e 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_cmd.c
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_cmd.c
-@@ -71,6 +71,13 @@ static void _dpu_encoder_phys_cmd_update_intf_cfg(
- 	intf_cfg.stream_sel = cmd_enc->stream_sel;
- 	intf_cfg.mode_3d = dpu_encoder_helper_get_3d_blend_mode(phys_enc);
- 	ctl->ops.setup_intf_cfg(ctl, &intf_cfg);
-+
-+	/* setup which pp blk will connect to this intf */
-+	if (test_bit(DPU_CTL_ACTIVE_CFG, &ctl->caps->features) && phys_enc->hw_intf->ops.bind_pingpong_blk)
-+		phys_enc->hw_intf->ops.bind_pingpong_blk(
-+				phys_enc->hw_intf,
-+				true,
-+				phys_enc->hw_pp->idx);
- }
- 
- static void dpu_encoder_phys_cmd_pp_tx_done_irq(void *arg, int irq_idx)
-@@ -507,6 +514,7 @@ static void dpu_encoder_phys_cmd_disable(struct dpu_encoder_phys *phys_enc)
- {
- 	struct dpu_encoder_phys_cmd *cmd_enc =
- 		to_dpu_encoder_phys_cmd(phys_enc);
-+	struct dpu_hw_ctl *ctl;
- 
- 	if (!phys_enc->hw_pp) {
- 		DPU_ERROR("invalid encoder\n");
-@@ -523,6 +531,17 @@ static void dpu_encoder_phys_cmd_disable(struct dpu_encoder_phys *phys_enc)
- 
- 	if (phys_enc->hw_pp->ops.enable_tearcheck)
- 		phys_enc->hw_pp->ops.enable_tearcheck(phys_enc->hw_pp, false);
-+
-+	if (phys_enc->hw_intf->ops.bind_pingpong_blk) {
-+		phys_enc->hw_intf->ops.bind_pingpong_blk(
-+				phys_enc->hw_intf,
-+				false,
-+				phys_enc->hw_pp->idx);
-+
-+		ctl = phys_enc->hw_ctl;
-+		ctl->ops.update_pending_flush_intf(ctl, phys_enc->intf_idx);
-+	}
-+
- 	phys_enc->enable_state = DPU_ENC_DISABLED;
- }
- 
-
-base-commit: 3c30cf91b5ecc7272b3d2942ae0505dd8320b81c
--- 
-2.35.1
-
+>
+>      Andrew

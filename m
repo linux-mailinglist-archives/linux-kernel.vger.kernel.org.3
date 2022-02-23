@@ -2,322 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB76A4C1020
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 11:17:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0E614C102E
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 11:20:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239648AbiBWKSU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 05:18:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48934 "EHLO
+        id S236653AbiBWKUo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 05:20:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239601AbiBWKSF (ORCPT
+        with ESMTP id S231947AbiBWKUm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 05:18:05 -0500
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 844128C7CE;
-        Wed, 23 Feb 2022 02:17:35 -0800 (PST)
-Received: by mail-lf1-x12d.google.com with SMTP id b11so30088478lfb.12;
-        Wed, 23 Feb 2022 02:17:35 -0800 (PST)
+        Wed, 23 Feb 2022 05:20:42 -0500
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A550C8BF71
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 02:20:14 -0800 (PST)
+Received: by mail-pf1-x433.google.com with SMTP id i21so14860656pfd.13
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 02:20:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:organization:content-transfer-encoding;
-        bh=B62nDdE55WM/1duOKCHxmZ2f2uyelMOuqvpmkuCjkww=;
-        b=Jp4+U0Urt1JRgU4N5WbvXyrxpmnyoBYjtIi4vw/zpHLl/ZiZtuvTLDeLEpTFg+nwr/
-         mDPHM9uPt3JIMTlSechOPm4Imp2zjVLpqW4TjO3pbZojqeTNANDdnJTJnR82Tj1agcot
-         SPB8Vq+ZaZparv+qgffoGEup4n7stDOrbKqVLSVULIWizPgSr9nUzr759Xm6BhS/fIli
-         1ZLS8Dc0CWW/dbTqk2ZdFsUCeakC9rAFGgUKyMQWkM6SWrCl8UorqxLM51VYlaUxayFz
-         Skrfsuzn52Roh2mPXoG/8kqWSwa+sxlDZvfCBeXeJxyR9n9XkhcyA+cjeuuWOt52d/t5
-         UqwQ==
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=subject:from:to:cc:references:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=DQX7V52CBiJ7FddDejeLAMem+iUAD4nV8smE6+HMiCk=;
+        b=nN41YCVInSLt/JhZi7jK4UIpYreHneBcjM9jaq1ZZoxJ1/HvTSNw/17hZcv+kDyYd6
+         +REnkeyTUgx0AmMKdy+VTVlBINeBfEKvrtvRYmlTs9AgmnLtJF9qZixJ3s5pQNss0vs6
+         zVZe/dXo1+NnSdrdMA9wcfg6nXb7vGWJxV6I5T0J6PkmWpN0YNnb6zjvCoCr935RSum7
+         Y2LQBdU3OuNnflCdHskASMBzdNDYIplLTdH793XbTrZvH4nak4d7jYpjPCz/3Z2V+Mar
+         9jB/QwBi/DjewJnn924OyllWj+1kAstpa7J+h5ZalOgqI27LkUHizcD3M1ll6ekNuD3h
+         WfoQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:organization:content-transfer-encoding;
-        bh=B62nDdE55WM/1duOKCHxmZ2f2uyelMOuqvpmkuCjkww=;
-        b=uAAs3Lg40LNW6EoNlgNzmt2Q0ST437KCxCPMq7OEwN/Ws0JUWVvU+AXv1Xj/Lg7Znl
-         iC0bWl/dDKXAamnuamQLFHHaWgrJ+0cyF18S5BZqgMZX4O4IeDhFZ98RHt7rheY1UdZh
-         r91eVH4K+LD3fTxlqAcDqPGcFLJeZ6kqZzzsJfovuQFmp4fxnzCV3KeR1qSladtLdsxb
-         Uxg4+HwsxC8+QXHToCyhiKM9hqiVbDJX/1O/4AqyJmyYtIZ/XzxLevokClAF72pcMNHx
-         aFt1hxb8KxDLtantYOlOECxix32w6NoGyPNMbozuQfqBcQcs3I5wVwPRT71D7vVTazKB
-         tCQw==
-X-Gm-Message-State: AOAM531lBIV+hTKq7haG/LHQ3FmkFHEQuXcranjIPocO04OgeHG+LNwf
-        24K37nZNO8TI3X3lOSHvzRA=
-X-Google-Smtp-Source: ABdhPJxaBJc5Wc8NbdpOf6wGXNgbqWRrNC7TfVeQ75B+nhdGjR9FbtB6Y9z0UyrXsKU100bkEnNeFw==
-X-Received: by 2002:a05:6512:6cc:b0:42c:e7e1:57dd with SMTP id u12-20020a05651206cc00b0042ce7e157ddmr19984222lff.290.1645611453820;
-        Wed, 23 Feb 2022 02:17:33 -0800 (PST)
-Received: from wse-c0127.beijerelectronics.com ([208.127.141.29])
-        by smtp.gmail.com with ESMTPSA id d5sm1613102lfs.307.2022.02.23.02.17.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Feb 2022 02:17:33 -0800 (PST)
-From:   Hans Schultz <schultz.hans@gmail.com>
-X-Google-Original-From: Hans Schultz <schultz.hans+netdev@gmail.com>
-To:     davem@davemloft.net, kuba@kernel.org
-Cc:     netdev@vger.kernel.org,
-        Hans Schultz <schultz.hans+netdev@gmail.com>,
-        Ido Schimmel <idosch@nvidia.com>, Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <nikolay@nvidia.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Stephen Suryaputra <ssuryaextr@gmail.com>,
-        David Ahern <dsahern@kernel.org>,
-        Petr Machata <petrm@nvidia.com>,
-        Amit Cohen <amcohen@nvidia.com>,
-        Po-Hsu Lin <po-hsu.lin@canonical.com>,
-        Baowen Zheng <baowen.zheng@corigine.com>,
-        linux-kernel@vger.kernel.org, bridge@lists.linux-foundation.org,
-        linux-kselftest@vger.kernel.org
-Subject: [PATCH net-next v5 5/5] selftests: forwarding: tests of locked port feature
-Date:   Wed, 23 Feb 2022 11:16:50 +0100
-Message-Id: <20220223101650.1212814-6-schultz.hans+netdev@gmail.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220223101650.1212814-1-schultz.hans+netdev@gmail.com>
-References: <20220223101650.1212814-1-schultz.hans+netdev@gmail.com>
+        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=DQX7V52CBiJ7FddDejeLAMem+iUAD4nV8smE6+HMiCk=;
+        b=YOZuBy1xI97QabQ4GJCWVB/aywEe1W8TrwUoLZawh/NYRtPhRss5YaICL1DTLAYS+K
+         dRHdXav5Hj+vnnIEwCD3er3JCYAj7JJcW+70UivW/rss9ku0UGwvfq0xTgBktqczBKWd
+         kFZeRrqY+w5cgLzch/sn/QmpkpWSM0KR5JmUUH+cIwBuFGm/sgI9IorKPt5lOop0otlN
+         OzTUrKMmyCbz4VzIaN502wg5IPOL68+fJn7/w1Tg8cotCoAz1Rtl/YHFEHFSGkc/QUNr
+         5mEjZq+DBbKuQwYPe/iA7dcE3Z6XYASD3zuftl5gX7AlOT4x3SNRejBIjvJeTtX/sobM
+         FUuQ==
+X-Gm-Message-State: AOAM532sTi3icMvUfwJ2OGiFa5VultJnQsQ43svfY0CTrBxtKVqjl0AN
+        crFfFf50yrbxDbGq+gt9sh1BOg==
+X-Google-Smtp-Source: ABdhPJwOzH9BvKERdYDHwMSCkR2/GlOKIJMuXG+DePst13wAFc5G8wENJdbZFppqmk3wfvsgl9oAbg==
+X-Received: by 2002:a63:af4b:0:b0:373:a2a1:bf9a with SMTP id s11-20020a63af4b000000b00373a2a1bf9amr23123430pgo.369.1645611614111;
+        Wed, 23 Feb 2022 02:20:14 -0800 (PST)
+Received: from [10.76.15.169] ([61.120.150.76])
+        by smtp.gmail.com with ESMTPSA id x64-20020a17090a6c4600b001bc6d235a0esm2496931pjj.1.2022.02.23.02.20.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 23 Feb 2022 02:20:13 -0800 (PST)
+Subject: Re: [PATCH v2 3/3] virtio-crypto: implement RSA algorithm
+From:   zhenwei pi <pizhenwei@bytedance.com>
+To:     "Gonglei (Arei)" <arei.gonglei@huawei.com>
+Cc:     "jasowang@redhat.com" <jasowang@redhat.com>,
+        "mst@redhat.com" <mst@redhat.com>,
+        "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "helei.sig11@bytedance.com" <helei.sig11@bytedance.com>,
+        "herbert@gondor.apana.org.au" <herbert@gondor.apana.org.au>,
+        kernel test robot <lkp@intel.com>
+References: <20220211084108.1254218-1-pizhenwei@bytedance.com>
+ <20220211084108.1254218-4-pizhenwei@bytedance.com>
+ <c9144b0d82e34566a960f210ddc32696@huawei.com>
+ <8ef2f660-bd84-de70-1539-402c73795dfe@bytedance.com>
+Message-ID: <bc2bbc3b-8a34-2f09-41f5-60f1568a6bef@bytedance.com>
+Date:   Wed, 23 Feb 2022 18:17:21 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Organization: Westermo Network Technologies AB
+In-Reply-To: <8ef2f660-bd84-de70-1539-402c73795dfe@bytedance.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-These tests check that the basic locked port feature works, so that
-no 'host' can communicate (ping) through a locked port unless the
-MAC address of the 'host' interface is in the forwarding database of
-the bridge.
 
-Signed-off-by: Hans Schultz <schultz.hans+netdev@gmail.com>
-Acked-by: Ido Schimmel <idosch@nvidia.com>
----
- .../testing/selftests/net/forwarding/Makefile |   1 +
- .../net/forwarding/bridge_locked_port.sh      | 180 ++++++++++++++++++
- tools/testing/selftests/net/forwarding/lib.sh |   8 +
- 3 files changed, 189 insertions(+)
- create mode 100755 tools/testing/selftests/net/forwarding/bridge_locked_port.sh
+On 2/18/22 11:12 AM, zhenwei pi wrote:
+>>> +void virtio_crypto_akcipher_algs_unregister(struct virtio_crypto
+>>> +*vcrypto) {
+>>> +    int i = 0;
+>>> +
+>>> +    mutex_lock(&algs_lock);
+>>> +
+>>> +    for (i = 0; i < ARRAY_SIZE(virtio_crypto_akcipher_algs); i++) {
+>>> +        uint32_t service = virtio_crypto_akcipher_algs[i].service;
+>>> +        uint32_t algonum = virtio_crypto_akcipher_algs[i].algonum;
+>>> +
+>>> +        if (virtio_crypto_akcipher_algs[i].active_devs == 0 ||
+>>> +            !virtcrypto_algo_is_supported(vcrypto, service, algonum))
+>>> +            continue;
+>>> +
+>>> +        if (virtio_crypto_akcipher_algs[i].active_devs == 1)
+>>> +
+>>>     crypto_unregister_akcipher(&virtio_crypto_akcipher_algs[i].algo);
+>>> +
+>>> +        virtio_crypto_akcipher_algs[i].active_devs--;
+>>> +    }
+>>> +
+>>> +    mutex_unlock(&algs_lock);
+>>> +}
+>>
+>> Why don't you reuse the virtio_crypto_algs_register/unregister functions?
+>> The current code is too repetitive. Maybe we don't need create the new 
+>> file virtio_crypto_akcipher_algo.c
+>> because we had virtio_crypto_algs.c which includes all algorithms.
+>>
+> 
+> Yes, this looks similar to virtio_crypto_algs_register/unregister.
+> 
+> Let's look at the difference:
+> struct virtio_crypto_akcipher_algo {
+>          uint32_t algonum;
+>          uint32_t service;
+>          unsigned int active_devs;
+>          struct akcipher_alg algo;
+> };
+> 
+> struct virtio_crypto_algo {
+>          uint32_t algonum;
+>          uint32_t service;
+>          unsigned int active_devs;
+>          struct skcipher_alg algo; /* akcipher_alg VS skcipher_alg */
+> };
+> 
+> If reusing virtio_crypto_algs_register/unregister, we need to modify the 
+> data structure like this:
+> struct virtio_crypto_akcipher_algo {
+>          uint32_t algonum;
+>          uint32_t service;    /* use service to distinguish 
+> akcipher/skcipher */
+>          unsigned int active_devs;
+>      union {
+>          struct skcipher_alg skcipher;
+>              struct akcipher_alg akcipher;
+>      } alg;
+> };
+> 
+> int virtio_crypto_akcipher_algs_register(struct virtio_crypto *vcrypto)
+> {
+>      ...
+>          for (i = 0; i < ARRAY_SIZE(virtio_crypto_akcipher_algs); i++) {
+>                  uint32_t service = virtio_crypto_akcipher_algs[i].service;
+>          ...
+>          /* test service type then call 
+> crypto_register_akcipher/crypto_register_skcipher */
+>                  if (service == VIRTIO_CRYPTO_SERVICE_AKCIPHER)
+>              
+> crypto_register_akcipher(&virtio_crypto_akcipher_algs[i].algo.akcipher);
+>          else
+>              
+> crypto_register_skcipher(&virtio_crypto_skcipher_algs[i].algo.skcipher);
+>          ...
+>          }
+>      ...
+> }
+> 
+> Also test service type and call 
+> crypto_unregister_skcipher/crypto_unregister_akcipher.
+> 
+> This gets unclear from current v2 version.
+> 
+> On the other hand, the kernel side prefers to separate skcipher and 
+> akcipher(separated header files and implementations).
+> 
+Hi, Lei
+I also take a look at other crypto drivers at qat/ccp/hisilicon, they 
+separate akcipher/skcipher algo. If you consider that reusing 
+virtio_crypto_algs_register/unregister seems better, I will try to merge 
+them into a single function.
 
-diff --git a/tools/testing/selftests/net/forwarding/Makefile b/tools/testing/selftests/net/forwarding/Makefile
-index 72ee644d47bf..8fa97ae9af9e 100644
---- a/tools/testing/selftests/net/forwarding/Makefile
-+++ b/tools/testing/selftests/net/forwarding/Makefile
-@@ -1,6 +1,7 @@
- # SPDX-License-Identifier: GPL-2.0+ OR MIT
- 
- TEST_PROGS = bridge_igmp.sh \
-+	bridge_locked_port.sh \
- 	bridge_port_isolation.sh \
- 	bridge_sticky_fdb.sh \
- 	bridge_vlan_aware.sh \
-diff --git a/tools/testing/selftests/net/forwarding/bridge_locked_port.sh b/tools/testing/selftests/net/forwarding/bridge_locked_port.sh
-new file mode 100755
-index 000000000000..6e98efa6d371
---- /dev/null
-+++ b/tools/testing/selftests/net/forwarding/bridge_locked_port.sh
-@@ -0,0 +1,180 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+
-+ALL_TESTS="locked_port_ipv4 locked_port_ipv6 locked_port_vlan"
-+NUM_NETIFS=4
-+CHECK_TC="no"
-+source lib.sh
-+
-+h1_create()
-+{
-+	simple_if_init $h1 192.0.2.1/24 2001:db8:1::1/64
-+	vrf_create "vrf-vlan-h1"
-+	ip link set dev vrf-vlan-h1 up
-+	vlan_create $h1 100 vrf-vlan-h1 198.51.100.1/24
-+}
-+
-+h1_destroy()
-+{
-+	vlan_destroy $h1 100
-+	simple_if_fini $h1 192.0.2.1/24 2001:db8:1::1/64
-+}
-+
-+h2_create()
-+{
-+	simple_if_init $h2 192.0.2.2/24 2001:db8:1::2/64
-+	vrf_create "vrf-vlan-h2"
-+	ip link set dev vrf-vlan-h2 up
-+	vlan_create $h2 100 vrf-vlan-h2 198.51.100.2/24
-+}
-+
-+h2_destroy()
-+{
-+	vlan_destroy $h2 100
-+	simple_if_fini $h2 192.0.2.2/24 2001:db8:1::2/64
-+}
-+
-+switch_create()
-+{
-+	ip link add dev br0 type bridge vlan_filtering 1
-+
-+	ip link set dev $swp1 master br0
-+	ip link set dev $swp2 master br0
-+
-+	ip link set dev br0 up
-+	ip link set dev $swp1 up
-+	ip link set dev $swp2 up
-+
-+	bridge link set dev $swp1 learning off
-+}
-+
-+switch_destroy()
-+{
-+	ip link set dev $swp2 down
-+	ip link set dev $swp1 down
-+
-+	ip link del dev br0
-+}
-+
-+setup_prepare()
-+{
-+	h1=${NETIFS[p1]}
-+	swp1=${NETIFS[p2]}
-+
-+	swp2=${NETIFS[p3]}
-+	h2=${NETIFS[p4]}
-+
-+	vrf_prepare
-+
-+	h1_create
-+	h2_create
-+
-+	switch_create
-+}
-+
-+cleanup()
-+{
-+	pre_cleanup
-+
-+	switch_destroy
-+
-+	h2_destroy
-+	h1_destroy
-+
-+	vrf_cleanup
-+}
-+
-+locked_port_ipv4()
-+{
-+	RET=0
-+
-+	check_locked_port_support || return 0
-+
-+	ping_do $h1 192.0.2.2
-+	check_err $? "Ping did not work before locking port"
-+
-+	bridge link set dev $swp1 locked on
-+
-+	ping_do $h1 192.0.2.2
-+	check_fail $? "Ping worked after locking port, but before adding FDB entry"
-+
-+	bridge fdb add `mac_get $h1` dev $swp1 master static
-+
-+	ping_do $h1 192.0.2.2
-+	check_err $? "Ping did not work after locking port and adding FDB entry"
-+
-+	bridge link set dev $swp1 locked off
-+	bridge fdb del `mac_get $h1` dev $swp1 master static
-+
-+	ping_do $h1 192.0.2.2
-+	check_err $? "Ping did not work after unlocking port and removing FDB entry."
-+
-+	log_test "Locked port ipv4"
-+}
-+
-+locked_port_vlan()
-+{
-+	RET=0
-+
-+	check_locked_port_support || return 0
-+
-+	bridge vlan add vid 100 dev $swp1
-+	bridge vlan add vid 100 dev $swp2
-+
-+	ping_do $h1.100 198.51.100.2
-+	check_err $? "Ping through vlan did not work before locking port"
-+
-+	bridge link set dev $swp1 locked on
-+	ping_do $h1.100 198.51.100.2
-+	check_fail $? "Ping through vlan worked after locking port, but before adding FDB entry"
-+
-+	bridge fdb add `mac_get $h1` dev $swp1 vlan 100 master static
-+
-+	ping_do $h1.100 198.51.100.2
-+	check_err $? "Ping through vlan did not work after locking port and adding FDB entry"
-+
-+	bridge link set dev $swp1 locked off
-+	bridge fdb del `mac_get $h1` dev $swp1 vlan 100 master static
-+
-+	ping_do $h1.100 198.51.100.2
-+	check_err $? "Ping through vlan did not work after unlocking port and removing FDB entry"
-+
-+	bridge vlan del vid 100 dev $swp1
-+	bridge vlan del vid 100 dev $swp2
-+	log_test "Locked port vlan"
-+}
-+
-+locked_port_ipv6()
-+{
-+	RET=0
-+	check_locked_port_support || return 0
-+
-+	ping6_do $h1 2001:db8:1::2
-+	check_err $? "Ping6 did not work before locking port"
-+
-+	bridge link set dev $swp1 locked on
-+
-+	ping6_do $h1 2001:db8:1::2
-+	check_fail $? "Ping6 worked after locking port, but before adding FDB entry"
-+
-+	bridge fdb add `mac_get $h1` dev $swp1 master static
-+	ping6_do $h1 2001:db8:1::2
-+	check_err $? "Ping6 did not work after locking port and adding FDB entry"
-+
-+	bridge link set dev $swp1 locked off
-+	bridge fdb del `mac_get $h1` dev $swp1 master static
-+
-+	ping6_do $h1 2001:db8:1::2
-+	check_err $? "Ping6 did not work after unlocking port and removing FDB entry"
-+
-+	log_test "Locked port ipv6"
-+}
-+
-+trap cleanup EXIT
-+
-+setup_prepare
-+setup_wait
-+
-+tests_run
-+
-+exit $EXIT_STATUS
-diff --git a/tools/testing/selftests/net/forwarding/lib.sh b/tools/testing/selftests/net/forwarding/lib.sh
-index 7da783d6f453..c26b603abb4d 100644
---- a/tools/testing/selftests/net/forwarding/lib.sh
-+++ b/tools/testing/selftests/net/forwarding/lib.sh
-@@ -125,6 +125,14 @@ check_ethtool_lanes_support()
- 	fi
- }
- 
-+check_locked_port_support()
-+{
-+	if ! bridge -d link show | grep -q " locked"; then
-+		echo "SKIP: iproute2 too old; Locked port feature not supported."
-+		return $ksft_skip
-+	fi
-+}
-+
- if [[ "$(id -u)" -ne 0 ]]; then
- 	echo "SKIP: need root privileges"
- 	exit $ksft_skip
 -- 
-2.30.2
-
+zhenwei pi

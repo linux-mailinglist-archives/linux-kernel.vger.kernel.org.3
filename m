@@ -2,24 +2,24 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77A214C1493
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 14:45:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA2174C148E
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 14:45:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241155AbiBWNpi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 08:45:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42808 "EHLO
+        id S241209AbiBWNqB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 08:46:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241093AbiBWNow (ORCPT
+        with ESMTP id S241095AbiBWNow (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 23 Feb 2022 08:44:52 -0500
 Received: from ssl.serverraum.org (ssl.serverraum.org [IPv6:2a01:4f8:151:8464::1:2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DCBFAC910
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6178BAD100
         for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 05:44:17 -0800 (PST)
 Received: from mwalle01.kontron.local. (unknown [213.135.10.150])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id 6B6A32247C;
+        by ssl.serverraum.org (Postfix) with ESMTPSA id CC3C0223F6;
         Wed, 23 Feb 2022 14:44:15 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
         t=1645623855;
@@ -27,10 +27,10 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail20160613
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=nj33sEa1mwkdrgAwZgX2kvvf+/FEMBirt9My5egz17o=;
-        b=Xjnm5OPBnHZqO/qWU+8VNuO6zEYGuCHa88//rjV6Rkv4I/Rjdr7gISVcbaekXP1h5SK3f1
-        cHVmaj1B4y6ffgA2gHdBDCqk4uAYunqmT/d5VYpGoxg6oIh6qtU4h7fUwBousIiVjTwHPo
-        m7AhygQqoXvRgjufVM/bQVa4wuABgd4=
+        bh=35/TrCmEc5UMzhIA1WiLFawNYfLWm/HAT5pOPDWhA7g=;
+        b=oGhvUGdgRR6POL7pFSOWL899Vqs1yn00SDOSXcW5ESSlWSeYArrNCo/BKV29iGWF8Zi03i
+        nQNiUvM4bO97oSswQQc7xnQw2XY+NS78D7banYY01NyLWQ3k+IT90wS5SiURY11revl1iP
+        Mw6fCfWGsKqUqEvxE35LGOoYxfYCUCs=
 From:   Michael Walle <michael@walle.cc>
 To:     linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org
 Cc:     Tudor Ambarus <tudor.ambarus@microchip.com>,
@@ -39,9 +39,9 @@ Cc:     Tudor Ambarus <tudor.ambarus@microchip.com>,
         Richard Weinberger <richard@nod.at>,
         Vignesh Raghavendra <vigneshr@ti.com>,
         yaliang.wang@windriver.com, Michael Walle <michael@walle.cc>
-Subject: [PATCH v5 25/32] mtd: spi-nor: micron-st: convert USE_FSR to a manufacturer flag
-Date:   Wed, 23 Feb 2022 14:43:51 +0100
-Message-Id: <20220223134358.1914798-26-michael@walle.cc>
+Subject: [PATCH v5 26/32] mtd: spi-nor: micron-st: rename vendor specific functions and defines
+Date:   Wed, 23 Feb 2022 14:43:52 +0100
+Message-Id: <20220223134358.1914798-27-michael@walle.cc>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220223134358.1914798-1-michael@walle.cc>
 References: <20220223134358.1914798-1-michael@walle.cc>
@@ -49,222 +49,101 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UPPERCASE_50_75 autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now that all functions using that flag are local to the micron module,
-we can convert the flag to a manufacturer one.
+Drop the generic spi_nor prefix for all the micron-st functions.
 
 Signed-off-by: Michael Walle <michael@walle.cc>
-Reviewed-by: Tudor Ambarus <tudor.ambarus@microchip.com>
-Reviewed-by: Pratyush Yadav <p.yadav@ti.com>
 Tested-by: Pratyush Yadav <p.yadav@ti.com> # on mt35xu512aba, s28hs512t
 ---
- drivers/mtd/spi-nor/core.c      |  3 --
- drivers/mtd/spi-nor/core.h      |  3 --
- drivers/mtd/spi-nor/micron-st.c | 93 +++++++++++++++++++++------------
- 3 files changed, 60 insertions(+), 39 deletions(-)
+ drivers/mtd/spi-nor/micron-st.c | 18 +++++++++---------
+ 1 file changed, 9 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/mtd/spi-nor/core.c b/drivers/mtd/spi-nor/core.c
-index 5b56d718692b..ac0faedebafe 100644
---- a/drivers/mtd/spi-nor/core.c
-+++ b/drivers/mtd/spi-nor/core.c
-@@ -2499,9 +2499,6 @@ static void spi_nor_init_flags(struct spi_nor *nor)
- 
- 	if (flags & USE_CLSR)
- 		nor->flags |= SNOR_F_USE_CLSR;
--
--	if (flags & USE_FSR)
--		nor->flags |= SNOR_F_USE_FSR;
+diff --git a/drivers/mtd/spi-nor/micron-st.c b/drivers/mtd/spi-nor/micron-st.c
+index 1a7227594bf0..8a20475ce77a 100644
+--- a/drivers/mtd/spi-nor/micron-st.c
++++ b/drivers/mtd/spi-nor/micron-st.c
+@@ -309,7 +309,7 @@ static int micron_st_nor_set_4byte_addr_mode(struct spi_nor *nor, bool enable)
  }
  
  /**
-diff --git a/drivers/mtd/spi-nor/core.h b/drivers/mtd/spi-nor/core.h
-index fabc01ae9a81..a02bf54289fb 100644
---- a/drivers/mtd/spi-nor/core.h
-+++ b/drivers/mtd/spi-nor/core.h
-@@ -12,7 +12,6 @@
- #define SPI_NOR_MAX_ID_LEN	6
- 
- enum spi_nor_option_flags {
--	SNOR_F_USE_FSR		= BIT(0),
- 	SNOR_F_HAS_SR_TB	= BIT(1),
- 	SNOR_F_NO_OP_CHIP_ERASE	= BIT(2),
- 	SNOR_F_USE_CLSR		= BIT(4),
-@@ -349,7 +348,6 @@ struct spi_nor_fixups {
-  *   NO_CHIP_ERASE:           chip does not support chip erase.
-  *   SPI_NOR_NO_FR:           can't do fastread.
-  *   USE_CLSR:                use CLSR command.
-- *   USE_FSR:                 use flag status register
+- * spi_nor_read_fsr() - Read the Flag Status Register.
++ * micron_st_nor_read_fsr() - Read the Flag Status Register.
+  * @nor:	pointer to 'struct spi_nor'
+  * @fsr:	pointer to a DMA-able buffer where the value of the
+  *              Flag Status Register will be written. Should be at least 2
+@@ -317,7 +317,7 @@ static int micron_st_nor_set_4byte_addr_mode(struct spi_nor *nor, bool enable)
   *
-  * @no_sfdp_flags:  flags that indicate support that can be discovered via SFDP.
-  *                  Used when SFDP tables are not defined in the flash. These
-@@ -401,7 +399,6 @@ struct flash_info {
- #define NO_CHIP_ERASE			BIT(7)
- #define SPI_NOR_NO_FR			BIT(8)
- #define USE_CLSR			BIT(9)
--#define USE_FSR				BIT(10)
- 
- 	u8 no_sfdp_flags;
- #define SPI_NOR_SKIP_SFDP		BIT(0)
-diff --git a/drivers/mtd/spi-nor/micron-st.c b/drivers/mtd/spi-nor/micron-st.c
-index e580830ed70f..1a7227594bf0 100644
---- a/drivers/mtd/spi-nor/micron-st.c
-+++ b/drivers/mtd/spi-nor/micron-st.c
-@@ -8,6 +8,9 @@
- 
- #include "core.h"
- 
-+/* flash_info mfr_flag. Used to read proprietary FSR register. */
-+#define USE_FSR		BIT(0)
-+
- #define SPINOR_OP_RDFSR		0x70	/* Read flag status register */
- #define SPINOR_OP_CLFSR		0x50	/* Clear flag status register */
- #define SPINOR_OP_MT_DTR_RD	0xfd	/* Fast Read opcode in DTR mode */
-@@ -140,15 +143,17 @@ static const struct spi_nor_fixups mt35xu512aba_fixups = {
- 
- static const struct flash_info micron_nor_parts[] = {
- 	{ "mt35xu512aba", INFO(0x2c5b1a, 0, 128 * 1024, 512)
--		FLAGS(USE_FSR)
- 		NO_SFDP_FLAGS(SECT_4K | SPI_NOR_OCTAL_READ |
- 			   SPI_NOR_OCTAL_DTR_READ | SPI_NOR_OCTAL_DTR_PP)
- 		FIXUP_FLAGS(SPI_NOR_4B_OPCODES | SPI_NOR_IO_MODE_EN_VOLATILE)
--		.fixups = &mt35xu512aba_fixups},
-+		MFR_FLAGS(USE_FSR)
-+		.fixups = &mt35xu512aba_fixups
-+	},
- 	{ "mt35xu02g", INFO(0x2c5b1c, 0, 128 * 1024, 2048)
--		FLAGS(USE_FSR)
- 		NO_SFDP_FLAGS(SECT_4K | SPI_NOR_OCTAL_READ)
--		FIXUP_FLAGS(SPI_NOR_4B_OPCODES) },
-+		FIXUP_FLAGS(SPI_NOR_4B_OPCODES)
-+		MFR_FLAGS(USE_FSR)
-+	},
- };
- 
- static const struct flash_info st_nor_parts[] = {
-@@ -164,57 +169,79 @@ static const struct flash_info st_nor_parts[] = {
- 		NO_SFDP_FLAGS(SECT_4K | SPI_NOR_QUAD_READ) },
- 	{ "n25q128a11",  INFO(0x20bb18, 0, 64 * 1024,  256)
- 		FLAGS(SPI_NOR_HAS_LOCK | SPI_NOR_HAS_TB | SPI_NOR_4BIT_BP |
--		      SPI_NOR_BP3_SR_BIT6 | USE_FSR)
--		NO_SFDP_FLAGS(SECT_4K | SPI_NOR_QUAD_READ) },
-+		      SPI_NOR_BP3_SR_BIT6)
-+		NO_SFDP_FLAGS(SECT_4K | SPI_NOR_QUAD_READ)
-+		MFR_FLAGS(USE_FSR)
-+	},
- 	{ "n25q128a13",  INFO(0x20ba18, 0, 64 * 1024,  256)
- 		FLAGS(SPI_NOR_HAS_LOCK | SPI_NOR_HAS_TB | SPI_NOR_4BIT_BP |
--		      SPI_NOR_BP3_SR_BIT6 | USE_FSR)
--		NO_SFDP_FLAGS(SECT_4K | SPI_NOR_QUAD_READ) },
-+		      SPI_NOR_BP3_SR_BIT6)
-+		NO_SFDP_FLAGS(SECT_4K | SPI_NOR_QUAD_READ)
-+		MFR_FLAGS(USE_FSR)
-+	},
- 	{ "mt25ql256a",  INFO6(0x20ba19, 0x104400, 64 * 1024,  512)
--		FLAGS(USE_FSR)
- 		NO_SFDP_FLAGS(SECT_4K | SPI_NOR_DUAL_READ | SPI_NOR_QUAD_READ)
--		FIXUP_FLAGS(SPI_NOR_4B_OPCODES) },
-+		FIXUP_FLAGS(SPI_NOR_4B_OPCODES)
-+		MFR_FLAGS(USE_FSR)
-+	},
- 	{ "n25q256a",    INFO(0x20ba19, 0, 64 * 1024,  512)
--		FLAGS(USE_FSR)
- 		NO_SFDP_FLAGS(SECT_4K | SPI_NOR_DUAL_READ |
--			      SPI_NOR_QUAD_READ) },
-+			      SPI_NOR_QUAD_READ)
-+		MFR_FLAGS(USE_FSR)
-+	},
- 	{ "mt25qu256a",  INFO6(0x20bb19, 0x104400, 64 * 1024,  512)
--		FLAGS(USE_FSR)
- 		NO_SFDP_FLAGS(SECT_4K | SPI_NOR_DUAL_READ | SPI_NOR_QUAD_READ)
--		FIXUP_FLAGS(SPI_NOR_4B_OPCODES) },
-+		FIXUP_FLAGS(SPI_NOR_4B_OPCODES)
-+		MFR_FLAGS(USE_FSR)
-+	},
- 	{ "n25q256ax1",  INFO(0x20bb19, 0, 64 * 1024,  512)
--		FLAGS(USE_FSR)
--		NO_SFDP_FLAGS(SECT_4K | SPI_NOR_QUAD_READ) },
-+		NO_SFDP_FLAGS(SECT_4K | SPI_NOR_QUAD_READ)
-+		MFR_FLAGS(USE_FSR)
-+	},
- 	{ "mt25ql512a",  INFO6(0x20ba20, 0x104400, 64 * 1024, 1024)
--		FLAGS(USE_FSR)
- 		NO_SFDP_FLAGS(SECT_4K | SPI_NOR_DUAL_READ | SPI_NOR_QUAD_READ)
--		FIXUP_FLAGS(SPI_NOR_4B_OPCODES) },
-+		FIXUP_FLAGS(SPI_NOR_4B_OPCODES)
-+		MFR_FLAGS(USE_FSR)
-+	},
- 	{ "n25q512ax3",  INFO(0x20ba20, 0, 64 * 1024, 1024)
- 		FLAGS(SPI_NOR_HAS_LOCK | SPI_NOR_HAS_TB | SPI_NOR_4BIT_BP |
--		      SPI_NOR_BP3_SR_BIT6 | USE_FSR)
--		NO_SFDP_FLAGS(SECT_4K | SPI_NOR_QUAD_READ) },
-+		      SPI_NOR_BP3_SR_BIT6)
-+		NO_SFDP_FLAGS(SECT_4K | SPI_NOR_QUAD_READ)
-+		MFR_FLAGS(USE_FSR)
-+	},
- 	{ "mt25qu512a",  INFO6(0x20bb20, 0x104400, 64 * 1024, 1024)
--		FLAGS(USE_FSR)
- 		NO_SFDP_FLAGS(SECT_4K | SPI_NOR_DUAL_READ | SPI_NOR_QUAD_READ)
--		FIXUP_FLAGS(SPI_NOR_4B_OPCODES) },
-+		FIXUP_FLAGS(SPI_NOR_4B_OPCODES)
-+		MFR_FLAGS(USE_FSR)
-+	},
- 	{ "n25q512a",    INFO(0x20bb20, 0, 64 * 1024, 1024)
- 		FLAGS(SPI_NOR_HAS_LOCK | SPI_NOR_HAS_TB | SPI_NOR_4BIT_BP |
--		      SPI_NOR_BP3_SR_BIT6 | USE_FSR)
--		NO_SFDP_FLAGS(SECT_4K | SPI_NOR_QUAD_READ) },
-+		      SPI_NOR_BP3_SR_BIT6)
-+		NO_SFDP_FLAGS(SECT_4K | SPI_NOR_QUAD_READ)
-+		MFR_FLAGS(USE_FSR)
-+	},
- 	{ "n25q00",      INFO(0x20ba21, 0, 64 * 1024, 2048)
- 		FLAGS(SPI_NOR_HAS_LOCK | SPI_NOR_HAS_TB | SPI_NOR_4BIT_BP |
--		      SPI_NOR_BP3_SR_BIT6 | NO_CHIP_ERASE | USE_FSR)
--		NO_SFDP_FLAGS(SECT_4K | SPI_NOR_QUAD_READ) },
-+		      SPI_NOR_BP3_SR_BIT6 | NO_CHIP_ERASE)
-+		NO_SFDP_FLAGS(SECT_4K | SPI_NOR_QUAD_READ)
-+		MFR_FLAGS(USE_FSR)
-+	},
- 	{ "n25q00a",     INFO(0x20bb21, 0, 64 * 1024, 2048)
--		FLAGS(NO_CHIP_ERASE | USE_FSR)
--		NO_SFDP_FLAGS(SECT_4K | SPI_NOR_QUAD_READ) },
-+		FLAGS(NO_CHIP_ERASE)
-+		NO_SFDP_FLAGS(SECT_4K | SPI_NOR_QUAD_READ)
-+		MFR_FLAGS(USE_FSR)
-+	},
- 	{ "mt25ql02g",   INFO(0x20ba22, 0, 64 * 1024, 4096)
--		FLAGS(NO_CHIP_ERASE | USE_FSR)
--		NO_SFDP_FLAGS(SECT_4K | SPI_NOR_QUAD_READ) },
-+		FLAGS(NO_CHIP_ERASE)
-+		NO_SFDP_FLAGS(SECT_4K | SPI_NOR_QUAD_READ)
-+		MFR_FLAGS(USE_FSR)
-+	},
- 	{ "mt25qu02g",   INFO(0x20bb22, 0, 64 * 1024, 4096)
--		FLAGS(NO_CHIP_ERASE | USE_FSR)
-+		FLAGS(NO_CHIP_ERASE)
- 		NO_SFDP_FLAGS(SECT_4K | SPI_NOR_DUAL_READ |
--			      SPI_NOR_QUAD_READ) },
-+			      SPI_NOR_QUAD_READ)
-+		MFR_FLAGS(USE_FSR)
-+	},
- 
- 	{ "m25p05",  INFO(0x202010,  0,  32 * 1024,   2) },
- 	{ "m25p10",  INFO(0x202011,  0,  32 * 1024,   4) },
-@@ -410,7 +437,7 @@ static void micron_st_nor_default_init(struct spi_nor *nor)
- 
- static void micron_st_nor_late_init(struct spi_nor *nor)
+  * Return: 0 on success, -errno otherwise.
+  */
+-static int spi_nor_read_fsr(struct spi_nor *nor, u8 *fsr)
++static int micron_st_nor_read_fsr(struct spi_nor *nor, u8 *fsr)
  {
--	if (nor->flags & SNOR_F_USE_FSR)
-+	if (nor->info->mfr_flags & USE_FSR)
- 		nor->params->ready = spi_nor_fsr_ready;
+ 	int ret;
+ 
+@@ -353,10 +353,10 @@ static int spi_nor_read_fsr(struct spi_nor *nor, u8 *fsr)
  }
  
+ /**
+- * spi_nor_clear_fsr() - Clear the Flag Status Register.
++ * micron_st_nor_clear_fsr() - Clear the Flag Status Register.
+  * @nor:	pointer to 'struct spi_nor'.
+  */
+-static void spi_nor_clear_fsr(struct spi_nor *nor)
++static void micron_st_nor_clear_fsr(struct spi_nor *nor)
+ {
+ 	int ret;
+ 
+@@ -380,14 +380,14 @@ static void spi_nor_clear_fsr(struct spi_nor *nor)
+ }
+ 
+ /**
+- * spi_nor_fsr_ready() - Query the Status Register as well as the Flag Status
++ * micron_st_nor_ready() - Query the Status Register as well as the Flag Status
+  * Register to see if the flash is ready for new commands. If there are any
+  * errors in the FSR clear them.
+  * @nor:	pointer to 'struct spi_nor'.
+  *
+  * Return: 1 if ready, 0 if not ready, -errno on errors.
+  */
+-static int spi_nor_fsr_ready(struct spi_nor *nor)
++static int micron_st_nor_ready(struct spi_nor *nor)
+ {
+ 	int sr_ready, ret;
+ 
+@@ -395,7 +395,7 @@ static int spi_nor_fsr_ready(struct spi_nor *nor)
+ 	if (sr_ready < 0)
+ 		return sr_ready;
+ 
+-	ret = spi_nor_read_fsr(nor, nor->bouncebuf);
++	ret = micron_st_nor_read_fsr(nor, nor->bouncebuf);
+ 	if (ret)
+ 		return ret;
+ 
+@@ -409,7 +409,7 @@ static int spi_nor_fsr_ready(struct spi_nor *nor)
+ 			dev_err(nor->dev,
+ 				"Attempted to modify a protected sector.\n");
+ 
+-		spi_nor_clear_fsr(nor);
++		micron_st_nor_clear_fsr(nor);
+ 
+ 		/*
+ 		 * WEL bit remains set to one when an erase or page program
+@@ -438,7 +438,7 @@ static void micron_st_nor_default_init(struct spi_nor *nor)
+ static void micron_st_nor_late_init(struct spi_nor *nor)
+ {
+ 	if (nor->info->mfr_flags & USE_FSR)
+-		nor->params->ready = spi_nor_fsr_ready;
++		nor->params->ready = micron_st_nor_ready;
+ }
+ 
+ static const struct spi_nor_fixups micron_st_nor_fixups = {
 -- 
 2.30.2
 

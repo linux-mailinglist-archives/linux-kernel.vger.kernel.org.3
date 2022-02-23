@@ -2,101 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3EFE4C0EE3
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 10:10:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7ADB94C0EE5
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 10:10:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239203AbiBWJKp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 04:10:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56122 "EHLO
+        id S239209AbiBWJLJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 04:11:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238054AbiBWJKm (ORCPT
+        with ESMTP id S234982AbiBWJLH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 04:10:42 -0500
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A006C8021F
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 01:10:14 -0800 (PST)
-Received: by mail-pg1-x532.google.com with SMTP id f8so19338737pgc.8
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 01:10:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=wwEeIbVKRAFJc1IUROvg7itOrJyqhQC3kCceTm88ch8=;
-        b=xoEiNPwmXke/nkZ+DHLML+rqVhZKfA5g2eNwCprpOPWpsB2mBdhm3r7fZWJm77ipkp
-         vrMwX13qNO4zEY1fMqN/y0g0HIfiRkJlRB+JF7WVnmRR07Y7S8dnSjlfx4W3T2FjGywb
-         lSvSAfrbHA3lDrBiL487sp/sc12pqGXt2qrhzgwQsl9UUaI0hLjJGLEGp75Xi4Y8Z5Za
-         kbShy8E4rW66PdUgdyQCUgnTxUo0QFQNSdlIwWLybJYpYwm9OLT69Mo6vZAvNMDID8Yb
-         sCwinct0dhRRhj+KkmJmQymMr3zrpInDNOgrkE7K8oakKrzmIMvORby4TNYYrmqM28u7
-         YhZg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=wwEeIbVKRAFJc1IUROvg7itOrJyqhQC3kCceTm88ch8=;
-        b=y5aD+GDceyMluxU4aL44HmGNoXM/POMlPzlHlKm7F9B5J3o3fIT9KnRY5KaWhfG3Kv
-         We68aKGztEJEWw8sUCB/iyUbDwGSqy2O9tojmmtAgWI9yCmOtXDrY+bBDZYWxW0T7Ffi
-         P0A9RIOLQhPBuDHIydmZ08fNSNwFhcYjiPgZY1lSOUFdxq6ha67zJ8l0T6uI3NXINqgI
-         RedFJKWd7a2bqWnNMHPV5MMn3kotVZG2zpDXiNIi+RP1QdDEUv9rNY7h/nbMrpWF2eI2
-         obBYf83ReDkdfh+YABMKp4LpV0IeKJYGctnKR0mfMkBvvjDosYMrWaMJTFK20arCJ4C1
-         4o9g==
-X-Gm-Message-State: AOAM530xkEb4bJL9PK/xiWJXSd6tK1MTipXzborjkiNv9youOh7dhK4r
-        ZDLDJnAhkadBGqjvjipiLTV9dQ==
-X-Google-Smtp-Source: ABdhPJxY3zmpRDrdJPFVLfKKYjvYzCca+xNI3tbn213m0TTlPNQfpWhFGnb77TgCu1ptREKSDnDGVw==
-X-Received: by 2002:a63:9845:0:b0:375:5cc8:7d34 with SMTP id l5-20020a639845000000b003755cc87d34mr1002442pgo.124.1645607414211;
-        Wed, 23 Feb 2022 01:10:14 -0800 (PST)
-Received: from localhost ([223.184.83.228])
-        by smtp.gmail.com with ESMTPSA id h4sm6269241pfo.81.2022.02.23.01.10.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Feb 2022 01:10:13 -0800 (PST)
-Date:   Wed, 23 Feb 2022 14:40:12 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Lukasz Luba <lukasz.luba@arm.com>
-Cc:     linux-kernel@vger.kernel.org, dietmar.eggemann@arm.com,
-        rafael@kernel.org, daniel.lezcano@linaro.org, nm@ti.com,
-        sboyd@kernel.org, mka@chromium.org, dianders@chromium.org,
-        robh+dt@kernel.org, devicetree@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: Re: [[PATCH v2 2/2] OPP: Add 'opp-microwatt' parsing for advanced EM
- registration
-Message-ID: <20220223091012.w3flzpye6z55jnwd@vireshk-i7>
-References: <20220222140746.12293-1-lukasz.luba@arm.com>
- <20220222140746.12293-3-lukasz.luba@arm.com>
- <20220223055357.t3wulpla64vt3xus@vireshk-i7>
- <b6682d6f-a6ae-8a82-68c3-13840c02d178@arm.com>
+        Wed, 23 Feb 2022 04:11:07 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4E47C80228;
+        Wed, 23 Feb 2022 01:10:39 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DBF001042;
+        Wed, 23 Feb 2022 01:10:38 -0800 (PST)
+Received: from [10.57.9.184] (unknown [10.57.9.184])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E59CC3F5A1;
+        Wed, 23 Feb 2022 01:10:36 -0800 (PST)
+Message-ID: <b13ece66-a1c0-439f-efaa-689ddfa530db@arm.com>
+Date:   Wed, 23 Feb 2022 09:10:35 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b6682d6f-a6ae-8a82-68c3-13840c02d178@arm.com>
-User-Agent: NeoMutt/20180716-391-311a52
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 1/2] thermal: cooling: Check Energy Model type in
+ cpufreq_cooling and devfreq_cooling
+Content-Language: en-US
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     amit.kachhap@gmail.com, viresh.kumar@linaro.org, rafael@kernel.org,
+        amitk@kernel.org, rui.zhang@intel.com, dietmar.eggemann@arm.com,
+        Pierre.Gondois@arm.com, Matthias Kaehlcke <mka@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220207073036.14901-1-lukasz.luba@arm.com>
+ <20220207073036.14901-2-lukasz.luba@arm.com>
+ <4e090ffe-c19b-8e2c-0396-72dc33361f35@arm.com>
+ <211a3606-2f4c-227b-33aa-177ef68a49a3@arm.com>
+ <3d1719ca-d4a4-f904-e284-b857414669ba@linaro.org>
+ <27df4e4f-b6d7-9a58-f2dd-d6afa748e217@arm.com>
+ <a5730ce7-a24c-0738-e76f-e06d56601408@linaro.org>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <a5730ce7-a24c-0738-e76f-e06d56601408@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23-02-22, 08:59, Lukasz Luba wrote:
-> OK, so you want to have this available for the whole system. I can do
-> that. I would go for one value of power 
 
-One value per supply, right ?
 
-> and try to fit into the
-> opp_parse_supplies() code.
+On 2/22/22 22:10, Daniel Lezcano wrote:
+> 
+> Hi Lukasz,
+> 
+> On 22/02/2022 19:31, Lukasz Luba wrote:
+>>
+>>
+>> On 2/22/22 18:12, Daniel Lezcano wrote:
+>>>
+>>> Hi Lukasz,
+>>>
+>>> I don't think it makes sense to remove the support of the energy 
+>>> model if the units are abstracts.
+>>>
+>>> IIUC, regarding your previous answer, we don't really know what will 
+>>> do the SoC vendor with these numbers and likely they will provide 
+>>> consistent abstract values which won't prevent a correct behavior.
+>>>
+>>> What would be the benefit of giving inconsistent abstract values 
+>>> which will be unusable except of giving a broken energy model?
+>>
+>> The power values in the EM which has abstract scale, would make sense 
+>> to EAS, but not for IPA or DTPM. Those platforms which want to enable 
+>> EAS,
+>> but don't need IPA, would register such '<a_good_name_here>' EM.
+> 
+> Sorry, but I don't understand why DTPM can not deal with abstract values?
 
-Correct.
+They will be totally meaningless/bogus.
 
-> As far as I can see in the
-> dev_pm_opp_get_voltage() the simple solution: supplier[0] and u_volt
-> is used. I would go for similar solution for u_watt.
-> There is even a single u_amp and no _max, _min variants, so should be
-> good..
+> 
+> 
+>>> Your proposed changes would be acceptable if the energy model has a 
+>>> broken flag IMO
+>>
+>> That is doable. I can add that flag, so we can call it 'artificial' EM
+>> (when this new flag is set).
+> 
+> It is too soon IMO, I would like to see the numbers first so we can take 
+> an enlighten decision. Right now, it is unclear what the numbers will be.
 
-Yes, I don't think we need min/max/target kind of naming here. Just a single
-value per supply is enough.
+We are going to add new support from our roadmap for platforms which
+don't have this power information but are going to use EAS.
 
--- 
-viresh
+I'm going to send some patches soon which create that support. Pierre
+is going to send the platform code. I want to make sure that this
+platform won't register power actors for IPA. Other thermal governors
+will work, since they don't use EM for making a decision.

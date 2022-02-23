@@ -2,162 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B6F34C1D6C
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 22:00:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 150804C1DFE
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 22:52:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242071AbiBWVA0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 16:00:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37120 "EHLO
+        id S242431AbiBWVwm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 16:52:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242066AbiBWVAW (ORCPT
+        with ESMTP id S233941AbiBWVwi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 16:00:22 -0500
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70C744D257
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 12:59:53 -0800 (PST)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 21NKxWg1026937;
-        Wed, 23 Feb 2022 14:59:32 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1645649972;
-        bh=J9YTkhnhayU3ZR7csP9bS5fBrAnr5xkdso1tUysRVEI=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=ZhBycOXy1r3HLmU/UnRa6cKbubus+bcbAfc0WMXHWOQOlSNlAy58YLZbChGLTZR1Z
-         8BIF2eLa7PgcovPWYSJ5pVlx0/fp4jgCuS0fIr/OpDUiLLDDUHInlrrO6OxpOsghoD
-         CcpRpAeIbHZN5xe5CyKZnnyslGprN5BilIkKtu+Q=
-Received: from DLEE114.ent.ti.com (dlee114.ent.ti.com [157.170.170.25])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 21NKxWbb078114
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 23 Feb 2022 14:59:32 -0600
-Received: from DLEE103.ent.ti.com (157.170.170.33) by DLEE114.ent.ti.com
- (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Wed, 23
- Feb 2022 14:59:32 -0600
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE103.ent.ti.com
- (157.170.170.33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Wed, 23 Feb 2022 14:59:29 -0600
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 21NKxSxO124392;
-        Wed, 23 Feb 2022 14:59:29 -0600
-Date:   Thu, 24 Feb 2022 02:29:27 +0530
-From:   Pratyush Yadav <p.yadav@ti.com>
-To:     Tudor Ambarus <tudor.ambarus@microchip.com>
-CC:     <michael@walle.cc>, <Takahiro.Kuwano@infineon.com>,
-        <miquel.raynal@bootlin.com>, <richard@nod.at>, <vigneshr@ti.com>,
-        <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        <nicolas.ferre@microchip.com>, <zhengxunli@mxic.com.tw>,
-        <jaimeliao@mxic.com.tw>, <Bacem.Daassi@infineon.com>
-Subject: Re: [PATCH 1/3] mtd: spi-nor: core: Add helpers to read/write any
- register
-Message-ID: <20220223205927.axuejgdsnvn4jj65@ti.com>
-References: <20220210023334.408926-1-tudor.ambarus@microchip.com>
- <20220210023334.408926-2-tudor.ambarus@microchip.com>
+        Wed, 23 Feb 2022 16:52:38 -0500
+Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.73])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBF533C4B9;
+        Wed, 23 Feb 2022 13:52:07 -0800 (PST)
+Received: from mail-ej1-f51.google.com ([209.85.218.51]) by
+ mrelayeu.kundenserver.de (mreue109 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1Mc02T-1nwrnu3KHv-00da4O; Wed, 23 Feb 2022 22:52:05 +0100
+Received: by mail-ej1-f51.google.com with SMTP id r13so249489ejd.5;
+        Wed, 23 Feb 2022 13:52:05 -0800 (PST)
+X-Gm-Message-State: AOAM5308jvEXhpKL/w+dlKOqx/PFZZgd5JfDS6c5Bk8AtLsATnuuPNun
+        FTUsSC+jEyRTsxcmRagkzksfRbiAM3ocICNcygA=
+X-Google-Smtp-Source: ABdhPJxtj8uyicd8SyqQTEpI7vIdv7hPv52/WmZ5AoYWSFitVsWjSUWx5lKV5rVYc5oiMdSbMnSOL/JSvK5tIzHTFXA=
+X-Received: by 2002:a5d:59aa:0:b0:1ed:9f45:c2ff with SMTP id
+ p10-20020a5d59aa000000b001ed9f45c2ffmr1035641wrr.192.1645649355189; Wed, 23
+ Feb 2022 12:49:15 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20220210023334.408926-2-tudor.ambarus@microchip.com>
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220217184829.1991035-1-jakobkoschel@gmail.com>
+ <20220217184829.1991035-4-jakobkoschel@gmail.com> <CAHk-=wg1RdFQ6OGb_H4ZJoUwEr-gk11QXeQx63n91m0tvVUdZw@mail.gmail.com>
+ <6DFD3D91-B82C-469C-8771-860C09BD8623@gmail.com> <CAHk-=wiyCH7xeHcmiFJ-YgXUy2Jaj7pnkdKpcovt8fYbVFW3TA@mail.gmail.com>
+ <CAHk-=wgLe-OSLTEHm=V7eRG6Fcr0dpAM1ZRV1a=R_g6pBOr8Bg@mail.gmail.com>
+ <CAK8P3a0DOC3s7x380XR_kN8UYQvkRqvE5LkHQfK2-KzwhcYqQQ@mail.gmail.com> <CAHk-=wicJ0VxEmnpb8=TJfkSDytFuf+dvQJj8kFWj0OF2FBZ9w@mail.gmail.com>
+In-Reply-To: <CAHk-=wicJ0VxEmnpb8=TJfkSDytFuf+dvQJj8kFWj0OF2FBZ9w@mail.gmail.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Wed, 23 Feb 2022 21:48:59 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a2b_RtXkhQ2pwqbZ1zz6QtjaWwD4em_MCF_wGXRwZirKA@mail.gmail.com>
+Message-ID: <CAK8P3a2b_RtXkhQ2pwqbZ1zz6QtjaWwD4em_MCF_wGXRwZirKA@mail.gmail.com>
+Subject: Re: [RFC PATCH 03/13] usb: remove the usage of the list iterator
+ after the loop
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Jakob <jakobkoschel@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
+        Cristiano Giuffrida <c.giuffrida@vu.nl>,
+        "Bos, H.J." <h.j.bos@vu.nl>, Nathan Chancellor <nathan@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:cjkUysxlJscg26BdLEqvQDwPBkRPWuqIBWReqtQZ15RnMmjfj5A
+ FReQE+scpfMJKfK1nSKyO3B+N6OnxYFTXnwyAGB2Eobvu65WBoTlkEx+RaGqyBuqmR2p2vV
+ yt/yJUMtHyZBsuwj2WOWK7cq4UvbcFFPdKOLJimz3wd3kC8J5tiqJYItu3+WU41vGpRkQe8
+ 4AKDYq3OmeMc1vKbCm/pQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:3MLiFAkrs2E=:9Tf5B1NU3+YtBT74Jx1q64
+ +JNlxJdngVHLKPENxJcTq5Wy3AYtzwF4uAUGLkZluOndrX+1cQMcH770BO+fVqcqBO26KxcPT
+ wyTqxnko6GWoBQTzIL9OPjmZOQvb+TK9bc4KZOoR4AA+OI3eHfw44TcIeHBxcKH+rg5L6j08Z
+ byvTUW/r0foAa9S7xniGGPclGJbRAo9Rt65aRhepIR3u6cX+nBC8EGEwYbULFBSY47bjs8Tu4
+ Nsftv/BOYuHaqOg5JZ9lw5GIcPpE/2TJAtJFej3Qo9qrQ/lgPE5/NL9nIK05Mdh2dwRso5NeS
+ oS0lMKJlef/2jlC3KpDLdHS1l8Eh5SFjHbih8rO+PPz/bZBNgmgpbLQl4RbWZsrJK8yBgGZVz
+ I+/kUp4XoILQjQus/654TzbeXD3gmbAQg7zSp90wnSwAu4IfRFQi2eexMSRXXwLDrBYimTxlf
+ CD3P9+peR8lw56EoUky+dIpS65Rk5st8cXXx5toWhkRQsS3kAo1a6xfr5K0Pk2HQWQ3nAdT4A
+ PT2cUspSW+Xy6SjqBHqGHhsFsaCqhURKoy+m85RfsYlyk1vsRdxek4MEKeoCvMAoEf0huRxsh
+ 4ipSZexpkrm2sa7rSwN1Rp0OQ0UEYleXjlooqO543a0xxEyZNXWcgP+STje3pD8NSplL27It5
+ 9t4EEUaO8LNjPNZrEIO0sioyXo/A+nVLBsjPas7XBp/0JEYV5buwvjqWF5TjDZAj50ZoO3krV
+ l2YIuoYkD7ntHXD3AmN/5O2kzuQQLQ75/dE17re9G0hm9RC0vpflONqoAyocfXoY+NtFEvsuf
+ JkpUxd7y1Nqo6vDBmavUOSrAJdldpeQXFmdSlq6SGH7U61Anp4=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/02/22 04:33AM, Tudor Ambarus wrote:
-> There are manufacturers that use registers indexed by address. Some of
-> them support "read/write any register" opcodes. Provide core methods that
-> can be used by all manufacturers. SPI NOR controller ops are intentionally
-> not supported as we intend to move all the SPI NOR controller drivers
-> under the SPI subsystem.
-> 
-> Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
-> ---
->  drivers/mtd/spi-nor/core.c | 41 ++++++++++++++++++++++++++++++++++++++
->  drivers/mtd/spi-nor/core.h |  4 ++++
->  2 files changed, 45 insertions(+)
-> 
-> diff --git a/drivers/mtd/spi-nor/core.c b/drivers/mtd/spi-nor/core.c
-> index 7d5e3acb0ae7..d394179689e6 100644
-> --- a/drivers/mtd/spi-nor/core.c
-> +++ b/drivers/mtd/spi-nor/core.c
-> @@ -307,6 +307,47 @@ ssize_t spi_nor_write_data(struct spi_nor *nor, loff_t to, size_t len,
->  	return nor->controller_ops->write(nor, to, len, buf);
->  }
->  
-> +/**
-> + * spi_nor_read_reg() - read register to flash memory
+On Wed, Feb 23, 2022 at 9:43 PM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+>
+> On Wed, Feb 23, 2022 at 12:25 PM Arnd Bergmann <arnd@arndb.de> wrote:
+> >
+> > I looked at the gcc documentation for this flag, and it tells me that
+> > it's default-enabled for std=c99 or higher. Turning it on for --std=gnu89
+> > shows the same warning, so at least it doesn't sound like the actual
+> > behavior changed, only the warning output. clang does not warn
+> > for this code at all, regardless of the --std= flag.
+>
+> Ok, so we should be able to basically convert '--std=gnu89' into
+> '--std=gnu11 -Wno-shift-negative-value' with no expected change of
+> behavior.
 
-Nitpick: s/to/from/ ?
+Yes, I think that is correct.
 
-> + * @nor:        pointer to 'struct spi_nor'.
-> + * @op:		SPI memory operation. op->data.buf must be DMA-able.
-> + * @proto:	SPI protocol to use for the register operation.
-> + *
-> + * Return: zero on success, -errno otherwise
-> + */
-> +int spi_nor_read_reg(struct spi_nor *nor, struct spi_mem_op *op,
-> +		     enum spi_nor_protocol proto)
-> +{
-> +	if (!nor->spimem)
-> +		return -EOPNOTSUPP;
-> +
-> +	spi_nor_spimem_setup_op(nor, op, proto);
-> +	return spi_nor_spimem_exec_op(nor, op);
-> +}
-> +
-> +/**
-> + * spi_nor_write_reg() - write register to flash memory
-> + * @nor:        pointer to 'struct spi_nor'
-> + * @op:		SPI memory operation. op->data.buf must be DMA-able.
-> + * @proto:	SPI protocol to use for the register operation.
-> + *
-> + * Return: zero on success, -errno otherwise
-> + */
-> +int spi_nor_write_reg(struct spi_nor *nor, struct spi_mem_op *op,
-> +		      enum spi_nor_protocol proto)
-> +{
-> +	int ret;
-> +
-> +	if (!nor->spimem)
-> +		return -EOPNOTSUPP;
-> +
-> +	ret = spi_nor_write_enable(nor);
-> +	if (ret)
-> +		return ret;
+> Of course, maybe we need to make -Wno-shift-negative-value be
+> conditional on the compiler supporting it in the first place?
 
-Nitpick: Add a blank line here.
+I think they all do. I discussed this with Nathan Chancellor on IRC, to
+see what clang does, and he points out that the warning was made
+conditional on -fwrapv there a while ago:
 
-> +	spi_nor_spimem_setup_op(nor, op, proto);
-> +	return spi_nor_spimem_exec_op(nor, op);
-> +}
-> +
->  /**
->   * spi_nor_write_enable() - Set write enable latch with Write Enable command.
->   * @nor:	pointer to 'struct spi_nor'.
-> diff --git a/drivers/mtd/spi-nor/core.h b/drivers/mtd/spi-nor/core.h
-> index cbfb4fa7647f..c728454b5424 100644
-> --- a/drivers/mtd/spi-nor/core.h
-> +++ b/drivers/mtd/spi-nor/core.h
-> @@ -578,6 +578,10 @@ ssize_t spi_nor_read_data(struct spi_nor *nor, loff_t from, size_t len,
->  			  u8 *buf);
->  ssize_t spi_nor_write_data(struct spi_nor *nor, loff_t to, size_t len,
->  			   const u8 *buf);
-> +int spi_nor_read_reg(struct spi_nor *nor, struct spi_mem_op *op,
-> +		     enum spi_nor_protocol proto);
-> +int spi_nor_write_reg(struct spi_nor *nor, struct spi_mem_op *op,
-> +		      enum spi_nor_protocol proto);
->  int spi_nor_erase_sector(struct spi_nor *nor, u32 addr);
->  
->  int spi_nor_otp_read_secr(struct spi_nor *nor, loff_t addr, size_t len, u8 *buf);
+https://github.com/llvm/llvm-project/commit/59802321785b4b9fc31b10456c62ba3a06d3a631
 
-Reviewed-by: Pratyush Yadav <p.yadav@ti.com>
+So the normal behavior on clang is to always warn about it, but since
+we explicitly ask for sane signed integer behavior, it doesn't warn for
+the kernel.
 
--- 
-Regards,
-Pratyush Yadav
-Texas Instruments Inc.
+        Arnd

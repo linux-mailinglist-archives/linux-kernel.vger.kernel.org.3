@@ -2,153 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D223D4C1A34
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 18:50:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 045184C1A3B
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 18:51:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243534AbiBWRuv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 12:50:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43868 "EHLO
+        id S240455AbiBWRvx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 12:51:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237008AbiBWRus (ORCPT
+        with ESMTP id S237008AbiBWRvt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 12:50:48 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ACC35FF7;
-        Wed, 23 Feb 2022 09:50:19 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EC1FD61470;
-        Wed, 23 Feb 2022 17:50:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D6BBC340F0;
-        Wed, 23 Feb 2022 17:50:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645638618;
-        bh=tlGfAuQ/IMqnIqCvJXqfuyQ+e69E/QZS0Z5cZBeqpE8=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=bh21cG5LASljj+iTvs99EC8JUuAQtfLwUEc0e+65NH1U3Uo4I/ED6ZvGFkYaZzu/K
-         OHqcyfw8UzkHRfZPvXTYy0LPmIe6Tfv8XEHmpvCxrW/tNkZD4K1pG/1Mdixg6iQ5Ks
-         MOrP7WgTgmC04jthUlXOCNtsoPlTnXkTq+dVkRTS/8fUSfTm5BtOEPJHRAaLgV/5cz
-         6mrmtttvKn9ufUbIw1FNAF9+Y1weqJ9hg4898GTrxcnRxoXLBXRx1tp7BCw/6c/w/O
-         7CKucBDo2o4ctGU1E/S2MXlrPzpIyxvpFtcNr82fro0rKZ3aLg5vRIGnOXN5dAM91w
-         jyeOJoiq2FhXw==
-Date:   Wed, 23 Feb 2022 11:50:16 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Richard Zhu <hongxing.zhu@nxp.com>
-Cc:     l.stach@pengutronix.de, bhelgaas@google.com, broonie@kernel.org,
-        lorenzo.pieralisi@arm.com, jingoohan1@gmail.com,
-        festevam@gmail.com, francesco.dolcini@toradex.com,
-        linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, kernel@pengutronix.de,
-        linux-imx@nxp.com
-Subject: Re: [PATCH v7 7/8] PCI: imx6: Disable enabled clocks and regulators
- after link is down
-Message-ID: <20220223175016.GA140091@bhelgaas>
+        Wed, 23 Feb 2022 12:51:49 -0500
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F074826CA
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 09:51:20 -0800 (PST)
+Received: by mail-lj1-x22b.google.com with SMTP id o6so25823401ljp.3
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 09:51:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=RrdEVsjsD+nqXmQqBvUEIQg+R+7+UWVmueHZbvxi/fY=;
+        b=HrqUskcTi7myVyE20lUHGxJ5Cbqhrcee6XGl5vkm8NnzpACCfPRFm/+h5jJFvLnJIH
+         J09n5gnVJYBhqvTpCNt326dmBcHXVR9YUWVcgJOUx74XOdS76Di+Wn+9quQYy+pi6ymr
+         AsBJ+RxttBSyKX71ZYQ6bNvnrcXsiJ1bMJZvziOq0mEDMa/C6SnANiHyPjCmlEDftBo/
+         /dmao04eFUAwrM4TWxdQ2+Jv6uDUNIJ/Y7xhQ5+9z5AGuZ7My4MfYahlXf0wQULDAW0S
+         WUl4lShCV5B1BEGM+itp8+KvXaDTINCwBbb3TuBr8OUEIxfhmCSDYRJNrwhzTrZlOXR8
+         AoMQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=RrdEVsjsD+nqXmQqBvUEIQg+R+7+UWVmueHZbvxi/fY=;
+        b=n+ItAJm6nux2N6k2MyL4YR6YWbCHvqaajXDk6OxQ67SdC2qenUjuLmnqEc9KpPlQ94
+         zVKuQt9dDGBM2HP0kNVUyQ68AcF9C8A7eSOA83I+5dVEMlbo4XZA1wXQPbqUe4pVZ/ie
+         r/n6KG5cDOfIdeI5eVc/+oAcCyg7HnMnZsmxutDPkOkBZT6yCtEESBXTMB3cUs6R8P7C
+         xmWCPBCOfj04WHUDJ19FnPmdNVdBN+5nWO8Kg7WplVXxWzCIAzNTCzOLFom/fOjgwMrH
+         YLP8/DSwBGBmBjEtHBQFwp2DB+cTdrpgTSgu6Wed1F9NmpTYmgBMU+L5uJV7JrLslrzP
+         knGA==
+X-Gm-Message-State: AOAM530seRPk0tK/hN00J4flKrnxvtSZBRvfsxe9pPw9WSOig9IEvNE9
+        Q3Ll19gZ3ynxSAvajKjQb+GQ1vWF1U27YD9UJLq5hw==
+X-Google-Smtp-Source: ABdhPJyy2+PbEHWjK5m1pGy4RMoMiz8/1ddYOLWwa6WdZj216uctOj7fPykTeNcuWhj9vtR5ujN+1LSrAt9hQfe4l5g=
+X-Received: by 2002:a2e:b78f:0:b0:246:6331:c1bc with SMTP id
+ n15-20020a2eb78f000000b002466331c1bcmr378483ljo.188.1645638679148; Wed, 23
+ Feb 2022 09:51:19 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1644992463-14467-8-git-send-email-hongxing.zhu@nxp.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220218181950.1438236-1-jannh@google.com> <8D85619E-99BD-4DB5-BDDB-A205B057C910@chromium.org>
+In-Reply-To: <8D85619E-99BD-4DB5-BDDB-A205B057C910@chromium.org>
+From:   Jann Horn <jannh@google.com>
+Date:   Wed, 23 Feb 2022 18:50:52 +0100
+Message-ID: <CAG48ez0UJDBzoaB4=c0Uju6L-eZvhWMdnzAp8N3QfeERbzYv2w@mail.gmail.com>
+Subject: Re: [PATCH v2] pstore: Don't use semaphores in always-atomic-context code
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Anton Vorontsov <anton@enomsg.org>,
+        Colin Cross <ccross@android.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In subject,
+On Wed, Feb 23, 2022 at 8:50 AM Kees Cook <keescook@chromium.org> wrote:
+> On February 18, 2022 10:19:50 AM PST, Jann Horn <jannh@google.com> wrote:
+> >pstore_dump() is *always* invoked in atomic context (nowadays in an RCU
+> >read-side critical section, before that under a spinlock).
+> >It doesn't make sense to try to use semaphores here.
+>
+> Ah, very nice. Thanks for the analysis!
+>
+> >[...]
+> >-static bool pstore_cannot_wait(enum kmsg_dump_reason reason)
+> >+bool pstore_cannot_block_path(enum kmsg_dump_reason reason)
+>
+> Why the rename,
 
-s/Disable enabled clocks/Disable clocks/
+That's one of the parts of commit ea84b580b955 that I included in the
+revert. "wait" in the name is not accurate, since "wait" in the kernel
+normally refers to scheduling away until some condition is fulfilled.
+(Though I guess "block" also isn't the best name either... idk.) The
+place where we might want to have different behavior depending on
+whether we're handling a kernel crash are spinlocks; during a kernel
+crash, we shouldn't deadlock on them, but otherwise, AFAIK it's fine
+to block on them.
 
-On Wed, Feb 16, 2022 at 02:21:02PM +0800, Richard Zhu wrote:
-> Since i.MX PCIe doesn't support the hot-plug, and to save power
-> consumption as much as possible. Return error and disable the enabled
-> clocks and regulators when link is down,.
+> extern, and EXPORT? This appears to still only have the same single caller?
 
-Maybe:
+Also part of the revert. I figured it might make sense to also revert
+that part because:
 
-  Since i.MX PCIe doesn't support hot-plug, reduce power consumption
-  as much as possible by disabling clocks and regulators and returning
-  error when the link is down.
+With this commit applied, the EFI code will always take the "nonblock"
+path for now, but that's kinda suboptimal; on some platforms the
+"blocking" path uses a semaphore, so we really can't take that, but on
+x86 it uses a spinlock, which we could block on if we're not oopsing.
+We could avoid needlessly losing non-crash dmesg dumps there; I don't
+know whether we care about that though.
 
-> Add a new host_exit() callback for i.MX PCIe driver to disable the
-> enabled clocks, regulators and so on in the error handling after
-> host_init is finished.
-> 
-> Signed-off-by: Richard Zhu <hongxing.zhu@nxp.com>
-> ---
->  drivers/pci/controller/dwc/pci-imx6.c | 30 ++++++++++++++++++++++++---
->  1 file changed, 27 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/pci/controller/dwc/pci-imx6.c b/drivers/pci/controller/dwc/pci-imx6.c
-> index 242d8ef73c1e..fe671e88ec93 100644
-> --- a/drivers/pci/controller/dwc/pci-imx6.c
-> +++ b/drivers/pci/controller/dwc/pci-imx6.c
-> @@ -848,7 +848,9 @@ static int imx6_pcie_start_link(struct dw_pcie *pci)
->  	/* Start LTSSM. */
->  	imx6_pcie_ltssm_enable(dev);
->  
-> -	dw_pcie_wait_for_link(pci);
-> +	ret = dw_pcie_wait_for_link(pci);
-> +	if (ret)
-> +		goto err_reset_phy;
+So I figured that we might want to start adding new callers to this
+later on. But if you want, I'll remove that part of the revert and
+resend?
 
-These labels look wrong now, since you no longer reset the PHY at
-err_reset_phy.
+> > [...]
+> >-                      pr_err("dump skipped in %s path: may corrupt error record\n",
+> >-                              in_nmi() ? "NMI" : why);
+> >-                      return;
+> >-              }
+> >-              if (down_interruptible(&psinfo->buf_lock)) {
+> >-                      pr_err("could not grab semaphore?!\n");
+> >+      if (pstore_cannot_block_path(reason)) {
+> >+              if (!spin_trylock_irqsave(&psinfo->buf_lock, flags)) {
+> >+                      pr_err("dump skipped in %s path because of concurrent dump\n"
+> >+                                     , in_nmi() ? "NMI" : why);
+>
+> The pr_err had the comma following the format string moved,
 
->  	if (pci->link_gen == 2) {
->  		/* Allow Gen2 mode after the link is up. */
-> @@ -884,7 +886,9 @@ static int imx6_pcie_start_link(struct dw_pcie *pci)
->  		}
->  
->  		/* Make sure link training is finished as well! */
-> -		dw_pcie_wait_for_link(pci);
-> +		ret = dw_pcie_wait_for_link(pci);
-> +		if (ret)
-> +			goto err_reset_phy;
->  	} else {
->  		dev_info(dev, "Link: Gen2 disabled\n");
->  	}
-> @@ -897,7 +901,6 @@ static int imx6_pcie_start_link(struct dw_pcie *pci)
->  	dev_dbg(dev, "PHY DEBUG_R0=0x%08x DEBUG_R1=0x%08x\n",
->  		dw_pcie_readl_dbi(pci, PCIE_PORT_DEBUG0),
->  		dw_pcie_readl_dbi(pci, PCIE_PORT_DEBUG1));
-> -	imx6_pcie_reset_phy(imx6_pcie);
->  	return ret;
->  }
->  
-> @@ -921,8 +924,29 @@ static int imx6_pcie_host_init(struct pcie_port *pp)
->  	return 0;
->  }
->  
-> +static void imx6_pcie_host_exit(struct pcie_port *pp)
-> +{
-> +	struct dw_pcie *pci = to_dw_pcie_from_pp(pp);
-> +	struct device *dev = pci->dev;
-> +	struct imx6_pcie *imx6_pcie = to_imx6_pcie(pci);
-> +
-> +	imx6_pcie_reset_phy(imx6_pcie);
-> +	imx6_pcie_clk_disable(imx6_pcie);
-> +	switch (imx6_pcie->drvdata->variant) {
-> +	case IMX8MM:
-> +		if (phy_power_off(imx6_pcie->phy))
-> +			dev_err(dev, "unable to power off phy\n");
-> +		break;
-> +	default:
-> +		break;
-> +	}
-> +	if (imx6_pcie->vpcie)
-> +		regulator_disable(imx6_pcie->vpcie);
-> +}
-> +
->  static const struct dw_pcie_host_ops imx6_pcie_host_ops = {
->  	.host_init = imx6_pcie_host_init,
-> +	.host_exit = imx6_pcie_host_exit,
->  };
->  
->  static const struct dw_pcie_ops dw_pcie_ops = {
-> -- 
-> 2.25.1
-> 
+Ah, whoops, that was also part of the revert, but I guess I should
+have left that part out...
+
+> and the note about corruption removed. Is that no longer accurate?
+
+There should be no more corruption since commit 959217c84c27 ("pstore:
+Actually give up during locking failure") - if we're bailing out, we
+can't be causing corruption, I believe?

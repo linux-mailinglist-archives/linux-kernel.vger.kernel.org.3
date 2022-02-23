@@ -2,154 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E5044C1B42
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 19:57:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 70B484C1B3D
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 19:56:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244079AbiBWS5I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 13:57:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42758 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244075AbiBWS5E (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S238686AbiBWS5E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Wed, 23 Feb 2022 13:57:04 -0500
-Received: from m43-7.mailgun.net (m43-7.mailgun.net [69.72.43.7])
-        by lindbergh.monkeyblade.net (Postfix) with UTF8SMTPS id 152EC5F91
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 10:56:35 -0800 (PST)
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1645642595; h=References: In-Reply-To: Message-Id: Date:
- Subject: Cc: To: From: Sender;
- bh=mAAs8h+YuRWo6ZgSk4LFZw8uJ0x4NrY9wyEzkcVXIRQ=; b=bIPmxQNN3Ud4K5tLdVw1p/yW/E8PFyhcGRMgEgI2nDrs0wYKYVsZOVKPV2NlSlh03A92SxDT
- L63GQErSEbw+qaXW3rbz3FOHDtKSGR5E6MDvlTPLBlQpKO/gOYz9E0Mq87FPP/khF/39pAxj
- rLYFClziVOM7PvY35U7oHPPNqOQ=
-X-Mailgun-Sending-Ip: 69.72.43.7
-X-Mailgun-Sid: WyI0MWYwYSIsICJsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n04.prod.us-west-2.postgun.com with SMTP id
- 62168362d099c7c4e302f86d (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Wed, 23 Feb 2022 18:56:34
- GMT
-Sender: tdas=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 57351C43616; Wed, 23 Feb 2022 18:56:34 +0000 (UTC)
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42634 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244070AbiBWS5C (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 23 Feb 2022 13:57:02 -0500
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D250338AD
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 10:56:33 -0800 (PST)
+Received: by mail-pf1-x42d.google.com with SMTP id z15so10489163pfe.7
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 10:56:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=WO10LZXV2/UIWFExeWc5y4Axog2LtDZPkQsLOSvWfIQ=;
+        b=D8TkVS0SFNlR75Wec0ztTxmXYaKBMsKoUqb/Nhs2hNUiK/oaDz71s6bWwqHwBV1Wjz
+         cslgksXqAs492hjk4W5fOe6HJmIx2jOGr42dklLADLnuAj6O7rlxzR4je1EbsPrOP8wk
+         weGsjLeFnSuR/7vT+UaNHlsfv8241RQA0ZB5g3tenBZ3jhcHWHEPO1lvjP6HPgoGmptr
+         iscT1tlwsb64dhL/wSDAaCJ/0x3uLXRTToo1xd1dpg2OSIUJMis8ITDrAWCTvY2C72SG
+         xThZMVdYqHwxBZkQnHbX5lJxFn9v35CY9ZtkqKIMMIPzO/6GSf6aJeMr/VWZ4lkhrzKF
+         +BNg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=WO10LZXV2/UIWFExeWc5y4Axog2LtDZPkQsLOSvWfIQ=;
+        b=tnx9hqtQbeZFejEKta4pYejGphaDe1TU/E5K6VeYdUiteErihu/+VLWrEurlQcMvzX
+         Qul3kIDf4bvRL2oty++eFFjcB0u/BIeD4w9/gHB43MiyWQjLl5OZui1F57OKhxPwE3sO
+         ZXwlAktU+MP/KLJWyUyQ1ZMgynX3KVuuR70sN9fYMNEfWZx8asDrWuZDbyyrZOYuMVxa
+         t11agQ0X7iujWDo6Yj6ILC6zi1vWNV6bMfZqGQu7FkBT6NS2cND0p7U5rR2UqvXfPZk2
+         R+xF2CB8OntL/Y/Kjc2s1YY/MYgTuUPupsYzfB6NW0nYdc7YKc6F6eiDcSqBZrkmrj28
+         hW9w==
+X-Gm-Message-State: AOAM532gBStfYfKp9jHdAu7zbu4paMN19MUABTl3g/qDk4CMI2EPsAO8
+        KpEv/OcNC/Fp+yNV5TPzKKfq7WjF4qfzXw==
+X-Google-Smtp-Source: ABdhPJxWzseRIGwjKlr0g3XO7WPLxpsY657PyUA0i4zsqM9a8QWHzQK5Zdw5cIoRSvIs8eDmqn0I2g==
+X-Received: by 2002:a63:31ce:0:b0:34e:4052:1bce with SMTP id x197-20020a6331ce000000b0034e40521bcemr735240pgx.459.1645642592668;
+        Wed, 23 Feb 2022 10:56:32 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id i11sm231887pgs.58.2022.02.23.10.56.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Feb 2022 10:56:31 -0800 (PST)
+Date:   Wed, 23 Feb 2022 18:56:28 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Like Xu <like.xu.linux@gmail.com>
+Subject: Re: [PATCH] KVM: x86: Fix pointer mistmatch warning when patching
+ RET0 static calls
+Message-ID: <YhaDXDfLBQtkmbtV@google.com>
+References: <20220223162355.3174907-1-seanjc@google.com>
+ <YhZuk8eA6rsDuJkd@dev-arch.archlinux-ax161>
+ <YhZ16cMMcHQIvS9d@google.com>
+ <YhZ5Q8DNoGGWUBLh@dev-arch.archlinux-ax161>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <YhZ5Q8DNoGGWUBLh@dev-arch.archlinux-ax161>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
-Received: from hu-tdas-hyd.qualcomm.com (unknown [202.46.22.19])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: tdas)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 5627EC4338F;
-        Wed, 23 Feb 2022 18:56:31 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.codeaurora.org 5627EC4338F
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=codeaurora.org
-From:   Taniya Das <tdas@codeaurora.org>
-To:     Stephen Boyd <sboyd@kernel.org>,
-        =?UTF-8?q?Michael=20Turquette=20=C2=A0?= <mturquette@baylibre.com>
-Cc:     Rajendra Nayak <rnayak@codeaurora.org>,
-        linux-arm-msm@vger.kernel.org, linux-soc@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Taniya Das <tdas@codeaurora.org>
-Subject: [v2 2/2] clk: qcom: dispcc: Update the transition delay for MDSS GDSC
-Date:   Thu, 24 Feb 2022 00:26:06 +0530
-Message-Id: <20220223185606.3941-2-tdas@codeaurora.org>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220223185606.3941-1-tdas@codeaurora.org>
-References: <20220223185606.3941-1-tdas@codeaurora.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On SC7180 we observe black screens because the gdsc is being
-enabled/disabled very rapidly and the GDSC FSM state does not work as
-expected. This is due to the fact that the GDSC reset value is being
-updated from SW.
+On Wed, Feb 23, 2022, Nathan Chancellor wrote:
+> On Wed, Feb 23, 2022 at 05:59:05PM +0000, Sean Christopherson wrote:
+> > On Wed, Feb 23, 2022, Nathan Chancellor wrote:
+> > > Hi Sean,
+> > > 
+> > > On Wed, Feb 23, 2022 at 04:23:55PM +0000, Sean Christopherson wrote:
+> > > > Cast kvm_x86_ops.func to 'void *' when updating KVM static calls that are
+> > > > conditionally patched to __static_call_return0().  clang complains about
+> > > > using mismatching pointers in the ternary operator, which breaks the
+> > > > build when compiling with CONFIG_KVM_WERROR=y.
+> > > > 
+> > > >   >> arch/x86/include/asm/kvm-x86-ops.h:82:1: warning: pointer type mismatch
+> > > >   ('bool (*)(struct kvm_vcpu *)' and 'void *') [-Wpointer-type-mismatch]
+> > > > 
+> > > > Fixes: 5be2226f417d ("KVM: x86: allow defining return-0 static calls")
+> > > > Reported-by: Like Xu <like.xu.linux@gmail.com>
+> > > > Reported-by: kernel test robot <lkp@intel.com>
+> > > > Signed-off-by: Sean Christopherson <seanjc@google.com>
+> > > 
+> > > Thank you for the patch! Is this a bug in clang?
+> > 
+> > IMO, no.  I think it's completely reasonable for the compiler to complain that KVM
+> > is generating two different pointer types out of a ternary operator.
+> > 
+> > clang is somewhat inconsistent, though it may be deliberate.  clang doesn't complain
+> > about implicitly casting a 'void *' to another data type, e.g. this complies clean,
+> > where "data" is a 'void *'
+> > 
+> > 	struct kvm_vcpu *x = vcpu ? : data;
+> 
+> Right, I would assume this is deliberate. I think warning in this case
+> might be quite noisy, as the kernel implicitly converts 'void *' to
+> typed pointers for certain function pointer callbacks (although this
+> particular case is probably pretty rare).
 
-The recommended transition delay for mdss core gdsc updated for
-SC7180/SC7280/SM8250.
+Aha!  Looks like clang's behavior is correct, assuming a function is not considered
+an "object".  From C99 "6.5.15 Conditional operator":
 
-Fixes: dd3d06622138 ("clk: qcom: Add display clock controller driver for SC7180")
-Fixes: 1a00c962f9cd ("clk: qcom: Add display clock controller driver for SC7280")
-Fixes: 80a18f4a8567 ("clk: qcom: Add display clock controller driver for SM8150 and SM8250")
-Signed-off-by: Taniya Das <tdas@codeaurora.org>
----
- drivers/clk/qcom/dispcc-sc7180.c | 5 ++++-
- drivers/clk/qcom/dispcc-sc7280.c | 5 ++++-
- drivers/clk/qcom/dispcc-sm8250.c | 5 ++++-
- 3 files changed, 12 insertions(+), 3 deletions(-)
+  One of the following shall hold for the second and third operands:
+    — both operands have arithmetic type;
+    — both operands have the same structure or union type;
+    — both operands have void type;
+    — both operands are pointers to qualified or unqualified versions of compatible types;
+    — one operand is a pointer and the other is a null pointer constant; or
+    — one operand is a pointer to an object or incomplete type and the other is a pointer to a
+      qualified or unqualified version of void.
 
-diff --git a/drivers/clk/qcom/dispcc-sc7180.c b/drivers/clk/qcom/dispcc-sc7180.c
-index 538e4963c915..0261eb044b7c 100644
---- a/drivers/clk/qcom/dispcc-sc7180.c
-+++ b/drivers/clk/qcom/dispcc-sc7180.c
-@@ -1,6 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0-only
- /*
-- * Copyright (c) 2019, The Linux Foundation. All rights reserved.
-+ * Copyright (c) 2019, 2022, The Linux Foundation. All rights reserved.
-  */
-
- #include <linux/clk-provider.h>
-@@ -625,6 +625,9 @@ static struct clk_branch disp_cc_mdss_vsync_clk = {
-
- static struct gdsc mdss_gdsc = {
- 	.gdscr = 0x3000,
-+	.en_rest_wait_val = 0x2,
-+	.en_few_wait_val = 0x2,
-+	.clk_dis_wait_val = 0xF,
- 	.pd = {
- 		.name = "mdss_gdsc",
- 	},
-diff --git a/drivers/clk/qcom/dispcc-sc7280.c b/drivers/clk/qcom/dispcc-sc7280.c
-index 4ef4ae231794..396339e19f65 100644
---- a/drivers/clk/qcom/dispcc-sc7280.c
-+++ b/drivers/clk/qcom/dispcc-sc7280.c
-@@ -1,6 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0-only
- /*
-- * Copyright (c) 2021, The Linux Foundation. All rights reserved.
-+ * Copyright (c) 2021-2022, The Linux Foundation. All rights reserved.
-  */
-
- #include <linux/clk-provider.h>
-@@ -787,6 +787,9 @@ static struct clk_branch disp_cc_sleep_clk = {
-
- static struct gdsc disp_cc_mdss_core_gdsc = {
- 	.gdscr = 0x1004,
-+	.en_rest_wait_val = 0x2,
-+	.en_few_wait_val = 0x2,
-+	.clk_dis_wait_val = 0xF,
- 	.pd = {
- 		.name = "disp_cc_mdss_core_gdsc",
- 	},
-diff --git a/drivers/clk/qcom/dispcc-sm8250.c b/drivers/clk/qcom/dispcc-sm8250.c
-index 566fdfa0a15b..5afa037f77d5 100644
---- a/drivers/clk/qcom/dispcc-sm8250.c
-+++ b/drivers/clk/qcom/dispcc-sm8250.c
-@@ -1,6 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0
- /*
-- * Copyright (c) 2018-2020, The Linux Foundation. All rights reserved.
-+ * Copyright (c) 2018-2020, 2022, The Linux Foundation. All rights reserved.
-  */
-
- #include <linux/clk-provider.h>
-@@ -1126,6 +1126,9 @@ static struct clk_branch disp_cc_mdss_vsync_clk = {
-
- static struct gdsc mdss_gdsc = {
- 	.gdscr = 0x3000,
-+	.en_rest_wait_val = 0x2,
-+	.en_few_wait_val = 0x2,
-+	.clk_dis_wait_val = 0xF,
- 	.pd = {
- 		.name = "mdss_gdsc",
- 	},
---
-Qualcomm INDIA, on behalf of Qualcomm Innovation Center, Inc.is a member
-of the Code Aurora Forum, hosted by the  Linux Foundation.
-
+That last case would explain why clang warns about a function pointer but not a
+object pointer when the third operand is a 'void *'.

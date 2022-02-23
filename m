@@ -2,61 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 532D04C1D3F
+	by mail.lfdr.de (Postfix) with ESMTP id 9F3584C1D40
 	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 21:39:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241439AbiBWUjY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 15:39:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37764 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234184AbiBWUjS (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S241420AbiBWUjS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Wed, 23 Feb 2022 15:39:18 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7C8547AD9
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 12:38:50 -0800 (PST)
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37742 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234184AbiBWUjQ (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 23 Feb 2022 15:39:16 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E34747AD9
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 12:38:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645648730; x=1677184730;
+  t=1645648728; x=1677184728;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=BU0GOWTUhF9yJXXVIV+UeYaKiM/2sV3bpXc7BZH9FDo=;
-  b=f3rVht9IhkymHkC1YIqwnhhS28KhgIOD7VvAtZuPRGg8kHovoHMB8xvD
-   tbNnJcHKWqz7KBOeQp6yjtLrQwq1GMYU+secMepBhYr1G4NKJdAvq8w8k
-   E9zeRGaaHRLg0K/bJKJYT83NGKrVxXMgDBAckSkOg0YaiMb+rgdW7WBpt
-   2u5pYlkgDNOqvJyuOQVewkuPm+8ALUGTpSd97NrkXIIm1/lzV6U5DbJ/2
-   gK9/grTI8b3cnxIIC7SBxVniIJApnmSbjkLPlmSvn6iLdkG3QfZs5XE8R
-   s0RcKJlX6r0EAnXiYJFoZGIECYbaYF+NjjxpIPDqDTdXZ9Kto34/dKCyT
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10267"; a="315302482"
+  bh=qxFtbjyZUFdMOJwr/SJELnPxdUNykssEMShYDlFHvlw=;
+  b=k6YfIt04ZorVX/EeeXWLg9mdQpq+RsaIIECLU9O2Wr1PuRgf1wIBuB36
+   u55Q8pyYPz2T1SwvrPkZXnthH9SsGtrM47rfumYiKmMTb5k9+DigM1Xax
+   qQQemCWVTFSUYFuNLSTstAQskZomJa+oqgEen/RKHJIp+mJblIixkPSym
+   sI8Byq7izTt4uV5HOrSJTgXH6bFuhtEkUU9kA7MOpEvnsNa9Rp2rNJWqt
+   ZpVFVx5DLDeSl35TKXS0UroT1gURHklSEJ7fdILu+8RPdbC7wQHw+DZ7y
+   XFK19nRWmBhV+c/tM187v1wXJsSZjwtdSb+EkqdL6j64X1lve466HpHM+
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10267"; a="232696893"
 X-IronPort-AV: E=Sophos;i="5.88,391,1635231600"; 
-   d="scan'208";a="315302482"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2022 12:38:50 -0800
+   d="scan'208";a="232696893"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2022 12:38:48 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,391,1635231600"; 
-   d="scan'208";a="591842134"
+   d="scan'208";a="684036559"
 Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 23 Feb 2022 12:38:47 -0800
+  by fmsmga001.fm.intel.com with ESMTP; 23 Feb 2022 12:38:47 -0800
 Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1nMyPO-0001oE-Q8; Wed, 23 Feb 2022 20:38:46 +0000
-Date:   Thu, 24 Feb 2022 04:38:32 +0800
+        id 1nMyPO-0001oG-Rn; Wed, 23 Feb 2022 20:38:46 +0000
+Date:   Thu, 24 Feb 2022 04:38:36 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Quinn Tran <qutran@marvell.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Hannes Reinecke <hare@suse.de>,
-        Himanshu Madhani <himanshu.madhani@oracle.com>,
-        Larry Wisneski <Larry.Wisneski@marvell.com>,
-        Duane Grigsby <duane.grigsby@marvell.com>,
-        Rick Hicksted Jr <rhicksted@marvell.com>,
-        Nilesh Javali <njavali@marvell.com>
-Subject: drivers/scsi/qla2xxx/qla_edif_bsg.h:93:12: warning: field remote_pid
- within 'struct app_pinfo_req' is less aligned than 'port_id_t' and is
- usually due to 'struct app_pinfo_req' being packed, which can lead to
- unaligned accesses
-Message-ID: <202202240422.NUeO1V58-lkp@intel.com>
+To:     Hannes Reinecke <hare@suse.de>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [hare-scsi-devel:tls-upcall.v2 51/67] include/net/tls.h:363:1:
+ error: unknown type name 'key_ref_t'; did you mean 'key_ref_put'?
+Message-ID: <202202240430.qhweZYwe-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
@@ -71,64 +61,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Quinn,
-
-FYI, the error/warning still remains.
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   5c1ee569660d4a205dced9cb4d0306b907fb7599
-commit: 7878f22a2e03b69baf792f74488962981a1c9547 scsi: qla2xxx: edif: Add getfcinfo and statistic bsgs
-date:   7 months ago
-config: arm-randconfig-r033-20220223 (https://download.01.org/0day-ci/archive/20220224/202202240422.NUeO1V58-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/hare/scsi-devel.git tls-upcall.v2
+head:   ac729ea3c52bda460616c71d5f5fc47b2e64da6d
+commit: 5cfffd00ff4be23f0447069eb31ce2301a83d974 [51/67] net/tls: Add tls_key_lookup() and tls_key_refresh()
+config: um-i386_defconfig (https://download.01.org/0day-ci/archive/20220224/202202240430.qhweZYwe-lkp@intel.com/config)
+compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
 reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=7878f22a2e03b69baf792f74488962981a1c9547
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 7878f22a2e03b69baf792f74488962981a1c9547
+        # https://git.kernel.org/pub/scm/linux/kernel/git/hare/scsi-devel.git/commit/?id=5cfffd00ff4be23f0447069eb31ce2301a83d974
+        git remote add hare-scsi-devel https://git.kernel.org/pub/scm/linux/kernel/git/hare/scsi-devel.git
+        git fetch --no-tags hare-scsi-devel tls-upcall.v2
+        git checkout 5cfffd00ff4be23f0447069eb31ce2301a83d974
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/scsi/
+        make W=1 O=build_dir ARCH=um SUBARCH=i386 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   In file included from drivers/scsi/qla2xxx/qla_edif.c:6:
-   In file included from drivers/scsi/qla2xxx/qla_def.h:34:
-   include/uapi/scsi/scsi_bsg_fc.h:280:4: warning: field rqst_data within 'struct fc_bsg_request' is less aligned than 'union (unnamed union at include/uapi/scsi/scsi_bsg_fc.h:271:2)' and is usually due to 'struct fc_bsg_request' being packed, which can lead to unaligned accesses [-Wunaligned-access]
-           } rqst_data;
-             ^
-   In file included from drivers/scsi/qla2xxx/qla_edif.c:6:
-   In file included from drivers/scsi/qla2xxx/qla_def.h:74:
-   In file included from drivers/scsi/qla2xxx/qla_bsg.h:298:
->> drivers/scsi/qla2xxx/qla_edif_bsg.h:93:12: warning: field remote_pid within 'struct app_pinfo_req' is less aligned than 'port_id_t' and is usually due to 'struct app_pinfo_req' being packed, which can lead to unaligned accesses [-Wunaligned-access]
-           port_id_t remote_pid;
-                     ^
-   2 warnings generated.
+   In file included from net/core/filter.c:79:
+>> include/net/tls.h:363:1: error: unknown type name 'key_ref_t'; did you mean 'key_ref_put'?
+     363 | key_ref_t tls_key_refresh(char *identity, u8 *data, size_t data_len);
+         | ^~~~~~~~~
+         | key_ref_put
+   include/net/tls.h:364:1: error: unknown type name 'key_ref_t'; did you mean 'key_ref_put'?
+     364 | key_ref_t tls_key_lookup(char *identity);
+         | ^~~~~~~~~
+         | key_ref_put
 
 
-vim +93 drivers/scsi/qla2xxx/qla_edif_bsg.h
+vim +363 include/net/tls.h
 
-7ebb336e45ef1c Quinn Tran 2021-06-23  89  
-7ebb336e45ef1c Quinn Tran 2021-06-23  90  struct app_pinfo_req {
-7ebb336e45ef1c Quinn Tran 2021-06-23  91  	struct app_id app_info;
-7ebb336e45ef1c Quinn Tran 2021-06-23  92  	uint8_t	 num_ports;
-7ebb336e45ef1c Quinn Tran 2021-06-23 @93  	port_id_t remote_pid;
-7ebb336e45ef1c Quinn Tran 2021-06-23  94  	uint8_t	 reserved[VND_CMD_APP_RESERVED_SIZE];
-7ebb336e45ef1c Quinn Tran 2021-06-23  95  } __packed;
-7ebb336e45ef1c Quinn Tran 2021-06-23  96  
-
-:::::: The code at line 93 was first introduced by commit
-:::::: 7ebb336e45ef1ce23462c3bbd03779929008901f scsi: qla2xxx: edif: Add start + stop bsgs
-
-:::::: TO: Quinn Tran <qutran@marvell.com>
-:::::: CC: Martin K. Petersen <martin.petersen@oracle.com>
+   362	
+ > 363	key_ref_t tls_key_refresh(char *identity, u8 *data, size_t data_len);
+   364	key_ref_t tls_key_lookup(char *identity);
+   365	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation

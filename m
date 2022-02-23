@@ -2,165 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 157134C1638
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 16:12:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 51DE04C1644
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 16:14:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240966AbiBWPM6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 10:12:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49096 "EHLO
+        id S241137AbiBWPOy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 10:14:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232062AbiBWPMz (ORCPT
+        with ESMTP id S232062AbiBWPOx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 10:12:55 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61ABCB0C59;
-        Wed, 23 Feb 2022 07:12:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645629147; x=1677165147;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=qMarhxCBuuIazWT4M/7uzoNqED1lkqXiUG/trfcuqVE=;
-  b=PE2FJpbnD6Xu2K+83Sdc0GouKEG6toPvpwvx+FdskF8B6hJLX1PC4ZhT
-   oGsBtPJKPQ3MTo+aSKzlgEuVdhoC/Z11QzuIvz/yscuAWn3auANfaDvaw
-   x/dc1FbD7bl0wBLwqVCvHo7d1Pq8zg3riWOKaKm25LGisOSmoL3SFRnWh
-   dqMbCzMD3LOy0KxYXQErkSF/5Iai7yvs+Sd5OYalIoe0U5RjpwHNl26R8
-   TUs6nAO+WPgV6MA6No8QLIDzoNVZ9hHWoZRcDte/cVuhgxEdAEo35cAD0
-   HgPUXYTIcbOSCSge/mQ9Gz9854GVGUHNn3eyoYmdsfWc7cqaH8oD3Hg8e
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10266"; a="338421166"
-X-IronPort-AV: E=Sophos;i="5.88,391,1635231600"; 
-   d="scan'208";a="338421166"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2022 07:12:27 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,391,1635231600"; 
-   d="scan'208";a="628112855"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by FMSMGA003.fm.intel.com with ESMTP; 23 Feb 2022 07:12:25 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 3B30194; Wed, 23 Feb 2022 17:12:41 +0200 (EET)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Qing Wang <wangqing@vivo.com>
-Subject: [PATCH v3 1/1] serial: 8250_lpss: Balance reference count for PCI DMA device
-Date:   Wed, 23 Feb 2022 17:12:40 +0200
-Message-Id: <20220223151240.70248-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.34.1
+        Wed, 23 Feb 2022 10:14:53 -0500
+Received: from 189.cn (ptr.189.cn [183.61.185.102])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 50AE8B82DE;
+        Wed, 23 Feb 2022 07:14:23 -0800 (PST)
+HMM_SOURCE_IP: 10.64.8.31:44458.435332613
+HMM_ATTACHE_NUM: 0000
+HMM_SOURCE_TYPE: SMTP
+Received: from clientip-114.242.206.180 (unknown [10.64.8.31])
+        by 189.cn (HERMES) with SMTP id 30AE11001F7;
+        Wed, 23 Feb 2022 23:14:17 +0800 (CST)
+Received: from  ([114.242.206.180])
+        by gateway-151646-dep-b7fbf7d79-bwdqx with ESMTP id 90e95b07aa22426594cd3a88c70e7830 for maxime@cerno.tech;
+        Wed, 23 Feb 2022 23:14:21 CST
+X-Transaction-ID: 90e95b07aa22426594cd3a88c70e7830
+X-Real-From: 15330273260@189.cn
+X-Receive-IP: 114.242.206.180
+X-MEDUSA-Status: 0
+Sender: 15330273260@189.cn
+Message-ID: <0d4a75c4-78bb-4aed-0fa8-88e9cc165896@189.cn>
+Date:   Wed, 23 Feb 2022 23:14:12 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v10 3/4] drm/lsdc: add drm driver for loongson display
+ controller
+Content-Language: en-US
+To:     Maxime Ripard <maxime@cerno.tech>
+Cc:     Thomas Zimmermann <tzimmermann@suse.de>,
+        Roland Scheidegger <sroland@vmware.com>,
+        Zack Rusin <zackr@vmware.com>,
+        Christian Gmeiner <christian.gmeiner@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Ilia Mirkin <imirkin@alum.mit.edu>,
+        Qing Zhang <zhangqing@loongson.cn>,
+        suijingfeng <suijingfeng@loongson.cn>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Randy Dunlap <rdunlap@infradead.org>,
+        kernel test robot <lkp@intel.com>
+References: <20220220145554.117854-1-15330273260@189.cn>
+ <20220220145554.117854-4-15330273260@189.cn>
+ <20220222082747.66otrkc4zwvhem7w@houat>
+ <54ea69d7-2fac-74dc-2ef6-843a666cff85@189.cn>
+ <20220223143912.m727fie3vtdkvklo@houat>
+From:   Sui Jingfeng <15330273260@189.cn>
+In-Reply-To: <20220223143912.m727fie3vtdkvklo@houat>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FROM_LOCAL_DIGITS,
+        FROM_LOCAL_HEX,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pci_get_slot() increases its reference count, the caller
-must decrement the reference count by calling pci_dev_put().
 
-Fixes: 9a1870ce812e ("serial: 8250: don't use slave_id of dma_slave_config")
-Depends-on: a13e19cf3dc1 ("serial: 8250_lpss: split LPSS driver to separate module")
-Reported-by: Qing Wang <wangqing@vivo.com>
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
-v3: split out as independent patch from the series (the rest is under discussion)
- drivers/tty/serial/8250/8250_lpss.c | 28 ++++++++++++++++++++++------
- 1 file changed, 22 insertions(+), 6 deletions(-)
+On 2022/2/23 22:39, Maxime Ripard wrote:
+> On Tue, Feb 22, 2022 at 10:46:35PM +0800, Sui Jingfeng wrote:
+>> On 2022/2/22 16:27, Maxime Ripard wrote:
+>>>> +	if (!of_device_is_available(output)) {
+>>>> +		of_node_put(output);
+>>>> +		drm_info(ddev, "connector%d is not available\n", index);
+>>>> +		return NULL;
+>>>> +	}
+>>>> +
+>>>> +	disp_tims_np = of_get_child_by_name(output, "display-timings");
+>>>> +	if (disp_tims_np) {
+>>>> +		lsdc_get_display_timings_from_dtb(output, &lconn->disp_tim);
+>>>> +		lconn->has_disp_tim = true;
+>>>> +		of_node_put(disp_tims_np);
+>>>> +		drm_info(ddev, "Found display timings provided by connector%d\n", index);
+>>>> +	}
+>>>> +
+>>>> +	connector_type = lsdc_get_connector_type(ddev, output, index);
+>>>> +
+>>>> +	if (output) {
+>>>> +		of_node_put(output);
+>>>> +		output = NULL;
+>>>> +	}
+>>>> +
+>>>> +DT_SKIPED:
+>>>> +
+>>>> +	/* Only create the i2c channel if display timing is not provided */
+>>>> +	if (!lconn->has_disp_tim) {
+>>>> +		const struct lsdc_chip_desc * const desc = ldev->desc;
+>>>> +
+>>>> +		if (desc->have_builtin_i2c)
+>>>> +			lconn->ddc = lsdc_create_i2c_chan(ddev, index);
+>>>> +		else
+>>>> +			lconn->ddc = lsdc_get_i2c_adapter(ddev, index);
+>>> This looks weird: the connector bindings have a property to store the
+>>> i2c controller connected to the DDC lines, so you should use that
+>>> instead.
+>>>
+>> This is not  weird,  ast, mgag200, hibmc do the same thing.
+> And none of them have DT support.
+>
+> Maxime
 
-diff --git a/drivers/tty/serial/8250/8250_lpss.c b/drivers/tty/serial/8250/8250_lpss.c
-index d3bafec7619d..0f5af061e0b4 100644
---- a/drivers/tty/serial/8250/8250_lpss.c
-+++ b/drivers/tty/serial/8250/8250_lpss.c
-@@ -117,8 +117,7 @@ static int byt_serial_setup(struct lpss8250 *lpss, struct uart_port *port)
- {
- 	struct dw_dma_slave *param = &lpss->dma_param;
- 	struct pci_dev *pdev = to_pci_dev(port->dev);
--	unsigned int dma_devfn = PCI_DEVFN(PCI_SLOT(pdev->devfn), 0);
--	struct pci_dev *dma_dev = pci_get_slot(pdev->bus, dma_devfn);
-+	struct pci_dev *dma_dev;
- 
- 	switch (pdev->device) {
- 	case PCI_DEVICE_ID_INTEL_BYT_UART1:
-@@ -137,6 +136,8 @@ static int byt_serial_setup(struct lpss8250 *lpss, struct uart_port *port)
- 		return -EINVAL;
- 	}
- 
-+	dma_dev = pci_get_slot(pdev->bus, PCI_DEVFN(PCI_SLOT(pdev->devfn), 0));
-+
- 	param->dma_dev = &dma_dev->dev;
- 	param->m_master = 0;
- 	param->p_master = 1;
-@@ -152,6 +153,14 @@ static int byt_serial_setup(struct lpss8250 *lpss, struct uart_port *port)
- 	return 0;
- }
- 
-+static void byt_serial_exit(struct lpss8250 *lpss)
-+{
-+	struct dw_dma_slave *param = &lpss->dma_param;
-+
-+	/* Paired with pci_get_slot() in the byt_serial_setup() above */
-+	put_device(param->dma_dev);
-+}
-+
- static int ehl_serial_setup(struct lpss8250 *lpss, struct uart_port *port)
- {
- 	struct uart_8250_dma *dma = &lpss->data.dma;
-@@ -170,6 +179,13 @@ static int ehl_serial_setup(struct lpss8250 *lpss, struct uart_port *port)
- 	return 0;
- }
- 
-+static void ehl_serial_exit(struct lpss8250 *lpss)
-+{
-+	struct uart_8250_port *up = serial8250_get_port(lpss->data.line);
-+
-+	up->dma = NULL;
-+}
-+
- #ifdef CONFIG_SERIAL_8250_DMA
- static const struct dw_dma_platform_data qrk_serial_dma_pdata = {
- 	.nr_channels = 2,
-@@ -344,8 +360,7 @@ static int lpss8250_probe(struct pci_dev *pdev, const struct pci_device_id *id)
- 	return 0;
- 
- err_exit:
--	if (lpss->board->exit)
--		lpss->board->exit(lpss);
-+	lpss->board->exit(lpss);
- 	pci_free_irq_vectors(pdev);
- 	return ret;
- }
-@@ -356,8 +371,7 @@ static void lpss8250_remove(struct pci_dev *pdev)
- 
- 	serial8250_unregister_port(lpss->data.line);
- 
--	if (lpss->board->exit)
--		lpss->board->exit(lpss);
-+	lpss->board->exit(lpss);
- 	pci_free_irq_vectors(pdev);
- }
- 
-@@ -365,12 +379,14 @@ static const struct lpss8250_board byt_board = {
- 	.freq = 100000000,
- 	.base_baud = 2764800,
- 	.setup = byt_serial_setup,
-+	.exit = byt_serial_exit,
- };
- 
- static const struct lpss8250_board ehl_board = {
- 	.freq = 200000000,
- 	.base_baud = 12500000,
- 	.setup = ehl_serial_setup,
-+	.exit = ehl_serial_exit,
- };
- 
- static const struct lpss8250_board qrk_board = {
--- 
-2.34.1
+You are wrong, ast driver have dt support. See ast_detect_config_mode() 
+in drm/ast/ast_main.c
+
+static void ast_detect_config_mode(struct drm_device *dev, u32 *scu_rev)
+{
+     struct device_node *np = dev->dev->of_node;
+     struct ast_private *ast = to_ast_private(dev);
+     struct pci_dev *pdev = to_pci_dev(dev->dev);
+     uint32_t data, jregd0, jregd1;
+
+     /* Defaults */
+     ast->config_mode = ast_use_defaults;
+     *scu_rev = 0xffffffff;
+
+     /* Check if we have device-tree properties */
+     if (np && !of_property_read_u32(np, "aspeed,scu-revision-id",
+                     scu_rev)) {
+         /* We do, disable P2A access */
+         ast->config_mode = ast_use_dt;
+         drm_info(dev, "Using device-tree for configuration\n");
+         return;
+     }
+
+  ....
+
+}
 

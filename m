@@ -2,168 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F00E14C1588
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 15:38:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 951264C158A
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 15:38:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241663AbiBWOic (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 09:38:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57674 "EHLO
+        id S241666AbiBWOiv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 09:38:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235883AbiBWOia (ORCPT
+        with ESMTP id S235883AbiBWOit (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 09:38:30 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21F2A4BFC9;
-        Wed, 23 Feb 2022 06:38:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645627082; x=1677163082;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=ZrtkatlHEX8TrOAncGqCt3HfwjC0OWdY0TpW7ZrDiNo=;
-  b=lKD3blN6P7WQQoRVM53f/E+cDOFfaNxBEz8sMtTon+HsoeQRo5WB+k72
-   uoP8/G/i1yzHK7aV7/QyutIEZVjQAmP5vyeS8TBI43X+br9fPY5NyU51b
-   Y6rT4b5cFQZP7tdxw9bcyp8qxxzKqgWSAyhDKzymzpCLlY9j/FoVwHKbR
-   brqcAm3Exc7t6q52oXbIrlQ+x1D339uKDChjoOpRzNXSxKn0Q6G61LS9/
-   iAn6jl84nvVN+J/bDulgNkEjh6jeH2Nt7ezL6MCxs3kdaM1EsKz2dj523
-   Rn1etJ1UNMHqpwQwzsCob/3dsKtei202SI1dRveCXa+Zy0nqpYVo+yhq2
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10266"; a="235484596"
-X-IronPort-AV: E=Sophos;i="5.88,391,1635231600"; 
-   d="scan'208";a="235484596"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2022 06:38:01 -0800
-X-IronPort-AV: E=Sophos;i="5.88,391,1635231600"; 
-   d="scan'208";a="639327488"
-Received: from smile.fi.intel.com ([10.237.72.59])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2022 06:37:57 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1nMslN-007SYd-JO;
-        Wed, 23 Feb 2022 16:37:05 +0200
-Date:   Wed, 23 Feb 2022 16:37:05 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc:     Hans de Goede <hdegoede@redhat.com>,
-        =?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <clement.leger@bootlin.com>,
-        Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Wolfram Sang <wsa@kernel.org>, Peter Rosin <peda@axentia.se>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-acpi@vger.kernel.org, linux-i2c@vger.kernel.org,
-        netdev@vger.kernel.org,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-Subject: Re: [RFC 10/10] net: sfp: add support for fwnode
-Message-ID: <YhZGkZNAaXNPBRbf@smile.fi.intel.com>
-References: <20220221162652.103834-1-clement.leger@bootlin.com>
- <20220221162652.103834-11-clement.leger@bootlin.com>
- <YhPSkz8+BIcdb72R@smile.fi.intel.com>
- <20220222142513.026ad98c@fixe.home>
- <YhYZAc5+Q1rN3vhk@smile.fi.intel.com>
- <888f9f1a-ca5a-1250-1423-6c012ec773e2@redhat.com>
- <YhYriwvHJKjrDQRf@shell.armlinux.org.uk>
+        Wed, 23 Feb 2022 09:38:49 -0500
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id F3DF4B45BB
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 06:38:20 -0800 (PST)
+Received: (qmail 1008541 invoked by uid 1000); 23 Feb 2022 09:38:20 -0500
+Date:   Wed, 23 Feb 2022 09:38:20 -0500
+From:   "stern@rowland.harvard.edu" <stern@rowland.harvard.edu>
+To:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
+Cc:     "Zhang, Qiang1" <qiang1.zhang@intel.com>,
+        syzbot <syzbot+348b571beb5eeb70a582@syzkaller.appspotmail.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "rafael@kernel.org" <rafael@kernel.org>,
+        "syzkaller-bugs@googlegroups.com" <syzkaller-bugs@googlegroups.com>,
+        "balbi@kernel.org" <balbi@kernel.org>
+Subject: Re: [syzbot] KASAN: use-after-free Read in dev_uevent
+Message-ID: <YhZG3GJb8G7oL7l7@rowland.harvard.edu>
+References: <0000000000005a991a05a86970bb@google.com>
+ <00000000000033314805d8765175@google.com>
+ <PH0PR11MB58805E3C4CF7D4C41D49BFCFDA3C9@PH0PR11MB5880.namprd11.prod.outlook.com>
+ <YhYafwiwUV2Sbn5t@kroah.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YhYriwvHJKjrDQRf@shell.armlinux.org.uk>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <YhYafwiwUV2Sbn5t@kroah.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 23, 2022 at 12:41:47PM +0000, Russell King (Oracle) wrote:
-> On Wed, Feb 23, 2022 at 01:02:23PM +0100, Hans de Goede wrote:
-> > On 2/23/22 12:22, Andy Shevchenko wrote:
-> > > On Tue, Feb 22, 2022 at 02:25:13PM +0100, Clément Léger wrote:
-> > >> Le Mon, 21 Feb 2022 19:57:39 +0200,
-> > >> Andy Shevchenko <andriy.shevchenko@linux.intel.com> a écrit :
-> > >>> On Mon, Feb 21, 2022 at 05:26:52PM +0100, Clément Léger wrote:
-> > >>>> Add support to retrieve a i2c bus in sfp with a fwnode. This support
-> > >>>> is using the fwnode API which also works with device-tree and ACPI.
-> > >>>> For this purpose, the device-tree and ACPI code handling the i2c
-> > >>>> adapter retrieval was factorized with the new code. This also allows
-> > >>>> i2c devices using a software_node description to be used by sfp code.  
-> > >>>
-> > >>> If I'm not mistaken this patch can even go separately right now, since all used
-> > >>> APIs are already available.
-> > >>
-> > >> This patches uses fwnode_find_i2c_adapter_by_node() which is introduced
-> > >> by "i2c: fwnode: add fwnode_find_i2c_adapter_by_node()" but they can
-> > >> probably be contributed both in a separate series.
-> > > 
-> > > I summon Hans into the discussion since I remember he recently refactored
-> > > a bit I2C (ACPI/fwnode) APIs. Also he might have an idea about entire big
-> > > picture approach with this series based on his ACPI experience.
+On Wed, Feb 23, 2022 at 12:29:03PM +0100, gregkh@linuxfoundation.org wrote:
+> On Wed, Feb 23, 2022 at 11:17:07AM +0000, Zhang, Qiang1 wrote:
 > > 
-> > If I understand this series correctly then this is about a PCI-E card
-> > which has an I2C controller on the card and behind that I2C-controller
-> > there are a couple if I2C muxes + I2C clients.
+> > syzbot has found a reproducer for the following issue on:
+> > 
+> > HEAD commit:    4f12b742eb2b Merge tag 'nfs-for-5.17-3' of git://git.linux..
+> > git tree:       upstream
+> > console output: https://syzkaller.appspot.com/x/log.txt?x=110a6df2700000
+> > kernel config:  https://syzkaller.appspot.com/x/.config?x=f6a069ed94a1ed1d
+> > dashboard link: https://syzkaller.appspot.com/bug?extid=348b571beb5eeb70a582
+> > compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12377296700000
+> > 
+> > IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> > Reported-by: syzbot+348b571beb5eeb70a582@syzkaller.appspotmail.com
+> > 
+> > ==================================================================
+> > BUG: KASAN: use-after-free in dev_uevent+0x712/0x780 drivers/base/core.c:2320 Read of size 8 at addr ffff88802b934098 by task udevd/3689
+> > 
+> > CPU: 2 PID: 3689 Comm: udevd Not tainted 5.17.0-rc4-syzkaller-00229-g4f12b742eb2b #0 Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-2 04/01/2014 Call Trace:
+> >  <TASK>
+> >  __dump_stack lib/dump_stack.c:88 [inline]
+> >  dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+> >  print_address_description.constprop.0.cold+0x8d/0x303 mm/kasan/report.c:255  __kasan_report mm/kasan/report.c:442 [inline]  kasan_report.cold+0x83/0xdf mm/kasan/report.c:459
+> >  dev_uevent+0x712/0x780 drivers/base/core.c:2320
+> >  uevent_show+0x1b8/0x380 drivers/base/core.c:2391
+> >  dev_attr_show+0x4b/0x90 drivers/base/core.c:2094
+> >  sysfs_kf_seq_show+0x219/0x3d0 fs/sysfs/file.c:59
+> >  seq_read_iter+0x4f5/0x1280 fs/seq_file.c:230
+> >  kernfs_fop_read_iter+0x514/0x6f0 fs/kernfs/file.c:241  call_read_iter include/linux/fs.h:2068 [inline]
+> >  new_sync_read+0x429/0x6e0 fs/read_write.c:400
+> >  vfs_read+0x35c/0x600 fs/read_write.c:481
+> >  ksys_read+0x12d/0x250 fs/read_write.c:619
+> >  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+> >  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80  entry_SYSCALL_64_after_hwframe+0x44/0xae
+> > RIP: 0033:0x7f964cc558fe
+> > Code: c0 e9 e6 fe ff ff 50 48 8d 3d 0e c7 09 00 e8 c9 cf 01 00 66 0f 1f 84 00 00 00 00 00 64 8b 04 25 18 00 00 00 85 c0 75 14 0f 05 <48> 3d 00 f0 ff ff 77 5a c3 66 0f 1f 84 00 00 00 00 00 48 83 ec 28
+> > RSP: 002b:00007ffc0133d258 EFLAGS: 00000246 ORIG_RAX: 0000000000000000
+> > RAX: ffffffffffffffda RBX: 000056497b21a140 RCX: 00007f964cc558fe
+> > RDX: 0000000000001000 RSI: 000056497b218650 RDI: 0000000000000008
+> > RBP: 00007f964cd22380 R08: 0000000000000008 R09: 00007f964cd25a60
+> > R10: 0000000000000008 R11: 0000000000000246 R12: 000056497b21a140
+> > R13: 0000000000000d68 R14: 00007f964cd21780 R15: 0000000000000d68  </TASK>
+> > 
+> > Cc: Alan Stern 
+> >        Felipe Balbi
+> > 
+> > Hello syzbot, Please try it:
+> > 
+> > From 574d45ff924e2d2f9b9f5cc3e846f8004498a811 Mon Sep 17 00:00:00 2001
+> > From: Zqiang <qiang1.zhang@intel.com>
+> > Date: Wed, 23 Feb 2022 18:18:22 +0800
+> > Subject: [PATCH] driver core: Fix use-after-free in dev_uevent()
+> > 
+> > In dev_uevent(), if the "dev->driver" is valid, the "dev->driver->name"
+> > be accessed, there may be a window period between these two operations.
 > 
-> That is what I gathered as well.
+> There should not be any such window period.  The bus locks should
+> prevent this, unless some driver is doing odd things with the pointers
+> that it should not be doing.
+
+Which bus locks are you referring to?  I'm not aware of any locks that 
+synchronize dev_uevent() with anything (in particular, with driver 
+unbinding).
+
+And as far as I know, usb_gadget_remove_driver() doesn't play any odd 
+tricks with pointers.
+
+> > in this window period if the "dev->driver" is set to null
+> > (in usb_gadget_unregister_driver function), when the "dev->driver->name"
+> > is accessed again, invalid address will be accessed. fix it by checking
+> > "dev->driver" again.
+> > 
+> > Signed-off-by: Zqiang <qiang1.zhang@intel.com>
+> > ---
+> >  drivers/base/core.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/base/core.c b/drivers/base/core.c
+> > index 3d6430eb0c6a..a45b927ee76e 100644
+> > --- a/drivers/base/core.c
+> > +++ b/drivers/base/core.c
+> > @@ -2317,7 +2317,7 @@ static int dev_uevent(struct kobject *kobj, struct kobj_uevent_env *env)
+> >                 add_uevent_var(env, "DEVTYPE=%s", dev->type->name);
+> > 
+> >         if (dev->driver)
+> > -               add_uevent_var(env, "DRIVER=%s", dev->driver->name);
+> > +               add_uevent_var(env, "DRIVER=%s", dev_driver_string(dev));
 > 
-> > Assuming I did understand the above correctly. One alternative would be
-> > to simply manually instantiate the I2C muxes + clients using
-> > i2c_new_client_device(). But I'm not sure if i2c_new_client_device()
-> > will work for the muxes without adding some software_nodes which
-> > brings us back to something like this patch-set.
-> 
-> That assumes that an I2C device is always present, which is not always
-> the case - there are hot-pluggable devices on I2C buses.
-> 
-> Specifically, this series includes pluggable SFP modules, which fall
-> into this category of "hot-pluggable I2C devices" - spanning several
-> bus addresses (0x50, 0x51, 0x56). 0x50 is EEPROM like, but not quite
-> as the top 128 bytes is paged and sometimes buggy in terms of access
-> behaviour. 0x51 contains a bunch of monitoring and other controls
-> for the module which again can be paged. At 0x56, there may possibly
-> be some kind of device that translates I2C accesses to MDIO accesses
-> to access a PHY onboard.
-> 
-> Consequently, the SFP driver and MDIO translation layer wants access to
-> the I2C bus, rather than a device.
-> 
-> Now, before ARM was converted to DT, we had ways to cope with
-> non-firmware described setups like this by using platform devices and
-> platform data. Much of that ended up deprecated, because - hey - DT
-> is great and more modern and the old way is disgusting and we want to
-> get rid of it.
-> 
-> However, that approach locks us into describing stuff in firmware,
-> which is unsuitable when something like this comes along.
+> What's to prevent the "window" from happening in the middle of the
+> dev_driver_string() call?
 
-Looks like this is a way to reinvent what FPGA should cope with already.
-And if I remember correctly the discussions about PCIe FPGAs (from 2016,
-though) the idea is that FPGA should have provided a firmware description
-with itself. I.o.w. If we are talking about "run-time configurable"
-devices they should provide a way to bring their description to the
-system.
+Nothing prevents it.  But if you read the code for dev_driver_string(), 
+you will see that it doesn't matter if dev->driver gets set to NULL 
+while the routine is running.
 
-The currently available way to do it is to get this from EEPROM / ROM
-specified on the hardware side in form of DT and ACPI blobs (representing
-overlays). Then the only part that is missed (at least for ACPI case) is
-to dynamically insert that based on the PCI BDF of the corresponding
-PCI bridge.
+(Of course, there is still the possibility that the driver structure 
+itself might get deallocated while dev_driver_string() is running.  
+This whole area could perhaps use a little careful thought.  Driver 
+unbinding might be a good application for SRCU.)
 
-TL;DR: In my opinion such hardware must bring the description with itself
-in case it uses non-enumerable busses, such as SPI, I²C.
-
-I dunno what was the last development in this area for FPGAs cases.
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+Alan Stern

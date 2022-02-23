@@ -2,215 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 083524C0AC0
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 04:57:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B0C84C0AC2
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 04:58:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237710AbiBWD5h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 22:57:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55442 "EHLO
+        id S238013AbiBWD7A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 22:59:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231979AbiBWD5g (ORCPT
+        with ESMTP id S231979AbiBWD66 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 22:57:36 -0500
-Received: from new2-smtp.messagingengine.com (new2-smtp.messagingengine.com [66.111.4.224])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B65FC4CD6F
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 19:57:09 -0800 (PST)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 197C658016D;
-        Tue, 22 Feb 2022 22:57:09 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Tue, 22 Feb 2022 22:57:09 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
-        cc:cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; bh=rGS7E0Tr6KX60A
-        jswUG+WsXZIUdtEZ7uVok6SjY+3Nc=; b=TiiHLuliwP595agUDFcm1CnON1egtr
-        7WPWXMS8Y7w+7U38nTBsEEfVVZV+CnfOeO5EhSlKUws45RDuTI/Ztxcm85Kwzn4U
-        PzMDO9CGNuUlz/JCcnl0kJVqZPWiwEWJTVZvDPHddgQHVxK9y5GoT3MPvCCr0O+4
-        YNxZEsde0InUtXOs9HvbaOCat5ShEpIT2E74zaOIDuobsHYtbzo5TJlHnOSlFTJA
-        Jz5ZHA3T2+hbUHKF3efrZg1enQIqxhrh+00HvcJeVcXAl4E7k/ehmMjXBaX8BYQN
-        sEQiOU1kMVmjA8wSo+p+2diBc5rcgmCe5Iq3WtTo4mInx5JE1lNPk35Q==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; bh=rGS7E0Tr6KX60AjswUG+WsXZIUdtEZ7uVok6SjY+3
-        Nc=; b=dvCHztbM1x4e66FQBgeGRSyGIzStNuiQ60hU8fjHwl0xbmLQcwpE+zOuN
-        Hqtg4cgYHp/2sEe6FfqIbVlZNF3XWk3NBWa7QZ5lL34kTpySxmmhkFoPqDBzrGUx
-        eFVUeFrdwh0K2Es5gleGJtgZzMisiR9HbeZIM1HCqta5M8SJpMqKW3o/K8Y9kodi
-        +lqriAeqel6qhphC6z0oIPlu4k8fVSNnYH4CDiBetMFXU18dE8LJJnQ73/X/8Gg/
-        WHzQqC/5a2EK8qUC3dcYIGDAwUrf7EbKUM7hlVz0510+X9ugt9vFwRgUciMRhXD7
-        slZx0ADCnxhgL0YXE35Y3dQtt/Cvg==
-X-ME-Sender: <xms:lLAVYuj7WD6xQvxNjK22n8ltQidbxsNUWmAKoFM-40XBDbXfUgbcMA>
-    <xme:lLAVYvDNCzApkSu89cXDlH_THFKPond84grVXph-9u6yKjSgDE4N-Puyz7ja-bmfu
-    wzZZ346yKmHjzXFNQ>
-X-ME-Received: <xmr:lLAVYmGnrAD2w3V3ajMXo-XYCcbPFLpHif7shclhn77I34rH1UZRxs3ZDYuxGG94NsFnFWSx-Q31MvEdmc6C9p9A2_9bgKYpV_XQ-MFn0crguhpUjjYcM-zzeg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrkeelgdeigecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefuvfhfhffkffgfgggjtgfgsehtjeertddtfeejnecuhfhrohhmpefurghmuhgv
-    lhcujfholhhlrghnugcuoehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgqeenucggtf
-    frrghtthgvrhhnpefgveffteelheffjeeukedvkedviedtheevgeefkeehueeiieeuteeu
-    gfettdeggeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
-    hmpehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhg
-X-ME-Proxy: <xmx:lLAVYnTWMxgcyXjJasaHVrEKHKPW5Wdpgd_vrUlM3aRciXfvgVjiYA>
-    <xmx:lLAVYrxL8mfQi-jRHv7Nd6wFv8rlZy78KviRIEvH4ZFCwrnd3n7Gag>
-    <xmx:lLAVYl7Da0z0Etu5zc966BhPRY6GivZxaTAy5d9MCZn5FQr65lJ1ZA>
-    <xmx:lbAVYp5pEURhaTNDhNnBJU7wehG9wBx-ljjBeiPEi4VoYyuN2Gt27w>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 22 Feb 2022 22:57:07 -0500 (EST)
-Subject: Re: [PATCH v10 14/18] phy: sun4i-usb: Introduce port2 SIDDQ quirk
-To:     Andre Przywara <andre.przywara@arm.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>
-Cc:     Rob Herring <robh@kernel.org>, Ondrej Jirman <megous@megous.com>,
-        Icenowy Zheng <icenowy@aosc.io>,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>, linux-phy@lists.infradead.org
-References: <20220211122643.1343315-1-andre.przywara@arm.com>
- <20220211122643.1343315-15-andre.przywara@arm.com>
-From:   Samuel Holland <samuel@sholland.org>
-Message-ID: <14105ae3-4314-3463-8b07-ccd6106cf681@sholland.org>
-Date:   Tue, 22 Feb 2022 21:57:07 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.6.0
+        Tue, 22 Feb 2022 22:58:58 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8192F4D250
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 19:58:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1645588710;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=s2NWvKFq0kOBrsfHRCwf6sKcBU7Oc5+YasdRQtJdd6I=;
+        b=DdwXeBL1xa9iVrwJOdXSYogmg9HqucRwyLst3Bf/D7ZDhEgbIdg3n3GABUfpI505RwTMFk
+        QVEg+KSeRyp7NJ9vSzFH4FTn6lgo8kdGC6B2FFUoRl0uJ5JSSy2H7fam8z7fvlNA5XF5oq
+        Ai312RAk3bQasjCthwdufHHH9i6WT8c=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-209-Tx9NDDMAN861OlL5dVtAcA-1; Tue, 22 Feb 2022 22:58:27 -0500
+X-MC-Unique: Tx9NDDMAN861OlL5dVtAcA-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 882C51091DA0;
+        Wed, 23 Feb 2022 03:58:24 +0000 (UTC)
+Received: from localhost (ovpn-14-1.pek2.redhat.com [10.72.14.1])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 49992101E68B;
+        Wed, 23 Feb 2022 03:58:04 +0000 (UTC)
+Date:   Wed, 23 Feb 2022 11:58:01 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     Eric DeVolder <eric.devolder@oracle.com>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        kexec@lists.infradead.org, ebiederm@xmission.com,
+        dyoung@redhat.com, vgoyal@redhat.com, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        hpa@zytor.com, nramas@linux.microsoft.com, thomas.lendacky@amd.com,
+        robh@kernel.org, efault@gmx.de, rppt@kernel.org,
+        konrad.wilk@oracle.com, boris.ostrovsky@oracle.com
+Subject: Re: [PATCH v4 05/10] crash hp: introduce helper functions
+ un/map_crash_pages
+Message-ID: <YhWwyTZuXxM4w+Fu@MiWiFi-R3L-srv>
+References: <20220209195706.51522-1-eric.devolder@oracle.com>
+ <20220209195706.51522-6-eric.devolder@oracle.com>
 MIME-Version: 1.0
-In-Reply-To: <20220211122643.1343315-15-andre.przywara@arm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220209195706.51522-6-eric.devolder@oracle.com>
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/11/22 6:26 AM, Andre Przywara wrote:
-> At least the Allwinner H616 SoC requires a weird quirk to make most
-> USB PHYs work: Only port2 works out of the box, but all other ports
-> need some help from this port2 to work correctly: The CLK_BUS_PHY2 and
-> RST_USB_PHY2 clock and reset need to be enabled, and the SIDDQ bit in
-> the PMU PHY control register needs to be cleared. For this register to
-> be accessible, CLK_BUS_ECHI2 needs to be ungated. Don't ask ....
+On 02/09/22 at 02:57pm, Eric DeVolder wrote:
+> This change introduces two new functions un/map_crash_pages()
+> which are used to enable/disable access to the segments in the
+> crash memory region. (Upon loading of a crash kernel, the
+> crash memory regions are made inaccessible for integrity purposes.)
 > 
-> Instead of disguising this as some generic feature, do exactly that
-> in our PHY init:
-> If the quirk bit is set, and we initialise a PHY other than PHY2, ungate
-> this one special clock, and clear the SIDDQ bit. We can pull in the
-> other required clocks via the DT.
+> For example, on x86_64, one of the segments is the elfcorehdr,
+> which contains the list of CPUs and memories. This segment
+> needs to be modified in response to hotplug events. These functions
+> are used to obtain (and subsequenntly release) access to the crash
+> memory region in order to make the modifications.
 > 
-> Signed-off-by: Andre Przywara <andre.przywara@arm.com>
+> QUESTION: These might need to be in arch/x86 as I'm not certain
+> the implementatin is valid for all archs?
+
+Since only x86_64 uses them, I would suggest putting them into x86_64,
+near the caller.
+
+> 
+> Signed-off-by: Eric DeVolder <eric.devolder@oracle.com>
 > ---
->  drivers/phy/allwinner/phy-sun4i-usb.c | 59 +++++++++++++++++++++++++++
->  1 file changed, 59 insertions(+)
+>  include/linux/kexec.h |  2 ++
+>  kernel/crash_core.c   | 32 ++++++++++++++++++++++++++++++++
+>  2 files changed, 34 insertions(+)
 > 
-> diff --git a/drivers/phy/allwinner/phy-sun4i-usb.c b/drivers/phy/allwinner/phy-sun4i-usb.c
-> index 126ef74d013c..316ef5fca831 100644
-> --- a/drivers/phy/allwinner/phy-sun4i-usb.c
-> +++ b/drivers/phy/allwinner/phy-sun4i-usb.c
-> @@ -120,6 +120,7 @@ struct sun4i_usb_phy_cfg {
->  	u8 phyctl_offset;
->  	bool dedicated_clocks;
->  	bool phy0_dual_route;
-> +	bool needs_phy2_siddq;
->  	int missing_phys;
+> diff --git a/include/linux/kexec.h b/include/linux/kexec.h
+> index b11d75a6b2bc..e00c373c4095 100644
+> --- a/include/linux/kexec.h
+> +++ b/include/linux/kexec.h
+> @@ -324,6 +324,8 @@ struct kimage {
 >  };
 >  
-> @@ -289,6 +290,50 @@ static int sun4i_usb_phy_init(struct phy *_phy)
->  		return ret;
->  	}
+>  #ifdef CONFIG_CRASH_HOTPLUG
+> +void *map_crash_pages(unsigned long paddr, unsigned long size);
+> +void unmap_crash_pages(void **ptr);
+>  void arch_crash_hotplug_handler(struct kimage *image,
+>  	unsigned int hp_action, unsigned long a, unsigned long b);
+>  #define KEXEC_CRASH_HP_REMOVE_CPU   0
+> diff --git a/kernel/crash_core.c b/kernel/crash_core.c
+> index 256cf6db573c..0ff06d0698ad 100644
+> --- a/kernel/crash_core.c
+> +++ b/kernel/crash_core.c
+> @@ -9,6 +9,7 @@
+>  #include <linux/init.h>
+>  #include <linux/utsname.h>
+>  #include <linux/vmalloc.h>
+> +#include <linux/highmem.h>
 >  
-> +	/* Some PHYs on some SoCs need the help of PHY2 to work. */
-> +	if (data->cfg->needs_phy2_siddq && phy->index != 2) {
-> +		struct sun4i_usb_phy *phy2 = &data->phys[2];
+>  #include <asm/page.h>
+>  #include <asm/sections.h>
+> @@ -491,3 +492,34 @@ static int __init crash_save_vmcoreinfo_init(void)
+>  }
+>  
+>  subsys_initcall(crash_save_vmcoreinfo_init);
 > +
-> +		ret = clk_prepare_enable(phy2->clk);
-> +		if (ret) {
-> +			reset_control_assert(phy->reset);
-> +			clk_disable_unprepare(phy->clk2);
-> +			clk_disable_unprepare(phy->clk);
-> +			return ret;
-> +		}
+> +#ifdef CONFIG_CRASH_HOTPLUG
+> +void *map_crash_pages(unsigned long paddr, unsigned long size)
+> +{
+> +	/*
+> +	 * NOTE: The addresses and sizes passed to this routine have
+> +	 * already been fully aligned on page boundaries. There is no
+> +	 * need for massaging the address or size.
+> +	 */
+> +	void *ptr = NULL;
 > +
-> +		ret = reset_control_deassert(phy2->reset);
-> +		if (ret) {
-> +			clk_disable_unprepare(phy2->clk);
-> +			reset_control_assert(phy->reset);
-> +			clk_disable_unprepare(phy->clk2);
-> +			clk_disable_unprepare(phy->clk);
-> +			return ret;
-> +		}
+> +	/* NOTE: requires arch_kexec_[un]protect_crashkres() for write access */
+> +	if (size > 0) {
+> +		struct page *page = pfn_to_page(paddr >> PAGE_SHIFT);
 > +
-> +		/*
-> +		 * This extra clock is just needed to access the
-> +		 * REG_HCI_PHY_CTL PMU register for PHY2.
-> +		 */
-> +		ret = clk_prepare_enable(phy2->clk2);
-> +		if (ret) {
-> +			reset_control_assert(phy2->reset);
-> +			clk_disable_unprepare(phy2->clk);
-> +			reset_control_assert(phy->reset);
-> +			clk_disable_unprepare(phy->clk2);
-> +			clk_disable_unprepare(phy->clk);
-
-This is quite a lot of duplication. Please consider using goto for the error path.
-
-> +			return ret;
-> +		}
-> +
-> +		if (phy2->pmu && data->cfg->hci_phy_ctl_clear) {
-> +			val = readl(phy2->pmu + REG_HCI_PHY_CTL);
-> +			val &= ~data->cfg->hci_phy_ctl_clear;
-> +			writel(val, phy2->pmu + REG_HCI_PHY_CTL);
-> +		}
-> +
-> +		clk_disable_unprepare(phy->clk2);
+> +		ptr = kmap(page);
 > +	}
 > +
->  	if (phy->pmu && data->cfg->hci_phy_ctl_clear) {
->  		val = readl(phy->pmu + REG_HCI_PHY_CTL);
->  		val &= ~data->cfg->hci_phy_ctl_clear;
-> @@ -354,6 +399,13 @@ static int sun4i_usb_phy_exit(struct phy *_phy)
->  		data->phy0_init = false;
->  	}
->  
-> +	if (data->cfg->needs_phy2_siddq && phy->index != 2) {
-> +		struct sun4i_usb_phy *phy2 = &data->phys[2];
+> +	return ptr;
+> +}
 > +
-> +		clk_disable_unprepare(phy2->clk);
-> +		reset_control_assert(phy2->reset);
+> +void unmap_crash_pages(void **ptr)
+> +{
+> +	if (ptr) {
+> +		if (*ptr)
+> +			kunmap(*ptr);
+> +		*ptr = NULL;
 > +	}
+> +}
+> +#endif
 > +
->  	sun4i_usb_phy_passby(phy, 0);
->  	reset_control_assert(phy->reset);
->  	clk_disable_unprepare(phy->clk2);
-> @@ -785,6 +837,13 @@ static int sun4i_usb_phy_probe(struct platform_device *pdev)
->  				dev_err(dev, "failed to get clock %s\n", name);
->  				return PTR_ERR(phy->clk2);
->  			}
-> +		} else {
-> +			snprintf(name, sizeof(name), "pmu%d_clk", i);
-> +			phy->clk2 = devm_clk_get_optional(dev, name);
-
-This clock is not documented anywhere in the binding.
-
-Regards,
-Samuel
-
-> +			if (IS_ERR(phy->clk2)) {
-> +				dev_err(dev, "failed to get clock %s\n", name);
-> +				return PTR_ERR(phy->clk2);
-> +			}
->  		}
->  
->  		snprintf(name, sizeof(name), "usb%d_reset", i);
+> -- 
+> 2.27.0
 > 
 

@@ -2,129 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55A734C15D8
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 15:54:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 82E984C15B2
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 15:48:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241775AbiBWOyi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 09:54:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46720 "EHLO
+        id S241721AbiBWOtR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 09:49:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232632AbiBWOyg (ORCPT
+        with ESMTP id S229893AbiBWOtQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 09:54:36 -0500
-X-Greylist: delayed 340 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 23 Feb 2022 06:54:08 PST
-Received: from winds.org (winds.org [68.75.195.9])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8E5EEB4592;
-        Wed, 23 Feb 2022 06:54:08 -0800 (PST)
-Received: by winds.org (Postfix, from userid 100)
-        id D3E1E1CA58FE; Wed, 23 Feb 2022 09:48:26 -0500 (EST)
-Received: from localhost (localhost [127.0.0.1])
-        by winds.org (Postfix) with ESMTP id D13481CA589C;
-        Wed, 23 Feb 2022 09:48:26 -0500 (EST)
-Date:   Wed, 23 Feb 2022 09:48:26 -0500 (EST)
-From:   Byron Stanoszek <gandalf@winds.org>
-To:     Dave Chinner <david@fromorbit.com>
-cc:     Jan Kara <jack@suse.cz>, Matthew Wilcox <willy@infradead.org>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        reiserfs-devel@vger.kernel.org
-Subject: Re: Is it time to remove reiserfs?
-In-Reply-To: <20220222221614.GC3061737@dread.disaster.area>
-Message-ID: <3ce45c23-2721-af6e-6cd7-648dc399597@winds.org>
-References: <YhIwUEpymVzmytdp@casper.infradead.org> <20220222100408.cyrdjsv5eun5pzij@quack3.lan> <20220222221614.GC3061737@dread.disaster.area>
+        Wed, 23 Feb 2022 09:49:16 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDB0DB54EE;
+        Wed, 23 Feb 2022 06:48:48 -0800 (PST)
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21NDfpkv023403;
+        Wed, 23 Feb 2022 14:48:40 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=o7j5iHiT8UTKVsgeEcvLHgmHFsqwXBtiP2sSdM2L4xk=;
+ b=GIMmBnIZvxc31EfH9Pv5qLr7sSCgEyb8IsAMZzyUuIbEuKjuhGTG2ujjXz7fJwnZfo0a
+ FcCy414Y4ScyJSFbFOLSyi3fWT5Z0eXYWGHDcK9dCPQQAqnSc6Gvk/mYkt7npQRaN+jS
+ +hTfMKu8uPleq2kkoAR9Fl/hlnEDwbyz96snQAyiZhPKuZ7R61dFzrDsGN+eFQBTDCgH
+ kq4uWs34JOW5SjKlt14W1dOBlL79eKKqbE8IVi6Wu8D2/AY2Vapv7ivWpOsEVp5XyoNQ
+ EdhnyE43IRVOZ+mGKpA6LBXQTZ8IoIr/kxIyD3GBuxnEr/WYyyy82qXSKyxWSDKHjfb2 5A== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3edp1jhn0c-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 23 Feb 2022 14:48:40 +0000
+Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 21NETsWV003055;
+        Wed, 23 Feb 2022 14:48:40 GMT
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3edp1jhmyc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 23 Feb 2022 14:48:40 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 21NEXiag015044;
+        Wed, 23 Feb 2022 14:48:38 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma04ams.nl.ibm.com with ESMTP id 3ear69aujj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 23 Feb 2022 14:48:37 +0000
+Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 21NEmXc937093748
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 23 Feb 2022 14:48:33 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 68B0E4204D;
+        Wed, 23 Feb 2022 14:48:33 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4AC2D42049;
+        Wed, 23 Feb 2022 14:48:31 +0000 (GMT)
+Received: from localhost.localdomain (unknown [9.114.12.92])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed, 23 Feb 2022 14:48:31 +0000 (GMT)
+From:   Steffen Eiden <seiden@linux.ibm.com>
+To:     linux-s390@vger.kernel.org
+Cc:     Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: [PATCH v2 0/3] s390: Ultravisor device
+Date:   Wed, 23 Feb 2022 09:48:27 -0500
+Message-Id: <20220223144830.44039-1-seiden@linux.ibm.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII; format=flowed
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: bxgI3EJe9dmfHTbd1e1cIWlOIIZe4Dln
+X-Proofpoint-GUID: rNMnPAXNf77I7QH57Zeka8g1Uu-3iGGy
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-02-23_06,2022-02-23_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 mlxlogscore=999
+ mlxscore=0 malwarescore=0 impostorscore=0 bulkscore=0 suspectscore=0
+ priorityscore=1501 spamscore=0 clxscore=1015 phishscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2201110000 definitions=main-2202230083
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 23 Feb 2022, Dave Chinner wrote:
-> On Tue, Feb 22, 2022 at 11:04:08AM +0100, Jan Kara wrote:
->> Hello!
->>
->> On Sun 20-02-22 12:13:04, Matthew Wilcox wrote:
->>> Keeping reiserfs in the tree has certain costs.  For example, I would
->>> very much like to remove the 'flags' argument to ->write_begin.  We have
->>> the infrastructure in place to handle AOP_FLAG_NOFS differently, but
->>> AOP_FLAG_CONT_EXPAND is still around, used only by reiserfs.
->>>
->>> Looking over the patches to reiserfs over the past couple of years, there
->>> are fixes for a few syzbot reports and treewide changes.  There don't
->>> seem to be any fixes for user-spotted bugs since 2019.  Does reiserfs
->>> still have a large install base that is just very happy with an old
->>> stable filesystem?  Or have all its users migrated to new and exciting
->>> filesystems with active feature development?
->>>
->>> We've removed support for senescent filesystems before (ext, xiafs), so
->>> it's not unprecedented.  But while I have a clear idea of the benefits to
->>> other developers of removing reiserfs, I don't have enough information to
->>> weigh the costs to users.  Maybe they're happy with having 5.15 support
->>> for their reiserfs filesystems and can migrate to another filesystem
->>> before they upgrade their kernel after 5.15.
->>>
->>> Another possibility beyond outright removal would be to trim the kernel
->>> code down to read-only support for reiserfs.  Most of the quirks of
->>> reiserfs have to do with write support, so this could be a useful way
->>> forward.  Again, I don't have a clear picture of how people actually
->>> use reiserfs, so I don't know whether it is useful or not.
->>>
->>> NB: Please don't discuss the personalities involved.  This is purely a
->>> "we have old code using old APIs" discussion.
->>
->> So from my distro experience installed userbase of reiserfs is pretty small
->> and shrinking. We still do build reiserfs in openSUSE / SLES kernels but
->> for enterprise offerings it is unsupported (for like 3-4 years) and the module
->> is not in the default kernel rpm anymore.
->>
->> So clearly the filesystem is on the deprecation path, the question is
->> whether it is far enough to remove it from the kernel completely. Maybe
->> time to start deprecation by printing warnings when reiserfs gets mounted
->> and then if nobody yells for year or two, we'll go ahead and remove it?
->
-> Yup, I'd say we should deprecate it and add it to the removal
-> schedule. The less poorly tested legacy filesystem code we have to
-> maintain the better.
->
-> Along those lines, I think we really need to be more aggressive
-> about deprecating and removing filesystems that cannot (or will not)
-> be made y2038k compliant in the new future. We're getting to close
-> to the point where long term distro and/or product development life
-> cycles will overlap with y2038k, so we should be thinking of
-> deprecating and removing such filesystems before they end up in
-> products that will still be in use in 15 years time.
->
-> And just so everyone in the discussion is aware: XFS already has a
-> deprecation and removal schedule for the non-y2038k-compliant v4
-> filesystem format. It's officially deprecated right now, we'll stop
-> building kernels with v4 support enabled by default in 2025, and
-> we're removing the code that supports the v4 format entirely in
-> 2030.
+This series adds an Ultravisor(UV) device letting the userspace send some
+Ultravisor calls to the UV. Currently two calls are supported.
+Query Ultravisor Information (QUI) and
+Receive Attestation Measurement (Attest[ation]).
 
-For what it's worth, I have a number of production servers still using
-Reiserfs, which I regularly maintain by upgrading to the latest Linux kernel
-annually (mostly to apply security patches). I figured this filesystem would
-still be available for several more years, since it's not quite y2038k yet.
+The UV device is implemented as a miscdevice accepting only IOCTLs.
+The IOCTL cmd specifies the UV call and the IOCTL arg the request
+and response data depending on the UV call.
+The device driver writes the UV response in the ioctl argument data.
 
-I originally installed Reiserfs on these systems as early as 2005 due to the
-tail-packing feature, which saved space with many small files on older
-harddrives. Since then, I witnessed the development of ext4, and then btrfs.
-For a long time, these newer filesystems had occasional reports of instabilities
-and lost data, and so I shied away from using them. Meanwhile, Reiserfs reached
-a level of maturity and no longer had active development on it, except for the
-occasional bugfix. I felt this was a filesystem I could trust going forward
-(despite its relative slowness), even after popular Linux distributions
-eventually dropped it from being installed by default.
+The 'uvdevice' does no checks on the request beside faulty userspace
+addresses, if sizes are in a sane range before allocating in kernel space,
+and other tests that prevent the system from corruption.
+Especially, no checks are made, that will be performed by the UV anyway
+(E.g. 'invalid command' in case of attestation on unsupported hardware).
+These errors are reported back to Userspace using the UV return code
+field.
 
-I have only recently begun to use XFS on newer installs, only since the XFS
-developers added bigtime support for y2038k. But for existing installs, I ask
-that we keep Reiserfs supported in the kernel a little longer. Perhaps use the
-same deprecation schedule that was picked for XFS v4 (roughly 10 years of
-deprecation before eventual removal)?
+The first two patches introduce the new device as a module configured to be
+compiled directly into the kernel (y) similar to the s390 SCLP and CHSH
+miscdevice modules. Patch 3/3 introduces selftests which verify error
+paths of the ioctl.
 
-Thanks,
-  -Byron
+v1->v2:
+  * ioctl returns -ENOIOCTLCMD in case of a invalid ioctl command
+  * streamlined reserved field test
+  * default Kconfig is y instead of m
+  * improved selftest documentation
+
+Steffen Eiden (3):
+  drivers/s390/char: Add Ultravisor io device
+  drivers/s390/char: Add Ultravisor attestation to uvdevice
+  selftests: drivers/s390x: Add uvdevice tests
+
+ MAINTAINERS                                   |   3 +
+ arch/s390/include/asm/uv.h                    |  23 +-
+ arch/s390/include/uapi/asm/uvdevice.h         |  46 +++
+ drivers/s390/char/Kconfig                     |  11 +
+ drivers/s390/char/Makefile                    |   1 +
+ drivers/s390/char/uvdevice.c                  | 308 ++++++++++++++++++
+ tools/testing/selftests/Makefile              |   1 +
+ tools/testing/selftests/drivers/.gitignore    |   1 +
+ .../selftests/drivers/s390x/uvdevice/Makefile |  22 ++
+ .../selftests/drivers/s390x/uvdevice/config   |   1 +
+ .../drivers/s390x/uvdevice/test_uvdevice.c    | 281 ++++++++++++++++
+ 11 files changed, 697 insertions(+), 1 deletion(-)
+ create mode 100644 arch/s390/include/uapi/asm/uvdevice.h
+ create mode 100644 drivers/s390/char/uvdevice.c
+ create mode 100644 tools/testing/selftests/drivers/s390x/uvdevice/Makefile
+ create mode 100644 tools/testing/selftests/drivers/s390x/uvdevice/config
+ create mode 100644 tools/testing/selftests/drivers/s390x/uvdevice/test_uvdevice.c
+
+-- 
+2.25.1
 

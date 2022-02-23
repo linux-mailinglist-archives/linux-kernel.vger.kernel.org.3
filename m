@@ -2,185 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 146754C1435
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 14:32:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 85C0E4C1446
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 14:35:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237711AbiBWNcY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 08:32:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57254 "EHLO
+        id S240948AbiBWNgR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 08:36:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235189AbiBWNcW (ORCPT
+        with ESMTP id S231817AbiBWNgP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 08:32:22 -0500
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C25139BB83
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 05:31:54 -0800 (PST)
-Received: by mail-lj1-x234.google.com with SMTP id u7so17136346ljk.13
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 05:31:54 -0800 (PST)
+        Wed, 23 Feb 2022 08:36:15 -0500
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 613BBAB460
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 05:35:47 -0800 (PST)
+Received: by mail-pj1-x102e.google.com with SMTP id g7-20020a17090a708700b001bb78857ccdso2229090pjk.1
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 05:35:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=daynix-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=7dnyHmrO36rrHyXARPRiGQlAPqAL/RPhHWzq7NmeXFU=;
-        b=DCpZuBYw1K5GBm3Yf8oboPq/eMpixfVzGH8pD4UEALwU6Piq0DHgYQgOt/7CAvI306
-         Dcz50R2TMDksWKMuLwdtBmupzNUlRGkvZEr3wrUGXHDsry2cMM5zBquEuUE/lGQio3cy
-         dQioRFt9XmtopGgUlNHRhYJyo7M9qv/QhTJs7H/sBz6Y+d0QTU8BHf6TQuNWtwwlfHVy
-         CsK3Xgbm2ngEooxg6hRKNJbBTvfjYRUDLlL01JPPYENYx80hxKuFn8POj2bETak/AHLu
-         Za/hbi5Gqnd8nDCavCmWhSt5NPE4zh7m8WDnAJZpqs6lI7TkKUByTA7ZENXTV7ySlrYX
-         jQDg==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=2LkI7viyz1bWHFghD3wcUN6xjIn2SITh0BSW72H7QJE=;
+        b=PF7dH7sqNAJ9HacLIQRlA6mnOM9sdkvMnuxXQLkTMEwahp6+WGggIC0t7dyDipeldZ
+         Yf3hOya4oCl5Svryds5pBTT8I8o7aOjxzpceH/wRgb2Lhv6aZaalwYkUSu6G3VQ6RS10
+         9Ld09dma5WbtyThnTQRg19DlD4qP3KHv5nnpqfX4TrlPpVO2bEGRRB7pjaJFFyUnblHm
+         bKiuovctMvsBvcZSpBKl4uyLLLzyzBmipAUuuVD2V+8mn+ohrDEFLy6mV/cRfcDK8K3r
+         Isi4O1dE9OEQM1xHqq4TdUEXjAxG+dcOdrtFdzG3ggJEna79QBmbYQyPXG2ZW7fF/ott
+         UZNg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=7dnyHmrO36rrHyXARPRiGQlAPqAL/RPhHWzq7NmeXFU=;
-        b=SB3LdakCylx97Wbhs7nUs/h3twsUkv2quY20/nHfImlZm4HyZlPAbnItIAeiCgBBx0
-         JL2UPSSsvvx60rK0OskEUOzahrL7i8wGvA/OXRJfxX4cqUdQCiZBaHzQTy9z3ZayY60T
-         Xpm2cndGeWmFt6S7OnCqnHvGQCiPXONLSKx15YArFRZWG+Z5vPOcvwIp75TClPwQIFx3
-         7/EXakG7iAcbFPJEqj2Hxst266aQHm0H7hZPGDB4AM6Mvs63XURiqH1FRs6y9CJdJwPP
-         4jUkFsb1j+rtBOoWxJzS/Qojtn5S8bTt3gbpce6aDnjTyzzgh7rucPS8CU31uqnHGq+7
-         JqCQ==
-X-Gm-Message-State: AOAM530nsfgeATdh6wWvKq0uGXv9dtgnh2lhmhsaDAXlQL/dzysDaLhy
-        8S+4sSJn5Z7taoz8U0PEU8Dcs5hq7Yl+4dpGCANeQw==
-X-Google-Smtp-Source: ABdhPJwJY+a32PVbCbOr6F7WLpIRa1HJ6cmeP7R7LTqqu3aAVT2hhZelkzr7J95bPvGGBDkYywmSkJE5OgieO0xkm/Q=
-X-Received: by 2002:a05:651c:1509:b0:246:5f82:eed2 with SMTP id
- e9-20020a05651c150900b002465f82eed2mr1509589ljf.271.1645623113097; Wed, 23
- Feb 2022 05:31:53 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=2LkI7viyz1bWHFghD3wcUN6xjIn2SITh0BSW72H7QJE=;
+        b=aQELMqQ2fQuH1Sp6xVRtpEYZuUcxMr1uVBaPcyDm6xjAgh+FsAeTlP/y7LVWhkqRUk
+         eU3RHlHMqGyDwegzGjjMhaH+DxbFx+lX7i9dliGNu0YlMPzZchDhJwjmGK3enS7pqmDN
+         YQCj1f0kt7gJ6pYZR678A1dwe9W1UJnABED/ahfbAbFMpKAVdA3ZvUQSd4QQpMQxsdjK
+         4IrzjpyS/iUPW8cG2GwhQIXVjIpBiA+XiqhGCoWWH0GDw0j6YUwLYfdp+6Gqsx1XHhX/
+         6fgOO7KYgwIv/NDvNNZotrItfxMEdr5TXLN4evpUR828ueLOlIPSVX+OtpdQWl7C3iel
+         k6og==
+X-Gm-Message-State: AOAM531bvBZBVqSiI+frNfykbUE9z/asLLTvmtEdqXvfUel40ZozIYYe
+        x1EOlCc/tg7Osif7yAjzN7o=
+X-Google-Smtp-Source: ABdhPJwCO1kq/O6DcCnEWrp3+fmkJgA5BrNsQuDTU2C6eVjvU1X75VXTpD+XBl2IF/OOVG1hz3wOKw==
+X-Received: by 2002:a17:902:ac96:b0:14f:c5f2:3bf1 with SMTP id h22-20020a170902ac9600b0014fc5f23bf1mr11659282plr.126.1645623346778;
+        Wed, 23 Feb 2022 05:35:46 -0800 (PST)
+Received: from localhost.localdomain ([2404:e801:2003:194c:e139:f336:bd30:d658])
+        by smtp.gmail.com with ESMTPSA id t200sm21536122pfc.35.2022.02.23.05.35.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Feb 2022 05:35:46 -0800 (PST)
+From:   Hao Wu <guoyuanchao1202@gmail.com>
+To:     brauner@kernel.org, ebiederm@xmission.com, keescook@chromium.org,
+        axboe@kernel.dk, peterz@infradead.org, elver@google.com,
+        tglx@linutronix.de, legion@kernel.org
+Cc:     linux-kernel@vger.kernel.org, Hao Wu <guoyuanchao1202@gmail.com>
+Subject: [PATCH v1] signal.c: repeatedly set the TIF_SIGPENDING flag
+Date:   Wed, 23 Feb 2022 21:35:40 +0800
+Message-Id: <20220223133540.24230-1-guoyuanchao1202@gmail.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-References: <20220125084702.3636253-1-andrew@daynix.com> <20220125084702.3636253-2-andrew@daynix.com>
- <06a90de0-57ae-9315-dc2c-03cc74b4ae0c@redhat.com> <CABcq3pH7HnH_-nCHcX7eet_ouqocQEptp6A9GCbs3=9guArhPA@mail.gmail.com>
- <CACGkMEu3biQ+BM29nDu82jP8y+p4iiL4K=GzM6px+yktU5Zqjw@mail.gmail.com>
-In-Reply-To: <CACGkMEu3biQ+BM29nDu82jP8y+p4iiL4K=GzM6px+yktU5Zqjw@mail.gmail.com>
-From:   Yuri Benditovich <yuri.benditovich@daynix.com>
-Date:   Wed, 23 Feb 2022 15:31:41 +0200
-Message-ID: <CAOEp5OeGNezTasp7zsvpFHGfjkM4bWRbbFY7WEWc7hRYVDSxdA@mail.gmail.com>
-Subject: Re: [RFC PATCH 1/5] uapi/linux/if_tun.h: Added new ioctl for tun/tap.
-To:     Jason Wang <jasowang@redhat.com>
-Cc:     Andrew Melnichenko <andrew@daynix.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Network Development <netdev@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        virtualization <virtualization@lists.linux-foundation.org>,
-        Yan Vugenfirer <yan@daynix.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jason,
-We agree that the same can be done also using the old way, i.e. try to
-set specific offload - if failed, probably it is not supported.
-We think this is a little not scalable and we suggest adding the ioctl
-that will allow us to query allo the supported features in a single
-call.
-We think this will make QEMU code more simple also in future.
-Do I understand correctly that you suggest to skip this new ioctl and
-use the old way of query for this (USO) feature and all future
-extensions?
+The recalc_sigpending_and_wake() function calls recalc_sigpending_tsk() and signal_wake_up(),
+both of which set the TIF_SIGPENDING flag, so when recalc_sigpending_tsk() returns true,
+the TIF_SIGPENDING flag will be set twice.
 
-Thanks
+Maybe we can take away the set TIF_SIGPENDING logic from recalc_sigpending_tsk(),
+so that recalc_sigpending_tsk() just determines whether the TIF_SIGPENDING flag needs to be set,
+and the actual set TIF_SIGPENDING flag logic is executed outside.
 
+kernel/signal.c:175: recalc_sigpending_and_wake()
+kernel/signal.c:154: recalc_sigpending_tsk()
 
-On Wed, Feb 23, 2022 at 5:53 AM Jason Wang <jasowang@redhat.com> wrote:
->
-> On Tue, Feb 22, 2022 at 9:28 PM Andrew Melnichenko <andrew@daynix.com> wr=
-ote:
-> >
-> > Hi all,
-> >
-> > On Wed, Feb 9, 2022 at 6:26 AM Jason Wang <jasowang@redhat.com> wrote:
-> > >
-> > >
-> > > =E5=9C=A8 2022/1/25 =E4=B8=8B=E5=8D=884:46, Andrew Melnychenko =E5=86=
-=99=E9=81=93:
-> > > > Added TUNGETSUPPORTEDOFFLOADS that should allow
-> > > > to get bits of supported offloads.
-> > >
-> > >
-> > > So we don't use dedicated ioctls in the past, instead, we just probin=
-g
-> > > by checking the return value of TUNSETOFFLOADS.
-> > >
-> > > E.g qemu has the following codes:
-> > >
-> > > int tap_probe_has_ufo(int fd)
-> > > {
-> > >      unsigned offload;
-> > >
-> > >      offload =3D TUN_F_CSUM | TUN_F_UFO;
-> > >
-> > >      if (ioctl(fd, TUNSETOFFLOAD, offload) < 0)
-> > >          return 0;
-> > >
-> > >      return 1;
-> > > }
-> > >
-> > > Any reason we can't keep using that?
-> > >
-> > > Thanks
-> > >
-> >
-> > Well, even in this example. To check the ufo feature, we trying to set =
-it.
-> > What if we don't need to "enable" UFO and/or do not change its state?
->
-> So at least Qemu doesn't have such a requirement since during the
-> probe the virtual networking backend is not even started.
->
-> > I think it's a good idea to have the ability to get supported offloads
-> > without changing device behavior.
->
-> Do you see a real user for this?
->
-> Btw, we still need to probe this new ioctl anyway.
->
-> Thanks
->
-> >
-> > >
-> > > > Added 2 additional offlloads for USO(IPv4 & IPv6).
-> > > > Separate offloads are required for Windows VM guests,
-> > > > g.e. Windows may set USO rx only for IPv4.
-> > > >
-> > > > Signed-off-by: Andrew Melnychenko <andrew@daynix.com>
-> > > > ---
-> > > >   include/uapi/linux/if_tun.h | 3 +++
-> > > >   1 file changed, 3 insertions(+)
-> > > >
-> > > > diff --git a/include/uapi/linux/if_tun.h b/include/uapi/linux/if_tu=
-n.h
-> > > > index 454ae31b93c7..07680fae6e18 100644
-> > > > --- a/include/uapi/linux/if_tun.h
-> > > > +++ b/include/uapi/linux/if_tun.h
-> > > > @@ -61,6 +61,7 @@
-> > > >   #define TUNSETFILTEREBPF _IOR('T', 225, int)
-> > > >   #define TUNSETCARRIER _IOW('T', 226, int)
-> > > >   #define TUNGETDEVNETNS _IO('T', 227)
-> > > > +#define TUNGETSUPPORTEDOFFLOADS _IOR('T', 228, unsigned int)
-> > > >
-> > > >   /* TUNSETIFF ifr flags */
-> > > >   #define IFF_TUN             0x0001
-> > > > @@ -88,6 +89,8 @@
-> > > >   #define TUN_F_TSO6  0x04    /* I can handle TSO for IPv6 packets =
-*/
-> > > >   #define TUN_F_TSO_ECN       0x08    /* I can handle TSO with ECN =
-bits. */
-> > > >   #define TUN_F_UFO   0x10    /* I can handle UFO packets */
-> > > > +#define TUN_F_USO4   0x20    /* I can handle USO for IPv4 packets =
-*/
-> > > > +#define TUN_F_USO6   0x40    /* I can handle USO for IPv6 packets =
-*/
-> > > >
-> > > >   /* Protocol info prepended to the packets (when IFF_NO_PI is not =
-set) */
-> > > >   #define TUN_PKT_STRIP       0x0001
-> > >
-> >
->
+Signed-off-by: Hao Wu <guoyuanchao1202@gmail.com>
+---
+ kernel/signal.c | 10 +++++++---
+ 1 file changed, 7 insertions(+), 3 deletions(-)
+
+diff --git a/kernel/signal.c b/kernel/signal.c
+index 9b04631acde8..6c5a00cd7e9a 100644
+--- a/kernel/signal.c
++++ b/kernel/signal.c
+@@ -157,7 +157,6 @@ static bool recalc_sigpending_tsk(struct task_struct *t)
+ 	    PENDING(&t->pending, &t->blocked) ||
+ 	    PENDING(&t->signal->shared_pending, &t->blocked) ||
+ 	    cgroup_task_frozen(t)) {
+-		set_tsk_thread_flag(t, TIF_SIGPENDING);
+ 		return true;
+ 	}
+@@ -181,8 +180,11 @@ void recalc_sigpending_and_wake(struct task_struct *t)
+ void recalc_sigpending(void)
+ {
+-	if (!recalc_sigpending_tsk(current) && !freezing(current))
++	if (recalc_sigpending_tsk(current)) {
++		set_tsk_thread_flag(t, TIF_SIGPENDING);
++	} else if (!freezing(current)) {
+ 		clear_thread_flag(TIF_SIGPENDING);
++	}
+ }
+ EXPORT_SYMBOL(recalc_sigpending);
+@@ -2325,7 +2327,9 @@ static void ptrace_stop(int exit_code, int why, int clear_code, kernel_siginfo_t
+ 	 * So check for any that we should take before resuming user mode.
+ 	 * This sets TIF_SIGPENDING, but never clears it.
+ 	 */
+-	recalc_sigpending_tsk(current);
++	if (recalc_sigpending_tsk(current)) {
++		set_tsk_thread_flag(t, TIF_SIGPENDING);
++	}
+ }
+ static void ptrace_do_notify(int signr, int exit_code, int why)
+2.32.0
+

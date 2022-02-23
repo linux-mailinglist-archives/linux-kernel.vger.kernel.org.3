@@ -2,47 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 739A04C110A
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 12:10:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C2A4E4C1139
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 12:26:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239774AbiBWLLB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 06:11:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46808 "EHLO
+        id S239841AbiBWL0x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 06:26:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231288AbiBWLK6 (ORCPT
+        with ESMTP id S236327AbiBWL0w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 06:10:58 -0500
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6523E8EB69;
-        Wed, 23 Feb 2022 03:10:30 -0800 (PST)
-Received: from kwepemi500011.china.huawei.com (unknown [172.30.72.53])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4K3YC96CtVz9sGN;
-        Wed, 23 Feb 2022 19:07:01 +0800 (CST)
-Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
- kwepemi500011.china.huawei.com (7.221.188.124) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Wed, 23 Feb 2022 19:10:28 +0800
-Received: from huawei.com (10.175.127.227) by kwepemm600009.china.huawei.com
- (7.193.23.164) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Wed, 23 Feb
- 2022 19:10:27 +0800
-From:   Yu Kuai <yukuai3@huawei.com>
-To:     <axboe@kernel.dk>
-CC:     <linux-block@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <yukuai3@huawei.com>, <yi.zhang@huawei.com>
-Subject: [PATCH RFC] blk-mq: fix potential uaf for 'queue_hw_ctx'
-Date:   Wed, 23 Feb 2022 19:26:01 +0800
-Message-ID: <20220223112601.2902761-1-yukuai3@huawei.com>
-X-Mailer: git-send-email 2.31.1
+        Wed, 23 Feb 2022 06:26:52 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B303E9024D
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 03:26:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1645615583;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Haw7XCJunvY/DjkGYU10zm/TPnhQIIAXDUz4hP9McDQ=;
+        b=U+jAKXUz9cCflcHFuVRImQn8c65cuehczK9V1Vs/TIrMy3eijNdXRmvZMxkz8q1n5j5ylE
+        UCajgCp/GBsCtigg8kYNGK3SvHlSawhQ5RM8JHXHqLtRfbCfFYrYdjF6gKfOqWQa7gFsit
+        41q/Tr/iZf1J6eHbLIuYLowjV8c1CpA=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-37-Z13veCtBN9CMqTZX0Qkyig-1; Wed, 23 Feb 2022 06:26:22 -0500
+X-MC-Unique: Z13veCtBN9CMqTZX0Qkyig-1
+Received: by mail-wm1-f71.google.com with SMTP id w3-20020a7bc743000000b0037c5168b3c4so984061wmk.7
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 03:26:22 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Haw7XCJunvY/DjkGYU10zm/TPnhQIIAXDUz4hP9McDQ=;
+        b=P5Xc97h9rGO20rpMvQiNBi6YUC0DnyLkAurnGva8VqN7jayzRtGCg/CB6pFd/PX+0E
+         dKLvHRJJOpmWv+aY7vov2HeC7Vxq9ocs8XaIHtKDebo6Vj02hJsWNyZPnfgXx0EGTKK+
+         MmvU2stZCYpa2QvyX0TRRT5wDyUDSZ+iYE9PBlXdBkzg4nfMuLVGQnREIB9RMygc1ste
+         NVMmgMHLBRpix6WdEKJPkvkYIyWQU42p6OvmkAWlgNKo8tjz8GJ8M5S6R8axCCEG874q
+         bU9KJroffmEodWtgBti/b8WPgc3bg+iYuhaKhQVtE+UQQSKyT31kFZfigyD1eL40W1gx
+         xmHQ==
+X-Gm-Message-State: AOAM5307BgWLvutDyj7f4QyG0dCcBLe0I9XIREf09MFF4yS20Ut2CN11
+        dFL6EAAMcLO8JFctOLyPfhGBwaGVGo2Y5cgYsPc055i8FJZbSndtDPeAEzjYzgj/EvbFb09uj01
+        dxvY+rTH6ZyxZiEuckOCIjpRl
+X-Received: by 2002:adf:e2cf:0:b0:1ed:a702:5ef4 with SMTP id d15-20020adfe2cf000000b001eda7025ef4mr2247208wrj.487.1645615581413;
+        Wed, 23 Feb 2022 03:26:21 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJykSRUu2MIXs7qWqdvPoNdIH8fNfCQn7v7rt5GYse64UKs0Uo+59+0XKkms3GN06X84NEVg5Q==
+X-Received: by 2002:adf:e2cf:0:b0:1ed:a702:5ef4 with SMTP id d15-20020adfe2cf000000b001eda7025ef4mr2247190wrj.487.1645615581185;
+        Wed, 23 Feb 2022 03:26:21 -0800 (PST)
+Received: from debian.home (2a01cb058d3818005c1e4a7b0f47339f.ipv6.abo.wanadoo.fr. [2a01:cb05:8d38:1800:5c1e:4a7b:f47:339f])
+        by smtp.gmail.com with ESMTPSA id f63sm3976646wma.17.2022.02.23.03.26.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Feb 2022 03:26:20 -0800 (PST)
+Date:   Wed, 23 Feb 2022 12:26:18 +0100
+From:   Guillaume Nault <gnault@redhat.com>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     Eric Dumazet <edumazet@google.com>,
+        "Ziyang Xuan (William)" <william.xuanziyang@huawei.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        David Miller <davem@davemloft.net>,
+        netdev <netdev@vger.kernel.org>,
+        Vasily Averin <vvs@virtuozzo.com>,
+        Kees Cook <keescook@chromium.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH net] net: vlan: allow vlan device MTU change follow real
+ device from smaller to bigger
+Message-ID: <20220223112618.GA19531@debian.home>
+References: <20220221124644.1146105-1-william.xuanziyang@huawei.com>
+ <CANn89iKyWWCbAdv8W26HwGpM9q5+6rrk9E-Lbd2aujFkD3GMaQ@mail.gmail.com>
+ <YhQ1KrtpEr3TgCwA@gondor.apana.org.au>
+ <8248d662-8ea5-7937-6e34-5f1f8e19190f@huawei.com>
+ <CANn89iLf2ira4XponYV91cbvcdK76ekU7fDW93fmuJ3iytFHcw@mail.gmail.com>
+ <20220222103733.GA3203@debian.home>
+ <20220222152815.1056ca24@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.127.227]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- kwepemm600009.china.huawei.com (7.193.23.164)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220222152815.1056ca24@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,105 +89,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-blk_mq_realloc_hw_ctxs() will free the 'queue_hw_ctx'(e.g. undate
-submit_queues through configfs for null_blk), while it might still be
-used from other context(e.g. switch elevator to none):
+On Tue, Feb 22, 2022 at 03:28:15PM -0800, Jakub Kicinski wrote:
+> On Tue, 22 Feb 2022 11:37:33 +0100 Guillaume Nault wrote:
+> > What about an explicit option:
+> > 
+> >   ip link add link eth1 dev eth1.100 type vlan id 100 follow-parent-mtu
+> > 
+> > 
+> > Or for something more future proof, an option that can accept several
+> > policies:
+> > 
+> >   mtu-update <reduce-only,follow,...>
+> > 
+> >       reduce-only (default):
+> >         update vlan's MTU only if the new MTU is smaller than the
+> >         current one (current behaviour).
+> > 
+> >       follow:
+> >         always follow the MTU of the parent device.
+> > 
+> > Then if anyone wants more complex policies:
+> > 
+> >       follow-if-not-modified:
+> >         follow the MTU of the parent device as long as the VLAN's MTU
+> >         was not manually changed. Otherwise only adjust the VLAN's MTU
+> >         when the parent's one is set to a smaller value.
+> > 
+> >       follow-if-not-modified-but-not-quite:
+> >         like follow-if-not-modified but revert back to the VLAN's
+> >         last manually modified MTU, if any, whenever possible (that is,
+> >         when the parent device's MTU is set back to a higher value).
+> >         That probably requires the possibility to dump the last
+> >         modified MTU, so the administrator can anticipate the
+> >         consequences of modifying the parent device.
+> > 
+> >      yet-another-policy (because people have a lot of imagination):
+> >        for example, keep the MTU 4 bytes lower than the parent device,
+> >        to account for VLAN overhead.
+> > 
+> > Of course feel free to suggest better names and policies :).
+> > 
+> > This way, we can keep the current behaviour and avoid unexpected
+> > heuristics that are difficult to explain (and even more difficult for
+> > network admins to figure out on their own).
+> 
+> My $0.02 would be that if we want to make changes that require new uAPI
+> we should do it across uppers.
 
-t1					t2
-elevator_switch
- blk_mq_unquiesce_queue
-  blk_mq_run_hw_queues
-   queue_for_each_hw_ctx
-    // assembly code for hctx = (q)->queue_hw_ctx[i]
-    mov    0x48(%rbp),%rdx -> read old queue_hw_ctx
+Do you mean something like:
 
-					__blk_mq_update_nr_hw_queues
-					 blk_mq_realloc_hw_ctxs
-					  hctxs = q->queue_hw_ctx
-					  q->queue_hw_ctx = new_hctxs
-					  kfree(hctxs)
-    movslq %ebx,%rax
-    mov    (%rdx,%rax,8),%rdi ->uaf
+  ip link set dev eth0 vlan-mtu-policy <policy-name>
 
-This problem was found by code review, and I comfirmed that the concurrent
-scenarios do exist(specifically 'q->queue_hw_ctx' can be changed during
-blk_mq_run_hw_queues), however, the uaf problem hasn't been repoduced yet
-without hacking the kernel.
+that'd affect all existing (and future) vlans of eth0?
 
-Sicne the queue is freezed in __blk_mq_update_nr_hw_queues, fix the
-problem by protecting 'queue_hw_ctx' through rcu where it can be accessed
-without grabbing 'q_usage_counter'.
+Then I think that for non-ethernet devices, we should reject this
+option and skip it when dumping config. But yes, that's another
+possibility.
 
-Signed-off-by: Yu Kuai <yukuai3@huawei.com>
----
- block/blk-mq.c         |  8 +++++++-
- include/linux/blk-mq.h |  2 +-
- include/linux/blkdev.h | 13 ++++++++++++-
- 3 files changed, 20 insertions(+), 3 deletions(-)
+I personnaly don't really mind, as long as we keep a clear behaviour.
 
-diff --git a/block/blk-mq.c b/block/blk-mq.c
-index 6c59ffe765fd..79367457d555 100644
---- a/block/blk-mq.c
-+++ b/block/blk-mq.c
-@@ -3955,7 +3955,13 @@ static void blk_mq_realloc_hw_ctxs(struct blk_mq_tag_set *set,
- 		if (hctxs)
- 			memcpy(new_hctxs, hctxs, q->nr_hw_queues *
- 			       sizeof(*hctxs));
--		q->queue_hw_ctx = new_hctxs;
-+
-+		rcu_assign_pointer(q->queue_hw_ctx, new_hctxs);
-+		/*
-+		 * Make sure reading the old queue_hw_ctx from other
-+		 * context concurrently won't trigger uaf.
-+		 */
-+		synchronize_rcu();
- 		kfree(hctxs);
- 		hctxs = new_hctxs;
- 	}
-diff --git a/include/linux/blk-mq.h b/include/linux/blk-mq.h
-index d319ffa59354..edcf8ead76c6 100644
---- a/include/linux/blk-mq.h
-+++ b/include/linux/blk-mq.h
-@@ -918,7 +918,7 @@ static inline void *blk_mq_rq_to_pdu(struct request *rq)
- 
- #define queue_for_each_hw_ctx(q, hctx, i)				\
- 	for ((i) = 0; (i) < (q)->nr_hw_queues &&			\
--	     ({ hctx = (q)->queue_hw_ctx[i]; 1; }); (i)++)
-+	     ({ hctx = queue_hctx((q), i); 1; }); (i)++)
- 
- #define hctx_for_each_ctx(hctx, ctx, i)					\
- 	for ((i) = 0; (i) < (hctx)->nr_ctx &&				\
-diff --git a/include/linux/blkdev.h b/include/linux/blkdev.h
-index 3bfc75a2a450..2018a4dd2028 100644
---- a/include/linux/blkdev.h
-+++ b/include/linux/blkdev.h
-@@ -354,7 +354,7 @@ struct request_queue {
- 	unsigned int		queue_depth;
- 
- 	/* hw dispatch queues */
--	struct blk_mq_hw_ctx	**queue_hw_ctx;
-+	struct blk_mq_hw_ctx __rcu	**queue_hw_ctx;
- 	unsigned int		nr_hw_queues;
- 
- 	/*
-@@ -622,6 +622,17 @@ static inline bool queue_is_mq(struct request_queue *q)
- 	return q->mq_ops;
- }
- 
-+static inline struct blk_mq_hw_ctx *queue_hctx(struct request_queue *q, int id)
-+{
-+	struct blk_mq_hw_ctx *hctx;
-+
-+	rcu_read_lock();
-+	hctx = *(rcu_dereference(q->queue_hw_ctx) + id);
-+	rcu_read_unlock();
-+
-+	return hctx;
-+}
-+
- #ifdef CONFIG_PM
- static inline enum rpm_status queue_rpm_status(struct request_queue *q)
- {
--- 
-2.31.1
+What I'd really like to avoid is something like:
+  - By default it behaves this way.
+  - If you modified the MTU it behaves in another way
+  - But if you modified the MTU but later restored the
+    original MTU, then you're back to the default behaviour
+    (or not?), unless the MTU of the upper device was also
+    changed meanwhile, in which case ... to be continued ...
+  - BTW, you might not be able to tell how the VLAN's MTU is going to
+    behave by simply looking at its configuration, because that also
+    depends on past configurations.
+  - Well, and if your kernel is older than xxx, then you always get the
+    default behaviour.
+  - ... and we might modify the heuristics again in the future to
+    accomodate with situations or use cases we failed to consider.
 

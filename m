@@ -2,65 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53A634C0AB9
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 04:51:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A1944C0ABB
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 04:52:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237954AbiBWDvn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 22:51:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50514 "EHLO
+        id S237678AbiBWDwn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 22:52:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237346AbiBWDvk (ORCPT
+        with ESMTP id S233958AbiBWDwl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 22:51:40 -0500
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89D21657A8
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 19:51:12 -0800 (PST)
-Received: by mail-lj1-x22a.google.com with SMTP id e8so14822355ljj.2
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 19:51:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=W9o8E/GqdYtOTLRG+zZAUd0gtjWhs7Bb1g7AEZ+WmaI=;
-        b=aXRcJ4yvHQJyf6hir6XnrojLMAQB6U8jccX70auhmlB1CquPuAxO5Kj/XnwagE3C3m
-         iycKRFhvQvlKaLOC+DbDUMYJV9DQQzNhIA6i4Bl8PeEn0ftd7oiSO2awlUmRldWHLEL3
-         GvyRwpIEdEZgZ80W4Pu4tDwf4TQK7kvkcExxFkAk6JyDD8nDJ/102TCiXPHGTnE3vfyO
-         MLXKstC6hZQtMKEf3G5KhHehXE6zvK0jMK40AncVqK7efTJUCmKafH/MxV4+te+5RNTI
-         wtC/Hq3o+rOBi29XVbrlpDeLzJ7zWY2BM1QLQRGR86C3tTwBA83f0QluJ9IHay2GHCuY
-         2gpw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=W9o8E/GqdYtOTLRG+zZAUd0gtjWhs7Bb1g7AEZ+WmaI=;
-        b=Tg55YGCAH9Zomg57Tx0P0xp/665ejcq/tBrc6iWlEPKnxISfZNcTlVpdSJgsjHIX6E
-         WOep5f3jOn93dlAZLH+wg79iRbBLBeU2LS5AAN5Gm39MwnDi7SDLsr5KELQtmn2kBujR
-         bSHM5dmH49D+qHyKI0tloCsux7q9rtF3u1Jc+glYiJ4yN1TI7W5BxrPaER0aTSGWakpF
-         gNtJNk5JaNI/g6Zbyqd5NU2eh7U6K/QKK1eDlEb+V0yIf2GVjeW5vOjFi5Vz7xG4vHnb
-         BEypxy2jW6mmKUq8C0StaQKwSbbU993y0OAKlreDTE5hAa3ElAcBvt2yL4XxY/Zdgygy
-         /a6Q==
-X-Gm-Message-State: AOAM533Tw6v2w1t01qF/aiPmERx/oLvEsuIJJ5cNnqXSqiZ1NuMyKJ2/
-        IaJCeO34EbLuvt2B8a0Vbsqp1ICqKtEy+QVuwj8E6A==
-X-Google-Smtp-Source: ABdhPJzuv0Mz9ZFoYJQKM313P4fWrFMmznEbd/Qc826SeVAFFXm/puIOmIEgAaFTiz4B6KS9LP5DYnS7kpi2DwUdHuY=
-X-Received: by 2002:a2e:3013:0:b0:246:2ca9:365e with SMTP id
- w19-20020a2e3013000000b002462ca9365emr13863094ljw.291.1645588270878; Tue, 22
- Feb 2022 19:51:10 -0800 (PST)
+        Tue, 22 Feb 2022 22:52:41 -0500
+Received: from APC01-HK2-obe.outbound.protection.outlook.com (mail-eopbgr1300129.outbound.protection.outlook.com [40.107.130.129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 466224A3EC
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 19:52:14 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=LBjUL1HrCg93LEJzATG9+WlQEqn/5B3PM6jscHDwynSpWdxfaaas5vS0h0Wzf4a2mq+0e3TSQWfM5/kCTxqgXdH6EcA3H/cLWJ/ivpDIAR4cTACJv8pzPiaGpN0TZO8tYVXwha3bb/5KtLzP674xijlevlUfHkKJzhlEO5mw3WEk4cPOj3xKW0L/QOhqEud+NvqrhuLYacNyw/J/M/V8MzgZ0eCGdlylt5XyzgamjLUIirZyJZ1xvFKlx6zrIivdM5Zl/1boHQe7FLa9RUQoSwf5lfNaYWLsdrHZUbaSxijnP8TzBFoCFBPsSXL198KwN4Z/l+L+nWFUHI4HpUqTig==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ENnXnIhZO0Re6+UZvuzCybiCI9xVspYvEK5sHiIptC8=;
+ b=cfa72jRsJ6VEDqSdPta6WmQXo0n+GLreo/MtfAOTHYr+BJjJWrLTiLAnY1mYMXg6TcBdLrQuO805+5l12OSiSu76A66qZZlKsmMrg1SqvOd9AYJmaxpncjza6zH20Ir0z3ma2IWokVzCzQp4wUXYSYznUoILog88Nx0hpkfRBqNZjfEdSK6472dZAxubTmCLHwp/lWoyjw0N8o57sPV0U6RAAIuVMCj9RWnUnSxZo1oTdG3yWZ6fOtw4mwAizpz4ULJwx54tGqg/itJpxOuI3ft/BX0eGsNUk1oihoC66SJJopb1+yIqGF/6Q3paCBMEn8KRkyPMZX1RgtdqJmbnaw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo0.onmicrosoft.com;
+ s=selector2-vivo0-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ENnXnIhZO0Re6+UZvuzCybiCI9xVspYvEK5sHiIptC8=;
+ b=pNNmVoxWiHxiGJlo/BG/sksIBtVIF1YZ/PmFArqaof01u7kxA6puOXBhYjXtafOh0LFh79YGfu3W8sOC6rYetC75PqPtxPrghb9gFLW/JM9PimHXYnc4IT4WFrpBB/USCvJAMUKcFFgPfH950jcqXlBaFxM8E1CVuOVl+Mp6+wM=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from SG2PR06MB3367.apcprd06.prod.outlook.com (2603:1096:4:78::19) by
+ SI2PR06MB5292.apcprd06.prod.outlook.com (2603:1096:4:1e8::8) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5017.22; Wed, 23 Feb 2022 03:52:11 +0000
+Received: from SG2PR06MB3367.apcprd06.prod.outlook.com
+ ([fe80::9d3f:ff3b:1948:d732]) by SG2PR06MB3367.apcprd06.prod.outlook.com
+ ([fe80::9d3f:ff3b:1948:d732%4]) with mapi id 15.20.4995.027; Wed, 23 Feb 2022
+ 03:52:10 +0000
+From:   Wan Jiabing <wanjiabing@vivo.com>
+To:     Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Ivan Bornyakov <i.bornyakov@metrotek.ru>,
+        Wan Jiabing <wanjiabing@vivo.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     jiabing.wan@qq.com
+Subject: [PATCH] bus: imx-weim: fix NULL but dereferenced coccicheck error
+Date:   Wed, 23 Feb 2022 11:51:45 +0800
+Message-Id: <20220223035146.412499-1-wanjiabing@vivo.com>
+X-Mailer: git-send-email 2.35.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: HK2PR02CA0141.apcprd02.prod.outlook.com
+ (2603:1096:202:16::25) To SG2PR06MB3367.apcprd06.prod.outlook.com
+ (2603:1096:4:78::19)
 MIME-Version: 1.0
-References: <cover.1645558375.git.riteshh@linux.ibm.com> <e91b6872860df3ec520799a5d0b65e54ccf32407.1645558375.git.riteshh@linux.ibm.com>
-In-Reply-To: <e91b6872860df3ec520799a5d0b65e54ccf32407.1645558375.git.riteshh@linux.ibm.com>
-From:   Xin Yin <yinxin.x@bytedance.com>
-Date:   Wed, 23 Feb 2022 11:50:59 +0800
-Message-ID: <CAK896s7V7wj0Yiu0NQEFvmS9-oivJUosgMYW5UBJ4cX2YCSh6g@mail.gmail.com>
-Subject: Re: [External] [RFC 9/9] ext4: fast_commit missing tracking updates
- to a file
-To:     Ritesh Harjani <riteshh@linux.ibm.com>
-Cc:     linux-ext4@vger.kernel.org,
-        Harshad Shirwadkar <harshadshirwadkar@gmail.com>,
-        "Theodore Ts'o" <tytso@mit.edu>, Jan Kara <jack@suse.cz>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: dfd820b8-aad7-4b4d-1dc0-08d9f67fde40
+X-MS-TrafficTypeDiagnostic: SI2PR06MB5292:EE_
+X-Microsoft-Antispam-PRVS: <SI2PR06MB52922C8FE4BCB5ADAE614FD9AB3C9@SI2PR06MB5292.apcprd06.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Py9DDKJCQ/DtTXfdWcF/oRZnZ/y5LCCxtZVzUuvcY/5Mj1b0JKtY8sbUzjXuM/ZqwY5V61HdzJl1lRM2oSccStoX6BBXjQHG8kC08xTd68tYBT5X2dvaGTGhxIA56WJV8Nhb91MiVMBPBlD+z6uJ9nTFZh14DtFpErO5ee3xDWCZoz4PcTWngyK/D4Mpl0EKJXI9gVN2++SV0XuC4xj2yOOoY+IPTWcvsiJnrpmRiPuk+aZ5yBx4SxZmABeTOPmTHqekbKwez1fc7Fa17S9VyszQ/eyv8VY3brDNNZ+0ZmwZ40RRziNod9ZVHInSecdyPY2mnoyW/S+vpHcdV7vaE/ySkbZSYhRZU3sBN4mdyUO7GutX3/s34gnTVhYUgWt4o/zOVwDrbjTsluz5oBt+13JCmSmLjNT3Ih3TxFTmYgmGIpTT/SXyj3cmekCBmV/bOyacNPyBI4OfHQ45hc3uAN10ouVT8EOmLT1/w3mChlzIkfwVoOun2tFIRSMX+V/QZpUhHiqZqr9oRLGO+CARO3o58ujYgfNaeJpo7Bm+k//7Dr7yNSJvUN6LJYStT5xtdA1ugBPeGgHQfqLuWC0NCj47752gAq+X1lG53azL74Ro8FfcIWSrcb5T8GZ/w3rsa1uCI0Z0/P1SW5pkr+/8ED9SOnC0ogg3xsc5OZZp2AnWK7IySq4hrEn6e/HSdU5xUsXlvd6GT0MdPXHMneU9ag==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SG2PR06MB3367.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(6486002)(5660300002)(4326008)(6512007)(6666004)(6506007)(86362001)(508600001)(36756003)(4744005)(2616005)(2906002)(186003)(8936002)(26005)(1076003)(83380400001)(110136005)(316002)(8676002)(66476007)(66556008)(66946007)(52116002)(38350700002)(38100700002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?HFT0+UtG+g9QLJ5jzC5gI4ir5MLBuCavIihrgnJsXX/H6geo59riHQuzXevC?=
+ =?us-ascii?Q?Se8LAnWNZoaSTuT/aPX7pjfjF562VXizTR9VxtQJICjPJddIX7Fc0JUjdRIJ?=
+ =?us-ascii?Q?5wUnrEJ4lm+Ux1HSS2rhUWwJwZGQcdeifMuo+IyA+61Qwl/3JyylLa2JroBl?=
+ =?us-ascii?Q?O39XglfPYlRVbGz8M1ABmogolfSUwTFsHKG0a6r0KoM2FvWH9SZLoWhGTIGJ?=
+ =?us-ascii?Q?qWcHUffD7qhQdbmDL9Q2YeXhjSZOlAQxF6QuNu7wnT5QlD0vfZCizFqoqiSu?=
+ =?us-ascii?Q?smDn2G3MVwlDNYyXyE7ffqjOBu+1IH4uuwDOozwpOK9fuux8USR46fCxqgSM?=
+ =?us-ascii?Q?CNRWnjc/irB1Jznma0ct+xGZGZ1TCJg11yTMzSSW0/ITYxdOOk2nOETWyuIC?=
+ =?us-ascii?Q?OHvLw627eQXK+ZCGd58KTlLlM7+rHfxlik0JzyrwCN2iqiFVOQfmmQByCVbt?=
+ =?us-ascii?Q?VGun493dZXzkcWROzC/ioJJSqt0w1K2oNZIk07qlmPzqv6st761Jd7IZMw7/?=
+ =?us-ascii?Q?upTjJtTllIaBT56JHwNNpzOr2p0dESeA8xAQp+QpQVPiTmWeiu7FFBGJhN0O?=
+ =?us-ascii?Q?CVjrOfBZsp4XiRmPRuCriR0XylvHMb52AgqlYYeP5Bn/5BRSu2jHWR5OnPKS?=
+ =?us-ascii?Q?tP9C/AE9IxcHIZhYDRV1bKUnByYrTxnw5hmfkdGBwoGRnBgssvO6VDfEaM9S?=
+ =?us-ascii?Q?r74wNGCzKip08ZV24Idt5WO+57UOkyMvP5+m+O7QBXkB6GPsKYlJ7Qm9lEDG?=
+ =?us-ascii?Q?cIMhAL3nLwVbNBN9sHhvLVNiOrp+PSzPi1vvyGv+jOOTH5oiUaiknvbzg4XZ?=
+ =?us-ascii?Q?MLeqmxhQ87FoUVkbNfAUvvw/2bOBPGgRVcL5uZC8nSjCHeYAtS64BIDZb7Nd?=
+ =?us-ascii?Q?9i2KNh8yr10+QWhuDBVbqSqSuLIEqWfdnwKcjMqxcBmtn4YQQcjBR6VmhMbu?=
+ =?us-ascii?Q?VUG6Qbyl8b2FI4zMAYBn1ws0CA8SLiTThayKRHhWHBQ7e80AgpzIoSSBbTHi?=
+ =?us-ascii?Q?cthNfTr0+KRGZUqryemghWGQZTwUJYmUoH2Hrqb2QXhjC/N99xVn7DgAHGGO?=
+ =?us-ascii?Q?3+73Gz0n90pEefqUhsNm7JWkgOiQ3tqBc5QWihugNBcNj0qURveCT/0cqaP/?=
+ =?us-ascii?Q?HriP1A+0OZdM7adPUT7XiEZxWlHdwPDFC1YEFXW/3FiASw1PmWJa1thw3AA5?=
+ =?us-ascii?Q?puHuJ08XibiKi8tyKgJEU2tpikBetJ6LzWCUPPGfbJZzRxZnUpxlhdXP9znS?=
+ =?us-ascii?Q?wsAj3LpJTXcdMfuvD7o/5IUJ+cPTeBagh6xjT0NOgDD5eZ3JixCKMIWg0Dfr?=
+ =?us-ascii?Q?weyxB7R1BdAJtOUlULGUsKMblr8L6b6+zON0IhioXsZkv2wg3DQkmWeH1dYo?=
+ =?us-ascii?Q?BX+Me7PRRvyEFBmAtlt544V2wxuns3/FvQlwSJBjFZCNSrQsZqydmptuGPqs?=
+ =?us-ascii?Q?1HmjSX9Ov5obN292stcr+ckRzADn3RDuJICB6GCTUiOBM9txGO890n5kdRAL?=
+ =?us-ascii?Q?eQeR3bJoPJ0AamzLAmSp+/nEt3lMW+KrSQcAYxzLM57tr4DZqUh+Q5e/DP1Z?=
+ =?us-ascii?Q?LYet/4q+9jc0oKGN+suZVf1N0+J2jzmDGIfdhkcZFR6Hsh9ey4ni6c7Ti8LJ?=
+ =?us-ascii?Q?0Z21UQU3gUzah4joQpRiNTQ=3D?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: dfd820b8-aad7-4b4d-1dc0-08d9f67fde40
+X-MS-Exchange-CrossTenant-AuthSource: SG2PR06MB3367.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Feb 2022 03:52:10.4346
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: hUPWy78xX0df9TTq4cs2pJQsHn6VFWmtoIGWw93fDwjsPGLArgTs78sh+ABeC4KW70ri/TkPg1rPGBZdlq4aAA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SI2PR06MB5292
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,104 +118,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 23, 2022 at 4:36 AM Ritesh Harjani <riteshh@linux.ibm.com> wrote:
->
-> <DO NOT MERGE THIS YET>
->
-> Testcase
-> ==========
-> 1. i=0; while [ $i -lt 1000 ]; do xfs_io -f -c "pwrite -S 0xaa -b 32k 0 32k" -c "fsync" /mnt/$i; i=$(($i+1)); done && sudo ./src/godown -v /mnt && sudo umount /mnt && sudo mount /dev/loop2 /mnt'
-> 2. ls -alih /mnt/ -> In this you will observe one such file with 0 bytes (which ideally should not happen)
->
-> ^^^ say if you don't see the issue because your underlying storage
-> device is very fast, then maybe try with commit=1 mount option.
->
-> Analysis
-> ==========
-> It seems a file's updates can be a part of two transaction tid.
-> Below are the sequence of events which could cause this issue.
->
-> jbd2_handle_start -> (t_tid = 38)
-> __ext4_new_inode
-> ext4_fc_track_template -> __track_inode -> (i_sync_tid = 38, t_tid = 38)
-> <track more updates>
-> jbd2_start_commit -> (t_tid = 38)
->
-> jbd2_handle_start (tid = 39)
-> ext4_fc_track_template -> __track_inode -> (i_sync_tid = 38, t_tid 39)
->     -> ext4_fc_reset_inode & ei->i_sync_tid = t_tid
->
-> ext4_fc_commit_start -> (will wait since jbd2 full commit is in progress)
-> jbd2_end_commit (t_tid = 38)
->     -> jbd2_fc_cleanup() -> this will cleanup entries in sbi->s_fc_q[FC_Q_MAIN]
->         -> And the above could result inode size as 0 as  after effect.
-> ext4_fc_commit_stop
->
-> You could find the logs for the above behavior for inode 979 at [1].
->
-> -> So what is happening here is since the ei->i_fc_list is not empty
-> (because it is already part of sb's MAIN queue), we don't add this inode
-> again into neither sb's MAIN or STAGING queue.
-> And after jbd2_fc_cleanup() is called from jbd2 full commit, we
-> just remove this inode from the main queue.
->
-> So as a simple fix, what I did below was to check if it is a jbd2 full commit
-> in ext4_fc_cleanup(), and if the ei->i_sync_tid > tid, that means we
-> need not remove that from MAIN queue. This is since neither jbd2 nor FC
-> has committed updates of those inodes for this new txn tid yet.
->
-> But below are some quick queries on this
-> =========================================
->
-> 1. why do we call ext4_fc_reset_inode() when inode tid and
->    running txn tid does not match?
-This is part of a change in commit:bdc8a53a6f2f,  it fixes the issue
-for fc tracking logic while jbd2 commit is ongoing.
-If the inode tid is bigger than txn tid, that means this inode may be
-in the STAGING queue, if we reset it then it will lose the tack range.
-I think it's a similar issue, the difference is this inode is already
-in the MAIN queue before the jbd2 commit starts.
-And yes , I think in this case we can not remove it from the MAIN
-queue, but still need to clear EXT4_STATE_FC_COMMITTING right? it may
-block some task still waiting for it.
+Fix following coccicheck warning:
+./drivers/bus/imx-weim.c:355:18-21: ERROR: pdev is NULL but dereferenced.
 
-Thanks,
-Xin Yin
->
-> 2. Also is this an expected behavior from the design perspective of
->    fast_commit. i.e.
->    a. the inode can be part of two tids?
->    b. And that while a full commit is in progress, the inode can still
->    receive updates but using a new transaction tid.
->
-> Frankly speaking, since I was also working on other things, so I haven't
-> yet got the chance to completely analyze the situation yet.
-> Once I have those things sorted, I will spend more time on this, to
-> understand it more. Meanwhile if you already have some answers to above
-> queries/observations, please do share those here.
->
-> Links
-> =========
-> [1] https://raw.githubusercontent.com/riteshharjani/LinuxStudy/master/ext4/fast_commit/fc_inode_missing_updates_ino_979.txt
->
-> Signed-off-by: Ritesh Harjani <riteshh@linux.ibm.com>
-> ---
->  fs/ext4/fast_commit.c | 2 ++
->  1 file changed, 2 insertions(+)
->
-> diff --git a/fs/ext4/fast_commit.c b/fs/ext4/fast_commit.c
-> index 8803ba087b07..769b584c2552 100644
-> --- a/fs/ext4/fast_commit.c
-> +++ b/fs/ext4/fast_commit.c
-> @@ -1252,6 +1252,8 @@ static void ext4_fc_cleanup(journal_t *journal, int full, tid_t tid)
->         spin_lock(&sbi->s_fc_lock);
->         list_for_each_entry_safe(iter, iter_n, &sbi->s_fc_q[FC_Q_MAIN],
->                                  i_fc_list) {
-> +               if (full && iter->i_sync_tid > tid)
-> +                       continue;
->                 list_del_init(&iter->i_fc_list);
->                 ext4_clear_inode_state(&iter->vfs_inode,
->                                        EXT4_STATE_FC_COMMITTING);
-> --
-> 2.31.1
->
+Signed-off-by: Wan Jiabing <wanjiabing@vivo.com>
+---
+ drivers/bus/imx-weim.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/drivers/bus/imx-weim.c b/drivers/bus/imx-weim.c
+index 60fbd42041dd..2ea0a51f79f6 100644
+--- a/drivers/bus/imx-weim.c
++++ b/drivers/bus/imx-weim.c
+@@ -352,8 +352,7 @@ static int of_weim_notify(struct notifier_block *nb, unsigned long action,
+ 
+ 		pdev = of_find_device_by_node(rd->dn);
+ 		if (!pdev) {
+-			dev_err(&pdev->dev,
+-				"Could not find platform device for '%pOF'\n",
++			pr_err("Could not find platform device for '%pOF'\n",
+ 				rd->dn);
+ 
+ 			ret = notifier_from_errno(-EINVAL);
+-- 
+2.35.1
+

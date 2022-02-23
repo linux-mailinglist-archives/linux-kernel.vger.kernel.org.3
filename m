@@ -2,139 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A39BD4C18A4
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 17:34:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 64BF34C18A9
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 17:35:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242804AbiBWQfG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 11:35:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45168 "EHLO
+        id S242823AbiBWQfX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 11:35:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231128AbiBWQfE (ORCPT
+        with ESMTP id S242817AbiBWQfT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 11:35:04 -0500
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ED204EF53;
-        Wed, 23 Feb 2022 08:34:36 -0800 (PST)
-Received: (Authenticated sender: jacopo@jmondi.org)
-        by mail.gandi.net (Postfix) with ESMTPSA id 5C5C6E000D;
-        Wed, 23 Feb 2022 16:34:32 +0000 (UTC)
-Date:   Wed, 23 Feb 2022 17:34:31 +0100
-From:   Jacopo Mondi <jacopo@jmondi.org>
-To:     Eugen.Hristev@microchip.com
-Cc:     linux-media@vger.kernel.org, hverkuil-cisco@xs4all.nl,
-        Nicolas.Ferre@microchip.com, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Claudiu.Beznea@microchip.com
-Subject: Re: [PATCH v5 04/13] media: atmel: atmel-isc: implement media
- controller
-Message-ID: <20220223163431.wask6vh2tfhllzf4@uno.localdomain>
-References: <20220217135645.1427466-1-eugen.hristev@microchip.com>
- <20220217135645.1427466-5-eugen.hristev@microchip.com>
- <e4109e0f-af1f-7594-a154-92e65fd7ac59@microchip.com>
+        Wed, 23 Feb 2022 11:35:19 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C42885133D
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 08:34:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1645634091;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=nQ3OobjVOllFjF//341g+8FVMNuOOL65pOBy6n0VyaU=;
+        b=T/oixT1BX1XEx1a+XORn+9bgHzY1ETN1fOMRgPh87DkmZ+UFk4Mz5/Ral7LCMotGbirCeL
+        U2j3+DCu2NZrg63BoN1taO7q6NkQPQVOExt8NiN5CNk54WgeHmmqF0Y+R5R5Kbm58Kh3Qz
+        ebYNSpIgmozWFuXh9Yls9qoIlhBLlOA=
+Received: from mail-oo1-f72.google.com (mail-oo1-f72.google.com
+ [209.85.161.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-255-UjB-SeYNNGqIHh5qC7Z1ew-1; Wed, 23 Feb 2022 11:34:49 -0500
+X-MC-Unique: UjB-SeYNNGqIHh5qC7Z1ew-1
+Received: by mail-oo1-f72.google.com with SMTP id k17-20020a4adfb1000000b0031c228d26a2so8606294ook.6
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 08:34:49 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:organization:mime-version:content-transfer-encoding;
+        bh=nQ3OobjVOllFjF//341g+8FVMNuOOL65pOBy6n0VyaU=;
+        b=G2Q+zJCnAnusAR5KSccDbL53aXeCKo3rzi1B80Sfc2shJfmY2kxreghHFom7yBWIM7
+         y48TeOJrAyGJKHDOmlgMo5EIJmHzwVry/h0uua/UGLiJKeB/hoUp5k01kl0rDmSoZaPh
+         gHFubKpYen5wiN+oGiJjA1DC5yggpkvsgf0Mfxstnrt1DrRXAa3HITAyrkOVcR5EgFXR
+         09KiQgewbnwIkfElpjKflPKq9iDXyVCjNtC8DekB6v2Ma9Bauho/MeuV0zgjVUdya9rz
+         ulCZh0Tbs1z0vYjthLANKSwnSTjLhB0BEcQJfoG98OVgdQNP9lkJ2mtoaC9YFJCC7hSi
+         kesw==
+X-Gm-Message-State: AOAM532Q/DCTTY0sFD63kNdfetU9FIiMflFP+vhhlDMQgNZQac+I2YVn
+        3lYRo+g+IJZKxznr2y1HUPu88ZltNE4GeiDHvRXdFHp+d95sVQOuLq/cIuWNqTKM7GyThepiN25
+        stLdWLqHDfs10kopWSntrnCD3
+X-Received: by 2002:a54:4085:0:b0:2d4:6f0b:f3b7 with SMTP id i5-20020a544085000000b002d46f0bf3b7mr258692oii.148.1645634085370;
+        Wed, 23 Feb 2022 08:34:45 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxaP/1ZvmMsLm7zZq6HfYZWjNtio48LTCUjFpR9oZZdGxGMhkpLSdC41ujeIjXVdKBnwi0P6A==
+X-Received: by 2002:a54:4085:0:b0:2d4:6f0b:f3b7 with SMTP id i5-20020a544085000000b002d46f0bf3b7mr258680oii.148.1645634085157;
+        Wed, 23 Feb 2022 08:34:45 -0800 (PST)
+Received: from redhat.com ([38.15.36.239])
+        by smtp.gmail.com with ESMTPSA id s9sm55235otg.6.2022.02.23.08.34.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Feb 2022 08:34:44 -0800 (PST)
+Date:   Wed, 23 Feb 2022 09:34:43 -0700
+From:   Alex Williamson <alex.williamson@redhat.com>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-crypto@vger.kernel.org, cohuck@redhat.com,
+        mgurtovoy@nvidia.com, yishaih@nvidia.com, linuxarm@huawei.com,
+        liulongfang@huawei.com, prime.zeng@hisilicon.com,
+        jonathan.cameron@huawei.com, wangzhou1@hisilicon.com
+Subject: Re: [PATCH v5 7/8] hisi_acc_vfio_pci: Add support for VFIO live
+ migration
+Message-ID: <20220223093443.367ee531.alex.williamson@redhat.com>
+In-Reply-To: <20220223005251.GJ10061@nvidia.com>
+References: <20220221114043.2030-1-shameerali.kolothum.thodi@huawei.com>
+        <20220221114043.2030-8-shameerali.kolothum.thodi@huawei.com>
+        <20220223005251.GJ10061@nvidia.com>
+Organization: Red Hat
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <e4109e0f-af1f-7594-a154-92e65fd7ac59@microchip.com>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Eugen,
+On Tue, 22 Feb 2022 20:52:51 -0400
+Jason Gunthorpe <jgg@nvidia.com> wrote:
 
-On Thu, Feb 17, 2022 at 02:59:19PM +0000, Eugen.Hristev@microchip.com wrote:
-> On 2/17/22 3:56 PM, Eugen Hristev wrote:
-> > Implement the support for media-controller.
-> > This means that the capabilities of the driver have changed and now
-> > it also advertises the IO_MC .
-> > The driver will register it's media device, and add the video entity to this
-> > media device. The subdevices are registered to the same media device.
-> > The ISC will have a base entity which is auto-detected as atmel_isc_base.
-> > It will also register a subdevice that allows cropping of the incoming frame
-> > to the maximum frame size supported by the ISC.
-> > The ISC will create a link between the subdevice that is asynchronously
-> > registered and the atmel_isc_scaler entity.
-> > Then, the atmel_isc_scaler and atmel_isc_base are connected through another
-> > link.
-> >
-> > Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
-> > ---
->
->
-> Hello Jacopo,
->
-> I will add to this patch a little update about how the scaler is seen
-> now by the media-ctl :
->
-> for imx219 sensor, which generates 3280x2464:
->
->
-> - entity 1: atmel_isc_scaler (2 pads, 2 links)
->              type V4L2 subdev subtype Unknown flags 0
->              device node name /dev/v4l-subdev0
->          pad0: Sink
->                  [fmt:SRGGB10_1X10/3280x2464 field:none colorspace:srgb
->                   crop.bounds:(0,0)/3280x2464
->                   crop:(0,0)/3264x2464]
->                  <- "csi2dc":1 [ENABLED,IMMUTABLE]
->          pad1: Source
->                  [fmt:SRGGB10_1X10/3264x2464 field:none colorspace:srgb]
->                  -> "atmel_isc_common":0 [ENABLED,IMMUTABLE]
->
->
-> The source pad of the scaler looks good now.
->
-> For the imx274 which I am using (and it generates 3840x2160 ):
->
-> - entity 1: atmel_isc_scaler (2 pads, 2 links)
->              type V4L2 subdev subtype Unknown flags 0
->              device node name /dev/v4l-subdev0
->          pad0: Sink
->                  [fmt:SRGGB10_1X10/3840x2160 field:none colorspace:srgb
->                   crop.bounds:(0,0)/3840x2160
->                   crop:(0,0)/3264x2160]
->                  <- "csi2dc":1 [ENABLED,IMMUTABLE]
->          pad1: Source
->                  [fmt:SRGGB10_1X10/3264x2160 field:none colorspace:srgb]
->                  -> "atmel_isc_common":0 [ENABLED,IMMUTABLE]
->
-> So in both cases, each line is cropped down to 3264 as the maximum width.
->
-> If we select a lower frame size, the scaler will automatically update
-> the source pad to reflect this, e.g.:
->
->
-> - entity 1: atmel_isc_scaler (2 pads, 2 links)
->              type V4L2 subdev subtype Unknown flags 0
->              device node name /dev/v4l-subdev0
->          pad0: Sink
->                  [fmt:SRGGB10_1X10/1920x1080 field:none colorspace:srgb
->                   crop.bounds:(0,0)/1920x1080
->                   crop:(0,0)/1920x1080]
->                  <- "csi2dc":1 [ENABLED,IMMUTABLE]
->          pad1: Source
->                  [fmt:SRGGB10_1X10/1920x1080 field:none colorspace:srgb]
->                  -> "atmel_isc_common":0 [ENABLED,IMMUTABLE]
->
->
-> does it look good now ?
+> On Mon, Feb 21, 2022 at 11:40:42AM +0000, Shameer Kolothum wrote:
+> 
+> > +	/*
+> > +	 * ACC VF dev BAR2 region consists of both functional register space
+> > +	 * and migration control register space. For migration to work, we
+> > +	 * need access to both. Hence, we map the entire BAR2 region here.
+> > +	 * But from a security point of view, we restrict access to the
+> > +	 * migration control space from Guest(Please see mmap/ioctl/read/write
+> > +	 * override functions).
+> > +	 *
+> > +	 * Also the HiSilicon ACC VF devices supported by this driver on
+> > +	 * HiSilicon hardware platforms are integrated end point devices
+> > +	 * and has no capability to perform PCIe P2P.  
+> 
+> If that is the case why not implement the RUNNING_P2P as well as a
+> NOP?
+> 
+> Alex expressed concerned about proliferation of non-P2P devices as it
+> complicates qemu to support mixes
 
-great! I think it now works as intended, thanks!
+I read the above as more of a statement about isolation, ie. grouping.
+Given that all DMA from the device is translated by the IOMMU, how is
+it possible that a device can entirely lack p2p support, or even know
+that the target address post-translation is to a peer device rather
+than system memory.  If this is the case, it sounds like a restriction
+of the SMMU not supporting translations that reflect back to the I/O
+bus rather than a feature of the device itself.  Thanks,
 
-I only have one question. BOUND target is the larger rectangle that
-contains all crop rectangles. As your max crop is limited to 3264x2160
-I wonder if BOUND should be limited by the same size. Does
-v4l2-compliance check for this.
+Alex
 
-Otherwise it looks good!
-
-Thanks
-  j
-
->
-> Thanks for checking this out !
-> Eugen

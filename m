@@ -2,75 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC8D24C1AF1
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 19:30:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 75F474C1AF0
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 19:30:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243866AbiBWSac (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 13:30:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36504 "EHLO
+        id S243851AbiBWSa2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 13:30:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236947AbiBWSa0 (ORCPT
+        with ESMTP id S236852AbiBWSa0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 23 Feb 2022 13:30:26 -0500
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F5D145AC5
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 10:29:58 -0800 (PST)
-Received: by mail-pj1-x1032.google.com with SMTP id j10-20020a17090a94ca00b001bc2a9596f6so3771855pjw.5
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 10:29:58 -0800 (PST)
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A93A045AE4;
+        Wed, 23 Feb 2022 10:29:58 -0800 (PST)
+Received: by mail-pf1-x430.google.com with SMTP id g1so16190027pfv.1;
+        Wed, 23 Feb 2022 10:29:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=message-id:date:mime-version:user-agent:subject:to:cc:references
-         :from:in-reply-to;
-        bh=3Y59amG8IKrVmDxsN1dRgrlUps+atbzo/+VB0ldhQXE=;
-        b=AGhvc4P3aI9wktft6UouPS4MroWeBaxMov3m2BCoHQjuxCbX2bVk94qb/GIjySqejr
-         bFj3TZCshOnnkgAfohdhAyyxGO/aHZzSrKcNClUnXO451QyCqDQoAvCfivguRrTfR9cW
-         V7iAvK9tYX4xLJVxJs5cHSyBQpW17i+bXN29Y=
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=SkZuVNW5EhwJqSpZnaByyGJdLCPW7Ju2zPYGUOXsjqM=;
+        b=dC5HMCo5K4kF82jU3P9MGgHYmjD3SgZHQBVNL8r+3dcbwmwSC9FQKBkqvwUDKNSIp1
+         MEJXGQh9ZvlPZlPWjKdxsCvDCNJ9CF/6kZTPmNfEU9zMdR7ip8su2U1QLXEkj+uZ0Jdl
+         2LIt4R6GhXnT6bo77+ag2StqHl6/Wc/CKcePtMk8lgWmY7INuVg1XBlwFI7py58WhosU
+         T3ETmSugjcBdc7g0NTMlrTOu/e5m1qXcbYXgJT1VCavksgHjRjqvKYyV01YZMLj1l5Ej
+         lSsJ6sPdEzh1zrKnvYQa1ctRd5vPshfZS06bFcoNE1QEIpXoq3z7Fpw8j5DCOmo+IYPs
+         3+vQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :to:cc:references:from:in-reply-to;
-        bh=3Y59amG8IKrVmDxsN1dRgrlUps+atbzo/+VB0ldhQXE=;
-        b=cb8o59KTap4lBHtyximIqJnA7tk3gl6NSrSJGwcGh+wvYL6XGoZMZ/MYoODBybBClg
-         5i7pBr2rQIOHuNH3Fj5C+ueyLO1gLvCsq5Py8IyOHnisDClNfoPVDeIIwJESo6/llnr0
-         58hWHs/xSRZszoQscQ8iKK+sQCFkqoQSAmqwe87qxWwZ4jXws2lCOZAPaoaChhFMJrIh
-         RNsCVCGaSq+FT4/pwmZlhNlVwz3+7y+krNZIHkYzbaZgmnYzDq13aM9aIy/Q+eDszrJU
-         f0UpQZrIW8K9b/3Na+zv3aO8mMOnke4p4cd5SMF3SnnThv2AVuDbrMMnhFyxKIsgKXBs
-         aHpw==
-X-Gm-Message-State: AOAM531epRY6YoUej6AzsI+r4CO3uTZxqxjP1QxAS46BSh+tV/YqheWf
-        oXBgcHVo3K838+k86/FE0xTeMQ==
-X-Google-Smtp-Source: ABdhPJyoCfFLSDQgAhkClS3W6fYbLsyq/cLublkZ3Tj+Own7buS8FESbW3/tbaw24vfNFgUSX1hW7A==
-X-Received: by 2002:a17:902:e9c2:b0:14f:edeb:4b99 with SMTP id 2-20020a170902e9c200b0014fedeb4b99mr1005055plk.67.1645640997982;
-        Wed, 23 Feb 2022 10:29:57 -0800 (PST)
-Received: from [10.136.13.65] ([192.19.161.250])
-        by smtp.gmail.com with ESMTPSA id 6-20020a17090a030600b001bc62ecad28sm3619803pje.41.2022.02.23.10.29.56
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=SkZuVNW5EhwJqSpZnaByyGJdLCPW7Ju2zPYGUOXsjqM=;
+        b=sf2xsP8uIHKMxP/A+mP54ZLPnEHHf3O23u/u/JrHX+gjlqvjMl8dCBWqmVonRPrdts
+         b+ZsBBVh6aus4pKGTKPBT/ZzCJmvSHW517YU+Sy+4+bsbZiJeAaTPeyeu4zeuKSUmNzW
+         p5yomj4r3PNoSUEbXNIT2R+xq4LrFuo6bW/YLu4JDbP7iTnXRBkjy86MQnhQ7oZA/KND
+         3ADcGjWnDvXgAuR27OxfrHbgL8MghsO/Dk7CMi85v7fb0ULcnrQdGdQ6CnfciiBJfhdM
+         ss8qRNbzedOWJRt/kIK5J+UBrfR9rBjWUS/r/HU+f0xyej+y5PNvMRv52CPDfdobg4Bj
+         zwEQ==
+X-Gm-Message-State: AOAM533niuAwbb1S+RdVBZEPM4o2CzMIHZhAzrsf1yntg8Dp2zfmdtC0
+        ZCf4Acgd4/BoxNs92WqofvU=
+X-Google-Smtp-Source: ABdhPJw/aMkWYOkacTh9GK6zrN6Pxp+9MvTli2gOQggpOzRKne7hPDI4EZw1xVpdukjvOB118IG5Lg==
+X-Received: by 2002:a05:6a00:198f:b0:4e1:abfd:43cc with SMTP id d15-20020a056a00198f00b004e1abfd43ccmr1069614pfl.20.1645640998104;
+        Wed, 23 Feb 2022 10:29:58 -0800 (PST)
+Received: from [192.168.1.3] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
+        by smtp.gmail.com with ESMTPSA id u25sm224039pfh.46.2022.02.23.10.29.56
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
         Wed, 23 Feb 2022 10:29:57 -0800 (PST)
-Message-ID: <54efb659-e713-2c27-8db1-fb74ef0f7cc3@broadcom.com>
+Message-ID: <0a1d6269-62b2-ebd4-f302-efe14ffa4b66@gmail.com>
 Date:   Wed, 23 Feb 2022 10:29:55 -0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v1 1/1] misc: bcm-vk: add kconfig for supporting viper
- chip
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Desmond yan <desmond.yan@broadcom.com>,
-        Olof Johansson <olofj@fb.com>, Arnd Bergmann <arnd@arndb.de>,
-        bcm-kernel-feedback-list@broadcom.com, linux-kernel@vger.kernel.org
-References: <20220218200811.17136-1-desmond.yan@broadcom.com>
- <YhCdNyRxGYmhx21f@kroah.com>
- <CAEuuh2_b-xGAux_EmBaNCGcBM7C0-Z8d_q1BBZ+LA0zpkZEunQ@mail.gmail.com>
- <YhUZqYrvNy05h86j@kroah.com>
- <534605ef-aeb1-b0a2-2326-be6faba4709c@broadcom.com>
- <YhXht9ieY8vDuBTS@kroah.com>
- <3b2ff726-7ed8-9810-8d06-078f4f1fa4d8@broadcom.com>
- <YhZ8j6lAj8iHzLCq@kroah.com>
-From:   Scott Branden <scott.branden@broadcom.com>
-In-Reply-To: <YhZ8j6lAj8iHzLCq@kroah.com>
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000224d7705d8b3a7de"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Subject: Re: [PATCH RESEND stable 4.9] mtd: rawnand: brcmnand: Fixed incorrect
+ sub-page ECC status
+Content-Language: en-US
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, sashal@kernel.org,
+        david regan <dregan@mail.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Brian Norris <computersforpeace@gmail.com>,
+        "open list:NAND FLASH SUBSYSTEM" <linux-mtd@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20220223174431.1083-1-f.fainelli@gmail.com>
+ <20220223174431.1083-3-f.fainelli@gmail.com> <YhZ0vZxlp1VTgNG8@kroah.com>
+ <325bb69b-691b-3c61-9578-d42ec33277b8@gmail.com> <YhZ70pTGdGoPEMUb@kroah.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <YhZ70pTGdGoPEMUb@kroah.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,164 +83,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---000000000000224d7705d8b3a7de
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
 
 
-
-On 2022-02-23 10:27, Greg Kroah-Hartman wrote:
-> On Wed, Feb 23, 2022 at 09:59:48AM -0800, Scott Branden wrote:
->> Hi Greg,
+On 2/23/2022 10:24 AM, Greg KH wrote:
+> On Wed, Feb 23, 2022 at 09:54:59AM -0800, Florian Fainelli wrote:
 >>
->> On 2022-02-22 23:26, Greg Kroah-Hartman wrote:
->>> On Tue, Feb 22, 2022 at 09:14:02PM -0800, Desmond yan wrote:
->>>>
->>>> Greg,
->>>>
->>>> Please see inlined.
->>>>
->>>> On 2/22/22 09:13, Greg Kroah-Hartman wrote:
->>>>> A: http://en.wikipedia.org/wiki/Top_post
->>>>> Q: Were do I find info about this thing called top-posting?
->>>>> A: Because it messes up the order in which people normally read text.
->>>>> Q: Why is top-posting such a bad thing?
->>>>> A: Top-posting.
->>>>> Q: What is the most annoying thing in e-mail?
->>>>>
->>>>> A: No.
->>>>> Q: Should I include quotations after my reply?
->>>>>
->>>>>
->>>>> http://daringfireball.net/2007/07/on_top
->>>>>
->>>>> On Tue, Feb 22, 2022 at 07:41:04AM -0800, Desmond Yan (APD) wrote:
->>>>>> Greg,
->>>>>>
->>>>>> This is to allow the customer to use their own driver, by default,
->>>>>> which is their preferred option.
->>>>>
->>>>> We do not care about out-of-tree code, and do not add Kconfig options
->>>>> just for that, sorry.
->>>>>
->>>>> Why not just add the out-of-tree driver here to the in-kernel code?
->>>>> What is preventing that from happening today?
->>>>
->>>> Using the bcm_vk driver for viper is only for proof-of-concept, and is not
->>>> aimed to be deployed for production.  In parallel, customer is developing
->>>> their own production-ready driver and would probably upstream it whenever
->>>> the appropriate time comes.
->>>
->>> Ok, so let us not add a new config option only for one person working on
->>> writing their own driver.  Let's just add the device id as there are
->>> more people than just that one person wanting to use their hardware with
->>> the existing drivers.
->> The bcm_vk driver is the official driver for Valkyrie.  For Viper, the
->> bcm_vk driver is only for proof of concept, testing, and demonstration
->> purposes. For production, the new driver in development will be used.
 >>
->> To support such configuration, we need to have the Viper pci id configurable
->> and off by default in the bcm_vk driver to allow the new production driver
->> to be developed against the upstream kernel and drivers.
+>> On 2/23/2022 9:54 AM, Greg KH wrote:
+>>> On Wed, Feb 23, 2022 at 09:44:31AM -0800, Florian Fainelli wrote:
+>>>> From: david regan <dregan@mail.com>
+>>>>
+>>>> commit 36415a7964711822e63695ea67fede63979054d9 upstream
+>>>>
+>>>> The brcmnand driver contains a bug in which if a page (example 2k byte)
+>>>> is read from the parallel/ONFI NAND and within that page a subpage (512
+>>>> byte) has correctable errors which is followed by a subpage with
+>>>> uncorrectable errors, the page read will return the wrong status of
+>>>> correctable (as opposed to the actual status of uncorrectable.)
+>>>>
+>>>> The bug is in function brcmnand_read_by_pio where there is a check for
+>>>> uncorrectable bits which will be preempted if a previous status for
+>>>> correctable bits is detected.
+>>>>
+>>>> The fix is to stop checking for bad bits only if we already have a bad
+>>>> bits status.
+>>>>
+>>>> Fixes: 27c5b17cd1b1 ("mtd: nand: add NAND driver "library" for Broadcom STB NAND controller")
+>>>> Signed-off-by: david regan <dregan@mail.com>
+>>>> Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
+>>>> Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
+>>>> Link: https://lore.kernel.org/linux-mtd/trinity-478e0c09-9134-40e8-8f8c-31c371225eda-1643237024774@3c-app-mailcom-lxa02
+>>>> [florian: make patch apply to 4.14, file was renamed]
+>>>> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+>>>> ---
+>>>>    drivers/mtd/nand/brcmnand/brcmnand.c | 2 +-
+>>>>    1 file changed, 1 insertion(+), 1 deletion(-)
 >>>
->>> Please resubmit this without the Kconfig change and I will be glad to
->>> take it.
->> I don't understand what there would be to submit?  The Viper pci id is
->> already upstreamed into the bcm_vk driver.  The sole purpose of this patch
->> is to add the Kconfig option and have it off by default.
+>>> Why is this a RESEND?  What happened with the first set?
+>>
+>> I forgot to copy stable and you and Sasha, wanted to make it clear to the
+>> MTD folks why this is being resent.
 > 
-> Ah, I missed that it was disabling the id.  That's even worse.  No,
-> sorry, not going to take this upstream.  Again, we do not add changes to
-> the kernel (and especially not Kconfig options) for out-of-tree code.
-Well, will you accept a patch to remove the Viper PCI id from upstream 
-instead then?  bcm_vk driver should not support Viper PCI id in official 
-systems.
-> 
-> You know this...
-> 
-> thanks,
-> 
-> greg k-h
+> But this commit is already in the 4.14.268 and 4.19.231 release, why do
+> we need to add it again?
 
---000000000000224d7705d8b3a7de
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
+We don't, sorry I got an email that the patch failed to apply and forgot 
+to check 4.19 and 4.14 thinking they would not be there.
 
-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
-cRe0CRXA7ypOJSgxO/nOOyQoaJxT7CGg1npOeSpPjEuc3fE4xum3l0nvU85hj6MlKZu43hokdBh0
-D0nLyyhEwlR3AC/msdff/UGbM/JR9vk812RP4m/aNWZFJwIDAQABo4IB2zCCAdcwDgYDVR0PAQH/
-BAQDAgWgMIGjBggrBgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZCaHR0cDovL3NlY3VyZS5nbG9i
-YWxzaWduLmNvbS9jYWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3J0MEEGCCsGAQUF
-BzABhjVodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAy
-MDBNBgNVHSAERjBEMEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYmaHR0cHM6Ly93d3cuZ2xv
-YmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNVHR8EQjBAMD6gPKA6hjhodHRw
-Oi8vY3JsLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNybDAlBgNV
-HREEHjAcgRpzY290dC5icmFuZGVuQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAf
-BgNVHSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUOhjEpl04Sz9dh5MI82E1
-V39lM/owDQYJKoZIhvcNAQELBQADggEBAA7Rlypx/esz/iq1yA4+KW7uwV/aBY344BWcXt6I+SNK
-VwFBgFWfLj5vaEud9TVv2fPSiaHJo0umemOJk+43QD+bsoqmgcFXd21PrOt7Jjs+jjVED9VC5kJq
-S4NNKUkS+BqijJwSegtVygrc/atrIlJbjI21q4qpemUo5fgwqCNm++BmBGTI8yA09vtGSNDRN42k
-lLX9hl3iEj5SBgkQqCbbnoE+ZjjKfqt7ED166WhgyQWNrl39yLcvLj+JRUB3RuvXKZjH0NQEEBII
-wZBDSkyneykLt3CBNIhSCTxKM6OWxVp936ALSa5K9FNy00TeWSpokR6NmzaW8VD/EjTgvqAxggJt
-MIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYD
-VQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgx9oXSJpKniO4dS
-Gk8wDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIMBuD3a9IwCv4OF5ZCVNsmozWct4
-t3XFEkNu++OGVUWAMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIy
-MDIyMzE4Mjk1OFowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsG
-CWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFl
-AwQCATANBgkqhkiG9w0BAQEFAASCAQCTLq/xME6W5OCsDFAz9H0Gc4Vn8jPvJgqoucSITy7wvTwF
-iYeQUeAe8l+lbUAuQQoteogD8GhGcQITjzEmJQzUrMlneZQP0mT3doHshrJWC/To8hngXwwuFgXv
-Pz5w8nm41au/2Idt+Bpk607aqQzMhDX7xTPV2jT1QqbWICQdqC43ZP8xO0Zw9klnfevldtNXj/va
-hvaoAzn8+lX4+/9YwvmypS9x97VyzjzNkXTAFdmyagcHxGagyC+/tz1xOKoz1+vAy46ZozO6eG+q
-VxuXKPoerTp3VBJIapsWUwkG3tYh/9T/2hnDEnJaYKjFp/xQ9nHUOrWg3qlmyMv31Lv0
---000000000000224d7705d8b3a7de--
+>  > For 4.9 we need the backport, I'll take that one...
+
+Thanks!
+-- 
+Florian

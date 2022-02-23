@@ -2,62 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8944D4C1FF0
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 00:39:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 31ED34C1FED
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 00:39:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230493AbiBWXjB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 18:39:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58872 "EHLO
+        id S244931AbiBWXjM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 18:39:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244895AbiBWXi2 (ORCPT
+        with ESMTP id S244922AbiBWXif (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 18:38:28 -0500
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6EB45A5B8;
-        Wed, 23 Feb 2022 15:37:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1645659479; x=1677195479;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=DDRe7Pv56LCQJcqlWwmFLq2OP2NC5qVr02qNNdMapis=;
-  b=OspBUknzgSVXcvxAW26jfbAdaX4Vwyy9/ZekJVAXFhCPVQqM9whmTJQl
-   I3XiDFrfQRa66hgyJx3h6U+ClJz30JLnI9s5r/s8FVIpQwX+QfYPBUvVm
-   rp0lqsrOC0g+b/hX3qEFTCkMoI6Mf6YL8zbP1UJ0XyTJQbLCNoEacg1G2
-   E=;
-Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 23 Feb 2022 15:37:59 -0800
-X-QCInternal: smtphost
-Received: from nasanex01b.na.qualcomm.com ([10.46.141.250])
-  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2022 15:37:59 -0800
-Received: from hu-eberman-lv.qualcomm.com (10.49.16.6) by
- nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.15; Wed, 23 Feb 2022 15:37:58 -0800
-From:   Elliot Berman <quic_eberman@quicinc.com>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     Elliot Berman <quic_eberman@quicinc.com>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        Murali Nalajala <quic_mnalajala@quicinc.com>,
-        Srivatsa Vaddagiri <quic_svaddagiri@quicinc.com>,
-        Carl van Schaik <quic_cvanscha@quicinc.com>,
-        Andy Gross <agross@kernel.org>, <linux-arm-msm@vger.kernel.org>
-Subject: [PATCH 11/11] gunyah: Add tty console driver for RM Console Serivces
-Date:   Wed, 23 Feb 2022 15:37:29 -0800
-Message-ID: <20220223233729.1571114-12-quic_eberman@quicinc.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220223233729.1571114-1-quic_eberman@quicinc.com>
-References: <20220223233729.1571114-1-quic_eberman@quicinc.com>
+        Wed, 23 Feb 2022 18:38:35 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7D2945A5A4
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 15:38:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1645659485;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=TQseIfHyNHbxRxCOXDDjbxsPCfu7bqnMBIdUTwy6mvg=;
+        b=M0EjJ+aZoVau9eCd5yPlEPOBTF+Fola8l2gwVMsKjbIRk2goaVuJFxZk6mo1MvZThODJfv
+        FdfvaxAtY5nQ+1gvXGNuRegi2n1pkj171Hhvtws3Frv7iIrrxBlcVX7Xqx5tucgMOzsCRt
+        Sw4kmdQAIfD32yHb4xvg7D2u2ydMMdE=
+Received: from mail-ot1-f71.google.com (mail-ot1-f71.google.com
+ [209.85.210.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-553-h3xkzUNTP1ed_xToa-LuVA-1; Wed, 23 Feb 2022 18:38:04 -0500
+X-MC-Unique: h3xkzUNTP1ed_xToa-LuVA-1
+Received: by mail-ot1-f71.google.com with SMTP id m7-20020a9d7e87000000b005af1551b419so152647otp.5
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 15:38:04 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:organization:mime-version:content-transfer-encoding;
+        bh=TQseIfHyNHbxRxCOXDDjbxsPCfu7bqnMBIdUTwy6mvg=;
+        b=6GJA5wn6a66Zr2105FI8WLa/qf9PuRuDcgR68SYcYRUhiwc0qzWiy8Sq2Ld92VEVIr
+         m9kUbep/11uPfwJHOPTCMn7Lxmbvlk4JkIQpsrlqmgZnqlHKlR/0Dz5424lkdyA4xjg7
+         AIRDyqGzdfEkqIjuqgElfF6jQctvQxGrzQykd7AsYaEfT/yilWc0tXEGdzPYoBAdglnQ
+         9bFT8/hdzDPyer/lK+lGw6FJQTxtD6EjH/et9ZhvjCZQpcvYqvFIx7wAEI5S2r0s4vRa
+         FRcDWtP6oOKYzpL1vI5YxzQF25Amw5nsfiD/lwzUGZGwar8I1bVx9S+An+FmgeFvCTxq
+         UJ0g==
+X-Gm-Message-State: AOAM533OuPfnXJL1pmbbLJuoryc7VI+fykraRh1H+PsqTYJHvulLElkI
+        eKfAjwO2edQFPdE8a5VOlLJQPLdYtLu0D3Y6EuK4JZZnW2a2WR+xIR8hOLSMi5qIXs5fl1z4MLn
+        bcgabYeUbtFT0rWKduIWPY2ZT
+X-Received: by 2002:a05:6808:1597:b0:2d4:c9fd:b11c with SMTP id t23-20020a056808159700b002d4c9fdb11cmr1090222oiw.319.1645659483401;
+        Wed, 23 Feb 2022 15:38:03 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyTOMQrxcWbrjZEEnIVd77niRF3IebauKAnN/LNVNCDSL2buHj2AtUPxw2dFUF8pky3GMpDWg==
+X-Received: by 2002:a05:6808:1597:b0:2d4:c9fd:b11c with SMTP id t23-20020a056808159700b002d4c9fdb11cmr1090208oiw.319.1645659483191;
+        Wed, 23 Feb 2022 15:38:03 -0800 (PST)
+Received: from redhat.com ([38.15.36.239])
+        by smtp.gmail.com with ESMTPSA id y17sm475713otk.70.2022.02.23.15.38.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Feb 2022 15:38:02 -0800 (PST)
+Date:   Wed, 23 Feb 2022 16:38:01 -0700
+From:   Alex Williamson <alex.williamson@redhat.com>
+To:     Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>
+Cc:     <kvm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-crypto@vger.kernel.org>, <jgg@nvidia.com>,
+        <cohuck@redhat.com>, <mgurtovoy@nvidia.com>, <yishaih@nvidia.com>,
+        <linuxarm@huawei.com>, <liulongfang@huawei.com>,
+        <prime.zeng@hisilicon.com>, <jonathan.cameron@huawei.com>,
+        <wangzhou1@hisilicon.com>
+Subject: Re: [PATCH v5 7/8] hisi_acc_vfio_pci: Add support for VFIO live
+ migration
+Message-ID: <20220223163801.10f32e99.alex.williamson@redhat.com>
+In-Reply-To: <20220221114043.2030-8-shameerali.kolothum.thodi@huawei.com>
+References: <20220221114043.2030-1-shameerali.kolothum.thodi@huawei.com>
+        <20220221114043.2030-8-shameerali.kolothum.thodi@huawei.com>
+Organization: Red Hat
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.49.16.6]
-X-ClientProxiedBy: nalasex01a.na.qualcomm.com (10.47.209.196) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,483 +85,133 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Gunyah provides a console for each VM using the VM console resource
-manager APIs. This driver allows console data from other
-VMs to be accessed via a TTY device and exports a console device to dump
-Linux's own logs to our console.
+On Mon, 21 Feb 2022 11:40:42 +0000
+Shameer Kolothum <shameerali.kolothum.thodi@huawei.com> wrote:
+> @@ -159,23 +1110,46 @@ static long hisi_acc_vfio_pci_ioctl(struct vfio_device *core_vdev, unsigned int
+>  
+>  static int hisi_acc_vfio_pci_open_device(struct vfio_device *core_vdev)
+>  {
+> -	struct vfio_pci_core_device *vdev =
+> -		container_of(core_vdev, struct vfio_pci_core_device, vdev);
+> +	struct hisi_acc_vf_core_device *hisi_acc_vdev = container_of(core_vdev,
+> +			struct hisi_acc_vf_core_device, core_device.vdev);
+> +	struct vfio_pci_core_device *vdev = &hisi_acc_vdev->core_device;
+>  	int ret;
+>  
+>  	ret = vfio_pci_core_enable(vdev);
+>  	if (ret)
+>  		return ret;
+>  
+> -	vfio_pci_core_finish_enable(vdev);
+> +	if (core_vdev->migration_flags != VFIO_MIGRATION_STOP_COPY) {
 
-Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
----
- Documentation/virt/gunyah/index.rst   |   7 +
- drivers/virt/gunyah/Kconfig           |  13 +
- drivers/virt/gunyah/Makefile          |   3 +
- drivers/virt/gunyah/rsc_mgr_console.c | 410 ++++++++++++++++++++++++++
- 4 files changed, 433 insertions(+)
- create mode 100644 drivers/virt/gunyah/rsc_mgr_console.c
+This looks like a minor synchronization issue with
+hisi_acc_vfio_pci_migrn_init(), I think it might be cleaner to test
+core_vdev->ops against the migration enabled set.
 
-diff --git a/Documentation/virt/gunyah/index.rst b/Documentation/virt/gunyah/index.rst
-index e7bb2b14543e..95ba9b71ab30 100644
---- a/Documentation/virt/gunyah/index.rst
-+++ b/Documentation/virt/gunyah/index.rst
-@@ -90,3 +90,10 @@ When booting a virtual machine which uses a devicetree, resource manager overlay
- how to communicate with resource manager, and basic description and capabilities of
- this VM. See Documentation/devicetree/bindings/gunyah/qcom,hypervisor.yml for a description
- of this node.
-+
-+Resource Manager Consoles
-+-------------------------
-+RM provides infrastructure for virtual machines to share an interactive console. This can be used to
-+interact with a VM which may not have access to a serial port. Linux will register a printk console:
-+ttyGH0. That console and other VM's consoles can be accessed via ttyGHX.
-+/sys/class/tty/ttyGHX/vmid will print the VM which is associated with that TTY.
-diff --git a/drivers/virt/gunyah/Kconfig b/drivers/virt/gunyah/Kconfig
-index 2ef4887e280d..86d5ca292c76 100644
---- a/drivers/virt/gunyah/Kconfig
-+++ b/drivers/virt/gunyah/Kconfig
-@@ -12,3 +12,16 @@ config GUNYAH
- 
- 	  Say Y here to enable the drivers needed to interact in a Gunyah
- 	  virtual environment.
-+
-+if GUNYAH
-+config GUNYAH_RESOURCE_MANAGER_CONSOLE
-+	tristate "Gunyah Resource Manager Consoles"
-+	depends on TTY
-+	help
-+	  This enables support for console output using Gunyah's Resource Manager RPC.
-+	  This is normally used when a secondary VM which does not have exclusive access
-+	  to a real serial device.
-+
-+	  If you don't have Gunyah or have other console options for secondary VMs,
-+	  you probably don't want this option.
-+endif
-diff --git a/drivers/virt/gunyah/Makefile b/drivers/virt/gunyah/Makefile
-index b3f15c052297..001cf1630c03 100644
---- a/drivers/virt/gunyah/Makefile
-+++ b/drivers/virt/gunyah/Makefile
-@@ -3,3 +3,6 @@
- gunyah-y += sysfs.o device.o msgq.o
- gunyah-y += rsc_mgr.o rsc_mgr_rpc.o
- obj-$(CONFIG_GUNYAH) += gunyah.o
-+
-+gunyah_console-y += rsc_mgr_console.o
-+obj-$(CONFIG_GUNYAH_RESOURCE_MANAGER_CONSOLE) += gunyah_console.o
-diff --git a/drivers/virt/gunyah/rsc_mgr_console.c b/drivers/virt/gunyah/rsc_mgr_console.c
-new file mode 100644
-index 000000000000..72267bc9a315
---- /dev/null
-+++ b/drivers/virt/gunyah/rsc_mgr_console.c
-@@ -0,0 +1,410 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Copyright (c) 2022 Qualcomm Innovation Center, Inc. All rights reserved.
-+ */
-+
-+#define pr_fmt(fmt) "gh_rsc_mgr_console: " fmt
-+
-+#include <linux/gunyah_rsc_mgr.h>
-+#include <linux/auxiliary_bus.h>
-+#include <linux/workqueue.h>
-+#include <linux/spinlock.h>
-+#include <linux/tty_flip.h>
-+#include <linux/console.h>
-+#include <linux/module.h>
-+#include <linux/kfifo.h>
-+#include <linux/kref.h>
-+#include <linux/slab.h>
-+#include <linux/tty.h>
-+#include <linux/of.h>
-+
-+/*
-+ * The Linux TTY code does not support dynamic addition of tty derived devices
-+ * so we need to know how many tty devices we might need when space is allocated
-+ * for the tty device. Since this driver supports hotplug of vty adapters we
-+ * need to make sure we have enough allocated.
-+ */
-+#define RSC_MGR_TTY_ADAPTERS		16
-+
-+/* # of payload bytes that can fit in a 1-fragment CONSOLE_WRITE message */
-+#define RM_CONS_WRITE_MSG_SIZE	((1 * (GH_MSGQ_MAX_MSG_SIZE - 8)) - 4)
-+
-+struct rm_cons_port {
-+	struct tty_port port;
-+	gh_vmid_t vmid;
-+	bool open;
-+	unsigned int index;
-+
-+	DECLARE_KFIFO(put_fifo, char, 1024);
-+	spinlock_t fifo_lock;
-+	struct work_struct put_work;
-+
-+	struct rm_cons_data *cons_data;
-+};
-+
-+struct rm_cons_data {
-+	struct tty_driver *tty_driver;
-+	struct device *dev;
-+
-+	spinlock_t ports_lock;
-+	struct rm_cons_port *ports[RSC_MGR_TTY_ADAPTERS];
-+
-+	struct notifier_block rsc_mgr_notif;
-+	struct console console;
-+};
-+
-+static void put_work_fn(struct work_struct *ws)
-+{
-+	char buf[RM_CONS_WRITE_MSG_SIZE];
-+	int count, ret;
-+	struct rm_cons_port *port = container_of(ws, struct rm_cons_port, put_work);
-+
-+	while (!kfifo_is_empty(&port->put_fifo)) {
-+		count = kfifo_out_spinlocked(&port->put_fifo, buf, sizeof(buf), &port->fifo_lock);
-+		if (count <= 0)
-+			continue;
-+
-+		ret = gh_rm_console_write(port->vmid, buf, count);
-+		if (ret) {
-+			pr_warn_once("failed to send characters: %d\n", ret);
-+			break;
-+		}
-+	}
-+}
-+
-+static int rsc_mgr_console_notif(struct notifier_block *nb, unsigned long cmd, void *data)
-+{
-+	int count, i;
-+	struct rm_cons_port *rm_port;
-+	struct tty_port *tty_port = NULL;
-+	struct rm_cons_data *cons_data = container_of(nb, struct rm_cons_data, rsc_mgr_notif);
-+	const struct gh_rm_notification *notif = data;
-+	struct gh_rm_notif_vm_console_chars const * const msg = notif->buff;
-+
-+	if (cmd != GH_RM_NOTIF_VM_CONSOLE_CHARS ||
-+		notif->size < sizeof(*msg))
-+		return NOTIFY_DONE;
-+
-+	spin_lock(&cons_data->ports_lock);
-+	for (i = 0; i < RSC_MGR_TTY_ADAPTERS; i++) {
-+		if (!cons_data->ports[i])
-+			continue;
-+		if (cons_data->ports[i]->vmid == msg->vmid) {
-+			rm_port = cons_data->ports[i];
-+			break;
-+		}
-+	}
-+	if (rm_port)
-+		tty_port = tty_port_get(&rm_port->port);
-+	spin_unlock(&cons_data->ports_lock);
-+
-+	if (!rm_port)
-+		pr_warn("Received unexpected console characters for VMID %u\n", msg->vmid);
-+	if (!tty_port)
-+		return NOTIFY_DONE;
-+
-+	count = tty_buffer_request_room(tty_port, msg->num_bytes);
-+	tty_insert_flip_string(tty_port, msg->bytes, count);
-+	tty_flip_buffer_push(tty_port);
-+
-+	tty_port_put(tty_port);
-+	return NOTIFY_OK;
-+}
-+
-+static ssize_t vmid_show(struct device *dev, struct device_attribute *attr, char *buf)
-+{
-+	struct rm_cons_port *rm_port = dev_get_drvdata(dev);
-+
-+	if (rm_port->vmid == GH_VMID_SELF)
-+		return sysfs_emit(buf, "self\n");
-+
-+	return sysfs_emit(buf, "%u\n", rm_port->vmid);
-+}
-+
-+static DEVICE_ATTR_RO(vmid);
-+
-+static struct attribute *rsc_mgr_tty_dev_attrs[] = {
-+	&dev_attr_vmid.attr,
-+	NULL
-+};
-+
-+static const struct attribute_group rsc_mgr_tty_dev_attr_group = {
-+	.attrs = rsc_mgr_tty_dev_attrs,
-+};
-+
-+static const struct attribute_group *rsc_mgr_tty_dev_attr_groups[] = {
-+	&rsc_mgr_tty_dev_attr_group,
-+	NULL
-+};
-+
-+static int rsc_mgr_tty_open(struct tty_struct *tty, struct file *filp)
-+{
-+	int ret;
-+	struct rm_cons_port *rm_port = dev_get_drvdata(tty->dev);
-+
-+	if (!rm_port->open) {
-+		ret = gh_rm_console_open(rm_port->vmid);
-+		if (ret) {
-+			pr_err("Failed to open RM console for vmid %x: %d\n", rm_port->vmid, ret);
-+			return ret;
-+		}
-+		rm_port->open = true;
-+	}
-+
-+	return tty_port_open(&rm_port->port, tty, filp);
-+}
-+
-+static void rsc_mgr_tty_close(struct tty_struct *tty, struct file *filp)
-+{
-+	int ret;
-+	struct rm_cons_port *rm_port = dev_get_drvdata(tty->dev);
-+
-+	if (rm_port->open) {
-+		if (rm_port->vmid != GH_VMID_SELF) {
-+			ret = gh_rm_console_close(rm_port->vmid);
-+			if (ret)
-+				pr_warn("Failed to close RM console for vmid %d: %d\n",
-+					rm_port->vmid, ret);
-+		}
-+		rm_port->open = false;
-+
-+		tty_port_close(&rm_port->port, tty, filp);
-+	}
-+
-+}
-+
-+static int rsc_mgr_tty_write(struct tty_struct *tty, const unsigned char *buf, int count)
-+{
-+	struct rm_cons_port *rm_port = dev_get_drvdata(tty->dev);
-+	int ret;
-+
-+	ret = kfifo_in_spinlocked(&rm_port->put_fifo, buf, count, &rm_port->fifo_lock);
-+	if (ret > 0)
-+		schedule_work(&rm_port->put_work);
-+
-+	return ret;
-+}
-+
-+static unsigned int rsc_mgr_mgr_tty_write_room(struct tty_struct *tty)
-+{
-+	struct rm_cons_port *rm_port = dev_get_drvdata(tty->dev);
-+
-+	return kfifo_avail(&rm_port->put_fifo);
-+}
-+
-+static void rsc_mgr_console_write(struct console *co, const char *buf, unsigned count)
-+{
-+	struct rm_cons_port *rm_port = co->data;
-+	int ret;
-+
-+	ret = kfifo_in_spinlocked(&rm_port->put_fifo, buf, count, &rm_port->fifo_lock);
-+	if (ret > 0)
-+		schedule_work(&rm_port->put_work);
-+}
-+
-+static struct tty_driver *rsc_mgr_console_device(struct console *co, int *index)
-+{
-+	struct rm_cons_port *rm_port = co->data;
-+
-+	*index = rm_port->index;
-+	return rm_port->port.tty->driver;
-+}
-+
-+static int rsc_mgr_console_setup(struct console *co, char *unused)
-+{
-+	int ret;
-+	struct rm_cons_port *rm_port = co->data;
-+
-+	if (!rm_port->open) {
-+		ret = gh_rm_console_open(rm_port->vmid);
-+		if (ret) {
-+			pr_err("Failed to open RM console for vmid %x: %d\n", rm_port->vmid, ret);
-+			return ret;
-+		}
-+		rm_port->open = true;
-+	}
-+
-+	return 0;
-+}
-+
-+static int rsc_mgr_console_exit(struct console *co)
-+{
-+	int ret;
-+	struct rm_cons_port *rm_port = co->data;
-+
-+	if (rm_port->open) {
-+		ret = gh_rm_console_close(rm_port->vmid);
-+		if (ret) {
-+			pr_err("Failed to close RM console for vmid %x: %d\n", rm_port->vmid, ret);
-+			return ret;
-+		}
-+		rm_port->open = false;
-+	}
-+
-+	return 0;
-+}
-+
-+static const struct tty_operations rsc_mgr_tty_ops = {
-+	.open = rsc_mgr_tty_open,
-+	.close = rsc_mgr_tty_close,
-+	.write = rsc_mgr_tty_write,
-+	.write_room = rsc_mgr_mgr_tty_write_room,
-+};
-+
-+static void rsc_mgr_port_destruct(struct tty_port *port)
-+{
-+	struct rm_cons_port *rm_port = container_of(port, struct rm_cons_port, port);
-+	struct rm_cons_data *cons_data = rm_port->cons_data;
-+
-+	spin_lock(&cons_data->ports_lock);
-+	WARN_ON(cons_data->ports[rm_port->index] != rm_port);
-+	cons_data->ports[rm_port->index] = NULL;
-+	spin_unlock(&cons_data->ports_lock);
-+	kfree(rm_port);
-+}
-+
-+static const struct tty_port_operations rsc_mgr_port_ops = {
-+	.destruct = rsc_mgr_port_destruct,
-+};
-+
-+static struct rm_cons_port *rsc_mgr_port_create(struct rm_cons_data *cons_data, gh_vmid_t vmid)
-+{
-+	struct rm_cons_port *rm_port;
-+	struct device *ttydev;
-+	unsigned int index;
-+	int ret;
-+
-+	rm_port = kzalloc(sizeof(*rm_port), GFP_KERNEL);
-+	rm_port->vmid = vmid;
-+	INIT_KFIFO(rm_port->put_fifo);
-+	spin_lock_init(&rm_port->fifo_lock);
-+	INIT_WORK(&rm_port->put_work, put_work_fn);
-+	tty_port_init(&rm_port->port);
-+	rm_port->port.ops = &rsc_mgr_port_ops;
-+
-+	spin_lock(&cons_data->ports_lock);
-+	for (index = 0; index < RSC_MGR_TTY_ADAPTERS; index++) {
-+		if (!cons_data->ports[index]) {
-+			cons_data->ports[index] = rm_port;
-+			rm_port->index = index;
-+			break;
-+		}
-+	}
-+	spin_unlock(&cons_data->ports_lock);
-+	if (index >= RSC_MGR_TTY_ADAPTERS) {
-+		ret = -ENOSPC;
-+		goto err_put_port;
-+	}
-+
-+	ttydev = tty_port_register_device_attr(&rm_port->port, cons_data->tty_driver, index,
-+					      cons_data->dev, rm_port, rsc_mgr_tty_dev_attr_groups);
-+	if (IS_ERR(ttydev)) {
-+		ret = PTR_ERR(ttydev);
-+		goto err_put_port;
-+	}
-+
-+	return rm_port;
-+err_put_port:
-+	tty_port_put(&rm_port->port);
-+	return ERR_PTR(ret);
-+}
-+
-+static int rsc_mgr_console_probe(struct auxiliary_device *auxdev,
-+	const struct auxiliary_device_id *aux_dev_id)
-+{
-+	struct rm_cons_data *cons_data;
-+	struct rm_cons_port *rm_port;
-+	int ret;
-+	struct device_node *hyp_node, *vm_of_node;
-+	u32 vmid;
-+
-+	cons_data = devm_kzalloc(&auxdev->dev, sizeof(*cons_data), GFP_KERNEL);
-+	if (!cons_data)
-+		return -ENOMEM;
-+	dev_set_drvdata(&auxdev->dev, cons_data);
-+	cons_data->dev = &auxdev->dev;
-+
-+	cons_data->tty_driver = tty_alloc_driver(RSC_MGR_TTY_ADAPTERS,
-+						 TTY_DRIVER_REAL_RAW | TTY_DRIVER_DYNAMIC_DEV);
-+	if (IS_ERR(cons_data->tty_driver))
-+		return PTR_ERR(cons_data->tty_driver);
-+
-+	cons_data->tty_driver->driver_name = "gh";
-+	cons_data->tty_driver->name = "ttyGH";
-+	cons_data->tty_driver->type = TTY_DRIVER_TYPE_SYSTEM;
-+	cons_data->tty_driver->init_termios = tty_std_termios;
-+	tty_set_operations(cons_data->tty_driver, &rsc_mgr_tty_ops);
-+
-+	ret = tty_register_driver(cons_data->tty_driver);
-+	if (ret) {
-+		dev_err(&auxdev->dev, "Could not register tty driver: %d\n", ret);
-+		goto err_put_tty;
-+	}
-+
-+	spin_lock_init(&cons_data->ports_lock);
-+
-+	cons_data->rsc_mgr_notif.notifier_call = rsc_mgr_console_notif;
-+	ret = gh_rm_register_notifier(&cons_data->rsc_mgr_notif);
-+	if (ret) {
-+		dev_err(&auxdev->dev, "Could not register for resource manager notifications: %d\n",
-+			ret);
-+		goto err_put_tty;
-+	}
-+
-+	rm_port = rsc_mgr_port_create(cons_data, GH_VMID_SELF);
-+	if (IS_ERR(rm_port)) {
-+		ret = PTR_ERR(rm_port);
-+		dev_err(&auxdev->dev, "Could not create own console: %d\n", ret);
-+		goto err_unreg_notif;
-+	}
-+
-+	strncpy(cons_data->console.name, "ttyGH", sizeof(cons_data->console.name));
-+	cons_data->console.write = rsc_mgr_console_write;
-+	cons_data->console.device = rsc_mgr_console_device;
-+	cons_data->console.setup = rsc_mgr_console_setup;
-+	cons_data->console.exit = rsc_mgr_console_exit;
-+	cons_data->console.index = rm_port->index;
-+	cons_data->console.data = rm_port;
-+	register_console(&cons_data->console);
-+
-+	hyp_node = of_get_parent(auxdev->dev.parent->of_node);
-+	vm_of_node = of_find_compatible_node(hyp_node, NULL, "qcom,gunyah-vm-id");
-+	if (vm_of_node) {
-+		ret = of_property_read_u32(vm_of_node, "qcom,vmid", &vmid);
-+		if (ret)
-+			return 0;
-+		rm_port = rsc_mgr_port_create(cons_data, vmid);
-+	}
-+
-+	return 0;
-+err_unreg_notif:
-+	gh_rm_unregister_notifier(&cons_data->rsc_mgr_notif);
-+err_put_tty:
-+	tty_driver_kref_put(cons_data->tty_driver);
-+	return ret;
-+}
-+
-+static void rsc_mgr_console_remove(struct auxiliary_device *auxdev)
-+{
-+	struct rm_cons_data *cons_data = dev_get_drvdata(&auxdev->dev);
-+
-+	unregister_console(&cons_data->console);
-+	gh_rm_unregister_notifier(&cons_data->rsc_mgr_notif);
-+	tty_driver_kref_put(cons_data->tty_driver);
-+}
-+
-+static struct auxiliary_device_id rsc_mgr_console_ids[] = {
-+	{ .name = "gunyah.console" },
-+	{}
-+};
-+MODULE_DEVICE_TABLE(auxiliary, rsc_mgr_console_ids);
-+
-+static struct auxiliary_driver rsc_mgr_console_drv = {
-+	.probe = rsc_mgr_console_probe,
-+	.remove = rsc_mgr_console_remove,
-+	.id_table = rsc_mgr_console_ids,
-+};
-+module_auxiliary_driver(rsc_mgr_console_drv);
-+
-+MODULE_LICENSE("GPL v2");
-+MODULE_DESCRIPTION("Gunyah Console");
--- 
-2.25.1
+> +		vfio_pci_core_finish_enable(vdev);
+> +		return 0;
+> +	}
+> +
+> +	ret = hisi_acc_vf_qm_init(hisi_acc_vdev);
+> +	if (ret) {
+> +		vfio_pci_core_disable(vdev);
+> +		return ret;
+> +	}
+>  
+> +	hisi_acc_vdev->mig_state = VFIO_DEVICE_STATE_RUNNING;
+
+Change the polarity of the if() above and encompass this all within
+that branch scope so we can use the finish/return below for both cases?
+
+> +
+> +	vfio_pci_core_finish_enable(vdev);
+>  	return 0;
+>  }
+>  
+> +static void hisi_acc_vfio_pci_close_device(struct vfio_device *core_vdev)
+> +{
+> +	struct hisi_acc_vf_core_device *hisi_acc_vdev = container_of(core_vdev,
+> +			struct hisi_acc_vf_core_device, core_device.vdev);
+> +	struct hisi_qm *vf_qm = &hisi_acc_vdev->vf_qm;
+> +
+> +	iounmap(vf_qm->io_base);
+> +	vfio_pci_core_close_device(core_vdev);
+> +}
+> +
+>  static const struct vfio_device_ops hisi_acc_vfio_pci_migrn_ops = {
+>  	.name = "hisi-acc-vfio-pci",
+>  	.open_device = hisi_acc_vfio_pci_open_device,
+> -	.close_device = vfio_pci_core_close_device,
+> +	.close_device = hisi_acc_vfio_pci_close_device,
+>  	.ioctl = hisi_acc_vfio_pci_ioctl,
+>  	.device_feature = vfio_pci_core_ioctl_feature,
+>  	.read = hisi_acc_vfio_pci_read,
+> @@ -183,6 +1157,8 @@ static const struct vfio_device_ops hisi_acc_vfio_pci_migrn_ops = {
+>  	.mmap = hisi_acc_vfio_pci_mmap,
+>  	.request = vfio_pci_core_request,
+>  	.match = vfio_pci_core_match,
+> +	.migration_set_state = hisi_acc_vfio_pci_set_device_state,
+> +	.migration_get_state = hisi_acc_vfio_pci_get_device_state,
+>  };
+>  
+>  static const struct vfio_device_ops hisi_acc_vfio_pci_ops = {
+> @@ -198,38 +1174,71 @@ static const struct vfio_device_ops hisi_acc_vfio_pci_ops = {
+>  	.match = vfio_pci_core_match,
+>  };
+>  
+> +static int
+> +hisi_acc_vfio_pci_migrn_init(struct hisi_acc_vf_core_device *hisi_acc_vdev,
+> +			     struct pci_dev *pdev, struct hisi_qm *pf_qm)
+> +{
+> +	int vf_id;
+> +
+> +	vf_id = pci_iov_vf_id(pdev);
+> +	if (vf_id < 0)
+> +		return vf_id;
+> +
+> +	hisi_acc_vdev->vf_id = vf_id + 1;
+> +	hisi_acc_vdev->core_device.vdev.migration_flags =
+> +					VFIO_MIGRATION_STOP_COPY;
+> +	hisi_acc_vdev->pf_qm = pf_qm;
+> +	hisi_acc_vdev->vf_dev = pdev;
+> +	mutex_init(&hisi_acc_vdev->state_mutex);
+> +
+> +	return 0;
+> +}
+> +
+>  static int hisi_acc_vfio_pci_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+>  {
+> -	struct vfio_pci_core_device *vdev;
+> +	struct hisi_acc_vf_core_device *hisi_acc_vdev;
+> +	struct hisi_qm *pf_qm;
+>  	int ret;
+>  
+> -	vdev = kzalloc(sizeof(*vdev), GFP_KERNEL);
+> -	if (!vdev)
+> +	hisi_acc_vdev = kzalloc(sizeof(*hisi_acc_vdev), GFP_KERNEL);
+> +	if (!hisi_acc_vdev)
+>  		return -ENOMEM;
+>  
+> -	vfio_pci_core_init_device(vdev, pdev, &hisi_acc_vfio_pci_ops);
+> +	pf_qm = hisi_acc_get_pf_qm(pdev);
+> +	if (pf_qm && pf_qm->ver >= QM_HW_V3) {
+> +		ret = hisi_acc_vfio_pci_migrn_init(hisi_acc_vdev, pdev, pf_qm);
+> +		if (ret < 0) {
+> +			kfree(hisi_acc_vdev);
+> +			return ret;
+> +		}
+
+This error path can only occur if the VF ID lookup fails, but should we
+fall through to the non-migration ops, maybe with a dev_warn()?  Thanks,
+
+Alex
+
+> +
+> +		vfio_pci_core_init_device(&hisi_acc_vdev->core_device, pdev,
+> +					  &hisi_acc_vfio_pci_migrn_ops);
+> +	} else {
+> +		vfio_pci_core_init_device(&hisi_acc_vdev->core_device, pdev,
+> +					  &hisi_acc_vfio_pci_ops);
+> +	}
 

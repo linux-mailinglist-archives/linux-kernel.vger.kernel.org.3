@@ -2,61 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B38E34C120E
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 12:58:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C6CC4C1211
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 12:59:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240226AbiBWL6y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 06:58:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59840 "EHLO
+        id S240139AbiBWMAE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 07:00:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235992AbiBWL6v (ORCPT
+        with ESMTP id S233110AbiBWMAD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 06:58:51 -0500
-Received: from re-prd-fep-044.btinternet.com (mailomta28-re.btinternet.com [213.120.69.121])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D872449682;
-        Wed, 23 Feb 2022 03:58:21 -0800 (PST)
-Received: from re-prd-rgout-005.btmx-prd.synchronoss.net ([10.2.54.8])
-          by re-prd-fep-044.btinternet.com with ESMTP
-          id <20220223115819.YGRE28912.re-prd-fep-044.btinternet.com@re-prd-rgout-005.btmx-prd.synchronoss.net>;
-          Wed, 23 Feb 2022 11:58:19 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=btinternet.com; s=btmx201904; t=1645617499; 
-        bh=xH2HDukqbX5dvbmogMeWYVzR/wGRlgNjqzbmhBv/HvQ=;
-        h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:MIME-Version;
-        b=g2uncVR7olpMgOcyVdKW+/fiTVuoRP/9wbW9bcCzILHBGB7XmsBZg+Som/v8JeulKZIVZ93XdeC4fLZBZ09KT9ycMLFhLIul4h0z+GAqzNap62eqP2XZj0JXN6Lq9hKCOc53oqpzL0vXaTdfLk+5mWPwM+AqYkm/BPoaO1dfulICc6BTdSxixKZw8bbAcJXp0f+5t6dxjhaTt9KqWgJhr77iwR3hfa4reADj7eMAjRr3qgpUi7JOCnj+skWWzK8GMJ0QJCJbpaK4OX+yOdCOnCa9wj/SYdvaJyHPaLqcHY0bFSlLl2CgoyDOgs/hfeazC4sqEQKZVih2faafNIsLtw==
-Authentication-Results: btinternet.com;
-    auth=pass (LOGIN) smtp.auth=richard_c_haines@btinternet.com;
-    bimi=skipped
-X-SNCR-Rigid: 613A912415D7956E
-X-Originating-IP: [109.150.61.96]
-X-OWM-Source-IP: 109.150.61.96 (GB)
-X-OWM-Env-Sender: richard_c_haines@btinternet.com
-X-VadeSecure-score: verdict=clean score=0/300, class=clean
-X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgedvvddrledtgdeffecutefuodetggdotefrodftvfcurfhrohhfihhlvgemuceutffkvffkuffjvffgnffgvefqofdpqfgfvfenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepkffuhffvffgjfhgtfggggfesthekredttderjeenucfhrhhomheptfhitghhrghrugcujfgrihhnvghsuceorhhitghhrghruggptggphhgrihhnvghssegsthhinhhtvghrnhgvthdrtghomheqnecuggftrfgrthhtvghrnhepjeevteffjeduleetfeeitdfhheekudeutddthfevtefgveelhfegheffheffieeknecuffhomhgrihhnpehkvghrnhgvlhdrohhrghdpfhhigidrshgvtghurhhithihnecukfhppedutdelrdduhedtrdeiuddrleeinecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehhvghloheplgduledvrdduieekrddurdduleekngdpihhnvghtpedutdelrdduhedtrdeiuddrleeipdhmrghilhhfrhhomheprhhitghhrghruggptggphhgrihhnvghssegsthhinhhtvghrnhgvthdrtghomhdpnhgspghrtghpthhtohepkedprhgtphhtthhopeguvghmihhosggvnhhouhhrsehgmhgrihhlrdgtohhmpdhrtghpthhtohepvghprghrihhssehprghrihhsphhlrggtvgdrohhrghdprhgtphhtthhopehjvghffhhvsehgohhoghhlvgdrtghomhdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhes
-        vhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehprghulhesphgruhhlqdhmohhorhgvrdgtohhmpdhrtghpthhtohepshgvlhhinhhugidqrhgvfhhpohhlihgthiesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehsvghlihhnuhigsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepshhtvghphhgvnhdrshhmrghllhgvhidrfihorhhksehgmhgrihhlrdgtohhm
-X-RazorGate-Vade-Verdict: clean 0
-X-RazorGate-Vade-Classification: clean
-X-SNCR-hdrdom: btinternet.com
-Received: from [192.168.1.198] (109.150.61.96) by re-prd-rgout-005.btmx-prd.synchronoss.net (5.8.716.04) (authenticated as richard_c_haines@btinternet.com)
-        id 613A912415D7956E; Wed, 23 Feb 2022 11:58:19 +0000
-Message-ID: <20396305e71619dbee4fa3c612925b57f4bb0a4b.camel@btinternet.com>
-Subject: Re: [PATCH V2] security/selinux: Always allow FIOCLEX and FIONCLEX
-From:   Richard Haines <richard_c_haines@btinternet.com>
-To:     Paul Moore <paul@paul-moore.com>
-Cc:     stephen.smalley.work@gmail.com, eparis@parisplace.org,
-        demiobenour@gmail.com, selinux@vger.kernel.org,
-        linux-kernel@vger.kernel.org, selinux-refpolicy@vger.kernel.org,
-        jeffv@google.com
-Date:   Wed, 23 Feb 2022 11:58:19 +0000
-In-Reply-To: <CAHC9VhQnRQFrM-mTzUQ3UsyVp2JYw1wUh=7yrdjH7-QmHKidAg@mail.gmail.com>
-References: <20220221131533.74238-1-richard_c_haines@btinternet.com>
-         <CAHC9VhQnRQFrM-mTzUQ3UsyVp2JYw1wUh=7yrdjH7-QmHKidAg@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
+        Wed, 23 Feb 2022 07:00:03 -0500
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C93F899EF9
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 03:59:35 -0800 (PST)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 21NBxSQF028094;
+        Wed, 23 Feb 2022 05:59:28 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1645617568;
+        bh=y0CTifx/SII+A7nZ6Kxf8q8vy5DnXtlySIBCjwQtU1w=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=W+2sa+0+1y/Ia6DVpQBe4lW2nSAduGBmmCBqUhQT4ZpTFFzTBPwSwuW65A2GgykUL
+         Yq90GVuSYrH6TAFq9fOg5CbAUcX0o/Mk7JlttNrpcRKzU9DGC66LC/790wO4BPjXXB
+         rKQrnCUxIfmN5QyGOAj1FxSb8lze1fAnt6SnaeNA=
+Received: from DLEE113.ent.ti.com (dlee113.ent.ti.com [157.170.170.24])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 21NBxRZe027398
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 23 Feb 2022 05:59:27 -0600
+Received: from DLEE109.ent.ti.com (157.170.170.41) by DLEE113.ent.ti.com
+ (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Wed, 23
+ Feb 2022 05:59:24 -0600
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE109.ent.ti.com
+ (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Wed, 23 Feb 2022 05:59:24 -0600
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 21NBxNAj114579;
+        Wed, 23 Feb 2022 05:59:24 -0600
+Date:   Wed, 23 Feb 2022 17:29:23 +0530
+From:   Pratyush Yadav <p.yadav@ti.com>
+To:     Michael Walle <michael@walle.cc>
+CC:     <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        <yaliang.wang@windriver.com>
+Subject: Re: [PATCH v4 28/32] mtd: spi-nor: move all spansion specifics into
+ spansion.c
+Message-ID: <20220223115923.rxvpuuaj4dkdrxdl@ti.com>
+References: <20220221120809.1531502-1-michael@walle.cc>
+ <20220221120809.1531502-29-michael@walle.cc>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20220221120809.1531502-29-michael@walle.cc>
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,100 +69,137 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-02-22 at 18:28 -0500, Paul Moore wrote:
-> On Mon, Feb 21, 2022 at 8:15 AM Richard Haines
-> <richard_c_haines@btinternet.com> wrote:
-> > 
-> > These ioctls are equivalent to fcntl(fd, F_SETFD, flags), which
-> > SELinux
-> > always allows too.  Furthermore, a failed FIOCLEX could result in a
-> > file
-> > descriptor being leaked to a process that should not have access to
-> > it.
-> > 
-> > As this patch removes access controls, a policy capability needs to
-> > be
-> > enabled in policy to always allow these ioctls.
-> > 
-> > Based-on-patch-by: Demi Marie Obenour <demiobenour@gmail.com>
-> > Signed-off-by: Richard Haines <richard_c_haines@btinternet.com>
-> > ---
-> > V2 Change: Control via a policy capability. See this thread for
-> > discussion:
-> > https://lore.kernel.org/selinux/CAHC9VhQEPxYP_KU56gAGNHKQaxucY8gSsHiUB42PVgADBAccRQ@mail.gmail.com/T/#t
-> > 
-> > With this patch and the polcap enabled, the selinux-testsuite will
-> > fail:
-> > ioctl/test at line 47 - Will need a fix.
-> > 
-> >  security/selinux/hooks.c                   | 7 +++++++
-> >  security/selinux/include/policycap.h       | 1 +
-> >  security/selinux/include/policycap_names.h | 3 ++-
-> >  security/selinux/include/security.h        | 7 +++++++
-> >  4 files changed, 17 insertions(+), 1 deletion(-)
+On 21/02/22 01:08PM, Michael Walle wrote:
+> The clear status register flags is only available on spansion flashes.
+> Move all the functions around that into the spanion module.
 > 
-> Thanks Richard for putting together the v2 of this patch.
+> Signed-off-by: Michael Walle <michael@walle.cc>
+> ---
+>  drivers/mtd/spi-nor/core.c     | 49 ------------------------
+>  drivers/mtd/spi-nor/spansion.c | 70 ++++++++++++++++++++++++++++++++++
+>  include/linux/mtd/spi-nor.h    |  1 -
+>  3 files changed, 70 insertions(+), 50 deletions(-)
 > 
-> As far as the test is concerned, it seems like the quick-n-dirty fix
-> is to simply remove the ioctl(FIOCLEX) test in test_noioctl.c; is
-> everyone okay with that?  At least that is what I'm going to do with
-> my local copy that I use to validate the kernel-secnext builds unless
-> someone has a better patch :)
+[...]
+> diff --git a/drivers/mtd/spi-nor/spansion.c b/drivers/mtd/spi-nor/spansion.c
+> index 1a0e7214d9e5..38eeb0913ab2 100644
+> --- a/drivers/mtd/spi-nor/spansion.c
+> +++ b/drivers/mtd/spi-nor/spansion.c
+> @@ -8,6 +8,7 @@
+>  
+>  #include "core.h"
+>  
+> +#define SPINOR_OP_CLSR		0x30	/* Clear status register 1 */
+>  #define SPINOR_OP_RD_ANY_REG			0x65	/* Read any register */
+>  #define SPINOR_OP_WR_ANY_REG			0x71	/* Write any register */
+>  #define SPINOR_REG_CYPRESS_CFR2V		0x00800003
+> @@ -294,6 +295,72 @@ static const struct flash_info spansion_nor_parts[] = {
+>  	},
+>  };
+>  
+> +/**
+> + * spi_nor_clear_sr() - Clear the Status Register.
+> + * @nor:	pointer to 'struct spi_nor'.
+> + */
+> +static void spi_nor_clear_sr(struct spi_nor *nor)
+> +{
+> +	int ret;
+> +
+> +	if (nor->spimem) {
+> +		struct spi_mem_op op =
+> +			SPI_MEM_OP(SPI_MEM_OP_CMD(SPINOR_OP_CLSR, 0),
+> +				   SPI_MEM_OP_NO_ADDR,
+> +				   SPI_MEM_OP_NO_DUMMY,
+> +				   SPI_MEM_OP_NO_DATA);
+> +
+> +		spi_nor_spimem_setup_op(nor, &op, nor->reg_proto);
+> +
+> +		ret = spi_mem_exec_op(nor->spimem, &op);
+> +	} else {
+> +		ret = spi_nor_controller_ops_write_reg(nor, SPINOR_OP_CLSR,
+> +						       NULL, 0);
+> +	}
+> +
+> +	if (ret)
+> +		dev_dbg(nor->dev, "error %d clearing SR\n", ret);
+> +}
+> +
+> +/**
+> + * spi_nor_sr_ready_and_clear() - Query the Status Register to see if the flash
+> + * is ready for new commands and clear it.
 
-To fix this I was planning to submit a patch that would change the
-ioctl(FIOCLEX) tests to ioctl(FS_IOC_GETFSLABEL) as that would continue
-to test the xperms.
+Nitpick: "... and clear it if there are any errors."
 
+Looks good otherwise.
+
+Reviewed-by: Pratyush Yadav <p.yadav@ti.com>
+
+> + * @nor:	pointer to 'struct spi_nor'.
+> + *
+> + * Return: 1 if ready, 0 if not ready, -errno on errors.
+> + */
+> +static int spi_nor_sr_ready_and_clear(struct spi_nor *nor)
+> +{
+> +	int ret;
+> +
+> +	ret = spi_nor_read_sr(nor, nor->bouncebuf);
+> +	if (ret)
+> +		return ret;
+> +
+> +	if (nor->bouncebuf[0] & (SR_E_ERR | SR_P_ERR)) {
+> +		if (nor->bouncebuf[0] & SR_E_ERR)
+> +			dev_err(nor->dev, "Erase Error occurred\n");
+> +		else
+> +			dev_err(nor->dev, "Programming Error occurred\n");
+> +
+> +		spi_nor_clear_sr(nor);
+> +
+> +		/*
+> +		 * WEL bit remains set to one when an erase or page program
+> +		 * error occurs. Issue a Write Disable command to protect
+> +		 * against inadvertent writes that can possibly corrupt the
+> +		 * contents of the memory.
+> +		 */
+> +		ret = spi_nor_write_disable(nor);
+> +		if (ret)
+> +			return ret;
+> +
+> +		return -EIO;
+> +	}
+> +
+> +	return !(nor->bouncebuf[0] & SR_WIP);
+> +}
+> +
+>  static void spansion_nor_late_init(struct spi_nor *nor)
+>  {
+>  	if (nor->params->size > SZ_16M) {
+> @@ -302,6 +369,9 @@ static void spansion_nor_late_init(struct spi_nor *nor)
+>  		nor->erase_opcode = SPINOR_OP_SE;
+>  		nor->mtd.erasesize = nor->info->sector_size;
+>  	}
+> +
+> +	if (nor->flags & SNOR_F_USE_CLSR)
+> +		nor->params->ready = spi_nor_sr_ready_and_clear;
+>  }
+>  
+>  static const struct spi_nor_fixups spansion_nor_fixups = {
+> diff --git a/include/linux/mtd/spi-nor.h b/include/linux/mtd/spi-nor.h
+> index 4622251a79ff..5e25a7b75ae2 100644
+> --- a/include/linux/mtd/spi-nor.h
+> +++ b/include/linux/mtd/spi-nor.h
+> @@ -90,7 +90,6 @@
+>  
+>  /* Used for Spansion flashes only. */
+>  #define SPINOR_OP_BRWR		0x17	/* Bank register write */
+> -#define SPINOR_OP_CLSR		0x30	/* Clear status register 1 */
+>  
+>  /* Used for Micron flashes only. */
+>  #define SPINOR_OP_RD_EVCR      0x65    /* Read EVCR register */
+> -- 
+> 2.30.2
 > 
-> > diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
-> > index 5b6895e4f..030c41652 100644
-> > --- a/security/selinux/hooks.c
-> > +++ b/security/selinux/hooks.c
-> > @@ -3745,6 +3745,13 @@ static int selinux_file_ioctl(struct file
-> > *file, unsigned int cmd,
-> >                                             CAP_OPT_NONE, true);
-> >                 break;
-> > 
-> > +       case FIOCLEX:
-> > +       case FIONCLEX:
-> > +               /* Must always succeed if polcap set, else default:
-> > */
-> > +               if (selinux_policycap_ioctl_skip_cloexec())
-> > +                       break;
-> > +               fallthrough;
-> > +
-> 
-> The break/fallthrough looks like it might be a little more fragile
-> than necessary, how about something like this:
-> 
->   case FIOCLEX:
->   case FIONCLEX:
->     if (!selinux_policycap_ioctl_skip_cloexec())
->       error = ioctl_has_perm(cred, file, FILE__IOCTL, (u16) cmd);
->       break;
-> 
-> Yes, it does duplicate the default ioctl_has_perm() call, but since
-> we
-> are effectively deprecating this and locking the FIOCLEX/FIONCLEX
-> behavior with this policy capability it seems okay to me (and
-> preferable to relying on the fallthrough).
-> 
-> Thoughts?
 
-Yes I did ponder this and in my first attempt I had this before the
-switch():
-
-	/* Must always succeed if polcap set */
-	if (selinux_policycap_ioctl_skip_cloexec() &&
-	    (cmd == FIOCLEX || cmd == FIONCLEX))
-		return 0;
-
- 	switch (cmd) {
- 	case FIONREAD:
- 	case FIBMAP:
-
-but changed to within the switch(), anyway I'm happy to resubmit a
-patch either way.
-
-> 
-
+-- 
+Regards,
+Pratyush Yadav
+Texas Instruments Inc.

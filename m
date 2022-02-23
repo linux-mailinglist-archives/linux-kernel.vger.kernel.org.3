@@ -2,85 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EB2B4C1145
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 12:30:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C0CF4C114B
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 12:31:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239866AbiBWLax (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 06:30:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42140 "EHLO
+        id S239882AbiBWLcI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 06:32:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239846AbiBWLaw (ORCPT
+        with ESMTP id S239846AbiBWLcE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 06:30:52 -0500
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F41A48F99A
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 03:30:24 -0800 (PST)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 21NBU6l0119499;
-        Wed, 23 Feb 2022 05:30:06 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1645615806;
-        bh=8iJFbuoO/1UTlyrGebm94tvMfHSgMwxLXJIsLPvUJOU=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=bKYjk+cDLv/VzLu5Yd4T/ISZYnkQhp/ZMu38B4s9ls486So0h9Rl+zpz76Kq4CoGo
-         rewbWvoqnKbYED/Z0mGGbIp8yYI1SO09oa4bJVD9Vg7FFdXQSWwxvNzFd+FUB82zoa
-         BZ7cn4Us6AQvC/I2vX+gFf5MNWngy22rJdUYyPLE=
-Received: from DLEE115.ent.ti.com (dlee115.ent.ti.com [157.170.170.26])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 21NBU5XS115414
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 23 Feb 2022 05:30:06 -0600
-Received: from DLEE105.ent.ti.com (157.170.170.35) by DLEE115.ent.ti.com
- (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Wed, 23
- Feb 2022 05:30:05 -0600
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE105.ent.ti.com
- (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Wed, 23 Feb 2022 05:30:05 -0600
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 21NBU4CM050742;
-        Wed, 23 Feb 2022 05:30:04 -0600
-Date:   Wed, 23 Feb 2022 17:00:03 +0530
-From:   Pratyush Yadav <p.yadav@ti.com>
-To:     <Tudor.Ambarus@microchip.com>
-CC:     <michael@walle.cc>, <linux-mtd@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <miquel.raynal@bootlin.com>,
-        <richard@nod.at>, <vigneshr@ti.com>, <yaliang.wang@windriver.com>
-Subject: Re: [PATCH v4 00/32] mtd: spi-nor: move vendor specific code into
- vendor modules
-Message-ID: <20220223113003.cuf7e6kgvjwsukzy@ti.com>
-References: <20220221120809.1531502-1-michael@walle.cc>
- <d45daacc-8372-9b2d-019e-5d383db4fa57@microchip.com>
+        Wed, 23 Feb 2022 06:32:04 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1AD3DFF4;
+        Wed, 23 Feb 2022 03:31:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645615895; x=1677151895;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=0zm8wIULsN4Dyhom0z7elKrKoBwJYW9qnpSEEw2q5Wk=;
+  b=kog0pOB+nM8reYobUTlNS5hEPr9EMXMc5hqqtRTBdJSePP5+42ZRC+xJ
+   Vv3aE1ws2ZvDtIZp6lms0hkqlYXpQ/wwciq3r39/giuhoPxb8aWxJ6brd
+   YfTyz0UcfIWNVXVO5MFnondma+ZoY5haECBCm2BfkSYNC9S9q3tyQcAqm
+   Q5QNZGwt9NdTsXnp6Q0phHI3HxrGZUFY/yPQnG8TtOyyyISquRPfY8LD2
+   6GTKN/SxaMyVxoRDKqYWF25dl2hR0l8P270NORYqpmFdarFHne/TKhnf2
+   rxZW4is9aKdHb2PfiAuCLpH6jFqD+f58s6hKmYWnmcXkxNhAJaHDXx+R9
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10266"; a="250769476"
+X-IronPort-AV: E=Sophos;i="5.88,390,1635231600"; 
+   d="scan'208";a="250769476"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2022 03:31:35 -0800
+X-IronPort-AV: E=Sophos;i="5.88,390,1635231600"; 
+   d="scan'208";a="637389174"
+Received: from smile.fi.intel.com ([10.237.72.59])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2022 03:31:33 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1nMpqx-007OOM-0K;
+        Wed, 23 Feb 2022 13:30:39 +0200
+Date:   Wed, 23 Feb 2022 13:30:38 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Rob Herring <robh@kernel.org>
+Cc:     shruthi.sanil@intel.com, daniel.lezcano@linaro.org,
+        tglx@linutronix.de, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, mgross@linux.intel.com,
+        srikanth.thokala@intel.com, lakshmi.bai.raja.subramanian@intel.com,
+        mallikarjunappa.sangannavar@intel.com
+Subject: Re: [PATCH v8 1/2] dt-bindings: timer: Add bindings for Intel Keem
+ Bay SoC Timer
+Message-ID: <YhYa3tlTEcLct2xu@smile.fi.intel.com>
+References: <20220222095654.9097-1-shruthi.sanil@intel.com>
+ <20220222095654.9097-2-shruthi.sanil@intel.com>
+ <YhVuJaf3AJ1c6TpT@robh.at.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <d45daacc-8372-9b2d-019e-5d383db4fa57@microchip.com>
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <YhVuJaf3AJ1c6TpT@robh.at.kernel.org>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/02/22 08:59AM, Tudor.Ambarus@microchip.com wrote:
-> I would like some tested-by tags if possible. At least with a micron and a spansion flash.
-> I think I have a micron and a spansion somewhere, I'll try to do a short test too.
+On Tue, Feb 22, 2022 at 05:13:41PM -0600, Rob Herring wrote:
+> On Tue, Feb 22, 2022 at 03:26:53PM +0530, shruthi.sanil@intel.com wrote:
+> > From: Shruthi Sanil <shruthi.sanil@intel.com>
+> > 
+> > Add Device Tree bindings for the Timer IP, which can be used as
+> > clocksource and clockevent device in the Intel Keem Bay SoC.
 
-I still have some patches left to review in this series. But in the 
-meantime, I have tested it on a Micron and Spansion flash. Ran through a 
-few Erase/Program/Read cycles.
+...
 
-Tested-by: Pratyush Yadav <p.yadav@ti.com> # on mt35xu512aba, s28hs512t
-
+> > +    soc {
+> > +        #address-cells = <0x2>;
+> > +        #size-cells = <0x2>;
+> > +
+> > +        gpt@20331000 {
+> > +            compatible = "intel,keembay-gpt-creg", "simple-mfd";
 > 
-> Cheers,
-> ta
+> It looks like you are splitting things based on Linux implementation
+> details. Does this h/w block have different combinations of timers and
+> counters? If not, then you don't need the child nodes at all. There's
+> plenty of h/w blocks that get used as both a clocksource and clockevent.
+> 
+> Maybe I already raised this, but assume I don't remember and this patch
+> needs to address any questions I already asked.
+
+I dunno if I mentioned that hardware seems to have 5 or so devices behind
+the block, so ideally it should be one device node that represents the global
+register spaces and several children nodes.
+
+However, I am not familiar with the established practices in DT world, but
+above seems to me the right thing to do since it describes the hardware as
+is (without any linuxisms).
+
+> > +            reg = <0x0 0x20331000 0x0 0xc>;
+> > +            ranges = <0x0 0x0 0x20330000 0xF0>;
+> > +            #address-cells = <0x1>;
+> > +            #size-cells = <0x1>;
+> > +
+> > +            counter@e8 {
+> > +                compatible = "intel,keembay-counter";
+> > +                reg = <0xe8 0x8>;
+> > +                clocks = <&scmi_clk KEEM_BAY_A53_TIM>;
+> > +            };
+> > +
+> > +            timer@30 {
+> > +                compatible = "intel,keembay-timer";
+> > +                reg = <0x30 0xc>;
+> > +                interrupts = <GIC_SPI 0x5 IRQ_TYPE_LEVEL_HIGH>;
+> > +                clocks = <&scmi_clk KEEM_BAY_A53_TIM>;
+> > +            };
+> > +        };
+> > +    };
 
 -- 
-Regards,
-Pratyush Yadav
-Texas Instruments Inc.
+With Best Regards,
+Andy Shevchenko
+
+

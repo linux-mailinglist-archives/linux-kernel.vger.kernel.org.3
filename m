@@ -2,111 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E5004C0D7E
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 08:42:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 15C914C0D82
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 08:45:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238717AbiBWHmz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 02:42:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39298 "EHLO
+        id S238660AbiBWHpa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 02:45:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236278AbiBWHmy (ORCPT
+        with ESMTP id S230154AbiBWHp2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 02:42:54 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A64B33B298
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 23:42:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=UUDMqr/9c1gNA/wamWMnwltjDT92zuHM5PlATkNE7uw=; b=knZxiD9W6pRdpjcOchY0fSbRZR
-        TuX7xUFcdsrpfwV71LIZFOUZdYME9PbodVM8OlD9ckYCHq7+g7pkI7gveYqEcn19vo1h8el7P7AXC
-        1mlrWZ3BikTpHCM40cJUPGsz7RP2HKehF0FmgMFveF/UMFqfPmPGUkN64YwrVOzTaD33TupF3ngnj
-        KrEiIHAC2p9PbwASviKdVZbh9jgQlkuH3eKJTMlvCyTM+U91+FYI0ja+C7wHvvN74hRFb5gz95CJy
-        egwLl1rGprTjkvVpVVv9pygIkadMFj8FaFPZE/Uh27euKaX7zniv9e5rkfQ+Xj132fVaVLw7wCI8C
-        0l+g6oVA==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nMmI1-00D9pM-CA; Wed, 23 Feb 2022 07:42:21 +0000
-Date:   Tue, 22 Feb 2022 23:42:21 -0800
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Tim Murray <timmurray@google.com>,
-        Waiman Long <longman@redhat.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Jaegeuk Kim <jaegeuk@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-f2fs-devel@lists.sourceforge.net,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>
-Subject: Re: [PATCH] f2fs: move f2fs to use reader-unfair rwsems
-Message-ID: <YhXlXY28XiG7lVH1@infradead.org>
-References: <20220108164617.3130175-1-jaegeuk@kernel.org>
- <YdvoxkAAquI17UbX@infradead.org>
- <a23a3226-95d9-9835-c1c7-2d13f4a1ee16@redhat.com>
- <CAEe=SxnWeK0pSfijPKJSTxBiMgD1Ev69fV3qSTCgWASk0b3vhA@mail.gmail.com>
- <Yd7gVLdHW11TQUAi@hirez.programming.kicks-ass.net>
+        Wed, 23 Feb 2022 02:45:28 -0500
+Received: from mail-vs1-f43.google.com (mail-vs1-f43.google.com [209.85.217.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0B4E3B3C1;
+        Tue, 22 Feb 2022 23:45:00 -0800 (PST)
+Received: by mail-vs1-f43.google.com with SMTP id j3so2211614vsi.7;
+        Tue, 22 Feb 2022 23:45:00 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=C/cH9gtm/EgKMGw1picw/GL+xptyIrrQueUFFxgTrv0=;
+        b=uv5vEcb8pj6necklh2wMSc5HN+7iG5YQ9j0ZJvYOUdZ3qo00PZYyJQq0Q05M1OvInG
+         45c/K31LmBhbpLHHnw8KMd8R3nztqSB1ivYlaaWNW2EBFRRN8aWfpLOUzFU9jbPufZzZ
+         tvF1bqiYvh2AO3CzPihFlO1vH7I2rtlV1h9GX4zjCJXT+Gdshw2Vmm08zHhq5te26ZCR
+         /iP7aJyEAx9iEHQtyhrb9tXgiBsRkM37FzSNcnQTDB9ZgJycbIh74mg89tUb0itqHyCe
+         duqJP8gkpAxDnD/ny2HtqHUNVC6HB8C6seMmyahjOEwOm3KEuw6fAA85sYDiTE9qt9hy
+         9CGA==
+X-Gm-Message-State: AOAM533+gXXdRnh+vhNObaka6jzxSVkwaUqCVWlTjr99a2gbCLzQ08EU
+        qZyaaDhnGbY4crapbx1s1HoWzynq2DK2+Q==
+X-Google-Smtp-Source: ABdhPJxjuOme72bHaZGAif45cxC6WMI7nYRWNvJ6lO5PhT5nPo9aQB6gYholneGl9/aUNRS59G+0pQ==
+X-Received: by 2002:a67:e0cf:0:b0:31a:6079:cabf with SMTP id m15-20020a67e0cf000000b0031a6079cabfmr11130799vsl.39.1645602299581;
+        Tue, 22 Feb 2022 23:44:59 -0800 (PST)
+Received: from mail-vk1-f177.google.com (mail-vk1-f177.google.com. [209.85.221.177])
+        by smtp.gmail.com with ESMTPSA id g13sm605051vsj.5.2022.02.22.23.44.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 22 Feb 2022 23:44:59 -0800 (PST)
+Received: by mail-vk1-f177.google.com with SMTP id l10so11801564vki.9;
+        Tue, 22 Feb 2022 23:44:58 -0800 (PST)
+X-Received: by 2002:a05:6122:130c:b0:330:e674:ec91 with SMTP id
+ e12-20020a056122130c00b00330e674ec91mr11363499vkp.33.1645602298671; Tue, 22
+ Feb 2022 23:44:58 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yd7gVLdHW11TQUAi@hirez.programming.kicks-ass.net>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <1644890386-65119-1-git-send-email-wangqing@vivo.com>
+In-Reply-To: <1644890386-65119-1-git-send-email-wangqing@vivo.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 23 Feb 2022 08:44:47 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdUjyUmdDxqeyh=XnFhyKg1pm_y3DHsWXEb-vKQa-CNrRg@mail.gmail.com>
+Message-ID: <CAMuHMdUjyUmdDxqeyh=XnFhyKg1pm_y3DHsWXEb-vKQa-CNrRg@mail.gmail.com>
+Subject: Re: [PATCH] spi: add missing pci_dev_put() before return
+To:     Qing Wang <wangqing@vivo.com>
+Cc:     Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Mark Brown <broonie@kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It looks like this patch landed in linux-next despite all the perfectly
-reasonable objections.  Jaegeuk, please drop it again.
+Hi Qing,
 
-On Wed, Jan 12, 2022 at 03:06:12PM +0100, Peter Zijlstra wrote:
-> On Mon, Jan 10, 2022 at 11:41:23AM -0800, Tim Murray wrote:
-> 
-> > 1. f2fs-ckpt thread is running f2fs_write_checkpoint(), holding the
-> > cp_rwsem write lock while doing so via f2fs_lock_all() in
-> > block_operations().
-> > 2. Random very-low-priority thread A makes some other f2fs call that
-> > tries to get the cp_rwsem read lock by atomically adding on the rwsem,
-> > fails and deschedules in uninterruptible sleep. cp_rwsem now has a
-> > non-zero reader count but is write-locked.
-> > 3. f2fs-ckpt thread releases the cp_rwsem write lock. cp_rwsem now has
-> > a non-zero reader count and is not write-locked, so is reader-locked.
-> > 4. Other threads call fsync(), which requests checkpoints from
-> > f2fs-ckpt, and block on a completion event that f2fs-ckpt dispatches.
-> > cp_rwsem still has a non-zero reader count because the low-prio thread
-> > A from (2) has not been scheduled again yet.
-> > 5. f2fs-ckpt wakes up to perform checkpoints, but it stalls on the
-> > write lock via cmpxchg in block_operations() until the low-prio thread
-> > A has run and released the cp_rwsem read lock. Because f2fs-ckpt can't
-> > run, all fsync() callers are also effectively blocked by the
-> > low-priority thread holding the read lock.
-> > 
-> > I think this is the rough shape of the problem (vs readers holding the
-> > lock for too long or something like that) because the low-priority
-> > thread is never run between when it is initially made runnable by
-> > f2fs-ckpt and when it runs tens/hundreds of milliseconds later then
-> > immediately unblocks f2fs-ckpt.
-> 
-> *urgh*... so you're making the worst case less likely but fundamentally
-> you don't change anything.
-> 
-> If one of those low prio threads manages to block while holding
-> cp_rwsem your checkpoint thread will still block for a very long time.
-> 
-> So while you improve the average case, the worst case doesn't improve
-> much I think.
-> 
-> Also, given that this is a system wide rwsem, would percpu-rwsem not be
-> 'better' ? Arguably with the same hack cgroups uses for it (see
-> cgroup_init()) to lower the cost of percpu_down_write().
-> 
-> Now, I'm not a filesystem developer and I'm not much familiar with the
-> problem space, but this locking reads like a fairly big problem. I'm not
-> sure optimizing the lock is the answer.
-> 
-> 
----end quoted text---
+On Tue, Feb 15, 2022 at 3:08 AM Qing Wang <wangqing@vivo.com> wrote:
+> From: Wang Qing <wangqing@vivo.com>
+>
+> pci_get_slot() increases its reference count, the caller must
+> decrement the reference count by calling pci_dev_put()
+>
+> Signed-off-by: Wang Qing <wangqing@vivo.com>
+
+Thanks for your patch!
+
+Please use "spi: spi-topcliff-pch:" instead of just "spi:" in the patch
+summary, as this is specific to the spi-topcliff-pch driver, not to the SPI
+core.
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

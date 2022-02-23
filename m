@@ -2,244 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5252B4C1872
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 17:21:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E28134C186B
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 17:20:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242746AbiBWQVl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 11:21:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57718 "EHLO
+        id S242735AbiBWQVQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 11:21:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242728AbiBWQVj (ORCPT
+        with ESMTP id S242728AbiBWQVP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 11:21:39 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2BA9C5DA5
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 08:21:10 -0800 (PST)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[127.0.0.1])
-        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
-        (envelope-from <a.fatoum@pengutronix.de>)
-        id 1nMuNV-00087t-O4; Wed, 23 Feb 2022 17:20:33 +0100
-Message-ID: <a8cb99e0-fe01-2234-9839-fea28ca09f6d@pengutronix.de>
-Date:   Wed, 23 Feb 2022 17:20:27 +0100
+        Wed, 23 Feb 2022 11:21:15 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9A8CCC55BC
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 08:20:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1645633246;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=TiO1yBPh8R5cpx6Ex6jDuaNR/N/orDWr7M4nBkkNmDQ=;
+        b=J6AgSBXls+yLVWoCxJP9JwVk02y6ilbVbwHdap1LED4kzUCKJ4eB4+YDTLHPvz7ZzvA16x
+        VyMHznbim5TwtbJDIXovCHbc0O0Rb0NYxNynU9QR45gR3E1PLfd+WC6RaAKGEBjG+uQrAy
+        mnLSL0F3n8DlZYEQSOeQgGVjsIzxDGs=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-442-KraB3RmFOe6YNaelxlfj1g-1; Wed, 23 Feb 2022 11:20:43 -0500
+X-MC-Unique: KraB3RmFOe6YNaelxlfj1g-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 65E9AFC82;
+        Wed, 23 Feb 2022 16:20:42 +0000 (UTC)
+Received: from starship (unknown [10.40.195.190])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 0B2A29BEBD;
+        Wed, 23 Feb 2022 16:20:40 +0000 (UTC)
+Message-ID: <fd1cc09c83c1424cea7003eb9e8ec937276fe3f8.camel@redhat.com>
+Subject: Re: [PATCH v2 10/18] KVM: x86/mmu: load new PGD after the shadow
+ MMU is initialized
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+Cc:     seanjc@google.com
+Date:   Wed, 23 Feb 2022 18:20:39 +0200
+In-Reply-To: <20220217210340.312449-11-pbonzini@redhat.com>
+References: <20220217210340.312449-1-pbonzini@redhat.com>
+         <20220217210340.312449-11-pbonzini@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v5 4/5] crypto: caam - add in-kernel interface for blob
- generator
-Content-Language: en-US
-To:     Jarkko Sakkinen <jarkko@kernel.org>
-Cc:     =?UTF-8?Q?Horia_Geant=c4=83?= <horia.geanta@nxp.com>,
-        Aymen Sghaier <aymen.sghaier@nxp.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>, kernel@pengutronix.de,
-        David Gstir <david@sigma-star.at>,
-        Pankaj Gupta <pankaj.gupta@nxp.com>,
-        Tim Harvey <tharvey@gateworks.com>,
-        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
-        James Bottomley <jejb@linux.ibm.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        David Howells <dhowells@redhat.com>,
-        James Morris <jmorris@namei.org>,
-        Eric Biggers <ebiggers@kernel.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Jan Luebbe <j.luebbe@pengutronix.de>,
-        Richard Weinberger <richard@nod.at>,
-        Franck LENORMAND <franck.lenormand@nxp.com>,
-        Sumit Garg <sumit.garg@linaro.org>,
-        linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-References: <20220222195819.2313913-1-a.fatoum@pengutronix.de>
- <20220222195819.2313913-5-a.fatoum@pengutronix.de> <YhZVmBy3/nWbqf+/@iki.fi>
-From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
-In-Reply-To: <YhZVmBy3/nWbqf+/@iki.fi>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23.02.22 16:41, Jarkko Sakkinen wrote:
-> On Tue, Feb 22, 2022 at 08:58:18PM +0100, Ahmad Fatoum wrote:
->> The NXP Cryptographic Acceleration and Assurance Module (CAAM)
->> can be used to protect user-defined data across system reboot:
->>
->>   - When the system is fused and boots into secure state, the master
->>     key is a unique never-disclosed device-specific key
->>   - random key is encrypted by key derived from master key
->>   - data is encrypted using the random key
->>   - encrypted data and its encrypted random key are stored alongside
->>   - This blob can now be safely stored in non-volatile memory
->>
->> On next power-on:
->>   - blob is loaded into CAAM
->>   - CAAM writes decrypted data either into memory or key register
->>
->> Add functions to realize encrypting and decrypting into memory alongside
->> the CAAM driver.
->>
->> They will be used in a later commit as a source for the trusted key
->> seal/unseal mechanism.
->>
->> Reviewed-by: David Gstir <david@sigma-star.at>
->> Reviewed-by: Pankaj Gupta <pankaj.gupta@nxp.com>
->> Tested-By: Tim Harvey <tharvey@gateworks.com>
->> Tested-by: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
->> Signed-off-by: Steffen Trumtrar <s.trumtrar@pengutronix.de>
->> Signed-off-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
->> ---
->> To: "Horia Geantă" <horia.geanta@nxp.com>
->> To: Aymen Sghaier <aymen.sghaier@nxp.com>
->> To: Herbert Xu <herbert@gondor.apana.org.au>
->> To: "David S. Miller" <davem@davemloft.net>
->> Cc: James Bottomley <jejb@linux.ibm.com>
->> Cc: Jarkko Sakkinen <jarkko@kernel.org>
->> Cc: Mimi Zohar <zohar@linux.ibm.com>
->> Cc: David Howells <dhowells@redhat.com>
->> Cc: James Morris <jmorris@namei.org>
->> Cc: Eric Biggers <ebiggers@kernel.org>
->> Cc: "Serge E. Hallyn" <serge@hallyn.com>
->> Cc: Jan Luebbe <j.luebbe@pengutronix.de>
->> Cc: David Gstir <david@sigma-star.at>
->> Cc: Richard Weinberger <richard@nod.at>
->> Cc: Franck LENORMAND <franck.lenormand@nxp.com>
->> Cc: Sumit Garg <sumit.garg@linaro.org>
->> Cc: Tim Harvey <tharvey@gateworks.com>
->> Cc: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
->> Cc: Pankaj Gupta <pankaj.gupta@nxp.com>
->> Cc: linux-integrity@vger.kernel.org
->> Cc: keyrings@vger.kernel.org
->> Cc: linux-crypto@vger.kernel.org
->> Cc: linux-kernel@vger.kernel.org
->> Cc: linux-security-module@vger.kernel.org
->> ---
->>  drivers/crypto/caam/Kconfig    |   3 +
->>  drivers/crypto/caam/Makefile   |   1 +
->>  drivers/crypto/caam/blob_gen.c | 230 +++++++++++++++++++++++++++++++++
->>  include/soc/fsl/caam-blob.h    |  56 ++++++++
->>  4 files changed, 290 insertions(+)
->>  create mode 100644 drivers/crypto/caam/blob_gen.c
->>  create mode 100644 include/soc/fsl/caam-blob.h
->>
->> diff --git a/drivers/crypto/caam/Kconfig b/drivers/crypto/caam/Kconfig
->> index 84ea7cba5ee5..ea9f8b1ae981 100644
->> --- a/drivers/crypto/caam/Kconfig
->> +++ b/drivers/crypto/caam/Kconfig
->> @@ -151,6 +151,9 @@ config CRYPTO_DEV_FSL_CAAM_RNG_API
->>  	  Selecting this will register the SEC4 hardware rng to
->>  	  the hw_random API for supplying the kernel entropy pool.
->>  
->> +config CRYPTO_DEV_FSL_CAAM_BLOB_GEN
->> +	bool
->> +
->>  endif # CRYPTO_DEV_FSL_CAAM_JR
->>  
->>  endif # CRYPTO_DEV_FSL_CAAM
->> diff --git a/drivers/crypto/caam/Makefile b/drivers/crypto/caam/Makefile
->> index 3570286eb9ce..25f7ae5a4642 100644
->> --- a/drivers/crypto/caam/Makefile
->> +++ b/drivers/crypto/caam/Makefile
->> @@ -21,6 +21,7 @@ caam_jr-$(CONFIG_CRYPTO_DEV_FSL_CAAM_CRYPTO_API_QI) += caamalg_qi.o
->>  caam_jr-$(CONFIG_CRYPTO_DEV_FSL_CAAM_AHASH_API) += caamhash.o
->>  caam_jr-$(CONFIG_CRYPTO_DEV_FSL_CAAM_RNG_API) += caamrng.o
->>  caam_jr-$(CONFIG_CRYPTO_DEV_FSL_CAAM_PKC_API) += caampkc.o pkc_desc.o
->> +caam_jr-$(CONFIG_CRYPTO_DEV_FSL_CAAM_BLOB_GEN) += blob_gen.o
->>  
->>  caam-$(CONFIG_CRYPTO_DEV_FSL_CAAM_CRYPTO_API_QI) += qi.o
->>  ifneq ($(CONFIG_CRYPTO_DEV_FSL_CAAM_CRYPTO_API_QI),)
->> diff --git a/drivers/crypto/caam/blob_gen.c b/drivers/crypto/caam/blob_gen.c
->> new file mode 100644
->> index 000000000000..513d3f90e438
->> --- /dev/null
->> +++ b/drivers/crypto/caam/blob_gen.c
->> @@ -0,0 +1,230 @@
->> +// SPDX-License-Identifier: GPL-2.0-only
->> +/*
->> + * Copyright (C) 2015 Pengutronix, Steffen Trumtrar <kernel@pengutronix.de>
->> + * Copyright (C) 2021 Pengutronix, Ahmad Fatoum <kernel@pengutronix.de>
->> + */
->> +
->> +#include <linux/device.h>
->> +#include <soc/fsl/caam-blob.h>
->> +
->> +#include "compat.h"
->> +#include "desc_constr.h"
->> +#include "desc.h"
->> +#include "error.h"
->> +#include "intern.h"
->> +#include "jr.h"
->> +#include "regs.h"
->> +
->> +struct caam_blob_priv {
->> +	struct device jrdev;
->> +};
->> +
->> +struct caam_blob_job_result {
->> +	int err;
->> +	struct completion completion;
->> +};
->> +
->> +static void caam_blob_job_done(struct device *dev, u32 *desc, u32 err, void *context)
->> +{
->> +	struct caam_blob_job_result *res = context;
->> +	int ecode = 0;
->> +
->> +	dev_dbg(dev, "%s %d: err 0x%x\n", __func__, __LINE__, err);
->> +
->> +	if (err)
->> +		ecode = caam_jr_strstatus(dev, err);
->> +
->> +	res->err = ecode;
->> +
->> +	/*
->> +	 * Upon completion, desc points to a buffer containing a CAAM job
->> +	 * descriptor which encapsulates data into an externally-storable
->> +	 * blob.
->> +	 */
->> +	complete(&res->completion);
->> +}
->> +
->> +static u32 *caam_blob_alloc_desc(size_t keymod_len)
->> +{
->> +	size_t len;
->> +
->> +	/* header + (key mod immediate) + 2x pointers + op */
->> +	len = 4 + (4 + ALIGN(keymod_len, 4)) + 2*(4 + 4 + CAAM_PTR_SZ_MAX) + 4;
-> 
-> Nit: the amount of magic numbers is overwhelming here. I neither understand
-> the statement nor how that comment should help me to understand it.
+On Thu, 2022-02-17 at 16:03 -0500, Paolo Bonzini wrote:
+> Now that __kvm_mmu_new_pgd does not look at the MMU's root_level and
+> shadow_root_level anymore, pull the PGD load after the initialization of
+> the shadow MMUs.
 
-header              =  4
-(key mod immediate) = (4 + ALIGN(keymod_len, 4))
-2x pointer          =  2 * (4 + 4 + CAAM_PTR_SZ_MAX)
-op                  =  4
-
-I haven't heard back from the CAAM maintainers yet since v1. Perhaps now
-is a good occasion to chime in? :-)
-
-@Jarkko, could you take a look at patch 5? That's the gist of the series
-and I have yet to get maintainer feedback on that one.
-
-Cheers,
-Ahmad
-
+Again, thanks a million for this! I once spend at least a hour figuring
+out why my kernel panics when I did a similiar change, only to figure out
+that __kvm_mmu_new_pgd needs to happen before mmu re-initialization.
 
 > 
-> BR, Jarkko
+> Besides being more intuitive, this enables future simplifications
+> and optimizations because it's not necessary anymore to compute the
+> role outside kvm_init_mmu.  In particular, kvm_mmu_reset_context was not
+> attempting to use a cached PGD to avoid having to figure out the new role.
+> It will soon be able to follow what nested_{vmx,svm}_load_cr3 are doing,
+> and avoid unloading all the cached roots.
 > 
+> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+> ---
+>  arch/x86/kvm/mmu/mmu.c    | 37 +++++++++++++++++--------------------
+>  arch/x86/kvm/svm/nested.c |  6 +++---
+>  arch/x86/kvm/vmx/nested.c |  6 +++---
+>  3 files changed, 23 insertions(+), 26 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> index da324a317000..906a9244ad28 100644
+> --- a/arch/x86/kvm/mmu/mmu.c
+> +++ b/arch/x86/kvm/mmu/mmu.c
+> @@ -4903,9 +4903,8 @@ void kvm_init_shadow_npt_mmu(struct kvm_vcpu *vcpu, unsigned long cr0,
+>  
+>  	new_role = kvm_calc_shadow_npt_root_page_role(vcpu, &regs);
+>  
+> -	__kvm_mmu_new_pgd(vcpu, nested_cr3, new_role.base);
+> -
+>  	shadow_mmu_init_context(vcpu, context, &regs, new_role);
+> +	__kvm_mmu_new_pgd(vcpu, nested_cr3, new_role.base);
+>  }
+>  EXPORT_SYMBOL_GPL(kvm_init_shadow_npt_mmu);
+>  
+> @@ -4943,27 +4942,25 @@ void kvm_init_shadow_ept_mmu(struct kvm_vcpu *vcpu, bool execonly,
+>  		kvm_calc_shadow_ept_root_page_role(vcpu, accessed_dirty,
+>  						   execonly, level);
+>  
+> -	__kvm_mmu_new_pgd(vcpu, new_eptp, new_role.base);
+> -
+> -	if (new_role.as_u64 == context->mmu_role.as_u64)
+> -		return;
+> -
+> -	context->mmu_role.as_u64 = new_role.as_u64;
+> +	if (new_role.as_u64 != context->mmu_role.as_u64) {
+> +		context->mmu_role.as_u64 = new_role.as_u64;
+>  
+> -	context->shadow_root_level = level;
+> +		context->shadow_root_level = level;
+>  
+> -	context->ept_ad = accessed_dirty;
+> -	context->page_fault = ept_page_fault;
+> -	context->gva_to_gpa = ept_gva_to_gpa;
+> -	context->sync_page = ept_sync_page;
+> -	context->invlpg = ept_invlpg;
+> -	context->root_level = level;
+> -	context->direct_map = false;
+> +		context->ept_ad = accessed_dirty;
+> +		context->page_fault = ept_page_fault;
+> +		context->gva_to_gpa = ept_gva_to_gpa;
+> +		context->sync_page = ept_sync_page;
+> +		context->invlpg = ept_invlpg;
+> +		context->root_level = level;
+> +		context->direct_map = false;
+> +		update_permission_bitmask(context, true);
+> +		context->pkru_mask = 0;
+> +		reset_rsvds_bits_mask_ept(vcpu, context, execonly, huge_page_level);
+> +		reset_ept_shadow_zero_bits_mask(context, execonly);
+> +	}
+>  
+> -	update_permission_bitmask(context, true);
+> -	context->pkru_mask = 0;
+> -	reset_rsvds_bits_mask_ept(vcpu, context, execonly, huge_page_level);
+> -	reset_ept_shadow_zero_bits_mask(context, execonly);
+> +	__kvm_mmu_new_pgd(vcpu, new_eptp, new_role.base);
+>  }
+>  EXPORT_SYMBOL_GPL(kvm_init_shadow_ept_mmu);
+>  
+> diff --git a/arch/x86/kvm/svm/nested.c b/arch/x86/kvm/svm/nested.c
+> index f284e61451c8..96bab464967f 100644
+> --- a/arch/x86/kvm/svm/nested.c
+> +++ b/arch/x86/kvm/svm/nested.c
+> @@ -492,14 +492,14 @@ static int nested_svm_load_cr3(struct kvm_vcpu *vcpu, unsigned long cr3,
+>  	    CC(!load_pdptrs(vcpu, cr3)))
+>  		return -EINVAL;
+>  
+> -	if (!nested_npt)
+> -		kvm_mmu_new_pgd(vcpu, cr3);
+> -
+>  	vcpu->arch.cr3 = cr3;
+>  
+>  	/* Re-initialize the MMU, e.g. to pick up CR4 MMU role changes. */
+>  	kvm_init_mmu(vcpu);
+>  
+> +	if (!nested_npt)
+> +		kvm_mmu_new_pgd(vcpu, cr3);
+> +
+>  	return 0;
+>  }
+>  
+> diff --git a/arch/x86/kvm/vmx/nested.c b/arch/x86/kvm/vmx/nested.c
+> index b7bc634d35e2..1dfe23963a9e 100644
+> --- a/arch/x86/kvm/vmx/nested.c
+> +++ b/arch/x86/kvm/vmx/nested.c
+> @@ -1126,15 +1126,15 @@ static int nested_vmx_load_cr3(struct kvm_vcpu *vcpu, unsigned long cr3,
+>  		return -EINVAL;
+>  	}
+>  
+> -	if (!nested_ept)
+> -		kvm_mmu_new_pgd(vcpu, cr3);
+> -
+>  	vcpu->arch.cr3 = cr3;
+>  	kvm_register_mark_dirty(vcpu, VCPU_EXREG_CR3);
+>  
+>  	/* Re-initialize the MMU, e.g. to pick up CR4 MMU role changes. */
+>  	kvm_init_mmu(vcpu);
+>  
+> +	if (!nested_ept)
+> +		kvm_mmu_new_pgd(vcpu, cr3);
+> +
+>  	return 0;
+>  }
+>  
 
 
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
+
+Best regards,
+	Maxim Levitsky
+

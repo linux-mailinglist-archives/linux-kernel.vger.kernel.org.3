@@ -2,187 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B74F4C203E
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 00:50:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 42BEB4C2045
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 00:51:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241357AbiBWXuj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 18:50:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43222 "EHLO
+        id S245004AbiBWXwK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 18:52:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230499AbiBWXuf (ORCPT
+        with ESMTP id S230499AbiBWXwG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 18:50:35 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23AC45C84B;
-        Wed, 23 Feb 2022 15:50:07 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CB857B82281;
-        Wed, 23 Feb 2022 23:50:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45B5FC340E7;
-        Wed, 23 Feb 2022 23:50:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645660204;
-        bh=+x9HhxRlgmfRobO/LgV0YjczTJW4iqVhbfDJBh1tTy4=;
-        h=From:To:Cc:Subject:Date:From;
-        b=bFgoGKFaXZC2bLrF4yoiwH16PCVMfQVhZordG7bQRYjkIbG9pcwgEfH25X5miri39
-         1JbEDNiRMmN95ZXDUWdUT6jjoZb8TZ9sqMZ4n29CXMlw2xxWVl7BjiVMHkyvUjMrEZ
-         af/IbyviH4Kn8DsXxfxxLbcfs7jlhiANyp+xUyWnvx4dqDQLhJ4woXv0O1w6ep6LBn
-         KT7rDpKgsxXm6SGxHTOjn3ZVIcO0/04GlelsqqYDVd4hN3ToDPkno4JhBJ9XVJ5ND4
-         ocd+FqLm3aHoeH5X8JzWleujUIuSess395gQ3zb8tL3h8LLITAG8eKISy74CdCPETs
-         14PH9dAxvbruA==
-From:   broonie@kernel.org
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        "Liam R . Howlett" <Liam.Howlett@Oracle.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the folio tree with the maple tree
-Date:   Wed, 23 Feb 2022 23:49:58 +0000
-Message-Id: <20220223234958.672315-1-broonie@kernel.org>
-X-Mailer: git-send-email 2.30.2
+        Wed, 23 Feb 2022 18:52:06 -0500
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E31601D0FD;
+        Wed, 23 Feb 2022 15:51:36 -0800 (PST)
+Received: by mail-wr1-x432.google.com with SMTP id n14so26868wrq.7;
+        Wed, 23 Feb 2022 15:51:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=RWcU2wxdMqhCzxhAoNFRTMb2fbcbT+16RrjB3ao6kCg=;
+        b=ouCqYEFEJDJQSKvkEfkD1y8O+lo4KvkqEYA/USF0C0X4zYU0Hfwbv75xRCDOD/wYwS
+         bxc+OiNXUrvkzZlHehUbh5PJ+G7XAbOcheMWs4GqhIzuH9wP4L7CanMAsjkYWphZeRGm
+         GQ6oVXvr2y8+ruoyHT1nH8pNVj1gymYVpKqq1PwAwZQIp1ts/9ibkz+YtCK3ib7FYKa2
+         yt/TD/frVslyKKE/7JNw/nacl7ukTFCX8wcc6c6yTSmf6ptQvHhoQKZJxpElhXdzWC7O
+         s8EnApyLSZjheONUS323PMy4dMZXSoZO+jLbDt2fi24ywnYCbUuILQyY3maGmEEZp7gS
+         uCYg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=RWcU2wxdMqhCzxhAoNFRTMb2fbcbT+16RrjB3ao6kCg=;
+        b=i9blaG3JKYIUBvKBK/wR34HSyEikjJFwBOtYBR0HmUzZkrvGnAZY8TEebS4IhryYzg
+         LCRfp/OO5vbzjzOUeOZqNpiLIEVOuhlZrfTJGIQ8//oR42jYTvV4/zxJiJA5VSIXq0un
+         +/17+aAgBo01wj3Qex5HOX/P8+BUeA2mTMCNqdUIy888LbdFY/pj0dKAW6fUUNd+1rM6
+         9V4SHxJQac7+foL7Bb45HpKDjoFKuq1/vZNt18iA3rx2cVwZYnc5i7gQGKYjdklYeuSL
+         RPbWlRGEykwy7TWHiD+49Bh7BF+kD6SilfL1EE1ipZIIo6ydDjaEfULyZmPNpNIBt2gm
+         82dA==
+X-Gm-Message-State: AOAM530+9IVXbe14UJQq/HaBIWqvxY46+dRsG2Gj0dDf620tAwtdOs7p
+        tiItrlpTCsupiOGKrEe1qKRgYo26FEI=
+X-Google-Smtp-Source: ABdhPJxBnDjx7IqXw37IjhU7Y9Jyo4WmcJT+bDK7UZba4++07TTHZy3KUjLHzZOs4w7XW29nRwys5Q==
+X-Received: by 2002:a5d:6da7:0:b0:1ea:78a4:8e00 with SMTP id u7-20020a5d6da7000000b001ea78a48e00mr65078wrs.129.1645660295412;
+        Wed, 23 Feb 2022 15:51:35 -0800 (PST)
+Received: from localhost.localdomain ([2603:c020:c001:7eff:ffff:ffff:ffff:ff00])
+        by smtp.googlemail.com with ESMTPSA id s7sm943591wri.5.2022.02.23.15.51.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Feb 2022 15:51:34 -0800 (PST)
+From:   Matthew Hagan <mnhagan88@gmail.com>
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        Matthew Hagan <mnhagan88@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>, Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        bcm-kernel-feedback-list@broadcom.com, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH RESUBMIT 1/2] ARM: dts: NSP: MX6X: get mac-address from eeprom
+Date:   Wed, 23 Feb 2022 23:50:39 +0000
+Message-Id: <20220223235041.2542331-1-mnhagan88@gmail.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi all,
+The MAC address on the MX64/MX65 series is located on the AT24 EEPROM.
+This is the same as other Meraki devices such as the MR32 [1].
 
-Today's linux-next merge of the folio tree got a conflict in:
+[1] https://lore.kernel.org/linux-arm-kernel/fa8271d02ef74a687f365cebe5c55ec846963ab7.1631986106.git.chunkeey@gmail.com/
 
-  mm/internal.h
+Signed-off-by: Matthew Hagan <mnhagan88@gmail.com>
+---
+ arch/arm/boot/dts/bcm958625-meraki-mx6x-common.dtsi | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-between commits:
+diff --git a/arch/arm/boot/dts/bcm958625-meraki-mx6x-common.dtsi b/arch/arm/boot/dts/bcm958625-meraki-mx6x-common.dtsi
+index 6519b7c61af1..5de727de6a4b 100644
+--- a/arch/arm/boot/dts/bcm958625-meraki-mx6x-common.dtsi
++++ b/arch/arm/boot/dts/bcm958625-meraki-mx6x-common.dtsi
+@@ -39,6 +39,8 @@ led-3 {
+ 
+ &amac2 {
+ 	status = "okay";
++	nvmem-cells = <&mac_address>;
++	nvmem-cell-names = "mac-address";
+ };
+ 
+ &ehci0 {
+@@ -53,6 +55,12 @@ eeprom@50 {
+ 		reg = <0x50>;
+ 		pagesize = <32>;
+ 		read-only;
++		#address-cells = <1>;
++		#size-cells = <1>;
++
++		mac_address: mac-address@66 {
++			reg = <0x66 0x6>;
++		};
+ 	};
+ };
+ 
+-- 
+2.27.0
 
-  37f4270132af3 ("mm: Start tracking VMAs with maple tree")
-  b3d7ba3cdf23c ("mm: Remove the vma linked list")
-
-from the maple tree and commit:
-
-  522387590ac22 ("mm: Turn page_anon_vma() into folio_anon_vma()")
-
-from the folio tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
-diff --cc mm/internal.h
-index 2d3ede05cd7bf,0e95bc2130c4d..0000000000000
---- a/mm/internal.h
-+++ b/mm/internal.h
-@@@ -66,17 -67,12 +67,13 @@@ static inline void wake_throttle_isolat
-  vm_fault_t do_swap_page(struct vm_fault *vmf);
-  void folio_rotate_reclaimable(struct folio *folio);
-  bool __folio_end_writeback(struct folio *folio);
-+ void deactivate_file_folio(struct folio *folio);
-  
- -void free_pgtables(struct mmu_gather *tlb, struct vm_area_struct *start_vma,
- -		unsigned long floor, unsigned long ceiling);
- +void free_pgtables(struct mmu_gather *tlb, struct maple_tree *mt,
- +		   struct vm_area_struct *start_vma, unsigned long floor,
- +		   unsigned long ceiling);
-  void pmd_install(struct mm_struct *mm, pmd_t *pmd, pgtable_t *pte);
-  
-- static inline bool can_madv_lru_vma(struct vm_area_struct *vma)
-- {
-- 	return !(vma->vm_flags & (VM_LOCKED|VM_HUGETLB|VM_PFNMAP));
-- }
-- 
-  struct zap_details;
-  void unmap_page_range(struct mmu_gather *tlb,
-  			     struct vm_area_struct *vma,
-@@@ -387,76 -388,12 +389,79 @@@ static inline bool is_data_mapping(vm_f
-  	return (flags & (VM_WRITE | VM_SHARED | VM_STACK)) == VM_WRITE;
-  }
-  
- +/* Maple tree operations using VMAs */
- +/*
- + * vma_mas_store() - Store a VMA in the maple tree.
- + * @vma: The vm_area_struct
- + * @mas: The maple state
- + *
- + * Efficient way to store a VMA in the maple tree when the @mas has already
- + * walked to the correct location.
- + *
- + * Note: the end address is inclusive in the maple tree.
- + */
- +static inline int vma_mas_store(struct vm_area_struct *vma, struct ma_state *mas)
- +{
- +#ifdef CONFIG_DEBUG_VM_MAPLE_TREE
- +	/* Make sure no VMAs are about to be lost. */
- +	MA_STATE(test, mas->tree, vma->vm_start, vma->vm_end - 1);
- +	struct vm_area_struct *vma_mas;
- +	int count = 0;
- +
- +	mas_for_each(&test, vma_mas, vma->vm_end - 1) {
- +		/* Rule out vma_expand */
- +		if ((vma->vm_start != vma_mas->vm_start) &&
- +		    (vma->vm_end != vma_mas->vm_end))
- +			count++;
- +	}
- +
- +	/* vma adjust may overwrite a partial entry or remove one */
- +	BUG_ON(count > 1);
- +
- +	BUG_ON(mas->min > vma->vm_start);
- +	BUG_ON(mas->index > vma->vm_start);
- +#endif
- +	mas->index = vma->vm_start;
- +	mas->last = vma->vm_end - 1;
- +	return mas_store_gfp(mas, vma, GFP_KERNEL);
- +}
- +
- +/*
- + * vma_mas_remove() - Remove a VMA from the maple tree.
- + * @vma: The vm_area_struct
- + * @mas: The maple state
- + *
- + * Efficient way to remove a VMA from the maple tree when the @mas has already
- + * been established and points to the correct location.
- + * Note: the end address is inclusive in the maple tree.
- + */
- +static inline int vma_mas_remove(struct vm_area_struct *vma, struct ma_state *mas)
- +{
- +	int ret;
- +
- +#ifdef CONFIG_DEBUG_VM_MAPLE_TREE
- +	/* Make sure no VMAs are about to be lost. */
- +	MA_STATE(test, mas->tree, vma->vm_start, vma->vm_end - 1);
- +	struct vm_area_struct *vma_mas;
- +	int count = 0;
- +
- +	mas_for_each(&test, vma_mas, vma->vm_end - 1)
- +		count++;
- +
- +	BUG_ON(count != 1);
- +
- +	BUG_ON(mas->min > vma->vm_start);
- +	BUG_ON(mas->min > mas->index);
- +#endif
- +	mas->index = vma->vm_start;
- +	mas->last = vma->vm_end - 1;
- +	ret = mas_store_gfp(mas, NULL, GFP_KERNEL);
- +	return ret;
- +}
- +
-+ /* mm/util.c */
- -void __vma_link_list(struct mm_struct *mm, struct vm_area_struct *vma,
- -		struct vm_area_struct *prev);
- -void __vma_unlink_list(struct mm_struct *mm, struct vm_area_struct *vma);
-+ struct anon_vma *folio_anon_vma(struct folio *folio);
-+ 
-  #ifdef CONFIG_MMU
-  void unmap_mapping_folio(struct folio *folio);
-  extern long populate_vma_page_range(struct vm_area_struct *vma,

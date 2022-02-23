@@ -2,152 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A1B34C0C96
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 07:34:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 262074C0C9D
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 07:37:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238410AbiBWGfP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 01:35:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50666 "EHLO
+        id S237446AbiBWGg5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 01:36:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231616AbiBWGfN (ORCPT
+        with ESMTP id S231616AbiBWGgx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 01:35:13 -0500
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2079.outbound.protection.outlook.com [40.107.243.79])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A536765157;
-        Tue, 22 Feb 2022 22:34:46 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=eFOnXS4Q0oc0mVdM08fI/e17Bmd9jtdeto+61vc5ooHhHepZ5Ukkkvp6uLviv6o0oPvNtsFAutuVAfrx18Re9gfBPwvw6drTl/J0ZF6uYq1pCwWbli3Az6GrFdH/hXULpe7AmiCiqzln9TPcS8qiJevqx8UNoRTIIhdtG3GJL7Ln3YPmkJ3m6VxSdxjbzNYIAuHbiKC5BpZaP1YR29TINIWky6L6N3zpet+q8rlIZgVOUiqiW4dDinWFjPJfM6v2whApgdYIhSpmf49XqqAYKc4WHtoOyixr4D7AsObcu5EaANUFVkjLb8IimT3QUdNDwZsxo6g27W80kBIDZC6KQQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=YlDlgV7EzevhxNtd5599zjcKEY7YHcpBEPEh+1DIUrs=;
- b=QQuY/6FC10wcJb4w7br4CRkBZzpOSF2tkdWfUzIWrHUPHK69f3fp7NWXFTyuYzg5uzVuYlqcMvQqfMObJSLTDu4LWYvODTppXUVvzJxgEo/kSggsJ/jmu4KL/EXG9xa//uMTSho86LxD7vp1+hgfjPu/cm67P7PcCfJ/LoLOMawRJs7/BVYDr2tCeJ/L1ppizMB6crVHOyJcgsCe08+/2pH2iuqX5mYl02cRb/IBSAi2Minvm7n/nGtSgL1qV1oYONsdlpsZVxraeRf96DFzkuO/7M/bnUSK88X3EcYz2L+OCCc1AAqy0BAsO2b2xvJWGs+M0nnIdl4Yh4yfV4/B5g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=YlDlgV7EzevhxNtd5599zjcKEY7YHcpBEPEh+1DIUrs=;
- b=XlEgMBiZSJgMxikeNL2Ydftsat8e0I9K+/arB4WA67lfDRnyGOujBT6Y0KSVddtyCfQw1zJCHAoSPYe4RMSDw/zZb/aR8FacsOu5tAybqnJifgb9cP6Tfto4YOSYpD0Y8fyDQURVV6WMEpqqGadTWx+3ytMNDuekWrooqSeCCheuOSrTP/nUkxQQM6pOwu/u3VsnD1TLiQkzjfvXZ07BdJK4qBq/hm257dOKQPp9yYDbO/L+MOJNlXfwO9j1TTbAxJsEQ8X2Kl0YPocsvVq0cbmBMm2CFTPzRn9o3uIyw3OiOWgFjJ3ZaMx7Hbk7DnGncyK4ZMmRVs+FzKOxWe5xBw==
-Received: from DM4PR12MB5769.namprd12.prod.outlook.com (2603:10b6:8:60::6) by
- MN2PR12MB3406.namprd12.prod.outlook.com (2603:10b6:208:c9::24) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.4995.17; Wed, 23 Feb 2022 06:34:44 +0000
-Received: from DM4PR12MB5769.namprd12.prod.outlook.com
- ([fe80::d91c:c44d:f621:18b6]) by DM4PR12MB5769.namprd12.prod.outlook.com
- ([fe80::d91c:c44d:f621:18b6%3]) with mapi id 15.20.4995.027; Wed, 23 Feb 2022
- 06:34:44 +0000
-From:   Krishna Yarlagadda <kyarlagadda@nvidia.com>
-To:     Mark Brown <broonie@kernel.org>
-CC:     "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
-        Sowjanya Komatineni <skomatineni@nvidia.com>,
-        Laxman Dewangan <ldewangan@nvidia.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>
-Subject: RE: [PATCH v2 5/5] spi: tegra210-quad: combined sequence mode
-Thread-Topic: [PATCH v2 5/5] spi: tegra210-quad: combined sequence mode
-Thread-Index: AQHYKBWjj4LbNoGwBkCe53Tr2h3kVayf53KAgADHQ5A=
-Date:   Wed, 23 Feb 2022 06:34:44 +0000
-Message-ID: <DM4PR12MB5769CB86A0348A669647D0F3C33C9@DM4PR12MB5769.namprd12.prod.outlook.com>
-References: <20220222175611.58051-1-kyarlagadda@nvidia.com>
- <20220222175611.58051-6-kyarlagadda@nvidia.com>
- <YhUuW+MlgeQRTVZB@sirena.org.uk>
-In-Reply-To: <YhUuW+MlgeQRTVZB@sirena.org.uk>
-Accept-Language: en-IN, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 220d7fe8-22ff-403f-6451-08d9f6969432
-x-ms-traffictypediagnostic: MN2PR12MB3406:EE_
-x-microsoft-antispam-prvs: <MN2PR12MB34060B999D0CB8466E3DA345C33C9@MN2PR12MB3406.namprd12.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: QokCMFXQ79eDpkyJvX2NSTbblFH4aLJMtAfE0bHFyaPAkDMhIMaWGKHWR1L2DREWr8gNgT3gRXbrhfi/Wv50GCIXH+snvfahDx+Z2GsuVIHOe7vYFEIf+RLIUQFjEZWYa7yN7rroA5HXwX4NW0GAKzxgY2SiBFjYUTqM1jW56Z83lba8RlopjkBxFUvUzl8mxmlgwbEsQjrRRVORibIzSwnVm8SSbtPlPK9EX2YnQX+DQnqsEFnJmv+w1fg/glSVlh9fX/qPbPV1ETrn5AMeMFm/ctHseijz9KF8eeh3gInwj9T3kKJyLmxRaYMA0SrjXU4sgKJMe0VE69CMBa+xMyiB2yUNeH9JRLiMr8eatkaP7aWfpG74riQ4+kgy5hZpnx31l6xLDraAP/TzOk/TxzwnWuv9sl6OwZ5uy7OTgTXTeOIwzz08MdCUAbUO/UBrVIvnZMeTs6C90HVcqniHY990uXSja914akEjvYKoPSJZkT8zRevg7SQuJSVf9zbEz8GZCV7Mkvl30J2gsaFJLG/uMb7AwxzMG84igsPJ1F8JZdkPzUYG9v/XGAFOcIOM5F2Yv0m5so+IWPWOZg1oH8GzjadKx3TWIj/+prDkJTd8ISnEBcM6isqnqFc+csdx5wKly/4JzUdDxNYvJ7N/4WMWnQFfzy5uVTHA6XJaOoSw22o1t5SOEGg1UiXoJrVIPJRHlRaAQeSbnY2YtzYMcw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB5769.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(66476007)(186003)(53546011)(26005)(55236004)(66946007)(76116006)(66556008)(9686003)(6506007)(7696005)(6916009)(316002)(86362001)(54906003)(66446008)(64756008)(122000001)(8676002)(508600001)(71200400001)(4744005)(38070700005)(83380400001)(52536014)(4326008)(38100700002)(55016003)(5660300002)(8936002)(33656002)(2906002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?/MCi2vy9R3cWx4ftZVIzZGDFvqi/CUgp/gIBfokobY49L2sxWNfPpJFGB2Hr?=
- =?us-ascii?Q?wIVtR60EHHOIUnjbW8oQe7dy6ocF7MvDXZvdYBDaqoha7A5VFhG0WJo60W6B?=
- =?us-ascii?Q?kNfVcw2Rk3SgHUhJuD0GG8HjMQcQQ6GV9Q8lPWY2ylC7qcL2ofKg1UqwiAn7?=
- =?us-ascii?Q?PguyKsiK3zWydga38WR2o0XjU6P58V/3rpRg70UO8igK9yhLoDnRazwia2nq?=
- =?us-ascii?Q?dB5+5cspIUNuY5T48AEyY7VYYBgnySM9ZpM0RxSKhS35IWJM4tZtqGxYxVAe?=
- =?us-ascii?Q?mNcivvN0cGP+vUT+sOoBw1GMlvC/vz39wzJpu+lR2ZCMGlM2832palXsHPSW?=
- =?us-ascii?Q?z89JuGXyS0yK29SR403S9dobgAeuEPq638bAjhGGaud3djfd7HD3QjFNQfJB?=
- =?us-ascii?Q?51rR/GU2fapn3f9Yc33nXxFaElcTVgqqvdgOKH8+abBsQ/b175H1eEJ3P7SM?=
- =?us-ascii?Q?0FGH+uVk1Xzn4LIhLAWEeh67NgGWj6vV36NsWyIdP+YSw0Ry6gTz8EEYGHGB?=
- =?us-ascii?Q?myl5bRl7QZpg7zL4jm+gqB44Ryd7kcBduwKIPPetsP/dskQRa/OwRJv6oEeP?=
- =?us-ascii?Q?lf/g5pO3rt/SoRHxYLC45a8GaRAPRsGHpT9mlk07EyUkUK6k1EuHFHwQH4uo?=
- =?us-ascii?Q?EtiRLBkT3WDusE80qX11V6+C9ZXRbcuQk3Prcz9fbGoDG179Uy0u1D9WJ24V?=
- =?us-ascii?Q?DaWdmCqjbC8X3msDHvvXV+av4uYJC/1XM9pfPkdTu/9HWgWB9wnFzZeMrewq?=
- =?us-ascii?Q?o2fGAIWyfhL1+3mQaPDVWWMGzD4GbTmUd9t3Q+3oNJk89kGwwL+xzZ3bgkON?=
- =?us-ascii?Q?f9NQgMLvnIKDEAN1hWzTGXNz6INXzyegmJUDEXDkcgfgiLJTWPv1hhXtK624?=
- =?us-ascii?Q?LdYHkA5U01+hivcsTwzDn6gGP6oUOhtSHbF1AR9orf+JOPyoDJ7GXJrpu0jd?=
- =?us-ascii?Q?w4ZE8iIvYQBIJWvdrjQSBFtfUvnEY1tK+aL01IpCiNKuat3RSnlUfJabvRA5?=
- =?us-ascii?Q?yr24a1HSlI5SbqMQnBHPMM/VnP/jBro/HHmnrw/HhyqywObq0RwJs4gZcrZl?=
- =?us-ascii?Q?xq7K5yWA3vh7uEXlZzRYLmoTYJiz4vhBpHaAcDKaqkr1vbR6uvaTd7lif5GI?=
- =?us-ascii?Q?Z+kS0I6beRNjN4L7HukF+GCRcM2E0rATB46/rG6qT6MW5165NxSixQyjt9gY?=
- =?us-ascii?Q?KXWSXCd+GGz+4eWC06RGvLWLbSBnDQ3Xn2actLqZePi/wuouOoThIOb/eQbT?=
- =?us-ascii?Q?D3JD7LphpcOvDikhJ8CW6OxmBKXatGl1Mp7K0TAopZxSfBhtOguyKbfE3BKi?=
- =?us-ascii?Q?KivD/ULATWK8YOwYhrs6EUw5EABtsTxh+Xj4dV5evv9ZK0DzuSBeW+ykTO4x?=
- =?us-ascii?Q?oe2FRovn5GlJ7uHaRQgf+299z6fFhg3taB5abmKpZlBgksZQ8g+KpSxui772?=
- =?us-ascii?Q?mu5cYe1gyMyXKny6r9Fb+XOXnbQ2hb0TUGpWVlwnfYYQJMIu8g0eOpWkSuFH?=
- =?us-ascii?Q?RiSIIzYQxJjfVE5d4y4NrkueE3VnzNQY5aJmHoA/W5eUvEQjj02fPObd2QrJ?=
- =?us-ascii?Q?GM2V7v3glgHhyFOaXsAzvDdz74+9SKBfiOUbbA2lCLemqkxw6F4rZt0N0r1K?=
- =?us-ascii?Q?mBT6a6W0Gn1NHWbGLqyfzfE=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Wed, 23 Feb 2022 01:36:53 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3F0965157
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 22:36:26 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nMlG5-0006rq-22; Wed, 23 Feb 2022 07:36:17 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nMlG1-000lIt-F4; Wed, 23 Feb 2022 07:36:12 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nMlFz-004y2z-Mh; Wed, 23 Feb 2022 07:36:11 +0100
+Date:   Wed, 23 Feb 2022 07:36:08 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Song Chen <chensong_2000@189.cn>
+Cc:     johan@kernel.org, elder@kernel.org, gregkh@linuxfoundation.org,
+        thierry.reding@gmail.com, lee.jones@linaro.org,
+        greybus-dev@lists.linaro.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-pwm@vger.kernel.org
+Subject: Re: [PATCH v2] staging: greybus: introduce pwm_ops::apply
+Message-ID: <20220223063608.gv2iaoek6rynjnbu@pengutronix.de>
+References: <1644580947-8529-1-git-send-email-chensong_2000@189.cn>
 MIME-Version: 1.0
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB5769.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 220d7fe8-22ff-403f-6451-08d9f6969432
-X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Feb 2022 06:34:44.0243
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: yWf4OTMhdep6LIYXwXTcVe2zl18GA7b1Y84Uv/NnWziT4B753hzKQkQd88nlnVgMlePlmEi6ygWUfxt4o/Dbkw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB3406
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="dsrm2xhl5lm6tau4"
+Content-Disposition: inline
+In-Reply-To: <1644580947-8529-1-git-send-email-chensong_2000@189.cn>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> -----Original Message-----
-> From: Mark Brown <broonie@kernel.org>
-> Sent: 23 February 2022 00:12
-> To: Krishna Yarlagadda <kyarlagadda@nvidia.com>
-> Cc: thierry.reding@gmail.com; Jonathan Hunter
-> <jonathanh@nvidia.com>; linux-spi@vger.kernel.org; linux-
-> tegra@vger.kernel.org; Sowjanya Komatineni
-> <skomatineni@nvidia.com>; Laxman Dewangan
-> <ldewangan@nvidia.com>; robh+dt@kernel.org;
-> devicetree@vger.kernel.org; linux-kernel@vger.kernel.org;
-> p.zabel@pengutronix.de
-> Subject: Re: [PATCH v2 5/5] spi: tegra210-quad: combined sequence
-> mode
+
+--dsrm2xhl5lm6tau4
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+Hello,
+
+orthogonal to the feedback you got for the protocol part, here some
+thoughts to the PWM specific bits;
+
+On Fri, Feb 11, 2022 at 08:02:27PM +0800, Song Chen wrote:
+> Introduce apply in pwm_ops to replace legacy operations,
+> like enable, disable, config and set_polarity.
 >=20
-> On Tue, Feb 22, 2022 at 11:26:11PM +0530, Krishna Yarlagadda wrote:
+> Signed-off-by: Song Chen <chensong_2000@189.cn>
 >=20
-> > +	val =3D tegra_qspi_readl(tqspi, QSPI_GLOBAL_CONFIG);
-> > +	val |=3D QSPI_CMB_SEQ_EN;
-> > +	tegra_qspi_writel(tqspi, val, QSPI_GLOBAL_CONFIG);
+> ---
+> V2:
+> 1, define duty_cycle and period as u64 in gb_pwm_config_operation.
+> 2, define duty and period as u64 in gb_pwm_config_request.
+> 3, disable before configuring duty and period if the eventual goal
+>    is a disabled state.
+> ---
+>  drivers/staging/greybus/pwm.c             | 61 ++++++++++++-----------
+>  include/linux/greybus/greybus_protocols.h |  4 +-
+>  2 files changed, 34 insertions(+), 31 deletions(-)
 >=20
-> I notice that nothing seems to clear QSPI_CMB_SEQ_EN - is that self
-> clearing or something?
-Need a change in non-combined sequence code to reset this.
-Will add the change in v3
+> diff --git a/drivers/staging/greybus/pwm.c b/drivers/staging/greybus/pwm.c
+> index 891a6a672378..03c69db5b9be 100644
+> --- a/drivers/staging/greybus/pwm.c
+> +++ b/drivers/staging/greybus/pwm.c
+> @@ -89,7 +89,7 @@ static int gb_pwm_deactivate_operation(struct gb_pwm_ch=
+ip *pwmc,
+>  }
+> =20
+>  static int gb_pwm_config_operation(struct gb_pwm_chip *pwmc,
+> -				   u8 which, u32 duty, u32 period)
+> +				   u8 which, u64 duty, u64 period)
+>  {
+>  	struct gb_pwm_config_request request;
+>  	struct gbphy_device *gbphy_dev;
+> @@ -99,8 +99,8 @@ static int gb_pwm_config_operation(struct gb_pwm_chip *=
+pwmc,
+>  		return -EINVAL;
+> =20
+>  	request.which =3D which;
+> -	request.duty =3D cpu_to_le32(duty);
+> -	request.period =3D cpu_to_le32(period);
+> +	request.duty =3D duty;
+> +	request.period =3D period;
+
+If you don't change the wire protocol, you want something like:
+
+	if (period > U32_MAX)
+		period =3D U32_MAX;
+
+	if (duty > period)
+		duty =3D period;
+
+To further improve the PWM driver it would be great if you added a
+paragraph about the details of its behaviour; in the format the other
+drivers do that (see e.g. drivers/pwm/pwm-sifive.c). It should describe
+the following properties:
+
+ - Is a period completed when period/duty changes?
+ - Is a period completed when the hardware is disabled?
+ - How does the output behave on disable?
+
+In this specific case I think there is also some rounding behaviour in
+the backend?! If so, describing this would be good, too.
+
+>  	gbphy_dev =3D to_gbphy_dev(pwmc->chip.dev);
+>  	ret =3D gbphy_runtime_get_sync(gbphy_dev);
+> @@ -204,43 +204,46 @@ static void gb_pwm_free(struct pwm_chip *chip, stru=
+ct pwm_device *pwm)
+>  	gb_pwm_deactivate_operation(pwmc, pwm->hwpwm);
+>  }
+> =20
+> -static int gb_pwm_config(struct pwm_chip *chip, struct pwm_device *pwm,
+> -			 int duty_ns, int period_ns)
+> +static int gb_pwm_apply(struct pwm_chip *chip, struct pwm_device *pwm,
+> +			const struct pwm_state *state)
+>  {
+> +	int err;
+> +	bool enabled =3D pwm->state.enabled;
+>  	struct gb_pwm_chip *pwmc =3D pwm_chip_to_gb_pwm_chip(chip);
+> =20
+> -	return gb_pwm_config_operation(pwmc, pwm->hwpwm, duty_ns, period_ns);
+> -};
+> -
+> -static int gb_pwm_set_polarity(struct pwm_chip *chip, struct pwm_device =
+*pwm,
+> -			       enum pwm_polarity polarity)
+> -{
+> -	struct gb_pwm_chip *pwmc =3D pwm_chip_to_gb_pwm_chip(chip);
+> -
+> -	return gb_pwm_set_polarity_operation(pwmc, pwm->hwpwm, polarity);
+> -};
+> +	/* set polarity */
+> +	if (state->polarity !=3D pwm->state.polarity) {
+> +		if (enabled) {
+> +			gb_pwm_disable_operation(pwmc, pwm->hwpwm);
+> +			enabled =3D false;
+> +		}
+> +		err =3D gb_pwm_set_polarity_operation(pwmc, pwm->hwpwm, state->polarit=
+y);
+> +		if (err)
+> +			return err;
+> +	}
+
+This is copied from the legacy pwm handling in the pwm core. This is
+good in principle. But if your hardware can change polarity without
+stopping operation, that would be the thing to do. (The pwm core cannot
+assume this, so it doesn't.)
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--dsrm2xhl5lm6tau4
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEyBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmIV1dUACgkQwfwUeK3K
+7AmSMgf0CVv4DE5aj42+pZS4w4G05NH6RjZczg1p6ylppMiQE86Jn/0wiksckSU2
+kOqzbT4MxRlWzsqKKX22/1xf3IG6gCVjbvZOSdq7YBn/XtF10jp8xSJlQd7qajsT
+vLybnzV9Ea23rLoTO/KKcQHpR5u02qvlbHz9M6SffUmBWWmgSFjNhRwyfl3XIKoz
+c7Vl8qvoRpSL81H2e+QK32plCIkStyt7gQgk4jluZ3JS6Hu5FIHoP+h/zDaNT0IO
+z9Ufd3lI0OmX11svFiBd3PhYG3PjgZ19UP2cXGqKpGPuJJyst8NHLCCVPqAEl0ew
+TP6kkgDorY46gJfeC80tNzjERoDw
+=dWMw
+-----END PGP SIGNATURE-----
+
+--dsrm2xhl5lm6tau4--

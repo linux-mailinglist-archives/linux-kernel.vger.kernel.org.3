@@ -2,115 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71DBD4C1E10
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 22:54:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C59324C1E0D
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 22:53:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242337AbiBWVyc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 16:54:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54242 "EHLO
+        id S242987AbiBWVyQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 16:54:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236891AbiBWVya (ORCPT
+        with ESMTP id S231163AbiBWVyO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 16:54:30 -0500
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2A0950451
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 13:54:01 -0800 (PST)
-Received: by mail-lf1-x134.google.com with SMTP id u20so656536lff.2
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 13:54:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=4TnD6jYOSsNtQKWO0JaU3gwq6Qdh6TjyUgcvqEl+K5I=;
-        b=dX/Jy7+F597/hIqi/9qMzXNMQrDyhVkP3dTnhBEOAl49NjqeCD8FqayzKHmPDChTw3
-         FXxIkt9v5pPo2K0sD+mRbJ2ze9fZjc9QQ0YoibAdDT8COHVHj0K4UemJxZnobNcdHhFL
-         ecGrXKp1xqB580NwK5g7hNFGZEgHao6WIIXUA=
+        Wed, 23 Feb 2022 16:54:14 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D73753E5F1
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 13:53:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1645653224;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=QHc4p6P496hz/XkslW9zde1DsEfB8iSDkjx5qIKJc48=;
+        b=L7gzNj9StIEUcC5xQmVVb7HRsLT5sLhhcaIhW9mJYoxtkxTnPxnn9jUZngwhqyxyO1b4/q
+        Dux5YbnbShPYmAYm9nAjhXL4fQLqVlxjG/5oklcogr/gdk19Y9+IqD7vG73pJtTr1HRKEu
+        re0RjXwzql23zYF7RCeTKdJIC3Zx6/g=
+Received: from mail-ot1-f71.google.com (mail-ot1-f71.google.com
+ [209.85.210.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-356-hKNCrCOIO1mkBhg4Lt_6Lg-1; Wed, 23 Feb 2022 16:53:42 -0500
+X-MC-Unique: hKNCrCOIO1mkBhg4Lt_6Lg-1
+Received: by mail-ot1-f71.google.com with SMTP id q8-20020a056830232800b005ab75f5e906so12351343otg.18
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 13:53:42 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=4TnD6jYOSsNtQKWO0JaU3gwq6Qdh6TjyUgcvqEl+K5I=;
-        b=FctymX292tA+gmkzdVNROhB9ubtoD/eWGmVAWbRGjF3qztPSudG+9pSBtnErJ/Qyfc
-         RiJX7WRCUfXbGlHyeCb+Ay6TuGXfIzWCOFj4KzekENrQ6eXyMHx3PJEzMUYZm33Hdfad
-         +Mji3rjGCnoQl8V1Ye73OEYsZaYBnZE9cxOmzGUMy+RmyMACwpehLTEldfMgZ4KDgPcH
-         /57SxHufqpVJj+ou24OiAQv3Gbxe4noUxYPZ4JHAHaLlCCVJb0jY3UTc22HNTGpptfyL
-         kOU+JghxjIQzggVn47AmxhSWMsEtk+uSmyP7AdtT6jqeZNOsYgqfmHjvBlgljFD1jZpu
-         LZSg==
-X-Gm-Message-State: AOAM5309retIsM6oaC/wEGluvtJpJ+6luHPTuGL+72d8APTNmbS4tcNB
-        vb/hNYeSsh7vgcN2w67Puv6VkSjHevmc+lOwH6M=
-X-Google-Smtp-Source: ABdhPJzEDFOJ0s1JQ5zRrqmi1ZcZ/y+AbaMxkXLw3b/Odem5AlM5Ic/jAoXr5i74TPG8NFUowMmgYQ==
-X-Received: by 2002:a19:6a07:0:b0:443:ecf7:e4b4 with SMTP id u7-20020a196a07000000b00443ecf7e4b4mr1019148lfu.395.1645653239782;
-        Wed, 23 Feb 2022 13:53:59 -0800 (PST)
-Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com. [209.85.167.51])
-        by smtp.gmail.com with ESMTPSA id a9sm57781lfl.180.2022.02.23.13.53.56
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 23 Feb 2022 13:53:56 -0800 (PST)
-Received: by mail-lf1-f51.google.com with SMTP id f37so602825lfv.8
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 13:53:56 -0800 (PST)
-X-Received: by 2002:a05:6512:2033:b0:443:3d49:dac with SMTP id
- s19-20020a056512203300b004433d490dacmr1067001lfs.52.1645653236389; Wed, 23
- Feb 2022 13:53:56 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:organization:mime-version:content-transfer-encoding;
+        bh=QHc4p6P496hz/XkslW9zde1DsEfB8iSDkjx5qIKJc48=;
+        b=UOS7INAM4OU8RU5AICjkPslGCVUfZUObV/b6SpnroCjQ+4b29voN3QDmBymix/fTFp
+         FGZ06lBW/g98ATndzEP+HiyDTH5c+nWVK6Dz1PgsDh9Ej2Or+lgDayyDW7GNB2WGGllg
+         lIuHAYsVNQacWWw2TDdI6+dJEK0JIsTfdFUkOXZdB5LN+M3nAQdgGTtV7B5I2vq0KjcO
+         ytCGcrkRejqqqMopER43pjCQdIkYdNzbkyIiGD/hJ1+ZlQsCM16Tjx9hGdkCoMHqKCcs
+         s/jHBKNi8tGIwTN5O2OfhUzhOxQZDj38xqSVRX+EmVRV/RTTsn6tTh9HBAI0YfiyWHZm
+         /1AQ==
+X-Gm-Message-State: AOAM5321Vg5bT8nUiFZlKHyZrpWgDOjtte9tzoen2f0sihfJUjDbbZjL
+        0kXBYPSLglQrXONWL9VVIGlJNdMABDb0aNnE9tIma70l3yvtnRHufAolUTCD82U0gsT0xX/cTyD
+        Jpp1DqmPTj1eTVkzGeCnwzLd/
+X-Received: by 2002:a05:6870:3e0d:b0:d3:fe6d:57c3 with SMTP id lk13-20020a0568703e0d00b000d3fe6d57c3mr780572oab.225.1645653222083;
+        Wed, 23 Feb 2022 13:53:42 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxVZWjYYf1lHUEZ749G1CD7yMY7PoElR7MtLZJgwYZu5lf142+Ut2Mxb4MgP1wHkjXeQTJkxQ==
+X-Received: by 2002:a05:6870:3e0d:b0:d3:fe6d:57c3 with SMTP id lk13-20020a0568703e0d00b000d3fe6d57c3mr780550oab.225.1645653221851;
+        Wed, 23 Feb 2022 13:53:41 -0800 (PST)
+Received: from redhat.com ([38.15.36.239])
+        by smtp.gmail.com with ESMTPSA id 128sm369711oor.15.2022.02.23.13.53.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Feb 2022 13:53:41 -0800 (PST)
+Date:   Wed, 23 Feb 2022 14:53:39 -0700
+From:   Alex Williamson <alex.williamson@redhat.com>
+To:     Lu Baolu <baolu.lu@linux.intel.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Joerg Roedel <joro@8bytes.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>, kvm@vger.kernel.org,
+        rafael@kernel.org, David Airlie <airlied@linux.ie>,
+        linux-pci@vger.kernel.org,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Diana Craciun <diana.craciun@oss.nxp.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Will Deacon <will@kernel.org>,
+        Stuart Yoder <stuyoder@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        linux-kernel@vger.kernel.org, Li Yang <leoyang.li@nxp.com>,
+        iommu@lists.linux-foundation.org,
+        Jacob jun Pan <jacob.jun.pan@intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Robin Murphy <robin.murphy@arm.com>
+Subject: Re: [PATCH v6 10/11] vfio: Remove iommu group notifier
+Message-ID: <20220223145339.57ed632e.alex.williamson@redhat.com>
+In-Reply-To: <20220218005521.172832-11-baolu.lu@linux.intel.com>
+References: <20220218005521.172832-1-baolu.lu@linux.intel.com>
+        <20220218005521.172832-11-baolu.lu@linux.intel.com>
+Organization: Red Hat
 MIME-Version: 1.0
-References: <20220217184829.1991035-1-jakobkoschel@gmail.com>
- <20220217184829.1991035-4-jakobkoschel@gmail.com> <CAHk-=wg1RdFQ6OGb_H4ZJoUwEr-gk11QXeQx63n91m0tvVUdZw@mail.gmail.com>
- <6DFD3D91-B82C-469C-8771-860C09BD8623@gmail.com> <CAHk-=wiyCH7xeHcmiFJ-YgXUy2Jaj7pnkdKpcovt8fYbVFW3TA@mail.gmail.com>
- <CAHk-=wgLe-OSLTEHm=V7eRG6Fcr0dpAM1ZRV1a=R_g6pBOr8Bg@mail.gmail.com>
- <CAK8P3a0DOC3s7x380XR_kN8UYQvkRqvE5LkHQfK2-KzwhcYqQQ@mail.gmail.com>
- <CAHk-=wicJ0VxEmnpb8=TJfkSDytFuf+dvQJj8kFWj0OF2FBZ9w@mail.gmail.com> <CAK8P3a2b_RtXkhQ2pwqbZ1zz6QtjaWwD4em_MCF_wGXRwZirKA@mail.gmail.com>
-In-Reply-To: <CAK8P3a2b_RtXkhQ2pwqbZ1zz6QtjaWwD4em_MCF_wGXRwZirKA@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Wed, 23 Feb 2022 13:53:39 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wh97QY9fEQUK6zMVQwaQ_JWDvR=R+TxQ_0OYrMHQ+egvQ@mail.gmail.com>
-Message-ID: <CAHk-=wh97QY9fEQUK6zMVQwaQ_JWDvR=R+TxQ_0OYrMHQ+egvQ@mail.gmail.com>
-Subject: Re: [RFC PATCH 03/13] usb: remove the usage of the list iterator
- after the loop
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Jakob <jakobkoschel@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
-        Cristiano Giuffrida <c.giuffrida@vu.nl>,
-        "Bos, H.J." <h.j.bos@vu.nl>, Nathan Chancellor <nathan@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 23, 2022 at 1:46 PM Arnd Bergmann <arnd@arndb.de> wrote:
->
-> > Ok, so we should be able to basically convert '--std=gnu89' into
-> > '--std=gnu11 -Wno-shift-negative-value' with no expected change of
-> > behavior.
->
-> Yes, I think that is correct.
+On Fri, 18 Feb 2022 08:55:20 +0800
+Lu Baolu <baolu.lu@linux.intel.com> wrote:
 
-Ok, somebody please remind me, and let's just try this early in the
-5.18 merge window.
+> The iommu core and driver core have been enhanced to avoid unsafe driver
+> binding to a live group after iommu_group_set_dma_owner(PRIVATE_USER)
+> has been called. There's no need to register iommu group notifier. This
+> removes the iommu group notifer which contains BUG_ON() and WARN().
+> 
+> The commit 5f096b14d421b ("vfio: Whitelist PCI bridges") allowed all
+> pcieport drivers to be bound with devices while the group is assigned to
+> user space. This is not always safe. For example, The shpchp_core driver
+> relies on the PCI MMIO access for the controller functionality. With its
+> downstream devices assigned to the userspace, the MMIO might be changed
+> through user initiated P2P accesses without any notification. This might
+> break the kernel driver integrity and lead to some unpredictable
+> consequences. As the result, currently we only allow the portdrv driver.
+> 
+> For any bridge driver, in order to avoiding default kernel DMA ownership
+> claiming, we should consider:
+> 
+>  1) Does the bridge driver use DMA? Calling pci_set_master() or
+>     a dma_map_* API is a sure indicate the driver is doing DMA
+> 
+>  2) If the bridge driver uses MMIO, is it tolerant to hostile
+>     userspace also touching the same MMIO registers via P2P DMA
+>     attacks?
+> 
+> Conservatively if the driver maps an MMIO region at all, we can say that
+> it fails the test.
 
-Because at least for me, doing
+IIUC, there's a chance we're going to break user configurations if
+they're assigning devices from a group containing a bridge that uses a
+driver other than pcieport.  The recommendation to such an affected user
+would be that the previously allowed host bridge driver was unsafe for
+this use case and to continue to enable assignment of devices within
+that group, the driver should be unbound from the bridge device or
+replaced with the pci-stub driver.  Is that right?
 
--                  -std=gnu89
-+                  -std=gnu11 -Wno-shift-negative-value
+Unfortunately I also think a bisect of such a breakage wouldn't land
+here, I think it was actually broken in "vfio: Set DMA ownership for
+VFIO" since that's where vfio starts to make use of
+iommu_group_claim_dma_owner() which should fail due to
+pci_dma_configure() calling iommu_device_use_default_domain() for
+any driver not identifying itself as driver_managed_dma.
 
-for KBUILD_CFLAGS works fine both in my gcc and clang builds. But
-that's obviously just one version of each.
+If that's correct, can we leave a breadcrumb in the correct commit log
+indicating why this potential breakage is intentional and how the
+bridge driver might be reconfigured to continue to allow assignment from
+within the group more safely?  Thanks,
 
-(I left the host compiler flags alone - I have this memory of us
-having had issues with people having old host compilers and wanting
-headers for tools still build with gcc-4)
+Alex
 
-                Linus

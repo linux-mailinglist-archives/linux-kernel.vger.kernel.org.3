@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 775614C1F3E
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 00:02:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 89FE64C1F41
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 00:03:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244688AbiBWXC3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 18:02:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43154 "EHLO
+        id S244691AbiBWXDX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 18:03:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237222AbiBWXCZ (ORCPT
+        with ESMTP id S234474AbiBWXDV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 18:02:25 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C34A75622E
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 15:01:56 -0800 (PST)
+        Wed, 23 Feb 2022 18:03:21 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E5135714E
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 15:02:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645657316; x=1677193316;
+  t=1645657373; x=1677193373;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=8nPmIxmtXYqAyhRT6COYK8620ZXK4lvOet6lsed/32g=;
-  b=AH7vzPJl/PIXFujh93MNfl9Vql6kny5WEVV2MdEGAO5oiFIye4kZgd+h
-   ZFPOFPfgChatwNSuGM2ZV2k0wynKa4NzubG5BacBN7aFT4dyG1rqsLyN9
-   x6onabEUJjasiqlDv7PE54G57IkGWdGkLpn+1KoVsmml9WgQJouXiYXgq
-   hOY/lvFv01wBZHn9ra6ZCYNs+qb5O4gT3MAGlNTaPKsIQ+AKNiiDsPAIo
-   VzpYXfmpsFSdNNd0+JL1nlHXOoxDZdg3eOsUWs4TBo2dASX0IXFNdcN3A
-   bREsG33vTI/gKI2wbbYXIf0O1+EcxTrO3QMy1PZRztDB5a4POPAeTJiOi
+  bh=cA/iBK1zv2TL2d3+yePnyMO9t24T6zwT8uyJGvJ28EM=;
+  b=CJWC1p8lgdq9WTPa4dPIvgyyX6nWht5PKqoIzSVX6szSvAUMjs5fQSg0
+   ROSe1UvaCOkcIkkzZDnLIfjiweeFVAzqUXKPPNjbUeyZf/V4gmP9PK8xX
+   tgc2uDvVIODItzDOYsl1h9gUnY1o0OdPK3A90hU1E4JXXraqS6Da8bp06
+   FlbUS5Gqb3pdSGwbrCf6j9E5ZQEgqFFDu0mOodIQvSPvPatHGArdC2rOE
+   sd6nIeX8qwiIJ3RQ7TqeZIYAkNH4ZrQTpYsDGsgZrRWodN+yz6qJiTPwv
+   OmWgUmdtVMM4zyqD7/uIvsKsX0AmZsob2kGnVG8OgRZxoz6Bd5HWe+LiE
    w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10267"; a="235610550"
+X-IronPort-AV: E=McAfee;i="6200,9189,10267"; a="250930679"
 X-IronPort-AV: E=Sophos;i="5.88,392,1635231600"; 
-   d="scan'208";a="235610550"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2022 15:01:53 -0800
+   d="scan'208";a="250930679"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2022 15:02:53 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,392,1635231600"; 
-   d="scan'208";a="607226336"
+   d="scan'208";a="637609511"
 Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 23 Feb 2022 15:01:51 -0800
+  by fmsmga002.fm.intel.com with ESMTP; 23 Feb 2022 15:02:51 -0800
 Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1nN0dq-0001v0-P1; Wed, 23 Feb 2022 23:01:50 +0000
-Date:   Thu, 24 Feb 2022 07:01:41 +0800
+        id 1nN0eo-0001vE-QR; Wed, 23 Feb 2022 23:02:50 +0000
+Date:   Thu, 24 Feb 2022 07:01:50 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     Ingo Molnar <mingo@kernel.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: [mingo-tip:sched/headers 13/2340] include/linux/rcupdate.h:414:36:
- error: dereferencing pointer to incomplete type 'struct css_set'
-Message-ID: <202202240645.bKyoBrpQ-lkp@intel.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [mingo-tip:sched/headers 1426/2340] fs/xfs/xfs_aops.c:185:3: error:
+ implicit declaration of function 'cond_resched'
+Message-ID: <202202240635.yBLA03nm-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -64,17 +64,19 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git sched/headers
 head:   97c5eeb4de3ad324ed2a4656b46465299cfd010a
-commit: c4ad6fcb67c42d65481c85733c8009c8afdfdf4e [13/2340] sched/headers: Reorganize, clean up and optimize kernel/sched/fair.c dependencies
-config: i386-randconfig-a003 (https://download.01.org/0day-ci/archive/20220224/202202240645.bKyoBrpQ-lkp@intel.com/config)
-compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
+commit: 696f8f602b998e5e83e2f71d3dd79e06dbb4e4ea [1426/2340] headers/deps: block/ioprio: Remove the <linux/sched.h> dependency from <linux/ioprio.h>
+config: i386-randconfig-a011 (https://download.01.org/0day-ci/archive/20220224/202202240635.yBLA03nm-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
 reproduce (this is a W=1 build):
-        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=c4ad6fcb67c42d65481c85733c8009c8afdfdf4e
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=696f8f602b998e5e83e2f71d3dd79e06dbb4e4ea
         git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
         git fetch --no-tags mingo-tip sched/headers
-        git checkout c4ad6fcb67c42d65481c85733c8009c8afdfdf4e
+        git checkout 696f8f602b998e5e83e2f71d3dd79e06dbb4e4ea
         # save the config file to linux build tree
         mkdir build_dir
-        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
@@ -84,64 +86,72 @@ Note: the mingo-tip/sched/headers HEAD 97c5eeb4de3ad324ed2a4656b46465299cfd010a 
 
 All errors (new ones prefixed by >>):
 
-   In file included from ./arch/x86/include/generated/asm/rwonce.h:1,
-                    from include/linux/compiler.h:255,
-                    from include/linux/export.h:43,
-                    from include/linux/linkage.h:7,
-                    from include/linux/kernel.h:17,
-                    from include/linux/cpumask.h:10,
-                    from include/linux/energy_model.h:4,
-                    from kernel/sched/fair.c:23:
-   include/linux/psi.h: In function 'cgroup_move_task':
->> include/linux/rcupdate.h:414:36: error: dereferencing pointer to incomplete type 'struct css_set'
-     414 | #define RCU_INITIALIZER(v) (typeof(*(v)) __force __rcu *)(v)
-         |                                    ^~~~
-   include/asm-generic/rwonce.h:55:33: note: in definition of macro '__WRITE_ONCE'
-      55 |  *(volatile typeof(x) *)&(x) = (val);    \
-         |                                 ^~~
-   arch/x86/include/asm/barrier.h:67:2: note: in expansion of macro 'WRITE_ONCE'
-      67 |  WRITE_ONCE(*p, v);      \
-         |  ^~~~~~~~~~
-   include/asm-generic/barrier.h:164:55: note: in expansion of macro '__smp_store_release'
-     164 | #define smp_store_release(p, v) do { kcsan_release(); __smp_store_release(p, v); } while (0)
-         |                                                       ^~~~~~~~~~~~~~~~~~~
-   include/linux/rcupdate.h:455:3: note: in expansion of macro 'smp_store_release'
-     455 |   smp_store_release(&p, RCU_INITIALIZER((typeof(p))_r_a_p__v)); \
-         |   ^~~~~~~~~~~~~~~~~
-   include/linux/rcupdate.h:455:25: note: in expansion of macro 'RCU_INITIALIZER'
-     455 |   smp_store_release(&p, RCU_INITIALIZER((typeof(p))_r_a_p__v)); \
-         |                         ^~~~~~~~~~~~~~~
-   include/linux/psi.h:58:2: note: in expansion of macro 'rcu_assign_pointer'
-      58 |  rcu_assign_pointer(p->cgroups, to);
-         |  ^~~~~~~~~~~~~~~~~~
-   In file included from kernel/sched/fair.c:52:
-   kernel/sched/sched.h: In function 'sched_core_account_forceidle':
-   kernel/sched/sched.h:1934:6: error: implicit declaration of function 'schedstat_enabled'; did you mean 'sched_core_enabled'? [-Werror=implicit-function-declaration]
-    1934 |  if (schedstat_enabled())
-         |      ^~~~~~~~~~~~~~~~~
-         |      sched_core_enabled
-   kernel/sched/fair.c: At top level:
-   kernel/sched/fair.c:11136:6: warning: no previous prototype for 'task_vruntime_update' [-Wmissing-prototypes]
-   11136 | void task_vruntime_update(struct rq *rq, struct task_struct *p, bool in_fi)
-         |      ^~~~~~~~~~~~~~~~~~~~
-   cc1: some warnings being treated as errors
+>> fs/xfs/xfs_aops.c:185:3: error: implicit declaration of function 'cond_resched' [-Werror,-Wimplicit-function-declaration]
+                   cond_resched();
+                   ^
+   fs/xfs/xfs_aops.c:185:3: note: did you mean '__cond_resched'?
+   include/linux/kernel.h:95:12: note: '__cond_resched' declared here
+   extern int __cond_resched(void);
+              ^
+   1 error generated.
+--
+>> fs/btrfs/ioctl.c:1655:3: error: implicit declaration of function 'cond_resched' [-Werror,-Wimplicit-function-declaration]
+                   cond_resched();
+                   ^
+   fs/btrfs/ioctl.c:1655:3: note: did you mean '__cond_resched'?
+   include/linux/kernel.h:95:12: note: '__cond_resched' declared here
+   extern int __cond_resched(void);
+              ^
+   1 error generated.
 
 
-vim +414 include/linux/rcupdate.h
+vim +/cond_resched +185 fs/xfs/xfs_aops.c
 
-ca5ecddfa8fcbd Paul E. McKenney 2010-04-28  409  
-462225ae47d717 Paul E. McKenney 2013-11-11  410  /**
-462225ae47d717 Paul E. McKenney 2013-11-11  411   * RCU_INITIALIZER() - statically initialize an RCU-protected global variable
-462225ae47d717 Paul E. McKenney 2013-11-11  412   * @v: The value to statically initialize with.
-462225ae47d717 Paul E. McKenney 2013-11-11  413   */
-462225ae47d717 Paul E. McKenney 2013-11-11 @414  #define RCU_INITIALIZER(v) (typeof(*(v)) __force __rcu *)(v)
-462225ae47d717 Paul E. McKenney 2013-11-11  415  
+3994fc48957520 Darrick J. Wong   2019-04-15  150  
+ebb7fb1557b1d0 Dave Chinner      2022-01-26  151  /*
+ebb7fb1557b1d0 Dave Chinner      2022-01-26  152   * Finish all pending IO completions that require transactional modifications.
+ebb7fb1557b1d0 Dave Chinner      2022-01-26  153   *
+ebb7fb1557b1d0 Dave Chinner      2022-01-26  154   * We try to merge physical and logically contiguous ioends before completion to
+ebb7fb1557b1d0 Dave Chinner      2022-01-26  155   * minimise the number of transactions we need to perform during IO completion.
+ebb7fb1557b1d0 Dave Chinner      2022-01-26  156   * Both unwritten extent conversion and COW remapping need to iterate and modify
+ebb7fb1557b1d0 Dave Chinner      2022-01-26  157   * one physical extent at a time, so we gain nothing by merging physically
+ebb7fb1557b1d0 Dave Chinner      2022-01-26  158   * discontiguous extents here.
+ebb7fb1557b1d0 Dave Chinner      2022-01-26  159   *
+ebb7fb1557b1d0 Dave Chinner      2022-01-26  160   * The ioend chain length that we can be processing here is largely unbound in
+ebb7fb1557b1d0 Dave Chinner      2022-01-26  161   * length and we may have to perform significant amounts of work on each ioend
+ebb7fb1557b1d0 Dave Chinner      2022-01-26  162   * to complete it. Hence we have to be careful about holding the CPU for too
+ebb7fb1557b1d0 Dave Chinner      2022-01-26  163   * long in this loop.
+ebb7fb1557b1d0 Dave Chinner      2022-01-26  164   */
+cb357bf3d105f6 Darrick J. Wong   2019-04-15  165  void
+cb357bf3d105f6 Darrick J. Wong   2019-04-15  166  xfs_end_io(
+cb357bf3d105f6 Darrick J. Wong   2019-04-15  167  	struct work_struct	*work)
+cb357bf3d105f6 Darrick J. Wong   2019-04-15  168  {
+433dad94ec5d6b Christoph Hellwig 2019-10-17  169  	struct xfs_inode	*ip =
+433dad94ec5d6b Christoph Hellwig 2019-10-17  170  		container_of(work, struct xfs_inode, i_ioend_work);
+598ecfbaa742ac Christoph Hellwig 2019-10-17  171  	struct iomap_ioend	*ioend;
+433dad94ec5d6b Christoph Hellwig 2019-10-17  172  	struct list_head	tmp;
+cb357bf3d105f6 Darrick J. Wong   2019-04-15  173  	unsigned long		flags;
+cb357bf3d105f6 Darrick J. Wong   2019-04-15  174  
+cb357bf3d105f6 Darrick J. Wong   2019-04-15  175  	spin_lock_irqsave(&ip->i_ioend_lock, flags);
+433dad94ec5d6b Christoph Hellwig 2019-10-17  176  	list_replace_init(&ip->i_ioend_list, &tmp);
+cb357bf3d105f6 Darrick J. Wong   2019-04-15  177  	spin_unlock_irqrestore(&ip->i_ioend_lock, flags);
+cb357bf3d105f6 Darrick J. Wong   2019-04-15  178  
+598ecfbaa742ac Christoph Hellwig 2019-10-17  179  	iomap_sort_ioends(&tmp);
+598ecfbaa742ac Christoph Hellwig 2019-10-17  180  	while ((ioend = list_first_entry_or_null(&tmp, struct iomap_ioend,
+433dad94ec5d6b Christoph Hellwig 2019-10-17  181  			io_list))) {
+cb357bf3d105f6 Darrick J. Wong   2019-04-15  182  		list_del_init(&ioend->io_list);
+6e552494fb90ac Brian Foster      2021-05-04  183  		iomap_ioend_try_merge(ioend, &tmp);
+cb357bf3d105f6 Darrick J. Wong   2019-04-15  184  		xfs_end_ioend(ioend);
+ebb7fb1557b1d0 Dave Chinner      2022-01-26 @185  		cond_resched();
+cb357bf3d105f6 Darrick J. Wong   2019-04-15  186  	}
+cb357bf3d105f6 Darrick J. Wong   2019-04-15  187  }
+cb357bf3d105f6 Darrick J. Wong   2019-04-15  188  
 
-:::::: The code at line 414 was first introduced by commit
-:::::: 462225ae47d7175f886281d8a91708550cd5178c rcu: Add an RCU_INITIALIZER for global RCU-protected pointers
+:::::: The code at line 185 was first introduced by commit
+:::::: ebb7fb1557b1d03b906b668aa2164b51e6b7d19a xfs, iomap: limit individual ioend chain lengths in writeback
 
-:::::: TO: Paul E. McKenney <paulmck@linux.vnet.ibm.com>
-:::::: CC: Paul E. McKenney <paulmck@linux.vnet.ibm.com>
+:::::: TO: Dave Chinner <dchinner@redhat.com>
+:::::: CC: Darrick J. Wong <djwong@kernel.org>
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation

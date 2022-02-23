@@ -2,120 +2,260 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A23504C0E8E
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 09:53:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 701E04C0E9B
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 09:54:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239086AbiBWIyA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 03:54:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33422 "EHLO
+        id S239109AbiBWIzL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 03:55:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239090AbiBWIx5 (ORCPT
+        with ESMTP id S237307AbiBWIzI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 03:53:57 -0500
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7974D7B55B;
-        Wed, 23 Feb 2022 00:53:29 -0800 (PST)
-Received: by mail-pg1-x52b.google.com with SMTP id o8so490004pgf.9;
-        Wed, 23 Feb 2022 00:53:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=iDb45oPj0ifDcB8Xoh2dodzalPDAwvLvo6tLmA+1g1A=;
-        b=mjbK/Qvyky40bHpb9CMcZeTXTikILi0QdvNGlkl/xfbx4ehMMLyLVLBwG4UAHrjXJC
-         qZ97pFWziKsT8Ay5h4ojKoZyq6NeXAh6ADGWvdRQa2t2iIkkdmV2eHSjj0U7qlbim6Pt
-         FOYoBJP5rOCNKtQOZvrqlHbv5uETayn7kMpKlF8KWDXNKiHmjBGNDZWHjf+DZDKrSyua
-         Lm6AqmUKEXj9hGreOdCtBvtMXNSDrHIgPQrlpdQq/UEKV8bD9T1yuxUEc8zw9Ok2X2Cx
-         N3iRl6WixrLYYwWx9/RAIeCWXNAfflB6skCejDzhXl7Y0nrM4wBCthW0YvQBvuwFhJko
-         ctiQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=iDb45oPj0ifDcB8Xoh2dodzalPDAwvLvo6tLmA+1g1A=;
-        b=zK7TWib1MGdDn8GbDGLRy9sHiG69cgzLpzUsWXSvgPBDUaCYXn/kxj7fZYT2h4qFd/
-         ofaWWLyaXya3vy7Wxrq+Gk+eicoGvJ7fV1JX2WT7MjiVXkVHLimNihIzBEgdjkNyIdvo
-         i+eaQ8vh0c9Rs4N61dLgsqfprHzyFk41Sxi6Zvw7oWNSBsgcvcKrE5/z89nIgc0pvaHV
-         S/eD6P/dV9Jk0qoDsBMXAyBttZeeFfjOqy3rr+qKqKX3XsQc9O4tCgMllgYI/1BYpO9Z
-         orItWqqgtS501u4OaeJ96uo6YQTTqujcCG9O5bwIH/j8H3c5qTQYDvXj1B2+V09woR9G
-         StqA==
-X-Gm-Message-State: AOAM531zDWZAyhVzq3R0ReaDEaxUiGK01fDklDDT+b8ylnWg2xQdEqzm
-        Ln/2fk2zXEY18WLH+HjAQBssuALfPl2Vp9PpnNc=
-X-Google-Smtp-Source: ABdhPJx/R0IJt/LaaJ2AfxqrABa8uf/z9Mb2sxVMk8u3hvcBKdcmjiDWBmzbbR8L5ikg9VGcY06oyQ==
-X-Received: by 2002:a63:5d09:0:b0:372:9a55:bf89 with SMTP id r9-20020a635d09000000b003729a55bf89mr22668044pgb.321.1645606408731;
-        Wed, 23 Feb 2022 00:53:28 -0800 (PST)
-Received: from localhost.localdomain ([43.132.141.8])
-        by smtp.gmail.com with ESMTPSA id ft9sm2043174pjb.4.2022.02.23.00.53.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Feb 2022 00:53:28 -0800 (PST)
-From:   Yuntao Wang <ytcoode@gmail.com>
-To:     bpf@vger.kernel.org
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Yuntao Wang <ytcoode@gmail.com>
-Subject: [PATCH bpf-next] libbpf: Simplify the find_elf_sec_sz() function
-Date:   Wed, 23 Feb 2022 16:52:44 +0800
-Message-Id: <20220223085244.3058118-1-ytcoode@gmail.com>
-X-Mailer: git-send-email 2.35.0.rc2
+        Wed, 23 Feb 2022 03:55:08 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A37EE7C162;
+        Wed, 23 Feb 2022 00:54:41 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 555FBB81EAA;
+        Wed, 23 Feb 2022 08:54:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED6BBC340FB;
+        Wed, 23 Feb 2022 08:54:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645606479;
+        bh=E/2Z4Vy9mxZGDI8XrK5Vjz10Eu6BNFSrCZQ+fcA0AuU=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=imGt0TTBca8jC8OZdr7AeYQItk1jNw9+HsQXjcRpe7dvnhuuo+D2FGWv5SCqGxF/t
+         89ZHbUAaf5SwjwTx7Mt4ZqPdNeElhdp8nWkV66UGwLRewTfdEoO8LiSGAM7Ldma7H4
+         IkX6xbe87WEt8tIeJ5OQ30micEoR4LwOZ3+zYhBmkdQ9CAL8Z9ancmRC1vKkxuNvLL
+         40T/YrsZW/YbGmUVbKtwuLF0XMrwHjgQ7saZ4nyjOp6WyL+W2AkU5ivkNQbkPPQZaN
+         nvneaDydNHlO0ihSQqWE3wc7YdZxW8WaqK64QH2XemEL9z55fnGjfOa1ab1WWrEVD/
+         LG4LyHVisZZfQ==
+Received: by mail-vk1-f178.google.com with SMTP id l10so11872647vki.9;
+        Wed, 23 Feb 2022 00:54:38 -0800 (PST)
+X-Gm-Message-State: AOAM532x02H2LnMUijHE7jWNpaLlmO0E23Hefa5smmRg176HuzP0ytRj
+        wkk8lgIEiVF8kmUvRuyvl3ASHY+ZhX5SvcXKsk0=
+X-Google-Smtp-Source: ABdhPJwWW6G4x9OFAhhFWSWfocQLhP1I117Bx4K85d+PzjcITJADDiakZphcZmjJzU/UZPrPS/vziQCTmEPnC0Gezro=
+X-Received: by 2002:a05:6122:24b:b0:320:a9b7:f709 with SMTP id
+ t11-20020a056122024b00b00320a9b7f709mr12200542vko.2.1645606477843; Wed, 23
+ Feb 2022 00:54:37 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220201150545.1512822-10-guoren@kernel.org> <mhng-c74f1c06-0caa-4a71-82fa-7cf58a1ac0ca@palmer-ri-x1c9>
+In-Reply-To: <mhng-c74f1c06-0caa-4a71-82fa-7cf58a1ac0ca@palmer-ri-x1c9>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Wed, 23 Feb 2022 16:54:27 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTS8EnPeTRj72UE2KehAqFEZ5PFVAQWgBvWRbLkGsOyXCg@mail.gmail.com>
+Message-ID: <CAJF2gTS8EnPeTRj72UE2KehAqFEZ5PFVAQWgBvWRbLkGsOyXCg@mail.gmail.com>
+Subject: Re: [PATCH V5 09/21] riscv: compat: Add basic compat data type implementation
+To:     Palmer Dabbelt <palmer@dabbelt.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Anup Patel <anup@brainfault.org>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        liush <liush@allwinnertech.com>, Wei Fu <wefu@redhat.com>,
+        Drew Fustini <drew@beagleboard.org>,
+        Wang Junqiang <wangjunqiang@iscas.ac.cn>,
+        Christoph Hellwig <hch@lst.de>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        linux-csky@vger.kernel.org,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        sparclinux <sparclinux@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Parisc List <linux-parisc@vger.kernel.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Guo Ren <guoren@linux.alibaba.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The check in the last return statement is unnecessary, we can just return
-the ret variable.
+On Wed, Feb 23, 2022 at 9:42 AM Palmer Dabbelt <palmer@dabbelt.com> wrote:
+>
+> On Tue, 01 Feb 2022 07:05:33 PST (-0800), guoren@kernel.org wrote:
+> > From: Guo Ren <guoren@linux.alibaba.com>
+> >
+> > Implement riscv asm/compat.h for struct compat_xxx,
+> > is_compat_task, compat_user_regset, regset convert.
+> >
+> > The rv64 compat.h has inherited most of the structs
+> > from the generic one.
+> >
+> > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> > Signed-off-by: Guo Ren <guoren@kernel.org>
+> > Cc: Arnd Bergmann <arnd@arndb.de>
+> > Cc: Palmer Dabbelt <palmer@dabbelt.com>
+> > ---
+> >  arch/riscv/include/asm/compat.h      | 129 +++++++++++++++++++++++++++
+> >  arch/riscv/include/asm/thread_info.h |   1 +
+> >  2 files changed, 130 insertions(+)
+> >  create mode 100644 arch/riscv/include/asm/compat.h
+> >
+> > diff --git a/arch/riscv/include/asm/compat.h b/arch/riscv/include/asm/compat.h
+> > new file mode 100644
+> > index 000000000000..2ac955b51148
+> > --- /dev/null
+> > +++ b/arch/riscv/include/asm/compat.h
+> > @@ -0,0 +1,129 @@
+> > +/* SPDX-License-Identifier: GPL-2.0-only */
+> > +#ifndef __ASM_COMPAT_H
+> > +#define __ASM_COMPAT_H
+> > +
+> > +#define COMPAT_UTS_MACHINE   "riscv\0\0"
+> > +
+> > +/*
+> > + * Architecture specific compatibility types
+> > + */
+> > +#include <linux/types.h>
+> > +#include <linux/sched.h>
+> > +#include <linux/sched/task_stack.h>
+> > +#include <asm-generic/compat.h>
+> > +
+> > +static inline int is_compat_task(void)
+> > +{
+> > +     return test_thread_flag(TIF_32BIT);
+> > +}
+> > +
+> > +struct compat_user_regs_struct {
+> > +     compat_ulong_t pc;
+> > +     compat_ulong_t ra;
+> > +     compat_ulong_t sp;
+> > +     compat_ulong_t gp;
+> > +     compat_ulong_t tp;
+> > +     compat_ulong_t t0;
+> > +     compat_ulong_t t1;
+> > +     compat_ulong_t t2;
+> > +     compat_ulong_t s0;
+> > +     compat_ulong_t s1;
+> > +     compat_ulong_t a0;
+> > +     compat_ulong_t a1;
+> > +     compat_ulong_t a2;
+> > +     compat_ulong_t a3;
+> > +     compat_ulong_t a4;
+> > +     compat_ulong_t a5;
+> > +     compat_ulong_t a6;
+> > +     compat_ulong_t a7;
+> > +     compat_ulong_t s2;
+> > +     compat_ulong_t s3;
+> > +     compat_ulong_t s4;
+> > +     compat_ulong_t s5;
+> > +     compat_ulong_t s6;
+> > +     compat_ulong_t s7;
+> > +     compat_ulong_t s8;
+> > +     compat_ulong_t s9;
+> > +     compat_ulong_t s10;
+> > +     compat_ulong_t s11;
+> > +     compat_ulong_t t3;
+> > +     compat_ulong_t t4;
+> > +     compat_ulong_t t5;
+> > +     compat_ulong_t t6;
+> > +};
+> > +
+> > +static inline void regs_to_cregs(struct compat_user_regs_struct *cregs,
+> > +                              struct pt_regs *regs)
+> > +{
+> > +     cregs->pc       = (compat_ulong_t) regs->epc;
+> > +     cregs->ra       = (compat_ulong_t) regs->ra;
+> > +     cregs->sp       = (compat_ulong_t) regs->sp;
+> > +     cregs->gp       = (compat_ulong_t) regs->gp;
+> > +     cregs->tp       = (compat_ulong_t) regs->tp;
+> > +     cregs->t0       = (compat_ulong_t) regs->t0;
+> > +     cregs->t1       = (compat_ulong_t) regs->t1;
+> > +     cregs->t2       = (compat_ulong_t) regs->t2;
+> > +     cregs->s0       = (compat_ulong_t) regs->s0;
+> > +     cregs->s1       = (compat_ulong_t) regs->s1;
+> > +     cregs->a0       = (compat_ulong_t) regs->a0;
+> > +     cregs->a1       = (compat_ulong_t) regs->a1;
+> > +     cregs->a2       = (compat_ulong_t) regs->a2;
+> > +     cregs->a3       = (compat_ulong_t) regs->a3;
+> > +     cregs->a4       = (compat_ulong_t) regs->a4;
+> > +     cregs->a5       = (compat_ulong_t) regs->a5;
+> > +     cregs->a6       = (compat_ulong_t) regs->a6;
+> > +     cregs->a7       = (compat_ulong_t) regs->a7;
+> > +     cregs->s2       = (compat_ulong_t) regs->s2;
+> > +     cregs->s3       = (compat_ulong_t) regs->s3;
+> > +     cregs->s4       = (compat_ulong_t) regs->s4;
+> > +     cregs->s5       = (compat_ulong_t) regs->s5;
+> > +     cregs->s6       = (compat_ulong_t) regs->s6;
+> > +     cregs->s7       = (compat_ulong_t) regs->s7;
+> > +     cregs->s8       = (compat_ulong_t) regs->s8;
+> > +     cregs->s9       = (compat_ulong_t) regs->s9;
+> > +     cregs->s10      = (compat_ulong_t) regs->s10;
+> > +     cregs->s11      = (compat_ulong_t) regs->s11;
+> > +     cregs->t3       = (compat_ulong_t) regs->t3;
+> > +     cregs->t4       = (compat_ulong_t) regs->t4;
+> > +     cregs->t5       = (compat_ulong_t) regs->t5;
+> > +     cregs->t6       = (compat_ulong_t) regs->t6;
+> > +};
+> > +
+> > +static inline void cregs_to_regs(struct compat_user_regs_struct *cregs,
+> > +                              struct pt_regs *regs)
+> > +{
+> > +     regs->epc       = (unsigned long) cregs->pc;
+> > +     regs->ra        = (unsigned long) cregs->ra;
+> > +     regs->sp        = (unsigned long) cregs->sp;
+> > +     regs->gp        = (unsigned long) cregs->gp;
+> > +     regs->tp        = (unsigned long) cregs->tp;
+> > +     regs->t0        = (unsigned long) cregs->t0;
+> > +     regs->t1        = (unsigned long) cregs->t1;
+> > +     regs->t2        = (unsigned long) cregs->t2;
+> > +     regs->s0        = (unsigned long) cregs->s0;
+> > +     regs->s1        = (unsigned long) cregs->s1;
+> > +     regs->a0        = (unsigned long) cregs->a0;
+> > +     regs->a1        = (unsigned long) cregs->a1;
+> > +     regs->a2        = (unsigned long) cregs->a2;
+> > +     regs->a3        = (unsigned long) cregs->a3;
+> > +     regs->a4        = (unsigned long) cregs->a4;
+> > +     regs->a5        = (unsigned long) cregs->a5;
+> > +     regs->a6        = (unsigned long) cregs->a6;
+> > +     regs->a7        = (unsigned long) cregs->a7;
+> > +     regs->s2        = (unsigned long) cregs->s2;
+> > +     regs->s3        = (unsigned long) cregs->s3;
+> > +     regs->s4        = (unsigned long) cregs->s4;
+> > +     regs->s5        = (unsigned long) cregs->s5;
+> > +     regs->s6        = (unsigned long) cregs->s6;
+> > +     regs->s7        = (unsigned long) cregs->s7;
+> > +     regs->s8        = (unsigned long) cregs->s8;
+> > +     regs->s9        = (unsigned long) cregs->s9;
+> > +     regs->s10       = (unsigned long) cregs->s10;
+> > +     regs->s11       = (unsigned long) cregs->s11;
+> > +     regs->t3        = (unsigned long) cregs->t3;
+> > +     regs->t4        = (unsigned long) cregs->t4;
+> > +     regs->t5        = (unsigned long) cregs->t5;
+> > +     regs->t6        = (unsigned long) cregs->t6;
+> > +};
+> > +
+> > +#endif /* __ASM_COMPAT_H */
+> > diff --git a/arch/riscv/include/asm/thread_info.h b/arch/riscv/include/asm/thread_info.h
+> > index 60da0dcacf14..9392e35c689d 100644
+> > --- a/arch/riscv/include/asm/thread_info.h
+> > +++ b/arch/riscv/include/asm/thread_info.h
+> > @@ -91,6 +91,7 @@ struct thread_info {
+> >  #define TIF_SECCOMP          8       /* syscall secure computing */
+> >  #define TIF_NOTIFY_SIGNAL    9       /* signal notifications exist */
+> >  #define TIF_UPROBE           10      /* uprobe breakpoint or singlestep */
+> > +#define TIF_32BIT            11      /* 32bit process */
+>
+> Presumably that's just meant for 32-bit processes on rv64?  Probably
+> best to have the comment say that explicitly.
+/* compat-mode 32bit process */
 
-But we can simplify the function further by returning 0 immediately if we
-find the section size and -ENOENT otherwise.
+>
+> >  #define _TIF_SYSCALL_TRACE   (1 << TIF_SYSCALL_TRACE)
+> >  #define _TIF_NOTIFY_RESUME   (1 << TIF_NOTIFY_RESUME)
 
-Thus we can also remove the ret variable.
 
-Signed-off-by: Yuntao Wang <ytcoode@gmail.com>
----
- tools/lib/bpf/libbpf.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 7e978feaf822..776b8e034d62 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -1374,22 +1374,20 @@ static bool bpf_map_type__is_map_in_map(enum bpf_map_type type)
- 
- static int find_elf_sec_sz(const struct bpf_object *obj, const char *name, __u32 *size)
- {
--	int ret = -ENOENT;
- 	Elf_Data *data;
- 	Elf_Scn *scn;
- 
--	*size = 0;
- 	if (!name)
- 		return -EINVAL;
- 
- 	scn = elf_sec_by_name(obj, name);
- 	data = elf_sec_data(obj, scn);
- 	if (data) {
--		ret = 0; /* found it */
- 		*size = data->d_size;
-+		return 0; /* found it */
- 	}
- 
--	return *size ? 0 : ret;
-+	return -ENOENT;
- }
- 
- static int find_elf_var_offset(const struct bpf_object *obj, const char *name, __u32 *off)
 -- 
-2.35.0.rc2
+Best Regards
+ Guo Ren
 
+ML: https://lore.kernel.org/linux-csky/

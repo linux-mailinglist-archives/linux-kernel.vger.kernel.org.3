@@ -2,296 +2,249 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 763044C14D0
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 14:55:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 502154C14CC
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 14:54:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241128AbiBWNzp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 08:55:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36786 "EHLO
+        id S241100AbiBWNzO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 08:55:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229574AbiBWNzn (ORCPT
+        with ESMTP id S230467AbiBWNzM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 08:55:43 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12211B0A6E;
-        Wed, 23 Feb 2022 05:55:15 -0800 (PST)
-Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21NCIjuM022970;
-        Wed, 23 Feb 2022 13:54:44 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=/0ph7D9yuIiQ3EQYTSolEoufpWrl82Nyycdl4KJnS20=;
- b=o4RU6E4RSjwibtiWxHmWvy3qRdqenFcyaFiUDkCQbJfV+zwKeJsc2sMN8EbqESyUntdw
- j3uXw4VIFcJzDNBjvPiW3WgR+/ZONegVMCMs915Ib0gL5AaFLyZeh3WotaOYPEsxj9JM
- 4/KYAMQZe4tmAsVamy3cqC5GEry73L46Kj3ZCN1Lxim+6bVwLLwJm0W09gw9h+hHvo4y
- EOfUHoELniSBgCMDgHHJxeKiZNiT2WWOUwo6jLpA4dG2m+sYetugCvNFoowMf9CJrms8
- Auy+AbrBoHIHTauhFUoyHG4KKN/86KfNFnmTr9XgdUd1j+MZ1ObgWJE93Y53wpWlaZ8p kA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3edmtet06c-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 23 Feb 2022 13:54:43 +0000
-Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 21NDrvT0017020;
-        Wed, 23 Feb 2022 13:54:43 GMT
-Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3edmtet05x-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 23 Feb 2022 13:54:43 +0000
-Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
-        by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 21NDmXTA008381;
-        Wed, 23 Feb 2022 13:54:41 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma03fra.de.ibm.com with ESMTP id 3ear698ttr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 23 Feb 2022 13:54:41 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 21NDsclj52429156
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 23 Feb 2022 13:54:38 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2031CAE04D;
-        Wed, 23 Feb 2022 13:54:38 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D8175AE055;
-        Wed, 23 Feb 2022 13:54:35 +0000 (GMT)
-Received: from sig-9-65-80-154.ibm.com (unknown [9.65.80.154])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed, 23 Feb 2022 13:54:35 +0000 (GMT)
-Message-ID: <9a720bf5928151a0cbc7994ee498a1c3ca779c56.camel@linux.ibm.com>
-Subject: Re: [PATCH v10 24/27] ima: Introduce securityfs file to activate an
- IMA namespace
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Stefan Berger <stefanb@linux.ibm.com>,
-        linux-integrity@vger.kernel.org
-Cc:     serge@hallyn.com, christian.brauner@ubuntu.com,
-        containers@lists.linux.dev, dmitry.kasatkin@gmail.com,
-        ebiederm@xmission.com, krzysztof.struczynski@huawei.com,
-        roberto.sassu@huawei.com, mpeters@redhat.com, lhinds@redhat.com,
-        lsturman@redhat.com, puiterwi@redhat.com, jejb@linux.ibm.com,
-        jamjoom@us.ibm.com, linux-kernel@vger.kernel.org,
-        paul@paul-moore.com, rgb@redhat.com,
-        linux-security-module@vger.kernel.org, jmorris@namei.org
-Date:   Wed, 23 Feb 2022 08:54:35 -0500
-In-Reply-To: <20220201203735.164593-25-stefanb@linux.ibm.com>
-References: <20220201203735.164593-1-stefanb@linux.ibm.com>
-         <20220201203735.164593-25-stefanb@linux.ibm.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: gLVbcJsnTR4RZgWZdZDqeCMykakZCDa1
-X-Proofpoint-ORIG-GUID: nxR5c6ouX-XuWzMUH-IpcpR9n8m9fY7_
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-02-23_06,2022-02-23_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
- mlxlogscore=999 bulkscore=0 spamscore=0 lowpriorityscore=0 impostorscore=0
- phishscore=0 mlxscore=0 adultscore=0 priorityscore=1501 clxscore=1015
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2201110000 definitions=main-2202230077
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 23 Feb 2022 08:55:12 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22170B0A65;
+        Wed, 23 Feb 2022 05:54:45 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id BE5F621155;
+        Wed, 23 Feb 2022 13:54:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1645624483; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type;
+        bh=BDDtMFSlNaRroadtmjh5Rpea2LPkFe//rdeeAscwciI=;
+        b=1hG1h0oScQB5MQ5JpmLkarELJg9Sd+dGOSWF9Sx/uh3llAxMIDnb4K2uM8fkw4yOUU/zwm
+        Na0iR8+Mx5Q4UAJCX2wi4hCGpmu0EvBT8IwdUTgY8kmVNM2JjqBVpE3cUixDIFBoEuOhfH
+        joUBQVQJi+MmhJCRQEmG2S6P531LddM=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1645624483;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type;
+        bh=BDDtMFSlNaRroadtmjh5Rpea2LPkFe//rdeeAscwciI=;
+        b=Ls2d1Dv6wKxOqma4CFw+uqyp1dbt4ahwDfB7wifMeJu6wkPAFpyUIaXLvGZVElJ/1/91+u
+        dMitCnBiPMsvGNDg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 8FB4E13D72;
+        Wed, 23 Feb 2022 13:54:43 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id gELmIaM8FmIwOAAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Wed, 23 Feb 2022 13:54:43 +0000
+Content-Type: multipart/mixed; boundary="------------GrTvbgEqrrcmnHjnYyoN6t08"
+Message-ID: <df3b5d1c-a36b-2c73-3e27-99e74983de3a@suse.cz>
+Date:   Wed, 23 Feb 2022 14:54:43 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Content-Language: en-US
+From:   Vlastimil Babka <vbabka@suse.cz>
+To:     Matthew Wilcox <willy@infradead.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+Cc:     Miaohe Lin <linmiaohe@huawei.com>,
+        Christoph Hellwig <hch@infradead.org>, Jan Kara <jack@suse.cz>,
+        Takashi Iwai <tiwai@suse.de>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>, patches@lists.linux.dev,
+        LKML <linux-kernel@vger.kernel.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Subject: read() data corruption with CONFIG_READ_ONLY_THP_FOR_FS=y
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-02-01 at 15:37 -0500, Stefan Berger wrote:
-> Introduce securityfs file 'active' that allows a user to activate an IMA
-> namespace by writing a "1" (precisely a '1\0' or '1\n') to it. When
-> reading from the file, it shows either '0' or '1'.
+This is a multi-part message in MIME format.
+--------------GrTvbgEqrrcmnHjnYyoN6t08
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-A patch description should start with the motivation for the change
-being introduced.  The last paragraph mentions "why" it will be needed
-in the future, but there are other reasons for explicitly requiring
-activation.   Probably something along the lines of not every user
-namespace requires an active IMA namespace.  Please include those
-reasons here.
+Hi,
 
-> 
-> Also, introduce ns_is_active() to be used in those places where the
-> ima_namespace pointer may either be NULL or where the active field may not
-> have been set to '1', yet. An inactive IMA namespace should never be
-> accessed since it has not been initialized, yet.
-> 
-> Set the init_ima_ns's active field to '1' since it is considered active
-> right from the beginning.
-> 
-> The rationale for introducing a file to activate an IMA namespace is that
-> subsequent support for IMA-measurement and IMA-appraisal will add
-> configuration files for selecting for example the template that an IMA
-> namespace is supposed to use for logging measurements, which will add
-> an IMA namespace configuration stage (using securityfs files) before its
-> activation.
+we have found a bug involving CONFIG_READ_ONLY_THP_FOR_FS=y, introduced in
+5.12 by cbd59c48ae2b ("mm/filemap: use head pages in
+generic_file_buffered_read")
+and apparently fixed in 5.17-rc1 by 6b24ca4a1a8d ("mm: Use multi-index
+entries in the page cache")
+The latter commit is part of folio rework so likely not stable material, so
+it would be nice to have a small fix for e.g. 5.15 LTS. Preferably from
+someone who understands xarray :)
 
-This could be included at the beginning, as part of the motivation for
-the patch, but it shouldn't be the only reason.
+The bug was found while building nodejs16, which involves running some
+tests, first with a non-stripped node16 binary, and then stripping it. This
+has a good chance of the stripped result becoming corrupted and not
+executable anymore due to dynamic loader failures. It turns out that while
+executed during tests, CONFIG_READ_ONLY_THP_FOR_FS=y allows khugepaged to
+collapse the large executable mappings. Then /usr/bin/strip uses read() to
+process the binary and triggers a bug introduced in cbd59c48ae2b where if a
+read spans two or more collapsed THPs in the page cache, the first one will
+be read multiple times instead.
 
-> 
-> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
-> 
-> ---
->  v10:
->  - use memdup_user_nul to copy input from user
->  - propagating error returned from ima_fs_add_ns_files()
-> ---
->  security/integrity/ima/ima.h             |  7 +++
->  security/integrity/ima/ima_fs.c          | 71 ++++++++++++++++++++++++
->  security/integrity/ima/ima_init_ima_ns.c |  1 +
->  security/integrity/ima/ima_main.c        |  2 +-
->  4 files changed, 80 insertions(+), 1 deletion(-)
-> 
-> diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
-> index 1e3f9dda218d..05e2de7697da 100644
-> --- a/security/integrity/ima/ima.h
-> +++ b/security/integrity/ima/ima.h
-> @@ -123,6 +123,8 @@ struct ima_h_table {
->  };
->  
->  struct ima_namespace {
-> +	atomic_t active;		/* whether namespace is active */
-> +
->  	struct rb_root ns_status_tree;
->  	rwlock_t ns_tree_lock;
->  	struct kmem_cache *ns_status_cache;
-> @@ -154,6 +156,11 @@ struct ima_namespace {
->  } __randomize_layout;
->  extern struct ima_namespace init_ima_ns;
->  
-> +static inline bool ns_is_active(struct ima_namespace *ns)
-> +{
-> +	return (ns && atomic_read(&ns->active));
-> +}
-> +
->  extern const int read_idmap[];
->  
->  #ifdef CONFIG_HAVE_IMA_KEXEC
-> diff --git a/security/integrity/ima/ima_fs.c b/security/integrity/ima/ima_fs.c
-> index 84cd02a9e19b..58d80884880f 100644
-> --- a/security/integrity/ima/ima_fs.c
-> +++ b/security/integrity/ima/ima_fs.c
-> @@ -451,6 +451,71 @@ static const struct file_operations ima_measure_policy_ops = {
->  	.llseek = generic_file_llseek,
->  };
->  
-> +static ssize_t ima_show_active(struct file *filp,
-> +			       char __user *buf,
-> +			       size_t count, loff_t *ppos)
-> +{
-> +	struct ima_namespace *ns = &init_ima_ns;
-> +	char tmpbuf[2];
-> +	ssize_t len;
-> +
-> +	len = scnprintf(tmpbuf, sizeof(tmpbuf),
-> +			"%d\n", atomic_read(&ns->active));
-> +	return simple_read_from_buffer(buf, count, ppos, tmpbuf, len);
-> +}
-> +
-> +static ssize_t ima_write_active(struct file *filp,
-> +				const char __user *buf,
-> +				size_t count, loff_t *ppos)
-> +{
-> +	struct ima_namespace *ns = &init_ima_ns;
-> +	unsigned int active;
-> +	char *kbuf;
-> +	int err;
-> +
-> +	if (ns_is_active(ns))
-> +		return -EBUSY;
-> +
-> +	/* accepting '1\n' and '1\0' and no partial writes */
-> +	if (count >= 3 || *ppos != 0)
-> +		return -EINVAL;
-> +
-> +	kbuf = memdup_user_nul(buf, count);
-> +	if (IS_ERR(kbuf))
-> +		return PTR_ERR(kbuf);
-> +
-> +	err = kstrtouint(kbuf, 10, &active);
-> +	kfree(kbuf);
-> +	if (err)
-> +		return err;
-> +
-> +	if (active != 1)
-> +		return -EINVAL;
-> +
-> +	atomic_set(&ns->active, 1);
-> +
-> +	return count;
-> +}
-> +
-> +static const struct file_operations ima_active_ops = {
-> +	.read = ima_show_active,
-> +	.write = ima_write_active,
-> +};
-> +
-> +static int ima_fs_add_ns_files(struct dentry *ima_dir)
-> +{
-> +	struct dentry *active;
-> +
-> +	active =
-> +	    securityfs_create_file("active",
-> +				   S_IRUSR | S_IWUSR | S_IRGRP, ima_dir, NULL,
-> +				   &ima_active_ops);
-> +	if (IS_ERR(active))
-> +		return PTR_ERR(active);
-> +
-> +	return 0;
-> +}
-> +
->  int ima_fs_ns_init(struct user_namespace *user_ns, struct dentry *root)
->  {
->  	struct ima_namespace *ns = ima_ns_from_user_ns(user_ns);
-> @@ -531,6 +596,12 @@ int ima_fs_ns_init(struct user_namespace *user_ns, struct dentry *root)
->  		}
->  	}
->  
-> +	if (ns != &init_ima_ns) {
-> +		ret = ima_fs_add_ns_files(ima_dir);
-> +		if (ret)
-> +			goto out;
-> +	}
-> +
+Takashi Iwai has bisected using the nodejs build scenario to commit
+cbd59c48ae2b.
 
-In all other cases, the securityfs files are directly created in
-ima_fs_ns_init().   What is different about "active" that a new
-function is defined?
+I have distilled the scenario to the attached reproducer. There are some
+assumptions for it to work:
 
-thanks,
+- the passed path for file it creates/works with should be on a filesystem
+such as xfs or ext4 that uses generic_file_buffered_read()
+- the kernel should have e6be37b2e7bd ("mm/huge_memory.c: add missing
+read-only THP checking in transparent_hugepage_enabled()") otherwise
+khugepaged will not recognize the reproducer's mm as thp eligible (it had to
+be some other mapping in nodejs that made it still possible to trigger this
+during bisect)
+- there's a pause to allow khugepaged to do its job, you can increase the
+speed as instructed and verify with /proc/pid/smaps and meminfo that the
+collapse in page cache has happened
+- if the bug is reproduced, the reproducer will complain like this:
+mismatch at offset 2097152: read value expected for offset 0 instead of 2097152
 
-Mimi
+I've hacked some printk on top 5.16 (attached debug.patch)
+which gives this output:
 
->  	return 0;
->  out:
->  	securityfs_remove(ns->ima_policy);
-> diff --git a/security/integrity/ima/ima_init_ima_ns.c b/security/integrity/ima/ima_init_ima_ns.c
-> index d4ddfd1de60b..39ee0c2477a6 100644
-> --- a/security/integrity/ima/ima_init_ima_ns.c
-> +++ b/security/integrity/ima/ima_init_ima_ns.c
-> @@ -58,5 +58,6 @@ struct ima_namespace init_ima_ns = {
->  	.ima_lsm_policy_notifier = {
->  		.notifier_call = ima_lsm_policy_change,
->  	},
-> +	.active = ATOMIC_INIT(1),
->  };
->  EXPORT_SYMBOL(init_ima_ns);
-> diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
-> index 1dee8cb5afa2..9ca9223bbcf6 100644
-> --- a/security/integrity/ima/ima_main.c
-> +++ b/security/integrity/ima/ima_main.c
-> @@ -441,7 +441,7 @@ static int process_measurement(struct user_namespace *user_ns,
->  
->  	while (user_ns) {
->  		ns = ima_ns_from_user_ns(user_ns);
-> -		if (ns) {
-> +		if (ns_is_active(ns)) {
->  			int rc;
->  
->  			rc = __process_measurement(ns, file, cred, secid, buf,
+i=0 page=ffffea0004340000 page_offset=0 uoff=0 bytes=2097152
+i=1 page=ffffea0004340000 page_offset=0 uoff=0 bytes=2097152
+i=2 page=ffffea0004340000 page_offset=0 uoff=0 bytes=0
+i=3 page=ffffea0004340000 page_offset=0 uoff=0 bytes=0
+i=4 page=ffffea0004340000 page_offset=0 uoff=0 bytes=0
+i=5 page=ffffea0004340000 page_offset=0 uoff=0 bytes=0
+i=6 page=ffffea0004340000 page_offset=0 uoff=0 bytes=0
+i=7 page=ffffea0004340000 page_offset=0 uoff=0 bytes=0
+i=8 page=ffffea0004470000 page_offset=2097152 uoff=0 bytes=0
+i=9 page=ffffea0004470000 page_offset=2097152 uoff=0 bytes=0
+i=10 page=ffffea0004470000 page_offset=2097152 uoff=0 bytes=0
+i=11 page=ffffea0004470000 page_offset=2097152 uoff=0 bytes=0
+i=12 page=ffffea0004470000 page_offset=2097152 uoff=0 bytes=0
+i=13 page=ffffea0004470000 page_offset=2097152 uoff=0 bytes=0
+i=14 page=ffffea0004470000 page_offset=2097152 uoff=0 bytes=0
 
+It seems filemap_get_read_batch() should be returning pages ffffea0004340000
+and ffffea0004470000 consecutively in the pvec, but returns the first one 8
+times, so it's read twice and then the rest is just skipped over as it's
+beyond the requested read size.
 
+I suspect these lines:
+  xas.xa_index = head->index + thp_nr_pages(head) - 1;
+  xas.xa_offset = (xas.xa_index >> xas.xa_shift) & XA_CHUNK_MASK;
+
+commit 6b24ca4a1a8d changes those to xas_advance() (introduced one patch
+earlier), so some self-contained fix should be possible for prior kernels?
+But I don't understand xarray well enough.
+
+My colleagues should be credited for initial analysis of the nodejs build
+scenario:
+
+Analyzed-by: Adam Majer <amajer@suse.com>
+Analyzed-by: Dirk Mueller <dmueller@suse.com>
+Bisected-by: Takashi Iwai <tiwai@suse.de>
+
+Thanks,
+Vlastimil
+--------------GrTvbgEqrrcmnHjnYyoN6t08
+Content-Type: text/x-csrc; charset=UTF-8; name="thp_reproducer.c"
+Content-Disposition: attachment; filename="thp_reproducer.c"
+Content-Transfer-Encoding: base64
+
+CiNpbmNsdWRlIDx1bmlzdGQuaD4KI2luY2x1ZGUgPHN0ZGxpYi5oPgojaW5jbHVkZSA8c3Rk
+aW8uaD4KI2luY2x1ZGUgPGZjbnRsLmg+CiNpbmNsdWRlIDxzeXMvbW1hbi5oPgojaW5jbHVk
+ZSA8c3lzL3BhcmFtLmg+CgojZGVmaW5lIFBBR0VfU0laRQkoNDA5NikKI2RlZmluZSBQTURf
+U0laRQkoUEFHRV9TSVpFICogNTEyKQojZGVmaW5lIFVMT05HX1NJWkUJKHNpemVvZih1bnNp
+Z25lZCBsb25nKSkKI2RlZmluZSBVTE9OR1NfUEVSX1BBR0UJKChQQUdFX1NJWkUpIC8gKFVM
+T05HX1NJWkUpKQojZGVmaW5lIE1BR0lDX1ZBTFVFCTB4YWJjZAoKCmludCB3cml0ZV9maWxl
+KGNoYXIgKm5hbWUsIHVuc2lnbmVkIGxvbmcgc2l6ZSkKewoJdW5zaWduZWQgbG9uZyAqYnVm
+OwoJdW5zaWduZWQgbG9uZyBpLCBwOwoJaW50IGZkOwoJaW50IHJldDsKCglidWYgPSBtbWFw
+KE5VTEwsIFBBR0VfU0laRSwgUFJPVF9SRUFEfFBST1RfV1JJVEUsCgkJCU1BUF9QUklWQVRF
+fE1BUF9BTk9OWU1PVVMsIDAsIDApOwoKCWlmIChidWYgPT0gTUFQX0ZBSUxFRCkgewoJCXBy
+aW50ZigibW1hcCBmYWlsZWRcbiIpOwoJCWV4aXQoMSk7Cgl9CgoJZmQgPSBjcmVhdChuYW1l
+LCBTX0lSV1hVKTsKCWlmIChmZCA9PSAtMSkgewoJCXBlcnJvcigiY3JlYXQiKTsKCQlleGl0
+KDEpOwoJfQoKCWZvciAoaSA9IDA7IGkgPCBzaXplIC8gUEFHRV9TSVpFOyBpKyspIHsKCQli
+dWZbMF0gPSBNQUdJQ19WQUxVRSArIGk7CgkJcmV0ID0gd3JpdGUoZmQsIGJ1ZiwgUEFHRV9T
+SVpFKTsKCQkJLy8geWVhaCwgc2xvcHB5CgkJaWYgKHJldCAhPSBQQUdFX1NJWkUpIHsKCQkJ
+cGVycm9yKCJ3cml0ZSIpOwoJCQlleGl0KDEpOwoJCX0KCX0KCgljbG9zZShmZCk7CgltdW5t
+YXAoYnVmLCBQQUdFX1NJWkUpOwp9Cgp2b2lkIHRvdWNoKGNoYXIgKiBidWYsIHVuc2lnbmVk
+IGxvbmcgc3RhcnQsIHVuc2lnbmVkIGxvbmcgc2l6ZSkKewoJdm9sYXRpbGUgY2hhciBmb287
+CgoJZm9yIChjaGFyICogcHRyID0gYnVmICsgc3RhcnQ7CgkgICAgIHB0ciA8IGJ1ZiArIHN0
+YXJ0ICsgc2l6ZTsKCSAgICAgcHRyICs9IFBBR0VfU0laRSkgewoJCWZvbyA9ICpwdHI7Cgl9
+Cn0KCnZvaWQgdGVzdF9yZWFkKGludCBmZCwgb2ZmX3Qgb2ZmLCBzaXplX3QgY291bnQsIHNp
+emVfdCBidWZzaXplKQp7CgljaGFyICpidWYgPSBOVUxMOwoJaW50IHJldDsKCglidWYgPSBt
+bWFwKE5VTEwsIGJ1ZnNpemUsIFBST1RfUkVBRHxQUk9UX1dSSVRFLAoJCQlNQVBfQU5PTllN
+T1VTfE1BUF9QUklWQVRFLCAwLCAwKTsKCWlmIChidWYgPT0gTUFQX0ZBSUxFRCkgewoJCXBl
+cnJvcigibW1hcCIpOwoJCWV4aXQoMSk7Cgl9CgoJb2ZmID0gbHNlZWsoZmQsIG9mZiwgU0VF
+S19TRVQpOwoJaWYgKG9mZiA9PSAtMSkgewoJCXBlcnJvcigibHNlZWsiKTsKCQlleGl0KDEp
+OwoJfQoKCWZvciAoc2l6ZV90IGRvbmUgPSAwOyBkb25lIDwgY291bnQ7IGRvbmUgKz0gYnVm
+c2l6ZSkgewoJCXNpemVfdCB0b19yZWFkID0gTUlOKGJ1ZnNpemUsIGNvdW50IC0gZG9uZSk7
+CgkJc2l6ZV90IGJ1Zl9yZWFkID0gMDsKCgkJd2hpbGUgKHRvX3JlYWQgPiAwKSB7CgkJCXNz
+aXplX3QgcmVhZF9vbmNlID0gcmVhZChmZCwgYnVmICsgYnVmX3JlYWQsIHRvX3JlYWQpOwoK
+CQkJaWYgKHJlYWRfb25jZSA9PSAtMSkgewoJCQkJcGVycm9yKCJyZWFkIik7CgkJCQlleGl0
+KDEpOwoJCQl9CgkJCWlmIChyZWFkX29uY2UgPT0gMCkgewoJCQkJcHJpbnRmKCJFT0Ygd2hp
+bGUgcmVhZGluZ1xuIik7CgkJCQlyZXR1cm47CgkJCX0KCQkJdG9fcmVhZCAtPSByZWFkX29u
+Y2U7CgkJCWJ1Zl9yZWFkICs9IHJlYWRfb25jZTsKCQl9CgoJCWZvciAoc2l6ZV90IHBvcyA9
+IDA7IHBvcyA8IGJ1Zl9yZWFkOyBwb3MgKz0gUE1EX1NJWkUpIHsKCQkJdW5zaWduZWQgbG9u
+ZyBhYnNfcG9zID0gb2ZmICsgZG9uZSArIHBvczsKCQkJdW5zaWduZWQgbG9uZyBmb3VuZF92
+YWwgPSAqKCh1bnNpZ25lZCBsb25nICopKGJ1ZiArIHBvcykpIC0gTUFHSUNfVkFMVUU7CgkJ
+CXVuc2lnbmVkIGxvbmcgZXhwZWN0ZWRfdmFsID0gYWJzX3BvcyAvIFBBR0VfU0laRTsKCgkJ
+CWlmIChmb3VuZF92YWwgIT0gZXhwZWN0ZWRfdmFsKSB7CgkJCQlwcmludGYoIm1pc21hdGNo
+IGF0IG9mZnNldCAlbGx1OiByZWFkIHZhbHVlIGV4cGVjdGVkIGZvciBvZmZzZXQgJWxsdSBp
+bnN0ZWFkIG9mICVsbHVcbiIsCgkJCQkJCWFic19wb3MsIGZvdW5kX3ZhbCAqIFBBR0VfU0la
+RSwgZXhwZWN0ZWRfdmFsICogUEFHRV9TSVpFKTsKCQkJfQoJCX0KCX0KCgltdW5tYXAoYnVm
+LCBidWZzaXplKTsKfQoKI2RlZmluZSBNQVBfU0laRSAoMipQTURfU0laRSkKCmludCBtYWlu
+KGludCBhcmdjLCBjaGFyICoqYXJndikKewoJaW50IGZkLCByZXQ7Cgl1bnNpZ25lZCBjaGFy
+ICpidWY7CglwaWRfdCBwaWQ7CgoJaWYgKGFyZ2MgIT0gMikgewoJCXByaW50ZigidXNhZ2U6
+ICVzIC9wYXRoL3RvL3Rlc3RfZmlsZVxuIiwgYXJndlswXSk7CgkJcHJpbnRmKCJ1c2UgYSBm
+aWxlc3lzdGVtIHVzaW5nIGdlbmVyaWNfZmlsZV9yZWFkX2l0ZXIoKSBzdWNoIGFzIGV4dDMg
+b3IgeGZzXG4iKTsKCQlleGl0KDEpOwoJfQoKCXdyaXRlX2ZpbGUoYXJndlsxXSwgTUFQX1NJ
+WkUpOwoKCWZkID0gb3Blbihhcmd2WzFdLCBPX1JET05MWSk7CgoJaWYgKGZkID09IC0xKSB7
+CgkJcGVycm9yKCJvcGVuIik7CgkJZXhpdCgxKTsKCX0KCglidWYgPSBtbWFwKCh2b2lkICop
+MHg3MDAwMDAwMDAwMDBVTCwgTUFQX1NJWkUsIFBST1RfUkVBRHxQUk9UX0VYRUMsCgkJCU1B
+UF9QUklWQVRFLCBmZCwgMCk7CgoJaWYgKGJ1ZiA9PSBNQVBfRkFJTEVEKSB7CgkJcGVycm9y
+KCJtbWFwIGZhaWxlZCIpOwoJCWV4aXQoMSk7Cgl9CgoJcmV0ID0gbWFkdmlzZShidWYsIE1B
+UF9TSVpFLCBNQURWX0hVR0VQQUdFKTsKCglpZiAocmV0KQoJCXBlcnJvcigibWFkdmlzZSIp
+OwoKCXRvdWNoKGJ1ZiwgMCwgTUFQX1NJWkUpOwoKCXByaW50ZigicGlkOiAlZFxuIiwgZ2V0
+cGlkKCkpOwoKCXByaW50ZigicHJlc3MgZW50ZXIgdG8gY29udGludWUgYWZ0ZXIga2h1Z2Vw
+YWdlZCBoYXMgY29sbGFwc2VkIHRoZSBodWdlIHBhZ2VzXG4iKTsKCXByaW50ZigiY2hlY2sg
+L3Byb2MvbWVtaW5mbyBGaWxlSHVnZVBhZ2VzOiB0byB2ZXJpZnlcbiIpOwoJcHJpbnRmKCJ1
+c2UgJ2VjaG8gMTAwID4gL3N5cy9rZXJuZWwvbW0vdHJhbnNwYXJlbnRfaHVnZXBhZ2Uva2h1
+Z2VwYWdlZC9zY2FuX3NsZWVwX21pbGxpc2VjcycgdG8gc3BlZWQga2h1Z2VwYWdlZCB1cFxu
+Iik7CgoJZ2V0Y2hhcigpOwoKCXRvdWNoKGJ1ZiwgMCwgTUFQX1NJWkUpOwoKCXJldCA9IG11
+bm1hcChidWYsIE1BUF9TSVpFKTsKCWlmIChyZXQpIHsKCQlwZXJyb3IoIm11bm1hcCIpOwoJ
+CWV4aXQoMSk7Cgl9CgoJcmV0ID0gY2xvc2UoZmQpOwoJaWYgKHJldCkgewoJCXBlcnJvcigi
+Y2xvc2UiKTsKCQlleGl0KDEpOwoJfQoKCWZkID0gb3Blbihhcmd2WzFdLCBPX1JET05MWSk7
+CgoJaWYgKGZkID09IC0xKSB7CgkJcGVycm9yKCJvcGVuIik7CgkJZXhpdCgxKTsKCX0KCgl0
+ZXN0X3JlYWQoZmQsIDAsIE1BUF9TSVpFLCBNQVBfU0laRSk7CgoJY2xvc2UoZmQpOwp9Cg==
+
+--------------GrTvbgEqrrcmnHjnYyoN6t08
+Content-Type: text/x-patch; charset=UTF-8; name="debug.patch"
+Content-Disposition: attachment; filename="debug.patch"
+Content-Transfer-Encoding: base64
+
+ZGlmZiAtLWdpdCBhL21tL2ZpbGVtYXAuYyBiL21tL2ZpbGVtYXAuYwppbmRleCAzOWM0YzQ2
+YzYxMzMuLmNlMzljMTVlODM3OSAxMDA2NDQKLS0tIGEvbW0vZmlsZW1hcC5jCisrKyBiL21t
+L2ZpbGVtYXAuYwpAQCAtMjY4Miw2ICsyNjgyLDExIEBAIHNzaXplX3QgZmlsZW1hcF9yZWFk
+KHN0cnVjdCBraW9jYiAqaW9jYiwgc3RydWN0IGlvdl9pdGVyICppdGVyLAogCQkJCWJyZWFr
+OwogCQkJaWYgKGkgPiAwKQogCQkJCW1hcmtfcGFnZV9hY2Nlc3NlZChwYWdlKTsKKworCQkJ
+aWYgKHBhZ2Vfc2l6ZSA+IFBBR0VfU0laRSkKKwkJCQlwcl9pbmZvKCJpPSVkIHBhZ2U9JXB4
+IHBhZ2Vfb2Zmc2V0PSVsbGQgb2ZmPSVsdSBieXRlcz0lbHVcbiIsCisJCQkJCQlpLCBwYWdl
+LCBwYWdlX29mZnNldChwYWdlKSwgb2Zmc2V0LCBieXRlcyk7CisKIAkJCS8qCiAJCQkgKiBJ
+ZiB1c2VycyBjYW4gYmUgd3JpdGluZyB0byB0aGlzIHBhZ2UgdXNpbmcgYXJiaXRyYXJ5CiAJ
+CQkgKiB2aXJ0dWFsIGFkZHJlc3NlcywgdGFrZSBjYXJlIGFib3V0IHBvdGVudGlhbCBhbGlh
+c2luZwo=
+
+--------------GrTvbgEqrrcmnHjnYyoN6t08--

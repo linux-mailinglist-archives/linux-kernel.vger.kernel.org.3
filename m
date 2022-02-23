@@ -2,157 +2,233 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C659E4C0761
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 02:49:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 401724C0770
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 02:52:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235623AbiBWBt5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 20:49:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47408 "EHLO
+        id S236422AbiBWBw3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 20:52:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233342AbiBWBt4 (ORCPT
+        with ESMTP id S236076AbiBWBw0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 20:49:56 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01F2653E3E;
-        Tue, 22 Feb 2022 17:49:30 -0800 (PST)
-Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21N0igvx013877;
-        Wed, 23 Feb 2022 01:48:59 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=iKFpQ9kbhqeLxy4HC18HZD9+9bhlB13TyDv7gJ8L99I=;
- b=GODOdtDrT93RlhyWG7kiXyUIkCAL9vNjG01G/T4V+jLAwIghchepcZfHpDW8LEzK7cXl
- tbiTfFhsLyECnoWqRd3RICuWm0fE5bt3wYVXIZYLLC4Wea1p+FGsDg87CoZ9HEuIyoek
- nVYZUBnISssH3a7Pji4F5outRClNKokKwBfQTL3r8IF73MXMvwiCNz1w/86HEtAfDJtU
- sCzJeqUKxA2ajNgNyBKynE4SperV/y5aVRaL/i37MixusuDV+Z8Ht4kKIc0/s6ufJDad
- 2wQHKkhPkhbTW3YnsGjzqFD2A4J+WIblvIYoKQGqIlJZ+ShPnD3rg4BuoZvyZiPTNG5h Nw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3ed8gfaw1q-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 23 Feb 2022 01:48:58 +0000
-Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 21N1mwkP008738;
-        Wed, 23 Feb 2022 01:48:58 GMT
-Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3ed8gfaw16-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 23 Feb 2022 01:48:58 +0000
-Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
-        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 21N1lnRL021504;
-        Wed, 23 Feb 2022 01:48:55 GMT
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-        by ppma06fra.de.ibm.com with ESMTP id 3eaqtjn85h-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 23 Feb 2022 01:48:55 +0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 21N1mojV38404432
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 23 Feb 2022 01:48:51 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id DF90EA4054;
-        Wed, 23 Feb 2022 01:48:50 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 9166CA405C;
-        Wed, 23 Feb 2022 01:48:48 +0000 (GMT)
-Received: from sig-9-65-81-84.ibm.com (unknown [9.65.81.84])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed, 23 Feb 2022 01:48:48 +0000 (GMT)
-Message-ID: <177baf827c4dbf9a225b14552725360066af6471.camel@linux.ibm.com>
-Subject: Re: [PATCH v10 22/27] securityfs: Extend securityfs with
- namespacing support
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Stefan Berger <stefanb@linux.ibm.com>,
-        linux-integrity@vger.kernel.org
-Cc:     serge@hallyn.com, christian.brauner@ubuntu.com,
-        containers@lists.linux.dev, dmitry.kasatkin@gmail.com,
-        ebiederm@xmission.com, krzysztof.struczynski@huawei.com,
-        roberto.sassu@huawei.com, mpeters@redhat.com, lhinds@redhat.com,
-        lsturman@redhat.com, puiterwi@redhat.com, jejb@linux.ibm.com,
-        jamjoom@us.ibm.com, linux-kernel@vger.kernel.org,
-        paul@paul-moore.com, rgb@redhat.com,
-        linux-security-module@vger.kernel.org, jmorris@namei.org,
-        Christian Brauner <brauner@kernel.org>,
-        James Bottomley <James.Bottomley@HansenPartnership.com>
-Date:   Tue, 22 Feb 2022 20:48:47 -0500
-In-Reply-To: <20220201203735.164593-23-stefanb@linux.ibm.com>
-References: <20220201203735.164593-1-stefanb@linux.ibm.com>
-         <20220201203735.164593-23-stefanb@linux.ibm.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
+        Tue, 22 Feb 2022 20:52:26 -0500
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2E581141;
+        Tue, 22 Feb 2022 17:51:53 -0800 (PST)
+X-UUID: 08f0cd9317294c4cabb126ea836f5f00-20220223
+X-UUID: 08f0cd9317294c4cabb126ea836f5f00-20220223
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
+        (envelope-from <leilk.liu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1968855812; Wed, 23 Feb 2022 09:51:45 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Wed, 23 Feb 2022 09:51:44 +0800
+Received: from mhfsdcap04 (10.17.3.154) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Wed, 23 Feb 2022 09:51:44 +0800
+Message-ID: <048044adfba3786bd94ec1878832376979fc9513.camel@mediatek.com>
+Subject: Re: [PATCH V2 2/6] spi: mediatek: add IPM single mode design support
+From:   Leilk Liu <leilk.liu@mediatek.com>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Mark Brown <broonie@kernel.org>
+CC:     Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-spi@vger.kernel.org>, <linux-mediatek@lists.infradead.org>
+Date:   Wed, 23 Feb 2022 09:51:44 +0800
+In-Reply-To: <3d333da3-82cb-acdd-fba0-d555d94fbfa2@collabora.com>
+References: <20220221040717.3729-1-leilk.liu@mediatek.com>
+         <20220221040717.3729-3-leilk.liu@mediatek.com>
+         <3d333da3-82cb-acdd-fba0-d555d94fbfa2@collabora.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: 7V62I64nn7OkWARNIC9G2e67EqS6lT0Q
-X-Proofpoint-GUID: y6sEF0FKWWD0DP0ofnsaya5WQhmV79Mf
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-02-22_08,2022-02-21_02,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 suspectscore=0
- impostorscore=0 adultscore=0 priorityscore=1501 malwarescore=0
- lowpriorityscore=0 mlxscore=0 clxscore=1015 spamscore=0 mlxlogscore=999
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2201110000 definitions=main-2202230004
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MTK:  N
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
+        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-02-01 at 15:37 -0500, Stefan Berger wrote:
-> Enable multiple instances of securityfs by keying each instance with a
-> pointer to the user namespace it belongs to.
+On Tue, 2022-02-22 at 11:09 +0100, AngeloGioacchino Del Regno wrote:
+> Il 21/02/22 05:07, Leilk Liu ha scritto:
+> > this patch add the support of IPM single mode design.
+> > 
+> > Signed-off-by: Leilk Liu <leilk.liu@mediatek.com>
+> > ---
+> >   drivers/spi/spi-mt65xx.c | 103 +++++++++++++++++++++++++++++++++-
+> > -----
+> >   1 file changed, 87 insertions(+), 16 deletions(-)
+> > 
+> > diff --git a/drivers/spi/spi-mt65xx.c b/drivers/spi/spi-mt65xx.c
+> > index bbfeb8046c17..5fa677a589a4 100644
+> > --- a/drivers/spi/spi-mt65xx.c
+> > +++ b/drivers/spi/spi-mt65xx.c
+> > @@ -31,6 +31,7 @@
+> >   #define SPI_CFG2_REG                      0x0028
+> >   #define SPI_TX_SRC_REG_64                 0x002c
+> >   #define SPI_RX_DST_REG_64                 0x0030
+> > +#define SPI_CFG3_IPM_REG                  0x0040
+> >   
+> >   #define SPI_CFG0_SCK_HIGH_OFFSET          0
+> >   #define SPI_CFG0_SCK_LOW_OFFSET           8
+> > @@ -48,6 +49,7 @@
+> >   #define SPI_CFG1_CS_IDLE_MASK             0xff
+> >   #define SPI_CFG1_PACKET_LOOP_MASK         0xff00
+> >   #define SPI_CFG1_PACKET_LENGTH_MASK       0x3ff0000
+> > +#define SPI_CFG1_IPM_PACKET_LENGTH_MASK   GENMASK(31, 16)
+> >   #define SPI_CFG2_SCK_HIGH_OFFSET          0
+> >   #define SPI_CFG2_SCK_LOW_OFFSET           16
+> >   
+> > @@ -68,7 +70,13 @@
+> >   #define SPI_CMD_TX_ENDIAN            BIT(15)
+> >   #define SPI_CMD_FINISH_IE            BIT(16)
+> >   #define SPI_CMD_PAUSE_IE             BIT(17)
+> > +#define SPI_CMD_IPM_NONIDLE_MODE     BIT(19)
+> > +#define SPI_CMD_IPM_SPIM_LOOP        BIT(21)
+> > +#define SPI_CMD_IPM_GET_TICKDLY_OFFSET    22
+> >   
+> > +#define SPI_CMD_IPM_GET_TICKDLY_MASK	GENMASK(24, 22)
+> > +#define SPI_CFG3_IPM_HALF_DUPLEX_DIR		BIT(2)
+> > +#define SPI_CFG3_IPM_HALF_DUPLEX_EN		BIT(3)
+> >   #define MT8173_SPI_MAX_PAD_SEL 3
+> >   
+> >   #define MTK_SPI_PAUSE_INT_STATUS 0x2
+> > @@ -78,6 +86,7 @@
+> >   
+> >   #define MTK_SPI_MAX_FIFO_SIZE 32U
+> >   #define MTK_SPI_PACKET_SIZE 1024
+> > +#define MTK_SPI_IPM_PACKET_SIZE SZ_64K
+> >   #define MTK_SPI_32BITS_MASK  (0xffffffff)
+> >   
+> >   #define DMA_ADDR_EXT_BITS (36)
+> > @@ -93,6 +102,9 @@ struct mtk_spi_compatible {
+> >   	bool dma_ext;
+> >   	/* some IC no need unprepare SPI clk */
+> >   	bool no_need_unprepare;
+> > +	/* IPM design improve some single mode features */
+> > +	bool ipm_design;
+> > +
+> >   };
+> >   
+> >   struct mtk_spi {
+> > @@ -116,6 +128,12 @@ static const struct mtk_spi_compatible
+> > mt2712_compat = {
+> >   	.must_tx = true,
+> >   };
+> >   
+> > +static const struct mtk_spi_compatible ipm_compat_single = {
+> > +	.enhance_timing = true,
+> > +	.dma_ext = true,
+> > +	.ipm_design = true,
+> > +};
+> > +
+> >   static const struct mtk_spi_compatible mt6765_compat = {
+> >   	.need_pad_sel = true,
+> >   	.must_tx = true,
+> > @@ -157,6 +175,9 @@ static const struct mtk_chip_config
+> > mtk_default_chip_info = {
+> >   };
+> >   
+> >   static const struct of_device_id mtk_spi_of_match[] = {
+> > +	{ .compatible = "mediatek,ipm-spi-single",
+> > +		.data = (void *)&ipm_compat_single,
+> > +	},
+> >   	{ .compatible = "mediatek,mt2701-spi",
+> >   		.data = (void *)&mtk_common_compat,
+> >   	},
+> > @@ -275,12 +296,11 @@ static int mtk_spi_set_hw_cs_timing(struct
+> > spi_device *spi)
+> >   	return 0;
+> >   }
+> >   
+> > -static int mtk_spi_prepare_message(struct spi_master *master,
+> > -				   struct spi_message *msg)
+> > +static int mtk_spi_hw_init(struct spi_master *master,
+> > +			   struct spi_device *spi)
+> >   {
+> >   	u16 cpha, cpol;
+> >   	u32 reg_val;
+> > -	struct spi_device *spi = msg->spi;
+> >   	struct mtk_chip_config *chip_config = spi->controller_data;
+> >   	struct mtk_spi *mdata = spi_master_get_devdata(master);
+> >   
+> > @@ -288,6 +308,15 @@ static int mtk_spi_prepare_message(struct
+> > spi_master *master,
+> >   	cpol = spi->mode & SPI_CPOL ? 1 : 0;
+> >   
+> >   	reg_val = readl(mdata->base + SPI_CMD_REG);
+> > +	if (mdata->dev_comp->ipm_design) {
+> > +		/* SPI transfer without idle time until packet length
+> > done */
+> > +		reg_val |= SPI_CMD_IPM_NONIDLE_MODE;
+> > +		if (spi->mode & SPI_LOOP)
+> > +			reg_val |= SPI_CMD_IPM_SPIM_LOOP;
+> > +		else
+> > +			reg_val &= ~SPI_CMD_IPM_SPIM_LOOP;
+> > +	}
+> > +
+> >   	if (cpha)
+> >   		reg_val |= SPI_CMD_CPHA;
+> >   	else
+> > @@ -344,18 +373,33 @@ static int mtk_spi_prepare_message(struct
+> > spi_master *master,
+> >   		writel(mdata->pad_sel[spi->chip_select],
+> >   		       mdata->base + SPI_PAD_SEL_REG);
+> >   
+> > -	/* tick delay */
+> > -	reg_val = readl(mdata->base + SPI_CFG1_REG);
+> > -	reg_val &= ~SPI_CFG1_GET_TICK_DLY_MASK;
+> > -	reg_val |= ((chip_config->tick_delay & 0x7)
+> > -		<< SPI_CFG1_GET_TICK_DLY_OFFSET);
+> > -	writel(reg_val, mdata->base + SPI_CFG1_REG);
 > 
-> Since we do not need the pinning of the filesystem for the virtualization
-
-^namespacing case
-
-> case, limit the usage of simple_pin_fs() and simpe_release_fs() to the
-
-^simple_release_fs
-
-> case when the init_user_ns is active. This simplifies the cleanup for the
-> virtualization case where usage of securityfs_remove() to free dentries
-
-^namespacing 
-
-> is therefore not needed anymore.
+> Hello Leilk,
 > 
-> For the initial securityfs, i.e. the one mounted in the host userns mount,
-> nothing changes. The rules for securityfs_remove() are as before and it is
-> still paired with securityfs_create(). Specifically, a file created via
-> securityfs_create_dentry() in the initial securityfs mount still needs to
-> be removed by a call to securityfs_remove(). Creating a new dentry in the
-> initial securityfs mount still pins the filesystem like it always did.
-> Consequently, the initial securityfs mount is not destroyed on
-> umount/shutdown as long as at least one user of it still has dentries that
-> it hasn't removed with a call to securityfs_remove().
+> with this change, you are excluding this code from MT2712: is that
+> intentional?
+> If it is, then this should reside in a different commit with a Fixes
+> tag, also explaining the reason for not setting the tick delay on
+> that SoC.
+It's different for MT2712 and the other ICs for tick delay. I'll send a
+patch with fixes tag, thanks
+
 > 
-> Prevent mounting of an instance of securityfs in another user namespace
-> than it belongs to. Also, prevent accesses to files and directories by
-> a user namespace that is neither the user namespace it belongs to
-> nor an ancestor of the user namespace that the instance of securityfs
-> belongs to. Do not prevent access if securityfs was bind-mounted and
-> therefore the init_user_ns is the owning user namespace.
+> Also, please don't remove the /* tick delay */ comment.
 > 
-> Suggested-by: Christian Brauner <brauner@kernel.org>
-> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
-> Signed-off-by: James Bottomley <James.Bottomley@HansenPartnership.com>
+OK, I'll fix it,thanks
 
-Christian, I understand that "[PATCH v10 23/27] ima: Setup securityfs
-for IMA namespace" needs to be deferred, but is there a reason for
-deferring  "[PATCH v10 22/27] securityfs: Extend securityfs with
-namespacing support"?   As the securityfs patches are really
-independent of IMA namespacing, I would have thought  "[PATCH v10
-04/27] securityfs: rework dentry creation" and this patch should be co-
-located at the beginning of the patch set.
-
--- 
-thanks,
-
-Mimi
+> Regards,
+> Angelo
+> 
+> > +	if (mdata->dev_comp->enhance_timing) {
+> > +		if (mdata->dev_comp->ipm_design) {
+> > +			reg_val = readl(mdata->base + SPI_CMD_REG);
+> > +			reg_val &= ~SPI_CMD_IPM_GET_TICKDLY_MASK;
+> > +			reg_val |= ((chip_config->tick_delay & 0x7)
+> > +				   << SPI_CMD_IPM_GET_TICKDLY_OFFSET);
+> > +			writel(reg_val, mdata->base + SPI_CMD_REG);
+> > +		} else {
+> > +			reg_val = readl(mdata->base + SPI_CFG1_REG);
+> > +			reg_val &= ~SPI_CFG1_GET_TICK_DLY_MASK;
+> > +			reg_val |= ((chip_config->tick_delay & 0x7)
+> > +				<< SPI_CFG1_GET_TICK_DLY_OFFSET);
+> > +			writel(reg_val, mdata->base + SPI_CFG1_REG);
+> > +		}
+> > +	}
+> >   
+> >   	/* set hw cs timing */
+> >   	mtk_spi_set_hw_cs_timing(spi);
+> >   	return 0;
+> >   }
+> 
+> 
 

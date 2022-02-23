@@ -2,234 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B3F84C1A4D
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 18:56:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B5EA4C1A52
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 18:57:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239157AbiBWR4W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 12:56:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49952 "EHLO
+        id S243585AbiBWR5m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 12:57:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243628AbiBWR4Q (ORCPT
+        with ESMTP id S235343AbiBWR5i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 12:56:16 -0500
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89C9B255BA;
-        Wed, 23 Feb 2022 09:55:32 -0800 (PST)
-Received: by mail-pf1-x433.google.com with SMTP id x18so16071638pfh.5;
-        Wed, 23 Feb 2022 09:55:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=g5MUiBUuvl2XFBhVkmzyntL4m7Jquw4ZA1vWQa16xCM=;
-        b=PAn4/ZTO4UJZ88VUZ8mmuaGq+nBZ/AwiPcMbcNzrh/98L+ynTqdmamNg5VJ9fTs/yJ
-         uNwxzx1I5pSr4afLtazdRCKtLAQFeC9t92OXdRmnsSj2E+G5S/romNseBkOXjbOqBCQV
-         ZVZHSppa01U6wGzlEbKujerbZ9pum+exIjpQ9TzeTZw+x+q+gttqlgxnFW16f42xM7p0
-         6FYzYCrMaX1XoLlckg7YMnbtDqsIgYFobi/V0IdC2UVWq86rlFKrYtzTItXMXOldQlIY
-         8bfO5yg3gC5Pjgw4DsgkprOw1NMskzNit5RWbziHmArb0cLueK8g6TlhtlOAvq9MKzVd
-         bZYg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=g5MUiBUuvl2XFBhVkmzyntL4m7Jquw4ZA1vWQa16xCM=;
-        b=p9nKxL2VIxPJlnPficlZT3NfdydcCO7/PK6vvDWG/THd4a7CzyEHkIR8hyB7N8jbXS
-         aI3OAPkP3PzXBQu8XGXDGnu8g3wOj1llNDngbHcdZSQIyHY4cqNZ/xC3WO5R3rlKhE1D
-         hvfz2uyI+zD5gZK0zUv+33tJXkhEQFWESqFmGu66ku5PmJ9yxf6ADKJBuAOT/ZPxIw8K
-         PkAVUKOMt7VkIt9jnHkcZbAKqDScjSdi7a/ATVk/iwlfD3uSYclQvLRdi/ZX6SEW2Tzm
-         UBtnQ/OAZUYnE+l6ADWi/2azLWXlxKJFrIaE8k5DVIWKdWy/N6nXvhETOjxst/lJZWqH
-         Ck/w==
-X-Gm-Message-State: AOAM533zzXASZaVjpissADm5M/cr9LU/4d6k4pVUewYTnSv13yckfGBv
-        7pZisB5kyIV9BJaqiAvHn5c=
-X-Google-Smtp-Source: ABdhPJwpiB5x5gfXIiuYRpt4Z4bvjryNs08dSMMPO9x3w0RDZAcHaHs6MKIYSt4MB5OksV4si1Kk+g==
-X-Received: by 2002:a63:543:0:b0:374:62b7:8ab0 with SMTP id 64-20020a630543000000b0037462b78ab0mr591954pgf.384.1645638931892;
-        Wed, 23 Feb 2022 09:55:31 -0800 (PST)
-Received: from [192.168.1.3] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
-        by smtp.gmail.com with ESMTPSA id u25sm165880pfh.46.2022.02.23.09.55.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 23 Feb 2022 09:55:31 -0800 (PST)
-Message-ID: <91e2d4ad-7544-784b-defe-3a76577462f1@gmail.com>
-Date:   Wed, 23 Feb 2022 09:55:29 -0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [PATCH 3/3] drivers/net/ftgmac100: fix DHCP potential failure
- with systemd
-Content-Language: en-US
-To:     Heyi Guo <guoheyi@linux.alibaba.com>, linux-kernel@vger.kernel.org
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Guangbin Huang <huangguangbin2@huawei.com>,
-        Hao Chen <chenhao288@hisilicon.com>,
+        Wed, 23 Feb 2022 12:57:38 -0500
+Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33BB93C728;
+        Wed, 23 Feb 2022 09:57:09 -0800 (PST)
+Received: from cwcc.thunk.org (pool-108-7-220-252.bstnma.fios.verizon.net [108.7.220.252])
+        (authenticated bits=0)
+        (User authenticated as tytso@ATHENA.MIT.EDU)
+        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 21NHttsY015836
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 23 Feb 2022 12:55:55 -0500
+Received: by cwcc.thunk.org (Postfix, from userid 15806)
+        id 25DFF15C0036; Wed, 23 Feb 2022 12:55:55 -0500 (EST)
+Date:   Wed, 23 Feb 2022 12:55:55 -0500
+From:   "Theodore Ts'o" <tytso@mit.edu>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     Andy Lutomirski <luto@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Nick Hu <nickhu@andestech.com>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Yoshinori Sato <ysato@users.osdn.me>,
+        Michal Simek <monstr@monstr.eu>,
+        Borislav Petkov <bp@alien8.de>, Guo Ren <guoren@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Joshua Kinard <kumba@gentoo.org>,
+        David Laight <David.Laight@aculab.com>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Eric Biggers <ebiggers@google.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
         Arnd Bergmann <arnd@arndb.de>,
-        Dylan Hung <dylan_hung@aspeedtech.com>, netdev@vger.kernel.org
-References: <20220223031436.124858-1-guoheyi@linux.alibaba.com>
- <20220223031436.124858-4-guoheyi@linux.alibaba.com>
- <1675a52d-a270-d768-5ccc-35b1e82e56d2@gmail.com>
- <5cdf5d09-9b32-ec98-cbd1-c05365ec01fa@linux.alibaba.com>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <5cdf5d09-9b32-ec98-cbd1-c05365ec01fa@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thomas Gleixner <tglx@linutronix.de>,
+        Kees Cook <keescook@chromium.org>,
+        Lennart Poettering <mzxreary@0pointer.de>,
+        Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH v1] random: block in /dev/urandom
+Message-ID: <YhZ1Kxmhs4ObbXOB@mit.edu>
+References: <20220217162848.303601-1-Jason@zx2c4.com>
+ <6e117393-9c2f-441c-9c72-62c209643622@www.fastmail.com>
+ <CAHmME9qcUM+G8E3ag5iPfowUF4-iYATODGK+MoLjkfaipnkgjA@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHmME9qcUM+G8E3ag5iPfowUF4-iYATODGK+MoLjkfaipnkgjA@mail.gmail.com>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2/23/2022 3:39 AM, Heyi Guo wrote:
-> Hi Florian,
+On Wed, Feb 23, 2022 at 06:02:52PM +0100, Jason A. Donenfeld wrote:
 > 
-> 在 2022/2/23 下午1:00, Florian Fainelli 写道:
->>
->>
->> On 2/22/2022 7:14 PM, Heyi Guo wrote:
->>> DHCP failures were observed with systemd 247.6. The issue could be
->>> reproduced by rebooting Aspeed 2600 and then running ifconfig ethX
->>> down/up.
->>>
->>> It is caused by below procedures in the driver:
->>>
->>> 1. ftgmac100_open() enables net interface and call phy_start()
->>> 2. When PHY is link up, it calls netif_carrier_on() and then
->>> adjust_link callback
->>> 3. ftgmac100_adjust_link() will schedule the reset task
->>> 4. ftgmac100_reset_task() will then reset the MAC in another schedule
->>>
->>> After step 2, systemd will be notified to send DHCP discover packet,
->>> while the packet might be corrupted by MAC reset operation in step 4.
->>>
->>> Call ftgmac100_reset() directly instead of scheduling task to fix the
->>> issue.
->>>
->>> Signed-off-by: Heyi Guo <guoheyi@linux.alibaba.com>
->>> ---
->>> Cc: Andrew Lunn <andrew@lunn.ch>
->>> Cc: "David S. Miller" <davem@davemloft.net>
->>> Cc: Jakub Kicinski <kuba@kernel.org>
->>> Cc: Joel Stanley <joel@jms.id.au>
->>> Cc: Guangbin Huang <huangguangbin2@huawei.com>
->>> Cc: Hao Chen <chenhao288@hisilicon.com>
->>> Cc: Arnd Bergmann <arnd@arndb.de>
->>> Cc: Dylan Hung <dylan_hung@aspeedtech.com>
->>> Cc: netdev@vger.kernel.org
->>>
->>>
->>> ---
->>>   drivers/net/ethernet/faraday/ftgmac100.c | 13 +++++++++++--
->>>   1 file changed, 11 insertions(+), 2 deletions(-)
->>>
->>> diff --git a/drivers/net/ethernet/faraday/ftgmac100.c 
->>> b/drivers/net/ethernet/faraday/ftgmac100.c
->>> index c1deb6e5d26c5..d5356db7539a4 100644
->>> --- a/drivers/net/ethernet/faraday/ftgmac100.c
->>> +++ b/drivers/net/ethernet/faraday/ftgmac100.c
->>> @@ -1402,8 +1402,17 @@ static void ftgmac100_adjust_link(struct 
->>> net_device *netdev)
->>>       /* Disable all interrupts */
->>>       iowrite32(0, priv->base + FTGMAC100_OFFSET_IER);
->>>   -    /* Reset the adapter asynchronously */
->>> -    schedule_work(&priv->reset_task);
->>> +    /* Release phy lock to allow ftgmac100_reset to aquire it, 
->>> keeping lock
->>
->> typo: acquire
->>
-> Thanks for the catch :)
->>> +     * order consistent to prevent dead lock.
->>> +     */
->>> +    if (netdev->phydev)
->>> +        mutex_unlock(&netdev->phydev->lock);
->>> +
->>> +    ftgmac100_reset(priv);
->>> +
->>> +    if (netdev->phydev)
->>> +        mutex_lock(&netdev->phydev->lock);
->>
->> Do you really need to perform a full MAC reset whenever the link goes 
->> up or down? Instead cannot you just extract the maccr configuration 
->> which adjusts the speed and be done with it?
-> 
-> This is the original behavior and not changed in this patch set, and I'm 
-> not familiar with the hardware design of ftgmac100, so I'd like to limit 
-> the changes to the code which really causes practical issues.
+> I think your analysis is a bit mismatched from the reality of the
+> situation. That reality is that cryptographic users still find
+> themselves using /dev/urandom, as that's been the "standard good
+> advice" for a very long time. And people are still encouraged to do
+> that, either out of ignorance or out of "compatibility". The
+> cryptographic problem is not going away.
 
-This unlocking and re-locking seems superfluous when you could introduce 
-a version of ftgmac100_reset() which does not acquire the PHY device 
-mutex, and have that version called from ftgmac100_adjust_link(). For 
-every other call site, you would acquire it. Something like this for 
-instance:
+Or they open /dev/urandom because getrandom() and getentropy() isn't
+available on some OS's (all the world is not Linux, despite what the
+systemd folks like to believe), and some other OS's have a
+/dev/urandom-like device that they can open, and so it's just more
+convenient for application programers to open and read from
+/dev/urandom.
 
+> Fixing this issue means, yes, adding a 1 second delay to the small
+> group of init system users who haven't switched to using
+> getrandom(GRND_INSECURE) for that less common usage (who even are
+> those users actually?). That's not breaking compatibility or breaking
+> userspace or breaking anything; that's accepting the reality of _how_
+> /dev/urandom is mostly used -- for crypto -- and making that usage
+> finally secure, at the expense of a 1 second delay for those other
+> users who haven't switched to getrandom(GRND_INSECURE) yet. That seems
+> like a _very_ small price to pay for eliminating a footgun.
 
-diff --git a/drivers/net/ethernet/faraday/ftgmac100.c 
-b/drivers/net/ethernet/faraday/ftgmac100.c
-index 691605c15265..98179c3fd9ee 100644
---- a/drivers/net/ethernet/faraday/ftgmac100.c
-+++ b/drivers/net/ethernet/faraday/ftgmac100.c
-@@ -1038,7 +1038,7 @@ static void ftgmac100_adjust_link(struct 
-net_device *netdev)
-         iowrite32(0, priv->base + FTGMAC100_OFFSET_IER);
+I agree.  So long as we're only blocking for short amount of time, and
+only during early after the system was booted, people shouldn't care.
+The reason why we had to add the "gee-I-hope-this-jitterentropy-like-
+hack-is-actually-secure on all architectures but it's better than the
+alternatives people were trying to get Linus to adopt" was because
+there were systems were hanging for hours or days.
 
-         /* Reset the adapter asynchronously */
--       schedule_work(&priv->reset_task);
-+       ftgmac100_reset(priv, false);
-  }
-
-  static int ftgmac100_mii_probe(struct net_device *netdev)
-@@ -1410,10 +1410,8 @@ static int ftgmac100_init_all(struct ftgmac100 
-*priv, bool ignore_alloc_err)
-         return err;
-  }
-
--static void ftgmac100_reset_task(struct work_struct *work)
-+static void ftgmac100_reset_task(struct ftgmac100_priv *priv, bool 
-lock_phy)
-  {
--       struct ftgmac100 *priv = container_of(work, struct ftgmac100,
--                                             reset_task);
-         struct net_device *netdev = priv->netdev;
-         int err;
-
-@@ -1421,7 +1419,7 @@ static void ftgmac100_reset_task(struct 
-work_struct *work)
-
-         /* Lock the world */
-         rtnl_lock();
--       if (netdev->phydev)
-+       if (netdev->phydev && lock_phy)
-                 mutex_lock(&netdev->phydev->lock);
-         if (priv->mii_bus)
-                 mutex_lock(&priv->mii_bus->mdio_lock);
-@@ -1454,11 +1452,19 @@ static void ftgmac100_reset_task(struct 
-work_struct *work)
-   bail:
-         if (priv->mii_bus)
-                 mutex_unlock(&priv->mii_bus->mdio_lock);
--       if (netdev->phydev)
-+       if (netdev->phydev && lock_phy)
-                 mutex_unlock(&netdev->phydev->lock);
-         rtnl_unlock();
-  }
-
-+static void ftgmac100_reset_task(struct work_struct *work)
-+{
-+       struct ftgmac100 *priv = container_of(work, struct ftgmac100,
-+                                             reset_task);
-+
-+       ftgmac100_reset(priv, true);
-+}
-+
-  static int ftgmac100_open(struct net_device *netdev)
-  {
-         struct ftgmac100 *priv = netdev_priv(netdev)
--- 
-Florian
+      	   	   		    	  - Ted

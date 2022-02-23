@@ -2,117 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E22C4C06D9
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 02:27:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D00F4C06E0
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 02:29:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236551AbiBWB2L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 20:28:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56684 "EHLO
+        id S236557AbiBWB34 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 20:29:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231136AbiBWB2J (ORCPT
+        with ESMTP id S236555AbiBWB3z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 20:28:09 -0500
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4682122B04
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 17:27:43 -0800 (PST)
-Received: by mail-pg1-x52d.google.com with SMTP id 139so18520700pge.1
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 17:27:43 -0800 (PST)
+        Tue, 22 Feb 2022 20:29:55 -0500
+Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6716749CBE
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 17:29:26 -0800 (PST)
+Received: by mail-pj1-x104a.google.com with SMTP id x17-20020a17090ab01100b001bbffb2c5f3so434165pjq.9
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 17:29:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=z2BI41+moHLqPxYye2IJzRPB1aVADH7WFMUHE1bkSIg=;
-        b=A0iseiH33OikZhbY+MY2r3xCS1rV/nUjB7sgKJCRW9RIlTl3b2Cqa9hD940e0Ktk3G
-         PsE65b5jhY1C4NImzuubK5f+T34jmiHvkH9Vsu7f3dK/yQfGoq516nDb0g49dbw3bnMC
-         tc0n9La8yoQfrKTWbEhJndrb+XFLD5Wc5sbmg=
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc
+         :content-transfer-encoding;
+        bh=XJt7E+/TbSWO+R4K5yrVaKdlcnMjFDGRebGSqWZKoOM=;
+        b=VUYknfLXL+unn/6VXtDwyrULYfWLDjOsZa0fJmThc66yI1NsTFLXS6HOfPxjE13UR0
+         wfmwCx/GaDmK8g9Seq1lutlHlvAv2/YRiwYFbBvOXJw2ZEj/WB9DTgIoDA84dsTiF24A
+         /6zLKmpQbnTLC4tgp3e6zNGrOFs9syvzaoDMq5miys2dfVDHVuNhilHNQDsMksd6p5pP
+         9rSvP4TH5Ih9Nu9GwP0qxEdeCOVbDBSUbpgHqa7zjE/+PTlmyizMdoKp5f+kdjciUQXS
+         h5sUUYrb2DvtR2As0ASss2/vfKVYUvuCWAOvppGcllXLKnyuYinNIAjYK1oVtKeRqYtc
+         hTAg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=z2BI41+moHLqPxYye2IJzRPB1aVADH7WFMUHE1bkSIg=;
-        b=pu86XbTxQftdK5i/AML0oqBGNsKMkzmbAD0hVm0sKYI+mXEPyBq38aPx6NOqRGIeXI
-         xu18TcnqmKb8iBW+Et6U013FcUPYKyMNsiURfJxQd8c0bYntxh3uU3th67YqsGflmxn1
-         Xob8UcRjEjedYjPCjlq/9n2/ofxxsd1e9R72ywSgubuj0p7uwBrTgjSSITfoA4n1ONQo
-         dB0vj+btMMeUhz4k6/coTWourIM7d0uo92odhx+UZMQmikUPfpyKPPFB9smsVZIhf01P
-         1ZfcjJQtRjICLD6FyoRcoNYOgzhFZf5matzrsFCMTnsmpuWfY6GHn9FLroonjcGFfLhr
-         aIXQ==
-X-Gm-Message-State: AOAM533e92Y3HFxBZCbnXlr3ME9PYmbJuw9MmDo9i6aCkOuE7bPceuUK
-        XMVYx/sskUz0M9lQ8qX+A1DgUg==
-X-Google-Smtp-Source: ABdhPJyqp/rlr5xxZHgn3ZIxCdMsiOWCS0xpNad16llxE39IBc2Q4ud59TVWIWkuntmFrtCA5RAEUA==
-X-Received: by 2002:a63:ec0f:0:b0:373:a3e9:10a7 with SMTP id j15-20020a63ec0f000000b00373a3e910a7mr21658149pgh.149.1645579662820;
-        Tue, 22 Feb 2022 17:27:42 -0800 (PST)
-Received: from google.com ([240f:75:7537:3187:d2bd:9913:3c85:9aca])
-        by smtp.gmail.com with ESMTPSA id u27sm1159400pfg.171.2022.02.22.17.27.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Feb 2022 17:27:42 -0800 (PST)
-Date:   Wed, 23 Feb 2022 01:27:35 +0000
-From:   Sergey Senozhatsky <senozhatsky@chromium.org>
-To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        linux-kernel@vger.kernel.org, bhe@redhat.com, pmladek@suse.com,
-        akpm@linux-foundation.org, anton@enomsg.org, ccross@android.com,
-        dyoung@redhat.com, feng.tang@intel.com, john.ogness@linutronix.de,
-        keescook@chromium.org, kernel@gpiccoli.net,
-        kexec@lists.infradead.org, rostedt@goodmis.org,
-        tony.luck@intel.com, vgoyal@redhat.com
-Subject: Re: [PATCH V6] panic: Move panic_print before kmsg dumpers
-Message-ID: <YhWNhzacAVDuFtwB@google.com>
-References: <20220214141308.841525-1-gpiccoli@igalia.com>
- <YhRFNKtxSE8Xrbfw@google.com>
- <7e15bc6a-ceae-aa3a-0a86-18d24181b0ed@igalia.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7e15bc6a-ceae-aa3a-0a86-18d24181b0ed@igalia.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc
+         :content-transfer-encoding;
+        bh=XJt7E+/TbSWO+R4K5yrVaKdlcnMjFDGRebGSqWZKoOM=;
+        b=knfOm+eULZDdgLsAo9Ruef6M/kGQuORspf/GcZPggNzK/KDAVO+yQlKYXciXfMGXex
+         oOLSS6O7dipnJK6C+T4FpWsxr0F4/70cT1wn+SDwrv7g0x0vqevMn7yZKwHhKK2MEop4
+         Q8SDZFFMxIgJNd5BZiYFwrsEvmSpPnyETD3NyKVxGBwgh3/oQBL8GdsGuxWs+NtJsqqp
+         DepjPQAltqMXLOGBU7/ZAVq6dFaqUJooXa2kLUoykIkZak97J4DhcqCwLNt1Fn43T/0o
+         VngnjtvazPjbDe66bB+pyPzXmuGqjnuM9eQUQyF5cZAJw96Td/E7WbINAyjMey/GVC9r
+         SxkQ==
+X-Gm-Message-State: AOAM530kXwrsoQDoOpeCud6VEyCjrp4HG695+CDZ22As67lS4554dSQF
+        zFZUT0+P/VO2/CDstdR3wbg5YdWfV86x
+X-Google-Smtp-Source: ABdhPJwok/zYeBv9iYgH5TNm6XOpbgEypuRH1+BE3TzucfcQU2CHSzz99Lv+LdxirpLHnB05kLsrDfGCDg4o
+X-Received: from connoro.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:a99])
+ (user=connoro job=sendgmr) by 2002:a17:902:e34b:b0:14f:af20:4b3c with SMTP id
+ p11-20020a170902e34b00b0014faf204b3cmr12782893plc.56.1645579765763; Tue, 22
+ Feb 2022 17:29:25 -0800 (PST)
+Date:   Wed, 23 Feb 2022 01:28:14 +0000
+Message-Id: <20220223012814.1898677-1-connoro@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.35.1.473.g83b2b277ed-goog
+Subject: [PATCH bpf-next] bpf: add config to allow loading modules with BTF mismatches
+From:   "Connor O'Brien" <connoro@google.com>
+To:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>
+Cc:     Martin KaFai Lau <kafai@fb.com>, Song Liu <songliubraving@fb.com>,
+        Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Shung-Hsi Yu <shung-hsi.yu@suse.com>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "Connor O'Brien" <connoro@google.com>,
+        "=?UTF-8?q?Michal=20Such=C3=A1nek?=" <msuchanek@suse.de>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On (22/02/22 11:10), Guilherme G. Piccoli wrote:
-> On 21/02/2022 23:06, Sergey Senozhatsky wrote:
-> > On (22/02/14 11:13), Guilherme G. Piccoli wrote:
-> > [...]
-> > By additional panic_print messages you mean that panic_print_sys_info()
-> > will print everything (except PANIC_PRINT_ALL_PRINTK_MSG) twice?
-> > 
-> > Do we really need to dump everything twice? show_mem(), show_state(),
-> > ftrace_dump(DUMP_ALL). That's quite a bit of extra data.
-> > 
-> 
-> Oh no, we don't print everything twice, that'd be insane heh
+BTF mismatch can occur for a separately-built module even when the ABI
+is otherwise compatible and nothing else would prevent successfully
+loading. Add a new config to control how mismatches are handled. By
+default, preserve the current behavior of refusing to load the
+module. If MODULE_ALLOW_BTF_MISMATCH is enabled, load the module but
+ignore its BTF information.
 
-My bad! I did not spot the `return` at the end of the new branch.
+Suggested-by: Yonghong Song <yhs@fb.com>
+Suggested-by: Michal Such=C3=A1nek <msuchanek@suse.de>
+Signed-off-by: Connor O'Brien <connoro@google.com>
+---
+Hello,
 
-+       if (console_flush) {
-+               if (panic_print & PANIC_PRINT_ALL_PRINTK_MSG)
-+                       console_flush_on_panic(CONSOLE_REPLAY_ALL);
-+               return;
-+       }
+In the discussion regarding BTF compatibility & modules, there seemed
+to be broad agreement that an option to ignore mismatches would be
+reasonable. Currently the only option for handling this problem seems
+to be to disable BTF entirely, so this would at least be an
+incremental improvement.
 
-Hmm. Yeah, well, that's a bit of a tricky interface now
+Thanks,
+Connor
 
-	panic()
-		// everything (if corresponding bits set), no console flush
-		panic_print_sys_info(false)
-		...
-		// console flush only if corresponding bit set
-		panic_print_sys_info(true)
+ kernel/bpf/btf.c  |  3 ++-
+ lib/Kconfig.debug | 10 ++++++++++
+ 2 files changed, 12 insertions(+), 1 deletion(-)
 
+diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+index 11740b300de9..1a21f24105b3 100644
+--- a/kernel/bpf/btf.c
++++ b/kernel/bpf/btf.c
+@@ -6397,7 +6397,8 @@ static int btf_module_notify(struct notifier_block *n=
+b, unsigned long op,
+ 			pr_warn("failed to validate module [%s] BTF: %ld\n",
+ 				mod->name, PTR_ERR(btf));
+ 			kfree(btf_mod);
+-			err =3D PTR_ERR(btf);
++			if (!IS_ENABLED(CONFIG_MODULE_ALLOW_BTF_MISMATCH))
++				err =3D PTR_ERR(btf);
+ 			goto out;
+ 		}
+ 		err =3D btf_alloc_id(btf);
+diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+index 1555da672275..ff857bb7d633 100644
+--- a/lib/Kconfig.debug
++++ b/lib/Kconfig.debug
+@@ -339,6 +339,16 @@ config DEBUG_INFO_BTF_MODULES
+ 	help
+ 	  Generate compact split BTF type information for kernel modules.
+=20
++config MODULE_ALLOW_BTF_MISMATCH
++	bool "Allow loading modules with non-matching BTF type info"
++	depends on DEBUG_INFO_BTF_MODULES
++	help
++	  For modules whose split BTF does not match vmlinux, load without
++	  BTF rather than refusing to load. The default behavior with
++	  module BTF enabled is to reject modules with such mismatches;
++	  this option will still load module BTF where possible but ignore
++	  it when a mismatch is found.
++
+ config GDB_SCRIPTS
+ 	bool "Provide GDB scripts for kernel debugging"
+ 	help
+--=20
+2.35.1.473.g83b2b277ed-goog
 
-
-If everyone is fine then OK.
-
-But I _personally_ would look into changing this to something like this:
-
-	#define EARLY_PANIC_MASK (PANIC_PRINT_FOO | PANIC_PRINT_BAR | ...)
-	#define LATE_PANIC_MASK (PANIC_PRINT_ALL_PRINTK_MSG)
-	panic()
-		panic_print_sys_info(panic_print & EARLY_PANIC_MASK)
-		...
-		panic_print_sys_info(panic_print & LATE_PANIC_MASK)

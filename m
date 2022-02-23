@@ -2,109 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE4D04C0F7D
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 10:46:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CE4F4C0F7F
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 10:47:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239378AbiBWJrS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 04:47:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40784 "EHLO
+        id S239392AbiBWJrm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 04:47:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237784AbiBWJrQ (ORCPT
+        with ESMTP id S235685AbiBWJrl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 04:47:16 -0500
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4EB340923;
-        Wed, 23 Feb 2022 01:46:48 -0800 (PST)
-Received: by mail-pf1-x432.google.com with SMTP id l19so14813425pfu.2;
-        Wed, 23 Feb 2022 01:46:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=JB14j33OIPs1OGizD0q9pEqsxND8clVKLhTJqZTYOEc=;
-        b=h2qK/+1UhNIaADfvFYzi0SHlb7e0Q/Ppl0nuTgX88goT4YiO3WoB5x46n31RnWQ6FK
-         rQ4PIPSEy2IREvN5KHI8eBNErn2eu0xq7kJOc7Lsk6hL9nFBEZTEIqB9LIfQc57AsnlE
-         jklVKf/CwE3i1EgmHTfY/xIbeY7EXJq/gdSgDKa4kPAUU7gnMj/Q7eQDHW+8r9xv2I46
-         Rs3Zjq+UJKWXzGx0Kz3M/QjATpgD7wR8rIpeH7gvrh7sXAFhUgUUP7eeRTEZ2chkYNWr
-         xE/Bula0Tta+VO7n7NXnjhT4SJwVZ5qhrEjLUkxA5BUaY8HcNlW07ZOUTpNcXW+bIO5n
-         2ljg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=JB14j33OIPs1OGizD0q9pEqsxND8clVKLhTJqZTYOEc=;
-        b=4LwCRglPTs7OOeBIdOjUaA5pc5zldCxdSbsV3Wqrk+uollVwQxdJexOGshxuTpCpuo
-         bGYXfJ9wbh4gfk7E2FGmMNg9rFjnI4rdFq3sOaq0o64yg6eOwM8ryxfUR0ZPBT7BnxsU
-         p7IaXNFFrvlze93PRJOCSIey8a/nEWuuJb2uWYSGfQsWNVzYQvsklxtqQW3V9SboTZkc
-         Q5muL1hY1e5wdUqF3J6+0IQnacFvzjkx5PuFsh7HsPlDO+38SWcXW38jF9PHWE/BrrIk
-         sdVCfodz6D+e85HJGS8ZHSieKRhFN2tpdk2yItCWcn2v36vjK3oNW1BwTftq3f2SPmn1
-         LD/g==
-X-Gm-Message-State: AOAM530MfTebnevAqEzTU/EJONHIjtvgbsJ0E8NBoAH2jyAWMTfz73H5
-        xL109eR7AnCxaVEhEqjrruI=
-X-Google-Smtp-Source: ABdhPJwO+VZiM9CHOaWQb//I+ozQnEAAeKik4xggTRSisdu0hPGa/PxgcNPeZUw+9X4py3EPVZSr8A==
-X-Received: by 2002:a05:6a00:a92:b0:4e0:57a7:2d5d with SMTP id b18-20020a056a000a9200b004e057a72d5dmr29045712pfl.81.1645609607206;
-        Wed, 23 Feb 2022 01:46:47 -0800 (PST)
-Received: from ?IPV6:2404:f801:0:5:8000::754? ([2404:f801:9000:1a:efea::754])
-        by smtp.gmail.com with ESMTPSA id w2sm19827467pfb.139.2022.02.23.01.46.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 23 Feb 2022 01:46:46 -0800 (PST)
-Message-ID: <40f91949-58fa-4be2-5b01-ea34dda58670@gmail.com>
-Date:   Wed, 23 Feb 2022 17:46:39 +0800
+        Wed, 23 Feb 2022 04:47:41 -0500
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8F0B4C43B;
+        Wed, 23 Feb 2022 01:47:13 -0800 (PST)
+Received: from kwepemi500010.china.huawei.com (unknown [172.30.72.55])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4K3WM52TsWz9s8R;
+        Wed, 23 Feb 2022 17:43:45 +0800 (CST)
+Received: from kwepemm600010.china.huawei.com (7.193.23.86) by
+ kwepemi500010.china.huawei.com (7.221.188.191) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Wed, 23 Feb 2022 17:47:11 +0800
+Received: from linux_suse_sp4_work.huawei.com (10.67.133.232) by
+ kwepemm600010.china.huawei.com (7.193.23.86) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Wed, 23 Feb 2022 17:47:11 +0800
+From:   Liao Hua <liaohua4@huawei.com>
+To:     <mcgrof@kernel.org>, <keescook@chromium.org>, <yzaikin@google.com>,
+        <nixiaoming@huawei.com>
+CC:     <linux-kernel@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
+        <wangfangpeng1@huawei.com>
+Subject: [PATCH sysctl-next v2] latencytop: move sysctl to its own file
+Date:   Wed, 23 Feb 2022 17:47:10 +0800
+Message-ID: <20220223094710.103378-1-liaohua4@huawei.com>
+X-Mailer: git-send-email 2.12.3
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [PATCH V2 1/2] Swiotlb: Add swiotlb_alloc_from_low_pages switch
-Content-Language: en-US
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
-        wei.liu@kernel.org, decui@microsoft.com, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        x86@kernel.org, hpa@zytor.com, hch@infradead.org,
-        m.szyprowski@samsung.com, robin.murphy@arm.com,
-        michael.h.kelley@microsoft.com,
-        Tianyu Lan <Tianyu.Lan@microsoft.com>,
-        iommu@lists.linux-foundation.org, linux-hyperv@vger.kernel.org,
-        linux-kernel@vger.kernel.org, vkuznets@redhat.com,
-        brijesh.singh@amd.com, konrad.wilk@oracle.com,
-        parri.andrea@gmail.com, thomas.lendacky@amd.com
-References: <20220209122302.213882-1-ltykernel@gmail.com>
- <20220209122302.213882-2-ltykernel@gmail.com> <20220214081919.GA18337@lst.de>
- <4f433f07-05be-f81f-43e8-55c3f1af23b3@gmail.com>
- <20220214135834.GA30150@lst.de>
- <8d052867-ccff-f00f-7c89-cc26a4bfa347@gmail.com>
- <23f4a64d-5977-1816-8faa-fe7691ace2ff@gmail.com>
- <20220222080543.GA5412@lst.de>
- <00112505-4999-ac41-877e-49c4cc45312e@gmail.com>
- <20220222160039.GA13380@lst.de>
-From:   Tianyu Lan <ltykernel@gmail.com>
-In-Reply-To: <20220222160039.GA13380@lst.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.67.133.232]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ kwepemm600010.china.huawei.com (7.193.23.86)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: liaohua <liaohua4@huawei.com>
 
+This moves latencytop sysctl to kernel/latencytop.c
 
-On 2/23/2022 12:00 AM, Christoph Hellwig wrote:
-> On Tue, Feb 22, 2022 at 11:07:19PM +0800, Tianyu Lan wrote:
->> Thanks for your comment. That means we need to expose an
->> swiotlb_device_init() interface to allocate bounce buffer and initialize
->> io tlb mem entry. DMA API Current  rmem_swiotlb_device_init() only works
->> for platform with device tree. The new API should be called in the bus
->> driver or new DMA API. Could you check whether this is a right way before
->> we start the work.
-> 
-> Do these VMs use ACPI?  We'd probably really want some kind of higher
-> level configuration and not have the drivers request it themselves.
+Signed-off-by: liaohua <liaohua4@huawei.com>
 
-Yes, Hyper-V isolation VM uses ACPI. Devices are enumerated via vmbus 
-host and there is no child device information in ACPI table. The host 
-driver seems to be the right place to call new API.
+------
+v2:
+ Move latencytop sysctl to its own file base based on sysctl-next.
+
+ v1: https://lore.kernel.org/lkml/20220219072433.86983-1-liaohua4@huawei.com/
+  Move latencytop sysctl to its own file base based on linux master.
+---
+ include/linux/latencytop.h |  3 ---
+ kernel/latencytop.c        | 41 +++++++++++++++++++++++++++++------------
+ kernel/sysctl.c            | 10 ----------
+ 3 files changed, 29 insertions(+), 25 deletions(-)
+
+diff --git a/include/linux/latencytop.h b/include/linux/latencytop.h
+index abe3d95f795b..84f1053cf2a8 100644
+--- a/include/linux/latencytop.h
++++ b/include/linux/latencytop.h
+@@ -38,9 +38,6 @@ account_scheduler_latency(struct task_struct *task, int usecs, int inter)
+ 
+ void clear_tsk_latency_tracing(struct task_struct *p);
+ 
+-int sysctl_latencytop(struct ctl_table *table, int write, void *buffer,
+-		size_t *lenp, loff_t *ppos);
+-
+ #else
+ 
+ static inline void
+diff --git a/kernel/latencytop.c b/kernel/latencytop.c
+index 166d7bf49666..76166df011a4 100644
+--- a/kernel/latencytop.c
++++ b/kernel/latencytop.c
+@@ -55,6 +55,7 @@
+ #include <linux/sched/stat.h>
+ #include <linux/list.h>
+ #include <linux/stacktrace.h>
++#include <linux/sysctl.h>
+ 
+ static DEFINE_RAW_SPINLOCK(latency_lock);
+ 
+@@ -63,6 +64,31 @@ static struct latency_record latency_record[MAXLR];
+ 
+ int latencytop_enabled;
+ 
++#ifdef CONFIG_SYSCTL
++static int sysctl_latencytop(struct ctl_table *table, int write, void *buffer,
++		size_t *lenp, loff_t *ppos)
++{
++	int err;
++
++	err = proc_dointvec(table, write, buffer, lenp, ppos);
++	if (latencytop_enabled)
++		force_schedstat_enabled();
++
++	return err;
++}
++
++static struct ctl_table latencytop_sysctl[] = {
++	{
++		.procname   = "latencytop",
++		.data       = &latencytop_enabled,
++		.maxlen     = sizeof(int),
++		.mode       = 0644,
++		.proc_handler   = sysctl_latencytop,
++	},
++	{}
++};
++#endif
++
+ void clear_tsk_latency_tracing(struct task_struct *p)
+ {
+ 	unsigned long flags;
+@@ -266,18 +292,9 @@ static const struct proc_ops lstats_proc_ops = {
+ static int __init init_lstats_procfs(void)
+ {
+ 	proc_create("latency_stats", 0644, NULL, &lstats_proc_ops);
++#ifdef CONFIG_SYSCTL
++	register_sysctl_init("kernel", latencytop_sysctl);
++#endif
+ 	return 0;
+ }
+-
+-int sysctl_latencytop(struct ctl_table *table, int write, void *buffer,
+-		size_t *lenp, loff_t *ppos)
+-{
+-	int err;
+-
+-	err = proc_dointvec(table, write, buffer, lenp, ppos);
+-	if (latencytop_enabled)
+-		force_schedstat_enabled();
+-
+-	return err;
+-}
+ device_initcall(init_lstats_procfs);
+diff --git a/kernel/sysctl.c b/kernel/sysctl.c
+index ae5e59396b5d..4d76e6239f7c 100644
+--- a/kernel/sysctl.c
++++ b/kernel/sysctl.c
+@@ -65,7 +65,6 @@
+ #include <linux/bpf.h>
+ #include <linux/mount.h>
+ #include <linux/userfaultfd_k.h>
+-#include <linux/latencytop.h>
+ #include <linux/pid.h>
+ #include <linux/delayacct.h>
+ 
+@@ -1723,15 +1722,6 @@ static struct ctl_table kern_table[] = {
+ 		.extra2		= SYSCTL_ONE,
+ 	},
+ #endif
+-#ifdef CONFIG_LATENCYTOP
+-	{
+-		.procname	= "latencytop",
+-		.data		= &latencytop_enabled,
+-		.maxlen		= sizeof(int),
+-		.mode		= 0644,
+-		.proc_handler	= sysctl_latencytop,
+-	},
+-#endif
+ #ifdef CONFIG_BLK_DEV_INITRD
+ 	{
+ 		.procname	= "real-root-dev",
+-- 
+2.12.3
+

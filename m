@@ -2,210 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC2324C1C63
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 20:38:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E80D4C1C6A
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 20:40:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244484AbiBWTio (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 14:38:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34124 "EHLO
+        id S244489AbiBWTkx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 14:40:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244472AbiBWTim (ORCPT
+        with ESMTP id S235576AbiBWTkw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 14:38:42 -0500
-Received: from box.fidei.email (box.fidei.email [IPv6:2605:2700:0:2:a800:ff:feba:dc44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AF1C48E67;
-        Wed, 23 Feb 2022 11:38:14 -0800 (PST)
-Received: from authenticated-user (box.fidei.email [71.19.144.250])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by box.fidei.email (Postfix) with ESMTPSA id E147980757;
-        Wed, 23 Feb 2022 14:38:13 -0500 (EST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=dorminy.me; s=mail;
-        t=1645645094; bh=etjZw66rvQA6SzPGJtRqaZuHyWgp1fAbp7hIKSxaZZk=;
-        h=From:To:Cc:Subject:Date:From;
-        b=w05UNGvWwZGSUcpFPvG6Q2IdTNgBl7kFoTXn6cHHwqds97hxYpLCpOBD/HInTTPQ9
-         J6eCXMe8eYtq5i06Fi01bqFSs5dDX+2TLF5a1i1b83hq+p/qNLnmaluODMozZvC8IB
-         w1sWJm7UU0rbL6snMSv3M2jLuB7viTzZ6oEBI5Z8gVm/T5OHwapmyJ5AjyQz5XYUsg
-         M72amGG1gL+BGAHH91QaJLblGqkJZEosyidWlmvA+W3AbA7bpWNyKD81fxMnM7enEv
-         nWAqsWapOD9mSsW2o+B4HE/47a/3pIAwFex0J1crSmI3jO0DlCzxcwEeHTJh/9Vbh7
-         Cxs5OlYjKUEdw==
-From:   Sweet Tea Dorminy <sweettea-kernel@dorminy.me>
-To:     Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>, linux-btrfs@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel-team@fb.com
-Cc:     Sweet Tea Dorminy <sweettea-kernel@dorminy.me>
-Subject: [PATCH v4] btrfs: add fs state details to error messages.
-Date:   Wed, 23 Feb 2022 14:38:06 -0500
-Message-Id: <a059920460fe13f773fd9a2e870ceb9a8e3a105a.1645644489.git.sweettea-kernel@dorminy.me>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+        Wed, 23 Feb 2022 14:40:52 -0500
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE79849248
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 11:40:23 -0800 (PST)
+Received: by mail-yb1-xb49.google.com with SMTP id d17-20020a253611000000b006244e94b7b4so16142380yba.4
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 11:40:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=3O2OEu4eUhR3YtOUni3RQudnfEWV+vLSeR/9NTfWNyU=;
+        b=jzC9fz4TzuA54IP+E5K9YaKUQaPNmQ/lvm3NX2pb3OKYpT8t0JaPn6bAt2BddJkswc
+         CaDH8o0HuYAtisKR5ccNJFhqnT9crftdUBByiSgZ28y3XbzO3EdQaGScOTjoQ8alXMwB
+         JBrL6fQH+JWTaChQwvObiF7Wze08of9eeQzNJBGqa58pXjb8fI0wFM01INm2APxTcq6d
+         0/z1QuNzzNqvlMbZmvPurZn/8lu9y9/XNtMjiBk+FAPQ0V4eXsbYDNvjkoDuhePHNvGO
+         UffScw890HXGZdnsEUbyecWHYB9Sntgl8fkx0DrcJkg0q5QFExj/O81celFzUTPqIBKJ
+         3tzg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=3O2OEu4eUhR3YtOUni3RQudnfEWV+vLSeR/9NTfWNyU=;
+        b=Qs3UFNxASB0IAFea75PGUrg4t44rHb4mjtoygzOrALru1oo78UpVC46oruumwSfcRf
+         44VeoA9KI1WUP0AZzVcOLUv3kTRTqpKdq2XTn4Ax5yYxtc9tnzhpPa/hjMHqxVED615G
+         BiIJwOH1ZGVFbLaUccYbWAWtOGwf3xT2YcDolrL+u2lH1Ig1YLUPHrlrY9UdabZ+zsQr
+         aW5FCsFmDOaSRAA1On3+iK8mAD4qFarxKhElnrDmCkA+UJUmlxe6we2FzH1+vjvzGx04
+         zi6GmiLmL/3J+24v9GzsZ07xgdkMSwqVdUyKYhoMnkKy1POcM80VcFW8/E2n+1liKcqS
+         0pjA==
+X-Gm-Message-State: AOAM531yP53Bgcnisjhz+dOlpnKnkjmbhl4MhmDg62MF2wAqjfJNTJe1
+        Ew+LQAm2EMGBMwoAYAEIpNX6OEk1/A0=
+X-Google-Smtp-Source: ABdhPJw7+FhbLt4ftGqCh3/S46XA43RnDHK0Jo9UuVmyeO3SvFEivpVsPC0K8bjqax6iJuYtGWwMzLT1f5k=
+X-Received: from surenb-desktop.mtv.corp.google.com ([2620:15c:211:200:5093:9fb5:d0ba:a5f])
+ (user=surenb job=sendgmr) by 2002:a25:db8d:0:b0:624:5e99:1665 with SMTP id
+ g135-20020a25db8d000000b006245e991665mr1151004ybf.524.1645645223005; Wed, 23
+ Feb 2022 11:40:23 -0800 (PST)
+Date:   Wed, 23 Feb 2022 11:40:18 -0800
+Message-Id: <20220223194018.1296629-1-surenb@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.35.1.473.g83b2b277ed-goog
+Subject: [PATCH v2 1/1] mm: count time in drain_all_pages during direct
+ reclaim as memory pressure
+From:   Suren Baghdasaryan <surenb@google.com>
+To:     akpm@linux-foundation.org
+Cc:     hannes@cmpxchg.org, mhocko@suse.com, pmladek@suse.com,
+        peterz@infradead.org, guro@fb.com, shakeelb@google.com,
+        minchan@kernel.org, timmurray@google.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, kernel-team@android.com,
+        surenb@google.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When a filesystem goes read-only due to an error, multiple errors tend
-to be reported, some of which are knock-on failures. Logging fs_states,
-in btrfs_handle_fs_error() and btrfs_printk() helps distinguish the
-first error from subsequent messages which may only exist due to an
-error state.
+When page allocation in direct reclaim path fails, the system will
+make one attempt to shrink per-cpu page lists and free pages from
+high alloc reserves. Draining per-cpu pages into buddy allocator can
+be a very slow operation because it's done using workqueues and the
+task in direct reclaim waits for all of them to finish before
+proceeding. Currently this time is not accounted as psi memory stall.
 
-Under the new format, most initial errors will look like:
-`BTRFS: error (device loop0) in ...`
-while subsequent errors will begin with:
-`error (device loop0: state E) in ...`
+While testing mobile devices under extreme memory pressure, when
+allocations are failing during direct reclaim, we notices that psi
+events which would be expected in such conditions were not triggered.
+After profiling these cases it was determined that the reason for
+missing psi events was that a big chunk of time spent in direct
+reclaim is not accounted as memory stall, therefore psi would not
+reach the levels at which an event is generated. Further investigation
+revealed that the bulk of that unaccounted time was spent inside
+drain_all_pages call.
 
-An initial transaction abort error will look like
-`error (device loop0: state A) in ...`
-and subsequent messages will contain
-`(device loop0: state EA) in ...`
+A typical captured case when drain_all_pages path gets activated:
 
-Signed-off-by: Sweet Tea Dorminy <sweettea-kernel@dorminy.me>
+__alloc_pages_slowpath  took 44.644.613ns
+    __perform_reclaim   took    751.668ns (1.7%)
+    drain_all_pages     took 43.887.167ns (98.3%)
+
+PSI in this case records the time spent in __perform_reclaim but
+ignores drain_all_pages, IOW it misses 98.3% of the time spent in
+__alloc_pages_slowpath.
+
+Annotate __alloc_pages_direct_reclaim in its entirety so that delays
+from handling page allocation failure in the direct reclaim path are
+accounted as memory stall.
+
+Reported-by: Tim Murray <timmurray@google.com>
+Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+Acked-by: Johannes Weiner <hannes@cmpxchg.org>
 ---
-v4:
-  - Adjusted state translation table to contain chars instead of
-    strings.
+changes in v2:
+- Added captured sample case to show the delay numbers, per Michal Hocko
+- Moved annotation from __perform_reclaim into __alloc_pages_direct_reclaim,
+per Minchan Kim
 
-v3:
-  - Reworked btrfs_state_to_string to use an array mapping all states
-    to various error chars, or nothing, explicitly. Added error logging
-    for more states, as requested.
-  - Consolidated buffer length definition
-  - ttps://lore.kernel.org/linux-btrfs/8a2a73ab4b48a4e73d24cf7f10cc0fe245d50a84.1645562216.git.sweettea-kernel@dorminy.me/
+ mm/page_alloc.c | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
 
-v2: 
-  - Changed btrfs_state_to_string() for clarity
-  - Removed superfluous whitespace change
-  - https://lore.kernel.org/linux-btrfs/084c136c6bb2d20ca0e91af7ded48306d52bb910.1645210326.git.sweettea-kernel@dorminy.me/
-
-v1:
-  - https://lore.kernel.org/linux-btrfs/20220212191042.94954-1-sweettea-kernel@dorminy.me/
-
- fs/btrfs/ctree.h |  2 ++
- fs/btrfs/super.c | 62 +++++++++++++++++++++++++++++++++++++++++-------
- 2 files changed, 56 insertions(+), 8 deletions(-)
-
-diff --git a/fs/btrfs/ctree.h b/fs/btrfs/ctree.h
-index 8992e0096163..3db337cd015a 100644
---- a/fs/btrfs/ctree.h
-+++ b/fs/btrfs/ctree.h
-@@ -148,6 +148,8 @@ enum {
- 
- 	/* Indicates there was an error cleaning up a log tree. */
- 	BTRFS_FS_STATE_LOG_CLEANUP_ERROR,
-+
-+	BTRFS_FS_STATE_COUNT,
- };
- 
- #define BTRFS_BACKREF_REV_MAX		256
-diff --git a/fs/btrfs/super.c b/fs/btrfs/super.c
-index 4d947ba32da9..7ef6a3e494d0 100644
---- a/fs/btrfs/super.c
-+++ b/fs/btrfs/super.c
-@@ -66,6 +66,46 @@ static struct file_system_type btrfs_root_fs_type;
- 
- static int btrfs_remount(struct super_block *sb, int *flags, char *data);
- 
-+#define STATE_STRING_PREFACE ": state "
-+#define STATE_STRING_BUF_LEN \
-+	(sizeof(STATE_STRING_PREFACE) + BTRFS_FS_STATE_COUNT)
-+
-+/* Characters to print to indicate error conditions. RO is not an error. */
-+static const char fs_state_chars[] = {
-+	[BTRFS_FS_STATE_ERROR]			= 'E',
-+	[BTRFS_FS_STATE_REMOUNTING]		= 'M',
-+	[BTRFS_FS_STATE_RO]			= 0,
-+	[BTRFS_FS_STATE_TRANS_ABORTED]		= 'A',
-+	[BTRFS_FS_STATE_DEV_REPLACING]		= 'P',
-+	[BTRFS_FS_STATE_DUMMY_FS_INFO]		= 0,
-+	[BTRFS_FS_STATE_NO_CSUMS]		= 0,
-+	[BTRFS_FS_STATE_LOG_CLEANUP_ERROR]	= 'L',
-+};
-+
-+static void btrfs_state_to_string(const struct btrfs_fs_info *info, char *buf)
-+{
-+	unsigned int bit;
-+	unsigned int states_printed = 0;
-+	char *curr = buf;
-+
-+	memcpy(curr, STATE_STRING_PREFACE, sizeof(STATE_STRING_PREFACE));
-+	curr += sizeof(STATE_STRING_PREFACE) - 1;
-+
-+	for_each_set_bit(bit, &info->fs_state, sizeof(info->fs_state)) {
-+		WARN_ON_ONCE(bit >= BTRFS_FS_STATE_COUNT);
-+		if ((bit < BTRFS_FS_STATE_COUNT) && fs_state_chars[bit]) {
-+			*curr++ = fs_state_chars[bit];
-+			states_printed++;
-+		}
-+	}
-+
-+	/* If no states were printed, reset the buffer */
-+	if (!states_printed)
-+		curr = buf;
-+
-+	*curr++ = '\0';
-+}
-+
- /*
-  * Generally the error codes correspond to their respective errors, but there
-  * are a few special cases.
-@@ -128,6 +168,7 @@ void __btrfs_handle_fs_error(struct btrfs_fs_info *fs_info, const char *function
+diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+index 3589febc6d31..2e9fbf28938f 100644
+--- a/mm/page_alloc.c
++++ b/mm/page_alloc.c
+@@ -4595,13 +4595,12 @@ __perform_reclaim(gfp_t gfp_mask, unsigned int order,
+ 					const struct alloc_context *ac)
  {
- 	struct super_block *sb = fs_info->sb;
- #ifdef CONFIG_PRINTK
-+	char statestr[STATE_STRING_BUF_LEN];
- 	const char *errstr;
- #endif
+ 	unsigned int noreclaim_flag;
+-	unsigned long pflags, progress;
++	unsigned long progress;
  
-@@ -140,6 +181,7 @@ void __btrfs_handle_fs_error(struct btrfs_fs_info *fs_info, const char *function
+ 	cond_resched();
  
- #ifdef CONFIG_PRINTK
- 	errstr = btrfs_decode_error(errno);
-+	btrfs_state_to_string(fs_info, statestr);
- 	if (fmt) {
- 		struct va_format vaf;
- 		va_list args;
-@@ -148,12 +190,12 @@ void __btrfs_handle_fs_error(struct btrfs_fs_info *fs_info, const char *function
- 		vaf.fmt = fmt;
- 		vaf.va = &args;
+ 	/* We now go into synchronous reclaim */
+ 	cpuset_memory_pressure_bump();
+-	psi_memstall_enter(&pflags);
+ 	fs_reclaim_acquire(gfp_mask);
+ 	noreclaim_flag = memalloc_noreclaim_save();
  
--		pr_crit("BTRFS: error (device %s) in %s:%d: errno=%d %s (%pV)\n",
--			sb->s_id, function, line, errno, errstr, &vaf);
-+		pr_crit("BTRFS: error (device %s%s) in %s:%d: errno=%d %s (%pV)\n",
-+			sb->s_id, statestr, function, line, errno, errstr, &vaf);
- 		va_end(args);
- 	} else {
--		pr_crit("BTRFS: error (device %s) in %s:%d: errno=%d %s\n",
--			sb->s_id, function, line, errno, errstr);
-+		pr_crit("BTRFS: error (device %s%s) in %s:%d: errno=%d %s\n",
-+			sb->s_id, statestr, function, line, errno, errstr);
+@@ -4610,7 +4609,6 @@ __perform_reclaim(gfp_t gfp_mask, unsigned int order,
+ 
+ 	memalloc_noreclaim_restore(noreclaim_flag);
+ 	fs_reclaim_release(gfp_mask);
+-	psi_memstall_leave(&pflags);
+ 
+ 	cond_resched();
+ 
+@@ -4624,11 +4622,13 @@ __alloc_pages_direct_reclaim(gfp_t gfp_mask, unsigned int order,
+ 		unsigned long *did_some_progress)
+ {
+ 	struct page *page = NULL;
++	unsigned long pflags;
+ 	bool drained = false;
+ 
++	psi_memstall_enter(&pflags);
+ 	*did_some_progress = __perform_reclaim(gfp_mask, order, ac);
+ 	if (unlikely(!(*did_some_progress)))
+-		return NULL;
++		goto out;
+ 
+ retry:
+ 	page = get_page_from_freelist(gfp_mask, order, alloc_flags, ac);
+@@ -4644,7 +4644,8 @@ __alloc_pages_direct_reclaim(gfp_t gfp_mask, unsigned int order,
+ 		drained = true;
+ 		goto retry;
  	}
- #endif
+-
++	psi_memstall_leave(&pflags);
++out:
+ 	return page;
+ }
  
-@@ -240,11 +282,15 @@ void __cold btrfs_printk(const struct btrfs_fs_info *fs_info, const char *fmt, .
- 	vaf.va = &args;
- 
- 	if (__ratelimit(ratelimit)) {
--		if (fs_info)
--			printk("%sBTRFS %s (device %s): %pV\n", lvl, type,
--				fs_info->sb->s_id, &vaf);
--		else
-+		if (fs_info) {
-+			char statestr[STATE_STRING_BUF_LEN];
-+
-+			btrfs_state_to_string(fs_info, statestr);
-+			printk("%sBTRFS %s (device %s%s): %pV\n", lvl, type,
-+				fs_info->sb->s_id, statestr, &vaf);
-+		} else {
- 			printk("%sBTRFS %s: %pV\n", lvl, type, &vaf);
-+		}
- 	}
- 
- 	va_end(args);
 -- 
-2.35.1
+2.35.1.473.g83b2b277ed-goog
 

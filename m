@@ -2,111 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 961794C07C5
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 03:24:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD1FD4C07CD
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 03:28:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236788AbiBWCZK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 21:25:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38030 "EHLO
+        id S236767AbiBWC2w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 21:28:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233469AbiBWCZH (ORCPT
+        with ESMTP id S231986AbiBWC2u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 21:25:07 -0500
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E26F73969D
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 18:24:37 -0800 (PST)
-X-UUID: 1ce8197dbf7b4187aab88735c511e23c-20220223
-X-UUID: 1ce8197dbf7b4187aab88735c511e23c-20220223
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
-        (envelope-from <haibo.li@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 67793427; Wed, 23 Feb 2022 10:24:31 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Wed, 23 Feb 2022 10:24:30 +0800
-Received: from mszsdtcf10.gcn.mediatek.inc (10.16.4.60) by
- mtkcas11.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.0.1497.2 via Frontend Transport; Wed, 23 Feb 2022 10:24:29 +0800
-From:   Haibo Li <haibo.li@mediatek.com>
-To:     Russell King <linux@armlinux.org.uk>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-CC:     "GitAuthor : Haibo Li" <haibo.li@mediatek.com>,
-        <xiaoming.yu@mediatek.com>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>
-Subject: [PATCH] ARM:Fix incomplete stacktrace when unwind ftrace_regs_caller
-Date:   Wed, 23 Feb 2022 10:24:28 +0800
-Message-ID: <20220223022428.58385-1-haibo.li@mediatek.com>
-X-Mailer: git-send-email 2.25.1
+        Tue, 22 Feb 2022 21:28:50 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 129AD3CA7C;
+        Tue, 22 Feb 2022 18:28:24 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A1F696150E;
+        Wed, 23 Feb 2022 02:28:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1647C340E8;
+        Wed, 23 Feb 2022 02:28:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645583303;
+        bh=lfkFU3ZHQok4198keqUyJUicoCDvPOvYH5usdDQLzto=;
+        h=From:To:Cc:Subject:Date:From;
+        b=JNoUYRx9nN7ruFvfqf2ngBR4JcCzPWRqeKidwjqmLsyMYPsHx62Kpf8WkMiuSu5+i
+         ly6/DSFOK7veVym9HLLH0Uzz9+dHTsDIEYlgXAhuFUqGwalyMFIYoMQVxAh6j0cMOa
+         8jI2MQoqQmvqgBi2m8gVtwU6yV6hidcC0fjpPsM2oi52zHD3/dl6WcpzuR3WPsSAv3
+         TSrHwcsyQAG4R0QtHLexkX5/kJna3OIQMYIjb+lNWLVxt5Di9JtGUvkD/exKa9fmta
+         5Hod9djEbY9pxBHdvlFwni+mnozr755pRNmh9X4u27shYC2HR4i11jSDd45gaKl9V2
+         gjMjNcG675e6w==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Alex Henrie <alexhenrie24@gmail.com>,
+        Markus Wageringel <markus.wageringel@gmail.com>,
+        Jiri Kosina <jkosina@suse.cz>, Sasha Levin <sashal@kernel.org>,
+        jikos@kernel.org, benjamin.tissoires@redhat.com,
+        linux-input@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.16 01/30] HID: apple: Set the tilde quirk flag on the Wellspring 5 and later
+Date:   Tue, 22 Feb 2022 21:27:50 -0500
+Message-Id: <20220223022820.240649-1-sashal@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UPPERCASE_50_75
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We can use register_ftrace_function(&ops) to
-register a function callback.
-if we set FTRACE_OPS_FL_SAVE_REGS in ftrace flags(flags in ops),
-then do stack unwind
-like dump_stack or WARN in the callback,we get incomplete stacktrace.
-The stack unwind ends in ftrace_regs_caller.
+From: Alex Henrie <alexhenrie24@gmail.com>
 
-Below is the output from test code.
-The test code do register_ftrace_function
-with FTRACE_OPS_FL_SAVE_REGS set,
-and set sysrq_handle_loglevel as filter,then do dump_stack
-in callback.It can not continue to
-unwind the stack from ftrace_regs_call
+[ Upstream commit e26a78057c25dd56f112d536319c38735ed92ba4 ]
 
-echo 7 >/proc/sysrq-trigger
-sysrq: Changing Loglevel
-CPU: 1 PID: 145 Comm: sh Not tainted
-5.17.0-rc4-00002-gb0dc07624ccd-dirty #2
-[    9.023226][  T145] Hardware name: Generic DT based system
-[    9.023670][  T145]  unwind_backtrace from show_stack+0x28/0x2c
-[    9.024070][  T145]  show_stack from dump_stack_lvl+0x48/0x54
-[    9.024298][  T145]  dump_stack_lvl from ftrace_regs_call+0x4/0x18
-[    9.024650][  T145] sysrq: Loglevel set to 7
+Markus reports that his 2011 MacBook with a German ISO keyboard (USB
+product code 05ac:0246, HID country code 13) has the tilde key quirk.
+Seeing as all of the standalone Apple ISO keyboards since about 2008
+have the quirk, it seems reasonable to assume that once the integrated
+laptop keyboards started having the quirk, they likewise never stopped
+having it.
 
-Fix it by adding unwind directives in ftrace_regs_caller.
-
-Signed-off-by: Haibo Li <haibo.li@mediatek.com>
+Reported-by: Markus Wageringel <markus.wageringel@gmail.com>
+Signed-off-by: Alex Henrie <alexhenrie24@gmail.com>
+Signed-off-by: Jiri Kosina <jkosina@suse.cz>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm/kernel/entry-ftrace.S | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ drivers/hid/hid-apple.c | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
 
-diff --git a/arch/arm/kernel/entry-ftrace.S b/arch/arm/kernel/entry-ftrace.S
-index a74289ebc803..eafa0c9b8992 100644
---- a/arch/arm/kernel/entry-ftrace.S
-+++ b/arch/arm/kernel/entry-ftrace.S
-@@ -75,15 +75,18 @@
- 
- 	add 	ip, sp, #12	@ move in IP the value of SP as it was
- 				@ before the push {lr} of the mcount mechanism
--
-+ UNWIND(.movsp ip)
- 	str     lr, [sp, #0]    @ store LR instead of PC
-+ UNWIND(.save{pc})  @it is the caller of ftrace_regs_caller
- 
- 	ldr     lr, [sp, #8]    @ get previous LR
- 
- 	str	r0, [sp, #8]	@ write r0 as OLD_R0 over previous LR
- 
- 	stmdb   sp!, {ip, lr}
-+ UNWIND(.save{ip,lr})
- 	stmdb   sp!, {r0-r11, lr}
-+ UNWIND(.save{r0-r11,lr})
- 
- 	@ stack content at this point:
- 	@ 0  4          48   52       56            60   64    68       72
+diff --git a/drivers/hid/hid-apple.c b/drivers/hid/hid-apple.c
+index a4ca5ed00e5f5..a050dbcfc60e0 100644
+--- a/drivers/hid/hid-apple.c
++++ b/drivers/hid/hid-apple.c
+@@ -580,49 +580,49 @@ static const struct hid_device_id apple_devices[] = {
+ 	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRING5_ANSI),
+ 		.driver_data = APPLE_HAS_FN },
+ 	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRING5_ISO),
+-		.driver_data = APPLE_HAS_FN },
++		.driver_data = APPLE_HAS_FN | APPLE_ISO_TILDE_QUIRK },
+ 	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRING5_JIS),
+ 		.driver_data = APPLE_HAS_FN | APPLE_RDESC_JIS },
+ 	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRING6_ANSI),
+ 		.driver_data = APPLE_HAS_FN },
+ 	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRING6_ISO),
+-		.driver_data = APPLE_HAS_FN },
++		.driver_data = APPLE_HAS_FN | APPLE_ISO_TILDE_QUIRK },
+ 	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRING6_JIS),
+ 		.driver_data = APPLE_HAS_FN | APPLE_RDESC_JIS },
+ 	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRING6A_ANSI),
+ 		.driver_data = APPLE_HAS_FN },
+ 	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRING6A_ISO),
+-		.driver_data = APPLE_HAS_FN },
++		.driver_data = APPLE_HAS_FN | APPLE_ISO_TILDE_QUIRK },
+ 	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRING6A_JIS),
+ 		.driver_data = APPLE_HAS_FN | APPLE_RDESC_JIS },
+ 	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRING5A_ANSI),
+ 		.driver_data = APPLE_HAS_FN },
+ 	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRING5A_ISO),
+-		.driver_data = APPLE_HAS_FN },
++		.driver_data = APPLE_HAS_FN | APPLE_ISO_TILDE_QUIRK },
+ 	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRING5A_JIS),
+ 		.driver_data = APPLE_HAS_FN | APPLE_RDESC_JIS },
+ 	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRING7_ANSI),
+ 		.driver_data = APPLE_HAS_FN },
+ 	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRING7_ISO),
+-		.driver_data = APPLE_HAS_FN },
++		.driver_data = APPLE_HAS_FN | APPLE_ISO_TILDE_QUIRK },
+ 	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRING7_JIS),
+ 		.driver_data = APPLE_HAS_FN | APPLE_RDESC_JIS },
+ 	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRING7A_ANSI),
+ 		.driver_data = APPLE_HAS_FN },
+ 	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRING7A_ISO),
+-		.driver_data = APPLE_HAS_FN },
++		.driver_data = APPLE_HAS_FN | APPLE_ISO_TILDE_QUIRK },
+ 	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRING7A_JIS),
+ 		.driver_data = APPLE_HAS_FN | APPLE_RDESC_JIS },
+ 	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRING8_ANSI),
+ 		.driver_data = APPLE_HAS_FN },
+ 	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRING8_ISO),
+-		.driver_data = APPLE_HAS_FN },
++		.driver_data = APPLE_HAS_FN | APPLE_ISO_TILDE_QUIRK },
+ 	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRING8_JIS),
+ 		.driver_data = APPLE_HAS_FN | APPLE_RDESC_JIS },
+ 	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRING9_ANSI),
+ 		.driver_data = APPLE_HAS_FN },
+ 	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRING9_ISO),
+-		.driver_data = APPLE_HAS_FN },
++		.driver_data = APPLE_HAS_FN | APPLE_ISO_TILDE_QUIRK },
+ 	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_WELLSPRING9_JIS),
+ 		.driver_data = APPLE_HAS_FN | APPLE_RDESC_JIS },
+ 	{ HID_BLUETOOTH_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_ALU_WIRELESS_2009_ANSI),
 -- 
-2.25.1
+2.34.1
 

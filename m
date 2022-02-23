@@ -2,81 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 295114C1219
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 13:01:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C0064C1240
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 13:03:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240250AbiBWMCH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 07:02:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33216 "EHLO
+        id S240354AbiBWMDa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 07:03:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240239AbiBWMB5 (ORCPT
+        with ESMTP id S240267AbiBWMDO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 07:01:57 -0500
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0AD79A4F2
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 04:01:29 -0800 (PST)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 21NC1LFS126978;
-        Wed, 23 Feb 2022 06:01:21 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1645617681;
-        bh=beAAUiBHJjZi9JLosnAl3oN0PWrU4l00+9nL85TUYDI=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=ODqVzJ1GYvoiS1gKJ5y0cy4QwuoA0Eu+hdeLwzmUzwAICnWRRn/M6CQniqTwCaVfe
-         U/YthzoYPa7kTqVO5TYnMFg7CH1s3d80dxS2+OWLDxEeNgEYnoSnWA0skbBgs8x8S4
-         kBQ0IFilF+siOy/yp6KF8d8lvCbpQURg7YEzaVBs=
-Received: from DLEE113.ent.ti.com (dlee113.ent.ti.com [157.170.170.24])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 21NC1L4Q102265
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 23 Feb 2022 06:01:21 -0600
-Received: from DLEE109.ent.ti.com (157.170.170.41) by DLEE113.ent.ti.com
- (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Wed, 23
- Feb 2022 06:01:20 -0600
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE109.ent.ti.com
- (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Wed, 23 Feb 2022 06:01:20 -0600
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 21NC1KUL119770;
-        Wed, 23 Feb 2022 06:01:20 -0600
-Date:   Wed, 23 Feb 2022 17:31:19 +0530
-From:   Pratyush Yadav <p.yadav@ti.com>
-To:     Michael Walle <michael@walle.cc>
-CC:     <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        <yaliang.wang@windriver.com>
-Subject: Re: [PATCH v4 30/32] mtd: spi-nor: spansion: rename vendor specific
- functions and defines
-Message-ID: <20220223120119.c4uualanahpg4ekj@ti.com>
-References: <20220221120809.1531502-1-michael@walle.cc>
- <20220221120809.1531502-31-michael@walle.cc>
+        Wed, 23 Feb 2022 07:03:14 -0500
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 978ED9A4F2;
+        Wed, 23 Feb 2022 04:02:47 -0800 (PST)
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+        by localhost (Postfix) with ESMTP id 4K3ZRH0zw5z9sSp;
+        Wed, 23 Feb 2022 13:02:35 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id fdRTHS91z5Eb; Wed, 23 Feb 2022 13:02:35 +0100 (CET)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase2.c-s.fr (Postfix) with ESMTP id 4K3ZRC1vpFz9sSZ;
+        Wed, 23 Feb 2022 13:02:31 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 322AE8B778;
+        Wed, 23 Feb 2022 13:02:31 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id 1iYLXu2sbge3; Wed, 23 Feb 2022 13:02:31 +0100 (CET)
+Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.7.201])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id C57C48B77C;
+        Wed, 23 Feb 2022 13:02:30 +0100 (CET)
+Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 21NC2Kpc1148173
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Wed, 23 Feb 2022 13:02:21 +0100
+Received: (from chleroy@localhost)
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 21NC2JkP1148171;
+        Wed, 23 Feb 2022 13:02:19 +0100
+X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Luis Chamberlain <mcgrof@kernel.org>,
+        Aaron Tomlin <atomlin@redhat.com>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        kgdb-bugreport@lists.sourceforge.net, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-modules@vger.kernel.org
+Subject: [PATCH v6 0/6] Allocate module text and data separately
+Date:   Wed, 23 Feb 2022 13:02:10 +0100
+Message-Id: <cover.1645607143.git.christophe.leroy@csgroup.eu>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20220221120809.1531502-31-michael@walle.cc>
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1645617734; l=2137; s=20211009; h=from:subject:message-id; bh=5pa1UQ3HwyDZehywSQbAA8grWbJFM4jhq6fIuvgQR1I=; b=jJdm2BkQa9gEif7ktMD48MnhsQfgiuYZWvlcjGqSQAFNn+F4jLeHP92Z3FVUqVGswk4EzrSMHpf7 NMKzfvJiAla9UWgpQe57Sbh0hIA1WZxEqiQX3SY3RU2XBwRh4Nj1
+X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/02/22 01:08PM, Michael Walle wrote:
-> Drop the generic spi_nor prefix for all the spansion functions.
-> 
-> Signed-off-by: Michael Walle <michael@walle.cc>
+This series applies on top of my series "miscellanuous cleanups" v4.
 
-Reviewed-by: Pratyush Yadav <p.yadav@ti.com>
+
+This series allow architectures to request having modules data in
+vmalloc area instead of module area.
+
+This is required on powerpc book3s/32 in order to set data non
+executable, because it is not possible to set executability on page
+basis, this is done per 256 Mbytes segments. The module area has exec
+right, vmalloc area has noexec. Without this change module data
+remains executable regardless of CONFIG_STRICT_MODULES_RWX.
+
+This can also be useful on other powerpc/32 in order to maximize the
+chance of code being close enough to kernel core to avoid branch
+trampolines.
+
+Changes in v6:
+- Rebased on top of my series "miscellanuous cleanups" v4
+
+Changes in v5:
+- Rebased on top of Aaron's series "module: core code clean up" v8
+
+Changes in v4:
+- Rebased on top of Aaron's series "module: core code clean up" v6
+
+Changes in v3:
+- Fixed the tree for data_layout at one place (Thanks Miroslav)
+- Moved removal of module_addr_min/module_addr_max macro out of patch 1 in a new patch at the end of the series to reduce churn.
+
+Changes in v2:
+- Dropped first two patches which are not necessary. They may be added back later as a follow-up series.
+- Fixed the printks in GDB
+
+Christophe Leroy (6):
+  module: Always have struct mod_tree_root
+  module: Prepare for handling several RB trees
+  module: Introduce data_layout
+  module: Add CONFIG_ARCH_WANTS_MODULES_DATA_IN_VMALLOC
+  module: Remove module_addr_min and module_addr_max
+  powerpc: Select ARCH_WANTS_MODULES_DATA_IN_VMALLOC on book3s/32 and
+    8xx
+
+ arch/Kconfig                |   6 +++
+ arch/powerpc/Kconfig        |   1 +
+ include/linux/module.h      |   8 +++
+ kernel/debug/kdb/kdb_main.c |  10 +++-
+ kernel/module/internal.h    |  13 +++--
+ kernel/module/kallsyms.c    |  18 +++----
+ kernel/module/main.c        | 103 +++++++++++++++++++++++++++---------
+ kernel/module/procfs.c      |   8 ++-
+ kernel/module/strict_rwx.c  |  11 ++--
+ kernel/module/tree_lookup.c |  28 ++++++----
+ 10 files changed, 150 insertions(+), 56 deletions(-)
 
 -- 
-Regards,
-Pratyush Yadav
-Texas Instruments Inc.
+2.34.1
+

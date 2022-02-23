@@ -2,148 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21C594C0DE7
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 08:58:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 328DF4C0DED
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 09:00:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235153AbiBWH7U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 02:59:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34844 "EHLO
+        id S237658AbiBWIAN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 03:00:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231245AbiBWH7S (ORCPT
+        with ESMTP id S231245AbiBWIAL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 02:59:18 -0500
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40BF141FB4
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 23:58:50 -0800 (PST)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 21N7wSIK118950;
-        Wed, 23 Feb 2022 01:58:28 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1645603108;
-        bh=xeHlKo3olK+DJJaOwQQ411JFoxtohqodC7yeAbrDRYA=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=YA4EAXoxrMNk350f5P4LdC5iLpmvAuztW/M6SSt5Mc39+qOAEoxeifodLdHgFZ9jI
-         D2AUiO0pdIheqNA08jYjFI7ZuUrdMZCosbEBuzATFRqaRESqMQuV6culGn7pR6yvnC
-         dBijKK5/V876oKMPcjzBaXD2EmFpG2WswzHZ1eP0=
-Received: from DFLE103.ent.ti.com (dfle103.ent.ti.com [10.64.6.24])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 21N7wSbT075191
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 23 Feb 2022 01:58:28 -0600
-Received: from DFLE109.ent.ti.com (10.64.6.30) by DFLE103.ent.ti.com
- (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Wed, 23
- Feb 2022 01:58:27 -0600
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE109.ent.ti.com
- (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Wed, 23 Feb 2022 01:58:27 -0600
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 21N7wQDr052547;
-        Wed, 23 Feb 2022 01:58:27 -0600
-Date:   Wed, 23 Feb 2022 13:28:26 +0530
-From:   Rahul T R <r-ravikumar@ti.com>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-CC:     Nishanth Menon <nm@ti.com>, <catalin.marinas@arm.com>,
-        <will@kernel.org>, <shawnguo@kernel.org>, <krzk@kernel.org>,
-        <geert+renesas@glider.be>, <marcel.ziswiler@toradex.com>,
-        <biju.das.jz@bp.renesas.com>, <vkoul@kernel.org>,
-        <enric.balletbo@collabora.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <tomi.valkeinen@ideasonboard.com>,
-        <laurent.pinchart@ideasonboard.com>
-Subject: Re: [PATCH] arm64: defconfig: Enable configs for DisplayPort on J721e
-Message-ID: <20220223075825.ecqbyhllikh2sscx@uda0490373>
-References: <20220222180703.30401-1-r-ravikumar@ti.com>
- <20220222193930.sbc5xlsofhg3amgk@overrun>
- <YhVKSpMOKWzZy9a2@ripper>
- <20220222212642.vwtw7xiz7cck63ea@zombie>
- <YhVgjFWShgc8btJP@ripper>
+        Wed, 23 Feb 2022 03:00:11 -0500
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 943627804A;
+        Tue, 22 Feb 2022 23:59:42 -0800 (PST)
+Received: by mail-lj1-x231.google.com with SMTP id bn33so23368603ljb.6;
+        Tue, 22 Feb 2022 23:59:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:in-reply-to:references:date:message-id
+         :mime-version;
+        bh=Ubrw+ZDagpKqchc9nEqG4/IhR0XOEwvwWfaGS8w0bPI=;
+        b=NsUjsj9C9+wZTdQqvrfMMvSP9T3mo7HyPzUPj7Pc14q7FQi0XIR49ZZAkRFHroK/c8
+         SkbI3OuUO95RJMaffYEbNdAEZQ1c01WHvidP+7cAomt8PYshgHzZTRnrjxHSBHlff9wu
+         LLl0z1uV42OD0u9cRA2u5usRnnZ6cx/JYSFRjqIxIsW8RddRJchhf6bLg4dKyI8bofFI
+         CNoEpz+XllQ1Od5nbo82jD0Q38WF3aWCjpEpjly2tw3jcMQkATztiZbn3lx5yRGvt6L2
+         i8J+RQpxcU/8YjfYRvWcMjmmiYWr+ePYD7Xu1zwi9JZk7F8+yiLaCOVDA5kNujb4I9p+
+         THnQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=Ubrw+ZDagpKqchc9nEqG4/IhR0XOEwvwWfaGS8w0bPI=;
+        b=xrx5TEC2fOfoCILiX8hqpDUFzY6bL4tpITbxvUUdyVO5FrBj3kT3Q1DqidPoKBIogw
+         IMmttzRLYuzDnkNPBbsUspy3a9KeifDnxueFm975qLMfsn9v0DUe+lUX+c4/H8azNREe
+         isL0CHzo00ObDAVIRhL37O/B4m7Dv0OvoWOIyPVVjYtYZYOPKGlm91VJtL8atPCgnl6u
+         91PazAq3OkTXVDrZ0Yre3F/ZD+1m2c00WWpzrAXWAGedVGUXTcx8ntI6m3fEnDrUpfKO
+         vEZGoyGmoglzzFfoF7BjEOx8JN9Gx327LQJCQWMK7U4blRTJ0qQI6Pdw0MJLwTbALKEA
+         TU2Q==
+X-Gm-Message-State: AOAM531Slk7P5BevPbff0u4uisRMOUld/7q9sMXdRyfROG/mfWKN0d20
+        bjhQK/kTaCzcpXXIHzb6nUY0dB6gVfEKEEc7+eo=
+X-Google-Smtp-Source: ABdhPJyXRP4VOqNt80QMu1PrIa8l/0eknyoXn+CWjrbe3izSD4hCTEurZbgz2rhVvmwQvgYfP8Igaw==
+X-Received: by 2002:a2e:8955:0:b0:246:133b:673c with SMTP id b21-20020a2e8955000000b00246133b673cmr20040110ljk.380.1645603180752;
+        Tue, 22 Feb 2022 23:59:40 -0800 (PST)
+Received: from wse-c0127 ([208.127.141.29])
+        by smtp.gmail.com with ESMTPSA id k21sm2015561ljc.129.2022.02.22.23.59.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Feb 2022 23:59:40 -0800 (PST)
+From:   Hans Schultz <schultz.hans@gmail.com>
+X-Google-Original-From: Hans Schultz <schultz.hans+netdev@gmail.com>
+To:     Ido Schimmel <idosch@idosch.org>,
+        Hans Schultz <schultz.hans@gmail.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <nikolay@nvidia.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Stephen Suryaputra <ssuryaextr@gmail.com>,
+        David Ahern <dsahern@kernel.org>,
+        Ido Schimmel <idosch@nvidia.com>,
+        Petr Machata <petrm@nvidia.com>,
+        Amit Cohen <amcohen@nvidia.com>,
+        Po-Hsu Lin <po-hsu.lin@canonical.com>,
+        Baowen Zheng <baowen.zheng@corigine.com>,
+        linux-kernel@vger.kernel.org, bridge@lists.linux-foundation.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net-next v4 5/5] selftests: forwarding: tests of locked
+ port feature
+In-Reply-To: <YhUWvhkhRVY+/Osd@shredder>
+References: <20220222132818.1180786-1-schultz.hans+netdev@gmail.com>
+ <20220222132818.1180786-6-schultz.hans+netdev@gmail.com>
+ <YhUWvhkhRVY+/Osd@shredder>
+Date:   Wed, 23 Feb 2022 08:59:37 +0100
+Message-ID: <861qzuxbbq.fsf@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <YhVgjFWShgc8btJP@ripper>
-User-Agent: NeoMutt/20171215
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14:15-20220222, Bjorn Andersson wrote:
-> On Tue 22 Feb 13:26 PST 2022, Nishanth Menon wrote:
-> 
-> > On 12:40-20220222, Bjorn Andersson wrote:
-> > > On Tue 22 Feb 11:39 PST 2022, Nishanth Menon wrote:
-> > > 
-> > > > On 23:37-20220222, Rahul T R wrote:
-> > > > > Enable DRM and PHY configs required for supporting
-> > > > > DisplayPort on J721e
-> > > > > 
-> > > > > Signed-off-by: Rahul T R <r-ravikumar@ti.com>
-> > > > > ---
-> > > > >  arch/arm64/configs/defconfig | 5 +++++
-> > > > >  1 file changed, 5 insertions(+)
-> > > > > 
-> > > > > diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-> > > > > index 9f23d7ec1232..b0cb894a392e 100644
-> > > > > --- a/arch/arm64/configs/defconfig
-> > > > > +++ b/arch/arm64/configs/defconfig
-> > > > > @@ -702,6 +702,9 @@ CONFIG_DRM_EXYNOS_DSI=y
-> > > > >  CONFIG_DRM_EXYNOS_HDMI=y
-> > > > >  CONFIG_DRM_EXYNOS_MIC=y
-> > > > >  CONFIG_DRM_ROCKCHIP=m
-> > > > > +CONFIG_DRM_TIDSS=m
-> > > > > +CONFIG_DRM_DISPLAY_CONNECTOR=m
-> > > > > +CONFIG_DRM_CDNS_MHDP8546=m
-> > > > 
-> > > > Please use savedefconfig to place the changes in the correct location
-> > > > 
-> > > 
-> > > Just to clarify the request, use "make savedefconfig" to generate a
-> > > defconfig, then based on that put _only_ the relevant changes in the
-> > > commit.
-> > 
-> > Yup, thanks for clarifying.
-> > > 
-> > > > Also indicate changes if any in vmlinux in commit message.
-> > > > 
-> > > 
-> > > Nishanth, what are you asking for here? Just a mentioning if this has
-> > > any impact to vmlinux (or is isolated to the modules selected), or are
-> > > you asking for anything specific?
-> > 
-> > In this case, just ensure to state that vmlinux size has'nt
-> > changed, in case where we see a =y, we should indicate via
-> > ./scripts/bloat-o-meter change that is introduced and if yes, we
-> > should explain why this is fundamental to system boot.
-> > 
-> > Why is this necessary? This is to prevent product specific
-> > configurations (such as early display banner, chime etc) from creeping
-> > and increasing vmlinux size which has an impact for all ARM SoCs.
-> > 
-> 
-> Sounds very reasonable, I'll make sure to ask for such motivations in
-> the defconfig changes that I pick up through the Qualcomm tree as well.
-> 
-> Regards,
-> Bjorn
+On tis, feb 22, 2022 at 19:00, Ido Schimmel <idosch@idosch.org> wrote:
+> On Tue, Feb 22, 2022 at 02:28:18PM +0100, Hans Schultz wrote:
+>> diff --git a/tools/testing/selftests/net/forwarding/bridge_locked_port.sh b/tools/testing/selftests/net/forwarding/bridge_locked_port.sh
+>> new file mode 100755
+>> index 000000000000..a8800e531d07
+>> --- /dev/null
+>> +++ b/tools/testing/selftests/net/forwarding/bridge_locked_port.sh
+>> @@ -0,0 +1,180 @@
+>> +#!/bin/bash
+>> +# SPDX-License-Identifier: GPL-2.0
+>> +
+>> +ALL_TESTS="locked_port_ipv4 locked_port_ipv6 locked_port_vlan"
+>> +NUM_NETIFS=4
+>> +CHECK_TC="no"
+>> +source lib.sh
+>> +
+>> +h1_create()
+>> +{
+>> +	simple_if_init $h1 192.0.2.1/24 2001:db8:1::1/64
+>> +	vrf_create "vrf-vlan-h1"
+>> +	ip link set dev vrf-vlan-h1 up
+>> +	vlan_create $h1 100 vrf-vlan-h1 198.51.100.1/24 ::ffff:c633:6401/64
 >
+> Hi,
+>
+> Why did you change it from 2001:db8:3::1/64 to ::ffff:c633:6401/64? It
+> was actually OK the first time...
 
-Thanks for the review!
-I will send a v2 with the fixes
+I used an online converter (https://iplocation.io/ipv4-to-ipv6) to
+convert 198.51.100.1 into an 'equivalent' ipv6 address even though I
+know they are of different spaces.
 
-Regards
-Rahul T R
-
-> > 
-> > [...]
-> > 
-> > -- 
-> > Regards,
-> > Nishanth Menon
-> > Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
+>
+> Anyway, looking at locked_port_vlan() I see that you are only testing
+> IPv4 so you can just drop this address:
+>
+> vlan_create $h1 100 vrf-vlan-h1 198.51.100.1/24
+>
+> Same for $h2
+>
+> LGTM otherwise. Feel free to add my tag to the next version
+>
+>
+>> +}

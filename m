@@ -2,105 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AC2A4C11F4
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 12:53:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80B0D4C11FA
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 12:54:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240193AbiBWLxu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 06:53:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55798 "EHLO
+        id S240178AbiBWLzV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 06:55:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235966AbiBWLxs (ORCPT
+        with ESMTP id S237739AbiBWLzU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 06:53:48 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84C3E57B1A;
-        Wed, 23 Feb 2022 03:53:20 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 40A3F1F43D;
-        Wed, 23 Feb 2022 11:53:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1645617199; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=lHKLDcXaApTqsl2KQS4V+/Sm+LIozq5sgKx8GXifXUE=;
-        b=egv/jm8RvovquqsfWcuJRwBtKBVUu7OVZoV08A97BI/bojJrZKRGrPOawsaSoFdwUgRrJ1
-        Y8yOK1HZXCJlxhkg+3ItPW4f4Y7L7OGxC1fDYlJbmwORfiSY2i+owYRWiMkGiTWKBIJNSz
-        GYOIjG7+B3d4gYXjP41jiRgKBHjUWo8=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1645617199;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=lHKLDcXaApTqsl2KQS4V+/Sm+LIozq5sgKx8GXifXUE=;
-        b=DjQTeQ5j1zEB52lzsMsHmvZJjvTFizTsSZHs11jPamrSA1NDxfM+1XbJwJl372CHKtWIq6
-        AgOLK5j3rK2xnAAA==
-Received: from quack3.suse.cz (unknown [10.163.28.18])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 308D7A3B81;
-        Wed, 23 Feb 2022 11:53:19 +0000 (UTC)
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 67980A0605; Wed, 23 Feb 2022 12:53:13 +0100 (CET)
-Date:   Wed, 23 Feb 2022 12:53:13 +0100
-From:   Jan Kara <jack@suse.cz>
-To:     Ritesh Harjani <riteshh@linux.ibm.com>
-Cc:     Jan Kara <jack@suse.cz>, linux-ext4@vger.kernel.org,
-        Harshad Shirwadkar <harshadshirwadkar@gmail.com>,
-        Theodore Ts'o <tytso@mit.edu>, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC 3/9] ext4: Add couple of more fast_commit tracepoints
-Message-ID: <20220223115313.3s73bu7p454bodvl@quack3.lan>
-References: <cover.1645558375.git.riteshh@linux.ibm.com>
- <90608d31b7ad8500c33d875d3a7fa50e3456dc1a.1645558375.git.riteshh@linux.ibm.com>
- <20220223094057.53zcovnazrqwbngw@quack3.lan>
- <20220223101159.ekwbylvbmec5v35q@riteshh-domain>
+        Wed, 23 Feb 2022 06:55:20 -0500
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9E2A985A7
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 03:54:52 -0800 (PST)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 21NBsjx6125254;
+        Wed, 23 Feb 2022 05:54:45 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1645617285;
+        bh=nZ7gTtsnYSWT0640cyi2p07HuKh9WWN1Sd0k1wHT2yc=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=N7igpGNDbVhg91kQ8YcJjBMl0kBQ8zR6r5Oa4FwkGAMRga8lLAuH/FNuK4NOyrmui
+         Zgoh6wARohWyrnNRVKxtiVnQTTBEi9QcnuTYotnuI2sFmRGFjlWjNB+4L6RtFZ0VNP
+         xjZCYiF/wlN5523EHjm1YC67ljOE/N9e2sZrtJ/g=
+Received: from DLEE110.ent.ti.com (dlee110.ent.ti.com [157.170.170.21])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 21NBsjU0020751
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 23 Feb 2022 05:54:45 -0600
+Received: from DLEE110.ent.ti.com (157.170.170.21) by DLEE110.ent.ti.com
+ (157.170.170.21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Wed, 23
+ Feb 2022 05:54:45 -0600
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE110.ent.ti.com
+ (157.170.170.21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Wed, 23 Feb 2022 05:54:45 -0600
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 21NBsiFB046499;
+        Wed, 23 Feb 2022 05:54:45 -0600
+Date:   Wed, 23 Feb 2022 17:24:44 +0530
+From:   Pratyush Yadav <p.yadav@ti.com>
+To:     Michael Walle <michael@walle.cc>
+CC:     <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        <yaliang.wang@windriver.com>
+Subject: Re: [PATCH v4 26/32] mtd: spi-nor: micron-st: rename vendor specific
+ functions and defines
+Message-ID: <20220223115444.wj24a2vvtjc2zexv@ti.com>
+References: <20220221120809.1531502-1-michael@walle.cc>
+ <20220221120809.1531502-27-michael@walle.cc>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20220223101159.ekwbylvbmec5v35q@riteshh-domain>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220221120809.1531502-27-michael@walle.cc>
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 23-02-22 15:41:59, Ritesh Harjani wrote:
-> On 22/02/23 10:40AM, Jan Kara wrote:
-> > On Wed 23-02-22 02:04:11, Ritesh Harjani wrote:
-> > > This adds two more tracepoints for ext4_fc_track_template() &
-> > > ext4_fc_cleanup() which are helpful in debugging some fast_commit issues.
-> > >
-> > > Signed-off-by: Ritesh Harjani <riteshh@linux.ibm.com>
-> >
-> > So why is this more useful than trace_ext4_fc_track_range() and other
-> > tracepoints? I don't think it provides any more information? What am I
-> > missing?
+On 21/02/22 01:08PM, Michael Walle wrote:
+> Drop the generic spi_nor prefix for all the micron-st functions.
 > 
-> Thanks Jan for all the reviews.
+> Signed-off-by: Michael Walle <michael@walle.cc>
+> ---
+>  drivers/mtd/spi-nor/micron-st.c | 20 ++++++++++----------
+>  1 file changed, 10 insertions(+), 10 deletions(-)
 > 
-> So ext4_fc_track_template() adds almost all required information
-> (including the caller info) in this one trace point along with transaction tid
-> which is useful for tracking issue similar to what is mentioned in Patch-9.
-> 
-> (race with if inode is part of two transactions tid where jbd2 full commit
-> may begin for txn n-1 while inode is still in sbi->s_fc_q[MAIN])
- 
-I understand commit tid is interesting but cannot we just add it to
-tracepoints like trace_ext4_fc_track_range() directly? It would seem useful
-to have it there and when it is there, the need for
-ext4_fc_track_template() is not really big. I don't care too much but
-this tracepoint looked a bit superfluous to me.
+> diff --git a/drivers/mtd/spi-nor/micron-st.c b/drivers/mtd/spi-nor/micron-st.c
+> index f693f8720541..de450495e1ab 100644
+> --- a/drivers/mtd/spi-nor/micron-st.c
+> +++ b/drivers/mtd/spi-nor/micron-st.c
+> @@ -309,7 +309,7 @@ static int micron_st_nor_set_4byte_addr_mode(struct spi_nor *nor, bool enable)
+>  }
+>  
+>  /**
+> - * spi_nor_read_fsr() - Read the Flag Status Register.
+> + * micron_st_nor_read_fsr() - Read the Flag Status Register.
+>   * @nor:	pointer to 'struct spi_nor'
+>   * @fsr:	pointer to a DMA-able buffer where the value of the
+>   *              Flag Status Register will be written. Should be at least 2
+> @@ -317,7 +317,7 @@ static int micron_st_nor_set_4byte_addr_mode(struct spi_nor *nor, bool enable)
+>   *
+>   * Return: 0 on success, -errno otherwise.
+>   */
+> -static int spi_nor_read_fsr(struct spi_nor *nor, u8 *fsr)
+> +static int micron_st_nor_read_fsr(struct spi_nor *nor, u8 *fsr)
+>  {
+>  	int ret;
+>  
+> @@ -353,10 +353,10 @@ static int spi_nor_read_fsr(struct spi_nor *nor, u8 *fsr)
+>  }
+>  
+>  /**
+> - * spi_nor_clear_fsr() - Clear the Flag Status Register.
+> + * micron_st_nor_clear_fsr() - Clear the Flag Status Register.
+>   * @nor:	pointer to 'struct spi_nor'.
+>   */
+> -static void spi_nor_clear_fsr(struct spi_nor *nor)
+> +static void micron_st_nor_clear_fsr(struct spi_nor *nor)
+>  {
+>  	int ret;
+>  
+> @@ -380,13 +380,13 @@ static void spi_nor_clear_fsr(struct spi_nor *nor)
+>  }
+>  
+>  /**
+> - * spi_nor_fsr_ready() - Query the Flag Status Register to see if the flash is
+> - * ready for new commands.
+> + * micron_st_nor_fsr_ready() - Query the Flag Status Register to see if the
+> + * flash is ready for new commands.
 
-> And similarly ext4_fc_cleanup() helps with that information about which tid
-> completed and whether it was called from jbd2 full commit or from fast_commit.
+This is misleading. This function doesn't only query the FSR, but the SR 
+as well. I think this should be renamed to micron_st_nor_ready(), and 
+documentation updated to reflect that it checks for SR, and then FSR as 
+well if the flag is specified.
 
-Yeah, that one is clear.
+>   * @nor:	pointer to 'struct spi_nor'.
+>   *
+>   * Return: 1 if ready, 0 if not ready, -errno on errors.
+>   */
+> -static int spi_nor_fsr_ready(struct spi_nor *nor)
+> +static int micron_st_nor_fsr_ready(struct spi_nor *nor)
+>  {
+>  	int sr_ready, ret;
 
-								Honza
 -- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+Regards,
+Pratyush Yadav
+Texas Instruments Inc.

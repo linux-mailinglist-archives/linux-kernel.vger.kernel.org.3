@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6B3C4C06C3
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 02:14:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D6D44C06C4
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 02:15:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236559AbiBWBPL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 20:15:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47080 "EHLO
+        id S236572AbiBWBPP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 20:15:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236565AbiBWBPG (ORCPT
+        with ESMTP id S236570AbiBWBPJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 20:15:06 -0500
-Received: from EUR03-AM5-obe.outbound.protection.outlook.com (mail-eopbgr30046.outbound.protection.outlook.com [40.107.3.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DC1139B92;
-        Tue, 22 Feb 2022 17:14:37 -0800 (PST)
+        Tue, 22 Feb 2022 20:15:09 -0500
+Received: from EUR03-AM5-obe.outbound.protection.outlook.com (mail-eopbgr30076.outbound.protection.outlook.com [40.107.3.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07DF239BBB;
+        Tue, 22 Feb 2022 17:14:42 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=KjXAPTEL5oHYDEL/T8ptU7tE9BLg0eZLlmlRSk+7YbFvpPGg/O+kwsnZrbF9Gtrz5JWNShdTM2NlgtxFlfoUKFxqY0s1J9n7bPX6+o3fqVCop7hiKTQcfD25VC5AE+Wsna4tnXs553qHz/5LJn06ydsWGxlCIWPncd2K0bjv2AR54DA4aN4bYiSkxxwW3iKVcanBqI7OrsBQBwLV7MKPraw7EeooIWuAtLhLoQrkS5Gp3DfrRuFuasEr7Ommgg6BSlRJIWp0tiOyw9AX1JKHvcq3OOLFSFtSpwFXhqxiUZ/aYC63AlWOLOB58ARmk9isLwd/55zmZWBHEaUGX3H4YQ==
+ b=Yf442x89HcEkZt0dbb8A2j1e3BJ47LxC/ThyF6IEQagL6jwXhiSG5Fcu9xKaafJ6LtBYK6EJBVPSeDxz5N2gOg2GYt8GOXG9zUVO2BuY0tnWHxjgnPWk78CQYqq9O6Qm31tTftm/Qkrn9xmdH50xzP73B9OT1Yjc165WkvjJNjlGLjmMQTeCy5TSshw/8e6G37JlL2MCxLSVPJ/fPHABWra9sQKOFZlRSg2kDzimYQjZvTKN3NcggEJhGTtlsY8PWeP+m/kbQkakpfwjbwspPNGxAZLCqJYMdBi/Y+Svb8X1ReNUqCfoGhXPnnZ1rnwUuRqJFdD55qQqIHy5szvIqA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=I6y8KZvIgHATGmIYBESOoyPwOXzllnjzAU06kYu0hNk=;
- b=N5YaQUH0od4gXUR0S2o6Ou/ip+CaIMMLGL0J+pZ0mj4/FMybS57H/oZqvtSbS6AM8cJI/ghuYepPvKAR/JCBnl4dJ5SyuLuoPdD/rdKM+z7pd8FSgyZ7C+6RY97weCJiluaTZpff3h+L3wnCytKtSTC13Idn7kpsW47y7nJuYNssg13QwIKEWhMcNBBGlvmlJKGyqEl/o4HfbJrECOFQHwGkfBIgT6n6ZH12ozXRXE/WtbJjE677vqoH7rgRO0yzC6kTDlALWrakDoxCzWqYdxtCHNAyeShGGubqTW7gdf7UdBtaqumCthFnBrEpa2mi2LLPVKEpYUJ/awN3RDGidg==
+ bh=ehdlAszU7ZClC0gLx67I9UW7PM8nybUoGVY0aIgdqZw=;
+ b=mu+pQbNseOlWI7XJbJKj1eDe2cOFSGovlWBc4W0+VQNyFP7wiu2MvCT+CGT3DxQZG19/2VHMejosQayemwzesTcJWd5usRtwqVkcQiSsT+b2d2pwXWGI7BttifQ+8V5Xuveh6b5J8NkX9bRHh9NBPVs6QCpFoBo+v0Zz4d55CEqG00RpL7fWahtE39iWe/chheFXZU+qtLeBTEp3+kTzxTNPlC3bUi+izsieIKyixF9LCkBGbazyG+0CRCVLDiD+lHrkyZ1aEUuingGjxcVqR48O8A5RfkHHnQp4TvyegOnjHIVEjpe2aucv/+lusZEJt/hy7HEUbmB6Um7bB4aaPg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
  dkim=pass header.d=oss.nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
  s=selector2-NXP1-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=I6y8KZvIgHATGmIYBESOoyPwOXzllnjzAU06kYu0hNk=;
- b=MKYKBa9wQq5LFbELLVwoMOFkdsm5oRDs8wheha4mhvgx72J91OWCRcKrjr5v+88FWCFL3Q1A+3F5S2oPT7mm21sm8iEEwQrraQKMBitGEVSP8E++tnpjTcEqGhNhSLqeeY7n3MlDzT4Ycx2aCp9mv/VUNGQcOykAmbCm37a9YkM=
+ bh=ehdlAszU7ZClC0gLx67I9UW7PM8nybUoGVY0aIgdqZw=;
+ b=UPCCrjZZqk6XjeYOMUsym9egnazzyd/ElOyB7mUtH8SVNs1u2O8+9EN7at2lOFLfgipOsaky0QVt8pVzPjJlk6cVpNsk6gsHDkoWPSvaff4lKtf5fVdVEK9f0QCze/w6v0PlEI5+tOayqfBeMZK2fTQ15iMTdJHlToiQ7oZhpgI=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=oss.nxp.com;
 Received: from DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
  by DU2PR04MB8533.eurprd04.prod.outlook.com (2603:10a6:10:2d4::21) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4995.27; Wed, 23 Feb
- 2022 01:14:34 +0000
+ 2022 01:14:38 +0000
 Received: from DU0PR04MB9417.eurprd04.prod.outlook.com
  ([fe80::552c:ed46:26dc:77cc]) by DU0PR04MB9417.eurprd04.prod.outlook.com
  ([fe80::552c:ed46:26dc:77cc%4]) with mapi id 15.20.4995.018; Wed, 23 Feb 2022
- 01:14:34 +0000
+ 01:14:38 +0000
 From:   "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
 To:     sboyd@kernel.org, robh+dt@kernel.org, shawnguo@kernel.org,
         s.hauer@pengutronix.de, abel.vesa@nxp.com
@@ -48,83 +48,72 @@ Cc:     kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
         linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         Peng Fan <peng.fan@nxp.com>
-Subject: [PATCH V2 4/5] clk: imx: support fracn gppll
-Date:   Wed, 23 Feb 2022 09:16:05 +0800
-Message-Id: <20220223011606.3282165-5-peng.fan@oss.nxp.com>
+Subject: [PATCH V2 5/5] clk: imx: add i.MX93 clk
+Date:   Wed, 23 Feb 2022 09:16:06 +0800
+Message-Id: <20220223011606.3282165-6-peng.fan@oss.nxp.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220223011606.3282165-1-peng.fan@oss.nxp.com>
 References: <20220223011606.3282165-1-peng.fan@oss.nxp.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 X-ClientProxiedBy: SG2PR02CA0002.apcprd02.prod.outlook.com
  (2603:1096:3:17::14) To DU0PR04MB9417.eurprd04.prod.outlook.com
  (2603:10a6:10:358::11)
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 3f1c5d1d-d657-475d-05c5-08d9f669da51
+X-MS-Office365-Filtering-Correlation-Id: ff505869-d6b5-42f0-cbba-08d9f669dcc1
 X-MS-TrafficTypeDiagnostic: DU2PR04MB8533:EE_
 X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
-X-Microsoft-Antispam-PRVS: <DU2PR04MB8533702963A7165058C7B748C93C9@DU2PR04MB8533.eurprd04.prod.outlook.com>
+X-Microsoft-Antispam-PRVS: <DU2PR04MB85337B0590E64848F40EB3CCC93C9@DU2PR04MB8533.eurprd04.prod.outlook.com>
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: dfp/Zr8ew7zXTQbzP9cRsskGL1cCiZkl0xFAFBWODs3nqRf9xjGA0n8gLdVPSBg5qCDpK6X3Pc5lr+AiQAIJ+vOPxQrc3oCvYauIeTEZiye3YDWqEgtLajDjII6cNQSHuWUVHtXf2qrSS8wV5ydV3+rmrPtCDejnSWEAZWWq+o1zTfVms0YThw75pWAjvI4d57hmncB3DrFDIAN0DCRcdYhdPaaWp/jWNSBXxLjpPD3atNgrviduxBXsbIiG/qCSWNoNHJ6guBAeW4mAftNsN5x6q7cysYGlTq25PLlL7xDWs10N2lta7MxmpY52V7VGwVjj61e4VHv7b8YVPnyoWjf+T/loe7EPcLQY4ApOAENsbaZJxryIGHThMsjHNiOB8VV8jfNUVFkeqTQWlyRMbylVn55O3QMVqayy0qSt2lbYhHpfWCdO0Iam1/PNNzwC+McZlPGx0WB56nz9+2QEqqnX48rpmXYVhUWHSTa/3xcnhE4wVxLTQmFw1kCD5dwuemcil/A3E4knxAgpAOgf6dY2HjFWb8YcOLD/K+CYjfu+lpjRZ/7uribWXIMgf3b3BQ+jdJ8yQL3E4ECNSVr9jyixWQ858Lksw054NoPK3nO33QjoXhkFjR4vcEh3WlweRNjPEpRxPm/oYh5kUi7bDek7vAQCnp1JCp/ZFvgWOHXtMx3BhCfIQpohO781JyMtGpdkluB8wonzrcYiApgUYytpwPoAJGIpSPDETgC3bvjuY5aPRgJ6YHwAoVvgCIxsodfG+M9tGSeeN+tBDAVd6w==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(186003)(26005)(1076003)(2616005)(8936002)(2906002)(6506007)(52116002)(6666004)(7416002)(6512007)(5660300002)(86362001)(30864003)(38100700002)(38350700002)(83380400001)(66476007)(316002)(4326008)(508600001)(8676002)(6486002)(66946007)(66556008)(56820400005)(54580400013);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: aOSeZn6fZfHn2zTdzDEhnOKu6UzmjBjvOOnhFOqsb441hUk8b/BSXXlCwoWL8Qxz0U+Eg9dMJ/kMDsu5lmkhbNfXJQ0md1F90lpXCWrf9IzPNH0s7gzLEPhqXCLx14e8vFMtpfZZkKKTArl89NsQF3yvHyvHse/YdmaNTNhOQ7VKtAGPh9UHDQEt2AYx0nj3wpO8ULjh1rgirf+wNaZDAvITS6mf1RsNF9hYRHJ0zfe95EGEc0C+DyC2f1lXBG9jjcqXAwzhxSgo+apuJUBd0TNVbSjlHkyo/NheycKdmPAGUixAg1s7Z71iVcn5/HOcwqzTJu5/1Gcg0XrzF3r0rj3AywTghqqAEHlEPq1CwNRpaja1cDHOga6duiN3+exufkKr/Jg3relr9xMhW1SeXy+PrX4+lFG5HoMgrVK+kWpEOctCHqdA4Dd5md+5sighNrBmzC8vUBZa5blLdV9CedhoYll/aDscph08xJ5TZGfaO/NOoLWpNtbT2uXr1G9DLqhtC4oNixKhUKcP3XNoqI3fxqlEXd7IhnqccaSFt3zaVCSa1TrV/3e5faIV30N57GBTMbx4U6+hKWzliC/AeGjGAzJIcImozylFfmOWJaMzBb34TyxQemksB7tOIjuyEaP6QuDLDpaUL5ZhZhLIlibtjJ138P2z8ZcqG7dAtN80E9qEsj2L1o1nlBBoOeZAe+2uxJXtF2dhVCTk3xV5Xg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(186003)(26005)(1076003)(2616005)(8936002)(2906002)(6506007)(52116002)(6666004)(7416002)(6512007)(5660300002)(86362001)(30864003)(38100700002)(38350700002)(83380400001)(66476007)(316002)(4326008)(508600001)(8676002)(6486002)(66946007)(66556008);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?bE04Q251UjJPSVBxMjhMcDhWQlBoajZxSnM3b0NZa0JLTmQ0YTlMOVpQa2xS?=
- =?utf-8?B?MXhzNWlCTmw0U0YrbjdGbkZXTVNJOThNanFSL3pkVkJWeVMxTUZ6UWY4cTE5?=
- =?utf-8?B?dDNhdFB1Q3Bub29PV1NqczZ2L3NUY2ZxWnlic1N0Vy9JdG1SN2h0OEZWZm44?=
- =?utf-8?B?Z21BYkYwdDJPdUN1MjdmZ2E1VVBCK1NubVJRVGJYTkh4MU9oa21qODRiZlJs?=
- =?utf-8?B?NW9lREUvYjZOWVV4Y2c5cFZ5OUFSamZ6MTVvd09QN0VEaG5nR3hqakEwdWRK?=
- =?utf-8?B?dmpqekluM2hWWUpRUGNiWW5kVlBhUitQT0VabVVMMTZWL0J0K2pRK2g1ak9s?=
- =?utf-8?B?TnRveERrMXRWejgwWVEwZkNOSFpZc1FBU01mNi80Q3d2dVlkeWJpTGh2T3Zy?=
- =?utf-8?B?Njd2QURoL095bk1zZnNWS1J1SGFRZW1JbE9sK1BFOGlORE9VMlRIWHZTK1J5?=
- =?utf-8?B?Ly9Wam1GNVpUUzkycnVNK2dxOE0zcXorNy9rNk53N2MxZnRxTUsxQysxWGZi?=
- =?utf-8?B?NDNxbnlzbU5JN05lUkJQMXRqT3hGUTZack8xZ2JmZWdJUXZZVjNnektQS1Bl?=
- =?utf-8?B?WDluWG8xWTIrQi8yellGaEp0WDlhU3FTRFNNdmxFSlMxalRJWlNFZTlpYmNl?=
- =?utf-8?B?T2g0b0NNa1dKbzFMUmlpKzNpdkU3am5BaFhLVjU1aFN6YmNSb1ljK3pDZmIv?=
- =?utf-8?B?dDNRN0h4SWs4YnpUM250VTc5bWg2MmIyTXhMUnIzZi9LZGhJMEFyS3d5ZlFY?=
- =?utf-8?B?UFpBSklsS3NTVXBwTlZjN2EyTlZaaDBEU2F5cUZWTUtXbDh2OTVaUlhEQlAx?=
- =?utf-8?B?c2w0R2kvK0NWSGpPbjYzY0U1MGI2dmowd3RUTjhZMU9DQmpCbkpyZ05kamww?=
- =?utf-8?B?ZFRiVUVHTUxOa0tLSEJVYktWTFFWY3ZPSktjT1RGSUpBdWNxc0J0dXVPcjdD?=
- =?utf-8?B?WjR6RUIxRncxNzQ5bmUwSE5EOWw4b2JIWkRkeG53VzBQVzl5dy9ZcXRSQWc4?=
- =?utf-8?B?b3p2TTNxcXpLdlk3R2luK09YY3JRRVdkdGxDVE9WRUlHWEtkWG8weStESjc3?=
- =?utf-8?B?QVBqQXFJVU9MS3ordHZ2Q0hnNHNQWFJmbXZKbzNwWGQzSDErRGRMNnBkd25t?=
- =?utf-8?B?aEk0aVNrK2d2VkpvSWY2TjkyNUd5a1k1b0FZbHpDemRSZ2Yyc0JLUTVXRzhC?=
- =?utf-8?B?QmhLVnAvYUY5UDBydHZuNEkzVXRheUJjeXhyYXRqWFlBMDdWY0NGbzV5MVVF?=
- =?utf-8?B?S01tYzRGL0FSYXIvVFZwVGVhbFRFQ1g3MkJES0VnOWZhWlhmL2p3R1ByRHRh?=
- =?utf-8?B?SVRNdTdsSWhqa1RhK1NETENTaC81dXRTY2c4RFdFWHpqSkZwNGFVZGJzc296?=
- =?utf-8?B?QU9DQnZBT0k0YWpaQzRScHhXcWw3bG9SK0d5d1lQVUNMQ3VqTHdKNTJXQUVa?=
- =?utf-8?B?ZkM3SDRtcnErQi9WM2dTQzB0clJEYlVTZmhUZkltbVJleFZVY1dCTlp2dDRO?=
- =?utf-8?B?WlczSUVsOUZ2OW1BNUtUVStXcUhqL1BOdXZkcnNTS0RUa3VCcU14Wm13RjUx?=
- =?utf-8?B?VjNNTE1vRktrNld5eDh6ais3bHIzUW9nV1NBREp3cDQweHM5S2dqMDdLdGxo?=
- =?utf-8?B?Mm1DNXlBQnRLcFVTNmx1blVqYTBQVEtpeGc4aVFvVGM4Vno3UlhKRnpLdlRv?=
- =?utf-8?B?R2dyNTR2ZHNWd1lQT3Z1Z2kyTnhoVlR1bmxnbVhiYVlYVnRRVFdIQXdhY2d3?=
- =?utf-8?B?K1Yrczc4aUVSOVYrRVFjRS83MmQ0QVFjYlZZVUloams2aktIbEhOc2VzaTRv?=
- =?utf-8?B?UHV4WmpDOWNvbTF1emJqWFhKWmg1R0pFUmxvZDluTTBCNGtEbHpodW81Nm5N?=
- =?utf-8?B?bXUxQXZhVnRrQ3pIR3g0TlQ2U1FjUWNSTmdXTXlrWjR0RlpObWE0QmdCQ3Fh?=
- =?utf-8?B?bmNhckVGSU5VRXRDRzU4OWE4cFo1NWVFd0NaRWZMaGZPV0lXY00rMnVHT1Fj?=
- =?utf-8?B?a092cGFLVXFnSjVNQm9pcmpjQ1Z6N3ZVUHBuSGowekxZak5zNzhEMXhFMFNj?=
- =?utf-8?B?NnQvdFkxT1Q4VE9GSHIwcTNqOHpxV2loZ2oybW1KZ2tPNldPREZ4b3F3N3dC?=
- =?utf-8?B?TUZ0OWJ2Z2ZnWWRRY1p3YVVEd3BnRzN1YmhuaFNJZk91d2ZRV1FsUndueWhq?=
- =?utf-8?Q?POMPnMn/uYQtCnDMd8aMs48=3D?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?jWOKwWvhK/zdYN1ly4lNEB+Y02rXK2xm7ur4coBWfJTjGFRoSOTLjIsBNXar?=
+ =?us-ascii?Q?ZdExLCs1mUw7IZOZCNFHKdzM0f1w3RfkjU9jUtYQdN58jOpGMPcmScTcNGuv?=
+ =?us-ascii?Q?sTurrcHtP8ywJVfHZBzUOgIcHboeABuSLlRmAs1WQ1gi2U6RTYsNK0uo54ZD?=
+ =?us-ascii?Q?UxStiOr3MXF2KiKGrAG2HOhf9v/qQS1Z0KM/16cDoz+4h8+9lScJBXjPd1Nq?=
+ =?us-ascii?Q?jzF/TTgOgVNfDtPwuqg3MlU9uwcKChzPr4097StGXn/60HddRyb/rLuHgTB9?=
+ =?us-ascii?Q?S4uzN6fCFQ+xTfoBq4sX+OsqkwnXTOPiTJ2q3OWk5Tw9MFPWGuRQRNi/48c8?=
+ =?us-ascii?Q?vf0A+j4ClhHdPFNzSMhYMncgvfhvSYc11o/nldrRj7kfrc1+yfLmyZlPX4cp?=
+ =?us-ascii?Q?ZfbdZlggGKmazILS7ablAsvW0snYGylNZTENLaVlrk2ZTOXvePLcCuooQi2f?=
+ =?us-ascii?Q?Fbr44qYkL9Uzh99OkZQa9ytH22hWfzh/dirVTwlycHELUXm0Zfl2i61l046l?=
+ =?us-ascii?Q?PhsalnHfmAFhyRfNtWDl0/P0evWgBby1EoQuX6NvCIrxsRQUFd/Hm6T5Ufxp?=
+ =?us-ascii?Q?2CaSCjqNjpVfuAR9TVNKUMD0IlcIU2f2Avu5GvzFo/iqFneIdIj8aNLGTKKI?=
+ =?us-ascii?Q?6houqwXWXeYSKocg+sFBJIrodoNrf9aD1s8v8WVmDr4EH6j+M5ULIXhpBuvj?=
+ =?us-ascii?Q?85DGF72dy/pvYLdO0PczFr1vRTehxJalx+qhE2TsqCiyhF8K5uoKjwnup0HH?=
+ =?us-ascii?Q?1yhaObEpntRZ2UQQlckRFXmgJvhpq5+IAGpDRLOIYYx2kGBra5gkY2O64udL?=
+ =?us-ascii?Q?0ClzoFPuo9YmHCBlanPWzzSPLHnE9l6NgGGQ4sCgkmR9Lscc61Wi8t8AKJmj?=
+ =?us-ascii?Q?Q31hBttKpHLcBCSpeJ9svWDW2MdOF/PR/jmp6gMlBxYmqs/yd9gU4WSkN+1g?=
+ =?us-ascii?Q?xDupQ8wI/DT/cHyDRD11ri8cQAm5XEqKHJ0zAYNXokFekF6iBjCY7SW3Kxx2?=
+ =?us-ascii?Q?Fns9MkK5phEW0mb6Vv6uGV9RfolOYFT6vZwoXUb/xFTmnuyqviI7W6RGRDoh?=
+ =?us-ascii?Q?uaMJ26Pw1beKZaLP68bnJ4/Df27oyaKJbqkIBhOniVKNcMgjz2FxomUq/zcM?=
+ =?us-ascii?Q?vUjVuMx0Tj8a8b7LKznKcqBPc0cSLtjdxASXkTkYUxr46RcZxkUueRquD+SF?=
+ =?us-ascii?Q?Nw1q2jymir8t2AyD/WAHKn9Pby9G+IRKsJCFnE46F/G2b2LrecnQ7JkZRXdv?=
+ =?us-ascii?Q?jqLl+C40l81tZL1MvvG6arGP4aPCeOcF14PyPnQOz5hfZsSaSbz3BRO8WIGu?=
+ =?us-ascii?Q?AXGOpSZQJZkcr3h/wlD7XbiyH+TIZ/Sxg7Z/zE4qbaHFW0bDTX/KCYN64as4?=
+ =?us-ascii?Q?7rKMhAKOrRfQXz9SwRhqUjMce7NmNm6eKBsNfmLa4Uwa3K9tOQC1y1E1zzwM?=
+ =?us-ascii?Q?68vmHSrUhm8BqkjS89PDGX34zIKbQctHrd4iJkqff16pVglr5v8Bb2H0aHMs?=
+ =?us-ascii?Q?2SI1cdONChfXfepBfV7qed9oHybwNmVyHQCGcFVKdXAvAVPjlUu7rNYwZ1WW?=
+ =?us-ascii?Q?k6i2Anmda+NzbDTcpxZ0di2h5V8+mQmPY/Etcy5GevNkP3qbaHnKr1IM+pe8?=
+ =?us-ascii?Q?lVrGoL2UQcu2sHc4EdyUqEQ=3D?=
 X-OriginatorOrg: oss.nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3f1c5d1d-d657-475d-05c5-08d9f669da51
+X-MS-Exchange-CrossTenant-Network-Message-Id: ff505869-d6b5-42f0-cbba-08d9f669dcc1
 X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9417.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Feb 2022 01:14:34.6877
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Feb 2022 01:14:38.7197
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: auu3iff1+eHKD3Fd3eU30H3JEDEnyIoyLThPXcFNHfGDo/4vWcNYFO8+xByRkkRFWGfUBOGOlTQpmEVDS9NxHA==
+X-MS-Exchange-CrossTenant-UserPrincipalName: wc/RrvXgA6zDqUNYNnrdoT0RHpqqD7dbGiS09d31iakdFA4sIlJOJ8eBR1O+OFp5VR7DgHPNV75nxS3mvV+0AA==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU2PR04MB8533
-X-Spam-Status: No, score=1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        SUSP_UTF8_WORD_COMBO,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: *
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -133,397 +122,393 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Peng Fan <peng.fan@nxp.com>
 
-This PLL module is a Fractional-N synthesizer,
-supporting 30-bit numerator and denominator. Numerator is a signed
-number. It has feature to adjust fractional portion of feedback
-divider dynamically. This fracn gppll is used in i.MX93.
+Add i.MX93 clk driver. i.MX93 clk hardware design is different compared
+with i.MX8M. It supports 4 sources for each clk root and the sources
+are seperated into a few groups, low speed/fast io/audio and etc.
 
 Signed-off-by: Peng Fan <peng.fan@nxp.com>
 ---
- drivers/clk/imx/Makefile          |   1 +
- drivers/clk/imx/clk-fracn-gppll.c | 328 ++++++++++++++++++++++++++++++
- drivers/clk/imx/clk.h             |  21 ++
- 3 files changed, 350 insertions(+)
- create mode 100644 drivers/clk/imx/clk-fracn-gppll.c
+ drivers/clk/imx/Kconfig     |   6 +
+ drivers/clk/imx/Makefile    |   2 +
+ drivers/clk/imx/clk-imx93.c | 339 ++++++++++++++++++++++++++++++++++++
+ 3 files changed, 347 insertions(+)
+ create mode 100644 drivers/clk/imx/clk-imx93.c
 
+diff --git a/drivers/clk/imx/Kconfig b/drivers/clk/imx/Kconfig
+index 45641b8bdc50..cc464a42d646 100644
+--- a/drivers/clk/imx/Kconfig
++++ b/drivers/clk/imx/Kconfig
+@@ -106,6 +106,12 @@ config CLK_IMX8ULP
+ 	help
+ 	    Build the driver for i.MX8ULP CCM Clock Driver
+ 
++config CLK_IMX93
++	tristate "IMX93 CCM Clock Driver"
++	depends on ARCH_MXC || COMPILE_TEST
++	help
++	    Build the driver for i.MX93 CCM Clock Driver
++
+ config CLK_IMXRT1050
+ 	tristate "IMXRT1050 CCM Clock Driver"
+ 	depends on SOC_IMXRT
 diff --git a/drivers/clk/imx/Makefile b/drivers/clk/imx/Makefile
-index 36c04922d789..60c8a4bb7574 100644
+index 60c8a4bb7574..88b9b9285d22 100644
 --- a/drivers/clk/imx/Makefile
 +++ b/drivers/clk/imx/Makefile
-@@ -5,6 +5,7 @@ mxc-clk-objs += clk-busy.o
- mxc-clk-objs += clk-composite-7ulp.o
- mxc-clk-objs += clk-composite-8m.o
- mxc-clk-objs += clk-composite-93.o
-+mxc-clk-objs += clk-fracn-gppll.o
- mxc-clk-objs += clk-cpu.o
- mxc-clk-objs += clk-divider-gate.o
- mxc-clk-objs += clk-fixup-div.o
-diff --git a/drivers/clk/imx/clk-fracn-gppll.c b/drivers/clk/imx/clk-fracn-gppll.c
+@@ -28,6 +28,8 @@ obj-$(CONFIG_CLK_IMX8MN) += clk-imx8mn.o
+ obj-$(CONFIG_CLK_IMX8MP) += clk-imx8mp.o
+ obj-$(CONFIG_CLK_IMX8MQ) += clk-imx8mq.o
+ 
++obj-$(CONFIG_CLK_IMX93) += clk-imx93.o
++
+ obj-$(CONFIG_MXC_CLK_SCU) += clk-imx-scu.o clk-imx-lpcg-scu.o
+ clk-imx-scu-$(CONFIG_CLK_IMX8QXP) += clk-scu.o clk-imx8qxp.o \
+ 				     clk-imx8qxp-rsrc.o clk-imx8qm-rsrc.o \
+diff --git a/drivers/clk/imx/clk-imx93.c b/drivers/clk/imx/clk-imx93.c
 new file mode 100644
-index 000000000000..6c9946a4bdb7
+index 000000000000..52b080649501
 --- /dev/null
-+++ b/drivers/clk/imx/clk-fracn-gppll.c
-@@ -0,0 +1,328 @@
++++ b/drivers/clk/imx/clk-imx93.c
+@@ -0,0 +1,339 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
-+ * Copyright 2021 NXP
++ * Copyright 2021 NXP.
 + */
 +
-+#include <linux/bits.h>
++#include <dt-bindings/clock/imx93-clock.h>
++#include <linux/clk.h>
 +#include <linux/clk-provider.h>
++#include <linux/debugfs.h>
 +#include <linux/err.h>
-+#include <linux/export.h>
 +#include <linux/io.h>
-+#include <linux/iopoll.h>
++#include <linux/module.h>
++#include <linux/of_address.h>
++#include <linux/platform_device.h>
 +#include <linux/slab.h>
-+#include <linux/jiffies.h>
++#include <linux/types.h>
++#include <soc/imx/soc.h>
 +
 +#include "clk.h"
 +
-+#define PLL_CTRL		0x0
-+#define CLKMUX_BYPASS		BIT(2)
-+#define CLKMUX_EN		BIT(1)
-+#define POWERUP_MASK		BIT(0)
-+
-+#define PLL_ANA_PRG		0x10
-+#define PLL_SPREAD_SPECTRUM	0x30
-+
-+#define PLL_NUMERATOR		0x40
-+#define PLL_MFN_MASK		GENMASK(31, 2)
-+#define PLL_MFN_SHIFT		2
-+
-+#define PLL_DENOMINATOR		0x50
-+#define PLL_MFD_MASK		GENMASK(29, 0)
-+
-+#define PLL_DIV			0x60
-+#define PLL_MFI_MASK		GENMASK(24, 16)
-+#define PLL_MFI_SHIFT		16
-+#define PLL_RDIV_MASK		GENMASK(15, 13)
-+#define PLL_RDIV_SHIFT		13
-+#define PLL_ODIV_MASK		GENMASK(7, 0)
-+
-+#define PLL_DFS_CTRL(x)		(0x70 + (x) * 0x10)
-+
-+#define PLL_STATUS		0xF0
-+#define LOCK_STATUS		BIT(0)
-+
-+#define DFS_STATUS		0xF4
-+
-+#define LOCK_TIMEOUT_US		200
-+
-+#define PLL_FRACN_GP(_rate, _mfi, _mfn, _mfd, _rdiv, _odiv)	\
-+	{							\
-+		.rate	=	(_rate),			\
-+		.mfi	=	(_mfi),				\
-+		.mfn	=	(_mfn),				\
-+		.mfd	=	(_mfd),				\
-+		.rdiv	=	(_rdiv),			\
-+		.odiv	=	(_odiv),			\
-+	}
-+
-+struct clk_fracn_gppll {
-+	struct clk_hw			hw;
-+	void __iomem			*base;
-+	const struct imx_fracn_gppll_rate_table *rate_table;
-+	int rate_count;
++enum clk_sel {
++	LOW_SPEED_IO_SEL,
++	NON_IO_SEL,
++	FAST_SEL,
++	AUDIO_SEL,
++	VIDEO_SEL,
++	TPM_SEL,
++	CKO1_SEL,
++	CKO2_SEL,
++	MISC_SEL,
++	MAX_SEL
 +};
 +
-+#define to_clk_fracn_gppll(_hw) container_of(_hw, struct clk_fracn_gppll, hw)
-+
-+/*
-+ * Fvco = 𝐹𝑟𝑒𝑓∙(𝑀𝐹𝐼+𝑀𝐹𝑁/𝑀𝐹𝐷)
-+ * Fout = Fvco / (rdiv * odiv)
-+ */
-+static const struct imx_fracn_gppll_rate_table fracn_tbl[] = {
-+	PLL_FRACN_GP(650000000U, 81, 0, 0, 0, 3),
-+	PLL_FRACN_GP(594000000U, 198, 0, 0, 0, 8),
-+	PLL_FRACN_GP(560000000U, 70, 0, 0, 0, 3),
-+	PLL_FRACN_GP(400000000U, 50, 0, 0, 0, 3),
-+	PLL_FRACN_GP(393216000U, 81, 92, 100, 0, 5)
++static const char *parent_names[MAX_SEL][4] = {
++	{"osc_24m", "sys_pll_pfd0_div2", "sys_pll_pfd1_div2", "video_pll"},
++	{"osc_24m", "sys_pll_pfd0_div2", "sys_pll_pfd1_div2", "sys_pll_pfd2_div2"},
++	{"osc_24m", "sys_pll_pfd0", "sys_pll_pfd1", "sys_pll_pfd2"},
++	{"osc_24m", "audio_pll", "video_pll", "clk_ext1"},
++	{"osc_24m", "audio_pll", "video_pll", "sys_pll_pfd0"},
++	{"osc_24m", "sys_pll_pfd0", "audio_pll", "clk_ext1"},
++	{"osc_24m", "sys_pll_pfd0", "sys_pll_pfd1", "audio_pll"},
++	{"osc_24m", "sys_pll_pfd0", "sys_pll_pfd1", "video_pll"},
++	{"osc_24m", "audio_pll", "video_pll", "sys_pll_pfd2"},
 +};
 +
-+struct imx_fracn_gppll_clk imx_fracn_gppll = {
-+	.rate_table = fracn_tbl,
-+	.rate_count = ARRAY_SIZE(fracn_tbl),
++struct imx93_clk_root {
++	u32 clk;
++	char *name;
++	u32 off;
++	enum clk_sel sel;
++	unsigned long flags;
++} root_array[] = {
++	{ IMX93_CLK_A55_PERIPH,		"a55_periph_root",	0x0000,	FAST_SEL, CLK_IS_CRITICAL },
++	{ IMX93_CLK_A55_MTR_BUS,	"a55_mtr_bus_root",	0x0080,	LOW_SPEED_IO_SEL, CLK_IS_CRITICAL },
++	{ IMX93_CLK_A55,		"a55_root",		0x0100,	FAST_SEL, CLK_IS_CRITICAL },
++	{ IMX93_CLK_M33,		"m33_root",		0x0180,	LOW_SPEED_IO_SEL, CLK_IS_CRITICAL },
++	{ IMX93_CLK_BUS_WAKEUP,		"bus_wakeup_root",	0x0280,	LOW_SPEED_IO_SEL, CLK_IS_CRITICAL },
++	{ IMX93_CLK_BUS_AON,		"bus_aon_root",		0x0300,	LOW_SPEED_IO_SEL, CLK_IS_CRITICAL },
++	{ IMX93_CLK_WAKEUP_AXI,		"wakeup_axi_root",	0x0380,	FAST_SEL, CLK_IS_CRITICAL },
++	{ IMX93_CLK_SWO_TRACE,		"swo_trace_root",	0x0400,	LOW_SPEED_IO_SEL, },
++	{ IMX93_CLK_M33_SYSTICK,	"m33_systick_root",	0x0480,	LOW_SPEED_IO_SEL, },
++	{ IMX93_CLK_FLEXIO1,		"flexio1_root",		0x0500,	LOW_SPEED_IO_SEL, },
++	{ IMX93_CLK_FLEXIO2,		"flexio2_root",		0x0580,	LOW_SPEED_IO_SEL, },
++	{ IMX93_CLK_LPIT1,		"lpit1_root",		0x0600,	LOW_SPEED_IO_SEL, },
++	{ IMX93_CLK_LPIT2,		"lpit2_root",		0x0680,	LOW_SPEED_IO_SEL, },
++	{ IMX93_CLK_LPTMR1,		"lptmr1_root",		0x0700,	LOW_SPEED_IO_SEL, },
++	{ IMX93_CLK_LPTMR2,		"lptmr2_root",		0x0780,	LOW_SPEED_IO_SEL, },
++	{ IMX93_CLK_TPM1,		"tpm1_root",		0x0800,	TPM_SEL, },
++	{ IMX93_CLK_TPM2,		"tpm2_root",		0x0880,	TPM_SEL, },
++	{ IMX93_CLK_TPM3,		"tpm3_root",		0x0900,	TPM_SEL, },
++	{ IMX93_CLK_TPM4,		"tpm4_root",		0x0980,	TPM_SEL, },
++	{ IMX93_CLK_TPM5,		"tpm5_root",		0x0a00,	TPM_SEL, },
++	{ IMX93_CLK_TPM6,		"tpm6_root",		0x0a80,	TPM_SEL, },
++	{ IMX93_CLK_FLEXSPI1,		"flexspi1_root",	0x0b00,	FAST_SEL, },
++	{ IMX93_CLK_CAN1,		"can1_root",		0x0b80,	LOW_SPEED_IO_SEL, },
++	{ IMX93_CLK_CAN2,		"can2_root",		0x0c00,	LOW_SPEED_IO_SEL, },
++	{ IMX93_CLK_LPUART1,		"lpuart1_root",		0x0c80,	LOW_SPEED_IO_SEL, },
++	{ IMX93_CLK_LPUART2,		"lpuart2_root",		0x0d00,	LOW_SPEED_IO_SEL, },
++	{ IMX93_CLK_LPUART3,		"lpuart3_root",		0x0d80,	LOW_SPEED_IO_SEL, },
++	{ IMX93_CLK_LPUART4,		"lpuart4_root",		0x0e00,	LOW_SPEED_IO_SEL, },
++	{ IMX93_CLK_LPUART5,		"lpuart5_root",		0x0e80,	LOW_SPEED_IO_SEL, },
++	{ IMX93_CLK_LPUART6,		"lpuart6_root",		0x0f00,	LOW_SPEED_IO_SEL, },
++	{ IMX93_CLK_LPUART7,		"lpuart7_root",		0x0f80,	LOW_SPEED_IO_SEL, },
++	{ IMX93_CLK_LPUART8,		"lpuart8_root",		0x1000,	LOW_SPEED_IO_SEL, },
++	{ IMX93_CLK_LPI2C1,		"lpi2c1_root",		0x1080,	LOW_SPEED_IO_SEL, },
++	{ IMX93_CLK_LPI2C2,		"lpi2c2_root",		0x1100,	LOW_SPEED_IO_SEL, },
++	{ IMX93_CLK_LPI2C3,		"lpi2c3_root",		0x1180,	LOW_SPEED_IO_SEL, },
++	{ IMX93_CLK_LPI2C4,		"lpi2c4_root",		0x1200,	LOW_SPEED_IO_SEL, },
++	{ IMX93_CLK_LPI2C5,		"lpi2c5_root",		0x1280,	LOW_SPEED_IO_SEL, },
++	{ IMX93_CLK_LPI2C6,		"lpi2c6_root",		0x1300,	LOW_SPEED_IO_SEL, },
++	{ IMX93_CLK_LPI2C7,		"lpi2c7_root",		0x1380,	LOW_SPEED_IO_SEL, },
++	{ IMX93_CLK_LPI2C8,		"lpi2c8_root",		0x1400,	LOW_SPEED_IO_SEL, },
++	{ IMX93_CLK_LPSPI1,		"lpspi1_root",		0x1480,	LOW_SPEED_IO_SEL, },
++	{ IMX93_CLK_LPSPI2,		"lpspi2_root",		0x1500,	LOW_SPEED_IO_SEL, },
++	{ IMX93_CLK_LPSPI3,		"lpspi3_root",		0x1580,	LOW_SPEED_IO_SEL, },
++	{ IMX93_CLK_LPSPI4,		"lpspi4_root",		0x1600,	LOW_SPEED_IO_SEL, },
++	{ IMX93_CLK_LPSPI5,		"lpspi5_root",		0x1680,	LOW_SPEED_IO_SEL, },
++	{ IMX93_CLK_LPSPI6,		"lpspi6_root",		0x1700,	LOW_SPEED_IO_SEL, },
++	{ IMX93_CLK_LPSPI7,		"lpspi7_root",		0x1780,	LOW_SPEED_IO_SEL, },
++	{ IMX93_CLK_LPSPI8,		"lpspi8_root",		0x1800,	LOW_SPEED_IO_SEL, },
++	{ IMX93_CLK_I3C1,		"i3c1_root",		0x1880,	LOW_SPEED_IO_SEL, },
++	{ IMX93_CLK_I3C2,		"i3c2_root",		0x1900,	LOW_SPEED_IO_SEL, },
++	{ IMX93_CLK_USDHC1,		"usdhc1_root",		0x1980,	FAST_SEL, },
++	{ IMX93_CLK_USDHC2,		"usdhc2_root",		0x1a00,	FAST_SEL, },
++	{ IMX93_CLK_USDHC3,		"usdhc3_root",		0x1a80,	FAST_SEL, },
++	{ IMX93_CLK_SAI1,		"sai1_root",		0x1b00,	AUDIO_SEL, },
++	{ IMX93_CLK_SAI2,		"sai2_root",		0x1b80,	AUDIO_SEL, },
++	{ IMX93_CLK_SAI3,		"sai3_root",		0x1c00,	AUDIO_SEL, },
++	{ IMX93_CLK_CCM_CKO1,		"ccm_cko1_root",	0x1c80,	CKO1_SEL, },
++	{ IMX93_CLK_CCM_CKO2,		"ccm_cko2_root",	0x1d00,	CKO2_SEL, },
++	{ IMX93_CLK_CCM_CKO3,		"ccm_cko3_root",	0x1d80,	CKO1_SEL, },
++	{ IMX93_CLK_CCM_CKO4,		"ccm_cko4_root",	0x1e00,	CKO2_SEL, },
++	{ IMX93_CLK_HSIO,		"hsio_root",		0x1e80,	LOW_SPEED_IO_SEL, },
++	{ IMX93_CLK_HSIO_USB_TEST_60M,	"hsio_usb_test_60m_root", 0x1f00, LOW_SPEED_IO_SEL, },
++	{ IMX93_CLK_HSIO_ACSCAN_80M,	"hsio_acscan_80m_root",	0x1f80,	LOW_SPEED_IO_SEL, },
++	{ IMX93_CLK_HSIO_ACSCAN_480M,	"hsio_acscan_480m_root", 0x2000, MISC_SEL, },
++	{ IMX93_CLK_ML_APB,		"ml_apb_root",		0x2180,	LOW_SPEED_IO_SEL, },
++	{ IMX93_CLK_ML,			"ml_root",		0x2200,	FAST_SEL, },
++	{ IMX93_CLK_MEDIA_AXI,		"media_axi_root",	0x2280,	FAST_SEL, },
++	{ IMX93_CLK_MEDIA_APB,		"media_apb_root",	0x2300,	LOW_SPEED_IO_SEL, },
++	{ IMX93_CLK_MEDIA_LDB,		"media_ldb_root",	0x2380,	VIDEO_SEL, },
++	{ IMX93_CLK_MEDIA_DISP_PIX,	"media_disp_pix_root",	0x2400,	VIDEO_SEL, },
++	{ IMX93_CLK_CAM_PIX,		"cam_pix_root",		0x2480,	VIDEO_SEL, },
++	{ IMX93_CLK_MIPI_TEST_BYTE,	"mipi_test_byte_root",	0x2500,	VIDEO_SEL, },
++	{ IMX93_CLK_MIPI_PHY_CFG,	"mipi_phy_cfg_root",	0x2580,	VIDEO_SEL, },
++	{ IMX93_CLK_ADC,		"adc_root",		0x2700,	LOW_SPEED_IO_SEL, },
++	{ IMX93_CLK_PDM,		"pdm_root",		0x2780,	AUDIO_SEL, },
++	{ IMX93_CLK_TSTMR1,		"tstmr1_root",		0x2800,	LOW_SPEED_IO_SEL, },
++	{ IMX93_CLK_TSTMR2,		"tstmr2_root",		0x2880,	LOW_SPEED_IO_SEL, },
++	{ IMX93_CLK_MQS1,		"mqs1_root",		0x2900,	AUDIO_SEL, },
++	{ IMX93_CLK_MQS2,		"mqs2_root",		0x2980,	AUDIO_SEL, },
++	{ IMX93_CLK_AUDIO_XCVR,		"audio_xcvr_root",	0x2a00,	NON_IO_SEL, },
++	{ IMX93_CLK_SPDIF,		"spdif_root",		0x2a80,	AUDIO_SEL, },
++	{ IMX93_CLK_ENET,		"enet_root",		0x2b00,	NON_IO_SEL, },
++	{ IMX93_CLK_ENET_TIMER1,	"enet_timer1_root",	0x2b80,	LOW_SPEED_IO_SEL, },
++	{ IMX93_CLK_ENET_TIMER2,	"enet_timer2_root",	0x2c00,	LOW_SPEED_IO_SEL, },
++	{ IMX93_CLK_ENET_REF,		"enet_ref_root",	0x2c80,	NON_IO_SEL, },
++	{ IMX93_CLK_ENET_REF_PHY,	"enet_ref_phy_root",	0x2d00,	LOW_SPEED_IO_SEL, },
++	{ IMX93_CLK_I3C1_SLOW,		"i3c1_slow_root",	0x2d80,	LOW_SPEED_IO_SEL, },
++	{ IMX93_CLK_I3C2_SLOW,		"i3c2_slow_root",	0x2e00,	LOW_SPEED_IO_SEL, },
++	{ IMX93_CLK_USB_PHY_BURUNIN,	"usb_phy_root",		0x2e80,	LOW_SPEED_IO_SEL, },
++	{ IMX93_CLK_PAL_CAME_SCAN,	"pal_came_scan_root",	0x2f00,	MISC_SEL, }
 +};
-+EXPORT_SYMBOL_GPL(imx_fracn_gppll);
 +
-+static const struct imx_fracn_gppll_rate_table *
-+imx_get_pll_settings(struct clk_fracn_gppll *pll, unsigned long rate)
++struct imx93_clk_ccgr {
++	u32 clk;
++	char *name;
++	char *parent_name;
++	u32 off;
++	unsigned long flags;
++} ccgr_array[] = {
++	{ IMX93_CLK_A55_GATE,		"a55",		"a55_root",		0x8000, CLK_IS_CRITICAL },
++	{ IMX93_CLK_CM33_GATE,		"cm33",		"m33_root",		0x8040, CLK_IS_CRITICAL },
++	{ IMX93_CLK_ADC1_GATE,		"adc1",		"osc_24m",		0x82c0, },
++	{ IMX93_CLK_WDOG1_GATE,		"wdog1",	"osc_24m",		0x8300, },
++	{ IMX93_CLK_WDOG2_GATE,		"wdog2",	"osc_24m",		0x8340, },
++	{ IMX93_CLK_WDOG3_GATE,		"wdog3",	"osc_24m",		0x8380, },
++	{ IMX93_CLK_WDOG4_GATE,		"wdog4",	"osc_24m",		0x83c0, },
++	{ IMX93_CLK_WDOG5_GATE,		"wdog5",	"osc_24m",		0x8400, },
++	{ IMX93_CLK_SEMA1_GATE,		"sema1",	"bus_aon_root",		0x8440, },
++	{ IMX93_CLK_SEMA2_GATE,		"sema2",	"bus_wakeup_root",	0x8480, },
++	{ IMX93_CLK_MU_A_GATE,		"mu_a",		"bus_aon_root",		0x84c0, },
++	{ IMX93_CLK_MU_B_GATE,		"mu_b",		"bus_aon_root",		0x8500, },
++	{ IMX93_CLK_EDMA1_GATE,		"edma1",	"wakeup_axi_root",	0x8540, },
++	{ IMX93_CLK_EDMA2_GATE,		"edma2",	"wakeup_axi_root",	0x8580, },
++	{ IMX93_CLK_FLEXSPI1_GATE,	"flexspi",	"flexspi_root",		0x8640, },
++	{ IMX93_CLK_GPIO1_GATE,		"gpio1",	"m33_root",		0x8880, },
++	{ IMX93_CLK_GPIO2_GATE,		"gpio2",	"bus_wakeup_root",	0x88c0, },
++	{ IMX93_CLK_GPIO3_GATE,		"gpio3",	"bus_wakeup_root",	0x8900, },
++	{ IMX93_CLK_GPIO4_GATE,		"gpio4",	"bus_wakeup_root",	0x8940, },
++	{ IMX93_CLK_FLEXIO1_GATE,	"flexio1",	"flexio1_root",		0x8980, },
++	{ IMX93_CLK_FLEXIO2_GATE,	"flexio2",	"flexio2_root",		0x89c0, },
++	{ IMX93_CLK_LPIT1_GATE,		"lpit1",	"lpit1_root",		0x8a00, },
++	{ IMX93_CLK_LPIT2_GATE,		"lpit2",	"lpit2_root",		0x8a40, },
++	{ IMX93_CLK_LPTMR1_GATE,	"lptmr1",	"lptmr1_root",		0x8a80, },
++	{ IMX93_CLK_LPTMR2_GATE,	"lptmr2",	"lptmr2_root",		0x8ac0, },
++	{ IMX93_CLK_TPM1_GATE,		"tpm1",		"tpm1_root",		0x8b00, },
++	{ IMX93_CLK_TPM2_GATE,		"tpm2",		"tpm2_root",		0x8b40, },
++	{ IMX93_CLK_TPM3_GATE,		"tpm3",		"tpm3_root",		0x8b80, },
++	{ IMX93_CLK_TPM4_GATE,		"tpm4",		"tpm4_root",		0x8bc0, },
++	{ IMX93_CLK_TPM5_GATE,		"tpm5",		"tpm5_root",		0x8c00, },
++	{ IMX93_CLK_TPM6_GATE,		"tpm6",		"tpm6_root",		0x8c40, },
++	{ IMX93_CLK_CAN1_GATE,		"can1",		"can1_root",		0x8c80, },
++	{ IMX93_CLK_CAN2_GATE,		"can2",		"can2_root",		0x8cc0, },
++	{ IMX93_CLK_LPUART1_GATE,	"lpuart1",	"lpuart1_root",		0x8d00, },
++	{ IMX93_CLK_LPUART2_GATE,	"lpuart2",	"lpuart2_root",		0x8d40, },
++	{ IMX93_CLK_LPUART3_GATE,	"lpuart3",	"lpuart3_root",		0x8d80, },
++	{ IMX93_CLK_LPUART4_GATE,	"lpuart4",	"lpuart4_root",		0x8dc0, },
++	{ IMX93_CLK_LPUART5_GATE,	"lpuart5",	"lpuart5_root",		0x8e00, },
++	{ IMX93_CLK_LPUART6_GATE,	"lpuart6",	"lpuart6_root",		0x8e40, },
++	{ IMX93_CLK_LPUART7_GATE,	"lpuart7",	"lpuart7_root",		0x8e80, },
++	{ IMX93_CLK_LPUART8_GATE,	"lpuart8",	"lpuart8_root",		0x8ec0, },
++	{ IMX93_CLK_LPI2C1_GATE,	"lpi2c1",	"lpi2c1_root",		0x8f00, },
++	{ IMX93_CLK_LPI2C2_GATE,	"lpi2c2",	"lpi2c2_root",		0x8f40, },
++	{ IMX93_CLK_LPI2C3_GATE,	"lpi2c3",	"lpi2c3_root",		0x8f80, },
++	{ IMX93_CLK_LPI2C4_GATE,	"lpi2c4",	"lpi2c4_root",		0x8fc0, },
++	{ IMX93_CLK_LPI2C5_GATE,	"lpi2c5",	"lpi2c5_root",		0x9000, },
++	{ IMX93_CLK_LPI2C6_GATE,	"lpi2c6",	"lpi2c6_root",		0x9040, },
++	{ IMX93_CLK_LPI2C7_GATE,	"lpi2c7",	"lpi2c7_root",		0x9080, },
++	{ IMX93_CLK_LPI2C8_GATE,	"lpi2c8",	"lpi2c8_root",		0x90c0, },
++	{ IMX93_CLK_LPSPI1_GATE,	"lpspi1",	"lpspi1_root",		0x9100, },
++	{ IMX93_CLK_LPSPI2_GATE,	"lpspi2",	"lpspi2_root",		0x9140, },
++	{ IMX93_CLK_LPSPI3_GATE,	"lpspi3",	"lpspi3_root",		0x9180, },
++	{ IMX93_CLK_LPSPI4_GATE,	"lpspi4",	"lpspi4_root",		0x91c0, },
++	{ IMX93_CLK_LPSPI5_GATE,	"lpspi5",	"lpspi5_root",		0x9200, },
++	{ IMX93_CLK_LPSPI6_GATE,	"lpspi6",	"lpspi6_root",		0x9240, },
++	{ IMX93_CLK_LPSPI7_GATE,	"lpspi7",	"lpspi7_root",		0x9280, },
++	{ IMX93_CLK_LPSPI8_GATE,	"lpspi8",	"lpspi8_root",		0x92c0, },
++	{ IMX93_CLK_I3C1_GATE,		"i3c1",		"i3c1_root",		0x9300, },
++	{ IMX93_CLK_I3C2_GATE,		"i3c2",		"i3c2_root",		0x9340, },
++	{ IMX93_CLK_USDHC1_GATE,	"usdhc1",	"usdhc1_root",		0x9380, },
++	{ IMX93_CLK_USDHC2_GATE,	"usdhc2",	"usdhc2_root",		0x93c0, },
++	{ IMX93_CLK_USDHC3_GATE,	"usdhc3",	"usdhc3_root",		0x9400, },
++	{ IMX93_CLK_SAI1_GATE,		"sai1",		"sai1_root",		0x9440, },
++	{ IMX93_CLK_SAI2_GATE,		"sai2",		"sai2_root",		0x9480, },
++	{ IMX93_CLK_SAI3_GATE,		"sai3",		"sai3_root",		0x94c0, },
++	{ IMX93_CLK_MIPI_CSI_GATE,	"mipi_csi",	"media_apb_root",	0x9580, },
++	{ IMX93_CLK_MIPI_DSI_GATE,	"mipi_dsi",	"media_apb_root",	0x95c0, },
++	{ IMX93_CLK_LVDS_GATE,		"lvds",		"media_ldb_root",	0x9600, },
++	{ IMX93_CLK_LCDIF_GATE,		"lcdif",	"media_apb_root",	0x9640, },
++	{ IMX93_CLK_PXP_GATE,		"pxp",		"media_apb_root",	0x9680, },
++	{ IMX93_CLK_ISI_GATE,		"isi",		"media_apb_root",	0x96c0, },
++	{ IMX93_CLK_NIC_MEDIA_GATE,	"nic_media",	"media_apb_root",	0x9700, },
++	{ IMX93_CLK_USB_CONTROLLER_GATE, "usb_controller", "hsio_root",		0x9a00, },
++	{ IMX93_CLK_USB_TEST_60M_GATE,	"usb_test_60m",	"hsio_usb_test_60m_root", 0x9a40, },
++	{ IMX93_CLK_HSIO_TROUT_24M_GATE, "hsio_trout_24m", "osc_24m",		0x9a80, },
++	{ IMX93_CLK_PDM_GATE,		"pdm",		"pdm_root",		0x9ac0, },
++	{ IMX93_CLK_MQS1_GATE,		"mqs1",		"sai1_root",		0x9b00, },
++	{ IMX93_CLK_MQS2_GATE,		"mqs2",		"sai3_root",		0x9b40, },
++	{ IMX93_CLK_AUD_XCVR_GATE,	"aud_xcvr",	"audio_xcvr_root",	0x9b80, },
++	{ IMX93_CLK_SPDIF_GATE,		"spdif",	"spdif_root",		0x9c00, },
++	{ IMX93_CLK_HSIO_32K_GATE,	"hsio_32k",	"osc_32k",		0x9dc0, },
++	{ IMX93_CLK_ENET1_GATE,		"enet1",	"enet_root",		0x9e00, },
++	{ IMX93_CLK_ENET_QOS_GATE,	"enet_qos",	"wakeup_axi_root",	0x9e40, },
++	{ IMX93_CLK_SYS_CNT_GATE,	"sys_cnt",	"osc_24m",		0x9e80, },
++	{ IMX93_CLK_TSTMR1_GATE,	"tstmr1",	"bus_aon_root",		0x9ec0, },
++	{ IMX93_CLK_TSTMR2_GATE,	"tstmr2",	"bus_wakeup_root",	0x9f00, },
++	{ IMX93_CLK_TMC_GATE,		"tmc",		"osc_24m",		0x9f40, },
++	{ IMX93_CLK_PMRO_GATE,		"pmro",		"osc_24m",		0x9f80, }
++};
++
++static struct clk_hw_onecell_data *clk_hw_data;
++static struct clk_hw **clks;
++
++static int imx93_clocks_probe(struct platform_device *pdev)
 +{
-+	const struct imx_fracn_gppll_rate_table *rate_table = pll->rate_table;
-+	int i;
++	struct device *dev = &pdev->dev;
++	struct device_node *np = dev->of_node;
++	struct imx93_clk_root *root;
++	struct imx93_clk_ccgr *ccgr;
++	void __iomem *base = NULL;
++	int i, ret;
 +
-+	for (i = 0; i < pll->rate_count; i++)
-+		if (rate == rate_table[i].rate)
-+			return &rate_table[i];
++	clk_hw_data = kzalloc(struct_size(clk_hw_data, hws,
++					  IMX93_CLK_END), GFP_KERNEL);
++	if (WARN_ON(!clk_hw_data))
++		return -ENOMEM;
 +
-+	return NULL;
-+}
++	clk_hw_data->num = IMX93_CLK_END;
++	clks = clk_hw_data->hws;
 +
-+static long clk_fracn_gppll_round_rate(struct clk_hw *hw, unsigned long rate,
-+				       unsigned long *prate)
-+{
-+	struct clk_fracn_gppll *pll = to_clk_fracn_gppll(hw);
-+	const struct imx_fracn_gppll_rate_table *rate_table = pll->rate_table;
-+	int i;
++	clks[IMX93_CLK_DUMMY] = imx_clk_hw_fixed("dummy", 0);
++	clks[IMX93_CLK_24M] = imx_obtain_fixed_clk_hw(np, "osc_24m");
++	clks[IMX93_CLK_32K] = imx_obtain_fixed_clk_hw(np, "osc_32k");
++	clks[IMX93_CLK_EXT1] = imx_obtain_fixed_clk_hw(np, "clk_ext1");
 +
-+	/* Assumming rate_table is in descending order */
-+	for (i = 0; i < pll->rate_count; i++)
-+		if (rate >= rate_table[i].rate)
-+			return rate_table[i].rate;
++	clks[IMX93_CLK_SYS_PLL_PFD0] = imx_clk_hw_fixed("sys_pll_pfd0", 1000000000);
++	clks[IMX93_CLK_SYS_PLL_PFD0_DIV2] = imx_clk_hw_fixed_factor("sys_pll_pfd0_div2",
++								    "sys_pll_pfd0", 1, 2);
++	clks[IMX93_CLK_SYS_PLL_PFD1] = imx_clk_hw_fixed("sys_pll_pfd1", 800000000);
++	clks[IMX93_CLK_SYS_PLL_PFD1_DIV2] = imx_clk_hw_fixed_factor("sys_pll_pfd1_div2",
++								    "sys_pll_pfd1", 1, 2);
++	clks[IMX93_CLK_SYS_PLL_PFD2] = imx_clk_hw_fixed("sys_pll_pfd2", 625000000);
++	clks[IMX93_CLK_SYS_PLL_PFD2_DIV2] = imx_clk_hw_fixed_factor("sys_pll_pfd2_div2",
++								    "sys_pll_pfd2", 1, 2);
 +
-+	if (i == pll->rate_count)
-+		pr_err("Not able to round rate for %s: %lu\n", clk_hw_get_name(hw), rate);
++	np = of_find_compatible_node(NULL, NULL, "fsl,imx93-anatop");
++	base = of_iomap(np, 0);
++	of_node_put(np);
++	if (WARN_ON(!base))
++		return -ENOMEM;
 +
-+	/* return minimum supported value */
-+	return rate_table[i - 1].rate;
-+}
++	clks[IMX93_CLK_AUDIO_PLL] = imx_clk_fracn_gppll("audio_pll", "osc_24m", base + 0x1200,
++							&imx_fracn_gppll);
++	clks[IMX93_CLK_VIDEO_PLL] = imx_clk_fracn_gppll("video_pll", "osc_24m", base + 0x1400,
++							&imx_fracn_gppll);
 +
-+static unsigned long clk_fracn_gppll_recalc_rate(struct clk_hw *hw, unsigned long parent_rate)
-+{
-+	struct clk_fracn_gppll *pll = to_clk_fracn_gppll(hw);
-+	const struct imx_fracn_gppll_rate_table *rate_table = pll->rate_table;
-+	u32 pll_numerator, pll_denominator, pll_div;
-+	u32 mfi, mfn, mfd, rdiv, odiv;
-+	u64 fvco = parent_rate;
-+	long rate = 0;
-+	int i;
++	np = dev->of_node;
++	base = devm_platform_ioremap_resource(pdev, 0);
++	if (WARN_ON(IS_ERR(base)))
++		return PTR_ERR(base);
 +
-+	pll_numerator = readl_relaxed(pll->base + PLL_NUMERATOR);
-+	mfn = (pll_numerator & PLL_MFN_MASK) >> PLL_MFN_SHIFT;
-+
-+	pll_denominator = readl_relaxed(pll->base + PLL_DENOMINATOR);
-+	mfd = pll_denominator & PLL_MFD_MASK;
-+
-+	pll_div = readl_relaxed(pll->base + PLL_DIV);
-+	mfi = (pll_div & PLL_MFI_MASK) >> PLL_MFI_SHIFT;
-+
-+	rdiv = (pll_div & PLL_RDIV_MASK) >> PLL_RDIV_SHIFT;
-+	rdiv = rdiv + 1;
-+	odiv = pll_div & PLL_ODIV_MASK;
-+	switch (odiv) {
-+	case 0:
-+		odiv = 2;
-+		break;
-+	case 1:
-+		odiv = 3;
-+		break;
-+	default:
-+		break;
++	for (i = 0; i < ARRAY_SIZE(root_array); i++) {
++		root = &root_array[i];
++		clks[root->clk] = imx93_clk_composite_flags(root->name,
++							    parent_names[root->sel],
++							    4, base + root->off,
++							    root->flags);
 +	}
 +
-+	/*
-+	 * Sometimes, the recalculated rate has deviation due to
-+	 * the frac part. So find the accurate pll rate from the table
-+	 * first, if no match rate in the table, use the rate calculated
-+	 * from the equation below.
-+	 */
-+	for (i = 0; i < pll->rate_count; i++) {
-+		if (rate_table[i].mfn == mfn && rate_table[i].mfi == mfi &&
-+		    rate_table[i].mfd == mfd && rate_table[i].rdiv == rdiv &&
-+		    rate_table[i].odiv == odiv)
-+			rate = rate_table[i].rate;
++	for (i = 0; i < ARRAY_SIZE(ccgr_array); i++) {
++		ccgr = &ccgr_array[i];
++		clks[ccgr->clk] = imx_clk_hw_gate4_flags(ccgr->name,
++							 ccgr->parent_name,
++							 base + ccgr->off, 0,
++							 ccgr->flags);
 +	}
 +
-+	/* Fvco = 𝐹𝑟𝑒𝑓∙(𝑀𝐹𝐼+𝑀𝐹𝑁/𝑀𝐹𝐷) */
-+	fvco = fvco * mfi + fvco * mfn / mfd;
++	imx_check_clk_hws(clks, IMX93_CLK_END);
 +
-+	do_div(fvco, rdiv * odiv);
-+
-+	return rate ? (unsigned long) rate : (unsigned long)fvco;
-+}
-+
-+static int clk_fracn_gppll_wait_lock(struct clk_fracn_gppll *pll)
-+{
-+	u32 val;
-+
-+	return readl_poll_timeout(pll->base + PLL_STATUS, val,
-+				  val & LOCK_STATUS, 0, LOCK_TIMEOUT_US);
-+}
-+
-+static int clk_fracn_gppll_set_rate(struct clk_hw *hw, unsigned long drate,
-+				    unsigned long prate)
-+{
-+	struct clk_fracn_gppll *pll = to_clk_fracn_gppll(hw);
-+	const struct imx_fracn_gppll_rate_table *rate;
-+	u32 tmp, pll_div, ana_mfn;
-+	int ret;
-+
-+	rate = imx_get_pll_settings(pll, drate);
-+	if (!rate) {
-+		pr_err("%s: Invalid rate : %lu for pll clk %s\n", __func__,
-+			drate, clk_hw_get_name(hw));
-+		return -EINVAL;
++	ret = of_clk_add_hw_provider(np, of_clk_hw_onecell_get, clk_hw_data);
++	if (ret < 0) {
++		dev_err(dev, "failed to register clks for i.MX93\n");
++		goto unregister_hws;
 +	}
-+
-+	/* Disable output */
-+	tmp = readl_relaxed(pll->base + PLL_CTRL);
-+	tmp &= ~CLKMUX_EN;
-+	writel_relaxed(tmp, pll->base + PLL_CTRL);
-+
-+	/* Power Down */
-+	tmp &= ~POWERUP_MASK;
-+	writel_relaxed(tmp, pll->base + PLL_CTRL);
-+
-+	/* Disable BYPASS */
-+	tmp &= ~CLKMUX_BYPASS;
-+	writel_relaxed(tmp, pll->base + PLL_CTRL);
-+
-+	pll_div = (rate->rdiv << PLL_RDIV_SHIFT) | rate->odiv | (rate->mfi << PLL_MFI_SHIFT);
-+	writel_relaxed(pll_div, pll->base + PLL_DIV);
-+	writel_relaxed(rate->mfd, pll->base + PLL_DENOMINATOR);
-+	writel_relaxed(rate->mfn << PLL_MFN_SHIFT, pll->base + PLL_NUMERATOR);
-+
-+	/* Wait for 5us according to fracn mode pll doc */
-+	udelay(5);
-+
-+	/* Enable Powerup */
-+	tmp |= POWERUP_MASK;
-+	writel_relaxed(tmp, pll->base + PLL_CTRL);
-+
-+	/* Wait Lock*/
-+	ret = clk_fracn_gppll_wait_lock(pll);
-+	if (ret)
-+		return ret;
-+
-+	/* Enable output */
-+	tmp |= CLKMUX_EN;
-+	writel_relaxed(tmp, pll->base + PLL_CTRL);
-+
-+	ana_mfn = (readl_relaxed(pll->base + PLL_STATUS) & PLL_MFN_MASK) >> PLL_MFN_SHIFT;
-+
-+	WARN(ana_mfn != rate->mfn, "ana_mfn != rate->mfn\n");
 +
 +	return 0;
++
++unregister_hws:
++	imx_unregister_hw_clocks(clks, IMX93_CLK_END);
++
++	return ret;
 +}
 +
-+static int clk_fracn_gppll_prepare(struct clk_hw *hw)
-+{
-+	struct clk_fracn_gppll *pll = to_clk_fracn_gppll(hw);
-+	u32 val;
-+	int ret;
-+
-+	val = readl_relaxed(pll->base + PLL_CTRL);
-+	if (val & POWERUP_MASK)
-+		return 0;
-+
-+	val |= CLKMUX_BYPASS;
-+	writel_relaxed(val, pll->base + PLL_CTRL);
-+
-+	val |= POWERUP_MASK;
-+	writel_relaxed(val, pll->base + PLL_CTRL);
-+
-+	val |= CLKMUX_EN;
-+	writel_relaxed(val, pll->base + PLL_CTRL);
-+
-+	ret = clk_fracn_gppll_wait_lock(pll);
-+	if (ret)
-+		return ret;
-+
-+	val &= ~CLKMUX_BYPASS;
-+	writel_relaxed(val, pll->base + PLL_CTRL);
-+
-+	return 0;
-+}
-+
-+static int clk_fracn_gppll_is_prepared(struct clk_hw *hw)
-+{
-+	struct clk_fracn_gppll *pll = to_clk_fracn_gppll(hw);
-+	u32 val;
-+
-+	val = readl_relaxed(pll->base + PLL_CTRL);
-+
-+	return (val & POWERUP_MASK) ? 1 : 0;
-+}
-+
-+static void clk_fracn_gppll_unprepare(struct clk_hw *hw)
-+{
-+	struct clk_fracn_gppll *pll = to_clk_fracn_gppll(hw);
-+	u32 val;
-+
-+	val = readl_relaxed(pll->base + PLL_CTRL);
-+	val &= ~POWERUP_MASK;
-+	writel_relaxed(val, pll->base + PLL_CTRL);
-+}
-+
-+static const struct clk_ops clk_fracn_gppll_ops = {
-+	.prepare	= clk_fracn_gppll_prepare,
-+	.unprepare	= clk_fracn_gppll_unprepare,
-+	.is_prepared	= clk_fracn_gppll_is_prepared,
-+	.recalc_rate	= clk_fracn_gppll_recalc_rate,
-+	.round_rate	= clk_fracn_gppll_round_rate,
-+	.set_rate	= clk_fracn_gppll_set_rate,
++static const struct of_device_id imx93_clk_of_match[] = {
++	{ .compatible = "fsl,imx93-ccm" },
++	{ /* Sentinel */ },
 +};
++MODULE_DEVICE_TABLE(of, imx93_clk_of_match);
 +
-+struct clk_hw *imx_clk_fracn_gppll(const char *name, const char *parent_name, void __iomem *base,
-+				   const struct imx_fracn_gppll_clk *pll_clk)
-+{
-+	struct clk_fracn_gppll *pll;
-+	struct clk_hw *hw;
-+	struct clk_init_data init;
-+	int ret;
-+	u32 val;
-+
-+	pll = kzalloc(sizeof(*pll), GFP_KERNEL);
-+	if (!pll)
-+		return ERR_PTR(-ENOMEM);
-+
-+	init.name = name;
-+	init.flags = pll_clk->flags;
-+	init.parent_names = &parent_name;
-+	init.num_parents = 1;
-+	init.ops = &clk_fracn_gppll_ops;
-+
-+	pll->base = base;
-+	pll->hw.init = &init;
-+	pll->rate_table = pll_clk->rate_table;
-+	pll->rate_count = pll_clk->rate_count;
-+
-+	hw = &pll->hw;
-+
-+	ret = clk_hw_register(NULL, hw);
-+	if (ret) {
-+		pr_err("%s: failed to register pll %s %d\n", __func__, name, ret);
-+		kfree(pll);
-+		return ERR_PTR(ret);
-+	}
-+
-+	return hw;
-+}
-+EXPORT_SYMBOL_GPL(imx_clk_fracn_gppll);
-diff --git a/drivers/clk/imx/clk.h b/drivers/clk/imx/clk.h
-index 63eb7c53b123..a7cbbcd1a3f4 100644
---- a/drivers/clk/imx/clk.h
-+++ b/drivers/clk/imx/clk.h
-@@ -72,6 +72,27 @@ extern struct imx_pll14xx_clk imx_1416x_pll;
- extern struct imx_pll14xx_clk imx_1443x_pll;
- extern struct imx_pll14xx_clk imx_1443x_dram_pll;
- 
-+/* NOTE: Rate table should be kept sorted in descending order. */
-+struct imx_fracn_gppll_rate_table {
-+	unsigned int rate;
-+	unsigned int mfi;
-+	unsigned int mfn;
-+	unsigned int mfd;
-+	unsigned int rdiv;
-+	unsigned int odiv;
++static struct platform_driver imx93_clk_driver = {
++	.probe = imx93_clocks_probe,
++	.driver = {
++		.name = "imx93-ccm",
++		.suppress_bind_attrs = true,
++		.of_match_table = of_match_ptr(imx93_clk_of_match),
++	},
 +};
-+
-+struct imx_fracn_gppll_clk {
-+	const struct imx_fracn_gppll_rate_table *rate_table;
-+	int rate_count;
-+	int flags;
-+};
-+
-+struct clk_hw *imx_clk_fracn_gppll(const char *name, const char *parent_name, void __iomem *base,
-+				   const struct imx_fracn_gppll_clk *pll_clk);
-+
-+extern struct imx_fracn_gppll_clk imx_fracn_gppll;
-+
- #define imx_clk_cpu(name, parent_name, div, mux, pll, step) \
- 	to_clk(imx_clk_hw_cpu(name, parent_name, div, mux, pll, step))
- 
++module_platform_driver(imx93_clk_driver);
 -- 
 2.25.1
 

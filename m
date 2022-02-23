@@ -2,24 +2,24 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C24D84C1494
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 14:45:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AC804C148D
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 14:45:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241142AbiBWNp6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 08:45:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42432 "EHLO
+        id S237614AbiBWNpt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 08:45:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241066AbiBWNos (ORCPT
+        with ESMTP id S241072AbiBWNot (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 08:44:48 -0500
-Received: from ssl.serverraum.org (ssl.serverraum.org [IPv6:2a01:4f8:151:8464::1:2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EECBAC918
+        Wed, 23 Feb 2022 08:44:49 -0500
+Received: from ssl.serverraum.org (ssl.serverraum.org [176.9.125.105])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AA77AC91E
         for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 05:44:13 -0800 (PST)
 Received: from mwalle01.kontron.local. (unknown [213.135.10.150])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id 7902222453;
+        by ssl.serverraum.org (Postfix) with ESMTPSA id AAE7B22456;
         Wed, 23 Feb 2022 14:44:11 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
         t=1645623851;
@@ -27,10 +27,10 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail20160613
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=CqhkHAkkrKiJhs+qhvMCYUbLSrfnVv6IBJOqUiinTes=;
-        b=d2g4oSzifZXDqqqNQEDrKH1FEmLMbOdvlU6SBHr8JPpAlUXTSw16Gh2K0VFQTCA+zBLvRn
-        zaIt7v4jsPeozeljez8eIR6FGdNUovhZUvHZ99pYL52GFbv3XFRvqLuBLcyXFogSNRPBbc
-        kErTuogFUCOCo/vOdUS19Z5PzlKhkXw=
+        bh=FPwyUqw9bIye7MTeMw3+l2+GgFM/jhis7VAg9kKcJLA=;
+        b=PlAXWhAEJ4bl6ttd0i5BJfrgjJ5g+AwEUcovpu7oaBWPOGcwupeW5s0zWbVwZJKE8M1YEZ
+        xZVl/rnvyXS9Gn5yWUP36cBxOpAJCFbmCfSebyGKDBJvPWwSoF8VaTL3ay6nczucK2D+Bg
+        ua3jANmxVh2qqUcRYApGrCo8I137PAs=
 From:   Michael Walle <michael@walle.cc>
 To:     linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org
 Cc:     Tudor Ambarus <tudor.ambarus@microchip.com>,
@@ -39,9 +39,9 @@ Cc:     Tudor Ambarus <tudor.ambarus@microchip.com>,
         Richard Weinberger <richard@nod.at>,
         Vignesh Raghavendra <vigneshr@ti.com>,
         yaliang.wang@windriver.com, Michael Walle <michael@walle.cc>
-Subject: [PATCH v5 16/32] mtd: spi-nor: xmc: unify function names
-Date:   Wed, 23 Feb 2022 14:43:42 +0100
-Message-Id: <20220223134358.1914798-17-michael@walle.cc>
+Subject: [PATCH v5 17/32] mtd: spi-nor: slightly refactor the spi_nor_setup()
+Date:   Wed, 23 Feb 2022 14:43:43 +0100
+Message-Id: <20220223134358.1914798-18-michael@walle.cc>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220223134358.1914798-1-michael@walle.cc>
 References: <20220223134358.1914798-1-michael@walle.cc>
@@ -57,42 +57,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-To avoid name clashes unify all the function and static object names and
-use one of the following prefixes which should be sufficiently unique:
- - <vendor>_nor_
- - <flash_family>_nor_
- - <flash_part>_
+Instead of always using a function pointer (and initializing it to our
+default), just call the default function if the flash didn't set its own
+one. That will make the call flow easier to follow.
 
-There are no functional changes.
+Also mark the parameter as optional now.
 
 Signed-off-by: Michael Walle <michael@walle.cc>
-Acked-by: Pratyush Yadav <p.yadav@ti.com>
+Reviewed-by: Tudor Ambarus <tudor.ambarus@microchip.com>
+Reviewed-by: Pratyush Yadav <p.yadav@ti.com>
 ---
- drivers/mtd/spi-nor/xmc.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/mtd/spi-nor/core.c | 10 +++++-----
+ drivers/mtd/spi-nor/core.h |  8 ++++----
+ 2 files changed, 9 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/mtd/spi-nor/xmc.c b/drivers/mtd/spi-nor/xmc.c
-index 2992af03cb0a..051411e86339 100644
---- a/drivers/mtd/spi-nor/xmc.c
-+++ b/drivers/mtd/spi-nor/xmc.c
-@@ -8,7 +8,7 @@
+diff --git a/drivers/mtd/spi-nor/core.c b/drivers/mtd/spi-nor/core.c
+index 04ea180118e3..4d2036cdce42 100644
+--- a/drivers/mtd/spi-nor/core.c
++++ b/drivers/mtd/spi-nor/core.c
+@@ -2532,11 +2532,12 @@ static int spi_nor_setup(struct spi_nor *nor,
+ {
+ 	int ret;
  
- #include "core.h"
+-	if (nor->params->setup) {
++	if (nor->params->setup)
+ 		ret = nor->params->setup(nor, hwcaps);
+-		if (ret)
+-			return ret;
+-	}
++	else
++		ret = spi_nor_default_setup(nor, hwcaps);
++	if (ret)
++		return ret;
  
--static const struct flash_info xmc_parts[] = {
-+static const struct flash_info xmc_nor_parts[] = {
- 	/* XMC (Wuhan Xinxin Semiconductor Manufacturing Corp.) */
- 	{ "XM25QH64A", INFO(0x207017, 0, 64 * 1024, 128)
- 		NO_SFDP_FLAGS(SECT_4K | SPI_NOR_DUAL_READ |
-@@ -20,6 +20,6 @@ static const struct flash_info xmc_parts[] = {
+ 	return spi_nor_set_addr_width(nor);
+ }
+@@ -2786,7 +2787,6 @@ static void spi_nor_init_default_params(struct spi_nor *nor)
  
- const struct spi_nor_manufacturer spi_nor_xmc = {
- 	.name = "xmc",
--	.parts = xmc_parts,
--	.nparts = ARRAY_SIZE(xmc_parts),
-+	.parts = xmc_nor_parts,
-+	.nparts = ARRAY_SIZE(xmc_nor_parts),
- };
+ 	params->quad_enable = spi_nor_sr2_bit1_quad_enable;
+ 	params->set_4byte_addr_mode = spansion_set_4byte_addr_mode;
+-	params->setup = spi_nor_default_setup;
+ 	params->otp.org = &info->otp_org;
+ 
+ 	/* Default to 16-bit Write Status (01h) Command */
+diff --git a/drivers/mtd/spi-nor/core.h b/drivers/mtd/spi-nor/core.h
+index 2afb610853a9..4fe16b5aa3f5 100644
+--- a/drivers/mtd/spi-nor/core.h
++++ b/drivers/mtd/spi-nor/core.h
+@@ -257,10 +257,10 @@ struct spi_nor_otp {
+  * @convert_addr:	converts an absolute address into something the flash
+  *                      will understand. Particularly useful when pagesize is
+  *                      not a power-of-2.
+- * @setup:              configures the SPI NOR memory. Useful for SPI NOR
+- *                      flashes that have peculiarities to the SPI NOR standard
+- *                      e.g. different opcodes, specific address calculation,
+- *                      page size, etc.
++ * @setup:		(optional) configures the SPI NOR memory. Useful for
++ *			SPI NOR flashes that have peculiarities to the SPI NOR
++ *			standard e.g. different opcodes, specific address
++ *			calculation, page size, etc.
+  * @locking_ops:	SPI NOR locking methods.
+  */
+ struct spi_nor_flash_parameter {
 -- 
 2.30.2
 

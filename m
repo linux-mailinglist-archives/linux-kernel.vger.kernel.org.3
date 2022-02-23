@@ -2,111 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 920074C0673
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 01:54:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EFF314C0679
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 01:55:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236505AbiBWAyl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 19:54:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40738 "EHLO
+        id S236508AbiBWA4Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 19:56:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234184AbiBWAyk (ORCPT
+        with ESMTP id S234184AbiBWA4O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 19:54:40 -0500
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD85342485;
-        Tue, 22 Feb 2022 16:54:13 -0800 (PST)
-Received: from kwepemi100001.china.huawei.com (unknown [172.30.72.53])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4K3HVs3k6Xz1FDVN;
-        Wed, 23 Feb 2022 08:49:41 +0800 (CST)
-Received: from kwepemm600013.china.huawei.com (7.193.23.68) by
- kwepemi100001.china.huawei.com (7.221.188.215) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Wed, 23 Feb 2022 08:54:11 +0800
-Received: from [10.174.178.208] (10.174.178.208) by
- kwepemm600013.china.huawei.com (7.193.23.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Wed, 23 Feb 2022 08:54:10 +0800
-Subject: Re: [PATCH 5.4 00/80] 5.4.181-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <stable@vger.kernel.org>, <torvalds@linux-foundation.org>,
-        <akpm@linux-foundation.org>, <linux@roeck-us.net>,
-        <shuah@kernel.org>, <patches@kernelci.org>,
-        <lkft-triage@lists.linaro.org>, <pavel@denx.de>,
-        <jonathanh@nvidia.com>, <f.fainelli@gmail.com>,
-        <sudipm.mukherjee@gmail.com>, <slade@sladewatkins.com>
-References: <20220221084915.554151737@linuxfoundation.org>
-From:   Samuel Zou <zou_wei@huawei.com>
-Message-ID: <26742b63-3931-ca54-d4df-0334f162e1f8@huawei.com>
-Date:   Wed, 23 Feb 2022 08:54:09 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Tue, 22 Feb 2022 19:56:14 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3067742494;
+        Tue, 22 Feb 2022 16:55:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=UHKUXaQs83hzUDt8v+U00kEJvR6ZOsIIGcwG7EVaZYM=; b=ZZ8XaVHr7DtXsF4mq/JhD+5e19
+        PTQkrxYd2u/tKyqslo/SH7ec5rFaZ4v251YwFUYA4y1psL20VLIJ3+gxLLpZ7KaaOy8EIwgg16Urb
+        o7cyMzQa6dLO9oLH4usZX17Z4/TP3HAUiVQXi5ZK5jrNaIwWFywVM8LCGcsSlR1Ouao5988oG8pJ6
+        fMnQLJYRyyCbUT4M2ag1lWIhqdUuu8oQylCt9m6iMM4oDa1NwxKH2Cq+PYQGORzHbZvXh7BIYGcPT
+        OoQQLhBr4cW8bmu7IwxukZ+cYv3EPK4sVSKCaIHulOY2QHYiLI6nVQOsFhzg4cuQxeMIEADaX/rcY
+        PdsLQGqA==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nMfwT-00C2dS-Pt; Wed, 23 Feb 2022 00:55:41 +0000
+Date:   Tue, 22 Feb 2022 16:55:41 -0800
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Nitesh Shetty <nj.shetty@samsung.com>
+Cc:     hch@lst.de, javier@javigon.com, chaitanyak@nvidia.com,
+        linux-block@vger.kernel.org, linux-scsi@vger.kernel.org,
+        dm-devel@redhat.com, linux-nvme@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, axboe@kernel.dk,
+        msnitzer@redhat.com, bvanassche@acm.org,
+        martin.petersen@oracle.com, hare@suse.de, kbusch@kernel.org,
+        Frederick.Knight@netapp.com, osandov@fb.com,
+        lsf-pc@lists.linux-foundation.org, djwong@kernel.org,
+        josef@toxicpanda.com, clm@fb.com, dsterba@suse.com, tytso@mit.edu,
+        jack@suse.com, joshi.k@samsung.com, arnav.dawn@samsung.com,
+        nitheshshetty@gmail.com, SelvaKumar S <selvakuma.s1@samsung.com>,
+        Alasdair Kergon <agk@redhat.com>,
+        Mike Snitzer <snitzer@redhat.com>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        James Smart <james.smart@broadcom.com>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 02/10] block: Introduce queue limits for copy-offload
+ support
+Message-ID: <YhWGDUyQkUcE6itt@bombadil.infradead.org>
+References: <20220214080002.18381-1-nj.shetty@samsung.com>
+ <CGME20220214080605epcas5p16868dae515a6355cf9fecf22df4f3c3d@epcas5p1.samsung.com>
+ <20220214080002.18381-3-nj.shetty@samsung.com>
+ <20220217090700.b7n33vbkx5s4qbfq@garbanzo>
+ <20220217125901.GA3781@test-zns>
 MIME-Version: 1.0
-In-Reply-To: <20220221084915.554151737@linuxfoundation.org>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.208]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- kwepemm600013.china.huawei.com (7.193.23.68)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220217125901.GA3781@test-zns>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Feb 17, 2022 at 06:29:01PM +0530, Nitesh Shetty wrote:
+>  Thu, Feb 17, 2022 at 01:07:00AM -0800, Luis Chamberlain wrote:
+> > The subject says limits for copy-offload...
+> > 
+> > On Mon, Feb 14, 2022 at 01:29:52PM +0530, Nitesh Shetty wrote:
+> > > Add device limits as sysfs entries,
+> > >         - copy_offload (RW)
+> > >         - copy_max_bytes (RW)
+> > >         - copy_max_hw_bytes (RO)
+> > >         - copy_max_range_bytes (RW)
+> > >         - copy_max_range_hw_bytes (RO)
+> > >         - copy_max_nr_ranges (RW)
+> > >         - copy_max_nr_ranges_hw (RO)
+> > 
+> > Some of these seem like generic... and also I see a few more max_hw ones
+> > not listed above...
+> >
+> queue_limits and sysfs entries are differently named.
+> All sysfs entries start with copy_* prefix. Also it makes easy to lookup
+> all copy sysfs.
+> For queue limits naming, I tried to following existing queue limit
+> convention (like discard).
 
+My point was that your subject seems to indicate the changes are just
+for copy-offload, but you seem to be adding generic queue limits as
+well. Is that correct? If so then perhaps the subject should be changed
+or the patch split up.
 
-On 2022/2/21 16:48, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.4.181 release.
-> There are 80 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+> > > +static ssize_t queue_copy_offload_store(struct request_queue *q,
+> > > +				       const char *page, size_t count)
+> > > +{
+> > > +	unsigned long copy_offload;
+> > > +	ssize_t ret = queue_var_store(&copy_offload, page, count);
+> > > +
+> > > +	if (ret < 0)
+> > > +		return ret;
+> > > +
+> > > +	if (copy_offload && !q->limits.max_hw_copy_sectors)
+> > > +		return -EINVAL;
+> > 
+> > 
+> > If the kernel schedules, copy_offload may still be true and
+> > max_hw_copy_sectors may be set to 0. Is that an issue?
+> >
 > 
-> Responses should be made by Wed, 23 Feb 2022 08:48:58 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.4.181-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.4.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
-> 
+> This check ensures that, we dont enable offload if device doesnt support
+> offload. I feel it shouldn't be an issue.
 
-Tested on arm64 and x86 for 5.4.181-rc1,
+My point was this:
 
-Kernel repo:
-https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-Branch: linux-5.4.y
-Version: 5.4.181-rc1
-Commit: 04ffc48b9c61bf5eb49daca8b489e326d6aed975
-Compiler: gcc version 7.3.0 (GCC)
+CPU1                                       CPU2
+Time
+1) if (copy_offload 
+2)    ---> preemption so it schedules      
+3)    ---> some other high priority task  Sets q->limits.max_hw_copy_sectors to 0
+4) && !q->limits.max_hw_copy_sectors)
 
-arm64:
---------------------------------------------------------------------
-Testcase Result Summary:
-total: 9008
-passed: 9008
-failed: 0
-timeout: 0
---------------------------------------------------------------------
+Can something bad happen if we allow for this?
 
-x86:
---------------------------------------------------------------------
-Testcase Result Summary:
-total: 9008
-passed: 9008
-failed: 0
-timeout: 0
---------------------------------------------------------------------
-
-Tested-by: Hulk Robot <hulkrobot@huawei.com>

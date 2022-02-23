@@ -2,113 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 185C74C1D6A
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 21:59:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B6F34C1D6C
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 22:00:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242045AbiBWVAQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 16:00:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37004 "EHLO
+        id S242071AbiBWVA0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 16:00:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237286AbiBWVAP (ORCPT
+        with ESMTP id S242066AbiBWVAW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 16:00:15 -0500
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1FB44B862;
-        Wed, 23 Feb 2022 12:59:47 -0800 (PST)
-Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21NKmaWD035609;
-        Wed, 23 Feb 2022 20:59:35 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=2LdcpAy+utxkttn6kTitnDCobiBmZy0SLefekXBUf78=;
- b=WVU2muXcA3FmmTAqzpEr6d3B/RGAvBlZ/Q6JZ+0fiQ8R4nSc6OW2cz4ydDVjh2Dla4cN
- nWdiayvcmpukg5+Rtwj5sMceaKT13XH/fS4+vemAPzNJWV694qoOxbUmPwBrRNkC0ewB
- Sc0cnQC7Tf/6dMYw/y6FnSA2o1rSGxsXc+t9wacnwn1EPImDyMi1tdCtlhjoAp3KH7tm
- +4wGBm8yty7FDZLqVUzjHelAobo54Z7jdVgTTMTk8C9lNc4x9+kTZDg8JuYpXd3HBLAA
- KNXe1IwhKeU5r4E/U4yajmdt8N4+UoY3HPgKsAUfNOxmJy0M7cTdVqqltfcAe12x30Fu 3A== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3edv9p8577-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 23 Feb 2022 20:59:35 +0000
-Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 21NKn3hc038032;
-        Wed, 23 Feb 2022 20:59:34 GMT
-Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3edv9p856r-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 23 Feb 2022 20:59:34 +0000
-Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
-        by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 21NKv6w7014410;
-        Wed, 23 Feb 2022 20:59:32 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma01fra.de.ibm.com with ESMTP id 3ear69ayw4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 23 Feb 2022 20:59:32 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 21NKmnja35979650
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 23 Feb 2022 20:48:49 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 12FADAE051;
-        Wed, 23 Feb 2022 20:59:29 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 71476AE045;
-        Wed, 23 Feb 2022 20:59:26 +0000 (GMT)
-Received: from sig-9-65-80-154.ibm.com (unknown [9.65.80.154])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed, 23 Feb 2022 20:59:26 +0000 (GMT)
-Message-ID: <9efd4502617e39280ca47a91d395eae154a328a4.camel@linux.ibm.com>
-Subject: Re: [PATCH v10 26/27] ima: Limit number of policy rules in
- non-init_ima_ns
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Stefan Berger <stefanb@linux.ibm.com>,
-        linux-integrity@vger.kernel.org
-Cc:     serge@hallyn.com, christian.brauner@ubuntu.com,
-        containers@lists.linux.dev, dmitry.kasatkin@gmail.com,
-        ebiederm@xmission.com, krzysztof.struczynski@huawei.com,
-        roberto.sassu@huawei.com, mpeters@redhat.com, lhinds@redhat.com,
-        lsturman@redhat.com, puiterwi@redhat.com, jejb@linux.ibm.com,
-        jamjoom@us.ibm.com, linux-kernel@vger.kernel.org,
-        paul@paul-moore.com, rgb@redhat.com,
-        linux-security-module@vger.kernel.org, jmorris@namei.org
-Date:   Wed, 23 Feb 2022 15:59:25 -0500
-In-Reply-To: <46156a90-d6a6-a0cc-247a-3ceb29f1cf75@linux.ibm.com>
-References: <20220201203735.164593-1-stefanb@linux.ibm.com>
-         <20220201203735.164593-27-stefanb@linux.ibm.com>
-         <5e4a862917785972281bbcb483404da01b71e801.camel@linux.ibm.com>
-         <479f09e7-0d39-0281-45ef-5cce4861d24d@linux.ibm.com>
-         <8a4f9cb6cab5ba04eb61e346d0fca16efa4c6703.camel@linux.ibm.com>
-         <46156a90-d6a6-a0cc-247a-3ceb29f1cf75@linux.ibm.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: e4l1hm_wtfZHw3kTXQZt4jDBc-2VjQ1Q
-X-Proofpoint-GUID: 0KJIuGvk0GyISdOPcS7gpGWKAwRGvA0h
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-02-23_09,2022-02-23_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 malwarescore=0
- adultscore=0 impostorscore=0 priorityscore=1501 mlxscore=0
- lowpriorityscore=0 spamscore=0 suspectscore=0 bulkscore=0 mlxlogscore=999
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2201110000 definitions=main-2202230116
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 23 Feb 2022 16:00:22 -0500
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70C744D257
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 12:59:53 -0800 (PST)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 21NKxWg1026937;
+        Wed, 23 Feb 2022 14:59:32 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1645649972;
+        bh=J9YTkhnhayU3ZR7csP9bS5fBrAnr5xkdso1tUysRVEI=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=ZhBycOXy1r3HLmU/UnRa6cKbubus+bcbAfc0WMXHWOQOlSNlAy58YLZbChGLTZR1Z
+         8BIF2eLa7PgcovPWYSJ5pVlx0/fp4jgCuS0fIr/OpDUiLLDDUHInlrrO6OxpOsghoD
+         CcpRpAeIbHZN5xe5CyKZnnyslGprN5BilIkKtu+Q=
+Received: from DLEE114.ent.ti.com (dlee114.ent.ti.com [157.170.170.25])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 21NKxWbb078114
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 23 Feb 2022 14:59:32 -0600
+Received: from DLEE103.ent.ti.com (157.170.170.33) by DLEE114.ent.ti.com
+ (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Wed, 23
+ Feb 2022 14:59:32 -0600
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE103.ent.ti.com
+ (157.170.170.33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Wed, 23 Feb 2022 14:59:29 -0600
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 21NKxSxO124392;
+        Wed, 23 Feb 2022 14:59:29 -0600
+Date:   Thu, 24 Feb 2022 02:29:27 +0530
+From:   Pratyush Yadav <p.yadav@ti.com>
+To:     Tudor Ambarus <tudor.ambarus@microchip.com>
+CC:     <michael@walle.cc>, <Takahiro.Kuwano@infineon.com>,
+        <miquel.raynal@bootlin.com>, <richard@nod.at>, <vigneshr@ti.com>,
+        <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        <nicolas.ferre@microchip.com>, <zhengxunli@mxic.com.tw>,
+        <jaimeliao@mxic.com.tw>, <Bacem.Daassi@infineon.com>
+Subject: Re: [PATCH 1/3] mtd: spi-nor: core: Add helpers to read/write any
+ register
+Message-ID: <20220223205927.axuejgdsnvn4jj65@ti.com>
+References: <20220210023334.408926-1-tudor.ambarus@microchip.com>
+ <20220210023334.408926-2-tudor.ambarus@microchip.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20220210023334.408926-2-tudor.ambarus@microchip.com>
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-02-23 at 15:45 -0500, Stefan Berger wrote:
+On 10/02/22 04:33AM, Tudor Ambarus wrote:
+> There are manufacturers that use registers indexed by address. Some of
+> them support "read/write any register" opcodes. Provide core methods that
+> can be used by all manufacturers. SPI NOR controller ops are intentionally
+> not supported as we intend to move all the SPI NOR controller drivers
+> under the SPI subsystem.
+> 
+> Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
+> ---
+>  drivers/mtd/spi-nor/core.c | 41 ++++++++++++++++++++++++++++++++++++++
+>  drivers/mtd/spi-nor/core.h |  4 ++++
+>  2 files changed, 45 insertions(+)
+> 
+> diff --git a/drivers/mtd/spi-nor/core.c b/drivers/mtd/spi-nor/core.c
+> index 7d5e3acb0ae7..d394179689e6 100644
+> --- a/drivers/mtd/spi-nor/core.c
+> +++ b/drivers/mtd/spi-nor/core.c
+> @@ -307,6 +307,47 @@ ssize_t spi_nor_write_data(struct spi_nor *nor, loff_t to, size_t len,
+>  	return nor->controller_ops->write(nor, to, len, buf);
+>  }
+>  
+> +/**
+> + * spi_nor_read_reg() - read register to flash memory
 
-> avoid huge kernel memory consumption in the case that a cgroup limit for 
-> memory was not set up.
+Nitpick: s/to/from/ ?
 
-Ok, that is the motivation for the this patch.
+> + * @nor:        pointer to 'struct spi_nor'.
+> + * @op:		SPI memory operation. op->data.buf must be DMA-able.
+> + * @proto:	SPI protocol to use for the register operation.
+> + *
+> + * Return: zero on success, -errno otherwise
+> + */
+> +int spi_nor_read_reg(struct spi_nor *nor, struct spi_mem_op *op,
+> +		     enum spi_nor_protocol proto)
+> +{
+> +	if (!nor->spimem)
+> +		return -EOPNOTSUPP;
+> +
+> +	spi_nor_spimem_setup_op(nor, op, proto);
+> +	return spi_nor_spimem_exec_op(nor, op);
+> +}
+> +
+> +/**
+> + * spi_nor_write_reg() - write register to flash memory
+> + * @nor:        pointer to 'struct spi_nor'
+> + * @op:		SPI memory operation. op->data.buf must be DMA-able.
+> + * @proto:	SPI protocol to use for the register operation.
+> + *
+> + * Return: zero on success, -errno otherwise
+> + */
+> +int spi_nor_write_reg(struct spi_nor *nor, struct spi_mem_op *op,
+> +		      enum spi_nor_protocol proto)
+> +{
+> +	int ret;
+> +
+> +	if (!nor->spimem)
+> +		return -EOPNOTSUPP;
+> +
+> +	ret = spi_nor_write_enable(nor);
+> +	if (ret)
+> +		return ret;
 
+Nitpick: Add a blank line here.
+
+> +	spi_nor_spimem_setup_op(nor, op, proto);
+> +	return spi_nor_spimem_exec_op(nor, op);
+> +}
+> +
+>  /**
+>   * spi_nor_write_enable() - Set write enable latch with Write Enable command.
+>   * @nor:	pointer to 'struct spi_nor'.
+> diff --git a/drivers/mtd/spi-nor/core.h b/drivers/mtd/spi-nor/core.h
+> index cbfb4fa7647f..c728454b5424 100644
+> --- a/drivers/mtd/spi-nor/core.h
+> +++ b/drivers/mtd/spi-nor/core.h
+> @@ -578,6 +578,10 @@ ssize_t spi_nor_read_data(struct spi_nor *nor, loff_t from, size_t len,
+>  			  u8 *buf);
+>  ssize_t spi_nor_write_data(struct spi_nor *nor, loff_t to, size_t len,
+>  			   const u8 *buf);
+> +int spi_nor_read_reg(struct spi_nor *nor, struct spi_mem_op *op,
+> +		     enum spi_nor_protocol proto);
+> +int spi_nor_write_reg(struct spi_nor *nor, struct spi_mem_op *op,
+> +		      enum spi_nor_protocol proto);
+>  int spi_nor_erase_sector(struct spi_nor *nor, u32 addr);
+>  
+>  int spi_nor_otp_read_secr(struct spi_nor *nor, loff_t addr, size_t len, u8 *buf);
+
+Reviewed-by: Pratyush Yadav <p.yadav@ti.com>
+
+-- 
+Regards,
+Pratyush Yadav
+Texas Instruments Inc.

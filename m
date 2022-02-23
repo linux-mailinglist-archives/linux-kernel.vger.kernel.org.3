@@ -2,82 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F4634C1FCB
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 00:37:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CA854C1FD4
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 00:38:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244883AbiBWXhs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 18:37:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58032 "EHLO
+        id S244898AbiBWXia (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 18:38:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244880AbiBWXhp (ORCPT
+        with ESMTP id S244873AbiBWXiX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 18:37:45 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B52535A5BA
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 15:37:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1645659435;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=8aSBb/VoBYcQvKUpDDSg+cPg7cKg8nOk6XOiSIXQhhk=;
-        b=b06AXcNdZZEfzKhWRc+jf79T/mDj9jFtRd8B1vIrjhvkG2EMbr+l6PRI36U+RzVjGPtOxC
-        bhybJUn6zxTbOrM+1041i3AnP35Kq6IGKcWtGUr5XMa6r5fwz1XFeBylpuXJaOgcBq5qbT
-        SJdqIbtdL0NrJ44pOSFO1NS51XEzVkA=
-Received: from mail-oo1-f72.google.com (mail-oo1-f72.google.com
- [209.85.161.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-244-fsl3q_7jOtGY1K1w0hgIqg-1; Wed, 23 Feb 2022 18:37:14 -0500
-X-MC-Unique: fsl3q_7jOtGY1K1w0hgIqg-1
-Received: by mail-oo1-f72.google.com with SMTP id a22-20020a4a8dd6000000b0031c074ab4b1so300227ool.14
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 15:37:14 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
-         :references:organization:mime-version:content-transfer-encoding;
-        bh=8aSBb/VoBYcQvKUpDDSg+cPg7cKg8nOk6XOiSIXQhhk=;
-        b=hwHkZzJ7uzUrYxy8mAX0xv9/LGZN0S0PITzR7gUkFOYocwBgbcch2aFnAnk0d3vLat
-         cZrqAM2faTGw29u9fFUJGhc4ZOFW6auZYhchzADRpmIG1Wov1FE3qAIXswbfkG1Fwvtd
-         OrCZVQdgjRCUqmgDl+iu3kt9ObNhPU7w0tySl4eatxjDMSPCFA3kTFmOZXN2vn6S0fVF
-         CvcW0fJU/R1TJHYkROge3xspksm1SZr+hmV74P27cm1HPE2qET+oWxoaQgQnNIhGMp/r
-         tnfVHQIHfzmooLT49KZuV/CtUgqkPaPwDuv+tO/TnzJqWE3y9pBC05B4MnqMXpBKXCdk
-         JrZQ==
-X-Gm-Message-State: AOAM532udHWl7+G2Q3z6+nmMXQfsdi7jp+NCf83xbQGMWiWcWDrIkmRi
-        gyZWaKFO3KhBWGiUR59oN9sQZ/zqNaKpcDzvABUwbfV7dUWwzQhHIpu/uNA6BhmEj4e47HCLgvE
-        nL/7z80tofgdwstoH1O8m2YDu
-X-Received: by 2002:a05:6808:1406:b0:2d4:f822:578e with SMTP id w6-20020a056808140600b002d4f822578emr3871oiv.338.1645659433456;
-        Wed, 23 Feb 2022 15:37:13 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJznNClK9/UStphScNTKJaAAaGciiCfDkCBkb4WaYTlVNDrZwr4pfhqYR+GafH5TyVRk/JPZCw==
-X-Received: by 2002:a05:6808:1406:b0:2d4:f822:578e with SMTP id w6-20020a056808140600b002d4f822578emr3863oiv.338.1645659433265;
-        Wed, 23 Feb 2022 15:37:13 -0800 (PST)
-Received: from redhat.com ([38.15.36.239])
-        by smtp.gmail.com with ESMTPSA id 5sm481997otf.30.2022.02.23.15.37.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Feb 2022 15:37:12 -0800 (PST)
-Date:   Wed, 23 Feb 2022 16:37:11 -0700
-From:   Alex Williamson <alex.williamson@redhat.com>
-To:     Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>
-Cc:     <kvm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-crypto@vger.kernel.org>, <jgg@nvidia.com>,
-        <cohuck@redhat.com>, <mgurtovoy@nvidia.com>, <yishaih@nvidia.com>,
-        <linuxarm@huawei.com>, <liulongfang@huawei.com>,
-        <prime.zeng@hisilicon.com>, <jonathan.cameron@huawei.com>,
-        <wangzhou1@hisilicon.com>
-Subject: Re: [PATCH v5 6/8] hisi_acc_vfio_pci: Add helper to retrieve the PF
- qm data
-Message-ID: <20220223163711.42c5d928.alex.williamson@redhat.com>
-In-Reply-To: <20220221114043.2030-7-shameerali.kolothum.thodi@huawei.com>
-References: <20220221114043.2030-1-shameerali.kolothum.thodi@huawei.com>
-        <20220221114043.2030-7-shameerali.kolothum.thodi@huawei.com>
-Organization: Red Hat
+        Wed, 23 Feb 2022 18:38:23 -0500
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FF425A0A9;
+        Wed, 23 Feb 2022 15:37:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1645659475; x=1677195475;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=NbdLTpNQ3jh8gkc2GZROWVng6uHNoRVJJzbDZHL59Lo=;
+  b=BOCmol2+RLRXA/59WL8Kv7QSlRcteHi1q8H66cVYLwMbyiL+EMlnSpll
+   aYmpHkzmwA35j8OL2fC157MS0qnwgIqDow1jPoNEWzKYihuwbuPuOoSS/
+   pHvaPi1JYWJ14i47vSHQnXLQcl70n3bpvkBS9HD89Flkr5b3Is3oQi1ja
+   Q=;
+Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 23 Feb 2022 15:37:54 -0800
+X-QCInternal: smtphost
+Received: from nasanex01b.na.qualcomm.com ([10.46.141.250])
+  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2022 15:37:54 -0800
+Received: from hu-eberman-lv.qualcomm.com (10.49.16.6) by
+ nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.15; Wed, 23 Feb 2022 15:37:53 -0800
+From:   Elliot Berman <quic_eberman@quicinc.com>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     Elliot Berman <quic_eberman@quicinc.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Murali Nalajala <quic_mnalajala@quicinc.com>,
+        Srivatsa Vaddagiri <quic_svaddagiri@quicinc.com>,
+        Carl van Schaik <quic_cvanscha@quicinc.com>,
+        Andy Gross <agross@kernel.org>, <linux-arm-msm@vger.kernel.org>
+Subject: [PATCH 00/11] Gunyah Hypervisor drivers
+Date:   Wed, 23 Feb 2022 15:37:18 -0800
+Message-ID: <20220223233729.1571114-1-quic_eberman@quicinc.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.49.16.6]
+X-ClientProxiedBy: nalasex01a.na.qualcomm.com (10.47.209.196) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,40 +63,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 21 Feb 2022 11:40:41 +0000
-Shameer Kolothum <shameerali.kolothum.thodi@huawei.com> wrote:
+Gunyah is a Type-1 hypervisor independent of any
+high-level OS kernel, and runs in a higher CPU privilege level. It does
+not depend on any lower-privileged OS kernel/code for its core
+functionality. This increases its security and can support a much smaller
+trusted computing base than Type-2 hypervisors. This series adds the initial
+support for Gunyah hypercalls, IPC via message queues, communication with the
+Gunyah Resource Manager to enable Gunyah's paravirtualized console.
 
-> Provides a helper function to retrieve the PF QM data associated
-> with a ACC VF dev. This makes use of the  pci_iov_get_pf_drvdata()
-> to get PF drvdata safely. Introduces helpers to retrieve the ACC
-> PF dev struct pci_driver pointers as this is an input into the
-> pci_iov_get_pf_drvdata().
-> 
-> Signed-off-by: Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>
-> ---
->  drivers/crypto/hisilicon/hpre/hpre_main.c     |  6 ++++
->  drivers/crypto/hisilicon/sec2/sec_main.c      |  6 ++++
->  drivers/crypto/hisilicon/zip/zip_main.c       |  6 ++++
->  drivers/vfio/pci/hisilicon/Kconfig            |  7 +++++
->  .../vfio/pci/hisilicon/hisi_acc_vfio_pci.c    | 30 +++++++++++++++++++
->  include/linux/hisi_acc_qm.h                   |  5 ++++
->  6 files changed, 60 insertions(+)
-> 
-> diff --git a/drivers/crypto/hisilicon/hpre/hpre_main.c b/drivers/crypto/hisilicon/hpre/hpre_main.c
-> index ba4043447e53..80fb9ef8c571 100644
-> --- a/drivers/crypto/hisilicon/hpre/hpre_main.c
-> +++ b/drivers/crypto/hisilicon/hpre/hpre_main.c
-> @@ -1189,6 +1189,12 @@ static struct pci_driver hpre_pci_driver = {
->  	.driver.pm		= &hpre_pm_ops,
->  };
->  
-> +struct pci_driver *hisi_hpre_get_pf_driver(void)
-> +{
-> +	return &hpre_pci_driver;
-> +}
-> +EXPORT_SYMBOL(hisi_hpre_get_pf_driver);
+Gunyah is an open source hypervisor. The source repo is available at
+https://github.com/quic/gunyah-hypervisor.
 
-Curious why none of these are _GPL symbols.  Thanks,
+Elliot Berman (11):
+  docs: gunyah: Introduce Gunyah Hypervisor
+  dt-bindings: Add binding for gunyah hypervisor
+  arm64: gunyah: Add Gunyah hypercalls ABI
+  gunyah: Common types and error codes for Gunyah hypercalls
+  virt: gunyah: Add sysfs nodes
+  virt: gunyah: Add capabilities bus and devices
+  gunyah: msgq: Add Gunyah message queues
+  gunyah: rsc_mgr: Add resource manager RPC core
+  gunyah: rsc_mgr: Add auxiliary devices for console
+  gunyah: rsc_mgr: Add RPC for console services
+  gunyah: Add tty console driver for RM Console Serivces
 
-Alex
+ .../ABI/testing/sysfs-hypervisor-gunyah       |  37 +
+ .../bindings/gunyah/message-queue.yml         | 100 +++
+ .../bindings/gunyah/qcom,hypervisor.yml       | 122 ++++
+ Documentation/virt/gunyah/index.rst           |  99 +++
+ Documentation/virt/gunyah/message-queue.rst   |  52 ++
+ Documentation/virt/index.rst                  |   1 +
+ MAINTAINERS                                   |  12 +
+ arch/arm64/include/asm/gunyah/hypercall.h     | 199 ++++++
+ drivers/virt/Kconfig                          |   2 +
+ drivers/virt/Makefile                         |   1 +
+ drivers/virt/gunyah/Kconfig                   |  27 +
+ drivers/virt/gunyah/Makefile                  |   8 +
+ drivers/virt/gunyah/device.c                  | 108 +++
+ drivers/virt/gunyah/gunyah_private.h          |  18 +
+ drivers/virt/gunyah/msgq.c                    | 295 ++++++++
+ drivers/virt/gunyah/rsc_mgr.c                 | 632 ++++++++++++++++++
+ drivers/virt/gunyah/rsc_mgr.h                 |  53 ++
+ drivers/virt/gunyah/rsc_mgr_console.c         | 410 ++++++++++++
+ drivers/virt/gunyah/rsc_mgr_rpc.c             | 129 ++++
+ drivers/virt/gunyah/sysfs.c                   | 152 +++++
+ include/linux/gunyah.h                        | 138 ++++
+ include/linux/gunyah_rsc_mgr.h                |  44 ++
+ 22 files changed, 2639 insertions(+)
+ create mode 100644 Documentation/ABI/testing/sysfs-hypervisor-gunyah
+ create mode 100644 Documentation/devicetree/bindings/gunyah/message-queue.yml
+ create mode 100644 Documentation/devicetree/bindings/gunyah/qcom,hypervisor.yml
+ create mode 100644 Documentation/virt/gunyah/index.rst
+ create mode 100644 Documentation/virt/gunyah/message-queue.rst
+ create mode 100644 arch/arm64/include/asm/gunyah/hypercall.h
+ create mode 100644 drivers/virt/gunyah/Kconfig
+ create mode 100644 drivers/virt/gunyah/Makefile
+ create mode 100644 drivers/virt/gunyah/device.c
+ create mode 100644 drivers/virt/gunyah/gunyah_private.h
+ create mode 100644 drivers/virt/gunyah/msgq.c
+ create mode 100644 drivers/virt/gunyah/rsc_mgr.c
+ create mode 100644 drivers/virt/gunyah/rsc_mgr.h
+ create mode 100644 drivers/virt/gunyah/rsc_mgr_console.c
+ create mode 100644 drivers/virt/gunyah/rsc_mgr_rpc.c
+ create mode 100644 drivers/virt/gunyah/sysfs.c
+ create mode 100644 include/linux/gunyah.h
+ create mode 100644 include/linux/gunyah_rsc_mgr.h
+
+-- 
+2.25.1
 

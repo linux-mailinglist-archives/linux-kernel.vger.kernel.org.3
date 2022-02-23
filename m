@@ -2,74 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14D634C0F58
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 10:40:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B25D4C0F5E
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 10:41:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239339AbiBWJki (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 04:40:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35008 "EHLO
+        id S239354AbiBWJl3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 04:41:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233156AbiBWJkh (ORCPT
+        with ESMTP id S238560AbiBWJl1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 04:40:37 -0500
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84A6F5BD02
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 01:40:09 -0800 (PST)
-Received: by mail-io1-f69.google.com with SMTP id r191-20020a6b8fc8000000b0063de0033ee7so13553384iod.3
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 01:40:09 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=Cescbg8/jp8FsTcSy9R5A0Hc7x8UbA/1yigZrf68OGw=;
-        b=XrRPwjtUIKac/NLl+21itQllbUbCCXiPPLoXW2pB91f/xg+B0ZnkiKtxJhYa2x9oMw
-         ooB14NF4wjQZgLXhyGWdJlvDOqogs6mN+grWyB0153zhOp1Go7vucggY1zOQafE/BkRR
-         +7+4hi5fNYj2lgYpoS7hs2aPrwQ4FzFz7J/lqqTpxKhDDZ4uzfPDfGyBa7uQWo9KuUgq
-         Gwj4iYBbIBA8uk+VfdjwmJp9U60Kfd83V/dm5E9opIrCRVePFhEJVA5Zp05PwrPKYzNo
-         husUz5hI12xzHS3co4zkGo7Hqjk3l9qmksLD+QXOUalSxFDkEkCxnUSiphiUC5Wi+8uz
-         fojA==
-X-Gm-Message-State: AOAM531yxGCudkf02qDoiullXkLKW9YKSyaQz23kIXILVvuy0ikqNtlV
-        R/SjDScdDw0zfWhejMo8c2OMBn5xQMd2BvAT5+b0QmZWsicV
-X-Google-Smtp-Source: ABdhPJzNbY0WJ1ddy/IzgNSh3jXyZ7Tb7yBJOPo/bGSEnkHyfjUQwv2ab67suz0C4/jMzrEg1C0jVflIRnlF51oxJbldySM7u0PI
+        Wed, 23 Feb 2022 04:41:27 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 284B55B8BA;
+        Wed, 23 Feb 2022 01:40:58 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 784D51F3A8;
+        Wed, 23 Feb 2022 09:40:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1645609257; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=2/cCKw5BJZWLcNjwvBk6BwS8hu5S4/oabc2zMRr1ruQ=;
+        b=s9eFaBF0QEya+5LYiLmwzdRjbs4czu/mj+8T0S0b6t+xmaLz3uUChNXud8FTcIjAro0P/3
+        8326zMqkl3ovDTL+yKeaCJ2iJd+f5YHS1ICbA3W9P3mytxUOra0qjw4F95vH8T4uOuOvH8
+        xdBdRKriluu41R8UMNrGuekpnRWNOXQ=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1645609257;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=2/cCKw5BJZWLcNjwvBk6BwS8hu5S4/oabc2zMRr1ruQ=;
+        b=t3dhcuoU01aIFH4P8jRBPp73eOCXZEkzR6VIoW1EIM2YKfNX2LqYPKzsNc+F8HHLhWWKdH
+        vfzDQOc2CpeBeZBQ==
+Received: from quack3.suse.cz (unknown [10.163.28.18])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 6834FA3B84;
+        Wed, 23 Feb 2022 09:40:57 +0000 (UTC)
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 2A260A0605; Wed, 23 Feb 2022 10:40:57 +0100 (CET)
+Date:   Wed, 23 Feb 2022 10:40:57 +0100
+From:   Jan Kara <jack@suse.cz>
+To:     Ritesh Harjani <riteshh@linux.ibm.com>
+Cc:     linux-ext4@vger.kernel.org,
+        Harshad Shirwadkar <harshadshirwadkar@gmail.com>,
+        Theodore Ts'o <tytso@mit.edu>, Jan Kara <jack@suse.cz>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFC 3/9] ext4: Add couple of more fast_commit tracepoints
+Message-ID: <20220223094057.53zcovnazrqwbngw@quack3.lan>
+References: <cover.1645558375.git.riteshh@linux.ibm.com>
+ <90608d31b7ad8500c33d875d3a7fa50e3456dc1a.1645558375.git.riteshh@linux.ibm.com>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6602:185a:b0:641:56ac:32ee with SMTP id
- d26-20020a056602185a00b0064156ac32eemr6965344ioi.17.1645609208948; Wed, 23
- Feb 2022 01:40:08 -0800 (PST)
-Date:   Wed, 23 Feb 2022 01:40:08 -0800
-In-Reply-To: <2174944.iZASKD2KPV@leap>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000056adde05d8ac400f@google.com>
-Subject: Re: [syzbot] BUG: sleeping function called from invalid context in smc_pnet_apply_ib
-From:   syzbot <syzbot+4f322a6d84e991c38775@syzkaller.appspotmail.com>
-To:     fmdefrancesco@gmail.com, jgg@ziepe.ca, liangwenpeng@huawei.com,
-        linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org,
-        liweihang@huawei.com, netdev@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com, tonylu@linux.alibaba.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <90608d31b7ad8500c33d875d3a7fa50e3456dc1a.1645558375.git.riteshh@linux.ibm.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Wed 23-02-22 02:04:11, Ritesh Harjani wrote:
+> This adds two more tracepoints for ext4_fc_track_template() &
+> ext4_fc_cleanup() which are helpful in debugging some fast_commit issues.
+> 
+> Signed-off-by: Ritesh Harjani <riteshh@linux.ibm.com>
 
-syzbot has tested the proposed patch and the reproducer did not trigger any issue:
+So why is this more useful than trace_ext4_fc_track_range() and other
+tracepoints? I don't think it provides any more information? What am I
+missing?
 
-Reported-and-tested-by: syzbot+4f322a6d84e991c38775@syzkaller.appspotmail.com
+								Honza
 
-Tested on:
-
-commit:         5c1ee569 Merge branch 'for-5.17-fixes' of git://git.ke..
-git tree:       upstream
-kernel config:  https://syzkaller.appspot.com/x/.config?x=15187fc11a461d83
-dashboard link: https://syzkaller.appspot.com/bug?extid=4f322a6d84e991c38775
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=15bc3696700000
-
-Note: testing is done by a robot and is best-effort only.
+> ---
+>  fs/ext4/fast_commit.c       |  3 ++
+>  include/trace/events/ext4.h | 67 +++++++++++++++++++++++++++++++++++++
+>  2 files changed, 70 insertions(+)
+> 
+> diff --git a/fs/ext4/fast_commit.c b/fs/ext4/fast_commit.c
+> index 5ac594e03402..bf70879bb4fe 100644
+> --- a/fs/ext4/fast_commit.c
+> +++ b/fs/ext4/fast_commit.c
+> @@ -386,6 +386,8 @@ static int ext4_fc_track_template(
+>  	if (ext4_test_mount_flag(inode->i_sb, EXT4_MF_FC_INELIGIBLE))
+>  		return -EINVAL;
+>  
+> +	trace_ext4_fc_track_template(handle, inode, __fc_track_fn, enqueue);
+> +
+>  	tid = handle->h_transaction->t_tid;
+>  	mutex_lock(&ei->i_fc_lock);
+>  	if (tid == ei->i_sync_tid) {
+> @@ -1241,6 +1243,7 @@ static void ext4_fc_cleanup(journal_t *journal, int full, tid_t tid)
+>  	if (full && sbi->s_fc_bh)
+>  		sbi->s_fc_bh = NULL;
+>  
+> +	trace_ext4_fc_cleanup(journal, full, tid);
+>  	jbd2_fc_release_bufs(journal);
+>  
+>  	spin_lock(&sbi->s_fc_lock);
+> diff --git a/include/trace/events/ext4.h b/include/trace/events/ext4.h
+> index 17fb9c506e8a..cd09dccea502 100644
+> --- a/include/trace/events/ext4.h
+> +++ b/include/trace/events/ext4.h
+> @@ -2855,6 +2855,73 @@ TRACE_EVENT(ext4_fc_track_range,
+>  		      __entry->end)
+>  	);
+>  
+> +TRACE_EVENT(ext4_fc_track_template,
+> +	TP_PROTO(handle_t *handle, struct inode *inode,
+> +		 void *__fc_track_fn, int enqueue),
+> +
+> +	TP_ARGS(handle, inode, __fc_track_fn, enqueue),
+> +
+> +	TP_STRUCT__entry(
+> +		__field(dev_t, dev)
+> +		__field(tid_t, t_tid)
+> +		__field(ino_t, i_ino)
+> +		__field(tid_t, i_sync_tid)
+> +		__field(void *, __fc_track_fn)
+> +		__field(int, enqueue)
+> +		__field(bool, jbd2_ongoing)
+> +		__field(bool, fc_ongoing)
+> +	),
+> +
+> +	TP_fast_assign(
+> +		struct ext4_sb_info *sbi = EXT4_SB(inode->i_sb);
+> +		struct ext4_inode_info *ei = EXT4_I(inode);
+> +
+> +		__entry->dev = inode->i_sb->s_dev;
+> +		__entry->t_tid = handle->h_transaction->t_tid;
+> +		__entry->i_ino = inode->i_ino;
+> +		__entry->i_sync_tid = ei->i_sync_tid;
+> +		__entry->__fc_track_fn = __fc_track_fn;
+> +		__entry->enqueue = enqueue;
+> +		__entry->jbd2_ongoing =
+> +		    sbi->s_journal->j_flags & JBD2_FULL_COMMIT_ONGOING;
+> +		__entry->fc_ongoing =
+> +		    sbi->s_journal->j_flags & JBD2_FAST_COMMIT_ONGOING;
+> +	),
+> +
+> +	TP_printk("dev %d,%d, t_tid %u, ino %lu, i_sync_tid %u, "
+> +		  "track_fn %pS, enqueue %d, jbd2_ongoing %d, fc_ongoing %d",
+> +		  MAJOR(__entry->dev), MINOR(__entry->dev),
+> +		  __entry->t_tid, __entry->i_ino, __entry->i_sync_tid,
+> +		  (void *)__entry->__fc_track_fn, __entry->enqueue,
+> +		  __entry->jbd2_ongoing, __entry->fc_ongoing)
+> +	);
+> +
+> +TRACE_EVENT(ext4_fc_cleanup,
+> +	TP_PROTO(journal_t *journal, int full, tid_t tid),
+> +
+> +	TP_ARGS(journal, full, tid),
+> +
+> +	TP_STRUCT__entry(
+> +		__field(dev_t, dev)
+> +		__field(int, j_fc_off)
+> +		__field(int, full)
+> +		__field(tid_t, tid)
+> +	),
+> +
+> +	TP_fast_assign(
+> +		struct super_block *sb = journal->j_private;
+> +
+> +		__entry->dev = sb->s_dev;
+> +		__entry->j_fc_off = journal->j_fc_off;
+> +		__entry->full = full;
+> +		__entry->tid = tid;
+> +	),
+> +
+> +	TP_printk("dev %d,%d, j_fc_off %d, full %d, tid %u",
+> +		  MAJOR(__entry->dev), MINOR(__entry->dev),
+> +		  __entry->j_fc_off, __entry->full, __entry->tid)
+> +	);
+> +
+>  TRACE_EVENT(ext4_update_sb,
+>  	TP_PROTO(struct super_block *sb, ext4_fsblk_t fsblk,
+>  		 unsigned int flags),
+> -- 
+> 2.31.1
+> 
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR

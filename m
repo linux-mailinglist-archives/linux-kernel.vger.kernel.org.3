@@ -2,134 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFF584C18B2
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 17:35:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 816CD4C18AC
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 17:35:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242858AbiBWQft (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 11:35:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45882 "EHLO
+        id S242844AbiBWQfb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 11:35:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241768AbiBWQfq (ORCPT
+        with ESMTP id S242831AbiBWQfY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 11:35:46 -0500
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D386B53B4B
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 08:35:18 -0800 (PST)
-Received: by mail-pj1-x102c.google.com with SMTP id ev16-20020a17090aead000b001bc3835fea8so3334115pjb.0
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 08:35:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=PvSxjAkCTzHrnUJ0VH9JVo6LzgFiDVwgoKiwOiM2FoE=;
-        b=lIs9bWeQZCbVcF0ZizI997m5HtjcGLwofO/q2rO50UhL2K3rqPXTmaaK8+hPGnStlK
-         q0uM9I0AHFvbcVjS9NV0PVxbJ2oX2Dy9tIg/WyZAfQWBlPrACWk9PxTR5y2yk4VmL8IB
-         cqLE3fvXs01qOtV9upS+bV7gb2+cx4ePjwXpU=
+        Wed, 23 Feb 2022 11:35:24 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 82889527D1
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 08:34:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1645634095;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=clONYmZ5X2qlfrfzJXRhqvS1L3/caQ4kzeJBK6mGohk=;
+        b=ercBwKn+MFV+8vGY1W14XWigiUxu3lmI55faiI5FSDPo/OBqeFHtVzp+AEl2MfahEbsauw
+        yqThiG67o+oR5AfU+Y7Vyl9DZrmbYRoBTQAmhkZwK7W+bGgG7KE0BU45RGL/B6y8eJw/v4
+        bcGWHzuUuHKkZdy1FQZJpinOs/Ci5Rg=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-416-Mqk6tT2xOxaaGomKIQfxTw-1; Wed, 23 Feb 2022 11:34:54 -0500
+X-MC-Unique: Mqk6tT2xOxaaGomKIQfxTw-1
+Received: by mail-wm1-f69.google.com with SMTP id az39-20020a05600c602700b00380e48f5994so1221361wmb.0
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 08:34:54 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=PvSxjAkCTzHrnUJ0VH9JVo6LzgFiDVwgoKiwOiM2FoE=;
-        b=BVXvkCrcZxFqERyPs9+i0iQJl7MtDwgqXt9x7dMKGZxkXBI4XLMrddX0G4ZLGD1nki
-         E0Y2PoJqjG7ao6TJ+WE3tVhpFC91s4YX8vkMBPyQt8QEIYki6KS/NpI/sbZG3UfogKcz
-         V7jUVKqZ8DOQMogNa2AHiYOAkciSZMFlZVSXaxaLkwXuHRbDQxn+DRw9AyrXEkNtwhPp
-         ausXvOPgVaoxCYY3ZEBoFE7GeNodOauRoDlCBfTPyxeZcup/R3Xs3ejFlyFjxYL0VPC5
-         3KM+I4Z9XXH0shVHNRdLR9RYcmMDrgtHDbsSvlgPRL3u8rsW9lvKldVXx9LtJsqiTHrA
-         sJbA==
-X-Gm-Message-State: AOAM533uDGw6VeBpTUERluXCxG8k15J5JAAB81ts6TP20Yd2dgIp0hZi
-        tcNin9ed/3KHqIcoTnTW/4jBVA==
-X-Google-Smtp-Source: ABdhPJw5Jtbh9mv51qXwl2WJLO7oZUgpK7z+r3Jzsv2rFjApW+UyaQUhwslZQu6FcU65TL6jQei4TQ==
-X-Received: by 2002:a17:902:a406:b0:14d:61ba:8bcc with SMTP id p6-20020a170902a40600b0014d61ba8bccmr575575plq.36.1645634118294;
-        Wed, 23 Feb 2022 08:35:18 -0800 (PST)
-Received: from tictac2.mtv.corp.google.com ([2620:15c:202:201:fbbe:971a:f60f:11e1])
-        by smtp.gmail.com with ESMTPSA id g20sm4219pfj.64.2022.02.23.08.35.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Feb 2022 08:35:18 -0800 (PST)
-From:   Douglas Anderson <dianders@chromium.org>
-To:     "Rafael J . Wysocki" <rafael@kernel.org>
-Cc:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Douglas Anderson <dianders@chromium.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: [PATCH] PM: runtime: Have devm_pm_runtime_enable() handle pm_runtime_dont_use_autosuspend()
-Date:   Wed, 23 Feb 2022 08:34:48 -0800
-Message-Id: <20220223083441.1.I925ce9fa12992a58caed6b297e0171d214866fe7@changeid>
-X-Mailer: git-send-email 2.35.1.473.g83b2b277ed-goog
+        bh=clONYmZ5X2qlfrfzJXRhqvS1L3/caQ4kzeJBK6mGohk=;
+        b=SDlInbwZyV1sBz4Ll2AlJDvMIo1k/Aok0RBA1MiJUemNbc2Lz3MCnxvQd+j7JfSO4Q
+         3i382yVmdI2b/fyYzEZoJfThGqHrO7K3IBNdrLI1H6OQXxNTeeOC1HBEXY2AjQIDpRiv
+         1y+nfWlt8OiJFIWy6e+C5Zq/FuWbVA8WEtq6GLot2cvUFIU3BWnBkUR7uDvf1WQ87L4r
+         3gYltxRtEnrS5bVw3FWS/qq4zN3rmqsD1roysUQTzLE7eldjn4/TcDTxnBF1kZApyPRW
+         ckHOT4huCYCbb2tDhsDBtiEZuvbZ+wssqr+zs9wyHA1UGgDb6I2wulpxWMaUTqLejiji
+         Dfjw==
+X-Gm-Message-State: AOAM53077EGCY9EqvNISfr7QfqFQg1QHLWmLAvyIYuw0frU6oJRunTJV
+        kFHPXl5uiSjOJDOajIykY2ONTXv/XTu/l20ohDUdLJ01TNW948b4da7LWzjAqfRAlq0ZdhJ6wgB
+        MfBSCVRUGDNn3EnSzxvFFwawA
+X-Received: by 2002:adf:e544:0:b0:1ed:b6d5:d26b with SMTP id z4-20020adfe544000000b001edb6d5d26bmr327968wrm.634.1645634093126;
+        Wed, 23 Feb 2022 08:34:53 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyBzj3eVsLKn39DYPTvyzPcJE9MCfAnVshf1YYTW2KZMiRN8LC5w3bIaIsgJsQ3ygOVbXPktQ==
+X-Received: by 2002:adf:e544:0:b0:1ed:b6d5:d26b with SMTP id z4-20020adfe544000000b001edb6d5d26bmr327942wrm.634.1645634092830;
+        Wed, 23 Feb 2022 08:34:52 -0800 (PST)
+Received: from [192.168.1.102] ([92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id a1sm40095wrf.42.2022.02.23.08.34.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 23 Feb 2022 08:34:52 -0800 (PST)
+Message-ID: <33b80f9c-d54a-5471-a58b-7a783a7a9e5b@redhat.com>
+Date:   Wed, 23 Feb 2022 17:34:50 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v3] simplefb: Enable boot time VESA graphic mode
+ selection.
+Content-Language: en-US
+To:     Michal Suchanek <msuchanek@suse.de>,
+        dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
+        Thomas Zimmermann <tzimmermann@suse.de>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, Martin Mares <mj@ucw.cz>,
+        Helge Deller <deller@gmx.de>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Cristian Marussi <cristian.marussi@arm.com>,
+        Simon Trimmer <simont@opensource.cirrus.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rob Herring <robh@kernel.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        David Herrmann <dh.herrmann@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-video@atrey.karlin.mff.cuni.cz
+References: <a789e375-a23e-6988-33bc-1410eb5d974f@suse.de>
+ <20220218160436.23211-1-msuchanek@suse.de>
+From:   Javier Martinez Canillas <javierm@redhat.com>
+In-Reply-To: <20220218160436.23211-1-msuchanek@suse.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The PM Runtime docs say:
-  Drivers in ->remove() callback should undo the runtime PM changes done
-  in ->probe(). Usually this means calling pm_runtime_disable(),
-  pm_runtime_dont_use_autosuspend() etc.
+Hello Michal,
 
-From grepping code, it's clear that many people aren't aware of the
-need to call pm_runtime_dont_use_autosuspend().
+On 2/18/22 17:04, Michal Suchanek wrote:
+> Since switch to simplefb/simpledrm VESA graphic modes are no longer
+> available with legacy BIOS.
+>
 
-When brainstorming solutions, one idea that came up was to leverage
-the new-ish devm_pm_runtime_enable() function. The idea here is that:
-* When the devm action is called we know that the driver is being
-  removed. It's the perfect time to undo the use_autosuspend.
-* The code of pm_runtime_dont_use_autosuspend() already handles the
-  case of being called when autosuspend wasn't enabled.
-
-Suggested-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Signed-off-by: Douglas Anderson <dianders@chromium.org>
----
-
- drivers/base/power/runtime.c | 5 +++++
- include/linux/pm_runtime.h   | 4 ++++
- 2 files changed, 9 insertions(+)
-
-diff --git a/drivers/base/power/runtime.c b/drivers/base/power/runtime.c
-index 2f3cce17219b..d4059e6ffeae 100644
---- a/drivers/base/power/runtime.c
-+++ b/drivers/base/power/runtime.c
-@@ -1476,11 +1476,16 @@ EXPORT_SYMBOL_GPL(pm_runtime_enable);
+Maybe you can mention that is the "vga=" kernel command line parameter
+since that may be more evident to people reading the commit message ?
  
- static void pm_runtime_disable_action(void *data)
- {
-+	pm_runtime_dont_use_autosuspend(data);
- 	pm_runtime_disable(data);
- }
- 
- /**
-  * devm_pm_runtime_enable - devres-enabled version of pm_runtime_enable.
-+ *
-+ * NOTE: this will also handle calling pm_runtime_dont_use_autosuspend() for
-+ * you at driver exit time if needed.
-+ *
-  * @dev: Device to handle.
-  */
- int devm_pm_runtime_enable(struct device *dev)
-diff --git a/include/linux/pm_runtime.h b/include/linux/pm_runtime.h
-index 9f09601c465a..2bff6a10095d 100644
---- a/include/linux/pm_runtime.h
-+++ b/include/linux/pm_runtime.h
-@@ -567,6 +567,10 @@ static inline void pm_runtime_disable(struct device *dev)
-  * Allow the runtime PM autosuspend mechanism to be used for @dev whenever
-  * requested (or "autosuspend" will be handled as direct runtime-suspend for
-  * it).
-+ *
-+ * NOTE: It's important to undo this with pm_runtime_dont_use_autosuspend()
-+ * at driver exit time unless your driver initially enabled pm_runtime
-+ * with devm_pm_runtime_enable() (which handles it for you).
-  */
- static inline void pm_runtime_use_autosuspend(struct device *dev)
- {
+> The x86 realmode boot code enables the VESA graphic modes when option
+> FB_BOOT_VESA_SUPPORT is enabled.
+> 
+> To enable use of VESA modes with simplefb in legacy BIOS boot mode drop
+
+I think you meant "VESA modes with the sysfb driver" ? or something like
+that since otherwise it seems that you meant to use it with the simplefb
+(drivers/video/fbdev/simplefb.c) fbdev driver, which doesn't support the
+"vga=" param as far as I understand (it just uses whatever was setup).
+
+The name sysfb_simplefb is really horrible, because it is too confusing
+and probably we should change it at some point...
+
+Patch itself looks good to me though.
+
+Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>
+
+Best regards,
 -- 
-2.35.1.473.g83b2b277ed-goog
+Javier Martinez Canillas
+Linux Engineering
+Red Hat
 

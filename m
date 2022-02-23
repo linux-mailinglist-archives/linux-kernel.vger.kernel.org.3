@@ -2,61 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A8544C189F
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 17:33:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A39BD4C18A4
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 17:34:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242811AbiBWQda (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 11:33:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44174 "EHLO
+        id S242804AbiBWQfG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 11:35:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230215AbiBWQd2 (ORCPT
+        with ESMTP id S231128AbiBWQfE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 11:33:28 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 746194CD78
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 08:33:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1645633979;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=eJFcVMvv6yQets9GHtEootWOFNlstKVit+WEDgtDqA8=;
-        b=GwkIIkCyotnKLYkshTr7wdSrsIKuAG3Ocw016VsP6ePoloWluHd6me0OAnkDcs9rN6j1jj
-        QX+aQORNhoWbsw6pZdplWXAx18uCgQLCN+FXxNFGszGlcb0vSY3OfF7gNYAi9qUwsOrGOg
-        ioce9hUFvgk6knU9s6kwZLgTGa7TFNQ=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-57-k7jpMBl1Psy5uqDeQ85eJQ-1; Wed, 23 Feb 2022 11:32:56 -0500
-X-MC-Unique: k7jpMBl1Psy5uqDeQ85eJQ-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 3D15B801AAD;
-        Wed, 23 Feb 2022 16:32:55 +0000 (UTC)
-Received: from starship (unknown [10.40.195.190])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id D65DB2ED8D;
-        Wed, 23 Feb 2022 16:32:53 +0000 (UTC)
-Message-ID: <7f18cfd048609276cc298dbfa01628bd2fa15937.camel@redhat.com>
-Subject: Re: [PATCH v2 12/18] KVM: x86/mmu: clear MMIO cache when unloading
- the MMU
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org
-Cc:     seanjc@google.com
-Date:   Wed, 23 Feb 2022 18:32:52 +0200
-In-Reply-To: <20220217210340.312449-13-pbonzini@redhat.com>
-References: <20220217210340.312449-1-pbonzini@redhat.com>
-         <20220217210340.312449-13-pbonzini@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+        Wed, 23 Feb 2022 11:35:04 -0500
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ED204EF53;
+        Wed, 23 Feb 2022 08:34:36 -0800 (PST)
+Received: (Authenticated sender: jacopo@jmondi.org)
+        by mail.gandi.net (Postfix) with ESMTPSA id 5C5C6E000D;
+        Wed, 23 Feb 2022 16:34:32 +0000 (UTC)
+Date:   Wed, 23 Feb 2022 17:34:31 +0100
+From:   Jacopo Mondi <jacopo@jmondi.org>
+To:     Eugen.Hristev@microchip.com
+Cc:     linux-media@vger.kernel.org, hverkuil-cisco@xs4all.nl,
+        Nicolas.Ferre@microchip.com, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Claudiu.Beznea@microchip.com
+Subject: Re: [PATCH v5 04/13] media: atmel: atmel-isc: implement media
+ controller
+Message-ID: <20220223163431.wask6vh2tfhllzf4@uno.localdomain>
+References: <20220217135645.1427466-1-eugen.hristev@microchip.com>
+ <20220217135645.1427466-5-eugen.hristev@microchip.com>
+ <e4109e0f-af1f-7594-a154-92e65fd7ac59@microchip.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <e4109e0f-af1f-7594-a154-92e65fd7ac59@microchip.com>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,39 +44,97 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-02-17 at 16:03 -0500, Paolo Bonzini wrote:
-> For cleanliness, do not leave a stale GVA in the cache after all the roots are
-> cleared.  In practice, kvm_mmu_load will go through kvm_mmu_sync_roots if
-> paging is on, and will not use vcpu_match_mmio_gva at all if paging is off.
-> However, leaving data in the cache might cause bugs in the future.
-> 
-> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-> ---
->  arch/x86/kvm/mmu/mmu.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> index b01160716c6a..4e8e3e9530ca 100644
-> --- a/arch/x86/kvm/mmu/mmu.c
-> +++ b/arch/x86/kvm/mmu/mmu.c
-> @@ -5111,6 +5111,7 @@ void kvm_mmu_unload(struct kvm_vcpu *vcpu)
->  {
->  	__kvm_mmu_unload(vcpu->kvm, &vcpu->arch.root_mmu);
->  	__kvm_mmu_unload(vcpu->kvm, &vcpu->arch.guest_mmu);
-> +	vcpu_clear_mmio_info(vcpu, MMIO_GVA_ANY);
->  }
->  
->  static bool need_remote_flush(u64 old, u64 new)
+Hi Eugen,
 
+On Thu, Feb 17, 2022 at 02:59:19PM +0000, Eugen.Hristev@microchip.com wrote:
+> On 2/17/22 3:56 PM, Eugen Hristev wrote:
+> > Implement the support for media-controller.
+> > This means that the capabilities of the driver have changed and now
+> > it also advertises the IO_MC .
+> > The driver will register it's media device, and add the video entity to this
+> > media device. The subdevices are registered to the same media device.
+> > The ISC will have a base entity which is auto-detected as atmel_isc_base.
+> > It will also register a subdevice that allows cropping of the incoming frame
+> > to the maximum frame size supported by the ISC.
+> > The ISC will create a link between the subdevice that is asynchronously
+> > registered and the atmel_isc_scaler entity.
+> > Then, the atmel_isc_scaler and atmel_isc_base are connected through another
+> > link.
+> >
+> > Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
+> > ---
+>
+>
+> Hello Jacopo,
+>
+> I will add to this patch a little update about how the scaler is seen
+> now by the media-ctl :
+>
+> for imx219 sensor, which generates 3280x2464:
+>
+>
+> - entity 1: atmel_isc_scaler (2 pads, 2 links)
+>              type V4L2 subdev subtype Unknown flags 0
+>              device node name /dev/v4l-subdev0
+>          pad0: Sink
+>                  [fmt:SRGGB10_1X10/3280x2464 field:none colorspace:srgb
+>                   crop.bounds:(0,0)/3280x2464
+>                   crop:(0,0)/3264x2464]
+>                  <- "csi2dc":1 [ENABLED,IMMUTABLE]
+>          pad1: Source
+>                  [fmt:SRGGB10_1X10/3264x2464 field:none colorspace:srgb]
+>                  -> "atmel_isc_common":0 [ENABLED,IMMUTABLE]
+>
+>
+> The source pad of the scaler looks good now.
+>
+> For the imx274 which I am using (and it generates 3840x2160 ):
+>
+> - entity 1: atmel_isc_scaler (2 pads, 2 links)
+>              type V4L2 subdev subtype Unknown flags 0
+>              device node name /dev/v4l-subdev0
+>          pad0: Sink
+>                  [fmt:SRGGB10_1X10/3840x2160 field:none colorspace:srgb
+>                   crop.bounds:(0,0)/3840x2160
+>                   crop:(0,0)/3264x2160]
+>                  <- "csi2dc":1 [ENABLED,IMMUTABLE]
+>          pad1: Source
+>                  [fmt:SRGGB10_1X10/3264x2160 field:none colorspace:srgb]
+>                  -> "atmel_isc_common":0 [ENABLED,IMMUTABLE]
+>
+> So in both cases, each line is cropped down to 3264 as the maximum width.
+>
+> If we select a lower frame size, the scaler will automatically update
+> the source pad to reflect this, e.g.:
+>
+>
+> - entity 1: atmel_isc_scaler (2 pads, 2 links)
+>              type V4L2 subdev subtype Unknown flags 0
+>              device node name /dev/v4l-subdev0
+>          pad0: Sink
+>                  [fmt:SRGGB10_1X10/1920x1080 field:none colorspace:srgb
+>                   crop.bounds:(0,0)/1920x1080
+>                   crop:(0,0)/1920x1080]
+>                  <- "csi2dc":1 [ENABLED,IMMUTABLE]
+>          pad1: Source
+>                  [fmt:SRGGB10_1X10/1920x1080 field:none colorspace:srgb]
+>                  -> "atmel_isc_common":0 [ENABLED,IMMUTABLE]
+>
+>
+> does it look good now ?
 
-One thing that bothers me for a while with all of this is that
-vcpu->arch.{mmio_gva|mmio_access|mmio_gfn|mmio_gen} are often called mmio cache,
-while we also install reserved bit SPTEs and also call this a mmio cache.
+great! I think it now works as intended, thanks!
 
-The above is basically a cache of a cache sort of.
+I only have one question. BOUND target is the larger rectangle that
+contains all crop rectangles. As your max crop is limited to 3264x2160
+I wonder if BOUND should be limited by the same size. Does
+v4l2-compliance check for this.
 
-Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
+Otherwise it looks good!
 
-Best regards,
-	Maxim Levitsky
+Thanks
+  j
 
+>
+> Thanks for checking this out !
+> Eugen

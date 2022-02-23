@@ -2,71 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3EA94C1C39
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 20:30:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 407FD4C1C28
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 20:29:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244413AbiBWTaz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 14:30:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48408 "EHLO
+        id S244375AbiBWTaO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 14:30:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244407AbiBWTaw (ORCPT
+        with ESMTP id S238408AbiBWTaN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 14:30:52 -0500
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6956B4831F
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 11:30:22 -0800 (PST)
-Received: by mail-pj1-x102c.google.com with SMTP id v5-20020a17090ac90500b001bc40b548f9so3562207pjt.0
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 11:30:22 -0800 (PST)
+        Wed, 23 Feb 2022 14:30:13 -0500
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14BF147AE4
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 11:29:45 -0800 (PST)
+Received: by mail-pj1-x1034.google.com with SMTP id q8-20020a17090a178800b001bc299b8de1so3958859pja.1
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 11:29:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=yYf0qM8EzXfF4UkYBAdwkh5DAfiu0yUybShsdnlJ+V0=;
-        b=xpLVibRZlPiuJ+Toe8/fPJzR6Jht5ma1bxsj8Dy3MGK7eigeI8UmN26mRiOFs/Gz3c
-         ZxXUFzGCZi6Jj898rCXfgDyRWxIHmA8URMjY5hxs4czB9wAJlvQ/UA98d9r13fpY2YtW
-         dhjMHP6XHhdwrHgydlBEoThZV08JZEFgp2rUmpNByxZbyqFMFXdRr/JBVcpHSanN7zko
-         gUgjDNOutKuJovJn5GMi+YycGwMEDs7BdIlPR26JMW2TvOCW54azJh0gATZKi7ZUFxLM
-         59JZpcDuMyhK+RLxQCr2JPkOTbBnZydZFmHTa0rmTDsTuwLu6EOBL/3OXsfUxsGylNwF
-         PHSA==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=rcZtDDDiBwFJfxUmlCOz3RDMEXHNKOOpzN1iEr3gL5U=;
+        b=QWBzyrjZbDyYSLOvasncoWEYru0Moni/yVGRO01JjZbgsx9D2Olu/maNAtD0effRNG
+         wNYTVyenRE2iN8/gxF8zvDFIp1czImRucV3q+rH/Db4mDxfkNsMa5DdPNA12q8f3hQw0
+         CGhSrzqNOX9eTGM8sUUHgDxFqNl+jJQdeU/Ko=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=yYf0qM8EzXfF4UkYBAdwkh5DAfiu0yUybShsdnlJ+V0=;
-        b=E5f4zyzzB21OySxw9EE8i0z5NZnipXOVWu8ErzY/gg085/xUpBTqhE0fKhygwgUkrW
-         7KXSOxUY24p9dd6/SyPB6P6+EuoLhsTABL/7c9E/TkXZQ2DHupUH8sVr8IZ3mmOWcMvQ
-         tMBzFXk+suJJTbpurrgqLKeCA5s/gvfglapVy7BqFm2krx+G0nXLAMzY0oGC3HisSHW+
-         csx7eLnbZ06Yw+khMhr/sV6YtUkqq7NKdJt436rsssxbUYeyyWbMx+yKjRQzL+ueNLw9
-         RiFRYlasRbcE6vLgzA42nxXo+5gdiUlTIQIijdKh3X5xF2on1x5IQMuqoU4oBiB8wRqV
-         tV1Q==
-X-Gm-Message-State: AOAM5327O9Y4q1fbU/1dGqLBFuRUyLgfdACXf7Cb4em5kqnMgivy4vzI
-        YtbQCYcc53lp5vY/xrs00+6NnQ==
-X-Google-Smtp-Source: ABdhPJzhVl8/iwqfz4h0Jx2H9qID7UYMgoGd25UBO/+SkRGcd0r67FxMbxy8bMCtMxXNvCcur7P2fA==
-X-Received: by 2002:a17:903:192:b0:14f:ff7c:33db with SMTP id z18-20020a170903019200b0014fff7c33dbmr1240344plg.75.1645644621859;
-        Wed, 23 Feb 2022 11:30:21 -0800 (PST)
-Received: from localhost.localdomain ([2402:3a80:180f:6b3c:fda0:57e9:7d44:2aa7])
-        by smtp.gmail.com with ESMTPSA id z10-20020a17090a8b8a00b001b8d20074c8sm3719917pjn.33.2022.02.23.11.30.16
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=rcZtDDDiBwFJfxUmlCOz3RDMEXHNKOOpzN1iEr3gL5U=;
+        b=BIc/egrS7GoaMYUXhvfghSZ7EX4sjwFPwZpXEhVqipTeDFHKI2Dmh1NsUYenLQnwzE
+         qMJk7i7FJLHxq1ei66+zGmBZfBu0y44wDplEARJRkHd36pJsaf0nj3HKHPEYSh5Njh27
+         QP80dvafqo+6/5HdCdmeZBglLGjDyEPbe3FprKlmcFSuyFUfeeh8wADCi955wAoxVVK7
+         enlVS6d9avjP52iTnksHmR+16FEugMkqv8Tk8tUx3DPBui2j7LjwvPIisnfje91Y5vRo
+         PlkDDq9S/0hpI0b+5bbJkRBxoNNPGao/9AU5Wr9xa5DolIimQiSFL5IqKMNa3NcxCHON
+         J8Pg==
+X-Gm-Message-State: AOAM5300+Us7kwjqsFTKaGoUJTG+4zPX6KMpt5DGoFRyaXxVBXGXopnK
+        fc8VKe1lzxZvlOOUcrdGs87k05xwa6FkVQ==
+X-Google-Smtp-Source: ABdhPJxlXjAtTppGbdCoaBZt4izIbAhB7dGQ5TNK+YADNjZYa3D+4W9K2F3X6jY0EE0TLHnQMMfldA==
+X-Received: by 2002:a17:902:ab12:b0:14f:ce60:2ae4 with SMTP id ik18-20020a170902ab1200b0014fce602ae4mr1048141plb.87.1645644584562;
+        Wed, 23 Feb 2022 11:29:44 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id on17sm246496pjb.40.2022.02.23.11.29.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Feb 2022 11:30:21 -0800 (PST)
-From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
-To:     linux-arm-msm@vger.kernel.org, linux-pci@vger.kernel.org
-Cc:     bhupesh.sharma@linaro.org, bhupesh.linux@gmail.com,
-        lorenzo.pieralisi@arm.com, agross@kernel.org,
-        bjorn.andersson@linaro.org, svarbanov@mm-sol.com,
-        bhelgaas@google.com, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, robh+dt@kernel.org,
-        Vinod Koul <vkoul@kernel.org>
-Subject: [PATCH 3/6] phy: qcom-qmp: Add SM8150 PCIe QMP PHYs
-Date:   Thu, 24 Feb 2022 00:59:43 +0530
-Message-Id: <20220223192946.473172-4-bhupesh.sharma@linaro.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220223192946.473172-1-bhupesh.sharma@linaro.org>
-References: <20220223192946.473172-1-bhupesh.sharma@linaro.org>
+        Wed, 23 Feb 2022 11:29:44 -0800 (PST)
+Date:   Wed, 23 Feb 2022 11:29:43 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Jann Horn <jannh@google.com>
+Cc:     Anton Vorontsov <anton@enomsg.org>,
+        Colin Cross <ccross@android.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Subject: Re: [PATCH v2] pstore: Don't use semaphores in always-atomic-context
+ code
+Message-ID: <202202231128.E7445769AD@keescook>
+References: <20220218181950.1438236-1-jannh@google.com>
+ <8D85619E-99BD-4DB5-BDDB-A205B057C910@chromium.org>
+ <CAG48ez0UJDBzoaB4=c0Uju6L-eZvhWMdnzAp8N3QfeERbzYv2w@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAG48ez0UJDBzoaB4=c0Uju6L-eZvhWMdnzAp8N3QfeERbzYv2w@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,134 +75,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SM8150 has multiple (different) PHY versions:
-QMP GEN3x1 PHY - 1 lane
-QMP GEN3x2 PHY - 2 lanes
+On Wed, Feb 23, 2022 at 06:50:52PM +0100, Jann Horn wrote:
+> On Wed, Feb 23, 2022 at 8:50 AM Kees Cook <keescook@chromium.org> wrote:
+> > On February 18, 2022 10:19:50 AM PST, Jann Horn <jannh@google.com> wrote:
+> > >pstore_dump() is *always* invoked in atomic context (nowadays in an RCU
+> > >read-side critical section, before that under a spinlock).
+> > >It doesn't make sense to try to use semaphores here.
+> >
+> > Ah, very nice. Thanks for the analysis!
+> >
+> > >[...]
+> > >-static bool pstore_cannot_wait(enum kmsg_dump_reason reason)
+> > >+bool pstore_cannot_block_path(enum kmsg_dump_reason reason)
+> >
+> > Why the rename,
+> 
+> That's one of the parts of commit ea84b580b955 that I included in the
+> revert. "wait" in the name is not accurate, since "wait" in the kernel
+> normally refers to scheduling away until some condition is fulfilled.
+> (Though I guess "block" also isn't the best name either... idk.) The
+> place where we might want to have different behavior depending on
+> whether we're handling a kernel crash are spinlocks; during a kernel
+> crash, we shouldn't deadlock on them, but otherwise, AFAIK it's fine
+> to block on them.
 
-Add support for these with relevant init sequence.
+Gotcha. I'm find to avoid "wait"; I was just curious why it was
+changing, but I see now.
 
-Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc: Vinod Koul <vkoul@kernel.org>
-Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
----
- drivers/phy/qualcomm/phy-qcom-qmp.c | 90 +++++++++++++++++++++++++++++
- 1 file changed, 90 insertions(+)
+> 
+> > extern, and EXPORT? This appears to still only have the same single caller?
+> 
+> Also part of the revert. I figured it might make sense to also revert
+> that part because:
+> 
+> With this commit applied, the EFI code will always take the "nonblock"
+> path for now, but that's kinda suboptimal; on some platforms the
+> "blocking" path uses a semaphore, so we really can't take that, but on
+> x86 it uses a spinlock, which we could block on if we're not oopsing.
+> We could avoid needlessly losing non-crash dmesg dumps there; I don't
+> know whether we care about that though.
+> 
+> So I figured that we might want to start adding new callers to this
+> later on. But if you want, I'll remove that part of the revert and
+> resend?
 
-diff --git a/drivers/phy/qualcomm/phy-qcom-qmp.c b/drivers/phy/qualcomm/phy-qcom-qmp.c
-index 8ea87c69f463..0805c1bab690 100644
---- a/drivers/phy/qualcomm/phy-qcom-qmp.c
-+++ b/drivers/phy/qualcomm/phy-qcom-qmp.c
-@@ -3294,6 +3294,11 @@ static const char * const sdm845_pciephy_clk_l[] = {
- 	"aux", "cfg_ahb", "ref", "refgen",
- };
- 
-+/* the pcie phy on sm8150 doesn't have a ref clock */
-+static const char * const sm8150_pciephy_clk_l[] = {
-+	"aux", "cfg_ahb", "refgen",
-+};
-+
- static const char * const qmp_v4_phy_clk_l[] = {
- 	"aux", "ref_clk_src", "ref", "com_aux",
- };
-@@ -3583,6 +3588,85 @@ static const struct qmp_phy_cfg sdm845_qhp_pciephy_cfg = {
- 	.pwrdn_delay_max	= 1005,		/* us */
- };
- 
-+static const struct qmp_phy_cfg sm8150_qmp_gen3x1_pciephy_cfg = {
-+	.type = PHY_TYPE_PCIE,
-+	.nlanes = 1,
-+
-+	.serdes_tbl		= sm8250_qmp_pcie_serdes_tbl,
-+	.serdes_tbl_num		= ARRAY_SIZE(sm8250_qmp_pcie_serdes_tbl),
-+	.serdes_tbl_sec		= sm8250_qmp_gen3x1_pcie_serdes_tbl,
-+	.serdes_tbl_num_sec	= ARRAY_SIZE(sm8250_qmp_gen3x1_pcie_serdes_tbl),
-+	.tx_tbl			= sm8250_qmp_pcie_tx_tbl,
-+	.tx_tbl_num		= ARRAY_SIZE(sm8250_qmp_pcie_tx_tbl),
-+	.rx_tbl			= sm8250_qmp_pcie_rx_tbl,
-+	.rx_tbl_num		= ARRAY_SIZE(sm8250_qmp_pcie_rx_tbl),
-+	.rx_tbl_sec		= sm8250_qmp_gen3x1_pcie_rx_tbl,
-+	.rx_tbl_num_sec		= ARRAY_SIZE(sm8250_qmp_gen3x1_pcie_rx_tbl),
-+	.pcs_tbl		= sm8250_qmp_pcie_pcs_tbl,
-+	.pcs_tbl_num		= ARRAY_SIZE(sm8250_qmp_pcie_pcs_tbl),
-+	.pcs_tbl_sec		= sm8250_qmp_gen3x1_pcie_pcs_tbl,
-+	.pcs_tbl_num_sec		= ARRAY_SIZE(sm8250_qmp_gen3x1_pcie_pcs_tbl),
-+	.pcs_misc_tbl		= sm8250_qmp_pcie_pcs_misc_tbl,
-+	.pcs_misc_tbl_num	= ARRAY_SIZE(sm8250_qmp_pcie_pcs_misc_tbl),
-+	.pcs_misc_tbl_sec		= sm8250_qmp_gen3x1_pcie_pcs_misc_tbl,
-+	.pcs_misc_tbl_num_sec	= ARRAY_SIZE(sm8250_qmp_gen3x1_pcie_pcs_misc_tbl),
-+	.clk_list		= sm8150_pciephy_clk_l,
-+	.num_clks		= ARRAY_SIZE(sm8150_pciephy_clk_l),
-+	.reset_list		= sdm845_pciephy_reset_l,
-+	.num_resets		= ARRAY_SIZE(sdm845_pciephy_reset_l),
-+	.vreg_list		= qmp_phy_vreg_l,
-+	.num_vregs		= ARRAY_SIZE(qmp_phy_vreg_l),
-+	.regs			= sm8250_pcie_regs_layout,
-+
-+	.start_ctrl		= PCS_START | SERDES_START,
-+	.pwrdn_ctrl		= SW_PWRDN | REFCLK_DRV_DSBL,
-+	.phy_status		= PHYSTATUS,
-+
-+	.has_pwrdn_delay	= true,
-+	.pwrdn_delay_min	= 995,		/* us */
-+	.pwrdn_delay_max	= 1005,		/* us */
-+};
-+
-+static const struct qmp_phy_cfg sm8150_qmp_gen3x2_pciephy_cfg = {
-+	.type = PHY_TYPE_PCIE,
-+	.nlanes = 2,
-+
-+	.serdes_tbl		= sm8250_qmp_pcie_serdes_tbl,
-+	.serdes_tbl_num		= ARRAY_SIZE(sm8250_qmp_pcie_serdes_tbl),
-+	.tx_tbl			= sm8250_qmp_pcie_tx_tbl,
-+	.tx_tbl_num		= ARRAY_SIZE(sm8250_qmp_pcie_tx_tbl),
-+	.tx_tbl_sec		= sm8250_qmp_gen3x2_pcie_tx_tbl,
-+	.tx_tbl_num_sec		= ARRAY_SIZE(sm8250_qmp_gen3x2_pcie_tx_tbl),
-+	.rx_tbl			= sm8250_qmp_pcie_rx_tbl,
-+	.rx_tbl_num		= ARRAY_SIZE(sm8250_qmp_pcie_rx_tbl),
-+	.rx_tbl_sec		= sm8250_qmp_gen3x2_pcie_rx_tbl,
-+	.rx_tbl_num_sec		= ARRAY_SIZE(sm8250_qmp_gen3x2_pcie_rx_tbl),
-+	.pcs_tbl		= sm8250_qmp_pcie_pcs_tbl,
-+	.pcs_tbl_num		= ARRAY_SIZE(sm8250_qmp_pcie_pcs_tbl),
-+	.pcs_tbl_sec		= sm8250_qmp_gen3x2_pcie_pcs_tbl,
-+	.pcs_tbl_num_sec		= ARRAY_SIZE(sm8250_qmp_gen3x2_pcie_pcs_tbl),
-+	.pcs_misc_tbl		= sm8250_qmp_pcie_pcs_misc_tbl,
-+	.pcs_misc_tbl_num	= ARRAY_SIZE(sm8250_qmp_pcie_pcs_misc_tbl),
-+	.pcs_misc_tbl_sec		= sm8250_qmp_gen3x2_pcie_pcs_misc_tbl,
-+	.pcs_misc_tbl_num_sec	= ARRAY_SIZE(sm8250_qmp_gen3x2_pcie_pcs_misc_tbl),
-+	.clk_list		= sm8150_pciephy_clk_l,
-+	.num_clks		= ARRAY_SIZE(sm8150_pciephy_clk_l),
-+	.reset_list		= sdm845_pciephy_reset_l,
-+	.num_resets		= ARRAY_SIZE(sdm845_pciephy_reset_l),
-+	.vreg_list		= qmp_phy_vreg_l,
-+	.num_vregs		= ARRAY_SIZE(qmp_phy_vreg_l),
-+	.regs			= sm8250_pcie_regs_layout,
-+
-+	.start_ctrl		= PCS_START | SERDES_START,
-+	.pwrdn_ctrl		= SW_PWRDN | REFCLK_DRV_DSBL,
-+	.phy_status		= PHYSTATUS,
-+
-+	.is_dual_lane_phy	= true,
-+	.has_pwrdn_delay	= true,
-+	.pwrdn_delay_min	= 995,		/* us */
-+	.pwrdn_delay_max	= 1005,		/* us */
-+};
-+
- static const struct qmp_phy_cfg sm8250_qmp_gen3x1_pciephy_cfg = {
- 	.type = PHY_TYPE_PCIE,
- 	.nlanes = 1,
-@@ -6004,6 +6088,12 @@ static const struct of_device_id qcom_qmp_phy_of_match_table[] = {
- 	}, {
- 		.compatible = "qcom,sm6115-qmp-ufs-phy",
- 		.data = &sm6115_ufsphy_cfg,
-+	}, {
-+		.compatible = "qcom,sm8150-qmp-gen3x1-pcie-phy",
-+		.data = &sm8150_qmp_gen3x1_pciephy_cfg,
-+	}, {
-+		.compatible = "qcom,sm8150-qmp-gen3x2-pcie-phy",
-+		.data = &sm8150_qmp_gen3x2_pciephy_cfg,
- 	}, {
- 		.compatible = "qcom,sm8150-qmp-ufs-phy",
- 		.data = &sm8150_ufsphy_cfg,
+Yeah, let's just keep this static -- there's no reason to export it.
+
+> 
+> > > [...]
+> > >-                      pr_err("dump skipped in %s path: may corrupt error record\n",
+> > >-                              in_nmi() ? "NMI" : why);
+> > >-                      return;
+> > >-              }
+> > >-              if (down_interruptible(&psinfo->buf_lock)) {
+> > >-                      pr_err("could not grab semaphore?!\n");
+> > >+      if (pstore_cannot_block_path(reason)) {
+> > >+              if (!spin_trylock_irqsave(&psinfo->buf_lock, flags)) {
+> > >+                      pr_err("dump skipped in %s path because of concurrent dump\n"
+> > >+                                     , in_nmi() ? "NMI" : why);
+> >
+> > The pr_err had the comma following the format string moved,
+> 
+> Ah, whoops, that was also part of the revert, but I guess I should
+> have left that part out...
+> 
+> > and the note about corruption removed. Is that no longer accurate?
+> 
+> There should be no more corruption since commit 959217c84c27 ("pstore:
+> Actually give up during locking failure") - if we're bailing out, we
+> can't be causing corruption, I believe?
+
+Yeah, agreed. String content change is fine, the weird leading comma I'd
+like to do without. :)
+
+Thanks!
+
 -- 
-2.35.1
-
+Kees Cook

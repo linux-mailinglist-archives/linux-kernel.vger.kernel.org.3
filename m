@@ -2,152 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58A474C1F1F
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 23:52:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CEA014C1F23
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 23:52:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244608AbiBWWwX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 17:52:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33690 "EHLO
+        id S244629AbiBWWxD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 17:53:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232254AbiBWWwV (ORCPT
+        with ESMTP id S244696AbiBWWwz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 17:52:21 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDB2535864
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 14:51:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645656712; x=1677192712;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=9UChX+Z6I3uebtKSdtS/c4QDANq5pg7hMaISFlrV910=;
-  b=GEwpFW2eS8dk65RxMjfa2Uq56pkYcJnkO1zHmDmrwGpqOjF+N2ypxWVV
-   H8e+keBLeDl3DSKJP8DiFTNJFYX3/haBWSjlDFghbAt6vL5b9voYXcu+m
-   dWWaYy0JFb2JYt0vJ47DSWMtc4j/iyr4oEWFXFmBjGVSwhL+e1P43eM4j
-   BdILsE1MBkyNnVElfxW0AuJ0HAnvk289SmtyFdfBd6W01f3CvDDkUakR0
-   s5DjR6F92s0M9Y9u5jLXWfFj+ONJq+9fj73EEAGbTjXeJU4sSWpeOgS5B
-   ovV6NGfTv0+b+RghPFtfwPRoO7ByxaEEdqXDkhSdzJX0C9EZj5sDIf0ob
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10267"; a="276722529"
-X-IronPort-AV: E=Sophos;i="5.88,392,1635231600"; 
-   d="scan'208";a="276722529"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2022 14:51:52 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,392,1635231600"; 
-   d="scan'208";a="548475186"
-Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 23 Feb 2022 14:51:51 -0800
-Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nN0UA-0001uP-GF; Wed, 23 Feb 2022 22:51:50 +0000
-Date:   Thu, 24 Feb 2022 06:51:18 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Thierry Reding <treding@nvidia.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [thierryreding:for-5.18/work 143/143]
- drivers/iommu/tegra-smmu.c:906:38: error: 'struct tegra_smmu' has no member
- named 'parent'
-Message-ID: <202202240656.fYdbh6e7-lkp@intel.com>
+        Wed, 23 Feb 2022 17:52:55 -0500
+Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1FED554BD;
+        Wed, 23 Feb 2022 14:52:26 -0800 (PST)
+Received: by mail-io1-xd2c.google.com with SMTP id m185so633294iof.10;
+        Wed, 23 Feb 2022 14:52:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=2o+ZPlf2KURamdvg+hitpuro1zwcVnovw9N7uB+kYcU=;
+        b=GNwrG9LNEfQa403fZ4H3zN/Oe8rCNfslVnKm+cOCLCMtObn+ci8qq8RbbAvRoYaAvZ
+         EIWFI6XhbGaAxxnEru5zLypjGGTUbbm03h1RRVoAo6GvUE/TvbuENVVzQKh93ra/ofHI
+         5sgOu1ynKF+rcdCX5tDxm/+D+fpERl7OJ1bYhVwH0LbTfCZZ5jbx1yY0AUtwkLHmwZre
+         Wp7bhC3ZiI4z6KKWpcVU/qalR9M49nlwn0HNh96NQZ2fGtRVwbLGkUzZ+dS23iUWzPdv
+         U6EOtI+MI0Qy3OeA+mx2nHMdC4ARdT08YDMwyjXfi12Q+9iixQgSzYzGukUcwA06urhi
+         nUjw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=2o+ZPlf2KURamdvg+hitpuro1zwcVnovw9N7uB+kYcU=;
+        b=gO9x1BEZvCbI8if3yyfWS3+FFqe77LkZqnIVg1HX2izTE19+rK826gG2MH8UmOi+zr
+         aZMMou7tWzV+OohyDDh7L8OwTCCCmNRktkAKv9P5RTv7SU1wj3Q/DIZOe+5DoUhPCwT2
+         fgHnQFStJIubbV/0AqIgoBLNN1U+XbrU5S3NVLOsoY6ZAX0NZTlM9KipKbUpvzY6Z7vr
+         4pCkjvIorZ2a5zE25sY00cu/xZJwCah5tfpuq+iJ99G77TAIepU+r/pzGoDI+DPeoivv
+         o5tqAa+GEiF3sonJ68rzs1tp4lFOeiY6ErJFFYEuCMx8L3DdmS95lJwsUDTT4ifd4Kp1
+         TrTw==
+X-Gm-Message-State: AOAM53262qZXyPIhcxBMs6j+5s2dPcVSexJto8diFDk4SyaZxHRfApSC
+        t+VtkLCJ8kLDyQX2wqsLO9c+cWSbvPmkaSizSw4=
+X-Google-Smtp-Source: ABdhPJz/urE96ebSb5oQlMiktQGGc2XApVDdg7jhdQBEK0jHnKCRIdWEFWfGWeXsiji5qbp8XkMbtB8iIlafSUgeW1o=
+X-Received: by 2002:a6b:e901:0:b0:640:7bf8:f61d with SMTP id
+ u1-20020a6be901000000b006407bf8f61dmr1144042iof.112.1645656746186; Wed, 23
+ Feb 2022 14:52:26 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220223222002.1085114-1-haoluo@google.com>
+In-Reply-To: <20220223222002.1085114-1-haoluo@google.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Wed, 23 Feb 2022 14:52:15 -0800
+Message-ID: <CAEf4BzbjxwEukaZfW9qCLwXeyS32WeNQ_8MvUqRd-JA7cZzuGw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] bpf: Cache the last valid build_id.
+To:     Hao Luo <haoluo@google.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Song Liu <songliubraving@fb.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Blake Jones <blakejones@google.com>, bpf <bpf@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Greg Thelen <gthelen@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/thierryreding/linux for-5.18/work
-head:   1cdb7fffbcf8f949410bfa97c8cca5acc0285a48
-commit: 1cdb7fffbcf8f949410bfa97c8cca5acc0285a48 [143/143] WIP
-config: arm64-buildonly-randconfig-r004-20220223 (https://download.01.org/0day-ci/archive/20220224/202202240656.fYdbh6e7-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/thierryreding/linux/commit/1cdb7fffbcf8f949410bfa97c8cca5acc0285a48
-        git remote add thierryreding https://github.com/thierryreding/linux
-        git fetch --no-tags thierryreding for-5.18/work
-        git checkout 1cdb7fffbcf8f949410bfa97c8cca5acc0285a48
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/iommu/ drivers/soc/tegra/
+On Wed, Feb 23, 2022 at 2:20 PM Hao Luo <haoluo@google.com> wrote:
+>
+> For binaries that are statically linked, consecutive stack frames are
+> likely to be in the same VMA and therefore have the same build id.
+> As an optimization for this case, we can cache the previous frame's
+> VMA, if the new frame has the same VMA as the previous one, reuse the
+> previous one's build id. We are holding the MM locks as reader across
+> the entire loop, so we don't need to worry about VMA going away.
+>
+> Tested through "stacktrace_build_id" and "stacktrace_build_id_nmi" in
+> test_progs.
+>
+> Suggested-by: Greg Thelen <gthelen@google.com>
+> Signed-off-by: Hao Luo <haoluo@google.com>
+> ---
+>  kernel/bpf/stackmap.c | 11 ++++++++++-
+>  1 file changed, 10 insertions(+), 1 deletion(-)
+>
+> diff --git a/kernel/bpf/stackmap.c b/kernel/bpf/stackmap.c
+> index 22c8ae94e4c1..280b9198af27 100644
+> --- a/kernel/bpf/stackmap.c
+> +++ b/kernel/bpf/stackmap.c
+> @@ -132,7 +132,8 @@ static void stack_map_get_build_id_offset(struct bpf_stack_build_id *id_offs,
+>         int i;
+>         struct mmap_unlock_irq_work *work = NULL;
+>         bool irq_work_busy = bpf_mmap_unlock_get_irq_work(&work);
+> -       struct vm_area_struct *vma;
+> +       struct vm_area_struct *vma, *prev_vma = NULL;
+> +       const char *prev_build_id;
+>
+>         /* If the irq_work is in use, fall back to report ips. Same
+>          * fallback is used for kernel stack (!user) on a stackmap with
+> @@ -151,6 +152,11 @@ static void stack_map_get_build_id_offset(struct bpf_stack_build_id *id_offs,
+>
+>         for (i = 0; i < trace_nr; i++) {
+>                 vma = find_vma(current->mm, ips[i]);
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+as a further optimization, shouldn't we first check if ips[i] is
+within prev_vma and avoid rbtree walk altogether? Would this work:
 
-All error/warnings (new ones prefixed by >>):
-
-   drivers/iommu/tegra-smmu.c: In function 'tegra_smmu_probe_device':
->> drivers/iommu/tegra-smmu.c:906:38: error: 'struct tegra_smmu' has no member named 'parent'
-     906 |                         parent = smmu->parent;
-         |                                      ^~
->> drivers/iommu/tegra-smmu.c:914:9: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
-     914 |         if (!smmu)
-         |         ^~
-   drivers/iommu/tegra-smmu.c:918:17: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
-     918 |                 return ERR_PTR(-ENODEV);
-         |                 ^~~~~~
-   drivers/iommu/tegra-smmu.c: At top level:
->> drivers/iommu/tegra-smmu.c:921:9: error: expected identifier or '(' before 'return'
-     921 |         return &smmu->iommu;
-         |         ^~~~~~
->> drivers/iommu/tegra-smmu.c:922:1: error: expected identifier or '(' before '}' token
-     922 | }
-         | ^
---
->> make[4]: *** No rule to make target 'drivers/soc/tegra/dce.o', needed by 'drivers/soc/tegra/built-in.a'.
-   make[4]: *** [scripts/Makefile.build:614: drivers/soc/tegra/cbb] Error 2
-   make[4]: Target '__build' not remade because of errors.
+if (prev_vma && range_in_vma(prev_vma, ips[i])) {
+   /* reuse build_id */
+}
+vma = find_vma(current->mm, ips[i]);
 
 
-vim +906 drivers/iommu/tegra-smmu.c
+?
 
-   885	
-   886	static struct iommu_device *tegra_smmu_probe_device(struct device *dev)
-   887	{
-   888		struct device_node *np = dev->of_node;
-   889		struct tegra_smmu *smmu = NULL;
-   890		struct device *parent = NULL;
-   891		struct of_phandle_args args;
-   892		unsigned int index = 0;
-   893		int err;
-   894	
-   895		while (of_parse_phandle_with_args(np, "iommus", "#iommu-cells", index,
-   896						  &args) == 0) {
-   897			smmu = tegra_smmu_find(args.np);
-   898			if (smmu) {
-   899				err = tegra_smmu_configure(smmu, dev, &args);
-   900				if (err < 0) {
-   901					put_device(smmu->dev);
-   902					of_node_put(args.np);
-   903					return ERR_PTR(err);
-   904				}
-   905	
- > 906				parent = smmu->parent;
-   907			}
-   908	
-   909			of_node_put(args.np);
-   910			index++;
-   911		}
-   912	
-   913		smmu = dev_iommu_priv_get(dev);
- > 914		if (!smmu)
-   915			if (parent)
-   916				put_device(parent);
-   917	
- > 918			return ERR_PTR(-ENODEV);
-   919		}
-   920	
- > 921		return &smmu->iommu;
- > 922	}
-   923	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> +               if (vma && vma == prev_vma) {
+> +                       memcpy(id_offs[i].build_id, prev_build_id,
+> +                              BUILD_ID_SIZE_MAX);
+> +                       goto build_id_valid;
+> +               }
+>                 if (!vma || build_id_parse(vma, id_offs[i].build_id, NULL)) {
+>                         /* per entry fall back to ips */
+>                         id_offs[i].status = BPF_STACK_BUILD_ID_IP;
+> @@ -158,9 +164,12 @@ static void stack_map_get_build_id_offset(struct bpf_stack_build_id *id_offs,
+>                         memset(id_offs[i].build_id, 0, BUILD_ID_SIZE_MAX);
+>                         continue;
+>                 }
+> +build_id_valid:
+>                 id_offs[i].offset = (vma->vm_pgoff << PAGE_SHIFT) + ips[i]
+>                         - vma->vm_start;
+>                 id_offs[i].status = BPF_STACK_BUILD_ID_VALID;
+> +               prev_vma = vma;
+> +               prev_build_id = id_offs[i].build_id;
+>         }
+>         bpf_mmap_unlock_mm(work, current->mm);
+>  }
+> --
+> 2.35.1.473.g83b2b277ed-goog
+>

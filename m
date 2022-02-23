@@ -2,105 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 193B14C1376
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 13:59:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB5494C1378
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 13:59:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238951AbiBWNAC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 08:00:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55190 "EHLO
+        id S240571AbiBWNAP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 08:00:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238400AbiBWNAB (ORCPT
+        with ESMTP id S238400AbiBWNAO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 08:00:01 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3596B6549C
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 04:59:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645621173; x=1677157173;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=EdwXpwxeqUH7Cq2Ae1obglVV8LjCsQ3JhjCcS4UhTeo=;
-  b=AfPFac9uxphUsmJ8ocT0fOocb+7bmqYt9OUIW1YnP0rouj703ZVEZOLx
-   SKoGfGM+qaIO33KwaPPGRcccEkhB66gsGibCjc6b5m2NN1ttja0O+Tgsn
-   AodS36KLd4hqiqEnkKucFdiyNiM/asiYW+OoyH4Eo3HgVfAq7dXcrXP5r
-   K0fry0d3TToXVJJay7PZ5ylRFfVIPInTDca8Y8r3aaNLeZ2DJ4+7kTxHv
-   7pgCC6/a4HduKfWLyEpIKDyOsHR7hinlvILnR0ll0qStU9xzVwxcY+fph
-   w4Srp6k7PAjxzvNKV2NSEglsEufC+nPslht7jlY3nQWbm+VUR+9nZlMd0
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10266"; a="251874501"
-X-IronPort-AV: E=Sophos;i="5.88,391,1635231600"; 
-   d="scan'208";a="251874501"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2022 04:59:32 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,391,1635231600"; 
-   d="scan'208";a="543306233"
-Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 23 Feb 2022 04:59:31 -0800
-Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nMrEw-0001S1-Ip; Wed, 23 Feb 2022 12:59:30 +0000
-Date:   Wed, 23 Feb 2022 20:58:34 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Nathan Huckleberry <nhuck@google.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, Eric Biggers <ebiggers@google.com>
-Subject: [ebiggers:crypto-pending 7/7]
- arch/arm64/crypto/polyval-ce-glue.c:355:33: warning: unused variable
- 'polyval_cpu_feature'
-Message-ID: <202202232016.TAxtXYiJ-lkp@intel.com>
+        Wed, 23 Feb 2022 08:00:14 -0500
+Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.73])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 215F233E85
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 04:59:46 -0800 (PST)
+Received: from mail-wm1-f41.google.com ([209.85.128.41]) by
+ mrelayeu.kundenserver.de (mreue106 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1MX0Xf-1nlNBw26xd-00XOVO for <linux-kernel@vger.kernel.org>; Wed, 23 Feb
+ 2022 13:59:45 +0100
+Received: by mail-wm1-f41.google.com with SMTP id c18-20020a7bc852000000b003806ce86c6dso1456227wml.5
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 04:59:45 -0800 (PST)
+X-Gm-Message-State: AOAM530QwHEWVDhSLR7Az8RD7QMKvS0dltSG2wFgoiCWcJ5B2Pv+KHv+
+        uVrthyarchfJnGJuNANiociQpYSLVjQ6UlwfycU=
+X-Google-Smtp-Source: ABdhPJwrXMZ2Sp+1Yv51dw7LJzOihjOcH8LsPOt8g857TtX9P2CjdxvZ6l9BpnSV+7TOp6DTTWj/oYgAaIYR4u/i5CU=
+X-Received: by 2002:a05:600c:2108:b0:34e:870:966e with SMTP id
+ u8-20020a05600c210800b0034e0870966emr7466945wml.173.1645621185080; Wed, 23
+ Feb 2022 04:59:45 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <202202231910.H30peLyl-lkp@intel.com>
+In-Reply-To: <202202231910.H30peLyl-lkp@intel.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Wed, 23 Feb 2022 13:59:29 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a3dL3AJ31c7znroXH+hZaEJvxdqszxTU6D6Q2BgcV0Mog@mail.gmail.com>
+Message-ID: <CAK8P3a3dL3AJ31c7znroXH+hZaEJvxdqszxTU6D6Q2BgcV0Mog@mail.gmail.com>
+Subject: Re: include/linux/eventpoll.h:81:13: sparse: sparse: restricted
+ __poll_t degrades to integer
+To:     kernel test robot <lkp@intel.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>, kbuild-all@lists.01.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        linux-riscv <linux-riscv@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:7lZZiMMcE4sxb5PPSWsaHcvrOFY+0hX1yBez0v/Y5wnh85F6iQC
+ W+2pjrzPewOa+5itR8nYFepCA0xd8m6qG6dHN3gRUmjBKMoVR7qEUFMmlhQed8In6tuL9eD
+ 25JcOEnLGi4f/xRqr8+qegK0ckPHpL74goQMrE5RVO5QFjuFv4oylTTGMtdzlSDGRcFD63i
+ 4flh0gOrJzN7vmH+ycnmw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:3awXs+FJazk=:Yx//eCWcuB93h9MaeRhMjq
+ p5T/+Y3/Ogt5Mo31HfpiItc3ZORoUpPjR1TaG8Q8upURaMjgTAoGF5lYwudYYiw6am+V7OrhU
+ l/8nQVK+PmhRtEJ7WuqEacbwdUMJnIiFtenlsNSPAsvvGfhuSfH9Lr4NY52pCMA2zGM/Rumuy
+ QimaAhT0PPj+nKf8xcJ6dLRHAH/pelj7xi3KHkAZiaCmOP9XsISgc9DYfdHn0dtQ+7zMWU62L
+ JUEM7JCoNNP/JEM1G+RsgJtsNOGeNoVfKv4TqTWCW/cGPkx8nYV1y/jM+OI4Sn7vZNKOPP5bm
+ XXxjLzflWl/99VyBXiLHVLmKg43pQ9rUjw2aUYNLZCT6mQsNFTvbjsdUZRQ2c5zg8UwTinSH+
+ jXUrWRFspVNHAR+1Dx1JCQa9nVz5WmTbgu76H2RN0PZr5IueWmw0EUM9y1wsWvPdFw6CMkmdD
+ rLNQZSegZwV4GHeyuyIj1LqAQ/TUGVS9XTNP008Dq6xDAgE0AIJ+LNq5v9WmJQqrV1DmkCXGF
+ Os85N44XNGqKcV99Q8dIj8MSaQmf9hfhXvHKNfDOrBDTdDbIx3fzlIh/YGzyFup4r94OFB45s
+ mYx+tNmh4xs+DQbzECi3hdzLXAUnr8n1uENUansAey27KUJP9gpbjdCwkE+TIivIdv7xGL2ZO
+ 3IfzvLjRd8+ZlMwE/K55HiV7CCfa3A8YEfGC9BLd1NjUVuhs9JwJPx4EI+vyL23xI51c=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/ebiggers/linux.git crypto-pending
-head:   a46b8b65de5ca0c5dbe41a5682ec5a9c66ec8f48
-commit: a46b8b65de5ca0c5dbe41a5682ec5a9c66ec8f48 [7/7] crypto: arm64/polyval: Add PMULL accelerated implementation of POLYVAL
-config: arm64-allyesconfig (https://download.01.org/0day-ci/archive/20220223/202202232016.TAxtXYiJ-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/ebiggers/linux.git/commit/?id=a46b8b65de5ca0c5dbe41a5682ec5a9c66ec8f48
-        git remote add ebiggers https://git.kernel.org/pub/scm/linux/kernel/git/ebiggers/linux.git
-        git fetch --no-tags ebiggers crypto-pending
-        git checkout a46b8b65de5ca0c5dbe41a5682ec5a9c66ec8f48
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/crypto/ arch/arm64/kvm/hyp/nvhe/
+On Wed, Feb 23, 2022 at 1:47 PM kernel test robot <lkp@intel.com> wrote:
+>
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+> head:   5c1ee569660d4a205dced9cb4d0306b907fb7599
+> commit: 249dbe74d3c4b568a623fb55c56cddf19fdf0b89 ARM: 9108/1: oabi-compat: rework epoll_wait/epoll_pwait emulation
+> date:   6 months ago
+> config: riscv-randconfig-s031-20220221 (https://download.01.org/0day-ci/archive/20220223/202202231910.H30peLyl-lkp@intel.com/config)
+> compiler: riscv32-linux-gcc (GCC) 11.2.0
+> reproduce:
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # apt-get install sparse
+>         # sparse version: v0.6.4-dirty
+>         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=249dbe74d3c4b568a623fb55c56cddf19fdf0b89
+>         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+>         git fetch --no-tags linus master
+>         git checkout 249dbe74d3c4b568a623fb55c56cddf19fdf0b89
+>         # save the config file to linux build tree
+>         mkdir build_dir
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=riscv SHELL=/bin/bash
+>
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <lkp@intel.com>
+>
+>
+> sparse warnings: (new ones prefixed by >>)
+>    fs/eventpoll.c: note: in included file:
+> >> include/linux/eventpoll.h:81:13: sparse: sparse: restricted __poll_t degrades to integer
+> >> include/linux/eventpoll.h:81:13: sparse: sparse: restricted __poll_t degrades to integer
+>    include/linux/eventpoll.h:81:13: sparse: sparse: cast from restricted __poll_t
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+The code is only moved from one file to another, so I don't think this
+adds a new sparse
+warning but only changes the build log contents.
 
-All warnings (new ones prefixed by >>):
+>     77  static inline struct epoll_event __user *
+>     78  epoll_put_uevent(__poll_t revents, __u64 data,
+>     79                   struct epoll_event __user *uevent)
+>     80  {
+>   > 81          if (__put_user(revents, &uevent->events) ||
+>     82              __put_user(data, &uevent->data))
+>     83                  return NULL;
+>     84
 
->> arch/arm64/crypto/polyval-ce-glue.c:355:33: warning: unused variable 'polyval_cpu_feature' [-Wunused-const-variable]
-   static const struct cpu_feature polyval_cpu_feature[] = {
-                                   ^
-   1 warning generated.
+I think the problem is the riscv __put_user() macro, this should not
+warn when storing a __poll_t into a __user*__poll_t pointer.
 
-
-vim +/polyval_cpu_feature +355 arch/arm64/crypto/polyval-ce-glue.c
-
-   354	
- > 355	static const struct cpu_feature polyval_cpu_feature[] = {
-   356		{ cpu_feature(PMULL) }, { }
-   357	};
-   358	MODULE_DEVICE_TABLE(cpu, polyval_cpu_feature);
-   359	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+       Arnd

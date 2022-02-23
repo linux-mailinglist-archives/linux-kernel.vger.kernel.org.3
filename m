@@ -2,51 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BA324C1FE2
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 00:38:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA4744C1FDF
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 00:38:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244911AbiBWXih (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 18:38:37 -0500
+        id S244948AbiBWXiq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 18:38:46 -0500
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244878AbiBWXi1 (ORCPT
+        with ESMTP id S241915AbiBWXi2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 18:38:27 -0500
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24E0A5A589;
+        Wed, 23 Feb 2022 18:38:28 -0500
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57BC45A58D;
         Wed, 23 Feb 2022 15:37:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
   t=1645659476; x=1677195476;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=+MKLa2yx3nWTCH8/dR6dYi3DXpTMspvp8pf1dvGQZKQ=;
-  b=BxT4wK+FRMFIICKFGVQQTIT9V2dermF6KI2W939JQZ/uU1GHSAoKXMow
-   gBWu/gcBP7yxpvr9pXF7+wZQxqC3/raDURV5AitTNTbgpmK+hW7srEWKi
-   63iNYhtMdDpCjW/grMeTzN2dH7SoiCQQdw7sY7U14hih4HDTxc0DkRL1m
-   8=;
-Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 23 Feb 2022 15:37:55 -0800
+  bh=O348AWxXja34F/CxfeoastVacG7K7AciL4ROR2FvJFI=;
+  b=Eyh/XzcXabgRmqrUK0dy/QYd5j4h8dKedNwTXYctTdhp+GcZIpGmlcNz
+   9Ir3gUsKYTFF7URNq9lDzUdIVTfOr8HTlAnL7lf7/3l4NTefhZeJVUSVn
+   Uw3x7hZ4l0Dn39JaBetk7zNAXERsHEPq60BjRSJll4GQPXabhmdYVcRIS
+   o=;
+Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 23 Feb 2022 15:37:56 -0800
 X-QCInternal: smtphost
 Received: from nasanex01b.na.qualcomm.com ([10.46.141.250])
-  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2022 15:37:55 -0800
+  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2022 15:37:56 -0800
 Received: from hu-eberman-lv.qualcomm.com (10.49.16.6) by
  nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.15; Wed, 23 Feb 2022 15:37:54 -0800
+ 15.2.986.15; Wed, 23 Feb 2022 15:37:55 -0800
 From:   Elliot Berman <quic_eberman@quicinc.com>
 To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        <linux-kernel@vger.kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        <devicetree@vger.kernel.org>
+        <linux-kernel@vger.kernel.org>
 CC:     Elliot Berman <quic_eberman@quicinc.com>,
         Trilok Soni <quic_tsoni@quicinc.com>,
         Murali Nalajala <quic_mnalajala@quicinc.com>,
         Srivatsa Vaddagiri <quic_svaddagiri@quicinc.com>,
         Carl van Schaik <quic_cvanscha@quicinc.com>,
-        Andy Gross <agross@kernel.org>, <linux-arm-msm@vger.kernel.org>
-Subject: [PATCH 02/11] dt-bindings: Add binding for gunyah hypervisor
-Date:   Wed, 23 Feb 2022 15:37:20 -0800
-Message-ID: <20220223233729.1571114-3-quic_eberman@quicinc.com>
+        Andy Gross <agross@kernel.org>,
+        <linux-arm-msm@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+Subject: [PATCH 03/11] arm64: gunyah: Add Gunyah hypercalls ABI
+Date:   Wed, 23 Feb 2022 15:37:21 -0800
+Message-ID: <20220223233729.1571114-4-quic_eberman@quicinc.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220223233729.1571114-1-quic_eberman@quicinc.com>
 References: <20220223233729.1571114-1-quic_eberman@quicinc.com>
@@ -66,268 +67,235 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When Linux is booted as a guest under the Gunyah hypervisor, Gunyah
-applies a devicetree overlay describing the virtual platform
-configuration of the guest VM, such as the message queue capability IDs
-for communicating with the Resource Manager. Add the DT bindings that
-Gunyah adheres for the hypervisor node and message queues.
+Add initial support to perform Gunyah hypercalls. The arm64 ABI for
+Gunyah hypercalls generally follows the AAPCS64, and can be summarized:
+ - Function identifier is passed through the imm operand
+ - [r0,r7] are parameter and result registers
+ - [r8-r18] are temporary and saved by the caller (VM)
+ - [r19-r31] are preserved and saved by the hypervisor
+
+The preprocessor macors for creating the necessary HVC instruction
+roughly follows the SMCCC 1.1 implementation in
+include/linux/arm-smccc.h.
 
 Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
 ---
- .../bindings/gunyah/message-queue.yml         | 100 ++++++++++++++
- .../bindings/gunyah/qcom,hypervisor.yml       | 122 ++++++++++++++++++
- MAINTAINERS                                   |   1 +
- 3 files changed, 223 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/gunyah/message-queue.yml
- create mode 100644 Documentation/devicetree/bindings/gunyah/qcom,hypervisor.yml
+ MAINTAINERS                               |   1 +
+ arch/arm64/include/asm/gunyah/hypercall.h | 193 ++++++++++++++++++++++
+ 2 files changed, 194 insertions(+)
+ create mode 100644 arch/arm64/include/asm/gunyah/hypercall.h
 
-diff --git a/Documentation/devicetree/bindings/gunyah/message-queue.yml b/Documentation/devicetree/bindings/gunyah/message-queue.yml
-new file mode 100644
-index 000000000000..1a96d3de2a19
---- /dev/null
-+++ b/Documentation/devicetree/bindings/gunyah/message-queue.yml
-@@ -0,0 +1,100 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/gunyah/qcom,hypervisor.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Gunyah message queue
-+
-+maintainers:
-+   - Murali Nalajala <quic_mnalajal@quicinc.com>
-+   - Elliot Berman <quic_eberman@quicinc.com>
-+
-+properties:
-+  compatible:
-+    items:
-+      - const: qcom,gunyah-message-queue
-+      - const: qcom,gunyah-capability
-+  peer:
-+    description: VMID of the VM on the other end of message queue
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+  allOf:
-+    - if:
-+        anyOf:
-+          - properties:
-+              qcom,is-sender: true
-+          - properties:
-+              qcom,is-full-duplex: true
-+      then:
-+        properties:
-+          qcom,tx-message-size:
-+            description: Maximum size in bytes of a message which can be sent by this queue
-+            $ref: /schemas/types.yaml#/definitions/int32
-+          qcom,tx-queue-depth:
-+            description: Depth of transmit queue for messages sent by this queue
-+            $ref: /schemas/types.yaml#/definitions/int32
-+    - if:
-+        anyOf:
-+          - properties:
-+              qcom,is-receiver: true
-+          - properties:
-+              qcom,is-full-duplex: true
-+      then:
-+        properties:
-+          qcom,rx-message-size:
-+            description: Maximum size in bytes of a message which can be received by this queue
-+            $ref: /schemas/types.yaml#/definitions/int32
-+          qcom,rx-queue-depth:
-+            description: Depth of transmit queue for messages received by this queue
-+            $ref: /schemas/types.yaml#/definitions/int32
-+    - if:
-+        anyOf:
-+          - properties:
-+              qcom,is-receiver: true
-+          - properties:
-+              qcom,is-sender: true
-+      then:
-+        properties:
-+          reg:
-+            description: Hypervisor capability ID of the message queue
-+            $ref: /schemas/types.yaml#/definitions/uint32
-+            minItems: 1
-+            maxItems: 1
-+          interrupts:
-+            minItems: 1
-+            maxItems: 1
-+    - if:
-+        properties:
-+          qcom,is-full-duplex: true
-+      then:
-+        properties:
-+          reg:
-+            description:
-+              Hypervisor capability IDs of the message queue
-+              The first is tx side, the second is rx side
-+            $ref: /schemas/types.yaml#/definitions/uint32
-+            minItems: 2
-+            maxItems: 2
-+          interrupts:
-+            description: The first is tx interrupt, second is rx interrupt
-+            minItems: 2
-+            maxItems: 2
-+  required:
-+    - compatible
-+    - reg
-+    - interrupts
-+
-+
-+examples:
-+  - |
-+    display-msgq-pair@abbf0da3c3c965cc {
-+      compatible = "qcom,gunyah-message-queue", "qcom,gunyah-capability";
-+      interrupts = <GIC_SPI 3 IRQ_TYPE_EDGE_RISING>, /* TX full IRQ */
-+                    <GIC_SPI 4 IRQ_TYPE_EDGE_RISING>; /* RX empty IRQ */
-+      reg = <0x00000000 0x00000000>, <0x00000000 0x00000001>; /* TX, RX cap ids */
-+      qcom,is-full-duplex;
-+      qcom,tx-queue-depth = <8>;
-+      qcom,tx-message-size = <0xf0>;
-+      qcom,rx-queue-depth = <8>;
-+      qcom,rx-message-size = <0xf0>;
-+    };
-\ No newline at end of file
-diff --git a/Documentation/devicetree/bindings/gunyah/qcom,hypervisor.yml b/Documentation/devicetree/bindings/gunyah/qcom,hypervisor.yml
-new file mode 100644
-index 000000000000..f637d51c52f0
---- /dev/null
-+++ b/Documentation/devicetree/bindings/gunyah/qcom,hypervisor.yml
-@@ -0,0 +1,122 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/gunyah/qcom,hypervisor.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Hypervisor node to define virtual devices and other services provided by a Gunyah hypervisor
-+       to this virtual machine.
-+
-+maintainers:
-+   - Murali Nalajala <quic_mnalajal@quicinc.com>
-+   - Elliot Berman <quic_eberman@quicinc.com>
-+
-+description: |+
-+  On systems which support devicetree, Gunyah generates and overlays a deviceetree overlay which
-+  describes the basic configuration of the hypervisor. Virtual machines use this information for
-+  initial discovery that they are running as a Gunyah guest VM.
-+  See also: https://github.com/quic/gunyah-resource-manager/blob/develop/src/vm_creation/dto_construct.c
-+
-+properties:
-+  compatible:
-+    oneOf:
-+      - items:
-+          - const: qcom,gunyah-hypervisor-1.0
-+          - const: qcom,gunyah-hypervisor
-+
-+  "#address-cells":
-+    description: Number of cells needed to represent 64-bit capability IDs.
-+    const: 2
-+  "#size-cells":
-+    description: must be 0, because capability IDs are not memory address
-+                  ranges and do not have a size.
-+    const: 0
-+
-+  qcom,gunyah-vm:
-+    type: object
-+    description:
-+      The VM Identification is a virtual node that conveys to the VM information
-+      about this virtual machine in the context of the hypervisor-based system
-+    properties:
-+      compatible:
-+        oneOf:
-+          - items:
-+            - const: qcom,gunyah-vm-id-1.0
-+            - const: qcom,gunyah-vm-id
-+      qcom,vendor:
-+        $ref: /schemas/types.yaml#/definitions/string
-+        description: Vendor of the Virtual Machine, e.g. Qualcomm
-+      qcom,vmid:
-+        $ref: /schemas/types.yaml#/definitions/uint32
-+        description: contains the VMID of this VM as a 32-bit value
-+      qcom,owner-vmid:
-+        $ref: /schemas/types.yaml#/definitions/uint32
-+        description: Contains the hypervisor VMID of the VM's owner. The owner
-+                     is the VM that allocated and created the VM. VMs directly
-+                     managed by the resource manager, such as the primary VM do
-+                     not have an owner.
-+    required:
-+      - compatible
-+      - qcom,vmid
-+      - qcom,owner-vmid
-+
-+patternProperties:
-+  "^qcom,resource-manager-rpc(@.*)?":
-+    type: object
-+    description:
-+      Resource Manager node which is required to communicate to Resource
-+      Manager VM using Gunyah Message Queues.
-+    allOf: "message-queue.yml#"
-+
-+    properties:
-+      compatible:
-+        oneOf:
-+          items:
-+            - const: qcom,resource-manager-1-0
-+            - const: qcom,resource-manager
-+      qcom,console-dev:
-+        $ref: /schemas/types.yaml#/definitions/flag
-+        description: if set, the resource-manger will accept console logs from the VM
-+      qcom,free-irq-start:
-+        $ref: /schemas/types.yaml#/definitions/uint32
-+        description: Set on ARM systems which use a GIC. First VIRQ number which is free
-+                     for virtual interrupt use.
-+    required:
-+      - qcom,is-full-duplex
-+
-+
-+required:
-+- compatible
-+- "#address-cells"
-+- "#size-cells"
-+
-+examples:
-+  - |
-+    hypervisor {
-+        #address-cells = <2>;
-+        #size-cells = <0>;
-+        compatible = "qcom,gunyah-hypervisor-1.0", "qcom,gunyah-hypervisor", "simple-bus";
-+        name = "hypervisor";
-+
-+        qcom,gunyah-vm {
-+            compatible = "qcom,gunyah-vm-id-1.0", "qcom,gunyah-vm-id";
-+            qcom,vendor = "Qualcomm Technologies, Inc.";
-+            qcom,vmid = <45>;
-+            qcom,owner-vmid = <3>;
-+        };
-+
-+        qcom,resource-manager-rpc@0000000000000001 {
-+            compatible = "qcom,resource-manager-1-0", "qcom,resource-manager",
-+                          "qcom,gunyah-message-queue", "qcom,gunyah-capability";
-+            interrupts = <GIC_SPI 3 IRQ_TYPE_EDGE_RISING>, /* TX full IRQ */
-+                         <GIC_SPI 4 IRQ_TYPE_EDGE_RISING>; /* RX empty IRQ */
-+            reg = <0x00000000 0x00000000>, <0x00000000 0x00000001>;
-+                  /* TX, RX cap ids */
-+            qcom,is-full-duplex;
-+            qcom,free-irq-start = <0>;
-+            qcom,tx-queue-depth = <8>;
-+            qcom,tx-message-size = <0xf0>;
-+            qcom,rx-queue-depth = <8>;
-+            qcom,rx-message-size = <0xf0>;
-+        };
-+    };
 diff --git a/MAINTAINERS b/MAINTAINERS
-index bed175adc4c3..6a918f653eac 100644
+index 6a918f653eac..7e6a8488fa3e 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -8400,6 +8400,7 @@ M:	Elliot Berman <quic_eberman@quicinc.com>
- M:	Murali Nalajala <quic_mnalajal@quicinc.com>
- L:	linux-arm-msm@vger.kernel.org
+@@ -8402,6 +8402,7 @@ L:	linux-arm-msm@vger.kernel.org
  S:	Maintained
-+F:	Documentation/devicetree/bindings/gunyah/
+ F:	Documentation/devicetree/bindings/gunyah/
  F:	Documentation/virt/gunyah/
++F:	arch/arm64/include/asm/gunyah/
  
  H8/300 ARCHITECTURE
+ M:	Yoshinori Sato <ysato@users.sourceforge.jp>
+diff --git a/arch/arm64/include/asm/gunyah/hypercall.h b/arch/arm64/include/asm/gunyah/hypercall.h
+new file mode 100644
+index 000000000000..626163500e32
+--- /dev/null
++++ b/arch/arm64/include/asm/gunyah/hypercall.h
+@@ -0,0 +1,193 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++/*
++ * Copyright (c) 2022 Qualcomm Innovation Center, Inc. All rights reserved.
++ */
++#ifndef __ASM_GH_HYPERCALL_H
++#define __ASM_GH_HYPERCALL_H
++
++#include <linux/types.h>
++
++#define ___gh_count_args(_0, _1, _2, _3, _4, _5, _6, _7, _8, x, ...) x
++
++#define __gh_count_args(...)						\
++	___gh_count_args(_, ## __VA_ARGS__, 8, 7, 6, 5, 4, 3, 2, 1, 0)
++
++#define __gh_skip_0(...)		__VA_ARGS__
++#define __gh_skip_1(a, ...)	__VA_ARGS__
++#define __gh_skip_2(a, b, ...)	__VA_ARGS__
++#define __gh_skip_3(a, b, c, ...)	__VA_ARGS__
++#define __gh_skip_4(a, b, c, d, ...)	__VA_ARGS__
++#define __gh_skip_5(a, b, c, d, e, ...)	__VA_ARGS__
++#define __gh_skip_6(a, b, c, d, e, f, ...)	__VA_ARGS__
++#define __gh_skip_7(a, b, c, d, e, f, g, ...)	__VA_ARGS__
++#define __gh_skip_8(a, b, c, d, e, f, g, h, ...)	__VA_ARGS__
++
++#define __gh_declare_arg_0(...)
++
++#define __gh_declare_arg_1(a1, ...)					\
++	typeof(a1) __gh_a1 = (a1);					\
++	register uintptr_t arg1 asm("r0") = __gh_a1
++
++#define __gh_declare_arg_2(a1, a2, ...)					\
++	__gh_declare_arg_1(a1);						\
++	typeof(a2) __gh_a2 = (a2);					\
++	register uintptr_t arg2 asm("r1") = __gh_a2
++
++#define __gh_declare_arg_3(a1, a2, a3, ...)				\
++	__gh_declare_arg_2(a1, a2);					\
++	typeof(a3) __gh_a3 = (a3);					\
++	register uintptr_t arg3 asm("r2") = __gh_a3
++
++#define __gh_declare_arg_4(a1, a2, a3, a4, ...)				\
++	__gh_declare_arg_3(a1, a2, a3);					\
++	typeof(a4) __gh_a4 = (a4);					\
++	register uintptr_t arg4 asm("r3") = __gh_a4
++
++#define __gh_declare_arg_5(a1, a2, a3, a4, a5, ...)			\
++	__gh_declare_arg_4(a1, a2, a3, a4);				\
++	typeof(a5) __gh_a5 = (a5);					\
++	register uintptr_t arg5 asm("r4") = __gh_a5
++
++#define __gh_declare_arg_6(a1, a2, a3, a4, a5, a6, ...)			\
++	__gh_declare_arg_5(a1, a2, a3, a4, a5);				\
++	typeof(a6) __gh_a6 = (a6);					\
++	register uintptr_t arg6 asm("r5") = __gh_a6
++
++#define __gh_declare_arg_7(a1, a2, a3, a4, a5, a6, a7, ...)		\
++	__gh_declare_arg_6(a1, a2, a3, a4, a5, a6);			\
++	typeof(a7) __gh_a7 = (a7);					\
++	register uintptr_t arg7 asm("r6") = __gh_a7
++
++#define __gh_declare_arg_8(a1, a2, a3, a4, a5, a6, a7, a8, ...)		\
++	__gh_declare_arg_7(a1, a2, a3, a4, a5, a6, a7);			\
++	typeof(a8) __gh_a8 = (a8);					\
++	register uintptr_t arg8 asm("r7") = __gh_a8
++
++#define ___gh_declare_args(nargs)	__gh_declare_arg_ ## nargs
++#define __gh_declare_args(nargs)	___gh_declare_args(nargs)
++#define _gh_declare_args(nargs, ...) __gh_declare_args(nargs)(__VA_ARGS__)
++
++#define __gh_constraint_arg_0
++#define __gh_constraint_arg_1	"r" (arg1),
++#define __gh_constraint_arg_2	__gh_constraint_arg_1 "r" (arg2),
++#define __gh_constraint_arg_3	__gh_constraint_arg_2 "r" (arg3),
++#define __gh_constraint_arg_4	__gh_constraint_arg_3 "r" (arg4),
++#define __gh_constraint_arg_5	__gh_constraint_arg_4 "r" (arg5),
++#define __gh_constraint_arg_6	__gh_constraint_arg_5 "r" (arg6),
++#define __gh_constraint_arg_7	__gh_constraint_arg_6 "r" (arg7),
++#define __gh_constraint_arg_8	__gh_constraint_arg_7 "r" (arg8),
++
++#define _gh_constraint_args(nargs)	__gh_constraint_arg_ ## nargs
++
++#define __gh_to_res(nargs, ...)		__gh_skip_ ## nargs (__VA_ARGS__)
++
++#define __gh_declare_res_0
++
++#define __gh_declare_res_1				\
++	register uintptr_t res1 asm("r0")
++
++#define __gh_declare_res_2				\
++	__gh_declare_res_1;				\
++	register uintptr_t res2 asm("r1")
++
++#define __gh_declare_res_3				\
++	__gh_declare_res_2;				\
++	register uintptr_t res3 asm("r2")
++
++#define __gh_declare_res_4				\
++	__gh_declare_res_3;				\
++	register uintptr_t res4 asm("r3")
++
++#define __gh_declare_res_5				\
++	__gh_declare_res_4;				\
++	register uintptr_t res5 asm("r4")
++
++#define __gh_declare_res_6				\
++	__gh_declare_res_5;				\
++	register uintptr_t res6 asm("r5")
++
++#define __gh_declare_res_7				\
++	__gh_declare_res_6;				\
++	register uintptr_t res7 asm("r6")
++
++#define __gh_declare_res_8				\
++	__gh_declare_res_7;				\
++	register uintptr_t res8 asm("r7")
++
++#define ___gh_declare_res(nargs)	__gh_declare_res_ ## nargs
++#define __gh_declare_res(nargs)		___gh_declare_res(nargs)
++#define _gh_declare_res(...)		__gh_declare_res(__gh_count_args(__VA_ARGS__))
++
++#define __gh_constraint_res_0
++#define __gh_constraint_res_1	"=r" (res1)
++#define __gh_constraint_res_2	__gh_constraint_res_1, "=r" (res2)
++#define __gh_constraint_res_3	__gh_constraint_res_2, "=r" (res3)
++#define __gh_constraint_res_4	__gh_constraint_res_3, "=r" (res4)
++#define __gh_constraint_res_5	__gh_constraint_res_4, "=r" (res5)
++#define __gh_constraint_res_6	__gh_constraint_res_5, "=r" (res6)
++#define __gh_constraint_res_7	__gh_constraint_res_6, "=r" (res7)
++#define __gh_constraint_res_8	__gh_constraint_res_7, "=r" (res8)
++
++#define ___gh_constraint_res(nargs)	__gh_constraint_res_ ## nargs
++#define __gh_constraint_res(nargs)	___gh_constraint_res(nargs)
++#define _gh_constraint_res(...)				\
++	__gh_constraint_res(__gh_count_args(__VA_ARGS__))
++
++#define __gh_assign_res_0(...)
++
++#define __gh_assign_res_1(r1)					\
++	r1 = res1;
++
++#define __gh_assign_res_2(r1, r2)				\
++	__gh_assign_res_1(r1);					\
++	r2 = res2
++
++#define __gh_assign_res_3(r1, r2, r3)				\
++	__gh_assign_res_2(r1, r2);				\
++	r3 = res3
++
++#define __gh_assign_res_4(r1, r2, r3, r4)			\
++	__gh_assign_res_3(r1, r2, r3);				\
++	r4 = res4
++
++#define __gh_assign_res_5(r1, r2, r3, r4, r5)			\
++	__gh_assign_res_4(r1, r2, r3, r4);			\
++	r5 = res5
++
++#define __gh_assign_res_6(r1, r2, r3, r4, r5, r6)		\
++	__gh_assign_res_5(r1, r2, r3, r4, r5);			\
++	r6 = res6
++
++#define __gh_assign_res_7(r1, r2, r3, r4, r5, r6, r7)		\
++	__gh_assign_res_6(r1, r2, r3, r4, r5, r6);		\
++	r7 = res7
++
++#define __gh_assign_res_8(r1, r2, r3, r4, r5, r6, r7, r8)	\
++	__gh_assign_res_7(r1, r2, r3, r4, r5, r6, r7);		\
++	r8 = res8
++
++#define ___gh_assign_res(nargs)	__gh_assign_res_ ## nargs
++#define __gh_assign_res(nargs)	___gh_assign_res(nargs)
++#define _gh_assign_res(...) __gh_assign_res(__gh_count_args(__VA_ARGS__))(__VA_ARGS__)
++
++/**
++ * arch_gh_hypercall() - Performs an AArch64-specific call into hypervisor using Gunyah ABI
++ * @hcall_num: Hypercall function ID to invoke
++ * @nargs: Number of input arguments
++ * @...: First nargs are the input arguments. Remaining arguments are output variables.
++ */
++#define arch_gh_hypercall(hcall_num, nargs, ...)				\
++	do {									\
++		_gh_declare_res(__gh_to_res(nargs, __VA_ARGS__));		\
++		_gh_declare_args(nargs, __VA_ARGS__);				\
++		asm volatile(							\
++			     "hvc	%[num]\n"				\
++			     : _gh_constraint_res(__gh_to_res(nargs, __VA_ARGS__))	\
++			     : _gh_constraint_args(nargs)			\
++			       [num] "i" (hcall_num)				\
++			     : "x9", "x10", "x11", "x12", "x13", "x14", "x15", "x16", "x17", \
++			       "memory");					\
++		_gh_assign_res(__gh_to_res(nargs, __VA_ARGS__));		\
++	} while (0)
++
++#endif
 -- 
 2.25.1
 

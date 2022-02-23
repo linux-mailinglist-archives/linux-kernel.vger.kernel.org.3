@@ -2,81 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1A924C1284
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 13:13:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6760A4C1285
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 13:13:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240233AbiBWMNf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 07:13:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46790 "EHLO
+        id S240347AbiBWMNl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 07:13:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234296AbiBWMNd (ORCPT
+        with ESMTP id S240368AbiBWMNk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 07:13:33 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50DF29AD86;
-        Wed, 23 Feb 2022 04:13:05 -0800 (PST)
-Received: from zn.tnic (dslb-088-067-221-104.088.067.pools.vodafone-ip.de [88.67.221.104])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id BBD201EC0513;
-        Wed, 23 Feb 2022 13:12:59 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1645618379;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=gteGd11Jt7h+QAGrW830hXTEMn1cy4DB46HZyBPZsmo=;
-        b=Fj2YcrRUqhEaoJoKCeqK5tOBDRAl7PkHCVFguJVuhK8mci0/33tkpaPLwI+5KMjh5sF9u8
-        JKSrOHJ9l5Y4peNMwgCDH/SP6++XxmA+5PVZCs8Fc2Espb1OUwO10WDQnaYBM9+VH7Ofb6
-        BC6hBDm3wNNHvWviWHGbEUUhWsD/nC8=
-Date:   Wed, 23 Feb 2022 13:13:03 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Cc:     Brijesh Singh <brijesh.singh@amd.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-coco@lists.linux.dev, Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Peter Gonda <pgonda@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        David Rientjes <rientjes@google.com>,
-        Michael Roth <michael.roth@amd.com>,
-        Andi Kleen <ak@linux.intel.com>
-Subject: Re: [PATCH] x86/mm/cpa: Generalize __set_memory_enc_pgtable()
-Message-ID: <YhYkz7wMON1o64Ba@zn.tnic>
-References: <20220222185740.26228-1-kirill.shutemov@linux.intel.com>
- <20220223043528.2093214-1-brijesh.singh@amd.com>
- <YhYbLDTFLIksB/qp@zn.tnic>
- <20220223115539.pqk7624xku2qwhlu@black.fi.intel.com>
+        Wed, 23 Feb 2022 07:13:40 -0500
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 510959D060
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 04:13:12 -0800 (PST)
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+        by localhost (Postfix) with ESMTP id 4K3ZgV6HjGz9sSg;
+        Wed, 23 Feb 2022 13:13:10 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id AZzUVXXyVezj; Wed, 23 Feb 2022 13:13:10 +0100 (CET)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase2.c-s.fr (Postfix) with ESMTP id 4K3ZgV5Y7wz9sSZ;
+        Wed, 23 Feb 2022 13:13:10 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id B037E8B778;
+        Wed, 23 Feb 2022 13:13:10 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id rk39Sk2aK3bV; Wed, 23 Feb 2022 13:13:10 +0100 (CET)
+Received: from [192.168.7.201] (unknown [192.168.7.201])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 4ED8F8B763;
+        Wed, 23 Feb 2022 13:13:10 +0100 (CET)
+Message-ID: <2c2b0f65-38bd-d7b8-b146-0daf96b03559@csgroup.eu>
+Date:   Wed, 23 Feb 2022 13:13:10 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220223115539.pqk7624xku2qwhlu@black.fi.intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2 1/7] ftrace: Expose flags used for
+ ftrace_replace_code()
+Content-Language: fr-FR
+To:     "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Nicholas Piggin <npiggin@gmail.com>
+Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
+References: <cover.1561634177.git.naveen.n.rao@linux.vnet.ibm.com>
+ <51cba452b38ae55049bd15b0aeac6060cc1105f2.1561634177.git.naveen.n.rao@linux.vnet.ibm.com>
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+In-Reply-To: <51cba452b38ae55049bd15b0aeac6060cc1105f2.1561634177.git.naveen.n.rao@linux.vnet.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 23, 2022 at 02:55:39PM +0300, Kirill A. Shutemov wrote:
-> This operation can fail for TDX. We need to be able to return error code
-> here:
-> 	/* Notify hypervisor that we have successfully set/clr encryption attribute. */
-> 	if (!ret)
-> 		ret = x86_platform.guest.enc_status_change_finish(addr, numpages, enc);
 
-bool to state failure/success or you need to return a specific value?
 
--- 
-Regards/Gruss,
-    Boris.
+Le 27/06/2019 à 13:23, Naveen N. Rao a écrit :
+> Since ftrace_replace_code() is a __weak function and can be overridden,
+> we need to expose the flags that can be set. So, move the flags enum to
+> the header file.
+> 
+> Reviewed-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
+> Signed-off-by: Naveen N. Rao <naveen.n.rao@linux.vnet.ibm.com>
 
-https://people.kernel.org/tglx/notes-about-netiquette
+This series does apply anymore.
+
+We have a link to it in https://github.com/linuxppc/issues/issues/386
+
+I'll flag it "change requested"
+
+Christophe

@@ -2,104 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D04194C0798
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 03:07:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6383D4C079F
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 03:09:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236728AbiBWCIB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 21:08:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41030 "EHLO
+        id S236740AbiBWCJq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 21:09:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236690AbiBWCIA (ORCPT
+        with ESMTP id S236143AbiBWCJp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 21:08:00 -0500
-Received: from zg8tmty1ljiyny4xntqumjca.icoremail.net (zg8tmty1ljiyny4xntqumjca.icoremail.net [165.227.154.27])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id BD9E242A32;
-        Tue, 22 Feb 2022 18:07:31 -0800 (PST)
-Received: by ajax-webmail-mail-app3 (Coremail) ; Wed, 23 Feb 2022 10:06:48
- +0800 (GMT+08:00)
-X-Originating-IP: [180.169.129.130]
-Date:   Wed, 23 Feb 2022 10:06:48 +0800 (GMT+08:00)
-X-CM-HeaderCharset: UTF-8
-From:   "Jing Leng" <3090101217@zju.edu.cn>
-To:     "Greg KH" <gregkh@linuxfoundation.org>
-Cc:     balbi@kernel.org, bilbao@vt.edu, corbet@lwn.net,
-        laurent.pinchart@ideasonboard.com, mchehab+huawei@kernel.org,
-        pawell@cadence.com, rdunlap@infradead.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        "Jing Leng" <jleng@ambarella.com>
-Subject: Re: Re: [PATCH v2] usb: gadget: uvc: add framebased stream support
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20210104(ab8c30b6)
- Copyright (c) 2002-2022 www.mailtech.cn zju.edu.cn
-In-Reply-To: <Yg5pb1A9QlgoKYnm@kroah.com>
-References: <20220216081651.9089-1-3090101217@zju.edu.cn>
- <20220217104450.14372-1-3090101217@zju.edu.cn> <Yg5pb1A9QlgoKYnm@kroah.com>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=UTF-8
+        Tue, 22 Feb 2022 21:09:45 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C268313CE2
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 18:09:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1645582157;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=W9LkpmwRUB9s3DzzklqywD2GBEtiMiXthflpW97NS2M=;
+        b=i3PwiWxKRcCCRLelxFJMc8oFWIJjZE923xibPM10bxF/6Y42q87Z7EKls4dqbSK8CkhTVA
+        rC2mZJ7gB/56E5HV29FelPEeayZOvACq3ZWQ6BEU8b0lVyKUU4N8Dm58Q5THTFptu64LLQ
+        f5wfu9z6V20Wz+F1X7ca2mgKPWUAEjA=
+Received: from mail-lj1-f197.google.com (mail-lj1-f197.google.com
+ [209.85.208.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-633-WlvoN1TNPNS8WQ6ZQCA7RA-1; Tue, 22 Feb 2022 21:09:16 -0500
+X-MC-Unique: WlvoN1TNPNS8WQ6ZQCA7RA-1
+Received: by mail-lj1-f197.google.com with SMTP id r27-20020a2e575b000000b002463f43ca0aso4049032ljd.7
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 18:09:16 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=W9LkpmwRUB9s3DzzklqywD2GBEtiMiXthflpW97NS2M=;
+        b=E0L60FDyFIk1Bce8D1p/yrotFkU3YTjJ8/kZmAVhJcCxLFBSi8FQKgDUKsuTAkLtTD
+         OeFPv74+md9wZX7OsXQVSiHzLrvcSMPdVTCVdL3pzFmNMS351b1oQD4qbEzqq3ZQTAL/
+         byCM2FdvcSUUwQzDEuOoDGa5w1Vnc4wvvEMkxGOI/yTLo1e3ZcJC8dtRXw9dARPU7enF
+         ETIHv6UuzQYxtSbQucY7MhVEFr0FObukMNet+G39evjhjs6vuozFZJ0+gr2LVfIfHThw
+         fmlRL6ZKA7QWsCzo83+V9NOtv7Ldr9I3BfHaRGoEKiqakTuEvtm6sgrJETAezZDQnGHE
+         4Tng==
+X-Gm-Message-State: AOAM530J2YmRdP/GsR9SFf+jQBl8wkCs54BfO94BJDmc3M3IcVaC96rV
+        OUMFKnwSMbexwyut8zCTPojGOD2LBq8bVItVc7XQ6JfEvE7AySsBqb5wrCeGcr0SSUyjemPSwx3
+        PKaqL0DP0YkmWMlBvJtrblXL2YS89AwnVFoQQxL7w
+X-Received: by 2002:ac2:4da1:0:b0:438:74be:5a88 with SMTP id h1-20020ac24da1000000b0043874be5a88mr17748772lfe.210.1645582155152;
+        Tue, 22 Feb 2022 18:09:15 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwWVsv8Sx14FGPZdp4dBv1csb/D6luqE37ndqXaLZ0eJ0z4lL/rN+eJyDfku6eJ6K+YiTb9ktJZ9PM21p2/UQY=
+X-Received: by 2002:ac2:4da1:0:b0:438:74be:5a88 with SMTP id
+ h1-20020ac24da1000000b0043874be5a88mr17748759lfe.210.1645582154950; Tue, 22
+ Feb 2022 18:09:14 -0800 (PST)
 MIME-Version: 1.0
-Message-ID: <7b3d8dad.b85c3.17f2454bf49.Coremail.3090101217@zju.edu.cn>
-X-Coremail-Locale: en_US
-X-CM-TRANSID: cC_KCgDnX_O4lhViJo65DQ--.13863W
-X-CM-SenderInfo: qtqziiyqrsilo62m3hxhgxhubq/1tbiAwUKBVNG3FoJcQABsj
-X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
-        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
-        daVFxhVjvjDU=
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220222094742.16359-1-sgarzare@redhat.com>
+In-Reply-To: <20220222094742.16359-1-sgarzare@redhat.com>
+From:   Jason Wang <jasowang@redhat.com>
+Date:   Wed, 23 Feb 2022 10:09:03 +0800
+Message-ID: <CACGkMEtN_YO1Avi79bMyaCqLHMMpDaPvh1oVQPEMRYky_Zbugg@mail.gmail.com>
+Subject: Re: [PATCH v2] vhost/vsock: don't check owner in vhost_vsock_stop()
+ while releasing
+To:     Stefano Garzarella <sgarzare@redhat.com>
+Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        netdev <netdev@vger.kernel.org>,
+        virtualization <virtualization@lists.linux-foundation.org>,
+        syzbot <syzbot+1e3ea63db39f2b4440e0@syzkaller.appspotmail.com>,
+        kvm <kvm@vger.kernel.org>,
+        Anirudh Rayabharam <mail@anirudhrb.com>,
+        syzbot+3140b17cb44a7b174008@syzkaller.appspotmail.com,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Mike Christie <michael.christie@oracle.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGkgR3JlZyBLSCwKCj4gV2h5IG5vdCB1c2UgYSB1bmlvbiBoZXJlIGFzIHRoaXMgaXMgY29taW5n
-IGZyb20gdGhlIGhhcmR3YXJlLCByaWdodD8KPgoKSSB1c2VkIGEgdW5pb24gaW4gUEFUQ0ggdjEK
-KGh0dHBzOi8vcGF0Y2h3b3JrLmtlcm5lbC5vcmcvcHJvamVjdC9saW51eC11c2IvcGF0Y2gvMjAy
-MjAyMTYwODE2NTEuOTA4OS0xLTMwOTAxMDEyMTdAemp1LmVkdS5jbi8pLApJIGNvbXBpbGVkIGl0
-IHRvIGFybTY0IGJpbmFyeSB3aXRoIEdDQyAxMS4yLjEsIHRoZSBiaW5hcnkgd29ya3MgcHJvcGVy
-bHkuCkJ1dCAia2VybmVsIHRlc3Qgcm9ib3QgPGxrcEBpbnRlbC5jb20+IiByZXBvcnRlZCBhIHdh
-cm5pbmdzOgogPj4gZHJpdmVycy91c2IvZ2FkZ2V0L2Z1bmN0aW9uL3V2Y19jb25maWdmcy5jOjEw
-OTE6Mzogd2FybmluZzogCiBmaWVsZCAgd2l0aGluICdzdHJ1Y3QgdXZjZ19mcmFtZTo6KHVubmFt
-ZWQgYXQgZHJpdmVycy91c2IvZ2FkZ2V0L2Z1bmN0aW9uL3V2Y19jb25maWdmcy5jOjEwNjg6Mikn
-IAogaXMgbGVzcyBhbGlnbmVkIHRoYW4gJ3VuaW9uIHV2Y2dfZnJhbWU6Oihhbm9ueW1vdXMgYXQg
-ZHJpdmVycy91c2IvZ2FkZ2V0L2Z1bmN0aW9uL3V2Y19jb25maWdmcy5jOjEwOTE6MyknIAogYW5k
-IGlzIHVzdWFsbHkgZHVlIHRvICdzdHJ1Y3QgdXZjZ19mcmFtZTo6KHVubmFtZWQgYXQgZHJpdmVy
-cy91c2IvZ2FkZ2V0L2Z1bmN0aW9uL3V2Y19jb25maWdmcy5jOjEwNjg6MiknIAogYmVpbmcgcGFj
-a2VkLCB3aGljaCBjYW4gbGVhZCB0byB1bmFsaWduZWQgYWNjZXNzZXMgWy1XdW5hbGlnbmVkLWFj
-Y2Vzc10KICAgICAgICAgICAgICAgICAgIHVuaW9uIHsKICAgICAgICAgICAgICAgICAgIF4KICAg
-MSB3YXJuaW5nIGdlbmVyYXRlZC4KU28gSSB1c2UgYW5vdGhlciB3YXkgdG8gaGFuZGxlIHRoZSBm
-cmFtZSBzdHJ1Y3R1cmUuCgo+IFdoeSBpcyB0aGlzIHdyaXRhYmxlLCBidXQgdGhlIG90aGVyIHZh
-cmlhYmxlcyBhcmUgbm90Pwo+IAoKMS4gYkZvcm1hdEluZGV4IGlzIGF1dG9tYXRpYyBhdXRvIGNh
-bGN1bGF0ZWQgYnkgdGhlIGRyaXZlci4KICAgU28gaXQgaXMgcmVhZC1vbmx5LgoyLiBJIGRvbid0
-IGtub3cgd2h5ICJiX2FzcGVjdF9yYXRpb194IC8gYl9hc3BlY3RfcmF0aW9feSAvIGJtX2ludGVy
-ZmFjZV9mbGFncyIKICAgYXJlIHJlYWQtb25seS4gUGVyaGFwcyB0aGVzZSBwYXJhbWV0ZXJzIGNh
-biBiZSBvYnRhaW5lZCBkaXJlY3RseSBmcm9tIAogICB0aGUgYWN0dWFsIHN0cmVhbSwgc28gZHJp
-dmVyIGRvZXNuJ3QgbmVlZCB0byB0YWtlIGNhcmUgb2YgdGhlc2UgcGFyYW1ldGVycy4KMy4gSWYg
-YlZhcmlhYmxlU2l6ZSBpcyAxLCB0aGVuIGR3Qnl0ZXNQZXJMaW5lIG11c3QgYmUgc2V0dGVkIHRv
-IHplcm8gKDApLgogICBJZiBiVmFyaWFibGVTaXplIGlzIDAsIHRoZW4gZHdCeXRlc1BlckxpbmUg
-Y2FuIGJlIHNldHRlZCB0byBvdGhlciB2YWx1ZS4KICAgU28gaXQgaXMgd3JpdGFibGUuCgo+ID4g
-LQkJKnNpemUgKz0gc2l6ZW9mKGZybS0+ZnJhbWUpOwo+ID4gKwkJKnNpemUgKz0gc2l6ZW9mKGZy
-bS0+ZnJhbWUpIC0gNDsKPiAKPiBXaGVyZSBkaWQgIjQiIGNvbWUgZnJvbT8KPgoKVW5jb21wcmVz
-c2VkIGZyYW1lIGRvZXNuJ3QgaGF2ZSAidTMyIGR3X2J5dGVzX3BlcmxpbmUiLgpGcmFtZWJhc2Vk
-IGZyYW1lIGRvZXNuJ3QgaGF2ZSAidTMyIGR3X21heF92aWRlb19mcmFtZV9idWZmZXJfc2l6ZSIu
-CklmIHdlIHVzZSBhIHVuaW9uIGxpa2UgUEFUQ0ggdjEsIHRoZXJlJ3Mgbm8gbmVlZCB0byBkbyB0
-aGlzLgpNYXliZSB3ZSBjYW4gYWRkICIjZGVmaW5lIFVWQ0dfU1VCX0ZSQU1FX1BBWUxPQURfTEVO
-R1RIIDI2IiwgYW5kIHVzZQoiVVZDR19TVUJfRlJBTUVfUEFZTE9BRF9MRU5HVEgiIHRvIHJlcGxh
-Y2UgInNpemVvZihmcm0tPmZyYW1lKSAtIDQiCmZvciB0aGUgbmV3IFBBVENILgoKPiA+ICsJLyog
-YlZhcmlhYmxlU2l6ZSBpcyBvbmx5IGZvciBmcmFtZWJhc2VkIGZvcm1hdC4gKi8KPiA+ICsJX191
-OCAgYlZhcmlhYmxlU2l6ZTsKPiAKPiBUaGlzIGp1c3QgY2hhbmdlZCBhIHVzZXIgdmlzYWJsZSBz
-dHJ1Y3R1cmUgc2l6ZS4gIFdoYXQgYnJva2Ugd2hlbiBkb2luZwo+IHRoaXM/ICBXaGF0IHRvb2wg
-dXNlcyB0aGlzPwo+IAoKQXMgbG9uZyBhcyB1c2VycyB1c2UgIlVWQ19EVF9GT1JNQVRfVU5DT01Q
-UkVTU0VEX1NJWkUiIGluc3RlYWQgb2YKInNpemVvZihzdHJ1Y3QgdXZjX2Zvcm1hdF91bmNvbXBy
-ZXNzZWQpIiB0byBnZXQgdGhlIGxlbmd0aCwgdGhlcmUgaXMKbm8gcHJvYmxlbS4gU28gSSBoYXZl
-IHRoZSBmb2xsb3dpbmcgbW9kaWZpY2F0aW9uczoKICAgIC0JCQkqc2l6ZSArPSBzaXplb2YodS0+
-ZGVzYyk7CiAgICArCQkJKnNpemUgKz0gdS0+ZGVzYy5iTGVuZ3RoOwoKQ3VycmVudGx5IHRoaXMg
-Y2hhbmdlIGRvZXMgbm90IGJyZWFrIHRoZSBrZXJuZWwsIGFuZCB1dmMgc3RyZWFtIEFQUApiYXNl
-ZCBvbiBVVkMgZ2FkZ2V0IGRvZXNuJ3QgbmVlZCB0byB1c2UgInN0cnVjdCB1dmNfZm9ybWF0X3Vu
-Y29tcHJlc3NlZCIuCgpUaGVyZSBtYXkgYmUgc29tZSB0b29scyB3aGljaCB1c2UgaXQsIHRoZXkg
-Y2FuIHVzZSAKIlVWQ19EVF9GT1JNQVRfVU5DT01QUkVTU0VEX1NJWkUiIHRvIGNvdmVyIHRoZSBt
-b2RpZmljYXRpb24uCkluIGFkZGl0aW9uLCB3ZSBkb24ndCBuZWVkICJjb3B5IGFsbCB1bmNvbXBy
-ZXNzZWQgY29kZSwgcmVuYW1lCnVuY29tcHJlc3NlZCBhcyBmcmFtZWJhc2VkLCBhbmQgbWFrZSBh
-IGxpdHRsZSBjaGFuZ2UiIHRvIGFjY2VzcyBmcmFtZWJhc2VkCnN0cmVhbSBzdXBwb3J0LgoKVGhh
-bmtzLApKaW5nIExlbmcK
+On Tue, Feb 22, 2022 at 5:47 PM Stefano Garzarella <sgarzare@redhat.com> wrote:
+>
+> vhost_vsock_stop() calls vhost_dev_check_owner() to check the device
+> ownership. It expects current->mm to be valid.
+>
+> vhost_vsock_stop() is also called by vhost_vsock_dev_release() when
+> the user has not done close(), so when we are in do_exit(). In this
+> case current->mm is invalid and we're releasing the device, so we
+> should clean it anyway.
+>
+> Let's check the owner only when vhost_vsock_stop() is called
+> by an ioctl.
+>
+> When invoked from release we can not fail so we don't check return
+> code of vhost_vsock_stop(). We need to stop vsock even if it's not
+> the owner.
+>
+> Fixes: 433fc58e6bf2 ("VSOCK: Introduce vhost_vsock.ko")
+> Cc: stable@vger.kernel.org
+> Reported-by: syzbot+1e3ea63db39f2b4440e0@syzkaller.appspotmail.com
+> Reported-and-tested-by: syzbot+3140b17cb44a7b174008@syzkaller.appspotmail.com
+> Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
+
+Acked-by: Jason Wang <jasowang@redhat.com>
+
+> ---
+> v2:
+> - initialized `ret` in vhost_vsock_stop [Dan]
+> - added comment about vhost_vsock_stop() calling in the code and an explanation
+>   in the commit message [MST]
+>
+> v1: https://lore.kernel.org/virtualization/20220221114916.107045-1-sgarzare@redhat.com
+> ---
+>  drivers/vhost/vsock.c | 21 ++++++++++++++-------
+>  1 file changed, 14 insertions(+), 7 deletions(-)
+>
+> diff --git a/drivers/vhost/vsock.c b/drivers/vhost/vsock.c
+> index d6ca1c7ad513..37f0b4274113 100644
+> --- a/drivers/vhost/vsock.c
+> +++ b/drivers/vhost/vsock.c
+> @@ -629,16 +629,18 @@ static int vhost_vsock_start(struct vhost_vsock *vsock)
+>         return ret;
+>  }
+>
+> -static int vhost_vsock_stop(struct vhost_vsock *vsock)
+> +static int vhost_vsock_stop(struct vhost_vsock *vsock, bool check_owner)
+>  {
+>         size_t i;
+> -       int ret;
+> +       int ret = 0;
+>
+>         mutex_lock(&vsock->dev.mutex);
+>
+> -       ret = vhost_dev_check_owner(&vsock->dev);
+> -       if (ret)
+> -               goto err;
+> +       if (check_owner) {
+> +               ret = vhost_dev_check_owner(&vsock->dev);
+> +               if (ret)
+> +                       goto err;
+> +       }
+>
+>         for (i = 0; i < ARRAY_SIZE(vsock->vqs); i++) {
+>                 struct vhost_virtqueue *vq = &vsock->vqs[i];
+> @@ -753,7 +755,12 @@ static int vhost_vsock_dev_release(struct inode *inode, struct file *file)
+>          * inefficient.  Room for improvement here. */
+>         vsock_for_each_connected_socket(vhost_vsock_reset_orphans);
+>
+> -       vhost_vsock_stop(vsock);
+> +       /* Don't check the owner, because we are in the release path, so we
+> +        * need to stop the vsock device in any case.
+> +        * vhost_vsock_stop() can not fail in this case, so we don't need to
+> +        * check the return code.
+> +        */
+> +       vhost_vsock_stop(vsock, false);
+>         vhost_vsock_flush(vsock);
+>         vhost_dev_stop(&vsock->dev);
+>
+> @@ -868,7 +875,7 @@ static long vhost_vsock_dev_ioctl(struct file *f, unsigned int ioctl,
+>                 if (start)
+>                         return vhost_vsock_start(vsock);
+>                 else
+> -                       return vhost_vsock_stop(vsock);
+> +                       return vhost_vsock_stop(vsock, true);
+>         case VHOST_GET_FEATURES:
+>                 features = VHOST_VSOCK_FEATURES;
+>                 if (copy_to_user(argp, &features, sizeof(features)))
+> --
+> 2.35.1
+>
+

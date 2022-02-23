@@ -2,175 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 250674C1B61
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 20:06:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FB774C1B62
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 20:06:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244107AbiBWTGp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 14:06:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48276 "EHLO
+        id S244121AbiBWTG5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 14:06:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244112AbiBWTGn (ORCPT
+        with ESMTP id S232675AbiBWTGz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 14:06:43 -0500
-Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 199F93EF00
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 11:06:15 -0800 (PST)
-Received: by mail-yb1-xb33.google.com with SMTP id j12so49998265ybh.8
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 11:06:15 -0800 (PST)
+        Wed, 23 Feb 2022 14:06:55 -0500
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4983A3EF1D
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 11:06:26 -0800 (PST)
+Received: by mail-lf1-x12e.google.com with SMTP id w27so15128298lfa.5
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 11:06:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=linux-foundation.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=+uyB8qTyiqJA+8KT+MhYk3e+WJLsuNUugcYRMD4HHtc=;
-        b=XTcWUGqndSazCKYxvr5wfdVygp3PD8Q+5T/UmHtdzhxxiTh5N0vinkFlZN7MwnJGpP
-         PU/JSqVsObIVHE4Z/SRkI8lffvP1P9yocTbN/3F92cqvJYJsyiKWKImrpxxGoSZjr4Ie
-         DUK217WdtiEiy9Nj4AoJKGq1X+z0e4+9Tt3tL6dmFhfYS1kjuCuGA/Ug/xbccbpC6vrA
-         Z53QhfSqKz3YXtd70RcRkvZ8Y55npfAz2z5C5JqthTUdPFibChxuIHynA7xg/4pvipww
-         BNZheB27YegwfPK8nG3lG4IprMGjj/5oHGx8knm/KwgJ4Pc6Kob30ACxLMw1M3CHIagD
-         0uiw==
+        bh=mL0nR+ziEzThvzLITlZK1PYh9ofonS5DJNnVhGA9cEk=;
+        b=ZxfU9J7Sv2Cr5l8MpDBHBUZBrVW4RtmdXoajMkfvwL5M7gMkck9lVPP17E6o9PJ3/z
+         ETsUPxqKeXn2I8IImb0calaYlReEIGEV8iHd0/zOMfzCOmOYGI7/nX2ky2VlME1H418/
+         TnIcjdzbSuOjm67cwnrFkZVsdsAAO/6HIThdo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=+uyB8qTyiqJA+8KT+MhYk3e+WJLsuNUugcYRMD4HHtc=;
-        b=dOsPzNfQVUl0tl+29F4cW4DM4vM0L6JMN3PEIE35DLvPXqo6GK9GxRtl23ct0D6bGS
-         6WezwuvUA9aRPBPKfQXQA4xk7+muvxVmo5gNKqCKX4+lK+m2T3f+LQy/L1Cg62VW3FoL
-         /Kl+6Es7KU/h6CTS/S+GRKGomMqYHLgI7IT5KtIdBg46YJ7XE7a8Uwi/K7GssuLcwlt1
-         OPJORdC0lsDY3ixTjEJ1s/bAyBD/iMBaLA+1eN5r4JwNgjK6tgZY175C6MlODYb365Gu
-         aLWNvMcPnV7Z6Y4t/TYm1b4U2tP6seWQtkT4FKQCod5oPl5cPdKP3mTudjeY5jSrblez
-         MBUw==
-X-Gm-Message-State: AOAM531TALvXZBMymI4mGtbanM4ta/NXBCCpyT7+SvE2Uk4zxZgnQ7+z
-        KRITQL9+Uyzy2tgZ98i7pL6VSFPqeFvxAqwispl/5g==
-X-Google-Smtp-Source: ABdhPJzG+wZcj7IS5on1+GCgo2bfFUsCtjBnQs0QuELu2SkLfouEYImHnsLEqFHCrRSqVeoTZx4SqMYfZAhMCx7LVsU=
-X-Received: by 2002:a25:a4e8:0:b0:61e:1eb6:19bd with SMTP id
- g95-20020a25a4e8000000b0061e1eb619bdmr1094373ybi.168.1645643174054; Wed, 23
- Feb 2022 11:06:14 -0800 (PST)
+        bh=mL0nR+ziEzThvzLITlZK1PYh9ofonS5DJNnVhGA9cEk=;
+        b=r7lGxYVwD1xuGybT5aFWZhEOr3dkN5GOrtTfztRMPqDxAMNhChEUWsW5WF2v5cLN0Z
+         Dg+3WVYKFw2aJ9vr7GZCz5WN+spBAzRuKCQU4RtM8aDe5tlxm3UzgoWUkSM6KxEAKHvD
+         YrhN5jrLbrxlEEanQtNu4+D9gAzuswet3BHRJxUfQUo6h/BCgM4fPG4N9rPp8cTLBcgo
+         4VE4XP7iTLnmTlkD5b7lYgIlajq6b7hjTmqLRICJ02QSc8tojQrRpuC9rEaTFDQkOMEb
+         2PUmwYH5fWnMAp22If/VZo1KnwW85oFG6lWCiK12wZajYsTXDHDMRvvGbaroqAjHuLGJ
+         pi9Q==
+X-Gm-Message-State: AOAM531UB0qLEql4pihuzsAqShv3uy4L8R5/bbT2iZ38b56JifuP5WiM
+        D59Kc626AF041YHBNlBuIw2H7Q78iOJ7c8c2424=
+X-Google-Smtp-Source: ABdhPJz/xhH1EZyPY2/Bhae163Bl7DMER7+k/Fx3ezF2gj2ozgvKrGJXRK3VgR98FV7T3j1qUaIIYQ==
+X-Received: by 2002:a05:6512:32a6:b0:443:3d93:6f38 with SMTP id q6-20020a05651232a600b004433d936f38mr680901lfe.162.1645643184227;
+        Wed, 23 Feb 2022 11:06:24 -0800 (PST)
+Received: from mail-lj1-f170.google.com (mail-lj1-f170.google.com. [209.85.208.170])
+        by smtp.gmail.com with ESMTPSA id z4sm29228lfu.235.2022.02.23.11.06.19
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 23 Feb 2022 11:06:21 -0800 (PST)
+Received: by mail-lj1-f170.google.com with SMTP id r20so26129318ljj.1
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 11:06:19 -0800 (PST)
+X-Received: by 2002:a2e:80c6:0:b0:246:3334:9778 with SMTP id
+ r6-20020a2e80c6000000b0024633349778mr543364ljg.443.1645643179121; Wed, 23 Feb
+ 2022 11:06:19 -0800 (PST)
 MIME-Version: 1.0
-References: <20220221105336.522086-1-42.hyeyoo@gmail.com> <20220221105336.522086-2-42.hyeyoo@gmail.com>
- <4d42fcec-ff59-2e37-4d8f-a58e641d03c8@suse.cz>
-In-Reply-To: <4d42fcec-ff59-2e37-4d8f-a58e641d03c8@suse.cz>
-From:   Marco Elver <elver@google.com>
-Date:   Wed, 23 Feb 2022 20:06:02 +0100
-Message-ID: <CANpmjNMjgSKommNCrfyFuaz+3HQdW92ZSF_p26LQdmS0o3L98Q@mail.gmail.com>
-Subject: Re: [PATCH 1/5] mm/sl[au]b: Unify __ksize()
-To:     Vlastimil Babka <vbabka@suse.cz>
-Cc:     Hyeonggon Yoo <42.hyeyoo@gmail.com>, linux-mm@kvack.org,
-        Roman Gushchin <guro@fb.com>,
+References: <20220217184829.1991035-1-jakobkoschel@gmail.com>
+ <20220217184829.1991035-5-jakobkoschel@gmail.com> <20220218151216.GE1037534@ziepe.ca>
+ <6BA40980-554F-45E2-914D-5E4CD02FF21C@gmail.com>
+In-Reply-To: <6BA40980-554F-45E2-914D-5E4CD02FF21C@gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Wed, 23 Feb 2022 11:06:03 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wir=xabJ73Upk1dsuoMKWTTjTfeLFJ=p2S0yRYYaxW4fA@mail.gmail.com>
+Message-ID: <CAHk-=wir=xabJ73Upk1dsuoMKWTTjTfeLFJ=p2S0yRYYaxW4fA@mail.gmail.com>
+Subject: Re: [RFC PATCH 04/13] vfio/mdev: remove the usage of the list
+ iterator after the loop
+To:     Jakob <jakobkoschel@gmail.com>
+Cc:     Jason Gunthorpe <jgg@ziepe.ca>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Arnd Bergman <arnd@arndb.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        David Rientjes <rientjes@google.com>,
-        Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
         Kees Cook <keescook@chromium.org>,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>
+        Mike Rapoport <rppt@kernel.org>,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
+        Cristiano Giuffrida <c.giuffrida@vu.nl>,
+        "Bos, H.J." <h.j.bos@vu.nl>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 23 Feb 2022 at 19:39, Vlastimil Babka <vbabka@suse.cz> wrote:
-> On 2/21/22 11:53, Hyeonggon Yoo wrote:
-> > Only SLOB need to implement __ksize() separately because SLOB records
-> > size in object header for kmalloc objects. Unify SLAB/SLUB's __ksize().
-> >
-> > Signed-off-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
-> > ---
-> >  mm/slab.c        | 23 -----------------------
-> >  mm/slab_common.c | 29 +++++++++++++++++++++++++++++
-> >  mm/slub.c        | 16 ----------------
-> >  3 files changed, 29 insertions(+), 39 deletions(-)
-> >
-> > diff --git a/mm/slab.c b/mm/slab.c
-> > index ddf5737c63d9..eb73d2499480 100644
-> > --- a/mm/slab.c
-> > +++ b/mm/slab.c
-> > @@ -4199,27 +4199,4 @@ void __check_heap_object(const void *ptr, unsigned long n,
-> >  }
-> >  #endif /* CONFIG_HARDENED_USERCOPY */
-> >
-> > -/**
-> > - * __ksize -- Uninstrumented ksize.
-> > - * @objp: pointer to the object
-> > - *
-> > - * Unlike ksize(), __ksize() is uninstrumented, and does not provide the same
-> > - * safety checks as ksize() with KASAN instrumentation enabled.
-> > - *
-> > - * Return: size of the actual memory used by @objp in bytes
-> > - */
-> > -size_t __ksize(const void *objp)
-> > -{
-> > -     struct kmem_cache *c;
-> > -     size_t size;
-> >
-> > -     BUG_ON(!objp);
-> > -     if (unlikely(objp == ZERO_SIZE_PTR))
-> > -             return 0;
-> > -
-> > -     c = virt_to_cache(objp);
-> > -     size = c ? c->object_size : 0;
+On Wed, Feb 23, 2022 at 6:18 AM Jakob <jakobkoschel@gmail.com> wrote:
 >
-> This comes from commit a64b53780ec3 ("mm/slab: sanity-check page type when
-> looking up cache") by Kees and virt_to_cache() is an implicit check for
-> folio slab flag ...
->
-> > -
-> > -     return size;
-> > -}
-> > -EXPORT_SYMBOL(__ksize);
-> > diff --git a/mm/slab_common.c b/mm/slab_common.c
-> > index 23f2ab0713b7..488997db0d97 100644
-> > --- a/mm/slab_common.c
-> > +++ b/mm/slab_common.c
-> > @@ -1245,6 +1245,35 @@ void kfree_sensitive(const void *p)
-> >  }
-> >  EXPORT_SYMBOL(kfree_sensitive);
-> >
-> > +#ifndef CONFIG_SLOB
-> > +/**
-> > + * __ksize -- Uninstrumented ksize.
-> > + * @objp: pointer to the object
-> > + *
-> > + * Unlike ksize(), __ksize() is uninstrumented, and does not provide the same
-> > + * safety checks as ksize() with KASAN instrumentation enabled.
-> > + *
-> > + * Return: size of the actual memory used by @objp in bytes
-> > + */
-> > +size_t __ksize(const void *object)
-> > +{
-> > +     struct folio *folio;
-> > +
-> > +     if (unlikely(object == ZERO_SIZE_PTR))
-> > +             return 0;
-> > +
-> > +     folio = virt_to_folio(object);
-> > +
-> > +#ifdef CONFIG_SLUB
-> > +     if (unlikely(!folio_test_slab(folio)))
-> > +             return folio_size(folio);
-> > +#endif
-> > +
-> > +     return slab_ksize(folio_slab(folio)->slab_cache);
->
-> ... and here in the common version you now for SLAB trust that the folio
-> will be a slab folio, thus undoing the intention of that commit. Maybe
-> that's not good and we should keep the folio_test_slab() for both cases?
-> Although maybe it's also strange that prior this patch, SLAB would return 0
-> if the test fails, and SLUB would return folio_size(). Probably because with
-> SLUB this can be a large kmalloc here and with SLAB not. So we could keep
-> doing that in the unified version, or KASAN devs (CC'd) could advise
-> something better?
+> However, in this example, 'tmp' will be a out-of-bounds pointer
+> if the loop did finish without hitting the break, so the check past the
+> loop *could* match 'mdev' even though no break was ever met.
 
-Is this a definitive failure case? My opinion here is that returning 0
-from ksize() in case of failure will a) provide a way to check for
-error, and b) if the size is used unconditionally to compute an
-address may be the more graceful failure mode (see comment added in
-0d4ca4c9bab39 for what happens if we see invalid memory per KASAN
-being accessed).
+So just as context for others, since I was hit with the same confusion
+and didn't see what the relevance was for type speculation, when these
+patches seemed to be not about speculation at all.
+
+The background for this is that the list_for_each_entry() will set the
+iterator variable (here 'tmp') to be not the actual internal list
+pointer, but the pointer to the containing type (which is the whole
+'entry' part of the name, of course).
+
+And that is all good and true, but it's true only *WITHIN* that loop.
+At the exit condition, it will have hit the 'head' of the list, and
+the type that contains the list head is *not* necessarily the same
+type as the list entries.
+
+So that's where the type confusion comes from: if you access the list
+iterator outside the loop, and it could have fallen off the end of the
+loop, the list iterator pointer is now not actually really a valid
+pointer of that 'entry' type at all.
+
+And as such, you not only can't dereference it, but you also shouldn't
+even compare pointer values - because the pointer arithmetic that was
+valid for loop entries is not valid for the HEAD entry that is
+embedded in another type. So the pointer arithmetic might have turned
+it into a pointer outside the real container of the HEAD, and might
+actually match something else.
+
+Now, there are a number of reasons I really dislike the current RFC
+patch series, so I'm not claiming the patch is something we should
+apply as-is, but I'm trying to clarify why Jakob is doing what he's
+doing (because clearly I wasn't the only one taken  by surprise by
+it).
+
+The reasons I don't like it is:
+
+ - patches like these are very random. And very hard to read (and very
+easy to re-introduce the bug).
+
+ - I think it conflates the non-speculative "use pointer of the wrong
+type" issue like in this patch with the speculation
+
+ - I'm not even convinced that 'list_for_each_entry()' is that special
+wrt speculative type accesses, considering that we have other uses of
+doubly linked list *everywhere* - and it can happen in a lot of other
+situations anyway, so it all seems to be a bit ad hoc.
+
+but I do think the problem is real.
+
+So elsewhere I suggested that the fix to "you can't use the pointer
+outside the loop" be made to literally disallow it (using C99 for-loop
+variables seems the cleanest model), and have the compiler refuse to
+touch code that tries to use the loop iterator outside.
+
+And that is then entirely separate from the issue of actual
+speculative accesses (but honestly, I think that's a "you have to
+teach the compiler not to do them" issue, not a "let's randomly change
+*one* of our loop walkers).
+
+                Linus

@@ -2,85 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5ABE44C0FB9
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 11:00:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B69C4C0FBC
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 11:01:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237818AbiBWKAr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 05:00:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54088 "EHLO
+        id S239429AbiBWKCV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 05:02:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232757AbiBWKAo (ORCPT
+        with ESMTP id S236112AbiBWKCU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 05:00:44 -0500
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD75089CE4
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 02:00:16 -0800 (PST)
-Received: by mail-lj1-x229.google.com with SMTP id e2so20374969ljq.12
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 02:00:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=KjRNk806df2NZEel6HR0OBFdyY3J+pUWSPWymkVLPFs=;
-        b=L/bY7Hd1l+NE0lFKNPvrvbtKA+XRH/B1g+zl0CBMHf/q7KNnSoiuYRVL+GdIdRu1IU
-         jrVFSmUItFlCIugoop31cLAIbtcFbVdtB2BvYqtNBNr7apVUmRt9Cc37Htgd3rUuPH3B
-         g4MQqif+5yZMCyEKGfvZe7wXepuSL+tw9pRz1zdE3p13WM9nef9ZGDsiHm+eA5KXGMFU
-         sWQJ3/39FchyTtEDvkg1YqK0CDXAxVRIUBNZFZQb+78j35FjxGXDUpuDGKQj0rPwgqQD
-         huufR2YpUHPecD21q9oD/HXSt0tVK6cfsMl0V/NbX75r7eDLf6Dmo3VQ4bFkydRu1cnw
-         +bnA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=KjRNk806df2NZEel6HR0OBFdyY3J+pUWSPWymkVLPFs=;
-        b=a88t64mfJgo/vq8s8NtsyJc3UR5+l0tz63n0aEkEDLbV2IsN9d7Jxyx24b5TjOTkPM
-         hg/xjipZqF/raboXPdqpH+5215w4dcEQ6kCzwa9vrjT4Wb+Q5xnWz0Vo1FVF4J2EQNIN
-         IX1PlcknolvpNZWPRhPIOjmmGKrpmUSC6N376nmpqw7o4f6tvbqBis//A7BcCO9eStMG
-         NgAj4WHpmChvpjvjnDdru+13rQk+ItZp8eGFyqrC4FpWwfsa3pnZ/Kx2yjG1239bMZBn
-         bmBklBL8/s+rU5mqrMFXaENk0WbTVwYlIVz+C8XcvazHLGqV+RehR/DTCC66VvKlu5Fq
-         TFow==
-X-Gm-Message-State: AOAM532SFrkMsUpTPq5izosKkgv8VoNQ8psFXrpbnkiYo25eIjj5+flr
-        GWWXGGAB/FMJcFvxLeGPl/QWvQ==
-X-Google-Smtp-Source: ABdhPJxxwkBk1LLX9rUTnnMEKW4AA0UWWQGeRBmkSIs6AjPNN93uUfCEPcR6QiXqHXV3t9MDtNakAQ==
-X-Received: by 2002:a2e:9048:0:b0:246:1988:3105 with SMTP id n8-20020a2e9048000000b0024619883105mr19507617ljg.404.1645610414892;
-        Wed, 23 Feb 2022 02:00:14 -0800 (PST)
-Received: from [192.168.43.7] ([94.25.228.217])
-        by smtp.gmail.com with ESMTPSA id s5sm1618518lfr.55.2022.02.23.02.00.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 23 Feb 2022 02:00:14 -0800 (PST)
-Message-ID: <a065a843-e7c3-a75b-aa8e-d4b264146df0@linaro.org>
-Date:   Wed, 23 Feb 2022 13:00:12 +0300
+        Wed, 23 Feb 2022 05:02:20 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3ADF63F332;
+        Wed, 23 Feb 2022 02:01:53 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 063E41042;
+        Wed, 23 Feb 2022 02:01:53 -0800 (PST)
+Received: from lpieralisi (e121166-lin.cambridge.arm.com [10.1.196.255])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DE24E3F70D;
+        Wed, 23 Feb 2022 02:01:51 -0800 (PST)
+Date:   Wed, 23 Feb 2022 10:01:45 +0000
+From:   Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        bjorn.andersson@linaro.org
+Cc:     bhelgaas@google.com, svarbanov@mm-sol.com, robh@kernel.org,
+        linux-pci@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] PCI: qcom: Add support for handling MSIs from 8 endpoints
+Message-ID: <20220223100145.GA26873@lpieralisi>
+References: <20211214101319.25258-1-manivannan.sadhasivam@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [PATCH] drm/msm: Avoid dirtyfb stalls on video mode displays
-Content-Language: en-GB
-To:     Rob Clark <robdclark@gmail.com>, dri-devel@lists.freedesktop.org
-Cc:     freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        Rob Clark <robdclark@chromium.org>,
-        Sean Paul <sean@poorly.run>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Kalyan Thota <quic_kalyant@quicinc.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Krishna Manikandan <quic_mkrishn@quicinc.com>,
-        Mark Yacoub <markyacoub@google.com>,
-        Jessica Zhang <quic_jesszhan@quicinc.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Yangtao Li <tiny.windzz@gmail.com>,
-        David Heidelberg <david@ixit.cz>, Xu Wang <vulab@iscas.ac.cn>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20220219193957.577054-1-robdclark@gmail.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20220219193957.577054-1-robdclark@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211214101319.25258-1-manivannan.sadhasivam@linaro.org>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -89,152 +45,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/02/2022 22:39, Rob Clark wrote:
-> From: Rob Clark <robdclark@chromium.org>
+On Tue, Dec 14, 2021 at 03:43:19PM +0530, Manivannan Sadhasivam wrote:
+> The DWC controller used in the Qcom Platforms are capable of addressing the
+> MSIs generated from 8 different endpoints each with 32 vectors (256 in
+> total). Currently the driver is using the default value of addressing the
+> MSIs from 1 endpoint only. Extend it by passing the MAX_MSI_IRQS to the
+> num_vectors field of pcie_port structure.
 > 
-> Someone on IRC once asked an innocent enough sounding question:  Why
-> with xf86-video-modesetting is es2gears limited at 120fps.
-> 
-> So I broke out the perfetto tracing mesa MR and took a look.  It turns
-> out the problem was drm_atomic_helper_dirtyfb(), which would end up
-> waiting for vblank.. es2gears would rapidly push two frames to Xorg,
-> which would blit them to screen and in idle hook (I assume) call the
-> DIRTYFB ioctl.  Which in turn would do an atomic update to flush the
-> dirty rects, which would stall until the next vblank.  And then the
-> whole process would repeat.
-> 
-> But this is a bit silly, we only need dirtyfb for command mode DSI
-> panels.  So lets just skip it otherwise.
-> 
-> Signed-off-by: Rob Clark <robdclark@chromium.org>
+> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 > ---
->   drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c  | 13 +++++
->   drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.h  |  9 ++++
->   drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c   |  1 +
->   drivers/gpu/drm/msm/disp/mdp4/mdp4_crtc.c |  9 ++++
->   drivers/gpu/drm/msm/disp/mdp4/mdp4_kms.c  |  1 +
->   drivers/gpu/drm/msm/disp/mdp4/mdp4_kms.h  |  1 +
->   drivers/gpu/drm/msm/disp/mdp5/mdp5_crtc.c |  8 +++
->   drivers/gpu/drm/msm/disp/mdp5/mdp5_kms.c  |  1 +
->   drivers/gpu/drm/msm/disp/mdp5/mdp5_kms.h  |  1 +
->   drivers/gpu/drm/msm/msm_fb.c              | 64 ++++++++++++++++++++++-
->   drivers/gpu/drm/msm/msm_kms.h             |  2 +
->   11 files changed, 109 insertions(+), 1 deletion(-)
+>  drivers/pci/controller/dwc/pcie-qcom.c | 1 +
+>  1 file changed, 1 insertion(+)
+
+Need an ACK from qcom maintainers.
+
+Thanks,
+Lorenzo
+
+> diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
+> index 1c3d1116bb60..8a4c08d815a5 100644
+> --- a/drivers/pci/controller/dwc/pcie-qcom.c
+> +++ b/drivers/pci/controller/dwc/pcie-qcom.c
+> @@ -1550,6 +1550,7 @@ static int qcom_pcie_probe(struct platform_device *pdev)
+>  	pci->dev = dev;
+>  	pci->ops = &dw_pcie_ops;
+>  	pp = &pci->pp;
+> +	pp->num_vectors = MAX_MSI_IRQS;
+>  
+>  	pcie->pci = pci;
+>  
+> -- 
+> 2.25.1
 > 
-
-I have checked your previous dirtyfb patch (and corresponding discussion).
-
-I'm not fond of the idea of acquiring locks, computing the value, then 
-releasing the locks and reacquiring the locks again. I understand the 
-original needs_dirtyfb approach was frowned upon. Do we have a chance of 
-introducing drm_atomic_helper_dirtyfb_unlocked()? Which would perform 
-all the steps of the orignal helper, but without locks acquirement (and 
-state allocation/freeing)?
-
-[skipped]
-
-> diff --git a/drivers/gpu/drm/msm/msm_fb.c b/drivers/gpu/drm/msm/msm_fb.c
-> index 4d34df5354e0..1b0648baeae2 100644
-> --- a/drivers/gpu/drm/msm/msm_fb.c
-> +++ b/drivers/gpu/drm/msm/msm_fb.c
-> @@ -24,10 +24,72 @@ struct msm_framebuffer {
->   static struct drm_framebuffer *msm_framebuffer_init(struct drm_device *dev,
->   		const struct drm_mode_fb_cmd2 *mode_cmd, struct drm_gem_object **bos);
->   
-> +static int msm_framebuffer_dirtyfb(struct drm_framebuffer *fb,
-> +				   struct drm_file *file_priv, unsigned int flags,
-> +				   unsigned int color, struct drm_clip_rect *clips,
-> +				   unsigned int num_clips)
-> +{
-> +	struct msm_drm_private *priv = fb->dev->dev_private;
-> +	struct drm_modeset_acquire_ctx ctx;
-> +	struct drm_plane *plane;
-> +	bool needs_flush = false;
-> +	int ret = 0;
-> +
-> +	/*
-> +	 * When called from ioctl, we are interruptible, but not when called
-> +	 * internally (ie. defio worker)
-> +	 */
-> +	drm_modeset_acquire_init(&ctx,
-> +		file_priv ? DRM_MODESET_ACQUIRE_INTERRUPTIBLE : 0);
-> +
-> +retry:
-> +	drm_for_each_plane(plane, fb->dev) {
-> +		struct drm_plane_state *plane_state;
-> +		struct drm_crtc *crtc;
-> +
-> +		ret = drm_modeset_lock(&plane->mutex, &ctx);
-> +		if (ret)
-> +			goto out;
-> +
-> +		if (plane->state->fb != fb) {
-> +			drm_modeset_unlock(&plane->mutex);
-> +			continue;
-> +		}
-> +
-> +		crtc = plane->state->crtc;
-> +
-> +		ret = drm_modeset_lock(&crtc->mutex, &ctx);
-> +		if (ret)
-> +			goto out;
-> +
-> +		if (priv->kms->funcs->needs_dirtyfb(crtc)) {
-> +			needs_flush = true;
-> +			break;
-> +		}
-> +	}
-> +
-> +out:
-> +	if (ret == -EDEADLK) {
-> +		ret = drm_modeset_backoff(&ctx);
-> +		if (!ret)
-> +			goto retry;
-> +	}
-> +
-> +	drm_modeset_drop_locks(&ctx);
-> +	drm_modeset_acquire_fini(&ctx);
-> +
-> +	if (needs_flush) {
-
-This bit triggers my paranoia. The driver computes the value with the 
-locks being held and then performs some action depending on the computed 
-value after releasing the locks.
-
-I'd prefer to acquire modesetting locks for all the planes (and allocate 
-atomic state), check if the dirtyfb processing is needed, then call 
-drm_atomic_helper_dirtyfb_unlocked() withith the same locks section.
-
-> +		ret = drm_atomic_helper_dirtyfb(fb, file_priv, flags,
-> +						color, clips, num_clips);
-> +	}
-> +
-> +	return ret;
-> +}
-> +
->   static const struct drm_framebuffer_funcs msm_framebuffer_funcs = {
->   	.create_handle = drm_gem_fb_create_handle,
->   	.destroy = drm_gem_fb_destroy,
-> -	.dirty = drm_atomic_helper_dirtyfb,
-> +	.dirty = msm_framebuffer_dirtyfb,
->   };
->   
->   #ifdef CONFIG_DEBUG_FS
-> diff --git a/drivers/gpu/drm/msm/msm_kms.h b/drivers/gpu/drm/msm/msm_kms.h
-> index 2a4f0526cb98..eb870d499d1e 100644
-> --- a/drivers/gpu/drm/msm/msm_kms.h
-> +++ b/drivers/gpu/drm/msm/msm_kms.h
-> @@ -117,6 +117,8 @@ struct msm_kms_funcs {
->   			struct drm_encoder *encoder,
->   			struct drm_encoder *slave_encoder,
->   			bool is_cmd_mode);
-> +	bool (*needs_dirtyfb)(struct drm_crtc *crtc);
-> +
->   	/* cleanup: */
->   	void (*destroy)(struct msm_kms *kms);
->   
-
-
--- 
-With best wishes
-Dmitry

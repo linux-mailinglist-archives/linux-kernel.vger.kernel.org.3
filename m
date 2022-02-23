@@ -2,58 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A1924C19F1
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 18:36:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 702A04C19F2
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 18:37:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243410AbiBWRge (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 12:36:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51742 "EHLO
+        id S240809AbiBWRiX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 12:38:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242141AbiBWRgc (ORCPT
+        with ESMTP id S232607AbiBWRiU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 12:36:32 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1EFE554A2;
-        Wed, 23 Feb 2022 09:36:02 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: nfraprado)
-        with ESMTPSA id B13981F41250
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1645637761;
-        bh=CSOlJtblEwB4RlgPahvcN3gy+e32KywvGIkmYOzijI0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YVngT9RX4Zl8QM2ArzTdGkd+v6f9P7vNkU8HsSyWpEFDVkJFkdig9Y38uTCEdsr5O
-         5t6Ht9ZtyTDN+d1KqBwwOel2VU2Y6WYNaZMuFi3kjgIhHr7/Prog05ocB5CiV5IY2U
-         ymtA7PWhTGWrPnYdV0zUaKANpOI6GJ/Jgn30ZmrySwXWP5kKbr/vxIFVvwllKBgATa
-         NJkBmrDA9ZRwPK2lbqCDN+jOp/x4V7Lnt3XIN0vA6EYcRWItn8CGNs50sZwyOqazHQ
-         RG2MZ7y+cz0OgnTVSm4lttyzqdgJtqyC2coEngJCR7pVwOH33+NjiCD0Zv5dcap+c2
-         H3nWRyFpsEdow==
-Date:   Wed, 23 Feb 2022 12:35:56 -0500
-From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
-        <nfraprado@collabora.com>
-To:     Allen-KH Cheng <allen-kh.cheng@mediatek.com>
-Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Min Guo <Min.Guo@mediatek.com>,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH] dt-bindings: phy: Add compatible for Mediatek MT8192
-Message-ID: <20220223173556.u3dx7ugpxpcpir2n@notapiano>
-References: <20220217135620.10559-1-allen-kh.cheng@mediatek.com>
+        Wed, 23 Feb 2022 12:38:20 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 744AC6242;
+        Wed, 23 Feb 2022 09:37:52 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E6D1B61381;
+        Wed, 23 Feb 2022 17:37:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EBD0CC340E7;
+        Wed, 23 Feb 2022 17:37:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645637871;
+        bh=Okm5ikpIqu6C888lmXJ1Nz52yJBp2pGvTixiTk0zlZ0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=ZjheHihqnT5OjGKK7REeyBqKOZF5Us3zcTAo092EDrHdggsO0QouNyeiFMCZEC8ch
+         HiZht0O5gZcAuU7TyhJXiKxNmNkxHMVR1IWXeriTSskojPuqEp44DXO3EJ+XAsaU3j
+         M1WNfXv1+wrLPajG1TCMlq9djxeRiAg+KBnxYkjQPPyLQ5XBPlZzx+cfh7TpBMXGN/
+         mlf/uE8XAIMxRDkxEX7w92WXv4cYmCLDEcx+9z9KoQaonq8BRcKq5WWCzC7R2V8hDj
+         1afYMzSACpKd7WD0eqmHvyaa5Xtvpq2m3ZbRWGZ5xO6lxx5r6DF7NUrCj72IoVDG0Q
+         vlxBL48wjPwaA==
+Date:   Wed, 23 Feb 2022 09:37:49 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Guillaume Nault <gnault@redhat.com>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "Ziyang Xuan (William)" <william.xuanziyang@huawei.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        David Miller <davem@davemloft.net>,
+        netdev <netdev@vger.kernel.org>,
+        Vasily Averin <vvs@virtuozzo.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH net] net: vlan: allow vlan device MTU change follow real
+ device from smaller to bigger
+Message-ID: <20220223093749.6b33345a@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <20220223165836.GC19531@debian.home>
+References: <20220221124644.1146105-1-william.xuanziyang@huawei.com>
+        <CANn89iKyWWCbAdv8W26HwGpM9q5+6rrk9E-Lbd2aujFkD3GMaQ@mail.gmail.com>
+        <YhQ1KrtpEr3TgCwA@gondor.apana.org.au>
+        <8248d662-8ea5-7937-6e34-5f1f8e19190f@huawei.com>
+        <CANn89iLf2ira4XponYV91cbvcdK76ekU7fDW93fmuJ3iytFHcw@mail.gmail.com>
+        <20220222103733.GA3203@debian.home>
+        <20220222152815.1056ca24@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+        <20220223112618.GA19531@debian.home>
+        <20220223080342.5cdd597c@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+        <20220223165836.GC19531@debian.home>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220217135620.10559-1-allen-kh.cheng@mediatek.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,54 +70,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Allen,
-
-thanks for the patch. Please see the comment below.
-
-On Thu, Feb 17, 2022 at 09:56:20PM +0800, Allen-KH Cheng wrote:
-> This commit adds dt-binding documentation of T-Phy for Mediatek MT8192 SoC
-> Platform.
-
-Commit messages should be in imperative [1]. I'd suggest the following message:
-
-	Add MT8192 compatible to the Mediatek T-PHY dt-binding.
-
-[1] https://www.kernel.org/doc/html/latest/process/submitting-patches.html#describe-your-changes
-
-Also, the commit title would be better if it had the tag for the tphy file, like
-this:
-
-	dt-bindings: phy: mediatek,tphy: Add compatible for MT8192
-
-Otherwise it's not clear that you're changing the T-PHY just from the title.
-
+On Wed, 23 Feb 2022 17:58:36 +0100 Guillaume Nault wrote:
+> On Wed, Feb 23, 2022 at 08:03:42AM -0800, Jakub Kicinski wrote:
+> > I meant
+> > 
+> >   ip link set dev vlan0 mtu-policy blah
+> > 
+> > but also
+> > 
+> >   ip link set dev bond0 mtu-policy blah
+> > 
+> > and
+> > 
+> >   ip link set dev macsec0 mtu-policy blah2
+> >   ip link set dev vxlan0 mtu-policy blah2
+> > 
+> > etc.  
 > 
-> Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+> Unless I'm missing something, that looks very much like what I proposed
+> (these are all ARPHRD_ETHER devices). It's just a bit unclear whether
+> "ip link set dev vlan0 mtu-policy blah" applies to vlan0 or to the vlans
+> that might be stacked on top of it (given your other examples, I assume
+> it's the later).
 
-Other than that,
+No, sorry I thought it would be clear, we need that neuralink ;)
+It applies to the device on which it's configured. What I mean
+is that bond, macsec, mpls etc have the same "should it follow 
+the MTU of the lower device" problem, it's not vlan specific.
+Or am I wrong about that?
 
-Reviewed-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
-
-Thanks,
-Nícolas
-
-> ---
->  Documentation/devicetree/bindings/phy/mediatek,tphy.yaml | 1 +
->  1 file changed, 1 insertion(+)
+> > To be honest I'm still not clear if this is a real problem.
+> > The patch does not specify what the use case is.  
 > 
-> diff --git a/Documentation/devicetree/bindings/phy/mediatek,tphy.yaml b/Documentation/devicetree/bindings/phy/mediatek,tphy.yaml
-> index d279ba222316..7b2e1bc119be 100644
-> --- a/Documentation/devicetree/bindings/phy/mediatek,tphy.yaml
-> +++ b/Documentation/devicetree/bindings/phy/mediatek,tphy.yaml
-> @@ -81,6 +81,7 @@ properties:
->                - mediatek,mt7629-tphy
->                - mediatek,mt8183-tphy
->                - mediatek,mt8186-tphy
-> +              - mediatek,mt8192-tphy
->            - const: mediatek,generic-tphy-v2
->        - items:
->            - enum:
-> -- 
-> 2.18.0
-> 
-> 
+> It's probably not a problem as long as we keep sane behaviour by
+> default. Then we can let admins opt in for something more complex or
+> loosely defined.
+
+What I meant was - does anyone actually flip the MTU of their
+interfaces back and forth while the system is running. Maybe
+people do.

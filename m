@@ -2,41 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B69C4C0FBC
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 11:01:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BB554C0FBF
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 11:02:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239429AbiBWKCV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 05:02:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56176 "EHLO
+        id S239451AbiBWKDQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 05:03:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236112AbiBWKCU (ORCPT
+        with ESMTP id S236112AbiBWKDO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 05:02:20 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3ADF63F332;
-        Wed, 23 Feb 2022 02:01:53 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 063E41042;
-        Wed, 23 Feb 2022 02:01:53 -0800 (PST)
-Received: from lpieralisi (e121166-lin.cambridge.arm.com [10.1.196.255])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DE24E3F70D;
-        Wed, 23 Feb 2022 02:01:51 -0800 (PST)
-Date:   Wed, 23 Feb 2022 10:01:45 +0000
-From:   Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        bjorn.andersson@linaro.org
-Cc:     bhelgaas@google.com, svarbanov@mm-sol.com, robh@kernel.org,
-        linux-pci@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] PCI: qcom: Add support for handling MSIs from 8 endpoints
-Message-ID: <20220223100145.GA26873@lpieralisi>
-References: <20211214101319.25258-1-manivannan.sadhasivam@linaro.org>
+        Wed, 23 Feb 2022 05:03:14 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB29A8A322;
+        Wed, 23 Feb 2022 02:02:46 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7D82FB81E8F;
+        Wed, 23 Feb 2022 10:02:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B37AC340E7;
+        Wed, 23 Feb 2022 10:02:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645610564;
+        bh=cks2kgUvdKn9yDgezou3U+aY6IvjpnR2cUfofxlMj+s=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=nRHmOuU36eoGAr9V14rHJUhbunESuk0OXwMyAt4xUf0FKKEmfVlXGX3/aiqaCwz/f
+         ONKt4CtIO2AlG9DhygHFT7O7TldGYkqsaYfXdeQat+huiQrLPsAasCuFdhAPKsYj6q
+         QW2QD4ssaN1ul98IzUEFTsZ4fydKBYN+2uOrVOS/5sfo1PD+n6yM0g6Mdjkb5k3RtK
+         hgB45kMZ/sJ5CUJ6lStizDKbW0n7Pnmzp7SJ2jP2UWVao0S+5c9wQfcPIzucLYseIX
+         ZDbA0Wd+1ORRBRLtNZyeA/tYuh0vm8YmTruqNvQpDKChiqkKxGxXFyASsloLUtyJOH
+         zkmqapedNuJ5w==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id E2C0B400FE; Wed, 23 Feb 2022 07:02:40 -0300 (-03)
+Date:   Wed, 23 Feb 2022 07:02:40 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Leo Yan <leo.yan@linaro.org>
+Cc:     German Gomez <german.gomez@arm.com>, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org,
+        John Garry <john.garry@huawei.com>,
+        Will Deacon <will@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH] perf arm-spe: Use advertised caps/min_interval as
+ default sample_period
+Message-ID: <YhYGQO+DPwcWyT8i@kernel.org>
+References: <20220221171042.58460-1-german.gomez@arm.com>
+ <20220223011436.GA414932@leoy-ThinkPad-X240s>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211214101319.25258-1-manivannan.sadhasivam@linaro.org>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+In-Reply-To: <20220223011436.GA414932@leoy-ThinkPad-X240s>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -45,35 +67,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 14, 2021 at 03:43:19PM +0530, Manivannan Sadhasivam wrote:
-> The DWC controller used in the Qcom Platforms are capable of addressing the
-> MSIs generated from 8 different endpoints each with 32 vectors (256 in
-> total). Currently the driver is using the default value of addressing the
-> MSIs from 1 endpoint only. Extend it by passing the MAX_MSI_IRQS to the
-> num_vectors field of pcie_port structure.
+Em Wed, Feb 23, 2022 at 09:14:36AM +0800, Leo Yan escreveu:
+> On Mon, Feb 21, 2022 at 05:10:42PM +0000, German Gomez wrote:
+> > When recording SPE traces, the default sample_period is currently being
+> > set to 1 in the perf_event_attr fields, instead of the value advertised
+> > in '/sys/devices/arm_spe_0/caps/min_interval':
+> > 
+> > Before:
+> > 
+> > $ perf record -e arm_spe// -vv -- sleep 1
+> > [...]
+> >   { sample_period, sample_freq }   1
+> > [...]
+> > 
+> > Use the value from the above sysfs location as a more sensible default
+> > (it was already being read, but the value not being used)
+> > 
+> > After:
+> > 
+> > $ perf record -e arm_spe// -vv -- sleep 1
+> > [...]
+> >   { sample_period, sample_freq }   1024
+> > [...]
+> > 
+> > Signed-off-by: German Gomez <german.gomez@arm.com>
 > 
-> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> ---
->  drivers/pci/controller/dwc/pcie-qcom.c | 1 +
->  1 file changed, 1 insertion(+)
-
-Need an ACK from qcom maintainers.
-
-Thanks,
-Lorenzo
-
-> diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
-> index 1c3d1116bb60..8a4c08d815a5 100644
-> --- a/drivers/pci/controller/dwc/pcie-qcom.c
-> +++ b/drivers/pci/controller/dwc/pcie-qcom.c
-> @@ -1550,6 +1550,7 @@ static int qcom_pcie_probe(struct platform_device *pdev)
->  	pci->dev = dev;
->  	pci->ops = &dw_pcie_ops;
->  	pp = &pci->pp;
-> +	pp->num_vectors = MAX_MSI_IRQS;
->  
->  	pcie->pci = pci;
->  
-> -- 
-> 2.25.1
+> The change looks good to me:
 > 
+> Reviewed-by: Leo Yan <leo.yan@linaro.org>
+
+Thanks, applied.
+
+- Arnaldo
+

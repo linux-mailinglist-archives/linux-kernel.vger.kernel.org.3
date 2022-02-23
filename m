@@ -2,164 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2A4E4C1139
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 12:26:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 04A254C113B
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 12:27:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239841AbiBWL0x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 06:26:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34242 "EHLO
+        id S239846AbiBWL1j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 06:27:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236327AbiBWL0w (ORCPT
+        with ESMTP id S233080AbiBWL1g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 06:26:52 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B303E9024D
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 03:26:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1645615583;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Haw7XCJunvY/DjkGYU10zm/TPnhQIIAXDUz4hP9McDQ=;
-        b=U+jAKXUz9cCflcHFuVRImQn8c65cuehczK9V1Vs/TIrMy3eijNdXRmvZMxkz8q1n5j5ylE
-        UCajgCp/GBsCtigg8kYNGK3SvHlSawhQ5RM8JHXHqLtRfbCfFYrYdjF6gKfOqWQa7gFsit
-        41q/Tr/iZf1J6eHbLIuYLowjV8c1CpA=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-37-Z13veCtBN9CMqTZX0Qkyig-1; Wed, 23 Feb 2022 06:26:22 -0500
-X-MC-Unique: Z13veCtBN9CMqTZX0Qkyig-1
-Received: by mail-wm1-f71.google.com with SMTP id w3-20020a7bc743000000b0037c5168b3c4so984061wmk.7
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 03:26:22 -0800 (PST)
+        Wed, 23 Feb 2022 06:27:36 -0500
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B53938BCF
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 03:27:08 -0800 (PST)
+Received: by mail-lf1-x132.google.com with SMTP id g39so30426747lfv.10
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 03:27:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language
+         :from:to:references:in-reply-to:content-transfer-encoding;
+        bh=vPyJuAf88myS7si5WcR+zzfh8HnXlbMVH6oIBvug8tI=;
+        b=UqLvYJoTi5ddiTkA4j0CM0QCdyIxz6qClqQgMk/4ddFLkimncoMhxKGYAnxsGIHluY
+         uCkT+oc1lurVlRab923X0MWtaVtAOuyWNkigH3Xo1QMW4jBy9fEhRT2hBTmAc5nEktqC
+         u1IkOWjY/W6nUasJVGndlmCGsJ6iFBEkV04GNEiAkph/Y+RMqnPnY2vywYxbg+0UJ8SB
+         EKYWu5/DqVhi2fhmYqY1g82YIPIgWWmpQwMZGGZsSemIo8AiAQtRM1FR1hsaLkzYtTgf
+         d4k2jW/baYhRq9MOmL0y2Hx2V+b7eQ5TVsLs/hLFcFfMcmrezNlXiPFT0PPr3NKweNyx
+         RhTg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Haw7XCJunvY/DjkGYU10zm/TPnhQIIAXDUz4hP9McDQ=;
-        b=P5Xc97h9rGO20rpMvQiNBi6YUC0DnyLkAurnGva8VqN7jayzRtGCg/CB6pFd/PX+0E
-         dKLvHRJJOpmWv+aY7vov2HeC7Vxq9ocs8XaIHtKDebo6Vj02hJsWNyZPnfgXx0EGTKK+
-         MmvU2stZCYpa2QvyX0TRRT5wDyUDSZ+iYE9PBlXdBkzg4nfMuLVGQnREIB9RMygc1ste
-         NVMmgMHLBRpix6WdEKJPkvkYIyWQU42p6OvmkAWlgNKo8tjz8GJ8M5S6R8axCCEG874q
-         bU9KJroffmEodWtgBti/b8WPgc3bg+iYuhaKhQVtE+UQQSKyT31kFZfigyD1eL40W1gx
-         xmHQ==
-X-Gm-Message-State: AOAM5307BgWLvutDyj7f4QyG0dCcBLe0I9XIREf09MFF4yS20Ut2CN11
-        dFL6EAAMcLO8JFctOLyPfhGBwaGVGo2Y5cgYsPc055i8FJZbSndtDPeAEzjYzgj/EvbFb09uj01
-        dxvY+rTH6ZyxZiEuckOCIjpRl
-X-Received: by 2002:adf:e2cf:0:b0:1ed:a702:5ef4 with SMTP id d15-20020adfe2cf000000b001eda7025ef4mr2247208wrj.487.1645615581413;
-        Wed, 23 Feb 2022 03:26:21 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJykSRUu2MIXs7qWqdvPoNdIH8fNfCQn7v7rt5GYse64UKs0Uo+59+0XKkms3GN06X84NEVg5Q==
-X-Received: by 2002:adf:e2cf:0:b0:1ed:a702:5ef4 with SMTP id d15-20020adfe2cf000000b001eda7025ef4mr2247190wrj.487.1645615581185;
-        Wed, 23 Feb 2022 03:26:21 -0800 (PST)
-Received: from debian.home (2a01cb058d3818005c1e4a7b0f47339f.ipv6.abo.wanadoo.fr. [2a01:cb05:8d38:1800:5c1e:4a7b:f47:339f])
-        by smtp.gmail.com with ESMTPSA id f63sm3976646wma.17.2022.02.23.03.26.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Feb 2022 03:26:20 -0800 (PST)
-Date:   Wed, 23 Feb 2022 12:26:18 +0100
-From:   Guillaume Nault <gnault@redhat.com>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Eric Dumazet <edumazet@google.com>,
-        "Ziyang Xuan (William)" <william.xuanziyang@huawei.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        David Miller <davem@davemloft.net>,
-        netdev <netdev@vger.kernel.org>,
-        Vasily Averin <vvs@virtuozzo.com>,
-        Kees Cook <keescook@chromium.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH net] net: vlan: allow vlan device MTU change follow real
- device from smaller to bigger
-Message-ID: <20220223112618.GA19531@debian.home>
-References: <20220221124644.1146105-1-william.xuanziyang@huawei.com>
- <CANn89iKyWWCbAdv8W26HwGpM9q5+6rrk9E-Lbd2aujFkD3GMaQ@mail.gmail.com>
- <YhQ1KrtpEr3TgCwA@gondor.apana.org.au>
- <8248d662-8ea5-7937-6e34-5f1f8e19190f@huawei.com>
- <CANn89iLf2ira4XponYV91cbvcdK76ekU7fDW93fmuJ3iytFHcw@mail.gmail.com>
- <20220222103733.GA3203@debian.home>
- <20220222152815.1056ca24@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:from:to:references:in-reply-to
+         :content-transfer-encoding;
+        bh=vPyJuAf88myS7si5WcR+zzfh8HnXlbMVH6oIBvug8tI=;
+        b=SPRBnDYe9+AMaUfRxvQrVqFzwZ9l4iGZ0nDkpeK8x6PvBnqNMnRo7G0itDD+DDuL3l
+         fzWwLJQt8qisFQBLS1+gumHDCBj54sGHBpFav1g3gUcAaxrNOQ4YONZklMahPLYYj+JW
+         JtmA3KUuJxva7+05AP7WrnGmtTPKCBy95JRe1GlJodQ3H2nY3N1w8u9YRGD4rFjm+ph6
+         6vbat/KGt0vhBRhwgtdGeuBlXGNKlt101YEovPtwsbvuV6xyvrG14ScLBWyZZlXvOxjt
+         927YBJimGS4gkqNLObaP3tn5a0b8Y2rtAJDOI9OxINorb59Qd1XiTPMLLoXSFKzDZwVc
+         xclA==
+X-Gm-Message-State: AOAM532xdFI797d8UOUaDYTSA5xcNoAzPZRcAYSBK2aHlDmN7TPkSc+4
+        fLdjJJTC1wOWu36pHAgHg/S7YjucELUTDg==
+X-Google-Smtp-Source: ABdhPJx2gZHv46TNk5w/E+jP+2xTAixpxHt0WoJzaCTH92y3YKVnBZPZufjLB7XLlsTbRV5RqZw/EQ==
+X-Received: by 2002:a05:6512:3c9b:b0:440:10a2:dc11 with SMTP id h27-20020a0565123c9b00b0044010a2dc11mr19369660lfv.584.1645615626569;
+        Wed, 23 Feb 2022 03:27:06 -0800 (PST)
+Received: from [192.168.1.11] ([94.103.229.64])
+        by smtp.gmail.com with ESMTPSA id z9sm774383lji.29.2022.02.23.03.27.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 23 Feb 2022 03:27:06 -0800 (PST)
+Message-ID: <f1898870-23b8-3c13-01ed-854843043279@gmail.com>
+Date:   Wed, 23 Feb 2022 14:27:01 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220222152815.1056ca24@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [syzbot] KASAN: use-after-free Read in dev_uevent
+Content-Language: en-US
+From:   Pavel Skripkin <paskripkin@gmail.com>
+To:     "Zhang, Qiang1" <qiang1.zhang@intel.com>,
+        syzbot <syzbot+348b571beb5eeb70a582@syzkaller.appspotmail.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "rafael@kernel.org" <rafael@kernel.org>,
+        "syzkaller-bugs@googlegroups.com" <syzkaller-bugs@googlegroups.com>,
+        "balbi@kernel.org" <balbi@kernel.org>,
+        "stern@rowland.harvard.edu" <stern@rowland.harvard.edu>
+References: <0000000000005a991a05a86970bb@google.com>
+ <00000000000033314805d8765175@google.com>
+ <PH0PR11MB58805E3C4CF7D4C41D49BFCFDA3C9@PH0PR11MB5880.namprd11.prod.outlook.com>
+ <81102f38-3e1f-ec36-3119-a098bd5a85c4@gmail.com>
+In-Reply-To: <81102f38-3e1f-ec36-3119-a098bd5a85c4@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 22, 2022 at 03:28:15PM -0800, Jakub Kicinski wrote:
-> On Tue, 22 Feb 2022 11:37:33 +0100 Guillaume Nault wrote:
-> > What about an explicit option:
-> > 
-> >   ip link add link eth1 dev eth1.100 type vlan id 100 follow-parent-mtu
-> > 
-> > 
-> > Or for something more future proof, an option that can accept several
-> > policies:
-> > 
-> >   mtu-update <reduce-only,follow,...>
-> > 
-> >       reduce-only (default):
-> >         update vlan's MTU only if the new MTU is smaller than the
-> >         current one (current behaviour).
-> > 
-> >       follow:
-> >         always follow the MTU of the parent device.
-> > 
-> > Then if anyone wants more complex policies:
-> > 
-> >       follow-if-not-modified:
-> >         follow the MTU of the parent device as long as the VLAN's MTU
-> >         was not manually changed. Otherwise only adjust the VLAN's MTU
-> >         when the parent's one is set to a smaller value.
-> > 
-> >       follow-if-not-modified-but-not-quite:
-> >         like follow-if-not-modified but revert back to the VLAN's
-> >         last manually modified MTU, if any, whenever possible (that is,
-> >         when the parent device's MTU is set back to a higher value).
-> >         That probably requires the possibility to dump the last
-> >         modified MTU, so the administrator can anticipate the
-> >         consequences of modifying the parent device.
-> > 
-> >      yet-another-policy (because people have a lot of imagination):
-> >        for example, keep the MTU 4 bytes lower than the parent device,
-> >        to account for VLAN overhead.
-> > 
-> > Of course feel free to suggest better names and policies :).
-> > 
-> > This way, we can keep the current behaviour and avoid unexpected
-> > heuristics that are difficult to explain (and even more difficult for
-> > network admins to figure out on their own).
+On 2/23/22 14:23, Pavel Skripkin wrote:
+> you should use '#syz test' command to ask syzbot to test the patch.
+> Basic syntax is '#syz test: <git tree> <branch or sha>' and syzbot will
+> apply attached patch (if you have attached it)
 > 
-> My $0.02 would be that if we want to make changes that require new uAPI
-> we should do it across uppers.
+> 
+> More about syzbot interactions here [1].
+> 
+> [1]
+> https://github.com/google/syzkaller/blob/15439f1624735bde5ae3f3b66c1b964a98
 
-Do you mean something like:
+^^^^^^
 
-  ip link set dev eth0 vlan-mtu-policy <policy-name>
+I've copy-pasted something weird... Sorry about that. Here is actual link
 
-that'd affect all existing (and future) vlans of eth0?
 
-Then I think that for non-ethernet devices, we should reject this
-option and skip it when dumping config. But yes, that's another
-possibility.
+https://github.com/google/syzkaller/blob/master/docs/syzbot.md
 
-I personnaly don't really mind, as long as we keep a clear behaviour.
 
-What I'd really like to avoid is something like:
-  - By default it behaves this way.
-  - If you modified the MTU it behaves in another way
-  - But if you modified the MTU but later restored the
-    original MTU, then you're back to the default behaviour
-    (or not?), unless the MTU of the upper device was also
-    changed meanwhile, in which case ... to be continued ...
-  - BTW, you might not be able to tell how the VLAN's MTU is going to
-    behave by simply looking at its configuration, because that also
-    depends on past configurations.
-  - Well, and if your kernel is older than xxx, then you always get the
-    default behaviour.
-  - ... and we might modify the heuristics again in the future to
-    accomodate with situations or use cases we failed to consider.
 
+
+With regards,
+Pavel Skripkin

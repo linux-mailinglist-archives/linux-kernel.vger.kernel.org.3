@@ -2,125 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 592924C1F1A
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 23:50:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 58A474C1F1F
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 23:52:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240280AbiBWWuy convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 23 Feb 2022 17:50:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59786 "EHLO
+        id S244608AbiBWWwX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 17:52:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232254AbiBWWux (ORCPT
+        with ESMTP id S232254AbiBWWwV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 17:50:53 -0500
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 863254F9E2
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 14:50:24 -0800 (PST)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-56-CJOJkAA1OIaRjB3SuCR2iQ-1; Wed, 23 Feb 2022 22:50:20 +0000
-X-MC-Unique: CJOJkAA1OIaRjB3SuCR2iQ-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.28; Wed, 23 Feb 2022 22:50:19 +0000
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.028; Wed, 23 Feb 2022 22:50:19 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Andy Shevchenko' <andriy.shevchenko@linux.intel.com>
-CC:     Jason Gunthorpe <jgg@ziepe.ca>,
-        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Mike Marciniszyn <mike.marciniszyn@cornelisnetworks.com>,
-        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>
-Subject: RE: [PATCH v1 1/1] IB/hfi1: Don't cast parameter in bit operations
-Thread-Topic: [PATCH v1 1/1] IB/hfi1: Don't cast parameter in bit operations
-Thread-Index: AQHYKOavPScLVMZqEkOT//Q3noWC2qyhqG0wgAAPkwCAAAGzUA==
-Date:   Wed, 23 Feb 2022 22:50:19 +0000
-Message-ID: <efb8c82c626a4c7d8a9f781d63289343@AcuMS.aculab.com>
-References: <20220223185353.51370-1-andriy.shevchenko@linux.intel.com>
- <e39730af26cc4a4d944fa3205fa17b3c@AcuMS.aculab.com>
- <Yha1bIYZpCWZIowl@smile.fi.intel.com>
-In-Reply-To: <Yha1bIYZpCWZIowl@smile.fi.intel.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Wed, 23 Feb 2022 17:52:21 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDB2535864
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 14:51:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645656712; x=1677192712;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=9UChX+Z6I3uebtKSdtS/c4QDANq5pg7hMaISFlrV910=;
+  b=GEwpFW2eS8dk65RxMjfa2Uq56pkYcJnkO1zHmDmrwGpqOjF+N2ypxWVV
+   H8e+keBLeDl3DSKJP8DiFTNJFYX3/haBWSjlDFghbAt6vL5b9voYXcu+m
+   dWWaYy0JFb2JYt0vJ47DSWMtc4j/iyr4oEWFXFmBjGVSwhL+e1P43eM4j
+   BdILsE1MBkyNnVElfxW0AuJ0HAnvk289SmtyFdfBd6W01f3CvDDkUakR0
+   s5DjR6F92s0M9Y9u5jLXWfFj+ONJq+9fj73EEAGbTjXeJU4sSWpeOgS5B
+   ovV6NGfTv0+b+RghPFtfwPRoO7ByxaEEdqXDkhSdzJX0C9EZj5sDIf0ob
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10267"; a="276722529"
+X-IronPort-AV: E=Sophos;i="5.88,392,1635231600"; 
+   d="scan'208";a="276722529"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2022 14:51:52 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,392,1635231600"; 
+   d="scan'208";a="548475186"
+Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 23 Feb 2022 14:51:51 -0800
+Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nN0UA-0001uP-GF; Wed, 23 Feb 2022 22:51:50 +0000
+Date:   Thu, 24 Feb 2022 06:51:18 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Thierry Reding <treding@nvidia.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [thierryreding:for-5.18/work 143/143]
+ drivers/iommu/tegra-smmu.c:906:38: error: 'struct tegra_smmu' has no member
+ named 'parent'
+Message-ID: <202202240656.fYdbh6e7-lkp@intel.com>
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: 'Andy Shevchenko'
-> Sent: 23 February 2022 22:30
-> 
-> On Wed, Feb 23, 2022 at 09:44:32PM +0000, David Laight wrote:
-> > From: Andy Shevchenko
-> > > Sent: 23 February 2022 18:54
-> > >
-> > > While in this particular case it would not be a (critical) issue,
-> > > the pattern itself is bad and error prone in case somebody blindly
-> > > copies to their code.
-> >
-> > It is horribly wrong on BE systems.
-> 
-> You mean the pattern? Yes, it has three issues regarding to endianess and
-> potential out of boundary access.
+tree:   https://github.com/thierryreding/linux for-5.18/work
+head:   1cdb7fffbcf8f949410bfa97c8cca5acc0285a48
+commit: 1cdb7fffbcf8f949410bfa97c8cca5acc0285a48 [143/143] WIP
+config: arm64-buildonly-randconfig-r004-20220223 (https://download.01.org/0day-ci/archive/20220224/202202240656.fYdbh6e7-lkp@intel.com/config)
+compiler: aarch64-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/thierryreding/linux/commit/1cdb7fffbcf8f949410bfa97c8cca5acc0285a48
+        git remote add thierryreding https://github.com/thierryreding/linux
+        git fetch --no-tags thierryreding for-5.18/work
+        git checkout 1cdb7fffbcf8f949410bfa97c8cca5acc0285a48
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/iommu/ drivers/soc/tegra/
 
-Never mind the misaligned page-boundary-crossing locked access.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-> ...
-> 
-> > > -	return handled;
-> > > +	return IRQ_RETVAL(!bitmap_empty(pending, CCE_NUM_INT_CSRS * 64));
-> 
-> > You really don't want to scan the bitmap again.
-> 
-> Either way it wastes cycles, the outcome depends on the actual distribution of
-> the interrupts across the bitmap. If it gathered closer to the beginning of the
-> bitmap, my code wins, otherwise the original ones.
+All error/warnings (new ones prefixed by >>):
 
-The loop in bitmap_empty() will kill you - even if the first word in non-zero.
+   drivers/iommu/tegra-smmu.c: In function 'tegra_smmu_probe_device':
+>> drivers/iommu/tegra-smmu.c:906:38: error: 'struct tegra_smmu' has no member named 'parent'
+     906 |                         parent = smmu->parent;
+         |                                      ^~
+>> drivers/iommu/tegra-smmu.c:914:9: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+     914 |         if (!smmu)
+         |         ^~
+   drivers/iommu/tegra-smmu.c:918:17: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+     918 |                 return ERR_PTR(-ENODEV);
+         |                 ^~~~~~
+   drivers/iommu/tegra-smmu.c: At top level:
+>> drivers/iommu/tegra-smmu.c:921:9: error: expected identifier or '(' before 'return'
+     921 |         return &smmu->iommu;
+         |         ^~~~~~
+>> drivers/iommu/tegra-smmu.c:922:1: error: expected identifier or '(' before '}' token
+     922 | }
+         | ^
+--
+>> make[4]: *** No rule to make target 'drivers/soc/tegra/dce.o', needed by 'drivers/soc/tegra/built-in.a'.
+   make[4]: *** [scripts/Makefile.build:614: drivers/soc/tegra/cbb] Error 2
+   make[4]: Target '__build' not remade because of errors.
 
-Or just 'or' together the 'value' written to clear the pending interrupts
-in the first loop.
 
-Or just return IRQ_HANDLED ;-)
-Depending on exactly how the interrupt system works on you hardware
-it is perfectly possible to get another ISR entry for an IRQ bit
-you just cleared.
-Which can generate a 'spurious interrupt' message when IRQ_HANDLED
-isn't returned (maybe not in Linux...)
+vim +906 drivers/iommu/tegra-smmu.c
 
-It is easiest to see how that can happen with a level sensitive interrupt
-request.
-The write to clear the pending register can get delayed (posted bus write)
-long enough for the cpu to have actually exited the ISR.
-So the IRQ line is still set and the ISR re-entered.
-But no pending bits are now set.
+   885	
+   886	static struct iommu_device *tegra_smmu_probe_device(struct device *dev)
+   887	{
+   888		struct device_node *np = dev->of_node;
+   889		struct tegra_smmu *smmu = NULL;
+   890		struct device *parent = NULL;
+   891		struct of_phandle_args args;
+   892		unsigned int index = 0;
+   893		int err;
+   894	
+   895		while (of_parse_phandle_with_args(np, "iommus", "#iommu-cells", index,
+   896						  &args) == 0) {
+   897			smmu = tegra_smmu_find(args.np);
+   898			if (smmu) {
+   899				err = tegra_smmu_configure(smmu, dev, &args);
+   900				if (err < 0) {
+   901					put_device(smmu->dev);
+   902					of_node_put(args.np);
+   903					return ERR_PTR(err);
+   904				}
+   905	
+ > 906				parent = smmu->parent;
+   907			}
+   908	
+   909			of_node_put(args.np);
+   910			index++;
+   911		}
+   912	
+   913		smmu = dev_iommu_priv_get(dev);
+ > 914		if (!smmu)
+   915			if (parent)
+   916				put_device(parent);
+   917	
+ > 918			return ERR_PTR(-ENODEV);
+   919		}
+   920	
+ > 921		return &smmu->iommu;
+ > 922	}
+   923	
 
-Put enough PCIe bridges in a system and overload PCIe links and you
-might get the same to happen for MSI-X.
-Especially since there will be additional delays on the device itself
-converting the internal IRQ into the required PCIe write.
-
-	David
-
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
-
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

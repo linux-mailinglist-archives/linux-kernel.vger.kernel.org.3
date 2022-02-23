@@ -2,115 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D88EA4C0C46
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 06:54:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E8B0E4C0C50
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 06:59:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238098AbiBWFyb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 00:54:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50254 "EHLO
+        id S237530AbiBWF7S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 00:59:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235344AbiBWFy1 (ORCPT
+        with ESMTP id S237219AbiBWF7Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 00:54:27 -0500
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CFDF49C94
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 21:54:00 -0800 (PST)
-Received: by mail-pl1-x62c.google.com with SMTP id 4so9082070pll.6
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 21:54:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=kSSqgPqSgWwd9l6HqioycoWO2GD1CoGqpsv+gFNiT9I=;
-        b=lleu1EoJfeSbDrSg3KzCO1+3m8SVssae8KUkcgXKPl9xaovGjOmRD9ENgRn963QQza
-         NV4ZIta1kYJgoCQMKZG6ca74wQ0YD6ytzpivDwubCIG6H0ZbL4g9Gp7igHb6ptHnAWe+
-         rt9lpOPkbAnsRxeTMhlbbOqCbq9VdbKBkm+DdVxtSLzGJJq/mMIibXx5g4qisDht+Vgw
-         eRXGnsztIxv9MmoeMGIYCb5N3NPr2sWH2XAnmX9fHNfeEohjN//08tlxK9COCDa1hVPx
-         SZXMBK1L44IkxlxYcmoz027UHSiWCE8hKEmbLLQ8V/agZ0mE4aj1O982vSf0p5azgEay
-         be/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=kSSqgPqSgWwd9l6HqioycoWO2GD1CoGqpsv+gFNiT9I=;
-        b=qAADgBP4IjhDpUWvxmK3hG3Et1nokSCBeQ/bnMGoDzg3tkzW5R/+xRea5ywhPrE/Nw
-         OLsBcBLC714KGo/b2FLg9gh5RqyMBU5+iSbEYcyCsfBwyivP+RFOXxGNXUqNahA8CDrH
-         5glJCRpEN8FSRwrQ8oclfKxBvzCYjft3mInfqKQPlZNMk5JP0vZ3ffJXUmEGayGXLnRO
-         qHvckIaePhQ9iyiYiSfdSKACl5A+Z3S0EGcPxUZlz+ugDpyyAQeaqgtHusbA7iGgxqGW
-         58LUW0IR4U1tCtTVHHpcgi5ekp9Gr7iGGXRx0foF2QSRfXAkL8h6M5HZbwXJDBmdyVCe
-         //jg==
-X-Gm-Message-State: AOAM530lHVj6gT8Rk28tZ5KRGYIWjhF1SE4WO2fkMoskhh0xkJgM0BSR
-        1Ay9aCSepdZovkWeB/AJZLlp4A==
-X-Google-Smtp-Source: ABdhPJzt4RsyrslagFveen7bbfrlT+7Wph+LOX6nJ+TVqH5apt4xn9feR+OBelHjxUz1Ju2kplKZgA==
-X-Received: by 2002:a17:902:9045:b0:14f:14e7:f3aa with SMTP id w5-20020a170902904500b0014f14e7f3aamr25249517plz.69.1645595639866;
-        Tue, 22 Feb 2022 21:53:59 -0800 (PST)
-Received: from localhost ([223.184.83.228])
-        by smtp.gmail.com with ESMTPSA id l36sm5692148pgb.34.2022.02.22.21.53.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Feb 2022 21:53:59 -0800 (PST)
-Date:   Wed, 23 Feb 2022 11:23:57 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Lukasz Luba <lukasz.luba@arm.com>
-Cc:     linux-kernel@vger.kernel.org, dietmar.eggemann@arm.com,
-        rafael@kernel.org, daniel.lezcano@linaro.org, nm@ti.com,
-        sboyd@kernel.org, mka@chromium.org, dianders@chromium.org,
-        robh+dt@kernel.org, devicetree@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: Re: [[PATCH v2 2/2] OPP: Add 'opp-microwatt' parsing for advanced EM
- registration
-Message-ID: <20220223055357.t3wulpla64vt3xus@vireshk-i7>
-References: <20220222140746.12293-1-lukasz.luba@arm.com>
- <20220222140746.12293-3-lukasz.luba@arm.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220222140746.12293-3-lukasz.luba@arm.com>
-User-Agent: NeoMutt/20180716-391-311a52
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 23 Feb 2022 00:59:16 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C88F1D316;
+        Tue, 22 Feb 2022 21:58:48 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 23B6AB81E80;
+        Wed, 23 Feb 2022 05:58:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B07BC340E7;
+        Wed, 23 Feb 2022 05:58:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645595925;
+        bh=6zqjN+ejPis2B9ACr4wZd1FjHKnzjkEF3tE0bhMxNXE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=njIsi30tL6ufxOFei92QTBJMv47QqlchMWiZPjUpGK2CgUfQaNlqmMnecmUI4qoRx
+         pr9W53ELevdeg1nUI/muGp/G+eVCD2g0vUmyTZc7e6YBSsXZoGk3bW5u5hsm+qWxiL
+         PuF8Z1kfpr+OAqynSxNlsSVUPDOdWla5N+ujGuY+fHIf469JtqElTX1f+A/9MOzQyf
+         13kVSMpfmbghCYJcfKD6MX/IcLs2H241PKTrli1Q3VPg2MBUcZOEC6uHOo96dljAMh
+         +h58Rif4y+CxBab1ZMC5g3t8Zop72jV08RGDFU7Gg5N/IOph1yAncv6YeNFLzmaBtR
+         eEjlvZ2cFmJTA==
+Date:   Wed, 23 Feb 2022 14:58:40 +0900
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     Jiri Olsa <jolsa@kernel.org>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, lkml <linux-kernel@vger.kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>
+Subject: Re: [PATCH 02/10] bpf: Add multi kprobe link
+Message-Id: <20220223145840.64f708ed2357c89039f55f07@kernel.org>
+In-Reply-To: <20220222170600.611515-3-jolsa@kernel.org>
+References: <20220222170600.611515-1-jolsa@kernel.org>
+        <20220222170600.611515-3-jolsa@kernel.org>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22-02-22, 14:07, Lukasz Luba wrote:
-> +static int _of_find_opp_microwatt_property(struct device *dev)
+Hi Jiri,
+
+On Tue, 22 Feb 2022 18:05:52 +0100
+Jiri Olsa <jolsa@kernel.org> wrote:
+
+[snip]
+> +
+> +static void
+> +kprobe_multi_link_handler(struct fprobe *fp, unsigned long entry_ip,
+> +			  struct pt_regs *regs)
 > +{
-> +	unsigned long freq = 0;
-> +	struct dev_pm_opp *opp;
-> +	struct device_node *np;
-> +	struct property *prop;
+> +	unsigned long saved_ip = instruction_pointer(regs);
+> +	struct bpf_kprobe_multi_link *link;
 > +
-> +	/* We only support "operating-points-v2" */
-> +	np = dev_pm_opp_of_get_opp_desc_node(dev);
-> +	if (!np)
-> +		return -EINVAL;
+> +	/*
+> +	 * Because fprobe's regs->ip is set to the next instruction of
+> +	 * dynamic-ftrace instruction, correct entry ip must be set, so
+> +	 * that the bpf program can access entry address via regs as same
+> +	 * as kprobes.
+> +	 */
+> +	instruction_pointer_set(regs, entry_ip);
+
+This is true for the entry_handler, but false for the exit_handler,
+because entry_ip points the probed function address, not the
+return address. Thus, when this is done in the exit_handler,
+the bpf prog seems to be called from the entry of the function,
+not return.
+
+If it is what you expected, please explictly comment it to
+avoid confusion. Or, make another handler function for exit
+probing.
+
 > +
-> +	of_node_put(np);
+> +	link = container_of(fp, struct bpf_kprobe_multi_link, fp);
+> +	kprobe_multi_link_prog_run(link, regs);
 > +
-> +	/* Check if an OPP has needed property */
-> +	opp = dev_pm_opp_find_freq_ceil(dev, &freq);
-> +	if (IS_ERR(opp))
-> +		return -EINVAL;
-> +
-> +	prop = of_find_property(opp->np, "opp-microwatt", NULL);
-> +	dev_pm_opp_put(opp);
-> +	if (!prop)
-> +		return -EINVAL;
-> +
-> +	return 0;
+> +	instruction_pointer_set(regs, saved_ip);
 > +}
+> +
+> +static int
+> +kprobe_multi_resolve_syms(const void *usyms, u32 cnt,
+> +			  unsigned long *addrs)
+> +{
+> +	unsigned long addr, size;
+> +	const char **syms;
+> +	int err = -ENOMEM;
+> +	unsigned int i;
+> +	char *func;
+> +
+> +	size = cnt * sizeof(*syms);
+> +	syms = kvzalloc(size, GFP_KERNEL);
+> +	if (!syms)
+> +		return -ENOMEM;
+> +
+> +	func = kmalloc(KSYM_NAME_LEN, GFP_KERNEL);
+> +	if (!func)
+> +		goto error;
+> +
+> +	if (copy_from_user(syms, usyms, size)) {
+> +		err = -EFAULT;
+> +		goto error;
+> +	}
+> +
+> +	for (i = 0; i < cnt; i++) {
+> +		err = strncpy_from_user(func, syms[i], KSYM_NAME_LEN);
+> +		if (err == KSYM_NAME_LEN)
+> +			err = -E2BIG;
+> +		if (err < 0)
+> +			goto error;
+> +
+> +		err = -EINVAL;
+> +		if (func[0] == '\0')
+> +			goto error;
+> +		addr = kallsyms_lookup_name(func);
+> +		if (!addr)
+> +			goto error;
+> +		if (!kallsyms_lookup_size_offset(addr, &size, NULL))
+> +			size = MCOUNT_INSN_SIZE;
 
-Please follow everything just like opp-microvolt is defined. Create a new field
-in the struct dev_pm_opp, initialize it only once when the OPP is created, that
-field should be used here instead of parsing the DT here again. There also needs
-to be a debug file in debugfs for this new field.
+Note that this is good for x86, but may not be good for other arch
+which use some preparation instructions before mcount call.
+Maybe you can just reject it if kallsyms_lookup_size_offset() fails.
 
-Search for "supply" and "microvolt" in the OPP core, you will see all the places
-that need it.
+Thank you,
+
+
 
 -- 
-viresh
+Masami Hiramatsu <mhiramat@kernel.org>

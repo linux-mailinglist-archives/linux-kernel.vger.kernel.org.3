@@ -2,78 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DE644C187A
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 17:22:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E7264C187C
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 17:22:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242754AbiBWQWe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 11:22:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60438 "EHLO
+        id S242769AbiBWQWm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 11:22:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234555AbiBWQWd (ORCPT
+        with ESMTP id S242757AbiBWQWl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 11:22:33 -0500
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4FE46E7BD
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 08:22:04 -0800 (PST)
-Received: by mail-wr1-x435.google.com with SMTP id u1so40472225wrg.11
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 08:22:04 -0800 (PST)
+        Wed, 23 Feb 2022 11:22:41 -0500
+Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1anam02on2051.outbound.protection.outlook.com [40.107.96.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B97F75C08;
+        Wed, 23 Feb 2022 08:22:13 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=SNOfeeI8tXpBJ3pMLxr9ODxSN10fwLXgSxrdrw/FSPj3Bvcr4mKgMiamTScEpTeMMXnlSbT8M5Ycw2YKR/eJcJ8LdjijvjjqnAeBZNUsZwiUciLJCrkdUZ0kUUI0AJxHf3wMAVlb5bI668gf9PZjIFnPBwcdONeUyfIhw7ZLo+RG57YDNgxkkNUPV6INI61cF4OU5Yc00K1oq3flhlV7YkGnM1TdjA9vN7Ij0iIAeOOTEPdvpzhmJucz5FaBqFKhO1YYoje7SdsUCqKFmrQ6BZaJzLYON7aJedenuTU0HMM8//86NNkaLbQ70+3m6BfH2gby1Lo9V1cNMd2enp3ASQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=UVVNsVR6FhRVMvTuRDFiHE3g2Hnac5CE4S0GUYakVFs=;
+ b=dcsO8JUoOd8R3Xt2i+wE+JCH6wH4wQe27kIEqMpwXESIxVj27736Rruc+HMnTlYDZwG7pWge+XI0XMD3hzZp1RuH6kgc4L66dbY7xwwc4XhrNk8PespF8vqXoa9U7YrPlO5k5Pu45LvPvn+19wg47ikGuTORtd6tN6mMJxP01b8dex5GDcS6J4PeCZG7kx9h5sJOexX2C4IPXJffBoPAFSQjlObB9ur6gFjUVZPuTbyatny0dBKTps5HAV4VsNYcrJmu3YoL/x/SdgaNeZMAx3XQO6u6bmzjeJdzvbNMnBjLgacBS2qA1OMI1WnQ+QXSaB4DZtzH+1tgm87J9+lbyw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=xilinx.com; dmarc=pass action=none header.from=xilinx.com;
+ dkim=pass header.d=xilinx.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=3soeUz3Gxi2go8Buwh1sm4qJuSlmkJbGkcHtauPvNOw=;
-        b=ukTEz9n9ED5hmYtxHQ7QEwajoWikPgVDiqxvJs25fX/kKE4jq3t+tu39nTrnMufSTk
-         CbmIsESzXJ7V4t3JpWOLrixWi1rQ02gZMz1iSGknUK/8JoDDmDE8x3mwdgLOyT/9iepG
-         lfs4gAk++GU2fOV0xWwENclLflrFBm8UBDIasPOBIAQthAMelF3eErTUPyh+ii/pg+cO
-         9n/0Li/AHsTIEB7RIkjN3bOrcaqdnEWVimH6EtEK4s1FjQwGJHYYyvvgkimHYIORK4id
-         xYpebk7XjCwyr6kPqE0EM1IkhkrnTNmaSLvS9h8ZEi74HWygdSlze/r9s1Noxczem/30
-         Midg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=3soeUz3Gxi2go8Buwh1sm4qJuSlmkJbGkcHtauPvNOw=;
-        b=Lnl+F5EtwaHL7q5Cvf4D8SpdrOQ5vYiObe6DOs6A6L/eT7veO5xjHyBafwvKQJT2PY
-         IzLqUijbbgJvmg+VgrylgBnQB5nlsRjJ9B2bn0qw488BXKxEP2EY8VkiYwltgsLeO0UL
-         w/6Z31PVMkr4a5qmo+Dt62FYAt7ugKoIMg+SSzmnTuQS26+hm3SeTufm24Z6DLHKbdPr
-         5z1KFUXez7tNwoGihmcgBynZFEXcPMmNO0RUMEAuS90fZG/kwQwrfGOQdShV1G13jkU0
-         1tnblSyJ5gFRXEijBeE3ootPy6sUR9iaVZzACrzELvG49EJOVhYm7fpsukdw+4ZyEHQO
-         82aQ==
-X-Gm-Message-State: AOAM530gNMdyHvu24xDSoyIkv9YXaqiRoO+ZT2p1IpAMTxYU6RXQrcuV
-        M/2gC/TtawBTTixAiJqbdfLIME3fTAEpBA==
-X-Google-Smtp-Source: ABdhPJzbKFPWSq+qdM1MYHg1l9ir8j/wbqyy37IoARqa7ZG2n6LAoYfI2LG+OEsp1aOar6Zstb166w==
-X-Received: by 2002:adf:f3c8:0:b0:1ed:9cd9:5bf with SMTP id g8-20020adff3c8000000b001ed9cd905bfmr311877wrp.380.1645633323192;
-        Wed, 23 Feb 2022 08:22:03 -0800 (PST)
-Received: from [192.168.86.34] (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
-        by smtp.googlemail.com with ESMTPSA id c17sm4736wmh.31.2022.02.23.08.22.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 23 Feb 2022 08:22:02 -0800 (PST)
-Message-ID: <ee14c940-85c9-6c14-5738-e055801407ab@linaro.org>
-Date:   Wed, 23 Feb 2022 16:22:01 +0000
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 3/3] soundwire: qcom: add wake up interrupt support
+ d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=UVVNsVR6FhRVMvTuRDFiHE3g2Hnac5CE4S0GUYakVFs=;
+ b=EG6Fn8o9XISch/+Mln+ioGSUWvU0vlGJw9iJmcn3dhgURXtgHMmyNNB8CDZCS8li90AZu4K4PdcvcyVHHT8WJHrAglAzAtDVUj7N8t8dsB4ycjhE/5A5uNv5gmxKazAmlbyn/aP3F9TsAUjHP6HIld15lqFy4MT2n1WiJWXTquU=
+Received: from DM6PR02MB6635.namprd02.prod.outlook.com (2603:10b6:5:221::18)
+ by BN8PR02MB5889.namprd02.prod.outlook.com (2603:10b6:408:b7::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5017.22; Wed, 23 Feb
+ 2022 16:22:08 +0000
+Received: from DM6PR02MB6635.namprd02.prod.outlook.com
+ ([fe80::f0a5:b805:c932:7f0b]) by DM6PR02MB6635.namprd02.prod.outlook.com
+ ([fe80::f0a5:b805:c932:7f0b%5]) with mapi id 15.20.4995.028; Wed, 23 Feb 2022
+ 16:22:08 +0000
+From:   Shubhrajyoti Datta <shubhraj@xilinx.com>
+To:     Wolfram Sang <wsa@kernel.org>
+CC:     "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        git <git@xilinx.com>, Michal Simek <michals@xilinx.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Chirag Parekh <chiragp@xilinx.com>
+Subject: RE: [PATCH] i2c: cadence: Recover bus after controller reset
+Thread-Topic: [PATCH] i2c: cadence: Recover bus after controller reset
+Thread-Index: AQHYJ/Kh0wwIuA948EiCDqS/6iOWxKyhK14AgAAnlBA=
+Date:   Wed, 23 Feb 2022 16:22:07 +0000
+Message-ID: <DM6PR02MB663596AD498BE9D229C74565AA3C9@DM6PR02MB6635.namprd02.prod.outlook.com>
+References: <20220222134632.18598-1-shubhrajyoti.datta@xilinx.com>
+ <YhY92v3ItYdGV2r2@ninjato>
+In-Reply-To: <YhY92v3ItYdGV2r2@ninjato>
+Accept-Language: en-US
 Content-Language: en-US
-To:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        robh+dt@kernel.org, vkoul@kernel.org,
-        yung-chuan.liao@linux.intel.com
-Cc:     devicetree@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org, quic_srivasam@quicinc.com
-References: <20220221104127.15670-1-srinivas.kandagatla@linaro.org>
- <20220221104127.15670-4-srinivas.kandagatla@linaro.org>
- <5e050d4c-e3d2-35fb-ca49-7be53579bc31@linux.intel.com>
- <1cb4e02f-f040-23bd-44d0-0675429332bd@linaro.org>
- <49099bcb-35e9-0bea-9658-006caed3ab33@linux.intel.com>
-From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-In-Reply-To: <49099bcb-35e9-0bea-9658-006caed3ab33@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Has-Attach: 
+X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=xilinx.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 34520cf2-a878-4baa-1c4f-08d9f6e8a335
+x-ms-traffictypediagnostic: BN8PR02MB5889:EE_
+x-ld-processed: 657af505-d5df-48d0-8300-c31994686c5c,ExtAddr
+x-microsoft-antispam-prvs: <BN8PR02MB58897B6662058302D2870CC1AA3C9@BN8PR02MB5889.namprd02.prod.outlook.com>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: Q0o0lBUgthJ5U6meO60LZT/w48aZz5/u32ERhy49JdOwqFCpEFIKLHALofDHnCq1ve0TSUCpt6/cpe4X7DXLTy5TkVu1nhGhIBU034tw2dHqOtS/6o2Stpp+7CJmIelpfrdIS157Jfcj+pE+lo9T8tJrdNPiV08xLNWpzLnQQ6jMckOzbw/5d1b6Wix4pVwvU1XNK2D/LC+DE7Q8n8Oe1ePhuwSVmQu5h35H+Pmd0WnBJ2MPgW7373YivFd/BVuQaPOqxi3QkgviJ915yGorvTBilQf703e3zi6ac+7LhHXiHjKe/gODStzjceB02XEqYUQ0avrG+1tM61ssoFm37m/BWqBsbVSqrAhW5vDGam8N3yaWYX069CXdzaogE44NOHp7tdY5gxSfi4QzcUULl2EGWlATgcMXJvAgWUm4SjzBainXkuDw9qoCsDxNEZa8LznHwer6RDSQQ0c4mL7faaDSCDBGNDxr16duaY2faJ82WNRRq/QOZEwTTX4n5hRAWv60L1EpXskTCLTmcjHq7gVBUvBmNqqZSCeBHlFoMfKKy6CZyimG/tnwt+9wNJtWrMIrHYqo7TxF21aOjmbUc0V5IuiPLLTL4OEzEoNjVhhpbItrKCev8dsnBxmxcWq6X+/kh7br+EuS//vYl8NwhIDy5MQKC/oRdsNeE3KaAjkBH09pJ2aWUalWQjCGRQfOxtS5t4zMg4OC9lRPsSne6IGkUf8OBecYrwdujvo2AZ2+XLJ6eOZ6ns2TompBF8vpJZiF3hYFDX3wJIdZWcJRS4J9ReLvekoJBHDAsNfN39E=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR02MB6635.namprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(76116006)(64756008)(66446008)(66476007)(66556008)(71200400001)(2906002)(122000001)(86362001)(66946007)(38100700002)(38070700005)(4744005)(8676002)(4326008)(52536014)(107886003)(8936002)(83380400001)(55016003)(33656002)(26005)(186003)(54906003)(508600001)(6916009)(316002)(966005)(7696005)(6506007)(5660300002)(9686003)(53546011);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?wWL0CUPUZLzWOWtsQH/nszNpndn5KkJ91PDx3FBRXA8nikCEvN4cxMwzC1r8?=
+ =?us-ascii?Q?J7iqL1kKRXNomrLrqgVrWPhuh7ylEIUuxnDyav/FPn+2F4ZrcT1Pp6byOIzQ?=
+ =?us-ascii?Q?6lY741+8Er9Rxo5jn4btaGRb3Nk09JgJEcyTGbPY7avM4RREhFxyBw+lyPSm?=
+ =?us-ascii?Q?ky4/lXG8tfiLWAiDYeUTMR7ZxyVTaW0PuAOI+chXtJfRmAf5QhLpOjO8lag1?=
+ =?us-ascii?Q?1TB3CUQmu7Q723GNGZ863zD4bfiKilettbQGqNFh0uFCUi42SPnZh+2kbbxf?=
+ =?us-ascii?Q?EJV3bgGp6MQLwv9Do+Ms3PIO2VS9Eti9RyB8Wl6PFZIINsc2LPOaVEwAWghA?=
+ =?us-ascii?Q?Rm3qgTpflnzuKDTe5p/llI73fzpu1YrshDJ6jMGjDItnzKZRi7PFb3d5Jk/x?=
+ =?us-ascii?Q?I5io46hEfNlhQwkbndwXlonQsa7W3oIQOgJfhXLJdLAO4XQHfyj6YlAzI7/7?=
+ =?us-ascii?Q?slKlDA8wpgKCsFpdJ98O+s2pRmB0Q2QbvRUczkbSv6mp7FCTHsmL/gH5dzdq?=
+ =?us-ascii?Q?EglvGE5ccLfCcvdRVg1OuKr2XFLn9sZVNU9IRPgLiegYH74oYjIzCELnl9Dd?=
+ =?us-ascii?Q?Md3GmQfvCHG4r1nl8fjYHyLvwz9YA+sypwT8qUCA/lJ+2L/EFRUVsM9zllqj?=
+ =?us-ascii?Q?laa9bt7cDrMAkdQE/xOdopNm8+7kQfFPqrIH5s9APStpj4pR1fsEj9Lxckfe?=
+ =?us-ascii?Q?kTG0p9Kpy5GtqI/LqSaFnbe3bYqbu/O/RKdDDYI0XA+ZD8NjVyK+0b8/uVHQ?=
+ =?us-ascii?Q?+woQfvK2fUXao5n0uPK3/z2pS1t/7F/VSg/vldPhObgwPs0c8E+g/hZAyp6s?=
+ =?us-ascii?Q?evKmLDEOhPEpUD/dPhDsSX52ZG7oITg/apO92XJE2AzmwnhkEaCTM0MG+OpI?=
+ =?us-ascii?Q?QtGyQAXRbTEahDTa2VBwJGl1RWPEaj98ghJFPk9BMlkedticxqkNX0NhPgzw?=
+ =?us-ascii?Q?hCvjJvjtRn8ZATZOx4YOEJI/j/2sBEbLQ1dlVmMW+BYoOsrWCbt3d3OzrKis?=
+ =?us-ascii?Q?gR4ImLvCFBdFC5qGbm28mQGxm3m1E4qawfY3ikWJQEcrUvC52NYX09yMPzLz?=
+ =?us-ascii?Q?3VkLia3bpwqx5h5/t39svsmnE4/lNqE9qEM7AOn22fqa6kWJ7FTmTAexU77z?=
+ =?us-ascii?Q?DKFsDtk84OyjCJzkCnjkWTjWAJXBHPX5LOa09tJnImr8uu11C/fGAPvbES4B?=
+ =?us-ascii?Q?ksyanvxjx1wcyzM/Q1Xm+ItvQJpYvnmfHS79SaBRUBvH3TSkV6aUWOMTvnaq?=
+ =?us-ascii?Q?M60JX1N3JmayiVLCxDxz8jqYLBO2jV+vQGSUsZ+TDv6zk3lq3yXl59wVsZL3?=
+ =?us-ascii?Q?toMQ3y6mP68QwTQSuLutYo9U4jCNMieRkTffDGvLjbN4Qp3KLrdQho8EtzI3?=
+ =?us-ascii?Q?baTkeVaU3VgtCa5KKwgUTCM05Lo6e1OfSFbJ7t29z0osW+4+/oQus+W3xGbe?=
+ =?us-ascii?Q?3vJevMX7hd9fnMngfO9iw5TSAnCd39cmEmjwcAvWzmZjQgR/8l9XXhbnerJo?=
+ =?us-ascii?Q?8fHIJaMhmhsH/W6Yf2sPBwJltfsq4sRkiXNbytxOHaGHr/ZAPZOM91Bex4NR?=
+ =?us-ascii?Q?D97yA02WdB+1qE363LtuNpZdkg9m2hw/1TtarUMwyW+dVPEJzbIUEDXM+ON/?=
+ =?us-ascii?Q?+fNCxF4cWkVATsAnnU1gphQ=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: xilinx.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR02MB6635.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 34520cf2-a878-4baa-1c4f-08d9f6e8a335
+X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Feb 2022 16:22:07.9241
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 67EkDhD8jQh7eLiJS8eC5JJvwWetNDV8aj5YAcf917WUNn1qy72WllBzo0+7h1sGAtzitXW36RyqYUwZc0d/qg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR02MB5889
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -82,141 +124,29 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 23/02/2022 00:31, Pierre-Louis Bossart wrote:
-> 
-> 
-> On 2/22/22 16:52, Srinivas Kandagatla wrote:
->>
->>
->> On 22/02/2022 19:26, Pierre-Louis Bossart wrote:
->>>
->>>
->>>
->>>> +static irqreturn_t qcom_swrm_wake_irq_handler(int irq, void *dev_id)
->>>> +{
->>>> +    struct qcom_swrm_ctrl *swrm = dev_id;
->>>> +    int ret = IRQ_HANDLED;
->>>> +    struct sdw_slave *slave;
->>>> +
->>>> +    clk_prepare_enable(swrm->hclk);
->>>> +
->>>> +    if (swrm->wake_irq > 0) {
->>>> +        if (!irqd_irq_disabled(irq_get_irq_data(swrm->wake_irq)))
->>>> +            disable_irq_nosync(swrm->wake_irq);
->>>> +    }
->>>> +
->>>> +    /*
->>>> +     * resume all the slaves which must have potentially generated this
->>>> +     * interrupt, this should also wake the controller at the same
->>>> time.
->>>> +     * this is much safer than waking controller directly that will
->>>> deadlock!
->>>> +     */
->>> There should be no difference if you first resume the controller and
->>> then attached peripherals, or do a loop where you rely on the pm_runtime
->>> framework.
->>>
->>> The notion that there might be a dead-lock is surprising, you would need
->>> to elaborate here.Issue is, if wakeup interrupt resumes the controller
->>> first which can
->> trigger an slave pending interrupt (ex: Button press event) in the
->> middle of resume that will try to wake the slave device which in turn
->> will try to wake parent in the middle of resume resulting in a dead lock.
->>
->> This was the best way to avoid dead lock.
-> 
-> Not following, sorry. if you use pm_runtime functions and it so happens
-> that the resume already started, then those routines would wait for the
-> resume to complete.
-yes that is true,
+> -----Original Message-----
+> From: Wolfram Sang <wsa@kernel.org>
+> Sent: Wednesday, February 23, 2022 7:30 PM
+> To: Shubhrajyoti Datta <shubhraj@xilinx.com>
+> Cc: linux-i2c@vger.kernel.org; git <git@xilinx.com>; Michal Simek
+> <michals@xilinx.com>; linux-kernel@vger.kernel.org; Chirag Parekh
+> <chiragp@xilinx.com>
+> Subject: Re: [PATCH] i2c: cadence: Recover bus after controller reset
+>=20
+> On Tue, Feb 22, 2022 at 07:16:32PM +0530, Shubhrajyoti Datta wrote:
+> > From: Chirag Parekh <chiragp@xilinx.com>
+> >
+> > This will save from potential lock-up caused when I2c master
+> > controller resets in the middle of transfer and the slave is holding
+> > SDA line to transmit more data.
+> >
+> > Signed-off-by: Chirag Parekh <chiragp@xilinx.com>
+> > Signed-off-by: Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
+>=20
+> The comment from last version has not been clarified or addressed.
+>=20
+> http://patchwork.ozlabs.org/project/linux-
+> i2c/patch/20211129090116.16628-1-shubhrajyoti.datta@xilinx.com/
 
-TBH, I was trying to reproduce the issue since morning to collect some 
-traces but no luck so far, I hit these issues pretty much rarely. Now 
-code has changed since few months back am unable to reproduce this 
-anymore. Or it might be just the state of code I had while writing this up.
+I missed that apologies.=20
 
-But when I hit the issue, this is how it looks like:
-
-1. IRQ Wake interrupt resume parent.
-
-2. parent is in middle of resuming
-
-3. Slave Pend interrupt in controller fired up
-
-4. because of (3) child resume is requested and then the parent resume 
-blocked on (2) to finish.
-
-5. from (2) we also trying to resume child.
-
-6. (5) is blocked on (4) to finish which is blocked on (2) to finish
-
-we are dead locked. Only way for me to avoid dead lock was to wake the 
-child up after IRQ wake interrupts.
-
-here is the stack trace of blocked-tasks from sysrq
-
-root@linaro-gnome:~# [  182.327220] sysrq: Show Blocked State
-[  182.331063] task:irq/20-soundwir state:D stack:    0 pid:  445 ppid: 
-     2 flags:0x00000008
-[  182.339655] Call trace:
-[  182.342176]  __switch_to+0x168/0x1b8
-[  182.345864]  __schedule+0x2a8/0x880
-[  182.349459]  schedule+0x54/0xf0
-[  182.352700]  rpm_resume+0xc4/0x550
-[  182.356211]  rpm_resume+0x348/0x550
-[  182.359805]  rpm_resume+0x348/0x550
-[  182.363400]  __pm_runtime_resume+0x48/0xb8
-[  182.367616]  sdw_handle_slave_status+0x1f8/0xf80
-[  182.372371]  qcom_swrm_irq_handler+0x5c4/0x6f0
-[  182.376942]  irq_thread_fn+0x2c/0xa0
-[  182.380626]  irq_thread+0x16c/0x288
-[  182.384221]  kthread+0x11c/0x128
-[  182.387549]  ret_from_fork+0x10/0x20
-[  182.391231] task:irq/187-swr_wak state:D stack:    0 pid:  446 ppid: 
-     2 flags:0x00000008
-[  182.399819] Call trace:
-[  182.402339]  __switch_to+0x168/0x1b8
-[  182.406019]  __schedule+0x2a8/0x880
-[  182.409614]  schedule+0x54/0xf0
-[  182.412854]  rpm_resume+0xc4/0x550
-[  182.416363]  rpm_resume+0x348/0x550
-[  182.419957]  rpm_resume+0x348/0x550
-[  182.423552]  __pm_runtime_resume+0x48/0xb8
-[  182.427767]  swrm_runtime_resume+0x98/0x3d0
-[  182.432079]  pm_generic_runtime_resume+0x2c/0x48
-[  182.436832]  __rpm_callback+0x44/0x190
-[  182.440693]  rpm_callback+0x6c/0x78
-[  182.444289]  rpm_resume+0x2f0/0x550
-[  182.447883]  __pm_runtime_resume+0x48/0xb8
-[  182.452099]  qcom_swrm_wake_irq_handler+0x20/0x128
-[  182.457033]  irq_thread_fn+0x2c/0xa0
-[  182.460712]  irq_thread+0x16c/0x288
-[  182.464306]  kthread+0x11c/0x128
-[  182.467634]  ret_from_fork+0x10/0x20
-
-
-As am unable to reproduce this issue anymore so I will remove the code 
-dealing with slaves directly for now till we are able to really 
-reproduce the issue.
-
-> 
-> In other words, there can be multiple requests to resume, but only the
-> *first* request will trigger a transition and others will just increase
-> a refcount.
-> 
-> In addition, the pm_runtime framework guarantees that the peripheral
-> device can only start resuming when the parent controller device is
-> fully resumed.
-> 
-> While I am at it, one thing that kept us busy as well is the
-> relationship between system suspend and pm_runtime suspend. In the
-> generic case a system suspend will cause a pm_runtime resume before you
-> can actually start the system suspend, but you might be able to skip
-> this step. In the Intel case when the controller and its parent device
-> were suspended we had to pm_runtime resume everything because some
-> registers were no longer accessible.
-Interesting, thanks for the hints, will keep that in mind.
-
---srini
-> 
-> 

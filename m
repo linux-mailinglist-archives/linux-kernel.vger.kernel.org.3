@@ -2,402 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EF334C179A
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 16:47:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 916A34C1792
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 16:46:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242414AbiBWPri (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 10:47:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33984 "EHLO
+        id S242397AbiBWPqh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 10:46:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233481AbiBWPrg (ORCPT
+        with ESMTP id S233481AbiBWPqb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 10:47:36 -0500
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D71544DF73;
-        Wed, 23 Feb 2022 07:47:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1645631228; x=1677167228;
-  h=from:to:cc:subject:date:message-id:mime-version;
-  bh=YYctxn0kpK727CV6skfZz0Ey30lYJIa7enZ014ijZ4g=;
-  b=nHkHW3io7FpSrNi7JTHVpuRdJHRGuQRrvPqL4chYKK2GsMxbR7c4Kgkz
-   BdBabDq1pXUEBg5DZI3vWga6+g43NhYtbSDz8N4GMzpvsiiGl2w4Q6oXj
-   xrctlJryKj/FvHu6dH8Lvv96MaUBBB6gpF3460doeXmyC/lTUsYUq2Yc/
-   o=;
-Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 23 Feb 2022 07:47:07 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2022 07:47:07 -0800
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.15; Wed, 23 Feb 2022 07:47:06 -0800
-Received: from hu-srivasam-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.15; Wed, 23 Feb 2022 07:47:01 -0800
-From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-To:     <agross@kernel.org>, <bjorn.andersson@linaro.org>,
-        <lgirdwood@gmail.com>, <broonie@kernel.org>, <robh+dt@kernel.org>,
-        <quic_plai@quicinc.com>, <bgoswami@codeaurora.org>,
-        <perex@perex.cz>, <tiwai@suse.com>,
-        <srinivas.kandagatla@linaro.org>, <rohitkr@codeaurora.org>,
-        <linux-arm-msm@vger.kernel.org>, <alsa-devel@alsa-project.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <swboyd@chromium.org>, <judyhsiao@chromium.org>
-CC:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
-        "Venkata Prasad Potturu" <quic_potturu@quicinc.com>
-Subject: [PATCH v2] ASoC: codecs: Add power domains support in digital macro codecs
-Date:   Wed, 23 Feb 2022 21:16:38 +0530
-Message-ID: <1645631198-4701-1-git-send-email-quic_srivasam@quicinc.com>
-X-Mailer: git-send-email 2.7.4
+        Wed, 23 Feb 2022 10:46:31 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A77EC1151;
+        Wed, 23 Feb 2022 07:46:04 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BC4EF61849;
+        Wed, 23 Feb 2022 15:46:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2FF4BC340E7;
+        Wed, 23 Feb 2022 15:46:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645631163;
+        bh=5y8GBuKQ8Eu0KbdCimROfrUbByVtDNDNH0UD13FuHhA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Hg2LUP6Xzp4UdLri5evbkORuqJUfg0B6m8UBZKoDct2qzjZLv5InivSv3xRJDNilK
+         oTLsrVECQ34vJWpeuCYJSWzbA6vOuYXwdkX22kU28o14s+tDHYQKi0F4Lv4IK/EuPF
+         5oF3LjltFoulBk6wuk80Qjc+vksqZeUBGSpqpnvvzilv4ynDdycFinojz0xqy6Dv4x
+         UtmzYJsJt6/ekTv+z+HQfSuSsiGkqB+nWboyaf9O0R2d8fBh0KeJDXXOv/rT+Efz9u
+         tdIxVFq9smYfi7axYfU+/eIm1Cyw0psR1C0g5fJH+MEi0/H6HY1LNpzgdy/6jrHfV1
+         MDB5fo1yohihw==
+Date:   Wed, 23 Feb 2022 16:46:39 +0100
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Reinette Chatre <reinette.chatre@intel.com>
+Cc:     dave.hansen@linux.intel.com, tglx@linutronix.de, bp@alien8.de,
+        luto@kernel.org, mingo@redhat.com, linux-sgx@vger.kernel.org,
+        x86@kernel.org, seanjc@google.com, kai.huang@intel.com,
+        cathy.zhang@intel.com, cedric.xing@intel.com,
+        haitao.huang@intel.com, mark.shanahan@intel.com, hpa@zytor.com,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH V2 19/32] x86/sgx: Support adding of pages to an
+ initialized enclave
+Message-ID: <YhZW38aVILsrK4Jo@iki.fi>
+References: <cover.1644274683.git.reinette.chatre@intel.com>
+ <fcbde9c3e67289eaff9cd8b34989919629fe823c.1644274683.git.reinette.chatre@intel.com>
+ <YhDbGfzGWQ5RtwTU@iki.fi>
+ <YhDb/QRYMa4+xsyv@iki.fi>
+ <YhKLNqgPNNLS7JyN@iki.fi>
+ <80f3d7b9-e3d5-b2c0-7707-710bf6f5081e@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <80f3d7b9-e3d5-b2c0-7707-710bf6f5081e@intel.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for enabling required power domains in digital macro codecs.
-macro and dcodec power domains are being requested as clocks by HLOS
-in ADSP based architectures and ADSP internally handling as powerdomains.
-In ADSP bypass case need to handle them as power domains explicitly.
+On Tue, Feb 22, 2022 at 11:19:11AM -0800, Reinette Chatre wrote:
+> Hi Jarkko,
+> 
+> On 2/20/2022 10:40 AM, Jarkko Sakkinen wrote:
+> ...
+>  
+> > Do you know if it is possible to do EAUG, EMODPR and the do a single
+> > EACCEPT for both? Just looking at pseudo-code, it looked doable but
+> > I need to check this.
+> > 
+> > I.e. EAUG has this
+> > 
+> > EPCM(DS:RCX).BLOCKED := 0;
+> > EPCM(DS:RCX).PENDING := 1;
+> > EPCM(DS:RCX).MODIFIED := 0;
+> > EPCM(DS:RCX).PR := 0;
+> > (* associate the EPCPAGE with the SECS by storing the SECS identifier of DS:TMP_SECS *)
+> > Update EPCM(DS:RCX) SECS identifier to reference DS:TMP_SECS identifier;
+> > (* Set EPCM valid fields *)
+> > EPCM(DS:RCX).VALID := 1;
+> > 
+> > And EMODPR only checks .VALID.
+> 
+> After that check there is also:
+> IF (EPCM(DS:RCX).PENDING is not 0 or (EPCM(DS:RCX).MODIFIED is not 0) )
+>     THEN
+>         RFLAGS.ZF := 1;
+>         RAX := SGX_PAGE_NOT_MODIFIABLE;
+>         GOTO DONE;
+> FI;
+> 
+> Attempting the SGX_IOC_ENCLAVE_RESTRICT_PERMISSIONS ioctl() on a recently
+> added page (EAUG) that has not yet been EACCEPTed is thus expected to fail
+> with errno of EFAULT (indicating ENCLS[EMODPR] failure) and the returned
+> structure's result field set to 20 (SGX_PAGE_NOT_MODIFIABLE).
+> 
+> I confirmed this behavior by modifying the "augment" kselftest test by adding
+> a SGX_IOC_ENCLAVE_RESTRICT_PERMISSIONS call between the new memory access and
+> the EACCEPT.
 
-Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-Co-developed-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
-Signed-off-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
-Reported-by: kernel test robot <lkp@intel.com>
----
-Changes since v1:
-    -- Add missing macros in Kconfig.
+Thank you, also Mark confirmed this.
 
- sound/soc/codecs/Kconfig              |  7 ++++
- sound/soc/codecs/Makefile             |  2 +
- sound/soc/codecs/lpass-macro-common.c | 72 +++++++++++++++++++++++++++++++++++
- sound/soc/codecs/lpass-macro-common.h | 18 +++++++++
- sound/soc/codecs/lpass-rx-macro.c     | 13 ++++++-
- sound/soc/codecs/lpass-tx-macro.c     | 10 +++++
- sound/soc/codecs/lpass-va-macro.c     | 11 +++++-
- sound/soc/qcom/Kconfig                |  1 +
- 8 files changed, 132 insertions(+), 2 deletions(-)
- create mode 100644 sound/soc/codecs/lpass-macro-common.c
- create mode 100644 sound/soc/codecs/lpass-macro-common.h
-
-diff --git a/sound/soc/codecs/Kconfig b/sound/soc/codecs/Kconfig
-index c2627f7..4de029a 100644
---- a/sound/soc/codecs/Kconfig
-+++ b/sound/soc/codecs/Kconfig
-@@ -244,6 +244,7 @@ config SND_SOC_ALL_CODECS
- 	imply SND_SOC_WCD9335
- 	imply SND_SOC_WCD934X
- 	imply SND_SOC_WCD938X_SDW
-+	imply SND_SOC_LPASS_MACRO_COMMON
- 	imply SND_SOC_LPASS_RX_MACRO
- 	imply SND_SOC_LPASS_TX_MACRO
- 	imply SND_SOC_WL1273
-@@ -2008,6 +2009,9 @@ config SND_SOC_TPA6130A2
- 	tristate "Texas Instruments TPA6130A2 headphone amplifier"
- 	depends on I2C
- 
-+config SND_SOC_LPASS_MACRO_COMMON
-+        tristate
-+
- config SND_SOC_LPASS_WSA_MACRO
- 	depends on COMMON_CLK
- 	select REGMAP_MMIO
-@@ -2016,16 +2020,19 @@ config SND_SOC_LPASS_WSA_MACRO
- config SND_SOC_LPASS_VA_MACRO
- 	depends on COMMON_CLK
- 	select REGMAP_MMIO
-+	select SND_SOC_LPASS_MACRO_COMMON
- 	tristate "Qualcomm VA Macro in LPASS(Low Power Audio SubSystem)"
- 
- config SND_SOC_LPASS_RX_MACRO
- 	depends on COMMON_CLK
- 	select REGMAP_MMIO
-+	select SND_SOC_LPASS_MACRO_COMMON
- 	tristate "Qualcomm RX Macro in LPASS(Low Power Audio SubSystem)"
- 
- config SND_SOC_LPASS_TX_MACRO
- 	depends on COMMON_CLK
- 	select REGMAP_MMIO
-+	select SND_SOC_LPASS_MACRO_COMMON
- 	tristate "Qualcomm TX Macro in LPASS(Low Power Audio SubSystem)"
- 
- endmenu
-diff --git a/sound/soc/codecs/Makefile b/sound/soc/codecs/Makefile
-index b4e11c3..c3c6059 100644
---- a/sound/soc/codecs/Makefile
-+++ b/sound/soc/codecs/Makefile
-@@ -112,6 +112,7 @@ snd-soc-l3-objs := l3.o
- snd-soc-lm4857-objs := lm4857.o
- snd-soc-lm49453-objs := lm49453.o
- snd-soc-lochnagar-sc-objs := lochnagar-sc.o
-+snd-soc-lpass-macro-common-objs := lpass-macro-common.o
- snd-soc-lpass-rx-macro-objs := lpass-rx-macro.o
- snd-soc-lpass-tx-macro-objs := lpass-tx-macro.o
- snd-soc-lpass-wsa-macro-objs := lpass-wsa-macro.o
-@@ -676,6 +677,7 @@ obj-$(CONFIG_SND_SOC_MAX9877)	+= snd-soc-max9877.o
- obj-$(CONFIG_SND_SOC_MAX98504)	+= snd-soc-max98504.o
- obj-$(CONFIG_SND_SOC_SIMPLE_AMPLIFIER)	+= snd-soc-simple-amplifier.o
- obj-$(CONFIG_SND_SOC_TPA6130A2)	+= snd-soc-tpa6130a2.o
-+obj-$(CONFIG_SND_SOC_LPASS_MACRO_COMMON)	+= snd-soc-lpass-macro-common.o
- obj-$(CONFIG_SND_SOC_LPASS_WSA_MACRO)	+= snd-soc-lpass-wsa-macro.o
- obj-$(CONFIG_SND_SOC_LPASS_VA_MACRO)	+= snd-soc-lpass-va-macro.o
- obj-$(CONFIG_SND_SOC_LPASS_RX_MACRO)	+= snd-soc-lpass-rx-macro.o
-diff --git a/sound/soc/codecs/lpass-macro-common.c b/sound/soc/codecs/lpass-macro-common.c
-new file mode 100644
-index 0000000..b8e50e6
---- /dev/null
-+++ b/sound/soc/codecs/lpass-macro-common.c
-@@ -0,0 +1,72 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+// Copyright (c) 2022, The Linux Foundation. All rights reserved.
-+
-+#include <linux/export.h>
-+#include <linux/module.h>
-+#include <linux/init.h>
-+#include <linux/of_platform.h>
-+#include <linux/platform_device.h>
-+#include <linux/pm_domain.h>
-+#include <linux/pm_runtime.h>
-+
-+#include "lpass-macro-common.h"
-+
-+int lpass_macro_pds_init(struct platform_device *pdev, struct lpass_macro **pds)
-+{
-+	struct device *dev = &pdev->dev;
-+	struct lpass_macro *l_pds;
-+	int ret;
-+
-+	const struct property *prop = of_find_property(dev->of_node, "power-domains", NULL);
-+
-+	if (!prop)
-+		return 0;
-+
-+	l_pds = devm_kzalloc(dev, sizeof(*l_pds), GFP_KERNEL);
-+	if (!l_pds)
-+		return -ENOMEM;
-+
-+	l_pds->macro_pd = dev_pm_domain_attach_by_name(dev,  "macro");
-+	if (IS_ERR_OR_NULL(l_pds->macro_pd)) {
-+		ret = PTR_ERR(l_pds->macro_pd) ? : -ENODATA;
-+		return ret;
-+	}
-+	ret = pm_runtime_get_sync(l_pds->macro_pd);
-+	if (ret < 0) {
-+		dev_err(dev, "%s failed for macro_pd, ret %d\n", __func__, ret);
-+		dev_pm_domain_detach(l_pds->macro_pd, false);
-+		pm_runtime_put_noidle(l_pds->macro_pd);
-+		return ret;
-+	}
-+
-+	l_pds->dcodec_pd = dev_pm_domain_attach_by_name(dev, "dcodec");
-+	if (IS_ERR_OR_NULL(l_pds->dcodec_pd)) {
-+		ret = PTR_ERR(l_pds->dcodec_pd) ? : -ENODATA;
-+		dev_pm_domain_detach(l_pds->macro_pd, false);
-+		return ret;
-+	}
-+
-+	ret = pm_runtime_get_sync(l_pds->dcodec_pd);
-+	if (ret < 0) {
-+		dev_err(dev, "%s failed for dcodec_pd, ret %d\n", __func__, ret);
-+
-+		dev_pm_domain_detach(l_pds->dcodec_pd, false);
-+		pm_runtime_put_noidle(l_pds->dcodec_pd);
-+		return ret;
-+	}
-+	*pds = l_pds;
-+	return ret;
-+}
-+EXPORT_SYMBOL_GPL(lpass_macro_pds_init);
-+
-+void lpass_macro_pds_exit(struct platform_device *pdev, struct lpass_macro *pds)
-+{
-+	pm_runtime_put(pds->macro_pd);
-+	pm_runtime_put(pds->dcodec_pd);
-+	dev_pm_domain_detach(pds->macro_pd, false);
-+	dev_pm_domain_detach(pds->dcodec_pd, false);
-+}
-+EXPORT_SYMBOL_GPL(lpass_macro_pds_exit);
-+
-+MODULE_DESCRIPTION("QTI SC7280 LPI GPIO pin control driver");
-+MODULE_LICENSE("GPL");
-diff --git a/sound/soc/codecs/lpass-macro-common.h b/sound/soc/codecs/lpass-macro-common.h
-new file mode 100644
-index 0000000..c343f0e
---- /dev/null
-+++ b/sound/soc/codecs/lpass-macro-common.h
-@@ -0,0 +1,18 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+/*
-+ * Copyright (c) 2022, The Linux Foundation. All rights reserved.
-+ */
-+
-+#ifndef __LPASS_MACRO_COMMON_H__
-+#define __LPASS_MACRO_COMMON_H__
-+
-+
-+struct lpass_macro {
-+	struct device *macro_pd;
-+	struct device *dcodec_pd;
-+};
-+
-+int lpass_macro_pds_init(struct platform_device *pdev, struct lpass_macro **pds);
-+void lpass_macro_pds_exit(struct platform_device *pdev, struct lpass_macro *pds);
-+
-+#endif /* __LPASS_MACRO_COMMON_H__ */
-diff --git a/sound/soc/codecs/lpass-rx-macro.c b/sound/soc/codecs/lpass-rx-macro.c
-index 29d214f..db32090 100644
---- a/sound/soc/codecs/lpass-rx-macro.c
-+++ b/sound/soc/codecs/lpass-rx-macro.c
-@@ -14,6 +14,8 @@
- #include <linux/of_clk.h>
- #include <linux/clk-provider.h>
- 
-+#include "lpass-macro-common.h"
-+
- #define CDC_RX_TOP_TOP_CFG0		(0x0000)
- #define CDC_RX_TOP_SWR_CTRL		(0x0008)
- #define CDC_RX_TOP_DEBUG		(0x000C)
-@@ -606,7 +608,7 @@ struct rx_macro {
- 	int is_softclip_on;
- 	int is_aux_hpf_on;
- 	int softclip_clk_users;
--
-+	struct lpass_macro *pds;
- 	struct regmap *regmap;
- 	struct clk_bulk_data clks[RX_NUM_CLKS_MAX];
- 	struct clk_hw hw;
-@@ -3537,6 +3539,12 @@ static int rx_macro_probe(struct platform_device *pdev)
- 		return ret;
- 	}
- 
-+	ret = lpass_macro_pds_init(pdev, &rx->pds);
-+	if (ret < 0) {
-+		dev_err(dev, "Enabling power domains failed in %s\n", __func__);
-+		return ret;
-+	}
-+
- 	base = devm_platform_ioremap_resource(pdev, 0);
- 	if (IS_ERR(base))
- 		return PTR_ERR(base);
-@@ -3575,6 +3583,9 @@ static int rx_macro_remove(struct platform_device *pdev)
- 
- 	of_clk_del_provider(pdev->dev.of_node);
- 	clk_bulk_disable_unprepare(RX_NUM_CLKS_MAX, rx->clks);
-+
-+	lpass_macro_pds_exit(pdev, rx->pds);
-+
- 	return 0;
- }
- 
-diff --git a/sound/soc/codecs/lpass-tx-macro.c b/sound/soc/codecs/lpass-tx-macro.c
-index 9c96ab1..4d1e5ab 100644
---- a/sound/soc/codecs/lpass-tx-macro.c
-+++ b/sound/soc/codecs/lpass-tx-macro.c
-@@ -13,6 +13,8 @@
- #include <linux/of_clk.h>
- #include <linux/clk-provider.h>
- 
-+#include "lpass-macro-common.h"
-+
- #define CDC_TX_CLK_RST_CTRL_MCLK_CONTROL (0x0000)
- #define CDC_TX_MCLK_EN_MASK		BIT(0)
- #define CDC_TX_MCLK_ENABLE		BIT(0)
-@@ -266,6 +268,7 @@ struct tx_macro {
- 	u16 dmic_clk_div;
- 	bool bcs_enable;
- 	int dec_mode[NUM_DECIMATORS];
-+	struct lpass_macro *pds;
- 	bool bcs_clk_en;
- };
- #define to_tx_macro(_hw) container_of(_hw, struct tx_macro, hw)
-@@ -1802,6 +1805,11 @@ static int tx_macro_probe(struct platform_device *pdev)
- 		return ret;
- 	}
- 
-+	ret = lpass_macro_pds_init(pdev, &tx->pds);
-+	if (ret < 0) {
-+		dev_err(dev, "Enabling power domains failed in %s\n", __func__);
-+		return ret;
-+	}
- 	base = devm_platform_ioremap_resource(pdev, 0);
- 	if (IS_ERR(base))
- 		return PTR_ERR(base);
-@@ -1859,6 +1867,8 @@ static int tx_macro_remove(struct platform_device *pdev)
- 
- 	clk_bulk_disable_unprepare(TX_NUM_CLKS_MAX, tx->clks);
- 
-+	lpass_macro_pds_exit(pdev, tx->pds);
-+
- 	return 0;
- }
- 
-diff --git a/sound/soc/codecs/lpass-va-macro.c b/sound/soc/codecs/lpass-va-macro.c
-index 11147e3..b29b9a1 100644
---- a/sound/soc/codecs/lpass-va-macro.c
-+++ b/sound/soc/codecs/lpass-va-macro.c
-@@ -15,6 +15,8 @@
- #include <sound/soc-dapm.h>
- #include <sound/tlv.h>
- 
-+#include "lpass-macro-common.h"
-+
- /* VA macro registers */
- #define CDC_VA_CLK_RST_CTRL_MCLK_CONTROL	(0x0000)
- #define CDC_VA_MCLK_CONTROL_EN			BIT(0)
-@@ -195,6 +197,7 @@ struct va_macro {
- 	struct regmap *regmap;
- 	struct clk_bulk_data clks[VA_NUM_CLKS_MAX];
- 	struct clk_hw hw;
-+	struct lpass_macro *pds;
- 
- 	s32 dmic_0_1_clk_cnt;
- 	s32 dmic_2_3_clk_cnt;
-@@ -1413,7 +1416,11 @@ static int va_macro_probe(struct platform_device *pdev)
- 		dev_err(dev, "Error getting VA Clocks (%d)\n", ret);
- 		return ret;
- 	}
--
-+	ret = lpass_macro_pds_init(pdev, &va->pds);
-+	if (ret < 0) {
-+		dev_err(dev, "Enabling power domains failed %s\n", __func__);
-+		return ret;
-+	}
- 	ret = of_property_read_u32(dev->of_node, "qcom,dmic-sample-rate",
- 				   &sample_rate);
- 	if (ret) {
-@@ -1468,6 +1475,8 @@ static int va_macro_remove(struct platform_device *pdev)
- 
- 	clk_bulk_disable_unprepare(VA_NUM_CLKS_MAX, va->clks);
- 
-+	lpass_macro_pds_exit(pdev, va->pds);
-+
- 	return 0;
- }
- 
-diff --git a/sound/soc/qcom/Kconfig b/sound/soc/qcom/Kconfig
-index 52db003..6ffd51a 100644
---- a/sound/soc/qcom/Kconfig
-+++ b/sound/soc/qcom/Kconfig
-@@ -194,6 +194,7 @@ config SND_SOC_SC7280
- 	select SND_SOC_LPASS_SC7280
- 	select SND_SOC_MAX98357A
- 	select SND_SOC_WCD938X
-+	select SND_SOC_LPASS_MACRO_COMMON
- 	select SND_SOC_LPASS_RX_MACRO
- 	select SND_SOC_LPASS_TX_MACRO
- 	help
--- 
-2.7.4
-
+BR, Jarkko

@@ -2,61 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AB524C0E18
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 09:14:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E88A4C0E1E
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 09:19:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238844AbiBWIPA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 03:15:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57728 "EHLO
+        id S238729AbiBWIUI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 03:20:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232535AbiBWIO6 (ORCPT
+        with ESMTP id S232535AbiBWIT6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 03:14:58 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D59E536305;
-        Wed, 23 Feb 2022 00:14:30 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5B8A1B80B3E;
-        Wed, 23 Feb 2022 08:14:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C364C340E7;
-        Wed, 23 Feb 2022 08:14:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645604068;
-        bh=ORM81g/BJs6DqcF1RJUtYk0o42tX/xtNTRjiaCRrSJI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=uT6lcksV5+Ne5ixwr7lmetDdy+xY58hO5AeCSF+CW4YCneaY9TnMgC0DFV4uRDtD5
-         /pyXqmJQDAuI0pJgik5QK/0FH/z2/Xx1EVBKgN+YveRiw8k6UKW8sb6qmoLfnrJlht
-         D7xFLTXgyaY5J/04jXlaqkDZIotqjDNS18I0gmLurZ/1ngWVoMuehiBucYNprQxpIx
-         r8unlVaTrbmeWKNzf87FSbKFemUgweeScb7ZXbpkFCaB7/asmcpGKv0aPWz6rK6hfo
-         2FtNq8lKvIhcOInfBHsm/cFZKPBmcEoW2dPHuxTIKJ9jFvPpbW9kDPTArtHCKbmV7v
-         tQOAJzmr0QYaA==
-Date:   Wed, 23 Feb 2022 09:14:20 +0100
-From:   Christian Brauner <brauner@kernel.org>
-To:     Mimi Zohar <zohar@linux.ibm.com>
-Cc:     Stefan Berger <stefanb@linux.ibm.com>,
-        linux-integrity@vger.kernel.org, serge@hallyn.com,
-        containers@lists.linux.dev, dmitry.kasatkin@gmail.com,
-        ebiederm@xmission.com, krzysztof.struczynski@huawei.com,
-        roberto.sassu@huawei.com, mpeters@redhat.com, lhinds@redhat.com,
-        lsturman@redhat.com, puiterwi@redhat.com, jejb@linux.ibm.com,
-        jamjoom@us.ibm.com, linux-kernel@vger.kernel.org,
-        paul@paul-moore.com, rgb@redhat.com,
-        linux-security-module@vger.kernel.org, jmorris@namei.org,
-        James Bottomley <James.Bottomley@HansenPartnership.com>
-Subject: Re: [PATCH v10 22/27] securityfs: Extend securityfs with namespacing
- support
-Message-ID: <20220223081420.7mthf3rfxb3n5gvs@wittgenstein>
-References: <20220201203735.164593-1-stefanb@linux.ibm.com>
- <20220201203735.164593-23-stefanb@linux.ibm.com>
- <177baf827c4dbf9a225b14552725360066af6471.camel@linux.ibm.com>
+        Wed, 23 Feb 2022 03:19:58 -0500
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DE893BBCF
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 00:19:30 -0800 (PST)
+Received: by mail-lj1-x22f.google.com with SMTP id e8so15539318ljj.2
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 00:19:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=fovvMpQHviomQa5wGvfvQiYSHDpMQtFQkvinEKZ+P+o=;
+        b=wWRv8rgtL5livYYaXWb/IWTOYKTe58l8fJDjxBRPe1r5VgWIavmbGdRgF1UFvhjUHS
+         /TiaE2n4wVB6W+9ciQCHnPkMfkIjAvYDCteQPEOsimyX4zzr5NUuBjWc0OEQc6ObzsbE
+         dMAj1qhIcERH56EFJI8XeSAR+ZT5u9wKUZ+lOIkcU50N4HeNFAjtWNKGnF+5GlTSPAyo
+         SdU6vnY4qw6wz8BfHE4/rNYSU2wB2XjWcu4USrlpExOGy0J0gIh3+EnECxFShDr+54KR
+         NRfk/Q8d+wWmNCcOXYErHAIo14jjDMzT5o5kG9HmxyklFpM4wv8+tvIwDITlwkaxf46w
+         rDug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=fovvMpQHviomQa5wGvfvQiYSHDpMQtFQkvinEKZ+P+o=;
+        b=vJdgn2ulwrAXvNO0zlqH3VHEsOmyV/VA+yLWGBIscklvuhli479gAhVM4/J6ICTd+2
+         lxIMYi2P+3lmwsaxh8+6G7/qBzlYAeVC7PalNCX8q9GmEXrt0HkPIyQu9BaFpvtUyiNd
+         00JztnLbP1J+5VtCGAQHVvyptJXDTbdu235NVW8fNJyQv8vgz3ucqVEhMgoKcYIzfi/7
+         gK3iQyVGuByIlXba/GZugfkTtHknWGhu+lSnp0DnCB3TGVGf1bwAp6Ynqlv2M6TVQgsO
+         pVeYAwhyinY5i3rlDKuxhm80uzK+4EwVowEYuW/vgAAawaKpmPYgkf5WbKidL/2Y11k3
+         OIQw==
+X-Gm-Message-State: AOAM533gXmjZmnE/cRvRZf2/M6yz2Vfa6fORJ9jOUq4b9Ytryyv4LcWV
+        anZn40OtbOkAiTNfyYje4LBSDYlZqbBPJq+6GZvUrg==
+X-Google-Smtp-Source: ABdhPJxZ4uG4WcRtYARlWiDvfXmlL1zrTmIN3bab5l10WgW7vqV3d/uFWpuESmYgaZzGx92Jbh/adk2PJf9mJIrE7Qc=
+X-Received: by 2002:a05:651c:990:b0:240:752f:a224 with SMTP id
+ b16-20020a05651c099000b00240752fa224mr20281298ljq.266.1645604368738; Wed, 23
+ Feb 2022 00:19:28 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <177baf827c4dbf9a225b14552725360066af6471.camel@linux.ibm.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+References: <20220215163858.GA8458@willie-the-truck> <YgvYZy5xv1g+u5wp@fedora>
+ <20220215164639.GC8458@willie-the-truck> <CAKfTPtAFsL+uqQiGcuh+JJZB=rPrez0=kotq76CVRcBQhcPefg@mail.gmail.com>
+ <YgvjtsOZuxzbgBBl@fedora> <CAKfTPtCHrZCp1Uth4odyT721wE8zoNVY3Mh+DSyuTkqPafm0Hg@mail.gmail.com>
+ <YgwHhxy/uGafQsak@fedora> <CAKfTPtAR2+bY8QpyaCCJfezsVkB62n8XZjL9c5_mPO3iyDnp4w@mail.gmail.com>
+ <Yg0lULy5TmHKIHFv@fedora> <CAKfTPtB1Vt75ciX_V=8T3e5fgW-X7ybRk6VZvy4uXzjazjx9ZA@mail.gmail.com>
+ <YhWlDUzFeG0d7z6C@fedora>
+In-Reply-To: <YhWlDUzFeG0d7z6C@fedora>
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+Date:   Wed, 23 Feb 2022 09:19:17 +0100
+Message-ID: <CAKfTPtAjnRGc9c1Ni0ru6Xz9wKLPoBY4wdPkN0uFBzR-_iurPg@mail.gmail.com>
+Subject: Re: [PATCH] arm64: smp: Skip MC domain for SoCs without shared cache
+To:     Darren Hart <darren@os.amperecomputing.com>
+Cc:     Will Deacon <will@kernel.org>,
+        "Song Bao Hua (Barry Song)" <song.bao.hua@hisilicon.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux Arm <linux-arm-kernel@lists.infradead.org>,
+        Catalin Marinas <Catalin.Marinas@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Valentin Schneider <Valentin.Schneider@arm.com>,
+        "D . Scott Phillips" <scott@os.amperecomputing.com>,
+        Ilkka Koskinen <ilkka@os.amperecomputing.com>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -65,56 +79,287 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 22, 2022 at 08:48:47PM -0500, Mimi Zohar wrote:
-> On Tue, 2022-02-01 at 15:37 -0500, Stefan Berger wrote:
-> > Enable multiple instances of securityfs by keying each instance with a
-> > pointer to the user namespace it belongs to.
-> > 
-> > Since we do not need the pinning of the filesystem for the virtualization
-> 
-> ^namespacing case
-> 
-> > case, limit the usage of simple_pin_fs() and simpe_release_fs() to the
-> 
-> ^simple_release_fs
-> 
-> > case when the init_user_ns is active. This simplifies the cleanup for the
-> > virtualization case where usage of securityfs_remove() to free dentries
-> 
-> ^namespacing 
-> 
-> > is therefore not needed anymore.
-> > 
-> > For the initial securityfs, i.e. the one mounted in the host userns mount,
-> > nothing changes. The rules for securityfs_remove() are as before and it is
-> > still paired with securityfs_create(). Specifically, a file created via
-> > securityfs_create_dentry() in the initial securityfs mount still needs to
-> > be removed by a call to securityfs_remove(). Creating a new dentry in the
-> > initial securityfs mount still pins the filesystem like it always did.
-> > Consequently, the initial securityfs mount is not destroyed on
-> > umount/shutdown as long as at least one user of it still has dentries that
-> > it hasn't removed with a call to securityfs_remove().
-> > 
-> > Prevent mounting of an instance of securityfs in another user namespace
-> > than it belongs to. Also, prevent accesses to files and directories by
-> > a user namespace that is neither the user namespace it belongs to
-> > nor an ancestor of the user namespace that the instance of securityfs
-> > belongs to. Do not prevent access if securityfs was bind-mounted and
-> > therefore the init_user_ns is the owning user namespace.
-> > 
-> > Suggested-by: Christian Brauner <brauner@kernel.org>
-> > Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
-> > Signed-off-by: James Bottomley <James.Bottomley@HansenPartnership.com>
-> 
-> Christian, I understand that "[PATCH v10 23/27] ima: Setup securityfs
-> for IMA namespace" needs to be deferred, but is there a reason for
-> deferring  "[PATCH v10 22/27] securityfs: Extend securityfs with
-> namespacing support"?   As the securityfs patches are really
-> independent of IMA namespacing, I would have thought  "[PATCH v10
-> 04/27] securityfs: rework dentry creation" and this patch should be co-
-> located at the beginning of the patch set.
+On Wed, 23 Feb 2022 at 04:08, Darren Hart <darren@os.amperecomputing.com> wrote:
+>
+> On Wed, Feb 16, 2022 at 06:52:29PM +0100, Vincent Guittot wrote:
+> > On Wed, 16 Feb 2022 at 17:24, Darren Hart <darren@os.amperecomputing.com> wrote:
+> > >
+> > > On Wed, Feb 16, 2022 at 09:30:49AM +0100, Vincent Guittot wrote:
+> > > > On Tue, 15 Feb 2022 at 21:05, Darren Hart <darren@os.amperecomputing.com> wrote:
+> > > > >
+> > > > > On Tue, Feb 15, 2022 at 07:19:45PM +0100, Vincent Guittot wrote:
+> > > > > > On Tue, 15 Feb 2022 at 18:32, Darren Hart <darren@os.amperecomputing.com> wrote:
+> > > > > > >
+> > > > > > > On Tue, Feb 15, 2022 at 06:09:08PM +0100, Vincent Guittot wrote:
+> > > > > > > > On Tue, 15 Feb 2022 at 17:46, Will Deacon <will@kernel.org> wrote:
+> > > > > > > > >
+> > > > > > > > > On Tue, Feb 15, 2022 at 08:44:23AM -0800, Darren Hart wrote:
+> > > > > > > > > > On Tue, Feb 15, 2022 at 04:38:59PM +0000, Will Decon wrote:
+> > > > > > > > > > > On Fri, Feb 11, 2022 at 03:20:51AM +0000, Song Bao Hua (Barry Song) wrote:
+> > > > > > > > > > > >
+> > > > > > > > > > > >
+> > > > > > > > > > > > > -----Original Message-----
+> > > > > > > > > > > > > From: Darren Hart [mailto:darren@os.amperecomputing.com]
+> > > > > > > > > > > > > Sent: Friday, February 11, 2022 2:43 PM
+> > > > > > > > > > > > > To: LKML <linux-kernel@vger.kernel.org>; Linux Arm
+> > > > > > > > > > > > > <linux-arm-kernel@lists.infradead.org>
+> > > > > > > > > > > > > Cc: Catalin Marinas <catalin.marinas@arm.com>; Will Deacon <will@kernel.org>;
+> > > > > > > > > > > > > Peter Zijlstra <peterz@infradead.org>; Vincent Guittot
+> > > > > > > > > > > > > <vincent.guittot@linaro.org>; Song Bao Hua (Barry Song)
+> > > > > > > > > > > > > <song.bao.hua@hisilicon.com>; Valentin Schneider
+> > > > > > > > > > > > > <valentin.schneider@arm.com>; D . Scott Phillips
+> > > > > > > > > > > > > <scott@os.amperecomputing.com>; Ilkka Koskinen
+> > > > > > > > > > > > > <ilkka@os.amperecomputing.com>; stable@vger.kernel.org
+> > > > > > > > > > > > > Subject: [PATCH] arm64: smp: Skip MC domain for SoCs without shared cache
+> > > > > > > > > > > > >
+> > > > > > > > > > > > > SoCs such as the Ampere Altra define clusters but have no shared
+> > > > > > > > > > > > > processor-side cache. As of v5.16 with CONFIG_SCHED_CLUSTER and
+> > > > > > > > > > > > > CONFIG_SCHED_MC, build_sched_domain() will BUG() with:
+> > > > > > > > > > > > >
+> > > > > > > > > > > > > BUG: arch topology borken
+> > > > > > > > > > > > >      the CLS domain not a subset of the MC domain
+> > > > > > > > > > > > >
+> > > > > > > > > > > > > for each CPU (160 times for a 2 socket 80 core Altra system). The MC
+> > > > > > > > > > > > > level cpu mask is then extended to that of the CLS child, and is later
+> > > > > > > > > > > > > removed entirely as redundant.
+> > > > > > > > > > > > >
+> > > > > > > > > > > > > This change detects when all cpu_coregroup_mask weights=1 and uses an
+> > > > > > > > > > > > > alternative sched_domain_topology equivalent to the default if
+> > > > > > > > > > > > > CONFIG_SCHED_MC were disabled.
+> > > > > > > > > > > > >
+> > > > > > > > > > > > > The final resulting sched domain topology is unchanged with or without
+> > > > > > > > > > > > > CONFIG_SCHED_CLUSTER, and the BUG is avoided:
+> > > > > > > > > > > > >
+> > > > > > > > > > > > > For CPU0:
+> > > > > > > > > > > > >
+> > > > > > > > > > > > > With CLS:
+> > > > > > > > > > > > > CLS  [0-1]
+> > > > > > > > > > > > > DIE  [0-79]
+> > > > > > > > > > > > > NUMA [0-159]
+> > > > > > > > > > > > >
+> > > > > > > > > > > > > Without CLS:
+> > > > > > > > > > > > > DIE  [0-79]
+> > > > > > > > > > > > > NUMA [0-159]
+> > > > > > > > > > > > >
+> > > > > > > > > > > > > Cc: Catalin Marinas <catalin.marinas@arm.com>
+> > > > > > > > > > > > > Cc: Will Deacon <will@kernel.org>
+> > > > > > > > > > > > > Cc: Peter Zijlstra <peterz@infradead.org>
+> > > > > > > > > > > > > Cc: Vincent Guittot <vincent.guittot@linaro.org>
+> > > > > > > > > > > > > Cc: Barry Song <song.bao.hua@hisilicon.com>
+> > > > > > > > > > > > > Cc: Valentin Schneider <valentin.schneider@arm.com>
+> > > > > > > > > > > > > Cc: D. Scott Phillips <scott@os.amperecomputing.com>
+> > > > > > > > > > > > > Cc: Ilkka Koskinen <ilkka@os.amperecomputing.com>
+> > > > > > > > > > > > > Cc: <stable@vger.kernel.org> # 5.16.x
+> > > > > > > > > > > > > Signed-off-by: Darren Hart <darren@os.amperecomputing.com>
+> > > > > > > > > > > >
+> > > > > > > > > > > > Hi Darrent,
+> > > > > > > > > > > > What kind of resources are clusters sharing on Ampere Altra?
+> > > > > > > > > > > > So on Altra, cpus are not sharing LLC? Each LLC is separate
+> > > > > > > > > > > > for each cpu?
+> > > > > > > > > > > >
+> > > > > > > > > > > > > ---
+> > > > > > > > > > > > >  arch/arm64/kernel/smp.c | 32 ++++++++++++++++++++++++++++++++
+> > > > > > > > > > > > >  1 file changed, 32 insertions(+)
+> > > > > > > > > > > > >
+> > > > > > > > > > > > > diff --git a/arch/arm64/kernel/smp.c b/arch/arm64/kernel/smp.c
+> > > > > > > > > > > > > index 27df5c1e6baa..0a78ac5c8830 100644
+> > > > > > > > > > > > > --- a/arch/arm64/kernel/smp.c
+> > > > > > > > > > > > > +++ b/arch/arm64/kernel/smp.c
+> > > > > > > > > > > > > @@ -715,9 +715,22 @@ void __init smp_init_cpus(void)
+> > > > > > > > > > > > >         }
+> > > > > > > > > > > > >  }
+> > > > > > > > > > > > >
+> > > > > > > > > > > > > +static struct sched_domain_topology_level arm64_no_mc_topology[] = {
+> > > > > > > > > > > > > +#ifdef CONFIG_SCHED_SMT
+> > > > > > > > > > > > > +       { cpu_smt_mask, cpu_smt_flags, SD_INIT_NAME(SMT) },
+> > > > > > > > > > > > > +#endif
+> > > > > > > > > > > > > +
+> > > > > > > > > > > > > +#ifdef CONFIG_SCHED_CLUSTER
+> > > > > > > > > > > > > +       { cpu_clustergroup_mask, cpu_cluster_flags, SD_INIT_NAME(CLS) },
+> > > > > > > > > > > > > +#endif
+> > > > > > > > > > > > > +       { cpu_cpu_mask, SD_INIT_NAME(DIE) },
+> > > > > > > > > > > > > +       { NULL, },
+> > > > > > > > > > > > > +};
+> > > > > > > > > > > > > +
+> > > > > > > > > > > > >  void __init smp_prepare_cpus(unsigned int max_cpus)
+> > > > > > > > > > > > >  {
+> > > > > > > > > > > > >         const struct cpu_operations *ops;
+> > > > > > > > > > > > > +       bool use_no_mc_topology = true;
+> > > > > > > > > > > > >         int err;
+> > > > > > > > > > > > >         unsigned int cpu;
+> > > > > > > > > > > > >         unsigned int this_cpu;
+> > > > > > > > > > > > > @@ -758,6 +771,25 @@ void __init smp_prepare_cpus(unsigned int max_cpus)
+> > > > > > > > > > > > >
+> > > > > > > > > > > > >                 set_cpu_present(cpu, true);
+> > > > > > > > > > > > >                 numa_store_cpu_info(cpu);
+> > > > > > > > > > > > > +
+> > > > > > > > > > > > > +               /*
+> > > > > > > > > > > > > +                * Only use no_mc topology if all cpu_coregroup_mask weights=1
+> > > > > > > > > > > > > +                */
+> > > > > > > > > > > > > +               if (cpumask_weight(cpu_coregroup_mask(cpu)) > 1)
+> > > > > > > > > > > > > +                       use_no_mc_topology = false;
+> > > > > > > > > > > >
+> > > > > > > > > > > > This seems to be wrong? If you have 5 cpus,
+> > > > > > > > > > > > Cpu0 has cpu_coregroup_mask(cpu)== 1, cpu1-4
+> > > > > > > > > > > > has cpu_coregroup_mask(cpu)== 4, for cpu0, you still
+> > > > > > > > > > > > need to remove MC, but for cpu1-4, you will need
+> > > > > > > > > > > > CLS and MC both?
+> > > > > > > > > > >
+> > > > > > > > > > > What is the *current* behaviour on such a system?
+> > > > > > > > > > >
+> > > > > > > > > >
+> > > > > > > > > > As I understand it, any system that uses the default topology which has
+> > > > > > > > > > a cpus_coregroup weight of 1 and a child (cluster, smt, ...) weight > 1
+> > > > > > > > > > will behave as described above by printing the following for each CPU
+> > > > > > > > > > matching this criteria:
+> > > > > > > > > >
+> > > > > > > > > >   BUG: arch topology borken
+> > > > > > > > > >         the [CLS,SMT,...] domain not a subset of the MC domain
+> > > > > > > > > >
+> > > > > > > > > > And then extend the MC domain cpumask to match that of the child and continue
+> > > > > > > > > > on.
+> > > > > > > > > >
+> > > > > > > > > > That would still be the behavior for this type of system after this
+> > > > > > > > > > patch is applied.
+> > > > > > > > >
+> > > > > > > > > That's what I thought, but in that case applying your patch is a net
+> > > > > > > > > improvement: systems either get current or better behaviour.
+> > > > > > > >
+> > > > > > > > CLUSTER level is normally defined as a intermediate group of the MC
+> > > > > > > > level and both levels have the scheduler flag SD_SHARE_PKG_RESOURCES
+> > > > > > > > flag
+> > > > > > > >
+> > > > > > > > In the case of Ampere altra, they consider that CPUA have a CLUSTER
+> > > > > > > > level which SD_SHARE_PKG_RESOURCES with another CPUB but the next and
+> > > > > > > > larger MC level then says that CPUA doesn't SD_SHARE_PKG_RESOURCES
+> > > > > > > > with CPUB which seems to be odd because the SD_SHARE_PKG_RESOURCES has
+> > > > > > > > not disappeared Looks like there is a mismatch in topology description
+> > > > > > >
+> > > > > > > Hi Vincent,
+> > > > > > >
+> > > > > > > Agree. Where do you think this mismatch exists?
+> > > > > >
+> > > > > > I think that the problem comes from that the default topology order is
+> > > > > > assumed to be :
+> > > > > > SMT
+> > > > > > CLUSTER shares pkg resources i.e. cache
+> > > > > > MC
+> > > > > > DIE
+> > > > > > NUMA
+> > > > > >
+> > > > > > but in your case, you want a topology order like :
+> > > > > > SMT
+> > > > > > MC
+> > > > > > CLUSTER shares SCU
+> > > > > > DIE
+> > > > > > NUMA
+> > > > >
+> > > > > Given the fairly loose definition of some of these domains and the
+> > > > > freedom to adjust flags with custom topologies, I think it's difficult
+> > > > > to say it needs to be this or that. As you point out, this stems from an
+> > > > > assumption in the default topology, so eliding the MC level within the
+> > > > > current set of abstractions for a very targeted topology still seems
+> > > > > reasonable to address the BUG in the very near term in a contained way.
+> > > >
+> > > > But if another SoC comes with a valid MC then a CLUSTER, this proposal
+> > > > will not work.
+> > > >
+> > > > Keep in mind that the MC level will be removed/degenerate when
+> > > > building because it is useless in your case so the scheduler topology
+> > > > will still be the same at the end but it will support more case. That
+> > > > why I think you should keep MC level
+> > >
+> > > Hi Vincent,
+> > >
+> > > Thanks for reiterating, I don't think I quite understood what you were
+> > > suggesting before. Is the following in line with what you were thinking?
+> > >
+> > > I am testing a version of this patch which uses a topology like this instead:
+> > >
+> > > MC
+> > > CLS
+> > > DIE
+> > > NUMA
+> > >
+> > > (I tested without an SMT domain since the trigger is still MC weight==1, so
+> > > there is no valid topology that includes an SMT level under these conditions).
+> > >
+> > > Which results in no BUG output and a final topology on Altra of:
+> > >
+> > > CLS
+> > > DIE
+> > > NUMA
+> > >
+> > > Which so far seems right (I still need to do some testing and review the sched
+> > > debug data).
+> > >
+> > > If we take this approach, I think to address your concern about other systems
+> > > with valid MCs, we would need a different trigger that MC weight == 1 to use
+> > > this alternate topology. Do you have a suggestion on what to trigger this on?
+> >
+> > AFAICT, this CLUSTER level is only supported by ACPI. In
+> > parse_acpi_topology() you should be able to know if cluster level is
+> > above or below the level returned by acpi_find_last_cache_level() and
+> > set the correct topology table accordingly
+> >
+>
+> Thanks Vincent,
+>
+> This made sense as a place to start to me. The more I dug into the ACPI PPTT
+> code, I kept running into conflicts with the API which would require extending
+> it in ways that seems contrary to its intent. e.g. the exposed API uses Kernel
+> logical CPUs rather than the topology ids (needed for working with processor
+> containers). The cpu_topology masks haven't been populated yet, and
+> acpi_find_last_cache_level is decoupled from the CPU topology level. So what
+> we're really testing for is if the cluster cpumask is a subset of the coregroup
+> cpumask or not, and it made the most sense to me to keep that in smp.c after the
+> cpumasks have been updated and stored.
 
-It felt more natural to me to defer it until the end but I have no
-strong thoughts on this as of right now. Since Stefan has mentioned
-moving this earlier already himself and you seem to agree as well, feel
-free to do so.
+I'm not sure why you want to compare cpumask when you can directly
+compare topology level which is exactly what we are looking for in
+order to correctly order the scheduler topology. I was expecting
+something like the below to be enough. acpi_find_cluster_level() needs
+to be created and should be similar to
+find_acpi_cpu_topology_cluster() but return level instead of id. The
+main advantage is that everything is contained in topology.c which
+makes sense as we are playing with topology
+
+diff --git a/arch/arm64/kernel/topology.c b/arch/arm64/kernel/topology.c
+index 9ab78ad826e2..4dac0491b7e3 100644
+--- a/arch/arm64/kernel/topology.c
++++ b/arch/arm64/kernel/topology.c
+@@ -84,6 +84,7 @@ static bool __init acpi_cpu_is_threaded(int cpu)
+ int __init parse_acpi_topology(void)
+ {
+        int cpu, topology_id;
++       bool default_cluster_topology = true;
+
+        if (acpi_disabled)
+                return 0;
+@@ -119,8 +120,16 @@ int __init parse_acpi_topology(void)
+                        if (cache_id > 0)
+                                cpu_topology[cpu].llc_id = cache_id;
+                }
++
++               if (default_cluster_topology &&
++                   (i < acpi_find_cluster_level(cpu))) {
++                       default_cluster_topology = false;
++               }
+        }
+
++       if (!default_cluster_topology)
++               set_sched_topology(arm64_no_mc_topology);
++
+        return 0;
+ }
+ #endif
+
+>
+> I'll send v2 out for review shortly using this approach.
+
+Ok.
+
+>
+> --
+> Darren Hart
+> Ampere Computing / OS and Kernel

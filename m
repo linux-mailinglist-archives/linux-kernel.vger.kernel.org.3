@@ -2,82 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09BEB4C11A6
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 12:43:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 11C8A4C11BF
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 12:45:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240149AbiBWLmC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 06:42:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37778 "EHLO
+        id S233147AbiBWLpz convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 23 Feb 2022 06:45:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240129AbiBWLls (ORCPT
+        with ESMTP id S229492AbiBWLpv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 06:41:48 -0500
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EC5398594
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 03:41:16 -0800 (PST)
-Received: by mail-pj1-x1030.google.com with SMTP id m22so2422317pja.0
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 03:41:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=2FdpJtwwptOqf9HZS4rYWvt/1fNJrXfcPdRcbqchc9A=;
-        b=X2fNNniPtOIIm9CDvNXZh5lyGbvsRJGvOF/n0CLswxgJ/CzMPKNkAPld4djZqv/ioX
-         Uzm2CAMBk3pA19cmDysAKvaErW3p3oUVFRUZ59uV4PtR0oA5xQ13eSfjlwqnn3vAkWHo
-         Unv1kFIJoKvI7fs4kUZJnwWzg/XnwLpJCp3Qs=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=2FdpJtwwptOqf9HZS4rYWvt/1fNJrXfcPdRcbqchc9A=;
-        b=z2FFdqiSLcxAaRYOjQl+ouRocX7iiqLkNXslKfKBTbd7f5nqaAlt0L0BB+eVnaT/pe
-         8bJROoWKHxgapZrlNvixiBTdUfEpvr01DmfJeziMoIgiDwdxZCiG3HFAE/eBcWJHbAg1
-         5BqJVabfXNbMTpusiHXmn4bkkrUk2D1UgUF3yG8Qz5jb3Oh6qx85flp68F46ZeM+V+fT
-         0O50b7VZYmL9EpRLp8Tf/yFMDbkfgBK/V+dpP0EwJ8ktXSZA/Q06hdH/tJ7V05qMcbqa
-         CebvX2ek2U1qq8srt86lkVddrysEhoTuk9xRdtTgu5APCdoyAYTkEZCMBBxCLCLWoYYN
-         u5Kg==
-X-Gm-Message-State: AOAM532lkkzWM0lFOxaieqehwwhEqrVOp9JlL/Vv+io7eYzThIKeylph
-        /BuNHPMat5549DkGNe6J6r7QDg==
-X-Google-Smtp-Source: ABdhPJzAvBfKYhgVJwO+GzBK5Q6lxoYGCvV1OIKMlKQnwiWxMUYcDVdQosyf4QhvhTpuw4ls4Xhd1g==
-X-Received: by 2002:a17:902:e94e:b0:14d:85a1:c846 with SMTP id b14-20020a170902e94e00b0014d85a1c846mr27585145pll.120.1645616476128;
-        Wed, 23 Feb 2022 03:41:16 -0800 (PST)
-Received: from google.com ([240f:75:7537:3187:d2bd:9913:3c85:9aca])
-        by smtp.gmail.com with ESMTPSA id o3sm17936752pfu.50.2022.02.23.03.41.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Feb 2022 03:41:15 -0800 (PST)
-Date:   Wed, 23 Feb 2022 11:41:09 +0000
-From:   Sergey Senozhatsky <senozhatsky@chromium.org>
-To:     Petr Mladek <pmladek@suse.com>
-Cc:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        linux-kernel@vger.kernel.org, bhe@redhat.com,
-        akpm@linux-foundation.org, anton@enomsg.org, ccross@android.com,
-        dyoung@redhat.com, feng.tang@intel.com, john.ogness@linutronix.de,
-        keescook@chromium.org, kernel@gpiccoli.net,
-        kexec@lists.infradead.org, rostedt@goodmis.org,
-        senozhatsky@chromium.org, tony.luck@intel.com, vgoyal@redhat.com
-Subject: Re: [PATCH V6] panic: Move panic_print before kmsg dumpers
-Message-ID: <YhYdVYYapkaVdvZE@google.com>
-References: <20220214141308.841525-1-gpiccoli@igalia.com>
- <YgvRe92hEvj5mEUS@alley>
+        Wed, 23 Feb 2022 06:45:51 -0500
+Received: from aposti.net (aposti.net [89.234.176.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8557B996BB
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 03:45:22 -0800 (PST)
+Date:   Wed, 23 Feb 2022 11:45:10 +0000
+From:   Paul Cercueil <paul@crapouillou.net>
+Subject: Re: Error when compiling kernel module - Re: More power management
+ updates for v5.17-rc1
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     eh kernel <ehkernel@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>
+Message-Id: <AZ9R7R.OM8VC34SU42J2@crapouillou.net>
+In-Reply-To: <CAJZ5v0gb4Dra_NTQjcP8T7Cqy6ejRUV3MgcKC0RPSL_0kqTsuA@mail.gmail.com>
+References: <CAGsy+6s36Vf+n9cMbis2a=A4=dUNvsbda7K7rszHikq_HGOAtA@mail.gmail.com>
+        <CAJZ5v0iNLXVAR8fG-gjnRP4BSwReL1sZ9XiLHvO+YVKFJFjGOQ@mail.gmail.com>
+        <VSXN7R.644PDRMKJL992@crapouillou.net>
+        <CAJZ5v0gb4Dra_NTQjcP8T7Cqy6ejRUV3MgcKC0RPSL_0kqTsuA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YgvRe92hEvj5mEUS@alley>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On (22/02/15 17:14), Petr Mladek wrote:
-> Makes sense and looks good to me.
+Hi Rafael,
+
+Le lun., févr. 21 2022 at 17:44:28 +0100, Rafael J. Wysocki 
+<rafael@kernel.org> a écrit :
+> On Mon, Feb 21, 2022 at 5:29 PM Paul Cercueil <paul@crapouillou.net> 
+> wrote:
+>> 
+>>  Hi Rafael,
+>> 
+>>  Le lun., févr. 21 2022 at 17:18:51 +0100, Rafael J. Wysocki
+>>  <rafael@kernel.org> a écrit :
+>>  > On Mon, Feb 21, 2022 at 1:15 PM eh kernel <ehkernel@gmail.com> 
+>> wrote:
+>>  >>
+>>  >>  Hi Rafael,
+>>  >>
+>>  >>  I now get an error when compiling the kernel module 
+>> (out-of-tree)
+>>  >> with the new PM macros.
+>>  >>
+>>  >>  /home/ubuntu/pressure/bmp280-core.c:1163:28: error: expected
+>>  >> ‘)’ before ‘(’ token
+>>  >>   1163 |      bmp280_runtime_resume, NULL);
+>>  >
+>>  > Which of the macros has triggered this error?
+>> 
+>>  I think the bug was introduced by 23a133c1ba67 ("iio:adc:ab8500: 
+>> Switch
+>>  from CONFIG_PM guards to pm_ptr() etc")
+>> 
+>>  The macro takes 4 arguments and its first parameter should be the
+>>  dev_pm_ops name, so "ab8500_gpadc_pm_ops".
+>> 
+>>  It slipped during review.
 > 
-> Reviewed-by: Petr Mladek <pmladek@suse.com>
+> I see.
+> 
+> Can you fix this, please?
 
-FWIW
+Jonathan already fixed it in his tree.
 
-Reviewed-by: Sergey Senozhatsky <senozhatsky@chromium.org>
+Cheers,
+-Paul
+
+

@@ -2,112 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 926DC4C1F69
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 00:14:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A4514C1F70
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 00:15:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244742AbiBWXPK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 18:15:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33484 "EHLO
+        id S244749AbiBWXQL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 18:16:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235448AbiBWXPJ (ORCPT
+        with ESMTP id S236982AbiBWXQJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 18:15:09 -0500
-Received: from mail-oo1-f44.google.com (mail-oo1-f44.google.com [209.85.161.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FD6C4969F;
-        Wed, 23 Feb 2022 15:14:41 -0800 (PST)
-Received: by mail-oo1-f44.google.com with SMTP id x6-20020a4a4106000000b003193022319cso892089ooa.4;
-        Wed, 23 Feb 2022 15:14:41 -0800 (PST)
+        Wed, 23 Feb 2022 18:16:09 -0500
+Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2351357150;
+        Wed, 23 Feb 2022 15:15:41 -0800 (PST)
+Received: by mail-io1-xd2f.google.com with SMTP id w7so728785ioj.5;
+        Wed, 23 Feb 2022 15:15:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=P25Zfn5c3BtqYaoA6/wRj29feqJY0Zz0Nev1IhUk9Dc=;
+        b=HfHAa2uKg47YCKjW0CQBrlojE22jxt/8JNZubtz/35jfAp6QaO8wnHBFEPeo2fSHkK
+         SlW5+ZEyXEaPUU8AlTeR+Eaixz0FpST78wWFjKrpAKpQ9O+dAFJFZ9RzEtHzFygvvCJ+
+         Ypwhe6dTmaxzM8AXonk9ymSZPpsyYGxoLUMTJd68Yq5ahc5pSE4No3w0ybWVdkDpZ46r
+         G4Rubvbu3Z9xV+KKf58+xb8TeYWX/97dGaGioNDNPx92V7kCUeBFObmLNJeRTQsaMNUK
+         25JhzDK+vd5H7pthS2OpoR/ffvFhd4p3UthPI131UoaRCQ9esrbZOUYHrkoJNG2024rk
+         eS1g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=pDAbhMLqwFuK8xs2hO/0Bxu3J2o3Pp4IuTbDF5StkNI=;
-        b=ODs/HvB2qIYZDjUw7h7O8RfgSkywzWGQL1VVtIM6cks1txqc9amFs3Obdn5pIDTr5Q
-         jDeRY9V2sfEt7CFznYtdjnCx1sFQqjvdq92tmvUdLeKKEpgLUpM1/ivBVLeeYlHaT7x8
-         4tY9bgj/Zc1dd+9pTEYxYsBdZ9SsmRsanE47YcXfltpMeLOYG1mtFmsoH4nmMtG/yzzj
-         NtnicMZdmyWzTZbHvajBlFBd3KLGG2Yfvx3WzCOzIfcmxYAxbSoNGIjb/wctj0kQ4r1v
-         fEcRxOF+4MASyVcH36cDKZTGVGDOjbjl9eNBBD+134YfWMpMnRVfBFTrjPNRFRJUHSMJ
-         Jp1w==
-X-Gm-Message-State: AOAM5318TkzUIPObHh8asFOuwbF0kZ2fdZk/NLN40K+W/DwzCDfKGU8I
-        xfhN9XhcxurNsdrwarfFAg==
-X-Google-Smtp-Source: ABdhPJwpSX0Fz2OEuOo15ErSfOFt6amqRw5vARvyJEffvXlmNa02ukbyfdrvsUbPxBu3rpSa+R+b9w==
-X-Received: by 2002:a05:6871:82c:b0:d3:3713:4bd2 with SMTP id q44-20020a056871082c00b000d337134bd2mr972486oap.171.1645658080417;
-        Wed, 23 Feb 2022 15:14:40 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id o15sm405079ooi.31.2022.02.23.15.14.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Feb 2022 15:14:39 -0800 (PST)
-Received: (nullmailer pid 1720462 invoked by uid 1000);
-        Wed, 23 Feb 2022 23:14:39 -0000
-Date:   Wed, 23 Feb 2022 17:14:39 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Frank Rowand <frowand.list@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Subject: [GIT PULL] Devicetree fixes for v5.17, take 2
-Message-ID: <Yha/383yJgJFHqPR@robh.at.kernel.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=P25Zfn5c3BtqYaoA6/wRj29feqJY0Zz0Nev1IhUk9Dc=;
+        b=0r0zHnATpRnEAJre4YWhRGz3getxQq+71bFd8emRhnGnBHferDdgzOrDQWFT88o8bC
+         +fmgyWiOI0DdTkWRBL/rVg95iopHBbSaHbsoKjIQBIAbyff6x33m5Du/LEusNP9VDcTh
+         RgZoj4yPvYSHqFySW7faS2WmzhZavEApjqPjNrrvNJYYa9XEuspUZhQH+VvVVHPxfVaZ
+         Newwq510RnTuY4IZ2PGQANPa34LjKETkxO8xI4QXgLPcGNa4c9G9UjNoNOgONtsWq2J/
+         X7eo+wpebBOUFc5cIeaXADr5W1jyamMcBt0T22HJPfnuZSpd3WjivLkGkeSuZmqdOmaR
+         exnw==
+X-Gm-Message-State: AOAM5327tVoGUrquZNT+Er/7OUgVzQlkuJ0Ok9a8w5MGtLG9pMCJnDtj
+        R31wESD69wCZehdcn4KVDt5899RTNs6YzpnXTR0=
+X-Google-Smtp-Source: ABdhPJyH0mfb4p1AXEHyZ7nFOjHrPR/3RLDwloDCPaFaTjCrBVgRJexaQLr2VbGg+iObXNrg/nG3gbCUia8PAMp8V7w=
+X-Received: by 2002:a05:6602:3c6:b0:63d:cac9:bd35 with SMTP id
+ g6-20020a05660203c600b0063dcac9bd35mr8474iov.144.1645658140535; Wed, 23 Feb
+ 2022 15:15:40 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20220222204236.2192513-1-stijn@linux-ipv6.be> <CAPhsuW6WgjL_atKCivbk5iMNBFHuSGcjAC0tdZYag2fOesUBKA@mail.gmail.com>
+In-Reply-To: <CAPhsuW6WgjL_atKCivbk5iMNBFHuSGcjAC0tdZYag2fOesUBKA@mail.gmail.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Wed, 23 Feb 2022 15:15:29 -0800
+Message-ID: <CAEf4BzYuk2Rur-pae7gbuXSb=ayJ0fUREStdWyorWgd_q1D9zQ@mail.gmail.com>
+Subject: Re: [PATCH] libbpf: fix BPF_MAP_TYPE_PERF_EVENT_ARRAY auto-pinning
+To:     Song Liu <song@kernel.org>
+Cc:     Stijn Tintel <stijn@linux-ipv6.be>,
+        =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        KP Singh <kpsingh@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Yonghong Song <yhs@fb.com>, Song Liu <songliubraving@fb.com>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Linus,
+On Tue, Feb 22, 2022 at 6:37 PM Song Liu <song@kernel.org> wrote:
+>
+> On Tue, Feb 22, 2022 at 12:51 PM Stijn Tintel <stijn@linux-ipv6.be> wrote:
+> >
+> > When a BPF map of type BPF_MAP_TYPE_PERF_EVENT_ARRAY doesn't have the
+> > max_entries parameter set, this parameter will be set to the number of
+> > possible CPUs. Due to this, the map_is_reuse_compat function will return
+> > false, causing the following error when trying to reuse the map:
+> >
+> > libbpf: couldn't reuse pinned map at '/sys/fs/bpf/m_logging': parameter mismatch
+> >
+> > Fix this by checking against the number of possible CPUs if the
+> > max_entries parameter is not set in the map definition.
+> >
+> > Fixes: 57a00f41644f ("libbpf: Add auto-pinning of maps when loading BPF objects")
+> > Signed-off-by: Stijn Tintel <stijn@linux-ipv6.be>
+>
+> Acked-by: Song Liu <songliubraving@fb.com>
+>
+> I think the following fix would be more future proof, but the patch
+> as-is is better for
+> stable backport? How about we add a follow up patch on top of current
+> patch to fix
+> def->max_entries once for all?
 
-Please pull a couple of DT fixes.
+Keeping special logic for PERF_EVENT_ARRAY in one place is
+preferrable. With this, the changes in map_is_reuse_compat() shouldn't
+be necessary at all. Stijn, can you please send v2 with Song's
+proposed changes?
 
-Rob
-
-
-The following changes since commit e783362eb54cd99b2cac8b3a9aeac942e6f6ac07:
-
-  Linux 5.17-rc1 (2022-01-23 10:12:53 +0200)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git tags/devicetree-fixes-for-5.17-2
-
-for you to fetch changes up to 0c0822bcb73f154d96ee648644ec5a8628e3b864:
-
-  dt-bindings: update Roger Quadros email (2022-02-22 16:06:31 -0600)
-
-----------------------------------------------------------------
-Devicetree fixes for v5.17, take 2:
-
-- Update some maintainers email addresses
-
-- Fix handling of elfcorehdr reservation for crash dump kernel
-
-- Fix unittest expected warnings text
-
-----------------------------------------------------------------
-Frank Rowand (1):
-      of: unittest: update text of expected warnings
-
-Krzysztof Kozlowski (2):
-      MAINTAINERS: sifive: drop Yash Shah
-      dt-bindings: update Roger Quadros email
-
-Nikhil Gupta (1):
-      of/fdt: move elfcorehdr reservation early for crash dump kernel
-
- Documentation/devicetree/bindings/gpio/sifive,gpio.yaml  |  1 -
- .../bindings/mfd/ti,j721e-system-controller.yaml         |  2 +-
- Documentation/devicetree/bindings/phy/ti,omap-usb2.yaml  |  2 +-
- Documentation/devicetree/bindings/pwm/pwm-sifive.yaml    |  1 -
- .../devicetree/bindings/riscv/sifive-l2-cache.yaml       |  1 -
- Documentation/devicetree/bindings/usb/ti,j721e-usb.yaml  |  2 +-
- .../devicetree/bindings/usb/ti,keystone-dwc3.yaml        |  2 +-
- MAINTAINERS                                              |  6 ------
- drivers/of/fdt.c                                         |  2 +-
- drivers/of/unittest.c                                    | 16 ++++++++--------
- 10 files changed, 13 insertions(+), 22 deletions(-)
+>
+> Thanks,
+> Song
+>
+> diff --git i/tools/lib/bpf/libbpf.c w/tools/lib/bpf/libbpf.c
+> index ad43b6ce825e..a1bc1c80bc69 100644
+> --- i/tools/lib/bpf/libbpf.c
+> +++ w/tools/lib/bpf/libbpf.c
+> @@ -4881,10 +4881,9 @@ static int bpf_object__create_map(struct
+> bpf_object *obj, struct bpf_map *map, b
+>                         return nr_cpus;
+>                 }
+>                 pr_debug("map '%s': setting size to %d\n", map->name, nr_cpus);
+> -               max_entries = nr_cpus;
+> -       } else {
+> -               max_entries = def->max_entries;
+> +               def->max_entries = nr_cpus;
+>         }
+> +       max_entries = def->max_entries;
+>
+>         if (bpf_map__is_struct_ops(map))
+>                 create_attr.btf_vmlinux_value_type_id =
+> map->btf_vmlinux_value_type_id;

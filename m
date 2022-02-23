@@ -2,154 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F3F94C0B55
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 06:00:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C6E314C0B52
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 06:00:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233471AbiBWFA7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 00:00:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36092 "EHLO
+        id S230020AbiBWFAs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 00:00:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232067AbiBWFAz (ORCPT
+        with ESMTP id S229456AbiBWFAq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 00:00:55 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC7C060CCD;
-        Tue, 22 Feb 2022 21:00:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645592428; x=1677128428;
+        Wed, 23 Feb 2022 00:00:46 -0500
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DDB060CC3;
+        Tue, 22 Feb 2022 21:00:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1645592419; x=1677128419;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=6FLKm6fp0tyd6+4vW4Mst9f8YW1kXerksPWJZQnchhs=;
-  b=mkTRIgGfVowajtjZcwokhZm+kAsW6+MX/JpI+IPNvyifD3UxqLqLipgZ
-   79wlQ55GRGMnPdC7/eTEz3QOPTqrkSU70iwOhnLRshpNPnGoC9by/1l+a
-   8k5ChUQz7myoLs0rNZQb4wszb25j4NdMQeGJrroK+MeFGg/xg2mHjtsKd
-   9DyYPe4rM5eNheFBitL/YgkVeC86ySHgzhQk1NTbRA/LhwczW56KDfsnz
-   6utJDtw7dFOoz0txYWNobIgkvEmw861Pc2Ysu4h+dF+VpVMvzULF8FV3Z
-   pvHVbn2eD2hrdcE8gHMWDClEgXwebdRqmKVAgqCvCUdZzNaKKGqMW2aEz
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10266"; a="338320951"
-X-IronPort-AV: E=Sophos;i="5.88,390,1635231600"; 
-   d="scan'208";a="338320951"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2022 21:00:19 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,390,1635231600"; 
-   d="scan'208";a="639175040"
-Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 22 Feb 2022 21:00:16 -0800
-Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nMjl9-0000zj-DA; Wed, 23 Feb 2022 05:00:15 +0000
-Date:   Wed, 23 Feb 2022 12:59:48 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Markuss Broks <markuss.broks@gmail.com>,
-        linux-kernel@vger.kernel.org
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
-        Markuss Broks <markuss.broks@gmail.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Henrik Rydberg <rydberg@bitmath.org>,
-        linux-input@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v6 2/2] Input: add Imagis touchscreen driver
-Message-ID: <202202231213.Vj9yo4tW-lkp@intel.com>
-References: <20220222203414.8656-3-markuss.broks@gmail.com>
+  bh=XE2uJRgDNx1OqsKYkWTFHuk32gD01FUaPfvkpmgVI78=;
+  b=ggDz6njMq/Fiid8b+k1K8Wd8trrkLHt/aiVxU1imIrk3cx/y+VSTIygV
+   2ng7E1WyxAIU8Yd2VZD8ed6bgzHFVzuDdhSuGOv99vbEs8Hq1pY/YVUxW
+   FaB+VLs6uspL8sAWCr4erX4hYV2xUok4Z5PKt+82J0gYI8KoPg/4c7lSJ
+   A=;
+Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 22 Feb 2022 21:00:19 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2022 21:00:18 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.15; Tue, 22 Feb 2022 21:00:17 -0800
+Received: from hu-pkondeti-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.15; Tue, 22 Feb 2022 21:00:14 -0800
+Date:   Wed, 23 Feb 2022 10:30:10 +0530
+From:   Pavan Kondeti <quic_pkondeti@quicinc.com>
+To:     Daehwan Jung <dh10.jung@samsung.com>
+CC:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Muchun Song <songmuchun@bytedance.com>,
+        "Andrew Morton" <akpm@linux-foundation.org>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        <linux-usb@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: usb: gadget: rndis: add spinlock for rndis response list
+Message-ID: <20220223050010.GA20891@hu-pkondeti-hyd.qualcomm.com>
+References: <CGME20220222053200epcas2p4eddfc8f1083a9d998456164259004b36@epcas2p4.samsung.com>
+ <1645507768-77687-1-git-send-email-dh10.jung@samsung.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20220222203414.8656-3-markuss.broks@gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <1645507768-77687-1-git-send-email-dh10.jung@samsung.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Markuss,
+On Tue, Feb 22, 2022 at 02:29:28PM +0900, Daehwan Jung wrote:
+> There's no lock for rndis response list. It could cause list corruption
+> if there're two different list_add at the same time like below.
+> It's better to add in rndis_add_response / rndis_free_response
+> / rndis_get_next_response to prevent any race condition on response list.
+> 
+> [  361.894299] [1:   irq/191-dwc3:16979] list_add corruption.
+> next->prev should be prev (ffffff80651764d0),
+> but was ffffff883dc36f80. (next=ffffff80651764d0).
+> 
+> [  361.904380] [1:   irq/191-dwc3:16979] Call trace:
+> [  361.904391] [1:   irq/191-dwc3:16979]  __list_add_valid+0x74/0x90
+> [  361.904401] [1:   irq/191-dwc3:16979]  rndis_msg_parser+0x168/0x8c0
+> [  361.904409] [1:   irq/191-dwc3:16979]  rndis_command_complete+0x24/0x84
+> [  361.904417] [1:   irq/191-dwc3:16979]  usb_gadget_giveback_request+0x20/0xe4
+> [  361.904426] [1:   irq/191-dwc3:16979]  dwc3_gadget_giveback+0x44/0x60
+> [  361.904434] [1:   irq/191-dwc3:16979]  dwc3_ep0_complete_data+0x1e8/0x3a0
+> [  361.904442] [1:   irq/191-dwc3:16979]  dwc3_ep0_interrupt+0x29c/0x3dc
+> [  361.904450] [1:   irq/191-dwc3:16979]  dwc3_process_event_entry+0x78/0x6cc
+> [  361.904457] [1:   irq/191-dwc3:16979]  dwc3_process_event_buf+0xa0/0x1ec
+> [  361.904465] [1:   irq/191-dwc3:16979]  dwc3_thread_interrupt+0x34/0x5c
+> 
 
-I love your patch! Perhaps something to improve:
+This is just one context. what about the other contexts? Interested to see the
+different contexts under which this list is being manipulated. From the
+f_rndis perspective, this  list is touched from setup and disconnect
+callbacks. so are those two contexts not serialized from the UDC? not saying
+we don't need lock, but would be good to record that information in the change
+log.
 
-[auto build test WARNING on dtor-input/next]
-[also build test WARNING on linux/master robh/for-next linus/master v5.17-rc5 next-20220222]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+> Fixes: f6281af9d62e ("usb: gadget: rndis: use list_for_each_entry_safe")
+> Signed-off-by: Daehwan Jung <dh10.jung@samsung.com>
+> ---
+>  drivers/usb/gadget/function/rndis.c | 8 ++++++++
+>  drivers/usb/gadget/function/rndis.h | 1 +
+>  2 files changed, 9 insertions(+)
+> 
+> diff --git a/drivers/usb/gadget/function/rndis.c b/drivers/usb/gadget/function/rndis.c
+> index 431d5a7..79fd994 100644
+> --- a/drivers/usb/gadget/function/rndis.c
+> +++ b/drivers/usb/gadget/function/rndis.c
+> @@ -919,6 +919,7 @@ struct rndis_params *rndis_register(void (*resp_avail)(void *v), void *v)
+>  	params->resp_avail = resp_avail;
+>  	params->v = v;
+>  	INIT_LIST_HEAD(&params->resp_queue);
+> +	spin_lock_init(&params->resp_lock);
+>  	pr_debug("%s: configNr = %d\n", __func__, i);
+>  
+>  	return params;
+> @@ -1012,12 +1013,14 @@ void rndis_free_response(struct rndis_params *params, u8 *buf)
+>  {
+>  	rndis_resp_t *r, *n;
+>  
+> +	spin_lock(&params->resp_lock);
+>  	list_for_each_entry_safe(r, n, &params->resp_queue, list) {
+>  		if (r->buf == buf) {
+>  			list_del(&r->list);
+>  			kfree(r);
+>  		}
+>  	}
+> +	spin_unlock(&params->resp_lock);
+>  }
+>  EXPORT_SYMBOL_GPL(rndis_free_response);
 
-url:    https://github.com/0day-ci/linux/commits/Markuss-Broks/Add-support-for-Imagis-touchscreens/20220223-043645
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/dtor/input.git next
-config: hexagon-allyesconfig (https://download.01.org/0day-ci/archive/20220223/202202231213.Vj9yo4tW-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/bc77ee5e0d7309edca7d65925c6afa05334b0b01
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Markuss-Broks/Add-support-for-Imagis-touchscreens/20220223-043645
-        git checkout bc77ee5e0d7309edca7d65925c6afa05334b0b01
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/input/touchscreen/
+Are you sure that this lock is not acquired from any interrupt context from
+other contexts? Also would it be true for all UDC? some UDC may call setup
+from hadirq context and disconnect in process context etc or vice versa. we
+don't want to acquire lock without disabling interrupts in that case.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> drivers/input/touchscreen/imagis.c:300:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-           if (input_device_enabled(ts->input_dev))
-               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/input/touchscreen/imagis.c:305:9: note: uninitialized use occurs here
-           return ret;
-                  ^~~
-   drivers/input/touchscreen/imagis.c:300:2: note: remove the 'if' if its condition is always true
-           if (input_device_enabled(ts->input_dev))
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/input/touchscreen/imagis.c:296:9: note: initialize the variable 'ret' to silence this warning
-           int ret;
-                  ^
-                   = 0
-   drivers/input/touchscreen/imagis.c:316:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-           if (input_device_enabled(ts->input_dev))
-               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/input/touchscreen/imagis.c:321:9: note: uninitialized use occurs here
-           return ret;
-                  ^~~
-   drivers/input/touchscreen/imagis.c:316:2: note: remove the 'if' if its condition is always true
-           if (input_device_enabled(ts->input_dev))
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/input/touchscreen/imagis.c:312:9: note: initialize the variable 'ret' to silence this warning
-           int ret;
-                  ^
-                   = 0
-   2 warnings generated.
-
-
-vim +300 drivers/input/touchscreen/imagis.c
-
-   291	
-   292	static int __maybe_unused imagis_suspend(struct device *dev)
-   293	{
-   294		struct i2c_client *client = to_i2c_client(dev);
-   295		struct imagis_ts *ts = i2c_get_clientdata(client);
-   296		int ret;
-   297	
-   298		mutex_lock(&ts->input_dev->mutex);
-   299	
- > 300		if (input_device_enabled(ts->input_dev))
-   301			ret = imagis_stop(ts);
-   302	
-   303		mutex_unlock(&ts->input_dev->mutex);
-   304	
-   305		return ret;
-   306	}
-   307	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Thanks,
+Pavan

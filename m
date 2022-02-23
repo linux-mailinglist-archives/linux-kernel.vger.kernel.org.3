@@ -2,160 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07F514C1550
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 15:23:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C29A54C1553
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 15:23:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241506AbiBWOXZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 09:23:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40788 "EHLO
+        id S241514AbiBWOXy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 09:23:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239615AbiBWOXX (ORCPT
+        with ESMTP id S239615AbiBWOXw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 09:23:23 -0500
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 544B2B1A86
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 06:22:55 -0800 (PST)
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com [209.85.218.69])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Wed, 23 Feb 2022 09:23:52 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3082B18AC;
+        Wed, 23 Feb 2022 06:23:23 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 420B03F1D0
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 14:22:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1645626167;
-        bh=UkXoPF9GFsyAWsCPL3ryOH3fKN9jJKmB8GGxrcEoohU=;
-        h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-         In-Reply-To:Content-Type;
-        b=KprZCbbn9roHI76H3j/ZoMkRIaG+CEATaMj+2Zz8rEdG9iHpHB0b5QiRpqTrY/bVj
-         nZI2AdL2jNVcY0KA/s1yh/EtXgtzjRzKQS47WKnxXg9sNcUVVDBNOw7uFYsdHJJGIy
-         WvwsVL+Kgv+wpyfNwLE1rs9FgEbK5vuUUtbp0kcVdi9HTKYsKJjoZPkevXORaKD2P3
-         AU5qH9Efl8faRmCz71Fsrd9M13G52a56P37CML/QUFaKGneArevM+LaKZY88/Tz4Ru
-         mPIdF8H0eKkXO5NyWcsgCnWHrItwE4uaCNeoYbwdcBQUdIe+bAEkl7T5fgqHwUv8XB
-         WiK+ELItfF/kA==
-Received: by mail-ej1-f69.google.com with SMTP id k16-20020a17090632d000b006ae1cdb0f07so7154461ejk.16
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 06:22:47 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=UkXoPF9GFsyAWsCPL3ryOH3fKN9jJKmB8GGxrcEoohU=;
-        b=uG9rhFU7XYT3MYnG9BQ0LbjxUgMojbe7wVWcLtaLUfYFzpTRy585BTRLJItktzeybw
-         +A23r8o0MSUCfuq3KGw6YavgHxwh8b/Jaya4hbEvLT+JZ+P9BToWJ4vxR+wOCzj4MonC
-         qAUozzMhlFcqIUX2oiZ1MT2PU5PD+YoD0H3X7SFXVBfp9rBFZm2nf17vaWfIeei04Hi2
-         X4PBQxV+jN4coGolT+CAInnj0ZmNdZHew8wyNJcMBvYPFKXSoa9+r1Qjbdwft0gl+B7J
-         id6TpnGAzESViKR+6Fj3q12VtNRjPEUoIBIhXm4Wrf7U1/yjbawN9aMrEgFJvpWwKLDv
-         C3zQ==
-X-Gm-Message-State: AOAM533kivt0C5IW8gYelhBhVx8Y64+7OkDbGQbtARk1TibQN3usXa4P
-        MprGoNjJLswn5fiJYOfgZSOg4nhdQ0JhdVsARJ6Buqvc9NVsPOAn+VYpAz9om8bXQ0lxkP5zrEy
-        7VefMjqLFospGXSNwUeUhMqHf0mRMX6t4Hwv0f30yUw==
-X-Received: by 2002:a05:6402:1cae:b0:410:d3ae:3c8a with SMTP id cz14-20020a0564021cae00b00410d3ae3c8amr30820284edb.215.1645626166974;
-        Wed, 23 Feb 2022 06:22:46 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJx1+uin+sD6tlXUeggUaMrdcvpbhQG85O0fMULNFHN+DWoNxV6JXqumR8Csk+bhXTmYR8AoJw==
-X-Received: by 2002:a05:6402:1cae:b0:410:d3ae:3c8a with SMTP id cz14-20020a0564021cae00b00410d3ae3c8amr30820260edb.215.1645626166707;
-        Wed, 23 Feb 2022 06:22:46 -0800 (PST)
-Received: from [192.168.0.125] (xdsl-188-155-181-108.adslplus.ch. [188.155.181.108])
-        by smtp.gmail.com with ESMTPSA id hp7sm2475722ejc.144.2022.02.23.06.22.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 23 Feb 2022 06:22:45 -0800 (PST)
-Message-ID: <636e5b92-8ed8-35a1-d6e9-516d5b35be91@canonical.com>
-Date:   Wed, 23 Feb 2022 15:22:44 +0100
+        by ams.source.kernel.org (Postfix) with ESMTPS id 561AAB81FE0;
+        Wed, 23 Feb 2022 14:23:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C27E3C340E7;
+        Wed, 23 Feb 2022 14:23:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645626201;
+        bh=SrO9bsrYuRt7a8bRBkavU0Z0ZAQi8lO6YTykWYTLTLE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ZwRlc/wbqx1ItVhhxrDoIO713Lw9EURd6cCNPGOXG6vl+ZHzdl+O9iEDA35f46rYK
+         vK7tjqDaNYGarr2z/J6QLCIgddURexrZf3WW5CFRtuHm6IT9c3hR1cFAY69YCAXOkS
+         6+FZLXQWIpF9SMp1fLnNaJRS6DbSYFTwSDXQOQAwcin0VqoLZyCAVTTe/hKKnJITNr
+         gN/AgCeh9wQ/nUmXdyiUgnNan/IL787Arip2wVCVFEo3BRyU1mAW0mXP9b1AaTzWVX
+         9VEzzuyL/Q4sYCfpqxgdRXtPV0E0r6hjhM1cJgooicQiQke44MXZaNPPdZ5o/Xx9ec
+         jAadmBbA3+HaA==
+Date:   Wed, 23 Feb 2022 14:23:16 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Vincent Whitchurch <vincent.whitchurch@axis.com>
+Cc:     Liam Girdwood <lgirdwood@gmail.com>, kernel@axis.com,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] regulator: virtual: add devicetree support
+Message-ID: <YhZDVGC7dPiisnI+@sirena.org.uk>
+References: <20220218110604.1329024-1-vincent.whitchurch@axis.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [RFT PATCH 0/3] Fix kfree() of const memory on setting
- driver_override
-Content-Language: en-US
-To:     Robin Murphy <robin.murphy@arm.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Abel Vesa <abel.vesa@nxp.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, alsa-devel@alsa-project.org
-References: <20220222132707.266883-1-krzysztof.kozlowski@canonical.com>
- <708eabb1-7b35-d525-d4c3-451d4a3de84f@rasmusvillemoes.dk>
- <afa7001d-901e-55bf-b8dc-77051b1e7f78@canonical.com>
- <0442526f-b6d9-8868-ac1c-dd11a2d3b2ab@arm.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <0442526f-b6d9-8868-ac1c-dd11a2d3b2ab@arm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="lWslcJViHbwM70Q/"
+Content-Disposition: inline
+In-Reply-To: <20220218110604.1329024-1-vincent.whitchurch@axis.com>
+X-Cookie: I smell a wumpus.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23/02/2022 15:04, Robin Murphy wrote:
-> On 2022-02-22 14:06, Krzysztof Kozlowski wrote:
->> On 22/02/2022 14:51, Rasmus Villemoes wrote:
->>> On 22/02/2022 14.27, Krzysztof Kozlowski wrote:
->>>> Hi,
->>>>
->>>> Drivers still seem to use driver_override incorrectly. Perhaps my old
->>>> patch makes sense now?
->>>> https://lore.kernel.org/all/1550484960-2392-3-git-send-email-krzk@kernel.org/
->>>>
->>>> Not tested - please review and test (e.g. by writing to dirver_override
->>>> sysfs entry with KASAN enabled).
->>>
->>> Perhaps it would make sense to update the core code to release using
->>> kfree_const(), allowing drivers to set the initial value with
->>> kstrdup_const(). Drivers that currently use kstrdup() or kasprintf()
->>> will continue to work [but if they kstrdup() a string literal they could
->>> be changed to use kstrdup_const].
->>
->> The core here means several buses, so the change would not be that
->> small. However I don't see the reason why "driver_override" is special
->> and should be freed with kfree_const() while most of other places don't
->> use it.
->>
->> The driver_override field definition is here obvious: "char *", so any
->> assignments of "const char *" are logically wrong (although GCC does not
->> warn of this literal string const discarding). Adding kfree_const() is
->> hiding the problem - someone did not read the definition of assigned field.
-> 
-> That's not the issue, though, is it? If I take the struct 
-> platform_device definition at face value, this should be perfectly valid:
-> 
-> 	static char foo[] = "foo";
-> 	pdev->driver_override = &foo;
 
+--lWslcJViHbwM70Q/
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Yes, that's not the issue. It's rather about the interface. By
-convention we do not modify string literals but "char *driver_override"
-indicates that this is modifiable memory. I would argue that it even
-means that ownership is passed. Therefore passing string literal to
-"char *driver_override" is wrong from logical point of view.
+On Fri, Feb 18, 2022 at 12:06:03PM +0100, Vincent Whitchurch wrote:
 
-Plus, as you mentioned later, can lead to undefined behavior.
+> The reg-virt-consumer is very useful for development and testing of
+> regulator drivers since it allows voltages and modes to be set from
+> userspace.  However, it currently requires platform data so it cannot be
+> used on modern platforms.  Add support for probing it from the
+> devicetree to remedy this.
 
-> 
-> And in fact that's effectively how the direct assignment form works 
-> anyway - string literals are static arrays of type char (or wchar_t), 
-> *not* const char, however trying to modify them is undefined behaviour.
-> 
-> There's a big difference between "non-const" and "kfree()able", and 
-> AFAICS there's no obvious clue that the latter is actually a requirement.
+Meh, you can add a bit of code on module_init() to register a platform
+device or something.
 
-Then maybe kfreeable should be made a requirement? Or at least clearly
-documented?
+> Since this driver is only meant for testing and is a purely software
+> construct, no binding documentation is added.
 
+That's not going to stop anyone.  We should at the very least be
+printing very loud warnings if anyone tries to intantiate this.
 
-Best regards,
-Krzysztof
+> +	if (!reg_id)
+> +		reg_id = "default";
+> +
+
+Oh?
+
+--lWslcJViHbwM70Q/
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmIWQ1MACgkQJNaLcl1U
+h9D9rwf9EWvfPUGwP+cLGGFzy4Z+mcsPdZYQYP30JWIZwVe3K3vTEbPRkttdtl07
+rDGuj7BTTUaTMZVfNBzaTYiJKR34JTG3ksTuf8OPY87vGtVx6Dy/TweYrY8/voGv
+nuBM1MQRgeZN8SsOyr7ojtM7I0LlY7ZMda0cMQs3s7T4Ct2oOjPAXzJMqD2h50XL
+5652wNjIeLQJ80pmkawLuinxsKWzdcyrxHJ0r0Pal7ZQ05sPHEDc3nPI90IDEaAy
+Bnfdn+6qpFZ0yQz9UsXfp0Q6Ybw/hp6dYugLxjiEtzfBgUrWbJeBwomkjUiJ4COx
+vjl3gwCXqq/wngpZ8k3wfQlQNrIYCw==
+=Flk0
+-----END PGP SIGNATURE-----
+
+--lWslcJViHbwM70Q/--

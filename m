@@ -2,124 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03B0F4C0AB7
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 04:51:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53A634C0AB9
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 04:51:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237217AbiBWDvS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 22:51:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50180 "EHLO
+        id S237954AbiBWDvn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 22:51:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233958AbiBWDvR (ORCPT
+        with ESMTP id S237346AbiBWDvk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 22:51:17 -0500
-Received: from new2-smtp.messagingengine.com (new2-smtp.messagingengine.com [66.111.4.224])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDF23654B0
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 19:50:50 -0800 (PST)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 47E3D580137;
-        Tue, 22 Feb 2022 22:50:50 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Tue, 22 Feb 2022 22:50:50 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
-        cc:cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; bh=3wEKS3h+5OzQyz
-        tZqhqo7AqKh3WSzsRZZ2RSeXOn88s=; b=oGxD1TiPv3O+WZnTWLP7nS4c+KwzN6
-        v80Ch+fqifCQGX7/8vowCwmdYWC2Wlp/9DKswBjVBZC+HepJqEi2iCnVDewD9lAk
-        vPgJSd1waHeTv2Aq+KeQ3qDGj13Sjo6oKMTSSgz1iglHIp20gu/OjjLcaiasAGjm
-        z+WRHahkx/Df9RLe1Jalg7PMJ2n11SK+FLHDEyvgRfiyXgtEAbZx3FKQXEiz5wZm
-        k0XANgz4VBJqmEZgpGmxgkHI9ObOeVijR+akqGDqL+rjXi2ZF6meNh/S2ZNk78kI
-        3ayOQFzotWH9AjnDnB0u7H1gsZllmXqTyHntyV0OXsJNuMs29kcSbogA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; bh=3wEKS3h+5OzQyztZqhqo7AqKh3WSzsRZZ2RSeXOn8
-        8s=; b=an0AauzOT8x0/33wVs8WQrTqd1SX7ZQY65KEipZbjjjLROZ2zj6S3n0yz
-        y0jXJXnn30lhpzU7z2nOnS2bg0xsmBtor0cx3jwrgbMeLIK7H9YURhTb+YCesNeR
-        1wVvmBmUvE5KkUgjGSSAzdzglItZVNE3jVBcNuEd/qR77GZXPbABw/RF5liKpgIZ
-        l4bp7XIzxYgSrZIME9rcPnoSHS0IfRDm0+yY4RMM3wF2RpcFjbOpJ+hLouzbzD8h
-        dWicgjDTkvcZkiDvstv5OMF3tDiszSGTG84EDNVuXkNdUYWyX3K7g9qTxRqJT86d
-        Y5i1xlIOmrUXeTbYbKC7CsX4q8P/A==
-X-ME-Sender: <xms:Ga8VYt8ddOy8qX1IarzB4lLVW6_j3YBtY9-5aIBUJZ-2aJWVofkW0Q>
-    <xme:Ga8VYhsu0TOVJs8wqv5JvxzltFIR2GhM79inGF6iLagChmIZWDvFfplF94Qa6N9DC
-    3YfuoOyJzVm-UyOTA>
-X-ME-Received: <xmr:Ga8VYrA7weF-atG8mdGyCtm8OGAp_yWyEEygMdRgwvx2w9SjXgh580EfZYM-HNpxi7Axyj0k6crwEmY-W0GaJU7aNDMujtegWCP5zYmkhQqO4NJUh0ZgyfsV1Q>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrkeelgdeivdcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefuhffvfhfkffgfgggjtgfgsehtjeertddtfeejnecuhfhrohhmpefurghmuhgv
-    lhcujfholhhlrghnugcuoehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgqeenucggtf
-    frrghtthgvrhhnpeduieehveduveejtdfffeetveetfffhjeefheehudehhfdtueehveel
-    gfekkeeltdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
-    hmpehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhg
-X-ME-Proxy: <xmx:Ga8VYhf2CaY2dVxMEoTiYgPAfNksQeRyRp7a1AJmpc3Eh47M2R3j1g>
-    <xmx:Ga8VYiM2zrCUHGyJEnBYSsP87fylsI3uk5AH37PcHbcwXC7vZNqUig>
-    <xmx:Ga8VYjkbm09aEYiH5NzwZXQ3Uv9TE9DPdGipa0MAIgW8NPc74I_htQ>
-    <xmx:Gq8VYumnZnDnGogVNvwV0M7donP3A8wtvBEso9qqkOmYama8hdSYvA>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 22 Feb 2022 22:50:48 -0500 (EST)
-Subject: Re: [PATCH v10 13/18] phy: sun4i-usb: Allow reset line to be shared
-From:   Samuel Holland <samuel@sholland.org>
-To:     Andre Przywara <andre.przywara@arm.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>
-Cc:     Rob Herring <robh@kernel.org>, Ondrej Jirman <megous@megous.com>,
-        Icenowy Zheng <icenowy@aosc.io>,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>, linux-phy@lists.infradead.org,
-        Philipp Zabel <p.zabel@pengutronix.de>
-References: <20220211122643.1343315-1-andre.przywara@arm.com>
- <20220211122643.1343315-14-andre.przywara@arm.com>
- <aac11817-5c3c-631e-ad10-0fecf83e4c41@sholland.org>
-Message-ID: <562876e1-b14e-a505-5c41-e23b62fa238d@sholland.org>
-Date:   Tue, 22 Feb 2022 21:50:48 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.6.0
+        Tue, 22 Feb 2022 22:51:40 -0500
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89D21657A8
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 19:51:12 -0800 (PST)
+Received: by mail-lj1-x22a.google.com with SMTP id e8so14822355ljj.2
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 19:51:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=W9o8E/GqdYtOTLRG+zZAUd0gtjWhs7Bb1g7AEZ+WmaI=;
+        b=aXRcJ4yvHQJyf6hir6XnrojLMAQB6U8jccX70auhmlB1CquPuAxO5Kj/XnwagE3C3m
+         iycKRFhvQvlKaLOC+DbDUMYJV9DQQzNhIA6i4Bl8PeEn0ftd7oiSO2awlUmRldWHLEL3
+         GvyRwpIEdEZgZ80W4Pu4tDwf4TQK7kvkcExxFkAk6JyDD8nDJ/102TCiXPHGTnE3vfyO
+         MLXKstC6hZQtMKEf3G5KhHehXE6zvK0jMK40AncVqK7efTJUCmKafH/MxV4+te+5RNTI
+         wtC/Hq3o+rOBi29XVbrlpDeLzJ7zWY2BM1QLQRGR86C3tTwBA83f0QluJ9IHay2GHCuY
+         2gpw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=W9o8E/GqdYtOTLRG+zZAUd0gtjWhs7Bb1g7AEZ+WmaI=;
+        b=Tg55YGCAH9Zomg57Tx0P0xp/665ejcq/tBrc6iWlEPKnxISfZNcTlVpdSJgsjHIX6E
+         WOep5f3jOn93dlAZLH+wg79iRbBLBeU2LS5AAN5Gm39MwnDi7SDLsr5KELQtmn2kBujR
+         bSHM5dmH49D+qHyKI0tloCsux7q9rtF3u1Jc+glYiJ4yN1TI7W5BxrPaER0aTSGWakpF
+         gNtJNk5JaNI/g6Zbyqd5NU2eh7U6K/QKK1eDlEb+V0yIf2GVjeW5vOjFi5Vz7xG4vHnb
+         BEypxy2jW6mmKUq8C0StaQKwSbbU993y0OAKlreDTE5hAa3ElAcBvt2yL4XxY/Zdgygy
+         /a6Q==
+X-Gm-Message-State: AOAM533Tw6v2w1t01qF/aiPmERx/oLvEsuIJJ5cNnqXSqiZ1NuMyKJ2/
+        IaJCeO34EbLuvt2B8a0Vbsqp1ICqKtEy+QVuwj8E6A==
+X-Google-Smtp-Source: ABdhPJzuv0Mz9ZFoYJQKM313P4fWrFMmznEbd/Qc826SeVAFFXm/puIOmIEgAaFTiz4B6KS9LP5DYnS7kpi2DwUdHuY=
+X-Received: by 2002:a2e:3013:0:b0:246:2ca9:365e with SMTP id
+ w19-20020a2e3013000000b002462ca9365emr13863094ljw.291.1645588270878; Tue, 22
+ Feb 2022 19:51:10 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <aac11817-5c3c-631e-ad10-0fecf83e4c41@sholland.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <cover.1645558375.git.riteshh@linux.ibm.com> <e91b6872860df3ec520799a5d0b65e54ccf32407.1645558375.git.riteshh@linux.ibm.com>
+In-Reply-To: <e91b6872860df3ec520799a5d0b65e54ccf32407.1645558375.git.riteshh@linux.ibm.com>
+From:   Xin Yin <yinxin.x@bytedance.com>
+Date:   Wed, 23 Feb 2022 11:50:59 +0800
+Message-ID: <CAK896s7V7wj0Yiu0NQEFvmS9-oivJUosgMYW5UBJ4cX2YCSh6g@mail.gmail.com>
+Subject: Re: [External] [RFC 9/9] ext4: fast_commit missing tracking updates
+ to a file
+To:     Ritesh Harjani <riteshh@linux.ibm.com>
+Cc:     linux-ext4@vger.kernel.org,
+        Harshad Shirwadkar <harshadshirwadkar@gmail.com>,
+        "Theodore Ts'o" <tytso@mit.edu>, Jan Kara <jack@suse.cz>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andre,
+On Wed, Feb 23, 2022 at 4:36 AM Ritesh Harjani <riteshh@linux.ibm.com> wrote:
+>
+> <DO NOT MERGE THIS YET>
+>
+> Testcase
+> ==========
+> 1. i=0; while [ $i -lt 1000 ]; do xfs_io -f -c "pwrite -S 0xaa -b 32k 0 32k" -c "fsync" /mnt/$i; i=$(($i+1)); done && sudo ./src/godown -v /mnt && sudo umount /mnt && sudo mount /dev/loop2 /mnt'
+> 2. ls -alih /mnt/ -> In this you will observe one such file with 0 bytes (which ideally should not happen)
+>
+> ^^^ say if you don't see the issue because your underlying storage
+> device is very fast, then maybe try with commit=1 mount option.
+>
+> Analysis
+> ==========
+> It seems a file's updates can be a part of two transaction tid.
+> Below are the sequence of events which could cause this issue.
+>
+> jbd2_handle_start -> (t_tid = 38)
+> __ext4_new_inode
+> ext4_fc_track_template -> __track_inode -> (i_sync_tid = 38, t_tid = 38)
+> <track more updates>
+> jbd2_start_commit -> (t_tid = 38)
+>
+> jbd2_handle_start (tid = 39)
+> ext4_fc_track_template -> __track_inode -> (i_sync_tid = 38, t_tid 39)
+>     -> ext4_fc_reset_inode & ei->i_sync_tid = t_tid
+>
+> ext4_fc_commit_start -> (will wait since jbd2 full commit is in progress)
+> jbd2_end_commit (t_tid = 38)
+>     -> jbd2_fc_cleanup() -> this will cleanup entries in sbi->s_fc_q[FC_Q_MAIN]
+>         -> And the above could result inode size as 0 as  after effect.
+> ext4_fc_commit_stop
+>
+> You could find the logs for the above behavior for inode 979 at [1].
+>
+> -> So what is happening here is since the ei->i_fc_list is not empty
+> (because it is already part of sb's MAIN queue), we don't add this inode
+> again into neither sb's MAIN or STAGING queue.
+> And after jbd2_fc_cleanup() is called from jbd2 full commit, we
+> just remove this inode from the main queue.
+>
+> So as a simple fix, what I did below was to check if it is a jbd2 full commit
+> in ext4_fc_cleanup(), and if the ei->i_sync_tid > tid, that means we
+> need not remove that from MAIN queue. This is since neither jbd2 nor FC
+> has committed updates of those inodes for this new txn tid yet.
+>
+> But below are some quick queries on this
+> =========================================
+>
+> 1. why do we call ext4_fc_reset_inode() when inode tid and
+>    running txn tid does not match?
+This is part of a change in commit:bdc8a53a6f2f,  it fixes the issue
+for fc tracking logic while jbd2 commit is ongoing.
+If the inode tid is bigger than txn tid, that means this inode may be
+in the STAGING queue, if we reset it then it will lose the tack range.
+I think it's a similar issue, the difference is this inode is already
+in the MAIN queue before the jbd2 commit starts.
+And yes , I think in this case we can not remove it from the MAIN
+queue, but still need to clear EXT4_STATE_FC_COMMITTING right? it may
+block some task still waiting for it.
 
-On 2/22/22 9:44 PM, Samuel Holland wrote:
-> On 2/11/22 6:26 AM, Andre Przywara wrote:
->> The USB HCIs (and PHYs?) in Allwinner's newer generation SoCs (H616)
->> rely on the reset line of USB PHY 2 to be de-asserted, even when only
->> one of the other PHYs is actually in use.
-> 
-> Thankfully, so far this appears to be a quirk of H616 only.
-> 
->> To make those ports work, we include this reset line in the HCIs' resets
->> property, which requires this line to be shareable.
-
-Looking at your .dtsi patch 16/18, you don't actually do this. Is this patch not
-needed anymore?
-
-Regards,
-Samuel
-
->> Change the call to allocate the reset line to mark it as shared, to
->> enable the other ports on those SoCs.
->>
->> Signed-off-by: Andre Przywara <andre.przywara@arm.com>
->> Reviewed-by: Philipp Zabel <p.zabel@pengutronix.de>
-> 
-> Acked-by: Samuel Holland <samuel@sholland.org>
-> 
-
+Thanks,
+Xin Yin
+>
+> 2. Also is this an expected behavior from the design perspective of
+>    fast_commit. i.e.
+>    a. the inode can be part of two tids?
+>    b. And that while a full commit is in progress, the inode can still
+>    receive updates but using a new transaction tid.
+>
+> Frankly speaking, since I was also working on other things, so I haven't
+> yet got the chance to completely analyze the situation yet.
+> Once I have those things sorted, I will spend more time on this, to
+> understand it more. Meanwhile if you already have some answers to above
+> queries/observations, please do share those here.
+>
+> Links
+> =========
+> [1] https://raw.githubusercontent.com/riteshharjani/LinuxStudy/master/ext4/fast_commit/fc_inode_missing_updates_ino_979.txt
+>
+> Signed-off-by: Ritesh Harjani <riteshh@linux.ibm.com>
+> ---
+>  fs/ext4/fast_commit.c | 2 ++
+>  1 file changed, 2 insertions(+)
+>
+> diff --git a/fs/ext4/fast_commit.c b/fs/ext4/fast_commit.c
+> index 8803ba087b07..769b584c2552 100644
+> --- a/fs/ext4/fast_commit.c
+> +++ b/fs/ext4/fast_commit.c
+> @@ -1252,6 +1252,8 @@ static void ext4_fc_cleanup(journal_t *journal, int full, tid_t tid)
+>         spin_lock(&sbi->s_fc_lock);
+>         list_for_each_entry_safe(iter, iter_n, &sbi->s_fc_q[FC_Q_MAIN],
+>                                  i_fc_list) {
+> +               if (full && iter->i_sync_tid > tid)
+> +                       continue;
+>                 list_del_init(&iter->i_fc_list);
+>                 ext4_clear_inode_state(&iter->vfs_inode,
+>                                        EXT4_STATE_FC_COMMITTING);
+> --
+> 2.31.1
+>

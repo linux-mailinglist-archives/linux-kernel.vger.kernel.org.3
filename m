@@ -2,71 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2927E4C1666
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 16:19:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EEDD34C166A
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 16:20:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241749AbiBWPTu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 10:19:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57152 "EHLO
+        id S241775AbiBWPUz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 10:20:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239424AbiBWPTt (ORCPT
+        with ESMTP id S232357AbiBWPUv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 10:19:49 -0500
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F29BB5469A
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 07:19:20 -0800 (PST)
-Received: by mail-lj1-x231.google.com with SMTP id v22so23267806ljh.7
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 07:19:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=telus.net; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=UoIc818TKFJQDB8ZDtpesqyQke/StDy/K3yrOaNnU+w=;
-        b=c39BmkeOcZ7y8HmBehuyQIvQIxPXEIf3kKx6dR1Z7oy22fLgH2APdrdoJfpMEn4SW2
-         Yb/dM/mAIdHr3Kuym/kzfcT2q3uxdKPf86plKwdgSenihYITSeu8QgWOnK26BhA8G0ZT
-         4Rc4Xck3/BeY8PF6sS1TKUCOVUjBU2lA2kbanV2GNe8EFbJD4MKqnd2MshXZEz4ozxC8
-         nTz24URG2M9XtwTxghgj7fgkeT/dZbNq9cbVwd5dkHISS8W8fijXI9ErzRH6cx/PTM+w
-         SPesD7czzCbEmj9+fWMuzi8UuMhYihe32tiF/d7lS72VUZctJk39YsMZy+ElpAq5PnBD
-         Yqfg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=UoIc818TKFJQDB8ZDtpesqyQke/StDy/K3yrOaNnU+w=;
-        b=PZ7GBYd1z/qvIW2AeCSiMz19e2mRimh9xogV2+xLtgqzCy7KUMp9/ABWKnkVIMN+wV
-         rIhniowOFLPcESnGV/ClcQeEGor2xwMtaFg6FAeTbVyY0NnIblaw0Vh36kWy6KHmz7sm
-         7RKIkBmuDR13k0dOSpJ00Cg4H4P3qQyvefExoPQJ8pcKjKeyGQxxxS3Xi/rNlJFhQple
-         O4wUkcweseVMkGVQ1vuocI9fz4IG03FWabC8TokYV1LoTIg7vt2AJarSIMT+Pz5/0lFW
-         vbSFWFf18c+wKRHi1G4WoIio6Ynk/Q2lnCHNZx0+WSNoStz4o7KEoxE0UYdxJkEk4hdv
-         5LUg==
-X-Gm-Message-State: AOAM530MOaHrkS6L1hjTYdAHcdILtMobhj58iTtGs0q5FrDqyEaQFF9t
-        O5OGj13oA7QSgyZH89iwiz8Kcs1YRV4FbjJ59t7aOw==
-X-Google-Smtp-Source: ABdhPJyG0ns8FoarM8C6bxPJMgUtvK27UsU9zqR5BTIhUBgDTVAEW/biii1mTDKGN5M2izXm15v9vYhmY+u0FsKaetc=
-X-Received: by 2002:a05:651c:1542:b0:233:8ff5:eb80 with SMTP id
- y2-20020a05651c154200b002338ff5eb80mr21321595ljp.352.1645629559338; Wed, 23
- Feb 2022 07:19:19 -0800 (PST)
+        Wed, 23 Feb 2022 10:20:51 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8ECE39698;
+        Wed, 23 Feb 2022 07:20:23 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: nfraprado)
+        with ESMTPSA id C18CE1F44A52
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1645629621;
+        bh=jdy98UlpZp4yYyNgJgTnj63KiB3Y1ffMm1m1vA+HNuk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=WzKloTRB2XvEBA4y+u09U1ZlRrBoMkal3rajxL1xbBRiChBpJgO4UshC+8GcqtZ87
+         IVYDTYaISfOwenkbWeJZwk/COcmPKYI4QgbPW6VLS4vd5FmKe83KkVIO4iPRRe/zjf
+         NuXEssJQsc6EKnfWuXz3hvmS8jzXcEYGXydpDFVMc3sLEJ2yuaViUjVa15+NXCAwID
+         /g4KOtca9e94SvcqOP8w/XHr6shwyQ9XtLWLrnl0mF2RzMZ6X+zjAEE9Hps2KO1XwK
+         lR9+WFlqWdjaJC3zIyGlgKiavlNw9Xy7CKgTF4y9vaioDK1KCyZVHWikWBiKMBPJDc
+         8YgFE5sDFSnnQ==
+Date:   Wed, 23 Feb 2022 10:20:15 -0500
+From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
+        <nfraprado@collabora.com>
+To:     "allen-kh.cheng" <allen-kh.cheng@mediatek.com>
+Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        --to=Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        Chen-Yu Tsai <wenst@chromium.org>,
+        Ryder Lee <ryder.lee@kernel.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Subject: Re: [PATCH v2 22/23] arm64: dts: mt8192: Add gce info for display
+ nodes
+Message-ID: <20220223152015.vsuuycfvmgm5yi3x@notapiano>
+References: <20220218091633.9368-1-allen-kh.cheng@mediatek.com>
+ <20220218091633.9368-23-allen-kh.cheng@mediatek.com>
+ <20220222232439.dhsvnut3phudlsls@notapiano>
+ <d82cd71f06c803d15c1f2b86123c0ba63e7c5ed7.camel@mediatek.com>
 MIME-Version: 1.0
-References: <20220223100350.3523826-1-Jinzhou.Su@amd.com> <20220223100350.3523826-3-Jinzhou.Su@amd.com>
-In-Reply-To: <20220223100350.3523826-3-Jinzhou.Su@amd.com>
-From:   Doug Smythies <dsmythies@telus.net>
-Date:   Wed, 23 Feb 2022 07:19:08 -0800
-Message-ID: <CAAYoRsWn_gjuBdS3vbo6ZxAXKur6YhXKTkZKpQY+k6hogcibUA@mail.gmail.com>
-Subject: Re: [PATCH 2/3] tools/power/x86/intel_pstate_tracer: make tracer as a module
-To:     Jinzhou Su <Jinzhou.Su@amd.com>
-Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        "Huang, Ray" <ray.huang@amd.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        todd.e.brandt@linux.intel.com,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        deepak.sharma@amd.com, alexander.deucher@amd.com,
-        xiaojian.du@amd.com, perry.yuan@amd.com, li.meng@amd.com,
-        dsmythies <dsmythies@telus.net>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <d82cd71f06c803d15c1f2b86123c0ba63e7c5ed7.camel@mediatek.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,15 +64,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 23, 2022 at 2:04 AM Jinzhou Su <Jinzhou.Su@amd.com> wrote:
->
-> Make intel_pstate_tracer as a module. Other trace event can import
-> this module to analyze their trace data.
->
-> Signed-off-by: Jinzhou Su <Jinzhou.Su@amd.com>
+On Wed, Feb 23, 2022 at 09:12:37PM +0800, allen-kh.cheng wrote:
+> On Tue, 2022-02-22 at 18:24 -0500, Nícolas F. R. A. Prado wrote:
+> > On Fri, Feb 18, 2022 at 05:16:32PM +0800, Allen-KH Cheng wrote:
+> > > Add gce info for display nodes.
+> > > 
+> > > Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+> > > ---
+> > >  arch/arm64/boot/dts/mediatek/mt8192.dtsi | 16 ++++++++++++++++
+> > >  1 file changed, 16 insertions(+)
+> > > 
+> > > diff --git a/arch/arm64/boot/dts/mediatek/mt8192.dtsi
+> > > b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
+> > > index 1f1555fd18f5..df884c48669e 100644
+> > > --- a/arch/arm64/boot/dts/mediatek/mt8192.dtsi
+> > > +++ b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
+> > > @@ -1226,6 +1226,9 @@
+> > >  		mmsys: syscon@14000000 {
+> > >  			compatible = "mediatek,mt8192-mmsys", "syscon";
+> > >  			reg = <0 0x14000000 0 0x1000>;
+> > > +			mboxes = <&gce 0 CMDQ_THR_PRIO_HIGHEST 1>,
+> > > +				 <&gce 1 CMDQ_THR_PRIO_HIGHEST 1>;
+> > > +			mediatek,gce-client-reg = <&gce SUBSYS_1400XXXX
+> > > 0 0x1000>;
+> > 
+> > As a side note, the current mmsys dt-binding,
+> > Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys.yaml,
+> > doesn't
+> > define mboxes or mediatek,gce-client-reg, but looks like there's
+> > already a patch
+> > in the ML adding those:
+> > 
+> > 
+> https://urldefense.com/v3/__https://lore.kernel.org/all/20220126071932.32615-2-jason-jh.lin@mediatek.com/__;!!CTRNKA9wMg0ARbw!zNfQkN-YYjiqPCd5m9DsLhrQDymgEZJoY4oSl24nC3R95P0gIXEmNjyJMhjQZXkWX7mZPa5QS7KIMlGXMbDjDA1_2A$
+> > 
+> 
+> Hi Nícolas,
+> 
+> Thanks for your reminding, Should I need to remove this patch from
+> series?
+> 
+> or I can add this ML to base and mention it in cover letter.
 
-HI Joe,
-I have been using this version (well, with just 2 variable name changes,
-which I see you changed  back) since you sent it (off-list) on Feb 8th.
+I think it should be OK to just mention it in the cover letter.
 
-Acked-by: Doug Smythies <dsmythies@telus.net>
+Thanks,
+Nícolas

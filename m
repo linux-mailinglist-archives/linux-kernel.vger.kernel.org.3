@@ -2,105 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4CAE4C1829
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 17:08:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6729B4C182C
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 17:08:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242615AbiBWQIs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 11:08:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37370 "EHLO
+        id S242625AbiBWQJD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 11:09:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233313AbiBWQIq (ORCPT
+        with ESMTP id S242617AbiBWQJB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 11:08:46 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5139B7173;
-        Wed, 23 Feb 2022 08:08:18 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 81A3F61849;
-        Wed, 23 Feb 2022 16:08:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 376CFC340F0;
-        Wed, 23 Feb 2022 16:08:17 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="fp8CajXh"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1645632494;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=KIfU5+oFhsOwMYUUwLOIak3Q1ZR1ObTglPpSCZ1RML0=;
-        b=fp8CajXhg/qqnzjg/+OKoKtXE7i8z7f2ykur7nX/GB/hD+f7/dV1RY9KKe4G1DxwKh6DK5
-        cqo8wAQC1pRcZmVtHctFFglh0DpHTv+MLl3DOX6VZabKMGwj0jD3qeGhHbhyao9/VfbV8E
-        JSbLF/0HVctMQO6V/BCKxqwnWMp9lRQ=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 452aba86 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Wed, 23 Feb 2022 16:08:14 +0000 (UTC)
-Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-2d79394434dso73650937b3.5;
-        Wed, 23 Feb 2022 08:08:14 -0800 (PST)
-X-Gm-Message-State: AOAM531SpwA0aYZJEUwHUWYxsTOW5hsY1M9gRL+/1t914cdpotw5Uk3P
-        0nTsx7t/tb3s8+/6YXu9OyXxEh3IFRbJh000SSU=
-X-Google-Smtp-Source: ABdhPJy33A74qQdK52dpScB33s7jynPhLN4qjTE0dJTavDUA51Mn+CllONCLBg2IducogWoxWZTIJEkJ7l0DRx6DAd8=
-X-Received: by 2002:a81:7d04:0:b0:2d0:d0e2:126f with SMTP id
- y4-20020a817d04000000b002d0d0e2126fmr288331ywc.485.1645632492376; Wed, 23 Feb
- 2022 08:08:12 -0800 (PST)
-MIME-Version: 1.0
-References: <20220223131231.403386-1-Jason@zx2c4.com>
-In-Reply-To: <20220223131231.403386-1-Jason@zx2c4.com>
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date:   Wed, 23 Feb 2022 17:08:01 +0100
-X-Gmail-Original-Message-ID: <CAHmME9ogH_mx724n_deFfva7-xPCmma1-=2Mv0JdnZ-fC4JCjg@mail.gmail.com>
-Message-ID: <CAHmME9ogH_mx724n_deFfva7-xPCmma1-=2Mv0JdnZ-fC4JCjg@mail.gmail.com>
-Subject: Re: [PATCH RFC v1 0/2] VM fork detection for RNG
-To:     LKML <linux-kernel@vger.kernel.org>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        QEMU Developers <qemu-devel@nongnu.org>,
-        KVM list <kvm@vger.kernel.org>, linux-s390@vger.kernel.org,
-        adrian@parity.io
-Cc:     "Woodhouse, David" <dwmw@amazon.co.uk>,
-        "Catangiu, Adrian Costin" <acatan@amazon.com>, graf@amazon.com,
-        Colm MacCarthaigh <colmmacc@amazon.com>,
-        "Singh, Balbir" <sblbir@amazon.com>,
-        "Weiss, Radu" <raduweis@amazon.com>, Jann Horn <jannh@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Theodore Ts'o" <tytso@mit.edu>,
-        Igor Mammedov <imammedo@redhat.com>, ehabkost@redhat.com,
-        ben@skyportsystems.com, "Michael S. Tsirkin" <mst@redhat.com>,
-        lersek@redhat.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 23 Feb 2022 11:09:01 -0500
+Received: from mail-oi1-f172.google.com (mail-oi1-f172.google.com [209.85.167.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5C51B7173;
+        Wed, 23 Feb 2022 08:08:33 -0800 (PST)
+Received: by mail-oi1-f172.google.com with SMTP id x193so18861862oix.0;
+        Wed, 23 Feb 2022 08:08:33 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=VlLFX4EqJjMes8RQHVfh/XZ71GjRDL6L1TFesEM7wzE=;
+        b=U9Iq+jpKmAgE6T1X8+9vDb6hjAy3KHE9oilTJfE1alCPZJKvsKb9/yXmNAqp61hoDt
+         FPOxhqrrIKVz+0aQ6Xh+9hkUedbWmjhmlbFuVVLBVen406wUB/9ye7vQPRy/mtnKhTRW
+         c7eb72DtKfyWRnYquwUSybtboPOkGFjxx5ycJg3R2pYYUx5BhMxnXJVWfzZQ0VsTxPfa
+         9gyg9bOb98mii7sKjLnWr3FEutNpNeBAZ25xmaNXpnBa/fxbcLeBk/NTC3WwiFXcXMCd
+         Q0jKJuRtBoNwqEsaXzfLSz+tMYoS1C8o9Wfh55RHvIFaXIjo95zVvihyOzEvP3KyuZd4
+         JyJg==
+X-Gm-Message-State: AOAM533h/37sj60twFQTPXYO4bWbXX13Sb/JQfbSc3Cgl/D6BCBRqn62
+        zZOVTWwD5L9vxgDnlIlaqw==
+X-Google-Smtp-Source: ABdhPJwJKDQ6JefrLm3QtPQRxB642eYP2C3FBUp8cNjO1ona+VQ8wvG7WgEvKHU/GtcuAWfkCx9uoA==
+X-Received: by 2002:a05:6808:2101:b0:2d4:2b3a:9acb with SMTP id r1-20020a056808210100b002d42b3a9acbmr4960666oiw.231.1645632513102;
+        Wed, 23 Feb 2022 08:08:33 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id bc16sm10542255oib.26.2022.02.23.08.08.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Feb 2022 08:08:32 -0800 (PST)
+Received: (nullmailer pid 1021548 invoked by uid 1000);
+        Wed, 23 Feb 2022 16:08:31 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Vinod Koul <vkoul@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        linux-phy@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, Kishon Vijay Abraham I <kishon@ti.com>
+In-Reply-To: <20220223044213.3776600-1-bjorn.andersson@linaro.org>
+References: <20220223044213.3776600-1-bjorn.andersson@linaro.org>
+Subject: Re: [PATCH 1/2] dt-bindings: phy: qcom,qmp: add sc8180x and sc8280xp ufs compatibles
+Date:   Wed, 23 Feb 2022 10:08:31 -0600
+Message-Id: <1645632511.468790.1021547.nullmailer@robh.at.kernel.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 23, 2022 at 2:12 PM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
-> second patch is the reason this is just an RFC: it's a cleanup of the
-> ACPI driver from last year, and I don't really have much experience
-> writing, testing, debugging, or maintaining these types of drivers.
-> Ideally this thread would yield somebody saying, "I see the intent of
-> this; I'm happy to take over ownership of this part." That way, I can
-> focus on the RNG part, and whoever steps up for the paravirt ACPI part
-> can focus on that.
+On Tue, 22 Feb 2022 20:42:12 -0800, Bjorn Andersson wrote:
+> Add compatible for the UFS PHY found in the Qualcomm SC8280XP platform
+> and document the required clocks for this and the SC8180X UFS PHY.
+> 
+> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> ---
+>  Documentation/devicetree/bindings/phy/qcom,qmp-phy.yaml | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
 
-I actually managed to test this in QEMU, and it seems to work quite well. Steps:
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-$ qemu-system-x86_64 ... -device vmgenid,guid=auto -monitor stdio
-(qemu) savevm blah
-(qemu) quit
-$ qemu-system-x86_64 ... -device vmgenid,guid=auto -monitor stdio
-(qemu) loadvm blah
+yamllint warnings/errors:
+./Documentation/devicetree/bindings/phy/qcom,qmp-phy.yaml:284:1: [error] syntax error: found character '\t' that cannot start any token (syntax)
 
-Doing this successfully triggers the function to reinitialize the RNG
-with the new GUID. (It appears there's a bug in QEMU which prevents
-the GUID from being reinitialized when running `loadvm` without
-quitting first; I suppose this should be discussed with QEMU
-upstream.)
+dtschema/dtc warnings/errors:
+make[1]: *** Deleting file 'Documentation/devicetree/bindings/phy/qcom,qmp-phy.example.dts'
+Traceback (most recent call last):
+  File "/usr/local/bin/dt-extract-example", line 46, in <module>
+    binding = yaml.load(open(args.yamlfile, encoding='utf-8').read())
+  File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/main.py", line 434, in load
+    return constructor.get_single_data()
+  File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/constructor.py", line 119, in get_single_data
+    node = self.composer.get_single_node()
+  File "_ruamel_yaml.pyx", line 706, in _ruamel_yaml.CParser.get_single_node
+  File "_ruamel_yaml.pyx", line 724, in _ruamel_yaml.CParser._compose_document
+  File "_ruamel_yaml.pyx", line 775, in _ruamel_yaml.CParser._compose_node
+  File "_ruamel_yaml.pyx", line 889, in _ruamel_yaml.CParser._compose_mapping_node
+  File "_ruamel_yaml.pyx", line 773, in _ruamel_yaml.CParser._compose_node
+  File "_ruamel_yaml.pyx", line 850, in _ruamel_yaml.CParser._compose_sequence_node
+  File "_ruamel_yaml.pyx", line 775, in _ruamel_yaml.CParser._compose_node
+  File "_ruamel_yaml.pyx", line 889, in _ruamel_yaml.CParser._compose_mapping_node
+  File "_ruamel_yaml.pyx", line 775, in _ruamel_yaml.CParser._compose_node
+  File "_ruamel_yaml.pyx", line 889, in _ruamel_yaml.CParser._compose_mapping_node
+  File "_ruamel_yaml.pyx", line 775, in _ruamel_yaml.CParser._compose_node
+  File "_ruamel_yaml.pyx", line 889, in _ruamel_yaml.CParser._compose_mapping_node
+  File "_ruamel_yaml.pyx", line 775, in _ruamel_yaml.CParser._compose_node
+  File "_ruamel_yaml.pyx", line 889, in _ruamel_yaml.CParser._compose_mapping_node
+  File "_ruamel_yaml.pyx", line 775, in _ruamel_yaml.CParser._compose_node
+  File "_ruamel_yaml.pyx", line 889, in _ruamel_yaml.CParser._compose_mapping_node
+  File "_ruamel_yaml.pyx", line 773, in _ruamel_yaml.CParser._compose_node
+  File "_ruamel_yaml.pyx", line 852, in _ruamel_yaml.CParser._compose_sequence_node
+  File "_ruamel_yaml.pyx", line 904, in _ruamel_yaml.CParser._parse_next_event
+ruamel.yaml.scanner.ScannerError: while scanning a plain scalar
+  in "<unicode string>", line 283, column 17
+found a tab character that violates indentation
+  in "<unicode string>", line 284, column 1
+make[1]: *** [Documentation/devicetree/bindings/Makefile:25: Documentation/devicetree/bindings/phy/qcom,qmp-phy.example.dts] Error 1
+make[1]: *** Waiting for unfinished jobs....
+./Documentation/devicetree/bindings/phy/qcom,qmp-phy.yaml:  while scanning a plain scalar
+  in "<unicode string>", line 283, column 17
+found a tab character that violates indentation
+  in "<unicode string>", line 284, column 1
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/phy/qcom,qmp-phy.yaml: ignoring, error parsing file
+make: *** [Makefile:1398: dt_binding_check] Error 2
 
-So that's very positive. But I would appreciate hearing from some
-ACPI/Virt/Amazon people about this.
+doc reference errors (make refcheckdocs):
 
-Jason
+See https://patchwork.ozlabs.org/patch/1596499
+
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
+

@@ -2,135 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC5FF4C1DFC
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 22:51:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 71DBD4C1E10
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 22:54:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242337AbiBWVwH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 16:52:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50590 "EHLO
+        id S242337AbiBWVyc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 16:54:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240806AbiBWVwE (ORCPT
+        with ESMTP id S236891AbiBWVya (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 16:52:04 -0500
-Received: from mail-qv1-xf33.google.com (mail-qv1-xf33.google.com [IPv6:2607:f8b0:4864:20::f33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18D0A245B1
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 13:51:35 -0800 (PST)
-Received: by mail-qv1-xf33.google.com with SMTP id j5so448767qvs.13
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 13:51:35 -0800 (PST)
+        Wed, 23 Feb 2022 16:54:30 -0500
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2A0950451
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 13:54:01 -0800 (PST)
+Received: by mail-lf1-x134.google.com with SMTP id u20so656536lff.2
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 13:54:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=linux-foundation.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=7HUVNZQiEEXaUvy3RrhbANmYcH8oGsdxifIctFemNVw=;
-        b=SnxuRkXzdbe1wR2S1H3+KBQbfIfB8Losrc/r+oTwCiBTWmQ5dw9Fa8YhkcNJh5N1b1
-         67vU/Yjbe2hOZPfPAK2L456wDMBjXmTTw4234gOdFxKY2T/Z1G9vylHw7RxkwOHLDn1O
-         sadSZ7aXEeSTaKMePhtVGGU7YPQdZMzgKmZ5V+FF/BZumo1Y8Bs7rrLGicTSUzRo6xRd
-         cHYnrCT7HTizDx1O7UEZ4B3pE4Umhx9OYitYHiTaZnQ8ThY+gVfzwTC3FPJYBUbnPOIA
-         cvMNhcK2/6GTHLF8w7iBsgJJWc0d1RoLrAYuBb+W4clwWvdIQwWFI27AaFh3X2JnrR1p
-         ZUtw==
+        bh=4TnD6jYOSsNtQKWO0JaU3gwq6Qdh6TjyUgcvqEl+K5I=;
+        b=dX/Jy7+F597/hIqi/9qMzXNMQrDyhVkP3dTnhBEOAl49NjqeCD8FqayzKHmPDChTw3
+         FXxIkt9v5pPo2K0sD+mRbJ2ze9fZjc9QQ0YoibAdDT8COHVHj0K4UemJxZnobNcdHhFL
+         ecGrXKp1xqB580NwK5g7hNFGZEgHao6WIIXUA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=7HUVNZQiEEXaUvy3RrhbANmYcH8oGsdxifIctFemNVw=;
-        b=xgTCxLFQNL18NB1sLyNhzTCDp7jVR/YrCKtjQp3tjNSlXEAWybFBvYT/uha9DZwYpo
-         IDZd0lhPt7zLABeeP8GWyj2E5iestarFZhBbJH31SFH8ZoIptz7TeDmUt1bzjFdOraVp
-         LrGEnBlRtClopII/iE9BXZucGAaE8HgvxP79FD6u0+rHdE9yPSxYO6cj9LNI7N22/O4D
-         CqgVJ2qUblCQJgVgBBaQZ8PqBrGBmm2fhl5NsoU0yKOPxnPfyJNpZyrcuRbouReSS/gY
-         wTT6bsRX/rMdOErIcu9Cbs1ilD1jqB7M3wBsDTZmOzrn8DIMolVBm8bDhJ0csf6PTyLh
-         utLA==
-X-Gm-Message-State: AOAM531gNh2d4l5E6a+FSfyT7hP5mG2hwFBAhSUKh/iw0zRt9MieJjZr
-        mR/tSoakYNPtPss66WwtaFRXPuXE4hqO4Pkj5jpsTS0sztU=
-X-Google-Smtp-Source: ABdhPJzje7a7YdyFqZl6kLPzcoGrxOi4FHB8EGjU8WIbzSRWfDzPfj6CqCqQ5BsMUuXZxTnCbgaG73MeeM39f6u1zVQ=
-X-Received: by 2002:a0c:d807:0:b0:42c:1ff7:7242 with SMTP id
- h7-20020a0cd807000000b0042c1ff77242mr1538738qvj.119.1645653094284; Wed, 23
- Feb 2022 13:51:34 -0800 (PST)
+        bh=4TnD6jYOSsNtQKWO0JaU3gwq6Qdh6TjyUgcvqEl+K5I=;
+        b=FctymX292tA+gmkzdVNROhB9ubtoD/eWGmVAWbRGjF3qztPSudG+9pSBtnErJ/Qyfc
+         RiJX7WRCUfXbGlHyeCb+Ay6TuGXfIzWCOFj4KzekENrQ6eXyMHx3PJEzMUYZm33Hdfad
+         +Mji3rjGCnoQl8V1Ye73OEYsZaYBnZE9cxOmzGUMy+RmyMACwpehLTEldfMgZ4KDgPcH
+         /57SxHufqpVJj+ou24OiAQv3Gbxe4noUxYPZ4JHAHaLlCCVJb0jY3UTc22HNTGpptfyL
+         kOU+JghxjIQzggVn47AmxhSWMsEtk+uSmyP7AdtT6jqeZNOsYgqfmHjvBlgljFD1jZpu
+         LZSg==
+X-Gm-Message-State: AOAM5309retIsM6oaC/wEGluvtJpJ+6luHPTuGL+72d8APTNmbS4tcNB
+        vb/hNYeSsh7vgcN2w67Puv6VkSjHevmc+lOwH6M=
+X-Google-Smtp-Source: ABdhPJzEDFOJ0s1JQ5zRrqmi1ZcZ/y+AbaMxkXLw3b/Odem5AlM5Ic/jAoXr5i74TPG8NFUowMmgYQ==
+X-Received: by 2002:a19:6a07:0:b0:443:ecf7:e4b4 with SMTP id u7-20020a196a07000000b00443ecf7e4b4mr1019148lfu.395.1645653239782;
+        Wed, 23 Feb 2022 13:53:59 -0800 (PST)
+Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com. [209.85.167.51])
+        by smtp.gmail.com with ESMTPSA id a9sm57781lfl.180.2022.02.23.13.53.56
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 23 Feb 2022 13:53:56 -0800 (PST)
+Received: by mail-lf1-f51.google.com with SMTP id f37so602825lfv.8
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 13:53:56 -0800 (PST)
+X-Received: by 2002:a05:6512:2033:b0:443:3d49:dac with SMTP id
+ s19-20020a056512203300b004433d490dacmr1067001lfs.52.1645653236389; Wed, 23
+ Feb 2022 13:53:56 -0800 (PST)
 MIME-Version: 1.0
-References: <20220223192946.473172-1-bhupesh.sharma@linaro.org> <20220223192946.473172-5-bhupesh.sharma@linaro.org>
-In-Reply-To: <20220223192946.473172-5-bhupesh.sharma@linaro.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Thu, 24 Feb 2022 00:51:23 +0300
-Message-ID: <CAA8EJppDVo5rN3swiVoE8zAqCTmwQD9RZAxbrP0CPO30kQTBmA@mail.gmail.com>
-Subject: Re: [PATCH 4/6] PCI: qcom: Add SM8150 SoC support
-To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-pci@vger.kernel.org,
-        bhupesh.linux@gmail.com, lorenzo.pieralisi@arm.com,
-        agross@kernel.org, bjorn.andersson@linaro.org,
-        svarbanov@mm-sol.com, bhelgaas@google.com,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        robh+dt@kernel.org, Vinod Koul <vkoul@kernel.org>
+References: <20220217184829.1991035-1-jakobkoschel@gmail.com>
+ <20220217184829.1991035-4-jakobkoschel@gmail.com> <CAHk-=wg1RdFQ6OGb_H4ZJoUwEr-gk11QXeQx63n91m0tvVUdZw@mail.gmail.com>
+ <6DFD3D91-B82C-469C-8771-860C09BD8623@gmail.com> <CAHk-=wiyCH7xeHcmiFJ-YgXUy2Jaj7pnkdKpcovt8fYbVFW3TA@mail.gmail.com>
+ <CAHk-=wgLe-OSLTEHm=V7eRG6Fcr0dpAM1ZRV1a=R_g6pBOr8Bg@mail.gmail.com>
+ <CAK8P3a0DOC3s7x380XR_kN8UYQvkRqvE5LkHQfK2-KzwhcYqQQ@mail.gmail.com>
+ <CAHk-=wicJ0VxEmnpb8=TJfkSDytFuf+dvQJj8kFWj0OF2FBZ9w@mail.gmail.com> <CAK8P3a2b_RtXkhQ2pwqbZ1zz6QtjaWwD4em_MCF_wGXRwZirKA@mail.gmail.com>
+In-Reply-To: <CAK8P3a2b_RtXkhQ2pwqbZ1zz6QtjaWwD4em_MCF_wGXRwZirKA@mail.gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Wed, 23 Feb 2022 13:53:39 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wh97QY9fEQUK6zMVQwaQ_JWDvR=R+TxQ_0OYrMHQ+egvQ@mail.gmail.com>
+Message-ID: <CAHk-=wh97QY9fEQUK6zMVQwaQ_JWDvR=R+TxQ_0OYrMHQ+egvQ@mail.gmail.com>
+Subject: Re: [RFC PATCH 03/13] usb: remove the usage of the list iterator
+ after the loop
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Jakob <jakobkoschel@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
+        Cristiano Giuffrida <c.giuffrida@vu.nl>,
+        "Bos, H.J." <h.j.bos@vu.nl>, Nathan Chancellor <nathan@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 23 Feb 2022 at 22:30, Bhupesh Sharma <bhupesh.sharma@linaro.org> wrote:
+On Wed, Feb 23, 2022 at 1:46 PM Arnd Bergmann <arnd@arndb.de> wrote:
 >
-> The PCIe IP (rev 1.5.0) on SM8150 SoC is similar to the one used on
-> SM8250. Hence the support is added reusing the members of ops_2_7_0.
+> > Ok, so we should be able to basically convert '--std=gnu89' into
+> > '--std=gnu11 -Wno-shift-negative-value' with no expected change of
+> > behavior.
 >
-> Cc: Vinod Koul <vkoul@kernel.org>
-> Cc: Rob Herring <robh+dt@kernel.org>
-> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+> Yes, I think that is correct.
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Ok, somebody please remind me, and let's just try this early in the
+5.18 merge window.
 
-> ---
->  drivers/pci/controller/dwc/pcie-qcom.c | 16 ++++++++++++++++
->  1 file changed, 16 insertions(+)
->
-> diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
-> index c19cd506ed3f..66fbc0234888 100644
-> --- a/drivers/pci/controller/dwc/pcie-qcom.c
-> +++ b/drivers/pci/controller/dwc/pcie-qcom.c
-> @@ -1487,6 +1487,17 @@ static const struct qcom_pcie_ops ops_1_9_0 = {
->         .config_sid = qcom_pcie_config_sid_sm8250,
->  };
->
-> +/* Qcom IP rev.: 1.5.0 */
-> +static const struct qcom_pcie_ops ops_1_5_0 = {
-> +       .get_resources = qcom_pcie_get_resources_2_7_0,
-> +       .init = qcom_pcie_init_2_7_0,
-> +       .deinit = qcom_pcie_deinit_2_7_0,
-> +       .ltssm_enable = qcom_pcie_2_3_2_ltssm_enable,
-> +       .post_init = qcom_pcie_post_init_2_7_0,
-> +       .post_deinit = qcom_pcie_post_deinit_2_7_0,
-> +       .config_sid = qcom_pcie_config_sid_sm8250,
-> +};
-> +
->  static const struct qcom_pcie_cfg apq8084_cfg = {
->         .ops = &ops_1_0_0,
->  };
-> @@ -1511,6 +1522,10 @@ static const struct qcom_pcie_cfg sdm845_cfg = {
->         .ops = &ops_2_7_0,
->  };
->
-> +static const struct qcom_pcie_cfg sm8150_cfg = {
-> +       .ops = &ops_1_5_0,
-> +};
-> +
->  static const struct qcom_pcie_cfg sm8250_cfg = {
->         .ops = &ops_1_9_0,
->  };
-> @@ -1626,6 +1641,7 @@ static const struct of_device_id qcom_pcie_match[] = {
->         { .compatible = "qcom,pcie-ipq4019", .data = &ipq4019_cfg },
->         { .compatible = "qcom,pcie-qcs404", .data = &ipq4019_cfg },
->         { .compatible = "qcom,pcie-sdm845", .data = &sdm845_cfg },
-> +       { .compatible = "qcom,pcie-sm8150", .data = &sm8150_cfg },
->         { .compatible = "qcom,pcie-sm8250", .data = &sm8250_cfg },
->         { .compatible = "qcom,pcie-sc8180x", .data = &sm8250_cfg },
->         { .compatible = "qcom,pcie-sc7280", .data = &sc7280_cfg },
-> --
-> 2.35.1
->
+Because at least for me, doing
 
+-                  -std=gnu89
++                  -std=gnu11 -Wno-shift-negative-value
 
--- 
-With best wishes
-Dmitry
+for KBUILD_CFLAGS works fine both in my gcc and clang builds. But
+that's obviously just one version of each.
+
+(I left the host compiler flags alone - I have this memory of us
+having had issues with people having old host compilers and wanting
+headers for tools still build with gcc-4)
+
+                Linus

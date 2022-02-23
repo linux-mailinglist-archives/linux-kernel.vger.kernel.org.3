@@ -2,408 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDFF74C18FD
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 17:48:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3343D4C1900
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 17:49:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242955AbiBWQtF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 11:49:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32900 "EHLO
+        id S242991AbiBWQti (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 11:49:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233905AbiBWQtB (ORCPT
+        with ESMTP id S242157AbiBWQte (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 11:49:01 -0500
-Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C045B7DF
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 08:48:33 -0800 (PST)
-Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-2d6923bca1aso209139937b3.9
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 08:48:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=GLyN3TRZPlqJ5RwOtJrQLG6H3Ss7auyjkJskhRZNtj4=;
-        b=b76slybem1Fn/0Dv+dTvp9xRx5aXkmajcuqYCQDwPeHcWYWVIZqMcvkHdDGPXYYYYL
-         E0mAd3gR/HZJRFxT2sHbkSOhY1pqjk91n5R30x7EX0hM5QrF876qWoA3q0PCXu/tUJXL
-         VamqZfcemmSf+9ivicuS4F8+6O279UZto1Jm1thVODdrapOYftUsA4SAKLtRQwBLLulD
-         JgGwmq5OJuKnMjPm57uPT9v9v4Mks5vDETykwXKY/Zbz3BbhN+PV7Lu3UuC0yTWcHLfT
-         BQFFDMVJ245zafHtj9x12xnr0ZhxICIQkCOt58NP9YLKAfYKyw3aY5N5G1f9LVE1kYhR
-         9Kkw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=GLyN3TRZPlqJ5RwOtJrQLG6H3Ss7auyjkJskhRZNtj4=;
-        b=t9qB6khsLCsCIxehdUCPrjJ03zsx8KicEWH5YHc+9UuY7T4HVWZKlj++bOue42+ipZ
-         /A1tzg6Y1qmFSekADmg8ElGMMUvcaq+xK539L2HNqaA1OXPbEyns1+FFSepYmf5OeEQm
-         xf8OuaYTFspsz4i0Y30TL0braYknno0qRDEFAt7vBlN324CgkQM9wlDLkqjYxVnqyfTE
-         PBRuUxRsK4bJ59NIm5vGLuMWckv6Z4mOt+coo/BK5JOyofhbnsM7S07r8KZ6NxSKeVgG
-         Y9DU2+vQqNJnhENNM0K4/xPmGQuVx/OtdhlS/zJDSYb1M52GseePenUhY8OuzRdC7kU/
-         XzAA==
-X-Gm-Message-State: AOAM531u5q3TqKb+YRKPaK/tDDnLK1E5bC0jAoBVZRFTHSRivC4VnoVG
-        kzSwnB+wifGzOEaMdN50ioBuDZDqkNSI6riuPmoptw==
-X-Google-Smtp-Source: ABdhPJwgSVsCB2stPxsXkzt3E/eFSLY1Ukwn5NVLWhMpEDekfQnDELF8ivALo2R2H3M/Tt10RAjk52I/cAzF9PdA/cg=
-X-Received: by 2002:a81:57d0:0:b0:2d0:cd0d:6007 with SMTP id
- l199-20020a8157d0000000b002d0cd0d6007mr472771ywb.454.1645634911839; Wed, 23
- Feb 2022 08:48:31 -0800 (PST)
-MIME-Version: 1.0
-References: <20220223110135.1943210-1-zhengjun.xing@linux.intel.com>
-In-Reply-To: <20220223110135.1943210-1-zhengjun.xing@linux.intel.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Wed, 23 Feb 2022 08:48:19 -0800
-Message-ID: <CAP-5=fXWZ1vJqfU4TXedGVYNpj-RjVsQsrtggnGMZQR9C0-Yew@mail.gmail.com>
-Subject: Re: [PATCH 2/2] perf vendor events intel: Add uncore event list for Alderlake
-To:     zhengjun.xing@linux.intel.com
-Cc:     acme@kernel.org, peterz@infradead.org, mingo@redhat.com,
-        alexander.shishkin@intel.com, jolsa@redhat.com,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        adrian.hunter@intel.com, ak@linux.intel.com,
-        kan.liang@linux.intel.com
+        Wed, 23 Feb 2022 11:49:34 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E32EB10E7
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 08:49:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1645634945;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=wNS7v8DyjXrywMbSXEXz4BcYOAb2F62ZEYVuLUNKYhE=;
+        b=eGatZrV6BPIUFuDJinFcu1RUjeusjnmVGgn716RgumuHhwQNefOiyJNXqvaAqZ3+9HXac4
+        Eixdqs34QWXo2NZrYgUiMkfl3ZZDffVlovY2f9N7A/UFmK5v9A9vDhuQVjSU7gKuSQl5BF
+        x8aJr98AEO+wJuhy7uUnU6+eYdZCH/s=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-209-_9p6_WnoNaaswf3fZYCOvQ-1; Wed, 23 Feb 2022 11:48:37 -0500
+X-MC-Unique: _9p6_WnoNaaswf3fZYCOvQ-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 57F20501E3;
+        Wed, 23 Feb 2022 16:48:36 +0000 (UTC)
+Received: from starship (unknown [10.40.195.190])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id F2DCA804FD;
+        Wed, 23 Feb 2022 16:48:34 +0000 (UTC)
+Message-ID: <7ab6bb89c3413cbed9991587a4f6486f8616463b.camel@redhat.com>
+Subject: Re: [PATCH v2 13/18] KVM: x86: reset and reinitialize the MMU in
+ __set_sregs_common
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+Cc:     seanjc@google.com
+Date:   Wed, 23 Feb 2022 18:48:33 +0200
+In-Reply-To: <20220217210340.312449-14-pbonzini@redhat.com>
+References: <20220217210340.312449-1-pbonzini@redhat.com>
+         <20220217210340.312449-14-pbonzini@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 22, 2022 at 7:02 PM <zhengjun.xing@linux.intel.com> wrote:
->
-> From: Zhengjun Xing <zhengjun.xing@linux.intel.com>
->
-> Add JSON uncore events for Alderlake to perf.
->
-> Based on JSON list v1.06:
->
-> https://download.01.org/perfmon/ADL/
-
-Acked-by: Ian Rogers <irogers@google.com>
-
-Could you post the uncore csv file on:
-https://github.com/intel/event-converter-for-linux-perf
-For example, the skylakex one is:
-https://github.com/intel/event-converter-for-linux-perf/blob/master/perf-un=
-core-events-skx.csv
-
-Thanks,
-Ian
-
-> Signed-off-by: Zhengjun Xing <zhengjun.xing@linux.intel.com>
+On Thu, 2022-02-17 at 16:03 -0500, Paolo Bonzini wrote:
+> Do a full unload of the MMU in KVM_SET_SREGS and KVM_SEST_REGS2, in
+Typo
+> preparation for not doing so in kvm_mmu_reset_context.  There is no
+> need to delay the reset until after the return, so do it directly in
+> the __set_sregs_common function and remove the mmu_reset_needed output
+> parameter.
+> 
+> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
 > ---
->  .../arch/x86/alderlake/uncore-memory.json     | 222 ++++++++++++++++++
->  .../arch/x86/alderlake/uncore-other.json      |  40 ++++
->  2 files changed, 262 insertions(+)
->  create mode 100644 tools/perf/pmu-events/arch/x86/alderlake/uncore-memor=
-y.json
->  create mode 100644 tools/perf/pmu-events/arch/x86/alderlake/uncore-other=
-.json
->
-> diff --git a/tools/perf/pmu-events/arch/x86/alderlake/uncore-memory.json =
-b/tools/perf/pmu-events/arch/x86/alderlake/uncore-memory.json
-> new file mode 100644
-> index 000000000000..d82d6f62a6fb
-> --- /dev/null
-> +++ b/tools/perf/pmu-events/arch/x86/alderlake/uncore-memory.json
-> @@ -0,0 +1,222 @@
-> +[
-> +    {
-> +        "BriefDescription": "Number of clocks",
-> +        "Counter": "0,1,2,3,4",
-> +        "CounterType": "PGMABLE",
-> +        "EventCode": "0x01",
-> +        "EventName": "UNC_M_CLOCKTICKS",
-> +        "PerPkg": "1",
-> +        "Unit": "iMC"
-> +    },
-> +    {
-> +        "BriefDescription": "Incoming VC0 read request",
-> +        "Counter": "0,1,2,3,4",
-> +        "CounterType": "PGMABLE",
-> +        "EventCode": "0x02",
-> +        "EventName": "UNC_M_VC0_REQUESTS_RD",
-> +        "PerPkg": "1",
-> +        "Unit": "iMC"
-> +    },
-> +    {
-> +        "BriefDescription": "Incoming VC0 write request",
-> +        "Counter": "0,1,2,3,4",
-> +        "CounterType": "PGMABLE",
-> +        "EventCode": "0x03",
-> +        "EventName": "UNC_M_VC0_REQUESTS_WR",
-> +        "PerPkg": "1",
-> +        "Unit": "iMC"
-> +    },
-> +    {
-> +        "BriefDescription": "Incoming VC1 read request",
-> +        "Counter": "0,1,2,3,4",
-> +        "CounterType": "PGMABLE",
-> +        "EventCode": "0x04",
-> +        "EventName": "UNC_M_VC1_REQUESTS_RD",
-> +        "PerPkg": "1",
-> +        "Unit": "iMC"
-> +    },
-> +    {
-> +        "BriefDescription": "Incoming VC1 write request",
-> +        "Counter": "0,1,2,3,4",
-> +        "CounterType": "PGMABLE",
-> +        "EventCode": "0x05",
-> +        "EventName": "UNC_M_VC1_REQUESTS_WR",
-> +        "PerPkg": "1",
-> +        "Unit": "iMC"
-> +    },
-> +    {
-> +        "BriefDescription": "Incoming read prefetch request from IA",
-> +        "Counter": "0,1,2,3,4",
-> +        "CounterType": "PGMABLE",
-> +        "EventCode": "0x0A",
-> +        "EventName": "UNC_M_PREFETCH_RD",
-> +        "PerPkg": "1",
-> +        "Unit": "iMC"
-> +    },
-> +    {
-> +        "BriefDescription": "Any Rank at Hot state",
-> +        "Counter": "0,1,2,3,4",
-> +        "CounterType": "PGMABLE",
-> +        "EventCode": "0x19",
-> +        "EventName": "UNC_M_DRAM_THERMAL_HOT",
-> +        "PerPkg": "1",
-> +        "Unit": "iMC"
-> +    },
-> +    {
-> +        "BriefDescription": "Any Rank at Warm state",
-> +        "Counter": "0,1,2,3,4",
-> +        "CounterType": "PGMABLE",
-> +        "EventCode": "0x1A",
-> +        "EventName": "UNC_M_DRAM_THERMAL_WARM",
-> +        "PerPkg": "1",
-> +        "Unit": "iMC"
-> +    },
-> +    {
-> +        "BriefDescription": "incoming read request page status is Page H=
-it",
-> +        "Counter": "0,1,2,3,4",
-> +        "CounterType": "PGMABLE",
-> +        "EventCode": "0x1C",
-> +        "EventName": "UNC_M_DRAM_PAGE_HIT_RD",
-> +        "PerPkg": "1",
-> +        "Unit": "iMC"
-> +    },
-> +    {
-> +        "BriefDescription": "incoming read request page status is Page E=
-mpty",
-> +        "Counter": "0,1,2,3,4",
-> +        "CounterType": "PGMABLE",
-> +        "EventCode": "0x1D",
-> +        "EventName": "UNC_M_DRAM_PAGE_EMPTY_RD",
-> +        "PerPkg": "1",
-> +        "Unit": "iMC"
-> +    },
-> +    {
-> +        "BriefDescription": "incoming read request page status is Page M=
-iss",
-> +        "Counter": "0,1,2,3,4",
-> +        "CounterType": "PGMABLE",
-> +        "EventCode": "0x1E",
-> +        "EventName": "UNC_M_DRAM_PAGE_MISS_RD",
-> +        "PerPkg": "1",
-> +        "Unit": "iMC"
-> +    },
-> +    {
-> +        "BriefDescription": "incoming write request page status is Page =
-Hit",
-> +        "Counter": "0,1,2,3,4",
-> +        "CounterType": "PGMABLE",
-> +        "EventCode": "0x1F",
-> +        "EventName": "UNC_M_DRAM_PAGE_HIT_WR",
-> +        "PerPkg": "1",
-> +        "Unit": "iMC"
-> +    },
-> +    {
-> +        "BriefDescription": "incoming write request page status is Page =
-Empty",
-> +        "Counter": "0,1,2,3,4",
-> +        "CounterType": "PGMABLE",
-> +        "EventCode": "0x20",
-> +        "EventName": "UNC_M_DRAM_PAGE_EMPTY_WR",
-> +        "PerPkg": "1",
-> +        "Unit": "iMC"
-> +    },
-> +    {
-> +        "BriefDescription": "incoming write request page status is Page =
-Miss",
-> +        "Counter": "0,1,2,3,4",
-> +        "CounterType": "PGMABLE",
-> +        "EventCode": "0x21",
-> +        "EventName": "UNC_M_DRAM_PAGE_MISS_WR",
-> +        "PerPkg": "1",
-> +        "Unit": "iMC"
-> +    },
-> +    {
-> +        "BriefDescription": "Read CAS command sent to DRAM",
-> +        "Counter": "0,1,2,3,4",
-> +        "CounterType": "PGMABLE",
-> +        "EventCode": "0x22",
-> +        "EventName": "UNC_M_CAS_COUNT_RD",
-> +        "PerPkg": "1",
-> +        "Unit": "iMC"
-> +    },
-> +    {
-> +        "BriefDescription": "Write CAS command sent to DRAM",
-> +        "Counter": "0,1,2,3,4",
-> +        "CounterType": "PGMABLE",
-> +        "EventCode": "0x23",
-> +        "EventName": "UNC_M_CAS_COUNT_WR",
-> +        "PerPkg": "1",
-> +        "Unit": "iMC"
-> +    },
-> +    {
-> +        "BriefDescription": "ACT command for a read request sent to DRAM=
-",
-> +        "Counter": "0,1,2,3,4",
-> +        "CounterType": "PGMABLE",
-> +        "EventCode": "0x24",
-> +        "EventName": "UNC_M_ACT_COUNT_RD",
-> +        "PerPkg": "1",
-> +        "Unit": "iMC"
-> +    },
-> +    {
-> +        "BriefDescription": "ACT command for a write request sent to DRA=
-M",
-> +        "Counter": "0,1,2,3,4",
-> +        "CounterType": "PGMABLE",
-> +        "EventCode": "0x25",
-> +        "EventName": "UNC_M_ACT_COUNT_WR",
-> +        "PerPkg": "1",
-> +        "Unit": "iMC"
-> +    },
-> +    {
-> +        "BriefDescription": "ACT command sent to DRAM",
-> +        "Counter": "0,1,2,3,4",
-> +        "CounterType": "PGMABLE",
-> +        "EventCode": "0x26",
-> +        "EventName": "UNC_M_ACT_COUNT_TOTAL",
-> +        "PerPkg": "1",
-> +        "Unit": "iMC"
-> +    },
-> +    {
-> +        "BriefDescription": "PRE command sent to DRAM for a read/write r=
-equest",
-> +        "Counter": "0,1,2,3,4",
-> +        "CounterType": "PGMABLE",
-> +        "EventCode": "0x27",
-> +        "EventName": "UNC_M_PRE_COUNT_PAGE_MISS",
-> +        "PerPkg": "1",
-> +        "Unit": "iMC"
-> +    },
-> +    {
-> +        "BriefDescription": "PRE command sent to DRAM due to page table =
-idle timer expiration",
-> +        "Counter": "0,1,2,3,4",
-> +        "CounterType": "PGMABLE",
-> +        "EventCode": "0x28",
-> +        "EventName": "UNC_M_PRE_COUNT_IDLE",
-> +        "PerPkg": "1",
-> +        "Unit": "iMC"
-> +    },
-> +    {
-> +        "BriefDescription": "Counts every 64B read  request entering the=
- Memory Controller 0 to DRAM (sum of all channels)",
-> +        "CounterType": "FREERUN",
-> +        "EventName": "UNC_MC0_RDCAS_COUNT_FREERUN",
-> +        "PerPkg": "1",
-> +        "Unit": "iMC"
-> +    },
-> +    {
-> +        "BriefDescription": "Counts every 64B read request entering the =
-Memory Controller 1 to DRAM (sum of all channels)",
-> +        "Counter": "3",
-> +        "CounterType": "FREERUN",
-> +        "EventName": "UNC_MC1_RDCAS_COUNT_FREERUN",
-> +        "PerPkg": "1",
-> +        "Unit": "iMC"
-> +    },
-> +    {
-> +        "BriefDescription": "Counts every 64B write request entering the=
- Memory Controller 0 to DRAM (sum of all channels). Each write request coun=
-ts as a new request incrementing this counter. However, same cache line wri=
-te requests (both full and partial) are combined to a single 64 byte data t=
-ransfer to DRAM",
-> +        "Counter": "1",
-> +        "CounterType": "FREERUN",
-> +        "EventName": "UNC_MC0_WRCAS_COUNT_FREERUN",
-> +        "PerPkg": "1",
-> +        "Unit": "iMC"
-> +    },
-> +    {
-> +        "BriefDescription": "Counts every 64B write request entering the=
- Memory Controller 1 to DRAM (sum of all channels). Each write request coun=
-ts as a new request incrementing this counter. However, same cache line wri=
-te requests (both full and partial) are combined to a single 64 byte data t=
-ransfer to DRAM",
-> +        "Counter": "4",
-> +        "CounterType": "FREERUN",
-> +        "EventName": "UNC_MC1_WRCAS_COUNT_FREERUN",
-> +        "PerPkg": "1",
-> +        "Unit": "iMC"
-> +    }
-> +]
-> diff --git a/tools/perf/pmu-events/arch/x86/alderlake/uncore-other.json b=
-/tools/perf/pmu-events/arch/x86/alderlake/uncore-other.json
-> new file mode 100644
-> index 000000000000..50de82c29944
-> --- /dev/null
-> +++ b/tools/perf/pmu-events/arch/x86/alderlake/uncore-other.json
-> @@ -0,0 +1,40 @@
-> +[
-> +    {
-> +        "BriefDescription": "This 48-bit fixed counter counts the UCLK c=
-ycles",
-> +        "Counter": "Fixed",
-> +        "CounterType": "PGMABLE",
-> +       "EventCode": "0xff",
-> +        "EventName": "UNC_CLOCK.SOCKET",
-> +        "PerPkg": "1",
-> +        "Unit": "CLOCK"
-> +    },
-> +    {
-> +        "BriefDescription": "Counts the number of coherent and in-cohere=
-nt requests initiated by IA cores, processor graphic units, or LLC",
-> +        "Counter": "0,1",
-> +        "CounterType": "PGMABLE",
-> +        "EventCode": "0x81",
-> +        "EventName": "UNC_ARB_TRK_REQUESTS.ALL",
-> +        "PerPkg": "1",
-> +        "UMask": "0x01",
-> +        "Unit": "ARB"
-> +    },
-> +    {
-> +        "BriefDescription": "Number of requests allocated in Coherency T=
-racker",
-> +        "Counter": "0,1",
-> +        "CounterType": "PGMABLE",
-> +        "EventCode": "0x84",
-> +        "EventName": "UNC_ARB_COH_TRK_REQUESTS.ALL",
-> +        "PerPkg": "1",
-> +        "UMask": "0x01",
-> +        "Unit": "ARB"
-> +    },
-> +    {
-> +        "BriefDescription": "Each cycle counts number of all outgoing va=
-lid entries in ReqTrk. Such entry is defined as valid from its allocation i=
-n ReqTrk till deallocation. Accounts for Coherent and non-coherent traffic"=
-,
-> +        "CounterType": "PGMABLE",
-> +        "EventCode": "0x80",
-> +        "EventName": "UNC_ARB_TRK_OCCUPANCY.ALL",
-> +        "PerPkg": "1",
-> +        "UMask": "0x01",
-> +        "Unit": "ARB"
-> +    }
-> +]
-> --
-> 2.25.1
->
+>  arch/x86/kvm/x86.c | 32 +++++++++++++-------------------
+>  1 file changed, 13 insertions(+), 19 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> index 6aefd7ac7039..f10878aa5b20 100644
+> --- a/arch/x86/kvm/x86.c
+> +++ b/arch/x86/kvm/x86.c
+> @@ -10730,7 +10730,7 @@ static bool kvm_is_valid_sregs(struct kvm_vcpu *vcpu, struct kvm_sregs *sregs)
+>  }
+>  
+>  static int __set_sregs_common(struct kvm_vcpu *vcpu, struct kvm_sregs *sregs,
+> -		int *mmu_reset_needed, bool update_pdptrs)
+> +			      int update_pdptrs)
+>  {
+>  	struct msr_data apic_base_msr;
+>  	int idx;
+> @@ -10755,29 +10755,31 @@ static int __set_sregs_common(struct kvm_vcpu *vcpu, struct kvm_sregs *sregs,
+>  	static_call(kvm_x86_set_gdt)(vcpu, &dt);
+>  
+>  	vcpu->arch.cr2 = sregs->cr2;
+> -	*mmu_reset_needed |= kvm_read_cr3(vcpu) != sregs->cr3;
+> +
+> +	if (vcpu->arch.efer != sregs->efer ||
+> +	    kvm_read_cr0(vcpu) != sregs->cr0 ||
+> +	    vcpu->arch.cr3 != sregs->cr3 || !update_pdptrs ||
+> +	    kvm_read_cr4(vcpu) != sregs->cr4)
+> +		kvm_mmu_unload(vcpu);
+
+Should it be (update_pdptrs && is_pae_paging(vcpu)) instead?
+
+> +
+>  	vcpu->arch.cr3 = sregs->cr3;
+>  	kvm_register_mark_dirty(vcpu, VCPU_EXREG_CR3);
+>  	static_call_cond(kvm_x86_post_set_cr3)(vcpu, sregs->cr3);
+>  
+>  	kvm_set_cr8(vcpu, sregs->cr8);
+>  
+> -	*mmu_reset_needed |= vcpu->arch.efer != sregs->efer;
+>  	static_call(kvm_x86_set_efer)(vcpu, sregs->efer);
+>  
+> -	*mmu_reset_needed |= kvm_read_cr0(vcpu) != sregs->cr0;
+>  	static_call(kvm_x86_set_cr0)(vcpu, sregs->cr0);
+>  	vcpu->arch.cr0 = sregs->cr0;
+>  
+> -	*mmu_reset_needed |= kvm_read_cr4(vcpu) != sregs->cr4;
+>  	static_call(kvm_x86_set_cr4)(vcpu, sregs->cr4);
+>  
+> +	kvm_init_mmu(vcpu);
+>  	if (update_pdptrs) {
+>  		idx = srcu_read_lock(&vcpu->kvm->srcu);
+> -		if (is_pae_paging(vcpu)) {
+> +		if (is_pae_paging(vcpu))
+>  			load_pdptrs(vcpu, kvm_read_cr3(vcpu));
+> -			*mmu_reset_needed = 1;
+> -		}
+>  		srcu_read_unlock(&vcpu->kvm->srcu, idx);
+>  	}
+>  
+> @@ -10805,15 +10807,11 @@ static int __set_sregs_common(struct kvm_vcpu *vcpu, struct kvm_sregs *sregs,
+>  static int __set_sregs(struct kvm_vcpu *vcpu, struct kvm_sregs *sregs)
+>  {
+>  	int pending_vec, max_bits;
+> -	int mmu_reset_needed = 0;
+> -	int ret = __set_sregs_common(vcpu, sregs, &mmu_reset_needed, true);
+> +	int ret = __set_sregs_common(vcpu, sregs, true);
+>  
+>  	if (ret)
+>  		return ret;
+>  
+> -	if (mmu_reset_needed)
+> -		kvm_mmu_reset_context(vcpu);
+> -
+>  	max_bits = KVM_NR_INTERRUPTS;
+>  	pending_vec = find_first_bit(
+>  		(const unsigned long *)sregs->interrupt_bitmap, max_bits);
+> @@ -10828,7 +10826,6 @@ static int __set_sregs(struct kvm_vcpu *vcpu, struct kvm_sregs *sregs)
+>  
+>  static int __set_sregs2(struct kvm_vcpu *vcpu, struct kvm_sregs2 *sregs2)
+>  {
+> -	int mmu_reset_needed = 0;
+>  	bool valid_pdptrs = sregs2->flags & KVM_SREGS2_FLAGS_PDPTRS_VALID;
+>  	bool pae = (sregs2->cr0 & X86_CR0_PG) && (sregs2->cr4 & X86_CR4_PAE) &&
+>  		!(sregs2->efer & EFER_LMA);
+> @@ -10840,8 +10837,7 @@ static int __set_sregs2(struct kvm_vcpu *vcpu, struct kvm_sregs2 *sregs2)
+>  	if (valid_pdptrs && (!pae || vcpu->arch.guest_state_protected))
+>  		return -EINVAL;
+>  
+> -	ret = __set_sregs_common(vcpu, (struct kvm_sregs *)sregs2,
+> -				 &mmu_reset_needed, !valid_pdptrs);
+> +	ret = __set_sregs_common(vcpu, (struct kvm_sregs *)sregs2, !valid_pdptrs);
+>  	if (ret)
+>  		return ret;
+>  
+> @@ -10850,11 +10846,9 @@ static int __set_sregs2(struct kvm_vcpu *vcpu, struct kvm_sregs2 *sregs2)
+>  			kvm_pdptr_write(vcpu, i, sregs2->pdptrs[i]);
+>  
+>  		kvm_register_mark_dirty(vcpu, VCPU_EXREG_PDPTR);
+> -		mmu_reset_needed = 1;
+>  		vcpu->arch.pdptrs_from_userspace = true;
+> +		/* kvm_mmu_reload will be called on the next entry.  */
+Could you elaborate on this? 
+
+In theory if set_sregs2 only changed the pdptrs, without changing anything else
+which won't really happen in practice but can in theory, then there will
+be no mmu reset with new code IMHO.
+
+Best regards,
+	Maxim Levitsky
+
+
+>  	}
+> -	if (mmu_reset_needed)
+> -		kvm_mmu_reset_context(vcpu);
+>  	return 0;
+>  }
+>  
+
+

@@ -2,154 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91BA84C1DC2
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 22:31:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 863074C1DC4
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 22:33:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242693AbiBWVcR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 16:32:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60314 "EHLO
+        id S242724AbiBWVdf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 16:33:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234865AbiBWVcO (ORCPT
+        with ESMTP id S234865AbiBWVde (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 16:32:14 -0500
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 369E03CA49
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 13:31:45 -0800 (PST)
-Received: by mail-ej1-x62a.google.com with SMTP id hw13so124396ejc.9
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 13:31:45 -0800 (PST)
+        Wed, 23 Feb 2022 16:33:34 -0500
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B14DD4EA38
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 13:33:05 -0800 (PST)
+Received: by mail-pf1-x432.google.com with SMTP id w2so60275pfu.11
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 13:33:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Z4ZVkt8qZMy2gYEg/eldrrEE9UadTptB/fCse20u77k=;
-        b=uH3iTz2QGOOXGOs7gP4GUWmAmCSbm7JwqXRf/KvtFUe2MV934uQIEoIMfozDrL5ffI
-         trMtsQ83jy0lfEhG5pRbtwCDZ9MRFRvNXLlAx8KIx7JlIU0C4uSOG2+dfonx4pBCMZc5
-         lCttbFooWLazs/0fKKgsXUpOI2xQxA6W88Zyb/Vlu1KxU+IXRnQtmiE1gk4negHvoB//
-         CLuSgzLmqazAqFFZnawz8ktkav2/oByCKPSNbfqx6/W5e3Lkmg+5Z0w/Hs9akdqYS5OW
-         SGNTWMWIQzdkDoiX3xmdCm2Vc/yiUYSRWYfP6I7nYvtSi5AsYULM0LBXA/yKyVubEDjQ
-         zZ+g==
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=o3F1fn31BsVyEav46oaUSfeJlWihbw10OJWGV7VLc8U=;
+        b=Y5gZkMi28r+WxhsjdUErs+zaiyQY+lpdC416gS3r7rWZh+GS+Tc3hfcEYsDarkkcd7
+         +x4LZlo0yMfHyH8DyfT4vEktSAfM9jQ5dbGJuc62BpXncxkjklGer/BjCEXLIT48of5h
+         Gf0xQYYw4+jIf9hZ6hlkFkXb7QX1jihmXZ7qQFnNZH8BhRnYBmZp9uoUkOZOL7BjqoJI
+         Y8v9W5TRKIAEInSiS37QxaSmaIREHcnCmAOAcza8nYqZWbQ2dSiWPEEc7hQpiRpV6MKn
+         rJEsGD/tHUzJ4Whxpe9gbNzCxFj9kWf7dS7hPywrXSuSZgX+S5od38Dr6R3oOARe2CiJ
+         /lQA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Z4ZVkt8qZMy2gYEg/eldrrEE9UadTptB/fCse20u77k=;
-        b=A5miXaqjPmoqG6LdEXZddRk18FGp7xyjDYRJMoxmMLFBTTbceUiCmmVjw0Pi3PupAr
-         aFdtsgVe3wg05wH6ViCvHtPtk2Zm1K8/q+P0ijI9NTLiErbnXxpts6pC1dcH2HcBN0V/
-         J3wgxG/6nmZK73DqM3dWkyjcQ1vL5drit+/t4EXpGMlREykCIetZpUDvulL3663Jr6ub
-         n9sf+Eq8MR2LfhpMNFoHANIu4jP/MNw1/2rCv1PcZ09Ohh80P5bzoDbCLf4Ag2eZz8jX
-         CYll1UBthYWUw2Y2Xz7uaji0a8BJs8micgMIFoF+JfSySAwErVvyOKnhwMMBGrykAN/E
-         P8QQ==
-X-Gm-Message-State: AOAM5312UMkIOFxmaJ2ltFM7pGPWXNsFMrtp/qjmT7szvpxT6tqTrUFe
-        HEw8uQHbOuHp+Q5COk1Q8tL7JJjA2Cu9e4AJhC6UwQ==
-X-Google-Smtp-Source: ABdhPJwGY42pBBzmTXzQxtK8kQ3OvjcZRZjenfG79d42ZtNsrmQbmI2eEfrJx7GQiFK4Ji4rSTRHC8jqjQ1/5CRtQ3s=
-X-Received: by 2002:a17:906:1393:b0:6ba:dfb1:4435 with SMTP id
- f19-20020a170906139300b006badfb14435mr1282305ejc.736.1645651903755; Wed, 23
- Feb 2022 13:31:43 -0800 (PST)
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=o3F1fn31BsVyEav46oaUSfeJlWihbw10OJWGV7VLc8U=;
+        b=qJ1GkGDJwlcjlK5LzF98xogvBWVE/gDHJ5opTeN1MlbOXz9Nr6TblAz5I5KI6SUXBp
+         +IjAAaiAjHKKbS9BEtE2IZdYBKluMv2iJv8lCmayg+vQBhQgFTTDfm3QtATIu0/O5RmI
+         w4KN+sAcyuvCGAXgTZ27c5AzLTRYV7npS0p1nrL+NuQ/Ec2r9qx5L7IqgVvAS2nu+65H
+         rR89qf5T7bzWdKvXlbKzBGhMNN5ZRQzd8tlpiJtUVA5DV/qk0uBO7T6JE/nCadjO/J1c
+         VsbcRTiJ/ySKjOvLUuBv4YrAXuFWzCWFgzb4UkPrQZCho+cqQ//PPVb8WvHfXv9KpOW7
+         2Ryg==
+X-Gm-Message-State: AOAM533eZ9V1QGq0ndz3Yt5Kj9aT9NwRj6IS3zOmgI0ZQvcZKol5Z21g
+        IIHpUGn12Re6K958PzH7p5Y=
+X-Google-Smtp-Source: ABdhPJwEWpLr6owhhXHbZ5+BXl6m1lrcLKoiFIxv7I/dw0nZ8g+PXykCsyswaE+PXKND4KUrAPhi9A==
+X-Received: by 2002:a63:cf4c:0:b0:34d:5dd8:c489 with SMTP id b12-20020a63cf4c000000b0034d5dd8c489mr1271355pgj.10.1645651984813;
+        Wed, 23 Feb 2022 13:33:04 -0800 (PST)
+Received: from localhost (2603-800c-1a02-1bae-e24f-43ff-fee6-449f.res6.spectrum.com. [2603:800c:1a02:1bae:e24f:43ff:fee6:449f])
+        by smtp.gmail.com with ESMTPSA id f18sm468209pfc.110.2022.02.23.13.33.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Feb 2022 13:33:04 -0800 (PST)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Wed, 23 Feb 2022 11:33:02 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+Cc:     0day robot <lkp@intel.com>, LKML <linux-kernel@vger.kernel.org>,
+        lkp@lists.01.org, kernel test robot <oliver.sang@intel.com>
+Subject: Re: [PATCH] workqueue: Use private WQ for schedule_on_each_cpu() API
+Message-ID: <YhaoDiJ8MUOhRmp6@slm.duckdns.org>
+References: <20220221083358.GC835@xsang-OptiPlex-9020>
+ <3a20c799-c18e-dd3a-3161-fee6bca1491e@I-love.SAKURA.ne.jp>
+ <YhUdjip4VSWe4zDO@slm.duckdns.org>
+ <16a33a65-3c67-ef66-ccc8-9c4fffb0ae5a@I-love.SAKURA.ne.jp>
 MIME-Version: 1.0
-References: <20220216202655.194795-1-shreeya.patel@collabora.com>
-In-Reply-To: <20220216202655.194795-1-shreeya.patel@collabora.com>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Wed, 23 Feb 2022 22:31:33 +0100
-Message-ID: <CAMRc=MckPeT01V-iqXSk-eO4CYFD6aRP1yOaQXGUri5o2=tqZQ@mail.gmail.com>
-Subject: Re: [PATCH v5] gpio: Return EPROBE_DEFER if gc->to_irq is NULL
-To:     Shreeya Patel <shreeya.patel@collabora.com>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Gabriel Krisman Bertazi <krisman@collabora.com>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        kernel@collabora.com, Andy Shevchenko <andy.shevchenko@gmail.com>,
-        kernel test robot <lkp@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <16a33a65-3c67-ef66-ccc8-9c4fffb0ae5a@I-love.SAKURA.ne.jp>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 16, 2022 at 9:27 PM Shreeya Patel
-<shreeya.patel@collabora.com> wrote:
->
-> We are racing the registering of .to_irq when probing the
-> i2c driver. This results in random failure of touchscreen
-> devices.
->
-> Following explains the race condition better.
->
-> [gpio driver] gpio driver registers gpio chip
-> [gpio consumer] gpio is acquired
-> [gpio consumer] gpiod_to_irq() fails with -ENXIO
-> [gpio driver] gpio driver registers irqchip
-> gpiod_to_irq works at this point, but -ENXIO is fatal
->
-> We could see the following errors in dmesg logs when gc->to_irq is NULL
->
-> [2.101857] i2c_hid i2c-FTS3528:00: HID over i2c has not been provided an Int IRQ
-> [2.101953] i2c_hid: probe of i2c-FTS3528:00 failed with error -22
->
-> To avoid this situation, defer probing until to_irq is registered.
-> Returning -EPROBE_DEFER would be the first step towards avoiding
-> the failure of devices due to the race in registration of .to_irq.
-> Final solution to this issue would be to avoid using gc irq members
-> until they are fully initialized.
->
-> This issue has been reported many times in past and people have been
-> using workarounds like changing the pinctrl_amd to built-in instead
-> of loading it as a module or by adding a softdep for pinctrl_amd into
-> the config file.
->
-> BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=209413
-> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-> Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: Shreeya Patel <shreeya.patel@collabora.com>
->
-> ---
-> Changes in v5
->   - Improve explanation in commit message and sending it to the correct
-> email address.
->
-> Changes in v4
->   - Remove blank line and make the first letter of the sentence
-> capital.
->
-> Changes in v3
->   - Fix the error reported by kernel test robot.
->
-> Changes in v2
->   - Add a condition to check for irq chip to avoid bogus error.
-> ---
->  drivers/gpio/gpiolib.c | 10 ++++++++++
->  1 file changed, 10 insertions(+)
->
-> diff --git a/drivers/gpio/gpiolib.c b/drivers/gpio/gpiolib.c
-> index 3859911b61e9..a3d14277f17c 100644
-> --- a/drivers/gpio/gpiolib.c
-> +++ b/drivers/gpio/gpiolib.c
-> @@ -3147,6 +3147,16 @@ int gpiod_to_irq(const struct gpio_desc *desc)
->
->                 return retirq;
->         }
-> +#ifdef CONFIG_GPIOLIB_IRQCHIP
-> +       if (gc->irq.chip) {
-> +               /*
-> +                * Avoid race condition with other code, which tries to lookup
-> +                * an IRQ before the irqchip has been properly registered,
-> +                * i.e. while gpiochip is still being brought up.
-> +                */
-> +               return -EPROBE_DEFER;
-> +       }
-> +#endif
->         return -ENXIO;
->  }
->  EXPORT_SYMBOL_GPL(gpiod_to_irq);
-> --
-> 2.30.2
->
+On Wed, Feb 23, 2022 at 09:57:27AM +0900, Tetsuo Handa wrote:
+> On 2022/02/23 2:29, Tejun Heo wrote:
+> > On Mon, Feb 21, 2022 at 07:38:09PM +0900, Tetsuo Handa wrote:
+> >> Since schedule_on_each_cpu() calls schedule_work_on() and flush_work(),
+> >> we should avoid using system_wq in order to avoid unexpected locking
+> >> dependency.
+> > 
+> > I don't get it. schedule_on_each_cpu() is flushing each work item and thus
+> > shouldn't need its own flushing domain. What's this change for?
+> 
+> A kernel test robot tested "[PATCH v2] workqueue: Warn flush attempt using
+> system-wide workqueues" on 5.16.0-06523-g29bd199e4e73 and hit a lockdep
+> warning ( https://lkml.kernel.org/r/20220221083358.GC835@xsang-OptiPlex-9020 ).
+> 
+> Although the circular locking dependency itself needs to be handled by
+> lockless console printing support, we won't be able to apply
+> "[PATCH v2] workqueue: Warn flush attempt using system-wide workqueues"
+> if schedule_on_each_cpu() continues using system-wide workqueues.
 
-Queued for fixes, thanks!
+The patch seems pretty wrong. What's problematic is system workqueue flushes
+(which flushes the entire workqueue), not work item flushes.
 
-Bart
+Thanks.
+
+-- 
+tejun

@@ -2,173 +2,227 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 237634C0A27
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 04:22:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AD294C0A28
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 04:22:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237653AbiBWDWl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 22:22:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42116 "EHLO
+        id S237786AbiBWDWt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 22:22:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230118AbiBWDWi (ORCPT
+        with ESMTP id S237736AbiBWDWq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 22:22:38 -0500
-Received: from new3-smtp.messagingengine.com (new3-smtp.messagingengine.com [66.111.4.229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF8F331232;
-        Tue, 22 Feb 2022 19:22:10 -0800 (PST)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 3A5565801C5;
-        Tue, 22 Feb 2022 22:22:10 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute3.internal (MEProxy); Tue, 22 Feb 2022 22:22:10 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
-        cc:cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; bh=IkQN2es09BGyMo
-        mk4XSaidbsdDwmtXzWNdN/EUwe0wI=; b=DHVMG4Y3sJhtwmXC+v2SFFiu3PzNvJ
-        euyD5W2HAowEb/+qfpvaL3R2mUE5fcJlKQ4h9E4lPaBqJRt9/VL7EGtI938AP1D3
-        D0zMWN/9Fo6GgV2nR6a7vLxyJl/9rXuzVf/5TSFRkdacbUcxNlAKS1Ejd78gKEsL
-        IwLFioOPZo3c3hLvvRG+FDFnhZNMUFlCLhewUT1RTBHg/GyLNifkbIDEEzPubsRs
-        /2FmcRGjtOOyhGIhtRDPbf1ARjBiKESY5m6GeI+Kh+pXmF7jlzyVpbGq4JB5dcFd
-        7onx0+N9ztWH2U+HG69b8bQlPwE7VLTnvQJYRvAWNEWfUKVyzRnOehHA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; bh=IkQN2es09BGyMomk4XSaidbsdDwmtXzWNdN/EUwe0
-        wI=; b=STeopoSb06swZtR1gNJjMp15wrHyXSdTSQqHjxiDaQGdCiPX86bvasLBY
-        egLbZ6wAZ7sCKRNtQzyUbcO6hdtL+dR2uzhA4Au01zTr9ijldOhJV+TqwcO4x2bW
-        Vu0ujjHARsv7oKFoJ7/aQ0d+ZlXIZApbXWA7T+Uxf4qrmbCWbhak2F0Ybgo9XnZ3
-        +VnxZ34K/OmKcqlSmrRrOn/Ph3VY5OEWHkFw4L3uPJ3zXpPi/xAVkPqbOxLyBqga
-        KNmOKZSHf3r8kjdth0uSL0RyeOTgLKGGd7k2DC+GYM5XjMWlyy75NhCs5YlXiXOx
-        a42g1v7Js+aJdOdd6Oy3rsfYLFB5A==
-X-ME-Sender: <xms:YagVYiccQBzetdE6Yr9ysKYe-EaBJO9TNRfbcRrGCFY8PlrerVEPRg>
-    <xme:YagVYsMiga44LamZsGtqfIoY4E00FN-X5QrN8ik1Jk5QcsczqSJkLsih_OUcanSzB
-    4jtKhmrhrGX-s8kow>
-X-ME-Received: <xmr:YagVYjhXW28uqNfRYuxJKPIY2wVzkPsnTc-HtD6qmHii5DLwOOH93NIhv-4FqLOzU8omZgA50FfsGWi05baWhRnHTZBCCm3XwKmFdA4MW9vA3qn5w58so7BkSQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrkeelgdehjecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefuvfhfhffkffgfgggjtgfgsehtjeertddtfeejnecuhfhrohhmpefurghmuhgv
-    lhcujfholhhlrghnugcuoehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgqeenucggtf
-    frrghtthgvrhhnpefgveffteelheffjeeukedvkedviedtheevgeefkeehueeiieeuteeu
-    gfettdeggeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
-    hmpehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhg
-X-ME-Proxy: <xmx:YagVYv_ew7ZaINbHJaeC-C5Txqjp35SMFltfTexnNavnwz6CKHBn0Q>
-    <xmx:YagVYuvQFr0yEZDsTWvjOvgHQ_Kb_QjsV6IBZGWPN4Ko7fgErGWMKA>
-    <xmx:YagVYmGy9OXFHczyvOCL4jNVvv3FdbuX6Pz4TorS2ZVayq-IMmC5Rg>
-    <xmx:YqgVYmEfEL8miVxhdqZLNdhbUHosKGrn047kgLeVsugd7HX4xQb0Aw>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 22 Feb 2022 22:22:08 -0500 (EST)
-Subject: Re: [PATCH v10 01/18] clk: sunxi-ng: h616-r: Add RTC gate clock
-To:     Andre Przywara <andre.przywara@arm.com>
-Cc:     Maxime Ripard <mripard@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Rob Herring <robh@kernel.org>,
-        Ondrej Jirman <megous@megous.com>,
-        Icenowy Zheng <icenowy@aosc.io>,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org
-References: <20220211122643.1343315-1-andre.przywara@arm.com>
- <20220211122643.1343315-2-andre.przywara@arm.com>
-From:   Samuel Holland <samuel@sholland.org>
-Message-ID: <01e8d2a0-cdeb-ab64-42a7-48376b49c00e@sholland.org>
-Date:   Tue, 22 Feb 2022 21:22:07 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.6.0
-MIME-Version: 1.0
-In-Reply-To: <20220211122643.1343315-2-andre.przywara@arm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+        Tue, 22 Feb 2022 22:22:46 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9586F31352;
+        Tue, 22 Feb 2022 19:22:19 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4D2DBB81E34;
+        Wed, 23 Feb 2022 03:22:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B888C340E8;
+        Wed, 23 Feb 2022 03:22:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645586537;
+        bh=lg6yqO7Dr/3RAU+AMRY7QoG1UsSGE09TyZ94UM1qbQQ=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=gCo9uwVLP4d1JlkpHfuMRUUH+KKwB1Clv7DYGri21erCtgjkh4WNX4vJKUu9nuFUC
+         cZP3P9Og6LPCevG07qnGgH249bdUjqhQOvYzqse9k9emzI42iVwwW5K3x+uZJ1i6E2
+         MxBzA5N1n3liFCEK5B1/4q90ADLfNa59lH+YChtKwfpLU8EUnQbT1G0C91EeQ35qWr
+         hDZTE1/Sdn8Eh2uDKTqB0Ypu06EUeKrWIogEz6eUQFRaIvqgqgcJcEm2yOn07j1mDw
+         J/JU3DjF7bTjDpugAiv8Ztj11rc3bkH62i/J3aLY50ZJhbdQs3NlDwmYIPNw7ikWqd
+         QnNMmZE5K39tw==
+Date:   Wed, 23 Feb 2022 12:22:11 +0900
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     Jiri Olsa <jolsa@kernel.org>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        lkml <linux-kernel@vger.kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>
+Subject: Re: [PATCH 01/10] lib/sort: Add priv pointer to swap function
+Message-Id: <20220223122211.f1cf0bf0d019d79322c19957@kernel.org>
+In-Reply-To: <20220222170600.611515-2-jolsa@kernel.org>
+References: <20220222170600.611515-1-jolsa@kernel.org>
+        <20220222170600.611515-2-jolsa@kernel.org>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/11/22 6:26 AM, Andre Przywara wrote:
-> The H616 features an (undocumented) bus clock gate for accessing the RTC
-> registers. This seems to be enabled at reset (or by the BootROM), but is
-> there anyway.
-> Since the new RTC clock binding for the H616 requires this "bus" clock
-> to be specified in the DT, add this to R_CCU clock driver and expose it
-> on the DT side with a new number.
+On Tue, 22 Feb 2022 18:05:51 +0100
+Jiri Olsa <jolsa@kernel.org> wrote:
 
-It would be good to note why you didn't add this clock to H6, even though it
-exists in that hardware.
+> Adding support to have priv pointer in swap callback function.
+> 
+> Following the initial change on cmp callback functions [1]
+> and adding SWAP_WRAPPER macro to identify sort call of sort_r.
+> 
 
-> Signed-off-by: Andre Przywara <andre.przywara@arm.com>
+This looks good to me.
+
+Reviewed-by: Masami Hiramatsu <mhiramat@kernel.org>
+
+Thank you,
+
+> Cc: Rasmus Villemoes <linux@rasmusvillemoes.dk>
+> [1] 4333fb96ca10 ("media: lib/sort.c: implement sort() variant taking context argument")
+> Signed-off-by: Jiri Olsa <jolsa@kernel.org>
 > ---
->  drivers/clk/sunxi-ng/ccu-sun50i-h6-r.c      | 4 ++++
->  drivers/clk/sunxi-ng/ccu-sun50i-h6-r.h      | 2 +-
->  include/dt-bindings/clock/sun50i-h6-r-ccu.h | 1 +
->  3 files changed, 6 insertions(+), 1 deletion(-)
+>  include/linux/sort.h  |  2 +-
+>  include/linux/types.h |  1 +
+>  lib/sort.c            | 40 ++++++++++++++++++++++++++++++----------
+>  3 files changed, 32 insertions(+), 11 deletions(-)
 > 
-> diff --git a/drivers/clk/sunxi-ng/ccu-sun50i-h6-r.c b/drivers/clk/sunxi-ng/ccu-sun50i-h6-r.c
-> index 712e103382d8..26fb092f6df6 100644
-> --- a/drivers/clk/sunxi-ng/ccu-sun50i-h6-r.c
-> +++ b/drivers/clk/sunxi-ng/ccu-sun50i-h6-r.c
-> @@ -98,6 +98,8 @@ static SUNXI_CCU_GATE(r_apb1_ir_clk,	"r-apb1-ir",	"r-apb1",
->  		      0x1cc, BIT(0), 0);
->  static SUNXI_CCU_GATE(r_apb1_w1_clk,	"r-apb1-w1",	"r-apb1",
->  		      0x1ec, BIT(0), 0);
-> +static SUNXI_CCU_GATE(r_apb1_rtc_clk,	"r-apb1-rtc",	"r-apb1",
-> +		      0x20c, BIT(0), 0);
-
-All of the documentation I have found (manuals, A100 driver, BSP D1 driver)
-points to this clock coming off of R_AHB, not R_APB1.
-
-Regards,
-Samuel
-
+> diff --git a/include/linux/sort.h b/include/linux/sort.h
+> index b5898725fe9d..e163287ac6c1 100644
+> --- a/include/linux/sort.h
+> +++ b/include/linux/sort.h
+> @@ -6,7 +6,7 @@
 >  
->  /* Information of IR(RX) mod clock is gathered from BSP source code */
->  static const char * const r_mod0_default_parents[] = { "osc32k", "osc24M" };
-> @@ -147,6 +149,7 @@ static struct ccu_common *sun50i_h616_r_ccu_clks[] = {
->  	&r_apb2_i2c_clk.common,
->  	&r_apb2_rsb_clk.common,
->  	&r_apb1_ir_clk.common,
-> +	&r_apb1_rtc_clk.common,
->  	&ir_clk.common,
->  };
+>  void sort_r(void *base, size_t num, size_t size,
+>  	    cmp_r_func_t cmp_func,
+> -	    swap_func_t swap_func,
+> +	    swap_r_func_t swap_func,
+>  	    const void *priv);
 >  
-> @@ -179,6 +182,7 @@ static struct clk_hw_onecell_data sun50i_h616_r_hw_clks = {
->  		[CLK_R_APB2_I2C]	= &r_apb2_i2c_clk.common.hw,
->  		[CLK_R_APB2_RSB]	= &r_apb2_rsb_clk.common.hw,
->  		[CLK_R_APB1_IR]		= &r_apb1_ir_clk.common.hw,
-> +		[CLK_R_APB1_RTC]	= &r_apb1_rtc_clk.common.hw,
->  		[CLK_IR]		= &ir_clk.common.hw,
->  	},
->  	.num	= CLK_NUMBER,
-> diff --git a/drivers/clk/sunxi-ng/ccu-sun50i-h6-r.h b/drivers/clk/sunxi-ng/ccu-sun50i-h6-r.h
-> index 7e290b840803..10e9b66afc6a 100644
-> --- a/drivers/clk/sunxi-ng/ccu-sun50i-h6-r.h
-> +++ b/drivers/clk/sunxi-ng/ccu-sun50i-h6-r.h
-> @@ -14,6 +14,6 @@
+>  void sort(void *base, size_t num, size_t size,
+> diff --git a/include/linux/types.h b/include/linux/types.h
+> index ac825ad90e44..ea8cf60a8a79 100644
+> --- a/include/linux/types.h
+> +++ b/include/linux/types.h
+> @@ -226,6 +226,7 @@ struct callback_head {
+>  typedef void (*rcu_callback_t)(struct rcu_head *head);
+>  typedef void (*call_rcu_func_t)(struct rcu_head *head, rcu_callback_t func);
 >  
->  #define CLK_R_APB2	3
+> +typedef void (*swap_r_func_t)(void *a, void *b, int size, const void *priv);
+>  typedef void (*swap_func_t)(void *a, void *b, int size);
 >  
-> -#define CLK_NUMBER	(CLK_R_APB2_RSB + 1)
-> +#define CLK_NUMBER	(CLK_R_APB1_RTC + 1)
+>  typedef int (*cmp_r_func_t)(const void *a, const void *b, const void *priv);
+> diff --git a/lib/sort.c b/lib/sort.c
+> index aa18153864d2..b399bf10d675 100644
+> --- a/lib/sort.c
+> +++ b/lib/sort.c
+> @@ -122,16 +122,27 @@ static void swap_bytes(void *a, void *b, size_t n)
+>   * a pointer, but small integers make for the smallest compare
+>   * instructions.
+>   */
+> -#define SWAP_WORDS_64 (swap_func_t)0
+> -#define SWAP_WORDS_32 (swap_func_t)1
+> -#define SWAP_BYTES    (swap_func_t)2
+> +#define SWAP_WORDS_64 (swap_r_func_t)0
+> +#define SWAP_WORDS_32 (swap_r_func_t)1
+> +#define SWAP_BYTES    (swap_r_func_t)2
+> +#define SWAP_WRAPPER  (swap_r_func_t)3
+> +
+> +struct wrapper {
+> +	cmp_func_t cmp;
+> +	swap_func_t swap;
+> +};
 >  
->  #endif /* _CCU_SUN50I_H6_R_H */
-> diff --git a/include/dt-bindings/clock/sun50i-h6-r-ccu.h b/include/dt-bindings/clock/sun50i-h6-r-ccu.h
-> index 890368d252c4..a96087abc86f 100644
-> --- a/include/dt-bindings/clock/sun50i-h6-r-ccu.h
-> +++ b/include/dt-bindings/clock/sun50i-h6-r-ccu.h
-> @@ -22,5 +22,6 @@
->  #define CLK_W1			12
+>  /*
+>   * The function pointer is last to make tail calls most efficient if the
+>   * compiler decides not to inline this function.
+>   */
+> -static void do_swap(void *a, void *b, size_t size, swap_func_t swap_func)
+> +static void do_swap(void *a, void *b, size_t size, swap_r_func_t swap_func, const void *priv)
+>  {
+> +	if (swap_func == SWAP_WRAPPER) {
+> +		((const struct wrapper *)priv)->swap(a, b, (int)size);
+> +		return;
+> +	}
+> +
+>  	if (swap_func == SWAP_WORDS_64)
+>  		swap_words_64(a, b, size);
+>  	else if (swap_func == SWAP_WORDS_32)
+> @@ -139,7 +150,7 @@ static void do_swap(void *a, void *b, size_t size, swap_func_t swap_func)
+>  	else if (swap_func == SWAP_BYTES)
+>  		swap_bytes(a, b, size);
+>  	else
+> -		swap_func(a, b, (int)size);
+> +		swap_func(a, b, (int)size, priv);
+>  }
 >  
->  #define CLK_R_APB2_RSB		13
-> +#define CLK_R_APB1_RTC		14
+>  #define _CMP_WRAPPER ((cmp_r_func_t)0L)
+> @@ -147,7 +158,7 @@ static void do_swap(void *a, void *b, size_t size, swap_func_t swap_func)
+>  static int do_cmp(const void *a, const void *b, cmp_r_func_t cmp, const void *priv)
+>  {
+>  	if (cmp == _CMP_WRAPPER)
+> -		return ((cmp_func_t)(priv))(a, b);
+> +		return ((const struct wrapper *)priv)->cmp(a, b);
+>  	return cmp(a, b, priv);
+>  }
 >  
->  #endif /* _DT_BINDINGS_CLK_SUN50I_H6_R_CCU_H_ */
+> @@ -198,7 +209,7 @@ static size_t parent(size_t i, unsigned int lsbit, size_t size)
+>   */
+>  void sort_r(void *base, size_t num, size_t size,
+>  	    cmp_r_func_t cmp_func,
+> -	    swap_func_t swap_func,
+> +	    swap_r_func_t swap_func,
+>  	    const void *priv)
+>  {
+>  	/* pre-scale counters for performance */
+> @@ -208,6 +219,10 @@ void sort_r(void *base, size_t num, size_t size,
+>  	if (!a)		/* num < 2 || size == 0 */
+>  		return;
+>  
+> +	/* called from 'sort' without swap function, let's pick the default */
+> +	if (swap_func == SWAP_WRAPPER && !((struct wrapper *)priv)->swap)
+> +		swap_func = NULL;
+> +
+>  	if (!swap_func) {
+>  		if (is_aligned(base, size, 8))
+>  			swap_func = SWAP_WORDS_64;
+> @@ -230,7 +245,7 @@ void sort_r(void *base, size_t num, size_t size,
+>  		if (a)			/* Building heap: sift down --a */
+>  			a -= size;
+>  		else if (n -= size)	/* Sorting: Extract root to --n */
+> -			do_swap(base, base + n, size, swap_func);
+> +			do_swap(base, base + n, size, swap_func, priv);
+>  		else			/* Sort complete */
+>  			break;
+>  
+> @@ -257,7 +272,7 @@ void sort_r(void *base, size_t num, size_t size,
+>  		c = b;			/* Where "a" belongs */
+>  		while (b != a) {	/* Shift it into place */
+>  			b = parent(b, lsbit, size);
+> -			do_swap(base + b, base + c, size, swap_func);
+> +			do_swap(base + b, base + c, size, swap_func, priv);
+>  		}
+>  	}
+>  }
+> @@ -267,6 +282,11 @@ void sort(void *base, size_t num, size_t size,
+>  	  cmp_func_t cmp_func,
+>  	  swap_func_t swap_func)
+>  {
+> -	return sort_r(base, num, size, _CMP_WRAPPER, swap_func, cmp_func);
+> +	struct wrapper w = {
+> +		.cmp  = cmp_func,
+> +		.swap = swap_func,
+> +	};
+> +
+> +	return sort_r(base, num, size, _CMP_WRAPPER, SWAP_WRAPPER, &w);
+>  }
+>  EXPORT_SYMBOL(sort);
+> -- 
+> 2.35.1
 > 
 
+
+-- 
+Masami Hiramatsu <mhiramat@kernel.org>

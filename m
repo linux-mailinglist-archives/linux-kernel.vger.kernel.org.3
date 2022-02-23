@@ -2,38 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B1B24C0A50
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 04:33:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E71C4C0A4A
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 04:32:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237516AbiBWDdv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 22:33:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32994 "EHLO
+        id S237913AbiBWDcv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 22:32:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237922AbiBWDcw (ORCPT
+        with ESMTP id S231708AbiBWDct (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 22:32:52 -0500
+        Tue, 22 Feb 2022 22:32:49 -0500
 Received: from fornost.hmeau.com (helcar.hmeau.com [216.24.177.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C12F9527CF;
-        Tue, 22 Feb 2022 19:32:25 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06C584AE27;
+        Tue, 22 Feb 2022 19:32:22 -0800 (PST)
 Received: from gwarestrin.arnor.me.apana.org.au ([192.168.103.7])
         by fornost.hmeau.com with smtp (Exim 4.92 #5 (Debian))
-        id 1nMiNj-0006w0-0P; Wed, 23 Feb 2022 14:32:00 +1100
-Received: by gwarestrin.arnor.me.apana.org.au (sSMTP sendmail emulation); Wed, 23 Feb 2022 15:31:58 +1200
-Date:   Wed, 23 Feb 2022 15:31:58 +1200
+        id 1nMiNy-0006wK-Uo; Wed, 23 Feb 2022 14:32:16 +1100
+Received: by gwarestrin.arnor.me.apana.org.au (sSMTP sendmail emulation); Wed, 23 Feb 2022 15:32:14 +1200
+Date:   Wed, 23 Feb 2022 15:32:14 +1200
 From:   Herbert Xu <herbert@gondor.apana.org.au>
-To:     YueHaibing <yuehaibing@huawei.com>
-Cc:     davem@davemloft.net, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, colin.king@intel.com, linux-crypto@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH -next] crypto: x86/des3 - Remove unused inline function
- des3_ede_enc_blk_3way()
-Message-ID: <YhWqrmlpJzglvOns@gondor.apana.org.au>
-References: <20220216114521.20092-1-yuehaibing@huawei.com>
+To:     Gilad Ben-Yossef <gilad@benyossef.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Ofir Drang <ofir.drang@arm.com>,
+        Corentin Labbe <clabbe.montjoie@gmail.com>,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] crypto: ccree: don't attempt 0 len DMA mappings
+Message-ID: <YhWqvg47iQXWveOr@gondor.apana.org.au>
+References: <20220217192726.612328-1-gilad@benyossef.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220216114521.20092-1-yuehaibing@huawei.com>
+In-Reply-To: <20220217192726.612328-1-gilad@benyossef.com>
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
@@ -43,13 +42,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 16, 2022 at 07:45:21PM +0800, YueHaibing wrote:
-> This is unused after commit 768db5fee3bb ("crypto: x86/des - drop CTR mode implementation")
+On Thu, Feb 17, 2022 at 09:27:26PM +0200, Gilad Ben-Yossef wrote:
+> Refuse to try mapping zero bytes as this may cause a fault
+> on some configurations / platforms and it seems the prev.
+> attempt is not enough and we need to be more explicit.
 > 
-> Signed-off-by: YueHaibing <yuehaibing@huawei.com>
+> Signed-off-by: Gilad Ben-Yossef <gilad@benyossef.com>
+> Reported-by: Corentin Labbe <clabbe.montjoie@gmail.com>
+> Fixes: ce0fc6db38de ("crypto: ccree - protect against empty or NULL
+> scatterlists")
 > ---
->  arch/x86/crypto/des3_ede_glue.c | 8 --------
->  1 file changed, 8 deletions(-)
+>  drivers/crypto/ccree/cc_buffer_mgr.c | 7 +++++++
+>  1 file changed, 7 insertions(+)
 
 Patch applied.  Thanks.
 -- 

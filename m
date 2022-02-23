@@ -2,136 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 103D34C10E0
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 12:00:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E77374C10E5
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 12:01:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239742AbiBWLAY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 06:00:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37222 "EHLO
+        id S239746AbiBWLCM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 06:02:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233910AbiBWLAW (ORCPT
+        with ESMTP id S231893AbiBWLCJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 06:00:22 -0500
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AE5C8C7D1;
-        Wed, 23 Feb 2022 02:59:54 -0800 (PST)
-Received: from mail-wr1-f52.google.com ([209.85.221.52]) by
- mrelayeu.kundenserver.de (mreue009 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MlfCk-1o4Ra6312w-00inTg; Wed, 23 Feb 2022 11:59:52 +0100
-Received: by mail-wr1-f52.google.com with SMTP id o4so2135193wrf.3;
-        Wed, 23 Feb 2022 02:59:52 -0800 (PST)
-X-Gm-Message-State: AOAM532w0I/FQasSXoRn7paj/0r708sN7Hcll05a600icEtPzbVFW5nu
-        NA3gFKSoZzvNLofXWNFCuRR21wXtMvkt8QI7GtY=
-X-Google-Smtp-Source: ABdhPJz3tjc3IejYq+UPcpb0b0B/1/NsttPG6/6KnMrBytsQxjHYO0/p2daBPMgz1AgVYfLNcxR3Ydw+Oyz4L5S8GiA=
-X-Received: by 2002:adf:90c1:0:b0:1e4:ad27:22b9 with SMTP id
- i59-20020adf90c1000000b001e4ad2722b9mr23150986wri.219.1645613992251; Wed, 23
- Feb 2022 02:59:52 -0800 (PST)
+        Wed, 23 Feb 2022 06:02:09 -0500
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89F6D4ECFA;
+        Wed, 23 Feb 2022 03:01:41 -0800 (PST)
+Received: by mail-lf1-x130.google.com with SMTP id f37so30271641lfv.8;
+        Wed, 23 Feb 2022 03:01:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:in-reply-to:content-transfer-encoding;
+        bh=+6HvF8y2PGVk9Cp71pan23gGDAsMn7xOJMniykYsMVA=;
+        b=Qvth+Tj2xbGcQg4RffH5sEinkDzGrnbW9pCaQa4jWglF4sdA4hPhKi7DtMWo57bgz8
+         9hFCJB69KFDdvjE8q/jhOqIuPt8Th5XTsWhwPqqPRMDcLs98NQsUXMNPzD2OZqqlx6Po
+         U+77Svrcs72qGs9zUJuQJZxhS2CU8QiXS/7ZsXp0elymrRt8KF+Kf664r+2BfJDnfr6+
+         +lKfkyMyz33U4PT5Gu63ihQB3tcw58x10rFH5YaF5XSh12vnKAy4CNdLaRlqR5NNFOxq
+         7Zj3GVDOk4XiVsjO4MMSAgkj3lntscPlMCh/+M9plcJqKpPtmVhPKjYPDpDmlh8wQo9x
+         4GPw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=+6HvF8y2PGVk9Cp71pan23gGDAsMn7xOJMniykYsMVA=;
+        b=GnzF6MtIIPvjTBQZrGIvq8Aglsf1ImSpeLBHOxbFayflMlJThkUNQ7zQKdzBFdWRre
+         uTjazrZEFVgqEzmaUrkbEJRrwVdVrja77DqALCIzxQiiIfw4VMu2eRLy/u8seHmCzFj+
+         z/sgp6eP6dhwZ/Fkb2oyGk6HTk7AlpemuiDs/pNstYnURUp4h05TJpDKWxinBBZ+1Yof
+         WVvuSNLP3SrL8brVO8No+bPxPxASzl9a6oQ9EgzWyjduHygT0uvb3BXtahryNau9pW0h
+         wzvtr78b+O/X45reluSs72L8jdGRuhegvA67hVxNiXwR4xlRIQAbn8QDFLzBsMnlEJQm
+         PVAQ==
+X-Gm-Message-State: AOAM530KPiGqJTImD+2STVXxYzRqxSKSEusK5ZeH/4BSaL8ZYeiRpw5T
+        cSseoyOPwhYTcUpsu46h4UE=
+X-Google-Smtp-Source: ABdhPJyYPQd0BZZ7UK2cpCj+4TmBKQFxMfhKv4evp6r/guXztVb/QWuz3VsvagLyRfYJF3mMCyZGkg==
+X-Received: by 2002:ac2:522d:0:b0:43e:64b4:639c with SMTP id i13-20020ac2522d000000b0043e64b4639cmr19377732lfl.272.1645614099700;
+        Wed, 23 Feb 2022 03:01:39 -0800 (PST)
+Received: from [192.168.1.11] ([94.103.229.64])
+        by smtp.gmail.com with ESMTPSA id o19sm1619357lfl.259.2022.02.23.03.01.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 23 Feb 2022 03:01:39 -0800 (PST)
+Message-ID: <2c775ec8-6fcb-cdeb-9b7c-35822c74bbde@gmail.com>
+Date:   Wed, 23 Feb 2022 14:01:33 +0300
 MIME-Version: 1.0
-References: <20220201150545.1512822-1-guoren@kernel.org> <mhng-36783ff3-37c2-454b-9337-8cb124195255@palmer-ri-x1c9>
-In-Reply-To: <mhng-36783ff3-37c2-454b-9337-8cb124195255@palmer-ri-x1c9>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Wed, 23 Feb 2022 11:59:36 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a1W3Ns1WYiSGXb3Qn6-p+SPsx1UGqXdTkk2taPB72OZUA@mail.gmail.com>
-Message-ID: <CAK8P3a1W3Ns1WYiSGXb3Qn6-p+SPsx1UGqXdTkk2taPB72OZUA@mail.gmail.com>
-Subject: Re: [PATCH V5 00/21] riscv: compat: Add COMPAT mode support for rv64
-To:     Palmer Dabbelt <palmer@dabbelt.com>
-Cc:     Guo Ren <guoren@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Anup Patel <anup@brainfault.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        liush <liush@allwinnertech.com>, Wei Fu <wefu@redhat.com>,
-        Drew Fustini <drew@beagleboard.org>,
-        Wang Junqiang <wangjunqiang@iscas.ac.cn>,
-        Christoph Hellwig <hch@lst.de>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linux-csky@vger.kernel.org,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        sparclinux <sparclinux@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Parisc List <linux-parisc@vger.kernel.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Guo Ren <guoren@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:fDj8UNVRV8r/eEkDy+HCLSo5oTnkzwOoBxcvqklwcRxXRwi6wUV
- 6SE5GCBES+rEkqbaFiHz6aGc/CNcIz7j4g51nG2OX1z+qqp19c2xUqQAOlXIpbA/+vI2jCi
- 66nCed0HrHG8pKuBjTvpQfJ7mhp2uPg7qBZSY37R2iNdBB0GFnk2uzfcY2yijMhTM9tVR5a
- 82jnAWH9+MAZlTC76Larg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:VYpzYxJP3NU=:KiMJ/01sPAWeZQz4PFOQPd
- EUCgAbE0c2Cin8EOQRowCayryy7BPpe5bQgq2432OdqeY3VSVKI/wNylTiMVyAmj6FT2ytEiM
- gL1j8GQTU/d4DIa8yFaX2cUj/wMx2326wezaZ/Eg+xrmMuJ22WbnjY/4ERGhOlKbe2ajo2q4j
- nB1wwbuu2/KVd3tKlRy0wp6mdIDFpfpVGcEqCqwAj/hP5wu4Bpxj+rAKgQYaWLjMjB0i8h7OV
- ODpdELWbpwXtYHT1HK6t4KipCMhxoWeyfSxoLNNTG+0iakeWXjAJm7KH4geyKsF5/dBiVLve9
- MKzdUoMmTtdVLU0sMdKfHKhCsTfnPdYQbHoCzlVJOPOWfiUsbKZBWyaJbNPiDikGERCSzNAAX
- C4eXdL1FU/X0/uSzrmBOisTs1d7tFnm4TPPjLwuvkpTeDoFyCotroxkVLOwXyLoW/6Mtt2A5L
- f7HnXCuoCVK9NDA56rC8hmP4fvF5PgPXfZ53EjoRa0KAXhkeOt6hjiioccWF8GB3wtpYCSz2Q
- x/w188d2UL8fdFCA4/qcA93GYKxVDxtyijHEs2fv4X9cjVSLS1xofqo82uQlZNOld5oQD8grR
- 9xl/STptXx2jNltgonnEIU+jCcw8/C7Gq4wQYgpPWV4qU+vacJZX3kzdQKa4ngeO+Nmodh57z
- d51eBFgsR+V899w2wccXBgAg4hC1fCn0bVJEkBD2re7ZZKS51/XEGqsuqHdGgdz0vP3FvtHR9
- q8gtkkCIZPBMtMVsq/zXp0ciSyWaDJ1PcchbymzduRV9j0RoDYiuZAkhzcXQdeR8TUPw23V9y
- gjOWaejEBuP9kA/k1Ei5FfLOuljURkZ8ilqRlxgTSyUIVJnqi4=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [syzbot] KMSAN: uninit-value in asix_check_host_enable
+Content-Language: en-US
+To:     syzbot <syzbot+8f5f07bb9d6935e2f8d9@syzkaller.appspotmail.com>,
+        andrew@lunn.ch, davem@davemloft.net, glider@google.com,
+        kuba@kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux@rempel-privat.de,
+        netdev@vger.kernel.org, syzkaller-bugs@googlegroups.com
+References: <00000000000024a1f805d8ac1da3@google.com>
+From:   Pavel Skripkin <paskripkin@gmail.com>
+In-Reply-To: <00000000000024a1f805d8ac1da3@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 23, 2022 at 2:43 AM Palmer Dabbelt <palmer@dabbelt.com> wrote:
->
-> On Tue, 01 Feb 2022 07:05:24 PST (-0800), guoren@kernel.org wrote:
-> > From: Guo Ren <guoren@linux.alibaba.com>
-> >
-> > Currently, most 64-bit architectures (x86, parisc, powerpc, arm64,
-> > s390, mips, sparc) have supported COMPAT mode. But they all have
-> > history issues and can't use standard linux unistd.h. RISC-V would
-> > be first standard __SYSCALL_COMPAT user of include/uapi/asm-generic
-> > /unistd.h.
->
-> TBH, I'd always sort of hoped we wouldn't have to do this: it's a lot of
-> ABI surface to keep around for a use case I'm not really sure is ever
-> going to get any traction (it's not like we have legacy 32-bit
-> userspaces floating around, the 32-bit userspace is newer than the
-> 64-bit userspace).
+On 2/23/22 12:30, syzbot wrote:
+> Hello,
+> 
+> syzbot found the following issue on:
+> 
+> HEAD commit:    724946410067 x86: kmsan: enable KMSAN builds for x86
+> git tree:       https://github.com/google/kmsan.git master
+> console output: https://syzkaller.appspot.com/x/log.txt?x=11c85246700000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=76f99026248b24e4
+> dashboard link: https://syzkaller.appspot.com/bug?extid=8f5f07bb9d6935e2f8d9
+> compiler:       clang version 14.0.0 (/usr/local/google/src/llvm-git-monorepo 2b554920f11c8b763cd9ed9003f4e19b919b8e1f), GNU ld (GNU Binutils for Debian) 2.35.2
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11674fe2700000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1497324c700000
+> 
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+8f5f07bb9d6935e2f8d9@syzkaller.appspotmail.com
+> 
 
-The low-end embedded market isn't usually that newsworthy, but the
-machines ship in huge quantities, and they all run 32-bit user
-space for good reasons:
+Should be fixed by [1], but it's only in next for now.
 
-The cheapest Linux systems at the moment use a low-end MIPS or
-Arm core with a single DDR2 (32MB to 128MB) or DDR3 (128MB
-to 512MB) memory chip that for now is a bit cheaper than a larger
-LP-DDR4 (256MB+). The smaller configurations will go away over
-time as they get outpriced by systems with LP-DDR4, but a 32-bit
-system with 256MB will keep beating a 64-bit-only system with
-512MB on price, and will run most workloads better than a 64-bit
-system with the same amount of RAM.
+[1] 
+https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=920a9fa27e7805499cfe78491b36fed2322c02ec
 
-On the Arm side, I hope that these systems will migrate to Armv8
-based designs (Cortex-A53/A35 or newer) running 64-bit kernel
-with 32-bit user space to replace the currently dominant but aging
-32-bit Cortex-A7 cores. As you say, RISC-V is at a disadvantage
-here because there is no existing 32-bit ecosystem, but it may take
-a chunk of that market anyway based on licensing cost. Between
-doing this using pure 32-bit cores or on mixed 32/64-bit cores,
-I found Guo Ren's explanation very sensible, it lets you use the
-same chip both as a low-end embedded version with SiP
-memory, or using an external DDR3/LPDDR4 chip with enough
-capacity to run a generic 64-bit distro.
 
-> My assumption is that users who actually wanted the
-> memory savings (likely a very small number) would be better served with
-> rv64/ilp32, as that'll allow the larger registers that the hardware
-> supports.  From some earlier discussions it looks like rv64/ilp32 isn't
-> going to be allowed, though, so this seems like the only way to go.
 
-Right, between rv32 user space and a hypothetical rv64-ilp32 target,
-I think it's clear that the former is better because it means introducing
-only one fringe ABI rather than two incompatible ones with minor
-performance differences.
 
-        Arnd
+With regards,
+Pavel Skripkin

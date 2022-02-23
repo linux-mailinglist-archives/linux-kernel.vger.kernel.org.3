@@ -2,508 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDBC04C1086
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 11:43:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D974C4C108F
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 11:43:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239675AbiBWKn4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 05:43:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54536 "EHLO
+        id S239696AbiBWKoS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 05:44:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235642AbiBWKny (ORCPT
+        with ESMTP id S239598AbiBWKoP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 05:43:54 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDCAE58E76
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 02:43:26 -0800 (PST)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <sha@pengutronix.de>)
-        id 1nMp6z-0002iI-GX; Wed, 23 Feb 2022 11:43:09 +0100
-Received: from sha by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <sha@pengutronix.de>)
-        id 1nMp6y-00055q-Kh; Wed, 23 Feb 2022 11:43:08 +0100
-Date:   Wed, 23 Feb 2022 11:43:08 +0100
-From:   Sascha Hauer <s.hauer@pengutronix.de>
-To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-Cc:     sboyd@kernel.org, robh+dt@kernel.org, shawnguo@kernel.org,
-        abel.vesa@nxp.com, kernel@pengutronix.de, festevam@gmail.com,
-        linux-imx@nxp.com, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Peng Fan <peng.fan@nxp.com>
-Subject: Re: [PATCH V3 4/5] clk: imx: support fracn gppll
-Message-ID: <20220223104308.GI22780@pengutronix.de>
-References: <20220223064358.4097307-1-peng.fan@oss.nxp.com>
- <20220223064358.4097307-5-peng.fan@oss.nxp.com>
+        Wed, 23 Feb 2022 05:44:15 -0500
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50AC058E7D
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 02:43:48 -0800 (PST)
+Received: by mail-pg1-x52e.google.com with SMTP id 75so19537536pgb.4
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 02:43:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=izF6/BOlFRf0GfvXEkyLgXWuNg7Bc9Mpe7Dcz3gCT68=;
+        b=chEEFmEPoDo1VPyqjA70d68X5C0NptFBYwl6Fv98rSsbuKhE52Mm+kdu7Y0K1UC9s/
+         gWvQYWdgPqCLZ3Y9s9DYNIq7MB5k0G+LHybr0m/C66JhLpYnLIz7WN3PLXZzaGVTzBBu
+         x15MYb5DoaJ+qKOCionM/Eui/pQVJwfiAEs5dN43wwvz7q98oYNbeQecYKUqECKepIYc
+         f/KzPBSLD7bw8oJmh7/Xtu6Wnof8hjcjnmmjvw2woSk11pTbR50yfBT/HJH6H5lSfFCa
+         05a/mcUYQjJLNlki0D9QPXdX/hcGm0jKahKEiay9QhyYQkyUomG7wS21+M7kgJZZJYBF
+         VJXA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=izF6/BOlFRf0GfvXEkyLgXWuNg7Bc9Mpe7Dcz3gCT68=;
+        b=Q/inwAJaeUwJK+WYifXfw4pTV12yCHthobxdIxn63xKhMoBWAycbFSh92WS31wrs9Y
+         jQ9Y0PYllrKk5LBuPx796oUvv1Yx3Ao3NrtALxYrJ0ec4M9vMQhSlDvlLdt4zJP5PlA+
+         r1xa3i7bvVhj6HISKFC5gfWr+S0LM8kVt7TAojfnNFqd0mfi01dB9zZwGnIcANmP09Jn
+         1csFpE+Pjd4px8rTeFOR5niFLwstEryjjeP7hTiGk604KTSNSOn5u55Oht/CAA+ohftJ
+         VTNAthulILJAmJXqBM3KnVYuQwuNpqkIxqAdi9aRjb+l1ru54PO0ZC6LQavg43wIwWsV
+         A1FA==
+X-Gm-Message-State: AOAM533cfgM4bA6ip9q46A1vKbIOijajUgPrmXGRd2wUfOY3a+SU2aPI
+        mBnhA3a8nB0VA8vc1k45nfo=
+X-Google-Smtp-Source: ABdhPJysu9zb0UfI2rxfNbgv89NTLiU+G0srjigNHQKvLWHK3KsehgF7WzK+S2uETXCc1AcZNxngbA==
+X-Received: by 2002:a63:e604:0:b0:373:8aca:846e with SMTP id g4-20020a63e604000000b003738aca846emr23003518pgh.406.1645613027806;
+        Wed, 23 Feb 2022 02:43:47 -0800 (PST)
+Received: from ?IPV6:2404:f801:0:5:8000::754? ([2404:f801:9000:1a:efea::754])
+        by smtp.gmail.com with ESMTPSA id ms7sm2494784pjb.56.2022.02.23.02.43.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 23 Feb 2022 02:43:47 -0800 (PST)
+Message-ID: <bcdbd534-a077-3bb3-3d37-c9eb2a048854@gmail.com>
+Date:   Wed, 23 Feb 2022 18:43:40 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220223064358.4097307-5-peng.fan@oss.nxp.com>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-IRC:  #ptxdist @freenode
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-Uptime: 11:20:37 up 74 days, 19:06, 87 users,  load average: 0.24, 0.16,
- 0.17
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: sha@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,SUSP_UTF8_WORD_COMBO,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Subject: Re: [PATCH 1/4] x86/hyperv: Add missing ARCH_HAS_CC_PLATFORM
+ dependency
+Content-Language: en-US
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Wei Liu <wei.liu@kernel.org>, tglx@linutronix.de,
+        mingo@redhat.com, dave.hansen@intel.com, luto@kernel.org,
+        peterz@infradead.org, sathyanarayanan.kuppuswamy@linux.intel.com,
+        aarcange@redhat.com, ak@linux.intel.com, dan.j.williams@intel.com,
+        david@redhat.com, hpa@zytor.com, jmattson@google.com,
+        seanjc@google.com, thomas.lendacky@amd.com, brijesh.singh@amd.com,
+        x86@kernel.org, linux-kernel@vger.kernel.org,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Dexuan Cui <decui@microsoft.com>,
+        Tianyu Lan <Tianyu.Lan@microsoft.com>
+References: <20220222185740.26228-1-kirill.shutemov@linux.intel.com>
+ <20220222185740.26228-2-kirill.shutemov@linux.intel.com>
+ <YhVCoveTwsDZXE5G@zn.tnic> <4769a3c0-449b-184a-5c61-a0e155f9c5b4@gmail.com>
+ <YhYPPHKZFsGzaI2U@zn.tnic>
+From:   Tianyu Lan <ltykernel@gmail.com>
+In-Reply-To: <YhYPPHKZFsGzaI2U@zn.tnic>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-Sorry for the late review, but this PLL seems to have some copy-pasted
-code I just cleaned up in another PLL, so I thought I have a closer
-look.
 
 
-On Wed, Feb 23, 2022 at 02:43:57PM +0800, Peng Fan (OSS) wrote:
-> From: Peng Fan <peng.fan@nxp.com>
+On 2/23/2022 6:41 PM, Borislav Petkov wrote:
+> On Wed, Feb 23, 2022 at 03:04:41PM +0800, Tianyu Lan wrote:
+>>        Current Hyper-V Isolation VM requires AMD_MEM_ENCRYPT option which
 > 
-> This PLL module is a Fractional-N synthesizer,
-> supporting 30-bit numerator and denominator. Numerator is a signed
-> number. It has feature to adjust fractional portion of feedback
-> divider dynamically. This fracn gppll is used in i.MX93.
+> Where is that isolation VM option? Out of tree?
 > 
-> Signed-off-by: Peng Fan <peng.fan@nxp.com>
-> ---
->  drivers/clk/imx/Makefile          |   1 +
->  drivers/clk/imx/clk-fracn-gppll.c | 328 ++++++++++++++++++++++++++++++
->  drivers/clk/imx/clk.h             |  21 ++
->  3 files changed, 350 insertions(+)
->  create mode 100644 drivers/clk/imx/clk-fracn-gppll.c
+> Because
 > 
-> diff --git a/drivers/clk/imx/Makefile b/drivers/clk/imx/Makefile
-> index 36c04922d789..60c8a4bb7574 100644
-> --- a/drivers/clk/imx/Makefile
-> +++ b/drivers/clk/imx/Makefile
-> @@ -5,6 +5,7 @@ mxc-clk-objs += clk-busy.o
->  mxc-clk-objs += clk-composite-7ulp.o
->  mxc-clk-objs += clk-composite-8m.o
->  mxc-clk-objs += clk-composite-93.o
-> +mxc-clk-objs += clk-fracn-gppll.o
->  mxc-clk-objs += clk-cpu.o
->  mxc-clk-objs += clk-divider-gate.o
->  mxc-clk-objs += clk-fixup-div.o
-> diff --git a/drivers/clk/imx/clk-fracn-gppll.c b/drivers/clk/imx/clk-fracn-gppll.c
-> new file mode 100644
-> index 000000000000..6c9946a4bdb7
-> --- /dev/null
-> +++ b/drivers/clk/imx/clk-fracn-gppll.c
-> @@ -0,0 +1,328 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Copyright 2021 NXP
-> + */
-> +
-> +#include <linux/bits.h>
-> +#include <linux/clk-provider.h>
-> +#include <linux/err.h>
-> +#include <linux/export.h>
-> +#include <linux/io.h>
-> +#include <linux/iopoll.h>
-> +#include <linux/slab.h>
-> +#include <linux/jiffies.h>
-> +
-> +#include "clk.h"
-> +
-> +#define PLL_CTRL		0x0
-> +#define CLKMUX_BYPASS		BIT(2)
-> +#define CLKMUX_EN		BIT(1)
-> +#define POWERUP_MASK		BIT(0)
-> +
-> +#define PLL_ANA_PRG		0x10
-> +#define PLL_SPREAD_SPECTRUM	0x30
-> +
-> +#define PLL_NUMERATOR		0x40
-> +#define PLL_MFN_MASK		GENMASK(31, 2)
-> +#define PLL_MFN_SHIFT		2
-> +
-> +#define PLL_DENOMINATOR		0x50
-> +#define PLL_MFD_MASK		GENMASK(29, 0)
-> +
-> +#define PLL_DIV			0x60
-> +#define PLL_MFI_MASK		GENMASK(24, 16)
-> +#define PLL_MFI_SHIFT		16
-> +#define PLL_RDIV_MASK		GENMASK(15, 13)
-> +#define PLL_RDIV_SHIFT		13
-> +#define PLL_ODIV_MASK		GENMASK(7, 0)
-> +
-> +#define PLL_DFS_CTRL(x)		(0x70 + (x) * 0x10)
-> +
-> +#define PLL_STATUS		0xF0
-> +#define LOCK_STATUS		BIT(0)
-> +
-> +#define DFS_STATUS		0xF4
-> +
-> +#define LOCK_TIMEOUT_US		200
-> +
-> +#define PLL_FRACN_GP(_rate, _mfi, _mfn, _mfd, _rdiv, _odiv)	\
-> +	{							\
-> +		.rate	=	(_rate),			\
-> +		.mfi	=	(_mfi),				\
-> +		.mfn	=	(_mfn),				\
-> +		.mfd	=	(_mfd),				\
-> +		.rdiv	=	(_rdiv),			\
-> +		.odiv	=	(_odiv),			\
-> +	}
-> +
-> +struct clk_fracn_gppll {
-> +	struct clk_hw			hw;
-> +	void __iomem			*base;
-> +	const struct imx_fracn_gppll_rate_table *rate_table;
-> +	int rate_count;
-> +};
-> +
-> +#define to_clk_fracn_gppll(_hw) container_of(_hw, struct clk_fracn_gppll, hw)
-
-Consider using a static inline function instead.
-
-> +
-> +/*
-> + * Fvco = 𝐹𝑟𝑒𝑓∙(𝑀𝐹𝐼+𝑀𝐹𝑁/𝑀𝐹𝐷)
-> + * Fout = Fvco / (rdiv * odiv)
-> + */
-> +static const struct imx_fracn_gppll_rate_table fracn_tbl[] = {
-> +	PLL_FRACN_GP(650000000U, 81, 0, 0, 0, 3),
-> +	PLL_FRACN_GP(594000000U, 198, 0, 0, 0, 8),
-> +	PLL_FRACN_GP(560000000U, 70, 0, 0, 0, 3),
-> +	PLL_FRACN_GP(400000000U, 50, 0, 0, 0, 3),
-> +	PLL_FRACN_GP(393216000U, 81, 92, 100, 0, 5)
-> +};
-> +
-> +struct imx_fracn_gppll_clk imx_fracn_gppll = {
-> +	.rate_table = fracn_tbl,
-> +	.rate_count = ARRAY_SIZE(fracn_tbl),
-> +};
-> +EXPORT_SYMBOL_GPL(imx_fracn_gppll);
-> +
-> +static const struct imx_fracn_gppll_rate_table *
-> +imx_get_pll_settings(struct clk_fracn_gppll *pll, unsigned long rate)
-> +{
-> +	const struct imx_fracn_gppll_rate_table *rate_table = pll->rate_table;
-> +	int i;
-> +
-> +	for (i = 0; i < pll->rate_count; i++)
-> +		if (rate == rate_table[i].rate)
-> +			return &rate_table[i];
-> +
-> +	return NULL;
-> +}
-> +
-> +static long clk_fracn_gppll_round_rate(struct clk_hw *hw, unsigned long rate,
-> +				       unsigned long *prate)
-> +{
-> +	struct clk_fracn_gppll *pll = to_clk_fracn_gppll(hw);
-> +	const struct imx_fracn_gppll_rate_table *rate_table = pll->rate_table;
-> +	int i;
-> +
-> +	/* Assumming rate_table is in descending order */
-
-s/Assumming/Assuming/
-
-> +	for (i = 0; i < pll->rate_count; i++)
-> +		if (rate >= rate_table[i].rate)
-> +			return rate_table[i].rate;
-> +
-> +	if (i == pll->rate_count)
-
-This is always true when you're here,
-
-> +		pr_err("Not able to round rate for %s: %lu\n", clk_hw_get_name(hw), rate);
-
-but this message shouldn't be needed at all. When a rate is passed in
-here that is too low then the driver should silently round up to the
-lowest supported rate.
-
-> +
-> +	/* return minimum supported value */
-> +	return rate_table[i - 1].rate;
-
-IMO rate_table[pll->rate_count - 1].rate makes it clearer what is meant
-here.
-
-> +}
-> +
-> +static unsigned long clk_fracn_gppll_recalc_rate(struct clk_hw *hw, unsigned long parent_rate)
-> +{
-> +	struct clk_fracn_gppll *pll = to_clk_fracn_gppll(hw);
-> +	const struct imx_fracn_gppll_rate_table *rate_table = pll->rate_table;
-> +	u32 pll_numerator, pll_denominator, pll_div;
-> +	u32 mfi, mfn, mfd, rdiv, odiv;
-> +	u64 fvco = parent_rate;
-> +	long rate = 0;
-> +	int i;
-> +
-> +	pll_numerator = readl_relaxed(pll->base + PLL_NUMERATOR);
-> +	mfn = (pll_numerator & PLL_MFN_MASK) >> PLL_MFN_SHIFT;
-
-Have a look at FIELD_GET/FIELD_PREP, it really makes setting and reading
-fields easier and nicer to look at.
-
-> +
-> +	pll_denominator = readl_relaxed(pll->base + PLL_DENOMINATOR);
-> +	mfd = pll_denominator & PLL_MFD_MASK;
-> +
-> +	pll_div = readl_relaxed(pll->base + PLL_DIV);
-> +	mfi = (pll_div & PLL_MFI_MASK) >> PLL_MFI_SHIFT;
-> +
-> +	rdiv = (pll_div & PLL_RDIV_MASK) >> PLL_RDIV_SHIFT;
-> +	rdiv = rdiv + 1;
-> +	odiv = pll_div & PLL_ODIV_MASK;
-> +	switch (odiv) {
-> +	case 0:
-> +		odiv = 2;
-> +		break;
-> +	case 1:
-> +		odiv = 3;
-> +		break;
-> +	default:
-> +		break;
-> +	}
-> +
-> +	/*
-> +	 * Sometimes, the recalculated rate has deviation due to
-> +	 * the frac part. So find the accurate pll rate from the table
-> +	 * first, if no match rate in the table, use the rate calculated
-> +	 * from the equation below.
-> +	 */
-> +	for (i = 0; i < pll->rate_count; i++) {
-> +		if (rate_table[i].mfn == mfn && rate_table[i].mfi == mfi &&
-> +		    rate_table[i].mfd == mfd && rate_table[i].rdiv == rdiv &&
-> +		    rate_table[i].odiv == odiv)
-> +			rate = rate_table[i].rate;
-> +	}
-> +
-> +	/* Fvco = 𝐹𝑟𝑒𝑓∙(𝑀𝐹𝐼+𝑀𝐹𝑁/𝑀𝐹𝐷) */
-> +	fvco = fvco * mfi + fvco * mfn / mfd;
-> +
-> +	do_div(fvco, rdiv * odiv);
-> +
-> +	return rate ? (unsigned long) rate : (unsigned long)fvco;
-
-You could bail out early here instead of calculating fvco which you then
-don't use.
-
-> +}
-> +
-> +static int clk_fracn_gppll_wait_lock(struct clk_fracn_gppll *pll)
-> +{
-> +	u32 val;
-> +
-> +	return readl_poll_timeout(pll->base + PLL_STATUS, val,
-> +				  val & LOCK_STATUS, 0, LOCK_TIMEOUT_US);
-> +}
-> +
-> +static int clk_fracn_gppll_set_rate(struct clk_hw *hw, unsigned long drate,
-> +				    unsigned long prate)
-> +{
-> +	struct clk_fracn_gppll *pll = to_clk_fracn_gppll(hw);
-> +	const struct imx_fracn_gppll_rate_table *rate;
-> +	u32 tmp, pll_div, ana_mfn;
-> +	int ret;
-> +
-> +	rate = imx_get_pll_settings(pll, drate);
-> +	if (!rate) {
-> +		pr_err("%s: Invalid rate : %lu for pll clk %s\n", __func__,
-> +			drate, clk_hw_get_name(hw));
-> +		return -EINVAL;
-> +	}
-
-The core does a round_rate() before doing a set_rate(), so this should
-never happen. I think this can be dropped, in doubt the resulting NULL
-pointer deref provides enough developer information to debug this
-internal error.
-
-> +
-> +	/* Disable output */
-> +	tmp = readl_relaxed(pll->base + PLL_CTRL);
-> +	tmp &= ~CLKMUX_EN;
-> +	writel_relaxed(tmp, pll->base + PLL_CTRL);
-> +
-> +	/* Power Down */
-> +	tmp &= ~POWERUP_MASK;
-> +	writel_relaxed(tmp, pll->base + PLL_CTRL);
-> +
-> +	/* Disable BYPASS */
-> +	tmp &= ~CLKMUX_BYPASS;
-> +	writel_relaxed(tmp, pll->base + PLL_CTRL);
-> +
-> +	pll_div = (rate->rdiv << PLL_RDIV_SHIFT) | rate->odiv | (rate->mfi << PLL_MFI_SHIFT);
-> +	writel_relaxed(pll_div, pll->base + PLL_DIV);
-> +	writel_relaxed(rate->mfd, pll->base + PLL_DENOMINATOR);
-> +	writel_relaxed(rate->mfn << PLL_MFN_SHIFT, pll->base + PLL_NUMERATOR);
-> +
-> +	/* Wait for 5us according to fracn mode pll doc */
-> +	udelay(5);
-> +
-> +	/* Enable Powerup */
-> +	tmp |= POWERUP_MASK;
-> +	writel_relaxed(tmp, pll->base + PLL_CTRL);
-> +
-> +	/* Wait Lock*/
-
-Nitpick: Space missing at end of comment.
-
-> +	ret = clk_fracn_gppll_wait_lock(pll);
-> +	if (ret)
-> +		return ret;
-> +
-> +	/* Enable output */
-> +	tmp |= CLKMUX_EN;
-> +	writel_relaxed(tmp, pll->base + PLL_CTRL);
-> +
-> +	ana_mfn = (readl_relaxed(pll->base + PLL_STATUS) & PLL_MFN_MASK) >> PLL_MFN_SHIFT;
-> +
-> +	WARN(ana_mfn != rate->mfn, "ana_mfn != rate->mfn\n");
-> +
-> +	return 0;
-> +}
-> +
-> +static int clk_fracn_gppll_prepare(struct clk_hw *hw)
-> +{
-> +	struct clk_fracn_gppll *pll = to_clk_fracn_gppll(hw);
-> +	u32 val;
-> +	int ret;
-> +
-> +	val = readl_relaxed(pll->base + PLL_CTRL);
-> +	if (val & POWERUP_MASK)
-> +		return 0;
-> +
-> +	val |= CLKMUX_BYPASS;
-> +	writel_relaxed(val, pll->base + PLL_CTRL);
-> +
-> +	val |= POWERUP_MASK;
-> +	writel_relaxed(val, pll->base + PLL_CTRL);
-> +
-> +	val |= CLKMUX_EN;
-> +	writel_relaxed(val, pll->base + PLL_CTRL);
-> +
-> +	ret = clk_fracn_gppll_wait_lock(pll);
-> +	if (ret)
-> +		return ret;
-> +
-> +	val &= ~CLKMUX_BYPASS;
-> +	writel_relaxed(val, pll->base + PLL_CTRL);
-> +
-> +	return 0;
-> +}
-> +
-> +static int clk_fracn_gppll_is_prepared(struct clk_hw *hw)
-> +{
-> +	struct clk_fracn_gppll *pll = to_clk_fracn_gppll(hw);
-> +	u32 val;
-> +
-> +	val = readl_relaxed(pll->base + PLL_CTRL);
-> +
-> +	return (val & POWERUP_MASK) ? 1 : 0;
-> +}
-> +
-> +static void clk_fracn_gppll_unprepare(struct clk_hw *hw)
-> +{
-> +	struct clk_fracn_gppll *pll = to_clk_fracn_gppll(hw);
-> +	u32 val;
-> +
-> +	val = readl_relaxed(pll->base + PLL_CTRL);
-> +	val &= ~POWERUP_MASK;
-> +	writel_relaxed(val, pll->base + PLL_CTRL);
-> +}
-> +
-> +static const struct clk_ops clk_fracn_gppll_ops = {
-> +	.prepare	= clk_fracn_gppll_prepare,
-> +	.unprepare	= clk_fracn_gppll_unprepare,
-> +	.is_prepared	= clk_fracn_gppll_is_prepared,
-> +	.recalc_rate	= clk_fracn_gppll_recalc_rate,
-> +	.round_rate	= clk_fracn_gppll_round_rate,
-> +	.set_rate	= clk_fracn_gppll_set_rate,
-> +};
-> +
-> +struct clk_hw *imx_clk_fracn_gppll(const char *name, const char *parent_name, void __iomem *base,
-> +				   const struct imx_fracn_gppll_clk *pll_clk)
-> +{
-> +	struct clk_fracn_gppll *pll;
-> +	struct clk_hw *hw;
-> +	struct clk_init_data init;
-> +	int ret;
-> +	u32 val;
-> +
-> +	pll = kzalloc(sizeof(*pll), GFP_KERNEL);
-> +	if (!pll)
-> +		return ERR_PTR(-ENOMEM);
-> +
-> +	init.name = name;
-> +	init.flags = pll_clk->flags;
-> +	init.parent_names = &parent_name;
-> +	init.num_parents = 1;
-> +	init.ops = &clk_fracn_gppll_ops;
-> +
-> +	pll->base = base;
-> +	pll->hw.init = &init;
-> +	pll->rate_table = pll_clk->rate_table;
-> +	pll->rate_count = pll_clk->rate_count;
-> +
-> +	hw = &pll->hw;
-> +
-> +	ret = clk_hw_register(NULL, hw);
-> +	if (ret) {
-> +		pr_err("%s: failed to register pll %s %d\n", __func__, name, ret);
-> +		kfree(pll);
-> +		return ERR_PTR(ret);
-> +	}
-> +
-> +	return hw;
-> +}
-> +EXPORT_SYMBOL_GPL(imx_clk_fracn_gppll);
-> diff --git a/drivers/clk/imx/clk.h b/drivers/clk/imx/clk.h
-> index 63eb7c53b123..a7cbbcd1a3f4 100644
-> --- a/drivers/clk/imx/clk.h
-> +++ b/drivers/clk/imx/clk.h
-> @@ -72,6 +72,27 @@ extern struct imx_pll14xx_clk imx_1416x_pll;
->  extern struct imx_pll14xx_clk imx_1443x_pll;
->  extern struct imx_pll14xx_clk imx_1443x_dram_pll;
->  
-> +/* NOTE: Rate table should be kept sorted in descending order. */
-> +struct imx_fracn_gppll_rate_table {
-> +	unsigned int rate;
-> +	unsigned int mfi;
-> +	unsigned int mfn;
-> +	unsigned int mfd;
-> +	unsigned int rdiv;
-> +	unsigned int odiv;
-> +};
-> +
-> +struct imx_fracn_gppll_clk {
-> +	const struct imx_fracn_gppll_rate_table *rate_table;
-> +	int rate_count;
-> +	int flags;
-> +};
-> +
-> +struct clk_hw *imx_clk_fracn_gppll(const char *name, const char *parent_name, void __iomem *base,
-> +				   const struct imx_fracn_gppll_clk *pll_clk);
-> +
-> +extern struct imx_fracn_gppll_clk imx_fracn_gppll;
-> +
->  #define imx_clk_cpu(name, parent_name, div, mux, pll, step) \
->  	to_clk(imx_clk_hw_cpu(name, parent_name, div, mux, pll, step))
->  
-> -- 
-> 2.25.1
+> $ git grep AMD_MEM_ENCRYPT | grep Kconfig
+> arch/x86/Kconfig:1540:config AMD_MEM_ENCRYPT
+> arch/x86/Kconfig:1553:config AMD_MEM_ENCRYPT_ACTIVE_BY_DEFAULT
+> arch/x86/Kconfig:1555:  depends on AMD_MEM_ENCRYPT
 > 
-> 
+> and those ain't it.
 
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+Hyper-V code check cpuid during runtime and there is no Hyper-V
+isolation VM option.
+
+

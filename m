@@ -2,176 +2,233 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 038CC4C0FDD
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 11:10:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 809554C0FE4
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 11:12:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239492AbiBWKKm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 05:10:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36798 "EHLO
+        id S239497AbiBWKMj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 05:12:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229992AbiBWKKi (ORCPT
+        with ESMTP id S236386AbiBWKMi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 05:10:38 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDC8D7461F
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 02:10:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=43MTtx2ShEnwQ7emyxLNBwyvgk9UUmRrYt+AL3G2X3E=; b=MAwO5843UynMmVq6pOdzRwrKdU
-        ymw8E6nboUNVzgqZc1GEWRxJzQHrAanRsnmIifeTKDlo6LvQzpukWnDoQu3HPkMFCbyP+MdZGImhj
-        g/bQXCP4Hm1y2YqySe/QRMuA4QaUMbuUGC7vLxhC0nJYc+KyEF5aU8jeW5Wc4zqVZ5Zh9BS0ldJJ1
-        4L4/deCAjYcYWUv66dT3qvr2mcs8E8BoNYEPwOyTXqWhOoIMl1A+Y2PS9cjp9mL7EOkTaw+CmvGAC
-        TKnukLY+xR1LEdG4AohOkRbODzHuH1HhIbdZ3rqp+KjzqERS8oDKhXG6AEmDidpD86oYeNXV6UetF
-        1cEtAnzw==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nMoag-003eMZ-RE; Wed, 23 Feb 2022 10:09:46 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id BEFB7300296;
-        Wed, 23 Feb 2022 11:09:44 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 9C1C02B3A226E; Wed, 23 Feb 2022 11:09:44 +0100 (CET)
-Date:   Wed, 23 Feb 2022 11:09:44 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Josh Poimboeuf <jpoimboe@redhat.com>
-Cc:     x86@kernel.org, joao@overdrivepizza.com, hjl.tools@gmail.com,
-        andrew.cooper3@citrix.com, linux-kernel@vger.kernel.org,
-        ndesaulniers@google.com, keescook@chromium.org,
-        samitolvanen@google.com, mark.rutland@arm.com,
-        alyssa.milburn@intel.com, Miroslav Benes <mbenes@suse.cz>,
-        Steven Rostedt <rostedt@goodmis.org>
-Subject: Re: [PATCH 04/29] x86/livepatch: Validate __fentry__ location
-Message-ID: <YhYH6FMNh8pMws6Z@hirez.programming.kicks-ass.net>
-References: <20220218164902.008644515@infradead.org>
- <20220218171408.808810436@infradead.org>
- <20220218210831.u2ugtfr7gxllk4cs@treble>
+        Wed, 23 Feb 2022 05:12:38 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D31245AE4;
+        Wed, 23 Feb 2022 02:12:11 -0800 (PST)
+Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21N8iV6w031267;
+        Wed, 23 Feb 2022 10:12:07 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pp1; bh=U/uQdpDpvq4vwR4icPHzwoQg4Ya0ouZfsKzU0wXX/UU=;
+ b=Sllh3uTCCyhWpSBi0ndluRRs6t4gKXcel/N+looGvb2EAmH4VQ3ncTlh+NFO+RvKGqZ4
+ vofldxajCY/brpd4TdklRTv9LkQ29kydiDwTjUtQgP1ezXEVSu+cxpXvNo+BRDiI+US0
+ CRkfHukdl3XHc+5rSJ4ottjkyS5mHaZlAzBZw1jiskLFLb+iLH5o+E2M61yBzA8YS2zO
+ ZohVnhLLn2zOupOH/jZ96R4SaWMS36UjfGqNAb/uIIpuRrjfe6yHOarcCGqbj6ymHRHt
+ ourRl/aTQtGTpAFVmA1AOPcvsBJc3SyqL3XJVMYzWhRhGKX7XNgxGlekmaEyMIea4jLx wQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3ede6snk5m-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 23 Feb 2022 10:12:06 +0000
+Received: from m0098394.ppops.net (m0098394.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 21N9jTSx021009;
+        Wed, 23 Feb 2022 10:12:06 GMT
+Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3ede6snk4y-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 23 Feb 2022 10:12:06 +0000
+Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
+        by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 21NA96WA012950;
+        Wed, 23 Feb 2022 10:12:03 GMT
+Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
+        by ppma01fra.de.ibm.com with ESMTP id 3ear697f62-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 23 Feb 2022 10:12:03 +0000
+Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 21NAC1Dn45744632
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 23 Feb 2022 10:12:01 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6839A42041;
+        Wed, 23 Feb 2022 10:12:01 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id EE6C442054;
+        Wed, 23 Feb 2022 10:12:00 +0000 (GMT)
+Received: from localhost (unknown [9.43.55.101])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed, 23 Feb 2022 10:12:00 +0000 (GMT)
+Date:   Wed, 23 Feb 2022 15:41:59 +0530
+From:   Ritesh Harjani <riteshh@linux.ibm.com>
+To:     Jan Kara <jack@suse.cz>
+Cc:     linux-ext4@vger.kernel.org,
+        Harshad Shirwadkar <harshadshirwadkar@gmail.com>,
+        "Theodore Ts'o" <tytso@mit.edu>, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC 3/9] ext4: Add couple of more fast_commit tracepoints
+Message-ID: <20220223101159.ekwbylvbmec5v35q@riteshh-domain>
+References: <cover.1645558375.git.riteshh@linux.ibm.com>
+ <90608d31b7ad8500c33d875d3a7fa50e3456dc1a.1645558375.git.riteshh@linux.ibm.com>
+ <20220223094057.53zcovnazrqwbngw@quack3.lan>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220218210831.u2ugtfr7gxllk4cs@treble>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220223094057.53zcovnazrqwbngw@quack3.lan>
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: Cq1uarU9SNPTSa9xV7AuPib1rkMvtpGB
+X-Proofpoint-ORIG-GUID: U0auvqnAZsGbi0WpngfEyqq8OgvInQjU
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-02-23_03,2022-02-21_02,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0
+ priorityscore=1501 phishscore=0 impostorscore=0 mlxlogscore=525
+ clxscore=1015 mlxscore=0 malwarescore=0 adultscore=0 suspectscore=0
+ spamscore=0 lowpriorityscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2201110000 definitions=main-2202230052
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 18, 2022 at 01:08:31PM -0800, Josh Poimboeuf wrote:
-> On Fri, Feb 18, 2022 at 05:49:06PM +0100, Peter Zijlstra wrote:
-> > Currently livepatch assumes __fentry__ lives at func+0, which is most
-> > likely untrue with IBT on. Override the weak klp_get_ftrace_location()
-> > function with an arch specific version that's IBT aware.
-> > 
-> > Also make the weak fallback verify the location is an actual ftrace
-> > location as a sanity check.
-> > 
-> > Suggested-by: Miroslav Benes <mbenes@suse.cz>
-> > Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+On 22/02/23 10:40AM, Jan Kara wrote:
+> On Wed 23-02-22 02:04:11, Ritesh Harjani wrote:
+> > This adds two more tracepoints for ext4_fc_track_template() &
+> > ext4_fc_cleanup() which are helpful in debugging some fast_commit issues.
+> >
+> > Signed-off-by: Ritesh Harjani <riteshh@linux.ibm.com>
+>
+> So why is this more useful than trace_ext4_fc_track_range() and other
+> tracepoints? I don't think it provides any more information? What am I
+> missing?
+
+Thanks Jan for all the reviews.
+
+So ext4_fc_track_template() adds almost all required information
+(including the caller info) in this one trace point along with transaction tid
+which is useful for tracking issue similar to what is mentioned in Patch-9.
+
+(race with if inode is part of two transactions tid where jbd2 full commit
+may begin for txn n-1 while inode is still in sbi->s_fc_q[MAIN])
+
+And similarly ext4_fc_cleanup() helps with that information about which tid
+completed and whether it was called from jbd2 full commit or from fast_commit.
+
+-ritesh
+
+>
+> 								Honza
+>
 > > ---
-> >  arch/x86/include/asm/livepatch.h |    9 +++++++++
-> >  kernel/livepatch/patch.c         |    2 +-
-> >  2 files changed, 10 insertions(+), 1 deletion(-)
-> > 
-> > --- a/arch/x86/include/asm/livepatch.h
-> > +++ b/arch/x86/include/asm/livepatch.h
-> > @@ -17,4 +17,13 @@ static inline void klp_arch_set_pc(struc
-> >  	ftrace_instruction_pointer_set(fregs, ip);
-> >  }
-> >  
-> > +#define klp_get_ftrace_location klp_get_ftrace_location
-> > +static inline unsigned long klp_get_ftrace_location(unsigned long faddr)
-> > +{
-> > +	unsigned long addr = ftrace_location(faddr);
-> > +	if (!addr && IS_ENABLED(CONFIG_X86_IBT))
-> > +		addr = ftrace_location(faddr + 4);
-> > +	return addr;
-> 
-> I'm kind of surprised this logic doesn't exist in ftrace itself.  Is
-> livepatch really the only user that needs to find the fentry for a given
-> function?
-> 
-> I had to do a double take for the ftrace_location() semantics, as I
-> originally assumed that's what it did, based on its name and signature.
-> 
-> Instead it apparently functions like a bool but returns its argument on
-> success.
-> 
-> Though the function comment tells a different story:
-> 
-> /**
->  * ftrace_location - return true if the ip giving is a traced location
-> 
-> So it's all kinds of confusing...
-
-Yes.. so yesterday, when making function-graph tracing not explode, I
-ran into a similar issue. Steve suggested something along the lines of
-.... this.
-
-(modified from his actual suggestion to also cover this case)
-
-Let me go try this...
-
---- a/kernel/trace/ftrace.c
-+++ b/kernel/trace/ftrace.c
-@@ -1578,7 +1578,23 @@ unsigned long ftrace_location_range(unsi
-  */
- unsigned long ftrace_location(unsigned long ip)
- {
--	return ftrace_location_range(ip, ip);
-+	struct dyn_ftrace *rec;
-+	unsigned long offset;
-+	unsigned long size;
-+
-+	rec = lookup_rec(ip, ip);
-+	if (!rec) {
-+		if (!kallsyms_lookup(ip, &size, &offset, NULL, NULL))
-+			goto out;
-+
-+		rec = lookup_rec(ip - offset, (ip - offset) + size);
-+	}
-+
-+	if (rec)
-+		return rec->ip;
-+
-+out:
-+	return 0;
- }
- 
- /**
-@@ -5110,11 +5126,16 @@ int register_ftrace_direct(unsigned long
- 	struct ftrace_func_entry *entry;
- 	struct ftrace_hash *free_hash = NULL;
- 	struct dyn_ftrace *rec;
--	int ret = -EBUSY;
-+	int ret = -ENODEV;
- 
- 	mutex_lock(&direct_mutex);
- 
-+	ip = ftrace_location(ip);
-+	if (!ip)
-+		goto out_unlock;
-+
- 	/* See if there's a direct function at @ip already */
-+	ret = -EBUSY;
- 	if (ftrace_find_rec_direct(ip))
- 		goto out_unlock;
- 
-@@ -5222,6 +5243,10 @@ int unregister_ftrace_direct(unsigned lo
- 
- 	mutex_lock(&direct_mutex);
- 
-+	ip = ftrace_location(ip);
-+	if (!ip)
-+		goto out_unlock;
-+
- 	entry = find_direct_entry(&ip, NULL);
- 	if (!entry)
- 		goto out_unlock;
+> >  fs/ext4/fast_commit.c       |  3 ++
+> >  include/trace/events/ext4.h | 67 +++++++++++++++++++++++++++++++++++++
+> >  2 files changed, 70 insertions(+)
+> >
+> > diff --git a/fs/ext4/fast_commit.c b/fs/ext4/fast_commit.c
+> > index 5ac594e03402..bf70879bb4fe 100644
+> > --- a/fs/ext4/fast_commit.c
+> > +++ b/fs/ext4/fast_commit.c
+> > @@ -386,6 +386,8 @@ static int ext4_fc_track_template(
+> >  	if (ext4_test_mount_flag(inode->i_sb, EXT4_MF_FC_INELIGIBLE))
+> >  		return -EINVAL;
+> >
+> > +	trace_ext4_fc_track_template(handle, inode, __fc_track_fn, enqueue);
+> > +
+> >  	tid = handle->h_transaction->t_tid;
+> >  	mutex_lock(&ei->i_fc_lock);
+> >  	if (tid == ei->i_sync_tid) {
+> > @@ -1241,6 +1243,7 @@ static void ext4_fc_cleanup(journal_t *journal, int full, tid_t tid)
+> >  	if (full && sbi->s_fc_bh)
+> >  		sbi->s_fc_bh = NULL;
+> >
+> > +	trace_ext4_fc_cleanup(journal, full, tid);
+> >  	jbd2_fc_release_bufs(journal);
+> >
+> >  	spin_lock(&sbi->s_fc_lock);
+> > diff --git a/include/trace/events/ext4.h b/include/trace/events/ext4.h
+> > index 17fb9c506e8a..cd09dccea502 100644
+> > --- a/include/trace/events/ext4.h
+> > +++ b/include/trace/events/ext4.h
+> > @@ -2855,6 +2855,73 @@ TRACE_EVENT(ext4_fc_track_range,
+> >  		      __entry->end)
+> >  	);
+> >
+> > +TRACE_EVENT(ext4_fc_track_template,
+> > +	TP_PROTO(handle_t *handle, struct inode *inode,
+> > +		 void *__fc_track_fn, int enqueue),
+> > +
+> > +	TP_ARGS(handle, inode, __fc_track_fn, enqueue),
+> > +
+> > +	TP_STRUCT__entry(
+> > +		__field(dev_t, dev)
+> > +		__field(tid_t, t_tid)
+> > +		__field(ino_t, i_ino)
+> > +		__field(tid_t, i_sync_tid)
+> > +		__field(void *, __fc_track_fn)
+> > +		__field(int, enqueue)
+> > +		__field(bool, jbd2_ongoing)
+> > +		__field(bool, fc_ongoing)
+> > +	),
+> > +
+> > +	TP_fast_assign(
+> > +		struct ext4_sb_info *sbi = EXT4_SB(inode->i_sb);
+> > +		struct ext4_inode_info *ei = EXT4_I(inode);
+> > +
+> > +		__entry->dev = inode->i_sb->s_dev;
+> > +		__entry->t_tid = handle->h_transaction->t_tid;
+> > +		__entry->i_ino = inode->i_ino;
+> > +		__entry->i_sync_tid = ei->i_sync_tid;
+> > +		__entry->__fc_track_fn = __fc_track_fn;
+> > +		__entry->enqueue = enqueue;
+> > +		__entry->jbd2_ongoing =
+> > +		    sbi->s_journal->j_flags & JBD2_FULL_COMMIT_ONGOING;
+> > +		__entry->fc_ongoing =
+> > +		    sbi->s_journal->j_flags & JBD2_FAST_COMMIT_ONGOING;
+> > +	),
+> > +
+> > +	TP_printk("dev %d,%d, t_tid %u, ino %lu, i_sync_tid %u, "
+> > +		  "track_fn %pS, enqueue %d, jbd2_ongoing %d, fc_ongoing %d",
+> > +		  MAJOR(__entry->dev), MINOR(__entry->dev),
+> > +		  __entry->t_tid, __entry->i_ino, __entry->i_sync_tid,
+> > +		  (void *)__entry->__fc_track_fn, __entry->enqueue,
+> > +		  __entry->jbd2_ongoing, __entry->fc_ongoing)
+> > +	);
+> > +
+> > +TRACE_EVENT(ext4_fc_cleanup,
+> > +	TP_PROTO(journal_t *journal, int full, tid_t tid),
+> > +
+> > +	TP_ARGS(journal, full, tid),
+> > +
+> > +	TP_STRUCT__entry(
+> > +		__field(dev_t, dev)
+> > +		__field(int, j_fc_off)
+> > +		__field(int, full)
+> > +		__field(tid_t, tid)
+> > +	),
+> > +
+> > +	TP_fast_assign(
+> > +		struct super_block *sb = journal->j_private;
+> > +
+> > +		__entry->dev = sb->s_dev;
+> > +		__entry->j_fc_off = journal->j_fc_off;
+> > +		__entry->full = full;
+> > +		__entry->tid = tid;
+> > +	),
+> > +
+> > +	TP_printk("dev %d,%d, j_fc_off %d, full %d, tid %u",
+> > +		  MAJOR(__entry->dev), MINOR(__entry->dev),
+> > +		  __entry->j_fc_off, __entry->full, __entry->tid)
+> > +	);
+> > +
+> >  TRACE_EVENT(ext4_update_sb,
+> >  	TP_PROTO(struct super_block *sb, ext4_fsblk_t fsblk,
+> >  		 unsigned int flags),
+> > --
+> > 2.31.1
+> >
+> --
+> Jan Kara <jack@suse.com>
+> SUSE Labs, CR

@@ -2,80 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D58F94C185F
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 17:18:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C1C24C1866
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 17:20:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242704AbiBWQTI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 11:19:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55836 "EHLO
+        id S242720AbiBWQUf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 11:20:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242676AbiBWQTG (ORCPT
+        with ESMTP id S234267AbiBWQUd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 11:19:06 -0500
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA7681CFD9;
-        Wed, 23 Feb 2022 08:18:38 -0800 (PST)
-Received: by mail-wr1-x434.google.com with SMTP id u1so40455147wrg.11;
-        Wed, 23 Feb 2022 08:18:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=vu8Twnocn3vA4ricnLle2PUL2O6gazUeaL13927N0Bw=;
-        b=dU+Uq1hgyWoO4vVyQn1ujrktF0A2z0Zg7WmMjPHYBcM7m32p0tLKDSKQUVOjkCMPLd
-         NQHbsrDFQJ+vyYL92d2dYicS/odftSePDJWQl66P3pkpro62ARe5Evkii3sEAMhedGz/
-         VFdy0DKVRaEzQRiD/Gvgek/8tfHZlcsqxdoTTboE1sZ6EDbkjpUblB+t7bYdi29J4ezG
-         kiAJa5BditVgo5ThrGJQRtTECHC3i0GaVzlOEyfeeg0Hn67Nc3paqFSnSd+LK2M61yQa
-         Spy4a7vFsxx5Q9z8kV6/13pMYxzPbFFunOBddsseJsE5vcaC5Sdu4ypUcXOJMIql03aX
-         XVXQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=vu8Twnocn3vA4ricnLle2PUL2O6gazUeaL13927N0Bw=;
-        b=w4GKuCT5HFQzp3e32u30pLvwu0USuzaQSEZST2OwCc/YJrxeiIfL3A/8nYIN6QAA6e
-         bsKbX43lTQH1kh0LGM0bpIKekQdalT2f+u24rxiaTI2N9c+9ZxTr5gAbNfWpOARlHwcl
-         KXV1o7JuunfBmhehhn0jdo7eK8AZy4SMmf9pu88ArU8uCWWBr62g8WXXUgmv5Oikjbxv
-         BY88YbUofy3lPFvTGFaClC+zzxXU6rhlqO0LsEd+BuzE6cYTk/+JSjMfdtLQfYKnYtIU
-         4mUG1TQPkgib/LIWJekv5uowjPGxpI0raLIUMh65fnumb3hKVnMjDKlB1NBJMa5hjxiu
-         9VTQ==
-X-Gm-Message-State: AOAM532HNLvIe4ZXjtijdqMOH3IGsXqQUiYmhSXuVHIvKE+Zz5JeRByf
-        1Fs8njflQNxChUpHoA0bYYmtzT9NeNmKPLAheGE=
-X-Google-Smtp-Source: ABdhPJxUxsUu4B6LPuO8RFWw7Yn5lu+ezbPGrbFjXiTTcZQRl7UW8msM5NNY5SAhTMaB4e82kLY55STtgN9hvzTG0J0=
-X-Received: by 2002:a05:6000:1202:b0:1ed:b03e:69a0 with SMTP id
- e2-20020a056000120200b001edb03e69a0mr275388wrx.93.1645633117146; Wed, 23 Feb
- 2022 08:18:37 -0800 (PST)
+        Wed, 23 Feb 2022 11:20:33 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2A9AC2E57;
+        Wed, 23 Feb 2022 08:20:05 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3558161991;
+        Wed, 23 Feb 2022 16:20:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16D36C340E7;
+        Wed, 23 Feb 2022 16:20:04 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="UStiHDap"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1645633199;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=mnNQghKSAwgVNaMKLb/7Trnd/MlpODo5RAJNJEkv+10=;
+        b=UStiHDapBFGqlKj1XnAopIV0s/o4/wZAQt9kfn6UaRkkAF7dlnJ3QqN5tRoz/ZORj1iyB8
+        vZrQhcosPVD9IGzkANuD0g+v6mzrFASmeIaYq1MLaU1R7pw64al2PYmaHQo/tzRlnilQV3
+        twyhhu3J7BJ8itNYnKzpSPL2yJlYi2o=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id f2b47955 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Wed, 23 Feb 2022 16:19:59 +0000 (UTC)
+Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-2d07c4a0d06so216796747b3.13;
+        Wed, 23 Feb 2022 08:19:58 -0800 (PST)
+X-Gm-Message-State: AOAM532sMYVig0AJIED7HaxncuMXSE8p8sWohVSJNx6/ZVLkj0euEdTq
+        m5rVDcd9iq/dXWrkcJ7jgXyexa+1tBy2PSK9AZI=
+X-Google-Smtp-Source: ABdhPJzwqPvYWBp9LmD+Jha02PrV5WLBK/ki8ek/2uyVWgeaMR+4EcGUKMupw6bI8EUKZpQFGjPwDZfx/kujcdtLLBc=
+X-Received: by 2002:a81:5c83:0:b0:2d2:c136:70f3 with SMTP id
+ q125-20020a815c83000000b002d2c13670f3mr401327ywb.404.1645633196792; Wed, 23
+ Feb 2022 08:19:56 -0800 (PST)
 MIME-Version: 1.0
-References: <20220219193957.577054-1-robdclark@gmail.com> <a065a843-e7c3-a75b-aa8e-d4b264146df0@linaro.org>
-In-Reply-To: <a065a843-e7c3-a75b-aa8e-d4b264146df0@linaro.org>
-From:   Rob Clark <robdclark@gmail.com>
-Date:   Wed, 23 Feb 2022 08:18:56 -0800
-Message-ID: <CAF6AEGuAq_OT_bFon+WvGr+kU1wA_u=bRirC8BjN=5eYNopiOA@mail.gmail.com>
-Subject: Re: [PATCH] drm/msm: Avoid dirtyfb stalls on video mode displays
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
-        freedreno <freedreno@lists.freedesktop.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Rob Clark <robdclark@chromium.org>,
-        Sean Paul <sean@poorly.run>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Kalyan Thota <quic_kalyant@quicinc.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Krishna Manikandan <quic_mkrishn@quicinc.com>,
-        Mark Yacoub <markyacoub@google.com>,
-        Jessica Zhang <quic_jesszhan@quicinc.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Yangtao Li <tiny.windzz@gmail.com>,
-        David Heidelberg <david@ixit.cz>, Xu Wang <vulab@iscas.ac.cn>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        open list <linux-kernel@vger.kernel.org>
+References: <20220223131231.403386-1-Jason@zx2c4.com> <CAHmME9ogH_mx724n_deFfva7-xPCmma1-=2Mv0JdnZ-fC4JCjg@mail.gmail.com>
+In-Reply-To: <CAHmME9ogH_mx724n_deFfva7-xPCmma1-=2Mv0JdnZ-fC4JCjg@mail.gmail.com>
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date:   Wed, 23 Feb 2022 17:19:45 +0100
+X-Gmail-Original-Message-ID: <CAHmME9o9-eBCcjJMrJSdr23VfUEfvx12e4qRdtE5Sv3+Qcf-Bg@mail.gmail.com>
+Message-ID: <CAHmME9o9-eBCcjJMrJSdr23VfUEfvx12e4qRdtE5Sv3+Qcf-Bg@mail.gmail.com>
+Subject: Re: [PATCH RFC v1 0/2] VM fork detection for RNG
+To:     LKML <linux-kernel@vger.kernel.org>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        QEMU Developers <qemu-devel@nongnu.org>,
+        KVM list <kvm@vger.kernel.org>, linux-s390@vger.kernel.org,
+        adrian@parity.io
+Cc:     "Woodhouse, David" <dwmw@amazon.co.uk>,
+        "Catangiu, Adrian Costin" <acatan@amazon.com>, graf@amazon.com,
+        Colm MacCarthaigh <colmmacc@amazon.com>,
+        "Singh, Balbir" <sblbir@amazon.com>,
+        "Weiss, Radu" <raduweis@amazon.com>, Jann Horn <jannh@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Theodore Ts'o" <tytso@mit.edu>,
+        Igor Mammedov <imammedo@redhat.com>, ehabkost@redhat.com,
+        ben@skyportsystems.com, "Michael S. Tsirkin" <mst@redhat.com>,
+        lersek@redhat.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,63 +77,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 23, 2022 at 2:00 AM Dmitry Baryshkov
-<dmitry.baryshkov@linaro.org> wrote:
+On Wed, Feb 23, 2022 at 5:08 PM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
 >
-> On 19/02/2022 22:39, Rob Clark wrote:
-> > From: Rob Clark <robdclark@chromium.org>
-> >
-> > Someone on IRC once asked an innocent enough sounding question:  Why
-> > with xf86-video-modesetting is es2gears limited at 120fps.
-> >
-> > So I broke out the perfetto tracing mesa MR and took a look.  It turns
-> > out the problem was drm_atomic_helper_dirtyfb(), which would end up
-> > waiting for vblank.. es2gears would rapidly push two frames to Xorg,
-> > which would blit them to screen and in idle hook (I assume) call the
-> > DIRTYFB ioctl.  Which in turn would do an atomic update to flush the
-> > dirty rects, which would stall until the next vblank.  And then the
-> > whole process would repeat.
-> >
-> > But this is a bit silly, we only need dirtyfb for command mode DSI
-> > panels.  So lets just skip it otherwise.
-> >
-> > Signed-off-by: Rob Clark <robdclark@chromium.org>
-> > ---
-> >   drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c  | 13 +++++
-> >   drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.h  |  9 ++++
-> >   drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c   |  1 +
-> >   drivers/gpu/drm/msm/disp/mdp4/mdp4_crtc.c |  9 ++++
-> >   drivers/gpu/drm/msm/disp/mdp4/mdp4_kms.c  |  1 +
-> >   drivers/gpu/drm/msm/disp/mdp4/mdp4_kms.h  |  1 +
-> >   drivers/gpu/drm/msm/disp/mdp5/mdp5_crtc.c |  8 +++
-> >   drivers/gpu/drm/msm/disp/mdp5/mdp5_kms.c  |  1 +
-> >   drivers/gpu/drm/msm/disp/mdp5/mdp5_kms.h  |  1 +
-> >   drivers/gpu/drm/msm/msm_fb.c              | 64 ++++++++++++++++++++++-
-> >   drivers/gpu/drm/msm/msm_kms.h             |  2 +
-> >   11 files changed, 109 insertions(+), 1 deletion(-)
-> >
+> On Wed, Feb 23, 2022 at 2:12 PM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
+> > second patch is the reason this is just an RFC: it's a cleanup of the
+> > ACPI driver from last year, and I don't really have much experience
+> > writing, testing, debugging, or maintaining these types of drivers.
+> > Ideally this thread would yield somebody saying, "I see the intent of
+> > this; I'm happy to take over ownership of this part." That way, I can
+> > focus on the RNG part, and whoever steps up for the paravirt ACPI part
+> > can focus on that.
 >
-> I have checked your previous dirtyfb patch (and corresponding discussion).
+> I actually managed to test this in QEMU, and it seems to work quite well. Steps:
 >
-> I'm not fond of the idea of acquiring locks, computing the value, then
-> releasing the locks and reacquiring the locks again. I understand the
-> original needs_dirtyfb approach was frowned upon. Do we have a chance of
-> introducing drm_atomic_helper_dirtyfb_unlocked()? Which would perform
-> all the steps of the orignal helper, but without locks acquirement (and
-> state allocation/freeing)?
+> $ qemu-system-x86_64 ... -device vmgenid,guid=auto -monitor stdio
+> (qemu) savevm blah
+> (qemu) quit
+> $ qemu-system-x86_64 ... -device vmgenid,guid=auto -monitor stdio
+> (qemu) loadvm blah
 >
+> Doing this successfully triggers the function to reinitialize the RNG
+> with the new GUID. (It appears there's a bug in QEMU which prevents
+> the GUID from being reinitialized when running `loadvm` without
+> quitting first; I suppose this should be discussed with QEMU
+> upstream.)
+>
+> So that's very positive. But I would appreciate hearing from some
+> ACPI/Virt/Amazon people about this.
 
-The locking is really more just to avoid racing state access with
-state being free'd.  The sort of race you could have is perhaps
-dirtyfb racing with attaching the fb to a cmd mode
-plane->crtc->encoder chain.  I think this is relatively harmless since
-that act would flush the fb anyways.
+Because something something picture thousand words something, here's a
+gif to see this working as expected:
+https://data.zx2c4.com/vmgenid-appears-to-work.gif
 
-But it did give me an idea for a possibly simpler approach.. we might
-be able to just keep a refcnt of cmd mode panels the fb is indirectly
-attached to, and then msm_framebuffer_dirtyfb() simply has to check if
-that count is greater than zero.  If we increment/decrement the count
-in fb->prepare()/cleanup() that should also solve the race.
-
-BR,
--R
+Jason

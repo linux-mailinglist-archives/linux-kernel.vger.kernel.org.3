@@ -2,98 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA66A4C13DB
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 14:16:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 214AF4C13DC
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 14:16:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240828AbiBWNQs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 08:16:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38688 "EHLO
+        id S240837AbiBWNRE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 08:17:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240823AbiBWNQp (ORCPT
+        with ESMTP id S234560AbiBWNRB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 08:16:45 -0500
-Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0639A9E38;
-        Wed, 23 Feb 2022 05:16:17 -0800 (PST)
-Received: by mail-io1-xd35.google.com with SMTP id r7so18945825iot.3;
-        Wed, 23 Feb 2022 05:16:17 -0800 (PST)
+        Wed, 23 Feb 2022 08:17:01 -0500
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04C0F271A;
+        Wed, 23 Feb 2022 05:16:34 -0800 (PST)
+Received: by mail-pf1-x42b.google.com with SMTP id i6so15267905pfc.9;
+        Wed, 23 Feb 2022 05:16:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=u8in0yHTin9rid2JL1h9UHz/ZWLH7UBtkPLk0yjciWo=;
-        b=o0aEcJLwb5KuL077sU08l8nAD6z9CaYSS+zIHw1N1qn8BbmG9yBhjK4La7DlYUS68v
-         AV90yu4k9fqjO3SsYOEgrsqPFJ14ZbJtHV4kHExqj8wdMacxR7hSM153DOjKe1eymZ3/
-         jLUagLLLUhCJbtqmuGm8vzzq5scFkGx9D5Du9kBQnGxv0P9hk/Ai8HFez5s2ZeLRiARI
-         4lSCAxyu7DEHQ+/oUMlMei/6o1y/mR94iXPV1pIuHDy34xvfkqefyG2iAOYX98DaKpMm
-         7wV48TefocxDu1Ht/buxjNsvkheppZ36vXScCzWktgckjNrhTYoP6hvRRkWG/QW/J8s1
-         KRrA==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=+VpbJdgqUesqeroMLeLdo41RKTiOXezLGeN3mJqa6AQ=;
+        b=iUvdBHxfl/IXUeOyKcobXaHA4/Uui6w4QmrR1sDVIXKpW9bpixs67q5R/kp79ON6X7
+         v1ihBIsTPYVOriWKquuyFfyfvb5isNaoDuPu5moMuDl53dX5M2aiFxezY3tSHoiyarIP
+         ENDuLHk4AX0ZG0UJM11+DvunOSqkvoKUKisSs86whvR8t+Sgkcgi5XwwQ/RGJBFPnjoI
+         uIOdptXEp31b7s6n6sij4zK12sE9E3EW4iql4q3SjrQeij9KuLmHkk5Ipa4ssoz+CzNv
+         0z40hwf5gPfLV7aQUqOWstvrw8TCbRRNo4P+7YOSdhbqrchceN+zdenUlmF8UqMq5Wlg
+         75QQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=u8in0yHTin9rid2JL1h9UHz/ZWLH7UBtkPLk0yjciWo=;
-        b=TJ8pek0SyqrXsqTtnZBI7AIZGWdQG3ce/tbdSE3oWWhC6zKTwRtdt0eb6Kl2N5SIlk
-         5iewUsEYd/d64dFddF0k3pUQYMIHV2iTDK9C0/eJbTFaam/OG5xWye9gUykfqXGoqdRX
-         mPT7LztomPKPX6YBg7nHgHBcYImXA9uU2qh/sNFKkyntP3mEJvKab6PFw/ZXY7Cy+nV3
-         RMskMuCa4AQy8z7T3cDF2tlpHfzoMsP4XmLH1MkIWuXpdR5c3x38tVIYukjTrIIdyP1T
-         GLZ3y/69gf+VjoTOJLZEq7VnjsCKjbvS5MjxTALe0sIhKy0AHfdK06F19SODNT4xCYvf
-         gysg==
-X-Gm-Message-State: AOAM5325HLTuzKWQazLgEv5Zx1BTATHstWaqCo9T8OotWUjDTAuypv5s
-        gupAB75YE+yHHJKscmgdKuY=
-X-Google-Smtp-Source: ABdhPJzicFqUDPkW4Be0U6VpPioCzuvMlHyqli2pDCwuVxwUb1ugoQq8nTcJ0/GFAizHCeNXiWejig==
-X-Received: by 2002:a6b:8f83:0:b0:613:8b75:b76d with SMTP id r125-20020a6b8f83000000b006138b75b76dmr23134754iod.77.1645622177188;
-        Wed, 23 Feb 2022 05:16:17 -0800 (PST)
-Received: from auth1-smtp.messagingengine.com (auth1-smtp.messagingengine.com. [66.111.4.227])
-        by smtp.gmail.com with ESMTPSA id b1sm11526077ilj.76.2022.02.23.05.16.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Feb 2022 05:16:16 -0800 (PST)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailauth.nyi.internal (Postfix) with ESMTP id 856EF27C0054;
-        Wed, 23 Feb 2022 08:16:15 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute3.internal (MEProxy); Wed, 23 Feb 2022 08:16:15 -0500
-X-ME-Sender: <xms:nzMWYogrPCD5YHap9MTKfka32zIMGVL6n71BfQF_qtsB0sEjcmoDfw>
-    <xme:nzMWYhDVECLRJf_zb1E79awfGNVKPC7aPFH-D1lLV7ZfR124sk27iKdoT5PezwadZ
-    LUc6c-_1TIbn3jykw>
-X-ME-Received: <xmr:nzMWYgFwt-ICKunEDGpeG8RC7mp_aS4maIHF1Dpxmop8tgr2Q6xw_NJkUQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrledtgdeglecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefhvffufffkofgjfhgggfestdekredtredttdenucfhrhhomhepuehoqhhunhcu
-    hfgvnhhguceosghoqhhunhdrfhgvnhhgsehgmhgrihhlrdgtohhmqeenucggtffrrghtth
-    gvrhhnpeehvdevteefgfeiudettdefvedvvdelkeejueffffelgeeuhffhjeetkeeiueeu
-    leenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegsoh
-    hquhhnodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdeiledvgeehtdeigedq
-    udejjeekheehhedvqdgsohhquhhnrdhfvghngheppehgmhgrihhlrdgtohhmsehfihigmh
-    gvrdhnrghmvg
-X-ME-Proxy: <xmx:nzMWYpQCi7pd01qw25cDY3lXLld2VZgq5BbkgLCgI_ImwGc66OebIg>
-    <xmx:nzMWYlzVNEbga3d7cf3s0N9-I_WmwsjPcEmpJlNjkEBo1E0mLQ6_HA>
-    <xmx:nzMWYn4c5lVbZFBwORKMY7vfEsTLtOl2bTVC49yvFix6ZPqva-KD0g>
-    <xmx:nzMWYlfwdTuSA8FIPIeiN1cJy28UvLffsrFxAcbQVtt0SA9xAj-s1_LnvVw>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 23 Feb 2022 08:16:14 -0500 (EST)
-From:   Boqun Feng <boqun.feng@gmail.com>
-To:     Wei Liu <wei.liu@kernel.org>
-Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>,
-        linux-hyperv@vger.kernel.org,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Dexuan Cui <decui@microsoft.com>,
-        Michael Kelley <mikelley@microsoft.com>,
-        David Hildenbrand <david@redhat.com>,
-        linux-kernel@vger.kernel.org, Boqun Feng <boqun.feng@gmail.com>
-Subject: [RFC 2/2] Drivers: hv: balloon: Disable balloon and hot-add accordingly
-Date:   Wed, 23 Feb 2022 21:15:48 +0800
-Message-Id: <20220223131548.2234326-3-boqun.feng@gmail.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220223131548.2234326-1-boqun.feng@gmail.com>
-References: <20220223131548.2234326-1-boqun.feng@gmail.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=+VpbJdgqUesqeroMLeLdo41RKTiOXezLGeN3mJqa6AQ=;
+        b=3UbEiY7ldbIZTB26HKPle+VbI/C9WpsNKY4q/nLl/X02Biak6PGZX6KUpQv2Nj0Aj4
+         tcabE7rwDkodrvZN8lSPXVbTsXNDYDTj0K8DABXW2W+9wM5wTEAVyc+hq+TfV3TzJGSE
+         QUHioKFOiSZ0FvOmNdNdXHdBR6S7O2m5fjPUS6cpBq/hFUqsoSUmzhuchW5BBdiPRElo
+         maj3Ck3Z7C7cTFlc209Fdc9+ppfhocfCl8kAr+N8UPEt7X8P0XmlB03eJxbBFK8nMfwr
+         C2QwmBqhWOwSUz8vGECrU2gxByXYRoWctSmld8u8uPmqjvCV96KzNlPieMJmacVk/lQY
+         6w8Q==
+X-Gm-Message-State: AOAM533wd4XaNipwY6UpXvrb75MwixcRiav0LlmeLIC8VnWzAchdW4XK
+        IfpTrux6REcpDYVh0n2GZ3ZGfmTt8fI=
+X-Google-Smtp-Source: ABdhPJziEkZjFZEH9VUtfRZLLq2DxDDuDoTPhQ/YRirZW67cOz7qqkexo9nD2IeXWkNobvhOt6d1UA==
+X-Received: by 2002:a63:ac58:0:b0:373:9e90:3b7a with SMTP id z24-20020a63ac58000000b003739e903b7amr23172651pgn.262.1645622193486;
+        Wed, 23 Feb 2022 05:16:33 -0800 (PST)
+Received: from [192.168.11.5] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
+        by smtp.gmail.com with ESMTPSA id n15sm24173903pgd.17.2022.02.23.05.16.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 23 Feb 2022 05:16:33 -0800 (PST)
+Message-ID: <1abcb226-dbfd-b3d2-5453-208af7faa0c2@gmail.com>
+Date:   Wed, 23 Feb 2022 22:16:30 +0900
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v4 00/11] Transform documentation into POD
+Content-Language: en-US
+To:     =?UTF-8?B?VG9tYXN6IFdhcm5pZcWCxYJv?= <tomasz.warniello@gmail.com>
+Cc:     Randy Dunlap <rdunlap@infradead.org>, corbet@lwn.net,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Akira Yokosawa <akiyks@gmail.com>
+References: <525f3696-91f4-5a4a-c9ef-24758ccaa2bb@infradead.org>
+ <ff98f455-0221-7ff0-08ed-8dea9f08694b@gmail.com>
+ <939ef119-8a84-9206-bd7c-cfd215bb0200@gmail.com>
+ <20220223135548.27babd85@fuji.fritz.box>
+From:   Akira Yokosawa <akiyks@gmail.com>
+In-Reply-To: <20220223135548.27babd85@fuji.fritz.box>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -102,55 +78,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently there are known potential issues for balloon and hot-add on
-ARM64:
+On Wed, 23 Feb 2022 13:55:48 +0100,
+Tomasz Warnie=C5=82=C5=82o wrote:
+> Hi Akira,
+>=20
+> Take a look at `man perl` and you will find a synopsis also.
 
-*	Unballoon requests from Hyper-V should only unballoon ranges
-	that are guest page size aligned, otherwise guests cannot handle
-	because it's impossible to partially free a page.
+When I do "man perl", I want to see a detailed explanation, and
+somewhat hard-to-parse synopsis is ok.
 
-*	Memory hot-add requests from Hyper-V should provide the NUMA
-	node id of the added ranges or ARM64 should have a functional
-	memory_add_physaddr_to_nid(), otherwise the node id is missing
-	for add_memory().
+I'm saying that I don't like to see such a thing when I type
+"./scripts/kerneldoc -h".  I expect a hint to recall which option I
+should use.  I don't want to scroll back the terminal.
 
-These issues require discussions on design and implementation. In the
-meanwhile, post_status() is working and essiential to guest monitoring.
-Therefore instead of the entire hv_balloon driver, the balloon and
-hot-add are disabled accordingly for now. Once the issues are fixed,
-they can be re-enable in these cases.
+It would be nice if the verbose man page can be shown by
+"./scripts/kerneldoc -v -h" or "perldoc -F ./scripts/kerneldoc".
 
-Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
----
- drivers/hv/hv_balloon.c | 14 ++++++++++++--
- 1 file changed, 12 insertions(+), 2 deletions(-)
+>                                                              It's simpl=
+y
+> better in depicting grammar relations than a flat switch list. Especial=
+ly
+> when the grammar gets complex. I dislike it also. And I don't think it
+> looks good. Rather creepy and overwhelming.
+>=20
+>>> I don't see much point for such a non-user-facing script having nice-=
+looking
+>>> well-structured documentation in the first place.
+>=20
+> You're touching the very essence of kernel-doc here. What and who is it=
+ for?
+> Not just the script - all of it.
 
-diff --git a/drivers/hv/hv_balloon.c b/drivers/hv/hv_balloon.c
-index 062156b88a87..35dcda20be85 100644
---- a/drivers/hv/hv_balloon.c
-+++ b/drivers/hv/hv_balloon.c
-@@ -1730,9 +1730,19 @@ static int balloon_connect_vsp(struct hv_device *dev)
- 	 * When hibernation (i.e. virtual ACPI S4 state) is enabled, the host
- 	 * currently still requires the bits to be set, so we have to add code
- 	 * to fail the host's hot-add and balloon up/down requests, if any.
-+	 *
-+	 * We disable balloon if the page size is larger than 4k, since
-+	 * currently it's unclear to us whether an unballoon request can make
-+	 * sure all page ranges are guest page size aligned.
-+	 *
-+	 * We also disable hot add on ARM64, because we currently rely on
-+	 * memory_add_physaddr_to_nid() to get a node id of a hot add range,
-+	 * however ARM64's memory_add_physaddr_to_nid() always return 0 and
-+	 * DM_MEM_HOT_ADD_REQUEST doesn't have the NUMA node information for
-+	 * add_memory().
- 	 */
--	cap_msg.caps.cap_bits.balloon = 1;
--	cap_msg.caps.cap_bits.hot_add = 1;
-+	cap_msg.caps.cap_bits.balloon = !(PAGE_SIZE > 4096UL);
-+	cap_msg.caps.cap_bits.hot_add = !IS_ENABLED(CONFIG_ARM64);
- 
- 	/*
- 	 * Specify our alignment requirements as it relates
--- 
-2.35.1
+Sorry, I have no idea what I am being asked.
+Could you rephrase above for a non-native speaker of English, please?
 
+        Thanks, Akira
+
+>=20
+> Regards,
+>=20
+> Tomasz

@@ -2,119 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C23A4C0D1C
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 08:13:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 41B2D4C0D24
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 08:18:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238609AbiBWHNm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 02:13:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43736 "EHLO
+        id S238608AbiBWHSZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 02:18:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237755AbiBWHNk (ORCPT
+        with ESMTP id S235279AbiBWHSX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 02:13:40 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92AB259A43
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 23:13:13 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 23 Feb 2022 02:18:23 -0500
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B47D659A6C
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 23:17:55 -0800 (PST)
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com [209.85.208.69])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 422A8B81E7E
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 07:13:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67540C340E7;
-        Wed, 23 Feb 2022 07:13:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645600390;
-        bh=+DGzvPHAQ6IbmlzSXeG2hbFfqt/5MKzb+1UR8+c8x2M=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=vVRpKs37RLe7EKJJcUhi6ISAKPOxEM8zefmXwVShM7O73mfcBh9LQqz6pArS3RpDS
-         os5uNQroDZSb899RphtEMb/lex5UYTuHcWUHeXr/yUWGxDCA+qjE7AqAliHh1tqh5F
-         4sphX46ismj2+0I02g4s7iDedivUz/hOx5e6hXzs=
-Date:   Wed, 23 Feb 2022 08:13:08 +0100
-From:   "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
-To:     "Zhang, Qiang1" <qiang1.zhang@intel.com>
-Cc:     syzbot <syzbot+348b571beb5eeb70a582@syzkaller.appspotmail.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "rafael@kernel.org" <rafael@kernel.org>,
-        "syzkaller-bugs@googlegroups.com" <syzkaller-bugs@googlegroups.com>,
-        "balbi@kernel.org" <balbi@kernel.org>
-Subject: Re: [syzbot] KASAN: use-after-free Read in dev_uevent
-Message-ID: <YhXehCLx9LVwCIO6@kroah.com>
-References: <0000000000005a991a05a86970bb@google.com>
- <00000000000033314805d8765175@google.com>
- <PH0PR11MB5880C431590170767B4BACFEDA3C9@PH0PR11MB5880.namprd11.prod.outlook.com>
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 8D345407CE
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 07:17:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1645600674;
+        bh=pNhZLyO1aRbMKJR3E5jbPjYni0gu5zR1R9ulpGYQlfo=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=fNr9tmsd6x1Fy7uchtPcOhKjF86tBpqh4IBBaU29yuwEDzFMWm/peRpDiSVrNyD+M
+         BVjrzHpEa7H9Nhk90z7y9Wbe1epZaLFvDDSuyRpBf8FnPwDjp0ep+wuouCsuxAX3Cv
+         +JhBd0jHPzOpBX3Co2IW2l1i7ivj7MhbqauURjmIz7VXj0AvtN63Hkbp0cYbPM7CZn
+         bQya5c6byiPPinHc/a9J5CPbcgphMrv5wwlyGId5B8O0lRaYQyso7BpwqGI2AHmxM+
+         EfUXNpWq20HHL3vtSh4elW3kHxDYKCOngtTZ8dn1Ecpu4oq/CPkfFwoo33wD+6EuGA
+         JUdTAL9kNGIHw==
+Received: by mail-ed1-f69.google.com with SMTP id l3-20020a50cbc3000000b0041083c11173so13184250edi.4
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 23:17:54 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=pNhZLyO1aRbMKJR3E5jbPjYni0gu5zR1R9ulpGYQlfo=;
+        b=KXIl70GfT+/iun4rwN18O94e17rZjBfCTrugl8O4Wi43dfQgVj68SHF3BDdPh6ThX3
+         hpvNfKhApBCE7sGb3eAN3gjNxDC7aENMr84c294xGfGil5sLq3Jpu8XDNB4Uh0Ca7vFa
+         mqtfpFEjxQL+jz/FwUYd3MEWSIh25E4q0B5srW2/JYgKPOTzyuOug89r37Tibsq0dIcQ
+         GJT7IRRFdIeIc7A+L5dqG7vphnUczO2fk2in2ZZ4Hj97wnL5ZhGSElbhp8j5F3A06MJC
+         uPoLbDg6PJ30GCz0JeJvGduYw1gZamxIQuWUEvKUwqZpIiu3YyZ7S9hUfQqeT+AxL1x6
+         WhTg==
+X-Gm-Message-State: AOAM532gd24Y+M8GTtyOeJGBJU6eYt86xeLy26Ijl/XLHxnuB7IEMDS9
+        cbrvoF77r6i9dQQCAZKc8cf1cmaRAeQnpMGqj/UASMBAjcMnZJwwUHPxP+89dWU1ILy4pgknTFa
+        vTGDyhAIigF5iOAAEc0rzS+VZ8ujrcthhJ2hCB+yfTA==
+X-Received: by 2002:a17:906:960c:b0:6ce:f326:f0d with SMTP id s12-20020a170906960c00b006cef3260f0dmr22364014ejx.154.1645600674002;
+        Tue, 22 Feb 2022 23:17:54 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJytxCMf3oX2iILnCYpZtMcrjt7Xa73med3vZDJvwLgW7YJjJ3i4vJy9tPCBBDUlxazJyY8A0w==
+X-Received: by 2002:a17:906:960c:b0:6ce:f326:f0d with SMTP id s12-20020a170906960c00b006cef3260f0dmr22364002ejx.154.1645600673832;
+        Tue, 22 Feb 2022 23:17:53 -0800 (PST)
+Received: from [192.168.0.124] (xdsl-188-155-181-108.adslplus.ch. [188.155.181.108])
+        by smtp.gmail.com with ESMTPSA id b3sm7021079ejl.67.2022.02.22.23.17.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 22 Feb 2022 23:17:52 -0800 (PST)
+Message-ID: <13af6f53-2a8c-c8d5-f061-baf59b511e58@canonical.com>
+Date:   Wed, 23 Feb 2022 08:17:52 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <PH0PR11MB5880C431590170767B4BACFEDA3C9@PH0PR11MB5880.namprd11.prod.outlook.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2] dt-bindings: memory: lpddr2: Adjust revision ID
+ property to match lpddr3
+Content-Language: en-US
+To:     Julius Werner <jwerner@chromium.org>
+Cc:     Dmitry Osipenko <digetx@gmail.com>, devicetree@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>
+References: <20220219012457.2889385-1-jwerner@chromium.org>
+ <9d33314e-97da-dc47-8361-2e45b75fa566@canonical.com>
+ <CAODwPW_JbcppFGKvrooxf25dLJuvf5iWoWim1xSXZ2wqgL1k0A@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <CAODwPW_JbcppFGKvrooxf25dLJuvf5iWoWim1xSXZ2wqgL1k0A@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 23, 2022 at 06:51:10AM +0000, Zhang, Qiang1 wrote:
+On 23/02/2022 03:44, Julius Werner wrote:
+>>> +  revision-id:
+>>> +    $ref: /schemas/types.yaml#/definitions/uint32-array
+>>> +    minItems: 2
+>>> +    maxItems: 2
+>>
+>> You need maximum value under items.  See:
+>> Documentation/devicetree/bindings/arm/l2c2x0.yaml
 > 
-> HEAD commit:    4f12b742eb2b Merge tag 'nfs-for-5.17-3' of git://git.linux..
-> git tree:       upstream
-> console output: https://syzkaller.appspot.com/x/log.txt?x=110a6df2700000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=f6a069ed94a1ed1d
-> dashboard link: https://syzkaller.appspot.com/bug?extid=348b571beb5eeb70a582
-> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12377296700000
+> Sorry, can you clarify how this is supposed to be? Do you want
 > 
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+348b571beb5eeb70a582@syzkaller.appspotmail.com
+>  revision-id:
+>    minItems: 2
+>    maxItems: 2
+>    items:
+>      minItems: 2
+>      maxItems: 2
 > 
-> ==================================================================
-> BUG: KASAN: use-after-free in dev_uevent+0x712/0x780 drivers/base/core.c:2320 Read of size 8 at addr ffff88802b934098 by task udevd/3689
+> or just
 > 
-> CPU: 2 PID: 3689 Comm: udevd Not tainted 5.17.0-rc4-syzkaller-00229-g4f12b742eb2b #0 Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-2 04/01/2014 Call Trace:
->  <TASK>
->  __dump_stack lib/dump_stack.c:88 [inline]
->  dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
->  print_address_description.constprop.0.cold+0x8d/0x303 mm/kasan/report.c:255  __kasan_report mm/kasan/report.c:442 [inline]  kasan_report.cold+0x83/0xdf mm/kasan/report.c:459
->  dev_uevent+0x712/0x780 drivers/base/core.c:2320
->  uevent_show+0x1b8/0x380 drivers/base/core.c:2391
->  dev_attr_show+0x4b/0x90 drivers/base/core.c:2094
->  sysfs_kf_seq_show+0x219/0x3d0 fs/sysfs/file.c:59
->  seq_read_iter+0x4f5/0x1280 fs/seq_file.c:230
->  kernfs_fop_read_iter+0x514/0x6f0 fs/kernfs/file.c:241  call_read_iter include/linux/fs.h:2068 [inline]
->  new_sync_read+0x429/0x6e0 fs/read_write.c:400
->  vfs_read+0x35c/0x600 fs/read_write.c:481
->  ksys_read+0x12d/0x250 fs/read_write.c:619
->  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80  entry_SYSCALL_64_after_hwframe+0x44/0xae
-> RIP: 0033:0x7f964cc558fe
-> Code: c0 e9 e6 fe ff ff 50 48 8d 3d 0e c7 09 00 e8 c9 cf 01 00 66 0f 1f 84 00 00 00 00 00 64 8b 04 25 18 00 00 00 85 c0 75 14 0f 05 <48> 3d 00 f0 ff ff 77 5a c3 66 0f 1f 84 00 00 00 00 00 48 83 ec 28
-> RSP: 002b:00007ffc0133d258 EFLAGS: 00000246 ORIG_RAX: 0000000000000000
-> RAX: ffffffffffffffda RBX: 000056497b21a140 RCX: 00007f964cc558fe
-> RDX: 0000000000001000 RSI: 000056497b218650 RDI: 0000000000000008
-> RBP: 00007f964cd22380 R08: 0000000000000008 R09: 00007f964cd25a60
-> R10: 0000000000000008 R11: 0000000000000246 R12: 000056497b21a140
-> R13: 0000000000000d68 R14: 00007f964cd21780 R15: 0000000000000d68  </TASK>
+>  revision-id:
+>    items:
+>      minItems: 2
+>      maxItems: 2
 > 
-> 
-> Hi All 
-> 
-> This should be because when the raw_dev is released, the 'driver' address has expired,
-> although the usb_gadget_remove_driver() empty 'dev.driver ' NULL, but UAF cannot be avoided.
-> 
-> static int dev_uevent(struct kobject *kobj, struct kobj_uevent_env *env) {
-> .....
->          if (dev->driver)
-> 2320                 add_uevent_var(env, "DRIVER=%s", dev->driver->name);
-> .....
-> }
-> 
-> Whether protection can be added when operating 'dev->driver'?
+> I see examples of both in the file you linked (and also examples of
+> what my original patch did).
 
-When the driver structure is unbound, this should be set to NULL.  Why
-isn't that happening?
+There is no example of the first case in linked file. I am not sure if
+it is correct even... I did not ask about maximum number of items, but
+"maximum value", so like this:
+https://elixir.bootlin.com/linux/latest/source/Documentation/devicetree/bindings/arm/l2c2x0.yaml#L73
 
-thanks,
+> Is there any authoritative documentation
+> somewhere I can read that specifies which of those is correct? (I
+> tried looking at
+> https://json-schema.org/understanding-json-schema/reference/array.html#length
+> but I'm not sure if that's relevant here.)
 
-greg k-h
+example-schema.yaml is the best, but it might not cover that part. We
+need more docs, I know...
+
+
+> For updating existing DTSes, do you want that in the same patch or a
+> separate patch in a series?
+
+Separate patch in this series, please.
+
+
+Best regards,
+Krzysztof

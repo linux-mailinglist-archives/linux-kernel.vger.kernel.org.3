@@ -2,143 +2,473 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 635F14C0F1B
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 10:22:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 33B044C0F20
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 10:23:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239216AbiBWJWl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 04:22:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49412 "EHLO
+        id S238813AbiBWJYN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 04:24:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229992AbiBWJWj (ORCPT
+        with ESMTP id S229992AbiBWJYL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 04:22:39 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18D8A3A71F;
-        Wed, 23 Feb 2022 01:22:12 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A88AB61676;
-        Wed, 23 Feb 2022 09:22:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13426C340F3;
-        Wed, 23 Feb 2022 09:22:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645608131;
-        bh=qr8aGN/GfpzREfWWEWfy67hMxOcd5xgEZdDkbd5B0Fc=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=fvP1S9ICDfQF8hCsfx1j5bfZ8MyW/1rG6leAkItXfaKKhotabi5LJfUSgdtHnAs1e
-         e//NBoK00IXi9zTUjPv7rNpA1RU7H3GNLpb9V1grfG21006D6HV2Tb4+Qk5tLh0HIo
-         Y8xDpIW1XwC917uzpPR1esP/YuSq+XHVf/PTy1JzpDjvNBh8Jh8OysgZZO5Bjpcj+Q
-         EJYwG2Z8BOyrYZNJ4iSfk1NrfuQSK+S4t7xQPNsmD2s/GQ8tcuq/JigD7ZEI9VXG1f
-         eljgFZP39JEv9+yiNsBLF4dJImtQrUvYwdNENxl33kkrfAUIOs6Dsce/NuZ/ym9xNY
-         WkfVAuCjEyWQw==
-Received: by mail-ua1-f43.google.com with SMTP id 10so1100160uar.9;
-        Wed, 23 Feb 2022 01:22:11 -0800 (PST)
-X-Gm-Message-State: AOAM533GHSt2VO5OSbN+/PMx85QJ5OXAdQ125cZm9ZqDIt+0V7ZFSAZ6
-        sGYfO00CUeafNlgt1z+1b/gNa4WNVJ+uoaUYCOU=
-X-Google-Smtp-Source: ABdhPJydckZxxdHIMfr4RcZ21Y/DNoqRFXVrN4eEPW4jdar5CY+FIz7J7onmSF87bCDroUCQYiJcpWM17ymdodrxxjk=
-X-Received: by 2002:ab0:5543:0:b0:33c:9e1c:a30d with SMTP id
- u3-20020ab05543000000b0033c9e1ca30dmr11349278uaa.97.1645608129880; Wed, 23
- Feb 2022 01:22:09 -0800 (PST)
+        Wed, 23 Feb 2022 04:24:11 -0500
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A2408303E;
+        Wed, 23 Feb 2022 01:23:43 -0800 (PST)
+Received: by mail-wr1-x42b.google.com with SMTP id j17so11789620wrc.0;
+        Wed, 23 Feb 2022 01:23:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:subject:date:message-id:in-reply-to:references:mime-version
+         :content-transfer-encoding;
+        bh=jbq10nLonOoQIWUDU4MM+CGkApLNOTNDOJQzwLbfqW0=;
+        b=oPNM/G3uSPpuBebgefqdbWMgRiFhcsduaOPEq9qNwzcd74ZUcXRSMgNHCith4Gw+H2
+         pmts7S2pLGO5jsaODMKe6qEVR/Cru3BOY3zsP/9/O1OakDRRmmW0BYFlhDTvz7sHtM3d
+         SbI5AO0g5a8+epvFXKA2oNZLWZTG8lJC7VhNV0JOcXZ/Jj2SufRKBF6tXP4ic1picRHm
+         Dk0zT50yj8E8fvOi2bruCmB0Ki+RHTgjK9602ikrnd4ThBKi1KsmDB1IddSNODwLd4xb
+         /MYnY8BSifay5sU8OAJ7ca1UeqBValBBjX3357pY5HH3lsmBqPZfijLgdQPBq4fNLVkV
+         YRpw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=jbq10nLonOoQIWUDU4MM+CGkApLNOTNDOJQzwLbfqW0=;
+        b=sz278/CxGNLohC9pvYluSYyaakYWgpcUKiDyOOj1JdoPuBoVnm/ovVDqaWkC6SLcK2
+         oDqlPg7ha7KR5Jb3Tkf2O5VW/UswR1CW/51vVtJhNZwDiyT93OYOVRA/BWyuaA150jvI
+         5975hTNAG2Eq0DGX/K2Pe2aDjiDvs/n61C0lSkZN3r6q3tKnLbdCu2xswllgyYhn0PLo
+         d0Rv4WmyAtP+z76H6iM4ihtmMKGqg29iw94PdfCFXoxSSJcBvJ2UQrrEAobdPJxakRdk
+         gHfMKOfU7Ssvt8KwonBz5KqyHvdCfX0M8+8Rf3ax2H+AlsMCKZlQK1fTHB7Oo4il/Dts
+         e3rA==
+X-Gm-Message-State: AOAM532AAfi7dQlsnJftmxNZKstC45fGWKbKMMaVVjSqm4unfs9qALf2
+        k2ivOD25i5qz1S/vnaNnkdo=
+X-Google-Smtp-Source: ABdhPJxs2prQPovpRJskBs7NX1FZLDN9J5+qdma86yzWRGsRk/UeaEICxzQv5xQaBFb0qLJ3EEIWvg==
+X-Received: by 2002:adf:f583:0:b0:1ed:b63a:819a with SMTP id f3-20020adff583000000b001edb63a819amr1230188wro.104.1645608221328;
+        Wed, 23 Feb 2022 01:23:41 -0800 (PST)
+Received: from leap.localnet (host-79-27-0-81.retail.telecomitalia.it. [79.27.0.81])
+        by smtp.gmail.com with ESMTPSA id f13-20020a05600c4e8d00b0037bc5ce6042sm7190098wmq.27.2022.02.23.01.23.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Feb 2022 01:23:40 -0800 (PST)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     jgg@ziepe.ca, liangwenpeng@huawei.com,
+        linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org,
+        liweihang@huawei.com, netdev@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com,
+        syzbot <syzbot+4f322a6d84e991c38775@syzkaller.appspotmail.com>,
+        Tony Lu <tonylu@linux.alibaba.com>
+Subject: Re: [syzbot] BUG: sleeping function called from invalid context in smc_pnet_apply_ib
+Date:   Wed, 23 Feb 2022 10:23:38 +0100
+Message-ID: <2174944.iZASKD2KPV@leap>
+In-Reply-To: <0000000000008bcf6e05d83ab885@google.com>
+References: <0000000000008bcf6e05d83ab885@google.com>
 MIME-Version: 1.0
-References: <20220201150545.1512822-14-guoren@kernel.org> <mhng-5c3b969c-9a23-48dc-ab10-a1addc6a5349@palmer-ri-x1c9>
-In-Reply-To: <mhng-5c3b969c-9a23-48dc-ab10-a1addc6a5349@palmer-ri-x1c9>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Wed, 23 Feb 2022 17:21:59 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTQd_5Ei9RDUg5uYAAjf0+idCqUtxdemb0CEMsxq7m3+UA@mail.gmail.com>
-Message-ID: <CAJF2gTQd_5Ei9RDUg5uYAAjf0+idCqUtxdemb0CEMsxq7m3+UA@mail.gmail.com>
-Subject: Re: [PATCH V5 13/21] riscv: compat: process: Add UXL_32 support in start_thread
-To:     Palmer Dabbelt <palmer@dabbelt.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Anup Patel <anup@brainfault.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        liush <liush@allwinnertech.com>, Wei Fu <wefu@redhat.com>,
-        Drew Fustini <drew@beagleboard.org>,
-        Wang Junqiang <wangjunqiang@iscas.ac.cn>,
-        Christoph Hellwig <hch@lst.de>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linux-csky@vger.kernel.org,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        sparclinux <sparclinux@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Parisc List <linux-parisc@vger.kernel.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Guo Ren <guoren@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/mixed; boundary="nextPart1886803.PYKUYFuaPT"
+Content-Transfer-Encoding: 7Bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 23, 2022 at 9:42 AM Palmer Dabbelt <palmer@dabbelt.com> wrote:
->
-> On Tue, 01 Feb 2022 07:05:37 PST (-0800), guoren@kernel.org wrote:
-> > From: Guo Ren <guoren@linux.alibaba.com>
-> >
-> > If the current task is in COMPAT mode, set SR_UXL_32 in status for
-> > returning userspace. We need CONFIG _COMPAT to prevent compiling
-> > errors with rv32 defconfig.
-> >
-> > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> > Signed-off-by: Guo Ren <guoren@kernel.org>
-> > Cc: Arnd Bergmann <arnd@arndb.de>
-> > Cc: Palmer Dabbelt <palmer@dabbelt.com>
-> > ---
-> >  arch/riscv/kernel/process.c | 5 +++++
-> >  1 file changed, 5 insertions(+)
-> >
-> > diff --git a/arch/riscv/kernel/process.c b/arch/riscv/kernel/process.c
-> > index 03ac3aa611f5..1a666ad299b4 100644
-> > --- a/arch/riscv/kernel/process.c
-> > +++ b/arch/riscv/kernel/process.c
-> > @@ -97,6 +97,11 @@ void start_thread(struct pt_regs *regs, unsigned lon=
-g pc,
-> >       }
-> >       regs->epc =3D pc;
-> >       regs->sp =3D sp;
-> > +
-> > +#ifdef CONFIG_COMPAT
-> > +     if (is_compat_task())
-> > +             regs->status |=3D SR_UXL_32;
->
-> Not sure if I'm just misunderstanding the bit ops here, but aren't we
-> trying to set the UXL field to 1 (for UXL=3D32)?  That should be a bit
-> field set op, not just an OR.
-You are right, I would modify like this:
-+     if (is_compat_task())
-+             regs->status =3D =EF=BC=88regs->status & ~SR_UXL) | SR_UXL_32=
-;
-+     else
-+.            regs->status =3D =EF=BC=88regs->status & ~SR_UXL) | SR_UXL_64=
-;
+This is a multi-part message in MIME format.
+
+--nextPart1886803.PYKUYFuaPT
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="UTF-8"
+
+On gioved=C3=AC 17 febbraio 2022 19:13:19 CET syzbot wrote:
+> syzbot has found a reproducer for the following issue on:
+>=20
+> HEAD commit:    5740d0689096 net: sched: limit TC_ACT_REPEAT loops
+> git tree:       net
+> console output: https://syzkaller.appspot.com/x/log.txt?x=3D1474360e700000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=3D88e226f0197ae=
+ba5
+> dashboard link: https://syzkaller.appspot.com/bug?extid=3D4f322a6d84e991c=
+38775
+> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binuti=
+ls for Debian) 2.35.2
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=3D13dd93f2700=
+000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=3D16a497e2700000
+>=20
+> IMPORTANT: if you fix the issue, please add the following tag to the comm=
+it:
+> Reported-by: syzbot+4f322a6d84e991c38775@syzkaller.appspotmail.com
+>=20
+> infiniband syz1: set active
+> infiniband syz1: added lo
+> RDS/IB: syz1: added
+> smc: adding ib device syz1 with port count 1
+> BUG: sleeping function called from invalid context at kernel/locking/mute=
+x.c:577
+> in_atomic(): 1, irqs_disabled(): 0, non_block: 0, pid: 3589, name: syz-ex=
+ecutor180
+> preempt_count: 1, expected: 0
+> RCU nest depth: 0, expected: 0
+> 6 locks held by syz-executor180/3589:
+>  #0: ffffffff90865838 (&rdma_nl_types[idx].sem){.+.+}-{3:3}, at: rdma_nl_=
+rcv_msg+0x161/0x690 drivers/infiniband/core/netlink.c:164
+>  #1: ffffffff8d04edf0 (link_ops_rwsem){++++}-{3:3}, at: nldev_newlink+0x2=
+5d/0x560 drivers/infiniband/core/nldev.c:1707
+>  #2: ffffffff8d03e650 (devices_rwsem){++++}-{3:3}, at: enable_device_and_=
+get+0xfc/0x3b0 drivers/infiniband/core/device.c:1321
+>  #3: ffffffff8d03e510 (clients_rwsem){++++}-{3:3}, at: enable_device_and_=
+get+0x15b/0x3b0 drivers/infiniband/core/device.c:1329
+>  #4: ffff8880790445c0 (&device->client_data_rwsem){++++}-{3:3}, at: add_c=
+lient_context+0x3d0/0x5e0 drivers/infiniband/core/device.c:718
+>  #5: ffff88814a29c818 (&pnettable->lock){++++}-{2:2}, at: smc_pnetid_by_t=
+able_ib+0x18c/0x470 net/smc/smc_pnet.c:1159
+> Preemption disabled at:
+> [<0000000000000000>] 0x0
+> CPU: 0 PID: 3589 Comm: syz-executor180 Not tainted 5.17.0-rc3-syzkaller-0=
+0174-g5740d0689096 #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS G=
+oogle 01/01/2011
+> Call Trace:
+>  <TASK>
+>  __dump_stack lib/dump_stack.c:88 [inline]
+>  dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+>  __might_resched.cold+0x222/0x26b kernel/sched/core.c:9576
+>  __mutex_lock_common kernel/locking/mutex.c:577 [inline]
+>  __mutex_lock+0x9f/0x12f0 kernel/locking/mutex.c:733
+>  smc_pnet_apply_ib+0x28/0x160 net/smc/smc_pnet.c:251
+>  smc_pnetid_by_table_ib+0x2ae/0x470 net/smc/smc_pnet.c:1164
+>  smc_ib_add_dev+0x4d7/0x900 net/smc/smc_ib.c:940
+>  add_client_context+0x405/0x5e0 drivers/infiniband/core/device.c:720
+>  enable_device_and_get+0x1cd/0x3b0 drivers/infiniband/core/device.c:1331
+>  ib_register_device drivers/infiniband/core/device.c:1419 [inline]
+>  ib_register_device+0x814/0xaf0 drivers/infiniband/core/device.c:1365
+>  rxe_register_device+0x2fe/0x3b0 drivers/infiniband/sw/rxe/rxe_verbs.c:11=
+46
+>  rxe_add+0x1331/0x1710 drivers/infiniband/sw/rxe/rxe.c:246
+>  rxe_net_add+0x8c/0xe0 drivers/infiniband/sw/rxe/rxe_net.c:538
+>  rxe_newlink drivers/infiniband/sw/rxe/rxe.c:268 [inline]
+>  rxe_newlink+0xa9/0xd0 drivers/infiniband/sw/rxe/rxe.c:249
+>  nldev_newlink+0x30a/0x560 drivers/infiniband/core/nldev.c:1717
+>  rdma_nl_rcv_msg+0x36d/0x690 drivers/infiniband/core/netlink.c:195
+>  rdma_nl_rcv_skb drivers/infiniband/core/netlink.c:239 [inline]
+>  rdma_nl_rcv+0x2ee/0x430 drivers/infiniband/core/netlink.c:259
+>  netlink_unicast_kernel net/netlink/af_netlink.c:1317 [inline]
+>  netlink_unicast+0x539/0x7e0 net/netlink/af_netlink.c:1343
+>  netlink_sendmsg+0x904/0xe00 net/netlink/af_netlink.c:1919
+>  sock_sendmsg_nosec net/socket.c:705 [inline]
+>  sock_sendmsg+0xcf/0x120 net/socket.c:725
+>  ____sys_sendmsg+0x6e8/0x810 net/socket.c:2413
+>  ___sys_sendmsg+0xf3/0x170 net/socket.c:2467
+>  __sys_sendmsg+0xe5/0x1b0 net/socket.c:2496
+>  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+>  entry_SYSCALL_64_after_hwframe+0x44/0xae
+> RIP: 0033:0x7f7ef25bed59
+> Code: 28 c3 e8 5a 14 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48 89 f=
+7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff=
+ ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+> RSP: 002b:00007ffcd0ce91d8 EFLAGS: 00000246 ORIG_RAX: 000000000000002e
+> RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f7ef25bed59
+> RDX: 0000000000000000 RSI: 00000000200000c0 RDI: 0000000000000005
+> RBP: 00007f7ef25827c0 R08: 0000000000000014 R09: 0000000000000000
+> R10: 0000000000000041 R11: 0000000000000246 R12: 00007f7ef2582850
+> R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+>  </TASK>
+>=20
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+> [ BUG: Invalid wait context ]
+> 5.17.0-rc3-syzkaller-00174-g5740d0689096 #0 Tainted: G        W       =20
+> -----------------------------
+> syz-executor180/3589 is trying to lock:
+> ffffffff8d7100d8 (smc_ib_devices.mutex){+.+.}-{3:3}, at: smc_pnet_apply_i=
+b+0x28/0x160 net/smc/smc_pnet.c:251
+> other info that might help us debug this:
+> context-{4:4}
+> 6 locks held by syz-executor180/3589:
+>  #0: ffffffff90865838 (&rdma_nl_types[idx].sem){.+.+}-{3:3}, at: rdma_nl_=
+rcv_msg+0x161/0x690 drivers/infiniband/core/netlink.c:164
+>  #1: ffffffff8d04edf0 (link_ops_rwsem){++++}-{3:3}, at: nldev_newlink+0x2=
+5d/0x560 drivers/infiniband/core/nldev.c:1707
+>  #2: ffffffff8d03e650 (devices_rwsem){++++}-{3:3}, at: enable_device_and_=
+get+0xfc/0x3b0 drivers/infiniband/core/device.c:1321
+>  #3: ffffffff8d03e510 (clients_rwsem){++++}-{3:3}, at: enable_device_and_=
+get+0x15b/0x3b0 drivers/infiniband/core/device.c:1329
+>  #4: ffff8880790445c0 (&device->client_data_rwsem){++++}-{3:3}, at: add_c=
+lient_context+0x3d0/0x5e0 drivers/infiniband/core/device.c:718
+>  #5: ffff88814a29c818 (&pnettable->lock){++++}-{2:2}, at: smc_pnetid_by_t=
+able_ib+0x18c/0x470 net/smc/smc_pnet.c:1159
+> stack backtrace:
+> CPU: 0 PID: 3589 Comm: syz-executor180 Tainted: G        W         5.17.0=
+=2Drc3-syzkaller-00174-g5740d0689096 #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS G=
+oogle 01/01/2011
+> Call Trace:
+>  <TASK>
+>  __dump_stack lib/dump_stack.c:88 [inline]
+>  dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+>  print_lock_invalid_wait_context kernel/locking/lockdep.c:4678 [inline]
+>  check_wait_context kernel/locking/lockdep.c:4739 [inline]
+>  __lock_acquire.cold+0x213/0x3ab kernel/locking/lockdep.c:4977
+>  lock_acquire kernel/locking/lockdep.c:5639 [inline]
+>  lock_acquire+0x1ab/0x510 kernel/locking/lockdep.c:5604
+>  __mutex_lock_common kernel/locking/mutex.c:600 [inline]
+>  __mutex_lock+0x12f/0x12f0 kernel/locking/mutex.c:733
+>  smc_pnet_apply_ib+0x28/0x160 net/smc/smc_pnet.c:251
+>  smc_pnetid_by_table_ib+0x2ae/0x470 net/smc/smc_pnet.c:1164
+>  smc_ib_add_dev+0x4d7/0x900 net/smc/smc_ib.c:940
+>  add_client_context+0x405/0x5e0 drivers/infiniband/core/device.c:720
+>  enable_device_and_get+0x1cd/0x3b0 drivers/infiniband/core/device.c:1331
+>  ib_register_device drivers/infiniband/core/device.c:1419 [inline]
+>  ib_register_device+0x814/0xaf0 drivers/infiniband/core/device.c:1365
+>  rxe_register_device+0x2fe/0x3b0 drivers/infiniband/sw/rxe/rxe_verbs.c:11=
+46
+>  rxe_add+0x1331/0x1710 drivers/infiniband/sw/rxe/rxe.c:246
+>  rxe_net_add+0x8c/0xe0 drivers/infiniband/sw/rxe/rxe_net.c:538
+>  rxe_newlink drivers/infiniband/sw/rxe/rxe.c:268 [inline]
+>  rxe_newlink+0xa9/0xd0 drivers/infiniband/sw/rxe/rxe.c:249
+>  nldev_newlink+0x30a/0x560 drivers/infiniband/core/nldev.c:1717
+>  rdma_nl_rcv_msg+0x36d/0x690 drivers/infiniband/core/netlink.c:195
+>  rdma_nl_rcv_skb drivers/infiniband/core/netlink.c:239 [inline]
+>  rdma_nl_rcv+0x2ee/0x430 drivers/infiniband/core/netlink.c:259
+>  netlink_unicast_kernel net/netlink/af_netlink.c:1317 [inline]
+>  netlink_unicast+0x539/0x7e0 net/netlink/af_netlink.c:1343
+>  netlink_sendmsg+0x904/0xe00 net/netlink/af_netlink.c:1919
+>  sock_sendmsg_nosec net/socket.c:705 [inline]
+>  sock_sendmsg+0xcf/0x120 net/socket.c:725
+>  ____sys_sendmsg+0x6e8/0x810 net/socket.c:2413
+>  ___sys_sendmsg+0xf3/0x170 net/socket.c:2467
+>  __sys_sendmsg+0xe5/0x1b0 net/socket.c:2496
+>  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+>  entry_SYSCALL_64_after_hwframe+0x44/0xae
+> RIP: 0033:0x7f7ef25bed59
+> Code: 28 c3 e8 5a 14 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48 89 f=
+7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff=
+ ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+> RSP: 002b:00007ffcd0ce91d8 EFLAGS: 00000246 ORIG_RAX: 000000000000002e
+> RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f7ef25bed59
+> RDX: 0000000000000000 RSI: 00000000200000c0 RDI: 0000000000000005
+> RBP: 00007f7ef25827c0 R08: 0000000000000014 R09: 0000000000000000
+> R10: 0000000000000041 R11: 0000000000000246 R12: 00007f7ef2582850
+> R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+>  </TASK>
+> smc:    ib device syz1 port 1 has pnetid SYZ2 (user defined)
+>=20
+As confirmed by Tony Lu (thanks!), replace rwlocks with mutexes for locking=
+=20
+"struct smc_pnettable".
+
+#syz test: git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git=
+ master
+
+=46abio M. De Francesco
+
+P.S.: I have just sent another diff but it has a stupid mistake so it canno=
+t compile.
 
 
->
-> > +#endif
-> >  }
-> >
-> >  void flush_thread(void)
->
-> Additionally: this isn't really an issue so much with this patch, but it
-> does bring up that we're relying on someone else to have set UXL=3D64 on
-> CONFIG_COMPAT=3Dn systems.  I don't see that in any spec anywhere, so we
-> should really be setting UXL in Linux for all systems (ie, not just those=
- with
-> COMPAT=3Dy).
+--nextPart1886803.PYKUYFuaPT
+Content-Disposition: attachment; filename="diff"
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/x-patch; charset="UTF-8"; name="diff"
+
+diff --git a/net/smc/smc_pnet.c b/net/smc/smc_pnet.c
+index 0599246c0376..29f0a559d884 100644
+--- a/net/smc/smc_pnet.c
++++ b/net/smc/smc_pnet.c
+@@ -113,7 +113,7 @@ static int smc_pnet_remove_by_pnetid(struct net *net, char *pnet_name)
+ 	pnettable = &sn->pnettable;
+ 
+ 	/* remove table entry */
+-	write_lock(&pnettable->lock);
++	mutex_lock(&pnettable->lock);
+ 	list_for_each_entry_safe(pnetelem, tmp_pe, &pnettable->pnetlist,
+ 				 list) {
+ 		if (!pnet_name ||
+@@ -131,7 +131,7 @@ static int smc_pnet_remove_by_pnetid(struct net *net, char *pnet_name)
+ 			rc = 0;
+ 		}
+ 	}
+-	write_unlock(&pnettable->lock);
++	mutex_unlock(&pnettable->lock);
+ 
+ 	/* if this is not the initial namespace, stop here */
+ 	if (net != &init_net)
+@@ -192,7 +192,7 @@ static int smc_pnet_add_by_ndev(struct net_device *ndev)
+ 	sn = net_generic(net, smc_net_id);
+ 	pnettable = &sn->pnettable;
+ 
+-	write_lock(&pnettable->lock);
++	mutex_lock(&pnettable->lock);
+ 	list_for_each_entry_safe(pnetelem, tmp_pe, &pnettable->pnetlist, list) {
+ 		if (pnetelem->type == SMC_PNET_ETH && !pnetelem->ndev &&
+ 		    !strncmp(pnetelem->eth_name, ndev->name, IFNAMSIZ)) {
+@@ -206,7 +206,7 @@ static int smc_pnet_add_by_ndev(struct net_device *ndev)
+ 			break;
+ 		}
+ 	}
+-	write_unlock(&pnettable->lock);
++	mutex_unlock(&pnettable->lock);
+ 	return rc;
+ }
+ 
+@@ -224,7 +224,7 @@ static int smc_pnet_remove_by_ndev(struct net_device *ndev)
+ 	sn = net_generic(net, smc_net_id);
+ 	pnettable = &sn->pnettable;
+ 
+-	write_lock(&pnettable->lock);
++	mutex_lock(&pnettable->lock);
+ 	list_for_each_entry_safe(pnetelem, tmp_pe, &pnettable->pnetlist, list) {
+ 		if (pnetelem->type == SMC_PNET_ETH && pnetelem->ndev == ndev) {
+ 			dev_put_track(pnetelem->ndev, &pnetelem->dev_tracker);
+@@ -237,7 +237,7 @@ static int smc_pnet_remove_by_ndev(struct net_device *ndev)
+ 			break;
+ 		}
+ 	}
+-	write_unlock(&pnettable->lock);
++	mutex_unlock(&pnettable->lock);
+ 	return rc;
+ }
+ 
+@@ -370,7 +370,7 @@ static int smc_pnet_add_eth(struct smc_pnettable *pnettable, struct net *net,
+ 	strncpy(new_pe->eth_name, eth_name, IFNAMSIZ);
+ 	rc = -EEXIST;
+ 	new_netdev = true;
+-	write_lock(&pnettable->lock);
++	mutex_lock(&pnettable->lock);
+ 	list_for_each_entry(tmp_pe, &pnettable->pnetlist, list) {
+ 		if (tmp_pe->type == SMC_PNET_ETH &&
+ 		    !strncmp(tmp_pe->eth_name, eth_name, IFNAMSIZ)) {
+@@ -385,9 +385,9 @@ static int smc_pnet_add_eth(struct smc_pnettable *pnettable, struct net *net,
+ 					     GFP_ATOMIC);
+ 		}
+ 		list_add_tail(&new_pe->list, &pnettable->pnetlist);
+-		write_unlock(&pnettable->lock);
++		mutex_unlock(&pnettable->lock);
+ 	} else {
+-		write_unlock(&pnettable->lock);
++		mutex_unlock(&pnettable->lock);
+ 		kfree(new_pe);
+ 		goto out_put;
+ 	}
+@@ -448,7 +448,7 @@ static int smc_pnet_add_ib(struct smc_pnettable *pnettable, char *ib_name,
+ 	new_pe->ib_port = ib_port;
+ 
+ 	new_ibdev = true;
+-	write_lock(&pnettable->lock);
++	mutex_lock(&pnettable->lock);
+ 	list_for_each_entry(tmp_pe, &pnettable->pnetlist, list) {
+ 		if (tmp_pe->type == SMC_PNET_IB &&
+ 		    !strncmp(tmp_pe->ib_name, ib_name, IB_DEVICE_NAME_MAX)) {
+@@ -458,9 +458,9 @@ static int smc_pnet_add_ib(struct smc_pnettable *pnettable, char *ib_name,
+ 	}
+ 	if (new_ibdev) {
+ 		list_add_tail(&new_pe->list, &pnettable->pnetlist);
+-		write_unlock(&pnettable->lock);
++		mutex_unlock(&pnettable->lock);
+ 	} else {
+-		write_unlock(&pnettable->lock);
++		mutex_unlock(&pnettable->lock);
+ 		kfree(new_pe);
+ 	}
+ 	return (new_ibdev) ? 0 : -EEXIST;
+@@ -605,7 +605,7 @@ static int _smc_pnet_dump(struct net *net, struct sk_buff *skb, u32 portid,
+ 	pnettable = &sn->pnettable;
+ 
+ 	/* dump pnettable entries */
+-	read_lock(&pnettable->lock);
++	mutex_lock(&pnettable->lock);
+ 	list_for_each_entry(pnetelem, &pnettable->pnetlist, list) {
+ 		if (pnetid && !smc_pnet_match(pnetelem->pnet_name, pnetid))
+ 			continue;
+@@ -620,7 +620,7 @@ static int _smc_pnet_dump(struct net *net, struct sk_buff *skb, u32 portid,
+ 			break;
+ 		}
+ 	}
+-	read_unlock(&pnettable->lock);
++	mutex_unlock(&pnettable->lock);
+ 	return idx;
+ }
+ 
+@@ -864,7 +864,7 @@ int smc_pnet_net_init(struct net *net)
+ 	struct smc_pnetids_ndev *pnetids_ndev = &sn->pnetids_ndev;
+ 
+ 	INIT_LIST_HEAD(&pnettable->pnetlist);
+-	rwlock_init(&pnettable->lock);
++	mutex_init(&pnettable->lock);
+ 	INIT_LIST_HEAD(&pnetids_ndev->list);
+ 	rwlock_init(&pnetids_ndev->lock);
+ 
+@@ -944,7 +944,7 @@ static int smc_pnet_find_ndev_pnetid_by_table(struct net_device *ndev,
+ 	sn = net_generic(net, smc_net_id);
+ 	pnettable = &sn->pnettable;
+ 
+-	read_lock(&pnettable->lock);
++	mutex_lock(&pnettable->lock);
+ 	list_for_each_entry(pnetelem, &pnettable->pnetlist, list) {
+ 		if (pnetelem->type == SMC_PNET_ETH && ndev == pnetelem->ndev) {
+ 			/* get pnetid of netdev device */
+@@ -953,7 +953,7 @@ static int smc_pnet_find_ndev_pnetid_by_table(struct net_device *ndev,
+ 			break;
+ 		}
+ 	}
+-	read_unlock(&pnettable->lock);
++	mutex_unlock(&pnettable->lock);
+ 	return rc;
+ }
+ 
+@@ -1156,7 +1156,7 @@ int smc_pnetid_by_table_ib(struct smc_ib_device *smcibdev, u8 ib_port)
+ 	sn = net_generic(&init_net, smc_net_id);
+ 	pnettable = &sn->pnettable;
+ 
+-	read_lock(&pnettable->lock);
++	mutex_lock(&pnettable->lock);
+ 	list_for_each_entry(tmp_pe, &pnettable->pnetlist, list) {
+ 		if (tmp_pe->type == SMC_PNET_IB &&
+ 		    !strncmp(tmp_pe->ib_name, ib_name, IB_DEVICE_NAME_MAX) &&
+@@ -1166,7 +1166,7 @@ int smc_pnetid_by_table_ib(struct smc_ib_device *smcibdev, u8 ib_port)
+ 			break;
+ 		}
+ 	}
+-	read_unlock(&pnettable->lock);
++	mutex_unlock(&pnettable->lock);
+ 
+ 	return rc;
+ }
+@@ -1185,7 +1185,7 @@ int smc_pnetid_by_table_smcd(struct smcd_dev *smcddev)
+ 	sn = net_generic(&init_net, smc_net_id);
+ 	pnettable = &sn->pnettable;
+ 
+-	read_lock(&pnettable->lock);
++	mutex_lock(&pnettable->lock);
+ 	list_for_each_entry(tmp_pe, &pnettable->pnetlist, list) {
+ 		if (tmp_pe->type == SMC_PNET_IB &&
+ 		    !strncmp(tmp_pe->ib_name, ib_name, IB_DEVICE_NAME_MAX)) {
+@@ -1194,7 +1194,7 @@ int smc_pnetid_by_table_smcd(struct smcd_dev *smcddev)
+ 			break;
+ 		}
+ 	}
+-	read_unlock(&pnettable->lock);
++	mutex_unlock(&pnettable->lock);
+ 
+ 	return rc;
+ }
+diff --git a/net/smc/smc_pnet.h b/net/smc/smc_pnet.h
+index 14039272f7e4..80a88eea4949 100644
+--- a/net/smc/smc_pnet.h
++++ b/net/smc/smc_pnet.h
+@@ -29,7 +29,7 @@ struct smc_link_group;
+  * @pnetlist: List of PNETIDs
+  */
+ struct smc_pnettable {
+-	rwlock_t lock;
++	struct mutex lock;
+ 	struct list_head pnetlist;
+ };
+ 
+
+--nextPart1886803.PYKUYFuaPT--
 
 
 
---=20
-Best Regards
- Guo Ren
-
-ML: https://lore.kernel.org/linux-csky/

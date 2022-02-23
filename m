@@ -2,239 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1580D4C0ED4
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 10:06:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 256644C0ED0
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 10:06:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239173AbiBWJG5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 04:06:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48408 "EHLO
+        id S236305AbiBWJGh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 04:06:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237127AbiBWJGy (ORCPT
+        with ESMTP id S230301AbiBWJGf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 04:06:54 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C7717ED91
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 01:06:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645607187; x=1677143187;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=UmG8QUkK9khDhXRiw9N34JhJQ0VKWF9hY6tPnln+/Xk=;
-  b=XIL8F8FGozAUw9/ypXTljD5mI8fuaciOkDIU+cRe6q5QkyNcfQSrDnOZ
-   9zNmU89HqrCxQzFNkAeITIn+pcUgbhaSJt7H//kkiGTlAJ7ySFK9j2w9j
-   QQ6MM9i2ycqX746bPQ47FyWHFda2oBxJqhYlfAzlUW40qc0Bp5QaphHx6
-   gJBWQAmX6WPlpdZtd8Pbqvx4nYLA6fZQUfoK3H7aHBpsyUHnfYwR9nxdu
-   Zc7/EuSlRG7mZSae8LUfyXfTPs/aSkllUPyK3Tdi/cuJaRAAHvwfQEJOy
-   pjNkI9R9mgTLFzCVarpkVQYQmDgix6424NgyHmr/eKEY6lIvwY4mJQ0ik
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10266"; a="232541568"
-X-IronPort-AV: E=Sophos;i="5.88,390,1635231600"; 
-   d="scan'208";a="232541568"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2022 01:06:27 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,390,1635231600"; 
-   d="scan'208";a="543248029"
-Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 23 Feb 2022 01:06:21 -0800
-Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nMnbJ-0001C6-7M; Wed, 23 Feb 2022 09:06:21 +0000
-Date:   Wed, 23 Feb 2022 17:05:18 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Kalesh Singh <kaleshsingh@google.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org, will@kernel.org,
-        maz@kernel.org, qperret@google.com, tabba@google.com,
-        surenb@google.com, kernel-team@android.com,
-        Kalesh Singh <kaleshsingh@google.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Joey Gouly <joey.gouly@arm.com>,
-        Peter Collingbourne <pcc@google.com>,
-        Andrew Scull <ascull@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Zenghui Yu <yuzenghui@huawei.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kvmarm@lists.cs.columbia.edu
-Subject: Re: [PATCH v2 6/9] KVM: arm64: Detect and handle hypervisor stack
- overflows
-Message-ID: <202202231727.L621fVgD-lkp@intel.com>
-References: <20220222165212.2005066-7-kaleshsingh@google.com>
+        Wed, 23 Feb 2022 04:06:35 -0500
+Received: from out30-45.freemail.mail.aliyun.com (out30-45.freemail.mail.aliyun.com [115.124.30.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E39557B35;
+        Wed, 23 Feb 2022 01:06:06 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R931e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04407;MF=ashimida@linux.alibaba.com;NM=1;PH=DS;RN=20;SR=0;TI=SMTPD_---0V5I3avg_1645607161;
+Received: from 192.168.193.152(mailfrom:ashimida@linux.alibaba.com fp:SMTPD_---0V5I3avg_1645607161)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Wed, 23 Feb 2022 17:06:02 +0800
+Message-ID: <c30e464f-6d61-1274-3c47-d0df5d98cada@linux.alibaba.com>
+Date:   Wed, 23 Feb 2022 01:06:01 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220222165212.2005066-7-kaleshsingh@google.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Subject: Re: [PATCH] [PATCH] AARCH64: Add gcc Shadow Call Stack support
+Content-Language: en-US
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     catalin.marinas@arm.com, will@kernel.org, nathan@kernel.org,
+        ndesaulniers@google.com, keescook@chromium.org,
+        masahiroy@kernel.org, tglx@linutronix.de,
+        akpm@linux-foundation.org, samitolvanen@google.com,
+        npiggin@gmail.com, linux@roeck-us.net, mhiramat@kernel.org,
+        ojeda@kernel.org, luc.vanoostenryck@gmail.com, elver@google.com,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        llvm@lists.linux.dev, linux-hardening@vger.kernel.org
+References: <20220222095736.24898-1-ashimida@linux.alibaba.com>
+ <YhUvp5RHkTlBXX3o@lakrids>
+From:   Dan Li <ashimida@linux.alibaba.com>
+In-Reply-To: <YhUvp5RHkTlBXX3o@lakrids>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Kalesh,
-
-Thank you for the patch! Perhaps something to improve:
-
-[auto build test WARNING on cfb92440ee71adcc2105b0890bb01ac3cddb8507]
-
-url:    https://github.com/0day-ci/linux/commits/Kalesh-Singh/KVM-arm64-Hypervisor-stack-enhancements/20220223-010522
-base:   cfb92440ee71adcc2105b0890bb01ac3cddb8507
-config: arm64-randconfig-r011-20220221 (https://download.01.org/0day-ci/archive/20220223/202202231727.L621fVgD-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/0day-ci/linux/commit/7fe99fd40f7c4b2973218045ca5b9c9160524db1
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Kalesh-Singh/KVM-arm64-Hypervisor-stack-enhancements/20220223-010522
-        git checkout 7fe99fd40f7c4b2973218045ca5b9c9160524db1
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   include/linux/stddef.h:8:14: note: expanded from macro 'NULL'
-   #define NULL ((void *)0)
-                ^~~~~~~~~~~
-   arch/arm64/kvm/hyp/nvhe/switch.c:200:27: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
-           [ESR_ELx_EC_FP_ASIMD]           = kvm_hyp_handle_fpsimd,
-                                             ^~~~~~~~~~~~~~~~~~~~~
-   arch/arm64/kvm/hyp/nvhe/switch.c:196:28: note: previous initialization is here
-           [0 ... ESR_ELx_EC_MAX]          = NULL,
-                                             ^~~~
-   include/linux/stddef.h:8:14: note: expanded from macro 'NULL'
-   #define NULL ((void *)0)
-                ^~~~~~~~~~~
-   arch/arm64/kvm/hyp/nvhe/switch.c:201:27: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
-           [ESR_ELx_EC_IABT_LOW]           = kvm_hyp_handle_iabt_low,
-                                             ^~~~~~~~~~~~~~~~~~~~~~~
-   arch/arm64/kvm/hyp/nvhe/switch.c:196:28: note: previous initialization is here
-           [0 ... ESR_ELx_EC_MAX]          = NULL,
-                                             ^~~~
-   include/linux/stddef.h:8:14: note: expanded from macro 'NULL'
-   #define NULL ((void *)0)
-                ^~~~~~~~~~~
-   arch/arm64/kvm/hyp/nvhe/switch.c:202:27: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
-           [ESR_ELx_EC_DABT_LOW]           = kvm_hyp_handle_dabt_low,
-                                             ^~~~~~~~~~~~~~~~~~~~~~~
-   arch/arm64/kvm/hyp/nvhe/switch.c:196:28: note: previous initialization is here
-           [0 ... ESR_ELx_EC_MAX]          = NULL,
-                                             ^~~~
-   include/linux/stddef.h:8:14: note: expanded from macro 'NULL'
-   #define NULL ((void *)0)
-                ^~~~~~~~~~~
-   arch/arm64/kvm/hyp/nvhe/switch.c:203:22: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
-           [ESR_ELx_EC_PAC]                = kvm_hyp_handle_ptrauth,
-                                             ^~~~~~~~~~~~~~~~~~~~~~
-   arch/arm64/kvm/hyp/nvhe/switch.c:196:28: note: previous initialization is here
-           [0 ... ESR_ELx_EC_MAX]          = NULL,
-                                             ^~~~
-   include/linux/stddef.h:8:14: note: expanded from macro 'NULL'
-   #define NULL ((void *)0)
-                ^~~~~~~~~~~
-   arch/arm64/kvm/hyp/nvhe/switch.c:208:24: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
-           [ESR_ELx_EC_SYS64]              = kvm_handle_pvm_sys64,
-                                             ^~~~~~~~~~~~~~~~~~~~
-   arch/arm64/kvm/hyp/nvhe/switch.c:207:28: note: previous initialization is here
-           [0 ... ESR_ELx_EC_MAX]          = NULL,
-                                             ^~~~
-   include/linux/stddef.h:8:14: note: expanded from macro 'NULL'
-   #define NULL ((void *)0)
-                ^~~~~~~~~~~
-   arch/arm64/kvm/hyp/nvhe/switch.c:209:22: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
-           [ESR_ELx_EC_SVE]                = kvm_handle_pvm_restricted,
-                                             ^~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/arm64/kvm/hyp/nvhe/switch.c:207:28: note: previous initialization is here
-           [0 ... ESR_ELx_EC_MAX]          = NULL,
-                                             ^~~~
-   include/linux/stddef.h:8:14: note: expanded from macro 'NULL'
-   #define NULL ((void *)0)
-                ^~~~~~~~~~~
-   arch/arm64/kvm/hyp/nvhe/switch.c:210:27: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
-           [ESR_ELx_EC_FP_ASIMD]           = kvm_handle_pvm_fpsimd,
-                                             ^~~~~~~~~~~~~~~~~~~~~
-   arch/arm64/kvm/hyp/nvhe/switch.c:207:28: note: previous initialization is here
-           [0 ... ESR_ELx_EC_MAX]          = NULL,
-                                             ^~~~
-   include/linux/stddef.h:8:14: note: expanded from macro 'NULL'
-   #define NULL ((void *)0)
-                ^~~~~~~~~~~
-   arch/arm64/kvm/hyp/nvhe/switch.c:211:27: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
-           [ESR_ELx_EC_IABT_LOW]           = kvm_hyp_handle_iabt_low,
-                                             ^~~~~~~~~~~~~~~~~~~~~~~
-   arch/arm64/kvm/hyp/nvhe/switch.c:207:28: note: previous initialization is here
-           [0 ... ESR_ELx_EC_MAX]          = NULL,
-                                             ^~~~
-   include/linux/stddef.h:8:14: note: expanded from macro 'NULL'
-   #define NULL ((void *)0)
-                ^~~~~~~~~~~
-   arch/arm64/kvm/hyp/nvhe/switch.c:212:27: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
-           [ESR_ELx_EC_DABT_LOW]           = kvm_hyp_handle_dabt_low,
-                                             ^~~~~~~~~~~~~~~~~~~~~~~
-   arch/arm64/kvm/hyp/nvhe/switch.c:207:28: note: previous initialization is here
-           [0 ... ESR_ELx_EC_MAX]          = NULL,
-                                             ^~~~
-   include/linux/stddef.h:8:14: note: expanded from macro 'NULL'
-   #define NULL ((void *)0)
-                ^~~~~~~~~~~
-   arch/arm64/kvm/hyp/nvhe/switch.c:213:22: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
-           [ESR_ELx_EC_PAC]                = kvm_hyp_handle_ptrauth,
-                                             ^~~~~~~~~~~~~~~~~~~~~~
-   arch/arm64/kvm/hyp/nvhe/switch.c:207:28: note: previous initialization is here
-           [0 ... ESR_ELx_EC_MAX]          = NULL,
-                                             ^~~~
-   include/linux/stddef.h:8:14: note: expanded from macro 'NULL'
-   #define NULL ((void *)0)
-                ^~~~~~~~~~~
-   arch/arm64/kvm/hyp/nvhe/switch.c:350:17: warning: no previous prototype for function 'hyp_panic' [-Wmissing-prototypes]
-   void __noreturn hyp_panic(void)
-                   ^
-   arch/arm64/kvm/hyp/nvhe/switch.c:350:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void __noreturn hyp_panic(void)
-   ^
-   static 
->> arch/arm64/kvm/hyp/nvhe/switch.c:372:17: warning: no previous prototype for function 'hyp_panic_bad_stack' [-Wmissing-prototypes]
-   void __noreturn hyp_panic_bad_stack(void)
-                   ^
-   arch/arm64/kvm/hyp/nvhe/switch.c:372:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void __noreturn hyp_panic_bad_stack(void)
-   ^
-   static 
-   arch/arm64/kvm/hyp/nvhe/switch.c:377:17: warning: no previous prototype for function 'kvm_unexpected_el2_exception' [-Wmissing-prototypes]
-   asmlinkage void kvm_unexpected_el2_exception(void)
-                   ^
-   arch/arm64/kvm/hyp/nvhe/switch.c:377:12: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   asmlinkage void kvm_unexpected_el2_exception(void)
-              ^
-              static 
-   16 warnings generated.
 
 
-vim +/hyp_panic_bad_stack +372 arch/arm64/kvm/hyp/nvhe/switch.c
+On 2/22/22 10:47, Mark Rutland wrote:
+> Hi,
+> 
+> On Tue, Feb 22, 2022 at 01:57:36AM -0800, Dan Li wrote:
+>> Shadow call stack is available in GCC > 11.2.0, this patch makes
+>> the corresponding kernel configuration available when compiling
+>> the kernel with gcc.
+> 
+> Neat!
+> 
+> My local GCC devs told me that means GCC 12.x.x rather than 11.2.x or
+> 11.3.x, so as others have said it'd be clearer to say `GCC >= 12.0.0`.
+> 
 
-   371	
- > 372	void __noreturn hyp_panic_bad_stack(void)
-   373	{
-   374		hyp_panic();
-   375	}
-   376	
+Ah, yes, I just saw this flag in gcc/BASE-VER.
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> I'd like to try this with a GCC binary before I provide an Ack or R-b;
+> but in the mean time I have a few comments below.
+> 
+
+Thanks for your test, Mark.
+Please let me know if there is any issues :)
+
+>> ---
+>> FYI:
+>> This function can be used to test if the shadow call stack works:
+>> //noinline void __noscs scs_test(void)
+>> noinline void scs_test(void)
+>> {
+>>      register unsigned long *sp asm("sp");
+>>      unsigned long * lr = sp + 1;
+>>
+>>      asm volatile("":::"x30");
+>>      *lr = 0;
+>> }
+> 
+> It's probably be better to use __builtin_frame_address(0) to get the
+> address of the frame record rather than assuming that fp==sp in the
+> middle of the function.
+> 
+
+Got it.
+
+>>   config SHADOW_CALL_STACK
+>> -	bool "Clang Shadow Call Stack"
+>> -	depends on CC_IS_CLANG && ARCH_SUPPORTS_SHADOW_CALL_STACK
+>> +	bool "Shadow Call Stack"
+>> +	depends on ARCH_SUPPORTS_SHADOW_CALL_STACK
+>>   	depends on DYNAMIC_FTRACE_WITH_REGS || !FUNCTION_GRAPH_TRACER
+>>   	help
+>> -	  This option enables Clang's Shadow Call Stack, which uses a
+>> +	  This option enables Clang/GCC's Shadow Call Stack, which uses a
+>>   	  shadow stack to protect function return addresses from being
+>>   	  overwritten by an attacker. More information can be found in
+>>   	  Clang's documentation:
+> 
+> Is there any additional GCC documentation that we can refer to?
+> 
+
+Currently there is only a brief description of
+-fsanitize=shadow-call-stack in the user manual.
+
+Since the description of the clang documentation is more detailed, should
+I add this gcc link to the configuration description?
+
+Link: https://gcc.gnu.org/onlinedocs/gcc/Instrumentation-Options.html#Instrumentation-Options
+
+>> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+>> index 09b885cc4db5..a48a604301aa 100644
+>> --- a/arch/arm64/Kconfig
+>> +++ b/arch/arm64/Kconfig
+>> @@ -1255,7 +1255,7 @@ config HW_PERF_EVENTS
+>>   config ARCH_HAS_FILTER_PGPROT
+>>   	def_bool y
+>>   
+>> -# Supported by clang >= 7.0
+>> +# Supported by clang >= 7.0 or GCC > 11.2.0
+> 
+> As above, I beleive that should be `GCC >= 12.0.0`.
+> 
+
+Yeah.
+
+Thanks,
+Dan.

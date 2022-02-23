@@ -2,215 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84E984C1D99
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 22:20:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1219E4C1DAC
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 22:23:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242575AbiBWVVL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 16:21:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52300 "EHLO
+        id S242687AbiBWVWc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 16:22:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242572AbiBWVUo (ORCPT
+        with ESMTP id S242485AbiBWVVN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 16:20:44 -0500
-Received: from wnew4-smtp.messagingengine.com (wnew4-smtp.messagingengine.com [64.147.123.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A3164EA0A;
-        Wed, 23 Feb 2022 13:20:15 -0800 (PST)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailnew.west.internal (Postfix) with ESMTP id 19BF52B001F4;
-        Wed, 23 Feb 2022 16:20:14 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute1.internal (MEProxy); Wed, 23 Feb 2022 16:20:15 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:from:from:in-reply-to:message-id
-        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=FgfAeo
-        xPVPg0MdvPEZQn4ZDYWo1iiSPBcOv7dVpbcZk=; b=bUT6caj46S8Y5uir73PdHp
-        VeSZBsQs2ia89NwbEoWUE5jKz56+1HvcKMM/1Xsok9Wu9Uv2ZV/HQK+EAjwN8ID6
-        BB39M2IyVs4stGSP4TGQpviphhzW+pGgOP2t88/SvuoW5ewOw2GGN+6/tOs0HZfb
-        lzKPzsz+mnAOLCLetL33TYLnAq+UIzmNVkdr7ZAcQlcvyt/khgC1pd6hjNtUXdev
-        DHGk8AekGNQspcmrhH2iX1WAQbI25PhOYOr31Qn1dS+W8AsU9q9nORUgcT2zpOx2
-        09hOTMHJulMFQKWK3JGTPGJa60Mw2FrX3hwi81rLy1IwVFb3A47UkV0K9JUFvVSw
-        ==
-X-ME-Sender: <xms:DKUWYrQDmdgl1gpXMU3457DPpHxOUl1wg7J6gGapJ1x9PcmhAexRlA>
-    <xme:DKUWYsxnYHws0m4VBnlLmVdJNgglXhp4FNjNWxnsxDuzfXc_qQH3NllqcL6Yxcj3u
-    AQGSx0sdU31wQ>
-X-ME-Received: <xmr:DKUWYg3SvSGGUK2sYsq46aFBlnA8ZPuSG2Vzh4Eyb724vYl_ihPOFs4dq2-3B9IjEXrZRggSba7uyMaZdAwJfh1k4wQynOD3f70gSzpohGZGm2cFoFY>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrledtgddugeeiucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhephffvufffkffogggtohfgsehtkeertdertdejnecuhfhrohhmpeforghrvghk
-    ucforghrtgiihihkohifshhkihdqifpkrhgvtghkihcuoehmrghrmhgrrhgvkhesihhnvh
-    hishhisghlvghthhhinhhgshhlrggsrdgtohhmqeenucggtffrrghtthgvrhhnpeegvdef
-    hfdtgfekfeevteekhfeivdeuvdejffeugfegfeffvdeuffevgfeuleetheenucffohhmrg
-    hinhepghhithhhuhgsrdgtohhmnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghm
-    pehmrghilhhfrhhomhepmhgrrhhmrghrvghksehinhhvihhsihgslhgvthhhihhnghhslh
-    grsgdrtghomh
-X-ME-Proxy: <xmx:DKUWYrCJaRde3MQNUsM2eZENESX8A3l9HQB4-NSrF5Ut0L3IvOJpYQ>
-    <xmx:DKUWYkiEJ5R_OHhlHmL2V4YMRZeerA2w10C07gzVEfkCLBAtow9DtQ>
-    <xmx:DKUWYvqe8nh36FCPyaRt8mNUaB1tqjWKMKKAvNwpm-4DH300mYx_iA>
-    <xmx:DKUWYtVXaVIq97oididxrnUJGFMTCH8n8pFWDolQ2SbS1TnseyLocA8VNQ8>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 23 Feb 2022 16:20:10 -0500 (EST)
-From:   =?UTF-8?q?Marek=20Marczykowski-G=C3=B3recki?= 
-        <marmarek@invisiblethingslab.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     =?UTF-8?q?Marek=20Marczykowski-G=C3=B3recki?= 
-        <marmarek@invisiblethingslab.com>, stable@vger.kernel.org,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Juergen Gross <jgross@suse.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Antoine Tenart <atenart@kernel.org>,
-        xen-devel@lists.xenproject.org (moderated list:XEN HYPERVISOR INTERFACE),
-        netdev@vger.kernel.org (open list:NETWORKING DRIVERS)
-Subject: [PATCH v2] xen/netfront: destroy queues before real_num_tx_queues is zeroed
-Date:   Wed, 23 Feb 2022 22:19:54 +0100
-Message-Id: <20220223211954.2506824-1-marmarek@invisiblethingslab.com>
-X-Mailer: git-send-email 2.31.1
+        Wed, 23 Feb 2022 16:21:13 -0500
+Received: from mail-vk1-xa2c.google.com (mail-vk1-xa2c.google.com [IPv6:2607:f8b0:4864:20::a2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D89F94ECD0
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 13:20:44 -0800 (PST)
+Received: by mail-vk1-xa2c.google.com with SMTP id l42so172562vkd.7
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 13:20:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ehiyGAnQkCy6/74Qhqw+fB9gBwX1r1I6DWeVnzE/kAc=;
+        b=jXVzrQrxQTZJ8SEAB8dHg+0nEFplAWbQ+OCT9kTLrWig+hlvyzU4sTlRTAmJfueFFk
+         J0f58LKClXd1aqlf9j3xrcwq2we/dKIIvb8SH+ja3KvnDMJyWus/wq5MADouqUyKhTus
+         vFxMFepf4+/S2lrUKmiF23ugTzQU/Gihl/BWpZXC/x7Ngsaf3MYlQXyArXOk9GsOWO2b
+         3pX+6M+1EDNI1TfrZxeapswN4+5HCdWdsC56+dP/hAf36gXos6PM53IUmqpAw6LWB5Yk
+         myGy0aDP0ZqWclGd4L+i8w2LCamksx5o8kNsJnMQjshI0Gd+ZIGzp9/g39UAwXun5UBf
+         td9w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ehiyGAnQkCy6/74Qhqw+fB9gBwX1r1I6DWeVnzE/kAc=;
+        b=xE61U5vkGy/cvmvu0psc/obVp/atwIQ2fJDkod4gl2XgybpM06JjOEhMUbTxKFbW8L
+         WAArtWS5Vt6APhguYwrhDyyxF1RFu/IoM42mlE4UsR4h1NDWNQvM6/ZjRW4p7Tooy2vu
+         uyKw4wQPhe+/6KmGh8DJ5i5cP/a7r57dx1MwlegG6+Ed7rAZLV3o2Sk+YrICDgKh7f9g
+         U45WFSD4H58Ok1PP1eqb8TUcpPlp/b79XvJy7OJ0UWL2KxRhQ+SpyPDnPQQ9xB1NcEC1
+         WYJ8yglVMM8B3ZnhVUqFHlOhCaheiv2ZWfC/f1cgATHy4gxCVWUhodESJ5l6TIN+ehO0
+         q2OA==
+X-Gm-Message-State: AOAM531+himI6qlYwUppdGh5jG4qqV1OVBGKxOIxZQUP7dQ9f1YELOMV
+        bmeu02vfP90PkuX6d13c/lT/69Kwjx6PZcWPdydvRA==
+X-Google-Smtp-Source: ABdhPJycZBwQNTcE0ha+OSHu8lSiZ0cx0rPeoyTaaz0gE2xXBd0iR9Fx3cQwbQKM+yd7Al2QUCvsLv65lb2+hYpJMwU=
+X-Received: by 2002:a05:6122:887:b0:332:699e:7e67 with SMTP id
+ 7-20020a056122088700b00332699e7e67mr717484vkf.35.1645651243803; Wed, 23 Feb
+ 2022 13:20:43 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Organization: Invisible Things Lab
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220208081902.3550911-1-yuzhao@google.com> <20220208081902.3550911-13-yuzhao@google.com>
+ <Ygou6Gq79XY3mFK7@kernel.org> <Ygxt4iR9ZMYEbV78@google.com>
+ <YhNVAUM7H7PF7j7j@kernel.org> <CAOUHufbZOuXtFvTULArtQjrdrzUkRw71byKQap1Cf=Mm3U7T5g@mail.gmail.com>
+ <YhYTU3B7cdwV+YrW@kernel.org>
+In-Reply-To: <YhYTU3B7cdwV+YrW@kernel.org>
+From:   Yu Zhao <yuzhao@google.com>
+Date:   Wed, 23 Feb 2022 14:20:32 -0700
+Message-ID: <CAOUHufasp_to43QPi9y9rTtFKNBTjETzOiEQgm-3Hc6nzyziZA@mail.gmail.com>
+Subject: Re: [PATCH v7 12/12] mm: multigenerational LRU: documentation
+To:     Mike Rapoport <rppt@kernel.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Mel Gorman <mgorman@suse.de>, Michal Hocko <mhocko@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
+        Barry Song <21cnbao@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
+        Jesse Barnes <jsbarnes@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Michael Larabel <Michael@michaellarabel.com>,
+        Rik van Riel <riel@surriel.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Will Deacon <will@kernel.org>,
+        Ying Huang <ying.huang@intel.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        Kernel Page Reclaim v2 <page-reclaim@google.com>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Brian Geffon <bgeffon@google.com>,
+        Jan Alexander Steffens <heftig@archlinux.org>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
+        Steven Barrett <steven@liquorix.net>,
+        Suleiman Souhlal <suleiman@google.com>,
+        Daniel Byrne <djbyrne@mtu.edu>,
+        Donald Carr <d@chaos-reins.com>,
+        =?UTF-8?Q?Holger_Hoffst=C3=A4tte?= <holger@applied-asynchrony.com>,
+        Konstantin Kharlamov <Hi-Angel@yandex.ru>,
+        Shuang Zhai <szhai2@cs.rochester.edu>,
+        Sofia Trinh <sofia.trinh@edi.works>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-xennet_destroy_queues() relies on info->netdev->real_num_tx_queues to
-delete queues. Since d7dac083414eb5bb99a6d2ed53dc2c1b405224e5
-("net-sysfs: update the queue counts in the unregistration path"),
-unregister_netdev() indirectly sets real_num_tx_queues to 0. Those two
-facts together means, that xennet_destroy_queues() called from
-xennet_remove() cannot do its job, because it's called after
-unregister_netdev(). This results in kfree-ing queues that are still
-linked in napi, which ultimately crashes:
+On Wed, Feb 23, 2022 at 3:58 AM Mike Rapoport <rppt@kernel.org> wrote:
+>
+> On Mon, Feb 21, 2022 at 06:47:25PM -0700, Yu Zhao wrote:
+> > On Mon, Feb 21, 2022 at 2:02 AM Mike Rapoport <rppt@kernel.org> wrote:
+> > >
+> > > On Tue, Feb 15, 2022 at 08:22:10PM -0700, Yu Zhao wrote:
+> > > > > Please consider splitting "enable" and "features" attributes.
+> > > >
+> > > > How about s/Features/Components/?
+> > >
+> > > I meant to use two attributes:
+> > >
+> > > /sys/kernel/mm/lru_gen/enable for the main breaker, and
+> > > /sys/kernel/mm/lru_gen/features (or components) for the branch breakers
+> >
+> > It's a bit superfluous for my taste. I generally consider multiple
+> > items to fall into the same category if they can be expressed by a
+> > type of array, and I usually pack an array into a single file.
+> >
+> > From your last review, I gauged this would be too overloaded for your
+> > taste. So I'd be happy to make the change if you think two files look
+> > more intuitive from user's perspective.
+>
+> I do think that two attributes are more user-friendly, but I don't feel
+> strongly about it.
+>
+> > > > > As for the descriptions, what is the user-visible effect of these features?
+> > > > > How different modes of clearing the access bit are reflected in, say, GUI
+> > > > > responsiveness, database TPS, or probability of OOM?
+> > > >
+> > > > These remain to be seen :) I just added these switches in v7, per Mel's
+> > > > request from the meeting we had. These were never tested in the field.
+> > >
+> > > I see :)
+> > >
+> > > It would be nice to have a description or/and examples of user-visible
+> > > effects when there will be some insight on what these features do.
+> >
+> > How does the following sound?
+> >
+> > Clearing the accessed bit in large batches can theoretically cause
+> > lock contention (mmap_lock), and if it happens the 0x0002 switch can
+> > disable this feature. In this case the multigenerational LRU suffers a
+> > minor performance degradation.
+> > Clearing the accessed bit in non-leaf page table entries was only
+> > verified on Intel and AMD, and if it causes problems on other x86
+> > varieties the 0x0004 switch can disable this feature. In this case the
+> > multigenerational LRU suffers a negligible performance degradation.
+>
+> LGTM
+>
+> > > > > > +:Debugfs interface: ``/sys/kernel/debug/lru_gen`` has the following
+> > > > >
+> > > > > Is debugfs interface relevant only for datacenters?
+> > > >
+> > > > For the moment, yes.
+> > >
+> > > And what will happen if somebody uses these interfaces outside
+> > > datacenters? As soon as there is a sysfs intefrace, somebody will surely
+> > > play with it.
+> > >
+> > > I think the job schedulers might be the most important user of that
+> > > interface, but the documentation should not presume it is the only user.
+> >
+> > Other ideas are more like brainstorming than concrete use cases, e.g.,
+> > for desktop users, these interface can in theory speed up hibernation
+> > (suspend to disk); for VM users, they can again in theory support auto
+> > ballooning. These niches are really minor and less explored compared
+> > with the data center use cases which have been dominant.
+> >
+> > I was hoping we could focus on the essential and take one step at a
+> > time. Later on, if there is additional demand and resource, then we
+> > expand to cover more use cases.
+>
+> Apparently I was not clear :)
+>
+> I didn't mean that you should describe other use-cases, I rather suggested
+> to make the documentation more neutral, e.g. using "a user writes to this
+> file ..." instead of "job scheduler writes to a file ...". Or maybe add a
+> sentence in the beginning of the "Data centers" section, for instance:
+>
+> Data centers
+> ------------
+>
+> + A representative example of multigenerational LRU users are job
+> schedulers.
+>
+> Data centers want to optimize job scheduling (bin packing) to improve
+> memory utilizations. Job schedulers need to estimate whether a server
 
-    BUG: kernel NULL pointer dereference, address: 0000000000000000
-    #PF: supervisor read access in kernel mode
-    #PF: error_code(0x0000) - not-present page
-    PGD 0 P4D 0
-    Oops: 0000 [#1] PREEMPT SMP PTI
-    CPU: 1 PID: 52 Comm: xenwatch Tainted: G        W         5.16.10-1.32.fc32.qubes.x86_64+ #226
-    RIP: 0010:free_netdev+0xa3/0x1a0
-    Code: ff 48 89 df e8 2e e9 00 00 48 8b 43 50 48 8b 08 48 8d b8 a0 fe ff ff 48 8d a9 a0 fe ff ff 49 39 c4 75 26 eb 47 e8 ed c1 66 ff <48> 8b 85 60 01 00 00 48 8d 95 60 01 00 00 48 89 ef 48 2d 60 01 00
-    RSP: 0000:ffffc90000bcfd00 EFLAGS: 00010286
-    RAX: 0000000000000000 RBX: ffff88800edad000 RCX: 0000000000000000
-    RDX: 0000000000000001 RSI: ffffc90000bcfc30 RDI: 00000000ffffffff
-    RBP: fffffffffffffea0 R08: 0000000000000000 R09: 0000000000000000
-    R10: 0000000000000000 R11: 0000000000000001 R12: ffff88800edad050
-    R13: ffff8880065f8f88 R14: 0000000000000000 R15: ffff8880066c6680
-    FS:  0000000000000000(0000) GS:ffff8880f3300000(0000) knlGS:0000000000000000
-    CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-    CR2: 0000000000000000 CR3: 00000000e998c006 CR4: 00000000003706e0
-    Call Trace:
-     <TASK>
-     xennet_remove+0x13d/0x300 [xen_netfront]
-     xenbus_dev_remove+0x6d/0xf0
-     __device_release_driver+0x17a/0x240
-     device_release_driver+0x24/0x30
-     bus_remove_device+0xd8/0x140
-     device_del+0x18b/0x410
-     ? _raw_spin_unlock+0x16/0x30
-     ? klist_iter_exit+0x14/0x20
-     ? xenbus_dev_request_and_reply+0x80/0x80
-     device_unregister+0x13/0x60
-     xenbus_dev_changed+0x18e/0x1f0
-     xenwatch_thread+0xc0/0x1a0
-     ? do_wait_intr_irq+0xa0/0xa0
-     kthread+0x16b/0x190
-     ? set_kthread_struct+0x40/0x40
-     ret_from_fork+0x22/0x30
-     </TASK>
-
-Fix this by calling xennet_destroy_queues() from xennet_uninit(),
-when real_num_tx_queues is still available. This ensures that queues are
-destroyed when real_num_tx_queues is set to 0, regardless of how
-unregister_netdev() was called.
-
-Originally reported at
-https://github.com/QubesOS/qubes-issues/issues/7257
-
-Fixes: d7dac083414eb5bb9 ("net-sysfs: update the queue counts in the unregistration path")
-Cc: stable@vger.kernel.org
-Signed-off-by: Marek Marczykowski-Górecki <marmarek@invisiblethingslab.com>
-
----
-Changes in v2:
- - use xennet_uninit, as suggested by Jakub Kicinski
----
- drivers/net/xen-netfront.c | 39 ++++++++++++++++++++++----------------
- 1 file changed, 23 insertions(+), 16 deletions(-)
-
-diff --git a/drivers/net/xen-netfront.c b/drivers/net/xen-netfront.c
-index d514d96027a6..039ca902c5bf 100644
---- a/drivers/net/xen-netfront.c
-+++ b/drivers/net/xen-netfront.c
-@@ -842,6 +842,28 @@ static int xennet_close(struct net_device *dev)
- 	return 0;
- }
- 
-+static void xennet_destroy_queues(struct netfront_info *info)
-+{
-+	unsigned int i;
-+
-+	for (i = 0; i < info->netdev->real_num_tx_queues; i++) {
-+		struct netfront_queue *queue = &info->queues[i];
-+
-+		if (netif_running(info->netdev))
-+			napi_disable(&queue->napi);
-+		netif_napi_del(&queue->napi);
-+	}
-+
-+	kfree(info->queues);
-+	info->queues = NULL;
-+}
-+
-+static void xennet_uninit(struct net_device *dev)
-+{
-+	struct netfront_info *np = netdev_priv(dev);
-+	xennet_destroy_queues(np);
-+}
-+
- static void xennet_set_rx_rsp_cons(struct netfront_queue *queue, RING_IDX val)
- {
- 	unsigned long flags;
-@@ -1611,6 +1633,7 @@ static int xennet_xdp(struct net_device *dev, struct netdev_bpf *xdp)
- }
- 
- static const struct net_device_ops xennet_netdev_ops = {
-+	.ndo_uninit          = xennet_uninit,
- 	.ndo_open            = xennet_open,
- 	.ndo_stop            = xennet_close,
- 	.ndo_start_xmit      = xennet_start_xmit,
-@@ -2103,22 +2126,6 @@ static int write_queue_xenstore_keys(struct netfront_queue *queue,
- 	return err;
- }
- 
--static void xennet_destroy_queues(struct netfront_info *info)
--{
--	unsigned int i;
--
--	for (i = 0; i < info->netdev->real_num_tx_queues; i++) {
--		struct netfront_queue *queue = &info->queues[i];
--
--		if (netif_running(info->netdev))
--			napi_disable(&queue->napi);
--		netif_napi_del(&queue->napi);
--	}
--
--	kfree(info->queues);
--	info->queues = NULL;
--}
--
- 
- 
- static int xennet_create_page_pool(struct netfront_queue *queue)
--- 
-2.31.1
-
+Yes, that makes sense. Will do. Thanks.

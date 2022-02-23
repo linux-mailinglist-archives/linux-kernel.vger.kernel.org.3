@@ -2,115 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1CFE4C1629
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 16:08:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF0AD4C1626
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 16:08:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239592AbiBWPJE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 10:09:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43768 "EHLO
+        id S237755AbiBWPIx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 10:08:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239659AbiBWPJC (ORCPT
+        with ESMTP id S230402AbiBWPIv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 10:09:02 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7D05AC91F;
-        Wed, 23 Feb 2022 07:08:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645628913; x=1677164913;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=HfHNMcR5ubAAaB+Q+epxiJu58smcf4E5LCJ1Jt49JFE=;
-  b=d6g9esswYR7NrDWHHXNyGNEjXTa9Hmtf9P56yOmj9Jq1f/2vkxAdC6Ia
-   ic1RNNdnWb77XPpGZJc8ZR/Kt/V0h4uz70WQzjcbDSydFKhHGREoZU9cb
-   OKl5q2kh7x/tUdL7h57sq94Q62/E5LckbU8h3zJs4gGk8/wMFaTCXgnse
-   rFBbaNwucpvAfsvkkFOob+DH6WSSZnKDuJSvLezyLHNch+wGpBQZyqfs5
-   19z+nmorLrHKpEXmTlDmjJC/EpDUki4TXFtgNDOI0ZDdl+fK/jnkEIrXS
-   gIl1N6402IAoW9ZXujilC3UEX1DUx006KKKub+fZj8SgOUWrb9M2i0Y/2
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10266"; a="315209149"
-X-IronPort-AV: E=Sophos;i="5.88,391,1635231600"; 
-   d="scan'208";a="315209149"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2022 07:08:33 -0800
-X-IronPort-AV: E=Sophos;i="5.88,391,1635231600"; 
-   d="scan'208";a="776699605"
-Received: from smile.fi.intel.com ([10.237.72.59])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2022 07:08:31 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1nMtEy-007T9n-Ex;
-        Wed, 23 Feb 2022 17:07:40 +0200
-Date:   Wed, 23 Feb 2022 17:07:39 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Jan Dabros <jsd@semihalf.com>
-Cc:     linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        jarkko.nikula@linux.intel.com, wsa@kernel.org,
-        rrangel@chromium.org, upstream@semihalf.com,
-        kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH -next] i2c: designware: Fix improper usage of readl
-Message-ID: <YhZNu0pHKiK9Vf55@smile.fi.intel.com>
-References: <20220218133348.628962-1-jsd@semihalf.com>
+        Wed, 23 Feb 2022 10:08:51 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 68054A6534;
+        Wed, 23 Feb 2022 07:08:22 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E1FE2ED1;
+        Wed, 23 Feb 2022 07:08:21 -0800 (PST)
+Received: from [10.57.40.147] (unknown [10.57.40.147])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 083703F5A1;
+        Wed, 23 Feb 2022 07:08:18 -0800 (PST)
+Message-ID: <e0bc8dd2-bea9-354b-3b48-3123e0bbf717@arm.com>
+Date:   Wed, 23 Feb 2022 15:08:14 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220218133348.628962-1-jsd@semihalf.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [RFT PATCH 0/3] Fix kfree() of const memory on setting
+ driver_override
+Content-Language: en-GB
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Abel Vesa <abel.vesa@nxp.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, alsa-devel@alsa-project.org
+References: <20220222132707.266883-1-krzysztof.kozlowski@canonical.com>
+ <708eabb1-7b35-d525-d4c3-451d4a3de84f@rasmusvillemoes.dk>
+ <afa7001d-901e-55bf-b8dc-77051b1e7f78@canonical.com>
+ <0442526f-b6d9-8868-ac1c-dd11a2d3b2ab@arm.com>
+ <636e5b92-8ed8-35a1-d6e9-516d5b35be91@canonical.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <636e5b92-8ed8-35a1-d6e9-516d5b35be91@canonical.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 18, 2022 at 02:33:48PM +0100, Jan Dabros wrote:
-> Kernel test robot reported incorrect type in argument 1 of readl(), but
-> more importantly it brought attention that MMIO accessor shouldn't be
-> used in this case, since req->hdr.status is part of a command-response
-> buffer in system memory.
+On 2022-02-23 14:22, Krzysztof Kozlowski wrote:
+> On 23/02/2022 15:04, Robin Murphy wrote:
+>> On 2022-02-22 14:06, Krzysztof Kozlowski wrote:
+>>> On 22/02/2022 14:51, Rasmus Villemoes wrote:
+>>>> On 22/02/2022 14.27, Krzysztof Kozlowski wrote:
+>>>>> Hi,
+>>>>>
+>>>>> Drivers still seem to use driver_override incorrectly. Perhaps my old
+>>>>> patch makes sense now?
+>>>>> https://lore.kernel.org/all/1550484960-2392-3-git-send-email-krzk@kernel.org/
+>>>>>
+>>>>> Not tested - please review and test (e.g. by writing to dirver_override
+>>>>> sysfs entry with KASAN enabled).
+>>>>
+>>>> Perhaps it would make sense to update the core code to release using
+>>>> kfree_const(), allowing drivers to set the initial value with
+>>>> kstrdup_const(). Drivers that currently use kstrdup() or kasprintf()
+>>>> will continue to work [but if they kstrdup() a string literal they could
+>>>> be changed to use kstrdup_const].
+>>>
+>>> The core here means several buses, so the change would not be that
+>>> small. However I don't see the reason why "driver_override" is special
+>>> and should be freed with kfree_const() while most of other places don't
+>>> use it.
+>>>
+>>> The driver_override field definition is here obvious: "char *", so any
+>>> assignments of "const char *" are logically wrong (although GCC does not
+>>> warn of this literal string const discarding). Adding kfree_const() is
+>>> hiding the problem - someone did not read the definition of assigned field.
+>>
+>> That's not the issue, though, is it? If I take the struct
+>> platform_device definition at face value, this should be perfectly valid:
+>>
+>> 	static char foo[] = "foo";
+>> 	pdev->driver_override = &foo;
 > 
-> Since its value may be altered by PSP outside of the scope of current
-> thread (somehow similar to IRQ handler case), we need to use
-> READ_ONCE() to ensure compiler won't optimize this call.
 > 
-> Fix also 'status' variable type to reflect that corresponding field in
-> command-response buffer is platform-independent u32.
-
-Thanks for the fix, seems reasonable to me.
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-
-> Signed-off-by: Jan Dabros <jsd@semihalf.com>
-> Reported-by: kernel test robot <lkp@intel.com>
-> ---
->  drivers/i2c/busses/i2c-designware-amdpsp.c | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
+> Yes, that's not the issue. It's rather about the interface. By
+> convention we do not modify string literals but "char *driver_override"
+> indicates that this is modifiable memory. I would argue that it even
+> means that ownership is passed. Therefore passing string literal to
+> "char *driver_override" is wrong from logical point of view.
 > 
-> diff --git a/drivers/i2c/busses/i2c-designware-amdpsp.c b/drivers/i2c/busses/i2c-designware-amdpsp.c
-> index 752e0024db03..c64e459afb5c 100644
-> --- a/drivers/i2c/busses/i2c-designware-amdpsp.c
-> +++ b/drivers/i2c/busses/i2c-designware-amdpsp.c
-> @@ -160,9 +160,10 @@ static int psp_send_cmd(struct psp_i2c_req *req)
->  /* Helper to verify status returned by PSP */
->  static int check_i2c_req_sts(struct psp_i2c_req *req)
->  {
-> -	int status;
-> +	u32 status;
->  
-> -	status = readl(&req->hdr.status);
-> +	/* Status field in command-response buffer is updated by PSP */
-> +	status = READ_ONCE(req->hdr.status);
->  
->  	switch (status) {
->  	case PSP_I2C_REQ_STS_OK:
-> -- 
-> 2.35.1.265.g69c8d7142f-goog
+> Plus, as you mentioned later, can lead to undefined behavior.
+
+But does anything actually need to modify a driver_override string? I 
+wouldn't have thought so. I see at least two buses that *do* define 
+theirs as const char *, but still assume to kfree() them.
+
+>> And in fact that's effectively how the direct assignment form works
+>> anyway - string literals are static arrays of type char (or wchar_t),
+>> *not* const char, however trying to modify them is undefined behaviour.
+>>
+>> There's a big difference between "non-const" and "kfree()able", and
+>> AFAICS there's no obvious clue that the latter is actually a requirement.
 > 
+> Then maybe kfreeable should be made a requirement? Or at least clearly
+> documented?
 
--- 
-With Best Regards,
-Andy Shevchenko
+Indeed, there's clearly some room for improvement still. And I'm not 
+suggesting that these changes aren't already sensible as they are, just 
+that the given justification seems a little unfair :)
 
+Even kfree_const() can't help if someone has put their string in the 
+middle of some larger block of kmalloc()ed memory, so perhaps 
+encouraging a dedicated setter function rather than just exposing a raw 
+string pointer is the ideal solution in the long term.
 
+Cheers,
+Robin.

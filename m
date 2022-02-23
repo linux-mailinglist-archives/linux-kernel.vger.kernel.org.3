@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6A1F4C1FDA
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 00:38:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BA324C1FE2
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 00:38:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244917AbiBWXie (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 18:38:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58872 "EHLO
+        id S244911AbiBWXih (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 18:38:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244877AbiBWXi1 (ORCPT
+        with ESMTP id S244878AbiBWXi1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 23 Feb 2022 18:38:27 -0500
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEA8B5A580;
-        Wed, 23 Feb 2022 15:37:55 -0800 (PST)
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24E0A5A589;
+        Wed, 23 Feb 2022 15:37:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1645659475; x=1677195475;
+  t=1645659476; x=1677195476;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=q6I2iTlgYSdcCh5IbDuMtO1zYfoBSNPNnrKA7SE3n7E=;
-  b=f9AQlyRP2Vt6sL5IoyQN05i3GDEGnsCgktSWpgf58HsaO1SySGXvKKs/
-   tFrAMB1ognO/gSwnhbOnm44X3CmSXvLSCOxRr3pM4zb0+C5XPNlTmouGn
-   +zbINDsWbRKe1cbMGe7EmQ9bxb08yzen90h/syPtsbnvAXugTuIDNe64I
-   w=;
-Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 23 Feb 2022 15:37:55 -0800
+  bh=+MKLa2yx3nWTCH8/dR6dYi3DXpTMspvp8pf1dvGQZKQ=;
+  b=BxT4wK+FRMFIICKFGVQQTIT9V2dermF6KI2W939JQZ/uU1GHSAoKXMow
+   gBWu/gcBP7yxpvr9pXF7+wZQxqC3/raDURV5AitTNTbgpmK+hW7srEWKi
+   63iNYhtMdDpCjW/grMeTzN2dH7SoiCQQdw7sY7U14hih4HDTxc0DkRL1m
+   8=;
+Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 23 Feb 2022 15:37:55 -0800
 X-QCInternal: smtphost
 Received: from nasanex01b.na.qualcomm.com ([10.46.141.250])
-  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2022 15:37:55 -0800
+  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2022 15:37:55 -0800
 Received: from hu-eberman-lv.qualcomm.com (10.49.16.6) by
  nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
  15.2.986.15; Wed, 23 Feb 2022 15:37:54 -0800
 From:   Elliot Berman <quic_eberman@quicinc.com>
 To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        <linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>
+        <linux-kernel@vger.kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        <devicetree@vger.kernel.org>
 CC:     Elliot Berman <quic_eberman@quicinc.com>,
         Trilok Soni <quic_tsoni@quicinc.com>,
         Murali Nalajala <quic_mnalajala@quicinc.com>,
         Srivatsa Vaddagiri <quic_svaddagiri@quicinc.com>,
         Carl van Schaik <quic_cvanscha@quicinc.com>,
         Andy Gross <agross@kernel.org>, <linux-arm-msm@vger.kernel.org>
-Subject: [PATCH 01/11] docs: gunyah: Introduce Gunyah Hypervisor
-Date:   Wed, 23 Feb 2022 15:37:19 -0800
-Message-ID: <20220223233729.1571114-2-quic_eberman@quicinc.com>
+Subject: [PATCH 02/11] dt-bindings: Add binding for gunyah hypervisor
+Date:   Wed, 23 Feb 2022 15:37:20 -0800
+Message-ID: <20220223233729.1571114-3-quic_eberman@quicinc.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220223233729.1571114-1-quic_eberman@quicinc.com>
 References: <20220223233729.1571114-1-quic_eberman@quicinc.com>
@@ -66,211 +66,268 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Gunyah is an open-source Type-1 hypervisor developed by Qualcomm. It
-does not depend on any lower-privileged OS/kernel code for its core
-functionality. This increases its security and can support a smaller
-trusted computing based when compared to Type-2 hypervisors.
-
-Add documentation describing the Gunyah hypervisor and the main
-components of the Gunyah hypervisor which are of interest to Linux
-virtualization development.
+When Linux is booted as a guest under the Gunyah hypervisor, Gunyah
+applies a devicetree overlay describing the virtual platform
+configuration of the guest VM, such as the message queue capability IDs
+for communicating with the Resource Manager. Add the DT bindings that
+Gunyah adheres for the hypervisor node and message queues.
 
 Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
 ---
- Documentation/virt/gunyah/index.rst         | 92 +++++++++++++++++++++
- Documentation/virt/gunyah/message-queue.rst | 52 ++++++++++++
- Documentation/virt/index.rst                |  1 +
- MAINTAINERS                                 |  7 ++
- 4 files changed, 152 insertions(+)
- create mode 100644 Documentation/virt/gunyah/index.rst
- create mode 100644 Documentation/virt/gunyah/message-queue.rst
+ .../bindings/gunyah/message-queue.yml         | 100 ++++++++++++++
+ .../bindings/gunyah/qcom,hypervisor.yml       | 122 ++++++++++++++++++
+ MAINTAINERS                                   |   1 +
+ 3 files changed, 223 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/gunyah/message-queue.yml
+ create mode 100644 Documentation/devicetree/bindings/gunyah/qcom,hypervisor.yml
 
-diff --git a/Documentation/virt/gunyah/index.rst b/Documentation/virt/gunyah/index.rst
+diff --git a/Documentation/devicetree/bindings/gunyah/message-queue.yml b/Documentation/devicetree/bindings/gunyah/message-queue.yml
 new file mode 100644
-index 000000000000..e7bb2b14543e
+index 000000000000..1a96d3de2a19
 --- /dev/null
-+++ b/Documentation/virt/gunyah/index.rst
-@@ -0,0 +1,92 @@
-+.. SPDX-License-Identifier: GPL-2.0
++++ b/Documentation/devicetree/bindings/gunyah/message-queue.yml
+@@ -0,0 +1,100 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/gunyah/qcom,hypervisor.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+=================
-+Gunyah Hypervisor
-+=================
++title: Gunyah message queue
 +
-+.. toctree::
-+   :maxdepth: 1
++maintainers:
++   - Murali Nalajala <quic_mnalajal@quicinc.com>
++   - Elliot Berman <quic_eberman@quicinc.com>
 +
-+   message-queue
++properties:
++  compatible:
++    items:
++      - const: qcom,gunyah-message-queue
++      - const: qcom,gunyah-capability
++  peer:
++    description: VMID of the VM on the other end of message queue
++    $ref: /schemas/types.yaml#/definitions/uint32
++  allOf:
++    - if:
++        anyOf:
++          - properties:
++              qcom,is-sender: true
++          - properties:
++              qcom,is-full-duplex: true
++      then:
++        properties:
++          qcom,tx-message-size:
++            description: Maximum size in bytes of a message which can be sent by this queue
++            $ref: /schemas/types.yaml#/definitions/int32
++          qcom,tx-queue-depth:
++            description: Depth of transmit queue for messages sent by this queue
++            $ref: /schemas/types.yaml#/definitions/int32
++    - if:
++        anyOf:
++          - properties:
++              qcom,is-receiver: true
++          - properties:
++              qcom,is-full-duplex: true
++      then:
++        properties:
++          qcom,rx-message-size:
++            description: Maximum size in bytes of a message which can be received by this queue
++            $ref: /schemas/types.yaml#/definitions/int32
++          qcom,rx-queue-depth:
++            description: Depth of transmit queue for messages received by this queue
++            $ref: /schemas/types.yaml#/definitions/int32
++    - if:
++        anyOf:
++          - properties:
++              qcom,is-receiver: true
++          - properties:
++              qcom,is-sender: true
++      then:
++        properties:
++          reg:
++            description: Hypervisor capability ID of the message queue
++            $ref: /schemas/types.yaml#/definitions/uint32
++            minItems: 1
++            maxItems: 1
++          interrupts:
++            minItems: 1
++            maxItems: 1
++    - if:
++        properties:
++          qcom,is-full-duplex: true
++      then:
++        properties:
++          reg:
++            description:
++              Hypervisor capability IDs of the message queue
++              The first is tx side, the second is rx side
++            $ref: /schemas/types.yaml#/definitions/uint32
++            minItems: 2
++            maxItems: 2
++          interrupts:
++            description: The first is tx interrupt, second is rx interrupt
++            minItems: 2
++            maxItems: 2
++  required:
++    - compatible
++    - reg
++    - interrupts
 +
-+Gunyah is a Type-1 hypervisor which is independent of any OS kernel, and runs in
-+a higher CPU privilege level. It does not depend on any lower-privileged operating system
-+for its core functionality. This increases its security and can support a much smaller
-+trusted computing base than a Type-2 hypervisor.
 +
-+Gunyah is an open source hypervisor. The source repo is available at
-+https://github.com/quic/gunyah-hypervisor.
-+
-+Gunyah provides these following features.
-+
-+- Scheduling:
-+  A scheduler for virtual CPUs (VCPUs) on physical CPUs and enables time-sharing
-+  of the CPUs.
-+- Memory Management:
-+  APIs handling memory, abstracted as objects, limiting direct use of physical
-+  addresses. Memory ownership and usage tracking of all memory under its control.
-+  Memory partitioning between VMs is a fundamental security feature.
-+- Interrupt Virtualization:
-+  Uses CPU hardware interrupt virtualization capabilities. Interrupts are handled
-+  in the hypervisor and routed to the assigned VM.
-+- Inter-VM Communication:
-+  There are several different mechanisms provided for communicating between VMs.
-+- Virtual platform:
-+  Architectural devices such as interrupt controllers and CPU timers are directly provided
-+  by the hypervisor as well as core virtual platform devices and system APIs such as ARM PSCI.
-+- Device Virtualization:
-+  Para-virtualization of devices is supported using inter-VM communication.
-+
-+Architectures supported
-+=======================
-+AArch64 with a GIC
-+
-+Resources and Capabilities
-+==========================
-+
-+Some services or resources provided by the Gunyah hypervisor are described by capability IDs.
-+For instance, inter-VM communication is performed with doorbells and message queues. The specific
-+instance of a doorbell is described by a capability ID. These devices are described in Linux as a
-+struct gunyah_device.
-+
-+High level management of these resources is performed by the resource manager VM. RM informs a
-+guest VM about resources it can access through either the device tree or via guest-initiated RPC.
-+
-+Resource Manager
-+================
-+
-+The resource manager (RM) is a privileged application VM supporting the Gunyah Hypervisor.
-+It provides policy enforcement aspects of the virtualization system. The resource manager can
-+be treated as an extension of the Hypervisor but is separated to its own partition to ensure
-+that the hypervisor layer itself remains small and secure and to maintain a separation of policy
-+and mechanism in the platform. On arm64, RM runs at NS-EL1 similar to other virtual machines.
-+
-+Communication with the resource manager from each guest VM happens with message-queue.rst. Details
-+about the specific messages can be found in drivers/virt/gunyah/rsc_mgr.c
-+
-+::
-+  +-------+   +--------+   +--------+
-+  |  RM   |   |  VM_A  |   |  VM_B  |
-+  +-.-.-.-+   +---.----+   +---.----+
-+    | |           |            |
-+  +-.-.-----------.------------.----+
-+  | | \==========/             |    |
-+  |  \========================/     |
-+  |            Gunyah               |
-+  +---------------------------------+
-+
-+The source for the resource manager is available at https://github.com/quic/gunyah-resource-manager.
-+
-+The resource manager provides the following features:
-+
-+- Generate device-tree overlay
-+- VM creation and deletion
-+- VM device-tree management
-+- VM access control policy
-+- Interrupt routing configuration
-+
-+When booting a virtual machine which uses a devicetree, resource manager overlays a
-+/hypervisor node. This node can let Linux know it is running as a Gunyah guest VM,
-+how to communicate with resource manager, and basic description and capabilities of
-+this VM. See Documentation/devicetree/bindings/gunyah/qcom,hypervisor.yml for a description
-+of this node.
-diff --git a/Documentation/virt/gunyah/message-queue.rst b/Documentation/virt/gunyah/message-queue.rst
++examples:
++  - |
++    display-msgq-pair@abbf0da3c3c965cc {
++      compatible = "qcom,gunyah-message-queue", "qcom,gunyah-capability";
++      interrupts = <GIC_SPI 3 IRQ_TYPE_EDGE_RISING>, /* TX full IRQ */
++                    <GIC_SPI 4 IRQ_TYPE_EDGE_RISING>; /* RX empty IRQ */
++      reg = <0x00000000 0x00000000>, <0x00000000 0x00000001>; /* TX, RX cap ids */
++      qcom,is-full-duplex;
++      qcom,tx-queue-depth = <8>;
++      qcom,tx-message-size = <0xf0>;
++      qcom,rx-queue-depth = <8>;
++      qcom,rx-message-size = <0xf0>;
++    };
+\ No newline at end of file
+diff --git a/Documentation/devicetree/bindings/gunyah/qcom,hypervisor.yml b/Documentation/devicetree/bindings/gunyah/qcom,hypervisor.yml
 new file mode 100644
-index 000000000000..afd405f3a5e1
+index 000000000000..f637d51c52f0
 --- /dev/null
-+++ b/Documentation/virt/gunyah/message-queue.rst
-@@ -0,0 +1,52 @@
-+.. SPDX-License-Identifier: GPL-2.0
++++ b/Documentation/devicetree/bindings/gunyah/qcom,hypervisor.yml
+@@ -0,0 +1,122 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/gunyah/qcom,hypervisor.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+Message Queues
-+==============
-+Message queue is a simple low-capacity IPC channel between two VMs. It is
-+intended for sending small control and configuration messages. Each message
-+queue object is unidirectional, so a full-duplex IPC channel requires a pair of
-+objects.
++title: Hypervisor node to define virtual devices and other services provided by a Gunyah hypervisor
++       to this virtual machine.
 +
-+Messages can be up to 240 bytes in length. Longer messages require a further
-+protocol on top of the message queue messages themselves. For instance, communication
-+with the resource manager adds a header field for sending longer messages via multiple
-+message fragments.
++maintainers:
++   - Murali Nalajala <quic_mnalajal@quicinc.com>
++   - Elliot Berman <quic_eberman@quicinc.com>
 +
-+The diagram below shows how message queue works. A typical configuration involves
-+2 message queues. Message queue 1 allows VM_A to send messages to VM_B. Message
-+queue 2 allows VM_B to send messages to VM_A.
++description: |+
++  On systems which support devicetree, Gunyah generates and overlays a deviceetree overlay which
++  describes the basic configuration of the hypervisor. Virtual machines use this information for
++  initial discovery that they are running as a Gunyah guest VM.
++  See also: https://github.com/quic/gunyah-resource-manager/blob/develop/src/vm_creation/dto_construct.c
 +
-+1. VM_A sends a message of up to 240 bytes in length. It raises a hypercall
-+   with the message to inform the hypervisor to add the message to
-+   message queue 1's queue.
-+2. Gunyah raises the corresponding interrupt for VM_B when any of these happens:
-+   a. gh_msgq_send has PUSH flag. Queue is immediately flushed. This is the typical case.
-+   b. Explicility with gh_msgq_push command from VM_A.
-+   c. Message queue has reached a threshold depth.
-+3. VM_B calls gh_msgq_recv and Gunyah copies message to requested buffer.
++properties:
++  compatible:
++    oneOf:
++      - items:
++          - const: qcom,gunyah-hypervisor-1.0
++          - const: qcom,gunyah-hypervisor
 +
-+For VM_B to send a message to VM_A, the process is identical, except that hypercalls
-+reference message queue 2's capability ID.
++  "#address-cells":
++    description: Number of cells needed to represent 64-bit capability IDs.
++    const: 2
++  "#size-cells":
++    description: must be 0, because capability IDs are not memory address
++                  ranges and do not have a size.
++    const: 0
 +
-+::
++  qcom,gunyah-vm:
++    type: object
++    description:
++      The VM Identification is a virtual node that conveys to the VM information
++      about this virtual machine in the context of the hypervisor-based system
++    properties:
++      compatible:
++        oneOf:
++          - items:
++            - const: qcom,gunyah-vm-id-1.0
++            - const: qcom,gunyah-vm-id
++      qcom,vendor:
++        $ref: /schemas/types.yaml#/definitions/string
++        description: Vendor of the Virtual Machine, e.g. Qualcomm
++      qcom,vmid:
++        $ref: /schemas/types.yaml#/definitions/uint32
++        description: contains the VMID of this VM as a 32-bit value
++      qcom,owner-vmid:
++        $ref: /schemas/types.yaml#/definitions/uint32
++        description: Contains the hypervisor VMID of the VM's owner. The owner
++                     is the VM that allocated and created the VM. VMs directly
++                     managed by the resource manager, such as the primary VM do
++                     not have an owner.
++    required:
++      - compatible
++      - qcom,vmid
++      - qcom,owner-vmid
 +
-+      +---------------+         +-----------------+         +---------------+
-+      |      VM_A     |         |Gunyah hypervisor|         |      VM_B     |
-+      |               |         |                 |         |               |
-+      |               |         |                 |         |               |
-+      |               |   Tx    |                 |         |               |
-+      |               |-------->|                 | Rx vIRQ |               |
-+      |gh_msgq_send() | Tx vIRQ |Message queue 1  |-------->|gh_msgq_recv() |
-+      |               |<------- |                 |         |               |
-+      |               |         |                 |         |               |
-+      | Message Queue |         |                 |         | Message Queue |
-+      | driver        |         |                 |         | driver        |
-+      |               |         |                 |         |               |
-+      |               |         |                 |         |               |
-+      |               |         |                 |   Tx    |               |
-+      |               | Rx vIRQ |                 |<--------|               |
-+      |gh_msgq_recv() |<--------|Message queue 2  | Tx vIRQ |gh_msgq_send() |
-+      |               |         |                 |-------->|               |
-+      |               |         |                 |         |               |
-+      |               |         |                 |         |               |
-+      +---------------+         +-----------------+         +---------------+
-diff --git a/Documentation/virt/index.rst b/Documentation/virt/index.rst
-index edea7fea95a8..4080e7f5cad8 100644
---- a/Documentation/virt/index.rst
-+++ b/Documentation/virt/index.rst
-@@ -13,6 +13,7 @@ Linux Virtualization Support
-    guest-halt-polling
-    ne_overview
-    acrn/index
-+   gunyah/index
- 
- .. only:: html and subproject
- 
++patternProperties:
++  "^qcom,resource-manager-rpc(@.*)?":
++    type: object
++    description:
++      Resource Manager node which is required to communicate to Resource
++      Manager VM using Gunyah Message Queues.
++    allOf: "message-queue.yml#"
++
++    properties:
++      compatible:
++        oneOf:
++          items:
++            - const: qcom,resource-manager-1-0
++            - const: qcom,resource-manager
++      qcom,console-dev:
++        $ref: /schemas/types.yaml#/definitions/flag
++        description: if set, the resource-manger will accept console logs from the VM
++      qcom,free-irq-start:
++        $ref: /schemas/types.yaml#/definitions/uint32
++        description: Set on ARM systems which use a GIC. First VIRQ number which is free
++                     for virtual interrupt use.
++    required:
++      - qcom,is-full-duplex
++
++
++required:
++- compatible
++- "#address-cells"
++- "#size-cells"
++
++examples:
++  - |
++    hypervisor {
++        #address-cells = <2>;
++        #size-cells = <0>;
++        compatible = "qcom,gunyah-hypervisor-1.0", "qcom,gunyah-hypervisor", "simple-bus";
++        name = "hypervisor";
++
++        qcom,gunyah-vm {
++            compatible = "qcom,gunyah-vm-id-1.0", "qcom,gunyah-vm-id";
++            qcom,vendor = "Qualcomm Technologies, Inc.";
++            qcom,vmid = <45>;
++            qcom,owner-vmid = <3>;
++        };
++
++        qcom,resource-manager-rpc@0000000000000001 {
++            compatible = "qcom,resource-manager-1-0", "qcom,resource-manager",
++                          "qcom,gunyah-message-queue", "qcom,gunyah-capability";
++            interrupts = <GIC_SPI 3 IRQ_TYPE_EDGE_RISING>, /* TX full IRQ */
++                         <GIC_SPI 4 IRQ_TYPE_EDGE_RISING>; /* RX empty IRQ */
++            reg = <0x00000000 0x00000000>, <0x00000000 0x00000001>;
++                  /* TX, RX cap ids */
++            qcom,is-full-duplex;
++            qcom,free-irq-start = <0>;
++            qcom,tx-queue-depth = <8>;
++            qcom,tx-message-size = <0xf0>;
++            qcom,rx-queue-depth = <8>;
++            qcom,rx-message-size = <0xf0>;
++        };
++    };
 diff --git a/MAINTAINERS b/MAINTAINERS
-index 777cd6fa2b3d..bed175adc4c3 100644
+index bed175adc4c3..6a918f653eac 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -8395,6 +8395,13 @@ L:	linux-efi@vger.kernel.org
+@@ -8400,6 +8400,7 @@ M:	Elliot Berman <quic_eberman@quicinc.com>
+ M:	Murali Nalajala <quic_mnalajal@quicinc.com>
+ L:	linux-arm-msm@vger.kernel.org
  S:	Maintained
- F:	block/partitions/efi.*
++F:	Documentation/devicetree/bindings/gunyah/
+ F:	Documentation/virt/gunyah/
  
-+GUNYAH HYPERVISOR DRIVER
-+M:	Elliot Berman <quic_eberman@quicinc.com>
-+M:	Murali Nalajala <quic_mnalajal@quicinc.com>
-+L:	linux-arm-msm@vger.kernel.org
-+S:	Maintained
-+F:	Documentation/virt/gunyah/
-+
  H8/300 ARCHITECTURE
- M:	Yoshinori Sato <ysato@users.sourceforge.jp>
- L:	uclinux-h8-devel@lists.sourceforge.jp (moderated for non-subscribers)
 -- 
 2.25.1
 

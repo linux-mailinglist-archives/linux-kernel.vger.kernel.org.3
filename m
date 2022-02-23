@@ -2,208 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4477D4C1458
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 14:39:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 666824C1461
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 14:40:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240978AbiBWNkD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 08:40:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36706 "EHLO
+        id S240997AbiBWNk2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 08:40:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240976AbiBWNkA (ORCPT
+        with ESMTP id S240976AbiBWNk0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 08:40:00 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 42271AC04A
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 05:39:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1645623571;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=9ZjjBLEVy1E0rixG8g+5okuLN72qxgLAUeebM7Ze/UU=;
-        b=JQeDFBnLrQAkE0Jx+F1WAFd5dFBUR9jHZclXi65uIst1Lhj6ILDdv6OfUcwKVE/lzwOIZc
-        0vnD7+pxw6CzQmOotG7mVh/yQsjBHTP2daOWbnCb2lzvrKz5ft+GkDBUmO7h57wK/by05w
-        lcU57iT16sx/XZ0z0sNAwATmp0qYFIo=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-299-YZSEeJF1Pxe2Tmhca0o2qA-1; Wed, 23 Feb 2022 08:39:30 -0500
-X-MC-Unique: YZSEeJF1Pxe2Tmhca0o2qA-1
-Received: by mail-ed1-f69.google.com with SMTP id b13-20020a056402278d00b0041311e02a9bso4399813ede.13
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 05:39:30 -0800 (PST)
+        Wed, 23 Feb 2022 08:40:26 -0500
+Received: from mail-ua1-f43.google.com (mail-ua1-f43.google.com [209.85.222.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9900EAC056;
+        Wed, 23 Feb 2022 05:39:59 -0800 (PST)
+Received: by mail-ua1-f43.google.com with SMTP id k5so1450987uao.2;
+        Wed, 23 Feb 2022 05:39:59 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=9ZjjBLEVy1E0rixG8g+5okuLN72qxgLAUeebM7Ze/UU=;
-        b=24oPJ94OR7tZTIMszCs0sW2DX0KQNdlh3yg8oujTiwdFgMfm85mfF66RM5R0Mjj1Qy
-         ad14a4uWkvp30y86A2yLz/Lpxlp9VW6T68GDh7VRBAeVcQUQoQzKCmo1rYyH9eQCCEe6
-         OrEXqRhnyDPtXrXp2rPFnA/i2TLFdjaZw9ugGL/Dg2WlAqInS2pxjcf7yUKo+VSS0LCL
-         6dr55UxCehBkftY4c0on8hAQuIswmvBvJiG/58UKAQNKqzJhyIX3x4gNxI5OchVk8spj
-         BIe6dycaeKSIA8m/jl9LMFrD7yDjeNXWSoIy1OmWlBxISaKiNu70cHqEOUIWDSiVyN0N
-         1ecg==
-X-Gm-Message-State: AOAM5308yZDfd7cdMdGrKZwj8mPzUYX92Tt1TLfTtuobb2TQ+2wpVQis
-        Do8KNnsj651owdDalgU9qXCc8GW3BbWxvvEcSY4bXm4I7l4mh89NO/kjx4qMJhjWd9mumtv0cN7
-        vzwKDWQxdrrnRRkmzVZ/5a3uo
-X-Received: by 2002:a17:906:2ec6:b0:69f:286a:66ab with SMTP id s6-20020a1709062ec600b0069f286a66abmr23540593eji.684.1645623568948;
-        Wed, 23 Feb 2022 05:39:28 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzv4Ge2wJLmCbyT5FqSu5aHs9KNkldmFXzly5bPRTsLBfjQrPx6LpsM4oEgZIy3mytLBsRKzw==
-X-Received: by 2002:a17:906:2ec6:b0:69f:286a:66ab with SMTP id s6-20020a1709062ec600b0069f286a66abmr23540565eji.684.1645623568621;
-        Wed, 23 Feb 2022 05:39:28 -0800 (PST)
-Received: from ?IPV6:2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1? (2001-1c00-0c1e-bf00-1db8-22d3-1bc9-8ca1.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1])
-        by smtp.gmail.com with ESMTPSA id z22sm12238431edd.45.2022.02.23.05.39.27
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=dPeYplQbbLYXGtovtVVhsdi1q95Z7tVy8kR/XdoEwFw=;
+        b=PX7Nt9qXpqmTjlFOhhrsb5M/khaHHVULEAZc7ld8M2DZqySjYEcdAERmkeamrdW/aU
+         Vy91Muu7B/Qi09vclq9GJ3lSKdbRjnWlNa4bjwT1LX4jqIWqCHomrF6Js/54IQsdCGgl
+         tYPIW0jKrvm88C/94Zebd9QiCvh2mreNv5QBAk/j3/sTeQW64tGMETml+dan/2Inlhns
+         8hUrm8iBx3vO7BjOiaFscGf7Itc8ZgN7rjDu0Vzr/CErLH4bnqvMRMS1aMqCakGv2e4L
+         NSGAHCtwMxnIqB6JHsigQnVmLdDIEMp60YQRqoL2IDnrYLmWCIvBKgp597YTnicPyrqs
+         ldHg==
+X-Gm-Message-State: AOAM531a69GdEbv6Vhvyy1rl+1jKsNe3FwsHb8Q3ivxLXaF93y2xgPQG
+        0d35jLtEVe4FJoWRcdvAQ2yZzq0H4qG2ng==
+X-Google-Smtp-Source: ABdhPJwNxI2R6AEdabxPGiQHMAf1Ybqt+uMRJxs0wwwqMa5UMibfkulRZnrAVCVLljIQa5ADJ/LFiQ==
+X-Received: by 2002:ab0:2111:0:b0:341:8339:51b4 with SMTP id d17-20020ab02111000000b00341833951b4mr10756970ual.76.1645623598626;
+        Wed, 23 Feb 2022 05:39:58 -0800 (PST)
+Received: from mail-vs1-f48.google.com (mail-vs1-f48.google.com. [209.85.217.48])
+        by smtp.gmail.com with ESMTPSA id t127sm4198604vkb.31.2022.02.23.05.39.57
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 23 Feb 2022 05:39:28 -0800 (PST)
-Message-ID: <4d611fe8-b82a-1709-507a-56be94263688@redhat.com>
-Date:   Wed, 23 Feb 2022 14:39:27 +0100
+        Wed, 23 Feb 2022 05:39:58 -0800 (PST)
+Received: by mail-vs1-f48.google.com with SMTP id y26so3187221vsq.8;
+        Wed, 23 Feb 2022 05:39:57 -0800 (PST)
+X-Received: by 2002:a67:e10e:0:b0:31b:956b:70cf with SMTP id
+ d14-20020a67e10e000000b0031b956b70cfmr11904088vsl.77.1645623597826; Wed, 23
+ Feb 2022 05:39:57 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [RFC 10/10] net: sfp: add support for fwnode
-Content-Language: en-US
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>,
-        Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Wolfram Sang <wsa@kernel.org>, Peter Rosin <peda@axentia.se>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-acpi@vger.kernel.org, linux-i2c@vger.kernel.org,
-        netdev@vger.kernel.org,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-References: <20220221162652.103834-1-clement.leger@bootlin.com>
- <20220221162652.103834-11-clement.leger@bootlin.com>
- <YhPSkz8+BIcdb72R@smile.fi.intel.com> <20220222142513.026ad98c@fixe.home>
- <YhYZAc5+Q1rN3vhk@smile.fi.intel.com>
- <888f9f1a-ca5a-1250-1423-6c012ec773e2@redhat.com>
- <YhYriwvHJKjrDQRf@shell.armlinux.org.uk>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <YhYriwvHJKjrDQRf@shell.armlinux.org.uk>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20220221095032.95054-1-jjhiblot@traphandler.com> <20220221095032.95054-5-jjhiblot@traphandler.com>
+In-Reply-To: <20220221095032.95054-5-jjhiblot@traphandler.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 23 Feb 2022 14:39:46 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdX=Yos_CGcBXbV_+WGcTkz18mxiR4xbXwPqjR4mUGnMtQ@mail.gmail.com>
+Message-ID: <CAMuHMdX=Yos_CGcBXbV_+WGcTkz18mxiR4xbXwPqjR4mUGnMtQ@mail.gmail.com>
+Subject: Re: [PATCH v3 4/5] ARM: dts: r9a06g032-rzn1d400-db: Enable watchdog0
+ with a 60s timeout
+To:     Jean-Jacques Hiblot <jjhiblot@traphandler.com>
+Cc:     Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Mon, Feb 21, 2022 at 10:51 AM Jean-Jacques Hiblot
+<jjhiblot@traphandler.com> wrote:
+> 60s is a sensible default value.
+>
+> Signed-off-by: Jean-Jacques Hiblot <jjhiblot@traphandler.com>
+> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-On 2/23/22 13:41, Russell King (Oracle) wrote:
-> On Wed, Feb 23, 2022 at 01:02:23PM +0100, Hans de Goede wrote:
->> Hi,
->>
->> On 2/23/22 12:22, Andy Shevchenko wrote:
->>> On Tue, Feb 22, 2022 at 02:25:13PM +0100, Clément Léger wrote:
->>>> Le Mon, 21 Feb 2022 19:57:39 +0200,
->>>> Andy Shevchenko <andriy.shevchenko@linux.intel.com> a écrit :
->>>>
->>>>> On Mon, Feb 21, 2022 at 05:26:52PM +0100, Clément Léger wrote:
->>>>>> Add support to retrieve a i2c bus in sfp with a fwnode. This support
->>>>>> is using the fwnode API which also works with device-tree and ACPI.
->>>>>> For this purpose, the device-tree and ACPI code handling the i2c
->>>>>> adapter retrieval was factorized with the new code. This also allows
->>>>>> i2c devices using a software_node description to be used by sfp code.  
->>>>>
->>>>> If I'm not mistaken this patch can even go separately right now, since all used
->>>>> APIs are already available.
->>>>
->>>> This patches uses fwnode_find_i2c_adapter_by_node() which is introduced
->>>> by "i2c: fwnode: add fwnode_find_i2c_adapter_by_node()" but they can
->>>> probably be contributed both in a separate series.
->>>
->>> I summon Hans into the discussion since I remember he recently refactored
->>> a bit I2C (ACPI/fwnode) APIs. Also he might have an idea about entire big
->>> picture approach with this series based on his ACPI experience.
->>
->> If I understand this series correctly then this is about a PCI-E card
->> which has an I2C controller on the card and behind that I2C-controller
->> there are a couple if I2C muxes + I2C clients.
-> 
-> That is what I gathered as well.
-> 
->> Assuming I did understand the above correctly. One alternative would be
->> to simply manually instantiate the I2C muxes + clients using
->> i2c_new_client_device(). But I'm not sure if i2c_new_client_device()
->> will work for the muxes without adding some software_nodes which
->> brings us back to something like this patch-set.
-> 
-> That assumes that an I2C device is always present, which is not always
-> the case - there are hot-pluggable devices on I2C buses.
-> 
-> Specifically, this series includes pluggable SFP modules, which fall
-> into this category of "hot-pluggable I2C devices" - spanning several
-> bus addresses (0x50, 0x51, 0x56). 0x50 is EEPROM like, but not quite
-> as the top 128 bytes is paged and sometimes buggy in terms of access
-> behaviour. 0x51 contains a bunch of monitoring and other controls
-> for the module which again can be paged. At 0x56, there may possibly
-> be some kind of device that translates I2C accesses to MDIO accesses
-> to access a PHY onboard.
-> 
-> Consequently, the SFP driver and MDIO translation layer wants access to
-> the I2C bus, rather than a device.
-> 
-> Now, before ARM was converted to DT, we had ways to cope with
-> non-firmware described setups like this by using platform devices and
-> platform data. Much of that ended up deprecated, because - hey - DT
-> is great and more modern and the old way is disgusting and we want to
-> get rid of it.
-> 
-> However, that approach locks us into describing stuff in firmware,
-> which is unsuitable when something like this comes along.
-> 
-> I think what we need is both approaches. We need a way for the SFP
-> driver (which is a platform_driver) to be used _without_ needing
-> descriptions in firmware. I think we have that for GPIOs, but for an
-> I2C bus, We have i2c_get_adapter() for I2C buses, but that needs the
-> bus number - we could either pass the i2c_adapter or the adapter
-> number through platform data to the SFP driver.
-> 
-> Or is there another solution to being able to reuse multi-driver
-> based infrastructure that we have developed based on DT descriptions
-> in situations such as an add-in PCI card?
+Will queue in renesas-devel for v5.18.
 
-The use of software fwnode-s as proposed in this patch-set is another
-way to deal with this. There has been work to abstract ACPI vs
-of/dt firmware-nodes into a generic fwnode concept and software-nodes
-are a third way to define fwnode-s for "struct device" devices.
+Gr{oetje,eeting}s,
 
-Software nodes currently are mainly used as so called secondary
-fwnodes which means they can e.g. add extra properties to cover
-for the firmware description missing some info (which at least
-on ACPI happens more often then we would like).
+                        Geert
 
-But a software-node can also be used as the primary fwnode for
-a device. So what this patch-set does is move the i2c of/dt
-enumeration code over to the fwnode abstraction (1). This allows
-the driver for the SPF card to attach a software fwnode to the
-device for the i2c-controller which describes the hotplug pins +
-any other always present hw in the same way as it would be done
-in a devicetree fwnode and then the existing of/dt based SPF
-code can be re-used as is.
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-At least that is my understanding of this patch-set.
-
-Regards,
-
-Hans
-
-
-
-1) This should result in no functional changes for existing
-devicetree use cases.
-
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

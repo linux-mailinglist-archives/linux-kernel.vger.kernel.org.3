@@ -2,164 +2,422 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 257BF4C1C83
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 20:46:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1279E4C1C87
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 20:47:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234144AbiBWTrG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 14:47:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44708 "EHLO
+        id S244509AbiBWTrZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 14:47:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237983AbiBWTrC (ORCPT
+        with ESMTP id S244506AbiBWTrV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 14:47:02 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2AB83111C
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 11:46:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1645645592;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=/bAiudKI6GofrW8sW/IFMs0kLNUEycD7Kq3Myy+FN6M=;
-        b=ZtuaU1UVU67qatBqa+maG9vSQ9IHt6L1qhEp4GfZqJPXm4QzVDhvQwVHPBHFQHxjiAfvRR
-        GVO+xaNYma376l7N4RBIk1hAoJKM4tN6SfKFYOLgXjCQ+yXn39Sc3QhQUaU3c0ncLhFZxF
-        5SAeee3InR7ngR99h2v/RldL/ZiKh4Q=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-333-C2vdid_LNGG_unsKUapCNQ-1; Wed, 23 Feb 2022 14:46:30 -0500
-X-MC-Unique: C2vdid_LNGG_unsKUapCNQ-1
-Received: by mail-wm1-f69.google.com with SMTP id i131-20020a1c3b89000000b0037bb9f6feeeso1569671wma.5
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 11:46:30 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=/bAiudKI6GofrW8sW/IFMs0kLNUEycD7Kq3Myy+FN6M=;
-        b=t4VB59hrvjD45e3K5hwhm1pgqkvkq1gOnag76gD5joz+ZM9AxUizuQAwdukcc7HmtE
-         oo/FsimfB+SBa7f3a9OJLmkZ9E7CH237XnpTmnGGiiSWaDGIusqQCa+k5FNcyikOQaNN
-         Pv3aiKzx1l0gIQtGEIaplynso4YHVbdSA5pavhIsIpr4PSAjEZ/VmAzKR6mYRmRQEmZj
-         2KrzGW3UKgbQz5kyadeZTfpDLEi9CW4UTzkxmr1IC03p+cVf7qLzUUU93/1/vxuyjfOM
-         Kwyj1sbIC30T8MM6OarqFStLcOqbvK3Ov70tuxs3DC+wFFe4iYQ6DIhQ3vfVLEhHWocV
-         eFKg==
-X-Gm-Message-State: AOAM530U9yDisrdpxERQDZjflVFSI1b76Z0AeiX2PWUcNiddeODCoTjK
-        8N9mo+OH0SWXkq2Zy47ChKulltn04XbinUqSJWTtyScfsZABLHzxn6hIR5R6agNqrxcgap1axCy
-        jqKdy7V8BkBuBdDIiOxPdLbcT
-X-Received: by 2002:a05:600c:2e0c:b0:37c:3615:c52 with SMTP id o12-20020a05600c2e0c00b0037c36150c52mr954431wmf.43.1645645589743;
-        Wed, 23 Feb 2022 11:46:29 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJySrmeSB07rBtB2QvOGOMo8elbjh4NQ55HnawWX7yIAHPRtBLl0KqZraOKFQZWcMFevBUfseQ==
-X-Received: by 2002:a05:600c:2e0c:b0:37c:3615:c52 with SMTP id o12-20020a05600c2e0c00b0037c36150c52mr954416wmf.43.1645645589449;
-        Wed, 23 Feb 2022 11:46:29 -0800 (PST)
-Received: from debian.home (2a01cb058d3818005c1e4a7b0f47339f.ipv6.abo.wanadoo.fr. [2a01:cb05:8d38:1800:5c1e:4a7b:f47:339f])
-        by smtp.gmail.com with ESMTPSA id x11sm395152wmi.37.2022.02.23.11.46.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Feb 2022 11:46:27 -0800 (PST)
-Date:   Wed, 23 Feb 2022 20:46:24 +0100
-From:   Guillaume Nault <gnault@redhat.com>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "Ziyang Xuan (William)" <william.xuanziyang@huawei.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        David Miller <davem@davemloft.net>,
-        netdev <netdev@vger.kernel.org>,
-        Vasily Averin <vvs@virtuozzo.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH net] net: vlan: allow vlan device MTU change follow real
- device from smaller to bigger
-Message-ID: <20220223194624.GD19531@debian.home>
-References: <CANn89iKyWWCbAdv8W26HwGpM9q5+6rrk9E-Lbd2aujFkD3GMaQ@mail.gmail.com>
- <YhQ1KrtpEr3TgCwA@gondor.apana.org.au>
- <8248d662-8ea5-7937-6e34-5f1f8e19190f@huawei.com>
- <CANn89iLf2ira4XponYV91cbvcdK76ekU7fDW93fmuJ3iytFHcw@mail.gmail.com>
- <20220222103733.GA3203@debian.home>
- <20220222152815.1056ca24@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
- <20220223112618.GA19531@debian.home>
- <20220223080342.5cdd597c@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
- <20220223165836.GC19531@debian.home>
- <20220223093749.6b33345a@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+        Wed, 23 Feb 2022 14:47:21 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FBD633E17
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 11:46:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645645610; x=1677181610;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=83yi7+J2BaWupY0URhVucnRMpWAXsu49yuiZO526r4A=;
+  b=aJUHkPhynSjKyzq1KYgV+nCQ0s5IpidcTJ7hd0Dq/qL0f/cB0+nRihur
+   I+HsDdeKqCLN55WyRmZJcogqazDdG/5CTZF5ufG5gUIhc0legJndrYy2V
+   bz2cGnR37oPVKPHZqXmm5PiKXQqUNgTs+ggyKJ9om1HsaYoPAYTTqKJyX
+   aKz2skG5/LfjU6HqhgWcngoLzAD3+KICXI+38kdpN94tLOkctEN+D36DE
+   qC9k3yt3HttJrCD2PlVZ0eW5HHPTsDUhhJ3owVggLn+rrpPOb8fin+e76
+   7KNiCv0EWlaaLvcmJUVzWUKzUzwd5Hj2caeSRmeI2bibvulgZyNhAZ+Ty
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10267"; a="249647048"
+X-IronPort-AV: E=Sophos;i="5.88,391,1635231600"; 
+   d="scan'208";a="249647048"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2022 11:46:48 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,391,1635231600"; 
+   d="scan'208";a="628208534"
+Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 23 Feb 2022 11:46:45 -0800
+Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nMxb3-0001l4-5P; Wed, 23 Feb 2022 19:46:45 +0000
+Date:   Thu, 24 Feb 2022 03:46:34 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Raghu Bankapur <quic_rbankapu@quicinc.com>,
+        Jaroslav Kysela <perex@perex.cz>, linux-kernel@vger.kernel.org,
+        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        Krishna Jha <kkishorj@codeaurora.org>,
+        Raghu Bankapur <quic_rbankapu@quicinc.com>
+Subject: Re: [PATCH V1 1/1] ASoC: compress: propagate the error code from the
+ compress framework
+Message-ID: <202202240324.GFUDFcms-lkp@intel.com>
+References: <eda8b6cdd53576c5487422e46af20bae1a5c864f.1645618332.git.quic_rbankapu@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220223093749.6b33345a@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <eda8b6cdd53576c5487422e46af20bae1a5c864f.1645618332.git.quic_rbankapu@quicinc.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 23, 2022 at 09:37:49AM -0800, Jakub Kicinski wrote:
-> On Wed, 23 Feb 2022 17:58:36 +0100 Guillaume Nault wrote:
-> > On Wed, Feb 23, 2022 at 08:03:42AM -0800, Jakub Kicinski wrote:
-> > > I meant
-> > > 
-> > >   ip link set dev vlan0 mtu-policy blah
-> > > 
-> > > but also
-> > > 
-> > >   ip link set dev bond0 mtu-policy blah
-> > > 
-> > > and
-> > > 
-> > >   ip link set dev macsec0 mtu-policy blah2
-> > >   ip link set dev vxlan0 mtu-policy blah2
-> > > 
-> > > etc.  
-> > 
-> > Unless I'm missing something, that looks very much like what I proposed
-> > (these are all ARPHRD_ETHER devices). It's just a bit unclear whether
-> > "ip link set dev vlan0 mtu-policy blah" applies to vlan0 or to the vlans
-> > that might be stacked on top of it (given your other examples, I assume
-> > it's the later).
-> 
-> No, sorry I thought it would be clear, we need that neuralink ;)
-> It applies to the device on which it's configured. What I mean
-> is that bond, macsec, mpls etc have the same "should it follow 
-> the MTU of the lower device" problem, it's not vlan specific.
-> Or am I wrong about that?
+Hi Raghu,
 
-Ok, I get it now, sorry for being slow :). But I wouldn't consider mpls
-and vxlan. We have no device type for mpls. For vxlan (and other ip
-tunnels) the virtual device isn't directly tied to a physical device.
-Also, ip tunnels can resort to fragmentation in case of small MTU on
-the output device, so following MTU changes is not a hard requirement
-as with vlans.
+Thank you for the patch! Yet something to improve:
 
-For other devices, we'd probably have to take into account the fact
-that some of them need to have a smaller MTU due to their extra header
-(that can be the case for some stacked vlans scenarios).
+[auto build test ERROR on tiwai-sound/for-next]
+[also build test ERROR on linux/master broonie-sound/for-next linus/master v5.17-rc5 next-20220222]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-But honnestly, I don't believe it's worth the extra complexity.
+url:    https://github.com/0day-ci/linux/commits/Raghu-Bankapur/ASoC-compress-propagate-the-error-code-from-the-compress-framework/20220223-215509
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/tiwai/sound.git for-next
+config: hexagon-buildonly-randconfig-r001-20220223 (https://download.01.org/0day-ci/archive/20220224/202202240324.GFUDFcms-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/6154c602c715dac9253695c89bebd921f43cc81d
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Raghu-Bankapur/ASoC-compress-propagate-the-error-code-from-the-compress-framework/20220223-215509
+        git checkout 6154c602c715dac9253695c89bebd921f43cc81d
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash sound/core/
 
-> > > To be honest I'm still not clear if this is a real problem.
-> > > The patch does not specify what the use case is.  
-> > 
-> > It's probably not a problem as long as we keep sane behaviour by
-> > default. Then we can let admins opt in for something more complex or
-> > loosely defined.
-> 
-> What I meant was - does anyone actually flip the MTU of their
-> interfaces back and forth while the system is running. Maybe
-> people do.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-In my experience people often try to upgrade their MTU, which is prone
-to failure because all nodes on the ethernet segment need to be
-upgraded at once (and people like unmanageably big ethernet segments).
-So reverting to the previous configuration is often needed.
-Another reason for back and forth modifications is fat fingers: change
-the MTU of a device, realise that was the wrong one, restore settings
-and reapply on the correct device.
+All error/warnings (new ones prefixed by >>):
 
-More importantly, one path people take to upgrade their MTU is to
-ensure that all their traffic is vlan encapsulated, then higher the MTU
-of the ethernet device, and finally higher the MTU of each vlan on a
-case by case basis. In such scenarios, you certainly _don't_ want the
-vlans to follow the MTU of their parent device, no matter if their MTU
-is the default one, if it's equal to the current MTU of the eth
-interface, if it was ever modified since the creation of the device,
-or any other situation heuristics might use.
+>> sound/core/compress_offload.c:34:35: warning: extra tokens at end of #include directive [-Wextra-tokens]
+   #include <sound/compress_driver.h>ASoC: compress: propagate the error code from the compress framework
+                                     ^
+                                     //
+>> sound/core/compress_offload.c:36:1: error: unknown type name 'Propagate'
+   Propagate the error code from the compress framework for the timestamp
+   ^
+>> sound/core/compress_offload.c:36:14: error: expected ';' after top level declarator
+   Propagate the error code from the compress framework for the timestamp
+                ^
+                ;
+>> sound/core/compress_offload.c:112:23: error: invalid application of 'sizeof' to an incomplete type 'struct snd_compr_file'
+           data = kzalloc(sizeof(*data), GFP_KERNEL);
+                                ^~~~~~~
+   sound/core/compress_offload.c:82:9: note: forward declaration of 'struct snd_compr_file'
+           struct snd_compr_file *data;
+                  ^
+>> sound/core/compress_offload.c:118:25: error: incomplete definition of type 'struct snd_compr_file'
+           INIT_DELAYED_WORK(&data->stream.error_work, error_delayed_work);
+                              ~~~~^
+   include/linux/workqueue.h:267:22: note: expanded from macro 'INIT_DELAYED_WORK'
+           __INIT_DELAYED_WORK(_work, _func, 0)
+                               ^~~~~
+   include/linux/workqueue.h:252:15: note: expanded from macro '__INIT_DELAYED_WORK'
+                   INIT_WORK(&(_work)->work, (_func));                     \
+                               ^~~~~
+   include/linux/workqueue.h:245:15: note: expanded from macro 'INIT_WORK'
+           __INIT_WORK((_work), (_func), 0)
+                        ^~~~~
+   include/linux/workqueue.h:228:16: note: expanded from macro '__INIT_WORK'
+                   __init_work((_work), _onstack);                         \
+                                ^~~~~
+   sound/core/compress_offload.c:82:9: note: forward declaration of 'struct snd_compr_file'
+           struct snd_compr_file *data;
+                  ^
+>> sound/core/compress_offload.c:118:25: error: incomplete definition of type 'struct snd_compr_file'
+           INIT_DELAYED_WORK(&data->stream.error_work, error_delayed_work);
+                              ~~~~^
+   include/linux/workqueue.h:267:22: note: expanded from macro 'INIT_DELAYED_WORK'
+           __INIT_DELAYED_WORK(_work, _func, 0)
+                               ^~~~~
+   include/linux/workqueue.h:252:15: note: expanded from macro '__INIT_DELAYED_WORK'
+                   INIT_WORK(&(_work)->work, (_func));                     \
+                               ^~~~~
+   include/linux/workqueue.h:245:15: note: expanded from macro 'INIT_WORK'
+           __INIT_WORK((_work), (_func), 0)
+                        ^~~~~
+   include/linux/workqueue.h:229:4: note: expanded from macro '__INIT_WORK'
+                   (_work)->data = (atomic_long_t) WORK_DATA_INIT();       \
+                    ^~~~~
+   sound/core/compress_offload.c:82:9: note: forward declaration of 'struct snd_compr_file'
+           struct snd_compr_file *data;
+                  ^
+>> sound/core/compress_offload.c:118:25: error: incomplete definition of type 'struct snd_compr_file'
+           INIT_DELAYED_WORK(&data->stream.error_work, error_delayed_work);
+                              ~~~~^
+   include/linux/workqueue.h:267:22: note: expanded from macro 'INIT_DELAYED_WORK'
+           __INIT_DELAYED_WORK(_work, _func, 0)
+                               ^~~~~
+   include/linux/workqueue.h:252:15: note: expanded from macro '__INIT_DELAYED_WORK'
+                   INIT_WORK(&(_work)->work, (_func));                     \
+                               ^~~~~
+   include/linux/workqueue.h:245:15: note: expanded from macro 'INIT_WORK'
+           __INIT_WORK((_work), (_func), 0)
+                        ^~~~~
+   include/linux/workqueue.h:230:22: note: expanded from macro '__INIT_WORK'
+                   lockdep_init_map(&(_work)->lockdep_map, "(work_completion)"#_work, &__key, 0); \
+                                      ^~~~~
+   sound/core/compress_offload.c:82:9: note: forward declaration of 'struct snd_compr_file'
+           struct snd_compr_file *data;
+                  ^
+>> sound/core/compress_offload.c:118:25: error: incomplete definition of type 'struct snd_compr_file'
+           INIT_DELAYED_WORK(&data->stream.error_work, error_delayed_work);
+                              ~~~~^
+   include/linux/workqueue.h:267:22: note: expanded from macro 'INIT_DELAYED_WORK'
+           __INIT_DELAYED_WORK(_work, _func, 0)
+                               ^~~~~
+   include/linux/workqueue.h:252:15: note: expanded from macro '__INIT_DELAYED_WORK'
+                   INIT_WORK(&(_work)->work, (_func));                     \
+                               ^~~~~
+   include/linux/workqueue.h:245:15: note: expanded from macro 'INIT_WORK'
+           __INIT_WORK((_work), (_func), 0)
+                        ^~~~~
+   include/linux/workqueue.h:231:20: note: expanded from macro '__INIT_WORK'
+                   INIT_LIST_HEAD(&(_work)->entry);                        \
+                                    ^~~~~
+   sound/core/compress_offload.c:82:9: note: forward declaration of 'struct snd_compr_file'
+           struct snd_compr_file *data;
+                  ^
+>> sound/core/compress_offload.c:118:25: error: incomplete definition of type 'struct snd_compr_file'
+           INIT_DELAYED_WORK(&data->stream.error_work, error_delayed_work);
+                              ~~~~^
+   include/linux/workqueue.h:267:22: note: expanded from macro 'INIT_DELAYED_WORK'
+           __INIT_DELAYED_WORK(_work, _func, 0)
+                               ^~~~~
+   include/linux/workqueue.h:252:15: note: expanded from macro '__INIT_DELAYED_WORK'
+                   INIT_WORK(&(_work)->work, (_func));                     \
+                               ^~~~~
+   include/linux/workqueue.h:245:15: note: expanded from macro 'INIT_WORK'
+           __INIT_WORK((_work), (_func), 0)
+                        ^~~~~
+   include/linux/workqueue.h:232:4: note: expanded from macro '__INIT_WORK'
+                   (_work)->func = (_func);                                \
+                    ^~~~~
+   sound/core/compress_offload.c:82:9: note: forward declaration of 'struct snd_compr_file'
+           struct snd_compr_file *data;
+                  ^
+>> sound/core/compress_offload.c:118:25: error: incomplete definition of type 'struct snd_compr_file'
+           INIT_DELAYED_WORK(&data->stream.error_work, error_delayed_work);
+                              ~~~~^
+   include/linux/workqueue.h:267:22: note: expanded from macro 'INIT_DELAYED_WORK'
+           __INIT_DELAYED_WORK(_work, _func, 0)
+                               ^~~~~
+   include/linux/workqueue.h:253:18: note: expanded from macro '__INIT_DELAYED_WORK'
+                   __init_timer(&(_work)->timer,                           \
+                                  ^~~~~
+   include/linux/timer.h:115:19: note: expanded from macro '__init_timer'
+                   init_timer_key((_timer), (_fn), (_flags), #_timer, &__key);\
+                                   ^~~~~~
+   sound/core/compress_offload.c:82:9: note: forward declaration of 'struct snd_compr_file'
+           struct snd_compr_file *data;
+                  ^
+   sound/core/compress_offload.c:120:6: error: incomplete definition of type 'struct snd_compr_file'
+           data->stream.ops = compr->ops;
+           ~~~~^
+   sound/core/compress_offload.c:82:9: note: forward declaration of 'struct snd_compr_file'
+           struct snd_compr_file *data;
+                  ^
+   sound/core/compress_offload.c:121:6: error: incomplete definition of type 'struct snd_compr_file'
+           data->stream.direction = dirn;
+           ~~~~^
+   sound/core/compress_offload.c:82:9: note: forward declaration of 'struct snd_compr_file'
+           struct snd_compr_file *data;
+                  ^
+   sound/core/compress_offload.c:122:6: error: incomplete definition of type 'struct snd_compr_file'
+           data->stream.private_data = compr->private_data;
+           ~~~~^
+   sound/core/compress_offload.c:82:9: note: forward declaration of 'struct snd_compr_file'
+           struct snd_compr_file *data;
+                  ^
+   sound/core/compress_offload.c:123:6: error: incomplete definition of type 'struct snd_compr_file'
+           data->stream.device = compr;
+           ~~~~^
+   sound/core/compress_offload.c:82:9: note: forward declaration of 'struct snd_compr_file'
+           struct snd_compr_file *data;
+                  ^
+   sound/core/compress_offload.c:132:6: error: incomplete definition of type 'struct snd_compr_file'
+           data->stream.runtime = runtime;
+           ~~~~^
+   sound/core/compress_offload.c:82:9: note: forward declaration of 'struct snd_compr_file'
+           struct snd_compr_file *data;
+                  ^
+   sound/core/compress_offload.c:135:30: error: incomplete definition of type 'struct snd_compr_file'
+           ret = compr->ops->open(&data->stream);
+                                   ~~~~^
+   sound/core/compress_offload.c:82:9: note: forward declaration of 'struct snd_compr_file'
+           struct snd_compr_file *data;
+                  ^
+   sound/core/compress_offload.c:148:42: error: incomplete definition of type 'struct snd_compr_file'
+           struct snd_compr_runtime *runtime = data->stream.runtime;
+                                               ~~~~^
+   sound/core/compress_offload.c:147:9: note: forward declaration of 'struct snd_compr_file'
+           struct snd_compr_file *data = f->private_data;
+                  ^
+   sound/core/compress_offload.c:150:32: error: incomplete definition of type 'struct snd_compr_file'
+           cancel_delayed_work_sync(&data->stream.error_work);
+                                     ~~~~^
+   sound/core/compress_offload.c:147:9: note: forward declaration of 'struct snd_compr_file'
+           struct snd_compr_file *data = f->private_data;
+                  ^
+   sound/core/compress_offload.c:156:7: error: incomplete definition of type 'struct snd_compr_file'
+                   data->stream.ops->trigger(&data->stream, SNDRV_PCM_TRIGGER_STOP);
+                   ~~~~^
+   sound/core/compress_offload.c:147:9: note: forward declaration of 'struct snd_compr_file'
+           struct snd_compr_file *data = f->private_data;
+                  ^
+   sound/core/compress_offload.c:156:34: error: incomplete definition of type 'struct snd_compr_file'
+                   data->stream.ops->trigger(&data->stream, SNDRV_PCM_TRIGGER_STOP);
+                                              ~~~~^
+   sound/core/compress_offload.c:147:9: note: forward declaration of 'struct snd_compr_file'
+           struct snd_compr_file *data = f->private_data;
+                  ^
+   fatal error: too many errors emitted, stopping now [-ferror-limit=]
+   1 warning and 20 errors generated.
 
+
+vim +/Propagate +36 sound/core/compress_offload.c
+
+    14	
+    15	#include <linux/file.h>
+    16	#include <linux/fs.h>
+    17	#include <linux/list.h>
+    18	#include <linux/math64.h>
+    19	#include <linux/mm.h>
+    20	#include <linux/mutex.h>
+    21	#include <linux/poll.h>
+    22	#include <linux/slab.h>
+    23	#include <linux/sched.h>
+    24	#include <linux/types.h>
+    25	#include <linux/uio.h>
+    26	#include <linux/uaccess.h>
+    27	#include <linux/module.h>
+    28	#include <linux/compat.h>
+    29	#include <sound/core.h>
+    30	#include <sound/initval.h>
+    31	#include <sound/info.h>
+    32	#include <sound/compress_params.h>
+    33	#include <sound/compress_offload.h>
+  > 34	#include <sound/compress_driver.h>ASoC: compress: propagate the error code from the compress framework
+    35	
+  > 36	Propagate the error code from the compress framework for the timestamp
+    37	query. This error code will be used by the client to handle the
+    38	error case scenarios gracefully.
+    39	
+    40	/* struct snd_compr_codec_caps overflows the ioctl bit size for some
+    41	 * architectures, so we need to disable the relevant ioctls.
+    42	 */
+    43	#if _IOC_SIZEBITS < 14
+    44	#define COMPR_CODEC_CAPS_OVERFLOW
+    45	#endif
+    46	
+    47	/* TODO:
+    48	 * - add substream support for multiple devices in case of
+    49	 *	SND_DYNAMIC_MINORS is not used
+    50	 * - Multiple node representation
+    51	 *	driver should be able to register multiple nodes
+    52	 */
+    53	
+    54	struct snd_compr_file {
+    55		unsigned long caps;
+    56		struct snd_compr_stream stream;
+    57	};
+    58	
+    59	static void error_delayed_work(struct work_struct *work);
+    60	
+    61	/*
+    62	 * a note on stream states used:
+    63	 * we use following states in the compressed core
+    64	 * SNDRV_PCM_STATE_OPEN: When stream has been opened.
+    65	 * SNDRV_PCM_STATE_SETUP: When stream has been initialized. This is done by
+    66	 *	calling SNDRV_COMPRESS_SET_PARAMS. Running streams will come to this
+    67	 *	state at stop by calling SNDRV_COMPRESS_STOP, or at end of drain.
+    68	 * SNDRV_PCM_STATE_PREPARED: When a stream has been written to (for
+    69	 *	playback only). User after setting up stream writes the data buffer
+    70	 *	before starting the stream.
+    71	 * SNDRV_PCM_STATE_RUNNING: When stream has been started and is
+    72	 *	decoding/encoding and rendering/capturing data.
+    73	 * SNDRV_PCM_STATE_DRAINING: When stream is draining current data. This is done
+    74	 *	by calling SNDRV_COMPRESS_DRAIN.
+    75	 * SNDRV_PCM_STATE_PAUSED: When stream is paused. This is done by calling
+    76	 *	SNDRV_COMPRESS_PAUSE. It can be stopped or resumed by calling
+    77	 *	SNDRV_COMPRESS_STOP or SNDRV_COMPRESS_RESUME respectively.
+    78	 */
+    79	static int snd_compr_open(struct inode *inode, struct file *f)
+    80	{
+    81		struct snd_compr *compr;
+    82		struct snd_compr_file *data;
+    83		struct snd_compr_runtime *runtime;
+    84		enum snd_compr_direction dirn;
+    85		int maj = imajor(inode);
+    86		int ret;
+    87	
+    88		if ((f->f_flags & O_ACCMODE) == O_WRONLY)
+    89			dirn = SND_COMPRESS_PLAYBACK;
+    90		else if ((f->f_flags & O_ACCMODE) == O_RDONLY)
+    91			dirn = SND_COMPRESS_CAPTURE;
+    92		else
+    93			return -EINVAL;
+    94	
+    95		if (maj == snd_major)
+    96			compr = snd_lookup_minor_data(iminor(inode),
+    97						SNDRV_DEVICE_TYPE_COMPRESS);
+    98		else
+    99			return -EBADFD;
+   100	
+   101		if (compr == NULL) {
+   102			pr_err("no device data!!!\n");
+   103			return -ENODEV;
+   104		}
+   105	
+   106		if (dirn != compr->direction) {
+   107			pr_err("this device doesn't support this direction\n");
+   108			snd_card_unref(compr->card);
+   109			return -EINVAL;
+   110		}
+   111	
+ > 112		data = kzalloc(sizeof(*data), GFP_KERNEL);
+   113		if (!data) {
+   114			snd_card_unref(compr->card);
+   115			return -ENOMEM;
+   116		}
+   117	
+ > 118		INIT_DELAYED_WORK(&data->stream.error_work, error_delayed_work);
+   119	
+   120		data->stream.ops = compr->ops;
+   121		data->stream.direction = dirn;
+   122		data->stream.private_data = compr->private_data;
+   123		data->stream.device = compr;
+   124		runtime = kzalloc(sizeof(*runtime), GFP_KERNEL);
+   125		if (!runtime) {
+   126			kfree(data);
+   127			snd_card_unref(compr->card);
+   128			return -ENOMEM;
+   129		}
+   130		runtime->state = SNDRV_PCM_STATE_OPEN;
+   131		init_waitqueue_head(&runtime->sleep);
+   132		data->stream.runtime = runtime;
+   133		f->private_data = (void *)data;
+   134		mutex_lock(&compr->lock);
+   135		ret = compr->ops->open(&data->stream);
+   136		mutex_unlock(&compr->lock);
+   137		if (ret) {
+   138			kfree(runtime);
+   139			kfree(data);
+   140		}
+   141		snd_card_unref(compr->card);
+   142		return ret;
+   143	}
+   144	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

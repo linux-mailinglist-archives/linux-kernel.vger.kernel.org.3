@@ -2,120 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAF484C0E50
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 09:34:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB8464C0E4C
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 09:33:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239002AbiBWIeb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 03:34:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43954 "EHLO
+        id S238309AbiBWIeD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 03:34:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233549AbiBWIe2 (ORCPT
+        with ESMTP id S233565AbiBWIeC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 03:34:28 -0500
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A970674C4;
-        Wed, 23 Feb 2022 00:34:02 -0800 (PST)
-Received: by mail-pj1-x102f.google.com with SMTP id j10-20020a17090a94ca00b001bc2a9596f6so2024409pjw.5;
-        Wed, 23 Feb 2022 00:34:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=iDb45oPj0ifDcB8Xoh2dodzalPDAwvLvo6tLmA+1g1A=;
-        b=pZyB5i3EDjAvoOu1W4jIwUnpSx7RWt7r5xjs0PYS8CWbj9v/+h6LN5hErKk9z+R5tF
-         3MK33kzZg+4iafVWLruxFp+YPsCSgYshqQy5MwK6eYG9h0d3tlqTJ6od746GCspi3onX
-         xnO7jWcH5ymHmNkpRplsON3xjlfiMKGCfYXm+GpIHnUtRHzNQqUYj+lTAvPH/CrMK6EY
-         snxwzaLrt4fp8VbMaoyw8FLwrR9702Qy/U4H0gjia+elRMlqIQEJPvDbzyvqBJa/QKPh
-         6kH0c7Y2exw98Im4vIstHP54myt2aWXNIzXBi0/6htlpvmdWWBJS7lGkdO4dJxBn7Cb/
-         H6hw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=iDb45oPj0ifDcB8Xoh2dodzalPDAwvLvo6tLmA+1g1A=;
-        b=wRZt2jF9Q9Q2dv69l+QYBDUP2Fybnilnk3PVqFFxN4ETNpe8QOY2/rQXygs5hj7AMT
-         e5n3n8mYTIz9YgiHpbnaBfj+/41rkR7Kw/IJYY0QI7driHpaCKi5i120L0PFcfllATrb
-         pTKqAf0tbw/j9Xnsi5RtgiKi+QMjuJZLdsU/T06H9sTuGzn2u2ZY6rUKyEIGTE+Bfpy7
-         yrvKSRgSA2vt2687pprcHf63im1iLDat6MsMKNIw7vEHIOGRbvMCY7n5MpBfNW3wy7WK
-         WJeTce03gKVPiPGodQY9J12UC1+zv47PfpmCOZhteE2uvQrsI9F4OJ2C4s3QLdJSLpDW
-         LCKA==
-X-Gm-Message-State: AOAM533NBPVQpOK5d1RI+aSQfuDjVTmy/MjdtebqbWqvjWd8xJzHJI+Q
-        hP3zjoLi74F2816f4TYv19KZLeom+M5zrKYPZho=
-X-Google-Smtp-Source: ABdhPJxjyJEbWbvUjPn8qDp3Uys0pRB+Jj2L39nYmoHtTf0LFOWN1YRvivO9TAo6OOnscTXB4pYx9w==
-X-Received: by 2002:a17:90a:ac1:b0:1b9:7dd3:ba5f with SMTP id r1-20020a17090a0ac100b001b97dd3ba5fmr8126134pje.178.1645605241389;
-        Wed, 23 Feb 2022 00:34:01 -0800 (PST)
-Received: from localhost.localdomain ([43.132.141.8])
-        by smtp.gmail.com with ESMTPSA id bd14sm9338613pfb.165.2022.02.23.00.33.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Feb 2022 00:34:00 -0800 (PST)
-From:   Yuntao Wang <ytcoode@gmail.com>
-To:     bpf@vger.kernel.org
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Yuntao Wang <ytcoode@gmail.com>
-Subject: [PATCH] libbpf: Simplify the find_elf_sec_sz() function
-Date:   Wed, 23 Feb 2022 16:33:00 +0800
-Message-Id: <20220223083300.3054673-1-ytcoode@gmail.com>
-X-Mailer: git-send-email 2.35.0.rc2
+        Wed, 23 Feb 2022 03:34:02 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1550847548
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 00:33:36 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id CA0B01F43D;
+        Wed, 23 Feb 2022 08:33:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1645605214; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=HlBp6viB771Oj+TE+GJseCVUxyBgZ+42wgX49Qr/87E=;
+        b=QPUslG/i28MwIlcysXokkMrPqi0AIx58bQb8fcJ/5ecPydtBbLiYqJwuc9Jqf40wLKNSA/
+        g3TqGHMdafsIBVN11wkdb0YsXqlzjNw2REzPpkCAWsSl7s0V+AO6LOdMEVvK8NCialtwsV
+        iRa/nhIBlRMvXpFbISqSNwzUXrZc29A=
+Received: from suse.cz (unknown [10.100.201.86])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 9C360A3B87;
+        Wed, 23 Feb 2022 08:33:34 +0000 (UTC)
+Date:   Wed, 23 Feb 2022 09:33:34 +0100
+From:   Michal Hocko <mhocko@suse.com>
+To:     Mike Kravetz <mike.kravetz@oracle.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Zhenguo Yao <yaozhenguo1@gmail.com>,
+        Liu Yuntao <liuyuntao10@huawei.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: [PATCH v2] hugetlb: clean up potential spectre issue warnings
+Message-ID: <YhXxXg45loivQF10@dhcp22.suse.cz>
+References: <20220218212946.35441-1-mike.kravetz@oracle.com>
+ <YhNQf3LUZzNRD7u0@dhcp22.suse.cz>
+ <26565cd7-01b0-197c-6ce9-af92f5bc8563@oracle.com>
+ <YhSVGPQ6VIQfBZ9o@dhcp22.suse.cz>
+ <4bad1923-354d-3858-0339-82df8c090c3f@oracle.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4bad1923-354d-3858-0339-82df8c090c3f@oracle.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The check in the last return statement is unnecessary, we can just return
-the ret variable.
+On Tue 22-02-22 13:53:56, Mike Kravetz wrote:
+> On 2/21/22 23:47, Michal Hocko wrote:
+> > On Mon 21-02-22 12:24:25, Mike Kravetz wrote:
+> >> On 2/21/22 00:42, Michal Hocko wrote:
+> >>> On Fri 18-02-22 13:29:46, Mike Kravetz wrote:
+> >>> [...]
+> >>>> @@ -4161,7 +4162,7 @@ static int __init hugepages_setup(char *s)
+> >>>>  			}
+> >>>>  			if (tmp >= nr_online_nodes)
+> >>>>  				goto invalid;
+> >>>> -			node = tmp;
+> >>>> +			node = array_index_nospec(tmp, nr_online_nodes);
+> >>>>  			p += count + 1;
+> >>>>  			/* Parse hugepages */
+> >>>>  			if (sscanf(p, "%lu%n", &tmp, &count) != 1)
+> >>>> @@ -6889,9 +6890,9 @@ static int __init cmdline_parse_hugetlb_cma(char *p)
+> >>>>  			break;
+> >>>>  
+> >>>>  		if (s[count] == ':') {
+> >>>> -			nid = tmp;
+> >>>> -			if (nid < 0 || nid >= MAX_NUMNODES)
+> >>>> +			if (tmp >= MAX_NUMNODES)
+> >>>>  				break;
+> >>>> +			nid = array_index_nospec(tmp, MAX_NUMNODES);
+> >>>>  
+> >>>>  			s += count + 1;
+> >>>>  			tmp = memparse(s, &s);
+> >>>
+> >>> This is an early boot code, how is this supposed to be used as a side
+> >>> channel?
+> >>
+> >> I do not have an evil hacker mind, but I can not think of a way this one time
+> >> use of a user specified index could be an issue.  It does add noise to the
+> >> BUILD REGRESSION emails sent to Andrew.
+> > 
+> > Maybe Smack can be taught to ignore __init and other early boot
+> > functions.
+> > 
+> > I do not have any strong objections to using array_index_nospec because
+> > it won't do any harm. Except that it makes a security measure a normal
+> > comodity so any future changes to array_index_nospec and its users will
+> > have to consult additional callers. Whether that is something we should
+> > deeply care about, I don't know.
+> > 
+> > At minimum make sure to be explicit that this can hardly be a Spectre
+> > gadget as it is a _one_ time early boot call. If there is a scenario
+> > where this could be really abused then it should be mentioned
+> > explicitly.
+> 
+> How about adding this note to the commit message?
+> 
+> Note: these routines take a user specified value used as an index ONCE
+> during the boot process.  As a result, they can not be used as a general
+> method of exploitation.  Code changes are being made to eliminate warnings.
 
-But we can simplify the function further by returning 0 immediately if we
-find the section size and -ENOENT otherwise.
+This would help but the question whether the change is worth remains.
+Does this change have any other advantage than silencing the warning?
 
-Thus we can also remove the ret variable.
-
-Signed-off-by: Yuntao Wang <ytcoode@gmail.com>
----
- tools/lib/bpf/libbpf.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
-
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 7e978feaf822..776b8e034d62 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -1374,22 +1374,20 @@ static bool bpf_map_type__is_map_in_map(enum bpf_map_type type)
- 
- static int find_elf_sec_sz(const struct bpf_object *obj, const char *name, __u32 *size)
- {
--	int ret = -ENOENT;
- 	Elf_Data *data;
- 	Elf_Scn *scn;
- 
--	*size = 0;
- 	if (!name)
- 		return -EINVAL;
- 
- 	scn = elf_sec_by_name(obj, name);
- 	data = elf_sec_data(obj, scn);
- 	if (data) {
--		ret = 0; /* found it */
- 		*size = data->d_size;
-+		return 0; /* found it */
- 	}
- 
--	return *size ? 0 : ret;
-+	return -ENOENT;
- }
- 
- static int find_elf_var_offset(const struct bpf_object *obj, const char *name, __u32 *off)
 -- 
-2.35.0.rc2
-
+Michal Hocko
+SUSE Labs

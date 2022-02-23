@@ -2,162 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B1C44C144C
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 14:38:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EF894C1450
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 14:39:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240959AbiBWNic (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 08:38:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35880 "EHLO
+        id S240966AbiBWNj1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 08:39:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231817AbiBWNi1 (ORCPT
+        with ESMTP id S231817AbiBWNjZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 08:38:27 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C91F78EB73
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 05:37:59 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 7923721155;
-        Wed, 23 Feb 2022 13:37:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1645623478; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=pdh1Tn8ndAe9iwpdIyQN05+lew3EoojHLAN++mdC8O0=;
-        b=Ku+an7Ko7pE2XnVMSf1WcGJyaPZ3a4ucdz8msccsxWB72hpyL9vol956l8jMOHs2e+zLSl
-        LLzLccGj3SE7eRd1sGtfM1wi8ENhK0S0K2+DHnk/uawY1c2Wen4sWeetfTp4E5TkBfWNNl
-        MKvhKG8wkW4pcjJoeloV9ua4ZA9URp0=
-Received: from suse.cz (unknown [10.100.216.66])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 02B78A3B83;
-        Wed, 23 Feb 2022 13:37:57 +0000 (UTC)
-Date:   Wed, 23 Feb 2022 14:37:55 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     John Ogness <john.ogness@linutronix.de>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        David Sterba <dsterba@suse.com>,
-        Samuel Iglesias =?iso-8859-1?Q?Gons=E1lvez?= 
-        <siglesias@igalia.com>, Bhaskar Chowdhury <unixbhaskar@gmail.com>,
-        Igor Matheus Andrade Torrente <igormtorrente@gmail.com>,
-        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-        nick black <dankamongmen@gmail.com>
-Subject: Re: [PATCH printk v1 13/13] console: introduce CON_MIGHT_SLEEP for vt
-Message-ID: <YhY4s1WH5Rfjn+mn@alley>
-References: <20220207194323.273637-1-john.ogness@linutronix.de>
- <20220207194323.273637-14-john.ogness@linutronix.de>
+        Wed, 23 Feb 2022 08:39:25 -0500
+Received: from mail-vk1-f170.google.com (mail-vk1-f170.google.com [209.85.221.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D44169F6FD;
+        Wed, 23 Feb 2022 05:38:57 -0800 (PST)
+Received: by mail-vk1-f170.google.com with SMTP id f12so12199268vkl.2;
+        Wed, 23 Feb 2022 05:38:57 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=MTposQLuymO44pbPyYRUL/sGoep7NH0SVuUoddkxcYw=;
+        b=wdddxZFbGwLNygq82veni4RAYkcUJ18nauOW8yRNEgaqpir5d3iM6F8zfRKeUGKC2Q
+         t9sqbifjghNleZd/nPl5A20XTtJ1uXj/vH8zlTKsIG7Co5Eefq9Z4SXHSDrV+7ueeUPM
+         8687lrNZ3Z0V0FaPRhoOm51SVcsN+ojXvfDrxy9RX1eWgs17zpp0iBO350ZVK4uOBt2+
+         AZwtLwrRPWKClxAF3FI0uf/qxWl/JxSVCo8JlAohErVnSyBXTpx5Mlto6JVyi3jeLxFZ
+         80zquxTj3AEaYM3+CrnfC8ThqeRQFnjKe3RaO3LHpcBhGh8zDTATOa22YFWZ4v03ooDJ
+         4tLg==
+X-Gm-Message-State: AOAM530rRFqYFBjmi0WJGCnoYu4Eo+qNZqXxtIk6A5tBqQQbKHY9xt/p
+        h8CstKs0AVu7HE12DX6j+brhfzl3IyNH6g==
+X-Google-Smtp-Source: ABdhPJyDNhRNfBLkrrIicLkjr/CQky9hFswFZI5ZyBcMJJEtd1h2kfOVnvlpjP0soCYB2ByswPI7rA==
+X-Received: by 2002:a05:6122:114e:b0:32d:4662:65a8 with SMTP id p14-20020a056122114e00b0032d466265a8mr12534019vko.0.1645623536942;
+        Wed, 23 Feb 2022 05:38:56 -0800 (PST)
+Received: from mail-ua1-f52.google.com (mail-ua1-f52.google.com. [209.85.222.52])
+        by smtp.gmail.com with ESMTPSA id d11sm668612vsk.21.2022.02.23.05.38.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 23 Feb 2022 05:38:56 -0800 (PST)
+Received: by mail-ua1-f52.google.com with SMTP id c36so1424872uae.13;
+        Wed, 23 Feb 2022 05:38:56 -0800 (PST)
+X-Received: by 2002:ab0:69d0:0:b0:345:72b0:ee12 with SMTP id
+ u16-20020ab069d0000000b0034572b0ee12mr3390138uaq.78.1645623536345; Wed, 23
+ Feb 2022 05:38:56 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220207194323.273637-14-john.ogness@linutronix.de>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220221095032.95054-1-jjhiblot@traphandler.com> <20220221095032.95054-2-jjhiblot@traphandler.com>
+In-Reply-To: <20220221095032.95054-2-jjhiblot@traphandler.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 23 Feb 2022 14:38:45 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdX1eb1F5GbvfAydxyMnqLVMmGDTVCxudpgc63WV4wGAQA@mail.gmail.com>
+Message-ID: <CAMuHMdX1eb1F5GbvfAydxyMnqLVMmGDTVCxudpgc63WV4wGAQA@mail.gmail.com>
+Subject: Re: [PATCH v3 1/5] dt-bindings: clock: r9a06g032: Add the definition
+ of the watchdog clock
+To:     Jean-Jacques Hiblot <jjhiblot@traphandler.com>
+Cc:     Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 2022-02-07 20:49:23, John Ogness wrote:
-> Deadlocks and the framebuffer console have been a recurring issue
-> that is getting worse. Daniel Vetter suggested [0] that
-> fbcon->write() should no longer be called from an atomic context.
+On Mon, Feb 21, 2022 at 10:51 AM Jean-Jacques Hiblot
+<jjhiblot@traphandler.com> wrote:
+> This clock is actually the REF_SYNC_D8 clock.
+>
+> Signed-off-by: Jean-Jacques Hiblot <jjhiblot@traphandler.com>
+> Acked-by: Rob Herring <robh@kernel.org>
 
-We should make it clear that people will not longer see kernel
-messages on ttyX during early boot, panic, and in some other
-situations when printk kthreads are not available.
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+i.e. will queue in renesas-devel for v5.18, as this is only used by DT.
 
-Or do I miss something?
+Gr{oetje,eeting}s,
 
-Do we really want this?
+                        Geert
 
-Do the tty maintainers really want to give up on supporting
-modes when processes/kthreads do not work?
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-Maybe, it is inevitable. Maybe, people are not using tty
-for debugging too much.
-
-Anyway, this change has to be approved by tty guys.
-
-Best Regards,
-Petr
-
-> Introduce a new console flag CON_MIGHT_SLEEP for a console driver to
-> specify that it is only called from sleepable contexts. Set the
-> fbcon to use this new flag.
-> 
-> [0] https://lore.kernel.org/all/YYuS1uNhxWOEX1Ci@phenom.ffwll.local
-> 
-> Signed-off-by: John Ogness <john.ogness@linutronix.de>
-> ---
->  drivers/tty/vt/vt.c     | 2 +-
->  include/linux/console.h | 1 +
->  kernel/printk/printk.c  | 2 ++
->  3 files changed, 4 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/tty/vt/vt.c b/drivers/tty/vt/vt.c
-> index 7359c3e80d63..ab4712cc9327 100644
-> --- a/drivers/tty/vt/vt.c
-> +++ b/drivers/tty/vt/vt.c
-> @@ -3161,7 +3161,7 @@ static struct console vt_console_driver = {
->  	.write		= vt_console_print,
->  	.device		= vt_console_device,
->  	.unblank	= unblank_screen,
-> -	.flags		= CON_PRINTBUFFER,
-> +	.flags		= CON_PRINTBUFFER|CON_MIGHT_SLEEP,
->  	.index		= -1,
->  };
->  #endif
-> diff --git a/include/linux/console.h b/include/linux/console.h
-> index c51c7f5507a5..ea52c56b3ff8 100644
-> --- a/include/linux/console.h
-> +++ b/include/linux/console.h
-> @@ -138,6 +138,7 @@ static inline int con_debug_leave(void)
->  #define CON_BRL		(32) /* Used for a braille device */
->  #define CON_EXTENDED	(64) /* Use the extended output format a la /dev/kmsg */
->  #define CON_PAUSED	(128) /* Sleep while console is locked */
-> +#define CON_MIGHT_SLEEP	(256) /* Can only be called from sleepable context */
->  
->  struct console {
->  	char	name[16];
-> diff --git a/kernel/printk/printk.c b/kernel/printk/printk.c
-> index 086155578f10..b92ef67a5aa2 100644
-> --- a/kernel/printk/printk.c
-> +++ b/kernel/printk/printk.c
-> @@ -2836,6 +2836,8 @@ static bool console_flush_all(bool do_cond_resched, u64 *next_seq, bool *handove
->  
->  			if (!console_is_usable(con))
->  				continue;
-> +			if ((con->flags & CON_MIGHT_SLEEP) && !do_cond_resched)
-> +				continue;
-
-This means that ttyX will be able to show the messages only
-from a process context. It it will not longer show the messages
-during, early boot, panic, suspend, and some other situations.
-
-Do we really want this?
-
-Do the tty maintainers really want to give up support
-in these modes when processes/kthreads do not work?
-
-Maybe, it is inevitable. Maybe, people are not using tty
-for debugging too much.
-
-Anyway, this has to be 
-
-
-
-
-
->  			any_usable = true;
->  
->  			if (con->flags & CON_EXTENDED) {
-> -- 
-> 2.30.2
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

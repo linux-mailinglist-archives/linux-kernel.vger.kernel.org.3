@@ -2,67 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E062B4C175F
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 16:44:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 833294C177F
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 16:45:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240685AbiBWPoW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 10:44:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55984 "EHLO
+        id S242338AbiBWPpG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 10:45:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242108AbiBWPoO (ORCPT
+        with ESMTP id S242318AbiBWPox (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 10:44:14 -0500
+        Wed, 23 Feb 2022 10:44:53 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF2F0B1A85;
-        Wed, 23 Feb 2022 07:43:46 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95AFCBF970;
+        Wed, 23 Feb 2022 07:44:24 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 687B1618B9;
-        Wed, 23 Feb 2022 15:43:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 882EAC340EB;
-        Wed, 23 Feb 2022 15:43:43 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 17EE36174C;
+        Wed, 23 Feb 2022 15:44:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 739EFC340E7;
+        Wed, 23 Feb 2022 15:44:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645631025;
-        bh=GlQlJ7gTsSs+29mQwM51uU8EyiUWcBAHlmovzgZMq5A=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=ZO1F7n8icLu0SS8LTbbOz3ZX6I0UObRkMZp430mjGi8LrVJUfF2OldgHMoIAzghD1
-         At9AE3VGPsI1ocidqHDOgU8k0/e6MLECtGV+lC7G/btQp4HrkDP1F9XVJc9Yse7aUL
-         mf0cqqw5PbI7fNrGwG0UzZkZyYXVB+Ml/GZggGje4XPizTwSQvNDVGk/tnmWbsfw2l
-         lEnLltwKC4sGbZcxl2yUy66AgXuv+/maAOaFl30j3WzRX1NMcz+bNn6oSbA9LnFLzL
-         wFifgLSN3AYjBd/Ue6eziysvQHRY1lFlZ1BnUJkJQNvSyDlpcBXxF1ZkxyYDbu3pSD
-         T2gR1yrBxcBIQ==
-Message-ID: <ccc81eb5c23f933137c5da8d5050540cc54e58f0.camel@kernel.org>
-Subject: Re: [PATCH 06/11] ceph: remove reliance on bdi congestion
-From:   Jeff Layton <jlayton@kernel.org>
-To:     NeilBrown <neilb@suse.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jan Kara <jack@suse.cz>, Wu Fengguang <fengguang.wu@intel.com>,
-        Jaegeuk Kim <jaegeuk@kernel.org>, Chao Yu <chao@kernel.org>,
-        Ilya Dryomov <idryomov@gmail.com>,
-        Miklos Szeredi <miklos@szeredi.hu>,
-        Trond Myklebust <trond.myklebust@hammerspace.com>,
-        Anna Schumaker <anna.schumaker@netapp.com>,
-        Ryusuke Konishi <konishi.ryusuke@gmail.com>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        Philipp Reisner <philipp.reisner@linbit.com>,
-        Lars Ellenberg <lars.ellenberg@linbit.com>,
-        Paolo Valente <paolo.valente@linaro.org>,
-        Jens Axboe <axboe@kernel.dk>
-Cc:     linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-nilfs@vger.kernel.org, linux-nfs@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net, linux-ext4@vger.kernel.org,
-        ceph-devel@vger.kernel.org, drbd-dev@lists.linbit.com,
-        linux-kernel@vger.kernel.org
-Date:   Wed, 23 Feb 2022 10:43:42 -0500
-In-Reply-To: <164549983739.9187.14895675781408171186.stgit@noble.brown>
-References: <164549971112.9187.16871723439770288255.stgit@noble.brown>
-         <164549983739.9187.14895675781408171186.stgit@noble.brown>
-Content-Type: text/plain; charset="ISO-8859-15"
-User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
+        s=k20201202; t=1645631063;
+        bh=PVgeRt4LHCp9CTieLVRpqy0rj4cCYLX/Dq99wsHMmPU=;
+        h=From:To:Cc:Subject:Date:From;
+        b=tlZZm79gjjtiP8+zk3/zOOLSkEoC4f6peYZ6h0GfuWhfOU9WR19HvhIKFX9AfC36K
+         V69iwNnjpt56KnRRNZDoip11T58CLJZvHM8b3sMkw+ixcWjTFw8A3+GCvAKL7lPBgu
+         8V0KTwVLhkxlsyOMim11/HsU34l7bhs55snoAApFW1Et1mr4Ae7Pd6TlnifbBCgmOu
+         u7x7PQZM2kkUfABVRUTzGB75JZmPmoEBEvmLQeVH2HfI4M1Y1mlAAvJF09mCPig1sy
+         YSvpspIxbb6gKOBC/iCKFFyKQIkIOMsrfquTLNGptMvk7mtTxXJVLvkAJ6GDuR9mw4
+         UixT8ABNV0afg==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.lan)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nMtoT-009wgt-7P; Wed, 23 Feb 2022 15:44:21 +0000
+From:   Marc Zyngier <maz@kernel.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Joey Gouly <joey.gouly@arm.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Hector Martin <marcan@marcan.st>,
+        Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-gpio@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, kernel-team@android.com
+Subject: [PATCH 0/5] gpiolib: Handle immutable irq_chip structures
+Date:   Wed, 23 Feb 2022 15:44:00 +0000
+Message-Id: <20220223154405.54912-1-maz@kernel.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: linux-kernel@vger.kernel.org, linus.walleij@linaro.org, brgl@bgdev.pl, thierry.reding@gmail.com, joey.gouly@arm.com, jonathanh@nvidia.com, marcan@marcan.st, sven@svenpeter.dev, alyssa@rosenzweig.io, bjorn.andersson@linaro.org, agross@kernel.org, tglx@linutronix.de, linux-gpio@vger.kernel.org, linux-tegra@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org, kernel-team@android.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -73,164 +73,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-02-22 at 14:17 +1100, NeilBrown wrote:
-> The bdi congestion tracking in not widely used and will be removed.
-> 
-> CEPHfs is one of a small number of filesystems that uses it, setting
-> just the async (write) congestion flags at what it determines are
-> appropriate times.
-> 
-> The only remaining effect of the async flag is to cause (some)
-> WB_SYNC_NONE writes to be skipped.
-> 
-> So instead of setting the flag, set an internal flag and change:
->  - .writepages to do nothing if WB_SYNC_NONE and the flag is set
->  - .writepage to return AOP_WRITEPAGE_ACTIVATE if WB_SYNC_NONE
->     and the flag is set.
-> 
-> The writepages change causes a behavioural change in that pageout() can
-> now return PAGE_ACTIVATE instead of PAGE_KEEP, so SetPageActive() will
-> be called on the page which (I think) wil further delay the next attempt
-> at writeout.  This might be a good thing.
-> 
-> Signed-off-by: NeilBrown <neilb@suse.de>
+I recently realised that the gpiolib play ugly tricks on the
+unsuspecting irq_chip structures by patching the callbacks.
 
-Maybe. I have to wonder whether all of this is really useful.
+Not only this breaks when an irq_chip structure is made const (which
+really should be the default case), but it also forces this structure
+to be copied at nauseam for each instance of the GPIO block, which is
+a waste of memory.
 
-When things are congested we'll avoid trying to issue new writeback
-requests. Note that we don't prevent new pages from being dirtied here -
-- only their being written back.
+My current approach is to add a new irq_chip flag (IRQCHIP_IMMUTABLE)
+which does what it says on the tin: don't you dare writing there.
+Gpiolib is further updated not to install its own callbacks, and it
+becomes the responsibility of the driver to call into the gpiolib when
+required. This is similar to what we do for other subsystems such as
+PCI-MSI.
 
-This also doesn't do anything in the DIO or sync_write cases, so if we
-lose caps or are doing DIO, we'll just keep churning out "unlimited"
-writes in those cases anyway.
+3 drivers are updated to this new model: M1, QC and Tegra, as I
+actively use them (though Tegra is hosed at the moment), keeping a
+single irq_chip structure, marking it const, and exposing the new
+flag.
 
-With ceph too, we're not likely to be dealing with a single server as
-well. One OSD could be struggling to keep up but others are OK. Do we
-really want to throttle writeback to the ones that are fine?
+Nothing breaks, the volume of change is small, the memory usage goes
+down and we have fewer callbacks that can be used as attack vectors.
 
-FWIW, the original patch that added this stuff was this:
+Another approach was to let gpiolib provide its own irq_chip structure
+and stack it, but:
+- only a few drivers are hierarchy aware
+- the diversity of interrupt flows makes it impractical
 
-commit 2baba25019ec564cd247af74013873d69a0b8190
-Author: Yehuda Sadeh <yehuda@hq.newdream.net>
-Date:   Fri Dec 18 13:51:57 2009 -0800
+I'd welcome comments on the approach. If deemed acceptable, there are
+another 300+ drivers to update! Not to mention the documentation. I
+appreciate that this is a lot of potential changes, but the current
+situation is messy.
 
-    ceph: writeback congestion control
-    
-    Set bdi congestion bit when amount of write data in flight exceeds adjustable
-    threshold.
-    
-    Signed-off-by: Yehuda Sadeh <yehuda@hq.newdream.net>
-    Signed-off-by: Sage Weil <sage@newdream.net>
+Note that these patches are on top of irqchip-next, which contains
+more constifying work.
 
-...but it's pretty scant on details.
+	M.
 
-The only reason I can see to throttle writeback like this is to prevent
-you from having too much memory tied up in writeback requests, but we
-aren't limiting other requests in the same way.
+Marc Zyngier (5):
+  gpio: Don't fiddle with irqchips marked as immutable
+  gpio: Expose the gpiochip_irq_re[ql]res helpers
+  pinctrl: apple-gpio: Make the irqchip immutable
+  pinctrl: msmgpio: Make the irqchip immutable
+  gpio: tegra186: Make the irqchip immutable
 
-Maybe we would do better to just rip this stuff out?
-
-> ---
->  fs/ceph/addr.c  |   22 +++++++++++++---------
->  fs/ceph/super.c |    1 +
->  fs/ceph/super.h |    1 +
->  3 files changed, 15 insertions(+), 9 deletions(-)
-> 
-> diff --git a/fs/ceph/addr.c b/fs/ceph/addr.c
-> index c98e5238a1b6..dc7af34640dd 100644
-> --- a/fs/ceph/addr.c
-> +++ b/fs/ceph/addr.c
-> @@ -563,7 +563,7 @@ static int writepage_nounlock(struct page *page, struct writeback_control *wbc)
->  
->  	if (atomic_long_inc_return(&fsc->writeback_count) >
->  	    CONGESTION_ON_THRESH(fsc->mount_options->congestion_kb))
-> -		set_bdi_congested(inode_to_bdi(inode), BLK_RW_ASYNC);
-> +		fsc->write_congested = true;
->  
->  	req = ceph_osdc_new_request(osdc, &ci->i_layout, ceph_vino(inode), page_off, &len, 0, 1,
->  				    CEPH_OSD_OP_WRITE, CEPH_OSD_FLAG_WRITE, snapc,
-> @@ -623,7 +623,7 @@ static int writepage_nounlock(struct page *page, struct writeback_control *wbc)
->  
->  	if (atomic_long_dec_return(&fsc->writeback_count) <
->  	    CONGESTION_OFF_THRESH(fsc->mount_options->congestion_kb))
-> -		clear_bdi_congested(inode_to_bdi(inode), BLK_RW_ASYNC);
-> +		fsc->write_congested = false;
->  
->  	return err;
->  }
-> @@ -635,6 +635,10 @@ static int ceph_writepage(struct page *page, struct writeback_control *wbc)
->  	BUG_ON(!inode);
->  	ihold(inode);
->  
-> +	if (wbc->sync_mode == WB_SYNC_NONE &&
-> +	    ceph_inode_to_client(inode)->write_congested)
-> +		return AOP_WRITEPAGE_ACTIVATE;
-> +
->  	wait_on_page_fscache(page);
->  
->  	err = writepage_nounlock(page, wbc);
-> @@ -707,8 +711,7 @@ static void writepages_finish(struct ceph_osd_request *req)
->  			if (atomic_long_dec_return(&fsc->writeback_count) <
->  			     CONGESTION_OFF_THRESH(
->  					fsc->mount_options->congestion_kb))
-> -				clear_bdi_congested(inode_to_bdi(inode),
-> -						    BLK_RW_ASYNC);
-> +				fsc->write_congested = false;
->  
->  			ceph_put_snap_context(detach_page_private(page));
->  			end_page_writeback(page);
-> @@ -760,6 +763,10 @@ static int ceph_writepages_start(struct address_space *mapping,
->  	bool done = false;
->  	bool caching = ceph_is_cache_enabled(inode);
->  
-> +	if (wbc->sync_mode == WB_SYNC_NONE &&
-> +	    fsc->write_congested)
-> +		return 0;
-> +
->  	dout("writepages_start %p (mode=%s)\n", inode,
->  	     wbc->sync_mode == WB_SYNC_NONE ? "NONE" :
->  	     (wbc->sync_mode == WB_SYNC_ALL ? "ALL" : "HOLD"));
-> @@ -954,11 +961,8 @@ static int ceph_writepages_start(struct address_space *mapping,
->  
->  			if (atomic_long_inc_return(&fsc->writeback_count) >
->  			    CONGESTION_ON_THRESH(
-> -				    fsc->mount_options->congestion_kb)) {
-> -				set_bdi_congested(inode_to_bdi(inode),
-> -						  BLK_RW_ASYNC);
-> -			}
-> -
-> +				    fsc->mount_options->congestion_kb))
-> +				fsc->write_congested = true;
->  
->  			pages[locked_pages++] = page;
->  			pvec.pages[i] = NULL;
-> diff --git a/fs/ceph/super.c b/fs/ceph/super.c
-> index bf79f369aec6..4a3b77d049c7 100644
-> --- a/fs/ceph/super.c
-> +++ b/fs/ceph/super.c
-> @@ -802,6 +802,7 @@ static struct ceph_fs_client *create_fs_client(struct ceph_mount_options *fsopt,
->  	fsc->have_copy_from2 = true;
->  
->  	atomic_long_set(&fsc->writeback_count, 0);
-> +	fsc->write_congested = false;
->  
->  	err = -ENOMEM;
->  	/*
-> diff --git a/fs/ceph/super.h b/fs/ceph/super.h
-> index 67f145e1ae7a..0bd97aea2319 100644
-> --- a/fs/ceph/super.h
-> +++ b/fs/ceph/super.h
-> @@ -121,6 +121,7 @@ struct ceph_fs_client {
->  	struct ceph_mds_client *mdsc;
->  
->  	atomic_long_t writeback_count;
-> +	bool write_congested;
->  
->  	struct workqueue_struct *inode_wq;
->  	struct workqueue_struct *cap_wq;
-> 
-> 
+ drivers/gpio/gpio-tegra186.c         | 33 ++++++++++++-----
+ drivers/gpio/gpiolib.c               | 13 +++++--
+ drivers/pinctrl/pinctrl-apple-gpio.c | 30 +++++++++-------
+ drivers/pinctrl/qcom/pinctrl-msm.c   | 53 +++++++++++++++++-----------
+ include/linux/gpio/driver.h          |  4 +++
+ include/linux/irq.h                  |  2 ++
+ kernel/irq/debugfs.c                 |  1 +
+ 7 files changed, 91 insertions(+), 45 deletions(-)
 
 -- 
-Jeff Layton <jlayton@kernel.org>
+2.30.2
+

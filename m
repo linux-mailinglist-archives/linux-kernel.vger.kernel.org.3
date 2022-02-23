@@ -2,170 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 405B54C1329
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 13:49:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6ACD34C1324
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 13:48:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240618AbiBWMtM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 07:49:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40270 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240593AbiBWMtB (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S240592AbiBWMtB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Wed, 23 Feb 2022 07:49:01 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5270FA66C3
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 04:48:34 -0800 (PST)
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40246 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233079AbiBWMtA (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 23 Feb 2022 07:49:00 -0500
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B074A66C3
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 04:48:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645620514; x=1677156514;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=7U3dBXvnvJSXR66MUjtmjBPnFPs6h5fn1DN++jies5w=;
-  b=UdjaNgzP0TcAacOKhtCAkH+nQmnD8qXaqbwO+pXH5/YTckkSPEdGtlY8
-   UkeMtE7XUV0kT16nnaG/O0nd14Ko6od5kdg/vCW7oYt7l1PANdXNrJjc+
-   HAmlGn4elDJeGnPr/bOxydDiZ/5x/fwzRJBCIvikwFf0Ju6Nwm126MEoR
-   Rm9RiLW3ZPZf0w1fbqddGxWhzHuDgDArJTPkg2uJHm8h1CP/NUd8+L3Kr
-   TdC7tMqTGyqAF5nEB29lxJsp6I7yklVY6ix+sZUQwquxz+lYTjsP4NwmE
-   KUmhH6MUX2RiLNxGtVm5ES6I65OwfWsygz+24mKkTTXbBQ9w5vPrZ/dZ6
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10266"; a="251689844"
+  t=1645620512; x=1677156512;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=JnOgbhTQn0zJGJFf0Si3A4r7rgf3FSnREvr4CnkwPwo=;
+  b=OlCtPZU95YSP7vOyPlhHP0FEwvHq9JhNKHmMy5h1+LnBX/5QqdFqMH/5
+   Nj6vCA1jHeXEpujo42qzG0yDtAzNkZt3XC+CNO2374d2w/q7cO6ZyVi3k
+   VSnTjaw+TwB+ru2UebfuwZUmLwfEC7X95k5vlIPjOTrPjd4VyvxFDUXFF
+   WS0t+Nc82nZJqNzx4F7d4HD68p7zcYnZ4iNVdP495hT4CdXOWnvgM+hFw
+   9wwi3KSXXKTqVMXJk80bIoJzBDhdjhLu49zo+4xrw51Go9WLCNr4lYwI9
+   Nq5cbE/JgIi3qbrAFu52xFTxPU0dlUv/wQkYpUL6/EiCUeqlUKLYIKzS2
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10266"; a="251872995"
 X-IronPort-AV: E=Sophos;i="5.88,390,1635231600"; 
-   d="scan'208";a="251689844"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2022 04:48:33 -0800
+   d="scan'208";a="251872995"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2022 04:48:32 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,390,1635231600"; 
-   d="scan'208";a="637409614"
+   d="scan'208";a="628069766"
 Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 23 Feb 2022 04:48:30 -0800
+  by FMSMGA003.fm.intel.com with ESMTP; 23 Feb 2022 04:48:30 -0800
 Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1nMr4I-0001Pq-3g; Wed, 23 Feb 2022 12:48:30 +0000
-Date:   Wed, 23 Feb 2022 20:48:10 +0800
+        id 1nMr4I-0001Po-2W; Wed, 23 Feb 2022 12:48:30 +0000
+Date:   Wed, 23 Feb 2022 20:48:15 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Vijendar Mukunda <Vijendar.Mukunda@amd.com>, broonie@kernel.org,
-        alsa-devel@alsa-project.org
-Cc:     kbuild-all@lists.01.org, Alexander.Deucher@amd.com,
-        Sunil-kumar.Dommati@amd.com, krisman@collabora.com,
-        wtli@nuvoton.com, Vijendar Mukunda <Vijendar.Mukunda@amd.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 1/9] ASoC: amd: vg: fix for pm resume callback sequence
-Message-ID: <202202232021.rBs2qLvB-lkp@intel.com>
-References: <20220223071959.13539-1-Vijendar.Mukunda@amd.com>
+To:     Daniel Palmer <daniel@0x0f.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [chenxing:msc313_mainlining 62/93]
+ drivers/irqchip/irq-msc313-pm-wakeup.c:132:9: warning: ignoring return value
+ of 'request_irq' declared with attribute 'warn_unused_result'
+Message-ID: <202202232019.xWajHWPV-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220223071959.13539-1-Vijendar.Mukunda@amd.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Vijendar,
-
-Thank you for the patch! Perhaps something to improve:
-
-[auto build test WARNING on broonie-sound/for-next]
-[also build test WARNING on v5.17-rc5 next-20220222]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/Vijendar-Mukunda/ASoC-amd-vg-fix-for-pm-resume-callback-sequence/20220223-152636
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20220223/202202232021.rBs2qLvB-lkp@intel.com/config)
-compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
+tree:   git://github.com/linux-chenxing/linux.git msc313_mainlining
+head:   99a396728dcff78ca3eddcbd2085f11eeb8a01b8
+commit: 10f8a601bff9d43fdf11deba38af93f47faa1ea2 [62/93] irqchip: MStar wakeup intc
+config: alpha-allyesconfig (https://download.01.org/0day-ci/archive/20220223/202202232019.xWajHWPV-lkp@intel.com/config)
+compiler: alpha-linux-gcc (GCC) 11.2.0
 reproduce (this is a W=1 build):
-        # https://github.com/0day-ci/linux/commit/43c5f728cf59371b29569d941fb2ef2bdc3a279d
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Vijendar-Mukunda/ASoC-amd-vg-fix-for-pm-resume-callback-sequence/20220223-152636
-        git checkout 43c5f728cf59371b29569d941fb2ef2bdc3a279d
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/linux-chenxing/linux/commit/10f8a601bff9d43fdf11deba38af93f47faa1ea2
+        git remote add chenxing git://github.com/linux-chenxing/linux.git
+        git fetch --no-tags chenxing msc313_mainlining
+        git checkout 10f8a601bff9d43fdf11deba38af93f47faa1ea2
         # save the config file to linux build tree
         mkdir build_dir
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash sound/soc/amd/vangogh/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=alpha SHELL=/bin/bash drivers/irqchip/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
-   sound/soc/amd/vangogh/acp5x-pcm-dma.c: In function 'acp5x_pcm_resume':
->> sound/soc/amd/vangogh/acp5x-pcm-dma.c:430:20: warning: variable 'frmt_val' set but not used [-Wunused-but-set-variable]
-     430 |  u32 val, reg_val, frmt_val;
-         |                    ^~~~~~~~
->> sound/soc/amd/vangogh/acp5x-pcm-dma.c:430:11: warning: variable 'reg_val' set but not used [-Wunused-but-set-variable]
-     430 |  u32 val, reg_val, frmt_val;
-         |           ^~~~~~~
+   drivers/irqchip/irq-msc313-pm-wakeup.c: In function 'msc313_pm_wakeup_intc_of_init':
+>> drivers/irqchip/irq-msc313-pm-wakeup.c:132:9: warning: ignoring return value of 'request_irq' declared with attribute 'warn_unused_result' [-Wunused-result]
+     132 |         request_irq(irq, msc313_pm_wakeup_intc_chainedhandler, IRQF_SHARED,
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     133 |                                 "pmsleep", domain);
+         |                                 ~~~~~~~~~~~~~~~~~~
 
 
-vim +/frmt_val +430 sound/soc/amd/vangogh/acp5x-pcm-dma.c
+vim +132 drivers/irqchip/irq-msc313-pm-wakeup.c
 
-361414dc1f07b72 Vijendar Mukunda 2021-07-21  425  
-361414dc1f07b72 Vijendar Mukunda 2021-07-21  426  static int __maybe_unused acp5x_pcm_resume(struct device *dev)
-361414dc1f07b72 Vijendar Mukunda 2021-07-21  427  {
-361414dc1f07b72 Vijendar Mukunda 2021-07-21  428  	struct i2s_dev_data *adata;
-43c5f728cf59371 Vijendar Mukunda 2022-02-23  429  	struct i2s_stream_instance *rtd;
-361414dc1f07b72 Vijendar Mukunda 2021-07-21 @430  	u32 val, reg_val, frmt_val;
-361414dc1f07b72 Vijendar Mukunda 2021-07-21  431  
-361414dc1f07b72 Vijendar Mukunda 2021-07-21  432  	reg_val = 0;
-361414dc1f07b72 Vijendar Mukunda 2021-07-21  433  	frmt_val = 0;
-361414dc1f07b72 Vijendar Mukunda 2021-07-21  434  	adata = dev_get_drvdata(dev);
-361414dc1f07b72 Vijendar Mukunda 2021-07-21  435  
-361414dc1f07b72 Vijendar Mukunda 2021-07-21  436  	if (adata->play_stream && adata->play_stream->runtime) {
-43c5f728cf59371 Vijendar Mukunda 2022-02-23  437  		rtd = adata->play_stream->runtime->private_data;
-361414dc1f07b72 Vijendar Mukunda 2021-07-21  438  		config_acp5x_dma(rtd, SNDRV_PCM_STREAM_PLAYBACK);
-43c5f728cf59371 Vijendar Mukunda 2022-02-23  439  		acp_writel((rtd->xfer_resolution  << 3), rtd->acp5x_base + ACP_HSTDM_ITER);
-43c5f728cf59371 Vijendar Mukunda 2022-02-23  440  		if (adata->tdm_mode == TDM_ENABLE) {
-43c5f728cf59371 Vijendar Mukunda 2022-02-23  441  			acp_writel(adata->tdm_fmt, adata->acp5x_base + ACP_HSTDM_TXFRMT);
-43c5f728cf59371 Vijendar Mukunda 2022-02-23  442  			val = acp_readl(adata->acp5x_base + ACP_HSTDM_ITER);
-43c5f728cf59371 Vijendar Mukunda 2022-02-23  443  			acp_writel(val | 0x2, adata->acp5x_base + ACP_HSTDM_ITER);
-43c5f728cf59371 Vijendar Mukunda 2022-02-23  444  		}
-43c5f728cf59371 Vijendar Mukunda 2022-02-23  445  	}
-43c5f728cf59371 Vijendar Mukunda 2022-02-23  446  	if (adata->i2ssp_play_stream && adata->i2ssp_play_stream->runtime) {
-43c5f728cf59371 Vijendar Mukunda 2022-02-23  447  		rtd = adata->i2ssp_play_stream->runtime->private_data;
-43c5f728cf59371 Vijendar Mukunda 2022-02-23  448  		config_acp5x_dma(rtd, SNDRV_PCM_STREAM_PLAYBACK);
-43c5f728cf59371 Vijendar Mukunda 2022-02-23  449  		acp_writel((rtd->xfer_resolution  << 3), rtd->acp5x_base + ACP_I2STDM_ITER);
-43c5f728cf59371 Vijendar Mukunda 2022-02-23  450  		if (adata->tdm_mode == TDM_ENABLE) {
-43c5f728cf59371 Vijendar Mukunda 2022-02-23  451  			acp_writel(adata->tdm_fmt, adata->acp5x_base + ACP_I2STDM_TXFRMT);
-43c5f728cf59371 Vijendar Mukunda 2022-02-23  452  			val = acp_readl(adata->acp5x_base + ACP_I2STDM_ITER);
-43c5f728cf59371 Vijendar Mukunda 2022-02-23  453  			acp_writel(val | 0x2, adata->acp5x_base + ACP_I2STDM_ITER);
-361414dc1f07b72 Vijendar Mukunda 2021-07-21  454  		}
-361414dc1f07b72 Vijendar Mukunda 2021-07-21  455  	}
-361414dc1f07b72 Vijendar Mukunda 2021-07-21  456  
-361414dc1f07b72 Vijendar Mukunda 2021-07-21  457  	if (adata->capture_stream && adata->capture_stream->runtime) {
-43c5f728cf59371 Vijendar Mukunda 2022-02-23  458  		rtd = adata->capture_stream->runtime->private_data;
-361414dc1f07b72 Vijendar Mukunda 2021-07-21  459  		config_acp5x_dma(rtd, SNDRV_PCM_STREAM_CAPTURE);
-43c5f728cf59371 Vijendar Mukunda 2022-02-23  460  		acp_writel((rtd->xfer_resolution  << 3), rtd->acp5x_base + ACP_HSTDM_IRER);
-43c5f728cf59371 Vijendar Mukunda 2022-02-23  461  		if (adata->tdm_mode == TDM_ENABLE) {
-43c5f728cf59371 Vijendar Mukunda 2022-02-23  462  			acp_writel(adata->tdm_fmt, adata->acp5x_base + ACP_HSTDM_RXFRMT);
-43c5f728cf59371 Vijendar Mukunda 2022-02-23  463  			val = acp_readl(adata->acp5x_base + ACP_HSTDM_IRER);
-43c5f728cf59371 Vijendar Mukunda 2022-02-23  464  			acp_writel(val | 0x2, adata->acp5x_base + ACP_HSTDM_IRER);
-361414dc1f07b72 Vijendar Mukunda 2021-07-21  465  		}
-361414dc1f07b72 Vijendar Mukunda 2021-07-21  466  	}
-43c5f728cf59371 Vijendar Mukunda 2022-02-23  467  	if (adata->i2ssp_capture_stream && adata->i2ssp_capture_stream->runtime) {
-43c5f728cf59371 Vijendar Mukunda 2022-02-23  468  		rtd = adata->i2ssp_capture_stream->runtime->private_data;
-43c5f728cf59371 Vijendar Mukunda 2022-02-23  469  		config_acp5x_dma(rtd, SNDRV_PCM_STREAM_CAPTURE);
-43c5f728cf59371 Vijendar Mukunda 2022-02-23  470  		acp_writel((rtd->xfer_resolution  << 3), rtd->acp5x_base + ACP_I2STDM_IRER);
-361414dc1f07b72 Vijendar Mukunda 2021-07-21  471  		if (adata->tdm_mode == TDM_ENABLE) {
-43c5f728cf59371 Vijendar Mukunda 2022-02-23  472  			acp_writel(adata->tdm_fmt, adata->acp5x_base + ACP_I2STDM_RXFRMT);
-43c5f728cf59371 Vijendar Mukunda 2022-02-23  473  			val = acp_readl(adata->acp5x_base + ACP_I2STDM_IRER);
-43c5f728cf59371 Vijendar Mukunda 2022-02-23  474  			acp_writel(val | 0x2, adata->acp5x_base + ACP_I2STDM_IRER);
-43c5f728cf59371 Vijendar Mukunda 2022-02-23  475  		}
-361414dc1f07b72 Vijendar Mukunda 2021-07-21  476  	}
-361414dc1f07b72 Vijendar Mukunda 2021-07-21  477  	acp_writel(1, adata->acp5x_base + ACP_EXTERNAL_INTR_ENB);
-361414dc1f07b72 Vijendar Mukunda 2021-07-21  478  	return 0;
-361414dc1f07b72 Vijendar Mukunda 2021-07-21  479  }
-361414dc1f07b72 Vijendar Mukunda 2021-07-21  480  
+    97	
+    98	static int __init msc313_pm_wakeup_intc_of_init(struct device_node *node,
+    99					   struct device_node *parent)
+   100	{
+   101		int ret = 0, irq;
+   102		struct regmap *pmsleep;
+   103		struct msc313_sleep_intc *intc;
+   104		struct irq_domain *domain;
+   105	
+   106		irq = of_irq_get(node, 0);
+   107		if (irq <= 0)
+   108			return irq;
+   109	
+   110		pmsleep = syscon_regmap_lookup_by_phandle(node, "mstar,pmsleep");
+   111		if (IS_ERR(pmsleep))
+   112			return PTR_ERR(pmsleep);
+   113	
+   114		intc = kzalloc(sizeof(*intc), GFP_KERNEL);
+   115		if (!intc)
+   116			return -ENOMEM;
+   117	
+   118		intc->mask = regmap_field_alloc(pmsleep, mask_field);
+   119		intc->type = regmap_field_alloc(pmsleep, type_field);
+   120		intc->status = regmap_field_alloc(pmsleep, status_field);
+   121	
+   122		/* The masks survive deep sleep so clear them. */
+   123		regmap_field_write(intc->mask, ~0);
+   124	
+   125		domain = irq_domain_add_linear(node, NUM_IRQ,
+   126				&msc313_pm_wakeup_intc_domain_ops, intc);
+   127		if (!domain) {
+   128			ret = -ENOMEM;
+   129			goto out_free;
+   130		}
+   131	
+ > 132		request_irq(irq, msc313_pm_wakeup_intc_chainedhandler, IRQF_SHARED,
+   133					"pmsleep", domain);
+   134	
+   135		return 0;
+   136	
+   137	out_free:
+   138		kfree(intc);
+   139		return ret;
+   140	}
+   141	
 
 ---
 0-DAY CI Kernel Test Service, Intel Corporation

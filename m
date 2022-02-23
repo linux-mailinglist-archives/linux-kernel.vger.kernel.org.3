@@ -2,210 +2,308 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 055344C19AC
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 18:14:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 34CBA4C19AE
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 18:14:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243309AbiBWROs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 12:14:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43650 "EHLO
+        id S243318AbiBWRPI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 12:15:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243316AbiBWROo (ORCPT
+        with ESMTP id S243004AbiBWRPG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 12:14:44 -0500
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 134ED2617;
-        Wed, 23 Feb 2022 09:14:16 -0800 (PST)
-Received: by mail-pj1-x1035.google.com with SMTP id gb21so1122285pjb.5;
-        Wed, 23 Feb 2022 09:14:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=/XeAg9ADtnz9kNlifB43swg/qGRH7F+nelBZTu66s6A=;
-        b=BkvxaqFx5rjWa3W/xXrRTyUE4l/ps88Y9WKZ4VwdVPI9Ce8ObhM7/8iIWLjXoA2bfM
-         blUqTs9IZbV9pGeGDUJ7SGqPvgwvALQTxu4tTwlP730DNqPSJxIxTrW6qpe0uka4uoVr
-         IUEg6B0+LiNxwynPVQnd2wgB2ZTMf3xhYpWVONl4Okc7zwVjWQre0jEVKo9Az2ZYT5nd
-         He98PRiNGu8A3PpPOagUr1FFDeDQpf3wER2RzUEpUuaJbcdHeh7MK446EWUfwfjv2k/M
-         qnMfEr/OJbl3Tv9pzMkFzce1YD1k20vcoH3XyQg6VKmMXA36eIekLoRRt7E83Hd+GDJY
-         buXg==
+        Wed, 23 Feb 2022 12:15:06 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 713B7C02
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 09:14:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1645636477;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=rRO4MHe5Dmpeu5wHW26QySHaQNVY9l6AI+4qPBsGQkY=;
+        b=J6BdfPDkDfFgUmJeNjGRJ5NAfYot5MMr9DFALKBKW4XUxmhaENexYYYE8I7K9Tp1murh+e
+        5WDqf60L0mSMG35NjHHiAtrvAii4skIehn4WG4QsIhgl/c2shUGxdRIPgw5iALkqNqy1+T
+        SZl9mR8r3l9Z5vFeJ2oT67L7ZrZfTt4=
+Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
+ [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-653-YA2IKGy6NsqY6huVNJlVrw-1; Wed, 23 Feb 2022 12:14:36 -0500
+X-MC-Unique: YA2IKGy6NsqY6huVNJlVrw-1
+Received: by mail-ej1-f70.google.com with SMTP id gn20-20020a1709070d1400b006cf1fcb4c8dso7388157ejc.12
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 09:14:36 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=/XeAg9ADtnz9kNlifB43swg/qGRH7F+nelBZTu66s6A=;
-        b=LTm8LHSOHbPYupctI4SS4nNODKDO77unRwq9LgYwR5oM7XoMeL9E3bK2iODp+Ja3fi
-         Se0cDT5JP8rXB+NhB8R9za4mO6XhgWWpKJWFT9mCt3cOevFNEboGcqMekG9MR/0UG6Ii
-         ZVUPwtbmhy3W7g6ql2Xu9LrcCjwTr7wKpZzHj9rNVh6vPvuxbxysGtuNpCG7CUC5xFzU
-         qGELcVKnRL3NwZ+hZkFYLyp7US2xy5st3pNgrxhbcBKQDQfxqyh4YQcSPQeLSP9556eN
-         dpkXzTpaYRnOhgt5fL/3xmDLPEApCFPHhRNFVq8cRDoAhiWtM16sidau7YJOSPY+PhDK
-         x5Gg==
-X-Gm-Message-State: AOAM533DI89CPqC4DJfFiRV5sibqT6X6S+Ly+M+fiBLBXe+W60jxnRyH
-        qj5Rpn4LyKGlZV09Ue7TROc=
-X-Google-Smtp-Source: ABdhPJxTWyNWjhOu9GEOq69NbXkzL19oSyJqpDCgTobOaTVk9CZBn8abk/V8AU4itOIIz+Gyy+x1QA==
-X-Received: by 2002:a17:902:cccc:b0:14e:e89c:c669 with SMTP id z12-20020a170902cccc00b0014ee89cc669mr774635ple.58.1645636455415;
-        Wed, 23 Feb 2022 09:14:15 -0800 (PST)
-Received: from [192.168.1.3] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
-        by smtp.gmail.com with ESMTPSA id r13sm103857pgb.22.2022.02.23.09.14.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 23 Feb 2022 09:14:14 -0800 (PST)
-Message-ID: <118b98a8-918a-1350-070d-7b759e247c5f@gmail.com>
-Date:   Wed, 23 Feb 2022 09:14:10 -0800
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=rRO4MHe5Dmpeu5wHW26QySHaQNVY9l6AI+4qPBsGQkY=;
+        b=d8iAusSp7e4JQsXe5OfWcWTByUEAM9OBCB0L667A0bob/5CCuCvANFHlLtE+h9n9Ah
+         WvLw9N4p/ypitAx8+tjWRgyOv9YzBmq2p4gXmRuKbVP1Fae168cAirMR2kpISbPHK5cs
+         m8tP9UZ4II5d8n8nqHWeBmryEz7QnH4si1Es8Dxdjx4miRjoeOit2lSWq/lpE9DZkf8u
+         pFuWUgawnLM6LEJUId49tFENitu3s29n46slIOLSb/yE6P99Gur+ChaSLGqzZSaAusA0
+         cSKDgG1XDE25xqejypWr2Dt5ogv5a4oQePnhONy3PX8PpjhcIjkCtSXlvzJnHRMZKSt2
+         rkqA==
+X-Gm-Message-State: AOAM5323d/WAjb79O+952OvJsJTFxx15vuYEmvz7EsLfHb7S+V1Fb0J2
+        VTdf7cQ/52QnhPWHJ6uDsk2WosrE67ik5Gzp2UyIFhvoEZUKxUKwfOJNNCBm2EFzzswiIvjRl8P
+        MgXKciRQ+ek/EUSeMUSKeLYzJ
+X-Received: by 2002:a17:906:3c1a:b0:6ce:c404:9e3 with SMTP id h26-20020a1709063c1a00b006cec40409e3mr547082ejg.454.1645636474895;
+        Wed, 23 Feb 2022 09:14:34 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyFbC2GbFDO/AufWV0HURAE2UGs+63XdWnFOFf8Y8ydxKIShtBILjWFthYbDKuUpTSONSh+Hw==
+X-Received: by 2002:a17:906:3c1a:b0:6ce:c404:9e3 with SMTP id h26-20020a1709063c1a00b006cec40409e3mr547061ejg.454.1645636474553;
+        Wed, 23 Feb 2022 09:14:34 -0800 (PST)
+Received: from redhat.com ([2.55.145.157])
+        by smtp.gmail.com with ESMTPSA id 9sm106442ejg.97.2022.02.23.09.14.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Feb 2022 09:14:33 -0800 (PST)
+Date:   Wed, 23 Feb 2022 12:14:29 -0500
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Anirudh Rayabharam <mail@anirudhrb.com>
+Cc:     Jason Wang <jasowang@redhat.com>,
+        syzbot+0abd373e2e50d704db87@syzkaller.appspotmail.com,
+        kvm <kvm@vger.kernel.org>,
+        virtualization <virtualization@lists.linux-foundation.org>,
+        netdev <netdev@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] vhost: validate range size before adding to iotlb
+Message-ID: <20220223121404-mutt-send-email-mst@kernel.org>
+References: <20220221195303.13560-1-mail@anirudhrb.com>
+ <CACGkMEvLE=kV4PxJLRjdSyKArU+MRx6b_mbLGZHSUgoAAZ+-Fg@mail.gmail.com>
+ <YhRtQEWBF0kqWMsI@anirudhrb.com>
+ <CACGkMEvd7ETC_ANyrOSAVz_i64xqpYYazmm=+39E51=DMRFXdw@mail.gmail.com>
+ <20220222090511-mutt-send-email-mst@kernel.org>
+ <YhUdDUSxuXTLltpZ@anirudhrb.com>
+ <20220222181927-mutt-send-email-mst@kernel.org>
+ <YhZCKii8KwkcU8fM@anirudhrb.com>
+ <20220223101303-mutt-send-email-mst@kernel.org>
+ <YhZlk5iiOexnBouX@anirudhrb.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [PATCH v2] serial: make uart_console_write->putchar()'s character
- an unsigned char
-Content-Language: en-US
-To:     Jiri Slaby <jslaby@suse.cz>, gregkh@linuxfoundation.org
-Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Richard Genoud <richard.genoud@gmail.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Tobias Klauser <tklauser@distanz.ch>,
-        Russell King <linux@armlinux.org.uk>,
-        Vineet Gupta <vgupta@kernel.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Ludovic Desroches <ludovic.desroches@microchip.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        bcm-kernel-feedback-list@broadcom.com,
-        Alexander Shiyan <shc_work@mail.ru>,
-        Baruch Siach <baruch@tkos.co.il>,
-        "Maciej W. Rozycki" <macro@orcam.me.uk>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Karol Gugala <kgugala@antmicro.com>,
-        Mateusz Holenko <mholenko@antmicro.com>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Taichi Sugaya <sugaya.taichi@socionext.com>,
-        Takao Orito <orito.takao@socionext.com>,
-        Liviu Dudau <liviu.dudau@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        =?UTF-8?Q?Andreas_F=c3=a4rber?= <afaerber@suse.de>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang7@gmail.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Patrice Chotard <patrice.chotard@foss.st.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Peter Korsgaard <peter@korsgaard.com>,
-        Michal Simek <michal.simek@xilinx.com>
-References: <20220223113355.30860-1-jslaby@suse.cz>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20220223113355.30860-1-jslaby@suse.cz>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YhZlk5iiOexnBouX@anirudhrb.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2/23/2022 3:33 AM, Jiri Slaby wrote:
-> Currently, uart_console_write->putchar's second parameter (the
-> character) is of type int. It makes little sense, provided uart_console_write()
-> accepts the input string as "const char *s" and passes its content -- the
-> characters -- to putchar(). So switch the character's type to unsigned
-> char.
+On Wed, Feb 23, 2022 at 10:19:23PM +0530, Anirudh Rayabharam wrote:
+> On Wed, Feb 23, 2022 at 10:15:01AM -0500, Michael S. Tsirkin wrote:
+> > On Wed, Feb 23, 2022 at 07:48:18PM +0530, Anirudh Rayabharam wrote:
+> > > On Tue, Feb 22, 2022 at 06:21:50PM -0500, Michael S. Tsirkin wrote:
+> > > > On Tue, Feb 22, 2022 at 10:57:41PM +0530, Anirudh Rayabharam wrote:
+> > > > > On Tue, Feb 22, 2022 at 10:02:29AM -0500, Michael S. Tsirkin wrote:
+> > > > > > On Tue, Feb 22, 2022 at 03:11:07PM +0800, Jason Wang wrote:
+> > > > > > > On Tue, Feb 22, 2022 at 12:57 PM Anirudh Rayabharam <mail@anirudhrb.com> wrote:
+> > > > > > > >
+> > > > > > > > On Tue, Feb 22, 2022 at 10:50:20AM +0800, Jason Wang wrote:
+> > > > > > > > > On Tue, Feb 22, 2022 at 3:53 AM Anirudh Rayabharam <mail@anirudhrb.com> wrote:
+> > > > > > > > > >
+> > > > > > > > > > In vhost_iotlb_add_range_ctx(), validate the range size is non-zero
+> > > > > > > > > > before proceeding with adding it to the iotlb.
+> > > > > > > > > >
+> > > > > > > > > > Range size can overflow to 0 when start is 0 and last is (2^64 - 1).
+> > > > > > > > > > One instance where it can happen is when userspace sends an IOTLB
+> > > > > > > > > > message with iova=size=uaddr=0 (vhost_process_iotlb_msg). So, an
+> > > > > > > > > > entry with size = 0, start = 0, last = (2^64 - 1) ends up in the
+> > > > > > > > > > iotlb. Next time a packet is sent, iotlb_access_ok() loops
+> > > > > > > > > > indefinitely due to that erroneous entry:
+> > > > > > > > > >
+> > > > > > > > > >         Call Trace:
+> > > > > > > > > >          <TASK>
+> > > > > > > > > >          iotlb_access_ok+0x21b/0x3e0 drivers/vhost/vhost.c:1340
+> > > > > > > > > >          vq_meta_prefetch+0xbc/0x280 drivers/vhost/vhost.c:1366
+> > > > > > > > > >          vhost_transport_do_send_pkt+0xe0/0xfd0 drivers/vhost/vsock.c:104
+> > > > > > > > > >          vhost_worker+0x23d/0x3d0 drivers/vhost/vhost.c:372
+> > > > > > > > > >          kthread+0x2e9/0x3a0 kernel/kthread.c:377
+> > > > > > > > > >          ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
+> > > > > > > > > >          </TASK>
+> > > > > > > > > >
+> > > > > > > > > > Reported by syzbot at:
+> > > > > > > > > >         https://syzkaller.appspot.com/bug?extid=0abd373e2e50d704db87
+> > > > > > > > > >
+> > > > > > > > > > Reported-by: syzbot+0abd373e2e50d704db87@syzkaller.appspotmail.com
+> > > > > > > > > > Tested-by: syzbot+0abd373e2e50d704db87@syzkaller.appspotmail.com
+> > > > > > > > > > Signed-off-by: Anirudh Rayabharam <mail@anirudhrb.com>
+> > > > > > > > > > ---
+> > > > > > > > > >  drivers/vhost/iotlb.c | 6 ++++--
+> > > > > > > > > >  1 file changed, 4 insertions(+), 2 deletions(-)
+> > > > > > > > > >
+> > > > > > > > > > diff --git a/drivers/vhost/iotlb.c b/drivers/vhost/iotlb.c
+> > > > > > > > > > index 670d56c879e5..b9de74bd2f9c 100644
+> > > > > > > > > > --- a/drivers/vhost/iotlb.c
+> > > > > > > > > > +++ b/drivers/vhost/iotlb.c
+> > > > > > > > > > @@ -53,8 +53,10 @@ int vhost_iotlb_add_range_ctx(struct vhost_iotlb *iotlb,
+> > > > > > > > > >                               void *opaque)
+> > > > > > > > > >  {
+> > > > > > > > > >         struct vhost_iotlb_map *map;
+> > > > > > > > > > +       u64 size = last - start + 1;
+> > > > > > > > > >
+> > > > > > > > > > -       if (last < start)
+> > > > > > > > > > +       // size can overflow to 0 when start is 0 and last is (2^64 - 1).
+> > > > > > > > > > +       if (last < start || size == 0)
+> > > > > > > > > >                 return -EFAULT;
+> > > > > > > > >
+> > > > > > > > > I'd move this check to vhost_chr_iter_write(), then for the device who
+> > > > > > > > > has its own msg handler (e.g vDPA) can benefit from it as well.
+> > > > > > > >
+> > > > > > > > Thanks for reviewing!
+> > > > > > > >
+> > > > > > > > I kept the check here thinking that all devices would benefit from it
+> > > > > > > > because they would need to call vhost_iotlb_add_range() to add an entry
+> > > > > > > > to the iotlb. Isn't that correct?
+> > > > > > > 
+> > > > > > > Correct for now but not for the future, it's not guaranteed that the
+> > > > > > > per device iotlb message handler will use vhost iotlb.
+> > > > > > > 
+> > > > > > > But I agree that we probably don't need to care about it too much now.
+> > > > > > > 
+> > > > > > > > Do you see any other benefit in moving
+> > > > > > > > it to vhost_chr_iter_write()?
+> > > > > > > >
+> > > > > > > > One concern I have is that if we move it out some future caller to
+> > > > > > > > vhost_iotlb_add_range() might forget to handle this case.
+> > > > > > > 
+> > > > > > > Yes.
+> > > > > > > 
+> > > > > > > Rethink the whole fix, we're basically rejecting [0, ULONG_MAX] range
+> > > > > > > which seems a little bit odd.
+> > > > > > 
+> > > > > > Well, I guess ideally we'd split this up as two entries - this kind of
+> > > > > > thing is after all one of the reasons we initially used first,last as
+> > > > > > the API - as opposed to first,size.
+> > > > > 
+> > > > > IIUC, the APIs exposed to userspace accept first,size.
+> > > > 
+> > > > Some of them.
+> > > > 
+> > > > 
+> > > > /* vhost vdpa IOVA range
+> > > >  * @first: First address that can be mapped by vhost-vDPA
+> > > >  * @last: Last address that can be mapped by vhost-vDPA
+> > > >  */
+> > > > struct vhost_vdpa_iova_range {
+> > > >         __u64 first;
+> > > >         __u64 last;
+> > > > };
+> > > 
+> > > Alright, I will split it into two entries. That doesn't fully address
+> > > the bug though. I would also need to validate size in vhost_chr_iter_write().
+> > 
+> > Do you mean vhost_chr_write_iter?
 > 
-> We don't use char as that is signed on some platforms. That would cause
-> troubles for drivers which (implicitly) cast the char to u16 when
-> writing to the device. Sign extension would happen in that case and the
-> value written would be completely different to the provided char. DZ is
-> an example of such a driver -- on MIPS, it uses u16 for dz_out in
-> dz_console_putchar().
+> Yes, my bad.
 > 
-> Note we do the char -> uchar conversion implicitly in
-> uart_console_write(). Provided we do not change size of the data type,
-> sign extension does not happen there, so the problem is void.
+> > 
+> > > 
+> > > Should I do both in one patch or as a two patch series?
+> > 
+> > I'm not sure why we need to do validation in vhost_chr_iter_write,
+> > hard to say without seeing the patch.
 > 
-> This makes the types consistent and unified with the rest of the uart
-> layer, which uses unsigned char in most places already. One exception is
-> xmit_buf, but that is going to be converted later.
+> Well, if userspace sends iova = 0 and size = 0 in vhost_iotlb_msg, we will end
+> up mapping the range [0, ULONG_MAX] in iotlb which doesn't make sense. We
+> should probably reject when size = 0.
 > 
-> Signed-off-by: Jiri Slaby <jslaby@suse.cz>
-> Acked-by: Richard Genoud <richard.genoud@gmail.com> [atmel_serial]
-> Cc: Paul Cercueil <paul@crapouillou.net>
-> Cc: Tobias Klauser <tklauser@distanz.ch>
-> Cc: Russell King <linux@armlinux.org.uk>
-> Cc: Vineet Gupta <vgupta@kernel.org>
-> Cc: Nicolas Ferre <nicolas.ferre@microchip.com>
-> Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
-> Cc: Ludovic Desroches <ludovic.desroches@microchip.com>
-> Cc: Florian Fainelli <f.fainelli@gmail.com>
-> Cc: bcm-kernel-feedback-list@broadcom.com
-> Cc: Alexander Shiyan <shc_work@mail.ru>
-> Cc: Baruch Siach <baruch@tkos.co.il>
-> Cc: "Maciej W. Rozycki" <macro@orcam.me.uk>
-> Cc: Paul Walmsley <paul.walmsley@sifive.com>
-> Cc: Palmer Dabbelt <palmer@dabbelt.com>
-> Cc: Albert Ou <aou@eecs.berkeley.edu>
-> Cc: Shawn Guo <shawnguo@kernel.org>
-> Cc: Sascha Hauer <s.hauer@pengutronix.de>
-> Cc: Pengutronix Kernel Team <kernel@pengutronix.de>
-> Cc: Fabio Estevam <festevam@gmail.com>
-> Cc: NXP Linux Team <linux-imx@nxp.com>
-> Cc: Karol Gugala <kgugala@antmicro.com>
-> Cc: Mateusz Holenko <mholenko@antmicro.com>
-> Cc: Vladimir Zapolskiy <vz@mleia.com>
-> Cc: Neil Armstrong <narmstrong@baylibre.com>
-> Cc: Kevin Hilman <khilman@baylibre.com>
-> Cc: Jerome Brunet <jbrunet@baylibre.com>
-> Cc: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-> Cc: Taichi Sugaya <sugaya.taichi@socionext.com>
-> Cc: Takao Orito <orito.takao@socionext.com>
-> Cc: Liviu Dudau <liviu.dudau@arm.com>
-> Cc: Sudeep Holla <sudeep.holla@arm.com>
-> Cc: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-> Cc: "Andreas Färber" <afaerber@suse.de>
-> Cc: Manivannan Sadhasivam <mani@kernel.org>
-> Cc: Michael Ellerman <mpe@ellerman.id.au>
-> Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
-> Cc: Paul Mackerras <paulus@samba.org>
-> Cc: Andy Gross <agross@kernel.org>
-> Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
-> Cc: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-> Cc: Orson Zhai <orsonzhai@gmail.com>
-> Cc: Baolin Wang <baolin.wang7@gmail.com>
-> Cc: Chunyan Zhang <zhang.lyra@gmail.com>
-> Cc: Patrice Chotard <patrice.chotard@foss.st.com>
-> Cc: Maxime Coquelin <mcoquelin.stm32@gmail.com>
-> Cc: Alexandre Torgue <alexandre.torgue@foss.st.com>
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: Peter Korsgaard <peter@korsgaard.com>
-> Cc: Michal Simek <michal.simek@xilinx.com>
-> ---
+> As Jason pointed out [1], having the check in vhost_chr_write_iter() will
+> also benefit devices that have their own message handler.
+> 
+> [1]: https://lore.kernel.org/kvm/CACGkMEvLE=kV4PxJLRjdSyKArU+MRx6b_mbLGZHSUgoAAZ+-Fg@mail.gmail.com/
 
+Oh. Makes sense.
 
->   drivers/tty/serial/bcm63xx_uart.c          | 2 +-
+I think one patch is enough.
 
-For the above:
+> > 
+> > > > 
+> > > > but
+> > > > 
+> > > > struct vhost_iotlb_msg {
+> > > >         __u64 iova;
+> > > >         __u64 size;
+> > > >         __u64 uaddr;
+> > > > #define VHOST_ACCESS_RO      0x1
+> > > > #define VHOST_ACCESS_WO      0x2
+> > > > #define VHOST_ACCESS_RW      0x3
+> > > >         __u8 perm;
+> > > > #define VHOST_IOTLB_MISS           1
+> > > > #define VHOST_IOTLB_UPDATE         2
+> > > > #define VHOST_IOTLB_INVALIDATE     3
+> > > > #define VHOST_IOTLB_ACCESS_FAIL    4
+> > > > /*
+> > > >  * VHOST_IOTLB_BATCH_BEGIN and VHOST_IOTLB_BATCH_END allow modifying
+> > > >  * multiple mappings in one go: beginning with
+> > > >  * VHOST_IOTLB_BATCH_BEGIN, followed by any number of
+> > > >  * VHOST_IOTLB_UPDATE messages, and ending with VHOST_IOTLB_BATCH_END.
+> > > >  * When one of these two values is used as the message type, the rest
+> > > >  * of the fields in the message are ignored. There's no guarantee that
+> > > >  * these changes take place automatically in the device.
+> > > >  */
+> > > > #define VHOST_IOTLB_BATCH_BEGIN    5
+> > > > #define VHOST_IOTLB_BATCH_END      6
+> > > >         __u8 type;
+> > > > };
+> > > > 
+> > > > 
+> > > > 
+> > > > > Which means that
+> > > > > right now there is now way for userspace to map this range. So, is there
+> > > > > any value in not simply rejecting this range?
+> > > > > 
+> > > > > > 
+> > > > > > Anirudh, could you do it like this instead of rejecting?
+> > > > > > 
+> > > > > > 
+> > > > > > > I wonder if it's better to just remove
+> > > > > > > the map->size. Having a quick glance at the the user, I don't see any
+> > > > > > > blocker for this.
+> > > > > > > 
+> > > > > > > Thanks
+> > > > > > 
+> > > > > > I think it's possible but won't solve the bug by itself, and we'd need
+> > > > > > to review and fix all users - a high chance of introducing
+> > > > > > another regression. 
+> > > > > 
+> > > > > Agreed, I did a quick review of the usages and getting rid of size
+> > > > > didn't seem trivial.
+> > > > > 
+> > > > > Thanks,
+> > > > > 
+> > > > > 	- Anirudh.
+> > > > > 
+> > > > > > And I think there's value of fitting under the
+> > > > > > stable rule of 100 lines with context.
+> > > > > > So sure, but let's fix the bug first.
+> > > > > > 
+> > > > > > 
+> > > > > > 
+> > > > > > > >
+> > > > > > > > Thanks!
+> > > > > > > >
+> > > > > > > >         - Anirudh.
+> > > > > > > >
+> > > > > > > > >
+> > > > > > > > > Thanks
+> > > > > > > > >
+> > > > > > > > > >
+> > > > > > > > > >         if (iotlb->limit &&
+> > > > > > > > > > @@ -69,7 +71,7 @@ int vhost_iotlb_add_range_ctx(struct vhost_iotlb *iotlb,
+> > > > > > > > > >                 return -ENOMEM;
+> > > > > > > > > >
+> > > > > > > > > >         map->start = start;
+> > > > > > > > > > -       map->size = last - start + 1;
+> > > > > > > > > > +       map->size = size;
+> > > > > > > > > >         map->last = last;
+> > > > > > > > > >         map->addr = addr;
+> > > > > > > > > >         map->perm = perm;
+> > > > > > > > > > --
+> > > > > > > > > > 2.35.1
+> > > > > > > > > >
+> > > > > > > > >
+> > > > > > > >
+> > > > > > 
+> > > > 
+> > 
 
-Acked-by: Florian Fainelli <f.fainelli@gmail.com>
--- 
-Florian

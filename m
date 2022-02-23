@@ -2,143 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09F1F4C1938
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 18:02:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 602A84C198B
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 18:09:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243081AbiBWRDK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 12:03:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52838 "EHLO
+        id S243281AbiBWRKC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 12:10:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237984AbiBWRDG (ORCPT
+        with ESMTP id S236564AbiBWRJv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 12:03:06 -0500
-X-Greylist: delayed 2711 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 23 Feb 2022 09:02:38 PST
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7107F4579D
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 09:02:38 -0800 (PST)
-Received: from pendragon.ideasonboard.com (cpc89244-aztw30-2-0-cust3082.18-1.cable.virginm.net [86.31.172.11])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 99654DD;
-        Wed, 23 Feb 2022 18:02:36 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1645635756;
-        bh=SvlZHJRiZswjknEFYhFrfKWl4f8Xti/yiyOf1LPWSMk=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=PDUabE6HxtUCdOf5fNx+COIvK7IA9sWQZwerh/XD51hOKfLqOO/irzLdJ7hUsFGvP
-         5eZlKUn2b7ejHGcY3o658fGcZzq3h/Mk+k1/r/IRYzdFKQAFYmH7GwsrEqHvo6unxd
-         fU1uG7d6MkuVVyQJ/htGIk0mUSbUPYQuWopMz15E=
-Content-Type: text/plain; charset="utf-8"
+        Wed, 23 Feb 2022 12:09:51 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74DB76A00B
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 09:09:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645636163; x=1677172163;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=vRdsv3Fy6NbuApbaB3ggHyhSGJ4vHsHhQh9jBEiyj/U=;
+  b=RqawMp6lmh82jBEB5875lPF/RKF6ZcHN5pxzSpA9PZMWRAyetvF+U0zt
+   sWUEM44yQQnM5+IbH/ojMqQgU4KclS41JRTGfl7/5zfKt9a5IX/Te9SOw
+   b7do58bLEkyizu1U+dUs2rgWm4G5YZ7tAS0UWKtTJmpCk702i1azeEmcQ
+   w/FibHTFsuzMreiMV5AExmc/UQ8q6w+BoVxgdKY+i7z9SgLkFeOllyls3
+   NP3GjSUy/dqNFBjd+a1tiZ4sk362KDdmWvqxNZv3qBpwIBTWK3IyHtbkh
+   R9jQG3vkAbuAZFXXPu7q9C8ZI3Qgo7eaN5NpGYwRrJ8xBCutdzbMonR4I
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10267"; a="239418219"
+X-IronPort-AV: E=Sophos;i="5.88,391,1635231600"; 
+   d="scan'208";a="239418219"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2022 09:03:41 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,391,1635231600"; 
+   d="scan'208";a="548344664"
+Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 23 Feb 2022 09:03:40 -0800
+Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nMv3D-0001dl-Go; Wed, 23 Feb 2022 17:03:39 +0000
+Date:   Thu, 24 Feb 2022 01:02:37 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Ingo Molnar <mingo@kernel.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [mingo-tip:sched/headers 1583/2340]
+ drivers/net/ieee802154/ca8210.c:1782:4: error: implicit declaration of
+ function 'dev_kfree_skb_any'
+Message-ID: <202202240010.CSrNf18k-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <YhZf+Fs2AP+btuJj@pendragon.ideasonboard.com>
-References: <20211225063151.2110878-1-nikita.yoush@cogentembedded.com> <Yczy3UYpU2UMFQ6N@pendragon.ideasonboard.com> <164563304251.4066078.10022034509552549983@Monstersaurus> <YhZf+Fs2AP+btuJj@pendragon.ideasonboard.com>
-Subject: Re: [PATCH] drm/bridge_connector: enable HPD by default if supported
-From:   Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
-Cc:     Nikita Yushchenko <nikita.yoush@cogentembedded.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jacopo Mondi <jacopo+renesas@jmondi.org>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Date:   Wed, 23 Feb 2022 17:02:33 +0000
-Message-ID: <164563575394.4066078.17104997030535169083@Monstersaurus>
-User-Agent: alot/0.10
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Laurent Pinchart (2022-02-23 16:25:28)
-> Hello,
->=20
-> On Wed, Feb 23, 2022 at 04:17:22PM +0000, Kieran Bingham wrote:
-> > Quoting Laurent Pinchart (2021-12-29 23:44:29)
-> > > On Sat, Dec 25, 2021 at 09:31:51AM +0300, Nikita Yushchenko wrote:
-> > > > Hotplug events reported by bridge drivers over drm_bridge_hpd_notif=
-y()
-> > > > get ignored unless somebody calls drm_bridge_hpd_enable(). When the
-> > > > connector for the bridge is bridge_connector, such a call is done f=
-rom
-> > > > drm_bridge_connector_enable_hpd().
-> > > >=20
-> > > > However drm_bridge_connector_enable_hpd() is never called on init p=
-aths,
-> > > > documentation suggests that it is intended for suspend/resume paths.
-> > >=20
-> > > Hmmmm... I'm in two minds about this. The problem description is
-> > > correct, but I wonder if HPD should be enabled unconditionally here, =
-or
-> > > if this should be left to display drivers to control.
-> > > drivers/gpu/drm/imx/dcss/dcss-kms.c enables HPD manually at init time,
-> > > other drivers don't.
-> > >=20
-> > > It feels like this should be under control of the display controller
-> > > driver, but I can't think of a use case for not enabling HPD at init
-> > > time. Any second opinion from anyone ?
-> >=20
-> > This patch solves an issue I have where I have recently enabled HPD on
-> > the SN65DSI86, but without this, I do not get calls to my .hpd_enable or
-> > .hpd_disable hooks that I have added to the ti_sn_bridge_funcs.
-> >=20
-> > So it needs to be enabled somewhere, and this seems reasonable to me?
-> > It's not directly related to the display controller - as it's a factor
-> > of the bridge?
-> >=20
-> > On Falcon-V3U with HPD additions to SN65DSI86:
-> > Tested-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
->=20
-> If you think this is right, then
->=20
-> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git sched/headers
+head:   97c5eeb4de3ad324ed2a4656b46465299cfd010a
+commit: ea46cc7b8232972f12361f456922beddc7ab3d14 [1583/2340] headers/deps: networking/headers: Remove the <linux/netdevice_api.h> inclusion from <linux/netdevice.h>
+config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20220224/202202240010.CSrNf18k-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=ea46cc7b8232972f12361f456922beddc7ab3d14
+        git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
+        git fetch --no-tags mingo-tip sched/headers
+        git checkout ea46cc7b8232972f12361f456922beddc7ab3d14
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/net/dsa/ drivers/net/ieee802154/ net/dsa/ net/smc/
 
-I do, and at the very least it works for me, and fixes Nikita's issue so
-to me that's enough for:
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Reviewed-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+Note: the mingo-tip/sched/headers HEAD 97c5eeb4de3ad324ed2a4656b46465299cfd010a builds fine.
+      It only hurts bisectability.
 
-> > > > In result, once encoders are switched to bridge_connector,
-> > > > bridge-detected HPD stops working.
-> > > >=20
-> > > > This patch adds a call to that API on init path.
-> > > >=20
-> > > > This fixes HDMI HPD with rcar-du + adv7513 case when adv7513 report=
-s HPD
-> > > > events via interrupts.
-> > > >=20
-> > > > Fixes: c24110a8fd09 ("drm: rcar-du: Use drm_bridge_connector_init()=
- helper")
-> > > > Signed-off-by: Nikita Yushchenko <nikita.yoush@cogentembedded.com>
-> > > > ---
-> > > >  drivers/gpu/drm/drm_bridge_connector.c | 4 +++-
-> > > >  1 file changed, 3 insertions(+), 1 deletion(-)
-> > > >=20
-> > > > diff --git a/drivers/gpu/drm/drm_bridge_connector.c b/drivers/gpu/d=
-rm/drm_bridge_connector.c
-> > > > index 791379816837..4f20137ef21d 100644
-> > > > --- a/drivers/gpu/drm/drm_bridge_connector.c
-> > > > +++ b/drivers/gpu/drm/drm_bridge_connector.c
-> > > > @@ -369,8 +369,10 @@ struct drm_connector *drm_bridge_connector_ini=
-t(struct drm_device *drm,
-> > > >                                   connector_type, ddc);
-> > > >       drm_connector_helper_add(connector, &drm_bridge_connector_hel=
-per_funcs);
-> > > > =20
-> > > > -     if (bridge_connector->bridge_hpd)
-> > > > +     if (bridge_connector->bridge_hpd) {
-> > > >               connector->polled =3D DRM_CONNECTOR_POLL_HPD;
-> > > > +             drm_bridge_connector_enable_hpd(connector);
-> > > > +     }
-> > > >       else if (bridge_connector->bridge_detect)
-> > > >               connector->polled =3D DRM_CONNECTOR_POLL_CONNECT
-> > > >                                 | DRM_CONNECTOR_POLL_DISCONNECT;
->=20
-> --=20
-> Regards,
->=20
-> Laurent Pinchart
+All errors (new ones prefixed by >>):
+
+>> drivers/net/ieee802154/ca8210.c:1782:4: error: implicit declaration of function 'dev_kfree_skb_any' [-Werror,-Wimplicit-function-declaration]
+                           dev_kfree_skb_any(priv->tx_skb);
+                           ^
+   1 error generated.
+
+
+vim +/dev_kfree_skb_any +1782 drivers/net/ieee802154/ca8210.c
+
+ded845a781a578 Harry Morris  2017-03-28  1745  
+ded845a781a578 Harry Morris  2017-03-28  1746  /**
+ded845a781a578 Harry Morris  2017-03-28  1747   * ca8210_async_xmit_complete() - Called to announce that an asynchronous
+ded845a781a578 Harry Morris  2017-03-28  1748   *                                transmission has finished
+ded845a781a578 Harry Morris  2017-03-28  1749   * @hw:          ieee802154_hw of ca8210 that has finished exchange
+ded845a781a578 Harry Morris  2017-03-28  1750   * @msduhandle:  Identifier of transmission that has completed
+ded845a781a578 Harry Morris  2017-03-28  1751   * @status:      Returned 802.15.4 status code of the transmission
+ded845a781a578 Harry Morris  2017-03-28  1752   *
+ded845a781a578 Harry Morris  2017-03-28  1753   * Return: 0 or linux error code
+ded845a781a578 Harry Morris  2017-03-28  1754   */
+ded845a781a578 Harry Morris  2017-03-28  1755  static int ca8210_async_xmit_complete(
+ded845a781a578 Harry Morris  2017-03-28  1756  	struct ieee802154_hw  *hw,
+ded845a781a578 Harry Morris  2017-03-28  1757  	u8                     msduhandle,
+ded845a781a578 Harry Morris  2017-03-28  1758  	u8                     status)
+ded845a781a578 Harry Morris  2017-03-28  1759  {
+ded845a781a578 Harry Morris  2017-03-28  1760  	struct ca8210_priv *priv = hw->priv;
+ded845a781a578 Harry Morris  2017-03-28  1761  
+ded845a781a578 Harry Morris  2017-03-28  1762  	if (priv->nextmsduhandle != msduhandle) {
+ded845a781a578 Harry Morris  2017-03-28  1763  		dev_err(
+ded845a781a578 Harry Morris  2017-03-28  1764  			&priv->spi->dev,
+ded845a781a578 Harry Morris  2017-03-28  1765  			"Unexpected msdu_handle on data confirm, Expected %d, got %d\n",
+ded845a781a578 Harry Morris  2017-03-28  1766  			priv->nextmsduhandle,
+ded845a781a578 Harry Morris  2017-03-28  1767  			msduhandle
+ded845a781a578 Harry Morris  2017-03-28  1768  		);
+ded845a781a578 Harry Morris  2017-03-28  1769  		return -EIO;
+ded845a781a578 Harry Morris  2017-03-28  1770  	}
+ded845a781a578 Harry Morris  2017-03-28  1771  
+ded845a781a578 Harry Morris  2017-03-28  1772  	priv->async_tx_pending = false;
+ded845a781a578 Harry Morris  2017-03-28  1773  	priv->nextmsduhandle++;
+ded845a781a578 Harry Morris  2017-03-28  1774  
+ded845a781a578 Harry Morris  2017-03-28  1775  	if (status) {
+ded845a781a578 Harry Morris  2017-03-28  1776  		dev_err(
+ded845a781a578 Harry Morris  2017-03-28  1777  			&priv->spi->dev,
+ded845a781a578 Harry Morris  2017-03-28  1778  			"Link transmission unsuccessful, status = %d\n",
+ded845a781a578 Harry Morris  2017-03-28  1779  			status
+ded845a781a578 Harry Morris  2017-03-28  1780  		);
+ded845a781a578 Harry Morris  2017-03-28  1781  		if (status != MAC_TRANSACTION_OVERFLOW) {
+621b24b09eb61c Miquel Raynal 2022-01-25 @1782  			dev_kfree_skb_any(priv->tx_skb);
+ded845a781a578 Harry Morris  2017-03-28  1783  			ieee802154_wake_queue(priv->hw);
+ded845a781a578 Harry Morris  2017-03-28  1784  			return 0;
+ded845a781a578 Harry Morris  2017-03-28  1785  		}
+ded845a781a578 Harry Morris  2017-03-28  1786  	}
+ded845a781a578 Harry Morris  2017-03-28  1787  	ieee802154_xmit_complete(priv->hw, priv->tx_skb, true);
+ded845a781a578 Harry Morris  2017-03-28  1788  
+ded845a781a578 Harry Morris  2017-03-28  1789  	return 0;
+ded845a781a578 Harry Morris  2017-03-28  1790  }
+ded845a781a578 Harry Morris  2017-03-28  1791  
+
+:::::: The code at line 1782 was first introduced by commit
+:::::: 621b24b09eb61c63f262da0c9c5f0e93348897e5 net: ieee802154: ca8210: Stop leaking skb's
+
+:::::: TO: Miquel Raynal <miquel.raynal@bootlin.com>
+:::::: CC: Stefan Schmidt <stefan@datenfreihafen.org>
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

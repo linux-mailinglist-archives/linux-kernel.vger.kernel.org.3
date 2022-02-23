@@ -2,66 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A07C4C1E59
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 23:20:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C6334C1E5A
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 23:20:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243412AbiBWWUy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 17:20:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60626 "EHLO
+        id S243511AbiBWWVW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 17:21:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234050AbiBWWUt (ORCPT
+        with ESMTP id S234050AbiBWWVU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 17:20:49 -0500
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 854A73191E
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 14:20:21 -0800 (PST)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-2d61b4ef6cdso4479217b3.11
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 14:20:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=QqbfAnQFPeyq1W2tzhLj13WtIhug1v2RV5kcw4bVyD8=;
-        b=M3LRsVVYMLqrkPVLhjVgzgO6oqomWeWvslWNtCgCaeozs+5JE3quxKQloPnPmcFAuN
-         d7LWDcsYVSKoZuU4ViisNnctC3lgl8I6RE7cM1HGoAnEzeXzIdMKId9NHw6QHNCnah0y
-         KfR5ai8+6KnX5MTu/BMqpAfx/0CskzCX+mnEg/ntIanrAsX7ZRC93w9NVGjB6mg8Pm30
-         r5kPFzDatXjbWW3qMkJXTDRcvUn5rJShylq7agDYTAWRukZ73Km+RPnEAuEz/bnGS0PL
-         s3Z407McuBKx/uoaQvA5KCNE5qILDHK2YxyCo0vSEU+H/5bM0+UxlvQSjV7+p2eEo9u3
-         mQRg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=QqbfAnQFPeyq1W2tzhLj13WtIhug1v2RV5kcw4bVyD8=;
-        b=qRLWL0h93XQvAWEicSDOBM3NZTWiWUEMi5PSiIclGoDnCis0D28/IqOOwd1Lrdlgt0
-         ZyIn4eW3G+y2Xxv7D0PBsEmUZ7RYVl+yD8ZiVUa7bqsAKWGnB+hGSfATRDJ1iNUPGogF
-         ox4LX3ULMVd4eFf9SYcefGhsbl5DDjmGj++m4kOUWj3DHWLbC6nPB1K4SHs4DDgpsZIG
-         APKCYSIJMrMquv4SXU8mxFt00ctxZlz+6nNCIav2a4avBTHh1/yHDyn8kgt/eRuZTo0a
-         hebO/orndyntum44j/e0NT8EVxWNl1R9+6D3yPKKwCtWHymYhCtvVCTtAoM5R8S3GhjP
-         1Eug==
-X-Gm-Message-State: AOAM531oUjOxj4zfTUqx03cjOGTZSvWIxX1bEgaVTmxTPjlYBNpZQMbU
-        WwIgrO1y2yj2NrEo3J2ZKvNFPaHAClg=
-X-Google-Smtp-Source: ABdhPJy/KCJzay+oXWVPFlExuCe+j7tVl9NmWdRWJNWkS6pwrvnF8azwTDDu/N3fEA3sjOjL5ZKCjTdWyTM=
-X-Received: from haoluo.svl.corp.google.com ([2620:15c:2cd:202:9479:7f16:e9b8:14e4])
- (user=haoluo job=sendgmr) by 2002:a25:7e86:0:b0:622:6217:16a6 with SMTP id
- z128-20020a257e86000000b00622621716a6mr1568678ybc.188.1645654820555; Wed, 23
- Feb 2022 14:20:20 -0800 (PST)
-Date:   Wed, 23 Feb 2022 14:20:02 -0800
-Message-Id: <20220223222002.1085114-1-haoluo@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.35.1.473.g83b2b277ed-goog
-Subject: [PATCH bpf-next] bpf: Cache the last valid build_id.
-From:   Hao Luo <haoluo@google.com>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>
-Cc:     Song Liu <songliubraving@fb.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Blake Jones <blakejones@google.com>, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Hao Luo <haoluo@google.com>,
-        Greg Thelen <gthelen@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        Wed, 23 Feb 2022 17:21:20 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B9283191E
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 14:20:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645654852; x=1677190852;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=z29YhyUzvRRkn2b8sdYAneR6GXWhzbZDYKkYcCitR1o=;
+  b=kfpAyHj/nl7wUE1JP4nsKa5XcsW05x/htLShAKfQjV7neyCNWYxFyTlg
+   C6Ka0OMibiIOQUa05hkyw4ghWQv3DOCNXrYZnPhTTXhCgBiJBbOKuoIFl
+   pZ7MdT/g9Un0NEzd/uvQmkP7CXo0a2/YuY3rV/zJDTDg2r7AO+StlXZJo
+   cTkDW2dL7NE/KHtrVbbRddyXtqi0zIoj2N/VRJCzenwDQEgaONAiYsdMR
+   7tibJV5lu6bhRadbHryh3j4JlaJPUSl9rS+LIlEOfXZOzp3uSmgnKWwJq
+   CgnCc2bYALBenj/PxGrbE+8Ie8mCzPh3INZTqITLLnJANLNkdlVx6xLBa
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10267"; a="249672262"
+X-IronPort-AV: E=Sophos;i="5.88,392,1635231600"; 
+   d="scan'208";a="249672262"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2022 14:20:52 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,392,1635231600"; 
+   d="scan'208";a="637595374"
+Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
+  by fmsmga002.fm.intel.com with ESMTP; 23 Feb 2022 14:20:50 -0800
+Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nN009-0001tA-VL; Wed, 23 Feb 2022 22:20:49 +0000
+Date:   Thu, 24 Feb 2022 06:20:38 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Daniel Palmer <daniel@0x0f.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [chenxing:msc313_mainlining 62/93]
+ drivers/irqchip/irq-msc313-pm-wakeup.c:132:2: warning: ignoring return value
+ of function declared with 'warn_unused_result' attribute
+Message-ID: <202202240645.Grybzjbk-lkp@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,61 +63,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For binaries that are statically linked, consecutive stack frames are
-likely to be in the same VMA and therefore have the same build id.
-As an optimization for this case, we can cache the previous frame's
-VMA, if the new frame has the same VMA as the previous one, reuse the
-previous one's build id. We are holding the MM locks as reader across
-the entire loop, so we don't need to worry about VMA going away.
+tree:   git://github.com/linux-chenxing/linux.git msc313_mainlining
+head:   99a396728dcff78ca3eddcbd2085f11eeb8a01b8
+commit: 10f8a601bff9d43fdf11deba38af93f47faa1ea2 [62/93] irqchip: MStar wakeup intc
+config: hexagon-allyesconfig (https://download.01.org/0day-ci/archive/20220224/202202240645.Grybzjbk-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/linux-chenxing/linux/commit/10f8a601bff9d43fdf11deba38af93f47faa1ea2
+        git remote add chenxing git://github.com/linux-chenxing/linux.git
+        git fetch --no-tags chenxing msc313_mainlining
+        git checkout 10f8a601bff9d43fdf11deba38af93f47faa1ea2
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/clk/imx/ drivers/irqchip/
 
-Tested through "stacktrace_build_id" and "stacktrace_build_id_nmi" in
-test_progs.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Suggested-by: Greg Thelen <gthelen@google.com>
-Signed-off-by: Hao Luo <haoluo@google.com>
+All warnings (new ones prefixed by >>):
+
+>> drivers/irqchip/irq-msc313-pm-wakeup.c:132:2: warning: ignoring return value of function declared with 'warn_unused_result' attribute [-Wunused-result]
+           request_irq(irq, msc313_pm_wakeup_intc_chainedhandler, IRQF_SHARED,
+           ^~~~~~~~~~~ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 warning generated.
+
+
+vim +/warn_unused_result +132 drivers/irqchip/irq-msc313-pm-wakeup.c
+
+    97	
+    98	static int __init msc313_pm_wakeup_intc_of_init(struct device_node *node,
+    99					   struct device_node *parent)
+   100	{
+   101		int ret = 0, irq;
+   102		struct regmap *pmsleep;
+   103		struct msc313_sleep_intc *intc;
+   104		struct irq_domain *domain;
+   105	
+   106		irq = of_irq_get(node, 0);
+   107		if (irq <= 0)
+   108			return irq;
+   109	
+   110		pmsleep = syscon_regmap_lookup_by_phandle(node, "mstar,pmsleep");
+   111		if (IS_ERR(pmsleep))
+   112			return PTR_ERR(pmsleep);
+   113	
+   114		intc = kzalloc(sizeof(*intc), GFP_KERNEL);
+   115		if (!intc)
+   116			return -ENOMEM;
+   117	
+   118		intc->mask = regmap_field_alloc(pmsleep, mask_field);
+   119		intc->type = regmap_field_alloc(pmsleep, type_field);
+   120		intc->status = regmap_field_alloc(pmsleep, status_field);
+   121	
+   122		/* The masks survive deep sleep so clear them. */
+   123		regmap_field_write(intc->mask, ~0);
+   124	
+   125		domain = irq_domain_add_linear(node, NUM_IRQ,
+   126				&msc313_pm_wakeup_intc_domain_ops, intc);
+   127		if (!domain) {
+   128			ret = -ENOMEM;
+   129			goto out_free;
+   130		}
+   131	
+ > 132		request_irq(irq, msc313_pm_wakeup_intc_chainedhandler, IRQF_SHARED,
+   133					"pmsleep", domain);
+   134	
+   135		return 0;
+   136	
+   137	out_free:
+   138		kfree(intc);
+   139		return ret;
+   140	}
+   141	
+
 ---
- kernel/bpf/stackmap.c | 11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
-
-diff --git a/kernel/bpf/stackmap.c b/kernel/bpf/stackmap.c
-index 22c8ae94e4c1..280b9198af27 100644
---- a/kernel/bpf/stackmap.c
-+++ b/kernel/bpf/stackmap.c
-@@ -132,7 +132,8 @@ static void stack_map_get_build_id_offset(struct bpf_stack_build_id *id_offs,
- 	int i;
- 	struct mmap_unlock_irq_work *work = NULL;
- 	bool irq_work_busy = bpf_mmap_unlock_get_irq_work(&work);
--	struct vm_area_struct *vma;
-+	struct vm_area_struct *vma, *prev_vma = NULL;
-+	const char *prev_build_id;
- 
- 	/* If the irq_work is in use, fall back to report ips. Same
- 	 * fallback is used for kernel stack (!user) on a stackmap with
-@@ -151,6 +152,11 @@ static void stack_map_get_build_id_offset(struct bpf_stack_build_id *id_offs,
- 
- 	for (i = 0; i < trace_nr; i++) {
- 		vma = find_vma(current->mm, ips[i]);
-+		if (vma && vma == prev_vma) {
-+			memcpy(id_offs[i].build_id, prev_build_id,
-+			       BUILD_ID_SIZE_MAX);
-+			goto build_id_valid;
-+		}
- 		if (!vma || build_id_parse(vma, id_offs[i].build_id, NULL)) {
- 			/* per entry fall back to ips */
- 			id_offs[i].status = BPF_STACK_BUILD_ID_IP;
-@@ -158,9 +164,12 @@ static void stack_map_get_build_id_offset(struct bpf_stack_build_id *id_offs,
- 			memset(id_offs[i].build_id, 0, BUILD_ID_SIZE_MAX);
- 			continue;
- 		}
-+build_id_valid:
- 		id_offs[i].offset = (vma->vm_pgoff << PAGE_SHIFT) + ips[i]
- 			- vma->vm_start;
- 		id_offs[i].status = BPF_STACK_BUILD_ID_VALID;
-+		prev_vma = vma;
-+		prev_build_id = id_offs[i].build_id;
- 	}
- 	bpf_mmap_unlock_mm(work, current->mm);
- }
--- 
-2.35.1.473.g83b2b277ed-goog
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

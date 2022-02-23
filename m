@@ -2,426 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F27F4C07B4
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 03:18:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F89A4C07BA
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 03:21:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236750AbiBWCTH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 21:19:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60032 "EHLO
+        id S236773AbiBWCVt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 21:21:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233174AbiBWCTG (ORCPT
+        with ESMTP id S233174AbiBWCVr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 21:19:06 -0500
-Received: from out0.migadu.com (out0.migadu.com [94.23.1.103])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3CD16436
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 18:18:35 -0800 (PST)
-Date:   Wed, 23 Feb 2022 10:18:08 +0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1645582713;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=s9HSBqIac/zPcJpEFk8oJTnF827U32Uw6yG20Bp5Ut4=;
-        b=Zh1gHGYqbmTgArlhIBnwJcaiIkT9Omd/5ydQ84d1RG7t6jWSe5i5JT7Ab5IQA++YbK+f+H
-        IsZbWL1hPS9Ic1zYttA7fw7dcfYF1w3DwPMaxgQZs3RpcC4dKvjhyzYvU0ksHF7C7gyDjr
-        l0R4CFWNN9VafC6IPBDigCQi1nXAUY4=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Cai Huoqing <cai.huoqing@linux.dev>
-To:     Ben Skeggs <bskeggs@redhat.com>, Karol Herbst <kherbst@redhat.com>,
-        Lyude Paul <lyude@redhat.com>, David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org
-Subject: Re: [PATCH] drm/nouveau: Remove the unused header file nvif/list.h
-Message-ID: <20220223021808.GA8457@chq-T47>
-References: <20220209065322.43938-1-cai.huoqing@linux.dev>
+        Tue, 22 Feb 2022 21:21:47 -0500
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B083C3914D;
+        Tue, 22 Feb 2022 18:21:20 -0800 (PST)
+Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21MMo6mO018680;
+        Wed, 23 Feb 2022 02:20:58 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
+ from : message-id : references : date : in-reply-to : content-type :
+ mime-version; s=corp-2021-07-09;
+ bh=aTJkaJRi6CouSW7LHg5gtrKefG/896fm9A6MrICW7/o=;
+ b=HeyEUIOVcW2QQQYjW5gKgOhgCyRmjlPsrMXsKOjqe4X+XI2UbOU8TC9H1dJTDDxXSNnp
+ WoMN0Zw65ZbSlZZbNENIE3+lcX2jEkQE32HCyCvIhglfIcEy3Z4i/DbDBTpIAslU4ps+
+ gBgbTI5OTPPuyZHTHI6hsQW72eLUNbNaI9fx80shBtr68eGBXaFGvEm9x6g0fns5gbGt
+ 6ABx6znGl2zUrKUTETN2PFkcRIDOass6GKaaHWGh9Oi2Jjm81st3H8pMqocD3LVQkHcV
+ L6D+bPTk/PmmiPTj6tS198vt01vRLze31abNpWAHhnPelVEmhUkrPRSPFxLMlnxL+MRj Rg== 
+Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3ectsx2uj5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 23 Feb 2022 02:20:58 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+        by userp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 21N2GheK021622;
+        Wed, 23 Feb 2022 02:20:57 GMT
+Received: from nam12-dm6-obe.outbound.protection.outlook.com (mail-dm6nam12lp2173.outbound.protection.outlook.com [104.47.59.173])
+        by userp3020.oracle.com with ESMTP id 3eat0ntg96-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 23 Feb 2022 02:20:57 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=l0ERuQ7DzoECOqlFlAL8AOtYmJy5EqPKd2/u8PJFwiCi3fpdGkFC0iCprKOaGQlNWXE2ApMzdDsZ/uw4I6UmSR+8cN1x7Cz4MzskJFgFSlNBA02DmzUq9HNCi1aA+ImuBcpMfiv1eycoZkJYYe6i0wqpR8NZIaRU1B+xhL8cdRz5gK2s4bTK5YpkXahR5n090MX12v1mzSsvzuUW9OBdKea+iihN1G6X81v2QoVODhwaRwySqQbWVJYPO+qnHIIjzu1bepYMxw/Yubydeqe85l47iCdc04gWg0/NcTKMfbYSzso0Fuk88ZBm7e4gXiX1/NURNd1dTjAgZ/ldrGWajg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=aTJkaJRi6CouSW7LHg5gtrKefG/896fm9A6MrICW7/o=;
+ b=gqQgdkE+nUL16XRj+QOPt1g4tjM7pqek9u0c8mZ+LJmecEdSxPPEALOR7vy9awRaNOTyj7QeiORUjhW0FKbYN1LGtdJo6glylDS0Pb+14Q1fn4wl9waHmlaWP2S9VV7xtHdTzORM6nz4Y9Vvfbdl/KOTep8oZVtBAvcycfFyJ7KJ5ijDRoRc6CLvgGlWOmfBzKTAat3iyqq7gqSNhVWRNU4Xjerl1dwHL0gFAZAIOkzSZ2KJg6TnZCkPIUU0BobL0vj3Be6dfKLl8nbILfwNZNUzgvFjCl4eqCjkEvnO3H+aiBxwionfGpOVsLT01j6Cie37d6cjEagYjlEcvcNn8g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=aTJkaJRi6CouSW7LHg5gtrKefG/896fm9A6MrICW7/o=;
+ b=SMp68XABnaXoNtp0v9uFEL4klFoRS6Yug8NttAZ85csSjLGhmcWpRaCf9AabAnYm1t855UsLzEqmMr4UUbuqWJzEJey+0kvOxJ3FaM1XdjI9Mp03ynBU0BavqtBetmIY/+iI2JTs6z8ueEpyQY0pqK+8w31qwOBZ918xPBm5Ur4=
+Received: from PH0PR10MB4759.namprd10.prod.outlook.com (2603:10b6:510:3d::12)
+ by SN4PR10MB5573.namprd10.prod.outlook.com (2603:10b6:806:204::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5017.21; Wed, 23 Feb
+ 2022 02:20:55 +0000
+Received: from PH0PR10MB4759.namprd10.prod.outlook.com
+ ([fe80::c9f0:b3fb:25a6:3593]) by PH0PR10MB4759.namprd10.prod.outlook.com
+ ([fe80::c9f0:b3fb:25a6:3593%5]) with mapi id 15.20.4995.027; Wed, 23 Feb 2022
+ 02:20:55 +0000
+To:     John Garry <john.garry@huawei.com>
+Cc:     <jejb@linux.ibm.com>, <martin.petersen@oracle.com>,
+        <artur.paszkiewicz@intel.com>, <jinpu.wang@cloud.ionos.com>,
+        <chenxiang66@hisilicon.com>, <damien.lemoal@opensource.wdc.com>,
+        <hch@lst.de>, <Ajish.Koshy@microchip.com>, <yanaijie@huawei.com>,
+        <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-scsi@vger.kernel.org>, <linuxarm@huawei.com>,
+        <liuqi115@huawei.com>, <Viswas.G@microchip.com>
+Subject: Re: [PATCH v3 00/18] scsi: libsas and users: Factor out LLDD TMF code
+From:   "Martin K. Petersen" <martin.petersen@oracle.com>
+Organization: Oracle Corporation
+Message-ID: <yq1ee3ucow8.fsf@ca-mkp.ca.oracle.com>
+References: <1645534259-27068-1-git-send-email-john.garry@huawei.com>
+Date:   Tue, 22 Feb 2022 21:20:53 -0500
+In-Reply-To: <1645534259-27068-1-git-send-email-john.garry@huawei.com> (John
+        Garry's message of "Tue, 22 Feb 2022 20:50:41 +0800")
+Content-Type: text/plain
+X-ClientProxiedBy: SJ0PR05CA0036.namprd05.prod.outlook.com
+ (2603:10b6:a03:33f::11) To PH0PR10MB4759.namprd10.prod.outlook.com
+ (2603:10b6:510:3d::12)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220209065322.43938-1-cai.huoqing@linux.dev>
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 7859c549-a9d0-4cab-fc6d-08d9f6731f15
+X-MS-TrafficTypeDiagnostic: SN4PR10MB5573:EE_
+X-Microsoft-Antispam-PRVS: <SN4PR10MB55737395DFEE7D1FA87C14798E3C9@SN4PR10MB5573.namprd10.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: SuTgOWUHKXeHwSzTqxcRbIAjU1xS9xz18siCNlTeftujyL2TgfjjguDawsgMKbYP0gXayInH0IhW+R8IxQxxxmcGaKbtIIucmO9yQgjzWB3eBKSyS9i2hXs20gTVpXu8uUXMzVbNMmZ4QyVSQza0RT4kstjhmv5h+EbFfYTjLmVUHBFWwQhR4ydRDzYX97qNCsNTl1+YY/6fjaokQTPq+kR4BbjzvHlaAqlJALTrO+jncUA4GyRd20lLJhDSUo9Q4n/C0KVXlCBPCfarRlkUnFW/JVwhEUM0rpVMjgKSEb6SohSTIoT5uwUP+dGLVV2LiWtj03A+CmtoX47RQ5O4JWhdCFYHOWnRIjwDIZ29bWya9i+Kk5M+yCS6CS8h/MGPu4KzyMmdrJZZ5MJCgCdB4g6mUjyOBB9csTJLmo3bbH6K0y45UHDToWXQ3fkmd5IhaSxBhP6h13UOPcwbv77kV+DfYFMQ9BnWs8n6Dcevc3Rb8lIEyqIwmBZepm4+ob/7Dwt09XR2OA4LHYMHVW+fWzkfmDcx2eJlGq7Jmr7hP0APjEYG5vhAs5SYOcfXKlnvBhZqL9tUFcduMbQrD+KrcrsBIPc/5Huv/KALX4Tp5iog+w//ngUSpEaU/hmUxbArVu9oh2x+NExBsJA86/uK929LZ4rtO8EMKsaJEKCdVj8mNt8dnAgOZnj5ShpTtCa7X7PlE5XCGZihSYDuucrIpyGtEdM0wuOVs9w6lDjarrlUIbn2BYFW5bpESZ+MnkGo+OC/CfNsiBdz0q7j2kgZIuKeJjH0SPkt9d4DAcTEL4o=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR10MB4759.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(86362001)(6916009)(4744005)(316002)(54906003)(83380400001)(8936002)(2906002)(26005)(186003)(38350700002)(6506007)(6512007)(6486002)(66556008)(38100700002)(66946007)(4326008)(5660300002)(7416002)(508600001)(8676002)(36916002)(66476007)(52116002)(966005);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?i3yrvgN1RYIO9fh7fHCHBLQsRHmilnxabdT2g5PqpB4nKNnyQEEoDyE2Vmue?=
+ =?us-ascii?Q?zpBtRS4y6wYT5ng0xINCbdbF0yoVlNX2D6IVrd1gpXoxXpI+wMqEtMqyQI1u?=
+ =?us-ascii?Q?6C6pHUhcPzM+bljGRc4c5v8tdVTX8h1LsL/pPeOntZftgIDQE8mIvGI1zY4v?=
+ =?us-ascii?Q?KRb1SK84cpglMDYVs2jMoCNTbstJqvkKivUyXSe03DjrXBK0YYuQfdBfkm40?=
+ =?us-ascii?Q?4IkBQOmsENBAGgIbgytJpnaTVXQl7qy7XUXjkMxK3tzh8AWGrnPZC+MKqcBS?=
+ =?us-ascii?Q?GQbtGqHZLfGZFiIFNdQ7dn0wrB/HEMkKTCeG4oS3b9PQgol3nLkIovufpbCi?=
+ =?us-ascii?Q?Rzcnk7HXuttXSs4jfUWI6Wp8AcMVr1Cq0p0SS0PW6z7D0pWQPVMzlRYYIaHZ?=
+ =?us-ascii?Q?d8wW8sw78GJ/egCdUrrmtqIF+VoPxAYNrmM26Enf1aRusHBwqxRtkHxY46Eo?=
+ =?us-ascii?Q?G7e9OSDSGrtx+QXXtEC6My52tmlLAC03Hk7z21s4EaJKGU7Tn/pmvkFUeT8U?=
+ =?us-ascii?Q?Ii/GZgQIas+Nuajn2OUQ7l1OF84pwri0ZTO7s/1UzCnjKaqA28BfmmRTEWTv?=
+ =?us-ascii?Q?HDZfTvJEycyHLW70K7Ldd5SH/TgnVLvXK3jhr54qW9W0gpIvEFV0R09JaqCw?=
+ =?us-ascii?Q?1vZC25cwC4C1pbKzY1YU+g64KabzwUQG3ZnbtW9Xa9gwszXEiqc2CrO+ieeG?=
+ =?us-ascii?Q?6wN9EDf1A3g8T+aa77mDa55mrEahE/wMjQXOr+fXYoeWAWti7FCx90Xmyhg0?=
+ =?us-ascii?Q?AJUVUPr4M/1I6pKf/Rt7gBI2Z4NKwOgy4SX1XQY2ojVeqcisAVXcx+6NPUzu?=
+ =?us-ascii?Q?zYN0mU1voXWvd4Tpk235/bJdenLNpqk7fAjfiOKRPGtir+wQ/RHaizamlte1?=
+ =?us-ascii?Q?p5kJ5OQA+tR3TdZXkJi15YsZoOCDK/Y09pIV6OmwzQC6gAafAshX6QS+60Qo?=
+ =?us-ascii?Q?t37kUX18mmU6axOgAbdR6mhtUECDoDkwbfpbV79EFid4wH1KPbxJwi7rRK/P?=
+ =?us-ascii?Q?Fo3STx9QGDHveHiLD8RWoRa1Xeso9ztTg/pdFg0jxZwYfl3rKFoJ/W08yzEH?=
+ =?us-ascii?Q?M5dvyxiZMniewhEq5RW1dF0uDUcoqY6tCcclVJ+0KXk7UMjsEulSTF1TxAlm?=
+ =?us-ascii?Q?waUdhefFIP69ydoYl5ji1q26NYcfN2qryOgeYU1D8musSpZxIP3Gp8S260CX?=
+ =?us-ascii?Q?kCob2KfNNhRi4pz6heSHMnKJayGMEn7O6Ik+n9N5IrBHyv3ImejD50ho21KP?=
+ =?us-ascii?Q?k+ZxmCI+DzBOnANr8h/53k5A4Awmo//x9gy9mmZwDrXPxxJXUNPykc16bqmU?=
+ =?us-ascii?Q?omhhMeryAhKWg4jkwHL+zQvHJSsHzjXVTjH+n50ebeBpZLBuQvSJcIRU45kQ?=
+ =?us-ascii?Q?2mn8Jwi/YOjdBeeN/3nodsOLKd7NZ2QbWvoVVrN9C6soQwn/jGCoDT+bS89f?=
+ =?us-ascii?Q?eXo4stlAPHx7B0PnOboBCHxM7va0EcbKhORlYewLmTxcoXMsz7A5Lw+hlG6c?=
+ =?us-ascii?Q?u1RWQ+VMaPhOrC9OnO6if7PCQKpUEL1DTElXOvCX4F9ujwIkHgcIcLubT+Iz?=
+ =?us-ascii?Q?hopcSuJbnhUSjKvBudLpu3fRDpaKS5RwY2T9QedZnqPcmHwnXBtlR16ApB49?=
+ =?us-ascii?Q?OwdaRRbUDnMUQxzGSFPmM8h148+PMmS+vrAn4yKDfGdHPzRnwyRHzxu5WOMs?=
+ =?us-ascii?Q?2X7SpypEUSIJzR9a4NbL9/fsvvk=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7859c549-a9d0-4cab-fc6d-08d9f6731f15
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR10MB4759.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Feb 2022 02:20:55.3935
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: uRtVyjVD0hBam0jBiiruuQDRGYdoHL2XnvWAKn8MY4/7uFYRH3lOT8P4vPreDkNOsUOTzUYdiL1K6uRd7CkxkdqMabAX7y0evHTi7zgTJGs=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN4PR10MB5573
+X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10266 signatures=677939
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 bulkscore=0 spamscore=0
+ mlxscore=0 adultscore=0 mlxlogscore=999 suspectscore=0 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2201110000
+ definitions=main-2202230010
+X-Proofpoint-ORIG-GUID: KbW5uA8U-Ra5FMRZQw9cVT-0KLyZWBSX
+X-Proofpoint-GUID: KbW5uA8U-Ra5FMRZQw9cVT-0KLyZWBSX
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09 2月 22 14:53:19, Cai Huoqing wrote:
-> The nouveau driver depends on include/linux/list.h instead of
-> nvif/list.h, so remove the obstacle-nvif/list.h.
-> 
-> Signed-off-by: Cai Huoqing <cai.huoqing@linux.dev>
-> ---
-Ping :)
->  drivers/gpu/drm/nouveau/include/nvif/list.h | 353 --------------------
->  1 file changed, 353 deletions(-)
->  delete mode 100644 drivers/gpu/drm/nouveau/include/nvif/list.h
-> 
-> diff --git a/drivers/gpu/drm/nouveau/include/nvif/list.h b/drivers/gpu/drm/nouveau/include/nvif/list.h
-> deleted file mode 100644
-> index 8af5d144ecb0..000000000000
-> --- a/drivers/gpu/drm/nouveau/include/nvif/list.h
-> +++ /dev/null
-> @@ -1,353 +0,0 @@
-> -/*
-> - * Copyright © 2010 Intel Corporation
-> - * Copyright © 2010 Francisco Jerez <currojerez@riseup.net>
-> - *
-> - * Permission is hereby granted, free of charge, to any person obtaining a
-> - * copy of this software and associated documentation files (the "Software"),
-> - * to deal in the Software without restriction, including without limitation
-> - * the rights to use, copy, modify, merge, publish, distribute, sublicense,
-> - * and/or sell copies of the Software, and to permit persons to whom the
-> - * Software is furnished to do so, subject to the following conditions:
-> - *
-> - * The above copyright notice and this permission notice (including the next
-> - * paragraph) shall be included in all copies or substantial portions of the
-> - * Software.
-> - *
-> - * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-> - * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-> - * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL
-> - * THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-> - * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
-> - * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
-> - * IN THE SOFTWARE.
-> - *
-> - */
-> -
-> -/* Modified by Ben Skeggs <bskeggs@redhat.com> to match kernel list APIs */
-> -
-> -#ifndef _XORG_LIST_H_
-> -#define _XORG_LIST_H_
-> -
-> -/**
-> - * @file Classic doubly-link circular list implementation.
-> - * For real usage examples of the linked list, see the file test/list.c
-> - *
-> - * Example:
-> - * We need to keep a list of struct foo in the parent struct bar, i.e. what
-> - * we want is something like this.
-> - *
-> - *     struct bar {
-> - *          ...
-> - *          struct foo *list_of_foos; -----> struct foo {}, struct foo {}, struct foo{}
-> - *          ...
-> - *     }
-> - *
-> - * We need one list head in bar and a list element in all list_of_foos (both are of
-> - * data type 'struct list_head').
-> - *
-> - *     struct bar {
-> - *          ...
-> - *          struct list_head list_of_foos;
-> - *          ...
-> - *     }
-> - *
-> - *     struct foo {
-> - *          ...
-> - *          struct list_head entry;
-> - *          ...
-> - *     }
-> - *
-> - * Now we initialize the list head:
-> - *
-> - *     struct bar bar;
-> - *     ...
-> - *     INIT_LIST_HEAD(&bar.list_of_foos);
-> - *
-> - * Then we create the first element and add it to this list:
-> - *
-> - *     struct foo *foo = malloc(...);
-> - *     ....
-> - *     list_add(&foo->entry, &bar.list_of_foos);
-> - *
-> - * Repeat the above for each element you want to add to the list. Deleting
-> - * works with the element itself.
-> - *      list_del(&foo->entry);
-> - *      free(foo);
-> - *
-> - * Note: calling list_del(&bar.list_of_foos) will set bar.list_of_foos to an empty
-> - * list again.
-> - *
-> - * Looping through the list requires a 'struct foo' as iterator and the
-> - * name of the field the subnodes use.
-> - *
-> - * struct foo *iterator;
-> - * list_for_each_entry(iterator, &bar.list_of_foos, entry) {
-> - *      if (iterator->something == ...)
-> - *             ...
-> - * }
-> - *
-> - * Note: You must not call list_del() on the iterator if you continue the
-> - * loop. You need to run the safe for-each loop instead:
-> - *
-> - * struct foo *iterator, *next;
-> - * list_for_each_entry_safe(iterator, next, &bar.list_of_foos, entry) {
-> - *      if (...)
-> - *              list_del(&iterator->entry);
-> - * }
-> - *
-> - */
-> -
-> -/**
-> - * The linkage struct for list nodes. This struct must be part of your
-> - * to-be-linked struct. struct list_head is required for both the head of the
-> - * list and for each list node.
-> - *
-> - * Position and name of the struct list_head field is irrelevant.
-> - * There are no requirements that elements of a list are of the same type.
-> - * There are no requirements for a list head, any struct list_head can be a list
-> - * head.
-> - */
-> -struct list_head {
-> -    struct list_head *next, *prev;
-> -};
-> -
-> -/**
-> - * Initialize the list as an empty list.
-> - *
-> - * Example:
-> - * INIT_LIST_HEAD(&bar->list_of_foos);
-> - *
-> - * @param The list to initialized.
-> - */
-> -#define LIST_HEAD_INIT(name) { &(name), &(name) }
-> -
-> -#define LIST_HEAD(name) \
-> -	struct list_head name = LIST_HEAD_INIT(name)
-> -
-> -static inline void
-> -INIT_LIST_HEAD(struct list_head *list)
-> -{
-> -    list->next = list->prev = list;
-> -}
-> -
-> -static inline void
-> -__list_add(struct list_head *entry,
-> -                struct list_head *prev, struct list_head *next)
-> -{
-> -    next->prev = entry;
-> -    entry->next = next;
-> -    entry->prev = prev;
-> -    prev->next = entry;
-> -}
-> -
-> -/**
-> - * Insert a new element after the given list head. The new element does not
-> - * need to be initialised as empty list.
-> - * The list changes from:
-> - *      head → some element → ...
-> - * to
-> - *      head → new element → older element → ...
-> - *
-> - * Example:
-> - * struct foo *newfoo = malloc(...);
-> - * list_add(&newfoo->entry, &bar->list_of_foos);
-> - *
-> - * @param entry The new element to prepend to the list.
-> - * @param head The existing list.
-> - */
-> -static inline void
-> -list_add(struct list_head *entry, struct list_head *head)
-> -{
-> -    __list_add(entry, head, head->next);
-> -}
-> -
-> -/**
-> - * Append a new element to the end of the list given with this list head.
-> - *
-> - * The list changes from:
-> - *      head → some element → ... → lastelement
-> - * to
-> - *      head → some element → ... → lastelement → new element
-> - *
-> - * Example:
-> - * struct foo *newfoo = malloc(...);
-> - * list_add_tail(&newfoo->entry, &bar->list_of_foos);
-> - *
-> - * @param entry The new element to prepend to the list.
-> - * @param head The existing list.
-> - */
-> -static inline void
-> -list_add_tail(struct list_head *entry, struct list_head *head)
-> -{
-> -    __list_add(entry, head->prev, head);
-> -}
-> -
-> -static inline void
-> -__list_del(struct list_head *prev, struct list_head *next)
-> -{
-> -    next->prev = prev;
-> -    prev->next = next;
-> -}
-> -
-> -/**
-> - * Remove the element from the list it is in. Using this function will reset
-> - * the pointers to/from this element so it is removed from the list. It does
-> - * NOT free the element itself or manipulate it otherwise.
-> - *
-> - * Using list_del on a pure list head (like in the example at the top of
-> - * this file) will NOT remove the first element from
-> - * the list but rather reset the list as empty list.
-> - *
-> - * Example:
-> - * list_del(&foo->entry);
-> - *
-> - * @param entry The element to remove.
-> - */
-> -static inline void
-> -list_del(struct list_head *entry)
-> -{
-> -    __list_del(entry->prev, entry->next);
-> -}
-> -
-> -static inline void
-> -list_del_init(struct list_head *entry)
-> -{
-> -    __list_del(entry->prev, entry->next);
-> -    INIT_LIST_HEAD(entry);
-> -}
-> -
-> -static inline void list_move_tail(struct list_head *list,
-> -				  struct list_head *head)
-> -{
-> -	__list_del(list->prev, list->next);
-> -	list_add_tail(list, head);
-> -}
-> -
-> -/**
-> - * Check if the list is empty.
-> - *
-> - * Example:
-> - * list_empty(&bar->list_of_foos);
-> - *
-> - * @return True if the list contains one or more elements or False otherwise.
-> - */
-> -static inline bool
-> -list_empty(struct list_head *head)
-> -{
-> -    return head->next == head;
-> -}
-> -
-> -/**
-> - * Returns a pointer to the container of this list element.
-> - *
-> - * Example:
-> - * struct foo* f;
-> - * f = container_of(&foo->entry, struct foo, entry);
-> - * assert(f == foo);
-> - *
-> - * @param ptr Pointer to the struct list_head.
-> - * @param type Data type of the list element.
-> - * @param member Member name of the struct list_head field in the list element.
-> - * @return A pointer to the data struct containing the list head.
-> - */
-> -#ifndef container_of
-> -#define container_of(ptr, type, member) \
-> -    (type *)((char *)(ptr) - (char *) &((type *)0)->member)
-> -#endif
-> -
-> -/**
-> - * Alias of container_of
-> - */
-> -#define list_entry(ptr, type, member) \
-> -    container_of(ptr, type, member)
-> -
-> -/**
-> - * Retrieve the first list entry for the given list pointer.
-> - *
-> - * Example:
-> - * struct foo *first;
-> - * first = list_first_entry(&bar->list_of_foos, struct foo, list_of_foos);
-> - *
-> - * @param ptr The list head
-> - * @param type Data type of the list element to retrieve
-> - * @param member Member name of the struct list_head field in the list element.
-> - * @return A pointer to the first list element.
-> - */
-> -#define list_first_entry(ptr, type, member) \
-> -    list_entry((ptr)->next, type, member)
-> -
-> -/**
-> - * Retrieve the last list entry for the given listpointer.
-> - *
-> - * Example:
-> - * struct foo *first;
-> - * first = list_last_entry(&bar->list_of_foos, struct foo, list_of_foos);
-> - *
-> - * @param ptr The list head
-> - * @param type Data type of the list element to retrieve
-> - * @param member Member name of the struct list_head field in the list element.
-> - * @return A pointer to the last list element.
-> - */
-> -#define list_last_entry(ptr, type, member) \
-> -    list_entry((ptr)->prev, type, member)
-> -
-> -#define __container_of(ptr, sample, member)				\
-> -    (void *)container_of((ptr), typeof(*(sample)), member)
-> -
-> -/**
-> - * Loop through the list given by head and set pos to struct in the list.
-> - *
-> - * Example:
-> - * struct foo *iterator;
-> - * list_for_each_entry(iterator, &bar->list_of_foos, entry) {
-> - *      [modify iterator]
-> - * }
-> - *
-> - * This macro is not safe for node deletion. Use list_for_each_entry_safe
-> - * instead.
-> - *
-> - * @param pos Iterator variable of the type of the list elements.
-> - * @param head List head
-> - * @param member Member name of the struct list_head in the list elements.
-> - *
-> - */
-> -#define list_for_each_entry(pos, head, member)				\
-> -    for (pos = __container_of((head)->next, pos, member);		\
-> -	 &pos->member != (head);					\
-> -	 pos = __container_of(pos->member.next, pos, member))
-> -
-> -/**
-> - * Loop through the list, keeping a backup pointer to the element. This
-> - * macro allows for the deletion of a list element while looping through the
-> - * list.
-> - *
-> - * See list_for_each_entry for more details.
-> - */
-> -#define list_for_each_entry_safe(pos, tmp, head, member)		\
-> -    for (pos = __container_of((head)->next, pos, member),		\
-> -	 tmp = __container_of(pos->member.next, pos, member);		\
-> -	 &pos->member != (head);					\
-> -	 pos = tmp, tmp = __container_of(pos->member.next, tmp, member))
-> -
-> -
-> -#define list_for_each_entry_reverse(pos, head, member)			\
-> -	for (pos = __container_of((head)->prev, pos, member);		\
-> -	     &pos->member != (head);					\
-> -	     pos = __container_of(pos->member.prev, pos, member))
-> -
-> -#define list_for_each_entry_continue(pos, head, member)			\
-> -	for (pos = __container_of(pos->member.next, pos, member);	\
-> -	     &pos->member != (head);					\
-> -	     pos = __container_of(pos->member.next, pos, member))
-> -
-> -#define list_for_each_entry_continue_reverse(pos, head, member)		\
-> -	for (pos = __container_of(pos->member.prev, pos, member);	\
-> -	     &pos->member != (head);					\
-> -	     pos = __container_of(pos->member.prev, pos, member))
-> -
-> -#define list_for_each_entry_from(pos, head, member)			\
-> -	for (;								\
-> -	     &pos->member != (head);					\
-> -	     pos = __container_of(pos->member.next, pos, member))
-> -
-> -#endif
-> -- 
-> 2.25.1
-> 
+
+John,
+
+> This is just an update of the series to fix a build error, as reported
+> here:
+> https://lore.kernel.org/lkml/59b538b7-b4c5-8111-d2bf-7fb353ecb19b@huawei.com/
+
+Replaced patch 18, thanks!
+
+Generally an incremental patch is preferred if I have already applied
+something. Otherwise I have to redo any edits or tweaks I made to the
+original series (if any, but I usually don't remember and therefore will
+have to do it all over).
+
+-- 
+Martin K. Petersen	Oracle Linux Engineering

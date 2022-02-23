@@ -2,114 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CC7C4C0A34
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 04:28:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7476F4C0A36
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 04:28:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237493AbiBWD2n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 22:28:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54948 "EHLO
+        id S237863AbiBWD26 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 22:28:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230404AbiBWD2m (ORCPT
+        with ESMTP id S230404AbiBWD24 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 22:28:42 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B83212672
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 19:28:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645586895; x=1677122895;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=aXsvb76kxe1f0vtbpAwHxd95aWtlNMa7DirL39W8X0s=;
-  b=S1QFoymF9fhH7ljsMepTU5Wbyn2mOmt52QzwphTWurxQCWvKi6W8/Xt9
-   vPtml1JMNooZ4A54zzdazbB230hkPZ0Q7LunlbdapRAXIlLkWEl3n4GCG
-   6ducL2fmBR/on3VHMySbdTVq6UUUBDI4kgX1ujVTGa2UYDSFf6ZOeRETj
-   FGnaEm+cC8L2/9o30I5LwnfoGrWz9smXjvJVbp3NYOj9RZzQZd4ChD4nc
-   TJqESbgWiTalgH8jp+FGuny/Dnhyqj93az8wlOUZcjCA6uB6/rkBsToBl
-   mgJlAoppT1u8Hs89hpJQFXKbbS15ZJCZdQFQy3DvGUWa+9uugG9aXnxRQ
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10266"; a="276489347"
-X-IronPort-AV: E=Sophos;i="5.88,390,1635231600"; 
-   d="scan'208";a="276489347"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2022 19:28:15 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,390,1635231600"; 
-   d="scan'208";a="548052217"
-Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 22 Feb 2022 19:28:13 -0800
-Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nMiK5-0000w0-8k; Wed, 23 Feb 2022 03:28:13 +0000
-Date:   Wed, 23 Feb 2022 11:27:44 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Ingo Molnar <mingo@kernel.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: [mingo-tip:sched/headers 1839/2324] arch/mips/ath25/devices.h:36:10:
- error: implicit declaration of function 'smp_processor_id'
-Message-ID: <202202231135.jSEszXqu-lkp@intel.com>
+        Tue, 22 Feb 2022 22:28:56 -0500
+Received: from new3-smtp.messagingengine.com (new3-smtp.messagingengine.com [66.111.4.229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE9613584A;
+        Tue, 22 Feb 2022 19:28:27 -0800 (PST)
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 584A1580155;
+        Tue, 22 Feb 2022 22:28:27 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute1.internal (MEProxy); Tue, 22 Feb 2022 22:28:27 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
+        cc:cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm2; bh=JCqBgtNrf0VbGB
+        X+MXj8hMt+8kzvUy1V9drTUch1PIs=; b=GRA1Na8SRlnu6vXXEtILV4NHpyAH7W
+        6WFMOU8GWAQg8hQrP2W1N5r7AtIvHtih9brwtIpXVXtJdJIYYQasI9ewCGennSzf
+        C/txPce6CyOdrtAXfgcYDeusKVEXk+ErM/XrPDQR1x22UlnGSdg1XoOAzGhqxhi+
+        hHGr/difWEtpYlTQYK/z0A0XBn37/zSM9C6VRTElAAPj4eaBf2gY+SB9fKvrhwK9
+        846CCLE4deqJTons7yhCTKDFYfO5yYcJqcPWN8GYJLqVpe2Nef+L1dPwJzKQezAf
+        U+a4abS3yfZbr6yt3QzRjeY2kvFmCbjqHUgG0wA1WU11qw/1QBFIq6cA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; bh=JCqBgtNrf0VbGBX+MXj8hMt+8kzvUy1V9drTUch1P
+        Is=; b=aXtb9lFDfLKP2er/8eZkqMaZq+S8iiOcW8h6tlYrS7+gCvqKO5pyj31bT
+        ffnGu70hMWPKSTnYlbGczEb0JtVWhQeo4RgiiN7dvp0DJZJu+/qF0Olavhao6yYb
+        Sl8JgfTZsCWUdkSoGJ5KzOk2czNZSPQlfM2Xv/2HgknFW2GRJt9+xiSw4dcCjuaA
+        HvMt+9BJo2il2hOWy4MCLVDrC4mdB5UKZhySCRpz7zHmFWS/jhkibdfwtq7iazpN
+        dQ3x3Mbjr1EbOiN0zqRAlMgTXAavTxyAdrMuPc4fBsVe9+cOIlLuDGqckcM+jxWD
+        Yy2XngbmicwpLTNrD9j1CCn0baVvA==
+X-ME-Sender: <xms:2qkVYtCGGwoIoflwmxNEbVKWUAFL652Ok5LSeJ63DVb8SqWr774XdA>
+    <xme:2qkVYrhijfjyo8E3kQiFG3WEGvOpVuJ9IC6PY8V3HzvS8uyyvGF6w90HgoiS1MDPJ
+    E8ObAQrAHa_SVaL2Q>
+X-ME-Received: <xmr:2qkVYomw5GPOyWKnUTKaBnFFzt7sB-w9a2znwQ2BLgZF1uOgy1xxvpjWvz9n1ZXlhQeo-fMBRwkOfmkiy2oD76Y7lETXk-eUHfYdBYDLIS82P6Zywxuz2uD41Q>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrkeelgdehkecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefuvfhfhffkffgfgggjtgfgsehtjeertddtfeejnecuhfhrohhmpefurghmuhgv
+    lhcujfholhhlrghnugcuoehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgqeenucggtf
+    frrghtthgvrhhnpefgveffteelheffjeeukedvkedviedtheevgeefkeehueeiieeuteeu
+    gfettdeggeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
+    hmpehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhg
+X-ME-Proxy: <xmx:2qkVYnysKdB8ZV7XdEWMbfsroDCoC-S6BCguClHW2ZiepPVsLx2HOg>
+    <xmx:2qkVYiSdSdmuNokjN7ZOg4DT8GS8GJE5-baE7e9s3ZNJAGi2at1Xhg>
+    <xmx:2qkVYqbcnD1AYmkOlgxCZuGznPASKZrm5uWlHit-wb5ZzSjCsSGumw>
+    <xmx:26kVYuZkW1iVLzPnf_y04a8P8WOe_zxZVT_WPcTMUJilFZ2RpDlTFQ>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 22 Feb 2022 22:28:26 -0500 (EST)
+Subject: Re: [PATCH v10 02/18] clk: sunxi-ng: h616: Add PLL derived 32KHz
+ clock
+To:     Andre Przywara <andre.przywara@arm.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>
+Cc:     Rob Herring <robh@kernel.org>, Ondrej Jirman <megous@megous.com>,
+        Icenowy Zheng <icenowy@aosc.io>,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org
+References: <20220211122643.1343315-1-andre.przywara@arm.com>
+ <20220211122643.1343315-3-andre.przywara@arm.com>
+From:   Samuel Holland <samuel@sholland.org>
+Message-ID: <6a70f0fc-ddaf-b9f7-8b04-4544e399c45f@sholland.org>
+Date:   Tue, 22 Feb 2022 21:28:25 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.6.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220211122643.1343315-3-andre.przywara@arm.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git sched/headers
-head:   7d9efc989eceed6a8fa475a186880ec4a1ad54a3
-commit: 03d4ee3eff69c2a68c1717afc5a08d1142af6a57 [1839/2324] headers/deps: mm: Optimize <linux/node.h> dependencies
-config: mips-ath25_defconfig (https://download.01.org/0day-ci/archive/20220223/202202231135.jSEszXqu-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=03d4ee3eff69c2a68c1717afc5a08d1142af6a57
-        git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
-        git fetch --no-tags mingo-tip sched/headers
-        git checkout 03d4ee3eff69c2a68c1717afc5a08d1142af6a57
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
+On 2/11/22 6:26 AM, Andre Przywara wrote:
+> The RTC section of the H616 manual mentions in a half-sentence the
+> existence of a clock "32K divided by PLL_PERI(2X)". This is used as
+> one of the possible inputs for the mux that selects the clock for the
+> 32 KHz fanout pad. On the H616 this is routed to pin PG10, and some
+> boards use that clock output to compensate for a missing 32KHz crystal.
+> On the OrangePi Zero2 this is for instance connected to the LPO pin of
+> the WiFi/BT chip.
+> The new RTC clock binding requires this clock to be named as one input
+> clock, so we need to expose this to the DT. In contrast to the D1 SoC
+> there does not seem to be a gate for this clock, so just use a fixed
+> divider clock, using a newly assigned clock number.
+> 
+> Signed-off-by: Andre Przywara <andre.przywara@arm.com>
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   In file included from arch/mips/ath25/early_printk.c:14:
->> arch/mips/ath25/devices.h:36:10: error: implicit declaration of function 'smp_processor_id' [-Werror,-Wimplicit-function-declaration]
-           return (current_cpu_data.cputype == CPU_4KEC);
-                   ^
-   arch/mips/include/asm/cpu-info.h:120:35: note: expanded from macro 'current_cpu_data'
-   #define current_cpu_data cpu_data[smp_processor_id()]
-                                     ^
-   1 error generated.
-
-
-vim +/smp_processor_id +36 arch/mips/ath25/devices.h
-
-1ac91b1f686e9d Sergey Ryazanov 2014-10-29  33  
-43cc739fd98b8c Sergey Ryazanov 2014-10-29  34  static inline bool is_ar2315(void)
-43cc739fd98b8c Sergey Ryazanov 2014-10-29  35  {
-43cc739fd98b8c Sergey Ryazanov 2014-10-29 @36  	return (current_cpu_data.cputype == CPU_4KEC);
-43cc739fd98b8c Sergey Ryazanov 2014-10-29  37  }
-43cc739fd98b8c Sergey Ryazanov 2014-10-29  38  
-
-:::::: The code at line 36 was first introduced by commit
-:::::: 43cc739fd98b8c517ad45756d869f866e746ba04 MIPS: ath25: add common parts
-
-:::::: TO: Sergey Ryazanov <ryazanov.s.a@gmail.com>
-:::::: CC: Ralf Baechle <ralf@linux-mips.org>
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Reviewed-by: Samuel Holland <samuel@sholland.org>

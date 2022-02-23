@@ -2,119 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E4C94C1CCA
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 21:05:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AAE7F4C1CCF
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 21:05:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240867AbiBWUF0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 15:05:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37676 "EHLO
+        id S237509AbiBWUGD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 15:06:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233174AbiBWUFY (ORCPT
+        with ESMTP id S231267AbiBWUF7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 15:05:24 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5E2C40E63;
-        Wed, 23 Feb 2022 12:04:56 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 448A1B821A3;
-        Wed, 23 Feb 2022 20:04:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3349C340E7;
-        Wed, 23 Feb 2022 20:04:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645646693;
-        bh=M0+mVIZ0Lc26AANZRRAz4t6SzyvF92PylFUdbqphFSM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=htHMZ4ejkmVw5UZH147OWWvzPaFhKffm1si8PWKoQ3tnFx1yOLEVU9zQwxK66D03d
-         wplmLYlyIr1r52XdFqTtlesPjts/kWIf+iN1ATyktMdKEcaUJvlYonZ1V6H/8HPLI/
-         jMTrjWGhifOrhupEC9mn93Sk6u/MBMyXLCtr0HLQ/nz2PeL0MlAZGOz+uRBQ2dNQP+
-         1Ic12cGDQBffBc1oiHIM2JMAZUrS567iuIBAS786fIZ1Fhesjvllp4NBTINXzKcMxj
-         GOt37pF22BkcR2HDO2jvs15Y7ID8CBJEsV/Q3gpu+i821dkJIfTeyhhFcFWSUe12Qd
-         deVfLFRokXTYQ==
-Date:   Wed, 23 Feb 2022 20:04:42 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Stuart Yoder <stuyoder@gmail.com>,
-        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
-        Abel Vesa <abel.vesa@nxp.com>, Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Vineeth Vijayan <vneethv@linux.ibm.com>,
-        Peter Oberparleiter <oberpar@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Andy Gross <agross@kernel.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, NXP Linux Team <linux-imx@nxp.com>,
-        linux-arm-kernel@lists.infradead.org, linux-hyperv@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        linux-s390@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-spi@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Subject: Re: [PATCH v2 07/11] spi: use helper for safer setting of
- driver_override
-Message-ID: <YhaTWiSQl6pTVxqC@sirena.org.uk>
-References: <20220223191310.347669-1-krzysztof.kozlowski@canonical.com>
- <20220223191441.348109-1-krzysztof.kozlowski@canonical.com>
+        Wed, 23 Feb 2022 15:05:59 -0500
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A7DC4C40A
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 12:05:27 -0800 (PST)
+Received: by mail-lj1-x22a.google.com with SMTP id t14so26299333ljh.8
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 12:05:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=+S6BFzj6o5ckty5iXSThNrfkPsdFE94/fVb8NP4+aFs=;
+        b=F/2f/aEUKxSuzDdCknAbug+t8clrlE0v7gj9NkhphhHftuFg6XGIjvpJXVx+ZHKhn9
+         jOIdz4l7lK+/F1JhXkxR/PARyehOhzu1/S93ijWQKe7fGKOKTiRs9R81aIq3OYNVOgnf
+         G4UcKLBEtMgH8cssPIzV42vV3R64/Z0YRVhdY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=+S6BFzj6o5ckty5iXSThNrfkPsdFE94/fVb8NP4+aFs=;
+        b=NiMr5psxsJB3IZ2auamJab5cLGvWYKJZGhL1hQOA92DgzjMP4OTp95cgDYH6OQkENL
+         abHN95mMUroOM6HWpaFZaEpTPJhJ7iCG9VNPzv7/774rKMvMMukDyqmMEv2oEVlAsIJ8
+         TWPwZ5hlH1hdU+fYqDGzfh+E/W7TEvu45YFiR4DI9yiCs6BTqhtF3MCBMzHoLsv0wuzr
+         L2yz5AP/if4s1p5s2r8ez+Zs13zp+CmwEARNgWH1PLX8h08x5wURQlNhEK63348m+3Pa
+         gVuOoAFQqBOMAwv/YSnkzAsVcKmPgL/7I9J/5hxSC5PO8JPG1kaZ603g0uyIagxs9naw
+         wPEg==
+X-Gm-Message-State: AOAM533I5fqwWUnq90PXZu0+1KIUNb6aPmMj5ikeNZUJThimjnQmSPvI
+        WIERHD1YJWQ75yhHn+BqGK9TeWNYcQ7VdHks1+w=
+X-Google-Smtp-Source: ABdhPJxR4BFouoxJXXZ00MdF4eswCOBS5XHb1bGGS7+SYZaF8Ibbf3QG1L1t+EyccOrgbuv/A7iqGw==
+X-Received: by 2002:a2e:9ad5:0:b0:244:c85f:d546 with SMTP id p21-20020a2e9ad5000000b00244c85fd546mr705558ljj.303.1645646724756;
+        Wed, 23 Feb 2022 12:05:24 -0800 (PST)
+Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com. [209.85.167.45])
+        by smtp.gmail.com with ESMTPSA id a17sm41472lfs.35.2022.02.23.12.05.20
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 23 Feb 2022 12:05:21 -0800 (PST)
+Received: by mail-lf1-f45.google.com with SMTP id i11so216787lfu.3
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 12:05:20 -0800 (PST)
+X-Received: by 2002:a05:6512:130b:b0:443:c2eb:399d with SMTP id
+ x11-20020a056512130b00b00443c2eb399dmr822016lfu.27.1645646720244; Wed, 23 Feb
+ 2022 12:05:20 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="PaAAhqOBo3hBuacY"
-Content-Disposition: inline
-In-Reply-To: <20220223191441.348109-1-krzysztof.kozlowski@canonical.com>
-X-Cookie: I smell a wumpus.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220216131332.1489939-1-arnd@kernel.org> <20220216131332.1489939-10-arnd@kernel.org>
+ <20220221132456.GA7139@alpha.franken.de>
+In-Reply-To: <20220221132456.GA7139@alpha.franken.de>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Wed, 23 Feb 2022 12:05:04 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wjdHz6OU3M9T5zE9Fc9SNdDs52iOE+eVn-wuUT6UDpBLg@mail.gmail.com>
+Message-ID: <CAHk-=wjdHz6OU3M9T5zE9Fc9SNdDs52iOE+eVn-wuUT6UDpBLg@mail.gmail.com>
+Subject: Re: [PATCH v2 09/18] mips: use simpler access_ok()
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     Arnd Bergmann <arnd@kernel.org>, Christoph Hellwig <hch@lst.de>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        Linux API <linux-api@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Russell King - ARM Linux <linux@armlinux.org.uk>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        Brian Cain <bcain@codeaurora.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Michal Simek <monstr@monstr.eu>,
+        Nick Hu <nickhu@andestech.com>,
+        Greentime Hu <green.hu@gmail.com>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Stafford Horne <shorne@gmail.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Rich Felker <dalias@libc.org>,
+        David Miller <davem@davemloft.net>,
+        Richard Weinberger <richard@nod.at>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        alpha <linux-alpha@vger.kernel.org>,
+        "open list:SYNOPSYS ARC ARCHITECTURE" 
+        <linux-snps-arc@lists.infradead.org>, linux-csky@vger.kernel.org,
+        linux-hexagon <linux-hexagon@vger.kernel.org>,
+        linux-ia64@vger.kernel.org,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Openrisc <openrisc@lists.librecores.org>,
+        linux-parisc <linux-parisc@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        linux-sparc <sparclinux@vger.kernel.org>,
+        linux-um <linux-um@lists.infradead.org>,
+        "open list:TENSILICA XTENSA PORT (xtensa)" 
+        <linux-xtensa@linux-xtensa.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Feb 21, 2022 at 5:25 AM Thomas Bogendoerfer
+<tsbogend@alpha.franken.de> wrote:
+>
+> With this patch
+[ .. snip snip ..]
+> I at least get my simple test cases fixed, but I'm not sure this is
+> correct.
 
---PaAAhqOBo3hBuacY
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+I think you really want to do that anyway, just to get things like
+wild kernel pointers right (ie think get_kernel_nofault() and friends
+for ftrace etc).
 
-On Wed, Feb 23, 2022 at 08:14:37PM +0100, Krzysztof Kozlowski wrote:
+They shouldn't happen in any normal situation, but those kinds of
+unverified pointers is why we _have_ get_kernel_nofault() in the first
+place.
 
-> Remove also "const" from the definition of spi_device.driver_override,
-> because it is not correct.  The SPI driver already treats it as
-> dynamic, not const, memory.
+On x86-64, the roughly equivalent situation is that addresses that
+aren't in canonical format do not take a #PF (page fault), they take a
+#GP (general protection) fault.
 
-We don't modify the string do we, we just allocate a new one?
+So I think you want to do that fixup_exception() for any possible addresses.
 
---PaAAhqOBo3hBuacY
-Content-Type: application/pgp-signature; name="signature.asc"
+> Is there a reason to not also #define TASK_SIZE_MAX   __UA_LIMIT like
+> for the 32bit case ?
 
------BEGIN PGP SIGNATURE-----
+I would suggest against using a non-constant TASK_SIZE_MAX. Being
+constant is literally one reason why it exists, when TASK_SIZE itself
+has often been about other things (ie "32-bit process").
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmIWk1kACgkQJNaLcl1U
-h9DKugf+JTJnnQWx+6mOA4DxLKfWqeASwwB38nUbBFMpWAEhjMvez2XAp0h33Cp9
-bH+dZ5NjHjeUoLGkWBHxWiyuu1r4QrqL7E32x/mV1JsG7I2svj0l0XyCx7Xw7lqT
-QIFJxxSknnL1YtmnB53Rz55GDGQhIg4ewuv/ayCjk0oBDS6G2WBS2UAx2FWJQg2l
-0ALu1QKfCU2DfjLPbmMqLoJb9anvSLyPxe38+Q2dqLx6kUl1WqVWz/Af6dJp9YWY
-UDYfURm/JqyzEo/wiM5ZS39VO9Kv8M7EO9MFJvwxdkmM1evQah6crAugVx/WeCQy
-4Tv/1RJYx8DyQ53XSPVEVcgh9tSx9w==
-=g4g9
------END PGP SIGNATURE-----
+Having to load variables for things like get_user() is annoying, if
+you could do it with a simple constant instead (where that "simple"
+part is to avoid having to load big values from a constant pool -
+often constants like "high bit set" can be loaded and compared against
+more efficiently).
 
---PaAAhqOBo3hBuacY--
+               Linus

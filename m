@@ -2,100 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CA274C16C0
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 16:27:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 918DF4C16C7
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 16:28:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242041AbiBWP2N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 10:28:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38450 "EHLO
+        id S242067AbiBWP3L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 10:29:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232586AbiBWP2G (ORCPT
+        with ESMTP id S232535AbiBWP3H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 10:28:06 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 36FA859A57
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 07:27:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1645630057;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=kH8WIN2Y5/0MeVxcsZQrx8+wnwcyD8nghWH8KM7iDsA=;
-        b=LfNSe/pAhnvlWBYSh+R2TLxrxjK4o2/+KFyPHcTrn6yO4SR0ABvvHiKr1+y73t95GWgHFH
-        oXIl0aYRKQeeVTvWJ/59LhuU7xOgBKMDQZcABQ+PSw+xjlLZPvJVm6ibw1pb52frksknpI
-        GvKhnp0DYYtagEidnpUQ45Re7haWMLA=
-Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
- [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-423-NGdx5aGhPeeDMV3ing9WMg-1; Wed, 23 Feb 2022 10:27:36 -0500
-X-MC-Unique: NGdx5aGhPeeDMV3ing9WMg-1
-Received: by mail-ej1-f71.google.com with SMTP id qa30-20020a170907869e00b006cee5e080easo7195674ejc.3
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 07:27:36 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=kH8WIN2Y5/0MeVxcsZQrx8+wnwcyD8nghWH8KM7iDsA=;
-        b=CwvMiaYyLf5T3b0Iizzlbv/DVK2vkapCK45CvEMzL6e/2waL4uFcEDB5Um8AQFvvic
-         Pj/WTlg1x0SzsMsQb61K53hNh+FEba5TOm93xvk8bCncgo5vvkLIVXPwnPfZXoU4yWYN
-         /Id03gtWis4OIU7CDnf4SsaJNwyK1JY2VunqAKvVc/9jvjMzOwSRh2K3Kk2AlV3EkYKG
-         Of6KJgAeq8GDJJ/+XzG0bsHh6A/I+mFxq2Y3vYaMDkK+S9RkB6SRSthMCR5gOefUtSeB
-         4koTBy1PZKcNVsIL/rglSww8ZA4JC+t3cp3qL3RWrFsnzBPNzF6W90DzZ46BwhfeEr2d
-         kmXQ==
-X-Gm-Message-State: AOAM532XlsxmdPYXgkMWcdJrtjnTMqQBOsaY/q+MaZ/av1lISB53ZgU2
-        FfQeOw2fbEFALh3vhqprPx9uxLNjpkAfHZ8B2Ai1ppiHp0rWUabgJgUKO2sl0wBN9kFuJjlTx8Y
-        A3NM1OC8YMa4W17UKS3yMKO0D
-X-Received: by 2002:a17:906:b052:b0:6ce:88a5:e42a with SMTP id bj18-20020a170906b05200b006ce88a5e42amr192699ejb.237.1645630055141;
-        Wed, 23 Feb 2022 07:27:35 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJz57LXSr95exnXVUq8ZiXc7mHpA+5ceGpA7rB1clicZS90nENA1DfPGFMyeysD3j/UErNATAw==
-X-Received: by 2002:a17:906:b052:b0:6ce:88a5:e42a with SMTP id bj18-20020a170906b05200b006ce88a5e42amr192678ejb.237.1645630054986;
-        Wed, 23 Feb 2022 07:27:34 -0800 (PST)
-Received: from ?IPV6:2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1? (2001-1c00-0c1e-bf00-1db8-22d3-1bc9-8ca1.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1])
-        by smtp.gmail.com with ESMTPSA id c11sm12486585edx.42.2022.02.23.07.27.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 23 Feb 2022 07:27:34 -0800 (PST)
-Message-ID: <d7c8a9fe-5c9b-2c9d-3731-c735da795bf8@redhat.com>
-Date:   Wed, 23 Feb 2022 16:27:33 +0100
+        Wed, 23 Feb 2022 10:29:07 -0500
+Received: from winds.org (winds.org [68.75.195.9])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6432959A57;
+        Wed, 23 Feb 2022 07:28:39 -0800 (PST)
+Received: by winds.org (Postfix, from userid 100)
+        id 10DA01CA58FD; Wed, 23 Feb 2022 10:28:39 -0500 (EST)
+Received: from localhost (localhost [127.0.0.1])
+        by winds.org (Postfix) with ESMTP id 0F110124B482;
+        Wed, 23 Feb 2022 10:28:39 -0500 (EST)
+Date:   Wed, 23 Feb 2022 10:28:39 -0500 (EST)
+From:   Byron Stanoszek <gandalf@winds.org>
+To:     Dave Chinner <david@fromorbit.com>
+cc:     Jan Kara <jack@suse.cz>, Matthew Wilcox <willy@infradead.org>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        reiserfs-devel@vger.kernel.org
+Subject: Re: Is it time to remove reiserfs?
+In-Reply-To: <3ce45c23-2721-af6e-6cd7-648dc399597@winds.org>
+Message-ID: <1a5cd8ce-e7c7-5aa8-e475-ad7810e2f057@winds.org>
+References: <YhIwUEpymVzmytdp@casper.infradead.org> <20220222100408.cyrdjsv5eun5pzij@quack3.lan> <20220222221614.GC3061737@dread.disaster.area> <3ce45c23-2721-af6e-6cd7-648dc399597@winds.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [RFC 10/10] net: sfp: add support for fwnode
-Content-Language: en-US
-To:     Andrew Lunn <andrew@lunn.ch>,
-        =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
-Cc:     "Russell King (Oracle)" <linux@armlinux.org.uk>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Wolfram Sang <wsa@kernel.org>, Peter Rosin <peda@axentia.se>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-acpi@vger.kernel.org, linux-i2c@vger.kernel.org,
-        netdev@vger.kernel.org,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-References: <20220221162652.103834-1-clement.leger@bootlin.com>
- <20220221162652.103834-11-clement.leger@bootlin.com>
- <YhPSkz8+BIcdb72R@smile.fi.intel.com> <20220222142513.026ad98c@fixe.home>
- <YhYZAc5+Q1rN3vhk@smile.fi.intel.com>
- <888f9f1a-ca5a-1250-1423-6c012ec773e2@redhat.com>
- <YhYriwvHJKjrDQRf@shell.armlinux.org.uk>
- <4d611fe8-b82a-1709-507a-56be94263688@redhat.com>
- <20220223151436.4798e5ad@fixe.home> <YhZRgnPG5Yd8mvc/@lunn.ch>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <YhZRgnPG5Yd8mvc/@lunn.ch>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+Content-Type: text/plain; format=flowed; charset=US-ASCII
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -103,26 +41,97 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Wed, 23 Feb 2022, Byron Stanoszek wrote:
+> On Wed, 23 Feb 2022, Dave Chinner wrote:
+>>  On Tue, Feb 22, 2022 at 11:04:08AM +0100, Jan Kara wrote:
+>>>  Hello!
+>>>
+>>>  On Sun 20-02-22 12:13:04, Matthew Wilcox wrote:
+>>>>  Keeping reiserfs in the tree has certain costs.  For example, I would
+>>>>  very much like to remove the 'flags' argument to ->write_begin.  We have
+>>>>  the infrastructure in place to handle AOP_FLAG_NOFS differently, but
+>>>>  AOP_FLAG_CONT_EXPAND is still around, used only by reiserfs.
+>>>>
+>>>>  Looking over the patches to reiserfs over the past couple of years,
+>>>>  there
+>>>>  are fixes for a few syzbot reports and treewide changes.  There don't
+>>>>  seem to be any fixes for user-spotted bugs since 2019.  Does reiserfs
+>>>>  still have a large install base that is just very happy with an old
+>>>>  stable filesystem?  Or have all its users migrated to new and exciting
+>>>>  filesystems with active feature development?
+>>>>
+>>>>  We've removed support for senescent filesystems before (ext, xiafs), so
+>>>>  it's not unprecedented.  But while I have a clear idea of the benefits
+>>>>  to
+>>>>  other developers of removing reiserfs, I don't have enough information
+>>>>  to
+>>>>  weigh the costs to users.  Maybe they're happy with having 5.15 support
+>>>>  for their reiserfs filesystems and can migrate to another filesystem
+>>>>  before they upgrade their kernel after 5.15.
+>>>>
+>>>>  Another possibility beyond outright removal would be to trim the kernel
+>>>>  code down to read-only support for reiserfs.  Most of the quirks of
+>>>>  reiserfs have to do with write support, so this could be a useful way
+>>>>  forward.  Again, I don't have a clear picture of how people actually
+>>>>  use reiserfs, so I don't know whether it is useful or not.
+>>>>
+>>>>  NB: Please don't discuss the personalities involved.  This is purely a
+>>>>  "we have old code using old APIs" discussion.
+>>>
+>>>  So from my distro experience installed userbase of reiserfs is pretty
+>>>  small
+>>>  and shrinking. We still do build reiserfs in openSUSE / SLES kernels but
+>>>  for enterprise offerings it is unsupported (for like 3-4 years) and the
+>>>  module
+>>>  is not in the default kernel rpm anymore.
+>>>
+>>>  So clearly the filesystem is on the deprecation path, the question is
+>>>  whether it is far enough to remove it from the kernel completely. Maybe
+>>>  time to start deprecation by printing warnings when reiserfs gets mounted
+>>>  and then if nobody yells for year or two, we'll go ahead and remove it?
+>>
+>>  Yup, I'd say we should deprecate it and add it to the removal
+>>  schedule. The less poorly tested legacy filesystem code we have to
+>>  maintain the better.
+>>
+>>  Along those lines, I think we really need to be more aggressive
+>>  about deprecating and removing filesystems that cannot (or will not)
+>>  be made y2038k compliant in the new future. We're getting to close
+>>  to the point where long term distro and/or product development life
+>>  cycles will overlap with y2038k, so we should be thinking of
+>>  deprecating and removing such filesystems before they end up in
+>>  products that will still be in use in 15 years time.
+>>
+>>  And just so everyone in the discussion is aware: XFS already has a
+>>  deprecation and removal schedule for the non-y2038k-compliant v4
+>>  filesystem format. It's officially deprecated right now, we'll stop
+>>  building kernels with v4 support enabled by default in 2025, and
+>>  we're removing the code that supports the v4 format entirely in
+>>  2030.
+>
+> For what it's worth, I have a number of production servers still using
+> Reiserfs, which I regularly maintain by upgrading to the latest Linux kernel
+> annually (mostly to apply security patches). I figured this filesystem would
+> still be available for several more years, since it's not quite y2038k yet.
+>
+> I originally installed Reiserfs on these systems as early as 2005 due to the
+> tail-packing feature, which saved space with many small files on older
+> harddrives. Since then, I witnessed the development of ext4, and then btrfs.
+> For a long time, these newer filesystems had occasional reports of
+> instabilities and lost data, and so I shied away from using them. Meanwhile,
+> Reiserfs reached a level of maturity and no longer had active development on
+> it, except for the occasional bugfix. I felt this was a filesystem I could
+> trust going forward (despite its relative slowness), even after popular Linux
+> distributions eventually dropped it from being installed by default.
+>
+> I have only recently begun to use XFS on newer installs, only since the XFS
+> developers added bigtime support for y2038k. But for existing installs, I ask
+> that we keep Reiserfs supported in the kernel a little longer. Perhaps use
+> the same deprecation schedule that was picked for XFS v4 (roughly 10 years of
+> deprecation before eventual removal)?
 
-On 2/23/22 16:23, Andrew Lunn wrote:
->> As Russell asked, I'm also really interested if someone has a solution
->> to reuse device-tree description (overlays ?) to describe such
->> hardware. However, the fact that CONFIG_OF isn't enabled on x86 config
->> seems a bit complicated on this side.
-> 
-> It does work, intel even used it for one of there tiny x86 SoCs. Maybe
-> it was Newton?
+Sorry, I meant to say 5 years here, not 10.
 
-IIRC those SoCs did not use standard EFI/ACPI though, but rather some
-other special firmware, I think it was SFI ?  This is not so much about
-the CPU architecture as it is about the firmware/bootloader <->
-OS interface.
-
-Note I'm not saying this can not be done with EFI/ACPI systems, but
-I think it has never been tried.
-
-Regards,
-
-Hans
+Thanks,
+  -Byron
 

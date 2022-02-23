@@ -2,184 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A277B4C16B5
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 16:26:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B06C4C16A5
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 16:25:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242015AbiBWP0H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 10:26:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36050 "EHLO
+        id S241965AbiBWPZ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 10:25:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234260AbiBWP0C (ORCPT
+        with ESMTP id S234260AbiBWPZ0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 10:26:02 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC8F047541;
-        Wed, 23 Feb 2022 07:25:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645629934; x=1677165934;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=Pv6qoeuRRxG1BKg3CrjndNCfYi5xjha5hFmmaSyl8u4=;
-  b=Op/5E9j9ZDmwBLhtrIub4rlxfGN6nRZrD1wMMSIex1AjXhJXQtJVD7L+
-   RPoskfu89eu8CCUci7zCY7ZOlt6h5a9MBbTRPsX7cNGgqjk231BjJoRUz
-   sUr0SMdgmTIV0TUQdXH80n9yr+i0uUb6aturQSPliPG+rvKspFVSSbhsP
-   D4F0nu5WCziRRkJTZHSKoFlnX5JRm+wKzQW5pyyHzXe0KKnNA7r1HXvuv
-   bm99jqfDgHlKw23vo1fXt9MRfbPPDLTw4FDF7w2mH9psYj6KYGzqDvSMo
-   ZhU8H6TPNV+AmftpCmpf3sUC6omwKM4pfL3DFVClfGqhI0noZDrGzAPfo
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10266"; a="338425242"
-X-IronPort-AV: E=Sophos;i="5.88,391,1635231600"; 
-   d="scan'208";a="338425242"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2022 07:25:34 -0800
-X-IronPort-AV: E=Sophos;i="5.88,391,1635231600"; 
-   d="scan'208";a="491231866"
-Received: from smile.fi.intel.com ([10.237.72.59])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2022 07:25:29 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1nMtVN-007TS8-TO;
-        Wed, 23 Feb 2022 17:24:37 +0200
-Date:   Wed, 23 Feb 2022 17:24:37 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     =?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <clement.leger@bootlin.com>,
-        Mark Brown <broonie@kernel.org>
-Cc:     Hans de Goede <hdegoede@redhat.com>,
-        Enrico Weigelt <info@metux.net>,
-        Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Wolfram Sang <wsa@kernel.org>, Peter Rosin <peda@axentia.se>,
-        Russell King <linux@armlinux.org.uk>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-acpi@vger.kernel.org, linux-i2c@vger.kernel.org,
-        netdev@vger.kernel.org,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-Subject: Re: [RFC 00/10] add support for fwnode in i2c mux system and sfp
-Message-ID: <YhZRtads7MGzPEEL@smile.fi.intel.com>
-References: <20220221162652.103834-1-clement.leger@bootlin.com>
- <YhPOxL++yhNHh+xH@smile.fi.intel.com>
- <20220222173019.2380dcaf@fixe.home>
- <YhZI1XImMNJgzORb@smile.fi.intel.com>
- <20220223161150.664aa5e6@fixe.home>
+        Wed, 23 Feb 2022 10:25:26 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21795427CA;
+        Wed, 23 Feb 2022 07:24:58 -0800 (PST)
+Received: from ip4d144895.dynamic.kabel-deutschland.de ([77.20.72.149] helo=[192.168.66.200]); authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1nMtVd-0008EV-QY; Wed, 23 Feb 2022 16:24:53 +0100
+Message-ID: <6bdf8ca8-8836-4e44-5c27-0644aa9819ca@leemhuis.info>
+Date:   Wed, 23 Feb 2022 16:24:52 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220223161150.664aa5e6@fixe.home>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [RFC] Scheduler: DMA Engine regression because of sched/fair
+ changes
+Content-Language: en-BZ
+To:     Alexander Fomichev <fomichev.ru@gmail.com>,
+        Hillf Danton <hdanton@sina.com>
+Cc:     Mel Gorman <mgorman@suse.de>, linux-kernel@vger.kernel.org,
+        dmaengine@vger.kernel.org, linux@yadro.com,
+        Peter Zijlstra <peterz@infradead.org>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>
+References: <20220112152609.gg2boujeh5vv5cns@yadro.com>
+ <20220112170512.GO3301@suse.de> <20220117081905.a4pwglxqj7dqpyql@yadro.com>
+ <20220117102701.GQ3301@suse.de> <20220118020448.2399-1-hdanton@sina.com>
+ <20220121101217.2849-1-hdanton@sina.com>
+ <20220122233314.2999-1-hdanton@sina.com>
+ <20220128165058.zxyrnd7nzr4hlks2@yadro.com>
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+In-Reply-To: <20220128165058.zxyrnd7nzr4hlks2@yadro.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1645629898;bb9df89e;
+X-HE-SMSGID: 1nMtVd-0008EV-QY
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 23, 2022 at 04:11:50PM +0100, Clément Léger wrote:
-> Le Wed, 23 Feb 2022 16:46:45 +0200,
-> Andy Shevchenko <andriy.shevchenko@linux.intel.com> a écrit :
+Hi, this is your Linux kernel regression tracker. Top-posting for once,
+to make this easy accessible to everyone.
 
-...
+After below message nothing happened anymore afaics. Could anybody be so
+kind to provide a quick status update, to ensure this wasn't simply
+forgotten? And if this is not considered a regression anymore (I didn#t
+fully understand below message, sorry), it would be ideal if the person
+that replies could include a paragraph stating something like "#regzbot
+invalid: Some reason why this can be ignored", as then I'll stop
+tracking this. tia!
 
-> > > Again, the PCI card is independent of the platform, I do not really see
-> > > why it should be described using platform description language.  
-> > 
-> > Yep, and that why it should cope with the platforms it's designed to be used
-> > with.
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+
+P.S.: As the Linux kernel's regression tracker I'm getting a lot of
+reports on my table. I can only look briefly into most of them and lack
+knowledge about most of the areas they concern. I thus unfortunately
+will sometimes get things wrong or miss something important. I hope
+that's not the case here; if you think it is, don't hesitate to tell me
+in a public reply, it's in everyone's interest to set the public record
+straight.
+
+#regzbot poke
+
+On 28.01.22 17:50, Alexander Fomichev wrote:
+> On Sun, Jan 23, 2022 at 07:33:14AM +0800, Hillf Danton wrote:
+>>
+>> Lets put pieces together based on the data collected.
+>>
+>> 1, No irq migration was observed.
+>>
+>> 2, Your patch that produced the highest iops fo far
+>>
+>> -----< 5.15.8-ioat-ptdma-dirty-fix+ >-----
+>> [ 6183.356549] dmatest: Added 1 threads using dma0chan0
+>> [ 6187.868237] dmatest: Started 1 threads using dma0chan0
+>> [ 6187.887389] dmatest: dma0chan0-copy0: summary 1000 tests, 0 failures 52753.74 iops 3376239 KB/s (0)
+>> [ 6201.913154] dmatest: Added 1 threads using dma0chan0
+>> [ 6204.701340] dmatest: Started 1 threads using dma0chan0
+>> [ 6204.720490] dmatest: dma0chan0-copy0: summary 1000 tests, 0 failures 52614.96 iops 3367357 KB/s (0)
+>> [ 6285.114603] dmatest: Added 1 threads using dma0chan0
+>> [ 6287.031875] dmatest: Started 1 threads using dma0chan0
+>> [ 6287.050278] dmatest: dma0chan0-copy0: summary 1000 tests, 0 failures 54939.01 iops 3516097 KB/s (0)
+>> -----< end >-----
+>>
+>>
+>> -       if (available_idle_cpu(this_cpu) && cpus_share_cache(this_cpu, prev_cpu))
+>> -               return available_idle_cpu(prev_cpu) ? prev_cpu : this_cpu;
+>> +       if (available_idle_cpu(this_cpu))
+>> +               return this_cpu;
+>>
+>> prefers this cpu if it is idle regardless of cache affinity.
+>>
+>> This implies task migration to the cpu that handled irq.
+>>
+>> 3, Given this cpu is different from the prev cpu in addition to no irq
+>> migration, the tested task was bouncing between the two cpus, with one
+>> more question rising, why was task migrated off from the irq-handling cpu?
+>>
+>> Despite no evidence, I bet no bounce occurred given iops observed.
+>>
 > 
-> I don't think PCIe card manufacturer expect them to be used solely on a
-> x86 platform with ACPI. So why should I used ACPI to describe it (or DT
-> by the way), that's my point.
-
-Because you want it to be used on x86 platforms. On the rest it needs DT
-or whatever is required by those platforms (I dunno about Zephyr RTOS, or
-VxWorks, or *BSDs).
-
-...
-
-> > > For the moment, I only added fwnode API support as an alternative to
-> > > support both OF and software nodes. ACPI is not meant to be handled by
-> > > this code "as-is". There is for sure some modifications to be made and
-> > > I do not know how clocks are handled when using ACPI. Based on some
-> > > thread dating back to 2018 [1], it seem it was even not supported at
-> > > all.
-> > > 
-> > > To be clear, I added the equivalent of the OF support but using
-> > > fwnode API because I was interested primarly in using it with software
-> > > nodes and still wanted OF support to work. I did not planned it to be
-> > > "ACPI compliant" right now since I do not have any knowledge in that
-> > > field.  
-> > 
-> > And here is the problem. We have a few different resource providers
-> > (a.k.a. firmware interfaces) which we need to cope with.
+> IMHO, your assumptions are correct.
+> I've added CPU number counters on every step of dmatest. It reveals that
+> test task migration between (at least 2) CPUs occurs in even one thread
+> mode. Below is for vanilla 5.15.8 kernel:
 > 
-> Understood that but does adding fwnode support means it should work
-> as-is with both DT and ACPI ? ACPI code is still in place and only the
-> of part was converted. But maybe you expect the fwnode prot to be
-> conformant with ACPI.
-
-Not only me, I believe Mark also was against using pure DT approach on
-ACPI enabled platforms.
-
-...
-
-> > What is going on in this series seems to me quite a violation of the
-> > layers and technologies. But I guess you may find a supporter of your
-> > ideas (I mean Enrico). However, I'm on the other side and do not like
-> > this approach.
+> -----< threads_per_chan=1 >-----
+> [19449.557950] dmatest: Added 1 threads using dma0chan0
+> [19469.238180] dmatest: Started 1 threads using dma0chan0
+> [19469.253962] dmatest: dma0chan0-copy0: summary 1000 tests, 0 failures 65291.19 iops 4178636 KB/s (0)
+> [19469.253973] dmatest: CPUs hit: #52:417 #63:583  (times)
+> -----< end >-----
 > 
-> As I said in the cover-letter, this approach is the only one that I did
-> found acceptable without being tied to some firmware description. If you
-> have another more portable approach, I'm ok with that. But this
-> solution should ideally work with pinctrl, gpio, clk, reset, phy, i2c,
-> i2c-mux without rewriting half of the code. And also allows to easily
-> swap the PCIe card to other slots/computer without having to modify the
-> description.
-
-My proposal is to use overlays that card provides with itself.
-These are supported mechanisms by Linux kernel.
-
-...
-
-> > > > > static const struct property_entry ddr_clk_props[] = {
-> > > > >         PROPERTY_ENTRY_U32("clock-frequency", 30000000),    
-> > > >   
-> > > > >         PROPERTY_ENTRY_U32("#clock-cells", 0),    
-> > > > 
-> > > > Why this is used?  
-> > > 
-> > > These props actually describes a fixed-clock properties. When adding
-> > > fwnode support to clk framework, it was needed to add the
-> > > equivalent of of_xlate() for fwnode (fwnode_xlate()). The number of
-> > > cells used to describe a reference is still needed to do the
-> > > translation using fwnode_property_get_reference_args() and give the
-> > > correct arguments to fwnode_xlate().  
-> > 
-> > What you described is the programming (overkilled) point. But does hardware
-> > needs this? I.o.w. does it make sense in the _hardware_ description?
+> Note that IRQ handler runs on CPU #52 in this environment.
 > 
-> This does not makes sense for the hardware of course. It also does not
-> makes sense for the hardware to provide that in the device-tree though.
-
-How it can be discovered and enumerated without a hint? And under hint
-we may understand, in particular, the overlay blob.
-
-> I actually think this should be only provided by the drivers but it
-> might be difficult to parse the descriptions then (either DT or
-> software_node), at least that's how it works right now.
-
--- 
-With Best Regards,
-Andy Shevchenko
-
+> In 4 thread mode the task migrates even more aggressively:
+> 
+> -----< threads_per_chan=4 >-----
+> [19355.460227] dmatest: Added 4 threads using dma0chan0
+> [19359.841182] dmatest: Started 4 threads using dma0chan0
+> [19359.860447] dmatest: dma0chan0-copy3: summary 1000 tests, 0 failures 53908.35 iops 3450134 KB/s (0)
+> [19359.860451] dmatest: dma0chan0-copy2: summary 1000 tests, 0 failures 54179.98 iops 3467519 KB/s (0)
+> [19359.860456] dmatest: CPUs hit: #50:1000  (times)
+> [19359.860459] dmatest: CPUs hit: #17:1000  (times)
+> [19359.860459] dmatest: dma0chan0-copy0: summary 1000 tests, 0 failures 54048.21 iops 3459085 KB/s (0)
+> [19359.860466] dmatest: CPUs hit: #31:1000  (times)
+> [19359.861420] dmatest: dma0chan0-copy1: summary 1000 tests, 0 failures 51466.80 iops 3293875 KB/s (0)
+> [19359.861425] dmatest: CPUs hit: #30:213 #48:556 #52:231  (times)
+> -----< end >-----
+> 
+> On the other hand, for dirty-patched kernel task doesn't migrate:
+> 
+> -----< patched threads_per_chan=1 >-----
+> [ 2100.142002] dmatest: Added 1 threads using dma0chan0
+> [ 2102.359727] dmatest: Started 1 threads using dma0chan0
+> [ 2102.373594] dmatest: dma0chan0-copy0: summary 1000 tests, 0 failures 76173.06 iops 4875076 KB/s (0)
+> [ 2102.373600] dmatest: CPUs hit: #49:1000  (times)
+> -----< end >-----
+> 
+> IRQ handler runs on CPU #49 in this case.
+> 
+> Although in 4 thread mode the task still migrates. I think we should
+> consider such scenario as non-relevant for this isue.
+> 
 

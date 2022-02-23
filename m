@@ -2,495 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 197E14C09D5
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 04:03:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 858004C09D0
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 04:02:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237704AbiBWDDE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 22:03:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41786 "EHLO
+        id S237624AbiBWDC3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 22:02:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237728AbiBWDDC (ORCPT
+        with ESMTP id S233935AbiBWDC0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 22:03:02 -0500
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 250E84755E;
-        Tue, 22 Feb 2022 19:02:31 -0800 (PST)
-X-UUID: 3884514a88c44ab3b1bc2aeb163c7f9f-20220223
-X-UUID: 3884514a88c44ab3b1bc2aeb163c7f9f-20220223
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
-        (envelope-from <rex-bc.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 73986513; Wed, 23 Feb 2022 11:02:21 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Wed, 23 Feb 2022 11:02:20 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 23 Feb 2022 11:02:19 +0800
-From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
-To:     <jassisinghbrar@gmail.com>, <robh+dt@kernel.org>
-CC:     <matthias.bgg@gmail.com>, <yongqiang.niu@mediatek.com>,
-        <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Subject: [PATCH 2/2] dt-bindings: gce: add gce header file for mt8186
-Date:   Wed, 23 Feb 2022 11:01:38 +0800
-Message-ID: <20220223030138.13939-3-rex-bc.chen@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20220223030138.13939-1-rex-bc.chen@mediatek.com>
-References: <20220223030138.13939-1-rex-bc.chen@mediatek.com>
+        Tue, 22 Feb 2022 22:02:26 -0500
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2071.outbound.protection.outlook.com [40.107.220.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6B7C40A2B;
+        Tue, 22 Feb 2022 19:01:55 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ZnoZwo63JSe637u3NV2OUtuI+Ahf0yIFbOmqcUxddI6gwONGAQGUg3HeR7nUi9SPSLRaahbdKWPY72jQQUfh9DvsPvVFRPorkD9PoQ4wdnM1OHhVl75pbxa68zDPffbogZnTEcmsd307ukADTJud6Wvc2eFDFGg987pNbK3L5aeGDZUMcDSLrg9J6iAr88RvPuOiqmSu2bIy0xNAwmCjcLvfUi0sgtBfXmrajE4/06r9OLaTx6Y/QAZcBMj8+NhHEILNHELUO48nLBqO5n44+aBbJgqdTEoxCQgxHzbDRkG8LaBER1ihfVGiN/7YPsd/pmpuyAxScJ7QwOO2+QVZTA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=XGROMFgY2/LtyNCc4I2UJr0p9UOCroE+iOx8LJU95LE=;
+ b=AngqzC+1hA/4Yfc/C/Oi6pu79a8c/XOYquXArhu1Xi0dSXwkdyQ3wSfbY00r6WCxmyhrBnW9z6lACnBe//gsyLhT16CYeidr7MxzafUnK9tQ1N7RxhpPNzyrs/UA/w7ZUuly32jAQEx9a+zCDZ7NdUDzuuB52cCA5c3QxVZRtgzwnRqean0LD+wVEgmH7rjmWDmfPKBfEAuBJ0uz8D9wPy8CLR7BYkgdhBwbjDUVV/jcZqeo/I2FvRONTls9iK7XwETIYn4EIcCrxOrKQOW0B3yoAmGuDktHyeBbGyL+cWxCnv8GkipAjoyiqfTy4+D5n0iSPQAhwFsTlvvEPc8K0g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=XGROMFgY2/LtyNCc4I2UJr0p9UOCroE+iOx8LJU95LE=;
+ b=YkErW4wMvn6ARCdnLC2mxbVJLUJL/PVcLRhLEfQzhistODU+Ckq/28mPo6kKbxKwjyT3QT2U7sg5pCZC1rEbevVPbeqpQRpjvjY14SnuuS1g450RNFWti4aksIxIoRwMA/0/B4CaZzj5cM4DnwxQCmcNb4/p79q3jqxtSwqlvghzjOHSoNVu8ECcMEZJF+RG0FSTiFQMeQEDhbqHxmnLUS8OUvOIt2SpoHfkbNjvGGj/DRaKBwCPvq43vhbi39P+GwluoWpUFza6cd2ExzspaFTxS8ruxl/LKcDzqg2bNh8r9Cwsw/0tUztte6ljlGC/krl62oQvL/SY158WtybAuw==
+Received: from DM4PR12MB5769.namprd12.prod.outlook.com (2603:10b6:8:60::6) by
+ BL0PR12MB4738.namprd12.prod.outlook.com (2603:10b6:208:8e::13) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5017.22; Wed, 23 Feb 2022 03:01:52 +0000
+Received: from DM4PR12MB5769.namprd12.prod.outlook.com
+ ([fe80::d91c:c44d:f621:18b6]) by DM4PR12MB5769.namprd12.prod.outlook.com
+ ([fe80::d91c:c44d:f621:18b6%3]) with mapi id 15.20.4995.027; Wed, 23 Feb 2022
+ 03:01:52 +0000
+From:   Krishna Yarlagadda <kyarlagadda@nvidia.com>
+To:     Rob Herring <robh@kernel.org>
+CC:     "broonie@kernel.org" <broonie@kernel.org>,
+        "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
+        Sowjanya Komatineni <skomatineni@nvidia.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>
+Subject: RE: [PATCH v2 2/5] dt-bindings: spi: Tegra234 QUAD SPI compatible
+Thread-Topic: [PATCH v2 2/5] dt-bindings: spi: Tegra234 QUAD SPI compatible
+Thread-Index: AQHYKBWYtWPHAOm4hUqZVqh+BMWsdqygBPuAgABtiCA=
+Date:   Wed, 23 Feb 2022 03:01:52 +0000
+Message-ID: <DM4PR12MB57695126D8BF37F74E98DB42C33C9@DM4PR12MB5769.namprd12.prod.outlook.com>
+References: <20220222175611.58051-1-kyarlagadda@nvidia.com>
+ <20220222175611.58051-3-kyarlagadda@nvidia.com>
+ <YhVHIVJlCwhbVAH7@robh.at.kernel.org>
+In-Reply-To: <YhVHIVJlCwhbVAH7@robh.at.kernel.org>
+Accept-Language: en-IN, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: b8a1dfe9-08b9-49fc-41ea-08d9f678d7d4
+x-ms-traffictypediagnostic: BL0PR12MB4738:EE_
+x-microsoft-antispam-prvs: <BL0PR12MB4738CEF605D207725B27BC34C33C9@BL0PR12MB4738.namprd12.prod.outlook.com>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: XfzUieZQ5ZfSTpf8zB+puaMvFC0KryfR47VuP/NH0lLJd1JrmauVecwm+akjo+zTryv1TZYetnfXGZ6NqIaQSGX0pPA5hST4DWyMUgNT5CbnKsSqpCzwNFn5yvVzQm4H4IuiLMU6uhLjYBUqk8s7p508x042zj9tQxuiLIdHs6X4WlxCaVWGvrsJCziNUIvsXJ69DnY1btF956xAJkHW6D28G5hOIaeBuyBmlIbRGeh+ZAqn+AC9N4Big7sRb9PuYExgef6W8rKJMYxhk3ltW2FcbVj4UEhF+sVgUxQBSXIsMZ8obijKSzMBpFIGFCeo1ksJRT7iBRlq4ZUqsgbbeqdk8+a5hIfxMQV9dOyXZ58ix6K8iw5qVEIqSy2oP8k87hKKqF7Nn2fq7rEm5xutg9aACl/EIRLYlEb3YV1XXoTVRMI8CqplfGUD8+KDyB0YcG0skWNMfr4CqNt2Mn82JCO3JF8AYHju/WK9FWqQ5XVg/DkjKM+pVYrG5GA2RzjQHg55C2lKq1vjMEGRfMMl1gxbHS+3Kg82UwMRNVNdXSBLVqMoz7zgjaRKAGB8h/pPnKmaM/FFJh64C+AAEtm2lgH7E7Co8YEzT3Cwre+LY9RpJJNdIG6r4U8abn7ONVyIeL3KExSJ56a4A84/0GpMJVDNKUJ40raOyfmZH5q470lfPOR4U6RHFYZb+qd/xOTd7StD4TcLTwfiwJxK+PrrXQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB5769.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(508600001)(122000001)(7696005)(316002)(6506007)(71200400001)(86362001)(33656002)(38100700002)(26005)(9686003)(83380400001)(53546011)(55236004)(54906003)(6916009)(186003)(66946007)(66476007)(55016003)(66446008)(76116006)(8936002)(5660300002)(64756008)(66556008)(8676002)(52536014)(4326008)(38070700005)(2906002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?ZNCWH3zohUY8pPZ3lkhU/OnFMRw53f5GkH8AplKoNj71yujqrESj2E5pHuc5?=
+ =?us-ascii?Q?Glw2Fa3F9AaZoHcCYZxHVlR2m3NIlcw+EayzxX/G0yZhydRCTt8sNrIzohdU?=
+ =?us-ascii?Q?eHlcJbNwtTaK3P/aGYJrTVrDC+A7mxHsaRCU3qo8r1qXc0+SJ848j4Ar/Juk?=
+ =?us-ascii?Q?11z76SHJPe6plmAjKgp0ajggTpyH3gwKhXwYeI6vD1iq+uq+cUQJSkWDbAtP?=
+ =?us-ascii?Q?JWBQJribbAWrw96jlZG5rC4jQ+v6bNZV+3uN6lVVqhr3caN1vcq4RTWcSrN9?=
+ =?us-ascii?Q?oZnkYvKzQuocdafZin3aKZ494+hxIj0nfS/Z4bqEP9kBk9zLUx2v/RoR43l2?=
+ =?us-ascii?Q?lp2p3fHmelmpQqBl6Z1tCYF2o2Unw/NwL20AVnNdt4v2DxanfbtMf+X/UQgO?=
+ =?us-ascii?Q?VP3jXUTzVWXlhm7L+8bICSf1wJ6oF4i23IYnlu2Wfmti8EXjyJNpOvEQhTsb?=
+ =?us-ascii?Q?E10tV88Bez55ciMiSZQpTit4f5htjh+v0PCOLe6m30/Wc6f2sJpGsHEXdifc?=
+ =?us-ascii?Q?joeKfIMn4lZfzzuZ/pxyWpCOy2daQuKyxq4cdcLWea5vpIiQh9sHXM5LR9Qy?=
+ =?us-ascii?Q?nNicgkifMo4iZS4/h83SXflFaUhGR7zKBcXBvkhD/gxcaJ5lh1sVyqtPw81q?=
+ =?us-ascii?Q?oYsx+zyxnenql5hk2W1vUvgwSWhU2vxqnF9IbVCO+cA9HpUD9UpOUGaCe5Rp?=
+ =?us-ascii?Q?oT0PkVb4cwFaV3+5VtnDnGXR/OhRX4AtzFuCnjnt6hWNnI0+mF798Q72mTvq?=
+ =?us-ascii?Q?aZeTLGb46L5XDf/Ffa+Tk9qDbincDwu1C7ykbUVcN0M1pWRC2N3BLCx1rF90?=
+ =?us-ascii?Q?/6Vyv2rQm3HUz785WfWrukXhANAaqb9MkAWsB9PblGykp65Z/EY9Mjel48Xz?=
+ =?us-ascii?Q?edmjvgG1vr1QgjLLnQRg2wjVxrYLYHcq0H9v/Yss99JmVO2jKgHqpNP7GtSg?=
+ =?us-ascii?Q?0xG/s/qFvZq/nKBloZ9jULaU3pLlQsYDkjls3/bti1dabc+40qa4Iou0yQL/?=
+ =?us-ascii?Q?X+z1ee7UNBkefmEpbF2YIXVpDkrnSOBWkbi+tWZeNdIQqC/oobQ/WTORbkwN?=
+ =?us-ascii?Q?k4EqIAw9sM3/e1fMLa6XieCTCfjjgPFRGb+rZ5bQJjGJ7yuCDiCj6yvkqc/l?=
+ =?us-ascii?Q?6uSkyYYwKYZXfwk9e0vlhtyULBnhWo2chOHV/yawe6rwPZzD7YuBPV8wtxxW?=
+ =?us-ascii?Q?9Z5VLkHLtNIeIDVBcd5HEhryKiAKFj3Jre3TIaY1/QgVBBTfuZHyv/b8tB0X?=
+ =?us-ascii?Q?bt37oWZr6jNd3YcaqYDxLhsQz4OC7fZm8Myg1an5zBd0/wjY554WmZSYRWTg?=
+ =?us-ascii?Q?0os6YZxAkOs5kpZLpaIAqRpK3jEKUWzb+80ikMINCbNa+2UZWstMxnNQQI/r?=
+ =?us-ascii?Q?UQRZxL/XiLP8HSy56NiTvHSBdxCi60ZVs0dhmBQV/cqmjKbBikX0SyLExSrm?=
+ =?us-ascii?Q?oR2SPpNe7oYhhy+OZ9VZiQyxGafHTBSyLF5QZn5OBWKu7Y0ODiu1HBHDmBta?=
+ =?us-ascii?Q?kbR8TVkqZPBnsFe9X11lZMhFx2rrk93OyGy4SGATIJBaJ64HE+/XKyoAwzWx?=
+ =?us-ascii?Q?BKA0/advoE1bQRI8hiLWHHQuZSgWDyzFpBgtG37I4LJWh4wOy1PBOBklpGWq?=
+ =?us-ascii?Q?hy2wFcGSYgw6bEpBDeR4/k0=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,UPPERCASE_50_75
-        autolearn=no autolearn_force=no version=3.4.6
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB5769.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b8a1dfe9-08b9-49fc-41ea-08d9f678d7d4
+X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Feb 2022 03:01:52.6218
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: LFTMaknjrkGFUBKU1Rt5UBpDHTl2x6qqcUbQaivweQrLTph7rrDDiUke0sHE2WNsUDhO7jsJiG+eclqQuIhSjg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR12MB4738
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yongqiang Niu <yongqiang.niu@mediatek.com>
 
-Add gce header file to define the gce subsys id, hardware event id and
-constant for mt8186.
 
-Signed-off-by: Yongqiang Niu <yongqiang.niu@mediatek.com>
----
- include/dt-bindings/gce/mt8186-gce.h | 421 +++++++++++++++++++++++++++
- 1 file changed, 421 insertions(+)
- create mode 100644 include/dt-bindings/gce/mt8186-gce.h
+Regards
+KY
 
-diff --git a/include/dt-bindings/gce/mt8186-gce.h b/include/dt-bindings/gce/mt8186-gce.h
-new file mode 100644
-index 000000000000..f12e3cb586ce
---- /dev/null
-+++ b/include/dt-bindings/gce/mt8186-gce.h
-@@ -0,0 +1,421 @@
-+/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
-+/*
-+ * Copyright (C) 2022 MediaTek Inc.
-+ * Author: Yongqiang Niu <yongqiang.niu@mediatek.com>
-+ */
-+
-+#ifndef _DT_BINDINGS_GCE_MT8186_H
-+#define _DT_BINDINGS_GCE_MT8186_H
-+
-+/* assign timeout 0 also means default */
-+#define CMDQ_NO_TIMEOUT		0xffffffff
-+#define CMDQ_TIMEOUT_DEFAULT	1000
-+
-+/* GCE thread priority */
-+#define CMDQ_THR_PRIO_LOWEST	0
-+#define CMDQ_THR_PRIO_1		1
-+#define CMDQ_THR_PRIO_2		2
-+#define CMDQ_THR_PRIO_3		3
-+#define CMDQ_THR_PRIO_4		4
-+#define CMDQ_THR_PRIO_5		5
-+#define CMDQ_THR_PRIO_6		6
-+#define CMDQ_THR_PRIO_HIGHEST	7
-+
-+/* CPR count in 32bit register */
-+#define GCE_CPR_COUNT		1312
-+
-+/* GCE subsys table */
-+#define SUBSYS_1300XXXX		0
-+#define SUBSYS_1400XXXX		1
-+#define SUBSYS_1401XXXX		2
-+#define SUBSYS_1402XXXX		3
-+#define SUBSYS_1502XXXX		4
-+#define SUBSYS_1582XXXX		5
-+#define SUBSYS_1B00XXXX		6
-+#define SUBSYS_1C00XXXX		7
-+#define SUBSYS_1C10XXXX		8
-+#define SUBSYS_1000XXXX		9
-+#define SUBSYS_1001XXXX		10
-+#define SUBSYS_1020XXXX		11
-+#define SUBSYS_1021XXXX		12
-+#define SUBSYS_1022XXXX		13
-+#define SUBSYS_1023XXXX		14
-+#define SUBSYS_1060XXXX		15
-+#define SUBSYS_1602XXXX		16
-+#define SUBSYS_1608XXXX		17
-+#define SUBSYS_1700XXXX		18
-+#define SUBSYS_1701XXXX		19
-+#define SUBSYS_1702XXXX		20
-+#define SUBSYS_1703XXXX		21
-+#define SUBSYS_1706XXXX		22
-+#define SUBSYS_1A00XXXX		23
-+#define SUBSYS_1A01XXXX		24
-+#define SUBSYS_1A02XXXX		25
-+#define SUBSYS_1A03XXXX		26
-+#define SUBSYS_1A04XXXX		27
-+#define SUBSYS_1A05XXXX		28
-+#define SUBSYS_1A06XXXX		29
-+#define SUBSYS_NO_SUPPORT	99
-+
-+/* GCE General Purpose Register (GPR) support
-+ * Leave note for scenario usage here
-+ */
-+/* GCE: write mask */
-+#define GCE_GPR_R00		0x00
-+#define GCE_GPR_R01		0x01
-+/* MDP: P1: JPEG dest */
-+#define GCE_GPR_R02		0x02
-+#define GCE_GPR_R03		0x03
-+/* MDP: PQ color */
-+#define GCE_GPR_R04		0x04
-+/* MDP: 2D sharpness */
-+#define GCE_GPR_R05		0x05
-+/* DISP: poll esd */
-+#define GCE_GPR_R06		0x06
-+#define GCE_GPR_R07		0x07
-+/* MDP: P4: 2D sharpness dst */
-+#define GCE_GPR_R08		0x08
-+#define GCE_GPR_R09		0x09
-+/* VCU: poll with timeout for GPR timer */
-+#define GCE_GPR_R10		0x0A
-+#define GCE_GPR_R11		0x0B
-+/* CMDQ: debug */
-+#define GCE_GPR_R12		0x0C
-+#define GCE_GPR_R13		0x0D
-+/* CMDQ: P7: debug */
-+#define GCE_GPR_R14		0x0E
-+#define GCE_GPR_R15		0x0F
-+
-+/* GCE hardware events */
-+/* VDEC */
-+#define CMDQ_EVENT_LINE_COUNT_THRESHOLD_INTERRUPT	0
-+#define CMDQ_EVENT_VDEC_INT				1
-+#define CMDQ_EVENT_VDEC_PAUSE				2
-+#define CMDQ_EVENT_VDEC_DEC_ERROR			3
-+#define CMDQ_EVENT_MDEC_TIMEOUT				4
-+#define CMDQ_EVENT_DRAM_ACCESS_DONE			5
-+#define CMDQ_EVENT_INI_FETCH_RDY			6
-+#define CMDQ_EVENT_PROCESS_FLAG				7
-+#define CMDQ_EVENT_SEARCH_START_CODE_DONE		8
-+#define CMDQ_EVENT_REF_REORDER_DONE			9
-+#define CMDQ_EVENT_WP_TBLE_DONE				10
-+#define CMDQ_EVENT_COUNT_SRAM_CLR_DONE			11
-+#define CMDQ_EVENT_GCE_CNT_OP_THRESHOLD			15
-+#define CMDQ_EVENT_VDEC_MINI_MDP_EVENT_0		16
-+#define CMDQ_EVENT_VDEC_MINI_MDP_EVENT_1		17
-+#define CMDQ_EVENT_VDEC_MINI_MDP_EVENT_2		18
-+#define CMDQ_EVENT_VDEC_MINI_MDP_EVENT_3		19
-+#define CMDQ_EVENT_VDEC_MINI_MDP_EVENT_4		20
-+#define CMDQ_EVENT_VDEC_MINI_MDP_EVENT_5		21
-+#define CMDQ_EVENT_VDEC_MINI_MDP_EVENT_6		22
-+#define CMDQ_EVENT_VDEC_MINI_MDP_EVENT_7		23
-+#define CMDQ_EVENT_VDEC_MINI_MDP_EVENT_8		24
-+#define CMDQ_EVENT_VDEC_MINI_MDP_EVENT_9		25
-+#define CMDQ_EVENT_VDEC_MINI_MDP_EVENT_10		26
-+#define CMDQ_EVENT_VDEC_MINI_MDP_EVENT_11		27
-+#define CMDQ_EVENT_VDEC_MINI_MDP_EVENT_12		28
-+#define CMDQ_EVENT_VDEC_MINI_MDP_EVENT_13		29
-+#define CMDQ_EVENT_VDEC_MINI_MDP_EVENT_14		30
-+#define CMDQ_EVENT_VDEC_MINI_MDP_EVENT_15		31
-+#define CMDQ_EVENT_WPE_GCE_FRAME_DONE			32
-+
-+/* CAM */
-+#define CMDQ_EVENT_ISP_FRAME_DONE_A			65
-+#define CMDQ_EVENT_ISP_FRAME_DONE_B			66
-+#define CMDQ_EVENT_CAMSV1_PASS1_DONE			70
-+#define CMDQ_EVENT_CAMSV2_PASS1_DONE			71
-+#define CMDQ_EVENT_CAMSV3_PASS1_DONE			72
-+#define CMDQ_EVENT_MRAW_0_PASS1_DONE			73
-+#define CMDQ_EVENT_SENINF_CAM0_FIFO_FULL		75
-+#define CMDQ_EVENT_SENINF_CAM1_FIFO_FULL		76
-+#define CMDQ_EVENT_SENINF_CAM2_FIFO_FULL		77
-+#define CMDQ_EVENT_SENINF_CAM3_FIFO_FULL		78
-+#define CMDQ_EVENT_SENINF_CAM4_FIFO_FULL		79
-+#define CMDQ_EVENT_SENINF_CAM5_FIFO_FULL		80
-+#define CMDQ_EVENT_SENINF_CAM6_FIFO_FULL		81
-+#define CMDQ_EVENT_SENINF_CAM7_FIFO_FULL		82
-+#define CMDQ_EVENT_SENINF_CAM8_FIFO_FULL		83
-+#define CMDQ_EVENT_SENINF_CAM9_FIFO_FULL		84
-+#define CMDQ_EVENT_SENINF_CAM10_FIFO_FULL		85
-+#define CMDQ_EVENT_SENINF_CAM11_FIFO_FULL		86
-+#define CMDQ_EVENT_SENINF_CAM12_FIFO_FULL		87
-+#define CMDQ_EVENT_TG_OVRUN_A_INT			88
-+#define CMDQ_EVENT_DMA_R1_ERROR_A_INT			89
-+#define CMDQ_EVENT_TG_OVRUN_B_INT			90
-+#define CMDQ_EVENT_DMA_R1_ERROR_B_INT			91
-+#define CMDQ_EVENT_TG_OVRUN_M0_INT			94
-+#define CMDQ_EVENT_R1_ERROR_M0_INT			95
-+#define CMDQ_EVENT_TG_GRABERR_M0_INT			96
-+#define CMDQ_EVENT_TG_GRABERR_A_INT			98
-+#define CMDQ_EVENT_CQ_VR_SNAP_A_INT			99
-+#define CMDQ_EVENT_TG_GRABERR_B_INT			100
-+#define CMDQ_EVENT_CQ_VR_SNAP_B_INT			101
-+/* VENC */
-+#define CMDQ_EVENT_VENC_CMDQ_FRAME_DONE			129
-+#define CMDQ_EVENT_VENC_CMDQ_PAUSE_DONE			130
-+#define CMDQ_EVENT_JPGENC_CMDQ_DONE			131
-+#define CMDQ_EVENT_VENC_CMDQ_MB_DONE			132
-+#define CMDQ_EVENT_VENC_CMDQ_128BYTE_CNT_DONE		133
-+#define CMDQ_EVENT_VENC_CMDQ_PPS_DONE			136
-+#define CMDQ_EVENT_VENC_CMDQ_SPS_DONE			137
-+#define CMDQ_EVENT_VENC_CMDQ_VPS_DONE			138
-+/* IPE */
-+#define CMDQ_EVENT_FDVT_DONE				161
-+#define CMDQ_EVENT_FE_DONE				162
-+#define CMDQ_EVENT_RSC_DONE				163
-+#define CMDQ_EVENT_DVS_DONE_ASYNC_SHOT			164
-+#define CMDQ_EVENT_DVP_DONE_ASYNC_SHOT			165
-+/* IMG2 */
-+#define CMDQ_EVENT_GCE_IMG2_EVENT0			193
-+#define CMDQ_EVENT_GCE_IMG2_EVENT1			194
-+#define CMDQ_EVENT_GCE_IMG2_EVENT2			195
-+#define CMDQ_EVENT_GCE_IMG2_EVENT3			196
-+#define CMDQ_EVENT_GCE_IMG2_EVENT4			197
-+#define CMDQ_EVENT_GCE_IMG2_EVENT5			198
-+#define CMDQ_EVENT_GCE_IMG2_EVENT6			199
-+#define CMDQ_EVENT_GCE_IMG2_EVENT7			200
-+#define CMDQ_EVENT_GCE_IMG2_EVENT8			201
-+#define CMDQ_EVENT_GCE_IMG2_EVENT9			202
-+#define CMDQ_EVENT_GCE_IMG2_EVENT10			203
-+#define CMDQ_EVENT_GCE_IMG2_EVENT11			204
-+#define CMDQ_EVENT_GCE_IMG2_EVENT12			205
-+#define CMDQ_EVENT_GCE_IMG2_EVENT13			206
-+#define CMDQ_EVENT_GCE_IMG2_EVENT14			207
-+#define CMDQ_EVENT_GCE_IMG2_EVENT15			208
-+#define CMDQ_EVENT_GCE_IMG2_EVENT16			209
-+#define CMDQ_EVENT_GCE_IMG2_EVENT17			210
-+#define CMDQ_EVENT_GCE_IMG2_EVENT18			211
-+#define CMDQ_EVENT_GCE_IMG2_EVENT19			212
-+#define CMDQ_EVENT_GCE_IMG2_EVENT20			213
-+#define CMDQ_EVENT_GCE_IMG2_EVENT21			214
-+#define CMDQ_EVENT_GCE_IMG2_EVENT22			215
-+#define CMDQ_EVENT_GCE_IMG2_EVENT23			216
-+/* IMG1 */
-+#define CMDQ_EVENT_GCE_IMG1_EVENT0			225
-+#define CMDQ_EVENT_GCE_IMG1_EVENT1			226
-+#define CMDQ_EVENT_GCE_IMG1_EVENT2			227
-+#define CMDQ_EVENT_GCE_IMG1_EVENT3			228
-+#define CMDQ_EVENT_GCE_IMG1_EVENT4			229
-+#define CMDQ_EVENT_GCE_IMG1_EVENT5			230
-+#define CMDQ_EVENT_GCE_IMG1_EVENT6			231
-+#define CMDQ_EVENT_GCE_IMG1_EVENT7			232
-+#define CMDQ_EVENT_GCE_IMG1_EVENT8			233
-+#define CMDQ_EVENT_GCE_IMG1_EVENT9			234
-+#define CMDQ_EVENT_GCE_IMG1_EVENT10			235
-+#define CMDQ_EVENT_GCE_IMG1_EVENT11			236
-+#define CMDQ_EVENT_GCE_IMG1_EVENT12			237
-+#define CMDQ_EVENT_GCE_IMG1_EVENT13			238
-+#define CMDQ_EVENT_GCE_IMG1_EVENT14			239
-+#define CMDQ_EVENT_GCE_IMG1_EVENT15			240
-+#define CMDQ_EVENT_GCE_IMG1_EVENT16			241
-+#define CMDQ_EVENT_GCE_IMG1_EVENT17			242
-+#define CMDQ_EVENT_GCE_IMG1_EVENT18			243
-+#define CMDQ_EVENT_GCE_IMG1_EVENT19			244
-+#define CMDQ_EVENT_GCE_IMG1_EVENT20			245
-+#define CMDQ_EVENT_GCE_IMG1_EVENT21			246
-+#define CMDQ_EVENT_GCE_IMG1_EVENT22			247
-+#define CMDQ_EVENT_GCE_IMG1_EVENT23			248
-+/* MDP */
-+#define CMDQ_EVENT_MDP_RDMA0_SOF			256
-+#define CMDQ_EVENT_MDP_RDMA1_SOF			257
-+#define CMDQ_EVENT_MDP_AAL0_SOF				258
-+#define CMDQ_EVENT_MDP_AAL1_SOF				259
-+#define CMDQ_EVENT_MDP_HDR0_SOF				260
-+#define CMDQ_EVENT_MDP_RSZ0_SOF				261
-+#define CMDQ_EVENT_MDP_RSZ1_SOF				262
-+#define CMDQ_EVENT_MDP_WROT0_SOF			263
-+#define CMDQ_EVENT_MDP_WROT1_SOF			264
-+#define CMDQ_EVENT_MDP_TDSHP0_SOF			265
-+#define CMDQ_EVENT_MDP_TDSHP1_SOF			266
-+#define CMDQ_EVENT_IMG_DL_RELAY0_SOF			267
-+#define CMDQ_EVENT_IMG_DL_RELAY1_SOF			268
-+#define CMDQ_EVENT_MDP_COLOR0_SOF			269
-+#define CMDQ_EVENT_MDP_WROT3_FRAME_DONE			288
-+#define CMDQ_EVENT_MDP_WROT2_FRAME_DONE			289
-+#define CMDQ_EVENT_MDP_WROT1_FRAME_DONE			290
-+#define CMDQ_EVENT_MDP_WROT0_FRAME_DONE			291
-+#define CMDQ_EVENT_MDP_TDSHP3_FRAME_DONE		292
-+#define CMDQ_EVENT_MDP_TDSHP2_FRAME_DONE		293
-+#define CMDQ_EVENT_MDP_TDSHP1_FRAME_DONE		294
-+#define CMDQ_EVENT_MDP_TDSHP0_FRAME_DONE		295
-+#define CMDQ_EVENT_MDP_RSZ3_FRAME_DONE			296
-+#define CMDQ_EVENT_MDP_RSZ2_FRAME_DONE			297
-+#define CMDQ_EVENT_MDP_RSZ1_FRAME_DONE			298
-+#define CMDQ_EVENT_MDP_RSZ0_FRAME_DONE			299
-+#define CMDQ_EVENT_MDP_RDMA3_FRAME_DONE			300
-+#define CMDQ_EVENT_MDP_RDMA2_FRAME_DONE			301
-+#define CMDQ_EVENT_MDP_RDMA1_FRAME_DONE			302
-+#define CMDQ_EVENT_MDP_RDMA0_FRAME_DONE			303
-+#define CMDQ_EVENT_MDP_HDR1_FRAME_DONE			304
-+#define CMDQ_EVENT_MDP_HDR0_FRAME_DONE			305
-+#define CMDQ_EVENT_MDP_COLOR0_FRAME_DONE		306
-+#define CMDQ_EVENT_MDP_AAL3_FRAME_DONE			307
-+#define CMDQ_EVENT_MDP_AAL2_FRAME_DONE			308
-+#define CMDQ_EVENT_MDP_AAL1_FRAME_DONE			309
-+#define CMDQ_EVENT_MDP_AAL0_FRAME_DONE			310
-+#define CMDQ_EVENT_MDP_STREAM_DONE_ENG_EVENT_0		320
-+#define CMDQ_EVENT_MDP_STREAM_DONE_ENG_EVENT_1		321
-+#define CMDQ_EVENT_MDP_STREAM_DONE_ENG_EVENT_2		322
-+#define CMDQ_EVENT_MDP_STREAM_DONE_ENG_EVENT_3		323
-+#define CMDQ_EVENT_MDP_STREAM_DONE_ENG_EVENT_4		324
-+#define CMDQ_EVENT_MDP_STREAM_DONE_ENG_EVENT_5		325
-+#define CMDQ_EVENT_MDP_STREAM_DONE_ENG_EVENT_6		326
-+#define CMDQ_EVENT_MDP_STREAM_DONE_ENG_EVENT_7		327
-+#define CMDQ_EVENT_MDP_STREAM_DONE_ENG_EVENT_8		328
-+#define CMDQ_EVENT_MDP_STREAM_DONE_ENG_EVENT_9		329
-+#define CMDQ_EVENT_MDP_STREAM_DONE_ENG_EVENT_10		330
-+#define CMDQ_EVENT_MDP_STREAM_DONE_ENG_EVENT_11		331
-+#define CMDQ_EVENT_MDP_STREAM_DONE_ENG_EVENT_12		332
-+#define CMDQ_EVENT_MDP_STREAM_DONE_ENG_EVENT_13		333
-+#define CMDQ_EVENT_MDP_STREAM_DONE_ENG_EVENT_14		334
-+#define CMDQ_EVENT_MDP_STREAM_DONE_ENG_EVENT_15		335
-+#define CMDQ_EVENT_MDP_WROT3_SW_RST_DONE_ENG_EVENT	336
-+#define CMDQ_EVENT_MDP_WROT2_SW_RST_DONE_ENG_EVENT	337
-+#define CMDQ_EVENT_MDP_WROT1_SW_RST_DONE_ENG_EVENT	338
-+#define CMDQ_EVENT_MDP_WROT0_SW_RST_DONE_ENG_EVENT	339
-+#define CMDQ_EVENT_MDP_RDMA3_SW_RST_DONE_ENG_EVENT	340
-+#define CMDQ_EVENT_MDP_RDMA2_SW_RST_DONE_ENG_EVENT	341
-+#define CMDQ_EVENT_MDP_RDMA1_SW_RST_DONE_ENG_EVENT	342
-+#define CMDQ_EVENT_MDP_RDMA0_SW_RST_DONE_ENG_EVENT	343
-+/* DISP */
-+#define CMDQ_EVENT_DISP_OVL0_SOF			384
-+#define CMDQ_EVENT_DISP_OVL0_2L_SOF			385
-+#define CMDQ_EVENT_DISP_RDMA0_SOF			386
-+#define CMDQ_EVENT_DISP_RSZ0_SOF			387
-+#define CMDQ_EVENT_DISP_COLOR0_SOF			388
-+#define CMDQ_EVENT_DISP_CCORR0_SOF			389
-+#define CMDQ_EVENT_DISP_CCORR1_SOF			390
-+#define CMDQ_EVENT_DISP_AAL0_SOF			391
-+#define CMDQ_EVENT_DISP_GAMMA0_SOF			392
-+#define CMDQ_EVENT_DISP_POSTMASK0_SOF			393
-+#define CMDQ_EVENT_DISP_DITHER0_SOF			394
-+#define CMDQ_EVENT_DISP_CM0_SOF				395
-+#define CMDQ_EVENT_DISP_SPR0_SOF			396
-+#define CMDQ_EVENT_DISP_DSC_WRAP0_SOF			397
-+#define CMDQ_EVENT_DSI0_SOF				398
-+#define CMDQ_EVENT_DISP_WDMA0_SOF			399
-+#define CMDQ_EVENT_DISP_PWM0_SOF			400
-+#define CMDQ_EVENT_DSI0_FRAME_DONE			410
-+#define CMDQ_EVENT_DISP_WDMA0_FRAME_DONE		411
-+#define CMDQ_EVENT_DISP_SPR0_FRAME_DONE			412
-+#define CMDQ_EVENT_DISP_RSZ0_FRAME_DONE			413
-+#define CMDQ_EVENT_DISP_RDMA0_FRAME_DONE		414
-+#define CMDQ_EVENT_DISP_POSTMASK0_FRAME_DONE		415
-+#define CMDQ_EVENT_DISP_OVL0_FRAME_DONE			416
-+#define CMDQ_EVENT_DISP_OVL0_2L_FRAME_DONE		417
-+#define CMDQ_EVENT_DISP_GAMMA0_FRAME_DONE		418
-+#define CMDQ_EVENT_DISP_DSC_WRAP0_CORE0_FRAME_DONE	420
-+#define CMDQ_EVENT_DISP_DITHER0_FRAME_DONE		421
-+#define CMDQ_EVENT_DISP_COLOR0_FRAME_DONE		422
-+#define CMDQ_EVENT_DISP_CM0_FRAME_DONE			423
-+#define CMDQ_EVENT_DISP_CCORR1_FRAME_DONE		424
-+#define CMDQ_EVENT_DISP_CCORR0_FRAME_DONE		425
-+#define CMDQ_EVENT_DISP_AAL0_FRAME_DONE			426
-+#define CMDQ_EVENT_DISP_STREAM_DONE_ENG_EVENT_0		434
-+#define CMDQ_EVENT_DISP_STREAM_DONE_ENG_EVENT_1		435
-+#define CMDQ_EVENT_DISP_STREAM_DONE_ENG_EVENT_2		436
-+#define CMDQ_EVENT_DISP_STREAM_DONE_ENG_EVENT_3		437
-+#define CMDQ_EVENT_DISP_STREAM_DONE_ENG_EVENT_4		438
-+#define CMDQ_EVENT_DISP_STREAM_DONE_ENG_EVENT_5		439
-+#define CMDQ_EVENT_DISP_STREAM_DONE_ENG_EVENT_6		440
-+#define CMDQ_EVENT_DISP_STREAM_DONE_ENG_EVENT_7		441
-+#define CMDQ_EVENT_DISP_STREAM_DONE_ENG_EVENT_8		442
-+#define CMDQ_EVENT_DISP_STREAM_DONE_ENG_EVENT_9		443
-+#define CMDQ_EVENT_DISP_STREAM_DONE_ENG_EVENT_10	444
-+#define CMDQ_EVENT_DISP_STREAM_DONE_ENG_EVENT_11	445
-+#define CMDQ_EVENT_DISP_STREAM_DONE_ENG_EVENT_12	446
-+#define CMDQ_EVENT_DISP_STREAM_DONE_ENG_EVENT_13	447
-+#define CMDQ_EVENT_DISP_STREAM_DONE_ENG_EVENT_14	448
-+#define CMDQ_EVENT_DISP_STREAM_DONE_ENG_EVENT_15	449
-+#define CMDQ_EVENT_DSI0_TE_ENG_EVENT			450
-+#define CMDQ_EVENT_DSI0_IRQ_ENG_EVENT			451
-+#define CMDQ_EVENT_DSI0_DONE_ENG_EVENT			452
-+#define CMDQ_EVENT_DISP_WDMA0_SW_RST_DONE_ENG_EVENT	453
-+#define CMDQ_EVENT_DISP_SMIASSERT_ENG_EVENT		454
-+#define CMDQ_EVENT_DISP_POSTMASK0_RST_DONE_ENG_EVENT	455
-+#define CMDQ_EVENT_DISP_OVL0_RST_DONE_ENG_EVENT		456
-+#define CMDQ_EVENT_DISP_OVL0_2L_RST_DONE_ENG_EVENT	457
-+#define CMDQ_EVENT_BUF_UNDERRUN_ENG_EVENT_0		458
-+#define CMDQ_EVENT_BUF_UNDERRUN_ENG_EVENT_1		459
-+#define CMDQ_EVENT_BUF_UNDERRUN_ENG_EVENT_2		460
-+#define CMDQ_EVENT_BUF_UNDERRUN_ENG_EVENT_3		461
-+#define CMDQ_EVENT_BUF_UNDERRUN_ENG_EVENT_4		462
-+#define CMDQ_EVENT_BUF_UNDERRUN_ENG_EVENT_5		463
-+#define CMDQ_EVENT_BUF_UNDERRUN_ENG_EVENT_6		464
-+#define CMDQ_EVENT_BUF_UNDERRUN_ENG_EVENT_7		465
-+#define CMDQ_EVENT_OUT_EVENT_0				898
-+
-+/* CMDQ sw tokens
-+ * Following definitions are gce sw token which may use by clients
-+ * event operation API.
-+ * Note that token 512 to 639 may set secure
-+ */
-+
-+/* end of hw event and begin of sw token */
-+#define CMDQ_MAX_HW_EVENT				512
-+
-+/* Config thread notify trigger thread */
-+#define CMDQ_SYNC_TOKEN_CONFIG_DIRTY			640
-+/* Trigger thread notify config thread */
-+#define CMDQ_SYNC_TOKEN_STREAM_EOF			641
-+/* Block Trigger thread until the ESD check finishes. */
-+#define CMDQ_SYNC_TOKEN_ESD_EOF				642
-+#define CMDQ_SYNC_TOKEN_STREAM_BLOCK			643
-+/* check CABC setup finish */
-+#define CMDQ_SYNC_TOKEN_CABC_EOF			644
-+
-+/* Notify normal CMDQ there are some secure task done
-+ * MUST NOT CHANGE, this token sync with secure world
-+ */
-+#define CMDQ_SYNC_SECURE_THR_EOF			647
-+
-+/* CMDQ use sw token */
-+#define CMDQ_SYNC_TOKEN_USER_0				649
-+#define CMDQ_SYNC_TOKEN_USER_1				650
-+#define CMDQ_SYNC_TOKEN_POLL_MONITOR			651
-+#define CMDQ_SYNC_TOKEN_TPR_LOCK			652
-+
-+/* ISP sw token */
-+#define CMDQ_SYNC_TOKEN_MSS				665
-+#define CMDQ_SYNC_TOKEN_MSF				666
-+
-+/* DISP sw token */
-+#define CMDQ_SYNC_TOKEN_SODI				671
-+
-+/* GPR access tokens (for register backup)
-+ * There are 15 32-bit GPR, 3 GPR form a set
-+ * (64-bit for address, 32-bit for value)
-+ * MUST NOT CHANGE, these tokens sync with MDP
-+ */
-+#define CMDQ_SYNC_TOKEN_GPR_SET_0			700
-+#define CMDQ_SYNC_TOKEN_GPR_SET_1			701
-+#define CMDQ_SYNC_TOKEN_GPR_SET_2			702
-+#define CMDQ_SYNC_TOKEN_GPR_SET_3			703
-+#define CMDQ_SYNC_TOKEN_GPR_SET_4			704
-+
-+/* Resource lock event to control resource in GCE thread */
-+#define CMDQ_SYNC_RESOURCE_WROT0			710
-+#define CMDQ_SYNC_RESOURCE_WROT1			711
-+
-+/* event for gpr timer, used in sleep and poll with timeout */
-+#define CMDQ_TOKEN_GPR_TIMER_R0				994
-+#define CMDQ_TOKEN_GPR_TIMER_R1				995
-+#define CMDQ_TOKEN_GPR_TIMER_R2				996
-+#define CMDQ_TOKEN_GPR_TIMER_R3				997
-+#define CMDQ_TOKEN_GPR_TIMER_R4				998
-+#define CMDQ_TOKEN_GPR_TIMER_R5				999
-+#define CMDQ_TOKEN_GPR_TIMER_R6				1000
-+#define CMDQ_TOKEN_GPR_TIMER_R7				1001
-+#define CMDQ_TOKEN_GPR_TIMER_R8				1002
-+#define CMDQ_TOKEN_GPR_TIMER_R9				1003
-+#define CMDQ_TOKEN_GPR_TIMER_R10			1004
-+#define CMDQ_TOKEN_GPR_TIMER_R11			1005
-+#define CMDQ_TOKEN_GPR_TIMER_R12			1006
-+#define CMDQ_TOKEN_GPR_TIMER_R13			1007
-+#define CMDQ_TOKEN_GPR_TIMER_R14			1008
-+#define CMDQ_TOKEN_GPR_TIMER_R15			1009
-+
-+#define CMDQ_EVENT_MAX					0x3FF
-+/* CMDQ sw tokens END */
-+
-+#endif
--- 
-2.18.0
-
+> -----Original Message-----
+> From: Rob Herring <robh@kernel.org>
+> Sent: 23 February 2022 01:57
+> To: Krishna Yarlagadda <kyarlagadda@nvidia.com>
+> Cc: broonie@kernel.org; thierry.reding@gmail.com; Jonathan Hunter
+> <jonathanh@nvidia.com>; linux-spi@vger.kernel.org; linux-
+> tegra@vger.kernel.org; Sowjanya Komatineni
+> <skomatineni@nvidia.com>; Laxman Dewangan
+> <ldewangan@nvidia.com>; devicetree@vger.kernel.org; linux-
+> kernel@vger.kernel.org; p.zabel@pengutronix.de
+> Subject: Re: [PATCH v2 2/5] dt-bindings: spi: Tegra234 QUAD SPI
+> compatible
+>=20
+> External email: Use caution opening links or attachments
+>=20
+>=20
+> On Tue, Feb 22, 2022 at 11:26:08PM +0530, Krishna Yarlagadda wrote:
+> > Add compatible string for Tegra234 for Tegra QUAD SPI
+> >
+> > Signed-off-by: Krishna Yarlagadda <kyarlagadda@nvidia.com>
+> > ---
+> >  Documentation/devicetree/bindings/spi/nvidia,tegra210-quad.yaml
+> | 1 +
+> >  1 file changed, 1 insertion(+)
+>=20
+> Please add Acked-by/Reviewed-by tags when posting new versions.
+Sure. Will do that next time.
+> However, there's no need to repost patches *only* to add the tags.
+> The upstream maintainer will do that for acks received on the version
+> they apply.
+>=20
+I resent the patch as it was not clear to me if this patch can be applied.
+I received warning and assumed this cannot be applied without resend.
+-- This breaks an x86_64 allmodconfig build
+> If a tag was not added on purpose, please state why and what
+> changed.

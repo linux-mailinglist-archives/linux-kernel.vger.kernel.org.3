@@ -2,69 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD0EF4C0FC2
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 11:03:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AED14C0FCC
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 11:04:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239465AbiBWKD2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 05:03:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56914 "EHLO
+        id S239470AbiBWKEs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 05:04:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239453AbiBWKD0 (ORCPT
+        with ESMTP id S236443AbiBWKEp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 05:03:26 -0500
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C04048A339;
-        Wed, 23 Feb 2022 02:02:58 -0800 (PST)
-Received: by mail-wr1-x436.google.com with SMTP id q23so3935531wra.2;
-        Wed, 23 Feb 2022 02:02:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=SqAxPQEsa3A4xyob3zluFv3tjziMIdKJYPYJeW3AAL8=;
-        b=MBhdzcrVPaltuC7QO4FnB3SnkoeVXpFvLTouDASO7IzH2peZCz9lBAMGqOWde8Qh8D
-         kDOHiVkykGHwJ9ODUCowoUI5o8pHBoXYYTm8ATT3j0JUyxrqlLHIERCZnrLli6QX00Ow
-         ARevI9oTrw6Ql0amtIF96nKDvBQ9IRAHmr1mVVGh8IVL6kL5UvvSlCTqbxzYnSEZvw58
-         nc82P9ORs3OhQEn60SVYMaBi5QPQPP2fM2POKJutuOt+Y6q+71UeevbRXTpV3xLjaYIf
-         8XeNS0KGWZbwj0GuBmUdHJ/zi9K2C3BiL7MgnFzPYxm5wMxePOyJmfELVNujZYFKUQLE
-         R4Kw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=SqAxPQEsa3A4xyob3zluFv3tjziMIdKJYPYJeW3AAL8=;
-        b=ScmgGOwBvYXoVL39h/ShGnowRZTiOaJY0SwKnxsgOv9b5BbevCrE27kVqxJfIjDj39
-         CMdbXeqrHbXPqjtq2jhcAJd40aRNIXnSUvCs99GefckcDMzyZ6KfzDAMpehh7jJBaLzb
-         /7JXwIHN3qjYqMtVbZzmSwAcv3+hqfPgzzSvHgRbnMKpH34oTh4EyMzXX2ufX9tBkq9O
-         egP31AaZ6bE0LIyIu8EinBkk3wm5jN0ru/VHEaraVZo9jbKW3gUhQ1hqhp2Ik+VH/Bi9
-         y5ghCztTJMdFQXQuXUn5a8NY4UzLAp18fiXC9f8Px2zGxfYREAzYUrqoIomNZ5fvB9WQ
-         Sj2g==
-X-Gm-Message-State: AOAM531G+XWC+70xuJYtzo6TGHQn8+ecdT2QvQcbw8FfrXHJr4dpZxjT
-        Qix7PZUtGjtvZ3/ZI0e11mjzKTxs9q4=
-X-Google-Smtp-Source: ABdhPJyen0Gk7YkQnDQ//DA3TU+euR7cTv4E1ji+jT3VElJm06SuRDFWQiJ5DQuVZ8gyfFYvc+vmfg==
-X-Received: by 2002:a5d:47cc:0:b0:1e8:50e2:94cd with SMTP id o12-20020a5d47cc000000b001e850e294cdmr22222983wrc.34.1645610577241;
-        Wed, 23 Feb 2022 02:02:57 -0800 (PST)
-Received: from localhost.localdomain (host-79-27-0-81.retail.telecomitalia.it. [79.27.0.81])
-        by smtp.gmail.com with ESMTPSA id f14sm5856887wmq.3.2022.02.23.02.02.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Feb 2022 02:02:56 -0800 (PST)
-From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-To:     Karsten Graul <kgraul@linux.ibm.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, linux-s390@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Tony Lu <tonylu@linux.alibaba.com>
-Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
-        syzbot+4f322a6d84e991c38775@syzkaller.appspotmail.com
-Subject: [PATCH] net/smc: Use a mutex for locking "struct smc_pnettable"
-Date:   Wed, 23 Feb 2022 11:02:52 +0100
-Message-Id: <20220223100252.22562-1-fmdefrancesco@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Wed, 23 Feb 2022 05:04:45 -0500
+Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam08on2040.outbound.protection.outlook.com [40.107.102.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D774A8A32C;
+        Wed, 23 Feb 2022 02:04:17 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=TJhgVkuCDL4GLTvPaNzNCSutSfwJzfD//B+f3f13DjNvSvEXBjVgz5RhlescTDZ89+4p43xzVAoA52h6oXD9+YTw02dG3V2Tn8azeP/1mmWT5nAGXiwfgOJSBRzU4UcvuID9ot6egILIKBzPU7HZq5VipY3cdCsJqNU405iuim0Lr1lXPwcOD/s3oyNO9kHh3XofsiPPzQ0UPJM6YjwyWIkozkxghft7SS1XbQa/C6cvMWSnaEFcSmZhFZnUpjNEWI8Y64Z2S7b8OcZSlbbJrIme9ILJ6WfCdnHaOIbknHI4HuJ1f6wOR6rWhX2Oalws5SykWtAPCXzQ7qY16lZ9Ng==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=dSlrttMsmPx2BZPFqN5nmNJ77iz7ZuYFXsatxv+ccf0=;
+ b=JUMiz1UkSLPNUr+yts3Bi6UBySLQgXFzHN2i6HYMoXEqYHtyx8ZSfJf3MNJF6xCs9wNHmzOXraizgiRiZKxhiZa902iU7GMgBts/al7Dvdq1UtszJwDwBCXlAeYKYlqmuYsuO1+wbQzwqX7mzPQfl0hyomEclg9ipuQarUWOlnIBN7NuII/4OoSUYZyOeungG7jOg9pD/C994PNU44QwEgA2rc3jCtRB5Kdcf0ls9AXsLEmPeE7fb4cj8i0oR/JPBL7627X0nm54h8j9+kSTAEcQHpDMu0dlOWojrgLlDxhCwEzQh142RdPCLeQq7KBvKPnER4xm6ffEzCfhKNVz8A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=rjwysocki.net smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=dSlrttMsmPx2BZPFqN5nmNJ77iz7ZuYFXsatxv+ccf0=;
+ b=YLt53y1bvgX9nzkY8/genO19t7yVrqVAl8qucUIlPcrqo3whC1Z+LzKCEs3nEnlT49A84t7eO+Jiz9p9eUBOc+u1cV19Oc3d/3IWbZY3G2QcHvWTiW/SQl9UgQJY7TXfqmcSQhfB8RPJhmtDGq4veoA8Y7LGxH4oGYO9+qvgahs=
+Received: from DM5PR18CA0079.namprd18.prod.outlook.com (2603:10b6:3:3::17) by
+ BN6PR12MB1266.namprd12.prod.outlook.com (2603:10b6:404:14::8) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5017.21; Wed, 23 Feb 2022 10:04:09 +0000
+Received: from DM6NAM11FT055.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:3:3:cafe::d3) by DM5PR18CA0079.outlook.office365.com
+ (2603:10b6:3:3::17) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5017.23 via Frontend
+ Transport; Wed, 23 Feb 2022 10:04:09 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ DM6NAM11FT055.mail.protection.outlook.com (10.13.173.103) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5017.22 via Frontend Transport; Wed, 23 Feb 2022 10:04:09 +0000
+Received: from jinzhosu-System-Product-Name.amd.com (10.180.168.240) by
+ SATLEXMB04.amd.com (10.181.40.145) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.18; Wed, 23 Feb 2022 04:04:05 -0600
+From:   Jinzhou Su <Jinzhou.Su@amd.com>
+To:     <rjw@rjwysocki.net>, <linux-pm@vger.kernel.org>,
+        <srinivas.pandruvada@linux.intel.com>, <dsmythies@telus.net>
+CC:     <ray.huang@amd.com>, <viresh.kumar@linaro.org>,
+        <todd.e.brandt@linux.intel.com>, <linux-kernel@vger.kernel.org>,
+        <deepak.sharma@amd.com>, <alexander.deucher@amd.com>,
+        <xiaojian.du@amd.com>, <perry.yuan@amd.com>, <li.meng@amd.com>,
+        <jinzhou.su@amd.com>, Jinzhou Su <Jinzhou.Su@amd.com>
+Subject: [PATCH 0/3] Add tracer tool for AMD P-State driver
+Date:   Wed, 23 Feb 2022 18:03:47 +0800
+Message-ID: <20220223100350.3523826-1-Jinzhou.Su@amd.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: bdcc9f33-ce29-45b1-904b-08d9f6b3d5ad
+X-MS-TrafficTypeDiagnostic: BN6PR12MB1266:EE_
+X-Microsoft-Antispam-PRVS: <BN6PR12MB1266A69854098A93E4CD7AB5903C9@BN6PR12MB1266.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: alR45z2+lPeDWZT2kiVYSXZqua67mx0i1JQt5HbxXqBNvqwoDCzZ7nyLV98Jal437mD60Nh+82jKi5PHI5iNzPLxawRBtrE89VfI71Pm+tEzBxTm9DmW0sycN5VLbK+0L7CeSTvOC8yPFwLd8CpTE8JJFqqJ7nI/IuNY69iEEwLwagDpnPEWHtLb0PwPD9c4CEopnFVVOIeFH6OpdgZMOw2HZOmIqzIV/vbi359sLsftWpwoJDLgzXYYHd8uaObrSAunDYQ9CEeA52LQM4xZvCILp+3dQhsX+I36HSYLYBwKXXRfxJyV/Rr4oRVyi1bUfYaExRXTron06ftwsNZ+4pMBJ9c32BokPBgvUvTJoepFm+BKtxxnEtnwPS+ZI4+N0pY5CVwfcHEFgSUlmKuC/PKg3Dz5GsHB+zJ1qyAYHo/eSAAYC/528ItW5SkH5Pp1oiUrPKygJF+++KDfy5XByxu2JLCqjtInVz5ayZ8gva6qEZRDwlD04E79d+Yug0sHbiuH2B4YApgjGCZZkL7jx5XM+npDfesjfZsa24Gg0adBQaAft0FcX+zt/7qe55RFCoYZHMRJVfuVjI9SnqPR6eL2cdqYrincTDgcU5IxYJU++fgW227d61DyyTzSNDdTIzmVCf7bJ2s9ntfR3iURTjk7An1iLanPVz5DHPimraR0uUYSc1P3h3p7ZhxDPSdBcG6M4FyQ5p2nFrF+wI7mmQ==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(46966006)(40470700004)(36840700001)(47076005)(5660300002)(2906002)(110136005)(356005)(8936002)(6666004)(54906003)(82310400004)(316002)(81166007)(36860700001)(26005)(16526019)(186003)(426003)(336012)(508600001)(86362001)(2616005)(70586007)(70206006)(1076003)(40460700003)(8676002)(4326008)(7696005)(83380400001)(36756003)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Feb 2022 10:04:09.2105
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: bdcc9f33-ce29-45b1-904b-08d9f6b3d5ad
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT055.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR12MB1266
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,217 +101,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-smc_pnetid_by_table_ib() uses read_lock() and then it calls smc_pnet_apply_ib()
-which, in turn, calls mutex_lock(&smc_ib_devices.mutex).
+Hello,
 
-read_lock() disables preemption. Therefore, the code acquires a mutex while in
-atomic context and it leads to a SAC bug.
+intel_pstate_tracer is a useful tool to analyze the performance of
+intel_pstate driver. We upstream out AMD P-state driver into Linux
+kernel recently and like to use similiar tool to tune the performance
+of the driver.
 
-Fix this bug by replacing the rwlock with a mutex.
+I modified intel_pstate_tracer.py then it could import as a module to
+analyze AMD P-State trace event. Other trace event also can benifit from
+this change once they need this tool.
 
-Reported-and-tested-by: syzbot+4f322a6d84e991c38775@syzkaller.appspotmail.com
-Fixes: 64e28b52c7a6 ("net/smc: add pnet table namespace support")
-Confirmed-by: Tony Lu <tonylu@linux.alibaba.com>
-Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
----
- net/smc/smc_pnet.c | 42 +++++++++++++++++++++---------------------
- net/smc/smc_pnet.h |  2 +-
- 2 files changed, 22 insertions(+), 22 deletions(-)
+intel_pstate_tracer could be used as the same way as before and the original 
+functionality isn't broken.
 
-diff --git a/net/smc/smc_pnet.c b/net/smc/smc_pnet.c
-index 0599246c0376..29f0a559d884 100644
---- a/net/smc/smc_pnet.c
-+++ b/net/smc/smc_pnet.c
-@@ -113,7 +113,7 @@ static int smc_pnet_remove_by_pnetid(struct net *net, char *pnet_name)
- 	pnettable = &sn->pnettable;
- 
- 	/* remove table entry */
--	write_lock(&pnettable->lock);
-+	mutex_lock(&pnettable->lock);
- 	list_for_each_entry_safe(pnetelem, tmp_pe, &pnettable->pnetlist,
- 				 list) {
- 		if (!pnet_name ||
-@@ -131,7 +131,7 @@ static int smc_pnet_remove_by_pnetid(struct net *net, char *pnet_name)
- 			rc = 0;
- 		}
- 	}
--	write_unlock(&pnettable->lock);
-+	mutex_unlock(&pnettable->lock);
- 
- 	/* if this is not the initial namespace, stop here */
- 	if (net != &init_net)
-@@ -192,7 +192,7 @@ static int smc_pnet_add_by_ndev(struct net_device *ndev)
- 	sn = net_generic(net, smc_net_id);
- 	pnettable = &sn->pnettable;
- 
--	write_lock(&pnettable->lock);
-+	mutex_lock(&pnettable->lock);
- 	list_for_each_entry_safe(pnetelem, tmp_pe, &pnettable->pnetlist, list) {
- 		if (pnetelem->type == SMC_PNET_ETH && !pnetelem->ndev &&
- 		    !strncmp(pnetelem->eth_name, ndev->name, IFNAMSIZ)) {
-@@ -206,7 +206,7 @@ static int smc_pnet_add_by_ndev(struct net_device *ndev)
- 			break;
- 		}
- 	}
--	write_unlock(&pnettable->lock);
-+	mutex_unlock(&pnettable->lock);
- 	return rc;
- }
- 
-@@ -224,7 +224,7 @@ static int smc_pnet_remove_by_ndev(struct net_device *ndev)
- 	sn = net_generic(net, smc_net_id);
- 	pnettable = &sn->pnettable;
- 
--	write_lock(&pnettable->lock);
-+	mutex_lock(&pnettable->lock);
- 	list_for_each_entry_safe(pnetelem, tmp_pe, &pnettable->pnetlist, list) {
- 		if (pnetelem->type == SMC_PNET_ETH && pnetelem->ndev == ndev) {
- 			dev_put_track(pnetelem->ndev, &pnetelem->dev_tracker);
-@@ -237,7 +237,7 @@ static int smc_pnet_remove_by_ndev(struct net_device *ndev)
- 			break;
- 		}
- 	}
--	write_unlock(&pnettable->lock);
-+	mutex_unlock(&pnettable->lock);
- 	return rc;
- }
- 
-@@ -370,7 +370,7 @@ static int smc_pnet_add_eth(struct smc_pnettable *pnettable, struct net *net,
- 	strncpy(new_pe->eth_name, eth_name, IFNAMSIZ);
- 	rc = -EEXIST;
- 	new_netdev = true;
--	write_lock(&pnettable->lock);
-+	mutex_lock(&pnettable->lock);
- 	list_for_each_entry(tmp_pe, &pnettable->pnetlist, list) {
- 		if (tmp_pe->type == SMC_PNET_ETH &&
- 		    !strncmp(tmp_pe->eth_name, eth_name, IFNAMSIZ)) {
-@@ -385,9 +385,9 @@ static int smc_pnet_add_eth(struct smc_pnettable *pnettable, struct net *net,
- 					     GFP_ATOMIC);
- 		}
- 		list_add_tail(&new_pe->list, &pnettable->pnetlist);
--		write_unlock(&pnettable->lock);
-+		mutex_unlock(&pnettable->lock);
- 	} else {
--		write_unlock(&pnettable->lock);
-+		mutex_unlock(&pnettable->lock);
- 		kfree(new_pe);
- 		goto out_put;
- 	}
-@@ -448,7 +448,7 @@ static int smc_pnet_add_ib(struct smc_pnettable *pnettable, char *ib_name,
- 	new_pe->ib_port = ib_port;
- 
- 	new_ibdev = true;
--	write_lock(&pnettable->lock);
-+	mutex_lock(&pnettable->lock);
- 	list_for_each_entry(tmp_pe, &pnettable->pnetlist, list) {
- 		if (tmp_pe->type == SMC_PNET_IB &&
- 		    !strncmp(tmp_pe->ib_name, ib_name, IB_DEVICE_NAME_MAX)) {
-@@ -458,9 +458,9 @@ static int smc_pnet_add_ib(struct smc_pnettable *pnettable, char *ib_name,
- 	}
- 	if (new_ibdev) {
- 		list_add_tail(&new_pe->list, &pnettable->pnetlist);
--		write_unlock(&pnettable->lock);
-+		mutex_unlock(&pnettable->lock);
- 	} else {
--		write_unlock(&pnettable->lock);
-+		mutex_unlock(&pnettable->lock);
- 		kfree(new_pe);
- 	}
- 	return (new_ibdev) ? 0 : -EEXIST;
-@@ -605,7 +605,7 @@ static int _smc_pnet_dump(struct net *net, struct sk_buff *skb, u32 portid,
- 	pnettable = &sn->pnettable;
- 
- 	/* dump pnettable entries */
--	read_lock(&pnettable->lock);
-+	mutex_lock(&pnettable->lock);
- 	list_for_each_entry(pnetelem, &pnettable->pnetlist, list) {
- 		if (pnetid && !smc_pnet_match(pnetelem->pnet_name, pnetid))
- 			continue;
-@@ -620,7 +620,7 @@ static int _smc_pnet_dump(struct net *net, struct sk_buff *skb, u32 portid,
- 			break;
- 		}
- 	}
--	read_unlock(&pnettable->lock);
-+	mutex_unlock(&pnettable->lock);
- 	return idx;
- }
- 
-@@ -864,7 +864,7 @@ int smc_pnet_net_init(struct net *net)
- 	struct smc_pnetids_ndev *pnetids_ndev = &sn->pnetids_ndev;
- 
- 	INIT_LIST_HEAD(&pnettable->pnetlist);
--	rwlock_init(&pnettable->lock);
-+	mutex_init(&pnettable->lock);
- 	INIT_LIST_HEAD(&pnetids_ndev->list);
- 	rwlock_init(&pnetids_ndev->lock);
- 
-@@ -944,7 +944,7 @@ static int smc_pnet_find_ndev_pnetid_by_table(struct net_device *ndev,
- 	sn = net_generic(net, smc_net_id);
- 	pnettable = &sn->pnettable;
- 
--	read_lock(&pnettable->lock);
-+	mutex_lock(&pnettable->lock);
- 	list_for_each_entry(pnetelem, &pnettable->pnetlist, list) {
- 		if (pnetelem->type == SMC_PNET_ETH && ndev == pnetelem->ndev) {
- 			/* get pnetid of netdev device */
-@@ -953,7 +953,7 @@ static int smc_pnet_find_ndev_pnetid_by_table(struct net_device *ndev,
- 			break;
- 		}
- 	}
--	read_unlock(&pnettable->lock);
-+	mutex_unlock(&pnettable->lock);
- 	return rc;
- }
- 
-@@ -1156,7 +1156,7 @@ int smc_pnetid_by_table_ib(struct smc_ib_device *smcibdev, u8 ib_port)
- 	sn = net_generic(&init_net, smc_net_id);
- 	pnettable = &sn->pnettable;
- 
--	read_lock(&pnettable->lock);
-+	mutex_lock(&pnettable->lock);
- 	list_for_each_entry(tmp_pe, &pnettable->pnetlist, list) {
- 		if (tmp_pe->type == SMC_PNET_IB &&
- 		    !strncmp(tmp_pe->ib_name, ib_name, IB_DEVICE_NAME_MAX) &&
-@@ -1166,7 +1166,7 @@ int smc_pnetid_by_table_ib(struct smc_ib_device *smcibdev, u8 ib_port)
- 			break;
- 		}
- 	}
--	read_unlock(&pnettable->lock);
-+	mutex_unlock(&pnettable->lock);
- 
- 	return rc;
- }
-@@ -1185,7 +1185,7 @@ int smc_pnetid_by_table_smcd(struct smcd_dev *smcddev)
- 	sn = net_generic(&init_net, smc_net_id);
- 	pnettable = &sn->pnettable;
- 
--	read_lock(&pnettable->lock);
-+	mutex_lock(&pnettable->lock);
- 	list_for_each_entry(tmp_pe, &pnettable->pnetlist, list) {
- 		if (tmp_pe->type == SMC_PNET_IB &&
- 		    !strncmp(tmp_pe->ib_name, ib_name, IB_DEVICE_NAME_MAX)) {
-@@ -1194,7 +1194,7 @@ int smc_pnetid_by_table_smcd(struct smcd_dev *smcddev)
- 			break;
- 		}
- 	}
--	read_unlock(&pnettable->lock);
-+	mutex_unlock(&pnettable->lock);
- 
- 	return rc;
- }
-diff --git a/net/smc/smc_pnet.h b/net/smc/smc_pnet.h
-index 14039272f7e4..80a88eea4949 100644
---- a/net/smc/smc_pnet.h
-+++ b/net/smc/smc_pnet.h
-@@ -29,7 +29,7 @@ struct smc_link_group;
-  * @pnetlist: List of PNETIDs
-  */
- struct smc_pnettable {
--	rwlock_t lock;
-+	struct mutex lock;
- 	struct list_head pnetlist;
- };
- 
+Thanks,
+Joe
+
+Jinzhou Su (3):
+  cpufreq: amd-pstate: Add more tracepoint for AMD P-State module
+  tools/power/x86/intel_pstate_tracer: make tracer as a module
+  tools/power/x86/amd_pstate_tracer: Add tracer tool for AMD P-state
+
+ MAINTAINERS                                   |   1 +
+ drivers/cpufreq/amd-pstate-trace.h            |  22 +-
+ drivers/cpufreq/amd-pstate.c                  |  59 ++-
+ .../x86/amd_pstate_tracer/amd_pstate_trace.py | 354 ++++++++++++++++++
+ .../intel_pstate_tracer.py                    | 260 +++++++------
+ 5 files changed, 562 insertions(+), 134 deletions(-)
+ create mode 100755 tools/power/x86/amd_pstate_tracer/amd_pstate_trace.py
+
 -- 
-2.34.1
+2.27.0
 

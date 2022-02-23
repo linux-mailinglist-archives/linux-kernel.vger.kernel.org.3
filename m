@@ -2,103 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 701214C0EAF
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 09:59:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE67C4C0EA7
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 09:58:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239130AbiBWI7r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 03:59:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40838 "EHLO
+        id S239116AbiBWI6k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 03:58:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239125AbiBWI7o (ORCPT
+        with ESMTP id S229437AbiBWI6i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 03:59:44 -0500
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB2887C79E
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 00:59:16 -0800 (PST)
-Received: by mail-pj1-x1030.google.com with SMTP id q8-20020a17090a178800b001bc299b8de1so2097814pja.1
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 00:59:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=w2to3BP7Hk9Rhn4a/m99kEi4zOalhc4jbVth64Ox8bo=;
-        b=Ioq3fZdQL5Go7nNoKOTcI6UkzVDslzikWseU5l/a6xLGDiYT2bcUe9ivpcNzD7K1Tv
-         T03nES8J7htJdgJBrqq8sXjU3Qmx0RE90QkgNxV5QBgzUXXkQGndMG2n/ZDtTN39AUjc
-         uBBxrkCjdwZrFE6qaODTqqvrTGXRaRD6i4/DzHhc/Rt+0VqiiyE/v3g4p8KIj1cL1ovV
-         atI3/aEzA0lHOAWLTfrPiPQEEow8/gm+sCOAg7/HxWsTPJdWswhCLoj+zhReCoEgBbeC
-         lla/EdI7SfKzDSHpVuUgdIOr18CcF3E51B/+tPq+GO8XUdrjEaaL821NGrzPGBPaKcUJ
-         qMmA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=w2to3BP7Hk9Rhn4a/m99kEi4zOalhc4jbVth64Ox8bo=;
-        b=4eoI9TQTKYGx5zkzK21yMQ7Mfwj4AZ77hdwF6qIRJv8PrSXGTcIBRfSkAVQ1B8n/oJ
-         aCpeGReJ0CYOOJmI3tVI0Tqp1ZCgz6d/2Mfn27vU/YOtjKXGkBfV3EDZACs9WiZsXCm/
-         zZ4KygxVhmtlpvTWW13i/hDhe48luraKtFFV9W8D2t5OkqE44Jawejs44iNRMgW349O7
-         slLYtE6axJmg0dAgrKBoKA0yPChQ9uhAVmorHJwhlfyWUuAR5rwzZiZuHcRWoKTzuDLH
-         r1rTFVl2iDp65rE8R7T3QzRcnf+P9yu0E2hliA1A4HtyrB9Uh56vri7m+gp5d8yVo7b7
-         +KYA==
-X-Gm-Message-State: AOAM530QmdY5iszN+CGzrAQa48DldEPoPX/mUMTjpC5yY6RfWMEaYM0h
-        /rKUMsEY/i3E2wi8Nn5/yMY=
-X-Google-Smtp-Source: ABdhPJxEbCWZhD20rDjbo+ruunHnyo4end5hE45bLbvCFRkuf+jTx5gSE41diVYb+XaE7XFzcnTTMw==
-X-Received: by 2002:a17:902:ea02:b0:14f:fd0e:e433 with SMTP id s2-20020a170902ea0200b0014ffd0ee433mr1073572plg.24.1645606756292;
-        Wed, 23 Feb 2022 00:59:16 -0800 (PST)
-Received: from localhost ([103.220.76.197])
-        by smtp.gmail.com with ESMTPSA id u17sm16834351pfi.99.2022.02.23.00.59.14
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 23 Feb 2022 00:59:15 -0800 (PST)
-Date:   Wed, 23 Feb 2022 16:57:40 +0800
-From:   Yue Hu <zbestahu@gmail.com>
-To:     Gao Xiang <hsiangkao@linux.alibaba.com>
-Cc:     linux-erofs@lists.ozlabs.org, Chao Yu <chao@kernel.org>,
-        Yue Hu <huyue2@yulong.com>,
-        LKML <linux-kernel@vger.kernel.org>, zhangwen@coolpad.com,
-        shaojunjun@coolpad.com
-Subject: Re: [PATCH] erofs: fix ztailpacking on > 4GiB filesystems
-Message-ID: <20220223165740.0000067a.zbestahu@gmail.com>
-In-Reply-To: <20220222033118.20540-1-hsiangkao@linux.alibaba.com>
-References: <20220222033118.20540-1-hsiangkao@linux.alibaba.com>
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; i686-w64-mingw32)
+        Wed, 23 Feb 2022 03:58:38 -0500
+Received: from out30-43.freemail.mail.aliyun.com (out30-43.freemail.mail.aliyun.com [115.124.30.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFB357463A;
+        Wed, 23 Feb 2022 00:58:10 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R171e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04357;MF=ashimida@linux.alibaba.com;NM=1;PH=DS;RN=21;SR=0;TI=SMTPD_---0V5Hmy0a_1645606685;
+Received: from 192.168.193.152(mailfrom:ashimida@linux.alibaba.com fp:SMTPD_---0V5Hmy0a_1645606685)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Wed, 23 Feb 2022 16:58:06 +0800
+Message-ID: <887572c7-b508-ca51-6cd5-54a2c9ecaa75@linux.alibaba.com>
+Date:   Wed, 23 Feb 2022 00:58:05 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Subject: Re: [PATCH] [PATCH] AARCH64: Add gcc Shadow Call Stack support
+Content-Language: en-US
+To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
+        Guenter Roeck <linux@roeck-us.net>
+Cc:     Nathan Chancellor <nathan@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
+        Marco Elver <elver@google.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        llvm@lists.linux.dev, linux-hardening@vger.kernel.org
+References: <20220222095736.24898-1-ashimida@linux.alibaba.com>
+ <YhUMRoLDan7tJRiL@dev-arch.archlinux-ax161>
+ <f44612ce-5bb1-da45-d6cb-39464898c4ff@roeck-us.net>
+ <CANiq72nhu+CtYYNfWLYxf19OscoEEZj=TATM0SHNU8ic1iDhyQ@mail.gmail.com>
+From:   Dan Li <ashimida@linux.alibaba.com>
+In-Reply-To: <CANiq72nhu+CtYYNfWLYxf19OscoEEZj=TATM0SHNU8ic1iDhyQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 22 Feb 2022 11:31:18 +0800
-Gao Xiang <hsiangkao@linux.alibaba.com> wrote:
 
-> z_idataoff here is an absolute physical offset, so it should use
-> erofs_off_t (64 bits at least). Otherwise, it'll get trimmed and
-> cause the decompresion failure.
-> 
-> Fixes: ab92184ff8f1 ("erofs: add on-disk compressed tail-packing inline support")
-> Signed-off-by: Gao Xiang <hsiangkao@linux.alibaba.com>
-> ---
->  fs/erofs/internal.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/fs/erofs/internal.h b/fs/erofs/internal.h
-> index b8272fb95fd6..5aa2cf2c2f80 100644
-> --- a/fs/erofs/internal.h
-> +++ b/fs/erofs/internal.h
-> @@ -325,7 +325,7 @@ struct erofs_inode {
->  			unsigned char  z_algorithmtype[2];
->  			unsigned char  z_logical_clusterbits;
->  			unsigned long  z_tailextent_headlcn;
-> -			unsigned int   z_idataoff;
-> +			erofs_off_t    z_idataoff;
->  			unsigned short z_idata_size;
->  		};
->  #endif	/* CONFIG_EROFS_FS_ZIP */
 
-Reviewed-by: Yue Hu <huyue2@yulong.com>
+On 2/22/22 08:59, Miguel Ojeda wrote:
+> On Tue, Feb 22, 2022 at 5:48 PM Guenter Roeck <linux@roeck-us.net> wrote:
+>>
+>> The point here, I think, is to list the minimum gcc version.
+>> It is going to be a long time until gcc 12.0 is the minimum version,
+>> so I think it makes sense to list the minimum version number for
+>> each compiler here.
+> 
+> Yeah, please list the minimum version (ideally `>=` instead of `>`,
+> with the actual version where it first appeared). It makes it easy to
+> then remove things that are not needed anymore when the minimum GCC
+> version is upgraded.
+> 
+
+Got it, I'll use "gcc >= 12.0.0" in the next patch.
+
+Thanks,
+Dan.

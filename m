@@ -2,182 +2,326 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF07B4C0634
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 01:33:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 648C24C0640
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 01:35:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236394AbiBWAdl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 19:33:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38054 "EHLO
+        id S236367AbiBWAgU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 19:36:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230229AbiBWAdk (ORCPT
+        with ESMTP id S231889AbiBWAgQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 19:33:40 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 513835C64B
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 16:33:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645576393; x=1677112393;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=5wC0ctmgTuEoVSdyUpEPm0LqqJTQpVk/W/oJ8s+rpPU=;
-  b=IzIaT9ntfKGry/SNyOVV5cWPVIUQr+Rn4FvngzISP8E+gz1iuUYydPuh
-   AT6Dt9uKuSxn48FyQ7iwT+QzcxyBPRNlh0CdvQ7LLx7RFDLWg+DH8qNMs
-   Qb42nPoUGfCfMaX8di3lLHbn5F4gdcwBEWPv8GtNXecKuT4HmRFYjpzUx
-   Rs4z2XeYR5ir2X3nXcCtHPpFXZQlT7vR1LpeECgpbevNfdXq8rsI9F47s
-   Ds2w5QYc+PI7MW7dwWDCmxi0zkB5EOgTvpVW7MT+A8bxATGgkc+A7v8LC
-   jeS/i3uy9UKLvJg3fmqfN0oKdmLY1oCw5KDHN8vun8gafXN6DwojrvlZm
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10266"; a="338284927"
-X-IronPort-AV: E=Sophos;i="5.88,389,1635231600"; 
-   d="scan'208";a="338284927"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2022 16:33:11 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,389,1635231600"; 
-   d="scan'208";a="505729741"
-Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 22 Feb 2022 16:33:09 -0800
-Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nMfae-0000mz-E3; Wed, 23 Feb 2022 00:33:08 +0000
-Date:   Wed, 23 Feb 2022 08:32:20 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     hanchuanhua <hanchuanhua@oppo.com>
-Cc:     kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org, Palmer Dabbelt <palmer@rivosinc.com>
-Subject: [ammarfaizi2-block:palmer/linux/for-next 3/3]
- arch/riscv/mm/fault.c:126:9: error: 'pgd' undeclared; did you mean 'pid'?
-Message-ID: <202202230809.3HxMqsaH-lkp@intel.com>
+        Tue, 22 Feb 2022 19:36:16 -0500
+Received: from lgeamrelo11.lge.com (lgeamrelo13.lge.com [156.147.23.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C41AC5C656
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 16:35:48 -0800 (PST)
+Received: from unknown (HELO lgeamrelo04.lge.com) (156.147.1.127)
+        by 156.147.23.53 with ESMTP; 23 Feb 2022 09:35:46 +0900
+X-Original-SENDERIP: 156.147.1.127
+X-Original-MAILFROM: byungchul.park@lge.com
+Received: from unknown (HELO X58A-UD3R) (10.177.244.38)
+        by 156.147.1.127 with ESMTP; 23 Feb 2022 09:35:46 +0900
+X-Original-SENDERIP: 10.177.244.38
+X-Original-MAILFROM: byungchul.park@lge.com
+Date:   Wed, 23 Feb 2022 09:35:34 +0900
+From:   Byungchul Park <byungchul.park@lge.com>
+To:     Jan Kara <jack@suse.cz>
+Cc:     torvalds@linux-foundation.org, damien.lemoal@opensource.wdc.com,
+        linux-ide@vger.kernel.org, adilger.kernel@dilger.ca,
+        linux-ext4@vger.kernel.org, mingo@redhat.com,
+        linux-kernel@vger.kernel.org, peterz@infradead.org,
+        will@kernel.org, tglx@linutronix.de, rostedt@goodmis.org,
+        joel@joelfernandes.org, sashal@kernel.org, daniel.vetter@ffwll.ch,
+        chris@chris-wilson.co.uk, duyuyang@gmail.com,
+        johannes.berg@intel.com, tj@kernel.org, tytso@mit.edu,
+        willy@infradead.org, david@fromorbit.com, amir73il@gmail.com,
+        bfields@fieldses.org, gregkh@linuxfoundation.org,
+        kernel-team@lge.com, linux-mm@kvack.org, akpm@linux-foundation.org,
+        mhocko@kernel.org, minchan@kernel.org, hannes@cmpxchg.org,
+        vdavydov.dev@gmail.com, sj@kernel.org, jglisse@redhat.com,
+        dennis@kernel.org, cl@linux.com, penberg@kernel.org,
+        rientjes@google.com, vbabka@suse.cz, ngupta@vflare.org,
+        linux-block@vger.kernel.org, axboe@kernel.dk,
+        paolo.valente@linaro.org, josef@toxicpanda.com,
+        linux-fsdevel@vger.kernel.org, viro@zeniv.linux.org.uk,
+        jack@suse.com, jlayton@kernel.org, dan.j.williams@intel.com,
+        hch@infradead.org, djwong@kernel.org,
+        dri-devel@lists.freedesktop.org, airlied@linux.ie,
+        rodrigosiqueiramelo@gmail.com, melissa.srw@gmail.com,
+        hamohammed.sa@gmail.com
+Subject: Re: Report 2 in ext4 and journal based on v5.17-rc1
+Message-ID: <20220223003534.GA26277@X58A-UD3R>
+References: <1645095472-26530-1-git-send-email-byungchul.park@lge.com>
+ <1645096204-31670-1-git-send-email-byungchul.park@lge.com>
+ <1645096204-31670-2-git-send-email-byungchul.park@lge.com>
+ <20220221190204.q675gtsb6qhylywa@quack3.lan>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220221190204.q675gtsb6qhylywa@quack3.lan>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/ammarfaizi2/linux-block palmer/linux/for-next
-head:   c4f1d47294c4a59c09d14c5802bc0e978bad7b9a
-commit: c4f1d47294c4a59c09d14c5802bc0e978bad7b9a [3/3] riscv: mm: Remove the copy operation of pmd
-config: riscv-randconfig-m031-20220222 (https://download.01.org/0day-ci/archive/20220223/202202230809.3HxMqsaH-lkp@intel.com/config)
-compiler: riscv64-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/ammarfaizi2/linux-block/commit/c4f1d47294c4a59c09d14c5802bc0e978bad7b9a
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block palmer/linux/for-next
-        git checkout c4f1d47294c4a59c09d14c5802bc0e978bad7b9a
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/mm/
+On Mon, Feb 21, 2022 at 08:02:04PM +0100, Jan Kara wrote:
+> On Thu 17-02-22 20:10:04, Byungchul Park wrote:
+> > [    9.008161] ===================================================
+> > [    9.008163] DEPT: Circular dependency has been detected.
+> > [    9.008164] 5.17.0-rc1-00015-gb94f67143867-dirty #2 Tainted: G        W
+> > [    9.008166] ---------------------------------------------------
+> > [    9.008167] summary
+> > [    9.008167] ---------------------------------------------------
+> > [    9.008168] *** DEADLOCK ***
+> > [    9.008168]
+> > [    9.008168] context A
+> > [    9.008169]     [S] (unknown)(&(&journal->j_wait_transaction_locked)->dmap:0)
+> > [    9.008171]     [W] wait(&(&journal->j_wait_commit)->dmap:0)
+> > [    9.008172]     [E] event(&(&journal->j_wait_transaction_locked)->dmap:0)
+> > [    9.008173]
+> > [    9.008173] context B
+> > [    9.008174]     [S] down_write(mapping.invalidate_lock:0)
+> > [    9.008175]     [W] wait(&(&journal->j_wait_transaction_locked)->dmap:0)
+> > [    9.008176]     [E] up_write(mapping.invalidate_lock:0)
+> > [    9.008177]
+> > [    9.008178] context C
+> > [    9.008179]     [S] (unknown)(&(&journal->j_wait_commit)->dmap:0)
+> > [    9.008180]     [W] down_write(mapping.invalidate_lock:0)
+> > [    9.008181]     [E] event(&(&journal->j_wait_commit)->dmap:0)
+> > [    9.008181]
+> > [    9.008182] [S]: start of the event context
+> > [    9.008183] [W]: the wait blocked
+> > [    9.008183] [E]: the event not reachable
+> 
+> So what situation is your tool complaining about here? Can you perhaps show
+> it here in more common visualization like:
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Sure.
 
-All errors (new ones prefixed by >>):
+> TASK1				TASK2
+> 				does foo, grabs Z
+> does X, grabs lock Y
+> blocks on Z
+> 				blocks on Y
+> 
+> or something like that? Because I was not able to decipher this from the
+> report even after trying for some time...
 
-   arch/riscv/mm/fault.c: In function 'vmalloc_fault':
->> arch/riscv/mm/fault.c:126:9: error: 'pgd' undeclared (first use in this function); did you mean 'pid'?
-     126 |         pgd = (pgd_t *)pfn_to_virt(pfn) + index;
-         |         ^~~
-         |         pid
-   arch/riscv/mm/fault.c:126:9: note: each undeclared identifier is reported only once for each function it appears in
+KJOURNALD2(kthread)	TASK1(ksys_write)	TASK2(ksys_write)
 
+wait A
+--- stuck
+			wait B
+			--- stuck
+						wait C
+						--- stuck
 
-vim +126 arch/riscv/mm/fault.c
+wake up B		wake up C		wake up A
 
-a51271d99cdd049 Pekka Enberg 2020-08-25  101  
-2baa6d9506f24d5 Pekka Enberg 2020-09-05  102  static inline void vmalloc_fault(struct pt_regs *regs, int code, unsigned long addr)
-ac416a724f11320 Pekka Enberg 2020-08-25  103  {
-c4f1d47294c4a59 hanchuanhua  2022-01-27  104  	pgd_t *pgd_k;
-c4f1d47294c4a59 hanchuanhua  2022-01-27  105  	pud_t *pud_k;
-c4f1d47294c4a59 hanchuanhua  2022-01-27  106  	p4d_t *p4d_k;
-c4f1d47294c4a59 hanchuanhua  2022-01-27  107  	pmd_t *pmd_k;
-ac416a724f11320 Pekka Enberg 2020-08-25  108  	pte_t *pte_k;
-ac416a724f11320 Pekka Enberg 2020-08-25  109  	int index;
-bcacf5f6f239a9e Liu Shaohua  2020-10-26  110  	unsigned long pfn;
-ac416a724f11320 Pekka Enberg 2020-08-25  111  
-ac416a724f11320 Pekka Enberg 2020-08-25  112  	/* User mode accesses just cause a SIGSEGV */
-ac416a724f11320 Pekka Enberg 2020-08-25  113  	if (user_mode(regs))
-ac416a724f11320 Pekka Enberg 2020-08-25  114  		return do_trap(regs, SIGSEGV, code, addr);
-ac416a724f11320 Pekka Enberg 2020-08-25  115  
-ac416a724f11320 Pekka Enberg 2020-08-25  116  	/*
-ac416a724f11320 Pekka Enberg 2020-08-25  117  	 * Synchronize this task's top level page-table
-ac416a724f11320 Pekka Enberg 2020-08-25  118  	 * with the 'reference' page table.
-ac416a724f11320 Pekka Enberg 2020-08-25  119  	 *
-ac416a724f11320 Pekka Enberg 2020-08-25  120  	 * Do _not_ use "tsk->active_mm->pgd" here.
-ac416a724f11320 Pekka Enberg 2020-08-25  121  	 * We might be inside an interrupt in the middle
-ac416a724f11320 Pekka Enberg 2020-08-25  122  	 * of a task switch.
-ac416a724f11320 Pekka Enberg 2020-08-25  123  	 */
-ac416a724f11320 Pekka Enberg 2020-08-25  124  	index = pgd_index(addr);
-bcacf5f6f239a9e Liu Shaohua  2020-10-26  125  	pfn = csr_read(CSR_SATP) & SATP_PPN;
-bcacf5f6f239a9e Liu Shaohua  2020-10-26 @126  	pgd = (pgd_t *)pfn_to_virt(pfn) + index;
-ac416a724f11320 Pekka Enberg 2020-08-25  127  	pgd_k = init_mm.pgd + index;
-ac416a724f11320 Pekka Enberg 2020-08-25  128  
-ac416a724f11320 Pekka Enberg 2020-08-25  129  	if (!pgd_present(*pgd_k)) {
-ac416a724f11320 Pekka Enberg 2020-08-25  130  		no_context(regs, addr);
-ac416a724f11320 Pekka Enberg 2020-08-25  131  		return;
-ac416a724f11320 Pekka Enberg 2020-08-25  132  	}
-ac416a724f11320 Pekka Enberg 2020-08-25  133  	set_pgd(pgd, *pgd_k);
-ac416a724f11320 Pekka Enberg 2020-08-25  134  
-ac416a724f11320 Pekka Enberg 2020-08-25  135  	p4d_k = p4d_offset(pgd_k, addr);
-ac416a724f11320 Pekka Enberg 2020-08-25  136  	if (!p4d_present(*p4d_k)) {
-ac416a724f11320 Pekka Enberg 2020-08-25  137  		no_context(regs, addr);
-ac416a724f11320 Pekka Enberg 2020-08-25  138  		return;
-ac416a724f11320 Pekka Enberg 2020-08-25  139  	}
-ac416a724f11320 Pekka Enberg 2020-08-25  140  
-ac416a724f11320 Pekka Enberg 2020-08-25  141  	pud_k = pud_offset(p4d_k, addr);
-ac416a724f11320 Pekka Enberg 2020-08-25  142  	if (!pud_present(*pud_k)) {
-ac416a724f11320 Pekka Enberg 2020-08-25  143  		no_context(regs, addr);
-ac416a724f11320 Pekka Enberg 2020-08-25  144  		return;
-ac416a724f11320 Pekka Enberg 2020-08-25  145  	}
-ac416a724f11320 Pekka Enberg 2020-08-25  146  
-ac416a724f11320 Pekka Enberg 2020-08-25  147  	/*
-ac416a724f11320 Pekka Enberg 2020-08-25  148  	 * Since the vmalloc area is global, it is unnecessary
-ac416a724f11320 Pekka Enberg 2020-08-25  149  	 * to copy individual PTEs
-ac416a724f11320 Pekka Enberg 2020-08-25  150  	 */
-ac416a724f11320 Pekka Enberg 2020-08-25  151  	pmd_k = pmd_offset(pud_k, addr);
-ac416a724f11320 Pekka Enberg 2020-08-25  152  	if (!pmd_present(*pmd_k)) {
-ac416a724f11320 Pekka Enberg 2020-08-25  153  		no_context(regs, addr);
-ac416a724f11320 Pekka Enberg 2020-08-25  154  		return;
-ac416a724f11320 Pekka Enberg 2020-08-25  155  	}
-ac416a724f11320 Pekka Enberg 2020-08-25  156  
-ac416a724f11320 Pekka Enberg 2020-08-25  157  	/*
-ac416a724f11320 Pekka Enberg 2020-08-25  158  	 * Make sure the actual PTE exists as well to
-ac416a724f11320 Pekka Enberg 2020-08-25  159  	 * catch kernel vmalloc-area accesses to non-mapped
-ac416a724f11320 Pekka Enberg 2020-08-25  160  	 * addresses. If we don't do this, this will just
-ac416a724f11320 Pekka Enberg 2020-08-25  161  	 * silently loop forever.
-ac416a724f11320 Pekka Enberg 2020-08-25  162  	 */
-ac416a724f11320 Pekka Enberg 2020-08-25  163  	pte_k = pte_offset_kernel(pmd_k, addr);
-ac416a724f11320 Pekka Enberg 2020-08-25  164  	if (!pte_present(*pte_k)) {
-ac416a724f11320 Pekka Enberg 2020-08-25  165  		no_context(regs, addr);
-ac416a724f11320 Pekka Enberg 2020-08-25  166  		return;
-ac416a724f11320 Pekka Enberg 2020-08-25  167  	}
-ac416a724f11320 Pekka Enberg 2020-08-25  168  
-ac416a724f11320 Pekka Enberg 2020-08-25  169  	/*
-ac416a724f11320 Pekka Enberg 2020-08-25  170  	 * The kernel assumes that TLBs don't cache invalid
-ac416a724f11320 Pekka Enberg 2020-08-25  171  	 * entries, but in RISC-V, SFENCE.VMA specifies an
-ac416a724f11320 Pekka Enberg 2020-08-25  172  	 * ordering constraint, not a cache flush; it is
-ac416a724f11320 Pekka Enberg 2020-08-25  173  	 * necessary even after writing invalid entries.
-ac416a724f11320 Pekka Enberg 2020-08-25  174  	 */
-ac416a724f11320 Pekka Enberg 2020-08-25  175  	local_flush_tlb_page(addr);
-ac416a724f11320 Pekka Enberg 2020-08-25  176  }
-ac416a724f11320 Pekka Enberg 2020-08-25  177  
+where:
+A is a wait_queue, j_wait_commit
+B is a wait_queue, j_wait_transaction_locked
+C is a rwsem, mapping.invalidate_lock
 
-:::::: The code at line 126 was first introduced by commit
-:::::: bcacf5f6f239a9e60287680514f392748cb4ec39 riscv: fix pfn_to_virt err in do_page_fault().
+The above is the simplest form. And it's worth noting that Dept focuses
+on wait and event itself rather than grabing and releasing things like
+lock. The following is the more descriptive form of it.
 
-:::::: TO: Liu Shaohua <liush@allwinnertech.com>
-:::::: CC: Palmer Dabbelt <palmerdabbelt@google.com>
+KJOURNALD2(kthread)	TASK1(ksys_write)	TASK2(ksys_write)
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+wait @j_wait_commit
+			ext4_truncate_failed_write()
+			   down_write(mapping.invalidate_lock)
+
+			   ext4_truncate()
+			      ...
+			      wait @j_wait_transaction_locked
+
+						ext_truncate_failed_write()
+						   down_write(mapping.invalidate_lock)
+
+						ext4_should_retry_alloc()
+						   ...
+						   __jbd2_log_start_commit()
+						      wake_up(j_wait_commit)
+jbd2_journal_commit_transaction()
+   wake_up(j_wait_transaction_locked)
+			   up_write(mapping.invalidate_lock)
+
+I hope this would help you understand the report.
+
+Yeah... This is what Dept complained. And as Ted said, the kthread would
+be woken up by another wakeup. So it's not deadlock deadlock. However,
+these three threads and any other tasks waiting for any of the events A,
+B, C would be struck for a while until the wakeup eventually wakes up
+the kthread, kjournald2.
+
+I guess it's not what ext4 is meant to do. Honestly, ext4 and journal
+system look so complicated that I'm not convinced tho...
+
+Thanks,
+Byungchul
+
+> 
+> 								Honza
+> 
+> 				
+> 
+> > [    9.008184] ---------------------------------------------------
+> > [    9.008184] context A's detail
+> > [    9.008185] ---------------------------------------------------
+> > [    9.008186] context A
+> > [    9.008186]     [S] (unknown)(&(&journal->j_wait_transaction_locked)->dmap:0)
+> > [    9.008187]     [W] wait(&(&journal->j_wait_commit)->dmap:0)
+> > [    9.008188]     [E] event(&(&journal->j_wait_transaction_locked)->dmap:0)
+> > [    9.008189]
+> > [    9.008190] [S] (unknown)(&(&journal->j_wait_transaction_locked)->dmap:0):
+> > [    9.008191] (N/A)
+> > [    9.008191]
+> > [    9.008192] [W] wait(&(&journal->j_wait_commit)->dmap:0):
+> > [    9.008193] prepare_to_wait (kernel/sched/wait.c:275) 
+> > [    9.008197] stacktrace:
+> > [    9.008198] __schedule (kernel/sched/sched.h:1318 kernel/sched/sched.h:1616 kernel/sched/core.c:6213) 
+> > [    9.008200] schedule (kernel/sched/core.c:6373 (discriminator 1)) 
+> > [    9.008201] kjournald2 (fs/jbd2/journal.c:250) 
+> > [    9.008203] kthread (kernel/kthread.c:377) 
+> > [    9.008206] ret_from_fork (arch/x86/entry/entry_64.S:301) 
+> > [    9.008209]
+> > [    9.008209] [E] event(&(&journal->j_wait_transaction_locked)->dmap:0):
+> > [    9.008210] __wake_up_common (kernel/sched/wait.c:108) 
+> > [    9.008212] stacktrace:
+> > [    9.008213] dept_event (kernel/dependency/dept.c:2337) 
+> > [    9.008215] __wake_up_common (kernel/sched/wait.c:109) 
+> > [    9.008217] __wake_up_common_lock (./include/linux/spinlock.h:428 (discriminator 1) kernel/sched/wait.c:141 (discriminator 1)) 
+> > [    9.008218] jbd2_journal_commit_transaction (fs/jbd2/commit.c:583) 
+> > [    9.008221] kjournald2 (fs/jbd2/journal.c:214 (discriminator 3)) 
+> > [    9.008223] kthread (kernel/kthread.c:377) 
+> > [    9.008224] ret_from_fork (arch/x86/entry/entry_64.S:301) 
+> > [    9.008226] ---------------------------------------------------
+> > [    9.008226] context B's detail
+> > [    9.008227] ---------------------------------------------------
+> > [    9.008228] context B
+> > [    9.008228]     [S] down_write(mapping.invalidate_lock:0)
+> > [    9.008229]     [W] wait(&(&journal->j_wait_transaction_locked)->dmap:0)
+> > [    9.008230]     [E] up_write(mapping.invalidate_lock:0)
+> > [    9.008231]
+> > [    9.008232] [S] down_write(mapping.invalidate_lock:0):
+> > [    9.008233] ext4_da_write_begin (fs/ext4/truncate.h:21 fs/ext4/inode.c:2963) 
+> > [    9.008237] stacktrace:
+> > [    9.008237] down_write (kernel/locking/rwsem.c:1514) 
+> > [    9.008239] ext4_da_write_begin (fs/ext4/truncate.h:21 fs/ext4/inode.c:2963) 
+> > [    9.008241] generic_perform_write (mm/filemap.c:3784) 
+> > [    9.008243] ext4_buffered_write_iter (fs/ext4/file.c:269) 
+> > [    9.008245] ext4_file_write_iter (fs/ext4/file.c:677) 
+> > [    9.008247] new_sync_write (fs/read_write.c:504 (discriminator 1)) 
+> > [    9.008250] vfs_write (fs/read_write.c:590) 
+> > [    9.008251] ksys_write (fs/read_write.c:644) 
+> > [    9.008253] do_syscall_64 (arch/x86/entry/common.c:50 arch/x86/entry/common.c:80) 
+> > [    9.008255] entry_SYSCALL_64_after_hwframe (arch/x86/entry/entry_64.S:113) 
+> > [    9.008258]
+> > [    9.008258] [W] wait(&(&journal->j_wait_transaction_locked)->dmap:0):
+> > [    9.008259] prepare_to_wait (kernel/sched/wait.c:275) 
+> > [    9.008261] stacktrace:
+> > [    9.008261] __schedule (kernel/sched/sched.h:1318 kernel/sched/sched.h:1616 kernel/sched/core.c:6213) 
+> > [    9.008263] schedule (kernel/sched/core.c:6373 (discriminator 1)) 
+> > [    9.008264] wait_transaction_locked (fs/jbd2/transaction.c:184) 
+> > [    9.008266] add_transaction_credits (fs/jbd2/transaction.c:248 (discriminator 3)) 
+> > [    9.008267] start_this_handle (fs/jbd2/transaction.c:427) 
+> > [    9.008269] jbd2__journal_start (fs/jbd2/transaction.c:526) 
+> > [    9.008271] __ext4_journal_start_sb (fs/ext4/ext4_jbd2.c:105) 
+> > [    9.008273] ext4_truncate (fs/ext4/inode.c:4164) 
+> > [    9.008274] ext4_da_write_begin (./include/linux/fs.h:827 fs/ext4/truncate.h:23 fs/ext4/inode.c:2963) 
+> > [    9.008276] generic_perform_write (mm/filemap.c:3784) 
+> > [    9.008277] ext4_buffered_write_iter (fs/ext4/file.c:269) 
+> > [    9.008279] ext4_file_write_iter (fs/ext4/file.c:677) 
+> > [    9.008281] new_sync_write (fs/read_write.c:504 (discriminator 1)) 
+> > [    9.008283] vfs_write (fs/read_write.c:590) 
+> > [    9.008284] ksys_write (fs/read_write.c:644) 
+> > [    9.008285] do_syscall_64 (arch/x86/entry/common.c:50 arch/x86/entry/common.c:80) 
+> > [    9.008287]
+> > [    9.008288] [E] up_write(mapping.invalidate_lock:0):
+> > [    9.008288] ext4_da_get_block_prep (fs/ext4/inode.c:1795 fs/ext4/inode.c:1829) 
+> > [    9.008291] ---------------------------------------------------
+> > [    9.008291] context C's detail
+> > [    9.008292] ---------------------------------------------------
+> > [    9.008292] context C
+> > [    9.008293]     [S] (unknown)(&(&journal->j_wait_commit)->dmap:0)
+> > [    9.008294]     [W] down_write(mapping.invalidate_lock:0)
+> > [    9.008295]     [E] event(&(&journal->j_wait_commit)->dmap:0)
+> > [    9.008296]
+> > [    9.008297] [S] (unknown)(&(&journal->j_wait_commit)->dmap:0):
+> > [    9.008298] (N/A)
+> > [    9.008298]
+> > [    9.008299] [W] down_write(mapping.invalidate_lock:0):
+> > [    9.008299] ext4_da_write_begin (fs/ext4/truncate.h:21 fs/ext4/inode.c:2963) 
+> > [    9.008302] stacktrace:
+> > [    9.008302] down_write (kernel/locking/rwsem.c:1514) 
+> > [    9.008304] ext4_da_write_begin (fs/ext4/truncate.h:21 fs/ext4/inode.c:2963) 
+> > [    9.008305] generic_perform_write (mm/filemap.c:3784) 
+> > [    9.008307] ext4_buffered_write_iter (fs/ext4/file.c:269) 
+> > [    9.008309] ext4_file_write_iter (fs/ext4/file.c:677) 
+> > [    9.008311] new_sync_write (fs/read_write.c:504 (discriminator 1)) 
+> > [    9.008312] vfs_write (fs/read_write.c:590) 
+> > [    9.008314] ksys_write (fs/read_write.c:644) 
+> > [    9.008315] do_syscall_64 (arch/x86/entry/common.c:50 arch/x86/entry/common.c:80) 
+> > [    9.008316] entry_SYSCALL_64_after_hwframe (arch/x86/entry/entry_64.S:113) 
+> > [    9.008318]
+> > [    9.008319] [E] event(&(&journal->j_wait_commit)->dmap:0):
+> > [    9.008320] __wake_up_common (kernel/sched/wait.c:108) 
+> > [    9.008321] stacktrace:
+> > [    9.008322] __wake_up_common (kernel/sched/wait.c:109) 
+> > [    9.008323] __wake_up_common_lock (./include/linux/spinlock.h:428 (discriminator 1) kernel/sched/wait.c:141 (discriminator 1)) 
+> > [    9.008324] __jbd2_log_start_commit (fs/jbd2/journal.c:508) 
+> > [    9.008326] jbd2_log_start_commit (fs/jbd2/journal.c:527) 
+> > [    9.008327] __jbd2_journal_force_commit (fs/jbd2/journal.c:560) 
+> > [    9.008329] jbd2_journal_force_commit_nested (fs/jbd2/journal.c:583) 
+> > [    9.008331] ext4_should_retry_alloc (fs/ext4/balloc.c:670 (discriminator 3)) 
+> > [    9.008332] ext4_da_write_begin (fs/ext4/inode.c:2965 (discriminator 1)) 
+> > [    9.008334] generic_perform_write (mm/filemap.c:3784) 
+> > [    9.008335] ext4_buffered_write_iter (fs/ext4/file.c:269) 
+> > [    9.008337] ext4_file_write_iter (fs/ext4/file.c:677) 
+> > [    9.008339] new_sync_write (fs/read_write.c:504 (discriminator 1)) 
+> > [    9.008341] vfs_write (fs/read_write.c:590) 
+> > [    9.008342] ksys_write (fs/read_write.c:644) 
+> > [    9.008343] do_syscall_64 (arch/x86/entry/common.c:50 arch/x86/entry/common.c:80) 
+> > [    9.008345] entry_SYSCALL_64_after_hwframe (arch/x86/entry/entry_64.S:113) 
+> > [    9.008347] ---------------------------------------------------
+> > [    9.008348] information that might be helpful
+> > [    9.008348] ---------------------------------------------------
+> > [    9.008349] CPU: 0 PID: 89 Comm: jbd2/sda1-8 Tainted: G        W         5.17.0-rc1-00015-gb94f67143867-dirty #2
+> > [    9.008352] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS Bochs 01/01/2011
+> > [    9.008353] Call Trace:
+> > [    9.008354]  <TASK>
+> > [    9.008355] dump_stack_lvl (lib/dump_stack.c:107) 
+> > [    9.008358] print_circle (./arch/x86/include/asm/atomic.h:108 ./include/linux/atomic/atomic-instrumented.h:258 kernel/dependency/dept.c:157 kernel/dependency/dept.c:762) 
+> > [    9.008360] ? print_circle (kernel/dependency/dept.c:1086) 
+> > [    9.008362] cb_check_dl (kernel/dependency/dept.c:1104) 
+> > [    9.008364] bfs (kernel/dependency/dept.c:860) 
+> > [    9.008366] add_dep (kernel/dependency/dept.c:1423) 
+> > [    9.008368] do_event.isra.25 (kernel/dependency/dept.c:1651) 
+> > [    9.008370] ? __wake_up_common (kernel/sched/wait.c:108) 
+> > [    9.008372] dept_event (kernel/dependency/dept.c:2337) 
+> > [    9.008374] __wake_up_common (kernel/sched/wait.c:109) 
+> > [    9.008376] __wake_up_common_lock (./include/linux/spinlock.h:428 (discriminator 1) kernel/sched/wait.c:141 (discriminator 1)) 
+> > [    9.008379] jbd2_journal_commit_transaction (fs/jbd2/commit.c:583) 
+> > [    9.008381] ? arch_stack_walk (arch/x86/kernel/stacktrace.c:24) 
+> > [    9.008385] ? ret_from_fork (arch/x86/entry/entry_64.S:301) 
+> > [    9.008387] ? dept_enable_hardirq (./arch/x86/include/asm/current.h:15 kernel/dependency/dept.c:241 kernel/dependency/dept.c:999 kernel/dependency/dept.c:1043 kernel/dependency/dept.c:1843) 
+> > [    9.008389] ? _raw_spin_unlock_irqrestore (./arch/x86/include/asm/irqflags.h:45 ./arch/x86/include/asm/irqflags.h:80 ./arch/x86/include/asm/irqflags.h:138 ./include/linux/spinlock_api_smp.h:151 kernel/locking/spinlock.c:194) 
+> > [    9.008392] ? _raw_spin_unlock_irqrestore (./arch/x86/include/asm/preempt.h:103 ./include/linux/spinlock_api_smp.h:152 kernel/locking/spinlock.c:194) 
+> > [    9.008394] ? try_to_del_timer_sync (kernel/time/timer.c:1239) 
+> > [    9.008396] kjournald2 (fs/jbd2/journal.c:214 (discriminator 3)) 
+> > [    9.008398] ? prepare_to_wait_exclusive (kernel/sched/wait.c:431) 
+> > [    9.008400] ? commit_timeout (fs/jbd2/journal.c:173) 
+> > [    9.008402] kthread (kernel/kthread.c:377) 
+> > [    9.008404] ? kthread_complete_and_exit (kernel/kthread.c:332) 
+> > [    9.008407] ret_from_fork (arch/x86/entry/entry_64.S:301) 
+> > [    9.008410]  </TASK>
+> -- 
+> Jan Kara <jack@suse.com>
+> SUSE Labs, CR

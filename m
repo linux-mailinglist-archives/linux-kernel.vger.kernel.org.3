@@ -2,125 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 122334C19A0
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 18:12:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF3904C19A6
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 18:13:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243283AbiBWRNJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 12:13:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42554 "EHLO
+        id S243297AbiBWROS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 12:14:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243350AbiBWRNH (ORCPT
+        with ESMTP id S238693AbiBWROP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 12:13:07 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0209B118;
-        Wed, 23 Feb 2022 09:12:39 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 5CD722171F;
-        Wed, 23 Feb 2022 17:12:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1645636357; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=KjV96k+XrNEHF/rs/hUQai3q3Ll+0uP0q9QuZbCH91k=;
-        b=No1yFqbgB4W1AcYZmxPuvuIAuRoQFIIrXps00/9J1Z2h/iTM05zdsFZc5ADB+3RBacphAM
-        w5U5Kr8Fu5bw7jG8yHp5dH6qpbLtSXyITMuuNQAhl+3jRu+jm5Q7hwTqwZzIKDZ82RP9In
-        dCkMU4eA308t/PiSnYcI4az/GXg2jOo=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1645636357;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=KjV96k+XrNEHF/rs/hUQai3q3Ll+0uP0q9QuZbCH91k=;
-        b=aExfDoMHgw6vSTmfuWjbwunUBndSklXxQZiXlQ+tdsM5IO4w8Xt7YELS2Y9ZD1DIqGg3bK
-        2WtIDqyJkiqm4YCw==
-Received: from kunlun.suse.cz (unknown [10.100.128.76])
+        Wed, 23 Feb 2022 12:14:15 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7934F33A;
+        Wed, 23 Feb 2022 09:13:47 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 00A5BA3B8D;
-        Wed, 23 Feb 2022 17:12:36 +0000 (UTC)
-Date:   Wed, 23 Feb 2022 18:12:35 +0100
-From:   Michal =?iso-8859-1?Q?Such=E1nek?= <msuchanek@suse.de>
-To:     Javier Martinez Canillas <javierm@redhat.com>
-Cc:     dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, Martin Mares <mj@ucw.cz>,
-        Helge Deller <deller@gmx.de>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Cristian Marussi <cristian.marussi@arm.com>,
-        Simon Trimmer <simont@opensource.cirrus.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rob Herring <robh@kernel.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        David Herrmann <dh.herrmann@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-video@atrey.karlin.mff.cuni.cz
-Subject: Re: [PATCH v3] simplefb: Enable boot time VESA graphic mode
- selection.
-Message-ID: <20220223171235.GF3113@kunlun.suse.cz>
-References: <a789e375-a23e-6988-33bc-1410eb5d974f@suse.de>
- <20220218160436.23211-1-msuchanek@suse.de>
- <33b80f9c-d54a-5471-a58b-7a783a7a9e5b@redhat.com>
- <20220223164528.GE3113@kunlun.suse.cz>
- <f832a836-b6ee-ffc5-6f83-86c9ba475400@redhat.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <f832a836-b6ee-ffc5-6f83-86c9ba475400@redhat.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        by ams.source.kernel.org (Postfix) with ESMTPS id 280C6B82116;
+        Wed, 23 Feb 2022 17:13:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF1CFC340E7;
+        Wed, 23 Feb 2022 17:13:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645636424;
+        bh=Iuzpx3eqNgHmcbEjMXJ+Gh2uRHsMErcCOx9NX8k4XKA=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:From;
+        b=B1IyE4COZCZ918sC6snIEXlQ37FWTy+lbsQm8/muHoyWU51r7G2vlkgwMfeeNkkJo
+         LvuUWwWIgzsv0xOKdaQyFEZ5T9cwz0p3p2UmWne4sZvuIY1cz7nOzlDmpLM68zgaJf
+         wXjsKpjrJaOJ0wTGW2ySYzcG2B1OZ4C41Rnt773LWclbltXWyufpzh5CuyF29C8Ly4
+         o4J2yRRP3b26m03bY+MlZ4y/Ns+5CMzG0cMBTodUAdptqggAuoPAV1RFipqqHELUCq
+         v36YZRyzZKCJFamHLx+pcHWrmQOGNduvvo3l8sf8PSfT/8Y3ARBlwxl1MSbald+nmN
+         R+VI6B8pEJxAA==
+From:   SeongJae Park <sj@kernel.org>
+To:     SeongJae Park <sj@kernel.org>
+Cc:     Greg KH <gregkh@linuxfoundation.org>, akpm@linux-foundation.org,
+        corbet@lwn.net, skhan@linuxfoundation.org, rientjes@google.com,
+        xhao@linux.alibaba.com, linux-damon@amazon.com, linux-mm@kvack.org,
+        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 03/12] mm/damon: Implement a minimal stub for sysfs-based DAMON interface
+Date:   Wed, 23 Feb 2022 17:13:41 +0000
+Message-Id: <20220223171341.29010-1-sj@kernel.org>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20220223164513.23089-1-sj@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 23, 2022 at 05:54:54PM +0100, Javier Martinez Canillas wrote:
-> On 2/23/22 17:45, Michal Suchánek wrote:
->
-> [snip]
->
-> >>>
-> >>> To enable use of VESA modes with simplefb in legacy BIOS boot mode drop
-> >>
-> >> I think you meant "VESA modes with the sysfb driver" ? or something like
-> >> that since otherwise it seems that you meant to use it with the simplefb
-> >> (drivers/video/fbdev/simplefb.c) fbdev driver, which doesn't support the
-> >> "vga=" param as far as I understand (it just uses whatever was setup).
-> >
-> > And the vga= is whatever was set up by the realmode code. And the config
-> > option for realmode code to do that is selected by vesafb and not
-> > simplefb so it does not wotk for simplefb/simpledrm/whatewer when efifib
-> > is not built into the kernel.
-> >
->
-> Yes, that's what I tried to say. But your commit message says "To enable
-> use of VESA modes with simplefb in legacy BIOS boot mode" and that isn't
-> accurate AFAIU (unless you meant sysfb instead).
+On Wed, 23 Feb 2022 16:45:13 +0000 SeongJae Park <sj@kernel.org> wrote:
 
- config SYSFB_SIMPLEFB
-        bool "Mark VGA/VBE/EFI FB as generic system framebuffer"
-        depends on SYSFB
-+       select BOOT_VESA_SUPPORT if X86
+> On Wed, 23 Feb 2022 17:09:38 +0100 Greg KH <gregkh@linuxfoundation.org> wrote:
+> 
+> > On Wed, Feb 23, 2022 at 03:20:42PM +0000, SeongJae Park wrote:
+> > > +static struct kobj_attribute damon_sysfs_ul_range_min_attr =
+> > > +		__ATTR(min, 0600, damon_sysfs_ul_range_min_show,
+> > > +				damon_sysfs_ul_range_min_store);
+> > > +
+> > > +static struct kobj_attribute damon_sysfs_ul_range_max_attr =
+> > > +		__ATTR(max, 0600, damon_sysfs_ul_range_max_show,
+> > > +				damon_sysfs_ul_range_max_store);
+> > 
+> > Can you use __ATTR_RW_MODE() instead here and elsewhere?
+> 
+> Sure, I will, in the next revision.
 
-This to me means that it's simplefb specifically that requires it, not sysfb.
-More precisely SYSFB_SIMPLEFB which is the simplefb implementation on top of
-legacy BIOS.
+After thinking once more, I realized that it might not so simple.  First of
+all, there are two files having same name in different directories
+(kdamonds/<N>/pid and targets/<N>/pid).  The files work differently, so I need
+to use different _show/_store callbacks for them but __ATTR_RW_MODE() wouldn't
+support the case.
 
-Thanks
+Secondly, I'd like to keep the file names short because the meaning of the
+files can easily inferred from the hierarchy, but want to keep the _show/_store
+callback names to have prefixes that allows us easily know their meaning and
+usage even though it makes the name a little bit longer because I don't want to
+have too much source files for DAMON sysfs interface.
 
-Michal
+Am I missing some of your point?
+
+
+Thanks,
+SJ
+
+[...]

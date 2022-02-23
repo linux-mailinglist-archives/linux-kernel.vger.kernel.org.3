@@ -2,141 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4520C4C1B32
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 19:56:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 66C6B4C1B2C
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 19:55:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244050AbiBWS4P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 13:56:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41194 "EHLO
+        id S244035AbiBWSz3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 13:55:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233132AbiBWS4O (ORCPT
+        with ESMTP id S233132AbiBWSz1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 13:56:14 -0500
-Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89DDA3EF00
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 10:55:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645642546; x=1677178546;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=55FeCcb1ARGRmEKxVh+6A3zlRphXv2FFw32s6I+V6sk=;
-  b=f1Dcae9RiHrpLwJnlo5EO7GVx+j5gyT6Mc0yffI3AwhzxcVzosG6by1p
-   k0gI2Mt+y3a+vNNo7YAoLz8OIT9sr+rFXMqu9cTimr0alxmjyzHfr8zh2
-   sPNEtDaTWkCnNOlmAZozk5tcAF7+VtraL4lRbI2zGLoDfMDCIfp5HggWM
-   DhZabSn5oUQHsLElQ1lUwVwcF21Ishuzr9hR3w5a/LQvsz3dls8RgO1MK
-   l7RnOvUbkFhaPOUoMkVPfJX7CDtdDRn4biDfMSQj1l5HQocGU9p+So5YV
-   878LvFi+6G+rKAYrXqM/V0dqHHhgfjRscSzNzz7pdwgsovHAPQN0cIY9y
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10267"; a="312772099"
-X-IronPort-AV: E=Sophos;i="5.88,391,1635231600"; 
-   d="scan'208";a="312772099"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2022 10:55:46 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,391,1635231600"; 
-   d="scan'208";a="707153545"
-Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 23 Feb 2022 10:55:44 -0800
-Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nMwnf-0001iF-LT; Wed, 23 Feb 2022 18:55:43 +0000
-Date:   Thu, 24 Feb 2022 02:54:51 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Ville =?iso-8859-1?Q?Syrj=E4l=E4?= <ville.syrjala@linux.intel.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, 0day robot <lkp@intel.com>,
-        Lee Shawn C <shawn.c.lee@intel.com>
-Subject: drivers/gpu/drm/i915/display/intel_cursor.c:155:6: error: implicit
- declaration of function 'intel_crtc_is_bigjoiner_slave'
-Message-ID: <202202240216.mijx1JlB-lkp@intel.com>
+        Wed, 23 Feb 2022 13:55:27 -0500
+Received: from mail-qv1-xf2e.google.com (mail-qv1-xf2e.google.com [IPv6:2607:f8b0:4864:20::f2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CF7C3ED16
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 10:54:59 -0800 (PST)
+Received: by mail-qv1-xf2e.google.com with SMTP id x3so10115017qvd.8
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 10:54:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=fK7FpqspG7jF5jtxh0YvYWB/hUstBu9iQdJkK5fSXHU=;
+        b=YhQ1GZV818HFnqsC6KhMrbhbpSiJ/BaWSfoeVKso9Ev25O2AsceHCn4UhtrQQJpKdc
+         O3/GQq7cM0tHeud+hWzJvxAMc8C0Jxavyt4AGrUfCfLhHxkBJuolMHDMF+O3hpCYo79p
+         kCf6jPXR76CyYhhWOMBWxiV+ArjmpVhYge2P9lWDKPLwpD6EqGrYkiGRPzBmXDg/LRv+
+         l/VRqcDFWSK9vBoB6/ta+iBnaoZ2KJuvbQa8sCCnng0e1Hq3Cy3ZX4CdUZQ9HKIcNsTq
+         24KMf/1fIH4O7/aNNSt4jXdHlRqS4FprN/fq+hb34YMku8fKuVC0GWiQjDsJUvbZNWPp
+         UyRA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=fK7FpqspG7jF5jtxh0YvYWB/hUstBu9iQdJkK5fSXHU=;
+        b=INAKR9FvGX6QQYWZ7d6uyF28h/CK77nnBdyuOvGIJkb/jpsu1PhXjIoCHqpUziZbH9
+         jyBjn/2eTaO5bF7bC6NY1qTq1O73C5ORAR5+tLDGRHhweah3gOtT9K3FDVtrbpQ2gncx
+         wkHqjDL/BhPcm2crZ8QYMNpHVUL0ocpfQRDNiDKlhQtgwJOJTzbGkGnfEV9dHsgt4L3X
+         9mOygxvO6AGt4vxGdfPxCI3DplH3hiV4g+WyQfhNAXsifUlEnx2kM+lewpUimZpv6Hoj
+         qO3ao+a7kQXRaYrEqKXdKWbv6QcxZR5SSQvssvaQfAlZ7euc8GTaUQtSrC60JLz8TcEP
+         SWqg==
+X-Gm-Message-State: AOAM531ImmFuOPnJmL1maV7qgjF/umUTXHeVJliMrW8zu5EVNvNnG0fi
+        kD483QR6CgMLlCOCrwCBZZO+O/igfCHkzw==
+X-Google-Smtp-Source: ABdhPJxyd9gKcjqoaOsHR6RiSIBFfJnWIU2vuUHflml0HohXhfTyCB+A//GMBsJpUMADcZqbN1XOHA==
+X-Received: by 2002:a05:622a:1305:b0:2de:7054:2649 with SMTP id v5-20020a05622a130500b002de70542649mr1090584qtk.244.1645642497975;
+        Wed, 23 Feb 2022 10:54:57 -0800 (PST)
+Received: from localhost (cpe-98-15-154-102.hvc.res.rr.com. [98.15.154.102])
+        by smtp.gmail.com with ESMTPSA id f207sm210953qke.22.2022.02.23.10.54.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Feb 2022 10:54:57 -0800 (PST)
+Date:   Wed, 23 Feb 2022 13:54:56 -0500
+From:   Johannes Weiner <hannes@cmpxchg.org>
+To:     Suren Baghdasaryan <surenb@google.com>
+Cc:     Minchan Kim <minchan@kernel.org>, akpm@linux-foundation.org,
+        mhocko@suse.com, peterz@infradead.org, guro@fb.com,
+        shakeelb@google.com, timmurray@google.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, kernel-team@android.com
+Subject: Re: [PATCH 1/1] mm: count time in drain_all_pages during direct
+ reclaim as memory pressure
+Message-ID: <YhaDACTHpIT5rDB1@cmpxchg.org>
+References: <20220219174940.2570901-1-surenb@google.com>
+ <YhGN7nhqRMuEC5Rg@google.com>
+ <CAJuCfpF6xDzxU7JHva34F_PRwm9qXJa7a98OEuWfwJ21cMJe-Q@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CAJuCfpF6xDzxU7JHva34F_PRwm9qXJa7a98OEuWfwJ21cMJe-Q@mail.gmail.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/0day-ci/linux/commits/UPDATE-20220223-215130/Ville-Syrjala/drm-i915-Fix-cursor-coordinates-on-bigjoiner-slave/20220215-142435
-head:   57b0973986ab3f838289ef1e4d27e8638c04b72f
-commit: 57b0973986ab3f838289ef1e4d27e8638c04b72f drm/i915: Fix cursor coordinates on bigjoiner slave
-date:   5 hours ago
-config: i386-randconfig-a011 (https://download.01.org/0day-ci/archive/20220224/202202240216.mijx1JlB-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/57b0973986ab3f838289ef1e4d27e8638c04b72f
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review UPDATE-20220223-215130/Ville-Syrjala/drm-i915-Fix-cursor-coordinates-on-bigjoiner-slave/20220215-142435
-        git checkout 57b0973986ab3f838289ef1e4d27e8638c04b72f
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/gpu/drm/i915/
+On Sun, Feb 20, 2022 at 08:52:38AM -0800, Suren Baghdasaryan wrote:
+> On Sat, Feb 19, 2022 at 4:40 PM Minchan Kim <minchan@kernel.org> wrote:
+> >
+> > On Sat, Feb 19, 2022 at 09:49:40AM -0800, Suren Baghdasaryan wrote:
+> > > When page allocation in direct reclaim path fails, the system will
+> > > make one attempt to shrink per-cpu page lists and free pages from
+> > > high alloc reserves. Draining per-cpu pages into buddy allocator can
+> > > be a very slow operation because it's done using workqueues and the
+> > > task in direct reclaim waits for all of them to finish before
+> >
+> > Yes, drain_all_pages is serious slow(100ms - 150ms on Android)
+> > especially when CPUs are fully packed. It was also spotted in CMA
+> > allocation even when there was on no memory pressure.
+> 
+> Thanks for the input, Minchan!
+> In my tests I've seen 50-60ms delays in a single drain_all_pages but I
+> can imagine there are cases worse than these.
+> 
+> >
+> > > proceeding. Currently this time is not accounted as psi memory stall.
+> >
+> > Good spot.
+> >
+> > >
+> > > While testing mobile devices under extreme memory pressure, when
+> > > allocations are failing during direct reclaim, we notices that psi
+> > > events which would be expected in such conditions were not triggered.
+> > > After profiling these cases it was determined that the reason for
+> > > missing psi events was that a big chunk of time spent in direct
+> > > reclaim is not accounted as memory stall, therefore psi would not
+> > > reach the levels at which an event is generated. Further investigation
+> > > revealed that the bulk of that unaccounted time was spent inside
+> > > drain_all_pages call.
+> > >
+> > > Annotate drain_all_pages and unreserve_highatomic_pageblock during
+> > > page allocation failure in the direct reclaim path so that delays
+> > > caused by these calls are accounted as memory stall.
+> > >
+> > > Reported-by: Tim Murray <timmurray@google.com>
+> > > Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+> > > ---
+> > >  mm/page_alloc.c | 4 ++++
+> > >  1 file changed, 4 insertions(+)
+> > >
+> > > diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+> > > index 3589febc6d31..7fd0d392b39b 100644
+> > > --- a/mm/page_alloc.c
+> > > +++ b/mm/page_alloc.c
+> > > @@ -4639,8 +4639,12 @@ __alloc_pages_direct_reclaim(gfp_t gfp_mask, unsigned int order,
+> > >        * Shrink them and try again
+> > >        */
+> > >       if (!page && !drained) {
+> > > +             unsigned long pflags;
+> > > +
+> > > +             psi_memstall_enter(&pflags);
+> > >               unreserve_highatomic_pageblock(ac, false);
+> > >               drain_all_pages(NULL);
+> > > +             psi_memstall_leave(&pflags);
+> >
+> > Instead of annotating the specific drain_all_pages, how about
+> > moving the annotation from __perform_reclaim to
+> > __alloc_pages_direct_reclaim?
+> 
+> I'm fine with that approach too. Let's wait for Johannes' input before
+> I make any changes.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+I think the change makes sense, even if the workqueue fix speeds up
+the drain. I agree with Minchan about moving the annotation upward.
 
-All errors (new ones prefixed by >>):
-
->> drivers/gpu/drm/i915/display/intel_cursor.c:155:6: error: implicit declaration of function 'intel_crtc_is_bigjoiner_slave' [-Werror,-Wimplicit-function-declaration]
-           if (intel_crtc_is_bigjoiner_slave(crtc_state))
-               ^
-   1 error generated.
-
-
-vim +/intel_crtc_is_bigjoiner_slave +155 drivers/gpu/drm/i915/display/intel_cursor.c
-
-   130	
-   131	static int intel_check_cursor(struct intel_crtc_state *crtc_state,
-   132				      struct intel_plane_state *plane_state)
-   133	{
-   134		const struct drm_framebuffer *fb = plane_state->hw.fb;
-   135		struct drm_i915_private *i915 = to_i915(plane_state->uapi.plane->dev);
-   136		const struct drm_rect src = plane_state->uapi.src;
-   137		const struct drm_rect dst = plane_state->uapi.dst;
-   138		int ret;
-   139	
-   140		if (fb && fb->modifier != DRM_FORMAT_MOD_LINEAR) {
-   141			drm_dbg_kms(&i915->drm, "cursor cannot be tiled\n");
-   142			return -EINVAL;
-   143		}
-   144	
-   145		ret = intel_atomic_plane_check_clipping(plane_state, crtc_state,
-   146							DRM_PLANE_HELPER_NO_SCALING,
-   147							DRM_PLANE_HELPER_NO_SCALING,
-   148							true);
-   149		if (ret)
-   150			return ret;
-   151	
-   152		/* Use the unclipped src/dst rectangles, which we program to hw */
-   153		plane_state->uapi.src = src;
-   154		plane_state->uapi.dst = dst;
- > 155		if (intel_crtc_is_bigjoiner_slave(crtc_state))
-   156			drm_rect_translate(&plane_state->uapi.dst,
-   157					   -crtc_state->pipe_src_w, 0);
-   158	
-   159		ret = intel_cursor_check_surface(plane_state);
-   160		if (ret)
-   161			return ret;
-   162	
-   163		if (!plane_state->uapi.visible)
-   164			return 0;
-   165	
-   166		ret = intel_plane_check_src_coordinates(plane_state);
-   167		if (ret)
-   168			return ret;
-   169	
-   170		return 0;
-   171	}
-   172	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+With it moved, please feel free to add
+Acked-by: Johannes Weiner <hannes@cmpxchg.org>

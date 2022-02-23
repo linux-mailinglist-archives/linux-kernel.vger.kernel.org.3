@@ -2,130 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8ACA44C0F32
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 10:27:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53CC24C0F36
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 10:28:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239292AbiBWJ1l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 04:27:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54372 "EHLO
+        id S239294AbiBWJ23 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 04:28:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235331AbiBWJ1g (ORCPT
+        with ESMTP id S234127AbiBWJ20 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 04:27:36 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA632AE58;
-        Wed, 23 Feb 2022 01:27:08 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3CA406169C;
-        Wed, 23 Feb 2022 09:27:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9BF46C340F9;
-        Wed, 23 Feb 2022 09:27:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645608427;
-        bh=D2jUPs6ryRSFqPbSylqUkNdDZuOthbzsmeMEmvziyjY=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=Qprkztvt/vehYNHRcEK8aqRshRS+P9DBpcRom+Ea4pnSLocGv1eBVL2v483vi1brP
-         yniMjXK/S41L4Xb5GxmMolqLanH2PfdtLhr4aslEr3qRf3FRgZXiElzFJkvdC4w2nN
-         JS6y8Uxpo3q6QV2cYcl6Kk1+VLa3u1w7dstKq6JdbSKRuvb7qsDfR1olUXgTRiM4lW
-         h9gXptbf8SQ/Kn95+tqUCiEvk6NU1742fRGNTdgV5FXZ+Nd86Q2w5JlwL02OxgP5C1
-         +ol87y0DUBe7bzeKEkX3OWQML5KSSUNMqefzAhTnHd6BCu3L5B6sV9dAoeIrCnSrMr
-         hGVco4bZ15heQ==
-Received: by mail-wm1-f51.google.com with SMTP id p4so3139192wmg.1;
-        Wed, 23 Feb 2022 01:27:07 -0800 (PST)
-X-Gm-Message-State: AOAM533rjH2d5XuwiAcxoxjxPHchWShU53/wM3Yax8XoRhTZ4LMUtHmz
-        eSTAI3Q94+vqKovfLZNqqD5cgnhheiiFvMqGvbc=
-X-Google-Smtp-Source: ABdhPJwtMkGkHNVPhtWq1LOTi2OcT9JVNmxiOoaUyabWMpAtHbaXvG0B+oJZMTvLmHy/MuDTQEaSkGsJ6B3oEOPptXw=
-X-Received: by 2002:a05:600c:1d27:b0:37c:74bb:2b4d with SMTP id
- l39-20020a05600c1d2700b0037c74bb2b4dmr6779098wms.82.1645608425823; Wed, 23
- Feb 2022 01:27:05 -0800 (PST)
+        Wed, 23 Feb 2022 04:28:26 -0500
+Received: from mail-qv1-xf34.google.com (mail-qv1-xf34.google.com [IPv6:2607:f8b0:4864:20::f34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C66B71FA66
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 01:27:59 -0800 (PST)
+Received: by mail-qv1-xf34.google.com with SMTP id 8so7309722qvf.2
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 01:27:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=FhQOAPGriaJ90awBuK8zqjdKv78PGZubmhSGXhOpsOU=;
+        b=WYvmz1X6IIdRaJ23Vh2yQ2n13gh/YEBa6QbFeHL6Hg+tvYpNdPGs2Yu2PPKeeQv3+e
+         qG22nPSJTrT257gOYx3Q38lCw72iwtPISJGPnbgOEWf4UrqUHUHHbaVmX5J91ZsHMny+
+         Sf3SSmoVt9kuW+aJgpPzk/jWHEDn9VVfEboLyY6dLhgY7/1+OzK7mtRhmy7uSCFijIyr
+         DPNPZ27GmcW3LA2PNV5QhivEIZNmfxLb4ijyB22M7eliIcOyJr7/0jBgSVrvUeZALUDY
+         E/A86W3bkAxbwJcOisoR85JnOvJ8yv2gCX0OOuRYnIFIjW3gguw2auSFMBFgjZsy27Zc
+         LYZw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=FhQOAPGriaJ90awBuK8zqjdKv78PGZubmhSGXhOpsOU=;
+        b=bTzY013irEPlkq3bGR6u3FP+5X7Ka5ZBdY4yqbWURuOzKARZGR8po5uNTJK5mX0TC3
+         BmJrfeScW5QyZSllWtKH8LnMI9aClml64W/O+azzpUvvEH1fIR82N3C4O//3Y84iP+Q5
+         Pd5ClVTwJ6uIjZjt1Am2sfubo/h6tBIhRliU4qymSdjCP73otxkhSXif3zpPvTTXlwgm
+         72MbZTxkFx12noJWHY8zw+Z3DVdwPR+DjRlghLO3VkYPjHYoaV03TlJgWritIr7pYKgz
+         FhVhNFZTPFWdaAXAVydwerqjJVXdnUO7RRXlG+Lk4m/yLJlPzC7IovvsM5+QdhVx/Nqk
+         zCcA==
+X-Gm-Message-State: AOAM532hbAMPUDkZgSjAbwD1LClsOpdmUj5mD8MhHElv2hAPnjU1WuRN
+        LtbNIAK1ErpVa8L+8+s5uX4=
+X-Google-Smtp-Source: ABdhPJysnuY1B6OBDOm07qZYHEzp4gc3FPKgkCLtJYvJiUsHxlwskqu3IAXmibYmkfhtVSIXogVIHg==
+X-Received: by 2002:a05:622a:1452:b0:2de:6ed5:6230 with SMTP id v18-20020a05622a145200b002de6ed56230mr4682893qtx.619.1645608479002;
+        Wed, 23 Feb 2022 01:27:59 -0800 (PST)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id 18sm1691485qtx.88.2022.02.23.01.27.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Feb 2022 01:27:58 -0800 (PST)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: deng.changcheng@zte.com.cn
+To:     maz@kernel.org
+Cc:     james.morse@arm.com, alexandru.elisei@arm.com,
+        suzuki.poulose@arm.com, catalin.marinas@arm.com, will@kernel.org,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-kernel@vger.kernel.org,
+        Changcheng Deng <deng.changcheng@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH] KVM: arm64: Remove unneeded semicolon
+Date:   Wed, 23 Feb 2022 09:27:50 +0000
+Message-Id: <20220223092750.1934130-1-deng.changcheng@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220216131332.1489939-1-arnd@kernel.org> <20220216131332.1489939-10-arnd@kernel.org>
- <20220223074127.GA8287@alpha.franken.de>
-In-Reply-To: <20220223074127.GA8287@alpha.franken.de>
-From:   Arnd Bergmann <arnd@kernel.org>
-Date:   Wed, 23 Feb 2022 10:26:49 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a1nM3yPhjhMtUQyd5srgB99OkUvmapWv13KCuJXsf=euw@mail.gmail.com>
-Message-ID: <CAK8P3a1nM3yPhjhMtUQyd5srgB99OkUvmapWv13KCuJXsf=euw@mail.gmail.com>
-Subject: Re: [PATCH v2 09/18] mips: use simpler access_ok()
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Christoph Hellwig <hch@lst.de>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        Linux API <linux-api@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Russell King - ARM Linux <linux@armlinux.org.uk>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        Brian Cain <bcain@codeaurora.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Michal Simek <monstr@monstr.eu>,
-        Nick Hu <nickhu@andestech.com>,
-        Greentime Hu <green.hu@gmail.com>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Stafford Horne <shorne@gmail.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Rich Felker <dalias@libc.org>,
-        David Miller <davem@davemloft.net>,
-        Richard Weinberger <richard@nod.at>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        "Eric W . Biederman" <ebiederm@xmission.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        alpha <linux-alpha@vger.kernel.org>,
-        "open list:SYNOPSYS ARC ARCHITECTURE" 
-        <linux-snps-arc@lists.infradead.org>, linux-csky@vger.kernel.org,
-        "open list:QUALCOMM HEXAGON..." <linux-hexagon@vger.kernel.org>,
-        linux-ia64@vger.kernel.org,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Openrisc <openrisc@lists.librecores.org>,
-        Parisc List <linux-parisc@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        Linux-sh list <linux-sh@vger.kernel.org>,
-        sparclinux <sparclinux@vger.kernel.org>,
-        linux-um <linux-um@lists.infradead.org>,
-        "open list:TENSILICA XTENSA PORT (xtensa)" 
-        <linux-xtensa@linux-xtensa.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 23, 2022 at 8:41 AM Thomas Bogendoerfer
-<tsbogend@alpha.franken.de> wrote:
->
-> On Wed, Feb 16, 2022 at 02:13:23PM +0100, Arnd Bergmann wrote:
-> > diff --git a/arch/mips/include/asm/uaccess.h b/arch/mips/include/asm/uaccess.h
-> > index db9a8e002b62..d7c89dc3426c 100644
-> > --- a/arch/mips/include/asm/uaccess.h
-> > +++ b/arch/mips/include/asm/uaccess.h
-> > @@ -19,6 +19,7 @@
-> >  #ifdef CONFIG_32BIT
-> >
-> >  #define __UA_LIMIT 0x80000000UL
-> > +#define TASK_SIZE_MAX        __UA_LIMIT
->
-> using KSEG0 instead would IMHO be the better choice. This gives the
-> chance to remove __UA_LIMIT completly after cleaning up ptrace.c
+From: Changcheng Deng <deng.changcheng@zte.com.cn>
 
-Ok, changed now.
+Fix the following coccicheck review:
+./arch/arm64/kvm/psci.c: 379: 3-4: Unneeded semicolon
 
-      Arnd
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Changcheng Deng <deng.changcheng@zte.com.cn>
+---
+ arch/arm64/kvm/psci.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/arm64/kvm/psci.c b/arch/arm64/kvm/psci.c
+index 0a00ef250725..3b16dae4ab3d 100644
+--- a/arch/arm64/kvm/psci.c
++++ b/arch/arm64/kvm/psci.c
+@@ -376,7 +376,7 @@ static int kvm_psci_1_x_call(struct kvm_vcpu *vcpu, u32 minor)
+ 				ret = 0;
+ 			}
+ 			break;
+-		};
++		}
+ 		fallthrough;
+ 	default:
+ 		return kvm_psci_0_2_call(vcpu);
+-- 
+2.25.1
+

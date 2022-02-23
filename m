@@ -2,84 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A5B74C1734
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 16:41:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 81A8B4C1730
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 16:41:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235070AbiBWPlm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 10:41:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52158 "EHLO
+        id S242217AbiBWPlX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 10:41:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231680AbiBWPl1 (ORCPT
+        with ESMTP id S242272AbiBWPlN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 10:41:27 -0500
-Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ECFFBF956;
-        Wed, 23 Feb 2022 07:40:50 -0800 (PST)
-Received: by mail-ej1-f45.google.com with SMTP id qx21so53180779ejb.13;
-        Wed, 23 Feb 2022 07:40:50 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=WFKWHYEVTYdSkLxtSrxqY8mhLgNlskLotNcdJEfeS30=;
-        b=vi/HxvtxQYmkTv/q91DPRntemiFSiU0nmGjbk+/L+aX5Kz+otbtEtFc821l+/Okeq7
-         4Ldx75PFp5sZtGzpt6qrBOxrtY+2Uetrkx7FRi8mwIDEs/Wr/DBF610wG8jdRHckLDO5
-         ldivKkJOO6Ergk4UN1NfRwogmcgvG9e9/BjaV6k5KtZqAUZwrRV9ZthQ7+NVF3kus2qk
-         bhlRZU2HjcDKfDAJcMwcBHYYnrPathCqxhIL1XdrJDNtXfWOPoxJIaU/ZRChduyK3OeP
-         o5GKHRb+X7grpQsQCbPXWC11mPIQBBNsbnAg57if9LJdiEfFgmalR5BO9CQUC+fDbE3Q
-         TPSA==
-X-Gm-Message-State: AOAM533rajEeMNLaStmNvNKX3vDSIHRWNQnEW8qjRSzqBqdED9N/Bb2N
-        epVaT9k0hkuZ2Xyd3v5bmfc=
-X-Google-Smtp-Source: ABdhPJwCjKeESc3L8IbeV5j21bvDk0eitpRamZsq6g9YoXBYxtk65XHiLToC3J+qPucyR9UNzMvs2A==
-X-Received: by 2002:a17:906:31c1:b0:6c9:cfb3:4dd3 with SMTP id f1-20020a17090631c100b006c9cfb34dd3mr257861ejf.392.1645630848908;
-        Wed, 23 Feb 2022 07:40:48 -0800 (PST)
-Received: from [192.168.0.125] (xdsl-188-155-181-108.adslplus.ch. [188.155.181.108])
-        by smtp.googlemail.com with ESMTPSA id l6sm233ejz.189.2022.02.23.07.40.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 23 Feb 2022 07:40:47 -0800 (PST)
-Message-ID: <ac2c2075-3d5c-3f7e-d4e2-a8c80ec61883@kernel.org>
-Date:   Wed, 23 Feb 2022 16:40:45 +0100
+        Wed, 23 Feb 2022 10:41:13 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67651BECD3;
+        Wed, 23 Feb 2022 07:40:37 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0541061851;
+        Wed, 23 Feb 2022 15:40:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A22D4C340E7;
+        Wed, 23 Feb 2022 15:40:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645630836;
+        bh=8IktSqdB85n+lg+7e0S9tm1HlnzAvjvyAcTHddVcl48=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=YOWsE+Dwps7RGGwJq5CF82rcPW4Cajm7jGQms+3TSQz0peUcA8SY7gnOaGT0LF3L+
+         I+Z+qbcrjBT6dPz9IYTg44nXBRCmW6nDZ9eRozMKuuNDrNEaJk0UemHU10uqjPrd7b
+         pD2yqXPUyK6rjF+EqqxJtPQKjj1X799AXCdR2f1PjE4krNgtWxgF1jgP+MdM3ZWGNM
+         8i1uqlVFNEin9RkvzqBALtk1I7zP8slQR0JkQrw29mg4Y4BPXnp33SBBwfJlkOst2A
+         ITquYHoXPkvbOVC3BKPBVIAFmOTv6W90oAdG0Bkxflfi+8aYnDICz3tkeWrkANF4jm
+         K2wmGU/7ScniQ==
+Date:   Wed, 23 Feb 2022 16:41:12 +0100
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Ahmad Fatoum <a.fatoum@pengutronix.de>
+Cc:     Horia =?utf-8?Q?Geant=C4=83?= <horia.geanta@nxp.com>,
+        Aymen Sghaier <aymen.sghaier@nxp.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>, kernel@pengutronix.de,
+        David Gstir <david@sigma-star.at>,
+        Pankaj Gupta <pankaj.gupta@nxp.com>,
+        Tim Harvey <tharvey@gateworks.com>,
+        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        David Howells <dhowells@redhat.com>,
+        James Morris <jmorris@namei.org>,
+        Eric Biggers <ebiggers@kernel.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Jan Luebbe <j.luebbe@pengutronix.de>,
+        Richard Weinberger <richard@nod.at>,
+        Franck LENORMAND <franck.lenormand@nxp.com>,
+        Sumit Garg <sumit.garg@linaro.org>,
+        linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Subject: Re: [PATCH v5 4/5] crypto: caam - add in-kernel interface for blob
+ generator
+Message-ID: <YhZVmBy3/nWbqf+/@iki.fi>
+References: <20220222195819.2313913-1-a.fatoum@pengutronix.de>
+ <20220222195819.2313913-5-a.fatoum@pengutronix.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v10 2/4] Documentation/dt: Add descriptions for loongson
- display controller
-Content-Language: en-US
-To:     =?UTF-8?B?6ZqL5pmv5bOw?= <suijingfeng@loongson.cn>,
-        Rob Herring <robh@kernel.org>
-Cc:     Sui Jingfeng <15330273260@189.cn>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Roland Scheidegger <sroland@vmware.com>,
-        Zack Rusin <zackr@vmware.com>,
-        Christian Gmeiner <christian.gmeiner@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Ilia Mirkin <imirkin@alum.mit.edu>,
-        Qing Zhang <zhangqing@loongson.cn>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-References: <20220220145554.117854-1-15330273260@189.cn>
- <20220220145554.117854-3-15330273260@189.cn>
- <YhVrigEnXTiNgk67@robh.at.kernel.org>
- <720f940e.5ac.17f26de3a5b.Coremail.suijingfeng@loongson.cn>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <720f940e.5ac.17f26de3a5b.Coremail.suijingfeng@loongson.cn>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+In-Reply-To: <20220222195819.2313913-5-a.fatoum@pengutronix.de>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,65 +76,153 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23/02/2022 14:56, 隋景峰 wrote:
+On Tue, Feb 22, 2022 at 08:58:18PM +0100, Ahmad Fatoum wrote:
+> The NXP Cryptographic Acceleration and Assurance Module (CAAM)
+> can be used to protect user-defined data across system reboot:
 > 
+>   - When the system is fused and boots into secure state, the master
+>     key is a unique never-disclosed device-specific key
+>   - random key is encrypted by key derived from master key
+>   - data is encrypted using the random key
+>   - encrypted data and its encrypted random key are stored alongside
+>   - This blob can now be safely stored in non-volatile memory
 > 
+> On next power-on:
+>   - blob is loaded into CAAM
+>   - CAAM writes decrypted data either into memory or key register
 > 
-> &gt; -----Original Messages-----
-> &gt; From: "Rob Herring" <robh@kernel.org>
-> &gt; Sent Time: 2022-02-23 07:02:34 (Wednesday)
-> &gt; To: "Sui Jingfeng" &lt;15330273260@189.cn&gt;
-> &gt; Cc: "Maxime Ripard" <mripard@kernel.org>, "Thomas Zimmermann" <tzimmermann@suse.de>, "Roland Scheidegger" <sroland@vmware.com>, "Zack Rusin" <zackr@vmware.com>, "Christian Gmeiner" <christian.gmeiner@gmail.com>, "David Airlie" <airlied@linux.ie>, "Daniel Vetter" <daniel@ffwll.ch>, "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>, "Dan Carpenter" <dan.carpenter@oracle.com>, "Krzysztof Kozlowski" <krzk@kernel.org>, "Andrey Zhizhikin" <andrey.zhizhikin@leica-geosystems.com>, "Sam Ravnborg" <sam@ravnborg.org>, "David S . Miller" <davem@davemloft.net>, "Jiaxun Yang" <jiaxun.yang@flygoat.com>, "Lucas Stach" <l.stach@pengutronix.de>, "Maarten Lankhorst" <maarten.lankhorst@linux.intel.com>, "Ilia Mirkin" <imirkin@alum.mit.edu>, "Qing Zhang" <zhangqing@loongson.cn>, suijingfeng <suijingfeng@loongson.cn>, linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org
-> &gt; Subject: Re: [PATCH v10 2/4] Documentation/dt: Add descriptions for loongson display controller
-> &gt; 
-> &gt; On Sun, Feb 20, 2022 at 10:55:52PM +0800, Sui Jingfeng wrote:
-> &gt; &gt; From: suijingfeng <suijingfeng@loongson.cn>
-> &gt; 
-> &gt; Follow the conventions of the subsystem for patch subjects. It should be 
-> &gt; evident with 'git log --oneline Documentation/devicetree/bindings/display'.
-> &gt; 
-> &gt; Something like this:
-> &gt; 
-> &gt; dt-bindings: display: Add Loongson display controller
-> &gt; 
+> Add functions to realize encrypting and decrypting into memory alongside
+> the CAAM driver.
 > 
-> Hi, 
+> They will be used in a later commit as a source for the trusted key
+> seal/unseal mechanism.
 > 
-> We are not a platform device driver, there is no
-> of_device_id defined in my driver. In other word, 
-> my driver will not bind against devices whose compatible
-> is "loongson,ls7a1000-dc". We just parse the device tree
-> actively, find necessary information of interest. 
-> In this case, can I use the word "dt-bindings" in the commit title?
-
-This is a patch for specific subsystem, so as Rob said, it should follow
-subsystem conventions.
-
-The patch itself is a dt-bindings patch, so there is nothing here
-special which would encourage for any exception.
-
-
+> Reviewed-by: David Gstir <david@sigma-star.at>
+> Reviewed-by: Pankaj Gupta <pankaj.gupta@nxp.com>
+> Tested-By: Tim Harvey <tharvey@gateworks.com>
+> Tested-by: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+> Signed-off-by: Steffen Trumtrar <s.trumtrar@pengutronix.de>
+> Signed-off-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
+> ---
+> To: "Horia Geantă" <horia.geanta@nxp.com>
+> To: Aymen Sghaier <aymen.sghaier@nxp.com>
+> To: Herbert Xu <herbert@gondor.apana.org.au>
+> To: "David S. Miller" <davem@davemloft.net>
+> Cc: James Bottomley <jejb@linux.ibm.com>
+> Cc: Jarkko Sakkinen <jarkko@kernel.org>
+> Cc: Mimi Zohar <zohar@linux.ibm.com>
+> Cc: David Howells <dhowells@redhat.com>
+> Cc: James Morris <jmorris@namei.org>
+> Cc: Eric Biggers <ebiggers@kernel.org>
+> Cc: "Serge E. Hallyn" <serge@hallyn.com>
+> Cc: Jan Luebbe <j.luebbe@pengutronix.de>
+> Cc: David Gstir <david@sigma-star.at>
+> Cc: Richard Weinberger <richard@nod.at>
+> Cc: Franck LENORMAND <franck.lenormand@nxp.com>
+> Cc: Sumit Garg <sumit.garg@linaro.org>
+> Cc: Tim Harvey <tharvey@gateworks.com>
+> Cc: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+> Cc: Pankaj Gupta <pankaj.gupta@nxp.com>
+> Cc: linux-integrity@vger.kernel.org
+> Cc: keyrings@vger.kernel.org
+> Cc: linux-crypto@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Cc: linux-security-module@vger.kernel.org
+> ---
+>  drivers/crypto/caam/Kconfig    |   3 +
+>  drivers/crypto/caam/Makefile   |   1 +
+>  drivers/crypto/caam/blob_gen.c | 230 +++++++++++++++++++++++++++++++++
+>  include/soc/fsl/caam-blob.h    |  56 ++++++++
+>  4 files changed, 290 insertions(+)
+>  create mode 100644 drivers/crypto/caam/blob_gen.c
+>  create mode 100644 include/soc/fsl/caam-blob.h
 > 
-> I want to follow the conventions, but get some push back,
-> Krzysztof say that he can not see any bindings, these are not bindings.
+> diff --git a/drivers/crypto/caam/Kconfig b/drivers/crypto/caam/Kconfig
+> index 84ea7cba5ee5..ea9f8b1ae981 100644
+> --- a/drivers/crypto/caam/Kconfig
+> +++ b/drivers/crypto/caam/Kconfig
+> @@ -151,6 +151,9 @@ config CRYPTO_DEV_FSL_CAAM_RNG_API
+>  	  Selecting this will register the SEC4 hardware rng to
+>  	  the hw_random API for supplying the kernel entropy pool.
+>  
+> +config CRYPTO_DEV_FSL_CAAM_BLOB_GEN
+> +	bool
+> +
+>  endif # CRYPTO_DEV_FSL_CAAM_JR
+>  
+>  endif # CRYPTO_DEV_FSL_CAAM
+> diff --git a/drivers/crypto/caam/Makefile b/drivers/crypto/caam/Makefile
+> index 3570286eb9ce..25f7ae5a4642 100644
+> --- a/drivers/crypto/caam/Makefile
+> +++ b/drivers/crypto/caam/Makefile
+> @@ -21,6 +21,7 @@ caam_jr-$(CONFIG_CRYPTO_DEV_FSL_CAAM_CRYPTO_API_QI) += caamalg_qi.o
+>  caam_jr-$(CONFIG_CRYPTO_DEV_FSL_CAAM_AHASH_API) += caamhash.o
+>  caam_jr-$(CONFIG_CRYPTO_DEV_FSL_CAAM_RNG_API) += caamrng.o
+>  caam_jr-$(CONFIG_CRYPTO_DEV_FSL_CAAM_PKC_API) += caampkc.o pkc_desc.o
+> +caam_jr-$(CONFIG_CRYPTO_DEV_FSL_CAAM_BLOB_GEN) += blob_gen.o
+>  
+>  caam-$(CONFIG_CRYPTO_DEV_FSL_CAAM_CRYPTO_API_QI) += qi.o
+>  ifneq ($(CONFIG_CRYPTO_DEV_FSL_CAAM_CRYPTO_API_QI),)
+> diff --git a/drivers/crypto/caam/blob_gen.c b/drivers/crypto/caam/blob_gen.c
+> new file mode 100644
+> index 000000000000..513d3f90e438
+> --- /dev/null
+> +++ b/drivers/crypto/caam/blob_gen.c
+> @@ -0,0 +1,230 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Copyright (C) 2015 Pengutronix, Steffen Trumtrar <kernel@pengutronix.de>
+> + * Copyright (C) 2021 Pengutronix, Ahmad Fatoum <kernel@pengutronix.de>
+> + */
+> +
+> +#include <linux/device.h>
+> +#include <soc/fsl/caam-blob.h>
+> +
+> +#include "compat.h"
+> +#include "desc_constr.h"
+> +#include "desc.h"
+> +#include "error.h"
+> +#include "intern.h"
+> +#include "jr.h"
+> +#include "regs.h"
+> +
+> +struct caam_blob_priv {
+> +	struct device jrdev;
+> +};
+> +
+> +struct caam_blob_job_result {
+> +	int err;
+> +	struct completion completion;
+> +};
+> +
+> +static void caam_blob_job_done(struct device *dev, u32 *desc, u32 err, void *context)
+> +{
+> +	struct caam_blob_job_result *res = context;
+> +	int ecode = 0;
+> +
+> +	dev_dbg(dev, "%s %d: err 0x%x\n", __func__, __LINE__, err);
+> +
+> +	if (err)
+> +		ecode = caam_jr_strstatus(dev, err);
+> +
+> +	res->err = ecode;
+> +
+> +	/*
+> +	 * Upon completion, desc points to a buffer containing a CAAM job
+> +	 * descriptor which encapsulates data into an externally-storable
+> +	 * blob.
+> +	 */
+> +	complete(&res->completion);
+> +}
+> +
+> +static u32 *caam_blob_alloc_desc(size_t keymod_len)
+> +{
+> +	size_t len;
+> +
+> +	/* header + (key mod immediate) + 2x pointers + op */
+> +	len = 4 + (4 + ALIGN(keymod_len, 4)) + 2*(4 + 4 + CAAM_PTR_SZ_MAX) + 4;
 
-I said in comment to your patch with DTS, which you called bindings,
-that there are no bindings at all in it. Because in your patch with DTS
-you did not include bindings, but you called it bindings.
+Nit: the amount of magic numbers is overwhelming here. I neither understand
+the statement nor how that comment should help me to understand it.
 
-Here, this is a patch with bindings, so your comment "these are not
-bindings" is not true.
-
-
-</suijingfeng@loongson.cn></suijingfeng@loongson.cn></zhangqing@loongson.cn></imirkin@alum.mit.edu></maarten.lankhorst@linux.intel.com></l.stach@pengutronix.de></jiaxun.yang@flygoat.com></davem@davemloft.net></sam@ravnborg.org></andrey.zhizhikin@leica-geosystems.com></krzk@kernel.org></dan.carpenter@oracle.com></tsbogend@alpha.franken.de></daniel@ffwll.ch></airlied@linux.ie></christian.gmeiner@gmail.com></zackr@vmware.com></sroland@vmware.com></tzimmermann@suse.de></mripard@kernel.org></robh@kernel.org>
-
-This link does not work...
-
-> This email and its attachments contain confidential information from Loongson Technology , which is intended only for the person or entity whose address is listed above. Any use of the information contained herein in any way (including, but not limited to, total or partial disclosure, reproduction or dissemination) by persons other than the intended recipient(s) is prohibited. If you receive this email in error, please notify the sender by phone or email immediately and delete it. 
-
-Such automatic footers do not help. Could you work on a way to avoid them?
-
-
-
-Best regards,
-Krzysztof
+BR, Jarkko

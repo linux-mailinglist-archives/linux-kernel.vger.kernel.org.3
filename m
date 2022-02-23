@@ -2,146 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6A4A4C0D59
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 08:34:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 446154C0D5B
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 08:34:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238660AbiBWHez (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 02:34:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57978 "EHLO
+        id S238672AbiBWHfP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 02:35:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237287AbiBWHex (ORCPT
+        with ESMTP id S235456AbiBWHfO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 02:34:53 -0500
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 546B970CD0;
-        Tue, 22 Feb 2022 23:34:26 -0800 (PST)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 21N7YM5Q002893;
-        Wed, 23 Feb 2022 01:34:22 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1645601662;
-        bh=KmBWwGPqmoJGkq/QnEJwIuI5M/v2TuCCfT5yA2AkKZA=;
-        h=Subject:To:CC:References:From:Date:In-Reply-To;
-        b=EkAIBUOi4TYlV8+uxWlN3Kcz14lxgL1E31P0v8/Bw4763mgJcOP6PD/DwZ6xH+9zz
-         2ade5zxxkgOtQP5+GOrMWf1u8ilU8HvtLcti0TAegHinP5AhSbvMrWVeKT8NQdQSIV
-         lya22YzRng1jDao5pL0zWqYkO8xoSAjt4HRLU7XE=
-Received: from DLEE103.ent.ti.com (dlee103.ent.ti.com [157.170.170.33])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 21N7YMKZ130341
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 23 Feb 2022 01:34:22 -0600
-Received: from DLEE104.ent.ti.com (157.170.170.34) by DLEE103.ent.ti.com
- (157.170.170.33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Wed, 23
- Feb 2022 01:34:21 -0600
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE104.ent.ti.com
- (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Wed, 23 Feb 2022 01:34:21 -0600
-Received: from [10.24.69.236] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 21N7YInK104532;
-        Wed, 23 Feb 2022 01:34:19 -0600
-Subject: Re: [PATCH] usb: dwc3: drd: Add support for extcon drd notifier even
- with usb role switch config enabled
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-CC:     Kishon Vijay Abraham I <kishon@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Andrey Smirnov <andrew.smirnov@gmail.com>
-References: <20220218093348.1098-1-a-govindraju@ti.com>
- <273c9e6d-4fa3-52d9-e978-8f2be81dd6f6@synopsys.com>
-From:   Aswath Govindraju <a-govindraju@ti.com>
-Message-ID: <3792f301-1d94-0c72-87ff-c0683870bea1@ti.com>
-Date:   Wed, 23 Feb 2022 13:04:18 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Wed, 23 Feb 2022 02:35:14 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 792BB70CD0
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 23:34:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1645601686;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=McSwbVQkHiXC8iu7T4MJhFzHcjjvF5/k+kIazZQNsRc=;
+        b=NXqqOOoVewjVxm6Y4nBHoRCPIV6X2ThJApM55ZSj2Uel5BvKmnS/XJ1IoW1xh8tJ4ICBmf
+        joXv2pfYZbLxTZfeRfoiofwM9axupqWuquoGRfbBj8s74gvT7mJrhFh+PcwtfkdRn26DX8
+        u9HWxMy2ZzBFn7fXptc9wBoDlDrnRWU=
+Received: from mail-lf1-f72.google.com (mail-lf1-f72.google.com
+ [209.85.167.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-606-hou8sPpWOQaW_tQ8U9ecVw-1; Wed, 23 Feb 2022 02:34:45 -0500
+X-MC-Unique: hou8sPpWOQaW_tQ8U9ecVw-1
+Received: by mail-lf1-f72.google.com with SMTP id r14-20020ac252ae000000b00443987dc996so3144887lfm.19
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 23:34:44 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=McSwbVQkHiXC8iu7T4MJhFzHcjjvF5/k+kIazZQNsRc=;
+        b=iiLmiO5GGWLGH2K/loc8y8nNng9LRnvG9Cdn7zTo0LhY2XwBeJMXR/40c05RIQkij+
+         pRraAgLthy6KQ5bD09fKan92JFj3PofxxZXaGdC/DKSXNEftSLPDEpffqPiXi6oOBQZH
+         fK4Trl+UloqEe9nXbVA9xMXyzYpbBCiDO1lCZfJSLBBhoivqMQMktFgzGmRAQY6x5E8N
+         S6DJOrIXmo1WbOAe3XIjidfSKtoAl/ZHc4nm7QBWNZ3YNDk/Jj/vkf1nh0l7pitpIItV
+         3wEDjfXeeZU59MqpENdGkC+W4NK0Vva8ANL0ote75utwisn7S+C01OnafvKQITPco/C9
+         jkEQ==
+X-Gm-Message-State: AOAM5337aKb07DdN5qyVChpv8lQDtP6O74z0CKZjujLnkVZsseMefsaQ
+        dnex4OD8RUGmyfrzDZ8pecVp4B2zvEUFrQK9fdpkNXqIVzDzJ4W5/tzdJUSaD7u6VrAR1iRtQlc
+        R2RoIVFmkbHKvYeqBz1HOeszKcIqj4tpDOxWmZFxE
+X-Received: by 2002:a05:6512:15a0:b0:443:96ac:11d with SMTP id bp32-20020a05651215a000b0044396ac011dmr18882994lfb.471.1645601683499;
+        Tue, 22 Feb 2022 23:34:43 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJz46i8/q8ySRYQ6BTiY1ws+UNE6QavM6rT+wdU2ZmAtcmlZScVKO5j44ixU2NQgf2Y3Yx8osUMfzsWo/hJLY0g=
+X-Received: by 2002:a05:6512:15a0:b0:443:96ac:11d with SMTP id
+ bp32-20020a05651215a000b0044396ac011dmr18882988lfb.471.1645601683277; Tue, 22
+ Feb 2022 23:34:43 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <273c9e6d-4fa3-52d9-e978-8f2be81dd6f6@synopsys.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20211108081324.14204-1-jasowang@redhat.com> <CACGkMEucnZPt_dhaSXCegeFE0gs=dSDfv7CJSq4HCW_4a4XfGg@mail.gmail.com>
+ <20220223020452-mutt-send-email-mst@kernel.org>
+In-Reply-To: <20220223020452-mutt-send-email-mst@kernel.org>
+From:   Jason Wang <jasowang@redhat.com>
+Date:   Wed, 23 Feb 2022 15:34:32 +0800
+Message-ID: <CACGkMEu2UkOpGHJyKGzjJHMa3RmOoCmqD1iD_nh+pVcT63BQqA@mail.gmail.com>
+Subject: Re: [PATCH] virtio_ring: aovid reading flag from the descriptor ring
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     virtualization <virtualization@lists.linux-foundation.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Thinh,
+On Wed, Feb 23, 2022 at 3:08 PM Michael S. Tsirkin <mst@redhat.com> wrote:
+>
+> On Wed, Feb 23, 2022 at 11:19:03AM +0800, Jason Wang wrote:
+> > On Mon, Nov 8, 2021 at 4:13 PM Jason Wang <jasowang@redhat.com> wrote:
+> > >
+> > > Commit 72b5e8958738 ("virtio-ring: store DMA metadata in desc_extra
+> > > for split virtqueue") tries to make it possible for the driver to not
+> > > read from the descriptor ring to prevent the device from corrupting
+> > > the descriptor ring. But it still read the descriptor flag from the
+> > > descriptor ring during buffer detach.
+> > >
+> > > This patch fixes by always store the descriptor flag no matter whether
+> > > DMA API is used and then we can avoid reading descriptor flag from the
+> > > descriptor ring. This eliminates the possibly of unexpected next
+> > > descriptor caused by the wrong flag (e.g the next flag).
+> > >
+> > > Signed-off-by: Jason Wang <jasowang@redhat.com>
+> >
+> > Michael, any comment for this?
+> >
+> > Thanks
+>
+> I don't exactly see why we should care without DMA API, it seems
+> cleaner not to poke at the array one extra time.
 
-On 23/02/22 6:33 am, Thinh Nguyen wrote:
-> Hi,
-> 
-> Aswath Govindraju wrote:
->> In AM62x SoC, the USB controller supports USB role switching by using the
->> extcon drd notifiers. The current implementation does not accommodate this.
->> If usb role switching is enabled then drd notifiers are not added. If usb
->> role switching is not enabled then the dr_mode is forced to peripheral
->> (dwc3_get_dr_mode) and role switching will not be possible(dwc3_set_mode).
->>
->> Therefore, rearrange the "if else" logic such that extcon drd notifiers can
->> be added even with usb role switching enabled.
->>
->> Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
->> ---
->>  drivers/usb/dwc3/drd.c | 16 +++++++++-------
->>  1 file changed, 9 insertions(+), 7 deletions(-)
->>
->> diff --git a/drivers/usb/dwc3/drd.c b/drivers/usb/dwc3/drd.c
->> index b919ea3d87f2..0e86b1d8b50c 100644
->> --- a/drivers/usb/dwc3/drd.c
->> +++ b/drivers/usb/dwc3/drd.c
->> @@ -583,12 +583,7 @@ int dwc3_drd_init(struct dwc3 *dwc)
->>  	if (IS_ERR(dwc->edev))
->>  		return PTR_ERR(dwc->edev);
->>  
->> -	if (ROLE_SWITCH &&
->> -	    device_property_read_bool(dwc->dev, "usb-role-switch")) {
->> -		ret = dwc3_setup_role_switch(dwc);
->> -		if (ret < 0)
->> -			return ret;
->> -	} else if (dwc->edev) {
->> +	if (dwc->edev) {
->>  		dwc->edev_nb.notifier_call = dwc3_drd_notifier;
->>  		ret = extcon_register_notifier(dwc->edev, EXTCON_USB_HOST,
->>  					       &dwc->edev_nb);
->> @@ -598,7 +593,14 @@ int dwc3_drd_init(struct dwc3 *dwc)
->>  		}
->>  
->>  		dwc3_drd_update(dwc);
->> -	} else {
->> +	}
->> +
->> +	if (ROLE_SWITCH &&
->> +	    device_property_read_bool(dwc->dev, "usb-role-switch")) {
->> +		ret = dwc3_setup_role_switch(dwc);
->> +		if (ret < 0)
->> +			return ret;
->> +	} else if (!dwc->edev) {
->>  		dwc3_set_prtcap(dwc, DWC3_GCTL_PRTCAP_OTG);
->>  
->>  		/* use OTG block to get ID event */
-> 
-> 
-> Please check the patch by Andrey Smirnov and see if it works for you:
-> https://lore.kernel.org/linux-usb/20220221192020.346622-1-andrew.smirnov@gmail.com/
-> 
+I think the answer is that we have any special care about the DMA API
+for all other places that are using desc_extra.
 
-Thank you for pointing me this patch. I does solve my issue.
+Thanks
 
 
-Regards,
-Aswath
-
-> Thanks,
-> Thinh
-> 
-
-
+>
+> > > ---
+> > >  drivers/virtio/virtio_ring.c | 4 ++--
+> > >  1 file changed, 2 insertions(+), 2 deletions(-)
+> > >
+> > > diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/virtio_ring.c
+> > > index 00f64f2f8b72..28734f4e57d3 100644
+> > > --- a/drivers/virtio/virtio_ring.c
+> > > +++ b/drivers/virtio/virtio_ring.c
+> > > @@ -583,7 +583,7 @@ static inline int virtqueue_add_split(struct virtqueue *_vq,
+> > >         }
+> > >         /* Last one doesn't continue. */
+> > >         desc[prev].flags &= cpu_to_virtio16(_vq->vdev, ~VRING_DESC_F_NEXT);
+> > > -       if (!indirect && vq->use_dma_api)
+> > > +       if (!indirect)
+> > >                 vq->split.desc_extra[prev & (vq->split.vring.num - 1)].flags &=
+> > >                         ~VRING_DESC_F_NEXT;
+> > >
+> > > @@ -713,7 +713,7 @@ static void detach_buf_split(struct vring_virtqueue *vq, unsigned int head,
+> > >         /* Put back on free list: unmap first-level descriptors and find end */
+> > >         i = head;
+> > >
+> > > -       while (vq->split.vring.desc[i].flags & nextflag) {
+> > > +       while (vq->split.desc_extra[i].flags & nextflag) {
+> > >                 vring_unmap_one_split(vq, i);
+> > >                 i = vq->split.desc_extra[i].next;
+> > >                 vq->vq.num_free++;
+> > > --
+> > > 2.25.1
+> > >
+>
 

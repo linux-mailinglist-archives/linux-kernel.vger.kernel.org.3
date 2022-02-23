@@ -2,142 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C6334C1E5A
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 23:20:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 644674C1E60
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 23:22:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243511AbiBWWVW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 17:21:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60956 "EHLO
+        id S243565AbiBWWWf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 17:22:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234050AbiBWWVU (ORCPT
+        with ESMTP id S239577AbiBWWWd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 17:21:20 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B9283191E
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 14:20:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645654852; x=1677190852;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=z29YhyUzvRRkn2b8sdYAneR6GXWhzbZDYKkYcCitR1o=;
-  b=kfpAyHj/nl7wUE1JP4nsKa5XcsW05x/htLShAKfQjV7neyCNWYxFyTlg
-   C6Ka0OMibiIOQUa05hkyw4ghWQv3DOCNXrYZnPhTTXhCgBiJBbOKuoIFl
-   pZ7MdT/g9Un0NEzd/uvQmkP7CXo0a2/YuY3rV/zJDTDg2r7AO+StlXZJo
-   cTkDW2dL7NE/KHtrVbbRddyXtqi0zIoj2N/VRJCzenwDQEgaONAiYsdMR
-   7tibJV5lu6bhRadbHryh3j4JlaJPUSl9rS+LIlEOfXZOzp3uSmgnKWwJq
-   CgnCc2bYALBenj/PxGrbE+8Ie8mCzPh3INZTqITLLnJANLNkdlVx6xLBa
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10267"; a="249672262"
-X-IronPort-AV: E=Sophos;i="5.88,392,1635231600"; 
-   d="scan'208";a="249672262"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2022 14:20:52 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,392,1635231600"; 
-   d="scan'208";a="637595374"
-Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 23 Feb 2022 14:20:50 -0800
-Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nN009-0001tA-VL; Wed, 23 Feb 2022 22:20:49 +0000
-Date:   Thu, 24 Feb 2022 06:20:38 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Daniel Palmer <daniel@0x0f.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: [chenxing:msc313_mainlining 62/93]
- drivers/irqchip/irq-msc313-pm-wakeup.c:132:2: warning: ignoring return value
- of function declared with 'warn_unused_result' attribute
-Message-ID: <202202240645.Grybzjbk-lkp@intel.com>
+        Wed, 23 Feb 2022 17:22:33 -0500
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A063838BDE
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 14:22:03 -0800 (PST)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-52-47HVlWikMZ6aOVTG4W2bMg-1; Wed, 23 Feb 2022 22:22:00 +0000
+X-MC-Unique: 47HVlWikMZ6aOVTG4W2bMg-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.28; Wed, 23 Feb 2022 22:21:59 +0000
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.028; Wed, 23 Feb 2022 22:21:59 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Linus Torvalds' <torvalds@linux-foundation.org>,
+        Arnd Bergmann <arnd@arndb.de>
+CC:     Jakob <jakobkoschel@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
+        Cristiano Giuffrida <c.giuffrida@vu.nl>,
+        "Bos, H.J." <h.j.bos@vu.nl>
+Subject: RE: [RFC PATCH 03/13] usb: remove the usage of the list iterator
+ after the loop
+Thread-Topic: [RFC PATCH 03/13] usb: remove the usage of the list iterator
+ after the loop
+Thread-Index: AQHYKPelNzNrpGqQgkqTAOyaEHSAMayhspkg
+Date:   Wed, 23 Feb 2022 22:21:59 +0000
+Message-ID: <03f5e1f9ff89416d8b08906d4c776f00@AcuMS.aculab.com>
+References: <20220217184829.1991035-1-jakobkoschel@gmail.com>
+ <20220217184829.1991035-4-jakobkoschel@gmail.com>
+ <CAHk-=wg1RdFQ6OGb_H4ZJoUwEr-gk11QXeQx63n91m0tvVUdZw@mail.gmail.com>
+ <6DFD3D91-B82C-469C-8771-860C09BD8623@gmail.com>
+ <CAHk-=wiyCH7xeHcmiFJ-YgXUy2Jaj7pnkdKpcovt8fYbVFW3TA@mail.gmail.com>
+ <CAHk-=wgLe-OSLTEHm=V7eRG6Fcr0dpAM1ZRV1a=R_g6pBOr8Bg@mail.gmail.com>
+ <CAK8P3a0DOC3s7x380XR_kN8UYQvkRqvE5LkHQfK2-KzwhcYqQQ@mail.gmail.com>
+ <CAHk-=wicJ0VxEmnpb8=TJfkSDytFuf+dvQJj8kFWj0OF2FBZ9w@mail.gmail.com>
+ <CAHk-=wjtZG_0zjgVt0_0JDZgq=xO4LHYAbH764HTQJsjHTq-oQ@mail.gmail.com>
+In-Reply-To: <CAHk-=wjtZG_0zjgVt0_0JDZgq=xO4LHYAbH764HTQJsjHTq-oQ@mail.gmail.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://github.com/linux-chenxing/linux.git msc313_mainlining
-head:   99a396728dcff78ca3eddcbd2085f11eeb8a01b8
-commit: 10f8a601bff9d43fdf11deba38af93f47faa1ea2 [62/93] irqchip: MStar wakeup intc
-config: hexagon-allyesconfig (https://download.01.org/0day-ci/archive/20220224/202202240645.Grybzjbk-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/linux-chenxing/linux/commit/10f8a601bff9d43fdf11deba38af93f47faa1ea2
-        git remote add chenxing git://github.com/linux-chenxing/linux.git
-        git fetch --no-tags chenxing msc313_mainlining
-        git checkout 10f8a601bff9d43fdf11deba38af93f47faa1ea2
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/clk/imx/ drivers/irqchip/
+RnJvbTogTGludXMgVG9ydmFsZHMNCj4gU2VudDogMjMgRmVicnVhcnkgMjAyMiAyMDo1NQ0KPiAN
+Cj4gT24gV2VkLCBGZWIgMjMsIDIwMjIgYXQgMTI6NDMgUE0gTGludXMgVG9ydmFsZHMNCj4gPHRv
+cnZhbGRzQGxpbnV4LWZvdW5kYXRpb24ub3JnPiB3cm90ZToNCj4gPg0KPiA+IE9mIGNvdXJzZSwg
+dGhlIEMgc3RhbmRhcmQgYmVpbmcgdGhlIGJ1bmNoIG9mIGluY29tcGV0ZW50cyB0aGV5IGFyZSwN
+Cj4gPiB0aGV5IGluIHRoZSBwcm9jZXNzIGFwcGFyZW50bHkgbWFkZSBsZWZ0LXNoaWZ0cyB1bmRl
+ZmluZWQgKHJhdGhlciB0aGFuDQo+ID4gaW1wbGVtZW50YXRpb24tZGVmaW5lZCkuIENocmlzdCwg
+dGhleSBrZWVwIG9uIG1ha2luZyB0aGUgc2FtZSBtaXN0YWtlcw0KPiA+IG92ZXIgYW5kIG92ZXIu
+IFdoYXQgd2FzIHRoZSBkZWZpbml0aW9uIG9mIGluc2FuaXR5IGFnYWluPw0KPiANCj4gSGV5LCBz
+b21lIG1vcmUgZ29vZ2xpbmcgb24gbXkgcGFydCBzZWVtcyB0byBzYXkgdGhhdCBzb21lYm9keSBz
+YXcgdGhlDQo+IGxpZ2h0LCBhbmQgaXQncyBsaWtlbHkgZ2V0dGluZyBmaXhlZCBpbiBuZXdlciBD
+IHN0YW5kYXJkIHZlcnNpb24uDQo+IA0KPiBTbyBpdCB3YXMganVzdCBhIG1pc3Rha2UsIG5vdCBh
+Y3R1YWwgbWFsaWNlLiBNYXliZSB3ZSBjYW4gaG9wZSB0aGF0DQo+IHRoZSB0aWRlIGlzIHR1cm5p
+bmcgYWdhaW5zdCB0aGUgInVuZGVmaW5lZCIgY3Jvd2QgdGhhdCB1c2VkIHRvIHJ1bGUNCj4gdGhl
+IHJvb3N0IGluIHRoZSBDIHN0YW5kYXJkcyBib2RpZXMuIE1heWJlIHRoZSBmdW5kYW1lbnRhbCBz
+ZWN1cml0eQ0KPiBpc3N1ZXMgd2l0aCB1bmRlZmluZWQgYmVoYXZpb3IgZmluYWxseSBjb252aW5j
+ZWQgcGVvcGxlIGhvdyBiYWQgaXQNCj4gd2FzPw0KDQpJSVJDIFVCIGluY2x1ZGVzICdmaXJlIGFu
+IElDQk0gYXQgdGhlIHdyaXRlciBvZiB0aGUgc3RhbmRhcmRzIGRvY3VtZW50Jy4NClRoZXJlIGlz
+bid0IGFuICd1bmRlZmluZWQgdmFsdWUnIG9yIGV2ZW4gJ3VuZGVmaW5lZCB2YWx1ZSBvciBwcm9n
+cmFtIHRyYXAnDQpvcHRpb24uDQoNCkl0IGFsc28gc2VlbXMgdG8gbWUgdGhhdCB0aGUgY29tcGls
+ZXIgcGVvcGxlIGFyZSBwaWNraW5nIG9uIHRoaW5ncw0KaW4gdGhlIHN0YW5kYXJkIHRoYXQgYXJl
+IHRoZXJlIHRvIGxldCAnb2JzY3VyZSBtYWNoaW5lcyBjb25mb3JtJw0KYW5kIHRoZW4gdXNpbmcg
+dGhlbSB0byBicmVhayBwZXJmZWN0bHkgcmVhc29uYWJsZSBwcm9ncmFtcy4NCg0KU2lnbmVkIGFy
+aXRobWV0aWMgaXMgbm90IHJlcXVpcmVkIHRvIHdyYXAgc28gdGhhdCBjcHUgKGVnIERTUCkNCmNh
+biBkbyBzYXR1cmF0aW5nIG1hdGhzIC0gbm90IHNvIHRoZSBjb21waWxlciBjYW4gcmVtb3ZlIHNv
+bWUNCmNvbmRpdGlvbmFscy4NCg0KCURhdmlkDQoNCi0NClJlZ2lzdGVyZWQgQWRkcmVzcyBMYWtl
+c2lkZSwgQnJhbWxleSBSb2FkLCBNb3VudCBGYXJtLCBNaWx0b24gS2V5bmVzLCBNSzEgMVBULCBV
+Sw0KUmVnaXN0cmF0aW9uIE5vOiAxMzk3Mzg2IChXYWxlcykNCg==
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> drivers/irqchip/irq-msc313-pm-wakeup.c:132:2: warning: ignoring return value of function declared with 'warn_unused_result' attribute [-Wunused-result]
-           request_irq(irq, msc313_pm_wakeup_intc_chainedhandler, IRQF_SHARED,
-           ^~~~~~~~~~~ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 warning generated.
-
-
-vim +/warn_unused_result +132 drivers/irqchip/irq-msc313-pm-wakeup.c
-
-    97	
-    98	static int __init msc313_pm_wakeup_intc_of_init(struct device_node *node,
-    99					   struct device_node *parent)
-   100	{
-   101		int ret = 0, irq;
-   102		struct regmap *pmsleep;
-   103		struct msc313_sleep_intc *intc;
-   104		struct irq_domain *domain;
-   105	
-   106		irq = of_irq_get(node, 0);
-   107		if (irq <= 0)
-   108			return irq;
-   109	
-   110		pmsleep = syscon_regmap_lookup_by_phandle(node, "mstar,pmsleep");
-   111		if (IS_ERR(pmsleep))
-   112			return PTR_ERR(pmsleep);
-   113	
-   114		intc = kzalloc(sizeof(*intc), GFP_KERNEL);
-   115		if (!intc)
-   116			return -ENOMEM;
-   117	
-   118		intc->mask = regmap_field_alloc(pmsleep, mask_field);
-   119		intc->type = regmap_field_alloc(pmsleep, type_field);
-   120		intc->status = regmap_field_alloc(pmsleep, status_field);
-   121	
-   122		/* The masks survive deep sleep so clear them. */
-   123		regmap_field_write(intc->mask, ~0);
-   124	
-   125		domain = irq_domain_add_linear(node, NUM_IRQ,
-   126				&msc313_pm_wakeup_intc_domain_ops, intc);
-   127		if (!domain) {
-   128			ret = -ENOMEM;
-   129			goto out_free;
-   130		}
-   131	
- > 132		request_irq(irq, msc313_pm_wakeup_intc_chainedhandler, IRQF_SHARED,
-   133					"pmsleep", domain);
-   134	
-   135		return 0;
-   136	
-   137	out_free:
-   138		kfree(intc);
-   139		return ret;
-   140	}
-   141	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

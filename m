@@ -2,143 +2,234 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00D344C1C4F
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 20:34:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 75B0C4C1C53
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 20:37:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241427AbiBWTej (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 14:34:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54238 "EHLO
+        id S244464AbiBWTh1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 14:37:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231785AbiBWTeh (ORCPT
+        with ESMTP id S240506AbiBWThR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 14:34:37 -0500
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0324D12AB1
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 11:34:10 -0800 (PST)
-Received: by mail-pg1-x529.google.com with SMTP id z4so21057101pgh.12
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 11:34:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Xx/nJWtKVQ2r/ghOXNBRnDRbIE8tV+oqAzOXtwE9kSk=;
-        b=NGFREi7RSyhoYdxZH62APfuJu96ZfTSnPYczoNDq3FSnlXjP36rJtsApFddUhDQaxn
-         JS2RlR7sDyWXhntPdpagf9gOdxsybBiqrqogzOWijA3Dmev4Mgr/Jtx4HYBTgKBoodfB
-         S6dl220f0XV8muWKQAz+uRlRpFqN8095CatAc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Xx/nJWtKVQ2r/ghOXNBRnDRbIE8tV+oqAzOXtwE9kSk=;
-        b=TibDBWnk7VggMYu5VQvwHctwAjbJ8EruPjJkKPvUJDe2GcebMYRcElPpBa84gS2Zoc
-         544s03KM2BmSAOdw3Lq2GzXdIOWxnKdp9zkwosP2pSTJuqqyTfhMdMd/gLTIbnFExIDY
-         Ne3wVZ4mGB2bHxpcv//qnbDf/G7gktQxHX0BqlKSA4Q+K7j/VUv/m/OCP/N+ZyI2z5Ie
-         SR3GcPCX6/Qzwpm0990Y6F50VNQLLSztyekRur2Tya+mS7gZ+bVkq+GGPI2LGPsaMO6I
-         5WSMBcY/ruPf2Sl/PwclGG0Ay1qrM1YfT+JTCC5zpSwQ85VDn1qSvTyK+pWu6NEe6jA3
-         v9JA==
-X-Gm-Message-State: AOAM532p5u4FGjUh4saxRkpXtzUzt0Srvr41pAH2+DT9rJ0HcH5y2zYy
-        81Kec9EwtRxsOQ7nIfE2nd2fTIMFMDOa1w==
-X-Google-Smtp-Source: ABdhPJxX/URmFtB+GXqYaAMCGSemAGI+Rp5Jz/r2/uASmwJg/jbwKZ3HQtTIl5ed4mWRIOcd7rbayw==
-X-Received: by 2002:a63:d306:0:b0:34e:4330:efea with SMTP id b6-20020a63d306000000b0034e4330efeamr901399pgg.174.1645644849526;
-        Wed, 23 Feb 2022 11:34:09 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id j12sm297782pfu.79.2022.02.23.11.34.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Feb 2022 11:34:09 -0800 (PST)
-Date:   Wed, 23 Feb 2022 11:34:08 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH] powerpc/32: Clear volatile regs on syscall exit
-Message-ID: <202202231131.08B7EC1@keescook>
-References: <28b040bd2357a1879df0ca1b74094323f778a472.1645636285.git.christophe.leroy@csgroup.eu>
+        Wed, 23 Feb 2022 14:37:17 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0234344F1
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 11:36:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645645008; x=1677181008;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=mk3aN3pcpAB7oiE45QTenKkiA2nwTqBeLt06UaOynF4=;
+  b=RfSy2R1h6wkwdBgDQJaF9p/RXNO+/sLVI7YqLam+X/KamdKTiun9gd5m
+   6RoZT2JgQFq0Ru4zUah9b6aKCBIEGlE0lEcGUlRTuo313jd8ct4mQRNEi
+   cRLyGWH7Lkx1+wO30xZzLF8JDZ5tWmJy0r+DgquGQRCJ9Ohj/SJ7hrolC
+   a/sZaW2AInx5+Rgi0e4kQ5PaNorjDTiC/agdQaZcq0S9W5uH7z2/PdcEf
+   KhzhzfHU0fq41C2Id10zttULtsIV074J571rZNmOay3XJ7DrTmbeNILPt
+   Jq9WRATO03gdmHBMdUSl/3tavgIWjbaUUQYeideEtcpwUGU17hmDZeT6o
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10267"; a="235573913"
+X-IronPort-AV: E=Sophos;i="5.88,391,1635231600"; 
+   d="scan'208";a="235573913"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2022 11:36:48 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,391,1635231600"; 
+   d="scan'208";a="776797599"
+Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
+  by fmsmga006.fm.intel.com with ESMTP; 23 Feb 2022 11:36:45 -0800
+Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nMxRM-0001kK-S2; Wed, 23 Feb 2022 19:36:44 +0000
+Date:   Thu, 24 Feb 2022 03:35:56 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Ingo Molnar <mingo@kernel.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [mingo-tip:sched/headers 571/2340]
+ arch/s390/include/asm/preempt.h:110:42: error: implicit declaration of
+ function 'task_thread_info'
+Message-ID: <202202240337.1ug9UnXJ-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <28b040bd2357a1879df0ca1b74094323f778a472.1645636285.git.christophe.leroy@csgroup.eu>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 23, 2022 at 06:11:36PM +0100, Christophe Leroy wrote:
-> Commit a82adfd5c7cb ("hardening: Introduce CONFIG_ZERO_CALL_USED_REGS")
-> added zeroing of used registers at function exit.
-> 
-> At the time being, PPC64 clears volatile registers on syscall exit but
-> PPC32 doesn't do it for performance reason.
-> 
-> Add that clearing in PPC32 syscall exit as well, but only when
-> CONFIG_ZERO_CALL_USED_REGS is selected.
-> 
-> On an 8xx, the null_syscall selftest gives:
-> - Without CONFIG_ZERO_CALL_USED_REGS		: 288 cycles
-> - With CONFIG_ZERO_CALL_USED_REGS		: 305 cycles
-> - With CONFIG_ZERO_CALL_USED_REGS + this patch	: 319 cycles
-> 
-> Note that (independent of this patch), with pmac32_defconfig,
-> vmlinux size is as follows with/without CONFIG_ZERO_CALL_USED_REGS:
-> 
->    text	   	data	    bss	    dec	    hex		filename
-> 9578869		2525210	 194400	12298479	bba8ef	vmlinux.without
-> 10318045	2525210  194400	13037655	c6f057	vmlinux.with
-> 
-> That is a 7.7% increase on text size, 6.0% on overall size.
-> 
-> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
-> ---
->  arch/powerpc/kernel/entry_32.S | 15 +++++++++++++++
->  1 file changed, 15 insertions(+)
-> 
-> diff --git a/arch/powerpc/kernel/entry_32.S b/arch/powerpc/kernel/entry_32.S
-> index 7748c278d13c..199f23092c02 100644
-> --- a/arch/powerpc/kernel/entry_32.S
-> +++ b/arch/powerpc/kernel/entry_32.S
-> @@ -151,6 +151,21 @@ syscall_exit_finish:
->  	bne	3f
->  	mtcr	r5
->  
-> +#ifdef CONFIG_ZERO_CALL_USED_REGS
-> +	/* Zero volatile regs that may contain sensitive kernel data */
-> +	li	r0,0
-> +	li	r4,0
-> +	li	r5,0
-> +	li	r6,0
-> +	li	r7,0
-> +	li	r8,0
-> +	li	r9,0
-> +	li	r10,0
-> +	li	r11,0
-> +	li	r12,0
-> +	mtctr	r0
-> +	mtxer	r0
-> +#endif
+tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git sched/headers
+head:   97c5eeb4de3ad324ed2a4656b46465299cfd010a
+commit: 32c0f4ef20d93c78fce830a2fe6cc83db8bb29d0 [571/2340] headers/deps: Move task->thread_info to per_task()
+config: s390-randconfig-r044-20220223 (https://download.01.org/0day-ci/archive/20220224/202202240337.1ug9UnXJ-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install s390 cross compiling tool for clang build
+        # apt-get install binutils-s390x-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=32c0f4ef20d93c78fce830a2fe6cc83db8bb29d0
+        git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
+        git fetch --no-tags mingo-tip sched/headers
+        git checkout 32c0f4ef20d93c78fce830a2fe6cc83db8bb29d0
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 prepare
 
-I think this should probably be unconditional -- if this is actually
-leaking kernel pointers (or data) that's pretty bad. :|
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-If you really want to leave it build-time selectable, maybe add a new
-config that gets "select"ed by CONFIG_ZERO_CALL_USED_REGS?
+All error/warnings (new ones prefixed by >>):
 
-(And you may want to consider wiping all "unused" registers at syscall
-entry as well.)
+   In file included from arch/s390/kernel/asm-offsets.c:11:
+   In file included from include/linux/kvm_host.h:7:
+   In file included from include/linux/hardirq.h:5:
+   In file included from include/linux/context_tracking_state.h:5:
+   In file included from include/linux/percpu.h:6:
+   In file included from include/linux/smp.h:110:
+   In file included from include/linux/preempt.h:78:
+>> arch/s390/include/asm/preempt.h:110:42: error: implicit declaration of function 'task_thread_info' [-Werror,-Wimplicit-function-declaration]
+           return !--S390_lowcore.preempt_count && tif_need_resched();
+                                                   ^
+   include/linux/sched/thread_info_api_lowlevel.h:103:28: note: expanded from macro 'tif_need_resched'
+   #define tif_need_resched() test_thread_flag(TIF_NEED_RESCHED)
+                              ^
+   include/linux/sched/thread_info_api_lowlevel.h:64:22: note: expanded from macro 'test_thread_flag'
+           test_ti_thread_flag(current_thread_info(), flag)
+                               ^
+   include/linux/thread_info.h:26:32: note: expanded from macro 'current_thread_info'
+   # define current_thread_info() task_thread_info(current)
+                                  ^
+   In file included from arch/s390/kernel/asm-offsets.c:11:
+   In file included from include/linux/kvm_host.h:7:
+   In file included from include/linux/hardirq.h:5:
+   In file included from include/linux/context_tracking_state.h:5:
+   In file included from include/linux/percpu.h:6:
+   In file included from include/linux/smp.h:110:
+   In file included from include/linux/preempt.h:78:
+>> arch/s390/include/asm/preempt.h:110:42: warning: incompatible integer to pointer conversion passing 'int' to parameter of type 'struct thread_info *' [-Wint-conversion]
+           return !--S390_lowcore.preempt_count && tif_need_resched();
+                                                   ^~~~~~~~~~~~~~~~~~
+   include/linux/sched/thread_info_api_lowlevel.h:103:28: note: expanded from macro 'tif_need_resched'
+   #define tif_need_resched() test_thread_flag(TIF_NEED_RESCHED)
+                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/sched/thread_info_api_lowlevel.h:64:22: note: expanded from macro 'test_thread_flag'
+           test_ti_thread_flag(current_thread_info(), flag)
+                               ^~~~~~~~~~~~~~~~~~~~~
+   include/linux/thread_info.h:26:32: note: expanded from macro 'current_thread_info'
+   # define current_thread_info() task_thread_info(current)
+                                  ^~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/sched/thread_info_api_lowlevel.h:39:59: note: passing argument to parameter 'ti' here
+   static inline int test_ti_thread_flag(struct thread_info *ti, int flag)
+                                                             ^
+   In file included from arch/s390/kernel/asm-offsets.c:11:
+   In file included from include/linux/kvm_host.h:7:
+   In file included from include/linux/hardirq.h:5:
+   In file included from include/linux/context_tracking_state.h:5:
+   In file included from include/linux/percpu.h:6:
+   In file included from include/linux/smp.h:110:
+   In file included from include/linux/preempt.h:78:
+   arch/s390/include/asm/preempt.h:116:4: error: implicit declaration of function 'task_thread_info' [-Werror,-Wimplicit-function-declaration]
+                           tif_need_resched());
+                           ^
+   include/linux/sched/thread_info_api_lowlevel.h:103:28: note: expanded from macro 'tif_need_resched'
+   #define tif_need_resched() test_thread_flag(TIF_NEED_RESCHED)
+                              ^
+   include/linux/sched/thread_info_api_lowlevel.h:64:22: note: expanded from macro 'test_thread_flag'
+           test_ti_thread_flag(current_thread_info(), flag)
+                               ^
+   include/linux/thread_info.h:26:32: note: expanded from macro 'current_thread_info'
+   # define current_thread_info() task_thread_info(current)
+                                  ^
+   In file included from arch/s390/kernel/asm-offsets.c:11:
+   In file included from include/linux/kvm_host.h:7:
+   In file included from include/linux/hardirq.h:5:
+   In file included from include/linux/context_tracking_state.h:5:
+   In file included from include/linux/percpu.h:6:
+   In file included from include/linux/smp.h:110:
+   In file included from include/linux/preempt.h:78:
+   arch/s390/include/asm/preempt.h:116:4: warning: incompatible integer to pointer conversion passing 'int' to parameter of type 'struct thread_info *' [-Wint-conversion]
+                           tif_need_resched());
+                           ^~~~~~~~~~~~~~~~~~~
+   include/linux/sched/thread_info_api_lowlevel.h:103:28: note: expanded from macro 'tif_need_resched'
+   #define tif_need_resched() test_thread_flag(TIF_NEED_RESCHED)
+                              ^
+   include/linux/sched/thread_info_api_lowlevel.h:64:22: note: expanded from macro 'test_thread_flag'
+           test_ti_thread_flag(current_thread_info(), flag)
+                               ^
+   include/linux/thread_info.h:26:32: note: expanded from macro 'current_thread_info'
+   # define current_thread_info() task_thread_info(current)
+                                  ^
+   include/linux/compiler.h:48:41: note: expanded from macro 'unlikely'
+   #  define unlikely(x)   (__branch_check__(x, 0, __builtin_constant_p(x)))
+                            ~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler.h:33:34: note: expanded from macro '__branch_check__'
+                           ______r = __builtin_expect(!!(x), expect);      \
+                                                         ^
+   include/linux/sched/thread_info_api_lowlevel.h:39:59: note: passing argument to parameter 'ti' here
+   static inline int test_ti_thread_flag(struct thread_info *ti, int flag)
+                                                             ^
+   In file included from arch/s390/kernel/asm-offsets.c:11:
+   In file included from include/linux/kvm_host.h:7:
+   In file included from include/linux/hardirq.h:5:
+   In file included from include/linux/context_tracking_state.h:5:
+   In file included from include/linux/percpu.h:6:
+   In file included from include/linux/smp.h:110:
+   In file included from include/linux/preempt.h:78:
+   arch/s390/include/asm/preempt.h:116:4: warning: incompatible integer to pointer conversion passing 'int' to parameter of type 'struct thread_info *' [-Wint-conversion]
+                           tif_need_resched());
+                           ^~~~~~~~~~~~~~~~~~~
+   include/linux/sched/thread_info_api_lowlevel.h:103:28: note: expanded from macro 'tif_need_resched'
+   #define tif_need_resched() test_thread_flag(TIF_NEED_RESCHED)
+                              ^
+   include/linux/sched/thread_info_api_lowlevel.h:64:22: note: expanded from macro 'test_thread_flag'
+           test_ti_thread_flag(current_thread_info(), flag)
+                               ^
+   include/linux/thread_info.h:26:32: note: expanded from macro 'current_thread_info'
+   # define current_thread_info() task_thread_info(current)
+                                  ^
+   include/linux/compiler.h:48:68: note: expanded from macro 'unlikely'
+   #  define unlikely(x)   (__branch_check__(x, 0, __builtin_constant_p(x)))
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~
+   include/linux/compiler.h:35:19: note: expanded from macro '__branch_check__'
+                                                expect, is_constant);      \
+                                                        ^~~~~~~~~~~
+   include/linux/sched/thread_info_api_lowlevel.h:39:59: note: passing argument to parameter 'ti' here
+   static inline int test_ti_thread_flag(struct thread_info *ti, int flag)
+                                                             ^
+   In file included from arch/s390/kernel/asm-offsets.c:11:
+   In file included from include/linux/kvm_host.h:7:
+   In file included from include/linux/hardirq.h:9:
+   In file included from include/linux/sched.h:12:
+   include/linux/sched/per_task.h:48:11: fatal error: 'generated/asm-offsets.h' file not found
+   # include <generated/asm-offsets.h>
+             ^~~~~~~~~~~~~~~~~~~~~~~~~
+   3 warnings and 3 errors generated.
+   make[2]: *** [scripts/Makefile.build:121: arch/s390/kernel/asm-offsets.s] Error 1
+   make[2]: Target '__build' not remade because of errors.
+   make[1]: *** [Makefile:1191: prepare0] Error 2
 
--Kees
 
->  1:	lwz	r2,GPR2(r1)
->  	lwz	r1,GPR1(r1)
->  	rfi
-> -- 
-> 2.34.1
-> 
+vim +/task_thread_info +110 arch/s390/include/asm/preempt.h
 
--- 
-Kees Cook
+c360192bf4a8dc Martin Schwidefsky 2016-10-25  107  
+c360192bf4a8dc Martin Schwidefsky 2016-10-25  108  static inline bool __preempt_count_dec_and_test(void)
+c360192bf4a8dc Martin Schwidefsky 2016-10-25  109  {
+c360192bf4a8dc Martin Schwidefsky 2016-10-25 @110  	return !--S390_lowcore.preempt_count && tif_need_resched();
+c360192bf4a8dc Martin Schwidefsky 2016-10-25  111  }
+c360192bf4a8dc Martin Schwidefsky 2016-10-25  112  
+
+:::::: The code at line 110 was first introduced by commit
+:::::: c360192bf4a8dc72f102dd6a4e1bf8bd0b404cfa s390/preempt: move preempt_count to the lowcore
+
+:::::: TO: Martin Schwidefsky <schwidefsky@de.ibm.com>
+:::::: CC: Martin Schwidefsky <schwidefsky@de.ibm.com>
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

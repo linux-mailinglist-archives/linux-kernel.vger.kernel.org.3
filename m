@@ -2,73 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D8F54C0C3E
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 06:50:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 963504C0C42
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 06:51:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237608AbiBWFul (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 00:50:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45144 "EHLO
+        id S237990AbiBWFvu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 00:51:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236743AbiBWFuh (ORCPT
+        with ESMTP id S236743AbiBWFvr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 00:50:37 -0500
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F088843486
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 21:50:09 -0800 (PST)
-Received: by mail-pf1-x42b.google.com with SMTP id d187so14329843pfa.10
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 21:50:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=v75UoHDMV8Urw5J412ERbhmzgEk+9C7vg5aYyG8DNWU=;
-        b=BhmhUsOjiIoWB4qqEZ33JuuDLGq5ar8gcqVcHHXAJufMZCtfgryWlMFaMYU4rdl4pO
-         2qKNZxmv0itQMvWcmyvQ0uEeZrxMcRGmSlTB2XBjeS2H0loTJ2VQQynnQw9YyQeaZqrb
-         evhNvF4ZXxKsk+Z4YGdR51uzVeqJQIYNImt78PTJPycNlFsMUCCwbYcTF6ihEcM0sIWY
-         RvmjHGcq2I0SOPOfvWZoGHa+reskTyS3azZFEMV/O1rJ8zsNBoMS4ojkr84SIcSOlhcV
-         fPCaDNni0wJmgmaXXn6EcZM4BUVX4TEDzIM9C+YLJHbJFbP1BV3yWttFLUUN7rAT9jBo
-         fUgw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=v75UoHDMV8Urw5J412ERbhmzgEk+9C7vg5aYyG8DNWU=;
-        b=JO3LdiFA/817AqsoYYDLpl8gQmZjyUjHHmRknbxsRQBER3FheMHfckBQDPwuXAUadD
-         t2cFEslOHv8BQixmo2kUin0t5yy0mxjb6y1Z+lBJ01RzJ0Lx7vrVRP+GpH4D7IWBeRI5
-         CiXk/ywwX2SOF7cykHzUJpQooACqVKVYyVE23yY9XuTDmMYW643DDLCi+70DWjQFIsmp
-         JFnyKwCwyfFubWZaYeh35NNTOLElne/WUZK41omnwboPM4bDeN3co27mmgcr8QFObf4T
-         5Q0w46wV7HJl9vI5Ovq/5+CTYRPIQ5cy2jW9+teIKXhTL3gGdv/irQcrmCSkzxI/M4gI
-         UJRA==
-X-Gm-Message-State: AOAM532jPctf+eelLhK1B0biqiz1IxBkHcx+oxpz/xEhn7UkxI5miIxm
-        DOIUjAL90KIOSq0ZD1Xm5kmSIA==
-X-Google-Smtp-Source: ABdhPJzoLX4bZEQZeZGtz4jgW5zJz1eKTbRYv8TUYOR+TdHLNMDzpgbnlYYaD9VxiwDslerAzXtxMg==
-X-Received: by 2002:a63:8649:0:b0:34c:3be:ba14 with SMTP id x70-20020a638649000000b0034c03beba14mr22311661pgd.139.1645595409440;
-        Tue, 22 Feb 2022 21:50:09 -0800 (PST)
-Received: from localhost ([223.184.83.228])
-        by smtp.gmail.com with ESMTPSA id z27sm22534821pgk.78.2022.02.22.21.50.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Feb 2022 21:50:08 -0800 (PST)
-Date:   Wed, 23 Feb 2022 11:20:06 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Lukasz Luba <lukasz.luba@arm.com>
-Cc:     linux-kernel@vger.kernel.org, dietmar.eggemann@arm.com,
-        rafael@kernel.org, daniel.lezcano@linaro.org, nm@ti.com,
-        sboyd@kernel.org, mka@chromium.org, dianders@chromium.org,
-        robh+dt@kernel.org, devicetree@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: Re: [[PATCH v2 1/2] dt-bindings: opp: Add 'opp-microwatt' entry in
- the OPP
-Message-ID: <20220223055006.zlcwco7oducggxjw@vireshk-i7>
-References: <20220222140746.12293-1-lukasz.luba@arm.com>
- <20220222140746.12293-2-lukasz.luba@arm.com>
+        Wed, 23 Feb 2022 00:51:47 -0500
+Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87C1843AF4
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 21:51:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645595480; x=1677131480;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=8EFrPs1xiRRVF5w1/jRlZCuCqrPp2F8vOyo8y2fWGLo=;
+  b=EuyJjky77N/Md8G8NGu5REhIaS/EI5IN573R89Hfl8SM5q7t7A8h/VNF
+   JW6Q/BO+S3rkHcvcm+7/UCibXLe5Z/PT/RoKRgOkNWQWu6DOwgF1bTH/w
+   O3wGG77P6bvrotkRxvu0j4ShdUFODXw3wsWJlD1ybvEwT0bJpMsXk3tQs
+   N/DpyqcPo11Qm+S1ZXokLTCI6VALFOpg7auuvE3e/sWyHB3nLfIEC7llN
+   CHaokvnoN1ofK/sRs8rt2EBmk6cK/nSVsQaN664/K6+SGICtM7t9outhE
+   MEEBuX8iFsiRe+5rDv1tO+X3xJ2Q28Mh03jyD/senQt11G8Tw5MTj0ldo
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10266"; a="312605511"
+X-IronPort-AV: E=Sophos;i="5.88,390,1635231600"; 
+   d="scan'208";a="312605511"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2022 21:51:19 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,390,1635231600"; 
+   d="scan'208";a="639188679"
+Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 22 Feb 2022 21:51:17 -0800
+Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nMkYW-00012V-Qu; Wed, 23 Feb 2022 05:51:16 +0000
+Date:   Wed, 23 Feb 2022 13:50:52 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     =?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <clement.leger@bootlin.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Ludovic Desroches <ludovic.desroches@microchip.com>
+Cc:     kbuild-all@lists.01.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        =?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <clement.leger@bootlin.com>
+Subject: Re: [PATCH 3/4] ARM: at91: pm: add support for sama5d2 secure suspend
+Message-ID: <202202231329.2hzbFwiR-lkp@intel.com>
+References: <20220222150846.255307-4-clement.leger@bootlin.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20220222140746.12293-2-lukasz.luba@arm.com>
-User-Agent: NeoMutt/20180716-391-311a52
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220222150846.255307-4-clement.leger@bootlin.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,39 +71,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22-02-22, 14:07, Lukasz Luba wrote:
-> Add new entry for the OPP which provides information about power
-> expressed in micro-Watts. It is useful for the Energy Model framework.
-> 
-> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
-> ---
->  Documentation/devicetree/bindings/opp/opp-v2-base.yaml | 7 +++++++
->  1 file changed, 7 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/opp/opp-v2-base.yaml b/Documentation/devicetree/bindings/opp/opp-v2-base.yaml
-> index 15a76bcd6d42..3f07a279ed2a 100644
-> --- a/Documentation/devicetree/bindings/opp/opp-v2-base.yaml
-> +++ b/Documentation/devicetree/bindings/opp/opp-v2-base.yaml
-> @@ -93,6 +93,13 @@ patternProperties:
->          minItems: 1
->          maxItems: 8   # Should be enough regulators
->  
-> +      opp-microwatt:
-> +        description:
-> +          Power for the OPP
-> +
-> +          A value representing power for the OPP in micro-Watts.
-> +        $ref: /schemas/types.yaml#/definitions/uint32
-> +
+Hi "Clément,
 
-I was expecting a much larger change here. Look at how opp-microvolt and
-opp-microamp is defined in this file.
+Thank you for the patch! Perhaps something to improve:
 
-Should this value be made per-supply/regulator, just like voltage/current ?
+[auto build test WARNING on soc/for-next]
+[also build test WARNING on arm/for-next abelloni/rtc-next linus/master v5.17-rc5 next-20220217]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
->        opp-level:
->          description:
->            A value representing the performance level of the device.
+url:    https://github.com/0day-ci/linux/commits/Cl-ment-L-ger/ARM-at91-add-support-for-secure-suspend-on-sama5d2/20220222-231305
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git for-next
+config: arm-allmodconfig (https://download.01.org/0day-ci/archive/20220223/202202231329.2hzbFwiR-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/e7f524a6f3693c0e84b0258766c98a24046c9ba1
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Cl-ment-L-ger/ARM-at91-add-support-for-secure-suspend-on-sama5d2/20220222-231305
+        git checkout e7f524a6f3693c0e84b0258766c98a24046c9ba1
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm SHELL=/bin/bash
 
--- 
-viresh
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> arch/arm/mach-at91/pm_secure.c:50:5: warning: no previous prototype for 'at91_suspend_entering_slow_clock' [-Wmissing-prototypes]
+      50 | int at91_suspend_entering_slow_clock(void)
+         |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for ATMEL_PM
+   Depends on ARCH_AT91 && !ATMEL_SECURE_PM
+   Selected by
+   - SOC_SAMA7 && ARCH_AT91 && PM
+
+
+vim +/at91_suspend_entering_slow_clock +50 arch/arm/mach-at91/pm_secure.c
+
+    49	
+  > 50	int at91_suspend_entering_slow_clock(void)
+    51	{
+    52		return (suspend_mode >= AT91_PM_ULP0);
+    53	}
+    54	EXPORT_SYMBOL(at91_suspend_entering_slow_clock);
+    55	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

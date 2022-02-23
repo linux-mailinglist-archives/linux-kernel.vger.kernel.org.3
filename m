@@ -2,132 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D38A24C06D3
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 02:23:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E22C4C06D9
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 02:27:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235773AbiBWBXn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 20:23:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54432 "EHLO
+        id S236551AbiBWB2L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 20:28:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231136AbiBWBXl (ORCPT
+        with ESMTP id S231136AbiBWB2J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 20:23:41 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9A3548336;
-        Tue, 22 Feb 2022 17:23:13 -0800 (PST)
-Received: from dggpeml500024.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4K3JD82YczzdZPj;
-        Wed, 23 Feb 2022 09:22:00 +0800 (CST)
-Received: from Linux-SUSE12SP5.huawei.com (10.67.132.207) by
- dggpeml500024.china.huawei.com (7.185.36.10) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Wed, 23 Feb 2022 09:23:11 +0800
-From:   Wei Xiao <xiaowei66@huawei.com>
-To:     <rostedt@goodmis.org>, <mingo@redhat.com>, <mcgrof@kernel.org>,
-        <keescook@chromium.org>, <yzaikin@google.com>
-CC:     <linux-kernel@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
-        <young.liuyang@huawei.com>, <zengweilin@huawei.com>,
-        <nixiaoming@huawei.com>, <xiaowei66@huawei.com>
-Subject: [PATCH] ftrace: move sysctl_ftrace_enabled to ftrace.c
-Date:   Wed, 23 Feb 2022 09:23:11 +0800
-Message-ID: <20220223012311.134314-1-xiaowei66@huawei.com>
-X-Mailer: git-send-email 2.22.0
+        Tue, 22 Feb 2022 20:28:09 -0500
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4682122B04
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 17:27:43 -0800 (PST)
+Received: by mail-pg1-x52d.google.com with SMTP id 139so18520700pge.1
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 17:27:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=z2BI41+moHLqPxYye2IJzRPB1aVADH7WFMUHE1bkSIg=;
+        b=A0iseiH33OikZhbY+MY2r3xCS1rV/nUjB7sgKJCRW9RIlTl3b2Cqa9hD940e0Ktk3G
+         PsE65b5jhY1C4NImzuubK5f+T34jmiHvkH9Vsu7f3dK/yQfGoq516nDb0g49dbw3bnMC
+         tc0n9La8yoQfrKTWbEhJndrb+XFLD5Wc5sbmg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=z2BI41+moHLqPxYye2IJzRPB1aVADH7WFMUHE1bkSIg=;
+        b=pu86XbTxQftdK5i/AML0oqBGNsKMkzmbAD0hVm0sKYI+mXEPyBq38aPx6NOqRGIeXI
+         xu18TcnqmKb8iBW+Et6U013FcUPYKyMNsiURfJxQd8c0bYntxh3uU3th67YqsGflmxn1
+         Xob8UcRjEjedYjPCjlq/9n2/ofxxsd1e9R72ywSgubuj0p7uwBrTgjSSITfoA4n1ONQo
+         dB0vj+btMMeUhz4k6/coTWourIM7d0uo92odhx+UZMQmikUPfpyKPPFB9smsVZIhf01P
+         1ZfcjJQtRjICLD6FyoRcoNYOgzhFZf5matzrsFCMTnsmpuWfY6GHn9FLroonjcGFfLhr
+         aIXQ==
+X-Gm-Message-State: AOAM533e92Y3HFxBZCbnXlr3ME9PYmbJuw9MmDo9i6aCkOuE7bPceuUK
+        XMVYx/sskUz0M9lQ8qX+A1DgUg==
+X-Google-Smtp-Source: ABdhPJyqp/rlr5xxZHgn3ZIxCdMsiOWCS0xpNad16llxE39IBc2Q4ud59TVWIWkuntmFrtCA5RAEUA==
+X-Received: by 2002:a63:ec0f:0:b0:373:a3e9:10a7 with SMTP id j15-20020a63ec0f000000b00373a3e910a7mr21658149pgh.149.1645579662820;
+        Tue, 22 Feb 2022 17:27:42 -0800 (PST)
+Received: from google.com ([240f:75:7537:3187:d2bd:9913:3c85:9aca])
+        by smtp.gmail.com with ESMTPSA id u27sm1159400pfg.171.2022.02.22.17.27.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Feb 2022 17:27:42 -0800 (PST)
+Date:   Wed, 23 Feb 2022 01:27:35 +0000
+From:   Sergey Senozhatsky <senozhatsky@chromium.org>
+To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
+        linux-kernel@vger.kernel.org, bhe@redhat.com, pmladek@suse.com,
+        akpm@linux-foundation.org, anton@enomsg.org, ccross@android.com,
+        dyoung@redhat.com, feng.tang@intel.com, john.ogness@linutronix.de,
+        keescook@chromium.org, kernel@gpiccoli.net,
+        kexec@lists.infradead.org, rostedt@goodmis.org,
+        tony.luck@intel.com, vgoyal@redhat.com
+Subject: Re: [PATCH V6] panic: Move panic_print before kmsg dumpers
+Message-ID: <YhWNhzacAVDuFtwB@google.com>
+References: <20220214141308.841525-1-gpiccoli@igalia.com>
+ <YhRFNKtxSE8Xrbfw@google.com>
+ <7e15bc6a-ceae-aa3a-0a86-18d24181b0ed@igalia.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.67.132.207]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpeml500024.china.huawei.com (7.185.36.10)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <7e15bc6a-ceae-aa3a-0a86-18d24181b0ed@igalia.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This moves ftrace_enabled to trace/ftrace.c.
+On (22/02/22 11:10), Guilherme G. Piccoli wrote:
+> On 21/02/2022 23:06, Sergey Senozhatsky wrote:
+> > On (22/02/14 11:13), Guilherme G. Piccoli wrote:
+> > [...]
+> > By additional panic_print messages you mean that panic_print_sys_info()
+> > will print everything (except PANIC_PRINT_ALL_PRINTK_MSG) twice?
+> > 
+> > Do we really need to dump everything twice? show_mem(), show_state(),
+> > ftrace_dump(DUMP_ALL). That's quite a bit of extra data.
+> > 
+> 
+> Oh no, we don't print everything twice, that'd be insane heh
 
-Signed-off-by: Wei Xiao <xiaowei66@huawei.com>
----
- include/linux/ftrace.h |  3 ---
- kernel/sysctl.c        |  9 ---------
- kernel/trace/ftrace.c  | 22 +++++++++++++++++++++-
- 3 files changed, 21 insertions(+), 13 deletions(-)
+My bad! I did not spot the `return` at the end of the new branch.
 
-diff --git a/include/linux/ftrace.h b/include/linux/ftrace.h
-index 9999e29187de..659b2840563a 100644
---- a/include/linux/ftrace.h
-+++ b/include/linux/ftrace.h
-@@ -94,9 +94,6 @@ static inline int ftrace_mod_get_kallsym(unsigned int symnum, unsigned long *val
- #ifdef CONFIG_FUNCTION_TRACER
- 
- extern int ftrace_enabled;
--extern int
--ftrace_enable_sysctl(struct ctl_table *table, int write,
--		     void *buffer, size_t *lenp, loff_t *ppos);
- 
- #ifndef CONFIG_HAVE_DYNAMIC_FTRACE_WITH_ARGS
- 
-diff --git a/kernel/sysctl.c b/kernel/sysctl.c
-index 5ae443b2882e..55279ec66b28 100644
---- a/kernel/sysctl.c
-+++ b/kernel/sysctl.c
-@@ -1906,15 +1906,6 @@ static struct ctl_table kern_table[] = {
- 		.mode		= 0644,
- 		.proc_handler	= proc_dointvec,
- 	},
--#ifdef CONFIG_FUNCTION_TRACER
--	{
--		.procname	= "ftrace_enabled",
--		.data		= &ftrace_enabled,
--		.maxlen		= sizeof(int),
--		.mode		= 0644,
--		.proc_handler	= ftrace_enable_sysctl,
--	},
--#endif
- #ifdef CONFIG_STACK_TRACER
- 	{
- 		.procname	= "stack_tracer_enabled",
-diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
-index f9feb197b2da..4a5b4d6996a4 100644
---- a/kernel/trace/ftrace.c
-+++ b/kernel/trace/ftrace.c
-@@ -7846,7 +7846,8 @@ static bool is_permanent_ops_registered(void)
- 	return false;
- }
- 
--int
-+#ifdef CONFIG_SYSCTL
-+static int
- ftrace_enable_sysctl(struct ctl_table *table, int write,
- 		     void *buffer, size_t *lenp, loff_t *ppos)
- {
-@@ -7889,3 +7890,22 @@ ftrace_enable_sysctl(struct ctl_table *table, int write,
- 	mutex_unlock(&ftrace_lock);
- 	return ret;
- }
-+
-+static struct ctl_table ftrace_sysctls[] = {
-+	{
-+		.procname       = "ftrace_enabled",
-+		.data           = &ftrace_enabled,
-+		.maxlen         = sizeof(int),
-+		.mode           = 0644,
-+		.proc_handler   = ftrace_enable_sysctl,
-+	},
-+	{}
-+};
-+
-+static int __init ftrace_sysctl_init(void)
-+{
-+	register_sysctl_init("kernel", ftrace_sysctls);
-+	return 0;
-+}
-+late_initcall(ftrace_sysctl_init);
-+#endif
--- 
-2.19.1
++       if (console_flush) {
++               if (panic_print & PANIC_PRINT_ALL_PRINTK_MSG)
++                       console_flush_on_panic(CONSOLE_REPLAY_ALL);
++               return;
++       }
 
+Hmm. Yeah, well, that's a bit of a tricky interface now
+
+	panic()
+		// everything (if corresponding bits set), no console flush
+		panic_print_sys_info(false)
+		...
+		// console flush only if corresponding bit set
+		panic_print_sys_info(true)
+
+
+
+If everyone is fine then OK.
+
+But I _personally_ would look into changing this to something like this:
+
+	#define EARLY_PANIC_MASK (PANIC_PRINT_FOO | PANIC_PRINT_BAR | ...)
+	#define LATE_PANIC_MASK (PANIC_PRINT_ALL_PRINTK_MSG)
+	panic()
+		panic_print_sys_info(panic_print & EARLY_PANIC_MASK)
+		...
+		panic_print_sys_info(panic_print & LATE_PANIC_MASK)

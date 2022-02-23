@@ -2,63 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E53364C0AC4
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 05:00:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 06EAA4C0AC6
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 05:00:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238007AbiBWEAj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 23:00:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57148 "EHLO
+        id S238071AbiBWEBA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 23:01:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231979AbiBWEAh (ORCPT
+        with ESMTP id S238045AbiBWEA4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 23:00:37 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 71A285D19B
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 20:00:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1645588809;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=cZg/zOsjS1zgxZzshOQCrxDaITSJ0qnWWjX9sbQEFec=;
-        b=WeG2UwzBNxErOE2AOqookx2RWR6QQ4WiN/UFUeP0x0mZlswR7jua6GwFbNcvaZ1OQcWUc4
-        WAo0ZBkMh0vHdPUY+tINl6dYbyh6LC/eMK/24Z30VzJxCVhwUf/s2fPZ5FWgqPHGVoohbL
-        y4moIPYScLb1wKjsekDrlltbPGxGaJU=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-620-GclCn2EeO2q5o9pGQDTEZA-1; Tue, 22 Feb 2022 23:00:02 -0500
-X-MC-Unique: GclCn2EeO2q5o9pGQDTEZA-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id C46101006AA6;
-        Wed, 23 Feb 2022 04:00:00 +0000 (UTC)
-Received: from localhost (ovpn-14-1.pek2.redhat.com [10.72.14.1])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 2E6FF4D702;
-        Wed, 23 Feb 2022 03:59:56 +0000 (UTC)
-Date:   Wed, 23 Feb 2022 11:59:54 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Eric DeVolder <eric.devolder@oracle.com>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        kexec@lists.infradead.org, ebiederm@xmission.com,
-        dyoung@redhat.com, vgoyal@redhat.com, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        hpa@zytor.com, nramas@linux.microsoft.com, thomas.lendacky@amd.com,
-        robh@kernel.org, efault@gmx.de, rppt@kernel.org,
-        konrad.wilk@oracle.com, boris.ostrovsky@oracle.com
-Subject: Re: [PATCH v4 06/10] crash hp: generic crash hotplug support
- infrastructure
-Message-ID: <YhWxOoB3n2O2vLHB@MiWiFi-R3L-srv>
-References: <20220209195706.51522-1-eric.devolder@oracle.com>
- <20220209195706.51522-7-eric.devolder@oracle.com>
+        Tue, 22 Feb 2022 23:00:56 -0500
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73261654A3;
+        Tue, 22 Feb 2022 20:00:29 -0800 (PST)
+Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21MN8LqN021784;
+        Wed, 23 Feb 2022 04:00:14 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
+ from : message-id : references : date : in-reply-to : content-type :
+ mime-version; s=corp-2021-07-09;
+ bh=i8o97OI1U1jsjj7hSszd63ALT/ODDcUwgTDxj7J+bOo=;
+ b=GJM69SJ1YYhOBEuP/0GcDBLEjjihU80CybvjU3a4Z43MD7PuEYRSef3/ej43Bh5FFI15
+ LeFU6JrLbV05rrO8bWbw5VQcpvMFXMCTb1idYWcQMlVQJPbZMgR6sXVvx2/znHlQ+AUv
+ 1XAajXdid7v4aqZMmSNTxFtdxCOvUe6ihhFYT/30cWMBFqX9msgCDdl9qgIBEcLiG4oj
+ NDwa0OuK1Ss+2/pYPu4EHAlGjBhh9kJrZVX+k5Q3A7iRxQpXNCY3At73v6GHpJkIzFHR
+ 7JQmAnoN3oNzhH5s2fk3enhPZqhslbt9YiGDCs1TVNlWRBuxBzvBAihmbxdDTrcK5bES Gw== 
+Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3ecvar2n27-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 23 Feb 2022 04:00:14 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+        by userp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 21N3uiXk015618;
+        Wed, 23 Feb 2022 04:00:13 GMT
+Received: from nam10-mw2-obe.outbound.protection.outlook.com (mail-mw2nam10lp2105.outbound.protection.outlook.com [104.47.55.105])
+        by userp3020.oracle.com with ESMTP id 3eat0nw2ku-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 23 Feb 2022 04:00:12 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=oM7xhrHJeREqX4StI4HuN0V6b0KG6R48iyZt2QqG1oUVRj7V1I7yI62UHk4YtRVuSHlq9EzL+Vwf70m4u6ARGs9Vq7W3OA7syt28Olj9ulAZPc0QMV2ipGE5f/rCRKMVJwn+/I1RiVqDmP8dchOsEoIP7kzm+6ZP0xmVntO1SjpTr1N7UhyIsWa7GWRnVDaWDCqsXuwnfnI77ROcDj6bJA+vlhQZ5Wh0+Gq8VT9W6wDyubcyBmPxPYEcjHYymCU9S0tGBDtHLcDSaHlM892sSZPACHBRbwrqvidRuE8lbBDt1wPQbJCehrve59MDVUjJaYipDPT/wuFeg0NisUT7ig==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=i8o97OI1U1jsjj7hSszd63ALT/ODDcUwgTDxj7J+bOo=;
+ b=FVoyqXKuNLRhKpS5jeI1uyiZHowpGuU5dJEMXvZyLT1dziaP9FIpknvCSIw4Zbo6F4gcwrP9GmeDV6YQHxgsVFA3nHvqMic3sbnIgm7YXz3rOHUwmO+KhzZRLyZg7zP4Shfpz3YfzaqFoIssrW9TgJw5M0M3Yyj1ncjK+h5OfVx4+XSda7COvliUjSHxv3WXBYrlzfKCWtOJnCMx7q6aGPCmSTBl1RiSNDJX3B/1p4j51LGYGHxaiWjjVZgyavD1Ebt18Gaww10dWNPjKwgAb4VY9D29x7/BHh/0bsjpYPa3S4535xOodo/aPDAslmxxG4UHaBrJT70uF64TtqujTQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=i8o97OI1U1jsjj7hSszd63ALT/ODDcUwgTDxj7J+bOo=;
+ b=RLFy2rSpzhlvs4cPKqhIERhEV2+RuHFuqC61pUVrKVhZHr68VqgHFUtIfJhXbNl8F/28FvDvT0v55rIE+/VJP2107TRdfyU/x6WmSKm2RZO+AjGMGH4LjDd+StQZNFl6M6GA9SkUl+QVn5CTVd+WJrL+8q/rJr5aJwg/HMieIGY=
+Received: from PH0PR10MB4759.namprd10.prod.outlook.com (2603:10b6:510:3d::12)
+ by MWHPR10MB1488.namprd10.prod.outlook.com (2603:10b6:300:23::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4995.16; Wed, 23 Feb
+ 2022 04:00:10 +0000
+Received: from PH0PR10MB4759.namprd10.prod.outlook.com
+ ([fe80::c9f0:b3fb:25a6:3593]) by PH0PR10MB4759.namprd10.prod.outlook.com
+ ([fe80::c9f0:b3fb:25a6:3593%5]) with mapi id 15.20.4995.027; Wed, 23 Feb 2022
+ 04:00:10 +0000
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     JPT <j-p-t@gmx.net>, linux-kernel@vger.kernel.org,
+        linux-block@vger.kernel.org
+Subject: Re: blocksize 4096 even for floppy and CDROM?
+From:   "Martin K. Petersen" <martin.petersen@oracle.com>
+Organization: Oracle Corporation
+Message-ID: <yq1fsoab5n0.fsf@ca-mkp.ca.oracle.com>
+References: <e4ab39cb-fbe7-1148-8d8a-5cd46866159f@gmx.net>
+        <f94fc06e-c0ff-103b-789a-87af52c53e11@infradead.org>
+Date:   Tue, 22 Feb 2022 23:00:07 -0500
+In-Reply-To: <f94fc06e-c0ff-103b-789a-87af52c53e11@infradead.org> (Randy
+        Dunlap's message of "Tue, 22 Feb 2022 15:24:13 -0800")
+Content-Type: text/plain
+X-ClientProxiedBy: BYAPR05CA0022.namprd05.prod.outlook.com
+ (2603:10b6:a03:c0::35) To PH0PR10MB4759.namprd10.prod.outlook.com
+ (2603:10b6:510:3d::12)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220209195706.51522-7-eric.devolder@oracle.com>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 5a5cdff6-b8f3-4917-a717-08d9f680fc85
+X-MS-TrafficTypeDiagnostic: MWHPR10MB1488:EE_
+X-Microsoft-Antispam-PRVS: <MWHPR10MB14880B19BB2ADDE460C580748E3C9@MWHPR10MB1488.namprd10.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: FxEWUHyNN/cAXC9CZ7qOwLkFKZhB5KkOniIZqSoC4XRUls/o+uuq+8S+eMdYUs/FRDVoMXaPCyLy+1bIago3o5URg7PkHEA8DMIxAeC+WiIGqoYn5ZqHCIPPMo/I1FQFWxIzuOpieTd3GW2kmAeYPbVV0XCYuOw7oBfFWl7IXY2tlX4Ob8vV4Ss0+uEhwcxdReaP0I0roCFh9EJxYjbDagyu/2vznbsZin1FFVj/eH7hNWJN2qGafS8N7ViZdgjItmbsUfPQobRYgbd0HA0MK7oaBScDFFVnNEhYPPr9NhwWuGTdknjyx0+8X+XbM6k+2fxdWUzefMSJZGiSQnnDijnpR3JYX50KkBo3+A5I0lr96+1n/PuZk1AuYx+VSEALFkYPoLmGFBK2YKpaf8eJaJKIr504jQgSTPyCXHV78AbyK+APH3KiXiu7NoBWzc33v3PZr4L9scntCEyncM1hDdj81lRB9WYz04qmgljnpnoTva4lgFiAs3SGInEEQd98HNILCy2b+M7rkIW8fBSv8LR3IbtyPsxqFavd1AaDeq6YMOw6m4nSzWPD5xnRbM682VbrtP3soPDzh8eg3+YkpW4Jn4h47SrXpMvjInOrs9RzhOpA2bZeEKvUrzna5t0vA4KH8uYRQ6ahYS9Ya5FBM/6/lTfKL2MrPVl2u1l0RdeaBWJx8j83H4flsw2nlMEQnrF7QG3++xSkoE649GpyFw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR10MB4759.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(26005)(186003)(66556008)(6506007)(508600001)(6512007)(36916002)(52116002)(8676002)(6486002)(66946007)(66476007)(6666004)(86362001)(316002)(6916009)(83380400001)(4326008)(38100700002)(38350700002)(4744005)(5660300002)(8936002)(2906002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?5g9ql2/9O1BrnxPoesWTrlUkbc1XXBWuwQIUumyRNtx/YX+4gUO+tLZEu94z?=
+ =?us-ascii?Q?EQXTQ7V2HAfaM3L8qzsbNavKJB0GDXysMO9108nuuy0LggetDwoyuFxfSghT?=
+ =?us-ascii?Q?V+tlHc9q2DFiugkJvTbjLgmfq0xasm0epce5Uh1ObX5ATf64d9eK4uDO39uy?=
+ =?us-ascii?Q?ccOU/egxDVBiaSpozCsFz50EfUVKfICQZbjWAXoxn4KcW2mm90MbXPM0x+wu?=
+ =?us-ascii?Q?tlCJa7w3JNq31SGnAaAcUV2I6jLiB3+5CdhjccFccrf+zviWSAFk4cae70z2?=
+ =?us-ascii?Q?KVMDkEEZYWmAD5uhMF+jSyXDYI2d3uj2CibDfRHyvcsxs4ndAxeN5/0vcS05?=
+ =?us-ascii?Q?E2Nmc0WRV6kPyUYXe39PbsH4T7e5cADxLV/GCF01vTi0PsaPy7aEva1RXKHI?=
+ =?us-ascii?Q?RHxJfpOwyyC2BiMBIC581gQA7NTBsJIM3UO6dZIh41RVFDu/HGVKlkdhwuxp?=
+ =?us-ascii?Q?ZTWb7KJ/LA30PpYYuWZxTKag3Zs+ZB05nyUoPzXwMcULaIKz0/g3Yvl/KOML?=
+ =?us-ascii?Q?pP6CAkKTKglNCPZh5TzfD4hnc832rOQoGaqgkLfASPYue13+zRXRmexbkdfY?=
+ =?us-ascii?Q?Bf5XdI/i5GlBfesCLW1FFKvhEvI6QpOhkvn1ndRk2P2gyiXG3H6MpJHpJfnc?=
+ =?us-ascii?Q?SImyTSITtdOiMoikKMedCFRu1B+XwDHSAHcQN/3j29FTOYIM4Kvvt3ZjduhT?=
+ =?us-ascii?Q?h7L4EGxxgEaj2elwtRLueE17TyYNpSmPwyyeZGgZHucXWOpC53wqkjZAtmab?=
+ =?us-ascii?Q?JN8SZKNbdIOJHBcFys3yNsRvcgnQcZCh8Yx94NsX7geaUQY8RW1bdnv08ecF?=
+ =?us-ascii?Q?qGwKcyEq54PMfyGQzF4yIrJu7BJ6NsXvlxj0pzMnefSR0+2aFx9g0x2kvnnV?=
+ =?us-ascii?Q?ro+kuKyRxAPf6WwfHuYdnMew4exWHOaIXBxL6Rhig3IX0Rpjw2KQ2NVTUAsI?=
+ =?us-ascii?Q?PB4agMNxtZvMVc5blNKD/v7di7ixjFn89TEMuKyij6YTdUtkufoduRjcaKAv?=
+ =?us-ascii?Q?nzMKdugfdfd3vl30TofGBhawaZGDf2MJW7rEnIV/miOsWPY8hKYLYWsC5R51?=
+ =?us-ascii?Q?qROxhh0e4V3UReAqM1edNMf+2f8PiCwOsMIrNxvgc3mZUeWxV5tO4M8BpLpq?=
+ =?us-ascii?Q?zctgAs513/jDyvDr+H7NZHgu8zz0/xb6VQViEuvTXMheI4cp+MHyJ7/y8pyP?=
+ =?us-ascii?Q?z48k6uAt1IrhpPKdZbtavJZzZ+jakNVeuTktrp7SQsJdM35jD23RmWcxckbL?=
+ =?us-ascii?Q?6VsEBTegPxwLvlK5EqH0BfVjfz4iZGIxhuB+kxPNZrfmBhhZr9dmJ6AfPm/u?=
+ =?us-ascii?Q?IHARhTpgZ3XMIUcVaNrqWUJvRWcrpjI6bMp/YCsM2FI08/AsobKljRPx8ueC?=
+ =?us-ascii?Q?jjMxuHfCqTqbZChneu+lRK6NObRcTqAkTR7TZ5dIHHySeRBBqt/7wNpZ32ec?=
+ =?us-ascii?Q?ztDo/tVm/Ty35+pbJwLZmRfauxLldoOYjJgOW6P0slS/l+T4Iu2x//YyuohT?=
+ =?us-ascii?Q?2rDnWC0xXAra+9qoVagZgS9pYyPHIjk++sJqJG0q+/8do4qiC48xptrwT7Cv?=
+ =?us-ascii?Q?smZM0gZulF+5/WvS+xKuaw5DxWjhqBXrB6d1IdPcPKNmCsJBos/yd+juG05G?=
+ =?us-ascii?Q?mv6zXc33yvRako1ClcVAkktmLDJ9bPjd+wY0ZAxWVoZf8par4ii8KEuO2uvT?=
+ =?us-ascii?Q?XbWdtt/fs9qxvabi6xbnESGSdWM=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5a5cdff6-b8f3-4917-a717-08d9f680fc85
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR10MB4759.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Feb 2022 04:00:10.5011
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: JoYid4iBdNsg79NB004yOiSjIB/Sam+1Rwj2bI32DgwDgCQQT+zHIqNC/hDYN5VADr4qKSoZYjej7oHT4L3GEvdTfUIndrvTeAzrRQywG2k=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR10MB1488
+X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10266 signatures=677939
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 bulkscore=0 spamscore=0
+ mlxscore=0 adultscore=0 mlxlogscore=745 suspectscore=0 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2201110000
+ definitions=main-2202230018
+X-Proofpoint-GUID: YRyMkKJPq31jBqvfpaHLRGNFbGUGWzAU
+X-Proofpoint-ORIG-GUID: YRyMkKJPq31jBqvfpaHLRGNFbGUGWzAU
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -67,169 +146,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02/09/22 at 02:57pm, Eric DeVolder wrote:
-> This patch introduces a generic crash hot plug/unplug infrastructure
-> for CPU and memory changes. Upon CPU and memory changes, a generic
-> crash_hotplug_handler() obtains the appropriate lock, does some
-> important house keeping and then dispatches the hot plug/unplug event
-> to the architecture specific arch_crash_hotplug_handler(), and when
-> that handler returns, the lock is released.
-> 
-> This patch modifies crash_core.c to implement a subsys_initcall()
-> function that installs handlers for hot plug/unplug events. If CPU
-> hotplug is enabled, then cpuhp_setup_state() is invoked to register a
-> handler for CPU changes. Similarly, if memory hotplug is enabled, then
-> register_memory_notifier() is invoked to install a handler for memory
-> changes. These handlers in turn invoke the common generic handler
-> crash_hotplug_handler().
-> 
-> On the CPU side, cpuhp_setup_state_nocalls() is invoked with parameter
-> CPUHP_AP_ONLINE_DYN. While this works, when a CPU is being unplugged,
-> the CPU still shows up in foreach_present_cpu() during the regeneration
-> of the new CPU list, thus the need to explicitly check and exclude the
-> soon-to-be offlined CPU in crash_prepare_elf64_headers().
-> 
-> On the memory side, each un/plugged memory block passes through the
-> handler. For example, if a 1GiB DIMM is hotplugged, that generate 8
-> memory events, one for each 128MiB memblock.
 
-This looks good to me. As I commented in patch 3, these both may need be
-merged.
+Randy,
 
-> 
-> Signed-off-by: Eric DeVolder <eric.devolder@oracle.com>
-> ---
->  kernel/crash_core.c | 104 ++++++++++++++++++++++++++++++++++++++++++++
->  1 file changed, 104 insertions(+)
-> 
-> diff --git a/kernel/crash_core.c b/kernel/crash_core.c
-> index 0ff06d0698ad..524470e18883 100644
-> --- a/kernel/crash_core.c
-> +++ b/kernel/crash_core.c
-> @@ -10,12 +10,16 @@
->  #include <linux/utsname.h>
->  #include <linux/vmalloc.h>
->  #include <linux/highmem.h>
-> +#include <linux/memory.h>
-> +#include <linux/cpuhotplug.h>
->  
->  #include <asm/page.h>
->  #include <asm/sections.h>
->  
->  #include <crypto/sha1.h>
->  
-> +#include "kexec_internal.h"
-> +
->  /* vmcoreinfo stuff */
->  unsigned char *vmcoreinfo_data;
->  size_t vmcoreinfo_size;
-> @@ -521,5 +525,105 @@ void unmap_crash_pages(void **ptr)
->  		*ptr = NULL;
->  	}
->  }
-> +
-> +void __weak arch_crash_hotplug_handler(struct kimage *image,
-> +	unsigned int hp_action, unsigned long a, unsigned long b)
-> +{
-> +	pr_warn("crash hp: %s not implemented", __func__);
-> +}
-> +
-> +static void crash_hotplug_handler(unsigned int hp_action,
-> +	unsigned long a, unsigned long b)
-> +{
-> +	/* Obtain lock while changing crash information */
-> +	if (!mutex_trylock(&kexec_mutex))
-> +		return;
-> +
-> +	/* Check kdump is loaded */
-> +	if (kexec_crash_image) {
-> +		pr_debug("crash hp: hp_action %u, a %lu, b %lu", hp_action,
-> +			a, b);
-> +
-> +		/* Needed in order for the segments to be updated */
-> +		arch_kexec_unprotect_crashkres();
-> +
-> +		/* Flag to differentiate between normal load and hotplug */
-> +		kexec_crash_image->hotplug_event = true;
-> +
-> +		/* Now invoke arch-specific update handler */
-> +		arch_crash_hotplug_handler(kexec_crash_image, hp_action, a, b);
-> +
-> +		/* No longer handling a hotplug event */
-> +		kexec_crash_image->hotplug_event = false;
-> +
-> +		/* Change back to read-only */
-> +		arch_kexec_protect_crashkres();
-> +	}
-> +
-> +	/* Release lock now that update complete */
-> +	mutex_unlock(&kexec_mutex);
-> +}
-> +
-> +#if defined(CONFIG_MEMORY_HOTPLUG)
-> +static int crash_memhp_notifier(struct notifier_block *nb,
-> +	unsigned long val, void *v)
-> +{
-> +	struct memory_notify *mhp = v;
-> +	unsigned long start, end;
-> +
-> +	start = mhp->start_pfn << PAGE_SHIFT;
-> +	end = ((mhp->start_pfn + mhp->nr_pages) << PAGE_SHIFT) - 1;
-> +
-> +	switch (val) {
-> +	case MEM_ONLINE:
-> +		crash_hotplug_handler(KEXEC_CRASH_HP_ADD_MEMORY,
-> +			start, end-start);
-> +		break;
-> +
-> +	case MEM_OFFLINE:
-> +		crash_hotplug_handler(KEXEC_CRASH_HP_REMOVE_MEMORY,
-> +			start, end-start);
-> +		break;
-> +	}
-> +	return NOTIFY_OK;
-> +}
-> +
-> +static struct notifier_block crash_memhp_nb = {
-> +	.notifier_call = crash_memhp_notifier,
-> +	.priority = 0
-> +};
->  #endif
->  
-> +#if defined(CONFIG_HOTPLUG_CPU)
-> +static int crash_cpuhp_online(unsigned int cpu)
-> +{
-> +	crash_hotplug_handler(KEXEC_CRASH_HP_ADD_CPU, cpu, 0);
-> +	return 0;
-> +}
-> +
-> +static int crash_cpuhp_offline(unsigned int cpu)
-> +{
-> +	crash_hotplug_handler(KEXEC_CRASH_HP_REMOVE_CPU, cpu, 0);
-> +	return 0;
-> +}
-> +#endif
-> +
-> +static int __init crash_hotplug_init(void)
-> +{
-> +	int result = 0;
-> +
-> +#if defined(CONFIG_MEMORY_HOTPLUG)
-> +	register_memory_notifier(&crash_memhp_nb);
-> +#endif
-> +
-> +#if defined(CONFIG_HOTPLUG_CPU)
-> +	result = cpuhp_setup_state_nocalls(CPUHP_AP_ONLINE_DYN,
-> +				"crash/cpuhp",
-> +				crash_cpuhp_online, crash_cpuhp_offline);
-> +#endif
-> +
-> +	return result;
-> +}
-> +
-> +subsys_initcall(crash_hotplug_init);
-> +#endif /* CONFIG_CRASH_HOTPLUG */
-> -- 
-> 2.27.0
-> 
+>> I wonder why safecopy always says
+>> Reported hw blocksize: 4096
+>> Reported low level blocksize: 4096
+>> 
+>> even if the medium is floppy (512) or CDROM (2048)
+>> 
+>> is this a kernel issue always assuming min 4k block size?
 
+Not sure how safecopy queries the block size. The kernel supports
+devices with 512, 1024, 2048, and 4096-byte logical blocks.
+
+-- 
+Martin K. Petersen	Oracle Linux Engineering

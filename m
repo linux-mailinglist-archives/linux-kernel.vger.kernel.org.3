@@ -2,227 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73B134C1845
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 17:12:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 650F34C1846
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 17:14:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242666AbiBWQNF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 11:13:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44136 "EHLO
+        id S241271AbiBWQO0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 11:14:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242447AbiBWQMz (ORCPT
+        with ESMTP id S234136AbiBWQOY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 11:12:55 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9961275608;
-        Wed, 23 Feb 2022 08:12:27 -0800 (PST)
-Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21NFJ31c007698;
-        Wed, 23 Feb 2022 16:12:12 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=tM6CYaafv6levPFQZwnS+tS3XywolFy28ZPi68FuYXQ=;
- b=bjse8YTEUfsjJVYwcKQYmlWCp+aSwWSDNE71bzqsCVTfx+ty8WhXdN9IGO9YI7JsRlDO
- ib1aY7G8j6NZmt0UMrEU28YWHQmTDB5/UcLETeAzhjcgtd+8q0bOpZQRd+u2qcq9uuWM
- 7S1FYWY7ETjyyTpfT4cTBzoMGzMf+1aQ/97kvKgxFVr2Qo32UCToZMQVr2MrSONR8bKG
- jTLxLTFGd05xdesQFncAuyYd3sePWMuu0PIBpeN9yyE6Ztd4vy8wrezPFOINusaJVKQ6
- qQgF1CfaTU4PHk7J878EhCXT2umiiAK2qVw0O0wzcWPv9liA4WPUJBSOP3BiWr+aBSsL zA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3edqf3h99a-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 23 Feb 2022 16:12:11 +0000
-Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 21NG960a016764;
-        Wed, 23 Feb 2022 16:12:11 GMT
-Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3edqf3h98q-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 23 Feb 2022 16:12:11 +0000
-Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
-        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 21NG8aeu004810;
-        Wed, 23 Feb 2022 16:12:09 GMT
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
-        by ppma06fra.de.ibm.com with ESMTP id 3eaqtjst78-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 23 Feb 2022 16:12:09 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 21NGC5f153412176
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 23 Feb 2022 16:12:05 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A8656AE056;
-        Wed, 23 Feb 2022 16:12:05 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 68BB8AE051;
-        Wed, 23 Feb 2022 16:12:03 +0000 (GMT)
-Received: from sig-9-65-80-154.ibm.com (unknown [9.65.80.154])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed, 23 Feb 2022 16:12:03 +0000 (GMT)
-Message-ID: <d94928dcb87550b7d5cfe277eed8a195ad9c877c.camel@linux.ibm.com>
-Subject: Re: [PATCH v10 18/27] integrity/ima: Define ns_status for storing
- namespaced iint data
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Stefan Berger <stefanb@linux.ibm.com>,
-        linux-integrity@vger.kernel.org
-Cc:     serge@hallyn.com, christian.brauner@ubuntu.com,
-        containers@lists.linux.dev, dmitry.kasatkin@gmail.com,
-        ebiederm@xmission.com, krzysztof.struczynski@huawei.com,
-        roberto.sassu@huawei.com, mpeters@redhat.com, lhinds@redhat.com,
-        lsturman@redhat.com, puiterwi@redhat.com, jejb@linux.ibm.com,
-        jamjoom@us.ibm.com, linux-kernel@vger.kernel.org,
-        paul@paul-moore.com, rgb@redhat.com,
-        linux-security-module@vger.kernel.org, jmorris@namei.org,
-        Mehmet Kayaalp <mkayaalp@linux.vnet.ibm.com>
-Date:   Wed, 23 Feb 2022 11:12:01 -0500
-In-Reply-To: <20220201203735.164593-19-stefanb@linux.ibm.com>
-References: <20220201203735.164593-1-stefanb@linux.ibm.com>
-         <20220201203735.164593-19-stefanb@linux.ibm.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
+        Wed, 23 Feb 2022 11:14:24 -0500
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2046.outbound.protection.outlook.com [40.107.220.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBF4FB45BB
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 08:13:56 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Hd4a16fHglmbTLe8TAJ3S64UtUICRhj/Sy8dW5e0oadPjRxD2UQxeCW4Xc7a/Nq8dpyoPJ4buW1+ziZwWukA2z22lwdFbbIAvv7G9Y5IqojISPGo8XafaPx/zJR/U7mvSavLiKKGjBJ97AhJoTn+j8ppqrwQD9885+1h9lrhTmEBGQiJ6Aegu3fhivpuaoeWKc/Q4B/CM7BQkNfBNfzWK3Ms213yIXUoiJb4mMrk1S5QietIeTw5VELpeERrjLx35Gw5VwEhgZtKuoAnlTYo1lpuWhujrk05qNGYhdkrEqEoAmqxkm/8pQZpxJrxdEL7SNmCvGz1zg9P4iA73LnXjQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=64RdqPZdxyKzKgRykwMVTou8TeK9SljeH5cNR+IXsnA=;
+ b=cFSBIbND1LvquscJ39f65Pkf9BqShdAsfRdjUPbfnZ1xnivxZJlE4m/qVYVylfmG29/yxvhX0JCYnkf6qyv/5oTN0Jv+hjq1FmjxqUtmq4E7uOUov/D7zZYVxoXPoH82PZXitQM77XABV7vfl/JHBDwu+QblFC1QmRord3uA/wMCZakLApWibn1MbmjadqwNDZFsJixz55SyRzd7j0bMblNiVirdKwdowisfZv2kX62lnRnwJVnduvbKgIP3XjsE8UVl85VucSfNAnwanh/xrAOig29UeHww8PljIH8ROsgrbHLgQzBrXpiZfigJ/Uha9EAQ5mjd7tHB1E83cH9O7g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=64RdqPZdxyKzKgRykwMVTou8TeK9SljeH5cNR+IXsnA=;
+ b=p36K/6tRRcvY/b2Gkp/puIs7pbGFfa90dwUdB4sITiEABdJyVcKGIZZMqZBAPvOUwquz+1I0SXij8M1KcTIdtSnKkI0LsfOt0imYhuzcMBpzamW/ShxbXR0lrSxB4hIqIgGclxmALNlJ6Wx1ojadMMurJgeURLWejOFow7OxKsc=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BL1PR12MB5874.namprd12.prod.outlook.com (2603:10b6:208:396::17)
+ by BN8PR12MB3634.namprd12.prod.outlook.com (2603:10b6:408:47::26) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4995.26; Wed, 23 Feb
+ 2022 16:13:54 +0000
+Received: from BL1PR12MB5874.namprd12.prod.outlook.com
+ ([fe80::8d44:d69b:b031:1d50]) by BL1PR12MB5874.namprd12.prod.outlook.com
+ ([fe80::8d44:d69b:b031:1d50%4]) with mapi id 15.20.5017.023; Wed, 23 Feb 2022
+ 16:13:54 +0000
+Message-ID: <3c6224ca-c0da-7ba9-1396-a2e74c4a40e8@amd.com>
+Date:   Wed, 23 Feb 2022 10:13:50 -0600
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: [PATCH v2] kernel/sched: Update schedstats when migrating threads
+Content-Language: en-US
+From:   Carlos Bilbao <carlos.bilbao@amd.com>
+To:     Phil Auld <pauld@redhat.com>, Peter Zijlstra <peterz@infradead.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, mingo@redhat.com,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, linux-kernel@vger.kernel.org
+References: <20220126152222.5429-1-carlos.bilbao@amd.com>
+ <YhYKL4hxx4TNKHGD@hirez.programming.kicks-ass.net>
+ <aac8f860-c01f-bda0-9f1b-029b234213c2@amd.com>
+ <YhZSqd+d03oWUPP6@lorien.usersys.redhat.com>
+ <0e42c46a-ccc4-e793-00b8-ae407e06846f@amd.com>
+ <YhZXGv34YTV5omKq@lorien.usersys.redhat.com>
+ <b7a28537-8bfb-7f0d-5ed3-f301983e4e30@amd.com>
+In-Reply-To: <b7a28537-8bfb-7f0d-5ed3-f301983e4e30@amd.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: zK4eRAEmR0O6iAS1Os9DjhSEXCSTitaD
-X-Proofpoint-GUID: sjk5Ffb0PBuQMenBjcLb4EhkwPAcNysM
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-02-23_07,2022-02-23_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 suspectscore=0
- phishscore=0 clxscore=1015 mlxlogscore=999 spamscore=0 mlxscore=0
- malwarescore=0 adultscore=0 priorityscore=1501 impostorscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2201110000 definitions=main-2202230091
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-ClientProxiedBy: BL1PR13CA0246.namprd13.prod.outlook.com
+ (2603:10b6:208:2ba::11) To BL1PR12MB5874.namprd12.prod.outlook.com
+ (2603:10b6:208:396::17)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 4753ee1d-66b9-4dce-8180-08d9f6e77cd1
+X-MS-TrafficTypeDiagnostic: BN8PR12MB3634:EE_
+X-Microsoft-Antispam-PRVS: <BN8PR12MB363445AB1B195F249F1FAA8CF83C9@BN8PR12MB3634.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: DAMZwa/0Oi8hN0CEJsjm4RgjofvuMfezp5wevFRg+yvAmgLjfPX0mknNYMFB0xDjMTxudM6SVn02lgQFON9bhDkET8UloKjdln53KPeIJ9wGnkMqWUniw3y7t2MgfdgFO07OAn+rTyemfQIlt9grenTuGsV55RvHCrJ1L3Ciouin6Aa4L9wPYZWxdHvGn+EpLU+tlOqoDZJGLc8dv8A0pLP7WDL+wCTHd2j/uhRb2xxdfuVhrVID3ybG9aFxxDE+/gOtnExc4oaCScxCbiuyS/u6m0pm7ai2bDjw/vT5Tui8zo0TSPICMpXAdaZ62o+/9V/ID0rkNPJEG5hRiLyEeDUZ1arnC/+x0+LkCTOr540ljrkzyOz27tK3yNb2z3MvD6m6HD0iiZbpUJA65fGZ5EZpsW5uaKyq+B7EIQ8EgB+bdyUAFcq3lqa7/8r5+A+rlMknj3YyVeg7uwytM7fpSfesZYd76U3I7lWNiTixGEYe+xOZAC2dmwdoN4CupiDmRU6SCh5qvX5y1ljh65iQF/7hSWqtLO1jkLhdSCT05w8THgWfSph+85juvAVYEUU+fAxI2JsG7qbQDuWt9OxRwVnltggoF1ul9jhSQ8/j6EvfmialgqYMdkl+SV1gM6RcJHaG63pb0177X1aNKGdwwVTO+lTvbEFCPVCBesOBn6YK7ysazk2K1hyNcMUa98Pp/1x1TP9ividUiHVqXjr/6EJdyTA73+jing3etS/FgAMZCufH8J2v85Bz4N8tIM0U
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR12MB5874.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(36756003)(86362001)(6506007)(186003)(26005)(38100700002)(6666004)(2906002)(31686004)(44832011)(508600001)(316002)(83380400001)(110136005)(4326008)(31696002)(6512007)(8936002)(4744005)(2616005)(15650500001)(5660300002)(8676002)(6486002)(66946007)(66556008)(66476007)(7416002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?aURjTTJBQjZ6U2EwY2poQjNDNlp3SmQ0Zk12Q201K25sVUp1M2dQUUthOVl6?=
+ =?utf-8?B?YktBOGJDeDZPVHQ1YVl6WVNweTl5aENjQ041N2tKVkY0YXNWS0FMUGxKMUhw?=
+ =?utf-8?B?aytMeDh4VnoybUVEVUxYbTlyenFCd1pweEJodk4wc3FtTUN2TFJXcjR0K2Ex?=
+ =?utf-8?B?NW1xSGxWOVUzck82SkN1MUd1cjBUVzV0RlZzc09pTlhWWktLSk94d1ZnYndv?=
+ =?utf-8?B?ckMrZkVncUJUSFJWOFlJY3VDVGpoUHA0eXFGVHpiRVFVSm9SZm5qdnppVHQ0?=
+ =?utf-8?B?SEo4NmVQMXBUMENIeWlPWExneE9GOTZUUXpXdTNFWGNPQ2hEWmJpTVpyZXJh?=
+ =?utf-8?B?d0ZFb3VERU56bkFmNkx4aE0ydnhHR2xiMHBYSkt5UnlLdlFZWnFOM25lWkc0?=
+ =?utf-8?B?bnRJLzBxeVVacU53RWJyY3Y5dHUrbllSL3A4cGRUU05NMTlaL2V5UEY4S0RQ?=
+ =?utf-8?B?NmZLMjJqSkNSb0dWS08xUDVnRk1md2FucHZ6ZUVVWWJJVXRWTzhSUkZsMWFN?=
+ =?utf-8?B?Y3A5YzVLQXVFeW9WM2VXaC82ZWZDQlhHc1BUNFIrRTFYWWdpTnVQZnZQUmxG?=
+ =?utf-8?B?YWN6bWZGOFZTMko5d0dzTFJmSmtDNWRLSk5PYlhXT3NDMmlIYk1VTVduWWNa?=
+ =?utf-8?B?eFVYK1p4Rjl0NXpkVHNqajhnWWNsbEZReU1QdkM4V3FxTFo1MGdzaEE0ZkM5?=
+ =?utf-8?B?MHhsamhaaVZRSkhmVUtDNUNCMHR1RU10L0g4YXV5NmRwazlUbXBialdacUNk?=
+ =?utf-8?B?VjIwY3R3YmwrSFdKOHg3Wkl1Wi9QbEV1a29Nd2lVVTRJbUI0b2R4Z1Nmcy80?=
+ =?utf-8?B?dkpOZDB1K1RwdlJMNktmWVk5bTVQdUFPc3pnR1dEQzBldnd1eDlydXN2YnFW?=
+ =?utf-8?B?b0xNdk9SL0htcE9KUE5WMXlYZXk5WFdmQ3ZEcGRiUWtDUERTSkIyQURZVlVw?=
+ =?utf-8?B?NTMwNUR5dy9vZHZSNkJXNG1waUw2UnorTTZWL01CSU8rampsNEdKNGhUdUVl?=
+ =?utf-8?B?Vy90SGo4R08xeGtIbm5aamQxTGJveEJ4dTNidVQvSjNJTWdiOHFpUm05aHR4?=
+ =?utf-8?B?bUtnUituZXoxeFZtYXFxNkhXd3pTL05EYk9QaHFhMDhKSlEzM2dXTHhJVGNG?=
+ =?utf-8?B?bEQxVkpDbHVMcXIyV0lRYnBKeUx2TGxPVDgvZHU5SzRlZ1I0VDVBUnZwRHhj?=
+ =?utf-8?B?T0FuWjVGditDd0xsbmZ2TkxDWlBZckJIQ2hiUkJraXhIdDRodlFNVWhHb0VO?=
+ =?utf-8?B?NlQyYXBxSXRhRmplWlYxREhRMlI0QWJKNGc1a2tKMlVLcDBZYTY2QVZ2VE91?=
+ =?utf-8?B?TnBRR3hNQlp2ZEFMUDg3UU5WczhJSjAzQWRPVW9MeldpZklXQytJWFplaWYy?=
+ =?utf-8?B?Z0N3dkpPdEtkMmt5Z0hldmdWZ3JwUHgvMGh5NFFtRG80cHc3Y2lFZXBkYUpz?=
+ =?utf-8?B?Wm9LNFRuL3RkMmJoMjBYWithOGxVVWdteEVXZHd2VDlMUkZNNTFhTUlBdWxk?=
+ =?utf-8?B?VHl4c1cwZmZEdEViLzlSQkRVcDlleTMrSWZXN3c2WXc0MUl5b2hRbU11Vzhu?=
+ =?utf-8?B?eXhoaEthNm5GT1FodjRvRXR4YzJuQWNZY09Hallxek9SQkZlT2pkdWJ4MkNP?=
+ =?utf-8?B?c2V5MGljcUoxYU5JQXhCbUhPZCs5Rll5emE5UmVHWGZZTEd0bSt1eVFjSUdZ?=
+ =?utf-8?B?NHVERGdJK1FkTFd1WHdhSU85UW5majhOZkUrOC80azJ6SUcwazZFT0dEVXl5?=
+ =?utf-8?B?OUl0M0F0bkxsdU4yanovWHNkTDQvQk1DclhVZGVNU1VRRUxsblNuakVsaUR4?=
+ =?utf-8?B?ZFVqZnd2ZGlhNURJQzlsejRQRklINlh0OXF0WXZ5Q3NNeWc1VkFTSExHc3Q3?=
+ =?utf-8?B?SWY0QlZBUUtLdlp4YXBTTmNxV1dMQmR3T1NUU1BRZjRVNnJnTEx0cnlRZit0?=
+ =?utf-8?B?Z3F0MWEybHNQT3JDZWJkVlFKWTROdU9xa3JHUTRXaE5Ua3Zxb0RzdEtXdVk2?=
+ =?utf-8?B?Q2I2bWlnNzlMcHFVYlpHUjZFRHl6eWx2WUhpUmxkUS9aUTR3L0ZoVzU3cDhR?=
+ =?utf-8?B?QXdTUEFSU2wyVkpDOE1lWE00MXQ4L25Tc3FXL3JDVU55cDF6VG9PVFRQMG1Q?=
+ =?utf-8?B?THNiVmZ4aDZ3VzFuYUlaM2FVMmpYV2VUTVJ1V2V2YUg5OHVRM0dVR2RlVVZU?=
+ =?utf-8?Q?4ZAMNMMLzUonlZaD2s+kI64=3D?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4753ee1d-66b9-4dce-8180-08d9f6e77cd1
+X-MS-Exchange-CrossTenant-AuthSource: BL1PR12MB5874.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Feb 2022 16:13:54.2869
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: mUN/wSZ9/lKz4WJ0hJ49qi6LwYqCQOR7KGg9DQWn2DGPJWFEDqa9lckjtCEMif0xMSgcoQnyRv3KwcDQuF/esw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR12MB3634
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-02-01 at 15:37 -0500, Stefan Berger wrote:
-> From: Mehmet Kayaalp <mkayaalp@linux.vnet.ibm.com>
-> 
-> Add an rbtree to the IMA namespace structure that stores a namespaced
-> version of iint->flags in ns_status struct. Similar to the
-> integrity_iint_cache, both the iint and ns_status are looked up using the
-> inode pointer value. The lookup, allocate, and insertion code is also
-> similar.
-> 
-> In subsequent patches we will have to find all ns_status entries an iint
-> is being used in and reset flags there. To do this, connect a list of
-> ns_status to the integrity_iint_cache and provide a reader-writer
-> lock in the integrity_iint_cache to lock access to the list.
-> 
-> To simplify the code in the non-namespaces case embed an ns_status in
-> the integrity_iint_cache and have it linked into the iint's ns_status list
-> when calling ima_get_ns_status().
-> 
-> When getting an ns_status first try to find it in the RB tree. Here we can
-> run into the situation that an ns_status found in the RB tree has a
-> different iint associated with it for the same inode. In this case we need
-> to delete the ns_status structure and get a new one.
-> 
-> There are two cases for freeing:
-> - when the iint is freed (inode deletion): Walk the list of ns_status
->   entries and disconnect each ns_status from the list; take the
->   writer lock to protect access to the list; also, take the item off the
->   per-namespace rbtree
-> 
-> - when the ima_namepace is freed: While walking the rbtree, remove the
->   ns_status from the list while also holding the iint's writer lock;
->   to be able to grab the lock we have to have a pointer to the iint on
->   the ns_status structure.
-> 
-> To avoid an ns_status to be freed by the two cases concurrently, prevent
-> these two cases to run concurrently. Therefore, groups of threads
-> deleting either inodes or ima_namespaces are allowed to run concurrently
-> but no two threads may run and one delete an inode and the other an
-> ima_namespace.
+The kernel manages per-task scheduler statistics or schedstats. Update
+function migrate_task_to() to increase the counter for migrations.
 
-The locking involved here is really complex.  I'm sure you thought
-about it a lot, but isn't there a better alternative?
+Signed-off-by: Carlos Bilbao <carlos.bilbao@amd.com>
+---
+Changelog:
+	v2: Update commit message, don't reinitialize sched fields.
+---
+ kernel/sched/core.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> 
-> Signed-off-by: Mehmet Kayaalp <mkayaalp@linux.vnet.ibm.com>
-> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
-> 
-> ---
-> v9:
->  - Move ns_status into integrity.h and embedded it into integrity_iint_cache
->    for the non-CONFIG_IMA_NS case
-
-<snip>
-
->  
-> +/*
-> + * ima_free_ns_status_tree - free all items on the ns_status_tree and take each
-> + *                           one off the list; yield to ns_list free'ers
-> + *
-> + * This function is called when an ima_namespace is freed. All entries in the
-> + * rbtree will be taken off their list and collected in a garbage collection
-> + * list and freed at the end. This allows to walk the rbtree again.
-> + */
-> +void ima_free_ns_status_tree(struct ima_namespace *ns)
-> +{
-> +	struct ns_status *ns_status, *next;
-> +	struct llist_node *node;
-> +	LLIST_HEAD(garbage);
-> +	unsigned int ctr;
-> +	bool restart;
-> +
-> +	do {
-> +		ctr = 0;
-> +		restart = false;
-> +
-> +		lock_group(GRP_NS_STATUS_TREE);
-> +		write_lock(&ns->ns_tree_lock);
-> +
-> +		rbtree_postorder_for_each_entry_safe(ns_status, next,
-> +						     &ns->ns_status_tree,
-> +						     rb_node) {
-> +			write_lock(&ns_status->iint->ns_list_lock);
-> +			if (!list_empty(&ns_status->ns_next)) {
-> +				list_del_init(&ns_status->ns_next);
-> +				llist_add(&ns_status->gc_llist, &garbage);
-> +				ctr++;
-> +			}
-
-At this point when the namespace is being deleted, no entries are being
-added to the rbtree, so it is safe to remove the nodes here.  There's
-no need to first create a list and then remove them.
-
-> +			write_unlock(&ns_status->iint->ns_list_lock);
-> +
-> +			/*
-> +			 * After some progress yield to any waiting ns_list
-> +			 * free'ers.
-> +			 */
-> +			if (atomic_read(&ns_list_waiters) > 0 && ctr >= 5) {
-> +				restart = true;
-> +				break;
-> +			}
-
-Giving priority to removing entries in the iint cache is important, but
-I wish there was a better alternative.
-
-> +		}
-> +
-> +		write_unlock(&ns->ns_tree_lock);
-> +		unlock_group(GRP_NS_STATUS_TREE);
-> +	} while (restart);
-> +
-> +	node = llist_del_all(&garbage);
-> +	llist_for_each_entry_safe(ns_status, next, node, gc_llist)
-> +		ns_status_free(ns, ns_status);
-> +
-> +	kmem_cache_destroy(ns->ns_status_cache);
-> +}
-
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index fcf0c180617c..1360e501c737 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -8751,7 +8751,7 @@ int migrate_task_to(struct task_struct *p, int target_cpu)
+ 	if (!cpumask_test_cpu(target_cpu, p->cpus_ptr))
+ 		return -EINVAL;
+ 
+-	/* TODO: This is not properly updating schedstats */
++	schedstat_inc(p->stats.nr_migrations_cold);
+ 
+ 	trace_sched_move_numa(p, curr_cpu, target_cpu);
+ 	return stop_one_cpu(curr_cpu, migration_cpu_stop, &arg);
 -- 
-thanks,
-
-Mimi
-
+2.27.0

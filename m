@@ -2,266 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 094054C1807
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 17:02:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A54D4C180B
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 17:02:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239633AbiBWQC2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 11:02:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54956 "EHLO
+        id S242571AbiBWQDB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 11:03:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242037AbiBWQCZ (ORCPT
+        with ESMTP id S242583AbiBWQCs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 11:02:25 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EF7B441F9D
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 08:01:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1645632117;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=LyPewI311ZsWZtp0bCYFDOIX2a8lmRxLxUtHjdsbHnw=;
-        b=dXV8MP4yJBWZaeLA9dfLDitZS4067mtlpqjpINbmVNps1hPc6agO+SV2Xac9roFMalaPk+
-        i2K9p1he6skTjbEEKEvmq09A7Q8BGnnzGQTZRB3lusonWIFaBFwkMDFkPCJQcbtYMknDiW
-        uhJzfi5kBVeYTh/qx6nN2pMZmzSVCxM=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-190-YVKuVZToPQC4mQ8lYHCKPA-1; Wed, 23 Feb 2022 11:01:55 -0500
-X-MC-Unique: YVKuVZToPQC4mQ8lYHCKPA-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 3CE711854E26;
-        Wed, 23 Feb 2022 16:01:54 +0000 (UTC)
-Received: from starship (unknown [10.40.195.190])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id CE4BA837A4;
-        Wed, 23 Feb 2022 16:01:52 +0000 (UTC)
-Message-ID: <0c3644304cbead7924f888ec16498e334c6efbfc.camel@redhat.com>
-Subject: Re: [PATCH v2 09/18] KVM: x86/mmu: look for a cached PGD when going
- from 32-bit to 64-bit
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org
-Cc:     seanjc@google.com
-Date:   Wed, 23 Feb 2022 18:01:51 +0200
-In-Reply-To: <20220217210340.312449-10-pbonzini@redhat.com>
-References: <20220217210340.312449-1-pbonzini@redhat.com>
-         <20220217210340.312449-10-pbonzini@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+        Wed, 23 Feb 2022 11:02:48 -0500
+Received: from mail-oo1-f42.google.com (mail-oo1-f42.google.com [209.85.161.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D4F86D39C;
+        Wed, 23 Feb 2022 08:02:19 -0800 (PST)
+Received: by mail-oo1-f42.google.com with SMTP id s203-20020a4a3bd4000000b003191c2dcbe8so22888785oos.9;
+        Wed, 23 Feb 2022 08:02:19 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=SnHAJ2jXJaVVjE1oqZGwvuQytS4K0cKMmmVsJjHc5pk=;
+        b=cmlhd8svXculh72aqZrwvwv6LDzoc9l7X83KA0mIFJ4nMQjNbB8GJnZhWINfmOrWIu
+         RQy9GCoVDo3uT0bRQeWm+E+2Z09aQKKwlWP/veik3B5DFaoLYiRjIpJEt65B6nYXILqm
+         G/vF5ihXJ5sWir1ddrSob6MqeKmbCvPNtf7avkvLaHgGDMEtq9OT+Xew2zbxapmSAOkB
+         pbPcaqJ8e+0gAhamdhyeazmMNNwhJ+FVKukhRFliWJUzJd7skDzNezN13RMaFbAeE+e6
+         Gf4VCpa0oBKAbLhn/yTrOaTvEqUc9MJUUQqvTg0HiOrqiZvOVvH3j2+4ZJM7CvFRs1IO
+         l9VQ==
+X-Gm-Message-State: AOAM531tlxHzGRjv8HnFaPaA5G9FJ9i86nHViIyIC8to8z+82oxZoYZL
+        zyp20uIg5/r6rTgCUY/fLQ==
+X-Google-Smtp-Source: ABdhPJw8XWn4z29aClQvUF5kk1BY9mwbXLVBQPAYTLP4JVYBwZtzfi//QgYZpCES82OuILp12HV5sQ==
+X-Received: by 2002:a4a:a8c2:0:b0:319:4f4:18ea with SMTP id r2-20020a4aa8c2000000b0031904f418eamr65183oom.20.1645632138616;
+        Wed, 23 Feb 2022 08:02:18 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id w28sm9647ott.14.2022.02.23.08.02.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Feb 2022 08:02:17 -0800 (PST)
+Received: (nullmailer pid 1012060 invoked by uid 1000);
+        Wed, 23 Feb 2022 16:02:16 -0000
+Date:   Wed, 23 Feb 2022 10:02:16 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-hwmon@vger.kernel.org, Agathe Porte <agathe.porte@nokia.com>,
+        Jean Delvare <jdelvare@suse.com>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Krzysztof Adamski <krzysztof.adamski@nokia.com>,
+        Rob Herring <robh+dt@kernel.org>
+Subject: Re: [PATCH v6 1/2] dt-bindings: hwmon: add tmp464.yaml
+Message-ID: <YhZaiAIq7xUig+Wj@robh.at.kernel.org>
+References: <20220222220937.18728-1-linux@roeck-us.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220222220937.18728-1-linux@roeck-us.net>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-02-17 at 16:03 -0500, Paolo Bonzini wrote:
-> Right now, PGD caching avoids placing a PAE root in the cache by using the
-> old value of mmu->root_level and mmu->shadow_root_level; it does not look
-> for a cached PGD if the old root is a PAE one, and then frees it using
-> kvm_mmu_free_roots.
+On Tue, 22 Feb 2022 14:09:36 -0800, Guenter Roeck wrote:
+> From: Agathe Porte <agathe.porte@nokia.com>
 > 
-> Change the logic instead to free the uncacheable root early.
-> This way, __kvm_new_mmu_pgd is able to look up the cache when going from
-> 32-bit to 64-bit (if there is a hit, the invalid root becomes the least
-> recently used).  An example of this is nested virtualization with shadow
-> paging, when a 64-bit L1 runs a 32-bit L2.
+> Add basic description of the tmp464 driver DT bindings.
 > 
-> As a side effect (which is actually the reason why this patch was
-> written), PGD caching does not use the old value of mmu->root_level
-> and mmu->shadow_root_level anymore.
-
-Which is great - I hated this code!!!
-
-> 
-> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+> Signed-off-by: Agathe Porte <agathe.porte@nokia.com>
+> Cc: Krzysztof Adamski <krzysztof.adamski@nokia.com>
+> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 > ---
->  arch/x86/kvm/mmu/mmu.c | 82 ++++++++++++++++++++++++++++++------------
->  1 file changed, 59 insertions(+), 23 deletions(-)
+> v6:
+> - Model ti,n-factor as int32 instead of int8.
 > 
-> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> index 0f2de811e871..da324a317000 100644
-> --- a/arch/x86/kvm/mmu/mmu.c
-> +++ b/arch/x86/kvm/mmu/mmu.c
-> @@ -4107,52 +4107,88 @@ static inline bool is_root_usable(struct kvm_mmu_root_info *root, gpa_t pgd,
->  				  union kvm_mmu_page_role role)
->  {
->  	return (role.direct || pgd == root->pgd) &&
-> -	       VALID_PAGE(root->hpa) && to_shadow_page(root->hpa) &&
-> +	       VALID_PAGE(root->hpa) &&
->  	       role.word == to_shadow_page(root->hpa)->role.word;
->  }
->  
->  /*
-> - * Find out if a previously cached root matching the new pgd/role is available.
-> - * The current root is also inserted into the cache.
-> - * If a matching root was found, it is assigned to kvm_mmu->root.hpa and true is
-> - * returned.
-> - * Otherwise, the LRU root from the cache is assigned to kvm_mmu->root.hpa and
-> - * false is returned. This root should now be freed by the caller.
-> + * Find out if a previously cached root matching the new pgd/role is available,
-> + * and insert the current root as the MRU in the cache.
-> + * If a matching root is found, it is assigned to kvm_mmu->root and
-> + * true is returned.
-> + * If no match is found, kvm_mmu->root is left invalid, the LRU root is
-> + * evicted to make room for the current root, and false is returned.
->   */
-> -static bool cached_root_available(struct kvm_vcpu *vcpu, gpa_t new_pgd,
-> -				  union kvm_mmu_page_role new_role)
-> +static bool cached_root_find_and_keep_current(struct kvm *kvm, struct kvm_mmu *mmu,
-> +					      gpa_t new_pgd,
-> +					      union kvm_mmu_page_role new_role)
->  {
->  	uint i;
-> -	struct kvm_mmu *mmu = vcpu->arch.mmu;
->  
->  	if (is_root_usable(&mmu->root, new_pgd, new_role))
->  		return true;
->  
->  	for (i = 0; i < KVM_MMU_NUM_PREV_ROOTS; i++) {
-> +		/*
-> +		 * The swaps end up rotating the cache like this:
-> +		 *   C   0 1 2 3   (on entry to the function)
-> +		 *   0   C 1 2 3
-> +		 *   1   C 0 2 3
-> +		 *   2   C 0 1 3
-> +		 *   3   C 0 1 2   (on exit from the loop)
-> +		 */
+> v5:
+> - Dropped ti,n-factor from channel@0 example. Added additional
+>   channel to examples to show positive ti,n-factor property.
+> 
+> v4:
+> - No changes
+> 
+> v3:
+> - Addedd support for TMP468.
+> - Changed number of channels from 0..3 (which was wrong anyway) to 0..8.
+> - Changed value range for ti,n-factor to int8, with an example for
+>   a negative value.
+> - Added myself as driver maintainer.
+> 
+>  .../devicetree/bindings/hwmon/ti,tmp464.yaml  | 114 ++++++++++++++++++
+>  MAINTAINERS                                   |   7 ++
+>  2 files changed, 121 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/hwmon/ti,tmp464.yaml
+> 
 
-Thanks a million for documenting this! I remember it took
-me too much time to figure out what all of these swaps do.
-
-I do want to mention that it would be nice to mention that
-the above trace is when none of the root in the cache match.
-
-
->  		swap(mmu->root, mmu->prev_roots[i]);
-> -
->  		if (is_root_usable(&mmu->root, new_pgd, new_role))
-> -			break;
-Maybe even add comment that if that break happens, the cache would look like
-'2   C 0 1 3' with 2 beeing the matching root.
-
-> +			return true;
->  	}
->  
-> -	return i < KVM_MMU_NUM_PREV_ROOTS;
-> +	kvm_mmu_free_roots(kvm, mmu, KVM_MMU_ROOT_CURRENT);
-> +	return false;
->  }
->  
-> -static bool fast_pgd_switch(struct kvm_vcpu *vcpu, gpa_t new_pgd,
-> -			    union kvm_mmu_page_role new_role)
-> +/*
-> + * Find out if a previously cached root matching the new pgd/role is available.
-> + * On entry, mmu->root is invalid.
-> + * If a matching root is found, it is assigned to kvm_mmu->root, the LRU entry
-> + * of the cache becomes invalid, and true is returned.
-> + * If no match is found, kvm_mmu->root is left invalid and false is returned.
-> + */
-> +static bool cached_root_find_without_current(struct kvm *kvm, struct kvm_mmu *mmu,
-> +					     gpa_t new_pgd,
-> +					     union kvm_mmu_page_role new_role)
->  {
-> -	struct kvm_mmu *mmu = vcpu->arch.mmu;
-> +	uint i;
-> +
-> +	for (i = 0; i < KVM_MMU_NUM_PREV_ROOTS; i++)
-> +		if (is_root_usable(&mmu->prev_roots[i], new_pgd, new_role))
-> +			goto hit;
->  
-> +	return false;
-> +
-> +hit:
-> +	swap(mmu->root, mmu->prev_roots[i]);
-> +	/* Bubble up the remaining roots.  */
-> +	for (; i < KVM_MMU_NUM_PREV_ROOTS - 1; i++)
-> +		mmu->prev_roots[i] = mmu->prev_roots[i + 1];
-> +	mmu->prev_roots[i].hpa = INVALID_PAGE;
-
-I'll would have invalidated the 'pgd' value as well, just in case.
-
-> +	return true;
-> +}
-
-Since we just have 4 pointers in the LRU cache + root pointer, I wonder if something
-dumber/slower could work for both cases.
-
-Like something like that (not tested at all):
-
-for (i = 0 ; i < KVM_MMU_NUM_PREV_ROOTS ; i++)
-	tmp_prev_roots[i] = mmu->prev_roots[i];
-
-j = 0;
-
-/* current mmu root becomes MRU*/
-if (VALID_PAGE(mmu->root.hpa)
-	mmu->prev_roots[j++] = mmu->root;
-
-
-for (i = 0; i < KVM_MMU_NUM_PREV_ROOTS && j < KVM_MMU_NUM_PREV_ROOTS; i++)
-	if (is_root_usable(&tmp_prev_roots[i], new_pgd, new_role))
-		/* TODO: can also add a warning here if current root is already usable */
-		mmu->root = mmu->tmp_prev_roots[i];
-	else
-		mmu->prev_roots[j++] = mmu->tmp_prev_roots[i];
-
-for (; j < KVM_MMU_NUM_PREV_ROOTS ; j++)
-	mmu->prev_roots[j++].hpa = INVALID_PAGE;
-
-	
-> +
-> +static bool fast_pgd_switch(struct kvm *kvm, struct kvm_mmu *mmu,
-> +			    gpa_t new_pgd, union kvm_mmu_page_role new_role)
-> +{
->  	/*
-> -	 * For now, limit the fast switch to 64-bit hosts+VMs in order to avoid
-> +	 * For now, limit the caching to 64-bit hosts+VMs in order to avoid
->  	 * having to deal with PDPTEs. We may add support for 32-bit hosts/VMs
->  	 * later if necessary.
->  	 */
-> -	if (mmu->shadow_root_level >= PT64_ROOT_4LEVEL &&
-> -	    mmu->root_level >= PT64_ROOT_4LEVEL)
-> -		return cached_root_available(vcpu, new_pgd, new_role);
-> +	if (VALID_PAGE(mmu->root.hpa) && !to_shadow_page(mmu->root.hpa))
-> +		kvm_mmu_free_roots(kvm, mmu, KVM_MMU_ROOT_CURRENT);
->  
-> -	return false;
-> +	if (VALID_PAGE(mmu->root.hpa))
-> +		return cached_root_find_and_keep_current(kvm, mmu, new_pgd, new_role);
-> +	else
-> +		return cached_root_find_without_current(kvm, mmu, new_pgd, new_role);
->  }
->  
->  static void __kvm_mmu_new_pgd(struct kvm_vcpu *vcpu, gpa_t new_pgd,
-> @@ -4160,8 +4196,8 @@ static void __kvm_mmu_new_pgd(struct kvm_vcpu *vcpu, gpa_t new_pgd,
->  {
->  	struct kvm_mmu *mmu = vcpu->arch.mmu;
->  
-> -	if (!fast_pgd_switch(vcpu, new_pgd, new_role)) {
-> -		kvm_mmu_free_roots(vcpu->kvm, mmu, KVM_MMU_ROOT_CURRENT);
-> +	if (!fast_pgd_switch(vcpu->kvm, mmu, new_pgd, new_role)) {
-> +		/* kvm_mmu_ensure_valid_pgd will set up a new root.  */
-I also agree with Sean's comment on this.
->  		return;
->  	}
->  
-
-
-I don't see any bugs in the code  however, thus:
-
-Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
-
-Best regards,
-	Maxim Levitsky
-
-
+Reviewed-by: Rob Herring <robh@kernel.org>

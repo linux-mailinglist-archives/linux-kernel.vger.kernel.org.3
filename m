@@ -2,216 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 951D24C1B2E
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 19:55:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 920F94C1B39
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 19:56:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244043AbiBWSz4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 13:55:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40982 "EHLO
+        id S244065AbiBWS4y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 13:56:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233132AbiBWSzz (ORCPT
+        with ESMTP id S238686AbiBWS4t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 13:55:55 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B0453EF00;
-        Wed, 23 Feb 2022 10:55:27 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B94C0B8218D;
-        Wed, 23 Feb 2022 18:55:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94E10C340E7;
-        Wed, 23 Feb 2022 18:55:23 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="QkOuubY0"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1645642521;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=cwY0EDD6eopPWtPCL3v37+kjOKqJXSVA7WTKzKBMdiU=;
-        b=QkOuubY0JZAuCOGq4M7e4/QFDp9EvBWpOOFuim35X9plkeushAGzJT967j8qZV1YLiHotT
-        uoDVEZw8YT1I1JdZVYHAlqUfTh+Mz/+fw/vXYuFJqiiGqZRFjOoTRZGmtoSNcKUolk6vGw
-        vhaOlpSlh1oP0edkfAuYTOu1rEJaFkc=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id e60620e8 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Wed, 23 Feb 2022 18:55:20 +0000 (UTC)
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
-        bigeasy@linutronix.de
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Sultan Alsawaf <sultan@kerneltoast.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Theodore Ts'o <tytso@mit.edu>
-Subject: [PATCH] random: do crng pre-init loading in worker rather than irq
-Date:   Wed, 23 Feb 2022 19:55:11 +0100
-Message-Id: <20220223185511.628452-1-Jason@zx2c4.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 23 Feb 2022 13:56:49 -0500
+Received: from m43-7.mailgun.net (m43-7.mailgun.net [69.72.43.7])
+        by lindbergh.monkeyblade.net (Postfix) with UTF8SMTPS id 10D083FBC4
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 10:56:19 -0800 (PST)
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1645642580; h=Message-Id: Date: Subject: Cc: To: From:
+ Sender; bh=bJ3PTMa5ITK1zBs3UQ1rqQGE3Uh9+XtlEAte3v0fLh0=; b=GT3bzIgpIJGwbYIups/XWCMChW/xedoj7nBJCJ6EKCs1Cj0BrPDMHyAMa0b6IPab8X1ovKna
+ M0bDPVdVz8MNeinBBYcNlAtN/FAJeEJh4bw222KlYdGPRT7a6CQFK1ZYv7BxTMLaIEoDfTCa
+ b6HC3tVttjOEJ0INth5DladTHZU=
+X-Mailgun-Sending-Ip: 69.72.43.7
+X-Mailgun-Sid: WyI0MWYwYSIsICJsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n02.prod.us-west-2.postgun.com with SMTP id
+ 62168352f59adaaa8ea27743 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Wed, 23 Feb 2022 18:56:18
+ GMT
+Sender: tdas=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 640D0C43617; Wed, 23 Feb 2022 18:56:18 +0000 (UTC)
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
+Received: from hu-tdas-hyd.qualcomm.com (unknown [202.46.22.19])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: tdas)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 92A13C4338F;
+        Wed, 23 Feb 2022 18:56:14 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.codeaurora.org 92A13C4338F
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=codeaurora.org
+From:   Taniya Das <tdas@codeaurora.org>
+To:     Stephen Boyd <sboyd@kernel.org>,
+        =?UTF-8?q?Michael=20Turquette=20=C2=A0?= <mturquette@baylibre.com>
+Cc:     Rajendra Nayak <rnayak@codeaurora.org>,
+        linux-arm-msm@vger.kernel.org, linux-soc@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Taniya Das <tdas@codeaurora.org>
+Subject: [v2 1/2] clk: qcom: gdsc: Add support to update GDSC transition delay
+Date:   Thu, 24 Feb 2022 00:26:05 +0530
+Message-Id: <20220223185606.3941-1-tdas@codeaurora.org>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Taking spinlocks from IRQ context is problematic for PREEMPT_RT. That
-is, in part, why we take trylocks instead. But apparently this still
-trips up various lock dependency analyzers. That seems like a bug in the
-analyzers that should be fixed, rather than having to change things
-here.
+GDSCs have multiple transition delays which are used for the GDSC FSM
+states. Older targets/designs required these values to be updated from
+gdsc code to certain default values for the FSM state to work as
+expected. But on the newer targets/designs the values updated from the
+GDSC driver can hamper the FSM state to not work as expected.
 
-But maybe there's another reason to change things up: by deferring the
-crng pre-init loading to the worker, we can use the cryptographic hash
-function rather than xor, which is perhaps a meaningful difference when
-considering this data has only been through the relatively weak
-fast_mix() function.
+On SC7180 we observe black screens because the gdsc is being
+enabled/disabled very rapidly and the GDSC FSM state does not work as
+expected. This is due to the fact that the GDSC reset value is being
+updated from SW.
 
-The biggest downside of this approach is that the pre-init loading is
-now deferred until later, which means things that need random numbers
-after interrupts are enabled, but before workqueues are running -- or
-before this particular worker manages to run -- are going to get into
-trouble. Hopefully in the real world, this window is rather small,
-especially since this code won't run until 64 interrupts had occurred.
+Thus add support to update the transition delay from the clock
+controller gdscs as required.
 
-Cc: Dominik Brodowski <linux@dominikbrodowski.net>
-Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc: Sultan Alsawaf <sultan@kerneltoast.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Theodore Ts'o <tytso@mit.edu>
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+Fixes: 45dd0e55317cc ("clk: qcom: Add support for GDSCs)
+Signed-off-by: Taniya Das <tdas@codeaurora.org>
 ---
- drivers/char/random.c | 62 ++++++++++++-------------------------------
- 1 file changed, 17 insertions(+), 45 deletions(-)
+[v2]
+   * Add 3 transition delays and update the default values in case of
+     non-zero value.
+   * Update the delays from mdss gdsc in the corresponding display clock
+     controllers.
 
-diff --git a/drivers/char/random.c b/drivers/char/random.c
-index 536237a0f073..9fb06fc298d3 100644
---- a/drivers/char/random.c
-+++ b/drivers/char/random.c
-@@ -443,10 +443,6 @@ static void crng_make_state(u32 chacha_state[CHACHA_STATE_WORDS],
-  * boot time when it's better to have something there rather than
-  * nothing.
-  *
-- * There are two paths, a slow one and a fast one. The slow one
-- * hashes the input along with the current key. The fast one simply
-- * xors it in, and should only be used from interrupt context.
-- *
-  * If account is set, then the crng_init_cnt counter is incremented.
-  * This shouldn't be set by functions like add_device_randomness(),
-  * where we can't trust the buffer passed to it is guaranteed to be
-@@ -455,19 +451,15 @@ static void crng_make_state(u32 chacha_state[CHACHA_STATE_WORDS],
-  * Returns the number of bytes processed from input, which is bounded
-  * by CRNG_INIT_CNT_THRESH if account is true.
+ drivers/clk/qcom/gdsc.c | 26 +++++++++++++++++++++-----
+ drivers/clk/qcom/gdsc.h |  8 +++++++-
+ 2 files changed, 28 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/clk/qcom/gdsc.c b/drivers/clk/qcom/gdsc.c
+index 7e1dd8ccfa38..44520efc6c72 100644
+--- a/drivers/clk/qcom/gdsc.c
++++ b/drivers/clk/qcom/gdsc.c
+@@ -1,6 +1,6 @@
+ // SPDX-License-Identifier: GPL-2.0-only
+ /*
+- * Copyright (c) 2015, 2017-2018, The Linux Foundation. All rights reserved.
++ * Copyright (c) 2015, 2017-2018, 2022, The Linux Foundation. All rights reserved.
   */
--static size_t crng_pre_init_inject(const void *input, size_t len,
--				   bool fast, bool account)
-+static size_t crng_pre_init_inject(const void *input, size_t len, bool account)
- {
- 	static int crng_init_cnt = 0;
-+	struct blake2s_state hash;
- 	unsigned long flags;
- 
--	if (fast) {
--		if (!spin_trylock_irqsave(&base_crng.lock, flags))
--			return 0;
--	} else {
--		spin_lock_irqsave(&base_crng.lock, flags);
--	}
-+	blake2s_init(&hash, sizeof(base_crng.key));
- 
-+	spin_lock_irqsave(&base_crng.lock, flags);
- 	if (crng_init != 0) {
- 		spin_unlock_irqrestore(&base_crng.lock, flags);
- 		return 0;
-@@ -476,21 +468,9 @@ static size_t crng_pre_init_inject(const void *input, size_t len,
- 	if (account)
- 		len = min_t(size_t, len, CRNG_INIT_CNT_THRESH - crng_init_cnt);
- 
--	if (fast) {
--		const u8 *src = input;
--		size_t i;
--
--		for (i = 0; i < len; ++i)
--			base_crng.key[(crng_init_cnt + i) %
--				      sizeof(base_crng.key)] ^= src[i];
--	} else {
--		struct blake2s_state hash;
--
--		blake2s_init(&hash, sizeof(base_crng.key));
--		blake2s_update(&hash, base_crng.key, sizeof(base_crng.key));
--		blake2s_update(&hash, input, len);
--		blake2s_final(&hash, base_crng.key);
--	}
-+	blake2s_update(&hash, base_crng.key, sizeof(base_crng.key));
-+	blake2s_update(&hash, input, len);
-+	blake2s_final(&hash, base_crng.key);
- 
- 	if (account) {
- 		crng_init_cnt += len;
-@@ -1040,7 +1020,7 @@ void add_device_randomness(const void *buf, size_t size)
- 	unsigned long flags;
- 
- 	if (crng_init == 0 && size)
--		crng_pre_init_inject(buf, size, false, false);
-+		crng_pre_init_inject(buf, size, false);
- 
- 	spin_lock_irqsave(&input_pool.lock, flags);
- 	_mix_pool_bytes(buf, size);
-@@ -1157,7 +1137,7 @@ void add_hwgenerator_randomness(const void *buffer, size_t count,
- 				size_t entropy)
- {
- 	if (unlikely(crng_init == 0)) {
--		size_t ret = crng_pre_init_inject(buffer, count, false, true);
-+		size_t ret = crng_pre_init_inject(buffer, count, true);
- 		mix_pool_bytes(buffer, ret);
- 		count -= ret;
- 		buffer += ret;
-@@ -1298,7 +1278,12 @@ static void mix_interrupt_randomness(struct work_struct *work)
- 	local_irq_enable();
- 
- 	mix_pool_bytes(pool, sizeof(pool));
--	credit_entropy_bits(1);
+
+ #include <linux/bitops.h>
+@@ -35,9 +35,14 @@
+ #define CFG_GDSCR_OFFSET		0x4
+
+ /* Wait 2^n CXO cycles between all states. Here, n=2 (4 cycles). */
+-#define EN_REST_WAIT_VAL	(0x2 << 20)
+-#define EN_FEW_WAIT_VAL		(0x8 << 16)
+-#define CLK_DIS_WAIT_VAL	(0x2 << 12)
++#define EN_REST_WAIT_VAL	0x2
++#define EN_FEW_WAIT_VAL		0x8
++#define CLK_DIS_WAIT_VAL	0x2
 +
-+	if (unlikely(crng_init == 0))
-+		crng_pre_init_inject(pool, sizeof(pool), true);
-+	else
-+		credit_entropy_bits(1);
++/* Transition delay shifts */
++#define EN_REST_WAIT_SHIFT	20
++#define EN_FEW_WAIT_SHIFT	16
++#define CLK_DIS_WAIT_SHIFT	12
+
+ #define RETAIN_MEM		BIT(14)
+ #define RETAIN_PERIPH		BIT(13)
+@@ -380,7 +385,18 @@ static int gdsc_init(struct gdsc *sc)
+ 	 */
+ 	mask = HW_CONTROL_MASK | SW_OVERRIDE_MASK |
+ 	       EN_REST_WAIT_MASK | EN_FEW_WAIT_MASK | CLK_DIS_WAIT_MASK;
+-	val = EN_REST_WAIT_VAL | EN_FEW_WAIT_VAL | CLK_DIS_WAIT_VAL;
 +
- 	memzero_explicit(pool, sizeof(pool));
- }
- 
-@@ -1331,24 +1316,11 @@ void add_interrupt_randomness(int irq)
- 	fast_mix(fast_pool->pool32);
- 	new_count = ++fast_pool->count;
- 
--	if (unlikely(crng_init == 0)) {
--		if (new_count >= 64 &&
--		    crng_pre_init_inject(fast_pool->pool32, sizeof(fast_pool->pool32),
--					 true, true) > 0) {
--			fast_pool->count = 0;
--			fast_pool->last = now;
--			if (spin_trylock(&input_pool.lock)) {
--				_mix_pool_bytes(&fast_pool->pool32, sizeof(fast_pool->pool32));
--				spin_unlock(&input_pool.lock);
--			}
--		}
--		return;
--	}
--
- 	if (new_count & MIX_INFLIGHT)
- 		return;
- 
--	if (new_count < 64 && !time_after(now, fast_pool->last + HZ))
-+	if (new_count < 64 && (!time_after(now, fast_pool->last + HZ) ||
-+			       unlikely(crng_init == 0)))
- 		return;
- 
- 	if (unlikely(!fast_pool->mix.func))
--- 
-2.35.1
++	if (!sc->en_rest_wait_val)
++		sc->en_rest_wait_val = EN_REST_WAIT_VAL;
++	if (!sc->en_few_wait_val)
++		sc->en_few_wait_val = EN_FEW_WAIT_VAL;
++	if (!sc->clk_dis_wait_val)
++		sc->clk_dis_wait_val = CLK_DIS_WAIT_VAL;
++
++	val = sc->en_rest_wait_val << EN_REST_WAIT_SHIFT |
++		sc->en_few_wait_val << EN_FEW_WAIT_SHIFT |
++		sc->clk_dis_wait_val << CLK_DIS_WAIT_SHIFT;
++
+ 	ret = regmap_update_bits(sc->regmap, sc->gdscr, mask, val);
+ 	if (ret)
+ 		return ret;
+diff --git a/drivers/clk/qcom/gdsc.h b/drivers/clk/qcom/gdsc.h
+index d7cc4c21a9d4..ad313d7210bd 100644
+--- a/drivers/clk/qcom/gdsc.h
++++ b/drivers/clk/qcom/gdsc.h
+@@ -1,6 +1,6 @@
+ /* SPDX-License-Identifier: GPL-2.0-only */
+ /*
+- * Copyright (c) 2015, 2017-2018, The Linux Foundation. All rights reserved.
++ * Copyright (c) 2015, 2017-2018, 2022, The Linux Foundation. All rights reserved.
+  */
+
+ #ifndef __QCOM_GDSC_H__
+@@ -22,6 +22,9 @@ struct reset_controller_dev;
+  * @cxcs: offsets of branch registers to toggle mem/periph bits in
+  * @cxc_count: number of @cxcs
+  * @pwrsts: Possible powerdomain power states
++ * @en_rest_wait_val: transition delay value for receiving enr ack signal
++ * @en_few_wait_val: transition delay value for receiving enf ack signal
++ * @clk_dis_wait_val: transition delay value for halting clock
+  * @resets: ids of resets associated with this gdsc
+  * @reset_count: number of @resets
+  * @rcdev: reset controller
+@@ -36,6 +39,9 @@ struct gdsc {
+ 	unsigned int			clamp_io_ctrl;
+ 	unsigned int			*cxcs;
+ 	unsigned int			cxc_count;
++	unsigned int			en_rest_wait_val;
++	unsigned int			en_few_wait_val;
++	unsigned int			clk_dis_wait_val;
+ 	const u8			pwrsts;
+ /* Powerdomain allowable state bitfields */
+ #define PWRSTS_OFF		BIT(0)
+--
+Qualcomm INDIA, on behalf of Qualcomm Innovation Center, Inc.is a member
+of the Code Aurora Forum, hosted by the  Linux Foundation.
 

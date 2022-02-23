@@ -2,97 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B74F84C14E8
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 14:59:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7ADFA4C14EC
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 15:00:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241307AbiBWN7g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 08:59:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45178 "EHLO
+        id S241278AbiBWOA2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 09:00:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241290AbiBWN7e (ORCPT
+        with ESMTP id S235164AbiBWOAZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 08:59:34 -0500
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94939B0D01;
-        Wed, 23 Feb 2022 05:59:06 -0800 (PST)
-Received: by mail-pf1-x431.google.com with SMTP id i6so15372972pfc.9;
-        Wed, 23 Feb 2022 05:59:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=X6Dow0Ktg3f7s9R18PXLBZ+c8Wk6NqWpU+XTTN91E7I=;
-        b=RX18hLk8t4yl1UuCrwmxyKV6FBLuOZ3CuRlfI8mh5eLsCRMcu7yYNlt4TqZChs1x90
-         YIF1QcDiax/U7D1b/RxbvjQRQTVmNorNcAm2EjluWo36Ky98SoJ2mDVvniaWOCHo0wLo
-         MrSTyWM6L8qAmA0oII5XoNSDDIfmKZ1oIHE6ZxTnfimKV1g7qwJDZEPJc1+Qj1H3XeUV
-         95ooAE+V+bgUjidm2NmsrNzjbPnQ2qE0ciZ43KufM6ki9Tm8fFXAxzDBPAfPRpo1zW8m
-         aSUj24sOun3OrPu5xgc0aLDj+s2zNX1RKkjE4Hee5BEkzB+pQddCpFs7pxkuuYgKii0X
-         +jQQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=X6Dow0Ktg3f7s9R18PXLBZ+c8Wk6NqWpU+XTTN91E7I=;
-        b=lvjDaKvMBZp2IcJyLbWNz07OPbK82E0akO96AGAURRKt4qJNAlt5WM2BmVlcpgMv51
-         y+M62v40Qm87mHcV7NxgYs/bUUaWeXBEr7uyoD3K+iNdrJW0ZARNwYQRw9G5EpShUhoH
-         x2vzzgjXv5BEZxr4t+ea5tIrMCHuPi73fHrOaizSZbWTPKp+OinmldiQCKnIY6XJRgX+
-         rytk7U/uYbyyq7hpsPbkaRVNjTVXZj3dkvcSoUytEtdpDKwxZv7ZQp3PoquOo6TRA0mn
-         CzFOCurOUtwCldRCPYGm/EcdmsTLw40rnrAJVCv8kPfLmvElOVkTGaDCGMaIAnSGsh5o
-         Giig==
-X-Gm-Message-State: AOAM530t1ap6bkfV1w6oF2Fq0r2l0yDHc66NG+4gGv3d6Q/BMRHih7IX
-        Q4RvqJPEDwMcHZixpT2quP4=
-X-Google-Smtp-Source: ABdhPJzh6lTbjHeHmAyasMYIQHn/EZf6R89kUL1gUNz+eL3VXPSutvjf0y7809cEOUpc8J6UGsMlOA==
-X-Received: by 2002:a05:6a00:2405:b0:4e1:5008:adcc with SMTP id z5-20020a056a00240500b004e15008adccmr30100114pfh.35.1645624746021;
-        Wed, 23 Feb 2022 05:59:06 -0800 (PST)
-Received: from [192.168.11.5] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
-        by smtp.gmail.com with ESMTPSA id 16sm24688182pgz.76.2022.02.23.05.59.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 23 Feb 2022 05:59:05 -0800 (PST)
-Message-ID: <721f860a-a662-0f0c-a82d-eacf80841eb3@gmail.com>
-Date:   Wed, 23 Feb 2022 22:59:01 +0900
+        Wed, 23 Feb 2022 09:00:25 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61309B0D01;
+        Wed, 23 Feb 2022 05:59:58 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EA49F61637;
+        Wed, 23 Feb 2022 13:59:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C78F0C340E7;
+        Wed, 23 Feb 2022 13:59:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645624797;
+        bh=Bke8ApiyRMkH98UdJHHP3kEbMKnEWTq7NDJSUsa5F3o=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Sg92A5NLq8Tajr7dVhN7myJdFwU+RbgVRsX70RkREaYadj8q5FWfs0lJBjsiT6Oti
+         TzUyBp1FxADWnvKYry2yPTMr3rmJTxBDBZx8uLrH2AiH86qZgjTaNntcZTWcR/R0BK
+         FqxCxFJaYUtyaFLj51vHmVq4ZwcWfHqkm8J7Viy4LtavmVtGKbCOHZz8zraJu7VsmW
+         m6cGg+5TQNxUyS6X2A2hLm9EhSexy0m+hyLtWGPXz3IM3BaoUaNYv0iiD3JBxaunAc
+         ku/M0TkhT/hE83zxX0iEMGTSw/+4gwcDm4Oh96bed0R4wVmhGwgRNLVtE3g7QZMUXm
+         Jd9cmG8H0qDsg==
+Date:   Wed, 23 Feb 2022 14:59:54 +0100
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
+Cc:     linux-i2c@vger.kernel.org, git@xilinx.com, michal.simek@xilinx.com,
+        linux-kernel@vger.kernel.org, Chirag Parekh <chiragp@xilinx.com>
+Subject: Re: [PATCH] i2c: cadence: Recover bus after controller reset
+Message-ID: <YhY92v3ItYdGV2r2@ninjato>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>,
+        linux-i2c@vger.kernel.org, git@xilinx.com, michal.simek@xilinx.com,
+        linux-kernel@vger.kernel.org, Chirag Parekh <chiragp@xilinx.com>
+References: <20220222134632.18598-1-shubhrajyoti.datta@xilinx.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] scripts: kernel-doc: Check existence of FILE arg
-Content-Language: en-US
-To:     =?UTF-8?B?VG9tYXN6IFdhcm5pZcWCxYJv?= <tomasz.warniello@gmail.com>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Akira Yokosawa <akiyks@gmail.com>
-References: <1c71e5d2-f87e-6c8e-6176-e5ce42e4d41b@gmail.com>
- <20220223144713.6e2284e3@fuji.fritz.box>
-From:   Akira Yokosawa <akiyks@gmail.com>
-In-Reply-To: <20220223144713.6e2284e3@fuji.fritz.box>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="Dj3IRKXjHGCl9lf6"
+Content-Disposition: inline
+In-Reply-To: <20220222134632.18598-1-shubhrajyoti.datta@xilinx.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 23 Feb 2022 14:47:13 +0100,
-Tomasz Warnie=C5=82=C5=82o wrote:
-> On Wed, 23 Feb 2022 15:07:30 +0900
-> Akira Yokosawa <akiyks@gmail.com> wrote:
+
+--Dj3IRKXjHGCl9lf6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Tue, Feb 22, 2022 at 07:16:32PM +0530, Shubhrajyoti Datta wrote:
+> From: Chirag Parekh <chiragp@xilinx.com>
 >=20
->> Currently, when no FILE argument is given following switches such
->> as -man, -rst, and -none, kernel-doc ends up in the error of (long
->> msg from perl folded):
->>
->>     Use of uninitialized value $ARGV[0] in pattern match (m//)
->>     at ./scripts/kernel-doc line 438.
+> This will save from potential lock-up caused when I2c master controller
+> resets in the middle of transfer and the slave is holding SDA line to
+> transmit more data.
 >=20
-> It's a warning not an error.
+> Signed-off-by: Chirag Parekh <chiragp@xilinx.com>
+> Signed-off-by: Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
 
-Good catch!
+The comment from last version has not been clarified or addressed.
 
-Will amend in v2 with proper attribution.
+http://patchwork.ozlabs.org/project/linux-i2c/patch/20211129090116.16628-1-=
+shubhrajyoti.datta@xilinx.com/
 
-        Thanks Akira
+
+--Dj3IRKXjHGCl9lf6
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmIWPdYACgkQFA3kzBSg
+KbYMGBAApeNCqNYWDYaI9U1cx/3QE8qQSoKuZHN4Ps1URnOK9pvXVMOT9hPkMBNO
+7mTtUoHReSI3xg2a15/W6Xnlo3a3p38eXOI8R/W5BC18p3VO4BUcatHwmSzoPbJ2
+Z5xr+F7RyIW5LMDGwWO+6Zach8pBYod1scqZ0xzU1gLe+zlXxxKxdG8TBGG0lOEb
+u9dY+/vANLl+zmvKBUG0zUhv7iW+qse6aC3zh18EJ96QRXcsxT9cluGfPCTzDOsU
+Vj50HGPKhJ1IjYSTUXeC5H4nt4X23tMQqCTiJSrdF0k8NvPAh3D0Gf3cFp0rVWBA
+nXwSydUswuWAXfHAfuRVuDRvlvornn2IAJp7js1a2oqrXTgDxP1ari9rQTEPwBs+
+kD5uzsNkfBijjv5HtCI/cWYC/NNoBJ1eo3XyVuVnYpUmTgpE0gVeodIKfJI3H/4x
+fLwuZfKVt1kaECFIzHLOteERHROPt5fmKJHNZJ2fqHDMPeQyp5CG/IC4fCW7t+kU
+dMfh+uxZxk63Dw/5D86L9VnOnTy/Ak02yYEwH/agTJKLHdIvzAgvu6MvC2dmqckx
+j0t7ycg/uqkjRjvnV1ciDoIXYRjPEEBD4CffLhPPW3uMlYstYTMptlE5rSY5aYZb
+TXP5ROrEa3Wu6/sjt2lxPdKRW0T58sg8P5Abyo2ZnontF/xlOxo=
+=eStT
+-----END PGP SIGNATURE-----
+
+--Dj3IRKXjHGCl9lf6--

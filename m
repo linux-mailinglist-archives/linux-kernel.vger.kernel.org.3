@@ -2,162 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EABA54C0F25
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 10:26:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8ACA44C0F32
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 10:27:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239177AbiBWJ1R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 04:27:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53616 "EHLO
+        id S239292AbiBWJ1l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 04:27:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235331AbiBWJ1P (ORCPT
+        with ESMTP id S235331AbiBWJ1g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 04:27:15 -0500
-Received: from hel-mailgw-01.vaisala.com (hel-mailgw-01.vaisala.com [193.143.230.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0F55109B;
-        Wed, 23 Feb 2022 01:26:45 -0800 (PST)
-Received: from HEL-SMTP.corp.vaisala.com (HEL-SMTP.corp.vaisala.com [172.24.1.225])
-        by hel-mailgw-01.vaisala.com (Postfix) with ESMTP id 6631560674AA;
-        Wed, 23 Feb 2022 11:26:38 +0200 (EET)
-Received: from [172.24.190.103] ([172.24.190.103]) by HEL-SMTP.corp.vaisala.com over TLS secured channel with Microsoft SMTPSVC(8.5.9600.16384);
-         Wed, 23 Feb 2022 11:26:40 +0200
-Message-ID: <d62b6e76-164d-0adb-596a-d9743de95839@vaisala.com>
-Date:   Wed, 23 Feb 2022 11:26:40 +0200
+        Wed, 23 Feb 2022 04:27:36 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA632AE58;
+        Wed, 23 Feb 2022 01:27:08 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3CA406169C;
+        Wed, 23 Feb 2022 09:27:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9BF46C340F9;
+        Wed, 23 Feb 2022 09:27:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645608427;
+        bh=D2jUPs6ryRSFqPbSylqUkNdDZuOthbzsmeMEmvziyjY=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Qprkztvt/vehYNHRcEK8aqRshRS+P9DBpcRom+Ea4pnSLocGv1eBVL2v483vi1brP
+         yniMjXK/S41L4Xb5GxmMolqLanH2PfdtLhr4aslEr3qRf3FRgZXiElzFJkvdC4w2nN
+         JS6y8Uxpo3q6QV2cYcl6Kk1+VLa3u1w7dstKq6JdbSKRuvb7qsDfR1olUXgTRiM4lW
+         h9gXptbf8SQ/Kn95+tqUCiEvk6NU1742fRGNTdgV5FXZ+Nd86Q2w5JlwL02OxgP5C1
+         +ol87y0DUBe7bzeKEkX3OWQML5KSSUNMqefzAhTnHd6BCu3L5B6sV9dAoeIrCnSrMr
+         hGVco4bZ15heQ==
+Received: by mail-wm1-f51.google.com with SMTP id p4so3139192wmg.1;
+        Wed, 23 Feb 2022 01:27:07 -0800 (PST)
+X-Gm-Message-State: AOAM533rjH2d5XuwiAcxoxjxPHchWShU53/wM3Yax8XoRhTZ4LMUtHmz
+        eSTAI3Q94+vqKovfLZNqqD5cgnhheiiFvMqGvbc=
+X-Google-Smtp-Source: ABdhPJwtMkGkHNVPhtWq1LOTi2OcT9JVNmxiOoaUyabWMpAtHbaXvG0B+oJZMTvLmHy/MuDTQEaSkGsJ6B3oEOPptXw=
+X-Received: by 2002:a05:600c:1d27:b0:37c:74bb:2b4d with SMTP id
+ l39-20020a05600c1d2700b0037c74bb2b4dmr6779098wms.82.1645608425823; Wed, 23
+ Feb 2022 01:27:05 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [RFC PATCH] iio: core: provide a default value `label` property
-Content-Language: en-US
-To:     Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-Cc:     Jonathan Cameron <jic23@kernel.org>, lars@metafoo.de,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220216135604.3435769-1-nandor.han@vaisala.com>
- <20220220131809.1bc184e0@jic23-huawei>
- <4f0c786f-e29c-4838-59e3-236a908e4431@vaisala.com>
- <20220222163606.00005996@Huawei.com>
-From:   Nandor Han <nandor.han@vaisala.com>
-In-Reply-To: <20220222163606.00005996@Huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-OriginalArrivalTime: 23 Feb 2022 09:26:40.0238 (UTC) FILETIME=[769998E0:01D82897]
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220216131332.1489939-1-arnd@kernel.org> <20220216131332.1489939-10-arnd@kernel.org>
+ <20220223074127.GA8287@alpha.franken.de>
+In-Reply-To: <20220223074127.GA8287@alpha.franken.de>
+From:   Arnd Bergmann <arnd@kernel.org>
+Date:   Wed, 23 Feb 2022 10:26:49 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a1nM3yPhjhMtUQyd5srgB99OkUvmapWv13KCuJXsf=euw@mail.gmail.com>
+Message-ID: <CAK8P3a1nM3yPhjhMtUQyd5srgB99OkUvmapWv13KCuJXsf=euw@mail.gmail.com>
+Subject: Re: [PATCH v2 09/18] mips: use simpler access_ok()
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Christoph Hellwig <hch@lst.de>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        Linux API <linux-api@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Russell King - ARM Linux <linux@armlinux.org.uk>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        Brian Cain <bcain@codeaurora.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Michal Simek <monstr@monstr.eu>,
+        Nick Hu <nickhu@andestech.com>,
+        Greentime Hu <green.hu@gmail.com>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Stafford Horne <shorne@gmail.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Rich Felker <dalias@libc.org>,
+        David Miller <davem@davemloft.net>,
+        Richard Weinberger <richard@nod.at>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        "Eric W . Biederman" <ebiederm@xmission.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        alpha <linux-alpha@vger.kernel.org>,
+        "open list:SYNOPSYS ARC ARCHITECTURE" 
+        <linux-snps-arc@lists.infradead.org>, linux-csky@vger.kernel.org,
+        "open list:QUALCOMM HEXAGON..." <linux-hexagon@vger.kernel.org>,
+        linux-ia64@vger.kernel.org,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Openrisc <openrisc@lists.librecores.org>,
+        Parisc List <linux-parisc@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        sparclinux <sparclinux@vger.kernel.org>,
+        linux-um <linux-um@lists.infradead.org>,
+        "open list:TENSILICA XTENSA PORT (xtensa)" 
+        <linux-xtensa@linux-xtensa.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/22/22 18:36, Jonathan Cameron wrote:
-> On Tue, 22 Feb 2022 09:42:12 +0200
-> Nandor Han <nandor.han@vaisala.com> wrote:
-> 
->> On 2/20/22 15:18, Jonathan Cameron wrote:
->>> On Wed, 16 Feb 2022 15:56:04 +0200
->>> Nandor Han <nandor.han@vaisala.com> wrote:
->>>    
->>
->> Thanks for reviewing the patch and provide feed back.
->>
->>>> The label property is used to correctly identify the same IIO device
->>>> over reboots. The implementation requires that a value will be provided
->>>> through device-tree. This sometime could requires many changes to
->>>> device-trees when multiple devices want to use the label property.
->>>> In order to prevent this, we could use the device-tree node
->>>> name as default value. The device-tree node name is unique and
->>>> also reflects the device which makes it a good choice as default value.
->>>> This change is backward compatible since doesn't affect the users that
->>>> do configure a label using the device-tree or the ones that are not
->>>> using the labels at all.
->>>>
->>>> Use the device-tree node name as a default value for `label` property,
->>>> in case there isn't one configured through device-tree.
->>>
->>> Interesting idea.  However a few concerns come to mind.
->>> 1) If we start having a default for this, then it will get used as ABI
->>>      and if a label is applied later to the DT then we will end up breaking
->>>      userspace scripts.
->>
->> When a label is explicitly configured means that the userspace expects
->> to have that value available. Therefore, I don't see this as ABI change,
->> given that this affects the property label content and not for example
->> the property name.
-> 
-> The potential issue is that with this userspace code may rely on the common
-> option (matches device tree node name) and then get confused on it changing.
-> 
-> If it wasn't there previously and appears (which is what happens when
-> a label is added currently) userspace is unlikely to have in some fashion
-> depended on it not being there...
-> 
+On Wed, Feb 23, 2022 at 8:41 AM Thomas Bogendoerfer
+<tsbogend@alpha.franken.de> wrote:
+>
+> On Wed, Feb 16, 2022 at 02:13:23PM +0100, Arnd Bergmann wrote:
+> > diff --git a/arch/mips/include/asm/uaccess.h b/arch/mips/include/asm/uaccess.h
+> > index db9a8e002b62..d7c89dc3426c 100644
+> > --- a/arch/mips/include/asm/uaccess.h
+> > +++ b/arch/mips/include/asm/uaccess.h
+> > @@ -19,6 +19,7 @@
+> >  #ifdef CONFIG_32BIT
+> >
+> >  #define __UA_LIMIT 0x80000000UL
+> > +#define TASK_SIZE_MAX        __UA_LIMIT
+>
+> using KSEG0 instead would IMHO be the better choice. This gives the
+> chance to remove __UA_LIMIT completly after cleaning up ptrace.c
 
-If they rely on missing the label, it's true this will break that.
+Ok, changed now.
 
-> If someone modifies an existing label they can reasonably expect to break
-> compatibility because they made something 'go away'.
-> 
->>
->>> 2) If we do this it should be firmware agnostics (we need to fix
->>>      the existing code to be such as well).
->>
->> Not sure I understand this. If you could explain a bit more I would
->> really appriciate.
-> 
-> Typo in that didn't help. (agnostic).  Anyhow, basically it has to work
-> for ACPI as well.
-> 
->>
->>> 3) Is the node name always unique (think multiple accelerometers on
->>>      different i2c masters)?
->>> 3) I'm fairly sure this information is readily available anyway.
->>>      either via the of_node link for the iio\:deviceX
->>>      So why not have your usespace use that instead of label?
->>>      I'm not a fan of duplicating information that is readily available
->>>      anyway - be it as name and reg in the of_node directory.
->>>    
->>
->> The node name supposed to be unique AFAIK and you're right it is
->> available already in the userspace.
-> 
-> It's not unique.  As per https://eur03.safelinks.protection.outlook.com/?url=https%3A%2F%2Felinux.org%2FDevice_Tree_Usage&amp;data=04%7C01%7Cnandor.han%40vaisala.com%7Cdbfd5d178b484f5258fe08d9f6216e65%7C6d7393e041f54c2e9b124c2be5da5c57%7C0%7C0%7C637811445712047047%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000&amp;sdata=0y2Vx5Cqso5iYAvA58tXnfzI%2BJ9oUbhvDIIkC8XP6Ik%3D&amp;reserved=0,
-> "sibling nodes are expected to be unique".  If you have multiple
-> i2c masters and the same device under each of them with the
-> same i2c address they are not siblings (different parents) and
-> will have the same node name.
-> 
-
-Thanks for the info. Keep that in mind
-
-> 
->> My point with this patch is to provide a default value for the label
->> content and I'm open to suggestions related to content. The of_node name
->> was something that I thought that is unique and easy to use, but if
->> somebody has better suggestions I'm really open to these.
-> 
-> I don't see why we want a default label. If it's not provided it's
-> not there (no file) and userspace can go use something else for
-> it's unique naming. Note that for older kernels they need to do
-> that anyway because label never existed. So userspace will need
-> to work with possibility of it being absent. As userspace is
-> going to do that today, why add another option so we have:
-> 
-> 1) No label attribute.
-> 2) Label attribute == node name
-> 3) Label attribute something else
-> 
-> vs having to handle 2 cases.
-> 
-> 1) No label attribute
-> 2) Label attribute present.
-> 
-> So adding a default makes userspace code more complex, not less.
-> 
-
-Thanks for the explanation and review.
-
-Given the above comments I guess we will drop this idea.
-
-
-
-Thanks and Regards,
-    Nandor
+      Arnd

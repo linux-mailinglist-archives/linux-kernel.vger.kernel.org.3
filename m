@@ -2,61 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3400F4C165C
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 16:17:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 461264C165D
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 16:17:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241435AbiBWPRp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 10:17:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54532 "EHLO
+        id S241459AbiBWPSL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 10:18:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241473AbiBWPRf (ORCPT
+        with ESMTP id S237087AbiBWPSI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 10:17:35 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4C7911C11A
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 07:17:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1645629425;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=tu33o2ArSJyVBxtb4bIrT1Cfsldx0wNE8Mbk2ocniBo=;
-        b=eXCm/eB14MvdSi9yiJBtYz4E05xFN6jymbwWzpaVk+SvF11xFKLFpVE0ZVaNV3d1aRqWcY
-        R6kT9aompxYwlhfkWnVn9FyTv5kk0rjL9Na85r1ekfGhLR4/x5I3PR+PLDidrLub80U2/X
-        pdQwEuGivwQEx489z2PZE1oQEYG0L5g=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-563-cwXBXUKYM2S9sQXNBuhwfg-1; Wed, 23 Feb 2022 10:17:03 -0500
-X-MC-Unique: cwXBXUKYM2S9sQXNBuhwfg-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id A453E1006AA5;
-        Wed, 23 Feb 2022 15:17:02 +0000 (UTC)
-Received: from starship (unknown [10.40.195.190])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 3CBAD8359E;
-        Wed, 23 Feb 2022 15:17:01 +0000 (UTC)
-Message-ID: <cda148b77e3615a4f1ac81de8be233204fb8f981.camel@redhat.com>
-Subject: Re: [PATCH v2 08/18] KVM: x86/mmu: do not pass vcpu to root freeing
- functions
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org
-Cc:     seanjc@google.com
-Date:   Wed, 23 Feb 2022 17:16:59 +0200
-In-Reply-To: <20220217210340.312449-9-pbonzini@redhat.com>
-References: <20220217210340.312449-1-pbonzini@redhat.com>
-         <20220217210340.312449-9-pbonzini@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+        Wed, 23 Feb 2022 10:18:08 -0500
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE88D3914E
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 07:17:40 -0800 (PST)
+Received: by mail-pj1-x1030.google.com with SMTP id qe15so2930108pjb.3
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 07:17:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=networkplumber-org.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=FU9/IvCmjYnHYqrzJTmk+Vx5+9qmrRgnFwotNQzbX4k=;
+        b=2CCI/5pLpIu6L72TWxqSuj9zBOB2EWevZZIgPq1BxYyAavuNOHlZfCBsmFhCPj+mmD
+         uENTl/DFokE0ImFbCc+hiZm2m8uTEYE9INgDP8CDcUPyseE+n9PeZBbGPsOH0C2PYW0c
+         RGVx/vcbFW48Yop+L5RfzrvN0ARuvz7p/sL4ampiTvYfuLEWF2RvKrJe6ghmgFhda2ab
+         osn8h0mWe0hQKtig9tUYShO43DpE5lmHM8eQSUrRnSCuQu5Uq5NXNSPdVzud4OefYr2r
+         T7Yt24QNxwB3sNygJtdFTvNeBbQX96EfZqOtOfiy4HzvXiMCsaBlx60/x7wzi8wtLMza
+         j9sQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=FU9/IvCmjYnHYqrzJTmk+Vx5+9qmrRgnFwotNQzbX4k=;
+        b=qHDaoWT40+PO6MIIV1z5HVVi7xiferL0rOQ3Nfe5I9bE9rWLuYqcmIxS48aFM/63/z
+         gmsZCCFN8yJV8pj5dfTY8f7kpnuSf/fIFpzdZVKefhhVJDc01EuEBpuBc9tu6nfPM8A4
+         bQzGasVmWWa0AHFF0iePsB9J/RiV4ZNiR3qJzefn+A3wOdXcdkE8Puw5/dDlv1zIPuQ9
+         Ljz4EvvBs+/E1w8wpmJqEY3pO0ZxBFwAtpa5MyjLUeXjt6TAV56cIJkQYARCMb91qcq4
+         CkmpbvzojKFpUWY1Umj4JXItlsicQvVs4vI9NKL2WM7QWClQdEAJZuWvtR9Wy73QorVY
+         3XiQ==
+X-Gm-Message-State: AOAM530YEc2VzA7rHiNAy1Dvj2CW9d5CPKc4JBW8+NdFbp/wtVM/wUV7
+        CzbvxzewD7/C+wsT+7HMMfGtKA==
+X-Google-Smtp-Source: ABdhPJwN7M8YSHG4iF7b++t0/quAJ9PE73LLYCfZKEx6kSciDW9MpiOz69mCVKRkyTF+HUkKivUD3A==
+X-Received: by 2002:a17:902:ec88:b0:14f:de5b:2fbe with SMTP id x8-20020a170902ec8800b0014fde5b2fbemr198232plg.123.1645629460230;
+        Wed, 23 Feb 2022 07:17:40 -0800 (PST)
+Received: from hermes.local (204-195-112-199.wavecable.com. [204.195.112.199])
+        by smtp.gmail.com with ESMTPSA id u6sm12183964pfk.203.2022.02.23.07.17.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Feb 2022 07:17:39 -0800 (PST)
+Date:   Wed, 23 Feb 2022 07:17:36 -0800
+From:   Stephen Hemminger <stephen@networkplumber.org>
+To:     Guillaume Nault <gnault@redhat.com>
+Cc:     Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "Ziyang Xuan (William)" <william.xuanziyang@huawei.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        David Miller <davem@davemloft.net>,
+        netdev <netdev@vger.kernel.org>,
+        Vasily Averin <vvs@virtuozzo.com>,
+        Kees Cook <keescook@chromium.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH net] net: vlan: allow vlan device MTU change follow real
+ device from smaller to bigger
+Message-ID: <20220223071736.1cb2cf3e@hermes.local>
+In-Reply-To: <20220223112618.GA19531@debian.home>
+References: <20220221124644.1146105-1-william.xuanziyang@huawei.com>
+        <CANn89iKyWWCbAdv8W26HwGpM9q5+6rrk9E-Lbd2aujFkD3GMaQ@mail.gmail.com>
+        <YhQ1KrtpEr3TgCwA@gondor.apana.org.au>
+        <8248d662-8ea5-7937-6e34-5f1f8e19190f@huawei.com>
+        <CANn89iLf2ira4XponYV91cbvcdK76ekU7fDW93fmuJ3iytFHcw@mail.gmail.com>
+        <20220222103733.GA3203@debian.home>
+        <20220222152815.1056ca24@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+        <20220223112618.GA19531@debian.home>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,188 +84,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-02-17 at 16:03 -0500, Paolo Bonzini wrote:
-> These functions only operate on a given MMU, of which there are two in a vCPU.
-> They also need a struct kvm in order to lock the mmu_lock, but they do not
-> needed anything else in the struct kvm_vcpu.  So, pass the vcpu->kvm directly
-> to them.
+On Wed, 23 Feb 2022 12:26:18 +0100
+Guillaume Nault <gnault@redhat.com> wrote:
+
+> On Tue, Feb 22, 2022 at 03:28:15PM -0800, Jakub Kicinski wrote:
+> > On Tue, 22 Feb 2022 11:37:33 +0100 Guillaume Nault wrote:  
+> > > What about an explicit option:
+> > > 
+> > >   ip link add link eth1 dev eth1.100 type vlan id 100 follow-parent-mtu
+> > > 
+> > > 
+> > > Or for something more future proof, an option that can accept several
+> > > policies:
+> > > 
+> > >   mtu-update <reduce-only,follow,...>
+> > > 
+> > >       reduce-only (default):
+> > >         update vlan's MTU only if the new MTU is smaller than the
+> > >         current one (current behaviour).
+> > > 
+> > >       follow:
+> > >         always follow the MTU of the parent device.
+> > > 
+> > > Then if anyone wants more complex policies:
+> > > 
+> > >       follow-if-not-modified:
+> > >         follow the MTU of the parent device as long as the VLAN's MTU
+> > >         was not manually changed. Otherwise only adjust the VLAN's MTU
+> > >         when the parent's one is set to a smaller value.
+> > > 
+> > >       follow-if-not-modified-but-not-quite:
+> > >         like follow-if-not-modified but revert back to the VLAN's
+> > >         last manually modified MTU, if any, whenever possible (that is,
+> > >         when the parent device's MTU is set back to a higher value).
+> > >         That probably requires the possibility to dump the last
+> > >         modified MTU, so the administrator can anticipate the
+> > >         consequences of modifying the parent device.
+> > > 
+> > >      yet-another-policy (because people have a lot of imagination):
+> > >        for example, keep the MTU 4 bytes lower than the parent device,
+> > >        to account for VLAN overhead.
+> > > 
+> > > Of course feel free to suggest better names and policies :).
+> > > 
+> > > This way, we can keep the current behaviour and avoid unexpected
+> > > heuristics that are difficult to explain (and even more difficult for
+> > > network admins to figure out on their own).  
+> > 
+> > My $0.02 would be that if we want to make changes that require new uAPI
+> > we should do it across uppers.  
 > 
-> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-> ---
->  arch/x86/include/asm/kvm_host.h |  4 ++--
->  arch/x86/kvm/mmu/mmu.c          | 21 +++++++++++----------
->  arch/x86/kvm/vmx/nested.c       |  8 ++++----
->  arch/x86/kvm/x86.c              |  4 ++--
->  4 files changed, 19 insertions(+), 18 deletions(-)
+> Do you mean something like:
 > 
-> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-> index 6442facfd5c0..79f37ccc8726 100644
-> --- a/arch/x86/include/asm/kvm_host.h
-> +++ b/arch/x86/include/asm/kvm_host.h
-> @@ -1780,9 +1780,9 @@ void kvm_inject_nmi(struct kvm_vcpu *vcpu);
->  void kvm_update_dr7(struct kvm_vcpu *vcpu);
->  
->  int kvm_mmu_unprotect_page(struct kvm *kvm, gfn_t gfn);
-> -void kvm_mmu_free_roots(struct kvm_vcpu *vcpu, struct kvm_mmu *mmu,
-> +void kvm_mmu_free_roots(struct kvm *kvm, struct kvm_mmu *mmu,
->  			ulong roots_to_free);
-> -void kvm_mmu_free_guest_mode_roots(struct kvm_vcpu *vcpu, struct kvm_mmu *mmu);
-> +void kvm_mmu_free_guest_mode_roots(struct kvm *kvm, struct kvm_mmu *mmu);
->  gpa_t kvm_mmu_gva_to_gpa_read(struct kvm_vcpu *vcpu, gva_t gva,
->  			      struct x86_exception *exception);
->  gpa_t kvm_mmu_gva_to_gpa_fetch(struct kvm_vcpu *vcpu, gva_t gva,
-> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> index e1578f71feae..0f2de811e871 100644
-> --- a/arch/x86/kvm/mmu/mmu.c
-> +++ b/arch/x86/kvm/mmu/mmu.c
-> @@ -3234,10 +3234,9 @@ static void mmu_free_root_page(struct kvm *kvm, hpa_t *root_hpa,
->  }
->  
->  /* roots_to_free must be some combination of the KVM_MMU_ROOT_* flags */
-> -void kvm_mmu_free_roots(struct kvm_vcpu *vcpu, struct kvm_mmu *mmu,
-> +void kvm_mmu_free_roots(struct kvm *kvm, struct kvm_mmu *mmu,
->  			ulong roots_to_free)
->  {
-> -	struct kvm *kvm = vcpu->kvm;
->  	int i;
->  	LIST_HEAD(invalid_list);
->  	bool free_active_root;
-> @@ -3287,7 +3286,7 @@ void kvm_mmu_free_roots(struct kvm_vcpu *vcpu, struct kvm_mmu *mmu,
->  }
->  EXPORT_SYMBOL_GPL(kvm_mmu_free_roots);
->  
-> -void kvm_mmu_free_guest_mode_roots(struct kvm_vcpu *vcpu, struct kvm_mmu *mmu)
-> +void kvm_mmu_free_guest_mode_roots(struct kvm *kvm, struct kvm_mmu *mmu)
->  {
->  	unsigned long roots_to_free = 0;
->  	hpa_t root_hpa;
-> @@ -3309,7 +3308,7 @@ void kvm_mmu_free_guest_mode_roots(struct kvm_vcpu *vcpu, struct kvm_mmu *mmu)
->  			roots_to_free |= KVM_MMU_ROOT_PREVIOUS(i);
->  	}
->  
-> -	kvm_mmu_free_roots(vcpu, mmu, roots_to_free);
-> +	kvm_mmu_free_roots(kvm, mmu, roots_to_free);
->  }
->  EXPORT_SYMBOL_GPL(kvm_mmu_free_guest_mode_roots);
->  
-> @@ -3710,7 +3709,7 @@ void kvm_mmu_sync_prev_roots(struct kvm_vcpu *vcpu)
->  			roots_to_free |= KVM_MMU_ROOT_PREVIOUS(i);
->  
->  	/* sync prev_roots by simply freeing them */
-> -	kvm_mmu_free_roots(vcpu, vcpu->arch.mmu, roots_to_free);
-> +	kvm_mmu_free_roots(vcpu->kvm, vcpu->arch.mmu, roots_to_free);
->  }
->  
->  static gpa_t nonpaging_gva_to_gpa(struct kvm_vcpu *vcpu, struct kvm_mmu *mmu,
-> @@ -4159,8 +4158,10 @@ static bool fast_pgd_switch(struct kvm_vcpu *vcpu, gpa_t new_pgd,
->  static void __kvm_mmu_new_pgd(struct kvm_vcpu *vcpu, gpa_t new_pgd,
->  			      union kvm_mmu_page_role new_role)
->  {
-> +	struct kvm_mmu *mmu = vcpu->arch.mmu;
-> +
->  	if (!fast_pgd_switch(vcpu, new_pgd, new_role)) {
-> -		kvm_mmu_free_roots(vcpu, vcpu->arch.mmu, KVM_MMU_ROOT_CURRENT);
-> +		kvm_mmu_free_roots(vcpu->kvm, mmu, KVM_MMU_ROOT_CURRENT);
->  		return;
->  	}
->  
-> @@ -5083,10 +5084,10 @@ int kvm_mmu_load(struct kvm_vcpu *vcpu)
->  	return r;
->  }
->  
-> -static void __kvm_mmu_unload(struct kvm_vcpu *vcpu, struct kvm_mmu *mmu)
-> +static void __kvm_mmu_unload(struct kvm *kvm, struct kvm_mmu *mmu)
->  {
->  	int i;
-> -	kvm_mmu_free_roots(vcpu, mmu, KVM_MMU_ROOTS_ALL);
-> +	kvm_mmu_free_roots(kvm, mmu, KVM_MMU_ROOTS_ALL);
->  	WARN_ON(VALID_PAGE(mmu->root.hpa));
->  	if (mmu->pae_root) {
->  		for (i = 0; i < 4; ++i)
-> @@ -5096,8 +5097,8 @@ static void __kvm_mmu_unload(struct kvm_vcpu *vcpu, struct kvm_mmu *mmu)
->  
->  void kvm_mmu_unload(struct kvm_vcpu *vcpu)
->  {
-> -	__kvm_mmu_unload(vcpu, &vcpu->arch.root_mmu);
-> -	__kvm_mmu_unload(vcpu, &vcpu->arch.guest_mmu);
-> +	__kvm_mmu_unload(vcpu->kvm, &vcpu->arch.root_mmu);
-> +	__kvm_mmu_unload(vcpu->kvm, &vcpu->arch.guest_mmu);
->  }
->  
->  static bool need_remote_flush(u64 old, u64 new)
-> diff --git a/arch/x86/kvm/vmx/nested.c b/arch/x86/kvm/vmx/nested.c
-> index 29289ecca223..b7bc634d35e2 100644
-> --- a/arch/x86/kvm/vmx/nested.c
-> +++ b/arch/x86/kvm/vmx/nested.c
-> @@ -321,7 +321,7 @@ static void free_nested(struct kvm_vcpu *vcpu)
->  	kvm_vcpu_unmap(vcpu, &vmx->nested.pi_desc_map, true);
->  	vmx->nested.pi_desc = NULL;
->  
-> -	kvm_mmu_free_roots(vcpu, &vcpu->arch.guest_mmu, KVM_MMU_ROOTS_ALL);
-> +	kvm_mmu_free_roots(vcpu->kvm, &vcpu->arch.guest_mmu, KVM_MMU_ROOTS_ALL);
->  
->  	nested_release_evmcs(vcpu);
->  
-> @@ -5007,7 +5007,7 @@ static inline void nested_release_vmcs12(struct kvm_vcpu *vcpu)
->  				  vmx->nested.current_vmptr >> PAGE_SHIFT,
->  				  vmx->nested.cached_vmcs12, 0, VMCS12_SIZE);
->  
-> -	kvm_mmu_free_roots(vcpu, &vcpu->arch.guest_mmu, KVM_MMU_ROOTS_ALL);
-> +	kvm_mmu_free_roots(vcpu->kvm, &vcpu->arch.guest_mmu, KVM_MMU_ROOTS_ALL);
->  
->  	vmx->nested.current_vmptr = INVALID_GPA;
->  }
-> @@ -5486,7 +5486,7 @@ static int handle_invept(struct kvm_vcpu *vcpu)
->  	}
->  
->  	if (roots_to_free)
-> -		kvm_mmu_free_roots(vcpu, mmu, roots_to_free);
-> +		kvm_mmu_free_roots(vcpu->kvm, mmu, roots_to_free);
->  
->  	return nested_vmx_succeed(vcpu);
->  }
-> @@ -5575,7 +5575,7 @@ static int handle_invvpid(struct kvm_vcpu *vcpu)
->  	 * TODO: sync only the affected SPTEs for INVDIVIDUAL_ADDR.
->  	 */
->  	if (!enable_ept)
-> -		kvm_mmu_free_guest_mode_roots(vcpu, &vcpu->arch.root_mmu);
-> +		kvm_mmu_free_guest_mode_roots(vcpu->kvm, &vcpu->arch.root_mmu);
->  
->  	return nested_vmx_succeed(vcpu);
->  }
-> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> index c0d7256e3a78..6aefd7ac7039 100644
-> --- a/arch/x86/kvm/x86.c
-> +++ b/arch/x86/kvm/x86.c
-> @@ -855,7 +855,7 @@ int load_pdptrs(struct kvm_vcpu *vcpu, unsigned long cr3)
->  	 * Shadow page roots need to be reconstructed instead.
->  	 */
->  	if (!tdp_enabled && memcmp(mmu->pdptrs, pdpte, sizeof(mmu->pdptrs)))
-> -		kvm_mmu_free_roots(vcpu, mmu, KVM_MMU_ROOT_CURRENT);
-> +		kvm_mmu_free_roots(vcpu->kvm, mmu, KVM_MMU_ROOT_CURRENT);
->  
->  	memcpy(mmu->pdptrs, pdpte, sizeof(mmu->pdptrs));
->  	kvm_register_mark_dirty(vcpu, VCPU_EXREG_PDPTR);
-> @@ -1156,7 +1156,7 @@ static void kvm_invalidate_pcid(struct kvm_vcpu *vcpu, unsigned long pcid)
->  		if (kvm_get_pcid(vcpu, mmu->prev_roots[i].pgd) == pcid)
->  			roots_to_free |= KVM_MMU_ROOT_PREVIOUS(i);
->  
-> -	kvm_mmu_free_roots(vcpu, mmu, roots_to_free);
-> +	kvm_mmu_free_roots(vcpu->kvm, mmu, roots_to_free);
->  }
->  
->  int kvm_set_cr3(struct kvm_vcpu *vcpu, unsigned long cr3)
+>   ip link set dev eth0 vlan-mtu-policy <policy-name>
+> 
+> that'd affect all existing (and future) vlans of eth0?
+> 
+> Then I think that for non-ethernet devices, we should reject this
+> option and skip it when dumping config. But yes, that's another
+> possibility.
+> 
+> I personnaly don't really mind, as long as we keep a clear behaviour.
+> 
+> What I'd really like to avoid is something like:
+>   - By default it behaves this way.
+>   - If you modified the MTU it behaves in another way
+>   - But if you modified the MTU but later restored the
+>     original MTU, then you're back to the default behaviour
+>     (or not?), unless the MTU of the upper device was also
+>     changed meanwhile, in which case ... to be continued ...
+>   - BTW, you might not be able to tell how the VLAN's MTU is going to
+>     behave by simply looking at its configuration, because that also
+>     depends on past configurations.
+>   - Well, and if your kernel is older than xxx, then you always get the
+>     default behaviour.
+>   - ... and we might modify the heuristics again in the future to
+>     accomodate with situations or use cases we failed to consider.
+> 
 
-IMHO anything that is related to guest memory should work on
-VM level (that is struct kvm).
-
-It is just ironically sad that writing to a guest page requires
-these days a vCPU due to dirty ring tracking.
-
-
-Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
-
-Best regards,
-	Maxim Levitsky
-
+In general these kind of policy choices are done via sysctl knobs.
+They aren't done at netlink/ip link level.
 

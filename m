@@ -2,122 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F08884C0A1F
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 04:19:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 076E54C0A20
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 04:20:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237013AbiBWDTq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 22:19:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38110 "EHLO
+        id S237330AbiBWDUW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 22:20:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231871AbiBWDTp (ORCPT
+        with ESMTP id S231871AbiBWDUU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 22:19:45 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1110E33E86
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 19:19:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1645586358;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=o10+oL16B6fHkAqAM1KRvbz+KhlX2puJg4tawglVFis=;
-        b=X+X0TE6YVdT0Ka5v9UGhuT+L/KqzK2qaug3ic9THrguALHvD60jmpAQduemcWQ0LAmSD76
-        P77zVPb66iVBL3Bx8vbHksW2Vt/PYmMQQuyrE/mgqCsoFVu0kotrs9E+aqI36Rk27Rkt50
-        w4zwVlBWGeIzk7uEkKFyI5S0y7zd23U=
-Received: from mail-lf1-f69.google.com (mail-lf1-f69.google.com
- [209.85.167.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-623-zTaXhI0gNVCAwGqvANVyZg-1; Tue, 22 Feb 2022 22:19:16 -0500
-X-MC-Unique: zTaXhI0gNVCAwGqvANVyZg-1
-Received: by mail-lf1-f69.google.com with SMTP id j11-20020a19f50b000000b00443304eab91so3043142lfb.13
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 19:19:16 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to;
-        bh=o10+oL16B6fHkAqAM1KRvbz+KhlX2puJg4tawglVFis=;
-        b=b7seu0rNncMhAXKBweo3CxpftuUMkIrIQAVgoI48bxmvVhz+LXDxG2CU4NqXRa4wrP
-         mxjU7scE10ZtOLipEYnsR0i4Y16Xgcz0NOpShdM3Vir5HWTRb9/e3sAiaxa1NbSHaCdL
-         mLCgCIt5Hd8YM/1pS0zcVRKfhRImKSyfz3VCMVM48zxyr59/wxy203Q4wUWumD6tznLv
-         6qciGw0Rc0W4OKoxoUeIYt8zKNFzukLvXInIwMjub1ajMuUV4Xi63KjNuItcB5g22pXK
-         L3ajJ96arqf1DT4OGI+vB6c9unhHRK0tbypj3kzjzDixCPW/3NtS8UdTTjmpE3NwPCME
-         Lssw==
-X-Gm-Message-State: AOAM533t+9QmkBz7vxQdG3HCHlreJnm2A/munqKrgzo/ByffsMXYiuI5
-        dHKvi+ABqRJ8Ysn4DZq4ouls3tvFZYgzPeFpwQwsILqijRoChjz36IrgnRBnJjoKisPqM+OzKWv
-        uAl/mqdPYMqoJl1+x/MnTSKNlWBAS+n7q7wnzHwmq
-X-Received: by 2002:a05:6512:3147:b0:443:323d:179d with SMTP id s7-20020a056512314700b00443323d179dmr19712249lfi.98.1645586354933;
-        Tue, 22 Feb 2022 19:19:14 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzC+VckbRDPD22Vw3cVRNOnTu5Dv3fTch6szAQ3aD8AdD7ESb4+dCSn4ACFp0ue/sa1Fe1eo+0wiUKb44UQGJA=
-X-Received: by 2002:a05:6512:3147:b0:443:323d:179d with SMTP id
- s7-20020a056512314700b00443323d179dmr19712239lfi.98.1645586354760; Tue, 22
- Feb 2022 19:19:14 -0800 (PST)
+        Tue, 22 Feb 2022 22:20:20 -0500
+Received: from esa2.hgst.iphmx.com (esa2.hgst.iphmx.com [68.232.143.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9F3643EF4
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 19:19:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1645586393; x=1677122393;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=uLQNTA8Dse26+aqzoQaJ+44rdDc0MrIUCcoB8U3WzWM=;
+  b=JqIz8pg/bbj7tZmnMQd3ah0uWzlgkQsgsn22zqMvOlAUwI0jd8hqSH9v
+   sKGR+4WNXYQ9De+xY2M4Eus/O/D45dooRwxEx5dEVvnqromqyWqUbgm+g
+   FpBPa/l6RVWdqPPpHcaUvB9w5Z15ELqkQR0ov2h4xYZqhCo3UNt4HNQs+
+   zWeuhTrj5aoGx9lRwxyWMLSQeaGQ9Nu1L3i+a+Vwgg358XJ/apz1VCcKF
+   tiPPyi/7bwuJrMIZSU98MyKo7eS1p69tfT3pQALX239hImygFryRYJf/k
+   bRRuToAt/Cuaj3C/gUG1t+eq1iqmoDMdZmwh9CQbrUJOdu2Wkl/9ODmqo
+   g==;
+X-IronPort-AV: E=Sophos;i="5.88,390,1635177600"; 
+   d="scan'208";a="297843753"
+Received: from uls-op-cesaip02.wdc.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
+  by ob1.hgst.iphmx.com with ESMTP; 23 Feb 2022 11:19:53 +0800
+IronPort-SDR: 1+uej5Djgt6O/K+v7efk7zrt1/1Q2YjqZ7rObLAQSjIxWzyz5F8KGQ65tuc1T5LiXbOMsjVIpx
+ GZmSzX1X8dVWOXDyFiqyj4KmGbbmMcEE/9SOEaxzZWMP0UsdTi2Rk8gHHBfRPOyeoG0fPRZerC
+ hdnEexiU0/NhSZ0ZX5r5J/y9Y8owZiUS30FgraYJo/BRmnmFn8gxu9QTpiTNVNzStCb47tBwWx
+ JS/+JStuIkXXwF4S5dZqH9wRm/vt0VUke/BPx1fHyp94SWqcV/zc00+tOqPlEOakg9ih4L1E9Q
+ lNy+9jTexNTBBzrPQbHsQ9ih
+Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
+  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2022 18:51:25 -0800
+IronPort-SDR: e7c7kIGnBndtivdjxAsR1TiEwZSTxdm/CCUn3Hrdk6rqwCUzn5UH3AMT7opi1jeoM+rPFV0vB1
+ /6pJJ/d9effysIuAP64ymyeRIniehY9ku2LEC2X7QJSdpva3zNc3nArYBMZk+7jvrv1kCRf05r
+ nVhRzT5GCKFdJk/p10YaHoR8UL+xB95sWLbunmcjYlRo7MTCnEBogbyMsgogSVRYkfya1YEA/X
+ /FnO1F31xn+YdEJN20UOdTv49xhLybTyfOaKmCdq10JIGiwWnhl90ZLwmsPQUMI+x72KZi9gzn
+ 8hE=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2022 19:19:53 -0800
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4K3Lr86V8wz1SVnx
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 19:19:52 -0800 (PST)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:references:to:content-language
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1645586392; x=1648178393; bh=uLQNTA8Dse26+aqzoQaJ+44rdDc0MrIUCco
+        B8U3WzWM=; b=YyaEO8OB6qc8vSbWbbNngsb5YwhQ6lCuK3IHOvX5wzRataUkMiw
+        MMOLPZj8x49sT4XJNb9GPUW8cOJZWlYnE6Yft9sugqsFvh2lgEvej/8Bj21OoALZ
+        yFMgr8xfGsAQKB6i1TPnhD7/nLErl+GtkLFqok9RrMycp4/Hj+hYkO67mtIBb7xt
+        BMGGZvHxzrouMZDqovcWnwim/H7egsTQsj5+g2xUc0/vr9goPIvLBoE3m94LZOXI
+        NI/PTrgTeVqx7kmKFuDvptVxwSeFeYb0sN5mvGPTbut04MZZBZihqVe7a+BeZt6A
+        msZHulLpX8TvOt3MRdGGmrmpOxTh4TCJeCQ==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id 5-M0Tj__npg4 for <linux-kernel@vger.kernel.org>;
+        Tue, 22 Feb 2022 19:19:52 -0800 (PST)
+Received: from [10.225.163.81] (unknown [10.225.163.81])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4K3Lr73CX1z1Rvlx;
+        Tue, 22 Feb 2022 19:19:51 -0800 (PST)
+Message-ID: <cf99d18e-d8e5-cd41-5541-9d1e1d81adc8@opensource.wdc.com>
+Date:   Wed, 23 Feb 2022 12:19:49 +0900
 MIME-Version: 1.0
-References: <20211108081324.14204-1-jasowang@redhat.com>
-In-Reply-To: <20211108081324.14204-1-jasowang@redhat.com>
-From:   Jason Wang <jasowang@redhat.com>
-Date:   Wed, 23 Feb 2022 11:19:03 +0800
-Message-ID: <CACGkMEucnZPt_dhaSXCegeFE0gs=dSDfv7CJSq4HCW_4a4XfGg@mail.gmail.com>
-Subject: Re: [PATCH] virtio_ring: aovid reading flag from the descriptor ring
-To:     mst <mst@redhat.com>, jasowang <jasowang@redhat.com>,
-        virtualization <virtualization@lists.linux-foundation.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH RESEND v2] dm: Fix use-after-free in
+ dm_cleanup_zoned_dev()
+Content-Language: en-US
+To:     Mike Snitzer <snitzer@redhat.com>
+Cc:     Kirill Tkhai <ktkhai@virtuozzo.com>,
+        "agk@redhat.com" <agk@redhat.com>,
+        "dm-devel@redhat.com" <dm-devel@redhat.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <c64d2143-284e-7621-440c-971e3405b4d8@virtuozzo.com>
+ <d209a0b1-2514-79a0-257a-22bcb372785a@virtuozzo.com>
+ <1d287c7e-8aff-beea-1bd6-4b2226f9f3db@opensource.wdc.com>
+ <CAH6w=ayrR0yRCumgjtyB+mt_+33S6PHxBQDcwYVcuQ79ECYd7A@mail.gmail.com>
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <CAH6w=ayrR0yRCumgjtyB+mt_+33S6PHxBQDcwYVcuQ79ECYd7A@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 8, 2021 at 4:13 PM Jason Wang <jasowang@redhat.com> wrote:
->
-> Commit 72b5e8958738 ("virtio-ring: store DMA metadata in desc_extra
-> for split virtqueue") tries to make it possible for the driver to not
-> read from the descriptor ring to prevent the device from corrupting
-> the descriptor ring. But it still read the descriptor flag from the
-> descriptor ring during buffer detach.
->
-> This patch fixes by always store the descriptor flag no matter whether
-> DMA API is used and then we can avoid reading descriptor flag from the
-> descriptor ring. This eliminates the possibly of unexpected next
-> descriptor caused by the wrong flag (e.g the next flag).
->
-> Signed-off-by: Jason Wang <jasowang@redhat.com>
+On 2/23/22 12:02, Mike Snitzer wrote:
+> On Thu, Feb 17, 2022 at 5:49 AM Damien Le Moal
+> <damien.lemoal@opensource.wdc.com> wrote:
+>>
+>> On 2/17/22 19:13, Kirill Tkhai wrote:
+>>>
+>>> dm_cleanup_zoned_dev() uses queue, so it must be called
+>>> before blk_cleanup_disk() starts its killing:
+>>>
+>>> blk_cleanup_disk->blk_cleanup_queue()->kobject_put()->blk_release_queue()->
+>>> ->...RCU...->blk_free_queue_rcu()->kmem_cache_free()
+>>>
+>>> Otherwise, RCU callback may be executed first,
+>>> and dm_cleanup_zoned_dev() touches freed memory:
+>>
+>> Mike,
+>>
+>> Can you queue this please ?
+> 
+> I queued it earlier today, please see:
+> https://git.kernel.org/pub/scm/linux/kernel/git/device-mapper/linux-dm.git/commit/?h=dm-5.18&id=588b7f5df0cb64f281290c7672470c006abe7160
+> 
+> Thanks,
+> Mike
 
-Michael, any comment for this?
+Thanks !
 
-Thanks
 
-> ---
->  drivers/virtio/virtio_ring.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/virtio_ring.c
-> index 00f64f2f8b72..28734f4e57d3 100644
-> --- a/drivers/virtio/virtio_ring.c
-> +++ b/drivers/virtio/virtio_ring.c
-> @@ -583,7 +583,7 @@ static inline int virtqueue_add_split(struct virtqueue *_vq,
->         }
->         /* Last one doesn't continue. */
->         desc[prev].flags &= cpu_to_virtio16(_vq->vdev, ~VRING_DESC_F_NEXT);
-> -       if (!indirect && vq->use_dma_api)
-> +       if (!indirect)
->                 vq->split.desc_extra[prev & (vq->split.vring.num - 1)].flags &=
->                         ~VRING_DESC_F_NEXT;
->
-> @@ -713,7 +713,7 @@ static void detach_buf_split(struct vring_virtqueue *vq, unsigned int head,
->         /* Put back on free list: unmap first-level descriptors and find end */
->         i = head;
->
-> -       while (vq->split.vring.desc[i].flags & nextflag) {
-> +       while (vq->split.desc_extra[i].flags & nextflag) {
->                 vring_unmap_one_split(vq, i);
->                 i = vq->split.desc_extra[i].next;
->                 vq->vq.num_free++;
-> --
-> 2.25.1
->
-
+-- 
+Damien Le Moal
+Western Digital Research

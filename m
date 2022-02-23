@@ -2,89 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EBAF4C1D2A
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 21:28:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E4744C1D2F
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 21:34:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241267AbiBWU3T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 15:29:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57000 "EHLO
+        id S241300AbiBWUfJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 15:35:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240361AbiBWU3Q (ORCPT
+        with ESMTP id S240361AbiBWUfH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 15:29:16 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AB984D9C3
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 12:28:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645648128; x=1677184128;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=vsEIMLrOZ2b2sbaVXy5id03xMBh3hNGf9f9i6gjiwjo=;
-  b=UTp1mrgDoVqnSVrMYiEiyRD7XrtNtIhdzdVW5rFS8hKiveokYtkbYHdn
-   P+mxGtoRUPUIxOKVdUFCLir/dMsV0HUAAVtVVq1BlGe9VT/otRV+toMk/
-   RA3fqmBQVs8jfo4/hochpkOpLoSqXe1cbaG2zgdNep4yqO14jTacJV3Jk
-   ByxVfuOQdxAMcOOC1aUKLgyi8Kd65xwQZQI4HYMzhQNRYQ84XShwq3qZt
-   DMHHu6IARw+m9Y7XzTWlpev4sj+AYJS7ItuBhoThPcb6jFF3wsnwLbiYD
-   VKNh39Pk3pQgz5w2Z6uQI3eTpYQri4CtM8km2n4RtcXfPFPHV1tO6GQv2
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10267"; a="239467359"
-X-IronPort-AV: E=Sophos;i="5.88,391,1635231600"; 
-   d="scan'208";a="239467359"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2022 12:28:48 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,391,1635231600"; 
-   d="scan'208";a="548427841"
-Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 23 Feb 2022 12:28:47 -0800
-Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nMyFi-0001nm-Bj; Wed, 23 Feb 2022 20:28:46 +0000
-Date:   Thu, 24 Feb 2022 04:28:12 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Daniel Palmer <daniel@0x0f.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [chenxing:msc313_mainlining 77/93] FATAL ERROR: Syntax error parsing
- input tree
-Message-ID: <202202240422.vPzkMkf2-lkp@intel.com>
+        Wed, 23 Feb 2022 15:35:07 -0500
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87706457B5
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 12:34:39 -0800 (PST)
+Received: by mail-lj1-x233.google.com with SMTP id t14so26401459ljh.8
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 12:34:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=qFhEoMfG9JnrMiuxRlHG2UuQZfxYUHHdzjSkeWsOcD8=;
+        b=Sch0qA/uMUHSX7lm1Z26E01aFQIda35gcyPmVMGmgg/B0iK1poWZ5N+Iv8pmlRuBJ/
+         hmD9WSqMPQCsXSmydxbzVzOjygUon9SlqLsP2d/yUlh2jZBB1LkXkBDyjE9WCuOkIIhk
+         VJJ5eZOA1/ScB6KVCbfKtnEVHGsuTIFbkykeM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=qFhEoMfG9JnrMiuxRlHG2UuQZfxYUHHdzjSkeWsOcD8=;
+        b=sg8owF0moWHEIuNaA2VqE3+atGy/JS0Zh6PosnjXuAItGJVEqLJr/DOlnNJtAld2WQ
+         D5g+zf0nobvChnK4zVim5f3jkOxY+WTCAm5fI95IZAIa8RIpmdh6jObxOQS61wSIW+Am
+         s/5ug7kHOwyaYtbt8K2soZ9IwyTpFSn7/CmIB1wwUgxAoXgA1nJ+tuqKgAkM7UEPNqiY
+         Z7Y6tBD1+OQKyO1DAkNtjmgWOhqvRHWRACSlsE+IB/b3tMKnuo4R03mEQdTkKBR+oXD5
+         hzq21dVYwnqwsVUPuLyoj3Zkj1DsDYwDmkGf7G/AYAIBRvLTZbaPkI+26GzxQU6K25SP
+         WwnQ==
+X-Gm-Message-State: AOAM531KYB0Q2DhRFWdJFFYs1pP3CB3ww/7wpoxfgSkKDc76MM5xxemc
+        VM7urttyKuuAwgIx2jphTGFKwdeXg3i+RQI466M=
+X-Google-Smtp-Source: ABdhPJzZEpB74aDiIBlFtY2XEulNbfx2rQ+r0BSLvR7mYtSbTVkBonsnyCplglIrsnkaCorlimpaSw==
+X-Received: by 2002:a05:651c:160c:b0:244:c704:8315 with SMTP id f12-20020a05651c160c00b00244c7048315mr788812ljq.170.1645648477605;
+        Wed, 23 Feb 2022 12:34:37 -0800 (PST)
+Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com. [209.85.167.51])
+        by smtp.gmail.com with ESMTPSA id j11sm46334lfm.40.2022.02.23.12.34.34
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 23 Feb 2022 12:34:35 -0800 (PST)
+Received: by mail-lf1-f51.google.com with SMTP id u20so347387lff.2
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 12:34:34 -0800 (PST)
+X-Received: by 2002:ac2:5313:0:b0:443:99c1:7e89 with SMTP id
+ c19-20020ac25313000000b0044399c17e89mr825261lfh.531.1645648474572; Wed, 23
+ Feb 2022 12:34:34 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220217184829.1991035-1-jakobkoschel@gmail.com>
+ <20220217184829.1991035-5-jakobkoschel@gmail.com> <20220218151216.GE1037534@ziepe.ca>
+ <6BA40980-554F-45E2-914D-5E4CD02FF21C@gmail.com> <CAHk-=wir=xabJ73Upk1dsuoMKWTTjTfeLFJ=p2S0yRYYaxW4fA@mail.gmail.com>
+ <20220223191222.GC10361@ziepe.ca> <CAHk-=widDQUjQS2tpaw3j_+Yz8rAY3P0qdqpz+nTNu4-3LaU3w@mail.gmail.com>
+ <5a476b24-0f34-91d4-84a4-699e8c374abe@rasmusvillemoes.dk>
+In-Reply-To: <5a476b24-0f34-91d4-84a4-699e8c374abe@rasmusvillemoes.dk>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Wed, 23 Feb 2022 12:34:18 -0800
+X-Gmail-Original-Message-ID: <CAHk-=whpK93+mF8CPJZo0KxDeHrV2GL05=HT7=y+GnhcNbNyUA@mail.gmail.com>
+Message-ID: <CAHk-=whpK93+mF8CPJZo0KxDeHrV2GL05=HT7=y+GnhcNbNyUA@mail.gmail.com>
+Subject: Re: [RFC PATCH 04/13] vfio/mdev: remove the usage of the list
+ iterator after the loop
+To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Cc:     Jason Gunthorpe <jgg@ziepe.ca>, Jakob <jakobkoschel@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Arnd Bergman <arnd@arndb.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
+        Cristiano Giuffrida <c.giuffrida@vu.nl>,
+        "Bos, H.J." <h.j.bos@vu.nl>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://github.com/linux-chenxing/linux.git msc313_mainlining
-head:   99a396728dcff78ca3eddcbd2085f11eeb8a01b8
-commit: 89e6d5a9a03b2a20d94fd0c2027fbe89ccb84c83 [77/93] ARM: dts: mstar: Add top level dts for ssd201-som2d01
-config: arm-defconfig (https://download.01.org/0day-ci/archive/20220224/202202240422.vPzkMkf2-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/linux-chenxing/linux/commit/89e6d5a9a03b2a20d94fd0c2027fbe89ccb84c83
-        git remote add chenxing git://github.com/linux-chenxing/linux.git
-        git fetch --no-tags chenxing msc313_mainlining
-        git checkout 89e6d5a9a03b2a20d94fd0c2027fbe89ccb84c83
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm SHELL=/bin/bash
+On Wed, Feb 23, 2022 at 12:19 PM Rasmus Villemoes
+<linux@rasmusvillemoes.dk> wrote:
+>
+> I have often wished that the iterator macros would consistently set the
+> loop variable to NULL upon reaching the end.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+I really think the rule should be that to a 99% approximation, we
+should strive only ever use the iterated-upon value *inside* the loop.
 
-All errors (new ones prefixed by >>):
+No, that's now how we do it now. But I think the "break out and do the
+work outside the loop" case is kind of broken anyway. It makes you
+test the condition twice - and while a compiler might be smart enough
+to optimize the second test away, it's still just plain ugly.
 
-   Error: arch/arm/boot/dts/mstar-infinity2m-ssd201-wirelesstag-ido-som2d01.dtsi:18.1-9 Label or path pm_uart not found
->> FATAL ERROR: Syntax error parsing input tree
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+             Linus

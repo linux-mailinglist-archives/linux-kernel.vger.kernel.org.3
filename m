@@ -2,113 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E1E54C1847
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 17:14:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B761F4C184F
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 17:16:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242343AbiBWQOg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 11:14:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47606 "EHLO
+        id S242678AbiBWQQa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 11:16:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234136AbiBWQOf (ORCPT
+        with ESMTP id S236228AbiBWQQ1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 11:14:35 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E1E1B717B;
-        Wed, 23 Feb 2022 08:14:07 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id F25E3CE1BC1;
-        Wed, 23 Feb 2022 16:14:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3E93C340E7;
-        Wed, 23 Feb 2022 16:14:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645632844;
-        bh=RDlGUXhVMQjdPD7pgZi9YzuzAu6QlwjIsVRe2uzVobQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YuRdXmLcgPNMJOHk2OcUAFhYE945oDsoDg7DM3GMhKgfUK1j41IsKB+fndP08kJo4
-         gzaN4PQN0gv2/GE7I2q8KHSeuSpesGHqmJkTUgohUjN7BGWERSGBUX3R9tofkAWSTL
-         DnwC9fmCiPywK+lZ2RguXtZLuSlD3aj3j+s3f1nwHfaEx1A23ePpyBZt53vYSHepKX
-         uMaIpUZnGNGidvIl0L6eypjeWQDFuCw1SmRsVlHVxmhaIvA5M/tV41F0wObT/hDLtq
-         TCQOQDZ5OvLIM17zzD3bXG/xYIHbYjclOpl7sLsEY9bg26pO4Flij+civl7k0yjHsy
-         EJKrixSBvFVEg==
-Date:   Thu, 24 Feb 2022 00:06:09 +0800
-From:   Jisheng Zhang <jszhang@kernel.org>
-To:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-Cc:     Jingoo Han <jingoohan1@gmail.com>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
+        Wed, 23 Feb 2022 11:16:27 -0500
+X-Greylist: delayed 522 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 23 Feb 2022 08:15:58 PST
+Received: from wnew2-smtp.messagingengine.com (wnew2-smtp.messagingengine.com [64.147.123.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45E5FC4E12;
+        Wed, 23 Feb 2022 08:15:58 -0800 (PST)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailnew.west.internal (Postfix) with ESMTP id 70C702B0014E;
+        Wed, 23 Feb 2022 11:07:15 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute4.internal (MEProxy); Wed, 23 Feb 2022 11:07:16 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yotsuba.nl; h=cc
+        :cc:content-transfer-encoding:date:date:from:from:in-reply-to
+        :message-id:mime-version:reply-to:sender:subject:subject:to:to;
+         s=fm2; bh=6WaAJK5lyFLmcmFKJl+0M+d6NIX9M8qY6UrRrz5b9zI=; b=eEh3k
+        eL6El0y2BpWdZVivRqzzJikfGRKEww/41gQZgykXPMQv/2oIPH4jh/m+SdBtTLtI
+        20cI43uQwFWMG1lPao0tT9IaZhDgZzO006IgK0JadDHIDwrbpN1qvkysLlEq5KvW
+        jw9kOEekgM6R0MDKNgRFUmcwmZDwbyLGlMhxurpBdrmhFVeh/NWqEEpKjQJljr6i
+        qsayVve8o/OXRFwFwYfFeb3Yky2TRss3QVCWfF4Dn+WIJqUOqMGjw1Ux6oU1V34+
+        0SO9WeQ4pVBtN2yDF8Fol7Gy7hjN6v1ISces9Oin0WJSwfCtg0DZnTdBA+Y5JXT0
+        m3OHSW5j1JwtuC8uw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
+        :from:from:in-reply-to:message-id:mime-version:reply-to:sender
+        :subject:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender
+        :x-me-sender:x-sasl-enc; s=fm2; bh=6WaAJK5lyFLmcmFKJl+0M+d6NIX9M
+        8qY6UrRrz5b9zI=; b=HaRTHEgCGe+caz2sQsKoHHme3UB6NQ8YbcSovGCrxHKjP
+        otSNGsM1gqQjhEUwIhsTaW2JZGiGGAD/EQ2DyBM5VRgLeJyennBIReyJ8PFmEMz+
+        5LmtqrXgPXYI2qt9YNXFAqT4fTTLWgsvDvlL5lc7X/oJAq2YXMfmCBuN6q2urLPr
+        Bo35z3leobrdjuvCkLKZM/6UUfaiGfqEnR+pZl9LNdCxiOsvyPPmDDuSuXEYK4y+
+        splUPU5JIH0Fktta/JahNbcRtogxuEaglJNkId7ld/0BxJwKXOuoJHcOoYPLp+ol
+        kFkcTgIhTQGPeWSPoTSsZx8U14CdkfN/3eC6F+cdg==
+X-ME-Sender: <xms:slsWYqoNzUbmSnbWW7HIlb2tFL6XSTWqfv65Cwl0GecxMi_v-hd4kg>
+    <xme:slsWYoqpQ6zRqqoWOY8UcZQ_N-wmlPrBO0AYYrmm82V-NLhRS0nC120D8_asCvAZT
+    n4mcyX2QpN_clVeGu8>
+X-ME-Received: <xmr:slsWYvODuRF8D_NadyrzUYhSy1ILTh4crYtOv-3CFF51J3QrE2GNsJOSZJHISosO9AXBvA51uE_B6h0o0ElVy1mCrjcVEGauS1uUMYbsyjH7gjY8s88KxR06nQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrledtgdekfecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefhvffufffkofgggfestdekredtredttdenucfhrhhomhepofgrrhhkucevihhl
+    ihhsshgvnhcuoehmrghrkheshihothhsuhgsrgdrnhhlqeenucggtffrrghtthgvrhhnpe
+    ehudevhedtleefkefgjeduvefhgffhhedvteffhefgleetleehleegffdtffduheenucev
+    lhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehmrghrkheshi
+    hothhsuhgsrgdrnhhl
+X-ME-Proxy: <xmx:slsWYp7scNv8-zCXV2_wfWEtpBe4EREL41uJKSxlz_WF53wEm71ZHw>
+    <xmx:slsWYp53lkUiJ3SJyTslX0hhOWwBL3TqGnAVs9GqQjUahn7ApZHQRQ>
+    <xmx:slsWYph-F5uFCM5U8OXixZfnx5dqcJhJoarPmW3ENc-3VsXQ5JGUhQ>
+    <xmx:s1sWYmwtItwewWO-_NDnIP7WYAHxiVs5MzRLDAyijwIWBwlfOrXm6nH2lic>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 23 Feb 2022 11:07:12 -0500 (EST)
+From:   Mark Cilissen <mark@yotsuba.nl>
+To:     linux-acpi@vger.kernel.org, x86@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] PCI: dwc: Fix integrated MSI Receiver mask reg setting
- during resume
-Message-ID: <YhZbcU3yNuuBDXm/@xhacker>
-References: <20211226074019.2556-1-jszhang@kernel.org>
- <Ye1D4lYAIpDe7qAN@xhacker>
- <20220223114622.GA27645@lpieralisi>
+Cc:     Hans de Goede <hdegoede@redhat.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <len.brown@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Mark Cilissen <mark@yotsuba.nl>
+Subject: [PATCH] x86/acpi: Work around broken XSDT on SEGA AALE board
+Date:   Wed, 23 Feb 2022 17:07:08 +0100
+Message-Id: <20220223160708.88100-1-mark@yotsuba.nl>
+X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220223114622.GA27645@lpieralisi>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 23, 2022 at 11:46:22AM +0000, Lorenzo Pieralisi wrote:
-> On Sun, Jan 23, 2022 at 08:02:42PM +0800, Jisheng Zhang wrote:
-> > On Sun, Dec 26, 2021 at 03:40:19PM +0800, Jisheng Zhang wrote:
-> > > If the host which makes use of the IP's integrated MSI Receiver losts
-> > > power during suspend, we call dw_pcie_setup_rc() to reinit the RC. But
-> > > dw_pcie_setup_rc() always set the pp->irq_mask[ctrl] as ~0, so the mask
-> > > register is always set as 0xffffffff incorrectly, thus the MSI can't
-> > > work after resume.
-> > > 
-> > > Fix this issue by moving pp->irq_mask[ctrl] initialization to
-> > > dw_pcie_host_init(), so we can correctly set the mask reg during both
-> > > boot and resume.
-> > > 
-> > > Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
-> > 
-> > Hi all,
-> > 
-> > This patch can still be applied to the latest linus tree. Do you want
-> > me to rebase and send out a new version?
-> > 
-> > Without this patch, dwc host MSI interrupt(if use the IP's integrated
-> > MSI receiver) can't work after resume. Could it be picked up as a fix
-> > for v5.17?
-> 
-> The tricky bit with this patch is that it is not clear what piece of
-> logic is lost on power down and what not. IIUC MSI interrupt controller
-> logic is kept so it does not need to be saved/restored (but in
+On this board the ACPI RSDP structure points to both a RSDT and an XSDT,
+but the XSDT points to a truncated FADT. This causes all sorts of trouble
+and usually a complete failure to boot after the following error occurs:
 
-You may mean the external MSI interrupt controller case, but here the
-focus is the integrated MSI Receiver in the IP. Normally, after
-suspending to ram, the dwc IP would lost power, so the integrated MSI
-Receiver also lost power.
+  ACPI Error: Unsupported address space: 0x20 (*/hwregs-*)
+  ACPI Error: AE_SUPPORT, Unable to initialize fixed events (*/evevent-*)
+  ACPI: Unable to start ACPI Interpreter
 
-> dw_pcie_setup_rc() we overwrite PCIE_MSI_INTR0_ENABLE even if it
-> is not needed on resume - actually, it can even be destructive).
-> 
+This leaves the ACPI implementation in such a broken state that subsequent
+kernel subsystem initialisations go wrong, resulting in among others
+mismapped PCI memory, SATA and USB enumeration failures, and freezes.
 
-For the integrated MSI Receiver case, since the entire IP power is lost,
-so the PCIE_MSI_INTR0_MASK|ENABLE setting is lost, we need to resume the
-mask to the one before suspending. For PCIE_MSI_INTR0_ENABLE register(s),
-since it's always 0xffffffff, so current code is fine.
+As this is an older embedded platform that will likely never see any BIOS
+updates to address this issue and its default shipping OS only complies to
+ACPI 1.0, work around this by forcing `acpi=rsdt`. This patch, applied on
+top of Linux 5.10.102, was confirmed on real hardware to fix the issue.
 
-> Maybe we need to write suspend/resume hooks for the dwc core instead
-> of moving code around to fix these bugs ?
-> 
+Signed-off-by: Mark Cilissen <mark@yotsuba.nl>
+Cc: stable@vger.kernel.org
+---
+ arch/x86/kernel/acpi/boot.c | 25 +++++++++++++++++++++++++
+ 1 file changed, 25 insertions(+)
 
-Even with suspend/resume hooks, we still need to fix the
-PCIE_MSI_INTR0_MASK wrong setting with always ~0. After the fix, msi works
-so we don't need suspend/resume hooks any more.
+diff --git a/arch/x86/kernel/acpi/boot.c b/arch/x86/kernel/acpi/boot.c
+index 5b6d1a95776f..7caf4da075cd 100644
+--- a/arch/x86/kernel/acpi/boot.c
++++ b/arch/x86/kernel/acpi/boot.c
+@@ -1328,6 +1328,17 @@ static int __init disable_acpi_pci(const struct dmi_system_id *d)
+ 	return 0;
+ }
+ 
++static int __init disable_acpi_xsdt(const struct dmi_system_id *d)
++{
++	if (!acpi_force) {
++		pr_notice("%s detected: force use of acpi=rsdt\n", d->ident);
++		acpi_gbl_do_not_use_xsdt = TRUE;
++	} else {
++		pr_notice("Warning: DMI blacklist says broken, but acpi XSDT forced\n");
++	}
++	return 0;
++}
++
+ static int __init dmi_disable_acpi(const struct dmi_system_id *d)
+ {
+ 	if (!acpi_force) {
+@@ -1451,6 +1462,20 @@ static const struct dmi_system_id acpi_dmi_table[] __initconst = {
+ 		     DMI_MATCH(DMI_PRODUCT_NAME, "TravelMate 360"),
+ 		     },
+ 	 },
++	/*
++	 * Boxes that need ACPI XSDT use disabled due to corrupted tables
++	 */
++	{
++	 .callback = disable_acpi_xsdt,
++	 .ident = "SEGA AALE",
++	 .matches = {
++		     DMI_MATCH(DMI_SYS_VENDOR, "NEC"),
++		     DMI_MATCH(DMI_PRODUCT_NAME, "Bearlake CRB Board"),
++		     DMI_MATCH(DMI_BIOS_VENDOR, "Phoenix Technologies LTD"),
++		     DMI_MATCH(DMI_BIOS_VERSION, "V1.12"),
++		     DMI_MATCH(DMI_BIOS_DATE, "02/01/2011"),
++		     },
++	},
+ 	{}
+ };
+ 
 
-Thanks
+base-commit: cfb92440ee71adcc2105b0890bb01ac3cddb8507
+-- 
+2.28.0
+

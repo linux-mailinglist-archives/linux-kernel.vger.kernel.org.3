@@ -2,166 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4FD64C17A9
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 16:48:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C3DC4C17AA
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 16:48:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242441AbiBWPst (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 10:48:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38158 "EHLO
+        id S242456AbiBWPsx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 10:48:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238190AbiBWPsr (ORCPT
+        with ESMTP id S238190AbiBWPsu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 10:48:47 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7088E6C907
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 07:48:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1645631295;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=yme7e5g8TGrkrXhF+dr6q/ZQouPgxuhcTIm1Orj8V9k=;
-        b=PVYbLDJVt0Dc8Vn61aiqWx3rkVoJn0qhW2Jx0QiaiUTa6/5xlImm5kH4hMpALgq+XC6byo
-        aqBcCtOl1x4VTW4jkyAEKEyxwnW2sZA7PtgfU8goQZFKitEmBTZ4f92oMxnv40/tLofDrA
-        UsIbPz5DzEkyBkrFXIECZfrb1iv5za4=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-255-gPQdpIRbMcWDgTVZX0rpcw-1; Wed, 23 Feb 2022 10:48:11 -0500
-X-MC-Unique: gPQdpIRbMcWDgTVZX0rpcw-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 762191854E2A;
-        Wed, 23 Feb 2022 15:48:09 +0000 (UTC)
-Received: from lorien.usersys.redhat.com (unknown [10.22.10.120])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id F3DB71077D44;
-        Wed, 23 Feb 2022 15:47:39 +0000 (UTC)
-Date:   Wed, 23 Feb 2022 10:47:38 -0500
-From:   Phil Auld <pauld@redhat.com>
-To:     Carlos Bilbao <carlos.bilbao@amd.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, mingo@redhat.com,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] kernel/sched: Update schedstats when migrating threads
-Message-ID: <YhZXGv34YTV5omKq@lorien.usersys.redhat.com>
-References: <20220126152222.5429-1-carlos.bilbao@amd.com>
- <YhYKL4hxx4TNKHGD@hirez.programming.kicks-ass.net>
- <aac8f860-c01f-bda0-9f1b-029b234213c2@amd.com>
- <YhZSqd+d03oWUPP6@lorien.usersys.redhat.com>
- <0e42c46a-ccc4-e793-00b8-ae407e06846f@amd.com>
+        Wed, 23 Feb 2022 10:48:50 -0500
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E99F8522CA
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 07:48:20 -0800 (PST)
+Received: by mail-pg1-x532.google.com with SMTP id 12so16785356pgd.0
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 07:48:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=vpPW1JmffRLomQX318Bew2lope677hXxFjbioA+p6h0=;
+        b=TmuThBOWUcdi8v6oiscGDhyOi248jzblxf/snhYW3ySNS2xauck0j9YrgwMwKOPAyT
+         eUQM7pLk/vnZjXVyh1NWGlic51CSIHNdvUClibPF3/CzNzkF7gzwNNs+ofhE5necDm/h
+         5QwJzwwikQvOBy2TBUZW0mtqAu5YTNTgWzP0IHOyiJqWUFKtBMLEaiSpjwc1+9w7cVZ4
+         KZlzdvAEF8fZPp184qRkv++zfvwMV2iG7RPX7AmuMBS1eiY+IjgM2CLh16vkpQ4Cv9aZ
+         w0tC5wn4N7alqkaLAYqDZvYIDfS/uAXyldbMcrIZUL+yz6BN1J786I/oaChLzJN6IDOM
+         kMVg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=vpPW1JmffRLomQX318Bew2lope677hXxFjbioA+p6h0=;
+        b=Ni7byHtgMFYZiomDLsCJ/IQ0pujckqZ5gfKr2WPgWOwXwv2Wt52oTSRr+b7FH1xNYU
+         n8+XrVJ5sYL+OTtu58EqdRDxIYvnxtGdqUeTR0VIwnvSeyUlJMkgTI0vIx0XTCfn/9su
+         OFCo+NGNN/TRUPbl4Cc4gtK5hoNzlkO490FXbRUWe/0b7Pdr/UVjbma8MUqtpKs6SKeJ
+         ZqNf1I4HLYXHwqzJZdiC6gJxZ2jea/M87chIgfdmN0WDu/UbNf0wX+kab7VEZNDfbig1
+         nmzW6xhgCE+N1uIpbdRH1yk5S/L178NzA25Pc84z96S7K0dEq7uEw9j8TGRzn740LQ3+
+         eBmQ==
+X-Gm-Message-State: AOAM531tKvzBp2GUpkyLXYSCvmNRKQbwekyyZMDAGL4zEGrDPOJsB+j8
+        VbI48E3jzHMeBecfrnOzTY+ltA==
+X-Google-Smtp-Source: ABdhPJwfQEUfpatD1n4L4hWU6zoucEJJPgx1A0pPObEMj1Zs8HxzDqMRZQxhC7v1WTOG8yqyo7UtQw==
+X-Received: by 2002:a63:2d05:0:b0:34b:3f1d:2fa8 with SMTP id t5-20020a632d05000000b0034b3f1d2fa8mr105395pgt.447.1645631300245;
+        Wed, 23 Feb 2022 07:48:20 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id f8sm18654844pfv.100.2022.02.23.07.48.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Feb 2022 07:48:19 -0800 (PST)
+Date:   Wed, 23 Feb 2022 15:48:16 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Maxim Levitsky <mlevitsk@redhat.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+Subject: Re: [PATCH v2 08/18] KVM: x86/mmu: do not pass vcpu to root freeing
+ functions
+Message-ID: <YhZXQOg+5/we5/1g@google.com>
+References: <20220217210340.312449-1-pbonzini@redhat.com>
+ <20220217210340.312449-9-pbonzini@redhat.com>
+ <cda148b77e3615a4f1ac81de8be233204fb8f981.camel@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <0e42c46a-ccc4-e793-00b8-ae407e06846f@amd.com>
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <cda148b77e3615a4f1ac81de8be233204fb8f981.camel@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 23, 2022 at 09:33:59AM -0600 Carlos Bilbao wrote:
-> On 2/23/2022 9:28 AM, Phil Auld wrote:
-> > On Wed, Feb 23, 2022 at 09:14:45AM -0600 Carlos Bilbao wrote:
-> >> On 2/23/2022 4:19 AM, Peter Zijlstra wrote:
-> >>> On Wed, Jan 26, 2022 at 09:22:23AM -0600, Carlos Bilbao wrote:
-> >>>> The kernel manages per-task scheduler statistics or schedstats. Such
-> >>>> counters should be reinitialized when the thread is migrated to a
-> >>>> different core rq, except for the values recording number of migrations.
-> >>>
-> >>> I'm confused, why should we reset schedstats on migrate? I'm thinking
-> >>> this breaks per-task, since tasks tend to bounce around quite a lot.
-> >>>
-> >>
-> >> Thanks for your comments, Peter. 
-> >>
-> >> Looking at the documentation of schedstats I see that most values are 
-> >> actually linked to the particular CPU: time spent on the cpu, timeslices 
-> >> run on this cpu, number of times _something_ was called when the cpu was 
-> >> idle, and so forth. Those values lose their meaning after migration and we 
-> >> should reinitialize their counters. However, reviewing sched_statistics I 
-> >> identify two fields that we should definitely keep increasing even after 
-> >> migration (nr_migrations_cold, nr_forced_migrations).
-> >>
-> > 
-> > The documentation is a little off. I think it should say "any cpu" instead
-> > of "this cpu".  If you reset these per task counters (time on cpu, number
-> > of timeslices etc) on every migration then they become meaningless (and
-> > useless).
-> > 
-> > 
-> > Cheers,
-> > Phil
-> > 
+On Wed, Feb 23, 2022, Maxim Levitsky wrote:
+> On Thu, 2022-02-17 at 16:03 -0500, Paolo Bonzini wrote:
+> > @@ -1156,7 +1156,7 @@ static void kvm_invalidate_pcid(struct kvm_vcpu *vcpu, unsigned long pcid)
+> >  		if (kvm_get_pcid(vcpu, mmu->prev_roots[i].pgd) == pcid)
+> >  			roots_to_free |= KVM_MMU_ROOT_PREVIOUS(i);
+> >  
+> > -	kvm_mmu_free_roots(vcpu, mmu, roots_to_free);
+> > +	kvm_mmu_free_roots(vcpu->kvm, mmu, roots_to_free);
+> >  }
+> >  
+> >  int kvm_set_cr3(struct kvm_vcpu *vcpu, unsigned long cr3)
 > 
-> Well that clarifies it! Then, let me ask the opposite question... What
-> fields of schedstats should we clear when migrating? If there isn't any,
-> I will just increase the number of migrations.
->
+> IMHO anything that is related to guest memory should work on
+> VM level (that is struct kvm).
 
-I don't think any should be cleared on migration. They're per task and
-should be monotically increasing. If they ever reset it becomes hard to
-know what they mean when you read them.
+No, because there are plently of per-CPU/vCPU properties that affect physical
+memory accesseses.  Some of them KVM mostly punts on, e.g. MTRRs and APIC base,
+but others are relevant, e.g. SMM.
 
+> It is just ironically sad that writing to a guest page requires
+> these days a vCPU due to dirty ring tracking.
 
-Cheers,
-Phil
-
-
-> >> So this patch will have to be upgraded if there's some other value(s) in
-> >> schedstats that we do not want to reinitialize either.
-> >>
-> >>>> Signed-off-by: Carlos Bilbao <carlos.bilbao@amd.com>
-> >>>> ---
-> >>>>  kernel/sched/core.c | 10 +++++++++-
-> >>>>  1 file changed, 9 insertions(+), 1 deletion(-)
-> >>>>
-> >>>> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-> >>>> index fe53e510e711..d64c2a290176 100644
-> >>>> --- a/kernel/sched/core.c
-> >>>> +++ b/kernel/sched/core.c
-> >>>> @@ -8757,6 +8757,7 @@ bool sched_smp_initialized __read_mostly;
-> >>>>  int migrate_task_to(struct task_struct *p, int target_cpu)
-> >>>>  {
-> >>>>  	struct migration_arg arg = { p, target_cpu };
-> >>>> +	uint64_t forced_migrations, migrations_cold;
-> >>>>  	int curr_cpu = task_cpu(p);
-> >>>>  
-> >>>>  	if (curr_cpu == target_cpu)
-> >>>> @@ -8765,7 +8766,14 @@ int migrate_task_to(struct task_struct *p, int target_cpu)
-> >>>>  	if (!cpumask_test_cpu(target_cpu, p->cpus_ptr))
-> >>>>  		return -EINVAL;
-> >>>>  
-> >>>> -	/* TODO: This is not properly updating schedstats */
-> >>>> +	if (schedstat_enabled()) {
-> >>>> +		forced_migrations = schedstat_val(p->stats.nr_forced_migrations);
-> >>>> +		migrations_cold = schedstat_val(p->stats.nr_migrations_cold);
-> >>>> +		memset(&p->stats, 0, sizeof(p->stats));
-> >>>> +		schedstat_set(p->stats.nr_forced_migrations, forced_migrations);
-> >>>> +		schedstat_set(p->stats.nr_migrations_cold, migrations_cold);
-> >>>> +		schedstat_inc(p->stats.nr_migrations_cold);
-> >>>> +	}
-> >>>>  
-> >>>>  	trace_sched_move_numa(p, curr_cpu, target_cpu);
-> >>>>  	return stop_one_cpu(curr_cpu, migration_cpu_stop, &arg);
-> >>>> -- 
-> >>>> 2.27.0
-> >>>>
-> >>
-> >> Thanks,
-> >> Carlos
-> >>
-> > 
-> 
-> Thanks,
-> Carlos
-> 
-
--- 
-
+I dislike (understatement) that the dirty ring code uses the currently running
+vCPU instead of passing it down the stack, but fundamentally all memory accesses
+that originate from the "CPU", as opposed to a device or whatever, should be tied
+to a vCPU.

@@ -2,161 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 218134C1C07
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 20:20:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1981B4C1C11
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 20:20:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244305AbiBWTTP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 14:19:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38032 "EHLO
+        id S244341AbiBWTTk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 14:19:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235662AbiBWTTN (ORCPT
+        with ESMTP id S244328AbiBWTTi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 14:19:13 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2028045ADC;
-        Wed, 23 Feb 2022 11:18:45 -0800 (PST)
-Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21NJ9PeK008330;
-        Wed, 23 Feb 2022 19:18:18 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pp1; bh=4M7keEVwA9K+g1bmFw59BD8lXOkD/TAviruIu4QgsWM=;
- b=A4jSVxJ8psUNkRPXXpGO2BUHOR470CByPj2dqKa2gE03i47W5Lkubta7w3kR4ptQZGaJ
- IL6YR8QcCmQZgAuFHL8CuVBRP2445uiyVpcW+MZS2tZ1cuRxr2Qoqfz7AV1+0funeIVc
- e0xgHF3MbH7ApK9ic0xp7UIKWogRZUj08EMyqamPM3beFX8B2VWVZ0xT6PjGoishFo1f
- 9NuQO9QK39RGceWeiBQpkNYh3YcP/4wZ25ihoJXrhu9/kfzCj2lEJnpdu6LbPfI6k704
- fQ5x38+brQOPcMMQVOvIdD/jp6LSNWmOy2oSW6XdpJtOlfctVyhTTUTtxKLCQhiKIfbO 3w== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3ede6t1mvs-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 23 Feb 2022 19:18:18 +0000
-Received: from m0098394.ppops.net (m0098394.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 21NJHVXY015629;
-        Wed, 23 Feb 2022 19:18:17 GMT
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3ede6t1muq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 23 Feb 2022 19:18:17 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 21NJBlaT029428;
-        Wed, 23 Feb 2022 19:18:14 GMT
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-        by ppma04ams.nl.ibm.com with ESMTP id 3ear69c9cr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 23 Feb 2022 19:18:14 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 21NJIB4t26018054
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 23 Feb 2022 19:18:11 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 42DA3AE04D;
-        Wed, 23 Feb 2022 19:18:11 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 47C52AE051;
-        Wed, 23 Feb 2022 19:18:10 +0000 (GMT)
-Received: from osiris (unknown [9.145.31.42])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Wed, 23 Feb 2022 19:18:10 +0000 (GMT)
-Date:   Wed, 23 Feb 2022 20:18:08 +0100
-From:   Heiko Carstens <hca@linux.ibm.com>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Baoquan He <bhe@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, akpm@linux-foundation.org, cl@linux.com,
-        42.hyeyoo@gmail.com, penberg@kernel.org, rientjes@google.com,
-        iamjoonsoo.kim@lge.com, vbabka@suse.cz, David.Laight@aculab.com,
-        david@redhat.com, herbert@gondor.apana.org.au, davem@davemloft.net,
-        linux-crypto@vger.kernel.org, steffen.klassert@secunet.com,
-        netdev@vger.kernel.org, gor@linux.ibm.com, agordeev@linux.ibm.com,
-        borntraeger@linux.ibm.com, svens@linux.ibm.com,
-        linux-s390@vger.kernel.org, michael@walle.cc,
-        linux-i2c@vger.kernel.org, wsa@kernel.org,
-        Halil Pasic <pasic@linux.ibm.com>,
-        Vineeth Vijayan <vneethv@linux.ibm.com>
-Subject: Re: [PATCH 00/22] Don't use kmalloc() with GFP_DMA
-Message-ID: <YhaIcPmc8qi1zmnj@osiris>
-References: <20220219005221.634-1-bhe@redhat.com>
- <YhOaTsWUKO0SWsh7@osiris>
- <20220222084422.GA6139@lst.de>
+        Wed, 23 Feb 2022 14:19:38 -0500
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAE4B46155
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 11:19:09 -0800 (PST)
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com [209.85.218.69])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 6A3F63FCA5
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 19:19:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1645643948;
+        bh=OsmDWPse4xUb7lllvZErJnLq536hKmJqOuDcEnXswgI=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=Pyi3ZOsftRe4LCarU+sJ6V9zOGZ1f2csY6Ye3gN++YLm0D91rrcv3GRDbrIdPrAnU
+         KossIc9JSbE3oNYq6ku9O22UXEO2o2js/uhDaaSAFBroR6N+CrTI/y/flxACvVQSJA
+         p5ssWrFAJRdX+kf44kuNx52Pw0M3CpZukl/3jNw0NeLCSrwEMP9OhCyukUHmiR4y95
+         Fan33RM5XlgKofNgCWBgba5PBrP14Gp8EyXk4U6qmHYOHNBhgBqMyioyXfH6br3b3s
+         abHNwAngTxkyadwJGAbvWHg+wWYKiKnRjwgBY4xrSKK2WM2hiAL+jCgBxPBMMjwT4X
+         77C5OzygbQjmg==
+Received: by mail-ej1-f69.google.com with SMTP id gn20-20020a1709070d1400b006cf1fcb4c8dso7514380ejc.12
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 11:19:08 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=OsmDWPse4xUb7lllvZErJnLq536hKmJqOuDcEnXswgI=;
+        b=nBWLlv2oJumTnS3z+8G96JElBb50EVyBxYKwztcgJ9akTi5+pfcwaMza616vOdFE3m
+         Ct9htoNcfD8JFqXRQORIzKh6glAEJJxbtSavV/IirWFiZbhEByiDK8K1zY9CR3aVqtxF
+         pCGkehr/eHcPdoednLuQdbrq2Z7Iv5QA/WZTEh6bTGSrEzdwQQATEdHhQvgbtq37CZYO
+         RD2hbfgOqVKXbIyzm8WseYTzoQDR7fJXigoC4g+/ZsTyc9pD5o/cPsdm78UX3eA75Sbf
+         Z/v42Qzs2xbwYtjy6Xo8gDEhn5v8yup5hajbk1OaDrvlbLj02NnGTv/Xu4aSgLfZ7+Hn
+         6Adw==
+X-Gm-Message-State: AOAM533mY4SeQv8wdavQM50AfXhzq8lwWTt0cBHaGdA6Eid1TpMrhYwY
+        6KstfYbcRTq+wgyfttaN81d6RXt77Q4XMWS0OsoQqMnSwlEZBIziDgDoZr95SC6t6Zv6RCWB8/f
+        3epi1cn17yYLNzLAhgY6JcCzVxPmkSTgIbXQ2WQUsWg==
+X-Received: by 2002:a17:906:6b8e:b0:6b9:1f27:73e with SMTP id l14-20020a1709066b8e00b006b91f27073emr863421ejr.361.1645643947954;
+        Wed, 23 Feb 2022 11:19:07 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyJ9QUyPanWfiXE6vKIo8o+c2pwl8ckmaYif3CteDvcltA9YiJZAZD09dYlCxpl8UKoIvZBag==
+X-Received: by 2002:a17:906:6b8e:b0:6b9:1f27:73e with SMTP id l14-20020a1709066b8e00b006b91f27073emr863390ejr.361.1645643947743;
+        Wed, 23 Feb 2022 11:19:07 -0800 (PST)
+Received: from [192.168.0.127] (xdsl-188-155-181-108.adslplus.ch. [188.155.181.108])
+        by smtp.gmail.com with ESMTPSA id x14sm302707edd.63.2022.02.23.11.19.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 23 Feb 2022 11:19:07 -0800 (PST)
+Message-ID: <31c4f987-6480-278f-1d49-02bd611b521c@canonical.com>
+Date:   Wed, 23 Feb 2022 20:19:05 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220222084422.GA6139@lst.de>
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: TJSaBEB9Lulpk4sdWf3aymM3sOHqNnmS
-X-Proofpoint-ORIG-GUID: RQrgHuEksbIzwLY-XstVcce5JZQWh0wb
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-02-23_09,2022-02-23_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0
- priorityscore=1501 phishscore=0 impostorscore=0 mlxlogscore=632
- clxscore=1015 mlxscore=0 malwarescore=0 adultscore=0 suspectscore=0
- spamscore=0 lowpriorityscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2201110000 definitions=main-2202230108
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2 09/11] clk: imx: scu: fix kfree() of static memory on
+ setting driver_override
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Stuart Yoder <stuyoder@gmail.com>,
+        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
+        Abel Vesa <abel.vesa@nxp.com>, Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Vineeth Vijayan <vneethv@linux.ibm.com>,
+        Peter Oberparleiter <oberpar@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Andy Gross <agross@kernel.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, NXP Linux Team <linux-imx@nxp.com>,
+        linux-arm-kernel@lists.infradead.org, linux-hyperv@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-spi@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Rasmus Villemoes <linux@rasmusvillemoes.dk>, stable@vger.kernel.org
+References: <20220223191310.347669-1-krzysztof.kozlowski@canonical.com>
+ <20220223191441.348109-3-krzysztof.kozlowski@canonical.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20220223191441.348109-3-krzysztof.kozlowski@canonical.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 22, 2022 at 09:44:22AM +0100, Christoph Hellwig wrote:
-> On Mon, Feb 21, 2022 at 02:57:34PM +0100, Heiko Carstens wrote:
-> > > 1) Kmalloc(GFP_DMA) in s390 platform, under arch/s390 and drivers/s390;
-> > 
-> > So, s390 partially requires GFP_DMA allocations for memory areas which
-> > are required by the hardware to be below 2GB. There is not necessarily
-> > a device associated when this is required. E.g. some legacy "diagnose"
-> > calls require buffers to be below 2GB.
-> > 
-> > How should something like this be handled? I'd guess that the
-> > dma_alloc API is not the right thing to use in such cases. Of course
-> > we could say, let's waste memory and use full pages instead, however
-> > I'm not sure this is a good idea.
+On 23/02/2022 20:14, Krzysztof Kozlowski wrote:
+> The driver_override field from platform driver should not be initialized
+> from static memory (string literal) because the core later kfree() it,
+> for example when driver_override is set via sysfs.
 > 
-> Yeah, I don't think the DMA API is the right thing for that.  This
-> is one of the very rare cases where a raw allocation makes sense.
+> Use dedicated helper to set driver_override properly.
 > 
-> That being said being able to drop kmalloc support for GFP_DMA would
-> be really useful. How much memory would we waste if switching to the
-> page allocator?
-
-At a first glance this would not waste much memory, since most callers
-seem to allocate such memory pieces only temporarily.
-
-> > The question is: what would this buy us? As stated above I'd assume
-> > this comes with quite some code churn, so there should be a good
-> > reason to do this.
+> Fixes: 77d8f3068c63 ("clk: imx: scu: add two cells binding support")
+> Cc: <stable@vger.kernel.org>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> ---
+>  drivers/clk/imx/clk-scu.c | 7 ++++++-
+>  1 file changed, 6 insertions(+), 1 deletion(-)
 > 
-> There is two steps here.  One is to remove GFP_DMA support from
-> kmalloc, which would help to cleanup the slab allocator(s) very nicely,
-> as at that point it can stop to be zone aware entirely.
+> diff --git a/drivers/clk/imx/clk-scu.c b/drivers/clk/imx/clk-scu.c
+> index 083da31dc3ea..15e1d670e51f 100644
+> --- a/drivers/clk/imx/clk-scu.c
+> +++ b/drivers/clk/imx/clk-scu.c
+> @@ -683,7 +683,12 @@ struct clk_hw *imx_clk_scu_alloc_dev(const char *name,
+>  		return ERR_PTR(ret);
+>  	}
+>  
+> -	pdev->driver_override = "imx-scu-clk";
+> +	ret = driver_set_override(&pdev->dev, &pdev->driver_override,
+> +				  "imx-scu-clk");
+> +	if (ret) {
+> +		platform_device_put(pdev);
+> +		return ret;
 
-Well, looking at slub.c it looks like there is only a very minimal
-maintenance burden for GPF_DMA/GFP_DMA32 support.
+This is wrong - should be ERR_PTR.
 
-> The long term goal is to remove ZONE_DMA entirely at least for
-> architectures that only use the small 16MB ISA-style one.  It can
-> then be replaced with for example a CMA area and fall into a movable
-> zone.  I'd have to prototype this first and see how it applies to the
-> s390 case.  It might not be worth it and maybe we should replace
-> ZONE_DMA and ZONE_DMA32 with a ZONE_LIMITED for those use cases as
-> the amount covered tends to not be totally out of line for what we
-> built the zone infrastructure.
 
-So probably I'm missing something; but for small systems where we
-would only have ZONE_DMA, how would a CMA area within this zone
-improve things?
-
-If I'm not mistaken then the page allocator will not fallback to any
-CMA area for GFP_KERNEL allocations. That is: we would somehow need to
-find "the right size" for the CMA area, depending on memory size. This
-looks like a new problem class which currently does not exist.
-
-Besides that we would also not have all the debugging options provided
-by the slab allocator anymore.
-
-Anyway, maybe it would make more sense if you would send your patch
-and then we can see where we would end up.
+Best regards,
+Krzysztof

@@ -2,103 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 278764C06CD
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 02:19:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D38A24C06D3
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 02:23:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234903AbiBWBTc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 20:19:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52170 "EHLO
+        id S235773AbiBWBXn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 20:23:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231136AbiBWBTa (ORCPT
+        with ESMTP id S231136AbiBWBXl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 20:19:30 -0500
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A69393DA51;
-        Tue, 22 Feb 2022 17:19:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1645579143; x=1677115143;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=0kQShUgmQFv+XGVCWzx4wwZ+zYeAVyIwJJcXpq3EHQg=;
-  b=KljmWFdy/dKTxxnX8qntn6p2XAhi/AC07InYbS36U6Jls68e43BLScJa
-   QbEdG9uF0qtXzy7L/p5NZY0JinqRR6G8wlJWxR7gQ/4W/2Y/FOwYcAmOM
-   ybba+sp862WS9Tf+xELXOwbn4DpO/WfgPJVTr1N4B+C8IqhVeitTg7MY3
-   A=;
-Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 22 Feb 2022 17:19:03 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2022 17:19:02 -0800
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.15; Tue, 22 Feb 2022 17:19:02 -0800
-Received: from [10.48.243.226] (10.49.16.6) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.15; Tue, 22 Feb
- 2022 17:19:01 -0800
-Message-ID: <31aa626d-3d39-ca5f-c91d-47aa5bf7715b@quicinc.com>
-Date:   Tue, 22 Feb 2022 17:19:01 -0800
+        Tue, 22 Feb 2022 20:23:41 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9A3548336;
+        Tue, 22 Feb 2022 17:23:13 -0800 (PST)
+Received: from dggpeml500024.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4K3JD82YczzdZPj;
+        Wed, 23 Feb 2022 09:22:00 +0800 (CST)
+Received: from Linux-SUSE12SP5.huawei.com (10.67.132.207) by
+ dggpeml500024.china.huawei.com (7.185.36.10) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Wed, 23 Feb 2022 09:23:11 +0800
+From:   Wei Xiao <xiaowei66@huawei.com>
+To:     <rostedt@goodmis.org>, <mingo@redhat.com>, <mcgrof@kernel.org>,
+        <keescook@chromium.org>, <yzaikin@google.com>
+CC:     <linux-kernel@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
+        <young.liuyang@huawei.com>, <zengweilin@huawei.com>,
+        <nixiaoming@huawei.com>, <xiaowei66@huawei.com>
+Subject: [PATCH] ftrace: move sysctl_ftrace_enabled to ftrace.c
+Date:   Wed, 23 Feb 2022 09:23:11 +0800
+Message-ID: <20220223012311.134314-1-xiaowei66@huawei.com>
+X-Mailer: git-send-email 2.22.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH] ath9k: make array voice_priority static const
-Content-Language: en-US
-To:     Colin Ian King <colin.i.king@gmail.com>,
-        =?UTF-8?Q?Toke_H=c3=b8iland-J=c3=b8rgensen?= <toke@toke.dk>,
-        Kalle Valo <kvalo@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        <linux-wireless@vger.kernel.org>, <netdev@vger.kernel.org>
-CC:     <kernel-janitors@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20220222121749.87513-1-colin.i.king@gmail.com>
-From:   Jeff Johnson <quic_jjohnson@quicinc.com>
-In-Reply-To: <20220222121749.87513-1-colin.i.king@gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.49.16.6]
-X-ClientProxiedBy: nalasex01a.na.qualcomm.com (10.47.209.196) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.67.132.207]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpeml500024.china.huawei.com (7.185.36.10)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/22/2022 4:17 AM, Colin Ian King wrote:
-> Don't populate the read-only array voice_priority on the stack but
-> instead make it static const. Also makes the object code a little
-> smaller.
-> 
-> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
-> ---
->   drivers/net/wireless/ath/ath9k/mci.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/net/wireless/ath/ath9k/mci.c b/drivers/net/wireless/ath/ath9k/mci.c
-> index 39d46c203f6b..5e0ae7e6412f 100644
-> --- a/drivers/net/wireless/ath/ath9k/mci.c
-> +++ b/drivers/net/wireless/ath/ath9k/mci.c
-> @@ -43,7 +43,7 @@ static bool ath_mci_add_profile(struct ath_common *common,
->   				struct ath_mci_profile_info *info)
->   {
->   	struct ath_mci_profile_info *entry;
-> -	u8 voice_priority[] = { 110, 110, 110, 112, 110, 110, 114, 116, 118 };
-> +	static const u8 voice_priority[] = { 110, 110, 110, 112, 110, 110, 114, 116, 118 };
->   
->   	if ((mci->num_sco == ATH_MCI_MAX_SCO_PROFILE) &&
->   	    (info->type == MCI_GPM_COEX_PROFILE_VOICE))
+This moves ftrace_enabled to trace/ftrace.c.
 
-Reviewed-by: Jeff Johnson <quic_jjohnson@quicinc.com>
+Signed-off-by: Wei Xiao <xiaowei66@huawei.com>
+---
+ include/linux/ftrace.h |  3 ---
+ kernel/sysctl.c        |  9 ---------
+ kernel/trace/ftrace.c  | 22 +++++++++++++++++++++-
+ 3 files changed, 21 insertions(+), 13 deletions(-)
 
-An additional cleanup that could be performed in that function:
+diff --git a/include/linux/ftrace.h b/include/linux/ftrace.h
+index 9999e29187de..659b2840563a 100644
+--- a/include/linux/ftrace.h
++++ b/include/linux/ftrace.h
+@@ -94,9 +94,6 @@ static inline int ftrace_mod_get_kallsym(unsigned int symnum, unsigned long *val
+ #ifdef CONFIG_FUNCTION_TRACER
+ 
+ extern int ftrace_enabled;
+-extern int
+-ftrace_enable_sysctl(struct ctl_table *table, int write,
+-		     void *buffer, size_t *lenp, loff_t *ppos);
+ 
+ #ifndef CONFIG_HAVE_DYNAMIC_FTRACE_WITH_ARGS
+ 
+diff --git a/kernel/sysctl.c b/kernel/sysctl.c
+index 5ae443b2882e..55279ec66b28 100644
+--- a/kernel/sysctl.c
++++ b/kernel/sysctl.c
+@@ -1906,15 +1906,6 @@ static struct ctl_table kern_table[] = {
+ 		.mode		= 0644,
+ 		.proc_handler	= proc_dointvec,
+ 	},
+-#ifdef CONFIG_FUNCTION_TRACER
+-	{
+-		.procname	= "ftrace_enabled",
+-		.data		= &ftrace_enabled,
+-		.maxlen		= sizeof(int),
+-		.mode		= 0644,
+-		.proc_handler	= ftrace_enable_sysctl,
+-	},
+-#endif
+ #ifdef CONFIG_STACK_TRACER
+ 	{
+ 		.procname	= "stack_tracer_enabled",
+diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
+index f9feb197b2da..4a5b4d6996a4 100644
+--- a/kernel/trace/ftrace.c
++++ b/kernel/trace/ftrace.c
+@@ -7846,7 +7846,8 @@ static bool is_permanent_ops_registered(void)
+ 	return false;
+ }
+ 
+-int
++#ifdef CONFIG_SYSCTL
++static int
+ ftrace_enable_sysctl(struct ctl_table *table, int write,
+ 		     void *buffer, size_t *lenp, loff_t *ppos)
+ {
+@@ -7889,3 +7890,22 @@ ftrace_enable_sysctl(struct ctl_table *table, int write,
+ 	mutex_unlock(&ftrace_lock);
+ 	return ret;
+ }
++
++static struct ctl_table ftrace_sysctls[] = {
++	{
++		.procname       = "ftrace_enabled",
++		.data           = &ftrace_enabled,
++		.maxlen         = sizeof(int),
++		.mode           = 0644,
++		.proc_handler   = ftrace_enable_sysctl,
++	},
++	{}
++};
++
++static int __init ftrace_sysctl_init(void)
++{
++	register_sysctl_init("kernel", ftrace_sysctls);
++	return 0;
++}
++late_initcall(ftrace_sysctl_init);
++#endif
+-- 
+2.19.1
 
-		if (info->voice_type < sizeof(voice_priority))
-
-replace sizeof() with ARRAY_SIZE() so that it works correctly if the 
-base type is ever changed from u8

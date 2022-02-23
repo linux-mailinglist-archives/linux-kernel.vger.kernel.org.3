@@ -2,163 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE62C4C1FBB
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 00:34:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C75CB4C1FC4
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 00:35:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243984AbiBWXeX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 18:34:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54990 "EHLO
+        id S244844AbiBWXgO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 18:36:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234563AbiBWXeW (ORCPT
+        with ESMTP id S244837AbiBWXgM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 18:34:22 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEE6359382
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 15:33:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645659233; x=1677195233;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=7nh6eKh6I0z2qOX/grTcoEZEGXLN9IcBvF2QumexE4A=;
-  b=lnb4NTeGzX6zJ8M0deuGhxm+vXHxPZ4ORFcMFEPRPdbmh8U3iEusCbiP
-   XI2TZBXWRQU9hCRJglUCP70K66HVTST+Cvg3iSU0G6k4G27NMwHKPiKh2
-   x34AM3qQq2hpfPda5lEtueVQ17nbDLhUKjHzJTPQzf7QBBa/HqGdy2D1k
-   xhTPtP+rseEoZb6de1xys+8YzeOCf0Lk3XUGQa4J26ZNJafA4ugbu0PRF
-   OC1uFeGbOemxz3bOx36wv06ivG9MFYVY+/rpPsqh8gs7U6whORqBgf6nZ
-   yqgmY+QYFDSWAfpxE9WJq4QMGJgwxHcx9YWppYHz6DOKeHtattIS55d1Q
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10267"; a="315333452"
-X-IronPort-AV: E=Sophos;i="5.88,392,1635231600"; 
-   d="scan'208";a="315333452"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2022 15:33:53 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,392,1635231600"; 
-   d="scan'208";a="508640918"
-Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 23 Feb 2022 15:33:52 -0800
-Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nN18p-0001xF-IR; Wed, 23 Feb 2022 23:33:51 +0000
-Date:   Thu, 24 Feb 2022 07:32:51 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Ingo Molnar <mingo@kernel.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [mingo-tip:sched/headers 605/2340] kernel/kallsyms.c:88:3: warning:
- 'strncpy' specified bound 128 equals destination size
-Message-ID: <202202240701.bZqYmp7l-lkp@intel.com>
+        Wed, 23 Feb 2022 18:36:12 -0500
+Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68A4359A7D
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 15:35:44 -0800 (PST)
+Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-2d07ae0b1c0so7331747b3.2
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 15:35:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=thOSbRDXMSWEe7zpjS3HEOJEuojyPix5lNBQyOalrFA=;
+        b=kXBeL+3UeKaErZtrfUujSN7sJ2H6imMH32gDw3JIIT7a6J2nKg52sY05pBNozH2tcH
+         jNQc5H3uZVqcxtdZ6S9aLrlGiB0O5WsBJaiyU5DBHUE1zk4LxcBaY1Pw11zdheqK1tnK
+         rQ4wSRtNvn7DdrOW/O6iUOTTXxFkkNelw9GlQ+gMRlVUoFw28/dNbpSVwVo4spgp7K6c
+         PcoKUTacLMbjSWCm6QUn2l4FtyNj9Bc3sacWKkKiCdn/kHe6numf+Kc5XkqtpJTxGZHs
+         WWCRQTZ42wnejb6xmmebnXq4J+4LXI5ieknHlzxVzLJ+ieJPtq7m7m1IDAGDyK6LwSrz
+         QJ7A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=thOSbRDXMSWEe7zpjS3HEOJEuojyPix5lNBQyOalrFA=;
+        b=x5uYQOp6xe7yIt1yRZILGY9jUDN7E7/OWkBl9hNFiwohpUwRyMTe5A9wdxPULFo0W8
+         jETV19GeFIZBNxKeBkVOHHhCgz3u+FYYPtBbEZBiejyd08sSRvZOBn9pw6hkphZm5UzU
+         I+9Ilre9dhwIn2BsCICS1oA4SLYKc/B1ZCqHSS+Aj6avQuU5+NaEo9ZPKpvx08uDT3lz
+         k7WBYZvprzJkQej1XedUoJ3LPC5jsnEa1MijhEtzOms23qDBcY7W4e/k80+27A30spxe
+         I19Spn/WpVZ68+U5fOjBDpRMnt0d2KUKkPV0MWP3iva6S2HqOZ/bqtZ0f7jycgcArtKF
+         1aFw==
+X-Gm-Message-State: AOAM530lZUx+bCBVGqKUbD+a0vdyQHAwTROAVHmf8839rzsrvvb7ZkYU
+        2rG39mjwt1m1Ax3bMcuEf0RAL2Qmj/5vAZrEZ2LJVQ==
+X-Google-Smtp-Source: ABdhPJwbVPd7qT77NHlk8V4oWlEXIgmOyfJu7gQ03AREf4rQdIni83XRcufA5aZlf62+GYl8OF6Af0CHpB+Ne4lTEg0=
+X-Received: by 2002:a81:1a49:0:b0:2d7:fc73:dab2 with SMTP id
+ a70-20020a811a49000000b002d7fc73dab2mr9323ywa.316.1645659343393; Wed, 23 Feb
+ 2022 15:35:43 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220219012433.890941-1-pcc@google.com> <7a6afd53-a5c8-1be3-83cc-832596702401@huawei.com>
+ <CANpmjNO=1utdh_52sVWb1rNCDme+hbMJzP9GMfF1xWigmy2WsA@mail.gmail.com> <CAMn1gO7S++yR4=DjrPZU_POAHP8Pfxaa3P2Cy__Ggu+kN9pqBA@mail.gmail.com>
+In-Reply-To: <CAMn1gO7S++yR4=DjrPZU_POAHP8Pfxaa3P2Cy__Ggu+kN9pqBA@mail.gmail.com>
+From:   Marco Elver <elver@google.com>
+Date:   Thu, 24 Feb 2022 00:35:32 +0100
+Message-ID: <CANpmjNMyuQh-G0kLOdoFWXyhw31PJsjXgbv7Qy+774v8iq9NWw@mail.gmail.com>
+Subject: Re: [PATCH] kasan: update function name in comments
+To:     Peter Collingbourne <pcc@google.com>
+Cc:     Miaohe Lin <linmiaohe@huawei.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git sched/headers
-head:   97c5eeb4de3ad324ed2a4656b46465299cfd010a
-commit: 0368017257bd4ac64c10d6e64612256d5141d581 [605/2340] kallsyms/objtool: Utilize the kallsyms_syms[] table in kallsyms_expand_symbol() and kallsyms_sym_address()
-config: x86_64-defconfig (https://download.01.org/0day-ci/archive/20220224/202202240701.bZqYmp7l-lkp@intel.com/config)
-compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
-reproduce (this is a W=1 build):
-        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=0368017257bd4ac64c10d6e64612256d5141d581
-        git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
-        git fetch --no-tags mingo-tip sched/headers
-        git checkout 0368017257bd4ac64c10d6e64612256d5141d581
-        # save the config file to linux build tree
-        mkdir build_dir
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+On Wed, 23 Feb 2022 at 23:31, Peter Collingbourne <pcc@google.com> wrote:
+[...]
+> > > > Link: https://linux-review.googlesource.com/id/I20faa90126937bbee77d9d44709556c3dd4b40be
+> > > > Signed-off-by: Peter Collingbourne <pcc@google.com>
+> > > > Fixes: e5f4728767d2 ("kasan: test: add globals left-out-of-bounds test")
+> > >
+> > > This Fixes tag is unneeded.
+> > >
+> > > Except the above nit, this patch looks good to me. Thanks.
+> > >
+> > > Reviewed-by: Miaohe Lin <linmiaohe@huawei.com>
+> >
+> > Reviewed-by: Marco Elver <elver@google.com>
+> >
+> > And yes, the Fixes tag should be removed to not have stable teams do
+> > unnecessary work.
+>
+> I thought that Cc: stable@vger.kernel.org controlled whether the patch
+> is to be taken to the stable kernel and Fixes: was more of an
+> informational tag. At least that's what this seems to say:
+> https://www.kernel.org/doc/html/latest/process/submitting-patches.html#reviewer-s-statement-of-oversight
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+These days patches that just have a Fixes tag (and no Cc: stable) will
+be auto-picked in many (most?) cases (by empirical observation).
 
-All warnings (new ones prefixed by >>):
+I think there were also tree-specific variances of this policy, but am
+not sure anymore. What is the latest policy?
 
-   kernel/kallsyms.c:636:12: warning: no previous prototype for 'arch_get_kallsym' [-Wmissing-prototypes]
-     636 | int __weak arch_get_kallsym(unsigned int symnum, unsigned long *value,
-         |            ^~~~~~~~~~~~~~~~
-   In function 'kallsyms_expand_symbol',
-       inlined from 'kallsyms_lookup_name' at kernel/kallsyms.c:256:9:
->> kernel/kallsyms.c:88:3: warning: 'strncpy' specified bound 128 equals destination size [-Wstringop-truncation]
-      88 |   strncpy(result, sym->name, maxlen);
-         |   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> > +Cc'ing missing mailing lists (use get_maintainers.pl - in particular,
+> > LKML is missing, which should always be Cc'd for archival purposes so
+> > that things like b4 can work properly).
+>
+> get_maintainers.pl tends to list a lot of reviewers so I try to filter
+> it to only the most important recipients or only use it for
+> "important" patches (like the uaccess logging patch). It's also a bit
+> broken in my workflow --
+> https://lore.kernel.org/all/20210913233435.24585-1-pcc@google.com/
+> fixes one of the problems but there are others.
 
+That's fair. It just seemed that something went wrong given
+kasan-dev@googlegroups.com wasn't Cc'd. FWIW, syzbot uses
+'get_maintainer.pl --git-min-percent=20' which is a bit less
+aggressive with Cc'ing folks not mentioned explicitly in MAINTAINERS.
 
-vim +/strncpy +88 kernel/kallsyms.c
+> Doesn't b4 scan all the mailing lists? So I'd have imagined it
+> wouldn't matter which one you send it to.
 
-    68	
-    69	/*
-    70	 * Expand a compressed symbol data into the resulting uncompressed string,
-    71	 * if uncompressed string is too long (>= maxlen), it will be truncated,
-    72	 * given the offset to where the symbol is in the compressed stream.
-    73	 */
-    74	static unsigned int kallsyms_expand_symbol(unsigned int off,
-    75						   char *result, size_t maxlen)
-    76	{
-    77		int len, skipped_first = 0;
-    78		const char *tptr;
-    79		const u8 *data;
-    80	
-    81		if (WARN_ON_ONCE(!result || !maxlen))
-    82			return 0;
-    83	
-    84	#ifdef CONFIG_KALLSYMS_FAST
-    85		{
-    86			struct kallsyms_sym *sym = kallsyms_syms + off;
-    87	
-  > 88			strncpy(result, sym->name, maxlen);
-    89	
-    90			return off + 1;
-    91		}
-    92	#endif
-    93		/* Get the compressed symbol length from the first symbol byte. */
-    94		data = &kallsyms_names[off];
-    95		len = *data;
-    96		data++;
-    97	
-    98		/*
-    99		 * Update the offset to return the offset for the next symbol on
-   100		 * the compressed stream.
-   101		 */
-   102		off += len + 1;
-   103	
-   104		/*
-   105		 * For every byte on the compressed symbol data, copy the table
-   106		 * entry for that byte.
-   107		 */
-   108		while (len) {
-   109			tptr = &kallsyms_token_table[kallsyms_token_index[*data]];
-   110			data++;
-   111			len--;
-   112	
-   113			while (*tptr) {
-   114				if (skipped_first) {
-   115					if (maxlen <= 1)
-   116						goto tail;
-   117					*result = *tptr;
-   118					result++;
-   119					maxlen--;
-   120				} else
-   121					skipped_first = 1;
-   122				tptr++;
-   123			}
-   124		}
-   125	
-   126	tail:
-   127		if (maxlen)
-   128			*result = '\0';
-   129	
-   130		/* Return to offset to the next symbol. */
-   131		return off;
-   132	}
-   133	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Those under lore.kernel.org or lists.linux.dev. Seems linux-mm does
+get redirected to lore: https://lore.kernel.org/linux-mm/ -- It's not
+entirely obvious which are lore managed and which aren't (obviously
+things like kasan-dev@googlegroups.com aren't).

@@ -2,52 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAB454C05D3
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 01:18:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DEA464C05D7
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 01:19:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232550AbiBWASm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 19:18:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54848 "EHLO
+        id S233024AbiBWATU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 19:19:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231362AbiBWASk (ORCPT
+        with ESMTP id S232818AbiBWATT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 19:18:40 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4B064D26D;
-        Tue, 22 Feb 2022 16:18:14 -0800 (PST)
+        Tue, 22 Feb 2022 19:19:19 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C433B4D610;
+        Tue, 22 Feb 2022 16:18:52 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 575CAB81D90;
-        Wed, 23 Feb 2022 00:18:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9F9DC340E8;
-        Wed, 23 Feb 2022 00:18:11 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5F3A761260;
+        Wed, 23 Feb 2022 00:18:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A27BFC340E8;
+        Wed, 23 Feb 2022 00:18:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645575492;
-        bh=RnGSZlD3UXNbxlErLjFyxWBfwOaTBXXu5QN6JgLEYmc=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=L0KBFvdoWv+UuUr5+Y9RQnZgB58m1MR8iXxswBmme4DrVSCVMZRZVlBSCKrrRvY7m
-         Uae4eYxSLlD4e/AgI6AuxWM2+CUZDU+uKoaaXWClK9MlfPHWQQDji+SMid0WlQ1T20
-         jp3BiOjj+kEikOKP1BNN5GvdYaiFIqRRYuvGN1jyBQC4d9vDsIeHximM3IEV+tr+0g
-         UnawS6D2NQ+8j3A+wO4eDD9NeOnaDArM0raBpVyAA0Emw/NOXwafD0zm9YhbEgW6LR
-         bKMqUWYnhP0N+B5iCZ5g8GEqPc46Bc9+DtbwmtIv9RiPMHwBQJXTT4K1B73KAC7XBX
-         PsYj/mqcs1Jvw==
-Date:   Tue, 22 Feb 2022 16:18:10 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Dmitry Safonov <dima@arista.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Dmitry Safonov <0x7f454c46@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>, netdev@vger.kernel.org
-Subject: Re: [PATCH] net/tcp: Merge TCP-MD5 inbound callbacks
-Message-ID: <20220222161810.164f6d07@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <20220222185006.337620-1-dima@arista.com>
-References: <20220222185006.337620-1-dima@arista.com>
+        s=k20201202; t=1645575531;
+        bh=NXaPAr7gqysLvEwXoD5p+AxNR61/szVonKZdFsJ2fSI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=kLLcYCAgKrzMva/spRnrXevdY72OCm5QGpGVev+QDYQwjDwtoJNamqMiUrIyVn3dL
+         2XkM64hpmar83i+U/m56IOxwIFYl7+RNvnZFLnBdUzt/TZGrGGcVOJwjb8uKXmAAs7
+         eycp1USER8xiKjm9MXW8JAMVNITeXEF7tZi6inWLLxjBfQv2WyQAQW+UvlS2+0h5qL
+         iwEvWRWKMDYQ+ybGN36rN37Aj2EcZo8SAFMhAMBa99vpbn09TQdd/IRn55xDNlgfHd
+         Qk0W6chOY4lYswxm68BZ/149kqC1lGPiEOvms5NUslHajrpKAZeepKK/g23IKZdbHQ
+         eL2l6WpcHHsNw==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 87604400FE; Tue, 22 Feb 2022 21:18:49 -0300 (-03)
+Date:   Tue, 22 Feb 2022 21:18:49 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Jiri Olsa <olsajiri@gmail.com>
+Cc:     German Gomez <german.gomez@arm.com>, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>
+Subject: Re: [PATCH] perf script: Fix error when printing 'weight' field
+Message-ID: <YhV9aXx3VhXUkCcT@kernel.org>
+References: <20220221171707.62960-1-german.gomez@arm.com>
+ <YhPh5pHMGeP8Arx6@krava>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YhPh5pHMGeP8Arx6@krava>
+X-Url:  http://acmel.wordpress.com
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -58,14 +62,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 22 Feb 2022 18:50:06 +0000 Dmitry Safonov wrote:
-> The functions do essentially the same work to verify TCP-MD5 sign.
-> Code can be merged into one family-independent function in order to
-> reduce copy'n'paste and generated code.
-> Later with TCP-AO option added, this will allow to create one function
-> that's responsible for segment verification, that will have all the
-> different checks for MD5/AO/non-signed packets, which in turn will help
-> to see checks for all corner-cases in one function, rather than spread
-> around different families and functions.
+Em Mon, Feb 21, 2022 at 08:46:32PM +0100, Jiri Olsa escreveu:
+> On Mon, Feb 21, 2022 at 05:17:06PM +0000, German Gomez wrote:
+> > In SPE traces the 'weight' field can't be printed in perf-script because
+> > the 'dummy:u' event doesn't have the WEIGHT attribute set.
+> > 
+> > Use evsel__do_check_stype(..) to check this field, as it's done with
+> > other fields such as "phys_addr".
+> > 
+> > Before:
+> > 
+> > $ perf record -e arm_spe_0// -- sleep 1
+> > $ perf script -F event,ip,weight
+> > Samples for 'dummy:u' event do not have WEIGHT attribute set. Cannot print 'weight' field.
+> > 
+> > After:
+> > 
+> > $ perf script -F event,ip,weight
+> >    l1d-access:               12 ffffaf629d4cb320
+> >    tlb-access:               12 ffffaf629d4cb320
+> >        memory:               12 ffffaf629d4cb320
+> > 
+> > Fixes: b0fde9c6e291 ("perf arm-spe: Add SPE total latency as PERF_SAMPLE_WEIGHT")
+> > Signed-off-by: German Gomez <german.gomez@arm.com>
+> 
+> Acked-by: Jiri Olsa <jolsa@kernel.org>
 
-Please rebase on top of net-next
+Thanks, applied to perf/urgent.
+
+- Arnaldo
+
+ 
+> thanks,
+> jirka
+> 
+> > ---
+> >  tools/perf/builtin-script.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/tools/perf/builtin-script.c b/tools/perf/builtin-script.c
+> > index 9e032343f..6ce581067 100644
+> > --- a/tools/perf/builtin-script.c
+> > +++ b/tools/perf/builtin-script.c
+> > @@ -463,7 +463,7 @@ static int evsel__check_attr(struct evsel *evsel, struct perf_session *session)
+> >  		return -EINVAL;
+> >  
+> >  	if (PRINT_FIELD(WEIGHT) &&
+> > -	    evsel__check_stype(evsel, PERF_SAMPLE_WEIGHT_TYPE, "WEIGHT", PERF_OUTPUT_WEIGHT))
+> > +	    evsel__do_check_stype(evsel, PERF_SAMPLE_WEIGHT_TYPE, "WEIGHT", PERF_OUTPUT_WEIGHT, allow_user_set))
+> >  		return -EINVAL;
+> >  
+> >  	if (PRINT_FIELD(SYM) &&
+> > -- 
+> > 2.25.1
+> > 
+
+-- 
+
+- Arnaldo

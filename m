@@ -2,112 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49F1E4C0F52
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 10:39:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 14D634C0F58
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 10:40:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239331AbiBWJjv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 04:39:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34622 "EHLO
+        id S239339AbiBWJki (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 04:40:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233156AbiBWJju (ORCPT
+        with ESMTP id S233156AbiBWJkh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 04:39:50 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E5725A5AE;
-        Wed, 23 Feb 2022 01:39:23 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 18568616CA;
-        Wed, 23 Feb 2022 09:39:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B2C2C340E7;
-        Wed, 23 Feb 2022 09:39:21 +0000 (UTC)
-Date:   Wed, 23 Feb 2022 09:39:17 +0000
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Liam Howlett <liam.howlett@oracle.com>
-Cc:     Will Deacon <will@kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: [PATCH] arm64: Change elfcore for_each_mte_vma() to use VMA
- iterator
-Message-ID: <YhYAxb85oDSYJyw0@arm.com>
-References: <20220218014642.lop2ohx4ov6fekyl@revolver>
- <20220218023650.672072-1-Liam.Howlett@oracle.com>
- <YhPUuu+6TPMKjhwk@arm.com>
- <20220222142557.6oykxjz3j7fq4mrn@revolver>
- <20220222162016.GA16436@willie-the-truck>
- <YhUcywqIhmHvX6dG@arm.com>
- <20220222185401.jntcd4g62pamfxvr@revolver>
+        Wed, 23 Feb 2022 04:40:37 -0500
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84A6F5BD02
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 01:40:09 -0800 (PST)
+Received: by mail-io1-f69.google.com with SMTP id r191-20020a6b8fc8000000b0063de0033ee7so13553384iod.3
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 01:40:09 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=Cescbg8/jp8FsTcSy9R5A0Hc7x8UbA/1yigZrf68OGw=;
+        b=XrRPwjtUIKac/NLl+21itQllbUbCCXiPPLoXW2pB91f/xg+B0ZnkiKtxJhYa2x9oMw
+         ooB14NF4wjQZgLXhyGWdJlvDOqogs6mN+grWyB0153zhOp1Go7vucggY1zOQafE/BkRR
+         +7+4hi5fNYj2lgYpoS7hs2aPrwQ4FzFz7J/lqqTpxKhDDZ4uzfPDfGyBa7uQWo9KuUgq
+         Gwj4iYBbIBA8uk+VfdjwmJp9U60Kfd83V/dm5E9opIrCRVePFhEJVA5Zp05PwrPKYzNo
+         husUz5hI12xzHS3co4zkGo7Hqjk3l9qmksLD+QXOUalSxFDkEkCxnUSiphiUC5Wi+8uz
+         fojA==
+X-Gm-Message-State: AOAM531yxGCudkf02qDoiullXkLKW9YKSyaQz23kIXILVvuy0ikqNtlV
+        R/SjDScdDw0zfWhejMo8c2OMBn5xQMd2BvAT5+b0QmZWsicV
+X-Google-Smtp-Source: ABdhPJzNbY0WJ1ddy/IzgNSh3jXyZ7Tb7yBJOPo/bGSEnkHyfjUQwv2ab67suz0C4/jMzrEg1C0jVflIRnlF51oxJbldySM7u0PI
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220222185401.jntcd4g62pamfxvr@revolver>
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6602:185a:b0:641:56ac:32ee with SMTP id
+ d26-20020a056602185a00b0064156ac32eemr6965344ioi.17.1645609208948; Wed, 23
+ Feb 2022 01:40:08 -0800 (PST)
+Date:   Wed, 23 Feb 2022 01:40:08 -0800
+In-Reply-To: <2174944.iZASKD2KPV@leap>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000056adde05d8ac400f@google.com>
+Subject: Re: [syzbot] BUG: sleeping function called from invalid context in smc_pnet_apply_ib
+From:   syzbot <syzbot+4f322a6d84e991c38775@syzkaller.appspotmail.com>
+To:     fmdefrancesco@gmail.com, jgg@ziepe.ca, liangwenpeng@huawei.com,
+        linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org,
+        liweihang@huawei.com, netdev@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com, tonylu@linux.alibaba.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 22, 2022 at 06:54:38PM +0000, Liam Howlett wrote:
-> * Catalin Marinas <catalin.marinas@arm.com> [220222 12:26]:
-> > On Tue, Feb 22, 2022 at 04:20:16PM +0000, Will Deacon wrote:
-> > > On Tue, Feb 22, 2022 at 02:26:03PM +0000, Liam Howlett wrote:
-> > > > The vma iterator uses the maple tree, so this patch would resolve the
-> > > > conflict but both branches are needed.
-> > > 
-> > > I'm not really sure what to do here, then. I think the conflict is nasty
-> > > enough that we should resolve it before the trees reach Linus, but there
-> > > doesn't seem to be a way forward other than one of us merging the other
-> > > branch. I'd like to avoid having MTE coredump support depend on the maple
-> > > tree work.
-> > > 
-> > > Is there some way you could provide a branch which implements
-> > > for_each_vma() using the old vma list, and then the maple tree series
-> > > could switch that over to the maple tree without breaking things?
-> > 
-> > Without a branch, we could apply something like below on top of Liam's
-> > patch and revert it once the maple tree is upstream:
-> > 
-> > diff --git a/arch/arm64/kernel/elfcore.c b/arch/arm64/kernel/elfcore.c
-> > index 930a0bc4cac4..400ec7a902df 100644
-> > --- a/arch/arm64/kernel/elfcore.c
-> > +++ b/arch/arm64/kernel/elfcore.c
-> > @@ -8,6 +8,13 @@
-> >  #include <asm/cpufeature.h>
-> >  #include <asm/mte.h>
-> > 
-> > +#ifndef VMA_ITERATOR
-> > +#define VMA_ITERATOR(name, mm, addr) \
-> > +	struct mm_struct *name = mm
-> > +#define for_each_vma(vmi, vma) \
-> > +	for (vma = vmi->mmap; vma; vma = vma->vm_next)
-> > +#endif
-> > +
-> >  #define for_each_mte_vma(vmi, vma)					\
-> >  	if (system_supports_mte())					\
-> >  		for_each_vma(vmi, vma)					\
-> 
-> Note that the current VMA_ITERATOR takes a new type and not the mm.
+Hello,
 
-Well, in you proposed fix, it does take current->mm.
+syzbot has tested the proposed patch and the reproducer did not trigger any issue:
 
-> Since I am removing the linked list (mm->mmap and vma->vm_next), then
-> the build will fail if this patch and the maple tree branch exist
-> together.  The iterator may also not start at the start of the list (but
-> usually does) and may not run through the entire list; see
-> vma_for_each_range() in the patch set.
+Reported-and-tested-by: syzbot+4f322a6d84e991c38775@syzkaller.appspotmail.com
 
-My hack above is only temporary to allow building the arm64 tree on its
-own (no maple tree branch) and with your patch on top. In -next, when
-merged with the maple tree branch, the VMA_ITERATOR macro is already
-defined and the above hack skipped. We'll revert this hack around -rc1.
+Tested on:
 
-Note that the hack above is only in the arm64 elfcore.c, not a generic
-API solution.
+commit:         5c1ee569 Merge branch 'for-5.17-fixes' of git://git.ke..
+git tree:       upstream
+kernel config:  https://syzkaller.appspot.com/x/.config?x=15187fc11a461d83
+dashboard link: https://syzkaller.appspot.com/bug?extid=4f322a6d84e991c38775
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=15bc3696700000
 
--- 
-Catalin
+Note: testing is done by a robot and is best-effort only.

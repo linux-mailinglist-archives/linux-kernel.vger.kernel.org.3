@@ -2,112 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 150804C1DFE
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 22:52:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 659EE4C1D76
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 22:06:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242431AbiBWVwm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 16:52:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52998 "EHLO
+        id S242114AbiBWVG4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 16:06:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233941AbiBWVwi (ORCPT
+        with ESMTP id S239208AbiBWVGu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 16:52:38 -0500
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.73])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBF533C4B9;
-        Wed, 23 Feb 2022 13:52:07 -0800 (PST)
-Received: from mail-ej1-f51.google.com ([209.85.218.51]) by
- mrelayeu.kundenserver.de (mreue109 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1Mc02T-1nwrnu3KHv-00da4O; Wed, 23 Feb 2022 22:52:05 +0100
-Received: by mail-ej1-f51.google.com with SMTP id r13so249489ejd.5;
-        Wed, 23 Feb 2022 13:52:05 -0800 (PST)
-X-Gm-Message-State: AOAM5308jvEXhpKL/w+dlKOqx/PFZZgd5JfDS6c5Bk8AtLsATnuuPNun
-        FTUsSC+jEyRTsxcmRagkzksfRbiAM3ocICNcygA=
-X-Google-Smtp-Source: ABdhPJxtj8uyicd8SyqQTEpI7vIdv7hPv52/WmZ5AoYWSFitVsWjSUWx5lKV5rVYc5oiMdSbMnSOL/JSvK5tIzHTFXA=
-X-Received: by 2002:a5d:59aa:0:b0:1ed:9f45:c2ff with SMTP id
- p10-20020a5d59aa000000b001ed9f45c2ffmr1035641wrr.192.1645649355189; Wed, 23
- Feb 2022 12:49:15 -0800 (PST)
+        Wed, 23 Feb 2022 16:06:50 -0500
+Received: from ssl.serverraum.org (ssl.serverraum.org [176.9.125.105])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 638834DF79;
+        Wed, 23 Feb 2022 13:06:21 -0800 (PST)
+Received: from mwalle01.kontron.local. (unknown [213.135.10.150])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by ssl.serverraum.org (Postfix) with ESMTPSA id 1B05E22247;
+        Wed, 23 Feb 2022 22:06:19 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        t=1645650379;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=SBkyV3Y37C1PQOYlMNcw1v4s6vUf2MzUko1G+h5pAHs=;
+        b=gckdT97Tc7r0urgZ5KftgN2f0Ex4RaFi5rRBMzXM0NmKAgahjB/z+P8J6+nyiTCmLJGZRX
+        0ZtuIAHT/388SGrl0XFCV5TfuDmZzTUNVq9fWFr27pczWbtnyO4cr41ZQyU/uKamKeF0/P
+        5x0Ff1jduV7l6YKdqZUErntuUwAWSLE=
+From:   Michael Walle <michael@walle.cc>
+To:     Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>
+Cc:     heiko.thiery@gmail.com, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Michael Walle <michael@walle.cc>
+Subject: [PATCH v1 1/2] arm64: dts: imx8mn-evk: use proper names for PMIC outputs
+Date:   Wed, 23 Feb 2022 22:05:58 +0100
+Message-Id: <20220223210559.1999209-1-michael@walle.cc>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-References: <20220217184829.1991035-1-jakobkoschel@gmail.com>
- <20220217184829.1991035-4-jakobkoschel@gmail.com> <CAHk-=wg1RdFQ6OGb_H4ZJoUwEr-gk11QXeQx63n91m0tvVUdZw@mail.gmail.com>
- <6DFD3D91-B82C-469C-8771-860C09BD8623@gmail.com> <CAHk-=wiyCH7xeHcmiFJ-YgXUy2Jaj7pnkdKpcovt8fYbVFW3TA@mail.gmail.com>
- <CAHk-=wgLe-OSLTEHm=V7eRG6Fcr0dpAM1ZRV1a=R_g6pBOr8Bg@mail.gmail.com>
- <CAK8P3a0DOC3s7x380XR_kN8UYQvkRqvE5LkHQfK2-KzwhcYqQQ@mail.gmail.com> <CAHk-=wicJ0VxEmnpb8=TJfkSDytFuf+dvQJj8kFWj0OF2FBZ9w@mail.gmail.com>
-In-Reply-To: <CAHk-=wicJ0VxEmnpb8=TJfkSDytFuf+dvQJj8kFWj0OF2FBZ9w@mail.gmail.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Wed, 23 Feb 2022 21:48:59 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a2b_RtXkhQ2pwqbZ1zz6QtjaWwD4em_MCF_wGXRwZirKA@mail.gmail.com>
-Message-ID: <CAK8P3a2b_RtXkhQ2pwqbZ1zz6QtjaWwD4em_MCF_wGXRwZirKA@mail.gmail.com>
-Subject: Re: [RFC PATCH 03/13] usb: remove the usage of the list iterator
- after the loop
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Jakob <jakobkoschel@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
-        Cristiano Giuffrida <c.giuffrida@vu.nl>,
-        "Bos, H.J." <h.j.bos@vu.nl>, Nathan Chancellor <nathan@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:cjkUysxlJscg26BdLEqvQDwPBkRPWuqIBWReqtQZ15RnMmjfj5A
- FReQE+scpfMJKfK1nSKyO3B+N6OnxYFTXnwyAGB2Eobvu65WBoTlkEx+RaGqyBuqmR2p2vV
- yt/yJUMtHyZBsuwj2WOWK7cq4UvbcFFPdKOLJimz3wd3kC8J5tiqJYItu3+WU41vGpRkQe8
- 4AKDYq3OmeMc1vKbCm/pQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:3MLiFAkrs2E=:9Tf5B1NU3+YtBT74Jx1q64
- +JNlxJdngVHLKPENxJcTq5Wy3AYtzwF4uAUGLkZluOndrX+1cQMcH770BO+fVqcqBO26KxcPT
- wyTqxnko6GWoBQTzIL9OPjmZOQvb+TK9bc4KZOoR4AA+OI3eHfw44TcIeHBxcKH+rg5L6j08Z
- byvTUW/r0foAa9S7xniGGPclGJbRAo9Rt65aRhepIR3u6cX+nBC8EGEwYbULFBSY47bjs8Tu4
- Nsftv/BOYuHaqOg5JZ9lw5GIcPpE/2TJAtJFej3Qo9qrQ/lgPE5/NL9nIK05Mdh2dwRso5NeS
- oS0lMKJlef/2jlC3KpDLdHS1l8Eh5SFjHbih8rO+PPz/bZBNgmgpbLQl4RbWZsrJK8yBgGZVz
- I+/kUp4XoILQjQus/654TzbeXD3gmbAQg7zSp90wnSwAu4IfRFQi2eexMSRXXwLDrBYimTxlf
- CD3P9+peR8lw56EoUky+dIpS65Rk5st8cXXx5toWhkRQsS3kAo1a6xfr5K0Pk2HQWQ3nAdT4A
- PT2cUspSW+Xy6SjqBHqGHhsFsaCqhURKoy+m85RfsYlyk1vsRdxek4MEKeoCvMAoEf0huRxsh
- 4ipSZexpkrm2sa7rSwN1Rp0OQ0UEYleXjlooqO543a0xxEyZNXWcgP+STje3pD8NSplL27It5
- 9t4EEUaO8LNjPNZrEIO0sioyXo/A+nVLBsjPas7XBp/0JEYV5buwvjqWF5TjDZAj50ZoO3krV
- l2YIuoYkD7ntHXD3AmN/5O2kzuQQLQ75/dE17re9G0hm9RC0vpflONqoAyocfXoY+NtFEvsuf
- JkpUxd7y1Nqo6vDBmavUOSrAJdldpeQXFmdSlq6SGH7U61Anp4=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 23, 2022 at 9:43 PM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> On Wed, Feb 23, 2022 at 12:25 PM Arnd Bergmann <arnd@arndb.de> wrote:
-> >
-> > I looked at the gcc documentation for this flag, and it tells me that
-> > it's default-enabled for std=c99 or higher. Turning it on for --std=gnu89
-> > shows the same warning, so at least it doesn't sound like the actual
-> > behavior changed, only the warning output. clang does not warn
-> > for this code at all, regardless of the --std= flag.
->
-> Ok, so we should be able to basically convert '--std=gnu89' into
-> '--std=gnu11 -Wno-shift-negative-value' with no expected change of
-> behavior.
+Use the power signal names as given in the schematics of the reference
+board.
 
-Yes, I think that is correct.
+Signed-off-by: Michael Walle <michael@walle.cc>
+---
+ arch/arm64/boot/dts/freescale/imx8mn-evk.dts | 20 ++++++++++----------
+ 1 file changed, 10 insertions(+), 10 deletions(-)
 
-> Of course, maybe we need to make -Wno-shift-negative-value be
-> conditional on the compiler supporting it in the first place?
+diff --git a/arch/arm64/boot/dts/freescale/imx8mn-evk.dts b/arch/arm64/boot/dts/freescale/imx8mn-evk.dts
+index b4225cfcb6d9..eaa06f49aef5 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mn-evk.dts
++++ b/arch/arm64/boot/dts/freescale/imx8mn-evk.dts
+@@ -41,7 +41,7 @@ pmic: pmic@25 {
+ 
+ 		regulators {
+ 			buck1: BUCK1{
+-				regulator-name = "BUCK1";
++				regulator-name = "VDD_ARM_0V9";
+ 				regulator-min-microvolt = <600000>;
+ 				regulator-max-microvolt = <2187500>;
+ 				regulator-boot-on;
+@@ -50,7 +50,7 @@ buck1: BUCK1{
+ 			};
+ 
+ 			buck2: BUCK2 {
+-				regulator-name = "BUCK2";
++				regulator-name = "VDD_SOC";
+ 				regulator-min-microvolt = <600000>;
+ 				regulator-max-microvolt = <2187500>;
+ 				regulator-boot-on;
+@@ -61,7 +61,7 @@ buck2: BUCK2 {
+ 			};
+ 
+ 			buck4: BUCK4{
+-				regulator-name = "BUCK4";
++				regulator-name = "VDD_3V3";
+ 				regulator-min-microvolt = <600000>;
+ 				regulator-max-microvolt = <3400000>;
+ 				regulator-boot-on;
+@@ -69,7 +69,7 @@ buck4: BUCK4{
+ 			};
+ 
+ 			buck5: BUCK5{
+-				regulator-name = "BUCK5";
++				regulator-name = "VDD_1V8";
+ 				regulator-min-microvolt = <600000>;
+ 				regulator-max-microvolt = <3400000>;
+ 				regulator-boot-on;
+@@ -77,7 +77,7 @@ buck5: BUCK5{
+ 			};
+ 
+ 			buck6: BUCK6 {
+-				regulator-name = "BUCK6";
++				regulator-name = "NVCC_DRAM_1V1";
+ 				regulator-min-microvolt = <600000>;
+ 				regulator-max-microvolt = <3400000>;
+ 				regulator-boot-on;
+@@ -85,7 +85,7 @@ buck6: BUCK6 {
+ 			};
+ 
+ 			ldo1: LDO1 {
+-				regulator-name = "LDO1";
++				regulator-name = "NVCC_SNVS_1V8";
+ 				regulator-min-microvolt = <1600000>;
+ 				regulator-max-microvolt = <3300000>;
+ 				regulator-boot-on;
+@@ -93,7 +93,7 @@ ldo1: LDO1 {
+ 			};
+ 
+ 			ldo2: LDO2 {
+-				regulator-name = "LDO2";
++				regulator-name = "VDD_SNVS_0V8";
+ 				regulator-min-microvolt = <800000>;
+ 				regulator-max-microvolt = <1150000>;
+ 				regulator-boot-on;
+@@ -101,7 +101,7 @@ ldo2: LDO2 {
+ 			};
+ 
+ 			ldo3: LDO3 {
+-				regulator-name = "LDO3";
++				regulator-name = "VDDA_1V8";
+ 				regulator-min-microvolt = <800000>;
+ 				regulator-max-microvolt = <3300000>;
+ 				regulator-boot-on;
+@@ -109,7 +109,7 @@ ldo3: LDO3 {
+ 			};
+ 
+ 			ldo4: LDO4 {
+-				regulator-name = "LDO4";
++				regulator-name = "VDD_PHY_1V2";
+ 				regulator-min-microvolt = <800000>;
+ 				regulator-max-microvolt = <3300000>;
+ 				regulator-boot-on;
+@@ -117,7 +117,7 @@ ldo4: LDO4 {
+ 			};
+ 
+ 			ldo5: LDO5 {
+-				regulator-name = "LDO5";
++				regulator-name = "NVCC_SD2";
+ 				regulator-min-microvolt = <1800000>;
+ 				regulator-max-microvolt = <3300000>;
+ 				regulator-boot-on;
+-- 
+2.30.2
 
-I think they all do. I discussed this with Nathan Chancellor on IRC, to
-see what clang does, and he points out that the warning was made
-conditional on -fwrapv there a while ago:
-
-https://github.com/llvm/llvm-project/commit/59802321785b4b9fc31b10456c62ba3a06d3a631
-
-So the normal behavior on clang is to always warn about it, but since
-we explicitly ask for sane signed integer behavior, it doesn't warn for
-the kernel.
-
-        Arnd

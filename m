@@ -2,178 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C53C34C1B64
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 20:06:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B15444C1B6C
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 20:08:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244130AbiBWTHN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 14:07:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49592 "EHLO
+        id S244139AbiBWTId (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 14:08:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244141AbiBWTHL (ORCPT
+        with ESMTP id S238499AbiBWTIb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 14:07:11 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3E5A21803
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 11:06:42 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id DC50921111;
-        Wed, 23 Feb 2022 19:06:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1645643200; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=GPLZZ9okgxjG91kbEFfA4V5kB1YoiST1htziSbSlLxw=;
-        b=Vnh8DPok1Ac7DvCKwf3WdtKI1Z2WLxuoq+VsVLPz4YAp8bcoEdMIsqcBvp9Lqjkgp4xU/0
-        NHuS0CnIHeY3ycrhswui8wBJnwvvXcgQ1Q/L6gif2F5QhVfDU7JLOoJ5zaPzMPuJQyFbJI
-        LMks4rfU92a8mWVKtmooeiJKeYpd61A=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1645643200;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=GPLZZ9okgxjG91kbEFfA4V5kB1YoiST1htziSbSlLxw=;
-        b=gtsiwiiVYnWhRB/NyzBWdzD0XDIeU9nf19Izu9Mm08JSeEuwDPabVrANdBdyK7I/0klh2i
-        fw1/Xi2zyW6f8LCg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9061D13C98;
-        Wed, 23 Feb 2022 19:06:40 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id y0ViIcCFFmKYRwAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Wed, 23 Feb 2022 19:06:40 +0000
-Message-ID: <f9768b09-90a7-1908-0f5b-6474bbb00208@suse.de>
-Date:   Wed, 23 Feb 2022 20:06:39 +0100
+        Wed, 23 Feb 2022 14:08:31 -0500
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46D133BF8F
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 11:08:03 -0800 (PST)
+Received: by mail-pl1-x62f.google.com with SMTP id l8so19629457pls.7
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 11:08:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=intel-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=s5kpUzxnrVzEuxJL9YdhAPavDhDEx3huwZzW3QhMnqc=;
+        b=oOBuralfQkRqJWEG6w3RE13fM87S4Bdw+VaWFv6W0Tbu+D/QPJMcbmtJv4uAhVSD5q
+         pBuHfW73zvDqJ4Nglp7r8ruPaHFT/vEyOhuapkzxExi1NLkhKjU7uVr5gIopZMBoWWzY
+         g6esTKz5FreNqArsjrHzMTmfLlBifKZdqyAHRqEra5OS35E8dn9j3FXhLL9ZFvlimty9
+         ERaCqlFGR+j8PzpXswl6kgQfEhYY3XtCT4v425MgCKDhoWRCcl+xBnI8ZAU/5Nj1AgSV
+         6k2ExjHuFWfxWhgt6nJK2ZXjCjTGO1XRNV8t7wGz5+dY52NWGX/TA+63KYTmcepcS7N+
+         TdDg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=s5kpUzxnrVzEuxJL9YdhAPavDhDEx3huwZzW3QhMnqc=;
+        b=sE76fn334q88sWmhKtH1H3xMRL3Sy6aKXkWXKgqcr1ljsXujMkH/R6tXk8wQU0xYxH
+         eJW5xy1JCVjUL8/nM/A2fnOiIq/RR10JdKUCNvosj+b46rgDp3JQ5vbnaZKN0mI7uSxs
+         kIxH17JCKTVFRCNCzeUe+yj/+ej12XMngTGAIb+vsiaqMFPmiUjBfBq+4evnweqnArWF
+         RxEl9PPG6rTAfk2mR/Jqm8SF68BXfVbbMLp1yQfvFvN3o6OK2eJkoWuqx4d++euTm2Uq
+         VqtgIU04H9Sv+BuuETdEULHayhFWPWrGxa7C56M1GdBv53i9nxYVY8esgoU/s21zn6s+
+         Rt8Q==
+X-Gm-Message-State: AOAM533UX6zFijRUzAb0Tuo6PbVHWGZpa1OB1TDE3kTGxjWBOtpsN1Ki
+        5FRDDefwImFLpkrHIBnoS1yY48Yd39nvPP5GAsMEeQ==
+X-Google-Smtp-Source: ABdhPJzhtUBaBdesBQ5pwR9+dzHt8CxKBDk+IB3hd3lqfzeO01k3FItoDCHj4NIADGDpXtkD3/zVT/o5qkswbWwGdHI=
+X-Received: by 2002:a17:903:32c1:b0:14f:8ba2:2326 with SMTP id
+ i1-20020a17090332c100b0014f8ba22326mr420585plr.34.1645643282781; Wed, 23 Feb
+ 2022 11:08:02 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH v2] drm/panel: Select DRM_DP_HELPER for DRM_PANEL_EDP
-Content-Language: en-US
-To:     Doug Anderson <dianders@chromium.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, David Airlie <airlied@linux.ie>,
-        Randy Dunlap <rdunlap@infradead.org>,
+References: <20220217163357.276036-1-kjain@linux.ibm.com> <CAPcyv4jwpMbz0woftSfm3EO05pr3ZG9rVMJCkYVsapKYSOn3xw@mail.gmail.com>
+In-Reply-To: <CAPcyv4jwpMbz0woftSfm3EO05pr3ZG9rVMJCkYVsapKYSOn3xw@mail.gmail.com>
+From:   Dan Williams <dan.j.williams@intel.com>
+Date:   Wed, 23 Feb 2022 11:07:52 -0800
+Message-ID: <CAPcyv4hkLA_KJsKO_avTDZCVL2zGhcRNxVc+2P2uR6-5b2uwVA@mail.gmail.com>
+Subject: Re: [PATCH v6 0/4] Add perf interface to expose nvdimm
+To:     Kajol Jain <kjain@linux.ibm.com>
+Cc:     Michael Ellerman <mpe@ellerman.id.au>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Linux NVDIMM <nvdimm@lists.linux.dev>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Linux Kernel Functional Testing <lkft@linaro.org>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Ard Biesheuvel <ardb@kernel.org>
-References: <20220203093922.20754-1-tzimmermann@suse.de>
- <CAMuHMdWykWR4oKahC2GYF5jG4przRQ+MxNNm1BK7o62OhhGYwA@mail.gmail.com>
- <CAMuHMdXcRRgn4EMXn9qonnjTTp7EEfwP4F8FeVpLkQMNvB-6mg@mail.gmail.com>
- <CAD=FV=UbiXx4RBQNFp1htCYsM1YzAgES+mcA6KOJ7ZmydkHnBg@mail.gmail.com>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <CAD=FV=UbiXx4RBQNFp1htCYsM1YzAgES+mcA6KOJ7ZmydkHnBg@mail.gmail.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------lDM0znyJJhUJUE6V7sqi342b"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Peter Zijlstra <peterz@infradead.org>,
+        "Weiny, Ira" <ira.weiny@intel.com>,
+        Vishal L Verma <vishal.l.verma@intel.com>,
+        Santosh Sivaraj <santosh@fossix.org>, maddy@linux.ibm.com,
+        rnsastry@linux.ibm.com,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        atrajeev@linux.vnet.ibm.com, Vaibhav Jain <vaibhav@linux.ibm.com>,
+        Thomas Gleixner <tglx@linutronix.de>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------lDM0znyJJhUJUE6V7sqi342b
-Content-Type: multipart/mixed; boundary="------------3aKaSPBcptHyTGUjP8x0PKWx";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Doug Anderson <dianders@chromium.org>,
- Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: Arnd Bergmann <arnd@arndb.de>, David Airlie <airlied@linux.ie>,
- Randy Dunlap <rdunlap@infradead.org>,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- DRI Development <dri-devel@lists.freedesktop.org>,
- Thierry Reding <thierry.reding@gmail.com>,
- Naresh Kamboju <naresh.kamboju@linaro.org>,
- Linux Kernel Functional Testing <lkft@linaro.org>,
- Sam Ravnborg <sam@ravnborg.org>, Ard Biesheuvel <ardb@kernel.org>
-Message-ID: <f9768b09-90a7-1908-0f5b-6474bbb00208@suse.de>
-Subject: Re: [PATCH v2] drm/panel: Select DRM_DP_HELPER for DRM_PANEL_EDP
-References: <20220203093922.20754-1-tzimmermann@suse.de>
- <CAMuHMdWykWR4oKahC2GYF5jG4przRQ+MxNNm1BK7o62OhhGYwA@mail.gmail.com>
- <CAMuHMdXcRRgn4EMXn9qonnjTTp7EEfwP4F8FeVpLkQMNvB-6mg@mail.gmail.com>
- <CAD=FV=UbiXx4RBQNFp1htCYsM1YzAgES+mcA6KOJ7ZmydkHnBg@mail.gmail.com>
-In-Reply-To: <CAD=FV=UbiXx4RBQNFp1htCYsM1YzAgES+mcA6KOJ7ZmydkHnBg@mail.gmail.com>
+On Fri, Feb 18, 2022 at 10:06 AM Dan Williams <dan.j.williams@intel.com> wrote:
+>
+> On Thu, Feb 17, 2022 at 8:34 AM Kajol Jain <kjain@linux.ibm.com> wrote:
+> >
+> > Patchset adds performance stats reporting support for nvdimm.
+> > Added interface includes support for pmu register/unregister
+> > functions. A structure is added called nvdimm_pmu to be used for
+> > adding arch/platform specific data such as cpumask, nvdimm device
+> > pointer and pmu event functions like event_init/add/read/del.
+> > User could use the standard perf tool to access perf events
+> > exposed via pmu.
+> >
+> > Interface also defines supported event list, config fields for the
+> > event attributes and their corresponding bit values which are exported
+> > via sysfs. Patch 3 exposes IBM pseries platform nmem* device
+> > performance stats using this interface.
+> >
+> > Result from power9 pseries lpar with 2 nvdimm device:
+> >
+> > Ex: List all event by perf list
+> >
+> > command:# perf list nmem
+> >
+> >   nmem0/cache_rh_cnt/                                [Kernel PMU event]
+> >   nmem0/cache_wh_cnt/                                [Kernel PMU event]
+> >   nmem0/cri_res_util/                                [Kernel PMU event]
+> >   nmem0/ctl_res_cnt/                                 [Kernel PMU event]
+> >   nmem0/ctl_res_tm/                                  [Kernel PMU event]
+> >   nmem0/fast_w_cnt/                                  [Kernel PMU event]
+> >   nmem0/host_l_cnt/                                  [Kernel PMU event]
+> >   nmem0/host_l_dur/                                  [Kernel PMU event]
+> >   nmem0/host_s_cnt/                                  [Kernel PMU event]
+> >   nmem0/host_s_dur/                                  [Kernel PMU event]
+> >   nmem0/med_r_cnt/                                   [Kernel PMU event]
+> >   nmem0/med_r_dur/                                   [Kernel PMU event]
+> >   nmem0/med_w_cnt/                                   [Kernel PMU event]
+> >   nmem0/med_w_dur/                                   [Kernel PMU event]
+> >   nmem0/mem_life/                                    [Kernel PMU event]
+> >   nmem0/poweron_secs/                                [Kernel PMU event]
+> >   ...
+> >   nmem1/mem_life/                                    [Kernel PMU event]
+> >   nmem1/poweron_secs/                                [Kernel PMU event]
+> >
+> > Patch1:
+> >         Introduces the nvdimm_pmu structure
+> > Patch2:
+> >         Adds common interface to add arch/platform specific data
+> >         includes nvdimm device pointer, pmu data along with
+> >         pmu event functions. It also defines supported event list
+> >         and adds attribute groups for format, events and cpumask.
+> >         It also adds code for cpu hotplug support.
+> > Patch3:
+> >         Add code in arch/powerpc/platform/pseries/papr_scm.c to expose
+> >         nmem* pmu. It fills in the nvdimm_pmu structure with pmu name,
+> >         capabilities, cpumask and event functions and then registers
+> >         the pmu by adding callbacks to register_nvdimm_pmu.
+> > Patch4:
+> >         Sysfs documentation patch
+> >
+> > Changelog
+> > ---
+> > Resend v5 -> v6
+> > - No logic change, just a rebase to latest upstream and
+> >   tested the patchset.
+> >
+> > - Link to the patchset Resend v5: https://lkml.org/lkml/2021/11/15/3979
+> >
+> > v5 -> Resend v5
+> > - Resend the patchset
+> >
+> > - Link to the patchset v5: https://lkml.org/lkml/2021/9/28/643
+> >
+> > v4 -> v5:
+> > - Remove multiple variables defined in nvdimm_pmu structure include
+> >   name and pmu functions(event_int/add/del/read) as they are just
+> >   used to copy them again in pmu variable. Now we are directly doing
+> >   this step in arch specific code as suggested by Dan Williams.
+> >
+> > - Remove attribute group field from nvdimm pmu structure and
+> >   defined these attribute groups in common interface which
+> >   includes format, event list along with cpumask as suggested by
+> >   Dan Williams.
+> >   Since we added static defination for attrbute groups needed in
+> >   common interface, removes corresponding code from papr.
+> >
+> > - Add nvdimm pmu event list with event codes in the common interface.
+> >
+> > - Remove Acked-by/Reviewed-by/Tested-by tags as code is refactored
+> >   to handle review comments from Dan.
+>
+> I don't think review comments should invalidate the Acked-by tags in
+> this case. Nothing fundamentally changed in the approach, and I would
+> like to have the perf ack before taking this through the nvdimm tree.
+>
+> Otherwise this looks good to me.
+>
+> Peter, might you have a chance to re-Ack this series, or any concerns
+> about me retrieving those Acks from the previous postings?
 
---------------3aKaSPBcptHyTGUjP8x0PKWx
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
-
-SGkNCg0KQW0gMjMuMDIuMjIgdW0gMTc6MTEgc2NocmllYiBEb3VnIEFuZGVyc29uOg0KPiBI
-aSwNCj4gDQo+IE9uIFR1ZSwgRmViIDIyLCAyMDIyIGF0IDE6MzEgQU0gR2VlcnQgVXl0dGVy
-aG9ldmVuIDxnZWVydEBsaW51eC1tNjhrLm9yZz4gd3JvdGU6DQo+Pg0KPj4gT24gVHVlLCBG
-ZWIgOCwgMjAyMiBhdCAxMDozOSBBTSBHZWVydCBVeXR0ZXJob2V2ZW4gPGdlZXJ0QGxpbnV4
-LW02OGsub3JnPiB3cm90ZToNCj4+PiBPbiBNb24sIEZlYiA3LCAyMDIyIGF0IDEyOjMxIFBN
-IFRob21hcyBaaW1tZXJtYW5uIDx0emltbWVybWFubkBzdXNlLmRlPiB3cm90ZToNCj4+Pj4g
-QXMgcmVwb3J0ZWQgaW4gWzFdLCBEUk1fUEFORUxfRURQIGRlcGVuZHMgb24gRFJNX0RQX0hF
-TFBFUi4gU2VsZWN0DQo+Pj4+IHRoZSBvcHRpb24gdG8gZml4IHRoZSBidWlsZCBmYWlsdXJl
-LiBUaGUgZXJyb3IgbWVzc2FnZSBpcyBzaG93bg0KPj4+PiBiZWxvdy4NCj4+Pj4NCj4+Pj4g
-ICAgYXJtLWxpbnV4LWdudWVhYmloZi1sZDogZHJpdmVycy9ncHUvZHJtL3BhbmVsL3BhbmVs
-LWVkcC5vOiBpbiBmdW5jdGlvbg0KPj4+PiAgICAgIGBwYW5lbF9lZHBfcHJvYmUnOiBwYW5l
-bC1lZHAuYzooLnRleHQrMHhiNzQpOiB1bmRlZmluZWQgcmVmZXJlbmNlIHRvDQo+Pj4+ICAg
-ICAgYGRybV9wYW5lbF9kcF9hdXhfYmFja2xpZ2h0Jw0KPj4+PiAgICBtYWtlWzFdOiAqKiog
-Wy9idWlsZHMvbGludXgvTWFrZWZpbGU6MTIyMjogdm1saW51eF0gRXJyb3IgMQ0KPj4+Pg0K
-Pj4+PiBUaGUgaXNzdWUgaGFzIGJlZW4gcmVwb3J0ZWQgYmVmb3JlLCB3aGVuIERpc3BsYXlQ
-b3J0IGhlbHBlcnMgd2VyZQ0KPj4+PiBoaWRkZW4gYmVoaW5kIHRoZSBvcHRpb24gQ09ORklH
-X0RSTV9LTVNfSEVMUEVSLiBbMl0NCj4+Pj4NCj4+Pj4gdjI6DQo+Pj4+ICAgICAgICAgICog
-Zml4IGFuZCBleHBhbmQgY29tbWl0IGRlc2NyaXB0aW9uIChBcm5kKQ0KPj4+Pg0KPj4+PiBT
-aWduZWQtb2ZmLWJ5OiBUaG9tYXMgWmltbWVybWFubiA8dHppbW1lcm1hbm5Ac3VzZS5kZT4N
-Cj4+Pg0KPj4+IFRoYW5rcyBmb3IgeW91ciBwYXRjaCENCj4+Pg0KPj4+IFRoaXMgZml4ZXMg
-dGhlIGJ1aWxkIGVycm9ycyBJJ20gc2VlaW5nLCBzbw0KPj4+IFRlc3RlZC1ieTogR2VlcnQg
-VXl0dGVyaG9ldmVuIDxnZWVydCtyZW5lc2FzQGdsaWRlci5iZT4NCj4+DQo+PiBJcyB0aGlz
-IHBsYW5uZWQgdG8gYmUgcXVldWVkPyBUaGlzIGlzIHN0aWxsIGZhaWxpbmcgaW4gZHJtLW5l
-eHQuDQo+PiBUaGFua3MhDQo+IA0KPiBMb29rcyBsaWtlIHRoaXMgaGFzIGJlZW4gaW4gZHJt
-LW1pc2MtbmV4dCBzaW5jZSBGZWIgNDoNCj4gDQo+IC0tLQ0KPiANCj4gY29tbWl0IGVlYTg5
-ZGZmNGMzOWExMDZmOThkMWNiNWU0ZDYyNmY4YzYzOTA4YjkNCj4gQXV0aG9yOiAgICAgVGhv
-bWFzIFppbW1lcm1hbm4gPHR6aW1tZXJtYW5uQHN1c2UuZGU+DQo+IEF1dGhvckRhdGU6IFRo
-dSBGZWIgMyAxMDozOToyMiAyMDIyICswMTAwDQo+IENvbW1pdDogICAgIFRob21hcyBaaW1t
-ZXJtYW5uIDx0emltbWVybWFubkBzdXNlLmRlPg0KPiBDb21taXREYXRlOiBGcmkgRmViIDQg
-MDk6Mzg6NDcgMjAyMiArMDEwMA0KPiANCj4gICAgICBkcm0vcGFuZWw6IFNlbGVjdCBEUk1f
-RFBfSEVMUEVSIGZvciBEUk1fUEFORUxfRURQDQo+IA0KPiAtLS0NCj4gDQo+IE1heWJlIGl0
-IG5lZWRlZCB0byBsYW5kIGVsc2V3aGVyZSwgdGhvdWdoPw0KDQpTb3JyeSBhYm91dCB0aGUg
-bWVzcy4gV2UgaGFkIHNvbWUgY29uZnVzaW9uIHdpdGggdGhpcyBjeWNsZSdzIA0KZHJtLW1p
-c2MtbmV4dCBwdWxsIHJlcXVlc3QsIHdoaWNoIGdvdCBkZWxheWVkIHNpZ25pZmljYW50bHku
-IFRoZXJlJ3MgDQpiZWVuIGEgUFIgdG9kYXksIHdoaWNoIHNob3VsZCBiZSBtZXJnZWQgaW50
-byBkcm0tbmV4dCBhbnkgdGltZSBub3cuIFRoZSANCnBhdGNoIHdpbGwgYmUgcGFydCBvZiB0
-aGF0Lg0KDQpCZXN0IHJlZ2FyZHMNClRob21hcw0KDQo+IA0KPiAtRG91Zw0KDQotLSANClRo
-b21hcyBaaW1tZXJtYW5uDQpHcmFwaGljcyBEcml2ZXIgRGV2ZWxvcGVyDQpTVVNFIFNvZnR3
-YXJlIFNvbHV0aW9ucyBHZXJtYW55IEdtYkgNCk1heGZlbGRzdHIuIDUsIDkwNDA5IE7DvHJu
-YmVyZywgR2VybWFueQ0KKEhSQiAzNjgwOSwgQUcgTsO8cm5iZXJnKQ0KR2VzY2jDpGZ0c2bD
-vGhyZXI6IEl2byBUb3Rldg0K
-
---------------3aKaSPBcptHyTGUjP8x0PKWx--
-
---------------lDM0znyJJhUJUE6V7sqi342b
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmIWhb8FAwAAAAAACgkQlh/E3EQov+Ab
-Wg/+NkEWjfPU2gua61yok27wa/KL8+Cu1aSdZXooShWEA6ALA9FMOm0RQeOnN6ZlEwZP8DKeOIyy
-LWeh3IDM2HDFPqVacXxVWu87PN2HDdIbLzWRNkIu/WNSjFz+l/aImr4lOrVR4LtXiF7NH9UJProU
-DOgJQpBdRoMK0LuYqW5sZBh2ZREtKaYcQr99Dv+Jmzppyx9NHx7FggbGMHBqwo8OMFpXZKdzHc6/
-hGyn0NCAfeKO/V5zBZndacJHHsrur6IitUXYSbZk+930DB7C+nFssWFUkYwM3OZ0av6dTolpIOAW
-3wTO5UCILtlGIqGT62Tn0xgLP58MX65crHoWJoaAUoS5nxVDx44+ENdOvwR7Db3A9LOjboNxBm/G
-VHN5kmmWT2BmAJEMPo8KM2OybMTpkGVXudH3mipPIOcnpym93Jzn5GFAGD8J+KKuxz6rvCU8DtDO
-DJlGX2OKU2BUtrnlfkCjSbkbixttTLtnqLbmohkVVppf07WCIspBf4YL+VszT46MrSw5VXjlYQZC
-rQqZhB5tqRnuboj4nteMY+rE2WV0Kjds2UVh4Fd3jeFSsvmCS2GdncTFzcTnrfmFIP+RWrKxJDqm
-SdTMmlV5iYi6U/P7YEXpvVR9LDIkFX+UDJz8FLNarJLR9C7A23klAqFDgXXgdakp0MVuM4L0x29O
-Ao0=
-=Jv/L
------END PGP SIGNATURE-----
-
---------------lDM0znyJJhUJUE6V7sqi342b--
+Reached Peter offline and he refreshed his Acked-by.

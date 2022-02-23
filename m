@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A000E4C176C
+	by mail.lfdr.de (Postfix) with ESMTP id 2FB7B4C176B
 	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 16:45:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242328AbiBWPpK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 10:45:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56876 "EHLO
+        id S242343AbiBWPpC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 10:45:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242314AbiBWPoz (ORCPT
+        with ESMTP id S242320AbiBWPox (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 10:44:55 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C3BEBF962;
-        Wed, 23 Feb 2022 07:44:26 -0800 (PST)
+        Wed, 23 Feb 2022 10:44:53 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 780FDBF97B;
+        Wed, 23 Feb 2022 07:44:25 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 27570B820C9;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 12F9B618C9;
         Wed, 23 Feb 2022 15:44:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BAAE5C340F4;
-        Wed, 23 Feb 2022 15:44:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6895DC340F9;
+        Wed, 23 Feb 2022 15:44:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645631063;
-        bh=Qfdv6adW74CN704wOxVv3M2DoN5MT3Ou0BkWhDGVEyA=;
+        s=k20201202; t=1645631064;
+        bh=xQK2D7EJWOGhyjIfmxHYnMZNTbP+P6D6Iyjuk2G5Zdo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dPiA2G1VQMiKzHixzoxIVSA8sDLUzgBQ7SskBO4Sr51RGpDl/lqZNxmO9CvJGe50n
-         z8ABeO1WumlYLrKX/lcRdlIh20cVGMyd4uCnCuOX2SoQyCW2t36GKA9Er/aSAsO53u
-         7yD5rqlSdf3zXxx6V9jsZFSBcmSOMCzs+/5cwFJJH7iF7iRRQmmzUTCA7R3c5HX+c1
-         XTaVLThvgFHIGJRSev/v7o+xGZbeDo7Ne/kBPQIY3NnFjBxklYVzD9tREZh0HBE780
-         WsXgjDUwxWxMZfnPEpF09ZkWrnhIzBgbdHFc/MwMN5V1naLh3xP6RnjoFefySWPSFj
-         fnzIz9HDsHlNQ==
+        b=TvvUIieebi7XJWWWMNRZ02Zh57Wmj5hviQ/5eJFu9p3sne/y3hLPxHdmfnPR0ZBBU
+         DFK47DcbhlOaemVPXZzM0fPeBmwi2ae/JeCnKJAxPWCT6xOKely3GW34tQWBlxNENp
+         g5Y1LoO93fVT1PlotaICJzQ1yDj4UI0DjkdCPjeuzN2Qc1627aPp+Tccpyqq+1d4Ly
+         keFGDWIXvSMiAz/7GE9vixseYYxfRgUzfRYP6Ckwj4+CFwwTLA3ruRpvOmwKNIwFHC
+         3zda8JzXZnWIStnAw5aiE4u7f3e8rJ+3A6B6c1J52KEehxLn0rFS2TqHA9kPMTnw0p
+         yCO4Y+s/sLrVA==
 Received: from sofa.misterjones.org ([185.219.108.64] helo=why.lan)
         by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.94.2)
         (envelope-from <maz@kernel.org>)
-        id 1nMtoT-009wgt-P3; Wed, 23 Feb 2022 15:44:21 +0000
+        id 1nMtoU-009wgt-1L; Wed, 23 Feb 2022 15:44:22 +0000
 From:   Marc Zyngier <maz@kernel.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Linus Walleij <linus.walleij@linaro.org>,
@@ -53,9 +53,9 @@ Cc:     Linus Walleij <linus.walleij@linaro.org>,
         linux-gpio@vger.kernel.org, linux-tegra@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
         linux-arm-msm@vger.kernel.org, kernel-team@android.com
-Subject: [PATCH 2/5] gpio: Expose the gpiochip_irq_re[ql]res helpers
-Date:   Wed, 23 Feb 2022 15:44:02 +0000
-Message-Id: <20220223154405.54912-3-maz@kernel.org>
+Subject: [PATCH 3/5] pinctrl: apple-gpio: Make the irqchip immutable
+Date:   Wed, 23 Feb 2022 15:44:03 +0000
+Message-Id: <20220223154405.54912-4-maz@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220223154405.54912-1-maz@kernel.org>
 References: <20220223154405.54912-1-maz@kernel.org>
@@ -75,59 +75,93 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The GPIO subsystem has a couple of internal helpers to manage
-resources on behalf of the irqchip. Expose them so that GPIO
-drivers can use them directly.
+Prevent gpiolib from messing with the irqchip by advertising
+the irq_chip structure as immutable, making it const, and adding
+the various calls that gpiolib relies upon.
 
 Signed-off-by: Marc Zyngier <maz@kernel.org>
 ---
- drivers/gpio/gpiolib.c      | 6 ++++--
- include/linux/gpio/driver.h | 4 ++++
- 2 files changed, 8 insertions(+), 2 deletions(-)
+ drivers/pinctrl/pinctrl-apple-gpio.c | 30 ++++++++++++++++------------
+ 1 file changed, 17 insertions(+), 13 deletions(-)
 
-diff --git a/drivers/gpio/gpiolib.c b/drivers/gpio/gpiolib.c
-index 515838708b00..408ff8f262d3 100644
---- a/drivers/gpio/gpiolib.c
-+++ b/drivers/gpio/gpiolib.c
-@@ -1423,19 +1423,21 @@ static int gpiochip_to_irq(struct gpio_chip *gc, unsigned int offset)
- 	return irq_create_mapping(domain, offset);
+diff --git a/drivers/pinctrl/pinctrl-apple-gpio.c b/drivers/pinctrl/pinctrl-apple-gpio.c
+index 72f4dd2466e1..0ab5cc10f885 100644
+--- a/drivers/pinctrl/pinctrl-apple-gpio.c
++++ b/drivers/pinctrl/pinctrl-apple-gpio.c
+@@ -36,7 +36,6 @@ struct apple_gpio_pinctrl {
+ 
+ 	struct pinctrl_desc pinctrl_desc;
+ 	struct gpio_chip gpio_chip;
+-	struct irq_chip irq_chip;
+ 	u8 irqgrps[];
+ };
+ 
+@@ -275,17 +274,21 @@ static unsigned int apple_gpio_irq_type(unsigned int type)
+ 
+ static void apple_gpio_irq_mask(struct irq_data *data)
+ {
+-	struct apple_gpio_pinctrl *pctl = gpiochip_get_data(irq_data_get_irq_chip_data(data));
++	struct gpio_chip *gc = irq_data_get_irq_chip_data(data);
++	struct apple_gpio_pinctrl *pctl = gpiochip_get_data(gc);
+ 
+ 	apple_gpio_set_reg(pctl, data->hwirq, REG_GPIOx_MODE,
+ 	                   FIELD_PREP(REG_GPIOx_MODE, REG_GPIOx_IN_IRQ_OFF));
++	gpiochip_disable_irq(gc, data->hwirq);
  }
  
--static int gpiochip_irq_reqres(struct irq_data *d)
-+int gpiochip_irq_reqres(struct irq_data *d)
+ static void apple_gpio_irq_unmask(struct irq_data *data)
  {
- 	struct gpio_chip *gc = irq_data_get_irq_chip_data(d);
+-	struct apple_gpio_pinctrl *pctl = gpiochip_get_data(irq_data_get_irq_chip_data(data));
++	struct gpio_chip *gc = irq_data_get_irq_chip_data(data);
++	struct apple_gpio_pinctrl *pctl = gpiochip_get_data(gc);
+ 	unsigned int irqtype = apple_gpio_irq_type(irqd_get_trigger_type(data));
  
- 	return gpiochip_reqres_irq(gc, d->hwirq);
++	gpiochip_enable_irq(gc, data->hwirq);
+ 	apple_gpio_set_reg(pctl, data->hwirq, REG_GPIOx_MODE,
+ 	                   FIELD_PREP(REG_GPIOx_MODE, irqtype));
  }
-+EXPORT_SYMBOL(gpiochip_irq_reqres);
- 
--static void gpiochip_irq_relres(struct irq_data *d)
-+void gpiochip_irq_relres(struct irq_data *d)
- {
- 	struct gpio_chip *gc = irq_data_get_irq_chip_data(d);
- 
- 	gpiochip_relres_irq(gc, d->hwirq);
+@@ -343,13 +346,16 @@ static void apple_gpio_irq_handler(struct irq_desc *desc)
+ 	chained_irq_exit(chip, desc);
  }
-+EXPORT_SYMBOL(gpiochip_irq_relres);
  
- static void gpiochip_irq_mask(struct irq_data *d)
- {
-diff --git a/include/linux/gpio/driver.h b/include/linux/gpio/driver.h
-index b0728c8ad90c..89291c02854d 100644
---- a/include/linux/gpio/driver.h
-+++ b/include/linux/gpio/driver.h
-@@ -576,6 +576,10 @@ void gpiochip_relres_irq(struct gpio_chip *gc, unsigned int offset);
- void gpiochip_disable_irq(struct gpio_chip *gc, unsigned int offset);
- void gpiochip_enable_irq(struct gpio_chip *gc, unsigned int offset);
+-static struct irq_chip apple_gpio_irqchip = {
+-	.name		= "Apple-GPIO",
+-	.irq_startup	= apple_gpio_irq_startup,
+-	.irq_ack	= apple_gpio_irq_ack,
+-	.irq_mask	= apple_gpio_irq_mask,
+-	.irq_unmask	= apple_gpio_irq_unmask,
+-	.irq_set_type	= apple_gpio_irq_set_type,
++static const struct irq_chip apple_gpio_irqchip = {
++	.name			= "Apple-GPIO",
++	.irq_request_resources	= gpiochip_irq_reqres,
++	.irq_release_resources	= gpiochip_irq_relres,
++	.irq_startup		= apple_gpio_irq_startup,
++	.irq_ack		= apple_gpio_irq_ack,
++	.irq_mask		= apple_gpio_irq_mask,
++	.irq_unmask		= apple_gpio_irq_unmask,
++	.irq_set_type		= apple_gpio_irq_set_type,
++	.flags			= IRQCHIP_IMMUTABLE,
+ };
  
-+/* irq_data versions of the above */
-+int gpiochip_irq_reqres(struct irq_data *data);
-+void gpiochip_irq_relres(struct irq_data *data);
-+
- /* Line status inquiry for drivers */
- bool gpiochip_line_is_open_drain(struct gpio_chip *gc, unsigned int offset);
- bool gpiochip_line_is_open_source(struct gpio_chip *gc, unsigned int offset);
+ /* Probe & register */
+@@ -360,8 +366,6 @@ static int apple_gpio_register(struct apple_gpio_pinctrl *pctl)
+ 	void **irq_data = NULL;
+ 	int ret;
+ 
+-	pctl->irq_chip = apple_gpio_irqchip;
+-
+ 	pctl->gpio_chip.label = dev_name(pctl->dev);
+ 	pctl->gpio_chip.request = gpiochip_generic_request;
+ 	pctl->gpio_chip.free = gpiochip_generic_free;
+@@ -377,7 +381,7 @@ static int apple_gpio_register(struct apple_gpio_pinctrl *pctl)
+ 	if (girq->num_parents) {
+ 		int i;
+ 
+-		girq->chip = &pctl->irq_chip;
++		girq->chip = (struct irq_chip *)&apple_gpio_irqchip;
+ 		girq->parent_handler = apple_gpio_irq_handler;
+ 
+ 		girq->parents = kmalloc_array(girq->num_parents,
 -- 
 2.30.2
 

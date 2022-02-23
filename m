@@ -2,106 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A405F4C1744
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 16:42:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 76C604C1751
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 16:42:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242292AbiBWPm2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 10:42:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54374 "EHLO
+        id S242296AbiBWPnL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 10:43:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241099AbiBWPmR (ORCPT
+        with ESMTP id S242262AbiBWPnI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 10:42:17 -0500
-Received: from new3-smtp.messagingengine.com (new3-smtp.messagingengine.com [66.111.4.229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 363852D1E5;
-        Wed, 23 Feb 2022 07:41:41 -0800 (PST)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 34AD75802FD;
-        Wed, 23 Feb 2022 10:41:38 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute1.internal (MEProxy); Wed, 23 Feb 2022 10:41:38 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; bh=M2/b5MIE6bQJByA3Vh9tC6cYzTZFNeBiNnMth2
-        KLMVo=; b=Bnv7woDYcd7mmSSfipVO5la+dn+WX97gG+qYFku5RwmJ0b+uz29gKk
-        W/2lgSs3Ox46zW5BJNzdu9QnQWAlaLv9ZEUY0uScxAuhSrTdfl0gsZRpbn1AcuYR
-        rp4ogfiwhwIy7fX4XzhoNXVUe1eeXWt2U9LEcNfLrDCarGqOdsOMaBwLKq6lc07C
-        TkJ7jeBpIQyorDeqGZ0InOnN44owKvZhafYZamH9gD/VG9LHBpIY8KrmyNlKXmeU
-        eCiGVRY7pmgpwMCiDx8x4QwOzvl7/1CU5o57TZXUXTmaZH8/duxrLhtRBf3tyn49
-        j2w6NdoCyh5lxb0a9vrXxRjbWQl/WwkQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=M2/b5MIE6bQJByA3V
-        h9tC6cYzTZFNeBiNnMth2KLMVo=; b=QV9Juy7QQSjZuVHHhURF+1JcKbpnwuM2L
-        VBX0qBqM9COq6G8JtlBAGoYKPbuEo+hs+LLmqfg83f1gF0NFFEBeGu+vJf1DmY8O
-        RkOddVQ2IlNLls2Oj3ZkY6djaPU4zSBcDqnY6Z/0iUIHZy49MsCds/ZL33u9ch/v
-        XetHOyJnIKeMMcKumKLPnQssQ+uO+DjUdMMOt4QblQzlekvmXrX7Cdw2zhJBzdDN
-        jc0jXWr9dqAXKhvw3sk/mR4XmLh8trrHmi9ogmq8oIbzZSMIhdSgCAyKh2oBolEm
-        4kYXV2zaSg26RpZYRA1icgL6iyLDAVcbbQrBkYREWdhapRc3V6SVw==
-X-ME-Sender: <xms:sFUWYm-GEEjdbSALW-ne4zr0sLOEzsXQtkNn_Zyd5wc69QchaF-seA>
-    <xme:sFUWYmsTGwCa4aj1bgfQeK6Cx2WlsgGywYi7Yg_ErHCOtJxzNXhtdN_z_Nh5HhqYF
-    OHdd9nQg-pDWF5Imfw>
-X-ME-Received: <xmr:sFUWYsC-_QYnAVMxuCBJ1m-eY9bXN7V78hbuLSoOd0TrLUfjscuc6K4DsF-X7mzly28hBjWUH6uJLxKEMMSh9bEaiPH4okiUoU0G8Q0>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrledtgdejkecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvuffkfhggtggujgesghdtreertddtudenucfhrhhomhepofgrgihimhgv
-    ucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrghtth
-    gvrhhnpeduvdduhfekkeehgffftefflefgffdtheffudffgeevteffheeuiedvvdejvdfg
-    veenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehmrg
-    igihhmvgestggvrhhnohdrthgvtghh
-X-ME-Proxy: <xmx:sFUWYucjTpHs6Qn-MDTcCWWmXKBaJcOi8k7atOJd8k3NlTCjoAZtcQ>
-    <xmx:sFUWYrOXvrls4gJweUQTNaIcB_4eu8l17ekbpWVprS4CJ_ltn8bFIg>
-    <xmx:sFUWYokFXOZhIiRJnnF2QEvDa3gLV_16w0kxGw56zZN4sFSw0cYyug>
-    <xmx:slUWYucAa7gT1-vE7e0qdSDMi9pH5PrgDoV3u88A1vtFcOMsjvpvWg>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 23 Feb 2022 10:41:36 -0500 (EST)
-Date:   Wed, 23 Feb 2022 16:41:34 +0100
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Sui Jingfeng <15330273260@189.cn>
-Cc:     Thomas Zimmermann <tzimmermann@suse.de>,
-        Roland Scheidegger <sroland@vmware.com>,
-        Zack Rusin <zackr@vmware.com>,
-        Christian Gmeiner <christian.gmeiner@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
+        Wed, 23 Feb 2022 10:43:08 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 210D42D1E5;
+        Wed, 23 Feb 2022 07:42:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645630960; x=1677166960;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=e4iUHA2a+l+KhADALNLZscJEFxyySLAdMRx9NxqUlUY=;
+  b=GNHIh5uRR7RcnJ11FeOqgVCXkLbsF+4dd992sq4ECeK+3VqBWb3PS83T
+   eSuZ5Is/xdBVdm/JNA1Cc5AiCPurRdkWlIy9SREcP78D6FHSa/J/hPsbx
+   Gmz0XvvgEy1Wig14Ei9c/nPNDEzdGbjS9B+XYm01GxUmAzKb+o+YdQwxV
+   ZxlgiVMW9JJJKGW5uvtKbeM/g09SZ05sUpNBHCSSSD/XpL6UzuFJLyTBY
+   bbHZL/OCuqPjNt1p7fENqaNCagBGFPfmLP0BtK6mnBNzSB56Z8+idasSS
+   jBPY+8O9ceNE9zpOSDukQGCHvOsxflf2sugfaDHaB1EcWY26Fff38tAvp
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10266"; a="235500200"
+X-IronPort-AV: E=Sophos;i="5.88,391,1635231600"; 
+   d="scan'208";a="235500200"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2022 07:42:39 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,391,1635231600"; 
+   d="scan'208";a="591739627"
+Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 23 Feb 2022 07:42:36 -0800
+Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nMtml-0001ZQ-W6; Wed, 23 Feb 2022 15:42:35 +0000
+Date:   Wed, 23 Feb 2022 23:41:41 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Markuss Broks <markuss.broks@gmail.com>,
+        linux-kernel@vger.kernel.org
+Cc:     kbuild-all@lists.01.org, phone-devel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        Markuss Broks <markuss.broks@gmail.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
         Rob Herring <robh+dt@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
         Krzysztof Kozlowski <krzk@kernel.org>,
-        Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Ilia Mirkin <imirkin@alum.mit.edu>,
-        Qing Zhang <zhangqing@loongson.cn>,
-        suijingfeng <suijingfeng@loongson.cn>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Randy Dunlap <rdunlap@infradead.org>,
-        kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH v10 3/4] drm/lsdc: add drm driver for loongson display
- controller
-Message-ID: <20220223154134.y7slxu3jaje2jtwr@houat>
-References: <20220220145554.117854-1-15330273260@189.cn>
- <20220220145554.117854-4-15330273260@189.cn>
- <20220222082747.66otrkc4zwvhem7w@houat>
- <54ea69d7-2fac-74dc-2ef6-843a666cff85@189.cn>
- <20220223143912.m727fie3vtdkvklo@houat>
- <0d4a75c4-78bb-4aed-0fa8-88e9cc165896@189.cn>
+        Henrik Rydberg <rydberg@bitmath.org>,
+        linux-input@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH v6 2/2] Input: add Imagis touchscreen driver
+Message-ID: <202202232342.Ew209GPR-lkp@intel.com>
+References: <20220222203414.8656-3-markuss.broks@gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="uwizgizeraqcnone"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <0d4a75c4-78bb-4aed-0fa8-88e9cc165896@189.cn>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+In-Reply-To: <20220222203414.8656-3-markuss.broks@gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -109,105 +71,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Markuss,
 
---uwizgizeraqcnone
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I love your patch! Perhaps something to improve:
 
-On Wed, Feb 23, 2022 at 11:14:12PM +0800, Sui Jingfeng wrote:
->=20
-> On 2022/2/23 22:39, Maxime Ripard wrote:
-> > On Tue, Feb 22, 2022 at 10:46:35PM +0800, Sui Jingfeng wrote:
-> > > On 2022/2/22 16:27, Maxime Ripard wrote:
-> > > > > +	if (!of_device_is_available(output)) {
-> > > > > +		of_node_put(output);
-> > > > > +		drm_info(ddev, "connector%d is not available\n", index);
-> > > > > +		return NULL;
-> > > > > +	}
-> > > > > +
-> > > > > +	disp_tims_np =3D of_get_child_by_name(output, "display-timings"=
-);
-> > > > > +	if (disp_tims_np) {
-> > > > > +		lsdc_get_display_timings_from_dtb(output, &lconn->disp_tim);
-> > > > > +		lconn->has_disp_tim =3D true;
-> > > > > +		of_node_put(disp_tims_np);
-> > > > > +		drm_info(ddev, "Found display timings provided by connector%d\=
-n", index);
-> > > > > +	}
-> > > > > +
-> > > > > +	connector_type =3D lsdc_get_connector_type(ddev, output, index);
-> > > > > +
-> > > > > +	if (output) {
-> > > > > +		of_node_put(output);
-> > > > > +		output =3D NULL;
-> > > > > +	}
-> > > > > +
-> > > > > +DT_SKIPED:
-> > > > > +
-> > > > > +	/* Only create the i2c channel if display timing is not provide=
-d */
-> > > > > +	if (!lconn->has_disp_tim) {
-> > > > > +		const struct lsdc_chip_desc * const desc =3D ldev->desc;
-> > > > > +
-> > > > > +		if (desc->have_builtin_i2c)
-> > > > > +			lconn->ddc =3D lsdc_create_i2c_chan(ddev, index);
-> > > > > +		else
-> > > > > +			lconn->ddc =3D lsdc_get_i2c_adapter(ddev, index);
-> > > > This looks weird: the connector bindings have a property to store t=
-he
-> > > > i2c controller connected to the DDC lines, so you should use that
-> > > > instead.
-> > > >=20
-> > > This is not=A0 weird,=A0 ast, mgag200, hibmc do the same thing.
-> > And none of them have DT support.
-> >=20
-> > Maxime
->=20
-> You are wrong, ast driver have dt support. See ast_detect_config_mode() in
-> drm/ast/ast_main.c
->=20
-> static void ast_detect_config_mode(struct drm_device *dev, u32 *scu_rev)
-> {
-> =A0=A0 =A0struct device_node *np =3D dev->dev->of_node;
-> =A0=A0 =A0struct ast_private *ast =3D to_ast_private(dev);
-> =A0=A0 =A0struct pci_dev *pdev =3D to_pci_dev(dev->dev);
-> =A0=A0 =A0uint32_t data, jregd0, jregd1;
->=20
-> =A0=A0 =A0/* Defaults */
-> =A0=A0 =A0ast->config_mode =3D ast_use_defaults;
-> =A0=A0 =A0*scu_rev =3D 0xffffffff;
->=20
-> =A0=A0 =A0/* Check if we have device-tree properties */
-> =A0=A0 =A0if (np && !of_property_read_u32(np, "aspeed,scu-revision-id",
-> =A0=A0 =A0=A0=A0=A0 =A0=A0=A0 =A0=A0=A0 =A0=A0=A0 scu_rev)) {
-> =A0=A0 =A0=A0=A0=A0 /* We do, disable P2A access */
-> =A0=A0 =A0=A0=A0=A0 ast->config_mode =3D ast_use_dt;
-> =A0=A0 =A0=A0=A0=A0 drm_info(dev, "Using device-tree for configuration\n"=
-);
-> =A0=A0 =A0=A0=A0=A0 return;
-> =A0=A0 =A0}
->=20
-> =A0....
->=20
-> }
+[auto build test WARNING on dtor-input/next]
+[also build test WARNING on linux/master robh/for-next linus/master v5.17-rc5 next-20220222]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-It doesn't seem to probe from the DT though. It uses 4 properties, and
-none of them are documented. It's still a widely different case than
-your driver that uses the connector binding, and therefore has access to
-the ddc bus there.
+url:    https://github.com/0day-ci/linux/commits/Markuss-Broks/Add-support-for-Imagis-touchscreens/20220223-043645
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/dtor/input.git next
+config: arm-randconfig-s031-20220223 (https://download.01.org/0day-ci/archive/20220223/202202232342.Ew209GPR-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 11.2.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-dirty
+        # https://github.com/0day-ci/linux/commit/bc77ee5e0d7309edca7d65925c6afa05334b0b01
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Markuss-Broks/Add-support-for-Imagis-touchscreens/20220223-043645
+        git checkout bc77ee5e0d7309edca7d65925c6afa05334b0b01
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm SHELL=/bin/bash drivers/input/touchscreen/
 
-Maxime
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
---uwizgizeraqcnone
-Content-Type: application/pgp-signature; name="signature.asc"
 
------BEGIN PGP SIGNATURE-----
+sparse warnings: (new ones prefixed by >>)
+>> drivers/input/touchscreen/imagis.c:65:35: sparse: sparse: cast to restricted __be32
 
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYhZVrQAKCRDj7w1vZxhR
-xS48AQCiz86aru05sqZwXNd++y8Km72yvxlQbVk5ANA9UCjlYAD+KYiiiZuOLSqM
-9g3/jplVDK9jJSxClRqmlsO5loCq/QI=
-=H2N/
------END PGP SIGNATURE-----
+vim +65 drivers/input/touchscreen/imagis.c
 
---uwizgizeraqcnone--
+    40	
+    41	static int imagis_i2c_read_reg(struct imagis_ts *ts,
+    42				       unsigned int reg, unsigned int *buffer)
+    43	{
+    44		__be32 reg_be = cpu_to_be32(reg);
+    45		struct i2c_msg msg[] = {
+    46			{
+    47				.addr = ts->client->addr,
+    48				.flags = 0,
+    49				.buf = (unsigned char *)&reg_be,
+    50				.len = sizeof(reg_be),
+    51			}, {
+    52				.addr = ts->client->addr,
+    53				.flags = I2C_M_RD,
+    54				.buf = (unsigned char *)buffer,
+    55				.len = sizeof(reg_be),
+    56			},
+    57		};
+    58		int ret, error;
+    59		int retry = IST3038C_I2C_RETRY_COUNT;
+    60	
+    61		/* Retry in case the controller fails to respond */
+    62		do {
+    63			ret = i2c_transfer(ts->client->adapter, msg, ARRAY_SIZE(msg));
+    64			if (ret == ARRAY_SIZE(msg)) {
+  > 65				*buffer = be32_to_cpu(*buffer);
+    66				return 0;
+    67			}
+    68	
+    69			error = ret < 0 ? ret : -EIO;
+    70			dev_err(&ts->client->dev,
+    71				"%s - i2c_transfer failed: %d (%d)\n",
+    72				__func__, error, ret);
+    73		} while (--retry);
+    74	
+    75		return error;
+    76	}
+    77	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

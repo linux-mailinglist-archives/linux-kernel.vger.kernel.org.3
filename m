@@ -2,71 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A91734C1DE3
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 22:43:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FBF94C1DE5
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 22:44:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242985AbiBWVoI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 16:44:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43042 "EHLO
+        id S240938AbiBWVpG convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 23 Feb 2022 16:45:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237684AbiBWVoG (ORCPT
+        with ESMTP id S236610AbiBWVpF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 16:44:06 -0500
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B34B35240
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 13:43:38 -0800 (PST)
-Received: by mail-ej1-x62c.google.com with SMTP id gb39so249176ejc.1
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 13:43:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=2bJacL1gK1myHV6cmtvqCkNpKIOqEyVm+DidPJT3PKU=;
-        b=sF8l6ITl0deyEMbxKkVIBrcWScHYUlwGQ8IQ5KmZ0HCOlbjdfOy9WsrDyQj6LWGhcv
-         XHvcMFnlKmcsJSmgsY1rmpKshkAg8cYruw0wsuugbnkkzHD7MgPdOC6tAdEgHg45WR+3
-         m2k4uZAbXdat+d3aXBzZTuFw6/XegOEvHgQR0tzcTRKAFhVFLNB2IjLo9pHyoUtVqGMB
-         UOAT9gfzUxBjmOblb6206DPGuu+3UnRppOf3g1ywhHao8I/RF1TKAzOGE12ktriKt6mU
-         Ml+BO4wJnQjK5FTt9k1MqxRe7WHHjEMoa10RhXV7MpH16ah7JM3J00tfLRBaLWVSYivY
-         JAIA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=2bJacL1gK1myHV6cmtvqCkNpKIOqEyVm+DidPJT3PKU=;
-        b=aEyFKg1RPwVkucm5bUYa1u3Tdz0Ive24yUWEk9qrds/Y5KXU5UDo5YAX3xAangqPXe
-         UXIOCnVYqBm5CYhSupMQS+4MFZQQkwvrKysejFUslk8rF0wT2qhdX2p5VRygL4oWcQMn
-         mbThKN+Bp6fk0gj0CzMmyb8gAF7y5XjYQk9oaM52MWnuDBq3D+DoHnUH3ThROleGrBPx
-         7BoqGKV4HPNsjnqyjRRUJ9Nhx4/hjrOumntyB4pW5CB8nibnVjzKO1MvjS8NpE3xDkrM
-         EqaNVpbsloq9AgYEdhDHrfBDzvWXbE068acFPnvbZXXImKYjE306IaMQE5vHv88XKwyJ
-         BD/Q==
-X-Gm-Message-State: AOAM533+o9h66RMC8anSV145XIvO/XDZGUjL23hBv9tedF7drXOPl1kQ
-        vSKJrV91/ue/kJwlInm1EOtuZcf0mnTVbKEEKyKY
-X-Google-Smtp-Source: ABdhPJwBa5BiAlhVuYVNXrJfYpf/d2rqSaNKp6tkpVo7n2CjOE9eD8xGwRxxfeJ3qiugJDqV0tr235dYcrvqaLu+QZo=
-X-Received: by 2002:a17:906:6b8f:b0:6cd:7984:26fc with SMTP id
- l15-20020a1709066b8f00b006cd798426fcmr1203566ejr.701.1645652616571; Wed, 23
- Feb 2022 13:43:36 -0800 (PST)
+        Wed, 23 Feb 2022 16:45:05 -0500
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 20E8E3E5FC
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 13:44:36 -0800 (PST)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-27-hCb7lGpjNMCFd8pZEvh5ow-1; Wed, 23 Feb 2022 21:44:34 +0000
+X-MC-Unique: hCb7lGpjNMCFd8pZEvh5ow-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.28; Wed, 23 Feb 2022 21:44:32 +0000
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.028; Wed, 23 Feb 2022 21:44:32 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Andy Shevchenko' <andriy.shevchenko@linux.intel.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+CC:     Mike Marciniszyn <mike.marciniszyn@cornelisnetworks.com>,
+        "Dennis Dalessandro" <dennis.dalessandro@cornelisnetworks.com>
+Subject: RE: [PATCH v1 1/1] IB/hfi1: Don't cast parameter in bit operations
+Thread-Topic: [PATCH v1 1/1] IB/hfi1: Don't cast parameter in bit operations
+Thread-Index: AQHYKOavPScLVMZqEkOT//Q3noWC2qyhqG0w
+Date:   Wed, 23 Feb 2022 21:44:32 +0000
+Message-ID: <e39730af26cc4a4d944fa3205fa17b3c@AcuMS.aculab.com>
+References: <20220223185353.51370-1-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20220223185353.51370-1-andriy.shevchenko@linux.intel.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-References: <20220221131533.74238-1-richard_c_haines@btinternet.com>
- <CAHC9VhQnRQFrM-mTzUQ3UsyVp2JYw1wUh=7yrdjH7-QmHKidAg@mail.gmail.com>
- <20396305e71619dbee4fa3c612925b57f4bb0a4b.camel@btinternet.com>
- <CAFqZXNuf5J35Jb3nmQ6YRrc6C2f5rk-30U0rB4wTMd-+SBQhEQ@mail.gmail.com>
- <2b45951fceea5f535550f8ab3f3d25c3ff12a8c5.camel@btinternet.com> <CAHC9VhSDavBRxWEp2frY_dkSaxSBHfiCZ1zF2YNNoq6+-+GTjA@mail.gmail.com>
-In-Reply-To: <CAHC9VhSDavBRxWEp2frY_dkSaxSBHfiCZ1zF2YNNoq6+-+GTjA@mail.gmail.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Wed, 23 Feb 2022 16:43:25 -0500
-Message-ID: <CAHC9VhQ6kVroFZri+=DTewcecZASsH9VGZKi_zY4MzbbSmkEng@mail.gmail.com>
-Subject: Re: [PATCH V2] security/selinux: Always allow FIOCLEX and FIONCLEX
-To:     Richard Haines <richard_c_haines@btinternet.com>
-Cc:     Ondrej Mosnacek <omosnace@redhat.com>,
-        Stephen Smalley <stephen.smalley.work@gmail.com>,
-        Eric Paris <eparis@parisplace.org>, demiobenour@gmail.com,
-        SElinux list <selinux@vger.kernel.org>,
-        Linux kernel mailing list <linux-kernel@vger.kernel.org>,
-        selinux-refpolicy@vger.kernel.org,
-        Jeff Vander Stoep <jeffv@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,75 +62,95 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 23, 2022 at 4:36 PM Paul Moore <paul@paul-moore.com> wrote:
-> On Wed, Feb 23, 2022 at 7:43 AM Richard Haines
-> <richard_c_haines@btinternet.com> wrote:
-> > On Wed, 2022-02-23 at 13:12 +0100, Ondrej Mosnacek wrote:
-> > > On Wed, Feb 23, 2022 at 12:58 PM Richard Haines
-> > > <richard_c_haines@btinternet.com> wrote:
-> > > > On Tue, 2022-02-22 at 18:28 -0500, Paul Moore wrote:
-> > > > > On Mon, Feb 21, 2022 at 8:15 AM Richard Haines
-> > > > > <richard_c_haines@btinternet.com> wrote:
-> > > > > >
-> > > > > > These ioctls are equivalent to fcntl(fd, F_SETFD, flags), which
-> > > > > > SELinux
-> > > > > > always allows too.  Furthermore, a failed FIOCLEX could result
-> > > > > > in a
-> > > > > > file
-> > > > > > descriptor being leaked to a process that should not have
-> > > > > > access to
-> > > > > > it.
-> > > > > >
-> > > > > > As this patch removes access controls, a policy capability
-> > > > > > needs to
-> > > > > > be
-> > > > > > enabled in policy to always allow these ioctls.
-> > > > > >
-> > > > > > Based-on-patch-by: Demi Marie Obenour <demiobenour@gmail.com>
-> > > > > > Signed-off-by: Richard Haines <richard_c_haines@btinternet.com>
-> > > > > > ---
-> > > > > > V2 Change: Control via a policy capability. See this thread for
-> > > > > > discussion:
-> > > > > > https://lore.kernel.org/selinux/CAHC9VhQEPxYP_KU56gAGNHKQaxucY8gSsHiUB42PVgADBAccRQ@mail.gmail.com/T/#t
-> > > > > >
-> > > > > > With this patch and the polcap enabled, the selinux-testsuite
-> > > > > > will
-> > > > > > fail:
-> > > > > > ioctl/test at line 47 - Will need a fix.
-> > > > > >
-> > > > > >  security/selinux/hooks.c                   | 7 +++++++
-> > > > > >  security/selinux/include/policycap.h       | 1 +
-> > > > > >  security/selinux/include/policycap_names.h | 3 ++-
-> > > > > >  security/selinux/include/security.h        | 7 +++++++
-> > > > > >  4 files changed, 17 insertions(+), 1 deletion(-)
-> > > > >
-> > > > > Thanks Richard for putting together the v2 of this patch.
-> > > > >
-> > > > > As far as the test is concerned, it seems like the quick-n-dirty
-> > > > > fix
-> > > > > is to simply remove the ioctl(FIOCLEX) test in test_noioctl.c; is
-> > > > > everyone okay with that?  At least that is what I'm going to do
-> > > > > with
-> > > > > my local copy that I use to validate the kernel-secnext builds
-> > > > > unless
-> > > > > someone has a better patch :)
-> > > >
-> > > > To fix this I was planning to submit a patch that would change the
-> > > > ioctl(FIOCLEX) tests to ioctl(FS_IOC_GETFSLABEL) as that would
-> > > > continue
-> > > > to test the xperms.
-> > >
-> > > That one seems to be implemented only by some filesystems. Is there
-> > > any more generic one we could use?
-> >
-> > What about  FS_IOC_GETFLAGS
->
-> Unless I'm mistaken, FIGETBSZ should be largely fs independent.
+From: Andy Shevchenko
+> Sent: 23 February 2022 18:54
+> 
+> While in this particular case it would not be a (critical) issue,
+> the pattern itself is bad and error prone in case somebody blindly
+> copies to their code.
 
-Bah, nevermind, FIGETBSZ ends up in a FILE__GETATTR check.
-FS_IOC_GETFLAGS has the same problem.
+It is horribly wrong on BE systems.
 
-How about FIOQSIZE?
+> Don't cast parameter to unsigned long pointer in the bit operations.
+> Instead copy to a local variable on stack of a proper type and use.
+> 
+> Fixes: 7724105686e7 ("IB/hfi1: add driver files")
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+>  drivers/infiniband/hw/hfi1/chip.c | 29 ++++++++++++++---------------
+>  1 file changed, 14 insertions(+), 15 deletions(-)
+> 
+> diff --git a/drivers/infiniband/hw/hfi1/chip.c b/drivers/infiniband/hw/hfi1/chip.c
+> index f1245c94ae26..100274b926d3 100644
+> --- a/drivers/infiniband/hw/hfi1/chip.c
+> +++ b/drivers/infiniband/hw/hfi1/chip.c
+> @@ -8286,34 +8286,33 @@ static void is_interrupt(struct hfi1_devdata *dd, unsigned int source)
+>  irqreturn_t general_interrupt(int irq, void *data)
+>  {
+>  	struct hfi1_devdata *dd = data;
+> -	u64 regs[CCE_NUM_INT_CSRS];
+> +	DECLARE_BITMAP(pending, CCE_NUM_INT_CSRS * 64);
+> +	u64 value;
+>  	u32 bit;
+>  	int i;
+> -	irqreturn_t handled = IRQ_NONE;
+> 
+>  	this_cpu_inc(*dd->int_counter);
+> 
+>  	/* phase 1: scan and clear all handled interrupts */
+>  	for (i = 0; i < CCE_NUM_INT_CSRS; i++) {
+> -		if (dd->gi_mask[i] == 0) {
+> -			regs[i] = 0;	/* used later */
+> -			continue;
+> -		}
+> -		regs[i] = read_csr(dd, CCE_INT_STATUS + (8 * i)) &
+> -				dd->gi_mask[i];
+> +		if (dd->gi_mask[i] == 0)
+> +			value = 0;	/* used later */
+> +		else
+> +			value = read_csr(dd, CCE_INT_STATUS + (8 * i)) & dd->gi_mask[i];
+> +
+> +		/* save for further use */
+> +		bitmap_from_u64(&pending[BITS_TO_LONGS(i * 64)], value);
+> +
+>  		/* only clear if anything is set */
+> -		if (regs[i])
+> -			write_csr(dd, CCE_INT_CLEAR + (8 * i), regs[i]);
+> +		if (value)
+> +			write_csr(dd, CCE_INT_CLEAR + (8 * i), value);
+>  	}
 
--- 
-paul-moore.com
+I think I'd leave all that alone.
+
+>  	/* phase 2: call the appropriate handler */
+> -	for_each_set_bit(bit, (unsigned long *)&regs[0],
+> -			 CCE_NUM_INT_CSRS * 64) {
+> +	for_each_set_bit(bit, pending, CCE_NUM_INT_CSRS * 64)
+
+And do something else for that loop instead.
+
+>  		is_interrupt(dd, bit);
+> -		handled = IRQ_HANDLED;
+> -	}
+> 
+> -	return handled;
+> +	return IRQ_RETVAL(!bitmap_empty(pending, CCE_NUM_INT_CSRS * 64));
+
+You really don't want to scan the bitmap again.
+
+Actually, of the face of it, you could merge the two loops.
+Provided you clear the status bit before calling the relevant
+handler I expect it will all work.
+
+	David
+
+>  }
+> 
+>  irqreturn_t sdma_interrupt(int irq, void *data)
+> --
+> 2.34.1
+
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
+

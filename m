@@ -2,111 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D974C4C108F
+	by mail.lfdr.de (Postfix) with ESMTP id 4A83E4C108D
 	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 11:43:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239696AbiBWKoS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 05:44:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54878 "EHLO
+        id S239686AbiBWKoN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 05:44:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239598AbiBWKoP (ORCPT
+        with ESMTP id S239665AbiBWKoL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 05:44:15 -0500
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50AC058E7D
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 02:43:48 -0800 (PST)
-Received: by mail-pg1-x52e.google.com with SMTP id 75so19537536pgb.4
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 02:43:48 -0800 (PST)
+        Wed, 23 Feb 2022 05:44:11 -0500
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86F0B59382
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 02:43:44 -0800 (PST)
+Received: by mail-pg1-x52d.google.com with SMTP id w37so13150186pga.7
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 02:43:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=izF6/BOlFRf0GfvXEkyLgXWuNg7Bc9Mpe7Dcz3gCT68=;
-        b=chEEFmEPoDo1VPyqjA70d68X5C0NptFBYwl6Fv98rSsbuKhE52Mm+kdu7Y0K1UC9s/
-         gWvQYWdgPqCLZ3Y9s9DYNIq7MB5k0G+LHybr0m/C66JhLpYnLIz7WN3PLXZzaGVTzBBu
-         x15MYb5DoaJ+qKOCionM/Eui/pQVJwfiAEs5dN43wwvz7q98oYNbeQecYKUqECKepIYc
-         f/KzPBSLD7bw8oJmh7/Xtu6Wnof8hjcjnmmjvw2woSk11pTbR50yfBT/HJH6H5lSfFCa
-         05a/mcUYQjJLNlki0D9QPXdX/hcGm0jKahKEiay9QhyYQkyUomG7wS21+M7kgJZZJYBF
-         VJXA==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=IGvEMdAq6uGqNUosozT28Sx13oRnKbJJg2Bmggp0Iuo=;
+        b=dV8JCSijwVhoYmZgiZfy7ZhYRdSIfXJgJcGvazWV6mhaFYD3HUb0P2eP5FY1W88rbV
+         YwELB4ykBt892tKyw7Haazj+0Fh8B0S7oElI6ltvobH/80TMooJrwPhis0vUPBQQsIK0
+         KKXOatqA+iYZDkLc7/uuSfDqLfowpqPxNtvlZDIRM3VpubVbM5FXUXcNAS8l3unDkdua
+         Mpuymys0M2ls/cufLrKEzjBQhIay/Cv0zfeYH2YEyHVkklYw3FOx5xcsKRfTDGrJRtJj
+         ATIH9PSMd286NR6BMquc5rXW9JyCpUksvbl6xw12j6+XwnNOIF8tj9PRdiY3gfnupd3U
+         u/tA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=izF6/BOlFRf0GfvXEkyLgXWuNg7Bc9Mpe7Dcz3gCT68=;
-        b=Q/inwAJaeUwJK+WYifXfw4pTV12yCHthobxdIxn63xKhMoBWAycbFSh92WS31wrs9Y
-         jQ9Y0PYllrKk5LBuPx796oUvv1Yx3Ao3NrtALxYrJ0ec4M9vMQhSlDvlLdt4zJP5PlA+
-         r1xa3i7bvVhj6HISKFC5gfWr+S0LM8kVt7TAojfnNFqd0mfi01dB9zZwGnIcANmP09Jn
-         1csFpE+Pjd4px8rTeFOR5niFLwstEryjjeP7hTiGk604KTSNSOn5u55Oht/CAA+ohftJ
-         VTNAthulILJAmJXqBM3KnVYuQwuNpqkIxqAdi9aRjb+l1ru54PO0ZC6LQavg43wIwWsV
-         A1FA==
-X-Gm-Message-State: AOAM533cfgM4bA6ip9q46A1vKbIOijajUgPrmXGRd2wUfOY3a+SU2aPI
-        mBnhA3a8nB0VA8vc1k45nfo=
-X-Google-Smtp-Source: ABdhPJysu9zb0UfI2rxfNbgv89NTLiU+G0srjigNHQKvLWHK3KsehgF7WzK+S2uETXCc1AcZNxngbA==
-X-Received: by 2002:a63:e604:0:b0:373:8aca:846e with SMTP id g4-20020a63e604000000b003738aca846emr23003518pgh.406.1645613027806;
-        Wed, 23 Feb 2022 02:43:47 -0800 (PST)
-Received: from ?IPV6:2404:f801:0:5:8000::754? ([2404:f801:9000:1a:efea::754])
-        by smtp.gmail.com with ESMTPSA id ms7sm2494784pjb.56.2022.02.23.02.43.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 23 Feb 2022 02:43:47 -0800 (PST)
-Message-ID: <bcdbd534-a077-3bb3-3d37-c9eb2a048854@gmail.com>
-Date:   Wed, 23 Feb 2022 18:43:40 +0800
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=IGvEMdAq6uGqNUosozT28Sx13oRnKbJJg2Bmggp0Iuo=;
+        b=GJ8oS0SPvFkIAl5mXWIW5XXHxn+0w9vBf4Bz6vCaHPumTcxQraRzmbWo8RFmH7kUD0
+         JW3bcnOVYLBiclZmQ3BOYaSKet1Bp4fJ8zo5DvybCrxH7uwuQoGMxGg/5YDYRMvkGTyk
+         5Q8d0QG+KCqWAek+4YpY6dIn/GYQLvbzeWnPa32uD5TojWJI8NduwjFvi1Vn8LBJmqB3
+         kmQkxRn3BVBdnOm4o+0lF8cgkDU/V+w2QSVb4/TnuNa3S9g6D7LSzke/EygpaIW7F/zd
+         aC+3KxfQlpFkwpxWrXp7nK8jA737mHWwEsa9FLJldHoPbujRspHgoi9II2QoL4sxRI+z
+         bkhw==
+X-Gm-Message-State: AOAM5323RUAgHt/5MWGBqE57N5T1o2t+2sVJX9YR7ZijzuTpPPvn7FjH
+        EW04iiWN9yoPtng69Tx4ycL0xw==
+X-Google-Smtp-Source: ABdhPJxHHjKXBblGbpfaAfawIIH4wQmKfS6nuv2kwLRgYq2us+KUr8obIecYnIMOORQLllDgIMeEow==
+X-Received: by 2002:a63:4665:0:b0:374:7305:dab4 with SMTP id v37-20020a634665000000b003747305dab4mr6615300pgk.256.1645613024120;
+        Wed, 23 Feb 2022 02:43:44 -0800 (PST)
+Received: from localhost ([223.184.83.228])
+        by smtp.gmail.com with ESMTPSA id f16sm21408665pfe.52.2022.02.23.02.43.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Feb 2022 02:43:43 -0800 (PST)
+Date:   Wed, 23 Feb 2022 16:13:41 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     Lukasz Luba <lukasz.luba@arm.com>, linux-kernel@vger.kernel.org,
+        dietmar.eggemann@arm.com, rafael@kernel.org, nm@ti.com,
+        sboyd@kernel.org, mka@chromium.org, dianders@chromium.org,
+        robh+dt@kernel.org, devicetree@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH v2 0/2] Introduce 'advanced' Energy Model in DT
+Message-ID: <20220223104341.jh5hjcv6ugaexgoa@vireshk-i7>
+References: <20220222140746.12293-1-lukasz.luba@arm.com>
+ <467a7de4-df84-8e9e-a26a-80449ca55950@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [PATCH 1/4] x86/hyperv: Add missing ARCH_HAS_CC_PLATFORM
- dependency
-Content-Language: en-US
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Wei Liu <wei.liu@kernel.org>, tglx@linutronix.de,
-        mingo@redhat.com, dave.hansen@intel.com, luto@kernel.org,
-        peterz@infradead.org, sathyanarayanan.kuppuswamy@linux.intel.com,
-        aarcange@redhat.com, ak@linux.intel.com, dan.j.williams@intel.com,
-        david@redhat.com, hpa@zytor.com, jmattson@google.com,
-        seanjc@google.com, thomas.lendacky@amd.com, brijesh.singh@amd.com,
-        x86@kernel.org, linux-kernel@vger.kernel.org,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Dexuan Cui <decui@microsoft.com>,
-        Tianyu Lan <Tianyu.Lan@microsoft.com>
-References: <20220222185740.26228-1-kirill.shutemov@linux.intel.com>
- <20220222185740.26228-2-kirill.shutemov@linux.intel.com>
- <YhVCoveTwsDZXE5G@zn.tnic> <4769a3c0-449b-184a-5c61-a0e155f9c5b4@gmail.com>
- <YhYPPHKZFsGzaI2U@zn.tnic>
-From:   Tianyu Lan <ltykernel@gmail.com>
-In-Reply-To: <YhYPPHKZFsGzaI2U@zn.tnic>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <467a7de4-df84-8e9e-a26a-80449ca55950@linaro.org>
+User-Agent: NeoMutt/20180716-391-311a52
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 23-02-22, 10:52, Daniel Lezcano wrote:
+> why not extend the energy model to any kind of devices?
 
+FWIW, the OPP core supports a wide range of devices now, not just CPUs.
 
-On 2/23/2022 6:41 PM, Borislav Petkov wrote:
-> On Wed, Feb 23, 2022 at 03:04:41PM +0800, Tianyu Lan wrote:
->>        Current Hyper-V Isolation VM requires AMD_MEM_ENCRYPT option which
-> 
-> Where is that isolation VM option? Out of tree?
-> 
-> Because
-> 
-> $ git grep AMD_MEM_ENCRYPT | grep Kconfig
-> arch/x86/Kconfig:1540:config AMD_MEM_ENCRYPT
-> arch/x86/Kconfig:1553:config AMD_MEM_ENCRYPT_ACTIVE_BY_DEFAULT
-> arch/x86/Kconfig:1555:  depends on AMD_MEM_ENCRYPT
-> 
-> and those ain't it.
-
-Hyper-V code check cpuid during runtime and there is no Hyper-V
-isolation VM option.
-
-
+-- 
+viresh

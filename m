@@ -2,51 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E54C4C1AF4
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 19:32:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 790B74C1AFC
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 19:33:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243915AbiBWSc4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 13:32:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38614 "EHLO
+        id S243938AbiBWSdf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 13:33:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243936AbiBWScd (ORCPT
+        with ESMTP id S243922AbiBWSdc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 13:32:33 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDF79BC36;
-        Wed, 23 Feb 2022 10:32:01 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8C635B8212D;
-        Wed, 23 Feb 2022 18:32:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E49CC340E7;
-        Wed, 23 Feb 2022 18:31:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645641119;
-        bh=AkDY5SFZ//EjjzonkJWDtmO5oUw7EK4mfwf5idhETV4=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=rI8es7ID4IB366nvV/gM1u66kvmBnvSnp4QAzayAkT3VHBnUbYrVDFb2UGXUnRLPo
-         6vNnIBGyYYKQ5qOZseAjxqX5SvSVehoEYSqu4KbzLYFStIACex/PczjatZKLMQRq3O
-         kPWvgI8QHfUo+BK35JPNidrRygOy54DwJFELi3Dol+U7suyeTtljArP7g3Dy6ajOij
-         +eNVkQAAiLV14st+QPFl7dJUkH1K/gAQ4xY7SId/XRPMwUl26Nb7KqtBpi3L58zcub
-         ONtz/OHx9YkURuPD5CORCe745V2Rx60IfuNmEvz/dql9xAc32+4yHlEnLcT1AczoXP
-         L0qGU1LOl2NiQ==
-Date:   Wed, 23 Feb 2022 12:31:57 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Richard Zhu <hongxing.zhu@nxp.com>
-Cc:     l.stach@pengutronix.de, bhelgaas@google.com,
-        lorenzo.pieralisi@arm.com, linux-pci@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kernel@pengutronix.de, linux-imx@nxp.com
-Subject: Re: [PATCH] PCI: imx6: Override the CLKREQ low in the initialization
-Message-ID: <20220223183157.GA142509@bhelgaas>
+        Wed, 23 Feb 2022 13:33:32 -0500
+Received: from vps-vb.mhejs.net (vps-vb.mhejs.net [37.28.154.113])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5F0F123;
+        Wed, 23 Feb 2022 10:33:02 -0800 (PST)
+Received: from MUA
+        by vps-vb.mhejs.net with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.94.2)
+        (envelope-from <mail@maciej.szmigiero.name>)
+        id 1nMwRP-0003AV-QA; Wed, 23 Feb 2022 19:32:43 +0100
+Message-ID: <7822c00f-5a2d-b6a2-2f81-cf3330801ad3@maciej.szmigiero.name>
+Date:   Wed, 23 Feb 2022 19:32:37 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1645605513-7731-1-git-send-email-hongxing.zhu@nxp.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Content-Language: en-US
+To:     Chao Peng <chao.p.peng@linux.intel.com>
+Cc:     Yu Zhang <yu.c.zhang@linux.intel.com>,
+        Paolo Bonzini <pbonzini@redhat.com>, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jonathan Corbet <corbet@lwn.net>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, kvm@vger.kernel.org,
+        Borislav Petkov <bp@alien8.de>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>, Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com, qemu-devel@nongnu.org
+References: <20220118132121.31388-1-chao.p.peng@linux.intel.com>
+ <20220118132121.31388-13-chao.p.peng@linux.intel.com>
+ <a121e766-900d-2135-1516-e1d3ba716834@maciej.szmigiero.name>
+ <20220217134548.GA33836@chaop.bj.intel.com>
+ <45148f5f-fe79-b452-f3b2-482c5c3291c4@maciej.szmigiero.name>
+ <20220223120047.GB53733@chaop.bj.intel.com>
+From:   "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
+Subject: Re: [PATCH v4 12/12] KVM: Expose KVM_MEM_PRIVATE
+In-Reply-To: <20220223120047.GB53733@chaop.bj.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -55,52 +66,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In subject, maybe:
-
-  PCI: imx6: Assert i.MX8MM CLKREQ# even if no device present
-
-On Wed, Feb 23, 2022 at 04:38:33PM +0800, Richard Zhu wrote:
-> The CLKREQ# signal is an open drain, active low signal that is driven
-> low by the remote Endpoint device. But it might not be driven low if no
-> Endpoint device is connected.
+On 23.02.2022 13:00, Chao Peng wrote:
+> On Tue, Feb 22, 2022 at 02:16:46AM +0100, Maciej S. Szmigiero wrote:
+>> On 17.02.2022 14:45, Chao Peng wrote:
+>>> On Tue, Jan 25, 2022 at 09:20:39PM +0100, Maciej S. Szmigiero wrote:
+>>>> On 18.01.2022 14:21, Chao Peng wrote:
+>>>>> KVM_MEM_PRIVATE is not exposed by default but architecture code can turn
+>>>>> on it by implementing kvm_arch_private_memory_supported().
+>>>>>
+>>>>> Also private memslot cannot be movable and the same file+offset can not
+>>>>> be mapped into different GFNs.
+>>>>>
+>>>>> Signed-off-by: Yu Zhang <yu.c.zhang@linux.intel.com>
+>>>>> Signed-off-by: Chao Peng <chao.p.peng@linux.intel.com>
+>>>>> ---
+>>>> (..)
+>>>>>     static bool kvm_check_memslot_overlap(struct kvm_memslots *slots, int id,
+>>>>> -				      gfn_t start, gfn_t end)
+>>>>> +				      struct file *file,
+>>>>> +				      gfn_t start, gfn_t end,
+>>>>> +				      loff_t start_off, loff_t end_off)
+>>>>>     {
+>>>>>     	struct kvm_memslot_iter iter;
+>>>>> +	struct kvm_memory_slot *slot;
+>>>>> +	struct inode *inode;
+>>>>> +	int bkt;
+>>>>>     	kvm_for_each_memslot_in_gfn_range(&iter, slots, start, end) {
+>>>>>     		if (iter.slot->id != id)
+>>>>>     			return true;
+>>>>>     	}
+>>>>> +	/* Disallow mapping the same file+offset into multiple gfns. */
+>>>>> +	if (file) {
+>>>>> +		inode = file_inode(file);
+>>>>> +		kvm_for_each_memslot(slot, bkt, slots) {
+>>>>> +			if (slot->private_file &&
+>>>>> +			     file_inode(slot->private_file) == inode &&
+>>>>> +			     !(end_off <= slot->private_offset ||
+>>>>> +			       start_off >= slot->private_offset
+>>>>> +					     + (slot->npages >> PAGE_SHIFT)))
+>>>>> +				return true;
+>>>>> +		}
+>>>>> +	}
+>>>>
+>>>> That's a linear scan of all memslots on each CREATE (and MOVE) operation
+>>>> with a fd - we just spent more than a year rewriting similar linear scans
+>>>> into more efficient operations in KVM.
+>>>
+(..)
+>>> So linear scan is used before I can find a better way.
+>>
+>> Another option would be to simply not check for overlap at add or move
+>> time, declare such configuration undefined behavior under KVM API and
+>> make sure in MMU notifiers that nothing bad happens to the host kernel
+>> if it turns out somebody actually set up a VM this way (it could be
+>> inefficient in this case, since it's not supposed to ever happen
+>> unless there is a bug somewhere in the userspace part).
 > 
-> On i.MX8MM PCIe, phy_init() would be failed and system boot hang if the
-> reference clock is not toggled.
+> Specific to TDX case, SEAMMODULE will fail the overlapping case and then
+> KVM prints a message to the kernel log. It will not cause any other side
+> effect, it does look weird however. Yes warn that in the API document
+> can help to some extent.
 
-s/would be failed/may fail/
-s/boot hang/boot may hang/
-s/if the reference clock is not toggled/if no Endpoint is connected to assert CLKREQ#/
+So for the functionality you are adding this code for (TDX) this scan
+isn't necessary and the overlapping case (not supported anyway) is safely
+handled by the hardware (or firmware)?
+Then I would simply remove the scan and, maybe, add a comment instead
+that the overlap check is done by the hardware.
 
-> Follow with i.MX8MQ PCIe, to make sure the reference clock on, override
-> the CLKREQ# low during initialization to fix this issue.
+By the way, if a kernel log message could be triggered by (misbehaving)
+userspace then it should be rate limited (if it isn't already).
 
-  Handle this as on i.MX8MQ, where we explicitly assert CLKREQ# so the
-  PHY can be initialized.
+> Thanks,
+> Chao
 
-(I don't really understand the hardware here, so disregard if this
-doesn't say what it needs to.)
-
-> Fixes: 178e244cb6e2 ("PCI: imx: Add the imx8mm pcie support")
-> Signed-off-by: Richard Zhu <hongxing.zhu@nxp.com>
-> ---
->  drivers/pci/controller/dwc/pci-imx6.c | 4 ----
->  1 file changed, 4 deletions(-)
-> 
-> diff --git a/drivers/pci/controller/dwc/pci-imx6.c b/drivers/pci/controller/dwc/pci-imx6.c
-> index d7f0db01f3c3..a334341a1789 100644
-> --- a/drivers/pci/controller/dwc/pci-imx6.c
-> +++ b/drivers/pci/controller/dwc/pci-imx6.c
-> @@ -447,10 +447,6 @@ static int imx6_pcie_enable_ref_clk(struct imx6_pcie *imx6_pcie)
->  	case IMX7D:
->  		break;
->  	case IMX8MM:
-> -		ret = clk_prepare_enable(imx6_pcie->pcie_aux);
-> -		if (ret)
-> -			dev_err(dev, "unable to enable pcie_aux clock\n");
-> -		break;
->  	case IMX8MQ:
->  		ret = clk_prepare_enable(imx6_pcie->pcie_aux);
->  		if (ret) {
-> -- 
-> 2.25.1
-> 
+Thanks,
+Maciej

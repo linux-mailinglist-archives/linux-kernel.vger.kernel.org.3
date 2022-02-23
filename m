@@ -2,63 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 839BD4C0E42
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 09:30:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 89C024C0E45
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 09:32:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238950AbiBWIat (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 03:30:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41088 "EHLO
+        id S238980AbiBWIc3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 03:32:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234121AbiBWIaq (ORCPT
+        with ESMTP id S234121AbiBWIcZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 03:30:46 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BF8EA5C84D
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 00:30:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1645605018;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=VC0c9i1a3Nykyum2gdtxLjbX+0in0PaKJyj86P5G2R0=;
-        b=YrXTkp7gtxDWCZwGx3fU9g+vlxAHro6xPh+vcQGCLBI9O2TnInT1Lhuli3Sb1BXAADI+O1
-        yM8JhEwXnWR+tDu/nWncAA0qdXOaPMjWcKzHgJ9hEljMvg6GaXQwcIGySBhBZL3ItS9sCz
-        xbrMlDvOoMFBgGLrbqIUvaFrZU2Skzw=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-592-hIRIq-ThPcWHTGMYZo_44Q-1; Wed, 23 Feb 2022 03:30:15 -0500
-X-MC-Unique: hIRIq-ThPcWHTGMYZo_44Q-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Wed, 23 Feb 2022 03:32:25 -0500
+Received: from a.mx.secunet.com (a.mx.secunet.com [62.96.220.36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CC4147546;
+        Wed, 23 Feb 2022 00:31:58 -0800 (PST)
+Received: from localhost (localhost [127.0.0.1])
+        by a.mx.secunet.com (Postfix) with ESMTP id AD40A20533;
+        Wed, 23 Feb 2022 09:31:56 +0100 (CET)
+X-Virus-Scanned: by secunet
+Received: from a.mx.secunet.com ([127.0.0.1])
+        by localhost (a.mx.secunet.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id XOpYCDlDAmvR; Wed, 23 Feb 2022 09:31:56 +0100 (CET)
+Received: from mailout1.secunet.com (mailout1.secunet.com [62.96.220.44])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 4824F1091DA1;
-        Wed, 23 Feb 2022 08:30:13 +0000 (UTC)
-Received: from localhost (ovpn-13-167.pek2.redhat.com [10.72.13.167])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 74C3083191;
-        Wed, 23 Feb 2022 08:30:12 +0000 (UTC)
-Date:   Wed, 23 Feb 2022 16:30:09 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     yingelin <yingelin@huawei.com>
-Cc:     ebiederm@xmission.com, mcgrof@kernel.org, keescook@chromium.org,
-        yzaikin@google.com, kexec@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        zengweilin@huawei.com, chenjianguo3@huawei.com,
-        nixiaoming@huawei.com, qiuguorui1@huawei.com,
-        young.liuyang@huawei.com
-Subject: Re: [PATCH sysctl-next] kernel/kexec_core: move kexec_core sysctls
- into its own file
-Message-ID: <YhXwkTCwt3a4Dn9T@MiWiFi-R3L-srv>
-References: <20220223030318.213093-1-yingelin@huawei.com>
+        by a.mx.secunet.com (Postfix) with ESMTPS id 1903220501;
+        Wed, 23 Feb 2022 09:31:56 +0100 (CET)
+Received: from cas-essen-01.secunet.de (unknown [10.53.40.201])
+        by mailout1.secunet.com (Postfix) with ESMTP id 129F280004A;
+        Wed, 23 Feb 2022 09:31:56 +0100 (CET)
+Received: from mbx-essen-01.secunet.de (10.53.40.197) by
+ cas-essen-01.secunet.de (10.53.40.201) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.18; Wed, 23 Feb 2022 09:31:55 +0100
+Received: from gauss2.secunet.de (10.182.7.193) by mbx-essen-01.secunet.de
+ (10.53.40.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Wed, 23 Feb
+ 2022 09:31:55 +0100
+Received: by gauss2.secunet.de (Postfix, from userid 1000)
+        id 51EF73180FB1; Wed, 23 Feb 2022 09:31:55 +0100 (CET)
+Date:   Wed, 23 Feb 2022 09:31:55 +0100
+From:   Steffen Klassert <steffen.klassert@secunet.com>
+To:     Lina Wang <lina.wang@mediatek.com>
+CC:     Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S . Miller" <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        "David Ahern" <dsahern@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "Matthias Brugger" <matthias.bgg@gmail.com>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH] xfrm: fix tunnel model fragmentation behavior
+Message-ID: <20220223083155.GM17351@gauss3.secunet.de>
+References: <20220221051648.22660-1-lina.wang@mediatek.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20220223030318.213093-1-yingelin@huawei.com>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+In-Reply-To: <20220221051648.22660-1-lina.wang@mediatek.com>
+X-ClientProxiedBy: cas-essen-01.secunet.de (10.53.40.201) To
+ mbx-essen-01.secunet.de (10.53.40.197)
+X-EXCLAIMER-MD-CONFIG: 2c86f778-e09b-4440-8b15-867914633a10
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,84 +70,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02/23/22 at 11:03am, yingelin wrote:
-> This move the kernel/kexec_core.c respective sysctls to its own file.
-
-Hmm, why is the move needed? 
-
-With my understanding, sysctls are all put in kernel/sysctl.c,
-why is kexec special?
-
+On Mon, Feb 21, 2022 at 01:16:48PM +0800, Lina Wang wrote:
+> in tunnel mode, if outer interface(ipv4) is less, it is easily to let 
+> inner IPV6 mtu be less than 1280. If so, a Packet Too Big ICMPV6 message 
+> is received. When send again, packets are fragmentized with 1280, they
+> are still rejected with ICMPV6(Packet Too Big) by xfrmi_xmit2().
 > 
-> Signed-off-by: yingelin <yingelin@huawei.com>
+> According to RFC4213 Section3.2.2:
+>          if (IPv4 path MTU - 20) is less than 1280
+>                  if packet is larger than 1280 bytes
+>                          Send ICMPv6 "packet too big" with MTU = 1280.
+>                          Drop packet.
+>                  else
+>                          Encapsulate but do not set the Don't Fragment
+>                          flag in the IPv4 header.  The resulting IPv4
+>                          packet might be fragmented by the IPv4 layer
+>                          on the encapsulator or by some router along
+>                          the IPv4 path.
+>                  endif
+>          else
+>                  if packet is larger than (IPv4 path MTU - 20)
+>                          Send ICMPv6 "packet too big" with
+>                          MTU = (IPv4 path MTU - 20).
+>                          Drop packet.
+>                  else
+>                          Encapsulate and set the Don't Fragment flag
+>                          in the IPv4 header.
+>                  endif
+>          endif
+> Packets should be fragmentized with ipv4 outer interface, so change it.
+> 
+> After it is fragemtized with ipv4, there will be double fragmenation.
+> No.48 & No.51 are ipv6 fragment packets, No.48 is double fragmentized, 
+> then tunneled with IPv4(No.49& No.50), which obey spec. And received peer
+> cannot decrypt it rightly.
+> 
+> 48              2002::10	2002::11 1296(length) IPv6 fragment (off=0 more=y ident=0xa20da5bc nxt=50) 
+> 49   0x0000 (0) 2002::10	2002::11 1304	      IPv6 fragment (off=0 more=y ident=0x7448042c nxt=44)
+> 50   0x0000 (0)	2002::10	2002::11 200	      ESP (SPI=0x00035000) 
+> 51		2002::10	2002::11 180	      Echo (ping) request 
+> 52   0x56dc     2002::10	2002::11 248	      IPv6 fragment (off=1232 more=n ident=0xa20da5bc nxt=50)
+> 
+> esp_noneed_fragment has fixed above issues. Finally, it acted like below:
+> 1   0x6206 192.168.1.138   192.168.1.1 1316 Fragmented IP protocol (proto=Encap Security Payload 50, off=0, ID=6206) [Reassembled in #2]
+> 2   0x6206 2002::10	   2002::11    88   IPv6 fragment (off=0 more=y ident=0x1f440778 nxt=50)
+> 3   0x0000 2002::10	   2002::11    248  ICMPv6    Echo (ping) request 
+> 
+> Signed-off-by: Lina Wang <lina.wang@mediatek.com>
+
+Can you please add a 'Fixes' tag?
+
 > ---
->  kernel/kexec_core.c | 20 ++++++++++++++++++++
->  kernel/sysctl.c     | 13 -------------
->  2 files changed, 20 insertions(+), 13 deletions(-)
+>  net/ipv6/xfrm6_output.c   | 16 ++++++++++++++++
+>  net/xfrm/xfrm_interface.c |  5 ++++-
+>  2 files changed, 20 insertions(+), 1 deletion(-)
 > 
-> diff --git a/kernel/kexec_core.c b/kernel/kexec_core.c
-> index 68480f731192..e57339d49439 100644
-> --- a/kernel/kexec_core.c
-> +++ b/kernel/kexec_core.c
-> @@ -936,6 +936,26 @@ int kimage_load_segment(struct kimage *image,
->  struct kimage *kexec_image;
->  struct kimage *kexec_crash_image;
->  int kexec_load_disabled;
-> +static struct ctl_table kexec_core_sysctls[] = {
-> +	{
-> +		.procname	= "kexec_load_disabled",
-> +		.data		= &kexec_load_disabled,
-> +		.maxlen		= sizeof(int),
-> +		.mode		= 0644,
-> +		/* only handle a transition from default "0" to "1" */
-> +		.proc_handler	= proc_dointvec_minmax,
-> +		.extra1		= SYSCTL_ONE,
-> +		.extra2		= SYSCTL_ONE,
-> +	},
-> +	{ }
-> +};
-> +
-> +static int __init kexec_core_sysctl_init(void)
-> +{
-> +	register_sysctl_init("kernel", kexec_core_sysctls);
-> +	return 0;
-> +}
-> +late_initcall(kexec_core_sysctl_init);
+> diff --git a/net/ipv6/xfrm6_output.c b/net/ipv6/xfrm6_output.c
+> index d0d280077721..ab4384e22b4f 100644
+> --- a/net/ipv6/xfrm6_output.c
+> +++ b/net/ipv6/xfrm6_output.c
+> @@ -45,6 +45,19 @@ static int __xfrm6_output_finish(struct net *net, struct sock *sk, struct sk_buf
+>  	return xfrm_output(sk, skb);
+>  }
 >  
->  /*
->   * No panic_cpu check version of crash_kexec().  This function is called
-> diff --git a/kernel/sysctl.c b/kernel/sysctl.c
-> index ae5e59396b5d..00e97c6d6576 100644
-> --- a/kernel/sysctl.c
-> +++ b/kernel/sysctl.c
-> @@ -61,7 +61,6 @@
->  #include <linux/capability.h>
->  #include <linux/binfmts.h>
->  #include <linux/sched/sysctl.h>
-> -#include <linux/kexec.h>
->  #include <linux/bpf.h>
->  #include <linux/mount.h>
->  #include <linux/userfaultfd_k.h>
-> @@ -1839,18 +1838,6 @@ static struct ctl_table kern_table[] = {
->  		.proc_handler	= tracepoint_printk_sysctl,
->  	},
->  #endif
-> -#ifdef CONFIG_KEXEC_CORE
-> -	{
-> -		.procname	= "kexec_load_disabled",
-> -		.data		= &kexec_load_disabled,
-> -		.maxlen		= sizeof(int),
-> -		.mode		= 0644,
-> -		/* only handle a transition from default "0" to "1" */
-> -		.proc_handler	= proc_dointvec_minmax,
-> -		.extra1		= SYSCTL_ONE,
-> -		.extra2		= SYSCTL_ONE,
-> -	},
-> -#endif
->  #ifdef CONFIG_MODULES
->  	{
->  		.procname	= "modprobe",
-> -- 
-> 2.26.2
-> 
+> +static int esp_noneed_fragment(struct sk_buff *skb)
+> +{
+> +	struct frag_hdr *fh;
+> +	u8 prevhdr = ipv6_hdr(skb)->nexthdr;
+> +
+> +	if (prevhdr != NEXTHDR_FRAGMENT)
+> +		return 0;
+> +	fh = (struct frag_hdr *)(skb->data + sizeof(struct ipv6hdr));
+> +	if (fh->nexthdr == NEXTHDR_ESP)
+> +		return 1;
+
+Shouldn't this problem exist for NEXTHDR_AUTH too?
 

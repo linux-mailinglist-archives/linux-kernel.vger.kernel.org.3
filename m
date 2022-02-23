@@ -2,141 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 366944C16F0
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 16:36:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 683EF4C16F4
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 16:38:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242141AbiBWPhA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 10:37:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44576 "EHLO
+        id S242145AbiBWPh6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 10:37:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242133AbiBWPgv (ORCPT
+        with ESMTP id S242043AbiBWPh4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 10:36:51 -0500
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 908A8BBE04
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 07:36:23 -0800 (PST)
-Received: by mail-yb1-xb49.google.com with SMTP id j17-20020a25ec11000000b0061dabf74012so27870881ybh.15
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 07:36:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=KVI9h34IVpEZB73JFOBMLmYxwNU0WUD9iiOxc47ibAs=;
-        b=cEOaTS6V3ulJlRkWpGLZufC1eh2PraLWoGncZISKjYg572ZFmQbI5VgWAZ6KyfvVgB
-         +piaGLu69caHkbCzLMLInrkAWMBlCc3sY2U385t5PYrlH7CrDziPpdt4xbhanGJ1zc/a
-         64pBgl9gpq3C6uLvx+Fwi0cbxm9kCb4cUqQF5+DsBoDFU+mj/McXhoongC8mkEYf33z1
-         kw6l9/F9DIW2LMZsrgZ9qaXvuWQxDxKuyOKvNTO25CCAdaQ7jfRi8oi6pjMg93VLCzOv
-         oPHphG2/cnq/AMLn51ciMFK6Ctr1gR5AUA4tTkrBxg1XmcPLXf4DrWJVpXv7fDNfmdYN
-         UnFg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=KVI9h34IVpEZB73JFOBMLmYxwNU0WUD9iiOxc47ibAs=;
-        b=MBczS/ZuVlPxbft49f2xBTWFTItWeUvXpwSrfkjCA6PHqSWuifnR2kagW8Nf9yQpxl
-         0AbRAB6LTYAcBGXfXD8EJCHBZdhUTIGk+/Z2PKt1IHFRfWFfFQ51eai59zW99gXmBm/R
-         Sbt7IqJv6RT8M7K45GGDsX80JX9Nxu5rqrHneRKzRkbQ00a/M9jFLdiLTczEIYakhOlS
-         qZSOxVXqgRzabSPUSKomiFD9eYsTP7RxkR5yGOl8tTyGb7FSmX5Zgy6lo+TNJG3Ci3Sg
-         zVnt0utrpO+2QjQzQlXsEreJUa10/AvxNLRgsbQ23Swu9Krf6fixRzHdxpz5IKZqqH31
-         UbXw==
-X-Gm-Message-State: AOAM532r7PtL//ongVE4bwH9+QSXFC/G2HhePOWTQlxGga+NLJfWU1yj
-        H3NWf570foNDOPHVRT8P9P2yBxnRTqY=
-X-Google-Smtp-Source: ABdhPJz+dH+QYp21E0/NCb1xG1S5CJgsvwNt+rRWPe/zdfkulvwJe0FdspODecQRD2+y/VFn8M2ELMl3+IY=
-X-Received: from surenb-desktop.mtv.corp.google.com ([2620:15c:211:200:5093:9fb5:d0ba:a5f])
- (user=surenb job=sendgmr) by 2002:a25:2e10:0:b0:624:72a4:d938 with SMTP id
- u16-20020a252e10000000b0062472a4d938mr250689ybu.559.1645630582756; Wed, 23
- Feb 2022 07:36:22 -0800 (PST)
-Date:   Wed, 23 Feb 2022 07:36:13 -0800
-In-Reply-To: <20220223153613.835563-1-surenb@google.com>
-Message-Id: <20220223153613.835563-3-surenb@google.com>
-Mime-Version: 1.0
-References: <20220223153613.835563-1-surenb@google.com>
-X-Mailer: git-send-email 2.35.1.473.g83b2b277ed-goog
-Subject: [PATCH v5 3/3] mm: fix use-after-free when anon vma name is used
- after vma is freed
-From:   Suren Baghdasaryan <surenb@google.com>
-To:     akpm@linux-foundation.org
-Cc:     ccross@google.com, sumit.semwal@linaro.org, mhocko@suse.com,
-        dave.hansen@intel.com, keescook@chromium.org, willy@infradead.org,
-        kirill.shutemov@linux.intel.com, vbabka@suse.cz,
-        hannes@cmpxchg.org, ebiederm@xmission.com, brauner@kernel.org,
-        legion@kernel.org, ran.xiaokai@zte.com.cn, sashal@kernel.org,
-        chris.hyser@oracle.com, dave@stgolabs.net, pcc@google.com,
-        caoxiaofeng@yulong.com, david@redhat.com, gorcunov@gmail.com,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        kernel-team@android.com, surenb@google.com,
-        syzbot+aa7b3d4b35f9dc46a366@syzkaller.appspotmail.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 23 Feb 2022 10:37:56 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38572BBE0B;
+        Wed, 23 Feb 2022 07:37:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645630648; x=1677166648;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=7ONB/aTHqMjYH/OmutKWhupcasaRbDK6GNSZHCYrgIs=;
+  b=MEQumQnXn/kchseS79skJ8C/8UryZIzbBJ2HpjdjH6VRDDuuQa9i8ZWU
+   Xx9hCvjh9wL9nOUCUm02fc6TPhdslylyTvdOAE52DvqqoBqwFp6KH2sQ/
+   xdXRsWbgYyHiix6YTGJThfIYRXmMrH+hSFQbHNojfsoEr3kw2GIBfxpfh
+   63xnBb7rRtbEth7E3aJukrgUDnEvimcT2aLk1FapUKRFgYH3Y0v8Hce6p
+   UlNr/aUnRDcWdhqB72sJgWg++wApv0gDzomyagHM1Lk3zUJbBiwJ1L5QK
+   N53SJSJaV+eLDs212HDyNrHHUVoNpJhjdGtXGMU9xiYJAqU4GiXP+CA4q
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10266"; a="338427660"
+X-IronPort-AV: E=Sophos;i="5.88,391,1635231600"; 
+   d="scan'208";a="338427660"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2022 07:37:27 -0800
+X-IronPort-AV: E=Sophos;i="5.88,391,1635231600"; 
+   d="scan'208";a="628121128"
+Received: from smile.fi.intel.com ([10.237.72.59])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2022 07:37:23 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1nMtgt-007TeV-Tl;
+        Wed, 23 Feb 2022 17:36:31 +0200
+Date:   Wed, 23 Feb 2022 17:36:31 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        =?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <clement.leger@bootlin.com>,
+        "Russell King (Oracle)" <linux@armlinux.org.uk>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Wolfram Sang <wsa@kernel.org>, Peter Rosin <peda@axentia.se>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-acpi@vger.kernel.org, linux-i2c@vger.kernel.org,
+        netdev@vger.kernel.org,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+Subject: Re: [RFC 10/10] net: sfp: add support for fwnode
+Message-ID: <YhZUf6MXUTumYyvF@smile.fi.intel.com>
+References: <20220221162652.103834-11-clement.leger@bootlin.com>
+ <YhPSkz8+BIcdb72R@smile.fi.intel.com>
+ <20220222142513.026ad98c@fixe.home>
+ <YhYZAc5+Q1rN3vhk@smile.fi.intel.com>
+ <888f9f1a-ca5a-1250-1423-6c012ec773e2@redhat.com>
+ <YhYriwvHJKjrDQRf@shell.armlinux.org.uk>
+ <4d611fe8-b82a-1709-507a-56be94263688@redhat.com>
+ <20220223151436.4798e5ad@fixe.home>
+ <YhZRgnPG5Yd8mvc/@lunn.ch>
+ <d7c8a9fe-5c9b-2c9d-3731-c735da795bf8@redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d7c8a9fe-5c9b-2c9d-3731-c735da795bf8@redhat.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When adjacent vmas are being merged it can result in the vma that was
-originally passed to madvise_update_vma being destroyed.  In the current
-implementation, the name parameter passed to madvise_update_vma points
-directly to vma->anon_name and it is used after the call to
-vma_merge.  In the cases when vma_merge merges the original vma and
-destroys it, this will result in use-after-free bug as shown below:
+On Wed, Feb 23, 2022 at 04:27:33PM +0100, Hans de Goede wrote:
+> On 2/23/22 16:23, Andrew Lunn wrote:
+> >> As Russell asked, I'm also really interested if someone has a solution
+> >> to reuse device-tree description (overlays ?) to describe such
+> >> hardware. However, the fact that CONFIG_OF isn't enabled on x86 config
+> >> seems a bit complicated on this side.
+> > 
+> > It does work, intel even used it for one of there tiny x86 SoCs. Maybe
+> > it was Newton?
+> 
+> IIRC those SoCs did not use standard EFI/ACPI though, but rather some
+> other special firmware, I think it was SFI ?  This is not so much about
+> the CPU architecture as it is about the firmware/bootloader <->
+> OS interface.
 
-madvise_vma_behavior(vma)
-  madvise_update_vma(vma, ..., anon_name == vma->anon_name)
-    vma_merge(vma)
-      __vma_adjust(vma) <-- merges vma with adjacent one
-        vm_area_free(vma) <-- frees the original vma
-    replace_vma_anon_name(anon_name) <-- UAF of vma->anon_name
+I think Andrew refers to Intel SoCs that are using OF. Those so far are
+CE4xxx and SoFIA SoCs.
 
-Fix this by raising the name refcount and stabilizing it.
-
-Fixes: 9a10064f5625 ("mm: add a field to store names for private anonymous memory")
-Signed-off-by: Suren Baghdasaryan <surenb@google.com>
-Reported-by: syzbot+aa7b3d4b35f9dc46a366@syzkaller.appspotmail.com
----
-changes in v5:
-- Updated description, per Michal Hocko
-
- mm/madvise.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
-
-diff --git a/mm/madvise.c b/mm/madvise.c
-index 1f2693dccf7b..38d0f515d548 100644
---- a/mm/madvise.c
-+++ b/mm/madvise.c
-@@ -131,6 +131,8 @@ static int replace_anon_vma_name(struct vm_area_struct *vma,
- /*
-  * Update the vm_flags on region of a vma, splitting it or merging it as
-  * necessary.  Must be called with mmap_sem held for writing;
-+ * Caller should ensure anon_name stability by raising its refcount even when
-+ * anon_name belongs to a valid vma because this function might free that vma.
-  */
- static int madvise_update_vma(struct vm_area_struct *vma,
- 			      struct vm_area_struct **prev, unsigned long start,
-@@ -945,6 +947,7 @@ static int madvise_vma_behavior(struct vm_area_struct *vma,
- 				unsigned long behavior)
- {
- 	int error;
-+	struct anon_vma_name *anon_name;
- 	unsigned long new_flags = vma->vm_flags;
- 
- 	switch (behavior) {
-@@ -1010,8 +1013,11 @@ static int madvise_vma_behavior(struct vm_area_struct *vma,
- 		break;
- 	}
- 
-+	anon_name = anon_vma_name(vma);
-+	anon_vma_name_get(anon_name);
- 	error = madvise_update_vma(vma, prev, start, end, new_flags,
--				   anon_vma_name(vma));
-+				   anon_name);
-+	anon_vma_name_put(anon_name);
- 
- out:
- 	/*
 -- 
-2.35.1.473.g83b2b277ed-goog
+With Best Regards,
+Andy Shevchenko
+
 

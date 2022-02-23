@@ -2,265 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 310314C18D5
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 17:38:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 384124C18E2
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 17:39:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242823AbiBWQim (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 11:38:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51018 "EHLO
+        id S242961AbiBWQjK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 11:39:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242918AbiBWQid (ORCPT
+        with ESMTP id S242928AbiBWQjH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 11:38:33 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2F4258385;
-        Wed, 23 Feb 2022 08:38:05 -0800 (PST)
-Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21NG62Wa016747;
-        Wed, 23 Feb 2022 16:37:55 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=8mzKbb2ti1kJXWNa3haK0U6Y1jISsogRXqdr17NayRU=;
- b=jMUeOAudwK1G2GMwzt7HnUmyYC1UosTXkHAGVB1fOPwozKXiUKIR+WxQYXs7l3GOCU1y
- A+iGeI673EIOOXS+iw6YK/S8LNokszYXVhhM9sziWfjwsHYjCW+Yh5SrFOoSubunbeRd
- eDX87HsawrNKcOpRvgA7iPthXBgG3cDauBVyEtEi6g7D9E2XhIXCKZnxs0f0ToHThyS9
- r8J9tsDateviGc49Zgy/LZKik9BYsAralTlR4HzarK94+nNiiznQ7LikIah+7pbJw456
- sxWAPMjBjy5lk8MYqUA9PI9DCrE0ycJhDyg3PcJbn3F7ijdPvqLiGNPNOBkjq2BitZPH Qg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3edp4f4be3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 23 Feb 2022 16:37:54 +0000
-Received: from m0098413.ppops.net (m0098413.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 21NG7v24028679;
-        Wed, 23 Feb 2022 16:37:54 GMT
-Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3edp4f4bdm-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 23 Feb 2022 16:37:54 +0000
-Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
-        by ppma03dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 21NGXwP4004798;
-        Wed, 23 Feb 2022 16:37:52 GMT
-Received: from b03cxnp07028.gho.boulder.ibm.com (b03cxnp07028.gho.boulder.ibm.com [9.17.130.15])
-        by ppma03dal.us.ibm.com with ESMTP id 3ear6bvbqp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 23 Feb 2022 16:37:52 +0000
-Received: from b03ledav006.gho.boulder.ibm.com (b03ledav006.gho.boulder.ibm.com [9.17.130.237])
-        by b03cxnp07028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 21NGbod629360630
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 23 Feb 2022 16:37:50 GMT
-Received: from b03ledav006.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7B5D8C605A;
-        Wed, 23 Feb 2022 16:37:50 +0000 (GMT)
-Received: from b03ledav006.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 18CB8C605B;
-        Wed, 23 Feb 2022 16:37:47 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-        by b03ledav006.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Wed, 23 Feb 2022 16:37:46 +0000 (GMT)
-Message-ID: <479f09e7-0d39-0281-45ef-5cce4861d24d@linux.ibm.com>
-Date:   Wed, 23 Feb 2022 11:37:46 -0500
+        Wed, 23 Feb 2022 11:39:07 -0500
+Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2114.outbound.protection.outlook.com [40.107.215.114])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7603E5717C;
+        Wed, 23 Feb 2022 08:38:38 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=CzFcxAceP+SIryIgZk7Bp+2PmVmPmcTNUkqYovM6CvB7j79/2TjnPQ1yCRQrH5b1qfuwPoGi0rwoI3ZnHv8x4DdlrOfWmdqZnZK/wX/G/k0pgVKtJ6UrptZA5EhYaqd+LobEHFXBSTTokj1F/PDQSqA4f5VRx06G05z9OloS6h6lYtMWkHVXIXmlNMvFoa9C9PEA08DZQBe4LlKFUR/2o7vh1wQtZ/yOyxAALyo4r9d/lL/kJfAnN4vOfcYCYmNVwp30qVp3hCYBpJl4GLaV79DbySYVqWe5lYWk5bD5HBEy/nJ5w0tslcnMM/k6A0bvzvjxL4w1MYRO3r1dtP/nsA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ks4+hfj3tZdjLL0SMnWiGwBqzW2sTC7AbP3/1L5chs8=;
+ b=bIxFR/dEB5pgmymMWiTizZsyRQiPm2X2jByMSntyOsvTionV6g+uzlNwHNWez+KykDeSVntgKYXtIVP6iuMXibOh2uJ8zKF+PJNWSvoIAPJL7+eGn8CdBJqkce6zTEO07SExFa7isxD+yBa3HF8qBl7Ks1lKAXL7O4XrPqTrOVl4TaisIbt7yCZ/Xra8jc6MEDhYy61dN3UQtQFQYjOG5eyLAm6dq/CjHKC2aPvfmB5Qn0ryzl9/jIujOoj860gCIjkxeSrsBsfpCb2jVwFFxRzlUqskcyxLrAabxUOQBOSbmUwGOTPRtkHgF8cb1DLmfwIkgF6g7mM/6DhLiaxfiA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=quantatw.com; dmarc=pass action=none header.from=quantatw.com;
+ dkim=pass header.d=quantatw.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=quantacorp.onmicrosoft.com; s=selector2-quantacorp-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ks4+hfj3tZdjLL0SMnWiGwBqzW2sTC7AbP3/1L5chs8=;
+ b=J2LY+jbSffagczVbgc1baPs5lajize9cTrDajLL8x/vj5/xxWBmXAMXv83CvhaMtqYHWMM/axCAzL7QiHCgWhy8u59+CWSahLfYdZAf9GSxdMew7fHMUmNWiBWAH0+QkL0aaQeV+QL1Q4OL5I6TMreOVjshJsk2feYccnvNHoHU=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=quantatw.com;
+Received: from HK0PR04MB3282.apcprd04.prod.outlook.com (2603:1096:203:89::17)
+ by TY2PR04MB3456.apcprd04.prod.outlook.com (2603:1096:404:9b::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4995.24; Wed, 23 Feb
+ 2022 16:38:31 +0000
+Received: from HK0PR04MB3282.apcprd04.prod.outlook.com
+ ([fe80::ec21:c033:761d:3e03]) by HK0PR04MB3282.apcprd04.prod.outlook.com
+ ([fe80::ec21:c033:761d:3e03%4]) with mapi id 15.20.4995.027; Wed, 23 Feb 2022
+ 16:38:31 +0000
+From:   Potin Lai <potin.lai@quantatw.com>
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>
+Cc:     Patrick Williams <patrick@stwcx.xyz>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Potin Lai <potin.lai@quantatw.com>
+Subject: [PATCH 0/2] hwmon: (adm1275) Add sample averaging binding support
+Date:   Thu, 24 Feb 2022 00:38:15 +0800
+Message-Id: <20220223163817.30583-1-potin.lai@quantatw.com>
+X-Mailer: git-send-email 2.17.1
+Content-Type: text/plain
+X-ClientProxiedBy: HK2PR02CA0138.apcprd02.prod.outlook.com
+ (2603:1096:202:16::22) To HK0PR04MB3282.apcprd04.prod.outlook.com
+ (2603:1096:203:89::17)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v10 26/27] ima: Limit number of policy rules in
- non-init_ima_ns
-Content-Language: en-US
-To:     Mimi Zohar <zohar@linux.ibm.com>, linux-integrity@vger.kernel.org
-Cc:     serge@hallyn.com, christian.brauner@ubuntu.com,
-        containers@lists.linux.dev, dmitry.kasatkin@gmail.com,
-        ebiederm@xmission.com, krzysztof.struczynski@huawei.com,
-        roberto.sassu@huawei.com, mpeters@redhat.com, lhinds@redhat.com,
-        lsturman@redhat.com, puiterwi@redhat.com, jejb@linux.ibm.com,
-        jamjoom@us.ibm.com, linux-kernel@vger.kernel.org,
-        paul@paul-moore.com, rgb@redhat.com,
-        linux-security-module@vger.kernel.org, jmorris@namei.org
-References: <20220201203735.164593-1-stefanb@linux.ibm.com>
- <20220201203735.164593-27-stefanb@linux.ibm.com>
- <5e4a862917785972281bbcb483404da01b71e801.camel@linux.ibm.com>
-From:   Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <5e4a862917785972281bbcb483404da01b71e801.camel@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: YtdmZR6yvhc-B140zcPhCzlkHr9pdBRS
-X-Proofpoint-ORIG-GUID: UVGcGe1ZYf3dKIlHSyVwet67Jlxqw0cL
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-02-23_08,2022-02-23_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 clxscore=1015
- adultscore=0 phishscore=0 suspectscore=0 priorityscore=1501 spamscore=0
- mlxscore=0 impostorscore=0 mlxlogscore=999 malwarescore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2201110000 definitions=main-2202230093
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: cd62f4ad-45dd-4b91-3a78-08d9f6eaed3e
+X-MS-TrafficTypeDiagnostic: TY2PR04MB3456:EE_
+X-Microsoft-Antispam-PRVS: <TY2PR04MB34567E4434F6F718A457CEF08E3C9@TY2PR04MB3456.apcprd04.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: vuRvHYLl5T2jU/uunARZAY9t21sC6Ydn3XYaUJIme+tNdI992QKiNL68dJ8YwAD6yAt+pLwKE/6QvcABr0QUU4fDaxC7MA8unzWsz2tqiOiwRybxWMZNrgwedSy9VuqODIrZxBAHaTa7tDVrG02FaBLg7m0Yci2Njap3fkTS9F0nCigVzo+nZrObjnUQGOIYJ5fE9TIdQOYtsP0U2onJP+yk9bcujvCh3xIZ59DZAmP8rE5Qfhil2wKHnTeifNwTAURhJhpLd8tXdlkBniR1vzbLrV3NuFH/OAhp4kDOilevMIy7KqsUWGJxbLV57fR3nX4B1I77iPTy8RNhGcUoTnD68H6DlQpj9ymmdTEaO3gnUjEYZqGiZoImf94V1ncIkZXB2Vt5mS7I8OD5ggfFgTYBg6Ew7wG20Xi6vvKADuwOxmVs/Vx27V+hhOqxavKRQyY7xaCTxi9UgA/jkB5A10+OFv/Z8e6pLqYxjawDF9hGdrPuqyZnssX+7bPwRfHse6nR4rd9LVoy/DB+/rhZVlGuowTtOwGoKEbOalBjFLsehZAQyczj1NDcW8AkjS9G1rICGN5wrFTLip/DNym8kLAgKlrWWbHTLbQGIL2eZ9Smn4IvDSvXsZhMCUQ89QPp9aYPEsmQxGXoiTom149HFMmlXlziZfmzlTbUamN1X6JhTAKFFBTYGiAX+RLCm5+22alrGP6VBJpIuJLvt7OjKg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HK0PR04MB3282.apcprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(2906002)(38100700002)(38350700002)(86362001)(52116002)(54906003)(36756003)(6666004)(4326008)(6486002)(2616005)(8676002)(508600001)(5660300002)(26005)(1076003)(4744005)(44832011)(8936002)(186003)(6506007)(316002)(66946007)(66556008)(66476007)(6512007)(110136005)(107886003);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?yqj2hKnwHhIr1o0/aQYUqYk2bZpwkWrxcubDUMCXZ16UwlRsWoH/Ed/Kv5fZ?=
+ =?us-ascii?Q?TsbilD54X/cQ0iPvmgntZt/T/DLVrst2EB2zwPSjWpp2B5J/+CGVG07l32sD?=
+ =?us-ascii?Q?mbHrv5P/fruqioVy9PUoFAzynHm88D3aSqQqOcCESu+IWqpgKPPkBZUgz1DS?=
+ =?us-ascii?Q?R2QKRabq5msmzTcXcHajAdSop5PeJx6vX602Etleylgf4Xt6+So7dRF0OMvx?=
+ =?us-ascii?Q?Oj6T7vKQfpXPz6AHJxpjnQ3n7jUE3DPUoWz6kxli9rim2nUm1Ao80y5taxWz?=
+ =?us-ascii?Q?fW+Cpt7Uk79M4tMk5fqmvN3l/x3GGOAGT9y3Xg45+dtTqKOP2jm0/HkTa8Nn?=
+ =?us-ascii?Q?gGnbXaO3m+Jpd6BLo9kwmc9SZRKVaQ9vhYel7ReyvDUwjbVzWL3yEXYdQsz9?=
+ =?us-ascii?Q?7wkCeTPPkatCOZZGCQS5k5/YRD5dRH/9hmEndK/mx9QsidMEet6VlFB8j7Qy?=
+ =?us-ascii?Q?wL3/XmM8zH2BkcH0eGICJJ34/oMSkjM5ZHEJPak1cMPfRY2vPaFdlc1+Zkmw?=
+ =?us-ascii?Q?d+t2UQxDlKgOJHTwpEsrDaWF35dfFS/FanI8fiu9DmbeK57m8DPxxf5qOJDo?=
+ =?us-ascii?Q?Pqg+2t7i19Ig0f7hSjegGZV6tSzeHdnWI+Ec820KQZOnzV1JSn+BqRTgy09J?=
+ =?us-ascii?Q?W5mBa1lEuu9rHgN56ln4xAvZ0PjygabbViDTp8juwmH4hhBUB1sdahFsJzXz?=
+ =?us-ascii?Q?JtjqL4uVF7YS4VJpdPE08oDcL43YeLeW4W1hmf7FhhpJ59nDxTbWnvZcF8PN?=
+ =?us-ascii?Q?hoNczkXHVlLahnhhx1FI1CxwkebhUVzSA2I6uRAujJLOwQPe9xqrTxbyJBoj?=
+ =?us-ascii?Q?SQBmBDqHlXrF54vrfWAS+O3zPs3TtMepsuWasdTt0TBeTBnDm6pv92Vn2bs2?=
+ =?us-ascii?Q?Lvp4truIk8zBIhPaArokr1ampnA6Hm2M6ts9atjdIr7gBdhpI/kSKV/Vp75R?=
+ =?us-ascii?Q?QUZavg8ca+Z0MZU9NEJABM/lhge3lS8jBwKzDtLyMo1c0tXSUbp14ZXDqlDj?=
+ =?us-ascii?Q?2245RogqbDk/al1MBJcnrtwZXnMRv4/Y0Pdyn+TKyC2+B+6h/niYrUoDj2Ak?=
+ =?us-ascii?Q?oaPdscMEcGXUy6ynef6681KU5kETQP4mDRAtV9X6iIKkMd/MblHjjTX6gdyA?=
+ =?us-ascii?Q?O2hA9reCBp6yNLzwqCfPtt89pooMOrOhpldy48AVL1EDBptL+uUZkMw3qHmk?=
+ =?us-ascii?Q?Tc8u5WaD5vvjQid/DwjwMussm2CXb2BMXWSTQrq0/wLFU+KUF3yJ8Qg20Faq?=
+ =?us-ascii?Q?/xvRIeHEVHNOUoXkMCLzFtBfR4kpDx4/gv8ykTCwm12M5cwBAC4oDQgsoEhZ?=
+ =?us-ascii?Q?8BtyHhs58gKWtasNH3j3vo8iR//PZe3YnaRuHdyPo0YkHtASLBEhPuSfA1jW?=
+ =?us-ascii?Q?GGfPrwqdOgbeyxwOO4M0MqUITUrpnXF1pO/crRt856n9X0y9BLJfa2cqnMfx?=
+ =?us-ascii?Q?/L/8c1S4CTIxjirwNvIERfhhIyhjEl+bUoVPoAtCtm6fCO08fs/npYMc2WRR?=
+ =?us-ascii?Q?i/iMt74lclcI4SB7YDQ8gHD0uMWiv3laG3f4AF0teKVRb9qswjyfPbco92Wk?=
+ =?us-ascii?Q?wQGc7cRc4WMRteBiBGetsIKWAl5PAQi3szskzw5G82UsP6elkdWZ+S9f6d+y?=
+ =?us-ascii?Q?Nw8HUMsZfVwtMWR7oywpDjE=3D?=
+X-OriginatorOrg: quantatw.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: cd62f4ad-45dd-4b91-3a78-08d9f6eaed3e
+X-MS-Exchange-CrossTenant-AuthSource: HK0PR04MB3282.apcprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Feb 2022 16:38:31.6287
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 179b0327-07fc-4973-ac73-8de7313561b2
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: DsJxUx7zwD01VnyooY/MRNyoZXCUNiukUwcIt3FGLJEc1sJESazZYiGHBQwMnmEDltbW/5bK1DHzmA88s6L3OQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TY2PR04MB3456
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This patch series allow PWR_AVG and VI_AVG set from device tree
 
-On 2/23/22 10:38, Mimi Zohar wrote:
-> On Tue, 2022-02-01 at 15:37 -0500, Stefan Berger wrote:
->> Limit the number of policy rules one can set in non-init_ima_ns to a
->> hardcoded 1024 rules. If the user attempts to exceed this limit by
->> setting too many additional rules, emit an audit message with the cause
->> 'too-many-rules' and simply ignore the newly added rules.
-> This paragraph describes 'what' you're doing, not 'why'.  Please prefix
-> this paragraph with a short, probably one sentence, reason for the
-> change.
->> Switch the accounting for the memory allocated for IMA policy rules to
->> GFP_KERNEL_ACCOUNT so that cgroups kernel memory accounting takes effect.
-> Does this change affect the existing IMA policy rules for init_ima_ns?
+Example:
+        adm1278@11 {
+                compatible = "adi,adm1278";
+                ......
+                pwr-avg = <128>;
+                vi-avg = <128>;
+        };
 
-There's typically no cgroup for the int_ima_ns, so not effect on 
-init_ima_ns.
+Potin Lai (2):
+  hwmon: (adm1275) Allow setting sample averaging
+  dt-bindings: hwmon: Add sample averaging property for ADM1275
 
+ .../bindings/hwmon/adi,adm1275.yaml           | 10 ++++++++
+ drivers/hwmon/pmbus/adm1275.c                 | 25 +++++++++++++++++++
+ 2 files changed, 35 insertions(+)
 
-Here's the updated text:
+-- 
+2.17.1
 
-Limit the number of policy rules one can set in non-init_ima_ns to a
-hardcoded 1024 rules to restrict the amount of memory used for IMA's
-policy. Ignore the added rules if the user attempts to exceed this
-limit by setting too many additional rules.
-
-Switch the accounting for the memory allocated for IMA policy rules to
-GFP_KERNEL_ACCOUNT so that cgroups kernel memory accounting takes effect.
-This switch has no effect on the init_ima_ns.
-
-    Stefan
-
-
->> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
->> ---
->>   security/integrity/ima/ima_fs.c     | 20 ++++++++++++++------
->>   security/integrity/ima/ima_policy.c | 23 ++++++++++++++++++-----
->>   2 files changed, 32 insertions(+), 11 deletions(-)
->>
->> diff --git a/security/integrity/ima/ima_fs.c b/security/integrity/ima/ima_fs.c
->> index 58d80884880f..cd102bbd4677 100644
->> --- a/security/integrity/ima/ima_fs.c
->> +++ b/security/integrity/ima/ima_fs.c
->> @@ -410,24 +410,32 @@ static int ima_release_policy(struct inode *inode, struct file *file)
->>   {
->>   	struct ima_namespace *ns = &init_ima_ns;
->>   	const char *cause = ns->valid_policy ? "completed" : "failed";
->> +	int err = 0;
->>   
->>   	if ((file->f_flags & O_ACCMODE) == O_RDONLY)
->>   		return seq_release(inode, file);
->>   
->> -	if (ns->valid_policy && ima_check_policy(ns) < 0) {
->> -		cause = "failed";
->> -		ns->valid_policy = 0;
->> +	if (ns->valid_policy) {
->> +		err = ima_check_policy(ns);
->> +		if (err < 0) {
->> +			if (err == -ENOSPC)
-> Perhaps "EDQUOT" would be more appropriate.
->
->> +				cause = "too-many-rules";
->> +			else
->> +				cause = "failed";
->> +			ns->valid_policy = 0;
->> +		}
->>   	}
->>   
->>   	pr_info("policy update %s\n", cause);
->> -	integrity_audit_msg(AUDIT_INTEGRITY_STATUS, NULL, NULL,
->> -			    "policy_update", cause, !ns->valid_policy, 0);
->> +	integrity_audit_message(AUDIT_INTEGRITY_STATUS, NULL, NULL,
->> +				"policy_update", cause, !ns->valid_policy, 0,
->> +				-err);
-> The 'err' value is already properly set.  No need for the minus sign.
->
->>   
->>   	if (!ns->valid_policy) {
->>   		ima_delete_rules(ns);
->>   		ns->valid_policy = 1;
->>   		clear_bit(IMA_FS_BUSY, &ns->ima_fs_flags);
->> -		return 0;
->> +		return err;
->>   	}
->>   
->>   	ima_update_policy(ns);
->> diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
->> index acb4c36e539f..3f84d04f101d 100644
->> --- a/security/integrity/ima/ima_policy.c
->> +++ b/security/integrity/ima/ima_policy.c
->> @@ -305,7 +305,8 @@ static struct ima_rule_opt_list *ima_alloc_rule_opt_list(const substring_t *src)
->>   		return ERR_PTR(-EINVAL);
->>   	}
->>   
->> -	opt_list = kzalloc(struct_size(opt_list, items, count), GFP_KERNEL);
->> +	opt_list = kzalloc(struct_size(opt_list, items, count),
->> +			   GFP_KERNEL_ACCOUNT);
->>   	if (!opt_list) {
->>   		kfree(src_copy);
->>   		return ERR_PTR(-ENOMEM);
->> @@ -379,7 +380,7 @@ static struct ima_rule_entry *ima_lsm_copy_rule(struct ima_namespace *ns,
->>   	 * Immutable elements are copied over as pointers and data; only
->>   	 * lsm rules can change
->>   	 */
->> -	nentry = kmemdup(entry, sizeof(*nentry), GFP_KERNEL);
->> +	nentry = kmemdup(entry, sizeof(*nentry), GFP_KERNEL_ACCOUNT);
->>   	if (!nentry)
->>   		return NULL;
->>   
->> @@ -826,7 +827,7 @@ static void add_rules(struct ima_namespace *ns,
->>   
->>   		if (policy_rule & IMA_CUSTOM_POLICY) {
->>   			entry = kmemdup(&entries[i], sizeof(*entry),
->> -					GFP_KERNEL);
->> +					GFP_KERNEL_ACCOUNT);
->>   			if (!entry)
->>   				continue;
->>   
->> @@ -863,7 +864,7 @@ static int __init ima_init_arch_policy(struct ima_namespace *ns)
->>   
->>   	ns->arch_policy_entry = kcalloc(arch_entries + 1,
->>   					sizeof(*ns->arch_policy_entry),
->> -					GFP_KERNEL);
->> +					GFP_KERNEL_ACCOUNT);
->>   	if (!ns->arch_policy_entry)
->>   		return 0;
->>   
->> @@ -975,8 +976,20 @@ void __init ima_init_policy(struct ima_namespace *ns)
->>   /* Make sure we have a valid policy, at least containing some rules. */
->>   int ima_check_policy(struct ima_namespace *ns)
->>   {
->> +	struct ima_rule_entry *entry;
->> +	size_t len1 = 0;
->> +	size_t len2 = 0;
->> +
->>   	if (list_empty(&ns->ima_temp_rules))
->>   		return -EINVAL;
->> +	if (ns != &init_ima_ns) {
->> +		list_for_each_entry(entry, &ns->ima_temp_rules, list)
->> +			len1++;
->> +		list_for_each_entry(entry, &ns->ima_policy_rules, list)
-> Using list_for_each_entry() is fine here, because multiple policy
-> updates at the same time are blocked.  Please add a comment.
->
->> +			len2++;
->> +		if (len1 + len2 > 1024)
-> One variable should be enough.
->
->> +			return -ENOSPC;
->> +	}
->>   	return 0;
->>   }
->>   
->> @@ -1848,7 +1861,7 @@ ssize_t ima_parse_add_rule(struct ima_namespace *ns, char *rule)
->>   	if (*p == '#' || *p == '\0')
->>   		return len;
->>   
->> -	entry = kzalloc(sizeof(*entry), GFP_KERNEL);
->> +	entry = kzalloc(sizeof(*entry), GFP_KERNEL_ACCOUNT);
->>   	if (!entry) {
->>   		integrity_audit_msg(AUDIT_INTEGRITY_STATUS, NULL,
->>   				    NULL, op, "-ENOMEM", -ENOMEM, audit_info);

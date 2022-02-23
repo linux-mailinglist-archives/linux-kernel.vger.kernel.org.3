@@ -2,98 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EEB34C0F4B
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 10:37:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD06F4C0F4E
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 10:37:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239316AbiBWJh0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 04:37:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33240 "EHLO
+        id S239324AbiBWJhr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 04:37:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238715AbiBWJhZ (ORCPT
+        with ESMTP id S239318AbiBWJhn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 04:37:25 -0500
-Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2267488AB;
-        Wed, 23 Feb 2022 01:36:58 -0800 (PST)
-Received: by mail-qk1-x731.google.com with SMTP id q4so3774381qki.11;
-        Wed, 23 Feb 2022 01:36:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=O/nWq54aLnoBPA2OY9+4Ua6OhHSnHjOi//smrDEVze4=;
-        b=U/UF2VSng13xh7TYIcdZhyoqxbP214syzfRML65LozwHHn6Pviwu0XPWKn5BC2XiHn
-         bZ3/HYqQMWnjUIjNJaislhBbBICkfvfSPnuPEtRpf77VLTQivXJUUyztZifeBu19ajxH
-         BdVFj5xUphBufYY+3/Ky6Cjv5BdPLijHEwMlv6jJGnDhQ5otOga7VPcZ+J2NXAUafq0Z
-         hW6TqCbXRtna3Vz2g5EU1ThN+riBJMNynbK8Ain2B0xBOicNdDm7HgxdYp4JnUPHuVb/
-         tiOU20STT2tf4HBjTxDRKfR4EGWmobrugH/bWppQRkfRpPQcIQQElarSXGAzofM2K1lX
-         yaCA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=O/nWq54aLnoBPA2OY9+4Ua6OhHSnHjOi//smrDEVze4=;
-        b=Y5T3cbCMXdXuqiiZjjpSY1ngWAQmp83Pd/nH6btTSQmF46MMU+BCFql123SLftPT/T
-         j1MFTgnqaLWGl1q2FmYdB8R6Q3xFRoTJP0hEsYgNSjkD/gSSS1yCIPENqfd+HeWRWJny
-         lLgeDuNtHccWy3FpzXQ0Ti7Wn/FJn4hMfChF9IEVo4Bzn9mnTxsw2z4w95rZ23qTRB2c
-         9S/J2gpFqYfQSz0EzqFKALwsfWMkVsOaWHfYHxcsiiDb8oZJMDTMxBUHcg3Qoxd6W8y2
-         GWiBk5Lc5Od/pTp7Qww8yu1m+CEhR0LauTfGg1lW2zx5DUySeXU6eUguRGeJlJQloD8l
-         OlwQ==
-X-Gm-Message-State: AOAM532t9VzY3O7vrnNLkTq4ZDrBquPE9NBjByT/NyYS0paQmrq2wud2
-        Gif7dGCykC+be0IRBTsr0n3kMoHe7HU=
-X-Google-Smtp-Source: ABdhPJx2HMuX9P1TTeBc7I21YRWMQpgMTwy1YTU8mhxwTeFQiHXIV6p+G9bSBmBaGKA8283tjrtV3g==
-X-Received: by 2002:a37:a0c6:0:b0:60b:54ea:29dc with SMTP id j189-20020a37a0c6000000b0060b54ea29dcmr17779660qke.354.1645609017897;
-        Wed, 23 Feb 2022 01:36:57 -0800 (PST)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id z19sm1481805qts.18.2022.02.23.01.36.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Feb 2022 01:36:57 -0800 (PST)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: deng.changcheng@zte.com.cn
-To:     srinivas.pandruvada@linux.intel.com
-Cc:     platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Changcheng Deng <deng.changcheng@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH] tools/power/x86/intel-speed-select: Remove unneeded semicolon
-Date:   Wed, 23 Feb 2022 09:36:33 +0000
-Message-Id: <20220223093633.1934362-1-deng.changcheng@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        Wed, 23 Feb 2022 04:37:43 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F116496AB;
+        Wed, 23 Feb 2022 01:37:15 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 472992114D;
+        Wed, 23 Feb 2022 09:37:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1645609034; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=vkNKhnI3Z4RqRaZWsTmnjavlstvLrtTeTG7qCNbsiZc=;
+        b=DZ4x99N+/+0AEa+8XMcKiLhDGfCtlrlBGG6mbmQTWkwkZRtF7wFbn1VmgG6gUO0VSCC/ih
+        JL0LnlYOKsWQSUV7J51D40KNrHwpSMvsH+g7qKdjlD+93lZeEocuUtL8Dr52ByD/lccSMf
+        ksAPETt0tMNm9J80JoeGpl0cSqEzSNs=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1645609034;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=vkNKhnI3Z4RqRaZWsTmnjavlstvLrtTeTG7qCNbsiZc=;
+        b=qxX4/ycl1lYcZ5yOgm+InbnPdUtq6N86t/rBuaYd6sEIEBm7ZRTPRgke+/4HqsYSCuelPn
+        okR0EOVnNeN+ZIBg==
+Received: from quack3.suse.cz (unknown [10.163.28.18])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 36E04A3B83;
+        Wed, 23 Feb 2022 09:37:14 +0000 (UTC)
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id E0A3DA0605; Wed, 23 Feb 2022 10:37:13 +0100 (CET)
+Date:   Wed, 23 Feb 2022 10:37:13 +0100
+From:   Jan Kara <jack@suse.cz>
+To:     Ritesh Harjani <riteshh@linux.ibm.com>
+Cc:     linux-ext4@vger.kernel.org,
+        Harshad Shirwadkar <harshadshirwadkar@gmail.com>,
+        Theodore Ts'o <tytso@mit.edu>, Jan Kara <jack@suse.cz>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFC 1/9] ext4: Remove unused enum EXT4_FC_COMMIT_FAILED
+Message-ID: <20220223093713.fw7c54xmllxrmmld@quack3.lan>
+References: <cover.1645558375.git.riteshh@linux.ibm.com>
+ <a1e9902e84595a2088bcf4882691a8330640246b.1645558375.git.riteshh@linux.ibm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a1e9902e84595a2088bcf4882691a8330640246b.1645558375.git.riteshh@linux.ibm.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Changcheng Deng <deng.changcheng@zte.com.cn>
+On Wed 23-02-22 02:04:09, Ritesh Harjani wrote:
+> Below commit removed all references of EXT4_FC_COMMIT_FAILED.
+> commit 0915e464cb274 ("ext4: simplify updating of fast commit stats")
+> 
+> Just remove it since it is not used anymore.
+> 
+> Signed-off-by: Ritesh Harjani <riteshh@linux.ibm.com>
 
-Fix the following coccicheck review:
-tools/power/x86/intel-speed-select/hfi-events.c: 147: Unneeded semicolon
+Sure. Feel free to add:
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Changcheng Deng <deng.changcheng@zte.com.cn>
----
- tools/power/x86/intel-speed-select/hfi-events.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Reviewed-by: Jan Kara <jack@suse.cz>
 
-diff --git a/tools/power/x86/intel-speed-select/hfi-events.c b/tools/power/x86/intel-speed-select/hfi-events.c
-index e85676711372..2f871c108236 100644
---- a/tools/power/x86/intel-speed-select/hfi-events.c
-+++ b/tools/power/x86/intel-speed-select/hfi-events.c
-@@ -144,7 +144,7 @@ static int family_handler(struct nl_msg *msg, void *arg)
- 			continue;
- 		res->id = nla_get_u32(tb2[CTRL_ATTR_MCAST_GRP_ID]);
- 		break;
--	};
-+	}
- 
- 	return 0;
- }
+									Honza
+
+> ---
+>  fs/ext4/fast_commit.h | 1 -
+>  1 file changed, 1 deletion(-)
+> 
+> diff --git a/fs/ext4/fast_commit.h b/fs/ext4/fast_commit.h
+> index 02afa52e8e41..80414dcba6e1 100644
+> --- a/fs/ext4/fast_commit.h
+> +++ b/fs/ext4/fast_commit.h
+> @@ -93,7 +93,6 @@ enum {
+>  	EXT4_FC_REASON_RENAME_DIR,
+>  	EXT4_FC_REASON_FALLOC_RANGE,
+>  	EXT4_FC_REASON_INODE_JOURNAL_DATA,
+> -	EXT4_FC_COMMIT_FAILED,
+>  	EXT4_FC_REASON_MAX
+>  };
+>  
+> -- 
+> 2.31.1
+> 
 -- 
-2.25.1
-
+Jan Kara <jack@suse.com>
+SUSE Labs, CR

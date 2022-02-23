@@ -2,58 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A172B4C0BB1
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 06:24:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 679354C0BAD
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 06:24:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238167AbiBWFYl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 00:24:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56598 "EHLO
+        id S238152AbiBWFYf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 00:24:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237992AbiBWFYY (ORCPT
+        with ESMTP id S238123AbiBWFY2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 00:24:24 -0500
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABF6A69CFE
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 21:23:57 -0800 (PST)
-Received: by mail-yb1-xb49.google.com with SMTP id b12-20020a056902030c00b0061d720e274aso26585917ybs.20
-        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 21:23:57 -0800 (PST)
+        Wed, 23 Feb 2022 00:24:28 -0500
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE3416A047
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 21:23:59 -0800 (PST)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-2d306e372e5so163250677b3.5
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 21:23:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=LI1Qxw8YovJHKPYFPYoCf4datmDsbayp3z46DL8Kp8Q=;
-        b=U7xDPHt7nJyB2GTAgVc+5mVNa5D9AiEIkeTSJpYyuShkSe5G+Xo37Cmu4z2S0ODbd3
-         Wm5Eeq8cvy6TNvAv3A7bWuNv++i7NTg2KMLHM/m4eHjfRoQqwVJ2y/Yi5MDF7xrDbsQI
-         j5wRAvkCT4cYk3Bc/Ve5H0pU1FD7r6VuCExamGfvXcE67Mlg9W1l1RFlwTf48DP0g9j8
-         zrQbvmaWMqoIe6J4oo0xoCcquiVzfC7OAHWIqYk7V7cZwcAdfqwpYM8UaM/ZPk1iYlJM
-         o8gS8/KkwFxTjJeXBM9VLMqxRp+ccKcT56QtTvv+HXupkPEETHBW4Z+e7zRt00MQFKUT
-         ixgA==
+        bh=PIzleJhvx1e4in5SU2cz59acEkt7I4gZXxP/VePrhcs=;
+        b=UOhpXDHCnae+DRnauRxZtdjiTln+VoGZhoV1LC2HwZ0wE6hCMEDx6ZsM5m4zhmzU8C
+         zHAJJxzPwGGULan8LLoI7C3OSmGzlkgZIkeoNkliXHKxR2zxRtRuDwE2nmiSS1c4BXRL
+         MiuUyWSM6+TUYE5RqqQekigHUWwoMR7es7zfFE2KzZ5ooe/XoTE9TQgA48klkJO1uSey
+         E656AcQf7rLEbAA6uzuZiKaqjksL8iwXpjTOMvdQBp3iyrK4xwvnjKTRQ5lhnl0vyEeu
+         pioGnqi8o2SeqNRitqaZjawpEPOB4cWAR7yNk2BDoyC4/ldrIIsdHyj3n/nSEdlK5M0a
+         gypQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=LI1Qxw8YovJHKPYFPYoCf4datmDsbayp3z46DL8Kp8Q=;
-        b=MYd/DEBU0YO7vo0i+L0cMWECEq1OYVjT0ex6drnvqUgfKVVz5OufSMngCnRq+hiIyC
-         kMr2JzcvbPiJdSHwrFb7FTuCKMJKUUHea6fVanekTLhGk4WgZ4pi+hNYgPHloAaNIze5
-         s8a5mz8MWPgayUuZu56vAzsFkP4lOfqyWMfLEoSNpMhLD65xzAxtTw2rI2ZTCNsGZi5H
-         8qDx6LPazxnbqqoswHlGA7RnwhaCXTF1kOGE93trVYm++TXrKPT7Qc6KH5BZjQo6+NBF
-         i9wVgKbUp/9O80C26xG3SWaOBZb9zmZ5mma+jAFfiHxTM/JXLHxIJpuBfULZR+/5qeSG
-         ILgQ==
-X-Gm-Message-State: AOAM532S/NYfm+3MKn4iL4tX6Y09xnfdobV3VA9M6lAi1K4Kz58eGCNn
-        zxel16wvmund7HOfEEcVIObXgSEHWtgutxFDo7AzqvoZkQvf6qWo24qRel39eSsysg4GJr369X9
-        QtASa+Gyc0gylMAK8apiEHBt9Esd8tDki/ku2eQ1tlMyo4ryseufQOn8LklFzNIPm9Z67PLKN
-X-Google-Smtp-Source: ABdhPJxfznelYhWgkiOo62fJh4kZWSbldwDVUL5AZ4s809e7D3FsyXFvg8XSNCQZyLZ5Vxg+VGGrfUoGnpy5
+        bh=PIzleJhvx1e4in5SU2cz59acEkt7I4gZXxP/VePrhcs=;
+        b=Ipj/5KE1k0ES7yurFMTzfPS58abKskOdWc/E+l4HHvqsBBsTK84cWq2bnbXX4SWf1i
+         UlZBmO0hL2qEv++npNlMW+aaz1VL7nwzmZbUhNaK9SoiF7Ei05604FVRinuxGpNn0p7j
+         4ZKitdEPKLzRr/vE5g+3s6x6u52ciN+H5HVBG8olpVqthm5AdTPXXwrs9u5zP+EXXcLe
+         WuN29kfYlWT1t54xbxgoMgVFqGXzlyLCJjS/DecH0JKxPEwK1V0nwGoUjHXlIIhAhIMw
+         +ZyjfO9oHksrDyYP4A+sIM5z221LmmhsxdedgVWcmVuHRqQj6VO7SEB8tNTafThFfQTu
+         gAiA==
+X-Gm-Message-State: AOAM530O4HsYO4s97+Z9snFTcsil8+sxpxL/fV3iTuYa9vk0hFuX3cZH
+        TzDUEh++Tkwbloqprj9DR6YN0UmZlEEn9shiY/t924P3BTexLTrn8PEv2dpPRrMlw1unAQzSPvC
+        Jnhjr3J9e78uVU24jsQm1qKSEZce+u7OFQeT/m1qY4E77v3z8gz/fAOiZODXbcVXlrWUtyWWL
+X-Google-Smtp-Source: ABdhPJyZtnc6SgOpidUjkYpln4RLDN4W6lG8iW37Mn66M+p2QX3sw1OB0/Qqkeh8xQlAuLXN36L1X25C92Rt
 X-Received: from js-desktop.svl.corp.google.com ([2620:15c:2cd:202:ccbe:5d15:e2e6:322])
- (user=junaids job=sendgmr) by 2002:a81:5cc3:0:b0:2d0:a2d0:9c0e with SMTP id
- q186-20020a815cc3000000b002d0a2d09c0emr27666033ywb.270.1645593836836; Tue, 22
- Feb 2022 21:23:56 -0800 (PST)
-Date:   Tue, 22 Feb 2022 21:21:41 -0800
+ (user=junaids job=sendgmr) by 2002:a0d:c607:0:b0:2ca:287c:6b6c with SMTP id
+ i7-20020a0dc607000000b002ca287c6b6cmr28060793ywd.17.1645593839000; Tue, 22
+ Feb 2022 21:23:59 -0800 (PST)
+Date:   Tue, 22 Feb 2022 21:21:42 -0800
 In-Reply-To: <20220223052223.1202152-1-junaids@google.com>
-Message-Id: <20220223052223.1202152-6-junaids@google.com>
+Message-Id: <20220223052223.1202152-7-junaids@google.com>
 Mime-Version: 1.0
 References: <20220223052223.1202152-1-junaids@google.com>
 X-Mailer: git-send-email 2.35.1.473.g83b2b277ed-goog
-Subject: [RFC PATCH 05/47] mm: asi: Make __get_current_cr3_fast() ASI-aware
+Subject: [RFC PATCH 06/47] mm: asi: ASI page table allocation and free functions
 From:   Junaid Shahid <junaids@google.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     kvm@vger.kernel.org, pbonzini@redhat.com, jmattson@google.com,
@@ -72,84 +72,166 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When ASI is active, __get_current_cr3_fast() adjusts the returned CR3
-value accordingly to reflect the actual ASI CR3.
+This adds custom allocation and free functions for ASI page tables.
+
+The alloc functions support allocating memory using different GFP
+reclaim flags, in order to be able to support non-sensitive allocations
+from both standard and atomic contexts. They also install the page
+tables locklessly, which makes it slightly simpler to handle
+non-sensitive allocations from interrupts/exceptions.
+
+The free functions recursively free the page tables when the ASI
+instance is being torn down.
 
 Signed-off-by: Junaid Shahid <junaids@google.com>
 
 
 ---
- arch/x86/include/asm/asi.h |  7 +++++++
- arch/x86/mm/tlb.c          | 20 ++++++++++++++++++--
- 2 files changed, 25 insertions(+), 2 deletions(-)
+ arch/x86/mm/asi.c       | 109 +++++++++++++++++++++++++++++++++++++++-
+ include/linux/pgtable.h |   3 ++
+ 2 files changed, 111 insertions(+), 1 deletion(-)
 
-diff --git a/arch/x86/include/asm/asi.h b/arch/x86/include/asm/asi.h
-index 7702332c62e8..95557211dabd 100644
---- a/arch/x86/include/asm/asi.h
-+++ b/arch/x86/include/asm/asi.h
-@@ -112,6 +112,11 @@ static inline void asi_intr_exit(void)
- 	}
+diff --git a/arch/x86/mm/asi.c b/arch/x86/mm/asi.c
+index 2453124f221d..40d772b2e2a8 100644
+--- a/arch/x86/mm/asi.c
++++ b/arch/x86/mm/asi.c
+@@ -60,6 +60,113 @@ void asi_unregister_class(int index)
  }
+ EXPORT_SYMBOL_GPL(asi_unregister_class);
  
-+static inline pgd_t *asi_pgd(struct asi *asi)
-+{
-+	return asi->pgd;
++#ifndef mm_inc_nr_p4ds
++#define mm_inc_nr_p4ds(mm)	do {} while (false)
++#endif
++
++#ifndef mm_dec_nr_p4ds
++#define mm_dec_nr_p4ds(mm)	do {} while (false)
++#endif
++
++#define pte_offset		pte_offset_kernel
++
++#define DEFINE_ASI_PGTBL_ALLOC(base, level)				\
++static level##_t * asi_##level##_alloc(struct asi *asi,			\
++				       base##_t *base, ulong addr,	\
++				       gfp_t flags)			\
++{									\
++	if (unlikely(base##_none(*base))) {				\
++		ulong pgtbl = get_zeroed_page(flags);			\
++		phys_addr_t pgtbl_pa;					\
++									\
++		if (pgtbl == 0)						\
++			return NULL;					\
++									\
++		pgtbl_pa = __pa(pgtbl);					\
++		paravirt_alloc_##level(asi->mm, PHYS_PFN(pgtbl_pa));	\
++									\
++		if (cmpxchg((ulong *)base, 0,				\
++			    pgtbl_pa | _PAGE_TABLE) == 0) {		\
++			mm_inc_nr_##level##s(asi->mm);			\
++		} else {						\
++			paravirt_release_##level(PHYS_PFN(pgtbl_pa));	\
++			free_page(pgtbl);				\
++		}							\
++									\
++		/* NOP on native. PV call on Xen. */			\
++		set_##base(base, *base);				\
++	}								\
++	VM_BUG_ON(base##_large(*base));					\
++	return level##_offset(base, addr);				\
 +}
 +
- #else	/* CONFIG_ADDRESS_SPACE_ISOLATION */
- 
- static inline void asi_intr_enter(void) { }
-@@ -120,6 +125,8 @@ static inline void asi_intr_exit(void) { }
- 
- static inline void asi_init_thread_state(struct thread_struct *thread) { }
- 
-+static inline pgd_t *asi_pgd(struct asi *asi) { return NULL; }
++DEFINE_ASI_PGTBL_ALLOC(pgd, p4d)
++DEFINE_ASI_PGTBL_ALLOC(p4d, pud)
++DEFINE_ASI_PGTBL_ALLOC(pud, pmd)
++DEFINE_ASI_PGTBL_ALLOC(pmd, pte)
 +
- #endif	/* CONFIG_ADDRESS_SPACE_ISOLATION */
- 
- #endif
-diff --git a/arch/x86/mm/tlb.c b/arch/x86/mm/tlb.c
-index 88d9298720dc..25bee959d1d3 100644
---- a/arch/x86/mm/tlb.c
-+++ b/arch/x86/mm/tlb.c
-@@ -17,6 +17,7 @@
- #include <asm/cacheflush.h>
- #include <asm/apic.h>
- #include <asm/perf_event.h>
-+#include <asm/asi.h>
- 
- #include "mm_internal.h"
- 
-@@ -1073,12 +1074,27 @@ void flush_tlb_kernel_range(unsigned long start, unsigned long end)
-  */
- unsigned long __get_current_cr3_fast(void)
++#define asi_free_dummy(asi, addr)
++#define __pmd_free(mm, pmd) free_page((ulong)(pmd))
++#define pud_page_vaddr(pud) ((ulong)pud_pgtable(pud))
++#define p4d_page_vaddr(p4d) ((ulong)p4d_pgtable(p4d))
++
++static inline unsigned long pte_page_vaddr(pte_t pte)
++{
++	return (unsigned long)__va(pte_val(pte) & PTE_PFN_MASK);
++}
++
++#define DEFINE_ASI_PGTBL_FREE(level, LEVEL, next, free)			\
++static void asi_free_##level(struct asi *asi, ulong pgtbl_addr)		\
++{									\
++	uint i;								\
++	level##_t *level = (level##_t *)pgtbl_addr;			\
++									\
++	for (i = 0; i < PTRS_PER_##LEVEL; i++) {			\
++		ulong vaddr;						\
++									\
++		if (level##_none(level[i]))				\
++			continue;					\
++									\
++		vaddr = level##_page_vaddr(level[i]);			\
++									\
++		if (!level##_leaf(level[i]))				\
++			asi_free_##next(asi, vaddr);			\
++		else							\
++			VM_WARN(true, "Lingering mapping in ASI %p at %lx",\
++				asi, vaddr);				\
++	}								\
++	paravirt_release_##level(PHYS_PFN(__pa(pgtbl_addr)));		\
++	free(asi->mm, level);						\
++	mm_dec_nr_##level##s(asi->mm);					\
++}
++
++DEFINE_ASI_PGTBL_FREE(pte, PTE, dummy, pte_free_kernel)
++DEFINE_ASI_PGTBL_FREE(pmd, PMD, pte, __pmd_free)
++DEFINE_ASI_PGTBL_FREE(pud, PUD, pmd, pud_free)
++DEFINE_ASI_PGTBL_FREE(p4d, P4D, pud, p4d_free)
++
++static void asi_free_pgd_range(struct asi *asi, uint start, uint end)
++{
++	uint i;
++
++	for (i = start; i < end; i++)
++		if (pgd_present(asi->pgd[i]))
++			asi_free_p4d(asi, (ulong)p4d_offset(asi->pgd + i, 0));
++}
++
++/*
++ * Free the page tables allocated for the given ASI instance.
++ * The caller must ensure that all the mappings have already been cleared
++ * and appropriate TLB flushes have been issued before calling this function.
++ */
++static void asi_free_pgd(struct asi *asi)
++{
++	VM_BUG_ON(asi->mm == &init_mm);
++
++	asi_free_pgd_range(asi, KERNEL_PGD_BOUNDARY, PTRS_PER_PGD);
++	free_pages((ulong)asi->pgd, PGD_ALLOCATION_ORDER);
++}
++
+ static int __init set_asi_param(char *str)
  {
--	unsigned long cr3 = build_cr3(this_cpu_read(cpu_tlbstate.loaded_mm)->pgd,
--		this_cpu_read(cpu_tlbstate.loaded_mm_asid));
-+	unsigned long cr3;
-+	pgd_t *pgd;
-+	u16 asid = this_cpu_read(cpu_tlbstate.loaded_mm_asid);
-+	struct asi *asi = asi_get_current();
-+
-+	if (asi)
-+		pgd = asi_pgd(asi);
-+	else
-+		pgd = this_cpu_read(cpu_tlbstate.loaded_mm)->pgd;
-+
-+	cr3 = build_cr3(pgd, asid);
+ 	if (strcmp(str, "on") == 0)
+@@ -102,7 +209,7 @@ void asi_destroy(struct asi *asi)
+ 	if (!boot_cpu_has(X86_FEATURE_ASI))
+ 		return;
  
- 	/* For now, be very restrictive about when this can be called. */
- 	VM_WARN_ON(in_nmi() || preemptible());
- 
-+	/*
-+	 * CR3 is unstable if the target ASI is unrestricted
-+	 * and a restricted ASI is currently loaded.
-+	 */
-+	VM_WARN_ON_ONCE(asi && asi_is_target_unrestricted());
-+
- 	VM_BUG_ON(cr3 != __read_cr3());
- 	return cr3;
+-	free_pages((ulong)asi->pgd, PGD_ALLOCATION_ORDER);
++	asi_free_pgd(asi);
+ 	memset(asi, 0, sizeof(struct asi));
  }
+ EXPORT_SYMBOL_GPL(asi_destroy);
+diff --git a/include/linux/pgtable.h b/include/linux/pgtable.h
+index e24d2c992b11..2fff17a939f0 100644
+--- a/include/linux/pgtable.h
++++ b/include/linux/pgtable.h
+@@ -1593,6 +1593,9 @@ typedef unsigned int pgtbl_mod_mask;
+ #ifndef pmd_leaf
+ #define pmd_leaf(x)	0
+ #endif
++#ifndef pte_leaf
++#define pte_leaf(x)	1
++#endif
+ 
+ #ifndef pgd_leaf_size
+ #define pgd_leaf_size(x) (1ULL << PGDIR_SHIFT)
 -- 
 2.35.1.473.g83b2b277ed-goog
 

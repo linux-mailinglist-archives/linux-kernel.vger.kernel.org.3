@@ -2,154 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 602A84C198B
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 18:09:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DE3F4C193B
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 18:03:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243281AbiBWRKC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 12:10:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36996 "EHLO
+        id S243087AbiBWRDt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 12:03:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236564AbiBWRJv (ORCPT
+        with ESMTP id S241607AbiBWRDr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 12:09:51 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74DB76A00B
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 09:09:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645636163; x=1677172163;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=vRdsv3Fy6NbuApbaB3ggHyhSGJ4vHsHhQh9jBEiyj/U=;
-  b=RqawMp6lmh82jBEB5875lPF/RKF6ZcHN5pxzSpA9PZMWRAyetvF+U0zt
-   sWUEM44yQQnM5+IbH/ojMqQgU4KclS41JRTGfl7/5zfKt9a5IX/Te9SOw
-   b7do58bLEkyizu1U+dUs2rgWm4G5YZ7tAS0UWKtTJmpCk702i1azeEmcQ
-   w/FibHTFsuzMreiMV5AExmc/UQ8q6w+BoVxgdKY+i7z9SgLkFeOllyls3
-   NP3GjSUy/dqNFBjd+a1tiZ4sk362KDdmWvqxNZv3qBpwIBTWK3IyHtbkh
-   R9jQG3vkAbuAZFXXPu7q9C8ZI3Qgo7eaN5NpGYwRrJ8xBCutdzbMonR4I
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10267"; a="239418219"
-X-IronPort-AV: E=Sophos;i="5.88,391,1635231600"; 
-   d="scan'208";a="239418219"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2022 09:03:41 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,391,1635231600"; 
-   d="scan'208";a="548344664"
-Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 23 Feb 2022 09:03:40 -0800
-Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nMv3D-0001dl-Go; Wed, 23 Feb 2022 17:03:39 +0000
-Date:   Thu, 24 Feb 2022 01:02:37 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Ingo Molnar <mingo@kernel.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: [mingo-tip:sched/headers 1583/2340]
- drivers/net/ieee802154/ca8210.c:1782:4: error: implicit declaration of
- function 'dev_kfree_skb_any'
-Message-ID: <202202240010.CSrNf18k-lkp@intel.com>
+        Wed, 23 Feb 2022 12:03:47 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9967F4ECF4;
+        Wed, 23 Feb 2022 09:03:17 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 48D1DB82117;
+        Wed, 23 Feb 2022 17:03:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76CD2C340F6;
+        Wed, 23 Feb 2022 17:03:14 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="CDnOLrRM"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1645635788;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Pp12ena6dYDhd7GMsoT5AC0lytZr3q+Tcps8HSwUknA=;
+        b=CDnOLrRMtk4VRy2HmVtFBTs/Gbq3hrc0eMc9ePBYzEqT6grdqpdnNipnlYVZf6F4Vk0SHW
+        UBQv2m2COWqYCowr3DsdzXxn0vhuP6gQQGak8DDHGqSPEvUdh4/AM8Yx8yjWa1bZLEBZ8R
+        Dd+0HBkIG2pLvh7UELcEVRGSKfRHDjw=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id dd0a54aa (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Wed, 23 Feb 2022 17:03:07 +0000 (UTC)
+Received: by mail-yb1-f179.google.com with SMTP id w63so28048122ybe.10;
+        Wed, 23 Feb 2022 09:03:06 -0800 (PST)
+X-Gm-Message-State: AOAM531s7hJD0rB4w0QrH/mhacpYiJzfuDv05Xe+rwHYV9wz2ZyrMotI
+        oR7hN9EUKngAMLui61Z0frjP0/OLK0ReMztertk=
+X-Google-Smtp-Source: ABdhPJwPRBaPOjS3KtoDamJStmC6n2tfcA0U7gkU1wr5DyfkQa76VS2mekyDcU8DDIo2C3IK2X3TBhpqi9a0bun2Qt0=
+X-Received: by 2002:a05:6902:693:b0:613:7f4f:2e63 with SMTP id
+ i19-20020a056902069300b006137f4f2e63mr567022ybt.271.1645635783597; Wed, 23
+ Feb 2022 09:03:03 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220217162848.303601-1-Jason@zx2c4.com> <6e117393-9c2f-441c-9c72-62c209643622@www.fastmail.com>
+In-Reply-To: <6e117393-9c2f-441c-9c72-62c209643622@www.fastmail.com>
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date:   Wed, 23 Feb 2022 18:02:52 +0100
+X-Gmail-Original-Message-ID: <CAHmME9qcUM+G8E3ag5iPfowUF4-iYATODGK+MoLjkfaipnkgjA@mail.gmail.com>
+Message-ID: <CAHmME9qcUM+G8E3ag5iPfowUF4-iYATODGK+MoLjkfaipnkgjA@mail.gmail.com>
+Subject: Re: [PATCH v1] random: block in /dev/urandom
+To:     Andy Lutomirski <luto@kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Nick Hu <nickhu@andestech.com>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Michal Simek <monstr@monstr.eu>,
+        Borislav Petkov <bp@alien8.de>, Guo Ren <guoren@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Joshua Kinard <kumba@gentoo.org>,
+        David Laight <David.Laight@aculab.com>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Eric Biggers <ebiggers@google.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Kees Cook <keescook@chromium.org>,
+        Lennart Poettering <mzxreary@0pointer.de>,
+        Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Theodore Ts'o" <tytso@mit.edu>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git sched/headers
-head:   97c5eeb4de3ad324ed2a4656b46465299cfd010a
-commit: ea46cc7b8232972f12361f456922beddc7ab3d14 [1583/2340] headers/deps: networking/headers: Remove the <linux/netdevice_api.h> inclusion from <linux/netdevice.h>
-config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20220224/202202240010.CSrNf18k-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=ea46cc7b8232972f12361f456922beddc7ab3d14
-        git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
-        git fetch --no-tags mingo-tip sched/headers
-        git checkout ea46cc7b8232972f12361f456922beddc7ab3d14
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/net/dsa/ drivers/net/ieee802154/ net/dsa/ net/smc/
+Hi Andy,
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+I think your analysis is a bit mismatched from the reality of the
+situation. That reality is that cryptographic users still find
+themselves using /dev/urandom, as that's been the "standard good
+advice" for a very long time. And people are still encouraged to do
+that, either out of ignorance or out of "compatibility". The
+cryptographic problem is not going away.
 
-Note: the mingo-tip/sched/headers HEAD 97c5eeb4de3ad324ed2a4656b46465299cfd010a builds fine.
-      It only hurts bisectability.
+Fixing this issue means, yes, adding a 1 second delay to the small
+group of init system users who haven't switched to using
+getrandom(GRND_INSECURE) for that less common usage (who even are
+those users actually?). That's not breaking compatibility or breaking
+userspace or breaking anything; that's accepting the reality of _how_
+/dev/urandom is mostly used -- for crypto -- and making that usage
+finally secure, at the expense of a 1 second delay for those other
+users who haven't switched to getrandom(GRND_INSECURE) yet. That seems
+like a _very_ small price to pay for eliminating a footgun.
 
-All errors (new ones prefixed by >>):
+And in general, deemphasizing the rare performance of the less common
+usage in favor of fixing a commonly triggered footgun seems on par
+with how things morph and change over time. There's no actual
+breakage. There's no ABI change violation. What you're saying simply
+isn't so.
 
->> drivers/net/ieee802154/ca8210.c:1782:4: error: implicit declaration of function 'dev_kfree_skb_any' [-Werror,-Wimplicit-function-declaration]
-                           dev_kfree_skb_any(priv->tx_skb);
-                           ^
-   1 error generated.
+In other words, I'm not really at all convinced by what you're saying.
 
-
-vim +/dev_kfree_skb_any +1782 drivers/net/ieee802154/ca8210.c
-
-ded845a781a578 Harry Morris  2017-03-28  1745  
-ded845a781a578 Harry Morris  2017-03-28  1746  /**
-ded845a781a578 Harry Morris  2017-03-28  1747   * ca8210_async_xmit_complete() - Called to announce that an asynchronous
-ded845a781a578 Harry Morris  2017-03-28  1748   *                                transmission has finished
-ded845a781a578 Harry Morris  2017-03-28  1749   * @hw:          ieee802154_hw of ca8210 that has finished exchange
-ded845a781a578 Harry Morris  2017-03-28  1750   * @msduhandle:  Identifier of transmission that has completed
-ded845a781a578 Harry Morris  2017-03-28  1751   * @status:      Returned 802.15.4 status code of the transmission
-ded845a781a578 Harry Morris  2017-03-28  1752   *
-ded845a781a578 Harry Morris  2017-03-28  1753   * Return: 0 or linux error code
-ded845a781a578 Harry Morris  2017-03-28  1754   */
-ded845a781a578 Harry Morris  2017-03-28  1755  static int ca8210_async_xmit_complete(
-ded845a781a578 Harry Morris  2017-03-28  1756  	struct ieee802154_hw  *hw,
-ded845a781a578 Harry Morris  2017-03-28  1757  	u8                     msduhandle,
-ded845a781a578 Harry Morris  2017-03-28  1758  	u8                     status)
-ded845a781a578 Harry Morris  2017-03-28  1759  {
-ded845a781a578 Harry Morris  2017-03-28  1760  	struct ca8210_priv *priv = hw->priv;
-ded845a781a578 Harry Morris  2017-03-28  1761  
-ded845a781a578 Harry Morris  2017-03-28  1762  	if (priv->nextmsduhandle != msduhandle) {
-ded845a781a578 Harry Morris  2017-03-28  1763  		dev_err(
-ded845a781a578 Harry Morris  2017-03-28  1764  			&priv->spi->dev,
-ded845a781a578 Harry Morris  2017-03-28  1765  			"Unexpected msdu_handle on data confirm, Expected %d, got %d\n",
-ded845a781a578 Harry Morris  2017-03-28  1766  			priv->nextmsduhandle,
-ded845a781a578 Harry Morris  2017-03-28  1767  			msduhandle
-ded845a781a578 Harry Morris  2017-03-28  1768  		);
-ded845a781a578 Harry Morris  2017-03-28  1769  		return -EIO;
-ded845a781a578 Harry Morris  2017-03-28  1770  	}
-ded845a781a578 Harry Morris  2017-03-28  1771  
-ded845a781a578 Harry Morris  2017-03-28  1772  	priv->async_tx_pending = false;
-ded845a781a578 Harry Morris  2017-03-28  1773  	priv->nextmsduhandle++;
-ded845a781a578 Harry Morris  2017-03-28  1774  
-ded845a781a578 Harry Morris  2017-03-28  1775  	if (status) {
-ded845a781a578 Harry Morris  2017-03-28  1776  		dev_err(
-ded845a781a578 Harry Morris  2017-03-28  1777  			&priv->spi->dev,
-ded845a781a578 Harry Morris  2017-03-28  1778  			"Link transmission unsuccessful, status = %d\n",
-ded845a781a578 Harry Morris  2017-03-28  1779  			status
-ded845a781a578 Harry Morris  2017-03-28  1780  		);
-ded845a781a578 Harry Morris  2017-03-28  1781  		if (status != MAC_TRANSACTION_OVERFLOW) {
-621b24b09eb61c Miquel Raynal 2022-01-25 @1782  			dev_kfree_skb_any(priv->tx_skb);
-ded845a781a578 Harry Morris  2017-03-28  1783  			ieee802154_wake_queue(priv->hw);
-ded845a781a578 Harry Morris  2017-03-28  1784  			return 0;
-ded845a781a578 Harry Morris  2017-03-28  1785  		}
-ded845a781a578 Harry Morris  2017-03-28  1786  	}
-ded845a781a578 Harry Morris  2017-03-28  1787  	ieee802154_xmit_complete(priv->hw, priv->tx_skb, true);
-ded845a781a578 Harry Morris  2017-03-28  1788  
-ded845a781a578 Harry Morris  2017-03-28  1789  	return 0;
-ded845a781a578 Harry Morris  2017-03-28  1790  }
-ded845a781a578 Harry Morris  2017-03-28  1791  
-
-:::::: The code at line 1782 was first introduced by commit
-:::::: 621b24b09eb61c63f262da0c9c5f0e93348897e5 net: ieee802154: ca8210: Stop leaking skb's
-
-:::::: TO: Miquel Raynal <miquel.raynal@bootlin.com>
-:::::: CC: Stefan Schmidt <stefan@datenfreihafen.org>
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Jason

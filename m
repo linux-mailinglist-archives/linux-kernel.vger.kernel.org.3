@@ -2,121 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3D574C0EA0
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 09:56:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 472F24C0E94
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 09:54:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239110AbiBWI41 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 03:56:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35280 "EHLO
+        id S239099AbiBWIzE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 03:55:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbiBWI4Z (ORCPT
+        with ESMTP id S237307AbiBWIzD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 03:56:25 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC5DA7C162
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 00:55:58 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 4EF7A21119;
-        Wed, 23 Feb 2022 08:55:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1645606557; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=rSWEIXnuQwpAk+MXHN8ZsAjaODfoEUy8DAhjKKDK/28=;
-        b=lC6VZFYW0mGAsEmT5L6fmOa08ga+ZVyisgDMw3BbvZrTaWThVfRu/4FYG2ktsZB7sQflVe
-        IOkYvhzDSqSYsOMhspba/y3tCILrDymeWXWoNnFFMXEa5p3FUtd9xlFZnP1PvxTQWqqzTG
-        3gBTDpdfKIwqNgBKvTK1qsYw1jipMbQ=
-Received: from suse.cz (unknown [10.100.201.86])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 69A7EA3B85;
-        Wed, 23 Feb 2022 08:55:56 +0000 (UTC)
-Date:   Wed, 23 Feb 2022 09:55:54 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     Suren Baghdasaryan <surenb@google.com>
-Cc:     akpm@linux-foundation.org, ccross@google.com,
-        sumit.semwal@linaro.org, dave.hansen@intel.com,
-        keescook@chromium.org, willy@infradead.org,
-        kirill.shutemov@linux.intel.com, vbabka@suse.cz,
-        hannes@cmpxchg.org, ebiederm@xmission.com, brauner@kernel.org,
-        legion@kernel.org, ran.xiaokai@zte.com.cn, sashal@kernel.org,
-        chris.hyser@oracle.com, dave@stgolabs.net, pcc@google.com,
-        caoxiaofeng@yulong.com, david@redhat.com, gorcunov@gmail.com,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        kernel-team@android.com,
-        syzbot+aa7b3d4b35f9dc46a366@syzkaller.appspotmail.com
-Subject: Re: [PATCH v4 3/3] mm: fix use-after-free when anon vma name is used
- after vma is freed
-Message-ID: <YhX2mkb327KkZR2/@dhcp22.suse.cz>
-References: <20220222054025.3412898-1-surenb@google.com>
- <20220222054025.3412898-3-surenb@google.com>
- <YhSZhzUYlW6IAQT9@dhcp22.suse.cz>
- <CAJuCfpELxJ=7uuurKL9oRn1E_=rfL3aN8Duhqvi4Z2c1xHAT2w@mail.gmail.com>
+        Wed, 23 Feb 2022 03:55:03 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 737177B56D;
+        Wed, 23 Feb 2022 00:54:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645606476; x=1677142476;
+  h=to:cc:references:from:subject:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=0ZZp86S8zQ5HRoamd0As4WUEpt/6C+J08F7o2V0U4gk=;
+  b=EHAK1YAEBfgGW5W16QdkjnT2QadwGdpb73Irr0Xn8aDtd+kv3AuEmt3V
+   40Xsfi88ofknXcx4G6eTcDC5BS/rvoatrMyQNoBC++4yVHBv9RpP6Hztn
+   a7XJx6iW6Sp6LeXTbFFMUmbqcZNde4Lsz35vVTdC1ktXV0jyL2sSA0f8S
+   jL4amqeNPWauqs8gNfZ49ijjAyZ0xDRbpKpGw94pSn9mcOq42Ao46Vuwi
+   3j0zYM/kYFJDRXOk8ZeCsG4R5eWH2IWmo72qaz5luH+HchU4SRLwlJEWO
+   sk/aP59fAL41wM5OQ3hBSE8AXrO1HmoL9rnk1n+4jxM44FSqJXNnFu+I/
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10266"; a="251653875"
+X-IronPort-AV: E=Sophos;i="5.88,390,1635231600"; 
+   d="scan'208";a="251653875"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2022 00:54:36 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,390,1635231600"; 
+   d="scan'208";a="573743475"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
+  by orsmga001.jf.intel.com with ESMTP; 23 Feb 2022 00:54:34 -0800
+To:     Anssi Hannula <anssi.hannula@bitwise.fi>,
+        Mathias Nyman <mathias.nyman@intel.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220222134117.34844-1-anssi.hannula@bitwise.fi>
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: Re: [PATCH 1/2] xhci: fix garbage USBSTS being logged in some cases
+Message-ID: <fe7381b1-19bc-3b1e-50f3-0ed5c7c39e5e@linux.intel.com>
+Date:   Wed, 23 Feb 2022 10:56:14 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Firefox/78.0 Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJuCfpELxJ=7uuurKL9oRn1E_=rfL3aN8Duhqvi4Z2c1xHAT2w@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220222134117.34844-1-anssi.hannula@bitwise.fi>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue 22-02-22 07:43:40, Suren Baghdasaryan wrote:
-> On Tue, Feb 22, 2022 at 12:06 AM Michal Hocko <mhocko@suse.com> wrote:
-> >
-> > On Mon 21-02-22 21:40:25, Suren Baghdasaryan wrote:
-> > > When adjacent vmas are being merged it can result in the vma that was
-> > > originally passed to madvise_update_vma being destroyed.  In the current
-> > > implementation, the name parameter passed to madvise_update_vma points
-> > > directly to vma->anon_name->name and it is used after the call to
-> > > vma_merge.  In the cases when vma_merge merges the original vma and
-> > > destroys it, this will result in use-after-free bug as shown below:
-> > >
-> > > madvise_vma_behavior << passes vma->anon_name->name as name param
-> > >   madvise_update_vma(name)
-> > >     vma_merge
-> > >       __vma_adjust
-> > >         vm_area_free <-- frees the vma
-> > >     replace_vma_anon_name(name) <-- UAF
-> >
-> > This seems to be stale because bare const char pointer is not passed in
-> > the call chain. In fact I am not even sure there is any actual UAF here
-> > after the rework.
-> > Could you be more specific in describing the scenario?
+On 22.2.2022 15.41, Anssi Hannula wrote:
+> xhci_decode_usbsts() is expected to return a zero-terminated string by
+> its only caller, xhci_stop_endpoint_command_watchdog(), which directly
+> logs the return value:
 > 
-> Yes, sorry, I need to update the part of the description talking about
-> passing vma->anon_name->name directly.
-> I think UAF is still there, it's just harder to reproduce (admittedly
-> I could not reproduce it with the previous reproducer). The scenario
-> would be when a vma with vma->anon_name->kref == 1 is being merged
-> with another one and freed in the process:
+>   xhci_warn(xhci, "USBSTS:%s\n", xhci_decode_usbsts(str, usbsts));
 > 
-> madvise_vma_behavior
->    anon_name = vma_anon_name(vma) <-- does not increase refcount
->    madvise_update_vma(anon_name)
->      *prev = vma_merge <-- returns another vma
->        __vma_adjust
->          vm_area_free(vma)
->            free_vma_anon_name
->              anon_vma_name_put
->                vma_anon_name_free <-- frees the vma->anon_name
->      vma = *prev <-- original vma was freed
-
-How come this is not a UAF in the first place?
-
->      replace_vma_anon_name(vma, >>anon_name<<) <-- UAF
+> However, if no recognized bits are set in usbsts, the function will
+> return without having called any sprintf() and therefore return an
+> untouched non-zero-terminated caller-provided buffer, causing garbage
+> to be output to log.
 > 
-> Does this make sense or did I miss something?
+> Fix that by always including the raw value in the output.
+> 
+> Note that before 4843b4b5ec64 ("xhci: fix even more unsafe memory usage
+> in xhci tracing") the result effect in the failure case was different as
+> a static buffer was used here, but the code still worked incorrectly.
+> 
+> Fixes: 9c1aa36efdae ("xhci: Show host status when watchdog triggers and host is assumed dead.")
+> Signed-off-by: Anssi Hannula <anssi.hannula@bitwise.fi>
+> ---
+> 
+> Noticed this while debugging a USB issue. Let me know if you prefer a
+> different fix.
+> 
+>  drivers/usb/host/xhci.h | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
+> index 8a0026ee9524..ac91647195f6 100644
+> --- a/drivers/usb/host/xhci.h
+> +++ b/drivers/usb/host/xhci.h
+> @@ -2642,6 +2642,7 @@ static inline const char *xhci_decode_usbsts(char *str, u32 usbsts)
+>  		ret += sprintf(str + ret, " CNR");
+>  	if (usbsts & STS_HCE)
+>  		ret += sprintf(str + ret, " HCE");
+> +	ret += sprintf(str + ret, " (0x%08x)", usbsts);
 
-Sorry for being dense but I still do not see it. If *prev has been freed
-then we already have a different UAF. Admittedly, I am not really fluent
-at vma_merge code path so I am not really sure your chain above is
-really possible. I will try to double check later.
--- 
-Michal Hocko
-SUSE Labs
+Thanks, nice catch.
+
+Maybe this could be the first thing printed out, something like (untested):
+
+@@ -2697,8 +2697,11 @@ static inline const char *xhci_decode_usbsts(char *str, u32 usbsts)
+ {
+        int ret = 0;
+ 
++       ret = sprintf(str, " 0x%08x", usbsts);
++
+        if (usbsts == ~(u32)0)
+-               return " 0xffffffff";
++               return str;
++
+
+-Mathias
+

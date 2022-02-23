@@ -2,74 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F3974C1D18
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 21:25:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C8AC4C1D20
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 21:26:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241123AbiBWUZi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 15:25:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51202 "EHLO
+        id S241166AbiBWU1E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 15:27:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235991AbiBWUZg (ORCPT
+        with ESMTP id S241156AbiBWU1B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 15:25:36 -0500
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ECAB4D620;
-        Wed, 23 Feb 2022 12:25:05 -0800 (PST)
-Received: from mail-wm1-f50.google.com ([209.85.128.50]) by
- mrelayeu.kundenserver.de (mreue012 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MOV26-1naljC1Dg6-00PswW; Wed, 23 Feb 2022 21:25:04 +0100
-Received: by mail-wm1-f50.google.com with SMTP id d14-20020a05600c34ce00b0037bf4d14dc7so31673wmq.3;
-        Wed, 23 Feb 2022 12:25:04 -0800 (PST)
-X-Gm-Message-State: AOAM532Hhopo/vBy3TmiOBpaRgXvM2UjODSoa/dPYObvgEusiEOcONLh
-        wuyYBgLKkO2YVHKzGEgQ0KZ5cAkClE4MVvr0h+Y=
-X-Google-Smtp-Source: ABdhPJxiMN+ZwMju2gd3tky4L0Ize39g39jLHDwhpYR5QTjWUVsZJ5juZJg0Tyw16LN+7AUvGiKmD7ond8lk7c6UsH0=
-X-Received: by 2002:a7b:c191:0:b0:37b:b7e3:b930 with SMTP id
- y17-20020a7bc191000000b0037bb7e3b930mr1072095wmi.35.1645647903930; Wed, 23
- Feb 2022 12:25:03 -0800 (PST)
+        Wed, 23 Feb 2022 15:27:01 -0500
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 148174D9C0
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 12:26:30 -0800 (PST)
+Received: by mail-wm1-x32a.google.com with SMTP id d14-20020a05600c34ce00b0037bf4d14dc7so33723wmq.3
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 12:26:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=conchuod-ie.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=sJPlOaClwDYorktbDkd9+wDzEANKDnxO5CFuBVYHXe8=;
+        b=BEEfhcPqiI+WT+Dpz7WzsUiLQTWWnMGmqoexEhw593Y8ZxjjKAZ7ao2qeB0VJZJh6k
+         yBSGlRqkEIG8RCxnec2/BV4zUIEGx0OF8Z0I0bfqTwNgOa8x2ncKzuh104dOuGOtZ1lS
+         Pl/HqYC6zKa9tsnnoJscfu/xMTAhahGI5qwNHxSmIynWSvlwR86mIWhHPYc3H0lbSp+i
+         UFJZV0nEkO21ekUFWgd1zv3VMvxZCBmYVbVBhy9itkQQJOjFmaPzXJ+ryFjhgtMhYpFO
+         ytEG9yc9J0dhY3k/Wlf+8huRfPo9Ivl7hXHsdB3UaPNiuB4LmsG/qt6jMKj3PfSqG7TA
+         vWog==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=sJPlOaClwDYorktbDkd9+wDzEANKDnxO5CFuBVYHXe8=;
+        b=It3FtZSlQNcRagzJuKka2i3Qrwbed7RRFx7IvbDrMDS8sDe5b+kdWWuB8CFy6lYy93
+         K5g8oiu9VockvZ/s7k5/C29F310Hl29IkQ8ITGJu3bfRw+wudF0Jehe/dxZsXzlurcBf
+         y7KF/BHsJ4a9KMhXdB0XTOHZ3OqtoCsBuJDjDGRNUnwabeM25mr+9QJxgNTcyqbkiZYh
+         ZXfGPBR24LHnAlrgBFOlfgHtB9BgM5QVQrEbtUZw2jB4y6ysjvWYl9krH0Cu6jOVZ5O3
+         ZmbXLF6elSp/i1DxgLiq9QyKKyJTjzTmjEBpZsVJqNpU5qJwOhJ0Ybw8BkTFHXVgjNhd
+         K8vQ==
+X-Gm-Message-State: AOAM531/rKAGhBcgrXonv0E6x9tENqZ5i54xELUP0W/kwF5fkggUEOOl
+        0V5ghTCHMDqmfCLigYRZN/N0Wg==
+X-Google-Smtp-Source: ABdhPJwe3rIUpO4EQyWFQvq2poGfUjKuImrMQv+GNJQxf6u9vnwiDVZXhTabIndzGbOLOUpAfeVMzA==
+X-Received: by 2002:a05:600c:4fd6:b0:352:c2c6:8f34 with SMTP id o22-20020a05600c4fd600b00352c2c68f34mr9133943wmq.186.1645647988449;
+        Wed, 23 Feb 2022 12:26:28 -0800 (PST)
+Received: from [192.168.2.116] ([109.76.226.172])
+        by smtp.gmail.com with ESMTPSA id e3sm466620wrr.94.2022.02.23.12.26.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 23 Feb 2022 12:26:27 -0800 (PST)
+Message-ID: <08bed815-5f34-634f-df6d-7c7371c33033@conchuod.ie>
+Date:   Wed, 23 Feb 2022 20:26:26 +0000
 MIME-Version: 1.0
-References: <20220217184829.1991035-1-jakobkoschel@gmail.com>
- <20220217184829.1991035-4-jakobkoschel@gmail.com> <CAHk-=wg1RdFQ6OGb_H4ZJoUwEr-gk11QXeQx63n91m0tvVUdZw@mail.gmail.com>
- <6DFD3D91-B82C-469C-8771-860C09BD8623@gmail.com> <CAHk-=wiyCH7xeHcmiFJ-YgXUy2Jaj7pnkdKpcovt8fYbVFW3TA@mail.gmail.com>
- <CAHk-=wgLe-OSLTEHm=V7eRG6Fcr0dpAM1ZRV1a=R_g6pBOr8Bg@mail.gmail.com>
-In-Reply-To: <CAHk-=wgLe-OSLTEHm=V7eRG6Fcr0dpAM1ZRV1a=R_g6pBOr8Bg@mail.gmail.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Wed, 23 Feb 2022 21:24:47 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a0DOC3s7x380XR_kN8UYQvkRqvE5LkHQfK2-KzwhcYqQQ@mail.gmail.com>
-Message-ID: <CAK8P3a0DOC3s7x380XR_kN8UYQvkRqvE5LkHQfK2-KzwhcYqQQ@mail.gmail.com>
-Subject: Re: [RFC PATCH 03/13] usb: remove the usage of the list iterator
- after the loop
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Jakob <jakobkoschel@gmail.com>, Arnd Bergmann <arnd@arndb.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
-        Cristiano Giuffrida <c.giuffrida@vu.nl>,
-        "Bos, H.J." <h.j.bos@vu.nl>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:Jfe1X4m3h3tLbwktyEGuP94khgBT4Wep+vQx1J8+N3UW/OG0iEt
- vOJrR1p/9DWiu2YmBzYlPQprR4I+LxucIyTfu/EMsf/+vDjstIkoUAk3HsrBrGGiG8vDMRF
- N2wltb7ExuffaVgjrfbngQ5+/dHd1DxiTCyoIPQ/tb8LKZd1ixhx5BP1lCKAA+oOcQEgux2
- 4Z4aYDXbpyqGvaM6KZiJg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:svdb5o9ahQg=:qV8URQj9Nw2LISLKh2X1FV
- FrMHvXagSGQbEUxGNyv7vzDUryk2IWUGHe2frVBEvFugjiekwEwk1o+JaGGFNpwkeDjCJRbj0
- Qh0KNiRxKcjDqq2ynyURd+w8hvNyLMd7/N3EiuoyjKn5pVSJUU/cNPK7pNs+zngQWofLO6AAa
- biafejziO4yp34dzf48QnrjHRg7wZjxso/Zn8Q4eH7Dt5YCKwHeQupDVL+DVo34Hm4ZwezEkn
- W8ZcqjnI/W3FY5FRvyBvLBVOYLzhoS+0W29uPhW48h5VhmGanVBUbFLNLKjuTczf1DLJkFoHZ
- V9Om8G+xK+NQFRaNlSmRTDVnaRk8pSLe9ebhgqHSCWLqOGTTr/oc9eFKJBfaqBuS9Icyjt5jN
- 3hQB9AI+bcS5tqW8m9nu7FPbaxossYeiq97ixmqvNM8lJKmQRZ/Fn69UZcW3R4NIBkwWAUvHm
- I0C3xCAhs+U7Tqb67jkgRkxJJUj+p39cfdflu4k16Tf/d2RZ1Nmf0qKJdLJQjQLcoDgWdJFjZ
- +1NGY5McKOCkcM79aPkz5OVc5ewxOJ7FleW0sIazWJC1zMyf+SCZZ5nRAtm//tuMzAg2WtVbQ
- fsmjJslOtrW0kxbA9VUb1aAmvHE5oy+C3g9p7LEFxOvBFRYFCul6YJJuoKqUIendshO0xMa76
- DPhmi7QEYsKLjDjopVGMtavX+EqSqWdyug0dzs9BTFqY39FrCqiTHNnZXzC0cNip4o1Q=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH v7 03/11] dt-bindings: rtc: add bindings for microchip
+ mpfs rtc
+Content-Language: en-US
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Conor.Dooley@microchip.com
+Cc:     a.zummo@towertech.it, Lewis.Hanly@microchip.com,
+        Daire.McNamara@microchip.com, Ivan.Griffin@microchip.com,
+        atishp@rivosinc.com, palmer@rivosinc.com, robh@kernel.org,
+        linus.walleij@linaro.org, brgl@bgdev.pl, robh+dt@kernel.org,
+        jassisinghbrar@gmail.com, thierry.reding@gmail.com,
+        u.kleine-koenig@pengutronix.de, lee.jones@linaro.org,
+        paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, geert@linux-m68k.org,
+        krzysztof.kozlowski@canonical.com, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+References: <20220214135840.168236-1-conor.dooley@microchip.com>
+ <20220214135840.168236-4-conor.dooley@microchip.com>
+ <5b0681a0-ff46-7eb4-3644-0d1173c1f0d4@microchip.com>
+ <YhZQRqHib2+GR7Ma@piout.net>
+ <3483b6c4-67a7-5ed5-2953-728ea8ba5874@microchip.com>
+ <YhaXJofTTTgaoEsn@piout.net>
+From:   Conor Dooley <mail@conchuod.ie>
+In-Reply-To: <YhaXJofTTTgaoEsn@piout.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,79 +90,121 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 23, 2022 at 8:23 PM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> On Wed, Feb 23, 2022 at 10:47 AM Linus Torvalds
-> <torvalds@linux-foundation.org> wrote:
-> >
-> > Arnd - remind me, please.. Was there some other problem than just gcc-4.9?
+On 23/02/2022 20:20, Alexandre Belloni wrote:
+> On 23/02/2022 15:25:00+0000, Conor.Dooley@microchip.com wrote:
+>> On 23/02/2022 15:18, Alexandre Belloni wrote:
+>>> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
+>>>
+>>> On 23/02/2022 07:41:27+0000, Conor.Dooley@microchip.com wrote:
+>>>> Hi Alessandro, Alexandre,
+>>>> If one of you could take a look at this, that'd be great.
+>>>
+>>> I actually expected someone else to apply this, what is your plan?
+>>
+>> I was going to ask Palmer to take the series via riscv. Since I have
+>> Rob's R-b, I was just looking for a subsystem maintainer ack/R-b before
+>> actually asking him.
+>>
+> 
+> Rob's review is enough for a DT binding, no need to wait for me. but
+> FWIW:
+> 
+> Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
 
-
-I'm pretty sure this was the only thing. And not  even because gcc-4.9 didn't
-support later standards, but because it caused some false-postivee
-warnings like
-
-In file included from ../drivers/usb/core/notify.c:16:0:
-../include/linux/notifier.h:117:9: error: initializer element is not constant
-  struct blocking_notifier_head name =   \
-         ^
-../drivers/usb/core/notify.c:21:8: note: in expansion of macro
-'BLOCKING_NOTIFIER_HEAD'
- static BLOCKING_NOTIFIER_HEAD(usb_notifier_list);
-        ^
-../include/linux/notifier.h:117:9: error: (near initialization for
-'usb_notifier_list.rwsem.wait_lock')
-  struct blocking_notifier_head name =   \
-         ^
-../drivers/usb/core/notify.c:21:8: note: in expansion of macro
-'BLOCKING_NOTIFIER_HEAD'
- static BLOCKING_NOTIFIER_HEAD(usb_notifier_list);
-        ^
-
-> Hmm. Interesting. I decided to just try it and see for the compiler I
-> have, and changing the gnu89 to gnu99 I get new warnings
-> (-Werror=shift-negative-value).
-
-FWIW, I think we can go straight to gnu11 in this case even with gcc-5, no
-need to take gnu99 as an intermediate step. I don't know if there is a
-practical difference between the two though.
-
-gcc-8 and higher also support --std=gnu18 and --std=gnu2x, which also
-work for building the kernel but would break gcc-5/6/7 support
-
-> Very annoying.  Especially since negative values are in many contexts
-> actually *safer* than positive ones when used as a mask, because as
-> long as the top bit is set in 'int', if the end result is then
-> expanded to some wider type, the top bit stays set.
->
-> Example:
->
->   unsigned long mask(unsigned long x)
->   { return x & (~0 << 5); }
->
->   unsigned long badmask(unsigned long x)
->   { return x & (~0u << 5); }
->
-> One does it properly, the other is buggy.
->
-> Now, with an explicit "unsigned long" like this, some clueless
-> compiler person  might say "just use "~0ul", but that's completely
-> wrong - because quite often the type is *not* this visible, and the
-> signed version works *regardless* of type.
->
-> So this Werror=shift-negative-value warning seems to be actively
-> detrimental, and I'm not seeing the reason for it. Can somebody
-> explain the thinking for that stupid warning?
->
-> That said, we seem to only have two cases of it in the kernel, at
-> least by a x86-64 allmodconfig build. So we could examine the types
-> there, or we could just add '-Wno-shift-negative-value".
-
-I looked at the gcc documentation for this flag, and it tells me that
-it's default-enabled for std=c99 or higher. Turning it on for --std=gnu89
-shows the same warning, so at least it doesn't sound like the actual
-behavior changed, only the warning output. clang does not warn
-for this code at all, regardless of the --std= flag.
-
-        Arnd
+Great, thanks.
+> 
+> 
+>> Thanks,
+>> Conor.
+>>
+>>>
+>>>> Thanks,
+>>>> Conor.
+>>>>
+>>>> On 14/02/2022 13:58, conor.dooley@microchip.com wrote:
+>>>>> From: Conor Dooley <conor.dooley@microchip.com>
+>>>>>
+>>>>> Add device tree bindings for the real time clock on
+>>>>> the Microchip PolarFire SoC.
+>>>>>
+>>>>> Signed-off-by: Daire McNamara <daire.mcnamara@microchip.com>
+>>>>> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+>>>>> Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
+>>>>> Reviewed-by: Rob Herring <robh@kernel.org>
+>>>>> ---
+>>>>>     .../bindings/rtc/microchip,mfps-rtc.yaml      | 58 +++++++++++++++++++
+>>>>>     1 file changed, 58 insertions(+)
+>>>>>     create mode 100644 Documentation/devicetree/bindings/rtc/microchip,mfps-rtc.yaml
+>>>>>
+>>>>> diff --git a/Documentation/devicetree/bindings/rtc/microchip,mfps-rtc.yaml b/Documentation/devicetree/bindings/rtc/microchip,mfps-rtc.yaml
+>>>>> new file mode 100644
+>>>>> index 000000000000..a2e984ea3553
+>>>>> --- /dev/null
+>>>>> +++ b/Documentation/devicetree/bindings/rtc/microchip,mfps-rtc.yaml
+>>>>> @@ -0,0 +1,58 @@
+>>>>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>>>>> +%YAML 1.2
+>>>>> +---
+>>>>> +$id: http://devicetree.org/schemas/rtc/microchip,mfps-rtc.yaml#
+>>>>> +
+>>>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>>>>> +
+>>>>> +title: Microchip PolarFire Soc (MPFS) RTC Device Tree Bindings
+>>>>> +
+>>>>> +allOf:
+>>>>> +  - $ref: rtc.yaml#
+>>>>> +
+>>>>> +maintainers:
+>>>>> +  - Daire McNamara <daire.mcnamara@microchip.com>
+>>>>> +  - Lewis Hanly <lewis.hanly@microchip.com>
+>>>>> +
+>>>>> +properties:
+>>>>> +  compatible:
+>>>>> +    enum:
+>>>>> +      - microchip,mpfs-rtc
+>>>>> +
+>>>>> +  reg:
+>>>>> +    maxItems: 1
+>>>>> +
+>>>>> +  interrupts:
+>>>>> +    items:
+>>>>> +      - description: |
+>>>>> +          RTC_WAKEUP interrupt
+>>>>> +      - description: |
+>>>>> +          RTC_MATCH, asserted when the content of the Alarm register is equal
+>>>>> +          to that of the RTC's count register.
+>>>>> +
+>>>>> +  clocks:
+>>>>> +    maxItems: 1
+>>>>> +
+>>>>> +  clock-names:
+>>>>> +    items:
+>>>>> +      - const: rtc
+>>>>> +
+>>>>> +required:
+>>>>> +  - compatible
+>>>>> +  - reg
+>>>>> +  - interrupts
+>>>>> +  - clocks
+>>>>> +  - clock-names
+>>>>> +
+>>>>> +additionalProperties: false
+>>>>> +
+>>>>> +examples:
+>>>>> +  - |
+>>>>> +    rtc@20124000 {
+>>>>> +        compatible = "microchip,mpfs-rtc";
+>>>>> +        reg = <0x20124000 0x1000>;
+>>>>> +        clocks = <&clkcfg 21>;
+>>>>> +        clock-names = "rtc";
+>>>>> +        interrupts = <80>, <81>;
+>>>>> +    };
+>>>>> +...
+>>>>
+>>>
+>>> --
+>>> Alexandre Belloni, co-owner and COO, Bootlin
+>>> Embedded Linux and Kernel engineering
+>>> https://bootlin.com
+>>
+> 

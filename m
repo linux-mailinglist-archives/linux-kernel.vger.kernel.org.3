@@ -2,24 +2,24 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 414B94C202D
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 00:44:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 163A54C2030
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 00:45:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245021AbiBWXoz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 18:44:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38204 "EHLO
+        id S245058AbiBWXo7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 18:44:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244987AbiBWXor (ORCPT
+        with ESMTP id S234743AbiBWXor (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 23 Feb 2022 18:44:47 -0500
 Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23B7349272;
-        Wed, 23 Feb 2022 15:44:17 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2BCB46178;
+        Wed, 23 Feb 2022 15:44:16 -0800 (PST)
 Received: from [185.156.123.69] (helo=phil.sntech)
         by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <heiko@sntech.de>)
-        id 1nN1Is-0005mN-0x; Thu, 24 Feb 2022 00:44:14 +0100
+        id 1nN1Is-0005mN-8m; Thu, 24 Feb 2022 00:44:14 +0100
 From:   Heiko Stuebner <heiko@sntech.de>
 To:     linux-rockchip@lists.infradead.org,
         Michael Riesch <michael.riesch@wolfvision.net>,
@@ -27,12 +27,12 @@ To:     linux-rockchip@lists.infradead.org,
         linux-kernel@vger.kernel.org
 Cc:     Heiko Stuebner <heiko@sntech.de>, Rob Herring <robh+dt@kernel.org>,
         Liang Chen <cl@rock-chips.com>
-Subject: Re: [PATCH] arm64: dts: rockchip: add the vdd_cpu regulator to rk3568-evb1-v10
-Date:   Thu, 24 Feb 2022 00:44:09 +0100
-Message-Id: <164565984100.1356028.6052687711038538689.b4-ty@sntech.de>
+Subject: Re: [PATCH] arm64: dts: rockchip: set vdd_gpu regulator on rk3568-evb1-v10 to always on
+Date:   Thu, 24 Feb 2022 00:44:10 +0100
+Message-Id: <164565984100.1356028.13842583732609109921.b4-ty@sntech.de>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220223162054.1626257-1-michael.riesch@wolfvision.net>
-References: <20220223162054.1626257-1-michael.riesch@wolfvision.net>
+In-Reply-To: <20220223112008.1316132-1-michael.riesch@wolfvision.net>
+References: <20220223112008.1316132-1-michael.riesch@wolfvision.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -45,15 +45,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 23 Feb 2022 17:20:54 +0100, Michael Riesch wrote:
-> The TCS4525 voltage regulator provides the vdd_cpu on the Rockchip
-> RK3568 EVB1. Add the device tree node and connect it to the CPU
-> nodes.
+On Wed, 23 Feb 2022 12:20:08 +0100, Michael Riesch wrote:
+> As discussed in [0], the Rockchip power domain driver does not consider
+> the external supplies (such as VDD_GPU on the RK3568 EVB1). In the scope of
+> this discussion it has been pointed out that turning this voltage on/off
+> on the fly is not explicitly supported. This patch follows the other RK356x
+> boards by example and sets the vdd_gpu regulator to always on.
+> 
+> [0] https://lore.kernel.org/linux-rockchip/20211217130919.3035788-1-s.hauer@pengutronix.de/
 
 Applied, thanks!
 
-[1/1] arm64: dts: rockchip: add the vdd_cpu regulator to rk3568-evb1-v10
-      commit: 738bbac5612236bd8734f12bdc0122a591b0cb25
+[1/1] arm64: dts: rockchip: set vdd_gpu regulator on rk3568-evb1-v10 to always on
+      commit: bbe5d394c76bd534a0819f78a900ac1a83f3ee9e
 
 Best regards,
 -- 

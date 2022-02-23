@@ -2,96 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15C914C0D82
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 08:45:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 709404C0D8A
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 08:47:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238660AbiBWHpa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 02:45:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40148 "EHLO
+        id S238780AbiBWHrf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 02:47:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230154AbiBWHp2 (ORCPT
+        with ESMTP id S238749AbiBWHrb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 02:45:28 -0500
-Received: from mail-vs1-f43.google.com (mail-vs1-f43.google.com [209.85.217.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0B4E3B3C1;
-        Tue, 22 Feb 2022 23:45:00 -0800 (PST)
-Received: by mail-vs1-f43.google.com with SMTP id j3so2211614vsi.7;
-        Tue, 22 Feb 2022 23:45:00 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=C/cH9gtm/EgKMGw1picw/GL+xptyIrrQueUFFxgTrv0=;
-        b=uv5vEcb8pj6necklh2wMSc5HN+7iG5YQ9j0ZJvYOUdZ3qo00PZYyJQq0Q05M1OvInG
-         45c/K31LmBhbpLHHnw8KMd8R3nztqSB1ivYlaaWNW2EBFRRN8aWfpLOUzFU9jbPufZzZ
-         tvF1bqiYvh2AO3CzPihFlO1vH7I2rtlV1h9GX4zjCJXT+Gdshw2Vmm08zHhq5te26ZCR
-         /iP7aJyEAx9iEHQtyhrb9tXgiBsRkM37FzSNcnQTDB9ZgJycbIh74mg89tUb0itqHyCe
-         duqJP8gkpAxDnD/ny2HtqHUNVC6HB8C6seMmyahjOEwOm3KEuw6fAA85sYDiTE9qt9hy
-         9CGA==
-X-Gm-Message-State: AOAM533+gXXdRnh+vhNObaka6jzxSVkwaUqCVWlTjr99a2gbCLzQ08EU
-        qZyaaDhnGbY4crapbx1s1HoWzynq2DK2+Q==
-X-Google-Smtp-Source: ABdhPJxjuOme72bHaZGAif45cxC6WMI7nYRWNvJ6lO5PhT5nPo9aQB6gYholneGl9/aUNRS59G+0pQ==
-X-Received: by 2002:a67:e0cf:0:b0:31a:6079:cabf with SMTP id m15-20020a67e0cf000000b0031a6079cabfmr11130799vsl.39.1645602299581;
-        Tue, 22 Feb 2022 23:44:59 -0800 (PST)
-Received: from mail-vk1-f177.google.com (mail-vk1-f177.google.com. [209.85.221.177])
-        by smtp.gmail.com with ESMTPSA id g13sm605051vsj.5.2022.02.22.23.44.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 22 Feb 2022 23:44:59 -0800 (PST)
-Received: by mail-vk1-f177.google.com with SMTP id l10so11801564vki.9;
-        Tue, 22 Feb 2022 23:44:58 -0800 (PST)
-X-Received: by 2002:a05:6122:130c:b0:330:e674:ec91 with SMTP id
- e12-20020a056122130c00b00330e674ec91mr11363499vkp.33.1645602298671; Tue, 22
- Feb 2022 23:44:58 -0800 (PST)
+        Wed, 23 Feb 2022 02:47:31 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABCFD65797;
+        Tue, 22 Feb 2022 23:47:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=iy5Ofm6AWn5S0+TPzZqllkgh84EUFfIT9WUD1UClXn4=; b=KuGl+SxVwgaXgh5hLAVT1UAi4x
+        Mdf6Uz6m2y23+0SrvtSnU9O8BhDGXxKAatQH1UV+1HLTZS6EKiTcNTlvQr6XJI6pv0KEXE3xvFiKZ
+        R/Jky7QdCF8UDa+v3Z/QM6f/ERD1b/x8syFTQf7TpLLbwqST8AacGpmpD66qiLMZMpUOKXyZjimX2
+        dqd43SyR3QIvd4Ydjgs3/d/7SKJAn7H0MEg/DJhCNfnBiuUH1CugGaRKAQv+oCwF98QBvMo4HOU/T
+        ucaRKTd4ozFy8kNCn3ThNjnNyyDuUTB+nnvKoGQIx86jvBLxFv0AD8qU8mHYnOj4lkd3DtKX03IFR
+        DEkug9Yw==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nMmLj-00DALX-99; Wed, 23 Feb 2022 07:46:11 +0000
+Date:   Tue, 22 Feb 2022 23:46:11 -0800
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     arnd@arndb.de, hch@infradead.org, akpm@linux-foundation.org,
+        rth@twiddle.net, ink@jurassic.park.msu.ru, mattst88@gmail.com,
+        mpe@ellerman.id.au, benh@kernel.crashing.org, paulus@samba.org,
+        davem@davemloft.net, airlied@linux.ie, vkoul@kernel.org,
+        hao.wu@intel.com, trix@redhat.com, mdf@kernel.org,
+        yilun.xu@intel.com, awalls@md.metrocast.net, mchehab@kernel.org,
+        sathya.prakash@broadcom.com, sreekanth.reddy@broadcom.com,
+        suganath-prabu.subramani@broadcom.com, mporter@kernel.crashing.org,
+        alex.bou9@gmail.com, bhelgaas@google.com,
+        linux-alpha@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        sparclinux@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-fpga@vger.kernel.org, linux-media@vger.kernel.org,
+        MPT-FusionLinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org
+Subject: Re: [PATCH 00/16] Remove usage of the deprecated "pci-dma-compat.h"
+ API
+Message-ID: <YhXmQwvjMFPQFPUr@infradead.org>
+References: <cover.1641500561.git.christophe.jaillet@wanadoo.fr>
 MIME-Version: 1.0
-References: <1644890386-65119-1-git-send-email-wangqing@vivo.com>
-In-Reply-To: <1644890386-65119-1-git-send-email-wangqing@vivo.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 23 Feb 2022 08:44:47 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdUjyUmdDxqeyh=XnFhyKg1pm_y3DHsWXEb-vKQa-CNrRg@mail.gmail.com>
-Message-ID: <CAMuHMdUjyUmdDxqeyh=XnFhyKg1pm_y3DHsWXEb-vKQa-CNrRg@mail.gmail.com>
-Subject: Re: [PATCH] spi: add missing pci_dev_put() before return
-To:     Qing Wang <wangqing@vivo.com>
-Cc:     Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        Mark Brown <broonie@kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cover.1641500561.git.christophe.jaillet@wanadoo.fr>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Qing,
+Hi Christophe,
 
-On Tue, Feb 15, 2022 at 3:08 AM Qing Wang <wangqing@vivo.com> wrote:
-> From: Wang Qing <wangqing@vivo.com>
->
-> pci_get_slot() increases its reference count, the caller must
-> decrement the reference count by calling pci_dev_put()
->
-> Signed-off-by: Wang Qing <wangqing@vivo.com>
+do you know what the state is in current linux-next?
 
-Thanks for your patch!
-
-Please use "spi: spi-topcliff-pch:" instead of just "spi:" in the patch
-summary, as this is specific to the spi-topcliff-pch driver, not to the SPI
-core.
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+I think we'll just want to queue up anything left at this point in the
+dma-mapping or PCI tree and get it done.

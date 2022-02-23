@@ -2,216 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 406394C05C2
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 01:06:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7C714C05CB
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 01:16:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231687AbiBWAHT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 22 Feb 2022 19:07:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47122 "EHLO
+        id S231315AbiBWAPr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 22 Feb 2022 19:15:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231138AbiBWAHN (ORCPT
+        with ESMTP id S229544AbiBWAPo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 22 Feb 2022 19:07:13 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 223FECC5;
-        Tue, 22 Feb 2022 16:06:43 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AE8C4B81D44;
-        Wed, 23 Feb 2022 00:06:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6F64C340E8;
-        Wed, 23 Feb 2022 00:06:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645574800;
-        bh=vttMxgjAZpqLoGBZMw5U3C2KnMQw5fBtXlwVwgbVK4o=;
-        h=From:To:Cc:Subject:Date:From;
-        b=XO7xukoTpyqRb3XyRlq3kwhRoY5nLCP+HfKTdG9gufarYTFtKisOBuq7EdJbEGdRy
-         0jmGXvAp8bT8s7vdnxaGcmuCvJno6ysT9f9XvR54LNTzFcWgzL3kEqsXJi5ltu7mI+
-         ELMEXEq9b8W5FD5LkHqXLu8nGh+/rcgX6xpR9FpZHyim63wBZxRC4aGuryXwQ055kT
-         2T0gVzSClD7gOgRJClwh8cyxTSc1VNU5yFzcR82B2fywBNaZif8aj3J672u7lFtNZw
-         8Yq5qxzagkx33aCHy3oH3GgJo38aDwNoqIXX+kMOX55FloYZbVze1VQZONkPzozV+f
-         uEqBg5CqMF9PA==
-From:   broonie@kernel.org
-To:     Liam Howlett <liam.howlett@oracle.com>
-Cc:     Karolina Drobnik <karolinadrobnik@gmail.com>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        "Liam R . Howlett" <Liam.Howlett@Oracle.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Mike Rapoport <rppt@kernel.org>
-Subject: linux-next: manual merge of the maple tree with the memblock tree
-Date:   Wed, 23 Feb 2022 00:06:34 +0000
-Message-Id: <20220223000634.907121-1-broonie@kernel.org>
-X-Mailer: git-send-email 2.30.2
+        Tue, 22 Feb 2022 19:15:44 -0500
+Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 193BB4A90C
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 16:15:15 -0800 (PST)
+Received: by mail-yb1-xb2d.google.com with SMTP id p19so44622288ybc.6
+        for <linux-kernel@vger.kernel.org>; Tue, 22 Feb 2022 16:15:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=mgvgyHG6Euxw7Jq3yMjqlRWxbggEShS+kdasxbz+u3Y=;
+        b=gv9BIVVLkzCaJM9XhQMB7O7ZEuMTkylj1mOJtX6VvNBW86PfYskXe3jmdpUrgrdTFg
+         e5QkJUnYhyoovcF/cQlx1gczJZr6km72uAMK2KIcPe3vC/tQjRSme4pDHJqk90zkOJJk
+         4qxxUg/gCnFyhzbfxG7xY7dCuM4RwNyIjWB8ZXFuZjJx6ZPkc2NddydyKZSh2nEYWrqB
+         XdKPf12u4paUnazNuwgemJILjdmpDIxY6357Oi0kgxnvR8FMOQHWFU/g2IvTG35r/W+z
+         CBXmxmyXZw1EiS7tZ1SFnaOf5SGYeL/yxiABa0L0XaxPnfXUvPGg+Fx0x1WvnEUFHu2c
+         q6AQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=mgvgyHG6Euxw7Jq3yMjqlRWxbggEShS+kdasxbz+u3Y=;
+        b=0j8CO2NfNe4k6LZJuY1M/QmYA3EdAy0Ldr/O0VHVFUrzWcAKxn/410nbErT11DmLpA
+         hjkcjFmyXT8wpJjZyNRx1yoOqGqndb2jnPydV3JBEyTrkSCN8o3+VZZvEuzrsVFUm5ZT
+         tJmDdxJkRP3CyyMCsOGD4xAPIPjl+Eiozp6yemclpNleFh8sJaasKphYQ2mZCo1lsHo9
+         W4y7Pkbq3b0VTxeuwosnLotH3qPZ1oalc/Iw+amtVMAkMPA2YDVA2mDV71aF6/OKK6iK
+         llmATWK0nWH41cNhevrJUxYspKye+F3qWKriyk4x2abSoReC9p60x/0ekge3ugsCK3dg
+         Pt7A==
+X-Gm-Message-State: AOAM531YNN7HZ2gdmIG3EkjLwi0n4LRV2z4vKftxv4oPbIaMggfvxDrh
+        4tqscBq+BaRfqS+DU6hO18nthJnFx4JJ3bdR7+pP/fzoXPkvPZB+
+X-Google-Smtp-Source: ABdhPJxp0SxLcYYvmNL3AKcc4CDie00Qb1dbzY5fAvWnY4412DtSCTFOxi1Zxcq3jSi3a4zsDLAvEAH1dDGFowtzAVc=
+X-Received: by 2002:a25:da47:0:b0:61d:9af4:c834 with SMTP id
+ n68-20020a25da47000000b0061d9af4c834mr26488243ybf.441.1645575314006; Tue, 22
+ Feb 2022 16:15:14 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220219174940.2570901-1-surenb@google.com> <YhNTcM9XtqA1zUUi@dhcp22.suse.cz>
+ <CAEe=Sxmow-jx60cDjFMY7qi7+KVc+BT++BTdwC5+G9E=1soMmQ@mail.gmail.com>
+In-Reply-To: <CAEe=Sxmow-jx60cDjFMY7qi7+KVc+BT++BTdwC5+G9E=1soMmQ@mail.gmail.com>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Tue, 22 Feb 2022 16:15:03 -0800
+Message-ID: <CAJuCfpEMr8+i99L23J3tjKq9LHAPTDa3JtNnUre587HaWcNS5w@mail.gmail.com>
+Subject: Re: [PATCH 1/1] mm: count time in drain_all_pages during direct
+ reclaim as memory pressure
+To:     Tim Murray <timmurray@google.com>
+Cc:     Michal Hocko <mhocko@suse.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Peter Zijlstra <peterz@infradead.org>, guro@fb.com,
+        Shakeel Butt <shakeelb@google.com>,
+        Minchan Kim <minchan@kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Android Kernel Team <kernel-team@android.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi all,
+On Tue, Feb 22, 2022 at 11:47 AM Tim Murray <timmurray@google.com> wrote:
+>
+> On Mon, Feb 21, 2022 at 12:55 AM Michal Hocko <mhocko@suse.com> wrote:
+> > It would be cool to have some numbers here.
+>
+> Are there any numbers beyond what Suren mentioned that would be
+> useful? As one example, in a trace of a camera workload that I opened
+> at random to check for drain_local_pages stalls, I saw the kworker
+> that ran drain_local_pages stay at runnable for 68ms before getting
+> any CPU time. I could try to query our trace corpus to find more
+> examples, but they're not hard to find in individual traces already.
+>
+> > If the draining is too slow and dependent on the current CPU/WQ
+> > contention then we should address that. The original intention was that
+> > having a dedicated WQ with WQ_MEM_RECLAIM would help to isolate the
+> > operation from the rest of WQ activity. Maybe we need to fine tune
+> > mm_percpu_wq. If that doesn't help then we should revise the WQ model
+> > and use something else. Memory reclaim shouldn't really get stuck behind
+> > other unrelated work.
+>
+> In my experience, workqueues are easy to misuse and should be
+> approached with a lot of care. For many workloads, they work fine 99%+
+> of the time, but once you run into problems with scheduling delays for
+> that workqueue, the only option is to stop using workqueues. If you
+> have work that is system-initiated with minimal latency requirements
+> (eg, some driver heartbeat every so often, devfreq governors, things
+> like that), workqueues are great. If you have userspace-initiated work
+> that should respect priority (eg, GPU command buffer submission in the
+> critical path of UI) or latency-critical system-initiated work (eg,
+> display synchronization around panel refresh), workqueues are the
+> wrong choice because there is no RT capability. WQ_HIGHPRI has a minor
+> impact, but it won't solve the fundamental problem if the system is
+> under heavy enough load or if RT threads are involved. As Petr
+> mentioned, the best solution for those cases seems to be "convert the
+> workqueue to an RT kthread_worker." I've done that many times on many
+> different Android devices over the years for latency-critical work,
+> especially around GPU, display, and camera.
+>
+> In the drain_local_pages case, I think it is triggered by userspace
+> work and should respect priority; I don't think a prio 50 RT task
+> should be blocked waiting on a prio 120 (or prio 100 if WQ_HIGHPRI)
+> kworker to be scheduled so it can run drain_local_pages. If that's a
+> reasonable claim, then I think moving drain_local_pages away from
+> workqueues is the best choice.
 
-Today's linux-next merge of the maple tree got conflicts in:
-
-  tools/testing/radix-tree/linux.c
-  tools/testing/radix-tree/Makefile
-  tools/include/linux/slab.h
-
-between commit:
-
-  aa0eab8639ff0 ("tools: Move gfp.h and slab.h from radix-tree to lib")
-
-from the memblock tree and commits:
-
-  3a77b4e41d4f3 ("radix tree test suite: Add support for slab bulk APIs")
-  ad4144ea04112 ("lib/test_maple_tree: Add testing for maple tree")
-
-from the maple tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
-diff --cc tools/include/linux/slab.h
-index f41d8a0eb1a42,d7aed1cc69781..0000000000000
---- a/tools/include/linux/slab.h
-+++ b/tools/include/linux/slab.h
-@@@ -35,4 -24,8 +35,8 @@@ struct kmem_cache *kmem_cache_create(co
-  			unsigned int align, unsigned int flags,
-  			void (*ctor)(void *));
-  
-+ void kmem_cache_free_bulk(struct kmem_cache *cachep, size_t size, void **list);
-+ int kmem_cache_alloc_bulk(struct kmem_cache *cachep, gfp_t gfp, size_t size,
-+ 			  void **list);
-+ 
- -#endif		/* SLAB_H */
- +#endif		/* _TOOLS_SLAB_H */
-diff --cc tools/testing/radix-tree/Makefile
-index c4ea4fbb0bfcd,3e0fa6ae0e0a3..0000000000000
---- a/tools/testing/radix-tree/Makefile
-+++ b/tools/testing/radix-tree/Makefile
-@@@ -4,9 -4,8 +4,9 @@@ CFLAGS += -I. -I../../include -g -Og -W
-  	  -fsanitize=undefined
-  LDFLAGS += -fsanitize=address -fsanitize=undefined
-  LDLIBS+= -lpthread -lurcu
-- TARGETS = main idr-test multiorder xarray
-+ TARGETS = main idr-test multiorder xarray maple
- -CORE_OFILES := xarray.o radix-tree.o idr.o linux.o test.o find_bit.o bitmap.o maple.o
- +CORE_OFILES := xarray.o radix-tree.o idr.o linux.o test.o find_bit.o bitmap.o \
-- 			 slab.o
-++			 slab.o maple.o
-  OFILES = main.o $(CORE_OFILES) regression1.o regression2.o regression3.o \
-  	 regression4.o tag_check.o multiorder.o idr-test.o iteration_check.o \
-  	 iteration_check_2.o benchmark.o
-diff --cc tools/testing/radix-tree/linux.c
-index 81539f5439546,3383d748c6509..0000000000000
---- a/tools/testing/radix-tree/linux.c
-+++ b/tools/testing/radix-tree/linux.c
-@@@ -77,6 -118,97 +117,71 @@@ void kmem_cache_free(struct kmem_cache 
-  	pthread_mutex_unlock(&cachep->lock);
-  }
-  
-+ void kmem_cache_free_bulk(struct kmem_cache *cachep, size_t size, void **list)
-+ {
-+ 	if (kmalloc_verbose)
-+ 		pr_debug("Bulk free %p[0-%lu]\n", list, size - 1);
-+ 
-+ 	pthread_mutex_lock(&cachep->lock);
-+ 	for (int i = 0; i < size; i++)
-+ 		kmem_cache_free_locked(cachep, list[i]);
-+ 	pthread_mutex_unlock(&cachep->lock);
-+ }
-+ 
-+ int kmem_cache_alloc_bulk(struct kmem_cache *cachep, gfp_t gfp, size_t size,
-+ 			  void **p)
-+ {
-+ 	size_t i;
-+ 
-+ 	if (kmalloc_verbose)
-+ 		pr_debug("Bulk alloc %lu\n", size);
-+ 
-+ 	if (!(gfp & __GFP_DIRECT_RECLAIM)) {
-+ 		if (cachep->non_kernel < size)
-+ 			return 0;
-+ 
-+ 		cachep->non_kernel -= size;
-+ 	}
-+ 
-+ 	pthread_mutex_lock(&cachep->lock);
-+ 	if (cachep->nr_objs >= size) {
-+ 		struct radix_tree_node *node;
-+ 
-+ 		for (i = 0; i < size; i++) {
-+ 			node = cachep->objs;
-+ 			cachep->nr_objs--;
-+ 			cachep->objs = node->parent;
-+ 			p[i] = node;
-+ 			node->parent = NULL;
-+ 		}
-+ 		pthread_mutex_unlock(&cachep->lock);
-+ 	} else {
-+ 		pthread_mutex_unlock(&cachep->lock);
-+ 		for (i = 0; i < size; i++) {
-+ 			if (cachep->align) {
-+ 				posix_memalign(&p[i], cachep->align,
-+ 					       cachep->size * size);
-+ 			} else {
-+ 				p[i] = malloc(cachep->size * size);
-+ 			}
-+ 			if (cachep->ctor)
-+ 				cachep->ctor(p[i]);
-+ 			else if (gfp & __GFP_ZERO)
-+ 				memset(p[i], 0, cachep->size);
-+ 		}
-+ 	}
-+ 
-+ 	for (i = 0; i < size; i++) {
-+ 		uatomic_inc(&nr_allocated);
-+ 		uatomic_inc(&cachep->nr_allocated);
-+ 		uatomic_inc(&cachep->nr_tallocated);
-+ 		if (kmalloc_verbose)
-+ 			printf("Allocating %p from slab\n", p[i]);
-+ 	}
-+ 
-+ 	return size;
-+ }
-+ 
- -void *kmalloc(size_t size, gfp_t gfp)
- -{
- -	void *ret;
- -
- -	if (!(gfp & __GFP_DIRECT_RECLAIM))
- -		return NULL;
- -
- -	ret = malloc(size);
- -	uatomic_inc(&nr_allocated);
- -	if (kmalloc_verbose)
- -		printf("Allocating %p from malloc\n", ret);
- -	if (gfp & __GFP_ZERO)
- -		memset(ret, 0, size);
- -	return ret;
- -}
- -
- -void kfree(void *p)
- -{
- -	if (!p)
- -		return;
- -	uatomic_dec(&nr_allocated);
- -	if (kmalloc_verbose)
- -		printf("Freeing %p to malloc\n", p);
- -	free(p);
- -}
- -
-  struct kmem_cache *
-  kmem_cache_create(const char *name, unsigned int size, unsigned int align,
-  		unsigned int flags, void (*ctor)(void *))
+Ok, sounds like I should not spend time on WQ_HIGHPRI and go directly
+to kthread_create_worker_on_cpu approach suggested by Petr.

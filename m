@@ -2,144 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 977784C155D
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 15:24:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BB2E4C155E
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 15:24:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241533AbiBWOYk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 09:24:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41546 "EHLO
+        id S241539AbiBWOZC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 09:25:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236675AbiBWOYj (ORCPT
+        with ESMTP id S232221AbiBWOZB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 09:24:39 -0500
-Received: from mailserv1.kapsi.fi (mailserv1.kapsi.fi [IPv6:2001:67c:1be8::25:1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02012B1A87;
-        Wed, 23 Feb 2022 06:24:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=ext.kapsi.fi; s=20161220; h=Subject:Content-Transfer-Encoding:MIME-Version:
-        References:In-Reply-To:Message-Id:Date:Cc:To:From:Sender:Reply-To:
-        Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=alNyl1KfQO+V+SfyCQrXRZU0CihhZAB4Wnp96QyBXCk=; b=0IsdVDpsDh+adcMgpwSaRULTtn
-        AzomItLdY/7BbevphqzhFBifn7pmtFalbvNVdPabj73MJSPouu7DgUTVKIHWwkEgT7yXikKTseuL/
-        VfIlFeKdcUIfyPe9HqzR+WdGWd65/CIG6VzC1uqvsAXQWaZKtV7YyXvDlfMP7JeRKmdh2fKeJIoVV
-        aGTQAEWTgY1MI1p8/dRBok006vVn67cZ34ZmBPYWeDK8g8TdLJ8u1TKebLvUiU1NNwabudXK2Kt4n
-        hO2wPBh4imuGtc2emHPDRN1GVguuj+PxU12fP7Z3RirP8ssXl7KOM41wDuJ8N/yJcYRhOPBTC9Xh/
-        EmfT6E/Q==;
-Received: from 201-31-196-88.dyn.estpak.ee ([88.196.31.201]:56813 helo=localhost)
-        by mailserv1.kapsi.fi with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.89)
-        (envelope-from <maukka@ext.kapsi.fi>)
-        id 1nMsYm-0002Zi-Vl; Wed, 23 Feb 2022 16:24:07 +0200
-Received: by localhost (sSMTP sendmail emulation); Wed, 23 Feb 2022 16:24:03 +0200
-From:   Mauri Sandberg <maukka@ext.kapsi.fi>
-To:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Mauri Sandberg <maukka@ext.kapsi.fi>,
-        Andrew Lunn <andrew@lunn.ch>
-Date:   Wed, 23 Feb 2022 16:23:37 +0200
-Message-Id: <20220223142337.41757-1-maukka@ext.kapsi.fi>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220221062441.2685-1-maukka@ext.kapsi.fi>
-References: <20220221062441.2685-1-maukka@ext.kapsi.fi>
+        Wed, 23 Feb 2022 09:25:01 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C1ABB1A98;
+        Wed, 23 Feb 2022 06:24:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645626274; x=1677162274;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=IV+wRjFZ0KIXQehwCsMDvsyLOE60ai+2jVh9pnpXlHw=;
+  b=hwGB37uAAbJMo7lqmR1cNDNigoiICmbnIubWQ/wBTB1D3oV9AqGoc0Vt
+   /MkQCHq8oT3FFm4jZE+hL6y98BzpAMshpedv2Kp/7wyd1vwuK5CEnkGEB
+   BO4dTcyrLLugu5cgVxloULR/cyOoSyoxYPbXqVvJBlIhb0a3V7WTHIj8U
+   gGPf0/ihmVOiT0oWI5asD0mce+uZ302BfAXbmQ8f+szDxrC5ZyzNs8g3Z
+   +LupkrpZlfnOF4QVi+tOy6R9YuH3gamNYjcYoZ/1CgIf5E/V4tXll2k7Y
+   6aidZxFW9D9kvgWMtzn+0FNLlvkVV3sYZk5aClVT03phTLFtYdottTH4Z
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10266"; a="232594619"
+X-IronPort-AV: E=Sophos;i="5.88,391,1635231600"; 
+   d="scan'208";a="232594619"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2022 06:24:34 -0800
+X-IronPort-AV: E=Sophos;i="5.88,391,1635231600"; 
+   d="scan'208";a="508452930"
+Received: from smile.fi.intel.com ([10.237.72.59])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2022 06:24:32 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1nMsYP-007SIC-D9;
+        Wed, 23 Feb 2022 16:23:41 +0200
+Date:   Wed, 23 Feb 2022 16:23:40 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] serial: 8250_lpss: Switch to pcim_iomap() instead
+ of pci_ioremap_bar()
+Message-ID: <YhZDbNyJd0LjAbaB@smile.fi.intel.com>
+References: <20220215134359.78169-1-andriy.shevchenko@linux.intel.com>
+ <20220215134359.78169-2-andriy.shevchenko@linux.intel.com>
+ <Ygy7dNqFLZF9XYiH@infradead.org>
+ <d8336f83-9f31-e168-1ed7-29e97189e233@kernel.org>
+ <YhUJAl5JpCoXik7X@infradead.org>
+ <YhYVl9YaoPDwAXO4@smile.fi.intel.com>
+ <YhYWw/yEaYJFR1/y@kroah.com>
+ <YhYcbrsDD2iagUL7@smile.fi.intel.com>
+ <YhYmgEMRhGu1PsYg@infradead.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 88.196.31.201
-X-SA-Exim-Mail-From: maukka@ext.kapsi.fi
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YhYmgEMRhGu1PsYg@infradead.org>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
-Subject: [PATCH v2] net: mv643xx_eth: process retval from of_get_mac_address
-X-SA-Exim-Version: 4.2.1 (built Tue, 02 Aug 2016 21:08:31 +0000)
-X-SA-Exim-Scanned: Yes (on mailserv1.kapsi.fi)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Obtaining a MAC address may be deferred in cases when the MAC is stored
-in an NVMEM block, for example, and it may not be ready upon the first
-retrieval attempt and return EPROBE_DEFER.
+On Wed, Feb 23, 2022 at 04:20:16AM -0800, Christoph Hellwig wrote:
+> On Wed, Feb 23, 2022 at 01:37:18PM +0200, Andy Shevchenko wrote:
+> > Okay, so if I read this thread correctly Christoph suggests to introduce
+> > pcim_ioremap_bar() and then use it. Am I right?
+> 
+> Yes.
 
-It is also possible that a port that does not rely on NVMEM has been
-already created when getting the defer request. Thus, also the resources
-allocated previously must be freed when doing a roll-back.
+Thanks for clarification!
 
-Signed-off-by: Mauri Sandberg <maukka@ext.kapsi.fi>
-Cc: Andrew Lunn <andrew@lunn.ch>
----
-v1 -> v2
- - escalate all error values from of_get_mac_address()
- - move mv643xx_eth_shared_of_remove() before
-   mv643xx_eth_shared_of_probe()
- - release all resources potentially allocated for previous port nodes
- - update commit title and message
----
- drivers/net/ethernet/marvell/mv643xx_eth.c | 24 +++++++++++++---------
- 1 file changed, 14 insertions(+), 10 deletions(-)
+> > Christoph, since we are on the topic about pcim_*() APIs, can you chime in
+> > the discussion [1] about IRQ vectors allocation?
+> > 
+> > [1]: https://lore.kernel.org/all/20210607153916.1021016-1-zhengdejin5@gmail.com/
+> 
+> Did you intend to link to a 8 month old series or is there something
+> else this should point to?
 
-diff --git a/drivers/net/ethernet/marvell/mv643xx_eth.c b/drivers/net/ethernet/marvell/mv643xx_eth.c
-index 105247582684..143ca8be5eb5 100644
---- a/drivers/net/ethernet/marvell/mv643xx_eth.c
-+++ b/drivers/net/ethernet/marvell/mv643xx_eth.c
-@@ -2704,6 +2704,16 @@ MODULE_DEVICE_TABLE(of, mv643xx_eth_shared_ids);
- 
- static struct platform_device *port_platdev[3];
- 
-+static void mv643xx_eth_shared_of_remove(void)
-+{
-+	int n;
-+
-+	for (n = 0; n < 3; n++) {
-+		platform_device_del(port_platdev[n]);
-+		port_platdev[n] = NULL;
-+	}
-+}
-+
- static int mv643xx_eth_shared_of_add_port(struct platform_device *pdev,
- 					  struct device_node *pnp)
- {
-@@ -2740,7 +2750,9 @@ static int mv643xx_eth_shared_of_add_port(struct platform_device *pdev,
- 		return -EINVAL;
- 	}
- 
--	of_get_mac_address(pnp, ppd.mac_addr);
-+	ret = of_get_mac_address(pnp, ppd.mac_addr);
-+	if (ret)
-+		return ret;
- 
- 	mv643xx_eth_property(pnp, "tx-queue-size", ppd.tx_queue_size);
- 	mv643xx_eth_property(pnp, "tx-sram-addr", ppd.tx_sram_addr);
-@@ -2804,21 +2816,13 @@ static int mv643xx_eth_shared_of_probe(struct platform_device *pdev)
- 		ret = mv643xx_eth_shared_of_add_port(pdev, pnp);
- 		if (ret) {
- 			of_node_put(pnp);
-+			mv643xx_eth_shared_of_remove();
- 			return ret;
- 		}
- 	}
- 	return 0;
- }
- 
--static void mv643xx_eth_shared_of_remove(void)
--{
--	int n;
--
--	for (n = 0; n < 3; n++) {
--		platform_device_del(port_platdev[n]);
--		port_platdev[n] = NULL;
--	}
--}
- #else
- static inline int mv643xx_eth_shared_of_probe(struct platform_device *pdev)
- {
+Yes, because it seems stalled.
 
-base-commit: cfb92440ee71adcc2105b0890bb01ac3cddb8507
 -- 
-2.25.1
+With Best Regards,
+Andy Shevchenko
+
 

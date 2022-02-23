@@ -2,99 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 296DC4C0EB5
-	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 09:59:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 782264C0EBB
+	for <lists+linux-kernel@lfdr.de>; Wed, 23 Feb 2022 10:01:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239140AbiBWJAU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 04:00:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41202 "EHLO
+        id S239148AbiBWJBs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 04:01:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232588AbiBWJAT (ORCPT
+        with ESMTP id S237086AbiBWJBr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 04:00:19 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 612CA7CDE1;
-        Wed, 23 Feb 2022 00:59:52 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 29303D6E;
-        Wed, 23 Feb 2022 00:59:52 -0800 (PST)
-Received: from [10.57.9.184] (unknown [10.57.9.184])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 36B4C3F5A1;
-        Wed, 23 Feb 2022 00:59:50 -0800 (PST)
-Message-ID: <b6682d6f-a6ae-8a82-68c3-13840c02d178@arm.com>
-Date:   Wed, 23 Feb 2022 08:59:48 +0000
+        Wed, 23 Feb 2022 04:01:47 -0500
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D95F07D004;
+        Wed, 23 Feb 2022 01:01:19 -0800 (PST)
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+        by localhost (Postfix) with ESMTP id 4K3VQ62Nm4z9sSq;
+        Wed, 23 Feb 2022 10:01:18 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id tdaM3LWAsilI; Wed, 23 Feb 2022 10:01:18 +0100 (CET)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase2.c-s.fr (Postfix) with ESMTP id 4K3VQ61gF0z9sSZ;
+        Wed, 23 Feb 2022 10:01:18 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 245DC8B77C;
+        Wed, 23 Feb 2022 10:01:18 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id 1i2HwELHuxf6; Wed, 23 Feb 2022 10:01:18 +0100 (CET)
+Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.7.181])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id CCEAE8B77B;
+        Wed, 23 Feb 2022 10:01:17 +0100 (CET)
+Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 21N918Aj1126384
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Wed, 23 Feb 2022 10:01:08 +0100
+Received: (from chleroy@localhost)
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 21N918OZ1126383;
+        Wed, 23 Feb 2022 10:01:08 +0100
+X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Luis Chamberlain <mcgrof@kernel.org>, linux-modules@vger.kernel.org
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v4 0/4] Miscellaneous cleanups
+Date:   Wed, 23 Feb 2022 10:00:57 +0100
+Message-Id: <cover.1645605431.git.christophe.leroy@csgroup.eu>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [[PATCH v2 2/2] OPP: Add 'opp-microwatt' parsing for advanced EM
- registration
-Content-Language: en-US
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, dietmar.eggemann@arm.com,
-        rafael@kernel.org, daniel.lezcano@linaro.org, nm@ti.com,
-        sboyd@kernel.org, mka@chromium.org, dianders@chromium.org,
-        robh+dt@kernel.org, devicetree@vger.kernel.org,
-        linux-pm@vger.kernel.org
-References: <20220222140746.12293-1-lukasz.luba@arm.com>
- <20220222140746.12293-3-lukasz.luba@arm.com>
- <20220223055357.t3wulpla64vt3xus@vireshk-i7>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <20220223055357.t3wulpla64vt3xus@vireshk-i7>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1645606850; l=1242; s=20211009; h=from:subject:message-id; bh=Uz2+kN1n/x9zpl6zVpcs3EmjKyxlQOcAPNtFojggR/A=; b=SAjF73NBrthBLLzdf4B7fowip1Hi2yVbpPKdDtYN/OjzlpJcb2pv6E2Dt3cTa92VHY5zkNyc/jv+ TeNS53VNCMX4dCLQ62qmyQC1WnNugPwg+7hUniO40YFOw0k7iZR/
+X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This series applies on top of Aaron's series "module: core code clean up" v8.
 
+It does some cleanup around the settling of modules's layout page flags:
+- Make module_enable_x() independent of CONFIG_ARCH_HAS_STRICT_MODULE_RWX
+- Reunify everything into strict_rwx.c
+- Change big hammer BUG_ON()s into WARN_ON()s
+- Change misleading debug_align() to strict_align()
 
-On 2/23/22 05:53, Viresh Kumar wrote:
-> On 22-02-22, 14:07, Lukasz Luba wrote:
->> +static int _of_find_opp_microwatt_property(struct device *dev)
->> +{
->> +	unsigned long freq = 0;
->> +	struct dev_pm_opp *opp;
->> +	struct device_node *np;
->> +	struct property *prop;
->> +
->> +	/* We only support "operating-points-v2" */
->> +	np = dev_pm_opp_of_get_opp_desc_node(dev);
->> +	if (!np)
->> +		return -EINVAL;
->> +
->> +	of_node_put(np);
->> +
->> +	/* Check if an OPP has needed property */
->> +	opp = dev_pm_opp_find_freq_ceil(dev, &freq);
->> +	if (IS_ERR(opp))
->> +		return -EINVAL;
->> +
->> +	prop = of_find_property(opp->np, "opp-microwatt", NULL);
->> +	dev_pm_opp_put(opp);
->> +	if (!prop)
->> +		return -EINVAL;
->> +
->> +	return 0;
->> +}
-> 
-> Please follow everything just like opp-microvolt is defined. Create a new field
-> in the struct dev_pm_opp, initialize it only once when the OPP is created, that
-> field should be used here instead of parsing the DT here again. There also needs
-> to be a debug file in debugfs for this new field.
-> 
-> Search for "supply" and "microvolt" in the OPP core, you will see all the places
-> that need it.
-> 
+Changes in v4:
+- Rebased on top of Aaron's series "module: core code clean up" v8.
 
-OK, so you want to have this available for the whole system. I can do
-that. I would go for one value of power and try to fit into the
-opp_parse_supplies() code. As far as I can see in the
-dev_pm_opp_get_voltage() the simple solution: supplier[0] and u_volt
-is used. I would go for similar solution for u_watt.
-There is even a single u_amp and no _max, _min variants, so should be
-good..
+Changes in v2/v3:
+- Rebased on top of my series "Allocate module text and data separately" v5
+- Moved the Kconfig patch out of this series, it is an independent change
+
+Christophe Leroy (4):
+  module: Make module_enable_x() independent of
+    CONFIG_ARCH_HAS_STRICT_MODULE_RWX
+  module: Move module_enable_x() and frob_text() in strict_rwx.c
+  module: Rework layout alignment to avoid BUG_ON()s
+  module: Rename debug_align() as strict_align()
+
+ kernel/module/Makefile     |  3 +-
+ kernel/module/internal.h   | 26 +++----------
+ kernel/module/kallsyms.c   |  4 +-
+ kernel/module/main.c       | 58 ++++++-----------------------
+ kernel/module/strict_rwx.c | 75 +++++++++++++++++++++++++++++++++-----
+ 5 files changed, 87 insertions(+), 79 deletions(-)
+
+-- 
+2.34.1
+

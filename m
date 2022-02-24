@@ -2,76 +2,253 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51A714C3605
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 20:41:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 725504C360A
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 20:44:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233978AbiBXTla (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 14:41:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51118 "EHLO
+        id S233980AbiBXTo0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 14:44:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233043AbiBXTl2 (ORCPT
+        with ESMTP id S233076AbiBXToY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 14:41:28 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AD332763D9;
-        Thu, 24 Feb 2022 11:40:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=GrbBLAbtvC4chaYdzgUK1w1hf9+xtC4k6cVzY/iVx3U=; b=pUaNsZxVGnEHGlDh9Mk+nY4Puc
-        WDK2PKuOlt4p0TsbO6ETD2kRFFIDMPq93CdkJa9Iab0H00mjKKQLei1dPnXOHapqa58yCw72eYM4E
-        jlgrtc0l94HKpO/qSd6rRHBtIBI62VoEfbYdqDPC3hfIVl7cAWxyarEfP5GMPxxrivrWd2tj/QTtX
-        vMrA9PdF5ZHtwmXXUbcDoAk3PZumDSG6NW/yIway8XVyvJu28V5/hlFS4SmLWB4bDAglam6GIOtPg
-        EIakVt52CXxk2k40RN34UYCk8ko1gF5NiN2m5ieGbD1Qldb3mOTj2Ip+6w3fCOaQJD8L54/o+c8zk
-        OLAW9wCw==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nNJyt-0054y2-Hj; Thu, 24 Feb 2022 19:40:51 +0000
-Date:   Thu, 24 Feb 2022 19:40:51 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc:     LTP List <ltp@lists.linux.it>,
-        open list <linux-kernel@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org, regressions@lists.linux.dev,
-        lkft-triage@lists.linaro.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Hildenbrand <david@redhat.com>,
-        Kees Cook <keescook@chromium.org>,
-        Alexey Dobriyan <adobriyan@gmail.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Peter Xu <peterx@redhat.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Subject: Re: [next] LTP: readahead02.c:295: TFAIL: readahead failed to save
- any I/O
-Message-ID: <YhffQ6XStJycOmK1@casper.infradead.org>
-References: <CA+G9fYs_8ww=Mi4o4XXjQxL2XJiTiAUbMd1WF08zL+FoiA7GRw@mail.gmail.com>
+        Thu, 24 Feb 2022 14:44:24 -0500
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD4D31C6EF2
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 11:43:53 -0800 (PST)
+Received: by mail-ed1-x532.google.com with SMTP id cm8so4395243edb.3
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 11:43:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=cT6VTaPBAvZcJT0C07jbq6jkkSfnrkv3DOfnLzZ77CM=;
+        b=cph9wo/cKs42xh7OHpJ1L4/fItWA1YtsVsR8Di5tl2igWrI3LjGzwy+GTVPrIL3I1Z
+         GPmf1B0NtZnAEE3hGPmw8LkPPA+8eTx1vMqrbiZJvC6TMFfHROnbmMiYXNJp8huLI+gx
+         qO7LzfpbfGtaHrKawj/KVlZawWWAemhDdkG+FfRsf2zbCwRLYY8yk1hUtHQPAc+vZfmk
+         RxJzf8gEOCvxp1Kuikw1mJyQ5GskvlzG3ChUBTmfgr88rXLMULIcbZFULMD36AaKUC3e
+         HhchVJPs5IExtwcXN/IpVT84JaqinlITjSuAktAm60Cw3JGxFH3MCqXm65fyUBe1lLZi
+         IxIA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=cT6VTaPBAvZcJT0C07jbq6jkkSfnrkv3DOfnLzZ77CM=;
+        b=LXPJ7g9199ZFylDr9Hpl5H0EZgxNKvPPwHu0C06bD1lS7ta+8HPaEzYMwjBXZFy/UI
+         enOnU3c90nmPfpu+pnyj8jwIxrJin2nvm8TnivCRkahqHSmKSqiBB3K/RtW6sWFgPKhU
+         kdbXxP1HOudJnTIGhLwoFX4Ad+ryi1HOMEhp9pdZZxxFnUjYqLimNU5YkMT2MWBABzUd
+         IJOp0GuuRLBkXJQKDwf9E4wvAijNlWTUqpcNJBnBl7YlNNeCw0r60GUrBi6tJQe/tOf+
+         2vTkCYqzkKQDKbi/bmRNS+GF0KoW5wTbnMyq04YcXQ9QrxbdpNH2JDRvDr1WCJqNIKVp
+         RSuw==
+X-Gm-Message-State: AOAM533suIoXeqR+3dx1kSrb6Rx/R9hngGgxHe7R3itOdnI47NX0hbMf
+        HFDXwm5T8TYs3Mlj2i78E0evbvLoLsbFiAuMGV2gKQ==
+X-Google-Smtp-Source: ABdhPJwrdy9Ks+AvYVAONIODLhAaLZ43j966hZvJwXtEANqW/+4iWi8AF6gH87RMvVRxu+szCttnMs6KWkl6HKVvHdU=
+X-Received: by 2002:a05:6402:2546:b0:412:d0eb:2a4a with SMTP id
+ l6-20020a056402254600b00412d0eb2a4amr3924248edb.306.1645731832090; Thu, 24
+ Feb 2022 11:43:52 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CA+G9fYs_8ww=Mi4o4XXjQxL2XJiTiAUbMd1WF08zL+FoiA7GRw@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220224055145.1853657-1-keescook@chromium.org>
+In-Reply-To: <20220224055145.1853657-1-keescook@chromium.org>
+From:   Daniel Latypov <dlatypov@google.com>
+Date:   Thu, 24 Feb 2022 11:43:40 -0800
+Message-ID: <CAGS_qxrRi0zvGnoi-Ne=wp8xkuFKPzNj9d57eq=51gg5gwX=eA@mail.gmail.com>
+Subject: Re: [PATCH] lib: stackinit: Convert to KUnit
+To:     Kees Cook <keescook@chromium.org>
+Cc:     David Gow <davidgow@google.com>, Arnd Bergmann <arnd@arndb.de>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-kernel@vger.kernel.org,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        llvm@lists.linux.dev, linux-hardening@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 24, 2022 at 02:57:59PM +0530, Naresh Kamboju wrote:
-> On Linux next 20220222 tag LTP syscalls test case readahead02 failed.
-> Please find detail test output on below link [1]
-> 
-> test failed log:
-> --------------------
-> readahead02.c:181: TPASS: offset is still at 0 as expected
-> readahead02.c:285: TINFO: read_testfile(0) took: 37567 usec
-> readahead02.c:286: TINFO: read_testfile(1) took: 37263 usec
-> readahead02.c:288: TINFO: read_testfile(0) read: 0 bytes
-> readahead02.c:290: TINFO: read_testfile(1) read: 0 bytes
-> readahead02.c:295: TFAIL: readahead failed to save any I/O
+On Wed, Feb 23, 2022 at 9:51 PM Kees Cook <keescook@chromium.org> wrote:
+>
 
-Confirmed, I can reproduce this with the folio tree.  Will work on
-this once I've disposed of the other bug I'm looking at right now.
+<snip>
+
+
+>  /* Userspace headers. */
+> +#define _GNU_SOURCE
+>  #include <stdio.h>
+>  #include <stdint.h>
+> +#include <stdlib.h>
+>  #include <string.h>
+>  #include <stdbool.h>
+>  #include <errno.h>
+>  #include <sys/types.h>
+>
+>  /* Linux kernel-ism stubs for stand-alone userspace build. */
+
+This is neat and esp. so that it works.
+But may I ask, what's the value of using this vs UML?
+
+Given this has changed into mainly just a KUnit-compatibility layer,
+it feels like it can maybe live as a standalone file, if there's ever
+interest in doing this for other tests.
+
+It feels like something that will never quite be "supported", but I
+find it neat enough I'd have fun sending some patches to make it more
+realistic.
+
+> -#define KBUILD_MODNAME         "stackinit"
+> -#define pr_fmt(fmt)            KBUILD_MODNAME ": " fmt
+> -#define pr_err(fmt, ...)       fprintf(stderr, pr_fmt(fmt), ##__VA_ARGS__)
+> -#define pr_warn(fmt, ...)      fprintf(stderr, pr_fmt(fmt), ##__VA_ARGS__)
+> -#define pr_info(fmt, ...)      fprintf(stdout, pr_fmt(fmt), ##__VA_ARGS__)
+> -#define __init                 /**/
+> -#define __exit                 /**/
+> +#define TEST_PASS      0
+> +#define TEST_SKIP      1
+> +#define TEST_FAIL      2
+> +struct kunit {
+> +       int status;
+> +       char *msg;
+> +};
+> +struct kunit_case {
+> +        void (*run_case)(struct kunit *test);
+> +        const char *name;
+> +};
+> +struct kunit_suite {
+> +       const char *name;
+> +       const struct kunit_case *test_cases;
+> +};
+> +#define KUNIT_CASE(test_name) { .run_case = test_name, .name = #test_name }
+> +
+> +#define KUNIT_ASSERT_TRUE_MSG(test, expr, fmt, ...)                    \
+> +do {                                                                   \
+> +       if (!(expr)) {                                                  \
+> +               if (test->status != TEST_SKIP)                          \
+> +                       test->status = TEST_FAIL;                       \
+> +               if (test->msg)                                          \
+> +                       free(test->msg);                                \
+> +               asprintf(&test->msg, fmt, ##__VA_ARGS__);               \
+> +       }                                                               \
+> +} while (0)
+
+This looks more like KUNIT_EXPECT_TRUE_MSG(), since this macro won't
+abort the test if the expectation fails.
+
+Looking at the code, it looks like we do want the ability to abort.
+Perhaps we can do what Googletest does in C++ and just add in a `return;`?
+
+It has some annoying implications, like using them from helper
+functions doesn't work as one would expect.
+But people seem to be doing fine with that tradeoff in C++ land.
+
+> +
+> +#define KUNIT_ASSERT_EQ_MSG(test, left, right, fmt, ...)               \
+> +       KUNIT_ASSERT_TRUE_MSG(test, (left) == (right), fmt, ##__VA_ARGS__)
+
+Very optional:
+
+It might be nice to show the expressions automatically on failure.
+We could implement that via something like
+
+KUNIT_ASSERT_TRUE_MSG(test, (left) == (right), #left " != " #right ":
+" fmt, ##__VA_ARGS__);
+
+E.g.
+KUNIT_ASSERT_EQ_MSG(test, 2+2, 5, "math is broken")
+=> 2+2 != 5: math is broken
+
+But I can see that being a bit too complicated to want to do here.
+And the failure messages we had before are already decent at giving context.
+
+> +
+> +#define kunit_skip(test, fmt, ...)                                     \
+> +do {                                                                   \
+> +       test->status = TEST_SKIP;                                       \
+> +       if (test->msg)                                                  \
+> +               free(test->msg);                                        \
+> +       asprintf(&test->msg, fmt, ##__VA_ARGS__);                       \
+> +} while (0)
+
+Similarly, this has no control flow implications, so the current
+semantics match kunit_mark_skipped().
+
+But looking at the code, I think we want to abort early here too.
+
+> +
+>  #define __user                 /**/
+>  #define noinline               __attribute__((__noinline__))
+>  #define __aligned(x)           __attribute__((__aligned__(x)))
+> @@ -59,16 +102,44 @@ typedef uint16_t           u16;
+>  typedef uint32_t               u32;
+>  typedef uint64_t               u64;
+>
+> -#define module_init(func)      static int (*do_init)(void) = func
+> -#define module_exit(func)      static void (*do_exit)(void) = func
+> -#define MODULE_LICENSE(str)    int main(void) {                \
+> -                                       int rc;                 \
+> -                                       /* License: str */      \
+> -                                       rc = do_init();         \
+> -                                       if (rc == 0)            \
+> -                                               do_exit();      \
+> -                                       return rc;              \
+> -                               }
+> +#define MODULE_LICENSE(str)    /* */
+> +
+> +int do_kunit_test_suite(struct kunit_suite *suite)
+> +{
+> +       const struct kunit_case *test_case;
+> +       int rc = 0;
+> +
+> +       for (test_case = suite->test_cases; test_case->run_case; test_case++) {
+> +               struct kunit test = { };
+> +
+> +               test_case->run_case(&test);
+> +               switch (test.status) {
+> +               default:
+> +               case TEST_FAIL:
+> +                       fprintf(stderr, "FAIL: %s%s%s", test_case->name,
+> +                               test.msg ? ": " : "",
+> +                               test.msg ?: "\n");
+> +                       rc = 1;
+> +                       break;
+> +               case TEST_SKIP:
+> +                       fprintf(stdout, "XFAIL: %s%s%s", test_case->name,
+> +                               test.msg ? ": " : "",
+> +                               test.msg ?: "\n");
+> +                       break;
+> +               case TEST_PASS:
+> +                       fprintf(stdout, "ok: %s\n", test_case->name);
+> +                       break;
+> +               }
+> +               if (test.msg)
+> +                       free(test.msg);
+> +       }
+> +       return rc;
+> +}
+> +
+> +#define kunit_test_suite(suite)                                        \
+> +int main(void) {                                               \
+> +       return do_kunit_test_suite(&(suite));                   \
+> +}
+
+very optional:
+emulating kunit_test_suites() might be more future-proof here, if we
+ever want to setup more suites.
+There's little reason to do so right now given the lack of init and
+exit support.
+
+Like the stuff above, it wouldn't be hard to do, but I can see it not
+being worth the extra code, i.e.
+
+#define kunit_test_suites(suites...) \
+  int main(void) {
+     static struct kunit_suite *suites =[] = { __VA_ARGS__ };
+     int i, ret = 0;
+     for (i = 0; i < ARRAY_SIZE(suites); ++i)
+       ret += do_kunit_test_suite(suites[i]);
+     return ret;
+   }

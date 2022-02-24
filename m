@@ -2,117 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 379074C33C6
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 18:31:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 71CBF4C33CA
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 18:32:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232281AbiBXRb0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 12:31:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56898 "EHLO
+        id S231593AbiBXRdH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 12:33:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230400AbiBXRbY (ORCPT
+        with ESMTP id S230434AbiBXRdD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 12:31:24 -0500
-Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B7D2186B9C;
-        Thu, 24 Feb 2022 09:30:53 -0800 (PST)
-Received: by mail-yb1-xb2d.google.com with SMTP id b35so865187ybi.13;
-        Thu, 24 Feb 2022 09:30:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=YN3o5AHfbGVmbeaZUJjmbDqTCWv/jzMc3EILlut6Oww=;
-        b=a1WdcUy4rP1D+h2JWaW3NZ7cj7mMuh72pwuxNzL9nm3dxxunfRyAUaKgFx/ynm5sJk
-         Fb1eD1BUAyDPcJJIbAP+2TYtWC0umJJBRstjSjWNhhYYMgeLf9AwliKwI8oye4bFPRVX
-         /cERCPKOAMd8igNl35lFYoXqAeAiEv5fxAii3NUBubgd4ffDG9xJuES8SyZbJbORPbyz
-         Qu35wM6y4ILBESw64aV6Qg5yPH3fmmw3qsoMAUgp4NkVgt7qryVSYkLc7L3crqEnNA7H
-         5wi2UDdYC8vTpVkeMgL3pw1bhWDOOFOU6OTN0oYLmJPHo1cqf+lmkaDhGf5CHGp25mPa
-         avXw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=YN3o5AHfbGVmbeaZUJjmbDqTCWv/jzMc3EILlut6Oww=;
-        b=62NaEoyawj7nHPCFiyFvEB2/XSHFwAG/93cho+K0PFgYLPQj/74ilMR5V+BOLw1Rry
-         ZPTXwTc1R9kOtqYaWFD1o6lYgybibw1qzb0pWk1ZT1jlgEOPxw3s5shKPno18qsAXQPg
-         dGfwguUDYPdoz6nuUh4tLoRAxFH3XZ2CrIcRToRThqTl4krl/gwbhO7h98ImP1x5xwBu
-         5vnY6uwLsHYmeTZnZ+ES0zlCvjM/aCTa2/J+4Sa76rla2NoorWmK7FqtXjU4DG/kpx45
-         QXSnVlZiQsFYIo4Sugzd6mNMcEONdziO5ACsDB3khKWwzRYVEVqTepaLveucOZBJTUIu
-         SeEg==
-X-Gm-Message-State: AOAM533LLNtG9BjcMkQ6oiqAB98gDb9CsIzXhdwVUxjbyrmUvzeULqUM
-        B73sH/123JBipilcL5c7h08NEQYIW/fC813tspY8KJqbQTg=
-X-Google-Smtp-Source: ABdhPJwVE+iLZioAdIPSMXrJNMwFqMMEtMyE883chlGCzYhTLHZADwd1z+5sE5iGyyZNus3T/vJIrX8Y52GSTTvISaw=
-X-Received: by 2002:a05:6902:567:b0:624:649e:1b14 with SMTP id
- a7-20020a056902056700b00624649e1b14mr3297272ybt.84.1645723852614; Thu, 24 Feb
- 2022 09:30:52 -0800 (PST)
+        Thu, 24 Feb 2022 12:33:03 -0500
+Received: from sonic316-26.consmr.mail.ne1.yahoo.com (sonic316-26.consmr.mail.ne1.yahoo.com [66.163.187.152])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 708961D5286
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 09:32:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1645723952; bh=eLIg2lJ19nzizmVDA0nkElf6Xtn+HvNuyJ4wCD96xks=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=GV1cxOESMWrng+3IL98zCg0b8FfMP9E0QF0olWMSlnR4JXpobjqWuqqJi5NN2VdnjbE/nPSoJ2Y+wbIVYsigDzqG4zodY6MB09vKylHhAihzgV/iVQjjLwW94JrovdJFMEShy76yqEegNwcPZBRT9rwXxMikBr9dESdNPTfC72frYgCIG5Y9ZYF9eEKbjyJE/T5GtTxmqJAChm4PiG2OYSf3i3L5UxdtcuNfErXZcRCpwfuVmUmWF2G3shfX1RBWBmIwqIWo/V9KetUgLs4p92GmP1wYAkBUZA52oZNQXziL7jBwCOy7QMXsahVZTVehFbUhdH6oqOdEMNrg6VPULQ==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1645723952; bh=mhjr7k2u7onfh4com4tCPakkAZU4P4wXa0QL/H8kIxd=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=lZeq4jpKtHYKZB6/IHA4Lp7IF3i/cYEb6imbszdXIjlLKGtVr7V7d144XDpoo9LQgcL+VP4eKJ65JNS72PSAB+qRb/acmEgC1pLcppWH8anGwt5bkVemR4EUEqwxrJuuAOo5oz4O83DbAO7HLaCNhZxkzYr3q0t4CGeYCfMc/joKmQULndJSm54IMMJ1a5ZNZTpT8NU36xxU0uvnnEtfCo/c90PnKHJchJhRZ2Up83qkoLiO+jJKgDO22t1kbMr01tnPrIeTAe/69l7I9iDgZHc+Jiffw8qDB2FQkNfW8e74MFEdimV1C5gcJkylbKMFFmbBm2N1fJLfgkXOHLl5RQ==
+X-YMail-OSG: EXeYNvgVM1lbU8UFCrcoVIe8j.8RM2C.KyKcQoPW9RQX_8k6fd9JEFx3eeRqM6O
+ 0eREqXJp0RUPK8oqq3g5O6Ts_MUnPE3p1AMdLimafvxcLq9Wa1EHUZEJFNuR2uUo58RvBT1fQiRO
+ GdSoPgXx5phPS.C.ld5SzZXv.caXoJCF8PmROZeUMaAKCihWOeIoseq2h6cgvl3Jxuhdgipfar6N
+ RZ6SrR_b21JRuHJnLCndtpq2UTyNCtBDQuBjmtR6OdXuC.StGjAytHSaIJeg_Dn2svDmu3MEuLKT
+ G5FoxAjRK498iEjHYguVyjsrHh494vjafPFrsp8RrB8gJG2Nal5OqIWnAjZMtbgGjLgWvD9vnB74
+ NWGyE282yHwNJBj96Jr3fnWXw6FXH.z_OPf6ru5gR9SZcH74hbpqpWiKRIgqigvRurS7q1v50fo2
+ a2xvwPQ7wETgsfksKKQe2qU5JBxS1WzXpnG5Zh4pI5FHy4YR_u0M0L8hoZcYGijFB8YsfXe2.8c0
+ KsINFE20yeS8uINwrKhJMpx_IQ1P01AP0p8jkuvgdBv7740HUVVs6n.T4zMKG.TCnSpMC6a6fUhS
+ ERweyFsKez6CGZk3krR5gET4PV3.5u8wshcFs7uZEoIxG3YrL56PHcSWg7KloMaOHpMtOm0T7qg5
+ EKIGMlIpnWyo3fZmW.9avxPACGpsbHHkDbiL7zOyUC7DbbsmsSOZrEYaS1tOZgrLuHSNDcA4z072
+ YVBXyc_gdQIbWb5q_ufs9BXtiu1v2wq4fCKR9osM54jUvDbLxUJZWuVK58MTWYDRKZvOtIdZ.Z9u
+ V074NDWkAB2rYkidYz0NEooYFCTqhjsJtcjYjTxFOgAF37J4jo9Gby_elrJcK0zUIY6GMeVkPCjl
+ SmAxLfCs1RUh0DHmsBD4v0dYlQfKONo4OsnnF2Fwjxr7YJTMMdmU1i2p9Vqu8LiMruDVU8VxPEam
+ OdWMmeqB_5FGBhWlMv2G50jaGRAY47gGFc9g2G_JppGMIcLb8FlledDljNAdU3NQsP0caEjZ7f1C
+ 00t7p5HEurXQTTKBeDsacEDpc6uJ5TflqsTZu0Y.NHYhsGPozN_G2vWjDH8.B6s52yhao62Hryoo
+ 4.AG.q5Cn_uldXdU53TUMaTF5LpSQb4UYVOJOfAHsrMKaPNljoSzqTNkM9EVO5ER4ryEgmPMBKkg
+ ADUdvnMgVCTZSDrBGbpzGZLy0jFtSBZoR_ctl2LNCQl6UQMKD5_v1wF2URVsBWrJ2T5LIP.AGWuE
+ oBacFtFldxdmw.oZ0RL1eG3rp0kLI.lwhInTOQCQvVx.FF0FNe5L02AGISvtZQbxYdgILMnuUNXM
+ 2Gj2Ej9y.S3bSY9z3df6AJ7wIALWm1bBxtwMbzxrx4xcomIB0iO3qOaxYB8huCMSkQkLgXGa0Fe2
+ xouS79zpR.yMjkHvW.Z8.P1YGjil09k9KA4bJZEd2W1f6FigMzlVk3A9v.E7olXSPLOZi70aQjvJ
+ CinpXjoGDp0obut59CCDAIZEdKqGS17o_CckzoWsoCZzd1yNoLrBL922AZLZzAIV4sJ6iAUMHgh0
+ uV5IZGCJRphvyo.AqDCF6rj4UeNvclHsD4M8V0Isog2Z1eIA776ZV8N8KYl2ddNYbIynkhCUpLEc
+ wpERFVSyNMW3_XQnceIej.2mPAlRbhHwdZ1vkAlMWzTJ_NKIbGnMpP94GoR1cgYVe5XCGcHZ724I
+ 912HyORYDbBnGqZlICSEhOIaUMVG.6_g_8fnYmBqHnHK1IJLDByD4sQb28zSh7OOmNPWns0nApH.
+ 7AoFiujfO9Lcn0.u_STrSS_x0oAExCx5TqwsH6JI0ylxeYbe8wCGsH9x1Kr5ankyyOCWhIJc94dy
+ w7X.xoBCU3pZB9aB8kBaLExSOwiJ5G4wLPXX850JDGHFEH7EBnOrRvmoBxGmiXeojkN4j5guaL3M
+ zQP2qYI1Jfw9wZdBA8728ctQx_QsaE071Q0pLF9N_TOn6.qr5R_5nj5nVDJAlxJAXpRM2UE0Y4X2
+ 2IRqQOO5SOSOIae.DyjPPkvPx1DiC4saibnu2ps7XYmjH32P0g1zHPTeT.HG9JgnbILK7JTvbnSI
+ fMgE6ie5ZLm2w82NxShhqalGKkWWHbQX7uTiUK8YvOWC4CpQGrOgL5EpjWi2vWt7QSjkUiOKoLWx
+ TiPLN3DPSvDidaT9mpj8TIvGgudcfwESTQzkU5FSLH2aU28GA0u3tNSXnxThkrJQ9znhg7_Ptl3H
+ M2HQsyVXpABvHb4i514QRpa9c3VkwFPViYFM_PsByqDnNXow2MWih14YXA75kQmwYIw--
+X-Sonic-MF: <casey@schaufler-ca.com>
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic316.consmr.mail.ne1.yahoo.com with HTTP; Thu, 24 Feb 2022 17:32:32 +0000
+Received: by kubenode500.mail-prod1.omega.bf1.yahoo.com (VZM Hermes SMTP Server) with ESMTPA ID 3b5e45a9f836ff2b85e501e5f122e7d5;
+          Thu, 24 Feb 2022 17:32:31 +0000 (UTC)
+Message-ID: <418628ea-f524-05a1-8bfc-a688fa2d625d@schaufler-ca.com>
+Date:   Thu, 24 Feb 2022 09:32:29 -0800
 MIME-Version: 1.0
-References: <20220207103738.103661-1-jiapeng.chong@linux.alibaba.com>
-In-Reply-To: <20220207103738.103661-1-jiapeng.chong@linux.alibaba.com>
-From:   Ryusuke Konishi <konishi.ryusuke@gmail.com>
-Date:   Fri, 25 Feb 2022 02:30:40 +0900
-Message-ID: <CAKFNMokx2Qk4jJx6s0vzseYRbfjejZwoDY3MnPODWhT7-_1K=g@mail.gmail.com>
-Subject: Re: [PATCH] mm/fs: Remove redundant code
-To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-Cc:     linux-nilfs <linux-nilfs@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Abaci Robot <abaci@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH 2/2] integrity: double check iint_cache was initialized
+Content-Language: en-US
+To:     Petr Vorel <pvorel@suse.cz>, zohar@linux.ibm.com
+Cc:     dvyukov@google.com, ebiggers@kernel.org, jmorris@namei.org,
+        keescook@chromium.org, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org, serge@hallyn.com,
+        Casey Schaufler <casey@schaufler-ca.com>
+References: <20210322154207.6802-2-zohar@linux.ibm.com>
+ <20220224142025.2587-1-pvorel@suse.cz>
+From:   Casey Schaufler <casey@schaufler-ca.com>
+In-Reply-To: <20220224142025.2587-1-pvorel@suse.cz>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Mailer: WebService/1.1.19797 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jiapeng,
-
-On Mon, Feb 7, 2022 at 7:37 PM Jiapeng Chong
-<jiapeng.chong@linux.alibaba.com> wrote:
+On 2/24/2022 6:20 AM, Petr Vorel wrote:
+> Hi Mimi, Tetsuo, Kees, all,
 >
-> Clean up the following smatch warning:
->
-> fs/nilfs2/segbuf.c:358 nilfs_segbuf_submit_bio() warn: ignoring
-> unreachable code.
->
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-> ---
->  fs/nilfs2/segbuf.c | 4 ----
->  1 file changed, 4 deletions(-)
->
-> diff --git a/fs/nilfs2/segbuf.c b/fs/nilfs2/segbuf.c
-> index 9e5dd6324ea1..50d7e2e4daed 100644
-> --- a/fs/nilfs2/segbuf.c
-> +++ b/fs/nilfs2/segbuf.c
-> @@ -341,7 +341,6 @@ static int nilfs_segbuf_submit_bio(struct nilfs_segment_buffer *segbuf,
->                                    int mode_flags)
->  {
->         struct bio *bio = wi->bio;
-> -       int err;
->
->         bio->bi_end_io = nilfs_end_bio_write;
->         bio->bi_private = segbuf;
-> @@ -354,9 +353,6 @@ static int nilfs_segbuf_submit_bio(struct nilfs_segment_buffer *segbuf,
->         wi->nr_vecs = min(wi->max_pages, wi->rest_blocks);
->         wi->start = wi->end;
->         return 0;
-> -
-> -       wi->bio = NULL;
-> -       return err;
->  }
+> FYI this commit merged as 92063f3ca73a ("integrity: double check iint_cache was initialized")
+> is the reason for openSUSE distro installer going back from lsm= to deprecated
+> security= when filling default grub parameters because security=apparmor or
+> security=selinux does not break boot when used with ima_policy=tcb, unlike
+> using lsm.
 
-Sorry for my late reply.
+OK, color me confused. Integrity isn't an LSM. It doesn't
+call security_add_hooks().
 
-I will send this to Andrew to report and fix the regression on the -mm
-patch series.
+> @Kees, @Mimi sure, people who use ima_policy=tcb will just remove lsm parameter
+> or add "integrity" to it but I wonder whether there could be "integrity"
+> automatic inclusion when using ima_policy=tcb. Although the point of lsm= (and
+> CONFIG_LSM) is to have *ordered* list of enabled LSMs and it wouldn't be clear
+> on which place.
 
-I'd like to change the patch title to something like "nilfs2: Remove
-redundant code"
-since the "mm/fs" prefix does not properly represent what it applies to.
-(this patch may be folded into the patch that is causing the warning)
+Why would adding integrity to the lsm= make sense? It's not an LSM.
 
-Regards,
-Ryusuke Konishi
+Sorry, but something is wrong here.
+
+>
+> Kind regards,
+> Petr

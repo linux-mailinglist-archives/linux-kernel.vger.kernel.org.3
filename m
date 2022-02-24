@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB2E64C2827
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 10:36:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 395CA4C2832
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 10:36:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232831AbiBXJeO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 04:34:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49300 "EHLO
+        id S232867AbiBXJeW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 04:34:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232798AbiBXJdx (ORCPT
+        with ESMTP id S232832AbiBXJeK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 04:33:53 -0500
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C04726A39E
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 01:33:23 -0800 (PST)
-Received: by mail-pj1-x1036.google.com with SMTP id iq13-20020a17090afb4d00b001bc4437df2cso1546076pjb.2
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 01:33:23 -0800 (PST)
+        Thu, 24 Feb 2022 04:34:10 -0500
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2B0D27AA08
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 01:33:28 -0800 (PST)
+Received: by mail-pg1-x52f.google.com with SMTP id 139so1273938pge.1
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 01:33:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=bytedance-com.20210112.gappssmtp.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=Um2hOoO992A8z0y3YtWZVlugWm1fUhrmcXQ/7RYGwh8=;
-        b=dmY9TiLAQ/Sks9iO7V4G62Iq0F4qlBMW21+hDyL33W+fC59uEKCeH1kQPz7H/qXr4X
-         SvVBePgkVfp2+ZdtGoFrz4RZA/MnbhKe1Y+gZUU8kHjNRYAdc+x2DtDHGt3jwK9Cb00C
-         TkG5V3K39mgV+oebLPqYz8Hv/fUqlOzTKV7wyjPfam74HRRaVwDI7B29oSg2sxF4/xTS
-         np6kqdrSTbTA3AohcQZa4LYTE0N5FePEQb0d0FnaZdZkN0Kn0Sn2o1Ce6tFhYruXHP2Q
-         8nmbW3JYmXV0GJJDCQj3unSGk3/Cwdu+a9DjeDZp2/Fy96EP0/UCgyNTa256oPuvM3oB
-         Vgkg==
+        bh=Ur9wtD5hRziCyNtt0x078VkkIfEhwLa1NcuLg35lwx4=;
+        b=tCOC3j3DRPC8L4v+mDSfN1fAt0wWb2cyyK3zkm+uVDGDoDrnpHoNaF/uLLFaWO6iGj
+         UBl8ra8c/Ra+nggkq5+cor9kaAKMvHQZd05JnZF81t494fHnMs6t1uA/4gLBUP+/QrNX
+         nOTSpgK4XuvoT7xDkd2jMH/kUl7RYhWqGUdMdQVdY+QsS72+f836hZ8IkEKZdYm8SyT6
+         /QzXArkf58QcDzPpbkqBLBNe5wSC2Cm8zSMWs9sVlh8T6JRAXQ3zDk9keBepOPxCr9zv
+         EqnhA/U3cUkmoJtyjicbKAq8Abak68yml0ZSRzL2lKk/u6+ETNUOtphQP8wF1I7mejce
+         Vskg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=Um2hOoO992A8z0y3YtWZVlugWm1fUhrmcXQ/7RYGwh8=;
-        b=h1lUJsGUAHfF28f63cqi4NXMb5056811/rHYkhfe331SZnyatMIF2JBZR2/hapxS7a
-         M3BiWterxHcCBbysHHEB89sWOHeIEUllfaKM/akGm/9GUs6YU4GeNQeaWXG2Dslq0ewa
-         fogfn3hdSWUagB35k219fahxSlxJMtfHnXxEHt45weO5UWvtni1tChxxC4ww3KtBiAaE
-         yAk+0XAcru8YsXwHDsWtH9qney1MGGh9leO2GAHSebPpzctNUTRpHT3zeofhG1Ql/MBX
-         JoOnBr2J1pWAfhpbP62DepTp+vG3E7gnM5HCvv62IWjqzIvTJ3JPAxY5lqdiKn2R5gYE
-         9n9A==
-X-Gm-Message-State: AOAM53176vKfcjPKADi9auTmiNenDc52nyDbIJEWGPm/jukOlfxxIMIH
-        wbVOYtz8duLVPYzj/gTCIwc9zQ==
-X-Google-Smtp-Source: ABdhPJxLfTLxRibEEIi3LQRH2mR/4H/gW2oqwevUc7iY2J2LFlnQXH9WaCZ0SWn98k92VCGYf8fjjQ==
-X-Received: by 2002:a17:90a:4891:b0:1b9:81c:8774 with SMTP id b17-20020a17090a489100b001b9081c8774mr1930738pjh.8.1645695202689;
-        Thu, 24 Feb 2022 01:33:22 -0800 (PST)
+        bh=Ur9wtD5hRziCyNtt0x078VkkIfEhwLa1NcuLg35lwx4=;
+        b=i96mt2t/Q/ubf9TQ0x1i10EKN2Az2CcfCnRB0JExz95n7lF257NnpLo3+449GfCOBr
+         p8ke1Y9D02uP7y47gCoXzKH+Ya3z6FqPWK11SwdiBM0KEkna2SZVLrTjGTH4ax6fde6U
+         je5edTsgjEg7K6r5CRtl01fKMjoRv72hk7pHS46tvCl0L/8pumcc/ubnAl6+mefw08HY
+         HfnK/t+WgP3rR7rQuoEK5ndzcYXB+sBzGKOZWOwRE3iZWFxHmtTNa9HOkcbf/eFd4ow1
+         s/rI/4p96sKTn/NOvUbHwMffZlPqTNLS4Xl5P/TCQXCsMItOAuQfJF3XJCnUGsfc51nr
+         PHsA==
+X-Gm-Message-State: AOAM530slBtGnUyscZtHmEvAdYxvxNqxzVL7GF+shZWEAkBkBvLu95K/
+        OiLjZWLQAolrJ98yKnGBHbK0DISWqNLwMg==
+X-Google-Smtp-Source: ABdhPJyZz/IiG+PWxHVct5nQwUKfkF08wuXdEDJWf1nuV9VLNW7ezhCe4mXisB+A1XxUyHYlPADAdw==
+X-Received: by 2002:a05:6a00:a10:b0:4c1:8ad1:81c5 with SMTP id p16-20020a056a000a1000b004c18ad181c5mr2028054pfh.42.1645695208202;
+        Thu, 24 Feb 2022 01:33:28 -0800 (PST)
 Received: from C02CV1DAMD6P.bytedance.net ([139.177.225.251])
-        by smtp.gmail.com with ESMTPSA id 13sm2530988pfx.122.2022.02.24.01.33.17
+        by smtp.gmail.com with ESMTPSA id 13sm2530988pfx.122.2022.02.24.01.33.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Feb 2022 01:33:22 -0800 (PST)
+        Thu, 24 Feb 2022 01:33:27 -0800 (PST)
 From:   Chengming Zhou <zhouchengming@bytedance.com>
 To:     rostedt@goodmis.org, mark.rutland@arm.com, mingo@redhat.com,
         tglx@linutronix.de, catalin.marinas@arm.com, will@kernel.org,
@@ -56,9 +56,9 @@ Cc:     x86@kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org, songmuchun@bytedance.com,
         qirui.001@bytedance.com,
         Chengming Zhou <zhouchengming@bytedance.com>
-Subject: [PATCH v3 2/3] x86/ftrace: cleanup graph tracer
-Date:   Thu, 24 Feb 2022 17:32:50 +0800
-Message-Id: <20220224093251.49971-2-zhouchengming@bytedance.com>
+Subject: [PATCH v3 3/3] arm64/ftrace: Make function graph use ftrace directly
+Date:   Thu, 24 Feb 2022 17:32:51 +0800
+Message-Id: <20220224093251.49971-3-zhouchengming@bytedance.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220224093251.49971-1-zhouchengming@bytedance.com>
 References: <20220224093251.49971-1-zhouchengming@bytedance.com>
@@ -73,122 +73,117 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Put CONFIG_DYNAMIC_FTRACE related code after prepare_ftrace_return(),
-in which we define ftrace_graph_func() for graph_ops in
-DYNAMIC_FTRACE_WITH_ARGS case, then define ftrace_graph_caller
-enable and disable functions in the #else case to override.
+As we do in commit 0c0593b45c9b ("x86/ftrace: Make function graph
+use ftrace directly"), we don't need special hook for graph tracer,
+but instead we use graph_ops:func function to install return_hooker.
 
-Since ftrace_graph_caller enable and disable functions have weak
-versions in Ftrace core code, we don't need to override them in the
-DYNAMIC_FTRACE_WITH_ARGS case. This patch is just a cleanup,
-doesn't have functional changes actually.
+Since commit 3b23e4991fb6 ("arm64: implement ftrace with regs") add
+implementation for FTRACE_WITH_REGS on arm64, we can easily adopt
+the same cleanup on arm64. And this cleanup only changes the
+FTRACE_WITH_REGS implementation, so the mcount-based implementation
+is unaffected.
 
 Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
 ---
- arch/x86/kernel/ftrace.c | 78 +++++++++++++++++-----------------------
- 1 file changed, 32 insertions(+), 46 deletions(-)
+Changes in v3:
+ - Add comments in ftrace_graph_func() as suggested by Steve.
 
-diff --git a/arch/x86/kernel/ftrace.c b/arch/x86/kernel/ftrace.c
-index 7cc540e6de0c..e49c9d3e986b 100644
---- a/arch/x86/kernel/ftrace.c
-+++ b/arch/x86/kernel/ftrace.c
-@@ -583,51 +583,6 @@ void arch_ftrace_trampoline_free(struct ftrace_ops *ops)
- #endif /* CONFIG_DYNAMIC_FTRACE */
+Changes in v2:
+ - Remove FTRACE_WITH_REGS ftrace_graph_caller asm as suggested by Mark.
+---
+ arch/arm64/include/asm/ftrace.h  |  7 +++++++
+ arch/arm64/kernel/entry-ftrace.S | 17 -----------------
+ arch/arm64/kernel/ftrace.c       | 17 +++++++++++++++++
+ 3 files changed, 24 insertions(+), 17 deletions(-)
+
+diff --git a/arch/arm64/include/asm/ftrace.h b/arch/arm64/include/asm/ftrace.h
+index 1494cfa8639b..dbc45a4157fa 100644
+--- a/arch/arm64/include/asm/ftrace.h
++++ b/arch/arm64/include/asm/ftrace.h
+@@ -80,8 +80,15 @@ static inline unsigned long ftrace_call_adjust(unsigned long addr)
  
- #ifdef CONFIG_FUNCTION_GRAPH_TRACER
--
--#ifdef CONFIG_DYNAMIC_FTRACE
--
--#ifndef CONFIG_HAVE_DYNAMIC_FTRACE_WITH_ARGS
--extern void ftrace_graph_call(void);
--static const char *ftrace_jmp_replace(unsigned long ip, unsigned long addr)
--{
--	return text_gen_insn(JMP32_INSN_OPCODE, (void *)ip, (void *)addr);
--}
--
--static int ftrace_mod_jmp(unsigned long ip, void *func)
--{
--	const char *new;
--
--	new = ftrace_jmp_replace(ip, (unsigned long)func);
--	text_poke_bp((void *)ip, new, MCOUNT_INSN_SIZE, NULL);
--	return 0;
--}
--
--int ftrace_enable_ftrace_graph_caller(void)
--{
--	unsigned long ip = (unsigned long)(&ftrace_graph_call);
--
--	return ftrace_mod_jmp(ip, &ftrace_graph_caller);
--}
--
--int ftrace_disable_ftrace_graph_caller(void)
--{
--	unsigned long ip = (unsigned long)(&ftrace_graph_call);
--
--	return ftrace_mod_jmp(ip, &ftrace_stub);
--}
--#else /* !CONFIG_HAVE_DYNAMIC_FTRACE_WITH_ARGS */
--int ftrace_enable_ftrace_graph_caller(void)
--{
--	return 0;
--}
--
--int ftrace_disable_ftrace_graph_caller(void)
--{
--	return 0;
--}
--#endif /* CONFIG_HAVE_DYNAMIC_FTRACE_WITH_ARGS */
--#endif /* !CONFIG_DYNAMIC_FTRACE */
+ #ifdef CONFIG_DYNAMIC_FTRACE_WITH_REGS
+ struct dyn_ftrace;
++struct ftrace_ops;
++struct ftrace_regs;
++
+ int ftrace_init_nop(struct module *mod, struct dyn_ftrace *rec);
+ #define ftrace_init_nop ftrace_init_nop
++
++void ftrace_graph_func(unsigned long ip, unsigned long parent_ip,
++		       struct ftrace_ops *op, struct ftrace_regs *fregs);
++#define ftrace_graph_func ftrace_graph_func
+ #endif
+ 
+ #define ftrace_return_address(n) return_address(n)
+diff --git a/arch/arm64/kernel/entry-ftrace.S b/arch/arm64/kernel/entry-ftrace.S
+index e535480a4069..d42a205ef625 100644
+--- a/arch/arm64/kernel/entry-ftrace.S
++++ b/arch/arm64/kernel/entry-ftrace.S
+@@ -97,12 +97,6 @@ SYM_CODE_START(ftrace_common)
+ SYM_INNER_LABEL(ftrace_call, SYM_L_GLOBAL)
+ 	bl	ftrace_stub
+ 
+-#ifdef CONFIG_FUNCTION_GRAPH_TRACER
+-SYM_INNER_LABEL(ftrace_graph_call, SYM_L_GLOBAL) // ftrace_graph_caller();
+-	nop				// If enabled, this will be replaced
+-					// "b ftrace_graph_caller"
+-#endif
 -
  /*
-  * Hook the return address and push it in the stack of return addrs
-  * in current thread info.
-@@ -666,6 +621,8 @@ void prepare_ftrace_return(unsigned long ip, unsigned long *parent,
- 	ftrace_test_recursion_unlock(bit);
- }
+  * At the callsite x0-x8 and x19-x30 were live. Any C code will have preserved
+  * x19-x29 per the AAPCS, and we created frame records upon entry, so we need
+@@ -127,17 +121,6 @@ ftrace_common_return:
+ 	ret	x9
+ SYM_CODE_END(ftrace_common)
  
-+#ifdef CONFIG_DYNAMIC_FTRACE
-+
- #ifdef CONFIG_HAVE_DYNAMIC_FTRACE_WITH_ARGS
- void ftrace_graph_func(unsigned long ip, unsigned long parent_ip,
- 		       struct ftrace_ops *op, struct ftrace_regs *fregs)
-@@ -675,6 +632,35 @@ void ftrace_graph_func(unsigned long ip, unsigned long parent_ip,
- 
- 	prepare_ftrace_return(ip, (unsigned long *)stack, 0);
- }
+-#ifdef CONFIG_FUNCTION_GRAPH_TRACER
+-SYM_CODE_START(ftrace_graph_caller)
+-	ldr	x0, [sp, #S_PC]
+-	sub	x0, x0, #AARCH64_INSN_SIZE	// ip (callsite's BL insn)
+-	add	x1, sp, #S_LR			// parent_ip (callsite's LR)
+-	ldr	x2, [sp, #PT_REGS_SIZE]	   	// parent fp (callsite's FP)
+-	bl	prepare_ftrace_return
+-	b	ftrace_common_return
+-SYM_CODE_END(ftrace_graph_caller)
 -#endif
-+#else
-+extern void ftrace_graph_call(void);
-+static const char *ftrace_jmp_replace(unsigned long ip, unsigned long addr)
-+{
-+	return text_gen_insn(JMP32_INSN_OPCODE, (void *)ip, (void *)addr);
-+}
+-
+ #else /* CONFIG_DYNAMIC_FTRACE_WITH_REGS */
  
-+static int ftrace_mod_jmp(unsigned long ip, void *func)
+ /*
+diff --git a/arch/arm64/kernel/ftrace.c b/arch/arm64/kernel/ftrace.c
+index 4506c4a90ac1..35eb7c9b5e53 100644
+--- a/arch/arm64/kernel/ftrace.c
++++ b/arch/arm64/kernel/ftrace.c
+@@ -268,6 +268,22 @@ void prepare_ftrace_return(unsigned long self_addr, unsigned long *parent,
+ }
+ 
+ #ifdef CONFIG_DYNAMIC_FTRACE
++
++#ifdef CONFIG_DYNAMIC_FTRACE_WITH_REGS
++void ftrace_graph_func(unsigned long ip, unsigned long parent_ip,
++		       struct ftrace_ops *op, struct ftrace_regs *fregs)
 +{
-+	const char *new;
++	/*
++	 * Athough graph_ops doesn't have FTRACE_OPS_FL_SAVE_REGS set in flags,
++	 * regs can't be NULL in DYNAMIC_FTRACE_WITH_REGS. By design, it should
++	 * be fixed when DYNAMIC_FTRACE_WITH_ARGS is implemented.
++	 */
++	struct pt_regs *regs = arch_ftrace_get_regs(fregs);
++	unsigned long *parent = (unsigned long *)&procedure_link_pointer(regs);
 +
-+	new = ftrace_jmp_replace(ip, (unsigned long)func);
-+	text_poke_bp((void *)ip, new, MCOUNT_INSN_SIZE, NULL);
-+	return 0;
++	prepare_ftrace_return(ip, parent, frame_pointer(regs));
 +}
-+
-+int ftrace_enable_ftrace_graph_caller(void)
-+{
-+	unsigned long ip = (unsigned long)(&ftrace_graph_call);
-+
-+	return ftrace_mod_jmp(ip, &ftrace_graph_caller);
-+}
-+
-+int ftrace_disable_ftrace_graph_caller(void)
-+{
-+	unsigned long ip = (unsigned long)(&ftrace_graph_call);
-+
-+	return ftrace_mod_jmp(ip, &ftrace_stub);
-+}
-+#endif /* CONFIG_HAVE_DYNAMIC_FTRACE_WITH_ARGS */
-+#endif /* CONFIG_DYNAMIC_FTRACE */
++#else
+ /*
+  * Turn on/off the call to ftrace_graph_caller() in ftrace_caller()
+  * depending on @enable.
+@@ -297,5 +313,6 @@ int ftrace_disable_ftrace_graph_caller(void)
+ {
+ 	return ftrace_modify_graph_caller(false);
+ }
++#endif /* CONFIG_DYNAMIC_FTRACE_WITH_REGS */
+ #endif /* CONFIG_DYNAMIC_FTRACE */
  #endif /* CONFIG_FUNCTION_GRAPH_TRACER */
 -- 
 2.20.1

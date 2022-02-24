@@ -2,52 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECFF94C368E
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 21:09:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE3304C369A
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 21:11:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234233AbiBXUJo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 15:09:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55194 "EHLO
+        id S234248AbiBXULQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 15:11:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232032AbiBXUJl (ORCPT
+        with ESMTP id S234235AbiBXULP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 15:09:41 -0500
-Received: from box.fidei.email (box.fidei.email [IPv6:2605:2700:0:2:a800:ff:feba:dc44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22A5925A33C;
-        Thu, 24 Feb 2022 12:09:10 -0800 (PST)
-Received: from authenticated-user (box.fidei.email [71.19.144.250])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
-        (No client certificate requested)
-        by box.fidei.email (Postfix) with ESMTPSA id 41C6680054;
-        Thu, 24 Feb 2022 15:09:09 -0500 (EST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=dorminy.me; s=mail;
-        t=1645733349; bh=5IgLcIBl4ewGZXN7xM8bD2gcQkHoEkdSW6EarFjjkAo=;
-        h=Date:Subject:To:References:From:In-Reply-To:From;
-        b=kZIXYAzMGFUiWndbXVy703UHFFLKdgKxNyj+qKi5tt8fvye4qLJbZDZjVPqh0xxVY
-         MStcQK7LPPaxjpDaufHqu1hJaTENREUNwtYL5FyPeY9LjT7iBQX8zu8J5++nhWzorV
-         El4EP34llbag3tqUAktdhy2J9vo67jIbx58pcUPx9ldNdIrfIlJa6pudFvrbwfSPKK
-         SXA1Niv3bd6bDQrh7pMxCYGShppxKHJtL3JjkV60FDvRjT6uGc4yp2IhPjkQlRNPpS
-         N8VOKGP5lnszRg7TRqWOrI0yNgjiPqDF83Ju+zClCyzv3R65Ro0r+t79r9luAlcBZh
-         qPKHLyBsKf31Q==
-Message-ID: <20f14d85-6a07-e66d-4711-c16c6930c2a3@dorminy.me>
-Date:   Thu, 24 Feb 2022 15:09:08 -0500
+        Thu, 24 Feb 2022 15:11:15 -0500
+Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6826C2782AE
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 12:10:44 -0800 (PST)
+Received: by mail-oi1-x235.google.com with SMTP id q5so4679085oij.6
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 12:10:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=tp/pxUAsN1dsuv2WMgFOFlatJS81kJvAhFMGsLib+Ik=;
+        b=QD5DoxG2HFUYczwhvfPpKRZtnIME+v8s7w+BMnIyEY0/+LA6uzKnzx48TQFLyCi7F0
+         ZXnFA/+CXBjbSFYOtS/HtPQdxpoqKQCikgKMJ5nqywsutlOh215hj+5w2XnG7hcGhqfP
+         ettNPp5G8VpeUXSppkEJD7y/PNFkQQpjRzdLxM5Tk2YLpzBQRCJaMqG6jpW6LUISA0MG
+         v0BXQJ9gVeL2EVPR1q60Ac2A9Or1s6tbjQPqawwfA3VHvUv9z2gYfs1VgaS4+kIcdWyl
+         KckZ6LmxFupOpCf7p0rOAYnEGLcZDBB1clh3kSO+0qp2AO0mGbovLAP+k1RJ+ejdlYn7
+         YEKg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=tp/pxUAsN1dsuv2WMgFOFlatJS81kJvAhFMGsLib+Ik=;
+        b=Fzaj66+gI3KRhWuy73U97QOlOvwPZWj6ooER0akBdvFzlHUj4AqmCHY9vBRsjkwMOh
+         jYDye1qLfUmLmp4hWPK2hEsz0C5akFQE4Qj1xLtaz06U/YcesGipZpumQFYV6vm1O6dq
+         81ubHB9mlJApKkHZZbTi7hupLsY8Gs1ZFZb6orJ2qzdgKwhMGTGw0w7XscV3OXJh+YQZ
+         q4LahkANNakwO2xI8Wkg42g9spXOdLJWaPiSbNlvMhL3QpeMIUVnlV/dEtJ733GewcXb
+         qQmGKJ3oBttod/LBVnv2F196joluZt0lxHw+vydyka2oj90qL96wVp9EUjivA7818nDW
+         AMIw==
+X-Gm-Message-State: AOAM530gYx84ab7hQubTyOMXj4e1WP1mtPonfGaPYmwKqjNSFChVRFwl
+        n34cyI+ByUqL2O/hjlt6zn1nyw==
+X-Google-Smtp-Source: ABdhPJyN1tJXc2OmNxcbayjctonbYe7XOluBMlLa7fjoRQREv6clqrbNE7J3VS7gOJPpy7RKF/DD4A==
+X-Received: by 2002:a05:6870:6014:b0:d6:ca51:2108 with SMTP id t20-20020a056870601400b000d6ca512108mr2044865oaa.47.1645733443809;
+        Thu, 24 Feb 2022 12:10:43 -0800 (PST)
+Received: from builder.lan ([2600:1700:a0:3dc8:3697:f6ff:fe85:aac9])
+        by smtp.gmail.com with ESMTPSA id p16-20020a05680811d000b002d72ec3a921sm249592oiv.21.2022.02.24.12.10.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Feb 2022 12:10:43 -0800 (PST)
+Date:   Thu, 24 Feb 2022 14:10:40 -0600
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Luca Weiss <luca@z3ntu.xyz>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        Thara Gopinath <thara.gopinath@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 02/10] dt-bindings: thermal: tsens: Add msm8953
+ compatible
+Message-ID: <YhfmQFFCmb74dOvV@builder.lan>
+References: <20220220201909.445468-1-luca@z3ntu.xyz>
+ <20220220201909.445468-3-luca@z3ntu.xyz>
 MIME-Version: 1.0
-Subject: Re: [PATCH v4] btrfs: add fs state details to error messages.
-Content-Language: en-US
-To:     dsterba@suse.cz, Chris Mason <clm@fb.com>,
-        Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>, linux-btrfs@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel-team@fb.com
-References: <a059920460fe13f773fd9a2e870ceb9a8e3a105a.1645644489.git.sweettea-kernel@dorminy.me>
- <20220224132210.GS12643@twin.jikos.cz>
- <284ccc08-8de7-9188-19d8-20f4eda56cb4@dorminy.me>
- <20220224184231.GZ12643@twin.jikos.cz>
-From:   Sweet Tea Dorminy <sweettea-kernel@dorminy.me>
-In-Reply-To: <20220224184231.GZ12643@twin.jikos.cz>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220220201909.445468-3-luca@z3ntu.xyz>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,63 +84,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->> All the other interactions with info->fs_state are test/set/clear_bit,
->> which treat the argument as volatile and are therefore safe to do from
->> multiple threads. Without the READ_ONCE (reading it as a volatile),
->> the compiler or cpu could turn the reads of info->fs_state in
->> for_each_set_bit() into writes of random stuff into info->fs_state,
->> potentially clearing the state bits or filling them with garbage.
-> I'm not sure I'm missing something, but I find the above hard to
-> believe. Concurrent access to a variable from multiple threads may not
-> produce consistent results, but random writes should not happen when
-> we're just reading.
+On Sun 20 Feb 14:18 CST 2022, Luca Weiss wrote:
 
-Maybe I've been reading too many articles about the things compilers are 
-technically allowed to do. But as per the following link, the C standard 
-does permit compilers inventing writes except to atomics and volatiles: 
-https://lwn.net/Articles/793253/#Invented%20Stores
+> Document the compatible string for tsens found in msm8953.
+> 
+> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
+> Acked-by: Konrad Dybcio <konrad.dybcio@somainline.org>
+> Acked-by: Amit Kucheria <amitk@kernel.org>
+> Acked-by: Rob Herring <robh@kernel.org>
 
->
->> Even if this is right, it'd be rare, but it would be exceeding weird
->> for a message to be logged listing an error and then future messages
->> be logged without any such state, or with a random collection of
->> garbage states.
-> How would that happen? The volatile keyword is only a compiler hint not
-> to do optimizations on the variable, what actually happens on the CPU
-> level depends if the instruction is locked or not, so different threads
-> may read different bits.
-> You seem to imply that once a variable is not used with volatile
-> semantics, even just for read, the result could lead to random writes
-> because it's otherwise undefined.
+Daniel, can you please pick this patch through your tree?
 
-Pretty much; once a variable is read without READ_ONCE, it's unsafe to 
-write a new value on another thread that depends on the old value. 
-Imagine a compiler which invents stores; then if you are both reading 
-and setting a variable 'a' on different threads, the following could happen:
+Thanks,
+Bjorn
 
-thread 1 (reads)       thread 2 (modifies)
-
-reads a into tmp
-
-stores junk into a
-
-                                 reads junk from a
-
-stores tmp into a
-
-                                 writes junk | 2 to a
-
-
-Now a contains junk indefinitely.
-
-
-But if it's too theoretical, I'm happy to drop it and amend my paranoia 
-level.
-
-
-(Thanks for fixing the !CONFIG_PRINTK warning that btrfs_state_to_string 
-was unused; sorry I missed it.)
-
-
-Sweet Tea
-
+> ---
+> Changes in v2:
+> - no changes
+> 
+>  Documentation/devicetree/bindings/thermal/qcom-tsens.yaml | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+> index d3b9e9b600a2..b6406bcc683f 100644
+> --- a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+> +++ b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+> @@ -43,6 +43,7 @@ properties:
+>        - description: v2 of TSENS
+>          items:
+>            - enum:
+> +              - qcom,msm8953-tsens
+>                - qcom,msm8996-tsens
+>                - qcom,msm8998-tsens
+>                - qcom,sc7180-tsens
+> -- 
+> 2.35.1
+> 

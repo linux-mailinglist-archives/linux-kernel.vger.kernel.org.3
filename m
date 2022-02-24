@@ -2,123 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F8FB4C297B
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 11:31:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE8154C2976
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 11:31:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232282AbiBXKbS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 05:31:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50656 "EHLO
+        id S233465AbiBXKbJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 05:31:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233478AbiBXKbM (ORCPT
+        with ESMTP id S231235AbiBXKbH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 05:31:12 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A553420A3B8;
-        Thu, 24 Feb 2022 02:30:42 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 24 Feb 2022 05:31:07 -0500
+Received: from ssl.serverraum.org (ssl.serverraum.org [176.9.125.105])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC0DC1F7681;
+        Thu, 24 Feb 2022 02:30:37 -0800 (PST)
+Received: from mwalle01.kontron.local. (unknown [213.135.10.150])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 438F76162C;
-        Thu, 24 Feb 2022 10:30:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9CAB6C340F5;
-        Thu, 24 Feb 2022 10:30:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645698641;
-        bh=UVBFu/2kd+72msKvbsEhY06n98IaQ0VgsAo0y3uTQ2c=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=uKMo67CXZRSwdhBzi8/EEN9oztBr9soHLP8RvL0hIDZzDAQWECQ7f8/Z8eugIY42z
-         hdfwcBluy+paiOgWEjWvgQKMnK4adKDRPYUcdzCO1eHFfPr8N0p6F+ynpzpVaLf9iv
-         CZRG6rIeJEwNiFrzJtmKDTMeHAoxInP0LBcoot5lwoVNesSWsfBfyAK/NsNtQnkts0
-         AMlDmrllC81ZcK3cvVTbMA9khRkXj8pu1dHnRsqHjwpW8ZIpgngP/5/BCpTl75RUUI
-         vy/3K30H2fYs4D+RRMADFd4EhSy9aqCosQIJHK8SpqR9iXdhesbYPT0MaBTAKEOI9x
-         ItmMoXkR49BCQ==
-Received: by mail-vk1-f176.google.com with SMTP id k9so922391vki.4;
-        Thu, 24 Feb 2022 02:30:41 -0800 (PST)
-X-Gm-Message-State: AOAM53356GDXiNzYC3BdaVZfnWdnLdzuU6RTWh+kwNDoTN7fiPNJdVzG
-        q40iGuFT0bflOc33OENuEZJUDBMJ9+7vj4FN45I=
-X-Google-Smtp-Source: ABdhPJzrvZFAbp4Whh2uDrOBDpqD226YSRYRm6BxUCxiOKTwC758aaNZI0rGrTfTm/5o1TQu5AW4BErik6sfPZlMfiQ=
-X-Received: by 2002:a1f:2355:0:b0:32a:e5bb:29a1 with SMTP id
- j82-20020a1f2355000000b0032ae5bb29a1mr790584vkj.2.1645698640594; Thu, 24 Feb
- 2022 02:30:40 -0800 (PST)
+        by ssl.serverraum.org (Postfix) with ESMTPSA id B11D222239;
+        Thu, 24 Feb 2022 11:30:35 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        t=1645698636;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=lnIPwOqCRJiH4L71PFYAje5yHmuB8Zd41y71cotwIPE=;
+        b=is7xUE30uWhMJFJG93MwyWCfjkFRMAUITrvjgWsvH1JwCkF95ZQwdSS8KpHOjuwsfoRIJx
+        fFXCImouhKoaFQI/8BBBMrv2YDHuitIxTedT1au7uisM/gW4mgTjYWL5MwZ3bUdIf8Lpdi
+        ttYQaZXUx4j1pve7CSRrYTRSvmM09ec=
+From:   Michael Walle <michael@walle.cc>
+To:     Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>
+Cc:     heiko.thiery@gmail.com, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Michael Walle <michael@walle.cc>
+Subject: [PATCH v2 1/2] arm64: dts: imx8mn-evk: use proper names for PMIC outputs
+Date:   Thu, 24 Feb 2022 11:30:29 +0100
+Message-Id: <20220224103030.2040048-1-michael@walle.cc>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-References: <20220224085410.399351-1-guoren@kernel.org> <20220224085410.399351-12-guoren@kernel.org>
- <CAK8P3a3wg9S_zPad74FiJzYBn0M9bQyunuKzmH3z_QQrags5ng@mail.gmail.com>
-In-Reply-To: <CAK8P3a3wg9S_zPad74FiJzYBn0M9bQyunuKzmH3z_QQrags5ng@mail.gmail.com>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Thu, 24 Feb 2022 18:30:29 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTQratosmRtoiKx9xTm3-gBSrnEaWgVrYj1U2WZafR1RVg@mail.gmail.com>
-Message-ID: <CAJF2gTQratosmRtoiKx9xTm3-gBSrnEaWgVrYj1U2WZafR1RVg@mail.gmail.com>
-Subject: Re: [PATCH V6 11/20] riscv: compat: syscall: Add compat_sys_call_table
- implementation
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Anup Patel <anup@brainfault.org>,
-        gregkh <gregkh@linuxfoundation.org>,
-        liush <liush@allwinnertech.com>, Wei Fu <wefu@redhat.com>,
-        Drew Fustini <drew@beagleboard.org>,
-        Wang Junqiang <wangjunqiang@iscas.ac.cn>,
-        Christoph Hellwig <hch@lst.de>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linux-csky@vger.kernel.org,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        sparclinux <sparclinux@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Parisc List <linux-parisc@vger.kernel.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Guo Ren <guoren@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 24, 2022 at 5:38 PM Arnd Bergmann <arnd@arndb.de> wrote:
->
-> On Thu, Feb 24, 2022 at 9:54 AM <guoren@kernel.org> wrote:
-> >
-> > From: Guo Ren <guoren@linux.alibaba.com>
-> >
-> > Implement compat sys_call_table and some system call functions:
-> > truncate64, ftruncate64, fallocate, pread64, pwrite64,
-> > sync_file_range, readahead, fadvise64_64 which need argument
-> > translation.
-> >
-> > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> > Signed-off-by: Guo Ren <guoren@kernel.org>
-> > Cc: Arnd Bergmann <arnd@arndb.de>
-> > Cc: Palmer Dabbelt <palmer@dabbelt.com>
->
-> Here, I was hoping you'd convert some of the other architectures to use
-> the same code, but the changes you did do look correct.
->
-> Please at least add the missing bit for big-endian architectures here:
->
-> +#if !defined(compat_arg_u64) && !defined(CONFIG_CPU_BIG_ENDIAN)
-> +#define compat_arg_u64(name)           u32  name##_lo, u32  name##_hi
-> +#define compat_arg_u64_dual(name)      u32, name##_lo, u32, name##_hi
-> +#define compat_arg_u64_glue(name)      (((u64)name##_hi << 32) | \
-> +                                        ((u64)name##_lo & 0xffffffffUL))
-> +#endif
->
-> with the lo/hi words swapped. With that change:
-Got it, I would change it in next version of patch.
+Use the power signal names as given in the schematics of the reference
+board.
 
->
-> Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+Signed-off-by: Michael Walle <michael@walle.cc>
+---
+Changes since v1:
+ - swap buck1 and buck2
 
+ arch/arm64/boot/dts/freescale/imx8mn-evk.dts | 20 ++++++++++----------
+ 1 file changed, 10 insertions(+), 10 deletions(-)
 
-
+diff --git a/arch/arm64/boot/dts/freescale/imx8mn-evk.dts b/arch/arm64/boot/dts/freescale/imx8mn-evk.dts
+index b4225cfcb6d9..2b685c0c7eeb 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mn-evk.dts
++++ b/arch/arm64/boot/dts/freescale/imx8mn-evk.dts
+@@ -41,7 +41,7 @@ pmic: pmic@25 {
+ 
+ 		regulators {
+ 			buck1: BUCK1{
+-				regulator-name = "BUCK1";
++				regulator-name = "VDD_SOC";
+ 				regulator-min-microvolt = <600000>;
+ 				regulator-max-microvolt = <2187500>;
+ 				regulator-boot-on;
+@@ -50,7 +50,7 @@ buck1: BUCK1{
+ 			};
+ 
+ 			buck2: BUCK2 {
+-				regulator-name = "BUCK2";
++				regulator-name = "VDD_ARM_0V9";
+ 				regulator-min-microvolt = <600000>;
+ 				regulator-max-microvolt = <2187500>;
+ 				regulator-boot-on;
+@@ -61,7 +61,7 @@ buck2: BUCK2 {
+ 			};
+ 
+ 			buck4: BUCK4{
+-				regulator-name = "BUCK4";
++				regulator-name = "VDD_3V3";
+ 				regulator-min-microvolt = <600000>;
+ 				regulator-max-microvolt = <3400000>;
+ 				regulator-boot-on;
+@@ -69,7 +69,7 @@ buck4: BUCK4{
+ 			};
+ 
+ 			buck5: BUCK5{
+-				regulator-name = "BUCK5";
++				regulator-name = "VDD_1V8";
+ 				regulator-min-microvolt = <600000>;
+ 				regulator-max-microvolt = <3400000>;
+ 				regulator-boot-on;
+@@ -77,7 +77,7 @@ buck5: BUCK5{
+ 			};
+ 
+ 			buck6: BUCK6 {
+-				regulator-name = "BUCK6";
++				regulator-name = "NVCC_DRAM_1V1";
+ 				regulator-min-microvolt = <600000>;
+ 				regulator-max-microvolt = <3400000>;
+ 				regulator-boot-on;
+@@ -85,7 +85,7 @@ buck6: BUCK6 {
+ 			};
+ 
+ 			ldo1: LDO1 {
+-				regulator-name = "LDO1";
++				regulator-name = "NVCC_SNVS_1V8";
+ 				regulator-min-microvolt = <1600000>;
+ 				regulator-max-microvolt = <3300000>;
+ 				regulator-boot-on;
+@@ -93,7 +93,7 @@ ldo1: LDO1 {
+ 			};
+ 
+ 			ldo2: LDO2 {
+-				regulator-name = "LDO2";
++				regulator-name = "VDD_SNVS_0V8";
+ 				regulator-min-microvolt = <800000>;
+ 				regulator-max-microvolt = <1150000>;
+ 				regulator-boot-on;
+@@ -101,7 +101,7 @@ ldo2: LDO2 {
+ 			};
+ 
+ 			ldo3: LDO3 {
+-				regulator-name = "LDO3";
++				regulator-name = "VDDA_1V8";
+ 				regulator-min-microvolt = <800000>;
+ 				regulator-max-microvolt = <3300000>;
+ 				regulator-boot-on;
+@@ -109,7 +109,7 @@ ldo3: LDO3 {
+ 			};
+ 
+ 			ldo4: LDO4 {
+-				regulator-name = "LDO4";
++				regulator-name = "VDD_PHY_1V2";
+ 				regulator-min-microvolt = <800000>;
+ 				regulator-max-microvolt = <3300000>;
+ 				regulator-boot-on;
+@@ -117,7 +117,7 @@ ldo4: LDO4 {
+ 			};
+ 
+ 			ldo5: LDO5 {
+-				regulator-name = "LDO5";
++				regulator-name = "NVCC_SD2";
+ 				regulator-min-microvolt = <1800000>;
+ 				regulator-max-microvolt = <3300000>;
+ 				regulator-boot-on;
 -- 
-Best Regards
- Guo Ren
+2.30.2
 
-ML: https://lore.kernel.org/linux-csky/

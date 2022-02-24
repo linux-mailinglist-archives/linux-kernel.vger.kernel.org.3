@@ -2,205 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4944D4C210C
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 02:35:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 37CA74C210F
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 02:35:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229591AbiBXBd1 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 23 Feb 2022 20:33:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37730 "EHLO
+        id S229561AbiBXBfQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 20:35:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229575AbiBXBdZ (ORCPT
+        with ESMTP id S229500AbiBXBfO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 20:33:25 -0500
-Received: from out03.mta.xmission.com (out03.mta.xmission.com [166.70.13.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90B5449CB4;
-        Wed, 23 Feb 2022 17:32:52 -0800 (PST)
-Received: from in01.mta.xmission.com ([166.70.13.51]:35060)
-        by out03.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1nN2zx-00AMnv-Jv; Wed, 23 Feb 2022 18:32:49 -0700
-Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:53688 helo=email.froward.int.ebiederm.org.xmission.com)
-        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1nN2zw-00EDEm-Bb; Wed, 23 Feb 2022 18:32:49 -0700
-From:   "Eric W. Biederman" <ebiederm@xmission.com>
-To:     Linus Torvalds <linus@torvalds.org>
-Cc:     Linux API <linux-api@vger.kernel.org>,
-        Etienne Dechamps <etienne@edechamps.fr>,
-        Alexey Gladkov <legion@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Solar Designer <solar@openwall.com>,
-        Ran Xiaokai <ran.xiaokai@zte.com.cn>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Linux Containers <containers@lists.linux-foundation.org>,
-        Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>,
-        Security Officers <security@kernel.org>,
-        Neil Brown <neilb@cse.unsw.edu.au>, NeilBrown <neilb@suse.de>,
-        "Serge E. Hallyn" <serge@hallyn.com>, Jann Horn <jannh@google.com>,
-        Andy Lutomirski <luto@kernel.org>, Willy Tarreau <w@1wt.eu>
-In-Reply-To: <CAHk-=wjX3VK8QRMDUWwigCTKdHJt0ESXh0Hy5HNaXf7YkEdCAA@mail.gmail.com>
-        (Linus Torvalds's message of "Wed, 23 Feb 2022 11:50:38 -0800")
-References: <20220207121800.5079-1-mkoutny@suse.com>
-        <e9589141-cfeb-90cd-2d0e-83a62787239a@edechamps.fr>
-        <20220215101150.GD21589@blackbody.suse.cz>
-        <87zgmi5rhm.fsf@email.froward.int.ebiederm.org>
-        <87fso91n0v.fsf_-_@email.froward.int.ebiederm.org>
-        <CAHk-=wjX3VK8QRMDUWwigCTKdHJt0ESXh0Hy5HNaXf7YkEdCAA@mail.gmail.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-Date:   Wed, 23 Feb 2022 19:32:41 -0600
-Message-ID: <87ee3toxqe.fsf@email.froward.int.ebiederm.org>
+        Wed, 23 Feb 2022 20:35:14 -0500
+Received: from mail-ua1-x936.google.com (mail-ua1-x936.google.com [IPv6:2607:f8b0:4864:20::936])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 291F013AA0E
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 17:34:46 -0800 (PST)
+Received: by mail-ua1-x936.google.com with SMTP id p33so182276uap.8
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 17:34:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=DlTEvCMe8gLH8mkJngq0jMMrhF4Rb9J1L2FbOtnoMeA=;
+        b=sjYQXiAaTh8Pan58Dwbpxw8kVwXQt1oAtAF/M0W1jQ6kHv5MlMXbLhguJMlVQsz2mt
+         4eif8qTqHSAlzgJNMnMyUMVZy0186FJfeZP8a5XgyewuzQB8LgrY2v/VlIIxYnS5Tvw1
+         ahrvsWzDtvSalYitjQ/o/WowcaihqDCzMk82kA52tuXXN6+6QBx7m2q3ulEvMJ16uYEz
+         V5ZujsVnuN04sVmFL0PQPdCxfh/nwn5+yzc7DL6LoS+q3O+BFjnSOUMS2VOf/ZURdy8K
+         DDwVwm1IctjAuB6SKRa1QT3xdSHHJFY0rf7QFg88fopcFzkRII9LEpXSGdwirgd0ndLd
+         SQ0w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=DlTEvCMe8gLH8mkJngq0jMMrhF4Rb9J1L2FbOtnoMeA=;
+        b=hrZESqKqo3SwLOuVrBf9DxSrDZaCemeKOyfWuAaeSYyc/YNTKsmUgtok3QZWatGTH9
+         UOanXRGEim1aMWxjZd5sMsuXvxWAgd5xd0cZjD+aEOKwdHC+IzablubwN9WpwLbmXCRp
+         8B64Gt4C3To2pocJAyUcL7EV4j7hxQXtnB5wr0g5S7zcUTJC6VuK6mQRAm7Jm9WZaaJv
+         jDXtVvLKiy4uVoKVLQkKQj/419KrMJqM69MzjZkCa0sj8r1dGFBk6Yt7kX3np85vf2+o
+         ChAVn8ZEu/3G2uuxJYpH8jNKDjtKbL3rV8LOFdhxsLKBrWghkM/MWobVSLAa7JXO0LV7
+         8C/w==
+X-Gm-Message-State: AOAM532xBxxSgzukwflnGM9rTDp265+UTC0SVWgQEBt0aP2geA0hokRQ
+        oQpQDy6LA8hIN882fiwvlb+83vv/IJHOKFvIWpOaLg==
+X-Google-Smtp-Source: ABdhPJxBaf8RnByOCleoWZEZPun+AOvuwypSAyh6/fwhiM94QTJdh8bQ3/HbbFgUPiAM6IdBkr8T8WRot1ZydwqPvVI=
+X-Received: by 2002:ab0:2111:0:b0:341:8339:51b4 with SMTP id
+ d17-20020ab02111000000b00341833951b4mr162619ual.76.1645666485123; Wed, 23 Feb
+ 2022 17:34:45 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8BIT
-X-XM-SPF: eid=1nN2zw-00EDEm-Bb;;;mid=<87ee3toxqe.fsf@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=neutral
-X-XM-AID: U2FsdGVkX1+jQZBwXH9ZWGkbzMxdKBeobm1bR1k1t1k=
-X-SA-Exim-Connect-IP: 68.227.174.4
-X-SA-Exim-Mail-From: ebiederm@xmission.com
+References: <20220208081902.3550911-1-yuzhao@google.com> <20220208081902.3550911-6-yuzhao@google.com>
+ <87bkyy56nv.fsf@yhuang6-desk2.ccr.corp.intel.com> <CAOUHufbekcu09DyEZAkJNRq_1qKaf_xibXQNeAVK=rsGBn9Z4Q@mail.gmail.com>
+ <87y2213wrl.fsf@yhuang6-desk2.ccr.corp.intel.com>
+In-Reply-To: <87y2213wrl.fsf@yhuang6-desk2.ccr.corp.intel.com>
+From:   Yu Zhao <yuzhao@google.com>
+Date:   Wed, 23 Feb 2022 18:34:33 -0700
+Message-ID: <CAOUHufY8dRimricP=pvvgg8mEagb369nE8MVe6tnnLXQuKyAEA@mail.gmail.com>
+Subject: Re: [PATCH v7 05/12] mm: multigenerational LRU: minimal implementation
+To:     "Huang, Ying" <ying.huang@intel.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Mel Gorman <mgorman@suse.de>, Michal Hocko <mhocko@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
+        Barry Song <21cnbao@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
+        Jesse Barnes <jsbarnes@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Michael Larabel <Michael@michaellarabel.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        Rik van Riel <riel@surriel.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Will Deacon <will@kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        Kernel Page Reclaim v2 <page-reclaim@google.com>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Brian Geffon <bgeffon@google.com>,
+        Jan Alexander Steffens <heftig@archlinux.org>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
+        Steven Barrett <steven@liquorix.net>,
+        Suleiman Souhlal <suleiman@google.com>,
+        Daniel Byrne <djbyrne@mtu.edu>,
+        Donald Carr <d@chaos-reins.com>,
+        =?UTF-8?Q?Holger_Hoffst=C3=A4tte?= <holger@applied-asynchrony.com>,
+        Konstantin Kharlamov <Hi-Angel@yandex.ru>,
+        Shuang Zhai <szhai2@cs.rochester.edu>,
+        Sofia Trinh <sofia.trinh@edi.works>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
-X-Spam-DCC: XMission; sa06 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: **;Linus Torvalds <linus@torvalds.org>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 635 ms - load_scoreonly_sql: 0.03 (0.0%),
-        signal_user_changed: 12 (1.8%), b_tie_ro: 10 (1.6%), parse: 1.55
-        (0.2%), extract_message_metadata: 14 (2.2%), get_uri_detail_list: 3.0
-        (0.5%), tests_pri_-1000: 14 (2.3%), tests_pri_-950: 1.29 (0.2%),
-        tests_pri_-900: 1.02 (0.2%), tests_pri_-90: 155 (24.4%), check_bayes:
-        153 (24.1%), b_tokenize: 11 (1.8%), b_tok_get_all: 11 (1.8%),
-        b_comp_prob: 3.8 (0.6%), b_tok_touch_all: 123 (19.4%), b_finish: 0.88
-        (0.1%), tests_pri_0: 417 (65.8%), check_dkim_signature: 0.61 (0.1%),
-        check_dkim_adsp: 2.4 (0.4%), poll_dns_idle: 0.69 (0.1%), tests_pri_10:
-        2.3 (0.4%), tests_pri_500: 12 (1.9%), rewrite_mail: 0.00 (0.0%)
-Subject: Re: How should rlimits, suid exec, and capabilities interact?
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Feb 23, 2022 at 5:59 PM Huang, Ying <ying.huang@intel.com> wrote:
+>
+> Yu Zhao <yuzhao@google.com> writes:
+>
+> > On Wed, Feb 23, 2022 at 1:28 AM Huang, Ying <ying.huang@intel.com> wrote:
+> >>
+> >> Hi, Yu,
+> >>
+> >> Yu Zhao <yuzhao@google.com> writes:
+> >>
+> >> > To avoid confusions, the terms "promotion" and "demotion" will be
+> >> > applied to the multigenerational LRU, as a new convention; the terms
+> >> > "activation" and "deactivation" will be applied to the active/inactive
+> >> > LRU, as usual.
+> >>
+> >> In the memory tiering related commits and patchset, for example as follows,
+> >>
+> >> commit 668e4147d8850df32ca41e28f52c146025ca45c6
+> >> Author: Yang Shi <yang.shi@linux.alibaba.com>
+> >> Date:   Thu Sep 2 14:59:19 2021 -0700
+> >>
+> >>     mm/vmscan: add page demotion counter
+> >>
+> >> https://lore.kernel.org/linux-mm/20220221084529.1052339-1-ying.huang@intel.com/
+> >>
+> >> "demote" and "promote" is used for migrating pages between different
+> >> types of memory.  Is it better for us to avoid overloading these words
+> >> too much to avoid the possible confusion?
+> >
+> > Given that LRU and migration are usually different contexts, I think
+> > we'd be fine, unless we want a third pair of terms.
+>
+> This is true before memory tiering is introduced.  In systems with
+> multiple types memory (called memory tiering), LRU is used to identify
+> pages to be migrated to the slow memory node.  Please take a look at
+> can_demote(), which is called in shrink_page_list().
 
-Linus Torvalds <linus@torvalds.org> writes:
+This sounds clearly two contexts to me. Promotion/demotion (move
+between generations) while pages are on LRU; or promotion/demotion
+(migration between nodes) after pages are taken off LRU.
 
-> Basic rule: it's better to be too lenient than to be too strict.
+Note that promotion/demotion are not used in function names. They are
+used to describe how MGLRU works, in comparison with the
+active/inactive LRU. Memory tiering is not within this context.
 
-Thank you.  With that guideline I can explore the space of what is
-possible.
+> >> > +static int get_swappiness(struct mem_cgroup *memcg)
+> >> > +{
+> >> > +     return mem_cgroup_get_nr_swap_pages(memcg) >= MIN_LRU_BATCH ?
+> >> > +            mem_cgroup_swappiness(memcg) : 0;
+> >> > +}
+> >>
+> >> After we introduced demotion support in Linux kernel.  The anonymous
+> >> pages in the fast memory node could be demoted to the slow memory node
+> >> via the page reclaiming mechanism as in the following commit.  Can you
+> >> consider that too?
+> >
+> > Sure. How do I check whether there is still space on the slow node?
+>
+> You can always check the watermark of the slow node.  But now, we
+> actually don't check that (as in demote_page_list()), instead we will
+> wake up kswapd of the slow node.  The intended behavior is something
+> like,
+>
+>   DRAM -> PMEM -> disk
 
-Question: Running a suid program today charges the activity of that
-program to the user who ran that program, not to the user the program
-runs as.  Does anyone see a problem with charging the user the program
-runs as?
-
-The reason I want to change which user is charged with a process
-(besides it making more sense in my head) is so that
-"capable(CAP_SYS_RESOURCE)" can be used instead of the magic incantation
-"(cred->user == INIT_USER)".
-
-Today "capable(CAP_SYS_RESOURCE)" with respect to RLIMIT_NPROC is
-effectively meaningless for suid programs because the of the mismatch of
-charging the real user with the effective users credentials.
-
-An accidental experiment happened in v5.14-rc1 in July when the ucount
-rlimit code was merged.  It was only this last week when after Michal
-Koutný discovered the discrepancy through code inspection I merged a
-bug fix because the code was not preserving the existing behavior as
-intended.
-
-
-This behavior has existed in some form since Linux v1.0 when per user
-process limits were added.
-
-The original code in v1.0 was:
-> static int find_empty_process(void)
-> {
->        int free_task;
->        int i, tasks_free;
->        int this_user_tasks;
-> 
-> repeat:
->        if ((++last_pid) & 0xffff8000)
->                last_pid=1;
->        this_user_tasks = 0;
->        tasks_free = 0;
->        free_task = -EAGAIN;
->        i = NR_TASKS;
->        while (--i > 0) {
->                if (!task[i]) {
->                        free_task = i;
->                        tasks_free++;
->                        continue;
->                }
->                if (task[i]->uid == current->uid)
->                        this_user_tasks++;
->                if (task[i]->pid == last_pid || task[i]->pgrp == last_pid ||
->                    task[i]->session == last_pid)
->                        goto repeat;
->        }
->        if (tasks_free <= MIN_TASKS_LEFT_FOR_ROOT ||
->            this_user_tasks > MAX_TASKS_PER_USER)
->                if (current->uid)
->                        return -EAGAIN;
->        return free_task;
-> }
-
-Having tracked the use of real uid in limits back this far my guess
-is that it was an accident of the implementation and real uid vs
-effective uid had not be considered.
-
-Does anyone know if choosing the real uid vs the effective uid for
-accounting a users processes was a deliberate decision anywhere in the
-history of Linux?
-
-
-
-Linus you were talking about making it possible to login as I think a
-non-root user to be able to use sudo and kill a fork bomb.
-
-The counter case is apache having a dedicated user for running
-cgi-scripts and using RLIMIT_NPROC to limit how many of those processes
-can exist.  Unless I am misunderstanding something that looks exactly
-like your login as non-root so you can run sudo to kill a fork-bomb.
-
-A comment from an in-process cleanup patch explains this as best I can:
-         /*
-         * In general rlimits are only enforced when a new resource
-         * is acquired.  That would be during fork for RLIMIT_NPROC.
-         * That is insufficient for RLIMIT_NPROC as many attributes of
-         * a new process must be set between fork and exec.
-         *
-         * A case where this matter is when apache runs forks a process
-         * and calls setuid to run cgi-scripts as a different user.
-         * Generating those processes through a code sequence like:
-         *
-         *      fork()
- 	 *	setrlimit(RLIMIT_NPROC, ...)         
-         *      execve()  -- suid wrapper
-         *      setuid()
-         *      execve()  -- cgi script
-         *
-         * The cgi-scripts are unlikely to fork on their own so unless
-         * RLIMIT_NPROC is checked after the user change and before
-         * the cgi-script starts, RLIMIT_NPROC simply will not be enforced
-         * for the cgi-scripts.
-         *
-         * So the code tracks if between fork and exec if an operation
-         * occurs that could cause the RLIMIT_NPROC check to fail.  If
-         * such an operation has happened re-check RLIMIT_NPROC.
-         */
-
-
-Answered-Question: I was trying to ask if anyone knows of a reason why
-we can't just sanitize the rlimits of the process during suid exec?
-Linus your guideline would appear to allow that behavior.  Unfortunately
-that looks like it would break current usage of apache suexec.
-
-Eric
+I'll look into this later -- for now, it's a low priority because
+there isn't much demand. I'll bump it up if anybody is interested in
+giving it a try. Meanwhile, please feel free to cook up something if
+you are interested.

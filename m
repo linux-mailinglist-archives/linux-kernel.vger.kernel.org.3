@@ -2,84 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0ABE84C21DB
+	by mail.lfdr.de (Postfix) with ESMTP id 600E24C21DC
 	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 03:52:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230180AbiBXCwF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 21:52:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53032 "EHLO
+        id S230163AbiBXCu5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 21:50:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230113AbiBXCwC (ORCPT
+        with ESMTP id S230113AbiBXCuz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 21:52:02 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3214023740B;
-        Wed, 23 Feb 2022 18:51:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645671093; x=1677207093;
-  h=message-id:date:mime-version:cc:subject:to:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=q8NuIg6u4n/AovpFHzIDVu3x9nClaeDa6GNC+Dzc7zA=;
-  b=NZMQ/dNWhZDjekiADp6BryIRHvpwXrsT8rvIQn4WgWxWQ+KxPG8G7Dda
-   s9nsgKbnMFxrfFAYUtftP/nMsvwCn27k7J1j4JrLKx4jafPwLI4fu7V+5
-   O/rQ0EbXUVSRWwUNnhAe9OjeYyQx54J5xCYv6Qt4KdU7OKa0ksmp0tDcP
-   iMePIy+zNUfrAoWO4ZNazVx9ff0/67Qq/OuU8GHOEUVl8vqJkBmzZmzCY
-   adW+4ICgOVZpSUOx0DIxcblFYiK5XaOaHFj1PYeS7cSgHB6/eqsrih1K1
-   i9FO8YJmNB/aI5AxlG5FGp/1e77DFLESh8yTbF6y9/pZ2NgRa3eycAfQ3
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10267"; a="239531323"
-X-IronPort-AV: E=Sophos;i="5.88,392,1635231600"; 
-   d="scan'208";a="239531323"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2022 18:51:32 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,392,1635231600"; 
-   d="scan'208";a="684127489"
-Received: from allen-box.sh.intel.com (HELO [10.239.159.118]) ([10.239.159.118])
-  by fmsmga001.fm.intel.com with ESMTP; 23 Feb 2022 18:51:26 -0800
-Message-ID: <ca45b5db-69f2-b93d-745b-348463f1cb3c@linux.intel.com>
-Date:   Thu, 24 Feb 2022 10:49:58 +0800
+        Wed, 23 Feb 2022 21:50:55 -0500
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62945237437;
+        Wed, 23 Feb 2022 18:50:26 -0800 (PST)
+Received: by mail-pj1-x1030.google.com with SMTP id v4so772073pjh.2;
+        Wed, 23 Feb 2022 18:50:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=0pXW77xbSqoqd07SPOdMy6+frewnUErjG3BJoCU9xDQ=;
+        b=BLl5H9NX6YUNRD93h7c/vngLNJjudh/21VVtQn4DmFm4iDSShGw+uLt07zvfShhW07
+         dBYZBERO7cmVboh9TwHp4FnA0CzWX/LLjG/N9A4qmDJc5UgIOmuW9HBCw4Jqf0OUHbsN
+         ju92gxmIxzoNxkGEBgCoHLq0olkXCLU1qmV91MD/PB7gdQlmtmr8FSSTFasK5a17Dibc
+         jiOodnBm1xqhGEo+nLPFpXvTQlQH7f2ma5h9pNIJdcUVegGGpIjCsFujiF88i4MZXsyJ
+         CHvy3p+RAGAQvwJKOxFy+hPumyv6LsvMokjYvbhpB0iuqqvs9VOli87W8AT8tO1xriAE
+         EXLA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=0pXW77xbSqoqd07SPOdMy6+frewnUErjG3BJoCU9xDQ=;
+        b=A7gx/tmD8EZ+KsSnFgwjsbzZRrt3IMALyhPROB22cfqeS6r61OaKl7lm51pU80KYpY
+         GAG4BXOCH4gSQjbtA/taZ0WPmHmQiXkwZdkHS8qp3CIo0mVJmmXklXDps/NIGWJEmfdk
+         /bOC4jRN1bRE71Ii6xkcrKQV3pQWQplowyK+aZM6ji3hv1pWmM0WS6DEsYv9wmcQpzJR
+         4Sw35iwpZsiM9sIThaLox7Wf39m0JcLB+KJxtZV3q5BsMNKH7GTSDVMDKBlgk5PUHKEf
+         hHuL0h4YxyeZEoQVgNiaTRxX2wISoylbfczlYOBRq7f/bCEK2VxilJY1aftDbx2hKJvC
+         P7eA==
+X-Gm-Message-State: AOAM5334HNE+ouKYRUtGi0jue34lTE82T3qWFs6SRU0ZXwFRny3rYITi
+        gnt8TtIyYq4wvTjeCqhP3s4=
+X-Google-Smtp-Source: ABdhPJz24dHKQmcXqS7azyJDfNBw3zXK87BYAbvO4kajEuZofKqEzzgChDHeA43qUG4bxXTECXNDiA==
+X-Received: by 2002:a17:90a:fb84:b0:1bc:4d16:51fb with SMTP id cp4-20020a17090afb8400b001bc4d1651fbmr12561044pjb.22.1645671025820;
+        Wed, 23 Feb 2022 18:50:25 -0800 (PST)
+Received: from [172.20.119.15] ([61.16.102.69])
+        by smtp.gmail.com with ESMTPSA id 84sm906752pfx.181.2022.02.23.18.50.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 23 Feb 2022 18:50:25 -0800 (PST)
+Message-ID: <7489a7f8-2589-29de-1c95-b99d1d9b1850@gmail.com>
+Date:   Thu, 24 Feb 2022 10:50:22 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Cc:     baolu.lu@linux.intel.com,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Joerg Roedel <joro@8bytes.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, kvm@vger.kernel.org,
-        rafael@kernel.org, David Airlie <airlied@linux.ie>,
-        linux-pci@vger.kernel.org,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Diana Craciun <diana.craciun@oss.nxp.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Will Deacon <will@kernel.org>,
-        Stuart Yoder <stuyoder@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        linux-kernel@vger.kernel.org, Li Yang <leoyang.li@nxp.com>,
-        iommu@lists.linux-foundation.org,
-        Jacob jun Pan <jacob.jun.pan@intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Robin Murphy <robin.murphy@arm.com>
-Subject: Re: [PATCH v6 10/11] vfio: Remove iommu group notifier
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.6.1
+Subject: Re: [RFC V4 1/6] blk: prepare to make blk-rq-qos pluggable and
+ modular
 Content-Language: en-US
-To:     Alex Williamson <alex.williamson@redhat.com>
-References: <20220218005521.172832-1-baolu.lu@linux.intel.com>
- <20220218005521.172832-11-baolu.lu@linux.intel.com>
- <20220223145339.57ed632e.alex.williamson@redhat.com>
-From:   Lu Baolu <baolu.lu@linux.intel.com>
-In-Reply-To: <20220223145339.57ed632e.alex.williamson@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+To:     Tejun Heo <tj@kernel.org>
+Cc:     Jens Axboe <axboe@kernel.dk>, Josef Bacik <jbacik@fb.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220217031349.98561-1-jianchao.wan9@gmail.com>
+ <20220217031349.98561-2-jianchao.wan9@gmail.com>
+ <YhUbCH+dhKkgMirE@slm.duckdns.org>
+ <2e17c058-8917-4a37-896e-1093446339f6@gmail.com>
+ <39db454d-ca30-fb42-3d72-899efa34fb78@gmail.com>
+ <YhapCurbiI21WYmm@slm.duckdns.org>
+ <efd94670-9d6d-5651-358c-2f88646298cd@gmail.com>
+ <Yhbod7pJ1X4CGhEZ@slm.duckdns.org>
+From:   Wang Jianchao <jianchao.wan9@gmail.com>
+In-Reply-To: <Yhbod7pJ1X4CGhEZ@slm.duckdns.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,97 +83,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Alex,
 
-On 2/24/22 5:53 AM, Alex Williamson wrote:
-> On Fri, 18 Feb 2022 08:55:20 +0800
-> Lu Baolu <baolu.lu@linux.intel.com> wrote:
+
+On 2022/2/24 10:07 上午, Tejun Heo wrote:
+> Hello,
 > 
->> The iommu core and driver core have been enhanced to avoid unsafe driver
->> binding to a live group after iommu_group_set_dma_owner(PRIVATE_USER)
->> has been called. There's no need to register iommu group notifier. This
->> removes the iommu group notifer which contains BUG_ON() and WARN().
+> On Thu, Feb 24, 2022 at 09:51:04AM +0800, Wang Jianchao wrote:
+>> The initial version of this patchset has two targets：
+>> (1) Add a sysfs interface to open/close the policy per device. Then we needn't
+>>     waste cpu cycles and memory if the device doesn't need the policy.
+>> (2) Make the policies modular, then it easy to maintain the code of policy in
+>>     production environment as we only need to close the policy and replace the
+>>     .ko file.
 >>
->> The commit 5f096b14d421b ("vfio: Whitelist PCI bridges") allowed all
->> pcieport drivers to be bound with devices while the group is assigned to
->> user space. This is not always safe. For example, The shpchp_core driver
->> relies on the PCI MMIO access for the controller functionality. With its
->> downstream devices assigned to the userspace, the MMIO might be changed
->> through user initiated P2P accesses without any notification. This might
->> break the kernel driver integrity and lead to some unpredictable
->> consequences. As the result, currently we only allow the portdrv driver.
->>
->> For any bridge driver, in order to avoiding default kernel DMA ownership
->> claiming, we should consider:
->>
->>   1) Does the bridge driver use DMA? Calling pci_set_master() or
->>      a dma_map_* API is a sure indicate the driver is doing DMA
->>
->>   2) If the bridge driver uses MMIO, is it tolerant to hostile
->>      userspace also touching the same MMIO registers via P2P DMA
->>      attacks?
->>
->> Conservatively if the driver maps an MMIO region at all, we can say that
->> it fails the test.
+>> The loading module when open policy in sysfs interface is just to avoid modprobe
+>> manually. There is similar operation when switch io scheduler.
 > 
-> IIUC, there's a chance we're going to break user configurations if
-> they're assigning devices from a group containing a bridge that uses a
-> driver other than pcieport.  The recommendation to such an affected user
-> would be that the previously allowed host bridge driver was unsafe for
-> this use case and to continue to enable assignment of devices within
-> that group, the driver should be unbound from the bridge device or
-> replaced with the pci-stub driver.  Is that right?
+> Each rq-qos mechanism already needs and has a way to turn off itself.
+> There's no reason to add another layer on top. If the current way of
+> disabling isn't efficient, we should improve that instead of adding a new
+> layer of interface on top.
 
-Yes. You are right.
+Yes, right now, every policy has their own way to turn off, but we always need to
+iterate the rqos list and enter into the policy's callback to check it. And every
+blkio cgroup needs to allocate memory for it even we don't use it.
 
-Another possible solution (for long term) is to re-audit the bridge
-driver code and set the .device_managed_dma field on the premise that
-the driver doesn't violate above potential hazards.
+I don't this patchset is adding a new layer, but blk-rq-qos layer has been already
+there , we just add a unified interface to open/close the policies.
 
-> 
-> Unfortunately I also think a bisect of such a breakage wouldn't land
-> here, I think it was actually broken in "vfio: Set DMA ownership for
-> VFIO" since that's where vfio starts to make use of
-> iommu_group_claim_dma_owner() which should fail due to
-> pci_dma_configure() calling iommu_device_use_default_domain() for
-> any driver not identifying itself as driver_managed_dma.
-
-Yes. Great point. Thank you!
-
-> 
-> If that's correct, can we leave a breadcrumb in the correct commit log
-> indicating why this potential breakage is intentional and how the
-> bridge driver might be reconfigured to continue to allow assignment from
-> within the group more safely?  Thanks,
-
-Sure. I will add below in the commit message of "vfio: Set DMA ownership 
-for VFIO":
-
-"
-This change disallows some unsafe bridge drivers to bind to non-ACS
-bridges while devices under them are assigned to user space. This is an
-intentional enhancement and possibly breaks some existing
-configurations. The recommendation to such an affected user would be
-that the previously allowed host bridge driver was unsafe for this use
-case and to continue to enable assignment of devices within that group,
-the driver should be unbound from the bridge device or replaced with the
-pci-stub driver.
-
-For any bridge driver, we consider it unsafe if it satisfies any of the
-following conditions:
-
-   1) The bridge driver uses DMA. Calling pci_set_master() or calling any
-      kernel DMA API (dma_map_*() and etc.) is an indicate that the
-      driver is doing DMA.
-
-   2) If the bridge driver uses MMIO, it should be tolerant to hostile
-      userspace also touching the same MMIO registers via P2P DMA
-      attacks.
-
-If the bridge driver turns out to be a safe one, it could be used as
-before by setting the driver's .driver_managed_dma field, just like what
-we have done in the pcieport driver.
-"
-
-Best regards,
-baolu
+Thanks
+Jianchao

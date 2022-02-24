@@ -2,66 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FBEA4C2E93
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 15:43:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 82DB24C2E9B
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 15:45:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235597AbiBXOmn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 09:42:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36204 "EHLO
+        id S235609AbiBXOpZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 09:45:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234594AbiBXOmk (ORCPT
+        with ESMTP id S230187AbiBXOpY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 09:42:40 -0500
-Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [IPv6:2001:4b98:dc4:8::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 224BE3B28A;
-        Thu, 24 Feb 2022 06:42:06 -0800 (PST)
-Received: (Authenticated sender: clement.leger@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 2183010000B;
-        Thu, 24 Feb 2022 14:41:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1645713722;
+        Thu, 24 Feb 2022 09:45:24 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 62D5323A1AF
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 06:44:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1645713893;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=sNoHiIq/LUmsFS78HSg7zcwPRlYAqtoPyM+2X+83TE4=;
-        b=kulEb06OhHb7WlgmmbMxnFynO6AQWPrh5d5U5TT4gfR8tp2Nx/nYXhBHFouR+pboJL83wc
-        DqLug2hMzkDnFmgztq0c2b27OKD0tiKf3Q/mExOtpC4ud5k7N35A67Tz86965BoFuajbOB
-        JV/ZKg2+RICEd8X1ydrqYQQ6lw9g+3rvJvnniUDsrGnO/Ex4hJBWfBPyCeWcM8ufphCHZp
-        5GvfwGpBW8FPtrgdhuiQQyoFnABnw98ZH4g24jNSK6xWWko9HQ3Lu048v3Mgr7npquq/0H
-        ePG9j91ahLsi3wdtuzFu0spX5fA3hxFA1pdTWaXvs47N8upSYF+/QlWF91fk2g==
-Date:   Thu, 24 Feb 2022 15:40:40 +0100
-From:   =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Wolfram Sang <wsa@kernel.org>, Peter Rosin <peda@axentia.se>,
-        Russell King <linux@armlinux.org.uk>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Brown <broonie@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-i2c@vger.kernel.org, netdev@vger.kernel.org,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-Subject: Re: [RFC 00/10] add support for fwnode in i2c mux system and sfp
-Message-ID: <20220224154040.2633a4e4@fixe.home>
-In-Reply-To: <20220221162652.103834-1-clement.leger@bootlin.com>
-References: <20220221162652.103834-1-clement.leger@bootlin.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-pc-linux-gnu)
+        bh=GbEproH24Nb7tYPTH/K4BdGwkHbYgaoV/yDje8U1XwI=;
+        b=YjYwxO/Rm6Xbt9/Cv0o/DsekK4nB+5mqzjvqdj5oSL4DbVnedx11FlZR6HpLCNjTmDDRjO
+        YAjg0W8H+C10PiVx7kXF+//xASgSA/rwzi7OOKorkA9FSo3w4+fJUZJrt1ZWS4yN4zt4wl
+        ppFYhgQIBwNVX6HdizTIIwdLzWDmkVs=
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
+ [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-170-0Af_Ra22OiyPFTs-UiPAdQ-1; Thu, 24 Feb 2022 09:44:52 -0500
+X-MC-Unique: 0Af_Ra22OiyPFTs-UiPAdQ-1
+Received: by mail-ej1-f71.google.com with SMTP id ga31-20020a1709070c1f00b006cec400422fso1294066ejc.22
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 06:44:51 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=GbEproH24Nb7tYPTH/K4BdGwkHbYgaoV/yDje8U1XwI=;
+        b=ku6lVFRO00TOuOlhuAvvHiGuvMFsUUWg9psD9PvsQnts7APhyuPwqGJh36YoNjq4qr
+         cC+eiKx7UOMxnjTVUyR01DV+EDUJ82w141xS9eBH+42qTd4WX50ziIRnZBZKceb1BQNr
+         Zkwf/StCO1NVEVo5B+2QX11A4t8ihziWuSxB4ziAQp1RZhNoXwpxKXCch3RHB1Tpooar
+         7qYdEiDOLkPI5hZiSerYByEVfuoWChv7p31AlXLoj/SZcuLCW6/51/K81SesU6MPkum7
+         f1p15NC1nBI2TBoPtqRBCjrHkadD2R2DRSzpRusxkCWcvabHqc/lzg/m0qR52sQNMdA5
+         ox1Q==
+X-Gm-Message-State: AOAM531jkGTn1fxNXS0R7Brd9wWyj/IlGVgWL/sfmq24JnqSi0pBMKSM
+        9PtIAhKyMX9YgoFxcOMLqmlfiaEUyogU4rWCjJeDESEhS3YEV3731SQ3RquavEOzk1yiuK+WAb4
+        /s3XnLohe0M9hlzCXX67KV3eJ
+X-Received: by 2002:a17:906:4987:b0:6ce:88fc:3c88 with SMTP id p7-20020a170906498700b006ce88fc3c88mr2401991eju.608.1645713890864;
+        Thu, 24 Feb 2022 06:44:50 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwZcvLntGLEMOZeQNDz06+3JrdpH/4f+5BClXZE9MIlKqar04vYm+Igr+9loVgByBMTOi4ljA==
+X-Received: by 2002:a17:906:4987:b0:6ce:88fc:3c88 with SMTP id p7-20020a170906498700b006ce88fc3c88mr2401973eju.608.1645713890585;
+        Thu, 24 Feb 2022 06:44:50 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
+        by smtp.googlemail.com with ESMTPSA id z12sm1635541edc.80.2022.02.24.06.44.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 24 Feb 2022 06:44:49 -0800 (PST)
+Message-ID: <beb1878e-7708-9dd1-0282-7fb5f0d23df4@redhat.com>
+Date:   Thu, 24 Feb 2022 15:44:48 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2] KVM: x86: Fix emulation in writing cr8
+Content-Language: en-US
+To:     Zhenzhong Duan <zhenzhong.duan@intel.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     seanjc@google.com, vkuznets@redhat.com, wanpengli@tencent.com
+References: <20220210094506.20181-1-zhenzhong.duan@intel.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <20220210094506.20181-1-zhenzhong.duan@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,152 +82,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On 2/10/22 10:45, Zhenzhong Duan wrote:
+> In emulation of writing to cr8, one of the lowest four bits in TPR[3:0]
+> is kept.
+> 
+> According to Intel SDM 10.8.6.1(baremetal scenario):
+> "APIC.TPR[bits 7:4] = CR8[bits 3:0], APIC.TPR[bits 3:0] = 0";
+> 
+> and SDM 28.3(use TPR shadow):
+> "MOV to CR8. The instruction stores bits 3:0 of its source operand into
+> bits 7:4 of VTPR; the remainder of VTPR (bits 3:0 and bits 31:8) are
+> cleared.";
+> 
+> and AMD's APM 16.6.4:
+> "Task Priority Sub-class (TPS)-Bits 3 : 0. The TPS field indicates the
+> current sub-priority to be used when arbitrating lowest-priority messages.
+> This field is written with zero when TPR is written using the architectural
+> CR8 register.";
+> 
+> so in KVM emulated scenario, clear TPR[3:0] to make a consistent behavior
+> as in other scenarios.
+> 
+> This doesn't impact evaluation and delivery of pending virtual interrupts
+> because processor does not use the processor-priority sub-class to
+> determine which interrupts to delivery and which to inhibit.
+> 
+> Sub-class is used by hardware to arbitrate lowest priority interrupts,
+> but KVM just does a round-robin style delivery.
+> 
+> Fixes: b93463aa59d6 ("KVM: Accelerated apic support")
+> Signed-off-by: Zhenzhong Duan <zhenzhong.duan@intel.com>
+> Reviewed-by: Sean Christopherson <seanjc@google.com>
+> ---
+> v2: Add Sean's comments and "Fixes:" to patch description
+> 
+>   arch/x86/kvm/lapic.c | 5 +----
+>   1 file changed, 1 insertion(+), 4 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
+> index d7e6fde82d25..306025db9959 100644
+> --- a/arch/x86/kvm/lapic.c
+> +++ b/arch/x86/kvm/lapic.c
+> @@ -2242,10 +2242,7 @@ void kvm_set_lapic_tscdeadline_msr(struct kvm_vcpu *vcpu, u64 data)
+>   
+>   void kvm_lapic_set_tpr(struct kvm_vcpu *vcpu, unsigned long cr8)
+>   {
+> -	struct kvm_lapic *apic = vcpu->arch.apic;
+> -
+> -	apic_set_tpr(apic, ((cr8 & 0x0f) << 4)
+> -		     | (kvm_lapic_get_reg(apic, APIC_TASKPRI) & 4));
+> +	apic_set_tpr(vcpu->arch.apic, (cr8 & 0x0f) << 4);
+>   }
+>   
+>   u64 kvm_lapic_get_cr8(struct kvm_vcpu *vcpu)
 
-As stated at the beginning of the cover letter, the PCIe card I'm
-working on uses a lan9662 SoC. This card is meant to be used an
-ethernet switch with 2 x RJ45 ports and 2 x 10G SFPs. The lan966x SoCs
-can be used in two different ways:
+Queued, thanks.
 
- - It can run Linux by itself, on ARM64 cores included in the SoC. This
-   use-case of the lan966x is currently being upstreamed, using a
-   traditional Device Tree representation of the lan996x HW blocks [1]
-   A number of drivers for the different IPs of the SoC have already
-   been merged in upstream Linux.
+Paolo
 
- - It can be used as a PCIe endpoint, connected to a separate platform
-   that acts as the PCIe root complex. In this case, all the devices
-   that are embedded on this SoC are exposed through PCIe BARs and the
-   ARM64 cores of the SoC are not used. Since this is a PCIe card, it
-   can be plugged on any platform, of any architecture supporting PCIe.
-
-The goal of this effort is to enable this second use-case, while
-allowing the re-use of the existing drivers for the different devices
-part of the SoC.
-
-Following a first round of discussion, here are some clarifications on
-what problem this series is trying to solve and what are the possible
-choices to support this use-case.
-
-Here is the list of devices that are exposed and needed to make this
-card work as an ethernet switch:
- - lan966x-switch
- - reset-microchip-sparx5
- - lan966x_serdes
- - reset-microchip-lan966x-phy
- - mdio-mscc-miim
- - pinctrl-lan966x
- - atmel-flexcom
- - i2c-at91
- - i2c-mux
- - i2c-mux-pinctrl
- - sfp
- - clk-lan966x
-
-All the devices on this card are "self-contained" and do not require
-cross-links with devices that are on the host (except to demux IRQ but
-this is something easy to do). These drivers already exists and are
-using of_* API to register controllers, get properties and so on.
-
-The challenge we're trying to solve is how can the PCI driver for this
-card re-use the existing drivers, and using which hardware
-representation to instantiate all those drivers.
-
-Although this series only contained the modifications for the I2C
-subsystem all the subsystems that are used or needed by the previously
-listed driver have also been modified to have support for fwnode. This
-includes the following subsystems:
-- reset
-- clk
-- pinctrl
-- syscon
-- gpio
-- pinctrl
-- phy
-- mdio
-- i2c
-
-The first feedback on this series does not seems to reach a consensus
-(to say the least) on how to do it cleanly so here is a recap of the
-possible solutions, either brought by this series or mentioned by
-contributors:
-
-1) Describe the card statically using swnode
-
-This is the approach that was taken by this series. The devices are
-described using the MFD subsystem with mfd_cells. These cells are
-attached with a swnode which will be used as a primary node in place of
-ACPI or OF description. This means that the device description
-(properties and references) is conveyed entirely in the swnode. In order
-to make these swnode usable with existing OF based subsystems, the
-fwnode API can be used in needed subsystems.
-
-Pros:
- - Self-contained in the driver.
- - Will work on all platforms no matter the firmware description.
- - Makes the subsystems less OF-centric.
-
-Cons:
- - Modifications are required in subsystems to support fwnode
-   (mitigated by the fact it makes to subsystems less OF-centric).
- - swnode are not meant to be used entirely as primary nodes.
- - Specifications for both ACPI and OF must be handled if using fwnode
-   API.
-
-2) Use SSDT overlays
-
-Andy mentioned that SSDT overlays could be used. This overlay should
-match the exact configuration that is used (ie correct PCIe bus/port
-etc). It requires the user to write/modify/compile a .asl file and load
-it using either EFI vars, custom initrd or via configfs. The existing
-drivers would also need more modifications to work with ACPI. Some of
-them might even be harder (if not possible) to use since there is no
-ACPI support for the subsystems they are using .
-
-Pros:
- - Can't really find any for this one
-
-Cons:
- - Not all needed subsystems have appropriate ACPI bindings/support
-   (reset, clk, pinctrl, syscon).
- - Difficult to setup for the user (modify/compile/load .aml file).
- - Not portable between machines, as the SSDT overlay need to be
-   different depending on how the PCI device is connected to the
-   platform.
-
-3) Use device-tree overlays
-
-This solution was proposed by Andrew and could potentially allows to
-keep all the existing device-tree infrastructure and helpers. A
-device-tree overlay could be loaded by the driver and applied using
-of_overlay_fdt_apply(). There is some glue to make this work but it
-could potentially be possible. Mark have raised some warnings about
-using such device-tree overlays on an ACPI enabled platform.
-
-Pros:
- - Reuse all the existing OF infrastructure, no modifications at all on
-   drivers and subsystems.
- - Could potentially lead to designing a generic driver for PCI devices
-   that uses a composition of other drivers.
-
-Cons:
- - Might not the best idea to mix it with ACPI.
- - Needs CONFIG_OF, which typically isn't enabled today on most x86
-   platforms.
- - Loading DT overlays on non-DT platforms is not currently working. It
-   can be addressed, but it's not necessarily immediate.
-
-My preferred solutions would be swnode or device-tree overlays but
-since there to is no consensus on how to add this support, how
-can we go on with this series ?
-
-Thanks,
-
-[1]
-https://lore.kernel.org/linux-arm-kernel/20220210123704.477826-1-michael@wa=
-lle.cc/
-
---=20
-Cl=C3=A9ment L=C3=A9ger,
-Embedded Linux and Kernel engineer at Bootlin
-https://bootlin.com

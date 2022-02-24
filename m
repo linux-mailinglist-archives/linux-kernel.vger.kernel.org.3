@@ -2,133 +2,293 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 920FB4C21E3
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 03:53:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 346314C21E5
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 03:53:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230206AbiBXCxY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 21:53:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55806 "EHLO
+        id S230222AbiBXCx1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 21:53:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230113AbiBXCxW (ORCPT
+        with ESMTP id S230200AbiBXCxX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 21:53:22 -0500
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12CAF1662D7
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 18:52:54 -0800 (PST)
-Received: by mail-pg1-x536.google.com with SMTP id z4so543668pgh.12
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 18:52:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Q3TGm28B6O/EdXXho5YF6aTQecDJdHdeGkzGFf9YLIc=;
-        b=nxQ4aJE+vqbCAJSYhBXr4dUljBatSkC8lk+Xt7/dM7NULoBoPsmdryGQEp9kP4CJCr
-         9we7cKz1LopYUEehfnYzyzcv2DG9lrnTEi+La3rxkaKorRC9CKPGrScJHsCkE6WR5BID
-         Ua4KFzX65o/hcjRDeFA2Pgb7m8HnfqVBsRFx8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Q3TGm28B6O/EdXXho5YF6aTQecDJdHdeGkzGFf9YLIc=;
-        b=bDMxK2pLlp6zjvre0Wnh3APnLHmHGsmZm3oIa/nHnJ4OkAk1Za6e6qQgEAONT4MIc1
-         w20G6ZZxiFyo9wKsGN4ATE19/UD7j99earMoJEkNPK1c5zXg9wFkrrceA8lCEu1YxIi0
-         fCjNfsfIetgnsxTAkPgQX0pNfq5cuZUfUqkeGUbNTcjAuCWJUkQH9HdgpSjAjVvYbqiF
-         F2WNMealPwX4MFAnBoo9prPvXOrVKjwBy4ZdSWRIqSOheYKQx3VWUDcPyeqaQQvllLt1
-         oYfyN+DZ0V/vnpTsBkneSM7/GKwrSxZ4a4pedTLYcefvtPg39Y6XU/vWplv9G0MXr8QO
-         cOvQ==
-X-Gm-Message-State: AOAM531J4Y+wF+0lJUfiNX9O35njdkH/2cVZNR31ijBNQRqW8lwWrqI8
-        TnKuHTXno15rlKzbYNCLmkoIFA==
-X-Google-Smtp-Source: ABdhPJxz+HP1w4TsYKr5g2QkrdSVIlF3ksWZu/mGdodQvCuIM9nuuFQ2gUjIwmCbdWf68kuzDfVvhw==
-X-Received: by 2002:a05:6a00:15c6:b0:4f0:fc4d:35d1 with SMTP id o6-20020a056a0015c600b004f0fc4d35d1mr540080pfu.23.1645671173550;
+        Wed, 23 Feb 2022 21:53:23 -0500
+Received: from out30-42.freemail.mail.aliyun.com (out30-42.freemail.mail.aliyun.com [115.124.30.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1C661662C0;
         Wed, 23 Feb 2022 18:52:53 -0800 (PST)
-Received: from google.com ([2401:fa00:8f:203:50f1:f5eb:bd04:8bb0])
-        by smtp.gmail.com with ESMTPSA id on14sm778927pjb.34.2022.02.23.18.52.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Feb 2022 18:52:52 -0800 (PST)
-Date:   Thu, 24 Feb 2022 11:52:46 +0900
-From:   Sergey Senozhatsky <senozhatsky@chromium.org>
-To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        linux-kernel@vger.kernel.org, bhe@redhat.com, pmladek@suse.com,
-        akpm@linux-foundation.org, anton@enomsg.org, ccross@android.com,
-        dyoung@redhat.com, feng.tang@intel.com, john.ogness@linutronix.de,
-        keescook@chromium.org, kernel@gpiccoli.net,
-        kexec@lists.infradead.org, rostedt@goodmis.org,
-        tony.luck@intel.com, vgoyal@redhat.com
-Subject: Re: [PATCH V6] panic: Move panic_print before kmsg dumpers
-Message-ID: <Yhby/n4P+E15zjKj@google.com>
-References: <20220214141308.841525-1-gpiccoli@igalia.com>
- <YhRFNKtxSE8Xrbfw@google.com>
- <7e15bc6a-ceae-aa3a-0a86-18d24181b0ed@igalia.com>
- <YhWNhzacAVDuFtwB@google.com>
- <5eeba935-d73a-5539-4eb1-298fb6ee0578@igalia.com>
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R161e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04423;MF=guoheyi@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0V5LiApd_1645671168;
+Received: from 30.225.140.83(mailfrom:guoheyi@linux.alibaba.com fp:SMTPD_---0V5LiApd_1645671168)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Thu, 24 Feb 2022 10:52:49 +0800
+Message-ID: <c378a57f-cb21-eb86-0290-0c08fa748f10@linux.alibaba.com>
+Date:   Thu, 24 Feb 2022 10:52:48 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5eeba935-d73a-5539-4eb1-298fb6ee0578@igalia.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.6.1
+Subject: Re: [PATCH 3/3] drivers/net/ftgmac100: fix DHCP potential failure
+ with systemd
+Content-Language: en-US
+To:     Florian Fainelli <f.fainelli@gmail.com>,
+        linux-kernel@vger.kernel.org
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Guangbin Huang <huangguangbin2@huawei.com>,
+        Hao Chen <chenhao288@hisilicon.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Dylan Hung <dylan_hung@aspeedtech.com>, netdev@vger.kernel.org
+References: <20220223031436.124858-1-guoheyi@linux.alibaba.com>
+ <20220223031436.124858-4-guoheyi@linux.alibaba.com>
+ <1675a52d-a270-d768-5ccc-35b1e82e56d2@gmail.com>
+ <5cdf5d09-9b32-ec98-cbd1-c05365ec01fa@linux.alibaba.com>
+ <91e2d4ad-7544-784b-defe-3a76577462f1@gmail.com>
+From:   Heyi Guo <guoheyi@linux.alibaba.com>
+In-Reply-To: <91e2d4ad-7544-784b-defe-3a76577462f1@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hi Florian,
 
-On (22/02/23 10:15), Guilherme G. Piccoli wrote:
-> On 22/02/2022 22:27, Sergey Senozhatsky wrote:
-> > [...]
-> > Hmm. Yeah, well, that's a bit of a tricky interface now
-> > 
-> > 	panic()
-> > 		// everything (if corresponding bits set), no console flush
-> > 		panic_print_sys_info(false)
-> > 		...
-> > 		// console flush only if corresponding bit set
-> > 		panic_print_sys_info(true)
-> > 
-> > 
-> > 
-> > If everyone is fine then OK.
-> > 
-> > But I _personally_ would look into changing this to something like this:
-> > 
-> > 	#define EARLY_PANIC_MASK (PANIC_PRINT_FOO | PANIC_PRINT_BAR | ...)
-> > 	#define LATE_PANIC_MASK (PANIC_PRINT_ALL_PRINTK_MSG)
-> > 	panic()
-> > 		panic_print_sys_info(panic_print & EARLY_PANIC_MASK)
-> > 		...
-> > 		panic_print_sys_info(panic_print & LATE_PANIC_MASK)
-> 
-> Hi Sergey, notice that panic_print_sys_info() currently doesn't have a
-> parameter! The prototype (without this patch) is:
-
-Correct.
-
-> static void panic_print_sys_info(void);
+在 2022/2/24 上午1:55, Florian Fainelli 写道:
 >
-> So, it consumes the "panic_print" global variable (which matches the
-> command-line parameter / sysctl), hence to implement your suggestion
-> either we need a refactor in panic_print_sys_info(), adding a parameter
+>
+> On 2/23/2022 3:39 AM, Heyi Guo wrote:
+>> Hi Florian,
+>>
+>> 在 2022/2/23 下午1:00, Florian Fainelli 写道:
+>>>
+>>>
+>>> On 2/22/2022 7:14 PM, Heyi Guo wrote:
+>>>> DHCP failures were observed with systemd 247.6. The issue could be
+>>>> reproduced by rebooting Aspeed 2600 and then running ifconfig ethX
+>>>> down/up.
+>>>>
+>>>> It is caused by below procedures in the driver:
+>>>>
+>>>> 1. ftgmac100_open() enables net interface and call phy_start()
+>>>> 2. When PHY is link up, it calls netif_carrier_on() and then
+>>>> adjust_link callback
+>>>> 3. ftgmac100_adjust_link() will schedule the reset task
+>>>> 4. ftgmac100_reset_task() will then reset the MAC in another schedule
+>>>>
+>>>> After step 2, systemd will be notified to send DHCP discover packet,
+>>>> while the packet might be corrupted by MAC reset operation in step 4.
+>>>>
+>>>> Call ftgmac100_reset() directly instead of scheduling task to fix the
+>>>> issue.
+>>>>
+>>>> Signed-off-by: Heyi Guo <guoheyi@linux.alibaba.com>
+>>>> ---
+>>>> Cc: Andrew Lunn <andrew@lunn.ch>
+>>>> Cc: "David S. Miller" <davem@davemloft.net>
+>>>> Cc: Jakub Kicinski <kuba@kernel.org>
+>>>> Cc: Joel Stanley <joel@jms.id.au>
+>>>> Cc: Guangbin Huang <huangguangbin2@huawei.com>
+>>>> Cc: Hao Chen <chenhao288@hisilicon.com>
+>>>> Cc: Arnd Bergmann <arnd@arndb.de>
+>>>> Cc: Dylan Hung <dylan_hung@aspeedtech.com>
+>>>> Cc: netdev@vger.kernel.org
+>>>>
+>>>>
+>>>> ---
+>>>>   drivers/net/ethernet/faraday/ftgmac100.c | 13 +++++++++++--
+>>>>   1 file changed, 11 insertions(+), 2 deletions(-)
+>>>>
+>>>> diff --git a/drivers/net/ethernet/faraday/ftgmac100.c 
+>>>> b/drivers/net/ethernet/faraday/ftgmac100.c
+>>>> index c1deb6e5d26c5..d5356db7539a4 100644
+>>>> --- a/drivers/net/ethernet/faraday/ftgmac100.c
+>>>> +++ b/drivers/net/ethernet/faraday/ftgmac100.c
+>>>> @@ -1402,8 +1402,17 @@ static void ftgmac100_adjust_link(struct 
+>>>> net_device *netdev)
+>>>>       /* Disable all interrupts */
+>>>>       iowrite32(0, priv->base + FTGMAC100_OFFSET_IER);
+>>>>   -    /* Reset the adapter asynchronously */
+>>>> -    schedule_work(&priv->reset_task);
+>>>> +    /* Release phy lock to allow ftgmac100_reset to aquire it, 
+>>>> keeping lock
+>>>
+>>> typo: acquire
+>>>
+>> Thanks for the catch :)
+>>>> +     * order consistent to prevent dead lock.
+>>>> +     */
+>>>> +    if (netdev->phydev)
+>>>> +        mutex_unlock(&netdev->phydev->lock);
+>>>> +
+>>>> +    ftgmac100_reset(priv);
+>>>> +
+>>>> +    if (netdev->phydev)
+>>>> +        mutex_lock(&netdev->phydev->lock);
+>>>
+>>> Do you really need to perform a full MAC reset whenever the link 
+>>> goes up or down? Instead cannot you just extract the maccr 
+>>> configuration which adjusts the speed and be done with it?
+>>
+>> This is the original behavior and not changed in this patch set, and 
+>> I'm not familiar with the hardware design of ftgmac100, so I'd like 
+>> to limit the changes to the code which really causes practical issues.
+>
+> This unlocking and re-locking seems superfluous when you could 
+> introduce a version of ftgmac100_reset() which does not acquire the 
+> PHY device mutex, and have that version called from 
+> ftgmac100_adjust_link(). For every other call site, you would acquire 
+> it. Something like this for instance:
+>
+>
+> diff --git a/drivers/net/ethernet/faraday/ftgmac100.c 
+> b/drivers/net/ethernet/faraday/ftgmac100.c
+> index 691605c15265..98179c3fd9ee 100644
+> --- a/drivers/net/ethernet/faraday/ftgmac100.c
+> +++ b/drivers/net/ethernet/faraday/ftgmac100.c
+> @@ -1038,7 +1038,7 @@ static void ftgmac100_adjust_link(struct 
+> net_device *netdev)
+>         iowrite32(0, priv->base + FTGMAC100_OFFSET_IER);
+>
+>         /* Reset the adapter asynchronously */
+> -       schedule_work(&priv->reset_task);
+> +       ftgmac100_reset(priv, false);
+>  }
+>
+>  static int ftgmac100_mii_probe(struct net_device *netdev)
+> @@ -1410,10 +1410,8 @@ static int ftgmac100_init_all(struct ftgmac100 
+> *priv, bool ignore_alloc_err)
+>         return err;
+>  }
+>
+> -static void ftgmac100_reset_task(struct work_struct *work)
+> +static void ftgmac100_reset_task(struct ftgmac100_priv *priv, bool 
+> lock_phy)
+>  {
+> -       struct ftgmac100 *priv = container_of(work, struct ftgmac100,
+> -                                             reset_task);
+>         struct net_device *netdev = priv->netdev;
+>         int err;
+>
+> @@ -1421,7 +1419,7 @@ static void ftgmac100_reset_task(struct 
+> work_struct *work)
+>
+>         /* Lock the world */
+>         rtnl_lock();
+> -       if (netdev->phydev)
+> +       if (netdev->phydev && lock_phy)
+>                 mutex_lock(&netdev->phydev->lock);
+>         if (priv->mii_bus)
+>                 mutex_lock(&priv->mii_bus->mdio_lock);
+> @@ -1454,11 +1452,19 @@ static void ftgmac100_reset_task(struct 
+> work_struct *work)
+>   bail:
+>         if (priv->mii_bus)
+>                 mutex_unlock(&priv->mii_bus->mdio_lock);
+> -       if (netdev->phydev)
+> +       if (netdev->phydev && lock_phy)
+>                 mutex_unlock(&netdev->phydev->lock);
+>         rtnl_unlock();
+>  }
 
-Correct. That's the idea. Since you are already adding a parameter,
-what I'm talking is turning that parameter from true/false to something
-more verbose.
+This is also what we supposed to do at first, however it will introduce 
+a potential dead lock for different locks acquiring order, and 
+CONFIG_PROVE_LOCKING will complain about it:
 
-> (more or less what the patch is already doing, but with a bit more
-> changes) or we override the global variable twice in panic(), before the
-> function calls.
+[   16.852199] ======================================================
+[   16.859102] WARNING: possible circular locking dependency detected
+[   16.866012] 5.10.36-60b3c9d-dirty-15f4fba #1 Not tainted
+[   16.871976] ------------------------------------------------------
+[   16.871991] kworker/1:1/23 is trying to acquire lock:
+[   16.872000] 80fa0920 (rtnl_mutex){+.+.}-{3:3}, at: rtnl_lock+0x24/0x28
+[   16.872047]
+[   16.872047] but task is already holding lock:
+[   16.872051] 821d44c0 (&dev->lock){+.+.}-{3:3}, at: 
+phy_state_machine+0x50/0x290
+[   16.872076]
+[   16.872076] which lock already depends on the new lock.
+[   16.872076]
+[   16.872080]
+[   16.872080] the existing dependency chain (in reverse order) is:
+[   16.872083]
+[   16.872083] -> #1 (&dev->lock){+.+.}-{3:3}:
+[   16.872106]        lock_acquire+0x6c/0x74
+[   16.872117]        __mutex_lock+0xb4/0xa48
+[   16.872132]        mutex_lock_nested+0x2c/0x34
+[   16.872141]        phy_start+0x30/0xc4
+[   16.872155]        ftgmac100_open+0x1a0/0x254
+[   16.872168]        __dev_open+0x110/0x1d0
+[   16.872180]        __dev_change_flags+0x1d0/0x258
+[   16.872192]        dev_change_flags+0x28/0x58
+[   16.872204]        do_setlink+0x258/0xc60
+[   16.872212]        rtnl_setlink+0x110/0x18c
+[   16.872219]        rtnetlink_rcv_msg+0x1d0/0x53c
+[   16.872226]        netlink_rcv_skb+0xd0/0x128
+[   16.872233]        rtnetlink_rcv+0x20/0x24
+[   16.872244]        netlink_unicast+0x1a8/0x26c
+[   16.872254]        netlink_sendmsg+0x220/0x464
+[   16.872265]        __sys_sendto+0xe4/0x134
+[   16.872276]        sys_sendto+0x24/0x2c
+[   16.872288]        ret_fast_syscall+0x0/0x28
+[   16.872297]        0x7ed9e928
+[   16.872301]
+[   16.872301] -> #0 (rtnl_mutex){+.+.}-{3:3}:
+[   16.872325]        __lock_acquire+0x17e8/0x3268
+[   16.872331]        lock_acquire.part.0+0xcc/0x394
+[   16.872341]        lock_acquire+0x6c/0x74
+[   16.872354]        __mutex_lock+0xb4/0xa48
+[   16.872365]        mutex_lock_nested+0x2c/0x34
+[   16.872377]        rtnl_lock+0x24/0x28
+[   16.872389]        ftgmac100_adjust_link+0xc0/0x144
+[   16.872401]        phy_link_change+0x38/0x64
+[   16.872411]        phy_check_link_status+0xa8/0xfc
+[   16.872422]        phy_state_machine+0x80/0x290
+[   16.872435]        process_one_work+0x294/0x7d8
+[   16.872447]        worker_thread+0x6c/0x548
+[   16.872456]        kthread+0x170/0x178
+[   16.872462]        ret_from_fork+0x14/0x20
+[   16.872467]        0x0
+[   16.872471]
+[   16.872471] other info that might help us debug this:
+[   16.872471]
+[   16.872475]  Possible unsafe locking scenario:
+[   16.872475]
+[   16.872478]        CPU0                    CPU1
+[   16.872482]        ----                    ----
+[   16.872485]   lock(&dev->lock);
+[   16.872495]                                lock(rtnl_mutex);
+[   16.872505] lock(&dev->lock);
+[   16.872513]   lock(rtnl_mutex);
+[   16.872522]
+[   16.872522]  *** DEADLOCK ***
+[   16.872522]
+[   16.872528] 3 locks held by kworker/1:1/23:
+[   16.872532]  #0: 818472a8 
+((wq_completion)events_power_efficient){+.+.}-{0:0}, at: 
+process_one_work+0x1e8/0x7d8
+[   16.872558]  #1: 819fbef8 
+((work_completion)(&(&dev->state_queue)->work)){+.+.}-{0:0}, at: 
+process_one_work+0x1e8/0x7d8
+[   16.872582]  #2: 821d44c0 (&dev->lock){+.+.}-{3:3}, at: 
+phy_state_machine+0x50/0x290
 
-We don't need to overwrite the global var. We pass "permitted bits at
-this stage of panic" mask to panic_print_sys_info(). The global var
-stays intact.
+Thanks,
 
-> As you said, it's possible and a matter of personal coding style. I'd be
-> fine if more people ask that, but if everyone is fine with the current
-> implementation, I'd rather get this patch merged as is, since we need it
-> and couldn't even make it for 5.17 heh
+Heyi
 
-Sure, works for me.
+>
+> +static void ftgmac100_reset_task(struct work_struct *work)
+> +{
+> +       struct ftgmac100 *priv = container_of(work, struct ftgmac100,
+> +                                             reset_task);
+> +
+> +       ftgmac100_reset(priv, true);
+> +}
+> +
+>  static int ftgmac100_open(struct net_device *netdev)
+>  {
+>         struct ftgmac100 *priv = netdev_priv(netdev)

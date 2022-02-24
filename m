@@ -2,109 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41E8D4C2146
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 02:49:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE1564C215B
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 02:53:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229786AbiBXBtS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 20:49:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41586 "EHLO
+        id S229799AbiBXBvh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 20:51:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229739AbiBXBtQ (ORCPT
+        with ESMTP id S229782AbiBXBvg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 20:49:16 -0500
-Received: from mail104.syd.optusnet.com.au (mail104.syd.optusnet.com.au [211.29.132.246])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6C5B1D1985;
-        Wed, 23 Feb 2022 17:48:47 -0800 (PST)
-Received: from dread.disaster.area (pa49-186-17-0.pa.vic.optusnet.com.au [49.186.17.0])
-        by mail104.syd.optusnet.com.au (Postfix) with ESMTPS id 1FBA553306C;
-        Thu, 24 Feb 2022 12:48:43 +1100 (AEDT)
-Received: from dave by dread.disaster.area with local (Exim 4.92.3)
-        (envelope-from <david@fromorbit.com>)
-        id 1nN3FK-00FgMA-GD; Thu, 24 Feb 2022 12:48:42 +1100
-Date:   Thu, 24 Feb 2022 12:48:42 +1100
-From:   Dave Chinner <david@fromorbit.com>
-To:     Theodore Ts'o <tytso@mit.edu>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Lee Jones <lee.jones@linaro.org>, linux-ext4@vger.kernel.org,
-        Christoph Hellwig <hch@lst.de>,
-        Dave Chinner <dchinner@redhat.com>,
-        Goldwyn Rodrigues <rgoldwyn@suse.com>,
-        "Darrick J . Wong" <darrick.wong@oracle.com>,
-        Bob Peterson <rpeterso@redhat.com>,
-        Damien Le Moal <damien.lemoal@wdc.com>,
-        Andreas Gruenbacher <agruenba@redhat.com>,
-        Ritesh Harjani <riteshh@linux.ibm.com>,
-        Johannes Thumshirn <jth@kernel.org>, linux-xfs@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, cluster-devel@redhat.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [REPORT] kernel BUG at fs/ext4/inode.c:2620 - page_buffers()
-Message-ID: <20220224014842.GM59715@dread.disaster.area>
-References: <Yg0m6IjcNmfaSokM@google.com>
- <82d0f4e4-c911-a245-4701-4712453592d9@nvidia.com>
- <Yg8bxiz02WBGf6qO@mit.edu>
- <Yg9QGm2Rygrv+lMj@kroah.com>
- <YhbE2nocBMtLc27C@mit.edu>
+        Wed, 23 Feb 2022 20:51:36 -0500
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 749B7159293;
+        Wed, 23 Feb 2022 17:51:07 -0800 (PST)
+Received: by mail-pf1-x42c.google.com with SMTP id l19so563107pfu.2;
+        Wed, 23 Feb 2022 17:51:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=RhKhAkTTrkMeO2LTTiP23E3IDSrksBY5pBg7ODoVhdQ=;
+        b=GQqAtyFgniyh0PvnLWGmDOmG60ubr9j4MKOjIrQrxaDRQj37QD4Rtzaea0Ry3CEs3r
+         eClV5OXDOg8b3YM1sZt+Xu3676vAGdH773d6zFYm2ti4Nk3qP9pvfhMJTJGbXjVt0u5y
+         +UDrMgYKKXj/AVrQ5eT4k7bWrmyqQpXLDg9XGU5HpWnnlcnoBaVauB7qnbYJyQwhrRX/
+         vwLcnvnezSxcjxcGnybSjWlcBZXTBECm9/n90jNZYXdTPl+gLfw5hrlSgh3gq5NuloUp
+         m5r84yD9t9ic9Gop/RPGY3VbHLZZZgUzOxTs03xwU0+uYS749YyLt9MWSyZokA23JdRJ
+         CQzg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=RhKhAkTTrkMeO2LTTiP23E3IDSrksBY5pBg7ODoVhdQ=;
+        b=ncFTVxMbaKZ+xPKjxEetx79Djmi3THfa9RD5yTceUveBH2pIgm7xqHQK54YvVLM+6z
+         aXxQsS5ud0aflcnBl4qpT1XDpJKInQ075ENavuoIqPupogBe6lN1iTPiMGn2FK3V9tx3
+         7CGgfYfDZcOZCwadhbHwEBIYVf2nqbk4kGHZyZQ/JggznNkOp9blBWc3rKlyYeTrJnnD
+         l6bSGZ+wsgVPX02eTZ+viXCNHTLtOq9v9Zh3VPZpUWc+b8unz8YodHlEwyKq5qk+wo7Y
+         A7iBPeSMfLiDy9+SYsZwuruykv6icLgVKLR+2iF2IZiBISdb1n1+/K3PNnygDPHuySe8
+         A5YA==
+X-Gm-Message-State: AOAM530TNScN2VsAHsKkZreL9XmYIGmH8AS/DN0iGe6afEnH4qt6URRs
+        V/S6nXtZt/zQ1hviNN4r8lsUaXTTiE0ufg==
+X-Google-Smtp-Source: ABdhPJx51vfxbOZNXNBHmmp/JoXM+3xQyq1uApYDSP0c1CdAZvWtpLWVREhwI0LPOaY9K1Fo15lt8w==
+X-Received: by 2002:a63:d64d:0:b0:374:6edc:989c with SMTP id d13-20020a63d64d000000b003746edc989cmr493333pgj.434.1645667466973;
+        Wed, 23 Feb 2022 17:51:06 -0800 (PST)
+Received: from [172.20.119.15] ([162.219.34.248])
+        by smtp.gmail.com with ESMTPSA id g1sm808146pfu.32.2022.02.23.17.51.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 23 Feb 2022 17:51:06 -0800 (PST)
+Message-ID: <efd94670-9d6d-5651-358c-2f88646298cd@gmail.com>
+Date:   Thu, 24 Feb 2022 09:51:04 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YhbE2nocBMtLc27C@mit.edu>
-X-Optus-CM-Score: 0
-X-Optus-CM-Analysis: v=2.4 cv=VuxAv86n c=1 sm=1 tr=0 ts=6216e3fe
-        a=+dVDrTVfsjPpH/ci3UuFng==:117 a=+dVDrTVfsjPpH/ci3UuFng==:17
-        a=kj9zAlcOel0A:10 a=oGFeUVbbRNcA:10 a=7-415B0cAAAA:8
-        a=-kggqxpRYmVVPZmSJLkA:9 a=CjuIK1q_8ugA:10 a=biEYGPWJfzWAr4FL6Ov7:22
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.6.1
+Subject: Re: [RFC V4 1/6] blk: prepare to make blk-rq-qos pluggable and
+ modular
+Content-Language: en-US
+To:     Tejun Heo <tj@kernel.org>
+Cc:     Jens Axboe <axboe@kernel.dk>, Josef Bacik <jbacik@fb.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220217031349.98561-1-jianchao.wan9@gmail.com>
+ <20220217031349.98561-2-jianchao.wan9@gmail.com>
+ <YhUbCH+dhKkgMirE@slm.duckdns.org>
+ <2e17c058-8917-4a37-896e-1093446339f6@gmail.com>
+ <39db454d-ca30-fb42-3d72-899efa34fb78@gmail.com>
+ <YhapCurbiI21WYmm@slm.duckdns.org>
+From:   Wang Jianchao <jianchao.wan9@gmail.com>
+In-Reply-To: <YhapCurbiI21WYmm@slm.duckdns.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 23, 2022 at 06:35:54PM -0500, Theodore Ts'o wrote:
-> On Fri, Feb 18, 2022 at 08:51:54AM +0100, Greg Kroah-Hartman wrote:
-> > > The challenge is that fixing this "the right away" is probably not
-> > > something we can backport into an LTS kernel, whether it's 5.15 or
-> > > 5.10... or 4.19.
-> > 
-> > Don't worry about stable backports to start with.  Do it the "right way"
-> > first and then we can consider if it needs to be backported or not.
+
+
+On 2022/2/24 5:37 上午, Tejun Heo wrote:
+> Hello,
 > 
-> Fair enough; on the other hand, we could also view this as making ext4
-> more robust against buggy code in other subsystems, and while other
-> file systems may be losing user data if they are actually trying to do
-> remote memory access to file-backed memory, apparently other file
-> systems aren't noticing and so they're not crashing.
+>>> We just want to provide the flexibility for the user to open/close a policy
+>>> per device. If we need to the policy on a device, we needn't to waste cpu
+>> sorry, it should be "If we don't need the policy on a device" ;)
+> 
+> Yeah, that's what modularization does but why does it need a separate user
+> interface for loading? Everything else inits on insmod and exits on rmmod
+> and autoloading has been delegated to udev a very long time ago. The
+> interface you added for loading module doesn't make sense to me.
+> 
 
-Oh, we've noticed them, no question about that.  We've got bug
-reports going back years for systems being crashed, triggering BUGs
-and/or corrupting data on both XFS and ext4 filesystems due to users
-trying to run RDMA applications with file backed pages.
+The initial version of this patchset has two targets：
+(1) Add a sysfs interface to open/close the policy per device. Then we needn't
+    waste cpu cycles and memory if the device doesn't need the policy.
+(2) Make the policies modular, then it easy to maintain the code of policy in
+    production environment as we only need to close the policy and replace the
+    .ko file.
 
-Most of the people doing this now know that we won't support such
-applications until the RDMA stack/hardware can trigger on-demand
-write page faults the same way CPUs do when they first write to a
-clean page. They don't have this, so mostly these people don't
-bother reporting these class of problems to us anymore.  The
-gup/RDMA infrastructure to make this all work is slowly moving
-forwards, but it's not here yet.
+The loading module when open policy in sysfs interface is just to avoid modprobe
+manually. There is similar operation when switch io scheduler.
 
-> Issuing a
-> warning and then not crashing is arguably a better way for ext4 to
-> react, especially if there are other parts of the kernel that are
-> randomly calling set_page_dirty() on file-backed memory without
-> properly first informing the file system in a context where it can
-> block and potentially do I/O to do things like allocate blocks.
+And as Christoph suggested, the modularization has been get rid of in next version.
 
-I'm not sure that replacing the BUG() with a warning is good enough
-- it's still indicative of an application doing something dangerous
-that could result in silent data corruption and/or other problems.
-
-Cheers,
-
-Dave.
--- 
-Dave Chinner
-david@fromorbit.com
+Thanks
+Jianchao

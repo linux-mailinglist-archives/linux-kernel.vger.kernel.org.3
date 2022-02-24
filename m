@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C43B4C2350
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 06:20:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 54A054C2352
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 06:21:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230118AbiBXFUu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 00:20:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53238 "EHLO
+        id S230146AbiBXFVv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 00:21:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229703AbiBXFUt (ORCPT
+        with ESMTP id S229744AbiBXFVu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 00:20:49 -0500
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B16E17F69F
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 21:20:20 -0800 (PST)
-Received: by mail-yb1-xb49.google.com with SMTP id a19-20020a25ca13000000b0061db44646b3so943722ybg.2
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 21:20:20 -0800 (PST)
+        Thu, 24 Feb 2022 00:21:50 -0500
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3283B189A81
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 21:21:21 -0800 (PST)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-2d11b6259adso11322037b3.19
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 21:21:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:cc;
-        bh=H4Z1lUqUeabFhmJD3t8xVbX28HOrFIYN1Agzn114BGo=;
-        b=LsQ97pcohFsj9RlBvIOR/HjRRTmpxuoxoVutPu6Mz8f8Qc8IiLUdOvgGwYWo6PkPqP
-         edGd3S6spZfR1eG7lKcxxDMoY93t5dZyarnvaxqB/e8uaJHBjjHxpPojSAfvmbE5SA+q
-         yH5/xwTQQ1ApMBlT4llh7MhcqVVpsUfgYdJ1iKJ6oqJz2HRvD5USeQ38eCXddXx5ogBv
-         kE/jZINSl2wgXKpy0cIapbKMmmLn1hDj7jvYWPvUDNUUSNXkYBs9l0teLhdyiRhTAVOk
-         Py2ZxE/qmDVu81csLNOLFCwMGUyw/uXDQMhoEajwvjW82rbKO4U8DeRxLYT0WkngZ4FK
-         0i+A==
+        bh=v7H+YHEXea4IIqGySI7aLREzIvLtpBuCKjmvH1cIeXQ=;
+        b=NulZA7w/XH6Ovox3Z8EPA5m/C/4Cu5qNglcuNmoAQGiwk4ZsQUEDaqrrza3kj0/rO1
+         4AIBYeKLpSv0/Y0kyPuD0iIaYP+rfQjHEEPqR6hATVEXSiEGw1puhIgCf0xl4KrRv9Ze
+         bf3X6bGXRtPd3AVhIvpnfTipQKZ7kaRoy2V22FK420mGJNxu4NBXNZkGrPE31FXO18uL
+         p5giufi9NXloDjTBFhB+FZiUOIrIvZ5VdVoH+krscvWKPlnWpw3VycB1f6vXmcZ/3Bcy
+         kQgU10gE8FIBPttAIaRsih5zbrOFWZVcM3EhGsNnh5UyKz3q6san4735fgWDpsuyGnfD
+         vTQQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:cc;
-        bh=H4Z1lUqUeabFhmJD3t8xVbX28HOrFIYN1Agzn114BGo=;
-        b=Kk836Pr9nDrMk4CN2Z3UgJrVd2wzbzybrrox53ot+RklZHRUsk4YkYOKFj3MO8BqwM
-         7aNR3j0TBZn1OaA2sre/ndUuxU2GIuVW476AvTEibl2yjhjv8YvojVPTBSLLpBjK0DB4
-         d9jIbfx4FMaJPH8UCvjSLFmrxzJyeyGKbiE0ZrbMIF1Jro0423n4yhVnFn7hFnXUu21x
-         INM+RMKGREgDxb/AFI1Mec880fmUQr0vSjMBJ2DHdgqswB9HN7MIWKEmBiW7w1ML84pA
-         UTdjOi0L9zXW1sq1mWLkxS1cS5gGaBXYcSF8dL2u6Bhr2EfzG9VA1YrWj1aUt+nxc3qw
-         s+Yg==
-X-Gm-Message-State: AOAM530L78e8wAKpBP4x7knh3fix42+atMdVb+q3NtFzQhlA84QnuXb1
-        sWHbQ8xO82bIizb+F+jbqnFrPIZ/SMNuKfSlpQ==
-X-Google-Smtp-Source: ABdhPJz5Qiz49suSJpWhdDGBZ/Par4c6tTpWzRj6zIuxEJHxtLIJ4WzGG0ZrNy9JUdjCvZK71gx48FILjtMxJXC9CQ==
+        bh=v7H+YHEXea4IIqGySI7aLREzIvLtpBuCKjmvH1cIeXQ=;
+        b=nj+Dn9KYSq0InJwzQQdljNl9WvqfGgf3mzeiaNXQdQrWUaMvHGts56s+CgK/NQ6cSF
+         1cbOfnLRZdIpBgkr07EYqrqIRScoMMz4Bvbh7Sxy8q2thuI2ET9BGSMAoV+QnjTgwuIj
+         7RUuOAeMtFkFXdmniD+9ALkRY699ha+ZsCn6RxcstSjQDpRYbnUNhPDQzI+QYVzbFky6
+         bK4sgFcGlF0r82on//gxsXX6pVDNAvfL3T9BSKH4Fx46l5DnBcNwpaHe+ycvB5H64V+z
+         LhbMoJry0709Ek19RD4PkgWgZZ6lq3VABw7zVAVLAbfRGlQ4CDWxoBcf8XEE2Qg8vZvs
+         Kc/w==
+X-Gm-Message-State: AOAM533sg4s4npNM2HtH/PaMXPeNmBBaQXpi/m4Hgmja2DoXiSTTJwf/
+        uzkV0mFWshdHBsl/dLoANCkTU67zW5/zY2oQ4Q==
+X-Google-Smtp-Source: ABdhPJyGTlGm+C/X/WYwJEpFuocVcINp/xR0sgVssDAtD0IXfiwn+elCX3UtU0cHn8Y6Lskq6uXxQyXVu8faJREUXQ==
 X-Received: from kaleshsingh.mtv.corp.google.com ([2620:15c:211:200:415c:9be0:c461:440a])
- (user=kaleshsingh job=sendgmr) by 2002:a25:374d:0:b0:611:a6c1:b948 with SMTP
- id e74-20020a25374d000000b00611a6c1b948mr1007735yba.21.1645680019488; Wed, 23
- Feb 2022 21:20:19 -0800 (PST)
-Date:   Wed, 23 Feb 2022 21:13:40 -0800
+ (user=kaleshsingh job=sendgmr) by 2002:a25:9108:0:b0:61e:329:700 with SMTP id
+ v8-20020a259108000000b0061e03290700mr976530ybl.369.1645680080321; Wed, 23 Feb
+ 2022 21:21:20 -0800 (PST)
+Date:   Wed, 23 Feb 2022 21:13:41 -0800
 In-Reply-To: <20220224051439.640768-1-kaleshsingh@google.com>
-Message-Id: <20220224051439.640768-6-kaleshsingh@google.com>
+Message-Id: <20220224051439.640768-7-kaleshsingh@google.com>
 Mime-Version: 1.0
 References: <20220224051439.640768-1-kaleshsingh@google.com>
 X-Mailer: git-send-email 2.35.1.473.g83b2b277ed-goog
-Subject: [PATCH v3 5/8] KVM: arm64: Detect and handle hypervisor stack overflows
+Subject: [PATCH v3 6/8] KVM: arm64: Add hypervisor overflow stack
 From:   Kalesh Singh <kaleshsingh@google.com>
 Cc:     will@kernel.org, maz@kernel.org, qperret@google.com,
         tabba@google.com, surenb@google.com, kernel-team@android.com,
@@ -68,6 +68,8 @@ Cc:     will@kernel.org, maz@kernel.org, qperret@google.com,
         Andrew Walbran <qwandor@google.com>,
         Andrew Scull <ascull@google.com>,
         Zenghui Yu <yuzenghui@huawei.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
         linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
         linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
@@ -82,90 +84,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The hypervisor stacks (for both nVHE Hyp mode and nVHE protected mode)
-are aligned to twice their size (PAGE_SIZE), meaning that any valid stack
-address has PAGE_SHIFT bit as 0. This allows us to conveniently check for
-overflow in the exception entry without corrupting any GPRs. We won't
-recover from a stack overflow so panic the hypervisor.
+Allocate and switch to 16-byte aligned secondary stack on overflow. This
+provides us stack space to better handle overflows; and is used in
+a subsequent patch to dump the hypervisor stacktrace. The overflow stack
+is only allocated if CONFIG_NVHE_EL2_DEBUG is enabled, as hypervisor
+stacktraces is a debug feature dependent on CONFIG_NVHE_EL2_DEBUG.
 
 Signed-off-by: Kalesh Singh <kaleshsingh@google.com>
 ---
-
-Changes in v3:
-  - Remove test_sp_overflow macro, per Mark
-  - Add asmlinkage attribute for hyp_panic, hyp_panic_bad_stack, per Ard
-
- arch/arm64/kvm/hyp/nvhe/host.S   | 24 ++++++++++++++++++++++++
- arch/arm64/kvm/hyp/nvhe/switch.c |  7 ++++++-
- 2 files changed, 30 insertions(+), 1 deletion(-)
+ arch/arm64/kvm/hyp/nvhe/host.S   | 5 +++++
+ arch/arm64/kvm/hyp/nvhe/switch.c | 5 +++++
+ 2 files changed, 10 insertions(+)
 
 diff --git a/arch/arm64/kvm/hyp/nvhe/host.S b/arch/arm64/kvm/hyp/nvhe/host.S
-index 3d613e721a75..749961bfa5ba 100644
+index 749961bfa5ba..367a01e8abed 100644
 --- a/arch/arm64/kvm/hyp/nvhe/host.S
 +++ b/arch/arm64/kvm/hyp/nvhe/host.S
-@@ -153,6 +153,18 @@ SYM_FUNC_END(__host_hvc)
- 
- .macro invalid_host_el2_vect
- 	.align 7
-+
-+	/*
-+	 * Test whether the SP has overflowed, without corrupting a GPR.
-+	 * nVHE hypervisor stacks are aligned so that SP & (1 << PAGE_SHIFT)
-+	 * should always be zero.
-+	 */
-+	add	sp, sp, x0			// sp' = sp + x0
-+	sub	x0, sp, x0			// x0' = sp' - x0 = (sp + x0) - x0 = sp
-+	tbnz	x0, #PAGE_SHIFT, .L__hyp_sp_overflow\@
-+	sub	x0, sp, x0			// x0'' = sp' - x0' = (sp + x0) - sp = x0
-+	sub	sp, sp, x0			// sp'' = sp' - x0 = (sp + x0) - x0 = sp
-+
- 	/* If a guest is loaded, panic out of it. */
- 	stp	x0, x1, [sp, #-16]!
- 	get_loaded_vcpu x0, x1
-@@ -165,6 +177,18 @@ SYM_FUNC_END(__host_hvc)
- 	 * been partially clobbered by __host_enter.
- 	 */
+@@ -179,6 +179,10 @@ SYM_FUNC_END(__host_hvc)
  	b	hyp_panic
-+
-+.L__hyp_sp_overflow\@:
-+	/*
-+	 * Reset SP to the top of the stack, to allow handling the hyp_panic.
-+	 * This corrupts the stack but is ok, since we won't be attempting
-+	 * any unwinding here.
-+	 */
-+	ldr_this_cpu	x0, kvm_init_params + NVHE_INIT_STACK_HYP_VA, x1
-+	mov	sp, x0
-+
-+	bl	hyp_panic_bad_stack
-+	ASM_BUG()
- .endm
  
- .macro invalid_host_el1_vect
+ .L__hyp_sp_overflow\@:
++#ifdef CONFIG_NVHE_EL2_DEBUG
++	/* Switch to the overflow stack */
++	adr_this_cpu sp, hyp_overflow_stack + PAGE_SIZE, x0
++#else
+ 	/*
+ 	 * Reset SP to the top of the stack, to allow handling the hyp_panic.
+ 	 * This corrupts the stack but is ok, since we won't be attempting
+@@ -186,6 +190,7 @@ SYM_FUNC_END(__host_hvc)
+ 	 */
+ 	ldr_this_cpu	x0, kvm_init_params + NVHE_INIT_STACK_HYP_VA, x1
+ 	mov	sp, x0
++#endif
+ 
+ 	bl	hyp_panic_bad_stack
+ 	ASM_BUG()
 diff --git a/arch/arm64/kvm/hyp/nvhe/switch.c b/arch/arm64/kvm/hyp/nvhe/switch.c
-index 6410d21d8695..703a5d3f611b 100644
+index 703a5d3f611b..efc20273a352 100644
 --- a/arch/arm64/kvm/hyp/nvhe/switch.c
 +++ b/arch/arm64/kvm/hyp/nvhe/switch.c
-@@ -347,7 +347,7 @@ int __kvm_vcpu_run(struct kvm_vcpu *vcpu)
- 	return exit_code;
- }
+@@ -34,6 +34,11 @@ DEFINE_PER_CPU(struct kvm_host_data, kvm_host_data);
+ DEFINE_PER_CPU(struct kvm_cpu_context, kvm_hyp_ctxt);
+ DEFINE_PER_CPU(unsigned long, kvm_hyp_vector);
  
--void __noreturn hyp_panic(void)
-+asmlinkage void __noreturn hyp_panic(void)
- {
- 	u64 spsr = read_sysreg_el2(SYS_SPSR);
- 	u64 elr = read_sysreg_el2(SYS_ELR);
-@@ -369,6 +369,11 @@ void __noreturn hyp_panic(void)
- 	unreachable();
- }
- 
-+asmlinkage void __noreturn hyp_panic_bad_stack(void)
-+{
-+	hyp_panic();
-+}
++#ifdef CONFIG_NVHE_EL2_DEBUG
++DEFINE_PER_CPU(unsigned long [PAGE_SIZE/sizeof(long)], hyp_overflow_stack)
++	__aligned(16);
++#endif
 +
- asmlinkage void kvm_unexpected_el2_exception(void)
+ static void __activate_traps(struct kvm_vcpu *vcpu)
  {
- 	return __kvm_unexpected_el2_exception();
+ 	u64 val;
 -- 
 2.35.1.473.g83b2b277ed-goog
 

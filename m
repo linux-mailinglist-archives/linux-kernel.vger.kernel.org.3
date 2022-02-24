@@ -2,54 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF8464C344A
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 19:05:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 152EF4C344C
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 19:06:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232512AbiBXSFa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 13:05:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55716 "EHLO
+        id S232528AbiBXSGO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 13:06:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229662AbiBXSF2 (ORCPT
+        with ESMTP id S229662AbiBXSGM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 13:05:28 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C45FC674C7;
-        Thu, 24 Feb 2022 10:04:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
-        :In-Reply-To:From:References:To:Subject:MIME-Version:Date:Message-ID:Sender:
-        Reply-To:Cc:Content-ID:Content-Description;
-        bh=cJwoEaVvvYLAlik9YwBxkUiII/mzymj+DJDxr+/UFjI=; b=kaoXWa9/LCvq/dsK7GYIHAVRqj
-        t6h6MjOTEfYdrxdtvSuX4dAQS79bV95Y9zFfRDQolYgeq38GznJTO27YdmEQ6CUs0pQx1NGBfvZ01
-        q9G6ESlFU28pbqEmlS/csaNof3P44yXN8KrsmwYSnIIRjpWVlnBws3eO+kYS7QMPjMahm8JLEptdM
-        qF93cfb8cmSq1yrMF/Rd5B2XRIqmumgyIx62nupruebgcYIe9tNnBX0mQ4A8CcXKAU6MPlXLzoeyd
-        7Qudpxmr8qnqLceKGlRi1nvcChnRPWX5SfoavOvL77x0Lv/OC1Zu2s4D2AClLJjxAlM+H5JIL6KBE
-        by19IE4Q==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nNITw-00Cgl5-K1; Thu, 24 Feb 2022 18:04:48 +0000
-Message-ID: <52f0922c-143a-8a40-b1e1-23d562ca6f80@infradead.org>
-Date:   Thu, 24 Feb 2022 10:04:42 -0800
+        Thu, 24 Feb 2022 13:06:12 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66C49270252;
+        Thu, 24 Feb 2022 10:05:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645725942; x=1677261942;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=hxBAdTR0owOoMKt0GpG1ZgSex/03IjMwvi0Jz7GXfd8=;
+  b=EGOnyT8tOl/v9zJVaF1UoHGTHd5I5TdNF0SO4VVeG7Nv6aL52l4z1Mxt
+   rpS5wvqV2FO5z2sRL6Zt8MO1hG3IzbU2upacbE9EyKMWxs5uiYdQ/flN4
+   lKROVaO9iSNt3LLr7nBpOCriTax2dnCogiYgqq91w5XxsEvbADVKlJuk6
+   Lw0yB6VrAWknR95AG6JimIt1p9UlqzvdIhNQDqxUrBF/C3s5DIaGETbXu
+   k9ojEFXcIAEO/+cZla5qMqzAXrpLYSW9z/MbLVJUi27V6vNvh+8DdustJ
+   UpnEQE94C2Q0FykwrDCQTc2d2ZCvZ1clzelV5dPSHp7tmCkZfFIUn/OPV
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10268"; a="252039190"
+X-IronPort-AV: E=Sophos;i="5.90,134,1643702400"; 
+   d="scan'208";a="252039190"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2022 10:05:42 -0800
+X-IronPort-AV: E=Sophos;i="5.90,134,1643702400"; 
+   d="scan'208";a="533236249"
+Received: from ronakmeh-mobl1.amr.corp.intel.com (HELO [10.212.97.131]) ([10.212.97.131])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2022 10:05:40 -0800
+Message-ID: <04e79b9c-ccb1-119a-c2e2-34c8ca336215@linux.intel.com>
+Date:   Thu, 24 Feb 2022 12:05:30 -0600
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: mmotm 2022-02-23-21-20 uploaded
- [drivers/scsi/hisi_sas/hisi_sas_main.ko]
+ Firefox/91.0 Thunderbird/91.5.0
+Subject: Re: [PATCH] ASoC: SOF: Intel: Fix NULL ptr dereference when ENOMEM
 Content-Language: en-US
-To:     Andrew Morton <akpm@linux-foundation.org>, broonie@kernel.org,
-        mhocko@suse.cz, sfr@canb.auug.org.au, linux-next@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, mm-commits@vger.kernel.org,
-        linux-scsi@vger.kernel.org, John Garry <john.garry@huawei.com>
-References: <20220224052137.BFB10C340E9@smtp.kernel.org>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20220224052137.BFB10C340E9@smtp.kernel.org>
+To:     =?UTF-8?Q?P=c3=a9ter_Ujfalusi?= <peter.ujfalusi@linux.intel.com>,
+        Ammar Faizi <ammarfaizi2@gnuweeb.org>,
+        Mark Brown <broonie@kernel.org>
+Cc:     alsa-devel@alsa-project.org,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Rander Wang <rander.wang@intel.com>,
+        linux-kernel@vger.kernel.org, Takashi Iwai <tiwai@suse.com>,
+        Keyon Jie <yang.jie@linux.intel.com>, stable@vger.kernel.org,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        Daniel Baluta <daniel.baluta@nxp.com>,
+        sound-open-firmware@alsa-project.org
+References: <20220224145124.15985-1-ammarfaizi2@gnuweeb.org>
+ <cfe9e583-e20a-f1d6-2a81-2538ca3ca054@linux.intel.com>
+From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+In-Reply-To: <cfe9e583-e20a-f1d6-2a81-2538ca3ca054@linux.intel.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -57,34 +73,15 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
+>> From: Ammar Faizi <ammarfaizi2@gnuweeb.org>
+>>
+>> Do not call snd_dma_free_pages() when snd_dma_alloc_pages() returns
+>> -ENOMEM because it leads to a NULL pointer dereference bug.
+> 
+> Reviewed-by: Peter Ujfalusi <peter.ujfalusi@linux.intel.com>
 
-On 2/23/22 21:21, Andrew Morton wrote:
-> The mm-of-the-moment snapshot 2022-02-23-21-20 has been uploaded to
-> 
->    https://www.ozlabs.org/~akpm/mmotm/
-> 
-> mmotm-readme.txt says
-> 
-> README for mm-of-the-moment:
-> 
-> https://www.ozlabs.org/~akpm/mmotm/
-> 
-> This is a snapshot of my -mm patch queue.  Uploaded at random hopefully
-> more than once a week.
-> 
-> You will need quilt to apply these patches to the latest Linus release (5.x
-> or 5.x-rcY).  The series file is in broken-out.tar.gz and is duplicated in
-> https://ozlabs.org/~akpm/mmotm/series
+Thanks for this patch. looks good and tested by our CI, so
 
-on  i386:
-
-ERROR: modpost: "sas_execute_ata_cmd" [drivers/scsi/hisi_sas/hisi_sas_main.ko] undefined!
-
-CONFIG_SCSI_SAS_ATTRS=y
-CONFIG_SCSI_SAS_LIBSAS=y
-# CONFIG_SCSI_SAS_ATA is not set
-CONFIG_SCSI_SAS_HOST_SMP=y
+Reviewed-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
 
 
--- 
-~Randy

@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 727F64C2F94
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 16:26:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C0224C2F90
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 16:26:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235606AbiBXP0N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 10:26:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45266 "EHLO
+        id S236249AbiBXP0W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 10:26:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236167AbiBXPZu (ORCPT
+        with ESMTP id S236181AbiBXPZw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 10:25:50 -0500
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01D7822B955
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 07:25:20 -0800 (PST)
-Received: by mail-ej1-x634.google.com with SMTP id d10so5078433eje.10
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 07:25:20 -0800 (PST)
+        Thu, 24 Feb 2022 10:25:52 -0500
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E22FA22B95F
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 07:25:21 -0800 (PST)
+Received: by mail-ej1-x62b.google.com with SMTP id qk11so5167288ejb.2
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 07:25:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=F5OyyqcGBOYroe/L/tNkoUrlGSaTDcsxizXKN09y7yE=;
-        b=Kaew0SH/TCeAiPwYdosspcB1TVRMXC5YKrH07NT6MH1F9SHJMvC24ODuaK0LJk/93z
-         D/SLzfgn9VdYpwV34WRYr62vhZCvqz4jdXFSGzvRyj+ZEMvNiRxS8USUXUp3FF9ByLzz
-         qjNQ3f6uPY5rMezNzpKZMfbgrN8bBmwSyLEmyC7O05AiWfznUZl05TThgSt+xEEdQhrv
-         DuJQm35TJH1TJlir31NOJZ1yNI6C3F2O2TR9tCKkp0dcV9FMyr+fnowbWjF/8VftngSF
-         LaaY7VsxpTJsZ7mUevzKqpX2SpVSWH4kJ1lj3RvJpQkVU+EnlF5mIrmFI/povniM0Urj
-         KiZA==
+        bh=xb6ZbsBfJcNQTb4eFVxZ+eD4ollYnCaYaEUkZiE9buU=;
+        b=XE4Mjw0oW6cyh7Jz/klql52/xhVYa6R3/iQA8JMo4UcXgDnA7XP/kt9VYeJjcct+TU
+         fk4oaYlJrq1hov7+CB8pLoqAIyKv0UC2H25etYmgwtsr4WVP14vrICEZ5BgFFfFWU29e
+         DRVioE05DadX6IfGCD+P7K9pHHkMrtzANp6NuKOWeHc+2ENGdJaGcli8AuoXXlB1/bpQ
+         ue8hNGTE7Unql/nSYX95SRS1v2QRT9XD728n90NAVUHegHsCrZyyxhad61I3wI52C+m2
+         rt5/9+PVIa8+J0vi43+bWyU1ZpJ1OzngNS/tZUF7gqylKf4z8jrPmMjCnhY9ny3/zBs/
+         +ddQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
          :in-reply-to:references:mime-version:content-transfer-encoding;
-        bh=F5OyyqcGBOYroe/L/tNkoUrlGSaTDcsxizXKN09y7yE=;
-        b=kJSiSoDkZpk0/eGc6nkQB6hN2SuuVMiskZ3gnf5CJTniDS9BGOFZLVVdKEgh2jRZFH
-         OL1s2Ab5CRwt7oOn9VaDTdxleD2V+fq2pWK+wq62xl7VuzR+yV5uw4MHHfPYOXFh/wmN
-         nvHcf7M+gJLgugboNbhtcJitCboGQFXnZRiBKv+XV/tQLRvc5egMd1Oa38C1PuBRu3iP
-         hNchoeN5NeDhEglDhjOUdFE21G35Gs037IZpkVQyrTB7ub9Gdh7EdZ/CWyKam+RS9cRg
-         ifEUObFypxs9yFZo+2UvcqHlEA2dXq5s+RcBzHgDB/gbncn+oC1sPJWAfVgL9mchJkt/
-         EZBA==
-X-Gm-Message-State: AOAM531atNOZLNl3AMoM/SQnv+NKTuQZioBeD0O/L2sj+4r+b3ZTCWXI
-        Lb027xN68MFEaKodzo5a/pM=
-X-Google-Smtp-Source: ABdhPJxjOawtmnv3q4ky6UnhfDKTXZ8H/SdiRNzzbQmUMaqQUFmexWJyIZun3SuAUQl6+eDK150nTg==
-X-Received: by 2002:a17:906:66cb:b0:6cf:e4f7:9504 with SMTP id k11-20020a17090666cb00b006cfe4f79504mr2735299ejp.142.1645716319481;
-        Thu, 24 Feb 2022 07:25:19 -0800 (PST)
+        bh=xb6ZbsBfJcNQTb4eFVxZ+eD4ollYnCaYaEUkZiE9buU=;
+        b=vqqnlYdjUk9dxCUBPm3/bAqPiFnNYj7O1whlLnBwqdnHDDL+I2APRRzLVulhSeIm00
+         l6+2mLOHCCsSafN4X7/ntbJ8fSVbIqXXXhVLfqzXNLwRw58YnJwaMcKEUmEKOP3OVnX8
+         b+ypcAcQXJ+IlZzcGVds4l/sk+eGxNedWzv2rc4rbk0xixtYdyqTsAgim2TwsNfP9i8V
+         N0V7J57ZZROw9zRt/FpG2o1NRcxMzQ94Zp2CJA78NfrIIVzEEEgmm+mAofIWanNAAPRZ
+         sHdLG3NO007Pc9dAYpCbeHmN+xIqDh56Bfdtte3knY1qTEiUAiurpAeky/DU+zNq3ckV
+         FAVA==
+X-Gm-Message-State: AOAM530P6Xd/gA+y59n4PA70Xa1szBc9UcrzayYPsoTcldWT5x6jQp9V
+        Q4bbYBSMsvtRyJ2OFQuHk8E=
+X-Google-Smtp-Source: ABdhPJyal/+V9nN3rpbn43hnO657ZZ2qZJ/qzGLGOKSpxlqsaAfLg7zoK74dogk+Cxfnd6mQyPpG/Q==
+X-Received: by 2002:a17:907:3c7:b0:6cd:5399:c1ad with SMTP id su7-20020a17090703c700b006cd5399c1admr2687583ejb.547.1645716320508;
+        Thu, 24 Feb 2022 07:25:20 -0800 (PST)
 Received: from stitch.. (80.71.140.73.ipv4.parknet.dk. [80.71.140.73])
-        by smtp.gmail.com with ESMTPSA id s11sm1509693edt.10.2022.02.24.07.25.18
+        by smtp.gmail.com with ESMTPSA id s11sm1509693edt.10.2022.02.24.07.25.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Feb 2022 07:25:19 -0800 (PST)
+        Thu, 24 Feb 2022 07:25:20 -0800 (PST)
 Sender: Emil Renner Berthing <emil.renner.berthing@gmail.com>
 From:   Emil Renner Berthing <kernel@esmil.dk>
 To:     linux-riscv@lists.infradead.org
@@ -63,9 +63,9 @@ Cc:     Emil Renner Berthing <kernel@esmil.dk>,
         Ard Biesheuvel <ardb@kernel.org>,
         Jisheng Zhang <jszhang@kernel.org>,
         Alexandre Ghiti <alex@ghiti.fr>, linux-kernel@vger.kernel.org
-Subject: [PATCH v3 3/8] riscv: Remove unneeded definitions from asm/ftrace.h
-Date:   Thu, 24 Feb 2022 16:24:51 +0100
-Message-Id: <20220224152456.493365-4-kernel@esmil.dk>
+Subject: [PATCH v3 4/8] riscv: Add asm/insn.h header
+Date:   Thu, 24 Feb 2022 16:24:52 +0100
+Message-Id: <20220224152456.493365-5-kernel@esmil.dk>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220224152456.493365-1-kernel@esmil.dk>
 References: <20220224152456.493365-1-kernel@esmil.dk>
@@ -82,108 +82,172 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The macros for generating the auipc + jalr instruction pair is only ever
-used in kernel/ftrace.c, so move the definitions there.
+Add new asm/insn.h header to consolidate RISC-V instruction constants
+and inline helper functions.
 
 Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
 ---
- arch/riscv/include/asm/ftrace.h | 35 +--------------------------------
- arch/riscv/kernel/ftrace.c      | 35 +++++++++++++++++++++++++++++++++
- 2 files changed, 36 insertions(+), 34 deletions(-)
+ arch/riscv/include/asm/insn.h | 151 ++++++++++++++++++++++++++++++++++
+ 1 file changed, 151 insertions(+)
+ create mode 100644 arch/riscv/include/asm/insn.h
 
-diff --git a/arch/riscv/include/asm/ftrace.h b/arch/riscv/include/asm/ftrace.h
-index 04dad3380041..585714993749 100644
---- a/arch/riscv/include/asm/ftrace.h
-+++ b/arch/riscv/include/asm/ftrace.h
-@@ -36,41 +36,8 @@ struct dyn_arch_ftrace {
- #endif
- 
- #ifdef CONFIG_DYNAMIC_FTRACE
--/*
-- * A general call in RISC-V is a pair of insts:
-- * 1) auipc: setting high-20 pc-related bits to ra register
-- * 2) jalr: setting low-12 offset to ra, jump to ra, and set ra to
-- *          return address (original pc + 4)
-- *
-- * Dynamic ftrace generates probes to call sites, so we must deal with
-- * both auipc and jalr at the same time.
-- */
--
--#define MCOUNT_ADDR		((unsigned long)MCOUNT_NAME)
--#define JALR_SIGN_MASK		(0x00000800)
--#define JALR_OFFSET_MASK	(0x00000fff)
--#define AUIPC_OFFSET_MASK	(0xfffff000)
--#define AUIPC_PAD		(0x00001000)
--#define JALR_SHIFT		20
--#define JALR_BASIC		(0x000080e7)
--#define AUIPC_BASIC		(0x00000097)
--#define NOP4			(0x00000013)
--
--#define make_call(caller, callee, call)					\
--do {									\
--	call[0] = to_auipc_insn((unsigned int)((unsigned long)callee -	\
--				(unsigned long)caller));		\
--	call[1] = to_jalr_insn((unsigned int)((unsigned long)callee -	\
--			       (unsigned long)caller));			\
--} while (0)
--
--#define to_jalr_insn(offset)						\
--	(((offset & JALR_OFFSET_MASK) << JALR_SHIFT) | JALR_BASIC)
- 
--#define to_auipc_insn(offset)						\
--	((offset & JALR_SIGN_MASK) ?					\
--	(((offset & AUIPC_OFFSET_MASK) + AUIPC_PAD) | AUIPC_BASIC) :	\
--	((offset & AUIPC_OFFSET_MASK) | AUIPC_BASIC))
-+#define MCOUNT_ADDR	((unsigned long)MCOUNT_NAME)
- 
- /*
-  * Let auipc+jalr be the basic *mcount unit*, so we make it 8 bytes here.
-diff --git a/arch/riscv/kernel/ftrace.c b/arch/riscv/kernel/ftrace.c
-index 4716f4cdc038..2cc15dc45ce0 100644
---- a/arch/riscv/kernel/ftrace.c
-+++ b/arch/riscv/kernel/ftrace.c
-@@ -12,6 +12,41 @@
- #include <asm/patch.h>
- 
- #ifdef CONFIG_DYNAMIC_FTRACE
+diff --git a/arch/riscv/include/asm/insn.h b/arch/riscv/include/asm/insn.h
+new file mode 100644
+index 000000000000..02f387a06ef3
+--- /dev/null
++++ b/arch/riscv/include/asm/insn.h
+@@ -0,0 +1,151 @@
++/* SPDX-License-Identifier: GPL-2.0 */
 +/*
-+ * A general call in RISC-V is a pair of insts:
-+ * 1) auipc: setting high-20 pc-related bits to ra register
-+ * 2) jalr: setting low-12 offset to ra, jump to ra, and set ra to
-+ *          return address (original pc + 4)
-+ *
-+ * Dynamic ftrace generates probes to call sites, so we must deal with
-+ * both auipc and jalr at the same time.
++ * Copyright (C) 2020 Emil Renner Berthing
 + */
++#ifndef __ASM_RISCV_INSN_H
++#define __ASM_RISCV_INSN_H
 +
-+#define JALR_SIGN_MASK		(0x00000800)
-+#define JALR_OFFSET_MASK	(0x00000fff)
-+#define AUIPC_OFFSET_MASK	(0xfffff000)
-+#define AUIPC_PAD		(0x00001000)
-+#define JALR_SHIFT		20
-+#define JALR_BASIC		(0x000080e7)
-+#define AUIPC_BASIC		(0x00000097)
-+#define NOP4			(0x00000013)
++#include <linux/const.h>
 +
-+#define make_call(caller, callee, call)					\
-+do {									\
-+	call[0] = to_auipc_insn((unsigned int)((unsigned long)callee -	\
-+				(unsigned long)caller));		\
-+	call[1] = to_jalr_insn((unsigned int)((unsigned long)callee -	\
-+			       (unsigned long)caller));			\
-+} while (0)
++#define RISCV_INSN_LW		_AC(0x00002003, U)
++#define RISCV_INSN_LD		_AC(0x00003003, U)
++#define RISCV_INSN_ADDI		_AC(0x00000013, U)
++#define RISCV_INSN_NOP		RISCV_INSN_ADDI
++#define RISCV_INSN_SW		_AC(0x00002023, U)
++#define RISCV_INSN_SD		_AC(0x00003023, U)
++#define RISCV_INSN_AUIPC	_AC(0x00000017, U)
++#define RISCV_INSN_LUI		_AC(0x00000037, U)
++#define RISCV_INSN_JALR		_AC(0x00000067, U)
++#define RISCV_INSN_JAL		_AC(0x0000006f, U)
 +
-+#define to_jalr_insn(offset)						\
-+	(((offset & JALR_OFFSET_MASK) << JALR_SHIFT) | JALR_BASIC)
++#if __riscv_xlen == 64
++#define RISCV_INSN_REG_L	RISCV_INSN_LD
++#define RISCV_INSN_REG_S	RISCV_INSN_SD
++#define RISCV_INSN_SZREG	8
++#elif __riscv_xlen == 32
++#define RISCV_INSN_REG_L	RISCV_INSN_LW
++#define RISCV_INSN_REG_S	RISCV_INSN_SW
++#define RISCV_INSN_SZREG	4
++#else
++#error "Unexpected __riscv_xlen"
++#endif
 +
-+#define to_auipc_insn(offset)						\
-+	((offset & JALR_SIGN_MASK) ?					\
-+	(((offset & AUIPC_OFFSET_MASK) + AUIPC_PAD) | AUIPC_BASIC) :	\
-+	((offset & AUIPC_OFFSET_MASK) | AUIPC_BASIC))
++#define RISCV_INSN_RA		_AC(0x1, U)
++#define RISCV_INSN_SP		_AC(0x2, U)
++#define RISCV_INSN_T0		_AC(0x5, U)
++#define RISCV_INSN_T1		_AC(0x6, U)
 +
- int ftrace_arch_code_modify_prepare(void) __acquires(&text_mutex)
- {
- 	mutex_lock(&text_mutex);
++#define RISCV_INSN_RD_POS	7
++#define RISCV_INSN_RD_RA	(RISCV_INSN_RA << RISCV_INSN_RD_POS)
++#define RISCV_INSN_RD_SP	(RISCV_INSN_SP << RISCV_INSN_RD_POS)
++#define RISCV_INSN_RD_T0	(RISCV_INSN_T0 << RISCV_INSN_RD_POS)
++#define RISCV_INSN_RD_T1	(RISCV_INSN_T1 << RISCV_INSN_RD_POS)
++
++#define RISCV_INSN_RS1_POS	15
++#define RISCV_INSN_RS1_RA	(RISCV_INSN_RA << RISCV_INSN_RS1_POS)
++#define RISCV_INSN_RS1_SP	(RISCV_INSN_SP << RISCV_INSN_RS1_POS)
++#define RISCV_INSN_RS1_T0	(RISCV_INSN_T0 << RISCV_INSN_RS1_POS)
++#define RISCV_INSN_RS1_T1	(RISCV_INSN_T1 << RISCV_INSN_RS1_POS)
++
++#define RISCV_INSN_RS2_POS	20
++#define RISCV_INSN_RS2_RA	(RISCV_INSN_RA << RISCV_INSN_RS2_POS)
++#define RISCV_INSN_RS2_SP	(RISCV_INSN_SP << RISCV_INSN_RS2_POS)
++#define RISCV_INSN_RS2_T0	(RISCV_INSN_T0 << RISCV_INSN_RS2_POS)
++#define RISCV_INSN_RS2_T1	(RISCV_INSN_T1 << RISCV_INSN_RS2_POS)
++
++#define RISCV_INSN_I_IMM_MASK	_AC(0xfff00000, U)
++#define RISCV_INSN_S_IMM_MASK	_AC(0xfe000f80, U)
++#define RISCV_INSN_B_IMM_MASK	_AC(0xfe000f80, U)
++#define RISCV_INSN_U_IMM_MASK	_AC(0xfffff000, U)
++#define RISCV_INSN_J_IMM_MASK	_AC(0xfffff000, U)
++
++#define RISCV_INSN_CI_IMM_MASK	_AC(0x107c, U)
++#define RISCV_INSN_CSS_IMM_MASK	_AC(0x1f80, U)
++#define RISCV_INSN_CIW_IMM_MASK	_AC(0x1fe0, U)
++#define RISCV_INSN_CL_IMM_MASK	_AC(0x1c60, U)
++#define RISCV_INSN_CS_IMM_MASK	_AC(0x1c60, U)
++#define RISCV_INSN_CB_IMM_MASK	_AC(0x1c7c, U)
++#define RISCV_INSN_CJ_IMM_MASK	_AC(0x1ffc, U)
++
++#ifndef __ASSEMBLY__
++#include <linux/bits.h>
++#include <asm/types.h>
++
++/*
++ * The J-format jump and link instruction, jal, has a 20bit immediate except
++ * bit 0 is always taken to be 0, so it must be even and is interpreted as a
++ * signed value.
++ */
++static inline bool riscv_insn_valid_20bit_offset(ptrdiff_t val)
++{
++	return !(val & 1) && -(1L << 19) <= val && val < (1L << 19);
++}
++
++/*
++ * The auipc+jalr instruction pair can reach any PC-relative offset
++ * in the range [-2^31 - 2^11, 2^31 - 2^11)
++ */
++static inline bool riscv_insn_valid_32bit_offset(ptrdiff_t val)
++{
++#if __riscv_xlen == 32
++	return true;
++#else
++	return (-(1L << 31) - (1L << 11)) <= val && val < ((1L << 31) - (1L << 11));
++#endif
++}
++
++static inline u32 riscv_insn_i_imm(u32 imm)
++{
++	return (imm & GENMASK(11, 0)) << 20;
++}
++
++static inline u32 riscv_insn_s_imm(u32 imm)
++{
++	return (imm & GENMASK( 4, 0)) << ( 7 - 0) |
++	       (imm & GENMASK(11, 5)) << (25 - 5);
++}
++
++static inline u32 riscv_insn_b_imm(u32 imm)
++{
++	return (imm & GENMASK(11, 11)) >> (11 -  7) |
++	       (imm & GENMASK( 4,  1)) << ( 8 -  1) |
++	       (imm & GENMASK(10,  5)) << (25 -  5) |
++	       (imm & GENMASK(12, 12)) << (31 - 12);
++}
++
++static inline u32 riscv_insn_u_imm(u32 imm)
++{
++	return imm & GENMASK(31, 12);
++}
++
++static inline u32 riscv_insn_j_imm(u32 imm)
++{
++	return (imm & GENMASK(19, 12)) << (12 - 12) |
++	       (imm & GENMASK(11, 11)) << (20 - 11) |
++	       (imm & GENMASK(10,  1)) << (21 -  1) |
++	       (imm & GENMASK(20, 20)) << (31 - 20);
++}
++
++static inline u16 riscv_insn_rvc_branch_imm(u16 imm)
++{
++	return (imm & GENMASK(5, 5)) >> ( 5 - 2) |
++	       (imm & GENMASK(2, 1)) << ( 3 - 1) |
++	       (imm & GENMASK(7, 6)) >> ( 6 - 5) |
++	       (imm & GENMASK(4, 3)) << (10 - 3) |
++	       (imm & GENMASK(8, 8)) << (12 - 8);
++}
++
++static inline u16 riscv_insn_rvc_jump_imm(u16 imm)
++{
++	return (imm & GENMASK( 5,  5)) >> ( 5 -  2) |
++	       (imm & GENMASK( 3,  1)) << ( 3 -  1) |
++	       (imm & GENMASK( 7,  7)) >> ( 7 -  6) |
++	       (imm & GENMASK( 6,  6)) << ( 7 -  6) |
++	       (imm & GENMASK(10, 10)) >> (10 -  8) |
++	       (imm & GENMASK( 9,  8)) << ( 9 -  8) |
++	       (imm & GENMASK( 4,  4)) << (11 -  4) |
++	       (imm & GENMASK(11, 11)) << (12 - 11);
++}
++
++#endif
++#endif
 -- 
 2.35.1
 

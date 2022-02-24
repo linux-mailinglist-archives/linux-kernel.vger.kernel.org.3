@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90A244C30A5
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 16:59:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C8D894C309C
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 16:59:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236732AbiBXP5O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 10:57:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41960 "EHLO
+        id S236755AbiBXP6d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 10:58:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236720AbiBXP4z (ORCPT
+        with ESMTP id S236768AbiBXP5V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 10:56:55 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B251C254544
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 07:56:24 -0800 (PST)
+        Thu, 24 Feb 2022 10:57:21 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95F9431369
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 07:56:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645718184; x=1677254184;
+  t=1645718204; x=1677254204;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=o7VDf0nJv0XlRbUzs4IaCYJuN/W3ueBazitrj9bCGEQ=;
-  b=Liwmh+CzWUlYNhtmog678dN2iuYjPW9ovD6aW1AD/SWF3wB7AWVUlwBq
-   TYR8DmOfCs2oCNRgwXrEEvp1aC3Pyo2Gve9+hFz5IYzXaVs/Kq/B+8yO5
-   E+ysIXAgH1l1Exzd8auMCHUbhjDjXOqyXMOTFGlfNqYMXcYah8FifeX37
-   4RZwxKuGaKdcB73UcgqC5lxZytUItxnwkp09/8uxBZod9pZwOh28bRCH/
-   zSoYRCdv2MSrvBHPp1kH0X30mz/1nh0YUtOvt0/sjW2vp3ncOgkIaPOVC
-   4X8jGYQ0L6wDYIUfUzBNbbbpfOQzaLLNXeLzVr9oqW4+QU/cpb5h5tNTN
+  bh=3ill6r3APRtdoR5+XQpSN1Lih2FBgTexytUcOMygEBQ=;
+  b=ORS3Ei98NEp2N88Dag2ZyHmcqMjUzDJjQJGNmArnh3eVzjS3QQGVvYef
+   iZuIADEK7ue2Y9mM/C61PuxvWS+LuU25sttf1WOGz5XSerxeMJFB9pxrx
+   BjSEoUc7IYCKsncPufDt5u+7CNEnxS1fSI1Z7UeZC9PGHEjrE0GipN7S/
+   0ykhBf16JRGwEtyjSyOrBVodn5I+Pf5oAYHuIsxTUzNr2t287Ttsu7cZU
+   t2tvCUpNzFB34A3iprk+Nit1yuUEhNN0Y/vgd9fTEDeX5GBc8Sg/+CcKe
+   WZXMm+W5O5SLiUT/TZId722h52zffrU/BPXeubz0o+9xJVqloFf+Q9Q3q
    w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10268"; a="252186709"
+X-IronPort-AV: E=McAfee;i="6200,9189,10268"; a="239666506"
 X-IronPort-AV: E=Sophos;i="5.90,134,1643702400"; 
-   d="scan'208";a="252186709"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2022 07:56:24 -0800
+   d="scan'208";a="239666506"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2022 07:56:23 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,134,1643702400"; 
-   d="scan'208";a="574253915"
+   d="scan'208";a="607458032"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga001.jf.intel.com with ESMTP; 24 Feb 2022 07:56:17 -0800
+  by fmsmga004.fm.intel.com with ESMTP; 24 Feb 2022 07:56:17 -0800
 Received: by black.fi.intel.com (Postfix, from userid 1000)
-        id 3A30993; Thu, 24 Feb 2022 17:56:34 +0200 (EET)
+        id 455F3439; Thu, 24 Feb 2022 17:56:34 +0200 (EET)
 From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
 To:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
         dave.hansen@intel.com, luto@kernel.org, peterz@infradead.org
@@ -51,67 +51,200 @@ Cc:     sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
         tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
         thomas.lendacky@amd.com, brijesh.singh@amd.com, x86@kernel.org,
         linux-kernel@vger.kernel.org,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        David Rientjes <rientjes@google.com>
-Subject: [PATCHv4 01/30] x86/mm: Fix warning on build with X86_MEM_ENCRYPT=y
-Date:   Thu, 24 Feb 2022 18:56:01 +0300
-Message-Id: <20220224155630.52734-2-kirill.shutemov@linux.intel.com>
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
+Subject: [PATCHv4 02/30] x86/tdx: Detect running as a TDX guest in early boot
+Date:   Thu, 24 Feb 2022 18:56:02 +0300
+Message-Id: <20220224155630.52734-3-kirill.shutemov@linux.intel.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220224155630.52734-1-kirill.shutemov@linux.intel.com>
 References: <20220224155630.52734-1-kirill.shutemov@linux.intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-So far, AMD_MEM_ENCRYPT is the only user of X86_MEM_ENCRYPT. TDX will be
-the second. It will make mem_encrypt.c build without AMD_MEM_ENCRYPT,
-which triggers a warning:
+From: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
 
-arch/x86/mm/mem_encrypt.c:69:13: warning: no previous prototype for
-	function 'mem_encrypt_init' [-Wmissing-prototypes]
+In preparation of extending cc_platform_has() API to support TDX guest,
+use CPUID instruction to detect support for TDX guests in the early
+boot code (via tdx_early_init()). Since copy_bootdata() is the first
+user of cc_platform_has() API, detect the TDX guest status before it.
 
-Fix it by moving mem_encrypt_init() declaration outside of #ifdef
-CONFIG_AMD_MEM_ENCRYPT.
+Define a synthetic feature flag (X86_FEATURE_TDX_GUEST) and set this
+bit in a valid TDX guest platform.
 
+Signed-off-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
+Reviewed-by: Andi Kleen <ak@linux.intel.com>
+Reviewed-by: Tony Luck <tony.luck@intel.com>
 Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-Fixes: 20f07a044a76 ("x86/sev: Move common memory encryption code to mem_encrypt.c")
-Acked-by: David Rientjes <rientjes@google.com>
 ---
- arch/x86/include/asm/mem_encrypt.h | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ arch/x86/Kconfig                         | 12 ++++++++++++
+ arch/x86/coco/Makefile                   |  2 ++
+ arch/x86/coco/tdx.c                      | 23 +++++++++++++++++++++++
+ arch/x86/include/asm/cpufeatures.h       |  1 +
+ arch/x86/include/asm/disabled-features.h |  8 +++++++-
+ arch/x86/include/asm/tdx.h               | 21 +++++++++++++++++++++
+ arch/x86/kernel/head64.c                 |  4 ++++
+ 7 files changed, 70 insertions(+), 1 deletion(-)
+ create mode 100644 arch/x86/coco/tdx.c
+ create mode 100644 arch/x86/include/asm/tdx.h
 
-diff --git a/arch/x86/include/asm/mem_encrypt.h b/arch/x86/include/asm/mem_encrypt.h
-index e2c6f433ed10..88ceaf3648b3 100644
---- a/arch/x86/include/asm/mem_encrypt.h
-+++ b/arch/x86/include/asm/mem_encrypt.h
-@@ -49,9 +49,6 @@ void __init early_set_mem_enc_dec_hypercall(unsigned long vaddr, int npages,
+diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+index 57a4e0285a80..c346d66b51fc 100644
+--- a/arch/x86/Kconfig
++++ b/arch/x86/Kconfig
+@@ -880,6 +880,18 @@ config ACRN_GUEST
+ 	  IOT with small footprint and real-time features. More details can be
+ 	  found in https://projectacrn.org/.
  
- void __init mem_encrypt_free_decrypted_mem(void);
++config INTEL_TDX_GUEST
++	bool "Intel TDX (Trust Domain Extensions) - Guest Support"
++	depends on X86_64 && CPU_SUP_INTEL
++	depends on X86_X2APIC
++	help
++	  Support running as a guest under Intel TDX.  Without this support,
++	  the guest kernel can not boot or run under TDX.
++	  TDX includes memory encryption and integrity capabilities
++	  which protect the confidentiality and integrity of guest
++	  memory contents and CPU state. TDX guests are protected from
++	  some attacks from the VMM.
++
+ endif #HYPERVISOR_GUEST
  
--/* Architecture __weak replacement functions */
--void __init mem_encrypt_init(void);
--
- void __init sev_es_init_vc_handling(void);
+ source "arch/x86/Kconfig.cpu"
+diff --git a/arch/x86/coco/Makefile b/arch/x86/coco/Makefile
+index c1ead00017a7..32f4c6e6f199 100644
+--- a/arch/x86/coco/Makefile
++++ b/arch/x86/coco/Makefile
+@@ -4,3 +4,5 @@ KASAN_SANITIZE_core.o	:= n
+ CFLAGS_core.o		+= -fno-stack-protector
  
- #define __bss_decrypted __section(".bss..decrypted")
-@@ -89,6 +86,9 @@ static inline void mem_encrypt_free_decrypted_mem(void) { }
+ obj-y += core.o
++
++obj-$(CONFIG_INTEL_TDX_GUEST)	+= tdx.o
+diff --git a/arch/x86/coco/tdx.c b/arch/x86/coco/tdx.c
+new file mode 100644
+index 000000000000..00898e3eb77f
+--- /dev/null
++++ b/arch/x86/coco/tdx.c
+@@ -0,0 +1,23 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (C) 2021-2022 Intel Corporation */
++
++#undef pr_fmt
++#define pr_fmt(fmt)     "tdx: " fmt
++
++#include <linux/cpufeature.h>
++#include <asm/tdx.h>
++
++void __init tdx_early_init(void)
++{
++	u32 eax, sig[3];
++
++	cpuid_count(TDX_CPUID_LEAF_ID, 0, &eax, &sig[0], &sig[2],  &sig[1]);
++
++	BUILD_BUG_ON(sizeof(sig) != sizeof(TDX_IDENT) - 1);
++	if (memcmp(TDX_IDENT, sig, sizeof(sig)))
++		return;
++
++	setup_force_cpu_cap(X86_FEATURE_TDX_GUEST);
++
++	pr_info("Guest detected\n");
++}
+diff --git a/arch/x86/include/asm/cpufeatures.h b/arch/x86/include/asm/cpufeatures.h
+index 5cd22090e53d..cacc8dde854b 100644
+--- a/arch/x86/include/asm/cpufeatures.h
++++ b/arch/x86/include/asm/cpufeatures.h
+@@ -238,6 +238,7 @@
+ #define X86_FEATURE_VMW_VMMCALL		( 8*32+19) /* "" VMware prefers VMMCALL hypercall instruction */
+ #define X86_FEATURE_PVUNLOCK		( 8*32+20) /* "" PV unlock function */
+ #define X86_FEATURE_VCPUPREEMPT		( 8*32+21) /* "" PV vcpu_is_preempted function */
++#define X86_FEATURE_TDX_GUEST		( 8*32+22) /* Intel Trust Domain Extensions Guest */
  
- #endif	/* CONFIG_AMD_MEM_ENCRYPT */
+ /* Intel-defined CPU features, CPUID level 0x00000007:0 (EBX), word 9 */
+ #define X86_FEATURE_FSGSBASE		( 9*32+ 0) /* RDFSBASE, WRFSBASE, RDGSBASE, WRGSBASE instructions*/
+diff --git a/arch/x86/include/asm/disabled-features.h b/arch/x86/include/asm/disabled-features.h
+index 1231d63f836d..b37de8268c9a 100644
+--- a/arch/x86/include/asm/disabled-features.h
++++ b/arch/x86/include/asm/disabled-features.h
+@@ -68,6 +68,12 @@
+ # define DISABLE_SGX	(1 << (X86_FEATURE_SGX & 31))
+ #endif
  
-+/* Architecture __weak replacement functions */
-+void __init mem_encrypt_init(void);
++#ifdef CONFIG_INTEL_TDX_GUEST
++# define DISABLE_TDX_GUEST	0
++#else
++# define DISABLE_TDX_GUEST	(1 << (X86_FEATURE_TDX_GUEST & 31))
++#endif
 +
  /*
-  * The __sme_pa() and __sme_pa_nodebug() macros are meant for use when
-  * writing to or comparing values from the cr3 register.  Having the
+  * Make sure to add features to the correct mask
+  */
+@@ -79,7 +85,7 @@
+ #define DISABLED_MASK5	0
+ #define DISABLED_MASK6	0
+ #define DISABLED_MASK7	(DISABLE_PTI)
+-#define DISABLED_MASK8	0
++#define DISABLED_MASK8	(DISABLE_TDX_GUEST)
+ #define DISABLED_MASK9	(DISABLE_SMAP|DISABLE_SGX)
+ #define DISABLED_MASK10	0
+ #define DISABLED_MASK11	0
+diff --git a/arch/x86/include/asm/tdx.h b/arch/x86/include/asm/tdx.h
+new file mode 100644
+index 000000000000..ba8042ce61c2
+--- /dev/null
++++ b/arch/x86/include/asm/tdx.h
+@@ -0,0 +1,21 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/* Copyright (C) 2021-2022 Intel Corporation */
++#ifndef _ASM_X86_TDX_H
++#define _ASM_X86_TDX_H
++
++#include <linux/init.h>
++
++#define TDX_CPUID_LEAF_ID	0x21
++#define TDX_IDENT		"IntelTDX    "
++
++#ifdef CONFIG_INTEL_TDX_GUEST
++
++void __init tdx_early_init(void);
++
++#else
++
++static inline void tdx_early_init(void) { };
++
++#endif /* CONFIG_INTEL_TDX_GUEST */
++
++#endif /* _ASM_X86_TDX_H */
+diff --git a/arch/x86/kernel/head64.c b/arch/x86/kernel/head64.c
+index 4f5ecbbaae77..6dff50c3edd6 100644
+--- a/arch/x86/kernel/head64.c
++++ b/arch/x86/kernel/head64.c
+@@ -40,6 +40,7 @@
+ #include <asm/extable.h>
+ #include <asm/trapnr.h>
+ #include <asm/sev.h>
++#include <asm/tdx.h>
+ 
+ /*
+  * Manage page tables very early on.
+@@ -514,6 +515,9 @@ asmlinkage __visible void __init x86_64_start_kernel(char * real_mode_data)
+ 
+ 	idt_setup_early_handler();
+ 
++	/* Needed before cc_platform_has() can be used for TDX */
++	tdx_early_init();
++
+ 	copy_bootdata(__va(real_mode_data));
+ 
+ 	/*
 -- 
 2.34.1
 

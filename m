@@ -2,119 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 519CF4C3164
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 17:34:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 400444C316C
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 17:34:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230022AbiBXQc7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 11:32:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59260 "EHLO
+        id S229987AbiBXQdp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 11:33:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230016AbiBXQcv (ORCPT
+        with ESMTP id S230100AbiBXQdh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 11:32:51 -0500
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 211761E6974;
-        Thu, 24 Feb 2022 08:32:11 -0800 (PST)
-Received: by mail-lj1-x22e.google.com with SMTP id r20so3715145ljj.1;
-        Thu, 24 Feb 2022 08:32:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=QxdeQ03DOR4RUC1RUGZAh5JLbtSCzS9nhA1X4N35/bw=;
-        b=KmC0LCs2Vxk9FBRyReMaUV3AKq9Rlbiqsam70nDmlZsqjW1y7j6LXnK9gFFcTDJlFa
-         Ks+Sr2Qffjmvoj18qUVEiFXgRAUE3kcgo1wFqtq4+HHKHzRDwrnm680F3AwJ7gV3JLDq
-         DN+3exlceOtVKKWiOj8ZZ0Vq7EuMw9+xyHqEXtfc/DKOJfn7/EAgqUCgNJLpMwV0IdlE
-         ApRg6eggZSPjPreGaEWY+U0axCKkz54UeUK7/+pTM+D28ifoAmrMau29U+NEy6EunAGy
-         9An76HikDYT9bTtymPfBDV8uQbGmVZ9LSkTqDhjZVMb7j6zia2jUv96pNZEgW+QG5gf5
-         X+og==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=QxdeQ03DOR4RUC1RUGZAh5JLbtSCzS9nhA1X4N35/bw=;
-        b=jCnGIMl9lVn1iTPVuwuuodwlT2nOM5OKAtni4bvEW6m553GeHCgVx1IL3+cF0IO75X
-         4duF0xibGDyBMuYzy04M9LL12V98xiXk07AgA6Zfg8EnmJwYkhHyk6+MFx65tYbn6eQX
-         HnfGdk5uw+KnPwyoErYLJEvX2G3X24t63llQnfbXP8w+/li6Tj1dCGxRtd92BNID/ctC
-         13kD5V0E6u/VbU0atntPXqpa0ee8VmoJru7ZcQ7+niqf7mjQ/x0Uo99soYIszXXbLwEx
-         ALZioYoJvFyNVMSoS/PYmRUdgADyAw3hITGRfjVqXGviKT2bUrimIMep/9KO8gtNExli
-         vv1Q==
-X-Gm-Message-State: AOAM532nLZkvnhn5v9Thsbf7lk7oxpHmxDwjkgeYEXJSDbI8YcCMVDV0
-        0C24QRcVB+RktFjCBNIvbn7swNXT8IY=
-X-Google-Smtp-Source: ABdhPJzGSFV9ICsyeh1MhD6IF+T1wQ5Hlmu7RGqgBZ+IBS0v6RBOWl4mje++5heJI0kcnHQt6WaXng==
-X-Received: by 2002:a2e:b014:0:b0:23c:9593:f7 with SMTP id y20-20020a2eb014000000b0023c959300f7mr2397143ljk.209.1645720328197;
-        Thu, 24 Feb 2022 08:32:08 -0800 (PST)
-Received: from orome ([62.96.65.119])
-        by smtp.gmail.com with ESMTPSA id 7sm243339lft.194.2022.02.24.08.32.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Feb 2022 08:32:06 -0800 (PST)
-Date:   Thu, 24 Feb 2022 17:32:04 +0100
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Akhil R <akhilrajeev@nvidia.com>
-Cc:     devicetree@vger.kernel.org, dmaengine@vger.kernel.org,
-        jonathanh@nvidia.com, kyarlagadda@nvidia.com, ldewangan@nvidia.com,
-        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
-        p.zabel@pengutronix.de, rgumasta@nvidia.com, robh+dt@kernel.org,
-        nathan@kernel.org, vkoul@kernel.org
-Subject: Re: [PATCH v21 1/2] dt-bindings: dmaengine: Add doc for tegra gpcdma
-Message-ID: <YhezBG9tpNDG24R6@orome>
-References: <20220224123903.5020-1-akhilrajeev@nvidia.com>
- <20220224123903.5020-2-akhilrajeev@nvidia.com>
+        Thu, 24 Feb 2022 11:33:37 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7E04440A13
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 08:32:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1645720344;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=vcPtK5juKrQCjxOJebxU3eX3Pl6fam/VQTjX11RWkBk=;
+        b=fmNa2M0ExsQuSH3CvfyLgyMRNYRMdRwh4H2auyJgxF6YjnR1g4s5Rf2QYA3/kFiPtHLwI+
+        my6EKaMshK3RWMiI3uGjcZDCeUGDVAWpdMCP2vVgKZWZPODEbgtRsXhR9ZrEKTagUlE2O/
+        wsIwU3ml2VkQFV1WvphR8BvruCjPnQI=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-114-N6oZOjT2PlSyRcV5D7Aw0Q-1; Thu, 24 Feb 2022 11:32:21 -0500
+X-MC-Unique: N6oZOjT2PlSyRcV5D7Aw0Q-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 4C6A0180CBFB;
+        Thu, 24 Feb 2022 16:32:20 +0000 (UTC)
+Received: from starship (unknown [10.40.195.190])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 52FF17DE2E;
+        Thu, 24 Feb 2022 16:32:07 +0000 (UTC)
+Message-ID: <b7c2e257c8080f9724ee2ca96642d45d968a8b00.camel@redhat.com>
+Subject: Re: [RFC PATCH 02/13] x86/cpufeatures: Introduce x2AVIC CPUID bit
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Cc:     pbonzini@redhat.com, seanjc@google.com, joro@8bytes.org,
+        jon.grimm@amd.com, wei.huang2@amd.com, terry.bowman@amd.com
+Date:   Thu, 24 Feb 2022 18:32:06 +0200
+In-Reply-To: <20220221021922.733373-3-suravee.suthikulpanit@amd.com>
+References: <20220221021922.733373-1-suravee.suthikulpanit@amd.com>
+         <20220221021922.733373-3-suravee.suthikulpanit@amd.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="r/ttdRDeDVZvVJVR"
-Content-Disposition: inline
-In-Reply-To: <20220224123903.5020-2-akhilrajeev@nvidia.com>
-User-Agent: Mutt/2.2.1 (c8109e14) (2022-02-19)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
---r/ttdRDeDVZvVJVR
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Thu, Feb 24, 2022 at 06:09:02PM +0530, Akhil R wrote:
-> Add DT binding document for Nvidia Tegra GPCDMA controller.
->=20
-> Signed-off-by: Rajesh Gumasta <rgumasta@nvidia.com>
-> Signed-off-by: Akhil R <akhilrajeev@nvidia.com>
-> Reviewed-by: Jon Hunter <jonathanh@nvidia.com>
-> Reviewed-by: Rob Herring <robh@kernel.org>
+On Sun, 2022-02-20 at 20:19 -0600, Suravee Suthikulpanit wrote:
+> Introduce a new feature bit for virtualized x2APIC (x2AVIC) in
+> CPUID_Fn8000000A_EDX [SVM Revision and Feature Identification].
+> 
+> Signed-off-by: Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
 > ---
->  .../bindings/dma/nvidia,tegra186-gpc-dma.yaml | 110 ++++++++++++++++++
->  1 file changed, 110 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/dma/nvidia,tegra186=
--gpc-dma.yaml
+>  arch/x86/include/asm/cpufeatures.h | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/arch/x86/include/asm/cpufeatures.h b/arch/x86/include/asm/cpufeatures.h
+> index 6db4e2932b3d..8c91a313668e 100644
+> --- a/arch/x86/include/asm/cpufeatures.h
+> +++ b/arch/x86/include/asm/cpufeatures.h
+> @@ -345,6 +345,7 @@
+>  #define X86_FEATURE_AVIC		(15*32+13) /* Virtual Interrupt Controller */
+>  #define X86_FEATURE_V_VMSAVE_VMLOAD	(15*32+15) /* Virtual VMSAVE VMLOAD */
+>  #define X86_FEATURE_VGIF		(15*32+16) /* Virtual GIF */
+> +#define X86_FEATURE_X2AVIC		(15*32+18) /* Virtual x2apic */
+>  #define X86_FEATURE_V_SPEC_CTRL		(15*32+20) /* Virtual SPEC_CTRL */
+>  #define X86_FEATURE_SVME_ADDR_CHK	(15*32+28) /* "" SVME addr check */
+>  
+Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
 
-Acked-by: Thierry Reding <treding@nvidia.com>
+Best regards,
+	Maxim Levitsky
 
---r/ttdRDeDVZvVJVR
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmIXswQACgkQ3SOs138+
-s6FH/w//X7V7oWBuRIHPW4LFa+M3TSBMgEuz3noJYqm1is6ABFrLv4sdprTm/ykI
-3dmEvSS5y0CoyW7VgnUDnmQ+UYwXzAGisFo/fIR7VjKdIkgIjQrejEF/hWNj4RY4
-Os1OejpnpNQJXq/4LRxqO7DVe7iFPMGhzO8jrHkpMuDACDHUnz5fF95FqLLwrMBo
-aJ0c0kzuCj1j3op+yfQuc900AbX07bPpYYMk2kicD5/2NhoYQUVSCo6Q7KvI6lyj
-p55v0eqtqe14gNeO4QG3lE2jtGmA2KEMs/+Yn+CQ3mnkQiC5RJR+A5IS+GdCINR7
-1wavUab7pQUGCVie80j1AcdOP616q8q7AmO23F+O2lahT80QLzPj1Rdl5rQOQS5z
-uksopvbpGNO4ACxsL8UoUZ9IGb+9NV/kEp1iDIHuLUslURtrAQJvz2cp6vWpM+Tx
-EeuO1Y0JEXdW4N1pBf73FjUut5f4lp9d2s20w9ByfMRnHfaeKyU6kPPWEWup2z9X
-IQNkCtFEKwdsBbFm8w6Ftq4dSTmcA/+hmr/vl7Q5vMuYQUAYiiIpD2uyeuquNiQy
-0nYX8VYWDQy9t53GzB5cj5gSgKqnaqdVEvSCcJ+/mg1tmw8tU+vxRbg8qQTy4xuy
-LpMxvFWSh9Fb4hG+oQ6TL13O9tigX1vIs8pFbNHs7AlLbMxCXdg=
-=7ran
------END PGP SIGNATURE-----
-
---r/ttdRDeDVZvVJVR--

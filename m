@@ -2,144 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF0374C2BD4
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 13:36:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D75E4C2BA5
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 13:27:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234423AbiBXMeR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 07:34:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55018 "EHLO
+        id S234281AbiBXM0p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 07:26:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234416AbiBXMeP (ORCPT
+        with ESMTP id S234280AbiBXM0n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 07:34:15 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E84D02804C0
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 04:33:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1645706020;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
+        Thu, 24 Feb 2022 07:26:43 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 521FA160FC2
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 04:26:13 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 034F71F43D;
+        Thu, 24 Feb 2022 12:26:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1645705572; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=QWdKc7kD/Q/4rS5vi3P5eDrUhZz3GFyt+nP81Uz1mas=;
-        b=P1tQ5Ll7hiii5uu3wKncxuZd29lz+P8M1FcAPqbqtG2Ax6yrQccTuslGZran0Q4YOS8orO
-        5ZCSSUdK5BHICaxtoNDopsglmnLM8NnonuxsTvFVj+WoG9l+ca/P3Nia4ndl/MnqJKn/ur
-        vm3YTgNT7AHwqIcnlQ7UPzcMxdUZRuU=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-139-_LaSqInlMl2xFN2Y1YreTQ-1; Thu, 24 Feb 2022 07:33:34 -0500
-X-MC-Unique: _LaSqInlMl2xFN2Y1YreTQ-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        bh=iRlluuQbnUld5s/Ic1hGKrSMGDqTXKB3g6TTm6f3L7Y=;
+        b=P4+Atof8O39vObfzAjqg/Nzxqg4luBetNwbADlOtA/HKFS7YWpwMdwKB7c9c8j4YPgPG3/
+        CubsBVR+ghLMjuOi29tKDCB7aoMwQwuEqhf/gCy7EcaU1ewg9NVt6db5FxNoAOyemU5lAT
+        UkXbFafx4SCfmV9vpQYBTxzCQJFw7dE=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1645705572;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=iRlluuQbnUld5s/Ic1hGKrSMGDqTXKB3g6TTm6f3L7Y=;
+        b=TY7aQvrFUZfYzQXzzLbh5HZ0OfZnCp3NUxvJW4Sa1kA0MEP5PZFRvBodlXh7vdKD9rkxf8
+        YBzGqKxWSvLfGKAQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 2B00651EA;
-        Thu, 24 Feb 2022 12:33:31 +0000 (UTC)
-Received: from t480s.redhat.com (unknown [10.39.194.160])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 18FB52635E;
-        Thu, 24 Feb 2022 12:32:54 +0000 (UTC)
-From:   David Hildenbrand <david@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        David Rientjes <rientjes@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Yang Shi <shy828301@gmail.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Nadav Amit <namit@vmware.com>, Rik van Riel <riel@surriel.com>,
-        Roman Gushchin <guro@fb.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Peter Xu <peterx@redhat.com>,
-        Donald Dutile <ddutile@redhat.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
-        Liang Zhang <zhangliang5@huawei.com>,
-        Pedro Gomes <pedrodemargomes@gmail.com>,
-        Oded Gabbay <oded.gabbay@gmail.com>, linux-mm@kvack.org,
-        David Hildenbrand <david@redhat.com>
-Subject: [PATCH RFC 10/13] mm/gup: disallow follow_page(FOLL_PIN)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id CA82913AD9;
+        Thu, 24 Feb 2022 12:26:11 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id qdrBMGN5F2J8AQAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Thu, 24 Feb 2022 12:26:11 +0000
+Message-ID: <0e02416f-ef43-dc8a-9e8e-50ff63dd3c61@suse.cz>
 Date:   Thu, 24 Feb 2022 13:26:11 +0100
-Message-Id: <20220224122614.94921-11-david@redhat.com>
-In-Reply-To: <20220224122614.94921-1-david@redhat.com>
-References: <20220224122614.94921-1-david@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Content-Language: en-US
+To:     Marco Elver <elver@google.com>
+Cc:     Hyeonggon Yoo <42.hyeyoo@gmail.com>, linux-mm@kvack.org,
+        Roman Gushchin <guro@fb.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        David Rientjes <rientjes@google.com>,
+        Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>
+References: <20220221105336.522086-1-42.hyeyoo@gmail.com>
+ <20220221105336.522086-2-42.hyeyoo@gmail.com>
+ <4d42fcec-ff59-2e37-4d8f-a58e641d03c8@suse.cz>
+ <CANpmjNMjgSKommNCrfyFuaz+3HQdW92ZSF_p26LQdmS0o3L98Q@mail.gmail.com>
+From:   Vlastimil Babka <vbabka@suse.cz>
+Subject: Re: [PATCH 1/5] mm/sl[au]b: Unify __ksize()
+In-Reply-To: <CANpmjNMjgSKommNCrfyFuaz+3HQdW92ZSF_p26LQdmS0o3L98Q@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We want to change the way we handle R/O pins on anonymous pages that
-might be shared: if we detect a possibly shared anonymous page --
-mapped R/O and not !PageAnonExclusive() -- we want to trigger unsharing
-via a page fault, resulting in an exclusive anonymous page that can be
-pinned reliably without getting replaced via COW on the next write
-fault.
+On 2/23/22 20:06, Marco Elver wrote:
+> On Wed, 23 Feb 2022 at 19:39, Vlastimil Babka <vbabka@suse.cz> wrote:
+>> On 2/21/22 11:53, Hyeonggon Yoo wrote:
+>> > Only SLOB need to implement __ksize() separately because SLOB records
+>> > size in object header for kmalloc objects. Unify SLAB/SLUB's __ksize().
+>> >
+>> > Signed-off-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
+>> > ---
+>> >  mm/slab.c        | 23 -----------------------
+>> >  mm/slab_common.c | 29 +++++++++++++++++++++++++++++
+>> >  mm/slub.c        | 16 ----------------
+>> >  3 files changed, 29 insertions(+), 39 deletions(-)
+>> >
+>> > diff --git a/mm/slab.c b/mm/slab.c
+>> > index ddf5737c63d9..eb73d2499480 100644
+>> > --- a/mm/slab.c
+>> > +++ b/mm/slab.c
+>> > @@ -4199,27 +4199,4 @@ void __check_heap_object(const void *ptr, unsigned long n,
+>> >  }
+>> >  #endif /* CONFIG_HARDENED_USERCOPY */
+>> >
+>> > -/**
+>> > - * __ksize -- Uninstrumented ksize.
+>> > - * @objp: pointer to the object
+>> > - *
+>> > - * Unlike ksize(), __ksize() is uninstrumented, and does not provide the same
+>> > - * safety checks as ksize() with KASAN instrumentation enabled.
+>> > - *
+>> > - * Return: size of the actual memory used by @objp in bytes
+>> > - */
+>> > -size_t __ksize(const void *objp)
+>> > -{
+>> > -     struct kmem_cache *c;
+>> > -     size_t size;
+>> >
+>> > -     BUG_ON(!objp);
+>> > -     if (unlikely(objp == ZERO_SIZE_PTR))
+>> > -             return 0;
+>> > -
+>> > -     c = virt_to_cache(objp);
+>> > -     size = c ? c->object_size : 0;
+>>
+>> This comes from commit a64b53780ec3 ("mm/slab: sanity-check page type when
+>> looking up cache") by Kees and virt_to_cache() is an implicit check for
+>> folio slab flag ...
+>>
+>> > -
+>> > -     return size;
+>> > -}
+>> > -EXPORT_SYMBOL(__ksize);
+>> > diff --git a/mm/slab_common.c b/mm/slab_common.c
+>> > index 23f2ab0713b7..488997db0d97 100644
+>> > --- a/mm/slab_common.c
+>> > +++ b/mm/slab_common.c
+>> > @@ -1245,6 +1245,35 @@ void kfree_sensitive(const void *p)
+>> >  }
+>> >  EXPORT_SYMBOL(kfree_sensitive);
+>> >
+>> > +#ifndef CONFIG_SLOB
+>> > +/**
+>> > + * __ksize -- Uninstrumented ksize.
+>> > + * @objp: pointer to the object
+>> > + *
+>> > + * Unlike ksize(), __ksize() is uninstrumented, and does not provide the same
+>> > + * safety checks as ksize() with KASAN instrumentation enabled.
+>> > + *
+>> > + * Return: size of the actual memory used by @objp in bytes
+>> > + */
+>> > +size_t __ksize(const void *object)
+>> > +{
+>> > +     struct folio *folio;
+>> > +
+>> > +     if (unlikely(object == ZERO_SIZE_PTR))
+>> > +             return 0;
+>> > +
+>> > +     folio = virt_to_folio(object);
+>> > +
+>> > +#ifdef CONFIG_SLUB
+>> > +     if (unlikely(!folio_test_slab(folio)))
+>> > +             return folio_size(folio);
+>> > +#endif
+>> > +
+>> > +     return slab_ksize(folio_slab(folio)->slab_cache);
+>>
+>> ... and here in the common version you now for SLAB trust that the folio
+>> will be a slab folio, thus undoing the intention of that commit. Maybe
+>> that's not good and we should keep the folio_test_slab() for both cases?
+>> Although maybe it's also strange that prior this patch, SLAB would return 0
+>> if the test fails, and SLUB would return folio_size(). Probably because with
+>> SLUB this can be a large kmalloc here and with SLAB not. So we could keep
+>> doing that in the unified version, or KASAN devs (CC'd) could advise
+>> something better?
+> 
+> Is this a definitive failure case?
 
-However, the required page fault will be problematic for follow_page():
-in contrast to ordinary GUP, follow_page() doesn't trigger faults
-internally. So we would have to end up failing a R/O pin via
-follow_page(), although there is something mapped R/O into the page
-table, which might be rather surprising.
+Yeah, if we called it on a supposed object pointer that turns out to be not
+slab, it usually means some UAF, so a failure.
 
-We don't seem to have follow_page(FOLL_PIN) users, and it's a purely
-internal MM function. Let's just make our life easier and the semantics of
-follow_page() clearer by just disallowing FOLL_PIN for follow_page()
-completely.
+> My opinion here is that returning 0
+> from ksize() in case of failure will a) provide a way to check for
+> error, and b) if the size is used unconditionally to compute an
+> address may be the more graceful failure mode (see comment added in
+> 0d4ca4c9bab39 for what happens if we see invalid memory per KASAN
+> being accessed).
 
-Signed-off-by: David Hildenbrand <david@redhat.com>
----
- mm/gup.c     | 3 +++
- mm/hugetlb.c | 8 +++++---
- 2 files changed, 8 insertions(+), 3 deletions(-)
-
-diff --git a/mm/gup.c b/mm/gup.c
-index a9d4d724aef7..7127e789d210 100644
---- a/mm/gup.c
-+++ b/mm/gup.c
-@@ -875,6 +875,9 @@ struct page *follow_page(struct vm_area_struct *vma, unsigned long address,
- 	if (vma_is_secretmem(vma))
- 		return NULL;
- 
-+	if (foll_flags & FOLL_PIN)
-+		return NULL;
-+
- 	page = follow_page_mask(vma, address, foll_flags, &ctx);
- 	if (ctx.pgmap)
- 		put_dev_pagemap(ctx.pgmap);
-diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-index 0c2f3d500487..8aaca8becf97 100644
---- a/mm/hugetlb.c
-+++ b/mm/hugetlb.c
-@@ -6693,9 +6693,11 @@ follow_huge_pmd(struct mm_struct *mm, unsigned long address,
- 	spinlock_t *ptl;
- 	pte_t pte;
- 
--	/* FOLL_GET and FOLL_PIN are mutually exclusive. */
--	if (WARN_ON_ONCE((flags & (FOLL_PIN | FOLL_GET)) ==
--			 (FOLL_PIN | FOLL_GET)))
-+	/*
-+	 * FOLL_PIN is not supported for follow_page(). Ordinary GUP goes via
-+	 * follow_hugetlb_page().
-+	 */
-+	if (WARN_ON_ONCE(flags & FOLL_PIN))
- 		return NULL;
- 
- retry:
--- 
-2.35.1
-
+Sounds good, thanks. Then the patch should be fixed up to keep checking for
+slab flag and returning 0 otherwise for CONFIG_SLAB.
+For SLUB we might fail to detect the failure case by assuming it was a large
+kmalloc. Maybe we could improve and only assume that when folio_size() is
+large enough that the corresponding allocation would actually be done as a
+large kmalloc, and the object pointer is to the beginning of the folio?

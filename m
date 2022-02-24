@@ -2,93 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5276F4C2FF2
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 16:37:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 33B284C2FF8
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 16:37:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236438AbiBXPhY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 10:37:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39056 "EHLO
+        id S236449AbiBXPhr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 10:37:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236287AbiBXPhU (ORCPT
+        with ESMTP id S236237AbiBXPhp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 10:37:20 -0500
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D289D60DB5;
-        Thu, 24 Feb 2022 07:36:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1645717009; x=1677253009;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=6iOO/xvEAZwa7uM8e2lemBPhR3SH5fevH9P0Xv6tYoc=;
-  b=lrmOcWCSpYOIfhDm5ko0cestwdzQpWwWRQmvibM4sDEQF0FHVcj4TgUk
-   hYuRv9QFGEuer6HF+ZEJtbNCPJQ/mv+adpanJSy87n+c6hUDP/8uHZDp9
-   4m2I7pnYsbzAOAYPhXEQu76dFkQPGkA5fWLeZgJBy0O0zqx85qpm3pRSe
-   w=;
-Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
-  by alexa-out.qualcomm.com with ESMTP; 24 Feb 2022 07:36:49 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2022 07:36:49 -0800
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.15; Thu, 24 Feb 2022 07:36:49 -0800
-Received: from [10.216.20.63] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.15; Thu, 24 Feb
- 2022 07:36:43 -0800
-Message-ID: <1d433167-7768-9d10-7e92-74bca4bc8d39@quicinc.com>
-Date:   Thu, 24 Feb 2022 21:06:41 +0530
+        Thu, 24 Feb 2022 10:37:45 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18C4FC3352
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 07:37:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=Li2ym5e5bGLmvOcbwxkBR7B+lbUlnoGsXmnse0xyBVQ=; b=ebNKOZ2K6PtWFV5rWWb5UcEkS6
+        GtsGw6+fM0iFmvW0/wfyKKGWDEScN0HC6Zvkj98bK+aGxe4Sjd+MxHRSsRbYKlybLUi7TVxZO3ovI
+        6KX26HuaWDdCN5jz6+NY2uiHP3P0ZAPU/ymG2z+m1RRY8vIAj8c4+iW7h6U6HNMy8xh8xKJlHo64v
+        zDcNDMcJaSsPOSwB2rPFyWZRwfiL5zVIGD1/bn4u6oDxfpW723NkWA4pZp5Mlp0H39TvbhPmxc1jU
+        F9SB9oM6XRWiPKxlgs4MdlqMB1dNUxYXjMnd6ocXlIKqmX80v8Bb8GF8/EYclYMHiiECceZnctVAq
+        hb76ri7Q==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nNGAs-004tF7-Gj; Thu, 24 Feb 2022 15:36:58 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id B76393000E3;
+        Thu, 24 Feb 2022 16:36:57 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 7A723203905CF; Thu, 24 Feb 2022 16:36:57 +0100 (CET)
+Date:   Thu, 24 Feb 2022 16:36:57 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     x86@kernel.org, joao@overdrivepizza.com, hjl.tools@gmail.com,
+        jpoimboe@redhat.com, andrew.cooper3@citrix.com
+Cc:     linux-kernel@vger.kernel.org, ndesaulniers@google.com,
+        keescook@chromium.org, samitolvanen@google.com,
+        mark.rutland@arm.com, alyssa.milburn@intel.com, mbenes@suse.cz,
+        rostedt@goodmis.org, mhiramat@kernel.org,
+        alexei.starovoitov@gmail.com
+Subject: Re: [PATCH v2 14/39] x86/ibt,ftrace: Make function-graph play nice
+Message-ID: <YhemGUoGmrzxuc+C@hirez.programming.kicks-ass.net>
+References: <20220224145138.952963315@infradead.org>
+ <20220224151322.834445396@infradead.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH v15 6/10] ASoC: qcom: Add regmap config support for codec
- dma driver
-Content-Language: en-US
-To:     Mark Brown <broonie@kernel.org>
-CC:     <agross@kernel.org>, <bjorn.andersson@linaro.org>,
-        <lgirdwood@gmail.com>, <robh+dt@kernel.org>,
-        <quic_plai@quicinc.com>, <bgoswami@codeaurora.org>,
-        <perex@perex.cz>, <tiwai@suse.com>,
-        <srinivas.kandagatla@linaro.org>, <rohitkr@codeaurora.org>,
-        <linux-arm-msm@vger.kernel.org>, <alsa-devel@alsa-project.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <swboyd@chromium.org>, <judyhsiao@chromium.org>,
-        Venkata Prasad Potturu <quic_potturu@quicinc.com>
-References: <1645630745-25051-1-git-send-email-quic_srivasam@quicinc.com>
- <1645630745-25051-7-git-send-email-quic_srivasam@quicinc.com>
- <Yhd26Cbe6ecbiVYH@sirena.org.uk>
-From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-Organization: Qualcomm
-In-Reply-To: <Yhd26Cbe6ecbiVYH@sirena.org.uk>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220224151322.834445396@infradead.org>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Feb 24, 2022 at 03:51:52PM +0100, Peter Zijlstra wrote:
+> @@ -316,10 +317,12 @@ SYM_FUNC_START(return_to_handler)
+>  
+>  	call ftrace_return_to_handler
+>  
+> -	movq %rax, %rdi
+> +	movq %rax, 16(%rsp)
+>  	movq 8(%rsp), %rdx
+>  	movq (%rsp), %rax
+> -	addq $24, %rsp
+> -	JMP_NOSPEC rdi
+> +
+> +	addq $16, %rsp
+> +	UNWIND_HINT_FUNC
+> +	RET
+>  SYM_FUNC_END(return_to_handler)
+>  #endif
 
-On 2/24/2022 5:45 PM, Mark Brown wrote:
-Thanks for Your time Brown!!!
-> On Wed, Feb 23, 2022 at 09:09:01PM +0530, Srinivasa Rao Mandadapu wrote:
->> Update regmap configuration for supporting headset playback and
->> capture and DMIC capture using codec dma interface
-> This breaks an x86 allmodconfig build:
->
-> /mnt/kernel/sound/soc/qcom/lpass-cpu.c:976:29: error: 'lpass_va_regmap_config' defined but not used [-Werror=unused-variable]
->    976 | static struct regmap_config lpass_va_regmap_config = {
->        |                             ^~~~~~~~~~~~~~~~~~~~~~
-> /mnt/kernel/sound/soc/qcom/lpass-cpu.c:966:29: error: 'lpass_rxtx_regmap_config' defined but not used [-Werror=unused-variable]
->    966 | static struct regmap_config lpass_rxtx_regmap_config = {
->        |                             ^~~~~~~~~~~~~~~~~~~~~~~~
-Okay. Sent patch series with fix.
+While talking about this with Mark, an alternative solution is something
+like this, that would keep the RSB balanced and only mess up the current
+return.
+
+No idea it if makes an appreciatable difference on current hardware,
+therefore I went with the simpler option above.
+
+@@ -307,7 +315,7 @@ EXPORT_SYMBOL(__fentry__)
+ 
+ #ifdef CONFIG_FUNCTION_GRAPH_TRACER
+ SYM_FUNC_START(return_to_handler)
+-	subq  $24, %rsp
++	subq  $16, %rsp
+ 
+ 	/* Save the return values */
+ 	movq %rax, (%rsp)
+@@ -319,7 +327,13 @@ SYM_FUNC_START(return_to_handler)
+ 	movq %rax, %rdi
+ 	movq 8(%rsp), %rdx
+ 	movq (%rsp), %rax
+-	addq $24, %rsp
+-	JMP_NOSPEC rdi
++
++	addq $16, %rsp
++	ANNOTATE_INTRA_FUNCTION_CALL
++	call .Ldo_rop
++.Ldo_rop:
++	mov %rdi, (%rsp)
++	UNWIND_HINT_FUNC
++	RET
+ SYM_FUNC_END(return_to_handler)
+ #endif
+
+

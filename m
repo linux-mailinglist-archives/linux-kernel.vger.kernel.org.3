@@ -2,58 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93B8C4C39FC
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 00:57:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A37134C39F9
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 00:57:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235967AbiBXX5a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 18:57:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56236 "EHLO
+        id S235564AbiBXX5W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 18:57:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235591AbiBXX5O (ORCPT
+        with ESMTP id S235531AbiBXX5L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 18:57:14 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28CE25F4E
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 15:56:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645747001; x=1677283001;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=zN8gIqP7DXdhVvzNWMECCUTyj4Z3gZZ0ZKc7mIvoOcg=;
-  b=ZsgiKGKKNxmWok7aMDemHpUIicfZqfBuLko6PBmxE8gy4t4CsKpUSt3y
-   2XsBJBhbkP1GV8TmAZ1Y5nkaCASlULGDJDCikANgN0eiTOChTMO9dOy39
-   I0kyBOYw3NgmpLr+q0nAEvx+Qd97KxW8pJKhV6BYkmqObRSw4mRoNdPGo
-   3W/9gJgMvxmdwDnu4yRYrqF4rC1UlAH+Dxwt0dIgxyH1E2NPPAFpN3OOb
-   Z9Y/1Wwk+k0+Ra2twgVM96WAqVx70BemPKtmEWuMKiQ8YuZduzQIQSaSp
-   0MZf4fL19W0vsSb66G35PmMdJNVVpBtecRepo3MJLgkJb+UTQ53W3SwN6
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10268"; a="338814910"
-X-IronPort-AV: E=Sophos;i="5.90,134,1643702400"; 
-   d="scan'208";a="338814910"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2022 15:56:40 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,134,1643702400"; 
-   d="scan'208";a="707663616"
-Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 24 Feb 2022 15:56:37 -0800
-Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nNNyO-0003aQ-IQ; Thu, 24 Feb 2022 23:56:36 +0000
-Date:   Fri, 25 Feb 2022 07:55:33 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Trond Myklebust <trond.myklebust@hammerspace.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [trondmy-nfs-2.6:testing 43/47] xxhash_generic.c:undefined reference
- to `xxh64'
-Message-ID: <202202250739.uOaDW2T2-lkp@intel.com>
+        Thu, 24 Feb 2022 18:57:11 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18C5A260B;
+        Thu, 24 Feb 2022 15:56:37 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 37FC161C5A;
+        Thu, 24 Feb 2022 23:56:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 847F4C340E9;
+        Thu, 24 Feb 2022 23:56:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645746996;
+        bh=Ih5JYTd0Da7Xsf2nsb9SNMND0av004oSEgWifyEjasI=;
+        h=From:To:Cc:Subject:Date:From;
+        b=PWh1cYEdCo157rEx2C5QP/ipoMslEVI7A3SLC5i1iaOLTTyxX8zcbnr0+HZxjS1Fu
+         1t9QEK1/3uIShNzfHYSl3jMMBvwbhm0S6cGSYRj/cOCYUt1Ob7FC44AVU9wkBJiXf+
+         ZFFxa1JArf2fOX4GuzDWKmyC95qqj/IKX/Un+hWBNj5HUtjE+rD77jYeLbJwglJQEQ
+         b4bq0Ysr1iKbUNSZ6dkIVxgE9qoAy1n9Tt1rNGJUg3z5gf4kLGqAjqV4o1BLMbfkrz
+         Un+Zi3uVFAXyexv2OYsGCjJ0VBuxrIfbGGpFBj8sAP5ct7H46liywAKXaK5VDdHRiT
+         R/IJfg58ujIbw==
+From:   Jaegeuk Kim <jaegeuk@kernel.org>
+To:     linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Asutosh Das <asutoshd@codeaurora.org>,
+        Avri Altman <avri.altman@wdc.com>,
+        Bean Huo <beanhuo@micron.com>,
+        Stanley Chu <stanley.chu@mediatek.com>,
+        Can Guo <cang@codeaurora.org>
+Cc:     Jaegeuk Kim <jaegeuk@kernel.org>, stable@vger.kernel.org
+Subject: [PATCH] scsi: ufs: move shutting_down back to ufshcd_shutdown
+Date:   Thu, 24 Feb 2022 15:56:29 -0800
+Message-Id: <20220224235629.3804227-1-jaegeuk@kernel.org>
+X-Mailer: git-send-email 2.35.1.574.g5d30c73bfb-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,51 +59,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://git.linux-nfs.org/projects/trondmy/nfs-2.6.git testing
-head:   18819db1468b966c49a5b95dade10d5e25216b83
-commit: aa6b34ca6840595e2d817de4c75534966cb49ba3 [43/47] NFS: Convert readdir page cache to use a cookie based index
-config: nios2-defconfig (https://download.01.org/0day-ci/archive/20220225/202202250739.uOaDW2T2-lkp@intel.com/config)
-compiler: nios2-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        git remote add trondmy-nfs-2.6 git://git.linux-nfs.org/projects/trondmy/nfs-2.6.git
-        git fetch --no-tags trondmy-nfs-2.6 testing
-        git checkout aa6b34ca6840595e2d817de4c75534966cb49ba3
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=nios2 SHELL=/bin/bash
+The commit b294ff3e3449 ("scsi: ufs: core: Enable power management for wlun")
+moved hba->shutting_down from ufshcd_shutdown to ufshcd_wl_shutdown, which
+introduced regression as belows.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+ufshcd_err_handler started; HBA state eh_non_fatal; powered 1; shutting down 1; saved_err = 4; saved_uic_err = 64; force_reset = 0
+...
+task:init            state:D stack:    0 pid:    1 ppid:     0 flags:0x04000008
+Call trace:
+ __switch_to+0x25c/0x5e0
+ __schedule+0x68c/0xaa8
+ schedule+0x12c/0x24c
+ schedule_timeout+0x98/0x138
+ wait_for_common_io+0x13c/0x30c
+ blk_execute_rq+0xb0/0x10c
+ __scsi_execute+0x100/0x27c
+ ufshcd_set_dev_pwr_mode+0x1c8/0x408
+ __ufshcd_wl_suspend+0x564/0x688
+ ufshcd_wl_shutdown+0xa8/0xc0
+ device_shutdown+0x234/0x578
+ kernel_restart+0x4c/0x140
+ __arm64_sys_reboot+0x3a0/0x414
+ el0_svc_common+0xd0/0x1e4
+ el0_svc+0x28/0x88
+ el0_sync_handler+0x8c/0xf0
+ el0_sync+0x1c0/0x200
 
-All errors (new ones prefixed by >>):
+The init for reboot was stuck, since ufshcd_err_hanlder was skipped when
+shutting down WLUN. This patch allows to run the error handler and let
+disable it during final ufshcd_shutdown only.
 
-   nios2-linux-ld: fs/nfs/dir.o: in function `nfs_readdir_page_get_locked':
-   dir.c:(.text+0x2998): undefined reference to `xxh32'
-   dir.c:(.text+0x2998): relocation truncated to fit: R_NIOS2_CALL26 against `xxh32'
-   nios2-linux-ld: crypto/xxhash_generic.o: in function `xxhash64_digest':
->> xxhash_generic.c:(.text+0x98): undefined reference to `xxh64'
-   xxhash_generic.c:(.text+0x98): relocation truncated to fit: R_NIOS2_CALL26 against `xxh64'
-   nios2-linux-ld: crypto/xxhash_generic.o: in function `xxhash64_final':
->> xxhash_generic.c:(.text+0xfc): undefined reference to `xxh64_digest'
-   xxhash_generic.c:(.text+0xfc): relocation truncated to fit: R_NIOS2_CALL26 against `xxh64_digest'
-   nios2-linux-ld: crypto/xxhash_generic.o: in function `xxhash64_update':
->> xxhash_generic.c:(.text+0x158): undefined reference to `xxh64_update'
-   xxhash_generic.c:(.text+0x158): relocation truncated to fit: R_NIOS2_CALL26 against `xxh64_update'
-   nios2-linux-ld: crypto/xxhash_generic.o: in function `xxhash64_init':
->> xxhash_generic.c:(.text+0x184): undefined reference to `xxh64_reset'
-   xxhash_generic.c:(.text+0x184): relocation truncated to fit: R_NIOS2_CALL26 against `xxh64_reset'
-   nios2-linux-ld: crypto/xxhash_generic.o: in function `xxhash_mod_init':
->> xxhash_generic.c:(.init.text+0x10): undefined reference to `crypto_register_shash'
-   xxhash_generic.c:(.init.text+0x10): relocation truncated to fit: R_NIOS2_CALL26 against `crypto_register_shash'
-
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for CRYPTO_XXHASH
-   Depends on CRYPTO
-   Selected by
-   - NFS_FS && NETWORK_FILESYSTEMS && INET && FILE_LOCKING && MULTIUSER
-
+Cc: stable@vger.kernel.org
+Fixes: b294ff3e3449 ("scsi: ufs: core: Enable power management for wlun")
+Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ drivers/scsi/ufs/ufshcd.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
+index 460d2b440d2e..a37813b474d0 100644
+--- a/drivers/scsi/ufs/ufshcd.c
++++ b/drivers/scsi/ufs/ufshcd.c
+@@ -9178,10 +9178,6 @@ static void ufshcd_wl_shutdown(struct device *dev)
+ 
+ 	hba = shost_priv(sdev->host);
+ 
+-	down(&hba->host_sem);
+-	hba->shutting_down = true;
+-	up(&hba->host_sem);
+-
+ 	/* Turn on everything while shutting down */
+ 	ufshcd_rpm_get_sync(hba);
+ 	scsi_device_quiesce(sdev);
+@@ -9387,6 +9383,10 @@ EXPORT_SYMBOL(ufshcd_runtime_resume);
+  */
+ int ufshcd_shutdown(struct ufs_hba *hba)
+ {
++	down(&hba->host_sem);
++	hba->shutting_down = true;
++	up(&hba->host_sem);
++
+ 	if (ufshcd_is_ufs_dev_poweroff(hba) && ufshcd_is_link_off(hba))
+ 		goto out;
+ 
+-- 
+2.35.1.574.g5d30c73bfb-goog
+

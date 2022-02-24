@@ -2,208 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3459A4C3701
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 21:47:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA1014C3704
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 21:49:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234411AbiBXUrw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 15:47:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45934 "EHLO
+        id S234366AbiBXUts (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 15:49:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234399AbiBXUrt (ORCPT
+        with ESMTP id S229746AbiBXUtq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 15:47:49 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9F7F5F4F5;
-        Thu, 24 Feb 2022 12:47:18 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4B0BF618B6;
-        Thu, 24 Feb 2022 20:47:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65D9CC340E9;
-        Thu, 24 Feb 2022 20:47:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645735637;
-        bh=FYQ8VrczMzKCYBS2fqPJjnn5DOPdGVQZpAF+gTsqXtQ=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=pxl+AbTmWvoCndwH8I+otmkcCq3c+l5agXw1C6v/+if43v26CMehYuY02ZfCAd45F
-         4nKW3cPqh8CCHk7YkpP41RaexzvBOQkwKw1N7zt7spvpy3h5+N3U3EkGcpMhB7mTsE
-         cJ62Qg5SFY7OuW8fljKGM5ceuxMOrI2p9Qg2ZtmLYg68jGuguYK4pvBGky2cMmN6Wk
-         j5pZrNROOssdt/01NK21l3enpoMlfLf67eTlyC9KmPtpYAV5tWp3/fCnzytj4TZjsD
-         Sk36mTHaau1hWFiTYbr1X4ncDCmusAhlRERC9V5As7RSP9JPWurhMnNQLubgPfklVY
-         wYN/i3Z3r0ELg==
-Date:   Thu, 24 Feb 2022 14:47:15 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>
-Cc:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Rob Herring <robh+dt@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>,
-        Russell King <rmk+kernel@armlinux.org.uk>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 4/6] PCI: Add function for parsing
- 'slot-power-limit-milliwatt' DT property
-Message-ID: <20220224204715.GA291889@bhelgaas>
+        Thu, 24 Feb 2022 15:49:46 -0500
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7350C1B4017
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 12:49:16 -0800 (PST)
+Received: by mail-pj1-x102a.google.com with SMTP id p3-20020a17090a680300b001bbfb9d760eso6688839pjj.2
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 12:49:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=kt0DflJYNGoK/9k7KHNe9BslzuEs8T188OhlBRiK1gE=;
+        b=cmEe97r96xtkl/ei/J5ZMsEk3uTurAHKHy6ai6xzTlvTUEDJuVM/q7kBHCTxr/bMiM
+         kLQCjgrf18Yr1uOSbAwDcB9FEXHd8CqAN04oFPNTLfI3nwGP8vwFvtgyX+0faYamyOc7
+         8v38sJO3C6W1+l0l1xUaAeJWxzQtBFZ/NIPM7rhIIClPVSgKhb5pnl7N8NkjmBBmJ30U
+         R22CiSw085apSh5bPwPGw45h1luALlBk69vBYB2NpDJRWoMN4s7QuoUF7L241Cqvp3f8
+         iRYMbDPEbyYtRmYLEBxMG76YsLzws9O5HEZEEFSMqoCWUMLlUreSPSxUmbSVfcKUwzFG
+         /yzw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=kt0DflJYNGoK/9k7KHNe9BslzuEs8T188OhlBRiK1gE=;
+        b=MFw3WSRuuCspPp/JpAi5nojAOiOGubjybgbOLR/DBN7usWSAdF4tmo0OSxjwsji/Dj
+         hQ2+/VcQV6wLMfso+NioBouO1g+nwBumZ//whAHUJAD9ZEYrdbY3/uWkVIcACDS4cQK0
+         /sfortSMWrdANTWcuygtnHPfmbA2eyxF8sZ3dF5y4lsBBaLaslyNtMsI0E8qS8QTNDDo
+         qLKey9vRiI57GcnGn4BD+2NZndjVFTCSLae0Saj9aSZ37HZgu/5dgOFoDJPnrn9LH2T2
+         jb8WbgBn3a5E/XZx7h2PitJecc2lAdPHU61IFKBf/eVISIqTJiHpp0aN7ehuriK3enX3
+         2JiQ==
+X-Gm-Message-State: AOAM532WYD8lg65wYHesvjwluO4KrKN1DMpOCtIe6TFcUTD+EOHbFZ9X
+        7IQ6uUHkfC9AixoEqHZWfUhz+w==
+X-Google-Smtp-Source: ABdhPJykhkWzHmF5xPxrF3cs7RdPTBS0whzZQqBMgqNI2GDMMdwLpts974Jq8PWZMhItbYsml12Dcw==
+X-Received: by 2002:a17:902:e2d1:b0:14f:a24a:e48e with SMTP id l17-20020a170902e2d100b0014fa24ae48emr4450113plc.48.1645735755715;
+        Thu, 24 Feb 2022 12:49:15 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id o14-20020a056a001bce00b004def1931fbcsm349292pfw.63.2022.02.24.12.49.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Feb 2022 12:49:15 -0800 (PST)
+Date:   Thu, 24 Feb 2022 20:49:09 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Like Xu <like.xu.linux@gmail.com>
+Subject: Re: [PATCH] KVM: x86: Reacquire kvm->srcu in vcpu_run() if exiting
+ on pending signal
+Message-ID: <YhfvRRa56qQR9w5K@google.com>
+References: <20220224190609.3464071-1-seanjc@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220222163158.1666-5-pali@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220224190609.3464071-1-seanjc@google.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 22, 2022 at 05:31:56PM +0100, Pali Rohár wrote:
-> Add function of_pci_get_slot_power_limit(), which parses the
-> 'slot-power-limit-milliwatt' DT property, returning the value in
-> milliwatts and in format ready for the PCIe Slot Capabilities Register.
+On Thu, Feb 24, 2022, Sean Christopherson wrote:
+> Reacquire kvm->srcu in vcpu_run() before returning to the caller if srcu
+> was dropped to handle pending work.  If the task receives a signal, KVM
+> will exit without reacquiring kvm->srcu, resulting in an unbalanced
+> unlock kvm_arch_vcpu_ioctl_run(), and eventually hung tasks.
 > 
-> Signed-off-by: Pali Rohár <pali@kernel.org>
-> Signed-off-by: Marek Behún <kabel@kernel.org>
-> Reviewed-by: Rob Herring <robh@kernel.org>
-> Acked-by: Bjorn Helgaas <bhelgaas@google.com>
-> ---
->  drivers/pci/of.c  | 64 +++++++++++++++++++++++++++++++++++++++++++++++
->  drivers/pci/pci.h | 15 +++++++++++
->  2 files changed, 79 insertions(+)
+>  =====================================
+>  WARNING: bad unlock balance detected!
+>  5.17.0-rc3+ #749 Not tainted
+>  -------------------------------------
+>  CPU 0/KVM/1803 is trying to release lock (&kvm->srcu) at:
+>  [<ffffffff81042a19>] kvm_arch_vcpu_ioctl_run+0x669/0x1f60
+>  but there are no more locks to release!
 > 
-> diff --git a/drivers/pci/of.c b/drivers/pci/of.c
-> index cb2e8351c2cc..2b0c0a3641a8 100644
-> --- a/drivers/pci/of.c
-> +++ b/drivers/pci/of.c
-> @@ -633,3 +633,67 @@ int of_pci_get_max_link_speed(struct device_node *node)
->  	return max_link_speed;
->  }
->  EXPORT_SYMBOL_GPL(of_pci_get_max_link_speed);
-> +
-> +/**
-> + * of_pci_get_slot_power_limit - Parses the "slot-power-limit-milliwatt"
-> + *				 property.
-> + *
-> + * @node: device tree node with the slot power limit information
-> + * @slot_power_limit_value: pointer where the value should be stored in PCIe
-> + *			    Slot Capabilities Register format
-> + * @slot_power_limit_scale: pointer where the scale should be stored in PCIe
-> + *			    Slot Capabilities Register format
-> + *
-> + * Returns the slot power limit in milliwatts and if @slot_power_limit_value
-> + * and @slot_power_limit_scale pointers are non-NULL, fills in the value and
-> + * scale in format used by PCIe Slot Capabilities Register.
-> + *
-> + * If the property is not found or is invalid, returns 0.
-> + */
-> +u32 of_pci_get_slot_power_limit(struct device_node *node,
-> +				u8 *slot_power_limit_value,
-> +				u8 *slot_power_limit_scale)
-> +{
-> +	u32 slot_power_limit;
-
-Including "mw" or similar reference to the units would give a hint of
-how to relate the code to the spec.
-
-> +	u8 value, scale;
-> +
-> +	if (of_property_read_u32(node, "slot-power-limit-milliwatt",
-> +				 &slot_power_limit))
-> +		slot_power_limit = 0;
-> +
-> +	/* Calculate Slot Power Limit Value and Slot Power Limit Scale */
-
-Add a spec reference to PCIe r6.0, sec 7.5.3.9.  IIUC, this supports
-up to 300W, which was what r5.0 defined, but r6.0 added values up to
-0xfe (600W).
-
-> +	if (slot_power_limit == 0) {
-> +		value = 0x00;
-> +		scale = 0;
-> +	} else if (slot_power_limit <= 255) {
-> +		value = slot_power_limit;
-> +		scale = 3;
-> +	} else if (slot_power_limit <= 255*10) {
-> +		value = slot_power_limit / 10;
-> +		scale = 2;
-> +	} else if (slot_power_limit <= 255*100) {
-> +		value = slot_power_limit / 100;
-> +		scale = 1;
-> +	} else if (slot_power_limit <= 239*1000) {
-> +		value = slot_power_limit / 1000;
-> +		scale = 0;
-> +	} else if (slot_power_limit <= 250*1000) {
-> +		value = 0xF0;
-> +		scale = 0;
-> +	} else if (slot_power_limit <= 275*1000) {
-> +		value = 0xF1;
-> +		scale = 0;
-> +	} else {
-> +		value = 0xF2;
-> +		scale = 0;
-> +	}
-> +
-> +	if (slot_power_limit_value)
-> +		*slot_power_limit_value = value;
-> +
-> +	if (slot_power_limit_scale)
-> +		*slot_power_limit_scale = scale;
-> +
-> +	return slot_power_limit;
-
-If "slot-power-limit-milliwatt" contains a value larger than can be
-represented in "value" and "scale", the return value will not agree
-with value/scale, will it?
-
-Currently you only use the return value for a log message, so no real
-harm yet, other than the fact that we might print "Slot power limit
-1000.0W" when the hardware will only advertise 600W available.
-
-Also, if "slot-power-limit-milliwatt" contains something like
-260000 mW (260 W), we'll return 0xF1/0, so the hardware will
-advertise 275 W available.
-
-> +}
-> +EXPORT_SYMBOL_GPL(of_pci_get_slot_power_limit);
-> diff --git a/drivers/pci/pci.h b/drivers/pci/pci.h
-> index 3d60cabde1a1..e10cdec6c56e 100644
-> --- a/drivers/pci/pci.h
-> +++ b/drivers/pci/pci.h
-> @@ -627,6 +627,9 @@ struct device_node;
->  int of_pci_parse_bus_range(struct device_node *node, struct resource *res);
->  int of_get_pci_domain_nr(struct device_node *node);
->  int of_pci_get_max_link_speed(struct device_node *node);
-> +u32 of_pci_get_slot_power_limit(struct device_node *node,
-> +				u8 *slot_power_limit_value,
-> +				u8 *slot_power_limit_scale);
->  void pci_set_of_node(struct pci_dev *dev);
->  void pci_release_of_node(struct pci_dev *dev);
->  void pci_set_bus_of_node(struct pci_bus *bus);
-> @@ -653,6 +656,18 @@ of_pci_get_max_link_speed(struct device_node *node)
->  	return -EINVAL;
->  }
->  
-> +static inline u32
-> +of_pci_get_slot_power_limit(struct device_node *node,
-> +			    u8 *slot_power_limit_value,
-> +			    u8 *slot_power_limit_scale)
-> +{
-> +	if (slot_power_limit_value)
-> +		*slot_power_limit_value = 0;
-> +	if (slot_power_limit_scale)
-> +		*slot_power_limit_scale = 0;
-> +	return 0;
-> +}
-> +
->  static inline void pci_set_of_node(struct pci_dev *dev) { }
->  static inline void pci_release_of_node(struct pci_dev *dev) { }
->  static inline void pci_set_bus_of_node(struct pci_bus *bus) { }
-> -- 
-> 2.20.1
+>  other info that might help us debug this:
+>  1 lock held by CPU 0/KVM/1803:
+>   #0: ffff88810489c0b0 (&vcpu->mutex){....}-{3:3}, at: kvm_vcpu_ioctl+0x77/0x690
 > 
+>  stack backtrace:
+>  CPU: 7 PID: 1803 Comm: CPU 0/KVM Not tainted 5.17.0-rc3+ #749
+>  Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 0.0.0 02/06/2015
+>  Call Trace:
+>   <TASK>
+>   dump_stack_lvl+0x34/0x44
+>   lock_release+0x1b4/0x240
+>   kvm_arch_vcpu_ioctl_run+0x680/0x1f60
+>   kvm_vcpu_ioctl+0x279/0x690
+>   __x64_sys_ioctl+0x83/0xb0
+>   do_syscall_64+0x3b/0xc0
+>   entry_SYSCALL_64_after_hwframe+0x44/0xae
+>   </TASK>
+>  INFO: task stable:2347 blocked for more than 120 seconds.
+>        Not tainted 5.17.0-rc3+ #749
+>  "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+>  task:stable          state:D stack:    0 pid: 2347 ppid:  2340 flags:0x00000000
+>  Call Trace:
+>   <TASK>
+>   __schedule+0x328/0xa00
+>   schedule+0x44/0xb0
+>   schedule_timeout+0x26f/0x300
+>   wait_for_completion+0x84/0xe0
+>   __synchronize_srcu.part.0+0x7a/0xa0
+>   kvm_swap_active_memslots+0x141/0x180
+>   kvm_set_memslot+0x2f9/0x470
+>   kvm_set_memory_region+0x29/0x40
+>   kvm_vm_ioctl+0x2c3/0xd70
+>   __x64_sys_ioctl+0x83/0xb0
+>   do_syscall_64+0x3b/0xc0
+>   entry_SYSCALL_64_after_hwframe+0x44/0xae
+>   </TASK>
+>  INFO: lockdep is turned off.
+
+Ugh, the task hung is actually a different mess introduced by the same patch.
+I suspect I'm hitting the one Like reported.
+
+I'll get a fix posted shortly...

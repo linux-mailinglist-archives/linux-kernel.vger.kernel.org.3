@@ -2,105 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 043E84C21F1
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 03:56:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 045A64C21FF
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 04:09:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230196AbiBXCza (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 21:55:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58806 "EHLO
+        id S230233AbiBXDAl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 22:00:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230203AbiBXCz2 (ORCPT
+        with ESMTP id S230189AbiBXDAk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 21:55:28 -0500
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1C7E23A1B6;
-        Wed, 23 Feb 2022 18:54:59 -0800 (PST)
-Received: by mail-pf1-x430.google.com with SMTP id i6so647131pfc.9;
-        Wed, 23 Feb 2022 18:54:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:subject:to:cc:references:in-reply-to:mime-version
-         :message-id:content-transfer-encoding;
-        bh=FxQHatlTrRq7n3gKv7MI+frHpxxNsIq5DRZG8efWFS4=;
-        b=b518rUrDU5aRRQEoulnpVrkWEE0YPug819IuLWcpCyw32P6K+H9akNr8b0UtmTFe/U
-         KWQYZ7ciC7LMs1CnnACaZjAewODXu/w7X5GEv4ryE0UcfgzVl7er9Aygco8Vg1eahP+t
-         dx1+mgnszHtWeJ2ychRMEh5WrE4KI6f+UvskHoGNnCRD9EDYXfOU06jGhf8+67aZbrJ2
-         QypI3Zdy2GqCWAptTEM2iFnb8mAa5VYIMZEkK7DgoWbDIcJJPqCunk8x5VVSGb2Tp5m2
-         Rt2D4tJL903ktJ68WxQo8qUL1SajUJi9yOAN738rWLH3Q03YPeRNQ33HsIVB2MONKUQ0
-         VS5g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:subject:to:cc:references:in-reply-to
-         :mime-version:message-id:content-transfer-encoding;
-        bh=FxQHatlTrRq7n3gKv7MI+frHpxxNsIq5DRZG8efWFS4=;
-        b=Z/C6+kkZdDbKKylWmAz9pBLDMQkS97cP3XN5Yo8YC5HN/a8QutNx3x9nxqu+3iUdv3
-         SqygTc+tWc8kxE0u2u4ElrR7bZ4Ns93KQYVWFyvTJRvXDk12VG9873DpQgBqJo+vI1HN
-         0Y0mnJnGoUMoQ3vo70p7oLGP9kBRcwBUcW2ZnUAJo8AyHlQTM3CDVjkAHIb78GFvA4vC
-         rpQJ9BFVw7KOxqIh3ykj/kIkylP2kdynnL15Nb14ZeO7BJa/IhhVETQyVhxyhguh8OTA
-         1aKOIEFz7ZQXkKn3UXLiMmNKbWrqKTjWfA69LlajGl2i7DkPTXBe+IgCbgmRXj4mcft/
-         Aegw==
-X-Gm-Message-State: AOAM533hRJhA05IUCuzImwOIJW3sxh26PyCikEo81i4IWKs6q/b5oBnA
-        v5GFlvH9fD7R40pCsjwQV2yRhwkDEDQ=
-X-Google-Smtp-Source: ABdhPJyFv+lwxjKmKEwPGxhmxZsPA6m+LPm+lRZgyA+/E+lsDACEN1iWas9d9jL/8UIqCUseD6JRew==
-X-Received: by 2002:a63:375b:0:b0:374:915e:d893 with SMTP id g27-20020a63375b000000b00374915ed893mr674932pgn.494.1645671299350;
-        Wed, 23 Feb 2022 18:54:59 -0800 (PST)
-Received: from localhost (115-64-212-59.static.tpgi.com.au. [115.64.212.59])
-        by smtp.gmail.com with ESMTPSA id s6sm949926pfk.86.2022.02.23.18.54.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Feb 2022 18:54:58 -0800 (PST)
-Date:   Thu, 24 Feb 2022 12:54:54 +1000
-From:   Nicholas Piggin <npiggin@gmail.com>
-Subject: Re: [PATCH 2/3] powerpc: fix build errors
-To:     Anders Roxell <anders.roxell@linaro.org>, mpe@ellerman.id.au
-Cc:     Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, stable@vger.kernel.org
-References: <20220223135820.2252470-1-anders.roxell@linaro.org>
-        <20220223135820.2252470-2-anders.roxell@linaro.org>
-In-Reply-To: <20220223135820.2252470-2-anders.roxell@linaro.org>
+        Wed, 23 Feb 2022 22:00:40 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ED86C4842
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 19:00:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645671611; x=1677207611;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=gI7JIRRaP3GbGMo5GnOXcrDl7QzB+IB0aRU86vFSBh0=;
+  b=DLBP9aGN3C+M9ym2f9pg42KP9hpJ4ce6v0A5dwe1KwhKN1OzpckkJGY+
+   ugXiERy6oZXwYUSuQkSJcz8bwNEYfKqrWxxJir6NEBmQHBDLhnt3RlGWv
+   Dlnw16JUkDcpdjr7Y8dK4T0fo2/O359FEN/TG8k+5RBSbCh454Z+K+LW+
+   WYHJ6mb459Dp8FsYUqSABKdwsTVrxSN4ioky2HDWsgnwAkL5BStBShXFi
+   NjQqzC5nZb+jQzJcoJNWnapRZjsWShEsE+z9FR9MRfOYormTFWu9mL3DK
+   ghJi33Rgd0eohG3v3hfg7SjVkeob7O7wLlYVnhPSuM/ZnfkZEAeCQbncn
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10267"; a="250965586"
+X-IronPort-AV: E=Sophos;i="5.88,392,1635231600"; 
+   d="scan'208";a="250965586"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2022 19:00:01 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,392,1635231600"; 
+   d="scan'208";a="574061224"
+Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 23 Feb 2022 19:00:00 -0800
+Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nN4MJ-00029T-E5; Thu, 24 Feb 2022 02:59:59 +0000
+Date:   Thu, 24 Feb 2022 10:59:51 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Hannes Reinecke <hare@suse.de>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [hare-scsi-devel:tls-upcall.v2 54/67] tcp.c:undefined reference to
+ `tls_client_hello_user'
+Message-ID: <202202241024.EIelxH6D-lkp@intel.com>
 MIME-Version: 1.0
-Message-Id: <1645670923.t0z533n7uu.astroid@bobo.none>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Excerpts from Anders Roxell's message of February 23, 2022 11:58 pm:
-> Building tinyconfig with gcc (Debian 11.2.0-16) and assembler (Debian
-> 2.37.90.20220207) the following build error shows up:
->=20
->  {standard input}: Assembler messages:
->  {standard input}:1190: Error: unrecognized opcode: `stbcix'
->  {standard input}:1433: Error: unrecognized opcode: `lwzcix'
->  {standard input}:1453: Error: unrecognized opcode: `stbcix'
->  {standard input}:1460: Error: unrecognized opcode: `stwcix'
->  {standard input}:1596: Error: unrecognized opcode: `stbcix'
->  ...
->=20
-> Rework to add assembler directives [1] around the instruction. Going
-> through the them one by one shows that the changes should be safe.  Like
-> __get_user_atomic_128_aligned() is only called in p9_hmi_special_emu(),
-> which according to the name is specific to power9.  And __raw_rm_read*()
-> are only called in things that are powernv or book3s_hv specific.
->=20
-> [1] https://sourceware.org/binutils/docs/as/PowerPC_002dPseudo.html#Power=
-PC_002dPseudo
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/hare/scsi-devel.git tls-upcall.v2
+head:   ac729ea3c52bda460616c71d5f5fc47b2e64da6d
+commit: 4c6b8023e6fd977739a1df4a3309c661a21bb65e [54/67] nvme-tcp: derive keys and start TLS if requested
+config: openrisc-buildonly-randconfig-r005-20220223 (https://download.01.org/0day-ci/archive/20220224/202202241024.EIelxH6D-lkp@intel.com/config)
+compiler: or1k-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/hare/scsi-devel.git/commit/?id=4c6b8023e6fd977739a1df4a3309c661a21bb65e
+        git remote add hare-scsi-devel https://git.kernel.org/pub/scm/linux/kernel/git/hare/scsi-devel.git
+        git fetch --no-tags hare-scsi-devel tls-upcall.v2
+        git checkout 4c6b8023e6fd977739a1df4a3309c661a21bb65e
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=openrisc SHELL=/bin/bash
 
-Thanks for doing this. There is a recent patch committed to binutils to wor=
-k
-around this compiler bug.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-https://sourceware.org/git/?p=3Dbinutils-gdb.git;a=3Dcommit;h=3Dcebc89b9328
+All errors (new ones prefixed by >>):
 
-Not sure on the outlook for GCC fix. Either way unfortunately we have=20
-toolchains in the wild now that will explode, so we might have to take=20
-your patches for the time being.
+   or1k-linux-ld: drivers/nvme/host/core.o: in function `nvme_core_init':
+   core.c:(.init.text+0x1d8): undefined reference to `nvme_keyring_init'
+   core.c:(.init.text+0x1d8): relocation truncated to fit: R_OR1K_INSN_REL_26 against undefined symbol `nvme_keyring_init'
+   or1k-linux-ld: drivers/nvme/host/tcp.o: in function `nvme_tcp_start_tls':
+>> tcp.c:(.text+0xd50): undefined reference to `tls_client_hello_user'
+   tcp.c:(.text+0xd50): relocation truncated to fit: R_OR1K_INSN_REL_26 against undefined symbol `tls_client_hello_user'
+   or1k-linux-ld: drivers/nvme/host/tcp.o: in function `nvme_tcp_lookup_psk.constprop.0':
+   tcp.c:(.text+0x2ed4): undefined reference to `nvme_keyring_lookup_dhchap'
+   tcp.c:(.text+0x2ed4): relocation truncated to fit: R_OR1K_INSN_REL_26 against undefined symbol `nvme_keyring_lookup_dhchap'
+>> or1k-linux-ld: tcp.c:(.text+0x2ef8): undefined reference to `nvme_keyring_lookup_tls'
+   tcp.c:(.text+0x2ef8): relocation truncated to fit: R_OR1K_INSN_REL_26 against undefined symbol `nvme_keyring_lookup_tls'
+   or1k-linux-ld: tcp.c:(.text+0x2f24): undefined reference to `nvme_keyring_lookup_psk'
+   tcp.c:(.text+0x2f24): relocation truncated to fit: R_OR1K_INSN_REL_26 against undefined symbol `nvme_keyring_lookup_psk'
+>> or1k-linux-ld: tcp.c:(.text+0x2f40): undefined reference to `nvme_keyring_insert_tls'
+   tcp.c:(.text+0x2f40): relocation truncated to fit: R_OR1K_INSN_REL_26 against undefined symbol `nvme_keyring_insert_tls'
+   or1k-linux-ld: tcp.c:(.text+0x2f64): undefined reference to `nvme_keyring_lookup_dhchap'
+   tcp.c:(.text+0x2f64): relocation truncated to fit: R_OR1K_INSN_REL_26 against undefined symbol `nvme_keyring_lookup_dhchap'
+   or1k-linux-ld: tcp.c:(.text+0x2f84): undefined reference to `nvme_keyring_insert_tls'
+   tcp.c:(.text+0x2f84): relocation truncated to fit: R_OR1K_INSN_REL_26 against undefined symbol `nvme_keyring_insert_tls'
+   or1k-linux-ld: tcp.c:(.text+0x2fa8): undefined reference to `nvme_keyring_lookup_tls'
+   tcp.c:(.text+0x2fa8): relocation truncated to fit: R_OR1K_INSN_REL_26 against undefined symbol `nvme_keyring_lookup_tls'
+   or1k-linux-ld: tcp.c:(.text+0x2fd0): undefined reference to `nvme_keyring_lookup_psk'
+   tcp.c:(.text+0x2fd0): relocation truncated to fit: R_OR1K_INSN_REL_26 against undefined symbol `nvme_keyring_lookup_psk'
+   or1k-linux-ld: tcp.c:(.text+0x2fec): undefined reference to `nvme_keyring_insert_tls'
+   tcp.c:(.text+0x2fec): additional relocation overflows omitted from the output
+   or1k-linux-ld: tcp.c:(.text+0x3044): undefined reference to `nvme_keyring_insert_tls'
 
-Thanks,
-Nick
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

@@ -2,137 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 860F34C2DA0
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 14:54:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 742294C2DA3
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 14:54:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235044AbiBXNxm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 08:53:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43622 "EHLO
+        id S231650AbiBXNxr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 08:53:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235245AbiBXNxh (ORCPT
+        with ESMTP id S235251AbiBXNxh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 24 Feb 2022 08:53:37 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7374B13C25A
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 05:53:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1645710785;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=nW0eks/cUbzpUTn5JZlT+rD6G7IprS9N+XGNcxMKob0=;
-        b=SKX//xaKnJufs2LW8fbsXCVi4Yo8lc/RUtk81nckOAc9IREhueBfjsAc/0ydExasL9dTWb
-        DINH7Bhax2dhVXNSDbHS7m616kNQ16jaBZlXRYF5srJQoHBda29gwws4dq8a7gFZIgkzsu
-        NILD5KyHtSb4bx81ANVz5LCbPq8Hu0s=
-Received: from mail-pj1-f71.google.com (mail-pj1-f71.google.com
- [209.85.216.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-177-iZ4YmzygOriwpjv7xuIdXw-1; Thu, 24 Feb 2022 08:53:04 -0500
-X-MC-Unique: iZ4YmzygOriwpjv7xuIdXw-1
-Received: by mail-pj1-f71.google.com with SMTP id t12-20020a17090abc4c00b001bc770db571so1338781pjv.5
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 05:53:04 -0800 (PST)
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CBB013C3A7;
+        Thu, 24 Feb 2022 05:53:07 -0800 (PST)
+Received: by mail-ed1-x52c.google.com with SMTP id s1so2889518edd.13;
+        Thu, 24 Feb 2022 05:53:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=PsHbpOEJCVknsAa9Ew1MJQLg7HZo/XSZeiEybp+5mZg=;
+        b=QDxmyMXJ4i9lHmwVUraX5Rlhf7hv+wUE4GLih8mYSl/hCGo1BUhJX+Y1I3L2c+enob
+         vVGhLR9hh7gop8Cd9+9Fu2E8hC2ruBDcwonDLTAUXu7lIp+BB8Z3CS3fsK5uje4RIiLY
+         QoOgti+cWfvrzDU6e/JGaF9aParwVVPvQzocuJS1VgnybVST51Qa6WZJJHXfCM7n1KaP
+         1TzCCXiMaWKOvNqWIecYig8Dqg14gY2X/xZZGn3kgC/OeeI6CHA64opA52auIsSFqB3B
+         gAMnHvg7efk1a2N1H0cbJiHPtCcX6botTUG9kpQbXMsoWLce9e462CquDLW5x+owxfii
+         xAWQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=nW0eks/cUbzpUTn5JZlT+rD6G7IprS9N+XGNcxMKob0=;
-        b=eHwXMkg2ggGnR9/LMwamj9kTW1eWF7vYBJpA0g66lyiyBwXNQh100u5lzpFxM6EAbR
-         75+G4T7/GFYCyYjz8ldXkahh49x3j+qqw/c4LinroVAbSIkxtvTaNGilnuFcxjeV4wY8
-         knLwjibZFmbILIs9OTO7N3IbqjzPYCkQK1z0lwVaGjtoPpo8teVDZJLxdydZjjPdpVG6
-         TSOQM2N519waEdmTw2KfS0gX/VFIlgW+BoO2y64GvovJm5CVOqR8DCmaX+SYePdUVEKr
-         Sm3iJZtWvfUK0kYJv7ecKwcyd5lgJUAMjpYdXrMebpJyClQZs/Cp2eNUb3nIUsVkSczY
-         kLBA==
-X-Gm-Message-State: AOAM5301FXGQQ2ipV7dI/g0N0AjTvy0h1dUBhGnOmFqb1at324H/1UBF
-        jpswHNq4pAcy0mtgQ0jToHWp0iXjaRo8D+1C96A7oM5S5WGOmECqbTMP+r68qMGCDCbpGN0spWy
-        ViwWHO0SPHRjFqKMZBHOXABp6AhkzKSsbp4AC/zOc
-X-Received: by 2002:a17:90b:3796:b0:1bc:c077:5be4 with SMTP id mz22-20020a17090b379600b001bcc0775be4mr2926057pjb.113.1645710783274;
-        Thu, 24 Feb 2022 05:53:03 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyP5SF908XSlgAzoTvKvDDAdvOLIhxJ4D3T0E+ATkZQ8SViZKIlb+DLC9cEjliR0+RFjbKI3qPerMdruQrSD9Y=
-X-Received: by 2002:a17:90b:3796:b0:1bc:c077:5be4 with SMTP id
- mz22-20020a17090b379600b001bcc0775be4mr2926032pjb.113.1645710783083; Thu, 24
- Feb 2022 05:53:03 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=PsHbpOEJCVknsAa9Ew1MJQLg7HZo/XSZeiEybp+5mZg=;
+        b=LodDi75dYRQEh+bAsmiO3Ftrl9Lmm/5xu+WatwGVWa/c5lzvy+5p5rkL6w2XNWS/n+
+         JDQWMYZmarT6K9PcYt7baZrJJXvr3NBRogQ+XcCVjb3+FgYLKEEch5NNs5O5PTKWPRaz
+         vDjIjWIrsqw2lDCquqJ/Q5gVrvio7//LMyANBMS6NZFouer3C3fOn6Bvg3fDEDFbpI+a
+         TKDXd8XbP5cqd8kIJkRQc0JOOyCzpRdrz6KorzNApYSrxKH84M4vBmty9bOrSBeOeJ84
+         mr8WAYtWOZ4G0fm1RiNmkP/UuU/RTU0Qe7BAAyyiOStneLFqp3RIlNy3MZnb7uBcgOrp
+         9CcA==
+X-Gm-Message-State: AOAM530Xycj72Rhn2PwY6HFwkP3qbowbgdGFSbf7j15xI60sw/WAsDQ+
+        sZXasQpeDSsJXMOXgUYBhEY=
+X-Google-Smtp-Source: ABdhPJwYJ1sQPo7eUQ7M9X2zgdVZRDirXqwrTv0tPiXNsHmdAq6JmlyGZffSuNvBcEayqtpPP6YBHQ==
+X-Received: by 2002:a05:6402:3583:b0:410:a99b:59ee with SMTP id y3-20020a056402358300b00410a99b59eemr2402863edc.454.1645710785751;
+        Thu, 24 Feb 2022 05:53:05 -0800 (PST)
+Received: from orome (p200300e41f0a6900000000000000043a.dip0.t-ipconnect.de. [2003:e4:1f0a:6900::43a])
+        by smtp.gmail.com with ESMTPSA id c11sm1550197edx.42.2022.02.24.05.53.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Feb 2022 05:53:04 -0800 (PST)
+Date:   Thu, 24 Feb 2022 14:53:02 +0100
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     u.kleine-koenig@pengutronix.de, lee.jones@linaro.org,
+        matthias.bgg@gmail.com, linux-pwm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, kernel@collabora.com
+Subject: Re: [PATCH v2 1/3] pwm: pwm-mediatek: Simplify error handling with
+ dev_err_probe()
+Message-ID: <YheNvqKMfDPqM48r@orome>
+References: <20220214140339.112500-1-angelogioacchino.delregno@collabora.com>
 MIME-Version: 1.0
-References: <20220224110828.2168231-1-benjamin.tissoires@redhat.com>
- <20220224110828.2168231-2-benjamin.tissoires@redhat.com> <YhdtKN7qodX7VDPV@kroah.com>
-In-Reply-To: <YhdtKN7qodX7VDPV@kroah.com>
-From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Date:   Thu, 24 Feb 2022 14:52:52 +0100
-Message-ID: <CAO-hwJKQA4v53ER-y6Qx6gK032O3a+HNxbpQVhn2GiP4UJqe5g@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v1 1/6] HID: initial BPF implementation
-To:     Greg KH <greg@kroah.com>
-Cc:     Jiri Kosina <jikos@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Dave Marchevsky <davemarchevsky@fb.com>,
-        Joe Stringer <joe@cilium.io>,
-        Tero Kristo <tero.kristo@linux.intel.com>,
-        lkml <linux-kernel@vger.kernel.org>,
-        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="d2Zfu6vgd3T2uyn0"
+Content-Disposition: inline
+In-Reply-To: <20220214140339.112500-1-angelogioacchino.delregno@collabora.com>
+User-Agent: Mutt/2.2.1 (c8109e14) (2022-02-19)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 24, 2022 at 12:41 PM Greg KH <greg@kroah.com> wrote:
->
-> On Thu, Feb 24, 2022 at 12:08:23PM +0100, Benjamin Tissoires wrote:
-> > index 000000000000..243ac45a253f
-> > --- /dev/null
-> > +++ b/include/uapi/linux/bpf_hid.h
-> > @@ -0,0 +1,39 @@
-> > +/* SPDX-License-Identifier: GPL-2.0-or-later WITH Linux-syscall-note */
-> > +
-> > +/*
-> > + *  HID BPF public headers
-> > + *
-> > + *  Copyright (c) 2021 Benjamin Tissoires
-> > + */
-> > +
-> > +#ifndef _UAPI__LINUX_BPF_HID_H__
-> > +#define _UAPI__LINUX_BPF_HID_H__
-> > +
-> > +#include <linux/types.h>
-> > +
-> > +#define HID_BPF_MAX_BUFFER_SIZE              16384           /* 16kb */
-> > +
-> > +struct hid_device;
-> > +
-> > +enum hid_bpf_event {
-> > +     HID_BPF_UNDEF = 0,
-> > +     HID_BPF_DEVICE_EVENT,
-> > +};
-> > +
-> > +/* type is HID_BPF_DEVICE_EVENT */
-> > +struct hid_bpf_ctx_device_event {
-> > +     __u8 data[HID_BPF_MAX_BUFFER_SIZE];
-> > +     unsigned long size;
->
-> That's not a valid type to cross the user/kernel boundry, shouldn't it
-> be "__u64"?  But really, isn't __u32 enough here?
 
-thanks. Even __u16 should be enough, given that the upper bound is
-16384. I'll amend it in v2.
+--d2Zfu6vgd3T2uyn0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Cheers,
-Benjamin
+On Mon, Feb 14, 2022 at 03:03:37PM +0100, AngeloGioacchino Del Regno wrote:
+> Use dev_err_probe() to simplify handling errors in pwm_mediatek_probe().
+>=20
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@coll=
+abora.com>
+> ---
+>  drivers/pwm/pwm-mediatek.c | 30 +++++++++++-------------------
+>  1 file changed, 11 insertions(+), 19 deletions(-)
 
->
-> thanks,
->
-> greg k-h
->
+Applied, thanks.
 
+Thierry
+
+--d2Zfu6vgd3T2uyn0
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmIXjb4ACgkQ3SOs138+
+s6Fk8hAAnIRaKfj9+HXIijwEGPCmMx7BlzgpvJ6PmUHUWirU6k2C3ptFUVxh1p/R
+sp1MdzkgMXh1QR6sffWbmJWMrBW9c4tFzjeHTvGls/dEchQi2VWqTaHEvcY6dMB5
+yrK4MZfCbGe08jFJfI5CwDirhxNK/cInmKOVxGL60u2QSEMPRKvjjlIl2YvFqf3o
+C+TIRlC7C9rc9tuOBKvwQwnixOeJELte3k+E8WSIHBE2/G3lwpCQxCQd8VvERBvQ
++nBAx0vE9b+xe33lYZBnc/C5RhW8FDoIZ2qoXxhycQvrBX1H/2am+F47zGr+097Q
+kyX24SIvodLAt/9Al7/W0TrLqYlTh5kL595/sT5ksT8pJqtGeHJKBUhlpjIMD+3K
+J8MPsi8jQA7B/bWB34BFjF6OgIT28sCHFUGL3MT1BKEpsyt0py6TBt480LQ7kT8V
+T7H+whLUZ5uImhIbCon1z2lP71MneIRG9bUYYVlEX1S1syajKdSlBldmPAX3FUEc
+LDkfTSRwFXGsydlLl/qiOhSj03yHymPWBa8UZHlQptZ4PQQJ/tg/Z4kFmZxE/Vca
+91FrqBN42oUtjJd2H/NxGsLfB4n6hFWrHL7dHdDwXmMWD919IqFmAzmzj5wwW+sn
+zh2J3Lb+vqmhNTZ8PhM3lWG566bR2W9XfzKlCmIpCzokyQf/9Ns=
+=wC81
+-----END PGP SIGNATURE-----
+
+--d2Zfu6vgd3T2uyn0--

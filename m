@@ -2,140 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCEC04C3785
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 22:23:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B8674C378B
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 22:23:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234650AbiBXVYE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 16:24:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34642 "EHLO
+        id S234671AbiBXVYN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 16:24:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234635AbiBXVX7 (ORCPT
+        with ESMTP id S234681AbiBXVYK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 16:23:59 -0500
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id D726E1598F6
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 13:23:27 -0800 (PST)
-Received: (qmail 1060076 invoked by uid 1000); 24 Feb 2022 16:23:26 -0500
-Date:   Thu, 24 Feb 2022 16:23:26 -0500
-From:   "stern@rowland.harvard.edu" <stern@rowland.harvard.edu>
-To:     "Zhang, Qiang1" <qiang1.zhang@intel.com>, Tejun Heo <tj@kernel.org>
-Cc:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        syzbot <syzbot+348b571beb5eeb70a582@syzkaller.appspotmail.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "syzkaller-bugs@googlegroups.com" <syzkaller-bugs@googlegroups.com>,
-        "balbi@kernel.org" <balbi@kernel.org>
-Subject: Re: [syzbot] KASAN: use-after-free Read in dev_uevent
-Message-ID: <Yhf3ThBfjWVcYszC@rowland.harvard.edu>
-References: <0000000000005a991a05a86970bb@google.com>
- <00000000000033314805d8765175@google.com>
- <PH0PR11MB58805E3C4CF7D4C41D49BFCFDA3C9@PH0PR11MB5880.namprd11.prod.outlook.com>
- <YhYafwiwUV2Sbn5t@kroah.com>
- <YhZG3GJb8G7oL7l7@rowland.harvard.edu>
- <YhZaDGeIIvpILdCk@kroah.com>
- <YhZiMHHjrBw8am5g@rowland.harvard.edu>
- <PH0PR11MB5880D7544442B4D60810F0D2DA3D9@PH0PR11MB5880.namprd11.prod.outlook.com>
- <PH0PR11MB588091026B817203C772B264DA3D9@PH0PR11MB5880.namprd11.prod.outlook.com>
+        Thu, 24 Feb 2022 16:24:10 -0500
+Received: from fieldses.org (fieldses.org [IPv6:2600:3c00:e000:2f7::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35989184626;
+        Thu, 24 Feb 2022 13:23:35 -0800 (PST)
+Received: by fieldses.org (Postfix, from userid 2815)
+        id 57D0C72F9; Thu, 24 Feb 2022 16:23:34 -0500 (EST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 fieldses.org 57D0C72F9
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fieldses.org;
+        s=default; t=1645737814;
+        bh=OkVG8HhEKCzBDMlS68Ne4qJf64Q9ibr4f7QoJtnKZBQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Q3lRwZHs04vSExkB+AR4Cj6i+T8amI3WBtE7BQV//KHaX9D9tmAAtNYi7kXGcqw4v
+         gxlS0urkwsmqndbPb0jpGcvMdL0HvvJzWGV+WlV/PuWyj6Ukh+9CDMVTGUWzBxfZ/4
+         jrqQQmPv/3TigWBEo87OM0kJuUxTJipmmjMrBqVY=
+Date:   Thu, 24 Feb 2022 16:23:34 -0500
+From:   "J. Bruce Fields" <bfields@fieldses.org>
+To:     NeilBrown <neilb@suse.de>
+Cc:     Al Viro <viro@zeniv.linux.org.uk>,
+        Linux NFS Mailing List <linux-nfs@vger.kernel.org>,
+        linux-fsdevel@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        Daire Byrne <daire@dneg.com>,
+        Andreas Dilger <adilger.kernel@dilger.ca>
+Subject: Re: [PATCH/RFC] VFS: support parallel updates in the one directory.
+Message-ID: <20220224212334.GB29410@fieldses.org>
+References: <164549669043.5153.2021348013072574365@noble.neil.brown.name>
+ <20220222190751.GA7766@fieldses.org>
+ <164567931673.25116.15009501732764258663@noble.neil.brown.name>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <PH0PR11MB588091026B817203C772B264DA3D9@PH0PR11MB5880.namprd11.prod.outlook.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <164567931673.25116.15009501732764258663@noble.neil.brown.name>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 24, 2022 at 03:14:54AM +0000, Zhang, Qiang1 wrote:
-> 
-> On Wed, Feb 23, 2022 at 05:00:12PM +0100, gregkh@linuxfoundation.org wrote:
-> > On Wed, Feb 23, 2022 at 09:38:20AM -0500, stern@rowland.harvard.edu wrote:
-> > > Which bus locks are you referring to?  I'm not aware of any locks 
-> > > that synchronize dev_uevent() with anything (in particular, with 
-> > > driver unbinding).
+On Thu, Feb 24, 2022 at 04:08:36PM +1100, NeilBrown wrote:
+> On Wed, 23 Feb 2022, J. Bruce Fields wrote:
+> > For what it's worth, I applied this to recent upstream (038101e6b2cd)
+> > and fed it through my usual scripts--tests all passed, but I did see
+> > this lockdep warning.
 > > 
-> > The locks in the driver core that handle the binding and unbinding of 
-> > drivers to devices.
+> > I'm not actually sure what was running at the time--probably just cthon.
 > > 
-> > > And as far as I know, usb_gadget_remove_driver() doesn't play any 
-> > > odd tricks with pointers.
+> > --b.
 > > 
-> > Ah, I never noticed that this is doing a "fake" bus and does the 
-> > bind/unbind itself outside of the driver core.  It should just be a 
-> > normal bus type and have the core do the work for it, but oh well.
+> > [  142.679891] ======================================================
+> > [  142.680883] WARNING: possible circular locking dependency detected
+> > [  142.681999] 5.17.0-rc5-00005-g64e79f877311 #1778 Not tainted
+> > [  142.682970] ------------------------------------------------------
+> > [  142.684059] test1/4557 is trying to acquire lock:
+> > [  142.684881] ffff888023d85398 (DENTRY_PAR_UPDATE){+.+.}-{0:0}, at: d_lock_update_nested+0x5/0x6a0
+> > [  142.686421] 
+> >                but task is already holding lock:
+> > [  142.687171] ffff88801f618bd0 (&type->i_mutex_dir_key#6){++++}-{3:3}, at: path_openat+0x7cb/0x24a0
+> > [  142.689098] 
+> >                which lock already depends on the new lock.
 > > 
-> > And there is a lock that should serialize all of this already, so it's 
-> > odd that this is able to be triggered at all.
+> > [  142.690045] 
+> >                the existing dependency chain (in reverse order) is:
+> > [  142.691171] 
+> >                -> #1 (&type->i_mutex_dir_key#6){++++}-{3:3}:
+> > [  142.692285]        down_write+0x82/0x130
+> > [  142.692844]        vfs_rmdir+0xbd/0x560
+> > [  142.693351]        do_rmdir+0x33d/0x400
 > 
-> >>I guess at a minimum the UDC core should hold the device lock when it registers, unregisters, binds, or unbinds UDC and gadget devices.  
-> >>Would that be enough to fix the problem?  I really don't understand how sysfs file access gets synchronized with device removal.
-> 
-> >>>
-> >>>Agree with you, in usb_gadget_remove_driver() function, the udc->dev.driver and udc->gadget->dev.driver be set to null without any protection, so when the udevd accessed the dev->driver, this address may be invalid at this time.
-> >>>maybe the operation of dev->driver can be protected by device_lock(). 
-> >>>
-> 
-> Is it enough that we just need to protect "dev.driver" ?
+> Thanks.  I hadn't tested rmdir :-)
 
-I don't know, although I doubt it.  The right way to fix it is to make 
-sure that the existing protections, which apply to drivers that are 
-registered in the driver core, can also work properly with gadgets.  But 
-I don't know what those protections are or how they work.
+OK.  I tested with this applied and didn't see any issues.
 
-> diff --git a/drivers/base/core.c b/drivers/base/core.c
-> index 3d6430eb0c6a..9bd2624973d7 100644
-> --- a/drivers/base/core.c
-> +++ b/drivers/base/core.c
-> @@ -2316,8 +2316,10 @@ static int dev_uevent(struct kobject *kobj, struct kobj_uevent_env *env)
->         if (dev->type && dev->type->name)
->                 add_uevent_var(env, "DEVTYPE=%s", dev->type->name);
-> 
-> +       device_lock(dev);
->         if (dev->driver)
->                 add_uevent_var(env, "DRIVER=%s", dev->driver->name);
-> +       device_unlock(dev);
-
-You probably should not do this.  Unless there's a serious bug, the 
-driver core already takes all the locks it needs.  Doing this might 
-cause a deadlock (because the caller may already hold the device lock).
+--b.
 
 > 
->         /* Add common DT information about the device */
->         of_device_uevent(dev, env);
-> diff --git a/drivers/usb/gadget/udc/core.c b/drivers/usb/gadget/udc/core.c
-> index 568534a0d17c..7877142397d3 100644
-> --- a/drivers/usb/gadget/udc/core.c
-> +++ b/drivers/usb/gadget/udc/core.c
-> @@ -1436,8 +1436,14 @@ static void usb_gadget_remove_driver(struct usb_udc *udc)
->         usb_gadget_udc_stop(udc);
+> "rmdir" and "open(O_CREATE)" take these locks in the opposite order.
 > 
->         udc->driver = NULL;
-> +
-> +       device_lock(&udc->dev);
->         udc->dev.driver = NULL;
-> +       device_unlock(&udc->dev);
-> +
-> +       device_lock(&udc->gadget->dev);
->         udc->gadget->dev.driver = NULL;
-> +       device_unlock(&udc->gadget->dev);
->  }
-
-These are reasonable things to do, but I don't know if they will fix the 
-problem.
-
-We really should ask advice from somebody who understands how this stuff 
-is supposed to work.  I'm not sure who to ask, though.  Tejun Heo, 
-perhaps (CC'ed).
-
-Tejun: The USB Gadget core binds and unbinds drivers without using the 
-normal driver core facilities (see the code in 
-usb_gadget_remove_driver() above).  As a result, unbinding races with 
-uevent generation, which can lead to a NULL pointer dereference as found 
-by syzbot testing.  In particular, dev->driver can become NULL between 
-the times when dev_uevent() tests it and uses it (see above).
-
-Can you tell us how this should be fixed?
-
-Alan Stern
+> I think the simplest fix might be to change the inode_lock(_shared) taken
+> on the dir in open_last_Lookups() to use I_MUTEX_PARENT.  That is
+> consistent with unlink and rmdir etc which use I_MUTEX_PARENT on the
+> parent.
+> 
+> open() doesn't currently use I_MUTEX_PARENT because it never needs to
+> lock the child.  But as it *is* a parent that is being locked, using
+> I_MUTEX_PARENT probably make more sense.
+> 
+> --- a/fs/namei.c
+> +++ b/fs/namei.c
+> @@ -3513,9 +3513,9 @@ static const char *open_last_lookups(struct nameidata *nd,
+>  	}
+>  	shared = !!(dir->d_inode->i_flags & S_PAR_UPDATE);
+>  	if ((open_flag & O_CREAT) && !shared)
+> -		inode_lock(dir->d_inode);
+> +		inode_lock_nested(dir->d_inode, I_MUTEX_PARENT);
+>  	else
+> -		inode_lock_shared(dir->d_inode);
+> +		inode_lock_shared_nested(dir->d_inode, I_MUTEX_PARENT);
+>  	dentry = lookup_open(nd, file, op, got_write);
+>  	if (!IS_ERR(dentry) && (file->f_mode & FMODE_CREATED))
+>  		fsnotify_create(dir->d_inode, dentry);
+> 
+> Thanks,
+> NeilBrown

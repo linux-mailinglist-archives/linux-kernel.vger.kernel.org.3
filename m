@@ -2,60 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1178D4C2700
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 10:01:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BCDFC4C26BD
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 10:00:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232172AbiBXIyu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 03:54:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41380 "EHLO
+        id S232198AbiBXIzM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 03:55:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232062AbiBXIyr (ORCPT
+        with ESMTP id S232201AbiBXIzC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 03:54:47 -0500
-Received: from ssl.serverraum.org (ssl.serverraum.org [176.9.125.105])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 497E4163062;
-        Thu, 24 Feb 2022 00:54:18 -0800 (PST)
-Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id C1FB122239;
-        Thu, 24 Feb 2022 09:54:15 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1645692856;
+        Thu, 24 Feb 2022 03:55:02 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5C62B169383
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 00:54:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1645692866;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=ZvkcoUKllQj2T4+MNV6kXQ3nLOUi8Q7r2MLGcdGUqmY=;
-        b=RBInsJPHuWavYhtDil26uHxuu1hhkXEIy8BK9iZ7Gqbb0NEctvhoVGEPGErHLnVGbznh6m
-        CCB2eo37CSiFwVfhtG/l4bHYj8aczvSJLIAgxX1PlM+kXD4C/xywD/5II4iBMgUbotl7Sq
-        eKne8tpz6DqzFLwtJ43OtBoLdquy9E4=
+        bh=YPhCBtbBQg1eNMETiQV7Nct7o+5KyMwoVZErHD9r+9U=;
+        b=TOv4DDsOV+z8Zc8zE/pe2e29GhOjlevM8Fqp3zrhgtPHnj1jOqt2IMS85gxNmLj/bFPMV2
+        9wUEN38NI/piU8af6vOugUKsEp9aqidVQRTtqCWYGtSxUjb555USLC3op1nmcEuScehQFd
+        1i1dfseIKoLZL0NUnpdCxyg6qVVS0mg=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-277-y1nzKvv2MRKNwV4bvGwhPg-1; Thu, 24 Feb 2022 03:54:23 -0500
+X-MC-Unique: y1nzKvv2MRKNwV4bvGwhPg-1
+Received: by mail-ed1-f70.google.com with SMTP id y13-20020aa7c24d000000b00411925b7829so412810edo.22
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 00:54:22 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=YPhCBtbBQg1eNMETiQV7Nct7o+5KyMwoVZErHD9r+9U=;
+        b=L2kKpgaSYpE8OjeR7tw/dA1xemZmYdbEEvoE6Z0bDJ6/4+UpXBnwEnGekx0WG/8jij
+         cOxe1gd6XoHE0Zbx9HD8geq7J+gpQe0WzxsPU9WMBWMBfw73aGdhUAvyQPinG/GVp3ea
+         XJUrIZauVUd66HTEZcHji49H7sV/w+pcZlvq38Tgu+zsme50D63cE3sHdfXAty9uO01A
+         DGtekzlhN+QaQ9mCsNXl8LeMYoFUMFjruV2lY0oyteOv/BdOutL3EsSiaZD58vmEZI49
+         +eziHCaA4Gr3Xk4PmrAbxtf9aMrmKtSP2A+gAuo6/tfcnfsi07rD4Z9dFNG66acApSWI
+         tgRg==
+X-Gm-Message-State: AOAM531YT5O5AeV0tkz1+xNTi8O9p8tl6ocfVBkYwKYnC2Gn2hCZKE50
+        6igcXtVqBpzsUwqau3TK8CpTn9aPqZw/bK6z+WUyo4G5wXx+95Iw7rnpmEybqEwjbLoMNi9lwWJ
+        mS2RmvKXrQ16IIYnKxjaOJ/wy
+X-Received: by 2002:a05:6402:3487:b0:40f:fa53:956c with SMTP id v7-20020a056402348700b0040ffa53956cmr1326316edc.22.1645692861857;
+        Thu, 24 Feb 2022 00:54:21 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyAJnHhz/3Ie6pHX1cwQRRG0ycfTSIdcnjOnWNpyAK0LrQieneEB0VUjawsQUWT/GINhQOCLg==
+X-Received: by 2002:a05:6402:3487:b0:40f:fa53:956c with SMTP id v7-20020a056402348700b0040ffa53956cmr1326299edc.22.1645692861647;
+        Thu, 24 Feb 2022 00:54:21 -0800 (PST)
+Received: from [10.0.0.45] (host-95-232-30-176.retail.telecomitalia.it. [95.232.30.176])
+        by smtp.gmail.com with ESMTPSA id d12sm968745edy.17.2022.02.24.00.54.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 24 Feb 2022 00:54:21 -0800 (PST)
+Message-ID: <7b856b70-9da0-823e-163b-63d9157b5873@redhat.com>
+Date:   Thu, 24 Feb 2022 09:54:20 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] tracing: Have traceon and traceoff trigger honor the
+ instance
+Content-Language: en-US
+To:     Steven Rostedt <rostedt@goodmis.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Tom Zanussi <zanussi@kernel.org>
+References: <20220223223837.14f94ec3@rorschach.local.home>
+From:   Daniel Bristot de Oliveira <bristot@redhat.com>
+In-Reply-To: <20220223223837.14f94ec3@rorschach.local.home>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-Date:   Thu, 24 Feb 2022 09:54:15 +0100
-From:   Michael Walle <michael@walle.cc>
-To:     Heiko Thiery <heiko.thiery@gmail.com>
-Cc:     Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Shawn Guo <shawnguo@kernel.org>
-Subject: Re: [PATCH v1 1/2] arm64: dts: imx8mn-evk: use proper names for PMIC
- outputs
-In-Reply-To: <CAEyMn7aVWK7NBH5+FpcK-gr9LPqb8MwsiOOTVJqo+PZJ+_naSw@mail.gmail.com>
-References: <20220223210559.1999209-1-michael@walle.cc>
- <CAEyMn7aVWK7NBH5+FpcK-gr9LPqb8MwsiOOTVJqo+PZJ+_naSw@mail.gmail.com>
-User-Agent: Roundcube Webmail/1.4.12
-Message-ID: <b3f0b5ee57b144c2e0487fb104ae92da@walle.cc>
-X-Sender: michael@walle.cc
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,48 +85,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 2022-02-24 08:29, schrieb Heiko Thiery:
-> Hi,
+On 2/24/22 04:38, Steven Rostedt wrote:
+> From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
 > 
-> Am Mi., 23. Feb. 2022 um 22:06 Uhr schrieb Michael Walle 
-> <michael@walle.cc>:
->> 
->> Use the power signal names as given in the schematics of the reference
->> board.
->> 
->> Signed-off-by: Michael Walle <michael@walle.cc>
->> ---
->>  arch/arm64/boot/dts/freescale/imx8mn-evk.dts | 20 
->> ++++++++++----------
->>  1 file changed, 10 insertions(+), 10 deletions(-)
->> 
->> diff --git a/arch/arm64/boot/dts/freescale/imx8mn-evk.dts 
->> b/arch/arm64/boot/dts/freescale/imx8mn-evk.dts
->> index b4225cfcb6d9..eaa06f49aef5 100644
->> --- a/arch/arm64/boot/dts/freescale/imx8mn-evk.dts
->> +++ b/arch/arm64/boot/dts/freescale/imx8mn-evk.dts
->> @@ -41,7 +41,7 @@ pmic: pmic@25 {
->> 
->>                 regulators {
->>                         buck1: BUCK1{
->> -                               regulator-name = "BUCK1";
->> +                               regulator-name = "VDD_ARM_0V9";
+> If a trigger is set on an event to disable or enable tracing within an
+> instance, then tracing should be disabled or enabled in the instance and
+> not at the top level, which is confusing to users.
 > 
-> I think BUCK1 and BUCK2 are twisted here. This should be "VDD_SOC".
-> 
->>                                 regulator-min-microvolt = <600000>;
->>                                 regulator-max-microvolt = <2187500>;
->>                                 regulator-boot-on;
->> @@ -50,7 +50,7 @@ buck1: BUCK1{
->>                         };
->> 
->>                         buck2: BUCK2 {
->> -                               regulator-name = "BUCK2";
->> +                               regulator-name = "VDD_SOC";
-> 
-> And this should be "VDD_ARM_0V9".
+> Cc: stable@vger.kernel.org
+> Fixes: ae63b31e4d0e2 ("tracing: Separate out trace events from global variables")
+> Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 
-You are absolutely right. I noticed it on the 8MNANOD3L-EVK but
-forgot to update these.
+Tested-by: Daniel Bristot de Oliveira <bristot@kernel.org>
 
--michael
+Thanks!
+-- Daniel
+

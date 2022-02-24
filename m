@@ -2,57 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 662924C239A
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 06:33:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A60504C2454
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 08:06:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230286AbiBXFdi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 00:33:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44802 "EHLO
+        id S231451AbiBXHGl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 02:06:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229546AbiBXFdf (ORCPT
+        with ESMTP id S229925AbiBXHGh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 00:33:35 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11584194AB6;
-        Wed, 23 Feb 2022 21:33:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645680786; x=1677216786;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=4JM8eHvqmWwIp4CrLDt0H7n0k8k/HXvlCaX2k3ifBUY=;
-  b=PQlGEysl0WvKR/kAJg0k5ZGPn0KItA2ZakIWat49Ly2MPfDQg5b9EWYt
-   u4ZC4Noql2NrzhKCCO1HMu/kLs1GJurexIBthbyvOrs9/yM4/Oi2NQho3
-   vA9YYUT923eTlrO6AmHS/qHsSrZI3Qli0ojnkoj7KwKL+yGZlxzaaPhYF
-   7bLHkOaMxY+uLX/drnaK1X0OWcfekFRngAGTjekTKGHg4LNQUYh07U0S6
-   TFrYmEiUaSf5oYuXDdk2jNx7qySYEWVJLIONys3nracPclU2bYbxFsMEI
-   PiznKqMkcWmfK0/6j4gMRu4nlRcxIBviAXWTM+m+XfDfWgSN1jwJv5qjs
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10267"; a="232129256"
-X-IronPort-AV: E=Sophos;i="5.88,393,1635231600"; 
-   d="scan'208";a="232129256"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2022 21:33:05 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,393,1635231600"; 
-   d="scan'208";a="506192782"
-Received: from zxingrtx.sh.intel.com ([10.239.159.110])
-  by orsmga002.jf.intel.com with ESMTP; 23 Feb 2022 21:33:01 -0800
-From:   zhengjun.xing@linux.intel.com
-To:     acme@kernel.org, peterz@infradead.org, mingo@redhat.com,
-        alexander.shishkin@intel.com, jolsa@redhat.com
-Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        irogers@google.com, adrian.hunter@intel.com, ak@linux.intel.com,
-        kan.liang@linux.intel.com, zhengjun.xing@linux.intel.com
-Subject: [PATCH v2 2/2] perf vendor events intel: Add uncore event list for Alderlake
-Date:   Thu, 24 Feb 2022 21:31:38 +0800
-Message-Id: <20220224133138.1969087-1-zhengjun.xing@linux.intel.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 24 Feb 2022 02:06:37 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADD3F2649B0;
+        Wed, 23 Feb 2022 23:06:07 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E40CD61978;
+        Thu, 24 Feb 2022 07:06:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47C7EC34100;
+        Thu, 24 Feb 2022 07:06:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645686366;
+        bh=d3iTCnmjiWI2WfX8T3i0lRHp9N81t6Yh8Z7V7FwGN/U=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=d9kZ0BbVkyCyNqDMbIIl+9W1OVaOiHcqpofy9Tv0x+jjG5DysO9+U6Q2K4lcdfFyH
+         fai03dHJQzajxq5x8dD/JFbdF1zJckhozUk8lR9cVmlk5bBWd0W6ERB7Zbxdjefy3a
+         B8/SUsADYD0SQguWOueuCsugHgBSJ8wqUkSLkiLSqKWedW5ys5Z7/z6mU2vQUHnHJ6
+         T4vRyvf7dvKpTRGhlcWD3SzP2O+MDfjLinnJiEst0s0apfF0uwuaENIe6tuGMnmiQ2
+         f1b6FsJH1WZrXXQHaNQBk/Ix0arInQgA572KGEYojkJ/0uUcVIi+T6URqFtcgb3eKx
+         YzcfTkJH+KZ5w==
+Received: by mail-wr1-f41.google.com with SMTP id n14so1094215wrq.7;
+        Wed, 23 Feb 2022 23:06:06 -0800 (PST)
+X-Gm-Message-State: AOAM533IwfhdoMLynJ+bABIrvx9165dae9qEOAN49auVA5Wg4l9cRSuW
+        wg6wjh0haKlmXfi2cxR8wCiOxEwWbvnr+Ck444Y=
+X-Google-Smtp-Source: ABdhPJyN7vOmEPkorPTffJc1X7o++TFchfjh5Aum2nyP+tyYB62T97KqiFOhsVfqhaexAyBFN29agtP9qBPfezDsID0=
+X-Received: by 2002:adf:a446:0:b0:1ed:c41b:cf13 with SMTP id
+ e6-20020adfa446000000b001edc41bcf13mr1075883wra.407.1645686364180; Wed, 23
+ Feb 2022 23:06:04 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
-        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20220216131332.1489939-1-arnd@kernel.org> <20220216131332.1489939-8-arnd@kernel.org>
+ <c6f461f1-1dd9-aec1-2c85-a3eda478a1be@kernel.org>
+In-Reply-To: <c6f461f1-1dd9-aec1-2c85-a3eda478a1be@kernel.org>
+From:   Arnd Bergmann <arnd@kernel.org>
+Date:   Thu, 24 Feb 2022 08:05:48 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a34OBFhncvg32hO3qb1uH8cvwFb0ro1jEMT4bdOLrtfdw@mail.gmail.com>
+Message-ID: <CAK8P3a34OBFhncvg32hO3qb1uH8cvwFb0ro1jEMT4bdOLrtfdw@mail.gmail.com>
+Subject: Re: [PATCH v2 07/18] nios2: drop access_ok() check from __put_user()
+To:     Dinh Nguyen <dinguyen@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Christoph Hellwig <hch@lst.de>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        Linux API <linux-api@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Russell King - ARM Linux <linux@armlinux.org.uk>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        Brian Cain <bcain@codeaurora.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Michal Simek <monstr@monstr.eu>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Nick Hu <nickhu@andestech.com>,
+        Greentime Hu <green.hu@gmail.com>,
+        Stafford Horne <shorne@gmail.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Rich Felker <dalias@libc.org>,
+        David Miller <davem@davemloft.net>,
+        Richard Weinberger <richard@nod.at>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        "Eric W . Biederman" <ebiederm@xmission.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        alpha <linux-alpha@vger.kernel.org>,
+        "open list:SYNOPSYS ARC ARCHITECTURE" 
+        <linux-snps-arc@lists.infradead.org>, linux-csky@vger.kernel.org,
+        "open list:QUALCOMM HEXAGON..." <linux-hexagon@vger.kernel.org>,
+        linux-ia64@vger.kernel.org,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Openrisc <openrisc@lists.librecores.org>,
+        Parisc List <linux-parisc@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        sparclinux <sparclinux@vger.kernel.org>,
+        linux-um <linux-um@lists.infradead.org>,
+        "open list:TENSILICA XTENSA PORT (xtensa)" 
+        <linux-xtensa@linux-xtensa.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,302 +109,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zhengjun Xing <zhengjun.xing@linux.intel.com>
+On Thu, Feb 24, 2022 at 12:30 AM Dinh Nguyen <dinguyen@kernel.org> wrote:
+> On 2/16/22 07:13, Arnd Bergmann wrote: From: Arnd Bergmann <arnd@arndb.de>
+> >
+> > Unlike other architectures, the nios2 version of __put_user() has an
+> > extra check for access_ok(), preventing it from being used to implement
+> > __put_kernel_nofault().
+> >
+> > Split up put_user() along the same lines as __get_user()/get_user()
+> >
+> > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+>
+> Acked-by: Dinh Nguyen <dinguyen@kernel.org>
 
-Add JSON uncore events for Alderlake to perf.
+Thanks! Could you also have a look at patch 2 (uaccess: fix nios2 and
+microblaze get_user_8)? That one is actually more critical, and should
+be backported to stable kernels.
 
-Based on JSON list v1.06:
-
-https://download.01.org/perfmon/ADL/
-
-Signed-off-by: Zhengjun Xing <zhengjun.xing@linux.intel.com>
-Acked-by: Ian Rogers <irogers@google.com>
----
-Change log:
-
- v2:
-    * Add Acked-by tag
-
- .../arch/x86/alderlake/uncore-memory.json     | 222 ++++++++++++++++++
- .../arch/x86/alderlake/uncore-other.json      |  40 ++++
- 2 files changed, 262 insertions(+)
- create mode 100644 tools/perf/pmu-events/arch/x86/alderlake/uncore-memory.json
- create mode 100644 tools/perf/pmu-events/arch/x86/alderlake/uncore-other.json
-
-diff --git a/tools/perf/pmu-events/arch/x86/alderlake/uncore-memory.json b/tools/perf/pmu-events/arch/x86/alderlake/uncore-memory.json
-new file mode 100644
-index 000000000000..d82d6f62a6fb
---- /dev/null
-+++ b/tools/perf/pmu-events/arch/x86/alderlake/uncore-memory.json
-@@ -0,0 +1,222 @@
-+[
-+    {
-+        "BriefDescription": "Number of clocks",
-+        "Counter": "0,1,2,3,4",
-+        "CounterType": "PGMABLE",
-+        "EventCode": "0x01",
-+        "EventName": "UNC_M_CLOCKTICKS",
-+        "PerPkg": "1",
-+        "Unit": "iMC"
-+    },
-+    {
-+        "BriefDescription": "Incoming VC0 read request",
-+        "Counter": "0,1,2,3,4",
-+        "CounterType": "PGMABLE",
-+        "EventCode": "0x02",
-+        "EventName": "UNC_M_VC0_REQUESTS_RD",
-+        "PerPkg": "1",
-+        "Unit": "iMC"
-+    },
-+    {
-+        "BriefDescription": "Incoming VC0 write request",
-+        "Counter": "0,1,2,3,4",
-+        "CounterType": "PGMABLE",
-+        "EventCode": "0x03",
-+        "EventName": "UNC_M_VC0_REQUESTS_WR",
-+        "PerPkg": "1",
-+        "Unit": "iMC"
-+    },
-+    {
-+        "BriefDescription": "Incoming VC1 read request",
-+        "Counter": "0,1,2,3,4",
-+        "CounterType": "PGMABLE",
-+        "EventCode": "0x04",
-+        "EventName": "UNC_M_VC1_REQUESTS_RD",
-+        "PerPkg": "1",
-+        "Unit": "iMC"
-+    },
-+    {
-+        "BriefDescription": "Incoming VC1 write request",
-+        "Counter": "0,1,2,3,4",
-+        "CounterType": "PGMABLE",
-+        "EventCode": "0x05",
-+        "EventName": "UNC_M_VC1_REQUESTS_WR",
-+        "PerPkg": "1",
-+        "Unit": "iMC"
-+    },
-+    {
-+        "BriefDescription": "Incoming read prefetch request from IA",
-+        "Counter": "0,1,2,3,4",
-+        "CounterType": "PGMABLE",
-+        "EventCode": "0x0A",
-+        "EventName": "UNC_M_PREFETCH_RD",
-+        "PerPkg": "1",
-+        "Unit": "iMC"
-+    },
-+    {
-+        "BriefDescription": "Any Rank at Hot state",
-+        "Counter": "0,1,2,3,4",
-+        "CounterType": "PGMABLE",
-+        "EventCode": "0x19",
-+        "EventName": "UNC_M_DRAM_THERMAL_HOT",
-+        "PerPkg": "1",
-+        "Unit": "iMC"
-+    },
-+    {
-+        "BriefDescription": "Any Rank at Warm state",
-+        "Counter": "0,1,2,3,4",
-+        "CounterType": "PGMABLE",
-+        "EventCode": "0x1A",
-+        "EventName": "UNC_M_DRAM_THERMAL_WARM",
-+        "PerPkg": "1",
-+        "Unit": "iMC"
-+    },
-+    {
-+        "BriefDescription": "incoming read request page status is Page Hit",
-+        "Counter": "0,1,2,3,4",
-+        "CounterType": "PGMABLE",
-+        "EventCode": "0x1C",
-+        "EventName": "UNC_M_DRAM_PAGE_HIT_RD",
-+        "PerPkg": "1",
-+        "Unit": "iMC"
-+    },
-+    {
-+        "BriefDescription": "incoming read request page status is Page Empty",
-+        "Counter": "0,1,2,3,4",
-+        "CounterType": "PGMABLE",
-+        "EventCode": "0x1D",
-+        "EventName": "UNC_M_DRAM_PAGE_EMPTY_RD",
-+        "PerPkg": "1",
-+        "Unit": "iMC"
-+    },
-+    {
-+        "BriefDescription": "incoming read request page status is Page Miss",
-+        "Counter": "0,1,2,3,4",
-+        "CounterType": "PGMABLE",
-+        "EventCode": "0x1E",
-+        "EventName": "UNC_M_DRAM_PAGE_MISS_RD",
-+        "PerPkg": "1",
-+        "Unit": "iMC"
-+    },
-+    {
-+        "BriefDescription": "incoming write request page status is Page Hit",
-+        "Counter": "0,1,2,3,4",
-+        "CounterType": "PGMABLE",
-+        "EventCode": "0x1F",
-+        "EventName": "UNC_M_DRAM_PAGE_HIT_WR",
-+        "PerPkg": "1",
-+        "Unit": "iMC"
-+    },
-+    {
-+        "BriefDescription": "incoming write request page status is Page Empty",
-+        "Counter": "0,1,2,3,4",
-+        "CounterType": "PGMABLE",
-+        "EventCode": "0x20",
-+        "EventName": "UNC_M_DRAM_PAGE_EMPTY_WR",
-+        "PerPkg": "1",
-+        "Unit": "iMC"
-+    },
-+    {
-+        "BriefDescription": "incoming write request page status is Page Miss",
-+        "Counter": "0,1,2,3,4",
-+        "CounterType": "PGMABLE",
-+        "EventCode": "0x21",
-+        "EventName": "UNC_M_DRAM_PAGE_MISS_WR",
-+        "PerPkg": "1",
-+        "Unit": "iMC"
-+    },
-+    {
-+        "BriefDescription": "Read CAS command sent to DRAM",
-+        "Counter": "0,1,2,3,4",
-+        "CounterType": "PGMABLE",
-+        "EventCode": "0x22",
-+        "EventName": "UNC_M_CAS_COUNT_RD",
-+        "PerPkg": "1",
-+        "Unit": "iMC"
-+    },
-+    {
-+        "BriefDescription": "Write CAS command sent to DRAM",
-+        "Counter": "0,1,2,3,4",
-+        "CounterType": "PGMABLE",
-+        "EventCode": "0x23",
-+        "EventName": "UNC_M_CAS_COUNT_WR",
-+        "PerPkg": "1",
-+        "Unit": "iMC"
-+    },
-+    {
-+        "BriefDescription": "ACT command for a read request sent to DRAM",
-+        "Counter": "0,1,2,3,4",
-+        "CounterType": "PGMABLE",
-+        "EventCode": "0x24",
-+        "EventName": "UNC_M_ACT_COUNT_RD",
-+        "PerPkg": "1",
-+        "Unit": "iMC"
-+    },
-+    {
-+        "BriefDescription": "ACT command for a write request sent to DRAM",
-+        "Counter": "0,1,2,3,4",
-+        "CounterType": "PGMABLE",
-+        "EventCode": "0x25",
-+        "EventName": "UNC_M_ACT_COUNT_WR",
-+        "PerPkg": "1",
-+        "Unit": "iMC"
-+    },
-+    {
-+        "BriefDescription": "ACT command sent to DRAM",
-+        "Counter": "0,1,2,3,4",
-+        "CounterType": "PGMABLE",
-+        "EventCode": "0x26",
-+        "EventName": "UNC_M_ACT_COUNT_TOTAL",
-+        "PerPkg": "1",
-+        "Unit": "iMC"
-+    },
-+    {
-+        "BriefDescription": "PRE command sent to DRAM for a read/write request",
-+        "Counter": "0,1,2,3,4",
-+        "CounterType": "PGMABLE",
-+        "EventCode": "0x27",
-+        "EventName": "UNC_M_PRE_COUNT_PAGE_MISS",
-+        "PerPkg": "1",
-+        "Unit": "iMC"
-+    },
-+    {
-+        "BriefDescription": "PRE command sent to DRAM due to page table idle timer expiration",
-+        "Counter": "0,1,2,3,4",
-+        "CounterType": "PGMABLE",
-+        "EventCode": "0x28",
-+        "EventName": "UNC_M_PRE_COUNT_IDLE",
-+        "PerPkg": "1",
-+        "Unit": "iMC"
-+    },
-+    {
-+        "BriefDescription": "Counts every 64B read  request entering the Memory Controller 0 to DRAM (sum of all channels)",
-+        "CounterType": "FREERUN",
-+        "EventName": "UNC_MC0_RDCAS_COUNT_FREERUN",
-+        "PerPkg": "1",
-+        "Unit": "iMC"
-+    },
-+    {
-+        "BriefDescription": "Counts every 64B read request entering the Memory Controller 1 to DRAM (sum of all channels)",
-+        "Counter": "3",
-+        "CounterType": "FREERUN",
-+        "EventName": "UNC_MC1_RDCAS_COUNT_FREERUN",
-+        "PerPkg": "1",
-+        "Unit": "iMC"
-+    },
-+    {
-+        "BriefDescription": "Counts every 64B write request entering the Memory Controller 0 to DRAM (sum of all channels). Each write request counts as a new request incrementing this counter. However, same cache line write requests (both full and partial) are combined to a single 64 byte data transfer to DRAM",
-+        "Counter": "1",
-+        "CounterType": "FREERUN",
-+        "EventName": "UNC_MC0_WRCAS_COUNT_FREERUN",
-+        "PerPkg": "1",
-+        "Unit": "iMC"
-+    },
-+    {
-+        "BriefDescription": "Counts every 64B write request entering the Memory Controller 1 to DRAM (sum of all channels). Each write request counts as a new request incrementing this counter. However, same cache line write requests (both full and partial) are combined to a single 64 byte data transfer to DRAM",
-+        "Counter": "4",
-+        "CounterType": "FREERUN",
-+        "EventName": "UNC_MC1_WRCAS_COUNT_FREERUN",
-+        "PerPkg": "1",
-+        "Unit": "iMC"
-+    }
-+]
-diff --git a/tools/perf/pmu-events/arch/x86/alderlake/uncore-other.json b/tools/perf/pmu-events/arch/x86/alderlake/uncore-other.json
-new file mode 100644
-index 000000000000..50de82c29944
---- /dev/null
-+++ b/tools/perf/pmu-events/arch/x86/alderlake/uncore-other.json
-@@ -0,0 +1,40 @@
-+[
-+    {
-+        "BriefDescription": "This 48-bit fixed counter counts the UCLK cycles",
-+        "Counter": "Fixed",
-+        "CounterType": "PGMABLE",
-+	"EventCode": "0xff",
-+        "EventName": "UNC_CLOCK.SOCKET",
-+        "PerPkg": "1",
-+        "Unit": "CLOCK"
-+    },
-+    {
-+        "BriefDescription": "Counts the number of coherent and in-coherent requests initiated by IA cores, processor graphic units, or LLC",
-+        "Counter": "0,1",
-+        "CounterType": "PGMABLE",
-+        "EventCode": "0x81",
-+        "EventName": "UNC_ARB_TRK_REQUESTS.ALL",
-+        "PerPkg": "1",
-+        "UMask": "0x01",
-+        "Unit": "ARB"
-+    },
-+    {
-+        "BriefDescription": "Number of requests allocated in Coherency Tracker",
-+        "Counter": "0,1",
-+        "CounterType": "PGMABLE",
-+        "EventCode": "0x84",
-+        "EventName": "UNC_ARB_COH_TRK_REQUESTS.ALL",
-+        "PerPkg": "1",
-+        "UMask": "0x01",
-+        "Unit": "ARB"
-+    },
-+    {
-+        "BriefDescription": "Each cycle counts number of all outgoing valid entries in ReqTrk. Such entry is defined as valid from its allocation in ReqTrk till deallocation. Accounts for Coherent and non-coherent traffic",
-+        "CounterType": "PGMABLE",
-+        "EventCode": "0x80",
-+        "EventName": "UNC_ARB_TRK_OCCUPANCY.ALL",
-+        "PerPkg": "1",
-+        "UMask": "0x01",
-+        "Unit": "ARB"
-+    }
-+]
--- 
-2.25.1
-
+       Arnd

@@ -2,123 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A3084C22B9
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 04:56:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E5F624C22C6
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 04:59:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229799AbiBXDzu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 22:55:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35850 "EHLO
+        id S229815AbiBXD7G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 22:59:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229743AbiBXDzt (ORCPT
+        with ESMTP id S229814AbiBXD7E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 22:55:49 -0500
-Received: from mail-oo1-xc35.google.com (mail-oo1-xc35.google.com [IPv6:2607:f8b0:4864:20::c35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0430525A973
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 19:55:20 -0800 (PST)
-Received: by mail-oo1-xc35.google.com with SMTP id d134-20020a4a528c000000b00319244f4b04so1693534oob.8
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 19:55:19 -0800 (PST)
+        Wed, 23 Feb 2022 22:59:04 -0500
+Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8808D25D26E
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 19:58:35 -0800 (PST)
+Received: by mail-pj1-x1049.google.com with SMTP id t12-20020a17090a448c00b001b9cbac9c43so643090pjg.2
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 19:58:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=ajP0nNbv/lY2RjaMzeZma7fHPb0CL6iW0Eaau4Kq0yc=;
-        b=mYpgMlnXgiymLh+rrNxgaVG4lEFGLxJy9cg5bKJhj926cDrGiHcLxfHC2fFLtKYN5J
-         JNxR2IGJdIRv0DUCsmciRUD3/WuZacEPBHw/k+k3DJ1xKUdxJ3bvGrh+6r2nKcRAqkEf
-         rHz4LGxi8yAry8msa9geOq8x1CVa7jG/wl54DZLcKWDgT4oaqMh7R2+yde1aw4jWWOqq
-         bYFxRu2/BZAYZqtqarh0+/40AJ7lUDmAHn2BeGbUU0ek1jXTwxTVhhCFq6zTTc/9cUUB
-         AQmTmXyfpdlXKGkHyjmU/tMgXzviJUIz4B0yKySg4q1Ki48xp/BG+A/cSy4CNqOZK/kl
-         woCw==
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=S/BktkTRg3IeOBKPRorlYf8cDypH5GwEH28l9JcLNGU=;
+        b=ZQv2vKvk1pOFvbCHKtwEOcwunkRUKdEYXB3FRaaa1IRk3ge8LuaPQw3HhcCu12PSWn
+         kfCVvYbvALDA+VKUM9caWeWM6Vi0SWRYp2nwzvQjeM4t0D+QyxLMhLkLCNlGm455POwQ
+         GEtOAUlw0jbBFQTDccVh/sPZKHD0Is8L0KnY/3UFcE4KlnWmnTv1DgIg3wR9wYaP0j79
+         aWlx8j+W2oMu5a6mOk3M71HzQv63tooHPxgF3QU4KD9NNYO7IfDVitzwHSskyRd2Mcq6
+         ZFQHf1OMvGTZfeBMD+Jv1+6fn4xE4y/xEcb+gkgeBT7Q0YLFmvQceqMZm9Vc7O4ol467
+         XS0A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=ajP0nNbv/lY2RjaMzeZma7fHPb0CL6iW0Eaau4Kq0yc=;
-        b=Ng0Lg28LdU6zM4dePpM3V00D2O7Ur48YqRwKj2Fj4C6R29WdTOT6gn0f3H2G5IDUTn
-         qAbjiDGJCW1gwtlxFJgXryDGqSmQWcMm8lL4Ay6LTpUCqGLP/rqFfZqd9kvdW7pe3URd
-         Z3XUnzVaS9IIsF8bnhNLwl6nkHAXI/3dy+1uqE+DZegQNPHgVm+jOekOA2wcQbC5V7Gv
-         UjhJJLoStDBoQtqliBK0oAP2B5W4nedTVKMPucJlt/pUbJLeNJ1pyxVUdfLYRIxvIJS9
-         W+OUcLGubewhlSssOkuK3kFnndtO/9fufZuHzB+XLCFYpXLpgcYJa/5o1Nm4H+V7dwN0
-         N65A==
-X-Gm-Message-State: AOAM532xhwi45IeGAYKg52FNbbhNkvHFAdDKvnr54MplmGfQhIiE1GdG
-        EeJjANf/HUz4ZKXJOhnwoKjjyw==
-X-Google-Smtp-Source: ABdhPJzUBXDkQzu1i/26Sjhn+mnlOEBwWEXhUKalWDKyryJROBtbxATXkrjyCP+SUh5VmMhs5flAWQ==
-X-Received: by 2002:a4a:3545:0:b0:2c5:e0f2:53b7 with SMTP id w5-20020a4a3545000000b002c5e0f253b7mr277036oog.27.1645674919211;
-        Wed, 23 Feb 2022 19:55:19 -0800 (PST)
-Received: from builder.lan ([2600:1700:a0:3dc8:3697:f6ff:fe85:aac9])
-        by smtp.gmail.com with ESMTPSA id d18sm792721oiw.18.2022.02.23.19.55.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Feb 2022 19:55:18 -0800 (PST)
-Date:   Wed, 23 Feb 2022 21:55:16 -0600
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Ansuel Smith <ansuelsmth@gmail.com>
-Cc:     Andy Gross <agross@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Taniya Das <tdas@codeaurora.org>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 08/16] clk: qcom: gcc-ipq806x: add additional freq nss
- cores
-Message-ID: <YhcBpBflfTd5/BNF@builder.lan>
-References: <20220217235703.26641-1-ansuelsmth@gmail.com>
- <20220217235703.26641-9-ansuelsmth@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220217235703.26641-9-ansuelsmth@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=S/BktkTRg3IeOBKPRorlYf8cDypH5GwEH28l9JcLNGU=;
+        b=V0Fh3xKffnfS+OI4pvpGUwMhSG6iVvDcXPkzO4RhfQVts0VSAzhWorRQxitxlOda1n
+         vLjUb3oMgaFZmM7hQeix2dl8zzH7svUTNRwRaEpheBif+2OaQCG5XuUuV2jPlcmvhYT6
+         wdgcpHzRvnRY9RY5EeeUxjYPbbpfiDEnbT2uFqB6+S9pOneYeLCIJfc71z2q1rb8TeUO
+         6cLJsQIEYXx5dq3PZyzkruWt/OoRgPKB/mBFrsVQfbbxrzyQ5468ySXQTS61fpDouNmo
+         Gu8LJFbzn23Y5CPAsUTPwTQMUK1f0ecaHyOK4N1jb7LAF5UXHsk8F2lLKLYD1DcfZ5JI
+         nrKg==
+X-Gm-Message-State: AOAM531BcdZsaQiivMS1+NvEbQUpJRsznyBNfzQuNNolVasv3JW02iVc
+        Ul7FHThbUlCunWOQ3Mf0Nvjgez7euzXc3w==
+X-Google-Smtp-Source: ABdhPJwbv0RBFl9Vkc/6rlQfWONrAPccTmsZ4K0XwDlcMLb+tBigsUI7IXGaatRjiIPnuFbk9rpA/+7gWSR9dA==
+X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
+ (user=davidgow job=sendgmr) by 2002:aa7:9911:0:b0:4e1:3a76:96f8 with SMTP id
+ z17-20020aa79911000000b004e13a7696f8mr1055845pff.28.1645675114919; Wed, 23
+ Feb 2022 19:58:34 -0800 (PST)
+Date:   Thu, 24 Feb 2022 11:58:19 +0800
+Message-Id: <20220224035819.1593730-1-davidgow@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.35.1.473.g83b2b277ed-goog
+Subject: [PATCH] Input: samsung-keypad - Properly state IOMEM dependency
+From:   David Gow <davidgow@google.com>
+To:     Joonyoung Shim <jy0922.shim@samsung.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     David Gow <davidgow@google.com>, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-um@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 17 Feb 17:56 CST 2022, Ansuel Smith wrote:
+Make the samsung-keypad driver explicitly depend on CONFIG_IOMEM, as it
+calls devm_ioremap(). This prevents compile errors in some configs (e.g,
+allyesconfig/randconfig under UML):
 
-> Ipq8065 SoC (an evolution of ipq8064 SoC) contains nss cores that can be
-> clocked to 800MHz. Add these missing freq to the gcc driver.
-> 
+/usr/bin/ld: drivers/input/keyboard/samsung-keypad.o: in function `samsung_keypad_probe':
+samsung-keypad.c:(.text+0xc60): undefined reference to `devm_ioremap'
 
-Do we somehow need to ensure that these new frequencies are only
-available on 8065?
+Signed-off-by: David Gow <davidgow@google.com>
+---
+ drivers/input/keyboard/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Regards,
-Bjorn
+diff --git a/drivers/input/keyboard/Kconfig b/drivers/input/keyboard/Kconfig
+index 0c607da9ee10..5c98d5f996e4 100644
+--- a/drivers/input/keyboard/Kconfig
++++ b/drivers/input/keyboard/Kconfig
+@@ -556,7 +556,7 @@ config KEYBOARD_PMIC8XXX
+ 
+ config KEYBOARD_SAMSUNG
+ 	tristate "Samsung keypad support"
+-	depends on HAVE_CLK
++	depends on IOMEM && HAVE_CLK
+ 	select INPUT_MATRIXKMAP
+ 	help
+ 	  Say Y here if you want to use the keypad on your Samsung mobile
+-- 
+2.35.1.473.g83b2b277ed-goog
 
-> Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
-> ---
->  drivers/clk/qcom/gcc-ipq806x.c | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/drivers/clk/qcom/gcc-ipq806x.c b/drivers/clk/qcom/gcc-ipq806x.c
-> index a4bf78fe8678..53a61860063d 100644
-> --- a/drivers/clk/qcom/gcc-ipq806x.c
-> +++ b/drivers/clk/qcom/gcc-ipq806x.c
-> @@ -232,7 +232,9 @@ static struct clk_regmap pll14_vote = {
->  
->  static struct pll_freq_tbl pll18_freq_tbl[] = {
->  	NSS_PLL_RATE(550000000, 44, 0, 1, 0x01495625),
-> +	NSS_PLL_RATE(600000000, 48, 0, 1, 0x01495625),
->  	NSS_PLL_RATE(733000000, 58, 16, 25, 0x014b5625),
-> +	NSS_PLL_RATE(800000000, 64, 0, 1, 0x01495625),
->  };
->  
->  static struct clk_pll pll18 = {
-> @@ -2702,7 +2704,9 @@ static const struct freq_tbl clk_tbl_nss[] = {
->  	{ 110000000, P_PLL18, 1, 1, 5 },
->  	{ 275000000, P_PLL18, 2, 0, 0 },
->  	{ 550000000, P_PLL18, 1, 0, 0 },
-> +	{ 600000000, P_PLL18, 1, 0, 0 },
->  	{ 733000000, P_PLL18, 1, 0, 0 },
-> +	{ 800000000, P_PLL18, 1, 0, 0 },
->  	{ }
->  };
->  
-> -- 
-> 2.34.1
-> 

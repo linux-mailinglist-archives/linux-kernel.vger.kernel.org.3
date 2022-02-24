@@ -2,75 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1A764C22AA
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 04:51:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 98B9C4C22B1
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 04:52:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229781AbiBXDur (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 22:50:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57940 "EHLO
+        id S229620AbiBXDwf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 22:52:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229774AbiBXDuq (ORCPT
+        with ESMTP id S229458AbiBXDwb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 22:50:46 -0500
-Received: from mail-oo1-xc31.google.com (mail-oo1-xc31.google.com [IPv6:2607:f8b0:4864:20::c31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F082620D82F
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 19:50:16 -0800 (PST)
-Received: by mail-oo1-xc31.google.com with SMTP id u47-20020a4a9732000000b00316d0257de0so1692438ooi.7
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 19:50:16 -0800 (PST)
+        Wed, 23 Feb 2022 22:52:31 -0500
+Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76FD3144F4B
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 19:52:00 -0800 (PST)
+Received: by mail-yb1-xb36.google.com with SMTP id c6so1407525ybk.3
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 19:52:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=YX+8SJVk0oliJ3pEu4ZMjuzH+FEJiz0kXUJ+6yLv9a4=;
-        b=GA90Bpj8f/3QLmmY2xQqr8xq+ilH5tEUvsH11kAFRgyfYarduXU7XRPIiOH5yE81IB
-         o2uD+ecmbi5A1PhoB++9M+aZgJwciRkK2iES4b0oYLvjRmOx7+XEb7rT5NC8D9vJ/Tun
-         sk85rMK4Hi05XxQFYG3O/8cCI44k4R6QOM7XQTPHiORfV9KQ9pbi4OVmOKzFZHm3FC89
-         SW5hxuG1YIqDQJ+jusCORyRQOdu02/7RgaL1zFTNDUbTZTgw9OHUObyxynkBt4qPa3zn
-         OVkkkBHUEEvvOJFQB4WCgFUbgXzXIH+B0NU4g+8fe/pp9t3SzNmZbaNKuOk5pMcCAAEu
-         9e9w==
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=C3V/dtxV15Mn7k63x16wvKI7YuLTRLAtDoW+UZHVNSQ=;
+        b=JpTyQ9fwmnCkQTdb4pTZ4OG7pAZVm7gwL2969nPUypAx3k22so+gM3I0W2ci/jvCA5
+         BDPZMmcHgO3YLsB+3wl8ORdfR8CU0QCz0p728ige4gFTPcamGc/2PpHz7ciUiyqBI3Tu
+         X9cjP50jWu0UKjTUkHmEzjal1OhvJNpAH3BzU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=YX+8SJVk0oliJ3pEu4ZMjuzH+FEJiz0kXUJ+6yLv9a4=;
-        b=NTWmPRbXTGWxnzS0luGzduUYCriwV8FTkP7P1bfWSg3cfpK3uw+xv/gZ2b/rdx8tGi
-         276kB4RIxKfTWAHlFmzpRZD29QvRAfmGmugW+5lqPQVKd2mziBnukagLCpWZIGRNPm8/
-         LTDXxeu/QPB+zVPj35m9y9TINemT3Cd/9f0WoznQGoXhS71R8h6QwkA8CexdWdqZoSAX
-         RaWyegXJ/cI+T0W+54yOZQWxqBfxPz8Miy+tbo4krzBoiRcBfdEYaTracVA7D5RlH1Ai
-         sbxOeuLYbZzq890nvawK5MvOhvmXotZFnULvZt/J6EedDZM6JzutQ/GngytvBzN51bTd
-         4A7w==
-X-Gm-Message-State: AOAM533xowSuvrLHEMmG4dAbyOElqOv73xNCCq0QgJw5DUkePYhZwLfA
-        rLYgTg7AAvJRbMWN4K+OcIQ18Q==
-X-Google-Smtp-Source: ABdhPJwfPVEYmjXLEJZtJLB3Y6ke4eOm2bx2wvBFvPmm0pp7LB7bFxCVEHhSH1ML96DFDxbNe+fzFw==
-X-Received: by 2002:a05:6870:832a:b0:cc:f848:1651 with SMTP id p42-20020a056870832a00b000ccf8481651mr316226oae.347.1645674616380;
-        Wed, 23 Feb 2022 19:50:16 -0800 (PST)
-Received: from builder.lan ([2600:1700:a0:3dc8:3697:f6ff:fe85:aac9])
-        by smtp.gmail.com with ESMTPSA id o2sm645821otl.9.2022.02.23.19.50.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Feb 2022 19:50:15 -0800 (PST)
-Date:   Wed, 23 Feb 2022 21:50:14 -0600
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Ansuel Smith <ansuelsmth@gmail.com>
-Cc:     Andy Gross <agross@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Taniya Das <tdas@codeaurora.org>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 07/16] clk: qcom: gcc-ipq806x: drop hardcoded pxo and
- cxo source clk
-Message-ID: <YhcAdq4ouQenhn2f@builder.lan>
-References: <20220217235703.26641-1-ansuelsmth@gmail.com>
- <20220217235703.26641-8-ansuelsmth@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=C3V/dtxV15Mn7k63x16wvKI7YuLTRLAtDoW+UZHVNSQ=;
+        b=pdoZ82FJ+Id06QVbFv85/zPHupUmixNVcqxA3TsM32JmpFNQAXhzGlIR1vqpqsdWfr
+         vVq4Wj3KxVzQEF+Kj/B1KjIdADekqWRTKp/ys2ORLg1BfREPUlKcR7YJBYL26oEN/urJ
+         wazcmDy6Q535te/vrPLjmL4yix3amf3WxG9e0BwYHaBEDTDy/joJZWvYqpGdwfVXWwnh
+         tHtlsjvCoihPymfa62sLeQJpDeG2be9gjec2otN3OO2ZiRPAM14gc+ci6N6EJVRsfmgn
+         Su4HqMayIrhD4G1Acv9NVYIYz5LkDtM+GGnMAwtIVAmDdA3VbKrG49DW9JUzpH60Mpw+
+         4QXQ==
+X-Gm-Message-State: AOAM533sFdz+L5bdHKUAdZ0Hq6510CrqwFbbwzpZb0ySqPW63jKThpoV
+        N+RAFjoRreW5Li3xDDWoqgQbFk86VPeTWcqGTTdWdw==
+X-Google-Smtp-Source: ABdhPJyiaPY/OEbo9lDvhKxowTvqVlkhYSSAXktn3qviviBrH2qstZAw3K9LBrLE61G6q3rwWoSQxKBMDVgyXk0nark=
+X-Received: by 2002:a25:a486:0:b0:61d:a523:acd0 with SMTP id
+ g6-20020a25a486000000b0061da523acd0mr753461ybi.203.1645674719716; Wed, 23 Feb
+ 2022 19:51:59 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220217235703.26641-8-ansuelsmth@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+References: <20220201174643.843102-1-nfraprado@collabora.com>
+In-Reply-To: <20220201174643.843102-1-nfraprado@collabora.com>
+From:   Chen-Yu Tsai <wenst@chromium.org>
+Date:   Thu, 24 Feb 2022 11:51:48 +0800
+Message-ID: <CAGXv+5HbBroWkR4gLA2EXOcki4wgZ6XahO1J-VOctgKX5K9k7w@mail.gmail.com>
+Subject: Re: [PATCH v2] arm64: dts: mt8183: jacuzzi: Fix bus properties in
+ anx's DSI endpoint
+To:     =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
+        <nfraprado@collabora.com>
+Cc:     Robert Foss <robert.foss@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Xin Ji <xji@analogixsemi.com>, kernel@collabora.com,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,57 +76,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 17 Feb 17:56 CST 2022, Ansuel Smith wrote:
+Hi,
 
-> We now define these clk in dts. Drop pxo and cxo hardcoded in the gcc
-> probe function.
-> 
+(CC-ed DRM bridge maintainers and the dri-devel ML)
 
-As noted on the previous patch, this breaks booting with existing dtbs.
-So I would like to split this with 1-2 releases in between to avoid any
-problems.
+On Wed, Feb 2, 2022 at 1:47 AM N=C3=ADcolas F. R. A. Prado
+<nfraprado@collabora.com> wrote:
+>
+> mt8183-kukui-jacuzzi has an anx7625 bridge connected to the output of
+> its DSI host. However, after commit fd0310b6fe7d ("drm/bridge: anx7625:
+> add MIPI DPI input feature"), a bus-type property started being required
+> in the endpoint node by the driver to indicate whether it is DSI or DPI.
+>
+> Add the missing bus-type property and set it to 5
+> (V4L2_FWNODE_BUS_TYPE_PARALLEL) so that the driver has its input
+> configured to DSI and the display pipeline can probe correctly.
 
-Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Don't people find it odd that this is setting the bus-type to "parallel"
+(5) for the device to use DSI? Instead of "MIPI CSI-2 D-PHY" (4) or even
+"MIPI CSI-2 C-PHY" (1) which is specified in the binding? It's completely
+backwards.
 
-on the change though.
+Would it be possible to fix the binding and driver at this point?
 
-Regards,
-Bjorn
 
-> Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
+Thanks
+ChenYu
+
+> While at it, also set the data-lanes property that was also introduced
+> in that same commit, so that we don't rely on the default value.
+>
+> Fixes: fd0310b6fe7d ("drm/bridge: anx7625: add MIPI DPI input feature")
+> Signed-off-by: N=C3=ADcolas F. R. A. Prado <nfraprado@collabora.com>
+>
 > ---
->  drivers/clk/qcom/gcc-ipq806x.c | 11 +----------
->  1 file changed, 1 insertion(+), 10 deletions(-)
-> 
-> diff --git a/drivers/clk/qcom/gcc-ipq806x.c b/drivers/clk/qcom/gcc-ipq806x.c
-> index f6db7247835e..a4bf78fe8678 100644
-> --- a/drivers/clk/qcom/gcc-ipq806x.c
-> +++ b/drivers/clk/qcom/gcc-ipq806x.c
-> @@ -3119,23 +3119,14 @@ MODULE_DEVICE_TABLE(of, gcc_ipq806x_match_table);
->  
->  static int gcc_ipq806x_probe(struct platform_device *pdev)
->  {
-> -	struct device *dev = &pdev->dev;
->  	struct regmap *regmap;
->  	int ret;
->  
-> -	ret = qcom_cc_register_board_clk(dev, "cxo_board", "cxo", 25000000);
-> -	if (ret)
-> -		return ret;
-> -
-> -	ret = qcom_cc_register_board_clk(dev, "pxo_board", "pxo", 25000000);
-> -	if (ret)
-> -		return ret;
-> -
->  	ret = qcom_cc_probe(pdev, &gcc_ipq806x_desc);
->  	if (ret)
->  		return ret;
->  
-> -	regmap = dev_get_regmap(dev, NULL);
-> +	regmap = dev_get_regmap(&pdev->dev, NULL);
->  	if (!regmap)
->  		return -ENODEV;
->  
-> -- 
-> 2.34.1
-> 
+> v1: https://lore.kernel.org/all/20220120224204.773117-1-nfraprado@collabo=
+ra.com
+>
+> Changes in v2:
+> - (thanks Rob) Use proper format when refering to commit in commit
+>   message as pointed out by checkpatch
+>
+>  arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi.dtsi | 2 ++
+>  1 file changed, 2 insertions(+)
+>
+> diff --git a/arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi.dtsi b/arc=
+h/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi.dtsi
+> index 8f7bf33f607d..e8f133dc96b9 100644
+> --- a/arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi.dtsi
+> +++ b/arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi.dtsi
+> @@ -171,6 +171,8 @@ port@0 {
+>
+>                         anx7625_in: endpoint {
+>                                 remote-endpoint =3D <&dsi_out>;
+> +                               bus-type =3D <5>;
+> +                               data-lanes =3D <0 1 2 3>;
+>                         };
+>                 };
+>
+> --
+> 2.35.1
+>
+>
+> _______________________________________________
+> Linux-mediatek mailing list
+> Linux-mediatek@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-mediatek

@@ -2,63 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A21D4C2AE1
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 12:27:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 822374C2AE8
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 12:30:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233954AbiBXL0l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 06:26:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53014 "EHLO
+        id S231459AbiBXLbK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 06:31:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229594AbiBXL0i (ORCPT
+        with ESMTP id S229525AbiBXLbH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 06:26:38 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E590129A56B;
-        Thu, 24 Feb 2022 03:26:08 -0800 (PST)
+        Thu, 24 Feb 2022 06:31:07 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBC5928A113;
+        Thu, 24 Feb 2022 03:30:37 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0509461806;
-        Thu, 24 Feb 2022 11:26:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE968C340E9;
-        Thu, 24 Feb 2022 11:26:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1645701967;
-        bh=c9g/jUJtCUw9sivZ3lkoycxnPjQ1WqrUDK+4vvMZAhg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rNfUenic21FUYcVgChtpf/OKbUtHvXzNJTMffYLsbZRJ+ydTkUPhK6jQSqZUCUXrF
-         lSR0NyoGcrNUJ3fH7EkgdKI5ChXw1/kKiLnKHsK0afT7hfZSkKr7cD6CvQBmPxmukA
-         PETIYkqoOWChOY1svgopA/zWJ+2V6cLgS5I/ZyjA=
-Date:   Thu, 24 Feb 2022 12:26:04 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Cristiano Giuffrida <c.giuffrida@vu.nl>
-Cc:     Jakob <jakobkoschel@gmail.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Arnd Bergman <arnd@arndb.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
-        "Bos, H.J." <h.j.bos@vu.nl>
-Subject: Re: [RFC PATCH 03/13] usb: remove the usage of the list iterator
- after the loop
-Message-ID: <YhdrTHeMzSqozGDY@kroah.com>
-References: <20220217184829.1991035-1-jakobkoschel@gmail.com>
- <20220217184829.1991035-4-jakobkoschel@gmail.com>
- <CAHk-=wg1RdFQ6OGb_H4ZJoUwEr-gk11QXeQx63n91m0tvVUdZw@mail.gmail.com>
- <6DFD3D91-B82C-469C-8771-860C09BD8623@gmail.com>
- <86C4CE7D-6D93-456B-AA82-F8ADEACA40B7@gmail.com>
- <6d191223d93249a98511177d4af08420@pexch012b.vu.local>
- <CANWxqZmDjfhw78ZmbS6H8Y+qurRC7jirm_rgb5WUYJYw7GrEmg@mail.gmail.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 75964B82575;
+        Thu, 24 Feb 2022 11:30:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE696C340E9;
+        Thu, 24 Feb 2022 11:30:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645702235;
+        bh=NEiEy8aPQXv4YCvSSvu1CrwZcw8hIl0XdkWsb+8kvdc=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=lzpWsjsxoWJp5qkJ96UqX80NBnU+UC1GaWf56BLmCibrCohLLcjWbwrFK+UFLdIgS
+         M3+IVpmCOF1k1d18hfO0Yq0UaOYTv8twIThmyrZyJtS0BaI+IBuZ8GbGCLoCA4Nfky
+         uw0HWHltyCjHAtOKREnE0y6956nBervDeobT4ihNlqBT6q1gMuJz1O6ENY8jS1nD30
+         C4oS6GqmHNV9tEmM4VTc/rfnlTTnWEqSE78JNNYFLUpVx8tkL5Lpk/To+UfIvaeCaj
+         xXDDgEeajWU/EpVj5VTsQF8+WQbltJex+TSRMA276bz7hfF54LMk8fLTqs2VgkV0uj
+         ELHbDgvjlTNSA==
+Message-ID: <e8ec98a9c4fab9b7aa099001f09ff9b11f0c3f96.camel@kernel.org>
+Subject: Re: [PATCH 06/11] ceph: remove reliance on bdi congestion
+From:   Jeff Layton <jlayton@kernel.org>
+To:     NeilBrown <neilb@suse.de>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, Jan Kara <jack@suse.cz>,
+        Wu Fengguang <fengguang.wu@intel.com>,
+        Jaegeuk Kim <jaegeuk@kernel.org>, Chao Yu <chao@kernel.org>,
+        Ilya Dryomov <idryomov@gmail.com>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        Anna Schumaker <anna.schumaker@netapp.com>,
+        Ryusuke Konishi <konishi.ryusuke@gmail.com>,
+        "Darrick J. Wong" <djwong@kernel.org>,
+        Philipp Reisner <philipp.reisner@linbit.com>,
+        Lars Ellenberg <lars.ellenberg@linbit.com>,
+        Paolo Valente <paolo.valente@linaro.org>,
+        Jens Axboe <axboe@kernel.dk>, linux-doc@vger.kernel.org,
+        linux-mm@kvack.org, linux-nilfs@vger.kernel.org,
+        linux-nfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net, linux-ext4@vger.kernel.org,
+        ceph-devel@vger.kernel.org, drbd-dev@lists.linbit.com,
+        linux-kernel@vger.kernel.org
+Date:   Thu, 24 Feb 2022 06:30:31 -0500
+In-Reply-To: <164568131640.25116.884631856219777713@noble.neil.brown.name>
+References: <164549971112.9187.16871723439770288255.stgit@noble.brown>
+        , <164549983739.9187.14895675781408171186.stgit@noble.brown>
+        , <ccc81eb5c23f933137c5da8d5050540cc54e58f0.camel@kernel.org>
+         <164568131640.25116.884631856219777713@noble.neil.brown.name>
+Content-Type: text/plain; charset="ISO-8859-15"
+User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CANWxqZmDjfhw78ZmbS6H8Y+qurRC7jirm_rgb5WUYJYw7GrEmg@mail.gmail.com>
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -69,21 +74,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 24, 2022 at 11:46:40AM +0100, Cristiano Giuffrida wrote:
-> I think the "problem" with this solution is that it doesn't prevent
-> `tmp` from being used outside the loop still (and people getting it
-> wrong again)? It would be good to have 'struct gr_request *tmp;' being
-> visible only inside the loop (i.e., declared in the macro).
+On Thu, 2022-02-24 at 16:41 +1100, NeilBrown wrote:
+> On Thu, 24 Feb 2022, Jeff Layton wrote:
+> > On Tue, 2022-02-22 at 14:17 +1100, NeilBrown wrote:
+> > > The bdi congestion tracking in not widely used and will be removed.
+> > > 
+> > > CEPHfs is one of a small number of filesystems that uses it, setting
+> > > just the async (write) congestion flags at what it determines are
+> > > appropriate times.
+> > > 
+> > > The only remaining effect of the async flag is to cause (some)
+> > > WB_SYNC_NONE writes to be skipped.
+> > > 
+> > > So instead of setting the flag, set an internal flag and change:
+> > >  - .writepages to do nothing if WB_SYNC_NONE and the flag is set
+> > >  - .writepage to return AOP_WRITEPAGE_ACTIVATE if WB_SYNC_NONE
+> > >     and the flag is set.
+> > > 
+> > > The writepages change causes a behavioural change in that pageout() can
+> > > now return PAGE_ACTIVATE instead of PAGE_KEEP, so SetPageActive() will
+> > > be called on the page which (I think) wil further delay the next attempt
+> > > at writeout.  This might be a good thing.
+> > > 
+> > > Signed-off-by: NeilBrown <neilb@suse.de>
+> > 
+> > Maybe. I have to wonder whether all of this is really useful.
+> > 
+> > When things are congested we'll avoid trying to issue new writeback
+> > requests. Note that we don't prevent new pages from being dirtied here -
+> > - only their being written back.
+> > 
+> > This also doesn't do anything in the DIO or sync_write cases, so if we
+> > lose caps or are doing DIO, we'll just keep churning out "unlimited"
+> > writes in those cases anyway.
+> 
+> I think the point of congestion tracking is to differentiate between
+> sync and async IO.  Or maybe "required" and "optional".
+> Eventually the "optional" IO will become required, but if we can delay
+> it until a time when there is less "required" io, then maybe we can
+> improve perceived latency.
+> 
+> "optional" IO here is write-back and read-ahead.  If the load of
+> "required" IO is bursty, and if we can shuffle that optional stuff into
+> the quiet periods, we might win.
+> 
 
-That is a larger change, one that we can hopefully make when changing to
-introduce the temp variable in the loop_for_each() macro as Linus
-described elsewhere in the thread.
+In that case, maybe we should be counting in-flight reads too and deny
+readahead when the count crosses some threshold? It seems a bit silly to
+only look at writes when it comes to "congestion".
 
-But for now, it should be pretty obvious to not touch tmp again after
-the loop is done.  That should make it easier to check for stuff like
-this as well in an automated fashion (i.e. the loop variable is only
-touched inside the loop.)
+> Whether this is a real need is an important question that I don't have an
+> answer for.  And whether it is better to leave delayed requests in the
+> page cache, or in the low-level queue with sync requests able to
+> over-take them - I don't know.  If you have multiple low-level queue as
+> you say you can with ceph, then lower might be better.
+> 
+> The block layer has REQ_RAHEAD ..  maybe those request get should get a
+> lower priority ... though I don't think they do.
+> NFS has a 3 level priority queue, with write-back going at a lower
+> priority ... I think... for NFSv3 at least.
+> 
+> Sometimes I suspect that as all our transports have become faster, we
+> have been able to ignore the extra latency caused by poor scheduling of
+> optional requests.  But at other times when my recently upgraded desktop
+> is struggling to view a web page while compiling a kernel ...  I wonder
+> if maybe we don't have the balance right any more.
+> 
+> So maybe you are right - maybe we can rip all this stuff out.
+> 
 
-thanks,
+I lean more toward just removing it. The existing implementation seems a
+bit half-baked with the gaps in what's being counted. Granted, the
+default congestion threshold is pretty high with modern memory sizes, so
+it probably doesn't come into play much in practice, but removing it
+would reduce some complexity in the client.
 
-greg k-h
+-- 
+Jeff Layton <jlayton@kernel.org>

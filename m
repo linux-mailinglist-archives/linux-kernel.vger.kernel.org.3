@@ -2,253 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 725504C360A
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 20:44:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 310AC4C360F
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 20:44:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233980AbiBXTo0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 14:44:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33332 "EHLO
+        id S234008AbiBXTol (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 14:44:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233076AbiBXToY (ORCPT
+        with ESMTP id S233992AbiBXTog (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 14:44:24 -0500
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD4D31C6EF2
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 11:43:53 -0800 (PST)
-Received: by mail-ed1-x532.google.com with SMTP id cm8so4395243edb.3
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 11:43:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=cT6VTaPBAvZcJT0C07jbq6jkkSfnrkv3DOfnLzZ77CM=;
-        b=cph9wo/cKs42xh7OHpJ1L4/fItWA1YtsVsR8Di5tl2igWrI3LjGzwy+GTVPrIL3I1Z
-         GPmf1B0NtZnAEE3hGPmw8LkPPA+8eTx1vMqrbiZJvC6TMFfHROnbmMiYXNJp8huLI+gx
-         qO7LzfpbfGtaHrKawj/KVlZawWWAemhDdkG+FfRsf2zbCwRLYY8yk1hUtHQPAc+vZfmk
-         RxJzf8gEOCvxp1Kuikw1mJyQ5GskvlzG3ChUBTmfgr88rXLMULIcbZFULMD36AaKUC3e
-         HhchVJPs5IExtwcXN/IpVT84JaqinlITjSuAktAm60Cw3JGxFH3MCqXm65fyUBe1lLZi
-         IxIA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=cT6VTaPBAvZcJT0C07jbq6jkkSfnrkv3DOfnLzZ77CM=;
-        b=LXPJ7g9199ZFylDr9Hpl5H0EZgxNKvPPwHu0C06bD1lS7ta+8HPaEzYMwjBXZFy/UI
-         enOnU3c90nmPfpu+pnyj8jwIxrJin2nvm8TnivCRkahqHSmKSqiBB3K/RtW6sWFgPKhU
-         kdbXxP1HOudJnTIGhLwoFX4Ad+ryi1HOMEhp9pdZZxxFnUjYqLimNU5YkMT2MWBABzUd
-         IJOp0GuuRLBkXJQKDwf9E4wvAijNlWTUqpcNJBnBl7YlNNeCw0r60GUrBi6tJQe/tOf+
-         2vTkCYqzkKQDKbi/bmRNS+GF0KoW5wTbnMyq04YcXQ9QrxbdpNH2JDRvDr1WCJqNIKVp
-         RSuw==
-X-Gm-Message-State: AOAM533suIoXeqR+3dx1kSrb6Rx/R9hngGgxHe7R3itOdnI47NX0hbMf
-        HFDXwm5T8TYs3Mlj2i78E0evbvLoLsbFiAuMGV2gKQ==
-X-Google-Smtp-Source: ABdhPJwrdy9Ks+AvYVAONIODLhAaLZ43j966hZvJwXtEANqW/+4iWi8AF6gH87RMvVRxu+szCttnMs6KWkl6HKVvHdU=
-X-Received: by 2002:a05:6402:2546:b0:412:d0eb:2a4a with SMTP id
- l6-20020a056402254600b00412d0eb2a4amr3924248edb.306.1645731832090; Thu, 24
- Feb 2022 11:43:52 -0800 (PST)
+        Thu, 24 Feb 2022 14:44:36 -0500
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2057.outbound.protection.outlook.com [40.107.93.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5BB81C6EF7
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 11:44:05 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=UaWBJZ+Ao39MyuN88VDsrpuB0DKlutnH2r+NefU2/SkXNbXamZCoM6X9hN7OFmOpufgXFiSXqWDVCJm6NhvX9ACEdwOHnBZGymitKCWsiIPZ42XeADURg5MiOHqmMH84LLwKJIhFDQd0Zw6PxCED9786VqjMD9cGX8g2GquAF2BBSAW9eLNfyDkgnjZBbmiZ3VhEJwjQqHjS8PyneWvp8j5I1rTy8EM22DBqwlaJFXgW8cf+ihu86vzdjtXQzpo3OFOobqCWRtxYza437pe1g5p4n1xKgoXCW9c5bJXW6Mgwzmf2Q5SbhqZTmuludvmhYFqCLWhKNT5K55x9llonYw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=WKNYjXRmKqtiCh4kegfkCxYI1NKJ7n8ZCDGIG5LCchI=;
+ b=YRrT+IyVGccEsbVHgoSHFalQKzoL322B69krMgeYVJGCjnYjm1QZnPtNpp5IQvmjr/ko/CC5JXDmLh7bsQCF/6QJuar+8odazBt8PVdHONu9Q6YuxIgSmIguIdMPr/j0rdT+fDkEL4ZDz2CRrKdlW50JFRW3ksbE5RhQmryUyHn9FAGNogu46DHrKwf11kvPxNyUNRqrpAaPO8dN4H80LxfLCOCF9z2soX90hWEXec7vVCdCXCqdqfobgDvrWc3SlqXY6LYoDxkhl0Ut215Mp2AW46cWkKCEw7A1dMkCqTK7i+2YdUMpN1KAapXHJs52268pxtRL3SiDw5vbpyKwxQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=WKNYjXRmKqtiCh4kegfkCxYI1NKJ7n8ZCDGIG5LCchI=;
+ b=p5lLmM2xhbTH2SdPGm8izczZgfv2RlJhGBIw0NA/jCrVhC73eLeORiyjGwU+6laqpXl+Zsm3XOBxMb70fWPYqjHYq+GfN7AIRyUqoQX9Z87aN65aXsXK4J92VyfWJzcU1krvmEMNWEZRZ52knfjfxwsRJIKMV0b+CC8X+QPj4fY=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from CO6PR12MB5427.namprd12.prod.outlook.com (2603:10b6:5:358::13)
+ by MN2PR12MB3069.namprd12.prod.outlook.com (2603:10b6:208:c4::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5017.24; Thu, 24 Feb
+ 2022 19:44:03 +0000
+Received: from CO6PR12MB5427.namprd12.prod.outlook.com
+ ([fe80::192:5346:4ece:7ca3]) by CO6PR12MB5427.namprd12.prod.outlook.com
+ ([fe80::192:5346:4ece:7ca3%6]) with mapi id 15.20.5017.022; Thu, 24 Feb 2022
+ 19:44:02 +0000
+Message-ID: <cf085422-d109-2e7b-aaef-083d75fcef10@amd.com>
+Date:   Thu, 24 Feb 2022 14:43:58 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH 0/4] Address a few compilation warnings
+Content-Language: en-US
+To:     Magali Lemes <magalilemes00@gmail.com>, airlied@linux.ie,
+        alexander.deucher@amd.com, christian.koenig@amd.com,
+        daniel@ffwll.ch, Rodrigo.Siqueira@amd.com, sunpeng.li@amd.com,
+        Xinhui.Pan@amd.com
+Cc:     siqueirajordao@riseup.net, mwen@igalia.com, maira.canal@usp.br,
+        isabbasso@riseup.net, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+References: <20220224191551.69103-1-magalilemes00@gmail.com>
+From:   Harry Wentland <harry.wentland@amd.com>
+In-Reply-To: <20220224191551.69103-1-magalilemes00@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: YT3PR01CA0110.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b01:85::22) To CO6PR12MB5427.namprd12.prod.outlook.com
+ (2603:10b6:5:358::13)
 MIME-Version: 1.0
-References: <20220224055145.1853657-1-keescook@chromium.org>
-In-Reply-To: <20220224055145.1853657-1-keescook@chromium.org>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Thu, 24 Feb 2022 11:43:40 -0800
-Message-ID: <CAGS_qxrRi0zvGnoi-Ne=wp8xkuFKPzNj9d57eq=51gg5gwX=eA@mail.gmail.com>
-Subject: Re: [PATCH] lib: stackinit: Convert to KUnit
-To:     Kees Cook <keescook@chromium.org>
-Cc:     David Gow <davidgow@google.com>, Arnd Bergmann <arnd@arndb.de>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-kernel@vger.kernel.org,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        llvm@lists.linux.dev, linux-hardening@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 23a35f37-9b26-40ae-7f82-08d9f7ce0238
+X-MS-TrafficTypeDiagnostic: MN2PR12MB3069:EE_
+X-Microsoft-Antispam-PRVS: <MN2PR12MB306971CC8A19A7E266DBB5428C3D9@MN2PR12MB3069.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: mSVQ7cCL5VccmzI62kZmoWs35mOyelUdrV8Lj7gRpJVc+6SDCNzw7s/cxW6uHkrjFYaLDVr1zUP5FkUZ9UKXeGZjak83qhdi9miA8h8y1h88l+bbddRqKa1ap9NiyYwTWh+JedzUEbqw81EZbz6EMNYLHbCbuHb+qOrm8nWJ0ExuIzaL1leeh98Bu2iXjWF+nNg3+67KW9Vj+CEwweD4QcnmAcCOVyQJkWx8Z9p5P5Vfs+lIkrW9b8Y2GdL20tksvze1/XtQEljoRBvORFYpb0WTwymsbQqqLk2jpwFi5GYwlmQzQHXLx22sOqfUCeJH8xk3MTO91R22xHTtusvm2ySzi10dsP2S8kZ72QMAWQY+VTjaMEeW3yds9LT5/BBtazvWZDUEXF4LeaDVe5rjq4jSEV+dt6teATEEpNoXCsIprUe8FXjMJiGsV71OP5FYVX6Ahs6q2j9Ab0oireIGMAGV2x4ekWdhpsLqZbMgVK0mF+PgtK6IaS2oITUbAYN4N3SZ71z50Q1CDiamS9vvdcnjmP6MK39WIb8ogBuW+qImcsS8wU1jWVRqA9AhuMM4xccPdE+9NXGhFN/shNgZ3fAKbXTgnECq/r+QablQY847wkDJ0a/4RIYSTA3zofA7/N21Zi7V73NAHUY6g13mmz0mnOpaGpWFOUN1wvhljmsAFD/EE2ovK+dbJ73x8QbKSBl9cf/Jpu5y+N7ot36dtDUQxb0HY51rhYyIB8JIzH7CkoX9UbnnB3Unp9grvdqr
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR12MB5427.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(53546011)(31696002)(6636002)(38100700002)(8936002)(186003)(6486002)(26005)(4326008)(8676002)(4744005)(44832011)(6512007)(66946007)(66556008)(66476007)(508600001)(316002)(5660300002)(2906002)(7416002)(2616005)(83380400001)(36756003)(86362001)(31686004)(6666004)(6506007)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Y3BXcWtuZUFxV25MYWMydzNrMFJSSXgyK2JuN3Y0NzNxZ1YxOGlrYm1IdFhP?=
+ =?utf-8?B?SkFuclNhMVFqWWhWSXZaS0Y3eVV0amRCUEFWOGlDbDRic0dIQjdTTG9mYzly?=
+ =?utf-8?B?aHJWQ29NVHo0cTdDMXlHZlhyTGd1TURyaHRDZ2s4ZmxBSzMzOHBGNmdNS2pv?=
+ =?utf-8?B?N1VJQVF3TzZsY2hwcitjV25DdUdhb1p1Nmk2Slp6Mm5vTFZTRWhNcTNiUmlo?=
+ =?utf-8?B?LzFXYnQxZGNkTjFFRmpvR0tQai9GY1dZTDJ0akRNSGQzUkxucEtRODB6UTJ4?=
+ =?utf-8?B?Q0htemdxL1BMVnhTSjFETVZRbk5zakpxL0VBN3VYdHl4Snp6NU1mWFZSNnpI?=
+ =?utf-8?B?QnFPd2FUeXJLQTAvNTUwWklTY1c0cXVhY3plYVpBc1J0Y1crSjZFSzdWclpT?=
+ =?utf-8?B?YUNqRFVQcDRFUGgySHVGRDVpOUtXUkpvbmZLM2NkcFpvSXcrc3F1S0V6NHNJ?=
+ =?utf-8?B?NmF6QjNCZGtwYkt3UWtJeTFRenRyRzZxQUU3aTUwM3RJbks1dUZ4MGZ2MDVi?=
+ =?utf-8?B?ZCtycEgzVVdFd21vcXJtbWxYeGJDMzY4RFFoVU1BaTRxMDRrYW5OWGs1MFhY?=
+ =?utf-8?B?NHFHVGhuRXJoUTJKR1hLM2toQUlYOW5LUlByMHRTdzBXU1R3OThKUXRCWVFS?=
+ =?utf-8?B?ZjBVU2E4L3gwbCtWWkRJU1N2TGRDVEcwZC9SOEhtd0VvejdoMHpndlpWZ3cy?=
+ =?utf-8?B?YjV1blFhVFdoQ2tsVzZwSkFqV0p6aGVxS1prRUR4SzdqZWVZTE1Lb2JXTGFi?=
+ =?utf-8?B?dFZoVDRQZ29XcXN0ZnRVUHFRL202OEFGeEt5UzFVUGZWSEdBeU1hWG9vbFBD?=
+ =?utf-8?B?dUNEd0dwdkVzeVpoSzZsZVUxK1FuSjJPNlVVR3dqZjBXclYxZjZaMXMyRTNv?=
+ =?utf-8?B?Q1BRUzRsVzVzZEtpUGhrWFM0a01sS0J3WE1wZUxVdFAyZ1ltOHIwKzRHL2J4?=
+ =?utf-8?B?YkVZQkxRVEJBL0JCUGJiWmczY3QwTDRmOU9sSkJvK1VXK0FmdEdLbGFLWGlC?=
+ =?utf-8?B?VDRuR0I4blFmT1JXY1ZiblRmVDJNdlYreDF0UldJc3ZkalF3bnFhQWhvb3lI?=
+ =?utf-8?B?bEdXbk9WY0E1d0NNL1kvZCtmSlV1blVid3F4Tm5tNW94b3lvSmc1eWk1eTBV?=
+ =?utf-8?B?SEYzdVE1bUJaSWY2STdwUFJCUEF4MU55c2tZMGp6K0dMd0EzVDFNQldRVkRM?=
+ =?utf-8?B?Wm9UUk1GMVVYMFBlTjdGS0NRMTlBM05qYmhycmZxQUJDNFVTbGtLVU9PRWxt?=
+ =?utf-8?B?OFBocXgyU3Z0Qm82MjVqVXJSUmxZTjRxTC9oQ21rVnFqTlZPNnEyQ1c4VnVP?=
+ =?utf-8?B?THFrc1BoWFhuYWxHa1RGczlDVTR1WTBrT2lreVVzSTlYUVMzaDhhbFJXb1Qy?=
+ =?utf-8?B?MEI4VWZtOEZpUEN6UW1pS0JybVZtbGZsc2NOcThrTkVqZXJ3U1BDSXlYQ1VQ?=
+ =?utf-8?B?S2VxMEdwYjJPeld4ejF2SXR1N3pER1UveU9ib1VJWXUyRm8xTEFFTExFcFpl?=
+ =?utf-8?B?TW1GZlZ1ZGhGQVpTMG53ZWNJUkRSWjhsNWc0S05lcDdob242L3FmTTFrS3Vl?=
+ =?utf-8?B?WDFUNllYbVIwUTR2bDZVS1E4S29iWVRYd2xuci9sZlVPb0F3ZTIyZFRuYTRJ?=
+ =?utf-8?B?dGhDL3oyUnoxbk5XOUhwQVVaMmFYSlBMZHN6K1FNdlM5T1o2ejVweVd3S2ph?=
+ =?utf-8?B?ajFwWC83T0FDcHVqTWlGcE1HNVZ4OE5ZcEJ4ZHArckVtcVBkNFJiNFByb3h0?=
+ =?utf-8?B?WVB2OGFwQW56RUxtNXhDMUZHcGZFcDdKUldkZERYUzNNVHJNTDIvbDQweE02?=
+ =?utf-8?B?dmRFYlBtdWg2UFdhZlNRZFAwV3dackczNUtkdTdIVUNWbG1GQVhHM0JIYTEw?=
+ =?utf-8?B?YWVZMFRTUTFJSVdGcWxWMWQzdjNzd0xCWG5qWjdEQ1QrNW01dFdmVnpWRzRw?=
+ =?utf-8?B?RGZQQmhURVZwY2tsNitzWDNQSkJ1UWs3OURIY0NUcGF0MmVhUmZOclUzRlFO?=
+ =?utf-8?B?VllBQVV5ZGZWbnFlUTIvMElLc3lRWk04cUVOYTVFczVnNDh6cnpFa3dDYzg3?=
+ =?utf-8?B?MEpOaytVUmNCOXVXTzRaVTd3ZnY5S3ltZVdEajFuSGFnRHRUZGdKRXdxOC9N?=
+ =?utf-8?B?dTc0NzU0d3hiR09TUXA0NmZSKzhJQVpUMlRhcjFqNEJSY0JsWE1rNHltbTZU?=
+ =?utf-8?Q?x5zrLmaP7qOAgrIhyETkMOk=3D?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 23a35f37-9b26-40ae-7f82-08d9f7ce0238
+X-MS-Exchange-CrossTenant-AuthSource: CO6PR12MB5427.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Feb 2022 19:44:02.5184
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 94rsWOjVfH9PmtOF3BCUa3vvEmB5pMJ0dbvpg+dLO1Zaj1mP7AHWPp+Ythi2MMbVB+q2i74MmHTWiKhjjBrHdA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB3069
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 23, 2022 at 9:51 PM Kees Cook <keescook@chromium.org> wrote:
->
+Series is
+Reviewed-by: Harry Wentland <harry.wentland@amd.com>
 
-<snip>
+Harry
 
+On 2022-02-24 14:15, Magali Lemes wrote:
+> This patchset addresses a few warnings reported by the Kernel Test Robot and
+> sparse.
+> 
+> Magali Lemes (4):
+>   drm/amd/display: Adjust functions documentation
+>   drm/amd/display: Add conditional around function
+>   drm/amd/display: Use NULL instead of 0
+>   drm/amd/display: Turn functions into static
+> 
+>  drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_helpers.c   | 4 +++-
+>  .../gpu/drm/amd/display/dc/clk_mgr/dcn315/dcn315_clk_mgr.c  | 2 +-
+>  drivers/gpu/drm/amd/display/dc/clk_mgr/dcn315/dcn315_smu.c  | 4 ++--
+>  drivers/gpu/drm/amd/display/dc/core/dc.c                    | 6 +++---
+>  drivers/gpu/drm/amd/display/dc/core/dc_resource.c           | 2 +-
+>  drivers/gpu/drm/amd/display/dc/dce110/dce110_hw_sequencer.c | 4 ++--
+>  drivers/gpu/drm/amd/display/dc/dce112/dce112_resource.c     | 4 +---
+>  .../gpu/drm/amd/display/dc/irq/dcn315/irq_service_dcn315.c  | 2 +-
+>  8 files changed, 14 insertions(+), 14 deletions(-)
+> 
 
->  /* Userspace headers. */
-> +#define _GNU_SOURCE
->  #include <stdio.h>
->  #include <stdint.h>
-> +#include <stdlib.h>
->  #include <string.h>
->  #include <stdbool.h>
->  #include <errno.h>
->  #include <sys/types.h>
->
->  /* Linux kernel-ism stubs for stand-alone userspace build. */
-
-This is neat and esp. so that it works.
-But may I ask, what's the value of using this vs UML?
-
-Given this has changed into mainly just a KUnit-compatibility layer,
-it feels like it can maybe live as a standalone file, if there's ever
-interest in doing this for other tests.
-
-It feels like something that will never quite be "supported", but I
-find it neat enough I'd have fun sending some patches to make it more
-realistic.
-
-> -#define KBUILD_MODNAME         "stackinit"
-> -#define pr_fmt(fmt)            KBUILD_MODNAME ": " fmt
-> -#define pr_err(fmt, ...)       fprintf(stderr, pr_fmt(fmt), ##__VA_ARGS__)
-> -#define pr_warn(fmt, ...)      fprintf(stderr, pr_fmt(fmt), ##__VA_ARGS__)
-> -#define pr_info(fmt, ...)      fprintf(stdout, pr_fmt(fmt), ##__VA_ARGS__)
-> -#define __init                 /**/
-> -#define __exit                 /**/
-> +#define TEST_PASS      0
-> +#define TEST_SKIP      1
-> +#define TEST_FAIL      2
-> +struct kunit {
-> +       int status;
-> +       char *msg;
-> +};
-> +struct kunit_case {
-> +        void (*run_case)(struct kunit *test);
-> +        const char *name;
-> +};
-> +struct kunit_suite {
-> +       const char *name;
-> +       const struct kunit_case *test_cases;
-> +};
-> +#define KUNIT_CASE(test_name) { .run_case = test_name, .name = #test_name }
-> +
-> +#define KUNIT_ASSERT_TRUE_MSG(test, expr, fmt, ...)                    \
-> +do {                                                                   \
-> +       if (!(expr)) {                                                  \
-> +               if (test->status != TEST_SKIP)                          \
-> +                       test->status = TEST_FAIL;                       \
-> +               if (test->msg)                                          \
-> +                       free(test->msg);                                \
-> +               asprintf(&test->msg, fmt, ##__VA_ARGS__);               \
-> +       }                                                               \
-> +} while (0)
-
-This looks more like KUNIT_EXPECT_TRUE_MSG(), since this macro won't
-abort the test if the expectation fails.
-
-Looking at the code, it looks like we do want the ability to abort.
-Perhaps we can do what Googletest does in C++ and just add in a `return;`?
-
-It has some annoying implications, like using them from helper
-functions doesn't work as one would expect.
-But people seem to be doing fine with that tradeoff in C++ land.
-
-> +
-> +#define KUNIT_ASSERT_EQ_MSG(test, left, right, fmt, ...)               \
-> +       KUNIT_ASSERT_TRUE_MSG(test, (left) == (right), fmt, ##__VA_ARGS__)
-
-Very optional:
-
-It might be nice to show the expressions automatically on failure.
-We could implement that via something like
-
-KUNIT_ASSERT_TRUE_MSG(test, (left) == (right), #left " != " #right ":
-" fmt, ##__VA_ARGS__);
-
-E.g.
-KUNIT_ASSERT_EQ_MSG(test, 2+2, 5, "math is broken")
-=> 2+2 != 5: math is broken
-
-But I can see that being a bit too complicated to want to do here.
-And the failure messages we had before are already decent at giving context.
-
-> +
-> +#define kunit_skip(test, fmt, ...)                                     \
-> +do {                                                                   \
-> +       test->status = TEST_SKIP;                                       \
-> +       if (test->msg)                                                  \
-> +               free(test->msg);                                        \
-> +       asprintf(&test->msg, fmt, ##__VA_ARGS__);                       \
-> +} while (0)
-
-Similarly, this has no control flow implications, so the current
-semantics match kunit_mark_skipped().
-
-But looking at the code, I think we want to abort early here too.
-
-> +
->  #define __user                 /**/
->  #define noinline               __attribute__((__noinline__))
->  #define __aligned(x)           __attribute__((__aligned__(x)))
-> @@ -59,16 +102,44 @@ typedef uint16_t           u16;
->  typedef uint32_t               u32;
->  typedef uint64_t               u64;
->
-> -#define module_init(func)      static int (*do_init)(void) = func
-> -#define module_exit(func)      static void (*do_exit)(void) = func
-> -#define MODULE_LICENSE(str)    int main(void) {                \
-> -                                       int rc;                 \
-> -                                       /* License: str */      \
-> -                                       rc = do_init();         \
-> -                                       if (rc == 0)            \
-> -                                               do_exit();      \
-> -                                       return rc;              \
-> -                               }
-> +#define MODULE_LICENSE(str)    /* */
-> +
-> +int do_kunit_test_suite(struct kunit_suite *suite)
-> +{
-> +       const struct kunit_case *test_case;
-> +       int rc = 0;
-> +
-> +       for (test_case = suite->test_cases; test_case->run_case; test_case++) {
-> +               struct kunit test = { };
-> +
-> +               test_case->run_case(&test);
-> +               switch (test.status) {
-> +               default:
-> +               case TEST_FAIL:
-> +                       fprintf(stderr, "FAIL: %s%s%s", test_case->name,
-> +                               test.msg ? ": " : "",
-> +                               test.msg ?: "\n");
-> +                       rc = 1;
-> +                       break;
-> +               case TEST_SKIP:
-> +                       fprintf(stdout, "XFAIL: %s%s%s", test_case->name,
-> +                               test.msg ? ": " : "",
-> +                               test.msg ?: "\n");
-> +                       break;
-> +               case TEST_PASS:
-> +                       fprintf(stdout, "ok: %s\n", test_case->name);
-> +                       break;
-> +               }
-> +               if (test.msg)
-> +                       free(test.msg);
-> +       }
-> +       return rc;
-> +}
-> +
-> +#define kunit_test_suite(suite)                                        \
-> +int main(void) {                                               \
-> +       return do_kunit_test_suite(&(suite));                   \
-> +}
-
-very optional:
-emulating kunit_test_suites() might be more future-proof here, if we
-ever want to setup more suites.
-There's little reason to do so right now given the lack of init and
-exit support.
-
-Like the stuff above, it wouldn't be hard to do, but I can see it not
-being worth the extra code, i.e.
-
-#define kunit_test_suites(suites...) \
-  int main(void) {
-     static struct kunit_suite *suites =[] = { __VA_ARGS__ };
-     int i, ret = 0;
-     for (i = 0; i < ARRAY_SIZE(suites); ++i)
-       ret += do_kunit_test_suite(suites[i]);
-     return ret;
-   }

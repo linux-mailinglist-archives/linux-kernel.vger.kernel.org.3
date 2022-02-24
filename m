@@ -2,181 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 369EA4C21BC
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 03:35:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BD174C21CB
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 03:46:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230115AbiBXCgD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 21:36:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34326 "EHLO
+        id S230121AbiBXCle (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 21:41:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230077AbiBXCgC (ORCPT
+        with ESMTP id S230077AbiBXCld (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 21:36:02 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0116B2325F3
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 18:35:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1645670132;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Mosce6mCx+3FrNUgxT+llyIw3dAjkfUdqQ0Qnjl3teY=;
-        b=G7m/WzI67WpIMMTks74/1MVWA6iMyEI3XlIfunIL2wPuBJ7pwBOtZUGlInpNlmX7GB19KI
-        bjsNT9QC1MsGhNAMj+m0bZoWl/FD5Meypfw2Fqa66DYQsjkwXMplmzkgToO+o+W3wu06M0
-        8ugKqeMa9Y4ic4QY4+CNuoCjcBcWI1A=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-344-5VULfEcfP2aqeaJ0LvbtoQ-1; Wed, 23 Feb 2022 21:35:28 -0500
-X-MC-Unique: 5VULfEcfP2aqeaJ0LvbtoQ-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id A31A2180FD71;
-        Thu, 24 Feb 2022 02:35:26 +0000 (UTC)
-Received: from localhost (ovpn-13-249.pek2.redhat.com [10.72.13.249])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id DBEEF4BC68;
-        Thu, 24 Feb 2022 02:35:24 +0000 (UTC)
-Date:   Thu, 24 Feb 2022 10:35:21 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     yingelin <yingelin@huawei.com>
-Cc:     ebiederm@xmission.com, mcgrof@kernel.org, keescook@chromium.org,
-        yzaikin@google.com, kexec@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        zengweilin@huawei.com, chenjianguo3@huawei.com,
-        nixiaoming@huawei.com, qiuguorui1@huawei.com,
-        young.liuyang@huawei.com
-Subject: Re: [PATCH sysctl-next] kernel/kexec_core: move kexec_core sysctls
- into its own file
-Message-ID: <Yhbu6UxoYXFtDyFk@fedora>
-References: <20220223030318.213093-1-yingelin@huawei.com>
- <YhXwkTCwt3a4Dn9T@MiWiFi-R3L-srv>
- <c60419f8-422b-660d-8254-291182a06cbe@huawei.com>
+        Wed, 23 Feb 2022 21:41:33 -0500
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18006187E2A;
+        Wed, 23 Feb 2022 18:41:03 -0800 (PST)
+Received: by mail-pj1-x1030.google.com with SMTP id q8-20020a17090a178800b001bc299b8de1so816698pja.1;
+        Wed, 23 Feb 2022 18:41:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:subject:to:cc:references:in-reply-to:mime-version
+         :message-id:content-transfer-encoding;
+        bh=EyCz/npgrvK3wpbga7/cyV5B/USjVvhtf8rmko5Ci44=;
+        b=OJgUqWsSYFDXMW2sk/xBn7Dewz4VOyeBPLsINElsaZ7NKuWAfaIWyYvNOn1xtvm3Lf
+         3eI5xv7A8DlDwu6OWAaMZJLYOOsUQxo5n87KDSpotcAoO45Omd4/8+zfyx7i6G31kJYy
+         j8CXnXG1MEeNqivSFTyvFeqMS7pE+/cTSh9Pssv52IFjnpcWFYG8MAairObWsYJMcSt2
+         QTal643N9GTg4iBzl6GxbpOk2e9nX3o0+WHR1P6eWo307dlaAEYfZ2tYGpHG+JsscMw7
+         PDYKuSH6XpHiUxNwq1epytPAVW+feSZtv2GFfeesftXhaHQRyAodhpl8b6x44k3iQ/ao
+         pYsA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:subject:to:cc:references:in-reply-to
+         :mime-version:message-id:content-transfer-encoding;
+        bh=EyCz/npgrvK3wpbga7/cyV5B/USjVvhtf8rmko5Ci44=;
+        b=sCjvtQQd0fNqhMKw7uAa5s391qbhODnyeplgaBaJ7r5vKsUdhM/FVlAyxfAdQoDixe
+         ucV7OnzJDUrJEHlSD6dVH7nMCFDxs945SqGgBcC1yPmqfLeV3RvBJ8ubxJp3PpPO9mK0
+         7SQU/TMUV5hineo5A80QbfU9rirb3JcIRYlCmTdwu7RbIJJy3Zhz5VoEx7xCQCe7euvY
+         Ab8ycwkdtLUCdVne6cxQVCzIDgbm7hm7A2zqTTvJg8/E/Jb1tPAMz7cDe/yg0qPNQlPa
+         D6EgsdfH9XXI25n0AtL/fF21/Kudbi84z9kwCRiagTXXzfOW4EOhMOPnOVIKCJOfTcZm
+         odPA==
+X-Gm-Message-State: AOAM532KZzskAn+7q73Fx/feale2IFwg8A61Gj7NPboP3zm7RFanUkp9
+        Gr/IWQ4KqeQEGwTo/j7r3tstDPzridY=
+X-Google-Smtp-Source: ABdhPJzLyhj73Fo6tspeW72DSqxDKpnxx2XzGLuzmSvGZw8cXuc6R3oLeUpxJPFg8bAMvJnoBz67RQ==
+X-Received: by 2002:a17:90a:aa98:b0:1b8:5adb:e35f with SMTP id l24-20020a17090aaa9800b001b85adbe35fmr612568pjq.192.1645670462502;
+        Wed, 23 Feb 2022 18:41:02 -0800 (PST)
+Received: from localhost (115-64-212-59.static.tpgi.com.au. [115.64.212.59])
+        by smtp.gmail.com with ESMTPSA id j5sm882941pfu.185.2022.02.23.18.41.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Feb 2022 18:41:02 -0800 (PST)
+Date:   Thu, 24 Feb 2022 12:40:57 +1000
+From:   Nicholas Piggin <npiggin@gmail.com>
+Subject: Re: [PATCH 1/3] powerpc: lib: sstep: fix 'sthcx' instruction
+To:     Anders Roxell <anders.roxell@linaro.org>, mpe@ellerman.id.au
+Cc:     Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, stable@vger.kernel.org
+References: <20220223135820.2252470-1-anders.roxell@linaro.org>
+In-Reply-To: <20220223135820.2252470-1-anders.roxell@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <c60419f8-422b-660d-8254-291182a06cbe@huawei.com>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Message-Id: <1645670438.z6ynuisobl.astroid@bobo.none>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02/24/22 at 09:04am, yingelin wrote:
-> 
-> 在 2022/2/23 16:30, Baoquan He 写道:
-> > On 02/23/22 at 11:03am, yingelin wrote:
-> > > This move the kernel/kexec_core.c respective sysctls to its own file.
-> > Hmm, why is the move needed?
-> > 
-> > With my understanding, sysctls are all put in kernel/sysctl.c,
-> > why is kexec special?
-> 
-> kernel/sysctl.c is a kitchen sink where everyone leaves their dirty dishes,
-> 
-> this makes it very difficult to maintain. The proc sysctl maintainers do not
-> want to
-> 
-> know what sysctl knobs you wish to add for your own piece of code, we
-> 
-> just care about the core logic.
-> 
-> This patch moves the kexec sysctls to the place where they actually belong
-> to help
+Excerpts from Anders Roxell's message of February 23, 2022 11:58 pm:
+> Looks like there been a copy paste mistake when added the instruction
+> 'stbcx' twice and one was probably meant to be 'sthcx'.
+> Changing to 'sthcx' from 'stbcx'.
+>=20
+> Cc: <stable@vger.kernel.org> # v4.13+
+> Fixes: 350779a29f11 ("powerpc: Handle most loads and stores in instructio=
+n emulation code")
+> Reported-by: Arnd Bergmann <arnd@arndb.de>
+> Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
 
-That seems to be an issue everything related to sysctl are all added to
-kernel/sysctl.c. Do you have a pointer that someone complained about it
-and people agree to scatter them into their own component code?
+Good catch.
 
-I understand your concern now, I am personally not confused by that
-maybe because I haven't got stuff adding or changing into sysctls. My
-concern is if we only care and move kexec knob, or we have plan to try
-to move all of them. If there's some background information or
-discussion with a link, that would be helpful.
+Reviewed-by: Nicholas Piggin <npiggin@gmail.com>
 
-Thanks
-Baoquan
-
-> 
-> with this maintenance.
-> 
-> > > Signed-off-by: yingelin <yingelin@huawei.com>
-> > > ---
-> > >   kernel/kexec_core.c | 20 ++++++++++++++++++++
-> > >   kernel/sysctl.c     | 13 -------------
-> > >   2 files changed, 20 insertions(+), 13 deletions(-)
-> > > 
-> > > diff --git a/kernel/kexec_core.c b/kernel/kexec_core.c
-> > > index 68480f731192..e57339d49439 100644
-> > > --- a/kernel/kexec_core.c
-> > > +++ b/kernel/kexec_core.c
-> > > @@ -936,6 +936,26 @@ int kimage_load_segment(struct kimage *image,
-> > >   struct kimage *kexec_image;
-> > >   struct kimage *kexec_crash_image;
-> > >   int kexec_load_disabled;
-> > > +static struct ctl_table kexec_core_sysctls[] = {
-> > > +	{
-> > > +		.procname	= "kexec_load_disabled",
-> > > +		.data		= &kexec_load_disabled,
-> > > +		.maxlen		= sizeof(int),
-> > > +		.mode		= 0644,
-> > > +		/* only handle a transition from default "0" to "1" */
-> > > +		.proc_handler	= proc_dointvec_minmax,
-> > > +		.extra1		= SYSCTL_ONE,
-> > > +		.extra2		= SYSCTL_ONE,
-> > > +	},
-> > > +	{ }
-> > > +};
-> > > +
-> > > +static int __init kexec_core_sysctl_init(void)
-> > > +{
-> > > +	register_sysctl_init("kernel", kexec_core_sysctls);
-> > > +	return 0;
-> > > +}
-> > > +late_initcall(kexec_core_sysctl_init);
-> > >   /*
-> > >    * No panic_cpu check version of crash_kexec().  This function is called
-> > > diff --git a/kernel/sysctl.c b/kernel/sysctl.c
-> > > index ae5e59396b5d..00e97c6d6576 100644
-> > > --- a/kernel/sysctl.c
-> > > +++ b/kernel/sysctl.c
-> > > @@ -61,7 +61,6 @@
-> > >   #include <linux/capability.h>
-> > >   #include <linux/binfmts.h>
-> > >   #include <linux/sched/sysctl.h>
-> > > -#include <linux/kexec.h>
-> > >   #include <linux/bpf.h>
-> > >   #include <linux/mount.h>
-> > >   #include <linux/userfaultfd_k.h>
-> > > @@ -1839,18 +1838,6 @@ static struct ctl_table kern_table[] = {
-> > >   		.proc_handler	= tracepoint_printk_sysctl,
-> > >   	},
-> > >   #endif
-> > > -#ifdef CONFIG_KEXEC_CORE
-> > > -	{
-> > > -		.procname	= "kexec_load_disabled",
-> > > -		.data		= &kexec_load_disabled,
-> > > -		.maxlen		= sizeof(int),
-> > > -		.mode		= 0644,
-> > > -		/* only handle a transition from default "0" to "1" */
-> > > -		.proc_handler	= proc_dointvec_minmax,
-> > > -		.extra1		= SYSCTL_ONE,
-> > > -		.extra2		= SYSCTL_ONE,
-> > > -	},
-> > > -#endif
-> > >   #ifdef CONFIG_MODULES
-> > >   	{
-> > >   		.procname	= "modprobe",
-> > > -- 
-> > > 2.26.2
-> > > 
-> > .
-> 
-
+> ---
+>  arch/powerpc/lib/sstep.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/arch/powerpc/lib/sstep.c b/arch/powerpc/lib/sstep.c
+> index bd3734d5be89..d2d29243fa6d 100644
+> --- a/arch/powerpc/lib/sstep.c
+> +++ b/arch/powerpc/lib/sstep.c
+> @@ -3389,7 +3389,7 @@ int emulate_loadstore(struct pt_regs *regs, struct =
+instruction_op *op)
+>  			__put_user_asmx(op->val, ea, err, "stbcx.", cr);
+>  			break;
+>  		case 2:
+> -			__put_user_asmx(op->val, ea, err, "stbcx.", cr);
+> +			__put_user_asmx(op->val, ea, err, "sthcx.", cr);
+>  			break;
+>  #endif
+>  		case 4:
+> --=20
+> 2.34.1
+>=20
+>=20

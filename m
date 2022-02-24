@@ -2,121 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DB494C3080
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 16:56:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 168894C3091
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 16:59:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236664AbiBXP4u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 10:56:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41752 "EHLO
+        id S236902AbiBXP5v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 10:57:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234301AbiBXP4t (ORCPT
+        with ESMTP id S236722AbiBXP5P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 10:56:49 -0500
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 584DA1C60DB;
-        Thu, 24 Feb 2022 07:56:18 -0800 (PST)
-Received: by mail-lf1-x134.google.com with SMTP id d23so4593807lfv.13;
-        Thu, 24 Feb 2022 07:56:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=Jxgwod+cjKF0cMAJ2EBnyYhyhK2ZuDAR5dbHn7cZPXk=;
-        b=e0C8B4o5e6PB8M5l1Tjy3WOI8+vIpkflzmaFjVAKz6E2CsUYjN+xl60dDhP14Q0/Aq
-         cY9LS+LKkU7QOP7gKmyHlAGCf+4a4wnoe/EpWa4wkcKycWvp4CqDWdTU2NOk7OvMDqny
-         2s7J3iVZIWz19QbkIwQnbZdf5x7DpB+im6Ihh9bVekOYbvuOdlLu0sUapKXdYiYCQd3e
-         F7TSvUKDm1DI5U4LeGP9MNobObTORkZil13+1X02okcnFgmhwrEh0Bu+JDUhY/aiMxZV
-         wRknmwdz1LWjBPVG4MY/Ky1Rcgv+iWyWR/8pCNPsIRxr/ZTOeUlSwf9yt/DsN4BNV/nN
-         mZnw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=Jxgwod+cjKF0cMAJ2EBnyYhyhK2ZuDAR5dbHn7cZPXk=;
-        b=kb8GMgRKTNLCNFX+1PNh1DpyKFeFkwQQ3Kub/yVh3csWg8pCuUt3vGFmoyRFX7pGXm
-         NVIxXOCooaAjp5xrRkdP+eq2zKrgIFltWrFIebdwdxsFlK8u+s8VYiHiHZc+2OWijrZL
-         uywMypISnBkcaYjRjR3e5pd5kI3B7VPe7XGcS4BFmAVjxff9yjvH3HI5RYXMQ+gNDhGc
-         KPRvXi+XG4dm/Jd7tlAnD0g2lwTh4lRw4486c7tnzauwWSTBuAuTAiwfvMxGtPWRwHWd
-         zVrP6E38pr81H6EUES5OfCGw7GtwUuv8bxIM8j5IjH/AkievIMF/mLhDdsMpxiPZ7KGF
-         t8Pw==
-X-Gm-Message-State: AOAM532KwStynrie8DJ79069a0zfJS5cMMnpVQVCQE67UUqygYKcocoh
-        Y/ImyExuEfPyon8p7qqVP/Q=
-X-Google-Smtp-Source: ABdhPJzaXZ8qcjNBoF7BIApIIdH26xRybKIPiTiVeuInTO23K+HAxK1nPPGw0ctm0nVZ1ijP5CbvgA==
-X-Received: by 2002:a05:6512:3f17:b0:43d:8e7f:29f8 with SMTP id y23-20020a0565123f1700b0043d8e7f29f8mr2099730lfa.609.1645718176505;
-        Thu, 24 Feb 2022 07:56:16 -0800 (PST)
-Received: from orome ([62.96.65.119])
-        by smtp.gmail.com with ESMTPSA id f39sm233996lfv.302.2022.02.24.07.56.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Feb 2022 07:56:15 -0800 (PST)
-Date:   Thu, 24 Feb 2022 16:56:12 +0100
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     Jonathan Hunter <jonathanh@nvidia.com>,
-        Svyatoslav Ryhel <clamor95@gmail.com>,
-        David Heidelberg <david@ixit.cz>,
-        Robert Eckelmann <longnoserob@gmail.com>,
-        Agneli <poczt@protonmail.ch>, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 0/4] NVIDIA Tegra ARM32 device-tree improvements for
- 5.18
-Message-ID: <YheqnF1CgQTNgRs5@orome>
-References: <20220207212826.10307-1-digetx@gmail.com>
+        Thu, 24 Feb 2022 10:57:15 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EBC912AB9
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 07:56:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645718198; x=1677254198;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=YLRcyqnwpgSRCqcWi/554Dc1Exapi/lSv6TTC7rFRfU=;
+  b=NCCx4kGDZ8i5wLzY5z1y0AzOdxZ1PMxFE5Kt/Y7+QUm8osDNg15y9ZRj
+   2thigD4f+6W+sVwERAdXphypefivjZjL3Fk/RUS6EM4Q5DE3f2RfDB9Cy
+   dIjjjzGLvCE6M0j3xXHY5osXSCvkjnvTr74j4ltAzy8Bpo3ylUdEkEFi7
+   +akf40Qc767YfPN3HMqjuwIcdr+ABlRA4cnVQP/XwFe0bC+iBNlbVNDSL
+   MVliHyOY0i55AwxYq+QlS2y3x4vO5dy7v+9GF0G8obcSdVR2vuNBefzCz
+   hKhf2kb0TlXiuZNcLM+tOZmWEo6swhwJ0edBW7V9/WWhseHnI6apE+qfS
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10268"; a="235773407"
+X-IronPort-AV: E=Sophos;i="5.90,134,1643702400"; 
+   d="scan'208";a="235773407"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2022 07:56:32 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,134,1643702400"; 
+   d="scan'208";a="684315440"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga001.fm.intel.com with ESMTP; 24 Feb 2022 07:56:25 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1000)
+        id CE8A4A3F; Thu, 24 Feb 2022 17:56:34 +0200 (EET)
+From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+To:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@intel.com, luto@kernel.org, peterz@infradead.org
+Cc:     sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
+        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
+        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
+        joro@8bytes.org, jpoimboe@redhat.com, knsathya@kernel.org,
+        pbonzini@redhat.com, sdeep@vmware.com, seanjc@google.com,
+        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
+        thomas.lendacky@amd.com, brijesh.singh@amd.com, x86@kernel.org,
+        linux-kernel@vger.kernel.org,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Subject: [PATCHv4 13/30] x86: Adjust types used in port I/O helpers
+Date:   Thu, 24 Feb 2022 18:56:13 +0300
+Message-Id: <20220224155630.52734-14-kirill.shutemov@linux.intel.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220224155630.52734-1-kirill.shutemov@linux.intel.com>
+References: <20220224155630.52734-1-kirill.shutemov@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="TpGEX/9APYzb/M4O"
-Content-Disposition: inline
-In-Reply-To: <20220207212826.10307-1-digetx@gmail.com>
-User-Agent: Mutt/2.2.1 (c8109e14) (2022-02-19)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Change port I/O helpers to use u8/u16/u32 instead of unsigned
+char/short/int for values. Use u16 instead of int for port number.
 
---TpGEX/9APYzb/M4O
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+It aligns the helpers with implementation in boot stub in preparation
+for consolidation.
 
-On Tue, Feb 08, 2022 at 12:28:22AM +0300, Dmitry Osipenko wrote:
-> Here are couple minor DT improvements and enabling of HDMI audio on
-> Asus TF101 tablet.
->=20
-> Dmitry Osipenko (3):
->   ARM: tegra: asus-tf101: Enable S/PDIF and HDMI audio
->   ARM: tegra: tf700t: Rename DSI node
->   ARM: tegra: paz00: Add MMC aliases
->=20
-> Svyatoslav Ryhel (1):
->   ARM: tegra: transformer: Drop reg-shift for Tegra HS UART
+Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+---
+ arch/x86/include/asm/io.h | 26 +++++++++++++-------------
+ 1 file changed, 13 insertions(+), 13 deletions(-)
 
-Applied all four patches, thanks.
+diff --git a/arch/x86/include/asm/io.h b/arch/x86/include/asm/io.h
+index f6d91ecb8026..638c1a2a82e0 100644
+--- a/arch/x86/include/asm/io.h
++++ b/arch/x86/include/asm/io.h
+@@ -258,37 +258,37 @@ static inline void slow_down_io(void)
+ #endif
+ 
+ #define BUILDIO(bwl, bw, type)						\
+-static inline void out##bwl(unsigned type value, int port)		\
++static inline void out##bwl(type value, u16 port)			\
+ {									\
+ 	asm volatile("out" #bwl " %" #bw "0, %w1"			\
+ 		     : : "a"(value), "Nd"(port));			\
+ }									\
+ 									\
+-static inline unsigned type in##bwl(int port)				\
++static inline type in##bwl(u16 port)					\
+ {									\
+-	unsigned type value;						\
++	type value;							\
+ 	asm volatile("in" #bwl " %w1, %" #bw "0"			\
+ 		     : "=a"(value) : "Nd"(port));			\
+ 	return value;							\
+ }									\
+ 									\
+-static inline void out##bwl##_p(unsigned type value, int port)		\
++static inline void out##bwl##_p(type value, u16 port)			\
+ {									\
+ 	out##bwl(value, port);						\
+ 	slow_down_io();							\
+ }									\
+ 									\
+-static inline unsigned type in##bwl##_p(int port)			\
++static inline type in##bwl##_p(u16 port)				\
+ {									\
+-	unsigned type value = in##bwl(port);				\
++	type value = in##bwl(port);					\
+ 	slow_down_io();							\
+ 	return value;							\
+ }									\
+ 									\
+-static inline void outs##bwl(int port, const void *addr, unsigned long count) \
++static inline void outs##bwl(u16 port, const void *addr, unsigned long count) \
+ {									\
+ 	if (cc_platform_has(CC_ATTR_GUEST_UNROLL_STRING_IO)) {		\
+-		unsigned type *value = (unsigned type *)addr;		\
++		type *value = (type *)addr;				\
+ 		while (count) {						\
+ 			out##bwl(*value, port);				\
+ 			value++;					\
+@@ -301,10 +301,10 @@ static inline void outs##bwl(int port, const void *addr, unsigned long count) \
+ 	}								\
+ }									\
+ 									\
+-static inline void ins##bwl(int port, void *addr, unsigned long count)	\
++static inline void ins##bwl(u16 port, void *addr, unsigned long count)	\
+ {									\
+ 	if (cc_platform_has(CC_ATTR_GUEST_UNROLL_STRING_IO)) {		\
+-		unsigned type *value = (unsigned type *)addr;		\
++		type *value = (type *)addr;				\
+ 		while (count) {						\
+ 			*value = in##bwl(port);				\
+ 			value++;					\
+@@ -317,9 +317,9 @@ static inline void ins##bwl(int port, void *addr, unsigned long count)	\
+ 	}								\
+ }
+ 
+-BUILDIO(b, b, char)
+-BUILDIO(w, w, short)
+-BUILDIO(l, , int)
++BUILDIO(b, b, u8)
++BUILDIO(w, w, u16)
++BUILDIO(l,  , u32)
+ 
+ #define inb inb
+ #define inw inw
+-- 
+2.34.1
 
-Thierry
-
---TpGEX/9APYzb/M4O
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmIXqpoACgkQ3SOs138+
-s6EJYhAApMCT89bKrNdY5f5zz04hJj8rlGJ86IyOYP+JVq1micAqhS1mOX/3fFBQ
-zU34ZBzlv/H4B7cxnUHm4//mm74c7KoLo3TtQxhOyAFOEtqgtkYm7xhlBBG4sWTO
-JHYfSnYk+Ljiok1tVXG1tjcTBSNe3nUPAJevgVSVWvqx7h6FwKvfx0/3CW7yRyYz
-xLrjj426ORsnK061VVrSC3Oz7Ngf/W152xp+whvc398adDRzoRxa3gG8imfGuT46
-jAeY3AdvOagw8ps9egLFYqHe2gz0/SCW18AYEA4bggrbh9mo9Pc2k6Eccz4jOyTO
-0sTk85Pvb4monlnNYXHFBRMxO2X7Yzx173nlsp6f10paDAbROCP4NCjSCQV+KAiv
-VhMVpeRRO5s8GbXKCJQCK7cdL6roOZmX7H33EQUAbf7A1VLYdqjn725cGWy72NZk
-TolbrF9RFGXCODRYNTfH57njAR9WGD8+AkwQtynLADfS+TUpBwq+XsyNk0JVjYWg
-+ZPbHqfeFDhLgTnzOLrmJfd1zGmd+QCZpLE6VhykQj6ykhnXhzzYE5sdsk79xfC+
-fkTk0YbXXp1Uj8LqmnNxuM8bOnQFHJLXN/gGTDMLlX35XMx4Q4u863tV0jUSEF8E
-iITccdHwwouoyX/eZUjEWoqjs023VkDTAUszuC7jzKwDv/++kAU=
-=PN3i
------END PGP SIGNATURE-----
-
---TpGEX/9APYzb/M4O--

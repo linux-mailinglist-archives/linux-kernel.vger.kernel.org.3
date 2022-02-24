@@ -2,103 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D6DB4C3790
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 22:24:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BCEC04C3785
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 22:23:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234707AbiBXVYa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 16:24:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36712 "EHLO
+        id S234650AbiBXVYE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 16:24:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234710AbiBXVYZ (ORCPT
+        with ESMTP id S234635AbiBXVX7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 16:24:25 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AEC421A1C5D
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 13:23:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1645737824;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=BY7N70q7sXGBDdrQKQWopMeqmb4Jr71LPGZFNt/ZGqQ=;
-        b=KRogMAUMzGH4l7DdfYCt2dNv2QHeQb3CTLhhV57h8tH1o68rgOC2Fv/r6vL0xpslMJx3io
-        Xv4ZTiCT9/h1BPfE2gxLJT2rDu4gjXv7ocipi5HsjpYZws/GeXpZAFay8n+VIDacfu3Nrs
-        Yl0beAD6CEDtBhcvhMQs5gz4YnJFeeE=
-Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
- [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-308-zcU2IoA2NpWysQiJlhj-0w-1; Thu, 24 Feb 2022 16:23:43 -0500
-X-MC-Unique: zcU2IoA2NpWysQiJlhj-0w-1
-Received: by mail-qv1-f72.google.com with SMTP id hu9-20020a056214234900b0042c4017aeb3so4154658qvb.14
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 13:23:43 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=BY7N70q7sXGBDdrQKQWopMeqmb4Jr71LPGZFNt/ZGqQ=;
-        b=EeJIBWElRwdXUa0PyOYqEoa1siMr8aCQ0ETD1E40hYy1+noQw+JIZXaJBtMzSj6+r9
-         rk/cnmXG6Bo8pkGvIok4o5sv7PgtFmtdaMldAC9FZR1666XfoF4lu5MZtbB+p4EmhlDE
-         LwkbAUM81I+ZYxqTPz/dBJXj/YsRSkqzvKuDmPqsnscKcVFc3Uyc7jgdpovaL0ovKMxa
-         BbNSSNhsNiwwv+HbPXwVGP65QaudgV2Bsshqz/1HmtBkCX3FNPspiAYZ0R64KN9056MT
-         JQwbm6QKYOo0kqR/Xt6wLgDt0S3a5YK6gRLuV5qlb7NwAxh8M3skpMCR6K88UvqpzM5l
-         Q8DQ==
-X-Gm-Message-State: AOAM532aoV4DaeUjIICKU7iqNPKFIHbMeEF+JEu4EsKOrYZTsV9Ty12p
-        9cPxOCqqV8FBs8wUiFaYoSoFzTWJiA+8hrN//27996MzMw8Au/fp8XIg1Hqopv+Vhx7Uir05654
-        /bU/SgCrXPanja7pws8gySYYi
-X-Received: by 2002:ac8:5b0d:0:b0:2dd:d99a:9b6e with SMTP id m13-20020ac85b0d000000b002ddd99a9b6emr4144680qtw.643.1645737822550;
-        Thu, 24 Feb 2022 13:23:42 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzCZfIYg09SRdJR3eRunjCHeN4Ra4Qf2OqWmWgdEOCswGYk7JiiMJOOGgH5rjNSKefuUMHdug==
-X-Received: by 2002:ac8:5b0d:0:b0:2dd:d99a:9b6e with SMTP id m13-20020ac85b0d000000b002ddd99a9b6emr4144664qtw.643.1645737822344;
-        Thu, 24 Feb 2022 13:23:42 -0800 (PST)
-Received: from halaneylaptop.redhat.com (068-184-200-203.res.spectrum.com. [68.184.200.203])
-        by smtp.gmail.com with ESMTPSA id l7-20020a37f507000000b0047b528ef416sm340999qkk.93.2022.02.24.13.23.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Feb 2022 13:23:41 -0800 (PST)
-From:   Andrew Halaney <ahalaney@redhat.com>
-To:     corbet@lwn.net
-Cc:     peterz@infradead.org, mingo@redhat.com, will@kernel.org,
-        longman@redhat.com, boqun.feng@gmail.com,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Andrew Halaney <ahalaney@redhat.com>,
-        Leah Leshchinsky <lleshchi@redhat.com>
-Subject: [PATCH] Documentation/locking/locktypes: Fix PREEMPT_RT _bh() description
-Date:   Thu, 24 Feb 2022 15:23:12 -0600
-Message-Id: <20220224212312.2601153-1-ahalaney@redhat.com>
-X-Mailer: git-send-email 2.35.1
+        Thu, 24 Feb 2022 16:23:59 -0500
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id D726E1598F6
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 13:23:27 -0800 (PST)
+Received: (qmail 1060076 invoked by uid 1000); 24 Feb 2022 16:23:26 -0500
+Date:   Thu, 24 Feb 2022 16:23:26 -0500
+From:   "stern@rowland.harvard.edu" <stern@rowland.harvard.edu>
+To:     "Zhang, Qiang1" <qiang1.zhang@intel.com>, Tejun Heo <tj@kernel.org>
+Cc:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        syzbot <syzbot+348b571beb5eeb70a582@syzkaller.appspotmail.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "syzkaller-bugs@googlegroups.com" <syzkaller-bugs@googlegroups.com>,
+        "balbi@kernel.org" <balbi@kernel.org>
+Subject: Re: [syzbot] KASAN: use-after-free Read in dev_uevent
+Message-ID: <Yhf3ThBfjWVcYszC@rowland.harvard.edu>
+References: <0000000000005a991a05a86970bb@google.com>
+ <00000000000033314805d8765175@google.com>
+ <PH0PR11MB58805E3C4CF7D4C41D49BFCFDA3C9@PH0PR11MB5880.namprd11.prod.outlook.com>
+ <YhYafwiwUV2Sbn5t@kroah.com>
+ <YhZG3GJb8G7oL7l7@rowland.harvard.edu>
+ <YhZaDGeIIvpILdCk@kroah.com>
+ <YhZiMHHjrBw8am5g@rowland.harvard.edu>
+ <PH0PR11MB5880D7544442B4D60810F0D2DA3D9@PH0PR11MB5880.namprd11.prod.outlook.com>
+ <PH0PR11MB588091026B817203C772B264DA3D9@PH0PR11MB5880.namprd11.prod.outlook.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <PH0PR11MB588091026B817203C772B264DA3D9@PH0PR11MB5880.namprd11.prod.outlook.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-With PREEMPT_RT the _bh() version of a spinlock leaves preemption
-enabled, align the doc to say that instead of the opposite.
+On Thu, Feb 24, 2022 at 03:14:54AM +0000, Zhang, Qiang1 wrote:
+> 
+> On Wed, Feb 23, 2022 at 05:00:12PM +0100, gregkh@linuxfoundation.org wrote:
+> > On Wed, Feb 23, 2022 at 09:38:20AM -0500, stern@rowland.harvard.edu wrote:
+> > > Which bus locks are you referring to?  I'm not aware of any locks 
+> > > that synchronize dev_uevent() with anything (in particular, with 
+> > > driver unbinding).
+> > 
+> > The locks in the driver core that handle the binding and unbinding of 
+> > drivers to devices.
+> > 
+> > > And as far as I know, usb_gadget_remove_driver() doesn't play any 
+> > > odd tricks with pointers.
+> > 
+> > Ah, I never noticed that this is doing a "fake" bus and does the 
+> > bind/unbind itself outside of the driver core.  It should just be a 
+> > normal bus type and have the core do the work for it, but oh well.
+> > 
+> > And there is a lock that should serialize all of this already, so it's 
+> > odd that this is able to be triggered at all.
+> 
+> >>I guess at a minimum the UDC core should hold the device lock when it registers, unregisters, binds, or unbinds UDC and gadget devices.  
+> >>Would that be enough to fix the problem?  I really don't understand how sysfs file access gets synchronized with device removal.
+> 
+> >>>
+> >>>Agree with you, in usb_gadget_remove_driver() function, the udc->dev.driver and udc->gadget->dev.driver be set to null without any protection, so when the udevd accessed the dev->driver, this address may be invalid at this time.
+> >>>maybe the operation of dev->driver can be protected by device_lock(). 
+> >>>
+> 
+> Is it enough that we just need to protect "dev.driver" ?
 
-Reported-by: Leah Leshchinsky <lleshchi@redhat.com>
-Signed-off-by: Andrew Halaney <ahalaney@redhat.com>
----
- Documentation/locking/locktypes.rst | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I don't know, although I doubt it.  The right way to fix it is to make 
+sure that the existing protections, which apply to drivers that are 
+registered in the driver core, can also work properly with gadgets.  But 
+I don't know what those protections are or how they work.
 
-diff --git a/Documentation/locking/locktypes.rst b/Documentation/locking/locktypes.rst
-index 4fd7b70fcde1..bfa75ea1b66a 100644
---- a/Documentation/locking/locktypes.rst
-+++ b/Documentation/locking/locktypes.rst
-@@ -247,7 +247,7 @@ based on rt_mutex which changes the semantics:
-    Non-PREEMPT_RT kernels disable preemption to get this effect.
- 
-    PREEMPT_RT kernels use a per-CPU lock for serialization which keeps
--   preemption disabled. The lock disables softirq handlers and also
-+   preemption enabled. The lock disables softirq handlers and also
-    prevents reentrancy due to task preemption.
- 
- PREEMPT_RT kernels preserve all other spinlock_t semantics:
--- 
-2.35.1
+> diff --git a/drivers/base/core.c b/drivers/base/core.c
+> index 3d6430eb0c6a..9bd2624973d7 100644
+> --- a/drivers/base/core.c
+> +++ b/drivers/base/core.c
+> @@ -2316,8 +2316,10 @@ static int dev_uevent(struct kobject *kobj, struct kobj_uevent_env *env)
+>         if (dev->type && dev->type->name)
+>                 add_uevent_var(env, "DEVTYPE=%s", dev->type->name);
+> 
+> +       device_lock(dev);
+>         if (dev->driver)
+>                 add_uevent_var(env, "DRIVER=%s", dev->driver->name);
+> +       device_unlock(dev);
 
+You probably should not do this.  Unless there's a serious bug, the 
+driver core already takes all the locks it needs.  Doing this might 
+cause a deadlock (because the caller may already hold the device lock).
+
+> 
+>         /* Add common DT information about the device */
+>         of_device_uevent(dev, env);
+> diff --git a/drivers/usb/gadget/udc/core.c b/drivers/usb/gadget/udc/core.c
+> index 568534a0d17c..7877142397d3 100644
+> --- a/drivers/usb/gadget/udc/core.c
+> +++ b/drivers/usb/gadget/udc/core.c
+> @@ -1436,8 +1436,14 @@ static void usb_gadget_remove_driver(struct usb_udc *udc)
+>         usb_gadget_udc_stop(udc);
+> 
+>         udc->driver = NULL;
+> +
+> +       device_lock(&udc->dev);
+>         udc->dev.driver = NULL;
+> +       device_unlock(&udc->dev);
+> +
+> +       device_lock(&udc->gadget->dev);
+>         udc->gadget->dev.driver = NULL;
+> +       device_unlock(&udc->gadget->dev);
+>  }
+
+These are reasonable things to do, but I don't know if they will fix the 
+problem.
+
+We really should ask advice from somebody who understands how this stuff 
+is supposed to work.  I'm not sure who to ask, though.  Tejun Heo, 
+perhaps (CC'ed).
+
+Tejun: The USB Gadget core binds and unbinds drivers without using the 
+normal driver core facilities (see the code in 
+usb_gadget_remove_driver() above).  As a result, unbinding races with 
+uevent generation, which can lead to a NULL pointer dereference as found 
+by syzbot testing.  In particular, dev->driver can become NULL between 
+the times when dev_uevent() tests it and uses it (see above).
+
+Can you tell us how this should be fixed?
+
+Alan Stern

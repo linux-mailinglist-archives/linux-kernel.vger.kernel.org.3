@@ -2,85 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB66E4C2C67
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 14:01:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EDAEF4C2C6A
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 14:02:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234631AbiBXNCG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 08:02:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51274 "EHLO
+        id S234636AbiBXNCW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 08:02:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234627AbiBXNCE (ORCPT
+        with ESMTP id S233821AbiBXNCV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 08:02:04 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B333E0A9;
-        Thu, 24 Feb 2022 05:01:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645707693; x=1677243693;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=5aznmc5N7mLUl584bkbTiNqi1v3rIz5jaM+TI+KfQd0=;
-  b=mDtncJToo1gUt+6IziRfwMFWb8wRTmueAabf9qIPB+tDzwlZ6jGIVkuy
-   UrYI4JN/zRHRFLd0bcMA48DM0Oi9JHYaqu/J6dPbgGj2QzzCakUMWWybG
-   o15XR7UZBeEjQ7cuRJM4pu4sSKcijCNVnDr5y3+eZs+i0QxtoJuoltLw4
-   CXMcLVhwzknmGbS6Yb0mdOFm6DMCmYyYOxYUo3Ct4soajeXT1qO8gOTkE
-   tVIWW7wjNL56+d33lUfsOp4WbP1uzG6vQmZ1FerJNkLQU4WaNiHiivEWW
-   AoAWP/28W6LQQLWfy/LijwUhBBl9IiWsb+Yos8/3+ElMW2DlcypsV0cJd
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10267"; a="252421890"
-X-IronPort-AV: E=Sophos;i="5.88,134,1635231600"; 
-   d="scan'208";a="252421890"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2022 05:01:31 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,134,1635231600"; 
-   d="scan'208";a="548737676"
-Received: from mylly.fi.intel.com (HELO [10.237.72.156]) ([10.237.72.156])
-  by orsmga008.jf.intel.com with ESMTP; 24 Feb 2022 05:01:28 -0800
-Message-ID: <a56eac7a-fd97-b371-c426-524c71abeb1d@linux.intel.com>
-Date:   Thu, 24 Feb 2022 15:01:27 +0200
+        Thu, 24 Feb 2022 08:02:21 -0500
+Received: from p3plsmtpa12-07.prod.phx3.secureserver.net (p3plsmtpa12-07.prod.phx3.secureserver.net [68.178.252.236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07B57329BC
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 05:01:50 -0800 (PST)
+Received: from localhost ([82.17.115.212])
+        by :SMTPAUTH: with ESMTPA
+        id NDkinwwSF4g5nNDkjnn3CQ; Thu, 24 Feb 2022 06:01:50 -0700
+X-CMAE-Analysis: v=2.4 cv=FvbAQ0nq c=1 sm=1 tr=0 ts=621781be
+ a=9gipVNR6X1CoIeAWHwLoWw==:117 a=9gipVNR6X1CoIeAWHwLoWw==:17
+ a=IkcTkHD0fZMA:10 a=1lnWF7C_TSq6DCnCXLMA:9 a=QEXdDO2ut3YA:10
+X-SECURESERVER-ACCT: atomlin@atomlin.com
+Date:   Thu, 24 Feb 2022 13:01:48 +0000
+From:   Aaron Tomlin <atomlin@atomlin.com>
+To:     Marcelo Tosatti <mtosatti@redhat.com>
+Cc:     Frederic Weisbecker <frederic@kernel.org>,
+        Christoph Lameter <cl@linux.com>, tglx@linutronix.de,
+        mingo@kernel.org, linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Phil Auld <pauld@redhat.com>
+Subject: Re: [RFC PATCH] tick/sched: Ensure quiet_vmstat() is called when the
+ idle tick was stopped too
+Message-ID: <20220224130148.xfpfmybrtayjncor@ava.usersys.com>
+References: <20220203214339.1889971-1-atomlin@redhat.com>
+ <20220217124729.GA743618@lothringen>
+ <20220217142615.xqtiydixvnumyvei@ava.usersys.com>
+ <20220217163205.GA748087@lothringen>
+ <20220218125454.utlgmuhijklzr3if@ava.usersys.com>
+ <20220219154616.pwsvh445x3vn7ltf@ava.usersys.com>
+ <Yhd5olg9CjXSAf2s@fuller.cnet>
+ <Yhd6UxWH3FQHg+eF@fuller.cnet>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.6.0
-Subject: Re: [PATCH -next] i2c: designware: Fix improper usage of readl
-Content-Language: en-US
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Jan Dabros <jsd@semihalf.com>
-Cc:     linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        wsa@kernel.org, rrangel@chromium.org, upstream@semihalf.com,
-        kernel test robot <lkp@intel.com>
-References: <20220218133348.628962-1-jsd@semihalf.com>
- <YhZNu0pHKiK9Vf55@smile.fi.intel.com>
-From:   Jarkko Nikula <jarkko.nikula@linux.intel.com>
-In-Reply-To: <YhZNu0pHKiK9Vf55@smile.fi.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <Yhd6UxWH3FQHg+eF@fuller.cnet>
+X-CMAE-Envelope: MS4xfFBGZKM6OSunN06Tbm0Ztuibn0pwdeWrky4QSfM+VrazJuNvuSs6abyyBknpFpM+JZ6MJsNyGCzM4n2izYj9SjYxwtwkrIW71V7FVHu00c03zcm6oCB2
+ 9jhyX1Qvrp17MncCXR8QXvHhgKcb0InD5siT1lafNsWD4zN8/aOUD2TZkJgLnRW10jyiUcco3NftAHFOYuS20v1IuKQeWtw6iZAIsfGxUdXA5dpsBXLwPSr1
+ 518IyejJKIrzmiuoGw/iRvQ26lrwEbAONLZ2AEjDF9aRE7QaLJZU8A4JSN3YhOu2m1rr1fUd8w8t9xms1a4zyYMzTPYHAoxikCBImzZnCYzWr14J3rmbPxmV
+ j+6tzaGQdjvzQ2seksPBcRLZAvAjmDVH2eMcS5Gb3J1/3o0nUBw=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/23/22 17:07, Andy Shevchenko wrote:
-> On Fri, Feb 18, 2022 at 02:33:48PM +0100, Jan Dabros wrote:
->> Kernel test robot reported incorrect type in argument 1 of readl(), but
->> more importantly it brought attention that MMIO accessor shouldn't be
->> used in this case, since req->hdr.status is part of a command-response
->> buffer in system memory.
->>
->> Since its value may be altered by PSP outside of the scope of current
->> thread (somehow similar to IRQ handler case), we need to use
->> READ_ONCE() to ensure compiler won't optimize this call.
->>
->> Fix also 'status' variable type to reflect that corresponding field in
->> command-response buffer is platform-independent u32.
+On Thu 2022-02-24 09:30 -0300, Marcelo Tosatti wrote:
+> > > > > 2) What if we are running task A in kernel mode while the tick is stopped
+> > > > >    (nohz_full). Task A modifies the vmstat and goes to userspace for a long
+> > > > >    while.
+> > > > > Your patch fixes case 1) but not case 2). The problem is that TIMER_DEFERRABLE
+> > > > > should really be about dynticks-idle only and not dynticks-full. I've always
+> > > > > been afraid about enforcing that rule though because that would break old
+> > > > > noise-free setups. But perhaps I should...
 > 
-> Thanks for the fix, seems reasonable to me.
-> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> 
-Acked-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+> Can't grasp the sentence above "The problem is that ...".
+> What rule?
+
+Hi Marcelo,
+
+That statement was from Frederic.
+
+
+Kind regards,
+
+-- 
+Aaron Tomlin

@@ -2,115 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4573B4C2DD5
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 15:05:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A0AC4C2DD7
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 15:05:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235317AbiBXOEM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 09:04:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47554 "EHLO
+        id S235325AbiBXOEf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 09:04:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235269AbiBXOEK (ORCPT
+        with ESMTP id S233324AbiBXOEe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 09:04:10 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6951C20D83C
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 06:03:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1645711419;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Rrg9S+e1z9ycGVjwf8FshYc7srhCJ2Jl2HeTSgf5H9U=;
-        b=aXPoaFIm9iIbICVft973jjTm32mwCc2DWAOSZjRz481JSrP8JoPs1zCFw81fMDYUzYJ8Yx
-        cS1LjHcZc9N4C/2N5yHRCPh02K/Sn8rW83YnMytauI5fscu9SbVjXV35+oBAdTMju3TOZG
-        SRytBGsDTCi1Xb9udv562QvoNPClG6U=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-235-4j-thfZ1NDuYbevR9MlnSw-1; Thu, 24 Feb 2022 09:03:36 -0500
-X-MC-Unique: 4j-thfZ1NDuYbevR9MlnSw-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id A96861854E2A;
-        Thu, 24 Feb 2022 14:03:34 +0000 (UTC)
-Received: from lorien.usersys.redhat.com (unknown [10.22.33.156])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id E9D86842D7;
-        Thu, 24 Feb 2022 14:03:15 +0000 (UTC)
-Date:   Thu, 24 Feb 2022 09:03:13 -0500
-From:   Phil Auld <pauld@redhat.com>
-To:     Carlos Bilbao <carlos.bilbao@amd.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, mingo@redhat.com,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] kernel/sched: Update schedstats when migrating threads
-Message-ID: <YheQIU7oFDcaPoD7@lorien.usersys.redhat.com>
-References: <20220126152222.5429-1-carlos.bilbao@amd.com>
- <YhYKL4hxx4TNKHGD@hirez.programming.kicks-ass.net>
- <aac8f860-c01f-bda0-9f1b-029b234213c2@amd.com>
- <YhZSqd+d03oWUPP6@lorien.usersys.redhat.com>
- <0e42c46a-ccc4-e793-00b8-ae407e06846f@amd.com>
- <YhZXGv34YTV5omKq@lorien.usersys.redhat.com>
- <b7a28537-8bfb-7f0d-5ed3-f301983e4e30@amd.com>
- <3c6224ca-c0da-7ba9-1396-a2e74c4a40e8@amd.com>
+        Thu, 24 Feb 2022 09:04:34 -0500
+Received: from mail-qv1-xf2b.google.com (mail-qv1-xf2b.google.com [IPv6:2607:f8b0:4864:20::f2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18D5D20DB2D
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 06:04:02 -0800 (PST)
+Received: by mail-qv1-xf2b.google.com with SMTP id 8so3695824qvf.2
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 06:04:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ieee.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=1J9QuuECw8l9XYBFc+hTDlCcdTttwd1QyTxrc8My5Mc=;
+        b=eE9z+QnJjmryr7iHS18252LzAY3KZHui2IO8G2M2OQR1+ze+Eh5101kkmZgBE96g2R
+         doEJBiu7zyPD6XIZLAavp8NN0hkJhyhWwIIXakpHWX5kSNiVd7EOcQj4Y2GHugvvwB4w
+         mLGCB+LlDNUDN/xkS8l9qgEikPLiHDS6Tul6k=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=1J9QuuECw8l9XYBFc+hTDlCcdTttwd1QyTxrc8My5Mc=;
+        b=c3frs7A1AKUjWPaNkspRw/rdEHWFUZSE7wCy7oNvuu7WRAdTdn5NT+kTeBo9PHYvlk
+         V1rvGvzmM4vHGUNeBUNmHlbV2McH11/K6s/pPmEziqW4N5qgt9leN9gZMfVoUWQ/LnTc
+         b4+78yChVh1H0r0kIErp17jTokFPIeQiJMcQQZF+Xao+QgXB6CBHqb9+iOwKAE49DCma
+         riw9W7sDNVb322gCFiqdaaJD75vdyRp9CkPaqz5doU1xB2PL2OYJOEQ77vGf81enlCks
+         9yl6QnVtazoocnqubwD6xmnZFIQuHkUbLWj8ie0BbTVq7FydqeusiO5X9w+Q/y0uqmOx
+         7L5w==
+X-Gm-Message-State: AOAM533d+wwJj2BWA0p/ZwffQW9ZesXb2lHPN2K9U2t+398aHoJKZmVn
+        MnMOFo1Ee0GFaecwd8ZYvYFEHB4BCD6zyQ==
+X-Google-Smtp-Source: ABdhPJykifWw99WUN3OfZ23Vq6YPYP6skQILQaAbVzWzMizPf/5KHeXWIqFK7expcvzniDuaH9x44A==
+X-Received: by 2002:ac8:5ace:0:b0:2c9:f9d2:146 with SMTP id d14-20020ac85ace000000b002c9f9d20146mr2513097qtd.216.1645711441204;
+        Thu, 24 Feb 2022 06:04:01 -0800 (PST)
+Received: from [172.22.22.4] (c-73-185-129-58.hsd1.mn.comcast.net. [73.185.129.58])
+        by smtp.googlemail.com with ESMTPSA id t19sm1682306qtx.68.2022.02.24.06.03.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 24 Feb 2022 06:04:00 -0800 (PST)
+Message-ID: <2c768b0f-316f-7227-6d87-2d1e875fcaaf@ieee.org>
+Date:   Thu, 24 Feb 2022 08:03:59 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3c6224ca-c0da-7ba9-1396-a2e74c4a40e8@amd.com>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: linux-next: Tree for Feb 23 (drivers/net/ipa/ipa_power.o)
+Content-Language: en-US
+To:     Randy Dunlap <rdunlap@infradead.org>, broonie@kernel.org,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        Alex Elder <elder@kernel.org>
+References: <20220224014440.1397777-1-broonie@kernel.org>
+ <23f9d46a-4b33-6918-9c62-f417c624585c@infradead.org>
+From:   Alex Elder <elder@ieee.org>
+In-Reply-To: <23f9d46a-4b33-6918-9c62-f417c624585c@infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 23, 2022 at 10:13:50AM -0600 Carlos Bilbao wrote:
-> The kernel manages per-task scheduler statistics or schedstats. Update
-> function migrate_task_to() to increase the counter for migrations.
+On 2/24/22 12:28 AM, Randy Dunlap wrote:
 > 
-> Signed-off-by: Carlos Bilbao <carlos.bilbao@amd.com>
-> ---
-> Changelog:
-> 	v2: Update commit message, don't reinitialize sched fields.
-> ---
->  kernel/sched/core.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-> index fcf0c180617c..1360e501c737 100644
-> --- a/kernel/sched/core.c
-> +++ b/kernel/sched/core.c
-> @@ -8751,7 +8751,7 @@ int migrate_task_to(struct task_struct *p, int target_cpu)
->  	if (!cpumask_test_cpu(target_cpu, p->cpus_ptr))
->  		return -EINVAL;
->  
-> -	/* TODO: This is not properly updating schedstats */
-> +	schedstat_inc(p->stats.nr_migrations_cold);
->
+> On 2/23/22 17:44, broonie@kernel.org wrote:
+>> Hi all,
+>>
+>> Note that today's -next again does not include the akpm tree since it's
+>> been a long day and the conflicts especially with the mm code seemed
+>> more than it was wise for me to attempt.  I'll have another go tomorrow
+>> but no guarantees, I got further today.
+>>
+>> Changes since 20220222
 
-I was going to give a reviewed by since I was looking at this,
-but I can't convince myself that nr_migrations_cold is right.
-This looks more like a "hot" migration (using stop_cpu to force
-it). But nr_migrations_cold is not incremented anywhere else so
-maybe it's a terminology thing.
+Thanks, I'll investigate.	-Alex
 
-Can you tell me why this is the right counter?
-
-
-Thanks,
-Phil
-
-
->  	trace_sched_move_numa(p, curr_cpu, target_cpu);
->  	return stop_one_cpu(curr_cpu, migration_cpu_stop, &arg);
-> -- 
-> 2.27.0
 > 
-
--- 
+> on i386:
+> 
+> ld: drivers/net/ipa/ipa_power.o: in function `ipa_power_retention':
+> ipa_power.c:(.text+0x57d): undefined reference to `qmp_send'
+> ld: ipa_power.c:(.text+0x5d1): undefined reference to `qmp_send'
+> ld: drivers/net/ipa/ipa_power.o: in function `ipa_power_init':
+> ipa_power.c:(.text+0x823): undefined reference to `qmp_get'
+> ld: drivers/net/ipa/ipa_power.o: in function `ipa_power_exit':
+> ipa_power.c:(.text+0x954): undefined reference to `qmp_put'
+> 
+> 
+> Full randconfig file is attached.
+> 
 

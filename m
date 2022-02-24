@@ -2,118 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 338B14C2397
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 06:30:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9525D4C2393
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 06:30:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230265AbiBXFbT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 00:31:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38706 "EHLO
+        id S230253AbiBXFau (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 00:30:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229596AbiBXFbS (ORCPT
+        with ESMTP id S229596AbiBXFat (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 00:31:18 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC3DB23BF28;
-        Wed, 23 Feb 2022 21:30:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645680649; x=1677216649;
-  h=message-id:date:mime-version:cc:subject:to:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=MRJOuFFYYPPC0Fs9nMbQSx2XuzsoF0+2SRmq/hChfag=;
-  b=QPLGr+QJ9Ys2dsrgnq93k1WfQgvhyKpq2SJCeDjnoJJ0morpyOgztwv1
-   RcSM9Vbr3qesQWiwFoxFHagJdZ9R3nwCq/L1a5tEwc47dxfK+gYwd7oN7
-   q7wew9fXwhhQdbG4hYFL9AM6HIfrOfDcohBaWp/qRnuEy8yV0XBiREHH7
-   EJQi6k94YFoMTiNihKWXPfydNWc7v3vklwbTU/1KcO+aPHnNHWA3pVi+d
-   ACdmiOWPB3liaY7CB82QCwkKrFTfeqhfVy6lVpdV1C3l2pgRU9E3gsfd8
-   7aUNixOdrjVIiA0GIG9dM6aKo1M+bwHaVYbBitsfRgTfNv9E+GrR6/JVR
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10267"; a="239549729"
-X-IronPort-AV: E=Sophos;i="5.88,393,1635231600"; 
-   d="scan'208";a="239549729"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2022 21:30:48 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,393,1635231600"; 
-   d="scan'208";a="684161288"
-Received: from allen-box.sh.intel.com (HELO [10.239.159.118]) ([10.239.159.118])
-  by fmsmga001.fm.intel.com with ESMTP; 23 Feb 2022 21:30:40 -0800
-Message-ID: <c591f91a-392c-21a2-e9bd-10c64073e9e8@linux.intel.com>
-Date:   Thu, 24 Feb 2022 13:29:11 +0800
+        Thu, 24 Feb 2022 00:30:49 -0500
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ADAD22EDF2;
+        Wed, 23 Feb 2022 21:30:20 -0800 (PST)
+Received: by mail-lf1-x129.google.com with SMTP id u20so2017545lff.2;
+        Wed, 23 Feb 2022 21:30:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=ssbTILFe2u43gFml3/5OETrelKmGcJxKqHN6FlLabWo=;
+        b=SIjxS4N0yIePoISFjFKUFxVDjaveHK9Y+Q+jNGLW6OIX9byTGcx9Cu1VmqCPM2Ps7T
+         yX3I/Pwk2Au59eJkLSlCDmYKEfEeKe7QOx/niDMTLXAe5JDtj06VC8teeseMDeDUgIz/
+         DxwdodRptKOZMTeh90zv2E7bIs/xwcJQ+h+lLq0XEdDPHYZeEzQgkZGscbwonR1pTOWR
+         R93mguwWuVCD6EqkmD1LLFlWHpNCrwLA9ZnrR6E304aPgBMf2Od02wuLXG3T1bfSB+Op
+         lo8dG9OuO1ZLAeXAnWRN/lKPboj0H0Pb63Vxi6cF+R3f3STq0JmWHpGZU90yy2t9pbR9
+         rIJQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=ssbTILFe2u43gFml3/5OETrelKmGcJxKqHN6FlLabWo=;
+        b=d+aKIad1sHXhDXIo8S0oXx4cl3m/JQs/sgKWP/QCIuVSIlS0n+wplWdUxfFOXA0pk9
+         k9CBGTE6Zh0O6I4+N0SpG7bTBeSspzLFS2Gm42zpG/Y/rFJdkbuxyX0vxYdK7fdfub1v
+         WiyLDWz4vV8bEsgJXa/+bZrxCb3v6zk/X0IrYV7MLFips09s4kI1Lbov3215zblUfT52
+         2p6DvL63cjKqpq+9nStakYhPXSNmSkQBrxb3x8AlYfuaChw891FYEZpMQsghH9bSi1fg
+         QCczd4hp5Axln8a7NlDaT424lXz7lgbZW01T8UrHSyMlP254Z1qzoK4wl0nk13AL5bV1
+         xOpw==
+X-Gm-Message-State: AOAM532TJ0Jcm3ZC6c6LA6VgHAPQCLN8Koh9U32s9XzGmF5EoXwl9+l2
+        OfN8QJV5Cj9F+lpbHa2/ta0PmZok+/zaUbnF1dKOYrnvXwc=
+X-Google-Smtp-Source: ABdhPJwIy0Ji5zP1BBlRg4CD/cIVUb39yK2WuQ6mQEy9VidIcSlv+KBlFCEmEw+2ck3fajrpAUO4zpWxyuTu99Ap/yM=
+X-Received: by 2002:a05:6512:c09:b0:438:df07:a97e with SMTP id
+ z9-20020a0565120c0900b00438df07a97emr769819lfu.667.1645680618344; Wed, 23 Feb
+ 2022 21:30:18 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Cc:     baolu.lu@linux.intel.com,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Joerg Roedel <joro@8bytes.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>, rafael@kernel.org,
-        Diana Craciun <diana.craciun@oss.nxp.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Eric Auger <eric.auger@redhat.com>,
-        Liu Yi L <yi.l.liu@intel.com>,
-        Jacob jun Pan <jacob.jun.pan@intel.com>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        Stuart Yoder <stuyoder@gmail.com>,
-        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Li Yang <leoyang.li@nxp.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        iommu@lists.linux-foundation.org, linux-pci@vger.kernel.org,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6 01/11] iommu: Add dma ownership management interfaces
-Content-Language: en-US
-To:     Jason Gunthorpe <jgg@nvidia.com>,
-        Robin Murphy <robin.murphy@arm.com>
-References: <20220218005521.172832-1-baolu.lu@linux.intel.com>
- <20220218005521.172832-2-baolu.lu@linux.intel.com>
- <f830c268-daca-8e8f-a429-0c80496a7273@arm.com>
- <20220223180244.GA390403@nvidia.com>
- <dd944ab4-cf25-fa41-0170-875e5c5fd0e8@linux.intel.com>
-From:   Lu Baolu <baolu.lu@linux.intel.com>
-In-Reply-To: <dd944ab4-cf25-fa41-0170-875e5c5fd0e8@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+From:   Steve French <smfrench@gmail.com>
+Date:   Wed, 23 Feb 2022 23:30:07 -0600
+Message-ID: <CAH2r5mv7Z7XmyWgp5K8ZshA1OiMBTNGU-v8FdmwwkZaNNe=4wA@mail.gmail.com>
+Subject: [LSF/MM/BPF TOPIC] making O_TMPFILE more atomic
+To:     lsf-pc@lists.linux-foundation.org,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/24/22 1:16 PM, Lu Baolu wrote:
-> Hi Robin and Jason,
-> 
-> On 2/24/22 2:02 AM, Jason Gunthorpe wrote:
->> On Wed, Feb 23, 2022 at 06:00:06PM +0000, Robin Murphy wrote:
->>
->>> ...and equivalently just set owner_cnt directly to 0 here. I don't see a
->>> realistic use-case for any driver to claim the same group more than 
->>> once,
->>> and allowing it in the API just feels like opening up various potential
->>> corners for things to get out of sync.
->> I am Ok if we toss it out to get this merged, as there is no in-kernel
->> user right now.
-> 
-> So we don't need the owner pointer in the API anymore, right?
+Currently creating tmpfiles on Linux can be problematic because the
+tmpfile is not created and opened at the same time  (vfs_tmpfile calls
+into the fs, then later vfs_open is called to open the tmpfile).   For
+some filesystems it would be more natural to create and open the
+tmpfile as one operation (because the action of creating the file on
+some filesystems returns an open handle, so closing it then reopening
+it would cause the tmpfile to be deleted).
 
-Oh, NO.
+I would like to discuss whether the function do_tmpfile (which creates
+and then opens the tmpfile) could have an option for a filesystem to
+do this as one operation which would allow it to be more atomic and
+allow it to work on a wider variety of filesystems.
 
-The owner token represents that the group has been claimed for user
-space access. And the default domain auto-attach policy will be changed
-accordingly.
+-- 
+Thanks,
 
-So we still need this. Sorry for the noise.
-
-Best regards,
-baolu
+Steve

@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DBC14C2F53
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 16:20:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A4D304C2F6F
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 16:23:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236043AbiBXPUI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 10:20:08 -0500
+        id S229541AbiBXPVV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 10:21:21 -0500
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235986AbiBXPSc (ORCPT
+        with ESMTP id S236006AbiBXPSl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 10:18:32 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C54914A222
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 07:17:59 -0800 (PST)
+        Thu, 24 Feb 2022 10:18:41 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65E401451F5
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 07:18:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=Content-Type:MIME-Version:References:
+        d=infradead.org; s=casper.20170209; h=Content-Type:MIME-Version:References:
         Subject:Cc:To:From:Date:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
         Content-ID:Content-Description:In-Reply-To;
-        bh=wPLl25fpeIQLW8L8xKToiko4ArI0LSp6NU8/QNuYuJ0=; b=ENbQjLoLz+m7A1scSH3yNztEZL
-        z675SOv02DHkEGshocpql8uExc13E+6TihVJFhXy7yCkR1EXHjdSnTujsp0oPxGwM98wESovuy2Yh
-        tcT8NFyUWM1E973Fbcyf0a6liKxpKcEcBukIno2jUpcfhiLmO7dk0i2MHnF80mZBflmo3dOgaZCGs
-        /C+p7e6GFD9zVqwwLk3/dWDIVmY36cpxs81hM9LT5fpDJNebE5UV1VTJ5yOCzqUWf20xdhV6wmF/9
-        xfioMEef9KToCbf989addXIZr1nIilbebKXcqAZlrE4egh4SVxzIPqwuB+rWutgW0zzcnQM4Pwxqo
-        OQxE+8HQ==;
+        bh=dtE4TxbRN5b4MUyKtNVPCJTQt/NBj65e8QNm1bw+r8Q=; b=FRfFCipFL2Iqn1EYtRVe/caWwU
+        6fIz141euuHxQ2P2t0QOhx0Mj241faFdqV2n3aV/QBsmVsqJTaFJsIYP/KlkHnXvRIfhrPs6wptSn
+        GaIferDd90Cor80E1UAWh/IQZ/c4bX1IeLnjztN4THZzJsRE3lW7EsQic5mitpuPiOTvVck5wO4LA
+        caAeRht5HeFR+x/QznDerxXVmkr6WWsmPzQXDHTC/jLpqBEB2s+QK/uzCzCMX2bEQ8lBT53st8qU+
+        MJsX4GVG6chjUOn33tz36DJ5RTn/HUwGv+v4k85NFYUdEvmyViuSvdsj4v3wZukyXbje9pwBY3e1F
+        Nd/69yaQ==;
 Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nNFs3-00CeM3-Ve; Thu, 24 Feb 2022 15:17:32 +0000
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nNFs3-004s2D-Vl; Thu, 24 Feb 2022 15:17:32 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 48455302A1E;
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 49373302D48;
         Thu, 24 Feb 2022 16:17:29 +0100 (CET)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
-        id 8D1842B35479F; Thu, 24 Feb 2022 16:17:28 +0100 (CET)
-Message-ID: <20220224151323.661210297@infradead.org>
+        id 92AB82B3547A1; Thu, 24 Feb 2022 16:17:28 +0100 (CET)
+Message-ID: <20220224151323.721065568@infradead.org>
 User-Agent: quilt/0.66
-Date:   Thu, 24 Feb 2022 15:52:06 +0100
+Date:   Thu, 24 Feb 2022 15:52:07 +0100
 From:   Peter Zijlstra <peterz@infradead.org>
 To:     x86@kernel.org, joao@overdrivepizza.com, hjl.tools@gmail.com,
         jpoimboe@redhat.com, andrew.cooper3@citrix.com
@@ -47,7 +47,7 @@ Cc:     linux-kernel@vger.kernel.org, peterz@infradead.org,
         samitolvanen@google.com, mark.rutland@arm.com,
         alyssa.milburn@intel.com, mbenes@suse.cz, rostedt@goodmis.org,
         mhiramat@kernel.org, alexei.starovoitov@gmail.com
-Subject: [PATCH v2 28/39] x86/ibt,xen: Sprinkle the ENDBR
+Subject: [PATCH v2 29/39] objtool: Rename --duplicate to --lto
 References: <20220224145138.952963315@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -61,156 +61,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Even though Xen currently doesn't advertise IBT, prepare for when it
-will eventually do so and sprinkle the ENDBR dust accordingly.
-
-Even though most of the entry points are IRET like, the CPL0
-Hypervisor can set WAIT-FOR-ENDBR and demand ENDBR at these sites.
+In order to prepare for LTO like objtool runs for modules, rename the
+duplicate argument to lto.
 
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 ---
- arch/x86/entry/entry_64.S      |    1 +
- arch/x86/include/asm/segment.h |    2 +-
- arch/x86/kernel/head_64.S      |    1 +
- arch/x86/xen/enlighten_pv.c    |    3 +++
- arch/x86/xen/xen-asm.S         |   10 ++++++++++
- arch/x86/xen/xen-head.S        |    8 ++++++--
- 6 files changed, 22 insertions(+), 3 deletions(-)
+ scripts/link-vmlinux.sh                 |    2 +-
+ tools/objtool/builtin-check.c           |    4 ++--
+ tools/objtool/check.c                   |    7 ++++++-
+ tools/objtool/include/objtool/builtin.h |    2 +-
+ 4 files changed, 10 insertions(+), 5 deletions(-)
 
---- a/arch/x86/entry/entry_64.S
-+++ b/arch/x86/entry/entry_64.S
-@@ -822,6 +822,7 @@ SYM_CODE_END(exc_xen_hypervisor_callback
-  */
- SYM_CODE_START(xen_failsafe_callback)
- 	UNWIND_HINT_EMPTY
-+	ENDBR
- 	movl	%ds, %ecx
- 	cmpw	%cx, 0x10(%rsp)
- 	jne	1f
---- a/arch/x86/include/asm/segment.h
-+++ b/arch/x86/include/asm/segment.h
-@@ -283,7 +283,7 @@ static inline void vdso_read_cpunode(uns
-  * pop %rcx; pop %r11; jmp early_idt_handler_array[i]; summing up to
-  * max 8 bytes.
-  */
--#define XEN_EARLY_IDT_HANDLER_SIZE 8
-+#define XEN_EARLY_IDT_HANDLER_SIZE (8 + 4*HAS_KERNEL_IBT)
+--- a/scripts/link-vmlinux.sh
++++ b/scripts/link-vmlinux.sh
+@@ -115,7 +115,7 @@ objtool_link()
+ 			objtoolcmd="orc generate"
+ 		fi
  
- #ifndef __ASSEMBLY__
+-		objtoolopt="${objtoolopt} --duplicate"
++		objtoolopt="${objtoolopt} --lto"
  
---- a/arch/x86/kernel/head_64.S
-+++ b/arch/x86/kernel/head_64.S
-@@ -389,6 +389,7 @@ SYM_CODE_START(early_idt_handler_array)
- 	.fill early_idt_handler_array + i*EARLY_IDT_HANDLER_SIZE - ., 1, 0xcc
- 	.endr
- SYM_CODE_END(early_idt_handler_array)
-+	ANNOTATE_NOENDBR // early_idt_handler_array[NUM_EXCEPTION_VECTORS]
+ 		if is_enabled CONFIG_FTRACE_MCOUNT_USE_OBJTOOL; then
+ 			objtoolopt="${objtoolopt} --mcount"
+--- a/tools/objtool/builtin-check.c
++++ b/tools/objtool/builtin-check.c
+@@ -20,7 +20,7 @@
+ #include <objtool/objtool.h>
  
- SYM_CODE_START_LOCAL(early_idt_handler_common)
- 	UNWIND_HINT_IRET_REGS offset=16
---- a/arch/x86/xen/enlighten_pv.c
-+++ b/arch/x86/xen/enlighten_pv.c
-@@ -624,6 +624,9 @@ static struct trap_array_entry trap_arra
- 	TRAP_ENTRY(exc_coprocessor_error,		false ),
- 	TRAP_ENTRY(exc_alignment_check,			false ),
- 	TRAP_ENTRY(exc_simd_coprocessor_error,		false ),
-+#ifdef CONFIG_X86_KERNEL_IBT
-+	TRAP_ENTRY(exc_control_protection,		false ),
-+#endif
- };
+ bool no_fp, no_unreachable, retpoline, module, backtrace, uaccess, stats,
+-     validate_dup, vmlinux, mcount, noinstr, backup, sls, dryrun;
++     lto, vmlinux, mcount, noinstr, backup, sls, dryrun;
  
- static bool __ref get_trap_addr(void **addr, unsigned int ist)
---- a/arch/x86/xen/xen-asm.S
-+++ b/arch/x86/xen/xen-asm.S
-@@ -122,6 +122,7 @@ SYM_FUNC_END(xen_read_cr2_direct);
- .macro xen_pv_trap name
- SYM_CODE_START(xen_\name)
- 	UNWIND_HINT_EMPTY
-+	ENDBR
- 	pop %rcx
- 	pop %r11
- 	jmp  \name
-@@ -147,6 +148,9 @@ xen_pv_trap asm_exc_page_fault
- xen_pv_trap asm_exc_spurious_interrupt_bug
- xen_pv_trap asm_exc_coprocessor_error
- xen_pv_trap asm_exc_alignment_check
-+#ifdef CONFIG_X86_KERNEL_IBT
-+xen_pv_trap asm_exc_control_protection
-+#endif
- #ifdef CONFIG_X86_MCE
- xen_pv_trap asm_xenpv_exc_machine_check
- #endif /* CONFIG_X86_MCE */
-@@ -162,6 +166,7 @@ SYM_CODE_START(xen_early_idt_handler_arr
- 	i = 0
- 	.rept NUM_EXCEPTION_VECTORS
- 	UNWIND_HINT_EMPTY
-+	ENDBR
- 	pop %rcx
- 	pop %r11
- 	jmp early_idt_handler_array + i*EARLY_IDT_HANDLER_SIZE
-@@ -169,6 +174,7 @@ SYM_CODE_START(xen_early_idt_handler_arr
- 	.fill xen_early_idt_handler_array + i*XEN_EARLY_IDT_HANDLER_SIZE - ., 1, 0xcc
- 	.endr
- SYM_CODE_END(xen_early_idt_handler_array)
-+	ANNOTATE_NOENDBR
- 	__FINIT
+ static const char * const check_usage[] = {
+ 	"objtool check [<options>] file.o",
+@@ -40,7 +40,7 @@ const struct option check_options[] = {
+ 	OPT_BOOLEAN('b', "backtrace", &backtrace, "unwind on error"),
+ 	OPT_BOOLEAN('a', "uaccess", &uaccess, "enable uaccess checking"),
+ 	OPT_BOOLEAN('s', "stats", &stats, "print statistics"),
+-	OPT_BOOLEAN('d', "duplicate", &validate_dup, "duplicate validation for vmlinux.o"),
++	OPT_BOOLEAN(0, "lto", &lto, "whole-archive like runs"),
+ 	OPT_BOOLEAN('n', "noinstr", &noinstr, "noinstr validation for vmlinux.o"),
+ 	OPT_BOOLEAN('l', "vmlinux", &vmlinux, "vmlinux.o validation"),
+ 	OPT_BOOLEAN('M', "mcount", &mcount, "generate __mcount_loc"),
+--- a/tools/objtool/check.c
++++ b/tools/objtool/check.c
+@@ -3501,6 +3501,11 @@ int check(struct objtool_file *file)
+ {
+ 	int ret, warnings = 0;
  
- hypercall_iret = hypercall_page + __HYPERVISOR_iret * 32
-@@ -231,6 +237,7 @@ SYM_CODE_END(xenpv_restore_regs_and_retu
- /* Normal 64-bit system call target */
- SYM_CODE_START(xen_syscall_target)
- 	UNWIND_HINT_EMPTY
-+	ENDBR
- 	popq %rcx
- 	popq %r11
++	if (lto && !(vmlinux || module)) {
++		fprintf(stderr, "--lto requires: --vmlinux or --module\n");
++		return 1;
++	}
++
+ 	arch_initial_func_cfi_state(&initial_func_cfi);
+ 	init_cfi_state(&init_cfi);
+ 	init_cfi_state(&func_cfi);
+@@ -3521,7 +3526,7 @@ int check(struct objtool_file *file)
+ 	if (list_empty(&file->insn_list))
+ 		goto out;
  
-@@ -250,6 +257,7 @@ SYM_CODE_END(xen_syscall_target)
- /* 32-bit compat syscall target */
- SYM_CODE_START(xen_syscall32_target)
- 	UNWIND_HINT_EMPTY
-+	ENDBR
- 	popq %rcx
- 	popq %r11
+-	if (vmlinux && !validate_dup) {
++	if (vmlinux && !lto) {
+ 		ret = validate_vmlinux_functions(file);
+ 		if (ret < 0)
+ 			goto out;
+--- a/tools/objtool/include/objtool/builtin.h
++++ b/tools/objtool/include/objtool/builtin.h
+@@ -9,7 +9,7 @@
  
-@@ -267,6 +275,7 @@ SYM_CODE_END(xen_syscall32_target)
- /* 32-bit compat sysenter target */
- SYM_CODE_START(xen_sysenter_target)
- 	UNWIND_HINT_EMPTY
-+	ENDBR
- 	/*
- 	 * NB: Xen is polite and clears TF from EFLAGS for us.  This means
- 	 * that we don't need to guard against single step exceptions here.
-@@ -290,6 +299,7 @@ SYM_CODE_END(xen_sysenter_target)
- SYM_CODE_START(xen_syscall32_target)
- SYM_CODE_START(xen_sysenter_target)
- 	UNWIND_HINT_EMPTY
-+	ENDBR
- 	lea 16(%rsp), %rsp	/* strip %rcx, %r11 */
- 	mov $-ENOSYS, %rax
- 	pushq $0
---- a/arch/x86/xen/xen-head.S
-+++ b/arch/x86/xen/xen-head.S
-@@ -25,8 +25,11 @@
- SYM_CODE_START(hypercall_page)
- 	.rept (PAGE_SIZE / 32)
- 		UNWIND_HINT_FUNC
--		.skip 31, 0x90
--		RET
-+		ANNOTATE_NOENDBR
-+		/*
-+		 * Xen will write the hypercall page, and sort out ENDBR.
-+		 */
-+		.skip 32, 0xcc
- 	.endr
+ extern const struct option check_options[];
+ extern bool no_fp, no_unreachable, retpoline, module, backtrace, uaccess, stats,
+-            validate_dup, vmlinux, mcount, noinstr, backup, sls, dryrun;
++	    lto, vmlinux, mcount, noinstr, backup, sls, dryrun;
  
- #define HYPERCALL(n) \
-@@ -74,6 +77,7 @@ SYM_CODE_END(startup_xen)
- .pushsection .text
- SYM_CODE_START(asm_cpu_bringup_and_idle)
- 	UNWIND_HINT_EMPTY
-+	ENDBR
+ extern int cmd_parse_options(int argc, const char **argv, const char * const usage[]);
  
- 	call cpu_bringup_and_idle
- SYM_CODE_END(asm_cpu_bringup_and_idle)
 
 

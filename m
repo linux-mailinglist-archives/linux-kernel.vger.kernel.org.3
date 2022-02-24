@@ -2,251 +2,257 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD3A34C3632
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 20:52:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DACF54C3635
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 20:52:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234058AbiBXTwo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 14:52:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49890 "EHLO
+        id S234057AbiBXTwd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 14:52:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233922AbiBXTwk (ORCPT
+        with ESMTP id S233922AbiBXTwb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 14:52:40 -0500
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D518E1B8BD3
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 11:52:08 -0800 (PST)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 21OJpfE6023425;
-        Thu, 24 Feb 2022 13:51:41 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1645732301;
-        bh=/Yco3sZhqGHYG24zZDa8hoqr6CjPjhi6uAaQBygzIN0=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=wUzqL0siiBF6IFywVllx+1rK1oFxL2s7nREVGHGuXSB43zq8cMjr1w7S9oFy7f5y1
-         nfFvF5gTB9M/HBDnxkTDLESb6foNoWx/oeZO15cqOBbDAvpXo949CJC3BEwIb8Q88g
-         MWiUwomBRnQI8ZBSThJplDhjRZx5bMkq4quea44U=
-Received: from DLEE111.ent.ti.com (dlee111.ent.ti.com [157.170.170.22])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 21OJpenP099894
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 24 Feb 2022 13:51:40 -0600
-Received: from DLEE101.ent.ti.com (157.170.170.31) by DLEE111.ent.ti.com
- (157.170.170.22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Thu, 24
- Feb 2022 13:51:40 -0600
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE101.ent.ti.com
- (157.170.170.31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Thu, 24 Feb 2022 13:51:40 -0600
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 21OJpdWI045062;
-        Thu, 24 Feb 2022 13:51:40 -0600
-Date:   Fri, 25 Feb 2022 01:21:39 +0530
-From:   Pratyush Yadav <p.yadav@ti.com>
-To:     Tudor Ambarus <tudor.ambarus@microchip.com>
-CC:     <michael@walle.cc>, <Takahiro.Kuwano@infineon.com>,
-        <miquel.raynal@bootlin.com>, <richard@nod.at>, <vigneshr@ti.com>,
-        <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        <nicolas.ferre@microchip.com>, <zhengxunli@mxic.com.tw>,
-        <jaimeliao@mxic.com.tw>, <Bacem.Daassi@infineon.com>
-Subject: Re: [PATCH 2/3] mtd: spi-nor: micron-st: Rework
- spi_nor_micron_octal_dtr_enable()
-Message-ID: <20220224195139.i4kjbnhgthwtcaet@ti.com>
-References: <20220210023334.408926-1-tudor.ambarus@microchip.com>
- <20220210023334.408926-3-tudor.ambarus@microchip.com>
+        Thu, 24 Feb 2022 14:52:31 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D02571B45E4
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 11:52:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1645732319;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Q2zY9nW3JSGkVakGPdaOHjkL7gRWAKVqi4jlLr2HJiI=;
+        b=QRrJU0gwpli9jf48X9/7jVKndHVj0mG8HRyXw7405dxoypkbOwyPCJLy5Xyp/qMqE7QOVX
+        rWaII6n4hRh4Y59qrHIm3fLYNKuloI15rFbFlJPk4U7p1DdGYZZb8vfy3Dl0ei+cN2ntWy
+        uOVxJNKsRu8UP88cB+AhlDOtcjUL558=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-490-iw_z2fXGOiefATfcu2U8zw-1; Thu, 24 Feb 2022 14:51:56 -0500
+X-MC-Unique: iw_z2fXGOiefATfcu2U8zw-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 5B60D1091DA0;
+        Thu, 24 Feb 2022 19:51:55 +0000 (UTC)
+Received: from starship (unknown [10.40.195.190])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id CD5E01971F;
+        Thu, 24 Feb 2022 19:51:52 +0000 (UTC)
+Message-ID: <70922149247cfe2bfd59d27d45bbf5d0966c2dcd.camel@redhat.com>
+Subject: Re: [RFC PATCH 10/13] KVM: SVM: Adding support for configuring
+ x2APIC MSRs interception
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Cc:     pbonzini@redhat.com, seanjc@google.com, joro@8bytes.org,
+        jon.grimm@amd.com, wei.huang2@amd.com, terry.bowman@amd.com
+Date:   Thu, 24 Feb 2022 21:51:51 +0200
+In-Reply-To: <20220221021922.733373-11-suravee.suthikulpanit@amd.com>
+References: <20220221021922.733373-1-suravee.suthikulpanit@amd.com>
+         <20220221021922.733373-11-suravee.suthikulpanit@amd.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20220210023334.408926-3-tudor.ambarus@microchip.com>
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Tudor,
-
-On 10/02/22 04:33AM, Tudor Ambarus wrote:
-> Introduce template operation to remove code duplication.
-> Split spi_nor_micron_octal_dtr_enable() in spi_nor_micron_octal_dtr_en()
-> and spi_nor_micron_octal_dtr_dis() as it no longer made sense to try to
-> keep everything alltogether: too many "if (enable)" throughout the code,
-> which made the code difficult to follow.
+On Sun, 2022-02-20 at 20:19 -0600, Suravee Suthikulpanit wrote:
+> When enabling x2APIC virtualization (x2AVIC), the interception of
+> x2APIC MSRs must be disabled to let the hardware virtualize guest
+> MSR accesses.
 > 
-> Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
+> Current implementation keeps track of MSR interception state
+> for generic MSRs in the svm_direct_access_msrs array.
+> For x2APIC MSRs, introduce direct_access_x2apic_msrs array.
+> 
+> Signed-off-by: Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
 > ---
->  drivers/mtd/spi-nor/micron-st.c | 105 +++++++++++++++++---------------
->  1 file changed, 55 insertions(+), 50 deletions(-)
+>  arch/x86/kvm/svm/svm.c | 67 +++++++++++++++++++++++++++++++-----------
+>  arch/x86/kvm/svm/svm.h |  7 +++++
+>  2 files changed, 57 insertions(+), 17 deletions(-)
 > 
-> diff --git a/drivers/mtd/spi-nor/micron-st.c b/drivers/mtd/spi-nor/micron-st.c
-> index 7f66b5943ceb..013aa6a52737 100644
-> --- a/drivers/mtd/spi-nor/micron-st.c
-> +++ b/drivers/mtd/spi-nor/micron-st.c
-> @@ -17,73 +17,72 @@
->  #define SPINOR_MT_OCT_DTR	0xe7	/* Enable Octal DTR. */
->  #define SPINOR_MT_EXSPI		0xff	/* Enable Extended SPI (default) */
+> diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
+> index 4e6dc1feeac7..afca26aa1f40 100644
+> --- a/arch/x86/kvm/svm/svm.c
+> +++ b/arch/x86/kvm/svm/svm.c
+> @@ -89,7 +89,7 @@ static uint64_t osvw_len = 4, osvw_status;
+>  static DEFINE_PER_CPU(u64, current_tsc_ratio);
+>  #define TSC_RATIO_DEFAULT	0x0100000000ULL
 >  
-> -static int spi_nor_micron_octal_dtr_enable(struct spi_nor *nor, bool enable)
-> +/* Micron ST SPI NOR flash operations. */
-> +#define SPI_NOR_MICRON_WR_ANY_REG_OP(naddr, addr, ndata, buf)		\
-
-Should change function and variable names based on mwalle's patches 
-(assuming you agree with that scheme). MICRON_NOR_WR_ANY_REG_OP?
-
-> +	SPI_MEM_OP(SPI_MEM_OP_CMD(SPINOR_OP_MT_WR_ANY_REG, 0),		\
-> +		   SPI_MEM_OP_ADDR(naddr, addr, 0),			\
-> +		   SPI_MEM_OP_NO_DUMMY,					\
-> +		   SPI_MEM_OP_DATA_OUT(ndata, buf, 0))
+> -static const struct svm_direct_access_msrs {
+> +static struct svm_direct_access_msrs {
+>  	u32 index;   /* Index of the MSR */
+>  	bool always; /* True if intercept is initially cleared */
+>  } direct_access_msrs[MAX_DIRECT_ACCESS_MSRS] = {
+> @@ -117,6 +117,9 @@ static const struct svm_direct_access_msrs {
+>  	{ .index = MSR_INVALID,				.always = false },
+>  };
+>  
+> +static struct svm_direct_access_msrs
+> +direct_access_x2apic_msrs[NUM_DIRECT_ACCESS_X2APIC_MSRS + 1];
 > +
-> +static int spi_nor_micron_octal_dtr_en(struct spi_nor *nor)
-
-micron_nor_octal_dtr_en(). Same for other functions.
-
->  {
->  	struct spi_mem_op op;
->  	u8 *buf = nor->bouncebuf;
->  	int ret;
+>  /*
+>   * These 2 parameters are used to config the controls for Pause-Loop Exiting:
+>   * pause_filter_count: On processors that support Pause filtering(indicated
+> @@ -609,41 +612,42 @@ static int svm_cpu_init(int cpu)
 >  
-> -	if (enable) {
-> -		/* Use 20 dummy cycles for memory array reads. */
-> -		ret = spi_nor_write_enable(nor);
-> -		if (ret)
-> -			return ret;
-> -
-> -		*buf = 20;
-> -		op = (struct spi_mem_op)
-> -			SPI_MEM_OP(SPI_MEM_OP_CMD(SPINOR_OP_MT_WR_ANY_REG, 1),
-> -				   SPI_MEM_OP_ADDR(3, SPINOR_REG_MT_CFR1V, 1),
-> -				   SPI_MEM_OP_NO_DUMMY,
-> -				   SPI_MEM_OP_DATA_OUT(1, buf, 1));
-> -
-> -		ret = spi_mem_exec_op(nor->spimem, &op);
-> -		if (ret)
-> -			return ret;
-> +	/* Use 20 dummy cycles for memory array reads. */
-> +	*buf = 20;
-> +	op = (struct spi_mem_op)
-> +		SPI_NOR_MICRON_WR_ANY_REG_OP(3, SPINOR_REG_MT_CFR1V, 1, buf);
-> +	ret = spi_nor_write_reg(nor, &op, nor->reg_proto);
-> +	if (ret)
-> +		return ret;
-> +	ret = spi_nor_wait_till_ready(nor);
-> +	if (ret)
-> +		return ret;
->  
-> -		ret = spi_nor_wait_till_ready(nor);
-> -		if (ret)
-> -			return ret;
-> -	}
-> +	buf[0] = SPINOR_MT_OCT_DTR;
-> +	op = (struct spi_mem_op)
-> +		SPI_NOR_MICRON_WR_ANY_REG_OP(3, SPINOR_REG_MT_CFR0V, 1, buf);
-> +	ret = spi_nor_write_reg(nor, &op, nor->reg_proto);
-> +	if (ret)
-> +		return ret;
->  
-> -	ret = spi_nor_write_enable(nor);
-> +	/* Read flash ID to make sure the switch was successful. */
-> +	ret = spi_nor_read_id(nor, 0, 8, buf, SNOR_PROTO_8_8_8_DTR);
->  	if (ret)
->  		return ret;
->  
-> -	if (enable) {
-> -		buf[0] = SPINOR_MT_OCT_DTR;
-> -	} else {
-> -		/*
-> -		 * The register is 1-byte wide, but 1-byte transactions are not
-> -		 * allowed in 8D-8D-8D mode. The next register is the dummy
-> -		 * cycle configuration register. Since the transaction needs to
-> -		 * be at least 2 bytes wide, set the next register to its
-> -		 * default value. This also makes sense because the value was
-> -		 * changed when enabling 8D-8D-8D mode, it should be reset when
-> -		 * disabling.
-> -		 */
-> -		buf[0] = SPINOR_MT_EXSPI;
-> -		buf[1] = SPINOR_REG_MT_CFR1V_DEF;
-> -	}
-> +	if (memcmp(buf, nor->info->id, nor->info->id_len))
-> +		return -EINVAL;
->  
-> -	op = (struct spi_mem_op)
-> -		SPI_MEM_OP(SPI_MEM_OP_CMD(SPINOR_OP_MT_WR_ANY_REG, 1),
-> -			   SPI_MEM_OP_ADDR(enable ? 3 : 4,
-> -					   SPINOR_REG_MT_CFR0V, 1),
-> -			   SPI_MEM_OP_NO_DUMMY,
-> -			   SPI_MEM_OP_DATA_OUT(enable ? 1 : 2, buf, 1));
-> +	return 0;
-> +}
->  
-> -	if (!enable)
-> -		spi_nor_spimem_setup_op(nor, &op, SNOR_PROTO_8_8_8_DTR);
-> +static int spi_nor_micron_octal_dtr_dis(struct spi_nor *nor)
-> +{
-> +	struct spi_mem_op op;
-> +	u8 *buf = nor->bouncebuf;
-> +	int ret;
->  
-> -	ret = spi_mem_exec_op(nor->spimem, &op);
-> +	/*
-> +	 * The register is 1-byte wide, but 1-byte transactions are not allowed
-> +	 * in 8D-8D-8D mode. The next register is the dummy cycle configuration
-> +	 * register. Since the transaction needs to be at least 2 bytes wide,
-> +	 * set the next register to its default value. This also makes sense
-> +	 * because the value was changed when enabling 8D-8D-8D mode, it should
-> +	 * be reset when disabling.
-> +	 */
-> +	buf[0] = SPINOR_MT_EXSPI;
-> +	buf[1] = SPINOR_REG_MT_CFR1V_DEF;
-> +	op = (struct spi_mem_op)
-> +		SPI_NOR_MICRON_WR_ANY_REG_OP(4, SPINOR_REG_MT_CFR0V, 2, buf);
-> +	ret = spi_nor_write_reg(nor, &op, SNOR_PROTO_8_8_8_DTR);
->  	if (ret)
->  		return ret;
->  
->  	/* Read flash ID to make sure the switch was successful. */
-> -	if (enable)
-> -		ret = spi_nor_read_id(nor, 0, 8, buf, SNOR_PROTO_8_8_8_DTR);
-> -	else
-> -		ret = spi_nor_read_id(nor, 0, 0, buf, nor->reg_proto);
-> +	ret = spi_nor_read_id(nor, 0, 0, buf, nor->reg_proto);
-
-nor->reg_proto is not updated yet. It will be updated _after_ this 
-function completes. So you would end up calling read ID in 8D-8D-8D 
-mode, which would be bogus.
-
-I tried with Micron MT35XU512ABA. Enable works fine, but disable fails 
-(it succeeds in reality but the function is unable to verify that) 
-because of this. Changing nor->reg_proto to SNOR_PROTO_1_1_1 fixes it.
-
-Looks like the problem is not introduced by this patch though. It seems 
-to come from patch 5 of your mx66 series. I see the same with the 
-Cypress flash too but I have not tested it yet.
-
->  	if (ret)
->  		return ret;
->  
-> @@ -93,6 +92,12 @@ static int spi_nor_micron_octal_dtr_enable(struct spi_nor *nor, bool enable)
->  	return 0;
 >  }
 >  
-> +static int spi_nor_micron_octal_dtr_enable(struct spi_nor *nor, bool enable)
+> -static int direct_access_msr_slot(u32 msr)
+> +static int direct_access_msr_slot(u32 msr, struct svm_direct_access_msrs *msrs)
+>  {
+>  	u32 i;
+>  
+> -	for (i = 0; direct_access_msrs[i].index != MSR_INVALID; i++)
+> -		if (direct_access_msrs[i].index == msr)
+> +	for (i = 0; msrs[i].index != MSR_INVALID; i++)
+> +		if (msrs[i].index == msr)
+>  			return i;
+>  
+>  	return -ENOENT;
+>  }
+>  
+> -static void set_shadow_msr_intercept(struct kvm_vcpu *vcpu, u32 msr, int read,
+> -				     int write)
+> +static void set_shadow_msr_intercept(struct kvm_vcpu *vcpu,
+> +				     struct svm_direct_access_msrs *msrs, u32 msr,
+> +				     int read, void *read_bits,
+> +				     int write, void *write_bits)
+>  {
+> -	struct vcpu_svm *svm = to_svm(vcpu);
+> -	int slot = direct_access_msr_slot(msr);
+> +	int slot = direct_access_msr_slot(msr, msrs);
+>  
+>  	if (slot == -ENOENT)
+>  		return;
+>  
+>  	/* Set the shadow bitmaps to the desired intercept states */
+>  	if (read)
+> -		set_bit(slot, svm->shadow_msr_intercept.read);
+> +		set_bit(slot, read_bits);
+>  	else
+> -		clear_bit(slot, svm->shadow_msr_intercept.read);
+> +		clear_bit(slot, read_bits);
+>  
+>  	if (write)
+> -		set_bit(slot, svm->shadow_msr_intercept.write);
+> +		set_bit(slot, write_bits);
+>  	else
+> -		clear_bit(slot, svm->shadow_msr_intercept.write);
+> +		clear_bit(slot, write_bits);
+>  }
+>  
+> -static bool valid_msr_intercept(u32 index)
+> +static bool valid_msr_intercept(u32 index, struct svm_direct_access_msrs *msrs)
+>  {
+> -	return direct_access_msr_slot(index) != -ENOENT;
+> +	return direct_access_msr_slot(index, msrs) != -ENOENT;
+>  }
+>  
+>  static bool msr_write_intercepted(struct kvm_vcpu *vcpu, u32 msr)
+> @@ -674,9 +678,12 @@ static void set_msr_interception_bitmap(struct kvm_vcpu *vcpu, u32 *msrpm,
+>  
+>  	/*
+>  	 * If this warning triggers extend the direct_access_msrs list at the
+> -	 * beginning of the file
+> +	 * beginning of the file. The direct_access_x2apic_msrs is only for
+> +	 * x2apic MSRs.
+>  	 */
+> -	WARN_ON(!valid_msr_intercept(msr));
+> +	WARN_ON(!valid_msr_intercept(msr, direct_access_msrs) &&
+> +		(boot_cpu_has(X86_FEATURE_X2AVIC) &&
+> +		 !valid_msr_intercept(msr, direct_access_x2apic_msrs)));
+>  
+>  	/* Enforce non allowed MSRs to trap */
+>  	if (read && !kvm_msr_allowed(vcpu, msr, KVM_MSR_FILTER_READ))
+> @@ -704,7 +711,16 @@ static void set_msr_interception_bitmap(struct kvm_vcpu *vcpu, u32 *msrpm,
+>  void set_msr_interception(struct kvm_vcpu *vcpu, u32 *msrpm, u32 msr,
+>  			  int read, int write)
+>  {
+> -	set_shadow_msr_intercept(vcpu, msr, read, write);
+> +	struct vcpu_svm *svm = to_svm(vcpu);
+> +
+> +	if (msr < 0x800 || msr > 0x8ff)
+> +		set_shadow_msr_intercept(vcpu, direct_access_msrs, msr,
+> +					 read, svm->shadow_msr_intercept.read,
+> +					 write, svm->shadow_msr_intercept.write);
+> +	else
+> +		set_shadow_msr_intercept(vcpu, direct_access_x2apic_msrs, msr,
+> +					 read, svm->shadow_x2apic_msr_intercept.read,
+> +					 write, svm->shadow_x2apic_msr_intercept.write);
+>  	set_msr_interception_bitmap(vcpu, msrpm, msr, read, write);
+>  }
+>  
+> @@ -786,6 +802,22 @@ static void add_msr_offset(u32 offset)
+>  	BUG();
+>  }
+>  
+> +static void init_direct_access_x2apic_msrs(void)
 > +{
-> +	return enable ? spi_nor_micron_octal_dtr_en(nor) :
-> +			spi_nor_micron_octal_dtr_dis(nor);
+> +	int i;
+> +
+> +	/* Initialize x2APIC direct_access_x2apic_msrs entries */
+> +	for (i = 0; i < NUM_DIRECT_ACCESS_X2APIC_MSRS; i++) {
+> +		direct_access_x2apic_msrs[i].index = boot_cpu_has(X86_FEATURE_X2AVIC) ?
+> +						  (0x800 + i) : MSR_INVALID;
+> +		direct_access_x2apic_msrs[i].always = false;
+> +	}
+> +
+> +	/* Initialize last entry */
+> +	direct_access_x2apic_msrs[i].index = MSR_INVALID;
+> +	direct_access_x2apic_msrs[i].always = false;
 > +}
 > +
->  static void mt35xu512aba_default_init(struct spi_nor *nor)
+>  static void init_msrpm_offsets(void)
 >  {
->  	nor->params->octal_dtr_enable = spi_nor_micron_octal_dtr_enable;
-> -- 
-> 2.25.1
-> 
+>  	int i;
+> @@ -4752,6 +4784,7 @@ static __init int svm_hardware_setup(void)
+>  	memset(iopm_va, 0xff, PAGE_SIZE * (1 << order));
+>  	iopm_base = page_to_pfn(iopm_pages) << PAGE_SHIFT;
+>  
+> +	init_direct_access_x2apic_msrs();
+>  	init_msrpm_offsets();
+>  
+>  	supported_xcr0 &= ~(XFEATURE_MASK_BNDREGS | XFEATURE_MASK_BNDCSR);
+> diff --git a/arch/x86/kvm/svm/svm.h b/arch/x86/kvm/svm/svm.h
+> index bfbebb933da2..41514df5107e 100644
+> --- a/arch/x86/kvm/svm/svm.h
+> +++ b/arch/x86/kvm/svm/svm.h
+> @@ -29,6 +29,8 @@
+>  
+>  #define MAX_DIRECT_ACCESS_MSRS	20
+>  #define MSRPM_OFFSETS	16
+> +#define NUM_DIRECT_ACCESS_X2APIC_MSRS	0x100
+> +
+>  extern u32 msrpm_offsets[MSRPM_OFFSETS] __read_mostly;
+>  extern bool npt_enabled;
+>  extern bool intercept_smi;
+> @@ -242,6 +244,11 @@ struct vcpu_svm {
+>  		DECLARE_BITMAP(write, MAX_DIRECT_ACCESS_MSRS);
+>  	} shadow_msr_intercept;
+>  
+> +	struct {
+> +		DECLARE_BITMAP(read, NUM_DIRECT_ACCESS_X2APIC_MSRS);
+> +		DECLARE_BITMAP(write, NUM_DIRECT_ACCESS_X2APIC_MSRS);
+> +	} shadow_x2apic_msr_intercept;
+> +
+>  	struct vcpu_sev_es_state sev_es;
+>  
+>  	bool guest_state_loaded;
 
--- 
-Regards,
-Pratyush Yadav
-Texas Instruments Inc.
+I only gave this a cursory look, the whole thing is a bit ugly (not your fault),
+I feel like it should be refactored a bit.
+
+
+Best regards,
+	Maxim Levitsky
+

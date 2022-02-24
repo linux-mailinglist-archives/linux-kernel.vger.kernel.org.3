@@ -2,61 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB9544C232B
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 05:59:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A6D504C2334
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 06:06:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230072AbiBXFAM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 00:00:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55880 "EHLO
+        id S230083AbiBXFGm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 00:06:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230073AbiBXFAK (ORCPT
+        with ESMTP id S229976AbiBXFGj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 00:00:10 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 752CA15D3AD
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 20:59:40 -0800 (PST)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1nN6E6-0007Mj-5Q; Thu, 24 Feb 2022 05:59:38 +0100
-Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1nN6E4-0003Yg-40; Thu, 24 Feb 2022 05:59:36 +0100
-Date:   Thu, 24 Feb 2022 05:59:36 +0100
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Vladimir Oltean <olteanv@gmail.com>
-Cc:     Woojung Huh <woojung.huh@microchip.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        kernel@pengutronix.de, Jakub Kicinski <kuba@kernel.org>,
-        UNGLinuxDriver@microchip.com,
-        "David S. Miller" <davem@davemloft.net>
-Subject: Re: [PATCH net-next v2 1/1] net: dsa: microchip: ksz9477: implement
- MTU configuration
-Message-ID: <20220224045936.GB4594@pengutronix.de>
-References: <20220223084055.2719969-1-o.rempel@pengutronix.de>
- <20220223233833.mjknw5ko7hpxj3go@skbuf>
+        Thu, 24 Feb 2022 00:06:39 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F473234023;
+        Wed, 23 Feb 2022 21:06:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645679169; x=1677215169;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=U7f8LlXFoOldvk1lVMQCofNeheZhhHppftkOlnZeRd4=;
+  b=fMiusDqYsubgM7pAojrXR2kNl+FJMPdWMTNmh7r+CMuiBLho6P+IO98+
+   i+2d3ROs5Hsc+pml9cHm9YApDW/4ZTjutY6eN41Ntl7wqKHjo0b57620H
+   bH49+KXIYWh2BqQya+3E+EXw8f68PeY78yBQ7/tM8S4upYBK6v1dnw+e8
+   jA9qCfWR7WoA+tXAssNlOaFY32VoBwajB6E2KtwRTLOP15hHDF82h9cOn
+   1vC4Quygc4IaM9Nzgv3m013mBztvxgRfLK43RyuMc/Lw2ODfct4EvqiWV
+   twiE2oTYtl+F9QrcfCTC5wjbALI582HuikljiOsx2Gzn9mkMql7C5+8P7
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10267"; a="250979557"
+X-IronPort-AV: E=Sophos;i="5.88,393,1635231600"; 
+   d="scan'208";a="250979557"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2022 21:06:08 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,393,1635231600"; 
+   d="scan'208";a="684156805"
+Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 23 Feb 2022 21:06:03 -0800
+Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nN6KJ-0002Hs-0U; Thu, 24 Feb 2022 05:06:03 +0000
+Date:   Thu, 24 Feb 2022 13:05:17 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Rob Clark <robdclark@gmail.com>, dri-devel@lists.freedesktop.org
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        Rob Clark <robdclark@chromium.org>,
+        Sean Paul <sean@poorly.run>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Kalyan Thota <quic_kalyant@quicinc.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Krishna Manikandan <quic_mkrishn@quicinc.com>,
+        Mark Yacoub <markyacoub@google.com>,
+        Jessica Zhang <quic_jesszhan@quicinc.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Yangtao Li <tiny.windzz@gmail.com>,
+        David Heidelberg <david@ixit.cz>, Xu Wang <vulab@iscas.ac.cn>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] drm/msm: Avoid dirtyfb stalls on video mode displays
+Message-ID: <202202241211.iXHxUcF2-lkp@intel.com>
+References: <20220219193957.577054-1-robdclark@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220223233833.mjknw5ko7hpxj3go@skbuf>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-IRC:  #ptxdist @freenode
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-Uptime: 05:38:33 up 75 days, 13:24, 51 users,  load average: 0.09, 0.13,
- 0.12
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20220219193957.577054-1-robdclark@gmail.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,146 +82,260 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 24, 2022 at 01:38:33AM +0200, Vladimir Oltean wrote:
-> On Wed, Feb 23, 2022 at 09:40:55AM +0100, Oleksij Rempel wrote:
-> > This chips supports two ways to configure max MTU size:
-> > - by setting SW_LEGAL_PACKET_DISABLE bit: if this bit is 0 allowed packed size
-> >   will be between 64 and bytes 1518. If this bit is 1, it will accept
-> >   packets up to 2000 bytes.
-> > - by setting SW_JUMBO_PACKET bit. If this bit is set, the chip will
-> >   ignore SW_LEGAL_PACKET_DISABLE value and use REG_SW_MTU__2 register to
-> >   configure MTU size.
-> > 
-> > Current driver has disabled SW_JUMBO_PACKET bit and activates
-> > SW_LEGAL_PACKET_DISABLE. So the switch will pass all packets up to 2000 without
-> > any way to configure it.
-> > 
-> > By providing port_change_mtu we are switch to SW_JUMBO_PACKET way and will
-> > be able to configure MTU up to ~9000.
-> > 
-> > Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
-> > ---
-> > changes v2:
-> > - rename max_mtu to max_frame and new_mtu to frame_size
-> > - use max() instead of if(>)
-> > ---
-> >  drivers/net/dsa/microchip/ksz9477.c     | 40 +++++++++++++++++++++++--
-> >  drivers/net/dsa/microchip/ksz9477_reg.h |  4 +++
-> >  drivers/net/dsa/microchip/ksz_common.h  |  1 +
-> >  3 files changed, 43 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/drivers/net/dsa/microchip/ksz9477.c b/drivers/net/dsa/microchip/ksz9477.c
-> > index 18ffc8ded7ee..5c5f78cb970e 100644
-> > --- a/drivers/net/dsa/microchip/ksz9477.c
-> > +++ b/drivers/net/dsa/microchip/ksz9477.c
-> > @@ -11,6 +11,7 @@
-> >  #include <linux/platform_data/microchip-ksz.h>
-> >  #include <linux/phy.h>
-> >  #include <linux/if_bridge.h>
-> > +#include <linux/if_vlan.h>
-> >  #include <net/dsa.h>
-> >  #include <net/switchdev.h>
-> >  
-> > @@ -182,6 +183,33 @@ static void ksz9477_port_cfg32(struct ksz_device *dev, int port, int offset,
-> >  			   bits, set ? bits : 0);
-> >  }
-> >  
-> > +static int ksz9477_change_mtu(struct dsa_switch *ds, int port, int mtu)
-> > +{
-> > +	struct ksz_device *dev = ds->priv;
-> > +	u16 frame_size, max_frame = 0;
-> > +	int i;
-> > +
-> > +	frame_size = mtu + ETH_HLEN + VLAN_HLEN + ETH_FCS_LEN;
-> 
-> Are you sure the unit of measurement is ok? My KSZ9477 documentation
-> says this about register 0x0308:
-> 
-> Maximum Frame Length (MTU)
-> Specifies the maximum transmission unit (MTU), which is the maximum
-> frame payload size. Frames which exceed this maximum are truncated. This
-> value can be set as high as 9000 (= 0x2328) if jumbo frame support is
-> required.
-> 
-> "frame payload" to me means what MTU should mean. And ETH_HLEN +
-> VLAN_HLEN + ETH_FCS_LEN isn't part of that meaning.
+Hi Rob,
 
-if I set this value to anything less then 1522, it breaks the NFS boot. Since
-my NFS server is configured with MTU 1500, i tried to guess how
-frame size is calculated on this chip.
+I love your patch! Perhaps something to improve:
 
-> > +
-> > +	if (dsa_is_cpu_port(ds, port))
-> > +		frame_size += KSZ9477_INGRESS_TAG_LEN;
-> > +
-> > +	/* Cache the per-port MTU setting */
-> > +	dev->ports[port].max_frame = frame_size;
-> > +
-> > +	for (i = 0; i < dev->port_cnt; i++)
-> > +		max_frame = max(max_frame, dev->ports[i].max_frame);
-> > +
-> > +	return regmap_update_bits(dev->regmap[1], REG_SW_MTU__2,
-> > +				  REG_SW_MTU_MASK, max_frame);
-> > +}
-> > +
-> > +static int ksz9477_max_mtu(struct dsa_switch *ds, int port)
-> > +{
-> > +	return KSZ9477_MAX_FRAME_SIZE - ETH_HLEN - ETH_FCS_LEN - VLAN_HLEN -
-> > +		KSZ9477_INGRESS_TAG_LEN;
-> > +}
-> > +
-> >  static int ksz9477_wait_vlan_ctrl_ready(struct ksz_device *dev)
-> >  {
-> >  	unsigned int val;
-> > @@ -1412,8 +1440,14 @@ static int ksz9477_setup(struct dsa_switch *ds)
-> >  	/* Do not work correctly with tail tagging. */
-> >  	ksz_cfg(dev, REG_SW_MAC_CTRL_0, SW_CHECK_LENGTH, false);
-> >  
-> > -	/* accept packet up to 2000bytes */
-> > -	ksz_cfg(dev, REG_SW_MAC_CTRL_1, SW_LEGAL_PACKET_DISABLE, true);
-> > +	/* Enable REG_SW_MTU__2 reg by setting SW_JUMBO_PACKET */
-> > +	ksz_cfg(dev, REG_SW_MAC_CTRL_1, SW_JUMBO_PACKET, true);
-> > +
-> > +	/* Now we can configure default MTU value */
-> > +	ret = regmap_update_bits(dev->regmap[1], REG_SW_MTU__2, REG_SW_MTU_MASK,
-> > +				 VLAN_ETH_FRAME_LEN + ETH_FCS_LEN);
-> 
-> Why do you need this? Doesn't DSA call dsa_slave_create() ->
-> dsa_slave_change_mtu(ETH_DATA_LEN) on probe?
+[auto build test WARNING on drm/drm-next]
+[also build test WARNING on drm-intel/for-linux-next drm-tip/drm-tip v5.17-=
+rc5 next-20220223]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-This was my initial assumption as well, but cadence macb driver provides
-buggy max MTU == -18. I hardcoded bigger MTU for now[1], but was not able to
-find proper way to fix it. To avoid this kinds of regressions I decided
-to keep some sane default configuration.
+url:    https://github.com/0day-ci/linux/commits/Rob-Clark/drm-msm-Avoid-di=
+rtyfb-stalls-on-video-mode-displays/20220220-185344
+base:   git://anongit.freedesktop.org/drm/drm drm-next
+config: mips-randconfig-r021-20220224 (https://download.01.org/0day-ci/arch=
+ive/20220224/202202241211.iXHxUcF2-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc=
+04d5b97b12e6b797c6067d3c96a8d7470e)
+reproduce (this is a W=3D1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/=
+make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips-linux-gnu
+        # https://github.com/0day-ci/linux/commit/e5d737074c502ff040a67f7fe=
+1f8a9e2a308dec9
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Rob-Clark/drm-msm-Avoid-dirtyfb-st=
+alls-on-video-mode-displays/20220220-185344
+        git checkout e5d737074c502ff040a67f7fe1f8a9e2a308dec9
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang make.cross W=3D=
+1 O=3Dbuild_dir ARCH=3Dmips SHELL=3D/bin/bash drivers/gpu/drm/msm/
 
-[1] - my workaround.
-commit 5f8385e9641a383478a65f96ccee8fd992201f68
-Author: Oleksij Rempel <linux@rempel-privat.de>
-Date:   Mon Feb 14 14:41:06 2022 +0100
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-    WIP: net: macb: fix max mtu size
-    
-    The gem_readl(bp, JML) will return 0, so we get max_mtu size of -18,
-    this is breaking MTU configuration for DSA
-    
-    Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+All warnings (new ones prefixed by >>):
 
-diff --git a/drivers/net/ethernet/cadence/macb_main.c b/drivers/net/ethernet/cadence/macb_main.c
-index a363da928e8b..454d811991bb 100644
---- a/drivers/net/ethernet/cadence/macb_main.c
-+++ b/drivers/net/ethernet/cadence/macb_main.c
-@@ -4727,7 +4727,7 @@ static int macb_probe(struct platform_device *pdev)
- 	/* MTU range: 68 - 1500 or 10240 */
- 	dev->min_mtu = GEM_MTU_MIN_SIZE;
- 	if (bp->caps & MACB_CAPS_JUMBO)
--		dev->max_mtu = gem_readl(bp, JML) - ETH_HLEN - ETH_FCS_LEN;
-+		dev->max_mtu = 10240 - ETH_HLEN - ETH_FCS_LEN;
- 	else
- 		dev->max_mtu = ETH_DATA_LEN;
- 
+>> drivers/gpu/drm/msm/msm_fb.c:47:27: warning: unused variable 'plane_stat=
+e'
+   struct drm_plane_state
+   ^
+   fatal error: error in backend: Nested variants found in inline asm strin=
+g: ' .set push
+   .set mips64r2
+   .if ( 0x00 ) !=3D -1)) 0x00 ) !=3D -1)) : ($( static struct ftrace_branc=
+h_data __attribute__((__aligned__(4))) __attribute__((__section__("_ftrace_=
+branch"))) __if_trace =3D $( .func =3D __func__, .file =3D "arch/mips/inclu=
+de/asm/atomic.h", .line =3D 156, $); 0x00 ) !=3D -1)) : $))) ) && ( 0 ); .s=
+et push; .set mips64r2; .rept 1; sync 0x00; .endr; .set pop; .else; ; .endif
+   1: ll $1, $2 # atomic_fetch_sub
+   subu $0, $1, $3
+   sc $0, $2
+   beqz $0, 1b
+   .set pop
+   move $0, $1
+   '
+   PLEASE submit a bug report to https://github.com/llvm/llvm-project/issue=
+s/ and include the crash backtrace, preprocessed source, and associated run=
+ script.
+   Stack dump:
+   0. Program arguments: clang -Wp,-MMD,drivers/gpu/drm/msm/.msm_fb.o.d -no=
+stdinc -Iarch/mips/include -I./arch/mips/include/generated -Iinclude -I./in=
+clude -Iarch/mips/include/uapi -I./arch/mips/include/generated/uapi -Iinclu=
+de/uapi -I./include/generated/uapi -include include/linux/compiler-version.=
+h -include include/linux/kconfig.h -include include/linux/compiler_types.h =
+-D__KERNEL__ -DVMLINUX_LOAD_ADDRESS=3D0xffffffff84000000 -DLINKER_LOAD_ADDR=
+ESS=3D0x84000000 -DDATAOFFSET=3D0 -Qunused-arguments -fmacro-prefix-map=3D=
+=3D -DKBUILD_EXTRA_WARN1 -Wall -Wundef -Werror=3Dstrict-prototypes -Wno-tri=
+graphs -fno-strict-aliasing -fno-common -fshort-wchar -fno-PIE -Werror=3Dim=
+plicit-function-declaration -Werror=3Dimplicit-int -Werror=3Dreturn-type -W=
+no-format-security -std=3Dgnu89 --target=3Dmipsel-linux -fintegrated-as -We=
+rror=3Dunknown-warning-option -Werror=3Dignored-optimization-argument -mno-=
+check-zero-division -mabi=3D32 -G 0 -mno-abicalls -fno-pic -pipe -msoft-flo=
+at -DGAS_HAS_SET_HARDFLOAT -Wa,-msoft-float -ffreestanding -EL -fno-stack-c=
+heck -march=3Dmips32 -Wa,--trap -DTOOLCHAIN_SUPPORTS_VIRT -Iarch/mips/inclu=
+de/asm/mach-ralink -Iarch/mips/include/asm/mach-ralink/mt7620 -Iarch/mips/i=
+nclude/asm/mach-generic -fno-asynchronous-unwind-tables -fno-delete-null-po=
+inter-checks -Wno-frame-address -Wno-address-of-packed-member -Os -Wframe-l=
+arger-than=3D1024 -fno-stack-protector -Wimplicit-fallthrough -Wno-gnu -mno=
+-global-merge -Wno-unused-but-set-variable -Wno-unused-const-variable -ftri=
+vial-auto-var-init=3Dpattern -fno-stack-clash-protection -pg -Wdeclaration-=
+after-statement -Wvla -Wno-pointer-sign -Wcast-function-type -Wno-array-bou=
+nds -fno-strict-overflow -fno-stack-check -Werror=3Ddate-time -Werror=3Dinc=
+ompatible-pointer-types -Wextra -Wunused -Wno-unused-parameter -Wmissing-de=
+clarations -Wmissing-format-attribute -Wmissing-prototypes -Wold-style-defi=
+nition -Wmissing-include-dirs -Wunused-but-set-variable -Wunused-const-vari=
+able -Wno-missing-field-initializers -Wno-sign-compare -Wno-type-limits -I =
+drivers/gpu/drm/msm -I drivers/gpu/drm/msm/disp/dpu1 -I drivers/gpu/drm/msm=
+ -I ./drivers/gpu/drm/msm -ffunction-sections -fdata-sections -DKBUILD_MODF=
+ILE=3D"drivers/gpu/drm/msm/msm" -DKBUILD_BASENAME=3D"msm_fb" -DKBUILD_MODNA=
+ME=3D"msm" -D__KBUILD_MODNAME=3Dkmod_msm -c -o drivers/gpu/drm/msm/msm_fb.o=
+ drivers/gpu/drm/msm/msm_fb.c
+   1. <eof> parser at end of file
+   2. Code generation
+   3. Running pass 'Function Pass Manager' on module 'drivers/gpu/drm/msm/m=
+sm_fb.c'.
+   4. Running pass 'Mips Assembly Printer' on function '@msm_framebuffer_cr=
+eate'
+   #0 0x000055e0318e4d7f Signals.cpp:0:0
+   #1 0x000055e0318e2c5c llvm::sys::CleanupOnSignal(unsigned long) (/opt/cr=
+oss/clang-d271fc04d5/bin/clang-15+0x348ec5c)
+   #2 0x000055e031822fd7 llvm::CrashRecoveryContext::HandleExit(int) (/opt/=
+cross/clang-d271fc04d5/bin/clang-15+0x33cefd7)
+   #3 0x000055e0318db30e llvm::sys::Process::Exit(int, bool) (/opt/cross/cl=
+ang-d271fc04d5/bin/clang-15+0x348730e)
+   #4 0x000055e02f506ccb (/opt/cross/clang-d271fc04d5/bin/clang-15+0x10b2cc=
+b)
+   #5 0x000055e031829a8c llvm::report_fatal_error(llvm::Twine const&, bool)=
+ (/opt/cross/clang-d271fc04d5/bin/clang-15+0x33d5a8c)
+   #6 0x000055e0325335c0 llvm::AsmPrinter::emitInlineAsm(llvm::MachineInstr=
+ const (/opt/cross/clang-d271fc04d5/bin/clang-15+0x40df5c0)
+   #7 0x000055e03252f4f4 llvm::AsmPrinter::emitFunctionBody() (/opt/cross/c=
+lang-d271fc04d5/bin/clang-15+0x40db4f4)
+   #8 0x000055e02ff70887 llvm::MipsAsmPrinter::runOnMachineFunction(llvm::M=
+achineFunction&) (/opt/cross/clang-d271fc04d5/bin/clang-15+0x1b1c887)
+   #9 0x000055e030c2d54d llvm::MachineFunctionPass::runOnFunction(llvm::Fun=
+ction&) (.part.53) MachineFunctionPass.cpp:0:0
+   #10 0x000055e031074807 llvm::FPPassManager::runOnFunction(llvm::Function=
+&) (/opt/cross/clang-d271fc04d5/bin/clang-15+0x2c20807)
+   #11 0x000055e031074981 llvm::FPPassManager::runOnModule(llvm::Module&) (=
+/opt/cross/clang-d271fc04d5/bin/clang-15+0x2c20981)
+   #12 0x000055e0310754ff llvm::legacy::PassManagerImpl::run(llvm::Module&)=
+ (/opt/cross/clang-d271fc04d5/bin/clang-15+0x2c214ff)
+   #13 0x000055e031bff147 clang::EmitBackendOutput(clang::DiagnosticsEngine=
+&, clang::HeaderSearchOptions const&, clang::CodeGenOptions const&, clang::=
+TargetOptions const&, clang::LangOptions const&, llvm::StringRef, clang::Ba=
+ckendAction, std::unique_ptr<llvm::raw_pwrite_stream, std::default_delete<l=
+lvm::raw_pwrite_stream> >) (/opt/cross/clang-d271fc04d5/bin/clang-15+0x37ab=
+147)
+   #14 0x000055e03284d693 clang::BackendConsumer::HandleTranslationUnit(cla=
+ng::ASTContext&) (/opt/cross/clang-d271fc04d5/bin/clang-15+0x43f9693)
+   #15 0x000055e0333286e9 clang::ParseAST(clang::Sema&, bool, bool) (/opt/c=
+ross/clang-d271fc04d5/bin/clang-15+0x4ed46e9)
+   #16 0x000055e03284c4cf clang::CodeGenAction::ExecuteAction() (/opt/cross=
+/clang-d271fc04d5/bin/clang-15+0x43f84cf)
+   #17 0x000055e03224f561 clang::FrontendAction::Execute() (/opt/cross/clan=
+g-d271fc04d5/bin/clang-15+0x3dfb561)
+   #18 0x000055e0321e5faa clang::CompilerInstance::ExecuteAction(clang::Fro=
+ntendAction&) (/opt/cross/clang-d271fc04d5/bin/clang-15+0x3d91faa)
+   #19 0x000055e032313cbb (/opt/cross/clang-d271fc04d5/bin/clang-15+0x3ebfc=
+bb)
+   #20 0x000055e02f50827c cc1_main(llvm::ArrayRef<char char (/opt/cross/cla=
+ng-d271fc04d5/bin/clang-15+0x10b427c)
+   #21 0x000055e02f504f4b ExecuteCC1Tool(llvm::SmallVectorImpl<char driver.=
+cpp:0:0
+   #22 0x000055e03207ed95 void llvm::function_ref<void ()>::callback_fn<cla=
+ng::driver::CC1Command::Execute(llvm::ArrayRef<llvm::Optional<llvm::StringR=
+ef> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::alloca=
+tor<char> const::'lambda'()>(long) Job.cpp:0:0
+   #23 0x000055e031822e93 llvm::CrashRecoveryContext::RunSafely(llvm::funct=
+ion_ref<void ()>) (/opt/cross/clang-d271fc04d5/bin/clang-15+0x33cee93)
+   #24 0x000055e03207f68e clang::driver::CC1Command::Execute(llvm::ArrayRef=
+<llvm::Optional<llvm::StringRef> >, std::__cxx11::basic_string<char, std::c=
+har_traits<char>, std::allocator<char> const (.part.216) Job.cpp:0:0
+   #25 0x000055e032054267 clang::driver::Compilation::ExecuteCommand(clang:=
+:driver::Command const&, clang::driver::Command const (/opt/cross/clang-d27=
+1fc04d5/bin/clang-15+0x3c00267)
+   #26 0x000055e032054c47 clang::driver::Compilation::ExecuteJobs(clang::dr=
+iver::JobList const&, llvm::SmallVectorImpl<std::pair<int, clang::driver::C=
+ommand >&) const (/opt/cross/clang-d271fc04d5/bin/clang-15+0x3c00c47)
+   #27 0x000055e03205e2f9 clang::driver::Driver::ExecuteCompilation(clang::=
+driver::Compilation&, llvm::SmallVectorImpl<std::pair<int, clang::driver::C=
+ommand >&) (/opt/cross/clang-d271fc04d5/bin/clang-15+0x3c0a2f9)
+   #28 0x000055e02f42d63f main (/opt/cross/clang-d271fc04d5/bin/clang-15+0x=
+fd963f)
+   #29 0x00007f8e07c7ed0a __libc_start_main (/lib/x86_64-linux-gnu/libc.so.=
+6+0x26d0a)
+   #30 0x000055e02f504a6a _start (/opt/cross/clang-d271fc04d5/bin/clang-15+=
+0x10b0a6a)
+   clang-15: error: clang frontend command failed with exit code 70 (use -v=
+ to see invocation)
+   clang version 15.0.0 (git://gitmirror/llvm_project d271fc04d5b97b12e6b79=
+7c6067d3c96a8d7470e)
+   Target: mipsel-unknown-linux
+   Thread model: posix
+   InstalledDir: /opt/cross/clang-d271fc04d5/bin
+   clang-15: note: diagnostic msg:
+   Makefile arch drivers fs include kernel nr_bisected scripts source usr
 
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+
+vim +/plane_state +47 drivers/gpu/drm/msm/msm_fb.c
+
+    23=09
+    24	static struct drm_framebuffer *msm_framebuffer_init(struct drm_devic=
+e *dev,
+    25			const struct drm_mode_fb_cmd2 *mode_cmd, struct drm_gem_object **b=
+os);
+    26=09
+    27	static int msm_framebuffer_dirtyfb(struct drm_framebuffer *fb,
+    28					   struct drm_file *file_priv, unsigned int flags,
+    29					   unsigned int color, struct drm_clip_rect *clips,
+    30					   unsigned int num_clips)
+    31	{
+    32		struct msm_drm_private *priv =3D fb->dev->dev_private;
+    33		struct drm_modeset_acquire_ctx ctx;
+    34		struct drm_plane *plane;
+    35		bool needs_flush =3D false;
+    36		int ret =3D 0;
+    37=09
+    38		/*
+    39		 * When called from ioctl, we are interruptible, but not when called
+    40		 * internally (ie. defio worker)
+    41		 */
+    42		drm_modeset_acquire_init(&ctx,
+    43			file_priv ? DRM_MODESET_ACQUIRE_INTERRUPTIBLE : 0);
+    44=09
+    45	retry:
+    46		drm_for_each_plane(plane, fb->dev) {
+  > 47			struct drm_plane_state *plane_state;
+    48			struct drm_crtc *crtc;
+    49=09
+    50			ret =3D drm_modeset_lock(&plane->mutex, &ctx);
+    51			if (ret)
+    52				goto out;
+    53=09
+    54			if (plane->state->fb !=3D fb) {
+    55				drm_modeset_unlock(&plane->mutex);
+    56				continue;
+    57			}
+    58=09
+    59			crtc =3D plane->state->crtc;
+    60=09
+    61			ret =3D drm_modeset_lock(&crtc->mutex, &ctx);
+    62			if (ret)
+    63				goto out;
+    64=09
+    65			if (priv->kms->funcs->needs_dirtyfb(crtc)) {
+    66				needs_flush =3D true;
+    67				break;
+    68			}
+    69		}
+    70=09
+    71	out:
+    72		if (ret =3D=3D -EDEADLK) {
+    73			ret =3D drm_modeset_backoff(&ctx);
+    74			if (!ret)
+    75				goto retry;
+    76		}
+    77=09
+    78		drm_modeset_drop_locks(&ctx);
+    79		drm_modeset_acquire_fini(&ctx);
+    80=09
+    81		if (needs_flush) {
+    82			ret =3D drm_atomic_helper_dirtyfb(fb, file_priv, flags,
+    83							color, clips, num_clips);
+    84		}
+    85=09
+    86		return ret;
+    87	}
+    88=09
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

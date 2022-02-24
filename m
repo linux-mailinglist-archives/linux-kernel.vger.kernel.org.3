@@ -2,59 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2C164C2EBE
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 15:55:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 31BBE4C2ECC
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 15:59:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234734AbiBXOzi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 09:55:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60820 "EHLO
+        id S235666AbiBXO6r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 09:58:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235666AbiBXOzh (ORCPT
+        with ESMTP id S231255AbiBXO6l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 09:55:37 -0500
-Received: from ssl.serverraum.org (ssl.serverraum.org [176.9.125.105])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D25E254557;
-        Thu, 24 Feb 2022 06:55:07 -0800 (PST)
-Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id 7222122236;
-        Thu, 24 Feb 2022 15:55:05 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1645714505;
+        Thu, 24 Feb 2022 09:58:41 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 72D0F13D91A
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 06:58:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1645714688;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=T+nj1LXBgfdrS//vBjhL1t/BXLWyCGMXuhBk/lp7Sdg=;
-        b=ZYnGOLI3clP5LcOWs885rEZZGnWxdvib1aqxw55IsYSY9PxQ7EQ3Bc22QVXlmPvWSnY6bU
-        llsZXULjwETbIUxvEhbQFNcjm3epozqWTzSQ/jzJsnrAuELy3ctqnHRWN/eTvVGvkQwcNg
-        vAykG5noDJl9oVC+mWgON4IU3bDxT5U=
+        bh=sLi8/HvPywrlQR06d5solHIr81MCizce1jnEJh+4CEI=;
+        b=d5IS0ac5l+2XreWlKMvlxOX2tKKqvty+Rtsp/rZtFKZYFdjsvgIBhokMpplt8KMujH9XfH
+        /nZbCfazPRSJYU3OCzGeeT3264/iBqLS4SUqTbWDmPfc92+Scx11bYwJqVaB79g3gGeDrC
+        zEyIHWPACqreoUlclSxswWd3IhXxlk8=
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
+ [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-235-x688sXcpNyCW3Ay8jsoong-1; Thu, 24 Feb 2022 09:58:07 -0500
+X-MC-Unique: x688sXcpNyCW3Ay8jsoong-1
+Received: by mail-ej1-f69.google.com with SMTP id ga31-20020a1709070c1f00b006cec400422fso1312329ejc.22
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 06:58:07 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=sLi8/HvPywrlQR06d5solHIr81MCizce1jnEJh+4CEI=;
+        b=W6f3A0QASWnHu6egbx7ysdvU7JcZ7LoL6qIkdqpdeu7KOgnbgRQYILq+TGJa8BTm2q
+         m9am7ShMaGCKT1ahSkd+JlSKfCmog6sjbg+JEouEdNJN1T10OX3eamvrNQCPnxFu1HyW
+         SQtp1eK8skX6SGKsNtr7HY8XgSQoZYVL4utR8BT7hGKVdmYFtx06T0+AELcYs4LiEjt3
+         zMZ2atAflHYhoSVObvyPPWtK6D7x9P8GzRx+EoJiS9OYZRxgXaHmDhzov8H2L2yQB2Rp
+         NZ1dAj/PFRC6jdy4QQuPnrkeTMirP7sw8dDqkJ/MxUML50i9gU/W1LtkK9aI2IrKx/Ws
+         h9xw==
+X-Gm-Message-State: AOAM533+AQpojzodzbBefvGybVwhwb0P9vgzpzuhinYjTG6buTMUWK8+
+        ollKYuqnEGyqlP8iFll6svJAgmG8/t7Y0ePmvGZICqAVJCtUcDo7eE+RniV2fZrYW/O4BeBcoCr
+        IcUSlB0w8CFoBpmfKK1g8G93Q
+X-Received: by 2002:a17:906:5e13:b0:6cf:42c:56b7 with SMTP id n19-20020a1709065e1300b006cf042c56b7mr2560144eju.725.1645714685917;
+        Thu, 24 Feb 2022 06:58:05 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJw1Fdaq03ebBOuTkF573q/U+4yxiSEURppdkHQu9XOUVTFWcqiUT2dyz/fPEeDzFPgVjBWYIg==
+X-Received: by 2002:a17:906:5e13:b0:6cf:42c:56b7 with SMTP id n19-20020a1709065e1300b006cf042c56b7mr2560114eju.725.1645714685629;
+        Thu, 24 Feb 2022 06:58:05 -0800 (PST)
+Received: from ?IPV6:2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1? (2001-1c00-0c1e-bf00-1db8-22d3-1bc9-8ca1.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1])
+        by smtp.gmail.com with ESMTPSA id s1sm1466186edd.100.2022.02.24.06.58.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 24 Feb 2022 06:58:05 -0800 (PST)
+Message-ID: <2d3278ef-0126-7b93-319b-543b17bccdc2@redhat.com>
+Date:   Thu, 24 Feb 2022 15:58:04 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Thu, 24 Feb 2022 15:55:05 +0100
-From:   Michael Walle <michael@walle.cc>
-To:     Nicolas Ferre <nicolas.ferre@microchip.com>
-Cc:     Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>,
-        arnd@arndb.de, alexandre.belloni@bootlin.com, olof@lixom.net,
-        soc@kernel.org, robh+dt@kernel.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, UNGLinuxDriver@microchip.com,
-        Manohar.Puri@microchip.com
-Subject: Re: [PATCH v7] ARM: dts: add DT for lan966 SoC and 2-port board
- pcb8291
-In-Reply-To: <85566f97-dcfc-f477-1ebb-5cac955b791a@microchip.com>
-References: <20220221080858.14233-1-kavyasree.kotagiri@microchip.com>
- <3b4c56201a478876783e69243c901cd8@walle.cc>
- <85566f97-dcfc-f477-1ebb-5cac955b791a@microchip.com>
-User-Agent: Roundcube Webmail/1.4.12
-Message-ID: <413b29b8a2e7a73561f942d4b7c78b9b@walle.cc>
-X-Sender: michael@walle.cc
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [RFC 00/10] add support for fwnode in i2c mux system and sfp
+Content-Language: en-US
+To:     =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Wolfram Sang <wsa@kernel.org>, Peter Rosin <peda@axentia.se>,
+        Russell King <linux@armlinux.org.uk>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Mark Brown <broonie@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-i2c@vger.kernel.org, netdev@vger.kernel.org,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+References: <20220221162652.103834-1-clement.leger@bootlin.com>
+ <20220224154040.2633a4e4@fixe.home>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20220224154040.2633a4e4@fixe.home>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,40 +98,173 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hi Clément,
 
-Am 2022-02-24 15:51, schrieb Nicolas Ferre:
->>> +/ {
->>> +     model = "Microchip LAN966 family SoC";
->>> +     compatible = "microchip,lan966";
->> 
->> As mentioned earlier, this isn't a documented compatible string. So,
->> I guess without overwriting this in the board dts it will throw an
->> error with the dt schema validator. OTOH, there are many dtsi files
->> in arch/arm/boot/dts/ doing this. I don't know what is correct here.
+On 2/24/22 15:40, Clément Léger wrote:
+> Hi,
 > 
-> I see it documented here:
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/devicetree/bindings/arm/atmel-at91.yaml#n165
+> As stated at the beginning of the cover letter, the PCIe card I'm
+> working on uses a lan9662 SoC. This card is meant to be used an
+> ethernet switch with 2 x RJ45 ports and 2 x 10G SFPs. The lan966x SoCs
+> can be used in two different ways:
 > 
-> Isn't it what is expected?
+>  - It can run Linux by itself, on ARM64 cores included in the SoC. This
+>    use-case of the lan966x is currently being upstreamed, using a
+>    traditional Device Tree representation of the lan996x HW blocks [1]
+>    A number of drivers for the different IPs of the SoC have already
+>    been merged in upstream Linux.
+> 
+>  - It can be used as a PCIe endpoint, connected to a separate platform
+>    that acts as the PCIe root complex. In this case, all the devices
+>    that are embedded on this SoC are exposed through PCIe BARs and the
+>    ARM64 cores of the SoC are not used. Since this is a PCIe card, it
+>    can be plugged on any platform, of any architecture supporting PCIe.
+> 
+> The goal of this effort is to enable this second use-case, while
+> allowing the re-use of the existing drivers for the different devices
+> part of the SoC.
+> 
+> Following a first round of discussion, here are some clarifications on
+> what problem this series is trying to solve and what are the possible
+> choices to support this use-case.
+> 
+> Here is the list of devices that are exposed and needed to make this
+> card work as an ethernet switch:
+>  - lan966x-switch
+>  - reset-microchip-sparx5
+>  - lan966x_serdes
+>  - reset-microchip-lan966x-phy
+>  - mdio-mscc-miim
+>  - pinctrl-lan966x
+>  - atmel-flexcom
+>  - i2c-at91
+>  - i2c-mux
+>  - i2c-mux-pinctrl
+>  - sfp
+>  - clk-lan966x
+> 
+> All the devices on this card are "self-contained" and do not require
+> cross-links with devices that are on the host (except to demux IRQ but
+> this is something easy to do). These drivers already exists and are
+> using of_* API to register controllers, get properties and so on.
+> 
+> The challenge we're trying to solve is how can the PCI driver for this
+> card re-use the existing drivers, and using which hardware
+> representation to instantiate all those drivers.
+> 
+> Although this series only contained the modifications for the I2C
+> subsystem all the subsystems that are used or needed by the previously
+> listed driver have also been modified to have support for fwnode. This
+> includes the following subsystems:
+> - reset
+> - clk
+> - pinctrl
+> - syscon
+> - gpio
+> - pinctrl
+> - phy
+> - mdio
+> - i2c
+> 
+> The first feedback on this series does not seems to reach a consensus
+> (to say the least) on how to do it cleanly so here is a recap of the
+> possible solutions, either brought by this series or mentioned by
+> contributors:
+> 
+> 1) Describe the card statically using swnode
+> 
+> This is the approach that was taken by this series. The devices are
+> described using the MFD subsystem with mfd_cells. These cells are
+> attached with a swnode which will be used as a primary node in place of
+> ACPI or OF description. This means that the device description
+> (properties and references) is conveyed entirely in the swnode. In order
+> to make these swnode usable with existing OF based subsystems, the
+> fwnode API can be used in needed subsystems.
+> 
+> Pros:
+>  - Self-contained in the driver.
+>  - Will work on all platforms no matter the firmware description.
+>  - Makes the subsystems less OF-centric.
+> 
+> Cons:
+>  - Modifications are required in subsystems to support fwnode
+>    (mitigated by the fact it makes to subsystems less OF-centric).
+>  - swnode are not meant to be used entirely as primary nodes.
+>  - Specifications for both ACPI and OF must be handled if using fwnode
+>    API.
+> 
+> 2) Use SSDT overlays
+> 
+> Andy mentioned that SSDT overlays could be used. This overlay should
+> match the exact configuration that is used (ie correct PCIe bus/port
+> etc). It requires the user to write/modify/compile a .asl file and load
+> it using either EFI vars, custom initrd or via configfs. The existing
+> drivers would also need more modifications to work with ACPI. Some of
+> them might even be harder (if not possible) to use since there is no
+> ACPI support for the subsystems they are using .
+> 
+> Pros:
+>  - Can't really find any for this one
+> 
+> Cons:
+>  - Not all needed subsystems have appropriate ACPI bindings/support
+>    (reset, clk, pinctrl, syscon).
+>  - Difficult to setup for the user (modify/compile/load .aml file).
+>  - Not portable between machines, as the SSDT overlay need to be
+>    different depending on how the PCI device is connected to the
+>    platform.
+> 
+> 3) Use device-tree overlays
+> 
+> This solution was proposed by Andrew and could potentially allows to
+> keep all the existing device-tree infrastructure and helpers. A
+> device-tree overlay could be loaded by the driver and applied using
+> of_overlay_fdt_apply(). There is some glue to make this work but it
+> could potentially be possible. Mark have raised some warnings about
+> using such device-tree overlays on an ACPI enabled platform.
+> 
+> Pros:
+>  - Reuse all the existing OF infrastructure, no modifications at all on
+>    drivers and subsystems.
+>  - Could potentially lead to designing a generic driver for PCI devices
+>    that uses a composition of other drivers.
+> 
+> Cons:
+>  - Might not the best idea to mix it with ACPI.
+>  - Needs CONFIG_OF, which typically isn't enabled today on most x86
+>    platforms.
+>  - Loading DT overlays on non-DT platforms is not currently working. It
+>    can be addressed, but it's not necessarily immediate.
+> 
+> My preferred solutions would be swnode or device-tree overlays but
+> since there to is no consensus on how to add this support, how
+> can we go on with this series ?
 
-That only documents
-   compatible = "microchip,lan9662-pcb8291", "microchip,lan9662", 
-"microchip,lan966";
+FWIW I think that the convert subsystems + drivers to use the fwnode
+abstraction layer + use swnode-s approach makes sense. For a bunch of
+x86/ACPI stuff like Type-C muxing/controllers/routing but also MIPI
+cameras we have already been moving in that direction since sometimes
+a bunch of info seems to be hardcoded in Windows drivers rather then
+"spelled out" in the ACPI tables so from the x86 side we are seeing
+a need to have platform glue code which replaces the hardcoding on
+the Windows side and we have been using the fwnode abstraction +
+swnodes for this, so that we can keep using the standard Linux
+abstractions/subsystems for this.
 
-But not the one above.
+As Mark already mentioned the regulator subsystem has shown to
+be a bit problematic here, but you don't seem to need that?
 
-> 
->> Everthing else looks good.
-> 
-> Thanks a lot for your reviews.
-> 
->> Reviewed-by: Michael Walle <michael@walle.cc>
-> 
-> Acked-by: Nicolas Ferre <nicolas.ferre@microchip.com>
-> I'm queuing it to at91-dt branch for reaching arm-soc in 5.18 merge 
-> window.
+Your i2c subsys patches looked reasonable to me. IMHO an important
+thing missing to give you some advice whether to try 1. or 3. first
+is how well / clean the move to the fwnode abstractions would work
+for the other subsystems.
 
-Nice, then I'm good to go for my patches on top of this :)
+Have you already converted other subsystems and if yes, can you
+give us a pointer to a branch somewhere with the conversion for
+other subsystems ?
 
--michael
+Regards,
+
+Hans
+
+

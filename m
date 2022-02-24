@@ -2,51 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0B224C395E
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 00:00:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 918E04C395B
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 00:00:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235859AbiBXW7v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 17:59:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39636 "EHLO
+        id S235918AbiBXXAB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 18:00:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235856AbiBXW7k (ORCPT
+        with ESMTP id S235853AbiBXW7o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 17:59:40 -0500
+        Thu, 24 Feb 2022 17:59:44 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF155184634;
-        Thu, 24 Feb 2022 14:59:09 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AA6018CC4D;
+        Thu, 24 Feb 2022 14:59:13 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7BCE461BE9;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1923D61B77;
+        Thu, 24 Feb 2022 22:59:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 580D6C340F1;
         Thu, 24 Feb 2022 22:59:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA000C340F3;
-        Thu, 24 Feb 2022 22:59:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645743548;
-        bh=3Qb2BkHQDJuZIu/isvYb9+K/H30oWB63BPIe7mkdsjA=;
+        s=k20201202; t=1645743552;
+        bh=ZWXXupdP+z3mMoHFbYDrLkme/FSZI7hGTF3wCfDqx2A=;
         h=From:To:In-Reply-To:References:Subject:Date:From;
-        b=eaIXBQmF7b+U5I8q1detGGs6SLD11jCUGts6JTw8S06U0qxITDP8GrJoV1lyEuKJy
-         DKjAR34X6/4+QDT5v+fGwHyeFBvU11+MxKgCQiUF+t0gQ3TjBnjXrPuCWIG6BBXtAf
-         p4IbMDyWbEQJx+NHqwdyoYOhIMarpzi6J1KAXkEBVek16LK+TjXmMkxgqOBJw82KrC
-         GZQg8RvuniuAD/+I6f9ZFN76kRqSlrRxgKgR0cqIO9bEBS2l0UU//sRFPtN/cg8gEn
-         2NFeaa0jc7M5fetCBYmNxzrCCE6vDoPsuESA30xzAO1mJGRuXkOAmhd9pl5G+dT1ak
-         P8q3PjmQgpBJw==
+        b=lUgCHjGcT5ghuhQ5FB9JeIgBRC0AxcVfo4ZO8RZf4mrGLD7f+ZmLCamAYqXM6eXSt
+         4LLDUD61kkQeq4kc42PWHLqkGkBYSVt2EZq8S2jnKiLgj3TActUoz7GYvfXX4gMhhD
+         sP13NEyK7EKgd5cuLhaTk/1b263jDSpQ1HOVhu/j1S9S87rwleiuFoNi80O5lmW2yU
+         mvGVhJvLFVqx87L+SILSTFt0ljsmhbEVEr0bvxKGCMeWKVP3TFut/Rtenc49R3HyqO
+         EmoToMsHwQpMIKbacPeBUzLFQoIa78MIuNkiyXY4ElGLA1rGjjsbMrGLCPLjfGftVr
+         pKnY9OSbQTe4w==
 From:   Mark Brown <broonie@kernel.org>
 To:     agross@kernel.org, linux-arm-msm@vger.kernel.org,
-        alsa-devel@alsa-project.org, perex@perex.cz, tiwai@suse.com,
+        alsa-devel@alsa-project.org, perex@perex.cz, quic_plai@quicinc.com,
         Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
-        swboyd@chromium.org, devicetree@vger.kernel.org,
-        robh+dt@kernel.org, linux-kernel@vger.kernel.org,
-        srinivas.kandagatla@linaro.org, bgoswami@codeaurora.org,
-        judyhsiao@chromium.org, plai@codeaurora.org,
-        rohitkr@codeaurora.org, lgirdwood@gmail.com,
-        bjorn.andersson@linaro.org
-In-Reply-To: <1639503391-10715-1-git-send-email-quic_srivasam@quicinc.com>
-References: <1639503391-10715-1-git-send-email-quic_srivasam@quicinc.com>
-Subject: Re: [PATCH v10 00/10] Add support for audio on SC7280 based targets
-Message-Id: <164574354548.4011497.8789309217655990766.b4-ty@kernel.org>
-Date:   Thu, 24 Feb 2022 22:59:05 +0000
+        swboyd@chromium.org, robh+dt@kernel.org,
+        devicetree@vger.kernel.org, srinivas.kandagatla@linaro.org,
+        linux-kernel@vger.kernel.org, bgoswami@codeaurora.org,
+        judyhsiao@chromium.org, tiwai@suse.com, rohitkr@codeaurora.org,
+        lgirdwood@gmail.com, bjorn.andersson@linaro.org
+In-Reply-To: <1645630745-25051-1-git-send-email-quic_srivasam@quicinc.com>
+References: <1645630745-25051-1-git-send-email-quic_srivasam@quicinc.com>
+Subject: Re: (subset) [PATCH v15 00/10] Add support for audio on SC7280 based targets
+Message-Id: <164574354907.4011497.12699483058167321693.b4-ty@kernel.org>
+Date:   Thu, 24 Feb 2022 22:59:09 +0000
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -60,10 +59,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 14 Dec 2021 23:06:21 +0530, Srinivasa Rao Mandadapu wrote:
+On Wed, 23 Feb 2022 21:08:55 +0530, Srinivasa Rao Mandadapu wrote:
 > This patch set is to add support for Audio over wcd codec,
 > digital mics, through digital codecs and without ADSP.
 > 
+> Changes Since V14:
+>     -- Split common wrapper function to separate wrapper for each handle in platform driver.
+>     -- Update cdc dma buffer handling with memremap with ioremap.
+>     -- Remove redundant error prints.
+>     -- Update irq flag.
+> Changes Since V13:
+>     -- Change bulk cdc clock voting to individual clock voting.
+>     -- Remove redundant code, conditional check and prints.
+>     -- Fix typo errors.
+> Changes Since V12:
+>     -- Fix arguments type mismatch.
+> Changes Since V11:
+>     -- Fix kernel robot issue on arguments type mismatch.
+> Changes Since V10:
+>     -- Split bulk clock voting to individual clock voting as per use case in cdc-dma driver.
+>     -- Add missing codec dma clocks.
+>     -- Update rxtx lpm buffer size.
 > Changes Since V9:
 >     -- Change individual clock voting to bulk clock voting of lpass-sc7280 platform driver.
 >     -- Remove redundant clocks in lpass variant structure.
@@ -112,8 +128,6 @@ Applied to
 
 Thanks!
 
-[01/10] ASoC: qcom: SC7280: Update config for building codec dma drivers
-        (no commit info)
 [02/10] ASoC: qcom: Move lpass_pcm_data structure to lpass header
         commit: 74190d7cd3e8ab5123206d383dbfe125a4b7bb19
 [03/10] ASoC: qcom: lpass: Add dma fields for codec dma lpass interface
@@ -126,12 +140,6 @@ Thanks!
         commit: b138706225c9ce9fac7a4955df31d8f68bb1d409
 [07/10] ASoC: qcom: Add support for codec dma driver
         commit: 7d7209557b6712e8aa72ac1ce67a3fe209f5f889
-[08/10] ASoC: qcom: Add lpass CPU driver for codec dma control
-        commit: b81af585ea54ee9f749391e594ee9cbd44061eae
-[09/10] ASoC: dt-bindings: Add SC7280 lpass cpu bindings
-        commit: f3fc4fbfa2d2a09cb279af4e290d0a6dbbc93c7e
-[10/10] ASoC: qcom: lpass-sc7280: Add platform driver for lpass audio
-        commit: b62c4e5fba2f910bc9f23ae152d11627e4c2f00f
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during

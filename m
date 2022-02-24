@@ -2,105 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7D4C4C2059
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 01:00:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE2BF4C205E
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 01:05:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245119AbiBXAAm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 19:00:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53028 "EHLO
+        id S245127AbiBXAGH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 19:06:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233871AbiBXAAk (ORCPT
+        with ESMTP id S245121AbiBXAGG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 19:00:40 -0500
-Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DFD45E147;
-        Wed, 23 Feb 2022 16:00:11 -0800 (PST)
-Received: by mail-yb1-xb2d.google.com with SMTP id u12so537605ybd.7;
-        Wed, 23 Feb 2022 16:00:11 -0800 (PST)
+        Wed, 23 Feb 2022 19:06:06 -0500
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D04085E75F
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 16:05:36 -0800 (PST)
+Received: by mail-yb1-xb49.google.com with SMTP id a12-20020a056902056c00b0061dc0f2a94aso294942ybt.6
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 16:05:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=djoY2wGo8Bskf3+H2QGMHgodNIrrUDznDojPM3Z5KCM=;
-        b=TEiq5QkD0Pl37RTkVTqlCRlV6YKVYsYu/wCcfutLS/EB/bm3giMtsgoQNr6gve8ZKH
-         V8lTH8chQAbx2axZpZYQNfuHNHRtw1Sl4svvF0R4GQUf7rJolYr5p5e7aUggdiL4RNSK
-         hkBwe0uKkG4qhoig+dOWUPaQ2XshdD1yuo7F6v7M/hKYVL0koIOtPWDCBcZgDp5c+2Ae
-         8POjP+u57Mdq+3f4UIRugZ+CBrSRe0bLZYRGyznvmVzhVIb/kXf3/oFzzhv0Z8AwSwFb
-         NTYXSI4AiMA+ZgviOXY+n4BqR0PIi90KOkIHl+fhzksVjX2jiWccIjI6ijQMa6ZoPSrP
-         XipQ==
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=iT2nwSp2MDELC5D0BfQ9M2lshxJNXqqajiXX8H+mgdY=;
+        b=kn+bLvQlifPhevSSRCAMPEsDbXAbo11L/fJnHiILGz3s/JmAEsBglIaLuY4Oanwudq
+         gl+XEjYU/xmrN6sxvU8aQyKNSRRTgyqkoKJjuwPLiYQAL158Y7sDWPvuIrbDnEMu1/4e
+         I2QbZW9Zmqd5OzDUhaNVsM57vtVWTELwjqlNT06PFABsBk3UoF1IeouVa0iBUAE9+o6L
+         61Qt9Aukr+KvAVLr9MfJhk6nVJlycej+oUiOcgUM+sqpLfmJQHxmEhGUR5zL9i+g3UXB
+         4JWau7fkz8hWBmZrkW3Hp6oJJJdxcRTf/wtyz+LHSgnP4cSN4dA6WS4ZNntl4y7dhONB
+         QmdA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=djoY2wGo8Bskf3+H2QGMHgodNIrrUDznDojPM3Z5KCM=;
-        b=nSaUJ5oUPCrP2V7NPkLcuAyCvE64qZoQqZjwZtqtVfVTNcJLm1G3u4+e2e84jtKTjD
-         jbLsuHcqI2LxKd1pPa1GEfF79MwwT27WKVieYNeXmaQtlHLPkotXn6bs2BVASx49NYx6
-         qSfnrWPOzRNoLJQYmjzTwpa/NALoqOom5fzbARnA+CtOkQ6zcKq2uZdhsi6MuVkEjJC9
-         BkvLMoGw0f9Xch5e7c/197he3Z4fKFftuMs74tRugSRn4ejeTaj6qst46SDmB1W9D9Fd
-         zMSmuy5iMf64AptokkwlHisriMKc3R4AYT/8ZxgzBl98erkpUw6HwE8fIjV0+2L99yia
-         YVsw==
-X-Gm-Message-State: AOAM530vIA5/p7nF1jAHdw65xmkSFuU4BrwKNk3Sh/0JGxDkfTaezRnk
-        5VoEXEGECVb01c8ZzJLHVZdM8PFz8wlozNQAAqk=
-X-Google-Smtp-Source: ABdhPJxnPNJgf+YrSnqXFBDyu5QCocMrL/CC8kWrzc1DMjw26LnV4Jda9nnJpQ9bDsAsnicYxRD9HGYgTuiYuWFQWkk=
-X-Received: by 2002:a5b:489:0:b0:623:a73e:3818 with SMTP id
- n9-20020a5b0489000000b00623a73e3818mr171822ybp.358.1645660810561; Wed, 23 Feb
- 2022 16:00:10 -0800 (PST)
-MIME-Version: 1.0
-References: <20220223231752.52241-1-ppbuk5246@gmail.com> <YhbCGDzlTWp2OJzI@zeniv-ca.linux.org.uk>
-In-Reply-To: <YhbCGDzlTWp2OJzI@zeniv-ca.linux.org.uk>
-From:   Yun Levi <ppbuk5246@gmail.com>
-Date:   Thu, 24 Feb 2022 08:59:59 +0900
-Message-ID: <CAM7-yPTM6FNuT4vs2EuKAKitTWMTHw_XzKVggxQJzn5hqbBHpw@mail.gmail.com>
-Subject: Re: [PATCH] fs/exec.c: Avoid a race in formats
-To:     Al Viro <viro@zeniv.linux.org.uk>
-Cc:     Kees Cook <keescook@chromium.org>, ebiederm@xmission.com,
-        linux-fsdevel@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=iT2nwSp2MDELC5D0BfQ9M2lshxJNXqqajiXX8H+mgdY=;
+        b=ZNpI29fLcpoqUHFfgMmRqzuwXdZpkoOjoVeqTkvZCS0S/foQpmqxO29mb7s0RW1kLx
+         6zRgNd+DJWrhg6x8XdoJS53ELqhcz+0qVbXtp1cVVmjWEPtM1arpP4/r6BRhfVDUSoxE
+         w+VC2FoqVSZggioVJ/CR1H2ReSz0nzz2JjDFn0hUAGGnqplqJXmL5KnRW54UsBglc7wN
+         4wJbeucNxjMN8Y/4xHwQNn5EJ6FFCCNQBIJzkLcW1nIf20J4uhudpqJMsqKdvWe2jT6w
+         FJDQ1piXfw2M00h+KNndrX4x+pyAin6rCXxHUHGgnLK7UmxSyowYnm/aWglHA+UR0YRc
+         P2eQ==
+X-Gm-Message-State: AOAM53105thiRdt9xYQAIQgGUQFNcLoGsrHbgqw8IyPrW4MVjAitoWCY
+        ycryOU9Z63Ko2xAS6rtaaAp849szonw=
+X-Google-Smtp-Source: ABdhPJxdsDLpj6UxKJPqhApcmMBk/+l3I/GwRbZoZ621WAWKapei6nkWK9pglXhSefYe8aCJdUpfO0t6lSQ=
+X-Received: from haoluo.svl.corp.google.com ([2620:15c:2cd:202:9479:7f16:e9b8:14e4])
+ (user=haoluo job=sendgmr) by 2002:a25:b226:0:b0:624:5e7a:56b with SMTP id
+ i38-20020a25b226000000b006245e7a056bmr174872ybj.61.1645661136096; Wed, 23 Feb
+ 2022 16:05:36 -0800 (PST)
+Date:   Wed, 23 Feb 2022 16:05:31 -0800
+Message-Id: <20220224000531.1265030-1-haoluo@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.35.1.473.g83b2b277ed-goog
+Subject: [PATCH bpf-next v2] bpf: Cache the last valid build_id.
+From:   Hao Luo <haoluo@google.com>
+To:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>
+Cc:     Song Liu <songliubraving@fb.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Blake Jones <blakejones@google.com>, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Hao Luo <haoluo@google.com>,
+        Greg Thelen <gthelen@google.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 24, 2022 at 8:24 AM Al Viro <viro@zeniv.linux.org.uk> wrote:
->
-> On Thu, Feb 24, 2022 at 08:17:52AM +0900, Levi Yun wrote:
-> > Suppose a module registers its own binfmt (custom) and formats is like:
-> >
-> > +---------+    +----------+    +---------+
-> > | custom  | -> |  format1 | -> | format2 |
-> > +---------+    +----------+    +---------+
-> >
-> > and try to call unregister_binfmt with custom NOT in __exit stage.
->
-> Explain, please.  Why would anyone do that?  And how would such
-> module decide when it's safe to e.g. dismantle data structures
-> used by methods of that binfmt, etc.?
-> Could you give more detailed example?
+For binaries that are statically linked, consecutive stack frames are
+likely to be in the same VMA and therefore have the same build id.
+As an optimization for this case, we can cache the previous frame's
+VMA, if the new frame has the same VMA as the previous one, reuse the
+previous one's build id. We are holding the MM locks as reader across
+the entire loop, so we don't need to worry about VMA going away.
 
-I think if someone wants to control their own binfmt via "ioctl" not
-on time on LOAD.
-For example, someone wants to control exec (notification,
-allow/disallow and etc..)
-and want to enable and disable own's control exec via binfmt reg / unreg
-In that situation, While the module is loaded, binfmt is still live
-and can be reused by
-reg/unreg to enable/disable his exec' control.
+Tested through "stacktrace_build_id" and "stacktrace_build_id_nmi" in
+test_progs.
 
-module can decide it's safe to unload by tracing the stack and
-confirming whether some tasks in the custom binfmt's function after it
-unregisters its own binfmt.
+Suggested-by: Greg Thelen <gthelen@google.com>
+Signed-off-by: Hao Luo <haoluo@google.com>
+---
+ kernel/bpf/stackmap.c | 12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
 
-> Because it looks like papering over an inherently unsafe use of binfmt interfaces..
+diff --git a/kernel/bpf/stackmap.c b/kernel/bpf/stackmap.c
+index 22c8ae94e4c1..38bdfcd06f55 100644
+--- a/kernel/bpf/stackmap.c
++++ b/kernel/bpf/stackmap.c
+@@ -132,7 +132,8 @@ static void stack_map_get_build_id_offset(struct bpf_stack_build_id *id_offs,
+ 	int i;
+ 	struct mmap_unlock_irq_work *work = NULL;
+ 	bool irq_work_busy = bpf_mmap_unlock_get_irq_work(&work);
+-	struct vm_area_struct *vma;
++	struct vm_area_struct *vma, *prev_vma = NULL;
++	const char *prev_build_id;
+ 
+ 	/* If the irq_work is in use, fall back to report ips. Same
+ 	 * fallback is used for kernel stack (!user) on a stackmap with
+@@ -150,6 +151,12 @@ static void stack_map_get_build_id_offset(struct bpf_stack_build_id *id_offs,
+ 	}
+ 
+ 	for (i = 0; i < trace_nr; i++) {
++		if (range_in_vma(prev_vma, ips[i], ips[i])) {
++			vma = prev_vma;
++			memcpy(id_offs[i].build_id, prev_build_id,
++			       BUILD_ID_SIZE_MAX);
++			goto build_id_valid;
++		}
+ 		vma = find_vma(current->mm, ips[i]);
+ 		if (!vma || build_id_parse(vma, id_offs[i].build_id, NULL)) {
+ 			/* per entry fall back to ips */
+@@ -158,9 +165,12 @@ static void stack_map_get_build_id_offset(struct bpf_stack_build_id *id_offs,
+ 			memset(id_offs[i].build_id, 0, BUILD_ID_SIZE_MAX);
+ 			continue;
+ 		}
++build_id_valid:
+ 		id_offs[i].offset = (vma->vm_pgoff << PAGE_SHIFT) + ips[i]
+ 			- vma->vm_start;
+ 		id_offs[i].status = BPF_STACK_BUILD_ID_VALID;
++		prev_vma = vma;
++		prev_build_id = id_offs[i].build_id;
+ 	}
+ 	bpf_mmap_unlock_mm(work, current->mm);
+ }
+-- 
+2.35.1.473.g83b2b277ed-goog
 
-I think the above example it's quite a trick and stupid.  it's quite
-unsafe to use as you mention.
-But, misuse allows that situation to happen without any warning.
-As a robustness, I just try to avoid above situation But,
-I think it's better to restrict unregister binfmt unregister only when
-there is no module usage.

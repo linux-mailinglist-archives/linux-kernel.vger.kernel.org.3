@@ -2,87 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 033D44C21C6
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 03:35:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 369EA4C21BC
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 03:35:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230109AbiBXCcA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 21:32:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52386 "EHLO
+        id S230115AbiBXCgD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 21:36:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230077AbiBXCb6 (ORCPT
+        with ESMTP id S230077AbiBXCgC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 21:31:58 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B0572325F3;
-        Wed, 23 Feb 2022 18:31:28 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 23 Feb 2022 21:36:02 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0116B2325F3
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 18:35:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1645670132;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Mosce6mCx+3FrNUgxT+llyIw3dAjkfUdqQ0Qnjl3teY=;
+        b=G7m/WzI67WpIMMTks74/1MVWA6iMyEI3XlIfunIL2wPuBJ7pwBOtZUGlInpNlmX7GB19KI
+        bjsNT9QC1MsGhNAMj+m0bZoWl/FD5Meypfw2Fqa66DYQsjkwXMplmzkgToO+o+W3wu06M0
+        8ugKqeMa9Y4ic4QY4+CNuoCjcBcWI1A=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-344-5VULfEcfP2aqeaJ0LvbtoQ-1; Wed, 23 Feb 2022 21:35:28 -0500
+X-MC-Unique: 5VULfEcfP2aqeaJ0LvbtoQ-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 129A86159E;
-        Thu, 24 Feb 2022 02:31:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7BEBCC340F1;
-        Thu, 24 Feb 2022 02:31:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645669887;
-        bh=35h6CX91aZ4xLwAScKOmp4ZeUdk2iLJq6vdPAvKxmQU=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=CS5MrlX3vvqBeU1jrlmDo+KtjGv6TsJEeSuC3LeP7tq+l1Pc4pZb9EhlHzdfj5LqT
-         WeprXJkAlSe/Z9lBpoijYWpVWEj/nQ+FKl/8CaU4MpqZl7bzYjHwoBZ74Gu0wgx9yZ
-         xTVd181hQTK01u3e9pYKQOsZ7LPVm+miTsij595/Ot/ULHHRDRC2uXvN4lOsyYGSaB
-         /RiDfO1t5qsnDjyi0r4wBiLBOdeq3NVMusGw1tFm+VhEPCkZiI0wOvhLuMxMB4cqgb
-         4dZyxJJahoZzcHl+hGSJGammk1clFDzaXfxahc4yOzmlel8OL3SeA7l5LFCyFsSyOn
-         MWjvcsfNP9c0Q==
-Received: by mail-yb1-f173.google.com with SMTP id b35so1030387ybi.13;
-        Wed, 23 Feb 2022 18:31:27 -0800 (PST)
-X-Gm-Message-State: AOAM532F/Y7tV+UkUd++sXF8x/98F8fNLEBVthxe7Wyc8V9ggDN5lubg
-        Wim/z86Nibwqn1faxUoyV/Uv2ENDpHNwAswAIYk=
-X-Google-Smtp-Source: ABdhPJwFL7h3B+Zvv1jvG93XoCCvjbqIrwW6XjyAFDlqlgFFcJ7A1MijTz/S/kHyGJdWE9E8o/v52xIS/rizIqLK1h4=
-X-Received: by 2002:a05:6902:1ca:b0:624:e2a1:2856 with SMTP id
- u10-20020a05690201ca00b00624e2a12856mr571208ybh.389.1645669886532; Wed, 23
- Feb 2022 18:31:26 -0800 (PST)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id A31A2180FD71;
+        Thu, 24 Feb 2022 02:35:26 +0000 (UTC)
+Received: from localhost (ovpn-13-249.pek2.redhat.com [10.72.13.249])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id DBEEF4BC68;
+        Thu, 24 Feb 2022 02:35:24 +0000 (UTC)
+Date:   Thu, 24 Feb 2022 10:35:21 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     yingelin <yingelin@huawei.com>
+Cc:     ebiederm@xmission.com, mcgrof@kernel.org, keescook@chromium.org,
+        yzaikin@google.com, kexec@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        zengweilin@huawei.com, chenjianguo3@huawei.com,
+        nixiaoming@huawei.com, qiuguorui1@huawei.com,
+        young.liuyang@huawei.com
+Subject: Re: [PATCH sysctl-next] kernel/kexec_core: move kexec_core sysctls
+ into its own file
+Message-ID: <Yhbu6UxoYXFtDyFk@fedora>
+References: <20220223030318.213093-1-yingelin@huawei.com>
+ <YhXwkTCwt3a4Dn9T@MiWiFi-R3L-srv>
+ <c60419f8-422b-660d-8254-291182a06cbe@huawei.com>
 MIME-Version: 1.0
-References: <20220224000531.1265030-1-haoluo@google.com>
-In-Reply-To: <20220224000531.1265030-1-haoluo@google.com>
-From:   Song Liu <song@kernel.org>
-Date:   Wed, 23 Feb 2022 18:31:15 -0800
-X-Gmail-Original-Message-ID: <CAPhsuW6BqEn8azap_zcWq0Zkvv8mRFg6g0UX2fPQXwzT+F6V=A@mail.gmail.com>
-Message-ID: <CAPhsuW6BqEn8azap_zcWq0Zkvv8mRFg6g0UX2fPQXwzT+F6V=A@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2] bpf: Cache the last valid build_id.
-To:     Hao Luo <haoluo@google.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Song Liu <songliubraving@fb.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Blake Jones <blakejones@google.com>, bpf <bpf@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Greg Thelen <gthelen@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <c60419f8-422b-660d-8254-291182a06cbe@huawei.com>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 23, 2022 at 4:05 PM Hao Luo <haoluo@google.com> wrote:
->
-> For binaries that are statically linked, consecutive stack frames are
-> likely to be in the same VMA and therefore have the same build id.
-> As an optimization for this case, we can cache the previous frame's
-> VMA, if the new frame has the same VMA as the previous one, reuse the
-> previous one's build id. We are holding the MM locks as reader across
-> the entire loop, so we don't need to worry about VMA going away.
->
-> Tested through "stacktrace_build_id" and "stacktrace_build_id_nmi" in
-> test_progs.
->
-> Suggested-by: Greg Thelen <gthelen@google.com>
-> Signed-off-by: Hao Luo <haoluo@google.com>
+On 02/24/22 at 09:04am, yingelin wrote:
+> 
+> 在 2022/2/23 16:30, Baoquan He 写道:
+> > On 02/23/22 at 11:03am, yingelin wrote:
+> > > This move the kernel/kexec_core.c respective sysctls to its own file.
+> > Hmm, why is the move needed?
+> > 
+> > With my understanding, sysctls are all put in kernel/sysctl.c,
+> > why is kexec special?
+> 
+> kernel/sysctl.c is a kitchen sink where everyone leaves their dirty dishes,
+> 
+> this makes it very difficult to maintain. The proc sysctl maintainers do not
+> want to
+> 
+> know what sysctl knobs you wish to add for your own piece of code, we
+> 
+> just care about the core logic.
+> 
+> This patch moves the kexec sysctls to the place where they actually belong
+> to help
 
-Nice optimization!
+That seems to be an issue everything related to sysctl are all added to
+kernel/sysctl.c. Do you have a pointer that someone complained about it
+and people agree to scatter them into their own component code?
 
-Acked-by: Song Liu <songliubraving@fb.com>
+I understand your concern now, I am personally not confused by that
+maybe because I haven't got stuff adding or changing into sysctls. My
+concern is if we only care and move kexec knob, or we have plan to try
+to move all of them. If there's some background information or
+discussion with a link, that would be helpful.
+
+Thanks
+Baoquan
+
+> 
+> with this maintenance.
+> 
+> > > Signed-off-by: yingelin <yingelin@huawei.com>
+> > > ---
+> > >   kernel/kexec_core.c | 20 ++++++++++++++++++++
+> > >   kernel/sysctl.c     | 13 -------------
+> > >   2 files changed, 20 insertions(+), 13 deletions(-)
+> > > 
+> > > diff --git a/kernel/kexec_core.c b/kernel/kexec_core.c
+> > > index 68480f731192..e57339d49439 100644
+> > > --- a/kernel/kexec_core.c
+> > > +++ b/kernel/kexec_core.c
+> > > @@ -936,6 +936,26 @@ int kimage_load_segment(struct kimage *image,
+> > >   struct kimage *kexec_image;
+> > >   struct kimage *kexec_crash_image;
+> > >   int kexec_load_disabled;
+> > > +static struct ctl_table kexec_core_sysctls[] = {
+> > > +	{
+> > > +		.procname	= "kexec_load_disabled",
+> > > +		.data		= &kexec_load_disabled,
+> > > +		.maxlen		= sizeof(int),
+> > > +		.mode		= 0644,
+> > > +		/* only handle a transition from default "0" to "1" */
+> > > +		.proc_handler	= proc_dointvec_minmax,
+> > > +		.extra1		= SYSCTL_ONE,
+> > > +		.extra2		= SYSCTL_ONE,
+> > > +	},
+> > > +	{ }
+> > > +};
+> > > +
+> > > +static int __init kexec_core_sysctl_init(void)
+> > > +{
+> > > +	register_sysctl_init("kernel", kexec_core_sysctls);
+> > > +	return 0;
+> > > +}
+> > > +late_initcall(kexec_core_sysctl_init);
+> > >   /*
+> > >    * No panic_cpu check version of crash_kexec().  This function is called
+> > > diff --git a/kernel/sysctl.c b/kernel/sysctl.c
+> > > index ae5e59396b5d..00e97c6d6576 100644
+> > > --- a/kernel/sysctl.c
+> > > +++ b/kernel/sysctl.c
+> > > @@ -61,7 +61,6 @@
+> > >   #include <linux/capability.h>
+> > >   #include <linux/binfmts.h>
+> > >   #include <linux/sched/sysctl.h>
+> > > -#include <linux/kexec.h>
+> > >   #include <linux/bpf.h>
+> > >   #include <linux/mount.h>
+> > >   #include <linux/userfaultfd_k.h>
+> > > @@ -1839,18 +1838,6 @@ static struct ctl_table kern_table[] = {
+> > >   		.proc_handler	= tracepoint_printk_sysctl,
+> > >   	},
+> > >   #endif
+> > > -#ifdef CONFIG_KEXEC_CORE
+> > > -	{
+> > > -		.procname	= "kexec_load_disabled",
+> > > -		.data		= &kexec_load_disabled,
+> > > -		.maxlen		= sizeof(int),
+> > > -		.mode		= 0644,
+> > > -		/* only handle a transition from default "0" to "1" */
+> > > -		.proc_handler	= proc_dointvec_minmax,
+> > > -		.extra1		= SYSCTL_ONE,
+> > > -		.extra2		= SYSCTL_ONE,
+> > > -	},
+> > > -#endif
+> > >   #ifdef CONFIG_MODULES
+> > >   	{
+> > >   		.procname	= "modprobe",
+> > > -- 
+> > > 2.26.2
+> > > 
+> > .
+> 
+

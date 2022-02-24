@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3A9B4C2F4B
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 16:20:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F62C4C2F57
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 16:20:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234440AbiBXPSy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 10:18:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42368 "EHLO
+        id S236066AbiBXPTN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 10:19:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235965AbiBXPS2 (ORCPT
+        with ESMTP id S235966AbiBXPS2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 24 Feb 2022 10:18:28 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1C7D1480D6
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C18671451D0
         for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 07:17:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=Content-Type:MIME-Version:References:
+        d=infradead.org; s=casper.20170209; h=Content-Type:MIME-Version:References:
         Subject:Cc:To:From:Date:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
         Content-ID:Content-Description:In-Reply-To;
-        bh=HL7fchLHOUn1lU/xbyxdwpFAdDeltvtUJ5iRLeT0/Ss=; b=kaJz1t36Q8qrm+cXl0hsxyjSnu
-        Ivj3CZQUlCHxIakSgntCgaBY6p5qJUXIOPnq9mnIDsrNN+1CyMT0T60rFbJfz2UFM2n7BkjsAkvgN
-        Wlfxwo6f39eftqHbQfOpCCGz5jEnb7ORUzLY9JjnwHDTTCTXPP/aFuY8U9vFgRxtUoLhE6kelq+nl
-        YB1ASjYMg6tBdq6bgzSj8yv2kahODscLQyOLxDj6+nj3iglxWgnjtcVEvUsGlo2H1qNRpSnSKN0UJ
-        I9AmJPzBn8W+7oxqQuD2PAxTFKvI1zvO7VpAmNDO4ITZjTjbCH+klWUOIp1Slnm8OhjI2CguhBTLO
-        CO7VAcfQ==;
+        bh=N852q9aWEiK0I+Tjg4v4NRP8lVB+Lypx5hQ0mJxyRSo=; b=q3/jyibdwqwVMQBl0fL8QQ0X0X
+        xL/MmJJvlfwpyiZO5he53MsxudldkaHxuwjjfe54dq77qpyYsRX2YHLeeVnbrpJxU2d8tNl/a6ulJ
+        aFMhh4rKcLgM2j+s8bbxxDXyJuBRkb2E0Vll8WCbMiYGjz+49XnYkIjdK/k75TuIBVjC7J/aYY4rx
+        PEZHOt/h22MbLQ11qPhRLSW4d8MWtjZA3wuMnBweh+6RmveC3tkg9/OUxNHoV1ND6TIPpnYjZ1YW1
+        wdMtP6M/mkpdU1MSq1+BUA560HPdb0YNJQbxzJ7x3UX1eO6VPQvzfn5V4sZ0AcQ+5OE0CUZ0Msxgz
+        5D6ZpSbA==;
 Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nNFs3-00CeLd-75; Thu, 24 Feb 2022 15:17:31 +0000
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nNFs3-004s1z-8X; Thu, 24 Feb 2022 15:17:31 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 2A9D93010EF;
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 2F25D301180;
         Thu, 24 Feb 2022 16:17:29 +0100 (CET)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
-        id 4595229E75E5B; Thu, 24 Feb 2022 16:17:28 +0100 (CET)
-Message-ID: <20220224151322.598835921@infradead.org>
+        id 4907229E75E5D; Thu, 24 Feb 2022 16:17:28 +0100 (CET)
+Message-ID: <20220224151322.656194153@infradead.org>
 User-Agent: quilt/0.66
-Date:   Thu, 24 Feb 2022 15:51:48 +0100
+Date:   Thu, 24 Feb 2022 15:51:49 +0100
 From:   Peter Zijlstra <peterz@infradead.org>
 To:     x86@kernel.org, joao@overdrivepizza.com, hjl.tools@gmail.com,
         jpoimboe@redhat.com, andrew.cooper3@citrix.com
@@ -47,7 +47,7 @@ Cc:     linux-kernel@vger.kernel.org, peterz@infradead.org,
         samitolvanen@google.com, mark.rutland@arm.com,
         alyssa.milburn@intel.com, mbenes@suse.cz, rostedt@goodmis.org,
         mhiramat@kernel.org, alexei.starovoitov@gmail.com
-Subject: [PATCH v2 10/39] x86/ibt,crypto: Add ENDBR for the jump-table entries
+Subject: [PATCH v2 11/39] x86/ibt,kvm: Add ENDBR to fastops
 References: <20220224145138.952963315@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -64,34 +64,37 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 ---
- arch/x86/crypto/crc32c-pcl-intel-asm_64.S |    3 +++
- 1 file changed, 3 insertions(+)
+ arch/x86/kvm/emulate.c |    6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
---- a/arch/x86/crypto/crc32c-pcl-intel-asm_64.S
-+++ b/arch/x86/crypto/crc32c-pcl-intel-asm_64.S
-@@ -195,6 +195,7 @@ SYM_FUNC_START(crc_pcl)
- .altmacro
- LABEL crc_ %i
- .noaltmacro
-+	ENDBR
- 	crc32q   -i*8(block_0), crc_init
- 	crc32q   -i*8(block_1), crc1
- 	crc32q   -i*8(block_2), crc2
-@@ -203,6 +204,7 @@ LABEL crc_ %i
+--- a/arch/x86/kvm/emulate.c
++++ b/arch/x86/kvm/emulate.c
+@@ -189,7 +189,7 @@
+ #define X16(x...) X8(x), X8(x)
  
- .altmacro
- LABEL crc_ %i
-+	ENDBR
- .noaltmacro
- 	crc32q   -i*8(block_0), crc_init
- 	crc32q   -i*8(block_1), crc1
-@@ -237,6 +239,7 @@ LABEL crc_ %i
- 	################################################################
+ #define NR_FASTOP (ilog2(sizeof(ulong)) + 1)
+-#define FASTOP_SIZE 8
++#define FASTOP_SIZE (8 * (1 + HAS_KERNEL_IBT))
  
- LABEL crc_ 0
-+	ENDBR
- 	mov     tmp, len
- 	cmp     $128*24, tmp
- 	jae     full_block
+ struct opcode {
+ 	u64 flags;
+@@ -311,7 +311,8 @@ static int fastop(struct x86_emulate_ctx
+ #define __FOP_FUNC(name) \
+ 	".align " __stringify(FASTOP_SIZE) " \n\t" \
+ 	".type " name ", @function \n\t" \
+-	name ":\n\t"
++	name ":\n\t" \
++	ASM_ENDBR
+ 
+ #define FOP_FUNC(name) \
+ 	__FOP_FUNC(#name)
+@@ -433,6 +434,7 @@ static int fastop(struct x86_emulate_ctx
+ 	".align 4 \n\t" \
+ 	".type " #op ", @function \n\t" \
+ 	#op ": \n\t" \
++	ASM_ENDBR \
+ 	#op " %al \n\t" \
+ 	__FOP_RET(#op)
+ 
 
 

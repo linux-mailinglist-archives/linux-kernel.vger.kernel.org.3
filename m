@@ -2,151 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EF3E4C2940
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 11:24:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AB2D4C2946
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 11:25:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231481AbiBXKXr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 05:23:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57144 "EHLO
+        id S233395AbiBXKZE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 05:25:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232152AbiBXKXo (ORCPT
+        with ESMTP id S233356AbiBXKZB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 05:23:44 -0500
-Received: from a.mx.secunet.com (a.mx.secunet.com [62.96.220.36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1939D16BFA4;
-        Thu, 24 Feb 2022 02:23:13 -0800 (PST)
-Received: from localhost (localhost [127.0.0.1])
-        by a.mx.secunet.com (Postfix) with ESMTP id 8027220533;
-        Thu, 24 Feb 2022 11:23:10 +0100 (CET)
-X-Virus-Scanned: by secunet
-Received: from a.mx.secunet.com ([127.0.0.1])
-        by localhost (a.mx.secunet.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id xobbXqXTnjQx; Thu, 24 Feb 2022 11:23:09 +0100 (CET)
-Received: from mailout1.secunet.com (mailout1.secunet.com [62.96.220.44])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by a.mx.secunet.com (Postfix) with ESMTPS id E574A20504;
-        Thu, 24 Feb 2022 11:23:09 +0100 (CET)
-Received: from cas-essen-01.secunet.de (unknown [10.53.40.201])
-        by mailout1.secunet.com (Postfix) with ESMTP id DF56380004A;
-        Thu, 24 Feb 2022 11:23:09 +0100 (CET)
-Received: from mbx-essen-01.secunet.de (10.53.40.197) by
- cas-essen-01.secunet.de (10.53.40.201) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.18; Thu, 24 Feb 2022 11:23:09 +0100
-Received: from gauss2.secunet.de (10.182.7.193) by mbx-essen-01.secunet.de
- (10.53.40.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Thu, 24 Feb
- 2022 11:23:09 +0100
-Received: by gauss2.secunet.de (Postfix, from userid 1000)
-        id 23B393182EF0; Thu, 24 Feb 2022 11:23:09 +0100 (CET)
-Date:   Thu, 24 Feb 2022 11:23:09 +0100
-From:   Steffen Klassert <steffen.klassert@secunet.com>
-To:     Lina Wang <lina.wang@mediatek.com>
-CC:     Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S . Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        "David Ahern" <dsahern@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "Matthias Brugger" <matthias.bgg@gmail.com>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH v2] xfrm: fix tunnel model fragmentation behavior
-Message-ID: <20220224102309.GN1223722@gauss3.secunet.de>
-References: <20220224060931.30404-1-lina.wang@mediatek.com>
+        Thu, 24 Feb 2022 05:25:01 -0500
+Received: from re-prd-fep-044.btinternet.com (mailomta28-re.btinternet.com [213.120.69.121])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BA0028B61E;
+        Thu, 24 Feb 2022 02:24:31 -0800 (PST)
+Received: from re-prd-rgout-001.btmx-prd.synchronoss.net ([10.2.54.4])
+          by re-prd-fep-044.btinternet.com with ESMTP
+          id <20220224102429.DPND28912.re-prd-fep-044.btinternet.com@re-prd-rgout-001.btmx-prd.synchronoss.net>;
+          Thu, 24 Feb 2022 10:24:29 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=btinternet.com; s=btmx201904; t=1645698269; 
+        bh=/sWckLMjg0ydzalpLHN/ixGkCu+XOlE1ayvL2CxaNS4=;
+        h=From:To:Cc:Subject:Date:Message-Id:X-Mailer:MIME-Version;
+        b=sEAfxWBRnPoOgiKvmtWugrHpS2MTT2t1wPWyWOtENolESSPFznKsIj15iwrmQcI4Kt9Iw74UvQHQAEDNnzsCcHuw9XSvHxGsc/8qgevY/u5UcCze6N2f8HYWgbbpgY76aP+G4wZvQT40hGAgFFzq55Ef67Et4/tTFu8c0xGcZ0+fIU3i13CKUhEI5LHHCZ+ZmHLBy0iFqQOyd4Tjry5NhnWiIUlhQRTuCXKNzs4T++Y5FgN7Oewh9Dg0ZHPlde8/JnzbHwW+nxxfwZ0gkw/wdpUh2oMTTxnzRngKSvk11enzGfbfhfz4MG61i0G8iIdod7dr8+4msHkAJfxc/h2nfg==
+Authentication-Results: btinternet.com;
+    auth=pass (PLAIN) smtp.auth=richard_c_haines@btinternet.com;
+    bimi=skipped
+X-SNCR-Rigid: 613A8CC3160038FB
+X-Originating-IP: [109.158.127.121]
+X-OWM-Source-IP: 109.158.127.121 (GB)
+X-OWM-Env-Sender: richard_c_haines@btinternet.com
+X-VadeSecure-score: verdict=clean score=0/300, class=clean
+X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgedvvddrledvgddugecutefuodetggdotefrodftvfcurfhrohhfihhlvgemuceutffkvffkuffjvffgnffgvefqofdpqfgfvfenuceurghilhhouhhtmecufedtudenucenucfjughrpefhvffufffkofgggfestdekredtredttdenucfhrhhomheptfhitghhrghrugcujfgrihhnvghsuceorhhitghhrghruggptggphhgrihhnvghssegsthhinhhtvghrnhgvthdrtghomheqnecuggftrfgrthhtvghrnheptdefleejjeejtdeiieevhfelkeelgefgleefveevteegffffudelhfevudeltdfgnecuffhomhgrihhnpegthhgvtghkrdhsvggtuhhrihhthienucfkphepuddtledrudehkedruddvjedruddvudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhephhgvlhhopehlohgtrghlhhhoshhtrdhlohgtrghlughomhgrihhnpdhinhgvthepuddtledrudehkedruddvjedruddvuddpmhgrihhlfhhrohhmpehrihgthhgrrhgupggtpghhrghinhgvshessghtihhnthgvrhhnvghtrdgtohhmpdhnsggprhgtphhtthhopeelpdhrtghpthhtohepuggvmhhiohgsvghnohhurhesghhmrghilhdrtghomhdprhgtphhtthhopegvphgrrhhishesphgrrhhishhplhgrtggvrdhorhhgpdhrtghpthhtohepjhgvfhhfvhesghhoohhglhgvrdgtohhmpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthht
+        ohepphgruhhlsehprghulhdqmhhoohhrvgdrtghomhdprhgtphhtthhopehrihgthhgrrhgupggtpghhrghinhgvshessghtihhnthgvrhhnvghtrdgtohhmpdhrtghpthhtohepshgvlhhinhhugidqrhgvfhhpohhlihgthiesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehsvghlihhnuhigsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepshhtvghphhgvnhdrshhmrghllhgvhidrfihorhhksehgmhgrihhlrdgtohhm
+X-RazorGate-Vade-Verdict: clean 0
+X-RazorGate-Vade-Classification: clean
+X-SNCR-hdrdom: btinternet.com
+Received: from localhost.localdomain (109.158.127.121) by re-prd-rgout-001.btmx-prd.synchronoss.net (5.8.716.04) (authenticated as richard_c_haines@btinternet.com)
+        id 613A8CC3160038FB; Thu, 24 Feb 2022 10:24:29 +0000
+From:   Richard Haines <richard_c_haines@btinternet.com>
+To:     paul@paul-moore.com, stephen.smalley.work@gmail.com,
+        eparis@parisplace.org, demiobenour@gmail.com
+Cc:     selinux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        selinux-refpolicy@vger.kernel.org, jeffv@google.com,
+        Richard Haines <richard_c_haines@btinternet.com>
+Subject: [PATCH V3] security/selinux: Always allow FIOCLEX and FIONCLEX
+Date:   Thu, 24 Feb 2022 10:24:17 +0000
+Message-Id: <20220224102417.42268-1-richard_c_haines@btinternet.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20220224060931.30404-1-lina.wang@mediatek.com>
-X-ClientProxiedBy: cas-essen-02.secunet.de (10.53.40.202) To
- mbx-essen-01.secunet.de (10.53.40.197)
-X-EXCLAIMER-MD-CONFIG: 2c86f778-e09b-4440-8b15-867914633a10
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 24, 2022 at 02:09:31PM +0800, Lina Wang wrote:
-> In tunnel mode, if outer interface(ipv4) is less, it is easily to let 
-> inner IPV6 mtu be less than 1280. If so, a Packet Too Big ICMPV6 message 
-> is received. When send again, packets are fragmentized with 1280, they
-> are still rejected with ICMPV6(Packet Too Big) by xfrmi_xmit2().
-> 
-> According to RFC4213 Section3.2.2:
->          if (IPv4 path MTU - 20) is less than 1280
->                  if packet is larger than 1280 bytes
->                          Send ICMPv6 "packet too big" with MTU = 1280.
->                          Drop packet.
->                  else
->                          Encapsulate but do not set the Don't Fragment
->                          flag in the IPv4 header.  The resulting IPv4
->                          packet might be fragmented by the IPv4 layer
->                          on the encapsulator or by some router along
->                          the IPv4 path.
->                  endif
->          else
->                  if packet is larger than (IPv4 path MTU - 20)
->                          Send ICMPv6 "packet too big" with
->                          MTU = (IPv4 path MTU - 20).
->                          Drop packet.
->                  else
->                          Encapsulate and set the Don't Fragment flag
->                          in the IPv4 header.
->                  endif
->          endif
-> Packets should be fragmentized with ipv4 outer interface, so change it.
-> 
-> After it is fragemtized with ipv4, there will be double fragmenation.
-> No.48 & No.51 are ipv6 fragment packets, No.48 is double fragmentized, 
-> then tunneled with IPv4(No.49& No.50), which obey spec. And received peer
-> cannot decrypt it rightly.
-> 
-> 48              2002::10	2002::11 1296(length) IPv6 fragment (off=0 more=y ident=0xa20da5bc nxt=50) 
-> 49   0x0000 (0) 2002::10	2002::11 1304	      IPv6 fragment (off=0 more=y ident=0x7448042c nxt=44)
-> 50   0x0000 (0)	2002::10	2002::11 200	      ESP (SPI=0x00035000) 
-> 51		2002::10	2002::11 180	      Echo (ping) request 
-> 52   0x56dc     2002::10	2002::11 248	      IPv6 fragment (off=1232 more=n ident=0xa20da5bc nxt=50)
-> 
-> esp_noneed_fragment has fixed above issues. Finally, it acted like below:
-> 1   0x6206 192.168.1.138   192.168.1.1 1316 Fragmented IP protocol (proto=Encap Security Payload 50, off=0, ID=6206) [Reassembled in #2]
-> 2   0x6206 2002::10	   2002::11    88   IPv6 fragment (off=0 more=y ident=0x1f440778 nxt=50)
-> 3   0x0000 2002::10	   2002::11    248  ICMPv6    Echo (ping) request 
-> 
-> Fixes: f203b76d7809 ("xfrm: Add virtual xfrm interfaces")
-> Signed-off-by: Lina Wang <lina.wang@mediatek.com>
+These ioctls are equivalent to fcntl(fd, F_SETFD, flags), which SELinux
+always allows too.  Furthermore, a failed FIOCLEX could result in a file
+descriptor being leaked to a process that should not have access to it.
 
-Your patch does not apply, it is not in plain text format.
+As this patch removes access controls, a policy capability needs to be
+enabled in policy to always allow these ioctls.
 
-> ---
->  net/ipv6/xfrm6_output.c   | 16 ++++++++++++++++
->  net/xfrm/xfrm_interface.c |  5 ++++-
->  2 files changed, 20 insertions(+), 1 deletion(-)
-> 
-> diff --git a/net/ipv6/xfrm6_output.c b/net/ipv6/xfrm6_output.c
-> index d0d280077721..1ee643f8f5d5 100644
-> --- a/net/ipv6/xfrm6_output.c
-> +++ b/net/ipv6/xfrm6_output.c
-> @@ -45,6 +45,19 @@ static int __xfrm6_output_finish(struct net *net, struct sock *sk, struct sk_buf
->  	return xfrm_output(sk, skb);
->  }
->  
-> +static int esp_noneed_fragment(struct sk_buff *skb)
-> +{
-> +	struct frag_hdr *fh;
-> +	u8 prevhdr = ipv6_hdr(skb)->nexthdr;
-> +
-> +	if (prevhdr != NEXTHDR_FRAGMENT)
-> +		return 0;
-> +	fh = (struct frag_hdr *)(skb->data + sizeof(struct ipv6hdr));
-> +	if (fh->nexthdr == NEXTHDR_ESP || fh->nexthdr == NEXTHDR_AUTH)
-> +		return 1;
-> +	return 0;
-> +}
+Based-on-patch-by: Demi Marie Obenour <demiobenour@gmail.com>
+Signed-off-by: Richard Haines <richard_c_haines@btinternet.com>
+---
+V2 Change: Control via a policy capability.
+V3 Change: Update switch check.
 
-While at it, this is not an ESP speciffic function. Please rename to
-xfrm_noneed_fragment.
+ security/selinux/hooks.c                   | 6 ++++++
+ security/selinux/include/policycap.h       | 1 +
+ security/selinux/include/policycap_names.h | 3 ++-
+ security/selinux/include/security.h        | 7 +++++++
+ 4 files changed, 16 insertions(+), 1 deletion(-)
+
+diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
+index 5b6895e4f..d369c2d82 100644
+--- a/security/selinux/hooks.c
++++ b/security/selinux/hooks.c
+@@ -3745,6 +3745,12 @@ static int selinux_file_ioctl(struct file *file, unsigned int cmd,
+ 					    CAP_OPT_NONE, true);
+ 		break;
+ 
++	case FIOCLEX:
++	case FIONCLEX:
++		if (!selinux_policycap_ioctl_skip_cloexec())
++			error = ioctl_has_perm(cred, file, FILE__IOCTL, (u16) cmd);
++		break;
++
+ 	/* default case assumes that the command will go
+ 	 * to the file's ioctl() function.
+ 	 */
+diff --git a/security/selinux/include/policycap.h b/security/selinux/include/policycap.h
+index 2ec038efb..44d73dc32 100644
+--- a/security/selinux/include/policycap.h
++++ b/security/selinux/include/policycap.h
+@@ -11,6 +11,7 @@ enum {
+ 	POLICYDB_CAPABILITY_CGROUPSECLABEL,
+ 	POLICYDB_CAPABILITY_NNP_NOSUID_TRANSITION,
+ 	POLICYDB_CAPABILITY_GENFS_SECLABEL_SYMLINKS,
++	POLICYDB_CAPABILITY_IOCTL_CLOEXEC,
+ 	__POLICYDB_CAPABILITY_MAX
+ };
+ #define POLICYDB_CAPABILITY_MAX (__POLICYDB_CAPABILITY_MAX - 1)
+diff --git a/security/selinux/include/policycap_names.h b/security/selinux/include/policycap_names.h
+index b89289f09..ebd64afe1 100644
+--- a/security/selinux/include/policycap_names.h
++++ b/security/selinux/include/policycap_names.h
+@@ -12,7 +12,8 @@ const char *selinux_policycap_names[__POLICYDB_CAPABILITY_MAX] = {
+ 	"always_check_network",
+ 	"cgroup_seclabel",
+ 	"nnp_nosuid_transition",
+-	"genfs_seclabel_symlinks"
++	"genfs_seclabel_symlinks",
++	"ioctl_skip_cloexec"
+ };
+ 
+ #endif /* _SELINUX_POLICYCAP_NAMES_H_ */
+diff --git a/security/selinux/include/security.h b/security/selinux/include/security.h
+index ac0ece013..8a789c22b 100644
+--- a/security/selinux/include/security.h
++++ b/security/selinux/include/security.h
+@@ -219,6 +219,13 @@ static inline bool selinux_policycap_genfs_seclabel_symlinks(void)
+ 	return READ_ONCE(state->policycap[POLICYDB_CAPABILITY_GENFS_SECLABEL_SYMLINKS]);
+ }
+ 
++static inline bool selinux_policycap_ioctl_skip_cloexec(void)
++{
++	struct selinux_state *state = &selinux_state;
++
++	return READ_ONCE(state->policycap[POLICYDB_CAPABILITY_IOCTL_CLOEXEC]);
++}
++
+ struct selinux_policy_convert_data;
+ 
+ struct selinux_load_state {
+-- 
+2.35.1
 

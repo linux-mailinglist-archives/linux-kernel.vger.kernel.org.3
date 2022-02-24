@@ -2,127 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED8864C2DC3
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 15:03:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4573B4C2DD5
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 15:05:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235319AbiBXODZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 09:03:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43872 "EHLO
+        id S235317AbiBXOEM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 09:04:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235278AbiBXODW (ORCPT
+        with ESMTP id S235269AbiBXOEK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 09:03:22 -0500
-Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2ACF20D838
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 06:02:51 -0800 (PST)
-Received: by mail-yb1-xb2c.google.com with SMTP id g6so3956592ybe.12
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 06:02:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=Uu/up663McmtHwyoDsIfscJIaOT5C+2Ofku1sz+3c7s=;
-        b=yeaQV/RM7+yh7dyByba3Uw81wfq81mO7nu0TI1EIsiKw1na9UNQ5yiAkFLa2frERQW
-         jbhkruRz/0mKJTe4q2i8KivPZXfjhxkX4YMGUA8Jr8JiIeKw6v35R/vg+Q1Y2UudXLzz
-         I+g+XXszoc6acZz3QeX7+XNT1bSS9Xa9kq60oI6VJkldWS/UKfW+Syv4j/9Wrkmm0GhO
-         ttr1kb9ueMYL3JgGOxfwlMpFer8Yjd3sKt+RZbI7Tm3ZHlNHoGmQQOGnc7I5NopQ/bzK
-         zXxhfLMn4iaPtk5PyAJjnoskqnC4L4luHO+6tmPhjsArHuUbxYadXmvnii8WXt35NKWr
-         /VMg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=Uu/up663McmtHwyoDsIfscJIaOT5C+2Ofku1sz+3c7s=;
-        b=bx9vpk13kkFGtGsEgX5qWiG+c1DzhmLcLF+om69nzs83GsN6kM2TECe1WdBQzBwFJ8
-         BVGVUAWMWqD39hlu0oBHiOllbVxeJBho/udZKkpb8a62dvANXsOxIfHV/bVi5dABTnOy
-         cCIZDvWpz/gzwCUznKzf8/ucJ3P7A46t79loLiv7YoIAkUfzYkYdUvLIGAgnInOieg1i
-         D3v8wlarEZPd+K2TO0P0FZx2ejnETVhgr2jeFZtZ/ZhT3GMlJLpOKz4gaLWEw3seix5o
-         HqCrM6SPEY5TWOFwyZSXd7rVWtHJzbNOJs5FDaNSfuskQiUwiC6rqqXXA98Ql65ehCYk
-         D5iA==
-X-Gm-Message-State: AOAM532u5sBjMqn8gD6xvhoBdtNYbnzOTh1Z/TSTBlxqkRcqQPY/H3a0
-        Jwg5YkIZgyuoR0fzPzYJAJr8nGdJhAmbAUhppHHbIg==
-X-Google-Smtp-Source: ABdhPJyFgcSPtZ+7eIpJu47YYVNdcJlDOjQ2o+dB7cqBHv4UdHQ6MtQQsUac7jeboUaZhHeeixU4ZJErYZVWYCtypuQ=
-X-Received: by 2002:a25:2551:0:b0:623:a424:e2b5 with SMTP id
- l78-20020a252551000000b00623a424e2b5mr2624980ybl.603.1645711368889; Thu, 24
- Feb 2022 06:02:48 -0800 (PST)
+        Thu, 24 Feb 2022 09:04:10 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6951C20D83C
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 06:03:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1645711419;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Rrg9S+e1z9ycGVjwf8FshYc7srhCJ2Jl2HeTSgf5H9U=;
+        b=aXPoaFIm9iIbICVft973jjTm32mwCc2DWAOSZjRz481JSrP8JoPs1zCFw81fMDYUzYJ8Yx
+        cS1LjHcZc9N4C/2N5yHRCPh02K/Sn8rW83YnMytauI5fscu9SbVjXV35+oBAdTMju3TOZG
+        SRytBGsDTCi1Xb9udv562QvoNPClG6U=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-235-4j-thfZ1NDuYbevR9MlnSw-1; Thu, 24 Feb 2022 09:03:36 -0500
+X-MC-Unique: 4j-thfZ1NDuYbevR9MlnSw-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id A96861854E2A;
+        Thu, 24 Feb 2022 14:03:34 +0000 (UTC)
+Received: from lorien.usersys.redhat.com (unknown [10.22.33.156])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id E9D86842D7;
+        Thu, 24 Feb 2022 14:03:15 +0000 (UTC)
+Date:   Thu, 24 Feb 2022 09:03:13 -0500
+From:   Phil Auld <pauld@redhat.com>
+To:     Carlos Bilbao <carlos.bilbao@amd.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, mingo@redhat.com,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] kernel/sched: Update schedstats when migrating threads
+Message-ID: <YheQIU7oFDcaPoD7@lorien.usersys.redhat.com>
+References: <20220126152222.5429-1-carlos.bilbao@amd.com>
+ <YhYKL4hxx4TNKHGD@hirez.programming.kicks-ass.net>
+ <aac8f860-c01f-bda0-9f1b-029b234213c2@amd.com>
+ <YhZSqd+d03oWUPP6@lorien.usersys.redhat.com>
+ <0e42c46a-ccc4-e793-00b8-ae407e06846f@amd.com>
+ <YhZXGv34YTV5omKq@lorien.usersys.redhat.com>
+ <b7a28537-8bfb-7f0d-5ed3-f301983e4e30@amd.com>
+ <3c6224ca-c0da-7ba9-1396-a2e74c4a40e8@amd.com>
 MIME-Version: 1.0
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Thu, 24 Feb 2022 19:32:38 +0530
-Message-ID: <CA+G9fYvdFWYQ4GJkvD9KK8ut=DqHu8MKM-jok+tXo6-HiaPT0g@mail.gmail.com>
-Subject: [next] mm/mmap.c:1962:25: error: passing argument 1 of 'vma_find'
- from incompatible pointer type
-To:     linux-mm <linux-mm@kvack.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        linux-parisc <linux-parisc@vger.kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>
-Cc:     "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        lkft-triage@lists.linaro.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3c6224ca-c0da-7ba9-1396-a2e74c4a40e8@amd.com>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Linux next-20220223 arch parisc builds failed due to following errors.
-Build configs:
-  - gcc-11-defconfig
-  - gcc-11-allnoconfig
-  - gcc-11-tinyconfig
+On Wed, Feb 23, 2022 at 10:13:50AM -0600 Carlos Bilbao wrote:
+> The kernel manages per-task scheduler statistics or schedstats. Update
+> function migrate_task_to() to increase the counter for migrations.
+> 
+> Signed-off-by: Carlos Bilbao <carlos.bilbao@amd.com>
+> ---
+> Changelog:
+> 	v2: Update commit message, don't reinitialize sched fields.
+> ---
+>  kernel/sched/core.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+> index fcf0c180617c..1360e501c737 100644
+> --- a/kernel/sched/core.c
+> +++ b/kernel/sched/core.c
+> @@ -8751,7 +8751,7 @@ int migrate_task_to(struct task_struct *p, int target_cpu)
+>  	if (!cpumask_test_cpu(target_cpu, p->cpus_ptr))
+>  		return -EINVAL;
+>  
+> -	/* TODO: This is not properly updating schedstats */
+> +	schedstat_inc(p->stats.nr_migrations_cold);
+>
 
-metadata:
-  git_ref: master
-  git_repo: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
-  git_sha: d4a0ae62a277377de396850ed4b709b6bd9b7326
-  git_describe: next-20220223
-  arch: parisc
-  toolchain: gcc-11
+I was going to give a reviewed by since I was looking at this,
+but I can't convince myself that nr_migrations_cold is right.
+This looks more like a "hot" migration (using stop_cpu to force
+it). But nr_migrations_cold is not incremented anywhere else so
+maybe it's a terminology thing.
 
-
-Build error:
------------
-mm/mmap.c: In function 'expand_upwards':
-mm/mmap.c:1962:25: error: passing argument 1 of 'vma_find' from
-incompatible pointer type [-Werror=incompatible-pointer-types]
- 1962 |         next = vma_find(mm, vma->vm_end);
-      |                         ^~
-      |                         |
-      |                         struct mm_struct *
-In file included from arch/parisc/include/asm/cacheflush.h:5,
-                 from include/linux/cacheflush.h:5,
-                 from include/linux/highmem.h:8,
-                 from include/linux/bvec.h:10,
-                 from include/linux/blk_types.h:10,
-                 from include/linux/writeback.h:13,
-                 from include/linux/backing-dev.h:16,
-                 from mm/mmap.c:14:
-include/linux/mm.h:661:54: note: expected 'struct vma_iterator *' but
-argument is of type 'struct mm_struct *'
-  661 | struct vm_area_struct *vma_find(struct vma_iterator *vmi,
-unsigned long max)
-      |                                 ~~~~~~~~~~~~~~~~~~~~~^~~
-cc1: some warnings being treated as errors
-
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-Steps to reproduce:
-------------------
-# To install tuxmake on your system globally:
-# sudo pip3 install -U tuxmake
-
-tuxmake --runtime podman --target-arch parisc --toolchain gcc-11
---kconfig allnoconfig
+Can you tell me why this is the right counter?
 
 
---
-Linaro LKFT
-https://lkft.linaro.org
+Thanks,
+Phil
 
-[1] https://builds.tuxbuild.com/25XO7KdJCJcum36gCorICgGU8C5/
+
+>  	trace_sched_move_numa(p, curr_cpu, target_cpu);
+>  	return stop_one_cpu(curr_cpu, migration_cpu_stop, &arg);
+> -- 
+> 2.27.0
+> 
+
+-- 
+

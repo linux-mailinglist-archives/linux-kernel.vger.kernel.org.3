@@ -2,128 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69ADA4C2880
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 10:49:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CB2B4C2884
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 10:50:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232986AbiBXJtu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 04:49:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43288 "EHLO
+        id S233002AbiBXJuM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 04:50:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231683AbiBXJtt (ORCPT
+        with ESMTP id S233003AbiBXJuK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 04:49:49 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA926674C4;
-        Thu, 24 Feb 2022 01:49:19 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8109BB824F1;
-        Thu, 24 Feb 2022 09:49:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC94EC340E9;
-        Thu, 24 Feb 2022 09:49:16 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="Do5PhtlR"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1645696154;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=fIXunQ0/AtwBaCePwIXP2qD27GW0DhIB45r4lJ1eLME=;
-        b=Do5PhtlRKqEQujks44fyPi9kMT+LVGhcBDYS7nMxm0pWM2YKsy3UctvgLTxSBAs94u154k
-        zj4iVzAyit10EWasQ5hm37bXPFfgA9aCTQb/WQezWlw8sIeBg13M2C4TgC0Rg1dVsVEYYf
-        32kCAjFYJOtPYj1lA7e2Z8egCOsqnTM=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 053d5ec8 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Thu, 24 Feb 2022 09:49:14 +0000 (UTC)
-Received: by mail-yb1-f171.google.com with SMTP id p19so2671697ybc.6;
-        Thu, 24 Feb 2022 01:49:13 -0800 (PST)
-X-Gm-Message-State: AOAM530J6pHZtn/TBfVROKhHC8op4Ge+TDiXexc9guSuQmQ8oayZJAPu
-        TeoMlog/sgCwF2sA3WIsuBlf95UAF6Q5psqMM38=
-X-Google-Smtp-Source: ABdhPJyOvLl5VmvQLFSBbWpUhA9AfJiUCFRoxcqCFbKEt2prfsXWWeXkViO9oqn3jcGnknwdnNFU+t+5KOTTYanL6dc=
-X-Received: by 2002:a25:238d:0:b0:619:3e19:b06b with SMTP id
- j135-20020a25238d000000b006193e19b06bmr1621006ybj.382.1645696152959; Thu, 24
- Feb 2022 01:49:12 -0800 (PST)
+        Thu, 24 Feb 2022 04:50:10 -0500
+Received: from mail-ua1-f42.google.com (mail-ua1-f42.google.com [209.85.222.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 228012819B2;
+        Thu, 24 Feb 2022 01:49:40 -0800 (PST)
+Received: by mail-ua1-f42.google.com with SMTP id p33so609901uap.8;
+        Thu, 24 Feb 2022 01:49:40 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=9IkiN0VIfOnYW5l2ddoLdbKXjFAORIEW7LEcXcst+cU=;
+        b=W7Jc42pt22ZkEpdnueYEPN7U/0bcpQgFvPDq0tNlhrn6ZmfeDp8ieB0YLCYZUyookc
+         H2+H+FHS/7yFiiZ1Y48nj9namidksaxQHyp/6msHeDIxPXaEO9BGvM5IZfSEiIOERTeA
+         CB1QDfZgTOUnweMnG0TuNDJSHF6HEJP9xAg5RvzllKYCojK/34cuJz+oR0pqOnoCKtDU
+         H7zIsWVcApnxhI1WF3Z917xDTtzhAiAiGoAXxw88XQaBPSf2A+ktpUmIEGqZPxeR9Sx8
+         A3/9T06T4SeQYtSBfwx4qxyKbGBoS+PwiSrjFjgeUmzGl14iKJxEvBXnHpwNC2gJfOdS
+         iniw==
+X-Gm-Message-State: AOAM53149u0ntyYC1qqBiJO9bRlmUcCd1D7mJPJhjUpzeS/sA8XGvdWW
+        qdcxIsMbxbY9kUWPCGC2EUbyApUg/rPruA==
+X-Google-Smtp-Source: ABdhPJxWI0W/CyVSr5GWmiGwIMIRNdaGuMDum0EpH4QRfsA9DlmWB46r/KgbqAXgfSahbTiyIZ9YnA==
+X-Received: by 2002:ab0:b05:0:b0:342:2961:37ee with SMTP id b5-20020ab00b05000000b00342296137eemr735920uak.29.1645696179094;
+        Thu, 24 Feb 2022 01:49:39 -0800 (PST)
+Received: from mail-vs1-f44.google.com (mail-vs1-f44.google.com. [209.85.217.44])
+        by smtp.gmail.com with ESMTPSA id l187sm322879vke.6.2022.02.24.01.49.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 24 Feb 2022 01:49:38 -0800 (PST)
+Received: by mail-vs1-f44.google.com with SMTP id t22so1513805vsa.4;
+        Thu, 24 Feb 2022 01:49:38 -0800 (PST)
+X-Received: by 2002:a05:6102:4411:b0:31b:6df1:3b80 with SMTP id
+ df17-20020a056102441100b0031b6df13b80mr761507vsb.5.1645696178512; Thu, 24 Feb
+ 2022 01:49:38 -0800 (PST)
 MIME-Version: 1.0
-Received: by 2002:a05:7110:71a8:b0:167:24f9:2d40 with HTTP; Thu, 24 Feb 2022
- 01:49:12 -0800 (PST)
-In-Reply-To: <Yhc4LwK3biZFIqwQ@owl.dominikbrodowski.net>
-References: <20220223185511.628452-1-Jason@zx2c4.com> <Yhc4LwK3biZFIqwQ@owl.dominikbrodowski.net>
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date:   Thu, 24 Feb 2022 10:49:12 +0100
-X-Gmail-Original-Message-ID: <CAHmME9oesPzz4ofe-wo_ZViM=uahL6WQo8-5ov7xjJN8ui1rsg@mail.gmail.com>
-Message-ID: <CAHmME9oesPzz4ofe-wo_ZViM=uahL6WQo8-5ov7xjJN8ui1rsg@mail.gmail.com>
-Subject: Re: [PATCH] random: do crng pre-init loading in worker rather than irq
-To:     Dominik Brodowski <linux@dominikbrodowski.net>
-Cc:     linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
-        bigeasy@linutronix.de, Sultan Alsawaf <sultan@kerneltoast.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Theodore Ts'o" <tytso@mit.edu>
+References: <20220224092114.25737-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20220224092114.25737-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 24 Feb 2022 10:49:27 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdWebGqoLeDcTYM9vKkdVpC0wCfcUSpV6gr+4wphzkacCg@mail.gmail.com>
+Message-ID: <CAMuHMdWebGqoLeDcTYM9vKkdVpC0wCfcUSpV6gr+4wphzkacCg@mail.gmail.com>
+Subject: Re: [PATCH] soc: renesas: Kconfig: Introduce ARCH_RZG2L config option
+To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Cc:     Magnus Damm <magnus.damm@gmail.com>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Prabhakar <prabhakar.csengg@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/24/22, Dominik Brodowski <linux@dominikbrodowski.net> wrote:
-> Am Wed, Feb 23, 2022 at 07:55:11PM +0100 schrieb Jason A. Donenfeld:
->> Taking spinlocks from IRQ context is problematic for PREEMPT_RT. That
->> is, in part, why we take trylocks instead. But apparently this still
->> trips up various lock dependency analyzers. That seems like a bug in the
->> analyzers that should be fixed, rather than having to change things
->> here.
->>
->> But maybe there's another reason to change things up: by deferring the
->> crng pre-init loading to the worker, we can use the cryptographic hash
->> function rather than xor, which is perhaps a meaningful difference when
->> considering this data has only been through the relatively weak
->> fast_mix() function.
->>
->> The biggest downside of this approach is that the pre-init loading is
->> now deferred until later, which means things that need random numbers
->> after interrupts are enabled, but before workqueues are running -- or
->> before this particular worker manages to run -- are going to get into
->> trouble. Hopefully in the real world, this window is rather small,
->> especially since this code won't run until 64 interrupts had occurred.
->>
->> Cc: Dominik Brodowski <linux@dominikbrodowski.net>
->> Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
->> Cc: Sultan Alsawaf <sultan@kerneltoast.com>
->> Cc: Thomas Gleixner <tglx@linutronix.de>
->> Cc: Peter Zijlstra <peterz@infradead.org>
->> Cc: Theodore Ts'o <tytso@mit.edu>
->> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
->> ---
->>  drivers/char/random.c | 62 ++++++++++++-------------------------------
->>  1 file changed, 17 insertions(+), 45 deletions(-)
->>
->> diff --git a/drivers/char/random.c b/drivers/char/random.c
->> index 536237a0f073..9fb06fc298d3 100644
->> --- a/drivers/char/random.c
->> +++ b/drivers/char/random.c
->> @@ -1298,7 +1278,12 @@ static void mix_interrupt_randomness(struct
->> work_struct *work)
->>  	local_irq_enable();
->>
->>  	mix_pool_bytes(pool, sizeof(pool));
->> -	credit_entropy_bits(1);
->> +
->> +	if (unlikely(crng_init == 0))
->> +		crng_pre_init_inject(pool, sizeof(pool), true);
->> +	else
->> +		credit_entropy_bits(1);
->> +
->>  	memzero_explicit(pool, sizeof(pool));
->>  }
+Hi Prabhakar,
+
+On Thu, Feb 24, 2022 at 10:21 AM Lad Prabhakar
+<prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
+> Renesas RZ/G2L, RZ/G2LC, RZ/G2UL and RZ/V2L SoC's have identical IP blocks
+> for which drivers are common. To avoid updating the Kconfig files for
+> drivers in common to each SoC, introduce the ARCH_RZG2L config option.
+> ARCH_RZG2L config option will be selected by the above mentioned SoC's and
+> ARCH_RZG2L config option will be used as a dependency for the drivers in
+> common.
 >
-> Might it make sense to call crng_pre_init_inject() before mix_pool_bytes?
+> While at it, move PM and PM_GENERIC_DOMAINS under the ARCH_RZG2L
+> config option instead of adding it to individual SoC.
+>
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> Reviewed-by: Biju Das <biju.das.jz@bp.renesas.com>
 
-What exactly is the difference you see mattering in the order? I keep
-chasing my tail trying to think about it.
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+i.e. will queue in renesas-devel for v5.18, so you can start updating
+dependencies after v5.18-rc1.
 
-Jason
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

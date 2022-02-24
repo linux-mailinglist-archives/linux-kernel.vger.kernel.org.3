@@ -2,111 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB4BD4C2DEB
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 15:10:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 07F524C2DF1
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 15:11:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235342AbiBXOJ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 09:09:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60248 "EHLO
+        id S235343AbiBXOMM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 09:12:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232103AbiBXOJZ (ORCPT
+        with ESMTP id S235348AbiBXOMI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 09:09:25 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E2E2229456D;
-        Thu, 24 Feb 2022 06:08:54 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 74410ED1;
-        Thu, 24 Feb 2022 06:08:54 -0800 (PST)
-Received: from lpieralisi (e121166-lin.cambridge.arm.com [10.1.196.255])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 58CC83F66F;
-        Thu, 24 Feb 2022 06:08:53 -0800 (PST)
-Date:   Thu, 24 Feb 2022 14:08:47 +0000
-From:   Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-To:     Jisheng Zhang <jszhang@kernel.org>
-Cc:     Jingoo Han <jingoohan1@gmail.com>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] PCI: dwc: Fix integrated MSI Receiver mask reg setting
- during resume
-Message-ID: <20220224140847.GA4839@lpieralisi>
-References: <20211226074019.2556-1-jszhang@kernel.org>
- <Ye1D4lYAIpDe7qAN@xhacker>
- <20220223114622.GA27645@lpieralisi>
- <YhZbcU3yNuuBDXm/@xhacker>
+        Thu, 24 Feb 2022 09:12:08 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 35C3E114E
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 06:11:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1645711890;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=QcE0EVUjCg6X/xa4J/ZeUVoMtNaV/sF9sKuaRTVThoM=;
+        b=DsN2F64DB5SUrY+y1OVBqFXf1hUrifC5BFgVOHKhyafJMFxQHmvre7sgxsntFukvNp+Eyt
+        lUW2t7087z0q32TmK6HP/Hncg2FvRqY9rmm+OkqQQCXjNdhOB3h1Is1HmnPlAT0MFeEgA5
+        8xvZoXz8hkf8i86968aqKzK/MFF3y7s=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-446-1e0tpTSFOiWgY-PtsWJlVw-1; Thu, 24 Feb 2022 09:11:27 -0500
+X-MC-Unique: 1e0tpTSFOiWgY-PtsWJlVw-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 6C8FB1006AA7;
+        Thu, 24 Feb 2022 14:11:22 +0000 (UTC)
+Received: from localhost (ovpn-13-73.pek2.redhat.com [10.72.13.73])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 9FC2684008;
+        Thu, 24 Feb 2022 14:11:19 +0000 (UTC)
+Date:   Thu, 24 Feb 2022 22:11:17 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        akpm@linux-foundation.org, cl@linux.com, 42.hyeyoo@gmail.com,
+        penberg@kernel.org, rientjes@google.com, iamjoonsoo.kim@lge.com,
+        vbabka@suse.cz, David.Laight@aculab.com, david@redhat.com,
+        herbert@gondor.apana.org.au, davem@davemloft.net,
+        linux-crypto@vger.kernel.org, steffen.klassert@secunet.com,
+        netdev@vger.kernel.org, hca@linux.ibm.com, gor@linux.ibm.com,
+        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
+        svens@linux.ibm.com, linux-s390@vger.kernel.org, michael@walle.cc,
+        linux-i2c@vger.kernel.org, wsa@kernel.org
+Subject: Re: [PATCH 1/2] dma-mapping: check dma_mask for streaming mapping
+ allocs
+Message-ID: <YheSBTJY216m6izG@MiWiFi-R3L-srv>
+References: <20220219005221.634-22-bhe@redhat.com>
+ <20220219071730.GG26711@lst.de>
+ <20220220084044.GC93179@MiWiFi-R3L-srv>
+ <20220222084530.GA6210@lst.de>
+ <YhSpaGfiQV8Nmxr+@MiWiFi-R3L-srv>
+ <20220222131120.GB10093@lst.de>
+ <YhToFzlSufrliUsi@MiWiFi-R3L-srv>
+ <20220222155904.GA13323@lst.de>
+ <YhV/nabDa5zdNL/4@MiWiFi-R3L-srv>
+ <20220223142555.GA5986@lst.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YhZbcU3yNuuBDXm/@xhacker>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220223142555.GA5986@lst.de>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 24, 2022 at 12:06:09AM +0800, Jisheng Zhang wrote:
-> On Wed, Feb 23, 2022 at 11:46:22AM +0000, Lorenzo Pieralisi wrote:
-> > On Sun, Jan 23, 2022 at 08:02:42PM +0800, Jisheng Zhang wrote:
-> > > On Sun, Dec 26, 2021 at 03:40:19PM +0800, Jisheng Zhang wrote:
-> > > > If the host which makes use of the IP's integrated MSI Receiver losts
-> > > > power during suspend, we call dw_pcie_setup_rc() to reinit the RC. But
-> > > > dw_pcie_setup_rc() always set the pp->irq_mask[ctrl] as ~0, so the mask
-> > > > register is always set as 0xffffffff incorrectly, thus the MSI can't
-> > > > work after resume.
-> > > > 
-> > > > Fix this issue by moving pp->irq_mask[ctrl] initialization to
-> > > > dw_pcie_host_init(), so we can correctly set the mask reg during both
-> > > > boot and resume.
-> > > > 
-> > > > Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
-> > > 
-> > > Hi all,
-> > > 
-> > > This patch can still be applied to the latest linus tree. Do you want
-> > > me to rebase and send out a new version?
-> > > 
-> > > Without this patch, dwc host MSI interrupt(if use the IP's integrated
-> > > MSI receiver) can't work after resume. Could it be picked up as a fix
-> > > for v5.17?
-> > 
-> > The tricky bit with this patch is that it is not clear what piece of
-> > logic is lost on power down and what not. IIUC MSI interrupt controller
-> > logic is kept so it does not need to be saved/restored (but in
+On 02/23/22 at 03:25pm, Christoph Hellwig wrote:
+> On Wed, Feb 23, 2022 at 08:28:13AM +0800, Baoquan He wrote:
+> > Could you tell more why this is wrong? According to
+> > Documentation/core-api/dma-api.rst and DMA code, __dma_alloc_pages() is
+> > the core function of dma_alloc_pages()/dma_alloc_noncoherent() which are
+> > obviously streaming mapping,
 > 
-> You may mean the external MSI interrupt controller case, but here the
-> focus is the integrated MSI Receiver in the IP. Normally, after
-> suspending to ram, the dwc IP would lost power, so the integrated MSI
-> Receiver also lost power.
-> 
-> > dw_pcie_setup_rc() we overwrite PCIE_MSI_INTR0_ENABLE even if it
-> > is not needed on resume - actually, it can even be destructive).
-> > 
-> 
-> For the integrated MSI Receiver case, since the entire IP power is lost,
-> so the PCIE_MSI_INTR0_MASK|ENABLE setting is lost, we need to resume the
-> mask to the one before suspending. For PCIE_MSI_INTR0_ENABLE register(s),
-> since it's always 0xffffffff, so current code is fine.
-> 
-> > Maybe we need to write suspend/resume hooks for the dwc core instead
-> > of moving code around to fix these bugs ?
-> > 
-> 
-> Even with suspend/resume hooks, we still need to fix the
-> PCIE_MSI_INTR0_MASK wrong setting with always ~0. After the fix, msi works
-> so we don't need suspend/resume hooks any more.
+> Why are they "obviously" streaming mappings?
 
-I don't understand. The fix removes code that is writing into
-PCIE_MSI_INTR0_MASK (in dw_pcie_setup_rc()). Where that register
-content is restored on power up to the correct value then ?
+Because they are obviously not coherent mapping?
 
-I assume those registers when the IP loses power are reset
-to their reset value, so something does not add up.
+With my understanding, there are two kinds of DMA mapping, coherent
+mapping (which is also persistent mapping), and streaming mapping. The
+coherent mapping will be handled during driver init, and released during
+driver de-init. While streaming mapping will be done when needed at any
+time, and released after usage.
 
-Lorenzo
+Are we going to add another kind of mapping? It's not streaming mapping,
+but use dev->coherent_dma_mask, just because it uses dma_alloc_xxx()
+api.
+
+> 
+> > why do we need to check
+> > dev->coherent_dma_mask here? Because dev->coherent_dma_mask is the subset
+> > of dev->dma_mask, it's safer to use dev->coherent_dma_mask in these
+> > places? This is confusing, I talked to Hyeonggon in private mail, he has
+> > the same feeling.
+> 
+> Think of th coherent_dma_mask as dma_alloc_mask.  It is the mask for the
+> DMA memory allocator.  dma_mask is the mask for the dma_map_* routines.
+
+I will check code further. While this may need be noted in doc, e.g
+dma_api.rst or dma-api-howto.rst.
+
+If you have guide, I can try to add some words to make clear this. Or
+leave this to people who knows this clearly. I believe it will be very
+helpful to understand DMA api.
+

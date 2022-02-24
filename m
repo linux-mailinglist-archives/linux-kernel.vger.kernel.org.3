@@ -2,83 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 975A64C3410
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 18:54:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BFB54C3416
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 18:54:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232389AbiBXRzE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 12:55:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51300 "EHLO
+        id S232394AbiBXRy4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 12:54:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232397AbiBXRy7 (ORCPT
+        with ESMTP id S232399AbiBXRyw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 12:54:59 -0500
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 853E5252937
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 09:54:28 -0800 (PST)
-Received: by mail-wr1-x432.google.com with SMTP id d17so842525wrc.9
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 09:54:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=GE+XGHonrH22zXrgiLwafrMHAo1pCMt8qc++bm61hZc=;
-        b=mZLz9SlFVQ84zMxIhFdLQMmVgKUhNsTq7TIRpy5lode3I8PkSY+1/w19uOMblnnZ6Z
-         4kZ9pOjtV/nAnm26mvr8v5z5LG7pNREFfElRV2jepUw1NHLVfHih/1BEty1AsHrgEyUI
-         wH0Gr9d/pOXtAIFXjebgufroKudUgLNif6D2BMDjj33guNjjYh+C58j11mRcVkC6KrhA
-         S+Pl3Qz8q4aw5v5ZGyfjRLH3zDgAjgDwhu944MLmr6gq5q0LTClONsHTHeXWb5AEq8HV
-         aWnhF74XNPIe1e6msCIsV+Ndp7HqCZV7nnGErVd2wx+gVEjzGkBd1MHS5ucJrC3jDVbO
-         AeYg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=GE+XGHonrH22zXrgiLwafrMHAo1pCMt8qc++bm61hZc=;
-        b=BKjF1NeDsGCVU5MX7AceUTF+OqADtPJDskytCGJo+cSzShVA5IK3/nvIcS65xUBuQc
-         90IM85cluTRRIRnVwFOq/6H5qqTqEmLsnSKc6L2cnLSp1OaZYVo7kerYR++Gq8KaJDxY
-         7KJRXMh3c+IhFcAZoMhcwtkeWTSulIe2+e8kbLC5to/V7AjOZtEvu9bMivzBVdlqoi/q
-         VjmBVRnqsqWKtQmaUJ8A3jrY6/E0ciPjHliL5Fs+82aHazE3jLyqm98A03FUKXwzPwCY
-         Zk5lhKKsgnOQOqw71Fyd8xWvU2sJAEyeerfb3CUonfBJQpjV7iYxh6G3SrtyFptn35Zh
-         IEFA==
-X-Gm-Message-State: AOAM531l9k7XDNBC86cr9ve425DpcXxRpUemD7aeOX+IhjsNihjLX41+
-        ewqXyqeopTjqxRdM55fFNSumq0e1iIljEk400CIy+w==
-X-Google-Smtp-Source: ABdhPJxHmUKpTMRNJ+ob8+yuIRIbACjTU5wiSB63z2iiN9d/8JNSMH+uWCSXvhJHtYIl9R7h2hcbj50TcC7mMZhOG/U=
-X-Received: by 2002:adf:ca08:0:b0:1ed:c0bc:c212 with SMTP id
- o8-20020adfca08000000b001edc0bcc212mr3148175wrh.577.1645725266912; Thu, 24
- Feb 2022 09:54:26 -0800 (PST)
-MIME-Version: 1.0
-References: <20220224051439.640768-1-kaleshsingh@google.com>
- <20220224051439.640768-4-kaleshsingh@google.com> <CA+EHjTy6DJt8Pcfj4JnVhSG0sQ7O09zvOaMP--aRuAsM=8zKUw@mail.gmail.com>
-In-Reply-To: <CA+EHjTy6DJt8Pcfj4JnVhSG0sQ7O09zvOaMP--aRuAsM=8zKUw@mail.gmail.com>
-From:   Kalesh Singh <kaleshsingh@google.com>
+        Thu, 24 Feb 2022 12:54:52 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90974275795
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 09:54:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645725262; x=1677261262;
+  h=message-id:date:mime-version:to:cc:references:from:
+   subject:in-reply-to:content-transfer-encoding;
+  bh=tYEwnjk4lBYRrx5EhWLikwGdOyioL/Al5KgYOVvpgpU=;
+  b=fgxmfAh+bt2SkmPzdpUfxDuMcAJlUdnpKdVK0vIAYfajVlf+EgaKkbq+
+   9vhnKZTTinE8jfTRq/vbOi21i1IJ18Eybwk/nitWAMIQcFiEvxJVcvGvl
+   +lNTIDrTkPOa+wD12e56IOhzjXhMu8YS7TYBE7oDvsdHwdIoHGZ3xMSUL
+   84tFcEGYqx7kBvEeDaeL+KjWKPD2YmmadRow/6RbxVdN4cVRDIrE00n//
+   GTkRS8UWwmJPFtnG6nG60K5rY/6/OCxZHZqa+qEWFIdcU8xE8gxssWXi0
+   yhyTmeiWcfWXieRoSZICZFxSecIIhH6f6v1nMKtym/B3+obTp5wbSGjSF
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10268"; a="338740426"
+X-IronPort-AV: E=Sophos;i="5.90,134,1643702400"; 
+   d="scan'208";a="338740426"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2022 09:54:22 -0800
+X-IronPort-AV: E=Sophos;i="5.90,134,1643702400"; 
+   d="scan'208";a="548858675"
+Received: from vpirogov-mobl.amr.corp.intel.com (HELO [10.252.137.68]) ([10.252.137.68])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2022 09:54:21 -0800
+Message-ID: <d51dc9c2-61e5-c8dd-e358-e4ab3d5429ac@intel.com>
 Date:   Thu, 24 Feb 2022 09:54:16 -0800
-Message-ID: <CAC_TJvcypLTxa=HaPvfNBgQpB1qG=d_sLnOLAn=gAznpD4_hqw@mail.gmail.com>
-Subject: Re: [PATCH v3 3/8] KVM: arm64: Add guard pages for KVM nVHE
- hypervisor stack
-To:     Fuad Tabba <tabba@google.com>
-Cc:     Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Quentin Perret <qperret@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        "Cc: Android Kernel" <kernel-team@android.com>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Mark Brown <broonie@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Peter Collingbourne <pcc@google.com>,
-        "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>,
-        Andrew Walbran <qwandor@google.com>,
-        Andrew Scull <ascull@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        "moderated list:ARM64 PORT (AARCH64 ARCHITECTURE)" 
-        <linux-arm-kernel@lists.infradead.org>,
-        kvmarm@lists.cs.columbia.edu, LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Content-Language: en-US
+To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        luto@kernel.org, peterz@infradead.org
+Cc:     sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
+        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
+        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
+        joro@8bytes.org, jpoimboe@redhat.com, knsathya@kernel.org,
+        pbonzini@redhat.com, sdeep@vmware.com, seanjc@google.com,
+        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
+        thomas.lendacky@amd.com, brijesh.singh@amd.com, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220224155630.52734-1-kirill.shutemov@linux.intel.com>
+ <20220224155630.52734-6-kirill.shutemov@linux.intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+Subject: Re: [PATCHv4 05/30] x86/tdx: Extend the confidential computing API to
+ support TDX guests
+In-Reply-To: <20220224155630.52734-6-kirill.shutemov@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,125 +72,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 24, 2022 at 4:26 AM Fuad Tabba <tabba@google.com> wrote:
->
-> Hi Kalesh,
->
->
->
-> On Thu, Feb 24, 2022 at 5:18 AM Kalesh Singh <kaleshsingh@google.com> wrote:
-> >
-> > Maps the stack pages in the flexible private VA range and allocates
-> > guard pages below the stack as unbacked VA space. The stack is aligned
-> > to twice its size to aid overflow detection (implemented in a subsequent
-> > patch in the series).
-> >
-> > Signed-off-by: Kalesh Singh <kaleshsingh@google.com>
-> > ---
-> >
-> > Changes in v3:
-> >   - Handle null ptr in IS_ERR_OR_NULL checks, per Mark
-> >
-> >  arch/arm64/include/asm/kvm_asm.h |  1 +
-> >  arch/arm64/kvm/arm.c             | 32 +++++++++++++++++++++++++++++---
-> >  2 files changed, 30 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/arch/arm64/include/asm/kvm_asm.h b/arch/arm64/include/asm/kvm_asm.h
-> > index d5b0386ef765..2e277f2ed671 100644
-> > --- a/arch/arm64/include/asm/kvm_asm.h
-> > +++ b/arch/arm64/include/asm/kvm_asm.h
-> > @@ -169,6 +169,7 @@ struct kvm_nvhe_init_params {
-> >         unsigned long tcr_el2;
-> >         unsigned long tpidr_el2;
-> >         unsigned long stack_hyp_va;
-> > +       unsigned long stack_pa;
-> >         phys_addr_t pgd_pa;
-> >         unsigned long hcr_el2;
-> >         unsigned long vttbr;
-> > diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
-> > index ecc5958e27fe..7a23630c4a7f 100644
-> > --- a/arch/arm64/kvm/arm.c
-> > +++ b/arch/arm64/kvm/arm.c
-> > @@ -1541,7 +1541,6 @@ static void cpu_prepare_hyp_mode(int cpu)
-> >         tcr |= (idmap_t0sz & GENMASK(TCR_TxSZ_WIDTH - 1, 0)) << TCR_T0SZ_OFFSET;
-> >         params->tcr_el2 = tcr;
-> >
-> > -       params->stack_hyp_va = kern_hyp_va(per_cpu(kvm_arm_hyp_stack_page, cpu) + PAGE_SIZE);
-> >         params->pgd_pa = kvm_mmu_get_httbr();
-> >         if (is_protected_kvm_enabled())
-> >                 params->hcr_el2 = HCR_HOST_NVHE_PROTECTED_FLAGS;
-> > @@ -1990,14 +1989,41 @@ static int init_hyp_mode(void)
-> >          * Map the Hyp stack pages
-> >          */
-> >         for_each_possible_cpu(cpu) {
-> > +               struct kvm_nvhe_init_params *params = per_cpu_ptr_nvhe_sym(kvm_init_params, cpu);
-> >                 char *stack_page = (char *)per_cpu(kvm_arm_hyp_stack_page, cpu);
-> > -               err = create_hyp_mappings(stack_page, stack_page + PAGE_SIZE,
-> > -                                         PAGE_HYP);
-> > +               unsigned long stack_hyp_va, guard_hyp_va;
-> >
-> > +               /*
-> > +                * Private mappings are allocated downwards from io_map_base
-> > +                * so allocate the stack first then the guard page.
-> > +                *
-> > +                * The stack is aligned to twice its size to facilitate overflow
-> > +                * detection.
-> > +                */
-> > +               err = __create_hyp_private_mapping(__pa(stack_page), PAGE_SIZE,
-> > +                                               PAGE_SIZE * 2, &stack_hyp_va, PAGE_HYP);
-> >                 if (err) {
-> >                         kvm_err("Cannot map hyp stack\n");
-> >                         goto out_err;
-> >                 }
-> > +
-> > +               /* Allocate unbacked private VA range for stack guard page */
-> > +               guard_hyp_va = hyp_alloc_private_va_range(PAGE_SIZE, PAGE_SIZE);
-> > +               if (IS_ERR_OR_NULL((void *)guard_hyp_va)) {
-> > +                       err = guard_hyp_va ? PTR_ERR((void *)guard_hyp_va) : -ENOMEM;
->
-> I am a bit confused by this check. hyp_alloc_private_va_range() always
-> returns ERR_PTR(-ENOMEM) if there's an error. Mark's comment (if I
-> understood it correctly) was about how you were handling it *in*
-> hyp_alloc_private_va_range(), rather than calls *to*
-> hyp_alloc_private_va_range().
+> +/* TDX module Call Leaf IDs */
+> +#define TDX_GET_INFO			1
+> +
+> +static struct {
+> +	unsigned int gpa_width;
+> +	unsigned long attributes;
+> +} td_info __ro_after_init;
 
-Mark's comments were for the callers. I think the address can still be
-null without returning -ENOMEM (judging from what the check was before
-hyp_alloc_private_va_range). You make a good point - I think we can
-handle any potential null in *_alloc_private_va_range() and drop the
-use of PTR_ERR with IS_ERR_OR_NULL (which seems not a good idea in
-general).
+This defines part of an ABI (TDX_GET_INFO) and then a structure right
+next to it which is not part of the ABI.  That's really confusing.
 
->
-> > +                       kvm_err("Cannot allocate hyp stack guard page\n");
-> > +                       goto out_err;
-> > +               }
-> > +
-> > +               /*
-> > +                * Save the stack PA in nvhe_init_params. This will be needed to recreate
-> > +                * the stack mapping in protected nVHE mode. __hyp_pa() won't do the right
-> > +                * thing there, since the stack has been mapped in the flexible private
-> > +                * VA space.
-> > +                */
->
-> Nit: These comments go over 80 columns, unlike other comments that
-> you've added in this file.
+It's further muddied by "attributes" being unused in this patch.  Why
+bother declaring it and assigning a value to it that won't be used?  Why
+even *have* a structure for a single value?
 
-Ack. I'll update in the next version.
+>  /*
+>   * Wrapper for standard use of __tdx_hypercall with no output aside from
+>   * return code.
+> @@ -25,6 +34,30 @@ static inline u64 _tdx_hypercall(u64 fn, u64 r12, u64 r13, u64 r14, u64 r15)
+>  	return __tdx_hypercall(&args, 0);
+>  }
+>  
+> +static inline void tdx_module_call(u64 fn, u64 rcx, u64 rdx, u64 r8, u64 r9,
+> +				   struct tdx_module_output *out)
+> +{
+> +	if (__tdx_module_call(fn, rcx, rdx, r8, r9, out))
+> +		panic("TDCALL %lld failed (Buggy TDX module!)\n", fn);
+> +}
+> +
+> +static void get_info(void)
+> +{
+> +	struct tdx_module_output out;
+> +
+> +	/*
+> +	 * TDINFO TDX module call is used to get the TD execution environment
+> +	 * information like GPA width, number of available vcpus, debug mode
+> +	 * information, etc. More details about the ABI can be found in TDX
+> +	 * Guest-Host-Communication Interface (GHCI), section 2.4.2 TDCALL
+> +	 * [TDG.VP.INFO].
+> +	 */
+> +	tdx_module_call(TDX_GET_INFO, 0, 0, 0, 0, &out);
+> +
+> +	td_info.gpa_width = out.rcx & GENMASK(5, 0);
+> +	td_info.attributes = out.rdx;
+> +}
 
-Thanks,
-Kalesh
+This left me wondering two things.  First, why this bothers storing
+'gpa_width' when it's only used to generate a mask?  Why not just store
+the mask in the structure?
 
->
-> Thanks,
-> /fuad
->
-> > +               params->stack_pa = __pa(stack_page) + PAGE_SIZE;
-> > +
-> > +               params->stack_hyp_va = stack_hyp_va + PAGE_SIZE;
-> >         }
-> >
-> >         for_each_possible_cpu(cpu) {
-> > --
-> > 2.35.1.473.g83b2b277ed-goog
-> >
+Second, why have the global 'td_info' instead of just declaring it on
+the stack.  It is only used within a single function.  Having it on the
+stack is *REALLY* nice because the code ends up looking like:
+
+	struct foo foo;
+	get_info(&foo);
+	cc_set_bar(foo.bar);
+
+The dependencies and scope are just stupidly obvious if you do that.
+
+>  void __init tdx_early_init(void)
+>  {
+>  	u32 eax, sig[3];
+> @@ -37,5 +70,15 @@ void __init tdx_early_init(void)
+>  
+>  	setup_force_cpu_cap(X86_FEATURE_TDX_GUEST);
+>  
+> +	get_info();
+> +
+> +	cc_set_vendor(CC_VENDOR_INTEL);
+> +
+> +	/*
+> +	 * The highest bit of a guest physical address is the "sharing" bit.
+> +	 * Set it for shared pages and clear it for private pages.
+> +	 */
+> +	cc_set_mask(BIT_ULL(td_info.gpa_width - 1));
+> +
+>  	pr_info("Guest detected\n");
+>  }
+I really want to start acking these things and get them moved along to
+the next step.  There are a few too many open questions, though.

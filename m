@@ -2,146 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C6254C34C7
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 19:29:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB1814C34C5
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 19:29:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232838AbiBXS25 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 13:28:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41124 "EHLO
+        id S231171AbiBXS3L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 13:29:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230368AbiBXS24 (ORCPT
+        with ESMTP id S230368AbiBXS3J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 13:28:56 -0500
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 614A312B76F
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 10:28:25 -0800 (PST)
-Received: by mail-ed1-x530.google.com with SMTP id w3so4080931edu.8
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 10:28:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=A9fzDXY9Pawtti5sitNYgs0Fy4usPU844voMfn3IdBw=;
-        b=dl6HDEGVlT4NNXS+IICLIyWUeJ4CPNtZVqt7karefHOT34m9SGbvzOBZnY4TRymU+P
-         TkWhXBb6+tkuw3h4utWmhoNw6f+PwulSb7gpb+/NZejGPPxjEbaBMwIoyyP5tVnqrnQI
-         NU8gttIl16ZIr9mhL9cMEXK7E0Q9RK3aACepd+i0T6ECmKr1Ko8jaU6MhGwU4USSGPfq
-         z779HAe3Cr+BgKDZ8/CCe0NULpEw0jkPfilJrpWc4A+0mBtl4Dx5QXt15277Bov3kmLJ
-         xxFcHR9V4DDznD/q4rB8pCa4mUrLkNRhFtkVse/rJeEVYV0SEw/kkggDHdHJ7xCbHjRr
-         tYIA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=A9fzDXY9Pawtti5sitNYgs0Fy4usPU844voMfn3IdBw=;
-        b=XnE+iKupJQa5ZVsFF7OU9bShF6cT3MazuA1h+61W3c5c+pvCpFcYYZAc4QdEG0xlV7
-         e3ynyzxAa5xAaC8iJIK1PboACWhvgr1yEnGcsA7b3TZqbbEfv8nY4Q5Ky8pApFSJCf/g
-         Az7oU/dKRnB40imBAuMKsevO+T506XXjHc6/HatlkkGygANYYoNVDY4kHpcnrijDZsEn
-         +04YqX/JrUxsActEaVVTiylKEJgXorP7HKbOeUuEJ4WxjTRMD55M+ySvR00ur1lsDk6O
-         SQWcaRJdqSr61AAvsKizs4m3tXUI8nhYkvanmTsF8lt1BCJkuYDLBo/jTahdIq0z4t54
-         CfOw==
-X-Gm-Message-State: AOAM531eUiQBxFJIToYcJmilGxAPId/GCVQvT5OTS1bWgUKQKVo7fAuL
-        O2v8q2AfE2Kror7Il4lILcHnSkhc5HC4JDUkGrgMaA==
-X-Google-Smtp-Source: ABdhPJyd0J9YBYi7aXnqX6OwRKkx26kDeX3KMKqCXaMxU62hgxoaffTO84p3kE7edGocRELjW9JrDbnvnBAzeENlM9g=
-X-Received: by 2002:aa7:d592:0:b0:410:b9f9:90f2 with SMTP id
- r18-20020aa7d592000000b00410b9f990f2mr3543452edq.327.1645727303752; Thu, 24
- Feb 2022 10:28:23 -0800 (PST)
+        Thu, 24 Feb 2022 13:29:09 -0500
+Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0CC512B76F;
+        Thu, 24 Feb 2022 10:28:38 -0800 (PST)
+Received: from integral2.. (unknown [36.78.50.60])
+        by gnuweeb.org (Postfix) with ESMTPSA id 014677E2A3;
+        Thu, 24 Feb 2022 18:28:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
+        s=default; t=1645727318;
+        bh=VCLpP+mfC5yC5cMO+0JDeJ/M40lflzsLuNleX1PqHFM=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=iizxB05mBRlsWLerBWLOhdxxfjyOmS1tTpb0mgou/nd2+hLHVvlf/LYrPBg6/uKgJ
+         nGHV0ZIEuOidHk8ekAKqgncu9ZAqftWV1RlmPRzD+ki/CazTDCEc+/Pla52/QnZQ5l
+         A0u+Xt6V44lLpXQKEp8akEk6J94FL7lnVXGpoX7XtzJMV8kvd3Z/r7a7gkIsOOWhsD
+         77T5qbUfeEKBwXvykN/5VeGiib/8yCna7iPH9MKU6SxjcPjWzL7rZp2PdOsn0bsglQ
+         i6uishd7V8rb+vbMGxCDMUVEla/kNxo8fmFFLym9ynNP9CLc2uBz1vYIsJunTdmjzn
+         ILoI0f2FhVGww==
+From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Ammar Faizi <ammarfaizi2@gnuweeb.org>,
+        Daniel Baluta <daniel.baluta@nxp.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Keyon Jie <yang.jie@linux.intel.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Rander Wang <rander.wang@intel.com>,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        Takashi Iwai <tiwai@suse.com>, stable@vger.kernel.org,
+        sound-open-firmware@alsa-project.org, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v3] ASoC: SOF: Intel: Fix NULL ptr dereference when ENOMEM
+Date:   Fri, 25 Feb 2022 01:28:18 +0700
+Message-Id: <20220224182818.40301-1-ammarfaizi2@gnuweeb.org>
+X-Mailer: git-send-email 2.32.0
+In-Reply-To: <YhfLCWm0Ms3E+j4z@sirena.org.uk>
+References: <20220224145124.15985-1-ammarfaizi2@gnuweeb.org> <cfe9e583-e20a-f1d6-2a81-2538ca3ca054@linux.intel.com> <Yhe/3rELNfFOdU4L@sirena.org.uk> <04e79b9c-ccb1-119a-c2e2-34c8ca336215@linux.intel.com> <20220224180850.34592-1-ammarfaizi2@gnuweeb.org> <YhfLCWm0Ms3E+j4z@sirena.org.uk>
 MIME-Version: 1.0
-References: <20220224055350.1854078-1-keescook@chromium.org>
-In-Reply-To: <20220224055350.1854078-1-keescook@chromium.org>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Thu, 24 Feb 2022 10:28:12 -0800
-Message-ID: <CAGS_qxo1UkRUbXnX7NkfDCLhqa2-_dn3poKBi=NyGJ4C0EhUmw@mail.gmail.com>
-Subject: Re: [PATCH] kunit: tool: Do not colorize output when redirected
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        David Gow <davidgow@google.com>, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 23, 2022 at 9:53 PM Kees Cook <keescook@chromium.org> wrote:
->
-> Filling log files with color codes makes diffs and other comparisons
-> difficult. Only emit vt100 codes when the stdout is a TTY.
->
-> Cc: Brendan Higgins <brendanhiggins@google.com>
-> Cc: linux-kselftest@vger.kernel.org
-> Cc: kunit-dev@googlegroups.com
-> Signed-off-by: Kees Cook <keescook@chromium.org>
-> ---
->  tools/testing/kunit/kunit_parser.py | 7 +++++++
->  1 file changed, 7 insertions(+)
->
-> diff --git a/tools/testing/kunit/kunit_parser.py b/tools/testing/kunit/kunit_parser.py
-> index 05ff334761dd..807ed2bd6832 100644
-> --- a/tools/testing/kunit/kunit_parser.py
-> +++ b/tools/testing/kunit/kunit_parser.py
-> @@ -11,6 +11,7 @@
->
->  from __future__ import annotations
->  import re
-> +import sys
->
->  import datetime
->  from enum import Enum, auto
-> @@ -503,14 +504,20 @@ RESET = '\033[0;0m'
->
->  def red(text: str) -> str:
->         """Returns inputted string with red color code."""
-> +       if not sys.stdout.isatty():
-> +               return text
+From: Ammar Faizi <ammarfaizi2@gnuweeb.org>
 
-I'd been thinking about doing this for a while.
-I'd just gotten used to removing them via sed, or ending pipes with less -R.
-I totally agree it's for the best that colors be turned off by default
-when piping.
+Do not call snd_dma_free_pages() when snd_dma_alloc_pages() returns
+-ENOMEM because it leads to a NULL pointer dereference bug.
 
-My hesitation was whether we'd want to introduce a flag like grep et al have.
-I.e. --color=auto/always/etc.
+The dmesg says:
 
-Pros:
-* consistency with grep, maybe less surprise
-* allows wrappers around kunit.py to redirect output and still show color
-   * this is very niche and I know it. But I happen to own such a wrapper :)
+  [ T1387] sof-audio-pci-intel-tgl 0000:00:1f.3: error: memory alloc failed: -12
+  [ T1387] BUG: kernel NULL pointer dereference, address: 0000000000000000
+  [ T1387] #PF: supervisor read access in kernel mode
+  [ T1387] #PF: error_code(0x0000) - not-present page
+  [ T1387] PGD 0 P4D 0
+  [ T1387] Oops: 0000 [#1] PREEMPT SMP NOPTI
+  [ T1387] CPU: 6 PID: 1387 Comm: alsa-sink-HDA A Tainted: G        W         5.17.0-rc4-superb-owl-00055-g80d47f5de5e3 #3 56590caeed02394520e20ca5a2059907eb2d5079
+  [ T1387] Hardware name: HP HP Laptop 14s-dq2xxx/87FD, BIOS F.15 09/15/2021
+  [ T1387] RIP: 0010:dma_free_noncontiguous+0x37/0x80
+  [ T1387] Code: [... snip ...]
+  [ T1387] RSP: 0000:ffffc90002b87770 EFLAGS: 00010246
+  [ T1387] RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
+  [ T1387] RDX: 0000000000000000 RSI: 0000000000000000 RDI: ffff888101db30d0
+  [ T1387] RBP: 00000000fffffff4 R08: 0000000000000000 R09: 0000000000000000
+  [ T1387] R10: 0000000000000000 R11: ffffc90002b874d0 R12: 0000000000000001
+  [ T1387] R13: 0000000000058000 R14: ffff888105260c68 R15: ffff888105260828
+  [ T1387] FS:  00007f42e2ffd640(0000) GS:ffff888466b80000(0000) knlGS:0000000000000000
+  [ T1387] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+  [ T1387] CR2: 0000000000000000 CR3: 000000014acf0003 CR4: 0000000000770ee0
+  [ T1387] PKRU: 55555554
+  [ T1387] Call Trace:
+  [ T1387]  <TASK>
+  [ T1387]  cl_stream_prepare+0x10a/0x120 [snd_sof_intel_hda_common 146addf995b9279ae7f509621078cccbe4f875e1]
 
-Cons:
-* an extra flag that's very niche
-  * I'm likely the only person to have ever used `kunit.py run | ... | less -R`
-* the logic to check for coloring becomes more complicated, need to add a helper
+  [... snip ...]
 
-I'm fine if we just stick with this simpler approach or do it later.
-My aforementioned wrapper only redirects stdout when necessary anyways.
+  [ T1387]  </TASK>
 
+Cc: Daniel Baluta <daniel.baluta@nxp.com>
+Cc: Jaroslav Kysela <perex@perex.cz>
+Cc: Kai Vehmanen <kai.vehmanen@linux.intel.com>
+Cc: Keyon Jie <yang.jie@linux.intel.com>
+Cc: Liam Girdwood <lgirdwood@gmail.com>
+Cc: Mark Brown <broonie@kernel.org>
+Cc: Peter Ujfalusi <peter.ujfalusi@linux.intel.com>
+Cc: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+Cc: Rander Wang <rander.wang@intel.com>
+Cc: Ranjani Sridharan <ranjani.sridharan@linux.intel.com>
+Cc: Takashi Iwai <tiwai@suse.com>
+Fixes: d16046ffa6de040bf580a64d5f4d0aa18258a854 ("ASoC: SOF: Intel: Add Intel specific HDA firmware loader")
+Cc: stable@vger.kernel.org # v5.2+
+Cc: sound-open-firmware@alsa-project.org
+Cc: alsa-devel@alsa-project.org
+Cc: linux-kernel@vger.kernel.org
+Link: https://lore.kernel.org/lkml/20220224145124.15985-1-ammarfaizi2@gnuweeb.org/ # v1
+Link: https://lore.kernel.org/lkml/20220224180850.34592-1-ammarfaizi2@gnuweeb.org/ # v2
+Reviewed-by: Peter Ujfalusi <peter.ujfalusi@linux.intel.com>
+Reviewed-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+Signed-off-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
+---
 
->         return '\033[1;31m' + text + RESET
->
->  def yellow(text: str) -> str:
->         """Returns inputted string with yellow color code."""
-> +       if not sys.stdout.isatty():
-> +               return text
->         return '\033[1;33m' + text + RESET
->
->  def green(text: str) -> str:
->         """Returns inputted string with green color code."""
-> +       if not sys.stdout.isatty():
-> +               return text
->         return '\033[1;32m' + text + RESET
->
->  ANSI_LEN = len(red(''))
-> --
-> 2.30.2
->
-> --
-> You received this message because you are subscribed to the Google Groups "KUnit Development" group.
-> To unsubscribe from this group and stop receiving emails from it, send an email to kunit-dev+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgid/kunit-dev/20220224055350.1854078-1-keescook%40chromium.org.
+On 2/25/22 1:14 AM, Mark Brown wrote:
+> On Fri, Feb 25, 2022 at 01:08:50AM +0700, Ammar Faizi wrote:
+> 
+>> The dmesg says:
+>>
+>>    [ T1387] sof-audio-pci-intel-tgl 0000:00:1f.3: error: memory alloc failed: -12
+>>    [ T1387] BUG: kernel NULL pointer dereference, address: 0000000000000000
+>>    [ T1387] #PF: supervisor read access in kernel mode
+>>    [ T1387] #PF: error_code(0x0000) - not-present page
+>>    [ T1387] PGD 0 P4D 0
+>>    [ T1387] Oops: 0000 [#1] PREEMPT SMP NOPTI
+> 
+> This is still an enormous and not super useful section of backtrace, at
+> a glance the backtrace is longer than the rest of the commit :(
+
+Should be okay now...
+
+"cl_stream_prepare()" and "RIP: 0010:dma_free_noncontiguous+0x37/0x80"
+should be the important parts to find this bug.
+
+ v3:
+   - Address comment from Mark Brown (strip not useful kernel log
+     from the commit message, again).
+
+ v2:
+   - Append Reviewed-by tag from Peter Ujfalusi.
+   - Append Reviewed-by tag from Pierre-Louis Bossart.
+   - Address comment from Mark Brown (strip irrelevant kernel log
+     from the commit message).
+
+ sound/soc/sof/intel/hda-loader.c | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
+
+diff --git a/sound/soc/sof/intel/hda-loader.c b/sound/soc/sof/intel/hda-loader.c
+index 33306d2023a7..9bbfdab8009d 100644
+--- a/sound/soc/sof/intel/hda-loader.c
++++ b/sound/soc/sof/intel/hda-loader.c
+@@ -47,7 +47,7 @@ static struct hdac_ext_stream *cl_stream_prepare(struct snd_sof_dev *sdev, unsig
+ 	ret = snd_dma_alloc_pages(SNDRV_DMA_TYPE_DEV_SG, &pci->dev, size, dmab);
+ 	if (ret < 0) {
+ 		dev_err(sdev->dev, "error: memory alloc failed: %d\n", ret);
+-		goto error;
++		goto out_put;
+ 	}
+ 
+ 	hstream->period_bytes = 0;/* initialize period_bytes */
+@@ -58,22 +58,23 @@ static struct hdac_ext_stream *cl_stream_prepare(struct snd_sof_dev *sdev, unsig
+ 		ret = hda_dsp_iccmax_stream_hw_params(sdev, dsp_stream, dmab, NULL);
+ 		if (ret < 0) {
+ 			dev_err(sdev->dev, "error: iccmax stream prepare failed: %d\n", ret);
+-			goto error;
++			goto out_free;
+ 		}
+ 	} else {
+ 		ret = hda_dsp_stream_hw_params(sdev, dsp_stream, dmab, NULL);
+ 		if (ret < 0) {
+ 			dev_err(sdev->dev, "error: hdac prepare failed: %d\n", ret);
+-			goto error;
++			goto out_free;
+ 		}
+ 		hda_dsp_stream_spib_config(sdev, dsp_stream, HDA_DSP_SPIB_ENABLE, size);
+ 	}
+ 
+ 	return dsp_stream;
+ 
+-error:
+-	hda_dsp_stream_put(sdev, direction, hstream->stream_tag);
++out_free:
+ 	snd_dma_free_pages(dmab);
++out_put:
++	hda_dsp_stream_put(sdev, direction, hstream->stream_tag);
+ 	return ERR_PTR(ret);
+ }
+ 
+
+base-commit: 23d04328444a8fa0ca060c5e532220dac8e8bc26
+-- 
+2.32.0
+

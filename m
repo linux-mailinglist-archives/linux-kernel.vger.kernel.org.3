@@ -2,147 +2,222 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 544044C23DB
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 07:08:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F0A014C23E6
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 07:08:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231159AbiBXGII (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 01:08:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56632 "EHLO
+        id S231137AbiBXGHy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 01:07:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231144AbiBXGIG (ORCPT
+        with ESMTP id S230513AbiBXGHt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 01:08:06 -0500
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACB1BB8212;
-        Wed, 23 Feb 2022 22:07:36 -0800 (PST)
+        Thu, 24 Feb 2022 01:07:49 -0500
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 905AC268349
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 22:07:19 -0800 (PST)
+Received: by mail-ej1-x62f.google.com with SMTP id lw4so2047921ejb.12
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 22:07:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1645682857; x=1677218857;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=VaArZKOVuXCZjKizWGEFDBQ0tSKeLOEkh0wZIyEkkHo=;
-  b=Lrf43rAaNpkAYaNuI03eLNQ01cgn4tyrXboNtqs2dn/noQjE2Dp4UiBX
-   /PjCh55+xnWx4cjU7RKYNKlpUTyoPLwgOuOInnJUWcsLDI2it50CC51c6
-   /bPtVxFdGKh4hzOnMfYIQPY5BonQlLs+5kCPP188MYScXh+EiK1B0TPSB
-   4=;
-Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
-  by alexa-out.qualcomm.com with ESMTP; 23 Feb 2022 22:07:36 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2022 22:07:35 -0800
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.15; Wed, 23 Feb 2022 22:07:35 -0800
-Received: from blr-ubuntu-253.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.15; Wed, 23 Feb 2022 22:07:31 -0800
-From:   Sai Prakash Ranjan <quic_saipraka@quicinc.com>
-To:     Will Deacon <will@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        "Marc Zyngier" <maz@kernel.org>
-CC:     Trilok Soni <quic_tsoni@quicinc.com>, <quic_psodagud@quicinc.com>,
-        gregkh <gregkh@linuxfoundation.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        "Sai Prakash Ranjan" <quic_saipraka@quicinc.com>
-Subject: [PATCHv10 1/6] arm64: io: Use asm-generic high level MMIO accessors
-Date:   Thu, 24 Feb 2022 11:37:03 +0530
-Message-ID: <31f49b98aa921f03d1a9f27af483ac0e5e5bcdb6.1644824638.git.quic_saipraka@quicinc.com>
-X-Mailer: git-send-email 2.33.1
-In-Reply-To: <cover.1644824638.git.quic_saipraka@quicinc.com>
-References: <cover.1644824638.git.quic_saipraka@quicinc.com>
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=kP+89y0hoRnShyoLp/hNYbJCaD/1tG2cQQ5MHA+Qy84=;
+        b=kwRnAaTapnRDvQFCX4erZ72wwBBIgT9aehZ1b407m0CDNloA8vSdFrLuPx0M7uHYYr
+         Z4d8Zd7Ous/XLZ8pl5j/P95yQwa+vGnhnb0m4OBf2SnigJ2PLxaxpoOyRTLQix2L0Asg
+         XYnk1fboddBNDJUconnfgW0y4b/X7ndWiQqqUijhrsavc2KBKbfLjeSxvPIIAsjDiJka
+         BuxkiqUPVTDxcaMSe/uXpFUpdvLe+w1G5O/PIPAmLnOpno7mwOz3Jq+isx3Us0w6nlld
+         Qvrdpj32vpP2hwfT8X0rAuyHIySqL92HKUgwwRGlnQ26VcMxzOtw2jvTEfASqrT5ZJFS
+         kABA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=kP+89y0hoRnShyoLp/hNYbJCaD/1tG2cQQ5MHA+Qy84=;
+        b=yA8NPyFtYpJ102c7244P04SrP+Z1xmyKdzzb6OufObiwwJti46Qd7wsu6KzaVSv9Hu
+         wyw42TyQn8YwSuoh4F8LZFc0G/gSAWH+ERFeYc8TAFNpXPizUTs81mnzyA3x0McQJ15F
+         8UWWm5v6wwr4z7DrrPz84FujS0lbxhm/maYN/c5GoU2gUVWHnGgswVw/1/ZFl4jy/wu2
+         pjL2ZmwJwYcMsI8IVYRaXAxzgS7qBdFRwF2QzT8uFwaLYuDAqcrFsmgEk/6UCtXIC3f4
+         VIlK6iM+Wigz5Ifdv8OqS9/MlAJNJ/NJtg10KlPC6REjxyTETgyLZ+Pj6/N/utMiCBL/
+         1Z7A==
+X-Gm-Message-State: AOAM533qZsvFgjTtJUDT9IDF0n9AUNhXOCrhc/aZLDobDoLxTMo2hD2y
+        X1CswN55d1fG2BMXjn1LjLV29Y6fSbOCner4jZsg/w==
+X-Google-Smtp-Source: ABdhPJzZgf+9TEGQb6iMcXtXFm9emtSA5v0uMfoaoiwA1lFfvD2e9TdWMjBamDP38FG17rD1IP935MHFoxCFr7G2kCA=
+X-Received: by 2002:a17:906:c12:b0:6cc:ec90:31f3 with SMTP id
+ s18-20020a1709060c1200b006ccec9031f3mr961140ejf.369.1645682837863; Wed, 23
+ Feb 2022 22:07:17 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220224054332.1852813-1-keescook@chromium.org>
+In-Reply-To: <20220224054332.1852813-1-keescook@chromium.org>
+From:   Daniel Latypov <dlatypov@google.com>
+Date:   Wed, 23 Feb 2022 22:07:04 -0800
+Message-ID: <CAGS_qxp8cjG5jCX-7ziqHcy2gq_MqL8kU01-joFD_W9iPG08EA@mail.gmail.com>
+Subject: Re: [PATCH] binfmt_elf: Introduce KUnit test
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Eric Biederman <ebiederm@xmission.com>,
+        David Gow <davidgow@google.com>,
+        Alexey Dobriyan <adobriyan@gmail.com>,
+        =?UTF-8?B?TWFnbnVzIEdyb8Of?= <magnus.gross@rwth-aachen.de>,
+        kunit-dev@googlegroups.com, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-hardening@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove custom arm64 MMIO accessors read{b,w,l,q} and their relaxed
-versions in support to use asm-generic defined accessors. Also define
-one set of IO barriers (ar/bw version) used by asm-generic code to
-override the arm64 specific variants.
+On Wed, Feb 23, 2022 at 9:43 PM Kees Cook <keescook@chromium.org> wrote:
+>
+> Adds simple KUnit test for some binfmt_elf internals: specifically a
+> regression test for the problem fixed by commit 8904d9cd90ee ("ELF:
+> fix overflow in total mapping size calculation").
+>
+> Cc: Eric Biederman <ebiederm@xmission.com>
+> Cc: David Gow <davidgow@google.com>
+> Cc: Alexey Dobriyan <adobriyan@gmail.com>
+> Cc: "Magnus Gro=C3=9F" <magnus.gross@rwth-aachen.de>
+> Cc: kunit-dev@googlegroups.com
+> Cc: linux-fsdevel@vger.kernel.org
+> Signed-off-by: Kees Cook <keescook@chromium.org>
+> ---
+> I'm exploring ways to mock copy_to_user() for more tests in here.
+> kprobes doesn't seem to let me easily hijack a function...
 
-Suggested-by: Arnd Bergmann <arnd@arndb.de>
-Signed-off-by: Sai Prakash Ranjan <quic_saipraka@quicinc.com>
-Acked-by: Catalin Marinas <catalin.marinas@arm.com>
----
- arch/arm64/include/asm/io.h | 41 ++++++++-----------------------------
- 1 file changed, 8 insertions(+), 33 deletions(-)
+Yeah, there doesn't seem to be a good way to do so. It seems more
+feasible if one is willing to write arch-specific code, but I'm not
+quite sure if that works either.
 
-diff --git a/arch/arm64/include/asm/io.h b/arch/arm64/include/asm/io.h
-index 7fd836bea7eb..1b436810d779 100644
---- a/arch/arm64/include/asm/io.h
-+++ b/arch/arm64/include/asm/io.h
-@@ -91,7 +91,7 @@ static inline u64 __raw_readq(const volatile void __iomem *addr)
- }
- 
- /* IO barriers */
--#define __iormb(v)							\
-+#define __io_ar(v)							\
- ({									\
- 	unsigned long tmp;						\
- 									\
-@@ -108,39 +108,14 @@ static inline u64 __raw_readq(const volatile void __iomem *addr)
- 		     : "memory");					\
- })
- 
--#define __io_par(v)		__iormb(v)
--#define __iowmb()		dma_wmb()
--#define __iomb()		dma_mb()
--
--/*
-- * Relaxed I/O memory access primitives. These follow the Device memory
-- * ordering rules but do not guarantee any ordering relative to Normal memory
-- * accesses.
-- */
--#define readb_relaxed(c)	({ u8  __r = __raw_readb(c); __r; })
--#define readw_relaxed(c)	({ u16 __r = le16_to_cpu((__force __le16)__raw_readw(c)); __r; })
--#define readl_relaxed(c)	({ u32 __r = le32_to_cpu((__force __le32)__raw_readl(c)); __r; })
--#define readq_relaxed(c)	({ u64 __r = le64_to_cpu((__force __le64)__raw_readq(c)); __r; })
-+#define __io_bw()		dma_wmb()
-+#define __io_br(v)
-+#define __io_aw(v)
- 
--#define writeb_relaxed(v,c)	((void)__raw_writeb((v),(c)))
--#define writew_relaxed(v,c)	((void)__raw_writew((__force u16)cpu_to_le16(v),(c)))
--#define writel_relaxed(v,c)	((void)__raw_writel((__force u32)cpu_to_le32(v),(c)))
--#define writeq_relaxed(v,c)	((void)__raw_writeq((__force u64)cpu_to_le64(v),(c)))
--
--/*
-- * I/O memory access primitives. Reads are ordered relative to any
-- * following Normal memory access. Writes are ordered relative to any prior
-- * Normal memory access.
-- */
--#define readb(c)		({ u8  __v = readb_relaxed(c); __iormb(__v); __v; })
--#define readw(c)		({ u16 __v = readw_relaxed(c); __iormb(__v); __v; })
--#define readl(c)		({ u32 __v = readl_relaxed(c); __iormb(__v); __v; })
--#define readq(c)		({ u64 __v = readq_relaxed(c); __iormb(__v); __v; })
--
--#define writeb(v,c)		({ __iowmb(); writeb_relaxed((v),(c)); })
--#define writew(v,c)		({ __iowmb(); writew_relaxed((v),(c)); })
--#define writel(v,c)		({ __iowmb(); writel_relaxed((v),(c)); })
--#define writeq(v,c)		({ __iowmb(); writeq_relaxed((v),(c)); })
-+/* arm64-specific, don't use in portable drivers */
-+#define __iormb(v)		__io_ar(v)
-+#define __iowmb()		__io_bw()
-+#define __iomb()		dma_mb()
- 
- /*
-  *  I/O port access primitives.
--- 
-2.33.1
+https://kunit.dev/mocking.html has some thoughts on this.
+Not sure if there's anything there that would be useful to you, but
+perhaps it can give you some ideas.
 
+> ---
+>  fs/Kconfig.binfmt      | 17 +++++++++++
+>  fs/binfmt_elf.c        |  4 +++
+>  fs/binfmt_elf_test.c   | 64 ++++++++++++++++++++++++++++++++++++++++++
+>  fs/compat_binfmt_elf.c |  2 ++
+>  4 files changed, 87 insertions(+)
+>  create mode 100644 fs/binfmt_elf_test.c
+>
+> diff --git a/fs/Kconfig.binfmt b/fs/Kconfig.binfmt
+> index 4d5ae61580aa..8e14589ee9cc 100644
+> --- a/fs/Kconfig.binfmt
+> +++ b/fs/Kconfig.binfmt
+> @@ -28,6 +28,23 @@ config BINFMT_ELF
+>           ld.so (check the file <file:Documentation/Changes> for location=
+ and
+>           latest version).
+>
+> +config BINFMT_ELF_KUNIT_TEST
+> +       bool "Build KUnit tests for ELF binary support" if !KUNIT_ALL_TES=
+TS
+> +       depends on KUNIT=3Dy && BINFMT_ELF=3Dy
+> +       default KUNIT_ALL_TESTS
+> +       help
+> +         This builds the ELF loader KUnit tests.
+> +
+> +         KUnit tests run during boot and output the results to the debug=
+ log
+> +         in TAP format (https://testanything.org/). Only useful for kern=
+el devs
+
+Tangent: should we update the kunit style guide to not refer to TAP
+anymore as it's not accurate?
+The KTAP spec is live on kernel.org at
+https://www.kernel.org/doc/html/latest/dev-tools/ktap.html
+
+We can leave this patch as-is and update later, or have it be the
+guinea pig for the new proposed wording.
+
+(I'm personally in favor of people not copy-pasting these paragraphs
+in the first place, but that is what the style-guide currently
+recommends)
+
+> +         running KUnit test harness and are not for inclusion into a
+> +         production build.
+> +
+> +         For more information on KUnit and unit tests in general please =
+refer
+> +         to the KUnit documentation in Documentation/dev-tools/kunit/.
+> +
+> +         If unsure, say N.
+> +
+>  config COMPAT_BINFMT_ELF
+>         def_bool y
+>         depends on COMPAT && BINFMT_ELF
+> diff --git a/fs/binfmt_elf.c b/fs/binfmt_elf.c
+> index 76ff2af15ba5..9bea703ed1c2 100644
+> --- a/fs/binfmt_elf.c
+> +++ b/fs/binfmt_elf.c
+> @@ -2335,3 +2335,7 @@ static void __exit exit_elf_binfmt(void)
+>  core_initcall(init_elf_binfmt);
+>  module_exit(exit_elf_binfmt);
+>  MODULE_LICENSE("GPL");
+> +
+> +#ifdef CONFIG_BINFMT_ELF_KUNIT_TEST
+> +#include "binfmt_elf_test.c"
+> +#endif
+> diff --git a/fs/binfmt_elf_test.c b/fs/binfmt_elf_test.c
+> new file mode 100644
+> index 000000000000..486ad419f763
+> --- /dev/null
+> +++ b/fs/binfmt_elf_test.c
+> @@ -0,0 +1,64 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +#include <kunit/test.h>
+> +
+> +static void total_mapping_size_test(struct kunit *test)
+> +{
+> +       struct elf_phdr empty[] =3D {
+> +               { .p_type =3D PT_LOAD, .p_vaddr =3D 0, .p_memsz =3D 0, },
+> +               { .p_type =3D PT_INTERP, .p_vaddr =3D 10, .p_memsz =3D 99=
+9999, },
+> +       };
+> +       /*
+> +        * readelf -lW /bin/mount | grep '^  .*0x0' | awk '{print "\t\t{ =
+.p_type =3D PT_" \
+> +        *                              $1 ", .p_vaddr =3D " $3 ", .p_mem=
+sz =3D " $6 ", },"}'
+> +        */
+> +       struct elf_phdr mount[] =3D {
+> +               { .p_type =3D PT_PHDR, .p_vaddr =3D 0x00000040, .p_memsz =
+=3D 0x0002d8, },
+> +               { .p_type =3D PT_INTERP, .p_vaddr =3D 0x00000318, .p_mems=
+z =3D 0x00001c, },
+> +               { .p_type =3D PT_LOAD, .p_vaddr =3D 0x00000000, .p_memsz =
+=3D 0x0033a8, },
+> +               { .p_type =3D PT_LOAD, .p_vaddr =3D 0x00004000, .p_memsz =
+=3D 0x005c91, },
+> +               { .p_type =3D PT_LOAD, .p_vaddr =3D 0x0000a000, .p_memsz =
+=3D 0x0022f8, },
+> +               { .p_type =3D PT_LOAD, .p_vaddr =3D 0x0000d330, .p_memsz =
+=3D 0x000d40, },
+> +               { .p_type =3D PT_DYNAMIC, .p_vaddr =3D 0x0000d928, .p_mem=
+sz =3D 0x000200, },
+> +               { .p_type =3D PT_NOTE, .p_vaddr =3D 0x00000338, .p_memsz =
+=3D 0x000030, },
+> +               { .p_type =3D PT_NOTE, .p_vaddr =3D 0x00000368, .p_memsz =
+=3D 0x000044, },
+> +               { .p_type =3D PT_GNU_PROPERTY, .p_vaddr =3D 0x00000338, .=
+p_memsz =3D 0x000030, },
+> +               { .p_type =3D PT_GNU_EH_FRAME, .p_vaddr =3D 0x0000b490, .=
+p_memsz =3D 0x0001ec, },
+> +               { .p_type =3D PT_GNU_STACK, .p_vaddr =3D 0x00000000, .p_m=
+emsz =3D 0x000000, },
+> +               { .p_type =3D PT_GNU_RELRO, .p_vaddr =3D 0x0000d330, .p_m=
+emsz =3D 0x000cd0, },
+> +       };
+> +       size_t mount_size =3D 0xE070;
+> +       /* https://lore.kernel.org/lkml/YfF18Dy85mCntXrx@fractal.localdom=
+ain */
+
+Slight nit, it looks like that message wasn't sent to lkml.
+lore gives a suggestion to change to
+https://lore.kernel.org/linux-fsdevel/YfF18Dy85mCntXrx@fractal.localdomain/

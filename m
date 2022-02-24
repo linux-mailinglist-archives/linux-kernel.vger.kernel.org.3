@@ -2,257 +2,447 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DACF54C3635
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 20:52:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A0DBE4C3637
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 20:53:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234057AbiBXTwd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 14:52:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49092 "EHLO
+        id S232563AbiBXTxo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 14:53:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233922AbiBXTwb (ORCPT
+        with ESMTP id S233310AbiBXTxk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 14:52:31 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D02571B45E4
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 11:52:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1645732319;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Q2zY9nW3JSGkVakGPdaOHjkL7gRWAKVqi4jlLr2HJiI=;
-        b=QRrJU0gwpli9jf48X9/7jVKndHVj0mG8HRyXw7405dxoypkbOwyPCJLy5Xyp/qMqE7QOVX
-        rWaII6n4hRh4Y59qrHIm3fLYNKuloI15rFbFlJPk4U7p1DdGYZZb8vfy3Dl0ei+cN2ntWy
-        uOVxJNKsRu8UP88cB+AhlDOtcjUL558=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-490-iw_z2fXGOiefATfcu2U8zw-1; Thu, 24 Feb 2022 14:51:56 -0500
-X-MC-Unique: iw_z2fXGOiefATfcu2U8zw-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Thu, 24 Feb 2022 14:53:40 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF70025D267;
+        Thu, 24 Feb 2022 11:53:09 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 5B60D1091DA0;
-        Thu, 24 Feb 2022 19:51:55 +0000 (UTC)
-Received: from starship (unknown [10.40.195.190])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id CD5E01971F;
-        Thu, 24 Feb 2022 19:51:52 +0000 (UTC)
-Message-ID: <70922149247cfe2bfd59d27d45bbf5d0966c2dcd.camel@redhat.com>
-Subject: Re: [RFC PATCH 10/13] KVM: SVM: Adding support for configuring
- x2APIC MSRs interception
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Cc:     pbonzini@redhat.com, seanjc@google.com, joro@8bytes.org,
-        jon.grimm@amd.com, wei.huang2@amd.com, terry.bowman@amd.com
-Date:   Thu, 24 Feb 2022 21:51:51 +0200
-In-Reply-To: <20220221021922.733373-11-suravee.suthikulpanit@amd.com>
-References: <20220221021922.733373-1-suravee.suthikulpanit@amd.com>
-         <20220221021922.733373-11-suravee.suthikulpanit@amd.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+        by ams.source.kernel.org (Postfix) with ESMTPS id F357DB82920;
+        Thu, 24 Feb 2022 19:53:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4FD11C340E9;
+        Thu, 24 Feb 2022 19:53:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645732386;
+        bh=oXItC0NjDc2WEH/99CAmErS6bAX3gw8fCyHnwvU2Iv4=;
+        h=From:To:Cc:Subject:Date:From;
+        b=I9eRLgpHAo9JcADY7CqRwv1ZK3EGOU9xvLGueVpFRyW8YYB1N21mWE64m/Nkc6Tnj
+         DvqM64YkA2Rla+tmJJlZLCncV/Jde7hMECXXhjKapKb5sR+/bbYGIxgr3fdSToXOEx
+         XVipXiIe6xN9+PloodfjhU+NWHFQpO3iH10wdpeBUy7vCxoLgdGDUj2zy0h63jPvaU
+         kM79UO2+ywaSheOkEOms7f+ybaimDhOubwWki+xZJULF/K/B88n93jqKCuFm8EGjT2
+         iLCLLi/9SUBkjfqjG6tKX1u0Ty1sHciJF1zT6A7iMcw3UkDe7Wg/PDkv7XZmdJ98mv
+         RA91vOixWg6yA==
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     torvalds@linux-foundation.org
+Cc:     kuba@kernel.org, davem@davemloft.net, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [GIT PULL] Networking for 5.17-rc6
+Date:   Thu, 24 Feb 2022 11:53:05 -0800
+Message-Id: <20220224195305.1584666-1-kuba@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 2022-02-20 at 20:19 -0600, Suravee Suthikulpanit wrote:
-> When enabling x2APIC virtualization (x2AVIC), the interception of
-> x2APIC MSRs must be disabled to let the hardware virtualize guest
-> MSR accesses.
-> 
-> Current implementation keeps track of MSR interception state
-> for generic MSRs in the svm_direct_access_msrs array.
-> For x2APIC MSRs, introduce direct_access_x2apic_msrs array.
-> 
-> Signed-off-by: Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
-> ---
->  arch/x86/kvm/svm/svm.c | 67 +++++++++++++++++++++++++++++++-----------
->  arch/x86/kvm/svm/svm.h |  7 +++++
->  2 files changed, 57 insertions(+), 17 deletions(-)
-> 
-> diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-> index 4e6dc1feeac7..afca26aa1f40 100644
-> --- a/arch/x86/kvm/svm/svm.c
-> +++ b/arch/x86/kvm/svm/svm.c
-> @@ -89,7 +89,7 @@ static uint64_t osvw_len = 4, osvw_status;
->  static DEFINE_PER_CPU(u64, current_tsc_ratio);
->  #define TSC_RATIO_DEFAULT	0x0100000000ULL
->  
-> -static const struct svm_direct_access_msrs {
-> +static struct svm_direct_access_msrs {
->  	u32 index;   /* Index of the MSR */
->  	bool always; /* True if intercept is initially cleared */
->  } direct_access_msrs[MAX_DIRECT_ACCESS_MSRS] = {
-> @@ -117,6 +117,9 @@ static const struct svm_direct_access_msrs {
->  	{ .index = MSR_INVALID,				.always = false },
->  };
->  
-> +static struct svm_direct_access_msrs
-> +direct_access_x2apic_msrs[NUM_DIRECT_ACCESS_X2APIC_MSRS + 1];
-> +
->  /*
->   * These 2 parameters are used to config the controls for Pause-Loop Exiting:
->   * pause_filter_count: On processors that support Pause filtering(indicated
-> @@ -609,41 +612,42 @@ static int svm_cpu_init(int cpu)
->  
->  }
->  
-> -static int direct_access_msr_slot(u32 msr)
-> +static int direct_access_msr_slot(u32 msr, struct svm_direct_access_msrs *msrs)
->  {
->  	u32 i;
->  
-> -	for (i = 0; direct_access_msrs[i].index != MSR_INVALID; i++)
-> -		if (direct_access_msrs[i].index == msr)
-> +	for (i = 0; msrs[i].index != MSR_INVALID; i++)
-> +		if (msrs[i].index == msr)
->  			return i;
->  
->  	return -ENOENT;
->  }
->  
-> -static void set_shadow_msr_intercept(struct kvm_vcpu *vcpu, u32 msr, int read,
-> -				     int write)
-> +static void set_shadow_msr_intercept(struct kvm_vcpu *vcpu,
-> +				     struct svm_direct_access_msrs *msrs, u32 msr,
-> +				     int read, void *read_bits,
-> +				     int write, void *write_bits)
->  {
-> -	struct vcpu_svm *svm = to_svm(vcpu);
-> -	int slot = direct_access_msr_slot(msr);
-> +	int slot = direct_access_msr_slot(msr, msrs);
->  
->  	if (slot == -ENOENT)
->  		return;
->  
->  	/* Set the shadow bitmaps to the desired intercept states */
->  	if (read)
-> -		set_bit(slot, svm->shadow_msr_intercept.read);
-> +		set_bit(slot, read_bits);
->  	else
-> -		clear_bit(slot, svm->shadow_msr_intercept.read);
-> +		clear_bit(slot, read_bits);
->  
->  	if (write)
-> -		set_bit(slot, svm->shadow_msr_intercept.write);
-> +		set_bit(slot, write_bits);
->  	else
-> -		clear_bit(slot, svm->shadow_msr_intercept.write);
-> +		clear_bit(slot, write_bits);
->  }
->  
-> -static bool valid_msr_intercept(u32 index)
-> +static bool valid_msr_intercept(u32 index, struct svm_direct_access_msrs *msrs)
->  {
-> -	return direct_access_msr_slot(index) != -ENOENT;
-> +	return direct_access_msr_slot(index, msrs) != -ENOENT;
->  }
->  
->  static bool msr_write_intercepted(struct kvm_vcpu *vcpu, u32 msr)
-> @@ -674,9 +678,12 @@ static void set_msr_interception_bitmap(struct kvm_vcpu *vcpu, u32 *msrpm,
->  
->  	/*
->  	 * If this warning triggers extend the direct_access_msrs list at the
-> -	 * beginning of the file
-> +	 * beginning of the file. The direct_access_x2apic_msrs is only for
-> +	 * x2apic MSRs.
->  	 */
-> -	WARN_ON(!valid_msr_intercept(msr));
-> +	WARN_ON(!valid_msr_intercept(msr, direct_access_msrs) &&
-> +		(boot_cpu_has(X86_FEATURE_X2AVIC) &&
-> +		 !valid_msr_intercept(msr, direct_access_x2apic_msrs)));
->  
->  	/* Enforce non allowed MSRs to trap */
->  	if (read && !kvm_msr_allowed(vcpu, msr, KVM_MSR_FILTER_READ))
-> @@ -704,7 +711,16 @@ static void set_msr_interception_bitmap(struct kvm_vcpu *vcpu, u32 *msrpm,
->  void set_msr_interception(struct kvm_vcpu *vcpu, u32 *msrpm, u32 msr,
->  			  int read, int write)
->  {
-> -	set_shadow_msr_intercept(vcpu, msr, read, write);
-> +	struct vcpu_svm *svm = to_svm(vcpu);
-> +
-> +	if (msr < 0x800 || msr > 0x8ff)
-> +		set_shadow_msr_intercept(vcpu, direct_access_msrs, msr,
-> +					 read, svm->shadow_msr_intercept.read,
-> +					 write, svm->shadow_msr_intercept.write);
-> +	else
-> +		set_shadow_msr_intercept(vcpu, direct_access_x2apic_msrs, msr,
-> +					 read, svm->shadow_x2apic_msr_intercept.read,
-> +					 write, svm->shadow_x2apic_msr_intercept.write);
->  	set_msr_interception_bitmap(vcpu, msrpm, msr, read, write);
->  }
->  
-> @@ -786,6 +802,22 @@ static void add_msr_offset(u32 offset)
->  	BUG();
->  }
->  
-> +static void init_direct_access_x2apic_msrs(void)
-> +{
-> +	int i;
-> +
-> +	/* Initialize x2APIC direct_access_x2apic_msrs entries */
-> +	for (i = 0; i < NUM_DIRECT_ACCESS_X2APIC_MSRS; i++) {
-> +		direct_access_x2apic_msrs[i].index = boot_cpu_has(X86_FEATURE_X2AVIC) ?
-> +						  (0x800 + i) : MSR_INVALID;
-> +		direct_access_x2apic_msrs[i].always = false;
-> +	}
-> +
-> +	/* Initialize last entry */
-> +	direct_access_x2apic_msrs[i].index = MSR_INVALID;
-> +	direct_access_x2apic_msrs[i].always = false;
-> +}
-> +
->  static void init_msrpm_offsets(void)
->  {
->  	int i;
-> @@ -4752,6 +4784,7 @@ static __init int svm_hardware_setup(void)
->  	memset(iopm_va, 0xff, PAGE_SIZE * (1 << order));
->  	iopm_base = page_to_pfn(iopm_pages) << PAGE_SHIFT;
->  
-> +	init_direct_access_x2apic_msrs();
->  	init_msrpm_offsets();
->  
->  	supported_xcr0 &= ~(XFEATURE_MASK_BNDREGS | XFEATURE_MASK_BNDCSR);
-> diff --git a/arch/x86/kvm/svm/svm.h b/arch/x86/kvm/svm/svm.h
-> index bfbebb933da2..41514df5107e 100644
-> --- a/arch/x86/kvm/svm/svm.h
-> +++ b/arch/x86/kvm/svm/svm.h
-> @@ -29,6 +29,8 @@
->  
->  #define MAX_DIRECT_ACCESS_MSRS	20
->  #define MSRPM_OFFSETS	16
-> +#define NUM_DIRECT_ACCESS_X2APIC_MSRS	0x100
-> +
->  extern u32 msrpm_offsets[MSRPM_OFFSETS] __read_mostly;
->  extern bool npt_enabled;
->  extern bool intercept_smi;
-> @@ -242,6 +244,11 @@ struct vcpu_svm {
->  		DECLARE_BITMAP(write, MAX_DIRECT_ACCESS_MSRS);
->  	} shadow_msr_intercept;
->  
-> +	struct {
-> +		DECLARE_BITMAP(read, NUM_DIRECT_ACCESS_X2APIC_MSRS);
-> +		DECLARE_BITMAP(write, NUM_DIRECT_ACCESS_X2APIC_MSRS);
-> +	} shadow_x2apic_msr_intercept;
-> +
->  	struct vcpu_sev_es_state sev_es;
->  
->  	bool guest_state_loaded;
+Hi Linus!
 
-I only gave this a cursory look, the whole thing is a bit ugly (not your fault),
-I feel like it should be refactored a bit.
+The following changes since commit 8b97cae315cafd7debf3601f88621e2aa8956ef3:
 
+  Merge tag 'net-5.17-rc5' of git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net (2022-02-17 11:33:59 -0800)
 
-Best regards,
-	Maxim Levitsky
+are available in the Git repository at:
 
+  git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git tags/net-5.17-rc6
+
+for you to fetch changes up to 42404d8f1c01861b22ccfa1d70f950242720ae57:
+
+  net: mv643xx_eth: process retval from of_get_mac_address (2022-02-24 10:05:08 -0800)
+
+----------------------------------------------------------------
+Networking fixes for 5.17-rc6, including fixes from bpf and netfilter.
+
+Current release - regressions:
+
+ - bpf: fix crash due to out of bounds access into reg2btf_ids
+
+ - mvpp2: always set port pcs ops, avoid null-deref
+
+ - eth: marvell: fix driver load from initrd
+
+ - eth: intel: revert "Fix reset bw limit when DCB enabled with 1 TC"
+
+Current release - new code bugs:
+
+ - mptcp: fix race in overlapping signal events
+
+Previous releases - regressions:
+
+ - xen-netback: revert hotplug-status changes causing devices to
+   not be configured
+
+ - dsa:
+   - avoid call to __dev_set_promiscuity() while rtnl_mutex isn't held
+   - fix panic when removing unoffloaded port from bridge
+
+ - dsa: microchip: fix bridging with more than two member ports
+
+Previous releases - always broken:
+
+ - bpf:
+  - fix crash due to incorrect copy_map_value when both spin lock
+    and timer are present in a single value
+  - fix a bpf_timer initialization issue with clang
+  - do not try bpf_msg_push_data with len 0
+  - add schedule points in batch ops
+
+ - nf_tables:
+   - unregister flowtable hooks on netns exit
+   - correct flow offload action array size
+   - fix a couple of memory leaks
+
+ - vsock: don't check owner in vhost_vsock_stop() while releasing
+
+ - gso: do not skip outer ip header in case of ipip and net_failover
+
+ - smc: use a mutex for locking "struct smc_pnettable"
+
+ - openvswitch: fix setting ipv6 fields causing hw csum failure
+
+ - mptcp: fix race in incoming ADD_ADDR option processing
+
+ - sysfs: add check for netdevice being present to speed_show
+
+ - sched: act_ct: fix flow table lookup after ct clear or switching
+   zones
+
+ - eth: intel: fixes for SR-IOV forwarding offloads
+
+ - eth: broadcom: fixes for selftests and error recovery
+
+ - eth: mellanox: flow steering and SR-IOV forwarding fixes
+
+Misc:
+
+ - make __pskb_pull_tail() & pskb_carve_frag_list() drop_monitor
+   friends not report freed skbs as drops
+
+ - force inlining of checksum functions in net/checksum.h
+
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+
+----------------------------------------------------------------
+Alexei Starovoitov (2):
+      Merge branch 'Fix for crash due to overwrite in copy_map_value'
+      Merge branch 'bpf: fix a bpf_timer initialization issue'
+
+Alvin Šipraga (2):
+      net: dsa: fix panic when removing unoffloaded port from bridge
+      MAINTAINERS: add myself as co-maintainer for Realtek DSA switch drivers
+
+Ariel Levkovich (1):
+      net/mlx5: Fix wrong limitation of metadata match on ecpf
+
+Baruch Siach (1):
+      net: mdio-ipq4019: add delay after clock enable
+
+Chris Mi (1):
+      net/mlx5: Fix tc max supported prio for nic mode
+
+Christophe JAILLET (1):
+      nfp: flower: Fix a potential leak in nfp_tunnel_add_shared_mac()
+
+Christophe Leroy (1):
+      net: Force inlining of checksum functions in net/checksum.h
+
+Dan Carpenter (2):
+      udp_tunnel: Fix end of loop test in udp_tunnel_nic_unregister()
+      tipc: Fix end of loop tests for list_for_each_entry()
+
+David S. Miller (5):
+      Merge branch 'mptcp-fixes'
+      Merge branch '100GbE' of git://git.kernel.org/pub/scm/linux/kernel/git/tnguy/net-queue
+      Merge branch 'bnxt_en-fixes'
+      Merge git://git.kernel.org/pub/scm/linux/kernel/git/netfilter/nf
+      Merge branch 'ftgmac100-fixes'
+
+Duoming Zhou (1):
+      drivers: hamradio: 6pack: fix UAF bug caused by mod_timer()
+
+Eric Dumazet (3):
+      bpf: Add schedule points in batch ops
+      net-timestamp: convert sk->sk_tskey to atomic_t
+      net: __pskb_pull_tail() & pskb_carve_frag_list() drop_monitor friends
+
+Fabio M. De Francesco (1):
+      net/smc: Use a mutex for locking "struct smc_pnettable"
+
+Felix Maurer (2):
+      bpf: Do not try bpf_msg_push_data with len 0
+      selftests: bpf: Check bpf_msg_push_data return value
+
+Florian Westphal (2):
+      netfilter: nft_limit: fix stateful object memory leak
+      netfilter: nf_tables: fix memory leak during stateful obj update
+
+Gal Pressman (2):
+      net/mlx5e: Fix wrong return value on ioctl EEPROM query failure
+      net/mlx5e: Fix VF min/max rate parameters interchange mistake
+
+Heyi Guo (3):
+      drivers/net/ftgmac100: refactor ftgmac100_reset_task to enable direct function call
+      drivers/net/ftgmac100: adjust code place for function call dependency
+      drivers/net/ftgmac100: fix DHCP potential failure with systemd
+
+Jacob Keller (1):
+      ice: fix concurrent reset and removal of VFs
+
+Jakub Kicinski (2):
+      Merge https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf
+      Merge tag 'mlx5-fixes-2022-02-23' of git://git.kernel.org/pub/scm/linux/kernel/git/saeed/linux
+
+Jeremy Linton (1):
+      net: mvpp2: always set port pcs ops
+
+Kalesh AP (2):
+      bnxt_en: Restore the resets_reliable flag in bnxt_open()
+      bnxt_en: Fix devlink fw_activate
+
+Kumar Kartikeya Dwivedi (3):
+      bpf: Fix crash due to incorrect copy_map_value
+      selftests/bpf: Add test for bpf_timer overwriting crash
+      bpf: Fix crash due to out of bounds access into reg2btf_ids.
+
+Lama Kayal (2):
+      net/mlx5e: Add feature check for set fec counters
+      net/mlx5e: Add missing increment of count
+
+Maher Sanalla (1):
+      net/mlx5: Update log_max_qp value to be 17 at most
+
+Manish Chopra (1):
+      bnx2x: fix driver load from initrd
+
+Maor Dickman (2):
+      net/mlx5e: Fix MPLSoUDP encap to use MPLS action information
+      net/mlx5e: MPLSoUDP decap, fix check for unsupported matches
+
+Maor Gottlieb (1):
+      net/mlx5: Fix possible deadlock on rule deletion
+
+Marek Marczykowski-Górecki (2):
+      Revert "xen-netback: remove 'hotplug-status' once it has served its purpose"
+      Revert "xen-netback: Check for hotplug-status existence before watching"
+
+Mateusz Palczewski (1):
+      Revert "i40e: Fix reset bw limit when DCB enabled with 1 TC"
+
+Mauri Sandberg (1):
+      net: mv643xx_eth: process retval from of_get_mac_address
+
+Meir Lichtinger (1):
+      net/mlx5: Update the list of the PCI supported devices
+
+Michael Chan (3):
+      bnxt_en: Fix offline ethtool selftest with RDMA enabled
+      bnxt_en: Fix occasional ethtool -t loopback test failures
+      bnxt_en: Increase firmware message response DMA wait time
+
+Michal Swiatkowski (1):
+      ice: fix setting l4 port flag when adding filter
+
+Niels Dossche (1):
+      ipv6: prevent a possible race condition with lifetimes
+
+Oliver Neukum (1):
+      sr9700: sanity check for packet length
+
+Pablo Neira Ayuso (3):
+      netfilter: xt_socket: missing ifdef CONFIG_IP6_NF_IPTABLES dependency
+      netfilter: nf_tables_offload: incorrect flow offload action array size
+      netfilter: nf_tables: unregister flowtable hooks on netns exit
+
+Paolo Abeni (7):
+      selftests: mptcp: fix diag instability
+      selftests: mptcp: improve 'fair usage on close' stability
+      mptcp: fix race in overlapping signal events
+      mptcp: fix race in incoming ADD_ADDR option processing
+      mptcp: add mibs counter for ignored incoming options
+      selftests: mptcp: more robust signal race test
+      selftests: mptcp: be more conservative with cookie MPJ limits
+
+Paul Blakey (2):
+      net/sched: act_ct: Fix flow table lookup after ct clear or switching zones
+      openvswitch: Fix setting ipv6 fields causing hw csum failure
+
+Pavan Chebbi (1):
+      bnxt_en: Fix incorrect multicast rx mask setting when not requested
+
+Roi Dayan (3):
+      net/mlx5e: TC, Reject rules with drop and modify hdr action
+      net/mlx5e: TC, Reject rules with forward and drop actions
+      net/mlx5e: TC, Skip redundant ct clear actions
+
+Somnath Kotur (1):
+      bnxt_en: Fix active FEC reporting to ethtool
+
+Stefano Garzarella (1):
+      vhost/vsock: don't check owner in vhost_vsock_stop() while releasing
+
+Subash Abhinov Kasiviswanathan (1):
+      MAINTAINERS: rmnet: Update email addresses
+
+Sukadev Bhattiprolu (1):
+      ibmvnic: schedule failover only if vioctl fails
+
+Svenning Sørensen (1):
+      net: dsa: microchip: fix bridging with more than two member ports
+
+Tao Liu (1):
+      gso: do not skip outer ip header in case of ipip and net_failover
+
+Tariq Toukan (1):
+      net/mlx5e: kTLS, Use CHECKSUM_UNNECESSARY for device-offloaded packets
+
+Tom Rix (2):
+      ice: check the return of ice_ptp_gettimex64
+      ice: initialize local variable 'tlv'
+
+Vladimir Oltean (1):
+      net: dsa: avoid call to __dev_set_promiscuity() while rtnl_mutex isn't held
+
+Wan Jiabing (1):
+      net: sched: avoid newline at end of message in NL_SET_ERR_MSG_MOD
+
+Wojciech Drewek (1):
+      ice: Match on all profiles in slow-path
+
+Xiaoke Wang (1):
+      net: ll_temac: check the return value of devm_kmalloc()
+
+Xin Long (1):
+      ping: remove pr_err from ping_lookup
+
+Yevgeny Kliteynik (4):
+      net/mlx5: DR, Cache STE shadow memory
+      net/mlx5: DR, Fix slab-out-of-bounds in mlx5_cmd_dr_create_fte
+      net/mlx5: DR, Don't allow match on IP w/o matching on full ethertype/ip_version
+      net/mlx5: DR, Fix the threshold that defines when pool sync is initiated
+
+Yonghong Song (2):
+      bpf: Emit bpf_timer in vmlinux BTF
+      bpf: Fix a bpf_timer initialization issue
+
+suresh kumar (1):
+      net-sysfs: add check for netdevice being present to speed_show
+
+ MAINTAINERS                                        |   5 +-
+ drivers/net/dsa/microchip/ksz_common.c             |  26 ++-
+ drivers/net/ethernet/broadcom/bnx2x/bnx2x_main.c   |   3 +
+ drivers/net/ethernet/broadcom/bnxt/bnxt.c          |  47 +++-
+ drivers/net/ethernet/broadcom/bnxt/bnxt.h          |   1 +
+ drivers/net/ethernet/broadcom/bnxt/bnxt_devlink.c  |  39 +++-
+ drivers/net/ethernet/broadcom/bnxt/bnxt_ethtool.c  |  17 +-
+ drivers/net/ethernet/broadcom/bnxt/bnxt_hwrm.c     |  12 +-
+ drivers/net/ethernet/broadcom/bnxt/bnxt_hwrm.h     |   2 +-
+ drivers/net/ethernet/faraday/ftgmac100.c           | 243 +++++++++++----------
+ drivers/net/ethernet/ibm/ibmvnic.c                 |   6 +-
+ drivers/net/ethernet/intel/i40e/i40e_main.c        |  12 +-
+ drivers/net/ethernet/intel/ice/ice.h               |   1 -
+ drivers/net/ethernet/intel/ice/ice_common.c        |   2 +-
+ drivers/net/ethernet/intel/ice/ice_eswitch.c       |   1 +
+ drivers/net/ethernet/intel/ice/ice_main.c          |   2 +
+ drivers/net/ethernet/intel/ice/ice_protocol_type.h |   1 +
+ drivers/net/ethernet/intel/ice/ice_ptp.c           |   5 +-
+ drivers/net/ethernet/intel/ice/ice_switch.c        |   4 +-
+ drivers/net/ethernet/intel/ice/ice_tc_lib.c        |   4 +-
+ drivers/net/ethernet/intel/ice/ice_virtchnl_pf.c   |  42 ++--
+ drivers/net/ethernet/marvell/mv643xx_eth.c         |  24 +-
+ drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c    |   6 +-
+ .../ethernet/mellanox/mlx5/core/en/tc/act/act.h    |   2 +
+ .../net/ethernet/mellanox/mlx5/core/en/tc/act/ct.c |   7 +
+ .../ethernet/mellanox/mlx5/core/en/tc/act/mirred.c |   6 +
+ .../ethernet/mellanox/mlx5/core/en/tc/act/mpls.c   |  11 +
+ .../net/ethernet/mellanox/mlx5/core/en/tc_priv.h   |   1 +
+ .../ethernet/mellanox/mlx5/core/en/tc_tun_encap.c  |   3 +
+ .../mellanox/mlx5/core/en/tc_tun_mplsoudp.c        |  33 ++-
+ .../net/ethernet/mellanox/mlx5/core/en_ethtool.c   |   2 +-
+ drivers/net/ethernet/mellanox/mlx5/core/en_rep.h   |   8 +
+ drivers/net/ethernet/mellanox/mlx5/core/en_rx.c    |   3 +-
+ .../net/ethernet/mellanox/mlx5/core/en_selftest.c  |   1 +
+ drivers/net/ethernet/mellanox/mlx5/core/en_stats.c |   6 +-
+ drivers/net/ethernet/mellanox/mlx5/core/en_tc.c    |  12 +
+ drivers/net/ethernet/mellanox/mlx5/core/esw/qos.c  |   2 +-
+ .../ethernet/mellanox/mlx5/core/eswitch_offloads.c |   4 -
+ drivers/net/ethernet/mellanox/mlx5/core/fs_core.c  |   2 +
+ .../ethernet/mellanox/mlx5/core/lib/fs_chains.c    |   3 +
+ drivers/net/ethernet/mellanox/mlx5/core/main.c     |   4 +-
+ .../mellanox/mlx5/core/steering/dr_icm_pool.c      | 120 ++++++----
+ .../mellanox/mlx5/core/steering/dr_matcher.c       |  20 +-
+ .../ethernet/mellanox/mlx5/core/steering/dr_ste.c  |  32 ++-
+ .../mellanox/mlx5/core/steering/dr_types.h         |  10 +
+ .../ethernet/mellanox/mlx5/core/steering/fs_dr.c   |  33 ++-
+ .../ethernet/mellanox/mlx5/core/steering/mlx5dr.h  |   5 +
+ .../ethernet/netronome/nfp/flower/tunnel_conf.c    |   4 +-
+ drivers/net/ethernet/xilinx/ll_temac_main.c        |   2 +
+ drivers/net/hamradio/6pack.c                       |   4 +-
+ drivers/net/mdio/mdio-ipq4019.c                    |   6 +-
+ drivers/net/usb/sr9700.c                           |   2 +-
+ drivers/net/xen-netback/xenbus.c                   |  14 +-
+ drivers/vhost/vsock.c                              |  21 +-
+ include/linux/bpf.h                                |   9 +-
+ include/net/checksum.h                             |  52 +++--
+ include/net/netfilter/nf_tables.h                  |   2 +-
+ include/net/netfilter/nf_tables_offload.h          |   2 -
+ include/net/sock.h                                 |   4 +-
+ kernel/bpf/btf.c                                   |   5 +-
+ kernel/bpf/helpers.c                               |   2 +
+ kernel/bpf/syscall.c                               |   3 +
+ net/can/j1939/transport.c                          |   2 +-
+ net/core/filter.c                                  |   3 +
+ net/core/net-sysfs.c                               |   2 +-
+ net/core/skbuff.c                                  |   6 +-
+ net/core/sock.c                                    |   4 +-
+ net/dsa/master.c                                   |   7 +-
+ net/dsa/port.c                                     |  29 ++-
+ net/ipv4/af_inet.c                                 |   5 +-
+ net/ipv4/ip_output.c                               |   2 +-
+ net/ipv4/ping.c                                    |   1 -
+ net/ipv4/udp_tunnel_nic.c                          |   2 +-
+ net/ipv6/addrconf.c                                |   2 +
+ net/ipv6/ip6_offload.c                             |   2 +
+ net/ipv6/ip6_output.c                              |   2 +-
+ net/mptcp/mib.c                                    |   2 +
+ net/mptcp/mib.h                                    |   2 +
+ net/mptcp/pm.c                                     |   8 +-
+ net/mptcp/pm_netlink.c                             |  29 ++-
+ net/netfilter/nf_tables_api.c                      |  16 +-
+ net/netfilter/nf_tables_offload.c                  |   3 +-
+ net/netfilter/nft_dup_netdev.c                     |   6 +
+ net/netfilter/nft_fwd_netdev.c                     |   6 +
+ net/netfilter/nft_immediate.c                      |  12 +-
+ net/netfilter/nft_limit.c                          |  18 ++
+ net/netfilter/xt_socket.c                          |   2 +
+ net/openvswitch/actions.c                          |  46 +++-
+ net/sched/act_api.c                                |   2 +-
+ net/sched/act_ct.c                                 |   5 -
+ net/smc/smc_pnet.c                                 |  42 ++--
+ net/smc/smc_pnet.h                                 |   2 +-
+ net/tipc/name_table.c                              |   2 +-
+ net/tipc/socket.c                                  |   2 +-
+ .../testing/selftests/bpf/prog_tests/timer_crash.c |  32 +++
+ .../selftests/bpf/progs/test_sockmap_kern.h        |  26 ++-
+ tools/testing/selftests/bpf/progs/timer_crash.c    |  54 +++++
+ tools/testing/selftests/net/mptcp/diag.sh          |  44 +++-
+ tools/testing/selftests/net/mptcp/mptcp_join.sh    |  32 ++-
+ 99 files changed, 990 insertions(+), 439 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/timer_crash.c
+ create mode 100644 tools/testing/selftests/bpf/progs/timer_crash.c

@@ -2,189 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 395CA4C2832
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 10:36:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 924F84C2823
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 10:36:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232867AbiBXJeW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 04:34:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50130 "EHLO
+        id S232802AbiBXJdy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 04:33:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232832AbiBXJeK (ORCPT
+        with ESMTP id S232769AbiBXJdv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 04:34:10 -0500
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2B0D27AA08
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 01:33:28 -0800 (PST)
-Received: by mail-pg1-x52f.google.com with SMTP id 139so1273938pge.1
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 01:33:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=Ur9wtD5hRziCyNtt0x078VkkIfEhwLa1NcuLg35lwx4=;
-        b=tCOC3j3DRPC8L4v+mDSfN1fAt0wWb2cyyK3zkm+uVDGDoDrnpHoNaF/uLLFaWO6iGj
-         UBl8ra8c/Ra+nggkq5+cor9kaAKMvHQZd05JnZF81t494fHnMs6t1uA/4gLBUP+/QrNX
-         nOTSpgK4XuvoT7xDkd2jMH/kUl7RYhWqGUdMdQVdY+QsS72+f836hZ8IkEKZdYm8SyT6
-         /QzXArkf58QcDzPpbkqBLBNe5wSC2Cm8zSMWs9sVlh8T6JRAXQ3zDk9keBepOPxCr9zv
-         EqnhA/U3cUkmoJtyjicbKAq8Abak68yml0ZSRzL2lKk/u6+ETNUOtphQP8wF1I7mejce
-         Vskg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=Ur9wtD5hRziCyNtt0x078VkkIfEhwLa1NcuLg35lwx4=;
-        b=i96mt2t/Q/ubf9TQ0x1i10EKN2Az2CcfCnRB0JExz95n7lF257NnpLo3+449GfCOBr
-         p8ke1Y9D02uP7y47gCoXzKH+Ya3z6FqPWK11SwdiBM0KEkna2SZVLrTjGTH4ax6fde6U
-         je5edTsgjEg7K6r5CRtl01fKMjoRv72hk7pHS46tvCl0L/8pumcc/ubnAl6+mefw08HY
-         HfnK/t+WgP3rR7rQuoEK5ndzcYXB+sBzGKOZWOwRE3iZWFxHmtTNa9HOkcbf/eFd4ow1
-         s/rI/4p96sKTn/NOvUbHwMffZlPqTNLS4Xl5P/TCQXCsMItOAuQfJF3XJCnUGsfc51nr
-         PHsA==
-X-Gm-Message-State: AOAM530slBtGnUyscZtHmEvAdYxvxNqxzVL7GF+shZWEAkBkBvLu95K/
-        OiLjZWLQAolrJ98yKnGBHbK0DISWqNLwMg==
-X-Google-Smtp-Source: ABdhPJyZz/IiG+PWxHVct5nQwUKfkF08wuXdEDJWf1nuV9VLNW7ezhCe4mXisB+A1XxUyHYlPADAdw==
-X-Received: by 2002:a05:6a00:a10:b0:4c1:8ad1:81c5 with SMTP id p16-20020a056a000a1000b004c18ad181c5mr2028054pfh.42.1645695208202;
-        Thu, 24 Feb 2022 01:33:28 -0800 (PST)
-Received: from C02CV1DAMD6P.bytedance.net ([139.177.225.251])
-        by smtp.gmail.com with ESMTPSA id 13sm2530988pfx.122.2022.02.24.01.33.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Feb 2022 01:33:27 -0800 (PST)
-From:   Chengming Zhou <zhouchengming@bytedance.com>
-To:     rostedt@goodmis.org, mark.rutland@arm.com, mingo@redhat.com,
-        tglx@linutronix.de, catalin.marinas@arm.com, will@kernel.org,
-        dave.hansen@linux.intel.com, broonie@kernel.org
-Cc:     x86@kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, songmuchun@bytedance.com,
-        qirui.001@bytedance.com,
-        Chengming Zhou <zhouchengming@bytedance.com>
-Subject: [PATCH v3 3/3] arm64/ftrace: Make function graph use ftrace directly
-Date:   Thu, 24 Feb 2022 17:32:51 +0800
-Message-Id: <20220224093251.49971-3-zhouchengming@bytedance.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220224093251.49971-1-zhouchengming@bytedance.com>
-References: <20220224093251.49971-1-zhouchengming@bytedance.com>
+        Thu, 24 Feb 2022 04:33:51 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8633C26A3AC;
+        Thu, 24 Feb 2022 01:33:21 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 52667ED1;
+        Thu, 24 Feb 2022 01:33:21 -0800 (PST)
+Received: from [10.57.8.211] (unknown [10.57.8.211])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5F7F13F70D;
+        Thu, 24 Feb 2022 01:33:19 -0800 (PST)
+Message-ID: <9c8f15a3-563f-3bed-61a4-2f72b0c20e89@arm.com>
+Date:   Thu, 24 Feb 2022 09:33:18 +0000
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v3 3/4] OPP: Add support of "opp-microwatt" for advanced
+ EM registration
+Content-Language: en-US
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, dietmar.eggemann@arm.com,
+        rafael@kernel.org, daniel.lezcano@linaro.org, nm@ti.com,
+        sboyd@kernel.org, mka@chromium.org, dianders@chromium.org,
+        robh+dt@kernel.org, devicetree@vger.kernel.org,
+        linux-pm@vger.kernel.org
+References: <20220224081131.27282-1-lukasz.luba@arm.com>
+ <20220224081131.27282-4-lukasz.luba@arm.com>
+ <20220224091346.xmnpj27vllpa4cuy@vireshk-i7>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <20220224091346.xmnpj27vllpa4cuy@vireshk-i7>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As we do in commit 0c0593b45c9b ("x86/ftrace: Make function graph
-use ftrace directly"), we don't need special hook for graph tracer,
-but instead we use graph_ops:func function to install return_hooker.
 
-Since commit 3b23e4991fb6 ("arm64: implement ftrace with regs") add
-implementation for FTRACE_WITH_REGS on arm64, we can easily adopt
-the same cleanup on arm64. And this cleanup only changes the
-FTRACE_WITH_REGS implementation, so the mcount-based implementation
-is unaffected.
 
-Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
----
-Changes in v3:
- - Add comments in ftrace_graph_func() as suggested by Steve.
+On 2/24/22 09:13, Viresh Kumar wrote:
+> On 24-02-22, 08:11, Lukasz Luba wrote:
+>> diff --git a/drivers/opp/of.c b/drivers/opp/of.c
+>>   
+>> +/*
+>> + * Callback function provided to the Energy Model framework upon registration.
+>> + * It provides the power used by @dev at @kHz if it is the frequency of an
+>> + * existing OPP, or at the frequency of the first OPP above @kHz otherwise
+>> + * (see dev_pm_opp_find_freq_ceil()). This function updates @kHz to the ceiled
+>> + * frequency and @mW to the associated power.
+>> + *
+>> + * Returns 0 on success or a proper -EINVAL value in case of error.
+>> + */
+>> +static int __maybe_unused
+>> +_get_opp_power(unsigned long *mW, unsigned long *kHz, struct device *dev)
+> 
+> Lets call it _get_dt_opp_power() or _get_dt_power() ?
 
-Changes in v2:
- - Remove FTRACE_WITH_REGS ftrace_graph_caller asm as suggested by Mark.
----
- arch/arm64/include/asm/ftrace.h  |  7 +++++++
- arch/arm64/kernel/entry-ftrace.S | 17 -----------------
- arch/arm64/kernel/ftrace.c       | 17 +++++++++++++++++
- 3 files changed, 24 insertions(+), 17 deletions(-)
+OK, I'll return to _get_dt_power()
 
-diff --git a/arch/arm64/include/asm/ftrace.h b/arch/arm64/include/asm/ftrace.h
-index 1494cfa8639b..dbc45a4157fa 100644
---- a/arch/arm64/include/asm/ftrace.h
-+++ b/arch/arm64/include/asm/ftrace.h
-@@ -80,8 +80,15 @@ static inline unsigned long ftrace_call_adjust(unsigned long addr)
- 
- #ifdef CONFIG_DYNAMIC_FTRACE_WITH_REGS
- struct dyn_ftrace;
-+struct ftrace_ops;
-+struct ftrace_regs;
-+
- int ftrace_init_nop(struct module *mod, struct dyn_ftrace *rec);
- #define ftrace_init_nop ftrace_init_nop
-+
-+void ftrace_graph_func(unsigned long ip, unsigned long parent_ip,
-+		       struct ftrace_ops *op, struct ftrace_regs *fregs);
-+#define ftrace_graph_func ftrace_graph_func
- #endif
- 
- #define ftrace_return_address(n) return_address(n)
-diff --git a/arch/arm64/kernel/entry-ftrace.S b/arch/arm64/kernel/entry-ftrace.S
-index e535480a4069..d42a205ef625 100644
---- a/arch/arm64/kernel/entry-ftrace.S
-+++ b/arch/arm64/kernel/entry-ftrace.S
-@@ -97,12 +97,6 @@ SYM_CODE_START(ftrace_common)
- SYM_INNER_LABEL(ftrace_call, SYM_L_GLOBAL)
- 	bl	ftrace_stub
- 
--#ifdef CONFIG_FUNCTION_GRAPH_TRACER
--SYM_INNER_LABEL(ftrace_graph_call, SYM_L_GLOBAL) // ftrace_graph_caller();
--	nop				// If enabled, this will be replaced
--					// "b ftrace_graph_caller"
--#endif
--
- /*
-  * At the callsite x0-x8 and x19-x30 were live. Any C code will have preserved
-  * x19-x29 per the AAPCS, and we created frame records upon entry, so we need
-@@ -127,17 +121,6 @@ ftrace_common_return:
- 	ret	x9
- SYM_CODE_END(ftrace_common)
- 
--#ifdef CONFIG_FUNCTION_GRAPH_TRACER
--SYM_CODE_START(ftrace_graph_caller)
--	ldr	x0, [sp, #S_PC]
--	sub	x0, x0, #AARCH64_INSN_SIZE	// ip (callsite's BL insn)
--	add	x1, sp, #S_LR			// parent_ip (callsite's LR)
--	ldr	x2, [sp, #PT_REGS_SIZE]	   	// parent fp (callsite's FP)
--	bl	prepare_ftrace_return
--	b	ftrace_common_return
--SYM_CODE_END(ftrace_graph_caller)
--#endif
--
- #else /* CONFIG_DYNAMIC_FTRACE_WITH_REGS */
- 
- /*
-diff --git a/arch/arm64/kernel/ftrace.c b/arch/arm64/kernel/ftrace.c
-index 4506c4a90ac1..35eb7c9b5e53 100644
---- a/arch/arm64/kernel/ftrace.c
-+++ b/arch/arm64/kernel/ftrace.c
-@@ -268,6 +268,22 @@ void prepare_ftrace_return(unsigned long self_addr, unsigned long *parent,
- }
- 
- #ifdef CONFIG_DYNAMIC_FTRACE
-+
-+#ifdef CONFIG_DYNAMIC_FTRACE_WITH_REGS
-+void ftrace_graph_func(unsigned long ip, unsigned long parent_ip,
-+		       struct ftrace_ops *op, struct ftrace_regs *fregs)
-+{
-+	/*
-+	 * Athough graph_ops doesn't have FTRACE_OPS_FL_SAVE_REGS set in flags,
-+	 * regs can't be NULL in DYNAMIC_FTRACE_WITH_REGS. By design, it should
-+	 * be fixed when DYNAMIC_FTRACE_WITH_ARGS is implemented.
-+	 */
-+	struct pt_regs *regs = arch_ftrace_get_regs(fregs);
-+	unsigned long *parent = (unsigned long *)&procedure_link_pointer(regs);
-+
-+	prepare_ftrace_return(ip, parent, frame_pointer(regs));
-+}
-+#else
- /*
-  * Turn on/off the call to ftrace_graph_caller() in ftrace_caller()
-  * depending on @enable.
-@@ -297,5 +313,6 @@ int ftrace_disable_ftrace_graph_caller(void)
- {
- 	return ftrace_modify_graph_caller(false);
- }
-+#endif /* CONFIG_DYNAMIC_FTRACE_WITH_REGS */
- #endif /* CONFIG_DYNAMIC_FTRACE */
- #endif /* CONFIG_FUNCTION_GRAPH_TRACER */
--- 
-2.20.1
+> 
+>> +{
+>> +	struct dev_pm_opp *opp;
+>> +	unsigned long opp_freq, opp_power;
+>> +
+>> +	/* Find the right frequency and related OPP */
+>> +	opp_freq = *kHz * 1000;
+>> +	opp = dev_pm_opp_find_freq_ceil(dev, &opp_freq);
+>> +	if (IS_ERR(opp))
+>> +		return -EINVAL;
+>> +
+>> +	opp_power = dev_pm_opp_get_power(opp);
+> 
+> As I said in 2/4, this should really give the total instead.
 
+make sense
+
+> 
+>> +	dev_pm_opp_put(opp);
+>> +	if (!opp_power)
+>> +		return -EINVAL;
+>> +
+>> +	*kHz = opp_freq / 1000;
+>> +	*mW = opp_power / 1000;
+>> +
+>> +	return 0;
+>> +}
+>> +
+>>   /*
+>>    * Callback function provided to the Energy Model framework upon registration.
+>>    * This computes the power estimated by @dev at @kHz if it is the frequency
+>> @@ -1488,6 +1520,24 @@ static int __maybe_unused _get_power(unsigned long *mW, unsigned long *kHz,
+>>   	return 0;
+>>   }
+>>   
+>> +static bool _of_has_opp_microwatt_property(struct device *dev)
+>> +{
+>> +	unsigned long power, freq = 0;
+>> +	struct dev_pm_opp *opp;
+>> +
+>> +	/* Check if at least one OPP has needed property */
+>> +	opp = dev_pm_opp_find_freq_ceil(dev, &freq);
+>> +	if (IS_ERR(opp))
+>> +		return false;
+>> +
+>> +	power = dev_pm_opp_get_power(opp);
+>> +	dev_pm_opp_put(opp);
+>> +	if (!power)
+> 
+> What if this particular frequency has 0 power mentioned for some
+> reason :)
+
+If that power 0 would be allowed here, then in next step when EM
+calls active_power() we check !power and report dev_err().
+IPA design would also not accept the power=0
+
+> 
+> Instead of this heavy stuff, just pick the first OPP from the opp
+> table and see its power-value.
+
+It is the first opp: freq=0.
+You mean by parsing the the DT node instead, like I had in v2 version?
+
+> 
+>> +		return false;
+>> +
+>> +	return true;
+>> +}
+>> +
+>>   /**
+>>    * dev_pm_opp_of_register_em() - Attempt to register an Energy Model
+>>    * @dev		: Device for which an Energy Model has to be registered
+>> @@ -1517,6 +1567,14 @@ int dev_pm_opp_of_register_em(struct device *dev, struct cpumask *cpus)
+>>   		goto failed;
+>>   	}
+>>   
+>> +	/* First, try to find more precised Energy Model in DT */
+>> +	if (_of_has_opp_microwatt_property(dev)) {
+>> +		struct em_data_callback em_dt_cb = EM_DATA_CB(_get_opp_power);
+>> +
+>> +		return em_dev_register_perf_domain(dev, nr_opp, &em_dt_cb,
+>> +						   cpus, true);
+>> +	}
+>> +
+> 
+> We have another em_dev_register_perf_domain() down the line, lets keep
+> only one such call and get it a callback that should be set in an
+> if/else loop.
+
+OK

@@ -2,107 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A19B4C38D4
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 23:37:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FB264C38D5
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 23:37:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235567AbiBXWiI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 17:38:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54452 "EHLO
+        id S235579AbiBXWiQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 17:38:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234625AbiBXWiG (ORCPT
+        with ESMTP id S231812AbiBXWiO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 17:38:06 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 021811470EF
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 14:37:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1645742255;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=cocWRBUsDVybCinHIcmXN5TQyz6k/B4wu/U68zqDoGQ=;
-        b=Tp9nlGD7mgCBOnsloBzabJiymsYNLSkTalDbzSmB8WfFgDpBIo17Vru9urwoR6+hQ4/H6j
-        C0dEpdaek9tvijRwakp+rYldWnlWRZvo9QDpzoYiGEUy56qZDwGHOE7hkF+qTgVZnigbOA
-        sg3RtAbOausjpGGDalBNwlU/qgwMO5o=
-Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
- [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-266-c_BCsqqpOaCE06eMT6dpPw-1; Thu, 24 Feb 2022 17:37:33 -0500
-X-MC-Unique: c_BCsqqpOaCE06eMT6dpPw-1
-Received: by mail-qk1-f200.google.com with SMTP id c19-20020a05620a11b300b00648cdeae21aso4011084qkk.17
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 14:37:33 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=cocWRBUsDVybCinHIcmXN5TQyz6k/B4wu/U68zqDoGQ=;
-        b=FFkGwrmfyod+Uz+2rWTRb1AZHDgw55R/7Z+8eI98cudAoBPYQjY47hnE01fItGuB8t
-         eDmxPv55091a+VBQ5KZC8fgmU9tkt9L8QWDTtWyFH4IQpBermM45sXCJwEN+uiucnrvd
-         By6/DYApzJhrPvGOlROzk2pR6yxPq5Wt9syx2PLnhwZORzUzbR0T9F6G1ZYtrDmql5Sy
-         j8SO2sHiy77WkQ8TsxGOKyvGlnGnqtfLDVq5iACj3kbd/nr57bQio3VbfakxLhxEhfOL
-         HKMKkFcT6h7V638mmuu8wgKwz54WtHKFnQ2PyiWjyLQWSmUwpn/0R2Xw64ekHjceaK8K
-         6EJw==
-X-Gm-Message-State: AOAM53126Vrv5UHSsvbN0Nw3xDYTa2SQrIvkO+BOwuOQ4SObacUmls4i
-        4O8SfqICWJx+ImTVQYLAWNuL0hTN4KQ4xmH7jJdm43I8wTytUA1JE+8Jxt1KErXAvZr6tZ4D7Bm
-        RHk842fD05R85XY5KBslrtZ+T
-X-Received: by 2002:ac8:594d:0:b0:2dd:ff9c:f26 with SMTP id 13-20020ac8594d000000b002ddff9c0f26mr4531274qtz.242.1645742253464;
-        Thu, 24 Feb 2022 14:37:33 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyG0iW04Fx1zW0sIzoJ9G20h8mEwWDiJHdELGfUisr1/RQDVOJ9S+gglwGPJlFFGmDVuSD75g==
-X-Received: by 2002:ac8:594d:0:b0:2dd:ff9c:f26 with SMTP id 13-20020ac8594d000000b002ddff9c0f26mr4531258qtz.242.1645742253232;
-        Thu, 24 Feb 2022 14:37:33 -0800 (PST)
-Received: from treble ([2600:1700:6e32:6c00::45])
-        by smtp.gmail.com with ESMTPSA id o13-20020ac87c4d000000b002dd2647f223sm414834qtv.42.2022.02.24.14.37.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Feb 2022 14:37:32 -0800 (PST)
-Date:   Thu, 24 Feb 2022 14:37:28 -0800
-From:   Josh Poimboeuf <jpoimboe@redhat.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     x86@kernel.org, joao@overdrivepizza.com, hjl.tools@gmail.com,
-        andrew.cooper3@citrix.com, linux-kernel@vger.kernel.org,
-        ndesaulniers@google.com, keescook@chromium.org,
-        samitolvanen@google.com, mark.rutland@arm.com,
-        alyssa.milburn@intel.com, mbenes@suse.cz, rostedt@goodmis.org,
-        mhiramat@kernel.org, alexei.starovoitov@gmail.com
-Subject: Re: [PATCH v2 07/39] x86/entry: Sprinkle ENDBR dust
-Message-ID: <20220224223728.fqko5ex7wbm2a5xn@treble>
-References: <20220224145138.952963315@infradead.org>
- <20220224151322.423131356@infradead.org>
+        Thu, 24 Feb 2022 17:38:14 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B09DF18C783
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 14:37:43 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 584D661B1F
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 22:37:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E1FCC340E9;
+        Thu, 24 Feb 2022 22:37:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1645742262;
+        bh=wtcBzWooL32dNZOr+Z536waTgYAuQ0OCmkwF/qD5HLI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=xw962sorCN8Y5u6rerZAVg2CHHt/+Upk7sbdDEYKQgC83AUyiotOJvnbqwLt0NwZm
+         w0ZKsvCmOKezjbRo8IjM5m6HFNVhfWfTko/Dt/s4CCP8klf5prGDcnGbSA6SUleDH8
+         OHyrB86MP1sGunh7hJ0myk6tJgzONdpcV9rDEqBc=
+Date:   Thu, 24 Feb 2022 23:37:39 +0100
+From:   "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
+To:     "stern@rowland.harvard.edu" <stern@rowland.harvard.edu>
+Cc:     "Zhang, Qiang1" <qiang1.zhang@intel.com>,
+        Tejun Heo <tj@kernel.org>,
+        syzbot <syzbot+348b571beb5eeb70a582@syzkaller.appspotmail.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "syzkaller-bugs@googlegroups.com" <syzkaller-bugs@googlegroups.com>,
+        "balbi@kernel.org" <balbi@kernel.org>
+Subject: Re: [syzbot] KASAN: use-after-free Read in dev_uevent
+Message-ID: <YhgIs6FmBJYXiQVw@kroah.com>
+References: <0000000000005a991a05a86970bb@google.com>
+ <00000000000033314805d8765175@google.com>
+ <PH0PR11MB58805E3C4CF7D4C41D49BFCFDA3C9@PH0PR11MB5880.namprd11.prod.outlook.com>
+ <YhYafwiwUV2Sbn5t@kroah.com>
+ <YhZG3GJb8G7oL7l7@rowland.harvard.edu>
+ <YhZaDGeIIvpILdCk@kroah.com>
+ <YhZiMHHjrBw8am5g@rowland.harvard.edu>
+ <PH0PR11MB5880D7544442B4D60810F0D2DA3D9@PH0PR11MB5880.namprd11.prod.outlook.com>
+ <PH0PR11MB588091026B817203C772B264DA3D9@PH0PR11MB5880.namprd11.prod.outlook.com>
+ <Yhf3ThBfjWVcYszC@rowland.harvard.edu>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220224151322.423131356@infradead.org>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Yhf3ThBfjWVcYszC@rowland.harvard.edu>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 24, 2022 at 03:51:45PM +0100, Peter Zijlstra wrote:
-> Kernel entry points should be having ENDBR on for IBT configs.
+On Thu, Feb 24, 2022 at 04:23:26PM -0500, stern@rowland.harvard.edu wrote:
+> On Thu, Feb 24, 2022 at 03:14:54AM +0000, Zhang, Qiang1 wrote:
+> > 
+> > On Wed, Feb 23, 2022 at 05:00:12PM +0100, gregkh@linuxfoundation.org wrote:
+> > > On Wed, Feb 23, 2022 at 09:38:20AM -0500, stern@rowland.harvard.edu wrote:
+> > > > Which bus locks are you referring to?  I'm not aware of any locks 
+> > > > that synchronize dev_uevent() with anything (in particular, with 
+> > > > driver unbinding).
+> > > 
+> > > The locks in the driver core that handle the binding and unbinding of 
+> > > drivers to devices.
+> > > 
+> > > > And as far as I know, usb_gadget_remove_driver() doesn't play any 
+> > > > odd tricks with pointers.
+> > > 
+> > > Ah, I never noticed that this is doing a "fake" bus and does the 
+> > > bind/unbind itself outside of the driver core.  It should just be a 
+> > > normal bus type and have the core do the work for it, but oh well.
+> > > 
+> > > And there is a lock that should serialize all of this already, so it's 
+> > > odd that this is able to be triggered at all.
+> > 
+> > >>I guess at a minimum the UDC core should hold the device lock when it registers, unregisters, binds, or unbinds UDC and gadget devices.  
+> > >>Would that be enough to fix the problem?  I really don't understand how sysfs file access gets synchronized with device removal.
+> > 
+> > >>>
+> > >>>Agree with you, in usb_gadget_remove_driver() function, the udc->dev.driver and udc->gadget->dev.driver be set to null without any protection, so when the udevd accessed the dev->driver, this address may be invalid at this time.
+> > >>>maybe the operation of dev->driver can be protected by device_lock(). 
+> > >>>
+> > 
+> > Is it enough that we just need to protect "dev.driver" ?
 > 
-> The SYSCALL entry points are found through taking their respective
-> address in order to program them in the MSRs, while the exception
-> entry points are found through UNWIND_HINT_IRET_REGS.
+> I don't know, although I doubt it.  The right way to fix it is to make 
+> sure that the existing protections, which apply to drivers that are 
+> registered in the driver core, can also work properly with gadgets.  But 
+> I don't know what those protections are or how they work.
 > 
-> The rule is that any UNWIND_HINT_IRET_REGS at sym+0 should have an
-> ENDBR, see the later objtool ibt validation patch.
+> > diff --git a/drivers/base/core.c b/drivers/base/core.c
+> > index 3d6430eb0c6a..9bd2624973d7 100644
+> > --- a/drivers/base/core.c
+> > +++ b/drivers/base/core.c
+> > @@ -2316,8 +2316,10 @@ static int dev_uevent(struct kobject *kobj, struct kobj_uevent_env *env)
+> >         if (dev->type && dev->type->name)
+> >                 add_uevent_var(env, "DEVTYPE=%s", dev->type->name);
+> > 
+> > +       device_lock(dev);
+> >         if (dev->driver)
+> >                 add_uevent_var(env, "DRIVER=%s", dev->driver->name);
+> > +       device_unlock(dev);
+> 
+> You probably should not do this.  Unless there's a serious bug, the 
+> driver core already takes all the locks it needs.  Doing this might 
+> cause a deadlock (because the caller may already hold the device lock).
+> 
+> > 
+> >         /* Add common DT information about the device */
+> >         of_device_uevent(dev, env);
+> > diff --git a/drivers/usb/gadget/udc/core.c b/drivers/usb/gadget/udc/core.c
+> > index 568534a0d17c..7877142397d3 100644
+> > --- a/drivers/usb/gadget/udc/core.c
+> > +++ b/drivers/usb/gadget/udc/core.c
+> > @@ -1436,8 +1436,14 @@ static void usb_gadget_remove_driver(struct usb_udc *udc)
+> >         usb_gadget_udc_stop(udc);
+> > 
+> >         udc->driver = NULL;
+> > +
+> > +       device_lock(&udc->dev);
+> >         udc->dev.driver = NULL;
+> > +       device_unlock(&udc->dev);
+> > +
+> > +       device_lock(&udc->gadget->dev);
+> >         udc->gadget->dev.driver = NULL;
+> > +       device_unlock(&udc->gadget->dev);
+> >  }
+> 
+> These are reasonable things to do, but I don't know if they will fix the 
+> problem.
+> 
+> We really should ask advice from somebody who understands how this stuff 
+> is supposed to work.  I'm not sure who to ask, though.  Tejun Heo, 
+> perhaps (CC'ed).
+> 
+> Tejun: The USB Gadget core binds and unbinds drivers without using the 
+> normal driver core facilities (see the code in 
+> usb_gadget_remove_driver() above).  As a result, unbinding races with 
+> uevent generation, which can lead to a NULL pointer dereference as found 
+> by syzbot testing.  In particular, dev->driver can become NULL between 
+> the times when dev_uevent() tests it and uses it (see above).
+> 
+> Can you tell us how this should be fixed?
 
-Could the "rule" be changed to only check global syms?  It seems
-unlikely a local symbol would need ENDBR.
+It should be fixed by properly using the driver core to bind/unbind the
+driver to devices like I mentioned previously :)
 
-Then you wouldn't need this annotation:
+That will be more work, but it's the correct fix here.  Otherwise it
+needs to take the same bus locks that the device lives on to keep things
+in sync, like the driver core would do if it were managing these things.
+That could be the "short term" fix if no one wants to do the real work
+needed here.  Nothing should be needed to change in the driver core
+itself, it is rightfully thinking it owns the device and can free it
+when needed.
 
->  SYM_CODE_START_LOCAL(early_idt_handler_common)
-> +	UNWIND_HINT_IRET_REGS offset=16
-> +	ANNOTATE_NOENDBR
->  	/*
->  	 * The stack is the hardware frame, an error code or zero, and the
->  	 * vector number.
+thanks,
 
--- 
-Josh
-
+greg k-h

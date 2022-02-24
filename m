@@ -2,90 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B696D4C2295
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 04:46:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 009CD4C2290
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 04:46:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229728AbiBXDo7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 22:44:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51694 "EHLO
+        id S229732AbiBXDpf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 22:45:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229716AbiBXDo6 (ORCPT
+        with ESMTP id S229512AbiBXDpe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 22:44:58 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D7ED25A315;
-        Wed, 23 Feb 2022 19:44:29 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F23C1615E6;
-        Thu, 24 Feb 2022 03:44:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0EE95C340E9;
-        Thu, 24 Feb 2022 03:44:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645674268;
-        bh=jZ6awLcE6M5IwYTyD00u231l2Hv6lyuBrW+r29jU1AU=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=InANoN3hy8jAhaH2B3j97Zd8hO6j23VdWyYcfJ9Wsp07n9vZdFBPvgkMSpv6u4jCV
-         xfPjW2tmBsKmRAbyVSDNWHleKvVxbtWB5XL/i9djj0io+zeo0rXe9KPzvgP37/y7Ii
-         hmXRoo2wrXQazsfVWHejRSM/TplI4Qk3/Tu/DXwS8k6Z5uiLopl/4l+zrTbB5tgTcX
-         KckeDPWP5At6RQWXepyTRojXoFjQ22mcOAEL7S4T4/5EBjTjbTngreaeDTg2RGYhpo
-         QXSiNFsOuq1S1/JjueU14B2dynucftb9jssvKCpbbuwEmDIyp09sVSLY08VfzD4IJz
-         YyAUofYAHx3Wg==
-Date:   Wed, 23 Feb 2022 19:44:26 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Marek =?UTF-8?B?TWFyY3p5a293c2tpLUfDs3JlY2tp?= 
-        <marmarek@invisiblethingslab.com>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Michael Brown <mcb30@ipxe.org>, Wei Liu <wei.liu@kernel.org>,
-        Paul Durrant <paul@xen.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        xen-devel@lists.xenproject.org (moderated list:XEN NETWORK BACKEND
-        DRIVER),
-        netdev@vger.kernel.org (open list:XEN NETWORK BACKEND DRIVER)
-Subject: Re: [PATCH v2 1/2] Revert "xen-netback: remove 'hotplug-status'
- once it has served its purpose"
-Message-ID: <20220223194426.6948b28c@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <20220222001817.2264967-1-marmarek@invisiblethingslab.com>
-References: <20220222001817.2264967-1-marmarek@invisiblethingslab.com>
+        Wed, 23 Feb 2022 22:45:34 -0500
+Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12C5F25D24A
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 19:45:04 -0800 (PST)
+Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-2d07ae0b1c4so11026007b3.11
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 19:45:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=/rL+TycpMQLfB5P4Zn9xgGfUWg8yPCNTwrE46ZNldMM=;
+        b=b+i26jACpHGUt7PiPDH5eeNKNhNYUz1/aWiveExwvXl0ceU1Ie1hYY0g8L94TpIbhJ
+         4VKycSYT9iXWQzoecjC7HO4G1ExnYUrtf2VdY2Bkta9QtbB3NL5VV8883jq/Lo75ReKo
+         kdQ8nMsT4VSywBSm8DQS56JSOxsDAKQyTJzx4klZiqZBXgDfgdL3VhzDbFTbmEB0Skz1
+         TW1Zj6Zho3GyG5/z3nf69VFe8UmlkIz09yefpdxZqYQEo2vcJbe8WWGKmHwvi9u+GDtN
+         SJ3jnKL6ySB9TTnZrRrTGkTb/X0F50atBIPZNDZqtijcCZqskXj8Y2xPrpOxRLU7r90e
+         0fvg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=/rL+TycpMQLfB5P4Zn9xgGfUWg8yPCNTwrE46ZNldMM=;
+        b=DVU0DqTN/KnhSGUcvWF9M2XdIuyzdQ7hzCp1lEONLgLXUrVUl8wrnpfT3raoX9US0g
+         MfvkxTAwlOl4/DVScM4vp0TujAe1687Pr2yeYSqaVO8A6AUlxdndRZvgguMWWETrYS13
+         1Mc9QZcp6sCcbryp5cFHyelg+BK+hd6xw3uJgehl5/KNa7WHmkTcgZUg5B/gCUJNyB+j
+         DItcmPMNQgK7wD50t+laJ0AckmL9cXCBieoJVLjp6idrVFaSCMPScengtQ3+kgO+JGZZ
+         iZGW7jkp5XiugZbgfZUfGli7i2tODddRToVAO4FmnnUTyexydZcaQduByXwXO2GA/4Ey
+         ERIw==
+X-Gm-Message-State: AOAM532v22AZh2CpJf+cC+LyN+OOxBAMSiGtVFXRy0kuniphQgONUJiZ
+        ptlK96CyAdUWvMGU0mzL56i5MvwLq3zSGh/2lZA=
+X-Google-Smtp-Source: ABdhPJxO6mfwyWdmybD+ZKo1IdrIgjo8AuLe+10YPKmnKkbcAZChQrOHWKklntK2WC0rzi0smJkUk3a5apQn+9j4i0c=
+X-Received: by 2002:a81:5bc3:0:b0:2ca:287c:6c31 with SMTP id
+ p186-20020a815bc3000000b002ca287c6c31mr675609ywb.214.1645674303191; Wed, 23
+ Feb 2022 19:45:03 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Received: by 2002:a05:7010:738a:b0:210:6fe6:62e1 with HTTP; Wed, 23 Feb 2022
+ 19:45:02 -0800 (PST)
+Reply-To: dravasmith27@gmail.com
+From:   Dr Ava Smith <gracebanneth@gmail.com>
+Date:   Wed, 23 Feb 2022 19:45:02 -0800
+Message-ID: <CABo=7A0xmNOkHup5i1eJoTmVcLy5rRS+YukcgHfe2-qXDyv_Ww@mail.gmail.com>
+Subject: GREETINGS FROM DR AVA SMITH
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=4.5 required=5.0 tests=BAYES_05,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        SUBJ_ALL_CAPS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no
         autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 22 Feb 2022 01:18:16 +0100 Marek Marczykowski-G=C3=B3recki wrote:
-> This reverts commit 1f2565780e9b7218cf92c7630130e82dcc0fe9c2.
->=20
-> The 'hotplug-status' node should not be removed as long as the vif
-> device remains configured. Otherwise the xen-netback would wait for
-> re-running the network script even if it was already called (in case of
-> the frontent re-connecting). But also, it _should_ be removed when the
-> vif device is destroyed (for example when unbinding the driver) -
-> otherwise hotplug script would not configure the device whenever it
-> re-appear.
->=20
-> Moving removal of the 'hotplug-status' node was a workaround for nothing
-> calling network script after xen-netback module is reloaded. But when
-> vif interface is re-created (on xen-netback unbind/bind for example),
-> the script should be called, regardless of who does that - currently
-> this case is not handled by the toolstack, and requires manual
-> script call. Keeping hotplug-status=3Dconnected to skip the call is wrong
-> and leads to not configured interface.
->=20
-> More discussion at
-> https://lore.kernel.org/xen-devel/afedd7cb-a291-e773-8b0d-4db9b291fa98@ip=
-xe.org/T/#u
->=20
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Marek Marczykowski-G=C3=B3recki <marmarek@invisiblethingsl=
-ab.com>
-
-Wei, Paul, do these look good?
+-- 
+Hello Dear,
+how are you today?hope you are fine
+My name is Dr Ava Smith ,Am an English and French nationalities.
+I will give you pictures and more details about me as soon as i hear from you
+Thanks
+Ava

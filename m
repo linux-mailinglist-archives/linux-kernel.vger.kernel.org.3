@@ -2,108 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D6D44C38A1
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 23:15:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 73EAA4C38A6
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 23:17:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235406AbiBXWP7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 17:15:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38966 "EHLO
+        id S235415AbiBXWSE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 17:18:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235311AbiBXWP5 (ORCPT
+        with ESMTP id S232032AbiBXWSC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 17:15:57 -0500
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FA2129DD04;
-        Thu, 24 Feb 2022 14:15:27 -0800 (PST)
-Received: by mail-wr1-x436.google.com with SMTP id d28so1763113wra.4;
-        Thu, 24 Feb 2022 14:15:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=23uPqqlxtmnZRHLs9v3vgksA5KeOpFw/ThnhTpkf+2w=;
-        b=S6nCprqxh0JglbBAqwKJDoHoVIjtj4T6nsOoxoor9OqZxzcWSmesnc8rh8G+UcJWwk
-         mc13iC3iU8uKZp4mj0CgARdJtp+90Ud9bgn5xxixO3CyqpAeGCn0AN3oF1cX3oJB8QHI
-         8UDrUzs36GYtOFY6uAjLWQanpjCWTIYlFlqjK+5LUI+xyxfWFQ6tVS0z0hiVKS+6d/0p
-         uDzEg8pnt+wxr4pKPMoXM/zFFnEQk9VlaKv2+C5Vd2mQ7edNv+t4RTkX4Sr9Xtq8hNMz
-         ujeMJtqjfqPyaAiw66xkhG8E57AyVTyOdWffuxDtoxuEQE1wiizAlDyCwHPUFQtj1pHX
-         q82g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=23uPqqlxtmnZRHLs9v3vgksA5KeOpFw/ThnhTpkf+2w=;
-        b=w2hc+VyG5yjyra+NFXy2ClKUEgfH2tdF0yiGVRlyQOkYVDFSHp2xuOLFEwPQozVg8J
-         gttDbdi5tVcMCyRElPVA5hgc2+TO07lv5ecf/E2o/DQs8yYyLdsW/FMZ3UCKQ/diycsz
-         mtxO+r/WNk7wbunAncECtjIK3lxJyQjP4jaCk0n7RYljPXavfd3SUmz45EZlYtDay4UV
-         qUd1T18AwZgljoXNo7emjcXFF18MEcX7WKhMVyiHinpGbUeLPbHK/HBr4T/mzj3Bc0zT
-         BgjiAE6lo4a/tX4dqIuV6GEaCSQ99sD4Vkf59/orkq2mvSXppLBTvhrn0d9nCJmOWPcT
-         qvYg==
-X-Gm-Message-State: AOAM533Clabvnq1Pcxc8xb27lp+u42Bch0sFmvGADyvJApkxlLm3r1O0
-        va+xS3Yk2yYsRoGkD/zNee4=
-X-Google-Smtp-Source: ABdhPJwAm/jUbae804Iirsh2TE+k/iRCYA06xF1rFmTlmPTvYCNCE4wR20beM9tBYDQ6CUCuGmHO7g==
-X-Received: by 2002:a05:6000:1789:b0:1ea:7bb7:312c with SMTP id e9-20020a056000178900b001ea7bb7312cmr3861415wrg.660.1645740926020;
-        Thu, 24 Feb 2022 14:15:26 -0800 (PST)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id r15-20020a05600c35cf00b003808165fbc2sm584330wmq.25.2022.02.24.14.15.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Feb 2022 14:15:25 -0800 (PST)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Saeed Mahameed <saeedm@nvidia.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Roi Dayan <roid@nvidia.com>, netdev@vger.kernel.org,
-        linux-rdma@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-Subject: [PATCH] net/mlx5e: Fix return of a kfree'd object instead of NULL
-Date:   Thu, 24 Feb 2022 22:15:24 +0000
-Message-Id: <20220224221525.147744-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Thu, 24 Feb 2022 17:18:02 -0500
+Received: from Chamillionaire.breakpoint.cc (Chamillionaire.breakpoint.cc [IPv6:2a0a:51c0:0:12e:520::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10593186BB4;
+        Thu, 24 Feb 2022 14:17:31 -0800 (PST)
+Received: from fw by Chamillionaire.breakpoint.cc with local (Exim 4.92)
+        (envelope-from <fw@strlen.de>)
+        id 1nNMQS-0007G8-Vd; Thu, 24 Feb 2022 23:17:29 +0100
+Date:   Thu, 24 Feb 2022 23:17:28 +0100
+From:   Florian Westphal <fw@strlen.de>
+To:     netfilter-devel <netfilter-devel@vger.kernel.org>
+Cc:     Florian Westphal <fw@strlen.de>, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org,
+        Pablo Neira Ayuso <pablo@netfilter.org>
+Subject: Re: [netfilter-nf:master 47/47] nf_queue.c:undefined reference to
+ `sock_gen_put'
+Message-ID: <20220224221728.GI28705@breakpoint.cc>
+References: <202202250551.bHhoyNSe-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202202250551.bHhoyNSe-lkp@intel.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently in the case where parse_attr fails to be allocated the memory
-pointed to by attr2 is kfree'd but the non-null pointer attr2 is returned
-and a potential use of a kfree'd object can occur.  Fix this by returning
-NULL to indicate a memory allocation error.
+kernel test robot <lkp@intel.com> wrote:
 
-Addresses issue found by clang-scan:
-drivers/net/ethernet/mellanox/mlx5/core/en_tc.c:3401:3: warning: Use of
-memory after it is freed [unix.Malloc]
+[ cc nf-devel ]
 
-Fixes: 8300f225268b ("net/mlx5e: Create new flow attr for multi table actions")
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- drivers/net/ethernet/mellanox/mlx5/core/en_tc.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> tree:   git://git.kernel.org/pub/scm/linux/kernel/git/netfilter/nf.git master
+> head:   661c8ec0381915e9a2b0f9dcc03a5bd70ba5e3dd
+> commit: 661c8ec0381915e9a2b0f9dcc03a5bd70ba5e3dd [47/47] netfilter: nf_queue: don't assume sk is full socket
+> config: arm-randconfig-c002-20220223 (https://download.01.org/0day-ci/archive/20220225/202202250551.bHhoyNSe-lkp@intel.com/config)
+> compiler: arm-linux-gnueabi-gcc (GCC) 11.2.0
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # https://git.kernel.org/pub/scm/linux/kernel/git/netfilter/nf.git/commit/?id=661c8ec0381915e9a2b0f9dcc03a5bd70ba5e3dd
+>         git remote add netfilter-nf git://git.kernel.org/pub/scm/linux/kernel/git/netfilter/nf.git
+>         git fetch --no-tags netfilter-nf master
+>         git checkout 661c8ec0381915e9a2b0f9dcc03a5bd70ba5e3dd
+>         # save the config file to linux build tree
+>         mkdir build_dir
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm SHELL=/bin/bash
+> 
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <lkp@intel.com>
+> 
+> All errors (new ones prefixed by >>):
+> 
+>    arm-linux-gnueabi-ld: net/netfilter/nf_queue.o: in function `nf_queue_entry_release_refs':
+> >> nf_queue.c:(.text+0x60): undefined reference to `sock_gen_put'
 
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_tc.c b/drivers/net/ethernet/mellanox/mlx5/core/en_tc.c
-index 76a015dfc5fc..c0776a4a3845 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/en_tc.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en_tc.c
-@@ -3398,7 +3398,7 @@ mlx5e_clone_flow_attr_for_post_act(struct mlx5_flow_attr *attr,
- 	if (!attr2 || !parse_attr) {
- 		kvfree(parse_attr);
- 		kfree(attr2);
--		return attr2;
-+		return NULL;
- 	}
- 
- 	memcpy(attr2, attr, attr_sz);
--- 
-2.34.1
+CONFIG_NETFILTER=y
+CONFIG_DECNET=y
+CONFIG_INET=n
 
+I could add ugly ifdef to use sock_put() like before for !INET case.
+OTOH, the entire nfqueue infra is doubtful in this config.
+
+Maybe elide that completely?  Any advice/preferred solution?

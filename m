@@ -2,135 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CC2A4C2ECD
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 15:59:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AC9D4C2ED1
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 16:00:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235700AbiBXO7a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 09:59:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41728 "EHLO
+        id S235701AbiBXPAF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 10:00:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235691AbiBXO71 (ORCPT
+        with ESMTP id S234948AbiBXPAD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 09:59:27 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BF4EC1B0C4B
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 06:58:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1645714735;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=7t/PhndngG1sSe9ScfhTi54FhdXHMvtO4i3SsRE9GWw=;
-        b=N2uVPf5jL1sKJFp08z1CFdJMFTBqFspK0mP74DDmtXKb8RZpuzFdJaK0rF8ln+X3eiiAP8
-        esE/1T8qIdeKD1YzFvy3h6/K78yo3Qpj491d6HqOFVtOmYZvjtLhYpwYmpOu+xy7/wDamy
-        G+tXwUFUcTOtllR73hi7vTTvYlA9cS8=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-402-SOFb325mMcStH_464N3obQ-1; Thu, 24 Feb 2022 09:58:54 -0500
-X-MC-Unique: SOFb325mMcStH_464N3obQ-1
-Received: by mail-ed1-f69.google.com with SMTP id s7-20020a508dc7000000b0040f29ccd65aso860358edh.1
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 06:58:54 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=7t/PhndngG1sSe9ScfhTi54FhdXHMvtO4i3SsRE9GWw=;
-        b=VOTRlatxANEbP5wCZA8QDvEqBbfYafTLKG4vZiCZ0ncCNgC6U8KtK0XOf2KlRZFKwo
-         RQqX5L4Zh5PODWwA/1cbgTY/+ltF7JiIQ/439BSekdiNBfapt/1/HqDjX6f+xWqWC7Pk
-         QaQZXijlW9S1W/rrOLjNdgbawGhSNO5JEdt18kPriQ7b+s9SHCjJLlL6UADngkXS9RZf
-         WMTGV3u2wE2TT0LBLtN6IbbWiGd5HZg3cjjI2iAD0XnxCF+8xmT/1nrbxCTuvN0fIPuW
-         zv2/wobvo9FucAmB82gp1LxKoAB1VHZof1ZzZMI71ihITi82gC4ulVkwAo7pv3nyBLSx
-         wN3g==
-X-Gm-Message-State: AOAM531ThjkKxQsb1raKSRfD/Sfhj1zlCPTvxs1QhYZ7rQLphRrPRSXq
-        Ok8D1NGTPbJWTky19zW/a1m4nD+8j6X4YmbHIRjpo1cFJZun07O/4yk6n+h0klG6MK9+/L+kKdT
-        FPTT379bzQR+Sk4gfaYhTTzxl
-X-Received: by 2002:a50:ef0b:0:b0:413:2c17:d967 with SMTP id m11-20020a50ef0b000000b004132c17d967mr2647077eds.307.1645714733019;
-        Thu, 24 Feb 2022 06:58:53 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwAth6e+lJsfBzJhg/2BDAmUQF+x6IiOo7EAOTCu9A2htoA90IJCRZ9rRv4/yCpgmPIuakpvw==
-X-Received: by 2002:a50:ef0b:0:b0:413:2c17:d967 with SMTP id m11-20020a50ef0b000000b004132c17d967mr2647058eds.307.1645714732810;
-        Thu, 24 Feb 2022 06:58:52 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
-        by smtp.googlemail.com with ESMTPSA id g20sm37931ejk.209.2022.02.24.06.58.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 24 Feb 2022 06:58:52 -0800 (PST)
-Message-ID: <a0594849-c141-16b5-4420-167174f2b2f1@redhat.com>
-Date:   Thu, 24 Feb 2022 15:58:50 +0100
+        Thu, 24 Feb 2022 10:00:03 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D243426834C;
+        Thu, 24 Feb 2022 06:59:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1645714769; x=1677250769;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=ORDMBlKCGSdSfHM8GA+311LvkiZtIfohu3XDDYVXTUo=;
+  b=avyvOQmmF4BPcZcaesDapZhEzVsXUXhtWe2l+KWfsHByG3VsWz/xiho9
+   orMS5UNJokPWBNN1qxwpmasgdMXkoH6EcnL3PlNCLCxppWsvDnCzJiAW1
+   7hMlI60fhpXPG1L7lT6TIfoIwxm3W7sjc9/fdhtK3ssUsHpjvrM3ErPA9
+   /nJAxxD7vdf9MHdnRAUScamy7Cd0wMQHccULa8hLsiyvjYKKUQ5gTAiK1
+   gPMhgBhbo+VqII3LS/ENTDXCQ0dy7NbhFskK8WzIecVmd0RaC2Oex7j3f
+   Xw7dIIiCPVdcf6G6Rs5r8hcQe1OILPdufaeX10/UXR5YNJ1Sw2lkNRUID
+   w==;
+X-IronPort-AV: E=Sophos;i="5.90,134,1643698800"; 
+   d="scan'208";a="154765321"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 24 Feb 2022 07:59:29 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Thu, 24 Feb 2022 07:59:29 -0700
+Received: from [10.12.73.51] (10.10.115.15) by chn-vm-ex03.mchp-main.com
+ (10.10.85.151) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
+ Transport; Thu, 24 Feb 2022 07:59:26 -0700
+Message-ID: <d0c4262c-097d-18da-cb51-5409f6e02b61@microchip.com>
+Date:   Thu, 24 Feb 2022 15:59:26 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
-Subject: Re: [PATCH 00/11] KVM: x86: Prep work for VMX IPI virtualization
+Subject: Re: [PATCH 6/8] ARM: dts: at91: sama7g5: add opps
 Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Zeng Guang <guang.zeng@intel.com>,
-        Chao Gao <chao.gao@intel.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>
-References: <20220204214205.3306634-1-seanjc@google.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <20220204214205.3306634-1-seanjc@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Claudiu Beznea <claudiu.beznea@microchip.com>,
+        <alexandre.belloni@bootlin.com>, <ludovic.desroches@microchip.com>,
+        <robh+dt@kernel.org>, <linux@armlinux.org.uk>,
+        <mturquette@baylibre.com>, <sboyd@kernel.org>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20211216141338.35144-1-claudiu.beznea@microchip.com>
+ <20211216141338.35144-7-claudiu.beznea@microchip.com>
+From:   Nicolas Ferre <nicolas.ferre@microchip.com>
+Organization: microchip
+In-Reply-To: <20211216141338.35144-7-claudiu.beznea@microchip.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/4/22 22:41, Sean Christopherson wrote:
-> Prepare for VMX's IPI virtualization, in which hardware treats ICR as a
-> single 64-bit register in x2APIC mode.  The SDM wasn't clear on how ICR
-> should be modeled, KVM just took the easier path and guessed wrong.
+On 16/12/2021 at 15:13, Claudiu Beznea wrote:
+> Add OPPs for SAMA7G5 along with clock for CPU.
 > 
-> Hardware's implementation of ICR as a 64-bit register requires explicit
-> handling to maintain backwards compatibility in KVM_{G,S}ET_REG, as
-> migrating a VM between hosts with different IPI virtualization support
-> would lead to ICR "corruption" for writes that aren't intercepted by
-> KVM (hardware doesn't fill ICR2 in vAPIC page).
-> 
-> This series includes AVIC cleanups for things I encountered along the way.
-> AVIC still has multiple issues, this only fixes the easy bugs.
-> 
-> Sean Christopherson (11):
->    Revert "svm: Add warning message for AVIC IPI invalid target"
->    KVM: VMX: Handle APIC-write offset wrangling in VMX code
->    KVM: x86: Use "raw" APIC register read for handling APIC-write VM-Exit
->    KVM: SVM: Use common kvm_apic_write_nodecode() for AVIC write traps
->    KVM: SVM: Don't rewrite guest ICR on AVIC IPI virtualization failure
->    KVM: x86: WARN if KVM emulates an IPI without clearing the BUSY flag
->    KVM: x86: Make kvm_lapic_reg_{read,write}() static
->    KVM: x86: Add helpers to handle 64-bit APIC MSR read/writes
->    KVM: x86: Treat x2APIC's ICR as a 64-bit register, not two 32-bit regs
->    KVM: x86: Make kvm_lapic_set_reg() a "private" xAPIC helper
->    KVM: selftests: Add test to verify KVM handles x2APIC ICR=>ICR2 dance
-> 
->   arch/x86/kvm/lapic.c                          | 193 ++++++++++++------
->   arch/x86/kvm/lapic.h                          |  21 +-
->   arch/x86/kvm/svm/avic.c                       |  38 ++--
->   arch/x86/kvm/trace.h                          |   6 +-
->   arch/x86/kvm/vmx/vmx.c                        |  11 +-
->   arch/x86/kvm/x86.c                            |  15 +-
->   tools/testing/selftests/kvm/.gitignore        |   1 +
->   tools/testing/selftests/kvm/Makefile          |   1 +
->   .../selftests/kvm/include/x86_64/apic.h       |   1 +
->   .../selftests/kvm/x86_64/xapic_state_test.c   | 150 ++++++++++++++
->   10 files changed, 325 insertions(+), 112 deletions(-)
->   create mode 100644 tools/testing/selftests/kvm/x86_64/xapic_state_test.c
-> 
-> 
-> base-commit: 17179d0068b20413de2355f84c75a93740257e20
+> Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
 
-Queued, with patch 4 adjusted.  Thanks,
+Acked-by: Nicolas Ferre <nicolas.ferre@microchip.com>
+Queued in at91-dt branch.
 
-Paolo
+Regards,
+   Nicolas
 
+> ---
+>   arch/arm/boot/dts/sama7g5.dtsi | 37 ++++++++++++++++++++++++++++++++++
+>   1 file changed, 37 insertions(+)
+> 
+> diff --git a/arch/arm/boot/dts/sama7g5.dtsi b/arch/arm/boot/dts/sama7g5.dtsi
+> index 7039311bf678..22352ef5bc72 100644
+> --- a/arch/arm/boot/dts/sama7g5.dtsi
+> +++ b/arch/arm/boot/dts/sama7g5.dtsi
+> @@ -30,6 +30,43 @@ cpu0: cpu@0 {
+>   			device_type = "cpu";
+>   			compatible = "arm,cortex-a7";
+>   			reg = <0x0>;
+> +			clocks = <&pmc PMC_TYPE_CORE PMC_CPUPLL>;
+> +			clock-names = "cpu";
+> +			operating-points-v2 = <&cpu_opp_table>;
+> +		};
+> +	};
+> +
+> +	cpu_opp_table: opp-table {
+> +		compatible = "operating-points-v2";
+> +
+> +		opp-90000000 {
+> +			opp-hz = /bits/ 64 <90000000>;
+> +			opp-microvolt = <1050000 1050000 1225000>;
+> +			clock-latency-ns = <320000>;
+> +		};
+> +
+> +		opp-250000000 {
+> +			opp-hz = /bits/ 64 <250000000>;
+> +			opp-microvolt = <1050000 1050000 1225000>;
+> +			clock-latency-ns = <320000>;
+> +		};
+> +
+> +		opp-600000000 {
+> +			opp-hz = /bits/ 64 <600000000>;
+> +			opp-microvolt = <1050000 1050000 1225000>;
+> +			clock-latency-ns = <320000>;
+> +		};
+> +
+> +		opp-800000000 {
+> +			opp-hz = /bits/ 64 <800000000>;
+> +			opp-microvolt = <1150000 1125000 1225000>;
+> +			clock-latency-ns = <320000>;
+> +		};
+> +
+> +		opp-1000000002 {
+> +			opp-hz = /bits/ 64 <1000000002>;
+> +			opp-microvolt = <1250000 1225000 1300000>;
+> +			clock-latency-ns = <320000>;
+>   		};
+>   	};
+>   
+
+
+-- 
+Nicolas Ferre

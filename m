@@ -2,191 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05DE74C3508
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 19:50:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C8574C350B
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 19:51:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233040AbiBXSvN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 13:51:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56016 "EHLO
+        id S233051AbiBXSvq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 13:51:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229850AbiBXSvK (ORCPT
+        with ESMTP id S229850AbiBXSvo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 13:51:10 -0500
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4631418FAE8;
-        Thu, 24 Feb 2022 10:50:39 -0800 (PST)
-Received: by mail-wm1-x330.google.com with SMTP id d14-20020a05600c34ce00b0037bf4d14dc7so343719wmq.3;
-        Thu, 24 Feb 2022 10:50:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=kcsRaaBaK/3NnHlqWyM90LHKzQI805DRatL3fjAzAmA=;
-        b=i5HOI0QxeN1+i5+46Of1picYM5ycjCQJhcPWz8QwvEiOSLu1QET3duA8EfS1eo8Og0
-         7ekLRxkNZ2rt/zME0buD71eIUm6tsYitLz1CfgpMFPwFM1bdGoayiNgdppRcZ2pw6nXT
-         zGJmiq0iC1gj1vcCV2YubF0VoLhuDi96suno1xvzPBdvG5SK2UtKvy4brpbMH75Si6Mv
-         wbxz5K0hogP4VfVhoNrQicP2v1fImhRsJYfaTQnkmi0yQasFeuF2lN7suZrbmhKcpmw8
-         wtG9Jzi88++gjXslUzVArri9mMyeD9uVUA2+dFsKbguZ11BX8YjyheCFyPpjCJ6IEYgn
-         MG0A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=kcsRaaBaK/3NnHlqWyM90LHKzQI805DRatL3fjAzAmA=;
-        b=53MIkXt5on/HRdQMxVOc0Z39V7MWATex/2vzilog2NY6s5M/TrhcqSc4WOo1y6bQk7
-         VyUVbKyYwesaQ2x6fibfkI9e447pEb/WTH4D8MRj7ZIRiaYbHHAEBfZH2tiIQOeRaLcn
-         Rsb6XUGCENa++4gII+vHno37gdau1wKsR3YITlKoITuD/C/qmnXml+tgc30qlLjcSssG
-         9u4L+45oOJ6fH+ud+D94xaghJ8rBL+4MNp1S53G2/oC9R+Av7MlP5o2NpMq3AQoldip3
-         Ro83GMsHOrNx7q9PQQAibcfjH2zhAyh4mhXBcC16NOpqyuDk2p1EmqJNrImQ9lfXi+uc
-         x5BQ==
-X-Gm-Message-State: AOAM531LqoLv4HL297n45cxZgvpqm9JGrMWP59EC+vEIjuowS0dbo66c
-        OjU5uAmQDxi9ZSpEOOSfiJQ=
-X-Google-Smtp-Source: ABdhPJzyv3nECbfuCA03OMwDjZibSfc8JTwKLF5tCSmAP6yezzjCFYAwDL5JUI3+OTb7DBZ+/wnQmw==
-X-Received: by 2002:a7b:c92a:0:b0:380:fd1f:5d7e with SMTP id h10-20020a7bc92a000000b00380fd1f5d7emr3571908wml.170.1645728637599;
-        Thu, 24 Feb 2022 10:50:37 -0800 (PST)
-Received: from Ansuel-xps.localdomain ([5.170.140.187])
-        by smtp.gmail.com with ESMTPSA id b15-20020adfe64f000000b001e60965a5d4sm157532wrn.44.2022.02.24.10.50.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Feb 2022 10:50:37 -0800 (PST)
-Date:   Thu, 24 Feb 2022 19:50:35 +0100
-From:   Ansuel Smith <ansuelsmth@gmail.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Taniya Das <tdas@codeaurora.org>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 02/15] dt-bindings: clock: simplify qcom,gcc-apq8064
- Documentation
-Message-ID: <YhfTe6itAilSaQpd@Ansuel-xps.localdomain>
-References: <20220224164831.21475-1-ansuelsmth@gmail.com>
- <20220224164831.21475-3-ansuelsmth@gmail.com>
- <YhfSaQEM4ZalLGyD@robh.at.kernel.org>
+        Thu, 24 Feb 2022 13:51:44 -0500
+Received: from sonic316-26.consmr.mail.ne1.yahoo.com (sonic316-26.consmr.mail.ne1.yahoo.com [66.163.187.152])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C96318FAE8
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 10:51:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1645728673; bh=fGF/EoVhODCigYV54NcDHM73XhMtHJ3BGOxKAblacms=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=c1yy3cP3Yxrr0acUmDfynbEv2O+osnOxJlzqLcrLIWzTPfUfFyJEVIVofNypNoxvCjtNM8LD+9qRM8WfpRvzjFCptAR+JAABSfT7lO2RXZQzVYZHsZFY0e/krcwzGzdnZqr0rjxlsVpuYfyiRczMa3sck3oGcZ1Gd0fifTpJDMjEHwKiMDdPXtDMPwoIbjHLNrJUQU3qBJyefpLXOsv1E8yJW8UEE2+ymM3wnEGFPWAp0QL0vwMAhmEdTY/SATiLURifNeYxmDrEqdXgbUlrmgViAC33W2tTchyxUAHxmp+E4x3qyw/uwaEI+zCSMMBhc1AddwPIy0+fwRlgK9PoQw==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1645728673; bh=OsSEL5s3BmBPYr+G6uYVI2zmjSywNBElDggcAMzbT3e=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=GeTziScyA1/iRhS0gm7zomSYGaeUnbzNiq9iMA83V9Oc/FKUzQR75PaUHaGgMJ0S5zCgYQK7altcKAgTbcHnSYtNvFgevwdKLLVB1AsuDnYhNlixvUZUM5MhjLdOQiVQTOvMa9Zq2Jp6sNxIUDt+S5N5et2hQJY2FOD0/FxBbPq5ecB1Q+gweE21CTQ7MbEiObO7elBYVqWQSGGNtIDpKmrw24mNOzlvySSbFTlosHPdQgFLAL7V+iNVbbKTAyoMy4kSz/oWVgJftfK+2EdYyd7k6/Fh0353BNCfewpL8KSxyX6RKfTSNpkgxxbfnwPPZx4uXptqNBn4O3LWbjYqgQ==
+X-YMail-OSG: ShwySLMVM1npCShlrpBxlUgFG_NfL37SbrOSYlzQB7mtnJi7JnHBF7JL8c4sPEg
+ HPS.KLD15BmkCOoX3A.00e4kInORhrX5ziWPGOVFbuBMNieUL1iufJqTYuSo0ykQzt2iOTMvrHDT
+ VPQ3e5pcBB3hc6RYFNmHASh9.89GNos_qJxoQTFjS4JTnhuWf9VqFEarUDetPks8nwOQCkGf0tVf
+ 0GjJXyQT7zHpQj51YCJ.uJF2gvRxqPj7BxhgxdFcQIOSS.7HhdYRVlMHkGKNC2JD1hYZemcleQ.g
+ PrSZEGIjRjzcbqs55wqw6syJfTT.UIpYP8lbHR1xYdTNVwGL46F2PsqZbozmswDULOF8Hkoutbkw
+ S4jUwqEIWVXXykhI7MigLWej5wPrFyCBW1g67khKDVo4pyrFasTp2TzacMyJflYHFR3fAZ8ZNpng
+ FKTdc2oJ0Aq4a._OogqjQQq89zFH1SmxRREls_nlcnOd.YquhzIRbfHx59xRVKw5Cng9nEiMfeQo
+ iGCPbQ4LA5p.qyJh5fDa5DjXZ.67T_2quJwsElovUuuacU2yJSG7xn6TqJDABignkOvyg996SbdW
+ PYkvsENCGBDrtys2DDSWhwI1TiOo6IKDdDXbAmFdfhITqi77Dn6ScFG48OU8OsZIDlRvBoL3dKmh
+ hcXtCHuU9rWGmUqRxlc1nZmgb_y.FnR2Bp6Q1Exm.NxmnzoFTOdI7fBADnmroLxpbok3qw4i6IEH
+ E0Rms6Rp9em8a2_A3sgC7Zo_MNWdk.jD6LUAGK_KIN0Lw1cKV.4ZY_bacK5WaANydPymqnNsdGuh
+ A_QhVHHwx4JUC.ocCnCJq9qGnH2QPyp4la6sVsDYJvWHhGqH6OGryDJtOGSzH3Cr0s7Y6savbijf
+ uTFTjwHLNIcmMs1YZ0jY3q2v_cduy0ZRR_MAhzfy9bkNa8l0e9Q5PNlWtiRyWLOXFXfhZz94.k5i
+ EqBgxH1syiCCPXh92ucQbUY_xE1Ypenjo9yaWUgGDRDw1Wj3YINUPXaZfp0frtx5nOf6lCpOn7CJ
+ EzYU.smotV80Z5jSp3vEzFx0MrM7rFzx25nv52T_CkXRPg6zb8Fhf4DggenfdvFEQgRUeS74I3Qc
+ 79BwTIStvFDiCsSd.L1Gc1nj0eCkI3S9VtPbQUY9BkXDmx7fVQlPEYSGD1ExFQO2.EFgk4R89.dF
+ z32bSUXeG.jdYI8zxkjDW0usdv8B60Aeogm9qxFLS.8f0fJS3yMxL83kO.Uh2ZmOs2Tra8Xhslcf
+ L3ox5ZNW0QgzbgD84hyorWnpwZtGaYPdRGA_KjWW_ODSfUVzcSyrrHKhS5DfWXxzXm15qZT74A2f
+ 3prHMk.NFGIFXp9MOTv7asbb68OZKMN4LcyAUNoE3xiJlNswtcFHVRh6FnbnNKmHRgBLwt03BjZf
+ HwofRK.nzoSmnhNsXXednbVULZZcwXd5CivVJdwmjTSx5yH9Whn5TI.GFwG1dnBJNbAjs4Yf0lrU
+ T.WSjSumRLXrGVZk_04hvc599usQRAKftXWgTc0nyPA2knQV8W.S0qpxVGedDPeYB.2K2esQTg_w
+ 87hgVSF2Q67RYkSdfZxYUn0lEsYC7jTpqGejuoMfsAogIfZxKUz7s3Y3PNvJL6a8JQ6JoJ.cFbe.
+ PkN15rrPnH_cAVS2NRjk823_HRwJDGH48VVZL5LMttvW3pLf0xN7zQVBNhkQwY3aS8aJ5kRlbidL
+ kTxA.SbtvqInF1bFLWOiAjULgOyt3WuCMUwIvxE5_z980YfilrTSHAh1_dV33tikcjn6WpeGVYk4
+ DhsF1tTOAjuQrQwlPP4yT3ctz4.JWl0PepERt2Bc6.lDEu2UcTPE_1g5..Z1fN_j0R6zNr0MgrOq
+ _Z7yfG_yZ7BIJCH3QYBLNXz36y3T56yKiF8TA7qjK4f0vTsU6ld6.kTkbdoi7_kGjnewwrbEoiKK
+ rxX5IG2i7WpZH6o3PZ3eNIasAGsxanUe_6sziW9S_LAOB7rKxYPSt4hruHLCe9WCj8uj6x7zpvbd
+ ahgQHEWpBCfomVu2bszy6SoOrbTopi7lXed53LesQFKY6ucxiv_a_khSVU0mYwrMxc0t_cewwUXy
+ RsKPiLLGFjOJVdkC7rd2i4RTmGUYhKncwpUE_0Fo1vd7.JzPsusl.J4q.cnazgC_3HHx6pyDLHiO
+ CF3adUtdydZV6tpQ5Bi0B_oTX9hFIxwFckg4P2nBS5O9GDzSzXsAA1LK2.d6IpAw7Uv.6lcOo0.H
+ wNAASIkdsmkF.RQiiIE9o9rNp5IgC6FM8DtpLtW4ggaeeOSzubtlGecNUwmSEDBZgMO7IQHYD
+X-Sonic-MF: <casey@schaufler-ca.com>
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic316.consmr.mail.ne1.yahoo.com with HTTP; Thu, 24 Feb 2022 18:51:13 +0000
+Received: by kubenode516.mail-prod1.omega.bf1.yahoo.com (VZM Hermes SMTP Server) with ESMTPA ID 5ae05b396aebdbf3fb66b680c61862d6;
+          Thu, 24 Feb 2022 18:51:09 +0000 (UTC)
+Message-ID: <9405bcfc-78bd-8e7f-41d4-b919221f73e4@schaufler-ca.com>
+Date:   Thu, 24 Feb 2022 10:51:07 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YhfSaQEM4ZalLGyD@robh.at.kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH 2/2] integrity: double check iint_cache was initialized
+Content-Language: en-US
+To:     Petr Vorel <pvorel@suse.cz>
+Cc:     zohar@linux.ibm.com, dvyukov@google.com, ebiggers@kernel.org,
+        jmorris@namei.org, keescook@chromium.org,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org, serge@hallyn.com,
+        Casey Schaufler <casey@schaufler-ca.com>
+References: <20210322154207.6802-2-zohar@linux.ibm.com>
+ <20220224142025.2587-1-pvorel@suse.cz>
+ <418628ea-f524-05a1-8bfc-a688fa2d625d@schaufler-ca.com>
+ <YhfDhYQYZTU0clAf@pevik>
+From:   Casey Schaufler <casey@schaufler-ca.com>
+In-Reply-To: <YhfDhYQYZTU0clAf@pevik>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Mailer: WebService/1.1.19797 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 24, 2022 at 12:46:01PM -0600, Rob Herring wrote:
-> On Thu, Feb 24, 2022 at 05:48:18PM +0100, Ansuel Smith wrote:
-> > Simplify qcon,gcc-apq8064 Documentation by using qcom,gcc.yaml as a
-> > template and remove the compatible from qcom,gcc.yaml
-> > 
-> > Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
-> > ---
-> >  .../bindings/clock/qcom,gcc-apq8064.yaml      | 29 +++++--------------
-> >  .../bindings/clock/qcom,gcc-other.yaml        |  3 --
-> >  2 files changed, 7 insertions(+), 25 deletions(-)
-> > 
-> > diff --git a/Documentation/devicetree/bindings/clock/qcom,gcc-apq8064.yaml b/Documentation/devicetree/bindings/clock/qcom,gcc-apq8064.yaml
-> > index 8e2eac6cbfb9..97936411b6b4 100644
-> > --- a/Documentation/devicetree/bindings/clock/qcom,gcc-apq8064.yaml
-> > +++ b/Documentation/devicetree/bindings/clock/qcom,gcc-apq8064.yaml
-> > @@ -6,6 +6,9 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
-> >  
-> >  title: Qualcomm Global Clock & Reset Controller Binding for APQ8064
-> >  
-> > +allOf:
-> > +  - $ref: qcom,gcc.yaml#
-> > +
-> >  maintainers:
-> >    - Stephen Boyd <sboyd@kernel.org>
-> >    - Taniya Das <tdas@codeaurora.org>
-> > @@ -17,22 +20,12 @@ description: |
-> >    See also:
-> >    - dt-bindings/clock/qcom,gcc-msm8960.h
-> >    - dt-bindings/reset/qcom,gcc-msm8960.h
-> > +  - dt-bindings/clock/qcom,gcc-apq8084.h
-> > +  - dt-bindings/reset/qcom,gcc-apq8084.h
-> >  
-> >  properties:
-> >    compatible:
-> > -    const: qcom,gcc-apq8064
-> 
-> I assume you didn't mean to remove this?
+On 2/24/2022 9:42 AM, Petr Vorel wrote:
+> Hi Casey,
 >
+>> On 2/24/2022 6:20 AM, Petr Vorel wrote:
+>>> Hi Mimi, Tetsuo, Kees, all,
+>>> FYI this commit merged as 92063f3ca73a ("integrity: double check iint_cache was initialized")
+>>> is the reason for openSUSE distro installer going back from lsm= to deprecated
+>>> security= when filling default grub parameters because security=apparmor or
+>>> security=selinux does not break boot when used with ima_policy=tcb, unlike
+>>> using lsm.
+>> OK, color me confused. Integrity isn't an LSM. It doesn't
+>> call security_add_hooks().
+> Really: "Initially I also questioned making "integrity" an LSM.  Perhaps it's
+> time to reconsider." [1]
 
-Think you got confused by the patch?
+It was always my expectation, which appears to have been poorly
+communicated, that "making integrity an LSM" meant using the LSM
+hook infrastructure. Just adding "integrity" to lsm= doesn't make
+it an LSM to my mind.
 
-> > -
-> > -  '#clock-cells':
-> > -    const: 1
-> > -
-> > -  '#reset-cells':
-> > -    const: 1
-> > -
-> > -  '#power-domain-cells':
-> > -    const: 1
-> > -
-> > -  reg:
-> > -    maxItems: 1
-> > +    const: qcom,gcc-apq8084
+>>> @Kees, @Mimi sure, people who use ima_policy=tcb will just remove lsm parameter
+>>> or add "integrity" to it but I wonder whether there could be "integrity"
+>>> automatic inclusion when using ima_policy=tcb. Although the point of lsm= (and
+>>> CONFIG_LSM) is to have *ordered* list of enabled LSMs and it wouldn't be clear
+>>> on which place.
+>> Why would adding integrity to the lsm= make sense? It's not an LSM.
+>> Sorry, but something is wrong here.
+> np. I explained that: try to boot with "ima_policy=tcb lsm=" or "ima_policy=tcb
+> lsm=whatever" (whatever != integrity).
+>
+> Also have look at commit 92063f3ca73a ("integrity: double check iint_cache was
+> initialized") which explain why it's needed.
 
-The compatible is here. Or I'm missing something?
+	"The mixed metaphor never boils."
 
-> >  
-> >    nvmem-cells:
-> >      minItems: 1
-> > @@ -53,21 +46,13 @@ properties:
-> >    '#thermal-sensor-cells':
-> >      const: 1
-> >  
-> > -  protected-clocks:
-> > -    description:
-> > -      Protected clock specifier list as per common clock binding.
-> > -
-> >  required:
-> >    - compatible
-> > -  - reg
-> > -  - '#clock-cells'
-> > -  - '#reset-cells'
-> > -  - '#power-domain-cells'
-> >    - nvmem-cells
-> >    - nvmem-cell-names
-> >    - '#thermal-sensor-cells'
-> >  
-> > -additionalProperties: false
-> > +unevaluatedProperties: false
-> >  
-> >  examples:
-> >    - |
-> > diff --git a/Documentation/devicetree/bindings/clock/qcom,gcc-other.yaml b/Documentation/devicetree/bindings/clock/qcom,gcc-other.yaml
-> > index 4e5903bcd70d..47e1c5332d76 100644
-> > --- a/Documentation/devicetree/bindings/clock/qcom,gcc-other.yaml
-> > +++ b/Documentation/devicetree/bindings/clock/qcom,gcc-other.yaml
-> > @@ -15,8 +15,6 @@ description:
-> >    power domains.
-> >  
-> >    See also:
-> > -  - dt-bindings/clock/qcom,gcc-apq8084.h
-> > -  - dt-bindings/reset/qcom,gcc-apq8084.h
-> >    - dt-bindings/clock/qcom,gcc-ipq4019.h
-> >    - dt-bindings/clock/qcom,gcc-ipq6018.h
-> >    - dt-bindings/reset/qcom,gcc-ipq6018.h
-> > @@ -40,7 +38,6 @@ allOf:
-> >  properties:
-> >    compatible:
-> >      enum:
-> > -      - qcom,gcc-apq8084
-> >        - qcom,gcc-ipq4019
-> >        - qcom,gcc-ipq6018
-> >        - qcom,gcc-ipq8064
-> > -- 
-> > 2.34.1
-> > 
-> > 
+What is bothering me is that IMA, which is not an LSM, depends on the
+LSM mechanism for specification. Sigh, I can see that boat has sailed.
 
--- 
-	Ansuel
+Since IMA doesn't use the LSM hook mechanisms (doesn't add hooks to the
+hook lists) it shouldn't matter where in the lsm= string "integrity" is
+or where in CONFIG_LSM it appears. The ordering is only relevant to the
+"registered" hooks, and IMA doesn't register.
+
+... except that it shouldn't be 1st, since "capability" is always supposed
+to be 1st. And it shouldn't be last, because BPF whats to be there, and I
+can't say if their user-space will handle the lsm string if it isn't.
+
+> Kind regards,
+> Petr
+>
+> [1] https://lore.kernel.org/linux-integrity/3ed2004413e0ac07c7bd6f10294d6b6fac6fdbf3.camel@linux.ibm.com/

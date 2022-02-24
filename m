@@ -2,56 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D0A74C242E
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 07:46:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D5E7C4C2430
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 07:46:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231387AbiBXGqY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 01:46:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54314 "EHLO
+        id S231393AbiBXGqx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 01:46:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231361AbiBXGqX (ORCPT
+        with ESMTP id S230448AbiBXGqv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 01:46:23 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2740C26A3A2;
-        Wed, 23 Feb 2022 22:45:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
-        :In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=5Nvi5N/h8QfPcwBE20KmmMMAuPRvtYOEhdDCUIz+bVY=; b=KOnwr/oj6KMEdAcxyzOz0NgHFi
-        d5ZDg7ZlnAhgAtvw0tI17c/NsyZ5OdJev1+0srWAf7oK9kBUREkd5G/paIk48BeK/ILV2AFTZNzBP
-        SO3TdB605qVQnMHvxsMblvYIMBlLm/rJhQgDh7b5f2ZH2IonYNfwXnW2soFH6DvilOBEt3TtLFR0F
-        U16DQpn1hV2uBh2HYYkwmhjLQue/s6IA8Reo1ZyViRyOWcp31r5rTX/Nv2hLpvju2hPtS+9/BZtmY
-        2Ut551AvT/29lAlDo0MrHyRL4p9hHNf0vOaBpHZrv7GtJZk/rm5l+ZPRYkDyjYvUpMlgkgg1etyNq
-        DlX8ai4A==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nN7sj-00CXJe-DE; Thu, 24 Feb 2022 06:45:41 +0000
-Message-ID: <4820dc3e-6c4d-58f4-701a-784726f6c786@infradead.org>
-Date:   Wed, 23 Feb 2022 22:45:35 -0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: linux-next: Tree for Feb 22 (NFSD_V2_ACL)
-Content-Language: en-US
-To:     Chuck Lever III <chuck.lever@oracle.com>
-Cc:     "broonie@kernel.org" <broonie@kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Thu, 24 Feb 2022 01:46:51 -0500
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EE8D26A3A2
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 22:46:22 -0800 (PST)
+Received: by mail-pj1-x102d.google.com with SMTP id m13-20020a17090aab0d00b001bbe267d4d1so5151635pjq.0
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 22:46:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=BNrrQeR6NLfEy9loV4cRdfklZCJsQsZ1Ot62w9IVtWc=;
+        b=FC6WwKcl8bcpZH6rSRW+egDrnBFtM3/+Wz8W+smEyyK8YkHUvCqHkLVFsbIzKgtIkZ
+         rpJQYoPf92HL8Ol2sa/r8myerAxpRTYyvXhTy3eMvROo9vuXKaMmnwMwAwIW0RqdRIhC
+         sCT8nHeSsD0KGOEbF+WJ88qUpgbSAyDK377p0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=BNrrQeR6NLfEy9loV4cRdfklZCJsQsZ1Ot62w9IVtWc=;
+        b=NFVrwnwZiYoe82HSk3tXQBNf1YJ00ucBxDLSvS5nSQJcH6WT+pG3HO7H5N/nf+wi09
+         Jv0EbWjfZBb2qEQeIdQjDC2vQZXUims27DSLIhnJ5KcVbXDKa9a+p75clOOV5UWEsUPB
+         OSPJEkUK8FCczO0Igej85/9qxO3etkv8Eie6nvqBTRhFQwS6szZKou+2bWLpoeTWRmz/
+         /pzmMJ6pihyEO5MQ27QateLDs+jMCf6WzR7NhmxfpktpmPIlzSox+ZYQgzq8fmhlCCDp
+         K4mC65GHVLMjpWCJ8IC0g9Qg9L1EL+sRSq8VblxBaQijd1f3P/fQSuJtuqI+NS5LkA+Y
+         1vlA==
+X-Gm-Message-State: AOAM531ICxOirJ2WIAu/r80iDYNh0v1hSkx7WDGP6UNkmYAzEwULYOJQ
+        4DvEwZGuy2gG2R5BGLX7SjpP0A==
+X-Google-Smtp-Source: ABdhPJxPMmxj82io+/WpZ92rz6mdpLfWg+7yYFn+HEFTUTwqoTzzIKGNd9B5t41jrbqTU+7RMRhLuA==
+X-Received: by 2002:a17:90a:ab89:b0:1bc:71a7:f93a with SMTP id n9-20020a17090aab8900b001bc71a7f93amr1341755pjq.111.1645685181936;
+        Wed, 23 Feb 2022 22:46:21 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id f7sm1866845pfc.0.2022.02.23.22.46.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Feb 2022 22:46:21 -0800 (PST)
+Date:   Wed, 23 Feb 2022 22:46:21 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     David Gow <davidgow@google.com>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux FS-devel Mailing List <linux-fsdevel@vger.kernel.org>,
-        Linux NFS Mailing List <linux-nfs@vger.kernel.org>
-References: <20220223014135.2764641-1-broonie@kernel.org>
- <5ef34a6f-c8ed-bb32-db24-050398c897a0@infradead.org>
- <EEADAF6A-04D6-42C8-9AAE-7D4EFB2FA507@oracle.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <EEADAF6A-04D6-42C8-9AAE-7D4EFB2FA507@oracle.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] kunit: tool: Do not colorize output when redirected
+Message-ID: <202202232245.BD69919F@keescook>
+References: <20220224055350.1854078-1-keescook@chromium.org>
+ <CABVgOS=pFN4T5HjYpJPW4KOzXRFr-SUTm09xymxBmyidg0h=WA@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CABVgOS=pFN4T5HjYpJPW4KOzXRFr-SUTm09xymxBmyidg0h=WA@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,33 +72,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2/23/22 07:58, Chuck Lever III wrote:
+On Thu, Feb 24, 2022 at 02:43:53PM +0800, David Gow wrote:
+> On Thu, Feb 24, 2022 at 1:53 PM Kees Cook <keescook@chromium.org> wrote:
+> >
+> > Filling log files with color codes makes diffs and other comparisons
+> > difficult. Only emit vt100 codes when the stdout is a TTY.
+> >
+> > Cc: Brendan Higgins <brendanhiggins@google.com>
+> > Cc: linux-kselftest@vger.kernel.org
+> > Cc: kunit-dev@googlegroups.com
+> > Signed-off-by: Kees Cook <keescook@chromium.org>
+> > ---
 > 
->> On Feb 23, 2022, at 1:08 AM, Randy Dunlap <rdunlap@infradead.org> wrote:
->>
->> On 2/22/22 17:41, broonie@kernel.org wrote:
->>> Hi all,
->>>
->>> Note that today's -next does not include the akpm tree since it's been a
->>> long day and the conflicts seemed more than it was wise for me to
->>> attempt at this point.  I'll have another go tomorrow but no guarantees.
->>>
->>> Changes since 20220217:
->>
->> on x86_64:
->>
->> WARNING: unmet direct dependencies detected for NFSD_V2_ACL
->>  Depends on [n]: NETWORK_FILESYSTEMS [=y] && NFSD [=n]
->>  Selected by [y]:
->>  - NFSD_V3_ACL [=y] && NETWORK_FILESYSTEMS [=y]
+> Ah, you can tell a tool has "made it" when people are redirecting its output!
+
+Heheh. Indeed! I have some more patches coming where I put a diff of
+output in the commit log. ;)
+
+> This works fine here.
 > 
-> Thanks, Randy. I think I've got it addressed in my for-next.
+> Reviewed-by: David Gow <davidgow@google.com>
 
-Hi Chuck,
+Thanks!
 
-I'm still seeing this in next-20220223...
+-Kees
+
+> 
+> Thanks,
+> -- David
+> 
+> >  tools/testing/kunit/kunit_parser.py | 7 +++++++
+> >  1 file changed, 7 insertions(+)
+> >
+> > diff --git a/tools/testing/kunit/kunit_parser.py b/tools/testing/kunit/kunit_parser.py
+> > index 05ff334761dd..807ed2bd6832 100644
+> > --- a/tools/testing/kunit/kunit_parser.py
+> > +++ b/tools/testing/kunit/kunit_parser.py
+> > @@ -11,6 +11,7 @@
+> >
+> >  from __future__ import annotations
+> >  import re
+> > +import sys
+> >
+> >  import datetime
+> >  from enum import Enum, auto
+> > @@ -503,14 +504,20 @@ RESET = '\033[0;0m'
+> >
+> >  def red(text: str) -> str:
+> >         """Returns inputted string with red color code."""
+> > +       if not sys.stdout.isatty():
+> > +               return text
+> >         return '\033[1;31m' + text + RESET
+> >
+> >  def yellow(text: str) -> str:
+> >         """Returns inputted string with yellow color code."""
+> > +       if not sys.stdout.isatty():
+> > +               return text
+> >         return '\033[1;33m' + text + RESET
+> >
+> >  def green(text: str) -> str:
+> >         """Returns inputted string with green color code."""
+> > +       if not sys.stdout.isatty():
+> > +               return text
+> >         return '\033[1;32m' + text + RESET
+> >
+> >  ANSI_LEN = len(red(''))
+> > --
+> > 2.30.2
+> >
+> > --
+> > You received this message because you are subscribed to the Google Groups "KUnit Development" group.
+> > To unsubscribe from this group and stop receiving emails from it, send an email to kunit-dev+unsubscribe@googlegroups.com.
+> > To view this discussion on the web visit https://groups.google.com/d/msgid/kunit-dev/20220224055350.1854078-1-keescook%40chromium.org.
+
+
 
 -- 
-~Randy
+Kees Cook

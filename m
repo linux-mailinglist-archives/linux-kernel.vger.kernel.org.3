@@ -2,135 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B4764C36C1
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 21:18:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BC9A4C36C8
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 21:21:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234316AbiBXUTI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 15:19:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43660 "EHLO
+        id S233728AbiBXUVM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 15:21:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234298AbiBXURq (ORCPT
+        with ESMTP id S230009AbiBXUVL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 15:17:46 -0500
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DAF077ABD
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 12:17:14 -0800 (PST)
-Received: by mail-pj1-x1034.google.com with SMTP id gl14-20020a17090b120e00b001bc2182c3d5so6105040pjb.1
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 12:17:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=osandov-com.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=VIoQPvwHqFXtMAXE8AKCkLiEbpc0ZIKiqGrsuvIzD+s=;
-        b=tk7jCJjg1+CUdYaHqNbciARDK8dfm6TepRBLjhUKgQM0CtIrgyTuICuE2Lsn723Gza
-         EXY0qT0hPfDJOuJd/GR0VFQJEcGxj0+VMw8UR9vZJXJ8VIgdAl0cWtet7MraYRn1nCjM
-         rdkvFjsQepqXyglMqp5mXi23JrdltsqogRns4pkN6ZxgE5WitpE+XPlGEHq+u4eIsjnD
-         q6kwVNfqxe3a9xRgdJzR6AOV7qGWFjMwbBiADU0lDjxg6XDS43DZ9KPOo/nOMgLIwJvB
-         +xohKsi/b9O1GaQh1BwCseDhIdkcFhF5vNPr/ySGWV9ynd4hlz/RDBManBb9jcHE42t9
-         l5XQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=VIoQPvwHqFXtMAXE8AKCkLiEbpc0ZIKiqGrsuvIzD+s=;
-        b=uGS5J+wPa4w3WVYJWEG/14xdFBOjSb3NW/BndwC4BfleICMxC2zfjp0QZxxKG+eGm9
-         IQVnR4OLrvdWlYkYHV+zcLg5MGHH6QTE7HhCqQsxkHca2P/BbOFMAx1oNnZ2ZCznm8yi
-         D5vVaPRti1YXyAobySYWg17Ad8szNSGjylje2Nc0atLs/Iht9UQDsToMEwYx2e5pRHco
-         bIrh1PM/jMUwfL9U2vX/ev8/iMjzJ0zhWgRRTTVpXB2AyOpXGdvpvnbp4EYCj5H7nNv5
-         S3yvnFu+yRXsRkTgQRYUJbBksO9H2Bl+iubX6TcN4FLtWvCPBgXWJkoAqGRhxOxwjcoo
-         ACRA==
-X-Gm-Message-State: AOAM533tABugkW2G92taoJ1qBEofhsxuzz8R81njOQygHTr1uQGoyK1b
-        W1zF+1dE9+HXNB7VFI3/nOVnTg==
-X-Google-Smtp-Source: ABdhPJy4DAaoL+2eDM6IAlpIbHkBTBRxpHyXtyOv9u8K7XTUIccliARsqfykcfASTj7CwdFEJRLY7g==
-X-Received: by 2002:a17:902:8f96:b0:14e:bd3c:149b with SMTP id z22-20020a1709028f9600b0014ebd3c149bmr4259267plo.172.1645733833457;
-        Thu, 24 Feb 2022 12:17:13 -0800 (PST)
-Received: from relinquished.localdomain ([2620:10d:c090:400::5:64b1])
-        by smtp.gmail.com with ESMTPSA id lb4-20020a17090b4a4400b001b9b20eabc4sm181429pjb.5.2022.02.24.12.17.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Feb 2022 12:17:13 -0800 (PST)
-Date:   Thu, 24 Feb 2022 12:17:11 -0800
-From:   Omar Sandoval <osandov@osandov.com>
-To:     Sweet Tea Dorminy <sweettea-kernel@dorminy.me>
-Cc:     dsterba@suse.cz, Chris Mason <clm@fb.com>,
-        Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>, linux-btrfs@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel-team@fb.com
-Subject: Re: [PATCH v4] btrfs: add fs state details to error messages.
-Message-ID: <Yhfnx21q51xSBl32@relinquished.localdomain>
-References: <a059920460fe13f773fd9a2e870ceb9a8e3a105a.1645644489.git.sweettea-kernel@dorminy.me>
- <20220224132210.GS12643@twin.jikos.cz>
- <284ccc08-8de7-9188-19d8-20f4eda56cb4@dorminy.me>
- <20220224184231.GZ12643@twin.jikos.cz>
- <20f14d85-6a07-e66d-4711-c16c6930c2a3@dorminy.me>
+        Thu, 24 Feb 2022 15:21:11 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A3EF75C34
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 12:20:41 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C2B056175F
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 20:20:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C5CFC340F2;
+        Thu, 24 Feb 2022 20:20:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645734040;
+        bh=jHJhesHy+9/fGMrcaHrx6dRyS22nbc2nynNMtLMtBCY=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=k08/uO31fAuRW7vQFOqGyJslkunL8DVwQipPk0y+Uik8Z/1FtQ7IJnau+PPf8mB1k
+         YA2ykCk+TocFcfWpUOvPww1Rh+HFQY9XyrTUsYqbmeoB1Y0u0rtlhEHZBw1i9H0euK
+         CUXS2AZ8SDh/LffuLfhT1eqAn+3LaOOkrkL5053dmw2r9He56rKIpMFXwGt2NCMS74
+         idvZdXx9OY8LGa+5kV4GGqVeG1pgPrTxY1Kn+yLQLUgmskGMXM5M9gv+1Bz7VKX14l
+         /AOLtA3N701mPQYB1hNWA209cjUKnGdrUawBmJ7pjqrD16cX625cW8ugfk1XwrpseS
+         m+nH0lBuYjb9g==
+From:   Mark Brown <broonie@kernel.org>
+To:     Daniel Baluta <daniel.baluta@oss.nxp.com>
+Cc:     linux-kernel@vger.kernel.org, pierre-louis.bossart@linux.intel.com,
+        alsa-devel@alsa-project.org, ranjani.sridharan@linux.intel.com,
+        peter.ujfalusi@linux.intel.com,
+        Daniel Baluta <daniel.baluta@nxp.com>,
+        kai.vehmanen@linux.intel.com, lgirdwood@gmail.com
+In-Reply-To: <20220223153849.84471-1-daniel.baluta@oss.nxp.com>
+References: <20220223153849.84471-1-daniel.baluta@oss.nxp.com>
+Subject: Re: [PATCH] ASoC: SOF: pcm: Add compress_ops for SOF platform component driver
+Message-Id: <164573403817.3139675.11623054539337651313.b4-ty@kernel.org>
+Date:   Thu, 24 Feb 2022 20:20:38 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20f14d85-6a07-e66d-4711-c16c6930c2a3@dorminy.me>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 24, 2022 at 03:09:08PM -0500, Sweet Tea Dorminy wrote:
-> > > All the other interactions with info->fs_state are test/set/clear_bit,
-> > > which treat the argument as volatile and are therefore safe to do from
-> > > multiple threads. Without the READ_ONCE (reading it as a volatile),
-> > > the compiler or cpu could turn the reads of info->fs_state in
-> > > for_each_set_bit() into writes of random stuff into info->fs_state,
-> > > potentially clearing the state bits or filling them with garbage.
-> > I'm not sure I'm missing something, but I find the above hard to
-> > believe. Concurrent access to a variable from multiple threads may not
-> > produce consistent results, but random writes should not happen when
-> > we're just reading.
+On Wed, 23 Feb 2022 17:38:49 +0200, Daniel Baluta wrote:
+> From: Daniel Baluta <daniel.baluta@nxp.com>
 > 
-> Maybe I've been reading too many articles about the things compilers are
-> technically allowed to do. But as per the following link, the C standard
-> does permit compilers inventing writes except to atomics and volatiles:
-> https://lwn.net/Articles/793253/#Invented%20Stores
+> Now that sof_compressed_ops initial implementation was merged
+> we can enable it in SOF platform component driver.
 > 
-> > 
-> > > Even if this is right, it'd be rare, but it would be exceeding weird
-> > > for a message to be logged listing an error and then future messages
-> > > be logged without any such state, or with a random collection of
-> > > garbage states.
-> > How would that happen? The volatile keyword is only a compiler hint not
-> > to do optimizations on the variable, what actually happens on the CPU
-> > level depends if the instruction is locked or not, so different threads
-> > may read different bits.
-> > You seem to imply that once a variable is not used with volatile
-> > semantics, even just for read, the result could lead to random writes
-> > because it's otherwise undefined.
+> This partially reverts commit
+> 8a720724589e ("ASoC: SOF: pcm: Remove non existent CONFIG_SND_SOC_SOF_COMPRESS reference")
 > 
-> Pretty much; once a variable is read without READ_ONCE, it's unsafe to write
-> a new value on another thread that depends on the old value. Imagine a
-> compiler which invents stores; then if you are both reading and setting a
-> variable 'a' on different threads, the following could happen:
-> 
-> thread 1 (reads)       thread 2 (modifies)
-> 
-> reads a into tmp
-> 
-> stores junk into a
-> 
->                                 reads junk from a
-> 
-> stores tmp into a
-> 
->                                 writes junk | 2 to a
-> 
-> 
-> Now a contains junk indefinitely.
-> 
-> 
-> But if it's too theoretical, I'm happy to drop it and amend my paranoia
-> level.
+> [...]
 
-I agree with Sweet Tea here. Even if it's very theoretical, it costs us
-nothing to do the "correct" thing here.
+Applied to
+
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+
+Thanks!
+
+[1/1] ASoC: SOF: pcm: Add compress_ops for SOF platform component driver
+      commit: 76cdd90b27b4e7379ce4d9032dda1927ac69ad01
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark

@@ -2,171 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C9094C29B3
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 11:40:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B9774C29C5
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 11:43:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233527AbiBXKj5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 05:39:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48734 "EHLO
+        id S233583AbiBXKm6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 05:42:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233524AbiBXKjx (ORCPT
+        with ESMTP id S233556AbiBXKmw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 05:39:53 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3227728AD8B
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 02:39:23 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EAA48B81C4A
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 10:39:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75D07C340E9;
-        Thu, 24 Feb 2022 10:39:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645699160;
-        bh=JE74vM6F239/HyTrEDsqOE00ec9BmQ42Y4OdvszfnpU=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=qAs+hGS6Ri7GNCE9Har0J+LPVD+ewhbDdPU45i37O7fJZZKp9bcyVQb4eE4Jvb94e
-         4P7PTXOxSwb3MNglKP4zsZgu0734lr6EMTGVUWMidtpZi/GhVgwZ526WxmlhJoS4TG
-         YRULgtIp5lITDHTUl9XTZCrjWmaMCwnAGOoYJNecxrXJ6mmAhqGJGnTvqePx+ruLxE
-         ykAsn+5JTIlB+HnsujxgbU1U9Oqd14UR0JDzrh6Cer3YxKsG6gNuVywh/pMQBr6qml
-         W5n6O49t1pX+X4FoiLqeMlFzNIxpXPXlFriizE+cwWKxUdjN7brcP0yLpz3y41GVEr
-         BKjT6Li1tOwig==
-Received: from disco-boy.misterjones.org ([51.254.78.96] helo=www.loen.fr)
-        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <maz@kernel.org>)
-        id 1nNBWo-00A9YD-5V; Thu, 24 Feb 2022 10:39:18 +0000
+        Thu, 24 Feb 2022 05:42:52 -0500
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B4D716A587;
+        Thu, 24 Feb 2022 02:42:21 -0800 (PST)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 21OAg0eH081267;
+        Thu, 24 Feb 2022 04:42:00 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1645699320;
+        bh=9mbVPX5yGxsgscu/w86Ery9cHYKSihH4xF3AO5vM/3g=;
+        h=Date:From:Subject:To:CC:References:In-Reply-To;
+        b=quzaTS8v57gU5qNp4wFdpYQlX8eU+jzDtUIHFVxXOKwBU/qL3yzz9LLRIHHPokEXv
+         D2CgcYrVQj661wM5FwLZ5FHXKWs3JwKPg+4i1aKgBtg3CUp0OYBb0Uo7BoYGVxJSUJ
+         52TBMLJFhlbgNyJF/Mu6RCi0LXZdIJVYuJ1YOc3I=
+Received: from DLEE104.ent.ti.com (dlee104.ent.ti.com [157.170.170.34])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 21OAg0MS022106
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 24 Feb 2022 04:42:00 -0600
+Received: from DLEE107.ent.ti.com (157.170.170.37) by DLEE104.ent.ti.com
+ (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Thu, 24
+ Feb 2022 04:41:59 -0600
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE107.ent.ti.com
+ (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Thu, 24 Feb 2022 04:41:59 -0600
+Received: from [10.250.232.149] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 21OAftkM124845;
+        Thu, 24 Feb 2022 04:41:56 -0600
+Message-ID: <220e82d4-1c20-c540-7dcf-a8fb25f8935d@ti.com>
+Date:   Thu, 24 Feb 2022 16:11:55 +0530
 MIME-Version: 1.0
-Date:   Thu, 24 Feb 2022 10:39:17 +0000
-From:   Marc Zyngier <maz@kernel.org>
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     Philip Li <philip.li@intel.com>,
-        Kalesh Singh <kaleshsingh@google.com>,
-        kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
-        kbuild-all@lists.01.org, Will Deacon <will@kernel.org>,
-        Quentin Perret <qperret@google.com>,
-        Fuad Tabba <tabba@google.com>, surenb@google.com,
-        Android Kernel Team <kernel-team@android.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Joey Gouly <joey.gouly@arm.com>,
-        Peter Collingbourne <pcc@google.com>,
-        Andrew Scull <ascull@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Zenghui Yu <yuzenghui@huawei.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        kvmarm <kvmarm@lists.cs.columbia.edu>
-Subject: Re: [kbuild-all] Re: [PATCH v2 6/9] KVM: arm64: Detect and handle
- hypervisor stack overflows
-In-Reply-To: <CAMj1kXHsNsQXbeeS1zcy+xYA7kSE5apbLpChohfvkABS7Z6jKg@mail.gmail.com>
-References: <20220222165212.2005066-7-kaleshsingh@google.com>
- <202202231727.L621fVgD-lkp@intel.com> <875yp63ptg.wl-maz@kernel.org>
- <YhYpvfZaSjrAtkZp@rli9-dbox> <cb750267af0636c49d2f8aa354f086a5@kernel.org>
- <CAMj1kXHsNsQXbeeS1zcy+xYA7kSE5apbLpChohfvkABS7Z6jKg@mail.gmail.com>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <89c48bd2a9b32b4607d1515714fa3c1b@kernel.org>
-X-Sender: maz@kernel.org
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+From:   Siddharth Narayan Vadapalli <s-vadapalli@ti.com>
+Subject: Re: [PATCH] net: phy: mscc: enable MAC SerDes autonegotiation
+To:     Raag Jadav <raagjadav@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Steen Hegelund <steen.hegelund@microchip.com>,
+        Bjarni Jonasson <bjarni.jonasson@microchip.com>
+CC:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Kishon Vijay Abraham <kishon@ti.com>, <s-vadapalli@ti.com>
+References: <1644043492-31307-1-git-send-email-raagjadav@gmail.com>
+Content-Language: en-US
+In-Reply-To: <1644043492-31307-1-git-send-email-raagjadav@gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 51.254.78.96
-X-SA-Exim-Rcpt-To: ardb@kernel.org, philip.li@intel.com, kaleshsingh@google.com, lkp@intel.com, llvm@lists.linux.dev, kbuild-all@lists.01.org, will@kernel.org, qperret@google.com, tabba@google.com, surenb@google.com, kernel-team@android.com, catalin.marinas@arm.com, james.morse@arm.com, alexandru.elisei@arm.com, suzuki.poulose@arm.com, mark.rutland@arm.com, pasha.tatashin@soleen.com, joey.gouly@arm.com, pcc@google.com, ascull@google.com, pbonzini@redhat.com, yuzenghui@huawei.com, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, kvmarm@lists.cs.columbia.edu
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-02-23 12:56, Ard Biesheuvel wrote:
-> On Wed, 23 Feb 2022 at 13:54, Marc Zyngier <maz@kernel.org> wrote:
->> 
->> On 2022-02-23 12:34, Philip Li wrote:
->> > On Wed, Feb 23, 2022 at 09:16:59AM +0000, Marc Zyngier wrote:
->> >> On Wed, 23 Feb 2022 09:05:18 +0000,
->> >> kernel test robot <lkp@intel.com> wrote:
->> >> >
->> >> > Hi Kalesh,
->> >> >
->> >> > Thank you for the patch! Perhaps something to improve:
->> >> >
->> >> > [auto build test WARNING on cfb92440ee71adcc2105b0890bb01ac3cddb8507]
->> >> >
->> >> > url:    https://github.com/0day-ci/linux/commits/Kalesh-Singh/KVM-arm64-Hypervisor-stack-enhancements/20220223-010522
->> >> > base:   cfb92440ee71adcc2105b0890bb01ac3cddb8507
->> >> > config: arm64-randconfig-r011-20220221 (https://download.01.org/0day-ci/archive/20220223/202202231727.L621fVgD-lkp@intel.com/config)
->> >> > compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
->> >> > reproduce (this is a W=1 build):
->> >> >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->> >> >         chmod +x ~/bin/make.cross
->> >> >         # install arm64 cross compiling tool for clang build
->> >> >         # apt-get install binutils-aarch64-linux-gnu
->> >> >         # https://github.com/0day-ci/linux/commit/7fe99fd40f7c4b2973218045ca5b9c9160524db1
->> >> >         git remote add linux-review https://github.com/0day-ci/linux
->> >> >         git fetch --no-tags linux-review Kalesh-Singh/KVM-arm64-Hypervisor-stack-enhancements/20220223-010522
->> >> >         git checkout 7fe99fd40f7c4b2973218045ca5b9c9160524db1
->> >> >         # save the config file to linux build tree
->> >> >         mkdir build_dir
->> >> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/
->> >> >
->> >> > If you fix the issue, kindly add following tag as appropriate
->> >> > Reported-by: kernel test robot <lkp@intel.com>
->> >> >
->> >> > All warnings (new ones prefixed by >>):
->> >> >
->> >> >    include/linux/stddef.h:8:14: note: expanded from macro 'NULL'
->> >> >    #define NULL ((void *)0)
->> >> >                 ^~~~~~~~~~~
->> >> >    arch/arm64/kvm/hyp/nvhe/switch.c:200:27: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
->> >> >            [ESR_ELx_EC_FP_ASIMD]           = kvm_hyp_handle_fpsimd,
->> >> >                                              ^~~~~~~~~~~~~~~~~~~~~
->> >> >    arch/arm64/kvm/hyp/nvhe/switch.c:196:28: note: previous initialization is here
->> >> >            [0 ... ESR_ELx_EC_MAX]          = NULL,
->> >> >                                              ^~~~
->> >> >    include/linux/stddef.h:8:14: note: expanded from macro 'NULL'
->> >> >    #define NULL ((void *)0)
->> >> >                 ^~~~~~~~~~~
->> >>
->> >> Kalesh, please ignore this nonsense. There may be things to improve,
->> >> but this is *NOT* one of them.
->> >>
->> >> These reports are pretty useless, and just lead people to ignore real
->> >> bug reports.
->> >
->> > Hi Kalesh, sorry there're some irrelevant issues mixed in the report,
->> > kindly ignore them. And the valuable ones are the new ones that
->> > prefixed by >>, as the below one in original report.
->> >
->> >>> arch/arm64/kvm/hyp/nvhe/switch.c:372:17: warning: no previous
->> >>> prototype for function 'hyp_panic_bad_stack' [-Wmissing-prototypes]
->> >    void __noreturn hyp_panic_bad_stack(void)
->> >                    ^
->> 
->> This is only called from assembly code, so a prototype wouldn't bring
->> much.
->> 
+Hi All,
+
+On 05/02/22 12:14, Raag Jadav wrote:
+> Enable MAC SerDes autonegotiation to distinguish between
+> 1000BASE-X, SGMII and QSGMII MAC.
 > 
-> Should probably be marked as 'asmlinkage' then. I've suggested many
-> times already that this bogus diagnostic should either be disabled, or
-> disregard 'asmlinkage' symbols.
+> Signed-off-by: Raag Jadav <raagjadav@gmail.com>
+> ---
+>   drivers/net/phy/mscc/mscc.h      |  2 ++
+>   drivers/net/phy/mscc/mscc_main.c | 24 ++++++++++++++++++++++++
+>   2 files changed, 26 insertions(+)
+> 
+> diff --git a/drivers/net/phy/mscc/mscc.h b/drivers/net/phy/mscc/mscc.h
+> index a50235f..366db14 100644
+> --- a/drivers/net/phy/mscc/mscc.h
+> +++ b/drivers/net/phy/mscc/mscc.h
+> @@ -195,6 +195,8 @@ enum rgmii_clock_delay {
+>   #define MSCC_PHY_EXTENDED_INT_MS_EGR	  BIT(9)
+>   
+>   /* Extended Page 3 Registers */
+> +#define MSCC_PHY_SERDES_PCS_CTRL	  16
+> +#define MSCC_PHY_SERDES_ANEG		  BIT(7)
+>   #define MSCC_PHY_SERDES_TX_VALID_CNT	  21
+>   #define MSCC_PHY_SERDES_TX_CRC_ERR_CNT	  22
+>   #define MSCC_PHY_SERDES_RX_VALID_CNT	  28
+> diff --git a/drivers/net/phy/mscc/mscc_main.c b/drivers/net/phy/mscc/mscc_main.c
+> index ebfeeb3..6db43a5 100644
+> --- a/drivers/net/phy/mscc/mscc_main.c
+> +++ b/drivers/net/phy/mscc/mscc_main.c
+> @@ -1685,6 +1685,25 @@ static int vsc8574_config_host_serdes(struct phy_device *phydev)
+>   			   PROC_CMD_RST_CONF_PORT | PROC_CMD_FIBER_1000BASE_X);
+>   }
+>   
+> +static int vsc85xx_config_inband_aneg(struct phy_device *phydev, bool enabled)
+> +{
+> +	int rc;
+> +	u16 reg_val = 0;
+> +
+> +	if (enabled)
+> +		reg_val = MSCC_PHY_SERDES_ANEG;
+> +
+> +	mutex_lock(&phydev->lock);
+> +
+> +	rc = phy_modify_paged(phydev, MSCC_PHY_PAGE_EXTENDED_3,
+> +			      MSCC_PHY_SERDES_PCS_CTRL, MSCC_PHY_SERDES_ANEG,
+> +			      reg_val);
+> +
+> +	mutex_unlock(&phydev->lock);
+> +
+> +	return rc;
+> +}
+> +
+>   static int vsc8584_config_init(struct phy_device *phydev)
+>   {
+>   	struct vsc8531_private *vsc8531 = phydev->priv;
+> @@ -1772,6 +1791,11 @@ static int vsc8584_config_init(struct phy_device *phydev)
+>   					      VSC8572_RGMII_TX_DELAY_MASK);
+>   		if (ret)
+>   			return ret;
+> +	} else {
+> +		/* Enable clause 37 */
+> +		ret = vsc85xx_config_inband_aneg(phydev, true);
+> +		if (ret)
+> +			return ret;
+>   	}
+>   
+>   	ret = genphy_soft_reset(phydev);
 
-Yes, asmlinkage is definitely missing.
+The same auto-negotiation configuration is also required for VSC8514.
+The following patch is required to get Ethernet working with the Quad
+port Ethernet Add-On card (QSGMII mode) connected to Texas Instruments
+J7 common processor board.
 
-But it is pretty obvious that the robot people aren't interested in
-fixing this particular issue, given how long we have been suggesting
-this...
+Let me know if I should send it as a separate patch.
 
-         M.
--- 
-Jazz is not dead. It just smells funny...
+Thanks and Regards,
+Siddharth Vadapalli.
+
+8<------------------SNIP----------------------------
+
+ From 2ab92251ba7a09bc97476cef6c760beefb0d3cae Mon Sep 17 00:00:00 2001
+From: Siddharth Vadapalli <s-vadapalli@ti.com>
+Date: Thu, 17 Feb 2022 15:45:20 +0530
+Subject: [PATCH] net: phy: mscc: Add auto-negotiation feature to VSC8514
+
+Auto-negotiation is currently enabled for VSC8584. It is also required
+for VSC8514. Invoke the vsc85xx_config_inband_aneg() function from the
+vsc8514_config_init() function present in mscc_main.c to start the
+auto-negotiation process. This is required to get Ethernet working with
+the Quad port Ethernet Add-On card (QSGMII mode) connected to Texas
+Instruments J7 common processor board.
+
+Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
+---
+  drivers/net/phy/mscc/mscc_main.c | 5 +++++
+  1 file changed, 5 insertions(+)
+
+diff --git a/drivers/net/phy/mscc/mscc_main.c 
+b/drivers/net/phy/mscc/mscc_main.c
+index 6db43a5c3b5e..b9a5662e7934 100644
+--- a/drivers/net/phy/mscc/mscc_main.c
++++ b/drivers/net/phy/mscc/mscc_main.c
+@@ -2119,6 +2119,11 @@ static int vsc8514_config_init(struct phy_device 
+*phydev)
+
+  	ret = genphy_soft_reset(phydev);
+
++	if (ret)
++		return ret;
++
++	ret = vsc85xx_config_inband_aneg(phydev, true);
++
+  	if (ret)
+  		return ret;

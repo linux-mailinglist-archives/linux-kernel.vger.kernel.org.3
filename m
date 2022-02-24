@@ -2,162 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9ECFB4C23A3
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 06:37:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F0DD24C23A6
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 06:38:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230304AbiBXFhg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 00:37:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54846 "EHLO
+        id S230321AbiBXFih (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 00:38:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229903AbiBXFhe (ORCPT
+        with ESMTP id S230289AbiBXFid (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 00:37:34 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 970B570F4E;
-        Wed, 23 Feb 2022 21:37:03 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 28E7F106F;
-        Wed, 23 Feb 2022 21:37:03 -0800 (PST)
-Received: from p8cg001049571a15.arm.com (unknown [10.163.48.178])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id C497E3F66F;
-        Wed, 23 Feb 2022 21:36:58 -0800 (PST)
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-perf-users@vger.kernel.org
-Subject: [PATCH] perf: Add irq and exception return branch types
-Date:   Thu, 24 Feb 2022 11:06:54 +0530
-Message-Id: <1645681014-3346-1-git-send-email-anshuman.khandual@arm.com>
-X-Mailer: git-send-email 2.7.4
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 24 Feb 2022 00:38:33 -0500
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCC75B91D4
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 21:37:59 -0800 (PST)
+X-UUID: 54e783c2236a4a0e808de00147f9f087-20220224
+X-UUID: 54e783c2236a4a0e808de00147f9f087-20220224
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
+        (envelope-from <ck.hu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 2093225992; Thu, 24 Feb 2022 13:37:52 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Thu, 24 Feb 2022 13:37:51 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 24 Feb 2022 13:37:50 +0800
+Message-ID: <4abb07d9673fb0e602ae26de233b45471b9e62e2.camel@mediatek.com>
+Subject: Re: [2/3] drm/mediatek: Separate poweron/poweroff from
+ enable/disable and define new funcs
+From:   CK Hu <ck.hu@mediatek.com>
+To:     <xinlei.lee@mediatek.com>, <chunkuang.hu@kernel.org>,
+        <p.zabel@pengutronix.de>, <airlied@linux.ie>, <daniel@ffwll.ch>,
+        <matthias.bgg@gmail.com>
+CC:     <dri-devel@lists.freedesktop.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <rex-bc.chen@mediatek.com>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        Jitao Shi <jitao.shi@mediatek.com>
+Date:   Thu, 24 Feb 2022 13:37:50 +0800
+In-Reply-To: <1644589818-13066-3-git-send-email-xinlei.lee@mediatek.com>
+References: <1644589818-13066-1-git-send-email-xinlei.lee@mediatek.com>
+         <1644589818-13066-3-git-send-email-xinlei.lee@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
+        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This expands generic branch type classification by adding two more entries
-there in i.e irq and exception return. Also updates the x86 implementation
-to process X86_BR_IRET and X86_BR_IRQ records as appropriate. This changes
-branch types reported to user space on x86 platform but it should not be a
-problem. The possible scenarios and impacts are enumerated here.
+Hi, Xinlei:
 
---------------------------------------------------------------------------
-| kernel | perf tool |                     Impact                        |
---------------------------------------------------------------------------
-|   old  |    old    |  Works as before                                  |
---------------------------------------------------------------------------
-|   old  |    new    |  PERF_BR_UNKNOWN is processed                     |
---------------------------------------------------------------------------
-|   new  |    old    |  PERF_BR_ERET/IRQ are blocked via old PERF_BR_MAX |
---------------------------------------------------------------------------
-|   new  |    new    |  PERF_BR_ERET/IRQ are recognized                  |
---------------------------------------------------------------------------
+On Fri, 2022-02-11 at 22:30 +0800, xinlei.lee@mediatek.com wrote:
+> From: Jitao Shi <jitao.shi@mediatek.com>
+> 
+> In order to match the changes of DSI RX devices (for example,
+> anx7625), 
+> the poweron/poweroff of dsi is extracted from enable/disable and 
+> defined as new funcs (pre_enable/post_disable).
 
-When PERF_BR_ERET/IRQ are blocked via old PERF_BR_MAX (new kernel with old
-perf tool) the user space might throw up an warning complaining about some
-unrecognized branch types being reported, but it is expected. PERF_BR_ERET
-and PERF_BR_IRQ branch types will be used for BRBE implementation on arm64
-platform.
+Does DSI not work with anx7625 now? This patch is a bug-fix or new
+feature? If this patch is a bug-fix, please add 'Fixes' tag [1].
 
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc: Mark Rutland <mark.rutland@arm.com>
-Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
-Cc: Jiri Olsa <jolsa@redhat.com>
-Cc: Namhyung Kim <namhyung@kernel.org>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Will Deacon <will@kernel.org>
-Cc: linux-arm-kernel@lists.infradead.org
-Cc: linux-perf-users@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
----
-This applies on v5.17-rc5
+[1] 
+https://www.kernel.org/doc/html/v5.16/process/submitting-patches.html
 
-These two new branch types expands generic branch type classification but
-still leaves another three entries in 'type' field for later. Please refer
-a previous discussion [1] for some further context.
+Regards,
+CK
 
-[1] https://lore.kernel.org/all/1643348653-24367-1-git-send-email-anshuman.khandual@arm.com/
-
- arch/x86/events/intel/lbr.c           | 4 ++--
- include/uapi/linux/perf_event.h       | 2 ++
- tools/include/uapi/linux/perf_event.h | 2 ++
- tools/perf/util/branch.c              | 4 +++-
- 4 files changed, 9 insertions(+), 3 deletions(-)
-
-diff --git a/arch/x86/events/intel/lbr.c b/arch/x86/events/intel/lbr.c
-index 669c2be14784..fe1742c4ca49 100644
---- a/arch/x86/events/intel/lbr.c
-+++ b/arch/x86/events/intel/lbr.c
-@@ -1329,10 +1329,10 @@ static int branch_map[X86_BR_TYPE_MAP_MAX] = {
- 	PERF_BR_SYSCALL,	/* X86_BR_SYSCALL */
- 	PERF_BR_SYSRET,		/* X86_BR_SYSRET */
- 	PERF_BR_UNKNOWN,	/* X86_BR_INT */
--	PERF_BR_UNKNOWN,	/* X86_BR_IRET */
-+	PERF_BR_ERET,		/* X86_BR_IRET */
- 	PERF_BR_COND,		/* X86_BR_JCC */
- 	PERF_BR_UNCOND,		/* X86_BR_JMP */
--	PERF_BR_UNKNOWN,	/* X86_BR_IRQ */
-+	PERF_BR_IRQ,		/* X86_BR_IRQ */
- 	PERF_BR_IND_CALL,	/* X86_BR_IND_CALL */
- 	PERF_BR_UNKNOWN,	/* X86_BR_ABORT */
- 	PERF_BR_UNKNOWN,	/* X86_BR_IN_TX */
-diff --git a/include/uapi/linux/perf_event.h b/include/uapi/linux/perf_event.h
-index 82858b697c05..d37629dbad72 100644
---- a/include/uapi/linux/perf_event.h
-+++ b/include/uapi/linux/perf_event.h
-@@ -251,6 +251,8 @@ enum {
- 	PERF_BR_SYSRET		= 8,	/* syscall return */
- 	PERF_BR_COND_CALL	= 9,	/* conditional function call */
- 	PERF_BR_COND_RET	= 10,	/* conditional function return */
-+	PERF_BR_ERET		= 11,	/* exception return */
-+	PERF_BR_IRQ		= 12,	/* irq */
- 	PERF_BR_MAX,
- };
- 
-diff --git a/tools/include/uapi/linux/perf_event.h b/tools/include/uapi/linux/perf_event.h
-index 82858b697c05..d37629dbad72 100644
---- a/tools/include/uapi/linux/perf_event.h
-+++ b/tools/include/uapi/linux/perf_event.h
-@@ -251,6 +251,8 @@ enum {
- 	PERF_BR_SYSRET		= 8,	/* syscall return */
- 	PERF_BR_COND_CALL	= 9,	/* conditional function call */
- 	PERF_BR_COND_RET	= 10,	/* conditional function return */
-+	PERF_BR_ERET		= 11,	/* exception return */
-+	PERF_BR_IRQ		= 12,	/* irq */
- 	PERF_BR_MAX,
- };
- 
-diff --git a/tools/perf/util/branch.c b/tools/perf/util/branch.c
-index 2285b1eb3128..a9a909db8cc7 100644
---- a/tools/perf/util/branch.c
-+++ b/tools/perf/util/branch.c
-@@ -49,7 +49,9 @@ const char *branch_type_name(int type)
- 		"SYSCALL",
- 		"SYSRET",
- 		"COND_CALL",
--		"COND_RET"
-+		"COND_RET",
-+		"ERET",
-+		"IRQ"
- 	};
- 
- 	if (type >= 0 && type < PERF_BR_MAX)
--- 
-2.25.1
+> 
+> Signed-off-by: Jitao Shi <jitao.shi@mediatek.com>
+> Signed-off-by: Xinlei Lee <xinlei.lee@mediatek.com>
+> ---
+>  drivers/gpu/drm/mediatek/mtk_dsi.c | 45 ++++++++++++++++++++++----
+> ------------
+>  1 file changed, 26 insertions(+), 19 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/mediatek/mtk_dsi.c
+> b/drivers/gpu/drm/mediatek/mtk_dsi.c
+> index 6d7b66d..e47c338 100644
+> --- a/drivers/gpu/drm/mediatek/mtk_dsi.c
+> +++ b/drivers/gpu/drm/mediatek/mtk_dsi.c
+> @@ -679,16 +679,6 @@ static void mtk_dsi_poweroff(struct mtk_dsi
+> *dsi)
+>  	if (--dsi->refcount != 0)
+>  		return;
+>  
+> -	/*
+> -	 * mtk_dsi_stop() and mtk_dsi_start() is asymmetric, since
+> -	 * mtk_dsi_stop() should be called after
+> mtk_drm_crtc_atomic_disable(),
+> -	 * which needs irq for vblank, and mtk_dsi_stop() will disable
+> irq.
+> -	 * mtk_dsi_start() needs to be called in
+> mtk_output_dsi_enable(),
+> -	 * after dsi is fully set.
+> -	 */
+> -	mtk_dsi_stop(dsi);
+> -
+> -	mtk_dsi_switch_to_cmd_mode(dsi, VM_DONE_INT_FLAG, 500);
+>  	mtk_dsi_reset_engine(dsi);
+>  	mtk_dsi_lane0_ulp_mode_enter(dsi);
+>  	mtk_dsi_clk_ulp_mode_enter(dsi);
+> @@ -703,17 +693,9 @@ static void mtk_dsi_poweroff(struct mtk_dsi
+> *dsi)
+>  
+>  static void mtk_output_dsi_enable(struct mtk_dsi *dsi)
+>  {
+> -	int ret;
+> -
+>  	if (dsi->enabled)
+>  		return;
+>  
+> -	ret = mtk_dsi_poweron(dsi);
+> -	if (ret < 0) {
+> -		DRM_ERROR("failed to power on dsi\n");
+> -		return;
+> -	}
+> -
+>  	mtk_dsi_set_mode(dsi);
+>  	mtk_dsi_clk_hs_mode(dsi, 1);
+>  
+> @@ -727,7 +709,16 @@ static void mtk_output_dsi_disable(struct
+> mtk_dsi *dsi)
+>  	if (!dsi->enabled)
+>  		return;
+>  
+> -	mtk_dsi_poweroff(dsi);
+> +	/*
+> +	 * mtk_dsi_stop() and mtk_dsi_start() is asymmetric, since
+> +	 * mtk_dsi_stop() should be called after
+> mtk_drm_crtc_atomic_disable(),
+> +	 * which needs irq for vblank, and mtk_dsi_stop() will disable
+> irq.
+> +	 * mtk_dsi_start() needs to be called in
+> mtk_output_dsi_enable(),
+> +	 * after dsi is fully set.
+> +	 */
+> +	mtk_dsi_stop(dsi);
+> +
+> +	mtk_dsi_switch_to_cmd_mode(dsi, VM_DONE_INT_FLAG, 500);
+>  
+>  	dsi->enabled = false;
+>  }
+> @@ -765,10 +756,26 @@ static void mtk_dsi_bridge_enable(struct
+> drm_bridge *bridge)
+>  	mtk_output_dsi_enable(dsi);
+>  }
+>  
+> +static void mtk_dsi_bridge_pre_enable(struct drm_bridge *bridge)
+> +{
+> +	struct mtk_dsi *dsi = bridge_to_dsi(bridge);
+> +
+> +	mtk_dsi_poweron(dsi);
+> +}
+> +
+> +static void mtk_dsi_bridge_post_disable(struct drm_bridge *bridge)
+> +{
+> +	struct mtk_dsi *dsi = bridge_to_dsi(bridge);
+> +
+> +	mtk_dsi_poweroff(dsi);
+> +}
+> +
+>  static const struct drm_bridge_funcs mtk_dsi_bridge_funcs = {
+>  	.attach = mtk_dsi_bridge_attach,
+>  	.disable = mtk_dsi_bridge_disable,
+>  	.enable = mtk_dsi_bridge_enable,
+> +	.pre_enable = mtk_dsi_bridge_pre_enable,
+> +	.post_disable = mtk_dsi_bridge_post_disable,
+>  	.mode_set = mtk_dsi_bridge_mode_set,
+>  };
+>  
 

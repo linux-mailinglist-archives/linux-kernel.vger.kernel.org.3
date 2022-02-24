@@ -2,92 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55D624C2791
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 10:09:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 08EB34C278B
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 10:09:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232487AbiBXJFF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 04:05:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41148 "EHLO
+        id S232453AbiBXJEr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 04:04:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232169AbiBXJEy (ORCPT
+        with ESMTP id S231736AbiBXJEp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 04:04:54 -0500
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19B7518A7A4;
-        Thu, 24 Feb 2022 01:04:24 -0800 (PST)
-Received: from mail-wm1-f47.google.com ([209.85.128.47]) by
- mrelayeu.kundenserver.de (mreue109 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1MWiYo-1nlKm71Ofo-00X7zY; Thu, 24 Feb 2022 10:04:23 +0100
-Received: by mail-wm1-f47.google.com with SMTP id l1-20020a7bcf01000000b0037f881182a8so3065539wmg.2;
-        Thu, 24 Feb 2022 01:04:23 -0800 (PST)
-X-Gm-Message-State: AOAM530FCm5GYNTPUNhsxLPZjBSLMZWXuWIg8HSA9REPaezbRWPguvIQ
-        CVrUzD2MVro3CMZbCKcDDdiaMRYotRsx4rldn8w=
-X-Google-Smtp-Source: ABdhPJyjEw35XhDO0nptzAMVKk2Hxde9tm8LwW6lNeB58GkA2TxxKPLSRkO1YZW5ApcDqUwIlDhAXRFgLJ95HKAPDdY=
-X-Received: by 2002:a05:600c:48a:b0:380:3f3a:e08e with SMTP id
- d10-20020a05600c048a00b003803f3ae08emr10577359wme.1.1645693462887; Thu, 24
- Feb 2022 01:04:22 -0800 (PST)
+        Thu, 24 Feb 2022 04:04:45 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 398601A58CC;
+        Thu, 24 Feb 2022 01:04:15 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CCFDA60A2B;
+        Thu, 24 Feb 2022 09:04:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49F3EC340E9;
+        Thu, 24 Feb 2022 09:04:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645693454;
+        bh=jgxNAFbFo5i1lWEOpOUAVFaQaooKHchqspipaHhzRwA=;
+        h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
+        b=ax/l6HCoZXj8aB2eKuyynYgXe0D8c08z4twnpLIX6i+h4h5aXIcMUo4g3p53tN0LI
+         2wdhgKjJN4W8SnPJt7iebQvR0OCFzkUcwW/Yc+OjUbYRxnuULiV+zftlIvO4HfVKPd
+         JBrxgPavHj3DhDZaWitkwrChtGW6EQh02zQjmqDLV4z4IwkxWHOuI0wM7L9Eq1/VFq
+         p+hVbj95dgq5QRtfvaCidK9O1EE/dbUN/2zd2aNuDqMJ/VtB4r3KPV1oH0IS/AIAu/
+         ix7nErT30AI4Rm/lBS42hef5Dwdo3OAjB3gM4/UwUogTgVgZBmWf77MVod74eKQxH+
+         q7NHsxmMRGihQ==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20220224085410.399351-1-guoren@kernel.org> <20220224085410.399351-20-guoren@kernel.org>
-In-Reply-To: <20220224085410.399351-20-guoren@kernel.org>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Thu, 24 Feb 2022 10:04:07 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a3vmB4Vm9UOHx3qnTY6wUyw_r3R11amYwyHNpEhFiknrw@mail.gmail.com>
-Message-ID: <CAK8P3a3vmB4Vm9UOHx3qnTY6wUyw_r3R11amYwyHNpEhFiknrw@mail.gmail.com>
-Subject: Re: [PATCH V6 19/20] riscv: compat: ptrace: Add compat_arch_ptrace implement
-To:     Guo Ren <guoren@kernel.org>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>, Arnd Bergmann <arnd@arndb.de>,
-        Anup Patel <anup@brainfault.org>,
-        gregkh <gregkh@linuxfoundation.org>,
-        liush <liush@allwinnertech.com>, Wei Fu <wefu@redhat.com>,
-        Drew Fustini <drew@beagleboard.org>,
-        Wang Junqiang <wangjunqiang@iscas.ac.cn>,
-        Christoph Hellwig <hch@lst.de>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linux-csky@vger.kernel.org,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        sparclinux <sparclinux@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Parisc List <linux-parisc@vger.kernel.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Guo Ren <guoren@linux.alibaba.com>,
-        Palmer Dabbelt <palmer@rivosinc.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:hqP+0S9onqPXjEc/plYI652niBmPQNsect9n2Zn0kmP9aAUySLJ
- JV5CqZA6ExYvpjHrNwUeqPQndgnaxyn/FMhuE70Nf5JCQqlRFqrnVgM1PdqmazzSogipLXQ
- AiJ2dp2HAGvlKjxOaGDSWWYGDm4zJv2aViLkM/ccCw4F/AlycXVrRlqlU9DTGlpMj8CyH6K
- lPhaqxyPXj3BykKqOWhVg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:UFZmV5HYQXI=:4zIeOikdnlT7/1M6xfURhe
- yD3y9gKQZW676YNE3EcSPMFEvhfJoGMJbLPO6AXTBmC2uVWRQfE9S/DW7NZwsrjD4oJwT1pMj
- H1lFJ4mQdP6EFpN+6V6ykRYaGbQtZLQGBYwZirAR5wAy3MUfhq0U/Rn3JLSdIkXzyTR09IzId
- PuEh+dt1NJBQl+JaMqzy3hUM09pzLMxhKgH0zCXpQY3TLt3GWuMCfaKxsytADB6S3vMkuL6EB
- gNQXnYjcoXERIOKEPGluqC5EatgbMrn2yz5LxfX+QLoKOkS2xCYuovSHC83/UGdTnUT92BKLQ
- 1TbRFcs+Z+nFgjTWvQFs+6qVMuCuQATvhknEfyWuCiD1BTMX6/fjw4+ApNVgDa7QE13qCdLAq
- bY/d7+REG/kewRLDJ1kdCCFh9117j2gSDy80ZCvo0BC2i4XeSOuAuFrEKY0N+RueYn4E/WJoh
- yX0mdgfNCUAeFVXBSpYaAOC109Ycytki2m6XXKF2YhwPvNWEApv8k4lpbNwvETpELyTbVUaZP
- BzX5doYZN364zRYyh5lzNCv8Z7dRxY0aZW5uN9mR3SOoEQNqsh4LgPM69cWuR5xm00Fv5tklB
- FDPebKiqC72nutCNrZrpxC1d/bL8UU934DukBJDvKzPw2zyOca0x+h8eiNBAr55fgPaLztuZc
- ZqE/uqYeyyjt/YagyqvRkowGe4Bxixe+a+s9Uqwq/8GCELdm9r38J5KXgkppvJgDJaBUNZfBi
- dcg5UZ7ErPULVlamJbkqV0/jgN2YpngkcNVYs0vs5bRIP9hj0y4Kl7/YJZpd/0OQbYqunBXbB
- d8f1tUAd7xxRV42Bl/1aB5an3+SPIq+NqNY+qvvx1J5nCWKiMc=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH][next] carl9170: Replace zero-length arrays with
+ flexible-array members
+From:   Kalle Valo <kvalo@kernel.org>
+In-Reply-To: <20220216194955.GA904126@embeddedor>
+References: <20220216194955.GA904126@embeddedor>
+To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc:     Christian Lamparter <chunkeey@googlemail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        linux-hardening@vger.kernel.org
+User-Agent: pwcli/0.1.0-git (https://github.com/kvalo/pwcli/) Python/3.7.3
+Message-ID: <164569345046.30378.3865257122515016490.kvalo@kernel.org>
+Date:   Thu, 24 Feb 2022 09:04:12 +0000 (UTC)
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 24, 2022 at 9:54 AM <guoren@kernel.org> wrote:
-> From: Guo Ren <guoren@linux.alibaba.com>
+"Gustavo A. R. Silva" <gustavoars@kernel.org> wrote:
 
->
-> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> Signed-off-by: Guo Ren <guoren@kernel.org>
-> Reviewed-by: Palmer Dabbelt <palmer@rivosinc.com>
+> There is a regular need in the kernel to provide a way to declare
+> having a dynamically sized set of trailing elements in a structure.
+> Kernel code should always use “flexible array members”[1] for these
+> cases. The older style of one-element or zero-length arrays should
+> no longer be used[2].
+> 
+> [1] https://en.wikipedia.org/wiki/Flexible_array_member
+> [2] https://www.kernel.org/doc/html/v5.16/process/deprecated.html#zero-length-and-one-element-arrays
+> 
+> Link: https://github.com/KSPP/linux/issues/78
+> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+> Reviewed-by: Kees Cook <keescook@chromium.org>
+> Acked-by: Christian Lamparter <chunkeey@gmail.com>
+> Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
 
-Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+Patch applied to ath-next branch of ath.git, thanks.
+
+152094dd8c8d carl9170: Replace zero-length arrays with flexible-array members
+
+-- 
+https://patchwork.kernel.org/project/linux-wireless/patch/20220216194955.GA904126@embeddedor/
+
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+

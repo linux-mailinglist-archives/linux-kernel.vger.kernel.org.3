@@ -2,49 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77CB54C30F6
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 17:08:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BD984C30FB
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 17:08:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229911AbiBXQJK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 11:09:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44322 "EHLO
+        id S230021AbiBXQI6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 11:08:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230046AbiBXQJE (ORCPT
+        with ESMTP id S229937AbiBXQIy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 11:09:04 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C656718886B;
-        Thu, 24 Feb 2022 08:08:15 -0800 (PST)
+        Thu, 24 Feb 2022 11:08:54 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BBB5194AA7
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 08:08:01 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 22192616A0;
-        Thu, 24 Feb 2022 16:07:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF009C340E9;
-        Thu, 24 Feb 2022 16:06:58 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4C1C66174D
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 16:07:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA22CC340E9;
+        Thu, 24 Feb 2022 16:07:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645718820;
-        bh=kJbsQ1SyKQBcOIF90Cd1CS9YzTGxK6ab/SLif+LghU8=;
-        h=From:To:Cc:Subject:Date:From;
-        b=T9i/B7IRZEAXJ/7wh6925nd6jnClctyy/1vPiIO23Oose0eEdyjSEauAwZRk/ETkQ
-         FoGh+Vfrscfs7Fk4DqAsLLSxtnVdnLv0Zo7Rq2R1PZGKVVKxcLUeV037TNDv9RXJK8
-         MVZtl3XeslsOUcPFY8uEbA06OD2c6rE8txj4iXXLUi5i9vpzreq/lwgYUhcgQNK0Pq
-         Qqn23dL1pGaRKqCMtLlpdEhr507X/JEvc2RwMr6pnbENNK55hjZ11NhSAPwHH0OH9k
-         Z2xQN+vA+wQTjaoF7HhXxFijeWzotPrHb+lc3ZBcrWQcdmmLmWxt/i3VXBbSFKKlZC
-         LM9tHRR9QXQ6A==
-From:   broonie@kernel.org
-To:     David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Maor Dickman <maord@nvidia.com>, Roi Dayan <roid@nvidia.com>,
-        Saeed Mahameed <saeedm@nvidia.com>
-Subject: linux-next: manual merge of the net-next tree with the net tree
-Date:   Thu, 24 Feb 2022 16:06:54 +0000
-Message-Id: <20220224160654.3751264-1-broonie@kernel.org>
-X-Mailer: git-send-email 2.30.2
+        s=k20201202; t=1645718847;
+        bh=Z3+x1SIV9VOetp2p+0THAAyY/l8As1yQ1l0nOvyh4Z8=;
+        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
+        b=HTqylMlxNFaTe6EnEmYyjQUVi05GaviKofzAWOsskUtS0bDU6vhKnG1YPX4gV58d8
+         6tsqZgEDoSELSkQVlI2XCjDJgjbJcSjg9En8hYEDwp1+pgxYWbta+cchr0+DYENBH3
+         zKIUetZPB5kQ/j4CdBHCuZH4wOtU0MAlEDmFd7vwQ6dlrPIqOQBHipsHoExCFOgYi5
+         vE/9zMEsUJuE4oyI/hC6aDuZ0oh/OSOf6cGTJtkRZEsUiwV8fAPUG2GOaxuAXVmVgf
+         QPhUR9qheftZxEE09uINE/qvbLjg9hHpEblFzDwG2nPzwG7ZmX/OBCG1BBfEnapMQd
+         NeyMVRLLfXKeQ==
+From:   Kalle Valo <kvalo@kernel.org>
+To:     kernel test robot <lkp@intel.com>
+Cc:     Carl Huang <quic_cjhuang@quicinc.com>, kbuild-all@lists.01.org,
+        ath10k@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Baochen Qiang <quic_bqiang@quicinc.com>,
+        Wen Gong <quic_wgong@quicinc.com>, ath11k@lists.infradead.org
+Subject: Re: [kvalo-ath:pending 37/42] drivers/net/wireless/ath/ath11k/wow.c:467:5: error: redefinition of 'ath11k_wow_init'
+References: <202202230812.uOGgSw5k-lkp@intel.com>
+Date:   Thu, 24 Feb 2022 18:07:21 +0200
+In-Reply-To: <202202230812.uOGgSw5k-lkp@intel.com> (kernel test robot's
+        message of "Wed, 23 Feb 2022 08:52:44 +0800")
+Message-ID: <87zgmgtfie.fsf@kernel.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -55,155 +57,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi all,
++ ath11k
 
-Today's linux-next merge of the net-next tree got conflicts in:
+kernel test robot <lkp@intel.com> writes:
 
-  drivers/net/ethernet/mellanox/mlx5/core/en/tc/act/act.h
-  drivers/net/ethernet/mellanox/mlx5/core/en/tc/act/ct.c
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/kvalo/ath.git pending
+> head:   4136ddcfda28450e2d01173e37300b95c8687d9b
+> commit: cae84a492cacd9b4eecaafd5dab33f5beba8806e [37/42] ath11k: Add basic WoW functionalities
+> config: m68k-allyesconfig (https://download.01.org/0day-ci/archive/20220223/202202230812.uOGgSw5k-lkp@intel.com/config)
+> compiler: m68k-linux-gcc (GCC) 11.2.0
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # https://git.kernel.org/pub/scm/linux/kernel/git/kvalo/ath.git/commit/?id=cae84a492cacd9b4eecaafd5dab33f5beba8806e
+>         git remote add kvalo-ath https://git.kernel.org/pub/scm/linux/kernel/git/kvalo/ath.git
+>         git fetch --no-tags kvalo-ath pending
+>         git checkout cae84a492cacd9b4eecaafd5dab33f5beba8806e
+>         # save the config file to linux build tree
+>         mkdir build_dir
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=m68k SHELL=/bin/bash
+>
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <lkp@intel.com>
+>
+> All errors (new ones prefixed by >>):
+>
+>    drivers/net/wireless/ath/ath11k/wow.c:357:5: warning: no previous prototype for 'ath11k_wow_op_suspend' [-Wmissing-prototypes]
+>      357 | int ath11k_wow_op_suspend(struct ieee80211_hw *hw,
+>          |     ^~~~~~~~~~~~~~~~~~~~~
+>    drivers/net/wireless/ath/ath11k/wow.c:416:6: warning: no previous
+> prototype for 'ath11k_wow_op_set_wakeup' [-Wmissing-prototypes]
+>      416 | void ath11k_wow_op_set_wakeup(struct ieee80211_hw *hw, bool enabled)
+>          |      ^~~~~~~~~~~~~~~~~~~~~~~~
+>    drivers/net/wireless/ath/ath11k/wow.c:425:5: warning: no previous
+> prototype for 'ath11k_wow_op_resume' [-Wmissing-prototypes]
+>      425 | int ath11k_wow_op_resume(struct ieee80211_hw *hw)
+>          |     ^~~~~~~~~~~~~~~~~~~~
+>>> drivers/net/wireless/ath/ath11k/wow.c:467:5: error: redefinition of
+>>> 'ath11k_wow_init'
+>      467 | int ath11k_wow_init(struct ath11k *ar)
+>          |     ^~~~~~~~~~~~~~~
+>    In file included from drivers/net/wireless/ath/ath11k/core.h:26,
+>                     from drivers/net/wireless/ath/ath11k/wow.c:11:
+>    drivers/net/wireless/ath/ath11k/wow.h:40:19: note: previous definition of 'ath11k_wow_init' with type 'int(struct ath11k *)'
+>       40 | static inline int ath11k_wow_init(struct ath11k *ar)
+>          |                   ^~~~~~~~~~~~~~~
+>    drivers/net/wireless/ath/ath11k/wow.c: In function 'ath11k_wow_init':
+>>> drivers/net/wireless/ath/ath11k/wow.c:482:22: error: 'struct wiphy'
+>>> has no member named 'wowlan'
+>      482 |         ar->hw->wiphy->wowlan = &ar->wow.wowlan_support;
+>          |                      ^~
 
-between commits:
+I was able to reproduce the errors by disabling CONFIG_PM. I fixed them
+and pushed the new patch to the pending branch:
 
-  fb7e76ea3f3b6 ("net/mlx5e: TC, Skip redundant ct clear actions")
-  c63741b426e11 ("net/mlx5e: Fix MPLSoUDP encap to use MPLS action information")
+https://git.kernel.org/pub/scm/linux/kernel/git/kvalo/ath.git/commit/?h=pending&id=624c999c214f02004c2f996aa6ce3a17dfbebd18
 
-from the net tree and commits:
+-- 
+https://patchwork.kernel.org/project/linux-wireless/list/
 
-  09bf97923224f ("net/mlx5e: TC, Move pedit_headers_action to parse_attr")
-  09bf97923224f ("net/mlx5e: TC, Move pedit_headers_action to parse_attr")
-  3b49a7edec1df ("net/mlx5e: TC, Reject rules with multiple CT actions")
-
-from the net-next tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en/tc/act/act.h b/drivers/net/ethernet/mellanox/mlx5/core/en/tc/act/act.h
-index 9cc844bd00f59..9f6a3b7620321 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/en/tc/act/act.h
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en/tc/act/act.h
-@@ -17,13 +17,14 @@ struct mlx5e_tc_act_parse_state {
- 	struct mlx5e_tc_flow *flow;
- 	struct netlink_ext_ack *extack;
- 	bool ct_clear;
-+	u32 actions;
-+	bool ct;
- 	bool encap;
- 	bool decap;
- 	bool mpls_push;
- 	bool ptype_host;
- 	const struct ip_tunnel_info *tun_info;
- 	struct mlx5e_mpls_info mpls_info;
--	struct pedit_headers_action hdrs[__PEDIT_CMD_MAX];
- 	int ifindexes[MLX5_MAX_FLOW_FWD_VPORTS];
- 	int if_count;
- 	struct mlx5_tc_ct_priv *ct_priv;
-@@ -32,7 +33,8 @@ struct mlx5e_tc_act_parse_state {
- struct mlx5e_tc_act {
- 	bool (*can_offload)(struct mlx5e_tc_act_parse_state *parse_state,
- 			    const struct flow_action_entry *act,
--			    int act_index);
-+			    int act_index,
-+			    struct mlx5_flow_attr *attr);
- 
- 	int (*parse_action)(struct mlx5e_tc_act_parse_state *parse_state,
- 			    const struct flow_action_entry *act,
-@@ -42,6 +44,15 @@ struct mlx5e_tc_act {
- 	int (*post_parse)(struct mlx5e_tc_act_parse_state *parse_state,
- 			  struct mlx5e_priv *priv,
- 			  struct mlx5_flow_attr *attr);
-+
-+	bool (*is_multi_table_act)(struct mlx5e_priv *priv,
-+				   const struct flow_action_entry *act,
-+				   struct mlx5_flow_attr *attr);
-+};
-+
-+struct mlx5e_tc_flow_action {
-+	unsigned int num_entries;
-+	struct flow_action_entry **entries;
- };
- 
- extern struct mlx5e_tc_act mlx5e_tc_act_drop;
-@@ -74,4 +85,19 @@ mlx5e_tc_act_init_parse_state(struct mlx5e_tc_act_parse_state *parse_state,
- 			      struct flow_action *flow_action,
- 			      struct netlink_ext_ack *extack);
- 
-+void
-+mlx5e_tc_act_reorder_flow_actions(struct flow_action *flow_action,
-+				  struct mlx5e_tc_flow_action *flow_action_reorder);
-+
-+int
-+mlx5e_tc_act_post_parse(struct mlx5e_tc_act_parse_state *parse_state,
-+			struct flow_action *flow_action,
-+			struct mlx5_flow_attr *attr,
-+			enum mlx5_flow_namespace_type ns_type);
-+
-+int
-+mlx5e_tc_act_set_next_post_act(struct mlx5e_tc_flow *flow,
-+			       struct mlx5_flow_attr *attr,
-+			       struct mlx5_flow_attr *next_attr);
-+
- #endif /* __MLX5_EN_TC_ACT_H__ */
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en/tc/act/ct.c b/drivers/net/ethernet/mellanox/mlx5/core/en/tc/act/ct.c
-index 58cc33f1363d2..6e63d898d3d53 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/en/tc/act/ct.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en/tc/act/ct.c
-@@ -8,13 +8,14 @@
- static bool
- tc_act_can_offload_ct(struct mlx5e_tc_act_parse_state *parse_state,
- 		      const struct flow_action_entry *act,
--		      int act_index)
-+		      int act_index,
-+		      struct mlx5_flow_attr *attr)
- {
-+	bool clear_action = act->ct.action & TCA_CT_ACT_CLEAR;
- 	struct netlink_ext_ack *extack = parse_state->extack;
- 
--	if (flow_flag_test(parse_state->flow, SAMPLE)) {
--		NL_SET_ERR_MSG_MOD(extack,
--				   "Sample action with connection tracking is not supported");
-+	if (parse_state->ct && !clear_action) {
-+		NL_SET_ERR_MSG_MOD(extack, "Multiple CT actions are not supported");
- 		return false;
- 	}
- 
-@@ -40,18 +41,34 @@ tc_act_parse_ct(struct mlx5e_tc_act_parse_state *parse_state,
- 	if (err)
- 		return err;
- 
--	flow_flag_set(parse_state->flow, CT);
- 
- 	if (mlx5e_is_eswitch_flow(parse_state->flow))
- 		attr->esw_attr->split_count = attr->esw_attr->out_count;
- 
- 	parse_state->ct_clear = clear_action;
-+	if (!clear_action) {
-+		attr->flags |= MLX5_ATTR_FLAG_CT;
-+		flow_flag_set(parse_state->flow, CT);
-+		parse_state->ct = true;
-+	}
- 
- 	return 0;
- }
- 
-+static bool
-+tc_act_is_multi_table_act_ct(struct mlx5e_priv *priv,
-+			     const struct flow_action_entry *act,
-+			     struct mlx5_flow_attr *attr)
-+{
-+	if (act->ct.action & TCA_CT_ACT_CLEAR)
-+		return false;
-+
-+	return true;
-+}
-+
- struct mlx5e_tc_act mlx5e_tc_act_ct = {
- 	.can_offload = tc_act_can_offload_ct,
- 	.parse_action = tc_act_parse_ct,
-+	.is_multi_table_act = tc_act_is_multi_table_act_ct,
- };
- 
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches

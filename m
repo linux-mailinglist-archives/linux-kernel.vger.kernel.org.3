@@ -2,292 +2,312 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 045924C37B7
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 22:28:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EB1B4C37D2
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 22:29:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234868AbiBXV2q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 16:28:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49066 "EHLO
+        id S234950AbiBXVaQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 16:30:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232412AbiBXV2p (ORCPT
+        with ESMTP id S234837AbiBXVaN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 16:28:45 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B6F56661F;
-        Thu, 24 Feb 2022 13:28:14 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CB7C6618FA;
-        Thu, 24 Feb 2022 21:28:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D40B9C340E9;
-        Thu, 24 Feb 2022 21:28:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645738093;
-        bh=3m3DlKMGILFVebpMDl5vuVCQeiAAEm489IHqF6lES3E=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=ISH09f3hGYHdaQAbuCQV8zv/YyL39jJUon+kbaT+W0a3XyAgGs6rKqvJaXNDzT8SZ
-         VrDN/517WxDdOLk0mf34olqFdiyXkhMif71/jNbYdmVFupnSF4h6h1sjAsrF//dVWz
-         pcrVrs99h2HgADQdeGleVVSIOTltul2+eGXwD7sO/BPCSv55oHXqz5SJNnntdcrHRi
-         WoNSzQEMbK3E1G48XBKHE/wjxWU7NET0PUeiRxxNFS7k+BNzZDoAkCKuW6Np/oi2Cq
-         st5pJnnPnTm6UjAjUBt3uzNtFiCutWNNdm1yXWu7L96tSBd7ACMr0NTNMFXfmFwQYO
-         OdfQ60hTbHdJg==
-Date:   Thu, 24 Feb 2022 15:28:11 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>
-Cc:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Rob Herring <robh+dt@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>,
-        Russell King <rmk+kernel@armlinux.org.uk>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 5/6] PCI: mvebu: Add support for sending
- Set_Slot_Power_Limit message
-Message-ID: <20220224212811.GA291001@bhelgaas>
+        Thu, 24 Feb 2022 16:30:13 -0500
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5451B1B4013
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 13:29:13 -0800 (PST)
+Received: by mail-ej1-x632.google.com with SMTP id r13so7044145ejd.5
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 13:29:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=p919IJnsnxJq1H265GJu8r+hD/eZdrOi1yYZQKFMV+E=;
+        b=Moc4yYvuNR+kOXi0dMtqEFC0MRIYMl13knqJXH21OTCo+3w9xCGKl7euc4ENAM/oTJ
+         DNAmmbDe1Ksr77xAdiOBK+AMLekVjjuo7qRuOBiFyNPkCmzH717LN6/y5ZaAFXxKpM3L
+         +RkcYu+DSztds3BgdvkGvhdhM62wm/bpmZ/jU0QhzngqLgCA26/5EMIQUeMCyBjNU3Za
+         6G02IynUPG2MgY07YX5vCROSv3NzcHLN8kKLKGYQ3VbLEn6iRF83v9pzfWQj1D24/2QG
+         DPiE/TkaWlMCw+zNjzWyBwdQfhGPDmv7fvtoJ7PQ0I0vVPP1An5xiYWuYUCwQRhuRqhf
+         qtNQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=p919IJnsnxJq1H265GJu8r+hD/eZdrOi1yYZQKFMV+E=;
+        b=JfXdkQtDgxfJDIhYJ+H4jFwIdrZfFY8ZKnvZjBLvLCdRAxEg9+doYHx/2ma18d2oWM
+         fDnRn55zaPRGDZi04wBZub97a5p6cSX+NnmY+Ws5fYcSTi1QFNfedir0Mjqaxqcds0Ow
+         WlCvXXnapU5XUBxVIFvCjS2CQOz6ox0juM58ZDNw22y4FyMr8XTXth/4UzmtrCdQ8BAO
+         nUpoMA9l9vFrupWaQufecZm+jJUz+hn3Z/iFEaVgmaF9fv23ZXFHTd2HgrHmOT1bSMr/
+         3MRLuLDiVu0wYrbudG9fpxTvoZJ1KKUEsUH6KScFzRH3Xs/8y6KNoWYVTghFnlvfrf0F
+         6ZtA==
+X-Gm-Message-State: AOAM532sWGes6q1z88YROrN2wdIj72MWUMy7Ntml3jhDTVwx2Mo74nzp
+        1w8h1p/V7iepTBnLW4Ol0dI7wySrEc+gT4INLJM=
+X-Google-Smtp-Source: ABdhPJyM+vMdSAsGICxq1iupm3Mo5fNMk2WAQfSdCgxu+icpYGk9N1inssIZcsE7JM5WnaZ4TEJNyEdulNbHWPKTx54=
+X-Received: by 2002:a17:906:86c7:b0:6a8:49fa:a3f5 with SMTP id
+ j7-20020a17090686c700b006a849faa3f5mr3800053ejy.421.1645738151725; Thu, 24
+ Feb 2022 13:29:11 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220222163158.1666-6-pali@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20210514093007.4117906-1-linmiaohe@huawei.com> <00f195d4-d039-3cf2-d3a1-a2c88de397a0@suse.cz>
+In-Reply-To: <00f195d4-d039-3cf2-d3a1-a2c88de397a0@suse.cz>
+From:   Yang Shi <shy828301@gmail.com>
+Date:   Thu, 24 Feb 2022 13:29:00 -0800
+Message-ID: <CAHbLzko+Hicj30VhMbNqB8da2paWdcL=YKJ5E=ESfmtraNCqRQ@mail.gmail.com>
+Subject: Re: [PATCH v4] mm/huge_memory.c: add missing read-only THP checking
+ in transparent_hugepage_enabled()
+To:     Vlastimil Babka <vbabka@suse.cz>
+Cc:     Miaohe Lin <linmiaohe@huawei.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Zi Yan <ziy@nvidia.com>,
+        William Kucharski <william.kucharski@oracle.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Yang Shi <yang.shi@linux.alibaba.com>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        Ralph Campbell <rcampbell@nvidia.com>,
+        Song Liu <songliubraving@fb.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Rik van Riel <riel@surriel.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Minchan Kim <minchan@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux MM <linux-mm@kvack.org>,
+        David Hildenbrand <david@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 22, 2022 at 05:31:57PM +0100, Pali Rohár wrote:
-> This PCIe message is sent automatically by mvebu HW when link changes
-> status from down to up.
+On Thu, Feb 24, 2022 at 10:51 AM Vlastimil Babka <vbabka@suse.cz> wrote:
+>
+> On 5/14/21 11:30, Miaohe Lin wrote:
+> > Since commit 99cb0dbd47a1 ("mm,thp: add read-only THP support for
+> > (non-shmem) FS"), read-only THP file mapping is supported. But it
+> > forgot to add checking for it in transparent_hugepage_enabled().
+> > To fix it, we add checking for read-only THP file mapping and also
+> > introduce helper transhuge_vma_enabled() to check whether thp is
+> > enabled for specified vma to reduce duplicated code. We rename
+> > transparent_hugepage_enabled to transparent_hugepage_active to make
+> > the code easier to follow as suggested by David Hildenbrand.
+> >
+> > Fixes: 99cb0dbd47a1 ("mm,thp: add read-only THP support for (non-shmem) FS")
+> > Reviewed-by: Yang Shi <shy828301@gmail.com>
+> > Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+>
+> FYI, I stumbled upon needing this for my reproducer for the read()
+> corruption [1] to work, and I think it's still not ideal. I also needed
+> madvise(MADV_HUGEPAGE) for the executable file mapping to make sure
+> khugepaged acts on my process. Yeah, commit 99cb0dbd47a1 suggests madvise.
+> Yet, khugepaged will happily collapse file mappings even without madvise
+> anyway. However, it might not know about the mm at all unless
+> __khugepaged_enter() has been applied at least on one of its vma's.
+> madvise() is one way to do it for executable file mappings, but it can also
+> happen through e.g. do_huge_pmd_anonymous_page() on another mapping, which
+> has nothing to do with the file mapping.
+> So what I'm trying to say is that we are somewhat inconsistent - the rules
+> to consider a vma in khugepaged seem to be clear and result of admin
+> configuration and madvise, but the rules to consider a mm for khugepaged
+> (which is the only way to collapse file mappings) are not completely
+> identical and there might be "random luck" involved.
 
-I *think* the intent of the above is:
+Yes, khugepaged_enter() is not called for file vma explicitly. My wild
+guess is THP for readonly fs was assumed to be collapsed by explicit
+demand from the users, for example, madvise.
 
-  If DT supplies the 'slot-power-limit-milliwatt' property, program
-  the value in the Slot Power Limit in the Slot Capabilities register
-  and program the Root Port to send a Set_Slot_Power_Limit Message
-  when the Link transitions to DL_Up.
+To achieve more consistent behavior we could call khugepaged_enter()
+for file fault just like what huge anonymous fault does. Of course we
+need to fix khugepaged_enter() to do the proper check as well.
 
-PCIe r6.0, sec 2.2.8.5 and 7.5.3.9, also say Set_Slot_Power_Limit must
-be sent on a config write to Slot Capabilities.  I don't really
-understand that, since AFAICS, everything in that register is
-read-only.  But there must be some use case for forcing a message.
-
-> Slot power limit is read from DT property 'slot-power-limit-milliwatt' and
-> set to mvebu HW. When this DT property is not specified then driver treat
-> it as "Slot Capabilities register has not yet been initialized".
-
-Does this last sentence mean "the Slot Power Limit is set to 0W
-(Value = 00h and Scale = 00b = 1.0x) and Auto Slot Power Limit Disable
-is set, so Set_Slot_Power_Limit Messages will never be sent"?
-
-> Signed-off-by: Pali Rohár <pali@kernel.org>
-> ---
->  drivers/pci/controller/pci-mvebu.c | 85 ++++++++++++++++++++++++++++--
->  1 file changed, 80 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/pci/controller/pci-mvebu.c b/drivers/pci/controller/pci-mvebu.c
-> index a75d2b9196f9..c786feec4d17 100644
-> --- a/drivers/pci/controller/pci-mvebu.c
-> +++ b/drivers/pci/controller/pci-mvebu.c
-> @@ -66,6 +66,12 @@
->  #define  PCIE_STAT_BUS                  0xff00
->  #define  PCIE_STAT_DEV                  0x1f0000
->  #define  PCIE_STAT_LINK_DOWN		BIT(0)
-> +#define PCIE_SSPL_OFF		0x1a0c
-> +#define  PCIE_SSPL_VALUE_SHIFT		0
-> +#define  PCIE_SSPL_VALUE_MASK		GENMASK(7, 0)
-> +#define  PCIE_SSPL_SCALE_SHIFT		8
-> +#define  PCIE_SSPL_SCALE_MASK		GENMASK(9, 8)
-> +#define  PCIE_SSPL_ENABLE		BIT(16)
->  #define PCIE_RC_RTSTA		0x1a14
->  #define PCIE_DEBUG_CTRL         0x1a60
->  #define  PCIE_DEBUG_SOFT_RESET		BIT(20)
-> @@ -111,6 +117,8 @@ struct mvebu_pcie_port {
->  	struct mvebu_pcie_window iowin;
->  	u32 saved_pcie_stat;
->  	struct resource regs;
-> +	u8 slot_power_limit_value;
-> +	u8 slot_power_limit_scale;
->  	struct irq_domain *intx_irq_domain;
->  	raw_spinlock_t irq_lock;
->  	int intx_irq;
-> @@ -239,7 +247,7 @@ static void mvebu_pcie_setup_wins(struct mvebu_pcie_port *port)
->  
->  static void mvebu_pcie_setup_hw(struct mvebu_pcie_port *port)
->  {
-> -	u32 ctrl, lnkcap, cmd, dev_rev, unmask;
-> +	u32 ctrl, lnkcap, cmd, dev_rev, unmask, sspl;
->  
->  	/* Setup PCIe controller to Root Complex mode. */
->  	ctrl = mvebu_readl(port, PCIE_CTRL_OFF);
-> @@ -292,6 +300,20 @@ static void mvebu_pcie_setup_hw(struct mvebu_pcie_port *port)
->  	/* Point PCIe unit MBUS decode windows to DRAM space. */
->  	mvebu_pcie_setup_wins(port);
->  
-> +	/*
-> +	 * Program Root Complex to automatically sends Set Slot Power Limit
-> +	 * PCIe Message when changing status from Dl-Down to Dl-Up and valid
-> +	 * slot power limit was specified.
-
-s/Root Complex/Root Port/, right?  AFAIK the message would be sent by
-a Downstream Port, i.e., a Root Port in this case.
-
-s/sends/send/
-s/Set Slot Power Limit/Set_Slot_Power_Limit/ to match spec usage (also
-below)
-s/Dl-Down/DL_Down/ to match spec usage
-s/Dl-Up/DL_Up/ ditto
-
-> +	 */
-> +	sspl = mvebu_readl(port, PCIE_SSPL_OFF);
-> +	sspl &= ~(PCIE_SSPL_VALUE_MASK | PCIE_SSPL_SCALE_MASK | PCIE_SSPL_ENABLE);
-> +	if (port->slot_power_limit_value && port->slot_power_limit_scale) {
-> +		sspl |= port->slot_power_limit_value << PCIE_SSPL_VALUE_SHIFT;
-> +		sspl |= port->slot_power_limit_scale << PCIE_SSPL_SCALE_SHIFT;
-> +		sspl |= PCIE_SSPL_ENABLE;
-> +	}
-> +	mvebu_writel(port, sspl, PCIE_SSPL_OFF);
-> +
->  	/* Mask all interrupt sources. */
->  	mvebu_writel(port, ~PCIE_INT_ALL_MASK, PCIE_INT_UNMASK_OFF);
->  
-> @@ -628,9 +650,16 @@ mvebu_pci_bridge_emul_pcie_conf_read(struct pci_bridge_emul *bridge,
->  			  (PCI_EXP_LNKSTA_DLLLA << 16) : 0);
->  		break;
->  
-> -	case PCI_EXP_SLTCTL:
-> -		*value = PCI_EXP_SLTSTA_PDS << 16;
-> +	case PCI_EXP_SLTCTL: {
-> +		u16 slotsta = le16_to_cpu(bridge->pcie_conf.slotsta);
-> +		u32 val = 0;
-> +		if (!(mvebu_readl(port, PCIE_SSPL_OFF) & PCIE_SSPL_ENABLE))
-> +			val |= PCI_EXP_SLTCTL_ASPL_DISABLE;
-> +		/* PCI_EXP_SLTCTL is 32-bit and contains also slot status bits */
-
-This comment is a little bit confusing because PCI_EXP_SLTCTL is not
-actually 32 bits; it's 16 bits.  It's just that we "read" 32 bits,
-which includes both PCI_EXP_SLTCTL and PCI_EXP_SLTSTA.  If you use
-"PCI_EXP_SLTCTL", I think it would be helpful to also say
-"PCI_EXP_SLTSTA" instead of "slot status bits".
-
-> +		val |= slotsta << 16;
-> +		*value = val;
->  		break;
-> +	}
->  
->  	case PCI_EXP_RTSTA:
->  		*value = mvebu_readl(port, PCIE_RC_RTSTA);
-> @@ -774,6 +803,19 @@ mvebu_pci_bridge_emul_pcie_conf_write(struct pci_bridge_emul *bridge,
->  		mvebu_writel(port, new, PCIE_CAP_PCIEXP + PCI_EXP_LNKCTL);
->  		break;
->  
-> +	case PCI_EXP_SLTCTL:
-> +		if ((mask & PCI_EXP_SLTCTL_ASPL_DISABLE) &&
-> +		    port->slot_power_limit_value &&
-> +		    port->slot_power_limit_scale) {
-> +			u32 sspl = mvebu_readl(port, PCIE_SSPL_OFF);
-> +			if (new & PCI_EXP_SLTCTL_ASPL_DISABLE)
-> +				sspl &= ~PCIE_SSPL_ENABLE;
-> +			else
-> +				sspl |= PCIE_SSPL_ENABLE;
-> +			mvebu_writel(port, sspl, PCIE_SSPL_OFF);
-
-IIUC, the behavior of PCI_EXP_SLTCTL_ASPL_DISABLE as observed by
-software that sets it and reads it back will depend on whether the DT
-contains "slot-power-limit-milliwatt".
-
-If there is no DT property, port->slot_power_limit_value will be zero
-and PCIE_SSPL_ENABLE will never be set.  So if I clear
-PCI_EXP_SLTCTL_ASPL_DISABLE, then read it back, it looks like it will
-read as being set.  That's not what I would expect from the spec
-(PCIe r6.0, sec 7.5.3.10).
-
-> +		}
-> +		break;
-> +
->  	case PCI_EXP_RTSTA:
->  		/*
->  		 * PME Status bit in Root Status Register (PCIE_RC_RTSTA)
-> @@ -868,8 +910,26 @@ static int mvebu_pci_bridge_emul_init(struct mvebu_pcie_port *port)
->  	/*
->  	 * Older mvebu hardware provides PCIe Capability structure only in
->  	 * version 1. New hardware provides it in version 2.
-> +	 * Enable slot support which is emulated.
->  	 */
-> -	bridge->pcie_conf.cap = cpu_to_le16(pcie_cap_ver);
-> +	bridge->pcie_conf.cap = cpu_to_le16(pcie_cap_ver | PCI_EXP_FLAGS_SLOT);
-> +
-> +	/*
-> +	 * Set Presence Detect State bit permanently as there is no support for
-> +	 * unplugging PCIe card from the slot. Assume that PCIe card is always
-> +	 * connected in slot.
-> +	 *
-> +	 * Set physical slot number to port+1 as mvebu ports are indexed from
-> +	 * zero and zero value is reserved for ports within the same silicon
-> +	 * as Root Port which is not mvebu case.
-> +	 *
-> +	 * Also set correct slot power limit.
-> +	 */
-> +	bridge->pcie_conf.slotcap = cpu_to_le32(
-> +		(port->slot_power_limit_value << PCI_EXP_SLTCAP_SPLV_SHIFT) |
-> +		(port->slot_power_limit_scale << PCI_EXP_SLTCAP_SPLS_SHIFT) |
-> +		((port->port+1) << PCI_EXP_SLTCAP_PSN_SHIFT));
-> +	bridge->pcie_conf.slotsta = cpu_to_le16(PCI_EXP_SLTSTA_PDS);
->  
->  	bridge->subsystem_vendor_id = ssdev_id & 0xffff;
->  	bridge->subsystem_id = ssdev_id >> 16;
-> @@ -1191,6 +1251,7 @@ static int mvebu_pcie_parse_port(struct mvebu_pcie *pcie,
->  {
->  	struct device *dev = &pcie->pdev->dev;
->  	enum of_gpio_flags flags;
-> +	u32 slot_power_limit;
->  	int reset_gpio, ret;
->  	u32 num_lanes;
->  
-> @@ -1291,6 +1352,15 @@ static int mvebu_pcie_parse_port(struct mvebu_pcie *pcie,
->  		port->reset_gpio = gpio_to_desc(reset_gpio);
->  	}
->  
-> +	slot_power_limit = of_pci_get_slot_power_limit(child,
-> +				&port->slot_power_limit_value,
-> +				&port->slot_power_limit_scale);
-> +	if (slot_power_limit)
-> +		dev_info(dev, "%s: Slot power limit %u.%uW\n",
-> +			 port->name,
-> +			 slot_power_limit / 1000,
-> +			 (slot_power_limit / 100) % 10);
-> +
->  	port->clk = of_clk_get_by_name(child, NULL);
->  	if (IS_ERR(port->clk)) {
->  		dev_err(dev, "%s: cannot get clock\n", port->name);
-> @@ -1587,7 +1657,7 @@ static int mvebu_pcie_remove(struct platform_device *pdev)
->  {
->  	struct mvebu_pcie *pcie = platform_get_drvdata(pdev);
->  	struct pci_host_bridge *bridge = pci_host_bridge_from_priv(pcie);
-> -	u32 cmd;
-> +	u32 cmd, sspl;
->  	int i;
->  
->  	/* Remove PCI bus with all devices. */
-> @@ -1624,6 +1694,11 @@ static int mvebu_pcie_remove(struct platform_device *pdev)
->  		/* Free config space for emulated root bridge. */
->  		pci_bridge_emul_cleanup(&port->bridge);
->  
-> +		/* Disable sending Set Slot Power Limit PCIe Message. */
-> +		sspl = mvebu_readl(port, PCIE_SSPL_OFF);
-> +		sspl &= ~(PCIE_SSPL_VALUE_MASK | PCIE_SSPL_SCALE_MASK | PCIE_SSPL_ENABLE);
-> +		mvebu_writel(port, sspl, PCIE_SSPL_OFF);
-> +
->  		/* Disable and clear BARs and windows. */
->  		mvebu_pcie_disable_wins(port);
->  
-> -- 
-> 2.20.1
-> 
+>
+> [1] https://lore.kernel.org/all/df3b5d1c-a36b-2c73-3e27-99e74983de3a@suse.cz/
+>
+> > ---
+> > v3->v4:
+> >   collect Reviewed-by tag
+> >   define transhuge_vma_enabled next to transhuge_vma_suitable
+> > ---
+> >  fs/proc/task_mmu.c      |  2 +-
+> >  include/linux/huge_mm.h | 57 +++++++++++++++++++++++++----------------
+> >  mm/huge_memory.c        | 11 +++++++-
+> >  mm/khugepaged.c         |  4 +--
+> >  mm/shmem.c              |  3 +--
+> >  5 files changed, 48 insertions(+), 29 deletions(-)
+> >
+> > diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
+> > index fc9784544b24..7389df326edd 100644
+> > --- a/fs/proc/task_mmu.c
+> > +++ b/fs/proc/task_mmu.c
+> > @@ -832,7 +832,7 @@ static int show_smap(struct seq_file *m, void *v)
+> >       __show_smap(m, &mss, false);
+> >
+> >       seq_printf(m, "THPeligible:    %d\n",
+> > -                transparent_hugepage_enabled(vma));
+> > +                transparent_hugepage_active(vma));
+> >
+> >       if (arch_pkeys_enabled())
+> >               seq_printf(m, "ProtectionKey:  %8u\n", vma_pkey(vma));
+> > diff --git a/include/linux/huge_mm.h b/include/linux/huge_mm.h
+> > index 0a526f211fec..7b7f7b52ccb8 100644
+> > --- a/include/linux/huge_mm.h
+> > +++ b/include/linux/huge_mm.h
+> > @@ -115,9 +115,34 @@ extern struct kobj_attribute shmem_enabled_attr;
+> >
+> >  extern unsigned long transparent_hugepage_flags;
+> >
+> > +static inline bool transhuge_vma_suitable(struct vm_area_struct *vma,
+> > +             unsigned long haddr)
+> > +{
+> > +     /* Don't have to check pgoff for anonymous vma */
+> > +     if (!vma_is_anonymous(vma)) {
+> > +             if (!IS_ALIGNED((vma->vm_start >> PAGE_SHIFT) - vma->vm_pgoff,
+> > +                             HPAGE_PMD_NR))
+> > +                     return false;
+> > +     }
+> > +
+> > +     if (haddr < vma->vm_start || haddr + HPAGE_PMD_SIZE > vma->vm_end)
+> > +             return false;
+> > +     return true;
+> > +}
+> > +
+> > +static inline bool transhuge_vma_enabled(struct vm_area_struct *vma,
+> > +                                       unsigned long vm_flags)
+> > +{
+> > +     /* Explicitly disabled through madvise. */
+> > +     if ((vm_flags & VM_NOHUGEPAGE) ||
+> > +         test_bit(MMF_DISABLE_THP, &vma->vm_mm->flags))
+> > +             return false;
+> > +     return true;
+> > +}
+> > +
+> >  /*
+> >   * to be used on vmas which are known to support THP.
+> > - * Use transparent_hugepage_enabled otherwise
+> > + * Use transparent_hugepage_active otherwise
+> >   */
+> >  static inline bool __transparent_hugepage_enabled(struct vm_area_struct *vma)
+> >  {
+> > @@ -128,15 +153,12 @@ static inline bool __transparent_hugepage_enabled(struct vm_area_struct *vma)
+> >       if (transparent_hugepage_flags & (1 << TRANSPARENT_HUGEPAGE_NEVER_DAX))
+> >               return false;
+> >
+> > -     if (vma->vm_flags & VM_NOHUGEPAGE)
+> > +     if (!transhuge_vma_enabled(vma, vma->vm_flags))
+> >               return false;
+> >
+> >       if (vma_is_temporary_stack(vma))
+> >               return false;
+> >
+> > -     if (test_bit(MMF_DISABLE_THP, &vma->vm_mm->flags))
+> > -             return false;
+> > -
+> >       if (transparent_hugepage_flags & (1 << TRANSPARENT_HUGEPAGE_FLAG))
+> >               return true;
+> >
+> > @@ -150,22 +172,7 @@ static inline bool __transparent_hugepage_enabled(struct vm_area_struct *vma)
+> >       return false;
+> >  }
+> >
+> > -bool transparent_hugepage_enabled(struct vm_area_struct *vma);
+> > -
+> > -static inline bool transhuge_vma_suitable(struct vm_area_struct *vma,
+> > -             unsigned long haddr)
+> > -{
+> > -     /* Don't have to check pgoff for anonymous vma */
+> > -     if (!vma_is_anonymous(vma)) {
+> > -             if (!IS_ALIGNED((vma->vm_start >> PAGE_SHIFT) - vma->vm_pgoff,
+> > -                             HPAGE_PMD_NR))
+> > -                     return false;
+> > -     }
+> > -
+> > -     if (haddr < vma->vm_start || haddr + HPAGE_PMD_SIZE > vma->vm_end)
+> > -             return false;
+> > -     return true;
+> > -}
+> > +bool transparent_hugepage_active(struct vm_area_struct *vma);
+> >
+> >  #define transparent_hugepage_use_zero_page()                         \
+> >       (transparent_hugepage_flags &                                   \
+> > @@ -351,7 +358,7 @@ static inline bool __transparent_hugepage_enabled(struct vm_area_struct *vma)
+> >       return false;
+> >  }
+> >
+> > -static inline bool transparent_hugepage_enabled(struct vm_area_struct *vma)
+> > +static inline bool transparent_hugepage_active(struct vm_area_struct *vma)
+> >  {
+> >       return false;
+> >  }
+> > @@ -362,6 +369,12 @@ static inline bool transhuge_vma_suitable(struct vm_area_struct *vma,
+> >       return false;
+> >  }
+> >
+> > +static inline bool transhuge_vma_enabled(struct vm_area_struct *vma,
+> > +                                       unsigned long vm_flags)
+> > +{
+> > +     return false;
+> > +}
+> > +
+> >  static inline void prep_transhuge_page(struct page *page) {}
+> >
+> >  static inline bool is_transparent_hugepage(struct page *page)
+> > diff --git a/mm/huge_memory.c b/mm/huge_memory.c
+> > index 76ca1eb2a223..4f37867eed12 100644
+> > --- a/mm/huge_memory.c
+> > +++ b/mm/huge_memory.c
+> > @@ -63,7 +63,14 @@ static struct shrinker deferred_split_shrinker;
+> >  static atomic_t huge_zero_refcount;
+> >  struct page *huge_zero_page __read_mostly;
+> >
+> > -bool transparent_hugepage_enabled(struct vm_area_struct *vma)
+> > +static inline bool file_thp_enabled(struct vm_area_struct *vma)
+> > +{
+> > +     return transhuge_vma_enabled(vma, vma->vm_flags) && vma->vm_file &&
+> > +            !inode_is_open_for_write(vma->vm_file->f_inode) &&
+> > +            (vma->vm_flags & VM_EXEC);
+> > +}
+> > +
+> > +bool transparent_hugepage_active(struct vm_area_struct *vma)
+> >  {
+> >       /* The addr is used to check if the vma size fits */
+> >       unsigned long addr = (vma->vm_end & HPAGE_PMD_MASK) - HPAGE_PMD_SIZE;
+> > @@ -74,6 +81,8 @@ bool transparent_hugepage_enabled(struct vm_area_struct *vma)
+> >               return __transparent_hugepage_enabled(vma);
+> >       if (vma_is_shmem(vma))
+> >               return shmem_huge_enabled(vma);
+> > +     if (IS_ENABLED(CONFIG_READ_ONLY_THP_FOR_FS))
+> > +             return file_thp_enabled(vma);
+> >
+> >       return false;
+> >  }
+> > diff --git a/mm/khugepaged.c b/mm/khugepaged.c
+> > index 6c0185fdd815..d97b20fad6e8 100644
+> > --- a/mm/khugepaged.c
+> > +++ b/mm/khugepaged.c
+> > @@ -442,9 +442,7 @@ static inline int khugepaged_test_exit(struct mm_struct *mm)
+> >  static bool hugepage_vma_check(struct vm_area_struct *vma,
+> >                              unsigned long vm_flags)
+> >  {
+> > -     /* Explicitly disabled through madvise. */
+> > -     if ((vm_flags & VM_NOHUGEPAGE) ||
+> > -         test_bit(MMF_DISABLE_THP, &vma->vm_mm->flags))
+> > +     if (!transhuge_vma_enabled(vma, vm_flags))
+> >               return false;
+> >
+> >       /* Enabled via shmem mount options or sysfs settings. */
+> > diff --git a/mm/shmem.c b/mm/shmem.c
+> > index a08cedefbfaa..1dcbec313c70 100644
+> > --- a/mm/shmem.c
+> > +++ b/mm/shmem.c
+> > @@ -4032,8 +4032,7 @@ bool shmem_huge_enabled(struct vm_area_struct *vma)
+> >       loff_t i_size;
+> >       pgoff_t off;
+> >
+> > -     if ((vma->vm_flags & VM_NOHUGEPAGE) ||
+> > -         test_bit(MMF_DISABLE_THP, &vma->vm_mm->flags))
+> > +     if (!transhuge_vma_enabled(vma, vma->vm_flags))
+> >               return false;
+> >       if (shmem_huge == SHMEM_HUGE_FORCE)
+> >               return true;
+>

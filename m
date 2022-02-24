@@ -2,238 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 146F54C26AE
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 10:00:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 689E64C26C2
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 10:00:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232262AbiBXI4s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 03:56:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43806 "EHLO
+        id S232062AbiBXIyz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 03:54:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232294AbiBXI4a (ORCPT
+        with ESMTP id S232151AbiBXIys (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 03:56:30 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D80171712BF;
-        Thu, 24 Feb 2022 00:55:55 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 3EDAACE1CEB;
-        Thu, 24 Feb 2022 08:55:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1583EC340EB;
-        Thu, 24 Feb 2022 08:55:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645692952;
-        bh=BMSJuM6mp3gNfGG4OzFVpdae7Wlvs48nLdEAGUhT22s=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WmH0Jsml56oxEaNnlQC164M+gJJq3queepPc11VKswmuGu/rs7PNCZWDP8mvrqcIa
-         YpbhMjDSzMscYjy5QvcNQxvXrHvKXbkkDoXwcAHdhQw0oqTmHbCdKGBZiHoZ48Bh3H
-         8Pqyus5246CzI6Ksb/Z6h3PdmTIeTqq3LdI6ADyRcYoDUUUa5eIk0B2LVibJZUn3Yo
-         NKUgSz3BxjuctFbCeQr2aDx+hCgKTYYJ4aeM7a/JicUrFC0WIW6Vq5lk0t4bssVxBL
-         ivt4e3yq+kj5DTAo4ZDGivk71eHGubFD+xDdpgYlBUBGrDe9QZJ2N+hTK7Ye7Y+oCm
-         OVYtTSR82f+SA==
-From:   guoren@kernel.org
-To:     guoren@kernel.org, palmer@dabbelt.com, arnd@arndb.de,
-        anup@brainfault.org, gregkh@linuxfoundation.org,
-        liush@allwinnertech.com, wefu@redhat.com, drew@beagleboard.org,
-        wangjunqiang@iscas.ac.cn, hch@lst.de
-Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-csky@vger.kernel.org,
-        linux-s390@vger.kernel.org, sparclinux@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-parisc@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        x86@kernel.org, Guo Ren <guoren@linux.alibaba.com>
-Subject: [PATCH V6 08/20] riscv: Fixup difference with defconfig
-Date:   Thu, 24 Feb 2022 16:53:58 +0800
-Message-Id: <20220224085410.399351-9-guoren@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220224085410.399351-1-guoren@kernel.org>
-References: <20220224085410.399351-1-guoren@kernel.org>
+        Thu, 24 Feb 2022 03:54:48 -0500
+Received: from smtp-fw-2101.amazon.com (smtp-fw-2101.amazon.com [72.21.196.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCBB7162020;
+        Thu, 24 Feb 2022 00:54:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1645692858; x=1677228858;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=12QSyjliW/2N5g2pN9oNa13hL2d3UZLmxKY0dS2g+TU=;
+  b=YJAmvEtDQPl32GD3t/WiXmXJa+powVBNiHIwcdegAd2CrBFgH2RxVpDM
+   mgdcf0UM9ISctIaaU5+lvNMLU7u76DlmKK5nyrnJ8NcLzOybnRPpcqX0j
+   ACs5iLKxOZGIuXUE09kebvSEvSKr7xXThQUbcB6pXRSRQjav1CVjjnKLB
+   E=;
+X-IronPort-AV: E=Sophos;i="5.88,393,1635206400"; 
+   d="scan'208";a="176212703"
+Received: from iad12-co-svc-p1-lb1-vlan2.amazon.com (HELO email-inbound-relay-pdx-2c-5c4a15b1.us-west-2.amazon.com) ([10.43.8.2])
+  by smtp-border-fw-2101.iad2.amazon.com with ESMTP; 24 Feb 2022 08:54:06 +0000
+Received: from EX13MTAUWC002.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
+        by email-inbound-relay-pdx-2c-5c4a15b1.us-west-2.amazon.com (Postfix) with ESMTPS id AF91E41634;
+        Thu, 24 Feb 2022 08:54:05 +0000 (UTC)
+Received: from EX13D20UWC001.ant.amazon.com (10.43.162.244) by
+ EX13MTAUWC002.ant.amazon.com (10.43.162.240) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.28; Thu, 24 Feb 2022 08:54:05 +0000
+Received: from [0.0.0.0] (10.43.161.89) by EX13D20UWC001.ant.amazon.com
+ (10.43.162.244) with Microsoft SMTP Server (TLS) id 15.0.1497.28; Thu, 24 Feb
+ 2022 08:54:01 +0000
+Message-ID: <234d7952-0379-e3d9-5e02-5eba171024a0@amazon.com>
+Date:   Thu, 24 Feb 2022 09:53:59 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UPPERCASE_50_75
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.6.1
+Subject: Re: [PATCH RFC v1 0/2] VM fork detection for RNG
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        <linux-kernel@vger.kernel.org>, <linux-crypto@vger.kernel.org>,
+        <qemu-devel@nongnu.org>, <kvm@vger.kernel.org>,
+        <linux-s390@vger.kernel.org>, <adrian@parity.io>
+CC:     <dwmw@amazon.co.uk>, <acatan@amazon.com>, <colmmacc@amazon.com>,
+        <sblbir@amazon.com>, <raduweis@amazon.com>, <jannh@google.com>,
+        <gregkh@linuxfoundation.org>, <tytso@mit.edu>
+References: <20220223131231.403386-1-Jason@zx2c4.com>
+From:   Alexander Graf <graf@amazon.com>
+In-Reply-To: <20220223131231.403386-1-Jason@zx2c4.com>
+X-Originating-IP: [10.43.161.89]
+X-ClientProxiedBy: EX13D47UWA001.ant.amazon.com (10.43.163.6) To
+ EX13D20UWC001.ant.amazon.com (10.43.162.244)
+Content-Type: text/plain; charset="utf-8"; format="flowed"
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Guo Ren <guoren@linux.alibaba.com>
-
-Let's follow the origin patch's spirit:
-
-The only difference between rv32_defconfig and defconfig is that
-rv32_defconfig has  CONFIG_ARCH_RV32I=y.
-
-This is helpful to compare rv64-compat-rv32 v.s. rv32-linux.
-
-Fixes: 1b937e8faa87ccfb ("RISC-V: Add separate defconfig for 32bit systems")
-Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-Signed-off-by: Guo Ren <guoren@kernel.org>
-Reviewed-by: Arnd Bergmann <arnd@arndb.de>
-Cc: Palmer Dabbelt <palmer@dabbelt.com>
----
- arch/riscv/Makefile               |   4 +
- arch/riscv/configs/rv32_defconfig | 135 ------------------------------
- 2 files changed, 4 insertions(+), 135 deletions(-)
- delete mode 100644 arch/riscv/configs/rv32_defconfig
-
-diff --git a/arch/riscv/Makefile b/arch/riscv/Makefile
-index 7d81102cffd4..c6ca1b9cbf71 100644
---- a/arch/riscv/Makefile
-+++ b/arch/riscv/Makefile
-@@ -154,3 +154,7 @@ PHONY += rv64_randconfig
- rv64_randconfig:
- 	$(Q)$(MAKE) KCONFIG_ALLCONFIG=$(srctree)/arch/riscv/configs/64-bit.config \
- 		-f $(srctree)/Makefile randconfig
-+
-+PHONY += rv32_defconfig
-+rv32_defconfig:
-+	$(Q)$(MAKE) -f $(srctree)/Makefile defconfig 32-bit.config
-diff --git a/arch/riscv/configs/rv32_defconfig b/arch/riscv/configs/rv32_defconfig
-deleted file mode 100644
-index 8b56a7f1eb06..000000000000
---- a/arch/riscv/configs/rv32_defconfig
-+++ /dev/null
-@@ -1,135 +0,0 @@
--CONFIG_SYSVIPC=y
--CONFIG_POSIX_MQUEUE=y
--CONFIG_NO_HZ_IDLE=y
--CONFIG_HIGH_RES_TIMERS=y
--CONFIG_BPF_SYSCALL=y
--CONFIG_IKCONFIG=y
--CONFIG_IKCONFIG_PROC=y
--CONFIG_CGROUPS=y
--CONFIG_CGROUP_SCHED=y
--CONFIG_CFS_BANDWIDTH=y
--CONFIG_CGROUP_BPF=y
--CONFIG_NAMESPACES=y
--CONFIG_USER_NS=y
--CONFIG_CHECKPOINT_RESTORE=y
--CONFIG_BLK_DEV_INITRD=y
--CONFIG_EXPERT=y
--# CONFIG_SYSFS_SYSCALL is not set
--CONFIG_SOC_SIFIVE=y
--CONFIG_SOC_VIRT=y
--CONFIG_ARCH_RV32I=y
--CONFIG_SMP=y
--CONFIG_HOTPLUG_CPU=y
--CONFIG_VIRTUALIZATION=y
--CONFIG_KVM=m
--CONFIG_JUMP_LABEL=y
--CONFIG_MODULES=y
--CONFIG_MODULE_UNLOAD=y
--CONFIG_NET=y
--CONFIG_PACKET=y
--CONFIG_UNIX=y
--CONFIG_INET=y
--CONFIG_IP_MULTICAST=y
--CONFIG_IP_ADVANCED_ROUTER=y
--CONFIG_IP_PNP=y
--CONFIG_IP_PNP_DHCP=y
--CONFIG_IP_PNP_BOOTP=y
--CONFIG_IP_PNP_RARP=y
--CONFIG_NETLINK_DIAG=y
--CONFIG_NET_9P=y
--CONFIG_NET_9P_VIRTIO=y
--CONFIG_PCI=y
--CONFIG_PCIEPORTBUS=y
--CONFIG_PCI_HOST_GENERIC=y
--CONFIG_PCIE_XILINX=y
--CONFIG_DEVTMPFS=y
--CONFIG_DEVTMPFS_MOUNT=y
--CONFIG_BLK_DEV_LOOP=y
--CONFIG_VIRTIO_BLK=y
--CONFIG_BLK_DEV_SD=y
--CONFIG_BLK_DEV_SR=y
--CONFIG_SCSI_VIRTIO=y
--CONFIG_ATA=y
--CONFIG_SATA_AHCI=y
--CONFIG_SATA_AHCI_PLATFORM=y
--CONFIG_NETDEVICES=y
--CONFIG_VIRTIO_NET=y
--CONFIG_MACB=y
--CONFIG_E1000E=y
--CONFIG_R8169=y
--CONFIG_MICROSEMI_PHY=y
--CONFIG_INPUT_MOUSEDEV=y
--CONFIG_SERIAL_8250=y
--CONFIG_SERIAL_8250_CONSOLE=y
--CONFIG_SERIAL_OF_PLATFORM=y
--CONFIG_SERIAL_EARLYCON_RISCV_SBI=y
--CONFIG_HVC_RISCV_SBI=y
--CONFIG_VIRTIO_CONSOLE=y
--CONFIG_HW_RANDOM=y
--CONFIG_HW_RANDOM_VIRTIO=y
--CONFIG_SPI=y
--CONFIG_SPI_SIFIVE=y
--# CONFIG_PTP_1588_CLOCK is not set
--CONFIG_DRM=y
--CONFIG_DRM_RADEON=y
--CONFIG_DRM_VIRTIO_GPU=y
--CONFIG_FB=y
--CONFIG_FRAMEBUFFER_CONSOLE=y
--CONFIG_USB=y
--CONFIG_USB_XHCI_HCD=y
--CONFIG_USB_XHCI_PLATFORM=y
--CONFIG_USB_EHCI_HCD=y
--CONFIG_USB_EHCI_HCD_PLATFORM=y
--CONFIG_USB_OHCI_HCD=y
--CONFIG_USB_OHCI_HCD_PLATFORM=y
--CONFIG_USB_STORAGE=y
--CONFIG_USB_UAS=y
--CONFIG_MMC=y
--CONFIG_MMC_SPI=y
--CONFIG_RTC_CLASS=y
--CONFIG_VIRTIO_PCI=y
--CONFIG_VIRTIO_BALLOON=y
--CONFIG_VIRTIO_INPUT=y
--CONFIG_VIRTIO_MMIO=y
--CONFIG_RPMSG_CHAR=y
--CONFIG_RPMSG_VIRTIO=y
--CONFIG_EXT4_FS=y
--CONFIG_EXT4_FS_POSIX_ACL=y
--CONFIG_AUTOFS4_FS=y
--CONFIG_MSDOS_FS=y
--CONFIG_VFAT_FS=y
--CONFIG_TMPFS=y
--CONFIG_TMPFS_POSIX_ACL=y
--CONFIG_NFS_FS=y
--CONFIG_NFS_V4=y
--CONFIG_NFS_V4_1=y
--CONFIG_NFS_V4_2=y
--CONFIG_ROOT_NFS=y
--CONFIG_9P_FS=y
--CONFIG_CRYPTO_USER_API_HASH=y
--CONFIG_CRYPTO_DEV_VIRTIO=y
--CONFIG_PRINTK_TIME=y
--CONFIG_DEBUG_FS=y
--CONFIG_DEBUG_PAGEALLOC=y
--CONFIG_SCHED_STACK_END_CHECK=y
--CONFIG_DEBUG_VM=y
--CONFIG_DEBUG_VM_PGFLAGS=y
--CONFIG_DEBUG_MEMORY_INIT=y
--CONFIG_DEBUG_PER_CPU_MAPS=y
--CONFIG_SOFTLOCKUP_DETECTOR=y
--CONFIG_WQ_WATCHDOG=y
--CONFIG_DEBUG_TIMEKEEPING=y
--CONFIG_DEBUG_RT_MUTEXES=y
--CONFIG_DEBUG_SPINLOCK=y
--CONFIG_DEBUG_MUTEXES=y
--CONFIG_DEBUG_RWSEMS=y
--CONFIG_DEBUG_ATOMIC_SLEEP=y
--CONFIG_STACKTRACE=y
--CONFIG_DEBUG_LIST=y
--CONFIG_DEBUG_PLIST=y
--CONFIG_DEBUG_SG=y
--# CONFIG_RCU_TRACE is not set
--CONFIG_RCU_EQS_DEBUG=y
--# CONFIG_FTRACE is not set
--# CONFIG_RUNTIME_TESTING_MENU is not set
--CONFIG_MEMTEST=y
--- 
-2.25.1
+SGV5IEphc29uLAoKT24gMjMuMDIuMjIgMTQ6MTIsIEphc29uIEEuIERvbmVuZmVsZCB3cm90ZToK
+PiBUaGlzIHNtYWxsIHNlcmllcyBwaWNrcyB1cCB3b3JrIGZyb20gQW1hem9uIHRoYXQgc2VlbXMg
+dG8gaGF2ZSBzdGFsbGVkCj4gb3V0IGxhdGVyIHllYXIgYXJvdW5kIHRoaXMgdGltZTogbGlzdGVu
+aW5nIGZvciB0aGUgdm1nZW5pZCBBQ1BJCj4gbm90aWZpY2F0aW9uLCBhbmQgdXNpbmcgaXQgdG8g
+ImRvIHNvbWV0aGluZy4iIExhc3QgeWVhciwgdGhhdCBzb21ldGhpbmcKPiBpbnZvbHZlZCBhIGNv
+bXBsaWNhdGVkIHVzZXJzcGFjZSBtbWFwIGNoYXJkZXYsIHdoaWNoIHNlZW1zIGZyb3VnaHQgd2l0
+aAo+IGRpZmZpY3VsdHkuIFRoaXMgeWVhciwgSSBoYXZlIHNvbWV0aGluZyBtdWNoIHNpbXBsZXIg
+aW4gbWluZDogc2ltcGx5Cj4gdXNpbmcgdGhvc2UgQUNQSSBub3RpZmljYXRpb25zIHRvIHRlbGwg
+dGhlIFJORyB0byByZWluaXRpYWxpemUgc2FmZWx5LAo+IHNvIHdlIGRvbid0IHJlcGVhdCByYW5k
+b20gbnVtYmVycyBpbiBjbG9uZWQsIGZvcmtlZCwgb3Igcm9sbGVkLWJhY2sgVk0KPiBpbnN0YW5j
+ZXMuCj4KPiBUaGlzIHNlcmllcyBjb25zaXN0cyBvZiB0d28gcGF0Y2hlcy4gVGhlIGZpcnN0IGlz
+IGEgcmF0aGVyCj4gc3RyYWlnaHRmb3J3YXJkIGFkZGl0aW9uIHRvIHJhbmRvbS5jLCB3aGljaCBJ
+IGZlZWwgZmluZSBhYm91dC4gVGhlCj4gc2Vjb25kIHBhdGNoIGlzIHRoZSByZWFzb24gdGhpcyBp
+cyBqdXN0IGFuIFJGQzogaXQncyBhIGNsZWFudXAgb2YgdGhlCj4gQUNQSSBkcml2ZXIgZnJvbSBs
+YXN0IHllYXIsIGFuZCBJIGRvbid0IHJlYWxseSBoYXZlIG11Y2ggZXhwZXJpZW5jZQo+IHdyaXRp
+bmcsIHRlc3RpbmcsIGRlYnVnZ2luZywgb3IgbWFpbnRhaW5pbmcgdGhlc2UgdHlwZXMgb2YgZHJp
+dmVycy4KPiBJZGVhbGx5IHRoaXMgdGhyZWFkIHdvdWxkIHlpZWxkIHNvbWVib2R5IHNheWluZywg
+Ikkgc2VlIHRoZSBpbnRlbnQgb2YKPiB0aGlzOyBJJ20gaGFwcHkgdG8gdGFrZSBvdmVyIG93bmVy
+c2hpcCBvZiB0aGlzIHBhcnQuIiBUaGF0IHdheSwgSSBjYW4KPiBmb2N1cyBvbiB0aGUgUk5HIHBh
+cnQsIGFuZCB3aG9ldmVyIHN0ZXBzIHVwIGZvciB0aGUgcGFyYXZpcnQgQUNQSSBwYXJ0Cj4gY2Fu
+IGZvY3VzIG9uIHRoYXQuCj4KPiBBcyBhIGZpbmFsIG5vdGUsIHRoaXMgc2VyaWVzIGludGVudGlv
+bmFsbHkgZG9lcyBfbm90XyBmb2N1cyBvbgo+IG5vdGlmaWNhdGlvbiBvZiB0aGVzZSBldmVudHMg
+dG8gdXNlcnNwYWNlIG9yIHRvIG90aGVyIGtlcm5lbCBjb25zdW1lcnMuCj4gU2luY2UgdGhlc2Ug
+Vk0gZm9yayBkZXRlY3Rpb24gZXZlbnRzIGZpcnN0IG5lZWQgdG8gaGl0IHRoZSBSTkcsIHdlIGNh
+bgo+IGxhdGVyIHRhbGsgYWJvdXQgd2hhdCBzb3J0cyBvZiBub3RpZmljYXRpb25zIG9yIG1tYXAn
+ZCBjb3VudGVycyB0aGUgUk5HCj4gc2hvdWxkIGJlIG1ha2luZyBhY2Nlc3NpYmxlIHRvIGVsc2V3
+aGVyZS4gQnV0IHRoYXQncyBhIGRpZmZlcmVudCBzb3J0IG9mCj4gcHJvamVjdCBhbmQgdGllcyBp
+bnRvIGEgbG90IG9mIG1vcmUgY29tcGxpY2F0ZWQgY29uY2VybnMgYmV5b25kIHRoaXMKPiBtb3Jl
+IGJhc2ljIHBhdGNoc2V0LiBTbyBob3BlZnVsbHkgd2UgY2FuIGtlZXAgdGhlIGRpc2N1c3Npb24g
+cmF0aGVyCj4gZm9jdXNlZCBoZXJlIHRvIHRoaXMgQUNQSSBidXNpbmVzcy4KCgpUaGUgbWFpbiBw
+cm9ibGVtIHdpdGggVk1HZW5JRCBpcyB0aGF0IGl0IGlzIGluaGVyZW50bHkgcmFjeS4gVGhlcmUg
+d2lsbCAKYWx3YXlzIGJlIGEgKHNob3J0KSBhbW91bnQgb2YgdGltZSB3aGVyZSB0aGUgQUNQSSBu
+b3RpZmljYXRpb24gaXMgbm90IApwcm9jZXNzZWQsIGJ1dCB0aGUgVk0gY291bGQgdXNlIGl0cyBS
+TkcgdG8gZm9yIGV4YW1wbGUgZXN0YWJsaXNoIFRMUyAKY29ubmVjdGlvbnMuCgpIZW5jZSB3ZSBh
+cyB0aGUgbmV4dCBzdGVwIHByb3Bvc2VkIGEgbXVsdGktc3RhZ2UgcXVpZXNjZS9yZXN1bWUgCm1l
+Y2hhbmlzbSB3aGVyZSB0aGUgc3lzdGVtIGlzIGF3YXJlIHRoYXQgaXQgaXMgZ29pbmcgaW50byBz
+dXNwZW5kIC0gY2FuIApibG9jayBuZXR3b3JrIGNvbm5lY3Rpb25zIGZvciBleGFtcGxlIC0gYW5k
+IG9ubHkgcmV0dXJucyB0byBhIGZ1bGx5IApmdW5jdGlvbmFsIHN0YXRlIGFmdGVyIGFuIHVucXVp
+ZXNjZSBwaGFzZToKCiDCoCBodHRwczovL2dpdGh1Yi5jb20vc3lzdGVtZC9zeXN0ZW1kL2lzc3Vl
+cy8yMDIyMgoKTG9va2luZyBhdCB0aGUgaXNzdWUgYWdhaW4sIGl0IHNlZW1zIGxpa2Ugd2UgY29t
+cGxldGVseSBtaXNzZWQgdG8gZm9sbG93IAp1cCB3aXRoIGEgUFIgdG8gaW1wbGVtZW50IHRoYXQg
+ZnVuY3Rpb25hbGl0eSA6KC4KCldoYXQgZXhhY3QgdXNlIGNhc2UgZG8geW91IGhhdmUgaW4gbWlu
+ZCBmb3IgdGhlIFJORy9WTUdlbklEIHVwZGF0ZT8gQ2FuIAp5b3UgdGhpbmsgb2Ygc2l0dWF0aW9u
+cyB3aGVyZSB0aGUgcmFjZSBpcyBub3QgYW4gYWN0dWFsIGNvbmNlcm4/CgoKQWxleAoKCj4KPiBD
+YzogZHdtd0BhbWF6b24uY28udWsKPiBDYzogYWNhdGFuQGFtYXpvbi5jb20KPiBDYzogZ3JhZkBh
+bWF6b24uY29tCj4gQ2M6IGNvbG1tYWNjQGFtYXpvbi5jb20KPiBDYzogc2JsYmlyQGFtYXpvbi5j
+b20KPiBDYzogcmFkdXdlaXNAYW1hem9uLmNvbQo+IENjOiBqYW5uaEBnb29nbGUuY29tCj4gQ2M6
+IGdyZWdraEBsaW51eGZvdW5kYXRpb24ub3JnCj4gQ2M6IHR5dHNvQG1pdC5lZHUKPgo+IEphc29u
+IEEuIERvbmVuZmVsZCAoMik6Cj4gICAgcmFuZG9tOiBhZGQgbWVjaGFuaXNtIGZvciBWTSBmb3Jr
+cyB0byByZWluaXRpYWxpemUgY3JuZwo+ICAgIGRyaXZlcnMvdmlydDogYWRkIHZtZ2VuaWQgZHJp
+dmVyIGZvciByZWluaXRpYWxpemluZyBSTkcKPgo+ICAgZHJpdmVycy9jaGFyL3JhbmRvbS5jICB8
+ICA1OCArKysrKysrKysrKysrKysrKysKPiAgIGRyaXZlcnMvdmlydC9LY29uZmlnICAgfCAgIDgg
+KysrCj4gICBkcml2ZXJzL3ZpcnQvTWFrZWZpbGUgIHwgICAxICsKPiAgIGRyaXZlcnMvdmlydC92
+bWdlbmlkLmMgfCAxMzMgKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysK
+PiAgIGluY2x1ZGUvbGludXgvcmFuZG9tLmggfCAgIDEgKwo+ICAgNSBmaWxlcyBjaGFuZ2VkLCAy
+MDEgaW5zZXJ0aW9ucygrKQo+ICAgY3JlYXRlIG1vZGUgMTAwNjQ0IGRyaXZlcnMvdmlydC92bWdl
+bmlkLmMKPgo+IC0tCj4gMi4zNS4xCj4KCgoKQW1hem9uIERldmVsb3BtZW50IENlbnRlciBHZXJt
+YW55IEdtYkgKS3JhdXNlbnN0ci4gMzgKMTAxMTcgQmVybGluCkdlc2NoYWVmdHNmdWVocnVuZzog
+Q2hyaXN0aWFuIFNjaGxhZWdlciwgSm9uYXRoYW4gV2Vpc3MKRWluZ2V0cmFnZW4gYW0gQW10c2dl
+cmljaHQgQ2hhcmxvdHRlbmJ1cmcgdW50ZXIgSFJCIDE0OTE3MyBCClNpdHo6IEJlcmxpbgpVc3Qt
+SUQ6IERFIDI4OSAyMzcgODc5CgoK
 

@@ -2,191 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A05444C34EB
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 19:43:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E45154C34F3
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 19:45:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232989AbiBXSnf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 13:43:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44014 "EHLO
+        id S232992AbiBXSoI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 13:44:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232203AbiBXSnd (ORCPT
+        with ESMTP id S229850AbiBXSoG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 13:43:33 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71A0820D51B
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 10:43:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645728183; x=1677264183;
-  h=message-id:date:mime-version:to:cc:references:from:
-   subject:in-reply-to:content-transfer-encoding;
-  bh=y/bGeuO2u8Zn7HXsvFk9tlnXkxIAjc9N5n2NQK7v5M0=;
-  b=ZWVrQknd9qxGMd6yEKExz0+CbDF47zH96wIuSi71e+i9T7SXIvW+4Enr
-   6e72Yk68U5AfiLgblHG3rcmCxFiirEp9fKcyJEoxPhbadW13tGxfLlgrU
-   CBGGx8sUfWfeO4/EmnnHiJz3jFd5vhpNm4zP6sahH/egAbYKKgPH+LZHb
-   6vl82u+gU16/zB9MSQCAdyK2syRBP8+6sJf7OiqsIul3Jh4Vg4P1wpjSB
-   Xv7K2YN07h4wbhCr6pF/saOrVJtkq41kcmL1f0iYRV88GdFb/u9NYL0lE
-   Dm2J46LVCzw+lx7lbf5pUy3dpIUndUNPtgxDLyGcxmWwZEddz4OROOiQT
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10268"; a="315537658"
-X-IronPort-AV: E=Sophos;i="5.90,134,1643702400"; 
-   d="scan'208";a="315537658"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2022 10:43:03 -0800
-X-IronPort-AV: E=Sophos;i="5.90,134,1643702400"; 
-   d="scan'208";a="548882659"
-Received: from vpirogov-mobl.amr.corp.intel.com (HELO [10.252.137.68]) ([10.252.137.68])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2022 10:43:01 -0800
-Message-ID: <9b4b3581-925b-32a8-8a4f-fdd8d98f2164@intel.com>
-Date:   Thu, 24 Feb 2022 10:42:56 -0800
+        Thu, 24 Feb 2022 13:44:06 -0500
+Received: from mail-oi1-f176.google.com (mail-oi1-f176.google.com [209.85.167.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F704223211;
+        Thu, 24 Feb 2022 10:43:36 -0800 (PST)
+Received: by mail-oi1-f176.google.com with SMTP id l25so4103119oic.13;
+        Thu, 24 Feb 2022 10:43:36 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=rDAV/WWC011qVv0D0YjIr6Ze1/ltKncfCfMwzEnMjjQ=;
+        b=o8+zIulVbhgAZbFoTuYA4+uz+LExCbxhjmPDq3Omw15z7+w/aqEUCHK9d0z9xJkHXh
+         mKHcsMJ7mej35QfkeczYztLX0kO9yZ+h1937eGKxEWZ971MbVpQkKsr3QWomuWPwlX1t
+         dCJTaEe2F6Gp2Osk/42gzv+xEiCi5ZgL1cM70nIr2uruBVITXS6u9pSFDax1Y8s3Y0u8
+         QaSsis8leehdU+kXf3c7S1NbYhSaU1uRFdv/rsWX8lxCJd3W+9subBTQ+wXJqnMuXkwA
+         fbqBR06H3RIcvEUt2e2RvsHjNcgKbYVnYnLKifjqjKpDK21jNiuW8rKqW3Xvzc9YCyft
+         vT/Q==
+X-Gm-Message-State: AOAM530VzZDLAb9U6F3xMMMVJ3r5MxlsbrzUeuIHkbjPL5PKShlUqGdm
+        2cfeDs72SlHMEs8zjytYIg==
+X-Google-Smtp-Source: ABdhPJyzToIn+k8zZMPupkt5bsE/2FY1U+G91saHHxKA8Ux7j9WTKJiq5dYRPnNsAu8lEQhspejNdg==
+X-Received: by 2002:a05:6808:1448:b0:2d7:dc0:c271 with SMTP id x8-20020a056808144800b002d70dc0c271mr5178534oiv.127.1645728215536;
+        Thu, 24 Feb 2022 10:43:35 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id p22-20020a056870831600b000ccfbea4f23sm236718oae.33.2022.02.24.10.43.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Feb 2022 10:43:34 -0800 (PST)
+Received: (nullmailer pid 3382450 invoked by uid 1000);
+        Thu, 24 Feb 2022 18:43:33 -0000
+Date:   Thu, 24 Feb 2022 12:43:33 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Ansuel Smith <ansuelsmth@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Taniya Das <tdas@codeaurora.org>, linux-clk@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>,
+        Andy Gross <agross@kernel.org>
+Subject: Re: [PATCH v5 01/15] dt-bindings: clock: split qcom,gcc.yaml to
+ common and specific schema
+Message-ID: <YhfR1fx+A0ZOrn5g@robh.at.kernel.org>
+References: <20220224164831.21475-1-ansuelsmth@gmail.com>
+ <20220224164831.21475-2-ansuelsmth@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Content-Language: en-US
-To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        luto@kernel.org, peterz@infradead.org
-Cc:     sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
-        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
-        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
-        joro@8bytes.org, jpoimboe@redhat.com, knsathya@kernel.org,
-        pbonzini@redhat.com, sdeep@vmware.com, seanjc@google.com,
-        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
-        thomas.lendacky@amd.com, brijesh.singh@amd.com, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220224155630.52734-1-kirill.shutemov@linux.intel.com>
- <20220224155630.52734-9-kirill.shutemov@linux.intel.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-Subject: Re: [PATCHv4 08/30] x86/tdx: Add HLT support for TDX guests
-In-Reply-To: <20220224155630.52734-9-kirill.shutemov@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220224164831.21475-2-ansuelsmth@gmail.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/24/22 07:56, Kirill A. Shutemov wrote:
-> The HLT instruction is a privileged instruction, executing it stops
-> instruction execution and places the processor in a HALT state. It
-> is used in kernel for cases like reboot, idle loop and exception fixup
-> handlers. For the idle case, interrupts will be enabled (using STI)
-> before the HLT instruction (this is also called safe_halt()).
+On Thu, 24 Feb 2022 17:48:17 +0100, Ansuel Smith wrote:
+> Split qcom,gcc.yaml to common and specific schema to use it as a
+> template for schema that needs to use the gcc bindings and require
+> to add additional bindings.
 > 
-> To support the HLT instruction in TDX guests, it needs to be emulated
-> using TDVMCALL (hypercall to VMM). More details about it can be found
-> in Intel Trust Domain Extensions (Intel TDX) Guest-Host-Communication
-> Interface (GHCI) specification, section TDVMCALL[Instruction.HLT].
+> Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
+> ---
+>  .../bindings/clock/qcom,gcc-other.yaml        | 76 +++++++++++++++++++
+>  .../devicetree/bindings/clock/qcom,gcc.yaml   | 59 +-------------
+>  2 files changed, 80 insertions(+), 55 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/clock/qcom,gcc-other.yaml
 > 
-> In TDX guests, executing HLT instruction will generate a #VE, which is
-> used to emulate the HLT instruction. But #VE based emulation will not
-> work for the safe_halt() flavor, because it requires STI instruction to
-> be executed just before the TDCALL. Since idle loop is the only user of
-> safe_halt() variant, handle it as a special case.
-> 
-> To avoid *safe_halt() call in the idle function, define the
-> tdx_guest_idle() and use it to override the "x86_idle" function pointer
-> for a valid TDX guest.
-> 
-> Alternative choices like PV ops have been considered for adding
-> safe_halt() support. But it was rejected because HLT paravirt calls
-> only exist under PARAVIRT_XXL, and enabling it in TDX guest just for
-> safe_halt() use case is not worth the cost.
 
-Thanks for all the history and background here.
-
-> diff --git a/arch/x86/coco/tdcall.S b/arch/x86/coco/tdcall.S
-> index c4dd9468e7d9..3c35a056974d 100644
-> --- a/arch/x86/coco/tdcall.S
-> +++ b/arch/x86/coco/tdcall.S
-> @@ -138,6 +138,19 @@ SYM_FUNC_START(__tdx_hypercall)
->  
->  	movl $TDVMCALL_EXPOSE_REGS_MASK, %ecx
->  
-> +	/*
-> +	 * For the idle loop STI needs to be called directly before the TDCALL
-> +	 * that enters idle (EXIT_REASON_HLT case). STI instruction enables
-> +	 * interrupts only one instruction later. If there is a window between
-> +	 * STI and the instruction that emulates the HALT state, there is a
-> +	 * chance for interrupts to happen in this window, which can delay the
-> +	 * HLT operation indefinitely. Since this is the not the desired
-> +	 * result, conditionally call STI before TDCALL.
-> +	 */
-> +	testq $TDX_HCALL_ISSUE_STI, %rsi
-> +	jz .Lskip_sti
-> +	sti
-> +.Lskip_sti:
->  	tdcall
->  
->  	/*
-> diff --git a/arch/x86/coco/tdx.c b/arch/x86/coco/tdx.c
-> index 86a2f35e7308..0a2e6be0cdae 100644
-> --- a/arch/x86/coco/tdx.c
-> +++ b/arch/x86/coco/tdx.c
-> @@ -7,6 +7,7 @@
->  #include <linux/cpufeature.h>
->  #include <asm/coco.h>
->  #include <asm/tdx.h>
-> +#include <asm/vmx.h>
->  
->  /* TDX module Call Leaf IDs */
->  #define TDX_GET_INFO			1
-> @@ -59,6 +60,62 @@ static void get_info(void)
->  	td_info.attributes = out.rdx;
->  }
->  
-> +static u64 __cpuidle __halt(const bool irq_disabled, const bool do_sti)
-> +{
-> +	struct tdx_hypercall_args args = {
-> +		.r10 = TDX_HYPERCALL_STANDARD,
-> +		.r11 = EXIT_REASON_HLT,
-> +		.r12 = irq_disabled,
-> +	};
-> +
-> +	/*
-> +	 * Emulate HLT operation via hypercall. More info about ABI
-> +	 * can be found in TDX Guest-Host-Communication Interface
-> +	 * (GHCI), section 3.8 TDG.VP.VMCALL<Instruction.HLT>.
-> +	 *
-> +	 * The VMM uses the "IRQ disabled" param to understand IRQ
-> +	 * enabled status (RFLAGS.IF) of the TD guest and to determine
-> +	 * whether or not it should schedule the halted vCPU if an
-> +	 * IRQ becomes pending. E.g. if IRQs are disabled, the VMM
-> +	 * can keep the vCPU in virtual HLT, even if an IRQ is
-> +	 * pending, without hanging/breaking the guest.
-> +	 */
-> +	return __tdx_hypercall(&args, do_sti ? TDX_HCALL_ISSUE_STI : 0);
-> +}
-> +
-> +static bool handle_halt(void)
-> +{
-> +	/*
-> +	 * Since non safe halt is mainly used in CPU offlining
-> +	 * and the guest will always stay in the halt state, don't
-> +	 * call the STI instruction (set do_sti as false).
-> +	 */
-> +	const bool irq_disabled = irqs_disabled();
-> +	const bool do_sti = false;
-> +
-> +	if (__halt(irq_disabled, do_sti))
-> +		return false;
-> +
-> +	return true;
-> +}
-
-One other note: I really do like the silly:
-
-	const bool do_sti = false;
-
-variables as opposed to doing gunk like:
-
-	__halt(irq_disabled, false));
-
-Thanks for doing that.
-
-Acked-by: Dave Hansen <dave.hansen@linux.intel.com>
+Reviewed-by: Rob Herring <robh@kernel.org>

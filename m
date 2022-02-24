@@ -2,184 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A1F44C3072
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 16:55:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AB834C303D
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 16:47:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236572AbiBXPze (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 10:55:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39950 "EHLO
+        id S236642AbiBXPqD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 10:46:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236434AbiBXPz1 (ORCPT
+        with ESMTP id S233702AbiBXPpy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 10:55:27 -0500
-Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23FE517C426;
-        Thu, 24 Feb 2022 07:54:56 -0800 (PST)
-Received: from localhost.localdomain (unknown [80.240.223.29])
-        by mail.ispras.ru (Postfix) with ESMTPSA id DC8BF40755DB;
-        Thu, 24 Feb 2022 15:44:53 +0000 (UTC)
-From:   Baskov Evgeniy <baskov@ispras.ru>
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     Baskov Evgeniy <baskov@ispras.ru>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH RFC v2 2/2] libstub: ensure allocated memory to be executable
-Date:   Thu, 24 Feb 2022 18:43:30 +0300
-Message-Id: <20220224154330.26564-3-baskov@ispras.ru>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220224154330.26564-1-baskov@ispras.ru>
-References: <20220224154330.26564-1-baskov@ispras.ru>
+        Thu, 24 Feb 2022 10:45:54 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F4607EA05;
+        Thu, 24 Feb 2022 07:45:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645717524; x=1677253524;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=PzX96kduRIYE/gKPsTNuQPtzkDDYW6yJR2z6E96mZSY=;
+  b=d0WERB3RAp/CicoT5flDd6VKqrW1FPZtctG3QR64XPg/X1id0vn9jQpY
+   QyLRVXrvzPXr1Kyl96oN8JhNmD58urRoVPzxsiA5BseBEo766IvQhOQ7o
+   LujrL3l4l9JBq0nrj59vNLENpbyLR71G0Iz+IXQDdPWr7qNmiZwakRJkM
+   DCaLYFuLtvh3OtIhDXOhLpdFOW1Iw0kb9CnMElLmsqTs2tIQaLuaEsdOf
+   Tf0/J65+e0/cU6jPofrqz4x12KItUSLSn6g7d9KfZmrPJLsWv17K9I8/V
+   EoskBWfQZ5I3v69wHDTtcoDlpHyEHfH9/uAf0idEb8Oz49fvZrz+YeLd2
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10268"; a="239663602"
+X-IronPort-AV: E=Sophos;i="5.90,134,1643702400"; 
+   d="scan'208";a="239663602"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2022 07:45:08 -0800
+X-IronPort-AV: E=Sophos;i="5.90,134,1643702400"; 
+   d="scan'208";a="533178518"
+Received: from ronakmeh-mobl1.amr.corp.intel.com (HELO [10.212.97.131]) ([10.212.97.131])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2022 07:45:07 -0800
+Message-ID: <87f434b5-0e99-d1d1-e4d1-248cf35cd05c@linux.intel.com>
+Date:   Thu, 24 Feb 2022 09:44:23 -0600
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.5.0
+Subject: Re: [PATCH v2 3/3] soundwire: qcom: add in-band wake up interrupt
+ support
+Content-Language: en-US
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        robh+dt@kernel.org, vkoul@kernel.org,
+        yung-chuan.liao@linux.intel.com
+Cc:     devicetree@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org, quic_srivasam@quicinc.com
+References: <20220224133125.6674-1-srinivas.kandagatla@linaro.org>
+ <20220224133125.6674-4-srinivas.kandagatla@linaro.org>
+From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+In-Reply-To: <20220224133125.6674-4-srinivas.kandagatla@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There are UEFI versions that restrict execution of memory regions,
-preventing the kernel from booting. Parts that needs to be executable
-are:
 
-* Area used for trampoline placement.
-* All memory regions that the kernel may be relocated before
-  and during extraction.
 
-Use DXE services to ensure aforementioned address ranges
-to be executable.
+On 2/24/22 07:31, Srinivas Kandagatla wrote:
+> Some of the Qualcomm SoundWire Controller instances like the ones that are
+> connected to RX path along with Headset connections support Waking up
+> Controller from Low power clock stop state using SoundWire In-band interrupt.
+> SoundWire Slave on the bus would intiate this by pulling the data line high,
 
-Signed-off-by: Baskov Evgeniy <baskov@ispras.ru>
+typo: initiate
 
-diff --git a/drivers/firmware/efi/libstub/x86-stub.c b/drivers/firmware/efi/libstub/x86-stub.c
-index 01ddd4502e28..ca7d5379b480 100644
---- a/drivers/firmware/efi/libstub/x86-stub.c
-+++ b/drivers/firmware/efi/libstub/x86-stub.c
-@@ -22,6 +22,7 @@
- #define MAXMEM_X86_64_4LEVEL (1ull << 46)
- 
- const efi_system_table_t *efi_system_table;
-+const efi_dxe_services_table_t *efi_dxe_table;
- extern u32 image_offset;
- static efi_loaded_image_t *image = NULL;
- 
-@@ -211,9 +212,41 @@ static void retrieve_apple_device_properties(struct boot_params *boot_params)
- 	}
- }
- 
-+
-+static void unprotect_memory_range(unsigned long base, unsigned long size)
-+{
-+	unsigned long rounded_base, rounded_size;
-+	efi_status_t res;
-+
-+	if (efi_dxe_table == NULL)
-+		return;
-+
-+	rounded_base = rounddown(base, EFI_PAGE_SIZE);
-+	rounded_size = roundup(base + size, EFI_PAGE_SIZE) - rounded_base;
-+
-+	res = efi_dxe_call(set_memory_space_attributes,
-+			   rounded_base, rounded_size, EFI_MEMORY_WB);
-+	if (res != EFI_SUCCESS) {
-+		efi_warn("Unable to unprotect memory range [%08lx,%08lx]: %d\n",
-+			 base, size + base, (int)res);
-+	}
-+}
-+
-+/*
-+ * Trampoline takes 2 pages and can be loaded in first megabyte of memory
-+ * with its end placed between 128k and 640k where BIOS might start
-+ */
-+
-+#define TRAMPOLINE_PLACEMENT_BASE ((128 - 8)*1024)
-+#define TRAMPOLINE_PLACEMENT_SIZE (640*1024 - (128 - 8)*1024)
-+
-+void startup_32(struct boot_params *boot_params);
-+
- static const efi_char16_t apple[] = L"Apple";
- 
--static void setup_quirks(struct boot_params *boot_params)
-+static void setup_quirks(struct boot_params *boot_params,
-+			 unsigned long image_base,
-+			 unsigned long image_size)
- {
- 	efi_char16_t *fw_vendor = (efi_char16_t *)(unsigned long)
- 		efi_table_attr(efi_system_table, fw_vendor);
-@@ -222,6 +255,31 @@ static void setup_quirks(struct boot_params *boot_params)
- 		if (IS_ENABLED(CONFIG_APPLE_PROPERTIES))
- 			retrieve_apple_device_properties(boot_params);
- 	}
-+
-+	/*
-+	 * Allow execution of possible trampoline used
-+	 * for switching between 4- and 5-level page tables
-+	 * and relocated kernel image.
-+	 */
-+
-+	unprotect_memory_range(TRAMPOLINE_PLACEMENT_BASE,
-+	                       TRAMPOLINE_PLACEMENT_SIZE);
-+
-+#ifdef CONFIG_64BIT
-+	if (image_base != (unsigned long)startup_32)
-+		unprotect_memory_range(image_base, image_size);
-+#else
-+	/*
-+	 * Clear protection flags on a whole range of possible
-+	 * addresses used for KASLR. We don't need to do that
-+	 * on x86_64, since KASLR/extraction is performed after
-+	 * dedicated identity page tables are built and we only
-+	 * need to remove possible protection on relocated image
-+	 * itself disregarding further relocations.
-+	 */
-+	unprotect_memory_range(LOAD_PHYSICAL_ADDR,
-+			       KERNEL_IMAGE_SIZE - LOAD_PHYSICAL_ADDR);
-+#endif
- }
- 
- /*
-@@ -341,8 +399,6 @@ static void __noreturn efi_exit(efi_handle_t handle, efi_status_t status)
- 		asm("hlt");
- }
- 
--void startup_32(struct boot_params *boot_params);
--
- void __noreturn efi_stub_entry(efi_handle_t handle,
- 			       efi_system_table_t *sys_table_arg,
- 			       struct boot_params *boot_params);
-@@ -677,11 +733,18 @@ unsigned long efi_main(efi_handle_t handle,
- 	efi_status_t status;
- 
- 	efi_system_table = sys_table_arg;
--
- 	/* Check if we were booted by the EFI firmware */
- 	if (efi_system_table->hdr.signature != EFI_SYSTEM_TABLE_SIGNATURE)
- 		efi_exit(handle, EFI_INVALID_PARAMETER);
- 
-+	efi_dxe_table = get_efi_config_table(EFI_DXE_SERVICES_TABLE_GUID);
-+
-+	if (efi_dxe_table == NULL ||
-+	    efi_dxe_table->hdr.signature != EFI_DXE_SERVICES_TABLE_SIGNATURE) {
-+		efi_warn("Unable to locate EFI DXE services table\n");
-+		efi_dxe_table = NULL;
-+	}
-+
- 	/*
- 	 * If the kernel isn't already loaded at a suitable address,
- 	 * relocate it.
-@@ -791,7 +854,7 @@ unsigned long efi_main(efi_handle_t handle,
- 
- 	setup_efi_pci(boot_params);
- 
--	setup_quirks(boot_params);
-+	setup_quirks(boot_params, bzimage_addr, buffer_end - buffer_start);
- 
- 	status = exit_boot(boot_params, handle);
- 	if (status != EFI_SUCCESS) {
--- 
-2.35.1
+> during clock stop condition.
+
+while the clock is stopped.
+
+A peripheral cannot generate an interrupt after a successful completion
+of a write to the ClockStopNow bitfield.
+
 

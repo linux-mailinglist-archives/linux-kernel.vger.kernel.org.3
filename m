@@ -2,131 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 301C64C30C3
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 17:01:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DBC394C30E9
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 17:03:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229917AbiBXQCO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 11:02:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38234 "EHLO
+        id S231338AbiBXQD4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 11:03:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229660AbiBXQCM (ORCPT
+        with ESMTP id S231199AbiBXQD2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 11:02:12 -0500
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F3CC193DE;
-        Thu, 24 Feb 2022 08:01:33 -0800 (PST)
-Received: by mail-wr1-x434.google.com with SMTP id x15so352553wrg.8;
-        Thu, 24 Feb 2022 08:01:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=y05yvb52Nsp11oYlXTQ2W1T0axwKZmDa9In+lb+g4zo=;
-        b=GnV/17WEDbgkTXw5Szy0hHTJZKC90jXe/+zj3SQueTq7TBeyrs/8twssH/6UgvEWGu
-         pPgsabBuHeUszXbWvLXy/atvo+h9H0fC5fwuRWN62mYXf2UQfXT6VW3H4PLtmrjQGRSc
-         mAvEnyt2IQe7TWSx+uEwkT1FSFXGo+rvonqUhxnXQ7YK/ZBFeaOHR6pE+Bztb17HMaTY
-         33eY9IDdWby1GJpfZDib5RhuFyoG7lAiRK7+OsCBHiGr5ULBD5HHm+kw7qYUn9f5XhRx
-         5iCMR9Fu3kUjdY3/vnGgrvMpr+h2eP2jLs0UZhY79trzcbqYp3NLACDL19mS0FIvKWDa
-         8Cxg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=y05yvb52Nsp11oYlXTQ2W1T0axwKZmDa9In+lb+g4zo=;
-        b=RoHFnikPONWlKmrINVZx1RZO+XhP/AFViV5Sn/tjofukfSSnFUs6CIfF2oVg7c9VY+
-         Jkp148Sjb1hwQtzFCSY6DxtHCYJqGCC5GtuemQNhm+OhJ+SY6E+e9WVogQWeZSwyrhsg
-         77zIB9xrj6OrXJ+a7APyK0GdZuz9Dy25rm6wKtuHefLXo8gVg98FLdUVkfspeyb0Trub
-         asxWDkMaI9ecweAXlhZC89YTebPksJOX0aFV/QeotdnU0CUt9CPC68Nz02gXuZC9mKRG
-         fZsYU7RIIMyukY/jrutIkxqWQpbdaCz9B+3NjfWVUWzCZaYPl/by0hhCPOWwF8zS+aHq
-         y4wg==
-X-Gm-Message-State: AOAM532CDcNgdn7gUQ+FFMd57IMnJKCcHhXL/ClVdtFslR3gwElnH/Do
-        WLOBkKF8jQlhQDAMzTQye3o=
-X-Google-Smtp-Source: ABdhPJwbEWyLUPKgPfJM8rbkKwDuyxaneNxCj7/Lstjc1QdxMEN0ykJ1Lu83MJZHWz7N7SoUgv2+Yw==
-X-Received: by 2002:a05:6000:8f:b0:1ed:bb0e:6cbe with SMTP id m15-20020a056000008f00b001edbb0e6cbemr2769902wrx.209.1645718491173;
-        Thu, 24 Feb 2022 08:01:31 -0800 (PST)
-Received: from Ansuel-xps.localdomain ([5.170.140.187])
-        by smtp.gmail.com with ESMTPSA id d13sm3704964wri.38.2022.02.24.08.01.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Feb 2022 08:01:30 -0800 (PST)
-Date:   Thu, 24 Feb 2022 17:01:27 +0100
-From:   Ansuel Smith <ansuelsmth@gmail.com>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
+        Thu, 24 Feb 2022 11:03:28 -0500
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED54E1A2723;
+        Thu, 24 Feb 2022 08:02:46 -0800 (PST)
+Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 21OFqe5i018312;
+        Thu, 24 Feb 2022 17:02:10 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=selector1;
+ bh=E3Ow4hgvVJpm2Kg+yAxOov+dlrfQEYMV60wWkQBS5mA=;
+ b=3711kNGZWOI/RcIHIa8Xx7RLHwn9QjBdBqpyj96jiCg5L+6csAnTGluvAmZvC+eGTSke
+ yHK9YuLKh+irI0c9KM1mFRUB78X2moTXt9V05vVcdrUSkAQMmG0oeFlvymUcJIxriTVL
+ POC3vVa0eQHN0kHtCWir9itseeFXT/4x/qQE9d2DeflU0ffeKF7/SEP+/IZWu1kGRxbk
+ U1rKhqmAnYKARGxBY5dywWhdoKTctmCWU+voCcxP298pSW0f4TiLW4uRWExZuxl+3B3z
+ VpXd4Gl0vr+m9oi16UeS2plw1pXbiY3Lx1m+UpWvV+4puOZ+77SXa/TKgsIRjmBS3Qf9 XQ== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3ee7tka6v8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 24 Feb 2022 17:02:10 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 5579F10002A;
+        Thu, 24 Feb 2022 17:02:09 +0100 (CET)
+Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 2D0E622A6FC;
+        Thu, 24 Feb 2022 17:02:09 +0100 (CET)
+Received: from localhost (10.75.127.50) by SFHDAG2NODE2.st.com (10.75.127.5)
+ with Microsoft SMTP Server (TLS) id 15.0.1497.26; Thu, 24 Feb 2022 17:02:08
+ +0100
+From:   <gabriel.fernandez@foss.st.com>
+To:     Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
         Philipp Zabel <p.zabel@pengutronix.de>,
-        Taniya Das <tdas@codeaurora.org>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 12/16] dt-bindings: clock: add ipq8064 ce5 clk define
-Message-ID: <Yher1ybYkFCVLLVt@Ansuel-xps.localdomain>
-References: <20220217235703.26641-1-ansuelsmth@gmail.com>
- <20220217235703.26641-13-ansuelsmth@gmail.com>
- <YhcDCnMFRppk3Mo+@builder.lan>
+        Gabriel Fernandez <gabriel.fernandez@foss.st.com>
+CC:     <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH 00/13] Introduction of STM32MP13 RCC driver (Reset Clock Controller)
+Date:   Thu, 24 Feb 2022 17:01:28 +0100
+Message-ID: <20220224160141.455881-1-gabriel.fernandez@foss.st.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YhcDCnMFRppk3Mo+@builder.lan>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.75.127.50]
+X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SFHDAG2NODE2.st.com
+ (10.75.127.5)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-02-24_03,2022-02-24_01,2022-02-23_01
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 23, 2022 at 10:01:14PM -0600, Bjorn Andersson wrote:
-> On Thu 17 Feb 17:56 CST 2022, Ansuel Smith wrote:
-> 
-> > Add ipq8064 ce5 clk define needed for CryptoEngine in gcc driver.
-> > 
-> 
-> Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> 
-> > Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
-> > ---
-> >  include/dt-bindings/clock/qcom,gcc-ipq806x.h | 5 ++++-
-> >  1 file changed, 4 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/include/dt-bindings/clock/qcom,gcc-ipq806x.h b/include/dt-bindings/clock/qcom,gcc-ipq806x.h
-> > index 7deec14a6dee..02262d2ac899 100644
-> > --- a/include/dt-bindings/clock/qcom,gcc-ipq806x.h
-> > +++ b/include/dt-bindings/clock/qcom,gcc-ipq806x.h
-> > @@ -240,7 +240,7 @@
-> >  #define PLL14					232
-> >  #define PLL14_VOTE				233
-> >  #define PLL18					234
-> > -#define CE5_SRC					235
-> > +#define CE5_A_CLK				235
-> >  #define CE5_H_CLK				236
-> >  #define CE5_CORE_CLK				237
-> >  #define CE3_SLEEP_CLK				238
-> > @@ -283,5 +283,8 @@
-> >  #define EBI2_AON_CLK				281
-> >  #define NSSTCM_CLK_SRC				282
-> >  #define NSSTCM_CLK				283
-> 
-> You don't like 284?
-> 
-> Regards,
-> Bjorn
->
+From: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
 
-In the QSDK 284 is used for a virtual clk used to scale the NSS core.
-I skipped that in case we will implement it and to keep these header
-similar across QSDK and linux.
+This patchset introduce the reset and clock driver of STM32MP13 SoC.
+It uses a clk-stm32-core module to manage stm32 gate, mux and divider
+for STM32MP13 and for new future STMP32 SoC.
 
-> > +#define CE5_A_CLK_SRC				285
-> > +#define CE5_H_CLK_SRC				286
-> > +#define CE5_CORE_CLK_SRC			287
-> >  
-> >  #endif
-> > -- 
-> > 2.34.1
-> > 
+Gabriel Fernandez (13):
+  dt-bindings: rcc: stm32: add new compatible for STM32MP13 SoC
+  clk: stm32: Introduce STM32MP13 RCC drivers (Reset Clock Controller)
+  clk: stm32mp13: add stm32_mux clock management
+  clk: stm32mp13: add stm32_gate management
+  clk: stm32mp13: add stm32 divider clock
+  clk: stm32mp13: add composite clock
+  clk: stm32mp13: manage secured clocks
+  clk: stm32mp13: add all STM32MP13 peripheral clocks
+  clk: stm32mp13: add all STM32MP13 kernel clocks
+  clk: stm32mp13: add multi mux function
+  clk: stm32mp13: add safe mux management
+  ARM: dts: stm32: enable optee firmware and SCMI support on STM32MP13
+  ARM: dts: stm32: add RCC on STM32MP13x SoC family
+
+ .../bindings/clock/st,stm32mp1-rcc.yaml       |    2 +
+ arch/arm/boot/dts/stm32mp131.dtsi             |  128 +-
+ arch/arm/boot/dts/stm32mp133.dtsi             |    4 +-
+ arch/arm/boot/dts/stm32mp13xf.dtsi            |    3 +-
+ drivers/clk/Kconfig                           |    5 +
+ drivers/clk/Makefile                          |    1 +
+ drivers/clk/stm32/Makefile                    |    1 +
+ drivers/clk/stm32/clk-stm32-core.c            |  707 +++++++
+ drivers/clk/stm32/clk-stm32-core.h            |  239 +++
+ drivers/clk/stm32/clk-stm32mp13.c             | 1580 +++++++++++++++
+ drivers/clk/stm32/reset-stm32.c               |  122 ++
+ drivers/clk/stm32/reset-stm32.h               |    8 +
+ drivers/clk/stm32/stm32mp13_rcc.h             | 1748 +++++++++++++++++
+ include/dt-bindings/clock/stm32mp13-clks.h    |  229 +++
+ include/dt-bindings/reset/stm32mp13-resets.h  |  100 +
+ 15 files changed, 4817 insertions(+), 60 deletions(-)
+ create mode 100644 drivers/clk/stm32/Makefile
+ create mode 100644 drivers/clk/stm32/clk-stm32-core.c
+ create mode 100644 drivers/clk/stm32/clk-stm32-core.h
+ create mode 100644 drivers/clk/stm32/clk-stm32mp13.c
+ create mode 100644 drivers/clk/stm32/reset-stm32.c
+ create mode 100644 drivers/clk/stm32/reset-stm32.h
+ create mode 100644 drivers/clk/stm32/stm32mp13_rcc.h
+ create mode 100644 include/dt-bindings/clock/stm32mp13-clks.h
+ create mode 100644 include/dt-bindings/reset/stm32mp13-resets.h
 
 -- 
-	Ansuel
+2.25.1
+

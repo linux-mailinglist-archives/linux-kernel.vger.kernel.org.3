@@ -2,77 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 406C94C3381
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 18:22:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F22F74C3387
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 18:26:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231331AbiBXRWl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 12:22:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56312 "EHLO
+        id S230202AbiBXR0i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 12:26:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229903AbiBXRWj (ORCPT
+        with ESMTP id S229549AbiBXR0h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 12:22:39 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E6DF1190B5B
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 09:22:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1645723328;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=jkmUZIekJ1fYPf2/HgjluquRw8TsLiMzA6hAe+2h9H4=;
-        b=ZvrwI6dAt+d5bidy5WnexHbZzRyB75TFhM4SDThPJnBjdPB5/FhUUpHwn43LegIHy3NI+D
-        kKOiY1G7zsJLqVJXaWRdN++7M39Gujnqguwwb28amuru+gg4KpDcDGXOZwYaSZSjtEblvt
-        pyVD+RqHoSMyQ7o2us3E2u0U56tZnl8=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-656-aqTRcoTzMSeG7im-Vswqug-1; Thu, 24 Feb 2022 12:22:06 -0500
-X-MC-Unique: aqTRcoTzMSeG7im-Vswqug-1
-Received: by mail-wm1-f71.google.com with SMTP id p14-20020a05600c1d8e00b00381001316a8so108765wms.8
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 09:22:06 -0800 (PST)
+        Thu, 24 Feb 2022 12:26:37 -0500
+Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E11E62782AE
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 09:26:06 -0800 (PST)
+Received: by mail-pj1-x1049.google.com with SMTP id b9-20020a17090aa58900b001b8b14b4aabso1723976pjq.9
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 09:26:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=5Ny1Q9o1DH3vUqhRTmZugJ8ecAooD8oCu9bG8GcZG5g=;
+        b=AMkSiIAbv28C9s3534CeAzvP41t3i9zYDrUhSKV/GA3Cg+sV66ia3Q5uqP4PKb7OO7
+         wAhn6S/lI9YaIBd+pTgFHXr0WM3wL3VuXqz/KFRIFYaf8RWi+FxtuLbTPfmlkuBkX7zf
+         ZS19r3R1vEzr8k0RfTI9Pk6AT26AmwETZOJgvE4HnVw9f+fq+Y01pXGR8Krot1YskYcN
+         meo6tVZozIQlOMu+Lu9h81oOwwfIW+Wj9tKK5oQvXDRfJA6Qujt98KUnGgHi3v3ZNaJQ
+         yV2CaMGkebo6JECAYLdfal3LzYb9F6FhxGm3DK64ZnGrVuLiPV6C1HS8j2PpfOGpkAwg
+         6d0A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:user-agent:mime-version:content-transfer-encoding;
-        bh=jkmUZIekJ1fYPf2/HgjluquRw8TsLiMzA6hAe+2h9H4=;
-        b=dOUGsTFRlCYW+59x4LRgAkIAIBTCsI+kjgIYvu5Nl5qyWfNgwE0AzO8ScSEebMeo2y
-         qEnSV+l3As+zDER77wqcTfVFTtNqYjAxNpnw2tSGMyVJCc2k8866XqxonV3rLbKbqsJY
-         BzD5kzVlnoA5KnatY6gB1x9tpXPWprwe3ikLEoUEhjqnOiL/jWejlrAiavgUST4Qrt86
-         w1aO/Ic2fT/RwkP3QWRttRXf6w2x1He7R7fIJogqCIN3KpkSQjn35iMYbWNtUsNesfKC
-         zWJ/UVyeBK/CI1GOf8gh/CqSY7I1HyG0F8HgPT+f0lmpj/QI1xvjE9FdFFQMRLS3RVXM
-         pJgA==
-X-Gm-Message-State: AOAM531m0Iz7s4lNrbbWX/PDUdisU4F2kN7KNDeNZpPQLHV/HhwMuTbO
-        F2myI43uDtlaeZ96HaTgqB8weWd+8La9TpKxn+b+KzywEuA2q2r2/PlKQ8xq0z6al4CZeLhE7Lk
-        /zEtZPicbzDxbzTrSSYL36gC7
-X-Received: by 2002:a5d:47ae:0:b0:1e8:e479:fa8e with SMTP id 14-20020a5d47ae000000b001e8e479fa8emr3025551wrb.169.1645723325691;
-        Thu, 24 Feb 2022 09:22:05 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJw4V+MHeIax3bYGiBqitMUg6wi4T/4JtYj3TQcKtk6C9Qbc9SPId3U/Fo4UJYI4rbxrDp7jHw==
-X-Received: by 2002:a5d:47ae:0:b0:1e8:e479:fa8e with SMTP id 14-20020a5d47ae000000b001e8e479fa8emr3025536wrb.169.1645723325472;
-        Thu, 24 Feb 2022 09:22:05 -0800 (PST)
-Received: from gerbillo.redhat.com (146-241-108-216.dyn.eolo.it. [146.241.108.216])
-        by smtp.gmail.com with ESMTPSA id y12sm4174551wrt.72.2022.02.24.09.22.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Feb 2022 09:22:05 -0800 (PST)
-Message-ID: <1de9e991f6c109d5986c857bc176e03d5e167944.camel@redhat.com>
-Subject: Re: [PATCH] tun: support NAPI to accelerate packet processing
-From:   Paolo Abeni <pabeni@redhat.com>
-To:     Harold Huang <baymaxhuang@gmail.com>, netdev@vger.kernel.org
-Cc:     jasowang@redhat.com, "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Date:   Thu, 24 Feb 2022 18:22:04 +0100
-In-Reply-To: <20220224103852.311369-1-baymaxhuang@gmail.com>
-References: <20220224103852.311369-1-baymaxhuang@gmail.com>
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=5Ny1Q9o1DH3vUqhRTmZugJ8ecAooD8oCu9bG8GcZG5g=;
+        b=Hamo4gVMk/FLoB3TSXQCiw0wDOTH9w1N0zX1V+BKes3GKNmTZ76habj1YrwqVfX6J3
+         HbX4tZuaXjL3xeVqCwwOBz1lEedNxgMOaNIANY2z9DgBIRUQJep9hWIVWYkK5OgFbEFm
+         r8y3Qk8jvt2Ciw5YgbL4PFNLTWj2a+TZUrWVj3RaiRlYWvISHk6eMxZxk+ycm1K9WAK9
+         m80gyMHidABP7cVnRCZxXRuNXUj5PAb+4EVOUqXpiJe3sRyidp2idFaLXgHL1ZeDlN8C
+         sefSCqw88PnEe31dgx363u/qFOmtjGiyuWs35mTtLNGIzue34RAfeg+N+09lVahc3yeK
+         ArUQ==
+X-Gm-Message-State: AOAM533fjTdk93nonwuwhK5g9tQcQARO0wTIUo2YjQqGO9U/5jjsJS8X
+        GKjoU57b4USMUyVuZt/8qj+zGPKgto2J
+X-Google-Smtp-Source: ABdhPJwnohW5A3uggSBCdW9O8Nv3B8wp5qqKcNw8tPsPI6pD9WxbKGiIR8gcGQ9h/3es0ugh4EeX4XMihRl0
+X-Received: from rananta-virt.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:1bcc])
+ (user=rananta job=sendgmr) by 2002:a17:90b:4f43:b0:1bc:7e5c:e024 with SMTP id
+ pj3-20020a17090b4f4300b001bc7e5ce024mr94032pjb.0.1645723565741; Thu, 24 Feb
+ 2022 09:26:05 -0800 (PST)
+Date:   Thu, 24 Feb 2022 17:25:46 +0000
+Message-Id: <20220224172559.4170192-1-rananta@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.35.1.574.g5d30c73bfb-goog
+Subject: [PATCH v4 00/13] KVM: arm64: Add support for hypercall services selection
+From:   Raghavendra Rao Ananta <rananta@google.com>
+To:     Marc Zyngier <maz@kernel.org>, Andrew Jones <drjones@redhat.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Peter Shier <pshier@google.com>,
+        Ricardo Koller <ricarkol@google.com>,
+        Oliver Upton <oupton@google.com>,
+        Reiji Watanabe <reijiw@google.com>,
+        Jing Zhang <jingzhangos@google.com>,
+        Raghavendra Rao Anata <rananta@google.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.3 (3.42.3-1.fc35) 
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -81,22 +77,181 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hello,
 
-On Thu, 2022-02-24 at 18:38 +0800, Harold Huang wrote:
-> In tun, NAPI is supported and we can also use NAPI in the path of
-> batched XDP buffs to accelerate packet processing. What is more, after
-> we use NPAI, GRO is also supported. The iperf shows that the throughput
+Continuing the discussion from [1], the series tries to add support
+for the user-space to elect the hypercall services that it wishes
+to expose to the guest, rather than the guest discovering them
+unconditionally. The idea employed by the series was taken from
+[1] as suggested by Marc Z.
 
-Very minor nit: typo above NPAI -> NAPI
+In a broad sense, the idea is similar to the current implementation
+of PSCI interface- create a 'firmware psuedo-register' to handle the
+firmware revisions. The series extends this idea to all the other
+hypercalls such as TRNG (True Random Number Generator), PV_TIME
+(Paravirtualized Time), and PTP (Precision Time protocol).
 
-> could be improved from 4.5Gbsp to 9.2Gbps per stream.
-> 
-> Reported-at: https://lore.kernel.org/netdev/CAHJXk3Y9_Fh04sakMMbcAkef7kOTEc-kf84Ne3DtWD7EAp13cg@mail.gmail.com/T/#t
-> Signed-off-by: Harold Huang <baymaxhuang@gmail.com>
+For better categorization and future scaling, these firmware registers
+are categorized based on the service call owners, but unlike the
+existing firmware psuedo-registers, they hold the features supported
+in the form of a bitmap.
 
-Additionally, please specify explicitly the target tree into the patch
-subject.
+During the VM initialization, the registers holds an upper-limit of
+the features supported by each one of them. It's expected that the
+userspace discover the features provided by each register via GET_ONE_REG,
+and writeback the desired values using SET_ONE_REG. KVM allows this
+modification only until the VM has started.
 
-Cheers,
+Older VMMs can simply ignore the capability and the hypercall services
+will be exposed unconditionally to the guests, thus ensuring backward
+compatibility.
 
-Paolo
+Since these registers, including the old ones such as
+KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_[1|2] maintain its state per-VM. Thus
+accessing them via KVM_[GET|SET]_ONE_REG for every vCPU is redundant.
+To optimize this, the series also introduces the capability
+KVM_CAP_ARM_REG_SCOPE. If enabled, KVM_GET_REG_LIST will advertise the
+registers that are VM-scoped by dynamically modifying the register
+encoding. KVM_REG_ARM_SCOPE_* helper macros are introduced to decode
+the same. By learning this, userspace can access such registers only once.
+
+The patches are based off of mainline kernel 5.17-rc5, with the selftest
+patches from [2] applied.
+
+Patch-1 factors out the non-PSCI related interface from psci.c to
+hypercalls.c, as the series would extend the list in the upcoming
+patches.
+
+Patch-2 introduces the KVM_CAP_ARM_REG_SCOPE capability.
+
+Patch-3 provides helpers to encode existing registers withe the scope
+information. The only users in the patch would be the registers,
+KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_[1|2]
+
+Patch-4 tracks if the VM has started running, which would be used in the
+upcoming patches.
+
+Patch-5 sets up the framework for the bitmap firmware psuedo-registers.
+It includes read/write helpers for the registers, and a helper to check
+if a particular hypercall service is supported for the guest.
+It also adds the register KVM_REG_ARM_STD_HYP_BMAP to support ARM's
+standard secure services.
+
+Patch-6 introduces the firmware register, KVM_REG_ARM_STD_HYP_BMAP,
+which holds the standard hypervisor services (such as PV_TIME).
+
+Patch-7 introduces the firmware register, KVM_REG_ARM_VENDOR_HYP_BMAP,
+which holds the vendor specific hypercall services.
+
+Patch-8,9 Add the necessary documentation for the newly added firmware
+registers.
+
+Patch-10 imports the SMCCC definitions from linux/arm-smccc.h into tools/
+for further use in selftests.
+
+Patch-11,12 adds the selftest to test the guest (using 'hvc') and
+userspace interfaces (SET/GET_ONE_REG).
+
+Patch-13 adds these firmware registers into the get-reg-list selftest.
+
+[1]: https://lore.kernel.org/kvmarm/874kbcpmlq.wl-maz@kernel.org/T/
+[2]: https://lore.kernel.org/kvmarm/YUzgdbYk8BeCnHyW@google.com/
+
+Regards,
+Raghavendra
+
+v3 -> v4
+
+Addressed comments and took suggestions by Reiji, Oliver, Marc,
+Sean and Jim:
+
+- Renamed and moved the VM has run once check to arm64.
+- Introduced the capability to dynamically modify the register
+  encodings to include the scope information.
+- Replaced mutex_lock with READ_ONCE and WRITE_ONCE when the
+  bitmaps are accessed.
+- The hypercalls selftest re-runs with KVM_CAP_ARM_REG_SCOPE
+  enabled.
+
+v2 -> v3
+
+Addressed comments by Marc and Andrew:
+
+- Dropped kvm_vcpu_has_run_once() implementation.
+- Redifined kvm_vm_has_run_once() as kvm_vm_has_started() in the core
+  KVM code that introduces a new field, 'vm_started', to track this.
+- KVM_CAP_ARM_HVC_FW_REG_BMAP returns the number of psuedo-firmware
+  bitmap registers upon a 'read'. Support for 'write' removed.
+- Removed redundant spinlock, 'fw_reg_bmap_enabled' fields from the
+  hypercall descriptor structure.
+- A separate sub-struct to hold the bitmap info is removed. The bitmap
+  info is directly stored in the hypercall descriptor structure
+  (struct kvm_hvc_desc).
+
+v1 -> v2
+
+Addressed comments by Oliver (thanks!):
+
+- Introduced kvm_vcpu_has_run_once() and kvm_vm_has_run_once() in the
+  core kvm code, rather than relying on ARM specific
+  vcpu->arch.has_run_once.
+- Writing to KVM_REG_ARM_PSCI_VERSION is done in hypercalls.c itself,
+  rather than separating out to psci.c.
+- Introduced KVM_CAP_ARM_HVC_FW_REG_BMAP to enable the extension.
+- Tracks the register accesses from VMM to decide whether to sanitize
+  a register or not, as opposed to sanitizing upon the first 'write'
+  in v1.
+- kvm_hvc_call_supported() is implemented using a direct switch-case
+  statement, instead of looping over all the registers to pick the
+  register for the function-id.
+- Replaced the register bit definitions with #defines, instead of enums.
+- Removed the patch v1-06/08 that imports the firmware register
+  definitions as it's not needed.
+- Separated out the documentations in its own patch, and the renaming
+  of hypercalls.rst to psci.rst into another patch.
+- Add the new firmware registers to get-reg-list KVM selftest.
+
+v1: https://lore.kernel.org/kvmarm/20211102002203.1046069-1-rananta@google.com/
+v2: https://lore.kernel.org/kvmarm/20211113012234.1443009-1-rananta@google.com/
+v3: https://lore.kernel.org/linux-arm-kernel/20220104194918.373612-1-rananta@google.com/
+
+Raghavendra Rao Ananta (13):
+  KVM: arm64: Factor out firmware register handling from psci.c
+  KVM: arm64: Introduce KVM_CAP_ARM_REG_SCOPE
+  KVM: arm64: Encode the scope for firmware registers
+  KVM: arm64: Capture VM's first run
+  KVM: arm64: Setup a framework for hypercall bitmap firmware registers
+  KVM: arm64: Add standard hypervisor firmware register
+  KVM: arm64: Add vendor hypervisor firmware register
+  Docs: KVM: Add doc for the bitmap firmware registers
+  Docs: KVM: Rename psci.rst to hypercalls.rst
+  tools: Import ARM SMCCC definitions
+  selftests: KVM: aarch64: Introduce hypercall ABI test
+  selftests: KVM: aarch64: hypercalls: Test with KVM_CAP_ARM_REG_SCOPE
+  selftests: KVM: aarch64: Add the bitmap firmware registers to
+    get-reg-list
+
+ Documentation/virt/kvm/api.rst                |  16 +
+ Documentation/virt/kvm/arm/hypercalls.rst     | 124 +++++
+ Documentation/virt/kvm/arm/psci.rst           |  77 ---
+ arch/arm64/include/asm/kvm_host.h             |  30 ++
+ arch/arm64/include/uapi/asm/kvm.h             |  22 +
+ arch/arm64/kvm/arm.c                          |  23 +-
+ arch/arm64/kvm/guest.c                        |  82 +++-
+ arch/arm64/kvm/hypercalls.c                   | 301 +++++++++++-
+ arch/arm64/kvm/psci.c                         | 166 -------
+ include/kvm/arm_hypercalls.h                  |  17 +
+ include/kvm/arm_psci.h                        |   7 -
+ include/uapi/linux/kvm.h                      |   1 +
+ tools/include/linux/arm-smccc.h               | 188 ++++++++
+ tools/testing/selftests/kvm/.gitignore        |   1 +
+ tools/testing/selftests/kvm/Makefile          |   1 +
+ .../selftests/kvm/aarch64/get-reg-list.c      |   3 +
+ .../selftests/kvm/aarch64/hypercalls.c        | 443 ++++++++++++++++++
+ 17 files changed, 1243 insertions(+), 259 deletions(-)
+ create mode 100644 Documentation/virt/kvm/arm/hypercalls.rst
+ delete mode 100644 Documentation/virt/kvm/arm/psci.rst
+ create mode 100644 tools/include/linux/arm-smccc.h
+ create mode 100644 tools/testing/selftests/kvm/aarch64/hypercalls.c
+
+-- 
+2.35.1.473.g83b2b277ed-goog
 

@@ -2,71 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8CB34C3855
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 23:05:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FDD34C3856
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 23:05:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235171AbiBXWE6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 17:04:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45322 "EHLO
+        id S235182AbiBXWFD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 17:05:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234968AbiBXWEx (ORCPT
+        with ESMTP id S235169AbiBXWFA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 17:04:53 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69A601C6ECA;
-        Thu, 24 Feb 2022 14:04:23 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B6DC561A9D;
-        Thu, 24 Feb 2022 22:04:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 127BDC340E9;
-        Thu, 24 Feb 2022 22:04:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645740262;
-        bh=eJHGdo6CUke8ydbEhmGdO/ZDUKPvm6q30tPSCfmsAl0=;
-        h=In-Reply-To:References:Subject:From:To:Date:From;
-        b=g9Uu+BPWUdYRQlQ4xhzfIZBnuXA8F6vW5S/d6W0ChuQun7d3RSFjwQLsGYNUC3Kp3
-         oPrqIMJFDPGarrFoTf2XYsSwk5HBa/Q807lqO7ZXa6D2w7spqfA680nmaXXGq/d6I6
-         pE6g1/u/tOzznNowBDgFgFYj5uNQwD2GVWTpPHJ/IRWlezqv8z9n/OiqwfsFNCnV3G
-         aBjg5dcou4YXh03M1yY+ItH1SAi51/W2YZH7ABGZdl4WwmTC/uFg1/9kEroonI9gOq
-         2MhxRYZ0Gv5qOgIA+hrWciVygiZzCzvPpKsCrzuzw12jXeluGO7uMWU65rJA+rCFeh
-         /dYePXkEDEY0w==
-Content-Type: text/plain; charset="utf-8"
+        Thu, 24 Feb 2022 17:05:00 -0500
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1657D27FB83;
+        Thu, 24 Feb 2022 14:04:29 -0800 (PST)
+Received: by mail-ej1-x630.google.com with SMTP id qk11so7229659ejb.2;
+        Thu, 24 Feb 2022 14:04:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=yTo2AJFj0p024dmFgNzjlTjj1pQe+R8Ne4kK75kJtFs=;
+        b=QIhP+IKPEdDDA8vwUrShclhCSPImb/WZb31yFXsDcCazdfgBf7FK7YiPVkt9mumnaL
+         gb4fx8rcmLWmRXYSWQ+1jket42cDSrSCYvyeVvgdTOA5EAf/C0UV2BXj7J6h7EssNysJ
+         VoJi2EtKZqNrsvXQme0jzc5UW0IS34EHoctP2O4UipE2UtFvHxYDeHgI7nsf0eZ5FbOu
+         8zE+oKmy3Uhvzltgp4pBxZD2JMWC/cw7lZDl5pcC53owbS9NF/L6WU+s1MMCW/K3LpBk
+         5T7r57asE+wnyj9tht7D/Zwr3MmmgqI2iRPCAb648rq8boBziETJYJ/iK1eeYanopUlJ
+         jHFw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=yTo2AJFj0p024dmFgNzjlTjj1pQe+R8Ne4kK75kJtFs=;
+        b=XE2noFdfbh4CSHo6SOg6JfZ87B3IPuDbGOXKwTHAPkz6JLWwUoLuZbQGt9Pti/dS/A
+         4g4q7ddgmSqC21eY5FUf+5OwfuWgT/cBU4CROQ3Yefc+fC1WgxcBUT9uDI+JMq5KDQtB
+         54QtF0yteMOEz+ZPJ69rx8GJ5NWWclQ2G9oO8aVuPNtJrHEx7ap8nupkUiRLXPYUfnZH
+         WTbbjse4Zcy49E7D/LIAIMhHcXK2pZOQucdfLFp0ImDV791DSin/wWso/NjZ5aTWqYiF
+         M+KsTcr1jQTgFCI4gaAaliQlefdN4LtuAVdUYV5M2DKzCM6GlFhIyf4eev4J9iD7m1Q1
+         rrzg==
+X-Gm-Message-State: AOAM5300AFAkNbxLrGL7LC54MpSmXTJTjrzFHJrr5dKnJhe/UbXxxa9e
+        L41OHUTkfVbb7ztzFaz32ucWA6PRaMU=
+X-Google-Smtp-Source: ABdhPJz/mYMbyr7MbfGwPFzomgRcKTZAvo6MA2BUHA0IodXKipfENCWl7Nj5w8LVfE3fJU22zp7Rqg==
+X-Received: by 2002:a17:906:805:b0:6ce:41a8:113 with SMTP id e5-20020a170906080500b006ce41a80113mr3942484ejd.366.1645740267578;
+        Thu, 24 Feb 2022 14:04:27 -0800 (PST)
+Received: from fuji.fritz.box (ip-89-161-76-237.tel.tkb.net.pl. [89.161.76.237])
+        by smtp.gmail.com with ESMTPSA id e6-20020a17090681c600b006cea1323f34sm238297ejx.29.2022.02.24.14.04.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Feb 2022 14:04:27 -0800 (PST)
+Date:   Thu, 24 Feb 2022 23:04:22 +0100
+From:   Tomasz =?UTF-8?B?V2FybmllxYLFgm8=?= <tomasz.warniello@gmail.com>
+To:     Jonathan Corbet <corbet@lwn.net>
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 00/11] Transform documentation into POD
+Message-ID: <20220224230422.016cef67@fuji.fritz.box>
+In-Reply-To: <87tucokswx.fsf@meer.lwn.net>
+References: <20220218181628.1411551-1-tomasz.warniello@gmail.com>
+        <87tucokswx.fsf@meer.lwn.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20220224164831.21475-2-ansuelsmth@gmail.com>
-References: <20220224164831.21475-1-ansuelsmth@gmail.com> <20220224164831.21475-2-ansuelsmth@gmail.com>
-Subject: Re: [PATCH v5 01/15] dt-bindings: clock: split qcom,gcc.yaml to common and specific schema
-From:   Stephen Boyd <sboyd@kernel.org>
-To:     Andy Gross <agross@kernel.org>,
-        Ansuel Smith <ansuelsmth@gmail.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Taniya Das <tdas@codeaurora.org>, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date:   Thu, 24 Feb 2022 14:04:20 -0800
-User-Agent: alot/0.10
-Message-Id: <20220224220422.127BDC340E9@smtp.kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Ansuel Smith (2022-02-24 08:48:17)
-> Split qcom,gcc.yaml to common and specific schema to use it as a
-> template for schema that needs to use the gcc bindings and require
-> to add additional bindings.
->=20
-> Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
-> ---
+On Thu, 24 Feb 2022 11:42:38 -0700
+Jonathan Corbet <corbet@lwn.net> wrote:
 
-Reviewed-by: Stephen Boyd <sboyd@kernel.org>
+> I have applied the series, thanks.
+> 
+> jon
+
+Thanks Jon,
+
+T. W.

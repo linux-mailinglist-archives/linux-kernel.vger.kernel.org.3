@@ -2,130 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F12324C2742
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 10:01:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BC574C26D6
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 10:00:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232183AbiBXIzJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 03:55:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41748 "EHLO
+        id S230456AbiBXI4i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 03:56:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232171AbiBXIzF (ORCPT
+        with ESMTP id S232255AbiBXI4V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 03:55:05 -0500
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 616F7164D1E
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 00:54:36 -0800 (PST)
-Received: by mail-yb1-xb2e.google.com with SMTP id j12so2433997ybh.8
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 00:54:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=6LyzN4y/7LbQq4KLs8Ged395bQeALH2HjEMTuIFD+Xs=;
-        b=tAwCy0Juzg1LJ8ESx7tnClUCfRh342K9ktgq/9ycOepQOkGF9CWrlSBJzukQ7mqmFV
-         Pt7AAanY+jPfQzWR95zmKaW/I95lS5ogeAsxuA/jdj1yNBtVm7NVk2aD++jKbzR2jb6k
-         UoXDGlePz1zXsUNVO9Q3MxNgEJ8YkcrWpqBSKSt1++biYEMjuCiPtpV1jbcfEzMYQ01V
-         zUK3+uxr58G8KS4PEDGYWZ8C2a92mLQ75XrdJ6FN1bic/huriP+ZZ8+eFPJAcFxwj4Is
-         wnJ0LX7cL0xg6oLjxVZCyq9nggeCGg0QAXBJNFa2dKkmYKWi6pFR1Loyk7GAu8lL+zpS
-         YweA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=6LyzN4y/7LbQq4KLs8Ged395bQeALH2HjEMTuIFD+Xs=;
-        b=FGo5lMLlq7MStC6JDm2nN3ffJcvAJAEBOc8kfC/MUVHyoL8ZrcpeaN2HAoNnM5CNP9
-         XzaW7tBufe2bqyBnmlV7KeGNHzN8EpiPYAK9SjottwGLmdqoO0JoP/qBMXUawOTTZWCg
-         yOJq1JcZddN1CTSUy3gS0E273xNUkFvLMBXpDjEcJhkEBXqJ+hCRdI+0F6zNkYCJSlOE
-         lMxlwENk4hFO5pmtgeW5vn2wF7+Tdj1PGNITnjikTTG+h8lqHNrtd5rw18SIAIN3HnO2
-         rNiOQ/0IByVj/ifjSUFQ5w5CsuYlYGQRU/VKwN37dFzL4Hkn6eo+xu0wSId1b/qZFvYp
-         EGng==
-X-Gm-Message-State: AOAM530XQS0nNbzSNn8sexnP/Y3fD2qdqG/GgkJVTJRGRltIWvEijqYK
-        HCog4qJPqW64oC+LIx0WSNXiKGKY1hvZ4OZfvp5kNw==
-X-Google-Smtp-Source: ABdhPJzgM45SQS4CBJEv1rTkvY1iH0epa4IjtQbO2nqN04jCGY6MooN2Q2hDh8eRIbMCjtwSTvwYaLV/TkLEvPgMQws=
-X-Received: by 2002:a25:a4e8:0:b0:61e:1eb6:19bd with SMTP id
- g95-20020a25a4e8000000b0061e1eb619bdmr1613695ybi.168.1645692875363; Thu, 24
- Feb 2022 00:54:35 -0800 (PST)
+        Thu, 24 Feb 2022 03:56:21 -0500
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E22051693A7
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 00:55:44 -0800 (PST)
+Received: from mail-wr1-f54.google.com ([209.85.221.54]) by
+ mrelayeu.kundenserver.de (mreue011 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1MyK1E-1oAjpL13zI-00yj9n; Thu, 24 Feb 2022 09:55:43 +0100
+Received: by mail-wr1-f54.google.com with SMTP id s1so1817228wrg.10;
+        Thu, 24 Feb 2022 00:55:43 -0800 (PST)
+X-Gm-Message-State: AOAM5321tyNBm9si7/U2bh+owVFO3S3s7EY1xq1BIhtkM+T4O3XuKdus
+        ulUcIWUNOFAhvHR94BJeMzS9bskE9DK3XTR+73c=
+X-Google-Smtp-Source: ABdhPJzVx8NxhnRplqn7UOCa0h4W/Ep2FJpa492JuQvGufCpx+inyOvUlatvGWKDK96MHihZg0ncKPY6m8F54x2XjXI=
+X-Received: by 2002:adf:a446:0:b0:1ed:c41b:cf13 with SMTP id
+ e6-20020adfa446000000b001edc41bcf13mr1436356wra.407.1645692942849; Thu, 24
+ Feb 2022 00:55:42 -0800 (PST)
 MIME-Version: 1.0
-References: <20220224002024.429707-1-pcc@google.com>
-In-Reply-To: <20220224002024.429707-1-pcc@google.com>
-From:   Marco Elver <elver@google.com>
-Date:   Thu, 24 Feb 2022 09:54:23 +0100
-Message-ID: <CANpmjNOaZNtsJ+5pgJrpHb5VZtXjFs1i1L2S6Q_oqFo3hFt4Tg@mail.gmail.com>
-Subject: Re: [PATCH v2] kasan: fix more unit tests with CONFIG_UBSAN_LOCAL_BOUNDS
- enabled
-To:     Peter Collingbourne <pcc@google.com>
-Cc:     Andrey Konovalov <andreyknvl@gmail.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Alexander Potapenko <glider@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Daniel Micay <danielmicay@gmail.com>,
-        kasan-dev@googlegroups.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+References: <20220223135820.2252470-1-anders.roxell@linaro.org>
+ <20220223135820.2252470-2-anders.roxell@linaro.org> <1645670923.t0z533n7uu.astroid@bobo.none>
+ <1645678884.dsm10mudmp.astroid@bobo.none>
+In-Reply-To: <1645678884.dsm10mudmp.astroid@bobo.none>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Thu, 24 Feb 2022 09:55:26 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a28XEN7aH-WdR=doBQKGskiTAeNsjbfvaD5YqEZNM=v0g@mail.gmail.com>
+Message-ID: <CAK8P3a28XEN7aH-WdR=doBQKGskiTAeNsjbfvaD5YqEZNM=v0g@mail.gmail.com>
+Subject: Re: [PATCH 2/3] powerpc: fix build errors
+To:     Nicholas Piggin <npiggin@gmail.com>
+Cc:     Anders Roxell <anders.roxell@linaro.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        "# 3.4.x" <stable@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Provags-ID: V03:K1:T/CJqf+iu6c4Xf/EuExSSIm06x9aJ6WDKLfHNQtRXGxumPmu8z7
+ EtaQl1Z0OVFx3hD9xVfSk3eRxxqK0eDOxVy8EUSuPcpQidkbZwG+8irxVhaM9vs6YM/o1Rs
+ sB/rlEnbewRor2D65FUH5k7JNB6Tz/vp0LJE7ZJ8kaXHE7X7teQaks2/GOxm/Mvb7Yrs76F
+ ZBF+9AU17HrltlODwbYaA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:F4t8QFQao90=:ey40bacQ5mfWz8RK5g5UwL
+ SiVhD7idP+Ixsg1lrrgW/V7adc1Lyj1s+cZgGL2fgDuyJXNarYJduIvau3CxLJJT4XhJJszy8
+ FY+wjla7xEv5tqNOtGNZnon/Uyw/6G033boDPMn8rRhLoRhFxjBkPLzzwOJ5JYCC7ueV1/G9u
+ NehYSMLQK7Jyh2RhghVaUlhSQIIX+CSkNcbcHnwbVrxTP+mfKYWbvciQmamUeF8Ik2+yn9oby
+ xTVhqH6nsnBCX7mBEkckrmdyFIbOX0BizuJTsm43frank9MRynHEcy83XGVXTjG1yGHaOTk6H
+ TV9bbE9AWFj7uipo2+ZiorONqX9/3VHOe126hgYOG2xxb25sV3YWg1sDUmET/QRxo3itUhtRH
+ /ajyN4jdXvycVWSjtmyoB7TxyDj0iVLDa2JLmt4MGQKLsKE3Er4qXqz+sbsjIWNOPGJ7ian6t
+ 86zdnv2XRarL7JGvGYIWb/cy2VrccTi4nmyEb9MxwFLG2U6zPmGLvGwWEf7Otfa7MvxVBZpwr
+ 1inoieouBzNnv2YeUMzSEDys8t4UT5R42eDPbOgzCr4bBq8MaNtGo5Olg9rdEy/v5DDt8GR6i
+ v3FDmj9fpRp/RAEF03WG4bVRNlbIB1+l+ZzddZWDQylKT44xHr4mFgZl9tfxllaC09L0IUBXJ
+ Iq++m2tuXRPN1m4HkB1sbrcx61oDzpB+3pywWhIjszIZw2/6xp6vhuZNPTGPFkh1AYS+vhMsv
+ W5dPElvxsepOhkrvccuGoa20pCsqwH3lXMobJfdr8rBhboRSmN6oJjFEmZ8FYwGig5EK80uWO
+ hZEwhWHt39uvw8LNfrrr94wKKbsum5EJU+wnT0we1wwi/N8L7U=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 24 Feb 2022 at 01:20, Peter Collingbourne <pcc@google.com> wrote:
+On Thu, Feb 24, 2022 at 6:05 AM Nicholas Piggin <npiggin@gmail.com> wrote:
+> Excerpts from Nicholas Piggin's message of February 24, 2022 12:54 pm:
+> >
+> > Not sure on the outlook for GCC fix. Either way unfortunately we have
+> > toolchains in the wild now that will explode, so we might have to take
+> > your patches for the time being.
 >
-> This is a followup to commit f649dc0e0d7b ("kasan: fix unit tests
-> with CONFIG_UBSAN_LOCAL_BOUNDS enabled") that fixes tests that fail
-> as a result of __alloc_size annotations being added to the kernel
-> allocator functions.
+> Perhaps not... Here's a hack that seems to work around the problem.
 >
-> Link: https://linux-review.googlesource.com/id/I4334cafc5db600fda5cebb851b2ee9fd09fb46cc
-> Signed-off-by: Peter Collingbourne <pcc@google.com>
-> Cc: <stable@vger.kernel.org> # 5.16.x
-> Fixes: c37495d6254c ("slab: add __alloc_size attributes for better bounds checking")
+> The issue of removing -many from the kernel and replacing it with
+> appropriate architecture versions is an orthogonal one (that we
+> should do). Either way this hack should be able to allow us to do
+> that as well, on these problem toolchains.
+>
+> But for now it just uses -many as the trivial regression fix to get
+> back to previous behaviour.
 
-Reviewed-by: Marco Elver <elver@google.com>
+I don't think the previous behavior is what you want to be honest.
 
-Thanks!
+We had the same thing on Arm a few years ago when binutils
+started enforcing this more strictly, and it does catch actual
+bugs. I think annotating individual inline asm statements is
+the best choice here, as that documents what the intention is.
 
-> ---
-> v2:
-> - use OPTIMIZER_HIDE_VAR instead of volatile
->
->  lib/test_kasan.c | 4 ++++
->  1 file changed, 4 insertions(+)
->
-> diff --git a/lib/test_kasan.c b/lib/test_kasan.c
-> index 26a5c9007653..7c3dfb569445 100644
-> --- a/lib/test_kasan.c
-> +++ b/lib/test_kasan.c
-> @@ -185,6 +185,7 @@ static void kmalloc_pagealloc_oob_right(struct kunit *test)
->         ptr = kmalloc(size, GFP_KERNEL);
->         KUNIT_ASSERT_NOT_ERR_OR_NULL(test, ptr);
->
-> +       OPTIMIZER_HIDE_VAR(ptr);
->         KUNIT_EXPECT_KASAN_FAIL(test, ptr[size + OOB_TAG_OFF] = 0);
->
->         kfree(ptr);
-> @@ -295,6 +296,7 @@ static void krealloc_more_oob_helper(struct kunit *test,
->                 KUNIT_EXPECT_KASAN_FAIL(test, ptr2[size2] = 'x');
->
->         /* For all modes first aligned offset after size2 must be inaccessible. */
-> +       OPTIMIZER_HIDE_VAR(ptr2);
->         KUNIT_EXPECT_KASAN_FAIL(test,
->                 ptr2[round_up(size2, KASAN_GRANULE_SIZE)] = 'x');
->
-> @@ -319,6 +321,8 @@ static void krealloc_less_oob_helper(struct kunit *test,
->         /* Must be accessible for all modes. */
->         ptr2[size2 - 1] = 'x';
->
-> +       OPTIMIZER_HIDE_VAR(ptr2);
-> +
->         /* Generic mode is precise, so unaligned size2 must be inaccessible. */
->         if (IS_ENABLED(CONFIG_KASAN_GENERIC))
->                 KUNIT_EXPECT_KASAN_FAIL(test, ptr2[size2] = 'x');
-> --
-> 2.35.1.473.g83b2b277ed-goog
->
+There is one more bug in this series that I looked at with Anders, but
+he did not send a patch for that so far:
+
+static void dummy_perf(struct pt_regs *regs)
+{
+#if defined(CONFIG_FSL_EMB_PERFMON)
+        mtpmr(PMRN_PMGC0, mfpmr(PMRN_PMGC0) & ~PMGC0_PMIE);
+#elif defined(CONFIG_PPC64) || defined(CONFIG_PPC_BOOK3S_32)
+        if (cur_cpu_spec->pmc_type == PPC_PMC_IBM)
+                mtspr(SPRN_MMCR0, mfspr(SPRN_MMCR0) & ~(MMCR0_PMXE|MMCR0_PMAO));
+#else
+        mtspr(SPRN_MMCR0, mfspr(SPRN_MMCR0) & ~MMCR0_PMXE);
+#endif
+}
+
+Here, the assembler correctly flags the mtpmr/mfpmr as an invalid
+instruction for a combined 6xx kernel: As far as I can tell, these are
+only available on e300 but not the others, and instead of the compile-time
+check for CONFIG_FSL_EMB_PERFMON, there needs to be some
+runtime check to use the first method on 83xx but the #elif one on
+the other 6xx machines.
+
+       Arnd

@@ -2,222 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0A014C23E6
+	by mail.lfdr.de (Postfix) with ESMTP id A54F84C23E5
 	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 07:08:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231137AbiBXGHy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 01:07:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56368 "EHLO
+        id S231162AbiBXGIR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 01:08:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230513AbiBXGHt (ORCPT
+        with ESMTP id S231173AbiBXGIO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 01:07:49 -0500
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 905AC268349
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 22:07:19 -0800 (PST)
-Received: by mail-ej1-x62f.google.com with SMTP id lw4so2047921ejb.12
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 22:07:19 -0800 (PST)
+        Thu, 24 Feb 2022 01:08:14 -0500
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59D47268377;
+        Wed, 23 Feb 2022 22:07:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=kP+89y0hoRnShyoLp/hNYbJCaD/1tG2cQQ5MHA+Qy84=;
-        b=kwRnAaTapnRDvQFCX4erZ72wwBBIgT9aehZ1b407m0CDNloA8vSdFrLuPx0M7uHYYr
-         Z4d8Zd7Ous/XLZ8pl5j/P95yQwa+vGnhnb0m4OBf2SnigJ2PLxaxpoOyRTLQix2L0Asg
-         XYnk1fboddBNDJUconnfgW0y4b/X7ndWiQqqUijhrsavc2KBKbfLjeSxvPIIAsjDiJka
-         BuxkiqUPVTDxcaMSe/uXpFUpdvLe+w1G5O/PIPAmLnOpno7mwOz3Jq+isx3Us0w6nlld
-         Qvrdpj32vpP2hwfT8X0rAuyHIySqL92HKUgwwRGlnQ26VcMxzOtw2jvTEfASqrT5ZJFS
-         kABA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=kP+89y0hoRnShyoLp/hNYbJCaD/1tG2cQQ5MHA+Qy84=;
-        b=yA8NPyFtYpJ102c7244P04SrP+Z1xmyKdzzb6OufObiwwJti46Qd7wsu6KzaVSv9Hu
-         wyw42TyQn8YwSuoh4F8LZFc0G/gSAWH+ERFeYc8TAFNpXPizUTs81mnzyA3x0McQJ15F
-         8UWWm5v6wwr4z7DrrPz84FujS0lbxhm/maYN/c5GoU2gUVWHnGgswVw/1/ZFl4jy/wu2
-         pjL2ZmwJwYcMsI8IVYRaXAxzgS7qBdFRwF2QzT8uFwaLYuDAqcrFsmgEk/6UCtXIC3f4
-         VIlK6iM+Wigz5Ifdv8OqS9/MlAJNJ/NJtg10KlPC6REjxyTETgyLZ+Pj6/N/utMiCBL/
-         1Z7A==
-X-Gm-Message-State: AOAM533qZsvFgjTtJUDT9IDF0n9AUNhXOCrhc/aZLDobDoLxTMo2hD2y
-        X1CswN55d1fG2BMXjn1LjLV29Y6fSbOCner4jZsg/w==
-X-Google-Smtp-Source: ABdhPJzZgf+9TEGQb6iMcXtXFm9emtSA5v0uMfoaoiwA1lFfvD2e9TdWMjBamDP38FG17rD1IP935MHFoxCFr7G2kCA=
-X-Received: by 2002:a17:906:c12:b0:6cc:ec90:31f3 with SMTP id
- s18-20020a1709060c1200b006ccec9031f3mr961140ejf.369.1645682837863; Wed, 23
- Feb 2022 22:07:17 -0800 (PST)
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1645682864; x=1677218864;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=KyOwqjIbG0TroSylE/Ycq5BtVWaP9tTR0OCtbJSnzHE=;
+  b=zhR0VPpEECz4NRevXBW7O5vzPFptuKhM650LbWr3xI1yIvlwB7S6Xgli
+   gITc7GL3RnSPGxQtOlGk2Kxc4QiV6YBbbfGFHQtzraJH1qoT/2Z5FwfcN
+   TiBpbkHZsIOim1MZyw5CXKafnvE7miXbJwTkBtgqtinffLjR6Crw5UxPN
+   U=;
+Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
+  by alexa-out.qualcomm.com with ESMTP; 23 Feb 2022 22:07:44 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2022 22:07:43 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.15; Wed, 23 Feb 2022 22:07:43 -0800
+Received: from blr-ubuntu-253.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.15; Wed, 23 Feb 2022 22:07:38 -0800
+From:   Sai Prakash Ranjan <quic_saipraka@quicinc.com>
+To:     Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        "Marc Zyngier" <maz@kernel.org>
+CC:     Trilok Soni <quic_tsoni@quicinc.com>, <quic_psodagud@quicinc.com>,
+        gregkh <gregkh@linuxfoundation.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        "Sai Prakash Ranjan" <quic_saipraka@quicinc.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        <coresight@lists.linaro.org>
+Subject: [PATCHv10 2/6] coresight: etm4x: Use asm-generic IO memory barriers
+Date:   Thu, 24 Feb 2022 11:37:04 +0530
+Message-ID: <8e1fe065405c2d9d1e28e3f84880d156c2e887a4.1644824638.git.quic_saipraka@quicinc.com>
+X-Mailer: git-send-email 2.33.1
+In-Reply-To: <cover.1644824638.git.quic_saipraka@quicinc.com>
+References: <cover.1644824638.git.quic_saipraka@quicinc.com>
 MIME-Version: 1.0
-References: <20220224054332.1852813-1-keescook@chromium.org>
-In-Reply-To: <20220224054332.1852813-1-keescook@chromium.org>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Wed, 23 Feb 2022 22:07:04 -0800
-Message-ID: <CAGS_qxp8cjG5jCX-7ziqHcy2gq_MqL8kU01-joFD_W9iPG08EA@mail.gmail.com>
-Subject: Re: [PATCH] binfmt_elf: Introduce KUnit test
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Eric Biederman <ebiederm@xmission.com>,
-        David Gow <davidgow@google.com>,
-        Alexey Dobriyan <adobriyan@gmail.com>,
-        =?UTF-8?B?TWFnbnVzIEdyb8Of?= <magnus.gross@rwth-aachen.de>,
-        kunit-dev@googlegroups.com, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-hardening@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 23, 2022 at 9:43 PM Kees Cook <keescook@chromium.org> wrote:
->
-> Adds simple KUnit test for some binfmt_elf internals: specifically a
-> regression test for the problem fixed by commit 8904d9cd90ee ("ELF:
-> fix overflow in total mapping size calculation").
->
-> Cc: Eric Biederman <ebiederm@xmission.com>
-> Cc: David Gow <davidgow@google.com>
-> Cc: Alexey Dobriyan <adobriyan@gmail.com>
-> Cc: "Magnus Gro=C3=9F" <magnus.gross@rwth-aachen.de>
-> Cc: kunit-dev@googlegroups.com
-> Cc: linux-fsdevel@vger.kernel.org
-> Signed-off-by: Kees Cook <keescook@chromium.org>
-> ---
-> I'm exploring ways to mock copy_to_user() for more tests in here.
-> kprobes doesn't seem to let me easily hijack a function...
+Per discussion in [1], it was decided to move to using architecture
+independent/asm-generic IO memory barriers to have just one set of
+them and deprecate use of arm64 specific IO memory barriers in driver
+code. So replace current usage of __io_rmb()/__iowmb() in drivers to
+__io_ar()/__io_bw().
 
-Yeah, there doesn't seem to be a good way to do so. It seems more
-feasible if one is willing to write arch-specific code, but I'm not
-quite sure if that works either.
+[1] https://lore.kernel.org/lkml/CAK8P3a0L2tLeF1Q0+0ijUxhGNaw+Z0fyPC1oW6_ELQfn0=i4iw@mail.gmail.com/
 
-https://kunit.dev/mocking.html has some thoughts on this.
-Not sure if there's anything there that would be useful to you, but
-perhaps it can give you some ideas.
+Cc: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
+Cc: Suzuki K Poulose <suzuki.poulose@arm.com>
+Cc: Mike Leach <mike.leach@linaro.org>
+Cc: coresight@lists.linaro.org
+Signed-off-by: Sai Prakash Ranjan <quic_saipraka@quicinc.com>
+---
+ drivers/hwtracing/coresight/coresight-etm4x-core.c | 8 ++++----
+ drivers/hwtracing/coresight/coresight-etm4x.h      | 8 ++++----
+ 2 files changed, 8 insertions(+), 8 deletions(-)
 
-> ---
->  fs/Kconfig.binfmt      | 17 +++++++++++
->  fs/binfmt_elf.c        |  4 +++
->  fs/binfmt_elf_test.c   | 64 ++++++++++++++++++++++++++++++++++++++++++
->  fs/compat_binfmt_elf.c |  2 ++
->  4 files changed, 87 insertions(+)
->  create mode 100644 fs/binfmt_elf_test.c
->
-> diff --git a/fs/Kconfig.binfmt b/fs/Kconfig.binfmt
-> index 4d5ae61580aa..8e14589ee9cc 100644
-> --- a/fs/Kconfig.binfmt
-> +++ b/fs/Kconfig.binfmt
-> @@ -28,6 +28,23 @@ config BINFMT_ELF
->           ld.so (check the file <file:Documentation/Changes> for location=
- and
->           latest version).
->
-> +config BINFMT_ELF_KUNIT_TEST
-> +       bool "Build KUnit tests for ELF binary support" if !KUNIT_ALL_TES=
-TS
-> +       depends on KUNIT=3Dy && BINFMT_ELF=3Dy
-> +       default KUNIT_ALL_TESTS
-> +       help
-> +         This builds the ELF loader KUnit tests.
-> +
-> +         KUnit tests run during boot and output the results to the debug=
- log
-> +         in TAP format (https://testanything.org/). Only useful for kern=
-el devs
+diff --git a/drivers/hwtracing/coresight/coresight-etm4x-core.c b/drivers/hwtracing/coresight/coresight-etm4x-core.c
+index bf18128cf5de..89ba7bb4c41d 100644
+--- a/drivers/hwtracing/coresight/coresight-etm4x-core.c
++++ b/drivers/hwtracing/coresight/coresight-etm4x-core.c
+@@ -98,7 +98,7 @@ u64 etm4x_sysreg_read(u32 offset, bool _relaxed, bool _64bit)
+ 	}
+ 
+ 	if (!_relaxed)
+-		__iormb(res);	/* Imitate the !relaxed I/O helpers */
++		__io_ar(res);	/* Imitate the !relaxed I/O helpers */
+ 
+ 	return res;
+ }
+@@ -106,7 +106,7 @@ u64 etm4x_sysreg_read(u32 offset, bool _relaxed, bool _64bit)
+ void etm4x_sysreg_write(u64 val, u32 offset, bool _relaxed, bool _64bit)
+ {
+ 	if (!_relaxed)
+-		__iowmb();	/* Imitate the !relaxed I/O helpers */
++		__io_bw();	/* Imitate the !relaxed I/O helpers */
+ 	if (!_64bit)
+ 		val &= GENMASK(31, 0);
+ 
+@@ -130,7 +130,7 @@ static u64 ete_sysreg_read(u32 offset, bool _relaxed, bool _64bit)
+ 	}
+ 
+ 	if (!_relaxed)
+-		__iormb(res);	/* Imitate the !relaxed I/O helpers */
++		__io_ar(res);	/* Imitate the !relaxed I/O helpers */
+ 
+ 	return res;
+ }
+@@ -138,7 +138,7 @@ static u64 ete_sysreg_read(u32 offset, bool _relaxed, bool _64bit)
+ static void ete_sysreg_write(u64 val, u32 offset, bool _relaxed, bool _64bit)
+ {
+ 	if (!_relaxed)
+-		__iowmb();	/* Imitate the !relaxed I/O helpers */
++		__io_bw();	/* Imitate the !relaxed I/O helpers */
+ 	if (!_64bit)
+ 		val &= GENMASK(31, 0);
+ 
+diff --git a/drivers/hwtracing/coresight/coresight-etm4x.h b/drivers/hwtracing/coresight/coresight-etm4x.h
+index 3c4d69b096ca..f54698731582 100644
+--- a/drivers/hwtracing/coresight/coresight-etm4x.h
++++ b/drivers/hwtracing/coresight/coresight-etm4x.h
+@@ -448,14 +448,14 @@
+ #define etm4x_read32(csa, offset)					\
+ 	({								\
+ 		u32 __val = etm4x_relaxed_read32((csa), (offset));	\
+-		__iormb(__val);						\
++		__io_ar(__val);						\
+ 		__val;							\
+ 	 })
+ 
+ #define etm4x_read64(csa, offset)					\
+ 	({								\
+ 		u64 __val = etm4x_relaxed_read64((csa), (offset));	\
+-		__iormb(__val);						\
++		__io_ar(__val);						\
+ 		__val;							\
+ 	 })
+ 
+@@ -479,13 +479,13 @@
+ 
+ #define etm4x_write32(csa, val, offset)					\
+ 	do {								\
+-		__iowmb();						\
++		__io_bw();						\
+ 		etm4x_relaxed_write32((csa), (val), (offset));		\
+ 	} while (0)
+ 
+ #define etm4x_write64(csa, val, offset)					\
+ 	do {								\
+-		__iowmb();						\
++		__io_bw();						\
+ 		etm4x_relaxed_write64((csa), (val), (offset));		\
+ 	} while (0)
+ 
+-- 
+2.33.1
 
-Tangent: should we update the kunit style guide to not refer to TAP
-anymore as it's not accurate?
-The KTAP spec is live on kernel.org at
-https://www.kernel.org/doc/html/latest/dev-tools/ktap.html
-
-We can leave this patch as-is and update later, or have it be the
-guinea pig for the new proposed wording.
-
-(I'm personally in favor of people not copy-pasting these paragraphs
-in the first place, but that is what the style-guide currently
-recommends)
-
-> +         running KUnit test harness and are not for inclusion into a
-> +         production build.
-> +
-> +         For more information on KUnit and unit tests in general please =
-refer
-> +         to the KUnit documentation in Documentation/dev-tools/kunit/.
-> +
-> +         If unsure, say N.
-> +
->  config COMPAT_BINFMT_ELF
->         def_bool y
->         depends on COMPAT && BINFMT_ELF
-> diff --git a/fs/binfmt_elf.c b/fs/binfmt_elf.c
-> index 76ff2af15ba5..9bea703ed1c2 100644
-> --- a/fs/binfmt_elf.c
-> +++ b/fs/binfmt_elf.c
-> @@ -2335,3 +2335,7 @@ static void __exit exit_elf_binfmt(void)
->  core_initcall(init_elf_binfmt);
->  module_exit(exit_elf_binfmt);
->  MODULE_LICENSE("GPL");
-> +
-> +#ifdef CONFIG_BINFMT_ELF_KUNIT_TEST
-> +#include "binfmt_elf_test.c"
-> +#endif
-> diff --git a/fs/binfmt_elf_test.c b/fs/binfmt_elf_test.c
-> new file mode 100644
-> index 000000000000..486ad419f763
-> --- /dev/null
-> +++ b/fs/binfmt_elf_test.c
-> @@ -0,0 +1,64 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +#include <kunit/test.h>
-> +
-> +static void total_mapping_size_test(struct kunit *test)
-> +{
-> +       struct elf_phdr empty[] =3D {
-> +               { .p_type =3D PT_LOAD, .p_vaddr =3D 0, .p_memsz =3D 0, },
-> +               { .p_type =3D PT_INTERP, .p_vaddr =3D 10, .p_memsz =3D 99=
-9999, },
-> +       };
-> +       /*
-> +        * readelf -lW /bin/mount | grep '^  .*0x0' | awk '{print "\t\t{ =
-.p_type =3D PT_" \
-> +        *                              $1 ", .p_vaddr =3D " $3 ", .p_mem=
-sz =3D " $6 ", },"}'
-> +        */
-> +       struct elf_phdr mount[] =3D {
-> +               { .p_type =3D PT_PHDR, .p_vaddr =3D 0x00000040, .p_memsz =
-=3D 0x0002d8, },
-> +               { .p_type =3D PT_INTERP, .p_vaddr =3D 0x00000318, .p_mems=
-z =3D 0x00001c, },
-> +               { .p_type =3D PT_LOAD, .p_vaddr =3D 0x00000000, .p_memsz =
-=3D 0x0033a8, },
-> +               { .p_type =3D PT_LOAD, .p_vaddr =3D 0x00004000, .p_memsz =
-=3D 0x005c91, },
-> +               { .p_type =3D PT_LOAD, .p_vaddr =3D 0x0000a000, .p_memsz =
-=3D 0x0022f8, },
-> +               { .p_type =3D PT_LOAD, .p_vaddr =3D 0x0000d330, .p_memsz =
-=3D 0x000d40, },
-> +               { .p_type =3D PT_DYNAMIC, .p_vaddr =3D 0x0000d928, .p_mem=
-sz =3D 0x000200, },
-> +               { .p_type =3D PT_NOTE, .p_vaddr =3D 0x00000338, .p_memsz =
-=3D 0x000030, },
-> +               { .p_type =3D PT_NOTE, .p_vaddr =3D 0x00000368, .p_memsz =
-=3D 0x000044, },
-> +               { .p_type =3D PT_GNU_PROPERTY, .p_vaddr =3D 0x00000338, .=
-p_memsz =3D 0x000030, },
-> +               { .p_type =3D PT_GNU_EH_FRAME, .p_vaddr =3D 0x0000b490, .=
-p_memsz =3D 0x0001ec, },
-> +               { .p_type =3D PT_GNU_STACK, .p_vaddr =3D 0x00000000, .p_m=
-emsz =3D 0x000000, },
-> +               { .p_type =3D PT_GNU_RELRO, .p_vaddr =3D 0x0000d330, .p_m=
-emsz =3D 0x000cd0, },
-> +       };
-> +       size_t mount_size =3D 0xE070;
-> +       /* https://lore.kernel.org/lkml/YfF18Dy85mCntXrx@fractal.localdom=
-ain */
-
-Slight nit, it looks like that message wasn't sent to lkml.
-lore gives a suggestion to change to
-https://lore.kernel.org/linux-fsdevel/YfF18Dy85mCntXrx@fractal.localdomain/

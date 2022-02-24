@@ -2,64 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C3A34C340F
+	by mail.lfdr.de (Postfix) with ESMTP id 975A64C3410
 	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 18:54:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232380AbiBXRyc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 12:54:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49634 "EHLO
+        id S232389AbiBXRzE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 12:55:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230094AbiBXRya (ORCPT
+        with ESMTP id S232397AbiBXRy7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 12:54:30 -0500
-Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 496EB2221AE;
-        Thu, 24 Feb 2022 09:54:00 -0800 (PST)
-Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-2d66f95f1d1so7001187b3.0;
-        Thu, 24 Feb 2022 09:54:00 -0800 (PST)
+        Thu, 24 Feb 2022 12:54:59 -0500
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 853E5252937
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 09:54:28 -0800 (PST)
+Received: by mail-wr1-x432.google.com with SMTP id d17so842525wrc.9
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 09:54:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=eq0rhSJW/1Sw11xhooN6LOA8GL16OGqICWs9SpqOzME=;
-        b=ovlMUCBoPHm0Ng7jBHgOGMvsivibBY0eFjYSXrf3lveZO9y7J2WPN15pjxopiEooRf
-         jPMf3/Zbrl33kMLio4YHaGFu/g0gHEoxnq6wMuDCigvid5G32wBFY4FwqI6X3TqCQKq5
-         s7OhTDCOZJ4i0qXn57rbq8Ygjw6NGONXkOhHCYlCpilq99mqAILegufcLLdORRqVk9TO
-         ul4bgzurtbgclnajz6YRvaRZDtc6tgxRenOvk76+cIAjaOihY0FZq8LTCujURAMByF06
-         xwZrGcr5kT+BK+kj0pQyLbeubQwxi7aY00qKJ9mawM7Pnf1MmavxrN5t9ESMA4xU+lOL
-         Bp1g==
+        bh=GE+XGHonrH22zXrgiLwafrMHAo1pCMt8qc++bm61hZc=;
+        b=mZLz9SlFVQ84zMxIhFdLQMmVgKUhNsTq7TIRpy5lode3I8PkSY+1/w19uOMblnnZ6Z
+         4kZ9pOjtV/nAnm26mvr8v5z5LG7pNREFfElRV2jepUw1NHLVfHih/1BEty1AsHrgEyUI
+         wH0Gr9d/pOXtAIFXjebgufroKudUgLNif6D2BMDjj33guNjjYh+C58j11mRcVkC6KrhA
+         S+Pl3Qz8q4aw5v5ZGyfjRLH3zDgAjgDwhu944MLmr6gq5q0LTClONsHTHeXWb5AEq8HV
+         aWnhF74XNPIe1e6msCIsV+Ndp7HqCZV7nnGErVd2wx+gVEjzGkBd1MHS5ucJrC3jDVbO
+         AeYg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=eq0rhSJW/1Sw11xhooN6LOA8GL16OGqICWs9SpqOzME=;
-        b=juZ5mGOZGXbyCxBl+X9EYqoekE9Mjz3oM9fxoV8y9uncWYLnNep3QG4BMUXWlWXe4Q
-         EFCTPgV/Tp9xGP3qysbfxFZ5+OQ3PfPUHG3Rwx9KUn41HjiuCBzvUhCBRONubmuTNvyP
-         eJs/hot7tD+7Aj5yL0NVE2zGA8vw0oIJZwT/aAXmoOwo6B7DnyuDOu26SaG1gOawtI8K
-         +/k2B0qXwOA3xJSDojnPtXC6+zvDHhR7fUgtg/erpRTXrgCErYEffzk7GH+Gni89WdQL
-         HR0rHv6scfSINzB8n5Y7aQ66OSej6LhiSpCyam5wTdSGvTFZR7djgYGvme3VOUT2dfrH
-         MIrw==
-X-Gm-Message-State: AOAM530AVSZMnVslyklvr/SWq4pyKTjXlwiJDGiLlO17xsZbp3qT79FY
-        J7/dTTHOtX2Skkk9W5hzrexbaVuWtECIgzRa47fJA4UO
-X-Google-Smtp-Source: ABdhPJxZp7Dh9XnMn1jok5IIVuFXG8ISgSBdeWyaZRCCEUUTGIHlI1sJNlJ0ObUBALgQDfzFy67N/QQEgUJvocgwQo4=
-X-Received: by 2002:a0d:d748:0:b0:2d7:549a:552d with SMTP id
- z69-20020a0dd748000000b002d7549a552dmr3559431ywd.261.1645725239362; Thu, 24
- Feb 2022 09:53:59 -0800 (PST)
+        bh=GE+XGHonrH22zXrgiLwafrMHAo1pCMt8qc++bm61hZc=;
+        b=BKjF1NeDsGCVU5MX7AceUTF+OqADtPJDskytCGJo+cSzShVA5IK3/nvIcS65xUBuQc
+         90IM85cluTRRIRnVwFOq/6H5qqTqEmLsnSKc6L2cnLSp1OaZYVo7kerYR++Gq8KaJDxY
+         7KJRXMh3c+IhFcAZoMhcwtkeWTSulIe2+e8kbLC5to/V7AjOZtEvu9bMivzBVdlqoi/q
+         VjmBVRnqsqWKtQmaUJ8A3jrY6/E0ciPjHliL5Fs+82aHazE3jLyqm98A03FUKXwzPwCY
+         Zk5lhKKsgnOQOqw71Fyd8xWvU2sJAEyeerfb3CUonfBJQpjV7iYxh6G3SrtyFptn35Zh
+         IEFA==
+X-Gm-Message-State: AOAM531l9k7XDNBC86cr9ve425DpcXxRpUemD7aeOX+IhjsNihjLX41+
+        ewqXyqeopTjqxRdM55fFNSumq0e1iIljEk400CIy+w==
+X-Google-Smtp-Source: ABdhPJxHmUKpTMRNJ+ob8+yuIRIbACjTU5wiSB63z2iiN9d/8JNSMH+uWCSXvhJHtYIl9R7h2hcbj50TcC7mMZhOG/U=
+X-Received: by 2002:adf:ca08:0:b0:1ed:c0bc:c212 with SMTP id
+ o8-20020adfca08000000b001edc0bcc212mr3148175wrh.577.1645725266912; Thu, 24
+ Feb 2022 09:54:26 -0800 (PST)
 MIME-Version: 1.0
-References: <20220207103738.103661-1-jiapeng.chong@linux.alibaba.com> <CAKFNMokx2Qk4jJx6s0vzseYRbfjejZwoDY3MnPODWhT7-_1K=g@mail.gmail.com>
-In-Reply-To: <CAKFNMokx2Qk4jJx6s0vzseYRbfjejZwoDY3MnPODWhT7-_1K=g@mail.gmail.com>
-From:   Ryusuke Konishi <konishi.ryusuke@gmail.com>
-Date:   Fri, 25 Feb 2022 02:53:47 +0900
-Message-ID: <CAKFNMo=jrEwV_U4wkfKvWeMoTJ9Ojbb0xx2cMrhr1KXD2gnxeg@mail.gmail.com>
-Subject: Re: [PATCH] mm/fs: Remove redundant code
-To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-Cc:     linux-nilfs <linux-nilfs@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Abaci Robot <abaci@linux.alibaba.com>
+References: <20220224051439.640768-1-kaleshsingh@google.com>
+ <20220224051439.640768-4-kaleshsingh@google.com> <CA+EHjTy6DJt8Pcfj4JnVhSG0sQ7O09zvOaMP--aRuAsM=8zKUw@mail.gmail.com>
+In-Reply-To: <CA+EHjTy6DJt8Pcfj4JnVhSG0sQ7O09zvOaMP--aRuAsM=8zKUw@mail.gmail.com>
+From:   Kalesh Singh <kaleshsingh@google.com>
+Date:   Thu, 24 Feb 2022 09:54:16 -0800
+Message-ID: <CAC_TJvcypLTxa=HaPvfNBgQpB1qG=d_sLnOLAn=gAznpD4_hqw@mail.gmail.com>
+Subject: Re: [PATCH v3 3/8] KVM: arm64: Add guard pages for KVM nVHE
+ hypervisor stack
+To:     Fuad Tabba <tabba@google.com>
+Cc:     Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Quentin Perret <qperret@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        "Cc: Android Kernel" <kernel-team@android.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Mark Brown <broonie@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Peter Collingbourne <pcc@google.com>,
+        "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>,
+        Andrew Walbran <qwandor@google.com>,
+        Andrew Scull <ascull@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        "moderated list:ARM64 PORT (AARCH64 ARCHITECTURE)" 
+        <linux-arm-kernel@lists.infradead.org>,
+        kvmarm@lists.cs.columbia.edu, LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,65 +86,125 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On Fri, Feb 25, 2022 at 2:30 AM Ryusuke Konishi
-<konishi.ryusuke@gmail.com> wrote:
+On Thu, Feb 24, 2022 at 4:26 AM Fuad Tabba <tabba@google.com> wrote:
 >
-> Hi Jiapeng,
+> Hi Kalesh,
 >
-> On Mon, Feb 7, 2022 at 7:37 PM Jiapeng Chong
-> <jiapeng.chong@linux.alibaba.com> wrote:
+>
+>
+> On Thu, Feb 24, 2022 at 5:18 AM Kalesh Singh <kaleshsingh@google.com> wrote:
 > >
-> > Clean up the following smatch warning:
+> > Maps the stack pages in the flexible private VA range and allocates
+> > guard pages below the stack as unbacked VA space. The stack is aligned
+> > to twice its size to aid overflow detection (implemented in a subsequent
+> > patch in the series).
 > >
-> > fs/nilfs2/segbuf.c:358 nilfs_segbuf_submit_bio() warn: ignoring
-> > unreachable code.
-> >
-> > Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> > Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+> > Signed-off-by: Kalesh Singh <kaleshsingh@google.com>
 > > ---
-> >  fs/nilfs2/segbuf.c | 4 ----
-> >  1 file changed, 4 deletions(-)
 > >
-> > diff --git a/fs/nilfs2/segbuf.c b/fs/nilfs2/segbuf.c
-> > index 9e5dd6324ea1..50d7e2e4daed 100644
-> > --- a/fs/nilfs2/segbuf.c
-> > +++ b/fs/nilfs2/segbuf.c
-> > @@ -341,7 +341,6 @@ static int nilfs_segbuf_submit_bio(struct nilfs_segment_buffer *segbuf,
-> >                                    int mode_flags)
-> >  {
-> >         struct bio *bio = wi->bio;
-> > -       int err;
+> > Changes in v3:
+> >   - Handle null ptr in IS_ERR_OR_NULL checks, per Mark
 > >
-> >         bio->bi_end_io = nilfs_end_bio_write;
-> >         bio->bi_private = segbuf;
-> > @@ -354,9 +353,6 @@ static int nilfs_segbuf_submit_bio(struct nilfs_segment_buffer *segbuf,
-> >         wi->nr_vecs = min(wi->max_pages, wi->rest_blocks);
-> >         wi->start = wi->end;
-> >         return 0;
-> > -
-> > -       wi->bio = NULL;
-> > -       return err;
-> >  }
+> >  arch/arm64/include/asm/kvm_asm.h |  1 +
+> >  arch/arm64/kvm/arm.c             | 32 +++++++++++++++++++++++++++++---
+> >  2 files changed, 30 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/arch/arm64/include/asm/kvm_asm.h b/arch/arm64/include/asm/kvm_asm.h
+> > index d5b0386ef765..2e277f2ed671 100644
+> > --- a/arch/arm64/include/asm/kvm_asm.h
+> > +++ b/arch/arm64/include/asm/kvm_asm.h
+> > @@ -169,6 +169,7 @@ struct kvm_nvhe_init_params {
+> >         unsigned long tcr_el2;
+> >         unsigned long tpidr_el2;
+> >         unsigned long stack_hyp_va;
+> > +       unsigned long stack_pa;
+> >         phys_addr_t pgd_pa;
+> >         unsigned long hcr_el2;
+> >         unsigned long vttbr;
+> > diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
+> > index ecc5958e27fe..7a23630c4a7f 100644
+> > --- a/arch/arm64/kvm/arm.c
+> > +++ b/arch/arm64/kvm/arm.c
+> > @@ -1541,7 +1541,6 @@ static void cpu_prepare_hyp_mode(int cpu)
+> >         tcr |= (idmap_t0sz & GENMASK(TCR_TxSZ_WIDTH - 1, 0)) << TCR_T0SZ_OFFSET;
+> >         params->tcr_el2 = tcr;
+> >
+> > -       params->stack_hyp_va = kern_hyp_va(per_cpu(kvm_arm_hyp_stack_page, cpu) + PAGE_SIZE);
+> >         params->pgd_pa = kvm_mmu_get_httbr();
+> >         if (is_protected_kvm_enabled())
+> >                 params->hcr_el2 = HCR_HOST_NVHE_PROTECTED_FLAGS;
+> > @@ -1990,14 +1989,41 @@ static int init_hyp_mode(void)
+> >          * Map the Hyp stack pages
+> >          */
+> >         for_each_possible_cpu(cpu) {
+> > +               struct kvm_nvhe_init_params *params = per_cpu_ptr_nvhe_sym(kvm_init_params, cpu);
+> >                 char *stack_page = (char *)per_cpu(kvm_arm_hyp_stack_page, cpu);
+> > -               err = create_hyp_mappings(stack_page, stack_page + PAGE_SIZE,
+> > -                                         PAGE_HYP);
+> > +               unsigned long stack_hyp_va, guard_hyp_va;
+> >
+> > +               /*
+> > +                * Private mappings are allocated downwards from io_map_base
+> > +                * so allocate the stack first then the guard page.
+> > +                *
+> > +                * The stack is aligned to twice its size to facilitate overflow
+> > +                * detection.
+> > +                */
+> > +               err = __create_hyp_private_mapping(__pa(stack_page), PAGE_SIZE,
+> > +                                               PAGE_SIZE * 2, &stack_hyp_va, PAGE_HYP);
+> >                 if (err) {
+> >                         kvm_err("Cannot map hyp stack\n");
+> >                         goto out_err;
+> >                 }
+> > +
+> > +               /* Allocate unbacked private VA range for stack guard page */
+> > +               guard_hyp_va = hyp_alloc_private_va_range(PAGE_SIZE, PAGE_SIZE);
+> > +               if (IS_ERR_OR_NULL((void *)guard_hyp_va)) {
+> > +                       err = guard_hyp_va ? PTR_ERR((void *)guard_hyp_va) : -ENOMEM;
 >
-> Sorry for my late reply.
->
-> I will send this to Andrew to report and fix the regression on the -mm
-> patch series.
->
-> I'd like to change the patch title to something like "nilfs2: Remove
-> redundant code"
-> since the "mm/fs" prefix does not properly represent what it applies to.
-> (this patch may be folded into the patch that is causing the warning)
->
-> Regards,
-> Ryusuke Konishi
+> I am a bit confused by this check. hyp_alloc_private_va_range() always
+> returns ERR_PTR(-ENOMEM) if there's an error. Mark's comment (if I
+> understood it correctly) was about how you were handling it *in*
+> hyp_alloc_private_va_range(), rather than calls *to*
+> hyp_alloc_private_va_range().
 
-Sorry again.
+Mark's comments were for the callers. I think the address can still be
+null without returning -ENOMEM (judging from what the check was before
+hyp_alloc_private_va_range). You make a good point - I think we can
+handle any potential null in *_alloc_private_va_range() and drop the
+use of PTR_ERR with IS_ERR_OR_NULL (which seems not a good idea in
+general).
 
-The reported issue was already corrected in NeilBrown's revised patch set, so I
-will suspend this.
+>
+> > +                       kvm_err("Cannot allocate hyp stack guard page\n");
+> > +                       goto out_err;
+> > +               }
+> > +
+> > +               /*
+> > +                * Save the stack PA in nvhe_init_params. This will be needed to recreate
+> > +                * the stack mapping in protected nVHE mode. __hyp_pa() won't do the right
+> > +                * thing there, since the stack has been mapped in the flexible private
+> > +                * VA space.
+> > +                */
+>
+> Nit: These comments go over 80 columns, unlike other comments that
+> you've added in this file.
+
+Ack. I'll update in the next version.
 
 Thanks,
-Ryusuke Konishi
+Kalesh
+
+>
+> Thanks,
+> /fuad
+>
+> > +               params->stack_pa = __pa(stack_page) + PAGE_SIZE;
+> > +
+> > +               params->stack_hyp_va = stack_hyp_va + PAGE_SIZE;
+> >         }
+> >
+> >         for_each_possible_cpu(cpu) {
+> > --
+> > 2.35.1.473.g83b2b277ed-goog
+> >

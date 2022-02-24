@@ -2,105 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2E7D4C2CF6
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 14:28:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B67064C2D04
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 14:32:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234878AbiBXN24 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 08:28:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40828 "EHLO
+        id S234896AbiBXNba (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 08:31:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234869AbiBXN2x (ORCPT
+        with ESMTP id S229478AbiBXNb3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 08:28:53 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7CC3FB0E86
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 05:28:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1645709301;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=psZr4jDZFA2vXRGitiJpCpve4DYNl/gB1HAhwDvFOEM=;
-        b=jFx8yeM/Gs5BifaIN1+LO7TZMpWhX18uQqDj3U8xR2dVpGGP1yWTWYBjRr+SJeiLW629wu
-        UVOuHLIq9WwLsiLYR+Rq/YBU7zSCQ0VpPErYyG6kkHmw7UHgQtR31Lp8gDp1S//Ni7VCYg
-        47HP5XA0fZNuJA59X/DsoTlQMhf21zQ=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-637-DbZy4lSIPF-Z0GrVSVZMXA-1; Thu, 24 Feb 2022 08:28:20 -0500
-X-MC-Unique: DbZy4lSIPF-Z0GrVSVZMXA-1
-Received: by mail-wr1-f71.google.com with SMTP id c16-20020adfa310000000b001ed9cd8f4c7so766792wrb.6
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 05:28:20 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=psZr4jDZFA2vXRGitiJpCpve4DYNl/gB1HAhwDvFOEM=;
-        b=DpJIOtPUdQ/Vk2pIAZZU2ZNvH1ae10e8oYX5O7B2GWSInFWBy2ekjyu1PbNN6s/e5n
-         vmz7zHTAdGgFIt7s7KlpXOHZD7+tkLvmgkYnGpL5KULArXXz5Atux6lvjTon2RgqvRGZ
-         cP2D15d/UyNjnLCN583p6J/CiKXDJ5kmhcmbR3dC9m0LRzzr9KbkYReNisvTZjPqYNTL
-         3jsCxxju9dLAOsw4XGFGQl/yItzvR3GRVYVHG/sasGnP7NTdwF5oQDqY8pCQBBna93Gr
-         J6e17hilk5NH8vXf2TtwE24NXtBcXws7Tlrja6ekwJcj9CwRnWhrB6I4nU8PJW1sK6ko
-         eexQ==
-X-Gm-Message-State: AOAM533uPyYnNb3zXTLlETkIQoCO9gZ6rkdt3h4ApBHjTyyeilUWjekb
-        +voRSt9nr/w674ZqR+7k+tCjwoPGGEAy1gyD3tYqogJ1KKDPMFwQEv3/1ihIa8UVl6KQ4ubwddw
-        l4dq7M9GLQFcO5VGYm9WPgGw=
-X-Received: by 2002:a5d:6a4e:0:b0:1e4:b619:52b0 with SMTP id t14-20020a5d6a4e000000b001e4b61952b0mr2158393wrw.504.1645709299420;
-        Thu, 24 Feb 2022 05:28:19 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJw5cFa1a1boJUcrdDPIdjZCohUc+uHn6SwTHV0xA9uehxBSNdr0AG9/cLNR0CXvMFzZI+bhEA==
-X-Received: by 2002:a5d:6a4e:0:b0:1e4:b619:52b0 with SMTP id t14-20020a5d6a4e000000b001e4b61952b0mr2158377wrw.504.1645709299163;
-        Thu, 24 Feb 2022 05:28:19 -0800 (PST)
-Received: from localhost (cpc111743-lutn13-2-0-cust979.9-3.cable.virginm.net. [82.17.115.212])
-        by smtp.gmail.com with ESMTPSA id ba27sm2815015wrb.61.2022.02.24.05.28.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Feb 2022 05:28:18 -0800 (PST)
-Date:   Thu, 24 Feb 2022 13:28:16 +0000
-From:   Aaron Tomlin <atomlin@redhat.com>
-To:     Marcelo Tosatti <mtosatti@redhat.com>
-Cc:     Aaron Tomlin <atomlin@atomlin.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Christoph Lameter <cl@linux.com>, tglx@linutronix.de,
-        mingo@kernel.org, linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Phil Auld <pauld@redhat.com>
-Subject: Re: [RFC PATCH] tick/sched: Ensure quiet_vmstat() is called when the
- idle tick was stopped too
-Message-ID: <20220224132816.qsfa66ao3xdjdxxx@ava.usersys.com>
-X-PGP-Key: http://pgp.mit.edu/pks/lookup?search=atomlin%40redhat.com
-X-PGP-Fingerprint: 7906 84EB FA8A 9638 8D1E  6E9B E2DE 9658 19CC 77D6
-References: <20220203214339.1889971-1-atomlin@redhat.com>
- <20220217124729.GA743618@lothringen>
- <20220217142615.xqtiydixvnumyvei@ava.usersys.com>
- <20220217163205.GA748087@lothringen>
- <20220218125454.utlgmuhijklzr3if@ava.usersys.com>
- <20220219154616.pwsvh445x3vn7ltf@ava.usersys.com>
- <Yhd5olg9CjXSAf2s@fuller.cnet>
- <20220224130014.rmhtx3xlepybuxn2@ava.usersys.com>
- <YheE0joXm53Hxn4J@fuller.cnet>
+        Thu, 24 Feb 2022 08:31:29 -0500
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B17EB7C7D;
+        Thu, 24 Feb 2022 05:30:58 -0800 (PST)
+X-UUID: c5ae9ddf238040a5a679bb039aed8d6f-20220224
+X-UUID: c5ae9ddf238040a5a679bb039aed8d6f-20220224
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
+        (envelope-from <allen-kh.cheng@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 352981464; Thu, 24 Feb 2022 21:30:53 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Thu, 24 Feb 2022 21:30:50 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 24 Feb 2022 21:30:50 +0800
+From:   Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+To:     Jassi Brar <jaswinder.singh@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+CC:     Jassi Brar <jassisinghbrar@gmail.com>,
+        Linux-ALSA <alsa-devel@alsa-project.org>, <tzungbi@google.com>,
+        <cujomalainey@google.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Daniel Baluta <daniel.baluta@nxp.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Chen-Yu Tsai <wenst@chromium.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <sound-open-firmware@alsa-project.org>,
+        Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+Subject: [RESEND v17 0/2] mtk: add ADSP mailbox controller for MT8195
+Date:   Thu, 24 Feb 2022 21:30:43 +0800
+Message-ID: <20220224133045.23903-1-allen-kh.cheng@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <YheE0joXm53Hxn4J@fuller.cnet>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 2022-02-24 10:14 -0300, Marcelo Tosatti wrote:
-> If the per-CPU vmstat_update is limited to happen once per second, that
-> shouldnt be a significant performance impact?
+Mediatek ADSP IPC is used to send notification or short message 
+between processors with dsp. It will place the message to the
+share buffer and will access the ADSP mailbox registers to kick
+dsp. Two mailboxes used to send notification or short message 
+between processors with dsp.
 
-Perhaps not. Albeit, is the interrupt worth it? Then again it could indeed
-be a long time before the idle task is selected and a return to idle code
-were we'd check for any remaining differentials with the aforementioned
-patch.
+This patchset was tested and confirmed on MT8195 cherry board.
 
-Kind regards,
+Based on tag: next-20220223, linux-next/master
+
+changes since v16:
+- fix WARNING: modpost: missing MODULE_LICENSE() in drivers/mailbox
+  /mtk-adsp-mailbox.o. Add MODULE_LICENSE in the last line.
+- Due to WARNING: Missing or malformed SPDX-License-Identifier tag
+  in line 1 in checkpatch, we don't remove SPDX-License in line 1.
+
+changes since v15:
+- add paragraphs to describe the config symbols fully
+
+changes since v14:
+- add inline for get_mtk_adsp_mbox_priv
+
+changes since v13:
+- rebase on v5.16-rc8
+- add back ptr check from of_device_get_match_data
+
+changes since v12:
+- remove of_device_get_match_data ptr check:
+  of_device_get_match_data(dev) will never going to return NULL.
+  driver probe with compatible mediatek,mt8195-adsp-mbox.
+
+changes since v11:
+- remove useless MODULE_LICENSE
+
+changes since v10:
+- split up v9 into two separate submissions
+
+changes since v9:
+- rename adsp_mbox_chan_ops to mtk_adsp_mbox_chan_ops
+
+changes since v8:
+- remove struct adsp_mbox_ch_info
+- add get_mtk_adsp_mbox_priv
+- use mtk_adsp_mbox_priv va_mboxreg address in adsp mbox driver
+- add struct mtk_adsp_mbox_cfg for DSP mbox register offset
+- remove adsp mbox register offset hard code define
+- remove mtk-adsp-ipc.h reference in adsp mbox driver
+
+changes since v7:
+- add mtk prefix for adsp ipc functions
+- rename adsp_mbox_ch_info to mtk_adsp_mbox_ch_info
+- remove incorrect reviewers in commit message
+
+changes since v6:
+- dt-bindings: change example dtsi node.
+- rename config MTK_ADSP_IPC_MBOX to MTK_ADSP_MBOX
+- remove unused variable
+- add reviewers
+
+changes since v5:
+- remove some redundant code
+
+changes since v4:
+- use switch ... case in adsp_ipc_recv
+- add error handling path for chan_name pointer
+- refine some code to be concise
+
+changes since v3:
+- reorder MTK_ADSP_IPC_MBOX config
+- remove some redundant code
+- remove lock in mtk-adsp-mailbox
+
+changes since v2:
+- separate adsp_mailbox into two instances
+
+changes since v1:
+- fix dt_binding_check error
+
+Allen-KH Cheng (2):
+  dt-bindings: mailbox: mtk,adsp-mbox: add mtk adsp-mbox document
+  mailbox: mediatek: add support for adsp mailbox controller
+
+ .../bindings/mailbox/mtk,adsp-mbox.yaml       |  52 ++++++
+ drivers/mailbox/Kconfig                       |   9 +
+ drivers/mailbox/Makefile                      |   2 +
+ drivers/mailbox/mtk-adsp-mailbox.c            | 176 ++++++++++++++++++
+ 4 files changed, 239 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/mailbox/mtk,adsp-mbox.yaml
+ create mode 100644 drivers/mailbox/mtk-adsp-mailbox.c
 
 -- 
-Aaron Tomlin
+2.18.0
 

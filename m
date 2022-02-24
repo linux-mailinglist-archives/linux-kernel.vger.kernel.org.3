@@ -2,102 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07AA44C313C
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 17:28:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1888F4C3136
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 17:27:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229788AbiBXQ3H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 11:29:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37222 "EHLO
+        id S229665AbiBXQ2D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 11:28:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229737AbiBXQ3G (ORCPT
+        with ESMTP id S229589AbiBXQ2C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 11:29:06 -0500
-Received: from mail-oi1-f170.google.com (mail-oi1-f170.google.com [209.85.167.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 682D11965C4;
-        Thu, 24 Feb 2022 08:28:35 -0800 (PST)
-Received: by mail-oi1-f170.google.com with SMTP id j24so3205356oii.11;
-        Thu, 24 Feb 2022 08:28:35 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=9Hw+IXRYrnzmeFFNG8Nc9XPQ/h/ngGDlwqtlbBJf7gQ=;
-        b=Sh2QGzb683l2ieej21t4GkmLUpBtgnqaVjfpogjOvadOwHiZ8n8vsYYMBrF6OPZHXm
-         B2uxEUVAYMV/PDjX+g/6f5eSl96IDJwaUCAQZOL2KTtT/rf0GelfH2sOZMHnCg8gKa8t
-         gqzu9XJwKMqVjxfsSJlagv9oTzJ0kC/2EbI6mMAhJoaErENbgpVM8ZMZzc9RIUq5jI5K
-         Ps6rCYYLAO1WRpipIjIcaydl4SxgiNJRAuJPTtLn1qs1gzRnDfiJhCpYUajqYyXVvWJO
-         ltj3wKLM35bXEwKVcaPb2eMWRUKl5JtE7jUxn0BRG+D6/x2p075GZIJVxiv9mLvCLP16
-         3OYw==
-X-Gm-Message-State: AOAM530LRqDAybgoR6pzCfJCwDKerD97x0PybH8TCxEOks7SZddX5ZU/
-        Q3eITvaDixVF6jAaZZWWpBpsI39ltg==
-X-Google-Smtp-Source: ABdhPJyBSuL4dpeG7BPV2Y0QipvRylf1FyFsNnew64rw4tYkMJ1gXBOSoDp7AJ29P+p4sn9gv7D7Wg==
-X-Received: by 2002:aca:b9d5:0:b0:2ce:6ee7:2cde with SMTP id j204-20020acab9d5000000b002ce6ee72cdemr7756180oif.268.1645719063709;
-        Thu, 24 Feb 2022 08:11:03 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id d60sm1352253otb.29.2022.02.24.08.11.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Feb 2022 08:11:03 -0800 (PST)
-Received: (nullmailer pid 3169955 invoked by uid 1000);
-        Thu, 24 Feb 2022 16:11:02 -0000
-Date:   Thu, 24 Feb 2022 10:11:02 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-kernel@vger.kernel.org,
-        Agathe Porte <agathe.porte@nokia.com>,
-        linux-hwmon@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Adamski <krzysztof.adamski@nokia.com>,
-        devicetree@vger.kernel.org, Jean Delvare <jdelvare@suse.com>
-Subject: Re: [PATCH v7 1/2] dt-bindings: hwmon: add tmp464.yaml
-Message-ID: <YheuFuVz38Rcy5Q1@robh.at.kernel.org>
-References: <20220222223610.23098-1-linux@roeck-us.net>
+        Thu, 24 Feb 2022 11:28:02 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E6DF29F6C6
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 08:27:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1645720051;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=HnqUOzHPW8Dkvm4wNNfAluTLjyE7u1lt3OFqRCOZI9M=;
+        b=baIzjeneG2SIDXgzdATgQN2Nyc1tqeOvcb6KwUsppuV9FX6sDNknokQOuT//uJBOcEai+4
+        3LCADUCIVhA2vZr9Qzs+oh8OCF5Xsp2FS31ef437BbhQAMub+LCbSo9VNvsIrQvo0fFVfP
+        5U++FiISYLVdNmTY9ur/pE/RtjI5ePY=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-474-066Bo6ZvOnOsOkVHTtdzCA-1; Thu, 24 Feb 2022 11:11:19 -0500
+X-MC-Unique: 066Bo6ZvOnOsOkVHTtdzCA-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 11A46180FD73;
+        Thu, 24 Feb 2022 16:11:18 +0000 (UTC)
+Received: from starship (unknown [10.40.195.190])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id A3475804D4;
+        Thu, 24 Feb 2022 16:11:16 +0000 (UTC)
+Message-ID: <065dff8b1c54e456c9f0d7d5d4d806aadf80eb16.camel@redhat.com>
+Subject: Re: [PATCH v2 17/18] KVM: x86: flush TLB separately from MMU reset
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+Cc:     seanjc@google.com
+Date:   Thu, 24 Feb 2022 18:11:15 +0200
+In-Reply-To: <20220217210340.312449-18-pbonzini@redhat.com>
+References: <20220217210340.312449-1-pbonzini@redhat.com>
+         <20220217210340.312449-18-pbonzini@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220222223610.23098-1-linux@roeck-us.net>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 22 Feb 2022 14:36:09 -0800, Guenter Roeck wrote:
-> From: Agathe Porte <agathe.porte@nokia.com>
+On Thu, 2022-02-17 at 16:03 -0500, Paolo Bonzini wrote:
+> For both CR0 and CR4, disassociate the TLB flush logic from the
+> MMU role logic.  Instead  of relying on kvm_mmu_reset_context() being
+> a superset of various TLB flushes (which is not necessarily going to
+> be the case in the future), always call it if the role changes
+> but also set the various TLB flush requests according to what is
+> in the manual.
 > 
-> Add basic description of the tmp464 driver DT bindings.
-> 
-> Signed-off-by: Agathe Porte <agathe.porte@nokia.com>
-> Cc: Krzysztof Adamski <krzysztof.adamski@nokia.com>
-> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
 > ---
-> v7:
-> - No change
+>  arch/x86/kvm/x86.c | 58 ++++++++++++++++++++++++++++++++--------------
+>  1 file changed, 40 insertions(+), 18 deletions(-)
 > 
-> v6:
-> - Model ti,n-factor as int32 instead of int8.
-> 
-> v5:
-> - Dropped ti,n-factor from channel@0 example. Added additional
->   channel to examples to show positive ti,n-factor property.
-> 
-> v4:
-> - No changes
-> 
-> v3:
-> - Addedd support for TMP468.
-> - Changed number of channels from 0..3 (which was wrong anyway) to 0..8.
-> - Changed value range for ti,n-factor to int8, with an example for
->   a negative value.
-> - Added myself as driver maintainer.
-> 
->  .../devicetree/bindings/hwmon/ti,tmp464.yaml  | 114 ++++++++++++++++++
->  MAINTAINERS                                   |   7 ++
->  2 files changed, 121 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/hwmon/ti,tmp464.yaml
-> 
+> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> index 9043548e6baf..2b4663dfcd8d 100644
+> --- a/arch/x86/kvm/x86.c
+> +++ b/arch/x86/kvm/x86.c
+> @@ -871,6 +871,13 @@ void kvm_post_set_cr0(struct kvm_vcpu *vcpu, unsigned long old_cr0, unsigned lon
+>  	if ((cr0 ^ old_cr0) & X86_CR0_PG) {
+>  		kvm_clear_async_pf_completion_queue(vcpu);
+>  		kvm_async_pf_hash_reset(vcpu);
+> +
+> +		/*
+> +		 * Clearing CR0.PG is defined to flush the TLB from the guest's
+> +		 * perspective.
+> +		 */
+> +		if (!(cr0 & X86_CR0_PG))
+> +			kvm_make_request(KVM_REQ_TLB_FLUSH_GUEST, vcpu);
+>  	}
+>  
+>  	if ((cr0 ^ old_cr0) & KVM_MMU_CR0_ROLE_BITS)
+> @@ -1057,28 +1064,41 @@ EXPORT_SYMBOL_GPL(kvm_is_valid_cr4);
+>  
+>  void kvm_post_set_cr4(struct kvm_vcpu *vcpu, unsigned long old_cr4, unsigned long cr4)
+>  {
+> +	if ((cr4 ^ old_cr4) & KVM_MMU_CR4_ROLE_BITS)
+> +		kvm_mmu_reset_context(vcpu);
+> +
+>  	/*
+> -	 * If any role bit is changed, the MMU needs to be reset.
+> -	 *
+> -	 * If CR4.PCIDE is changed 1 -> 0, the guest TLB must be flushed.
+>  	 * If CR4.PCIDE is changed 0 -> 1, there is no need to flush the TLB
+>  	 * according to the SDM; however, stale prev_roots could be reused
+>  	 * incorrectly in the future after a MOV to CR3 with NOFLUSH=1, so we
+> -	 * free them all.  KVM_REQ_MMU_RELOAD is fit for the both cases; it
+> -	 * is slow, but changing CR4.PCIDE is a rare case.
+> -	 *
+> -	 * If CR4.PGE is changed, the guest TLB must be flushed.
+> -	 *
+> -	 * Note: resetting MMU is a superset of KVM_REQ_MMU_RELOAD and
+> -	 * KVM_REQ_MMU_RELOAD is a superset of KVM_REQ_TLB_FLUSH_GUEST, hence
+> -	 * the usage of "else if".
+> +	 * free them all.  This is *not* a superset of KVM_REQ_TLB_FLUSH_GUEST
+> +	 * or KVM_REQ_TLB_FLUSH_CURRENT, because the hardware TLB is not flushed,
+> +	 * so fall through.
+>  	 */
+> -	if ((cr4 ^ old_cr4) & KVM_MMU_CR4_ROLE_BITS)
+> -		kvm_mmu_reset_context(vcpu);
+> -	else if ((cr4 ^ old_cr4) & X86_CR4_PCIDE)
+> +	if (!tdp_enabled &&
+> +	    (cr4 & X86_CR4_PCIDE) && !(old_cr4 & X86_CR4_PCIDE))
+>  		kvm_make_request(KVM_REQ_MMU_RELOAD, vcpu);
+> -	else if ((cr4 ^ old_cr4) & X86_CR4_PGE)
+> -		kvm_make_request(KVM_REQ_TLB_FLUSH_GUEST, vcpu);
+> +
+> +	/*
+> +	 * The TLB has to be flushed for all PCIDs on:
+> +	 * - CR4.PCIDE changed from 1 to 0
+> +	 * - any change to CR4.PGE
+> +	 *
+> +	 * This is a superset of KVM_REQ_TLB_FLUSH_CURRENT.
+> +	 */
+> +	if (((cr4 ^ old_cr4) & X86_CR4_PGE) ||
+> +	    (!(cr4 & X86_CR4_PCIDE) && (old_cr4 & X86_CR4_PCIDE)))
+> +		 kvm_make_request(KVM_REQ_TLB_FLUSH_GUEST, vcpu);
+> +
+> +	/*
+> +	 * The TLB has to be flushed for the current PCID on:
+> +	 * - CR4.SMEP changed from 0 to 1
+> +	 * - any change to CR4.PAE
+> +	 */
+> +	else if (((cr4 ^ old_cr4) & X86_CR4_PAE) ||
+> +		 ((cr4 & X86_CR4_SMEP) && !(old_cr4 & X86_CR4_SMEP)))
+> +		 kvm_make_request(KVM_REQ_TLB_FLUSH_CURRENT, vcpu);
+> +
+>  }
+>  EXPORT_SYMBOL_GPL(kvm_post_set_cr4);
+>  
+> @@ -11323,15 +11343,17 @@ void kvm_vcpu_reset(struct kvm_vcpu *vcpu, bool init_event)
+>  	static_call(kvm_x86_update_exception_bitmap)(vcpu);
+>  
+>  	/*
+> -	 * Reset the MMU context if paging was enabled prior to INIT (which is
+> +	 * A TLB flush is needed if paging was enabled prior to INIT (which is
+>  	 * implied if CR0.PG=1 as CR0 will be '0' prior to RESET).  Unlike the
+>  	 * standard CR0/CR4/EFER modification paths, only CR0.PG needs to be
+>  	 * checked because it is unconditionally cleared on INIT and all other
+>  	 * paging related bits are ignored if paging is disabled, i.e. CR0.WP,
+>  	 * CR4, and EFER changes are all irrelevant if CR0.PG was '0'.
+>  	 */
+> -	if (old_cr0 & X86_CR0_PG)
+> +	if (old_cr0 & X86_CR0_PG) {
+> +		kvm_make_request(KVM_REQ_TLB_FLUSH_GUEST, vcpu);
+>  		kvm_mmu_reset_context(vcpu);
+> +	}
+>  
+>  	/*
+>  	 * Intel's SDM states that all TLB entries are flushed on INIT.  AMD's
+Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Best regards,
+	Maxim Levitsky
+

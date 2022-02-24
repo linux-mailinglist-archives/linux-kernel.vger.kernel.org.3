@@ -2,93 +2,260 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB9AA4C2816
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 10:31:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7092E4C281C
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 10:33:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232509AbiBXJcP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 04:32:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41168 "EHLO
+        id S232683AbiBXJdS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 04:33:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231297AbiBXJcN (ORCPT
+        with ESMTP id S232750AbiBXJdN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 04:32:13 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 086A841FBB
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 01:31:43 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id B72E6212B8;
-        Thu, 24 Feb 2022 09:31:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1645695101; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=/nPvKs1oIrJwWVDpcneKVOW7b7d/cdXeZfU3+c7ooSo=;
-        b=O4QVF+uy/FlVk3fzEES2po7V50s0tZqU1eMi1aeX7+BsS8jsGrmmWQcmv48eHy5k3hxJXu
-        gtaVQsYpEojmMvVya4rCCHCOvSYdYKN1r/5zjAhNjTkCfxGrLnCY5/1VyB5XQfMQomI7Yo
-        nggnnnAYM9+UXUv9PPQLYtLszaeRRi4=
-Received: from suse.cz (unknown [10.100.201.86])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 2682EA3B85;
-        Thu, 24 Feb 2022 09:31:41 +0000 (UTC)
-Date:   Thu, 24 Feb 2022 10:31:40 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     Mike Kravetz <mike.kravetz@oracle.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Zhenguo Yao <yaozhenguo1@gmail.com>,
-        Liu Yuntao <liuyuntao10@huawei.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: Re: [PATCH v2] hugetlb: clean up potential spectre issue warnings
-Message-ID: <YhdQfPuOWNy+S8vt@dhcp22.suse.cz>
-References: <20220218212946.35441-1-mike.kravetz@oracle.com>
- <YhNQf3LUZzNRD7u0@dhcp22.suse.cz>
- <26565cd7-01b0-197c-6ce9-af92f5bc8563@oracle.com>
- <YhSVGPQ6VIQfBZ9o@dhcp22.suse.cz>
- <4bad1923-354d-3858-0339-82df8c090c3f@oracle.com>
- <YhXxXg45loivQF10@dhcp22.suse.cz>
- <d4f8579f-c6a2-2bd5-2b55-63a05b50b0d2@oracle.com>
+        Thu, 24 Feb 2022 04:33:13 -0500
+Received: from smtpbguseast3.qq.com (smtpbguseast3.qq.com [54.243.244.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F01B020A952
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 01:32:41 -0800 (PST)
+X-QQ-mid: bizesmtp88t1645695147tgwdwkrk
+Received: from localhost.localdomain (unknown [58.240.82.166])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Thu, 24 Feb 2022 17:32:03 +0800 (CST)
+X-QQ-SSF: 01400000000000B0F000B00A0000000
+X-QQ-FEAT: ZHWZeLXy+8esjqh9jW/ic4y9x7g7V3PVFwHyCbsFjWvtnbyYVlEAO51fszt3T
+        bHxSjNJkqhDKUPW3TEdys3rX/ZjRS2WriSEw7szpdmFr/wjNCZ3jy56t5N8eNio1rzwavz9
+        g+NrNE0rkbkIglNhcKQPmsFNTM+I/Moj/xIV9pAImVgNztfggHlOmlPsCsIIOZSZVhkpkNL
+        izzDMA51RSzItJVneHxc9/MQE6Z+LIbwQD3tSUqbIjj2t/VxU3jZiT3G/JepSwPApydef8p
+        cl4EL/QX0ywPwrDkNQ+JHzuetTFGg1Qvi/emVHK++mxW5+pUkJqzmjBufyCtfjCv6vAJLzb
+        KDYE1h3DWLL2Qa5JaX4/pPWb0yLeg==
+X-QQ-GoodBg: 2
+From:   Meng Tang <tangmeng@uniontech.com>
+To:     mcgrof@kernel.org, keescook@chromium.org, yzaikin@google.com
+Cc:     nixiaoming@huawei.com, nizhen@uniontech.com,
+        zhanglianjie@uniontech.com, sujiaxun@uniontech.com,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        Meng Tang <tangmeng@uniontech.com>
+Subject: [PATCH] fs/proc: optimize exactly register one ctl_table
+Date:   Thu, 24 Feb 2022 17:32:01 +0800
+Message-Id: <20220224093201.12440-1-tangmeng@uniontech.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d4f8579f-c6a2-2bd5-2b55-63a05b50b0d2@oracle.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:uniontech.com:qybgforeign:qybgforeign6
+X-QQ-Bgrelay: 1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 23-02-22 10:36:55, Mike Kravetz wrote:
-> On 2/23/22 00:33, Michal Hocko wrote:
-> > On Tue 22-02-22 13:53:56, Mike Kravetz wrote:
-> >> On 2/21/22 23:47, Michal Hocko wrote:
-> >> How about adding this note to the commit message?
-> >>
-> >> Note: these routines take a user specified value used as an index ONCE
-> >> during the boot process.  As a result, they can not be used as a general
-> >> method of exploitation.  Code changes are being made to eliminate warnings.
-> > 
-> > This would help but the question whether the change is worth remains.
-> > Does this change have any other advantage than silencing the warning?
-> > 
-> 
-> Silencing the warnings was the primary motivation for the change.  If Dan
-> has a plan to change smatch so that they are silenced for __init functions,
-> then it would be better to not make the changes to use array_index_nospec.
-> 
-> While making the changes, I shuffled the code a little and did not immediately
-> notice that it also 'fixes' an overflow/truncation issue when assigning an
-> unsigned long to int as addressed in [1].  We should probably make this change
-> whether or not we use array_index_nospec to silence warnings.
-> 
-> [1] https://lore.kernel.org/linux-mm/20220209134018.8242-1-liuyuntao10@huawei.com/
+Currently, sysctl is being moved to its own file. But ctl_table
+is quite large(64 bytes per entry) and every array is terminated
+with an empty one. This leads to thar when register exactly one
+ctl_table, we've gone from 64 bytes to 128 bytes.
 
-Yeah, this makes sense to me.
+So, it is obviously the right thing that we need to fix.
+
+In order to avoid compatibility problems, and to be compatible
+with array terminated with an empty one and register exactly one
+ctl_table, add the register_one variable in the ctl_table
+structure to fix it.
+
+When we register exactly one table, we only need to add
+"table->register = true" to avoid gone from 64 bytes to 128 bytes.
+
+Signed-off-by: Meng Tang <tangmeng@uniontech.com>
+---
+ fs/proc/proc_sysctl.c  | 58 +++++++++++++++++++++++++++++++++++++++---
+ include/linux/sysctl.h |  1 +
+ 2 files changed, 56 insertions(+), 3 deletions(-)
+
+diff --git a/fs/proc/proc_sysctl.c b/fs/proc/proc_sysctl.c
+index 7d9cfc730bd4..9ecd5c87e8dd 100644
+--- a/fs/proc/proc_sysctl.c
++++ b/fs/proc/proc_sysctl.c
+@@ -215,16 +215,24 @@ static void init_header(struct ctl_table_header *head,
+ 	INIT_HLIST_HEAD(&head->inodes);
+ 	if (node) {
+ 		struct ctl_table *entry;
+-		for (entry = table; entry->procname; entry++, node++)
++		for (entry = table; entry->procname; entry++, node++) {
+ 			node->header = head;
++
++			if (entry->register_one)
++				break;
++		}
+ 	}
+ }
+ 
+ static void erase_header(struct ctl_table_header *head)
+ {
+ 	struct ctl_table *entry;
+-	for (entry = head->ctl_table; entry->procname; entry++)
++	for (entry = head->ctl_table; entry->procname; entry++) {
+ 		erase_entry(head, entry);
++
++		if (entry->register_one)
++			break;
++	}
+ }
+ 
+ static int insert_header(struct ctl_dir *dir, struct ctl_table_header *header)
+@@ -252,6 +260,9 @@ static int insert_header(struct ctl_dir *dir, struct ctl_table_header *header)
+ 		err = insert_entry(header, entry);
+ 		if (err)
+ 			goto fail;
++
++		if (entry->register_one)
++			break;
+ 	}
+ 	return 0;
+ fail:
+@@ -1159,6 +1170,9 @@ static int sysctl_check_table(const char *path, struct ctl_table *table)
+ 		if ((table->mode & (S_IRUGO|S_IWUGO)) != table->mode)
+ 			err |= sysctl_err(path, table, "bogus .mode 0%o",
+ 				table->mode);
++
++		if (table->register_one)
++			break;
+ 	}
+ 	return err;
+ }
+@@ -1177,6 +1191,9 @@ static struct ctl_table_header *new_links(struct ctl_dir *dir, struct ctl_table
+ 	for (entry = table; entry->procname; entry++) {
+ 		nr_entries++;
+ 		name_bytes += strlen(entry->procname) + 1;
++
++		if (entry->register_one)
++			break;
+ 	}
+ 
+ 	links = kzalloc(sizeof(struct ctl_table_header) +
+@@ -1199,6 +1216,9 @@ static struct ctl_table_header *new_links(struct ctl_dir *dir, struct ctl_table
+ 		link->mode = S_IFLNK|S_IRWXUGO;
+ 		link->data = link_root;
+ 		link_name += len;
++
++		if (entry->register_one)
++			break;
+ 	}
+ 	init_header(links, dir->header.root, dir->header.set, node, link_table);
+ 	links->nreg = nr_entries;
+@@ -1218,6 +1238,15 @@ static bool get_links(struct ctl_dir *dir,
+ 		link = find_entry(&head, dir, procname, strlen(procname));
+ 		if (!link)
+ 			return false;
++
++		if (entry->register_one) {
++			if (S_ISDIR(link->mode) && S_ISDIR(entry->mode))
++				break;
++			if (S_ISLNK(link->mode) && (link->data == link_root))
++				break;
++			return false;
++		}
++
+ 		if (S_ISDIR(link->mode) && S_ISDIR(entry->mode))
+ 			continue;
+ 		if (S_ISLNK(link->mode) && (link->data == link_root))
+@@ -1230,6 +1259,8 @@ static bool get_links(struct ctl_dir *dir,
+ 		const char *procname = entry->procname;
+ 		link = find_entry(&head, dir, procname, strlen(procname));
+ 		head->nreg++;
++		if (entry->register_one)
++			break;
+ 	}
+ 	return true;
+ }
+@@ -1295,6 +1326,8 @@ static int insert_links(struct ctl_table_header *head)
+  *
+  * mode - the file permissions for the /proc/sys file
+  *
++ * register_one - set to true when exactly register one ctl_table
++ *
+  * child - must be %NULL.
+  *
+  * proc_handler - the text handler routine (described below)
+@@ -1329,9 +1362,13 @@ struct ctl_table_header *__register_sysctl_table(
+ 	struct ctl_node *node;
+ 	int nr_entries = 0;
+ 
+-	for (entry = table; entry->procname; entry++)
++	for (entry = table; entry->procname; entry++) {
+ 		nr_entries++;
+ 
++		if (entry->register_one)
++			break;
++	}
++
+ 	header = kzalloc(sizeof(struct ctl_table_header) +
+ 			 sizeof(struct ctl_node)*nr_entries, GFP_KERNEL);
+ 	if (!header)
+@@ -1461,6 +1498,9 @@ static int count_subheaders(struct ctl_table *table)
+ 			nr_subheaders += count_subheaders(entry->child);
+ 		else
+ 			has_files = 1;
++
++		if (entry->register_one)
++			break;
+ 	}
+ 	return nr_subheaders + has_files;
+ }
+@@ -1480,6 +1520,9 @@ static int register_leaf_sysctl_tables(const char *path, char *pos,
+ 			nr_dirs++;
+ 		else
+ 			nr_files++;
++
++		if (entry->register_one)
++			break;
+ 	}
+ 
+ 	files = table;
+@@ -1497,6 +1540,9 @@ static int register_leaf_sysctl_tables(const char *path, char *pos,
+ 				continue;
+ 			*new = *entry;
+ 			new++;
++
++			if (entry->register_one)
++				break;
+ 		}
+ 	}
+ 
+@@ -1532,6 +1578,9 @@ static int register_leaf_sysctl_tables(const char *path, char *pos,
+ 		pos[0] = '\0';
+ 		if (err)
+ 			goto out;
++
++		if (entry->register_one)
++			break;
+ 	}
+ 	err = 0;
+ out:
+@@ -1686,6 +1735,9 @@ static void put_links(struct ctl_table_header *header)
+ 			sysctl_print_dir(parent);
+ 			pr_cont("%s\n", name);
+ 		}
++
++		if (entry->register_one)
++			break;
+ 	}
+ }
+ 
+diff --git a/include/linux/sysctl.h b/include/linux/sysctl.h
+index 6353d6db69b2..889c995d8a08 100644
+--- a/include/linux/sysctl.h
++++ b/include/linux/sysctl.h
+@@ -134,6 +134,7 @@ struct ctl_table {
+ 	void *data;
+ 	int maxlen;
+ 	umode_t mode;
++	bool register_one;		/* Exactly register one ctl_table*/
+ 	struct ctl_table *child;	/* Deprecated */
+ 	proc_handler *proc_handler;	/* Callback for text formatting */
+ 	struct ctl_table_poll *poll;
 -- 
-Michal Hocko
-SUSE Labs
+2.20.1
+
+
+

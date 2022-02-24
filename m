@@ -2,93 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 537724C216C
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 02:57:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FE704C2139
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 02:43:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229925AbiBXB5t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 20:57:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42628 "EHLO
+        id S229704AbiBXBm2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 20:42:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229889AbiBXB5l (ORCPT
+        with ESMTP id S229650AbiBXBmZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 20:57:41 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91DE0FEB24;
-        Wed, 23 Feb 2022 17:57:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645667829; x=1677203829;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=d3w1+5OFGFVTtbNZejTZ3o12Tnm69aZayQDmW4rtE6M=;
-  b=Sdt9mEy6nq8f4K5L3U4juL7LTVPfMAGlQlOXQbWc4jqw/oZ88G+aV/EV
-   xFM8HZZhjuluRR5d2in/4xhXh4iLwvg/NuZW2JXMyiKnoZEmlELtnG6II
-   jRC5Qdn/u0b5J7EHDP69ZFgcbqTnO+uf7SW0/ACkFj4ypYqpTzG8iB266
-   KVEkLR9v58hvT4sHeezBDcPEthz9qgjlRxmG5k+UdpomMi7lPPseGS/lm
-   ZfN+BYHkWgvrxDXut4ZG7q1UpIE3aIy4ESwPzxJxs3duPaL9OgfPu+l1a
-   bzAvMjXEM/NERaf4xk+ixd7NPg0dMinNTIL+CIoKLRpmjRffvNNiVWIq0
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10267"; a="249700067"
-X-IronPort-AV: E=Sophos;i="5.88,392,1635231600"; 
-   d="scan'208";a="249700067"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2022 17:01:56 -0800
-X-IronPort-AV: E=Sophos;i="5.88,392,1635231600"; 
-   d="scan'208";a="707259145"
-Received: from smile.fi.intel.com ([10.237.72.59])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2022 17:01:54 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1nN2VE-007dta-JA;
-        Thu, 24 Feb 2022 03:01:04 +0200
-Date:   Thu, 24 Feb 2022 03:00:59 +0200
-From:   'Andy Shevchenko' <andriy.shevchenko@linux.intel.com>
-To:     David Laight <David.Laight@aculab.com>
-Cc:     Jason Gunthorpe <jgg@ziepe.ca>,
-        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Mike Marciniszyn <mike.marciniszyn@cornelisnetworks.com>,
-        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>
-Subject: Re: [PATCH v1 1/1] IB/hfi1: Don't cast parameter in bit operations
-Message-ID: <YhbYy7BRAw59V1It@smile.fi.intel.com>
-References: <20220223185353.51370-1-andriy.shevchenko@linux.intel.com>
- <e39730af26cc4a4d944fa3205fa17b3c@AcuMS.aculab.com>
- <Yha1bIYZpCWZIowl@smile.fi.intel.com>
- <efb8c82c626a4c7d8a9f781d63289343@AcuMS.aculab.com>
+        Wed, 23 Feb 2022 20:42:25 -0500
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13EFF36165;
+        Wed, 23 Feb 2022 17:41:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1645666916; x=1677202916;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=Kt6QjyLYTRwOzZP9VnYhf/8ijLxJLwLct45EpDi/FbI=;
+  b=e44unWK+leFg2HKumixyVSRMsUotVMEW9UpzLnpFdW4Lan0wofscLHN8
+   +VThvWwhRaSj5bYN6C1r+1GpH6kN9k7JypVgqo2wacra/iP0yPMlZuCDJ
+   L73ODYqSXtJuCSf7n4u9/vzNCA3EOkAbEcaiOskloA5WB2wmaxYA7vyJQ
+   I=;
+Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 23 Feb 2022 17:01:49 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2022 17:01:49 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.15; Wed, 23 Feb 2022 17:01:49 -0800
+Received: from [10.48.243.226] (10.49.16.6) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.15; Wed, 23 Feb
+ 2022 17:01:48 -0800
+Message-ID: <3f408c80-cabf-5ba2-2014-2eb0550b73f9@quicinc.com>
+Date:   Wed, 23 Feb 2022 17:01:48 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <efb8c82c626a4c7d8a9f781d63289343@AcuMS.aculab.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [PATCH 6/6][next] ath6kl: wmi: Replace one-element array with
+ flexible-array member in struct wmi_aplist_event
+Content-Language: en-US
+To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        <linux-wireless@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, <netdev@vger.kernel.org>,
+        <linux-hardening@vger.kernel.org>
+References: <cover.1645583264.git.gustavoars@kernel.org>
+ <c2116e10dd61869e17fa40a96f1e07a415820575.1645583264.git.gustavoars@kernel.org>
+From:   Jeff Johnson <quic_jjohnson@quicinc.com>
+In-Reply-To: <c2116e10dd61869e17fa40a96f1e07a415820575.1645583264.git.gustavoars@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.49.16.6]
+X-ClientProxiedBy: nalasex01b.na.qualcomm.com (10.47.209.197) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 23, 2022 at 10:50:19PM +0000, David Laight wrote:
-> From: 'Andy Shevchenko'
-> > Sent: 23 February 2022 22:30
-> > On Wed, Feb 23, 2022 at 09:44:32PM +0000, David Laight wrote:
-> > > From: Andy Shevchenko
-> > > > Sent: 23 February 2022 18:54
-
-...
-
-> > Either way it wastes cycles, the outcome depends on the actual distribution of
-> > the interrupts across the bitmap. If it gathered closer to the beginning of the
-> > bitmap, my code wins, otherwise the original ones.
+On 2/22/2022 6:39 PM, Gustavo A. R. Silva wrote:
+> Replace one-element array with flexible-array member in struct
+> wmi_aplist_event.
 > 
-> The loop in bitmap_empty() will kill you - even if the first word in non-zero.
+> It's also worth noting that due to the flexible array transformation,
+> the size of struct wmi_aplist_event changed (now the size is 8-byte
+> smaller), and in order to preserve the logic of before the transformation,
+> the following change is needed:
+> 
+>          -       if (len < sizeof(struct wmi_aplist_event))
+>          +       if (len <= sizeof(struct wmi_aplist_event))
+> 
+> sizeof(struct wmi_aplist_event) before the flex-array transformation:
+> 
+> struct wmi_aplist_event {
+> 	u8                         ap_list_ver;          /*     0     1 */
+> 	u8                         num_ap;               /*     1     1 */
+> 	union wmi_ap_info          ap_list[1];           /*     2     8 */
+> 
+> 	/* size: 10, cachelines: 1, members: 3 */
+> 	/* last cacheline: 10 bytes */
+> };
+> 
+> sizeof(struct wmi_aplist_event) after the flex-array transformation:
+> 
+> struct wmi_aplist_event {
+> 	u8                         ap_list_ver;          /*     0     1 */
+> 	u8                         num_ap;               /*     1     1 */
+> 	union wmi_ap_info          ap_list[];            /*     2     0 */
+> 
+> 	/* size: 2, cachelines: 1, members: 3 */
+> 	/* last cacheline: 2 bytes */
+> };
+> 
+> Also, make use of the struct_size() helper and remove unneeded variable
+> ap_info_entry_size.
+> 
+> This issue was found with the help of Coccinelle and audited and fixed,
+> manually.
+> 
+> Link: https://www.kernel.org/doc/html/v5.16/process/deprecated.html#zero-length-and-one-element-arrays
+> Link: https://github.com/KSPP/linux/issues/79
+> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+> ---
+> Hi!
+> 
+> It'd be great if someone can confirm or comment on the following
+> changes described in the changelog text:
+> 
+>          -       if (len < sizeof(struct wmi_aplist_event))
+>          +       if (len <= sizeof(struct wmi_aplist_event))
+> 
+> Thanks
+> 
+>   drivers/net/wireless/ath/ath6kl/wmi.c | 7 ++-----
+>   drivers/net/wireless/ath/ath6kl/wmi.h | 2 +-
+>   2 files changed, 3 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/net/wireless/ath/ath6kl/wmi.c b/drivers/net/wireless/ath/ath6kl/wmi.c
+> index 645fb6cae3be..484d37e66ce6 100644
+> --- a/drivers/net/wireless/ath/ath6kl/wmi.c
+> +++ b/drivers/net/wireless/ath/ath6kl/wmi.c
+> @@ -1750,23 +1750,20 @@ static int ath6kl_wmi_snr_threshold_event_rx(struct wmi *wmi, u8 *datap,
+>   
+>   static int ath6kl_wmi_aplist_event_rx(struct wmi *wmi, u8 *datap, int len)
+>   {
+> -	u16 ap_info_entry_size;
+>   	struct wmi_aplist_event *ev = (struct wmi_aplist_event *) datap;
+>   	struct wmi_ap_info_v1 *ap_info_v1;
+>   	u8 index;
+>   
+> -	if (len < sizeof(struct wmi_aplist_event) ||
+> +	if (len <= sizeof(struct wmi_aplist_event) ||
 
-What loop? Did you really look into implementation of bitmap_empty()?
+again IMO the original code is preferred since then we can handle a 
+0-length list
 
--- 
-With Best Regards,
-Andy Shevchenko
+>   	    ev->ap_list_ver != APLIST_VER1)
+>   		return -EINVAL;
+>   
+> -	ap_info_entry_size = sizeof(struct wmi_ap_info_v1);
+>   	ap_info_v1 = (struct wmi_ap_info_v1 *) ev->ap_list;
+>   
+>   	ath6kl_dbg(ATH6KL_DBG_WMI,
+>   		   "number of APs in aplist event: %d\n", ev->num_ap);
+>   
+> -	if (len < (int) (sizeof(struct wmi_aplist_event) +
+> -			 (ev->num_ap - 1) * ap_info_entry_size))
+> +	if (len < struct_size(ev, ap_list, ev->num_ap))
 
+and unlike the prior patches in this set, at least the original code 
+here had logic to validate len against the metadata that describes the 
+number of entries in the list. so this change is good, and also supports 
+a 0-length list
 
+>   		return -EINVAL;
+>   
+>   	/* AP list version 1 contents */
+> diff --git a/drivers/net/wireless/ath/ath6kl/wmi.h b/drivers/net/wireless/ath/ath6kl/wmi.h
+> index 6a7fc07cd9aa..a9732660192a 100644
+> --- a/drivers/net/wireless/ath/ath6kl/wmi.h
+> +++ b/drivers/net/wireless/ath/ath6kl/wmi.h
+> @@ -1957,7 +1957,7 @@ union wmi_ap_info {
+>   struct wmi_aplist_event {
+>   	u8 ap_list_ver;
+>   	u8 num_ap;
+> -	union wmi_ap_info ap_list[1];
+> +	union wmi_ap_info ap_list[];
+>   } __packed;
+>   
+>   /* Developer Commands */
+
+whether or not you modify the length check consider this:
+Reviewed-by: Jeff Johnson <quic_jjohnson@quicinc.com>

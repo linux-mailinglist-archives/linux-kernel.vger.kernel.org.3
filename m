@@ -2,183 +2,246 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D17E4C2CF2
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 14:27:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B2704C2CEC
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 14:25:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233870AbiBXN0e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 08:26:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34192 "EHLO
+        id S234811AbiBXNZk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 08:25:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231328AbiBXN0c (ORCPT
+        with ESMTP id S234757AbiBXNZi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 08:26:32 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADF1215B3FE;
-        Thu, 24 Feb 2022 05:26:01 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 625F8212BE;
-        Thu, 24 Feb 2022 13:26:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1645709160;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=yJlK5ujeFz45Ymry2OtkURFYaywUnISwHUMuFfLs3y8=;
-        b=QyAZC3JZssy+GcwXULtKx6hz5dLZM10ezQnTF+x+DC8+apBie8ahtihAxQet8p+lEnaukk
-        EoA5FCCHfJ0iO1RKMfNYLBi3MoNzTHA/V4zv4pY80FbqSZLuL2i4WWskP1p3iF5Cyqik53
-        p726ubiwxzU6vwG+vLinM48iBELE9L0=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1645709160;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=yJlK5ujeFz45Ymry2OtkURFYaywUnISwHUMuFfLs3y8=;
-        b=8mdsY++ZKa7KimYyKQukP0IAyc40vPsn/dmMFUd/0Soc0EPJxzh5pdO60s62QHpDY1L7zI
-        eWpjHRipLAkYzBCw==
-Received: from ds.suse.cz (ds.suse.cz [10.100.12.205])
-        by relay2.suse.de (Postfix) with ESMTP id 58174A3B89;
-        Thu, 24 Feb 2022 13:25:59 +0000 (UTC)
-Received: by ds.suse.cz (Postfix, from userid 10065)
-        id BE31CDA818; Thu, 24 Feb 2022 14:22:10 +0100 (CET)
-Date:   Thu, 24 Feb 2022 14:22:10 +0100
-From:   David Sterba <dsterba@suse.cz>
-To:     Sweet Tea Dorminy <sweettea-kernel@dorminy.me>
-Cc:     Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>, linux-btrfs@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel-team@fb.com
-Subject: Re: [PATCH v4] btrfs: add fs state details to error messages.
-Message-ID: <20220224132210.GS12643@twin.jikos.cz>
-Reply-To: dsterba@suse.cz
-Mail-Followup-To: dsterba@suse.cz,
-        Sweet Tea Dorminy <sweettea-kernel@dorminy.me>,
-        Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>, linux-btrfs@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel-team@fb.com
-References: <a059920460fe13f773fd9a2e870ceb9a8e3a105a.1645644489.git.sweettea-kernel@dorminy.me>
+        Thu, 24 Feb 2022 08:25:38 -0500
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 361E915F600;
+        Thu, 24 Feb 2022 05:25:07 -0800 (PST)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 21ODOhd3119358;
+        Thu, 24 Feb 2022 07:24:43 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1645709083;
+        bh=3wlxGPEqcUuLxhL4nA2EjEmwu/ulVsriqBiiWQlZbiQ=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=REdYTWA4Bl26tHubmkAhA7VvKGlGdo3F8cydFxGi39QSZNKGFhelll9BxPiVXbXCr
+         UiO6A0uH1J38EnSlZlgSwI96hZlFFIZu5KrcPL2OU6tog0qWDRu7we38PCeO4eWU6V
+         CKS4aA0s/6r/JkuoMAUEQgGm5xpU8fIsePcFbRTU=
+Received: from DLEE112.ent.ti.com (dlee112.ent.ti.com [157.170.170.23])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 21ODOhjV096226
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 24 Feb 2022 07:24:43 -0600
+Received: from DLEE113.ent.ti.com (157.170.170.24) by DLEE112.ent.ti.com
+ (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Thu, 24
+ Feb 2022 07:24:41 -0600
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE113.ent.ti.com
+ (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Thu, 24 Feb 2022 07:24:41 -0600
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 21ODOfps077696;
+        Thu, 24 Feb 2022 07:24:41 -0600
+Date:   Thu, 24 Feb 2022 18:54:40 +0530
+From:   Pratyush Yadav <p.yadav@ti.com>
+To:     Michael Walle <michael@walle.cc>
+CC:     <Tudor.Ambarus@microchip.com>, <broonie@kernel.org>,
+        <miquel.raynal@bootlin.com>, <richard@nod.at>, <vigneshr@ti.com>,
+        <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        <linux-spi@vger.kernel.org>, <Nicolas.Ferre@microchip.com>,
+        <zhengxunli@mxic.com.tw>, <jaimeliao@mxic.com.tw>
+Subject: Re: [PATCH 0/4] spi-mem: Allow specifying the byte order in DTR mode
+Message-ID: <20220224132440.pi55jefug7ntzgjq@ti.com>
+References: <44f655d027b49b87065915f6ba2744d2@walle.cc>
+ <81d7c569-d6c2-9167-e007-eda72f34842b@microchip.com>
+ <23fbbf2dde387e3832b4ca23d46816c0@walle.cc>
+ <7cd74ef3-5a7d-4e65-3436-ee3399ca56a3@microchip.com>
+ <e39d06684b8f3a63103f40f0e99e030e@walle.cc>
+ <3cd510ad-a6ab-d4a0-92e3-9156a0c7ddbf@microchip.com>
+ <20220223183849.xcwciv2ybnkdnauk@ti.com>
+ <6eb179ec-0b12-de30-829e-83ec6b964f21@microchip.com>
+ <779069a1-7389-ab70-9f03-81090d0600ba@microchip.com>
+ <a85e2d1862cfff477e97c39509b2b74d@walle.cc>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <a059920460fe13f773fd9a2e870ceb9a8e3a105a.1645644489.git.sweettea-kernel@dorminy.me>
-User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <a85e2d1862cfff477e97c39509b2b74d@walle.cc>
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 23, 2022 at 02:38:06PM -0500, Sweet Tea Dorminy wrote:
-> When a filesystem goes read-only due to an error, multiple errors tend
-> to be reported, some of which are knock-on failures. Logging fs_states,
-> in btrfs_handle_fs_error() and btrfs_printk() helps distinguish the
-> first error from subsequent messages which may only exist due to an
-> error state.
+On 24/02/22 10:37AM, Michael Walle wrote:
+> Am 2022-02-24 07:37, schrieb Tudor.Ambarus@microchip.com:
+> > On 2/24/22 08:08, Tudor.Ambarus@microchip.com wrote:
+> > > EXTERNAL EMAIL: Do not click links or open attachments unless you
+> > > know the content is safe
+> > > 
+> > > On 2/23/22 20:38, Pratyush Yadav wrote:
+> > > > EXTERNAL EMAIL: Do not click links or open attachments unless
+> > > > you know the content is safe
+> > > > 
+> > > > Hi Tudor,
+> > > > 
+> > > > On 22/02/22 02:43PM, Tudor.Ambarus@microchip.com wrote:
+> > > > > On 2/22/22 16:27, Michael Walle wrote:
+> > > > > > EXTERNAL EMAIL: Do not click links or open attachments
+> > > > > > unless you know the content is safe
+> > > > > > 
+> > > > > > Am 2022-02-22 15:23, schrieb Tudor.Ambarus@microchip.com:
+> > > > > > > On 2/22/22 16:13, Michael Walle wrote:
+> > > > > > > > EXTERNAL EMAIL: Do not click links or open
+> > > > > > > > attachments unless you know
+> > > > > > > > the content is safe
+> > > > > > > > 
+> > > > > > > > Am 2022-02-22 14:54, schrieb Tudor.Ambarus@microchip.com:
+> > > > > > > > > On 2/21/22 09:44, Michael Walle wrote:
+> > > > > > > > > > EXTERNAL EMAIL: Do not click links or
+> > > > > > > > > > open attachments unless you
+> > > > > > > > > > know
+> > > > > > > > > > the content is safe
+> > > > > > > > > > 
+> > > > > > > > > > Am 2022-02-18 15:58, schrieb Tudor Ambarus:
+> > > > > > > > > > > Fortunately there are controllers
+> > > > > > > > > > > that can swap back the bytes at
+> > > > > > > > > > > runtime, fixing the endiannesses.
+> > > > > > > > > > > Provide
+> > > > > > > > > > > a way for the upper layers to
+> > > > > > > > > > > specify the byte order in DTR mode.
+> > > > > > > > > > 
+> > > > > > > > > > Are there any patches for the
+> > > > > > > > > > atmel-quadspi yet? What happens if
+> > > > > > > > > 
+> > > > > > > > > not public, but will publish them these days.
+> > > > > > > > > 
+> > > > > > > > > > the controller doesn't support it? Will there be a software
+> > > > > > > > > > fallback?
+> > > > > > > > > 
+> > > > > > > > > no need for a fallback, the controller can ignore
+> > > > > > > > > op->data.dtr_bswap16
+> > > > > > > > > if
+> > > > > > > > > it can't swap bytes.
+> > > > > > > > 
+> > > > > > > > I don't understand. If the controller doesn't
+> > > > > > > > swap the 16bit values,
+> > > > > > > > you will read the wrong content, no?
+> > > > > > > > 
+> > > > > > > 
+> > > > > > > In linux no, because macronix swaps bytes on a 2
+> > > > > > > byte boundary both on
+> > > > > > > reads and on page program. The problem is when you
+> > > > > > > mix 8D-8D-8D mode
+> > > > > > > and
+> > > > > > > 1-1-1 mode along the boot stages. Let's assume you write all boot
+> > > > > > > binaries
+> > > > > > > in 1-1-1 mode. When reaching u-boot if you enable
+> > > > > > > 8D-8D-8D mode, when
+> > > > > > > u-boot
+> > > > > > > will try to get the kernel it will fail, as the
+> > > > > > > flash swaps the bytes
+> > > > > > > compared
+> > > > > > > to what was written with 1-1-1 mode. You write D0 D1
+> > > > > > > D2 D3 in 1-1-1
+> > > > > > > mode and
+> > > > > > > when reaching u-boot you will read D1 D0 D3 D2 and
+> > > > > > > it will mess the
+> > > > > > > kernel image.
+> > > > > > 
+> > > > > > But you have to consider also 3rd parties, like an
+> > > > > > external programmer
+> > > > > > or
+> > > > > 
+> > > > > Why? If you use the same mode when reading and writing,
+> > > > > everything is fine.
+> > > > > I'm not sure what's your suggestion here.
+> > > > 
+> > > > So our stance here is that we don't care about external programs?>
+> > > > If that is the case then why bother with all this anyway? Since
+> > > > the swap
+> > > > happens at both page program and read, what you write is what
+> > > > you read
+> > > > back. Who cares the order stored in the actual flash memory as
+> > > > long as
+> > > > the data read is correct?
+> > > > 
+> > > > If we do care about external programs, then what would happen if the
+> > > > external program writes data in 8D-8D-8D mode _without_ swapping the
+> > > > bytes? This would also cause data corruption. You can't control what
+> > > > they mode they use, and you can't detect it later either.
+> > > > 
+> > > > I think there is no winning here. You just have to say that external
+> > > > programs should write in 8D-8D-8D mode or it won't boot.
 > 
-> Under the new format, most initial errors will look like:
-> `BTRFS: error (device loop0) in ...`
-> while subsequent errors will begin with:
-> `error (device loop0: state E) in ...`
-> 
-> An initial transaction abort error will look like
-> `error (device loop0: state A) in ...`
-> and subsequent messages will contain
-> `(device loop0: state EA) in ...`
-> 
-> Signed-off-by: Sweet Tea Dorminy <sweettea-kernel@dorminy.me>
+> IMHO it should just work that you can use 1S-1S-1S mode and 8D-8D-8D on the
+> same flash. After all, that is Tudor's use case. The ROM access the flash
+> in single bit mode and linux in 8D-8D-8D mode. Maybe u-boot will use quad
 
-Added to misc-next with some minor updates, thanks.
+But you don't know that ROM will always access the flash in single bit 
+mode. For example, ROM on some TI SoC can read SFDP and use 8D-8D-8D 
+mode for reading images from flash. If you want to flash data from 
+Linux, and it byte swaps, ROM won't be able to read the images properly.
 
-> ---
-> v4:
->   - Adjusted state translation table to contain chars instead of
->     strings.
-> 
-> v3:
->   - Reworked btrfs_state_to_string to use an array mapping all states
->     to various error chars, or nothing, explicitly. Added error logging
->     for more states, as requested.
->   - Consolidated buffer length definition
->   - ttps://lore.kernel.org/linux-btrfs/8a2a73ab4b48a4e73d24cf7f10cc0fe245d50a84.1645562216.git.sweettea-kernel@dorminy.me/
-> 
-> v2: 
->   - Changed btrfs_state_to_string() for clarity
->   - Removed superfluous whitespace change
->   - https://lore.kernel.org/linux-btrfs/084c136c6bb2d20ca0e91af7ded48306d52bb910.1645210326.git.sweettea-kernel@dorminy.me/
-> 
-> v1:
->   - https://lore.kernel.org/linux-btrfs/20220212191042.94954-1-sweettea-kernel@dorminy.me/
-> 
->  fs/btrfs/ctree.h |  2 ++
->  fs/btrfs/super.c | 62 +++++++++++++++++++++++++++++++++++++++++-------
->  2 files changed, 56 insertions(+), 8 deletions(-)
-> 
-> diff --git a/fs/btrfs/ctree.h b/fs/btrfs/ctree.h
-> index 8992e0096163..3db337cd015a 100644
-> --- a/fs/btrfs/ctree.h
-> +++ b/fs/btrfs/ctree.h
-> @@ -148,6 +148,8 @@ enum {
->  
->  	/* Indicates there was an error cleaning up a log tree. */
->  	BTRFS_FS_STATE_LOG_CLEANUP_ERROR,
-> +
-> +	BTRFS_FS_STATE_COUNT,
->  };
->  
->  #define BTRFS_BACKREF_REV_MAX		256
-> diff --git a/fs/btrfs/super.c b/fs/btrfs/super.c
-> index 4d947ba32da9..7ef6a3e494d0 100644
-> --- a/fs/btrfs/super.c
-> +++ b/fs/btrfs/super.c
-> @@ -66,6 +66,46 @@ static struct file_system_type btrfs_root_fs_type;
->  
->  static int btrfs_remount(struct super_block *sb, int *flags, char *data);
->  
-> +#define STATE_STRING_PREFACE ": state "
-> +#define STATE_STRING_BUF_LEN \
-> +	(sizeof(STATE_STRING_PREFACE) + BTRFS_FS_STATE_COUNT)
-> +
-> +/* Characters to print to indicate error conditions. RO is not an error. */
-> +static const char fs_state_chars[] = {
-> +	[BTRFS_FS_STATE_ERROR]			= 'E',
-> +	[BTRFS_FS_STATE_REMOUNTING]		= 'M',
-> +	[BTRFS_FS_STATE_RO]			= 0,
-> +	[BTRFS_FS_STATE_TRANS_ABORTED]		= 'A',
-> +	[BTRFS_FS_STATE_DEV_REPLACING]		= 'P',
-> +	[BTRFS_FS_STATE_DUMMY_FS_INFO]		= 0,
-> +	[BTRFS_FS_STATE_NO_CSUMS]		= 0,
+This can only work when everything that reads/writes in 8D mode does 
+byte swapping. Otherwise it will lead to a mess where data is read 
+correctly by some software but not by some other software. I don't know 
+how practical it is to make this assumption.
 
-I've added 'C' for this, as it's an interesting state (data checksums
-not verified) and renamed the device replace to 'R'.
+> mode in between. All of these accesses should return the same flash
+> content.
+> 
+> > > How about swapping the bytes just at user request? Maybe with a
+> > > Kconfig
+> > > option.
+> > 
+> > Michael has suggested on #irc to always swap the bytes: if the SPI
+> > controller
+> > can't do it, to do it in software at SPI NOR level. I don't know what to
+> > say
+> > about this, because JEDEC216 just informs the reader I guess:
+> > "Byte order of 16-bit words is swapped when read in 8D-8D-8D mode
+> > compared to
+> > 1-1-1 mode.", this doesn't look like a hard request. The downside to
+> > doing
+> > the swapping in software is performance penalty which will make macronix
+> > users have second thoughts. I don't have a strong opinion, but I lean
+> > towards
+> > doing the swap just at user request, regardless if I do it via the SPI
+> > controller
+> > or in software.
+> 
+> Just having and opt-in will be a mess in the future with flashes containing
+> byte swapped content and we can't even fix it and we will have to live with
+> that forever. IMHO right now is the best time to circumvent that scenario.
+> I don't have anything against make it user configurable, but it should be
+> an opt-out.
+> 
+> I haven't looked at any controllers who can do 8D-8D-8D accesses, maybe most
+> of them can do the swapping on their own? So if you don't want to support a
 
-> +	[BTRFS_FS_STATE_LOG_CLEANUP_ERROR]	= 'L',
-> +};
-> +
-> +static void btrfs_state_to_string(const struct btrfs_fs_info *info, char *buf)
-> +{
-> +	unsigned int bit;
-> +	unsigned int states_printed = 0;
+I checked the datasheet of the Cadence Quadspi (spi-cadence-quadspi.c) 
+controller. I don't see any such option.
 
-This could be a simple bool indicator.
+> software fallback, then we should just say this mode isn't supported if
+> the controller can't do the byte swapping and we fall back to a slower mode.
 
-> +	char *curr = buf;
-> +
-> +	memcpy(curr, STATE_STRING_PREFACE, sizeof(STATE_STRING_PREFACE));
-> +	curr += sizeof(STATE_STRING_PREFACE) - 1;
-> +
-> +	for_each_set_bit(bit, &info->fs_state, sizeof(info->fs_state)) {
-> +		WARN_ON_ONCE(bit >= BTRFS_FS_STATE_COUNT);
-> +		if ((bit < BTRFS_FS_STATE_COUNT) && fs_state_chars[bit]) {
-> +			*curr++ = fs_state_chars[bit];
-> +			states_printed++;
-> +		}
-> +	}
-> +
-> +	/* If no states were printed, reset the buffer */
-> +	if (!states_printed)
-> +		curr = buf;
-> +
-> +	*curr++ = '\0';
-> +}
+From all I understand of this, it looks to me that this can't really be 
+solved completely. If you want to allow compatibility with 1S-1S-1S mode 
+then you lose compatibility with 8D-8D-8D software that doesn't do this 
+swap. So the question really is which one we consider "more important". 
+In my eyes the choice is arbitrary.
+
+But I am not convinced that adding a Kconfig option is the right thing 
+to do. I think that would cause too much confusion. It is entirely 
+possible that your data gets corrupted going from one kernel version to 
+another depending on how it was compiled. Us SPI NOR developers know 
+this tiny detail but other people won't, and it would be hard to explain 
+this to them.
+
+-- 
+Regards,
+Pratyush Yadav
+Texas Instruments Inc.

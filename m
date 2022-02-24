@@ -2,108 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00FB14C2085
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 01:15:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 423C64C208B
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 01:20:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245223AbiBXAPY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 19:15:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40928 "EHLO
+        id S245234AbiBXAVP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 19:21:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239973AbiBXAPX (ORCPT
+        with ESMTP id S243058AbiBXAVN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 19:15:23 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27515606E4
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 16:14:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645661695; x=1677197695;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=zQUmlgChyzMbyYMRmey7n1zKR+Div7iBoiP6Wm1FY8s=;
-  b=fK/4m2bye6uav+TQjOLdDnhMJp9Yccth7Hso8QNA76gBELit/Ey7XmCv
-   f9SnjEm+yxaV+SAj+K0dhmn6mte35DBXHPtvbKfE8ZBHAVkvK5bbf2VZQ
-   iGBx0m5lJVfyJxCLfACjzD0uaZRRNZkyioi2XjYeJqSSXBbSJx5zHf+pZ
-   4dbbZyadnn3xt2GFJSW3sN9pOCtdUde+pnNieL4qDg1eTYl0FnPnf/VGf
-   H8Hm/U+YZvu15VEIin7PmQ/HHRH1iqEyDrm/fqxjda+NZUyhKqFNhjH/f
-   VQuIH6CWr9KolCgjB421AovI0COJD+D+D+bVU6ZHTRH8mPhqvt3aBmQwm
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10267"; a="315339295"
-X-IronPort-AV: E=Sophos;i="5.88,392,1635231600"; 
-   d="scan'208";a="315339295"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2022 16:14:54 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,392,1635231600"; 
-   d="scan'208";a="491400477"
-Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 23 Feb 2022 16:14:53 -0800
-Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nN1mW-000207-Ps; Thu, 24 Feb 2022 00:14:52 +0000
-Date:   Thu, 24 Feb 2022 08:14:24 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Hannes Reinecke <hare@suse.de>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [hare-scsi-devel:tls-upcall.v2 28/67] <command-line>: warning:
- format '%lu' expects argument of type 'long unsigned int', but argument 9
- has type 'size_t' {aka 'unsigned int'}
-Message-ID: <202202240808.1QpLOeqY-lkp@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 23 Feb 2022 19:21:13 -0500
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F72B5AEF0
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 16:20:45 -0800 (PST)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-2d07ae11467so6677517b3.12
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 16:20:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=d5dLzGHZ/03S2GwnSJZ7atIUIHBRbtyGlBVTRxvEnP4=;
+        b=PGhrk29E4gaPK0VSM9m4SYYFNB8byuIYTyilg6iL8qEgAy+DUiTuwXd7DwWukyrYDH
+         HODoiwtt41htHibpJCxw2SNj3gA/5wHQTPpT3FY7jUCgzKZFwnrFWiRL9etRFbbYwpfp
+         ZDbOwmboFlG6R+8FIOeJ+SE1/iyRV9rtgNBcHSrJGs6nNbTJUdiNe3po+yiRM7lowpcT
+         h4COXZ3g1PUUgIYa8UfcVw94kUnoARZHjSwXwBsmjFdxYXGPhHIdAPIgF6sIsUycN28Y
+         10boTttMhEfGpNXIS6ZYFYT/yS3orWUjXjSdB4rQGZ32OgUftqMZwsu3cfw6kgEzQSKD
+         G3iA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=d5dLzGHZ/03S2GwnSJZ7atIUIHBRbtyGlBVTRxvEnP4=;
+        b=rTRXG7a6JidBQWxqjLHlbT/wQXjlKVUhstfLK9yGptuN/tdpZn2qTqQJnYd6Kffkne
+         fG21oFA4dsGPm9usUGxZEAiCV8tkcu85hHleMxDqdr9E5dOoS2JVs2PMPEhhxR9SXSvS
+         5AidK9C5USSIKYu6vaFsVKcni2xgb5DznsFXrWFgqBSO+bjUg9iHZVFjn38waeQMqzUE
+         D9C0wuIJnO9AELLDGhHDB/2oRyi/zeE+ZmpMM2eyE0Mnds7QGbgLCJJXNSIn0iHX6qOn
+         dukpYcj8h99RkvFVjJMtTBgfllRFXySNkAyqoj3ZrMBX/5yYHRZ1KcoKSZxYUGYFB+5k
+         +n+g==
+X-Gm-Message-State: AOAM532P/aa7/73sAjFxh/lAQ9lNKVUBz1g5AqEdxfCL/vlNT/cbIaXi
+        QFWxVKrOQJAe2iQZOapLdSQcliU=
+X-Google-Smtp-Source: ABdhPJzHJzd8T2fG9kRGkhwLudz98Mmh+GT6Rb7XdX1haa3CGWXiOCcOvzUyS8xw4PF3T70uQA4HBkA=
+X-Received: from pcc-desktop.svl.corp.google.com ([2620:15c:2ce:200:ef38:18a6:8640:7dc1])
+ (user=pcc job=sendgmr) by 2002:a25:7:0:b0:623:abbe:e6e9 with SMTP id
+ 7-20020a250007000000b00623abbee6e9mr200654yba.547.1645662044312; Wed, 23 Feb
+ 2022 16:20:44 -0800 (PST)
+Date:   Wed, 23 Feb 2022 16:20:24 -0800
+Message-Id: <20220224002024.429707-1-pcc@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.35.1.473.g83b2b277ed-goog
+Subject: [PATCH v2] kasan: fix more unit tests with CONFIG_UBSAN_LOCAL_BOUNDS enabled
+From:   Peter Collingbourne <pcc@google.com>
+To:     Andrey Konovalov <andreyknvl@gmail.com>,
+        Marco Elver <elver@google.com>
+Cc:     Peter Collingbourne <pcc@google.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Alexander Potapenko <glider@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Daniel Micay <danielmicay@gmail.com>,
+        kasan-dev@googlegroups.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/hare/scsi-devel.git tls-upcall.v2
-head:   ac729ea3c52bda460616c71d5f5fc47b2e64da6d
-commit: 3e155fab03919dae359f4f87a1a38d7b0e080f1a [28/67] nvmet-auth: Diffie-Hellman key exchange support
-config: arc-allyesconfig (https://download.01.org/0day-ci/archive/20220224/202202240808.1QpLOeqY-lkp@intel.com/config)
-compiler: arceb-elf-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/hare/scsi-devel.git/commit/?id=3e155fab03919dae359f4f87a1a38d7b0e080f1a
-        git remote add hare-scsi-devel https://git.kernel.org/pub/scm/linux/kernel/git/hare/scsi-devel.git
-        git fetch --no-tags hare-scsi-devel tls-upcall.v2
-        git checkout 3e155fab03919dae359f4f87a1a38d7b0e080f1a
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arc SHELL=/bin/bash drivers/nvme/ net/
+This is a followup to commit f649dc0e0d7b ("kasan: fix unit tests
+with CONFIG_UBSAN_LOCAL_BOUNDS enabled") that fixes tests that fail
+as a result of __alloc_size annotations being added to the kernel
+allocator functions.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   drivers/nvme/target/fabrics-cmd-auth.c: In function 'nvmet_auth_challenge':
->> <command-line>: warning: format '%lu' expects argument of type 'long unsigned int', but argument 9 has type 'size_t' {aka 'unsigned int'} [-Wformat=]
-   drivers/nvme/target/fabrics-cmd-auth.c:7:21: note: in expansion of macro 'KBUILD_MODNAME'
-       7 | #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
-         |                     ^~~~~~~~~~~~~~
-   include/linux/dynamic_debug.h:134:29: note: in expansion of macro 'pr_fmt'
-     134 |                 func(&id, ##__VA_ARGS__);               \
-         |                             ^~~~~~~~~~~
-   include/linux/dynamic_debug.h:152:9: note: in expansion of macro '__dynamic_func_call'
-     152 |         __dynamic_func_call(__UNIQUE_ID(ddebug), fmt, func, ##__VA_ARGS__)
-         |         ^~~~~~~~~~~~~~~~~~~
-   include/linux/dynamic_debug.h:162:9: note: in expansion of macro '_dynamic_func_call'
-     162 |         _dynamic_func_call(fmt, __dynamic_pr_debug,             \
-         |         ^~~~~~~~~~~~~~~~~~
-   include/linux/printk.h:574:9: note: in expansion of macro 'dynamic_pr_debug'
-     574 |         dynamic_pr_debug(fmt, ##__VA_ARGS__)
-         |         ^~~~~~~~~~~~~~~~
-   drivers/nvme/target/fabrics-cmd-auth.c:371:9: note: in expansion of macro 'pr_debug'
-     371 |         pr_debug("%s: ctrl %d qid %d seq %d transaction %d hl %d dhvlen %lu\n",
-         |         ^~~~~~~~
-
+Link: https://linux-review.googlesource.com/id/I4334cafc5db600fda5cebb851b2ee9fd09fb46cc
+Signed-off-by: Peter Collingbourne <pcc@google.com>
+Cc: <stable@vger.kernel.org> # 5.16.x
+Fixes: c37495d6254c ("slab: add __alloc_size attributes for better bounds checking")
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+v2:
+- use OPTIMIZER_HIDE_VAR instead of volatile
+
+ lib/test_kasan.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/lib/test_kasan.c b/lib/test_kasan.c
+index 26a5c9007653..7c3dfb569445 100644
+--- a/lib/test_kasan.c
++++ b/lib/test_kasan.c
+@@ -185,6 +185,7 @@ static void kmalloc_pagealloc_oob_right(struct kunit *test)
+ 	ptr = kmalloc(size, GFP_KERNEL);
+ 	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, ptr);
+ 
++	OPTIMIZER_HIDE_VAR(ptr);
+ 	KUNIT_EXPECT_KASAN_FAIL(test, ptr[size + OOB_TAG_OFF] = 0);
+ 
+ 	kfree(ptr);
+@@ -295,6 +296,7 @@ static void krealloc_more_oob_helper(struct kunit *test,
+ 		KUNIT_EXPECT_KASAN_FAIL(test, ptr2[size2] = 'x');
+ 
+ 	/* For all modes first aligned offset after size2 must be inaccessible. */
++	OPTIMIZER_HIDE_VAR(ptr2);
+ 	KUNIT_EXPECT_KASAN_FAIL(test,
+ 		ptr2[round_up(size2, KASAN_GRANULE_SIZE)] = 'x');
+ 
+@@ -319,6 +321,8 @@ static void krealloc_less_oob_helper(struct kunit *test,
+ 	/* Must be accessible for all modes. */
+ 	ptr2[size2 - 1] = 'x';
+ 
++	OPTIMIZER_HIDE_VAR(ptr2);
++
+ 	/* Generic mode is precise, so unaligned size2 must be inaccessible. */
+ 	if (IS_ENABLED(CONFIG_KASAN_GENERIC))
+ 		KUNIT_EXPECT_KASAN_FAIL(test, ptr2[size2] = 'x');
+-- 
+2.35.1.473.g83b2b277ed-goog
+

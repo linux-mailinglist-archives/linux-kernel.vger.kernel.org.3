@@ -2,160 +2,216 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 347484C27EA
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 10:17:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 952804C27BF
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 10:13:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232711AbiBXJPv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 04:15:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46604 "EHLO
+        id S232715AbiBXJKK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 04:10:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232704AbiBXJPt (ORCPT
+        with ESMTP id S232643AbiBXJJo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 04:15:49 -0500
-X-Greylist: delayed 508 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 24 Feb 2022 01:15:19 PST
-Received: from mail.avm.de (mail.avm.de [IPv6:2001:bf0:244:244::94])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDAC223BF17;
-        Thu, 24 Feb 2022 01:15:19 -0800 (PST)
-Received: from mail-notes.avm.de (mail-notes.avm.de [172.16.0.1])
-        by mail.avm.de (Postfix) with ESMTP;
-        Thu, 24 Feb 2022 10:06:50 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=avm.de; s=mail;
-        t=1645693610; bh=zOitn8r3Zy50HUJEKlb+OOGXVNbcWgsJdUJYtMJP3Rk=;
-        h=In-Reply-To:References:Subject:From:To:Date:From;
-        b=EFW8EQ1GmnTAGbouXKP9xookZUHWkDYvBo7hXqb93juxFsILPBjVqyRtCZ5WbKVbU
-         rda5ZZLehsbJcvvk0KtQQ8cf30KhNYjAknPYIFY3zHhi0okdTGpy5onSyOgpFu6o/t
-         4tSoqNAli5wE9cvIymW87mC5h48qObeQe87WZX/s=
-MIME-Version: 1.0
-X-Disclaimed: 1
-Sensitivity: 
-Importance: Normal
-X-Priority: 3 (Normal)
-In-Reply-To: 
-References: 
-Subject: [PATCH] net: ipv6: ensure we call ipv6_mc_down() at most once 
-From:   j.nixdorf@avm.de
-To:     "David S. Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        WANG Cong <xiyou.wangcong@gmail.com>,
-        Hannes Frederic Sowa <hannes@stressinduktion.org>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Thu, 24 Feb 2022 10:06:49 +0100
-Message-ID: <OF120FC6BB.53B5B31C-ONC12587F3.002A9E5A-C12587F3.0032105C@avm.de>
-X-Mailer: Lotus Domino Web Server Release 12.0.1HF14   December 15, 2021
-X-MIMETrack: Serialize by http on ANIS1/AVM(Release 12.0.1HF14 | December 15, 2021) at
- 24.02.2022 10:06:49,
-        Serialize complete at 24.02.2022 10:06:49,
-        Serialize by Router on ANIS1/AVM(Release 12.0.1HF14 | December 15, 2021) at
- 24.02.2022 10:06:49
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-purgate-ID: 149429::1645693610-00001F4B-77E04A23/0/0
-X-purgate-type: clean
-X-purgate-size: 3385
-X-purgate-Ad: Categorized by eleven eXpurgate (R) http://www.eleven.de
-X-purgate: This mail is considered clean (visit http://www.eleven.de for further information)
-X-purgate: clean
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 24 Feb 2022 04:09:44 -0500
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B82E11A58EA;
+        Thu, 24 Feb 2022 01:08:51 -0800 (PST)
+Received: by mail-pl1-x632.google.com with SMTP id e13so1150060plh.3;
+        Thu, 24 Feb 2022 01:08:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=vmaXXXHQ/i9EKjoTmBwkF1G8tSqW4N88V6hDi2C1HD4=;
+        b=WllXDIs36ZGrqgYryRhKFoGDVLxNIPINwv2Zi90yrKkz5EbSNgByCMuJ+sgA59vqnp
+         5dx71I2ov1cHh0W7QNsCqVRE8Q9JnYKrh/F4pygfB6qbbZkY9SmB46DUyet8jcxwOsVx
+         nJIUnA6CAkb65lMkE1fWgVZjn+rA3AcTY/a1abM0nZy4J5oRSLdOjmc8nM++SxdkdgMR
+         lY4EFIv+mROsTXCNymkXFsob7MpIFXWd6HvnrkJWvRPM0RFiG2E60cu29EvHuw8O4Xk9
+         sbmRKBW6arYUHzX8MBV8/S980aftF+d1PZEJTXB+6tQjnJlObjAA6Mp04BNQ1cHSluKx
+         lE6g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=vmaXXXHQ/i9EKjoTmBwkF1G8tSqW4N88V6hDi2C1HD4=;
+        b=K0SD9+g5Xlyt6YCfRYfLex6BWN0gFXf7kW0lW1hiYDszDk29mCV8HV0wuvnRWL6VzX
+         apKZhHR/xor+AxXsaKGFxsrZGjqkYoTU7jadjKz4/P2ibg9fR8oMFU2qEwBoN6uEcbqQ
+         OaS6gW9HCELDQr7oLY6H+PQbzvS3xEnm6wXppQnXd2sMTkoKv4fJSd667ErRRi2a+M71
+         ncL7zF7U7JKCGimg8gVFmIdVbjqLfOaLSgvivtnqERg+fmmoEbqyppIm54DUzvUDkBs4
+         f3s+WK7vh9+S9OmDJW3mmV7X6nB89t66ufv7TqPRJ52hiv6AW74RFv/+5tAoIY/34Pa9
+         ykqw==
+X-Gm-Message-State: AOAM531X+msPq3wHsDn6Mn1QTlkJ2I3PoqrQDo+BskNkV8mkwJRKfSYa
+        XFfCVoXMyd/NCAMUkXE2CIaLEn3wwuXZyA==
+X-Google-Smtp-Source: ABdhPJyZ5JcKXcufTNixaR7yYQQ8MLaW9hd9LGIlINMFtjycdxiT3SSTgVnP9PPAF8kueMeyYylhHQ==
+X-Received: by 2002:a17:902:d88f:b0:14d:696e:949f with SMTP id b15-20020a170902d88f00b0014d696e949fmr1651500plz.8.1645693731092;
+        Thu, 24 Feb 2022 01:08:51 -0800 (PST)
+Received: from localhost.localdomain ([162.219.34.248])
+        by smtp.gmail.com with ESMTPSA id nn14sm2023999pjb.45.2022.02.24.01.08.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Feb 2022 01:08:50 -0800 (PST)
+From:   "Wang Jianchao (Kuaishou)" <jianchao.wan9@gmail.com>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     Josef Bacik <jbacik@fb.com>, Tejun Heo <tj@kernel.org>,
+        Bart Van Assche <bvanassche@acm.org>,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [RFC V5 12/16] blk/rq-qos: change queue_depth_changed to setting_changed
+Date:   Thu, 24 Feb 2022 17:06:50 +0800
+Message-Id: <20220224090654.54671-13-jianchao.wan9@gmail.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20220224090654.54671-1-jianchao.wan9@gmail.com>
+References: <20220224090654.54671-1-jianchao.wan9@gmail.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There are two reasons for addrconf=5Fnotify() to be called with NETDEV=5FDO=
-WN:
-either the network device is actually going down, or IPv6 was disabled
-on the interface.
+Change the callback .queue_depth_changed() to .setting_changed().
+Then all of the queue setting changes can be involved.
 
-If either of them stays down while the other is toggled, we repeatedly
-call the code for NETDEV=5FDOWN, including ipv6=5Fmc=5Fdown(), while never
-calling the corresponding ipv6=5Fmc=5Fup() in between. This will cause a
-new entry in idev->mc=5Ftomb to be allocated for each multicast group
-the interface is subscribed to, which in turn leaks one struct ifmcaddr6
-per nontrivial multicast group the interface is subscribed to.
-
-The following reproducer will leak at least $n objects:
-
-ip addr add ff2e::4242/32 dev eth0 autojoin
-sysctl -w net.ipv6.conf.eth0.disable=5Fipv6=3D1
-for i in $(seq 1 $n); do
-	ip link set up eth0; ip link set down eth0
-done
-
-Joining groups with IPV6=5FADD=5FMEMBERSHIP (unprivileged) or setting the
-sysctl net.ipv6.conf.eth0.forwarding to 1 (=3D> subscribing to ff02::2)
-can also be used to create a nontrivial idev->mc=5Flist, which will the
-leak objects with the right up-down-sequence.
-
-Based on both sources for NETDEV=5FDOWN events the interface IPv6 state
-should be considered:
-
- - not ready if the network interface is not ready OR IPv6 is disabled
-   for it
- - ready if the network interface is ready AND IPv6 is enabled for it
-
-The functions ipv6=5Fmc=5Fup() and ipv6=5Fdown() should only be run when th=
-is
-state changes.
-
-Implement this by remembering when the IPv6 state is ready, and only
-run ipv6=5Fmc=5Fdown() if it actually changed from ready to not ready.
-
-The other direction (not ready -> ready) already works correctly, as:
-
- - the interface notification triggered codepath for NETDEV=5FUP /
-   NETDEV=5FCHANGE returns early if ipv6 is disabled, and
- - the disable=5Fipv6=3D0 triggered codepath skips fully initializing the
-   interface as long as addrconf=5Flink=5Fready(dev) returns false
- - calling ipv6=5Fmc=5Fup() repeatedly does not leak anything
-
-Fixes: 3ce62a84d53c ("ipv6: exit early in addrconf=5Fnotify() if IPv6 is di=
-sabled")
-Signed-off-by: Johannes Nixdorf <j.nixdorf@avm.de>
+Signed-off-by: Wang Jianchao (Kuaishou) <jianchao.wan9@gmail.com>
 ---
- net/ipv6/addrconf.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ block/blk-iocost.c   |  4 ++--
+ block/blk-rq-qos.c   |  6 +++---
+ block/blk-rq-qos.h   |  8 ++++----
+ block/blk-settings.c |  2 +-
+ block/blk-wbt.c      | 12 +++++++-----
+ 5 files changed, 17 insertions(+), 15 deletions(-)
 
-diff --git a/net/ipv6/addrconf.c b/net/ipv6/addrconf.c
-index f927c199a93c..c5e9ca244175 100644
---- a/net/ipv6/addrconf.c
-+++ b/net/ipv6/addrconf.c
-@@ -3732,6 +3732,7 @@ static int addrconf=5Fifdown(struct net=5Fdevice *dev=
-, bool unregister)
- 	struct inet6=5Fdev *idev;
- 	struct inet6=5Fifaddr *ifa, *tmp;
- 	bool keep=5Faddr =3D false;
-+	bool was=5Fready;
- 	int state, i;
-=20
- 	ASSERT=5FRTNL();
-@@ -3797,7 +3798,10 @@ static int addrconf=5Fifdown(struct net=5Fdevice *de=
-v, bool unregister)
-=20
- 	addrconf=5Fdel=5Frs=5Ftimer(idev);
-=20
--	/* Step 2: clear flags for stateless addrconf */
-+	/* Step 2: clear flags for stateless addrconf, repeated down
-+	 *         detection
-+	 */
-+	was=5Fready =3D idev->if=5Fflags & IF=5FREADY;
- 	if (!unregister)
- 		idev->if=5Fflags &=3D ~(IF=5FRS=5FSENT|IF=5FRA=5FRCVD|IF=5FREADY);
-=20
-@@ -3871,7 +3875,7 @@ static int addrconf=5Fifdown(struct net=5Fdevice *dev=
-, bool unregister)
- 	if (unregister) {
- 		ipv6=5Fac=5Fdestroy=5Fdev(idev);
- 		ipv6=5Fmc=5Fdestroy=5Fdev(idev);
--	} else {
-+	} else if (was=5Fready) {
- 		ipv6=5Fmc=5Fdown(idev);
- 	}
-=20
---=20
-2.35.1
+diff --git a/block/blk-iocost.c b/block/blk-iocost.c
+index 886c03383444..ad1d4d9762bd 100644
+--- a/block/blk-iocost.c
++++ b/block/blk-iocost.c
+@@ -2793,7 +2793,7 @@ static void ioc_rqos_done(struct rq_qos *rqos, struct request *rq)
+ 	put_cpu_ptr(ccs);
+ }
+ 
+-static void ioc_rqos_queue_depth_changed(struct rq_qos *rqos)
++static void ioc_rqos_setting_changed(struct rq_qos *rqos)
+ {
+ 	struct ioc *ioc = rqos_to_ioc(rqos);
+ 
+@@ -2885,7 +2885,7 @@ static struct rq_qos_ops ioc_rqos_ops = {
+ 	.merge = ioc_rqos_merge,
+ 	.done_bio = ioc_rqos_done_bio,
+ 	.done = ioc_rqos_done,
+-	.queue_depth_changed = ioc_rqos_queue_depth_changed,
++	.setting_changed = ioc_rqos_setting_changed,
+ 	.exit = ioc_rqos_exit,
+ 	.init = blk_iocost_init,
+ };
+diff --git a/block/blk-rq-qos.c b/block/blk-rq-qos.c
+index 03f2e654cd17..236ecb2af845 100644
+--- a/block/blk-rq-qos.c
++++ b/block/blk-rq-qos.c
+@@ -104,11 +104,11 @@ void __rq_qos_done_bio(struct rq_qos *rqos, struct bio *bio)
+ 	} while (rqos);
+ }
+ 
+-void __rq_qos_queue_depth_changed(struct rq_qos *rqos)
++void __rq_qos_setting_changed(struct rq_qos *rqos)
+ {
+ 	do {
+-		if (rqos->ops->queue_depth_changed)
+-			rqos->ops->queue_depth_changed(rqos);
++		if (rqos->ops->setting_changed)
++			rqos->ops->setting_changed(rqos);
+ 		rqos = rqos->next;
+ 	} while (rqos);
+ }
+diff --git a/block/blk-rq-qos.h b/block/blk-rq-qos.h
+index 58aba16c7d32..3d7df14edde3 100644
+--- a/block/blk-rq-qos.h
++++ b/block/blk-rq-qos.h
+@@ -42,7 +42,7 @@ struct rq_qos_ops {
+ 	void (*done)(struct rq_qos *, struct request *);
+ 	void (*done_bio)(struct rq_qos *, struct bio *);
+ 	void (*cleanup)(struct rq_qos *, struct bio *);
+-	void (*queue_depth_changed)(struct rq_qos *);
++	void (*setting_changed)(struct rq_qos *);
+ 	void (*exit)(struct rq_qos *);
+ 	int (*init)(struct request_queue *);
+ 	const struct blk_mq_debugfs_attr *debugfs_attrs;
+@@ -94,7 +94,7 @@ void __rq_qos_throttle(struct rq_qos *rqos, struct bio *bio);
+ void __rq_qos_track(struct rq_qos *rqos, struct request *rq, struct bio *bio);
+ void __rq_qos_merge(struct rq_qos *rqos, struct request *rq, struct bio *bio);
+ void __rq_qos_done_bio(struct rq_qos *rqos, struct bio *bio);
+-void __rq_qos_queue_depth_changed(struct rq_qos *rqos);
++void __rq_qos_setting_changed(struct rq_qos *rqos);
+ 
+ static inline void rq_qos_cleanup(struct request_queue *q, struct bio *bio)
+ {
+@@ -152,7 +152,7 @@ static inline void rq_qos_merge(struct request_queue *q, struct request *rq,
+ 		__rq_qos_merge(q->rq_qos, rq, bio);
+ }
+ 
+-static inline void rq_qos_queue_depth_changed(struct request_queue *q)
++static inline void rq_qos_setting_changed(struct request_queue *q)
+ {
+ 	/*
+ 	 * It is called by external module, protect the rqos list with
+@@ -160,7 +160,7 @@ static inline void rq_qos_queue_depth_changed(struct request_queue *q)
+ 	 */
+ 	mutex_lock(&q->sysfs_lock);
+ 	if (q->rq_qos)
+-		__rq_qos_queue_depth_changed(q->rq_qos);
++		__rq_qos_setting_changed(q->rq_qos);
+ 	mutex_unlock(&q->sysfs_lock);
+ }
+ 
+diff --git a/block/blk-settings.c b/block/blk-settings.c
+index b880c70e22e4..bceb1925e978 100644
+--- a/block/blk-settings.c
++++ b/block/blk-settings.c
+@@ -777,7 +777,7 @@ EXPORT_SYMBOL(blk_queue_update_dma_alignment);
+ void blk_set_queue_depth(struct request_queue *q, unsigned int depth)
+ {
+ 	q->queue_depth = depth;
+-	rq_qos_queue_depth_changed(q);
++	rq_qos_setting_changed(q);
+ }
+ EXPORT_SYMBOL(blk_set_queue_depth);
+ 
+diff --git a/block/blk-wbt.c b/block/blk-wbt.c
+index 6c0a85ddb107..3a3a683009c4 100644
+--- a/block/blk-wbt.c
++++ b/block/blk-wbt.c
+@@ -650,10 +650,12 @@ static int wbt_data_dir(const struct request *rq)
+ 	return -1;
+ }
+ 
+-static void wbt_queue_depth_changed(struct rq_qos *rqos)
++static void wbt_setting_changed(struct rq_qos *rqos)
+ {
+-	RQWB(rqos)->rq_depth.queue_depth = blk_queue_depth(rqos->q);
+-	wbt_update_limits(RQWB(rqos));
++	if (RQWB(rqos)->rq_depth.queue_depth != blk_queue_depth(rqos->q)) {
++		RQWB(rqos)->rq_depth.queue_depth = blk_queue_depth(rqos->q);
++		wbt_update_limits(RQWB(rqos));
++	}
+ }
+ 
+ static ssize_t wbt_lat_show(struct request_queue *q, char *page)
+@@ -841,7 +843,7 @@ static int wbt_init(struct request_queue *q)
+ 
+ 	rwb->min_lat_nsec = wbt_default_latency_nsec(q);
+ 
+-	wbt_queue_depth_changed(&rwb->rqos);
++	wbt_setting_changed(&rwb->rqos);
+ 	wbt_set_write_cache(q, test_bit(QUEUE_FLAG_WC, &q->queue_flags));
+ 
+ 	ret = sysfs_create_file(&q->kobj, &wbt_attr.attr);
+@@ -859,7 +861,7 @@ static struct rq_qos_ops wbt_rqos_ops = {
+ 	.requeue = wbt_requeue,
+ 	.done = wbt_done,
+ 	.cleanup = wbt_cleanup,
+-	.queue_depth_changed = wbt_queue_depth_changed,
++	.setting_changed = wbt_setting_changed,
+ 	.exit = wbt_exit,
+ 	.init = wbt_init,
+ #ifdef CONFIG_BLK_DEBUG_FS
+-- 
+2.17.1
+

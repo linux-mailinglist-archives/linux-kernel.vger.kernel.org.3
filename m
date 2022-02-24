@@ -2,87 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0395F4C3075
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 16:55:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B260F4C307B
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 16:56:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236624AbiBXP4I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 10:56:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40686 "EHLO
+        id S236658AbiBXP4j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 10:56:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233708AbiBXP4G (ORCPT
+        with ESMTP id S236665AbiBXP4e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 10:56:06 -0500
-Received: from mail-ot1-f44.google.com (mail-ot1-f44.google.com [209.85.210.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98E9216DADC;
-        Thu, 24 Feb 2022 07:55:36 -0800 (PST)
-Received: by mail-ot1-f44.google.com with SMTP id w3-20020a056830060300b005ad10e3becaso1552667oti.3;
-        Thu, 24 Feb 2022 07:55:36 -0800 (PST)
+        Thu, 24 Feb 2022 10:56:34 -0500
+Received: from mail-oi1-f180.google.com (mail-oi1-f180.google.com [209.85.167.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DF392465D6;
+        Thu, 24 Feb 2022 07:56:03 -0800 (PST)
+Received: by mail-oi1-f180.google.com with SMTP id j24so2971062oii.11;
+        Thu, 24 Feb 2022 07:56:03 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=hwWk0rF2AKk7PiZxFwIHj9zz4uI+BJYeLx4kKkwoHlc=;
-        b=kKtZMvNB4/K09c5e0rP1kjjzXnbOIdawxzNNo6jgHmU2nnw59TxYDPpsgwGpgqgB7V
-         liJ4KRFQ40BJEGVlg5Fl0idpgJX2CDTSeapwXydG07FpFSlWNP9FUel1JxR2ESyScuWX
-         Qn3vrXi9cSjONbXcv5q+x8bKBzIQ/P080WjeEzMVnn0ye9NeSFMsW1frgle5PhLV8N/9
-         Q2yQCruPQisAR8pX6VIHNF8xq9/z8lOw10cJh3IcsDbKINEY1E0AnQSw0drLn9m/DTn0
-         H9IuLiP9V6R6PnpjeiYC3O1R9nE1Wr3zen/4/TO33olo1lydij8C55ONYhkR58xFJWae
-         JzQg==
-X-Gm-Message-State: AOAM533ysiqQIhaHeLHLokPjeHK2/YkYEdoGE0rg5PgGCxCYZrMY4KWw
-        d+3dbGGLBick97QtAo+lKA==
-X-Google-Smtp-Source: ABdhPJz0d5KVjQ+1G4/eyV1LKEyrv8doihhEw++QrWPwlvXi1Nc657KxP7t8EqKOMYtHAfNRji94Hw==
-X-Received: by 2002:a9d:2a:0:b0:5af:7c41:60e5 with SMTP id 39-20020a9d002a000000b005af7c4160e5mr1114725ota.263.1645718135828;
-        Thu, 24 Feb 2022 07:55:35 -0800 (PST)
+        bh=SMVouXiosKn6ny3HfwSsMDf1jN2E26cY3uzaoXTs+S8=;
+        b=CMyPSTEYVPtaFYIQKIvmzPxaO8iAheDtHOjX76SMPRdtRwD0KHcgfZcxLoma7U1i/d
+         0mdOVKlwvvMX8CbP6nDHYNzmwePlyKZC6Z/tGEfviNPzX470guif6V/FLFLtvR4IwT/y
+         1obFWzAjfiJltDhnxGyNAFGx8/lYf9LsGPyKDe9zawqdCRYwdx1l65wLH7R8ZkaA8Tuo
+         0tf5zalCtflirFhAX1jWKz5yiplh8bFJMdoUJi5wRIdCWifwWrc3Ud5FAP2OB7RsPqE7
+         L9+JZUl6zd349bFGmWKt96Y+AVSfo+IAE1E6V4i4py8NzvtPIm/ql4QODjBCpcyDoAhj
+         T5/w==
+X-Gm-Message-State: AOAM532nEPv/uh70MdS50VbIMgyjjYGVgTLE4xbRfXzj0akAP4HQGawW
+        SxJXgBLrLS3aBGWldfbfNqYYlg0ICw==
+X-Google-Smtp-Source: ABdhPJzGQRqZXE/eFhGCyySrKwOqg3RMp89A7Vhidvx5ghGPBmdHjS+JrRTInXrcvk4Qs4h0bm+ZYQ==
+X-Received: by 2002:a05:6808:16a5:b0:2d3:a8e8:bc2c with SMTP id bb37-20020a05680816a500b002d3a8e8bc2cmr1705247oib.59.1645718162577;
+        Thu, 24 Feb 2022 07:56:02 -0800 (PST)
 Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id 4sm1296822otx.34.2022.02.24.07.55.34
+        by smtp.gmail.com with ESMTPSA id w18sm1355281otm.45.2022.02.24.07.55.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Feb 2022 07:55:34 -0800 (PST)
-Received: (nullmailer pid 3142509 invoked by uid 1000);
-        Thu, 24 Feb 2022 15:55:33 -0000
-Date:   Thu, 24 Feb 2022 09:55:33 -0600
+        Thu, 24 Feb 2022 07:55:58 -0800 (PST)
+Received: (nullmailer pid 3143263 invoked by uid 1000);
+        Thu, 24 Feb 2022 15:55:57 -0000
+Date:   Thu, 24 Feb 2022 09:55:57 -0600
 From:   Rob Herring <robh@kernel.org>
 To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     Krzysztof Kozlowski <krzk@kernel.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>
-Subject: Re: [PATCH 1/2] dt-bindings: writing-schema: Install from PyPI
- repository
-Message-ID: <YheqdXDXi28vyYIm@robh.at.kernel.org>
+Cc:     Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH 2/2] dt-bindings: example: Extend with typical case
+ (int-array and disallowed prop)
+Message-ID: <YheqjZQHq0T/RSIz@robh.at.kernel.org>
 References: <20220223073547.8746-1-krzysztof.kozlowski@canonical.com>
+ <20220223073547.8746-2-krzysztof.kozlowski@canonical.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220223073547.8746-1-krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20220223073547.8746-2-krzysztof.kozlowski@canonical.com>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 23 Feb 2022 08:35:46 +0100, Krzysztof Kozlowski wrote:
-> From: Krzysztof Kozlowski <krzk@kernel.org>
+On Wed, 23 Feb 2022 08:35:47 +0100, Krzysztof Kozlowski wrote:
+> Extend the example with:
+>  - an array where each element has constraints (min/max value),
+>  - property not allowed in case of different compatible.
 > 
-> Installing dtschema from github.com/devicetree-org is not needed anymore
-> because dtschema is now part of regular PyPI repository.  In certain
-> cases it might cause some troubles as it brings latest master version,
-> not the stable release:
-> 
->     $ pip3 show dtschema
->     Version: 2020.8.2.dev4+g341f3e3
->     $ make dt_binding_check
->     dtschema minimum version is v2020.8.1
-> 
-> Reported-by: Marek Szyprowski <m.szyprowski@samsung.com>
-> Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 > ---
->  Documentation/devicetree/bindings/writing-schema.rst | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  .../devicetree/bindings/example-schema.yaml        | 14 ++++++++++++++
+>  1 file changed, 14 insertions(+)
 > 
 
 Applied, thanks!

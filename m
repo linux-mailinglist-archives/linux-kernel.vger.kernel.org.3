@@ -2,107 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 670A94C26DB
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 10:00:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DCA954C272C
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 10:01:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230506AbiBXI71 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 03:59:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51386 "EHLO
+        id S229902AbiBXJAL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 04:00:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232380AbiBXI7Q (ORCPT
+        with ESMTP id S232428AbiBXI7u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 03:59:16 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6403615C9F2;
-        Thu, 24 Feb 2022 00:58:46 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 21F78D6E;
-        Thu, 24 Feb 2022 00:58:46 -0800 (PST)
-Received: from [10.57.40.147] (unknown [10.57.40.147])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 73E543F70D;
-        Thu, 24 Feb 2022 00:58:40 -0800 (PST)
-Message-ID: <31dc9d19-362d-4c1a-1483-cc7f525c6dd3@arm.com>
-Date:   Thu, 24 Feb 2022 08:58:36 +0000
+        Thu, 24 Feb 2022 03:59:50 -0500
+Received: from mail-ua1-f53.google.com (mail-ua1-f53.google.com [209.85.222.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A3C015C9E7;
+        Thu, 24 Feb 2022 00:59:20 -0800 (PST)
+Received: by mail-ua1-f53.google.com with SMTP id g15so552481ual.11;
+        Thu, 24 Feb 2022 00:59:20 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=glczv0l5uaIHGX0k1sHQaF0Req6u5NGSTbrWdrmUApU=;
+        b=Lu/QJFhL23DemLIEQ/v/O1fo8XJXSAmnLmY95UtSCKNxhuB44dxmLJhfK4xZ9haL68
+         1cm1cdXYv4cldUw9TPtoTnxi9OTXDUxhmpfNT6F7r5eXNouvez18n00j5YW0xn0718md
+         c59h0GBV7KY4s82gwCp/BiH921CbiOdtUkxAzfZd12j/zGx6EoMMYEeTXRW/JaDsOEEX
+         08UI2857XMbuJU4eeRAi1J+JQ3lzlGuz5Cq9tzqYmtis8XyochijwAQEs9gdDeJwsR0U
+         U8vp/UAV5Fo+AG0/4saZOouYWl2rO9cQH45swjSMWp27RpbS963E5ulxvcn5KLcPt72Q
+         0RHQ==
+X-Gm-Message-State: AOAM530WMdS+j7g0sFhzLKvPSkXroUWr2iLV6Xw+UoyITTqWIIkM4/Y1
+        5Fnqly6SCige/8C/w50pjFbkr09fw32HAA==
+X-Google-Smtp-Source: ABdhPJxVMubJNxj6kJFiHtVKwD7Jmy8N7cYjfmfOTg5bG+PlljwGRb4jmORG4KTcT9a8PRSvrfZJ1w==
+X-Received: by 2002:ab0:6897:0:b0:341:f244:f174 with SMTP id t23-20020ab06897000000b00341f244f174mr688142uar.130.1645693159594;
+        Thu, 24 Feb 2022 00:59:19 -0800 (PST)
+Received: from mail-vs1-f47.google.com (mail-vs1-f47.google.com. [209.85.217.47])
+        by smtp.gmail.com with ESMTPSA id y5sm289436vsj.11.2022.02.24.00.59.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 24 Feb 2022 00:59:19 -0800 (PST)
+Received: by mail-vs1-f47.google.com with SMTP id j3so1382996vsi.7;
+        Thu, 24 Feb 2022 00:59:19 -0800 (PST)
+X-Received: by 2002:a05:6102:4411:b0:31b:6df1:3b80 with SMTP id
+ df17-20020a056102441100b0031b6df13b80mr696559vsb.5.1645693159137; Thu, 24 Feb
+ 2022 00:59:19 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH v6 01/11] iommu: Add dma ownership management interfaces
-Content-Language: en-GB
-To:     Lu Baolu <baolu.lu@linux.intel.com>,
-        Jason Gunthorpe <jgg@nvidia.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Joerg Roedel <joro@8bytes.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>, rafael@kernel.org,
-        Diana Craciun <diana.craciun@oss.nxp.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Eric Auger <eric.auger@redhat.com>,
-        Liu Yi L <yi.l.liu@intel.com>,
-        Jacob jun Pan <jacob.jun.pan@intel.com>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        Stuart Yoder <stuyoder@gmail.com>,
-        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Li Yang <leoyang.li@nxp.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        iommu@lists.linux-foundation.org, linux-pci@vger.kernel.org,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220218005521.172832-1-baolu.lu@linux.intel.com>
- <20220218005521.172832-2-baolu.lu@linux.intel.com>
- <f830c268-daca-8e8f-a429-0c80496a7273@arm.com>
- <20220223180244.GA390403@nvidia.com>
- <dd944ab4-cf25-fa41-0170-875e5c5fd0e8@linux.intel.com>
- <c591f91a-392c-21a2-e9bd-10c64073e9e8@linux.intel.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <c591f91a-392c-21a2-e9bd-10c64073e9e8@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220224060448.1856091-1-keescook@chromium.org>
+In-Reply-To: <20220224060448.1856091-1-keescook@chromium.org>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 24 Feb 2022 09:59:08 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdVioQLy_T2LimgWdfWM=j=fomfpayuS1mbXnBLZj4gGQA@mail.gmail.com>
+Message-ID: <CAMuHMdVioQLy_T2LimgWdfWM=j=fomfpayuS1mbXnBLZj4gGQA@mail.gmail.com>
+Subject: Re: [PATCH] m68k: Implement "current_stack_pointer"
+To:     Kees Cook <keescook@chromium.org>
+Cc:     linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-hardening@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-02-24 05:29, Lu Baolu wrote:
-> On 2/24/22 1:16 PM, Lu Baolu wrote:
->> Hi Robin and Jason,
->>
->> On 2/24/22 2:02 AM, Jason Gunthorpe wrote:
->>> On Wed, Feb 23, 2022 at 06:00:06PM +0000, Robin Murphy wrote:
->>>
->>>> ...and equivalently just set owner_cnt directly to 0 here. I don't 
->>>> see a
->>>> realistic use-case for any driver to claim the same group more than 
->>>> once,
->>>> and allowing it in the API just feels like opening up various potential
->>>> corners for things to get out of sync.
->>> I am Ok if we toss it out to get this merged, as there is no in-kernel
->>> user right now.
->>
->> So we don't need the owner pointer in the API anymore, right?
-> 
-> Oh, NO.
-> 
-> The owner token represents that the group has been claimed for user
-> space access. And the default domain auto-attach policy will be changed
-> accordingly.
-> 
-> So we still need this. Sorry for the noise.
+Hi Kees,
 
-Exactly. In fact we could almost go the other way, and rename owner_cnt 
-to dma_api_users and make it mutually exclusive with owner being set, 
-but that's really just cosmetic. It's understandable enough as-is that 
-owner_cnt > 0 with owner == NULL represents implicit DMA API ownership.
+On Thu, Feb 24, 2022 at 7:04 AM Kees Cook <keescook@chromium.org> wrote:
+> To follow the existing per-arch conventions, add asm "sp" as
+> "current_stack_pointer". This will let it be used in non-arch places
+> (like HARDENED_USERCOPY).
+>
+> Cc: Geert Uytterhoeven <geert@linux-m68k.org>
+> Cc: linux-m68k@lists.linux-m68k.org
+> Signed-off-by: Kees Cook <keescook@chromium.org>
 
-Cheers,
-Robin.
+Thanks for your patch!
+
+> --- a/arch/m68k/include/asm/current.h
+> +++ b/arch/m68k/include/asm/current.h
+> @@ -24,6 +24,8 @@ static inline struct task_struct *get_current(void)
+>
+>  #define        current get_current()
+>
+> +register unsigned long current_stack_pointer __asm__("sp");
+
+I don't know what HARDENED_USERCOPY does, so I don't know if you need
+"usp" (see rdusp()) or "sp"?
+
+> +
+>  #endif /* CONFNIG_MMU */
+>
+>  #endif /* !(_M68K_CURRENT_H) */
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

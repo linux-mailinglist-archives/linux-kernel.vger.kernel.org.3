@@ -2,148 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E04D4C2174
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 03:02:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 54A114C219B
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 03:13:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229911AbiBXCB4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 21:01:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59466 "EHLO
+        id S230012AbiBXCL7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 21:11:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229901AbiBXCBz (ORCPT
+        with ESMTP id S229964AbiBXCLz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 21:01:55 -0500
-Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D31D915B3EF;
-        Wed, 23 Feb 2022 18:01:26 -0800 (PST)
-Received: by mail-yb1-xb33.google.com with SMTP id b35so913201ybi.13;
-        Wed, 23 Feb 2022 18:01:26 -0800 (PST)
+        Wed, 23 Feb 2022 21:11:55 -0500
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E8ADB4D;
+        Wed, 23 Feb 2022 18:11:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=gDzVZls32Tn+CgZQqLjQPwA2ePA8pNdpM8QzmA533pc=;
-        b=OQw7yyeyEfFjC3dZHjfMUxfYBAU6NRghHcNxQF46CLKtKLTCRbMhhIOy/86n2j985E
-         0Vmj9b1akLS6fQiSBG5w/PNqCfUgNLZuvwpZcDO65I+hCX7QbLCusXXBrrErXdl4uqUA
-         h2GGW+pwPYI2ZnE/6se/UMP+7x4QsMf040AkEqX1ftBaJHRMN7yJ7VqGzTZ4SQWkUylL
-         6VCJ5jMq3ANhXUTxzd7HHKyKp5vZs/WIibePxYqzWgwrjVvib+nKCq5gMjuwlfJgh1Tx
-         VTDst8A4foBg6aCtgMiMJc8yBoXtifMA2RumB//CZdWVFYSm/w2MTrF1xCxz/SG8yauR
-         yAMg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=gDzVZls32Tn+CgZQqLjQPwA2ePA8pNdpM8QzmA533pc=;
-        b=wNPqZabYgXD/XJ4yIhSHEiuOZXw3ry0mKdiDVeLZlA4U32hYbaN/6XjNN51T7TrnGf
-         2uM3tvw0F7+LZ00xdgFnLKIYuyatcJmaCcLVig7wXWVKhG/1B1c7ermGE0UtmTq6xhJ5
-         lyhl/FMOaUs5BVdRtn+emwG6GFd9wreoH4U88yPzE8n+2CdVPe8T5Lpd1/rt1A2c3q+M
-         o9jGj6uqJ1szJISGhoRNy6lOlhxw0eA9exCrMdv5K9xxZHB0OiSLBfZwDg8OOhJs+HF1
-         btURGBikcTP6rVPjkWzF6mupEGRk9vnreWVjYBI91ZWFo/3n4F1kaRxZ7vSwZ0H/J28t
-         lCQQ==
-X-Gm-Message-State: AOAM531NA4+65DHJqUt6DRFfIVBT9FI5suU+1Bxzj64XlusMlvbD/7o/
-        JpFSuW3wLAbkcQr5RDCJZpTQqBHhDKZh6J47B8mcSkAM5xlRPw==
-X-Google-Smtp-Source: ABdhPJwBkfAmaXuOhrLE426LrrsjRbaXAoxNnVJ3cgIzCOgY7z7HXNhGXPYupIwMI7HYn8OiRm7Xoc5MQ0loQQ/Trk4=
-X-Received: by 2002:a25:241:0:b0:61e:fb6e:8f33 with SMTP id
- 62-20020a250241000000b0061efb6e8f33mr278196ybc.413.1645663892466; Wed, 23 Feb
- 2022 16:51:32 -0800 (PST)
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1645668686; x=1677204686;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=x6brwM7ZtEJWe3+MXlu4EJraFcB8hQIqzGr5Jpw6Omo=;
+  b=B4xNYAOjZ6b8KkZ6OOj3s3d20VTLnCtTuNXow3pCwGhK9B2Vm0/9benJ
+   GolozGIn0BG3+YYXmnP/NGWu7OqK++77iXZOoaXxSzRsR3Rq7AGn/0Ryu
+   /XhEvkFgjGxuAvPO0rO3M0NuEarEhBSshF2w58O8qMu6hk0c7d9e8cWFP
+   g=;
+Received: from ironmsg08-lv.qualcomm.com ([10.47.202.152])
+  by alexa-out.qualcomm.com with ESMTP; 23 Feb 2022 16:53:47 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg08-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2022 16:53:47 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.15; Wed, 23 Feb 2022 16:53:46 -0800
+Received: from [10.48.243.226] (10.49.16.6) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.15; Wed, 23 Feb
+ 2022 16:53:45 -0800
+Message-ID: <03cee2a7-1455-b788-e1f0-5fb48db3478c@quicinc.com>
+Date:   Wed, 23 Feb 2022 16:53:45 -0800
 MIME-Version: 1.0
-References: <20220223231752.52241-1-ppbuk5246@gmail.com> <YhbCGDzlTWp2OJzI@zeniv-ca.linux.org.uk>
- <CAM7-yPTM6FNuT4vs2EuKAKitTWMTHw_XzKVggxQJzn5hqbBHpw@mail.gmail.com>
- <CAM7-yPSk35UoGmRY_rCo2=RryBvwbQEjeWfL2tz1ADUosCXNjw@mail.gmail.com> <878ru1umcu.fsf@email.froward.int.ebiederm.org>
-In-Reply-To: <878ru1umcu.fsf@email.froward.int.ebiederm.org>
-From:   Yun Levi <ppbuk5246@gmail.com>
-Date:   Thu, 24 Feb 2022 09:51:21 +0900
-Message-ID: <CAM7-yPTPZXPxhtwvvH6KqpRng2idxZiNCLsJHXbWM4ge1wqsBQ@mail.gmail.com>
-Subject: Re: [PATCH] fs/exec.c: Avoid a race in formats
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     Al Viro <viro@zeniv.linux.org.uk>,
-        Kees Cook <keescook@chromium.org>,
-        linux-fsdevel@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [PATCH 5/6][next] ath6kl: wmi: Replace one-element array with
+ flexible-array member in struct wmi_disconnect_event
+Content-Language: en-US
+To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        <linux-wireless@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, <netdev@vger.kernel.org>,
+        <linux-hardening@vger.kernel.org>
+References: <cover.1645583264.git.gustavoars@kernel.org>
+ <4a42b591109202589cb1cf87df13daef02eb75f9.1645583264.git.gustavoars@kernel.org>
+From:   Jeff Johnson <quic_jjohnson@quicinc.com>
+In-Reply-To: <4a42b591109202589cb1cf87df13daef02eb75f9.1645583264.git.gustavoars@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.49.16.6]
+X-ClientProxiedBy: nalasex01b.na.qualcomm.com (10.47.209.197) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Mostly of what has been happening with binary formats lately is code
-> removal.
->
-> So I humbly suggest the best defense against misuse by modules is to
-> simply remove "EXPORT_SYMBOL(__register_binfmt)".
+On 2/22/2022 6:39 PM, Gustavo A. R. Silva wrote:
+> Replace one-element array with flexible-array member in struct
+> wmi_disconnect_event.
+> 
+> It's also worth noting that due to the flexible array transformation,
+> the size of struct wmi_disconnect_event changed (now the size is 1 byte
+> smaller), and in order to preserve the logic of before the transformation,
+> the following change is needed:
+> 
+>          -       if (len < sizeof(struct wmi_disconnect_event))
+>          +       if (len <= sizeof(struct wmi_disconnect_event))
+> 
+> This issue was found with the help of Coccinelle and audited and fixed,
+> manually.
+> 
+> Link: https://www.kernel.org/doc/html/v5.16/process/deprecated.html#zero-length-and-one-element-arrays
+> Link: https://github.com/KSPP/linux/issues/79
+> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+> ---
+> Hi!
+> 
+> It'd be great if someone can confirm or comment on the following
+> changes described in the changelog text:
+> 
+>          -       if (len < sizeof(struct wmi_disconnect_event))
+>          +       if (len <= sizeof(struct wmi_disconnect_event))
+> 
+> Thanks
+> 
+>   drivers/net/wireless/ath/ath6kl/wmi.c | 2 +-
+>   drivers/net/wireless/ath/ath6kl/wmi.h | 2 +-
+>   2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/net/wireless/ath/ath6kl/wmi.c b/drivers/net/wireless/ath/ath6kl/wmi.c
+> index ccdccead688e..645fb6cae3be 100644
+> --- a/drivers/net/wireless/ath/ath6kl/wmi.c
+> +++ b/drivers/net/wireless/ath/ath6kl/wmi.c
+> @@ -1023,7 +1023,7 @@ static int ath6kl_wmi_disconnect_event_rx(struct wmi *wmi, u8 *datap, int len,
+>   	struct wmi_disconnect_event *ev;
+>   	wmi->traffic_class = 100;
+>   
+> -	if (len < sizeof(struct wmi_disconnect_event))
+> +	if (len <= sizeof(struct wmi_disconnect_event))
 
-It could be a solution. but that means the kernel doesn't allow
-dynamic binfmt using modules too.
-I think the best safe way to remove registered binfmt is ...
+this is another case where I believe the original code should remain 
+since that is checking that the "fixed" portion is present.
 
-unregister binfmt list first ---- (1)
-synchronize_rcu_task();
-// tasklist stack-check...
-unload module.
+and here again what is missing in the original code is logic to verify 
+that the provide len is large enough to handle the advertised assoc_resp_len
 
-But for this, there shouldn't happen in the above situation of (1).
-If unregister_binfmt has this problem.. I think there is no way to
-unload safely for dynamic registered binfmt via module.
+>   		return -EINVAL;
+>   
+>   	ev = (struct wmi_disconnect_event *) datap;
+> diff --git a/drivers/net/wireless/ath/ath6kl/wmi.h b/drivers/net/wireless/ath/ath6kl/wmi.h
+> index 6b064e669d87..6a7fc07cd9aa 100644
+> --- a/drivers/net/wireless/ath/ath6kl/wmi.h
+> +++ b/drivers/net/wireless/ath/ath6kl/wmi.h
+> @@ -1596,7 +1596,7 @@ struct wmi_disconnect_event {
+>   	u8 disconn_reason;
+>   
+>   	u8 assoc_resp_len;
+> -	u8 assoc_info[1];
+> +	u8 assoc_info[];
+>   } __packed;
+>   
+>   /*
 
-
-
-On Thu, Feb 24, 2022 at 9:42 AM Eric W. Biederman <ebiederm@xmission.com> wrote:
->
-> Yun Levi <ppbuk5246@gmail.com> writes:
->
-> > On Thu, Feb 24, 2022 at 8:59 AM Yun Levi <ppbuk5246@gmail.com> wrote:
-> >>
-> >> On Thu, Feb 24, 2022 at 8:24 AM Al Viro <viro@zeniv.linux.org.uk> wrote:
-> >> >
-> >> > On Thu, Feb 24, 2022 at 08:17:52AM +0900, Levi Yun wrote:
-> >> > > Suppose a module registers its own binfmt (custom) and formats is like:
-> >> > >
-> >> > > +---------+    +----------+    +---------+
-> >> > > | custom  | -> |  format1 | -> | format2 |
-> >> > > +---------+    +----------+    +---------+
-> >> > >
-> >> > > and try to call unregister_binfmt with custom NOT in __exit stage.
-> >> >
-> >> > Explain, please.  Why would anyone do that?  And how would such
-> >> > module decide when it's safe to e.g. dismantle data structures
-> >> > used by methods of that binfmt, etc.?
-> >> > Could you give more detailed example?
-> >>
-> >> I think if someone wants to control their own binfmt via "ioctl" not
-> >> on time on LOAD.
-> >> For example, someone wants to control exec (notification,
-> >> allow/disallow and etc..)
-> >> and want to enable and disable own's control exec via binfmt reg / unreg
-> >> In that situation, While the module is loaded, binfmt is still live
-> >> and can be reused by
-> >> reg/unreg to enable/disable his exec' control.
-> >>
-> >> module can decide it's safe to unload by tracing the stack and
-> >> confirming whether some tasks in the custom binfmt's function after it
-> >> unregisters its own binfmt.
-> >>
-> >> > Because it looks like papering over an inherently unsafe use of binfmt interfaces..
-> >>
-> >> I think the above example it's quite a trick and stupid.  it's quite
-> >> unsafe to use as you mention.
-> >> But, misuse allows that situation to happen without any warning.
-> >> As a robustness, I just try to avoid above situation But,
-> >> I think it's better to restrict unregister binfmt unregister only when
-> >> there is no module usage.
-> >
-> > And not only stupid exmaple,
-> > if someone loadable custom binfmt register in __init and __exit via
-> > register and unregister_binfmt,
-> > I think that situation could happen.
->
-> Mostly of what has been happening with binary formats lately is code
-> removal.
->
-> So I humbly suggest the best defense against misuse by modules is to
-> simply remove "EXPORT_SYMBOL(__register_binfmt)".
->
-> Eric

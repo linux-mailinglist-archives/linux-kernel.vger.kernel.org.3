@@ -2,74 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 938EE4C2E45
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 15:23:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 404B04C2E54
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 15:23:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235460AbiBXOXV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 09:23:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38076 "EHLO
+        id S235514AbiBXOYM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 09:24:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230136AbiBXOXT (ORCPT
+        with ESMTP id S235494AbiBXOX6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 09:23:19 -0500
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EBE010075C;
-        Thu, 24 Feb 2022 06:22:45 -0800 (PST)
-Received: by mail-ej1-x631.google.com with SMTP id qx21so4634149ejb.13;
-        Thu, 24 Feb 2022 06:22:45 -0800 (PST)
+        Thu, 24 Feb 2022 09:23:58 -0500
+Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D34341637F3
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 06:23:21 -0800 (PST)
+Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-2d641c31776so26571717b3.12
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 06:23:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=zYTHUsVVhBwj0g4Gze0zy2RUZ5LyrxDkA+fp8E1dT/8=;
-        b=bUSWfnuHV6MsxDaAFBe/JODFU0yALi+lxDfaUl/fPb5TY2Nnf45hMpyf2aEVrRz6kh
-         8rCFA+jEIeielP42fOHvWQPq2OSgUZWG/SBNXBcgzKAxr5Loh2yVBatjbNGvFP8KRkFR
-         2lIBNm+P8achvv7DW8oxjPteqR1o7x/sxIKKypSF1AgtMxeemjaGQWIsOUSb2M/XnNcV
-         UNC9y4V4dZBF6oCEn0CpSFEHfazHkkHMaBuGNY0WVTdkVYuCvQBGwKigu4wUOuugBBZp
-         U+Wc32NEDol3lGb0vh8AT7ijboa+HvlM8/D7mBtBKd4bw05mBD0yuvJf6mXTE51236kF
-         HBYQ==
+        d=linaro.org; s=google;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=GVCRdf20z2if/WXkRWAWqNzxqWMrdd3fec2HBGui9Y4=;
+        b=vpT0MGtjheNDD9UYyeQ9IF6ps2q6c5IYS7+YVX48yc4tWpxLckATwez9vl/fmKvKOu
+         Un5tTk7mFMOKmEWwBimuEknvcP6F2sB3NkCGOVULWA773CqcI2y5x05UrJOEey09Y1Qe
+         OJShbXk5oyDvWqTq2i9Ka5PCylSOR65FEwGo+hLe7OBJJig283XCAj/gVM7L7OOgVVkt
+         XNRb/aPlYGIrf3l6nSI8wk/DbPGeeiUIuLdESZg34GXkZggbWQM6xlBatPy6Dy+uJnjp
+         QWqq5zGiDQokTk0lCmwIrW6YT4xsP5OmXZCfFSVzLpNS4fCcMsnPPNCUwqQQerPw/0V7
+         QxZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=zYTHUsVVhBwj0g4Gze0zy2RUZ5LyrxDkA+fp8E1dT/8=;
-        b=NmlYBZN/MZKsFsDTdjNcB6ts/S9E4QfInlHigTwBfvw8hG92lqhgOGlNGXfzThFOQv
-         OcjYnm8+ze2WB3X6klbjbuhJ9HjK+Rrlrda/B9MYhvLx1fzsaCAWgdUAW+y2ZqCZAREl
-         a6EaqJ6Y7VGU389ueP96ZZXKRNNk61WnmWI/Z59LQN2+XUhjuRASOZMxwKaI1UjV72+Q
-         aiyvLi8q5JOT6nXgefRLxty6S/SV7MQ9NT0hMQSdR2lM/TLx0wNzJGM08E00nlQyC99j
-         csKhRDAShFy28OlbS9uVQS5AbX29u9Zk0STFhFsHoKoZsSB8/kGp9nizwsU+mak7Il50
-         nrYA==
-X-Gm-Message-State: AOAM531jnhA7AZN1DSCGyCi6ucTk/u6Ph19ksoWuWv76TpU/ad4NdWXn
-        pODjCdC0PyQBNu8owD9cS4A=
-X-Google-Smtp-Source: ABdhPJzpx4N3xp1lLjkagnxhXCabnGndX91MAsGN9ExhB14AG7jRfTUCqS6EGeMdSNZnv+DNnPGwEA==
-X-Received: by 2002:a17:907:90c7:b0:6d1:c55:86a4 with SMTP id gk7-20020a17090790c700b006d10c5586a4mr2478924ejb.484.1645712564078;
-        Thu, 24 Feb 2022 06:22:44 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
-        by smtp.googlemail.com with ESMTPSA id r1sm1433162ejh.52.2022.02.24.06.22.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 24 Feb 2022 06:22:43 -0800 (PST)
-Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
-Message-ID: <e459dbcc-3a43-bd20-6f78-1a9d712ae020@redhat.com>
-Date:   Thu, 24 Feb 2022 15:22:41 +0100
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=GVCRdf20z2if/WXkRWAWqNzxqWMrdd3fec2HBGui9Y4=;
+        b=cEgWPjoJWoAqAXnFZ46jXO7NnDkJEdtbCxxG+wQ3gfeX5+ytvtkqx068eXn3EgQOSD
+         6eCYzpIk5egdPqUwCtrs8Np2J4phXdsFleiDdt0GJNDA+CgDOqx+RVhkCYiErw9KFthf
+         /0Ttm2pKEFxdrlX5ZzED/CW1uzjrTv0aSI9Qkc0/qsV1phYdQRfBr9RjANfbIgbQOYLg
+         vafKXvgHgg0UhkYzBSXNMSamDuYwR8+1rzr1pvO65xWkIV7r2sZN46TH/SrktZzo26WR
+         menvfEh1Sbks0JMb1YPnF/wzdeMwJXojqGaWcB75icjiAekElOn6lVQvAf1ek5hze/MG
+         iNWg==
+X-Gm-Message-State: AOAM530mpSwybQj1piA+bkfk5BbeugQSNyOk/ytgdhrOORqP6Zh2KtTc
+        SPQMVxLAh5/6tYmvf4fAzendxr++7bYe6S0Ft0hUXcCXzFz+0g==
+X-Google-Smtp-Source: ABdhPJy/5/6AxH9eFRdpjQp6L9u+IiFuFnYk1TdAAYF24CLqBAoWxW4orYo4f65bn53WsTGYXwmnMlZI0suLijbIyQ4=
+X-Received: by 2002:a81:7812:0:b0:2d0:8c2c:5159 with SMTP id
+ t18-20020a817812000000b002d08c2c5159mr2626955ywc.120.1645712600221; Thu, 24
+ Feb 2022 06:23:20 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] KVM: x86: nSVM: disallow userspace setting of
- MSR_AMD64_TSC_RATIO to non default value when tsc scaling disabled
-Content-Language: en-US
-To:     Maxim Levitsky <mlevitsk@redhat.com>, kvm@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-References: <20220223115649.319134-1-mlevitsk@redhat.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <20220223115649.319134-1-mlevitsk@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Thu, 24 Feb 2022 19:53:09 +0530
+Message-ID: <CA+G9fYuhipgPsHetpvBmD4GO7KGfhSRRAAgN2ZnoFUWiCKMy6Q@mail.gmail.com>
+Subject: [next] riscv/kernel/vdso.c:123:27: error: 'next' undeclared
+To:     open list <linux-kernel@vger.kernel.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>
+Cc:     "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Tong Tiangen <tongtiangen@huawei.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Jisheng Zhang <jszhang@kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        lkft-triage@lists.linaro.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,55 +71,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/23/22 12:56, Maxim Levitsky wrote:
-> If nested tsc scaling is disabled, MSR_AMD64_TSC_RATIO should
-> never have non default value.
-> 
-> Due to way nested tsc scaling support was implmented in qemu,
-> it would set this msr to 0 when nested tsc scaling was disabled.
-> Ignore that value for now, as it causes no harm.
-> 
-> 
-> Fixes: 5228eb96a487 ("KVM: x86: nSVM: implement nested TSC scaling")
-> Cc: stable@vger.kernel.org
-> 
-> Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
-> ---
->   arch/x86/kvm/svm/svm.c | 19 +++++++++++++++++--
->   1 file changed, 17 insertions(+), 2 deletions(-)
+[Please ignore this email if it is already reported]
 
-Queued, thanks.
+Linux next-20220223 arch riscv builds failed due to following errors.
+Build configs:
+  - riscv-gcc-9-defconfig
+  - riscv-gcc-9-defconfig
+  - riscv-gcc-10-defconfig
+  - riscv-gcc-11-defconfig
 
-Paolo
+metadata:
+  git_ref: master
+  git_repo: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
+  git_sha: d4a0ae62a277377de396850ed4b709b6bd9b7326
+  git_describe: next-20220223
+  arch: riscv
+  toolchain: gcc-11
 
-> diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-> index 7038c76fa841..b80ad471776f 100644
-> --- a/arch/x86/kvm/svm/svm.c
-> +++ b/arch/x86/kvm/svm/svm.c
-> @@ -2705,8 +2705,23 @@ static int svm_set_msr(struct kvm_vcpu *vcpu, struct msr_data *msr)
->   	u64 data = msr->data;
->   	switch (ecx) {
->   	case MSR_AMD64_TSC_RATIO:
-> -		if (!msr->host_initiated && !svm->tsc_scaling_enabled)
-> -			return 1;
-> +
-> +		if (!svm->tsc_scaling_enabled) {
-> +
-> +			if (!msr->host_initiated)
-> +				return 1;
-> +			/*
-> +			 * In case TSC scaling is not enabled, always
-> +			 * leave this MSR at the default value.
-> +			 *
-> +			 * Due to bug in qemu 6.2.0, it would try to set
-> +			 * this msr to 0 if tsc scaling is not enabled.
-> +			 * Ignore this value as well.
-> +			 */
-> +			if (data != 0 && data != svm->tsc_ratio_msr)
-> +				return 1;
-> +			break;
-> +		}
->   
->   		if (data & TSC_RATIO_RSVD)
->   			return 1;
+Build error:
+-----------
+In file included from arch/riscv/kernel/vdso.c:10:
+arch/riscv/kernel/vdso.c: In function 'vdso_join_timens':
+arch/riscv/kernel/vdso.c:123:27: error: 'next' undeclared (first use
+in this function); did you mean 'net'?
+  123 |         for_each_vma(vmi, next) {
+      |                           ^~~~
+include/linux/mm.h:685:49: note: in definition of macro 'for_each_vma'
+  685 | #define for_each_vma(vmi, vma)          while ((vma =
+vma_next(&(vmi))) != NULL)
+      |                                                 ^~~
+arch/riscv/kernel/vdso.c:123:27: note: each undeclared identifier is
+reported only once for each function it appears in
+  123 |         for_each_vma(vmi, next) {
+      |                           ^~~~
+include/linux/mm.h:685:49: note: in definition of macro 'for_each_vma'
+  685 | #define for_each_vma(vmi, vma)          while ((vma =
+vma_next(&(vmi))) != NULL)
+      |                                                 ^~~
+make[3]: *** [scripts/Makefile.build:288: arch/riscv/kernel/vdso.o] Error 1
+make[3]: Target '__build' not remade because of errors.
+make[2]: *** [scripts/Makefile.build:614: arch/riscv/kernel] Error 2
+make[2]: Target '__build' not remade because of errors.
+make[1]: *** [Makefile:1971: arch/riscv] Error 2
 
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
+Steps to reproduce:
+------------------
+# To install tuxmake on your system globally:
+# sudo pip3 install -U tuxmake
+
+tuxmake --runtime podman --target-arch riscv --toolchain gcc-11
+--kconfig defconfig
+
+--
+Linaro LKFT
+https://lkft.linaro.org
+
+[1] https://builds.tuxbuild.com/25XO99nwfQgKrWKz4yfBPYw0wyU/

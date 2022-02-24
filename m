@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 501CD4C2BBE
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 13:30:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB1724C2BC3
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 13:32:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233834AbiBXMaj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 07:30:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43068 "EHLO
+        id S234341AbiBXMbg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 07:31:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234288AbiBXMag (ORCPT
+        with ESMTP id S231460AbiBXMbe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 07:30:36 -0500
+        Thu, 24 Feb 2022 07:31:34 -0500
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4EA162649AD
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 04:30:07 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6AE91264987
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 04:31:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1645705806;
+        s=mimecast20190719; t=1645705864;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=zhqDRec0VOKot1t14KWHy23p5AtjEJVAkoghtw0kzkE=;
-        b=Rmwb9dFfH7jYK88ZeAalN3MmvdJloZll1ef3SMxsahyxCN07vqcI277qNK1NpeFD0aKtw0
-        /AVVz2eLCiRcQTrAt39sUML1Bs6G5WyPF9nxs2bG7kHqk3blG6IvkiR4jJaO/Mi1Anyear
-        DnFb55NTsEB71xwUO0MfzsCExsKMuQs=
+        bh=a7/3du5HvRrnFGXwjxtGM6+I7ouu7VFk3hP1L/xSkXg=;
+        b=ambV93SgtrFiwEjLeT2YKVAGSLVROmhRaRD5x+Sq+iuznPLcgbIxN/kd27kCrBFTflxLud
+        5GLaLdfUXowa63Abj5fyUE0afjbLBbKf4bRIerFCH1liuUxwSRFzt7cZXCWtChxqDc3QII
+        nVvcjCJiU1/2EKJSdD1ewqMLosJo8yE=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-53-C2te0jKPMjmNIiCZmNMFvw-1; Thu, 24 Feb 2022 07:30:01 -0500
-X-MC-Unique: C2te0jKPMjmNIiCZmNMFvw-1
+ us-mta-245-V9iCVZ-EMhqdNW1jv_ymsg-1; Thu, 24 Feb 2022 07:31:01 -0500
+X-MC-Unique: V9iCVZ-EMhqdNW1jv_ymsg-1
 Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 7CC3A80D6AD;
-        Thu, 24 Feb 2022 12:29:57 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 24C77804312;
+        Thu, 24 Feb 2022 12:30:58 +0000 (UTC)
 Received: from t480s.redhat.com (unknown [10.39.194.160])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 3218C2634C;
-        Thu, 24 Feb 2022 12:29:32 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id F17F826576;
+        Thu, 24 Feb 2022 12:29:57 +0000 (UTC)
 From:   David Hildenbrand <david@redhat.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Andrew Morton <akpm@linux-foundation.org>,
@@ -65,9 +65,9 @@ Cc:     Andrew Morton <akpm@linux-foundation.org>,
         Pedro Gomes <pedrodemargomes@gmail.com>,
         Oded Gabbay <oded.gabbay@gmail.com>, linux-mm@kvack.org,
         David Hildenbrand <david@redhat.com>
-Subject: [PATCH RFC 06/13] mm/rmap: pass rmap flags to hugepage_add_anon_rmap()
-Date:   Thu, 24 Feb 2022 13:26:07 +0100
-Message-Id: <20220224122614.94921-7-david@redhat.com>
+Subject: [PATCH RFC 07/13] mm/rmap: use page_move_anon_rmap() when reusing a mapped PageAnon() page exclusively
+Date:   Thu, 24 Feb 2022 13:26:08 +0100
+Message-Id: <20220224122614.94921-8-david@redhat.com>
 In-Reply-To: <20220224122614.94921-1-david@redhat.com>
 References: <20220224122614.94921-1-david@redhat.com>
 MIME-Version: 1.0
@@ -83,70 +83,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Let's prepare for passing RMAP_EXCLUSIVE, similarly as we do for
-page_add_anon_rmap() now. RMAP_COMPOUND is implicit for hugetlb
-pages and ignored.
+We want to mark anonymous pages exclusive, and when using
+page_move_anon_rmap() we know that we are the exclusive user, as
+properly documented. This is a preparation for marking anonymous pages
+exclusive in page_move_anon_rmap().
+
+In both instances, we're holding page lock and are sure that we're the
+exclusive owner (page_count() == 1). hugetlb already properly uses
+page_move_anon_rmap() in the write fault handler.
 
 Signed-off-by: David Hildenbrand <david@redhat.com>
 ---
- include/linux/rmap.h | 2 +-
- mm/migrate.c         | 2 +-
- mm/rmap.c            | 8 +++++---
- 3 files changed, 7 insertions(+), 5 deletions(-)
+ mm/huge_memory.c | 2 ++
+ mm/memory.c      | 1 +
+ 2 files changed, 3 insertions(+)
 
-diff --git a/include/linux/rmap.h b/include/linux/rmap.h
-index f230e86b4587..593a4566420f 100644
---- a/include/linux/rmap.h
-+++ b/include/linux/rmap.h
-@@ -174,7 +174,7 @@ void page_add_file_rmap(struct page *, bool);
- void page_remove_rmap(struct page *, bool);
- 
- void hugepage_add_anon_rmap(struct page *, struct vm_area_struct *,
--			    unsigned long);
-+			    unsigned long, int);
- void hugepage_add_new_anon_rmap(struct page *, struct vm_area_struct *,
- 				unsigned long);
- 
-diff --git a/mm/migrate.c b/mm/migrate.c
-index d4d72a15224c..709cb11d5b81 100644
---- a/mm/migrate.c
-+++ b/mm/migrate.c
-@@ -238,7 +238,7 @@ static bool remove_migration_pte(struct page *page, struct vm_area_struct *vma,
- 			pte = pte_mkhuge(pte);
- 			pte = arch_make_huge_pte(pte, shift, vma->vm_flags);
- 			if (PageAnon(new))
--				hugepage_add_anon_rmap(new, vma, pvmw.address);
-+				hugepage_add_anon_rmap(new, vma, pvmw.address, 0);
- 			else
- 				page_dup_file_rmap(new, true);
- 			set_huge_pte_at(vma->vm_mm, pvmw.address, pvmw.pte, pte);
-diff --git a/mm/rmap.c b/mm/rmap.c
-index 902ebf99d147..bafdb7f70cec 100644
---- a/mm/rmap.c
-+++ b/mm/rmap.c
-@@ -2409,9 +2409,11 @@ void rmap_walk_locked(struct page *page, struct rmap_walk_control *rwc)
-  * The following two functions are for anonymous (private mapped) hugepages.
-  * Unlike common anonymous pages, anonymous hugepages have no accounting code
-  * and no lru code, because we handle hugepages differently from common pages.
-+ *
-+ * RMAP_COMPOUND is ignored.
-  */
--void hugepage_add_anon_rmap(struct page *page,
--			    struct vm_area_struct *vma, unsigned long address)
-+void hugepage_add_anon_rmap(struct page *page, struct vm_area_struct *vma,
-+			    unsigned long address, int flags)
- {
- 	struct anon_vma *anon_vma = vma->anon_vma;
- 	int first;
-@@ -2421,7 +2423,7 @@ void hugepage_add_anon_rmap(struct page *page,
- 	/* address might be in next vma when migration races vma_adjust */
- 	first = atomic_inc_and_test(compound_mapcount_ptr(page));
- 	if (first)
--		__page_set_anon_rmap(page, vma, address, 0);
-+		__page_set_anon_rmap(page, vma, address, flags & RMAP_EXCLUSIVE);
- }
- 
- void hugepage_add_new_anon_rmap(struct page *page,
+diff --git a/mm/huge_memory.c b/mm/huge_memory.c
+index 2ca137e01e84..7b9e76ba3f2f 100644
+--- a/mm/huge_memory.c
++++ b/mm/huge_memory.c
+@@ -1317,6 +1317,8 @@ vm_fault_t do_huge_pmd_wp_page(struct vm_fault *vmf)
+ 		try_to_free_swap(page);
+ 	if (page_count(page) == 1) {
+ 		pmd_t entry;
++
++		page_move_anon_rmap(page, vma);
+ 		entry = pmd_mkyoung(orig_pmd);
+ 		entry = maybe_pmd_mkwrite(pmd_mkdirty(entry), vma);
+ 		if (pmdp_set_access_flags(vma, haddr, vmf->pmd, entry, 1))
+diff --git a/mm/memory.c b/mm/memory.c
+index c2f1c2428303..1ab0dfbec288 100644
+--- a/mm/memory.c
++++ b/mm/memory.c
+@@ -3307,6 +3307,7 @@ static vm_fault_t do_wp_page(struct vm_fault *vmf)
+ 		 * and the page is locked, it's dark out, and we're wearing
+ 		 * sunglasses. Hit it.
+ 		 */
++		page_move_anon_rmap(page, vma);
+ 		unlock_page(page);
+ 		wp_page_reuse(vmf);
+ 		return VM_FAULT_WRITE;
 -- 
 2.35.1
 

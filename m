@@ -2,73 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38AC64C3759
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 22:07:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE5D94C376D
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 22:09:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234510AbiBXVG7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 16:06:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56270 "EHLO
+        id S234534AbiBXVIG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 16:08:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229542AbiBXVG6 (ORCPT
+        with ESMTP id S229542AbiBXVIE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 16:06:58 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6903D24FA27;
-        Thu, 24 Feb 2022 13:06:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=gqwsfxNL/6u6rNbdgXApLMLgt2yxqOUUOtWYMHIjK/s=; b=TIctb2fI/Th0lTWb0MsVMD/mze
-        ygDbG+qwvvYChpgzeugUgvWAh1UnWeb+BBL4nWUOLBYTLF1WDKe4XaRG+RZGIH0gFFGxo6L/JClJa
-        W9mwKicf+pRvoyYIJRjMJ9WwEvCr8yxmoKVlb6mtFvGHqlF4Qof/J+JJuna1JWC1wUHIQAXacYgRe
-        Z+3OjnWf/3pC1oAJXDqzTpfvRMF9n1o/LqiyljVjemJYY5d5stQe9rJFFHkjWHAl2Bfwp4i+rUpfE
-        PM5zdL1+Gs7HXhVFVDvA6MFrXjw0o7szFHgmJxI52cUFFdKBtjzigj2IEaEY8SfBHUBGOJ/2ImjHw
-        viPH3q1w==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nNLJh-0058qy-3b; Thu, 24 Feb 2022 21:06:25 +0000
-Date:   Thu, 24 Feb 2022 21:06:25 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Byron Stanoszek <gandalf@winds.org>
-Cc:     Dave Chinner <david@fromorbit.com>, Jan Kara <jack@suse.cz>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        reiserfs-devel@vger.kernel.org
-Subject: Re: Is it time to remove reiserfs?
-Message-ID: <YhfzUc8afuoQkx/U@casper.infradead.org>
-References: <YhIwUEpymVzmytdp@casper.infradead.org>
- <20220222100408.cyrdjsv5eun5pzij@quack3.lan>
- <20220222221614.GC3061737@dread.disaster.area>
- <3ce45c23-2721-af6e-6cd7-648dc399597@winds.org>
+        Thu, 24 Feb 2022 16:08:04 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B09816A593;
+        Thu, 24 Feb 2022 13:07:34 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E97926196B;
+        Thu, 24 Feb 2022 21:07:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79CFCC340E9;
+        Thu, 24 Feb 2022 21:07:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645736853;
+        bh=uYXf9/DJ39VQh6FgBg7fGGJcFRbwfo7L2EqOdk0O4Qs=;
+        h=Date:From:To:Cc:Subject:From;
+        b=QWDnDGKsG11aZVRYwfScOuwOwZPRkWArnNKJQdR3/aOnIy34rAeAs1HKxx161wPl+
+         Rm3OezleKwCckU9OTwa3KJfHim7hSZ6/VLKRmn6Hw3bc8fKRh50zHYpEAWM84JACUG
+         uEb14VbGFLb/RDwGq3/8ee7iOZ149Ddg7oNIvsmG/q935Md0pSjJeVMV3qBm1nggJR
+         4frVuf55GZOzX2CFbUKo8FLqCF3Kajaj6Wd285dsnA4LEo5RZc+7izGXCNC+fFUOfl
+         I6LtHxEgAFZtQGm9zXbb8e0ZpPTmojr1m1G3P5mAQpI5SDfMqBnIW+kAK9gQWTp2JQ
+         GXGBrexLCCEJQ==
+Date:   Thu, 24 Feb 2022 15:15:31 -0600
+From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
+To:     linux-wireless@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jeff Johnson <quic_jjohnson@quicinc.com>
+Cc:     Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+        linux-hardening@vger.kernel.org,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Subject: [PATCH v2 0/6][next] ath6kl: wmi: Replace one-element arrays with
+ flexible-array members
+Message-ID: <cover.1645736204.git.gustavoars@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <3ce45c23-2721-af6e-6cd7-648dc399597@winds.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 23, 2022 at 09:48:26AM -0500, Byron Stanoszek wrote:
-> For what it's worth, I have a number of production servers still using
-> Reiserfs, which I regularly maintain by upgrading to the latest Linux kernel
-> annually (mostly to apply security patches). I figured this filesystem would
-> still be available for several more years, since it's not quite y2038k yet.
+This series aims to replace one-element arrays with flexible-array
+members in multiple structures in drivers/net/wireless/ath/ath6kl/wmi.h
 
-Hey Byron, thanks for sharing your usage.
+There is a regular need in the kernel to provide a way to declare having
+a dynamically sized set of trailing elements in a structure. Kernel code
+should always use “flexible array members”[1] for these cases. The older
+style of one-element or zero-length arrays should no longer be used[2].
 
-It's not entirely clear to me from your message whether you're aware
-that our annual LTS release actually puts out new kernels every week (or
-sometimes twice a week), and upgrades to the latest version are always
-recommended.  Those LTS kernels typically get five years of support in
-total; indeed we just retired the v4.4 series earlier this month which
-was originally released in January 2016, so it got six years of support.
+This helps with the ongoing efforts to globally enable -Warray-bounds
+and get us closer to being able to tighten the FORTIFY_SOURCE routines
+on memcpy().
 
-If we dropped reiserfs from the kernel today (and thanks to Edward, we
-don't have to), you'd still be able to use a v5.15 based kernel with
-regular updates until 2028.  If we drop it in two years, that should
-take you through to 2030.  Is that enough for your usage?
+These issues were found with the help of Coccinelle and audited and fixed,
+manually.
+
+[1] https://en.wikipedia.org/wiki/Flexible_array_member
+[2] https://www.kernel.org/doc/html/v5.16/process/deprecated.html#zero-length-and-one-element-arrays
+
+Link: https://github.com/KSPP/linux/issues/79
+
+Changes in v2:
+ - Revert changes in if-statement logic for all the affected patches:
+	if (len < sizeof(struct foo))
+   Link: https://lore.kernel.org/linux-hardening/3abb0846-a26f-3d76-8936-cd23cf4387f1@quicinc.com/ 
+ - Update changelog texts.
+ - Add Reviewed-by: Jeff Johnson <quic_jjohnson@quicinc.com> tag.
+
+Gustavo A. R. Silva (6):
+  ath6kl: wmi: Replace one-element array with flexible-array member in
+    struct wmi_begin_scan_cmd
+  ath6kl: wmi: Replace one-element array with flexible-array member in
+    struct wmi_start_scan_cmd
+  ath6kl: wmi: Replace one-element array with flexible-array member in
+    struct wmi_channel_list_reply
+  ath6kl: wmi: Replace one-element array with flexible-array member in
+    struct wmi_connect_event
+  ath6kl: wmi: Replace one-element array with flexible-array member in
+    struct wmi_disconnect_event
+  ath6kl: wmi: Replace one-element array with flexible-array member in
+    struct wmi_aplist_event
+
+ drivers/net/wireless/ath/ath6kl/wmi.c | 22 ++++------------------
+ drivers/net/wireless/ath/ath6kl/wmi.h | 12 ++++++------
+ 2 files changed, 10 insertions(+), 24 deletions(-)
+
+-- 
+2.27.0
+

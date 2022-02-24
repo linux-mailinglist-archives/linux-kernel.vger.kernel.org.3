@@ -2,75 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC0104C2284
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 04:43:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A95CF4C228F
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 04:46:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229663AbiBXDnl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 22:43:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49672 "EHLO
+        id S229701AbiBXDog (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 22:44:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229666AbiBXDnj (ORCPT
+        with ESMTP id S229684AbiBXDod (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 22:43:39 -0500
-Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CCB425A30B
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 19:43:09 -0800 (PST)
-Received: by mail-oi1-x22f.google.com with SMTP id i5so1243545oih.1
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 19:43:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=LQV2Ce0Cqm3fFzgko900zEq9hMhH+dYL1BenORkgZSE=;
-        b=cLYZ+u45ycfZDh38NHEb/21XbNgNJUZG3on3NOdklDWSJ7PYJ+mdinq7E890TK38OQ
-         tSkQUxI/xCNA/cht+qvJAbH0cwiq7f7N3rXRxmjZbGS3GHMwWBev1n1I02+bJN7zW90S
-         Y73yWgHuDPVmf6+iArbNDFcrS1A79n7D5oRnf5N/FJ8ywVtznp2wcRdZ9W46JWcAonIF
-         XUk4j4BQcWTfayGWJUrM4yxLtlsHnLKU4H2WPmutQHSw3DikI6o0QvBR6/NDcFEpdp1e
-         5No0/Xf00aVJsSrQu/9VrUfDI9OA88oOlURFV1yzpkIuS88PD7aWFFrnlzjG3lTTSP1/
-         +wIg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=LQV2Ce0Cqm3fFzgko900zEq9hMhH+dYL1BenORkgZSE=;
-        b=zaQlrdfLY3t74AVhSesWNPUfBp+LwRZYfUa62hVS/vdIexGotlKLwcb4SpwlxsiBv7
-         1q4EZ5DmqlLabV/54wAVkT8V8d7UdkxhWUyPKE77cTqpKVCkXT+Vp5gDRfGhuTe8gY+e
-         4S0fBvIEVqsOvDqAfAtEegDEc0TnJDV5kwfOeFsJ/wiIFnPHWOVLLIrIWTNOaodnLaE2
-         avcN1PXtJ5FgaGRX/+thuqBVlgELAe6hoPslHofUKo6syWAF9pSu14NdqidKPnFaZkMm
-         dW1TK2diXW/3ofQ+tj/0Bty2i5MH88YONO+hA614ZDq0EYv1rytowHIvqWfbi06od2Xs
-         hxTw==
-X-Gm-Message-State: AOAM5311Qg33BLXqos2BTuXSmE9LA9aGL/O5kbVIcJy35BSLRlLMUi6w
-        CrSpz5KMnEMWxPHfM94vHAICAg==
-X-Google-Smtp-Source: ABdhPJzgnESy4fUgWr9qkHrfCBVEALdcwUFNttweBpXgPrGC9ko/0af5qYzPPWqA86hfZugFItirDw==
-X-Received: by 2002:aca:32c1:0:b0:2ce:6ee7:2c9f with SMTP id y184-20020aca32c1000000b002ce6ee72c9fmr6192858oiy.205.1645674189114;
-        Wed, 23 Feb 2022 19:43:09 -0800 (PST)
-Received: from builder.lan ([2600:1700:a0:3dc8:3697:f6ff:fe85:aac9])
-        by smtp.gmail.com with ESMTPSA id e9sm604775oos.19.2022.02.23.19.43.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Feb 2022 19:43:08 -0800 (PST)
-Date:   Wed, 23 Feb 2022 21:43:06 -0600
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Ansuel Smith <ansuelsmth@gmail.com>
-Cc:     Andy Gross <agross@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Taniya Das <tdas@codeaurora.org>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 04/16] clk: qcom: gcc-ipq806x: fix wrong naming for
- gcc_pxo_pll8_pll0
-Message-ID: <Yhb+yiSIBmO9iJNs@builder.lan>
-References: <20220217235703.26641-1-ansuelsmth@gmail.com>
- <20220217235703.26641-5-ansuelsmth@gmail.com>
+        Wed, 23 Feb 2022 22:44:33 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CEE525A307
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 19:44:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645674244; x=1677210244;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Mv/gyykeu8IUzjNn/14ZbL5ZYye4y48GpdUnsID2quU=;
+  b=UK/ICtdIlXrEE11VG3Rm4qs9qjRYfaQmcfvjESDwTWdG8NV7Vku8H6ct
+   BWd295mSOgNuHsu0g40+I/3/mxJ705fIaingX/dV9GETRjkKVmiGNEmat
+   5mzZn230tQK5O60nu6m5NEaW4/dydFjUGurnMJFfhQ7Gx9yhskeindxGS
+   8IKeCZYphY/IEn+zmi1ERj51xMVPhy43M4Ot/2KqTUJ1AXGBI0rjKwBsg
+   EkqPgYWGGF/DOwwFGJaO8pDhXID43mWBN8b5BrsTK/TIMK24tfmvLPbdZ
+   noQELgHUFNB7h0YBYK1I1wREvg8lRdTAyhTn+NGi4F+pnMNfg/0nw++Ly
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10267"; a="232117165"
+X-IronPort-AV: E=Sophos;i="5.88,392,1635231600"; 
+   d="scan'208";a="232117165"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2022 19:44:02 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,392,1635231600"; 
+   d="scan'208";a="628326426"
+Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 23 Feb 2022 19:44:01 -0800
+Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nN52u-0002CT-LY; Thu, 24 Feb 2022 03:44:00 +0000
+Date:   Thu, 24 Feb 2022 11:43:11 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Ingo Molnar <mingo@kernel.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [mingo-tip:sched/headers 1476/2340] kernel/power/wakelock.c:57:11:
+ error: implicit declaration of function 'sysfs_emit_at'
+Message-ID: <202202241133.jDlh5h9y-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220217235703.26641-5-ansuelsmth@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,111 +62,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 17 Feb 17:56 CST 2022, Ansuel Smith wrote:
+tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git sched/headers
+head:   97c5eeb4de3ad324ed2a4656b46465299cfd010a
+commit: b6a38a38fb2817f6575f45302405e6cfae374b4e [1476/2340] headers/deps: kobject: Use <linux/sysfs_types.h> in <linux/kobject.h>, remove <linux/sysfs.h> inclusion
+config: i386-randconfig-a011 (https://download.01.org/0day-ci/archive/20220224/202202241133.jDlh5h9y-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=b6a38a38fb2817f6575f45302405e6cfae374b4e
+        git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
+        git fetch --no-tags mingo-tip sched/headers
+        git checkout b6a38a38fb2817f6575f45302405e6cfae374b4e
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
-> Parent gcc_pxo_pll8_pll0 had the parent definition and parent map
-> swapped. Fix this naming error.
-> 
-> Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Note: the mingo-tip/sched/headers HEAD 97c5eeb4de3ad324ed2a4656b46465299cfd010a builds fine.
+      It only hurts bisectability.
 
-> ---
->  drivers/clk/qcom/gcc-ipq806x.c | 20 ++++++++++----------
->  1 file changed, 10 insertions(+), 10 deletions(-)
-> 
-> diff --git a/drivers/clk/qcom/gcc-ipq806x.c b/drivers/clk/qcom/gcc-ipq806x.c
-> index d6b7adb4be38..34cddf461dba 100644
-> --- a/drivers/clk/qcom/gcc-ipq806x.c
-> +++ b/drivers/clk/qcom/gcc-ipq806x.c
-> @@ -291,13 +291,13 @@ static const char * const gcc_pxo_pll3[] = {
->  	"pll3",
->  };
->  
-> -static const struct parent_map gcc_pxo_pll8_pll0[] = {
-> +static const struct parent_map gcc_pxo_pll8_pll0_map[] = {
->  	{ P_PXO, 0 },
->  	{ P_PLL8, 3 },
->  	{ P_PLL0, 2 }
->  };
->  
-> -static const char * const gcc_pxo_pll8_pll0_map[] = {
-> +static const char * const gcc_pxo_pll8_pll0[] = {
->  	"pxo",
->  	"pll8_vote",
->  	"pll0_vote",
-> @@ -1993,7 +1993,7 @@ static struct clk_rcg usb30_master_clk_src = {
->  	},
->  	.s = {
->  		.src_sel_shift = 0,
-> -		.parent_map = gcc_pxo_pll8_pll0,
-> +		.parent_map = gcc_pxo_pll8_pll0_map,
->  	},
->  	.freq_tbl = clk_tbl_usb30_master,
->  	.clkr = {
-> @@ -2001,7 +2001,7 @@ static struct clk_rcg usb30_master_clk_src = {
->  		.enable_mask = BIT(11),
->  		.hw.init = &(struct clk_init_data){
->  			.name = "usb30_master_ref_src",
-> -			.parent_names = gcc_pxo_pll8_pll0_map,
-> +			.parent_names = gcc_pxo_pll8_pll0,
->  			.num_parents = 3,
->  			.ops = &clk_rcg_ops,
->  			.flags = CLK_SET_RATE_GATE,
-> @@ -2063,7 +2063,7 @@ static struct clk_rcg usb30_utmi_clk = {
->  	},
->  	.s = {
->  		.src_sel_shift = 0,
-> -		.parent_map = gcc_pxo_pll8_pll0,
-> +		.parent_map = gcc_pxo_pll8_pll0_map,
->  	},
->  	.freq_tbl = clk_tbl_usb30_utmi,
->  	.clkr = {
-> @@ -2071,7 +2071,7 @@ static struct clk_rcg usb30_utmi_clk = {
->  		.enable_mask = BIT(11),
->  		.hw.init = &(struct clk_init_data){
->  			.name = "usb30_utmi_clk",
-> -			.parent_names = gcc_pxo_pll8_pll0_map,
-> +			.parent_names = gcc_pxo_pll8_pll0,
->  			.num_parents = 3,
->  			.ops = &clk_rcg_ops,
->  			.flags = CLK_SET_RATE_GATE,
-> @@ -2133,7 +2133,7 @@ static struct clk_rcg usb_hs1_xcvr_clk_src = {
->  	},
->  	.s = {
->  		.src_sel_shift = 0,
-> -		.parent_map = gcc_pxo_pll8_pll0,
-> +		.parent_map = gcc_pxo_pll8_pll0_map,
->  	},
->  	.freq_tbl = clk_tbl_usb,
->  	.clkr = {
-> @@ -2141,7 +2141,7 @@ static struct clk_rcg usb_hs1_xcvr_clk_src = {
->  		.enable_mask = BIT(11),
->  		.hw.init = &(struct clk_init_data){
->  			.name = "usb_hs1_xcvr_src",
-> -			.parent_names = gcc_pxo_pll8_pll0_map,
-> +			.parent_names = gcc_pxo_pll8_pll0,
->  			.num_parents = 3,
->  			.ops = &clk_rcg_ops,
->  			.flags = CLK_SET_RATE_GATE,
-> @@ -2197,7 +2197,7 @@ static struct clk_rcg usb_fs1_xcvr_clk_src = {
->  	},
->  	.s = {
->  		.src_sel_shift = 0,
-> -		.parent_map = gcc_pxo_pll8_pll0,
-> +		.parent_map = gcc_pxo_pll8_pll0_map,
->  	},
->  	.freq_tbl = clk_tbl_usb,
->  	.clkr = {
-> @@ -2205,7 +2205,7 @@ static struct clk_rcg usb_fs1_xcvr_clk_src = {
->  		.enable_mask = BIT(11),
->  		.hw.init = &(struct clk_init_data){
->  			.name = "usb_fs1_xcvr_src",
-> -			.parent_names = gcc_pxo_pll8_pll0_map,
-> +			.parent_names = gcc_pxo_pll8_pll0,
->  			.num_parents = 3,
->  			.ops = &clk_rcg_ops,
->  			.flags = CLK_SET_RATE_GATE,
-> -- 
-> 2.34.1
-> 
+All errors (new ones prefixed by >>):
+
+>> kernel/power/wakelock.c:57:11: error: implicit declaration of function 'sysfs_emit_at' [-Werror,-Wimplicit-function-declaration]
+                           len += sysfs_emit_at(buf, len, "%s ", wl->name);
+                                  ^
+   kernel/power/wakelock.c:60:9: error: implicit declaration of function 'sysfs_emit_at' [-Werror,-Wimplicit-function-declaration]
+           len += sysfs_emit_at(buf, len, "\n");
+                  ^
+   2 errors generated.
+
+
+vim +/sysfs_emit_at +57 kernel/power/wakelock.c
+
+b86ff9820fd5df Rafael J. Wysocki  2012-04-29  45  
+b86ff9820fd5df Rafael J. Wysocki  2012-04-29  46  ssize_t pm_show_wakelocks(char *buf, bool show_active)
+b86ff9820fd5df Rafael J. Wysocki  2012-04-29  47  {
+b86ff9820fd5df Rafael J. Wysocki  2012-04-29  48  	struct rb_node *node;
+b86ff9820fd5df Rafael J. Wysocki  2012-04-29  49  	struct wakelock *wl;
+c9d967b2ce40d7 Greg Kroah-Hartman 2022-01-13  50  	int len = 0;
+b86ff9820fd5df Rafael J. Wysocki  2012-04-29  51  
+b86ff9820fd5df Rafael J. Wysocki  2012-04-29  52  	mutex_lock(&wakelocks_lock);
+b86ff9820fd5df Rafael J. Wysocki  2012-04-29  53  
+b86ff9820fd5df Rafael J. Wysocki  2012-04-29  54  	for (node = rb_first(&wakelocks_tree); node; node = rb_next(node)) {
+b86ff9820fd5df Rafael J. Wysocki  2012-04-29  55  		wl = rb_entry(node, struct wakelock, node);
+2434aea58e652a Tri Vo             2019-08-06  56  		if (wl->ws->active == show_active)
+c9d967b2ce40d7 Greg Kroah-Hartman 2022-01-13 @57  			len += sysfs_emit_at(buf, len, "%s ", wl->name);
+b86ff9820fd5df Rafael J. Wysocki  2012-04-29  58  	}
+b86ff9820fd5df Rafael J. Wysocki  2012-04-29  59  
+c9d967b2ce40d7 Greg Kroah-Hartman 2022-01-13  60  	len += sysfs_emit_at(buf, len, "\n");
+b86ff9820fd5df Rafael J. Wysocki  2012-04-29  61  
+b86ff9820fd5df Rafael J. Wysocki  2012-04-29  62  	mutex_unlock(&wakelocks_lock);
+c9d967b2ce40d7 Greg Kroah-Hartman 2022-01-13  63  	return len;
+b86ff9820fd5df Rafael J. Wysocki  2012-04-29  64  }
+b86ff9820fd5df Rafael J. Wysocki  2012-04-29  65  
+
+:::::: The code at line 57 was first introduced by commit
+:::::: c9d967b2ce40d71e968eb839f36c936b8a9cf1ea PM: wakeup: simplify the output logic of pm_show_wakelocks()
+
+:::::: TO: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+:::::: CC: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

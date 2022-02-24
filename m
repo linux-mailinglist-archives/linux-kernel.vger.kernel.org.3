@@ -2,179 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1888F4C3136
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 17:27:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 94B924C3118
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 17:17:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229665AbiBXQ2D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 11:28:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60452 "EHLO
+        id S229595AbiBXQRp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 11:17:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229589AbiBXQ2C (ORCPT
+        with ESMTP id S229436AbiBXQRn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 11:28:02 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E6DF29F6C6
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 08:27:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1645720051;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=HnqUOzHPW8Dkvm4wNNfAluTLjyE7u1lt3OFqRCOZI9M=;
-        b=baIzjeneG2SIDXgzdATgQN2Nyc1tqeOvcb6KwUsppuV9FX6sDNknokQOuT//uJBOcEai+4
-        3LCADUCIVhA2vZr9Qzs+oh8OCF5Xsp2FS31ef437BbhQAMub+LCbSo9VNvsIrQvo0fFVfP
-        5U++FiISYLVdNmTY9ur/pE/RtjI5ePY=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-474-066Bo6ZvOnOsOkVHTtdzCA-1; Thu, 24 Feb 2022 11:11:19 -0500
-X-MC-Unique: 066Bo6ZvOnOsOkVHTtdzCA-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 11A46180FD73;
-        Thu, 24 Feb 2022 16:11:18 +0000 (UTC)
-Received: from starship (unknown [10.40.195.190])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id A3475804D4;
-        Thu, 24 Feb 2022 16:11:16 +0000 (UTC)
-Message-ID: <065dff8b1c54e456c9f0d7d5d4d806aadf80eb16.camel@redhat.com>
-Subject: Re: [PATCH v2 17/18] KVM: x86: flush TLB separately from MMU reset
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org
-Cc:     seanjc@google.com
-Date:   Thu, 24 Feb 2022 18:11:15 +0200
-In-Reply-To: <20220217210340.312449-18-pbonzini@redhat.com>
-References: <20220217210340.312449-1-pbonzini@redhat.com>
-         <20220217210340.312449-18-pbonzini@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+        Thu, 24 Feb 2022 11:17:43 -0500
+Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5339434B5
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 08:17:05 -0800 (PST)
+Received: by mail-yb1-xb36.google.com with SMTP id d21so427281yba.11
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 08:17:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=M6/DsYcMdCQ5Jv7h2HtppDAD63hulQRUnEll08wdM0w=;
+        b=MMxNIcwAG1rEPw9GYtGcc1MbySE+4/aZhxOK9Arfa8JLcnH0cfZ64TEtJey0SODZ7C
+         QBiByPS+i5aydu3vs8H0awLJPCpykYptJU2HmxOfIPQy8vs+fSr3SUJJNxd/KVNH/kNZ
+         gjoFbkx/CDEUSFXXCM5T51pKHiPWXVwYVlaXGo94O4Cmtc1DR+BED9zBq+ATBB0gXAsU
+         9w8HCZaC1ZZAwHI9UCrFptnAwn1x1krO6meiyDfKd7+rSVqIb0MYvV2xW4o0BAq/KmF8
+         q69HHptkg51lHY1WR5Ir2y0+/4WIeubhQ74U4NMz+V9vB19oH7Z86WtRP9Ikzr/QZWt6
+         IMHA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=M6/DsYcMdCQ5Jv7h2HtppDAD63hulQRUnEll08wdM0w=;
+        b=l5YP1j2a4Wc3mrK9T9z2P7rC7TJS6+mba3bwaJpb0ymD8sGu9fg4Yq5f+hMKwzNhnC
+         AfCIFTdouQkmtyGC1m9L2jNB8fGvM9ZYZaPYnDJwxwb8exCQt43WwkWA2ZV1ZP7eiOtD
+         CRCyEFwNLXeC0STEn3/OU8KnA9S+R8hjnC5gQOD3zyLb5XbpwNz5OqtteR906eBHpoKs
+         Y2Y7om1BGDLZEcUZ2ePRobtXcTZ9DByMEHbMC96izqhlxs+L+P+y6vIg8/9sUpUjTwXX
+         3Os0QXz4visYFWVpZTVyuDD+VozCzCFVijmz8JFH/+PRW5MruD63XcYEP2XGl80oTYUH
+         j9Zg==
+X-Gm-Message-State: AOAM533M8o8Q4miZs2J8g+3il4chiA4noOPJjW2d8Ktkk4wGKOpGErD7
+        6L3OVdbxy3x2OuUso7KyqRGdxEzwmjPzHvn+teZNDg==
+X-Google-Smtp-Source: ABdhPJx1PBFTzicPX+FhslEYT6ZwXv/E5aXyEeLEMZmHKuUh6nEpZizMLlaeQ3T+XDiafTBRLEZRxAV7na7hyyARMPw=
+X-Received: by 2002:a25:ad9b:0:b0:624:5db2:2084 with SMTP id
+ z27-20020a25ad9b000000b006245db22084mr3073965ybi.132.1645719140249; Thu, 24
+ Feb 2022 08:12:20 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20220223135820.2252470-1-anders.roxell@linaro.org>
+ <20220223135820.2252470-2-anders.roxell@linaro.org> <871qzsphfv.fsf@mpe.ellerman.id.au>
+In-Reply-To: <871qzsphfv.fsf@mpe.ellerman.id.au>
+From:   Anders Roxell <anders.roxell@linaro.org>
+Date:   Thu, 24 Feb 2022 17:12:09 +0100
+Message-ID: <CADYN=9L7L7+DOA6qYj4aOgg9rBhOrUCk5b4K5tr6wZ709WpsyA@mail.gmail.com>
+Subject: Re: [PATCH 2/3] powerpc: fix build errors
+To:     Michael Ellerman <mpe@ellerman.id.au>
+Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-02-17 at 16:03 -0500, Paolo Bonzini wrote:
-> For both CR0 and CR4, disassociate the TLB flush logic from the
-> MMU role logic.  Instead  of relying on kvm_mmu_reset_context() being
-> a superset of various TLB flushes (which is not necessarily going to
-> be the case in the future), always call it if the role changes
-> but also set the various TLB flush requests according to what is
-> in the manual.
-> 
-> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-> ---
->  arch/x86/kvm/x86.c | 58 ++++++++++++++++++++++++++++++++--------------
->  1 file changed, 40 insertions(+), 18 deletions(-)
-> 
-> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> index 9043548e6baf..2b4663dfcd8d 100644
-> --- a/arch/x86/kvm/x86.c
-> +++ b/arch/x86/kvm/x86.c
-> @@ -871,6 +871,13 @@ void kvm_post_set_cr0(struct kvm_vcpu *vcpu, unsigned long old_cr0, unsigned lon
->  	if ((cr0 ^ old_cr0) & X86_CR0_PG) {
->  		kvm_clear_async_pf_completion_queue(vcpu);
->  		kvm_async_pf_hash_reset(vcpu);
-> +
-> +		/*
-> +		 * Clearing CR0.PG is defined to flush the TLB from the guest's
-> +		 * perspective.
-> +		 */
-> +		if (!(cr0 & X86_CR0_PG))
-> +			kvm_make_request(KVM_REQ_TLB_FLUSH_GUEST, vcpu);
->  	}
->  
->  	if ((cr0 ^ old_cr0) & KVM_MMU_CR0_ROLE_BITS)
-> @@ -1057,28 +1064,41 @@ EXPORT_SYMBOL_GPL(kvm_is_valid_cr4);
->  
->  void kvm_post_set_cr4(struct kvm_vcpu *vcpu, unsigned long old_cr4, unsigned long cr4)
->  {
-> +	if ((cr4 ^ old_cr4) & KVM_MMU_CR4_ROLE_BITS)
-> +		kvm_mmu_reset_context(vcpu);
-> +
->  	/*
-> -	 * If any role bit is changed, the MMU needs to be reset.
-> -	 *
-> -	 * If CR4.PCIDE is changed 1 -> 0, the guest TLB must be flushed.
->  	 * If CR4.PCIDE is changed 0 -> 1, there is no need to flush the TLB
->  	 * according to the SDM; however, stale prev_roots could be reused
->  	 * incorrectly in the future after a MOV to CR3 with NOFLUSH=1, so we
-> -	 * free them all.  KVM_REQ_MMU_RELOAD is fit for the both cases; it
-> -	 * is slow, but changing CR4.PCIDE is a rare case.
-> -	 *
-> -	 * If CR4.PGE is changed, the guest TLB must be flushed.
-> -	 *
-> -	 * Note: resetting MMU is a superset of KVM_REQ_MMU_RELOAD and
-> -	 * KVM_REQ_MMU_RELOAD is a superset of KVM_REQ_TLB_FLUSH_GUEST, hence
-> -	 * the usage of "else if".
-> +	 * free them all.  This is *not* a superset of KVM_REQ_TLB_FLUSH_GUEST
-> +	 * or KVM_REQ_TLB_FLUSH_CURRENT, because the hardware TLB is not flushed,
-> +	 * so fall through.
->  	 */
-> -	if ((cr4 ^ old_cr4) & KVM_MMU_CR4_ROLE_BITS)
-> -		kvm_mmu_reset_context(vcpu);
-> -	else if ((cr4 ^ old_cr4) & X86_CR4_PCIDE)
-> +	if (!tdp_enabled &&
-> +	    (cr4 & X86_CR4_PCIDE) && !(old_cr4 & X86_CR4_PCIDE))
->  		kvm_make_request(KVM_REQ_MMU_RELOAD, vcpu);
-> -	else if ((cr4 ^ old_cr4) & X86_CR4_PGE)
-> -		kvm_make_request(KVM_REQ_TLB_FLUSH_GUEST, vcpu);
-> +
-> +	/*
-> +	 * The TLB has to be flushed for all PCIDs on:
-> +	 * - CR4.PCIDE changed from 1 to 0
-> +	 * - any change to CR4.PGE
-> +	 *
-> +	 * This is a superset of KVM_REQ_TLB_FLUSH_CURRENT.
-> +	 */
-> +	if (((cr4 ^ old_cr4) & X86_CR4_PGE) ||
-> +	    (!(cr4 & X86_CR4_PCIDE) && (old_cr4 & X86_CR4_PCIDE)))
-> +		 kvm_make_request(KVM_REQ_TLB_FLUSH_GUEST, vcpu);
-> +
-> +	/*
-> +	 * The TLB has to be flushed for the current PCID on:
-> +	 * - CR4.SMEP changed from 0 to 1
-> +	 * - any change to CR4.PAE
-> +	 */
-> +	else if (((cr4 ^ old_cr4) & X86_CR4_PAE) ||
-> +		 ((cr4 & X86_CR4_SMEP) && !(old_cr4 & X86_CR4_SMEP)))
-> +		 kvm_make_request(KVM_REQ_TLB_FLUSH_CURRENT, vcpu);
-> +
->  }
->  EXPORT_SYMBOL_GPL(kvm_post_set_cr4);
->  
-> @@ -11323,15 +11343,17 @@ void kvm_vcpu_reset(struct kvm_vcpu *vcpu, bool init_event)
->  	static_call(kvm_x86_update_exception_bitmap)(vcpu);
->  
->  	/*
-> -	 * Reset the MMU context if paging was enabled prior to INIT (which is
-> +	 * A TLB flush is needed if paging was enabled prior to INIT (which is
->  	 * implied if CR0.PG=1 as CR0 will be '0' prior to RESET).  Unlike the
->  	 * standard CR0/CR4/EFER modification paths, only CR0.PG needs to be
->  	 * checked because it is unconditionally cleared on INIT and all other
->  	 * paging related bits are ignored if paging is disabled, i.e. CR0.WP,
->  	 * CR4, and EFER changes are all irrelevant if CR0.PG was '0'.
->  	 */
-> -	if (old_cr0 & X86_CR0_PG)
-> +	if (old_cr0 & X86_CR0_PG) {
-> +		kvm_make_request(KVM_REQ_TLB_FLUSH_GUEST, vcpu);
->  		kvm_mmu_reset_context(vcpu);
-> +	}
->  
->  	/*
->  	 * Intel's SDM states that all TLB entries are flushed on INIT.  AMD's
-Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
+On Thu, 24 Feb 2022 at 13:39, Michael Ellerman <mpe@ellerman.id.au> wrote:
+>
+> Hi Anders,
 
-Best regards,
-	Maxim Levitsky
+Hi Michael,
 
+>
+> Thanks for these, just a few comments below ...
+
+I will resolve the comments below and resend a v2 shortly.
+
+Cheers,
+Anders
+
+>
+> Anders Roxell <anders.roxell@linaro.org> writes:
+> > Building tinyconfig with gcc (Debian 11.2.0-16) and assembler (Debian
+> > 2.37.90.20220207) the following build error shows up:
+> >
+> >  {standard input}: Assembler messages:
+> >  {standard input}:1190: Error: unrecognized opcode: `stbcix'
+> >  {standard input}:1433: Error: unrecognized opcode: `lwzcix'
+> >  {standard input}:1453: Error: unrecognized opcode: `stbcix'
+> >  {standard input}:1460: Error: unrecognized opcode: `stwcix'
+> >  {standard input}:1596: Error: unrecognized opcode: `stbcix'
+> >  ...
+> >
+> > Rework to add assembler directives [1] around the instruction. Going
+> > through the them one by one shows that the changes should be safe.  Like
+> > __get_user_atomic_128_aligned() is only called in p9_hmi_special_emu(),
+> > which according to the name is specific to power9.  And __raw_rm_read*()
+> > are only called in things that are powernv or book3s_hv specific.
+> >
+> > [1] https://sourceware.org/binutils/docs/as/PowerPC_002dPseudo.html#PowerPC_002dPseudo
+> >
+> > Cc: <stable@vger.kernel.org>
+> > Co-developed-by: Arnd Bergmann <arnd@arndb.de>
+> > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> > Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
+> > ---
+> >  arch/powerpc/include/asm/io.h        | 46 +++++++++++++++++++++++-----
+> >  arch/powerpc/include/asm/uaccess.h   |  3 ++
+> >  arch/powerpc/platforms/powernv/rng.c |  6 +++-
+> >  3 files changed, 46 insertions(+), 9 deletions(-)
+> >
+> > diff --git a/arch/powerpc/include/asm/io.h b/arch/powerpc/include/asm/io.h
+> > index beba4979bff9..5ff6dec489f8 100644
+> > --- a/arch/powerpc/include/asm/io.h
+> > +++ b/arch/powerpc/include/asm/io.h
+> > @@ -359,25 +359,37 @@ static inline void __raw_writeq_be(unsigned long v, volatile void __iomem *addr)
+> >   */
+> >  static inline void __raw_rm_writeb(u8 val, volatile void __iomem *paddr)
+> >  {
+> > -     __asm__ __volatile__("stbcix %0,0,%1"
+> > +     __asm__ __volatile__(".machine \"push\"\n"
+> > +                          ".machine \"power6\"\n"
+> > +                          "stbcix %0,0,%1\n"
+> > +                          ".machine \"pop\"\n"
+> >               : : "r" (val), "r" (paddr) : "memory");
+>
+> As Segher said it'd be cleaner without the embedded quotes.
+>
+> > @@ -441,7 +465,10 @@ static inline unsigned int name(unsigned int port)       \
+> >       unsigned int x;                                 \
+> >       __asm__ __volatile__(                           \
+> >               "sync\n"                                \
+> > +             ".machine \"push\"\n"                   \
+> > +             ".machine \"power6\"\n"                 \
+> >               "0:"    op "    %0,0,%1\n"              \
+> > +             ".machine \"pop\"\n"                    \
+> >               "1:     twi     0,%0,0\n"               \
+> >               "2:     isync\n"                        \
+> >               "3:     nop\n"                          \
+> > @@ -465,7 +492,10 @@ static inline void name(unsigned int val, unsigned int port) \
+> >  {                                                    \
+> >       __asm__ __volatile__(                           \
+> >               "sync\n"                                \
+> > +             ".machine \"push\"\n"                   \
+> > +             ".machine \"power6\"\n"                 \
+> >               "0:" op " %0,0,%1\n"                    \
+> > +             ".machine \"pop\"\n"                    \
+> >               "1:     sync\n"                         \
+> >               "2:\n"                                  \
+> >               EX_TABLE(0b, 2b)                        \
+>
+> It's not visible from the diff, but the above two are __do_in_asm and
+> __do_out_asm and are inside an ifdef CONFIG_PPC32.
+>
+> AFAICS they're only used for:
+>
+> __do_in_asm(_rec_inb, "lbzx")
+> __do_in_asm(_rec_inw, "lhbrx")
+> __do_in_asm(_rec_inl, "lwbrx")
+> __do_out_asm(_rec_outb, "stbx")
+> __do_out_asm(_rec_outw, "sthbrx")
+> __do_out_asm(_rec_outl, "stwbrx")
+>
+> Which are all old instructions, so I don't think we need the machine
+> power6 for those two macros?
+>
+> > diff --git a/arch/powerpc/platforms/powernv/rng.c b/arch/powerpc/platforms/powernv/rng.c
+> > index b4386714494a..5bf30ef6d928 100644
+> > --- a/arch/powerpc/platforms/powernv/rng.c
+> > +++ b/arch/powerpc/platforms/powernv/rng.c
+> > @@ -43,7 +43,11 @@ static unsigned long rng_whiten(struct powernv_rng *rng, unsigned long val)
+> >       unsigned long parity;
+> >
+> >       /* Calculate the parity of the value */
+> > -     asm ("popcntd %0,%1" : "=r" (parity) : "r" (val));
+> > +     asm (".machine \"push\"\n"
+> > +          ".machine \"power7\"\n"
+> > +          "popcntd %0,%1\n"
+> > +          ".machine \"pop\"\n"
+> > +          : "=r" (parity) : "r" (val));
+>
+> This was actually present in an older CPU, but it doesn't really matter,
+> this is fine.
+>
+> cheers

@@ -2,236 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30F0A4C35B3
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 20:20:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C9AD4C35B7
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 20:20:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233537AbiBXTUH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 14:20:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46960 "EHLO
+        id S233651AbiBXTUV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 14:20:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233660AbiBXTTz (ORCPT
+        with ESMTP id S230375AbiBXTUS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 14:19:55 -0500
-Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A05AD1B84C9
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 11:19:24 -0800 (PST)
-Received: by mail-pf1-x449.google.com with SMTP id 62-20020a621541000000b004f110fdb1aeso1749490pfv.13
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 11:19:24 -0800 (PST)
+        Thu, 24 Feb 2022 14:20:18 -0500
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47DEA1C60EF
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 11:19:48 -0800 (PST)
+Received: by mail-ed1-x52c.google.com with SMTP id g20so4279926edw.6
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 11:19:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=reply-to:date:in-reply-to:message-id:mime-version:references
-         :subject:from:to:cc;
-        bh=77vvkSuzcDk7zhAWEb8twucG4UQRTj6P/P2a2+pyH2Q=;
-        b=FiiEBYW65gPsOiKThbC8fvL5RuX2I3jgc28a+qA3vXDZjOq6Gw+PoEKzredP7K3ID0
-         CfU/gq3AZ9OvMjiOECa8n/dIyFGaufwgpWSfrn0HF2OLE2WmOOwmh4VjsHSNQqarF4ad
-         29/0LAg5KcmP1v+S0fR7GipN/sLtuPiUeZs1XU4Fgc2n3ZqdUJtpFg3kBU67VWG9LsEl
-         8zjjYl8RmhQ20JwgzeMKVN0ANQ/D9j+KucOGSIqPAOhZRZRYUhRa1E96kJwnYGDtvQln
-         kAJHT1F62k0S5cDraR7KfeUMJ7UxAvwRIcWcPEAuJQsx/zhkln78xNi2+twyV+Jc8Q4U
-         rcWA==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=VATloFIFOYSF7bULywKKNi4BXTcUzUGI2Feo95RIsUA=;
+        b=q99VBCao934/ZmCDT1MqxxEx6/2Evwlhr82gN7P1kO+1UaInYgpIWPru60gvA6QXzK
+         rMsuECYuQQarqjAq4Pt1ihJetGUVHuJY/VLwPLv3v7VRwyAjPlnPDcG6+hExyoR/V9g2
+         Qdzx5Jrfl9+DITfW40WAstrYLflu78UNWhl5gWp/Ut7tDtjmbvs9jR6Xm3/fNjamvQKg
+         7k6okgbolmlsnELmAPC3k3N5q3dTovR8VwVacgpDiuzhfJb1RhxPzMMYd9kj6dR3XZLM
+         JRYHfFV9GKCYiibv/4f+qgz8JTRws9mcunQ7X251bnoK4tzohdEcBB8jxdW2t7sTpX5y
+         6j7g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:reply-to:date:in-reply-to:message-id
-         :mime-version:references:subject:from:to:cc;
-        bh=77vvkSuzcDk7zhAWEb8twucG4UQRTj6P/P2a2+pyH2Q=;
-        b=JB5mA4DzgOD7+2IgpSy1g9XDSWu3KsAeeUld8rjNx8Rn6s9PWl7Db72dbSHXhFMmPo
-         eKyiRHYyE0euB+VGOd4Ba75Wi8lqZO5gKQLDrlVi/fZYZUgXXdVEMe+YUuiL7pK8qH7S
-         LIj8Go/2oW8/PW/XhTgrnX1YUCD+x2cNIHSEjHnbKBJWTldcrAjdYTo7iCd4adIxaiAb
-         rvXrHsTIkw9qsPFLyhFhPIYsv48/XG07wAjhOkL7IkDcveHxBK4LXtCS+6TFMter3tN1
-         tmHH0h5n0Y5cL3ZNKSQxjE3o5WQMDf2hFAL4ynDbfwOkfz9DG6uAROkEVLUDPFLxNG1i
-         PTSQ==
-X-Gm-Message-State: AOAM531qcaoCCA8up6MCE2YJw4z4zVE0xyZiwVJPnAVObBmAHu2ghKfy
-        hSReAi+IlA/NIBMZLGTceQLO+WEKEHg=
-X-Google-Smtp-Source: ABdhPJxLW6lOsAb3h8pc0hPSWq/uCMIdF/OvVb4876vbICb9U7jEj1oHgwhGbvsZ2qHOsJSTgSGtCbgKk8Y=
-X-Received: from seanjc.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e5])
- (user=seanjc job=sendgmr) by 2002:aa7:8495:0:b0:4e1:6419:3d3c with SMTP id
- u21-20020aa78495000000b004e164193d3cmr4003515pfn.57.1645730364112; Thu, 24
- Feb 2022 11:19:24 -0800 (PST)
-Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Thu, 24 Feb 2022 19:19:17 +0000
-In-Reply-To: <20220224191917.3508476-1-seanjc@google.com>
-Message-Id: <20220224191917.3508476-3-seanjc@google.com>
-Mime-Version: 1.0
-References: <20220224191917.3508476-1-seanjc@google.com>
-X-Mailer: git-send-email 2.35.1.574.g5d30c73bfb-goog
-Subject: [PATCH 2/2] Revert "KVM: VMX: Save HOST_CR3 in vmx_prepare_switch_to_guest()"
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Wanpeng Li <kernellwp@gmail.com>,
-        Lai Jiangshan <laijs@linux.alibaba.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=VATloFIFOYSF7bULywKKNi4BXTcUzUGI2Feo95RIsUA=;
+        b=Whll+1lvcBQpjeQrXIaphuiNL9Nlqq2eeya5fBUZIkVVPFSlpL6OJ+F2s5b8qwQ435
+         5x0RZOZ0ahSfUKXd20ZndygMjomw9N0e2O8iK2AoqF2hZuzaMhEdznrlJHYMt3yuwH4Y
+         ZSQNdeYUJ/gZS3Od5DpAaHSnS6lHde5K4B3mlLPVuA08oSlzukckwoiW5zXK5qHblKr7
+         vFjgY3n2F6A9vXVhpg6wVwI6osbPRXwO+6wWy6sfUgA9qcWFRh4tR4s1cnfgpSsaeBbA
+         B9bn3RrJpUlVO4kRaHNSRZ/qDnKH6L4qOL1TN1yTFTijEOghL1eHvgmZCvLKcmTqglh+
+         75eg==
+X-Gm-Message-State: AOAM532pRL2zSlHWuRSd/XBNthZUNYwsLw4jMhtdJrYDIukF2+NHJuIM
+        rdp+ip7J/fgvn/O9TMRDH4btye0hM6VPMzmE9/TWvw==
+X-Google-Smtp-Source: ABdhPJwqoMT/CIUaWZbEIWwrmnbTecRQHVO32kHMSduHILGYZNnlRX73Ps8yCTRl79BcpGMfkvFOdHBDoPFcxVD1oZI=
+X-Received: by 2002:aa7:d592:0:b0:410:b9f9:90f2 with SMTP id
+ r18-20020aa7d592000000b00410b9f990f2mr3746829edq.327.1645730386590; Thu, 24
+ Feb 2022 11:19:46 -0800 (PST)
+MIME-Version: 1.0
+References: <20220217205227.4098452-1-dlatypov@google.com> <20220217205227.4098452-3-dlatypov@google.com>
+ <CABVgOSmayxKsZYi36gbMWxExhE+=ae8PfFA_tbCGogPnwkw0gA@mail.gmail.com>
+In-Reply-To: <CABVgOSmayxKsZYi36gbMWxExhE+=ae8PfFA_tbCGogPnwkw0gA@mail.gmail.com>
+From:   Daniel Latypov <dlatypov@google.com>
+Date:   Thu, 24 Feb 2022 11:19:35 -0800
+Message-ID: <CAGS_qxrUZzFWWDHxWnwj+WyNhT1TQCkwCNd5UJieZyAu79UTpg@mail.gmail.com>
+Subject: Re: [PATCH 3/3] kunit: tool: properly report the used arch for
+ --json, or '' if not known
+To:     David Gow <davidgow@google.com>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Revert back to refreshing vmcs.HOST_CR3 immediately prior to VM-Enter.
-The PCID (ASID) part of CR3 can be bumped without KVM being scheduled
-out, as the kernel will switch CR3 during __text_poke(), e.g. in response
-to a static key toggling.  If switch_mm_irqs_off() chooses a new ASID for
-the mm associate with KVM, KVM will do VM-Enter => VM-Exit with a stale
-vmcs.HOST_CR3.
+On Wed, Feb 23, 2022 at 10:26 PM David Gow <davidgow@google.com> wrote:
+>
+> On Fri, Feb 18, 2022 at 4:52 AM Daniel Latypov <dlatypov@google.com> wrote:
+> >
+> > Before, kunit.py always printed "arch": "UM" in its json output, but...
+> > 1. With `kunit.py parse`, we could be parsing output from anywhere, so
+> >     we can't say that.
+> > 2. Capitalizing it is probably wrong, as it's `ARCH=um`
+> > 3. Commit 87c9c1631788 ("kunit: tool: add support for QEMU") made it so
+> >    kunit.py could knowingly run a different arch, yet we'd still always
+> >    claim "UM".
+> >
+> Agreed on all counts!
+>
+> > This patch addresses all of those. E.g.
+> >
+> > 1.
+> > $ ./tools/testing/kunit/kunit.py parse .kunit/test.log --json | grep -o '"arch.*' | sort -u
+> > "arch": "",
+> >
+> > 2.
+> > $ ./tools/testing/kunit/kunit.py run --json | ...
+> > "arch": "um",
+> >
+> > 3.
+> > $ ./tools/testing/kunit/kunit.py run --json --arch=x86_64 | ...
+> > "arch": "x86_64",
+> >
+> > Signed-off-by: Daniel Latypov <dlatypov@google.com>
+> > ---
+>
+> Looks good, and works well here. One question/comment below, but in general:
+>
+> Reviewed-by: David Gow <davidgow@google.com>
+>
+> Cheers,
+> -- David
+>
+> >  tools/testing/kunit/kunit.py        | 4 ++--
+> >  tools/testing/kunit/kunit_kernel.py | 2 ++
+> >  2 files changed, 4 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
+> > index 7dd6ed42141f..5ccdafd4d5aa 100755
+> > --- a/tools/testing/kunit/kunit.py
+> > +++ b/tools/testing/kunit/kunit.py
+> > @@ -153,7 +153,7 @@ def exec_tests(linux: kunit_kernel.LinuxSourceTree, request: KunitExecRequest) -
+> >                                 test_glob = request.filter_glob.split('.', maxsplit=2)[1]
+> >                                 filter_globs = [g + '.'+ test_glob for g in filter_globs]
+> >
+> > -       metadata = kunit_json.Metadata(build_dir=request.build_dir)
+> > +       metadata = kunit_json.Metadata(arch=linux.arch(), build_dir=request.build_dir)
+> >
+> >         test_counts = kunit_parser.TestCounts()
+> >         exec_time = 0.0
+> > @@ -506,7 +506,7 @@ def main(argv, linux=None):
+> >                         with open(cli_args.file, 'r', errors='backslashreplace') as f:
+> >                                 kunit_output = f.read().splitlines()
+> >                 # We know nothing about how the result was created!
+> > -               metadata = kunit_json.Metadata()
+> > +               metadata = kunit_json.Metadata(arch='', build_dir='', def_config='')
+>
+> Why do we explicitly pass empty strings in here, rather than making
+> the defaults correct for this case?
 
-Add a comment to explain why KVM must wait until VM-Enter is imminent to
-refresh vmcs.HOST_CR3.
+Good point, we should just make '' the defaults now.
+I'll move the hard-coding of "kunit_defconfig" out of the defaults and
+into exec_tests() then.
 
-The following splat was captured by stashing vmcs.HOST_CR3 in kvm_vcpu
-and adding a WARN in load_new_mm_cr3() to fire if a new ASID is being
-loaded for the KVM-associated mm while KVM has a "running" vCPU:
 
-  static void load_new_mm_cr3(pgd_t *pgdir, u16 new_asid, bool need_flush)
-  {
-	struct kvm_vcpu *vcpu = kvm_get_running_vcpu();
-
-	...
-
-	WARN(vcpu && (vcpu->cr3 & GENMASK(11, 0)) != (new_mm_cr3 & GENMASK(11, 0)) &&
-	     (vcpu->cr3 & PHYSICAL_PAGE_MASK) == (new_mm_cr3 & PHYSICAL_PAGE_MASK),
-	     "KVM is hosed, loading CR3 = %lx, vmcs.HOST_CR3 = %lx", new_mm_cr3, vcpu->cr3);
-  }
-
-  ------------[ cut here ]------------
-  KVM is hosed, loading CR3 = 8000000105393004, vmcs.HOST_CR3 = 105393003
-  WARNING: CPU: 4 PID: 20717 at arch/x86/mm/tlb.c:291 load_new_mm_cr3+0x82/0xe0
-  Modules linked in: vhost_net vhost vhost_iotlb tap kvm_intel
-  CPU: 4 PID: 20717 Comm: stable Tainted: G        W         5.17.0-rc3+ #747
-  Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 0.0.0 02/06/2015
-  RIP: 0010:load_new_mm_cr3+0x82/0xe0
-  RSP: 0018:ffffc9000489fa98 EFLAGS: 00010082
-  RAX: 0000000000000000 RBX: 8000000105393004 RCX: 0000000000000027
-  RDX: 0000000000000027 RSI: 00000000ffffdfff RDI: ffff888277d1b788
-  RBP: 0000000000000004 R08: ffff888277d1b780 R09: ffffc9000489f8b8
-  R10: 0000000000000001 R11: 0000000000000001 R12: 0000000000000000
-  R13: ffff88810678a800 R14: 0000000000000004 R15: 0000000000000c33
-  FS:  00007fa9f0e72700(0000) GS:ffff888277d00000(0000) knlGS:0000000000000000
-  CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-  CR2: 0000000000000000 CR3: 00000001001b5003 CR4: 0000000000172ea0
-  Call Trace:
-   <TASK>
-   switch_mm_irqs_off+0x1cb/0x460
-   __text_poke+0x308/0x3e0
-   text_poke_bp_batch+0x168/0x220
-   text_poke_finish+0x1b/0x30
-   arch_jump_label_transform_apply+0x18/0x30
-   static_key_slow_inc_cpuslocked+0x7c/0x90
-   static_key_slow_inc+0x16/0x20
-   kvm_lapic_set_base+0x116/0x190
-   kvm_set_apic_base+0xa5/0xe0
-   kvm_set_msr_common+0x2f4/0xf60
-   vmx_set_msr+0x355/0xe70 [kvm_intel]
-   kvm_set_msr_ignored_check+0x91/0x230
-   kvm_emulate_wrmsr+0x36/0x120
-   vmx_handle_exit+0x609/0x6c0 [kvm_intel]
-   kvm_arch_vcpu_ioctl_run+0x146f/0x1b80
-   kvm_vcpu_ioctl+0x279/0x690
-   __x64_sys_ioctl+0x83/0xb0
-   do_syscall_64+0x3b/0xc0
-   entry_SYSCALL_64_after_hwframe+0x44/0xae
-   </TASK>
-  ---[ end trace 0000000000000000 ]---
-
-This reverts commit 15ad9762d69fd8e40a4a51828c1d6b0c1b8fbea0.
-
-Fixes: 15ad9762d69f ("KVM: VMX: Save HOST_CR3 in vmx_prepare_switch_to_guest()")
-Reported-by: Wanpeng Li <kernellwp@gmail.com>
-Cc: Lai Jiangshan <laijs@linux.alibaba.com>
-Signed-off-by: Sean Christopherson <seanjc@google.com>
----
- arch/x86/kvm/vmx/nested.c |  8 +++++++-
- arch/x86/kvm/vmx/vmx.c    | 24 ++++++++++++++----------
- 2 files changed, 21 insertions(+), 11 deletions(-)
-
-diff --git a/arch/x86/kvm/vmx/nested.c b/arch/x86/kvm/vmx/nested.c
-index c12f95004a72..dc822a1d403d 100644
---- a/arch/x86/kvm/vmx/nested.c
-+++ b/arch/x86/kvm/vmx/nested.c
-@@ -3055,7 +3055,7 @@ static int nested_vmx_check_guest_state(struct kvm_vcpu *vcpu,
- static int nested_vmx_check_vmentry_hw(struct kvm_vcpu *vcpu)
- {
- 	struct vcpu_vmx *vmx = to_vmx(vcpu);
--	unsigned long cr4;
-+	unsigned long cr3, cr4;
- 	bool vm_fail;
- 
- 	if (!nested_early_check)
-@@ -3078,6 +3078,12 @@ static int nested_vmx_check_vmentry_hw(struct kvm_vcpu *vcpu)
- 	 */
- 	vmcs_writel(GUEST_RFLAGS, 0);
- 
-+	cr3 = __get_current_cr3_fast();
-+	if (unlikely(cr3 != vmx->loaded_vmcs->host_state.cr3)) {
-+		vmcs_writel(HOST_CR3, cr3);
-+		vmx->loaded_vmcs->host_state.cr3 = cr3;
-+	}
-+
- 	cr4 = cr4_read_shadow();
- 	if (unlikely(cr4 != vmx->loaded_vmcs->host_state.cr4)) {
- 		vmcs_writel(HOST_CR4, cr4);
-diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-index beb68cd28aca..b730d799c26e 100644
---- a/arch/x86/kvm/vmx/vmx.c
-+++ b/arch/x86/kvm/vmx/vmx.c
-@@ -1114,7 +1114,6 @@ void vmx_prepare_switch_to_guest(struct kvm_vcpu *vcpu)
- #ifdef CONFIG_X86_64
- 	int cpu = raw_smp_processor_id();
- #endif
--	unsigned long cr3;
- 	unsigned long fs_base, gs_base;
- 	u16 fs_sel, gs_sel;
- 	int i;
-@@ -1179,14 +1178,6 @@ void vmx_prepare_switch_to_guest(struct kvm_vcpu *vcpu)
- #endif
- 
- 	vmx_set_host_fs_gs(host_state, fs_sel, gs_sel, fs_base, gs_base);
--
--	/* Host CR3 including its PCID is stable when guest state is loaded. */
--	cr3 = __get_current_cr3_fast();
--	if (unlikely(cr3 != host_state->cr3)) {
--		vmcs_writel(HOST_CR3, cr3);
--		host_state->cr3 = cr3;
--	}
--
- 	vmx->guest_state_loaded = true;
- }
- 
-@@ -6793,7 +6784,7 @@ static noinstr void vmx_vcpu_enter_exit(struct kvm_vcpu *vcpu,
- static fastpath_t vmx_vcpu_run(struct kvm_vcpu *vcpu)
- {
- 	struct vcpu_vmx *vmx = to_vmx(vcpu);
--	unsigned long cr4;
-+	unsigned long cr3, cr4;
- 
- 	/* Record the guest's net vcpu time for enforced NMI injections. */
- 	if (unlikely(!enable_vnmi &&
-@@ -6836,6 +6827,19 @@ static fastpath_t vmx_vcpu_run(struct kvm_vcpu *vcpu)
- 		vmcs_writel(GUEST_RIP, vcpu->arch.regs[VCPU_REGS_RIP]);
- 	vcpu->arch.regs_dirty = 0;
- 
-+	/*
-+	 * Refresh vmcs.HOST_CR3 if necessary.  This must be done immediately
-+	 * prior to VM-Enter, as the kernel may load a new ASID (PCID) any time
-+	 * it switches back to the current->mm, which can occur in KVM context
-+	 * when switching to a temporary mm to patch kernel code, e.g. if KVM
-+	 * toggles a static key while handling a VM-Exit.
-+	 */
-+	cr3 = __get_current_cr3_fast();
-+	if (unlikely(cr3 != vmx->loaded_vmcs->host_state.cr3)) {
-+		vmcs_writel(HOST_CR3, cr3);
-+		vmx->loaded_vmcs->host_state.cr3 = cr3;
-+	}
-+
- 	cr4 = cr4_read_shadow();
- 	if (unlikely(cr4 != vmx->loaded_vmcs->host_state.cr4)) {
- 		vmcs_writel(HOST_CR4, cr4);
--- 
-2.35.1.574.g5d30c73bfb-goog
-
+>
+>
+> >                 request = KunitParseRequest(raw_output=cli_args.raw_output,
+> >                                             json=cli_args.json)
+> >                 result, _ = parse_tests(request, metadata, kunit_output)
+> > diff --git a/tools/testing/kunit/kunit_kernel.py b/tools/testing/kunit/kunit_kernel.py
+> > index fe159e7ff697..bbbe2ffe30b7 100644
+> > --- a/tools/testing/kunit/kunit_kernel.py
+> > +++ b/tools/testing/kunit/kunit_kernel.py
+> > @@ -248,6 +248,8 @@ class LinuxSourceTree(object):
+> >                         kconfig = kunit_config.parse_from_string('\n'.join(kconfig_add))
+> >                         self._kconfig.merge_in_entries(kconfig)
+> >
+> > +       def arch(self) -> str:
+> > +               return self._arch
+> >
+> >         def clean(self) -> bool:
+> >                 try:
+> > --
+> > 2.35.1.473.g83b2b277ed-goog
+> >

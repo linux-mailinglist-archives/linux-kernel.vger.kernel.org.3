@@ -2,69 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 254714C2E9D
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 15:45:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2605E4C2EA2
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 15:46:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235615AbiBXOp2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 09:45:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37388 "EHLO
+        id S235619AbiBXOqq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 09:46:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235608AbiBXOpZ (ORCPT
+        with ESMTP id S232242AbiBXOqo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 09:45:25 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00FB016DAF3;
-        Thu, 24 Feb 2022 06:44:55 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8D939B82617;
-        Thu, 24 Feb 2022 14:44:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82D17C340EC;
-        Thu, 24 Feb 2022 14:44:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645713893;
-        bh=lNcn+IdlDT0iCnlen6PL4o30r4n4CSddgB+J+wXxOLI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=TK6Vxvi0EBCwHTKwRiPp6/edCM35nF6hBq75phj0/eXIw+gO0sJjFeGiA8b9T2VhH
-         +8d2zeMM/IbLMzvQKmCZyAkH8MDzPWYKQTJeI13rM5ASifrcTrpUQClRZWmpfdu6Ij
-         pjqT4niJ7FqnBsaetRaV+bYrsgclP6aMEf9msZ07BjP6PKnn/D9adTBpRsFVcuUIwP
-         ec66WQu3SqVkc+N9uJSPFgLvTgZUoXmKVrq9VdOSzDgvcFrPujebY99ypVRIoSJMsN
-         Obnd81v0zLeMY5FsFZ+6qw4qc5qdUqzEnaEZspEyqGFue5P3LGfNaq+qs46O/GdLEm
-         URvXoFT8GqVTw==
-Date:   Thu, 24 Feb 2022 20:14:49 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Yifeng Zhao <yifeng.zhao@rock-chips.com>
-Cc:     heiko@sntech.de, robh+dt@kernel.org, jbx6244@gmail.com,
-        devicetree@vger.kernel.org, michael.riesch@wolfvision.net,
-        linux-rockchip@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-phy@lists.infradead.org, kishon@ti.com,
-        p.zabel@pengutronix.de, cl@rock-chips.com,
-        kever.yang@rock-chips.com, lee.jones@linaro.org,
-        wulf@rock-chips.com, david.wu@rock-chips.com
-Subject: Re: [PATCH v8 0/4] Add Naneng combo PHY support for RK3568
-Message-ID: <YheZ4XDX9kG8CocF@matsya>
-References: <20220208091326.12495-1-yifeng.zhao@rock-chips.com>
+        Thu, 24 Feb 2022 09:46:44 -0500
+Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 648245A143
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 06:46:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=RKi3ocJiTETOIJ5W2sRyo1ALvjXfAm2CZZ83RFejYIs=; b=MUltjm+t33sy7mS5YS4UfTgVdX
+        bfPq1EiKBxC9+jskLmVQqkN7AawgasWGxLeAayrDzziEzpaKqRRG49/5AAwK7TKEAcq8Blz1uW5pN
+        YIDipMgyvNdPXi/v6TYggUS18fSft6a1u03jFtmZHjMrOekr7sByYqJEy8rqCoY+zNBOliQ/uR8ce
+        9Tui/Fn/d8mL5Sq7Fr5co6mYPd4JpW714ws/r7IzDCVAshP8rUEAlHdPWV93Omhq/oCxCLYVsk500
+        smslN1vKjMTxIxKIbMC4ig4sV3ddrsJlV/1Wg6qPKnU0HSwiY2F1X0uKd7PINJNEckYK4gWRL/BiV
+        9VxgmJ+A==;
+Received: from [189.79.213.38] (helo=[192.168.1.60])
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+        id 1nNFNb-0007qr-4h; Thu, 24 Feb 2022 15:46:03 +0100
+Message-ID: <39f64d7d-714f-0be4-2854-10c00bcc9cda@igalia.com>
+Date:   Thu, 24 Feb 2022 11:45:42 -0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220208091326.12495-1-yifeng.zhao@rock-chips.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH V6] panic: Move panic_print before kmsg dumpers
+Content-Language: en-US
+To:     Petr Mladek <pmladek@suse.com>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        akpm@linux-foundation.org
+Cc:     linux-kernel@vger.kernel.org, bhe@redhat.com, anton@enomsg.org,
+        ccross@android.com, dyoung@redhat.com, feng.tang@intel.com,
+        john.ogness@linutronix.de, keescook@chromium.org,
+        kernel@gpiccoli.net, kexec@lists.infradead.org,
+        rostedt@goodmis.org, tony.luck@intel.com, vgoyal@redhat.com
+References: <20220214141308.841525-1-gpiccoli@igalia.com>
+ <YhRFNKtxSE8Xrbfw@google.com>
+ <7e15bc6a-ceae-aa3a-0a86-18d24181b0ed@igalia.com>
+ <YhWNhzacAVDuFtwB@google.com> <YheXRmmWr619Qxin@alley>
+From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+In-Reply-To: <YheXRmmWr619Qxin@alley>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08-02-22, 17:13, Yifeng Zhao wrote:
+On 24/02/2022 11:33, Petr Mladek wrote:
+> [...]
+> That said, I could live with the patch as is. I leave the decision
+> to Andrew. Feel free to use:
 > 
-> This phy can be used as pcie-phy, usb3-phy, sata-phy or sgmii-phy.
+> Reviewed-by: Petr Mladek <pmladek@suse.com>
+> 
+> Best Regards,
+> Petr
 
-Applied 1-3, thanks
+Thanks a bunch Petr and Sergey for the reviews (and the tags).
 
--- 
-~Vinod
+I also vote to keep the patch as-is and get it merged, maybe eventually
+improving that along with the complex panic notifiers task [0]. I could
+definitely do it over there...
+
+Andrew, is this fine for you?
+Thanks,
+
+
+Guilherme
+
+[0] https://lore.kernel.org/lkml/YfPxvzSzDLjO5ldp@alley/

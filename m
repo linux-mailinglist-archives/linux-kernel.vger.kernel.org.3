@@ -2,61 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 562384C2EE3
+	by mail.lfdr.de (Postfix) with ESMTP id A9EBC4C2EE4
 	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 16:05:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235767AbiBXPEA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 10:04:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54808 "EHLO
+        id S235773AbiBXPED (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 10:04:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232118AbiBXPD4 (ORCPT
+        with ESMTP id S235681AbiBXPD4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 24 Feb 2022 10:03:56 -0500
 Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0548213FAFB;
-        Thu, 24 Feb 2022 07:03:25 -0800 (PST)
-Received: by mail-wr1-x433.google.com with SMTP id n14so65956wrq.7;
-        Thu, 24 Feb 2022 07:03:24 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5678B141E24;
+        Thu, 24 Feb 2022 07:03:26 -0800 (PST)
+Received: by mail-wr1-x433.google.com with SMTP id d3so108678wrf.1;
+        Thu, 24 Feb 2022 07:03:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ay7hHiiyWs/Vspu7K7W0oyce1GoH5RAvVwUQfqJxKdw=;
-        b=QE7qSiCRSkNpeioUFowv1w/tMqa+CqBSzJ8cdc7hagydOTeoSgSBg5mTtY2ShLJmyX
-         UFVN3AfQCxZMsCrk8jjKemUEPPKJCmHt9tsAIBJMz2iQlRiKr0yYVQ5wkPYiDE3WGvqF
-         Z+WQ4rFRURUE5JY7P1NkgTBOo7KBC92JQHNGkgYzIkmZNhH3BP5fOltzvXyTFoGx9f6h
-         6gMi3kUxcEeF2IaMoGETmeVNJjY2kcJjX55PSYIoo8d1NhXXVpjI6gkhOAFPhM8LmJfD
-         MyEJhsU6aprqVV/HfZxPtIBLAytYOCwl5EfWf/FhLmSfHo3wGNSo85mj96ywZGeOwj4n
-         IkTQ==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=07w1eqbJ15tC5JNVyR7gPyWNsdMe4ksKSNb7RJ89FRc=;
+        b=Kr/SpNEEK10kPz2CyojbzFHbGPxq0EX6NdwDNWASMKt2PU6AnpTD4G1XPni+fCxeiI
+         qibZ21FBLSzAJ7yC/uBZb2LDSgFPDKb206q5vFxFFNeg10zYXzLp5UWurTeXquCTvFAC
+         jZ4llp7fd64thdCXYnVRQaYnbfmqglDTdE0OoUCH8v59qkDy+AXkNFkieNYPW+vL6lxu
+         K9vhzSUyHtN18Xg5UuD4F9+YkyWv3cnRAhj7gFkCgnW/NkwROdCDvNKQ6O01SsFVqEQ2
+         wKU18h1zPMLPLlA8Xf1kim5yR084gAKEj9kHrzPLCC6Lu+hQSalUpwraBCoxA3OYRY6B
+         EucA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ay7hHiiyWs/Vspu7K7W0oyce1GoH5RAvVwUQfqJxKdw=;
-        b=D4WNien1cFFpY+D8HGwBn/Nc4xGBoojZGhxtMVedKNMKSJQY2nHzOJjyokuxeXMmRt
-         ME+jJIOV9hJVHe1L4Kome5wm11PBpw1FeGZywKF12/ZkF7c0ns4HMgjFqLSGAJDnbRhN
-         7QXoK27EDF1EbIDPXVATp9ExYRlVMTLbh4SsRSIa0jTr5riAab58e3nbJajhKiRG8yF2
-         2DbjOC8p45j2o5MlOHXpTPQfaVvhaj5q4xVjzgIO9lkuebRonfiYl6dXTCNdA9vu75ZE
-         2P/ik4loSfn4h+w/nghJIsEDDNaXlqjLr6FWASzFMlt+SiQXU/CbnfGBf4VPBVJsWfgG
-         9AoA==
-X-Gm-Message-State: AOAM532NC2/BUCkXj9S3aNBYdgYl8yNv/t6Xz+H15X1osEQFbGpAvXV/
-        0UledogHvzimSft+gkXGJi4=
-X-Google-Smtp-Source: ABdhPJx2y+M/VKJ1us6B+6NIX3jANMf2jjeXPdnF2XYwqMhSm+MhoRZohCbTFsnugTJ4/g/NbYnhVA==
-X-Received: by 2002:a5d:6d0e:0:b0:1e2:fa3d:7f22 with SMTP id e14-20020a5d6d0e000000b001e2fa3d7f22mr2593465wrq.142.1645715003444;
-        Thu, 24 Feb 2022 07:03:23 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=07w1eqbJ15tC5JNVyR7gPyWNsdMe4ksKSNb7RJ89FRc=;
+        b=IEwh7dPK3nOmkhEdRlv1pTJHjbwwnvdhRJjQ+4vZMusNKA56hzge0Qi/zN048Z8wYN
+         c8OdY8Nzx8Gzrp+WvSrGuS1UyobGnoH6+a2KQp/jlmJWc1VqrQ3cQ1y2q+tmkxOvlCfP
+         qIZOd7Eo16G+tBJIxpgzLv5tck6p6tcZoUo0+5yrRKP6JpiLUjG8K9O2tOcvi+eI+rev
+         5An3lfPcRps5X/6kkQaTmqiU7+TYgEQGY/EahS/UOcXHsn9SCfB61smxEv3IJzvq/kgS
+         EtIftdsBWJDipjLnQCCGrAWri3T6YBcMGkqkwrXhQIOUUxD4DPjiRqF7ZKj+QixPn85K
+         8TGw==
+X-Gm-Message-State: AOAM531bib91LSvJmlwvRMhpwG1lmr5fcQAfc3nZXuQkjd4xXrPcXHR8
+        ybsvEYKzhcYfbryYUsDD9JV11V+1lJTw2A==
+X-Google-Smtp-Source: ABdhPJx6KbtOCExwexuwkiyhLyven+vSwBXYqmckAU+Jlq72l1EYhf+xNeAbVtVrN6thv/ozgo/qCQ==
+X-Received: by 2002:a05:6000:18c8:b0:1e4:b8f4:da8f with SMTP id w8-20020a05600018c800b001e4b8f4da8fmr2694759wrq.199.1645715004964;
+        Thu, 24 Feb 2022 07:03:24 -0800 (PST)
 Received: from localhost (92.40.203.111.threembb.co.uk. [92.40.203.111])
-        by smtp.gmail.com with ESMTPSA id w13sm3088645wrv.21.2022.02.24.07.03.22
+        by smtp.gmail.com with ESMTPSA id w13sm3088645wrv.21.2022.02.24.07.03.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Feb 2022 07:03:22 -0800 (PST)
+        Thu, 24 Feb 2022 07:03:24 -0800 (PST)
 From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
 To:     paul@crapouillou.net, robh+dt@kernel.org, mturquette@baylibre.com,
         sboyd@kernel.org
 Cc:     linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
         linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3 1/3] mips: dts: ingenic: x1000: Add TCU clock to tcu device node
-Date:   Thu, 24 Feb 2022 15:03:25 +0000
-Message-Id: <20220224150326.525707-1-aidanmacdonald.0x0@gmail.com>
+Subject: [PATCH v3 2/3] mips: dts: ingenic: x1830: Add TCU clock to tcu device node
+Date:   Thu, 24 Feb 2022 15:03:26 +0000
+Message-Id: <20220224150326.525707-2-aidanmacdonald.0x0@gmail.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220224150326.525707-1-aidanmacdonald.0x0@gmail.com>
+References: <20220224150326.525707-1-aidanmacdonald.0x0@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -69,32 +71,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This should've been present all along, but was omitted due to a
-mistake in the driver.
+Like the X1000, the X1830 was missing a TCU clock that belongs here.
 
 Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
 ---
-v1 -> v2: https://lore.kernel.org/linux-mips/20220209230145.18943-1-aidanmacdonald.0x0@gmail.com/
- * Split DTS changes to separate patch.
-v2 -> v3: https://lore.kernel.org/linux-mips/20220212150927.39513-1-aidanmacdonald.0x0@gmail.com/
- * Add fallback code if TCU clock is missing
- * Update X1830 devicetree
-
- arch/mips/boot/dts/ingenic/x1000.dtsi | 5 +++--
+ arch/mips/boot/dts/ingenic/x1830.dtsi | 5 +++--
  1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/arch/mips/boot/dts/ingenic/x1000.dtsi b/arch/mips/boot/dts/ingenic/x1000.dtsi
-index 8bd27edef216..c69df8eb158e 100644
---- a/arch/mips/boot/dts/ingenic/x1000.dtsi
-+++ b/arch/mips/boot/dts/ingenic/x1000.dtsi
-@@ -111,8 +111,9 @@ tcu: timer@10002000 {
+diff --git a/arch/mips/boot/dts/ingenic/x1830.dtsi b/arch/mips/boot/dts/ingenic/x1830.dtsi
+index 2595df8671c7..4408df24ca98 100644
+--- a/arch/mips/boot/dts/ingenic/x1830.dtsi
++++ b/arch/mips/boot/dts/ingenic/x1830.dtsi
+@@ -104,8 +104,9 @@ tcu: timer@10002000 {
  
- 		clocks = <&cgu X1000_CLK_RTCLK>,
- 			 <&cgu X1000_CLK_EXCLK>,
--			 <&cgu X1000_CLK_PCLK>;
+ 		clocks = <&cgu X1830_CLK_RTCLK>,
+ 			 <&cgu X1830_CLK_EXCLK>,
+-			 <&cgu X1830_CLK_PCLK>;
 -		clock-names = "rtc", "ext", "pclk";
-+			 <&cgu X1000_CLK_PCLK>,
-+			 <&cgu X1000_CLK_TCU>;
++			 <&cgu X1830_CLK_PCLK>,
++			 <&cgu X1830_CLK_TCU>;
 +		clock-names = "rtc", "ext", "pclk", "tcu";
  
  		interrupt-controller;

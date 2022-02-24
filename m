@@ -2,96 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 078DD4C2D1B
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 14:33:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ADB544C2D23
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 14:33:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234999AbiBXNdG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 08:33:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49214 "EHLO
+        id S235042AbiBXNd0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 08:33:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235117AbiBXNdC (ORCPT
+        with ESMTP id S235035AbiBXNdX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 08:33:02 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8F163D4B9;
-        Thu, 24 Feb 2022 05:32:32 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1D7B6B81878;
-        Thu, 24 Feb 2022 13:32:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1B80C340EC;
-        Thu, 24 Feb 2022 13:32:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645709549;
-        bh=SgGMnecg09ErfQo6Q/uEdth6PBMve0iYq5uuAS6ZHec=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=R32dRsAuPBg7Uhg5NEFR8h9XAqTdWzDOdgAkVtQiF4rWxCzfY81enVna8jwBN6cpo
-         XF3BfMPiU3nRJg8uWUlb2vGSPtsNSAms3F7fhEyGhkEJqTMsMAPmMtz36XwOcLN0oT
-         QCjLlQVNBSP48Vp0OlBLpZjludQd8DETTPybCHmoXiMnJyYSClaqVxky/85ZTBfIez
-         7jRXepjuLErrD7PtJFwMumrfly5VlSSEMP66jOZyWXjsZbZBCxIoNGbmYUEpBxhLHa
-         1qlCWyxskSTwYxjNLy9lfhMqkgkJSd9ZxWaK74+EptwiggV87RyNCL4PC1gv+8Bggk
-         8QT6sziDB3wSA==
-Received: by mail-ej1-f50.google.com with SMTP id lw4so4311526ejb.12;
-        Thu, 24 Feb 2022 05:32:29 -0800 (PST)
-X-Gm-Message-State: AOAM530O7TrH/YNBZoh0T/A3pEf96nEvRYSiGjWQ2QHJ1u0EMsHXpMv+
-        wj03PSLiin0ekLrNSO919jgqzLEl3jhNNt0XqA==
-X-Google-Smtp-Source: ABdhPJxaf0MKZ4M+LqN3z5YECxlhfw3GLarZPyG5domGJgD4pARWd/0ZP19xXsIyyHfbWq5bBwG8Q4xGGXnzV11I0y0=
-X-Received: by 2002:a17:906:f6d9:b0:6ce:e7d:5f3a with SMTP id
- jo25-20020a170906f6d900b006ce0e7d5f3amr2260021ejb.20.1645709547978; Thu, 24
- Feb 2022 05:32:27 -0800 (PST)
+        Thu, 24 Feb 2022 08:33:23 -0500
+Received: from smtpbgau1.qq.com (smtpbgau1.qq.com [54.206.16.166])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3B0F3D4B9
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 05:32:51 -0800 (PST)
+X-QQ-mid: bizesmtp70t1645709553teogwjqm
+Received: from localhost.localdomain (unknown [58.240.82.166])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Thu, 24 Feb 2022 21:32:30 +0800 (CST)
+X-QQ-SSF: 01400000002000B0F000B00A0000000
+X-QQ-FEAT: ZKIyA7viXp0gWhLqDVbbfYxfkb1rGrN8gS7cOdtlS7mVfvwrf5J+8/rKYvFC7
+        C/XTCCvT/2Awyd/hxgYSSFTj/R5yQIMkL3l1RyA43TAJIF2tJMBNBuUdhQ599kCIe5m1noz
+        kUjxq2b8nrQ7DkWyQWIlT0qleP7kc1r1cSYDdHen1miSf+NvaRlggGCd+Kcj76Wi4JNQtXE
+        OD/CMdjoN465+2nybrK3U+NRd+oCxrEJ8AOka9iCl2ZQYRGFZRMHM7wA0RMv7GMYk3VEpUj
+        i9W801lL0B/6+bXVsryCWraTiCKfhuVS2lzwWA2vH+BEFDlPRc3JQSZMmpH6IP7isO/tisW
+        RW+2H+fxRLm+R8eBUnHpkjKNUUEekqKxxkEN684X+7BXf5WGJcBmalzqaVaXw==
+X-QQ-GoodBg: 2
+From:   Meng Tang <tangmeng@uniontech.com>
+To:     mcgrof@kernel.org, keescook@chromium.org, yzaikin@google.com
+Cc:     guoren@kernel.org, nickhu@andestech.com, green.hu@gmail.com,
+        deanbo422@gmail.com, ebiggers@kernel.org, tytso@mit.edu,
+        wad@chromium.org, john.johansen@canonical.com, jmorris@namei.org,
+        serge@hallyn.com, linux-csky@vger.kernel.org,
+        linux-fscrypt@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        Meng Tang <tangmeng@uniontech.com>
+Subject: [PATCH v3 2/2] fs/proc: Optimize arrays defined by struct ctl_path
+Date:   Thu, 24 Feb 2022 21:32:17 +0800
+Message-Id: <20220224133217.1755-2-tangmeng@uniontech.com>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20220224133217.1755-1-tangmeng@uniontech.com>
+References: <20220224133217.1755-1-tangmeng@uniontech.com>
 MIME-Version: 1.0
-References: <1640164346-26818-1-git-send-email-vincent.sunplus@gmail.com> <1640164346-26818-3-git-send-email-vincent.sunplus@gmail.com>
-In-Reply-To: <1640164346-26818-3-git-send-email-vincent.sunplus@gmail.com>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Thu, 24 Feb 2022 07:32:16 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqJK2ka8H_RzjYfBW9UXn9Q9DCnZC3Mdo66XSsk4=ZcEzA@mail.gmail.com>
-Message-ID: <CAL_JsqJK2ka8H_RzjYfBW9UXn9Q9DCnZC3Mdo66XSsk4=ZcEzA@mail.gmail.com>
-Subject: Re: [PATCH v4 2/2] dt-bindings: nvmem: Add bindings doc for Sunplus
- OCOTP driver
-To:     Vincent Shih <vincent.sunplus@gmail.com>
-Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        devicetree@vger.kernel.org,
-        =?UTF-8?B?V2VsbHMgTHUg5ZGC6Iqz6aiw?= <wells.lu@sunplus.com>,
-        Vincent Shih <vincent.shih@sunplus.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:uniontech.com:qybgforeign:qybgforeign6
+X-QQ-Bgrelay: 1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 22, 2021 at 3:12 AM Vincent Shih <vincent.sunplus@gmail.com> wrote:
->
-> Add bindings doc for Sunplus OCOTP driver
->
-> Reviewed-by: Rob Herring <robh@kernel.org>
-> Signed-off-by: Vincent Shih <vincent.sunplus@gmail.com>
-> ---
-> Changes in v3
->  - No change
->
->  .../bindings/nvmem/sunplus,sp7021-ocotp.yaml       | 86 ++++++++++++++++++++++
->  MAINTAINERS                                        |  1 +
->  2 files changed, 87 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/nvmem/sunplus,sp7021-ocotp.yaml
+Previously, arrays defined by struct ctl_path is terminated
+with an empty one. When we actually only register one ctl_path,
+we've gone from 8 bytes to 16 bytes.
 
-This is now failing in linux-next:
+The optimization has been implemented in the previous patch,
+here to remove unnecessary terminate ctl_path with an empty one.
 
-/builds/robherring/linux-dt/Documentation/devicetree/bindings/spi/spi-sunplus-sp7021.example.dt.yaml:
-spi@9C002D80: 'clocks-names' is a required property
-From schema: /builds/robherring/linux-dt/Documentation/devicetree/bindings/spi/spi-sunplus-sp7021.yaml
-Documentation/devicetree/bindings/nvmem/sunplus,sp7021-ocotp.example.dts:19:18:
-fatal error: dt-bindings/clock/sp-sp7021.h: No such file or directory
-   19 |         #include <dt-bindings/clock/sp-sp7021.h>
-      |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-compilation terminated.
+Signed-off-by: Meng Tang <tangmeng@uniontech.com>
+---
+ arch/csky/abiv1/alignment.c | 5 ++---
+ arch/nds32/mm/alignment.c   | 5 ++---
+ fs/verity/signature.c       | 3 +--
+ kernel/pid_namespace.c      | 2 +-
+ kernel/seccomp.c            | 3 +--
+ security/apparmor/lsm.c     | 3 +--
+ security/loadpin/loadpin.c  | 3 +--
+ security/yama/yama_lsm.c    | 3 +--
+ 8 files changed, 10 insertions(+), 17 deletions(-)
 
-Please send a fix ASAP.
+diff --git a/arch/csky/abiv1/alignment.c b/arch/csky/abiv1/alignment.c
+index 2df115d0e210..5c2936b29d29 100644
+--- a/arch/csky/abiv1/alignment.c
++++ b/arch/csky/abiv1/alignment.c
+@@ -340,9 +340,8 @@ static struct ctl_table sysctl_table[2] = {
+ 	{}
+ };
+ 
+-static struct ctl_path sysctl_path[2] = {
+-	{.procname = "csky"},
+-	{}
++static struct ctl_path sysctl_path[1] = {
++	{.procname = "csky"}
+ };
+ 
+ static int __init csky_alignment_init(void)
+diff --git a/arch/nds32/mm/alignment.c b/arch/nds32/mm/alignment.c
+index 1eb7ded6992b..5e79c01b91d6 100644
+--- a/arch/nds32/mm/alignment.c
++++ b/arch/nds32/mm/alignment.c
+@@ -560,9 +560,8 @@ static struct ctl_table nds32_sysctl_table[2] = {
+ 	{}
+ };
+ 
+-static struct ctl_path nds32_path[2] = {
+-	{.procname = "nds32"},
+-	{}
++static struct ctl_path nds32_path[1] = {
++	{.procname = "nds32"}
+ };
+ 
+ /*
+diff --git a/fs/verity/signature.c b/fs/verity/signature.c
+index 143a530a8008..6cdad230c438 100644
+--- a/fs/verity/signature.c
++++ b/fs/verity/signature.c
+@@ -92,8 +92,7 @@ static struct ctl_table_header *fsverity_sysctl_header;
+ 
+ static const struct ctl_path fsverity_sysctl_path[] = {
+ 	{ .procname = "fs", },
+-	{ .procname = "verity", },
+-	{ }
++	{ .procname = "verity", }
+ };
+ 
+ static struct ctl_table fsverity_sysctl_table[] = {
+diff --git a/kernel/pid_namespace.c b/kernel/pid_namespace.c
+index a46a3723bc66..f4f6db65bf81 100644
+--- a/kernel/pid_namespace.c
++++ b/kernel/pid_namespace.c
+@@ -294,7 +294,7 @@ static struct ctl_table pid_ns_ctl_table[] = {
+ 	},
+ 	{ }
+ };
+-static struct ctl_path kern_path[] = { { .procname = "kernel", }, { } };
++static struct ctl_path kern_path[] = { { .procname = "kernel", } };
+ #endif	/* CONFIG_CHECKPOINT_RESTORE */
+ 
+ int reboot_pid_ns(struct pid_namespace *pid_ns, int cmd)
+diff --git a/kernel/seccomp.c b/kernel/seccomp.c
+index db10e73d06e0..03f88d0b79f1 100644
+--- a/kernel/seccomp.c
++++ b/kernel/seccomp.c
+@@ -2333,8 +2333,7 @@ static int seccomp_actions_logged_handler(struct ctl_table *ro_table, int write,
+ 
+ static struct ctl_path seccomp_sysctl_path[] = {
+ 	{ .procname = "kernel", },
+-	{ .procname = "seccomp", },
+-	{ }
++	{ .procname = "seccomp", }
+ };
+ 
+ static struct ctl_table seccomp_sysctl_table[] = {
+diff --git a/security/apparmor/lsm.c b/security/apparmor/lsm.c
+index 4f0eecb67dde..e35c3b29742d 100644
+--- a/security/apparmor/lsm.c
++++ b/security/apparmor/lsm.c
+@@ -1729,8 +1729,7 @@ static int apparmor_dointvec(struct ctl_table *table, int write,
+ }
+ 
+ static struct ctl_path apparmor_sysctl_path[] = {
+-	{ .procname = "kernel", },
+-	{ }
++	{ .procname = "kernel", }
+ };
+ 
+ static struct ctl_table apparmor_sysctl_table[] = {
+diff --git a/security/loadpin/loadpin.c b/security/loadpin/loadpin.c
+index b12f7d986b1e..0471b177d2e1 100644
+--- a/security/loadpin/loadpin.c
++++ b/security/loadpin/loadpin.c
+@@ -48,8 +48,7 @@ static DEFINE_SPINLOCK(pinned_root_spinlock);
+ 
+ static struct ctl_path loadpin_sysctl_path[] = {
+ 	{ .procname = "kernel", },
+-	{ .procname = "loadpin", },
+-	{ }
++	{ .procname = "loadpin", }
+ };
+ 
+ static struct ctl_table loadpin_sysctl_table[] = {
+diff --git a/security/yama/yama_lsm.c b/security/yama/yama_lsm.c
+index 06e226166aab..b42b61e801b1 100644
+--- a/security/yama/yama_lsm.c
++++ b/security/yama/yama_lsm.c
+@@ -449,8 +449,7 @@ static int max_scope = YAMA_SCOPE_NO_ATTACH;
+ 
+ static struct ctl_path yama_sysctl_path[] = {
+ 	{ .procname = "kernel", },
+-	{ .procname = "yama", },
+-	{ }
++	{ .procname = "yama", }
+ };
+ 
+ static struct ctl_table yama_sysctl_table[] = {
+-- 
+2.20.1
 
-Rob
+
+

@@ -2,132 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAEBA4C3691
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 21:09:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C89CD4C366F
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 21:01:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234222AbiBXUJS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 15:09:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54910 "EHLO
+        id S234158AbiBXUBO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 15:01:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234223AbiBXUJQ (ORCPT
+        with ESMTP id S232224AbiBXUBN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 15:09:16 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0720C278282
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 12:08:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1645733324;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=BZd1WVhqalDgY0pEVukQFKoKp+dFXjstcrXoRQTNR8c=;
-        b=HnP6kmhBh0QdzU0T4w5oUujC6ZmALHNk6GE9F9YFdOuPvj89IzdZC1v6sYRLigqVMNGENQ
-        w4Mv+99MPT0RamsKolvddRpLp0OaiDrtlkHfs8xf2G6wu5DY+IVFdblppvRabtOfmWRZAs
-        Csa5kQ0RGS6n14WgoLqpzBdjuyEPok8=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-556-1QK3e14cOouBo-54HfMhkQ-1; Thu, 24 Feb 2022 15:08:40 -0500
-X-MC-Unique: 1QK3e14cOouBo-54HfMhkQ-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Thu, 24 Feb 2022 15:01:13 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EE472763F9;
+        Thu, 24 Feb 2022 12:00:43 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id AD769FC82;
-        Thu, 24 Feb 2022 20:08:39 +0000 (UTC)
-Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 5DC8C2270D;
-        Thu, 24 Feb 2022 20:08:39 +0000 (UTC)
-From:   Paolo Bonzini <pbonzini@redhat.com>
-To:     torvalds@linux-foundation.org
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Subject: [GIT PULL] KVM changes for 5.17-rc6
-Date:   Thu, 24 Feb 2022 15:08:33 -0500
-Message-Id: <20220224200833.2287352-1-pbonzini@redhat.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id B3B91B82684;
+        Thu, 24 Feb 2022 20:00:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6924C340E9;
+        Thu, 24 Feb 2022 20:00:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645732840;
+        bh=SQaeb0Kta1h/s7fQ+4T22hNjVzetgs4lJusjv4G1iW0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=aax4l6Htvnug8mbTTCX0X2rLTjQUq6JeR+ueffcTenNILwwCX0flGWbvC3gLcJ6tA
+         LIh0hvw+Bbd4wOD+R8WWkcXInjD/9/0jYzDDCJgngg0AP70xSThZhi+xoRqNk2k57S
+         CZRuK6sIXueEnpj9OiYbnawB7IF086gcluUXoeYhoLInJcsG3QP8kljM56vsMmO0nL
+         /YS4U7y0DFUMJwrxWivKuA85OBpeIBAp3XuUSCNqMoGWt7d6xBjNGn0zesXPqr7gIX
+         eMs+OPAknzWIlasB15qWJ+spE8ujhHQYTziWSeHJ7iJl0ihM5++9OEaRHnYQt8UNyK
+         pgum76xmSyGAg==
+Date:   Thu, 24 Feb 2022 14:08:39 -0600
+From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
+To:     Jeff Johnson <quic_jjohnson@quicinc.com>
+Cc:     linux-wireless@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+Subject: Re: [PATCH 4/6][next] ath6kl: wmi: Replace one-element array with
+ flexible-array member in struct wmi_connect_event
+Message-ID: <20220224200839.GA1292927@embeddedor>
+References: <cover.1645583264.git.gustavoars@kernel.org>
+ <8a0e347615a3516980fd8b6ad2dc4864a880613b.1645583264.git.gustavoars@kernel.org>
+ <6106494b-a1b3-6b57-8b44-b9528127533b@quicinc.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6106494b-a1b3-6b57-8b44-b9528127533b@quicinc.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Linus,
+On Wed, Feb 23, 2022 at 04:50:18PM -0800, Jeff Johnson wrote:
+> On 2/22/2022 6:38 PM, Gustavo A. R. Silva wrote:
+> > Replace one-element array with flexible-array member in struct
+> > wmi_connect_event.
+> > 
+> > It's also worth noting that due to the flexible array transformation,
+> > the size of struct wmi_connect_event changed (now the size is 1 byte
+> > smaller), and in order to preserve the logic of before the transformation,
+> > the following change is needed:
+> > 
+> > 	-       if (len < sizeof(struct wmi_connect_event))
+> > 	+       if (len <= sizeof(struct wmi_connect_event))
+> > 
+> > This issue was found with the help of Coccinelle and audited and fixed,
+> > manually.
+> > 
+> > Link: https://www.kernel.org/doc/html/v5.16/process/deprecated.html#zero-length-and-one-element-arrays
+> > Link: https://github.com/KSPP/linux/issues/79
+> > Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+> > ---
+> > Hi!
+> > 
+> > It'd be great if someone can confirm or comment on the following
+> > changes described in the changelog text:
+> > 
+> >          -       if (len < sizeof(struct wmi_connect_event))
+> >          +       if (len <= sizeof(struct wmi_connect_event))
+> > 
+> > Thanks
+> > 
+> >   drivers/net/wireless/ath/ath6kl/wmi.c | 2 +-
+> >   drivers/net/wireless/ath/ath6kl/wmi.h | 2 +-
+> >   2 files changed, 2 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/drivers/net/wireless/ath/ath6kl/wmi.c b/drivers/net/wireless/ath/ath6kl/wmi.c
+> > index 049d75f31f3c..ccdccead688e 100644
+> > --- a/drivers/net/wireless/ath/ath6kl/wmi.c
+> > +++ b/drivers/net/wireless/ath/ath6kl/wmi.c
+> > @@ -857,7 +857,7 @@ static int ath6kl_wmi_connect_event_rx(struct wmi *wmi, u8 *datap, int len,
+> >   	struct wmi_connect_event *ev;
+> >   	u8 *pie, *peie;
+> > -	if (len < sizeof(struct wmi_connect_event))
+> > +	if (len <= sizeof(struct wmi_connect_event))
+> 
+> this is another case where IMO the original code can remain since all it is
+> really checking is to see if the entire "fixed" portion is present. in
+> reality if there was just one byte of assoc_info the response would actually
+> be invalid.
 
-The following changes since commit 710c476514313c74045c41c0571bb5178fd16e3d:
+I see; that's actually what I needed to be clarified. I wasn't sure if
+a channel list with no channels was valid and expected. Now I see it is. :)
 
-  KVM: x86/pmu: Use AMD64_RAW_EVENT_MASK for PERF_TYPE_RAW (2022-02-14 07:44:51 -0500)
+> what is missing is logic that verifies len is large enough to hold the
+> payload that is advertised via the beacon_ie_len, assoc_req_len, &
+> assoc_resp_len members. without this even if you change the initial len
+> check you can have a condition where len says there is one u8 in assoc_info
+> (and pass the initial test) but the other three members indicate that much
+> more data is present.
+> 
+> but that is a pre-existing shortcoming that should be handled with a
+> separate patch.
 
-are available in the Git repository at:
+Yeah; I'll consider extending this series to include a patch for that.
 
-  https://git.kernel.org/pub/scm/virt/kvm/kvm.git tags/for-linus
+> >   		return -EINVAL;
+> >   	ev = (struct wmi_connect_event *) datap;
+> > diff --git a/drivers/net/wireless/ath/ath6kl/wmi.h b/drivers/net/wireless/ath/ath6kl/wmi.h
+> > index 432e4f428a4a..6b064e669d87 100644
+> > --- a/drivers/net/wireless/ath/ath6kl/wmi.h
+> > +++ b/drivers/net/wireless/ath/ath6kl/wmi.h
+> > @@ -1545,7 +1545,7 @@ struct wmi_connect_event {
+> >   	u8 beacon_ie_len;
+> >   	u8 assoc_req_len;
+> >   	u8 assoc_resp_len;
+> > -	u8 assoc_info[1];
+> > +	u8 assoc_info[];
+> >   } __packed;
+> >   /* Disconnect Event */
+> 
+> whether or not you modify the length check consider this:
+> Reviewed-by: Jeff Johnson <quic_jjohnson@quicinc.com>
 
-for you to fetch changes up to e910a53fb4f20aa012e46371ffb4c32c8da259b4:
+Great. :)
 
-  KVM: x86: nSVM: disallow userspace setting of MSR_AMD64_TSC_RATIO to non default value when tsc scaling disabled (2022-02-24 13:04:47 -0500)
-
-----------------------------------------------------------------
-x86 host:
-
-* Expose KVM_CAP_ENABLE_CAP since it is supported
-
-* Disable KVM_HC_CLOCK_PAIRING in TSC catchup mode
-
-* Ensure async page fault token is nonzero
-
-* Fix lockdep false negative
-
-* Fix FPU migration regression from the AMX changes
-
-x86 guest:
-
-* Don't use PV TLB/IPI/yield on uniprocessor guests
-
-PPC:
-* reserve capability id (topic branch for ppc/kvm)
-
-----------------------------------------------------------------
-Aaron Lewis (1):
-      KVM: x86: Add KVM_CAP_ENABLE_CAP to x86
-
-Anton Romanov (1):
-      kvm: x86: Disable KVM_HC_CLOCK_PAIRING if tsc is in always catchup mode
-
-Leonardo Bras (3):
-      x86/kvm/fpu: Limit guest user_xfeatures to supported bits of XCR0
-      x86/kvm/fpu: Remove kvm_vcpu_arch.guest_supported_xcr0
-      x86/kvm: Fix compilation warning in non-x86_64 builds
-
-Liang Zhang (1):
-      KVM: x86/mmu: make apf token non-zero to fix bug
-
-Maxim Levitsky (1):
-      KVM: x86: nSVM: disallow userspace setting of MSR_AMD64_TSC_RATIO to non default value when tsc scaling disabled
-
-Nicholas Piggin (1):
-      KVM: PPC: reserve capability 210 for KVM_CAP_PPC_AIL_MODE_3
-
-Paolo Bonzini (1):
-      Merge branch 'kvm-ppc-cap-210' into kvm-master
-
-Wanpeng Li (2):
-      KVM: Fix lockdep false negative during host resume
-      x86/kvm: Don't use pv tlb/ipi/sched_yield if on 1 vCPU
-
- Documentation/virt/kvm/api.rst  | 16 +++++++++++++++-
- arch/x86/include/asm/kvm_host.h |  1 -
- arch/x86/kernel/fpu/xstate.c    |  5 ++++-
- arch/x86/kernel/kvm.c           |  9 ++++++---
- arch/x86/kvm/cpuid.c            |  5 ++++-
- arch/x86/kvm/mmu/mmu.c          | 13 ++++++++++++-
- arch/x86/kvm/svm/svm.c          | 19 +++++++++++++++++--
- arch/x86/kvm/x86.c              | 30 +++++++++++++++++++++++++-----
- include/uapi/linux/kvm.h        |  1 +
- tools/include/uapi/linux/kvm.h  |  1 +
- virt/kvm/kvm_main.c             |  4 +---
- 11 files changed, 86 insertions(+), 18 deletions(-)
+Thanks a lot for the feedback!
+--
+Gustavo
 

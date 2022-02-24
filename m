@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 101C24C2AAB
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 12:18:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CE264C2AA6
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 12:18:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231360AbiBXLSj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 06:18:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58934 "EHLO
+        id S234035AbiBXLSp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 06:18:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234033AbiBXLSD (ORCPT
+        with ESMTP id S233997AbiBXLSE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 06:18:03 -0500
+        Thu, 24 Feb 2022 06:18:04 -0500
 Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D547915A23A
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 03:17:33 -0800 (PST)
-Received: by mail-wr1-x42d.google.com with SMTP id p9so2411489wra.12
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 03:17:33 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 196D816C4F6
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 03:17:35 -0800 (PST)
+Received: by mail-wr1-x42d.google.com with SMTP id n14so2075132wrq.7
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 03:17:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=zE6/nZIDlJdrpc8fSPwZfEWaQMFLh+eWf0SbooVP2Cs=;
-        b=y0wC2iSaTfuMnX+xZjLGomf6N3YABPJaIUbLdMN9PI7FX2tlh9OC9gex041qeCWkbE
-         tkveBABwMnZVwGABeOznGoCqZv58ce7PD3oaDmsf9SX3QmE2it0VbRyMxID1sCLM7YSF
-         PenArZceaij7jQy2DdwKAaQGbPqplbjWiSQb5QzQ/x4CERjEaG1TSzJn5dsJohZT11rv
-         sgcZtn1mTdI3gUFuUJSUlGusNXqjl456Nnc1iRA5iq7AzR1cnxCh7pkjFue/Yj4A/Ux6
-         Kfk7OxE0R/ReiW34BRYX4Uds99Sn7KSPy1ZA5EKxGk9/IyDAxwG4O7JJfGypS8JMTLw+
-         tLbw==
+        bh=QnhpDOk4CUU3lYsv0PpUfinJqZMQJnvxRMmJ0Ek2uv8=;
+        b=iHgn2n0Xbc0eS5i5rmuVlIhBnrk1T9JqOx4lAmr9MjuuLqLPefIrWkjeUB03q3UJdk
+         JcYDwzltbGzolGWroQQt8Gc6b1IoXLn8Agdj9/jJkDhkrcX5btQlkOFD8kmicnTI8mfw
+         kQC15wMyxH7qrfe74fHBcLB6eSioWOWbGVFFev0Xmd6HZz5zyQZGi/3fE9VvSQuNwVje
+         wugyuVvpNoeRhvzMmdW71VcyBtTpu8JnZgJOrRp9q9GkEf+8J2UhRtNGJ08Rn1bFqwW+
+         GLErTgSwojHatENPHxxIP7hCsR3UF1UFlXyJzy7Xd/wSy+F7YK8LNI/+8fYhBHVvqRxM
+         6xPw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=zE6/nZIDlJdrpc8fSPwZfEWaQMFLh+eWf0SbooVP2Cs=;
-        b=MQ5m9Nc5b1OUYG8jFeYt0pIvoJaSxY8iQcLApLwNbER+Np/68ytn6tYZCZy8OmUo9L
-         xG2WxSxMN6haSLohFojymjPiEbm5mtSMyYvN8WGcsXoibEZLviYOXBGvYaU9LfA7yDk4
-         MWwxVrWXMGvX0pcpaWtDYTdMej4lukN8KGVFCXaArUQVy6yDn/mElfHasj19Wsj5/4Hr
-         UgUQyYSEs9D5vwZh/OZERMwILhvagZntPCCw/Me+Y4V6b1HwNIEzTxy9km1a3HKKIPeo
-         9DXb16wIFUoM8BRYHxls4mpIbpDYLWt1GdXcJZocnN3tJAC3n9kCs9hlZ99b9JGpS2x7
-         GMmA==
-X-Gm-Message-State: AOAM530CUx4mV4IOG/roaIe/JaOsBiSvxG+PBRy/P3PBvsxb30UVy/5D
-        SJL5CKOHUgiMRTetKQsUZopBdA==
-X-Google-Smtp-Source: ABdhPJw3NfB3x04KEBXGRKtfaIopOFoSnpJaNQZBGPeNyhHXjJQxGlGlxdY1AzUUWu4ZgFrUhRwcgQ==
-X-Received: by 2002:adf:fb06:0:b0:1e6:8b27:f1ea with SMTP id c6-20020adffb06000000b001e68b27f1eamr1803259wrr.353.1645701452462;
-        Thu, 24 Feb 2022 03:17:32 -0800 (PST)
+        bh=QnhpDOk4CUU3lYsv0PpUfinJqZMQJnvxRMmJ0Ek2uv8=;
+        b=j4mK48uuXXsKWp/DdMCMQErPW9XJ5rSxPi+uz9Mr8oAUhYvBBKr8uA+vQ/WygqUPCn
+         0TqkgR4VRTQ0mPAp5xd/gbPx0wfti3j+F7Xiu7b40dDJkAkOciJbhPDPqYKPFTuOExkT
+         jaOtGiUlKrC9Ynf9h+PopHxQ3JwiVyZqy6gRfXmyCZjOrPtlWY4BLAa7RCchpS1KW2+2
+         QU6IpfQP0htByCoQge0SonE+co7mh9DfnAvGZOLdvSzS6xA1Lu50U5s+3qDQ7hjd4DBO
+         Z727XfgqxaoZt9wLJRmghLEKtMfZIUxk0gNN28EBn9UU6BXgk6naeEZ0Dy5muL5SgKVE
+         a5aA==
+X-Gm-Message-State: AOAM531oHr+6MCsrNvCnTkC3EeisBiJhkxxwgRtttdN7/zFWAqPqbD+4
+        Le2sCVAJPFxUh/d26N+6W2BSvA==
+X-Google-Smtp-Source: ABdhPJxGJ8YMd6U1ZvlIMkNGjumB115CP6WBkh2oFxGcgtmx9Xosrnqs/8pck2bBAImBOr/InU6k5A==
+X-Received: by 2002:a05:6000:178a:b0:1ea:7db1:3159 with SMTP id e10-20020a056000178a00b001ea7db13159mr1819995wrg.9.1645701453670;
+        Thu, 24 Feb 2022 03:17:33 -0800 (PST)
 Received: from srini-hackbox.lan (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
-        by smtp.gmail.com with ESMTPSA id t4sm2245737wmj.10.2022.02.24.03.17.31
+        by smtp.gmail.com with ESMTPSA id t4sm2245737wmj.10.2022.02.24.03.17.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Feb 2022 03:17:31 -0800 (PST)
+        Thu, 24 Feb 2022 03:17:33 -0800 (PST)
 From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 To:     broonie@kernel.org
 Cc:     lgirdwood@gmail.com, perex@perex.cz, tiwai@suse.com,
         pierre-louis.bossart@linux.intel.com, alsa-devel@alsa-project.org,
         linux-kernel@vger.kernel.org, quic_srivasam@quicinc.com,
         Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Subject: [PATCH v2 09/16] ASoC: codecs: rx-macro: setup soundwire clks correctly
-Date:   Thu, 24 Feb 2022 11:17:11 +0000
-Message-Id: <20220224111718.6264-10-srinivas.kandagatla@linaro.org>
+Subject: [PATCH v2 10/16] ASoC: codecs: va-macro: add runtime pm support
+Date:   Thu, 24 Feb 2022 11:17:12 +0000
+Message-Id: <20220224111718.6264-11-srinivas.kandagatla@linaro.org>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20220224111718.6264-1-srinivas.kandagatla@linaro.org>
 References: <20220224111718.6264-1-srinivas.kandagatla@linaro.org>
@@ -72,53 +72,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For SoundWire Frame sync to be generated correctly we need both MCLK
-and MCLKx2 (npl). Without pm runtime enabled these two clocks will remain on,
-however after adding pm runtime support its possible that NPl clock could be
-turned off even when SoundWire controller is active.
-
-Fix this by enabling mclk and npl clk when SoundWire clks are enabled.
+Add pm runtime support to VA Macro.
 
 Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 ---
- sound/soc/codecs/lpass-rx-macro.c | 10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
+ sound/soc/codecs/lpass-va-macro.c | 41 +++++++++++++++++++++++++++++++
+ 1 file changed, 41 insertions(+)
 
-diff --git a/sound/soc/codecs/lpass-rx-macro.c b/sound/soc/codecs/lpass-rx-macro.c
-index 83b570403c59..a2f49a21678b 100644
---- a/sound/soc/codecs/lpass-rx-macro.c
-+++ b/sound/soc/codecs/lpass-rx-macro.c
-@@ -3430,6 +3430,13 @@ static int rx_macro_component_probe(struct snd_soc_component *component)
- static int swclk_gate_enable(struct clk_hw *hw)
- {
- 	struct rx_macro *rx = to_rx_macro(hw);
-+	int ret;
+diff --git a/sound/soc/codecs/lpass-va-macro.c b/sound/soc/codecs/lpass-va-macro.c
+index ff8120886eca..34aeee50332a 100644
+--- a/sound/soc/codecs/lpass-va-macro.c
++++ b/sound/soc/codecs/lpass-va-macro.c
+@@ -9,6 +9,7 @@
+ #include <linux/of_clk.h>
+ #include <linux/of_platform.h>
+ #include <linux/platform_device.h>
++#include <linux/pm_runtime.h>
+ #include <linux/regmap.h>
+ #include <linux/regulator/consumer.h>
+ #include <sound/soc.h>
+@@ -1469,6 +1470,12 @@ static int va_macro_probe(struct platform_device *pdev)
+ 	if (ret)
+ 		goto err_clkout;
+ 
++	pm_runtime_set_autosuspend_delay(dev, 3000);
++	pm_runtime_use_autosuspend(dev);
++	pm_runtime_mark_last_busy(dev);
++	pm_runtime_set_active(dev);
++	pm_runtime_enable(dev);
 +
-+	ret = clk_prepare_enable(rx->mclk);
-+	if (ret) {
-+		dev_err(rx->dev, "unable to prepare mclk\n");
-+		return ret;
-+	}
+ 	return 0;
  
- 	rx_macro_mclk_enable(rx, true);
- 	if (rx->reset_swr)
-@@ -3456,6 +3463,7 @@ static void swclk_gate_disable(struct clk_hw *hw)
- 			   CDC_RX_SWR_CLK_EN_MASK, 0);
- 
- 	rx_macro_mclk_enable(rx, false);
-+	clk_disable_unprepare(rx->mclk);
+ err_clkout:
+@@ -1492,6 +1499,39 @@ static int va_macro_remove(struct platform_device *pdev)
+ 	return 0;
  }
  
- static int swclk_gate_is_enabled(struct clk_hw *hw)
-@@ -3492,7 +3500,7 @@ static int rx_macro_register_mclk_output(struct rx_macro *rx)
- 	struct clk_init_data init;
- 	int ret;
- 
--	parent_clk_name = __clk_get_name(rx->mclk);
-+	parent_clk_name = __clk_get_name(rx->npl);
- 
- 	init.name = clk_name;
- 	init.ops = &swclk_gate_ops;
++static int __maybe_unused va_macro_runtime_suspend(struct device *dev)
++{
++	struct va_macro *va = dev_get_drvdata(dev);
++
++	regcache_cache_only(va->regmap, true);
++	regcache_mark_dirty(va->regmap);
++
++	clk_disable_unprepare(va->mclk);
++
++	return 0;
++}
++
++static int __maybe_unused va_macro_runtime_resume(struct device *dev)
++{
++	struct va_macro *va = dev_get_drvdata(dev);
++	int ret;
++
++	ret = clk_prepare_enable(va->mclk);
++	if (ret) {
++		dev_err(va->dev, "unable to prepare mclk\n");
++		return ret;
++	}
++
++	regcache_cache_only(va->regmap, false);
++	regcache_sync(va->regmap);
++	return 0;
++}
++
++
++static const struct dev_pm_ops va_macro_pm_ops = {
++	SET_RUNTIME_PM_OPS(va_macro_runtime_suspend, va_macro_runtime_resume, NULL)
++};
++
+ static const struct of_device_id va_macro_dt_match[] = {
+ 	{ .compatible = "qcom,sc7280-lpass-va-macro" },
+ 	{ .compatible = "qcom,sm8250-lpass-va-macro" },
+@@ -1504,6 +1544,7 @@ static struct platform_driver va_macro_driver = {
+ 		.name = "va_macro",
+ 		.of_match_table = va_macro_dt_match,
+ 		.suppress_bind_attrs = true,
++		.pm = &va_macro_pm_ops,
+ 	},
+ 	.probe = va_macro_probe,
+ 	.remove = va_macro_remove,
 -- 
 2.21.0
 

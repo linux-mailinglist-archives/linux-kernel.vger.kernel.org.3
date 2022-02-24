@@ -2,239 +2,242 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E61F4C240F
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 07:27:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F18BB4C2413
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 07:27:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231293AbiBXG11 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 01:27:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47220 "EHLO
+        id S231301AbiBXG1p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 01:27:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231286AbiBXG1T (ORCPT
+        with ESMTP id S231302AbiBXG1l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 01:27:19 -0500
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18A37B7DD
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 22:26:48 -0800 (PST)
-Received: by mail-wr1-x432.google.com with SMTP id d3so1380053wrf.1
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 22:26:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=8Yss0S1/vHMgjAoJ07KYM18JULTazWsBJxkic3i/H6g=;
-        b=YrX+UKq0Otcgx6V4q9kvXl56W0vasJICaS7kjdYAqpRhD3b5P35O7XhOjwrtLYWbm5
-         7nDZ2G42TUYw1fH748w/Ku3/X12DQLljM4eLzQ3pSlfaU2cETFk7uvTU+xA0iix51CuL
-         mMunrv7is4nAJJBk/CQfliRKpQqs6VECii8SHygTNSqXZNqb2erWFOBPIppBPno+dvWA
-         YjmcAgUfDhN1FmzPwVp3krgPgm+R3yuGE1e4X/xearvnVWZ0CNLJd2godfIqZVcmbEtM
-         ADlVxfxW6l6hBixVPmXZJLUabvyAWSj3inBExZ/E+GiVOK8J95IBtD/Oe1+fExFOJIsj
-         Fwrw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=8Yss0S1/vHMgjAoJ07KYM18JULTazWsBJxkic3i/H6g=;
-        b=tags/Q/CHjZ9jbqK8Wnx8ukrCbidMC7LUWsH2kA2utuHwLzTWKGBIukUp8rT8SpNnQ
-         opqtfSeC1UZcswTaZx4AuzDLfMhy5g1HG7/WG9rSFStCXN2Bpc6ASgA+jMJl8PQL9nV4
-         rhMaIE5ruAMVvLOUGUVfMXDicMtMgDB6fPhOD7HNCF1tegPX4M7nE+WvHztim4ltHDI4
-         f4GqhIKR4CHu7qvizATHgxxQBRP5kOkUcrCyLrRpydKWjguREt+/Nzxq3aMEUOcfI4ze
-         YBKto+vU5nbzlprYVCdzgW3Ugl7kEuatS/5c5GxtumSrEJ6po076XUIj9mMEHwXwQPvs
-         LP3w==
-X-Gm-Message-State: AOAM530TmDNN9jxbW2m6PA1LtlmjZQ6MEShjqRxighEgS0m6Kl5HtPke
-        bJTgMbiaa3j6ycb3jHoNwDZrBM0eDUbtYgAgHpR6aQ==
-X-Google-Smtp-Source: ABdhPJyyP0xvWOK9mg2Xt+P13712OBJ8o0tX0rY7uOmJesWVq/8DjhNwQqf6631T1cXY1Eox8fGa2yNBtsYNe2yYph8=
-X-Received: by 2002:adf:d1c9:0:b0:1ea:8b11:98a4 with SMTP id
- b9-20020adfd1c9000000b001ea8b1198a4mr930894wrd.220.1645684006544; Wed, 23 Feb
- 2022 22:26:46 -0800 (PST)
+        Thu, 24 Feb 2022 01:27:41 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A24C317AB8
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 22:27:11 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 541AEB8248C
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 06:27:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E96AC340EC;
+        Thu, 24 Feb 2022 06:27:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645684029;
+        bh=RfuCCY8zPmsR5Bp17+vtklf5h9j3ms7ZWNwMS/X7RF8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=L4B7jVAyolB6geCsbqCigeUDULujokT8cOt1gy4vqFaRRC794iilYUgF+U1MWtb3W
+         3FNYSmtBwV+EbP59MGS3VjT9oHj082T/n4S0kYaaHJFWwGQAZQ0yPgj4jY+SIwNK1k
+         i3WnaPwzM3K1FyQ3EWcn98Y1weuI+3Hxp4AvdjBDLEtT3aRyVdPdClWIH4C+CovDE/
+         b3wz0eHOnA7p4R5YbceR4MOcHfrX27LDPnLI5OAX5yTssKScPBgFogi4nobrt9coPH
+         Saj3gwOv0GJcssfcgFoHckOwiNusCDkHFHV6wivvpMv6eq9HJGPdrzlmixT9tpnuYK
+         pd2UuDi4V65gw==
+Date:   Thu, 24 Feb 2022 08:26:59 +0200
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Vijay Balakrishna <vijayb@linux.microsoft.com>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Pavel Tatashin <pasha.tatashin@soleen.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v2] arm64: Do not defer reserve_crashkernel() for
+ platforms with no DMA memory zones
+Message-ID: <YhclM0atq4oRHn/8@kernel.org>
+References: <1645646253-16072-1-git-send-email-vijayb@linux.microsoft.com>
 MIME-Version: 1.0
-References: <20220217205227.4098452-1-dlatypov@google.com> <20220217205227.4098452-3-dlatypov@google.com>
-In-Reply-To: <20220217205227.4098452-3-dlatypov@google.com>
-From:   David Gow <davidgow@google.com>
-Date:   Thu, 24 Feb 2022 14:26:35 +0800
-Message-ID: <CABVgOSmayxKsZYi36gbMWxExhE+=ae8PfFA_tbCGogPnwkw0gA@mail.gmail.com>
-Subject: Re: [PATCH 3/3] kunit: tool: properly report the used arch for
- --json, or '' if not known
-To:     Daniel Latypov <dlatypov@google.com>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000a4234905d8bdaa83"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1645646253-16072-1-git-send-email-vijayb@linux.microsoft.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---000000000000a4234905d8bdaa83
-Content-Type: text/plain; charset="UTF-8"
-
-On Fri, Feb 18, 2022 at 4:52 AM Daniel Latypov <dlatypov@google.com> wrote:
->
-> Before, kunit.py always printed "arch": "UM" in its json output, but...
-> 1. With `kunit.py parse`, we could be parsing output from anywhere, so
->     we can't say that.
-> 2. Capitalizing it is probably wrong, as it's `ARCH=um`
-> 3. Commit 87c9c1631788 ("kunit: tool: add support for QEMU") made it so
->    kunit.py could knowingly run a different arch, yet we'd still always
->    claim "UM".
->
-Agreed on all counts!
-
-> This patch addresses all of those. E.g.
->
-> 1.
-> $ ./tools/testing/kunit/kunit.py parse .kunit/test.log --json | grep -o '"arch.*' | sort -u
-> "arch": "",
->
-> 2.
-> $ ./tools/testing/kunit/kunit.py run --json | ...
-> "arch": "um",
->
-> 3.
-> $ ./tools/testing/kunit/kunit.py run --json --arch=x86_64 | ...
-> "arch": "x86_64",
->
-> Signed-off-by: Daniel Latypov <dlatypov@google.com>
+On Wed, Feb 23, 2022 at 11:57:33AM -0800, Vijay Balakrishna wrote:
+> The following patches resulted in deferring crash kernel reservation to
+> mem_init(), mainly aimed at platforms with DMA memory zones (no IOMMU),
+> in particular Raspberry Pi 4.
+> 
+> commit 1a8e1cef7603 ("arm64: use both ZONE_DMA and ZONE_DMA32")
+> commit 8424ecdde7df ("arm64: mm: Set ZONE_DMA size based on devicetree's dma-ranges")
+> commit 0a30c53573b0 ("arm64: mm: Move reserve_crashkernel() into mem_init()")
+> commit 2687275a5843 ("arm64: Force NO_BLOCK_MAPPINGS if crashkernel reservation is required")
+> 
+> Above changes introduced boot slowdown due to linear map creation for
+> all the memory banks with NO_BLOCK_MAPPINGS, see discussion[1].  The proposed
+> changes restore crash kernel reservation to earlier behavior thus avoids
+> slow boot, particularly for platforms with IOMMU (no DMA memory zones).
+> 
+> Tested changes to confirm no ~150ms boot slowdown on our SoC with IOMMU
+> and 8GB memory.  Also tested with ZONE_DMA and/or ZONE_DMA32 configs to confirm
+> no regression to deferring scheme of crash kernel memory reservation.
+> In both cases successfully collected kernel crash dump.
+> 
+> [1] https://lore.kernel.org/all/9436d033-579b-55fa-9b00-6f4b661c2dd7@linux.microsoft.com/
+> 
+> Signed-off-by: Vijay Balakrishna <vijayb@linux.microsoft.com>
+> Cc: stable@vger.kernel.org
 > ---
+> Changes from v1 -> v2
+> ---------------------
+> - replaced '!crashk_res.end' with IS_ENABLED(ZONE_DMA/DMA32) (Nicolas's comment)
+> - minor change to make it uniform -- replaced #if defined(..) -> #if IS_ENABLED(..)
+> - added new comment in arch/arm64/mm/init.c to ease future maintenance (Nicolas's comment)
+> - test performed comment moved to commit message
+> 
+> [v1] https://lore.kernel.org/all/1645056294-6509-1-git-send-email-vijayb@linux.microsoft.com/
+> ---
+>  arch/arm64/mm/init.c | 36 +++++++++++++++++++++++++++++++++---
+>  arch/arm64/mm/mmu.c  | 29 ++++++++++++++++++++++++++++-
+>  2 files changed, 61 insertions(+), 4 deletions(-)
+> 
+> diff --git a/arch/arm64/mm/init.c b/arch/arm64/mm/init.c
+> index db63cc885771..51869f9dfc33 100644
+> --- a/arch/arm64/mm/init.c
+> +++ b/arch/arm64/mm/init.c
+> @@ -61,8 +61,34 @@ EXPORT_SYMBOL(memstart_addr);
+>   * unless restricted on specific platforms (e.g. 30-bit on Raspberry Pi 4).
+>   * In such case, ZONE_DMA32 covers the rest of the 32-bit addressable memory,
+>   * otherwise it is empty.
+> + *
+> + * Memory reservation for crash kernel either done early or deferred
+> + * depending on DMA memory zones configs (ZONE_DMA) --
+> + *
+> + * In absence of ZONE_DMA configs arm64_dma_phys_limit initialized
+> + * here instead of max_zone_phys().  This lets early reservation of
+> + * crash kernel memory which has a dependency on arm64_dma_phys_limit.
+> + * Reserving memory early for crash kernel allows linear creation of block
+> + * mappings (greater than page-granularity) for all the memory bank rangs.
+> + * In this scheme a comparatively quicker boot is observed.
+> + *
+> + * If ZONE_DMA configs are defined, crash kernel memory reservation
+> + * is delayed until DMA zone memory range size initilazation performed in
+> + * zone_sizes_init().  The defer is necessary to steer clear of DMA zone
+> + * memory range to avoid overlap allocation.  So crash kernel memory boundaries
+> + * are not known when mapping all bank memory ranges, which otherwise means
+> + * not possible to exclude crash kernel range from creating block mappings
+> + * so page-granularity mappings are created for the entire memory range.
+> + * Hence a slightly slower boot is observed.
+> + *
+> + * Note: Page-granularity mapppings are necessary for crash kernel memory
+> + * range for shrinking its size via /sys/kernel/kexec_crash_size interface.
+>   */
+> -phys_addr_t arm64_dma_phys_limit __ro_after_init;
+> +#if IS_ENABLED(CONFIG_ZONE_DMA) || IS_ENABLED(CONFIG_ZONE_DMA32)
+> +phys_addr_t __ro_after_init arm64_dma_phys_limit;
+> +#else
+> +phys_addr_t __ro_after_init arm64_dma_phys_limit = PHYS_MASK + 1;
+> +#endif
+>  
+>  #ifdef CONFIG_KEXEC_CORE
+>  /*
+> @@ -153,8 +179,6 @@ static void __init zone_sizes_init(unsigned long min, unsigned long max)
+>  	if (!arm64_dma_phys_limit)
+>  		arm64_dma_phys_limit = dma32_phys_limit;
+>  #endif
+> -	if (!arm64_dma_phys_limit)
+> -		arm64_dma_phys_limit = PHYS_MASK + 1;
+>  	max_zone_pfns[ZONE_NORMAL] = max;
+>  
+>  	free_area_init(max_zone_pfns);
+> @@ -315,6 +339,10 @@ void __init arm64_memblock_init(void)
+>  
+>  	early_init_fdt_scan_reserved_mem();
+>  
+> +#if !IS_ENABLED(CONFIG_ZONE_DMA) && !IS_ENABLED(CONFIG_ZONE_DMA32)
+> +	reserve_crashkernel();
+> +#endif
 
-Looks good, and works well here. One question/comment below, but in general:
+Nit: with IS_ENABLED() this does not need to be an #ifdef, but rather
 
-Reviewed-by: David Gow <davidgow@google.com>
+	if (!IS_ENABLED(CONFIG_ZONE_DMA) && !IS_ENABLED(CONFIG_ZONE_DMA32))
+		reserve_crashkernel();
 
-Cheers,
--- David
+The same applies to the cases below.
 
->  tools/testing/kunit/kunit.py        | 4 ++--
->  tools/testing/kunit/kunit_kernel.py | 2 ++
->  2 files changed, 4 insertions(+), 2 deletions(-)
->
-> diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
-> index 7dd6ed42141f..5ccdafd4d5aa 100755
-> --- a/tools/testing/kunit/kunit.py
-> +++ b/tools/testing/kunit/kunit.py
-> @@ -153,7 +153,7 @@ def exec_tests(linux: kunit_kernel.LinuxSourceTree, request: KunitExecRequest) -
->                                 test_glob = request.filter_glob.split('.', maxsplit=2)[1]
->                                 filter_globs = [g + '.'+ test_glob for g in filter_globs]
->
-> -       metadata = kunit_json.Metadata(build_dir=request.build_dir)
-> +       metadata = kunit_json.Metadata(arch=linux.arch(), build_dir=request.build_dir)
->
->         test_counts = kunit_parser.TestCounts()
->         exec_time = 0.0
-> @@ -506,7 +506,7 @@ def main(argv, linux=None):
->                         with open(cli_args.file, 'r', errors='backslashreplace') as f:
->                                 kunit_output = f.read().splitlines()
->                 # We know nothing about how the result was created!
-> -               metadata = kunit_json.Metadata()
-> +               metadata = kunit_json.Metadata(arch='', build_dir='', def_config='')
+> +
+>  	high_memory = __va(memblock_end_of_DRAM() - 1) + 1;
+>  }
+>  
+> @@ -357,11 +385,13 @@ void __init bootmem_init(void)
+>  	 */
+>  	dma_contiguous_reserve(arm64_dma_phys_limit);
+>  
+> +#if IS_ENABLED(CONFIG_ZONE_DMA) || IS_ENABLED(CONFIG_ZONE_DMA32)
+>  	/*
+>  	 * request_standard_resources() depends on crashkernel's memory being
+>  	 * reserved, so do it here.
+>  	 */
+>  	reserve_crashkernel();
+> +#endif
+>  
+>  	memblock_dump_all();
+>  }
+> diff --git a/arch/arm64/mm/mmu.c b/arch/arm64/mm/mmu.c
+> index acfae9b41cc8..884b2c6d6cd9 100644
+> --- a/arch/arm64/mm/mmu.c
+> +++ b/arch/arm64/mm/mmu.c
+> @@ -517,7 +517,7 @@ static void __init map_mem(pgd_t *pgdp)
+>  	 */
+>  	BUILD_BUG_ON(pgd_index(direct_map_end - 1) == pgd_index(direct_map_end));
+>  
+> -	if (can_set_direct_map() || crash_mem_map || IS_ENABLED(CONFIG_KFENCE))
+> +	if (can_set_direct_map() || IS_ENABLED(CONFIG_KFENCE))
+>  		flags |= NO_BLOCK_MAPPINGS | NO_CONT_MAPPINGS;
+>  
+>  	/*
+> @@ -528,6 +528,18 @@ static void __init map_mem(pgd_t *pgdp)
+>  	 */
+>  	memblock_mark_nomap(kernel_start, kernel_end - kernel_start);
+>  
+> +#if IS_ENABLED(CONFIG_KEXEC_CORE)
+> +
+> +#if IS_ENABLED(CONFIG_ZONE_DMA) || IS_ENABLED(CONFIG_ZONE_DMA32)
+> +	if (crash_mem_map)
+> +		flags |= NO_BLOCK_MAPPINGS | NO_CONT_MAPPINGS;
+> +#else
+> +	if (crashk_res.end)
+> +		memblock_mark_nomap(crashk_res.start,
+> +				    resource_size(&crashk_res));
+> +#endif
+> +
+> +#endif
+>  	/* map all the memory banks */
+>  	for_each_mem_range(i, &start, &end) {
+>  		if (start >= end)
+> @@ -554,6 +566,21 @@ static void __init map_mem(pgd_t *pgdp)
+>  	__map_memblock(pgdp, kernel_start, kernel_end,
+>  		       PAGE_KERNEL, NO_CONT_MAPPINGS);
+>  	memblock_clear_nomap(kernel_start, kernel_end - kernel_start);
+> +#if IS_ENABLED(CONFIG_KEXEC_CORE) && \
+> +    !IS_ENABLED(CONFIG_ZONE_DMA) && !IS_ENABLED(CONFIG_ZONE_DMA32)
+> +	/*
+> +	 * Use page-level mappings here so that we can shrink the region
+> +	 * in page granularity and put back unused memory to buddy system
+> +	 * through /sys/kernel/kexec_crash_size interface.
+> +	 */
+> +	if (crashk_res.end) {
+> +		__map_memblock(pgdp, crashk_res.start, crashk_res.end + 1,
+> +			       PAGE_KERNEL,
+> +			       NO_BLOCK_MAPPINGS | NO_CONT_MAPPINGS);
+> +		memblock_clear_nomap(crashk_res.start,
+> +				     resource_size(&crashk_res));
+> +	}
+> +#endif
+>  }
+>  
+>  void mark_rodata_ro(void)
+> -- 
+> 2.35.1
+> 
 
-Why do we explicitly pass empty strings in here, rather than making
-the defaults correct for this case?
-
-
->                 request = KunitParseRequest(raw_output=cli_args.raw_output,
->                                             json=cli_args.json)
->                 result, _ = parse_tests(request, metadata, kunit_output)
-> diff --git a/tools/testing/kunit/kunit_kernel.py b/tools/testing/kunit/kunit_kernel.py
-> index fe159e7ff697..bbbe2ffe30b7 100644
-> --- a/tools/testing/kunit/kunit_kernel.py
-> +++ b/tools/testing/kunit/kunit_kernel.py
-> @@ -248,6 +248,8 @@ class LinuxSourceTree(object):
->                         kconfig = kunit_config.parse_from_string('\n'.join(kconfig_add))
->                         self._kconfig.merge_in_entries(kconfig)
->
-> +       def arch(self) -> str:
-> +               return self._arch
->
->         def clean(self) -> bool:
->                 try:
-> --
-> 2.35.1.473.g83b2b277ed-goog
->
-
---000000000000a4234905d8bdaa83
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
-ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
-VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
-AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
-AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
-IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
-dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
-6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
-c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
-I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
-AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
-BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
-CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
-AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
-MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
-My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
-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
-G7p3AiuB2sgfq6cOpbO5MEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
-dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
-AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
-c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
-LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
-LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
-Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQBsL34EJkCtu9Nu
-2+R6l1Qzno5Gl+N2Cm6/YLujukDGYa1JW27txXiilR9dGP7yl60HYyG2Exd5i6fiLDlaNEw0SqzE
-dw9ZSIak3Qvm2UybR8zcnB0deCUiwahqh7ZncEPlhnPpB08ETEUtwBEqCEnndNEkIN67yz4kniCZ
-jZstNF/BUnI3864fATiXSbnNqBwlJS3YkoaCTpbI9qNTrf5VIvnbryT69xJ6f25yfmxrXNJJe5OG
-ncB34Cwnb7xQyk+uRLZ465yUBkbjk9pC/yamL0O7SOGYUclrQl2c5zzGuVBD84YcQGDOK6gSPj6w
-QuBfOooZPOyZZZ8AMih7J980MYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
-R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABQeVybOOpR4bOOXZYL5T3MA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCCx
-J4+sjI0iHI+B1kLb+Ca5iDUlBZ/6wEfEurvRE3Ca/jAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMjAyMjQwNjI2NDZaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
-BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAGFBl3224vPFhuecQA2eH
-bpHQ3hVvswBBQpNLISeWKw93/cayVD5D7T/htKPelTRHATltE7cmK5t7VkA3h2aX1/hRx9tdHGO4
-fqMETu4B+eKl0YuIDGCSJ2LjeIfHr7pOmygRtMdWG9tXq59p/pLI8si8BSMlP00csLqW6z4L/6SJ
-yrm5UCPVqeOUI/gOqL+0vnFFOekSNwp578B1ih0fYqWgW5i8kNrsoU3xaQuOJ1caeuBkcU0pzF4q
-ya+wai8bFYdDpR1HBK6rcoKW4lFKsPeW/p7I82Z1Mm3/YBVrrLTRrCiPLgAMM6iWITqbjYdBapd6
-xWCuFfJAGN5lSFKakg==
---000000000000a4234905d8bdaa83--
+-- 
+Sincerely yours,
+Mike.

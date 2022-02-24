@@ -2,57 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 381184C24D9
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 09:07:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C0B64C24DC
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 09:08:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231550AbiBXIHX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 03:07:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51270 "EHLO
+        id S231563AbiBXIIh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 03:08:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229737AbiBXIHT (ORCPT
+        with ESMTP id S229737AbiBXIIf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 03:07:19 -0500
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0915343AD3
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 00:06:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1645690010; x=1677226010;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version;
-  bh=/f7/5aXrj1VvkZohdg3wHcq2F85RKdCY94ltEOcCXyE=;
-  b=BNBnxtQNfmSTLujFyUaZJS79gwrjSKUSp0CQ64LUsDznD0QEKtUViWk3
-   1TjimgAV2ILpiQuUyaCG1RGJm3c6UYUTd8YEl8j2KxNULT8I3ie/a7os/
-   LFnXEN+Ecl29PvJsemXNs/dyAE2wGxoo8em0ECAqCQ2vMHIX1ihRDVjU+
-   0=;
-Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 24 Feb 2022 00:06:49 -0800
-X-QCInternal: smtphost
-Received: from unknown (HELO nasanex01a.na.qualcomm.com) ([10.52.223.231])
-  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2022 00:06:49 -0800
-Received: from hu-rbankapu-blr.qualcomm.com (10.80.80.8) by
- nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.15; Thu, 24 Feb 2022 00:06:47 -0800
-From:   Raghu Bankapur <quic_rbankapu@quicinc.com>
-To:     Jaroslav Kysela <perex@perex.cz>, <linux-kernel@vger.kernel.org>,
-        "Takashi Iwai" <tiwai@suse.com>, <alsa-devel@alsa-project.org>
-CC:     Krishna Jha <quic_kkishorj@quicinc.com>,
-        Raghu Bankapur <quic_rbankapu@quicinc.com>
-Subject: [PATCH V1 1/1] ASoC: compress: propagate the error code from the compress framework
-Date:   Thu, 24 Feb 2022 13:36:14 +0530
-Message-ID: <ec8263009612ead127398ba089f84dafb9fcfa88.1645689841.git.quic_rbankapu@quicinc.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <cover.1645689841.git.quic_rbankapu@quicinc.com>
-References: <cover.1645689841.git.quic_rbankapu@quicinc.com>
+        Thu, 24 Feb 2022 03:08:35 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 166111B988A;
+        Thu, 24 Feb 2022 00:08:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645690086; x=1677226086;
+  h=date:from:to:cc:subject:message-id:reply-to:references:
+   mime-version:in-reply-to;
+  bh=zEoJWzKmpcYe9rSTl+BlseiX6qsVqXPhxybFv18kU3Y=;
+  b=YmXVklXWeL5w30rG/hRcjNLdX8WWQVkkme0P4DW7eUh3yPHii0CrJU0E
+   BXClZehcmm9xlnMr6xxiw6djBiS8pHNdhJX+4HAsjaXjz8hNrDs5c2uiJ
+   TnNyJvVpOx/7GqUAW3go9UiTOCyw6jbMNLul4GOTuYQRfLlDC0EQy11Dq
+   EMkjBydr4sn+mybv/Rb97UgHaeCT8ZnKVrcQD0e6c3uv4ViR5W93wMptF
+   LNnb9IuGb34vbTHJtZTaupOHnLI1PBB0PBYMkK4boP/X937bSTydQ/eLP
+   AZTYtfVRygMRXPDobTS/9QfFQY3bamfZ16ZO+RCaPmc89ofqQA4llys2e
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10267"; a="251004744"
+X-IronPort-AV: E=Sophos;i="5.88,393,1635231600"; 
+   d="scan'208";a="251004744"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2022 00:08:05 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,393,1635231600"; 
+   d="scan'208";a="637745308"
+Received: from chaop.bj.intel.com (HELO localhost) ([10.240.192.101])
+  by fmsmga002.fm.intel.com with ESMTP; 24 Feb 2022 00:07:58 -0800
+Date:   Thu, 24 Feb 2022 16:07:39 +0800
+From:   Chao Peng <chao.p.peng@linux.intel.com>
+To:     "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
+Cc:     Yu Zhang <yu.c.zhang@linux.intel.com>,
+        Paolo Bonzini <pbonzini@redhat.com>, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jonathan Corbet <corbet@lwn.net>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, kvm@vger.kernel.org,
+        Borislav Petkov <bp@alien8.de>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>, Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com, qemu-devel@nongnu.org
+Subject: Re: [PATCH v4 12/12] KVM: Expose KVM_MEM_PRIVATE
+Message-ID: <20220224080739.GA6672@chaop.bj.intel.com>
+Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
+References: <20220118132121.31388-1-chao.p.peng@linux.intel.com>
+ <20220118132121.31388-13-chao.p.peng@linux.intel.com>
+ <a121e766-900d-2135-1516-e1d3ba716834@maciej.szmigiero.name>
+ <20220217134548.GA33836@chaop.bj.intel.com>
+ <45148f5f-fe79-b452-f3b2-482c5c3291c4@maciej.szmigiero.name>
+ <20220223120047.GB53733@chaop.bj.intel.com>
+ <7822c00f-5a2d-b6a2-2f81-cf3330801ad3@maciej.szmigiero.name>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <7822c00f-5a2d-b6a2-2f81-cf3330801ad3@maciej.szmigiero.name>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,33 +85,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Propagate the error code from the compress framework for the timestamp
-query. This error code will be used by the client to handle the
-error case scenarios gracefully.
+On Wed, Feb 23, 2022 at 07:32:37PM +0100, Maciej S. Szmigiero wrote:
+> On 23.02.2022 13:00, Chao Peng wrote:
+> > On Tue, Feb 22, 2022 at 02:16:46AM +0100, Maciej S. Szmigiero wrote:
+> > > On 17.02.2022 14:45, Chao Peng wrote:
+> > > > On Tue, Jan 25, 2022 at 09:20:39PM +0100, Maciej S. Szmigiero wrote:
+> > > > > On 18.01.2022 14:21, Chao Peng wrote:
+> > > > > > KVM_MEM_PRIVATE is not exposed by default but architecture code can turn
+> > > > > > on it by implementing kvm_arch_private_memory_supported().
+> > > > > > 
+> > > > > > Also private memslot cannot be movable and the same file+offset can not
+> > > > > > be mapped into different GFNs.
+> > > > > > 
+> > > > > > Signed-off-by: Yu Zhang <yu.c.zhang@linux.intel.com>
+> > > > > > Signed-off-by: Chao Peng <chao.p.peng@linux.intel.com>
+> > > > > > ---
+> > > > > (..)
+> > > > > >     static bool kvm_check_memslot_overlap(struct kvm_memslots *slots, int id,
+> > > > > > -				      gfn_t start, gfn_t end)
+> > > > > > +				      struct file *file,
+> > > > > > +				      gfn_t start, gfn_t end,
+> > > > > > +				      loff_t start_off, loff_t end_off)
+> > > > > >     {
+> > > > > >     	struct kvm_memslot_iter iter;
+> > > > > > +	struct kvm_memory_slot *slot;
+> > > > > > +	struct inode *inode;
+> > > > > > +	int bkt;
+> > > > > >     	kvm_for_each_memslot_in_gfn_range(&iter, slots, start, end) {
+> > > > > >     		if (iter.slot->id != id)
+> > > > > >     			return true;
+> > > > > >     	}
+> > > > > > +	/* Disallow mapping the same file+offset into multiple gfns. */
+> > > > > > +	if (file) {
+> > > > > > +		inode = file_inode(file);
+> > > > > > +		kvm_for_each_memslot(slot, bkt, slots) {
+> > > > > > +			if (slot->private_file &&
+> > > > > > +			     file_inode(slot->private_file) == inode &&
+> > > > > > +			     !(end_off <= slot->private_offset ||
+> > > > > > +			       start_off >= slot->private_offset
+> > > > > > +					     + (slot->npages >> PAGE_SHIFT)))
+> > > > > > +				return true;
+> > > > > > +		}
+> > > > > > +	}
+> > > > > 
+> > > > > That's a linear scan of all memslots on each CREATE (and MOVE) operation
+> > > > > with a fd - we just spent more than a year rewriting similar linear scans
+> > > > > into more efficient operations in KVM.
+> > > > 
+> (..)
+> > > > So linear scan is used before I can find a better way.
+> > > 
+> > > Another option would be to simply not check for overlap at add or move
+> > > time, declare such configuration undefined behavior under KVM API and
+> > > make sure in MMU notifiers that nothing bad happens to the host kernel
+> > > if it turns out somebody actually set up a VM this way (it could be
+> > > inefficient in this case, since it's not supposed to ever happen
+> > > unless there is a bug somewhere in the userspace part).
+> > 
+> > Specific to TDX case, SEAMMODULE will fail the overlapping case and then
+> > KVM prints a message to the kernel log. It will not cause any other side
+> > effect, it does look weird however. Yes warn that in the API document
+> > can help to some extent.
+> 
+> So for the functionality you are adding this code for (TDX) this scan
+> isn't necessary and the overlapping case (not supported anyway) is safely
+> handled by the hardware (or firmware)?
 
-Signed-off-by: Raghu Bankapur <quic_rbankapu@quicinc.com>
----
- sound/core/compress_offload.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+Yes, it will be handled by the firmware.
 
-diff --git a/sound/core/compress_offload.c b/sound/core/compress_offload.c
-index de514ec8c83d..b89adbf666b1 100644
---- a/sound/core/compress_offload.c
-+++ b/sound/core/compress_offload.c
-@@ -166,9 +166,12 @@ static int snd_compr_free(struct inode *inode, struct file *f)
- static int snd_compr_update_tstamp(struct snd_compr_stream *stream,
- 		struct snd_compr_tstamp *tstamp)
- {
-+	int ret = 0;
- 	if (!stream->ops->pointer)
- 		return -ENOTSUPP;
--	stream->ops->pointer(stream, tstamp);
-+	ret = stream->ops->pointer(stream, tstamp);
-+	if (ret)
-+		return ret;
- 	pr_debug("dsp consumed till %d total %d bytes\n",
- 		tstamp->byte_offset, tstamp->copied_total);
- 	if (stream->direction == SND_COMPRESS_PLAYBACK)
--- 
-2.17.1
+> Then I would simply remove the scan and, maybe, add a comment instead
+> that the overlap check is done by the hardware.
 
+Sure.
+
+> 
+> By the way, if a kernel log message could be triggered by (misbehaving)
+> userspace then it should be rate limited (if it isn't already).
+
+Thanks for mention.
+
+Chao
+> 
+> > Thanks,
+> > Chao
+> 
+> Thanks,
+> Maciej

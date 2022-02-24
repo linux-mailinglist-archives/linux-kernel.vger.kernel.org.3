@@ -2,178 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 195C64C3538
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 19:59:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 83F974C353F
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 20:00:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233127AbiBXS7c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 13:59:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45126 "EHLO
+        id S233155AbiBXTA1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 14:00:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232292AbiBXS7b (ORCPT
+        with ESMTP id S231774AbiBXTAZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 13:59:31 -0500
-Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0495818E42D;
-        Thu, 24 Feb 2022 10:59:00 -0800 (PST)
-Received: from integral2.. (unknown [36.78.50.60])
-        by gnuweeb.org (Postfix) with ESMTPSA id 81CFB7E2A3;
-        Thu, 24 Feb 2022 18:58:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
-        s=default; t=1645729140;
-        bh=FCgV7HQ6Sz7X4EcW0AHGQFLFZjP2p7gApc5nIKixJdk=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ll07GBV4MJ5dFyQU6rmVP1mJAwWEhaWkrlN618dRWC4jaGKEnpf1i9SlQIDNK1r6q
-         2i2Aap4XKfirQn+9MbzRuYSNvBoAKAzAhif1KYa0J/YVm/c7PcANr2NSnVcqi9Cu+r
-         0DScWrfxF0rDJtS8CzB5oaGYzcgXvswWfyfu8GFnG5pjQpGYcryc1SlB5V+E+uGZLg
-         EeiPBek0alz7Vfkc2KUKxQxMjwraQ0IE1tDI7gFrlmxlRS7bNAlfK50qVmEaYWJ5C/
-         zEAdkGKX9GzYMJCKzBX06u12/ynxwbSP09K0IgWUOZttB/fXK2h9ZCYmZS5ipZ4mXE
-         CfPdfKeyP8h+g==
-From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Ammar Faizi <ammarfaizi2@gnuweeb.org>,
-        Daniel Baluta <daniel.baluta@nxp.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        Keyon Jie <yang.jie@linux.intel.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Rander Wang <rander.wang@intel.com>,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        Takashi Iwai <tiwai@suse.com>,
-        sound-open-firmware@alsa-project.org, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-Subject: [PATCH v4] ASoC: SOF: Intel: Fix NULL ptr dereference when ENOMEM
-Date:   Fri, 25 Feb 2022 01:58:36 +0700
-Message-Id: <20220224185836.44907-1-ammarfaizi2@gnuweeb.org>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220224182818.40301-1-ammarfaizi2@gnuweeb.org>
-References: <20220224145124.15985-1-ammarfaizi2@gnuweeb.org> <cfe9e583-e20a-f1d6-2a81-2538ca3ca054@linux.intel.com> <Yhe/3rELNfFOdU4L@sirena.org.uk> <04e79b9c-ccb1-119a-c2e2-34c8ca336215@linux.intel.com> <20220224180850.34592-1-ammarfaizi2@gnuweeb.org> <YhfLCWm0Ms3E+j4z@sirena.org.uk> <20220224182818.40301-1-ammarfaizi2@gnuweeb.org>
+        Thu, 24 Feb 2022 14:00:25 -0500
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B636218E42D
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 10:59:54 -0800 (PST)
+Received: by mail-pf1-x436.google.com with SMTP id y5so2677478pfe.4
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 10:59:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=fyRJwkdEk9dWrbptJefFZUVWbdfjncd85LnmXOcMJA4=;
+        b=koCoOElIvFf2pF9r8KqL81JR7/aEwX4ouLYXauh77CI48GZtPvSVyyuZL/+2Fw1KMN
+         yyhmYZR4KDha4XVqiwktrwJei4UPzgz6ynyBeZ6fE9G32zTS+kU7tyTKj9Vxqw/CIu1Z
+         1UXYlXoyMXgZKHKjzJ4A2Q/RtQjhWNQQDpNwKUG1K8XaKU5Y6KW2Au2Ks5RGYdeLyYZs
+         nCh0dU0rjhU8dDylVjfzAOjI3GDY4fGTepSXIYHTAC+kS54ZBSP/1ttxd9FZF6D0S4Df
+         h33hEX8nC0jK7vkIan4rNUfYEhdvghFN2o0+kP5Ha5JC2iKhrotsgLwLsWJ70M3gscOE
+         Lh6w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=fyRJwkdEk9dWrbptJefFZUVWbdfjncd85LnmXOcMJA4=;
+        b=4iyVDqgUyjGHW2SydBrv3KFHpZYvTirNz2wH4alxtAzSWR7eQQOyb42Ax0Vz0BUDMm
+         nai4d+nMuvRtAwW/JSY+5heIkieEC6VQ3TftJnU/9Fa1X2YAT/uyNVscA0yEFeBw/FSo
+         aWcoNCg7EvRz7Vg2i45rfmHSTfVSNJoi+mtAyLmnODrEAJEUy9s1ZaqwwEyHsnW+9uvW
+         4BO8xgqGzD08onPkWWIpiFv5BDGP1VP3OuA7lVH5ifxsJ3LAG5RPaAJpEDYisdzZ6Vdf
+         mvurK48I1mOIuChGmCmoEnX0g+Pj5DMefOBcR42dhvvuKTGyEGr1cZ+TMz8bjWIouglA
+         JdZQ==
+X-Gm-Message-State: AOAM532IUkq1pNicjd7xmMgXGSlJoc9XrjiP9k4yX2Yvo4226/3nIkpI
+        mw7MzN+VweFBssjOKQHb+Bprug==
+X-Google-Smtp-Source: ABdhPJwFBRKABFChm9nzdPOgbE3WXtr9EPr5XquiOKPJHsMmFjakNuJVob6G0QqvAmGUsUzPa+myAQ==
+X-Received: by 2002:a05:6a00:140f:b0:4e0:6995:9c48 with SMTP id l15-20020a056a00140f00b004e069959c48mr3962998pfu.59.1645729194251;
+        Thu, 24 Feb 2022 10:59:54 -0800 (PST)
+Received: from [192.168.254.17] ([50.39.160.154])
+        by smtp.gmail.com with ESMTPSA id 25-20020a631859000000b00373df766e76sm255444pgy.16.2022.02.24.10.59.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 24 Feb 2022 10:59:53 -0800 (PST)
+Message-ID: <8d3a11be-a7eb-5ad0-2ef6-abc9276ced2f@linaro.org>
+Date:   Thu, 24 Feb 2022 10:59:53 -0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] KVM: x86: Forcibly leave nested virt when SMM state is
+ toggled
+Content-Language: en-US
+To:     Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>
+Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        syzbot+8112db3ab20e70d50c31@syzkaller.appspotmail.com
+References: <20220125220358.2091737-1-seanjc@google.com>
+ <db8a9edd-533e-3502-aed1-e084d6b55e48@linaro.org>
+ <Yg/QKgxotNyZbYAI@google.com>
+ <3561688b-b52c-8858-3da2-afda7c3e681f@linaro.org>
+ <6cef7c8a-10d3-9fc6-f68d-220fdfc079c1@redhat.com>
+From:   Tadeusz Struk <tadeusz.struk@linaro.org>
+In-Reply-To: <6cef7c8a-10d3-9fc6-f68d-220fdfc079c1@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Do not call snd_dma_free_pages() when snd_dma_alloc_pages() returns
--ENOMEM because it leads to a NULL pointer dereference bug.
+On 2/18/22 10:14, Paolo Bonzini wrote:
+> On 2/18/22 18:22, Tadeusz Struk wrote:
+>> On 2/18/22 08:58, Sean Christopherson wrote:
+>>> This SMM-specific patch fixes something different, the bug that you are still
+>>> hitting is the FNAME(cmpxchg_gpte) mess.  The uaccess CMPXCHG series[*] that
+>>> properly fixes that issue hasn't been merged yet.
+>>>
+>>>    ==================================================================
+>>>    BUG: KASAN: use-after-free in ept_cmpxchg_gpte.constprop.0+0x3c3/0x590
+>>>    Write of size 8 at addr ffff888010000000 by task repro/5633
+>>>
+>>> [*]https://lore.kernel.org/all/20220202004945.2540433-1-seanjc@google.com
+>>>
+>>
+>> Ok, that's good. I will keep an eye on it and give it a try then.
+> 
+> I'll poke PeterZ for a review next week.
+> 
 
-The dmesg says:
+Paulo, do you know if PeterZ had a chance to look at the uaccess patches yet?
 
-  [ T1387] sof-audio-pci-intel-tgl 0000:00:1f.3: error: memory alloc failed: -12
-  [ T1387] BUG: kernel NULL pointer dereference, address: 0000000000000000
-  [ T1387] #PF: supervisor read access in kernel mode
-  [ T1387] #PF: error_code(0x0000) - not-present page
-  [ T1387] PGD 0 P4D 0
-  [ T1387] Oops: 0000 [#1] PREEMPT SMP NOPTI
-  [ T1387] CPU: 6 PID: 1387 Comm: alsa-sink-HDA A Tainted: G        W         5.17.0-rc4-superb-owl-00055-g80d47f5de5e3
-  [ T1387] Hardware name: HP HP Laptop 14s-dq2xxx/87FD, BIOS F.15 09/15/2021
-  [ T1387] RIP: 0010:dma_free_noncontiguous+0x37/0x80
-  [ T1387] Code: [... snip ...]
-  [ T1387] RSP: 0000:ffffc90002b87770 EFLAGS: 00010246
-  [ T1387] RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
-  [ T1387] RDX: 0000000000000000 RSI: 0000000000000000 RDI: ffff888101db30d0
-  [ T1387] RBP: 00000000fffffff4 R08: 0000000000000000 R09: 0000000000000000
-  [ T1387] R10: 0000000000000000 R11: ffffc90002b874d0 R12: 0000000000000001
-  [ T1387] R13: 0000000000058000 R14: ffff888105260c68 R15: ffff888105260828
-  [ T1387] FS:  00007f42e2ffd640(0000) GS:ffff888466b80000(0000) knlGS:0000000000000000
-  [ T1387] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-  [ T1387] CR2: 0000000000000000 CR3: 000000014acf0003 CR4: 0000000000770ee0
-  [ T1387] PKRU: 55555554
-  [ T1387] Call Trace:
-  [ T1387]  <TASK>
-  [ T1387]  cl_stream_prepare+0x10a/0x120 [snd_sof_intel_hda_common 146addf995b9279ae7f509621078cccbe4f875e1]
-  [... snip ...]
-  [ T1387]  </TASK>
-
-Cc: Daniel Baluta <daniel.baluta@nxp.com>
-Cc: Jaroslav Kysela <perex@perex.cz>
-Cc: Kai Vehmanen <kai.vehmanen@linux.intel.com>
-Cc: Keyon Jie <yang.jie@linux.intel.com>
-Cc: Liam Girdwood <lgirdwood@gmail.com>
-Cc: Mark Brown <broonie@kernel.org>
-Cc: Rander Wang <rander.wang@intel.com>
-Cc: Ranjani Sridharan <ranjani.sridharan@linux.intel.com>
-Cc: Takashi Iwai <tiwai@suse.com>
-Cc: sound-open-firmware@alsa-project.org
-Cc: alsa-devel@alsa-project.org
-Cc: linux-kernel@vger.kernel.org
-Cc: stable@vger.kernel.org # v5.2+
-Fixes: d16046ffa6de040bf580a64d5f4d0aa18258a854 ("ASoC: SOF: Intel: Add Intel specific HDA firmware loader")
-Link: https://lore.kernel.org/lkml/20220224145124.15985-1-ammarfaizi2@gnuweeb.org/ # v1
-Link: https://lore.kernel.org/lkml/20220224180850.34592-1-ammarfaizi2@gnuweeb.org/ # v2
-Link: https://lore.kernel.org/lkml/20220224182818.40301-1-ammarfaizi2@gnuweeb.org/ # v3
-Reviewed-by: Peter Ujfalusi <peter.ujfalusi@linux.intel.com>
-Reviewed-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-Signed-off-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
----
-
- v4:
-   - Remove 2 `Cc` tags after got the Reviewed-by tag from the CC'ed people
-     as they will be CC'ed anyway.
-   - Extra commit message cleanup.
-
- v3:
-   - Address comment from Mark Brown (strip not useful kernel log
-     from the commit message, again).
-
- v2:
-   - Append Reviewed-by tag from Peter Ujfalusi.
-   - Append Reviewed-by tag from Pierre-Louis Bossart.
-   - Address comment from Mark Brown (strip irrelevant kernel log
-     from the commit message).
-
- sound/soc/sof/intel/hda-loader.c | 11 ++++++-----
- 1 file changed, 6 insertions(+), 5 deletions(-)
-
-diff --git a/sound/soc/sof/intel/hda-loader.c b/sound/soc/sof/intel/hda-loader.c
-index 33306d2023a7..9bbfdab8009d 100644
---- a/sound/soc/sof/intel/hda-loader.c
-+++ b/sound/soc/sof/intel/hda-loader.c
-@@ -47,7 +47,7 @@ static struct hdac_ext_stream *cl_stream_prepare(struct snd_sof_dev *sdev, unsig
- 	ret = snd_dma_alloc_pages(SNDRV_DMA_TYPE_DEV_SG, &pci->dev, size, dmab);
- 	if (ret < 0) {
- 		dev_err(sdev->dev, "error: memory alloc failed: %d\n", ret);
--		goto error;
-+		goto out_put;
- 	}
- 
- 	hstream->period_bytes = 0;/* initialize period_bytes */
-@@ -58,22 +58,23 @@ static struct hdac_ext_stream *cl_stream_prepare(struct snd_sof_dev *sdev, unsig
- 		ret = hda_dsp_iccmax_stream_hw_params(sdev, dsp_stream, dmab, NULL);
- 		if (ret < 0) {
- 			dev_err(sdev->dev, "error: iccmax stream prepare failed: %d\n", ret);
--			goto error;
-+			goto out_free;
- 		}
- 	} else {
- 		ret = hda_dsp_stream_hw_params(sdev, dsp_stream, dmab, NULL);
- 		if (ret < 0) {
- 			dev_err(sdev->dev, "error: hdac prepare failed: %d\n", ret);
--			goto error;
-+			goto out_free;
- 		}
- 		hda_dsp_stream_spib_config(sdev, dsp_stream, HDA_DSP_SPIB_ENABLE, size);
- 	}
- 
- 	return dsp_stream;
- 
--error:
--	hda_dsp_stream_put(sdev, direction, hstream->stream_tag);
-+out_free:
- 	snd_dma_free_pages(dmab);
-+out_put:
-+	hda_dsp_stream_put(sdev, direction, hstream->stream_tag);
- 	return ERR_PTR(ret);
- }
- 
-
-base-commit: 23d04328444a8fa0ca060c5e532220dac8e8bc26
 -- 
-2.32.0
-
+Thanks,
+Tadeusz

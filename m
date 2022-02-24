@@ -2,58 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24CE94C388C
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 23:12:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 390D24C388F
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 23:13:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235327AbiBXWMu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 17:12:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33566 "EHLO
+        id S235314AbiBXWNR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 17:13:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232144AbiBXWMq (ORCPT
+        with ESMTP id S232144AbiBXWNO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 17:12:46 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71DE93B56F;
-        Thu, 24 Feb 2022 14:12:16 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0F68B61AFD;
-        Thu, 24 Feb 2022 22:12:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6863FC340F1;
-        Thu, 24 Feb 2022 22:12:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645740735;
-        bh=xUkIovkz/u4SBckbtXcdEJ59AHtHdNQU3RREzoj5Yp8=;
-        h=In-Reply-To:References:Subject:From:To:Date:From;
-        b=pSYlnzNmG8wFO2zwP3Wo/JVtX1Hd098LTTHkQXm7B2sikfhhx0cpMB9wbarGVBK0W
-         2bD6NoiT4nb7k56dcIMcSeQBdWLKYLDYyl7IoTsd6NB8Cq74rY85NhRa3LQoNNeHA6
-         SyuF8UFnWsGmqqHRlQu61qRsT8LHgW362g8SFpwWpF6KHbeoCKOXqMQeU46p/T65RC
-         IgjYdmbsJWKZ+KXsiDSrDmPQk5iZCWyNE+DF+xm4n6rIR+M3T9+UyyVApRuLmtBzc8
-         BsJ1ngjGqbUX++bnunx2rledl2Fw+XnFlR97JO0rpoeA3Hbn68C+yQRE+Wq7aeMWTY
-         sX7So5To8btmw==
-Content-Type: text/plain; charset="utf-8"
+        Thu, 24 Feb 2022 17:13:14 -0500
+Received: from mail-oi1-f174.google.com (mail-oi1-f174.google.com [209.85.167.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A0A4223201;
+        Thu, 24 Feb 2022 14:12:44 -0800 (PST)
+Received: by mail-oi1-f174.google.com with SMTP id l25so5300133oic.13;
+        Thu, 24 Feb 2022 14:12:44 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=AwrpQE4LJn3t0vwAwhao+3qHyp6bWGUtHRIdv9zUR3A=;
+        b=Wirx9IUDLLoFcCBgGbkiDDeK6x2YjeYg3uT39YDdU7RH297yN1a6A3cJbJtPOMp/YY
+         7dn9nGiEf9+88Qd3hPavgq83YIdf4wSuBUEMM1rjoj6fr9/TZKS9J36D5Hw/bkFUVzt6
+         veZ+Ps+48MF7k2H8j92FNv34qXTKluDJHbdfj/SKqNVvhUxZWDsaKu/vV41oTjc0CUrM
+         bTVsf9nvbr30mnss7Nfnjbny/2HngC/SmC2pF3urIJRB62ZzhUskyKUXLl59kNJ/I1i1
+         1yzTmckZCd+rO+L4qtwf2CSHVW6wFL+uTS6JJgVNSkU5OCinZaZwt+zzm0G4YBqfRdoW
+         9l6w==
+X-Gm-Message-State: AOAM531Gxp7LinsIfnic1myEM4Io2VSLqHRglHVDmUh2kmFf8gUGnZjk
+        R0xvzNUGBs7Y0hu+1pmmpg==
+X-Google-Smtp-Source: ABdhPJx8ZE9fbvxfnrwEKrYV4Ec4weHW2WZEMcIuFMfTxiJpMIT63JPWl/TeZ/ky7d/LhoFPzArzdg==
+X-Received: by 2002:a05:6870:780f:b0:d6:e266:e13f with SMTP id hb15-20020a056870780f00b000d6e266e13fmr112087oab.44.1645740763380;
+        Thu, 24 Feb 2022 14:12:43 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id u3-20020a056808114300b002d51f9b3263sm424053oiu.28.2022.02.24.14.12.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Feb 2022 14:12:42 -0800 (PST)
+Received: (nullmailer pid 3682256 invoked by uid 1000);
+        Thu, 24 Feb 2022 22:12:41 -0000
+Date:   Thu, 24 Feb 2022 16:12:41 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Marcello Sylvester Bauer <sylv@sylv.io>
+Cc:     Guenter Roeck <linux@roeck-us.net>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+        linux-hwmon@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Patrick Rudolph <patrick.rudolph@9elements.com>
+Subject: Re: [PATCH v2 1/3] dt-bindings: trivial-devices: Add xdpe11280
+Message-ID: <YhgC2RTyDmzdowzh@robh.at.kernel.org>
+References: <cover.1645108566.git.sylv@sylv.io>
+ <cbef5619ca8bb1edef32532ac22a5803248036ee.1645108566.git.sylv@sylv.io>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20220224164831.21475-12-ansuelsmth@gmail.com>
-References: <20220224164831.21475-1-ansuelsmth@gmail.com> <20220224164831.21475-12-ansuelsmth@gmail.com>
-Subject: Re: [PATCH v5 11/15] dt-bindings: clock: add ipq8064 ce5 clk define
-From:   Stephen Boyd <sboyd@kernel.org>
-To:     Andy Gross <agross@kernel.org>,
-        Ansuel Smith <ansuelsmth@gmail.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Taniya Das <tdas@codeaurora.org>, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date:   Thu, 24 Feb 2022 14:12:13 -0800
-User-Agent: alot/0.10
-Message-Id: <20220224221215.6863FC340F1@smtp.kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cbef5619ca8bb1edef32532ac22a5803248036ee.1645108566.git.sylv@sylv.io>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,14 +65,13 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Ansuel Smith (2022-02-24 08:48:27)
-> Add ipq8064 ce5 clk define needed for CryptoEngine in gcc driver.
-
-Would be worth noting that changing the define is OK because it isn't
-used.
-
->=20
-> Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
+On Thu, 17 Feb 2022 15:41:33 +0100, Marcello Sylvester Bauer wrote:
+> Add Infineon Multi-phase Digital Controller XDPE11280.
+> 
+> Signed-off-by: Marcello Sylvester Bauer <sylv@sylv.io>
 > ---
+>  Documentation/devicetree/bindings/trivial-devices.yaml | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
 
-Reviewed-by: Stephen Boyd <sboyd@kernel.org>
+Acked-by: Rob Herring <robh@kernel.org>

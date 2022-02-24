@@ -2,108 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 561F24C2122
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 02:40:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D3CD4C2140
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 02:49:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229653AbiBXBiD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 20:38:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53990 "EHLO
+        id S229702AbiBXBoP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 20:44:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229723AbiBXBhz (ORCPT
+        with ESMTP id S229711AbiBXBoN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 20:37:55 -0500
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BCBE4506E
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 17:37:26 -0800 (PST)
-Received: by mail-ed1-x535.google.com with SMTP id m3so773437eda.10
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 17:37:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:reply-to:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=7rPcGmjhZFqQTd6oy57LGwV/NoXmOrL2/XyqSHiSpT4=;
-        b=FPo99/LglWlYagpTblc5f8caCXuee5xCf55PzVYNgc9j6cWtHyBIxglPXvRcfnlUfF
-         cywQpV10FBgt4cKrkKe0LJ/U3hQXJp1QC/+D50STQzk0+YKVpJURbmhFsWT/+lzTVZQE
-         E6BF+NnkCbYmiGfAQBjZDa0h61YTfQReUC3CubR63oyJluP/1mihSDEvMBNSzPH9iJQf
-         ikH/xinsV5cJeL8NVK32g18s6nnNRNqoXvY1QzMFmxsMjLgslHtoBiTAvdASyKY9JoxR
-         DSEA6OPujdQkZLd75KtuahF641dPHXe9rUDo7acoO9641UUS4jqiapSpN0XlZAOTKeeM
-         wadA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:reply-to
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=7rPcGmjhZFqQTd6oy57LGwV/NoXmOrL2/XyqSHiSpT4=;
-        b=I8MfV+iAagRXYRlQT2Srq851ZoGMS2Rjs8JRu2L44sHbXHjSQC08rh43hTlKKhWXPr
-         +cEssZEsEciHf1gjQD93PCp2vT/95zrFpprL/PdMSsMUvtYUqEmIEXg3l9WhI0ScsDZm
-         5zafZKfnhxSvKshxs6JmPLy3qyA+DImYEIAmVB/rGmM6q+XQlr2u4+taWMdVh1uLZqQ3
-         UO7TIGtbfoLUuBh0ybusDdXJmSExd0jz79MeWVHtbyqk0oJ13ubH1Y2ctGc28AW96MU5
-         y8pyjhWfCKmJnM1yc8FI22dfpEPInhs9+jTYZYFn0LUjAYwogc9chUVHE9jxflSiAoga
-         iMrQ==
-X-Gm-Message-State: AOAM531YJ3lZ84xILLgNWigygCIEicO1cHHBJzrYq4a9DzAGrQV4Uv+e
-        ed0DbcXmQtxNfFppVAdS4VcI9DrliAw=
-X-Google-Smtp-Source: ABdhPJxqnInks01QQ2dUwRfitRyQdke9fhVXSXZXi2eqzfWyttrlAy/FsDrWU5MrfhqLAvbzzS8VLw==
-X-Received: by 2002:a17:906:3ac7:b0:6ce:c3a1:3dcf with SMTP id z7-20020a1709063ac700b006cec3a13dcfmr284921ejd.182.1645664639761;
-        Wed, 23 Feb 2022 17:03:59 -0800 (PST)
-Received: from localhost ([185.92.221.13])
-        by smtp.gmail.com with ESMTPSA id er17sm555582edb.34.2022.02.23.17.03.59
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 23 Feb 2022 17:03:59 -0800 (PST)
-Date:   Thu, 24 Feb 2022 01:03:58 +0000
-From:   Wei Yang <richard.weiyang@gmail.com>
-To:     Vlastimil Babka <vbabka@suse.cz>
-Cc:     Wei Yang <richard.weiyang@gmail.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        peterz@infradead.org, will@kernel.org, linyunsheng@huawei.com,
-        aarcange@redhat.com, feng.tang@intel.com, ebiederm@xmission.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mm: remove offset check on page->compound_head and
- folio->lru
-Message-ID: <20220224010358.ttc2mgdevfqddvea@master>
-Reply-To: Wei Yang <richard.weiyang@gmail.com>
-References: <20220106235254.19190-1-richard.weiyang@gmail.com>
- <Yde6hZ41agqa2zs3@casper.infradead.org>
- <20220107134059.flxr2hcd6ilb6vt7@master>
- <Ydi6iMbSZ/FewYPT@casper.infradead.org>
- <20220107160825.13c71fdd871d7d5611d116b9@linux-foundation.org>
- <YdjfsbAR0UlwyC6b@casper.infradead.org>
- <20220108081340.3oi2z2rm3cbqozzt@master>
- <20220123013852.mm7eyn3z26v3hkc2@master>
- <93c48e68-2266-72ee-0763-65805b94c968@suse.cz>
+        Wed, 23 Feb 2022 20:44:13 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EBD1D19B7;
+        Wed, 23 Feb 2022 17:43:43 -0800 (PST)
+Received: from dggpeml500024.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4K3vmP4nwgzdfT6;
+        Thu, 24 Feb 2022 09:03:33 +0800 (CST)
+Received: from dggpeml100012.china.huawei.com (7.185.36.121) by
+ dggpeml500024.china.huawei.com (7.185.36.10) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Thu, 24 Feb 2022 09:04:46 +0800
+Received: from [10.67.109.84] (10.67.109.84) by dggpeml100012.china.huawei.com
+ (7.185.36.121) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Thu, 24 Feb
+ 2022 09:04:45 +0800
+Message-ID: <c60419f8-422b-660d-8254-291182a06cbe@huawei.com>
+Date:   Thu, 24 Feb 2022 09:04:45 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <93c48e68-2266-72ee-0763-65805b94c968@suse.cz>
-User-Agent: NeoMutt/20170113 (1.7.2)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH sysctl-next] kernel/kexec_core: move kexec_core sysctls
+ into its own file
+To:     Baoquan He <bhe@redhat.com>
+CC:     <ebiederm@xmission.com>, <mcgrof@kernel.org>,
+        <keescook@chromium.org>, <yzaikin@google.com>,
+        <kexec@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        <linux-fsdevel@vger.kernel.org>, <zengweilin@huawei.com>,
+        <chenjianguo3@huawei.com>, <nixiaoming@huawei.com>,
+        <qiuguorui1@huawei.com>, <young.liuyang@huawei.com>
+References: <20220223030318.213093-1-yingelin@huawei.com>
+ <YhXwkTCwt3a4Dn9T@MiWiFi-R3L-srv>
+From:   yingelin <yingelin@huawei.com>
+In-Reply-To: <YhXwkTCwt3a4Dn9T@MiWiFi-R3L-srv>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.109.84]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpeml100012.china.huawei.com (7.185.36.121)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jan 24, 2022 at 11:30:10AM +0100, Vlastimil Babka wrote:
-[...]
->> Hi, Matthew
->> 
->> Are you back from vocation? If you could give more insight on this check, I
->> would be appreciated.
+
+在 2022/2/23 16:30, Baoquan He 写道:
+> On 02/23/22 at 11:03am, yingelin wrote:
+>> This move the kernel/kexec_core.c respective sysctls to its own file.
+> Hmm, why is the move needed?
 >
->I can offer my insight (which might be of course wrong). Ideally one day
->page.lru will be gone and only folio will be used for LRU pages. Then there
->won't be a  FOLIO_MATCH(lru, lru); and FOLIO_MATCH(compound_head, lru);
->won't appear to be redundant anymore. lru is list_head so two pointers and
->thus valid pointers are aligned in such a way they can't accidentaly set the
->bit 0.
->
+> With my understanding, sysctls are all put in kernel/sysctl.c,
+> why is kexec special?
 
-Hmm... I see your change on struct slab. I guess I got your point.
+kernel/sysctl.c is a kitchen sink where everyone leaves their dirty dishes,
 
-Seems we would shrink struct page...
+this makes it very difficult to maintain. The proc sysctl maintainers do 
+not want to
 
--- 
-Wei Yang
-Help you, Help me
+know what sysctl knobs you wish to add for your own piece of code, we
+
+just care about the core logic.
+
+This patch moves the kexec sysctls to the place where they actually 
+belong to help
+
+with this maintenance.
+
+>> Signed-off-by: yingelin <yingelin@huawei.com>
+>> ---
+>>   kernel/kexec_core.c | 20 ++++++++++++++++++++
+>>   kernel/sysctl.c     | 13 -------------
+>>   2 files changed, 20 insertions(+), 13 deletions(-)
+>>
+>> diff --git a/kernel/kexec_core.c b/kernel/kexec_core.c
+>> index 68480f731192..e57339d49439 100644
+>> --- a/kernel/kexec_core.c
+>> +++ b/kernel/kexec_core.c
+>> @@ -936,6 +936,26 @@ int kimage_load_segment(struct kimage *image,
+>>   struct kimage *kexec_image;
+>>   struct kimage *kexec_crash_image;
+>>   int kexec_load_disabled;
+>> +static struct ctl_table kexec_core_sysctls[] = {
+>> +	{
+>> +		.procname	= "kexec_load_disabled",
+>> +		.data		= &kexec_load_disabled,
+>> +		.maxlen		= sizeof(int),
+>> +		.mode		= 0644,
+>> +		/* only handle a transition from default "0" to "1" */
+>> +		.proc_handler	= proc_dointvec_minmax,
+>> +		.extra1		= SYSCTL_ONE,
+>> +		.extra2		= SYSCTL_ONE,
+>> +	},
+>> +	{ }
+>> +};
+>> +
+>> +static int __init kexec_core_sysctl_init(void)
+>> +{
+>> +	register_sysctl_init("kernel", kexec_core_sysctls);
+>> +	return 0;
+>> +}
+>> +late_initcall(kexec_core_sysctl_init);
+>>   
+>>   /*
+>>    * No panic_cpu check version of crash_kexec().  This function is called
+>> diff --git a/kernel/sysctl.c b/kernel/sysctl.c
+>> index ae5e59396b5d..00e97c6d6576 100644
+>> --- a/kernel/sysctl.c
+>> +++ b/kernel/sysctl.c
+>> @@ -61,7 +61,6 @@
+>>   #include <linux/capability.h>
+>>   #include <linux/binfmts.h>
+>>   #include <linux/sched/sysctl.h>
+>> -#include <linux/kexec.h>
+>>   #include <linux/bpf.h>
+>>   #include <linux/mount.h>
+>>   #include <linux/userfaultfd_k.h>
+>> @@ -1839,18 +1838,6 @@ static struct ctl_table kern_table[] = {
+>>   		.proc_handler	= tracepoint_printk_sysctl,
+>>   	},
+>>   #endif
+>> -#ifdef CONFIG_KEXEC_CORE
+>> -	{
+>> -		.procname	= "kexec_load_disabled",
+>> -		.data		= &kexec_load_disabled,
+>> -		.maxlen		= sizeof(int),
+>> -		.mode		= 0644,
+>> -		/* only handle a transition from default "0" to "1" */
+>> -		.proc_handler	= proc_dointvec_minmax,
+>> -		.extra1		= SYSCTL_ONE,
+>> -		.extra2		= SYSCTL_ONE,
+>> -	},
+>> -#endif
+>>   #ifdef CONFIG_MODULES
+>>   	{
+>>   		.procname	= "modprobe",
+>> -- 
+>> 2.26.2
+>>
+> .

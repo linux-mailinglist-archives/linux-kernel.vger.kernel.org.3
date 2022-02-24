@@ -2,64 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FDD34C3856
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 23:05:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B0484C385C
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 23:06:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235182AbiBXWFD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 17:05:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45738 "EHLO
+        id S235191AbiBXWGb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 17:06:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235169AbiBXWFA (ORCPT
+        with ESMTP id S230497AbiBXWGa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 17:05:00 -0500
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1657D27FB83;
-        Thu, 24 Feb 2022 14:04:29 -0800 (PST)
-Received: by mail-ej1-x630.google.com with SMTP id qk11so7229659ejb.2;
-        Thu, 24 Feb 2022 14:04:29 -0800 (PST)
+        Thu, 24 Feb 2022 17:06:30 -0500
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71D8227C231;
+        Thu, 24 Feb 2022 14:05:59 -0800 (PST)
+Received: by mail-wr1-x436.google.com with SMTP id d17so1702448wrc.9;
+        Thu, 24 Feb 2022 14:05:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=yTo2AJFj0p024dmFgNzjlTjj1pQe+R8Ne4kK75kJtFs=;
-        b=QIhP+IKPEdDDA8vwUrShclhCSPImb/WZb31yFXsDcCazdfgBf7FK7YiPVkt9mumnaL
-         gb4fx8rcmLWmRXYSWQ+1jket42cDSrSCYvyeVvgdTOA5EAf/C0UV2BXj7J6h7EssNysJ
-         VoJi2EtKZqNrsvXQme0jzc5UW0IS34EHoctP2O4UipE2UtFvHxYDeHgI7nsf0eZ5FbOu
-         8zE+oKmy3Uhvzltgp4pBxZD2JMWC/cw7lZDl5pcC53owbS9NF/L6WU+s1MMCW/K3LpBk
-         5T7r57asE+wnyj9tht7D/Zwr3MmmgqI2iRPCAb648rq8boBziETJYJ/iK1eeYanopUlJ
-         jHFw==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=et1Z6Z/KvYWUodJYfEuS39IO1XCVclEySq/foYvH8dk=;
+        b=mnf1tq4FpyWGBrbpbVW1mM5mQw5kAPuj7gsOJFmF1yavYT2tdb6vETJ3pe6Dag3IHp
+         pPBkr7t3Cn7aW2ZtN/KcQ7D60rgBUkHbNMjjvjP5KI3Ah3t2aLxXp6dTvlmNPY8r2ygn
+         nMaPnuIHGiYTHyhzZqZSwiUt6yo2d90NYr6E9iH6J4Cgk1IrVQhUH6MY75fInLmHBYBa
+         Q0i+KpyWeznUJbJ63DiwNXkkUiqOVuNJvX/7Yumxs8jnAKO/nVm5G0gSoHuT0x3tMYAV
+         PanbL0lw5881Pf0gJ9d5nXpkzhVVe1LkbbIxv93q3SqzreIff097RpzuGM3udF0Vtn5A
+         hs3A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=yTo2AJFj0p024dmFgNzjlTjj1pQe+R8Ne4kK75kJtFs=;
-        b=XE2noFdfbh4CSHo6SOg6JfZ87B3IPuDbGOXKwTHAPkz6JLWwUoLuZbQGt9Pti/dS/A
-         4g4q7ddgmSqC21eY5FUf+5OwfuWgT/cBU4CROQ3Yefc+fC1WgxcBUT9uDI+JMq5KDQtB
-         54QtF0yteMOEz+ZPJ69rx8GJ5NWWclQ2G9oO8aVuPNtJrHEx7ap8nupkUiRLXPYUfnZH
-         WTbbjse4Zcy49E7D/LIAIMhHcXK2pZOQucdfLFp0ImDV791DSin/wWso/NjZ5aTWqYiF
-         M+KsTcr1jQTgFCI4gaAaliQlefdN4LtuAVdUYV5M2DKzCM6GlFhIyf4eev4J9iD7m1Q1
-         rrzg==
-X-Gm-Message-State: AOAM5300AFAkNbxLrGL7LC54MpSmXTJTjrzFHJrr5dKnJhe/UbXxxa9e
-        L41OHUTkfVbb7ztzFaz32ucWA6PRaMU=
-X-Google-Smtp-Source: ABdhPJz/mYMbyr7MbfGwPFzomgRcKTZAvo6MA2BUHA0IodXKipfENCWl7Nj5w8LVfE3fJU22zp7Rqg==
-X-Received: by 2002:a17:906:805:b0:6ce:41a8:113 with SMTP id e5-20020a170906080500b006ce41a80113mr3942484ejd.366.1645740267578;
-        Thu, 24 Feb 2022 14:04:27 -0800 (PST)
-Received: from fuji.fritz.box (ip-89-161-76-237.tel.tkb.net.pl. [89.161.76.237])
-        by smtp.gmail.com with ESMTPSA id e6-20020a17090681c600b006cea1323f34sm238297ejx.29.2022.02.24.14.04.26
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=et1Z6Z/KvYWUodJYfEuS39IO1XCVclEySq/foYvH8dk=;
+        b=UBUhx3xe+FFvPMTC585xXJiMJ54hFc9deW8bqTOyAzSTQFkX4imx9KJ5Px/6HcaaSD
+         zQY0u9atk5wV11cp1p4g4RgA6C+UA5jSMuLGnCEz1oERtyAVtrOjQcCa8Xu76HZI+a9D
+         WOec0oAKxhKJs1SdTcHzdB8vf7fvrG4mf2AOhtytHv2IlPTNRNrktNt/zyTEB7HGbjEh
+         EFy9x8gvFLj/5i0q7JhMUwrGeLuOLZMViH/ZzQ37W2wEaMu8npEuD2bU+CNL8/3AAkgN
+         w1LkIT466Et9FD0IJViqU88LImYnEJy0HA0TzGOns3ADjcQlYpmuwafpeKlL14zE4Nz7
+         BA9A==
+X-Gm-Message-State: AOAM531raTVRqsH4YM5eKLYrbqVRnnabhs6KuvmukgjPpbjmLAvsHOSm
+        /kXiygOdIT3JeR2E50zBr/Ls7av6eu3Xxg==
+X-Google-Smtp-Source: ABdhPJxdmTL9qm2lX9wZlAGeBlGH0yxb/0WSSYGgg/cAt1Yo78pwYN9T0mgdpPvBtnk+KcI6OE643w==
+X-Received: by 2002:adf:910a:0:b0:1ed:c3fc:2dcf with SMTP id j10-20020adf910a000000b001edc3fc2dcfmr3845237wrj.430.1645740358055;
+        Thu, 24 Feb 2022 14:05:58 -0800 (PST)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id v5-20020adfe4c5000000b001edc1e5053esm461372wrm.82.2022.02.24.14.05.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Feb 2022 14:04:27 -0800 (PST)
-Date:   Thu, 24 Feb 2022 23:04:22 +0100
-From:   Tomasz =?UTF-8?B?V2FybmllxYLFgm8=?= <tomasz.warniello@gmail.com>
-To:     Jonathan Corbet <corbet@lwn.net>
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 00/11] Transform documentation into POD
-Message-ID: <20220224230422.016cef67@fuji.fritz.box>
-In-Reply-To: <87tucokswx.fsf@meer.lwn.net>
-References: <20220218181628.1411551-1-tomasz.warniello@gmail.com>
-        <87tucokswx.fsf@meer.lwn.net>
+        Thu, 24 Feb 2022 14:05:57 -0800 (PST)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Russell King <rmk+kernel@armlinux.org.uk>,
+        netdev@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+Subject: [PATCH][next] net: dsa: qca8k: return with -EINVAL on invalid port
+Date:   Thu, 24 Feb 2022 22:05:57 +0000
+Message-Id: <20220224220557.147075-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -70,13 +78,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 24 Feb 2022 11:42:38 -0700
-Jonathan Corbet <corbet@lwn.net> wrote:
+Currently an invalid port throws a WARN_ON warning however invalid
+uninitialized values in reg and cpu_port_index are being used later
+on. Fix this by returning -EINVAL for an invalid port value.
 
-> I have applied the series, thanks.
-> 
-> jon
+Addresses clang-scan warnings:
+drivers/net/dsa/qca8k.c:1981:3: warning: 2nd function call argument is an
+  uninitialized value [core.CallAndMessage]
+drivers/net/dsa/qca8k.c:1999:9: warning: 2nd function call argument is an
+  uninitialized value [core.CallAndMessage]
 
-Thanks Jon,
+Fixes: 7544b3ff745b ("net: dsa: qca8k: move pcs configuration")
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ drivers/net/dsa/qca8k.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-T. W.
+diff --git a/drivers/net/dsa/qca8k.c b/drivers/net/dsa/qca8k.c
+index 04fa21e37dfa..2ed45f69b8e4 100644
+--- a/drivers/net/dsa/qca8k.c
++++ b/drivers/net/dsa/qca8k.c
+@@ -1937,6 +1937,7 @@ static int qca8k_pcs_config(struct phylink_pcs *pcs, unsigned int mode,
+ 
+ 	default:
+ 		WARN_ON(1);
++		return -EINVAL;
+ 	}
+ 
+ 	/* Enable/disable SerDes auto-negotiation as necessary */
+-- 
+2.34.1
+

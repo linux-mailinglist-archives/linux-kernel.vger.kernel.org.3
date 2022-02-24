@@ -2,114 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C61F34C2D3B
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 14:35:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D1FB44C2D42
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 14:37:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235043AbiBXNfF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 08:35:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50956 "EHLO
+        id S235077AbiBXNhC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 08:37:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234991AbiBXNfB (ORCPT
+        with ESMTP id S231327AbiBXNhA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 08:35:01 -0500
-Received: from mail-vs1-f50.google.com (mail-vs1-f50.google.com [209.85.217.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83BFA178689;
-        Thu, 24 Feb 2022 05:34:31 -0800 (PST)
-Received: by mail-vs1-f50.google.com with SMTP id y26so2116234vsq.8;
-        Thu, 24 Feb 2022 05:34:31 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=/rGJyXX5HuWtJN5KYux5wXK7Ltl9r3aNxihQ5ZjTDFA=;
-        b=UV3BxKRez+pXvCKAlbJeJgWGZKESsxE1s1oFIs2CH5iqa/D7ihRKXve9bUC3kpT6wR
-         YFECU4Rlua1deS6YXWME9svvA+8Nc7ZFX5qys2CkmYUAVAgzKg+mTXeXJk/HfjBr/zgb
-         NxqNQamwdwTO5PDOXAK7aW20Sn6rHAnrGkERF9DHbdg/WETQTu8p+MQUP7D/yKXRUDpV
-         Ytbx4roW58NECS43q8GyOUi5chxObS7IYcpEaP4RNP/OmU9drM6zAqfwoIZJUvEEEeeC
-         EerGtug7bHNTA26aEsETskBtw5tELAkLFABFl2nCJQ9DejzqOZ4NDL4AnCKj54HiK6N6
-         adZg==
-X-Gm-Message-State: AOAM531K/UsFQy0lpfIrtkjusL3m1pSsLYWl6Pvu3DLUHg37xaeQCanS
-        UfMp7F6ECkPxKr1UEo5ooCljZ/Oos8FhjA==
-X-Google-Smtp-Source: ABdhPJz6P2/5hUu/aC3862I412RyAhgL/oqOreW8Kik+K1TPhhe5zu5N0UvL/B8/lR4FgM8zijO0uA==
-X-Received: by 2002:a67:d38f:0:b0:31a:808b:7f1 with SMTP id b15-20020a67d38f000000b0031a808b07f1mr1022196vsj.56.1645709670531;
-        Thu, 24 Feb 2022 05:34:30 -0800 (PST)
-Received: from mail-ua1-f43.google.com (mail-ua1-f43.google.com. [209.85.222.43])
-        by smtp.gmail.com with ESMTPSA id j24sm383459vki.39.2022.02.24.05.34.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 24 Feb 2022 05:34:30 -0800 (PST)
-Received: by mail-ua1-f43.google.com with SMTP id t25so898112uaa.3;
-        Thu, 24 Feb 2022 05:34:30 -0800 (PST)
-X-Received: by 2002:ab0:6253:0:b0:341:8be9:7a1 with SMTP id
- p19-20020ab06253000000b003418be907a1mr1074483uao.114.1645709670171; Thu, 24
- Feb 2022 05:34:30 -0800 (PST)
+        Thu, 24 Feb 2022 08:37:00 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81D2A1704DE;
+        Thu, 24 Feb 2022 05:36:30 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1BC2B61AC1;
+        Thu, 24 Feb 2022 13:36:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80CF1C340F3;
+        Thu, 24 Feb 2022 13:36:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645709789;
+        bh=2AyDGGxNktap1GCSav7/Y8s2uvS64c1pBQZnymqFe4U=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Yx8yWvUQOht5FU2AlaqGvIfI122/dDiBnDkK+tqYL3Ic+coI1fnkKszdfJpI+QGjA
+         T4B3Wmo4FowqKhjLPetwZzGsXo4Yls5WtH7ngewbrTZxSr2I8sahtgky6UH0X+BUWG
+         /+u+2KDhGZKAB7aXNhBjBB70u1MY2UdzE6mAfi5uTMtabjYS9+AKI1te384+UG1+Uw
+         CcGQmtT9dOyQTSkMdXbfx2CEXW0VGDCwjkCaQr5lvZ02YMG/Ew9/8LfWsvHewRYF8m
+         hTDqJOG1qo1Z3tub6i9p9qzFQkT4MygK+PXEzGgeVdasBkCPQ2rs/jEy0e21wdXCkp
+         NF4Yxssd24Mrg==
+Received: by mail-ej1-f50.google.com with SMTP id gb39so4430947ejc.1;
+        Thu, 24 Feb 2022 05:36:29 -0800 (PST)
+X-Gm-Message-State: AOAM533bVw1SvDixlcN2w1X7ddVQnAvzzGWwAQuq4ewChotFwh+Vra+U
+        w6tqh/ilT5Q0pfBBABTbaFLH4edI4ncegLZw9Q==
+X-Google-Smtp-Source: ABdhPJy7XTemJd1RIWN/eP2rQzg/ge+Oq4JXuQXOPiNrDJ5gTr0cji2l71T4OyRxESJMLHTt6j3u3RnnCiQeFL4+i2I=
+X-Received: by 2002:a17:906:181a:b0:6d0:ebf5:c064 with SMTP id
+ v26-20020a170906181a00b006d0ebf5c064mr2223818eje.82.1645709787743; Thu, 24
+ Feb 2022 05:36:27 -0800 (PST)
 MIME-Version: 1.0
-References: <365d32c63c2fe080866be60c32dddd0f3634d19d.1645705789.git.geert@linux-m68k.org>
- <97b69b3a-bf17-6a43-bf96-da19822051b3@microchip.com> <CAMuHMdXGQDqMagqzD8VNYm2oucE=_nas9mM2sT_RoW2GKhr4vw@mail.gmail.com>
- <ae6b0849-a3e3-33fe-b540-6dc77c868f4b@microchip.com>
-In-Reply-To: <ae6b0849-a3e3-33fe-b540-6dc77c868f4b@microchip.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 24 Feb 2022 14:34:18 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdV5ghvAze-zOVAm9LSv9261PE0hh3nxyv5db18azmo2=w@mail.gmail.com>
-Message-ID: <CAMuHMdV5ghvAze-zOVAm9LSv9261PE0hh3nxyv5db18azmo2=w@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: i2c: microchip,corei2c: Fix indentation of
- compatible items
-To:     Conor Dooley <Conor.Dooley@microchip.com>
-Cc:     Wolfram Sang <wsa@kernel.org>, Daire.McNamara@microchip.com,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <6a86f8c481be417972ef1b1e3b902ccf95706547.1645149279.git.lhjeff911@gmail.com>
+In-Reply-To: <6a86f8c481be417972ef1b1e3b902ccf95706547.1645149279.git.lhjeff911@gmail.com>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Thu, 24 Feb 2022 07:36:15 -0600
+X-Gmail-Original-Message-ID: <CAL_Jsq+tMG_8nYaZDaU2pPgy7+bXfPxATSeoJKKyR=kv=x=70g@mail.gmail.com>
+Message-ID: <CAL_Jsq+tMG_8nYaZDaU2pPgy7+bXfPxATSeoJKKyR=kv=x=70g@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: spi: delete unused required and adjust the item.
+To:     Li-hao Kuo <lhjeff911@gmail.com>
+Cc:     Mark Brown <broonie@kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        devicetree@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        =?UTF-8?B?V2VsbHMgTHUg5ZGC6Iqz6aiw?= <wells.lu@sunplus.com>,
+        "LH.Kuo" <lh.kuo@sunplus.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Conor,
-
-On Thu, Feb 24, 2022 at 2:15 PM <Conor.Dooley@microchip.com> wrote:
-> On 24/02/2022 12:58, Geert Uytterhoeven wrote:
-> > On Thu, Feb 24, 2022 at 1:55 PM <Conor.Dooley@microchip.com> wrote:
-> >> On 24/02/2022 12:31, Geert Uytterhoeven wrote:
-> >>> make dt_binding_check:
-> >>>
-> >>>       Documentation/devicetree/bindings/i2c/microchip,corei2c.yaml:19:9: [warning] wrong indentation: expected 10 but found 8 (indentation)
-> >>
-> >> Hey Geert,
-> >> I've run dt_binding_check locally but I dont get a warning, is there
-> >> something I am missing?
-> >
-> > Interesting. Are you using the latest dtschema?
-> > https://github.com/devicetree-org/dt-schema.git
+On Thu, Feb 17, 2022 at 7:56 PM Li-hao Kuo <lhjeff911@gmail.com> wrote:
 >
-> I was on v2021.12, but have now tried v2022.01 & master
-> (2022.2.dev1+gf677c85).
+> delete unused required(clock-name)
+> adjust position (interrupts)
+
+Why? This seems like an unnecessary change.
+
+Please write complete sentences that answer why this change is needed,
+not what the change is. The diff describes what changed. In this case,
+quoting the warning you are fixing is typical.
+
 >
-> Is there something other than running "make dt_binding_check" in a fresh
-> checkout that I need to do?
+> Fixes: 3b8ab4da34 ("spi: Fix test error for sp7021")
+>
 
-You did update your installation after the fresh[1] checkout?
+There should not be a blank line here.
 
-$ cd dt-schema
-$ pip3 install -e .
-
-[1] What about "git pull"? ;-)
-
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+> Reported-by: Rob Herring <robh+dt@kernel.org>
+> Signed-off-by: Li-hao Kuo <lhjeff911@gmail.com>
+> ---
+>  Documentation/devicetree/bindings/spi/spi-sunplus-sp7021.yaml | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+>
+> diff --git a/Documentation/devicetree/bindings/spi/spi-sunplus-sp7021.yaml b/Documentation/devicetree/bindings/spi/spi-sunplus-sp7021.yaml
+> index 298eac2..9df08d7 100644
+> --- a/Documentation/devicetree/bindings/spi/spi-sunplus-sp7021.yaml
+> +++ b/Documentation/devicetree/bindings/spi/spi-sunplus-sp7021.yaml
+> @@ -47,10 +47,9 @@ required:
+>    - compatible
+>    - reg
+>    - reg-names
+> -  - interrupts
+>    - interrupt-names
+> +  - interrupts
+>    - clocks
+> -  - clocks-names
+>    - resets
+>    - pinctrl-names
+>    - pinctrl-0
+> --
+> 2.7.4
+>

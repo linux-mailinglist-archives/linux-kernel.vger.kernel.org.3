@@ -2,157 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D96924C3366
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 18:19:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 734E64C336E
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 18:19:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229635AbiBXRTN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 12:19:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51174 "EHLO
+        id S230411AbiBXRUP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 12:20:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230342AbiBXRTL (ORCPT
+        with ESMTP id S229596AbiBXRUN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 12:19:11 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 55F65F1AFD
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 09:18:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1645723118;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=9zS1exBQ8/i7GE0yNuNzJ4368SmU3x1bv1hKHvRyPw8=;
-        b=G5kVW9EhSqAzx3RPivllE5QtIp+U3Vr12ukY096DvzRMtoHOFDpEIhsoNbvJWQZbvv4EeR
-        n8CK3FWTcPtsioKjHU/EUF/j0hFw85F40cYn4AoOipFOe6A80oasdCpd7ojRnkE/D+MqXo
-        UMRY9t2AjpaVM9lrwkpmzDf2fwE8uCc=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-83-HjQKu-n9MBu3I-8CPxWnAQ-1; Thu, 24 Feb 2022 12:18:37 -0500
-X-MC-Unique: HjQKu-n9MBu3I-8CPxWnAQ-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 9E31E1006AA6;
-        Thu, 24 Feb 2022 17:18:35 +0000 (UTC)
-Received: from starship (unknown [10.40.195.190])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 2765F841D3;
-        Thu, 24 Feb 2022 17:18:32 +0000 (UTC)
-Message-ID: <9143d9d24d1b169668062a18a5f49bb8cf8e877b.camel@redhat.com>
-Subject: Re: [RFC PATCH 05/13] KVM: SVM: Update max number of vCPUs
- supported for x2AVIC mode
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Cc:     pbonzini@redhat.com, seanjc@google.com, joro@8bytes.org,
-        jon.grimm@amd.com, wei.huang2@amd.com, terry.bowman@amd.com
-Date:   Thu, 24 Feb 2022 19:18:31 +0200
-In-Reply-To: <20220221021922.733373-6-suravee.suthikulpanit@amd.com>
-References: <20220221021922.733373-1-suravee.suthikulpanit@amd.com>
-         <20220221021922.733373-6-suravee.suthikulpanit@amd.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+        Thu, 24 Feb 2022 12:20:13 -0500
+Received: from mail-oi1-f182.google.com (mail-oi1-f182.google.com [209.85.167.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26EA529EBA2;
+        Thu, 24 Feb 2022 09:19:43 -0800 (PST)
+Received: by mail-oi1-f182.google.com with SMTP id y7so3604411oih.5;
+        Thu, 24 Feb 2022 09:19:43 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=GIkfwABiL9u4jgKQ7QzwnEVlsUine0tssVICa4obUes=;
+        b=g/jJSG3508N6n1hQTkFvSgVPRlKQ5eKn0US59DGY9qROOFQJq8gHLKCQq/GtYHDS6V
+         WnGZGGpon7QoavlAVgZuxfLyQXXx0+nP2fRyBHKaeQ9xUTwUrF5rKGx6G7oTmEo9Rse0
+         WY3AHXSP/W4y19FFeB1gI7flw9JPi9FkguuRNuOExj2wCv0FAZH0cKeqUIhej5lg7Z8D
+         HZZJEV4OC0LLI4+SMTCEhItqUyAXuP0J0iYyRsqkyrIz4bEKiN+sfsL/fOZaaUtK5qsl
+         K2GCcNg8eWSAhk05Z4PtFI1egMrGQgJgqYuISqHF7iSo3jOd/zUsKGxkFY2x1QwyReCj
+         XK3A==
+X-Gm-Message-State: AOAM531rXyQBAJlr+GBID4HzXUNfiTONuanAC809YMz5wEzlvcapt7X3
+        q7d75aOvsxjL/KlLSO1Pig==
+X-Google-Smtp-Source: ABdhPJwW9NXc4ZUuWoldsXFpMnU1Bree9YmCN9tbO3wUbV9Cdsfwk+AcO5gUPlMiqfAMwr1jytWDLw==
+X-Received: by 2002:a05:6870:a40b:b0:d3:4785:c580 with SMTP id m11-20020a056870a40b00b000d34785c580mr6993835oal.221.1645723181847;
+        Thu, 24 Feb 2022 09:19:41 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id t5sm1396432otp.67.2022.02.24.09.19.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Feb 2022 09:19:41 -0800 (PST)
+Received: (nullmailer pid 3265197 invoked by uid 1000);
+        Thu, 24 Feb 2022 17:19:39 -0000
+Date:   Thu, 24 Feb 2022 11:19:39 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Oleksij Rempel <o.rempel@pengutronix.de>
+Cc:     Ray Jui <rjui@broadcom.com>, linux-kernel@vger.kernel.org,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Jakub Kicinski <kuba@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, kernel@pengutronix.de,
+        "David S. Miller" <davem@davemloft.net>,
+        linux-rpi-kernel@lists.infradead.org, netdev@vger.kernel.org,
+        Scott Branden <sbranden@broadcom.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        =?iso-8859-1?Q?Beno=EEt?= Cousson <bcousson@baylibre.com>,
+        linux-tegra@vger.kernel.org, devicetree@vger.kernel.org,
+        Tony Lindgren <tony@atomide.com>, linux-omap@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org, Shawn Guo <shawnguo@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        bcm-kernel-feedback-list@broadcom.com, linux-usb@vger.kernel.org
+Subject: Re: [PATCH v5 3/9] dt-bindings: usb: ci-hdrc-usb2: fix node node for
+ ethernet controller
+Message-ID: <Yhe+K4rmcBtkyM6C@robh.at.kernel.org>
+References: <20220216074927.3619425-1-o.rempel@pengutronix.de>
+ <20220216074927.3619425-4-o.rempel@pengutronix.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220216074927.3619425-4-o.rempel@pengutronix.de>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 2022-02-20 at 20:19 -0600, Suravee Suthikulpanit wrote:
-> xAVIC and x2AVIC modes can support diffferent number of vcpus.
-> Update existing logics to support each mode accordingly.
+On Wed, 16 Feb 2022 08:49:21 +0100, Oleksij Rempel wrote:
+> This documentation provides wrong node name for the Ethernet controller.
+> It should be "ethernet" instead of "smsc" as required by Ethernet
+> controller devicetree schema:
+>  Documentation/devicetree/bindings/net/ethernet-controller.yaml
 > 
-> Also, modify the maximum physical APIC ID for AVIC to 255 to reflect
-> the actual value supported by the architecture.
-> 
-> Signed-off-by: Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
+> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
 > ---
->  arch/x86/include/asm/svm.h | 12 +++++++++---
->  arch/x86/kvm/svm/avic.c    |  8 +++++---
->  2 files changed, 14 insertions(+), 6 deletions(-)
+>  Documentation/devicetree/bindings/usb/ci-hdrc-usb2.txt | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/arch/x86/include/asm/svm.h b/arch/x86/include/asm/svm.h
-> index 7a7a2297165b..681a348a9365 100644
-> --- a/arch/x86/include/asm/svm.h
-> +++ b/arch/x86/include/asm/svm.h
-> @@ -250,10 +250,16 @@ enum avic_ipi_failure_cause {
->  
->  
->  /*
-> - * 0xff is broadcast, so the max index allowed for physical APIC ID
-> - * table is 0xfe.  APIC IDs above 0xff are reserved.
-> + * For AVIC, the max index allowed for physical APIC ID
-> + * table is 0xff (255).
->   */
-> -#define AVIC_MAX_PHYSICAL_ID_COUNT	0xff
-> +#define AVIC_MAX_PHYSICAL_ID		0XFFULL
-> +
-> +/*
-> + * For x2AVIC, the max index allowed for physical APIC ID
-> + * table is 0x1ff (511).
-> + */
-> +#define X2AVIC_MAX_PHYSICAL_ID		0x1FFUL
 
-Yep, physid page can't hold more entries...
-
-This brings the inventible question of what to do when a VM has more
-that 512 vCPUs...
-
-With AVIC, since it is xapic, it would be easy - xapic supports up to
-254 CPUs.
-
-But with x2apic, there is no such restriction on max 512 CPUs,
-thus it is legal to create a VM with x2apic and more that 512 CPUs,
-and x2AVIC won't work well in this case.
-
-I guess AVIC_IPI_FAILURE_INVALID_TARGET, has to be extened to support those
-cases, even with loss of performance, or we need to inhibit x2AVIC.
-
-Best regards,
-	Maxim Levitsky
-
->  
->  #define AVIC_HPA_MASK	~((0xFFFULL << 52) | 0xFFF)
->  #define VMCB_AVIC_APIC_BAR_MASK		0xFFFFFFFFFF000ULL
-> diff --git a/arch/x86/kvm/svm/avic.c b/arch/x86/kvm/svm/avic.c
-> index 0040824e4376..1999076966fd 100644
-> --- a/arch/x86/kvm/svm/avic.c
-> +++ b/arch/x86/kvm/svm/avic.c
-> @@ -195,7 +195,7 @@ void avic_init_vmcb(struct vcpu_svm *svm)
->  	vmcb->control.avic_backing_page = bpa & AVIC_HPA_MASK;
->  	vmcb->control.avic_logical_id = lpa & AVIC_HPA_MASK;
->  	vmcb->control.avic_physical_id = ppa & AVIC_HPA_MASK;
-> -	vmcb->control.avic_physical_id |= AVIC_MAX_PHYSICAL_ID_COUNT;
-> +	vmcb->control.avic_physical_id |= AVIC_MAX_PHYSICAL_ID;
->  	vmcb->control.avic_vapic_bar = APIC_DEFAULT_PHYS_BASE & VMCB_AVIC_APIC_BAR_MASK;
->  
->  	if (kvm_apicv_activated(svm->vcpu.kvm))
-> @@ -210,7 +210,8 @@ static u64 *avic_get_physical_id_entry(struct kvm_vcpu *vcpu,
->  	u64 *avic_physical_id_table;
->  	struct kvm_svm *kvm_svm = to_kvm_svm(vcpu->kvm);
->  
-> -	if (index >= AVIC_MAX_PHYSICAL_ID_COUNT)
-> +	if ((avic_mode == AVIC_MODE_X1 && index > AVIC_MAX_PHYSICAL_ID) ||
-> +	    (avic_mode == AVIC_MODE_X2 && index > X2AVIC_MAX_PHYSICAL_ID))
->  		return NULL;
->  
->  	avic_physical_id_table = page_address(kvm_svm->avic_physical_id_table_page);
-> @@ -257,7 +258,8 @@ static int avic_init_backing_page(struct kvm_vcpu *vcpu)
->  	int id = vcpu->vcpu_id;
->  	struct vcpu_svm *svm = to_svm(vcpu);
->  
-> -	if (id >= AVIC_MAX_PHYSICAL_ID_COUNT)
-> +	if ((avic_mode == AVIC_MODE_X1 && id > AVIC_MAX_PHYSICAL_ID) ||
-> +	    (avic_mode == AVIC_MODE_X2 && id > X2AVIC_MAX_PHYSICAL_ID))
->  		return -EINVAL;
->  
->  	if (!vcpu->arch.apic->regs)
-
-
+Acked-by: Rob Herring <robh@kernel.org>

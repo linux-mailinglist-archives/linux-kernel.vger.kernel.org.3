@@ -2,113 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C71F4C20EE
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 02:30:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ACFDF4C2126
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 02:40:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229487AbiBXBa1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 20:30:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49932 "EHLO
+        id S229672AbiBXBjO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 20:39:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229455AbiBXBaZ (ORCPT
+        with ESMTP id S229618AbiBXBjM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 20:30:25 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EFCD21DF16
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 17:29:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645666191; x=1677202191;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=QvnE9BwdXoW24hJK9PB/iH3BAXPdjZitAQ4ovburPWo=;
-  b=Vz40EW+24eeiHrNKyM1kjdE3YlJ/E9+maRVp1h3e27xj/V3+PboGTETE
-   jEaN4X+yOG/ftUbpKvd+q3QsuEiQTn21yCL2D7L/0dKbpH21qEyU71ytp
-   dumqvIvcBej00V1bII+0gphnizavFW4PQq8umg5slCQ5alHZuE6QwNDDQ
-   WQxnVIXUhU919/BArREPAyKj4HxFGhEH8uBL3Q8u8tmCi6o+IjFn+YL0S
-   9BsI/r08gGNywuO+gCaQ+xF/T/++O0sBalApyKy88iCIrtla6PI/ZATlS
-   RRkmDIJ5QS+8d3wenSlMbINopZgbt8NAKmdLFCQB3d8P5F7OkjADcnT12
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10267"; a="276744619"
-X-IronPort-AV: E=Sophos;i="5.88,392,1635231600"; 
-   d="scan'208";a="276744619"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2022 17:06:56 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,392,1635231600"; 
-   d="scan'208";a="776882266"
-Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 23 Feb 2022 17:06:55 -0800
-Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nN2as-00023I-4S; Thu, 24 Feb 2022 01:06:54 +0000
-Date:   Thu, 24 Feb 2022 09:06:36 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Ingo Molnar <mingo@kernel.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [mingo-tip:sched/headers 1767/2340]
- arch/mips/lantiq/xway/dma.c:284:34: error: array type has incomplete element
- type 'struct of_device_id'
-Message-ID: <202202240941.VUAMJLNZ-lkp@intel.com>
+        Wed, 23 Feb 2022 20:39:12 -0500
+Received: from mail-qv1-xf35.google.com (mail-qv1-xf35.google.com [IPv6:2607:f8b0:4864:20::f35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32D6069287;
+        Wed, 23 Feb 2022 17:38:43 -0800 (PST)
+Received: by mail-qv1-xf35.google.com with SMTP id 8so1330958qvf.2;
+        Wed, 23 Feb 2022 17:38:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=qQ9tgl+30McuPheRkP6XMt3TbjKT/oePeBXnUFyrMv8=;
+        b=X1sWVunSGk/wOb21MF08UOQHsGL44JsXndBN1yNlDkxuKaYMnfPmwd37XxH81H8zMT
+         V6ZfcwE7enjB66q6Axil2+yHYqNYbDaBI3mFd9i22vPMvICZv9d2al1c3Jmvv82UgC5b
+         mDiKqjq6M8vUtvTSV9v4LRq3yIHjZGwas8lM3izN0LMb00kvJuYrWyPxO2mnzNcTwGNb
+         2HEt348EEc5HYRQjU9hnqhjmjwreFdG9yCH/CWv+n3JfFRDHAiEhhPuvaTNQ9dUo+F0p
+         +N7pO+oaStp8rx5b6FHUFdWPC4CRQfagSBV9jnwJDCBVCKgKqOtWiBxCKNp94bT870Gm
+         ydOg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=qQ9tgl+30McuPheRkP6XMt3TbjKT/oePeBXnUFyrMv8=;
+        b=k9wXOEoFqcZL3/FQypx96M8GmiFk19mT7/RncLLfgQxXc6EvReGIIAcQBf4eoDhmBH
+         8orjqvKzxxoXpYJ1EtA6pBqkBlkl61Zr7XDK9JUny7zl5SOUFsrE7oioywZt+qvbCRpg
+         zYV1FQuvHu9Qr+gAl3wgyGKlYQYpMoPL3P0YCnhsUYEk+HQEcj2iUULCJky++q/DMBXj
+         5jKFn4TqUAJlKG/bvGNr95TlCFhUVGN0q6bMUbCQIX1bKAcNg0xh9EVxMQXh2n8s0AYG
+         USUGZ9LmQPqNHsj9FPAWqohEuLosr05OJKrhqBPw5WZWwsNIVwhwuZkk75Ze/p16SJRG
+         3DGg==
+X-Gm-Message-State: AOAM530RWepSdWfQeygRmEo766dULKN62+JQTJ2vdx1jNiZuLDhxwRCS
+        cRbwynFIFNGvusZPxQ5gXCRdL01YhAmF5JbjEcQQ8Od3rvA=
+X-Google-Smtp-Source: ABdhPJynqWhYAon/vU2BN5LkPiBakQ/4vVP5kufXxQmW8xVHytevGb8DOGMreWS+86DNG6nmqYMDYaUzrg7W5GlkrVs=
+X-Received: by 2002:a05:6638:382:b0:30e:3e2e:3227 with SMTP id
+ y2-20020a056638038200b0030e3e2e3227mr209459jap.234.1645665018788; Wed, 23 Feb
+ 2022 17:10:18 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220224000531.1265030-1-haoluo@google.com> <CAEf4Bzb44WR2LiYchxB5JZ=Jdie6FEEi90mh=SCv07v4h4W11w@mail.gmail.com>
+ <CA+khW7h4bL3qUst4nDy6LDmx73xVA_ch=PLc=o=v2iJNbGn21A@mail.gmail.com>
+In-Reply-To: <CA+khW7h4bL3qUst4nDy6LDmx73xVA_ch=PLc=o=v2iJNbGn21A@mail.gmail.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Wed, 23 Feb 2022 17:10:07 -0800
+Message-ID: <CAEf4BzaYxgnotk+J+czhAjXbfzEoOrnyiVMmmkjDDVHzYUs48A@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2] bpf: Cache the last valid build_id.
+To:     Hao Luo <haoluo@google.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Song Liu <songliubraving@fb.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Blake Jones <blakejones@google.com>, bpf <bpf@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Greg Thelen <gthelen@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git sched/headers
-head:   97c5eeb4de3ad324ed2a4656b46465299cfd010a
-commit: 4d3d857e45b20f83f7a1902118be9158f7e62ef3 [1767/2340] headers/deps: of: Optimize <linux/of_types.h> dependencies
-config: mips-xway_defconfig (https://download.01.org/0day-ci/archive/20220224/202202240941.VUAMJLNZ-lkp@intel.com/config)
-compiler: mips-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=4d3d857e45b20f83f7a1902118be9158f7e62ef3
-        git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
-        git fetch --no-tags mingo-tip sched/headers
-        git checkout 4d3d857e45b20f83f7a1902118be9158f7e62ef3
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=mips SHELL=/bin/bash
+On Wed, Feb 23, 2022 at 4:33 PM Hao Luo <haoluo@google.com> wrote:
+>
+> On Wed, Feb 23, 2022 at 4:11 PM Andrii Nakryiko
+> <andrii.nakryiko@gmail.com> wrote:
+> >
+> > On Wed, Feb 23, 2022 at 4:05 PM Hao Luo <haoluo@google.com> wrote:
+> > >
+> > > For binaries that are statically linked, consecutive stack frames are
+> > > likely to be in the same VMA and therefore have the same build id.
+> > > As an optimization for this case, we can cache the previous frame's
+> > > VMA, if the new frame has the same VMA as the previous one, reuse the
+> > > previous one's build id. We are holding the MM locks as reader across
+> > > the entire loop, so we don't need to worry about VMA going away.
+> > >
+> > > Tested through "stacktrace_build_id" and "stacktrace_build_id_nmi" in
+> > > test_progs.
+> > >
+> > > Suggested-by: Greg Thelen <gthelen@google.com>
+> > > Signed-off-by: Hao Luo <haoluo@google.com>
+> > > ---
+> >
+> > LGTM. Can you share performance numbers before and after?
+> >
+> > Acked-by: Andrii Nakryiko <andrii@kernel.org>
+> >
+>
+> Thanks Andrii.
+>
+> On a real-world workload, we observed that 66% of cpu cycles in
+> __bpf_get_stackid() were spent on build_id_parse() and find_vma().
+> This was before.
+>
+> We haven't evaluated the performance with this patch yet. This
+> optimization seems straightforward, so we plan to upstream it first
+> and then retest.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> arch/mips/lantiq/xway/dma.c:284:34: error: array type has incomplete element type 'struct of_device_id'
-     284 | static const struct of_device_id dma_match[] = {
-         |                                  ^~~~~~~~~
-   arch/mips/lantiq/xway/dma.c:298:1: warning: no previous prototype for 'dma_init' [-Wmissing-prototypes]
-     298 | dma_init(void)
-         | ^~~~~~~~
-   arch/mips/lantiq/xway/dma.c:284:34: warning: 'dma_match' defined but not used [-Wunused-variable]
-     284 | static const struct of_device_id dma_match[] = {
-         |                                  ^~~~~~~~~
-
-
-vim +284 arch/mips/lantiq/xway/dma.c
-
-dfec1a827d2bdc John Crispin 2011-05-06  283  
-ddd4eeca961cc6 John Crispin 2012-04-12 @284  static const struct of_device_id dma_match[] = {
-ddd4eeca961cc6 John Crispin 2012-04-12  285  	{ .compatible = "lantiq,dma-xway" },
-ddd4eeca961cc6 John Crispin 2012-04-12  286  	{},
-ddd4eeca961cc6 John Crispin 2012-04-12  287  };
-ddd4eeca961cc6 John Crispin 2012-04-12  288  
-
-:::::: The code at line 284 was first introduced by commit
-:::::: ddd4eeca961cc6b1d57e0ca2f264403d690b6882 MIPS: lantiq: convert dma to platform driver
-
-:::::: TO: John Crispin <blogic@openwrt.org>
-:::::: CC: Ralf Baechle <ralf@linux-mips.org>
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Ok, once it lands upstream, I'd really appreciate if you can retest
+and update us with numbers. Thanks!

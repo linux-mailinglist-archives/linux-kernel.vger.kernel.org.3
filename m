@@ -2,107 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 323E64C3692
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 21:09:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DAEBA4C3691
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 21:09:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234210AbiBXUJI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 15:09:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54750 "EHLO
+        id S234222AbiBXUJS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 15:09:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231588AbiBXUJH (ORCPT
+        with ESMTP id S234223AbiBXUJQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 15:09:07 -0500
-Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7BFD1B1DCC
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 12:08:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645733316; x=1677269316;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=xb6WUFUcK2wMWO+P1uC6p8nVNdVQ3A2tz0MLG/87zng=;
-  b=hGN0xsgiHEGd+GZcyu778ZU9ISAyQXvU3WhT9bvhi/3ryWOtDgxjUZTc
-   FUR6BuKA0mm8PemxwgkTPbiMpmj9ZYOrQDos+vOGaKyKSvHlU2cly/Lsi
-   EoJ9ltv3+675VLmjP/iP12lOFHOUxmwLozaIaApxr2QSd2dZdHcWngqfY
-   jdiqQcUzhc0j9dwQ44HZlj+a8MTl85PoRXMsk9wZ1BSjp8f799JEm/pCQ
-   qGuGbRGG4GtzIWia0Wia1B6nF+/bRoOXz5HAAAjJrqnhh1wnOLrTu53ij
-   k9OVED3/TCrz86gvAH1xa7aV5YSPvNUfvszLWKEM2AHRvor+fHlpMvpLo
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10268"; a="313055274"
-X-IronPort-AV: E=Sophos;i="5.90,134,1643702400"; 
-   d="scan'208";a="313055274"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2022 12:08:36 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,134,1643702400"; 
-   d="scan'208";a="509009566"
-Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 24 Feb 2022 12:08:32 -0800
-Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nNKPg-0003QQ-65; Thu, 24 Feb 2022 20:08:32 +0000
-Date:   Fri, 25 Feb 2022 04:07:24 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Will Deacon <will@kernel.org>
-Cc:     kbuild-all@lists.01.org,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Marc Zyngier <maz@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] KVM: arm64: fix semicolon.cocci warnings
-Message-ID: <20220224200724.GA16837@6c0ef8ecd909>
-References: <202202250442.6Y6h26na-lkp@intel.com>
+        Thu, 24 Feb 2022 15:09:16 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0720C278282
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 12:08:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1645733324;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=BZd1WVhqalDgY0pEVukQFKoKp+dFXjstcrXoRQTNR8c=;
+        b=HnP6kmhBh0QdzU0T4w5oUujC6ZmALHNk6GE9F9YFdOuPvj89IzdZC1v6sYRLigqVMNGENQ
+        w4Mv+99MPT0RamsKolvddRpLp0OaiDrtlkHfs8xf2G6wu5DY+IVFdblppvRabtOfmWRZAs
+        Csa5kQ0RGS6n14WgoLqpzBdjuyEPok8=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-556-1QK3e14cOouBo-54HfMhkQ-1; Thu, 24 Feb 2022 15:08:40 -0500
+X-MC-Unique: 1QK3e14cOouBo-54HfMhkQ-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id AD769FC82;
+        Thu, 24 Feb 2022 20:08:39 +0000 (UTC)
+Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 5DC8C2270D;
+        Thu, 24 Feb 2022 20:08:39 +0000 (UTC)
+From:   Paolo Bonzini <pbonzini@redhat.com>
+To:     torvalds@linux-foundation.org
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Subject: [GIT PULL] KVM changes for 5.17-rc6
+Date:   Thu, 24 Feb 2022 15:08:33 -0500
+Message-Id: <20220224200833.2287352-1-pbonzini@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202202250442.6Y6h26na-lkp@intel.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: kernel test robot <lkp@intel.com>
+Linus,
 
-arch/arm64/kvm/psci.c:372:3-4: Unneeded semicolon
+The following changes since commit 710c476514313c74045c41c0571bb5178fd16e3d:
 
+  KVM: x86/pmu: Use AMD64_RAW_EVENT_MASK for PERF_TYPE_RAW (2022-02-14 07:44:51 -0500)
 
- Remove unneeded semicolon.
+are available in the Git repository at:
 
-Generated by: scripts/coccinelle/misc/semicolon.cocci
+  https://git.kernel.org/pub/scm/virt/kvm/kvm.git tags/for-linus
 
-Fixes: d43583b890e7 ("KVM: arm64: Expose PSCI SYSTEM_RESET2 call to the guest")
-CC: Will Deacon <will@kernel.org>
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: kernel test robot <lkp@intel.com>
----
+for you to fetch changes up to e910a53fb4f20aa012e46371ffb4c32c8da259b4:
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   d4a0ae62a277377de396850ed4b709b6bd9b7326
-commit: d43583b890e7cb0078d13d056753a56602b92406 [7067/7915] KVM: arm64: Expose PSCI SYSTEM_RESET2 call to the guest
-:::::: branch date: 18 hours ago
-:::::: commit date: 3 days ago
+  KVM: x86: nSVM: disallow userspace setting of MSR_AMD64_TSC_RATIO to non default value when tsc scaling disabled (2022-02-24 13:04:47 -0500)
 
- arch/arm64/kvm/psci.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+----------------------------------------------------------------
+x86 host:
 
---- a/arch/arm64/kvm/psci.c
-+++ b/arch/arm64/kvm/psci.c
-@@ -369,7 +369,7 @@ static int kvm_psci_1_x_call(struct kvm_
- 				ret = 0;
- 			}
- 			break;
--		};
-+		}
- 		fallthrough;
- 	default:
- 		return kvm_psci_0_2_call(vcpu);
+* Expose KVM_CAP_ENABLE_CAP since it is supported
+
+* Disable KVM_HC_CLOCK_PAIRING in TSC catchup mode
+
+* Ensure async page fault token is nonzero
+
+* Fix lockdep false negative
+
+* Fix FPU migration regression from the AMX changes
+
+x86 guest:
+
+* Don't use PV TLB/IPI/yield on uniprocessor guests
+
+PPC:
+* reserve capability id (topic branch for ppc/kvm)
+
+----------------------------------------------------------------
+Aaron Lewis (1):
+      KVM: x86: Add KVM_CAP_ENABLE_CAP to x86
+
+Anton Romanov (1):
+      kvm: x86: Disable KVM_HC_CLOCK_PAIRING if tsc is in always catchup mode
+
+Leonardo Bras (3):
+      x86/kvm/fpu: Limit guest user_xfeatures to supported bits of XCR0
+      x86/kvm/fpu: Remove kvm_vcpu_arch.guest_supported_xcr0
+      x86/kvm: Fix compilation warning in non-x86_64 builds
+
+Liang Zhang (1):
+      KVM: x86/mmu: make apf token non-zero to fix bug
+
+Maxim Levitsky (1):
+      KVM: x86: nSVM: disallow userspace setting of MSR_AMD64_TSC_RATIO to non default value when tsc scaling disabled
+
+Nicholas Piggin (1):
+      KVM: PPC: reserve capability 210 for KVM_CAP_PPC_AIL_MODE_3
+
+Paolo Bonzini (1):
+      Merge branch 'kvm-ppc-cap-210' into kvm-master
+
+Wanpeng Li (2):
+      KVM: Fix lockdep false negative during host resume
+      x86/kvm: Don't use pv tlb/ipi/sched_yield if on 1 vCPU
+
+ Documentation/virt/kvm/api.rst  | 16 +++++++++++++++-
+ arch/x86/include/asm/kvm_host.h |  1 -
+ arch/x86/kernel/fpu/xstate.c    |  5 ++++-
+ arch/x86/kernel/kvm.c           |  9 ++++++---
+ arch/x86/kvm/cpuid.c            |  5 ++++-
+ arch/x86/kvm/mmu/mmu.c          | 13 ++++++++++++-
+ arch/x86/kvm/svm/svm.c          | 19 +++++++++++++++++--
+ arch/x86/kvm/x86.c              | 30 +++++++++++++++++++++++++-----
+ include/uapi/linux/kvm.h        |  1 +
+ tools/include/uapi/linux/kvm.h  |  1 +
+ virt/kvm/kvm_main.c             |  4 +---
+ 11 files changed, 86 insertions(+), 18 deletions(-)
+

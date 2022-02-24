@@ -2,124 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F7104C25EA
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 09:26:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A83C4C25F1
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 09:28:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231836AbiBXIZU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 03:25:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59342 "EHLO
+        id S231865AbiBXI04 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 03:26:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231816AbiBXIZO (ORCPT
+        with ESMTP id S230488AbiBXI0z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 03:25:14 -0500
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3899D26F4ED
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 00:24:45 -0800 (PST)
-Received: by mail-pf1-x42e.google.com with SMTP id i21so1188774pfd.13
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 00:24:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=p0ebp+02MdtNr1qZxZumdRZ3cbQAZn0ZqRcOn5l7rUo=;
-        b=b84C6meeF3jXg2k09uni6Q4FEkFaaorhJnzMqQGBFPYbuHIt5ACH4+7oP5o16cjDtI
-         GN4FY/5eMoLgphElJe/5CnXPYrWxxyF0ZDg2ertp52XcuwjI65f+Cc0ZJ0OfXWwso3fT
-         XGjtB6BwwfyAYARP1kNgI171VgQoHze41PAAXoVqQadP8JeKi6l3FcUWnJSEWpkPa2Gk
-         2xW67/0zIovbMRDSWWJ0bvTYxd3bswc3tZM3IHCn3Y9cTIxbFaPFDUKKwyTRAn7Ke1fF
-         wRY2dMeydk1jwbWmYsGtwTtlxhd5ms1oMwweTbkLhrsSyVOVBH58rFTkR++fAsQluH6E
-         rc4g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=p0ebp+02MdtNr1qZxZumdRZ3cbQAZn0ZqRcOn5l7rUo=;
-        b=Ax9XqhVIeO3clVOIE0/BaFJwpWjehRyh5jTVANsnyHP/ibSOQFZ7OczMGmSj9YwY77
-         U0+h2/ArcJlXJub8KZMCW/+Zp9h0FIr6/GwTUzJ05I52VKMQHrLao9k6KFz0cBCE6Ini
-         sZX5j1/tV7+T2xwhE7D7oIxURYz2xF4bpsoRLq1xo+ZQQCBR5Dt00ym/V1vnUdpqsYXM
-         u+PaXtIyTMUjUlk81pY26PXJ1QIzXXiZmkp7Va2DkmMe3PPgjiyogfrKPAmUZcWX8PZ3
-         D1iO0QMzpnP/GeHJnSGq998Gpvvv4hKBCIJYWFjHdsmCVdeksrcFzGT6kY2hrZJv7pKw
-         DEPg==
-X-Gm-Message-State: AOAM531O5G5HIkVXOte/mnD5eSfT/+9B4uT37pBkLdxrSl4Vt7ezuVFW
-        9jL8BeskilR7tuslpAAXSlo=
-X-Google-Smtp-Source: ABdhPJxkAQJFLh9JQh4FtgF9SJ5zQNnSxlMdeoQ6TVNT0MCOE13wlL0VkK+zx4LYSvzB0eE/gPA58g==
-X-Received: by 2002:a65:4348:0:b0:375:9840:b064 with SMTP id k8-20020a654348000000b003759840b064mr179872pgq.270.1645691084699;
-        Thu, 24 Feb 2022 00:24:44 -0800 (PST)
-Received: from localhost ([117.136.66.135])
-        by smtp.gmail.com with ESMTPSA id v20sm1896295pju.9.2022.02.24.00.24.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Feb 2022 00:24:44 -0800 (PST)
-From:   Junru Shen <hhusjrsjr@gmail.com>
-To:     Will Deacon <will@kernel.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
-        Junru Shen <hhusjrsjr@gmail.com>
-Subject: [PATCH] atomic: Put the fetching of the old value into the loop when doing atomic CAS
-Date:   Thu, 24 Feb 2022 16:24:38 +0800
-Message-Id: <20220224082438.580191-1-hhusjrsjr@gmail.com>
-X-Mailer: git-send-email 2.30.2
+        Thu, 24 Feb 2022 03:26:55 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1722E26F4E2
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 00:26:26 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id C20681F43D;
+        Thu, 24 Feb 2022 08:26:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1645691184; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=adxedwQWkr5jfagPKOdhZGUwUnLYqrYeTaIwwWUOYlE=;
+        b=FskKERZifrad1o6nZ0DWDHdrq+F/hS1tMewn8it5JtjAAcRDiFhVQ7B63thBQhiM2a3scE
+        Vfz2PbPm6MiVzipadsRGDOF6AS/jkET+2Ku20GNK9S8vSPK8kWL/rC4xSasAYpWCNFB3Ry
+        aqPSOJOgtuiVbc2CcuQaxgKPiIL5Mng=
+Received: from suse.cz (unknown [10.100.201.86])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 76F46A3B8C;
+        Thu, 24 Feb 2022 08:26:20 +0000 (UTC)
+Date:   Thu, 24 Feb 2022 09:26:24 +0100
+From:   Michal Hocko <mhocko@suse.com>
+To:     Vladimir Davydov <vdavydov.dev@gmail.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Johannes Weiner <hannes@cmpxchg.org>
+Subject: Re: [PATCH] MAINTAINERS: remove myself from memcg maintainers
+Message-ID: <YhdBMPcsc9g9kY8x@dhcp22.suse.cz>
+References: <4ad1f8da49d7b71c84a0c15bd5347f5ce704e730.1645608825.git.vdavydov.dev@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4ad1f8da49d7b71c84a0c15bd5347f5ce704e730.1645608825.git.vdavydov.dev@gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Put the acquisition of the expected value inside the loop to prevent an infinite loop when it does not match.
+On Wed 23-02-22 12:37:42, Vladimir Davydov wrote:
+> Signed-off-by: Vladimir Davydov <vdavydov.dev@gmail.com>
+> Cc: Roman Gushchin <roman.gushchin@linux.dev>
+> Cc: Johannes Weiner <hannes@cmpxchg.org>
+> Cc: Michal Hocko <mhocko@kernel.org>
 
-Signed-off-by: Junru Shen <hhusjrsjr@gmail.com>
----
- arch/x86/include/asm/atomic64_64.h | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+Thanks for all your contributions!
+Acked-by: Michal Hocko <mhocko@suse.com>
 
-diff --git a/arch/x86/include/asm/atomic64_64.h b/arch/x86/include/asm/atomic64_64.h
-index 7886d0578..3df04c44c 100644
---- a/arch/x86/include/asm/atomic64_64.h
-+++ b/arch/x86/include/asm/atomic64_64.h
-@@ -207,9 +207,10 @@ static inline void arch_atomic64_and(s64 i, atomic64_t *v)
- 
- static inline s64 arch_atomic64_fetch_and(s64 i, atomic64_t *v)
- {
--	s64 val = arch_atomic64_read(v);
-+	s64 val;
- 
- 	do {
-+		val = arch_atomic64_read(v);
- 	} while (!arch_atomic64_try_cmpxchg(v, &val, val & i));
- 	return val;
- }
-@@ -225,9 +226,10 @@ static inline void arch_atomic64_or(s64 i, atomic64_t *v)
- 
- static inline s64 arch_atomic64_fetch_or(s64 i, atomic64_t *v)
- {
--	s64 val = arch_atomic64_read(v);
-+	s64 val;
- 
- 	do {
-+		val = arch_atomic64_read(v);
- 	} while (!arch_atomic64_try_cmpxchg(v, &val, val | i));
- 	return val;
- }
-@@ -243,9 +245,10 @@ static inline void arch_atomic64_xor(s64 i, atomic64_t *v)
- 
- static inline s64 arch_atomic64_fetch_xor(s64 i, atomic64_t *v)
- {
--	s64 val = arch_atomic64_read(v);
-+	s64 val;
- 
- 	do {
-+		val = arch_atomic64_read(v);
- 	} while (!arch_atomic64_try_cmpxchg(v, &val, val ^ i));
- 	return val;
- }
+> ---
+>  MAINTAINERS | 1 -
+>  1 file changed, 1 deletion(-)
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 777cd6fa2b3d..cbadcffbff50 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -4913,7 +4913,6 @@ F:	kernel/cgroup/cpuset.c
+>  CONTROL GROUP - MEMORY RESOURCE CONTROLLER (MEMCG)
+>  M:	Johannes Weiner <hannes@cmpxchg.org>
+>  M:	Michal Hocko <mhocko@kernel.org>
+> -M:	Vladimir Davydov <vdavydov.dev@gmail.com>
+>  L:	cgroups@vger.kernel.org
+>  L:	linux-mm@kvack.org
+>  S:	Maintained
+> -- 
+> 2.25.1
+
 -- 
-2.30.2
-
+Michal Hocko
+SUSE Labs

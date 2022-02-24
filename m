@@ -2,63 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 655F44C3746
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 21:56:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E075F4C3751
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 22:02:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233975AbiBXU4w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 15:56:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39354 "EHLO
+        id S234492AbiBXVDH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 16:03:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232933AbiBXU4t (ORCPT
+        with ESMTP id S234331AbiBXVDF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 15:56:49 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A452C1D0360;
-        Thu, 24 Feb 2022 12:56:18 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 429C7618FA;
-        Thu, 24 Feb 2022 20:56:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A01D3C340E9;
-        Thu, 24 Feb 2022 20:56:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645736177;
-        bh=+yCLcGp91fyf8IidI1eikAsq2RLPsTRaBUxy5F0GI2c=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=tX7EPlTBWPpzhFY8AelPxQWhmXxCzDPC6QLuuVFR5TvmHyCgVDSUzaLo4ccQti+B2
-         VEicz8NEi2jCuqGun0nnYdwycSXg80kGSYovUroJWq3pWcuVNAY/HFpU9B0HVR8j65
-         wfIrElApbofLSNQii5PY1rrIRYf9gq7dWox+pWL1ynqClAUh6NLOCaNTxEJdM2blRy
-         QvuYbSmqFtz+0mG4l7VEZUQeRv6Rg9ayRHLoZOqNIBz29iKL+NOVkfWnDfJknio9il
-         HXmUkh/Xbk2tEm7L4vaPPNX/irp5mDu/P8i7BnwA/s2PWQyV4ua/BrHujtbF0B8+bW
-         pWr6W2Lmya+7A==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 414325C03B0; Thu, 24 Feb 2022 12:56:17 -0800 (PST)
-Date:   Thu, 24 Feb 2022 12:56:17 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Paul Menzel <pmenzel@molgen.mpg.de>
-Cc:     Josh Triplett <josh@joshtriplett.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Zhouyi Zhou <zhouzhouyi@gmail.com>, rcu@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] torture: Make thread detection more robust by using
- lspcu
-Message-ID: <20220224205617.GY4285@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20220222120718.17141-1-pmenzel@molgen.mpg.de>
- <20220222120718.17141-2-pmenzel@molgen.mpg.de>
- <20220222174328.GL4285@paulmck-ThinkPad-P17-Gen-1>
- <1084da08-f67d-b5d7-add4-580e9246b7b7@molgen.mpg.de>
+        Thu, 24 Feb 2022 16:03:05 -0500
+Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 762451D0872
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 13:02:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645736555; x=1677272555;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=OwvC37VirumM1fJMqmprYtoSJKo3Nw2N+GUScVuHfBU=;
+  b=ahXFfYbt0OQKOZ0TRUfZxBpi+MEP0s4uCpG8GhPi0O7JLZHZrUOtuyjt
+   0PCRaC5Aun88UI+un+WqqyHi+GHPjP0zSkjJjfjIDNmqyW/9YvhMJYoGa
+   RE3VsoZZMVI5B9Z7NdxpprzhZVf1b0zMLk27Ee+Mepssj6MBvoMoeXCyM
+   2blHVt1eSQh9gmLeCvfvkU8KQuqPvhrY4dl49NntM1ZOLGHLfI1H2KlPx
+   HkWtkPnGGWRYYZeiI0HSbpac2WLQeNmuvAsWku5dy8QnT/oaaM5G4n8nV
+   0ia2BsKsZbVjgRBBHbMxeM/THyneH9qco/PQaHPA+Mraoij2qrSGPZxLw
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10268"; a="313069873"
+X-IronPort-AV: E=Sophos;i="5.90,134,1643702400"; 
+   d="scan'208";a="313069873"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2022 13:02:34 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,134,1643702400"; 
+   d="scan'208";a="574360441"
+Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 24 Feb 2022 13:02:33 -0800
+Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nNLFx-0003T1-1O; Thu, 24 Feb 2022 21:02:33 +0000
+Date:   Fri, 25 Feb 2022 05:02:15 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [peterz-queue:x86/wip.ibt 13/45]
+ arch/x86/include/asm/segment.h:278:39: error: 'HAS_KERNEL_IBT' undeclared
+ here (not in a function)
+Message-ID: <202202250449.s9pErhtl-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1084da08-f67d-b5d7-add4-580e9246b7b7@molgen.mpg.de>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,114 +62,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 24, 2022 at 09:24:11AM +0100, Paul Menzel wrote:
-> Dear Paul,
-> 
-> 
-> Am 22.02.22 um 18:43 schrieb Paul E. McKenney:
-> > On Tue, Feb 22, 2022 at 01:07:17PM +0100, Paul Menzel wrote:
-> > > For consecutive numbers *lscpu* collapses the output and just shows the
-> > > range with start and end. The processors are numbered that way on POWER8.
-> > > 
-> > >      $ sudo ppc64_cpu --smt=8
-> > >      $ lscpu | grep '^NUMA node'
-> > >      NUMA node(s):                    2
-> > >      NUMA node0 CPU(s):               0-79
-> > >      NUMA node8 CPU(s):               80-159
-> > > 
-> > > This causes the heuristic to detect the number threads per core, looking
-> > > for the number after the first comma, to fail, and QEMU aborts because of
-> > > invalid arguments.
-> > > 
-> > >      $ lscpu | sed -n -e '/^NUMA node0/s/^[^,]*,\([0-9]*\),.*$/\1/p'
-> > >      $
-> > > 
-> > > (Before the last patch, the whole line was returned.)
-> > > 
-> > >      $ lscpu | grep '^NUMA node0' | sed -e 's/^[^,-]*(,|\-)\([0-9]*\),.*$/\1/'
-> > >      NUMA node0 CPU(s):               0-79
-> > > 
-> > > *lscpu* shows the number of threads per core, so use that value directly.
-> > > 
-> > >      $ sudo ppc64_cpu --smt=8
-> > >      $ lscpu | grep 'Thread(s) per core'
-> > >      Thread(s) per core:              8
-> > >      $ sudo ppc64_cpu --smt=off
-> > >      $ lscpu | grep 'Thread(s) per core'
-> > >      Thread(s) per core:              1
-> > > 
-> > > Note, the replaced heuristic is also incorrect for that case, where the
-> > > threads per core are disabled.
-> > > 
-> > >      $ lscpu | sed -n -e '/^NUMA node0/s/^[^,]*,\([0-9]*\),.*$/\1/p'
-> > >      8
-> > > 
-> > > Signed-off-by: Paul Menzel <pmenzel@molgen.mpg.de>
-> > 
-> > Makes sense, and thank you for chasing this down and for the fix!
-> > 
-> > But should this patch and 1/2 be merged?  Or am I confused and they
-> > are somehow affecting two different lines of scripting?
-> 
-> You are right. I guess with 1/2 I just wanted to document clearly, what I
-> learned in #sed@irc.libera.chat, that means, how to avoid using grep, when
-> sed is used.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git x86/wip.ibt
+head:   f9699e5d6e16c00fc73036f591bd64bf35dffb67
+commit: aa795ef63b11db632a0443e077367ab7deb5e285 [13/45] x86/entry: Sprinkle ENDBR dust
+config: i386-randconfig-a003 (https://download.01.org/0day-ci/archive/20220225/202202250449.s9pErhtl-lkp@intel.com/config)
+compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
+reproduce (this is a W=1 build):
+        # https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git/commit/?id=aa795ef63b11db632a0443e077367ab7deb5e285
+        git remote add peterz-queue https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git
+        git fetch --no-tags peterz-queue x86/wip.ibt
+        git checkout aa795ef63b11db632a0443e077367ab7deb5e285
+        # save the config file to linux build tree
+        mkdir build_dir
+        make W=1 O=build_dir ARCH=i386 prepare
 
-Nothing wrong with that!
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-I have merged the two patches as shown below.  Does this work for you?
+All errors (new ones prefixed by >>):
 
-							Thanx, Paul
+   In file included from arch/x86/include/asm/ptrace.h:5,
+                    from arch/x86/include/asm/math_emu.h:5,
+                    from arch/x86/include/asm/processor.h:13,
+                    from arch/x86/include/asm/cpufeature.h:5,
+                    from arch/x86/include/asm/thread_info.h:53,
+                    from include/linux/thread_info.h:60,
+                    from arch/x86/include/asm/preempt.h:7,
+                    from include/linux/preempt.h:78,
+                    from include/linux/spinlock.h:55,
+                    from include/linux/mmzone.h:8,
+                    from include/linux/gfp.h:6,
+                    from include/linux/slab.h:15,
+                    from include/linux/crypto.h:20,
+                    from arch/x86/kernel/asm-offsets.c:9:
+>> arch/x86/include/asm/segment.h:278:39: error: 'HAS_KERNEL_IBT' undeclared here (not in a function)
+     278 | #define EARLY_IDT_HANDLER_SIZE (9 + 4*HAS_KERNEL_IBT)
+         |                                       ^~~~~~~~~~~~~~
+   arch/x86/include/asm/segment.h:290:66: note: in expansion of macro 'EARLY_IDT_HANDLER_SIZE'
+     290 | extern const char early_idt_handler_array[NUM_EXCEPTION_VECTORS][EARLY_IDT_HANDLER_SIZE];
+         |                                                                  ^~~~~~~~~~~~~~~~~~~~~~
+   make[2]: *** [scripts/Makefile.build:121: arch/x86/kernel/asm-offsets.s] Error 1
+   make[2]: Target '__build' not remade because of errors.
+   make[1]: *** [Makefile:1212: prepare0] Error 2
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:219: __sub-make] Error 2
+   make: Target 'prepare' not remade because of errors.
 
-------------------------------------------------------------------------
 
-commit 9f0daba62e958c31326c7a9eae33651e3a3cc6b4
-Author: Paul Menzel <pmenzel@molgen.mpg.de>
-Date:   Tue Feb 22 13:07:16 2022 +0100
+vim +/HAS_KERNEL_IBT +278 arch/x86/include/asm/segment.h
 
-    torture: Make thread detection more robust by using lspcu
-    
-    For consecutive numbers the lscpu command collapses the output and just
-    shows the range with start and end. The processors are numbered that
-    way on POWER8.
-    
-        $ sudo ppc64_cpu --smt=8
-        $ lscpu | grep '^NUMA node'
-        NUMA node(s):                    2
-        NUMA node0 CPU(s):               0-79
-        NUMA node8 CPU(s):               80-159
-    
-    This causes the heuristic to detect the number threads per core, looking
-    for the number after the first comma, to fail, and QEMU aborts because of
-    invalid arguments.
-    
-        $ lscpu | grep '^NUMA node0' | sed -e 's/^[^,-]*(,|\-)\([0-9]*\),.*$/\1/'
-        NUMA node0 CPU(s):               0-79
-    
-    But the lscpu command shows the number of threads per core:
-    
-        $ sudo ppc64_cpu --smt=8
-        $ lscpu | grep 'Thread(s) per core'
-        Thread(s) per core:              8
-        $ sudo ppc64_cpu --smt=off
-        $ lscpu | grep 'Thread(s) per core'
-        Thread(s) per core:              1
-    
-    This commit therefore directly uses that value.
-    
-    Signed-off-by: Paul Menzel <pmenzel@molgen.mpg.de>
-    Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+   270	
+   271	/*
+   272	 * early_idt_handler_array is an array of entry points referenced in the
+   273	 * early IDT.  For simplicity, it's a real array with one entry point
+   274	 * every nine bytes.  That leaves room for an optional 'push $0' if the
+   275	 * vector has no error code (two bytes), a 'push $vector_number' (two
+   276	 * bytes), and a jump to the common entry code (up to five bytes).
+   277	 */
+ > 278	#define EARLY_IDT_HANDLER_SIZE (9 + 4*HAS_KERNEL_IBT)
+   279	
 
-diff --git a/tools/testing/selftests/rcutorture/bin/functions.sh b/tools/testing/selftests/rcutorture/bin/functions.sh
-index c35ba24f994c3..66d0414d8e4bc 100644
---- a/tools/testing/selftests/rcutorture/bin/functions.sh
-+++ b/tools/testing/selftests/rcutorture/bin/functions.sh
-@@ -301,7 +301,7 @@ specify_qemu_cpus () {
- 			echo $2 -smp $3
- 			;;
- 		qemu-system-ppc64)
--			nt="`lscpu | grep '^NUMA node0' | sed -e 's/^[^,]*,\([0-9]*\),.*$/\1/'`"
-+			nt="`lscpu | sed -n 's/^Thread(s) per core:\s*//p'`"
- 			echo $2 -smp cores=`expr \( $3 + $nt - 1 \) / $nt`,threads=$nt
- 			;;
- 		esac
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

@@ -2,91 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F34D4C2C08
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 13:49:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A37A14C2C40
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 13:57:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234537AbiBXMtU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 07:49:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40994 "EHLO
+        id S234575AbiBXM5J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 07:57:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234490AbiBXMtT (ORCPT
+        with ESMTP id S229986AbiBXM5G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 07:49:19 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 294151E2FC0
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 04:48:49 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id DD3E22114E;
-        Thu, 24 Feb 2022 12:48:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1645706927; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=zqhrZTZ5oMSeZ6sL+jtWqsF+SeNGe07XiBRm/i340v8=;
-        b=W/IEkVheYTm1TpUgBC3MP/XwrDGk25FJQrE39BZIn2qVaeypGIDGwJOOF+4N0bKc6tDW6Q
-        0Rt3E8X8i56XNJOz1r6/2BFEkzefvrueZSj7F2xRl+/AvHTOEs+JGd6Xj0NUGEn8XkklGn
-        Yv7J1zImB3Gh3RmLKemjer0Q/vdyRNI=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1645706927;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=zqhrZTZ5oMSeZ6sL+jtWqsF+SeNGe07XiBRm/i340v8=;
-        b=koxjp3gascCNcj2yb8tgzez0/tw/7v9pM64qKSJvRpsN7hwmqICr44i/ZmEz6CRS5gvxnV
-        ExQIzfjOTt/c/NBg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B2DCA13AD9;
-        Thu, 24 Feb 2022 12:48:47 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id NgDoKq9+F2IkDgAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Thu, 24 Feb 2022 12:48:47 +0000
-Message-ID: <8915b858-b46d-0acd-bebd-80a0c9882a7e@suse.cz>
-Date:   Thu, 24 Feb 2022 13:48:47 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Content-Language: en-US
-To:     Hyeonggon Yoo <42.hyeyoo@gmail.com>, linux-mm@kvack.org
-Cc:     Roman Gushchin <guro@fb.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        David Rientjes <rientjes@google.com>,
-        Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>
-References: <20220221105336.522086-1-42.hyeyoo@gmail.com>
- <20220221105336.522086-4-42.hyeyoo@gmail.com>
-From:   Vlastimil Babka <vbabka@suse.cz>
-Subject: Re: [PATCH 3/5] mm/slab: Do not call kmalloc_large() for unsupported
- size
-In-Reply-To: <20220221105336.522086-4-42.hyeyoo@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 24 Feb 2022 07:57:06 -0500
+Received: from gate.crashing.org (gate.crashing.org [63.228.1.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 112F163F1
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 04:56:32 -0800 (PST)
+Received: from gate.crashing.org (localhost.localdomain [127.0.0.1])
+        by gate.crashing.org (8.14.1/8.14.1) with ESMTP id 21OCnCdn002437;
+        Thu, 24 Feb 2022 06:49:12 -0600
+Received: (from segher@localhost)
+        by gate.crashing.org (8.14.1/8.14.1/Submit) id 21OCnBsZ002436;
+        Thu, 24 Feb 2022 06:49:11 -0600
+X-Authentication-Warning: gate.crashing.org: segher set sender to segher@kernel.crashing.org using -f
+Date:   Thu, 24 Feb 2022 06:49:11 -0600
+From:   Segher Boessenkool <segher@kernel.crashing.org>
+To:     Gabriel Paubert <paubert@iram.es>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Kees Cook <keescook@chromium.org>,
+        linux-kernel@vger.kernel.org, Paul Mackerras <paulus@samba.org>,
+        linuxppc-dev@lists.ozlabs.org
+Subject: Re: [PATCH] powerpc/32: Clear volatile regs on syscall exit
+Message-ID: <20220224124911.GL614@gate.crashing.org>
+References: <28b040bd2357a1879df0ca1b74094323f778a472.1645636285.git.christophe.leroy@csgroup.eu> <YhadiVbwao/p2N7o@lt-gp.iram.es> <20220223232739.GJ614@gate.crashing.org> <YhdCAwQ+VfLTslnV@lt-gp.iram.es>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YhdCAwQ+VfLTslnV@lt-gp.iram.es>
+User-Agent: Mutt/1.4.2.3i
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/21/22 11:53, Hyeonggon Yoo wrote:
-> SLAB's kfree() does not support freeing an object that is allocated from
-> kmalloc_large(). Fix this as SLAB do not pass requests larger than
-> KMALLOC_MAX_CACHE_SIZE directly to page allocator.
+Hi!
 
-AFAICS this issue is limited to build-time constant sizes. Might be better
-to make this a build error rather than build-time NULL?
+On Thu, Feb 24, 2022 at 09:29:55AM +0100, Gabriel Paubert wrote:
+> On Wed, Feb 23, 2022 at 05:27:39PM -0600, Segher Boessenkool wrote:
+> > On Wed, Feb 23, 2022 at 09:48:09PM +0100, Gabriel Paubert wrote:
+> > > On Wed, Feb 23, 2022 at 06:11:36PM +0100, Christophe Leroy wrote:
+> > > > +	/* Zero volatile regs that may contain sensitive kernel data */
+> > > > +	li	r0,0
+> > > > +	li	r4,0
+> > > > +	li	r5,0
+> > > > +	li	r6,0
+> > > > +	li	r7,0
+> > > > +	li	r8,0
+> > > > +	li	r9,0
+> > > > +	li	r10,0
+> > > > +	li	r11,0
+> > > > +	li	r12,0
+> > > > +	mtctr	r0
+> > > > +	mtxer	r0
+> > > 
+> > > Here, I'm almost sure that on some processors, it would be better to
+> > > separate mtctr form mtxer. mtxer is typically very expensive (pipeline
+> > > flush) but I don't know what's the best ordering for the average core.
+> > 
+> > mtxer is cheaper than mtctr on many cores :-)
+> 
+> We're speaking of 32 bit here I believe;
 
-> Signed-off-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
+32-bit userland, yes.  Which runs fine on non-ancient cores, too.
+
+> on my (admittedly old) paper
+> copy of PowerPC 604 user's manual, I read in a footnote:
+> 
+> "The mtspr (XER) instruction causes instructions to be flushed when it
+> executes." 
+
+And the 604 has a trivial depth pipeline anyway.
+
+> I know there are probably very few 604 left in the field, but in this
+> case mtspr(xer) looks very much like a superset of isync.
+
+It hasn't been like that for decades.  On the 750 mtxer was execution
+synchronised only already, for example.
+
+> I also just had a look at the documentation of a more widespread core:
+> 
+> https://www.nxp.com/docs/en/reference-manual/MPC7450UM.pdf
+> 
+> and mtspr(xer) is marked as execution and refetch serialized, actually
+> it is the only instruction to have both.
+
+This looks like a late addition (it messes up the table, for example,
+being put after "mtspr (other)").  It also is different from 7400 and
+750 and everything else.  A late bugfix?  Curious :-)
+
+> Maybe there is a subtle difference between "refetch serialization" and
+> "pipeline flush", but in this case please educate me.
+
+There is a subtle difference, but it goes the other way: refetch
+serialisation doesn't stop fetch / flush everything after it, only when
+the instruction completes it rejects everything after it.  So it can
+waste a bit more :-)
+
+> Besides that the back to back mtctr/mtspr(xer) may limit instruction
+> decoding and issuing bandwidth.
+
+It doesn't limit decode or dispatch (not issue fwiw) bandwidth on any
+core I have ever heard of.
+
+> I'd rather move one of them up by a few
+> lines since they can only go to one of the execution units on some
+> (or even most?) cores. This was my main point initially.
+
+I think it is much more beneficial to *not* do these insns than to
+shift them back and forth a cycle.
+
+
+Segher

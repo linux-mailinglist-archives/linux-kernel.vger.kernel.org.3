@@ -2,68 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E30EB4C3341
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 18:11:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A4EF4C3342
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 18:11:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230087AbiBXRKt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 12:10:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50720 "EHLO
+        id S230175AbiBXRL1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 12:11:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229974AbiBXRKo (ORCPT
+        with ESMTP id S229974AbiBXRLR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 12:10:44 -0500
-Received: from mail-oi1-f176.google.com (mail-oi1-f176.google.com [209.85.167.176])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E970B208318;
-        Thu, 24 Feb 2022 09:10:14 -0800 (PST)
-Received: by mail-oi1-f176.google.com with SMTP id 12so3490788oix.12;
-        Thu, 24 Feb 2022 09:10:14 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=fgEt++oBYASgr9TfRFFi+SD8GpomMen+OR/8J8QIuRk=;
-        b=aEtgsn3D2hw4ubfcvUO1S7T3MDR8VuyIdtRpCou6fY3Dz5IUx2ID51fZzT2EnZcZGx
-         zDcQi20F10WvUxTk6375EulMzoQYPk52i+AwGnauA7Lvznh/9udfqS02BDWzMiLoFuoO
-         NbEwBbgEh+SR07YBBmGales/f4A5p4nhMntfjbhhSuHSEYzPQh+P7Ug/Lpm49D4myMbE
-         53wVwmXmFmCs7RQq6s2RIHlJNe8Jq122j+hLLnDrYAP9W3+I99JoI+I0I5/17Og3TQtN
-         a4mwqoq+jShtXDbur/Fr/OhpepOopw+04JhaKaPCTCZJgddMDRQxkwyrANuUlo55Ko4C
-         o7HA==
-X-Gm-Message-State: AOAM532l5MZ8oN76lWCo6g+SFsk9NFROr/hYckN6bappMiQKTxQ+1WkL
-        elOKL3c0vm4dqLSEW1lMMg==
-X-Google-Smtp-Source: ABdhPJyRCb0IydycIC22RD0Zq8josaATMxmz1k/6Q12W3pmTQheLOuZTOB6+D1STwrh453Q5f2LV5w==
-X-Received: by 2002:a05:6870:670e:b0:ce:c0c9:65e with SMTP id gb14-20020a056870670e00b000cec0c9065emr6854697oab.176.1645722614234;
-        Thu, 24 Feb 2022 09:10:14 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id g3-20020a056870e1c300b000d0f502781esm65345oab.22.2022.02.24.09.10.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Feb 2022 09:10:12 -0800 (PST)
-Received: (nullmailer pid 3252581 invoked by uid 1000);
-        Thu, 24 Feb 2022 17:10:11 -0000
-Date:   Thu, 24 Feb 2022 11:10:11 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Guodong Liu <guodong.liu@mediatek.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        linux-mediatek@lists.infradead.org, linux-gpio@vger.kernel.org,
-        Sean Wang <sean.wang@mediatek.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        devicetree@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Sean Wang <sean.wang@kernel.org>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 1/3] dt-bindings: pinctrl: mt8186: add pinctrl file
- and binding document
-Message-ID: <Yhe7876iV+P+z5JM@robh.at.kernel.org>
-References: <20220216032124.28067-1-guodong.liu@mediatek.com>
- <20220216032124.28067-2-guodong.liu@mediatek.com>
+        Thu, 24 Feb 2022 12:11:17 -0500
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 515B8251E68;
+        Thu, 24 Feb 2022 09:10:47 -0800 (PST)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 21OHAW9T049160;
+        Thu, 24 Feb 2022 11:10:32 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1645722632;
+        bh=S2mjOr0Y8RKyDx6kZWYCa3wZ97385sH3NdpLYNxuSGk=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=xtTrob5jSLez6lJT9VF+2EtpoZBjRduO91jho9UKFL7fclCNIKIC8ofDVqe8I8ixl
+         MiQYwEgYGrtMY7dYUrcPOkyvXkyvk/xjLE969yrhJ1mSZ+o1L2cUUdgONlilqKpy7I
+         H5+71gzKjWcDWsUpDIZeYn+r8N4w8oTx31RYHvP8=
+Received: from DLEE115.ent.ti.com (dlee115.ent.ti.com [157.170.170.26])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 21OHAW8E111238
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 24 Feb 2022 11:10:32 -0600
+Received: from DLEE101.ent.ti.com (157.170.170.31) by DLEE115.ent.ti.com
+ (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Thu, 24
+ Feb 2022 11:10:31 -0600
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE101.ent.ti.com
+ (157.170.170.31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Thu, 24 Feb 2022 11:10:32 -0600
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 21OHAVVb106934;
+        Thu, 24 Feb 2022 11:10:31 -0600
+Date:   Thu, 24 Feb 2022 11:10:31 -0600
+From:   Nishanth Menon <nm@ti.com>
+To:     Vignesh Raghavendra <vigneshr@ti.com>
+CC:     Tero Kristo <kristo@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Marc Zyngier <maz@kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 5/5] arm64: dts: ti: Add support for AM62-SK
+Message-ID: <20220224171031.n5hd456zmtezhhdb@debug>
+References: <20220216171815.384377-1-vigneshr@ti.com>
+ <20220216171815.384377-6-vigneshr@ti.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="utf-8"
 Content-Disposition: inline
-In-Reply-To: <20220216032124.28067-2-guodong.liu@mediatek.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220216171815.384377-6-vigneshr@ti.com>
+User-Agent: NeoMutt/20171215
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,17 +70,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 16 Feb 2022 11:21:22 +0800, Guodong Liu wrote:
-> 1. This patch adds pinctrl file for mt8186.
-> 2. This patch adds mt8186 compatible node in binding document.
+On 22:48-20220216, Vignesh Raghavendra wrote:
+> From: Nishanth Menon <nm@ti.com>
 > 
-> Signed-off-by: Guodong Liu <guodong.liu@mediatek.com>
-> ---
->  .../bindings/pinctrl/pinctrl-mt8186.yaml      |  297 +++++
->  include/dt-bindings/pinctrl/mt8186-pinfunc.h  | 1174 +++++++++++++++++
->  2 files changed, 1471 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/pinctrl/pinctrl-mt8186.yaml
->  create mode 100644 include/dt-bindings/pinctrl/mt8186-pinfunc.h
-> 
+> AM62 StarterKit (SK) board is a low cost, small form factor board
+> designed for TI’s AM625 SoC. It supports the following interfaces:
+> * 2 GB DDR4 RAM
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+[...]
+> +
+> +	reserved-memory {
+> +		#address-cells = <2>;
+> +		#size-cells = <2>;
+> +		ranges;
+> +
+> +		secure_tfa_ddr: tfa@9e780000 {
+> +			reg = <0x00 0x9e780000 0x00 0x80000>;
+> +			alignment = <0x1000>;
+> +			no-map;
+> +		};
+> +
+> +		secure_ddr: optee@9e800000 {
+> +			reg = <0x00 0x9e800000 0x00 0x01800000>; /* for OP-TEE */
+> +			alignment = <0x1000>;
+> +			no-map;
+> +		};
+> +
+> +		wkup_r5fss0_core0_dma_memory_region: r5f-dma-memory@a0000000 {
+> +			compatible = "shared-dma-pool";
+> +			reg = <0x00 0xa0000000 0x00 0x200000>;
+> +			no-map;
+> +		};
+
+Hate to bring this up so late in the review cycle.. but:
+
+Could we update this so that we use 0xa0000000 (512MB as the outer
+memory bound) and bring the firmware contiguous to that?
+
+Else, we create a bit of holes in the memory map which will
+create problems eventually as memory fragments.
+
+While it is more optimal for this specific system to move the entire chunk
+towards the far end of 2GB, I do realize that folks do use TI platforms
+as the reference code and a reasonable usage of am62 (assuming gpu,
+display, camera usage) is better done with 512MB.. Though smaller
+systems may exist where further customizations is necessary..
+
+
+-- 
+Regards,
+Nishanth Menon
+Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D

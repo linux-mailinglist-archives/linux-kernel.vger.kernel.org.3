@@ -2,76 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4663C4C3077
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 16:56:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A71B54C306D
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 16:55:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236643AbiBXP42 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 10:56:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41134 "EHLO
+        id S235754AbiBXPz7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 10:55:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233708AbiBXP40 (ORCPT
+        with ESMTP id S236618AbiBXPz5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 10:56:26 -0500
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 950F41C60D9;
-        Thu, 24 Feb 2022 07:55:56 -0800 (PST)
-Received: by mail-wr1-x42d.google.com with SMTP id n14so329029wrq.7;
-        Thu, 24 Feb 2022 07:55:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=iODWQjpfwDqE/Br8oYICu9NFEv90Of96XMHQf2viFYk=;
-        b=BaYLGMDy19kCChj72sx+54gEnmCzKoIlx6L+PwJ5CIP+h4Fx3csRfKu0xmjT5kGZfG
-         3KM05jWO1oGLjOdImPapWscAH9rAR3OlxSAiVC1T1PT3xqpEx74K7j1WxCFWIMTHeeRp
-         JWZ/Mn9KKFWu/geN3u53JpUN1G+DZJ8wuH/ktcMoWwdinFYGDaRzFVSjp+L2PSpTzWij
-         bR0QYr85BXT9n/2SyGmM/4mxkezupZuP8/r6noPXJn9gM7I1Z4uHW7ufzMXr0qk5OGKz
-         ZK5GWsVxJExuDADqmXhbMVZgAB4EZp2QX1OkG93C2S+TGTkld8YBjIrStmlkR8PjpgSV
-         ilLw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=iODWQjpfwDqE/Br8oYICu9NFEv90Of96XMHQf2viFYk=;
-        b=PuOCFd+3CeQgas58Ke+rI+7gVBzpwf4mKAZ5ERYmhbV01PdByUWTHbfZxH3SyjESYO
-         USv9wxFUw6a7HV40RQr4z0bmclyQzFsj095l5y09gXB0E2/GJBcLnDU6JszyW5O2gyY9
-         rU011DXLFnQx9l0h9TeKy5AeuGGRCD5yJTvQAmZeKzypIx3v3PnZ/saV+Pl+oIHwaDd6
-         oJEx9p+jC1EoOz/6/LXDRyIxNh/Rjs8LcMfqJ+RD2sXV63XmkCviaoR5Nuoqc0g3ORJI
-         jvG8d0xinuEHRGcnJ+uh35YLE00M0TnYWmnNM2fHMib10p3cRITm1W/0QzX14xGCOTTU
-         msYA==
-X-Gm-Message-State: AOAM530/U/s5cNITvr/nO1icZLj6SF2WqPjlxGLMXtqDcwaAiVe0Mcoz
-        7ybmu6QT8yZvkG9sTlu3Q4o=
-X-Google-Smtp-Source: ABdhPJwWyrnXPCCtbgfwBkH7qs9CtFBC8t1MENopbNRBxP8vKQfIPJ00hnn8jHDBGhSdOM4kHa/jxQ==
-X-Received: by 2002:adf:c00b:0:b0:1ed:a100:d62 with SMTP id z11-20020adfc00b000000b001eda1000d62mr2703962wre.266.1645718154901;
-        Thu, 24 Feb 2022 07:55:54 -0800 (PST)
-Received: from Ansuel-xps.localdomain ([5.170.140.187])
-        by smtp.gmail.com with ESMTPSA id b11sm4089713wrd.31.2022.02.24.07.55.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Feb 2022 07:55:54 -0800 (PST)
-Date:   Thu, 24 Feb 2022 16:55:17 +0100
-From:   Ansuel Smith <ansuelsmth@gmail.com>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Taniya Das <tdas@codeaurora.org>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 08/16] clk: qcom: gcc-ipq806x: add additional freq nss
- cores
-Message-ID: <YheqZag1q6U8Gx8Y@Ansuel-xps.localdomain>
-References: <20220217235703.26641-1-ansuelsmth@gmail.com>
- <20220217235703.26641-9-ansuelsmth@gmail.com>
- <YhcBpBflfTd5/BNF@builder.lan>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YhcBpBflfTd5/BNF@builder.lan>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        Thu, 24 Feb 2022 10:55:57 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3778217C438
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 07:55:27 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C5A2E61764
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 15:55:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA1E0C340EC;
+        Thu, 24 Feb 2022 15:55:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645718126;
+        bh=QqinqAC468TSKHfPVewQtZrGPuE4gy2uDC9DJz44xt4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=N40eyeImIMne6IsvOpWskvHDWp/1aSFrqsLQecfhnOdC/G5/IU/UeavX9JBh9mau5
+         U49HHzDmkCsiSX1yA4/Tjm1CPaV8Q0DDjnnvV2LUUIM5ssEQhlbEcpFAC2nQU1/yM1
+         PQ9plYsKFK7LOPPheOG+RcWz7jFNZPWxUPHp2j60rkRs6OlzQCw6OtjlW0SWOw5oUd
+         SIgY1raFUrHwTlokFJ3PSpBxWbkW1T/TYq5eiFtkR8w9trxvNydX//RWr/ghkaqC1T
+         hn01CWJh8yu0Qym3jeCul7R1ESY6Vm6u2TaMZST6ZvQnYi//ILROLDYtLAqoLSrl5I
+         Z14BSX/QFF6xQ==
+Date:   Fri, 25 Feb 2022 00:55:20 +0900
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     x86@kernel.org, joao@overdrivepizza.com, hjl.tools@gmail.com,
+        jpoimboe@redhat.com, andrew.cooper3@citrix.com,
+        linux-kernel@vger.kernel.org, ndesaulniers@google.com,
+        keescook@chromium.org, samitolvanen@google.com,
+        mark.rutland@arm.com, alyssa.milburn@intel.com, mbenes@suse.cz,
+        rostedt@goodmis.org, mhiramat@kernel.org,
+        alexei.starovoitov@gmail.com
+Subject: Re: [PATCH v2 12/39] x86/ibt,ftrace: Search for __fentry__ location
+Message-Id: <20220225005520.c69be2fbdbd28028361792d9@kernel.org>
+In-Reply-To: <20220224151322.714815604@infradead.org>
+References: <20220224145138.952963315@infradead.org>
+        <20220224151322.714815604@infradead.org>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,55 +61,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 23, 2022 at 09:55:16PM -0600, Bjorn Andersson wrote:
-> On Thu 17 Feb 17:56 CST 2022, Ansuel Smith wrote:
-> 
-> > Ipq8065 SoC (an evolution of ipq8064 SoC) contains nss cores that can be
-> > clocked to 800MHz. Add these missing freq to the gcc driver.
-> > 
-> 
-> Do we somehow need to ensure that these new frequencies are only
-> available on 8065?
-> 
-> Regards,
-> Bjorn
->
+Hi Peter,
 
-In theory ipq8064 can run the nss cores to this freq. Do you have any
-suggestion on how to limit these 2 clock to the different compatible?
+On Thu, 24 Feb 2022 15:51:50 +0100
+Peter Zijlstra <peterz@infradead.org> wrote:
 
-> > Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
-> > ---
-> >  drivers/clk/qcom/gcc-ipq806x.c | 4 ++++
-> >  1 file changed, 4 insertions(+)
-> > 
-> > diff --git a/drivers/clk/qcom/gcc-ipq806x.c b/drivers/clk/qcom/gcc-ipq806x.c
-> > index a4bf78fe8678..53a61860063d 100644
-> > --- a/drivers/clk/qcom/gcc-ipq806x.c
-> > +++ b/drivers/clk/qcom/gcc-ipq806x.c
-> > @@ -232,7 +232,9 @@ static struct clk_regmap pll14_vote = {
-> >  
-> >  static struct pll_freq_tbl pll18_freq_tbl[] = {
-> >  	NSS_PLL_RATE(550000000, 44, 0, 1, 0x01495625),
-> > +	NSS_PLL_RATE(600000000, 48, 0, 1, 0x01495625),
-> >  	NSS_PLL_RATE(733000000, 58, 16, 25, 0x014b5625),
-> > +	NSS_PLL_RATE(800000000, 64, 0, 1, 0x01495625),
-> >  };
-> >  
-> >  static struct clk_pll pll18 = {
-> > @@ -2702,7 +2704,9 @@ static const struct freq_tbl clk_tbl_nss[] = {
-> >  	{ 110000000, P_PLL18, 1, 1, 5 },
-> >  	{ 275000000, P_PLL18, 2, 0, 0 },
-> >  	{ 550000000, P_PLL18, 1, 0, 0 },
-> > +	{ 600000000, P_PLL18, 1, 0, 0 },
-> >  	{ 733000000, P_PLL18, 1, 0, 0 },
-> > +	{ 800000000, P_PLL18, 1, 0, 0 },
-> >  	{ }
-> >  };
-> >  
-> > -- 
-> > 2.34.1
-> > 
+> Have ftrace_location() search the symbol for the __fentry__ location
+> when it isn't at func+0 and use this for {,un}register_ftrace_direct().
+> 
+> This avoids a whole bunch of assumptions about __fentry__ being at
+> func+0.
+> 
+> Suggested-by: Steven Rostedt <rostedt@goodmis.org>
+> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> ---
+>  kernel/trace/ftrace.c |   30 ++++++++++++++++++++++++++++--
+>  1 file changed, 28 insertions(+), 2 deletions(-)
+> 
+> --- a/kernel/trace/ftrace.c
+> +++ b/kernel/trace/ftrace.c
+> @@ -1578,7 +1578,24 @@ unsigned long ftrace_location_range(unsi
+>   */
+>  unsigned long ftrace_location(unsigned long ip)
+>  {
+> -	return ftrace_location_range(ip, ip);
+> +	struct dyn_ftrace *rec;
+> +	unsigned long offset;
+> +	unsigned long size;
+> +
+> +	rec = lookup_rec(ip, ip);
+> +	if (!rec) {
+> +		if (!kallsyms_lookup_size_offset(ip, &size, &offset))
+> +			goto out;
+> +
+> +		if (!offset)
+
+Isn't this 'if (offset)' ?
+
+> +			rec = lookup_rec(ip - offset, (ip - offset) + size);
+> +	}
+> +
+> +	if (rec)
+> +		return rec->ip;
+> +
+> +out:
+> +	return 0;
+>  }
+
+Thank you,
+
+>  
+>  /**
+> @@ -5110,11 +5127,16 @@ int register_ftrace_direct(unsigned long
+>  	struct ftrace_func_entry *entry;
+>  	struct ftrace_hash *free_hash = NULL;
+>  	struct dyn_ftrace *rec;
+> -	int ret = -EBUSY;
+> +	int ret = -ENODEV;
+>  
+>  	mutex_lock(&direct_mutex);
+>  
+> +	ip = ftrace_location(ip);
+> +	if (!ip)
+> +		goto out_unlock;
+> +
+>  	/* See if there's a direct function at @ip already */
+> +	ret = -EBUSY;
+>  	if (ftrace_find_rec_direct(ip))
+>  		goto out_unlock;
+>  
+> @@ -5222,6 +5244,10 @@ int unregister_ftrace_direct(unsigned lo
+>  
+>  	mutex_lock(&direct_mutex);
+>  
+> +	ip = ftrace_location(ip);
+> +	if (!ip)
+> +		goto out_unlock;
+> +
+>  	entry = find_direct_entry(&ip, NULL);
+>  	if (!entry)
+>  		goto out_unlock;
+> 
+> 
+
 
 -- 
-	Ansuel
+Masami Hiramatsu <mhiramat@kernel.org>

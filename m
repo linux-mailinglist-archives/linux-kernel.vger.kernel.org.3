@@ -2,140 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C2A24C3066
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 16:54:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4663C4C3077
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 16:56:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235927AbiBXPzO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 10:55:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39782 "EHLO
+        id S236643AbiBXP42 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 10:56:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233573AbiBXPzN (ORCPT
+        with ESMTP id S233708AbiBXP40 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 10:55:13 -0500
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6841616DAEE
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 07:54:43 -0800 (PST)
-Received: by mail-wm1-x330.google.com with SMTP id i19so110330wmq.5
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 07:54:43 -0800 (PST)
+        Thu, 24 Feb 2022 10:56:26 -0500
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 950F41C60D9;
+        Thu, 24 Feb 2022 07:55:56 -0800 (PST)
+Received: by mail-wr1-x42d.google.com with SMTP id n14so329029wrq.7;
+        Thu, 24 Feb 2022 07:55:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:content-language:from:to:cc
-         :subject:content-transfer-encoding;
-        bh=eE6e4wQAtHF1L7R2NE0Y+8YGz+RyJLvQFkmjUWHVwFQ=;
-        b=Hy1HTs7asakAnawD7EmFvZYi00Da0gzkMZbZgXt6YiBra8U+Po9OfoMRf0H5ZrKfxV
-         ybhCk9aLDLA4DcVYsJlsYplukABSrmOmL0klPw2gdn8ZuJizqDJcNeKKTN1KRJRulKcu
-         1paK2BhTEDeAsV5ppN8SGDaU5n0KpqAxOLT7TK3m6E+gjGBfRPXYoJyk2hb0pFT5qGnG
-         WybQm3Nm9U52EYZTpLFMFvXvZj8pc9rr4e+Dt8IMZ+RJ/Dhz9SjCeKa7GOQapDWAGnox
-         WQzim0cglp5hmB1qct9i+6uDjRgblIcht4HmKaXeci09sh6CWagndk0dORDX6iFMsr6k
-         16bw==
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=iODWQjpfwDqE/Br8oYICu9NFEv90Of96XMHQf2viFYk=;
+        b=BaYLGMDy19kCChj72sx+54gEnmCzKoIlx6L+PwJ5CIP+h4Fx3csRfKu0xmjT5kGZfG
+         3KM05jWO1oGLjOdImPapWscAH9rAR3OlxSAiVC1T1PT3xqpEx74K7j1WxCFWIMTHeeRp
+         JWZ/Mn9KKFWu/geN3u53JpUN1G+DZJ8wuH/ktcMoWwdinFYGDaRzFVSjp+L2PSpTzWij
+         bR0QYr85BXT9n/2SyGmM/4mxkezupZuP8/r6noPXJn9gM7I1Z4uHW7ufzMXr0qk5OGKz
+         ZK5GWsVxJExuDADqmXhbMVZgAB4EZp2QX1OkG93C2S+TGTkld8YBjIrStmlkR8PjpgSV
+         ilLw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:from:to:cc:subject:content-transfer-encoding;
-        bh=eE6e4wQAtHF1L7R2NE0Y+8YGz+RyJLvQFkmjUWHVwFQ=;
-        b=t5VG1qPiut8din71dy+pZ5IKZRmQfQzv/fm1bIp5eSnZgpSb+lRKjpkfJLo+rhPl6Z
-         awG82hELmKX8tqfyMY9R+hvLJsdCS8ElxWwmfD/1H6beNjzLcr8IXYcznui71mwzP/yt
-         nplvZQLpiVKWiA9tYgKt1RZv4u/Jt69V/bx8wX1qAWkMdDXqEm6t51rRJBAkTGYtC5oS
-         BmqfYCHLSTykogeIBl2WKsjrku0m7i4NRgDsLKvMVx6cllCJO8rNlTv6eaocKx2/3XUy
-         jf86DYeEK5+dOuQckgpSswVJTcEJLckwGTofOUaWyWGsUSxYgpdjs3+6qbo5R5cXo4/y
-         iI3Q==
-X-Gm-Message-State: AOAM533NMOzgQJ1o0in8v1sIvZegXWbPZGKRias/87XJj/wQUT3y3RXu
-        E035NGpJc6J9p6N9N2o0IBJutA==
-X-Google-Smtp-Source: ABdhPJw/NmZGYgJNf0fg+LWKjCrEwvd+/PSxT2lPdlF1MdV7ONiVR6RNNPcXH0K/ABDbHxs0P1XUKQ==
-X-Received: by 2002:a05:600c:154f:b0:37b:c5cf:40e8 with SMTP id f15-20020a05600c154f00b0037bc5cf40e8mr12300049wmg.27.1645718081837;
-        Thu, 24 Feb 2022 07:54:41 -0800 (PST)
-Received: from ?IPV6:2a01:e34:ed2f:f020:25a:d4d2:9383:c638? ([2a01:e34:ed2f:f020:25a:d4d2:9383:c638])
-        by smtp.googlemail.com with ESMTPSA id e26sm1707988wmh.12.2022.02.24.07.54.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 24 Feb 2022 07:54:40 -0800 (PST)
-Message-ID: <9e3ba314-2030-8385-33ad-6b9a0291e5cd@linaro.org>
-Date:   Thu, 24 Feb 2022 16:54:39 +0100
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=iODWQjpfwDqE/Br8oYICu9NFEv90Of96XMHQf2viFYk=;
+        b=PuOCFd+3CeQgas58Ke+rI+7gVBzpwf4mKAZ5ERYmhbV01PdByUWTHbfZxH3SyjESYO
+         USv9wxFUw6a7HV40RQr4z0bmclyQzFsj095l5y09gXB0E2/GJBcLnDU6JszyW5O2gyY9
+         rU011DXLFnQx9l0h9TeKy5AeuGGRCD5yJTvQAmZeKzypIx3v3PnZ/saV+Pl+oIHwaDd6
+         oJEx9p+jC1EoOz/6/LXDRyIxNh/Rjs8LcMfqJ+RD2sXV63XmkCviaoR5Nuoqc0g3ORJI
+         jvG8d0xinuEHRGcnJ+uh35YLE00M0TnYWmnNM2fHMib10p3cRITm1W/0QzX14xGCOTTU
+         msYA==
+X-Gm-Message-State: AOAM530/U/s5cNITvr/nO1icZLj6SF2WqPjlxGLMXtqDcwaAiVe0Mcoz
+        7ybmu6QT8yZvkG9sTlu3Q4o=
+X-Google-Smtp-Source: ABdhPJwWyrnXPCCtbgfwBkH7qs9CtFBC8t1MENopbNRBxP8vKQfIPJ00hnn8jHDBGhSdOM4kHa/jxQ==
+X-Received: by 2002:adf:c00b:0:b0:1ed:a100:d62 with SMTP id z11-20020adfc00b000000b001eda1000d62mr2703962wre.266.1645718154901;
+        Thu, 24 Feb 2022 07:55:54 -0800 (PST)
+Received: from Ansuel-xps.localdomain ([5.170.140.187])
+        by smtp.gmail.com with ESMTPSA id b11sm4089713wrd.31.2022.02.24.07.55.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Feb 2022 07:55:54 -0800 (PST)
+Date:   Thu, 24 Feb 2022 16:55:17 +0100
+From:   Ansuel Smith <ansuelsmth@gmail.com>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Taniya Das <tdas@codeaurora.org>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 08/16] clk: qcom: gcc-ipq806x: add additional freq nss
+ cores
+Message-ID: <YheqZag1q6U8Gx8Y@Ansuel-xps.localdomain>
+References: <20220217235703.26641-1-ansuelsmth@gmail.com>
+ <20220217235703.26641-9-ansuelsmth@gmail.com>
+ <YhcBpBflfTd5/BNF@builder.lan>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Content-Language: en-US
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     Linux PM mailing list <linux-pm@vger.kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: [GIT PULL] dtpm for v5.18-rc1
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YhcBpBflfTd5/BNF@builder.lan>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Feb 23, 2022 at 09:55:16PM -0600, Bjorn Andersson wrote:
+> On Thu 17 Feb 17:56 CST 2022, Ansuel Smith wrote:
+> 
+> > Ipq8065 SoC (an evolution of ipq8064 SoC) contains nss cores that can be
+> > clocked to 800MHz. Add these missing freq to the gcc driver.
+> > 
+> 
+> Do we somehow need to ensure that these new frequencies are only
+> available on 8065?
+> 
+> Regards,
+> Bjorn
+>
 
-The following changes since commit 26291c54e111ff6ba87a164d85d4a4e134b7315c:
+In theory ipq8064 can run the nss cores to this freq. Do you have any
+suggestion on how to limit these 2 clock to the different compatible?
 
-   Linux 5.17-rc2 (2022-01-30 15:37:07 +0200)
-
-are available in the Git repository at:
-
-   https://git.linaro.org/people/daniel.lezcano/linux.git tags/dtpm-v5.18
-
-for you to fetch changes up to f1ebef9e55f3c49063b575e97d2019832b8f8ef9:
-
-   dtpm/soc/rk3399: Add the ability to unload the module (2022-02-23 
-19:46:29 +0100)
-
-----------------------------------------------------------------
-- Added dtpm hierarchy description (Daniel Lezcano)
-
-- Changed the locking scheme (Daniel Lezcano)
-
-- Fixed dtpm_cpu cleanup at exit time and missing virtual dtpm pointer
-   release (Daniel Lezcano)
-
-----------------------------------------------------------------
-Daniel Lezcano (12):
-       powercap/drivers/dtpm: Convert the init table section to a simple 
-array
-       powercap/drivers/dtpm: Add hierarchy creation
-       powercap/drivers/dtpm: Add CPU DT initialization support
-       powercap/drivers/dtpm: Add dtpm devfreq with energy model support
-       rockchip/soc/drivers: Add DTPM description for rk3399
-       powercap/dtpm: Change locking scheme
-       powercap/dtpm_cpu: Reset per_cpu variable in the release function
-       powercap/dtpm: Fixup kfree for virtual node
-       powercap/dtpm: Destroy hierarchy function
-       powercap/dtpm: Move the 'root' reset place
-       powercap/dtpm_cpu: Add exit function
-       dtpm/soc/rk3399: Add the ability to unload the module
-
-  drivers/powercap/Kconfig          |   8 ++++++
-  drivers/powercap/Makefile         |   1 +
-  drivers/powercap/dtpm.c           | 333 
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++---------------------------------------------------
-  drivers/powercap/dtpm_cpu.c       |  55 
-+++++++++++++++++++++++++++++++++-----
-  drivers/powercap/dtpm_devfreq.c   | 203 
-++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-  drivers/powercap/dtpm_subsys.h    |  22 ++++++++++++++++
-  drivers/soc/rockchip/Kconfig      |   8 ++++++
-  drivers/soc/rockchip/Makefile     |   1 +
-  drivers/soc/rockchip/dtpm.c       |  65 
-+++++++++++++++++++++++++++++++++++++++++++++
-  include/asm-generic/vmlinux.lds.h |  11 --------
-  include/linux/dtpm.h              |  36 ++++++++++++-------------
-  11 files changed, 634 insertions(+), 109 deletions(-)
-  create mode 100644 drivers/powercap/dtpm_devfreq.c
-  create mode 100644 drivers/powercap/dtpm_subsys.h
-  create mode 100644 drivers/soc/rockchip/dtpm.c
-
-
+> > Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
+> > ---
+> >  drivers/clk/qcom/gcc-ipq806x.c | 4 ++++
+> >  1 file changed, 4 insertions(+)
+> > 
+> > diff --git a/drivers/clk/qcom/gcc-ipq806x.c b/drivers/clk/qcom/gcc-ipq806x.c
+> > index a4bf78fe8678..53a61860063d 100644
+> > --- a/drivers/clk/qcom/gcc-ipq806x.c
+> > +++ b/drivers/clk/qcom/gcc-ipq806x.c
+> > @@ -232,7 +232,9 @@ static struct clk_regmap pll14_vote = {
+> >  
+> >  static struct pll_freq_tbl pll18_freq_tbl[] = {
+> >  	NSS_PLL_RATE(550000000, 44, 0, 1, 0x01495625),
+> > +	NSS_PLL_RATE(600000000, 48, 0, 1, 0x01495625),
+> >  	NSS_PLL_RATE(733000000, 58, 16, 25, 0x014b5625),
+> > +	NSS_PLL_RATE(800000000, 64, 0, 1, 0x01495625),
+> >  };
+> >  
+> >  static struct clk_pll pll18 = {
+> > @@ -2702,7 +2704,9 @@ static const struct freq_tbl clk_tbl_nss[] = {
+> >  	{ 110000000, P_PLL18, 1, 1, 5 },
+> >  	{ 275000000, P_PLL18, 2, 0, 0 },
+> >  	{ 550000000, P_PLL18, 1, 0, 0 },
+> > +	{ 600000000, P_PLL18, 1, 0, 0 },
+> >  	{ 733000000, P_PLL18, 1, 0, 0 },
+> > +	{ 800000000, P_PLL18, 1, 0, 0 },
+> >  	{ }
+> >  };
+> >  
+> > -- 
+> > 2.34.1
+> > 
 
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+	Ansuel

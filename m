@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EE9D4C30CF
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 17:03:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BDB04C30DD
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 17:03:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232776AbiBXQDa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 11:03:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45154 "EHLO
+        id S232430AbiBXQDd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 11:03:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229807AbiBXQDY (ORCPT
+        with ESMTP id S230079AbiBXQDZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 11:03:24 -0500
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 214161A270F;
+        Thu, 24 Feb 2022 11:03:25 -0500
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2159A1A2778;
         Thu, 24 Feb 2022 08:02:45 -0800 (PST)
-Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 21OFqe5j018312;
-        Thu, 24 Feb 2022 17:02:11 +0100
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 21OCTEnC032636;
+        Thu, 24 Feb 2022 17:02:12 +0100
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=selector1;
- bh=UIStS2YTt1T7LrNscNo2b+4wp8dBm8Ks5KrvwGSzTzQ=;
- b=NR5/kCOfpCuAicadTXf2g7fqXp50GxIiKnFwQbGmZ7GXHxUnkLpJu0ybOGIdgCk471W7
- y9zQSukn5609nkYcVYYMPoUqVqv75z3a3M8jJPAyojZ+swIxBFBv2Vstvyi8kPP97MjY
- U2/BkmAOMPGYewHCZZfFQPnyzRzKVbMaQS9KzK/nZGLdU5GCZE6K4HTOKr9d7IPTD7zq
- RZArsaG1ZPOTfGZcj+j8RfWmFQalyfBx243iMoBMxx831ceqR1gSox8/eoG8aSZqMyGU
- TFk3ZsgqbqDrZsktnG6vQwOZTu8vAyDkzf0P7/ywNCa5s24qJmFhBJKVxZCmN4aiAHy9 Ug== 
+ bh=BwCNzsJ9PxyLQNaGsXq+tfOpWqHh+TR8gmKWBgTxFsc=;
+ b=X6Q5shjcvNfQDeu4XRCJ5AVCrbZ2/Ef8QInNbjjQZQdmGCItBTdczRssz5FfFbL8C3uI
+ v9V8MfPmq3zNcGxRketd8ZkZGeFo+OfE7kv8ARK3GN6LHsB/2JAtDIOXSanOP/IDsidN
+ BQzHtwlhOUAO0WP7eUJlaCegNhdfwl42vo7FVn2hf1pHvB3fFMlTWmbGcjOvaKcBPeCL
+ BJZtwxCw7fwK7J0H/aDBw6ydaWGg8xgAbLZPotSuReuE+dwRzwca5lBblkqgwUfAXCqo
+ UGAng3tX/+1QvW1HIyAtvf06rrOF82Eyj2Cpga7K9B4vEF4VhdQXHKcvlU4bXl8OP15q aA== 
 Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3ee7tka6vf-1
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3ee5x03699-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 24 Feb 2022 17:02:11 +0100
+        Thu, 24 Feb 2022 17:02:12 +0100
 Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 0070A10002A;
-        Thu, 24 Feb 2022 17:02:10 +0100 (CET)
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 87027100034;
+        Thu, 24 Feb 2022 17:02:11 +0100 (CET)
 Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id E143622A6FC;
-        Thu, 24 Feb 2022 17:02:10 +0100 (CET)
-Received: from localhost (10.75.127.51) by SFHDAG2NODE2.st.com (10.75.127.5)
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 7420D22A6FC;
+        Thu, 24 Feb 2022 17:02:11 +0100 (CET)
+Received: from localhost (10.75.127.50) by SFHDAG2NODE2.st.com (10.75.127.5)
  with Microsoft SMTP Server (TLS) id 15.0.1497.26; Thu, 24 Feb 2022 17:02:10
  +0100
 From:   <gabriel.fernandez@foss.st.com>
@@ -53,17 +53,17 @@ CC:     <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>,
         <linux-stm32@st-md-mailman.stormreply.com>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-kernel@vger.kernel.org>
-Subject: [PATCH 03/13] clk: stm32mp13: add stm32_mux clock management
-Date:   Thu, 24 Feb 2022 17:01:31 +0100
-Message-ID: <20220224160141.455881-4-gabriel.fernandez@foss.st.com>
+Subject: [PATCH 04/13] clk: stm32mp13: add stm32_gate management
+Date:   Thu, 24 Feb 2022 17:01:32 +0100
+Message-ID: <20220224160141.455881-5-gabriel.fernandez@foss.st.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220224160141.455881-1-gabriel.fernandez@foss.st.com>
 References: <20220224160141.455881-1-gabriel.fernandez@foss.st.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Originating-IP: [10.75.127.51]
-X-ClientProxiedBy: SFHDAG2NODE1.st.com (10.75.127.4) To SFHDAG2NODE2.st.com
+X-Originating-IP: [10.75.127.50]
+X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SFHDAG2NODE2.st.com
  (10.75.127.5)
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
@@ -79,95 +79,147 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
 
-Just to introduce management of a stm32 mux clock.
+Just to introduce management of a stm32 gate clock.
 
+Change-Id: I9c823f2742e8680bc131adcb854ad50ee66e682b
 Signed-off-by: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
 ---
- drivers/clk/stm32/clk-stm32-core.c | 79 ++++++++++++++++++++++++++++++
- drivers/clk/stm32/clk-stm32-core.h | 34 +++++++++++++
- drivers/clk/stm32/clk-stm32mp13.c  | 11 +++++
- 3 files changed, 124 insertions(+)
+ drivers/clk/stm32/clk-stm32-core.c | 124 +++++++++++++++++++++++++++++
+ drivers/clk/stm32/clk-stm32-core.h |  37 +++++++++
+ drivers/clk/stm32/clk-stm32mp13.c  |   6 ++
+ 3 files changed, 167 insertions(+)
 
 diff --git a/drivers/clk/stm32/clk-stm32-core.c b/drivers/clk/stm32/clk-stm32-core.c
-index 0fab4a5a8c66..f34659625aff 100644
+index f34659625aff..91eae0386e5e 100644
 --- a/drivers/clk/stm32/clk-stm32-core.c
 +++ b/drivers/clk/stm32/clk-stm32-core.c
-@@ -91,3 +91,82 @@ int stm32_rcc_init(struct device *dev, const struct of_device_id *match_data,
- 
+@@ -92,6 +92,109 @@ int stm32_rcc_init(struct device *dev, const struct of_device_id *match_data,
  	return 0;
  }
-+
-+u8 clk_stm32_get_parent_mux(void __iomem *base,
-+			    struct clk_stm32_clock_data *data,
-+			    u16 mux_id)
+ 
++void clk_stm32_endisable_gate(void __iomem *base,
++			      struct clk_stm32_clock_data *data,
++			      u16 gate_id, int enable)
 +{
-+	const struct stm32_mux_cfg *mux = &data->muxes[mux_id];
-+	u32 mask = BIT(mux->width) - 1;
-+	u32 val;
++	const struct stm32_gate_cfg *gate = &data->gates[gate_id];
++	void __iomem *addr = base + gate->offset;
 +
-+	val = readl(base + mux->offset) >> mux->shift;
-+	val &= mask;
++	if (enable) {
++		if (data->gate_cpt[gate_id]++ > 0)
++			return;
 +
-+	return val;
++		if (gate->set_clr != 0)
++			writel(BIT(gate->bit_idx), addr);
++		else
++			writel(readl(addr) | BIT(gate->bit_idx), addr);
++	} else {
++		if (--data->gate_cpt[gate_id] > 0)
++			return;
++
++		if (gate->set_clr != 0)
++			writel(BIT(gate->bit_idx), addr + gate->set_clr);
++		else
++			writel(readl(addr) & ~BIT(gate->bit_idx), addr);
++	}
 +}
 +
-+int clk_stm32_set_parent_mux(void __iomem *base,
-+			     struct clk_stm32_clock_data *data,
-+			     u16 mux_id, u8 index)
++void clk_stm32_disable_unused_gate(void __iomem *base,
++				   struct clk_stm32_clock_data *data,
++				   u16 gate_id)
 +{
-+	const struct stm32_mux_cfg *mux = &data->muxes[mux_id];
++	const struct stm32_gate_cfg *gate = &data->gates[gate_id];
++	void __iomem *addr = base + gate->offset;
 +
-+	u32 mask = BIT(mux->width) - 1;
-+	u32 reg = readl(base + mux->offset);
-+	u32 val = index << mux->shift;
++	if (data->gate_cpt[gate_id] > 0)
++		return;
 +
-+	reg &= ~(mask << mux->shift);
-+	reg |= val;
-+
-+	writel(reg, base + mux->offset);
-+
-+	return 0;
++	if (gate->set_clr != 0)
++		writel(BIT(gate->bit_idx), addr + gate->set_clr);
++	else
++		writel(readl(addr) & ~BIT(gate->bit_idx), addr);
 +}
 +
-+u8 clk_stm32_mux_get_parent(struct clk_hw *hw)
++int clk_stm32_is_enabled_gate(void __iomem *base,
++			      struct clk_stm32_clock_data *data,
++			      u16 gate_id)
 +{
-+	struct clk_stm32_mux *mux = to_clk_stm32_mux(hw);
++	const struct stm32_gate_cfg *gate = &data->gates[gate_id];
 +
-+	return clk_stm32_get_parent_mux(mux->base, mux->clock_data, mux->mux_id);
++	return (readl(base + gate->offset) & BIT(gate->bit_idx)) != 0;
 +}
 +
-+int clk_stm32_mux_set_parent(struct clk_hw *hw, u8 index)
++void clk_stm32_gate_endisable(struct clk_hw *hw, int enable)
 +{
-+	struct clk_stm32_mux *mux = to_clk_stm32_mux(hw);
++	struct clk_stm32_gate *gate = to_clk_stm32_gate(hw);
 +	unsigned long flags = 0;
 +
-+	spin_lock_irqsave(mux->lock, flags);
++	spin_lock_irqsave(gate->lock, flags);
 +
-+	clk_stm32_set_parent_mux(mux->base, mux->clock_data, mux->mux_id, index);
++	clk_stm32_endisable_gate(gate->base, gate->clock_data,
++				 gate->gate_id, enable);
 +
-+	spin_unlock_irqrestore(mux->lock, flags);
++	spin_unlock_irqrestore(gate->lock, flags);
++}
++
++int clk_stm32_gate_enable(struct clk_hw *hw)
++{
++	clk_stm32_gate_endisable(hw, 1);
 +
 +	return 0;
 +}
 +
-+const struct clk_ops clk_stm32_mux_ops = {
-+	.get_parent	= clk_stm32_mux_get_parent,
-+	.set_parent	= clk_stm32_mux_set_parent,
++void clk_stm32_gate_disable(struct clk_hw *hw)
++{
++	clk_stm32_gate_endisable(hw, 0);
++}
++
++int clk_stm32_gate_is_enabled(struct clk_hw *hw)
++{
++	struct clk_stm32_gate *gate = to_clk_stm32_gate(hw);
++
++	return clk_stm32_is_enabled_gate(gate->base, gate->clock_data,
++					 gate->gate_id);
++}
++
++void clk_stm32_gate_disable_unused(struct clk_hw *hw)
++{
++	struct clk_stm32_gate *gate = to_clk_stm32_gate(hw);
++	unsigned long flags = 0;
++
++	spin_lock_irqsave(gate->lock, flags);
++
++	clk_stm32_disable_unused_gate(gate->base, gate->clock_data, gate->gate_id);
++
++	spin_unlock_irqrestore(gate->lock, flags);
++}
++
++const struct clk_ops clk_stm32_gate_ops = {
++	.enable		= clk_stm32_gate_enable,
++	.disable	= clk_stm32_gate_disable,
++	.is_enabled	= clk_stm32_gate_is_enabled,
++	.disable_unused	= clk_stm32_gate_disable_unused,
 +};
 +
-+struct clk_hw *clk_stm32_mux_register(struct device *dev,
-+				      const struct stm32_rcc_match_data *data,
-+				      void __iomem *base,
-+				      spinlock_t *lock,
-+				      const struct clock_config *cfg)
+ u8 clk_stm32_get_parent_mux(void __iomem *base,
+ 			    struct clk_stm32_clock_data *data,
+ 			    u16 mux_id)
+@@ -150,6 +253,27 @@ const struct clk_ops clk_stm32_mux_ops = {
+ 	.set_parent	= clk_stm32_mux_set_parent,
+ };
+ 
++struct clk_hw *clk_stm32_gate_register(struct device *dev,
++				       const struct stm32_rcc_match_data *data,
++				       void __iomem *base,
++				       spinlock_t *lock,
++				       const struct clock_config *cfg)
 +{
-+	struct clk_stm32_mux *mux = cfg->clock_cfg;
-+	struct clk_hw *hw = &mux->hw;
++	struct clk_stm32_gate *gate = cfg->clock_cfg;
++	struct clk_hw *hw = &gate->hw;
 +	int err;
 +
-+	mux->base = base;
-+	mux->lock = lock;
-+	mux->clock_data = data->clock_data;
++	gate->base = base;
++	gate->lock = lock;
++	gate->clock_data = data->clock_data;
 +
 +	err = clk_hw_register(dev, hw);
 +	if (err)
@@ -175,75 +227,98 @@ index 0fab4a5a8c66..f34659625aff 100644
 +
 +	return hw;
 +}
++
+ struct clk_hw *clk_stm32_mux_register(struct device *dev,
+ 				      const struct stm32_rcc_match_data *data,
+ 				      void __iomem *base,
 diff --git a/drivers/clk/stm32/clk-stm32-core.h b/drivers/clk/stm32/clk-stm32-core.h
-index 519723ae97eb..7c9f503d3388 100644
+index 7c9f503d3388..1b4a73556512 100644
 --- a/drivers/clk/stm32/clk-stm32-core.h
 +++ b/drivers/clk/stm32/clk-stm32-core.h
-@@ -83,10 +83,44 @@ int stm32_rcc_init(struct device *dev, const struct of_device_id *match_data,
- /* DIV define */
+@@ -84,6 +84,16 @@ int stm32_rcc_init(struct device *dev, const struct of_device_id *match_data,
  #define DIV_NO_RDY		0xFF
  
-+/* Definition of clock structure */
-+struct clk_stm32_mux {
-+	u16 mux_id;
+ /* Definition of clock structure */
++struct clk_stm32_gate {
++	u16 gate_id;
 +	struct clk_hw hw;
 +	void __iomem *base;
 +	struct clk_stm32_clock_data *clock_data;
 +	spinlock_t *lock; /* spin lock */
 +};
 +
-+#define to_clk_stm32_mux(_hw) container_of(_hw, struct clk_stm32_mux, hw)
++#define to_clk_stm32_gate(_hw) container_of(_hw, struct clk_stm32_gate, hw)
 +
-+/* Clock ops */
-+u8 clk_stm32_get_parent_mux(void __iomem *base,
-+			    struct clk_stm32_clock_data *data, u16 mux_id);
+ struct clk_stm32_mux {
+ 	u16 mux_id;
+ 	struct clk_hw hw;
+@@ -95,6 +105,22 @@ struct clk_stm32_mux {
+ #define to_clk_stm32_mux(_hw) container_of(_hw, struct clk_stm32_mux, hw)
+ 
+ /* Clock ops */
++void clk_stm32_endisable_gate(void __iomem *base,
++			      struct clk_stm32_clock_data *data,
++			      u16 gate_id, int enable);
++void clk_stm32_disable_unused_gate(void __iomem *base,
++				   struct clk_stm32_clock_data *data,
++				   u16 gate_id);
++int clk_stm32_is_enabled_gate(void __iomem *base,
++			      struct clk_stm32_clock_data *data,
++			      u16 gate_id);
 +
-+int clk_stm32_set_parent_mux(void __iomem *base,
-+			     struct clk_stm32_clock_data *data, u16 mux_id,
-+			     u8 index);
++void clk_stm32_gate_endisable(struct clk_hw *hw, int enable);
++int clk_stm32_gate_enable(struct clk_hw *hw);
++void clk_stm32_gate_disable(struct clk_hw *hw);
++int clk_stm32_gate_is_enabled(struct clk_hw *hw);
++void clk_stm32_gate_disable_unused(struct clk_hw *hw);
 +
-+u8 clk_stm32_mux_get_parent(struct clk_hw *hw);
-+int clk_stm32_mux_set_parent(struct clk_hw *hw, u8 index);
-+
-+extern const struct clk_ops clk_stm32_mux_ops;
-+
+ u8 clk_stm32_get_parent_mux(void __iomem *base,
+ 			    struct clk_stm32_clock_data *data, u16 mux_id);
+ 
+@@ -105,9 +131,16 @@ int clk_stm32_set_parent_mux(void __iomem *base,
+ u8 clk_stm32_mux_get_parent(struct clk_hw *hw);
+ int clk_stm32_mux_set_parent(struct clk_hw *hw, u8 index);
+ 
++extern const struct clk_ops clk_stm32_gate_ops;
+ extern const struct clk_ops clk_stm32_mux_ops;
+ 
  /* Clock registering */
-+struct clk_hw *clk_stm32_mux_register(struct device *dev,
-+				      const struct stm32_rcc_match_data *data,
-+				      void __iomem *base,
-+				      spinlock_t *lock,
-+				      const struct clock_config *cfg);
++struct clk_hw *clk_stm32_gate_register(struct device *dev,
++				       const struct stm32_rcc_match_data *data,
++				       void __iomem *base,
++				       spinlock_t *lock,
++				       const struct clock_config *cfg);
 +
- #define STM32_CLOCK_CFG(_binding, _clk, _struct, _register)\
- {\
- 	.id		= (_binding),\
- 	.clock_cfg	= (_struct) {_clk},\
+ struct clk_hw *clk_stm32_mux_register(struct device *dev,
+ 				      const struct stm32_rcc_match_data *data,
+ 				      void __iomem *base,
+@@ -121,6 +154,10 @@ struct clk_hw *clk_stm32_mux_register(struct device *dev,
  	.func		= (_register),\
  }
+ 
++#define STM32_GATE_CFG(_binding, _clk)\
++	STM32_CLOCK_CFG(_binding, &(_clk), struct clk_stm32_gate *,\
++			&clk_stm32_gate_register)
 +
-+#define STM32_MUX_CFG(_binding, _clk)\
-+	STM32_CLOCK_CFG(_binding, &(_clk), struct clk_stm32_mux *,\
-+			&clk_stm32_mux_register)
+ #define STM32_MUX_CFG(_binding, _clk)\
+ 	STM32_CLOCK_CFG(_binding, &(_clk), struct clk_stm32_mux *,\
+ 			&clk_stm32_mux_register)
 diff --git a/drivers/clk/stm32/clk-stm32mp13.c b/drivers/clk/stm32/clk-stm32mp13.c
-index 6908c2fcd594..89d4e039e4e6 100644
+index 89d4e039e4e6..24c0c9ff3602 100644
 --- a/drivers/clk/stm32/clk-stm32mp13.c
 +++ b/drivers/clk/stm32/clk-stm32mp13.c
-@@ -400,7 +400,18 @@ static const struct stm32_mux_cfg stm32mp13_muxes[] = {
- 	CFG_MUX(MUX_SDMMC2,	RCC_SDMMC12CKSELR,	3, 3),
+@@ -410,8 +410,14 @@ static struct clk_stm32_mux ck_ker_eth1 = {
+ 				       CLK_OPS_PARENT_ENABLE | CLK_SET_RATE_NO_REPARENT),
  };
  
-+static const char * const eth12_src[] = {
-+	"pll4_p", "pll3_q"
-+};
-+
-+static struct clk_stm32_mux ck_ker_eth1 = {
-+	.mux_id = MUX_ETH1,
-+	.hw.init = CLK_HW_INIT_PARENTS("ck_ker_eth1", eth12_src, &clk_stm32_mux_ops,
-+				       CLK_OPS_PARENT_ENABLE | CLK_SET_RATE_NO_REPARENT),
++static struct clk_stm32_gate eth1ck_k = {
++	.gate_id = GATE_ETH1CK,
++	.hw.init = CLK_HW_INIT_HW("eth1ck_k", &ck_ker_eth1.hw, &clk_stm32_gate_ops, 0),
 +};
 +
  static const struct clock_config stm32mp13_clock_cfg[] = {
-+	STM32_MUX_CFG(NO_ID, ck_ker_eth1),
+ 	STM32_MUX_CFG(NO_ID, ck_ker_eth1),
++	STM32_GATE_CFG(ETH1CK_K, eth1ck_k),
  };
  
  u16 stm32mp13_cpt_gate[GATE_NB];

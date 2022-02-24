@@ -2,86 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5AFC4C2FAA
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 16:29:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C94BB4C2FB0
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 16:31:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236022AbiBXP3d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 10:29:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54370 "EHLO
+        id S236119AbiBXP3u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 10:29:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233088AbiBXP3b (ORCPT
+        with ESMTP id S232343AbiBXP3t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 10:29:31 -0500
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B3883388F
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 07:28:59 -0800 (PST)
-Received: by mail-pl1-x629.google.com with SMTP id bd1so1984043plb.13
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 07:28:59 -0800 (PST)
+        Thu, 24 Feb 2022 10:29:49 -0500
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 724091BA14C
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 07:29:19 -0800 (PST)
+Received: by mail-lj1-x22a.google.com with SMTP id bn33so3408864ljb.6
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 07:29:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=VWJVSEVc6yu+iQURcrOYouYc/suTELYQuIE1nRPdups=;
-        b=LQv74hMCwXu94WMaXezc8wryMNsIKIf1H7cEAt1VPvotbA2hrWh2680FFW95tg4va4
-         cO4gm48NkL8MpPRcbx+nYhKE629OfnCo7mpZAK4qSan7nD7NUymd3nW0uFK/hh3WbcJo
-         W0ONMtnowaLMNL6arpS3MFaJFQtLVZTkXpTe2VUoE851SlS+Py5pc4MolDlUZbFLmorW
-         C0M887Wo/sJIiaNEHjLoGA9E6h0PYpVEBJ9/hwFQlyMFT5mA2qm5NwN7SvFBxyKoeC5G
-         0UYL5NsZ9kkg1a1OYOd+zatB0s055UzRXIKWA05ZaW5TFfWrwKnd5f4RRF19Snb3N0yv
-         NK0A==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=EMjz3GUKEught2ePjPyclv4KwRdqwfnECAei6dKW3vI=;
+        b=gFftsX0zxW/J0elk0M3ECgZKjVXIIbavU/YePdhRXkpMslH4BYQQSm30MsSEwKkW+e
+         5AM+QDI2cWeD6mu8dLlaGyL/YBEHISsTs16zDwC2BeOsfXMmL2JvRzaY8+vbjTvQ8HDV
+         g+Yrl5r0cxVFAbHOZ4ReZzoUOeEb54kGl81MzFf7F+yykMW1xmJ49UvdySchA++r9WUt
+         96bluTYY7CZGYQ24S+YJ3CxFuDpopexF88tihcK/fa8VIH8qSoYCAQ0kNvbZjWFOvlWi
+         L2Rx2mXxDcF7a2gyCPz5fr8xPq6yRfMZGortCGXJUfVlWtY17nNRu+lRpHLH/NjvkxDh
+         zVHw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=VWJVSEVc6yu+iQURcrOYouYc/suTELYQuIE1nRPdups=;
-        b=FkraokanbuKPLIbeY9RksqxDMeYTC3mL4fe9fEQ/196i0bksyUwE7iv4qlC0IC+tFX
-         sN+UaDOq8LmBQDUQfkuaib9SDJVdgipCtnp75079tIlt0iidWLBq4R/ek9wsqKIdyjEs
-         cyofWq8qPDhCQjgnmnIAoYw8R48+JHDZI286FgubPzW1Hv14buFYrFis48WEXshN6zKf
-         56jjmRkvAWPceke6cf8xP6yrMdOdwlhXW2+Rp5xg9Lk1K3sOnJQLhAnIDliTFWAMaHNF
-         2a7vWQat2yPkS+WNFBgxMzybhtERrx2X+hNL4LojeYFjIb8Ne5N7XmC/RipzJSTTL+lB
-         undA==
-X-Gm-Message-State: AOAM533D12GqqgrxT8NNJQbmeIJM3ACPVTfOoT839dikTE9O3toGZfd/
-        2tXHVAS805ALUwQB942VFUc+Nsc9skILKg==
-X-Google-Smtp-Source: ABdhPJyKPNnW5mH8giEzV28DtABwB4Or+80/28YosK2mpIOjA1XHrdktFRYzj48oABrn6I2WjUdqEw==
-X-Received: by 2002:a17:902:7403:b0:14f:9f55:f9e6 with SMTP id g3-20020a170902740300b0014f9f55f9e6mr3327796pll.21.1645716538706;
-        Thu, 24 Feb 2022 07:28:58 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id p10sm3869680pfo.209.2022.02.24.07.28.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Feb 2022 07:28:58 -0800 (PST)
-Date:   Thu, 24 Feb 2022 15:28:54 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        Chao Gao <chao.gao@intel.com>
-Subject: Re: [PATCH] KVM: x86: Do not change ICR on write to APIC_SELF_IPI
-Message-ID: <YhekNhrK7VKW1jDV@google.com>
-References: <20220224145403.2254840-1-pbonzini@redhat.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=EMjz3GUKEught2ePjPyclv4KwRdqwfnECAei6dKW3vI=;
+        b=6iZTRTgWV2YHM0pRxDD7/vmGNI+DM+d8OI7QqBLkY+Tk9Hw0v0fRuLHSaUR4RfbiX1
+         J3idj/BiPnWOq+Tvn0tMz2H+HSGoyYCLE0dt/tsVt6eHLaZ01bwKM7mL82avgjbGKSD8
+         CXBX6fkfUONVQddj/w7n/69tyAVxJ28BNW1SvA7Bcqf1E1QWGiMqMxGQAMToNmCCAZhr
+         BoXaeOUnJ9yaMi6iRe4zSJMk5ugWSdOhKAd4RNlm7gfBKT58tENagUg5hkyoV5XuYFJl
+         vzvSZa9/rhHZiKVsueDaZvqBFKElIcly/SkxtnJGmocQZCavrDB/EFCv/eufz6whWMQz
+         AF3A==
+X-Gm-Message-State: AOAM531iLNScUGhkQJCcKLnvy4qh751wvVcnJLagTn7H8wnNOTgifqIM
+        X8uVqJqTMs6+UdMu0ur/s9XZvBr6lDMEZ23i9Eix8Q==
+X-Google-Smtp-Source: ABdhPJyWNQWbKWSU29Xq+LUBZEvcQ2vCZFTH7TFlscZZvLsZwNfmFaJFGMKhd8U6YLb+3JT8tZqkBY/Zm0ZC2XFig0E=
+X-Received: by 2002:a2e:a905:0:b0:246:609b:881e with SMTP id
+ j5-20020a2ea905000000b00246609b881emr2202891ljq.383.1645716557754; Thu, 24
+ Feb 2022 07:29:17 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220224145403.2254840-1-pbonzini@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220217154403.6497-1-wuyun.abel@bytedance.com> <YheiT2pGNDggdFSu@hirez.programming.kicks-ass.net>
+In-Reply-To: <YheiT2pGNDggdFSu@hirez.programming.kicks-ass.net>
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+Date:   Thu, 24 Feb 2022 16:29:06 +0100
+Message-ID: <CAKfTPtB_GGb2eZqWfmKrY3-Z9spN9wzU4pXMGz38bAZu8ExCMQ@mail.gmail.com>
+Subject: Re: [RFC PATCH 0/5] introduce sched-idle balancing
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Abel Wu <wuyun.abel@bytedance.com>,
+        Ben Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Mel Gorman <mgorman@suse.de>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 24, 2022, Paolo Bonzini wrote:
-> Emulating writes to SELF_IPI with a write to ICR has an unwanted side effect:
-> the value of ICR in vAPIC page gets changed.  The lists SELF_IPI as write-only,
-                                                   ^
-						   |- SDM
+On Thu, 24 Feb 2022 at 16:20, Peter Zijlstra <peterz@infradead.org> wrote:
+>
+> On Thu, Feb 17, 2022 at 11:43:56PM +0800, Abel Wu wrote:
+> > Current load balancing is mainly based on cpu capacity
+> > and task util, which makes sense in the POV of overall
+> > throughput. While there still might be some improvement
+> > can be done by reducing number of overloaded cfs rqs if
+> > sched-idle or idle rq exists.
+>
+> I'm much confused, there is an explicit new-idle balancer and a periodic
+> idle balancer already there.
 
-> with no associated MMIO offset, so any write should have no visible side
-> effect in the vAPIC page.
-> 
-> Reported-by: Chao Gao <chao.gao@intel.com>
-> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-> ---
-
-Reviewed-by: Sean Christopherson <seanjc@google.com>
+I agree, You failed to explain why newly_idle and periodic idle load
+balance are not enough and we need this new one

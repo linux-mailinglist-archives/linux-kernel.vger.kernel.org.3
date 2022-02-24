@@ -2,64 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94B924C3118
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 17:17:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E03C94C31C6
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 17:46:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229595AbiBXQRp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 11:17:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35162 "EHLO
+        id S230109AbiBXQqe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 11:46:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbiBXQRn (ORCPT
+        with ESMTP id S229619AbiBXQqd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 11:17:43 -0500
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5339434B5
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 08:17:05 -0800 (PST)
-Received: by mail-yb1-xb36.google.com with SMTP id d21so427281yba.11
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 08:17:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=M6/DsYcMdCQ5Jv7h2HtppDAD63hulQRUnEll08wdM0w=;
-        b=MMxNIcwAG1rEPw9GYtGcc1MbySE+4/aZhxOK9Arfa8JLcnH0cfZ64TEtJey0SODZ7C
-         QBiByPS+i5aydu3vs8H0awLJPCpykYptJU2HmxOfIPQy8vs+fSr3SUJJNxd/KVNH/kNZ
-         gjoFbkx/CDEUSFXXCM5T51pKHiPWXVwYVlaXGo94O4Cmtc1DR+BED9zBq+ATBB0gXAsU
-         9w8HCZaC1ZZAwHI9UCrFptnAwn1x1krO6meiyDfKd7+rSVqIb0MYvV2xW4o0BAq/KmF8
-         q69HHptkg51lHY1WR5Ir2y0+/4WIeubhQ74U4NMz+V9vB19oH7Z86WtRP9Ikzr/QZWt6
-         IMHA==
+        Thu, 24 Feb 2022 11:46:33 -0500
+Received: from mail-oi1-f180.google.com (mail-oi1-f180.google.com [209.85.167.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6437D340D6;
+        Thu, 24 Feb 2022 08:46:03 -0800 (PST)
+Received: by mail-oi1-f180.google.com with SMTP id l25so3315295oic.13;
+        Thu, 24 Feb 2022 08:46:03 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=M6/DsYcMdCQ5Jv7h2HtppDAD63hulQRUnEll08wdM0w=;
-        b=l5YP1j2a4Wc3mrK9T9z2P7rC7TJS6+mba3bwaJpb0ymD8sGu9fg4Yq5f+hMKwzNhnC
-         AfCIFTdouQkmtyGC1m9L2jNB8fGvM9ZYZaPYnDJwxwb8exCQt43WwkWA2ZV1ZP7eiOtD
-         CRCyEFwNLXeC0STEn3/OU8KnA9S+R8hjnC5gQOD3zyLb5XbpwNz5OqtteR906eBHpoKs
-         Y2Y7om1BGDLZEcUZ2ePRobtXcTZ9DByMEHbMC96izqhlxs+L+P+y6vIg8/9sUpUjTwXX
-         3Os0QXz4visYFWVpZTVyuDD+VozCzCFVijmz8JFH/+PRW5MruD63XcYEP2XGl80oTYUH
-         j9Zg==
-X-Gm-Message-State: AOAM533M8o8Q4miZs2J8g+3il4chiA4noOPJjW2d8Ktkk4wGKOpGErD7
-        6L3OVdbxy3x2OuUso7KyqRGdxEzwmjPzHvn+teZNDg==
-X-Google-Smtp-Source: ABdhPJx1PBFTzicPX+FhslEYT6ZwXv/E5aXyEeLEMZmHKuUh6nEpZizMLlaeQ3T+XDiafTBRLEZRxAV7na7hyyARMPw=
-X-Received: by 2002:a25:ad9b:0:b0:624:5db2:2084 with SMTP id
- z27-20020a25ad9b000000b006245db22084mr3073965ybi.132.1645719140249; Thu, 24
- Feb 2022 08:12:20 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=zbkQNmRMiKw/pcrFZH62eSxRpSbb/s9oDkkz3K5wBJ4=;
+        b=6Zc1PZ+6yfLdHeGuod2Sbf8yG/0oDXC7uiwip5liAhFAKut8hWCCeuvbCd9jcCde70
+         FwCEeqrBzKxzNSwClZiPyIZSOffdf5gNEoFBXwvzMcI4OFLnx6ZjRZu/V5I9YyPPHnkF
+         pY05CusdxFnPmVciXK5dpi7NFZ97NelDHRIZevjQwWHrqhhvpNI5hURHOvBTfI9ykWtV
+         cGlwVlcpK7g5lgz1cKh2DF/H5ye85OBof1p7a/NSl55BDvQV47tJqnxRtZRN+nv78A3B
+         CdLK9jdYsFYAiyVuCWJUBKEe3vxbLHynkSZJ+zBTQUm6Djz1ti3v98A6jGuN938jld3z
+         8XUg==
+X-Gm-Message-State: AOAM530h6CXxzuExkE8XzzzXnbrmtoG5h/ZD+a+sVefrJ/fRAOHM3G8x
+        FSIN5MK+ofRLkMcAiSp+CpOJ39/+rg==
+X-Google-Smtp-Source: ABdhPJxUdvQQ74bDVPACbU46SgRLAo662OysqMgqfjKUa3F3TgTNZydiCsoVlSxthTdtiIVIFdbrsg==
+X-Received: by 2002:aca:5c89:0:b0:2d5:18eb:9e6 with SMTP id q131-20020aca5c89000000b002d518eb09e6mr1735362oib.58.1645719172925;
+        Thu, 24 Feb 2022 08:12:52 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id bc16sm1650906oib.26.2022.02.24.08.12.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Feb 2022 08:12:52 -0800 (PST)
+Received: (nullmailer pid 3173677 invoked by uid 1000);
+        Thu, 24 Feb 2022 16:12:50 -0000
+Date:   Thu, 24 Feb 2022 10:12:50 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+Cc:     Jassi Brar <jaswinder.singh@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Linux-ALSA <alsa-devel@alsa-project.org>, tzungbi@google.com,
+        cujomalainey@google.com,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Daniel Baluta <daniel.baluta@nxp.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Chen-Yu Tsai <wenst@chromium.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        sound-open-firmware@alsa-project.org
+Subject: Re: [PATCH v17 1/2] dt-bindings: mailbox: mtk,adsp-mbox: add mtk
+ adsp-mbox document
+Message-ID: <YheugpFub9ArHDyT@robh.at.kernel.org>
+References: <20220224133045.23903-1-allen-kh.cheng@mediatek.com>
+ <20220224133045.23903-2-allen-kh.cheng@mediatek.com>
 MIME-Version: 1.0
-References: <20220223135820.2252470-1-anders.roxell@linaro.org>
- <20220223135820.2252470-2-anders.roxell@linaro.org> <871qzsphfv.fsf@mpe.ellerman.id.au>
-In-Reply-To: <871qzsphfv.fsf@mpe.ellerman.id.au>
-From:   Anders Roxell <anders.roxell@linaro.org>
-Date:   Thu, 24 Feb 2022 17:12:09 +0100
-Message-ID: <CADYN=9L7L7+DOA6qYj4aOgg9rBhOrUCk5b4K5tr6wZ709WpsyA@mail.gmail.com>
-Subject: Re: [PATCH 2/3] powerpc: fix build errors
-To:     Michael Ellerman <mpe@ellerman.id.au>
-Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220224133045.23903-2-allen-kh.cheng@mediatek.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,122 +82,85 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 24 Feb 2022 at 13:39, Michael Ellerman <mpe@ellerman.id.au> wrote:
->
-> Hi Anders,
+On Thu, Feb 24, 2022 at 09:30:44PM +0800, Allen-KH Cheng wrote:
+> From: Allen-KH Cheng <Allen-KH.Cheng@mediatek.com>
+> 
+> This patch adds document for mediatek adsp mbox
+> 
+> Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> ---
+>  .../bindings/mailbox/mtk,adsp-mbox.yaml       | 52 +++++++++++++++++++
+>  1 file changed, 52 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/mailbox/mtk,adsp-mbox.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/mailbox/mtk,adsp-mbox.yaml b/Documentation/devicetree/bindings/mailbox/mtk,adsp-mbox.yaml
+> new file mode 100644
+> index 000000000000..25756837797f
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/mailbox/mtk,adsp-mbox.yaml
+> @@ -0,0 +1,52 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/mailbox/mtk,adsp-mbox.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Mediatek ADSP mailbox
+> +
+> +maintainers:
+> +  - Allen-KH Cheng <Allen-KH.Cheng@mediatek.com>
+> +
+> +description: |
+> +  The MTK ADSP mailbox Inter-Processor Communication (IPC) enables the SoC
+> +  to ommunicate with ADSP by passing messages through two mailbox channels.
+> +  The MTK ADSP mailbox IPC also provides the ability for one processor to
+> +  signal the other processor using interrupts.
+> +
+> +properties:
+> +  compatible:
+> +    items:
+> +      - const: mediatek,mt8195-adsp-mbox
+> +
+> +  "#mbox-cells":
+> +    const: 0
+> +
+> +  reg:
+> +    description:
+> +      Physical address base for dsp mbox registers.
 
-Hi Michael,
+That's fairly obvious. Drop.
 
->
-> Thanks for these, just a few comments below ...
+You need to define how many: 'maxItems: 1'
 
-I will resolve the comments below and resend a v2 shortly.
+> +
+> +  interrupts:
+> +    description:
+> +      adsp mbox interrupt
 
-Cheers,
-Anders
+Same here.
 
->
-> Anders Roxell <anders.roxell@linaro.org> writes:
-> > Building tinyconfig with gcc (Debian 11.2.0-16) and assembler (Debian
-> > 2.37.90.20220207) the following build error shows up:
-> >
-> >  {standard input}: Assembler messages:
-> >  {standard input}:1190: Error: unrecognized opcode: `stbcix'
-> >  {standard input}:1433: Error: unrecognized opcode: `lwzcix'
-> >  {standard input}:1453: Error: unrecognized opcode: `stbcix'
-> >  {standard input}:1460: Error: unrecognized opcode: `stwcix'
-> >  {standard input}:1596: Error: unrecognized opcode: `stbcix'
-> >  ...
-> >
-> > Rework to add assembler directives [1] around the instruction. Going
-> > through the them one by one shows that the changes should be safe.  Like
-> > __get_user_atomic_128_aligned() is only called in p9_hmi_special_emu(),
-> > which according to the name is specific to power9.  And __raw_rm_read*()
-> > are only called in things that are powernv or book3s_hv specific.
-> >
-> > [1] https://sourceware.org/binutils/docs/as/PowerPC_002dPseudo.html#PowerPC_002dPseudo
-> >
-> > Cc: <stable@vger.kernel.org>
-> > Co-developed-by: Arnd Bergmann <arnd@arndb.de>
-> > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> > Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
-> > ---
-> >  arch/powerpc/include/asm/io.h        | 46 +++++++++++++++++++++++-----
-> >  arch/powerpc/include/asm/uaccess.h   |  3 ++
-> >  arch/powerpc/platforms/powernv/rng.c |  6 +++-
-> >  3 files changed, 46 insertions(+), 9 deletions(-)
-> >
-> > diff --git a/arch/powerpc/include/asm/io.h b/arch/powerpc/include/asm/io.h
-> > index beba4979bff9..5ff6dec489f8 100644
-> > --- a/arch/powerpc/include/asm/io.h
-> > +++ b/arch/powerpc/include/asm/io.h
-> > @@ -359,25 +359,37 @@ static inline void __raw_writeq_be(unsigned long v, volatile void __iomem *addr)
-> >   */
-> >  static inline void __raw_rm_writeb(u8 val, volatile void __iomem *paddr)
-> >  {
-> > -     __asm__ __volatile__("stbcix %0,0,%1"
-> > +     __asm__ __volatile__(".machine \"push\"\n"
-> > +                          ".machine \"power6\"\n"
-> > +                          "stbcix %0,0,%1\n"
-> > +                          ".machine \"pop\"\n"
-> >               : : "r" (val), "r" (paddr) : "memory");
->
-> As Segher said it'd be cleaner without the embedded quotes.
->
-> > @@ -441,7 +465,10 @@ static inline unsigned int name(unsigned int port)       \
-> >       unsigned int x;                                 \
-> >       __asm__ __volatile__(                           \
-> >               "sync\n"                                \
-> > +             ".machine \"push\"\n"                   \
-> > +             ".machine \"power6\"\n"                 \
-> >               "0:"    op "    %0,0,%1\n"              \
-> > +             ".machine \"pop\"\n"                    \
-> >               "1:     twi     0,%0,0\n"               \
-> >               "2:     isync\n"                        \
-> >               "3:     nop\n"                          \
-> > @@ -465,7 +492,10 @@ static inline void name(unsigned int val, unsigned int port) \
-> >  {                                                    \
-> >       __asm__ __volatile__(                           \
-> >               "sync\n"                                \
-> > +             ".machine \"push\"\n"                   \
-> > +             ".machine \"power6\"\n"                 \
-> >               "0:" op " %0,0,%1\n"                    \
-> > +             ".machine \"pop\"\n"                    \
-> >               "1:     sync\n"                         \
-> >               "2:\n"                                  \
-> >               EX_TABLE(0b, 2b)                        \
->
-> It's not visible from the diff, but the above two are __do_in_asm and
-> __do_out_asm and are inside an ifdef CONFIG_PPC32.
->
-> AFAICS they're only used for:
->
-> __do_in_asm(_rec_inb, "lbzx")
-> __do_in_asm(_rec_inw, "lhbrx")
-> __do_in_asm(_rec_inl, "lwbrx")
-> __do_out_asm(_rec_outb, "stbx")
-> __do_out_asm(_rec_outw, "sthbrx")
-> __do_out_asm(_rec_outl, "stwbrx")
->
-> Which are all old instructions, so I don't think we need the machine
-> power6 for those two macros?
->
-> > diff --git a/arch/powerpc/platforms/powernv/rng.c b/arch/powerpc/platforms/powernv/rng.c
-> > index b4386714494a..5bf30ef6d928 100644
-> > --- a/arch/powerpc/platforms/powernv/rng.c
-> > +++ b/arch/powerpc/platforms/powernv/rng.c
-> > @@ -43,7 +43,11 @@ static unsigned long rng_whiten(struct powernv_rng *rng, unsigned long val)
-> >       unsigned long parity;
-> >
-> >       /* Calculate the parity of the value */
-> > -     asm ("popcntd %0,%1" : "=r" (parity) : "r" (val));
-> > +     asm (".machine \"push\"\n"
-> > +          ".machine \"power7\"\n"
-> > +          "popcntd %0,%1\n"
-> > +          ".machine \"pop\"\n"
-> > +          : "=r" (parity) : "r" (val));
->
-> This was actually present in an older CPU, but it doesn't really matter,
-> this is fine.
->
-> cheers
+> +
+> +required:
+> +  - compatible
+> +  - "#mbox-cells"
+> +  - reg
+> +  - interrupts
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +
+> +    adsp_mailbox0:mailbox@10816000 {
+> +        compatible = "mediatek,mt8195-adsp-mbox";
+> +        #mbox-cells = <0>;
+> +        reg = <0x10816000 0x1000>;
+> +        interrupts = <GIC_SPI 702 IRQ_TYPE_LEVEL_HIGH 0>;
+> +    };
+> -- 
+> 2.18.0
+> 
+> 

@@ -2,59 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C4724C36B6
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 21:16:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B4764C36C1
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 21:18:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234290AbiBXUPs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 15:15:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41066 "EHLO
+        id S234316AbiBXUTI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 15:19:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230009AbiBXUPq (ORCPT
+        with ESMTP id S234298AbiBXURq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 15:15:46 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDE14278CA0;
-        Thu, 24 Feb 2022 12:15:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645733715; x=1677269715;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=6B/f+27LYRUPDQxWW8vRZGhcXmfz2Oq/sefZhYbxRaM=;
-  b=TWzMdUsXSnu9E2/SNzuThiiPF6sS3a23cVmL8KA/IjpgRmNYWIFoY0ls
-   5cr5vkXKQkSD9qq8sjy4mVAcYil4JqJVvQCNFCo2uc9VUbTB8bpq0lmYs
-   7ng792Z0WAyAhZ8PlWwBzsUxn3TUMjbIcEn612fhaPf9sjPo9jiRYjSfv
-   +SfwatcMWBjufucMornigNNYDO1KYac8glphhu9/u05jmDi7fO03JJDgX
-   Ut8q7VwDTMla9DV98Jdn5ikNltez05g9+ptCKmy2irxGoCNmmP9oGJOxj
-   AeBC2bxjzT2M2nw2Wj41HoTNDLPU21ilmTV7iMQSAfHyMIoCG5DF+drZb
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10268"; a="252260480"
-X-IronPort-AV: E=Sophos;i="5.90,134,1643702400"; 
-   d="scan'208";a="252260480"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2022 12:15:15 -0800
-X-IronPort-AV: E=Sophos;i="5.90,134,1643702400"; 
-   d="scan'208";a="787984782"
-Received: from rjfenger-mobl.amr.corp.intel.com (HELO spandruv-desk1.amr.corp.intel.com) ([10.209.48.94])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2022 12:15:14 -0800
-Message-ID: <1fe034be43340d413f13adea219f25917dcebdf7.camel@linux.intel.com>
-Subject: Re: [PATCH] thermal: int340x: fix memory leak in int3400_notify()
-From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Chuansheng Liu <chuansheng.liu@intel.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-Date:   Thu, 24 Feb 2022 12:15:14 -0800
-In-Reply-To: <CAJZ5v0iAkRQuoA+TDU46fR+Xek5rB=tiMNTJ-M28RSyHz2RKiQ@mail.gmail.com>
-References: <20220223002024.55026-1-chuansheng.liu@intel.com>
-         <CAJZ5v0iAkRQuoA+TDU46fR+Xek5rB=tiMNTJ-M28RSyHz2RKiQ@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.3 (3.42.3-1.fc35) 
+        Thu, 24 Feb 2022 15:17:46 -0500
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DAF077ABD
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 12:17:14 -0800 (PST)
+Received: by mail-pj1-x1034.google.com with SMTP id gl14-20020a17090b120e00b001bc2182c3d5so6105040pjb.1
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 12:17:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=osandov-com.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=VIoQPvwHqFXtMAXE8AKCkLiEbpc0ZIKiqGrsuvIzD+s=;
+        b=tk7jCJjg1+CUdYaHqNbciARDK8dfm6TepRBLjhUKgQM0CtIrgyTuICuE2Lsn723Gza
+         EXY0qT0hPfDJOuJd/GR0VFQJEcGxj0+VMw8UR9vZJXJ8VIgdAl0cWtet7MraYRn1nCjM
+         rdkvFjsQepqXyglMqp5mXi23JrdltsqogRns4pkN6ZxgE5WitpE+XPlGEHq+u4eIsjnD
+         q6kwVNfqxe3a9xRgdJzR6AOV7qGWFjMwbBiADU0lDjxg6XDS43DZ9KPOo/nOMgLIwJvB
+         +xohKsi/b9O1GaQh1BwCseDhIdkcFhF5vNPr/ySGWV9ynd4hlz/RDBManBb9jcHE42t9
+         l5XQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=VIoQPvwHqFXtMAXE8AKCkLiEbpc0ZIKiqGrsuvIzD+s=;
+        b=uGS5J+wPa4w3WVYJWEG/14xdFBOjSb3NW/BndwC4BfleICMxC2zfjp0QZxxKG+eGm9
+         IQVnR4OLrvdWlYkYHV+zcLg5MGHH6QTE7HhCqQsxkHca2P/BbOFMAx1oNnZ2ZCznm8yi
+         D5vVaPRti1YXyAobySYWg17Ad8szNSGjylje2Nc0atLs/Iht9UQDsToMEwYx2e5pRHco
+         bIrh1PM/jMUwfL9U2vX/ev8/iMjzJ0zhWgRRTTVpXB2AyOpXGdvpvnbp4EYCj5H7nNv5
+         S3yvnFu+yRXsRkTgQRYUJbBksO9H2Bl+iubX6TcN4FLtWvCPBgXWJkoAqGRhxOxwjcoo
+         ACRA==
+X-Gm-Message-State: AOAM533tABugkW2G92taoJ1qBEofhsxuzz8R81njOQygHTr1uQGoyK1b
+        W1zF+1dE9+HXNB7VFI3/nOVnTg==
+X-Google-Smtp-Source: ABdhPJy4DAaoL+2eDM6IAlpIbHkBTBRxpHyXtyOv9u8K7XTUIccliARsqfykcfASTj7CwdFEJRLY7g==
+X-Received: by 2002:a17:902:8f96:b0:14e:bd3c:149b with SMTP id z22-20020a1709028f9600b0014ebd3c149bmr4259267plo.172.1645733833457;
+        Thu, 24 Feb 2022 12:17:13 -0800 (PST)
+Received: from relinquished.localdomain ([2620:10d:c090:400::5:64b1])
+        by smtp.gmail.com with ESMTPSA id lb4-20020a17090b4a4400b001b9b20eabc4sm181429pjb.5.2022.02.24.12.17.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Feb 2022 12:17:13 -0800 (PST)
+Date:   Thu, 24 Feb 2022 12:17:11 -0800
+From:   Omar Sandoval <osandov@osandov.com>
+To:     Sweet Tea Dorminy <sweettea-kernel@dorminy.me>
+Cc:     dsterba@suse.cz, Chris Mason <clm@fb.com>,
+        Josef Bacik <josef@toxicpanda.com>,
+        David Sterba <dsterba@suse.com>, linux-btrfs@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel-team@fb.com
+Subject: Re: [PATCH v4] btrfs: add fs state details to error messages.
+Message-ID: <Yhfnx21q51xSBl32@relinquished.localdomain>
+References: <a059920460fe13f773fd9a2e870ceb9a8e3a105a.1645644489.git.sweettea-kernel@dorminy.me>
+ <20220224132210.GS12643@twin.jikos.cz>
+ <284ccc08-8de7-9188-19d8-20f4eda56cb4@dorminy.me>
+ <20220224184231.GZ12643@twin.jikos.cz>
+ <20f14d85-6a07-e66d-4711-c16c6930c2a3@dorminy.me>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+In-Reply-To: <20f14d85-6a07-e66d-4711-c16c6930c2a3@dorminy.me>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,80 +78,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-02-24 at 20:16 +0100, Rafael J. Wysocki wrote:
-> On Wed, Feb 23, 2022 at 1:33 AM Chuansheng Liu
-> <chuansheng.liu@intel.com> wrote:
-> > 
-> > It is easy to hit the below memory leaks in my TigerLake platform:
-> > 
-> > --
-> > unreferenced object 0xffff927c8b91dbc0 (size 32):
-> > Â  comm "kworker/0:2", pid 112, jiffies 4294893323 (age 83.604s)
-> > Â  hex dump (first 32 bytes):
-> > Â Â Â  4e 41 4d 45 3d 49 4e 54 33 34 30 30 20 54 68 65Â  NAME=INT3400
-> > The
-> > Â Â Â  72 6d 61 6c 00 6b 6b 6b 6b 6b 6b 6b 6b 6b 6b a5Â 
-> > rmal.kkkkkkkkkk.
-> > Â  backtrace:
-> > Â Â Â  [<ffffffff9c502c3e>] __kmalloc_track_caller+0x2fe/0x4a0
-> > Â Â Â  [<ffffffff9c7b7c15>] kvasprintf+0x65/0xd0
-> > Â Â Â  [<ffffffff9c7b7d6e>] kasprintf+0x4e/0x70
-> > Â Â Â  [<ffffffffc04cb662>] int3400_notify+0x82/0x120
-> > [int3400_thermal]
-> > Â Â Â  [<ffffffff9c8b7358>] acpi_ev_notify_dispatch+0x54/0x71
-> > Â Â Â  [<ffffffff9c88f1a7>] acpi_os_execute_deferred+0x17/0x30
-> > Â Â Â  [<ffffffff9c2c2c0a>] process_one_work+0x21a/0x3f0
-> > Â Â Â  [<ffffffff9c2c2e2a>] worker_thread+0x4a/0x3b0
-> > Â Â Â  [<ffffffff9c2cb4dd>] kthread+0xfd/0x130
-> > Â Â Â  [<ffffffff9c201c1f>] ret_from_fork+0x1f/0x30
-> > ---
-> > 
-> > Fix it by calling kfree() accordingly.
-> > 
-> > Fixes: 38e44da59130 ("thermal: int3400_thermal: process "thermal
-> > table
-> > changed" event")
-> > 
-> > Cc: linux-pm@vger.kernel.org
-> > Cc: stable@vger.kernel.org
-> > Cc: rafael@kernel.org
-> > Cc: srinivas.pandruvada@linux.intel.com
-> > Signed-off-by: Chuansheng Liu <chuansheng.liu@intel.com>
+On Thu, Feb 24, 2022 at 03:09:08PM -0500, Sweet Tea Dorminy wrote:
+> > > All the other interactions with info->fs_state are test/set/clear_bit,
+> > > which treat the argument as volatile and are therefore safe to do from
+> > > multiple threads. Without the READ_ONCE (reading it as a volatile),
+> > > the compiler or cpu could turn the reads of info->fs_state in
+> > > for_each_set_bit() into writes of random stuff into info->fs_state,
+> > > potentially clearing the state bits or filling them with garbage.
+> > I'm not sure I'm missing something, but I find the above hard to
+> > believe. Concurrent access to a variable from multiple threads may not
+> > produce consistent results, but random writes should not happen when
+> > we're just reading.
 > 
-> Applied as a fix for 5.17-rc, thanks!
+> Maybe I've been reading too many articles about the things compilers are
+> technically allowed to do. But as per the following link, the C standard
+> does permit compilers inventing writes except to atomics and volatiles:
+> https://lwn.net/Articles/793253/#Invented%20Stores
 > 
-> Srinivas, any concerns?
-None.
-
-Thanks,
-Srinivas
-
+> > 
+> > > Even if this is right, it'd be rare, but it would be exceeding weird
+> > > for a message to be logged listing an error and then future messages
+> > > be logged without any such state, or with a random collection of
+> > > garbage states.
+> > How would that happen? The volatile keyword is only a compiler hint not
+> > to do optimizations on the variable, what actually happens on the CPU
+> > level depends if the instruction is locked or not, so different threads
+> > may read different bits.
+> > You seem to imply that once a variable is not used with volatile
+> > semantics, even just for read, the result could lead to random writes
+> > because it's otherwise undefined.
 > 
-> > ---
-> > Â drivers/thermal/intel/int340x_thermal/int3400_thermal.c | 4 ++++
-> > Â 1 file changed, 4 insertions(+)
-> > 
-> > diff --git
-> > a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-> > b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-> > index 72acb1f61849..4f478812cb51 100644
-> > --- a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-> > +++ b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-> > @@ -404,6 +404,10 @@ static void int3400_notify(acpi_handle handle,
-> > Â Â Â Â Â Â Â  thermal_prop[3] = kasprintf(GFP_KERNEL, "EVENT=%d",
-> > therm_event);
-> > Â Â Â Â Â Â Â  thermal_prop[4] = NULL;
-> > Â Â Â Â Â Â Â  kobject_uevent_env(&priv->thermal->device.kobj,
-> > KOBJ_CHANGE, thermal_prop);
-> > +Â Â Â Â Â Â  kfree(thermal_prop[0]);
-> > +Â Â Â Â Â Â  kfree(thermal_prop[1]);
-> > +Â Â Â Â Â Â  kfree(thermal_prop[2]);
-> > +Â Â Â Â Â Â  kfree(thermal_prop[3]);
-> > Â }
-> > 
-> > Â static int int3400_thermal_get_temp(struct thermal_zone_device
-> > *thermal,
-> > --
-> > 2.25.0.rc2
-> > 
+> Pretty much; once a variable is read without READ_ONCE, it's unsafe to write
+> a new value on another thread that depends on the old value. Imagine a
+> compiler which invents stores; then if you are both reading and setting a
+> variable 'a' on different threads, the following could happen:
+> 
+> thread 1 (reads)       thread 2 (modifies)
+> 
+> reads a into tmp
+> 
+> stores junk into a
+> 
+>                                 reads junk from a
+> 
+> stores tmp into a
+> 
+>                                 writes junk | 2 to a
+> 
+> 
+> Now a contains junk indefinitely.
+> 
+> 
+> But if it's too theoretical, I'm happy to drop it and amend my paranoia
+> level.
 
+I agree with Sweet Tea here. Even if it's very theoretical, it costs us
+nothing to do the "correct" thing here.

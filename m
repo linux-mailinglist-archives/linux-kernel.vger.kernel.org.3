@@ -2,119 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36BA64C3004
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 16:39:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CBBC4C300A
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 16:41:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236437AbiBXPi4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 10:38:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42886 "EHLO
+        id S236463AbiBXPmA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 10:42:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236134AbiBXPiy (ORCPT
+        with ESMTP id S232717AbiBXPl6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 10:38:54 -0500
-X-Greylist: delayed 154540 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 24 Feb 2022 07:38:22 PST
-Received: from mail.tintel.eu (mail.tintel.eu [IPv6:2001:41d0:a:6e77:0:ff:fe5c:6a54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 446611BE4CF;
-        Thu, 24 Feb 2022 07:38:22 -0800 (PST)
-Received: from localhost (localhost [IPv6:::1])
-        by mail.tintel.eu (Postfix) with ESMTP id 29FBA424DC5A;
-        Thu, 24 Feb 2022 16:38:20 +0100 (CET)
-Received: from mail.tintel.eu ([IPv6:::1])
-        by localhost (mail.tintel.eu [IPv6:::1]) (amavisd-new, port 10032)
-        with ESMTP id Eu0qMrATjC32; Thu, 24 Feb 2022 16:38:19 +0100 (CET)
-Received: from localhost (localhost [IPv6:::1])
-        by mail.tintel.eu (Postfix) with ESMTP id 67D1842A43DC;
-        Thu, 24 Feb 2022 16:38:19 +0100 (CET)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.tintel.eu 67D1842A43DC
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux-ipv6.be;
-        s=502B7754-045F-11E5-BBC5-64595FD46BE8; t=1645717099;
-        bh=fHTcMK2fjry/ZwLUwGR9VTL4Aj2hsXiagbddnpv2XGo=;
-        h=Message-ID:Date:MIME-Version:From:To;
-        b=FO8WdDV8uji5PVkWOA5cQGMJlBitplUUfCXWUHxvPuPDokv3IdAK6TgZSLCWVxsq7
-         iUKErd5VtF9S3tSY8EfsYfQT/vHN3GkwY0AKkvtOlqzO0GFSiN7rq5xxfnM/Ei4Jde
-         j1Wg/+G6RYUxzlP9AK5O5XN7B7Ge2+CU/cJfErtk=
-X-Virus-Scanned: amavisd-new at mail.tintel.eu
-Received: from mail.tintel.eu ([IPv6:::1])
-        by localhost (mail.tintel.eu [IPv6:::1]) (amavisd-new, port 10026)
-        with ESMTP id qHjvbEqDfLeW; Thu, 24 Feb 2022 16:38:19 +0100 (CET)
-Received: from [IPV6:2001:67c:21bc:20::10] (unknown [IPv6:2001:67c:21bc:20::10])
-        (Authenticated sender: stijn@tintel.eu)
-        by mail.tintel.eu (Postfix) with ESMTPSA id 98ADF424DC5A;
-        Thu, 24 Feb 2022 16:38:18 +0100 (CET)
-Message-ID: <0f1fb86b-f8df-b209-9a89-512cbc142e04@linux-ipv6.be>
-Date:   Thu, 24 Feb 2022 17:38:17 +0200
+        Thu, 24 Feb 2022 10:41:58 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BD212465C1
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 07:41:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645717288; x=1677253288;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=tFGquLjlcsAHzuVwlqOIiy77lEjYW1VEOYeIrhl4xXs=;
+  b=KXMRdlQ8/e41hd44stXEvmm94vTvH9MtPnwf/6On2tk/11JIgJMWlZiu
+   HFDdw3pAbUaJxSZA48VBl6gbBkP6lcvZim5kwBUoFXAQ9GYlMsIba8KoJ
+   kC2QlSCP2y7UUQr6nB/Jp02qSfa2DJUcNAwYOvH2MB97cv2UkN76G5qC2
+   5n2ijgL25pgnAjBOKeql/eF+56E/T+6Ev+HAiSX7PmGNsawVPCp3S/PP9
+   I8oPf6MeMFyobr17VpdM+qKruSbbrd3EtFF/27wcNcQho2HI/P4/wE7sA
+   HbhgUAdzM9FmhVwvQIx1NkscTuXY/yZVx/zYmqKrosgAOiNhzj7S/jYTG
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10268"; a="239662991"
+X-IronPort-AV: E=Sophos;i="5.90,134,1643702400"; 
+   d="scan'208";a="239662991"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2022 07:41:27 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,134,1643702400"; 
+   d="scan'208";a="491640630"
+Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 24 Feb 2022 07:41:26 -0800
+Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nNGFB-0003Fj-Tg; Thu, 24 Feb 2022 15:41:25 +0000
+Date:   Thu, 24 Feb 2022 23:40:58 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Guo Ren <guoren@linux.alibaba.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [csky-linux:riscv_compat_v6 13/20]
+ arch/riscv/kernel/process.c:102:35: error: use of undeclared identifier
+ 'SR_UXL'
+Message-ID: <202202242346.yPxgaryD-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] libbpf: fix BPF_MAP_TYPE_PERF_EVENT_ARRAY auto-pinning
-Content-Language: en-GB
-From:   Stijn Tintel <stijn@linux-ipv6.be>
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Song Liu <song@kernel.org>
-Cc:     =?UTF-8?Q?Toke_H=c3=b8iland-J=c3=b8rgensen?= <toke@redhat.com>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        KP Singh <kpsingh@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Yonghong Song <yhs@fb.com>, Song Liu <songliubraving@fb.com>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>
-References: <20220222204236.2192513-1-stijn@linux-ipv6.be>
- <CAPhsuW6WgjL_atKCivbk5iMNBFHuSGcjAC0tdZYag2fOesUBKA@mail.gmail.com>
- <CAEf4BzYuk2Rur-pae7gbuXSb=ayJ0fUREStdWyorWgd_q1D9zQ@mail.gmail.com>
- <ac624e07-5310-438a-dce3-d2edb01e8031@linux-ipv6.be>
-In-Reply-To: <ac624e07-5310-438a-dce3-d2edb01e8031@linux-ipv6.be>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,NICE_REPLY_A,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24/02/2022 12:08, Stijn Tintel wrote:
-> On 24/02/2022 01:15, Andrii Nakryiko wrote:
->> On Tue, Feb 22, 2022 at 6:37 PM Song Liu <song@kernel.org> wrote:
->>> On Tue, Feb 22, 2022 at 12:51 PM Stijn Tintel <stijn@linux-ipv6.be> wrote:
->>>> When a BPF map of type BPF_MAP_TYPE_PERF_EVENT_ARRAY doesn't have the
->>>> max_entries parameter set, this parameter will be set to the number of
->>>> possible CPUs. Due to this, the map_is_reuse_compat function will return
->>>> false, causing the following error when trying to reuse the map:
->>>>
->>>> libbpf: couldn't reuse pinned map at '/sys/fs/bpf/m_logging': parameter mismatch
->>>>
->>>> Fix this by checking against the number of possible CPUs if the
->>>> max_entries parameter is not set in the map definition.
->>>>
->>>> Fixes: 57a00f41644f ("libbpf: Add auto-pinning of maps when loading BPF objects")
->>>> Signed-off-by: Stijn Tintel <stijn@linux-ipv6.be>
->>> Acked-by: Song Liu <songliubraving@fb.com>
->>>
->>> I think the following fix would be more future proof, but the patch
->>> as-is is better for
->>> stable backport? How about we add a follow up patch on top of current
->>> patch to fix
->>> def->max_entries once for all?
->> Keeping special logic for PERF_EVENT_ARRAY in one place is
->> preferrable. With this, the changes in map_is_reuse_compat() shouldn't
->> be necessary at all. Stijn, can you please send v2 with Song's
->> proposed changes?
->>
-> Will do!
+tree:   https://github.com/c-sky/csky-linux riscv_compat_v6
+head:   4aafa1859382d5a159bdafe2956453feafd38845
+commit: 4cebbf9e791522be5b6e7cea289ab1c43c66cbc0 [13/20] riscv: compat: process: Add UXL_32 support in start_thread
+config: riscv-buildonly-randconfig-r003-20220223 (https://download.01.org/0day-ci/archive/20220224/202202242346.yPxgaryD-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/c-sky/csky-linux/commit/4cebbf9e791522be5b6e7cea289ab1c43c66cbc0
+        git remote add csky-linux https://github.com/c-sky/csky-linux
+        git fetch --no-tags csky-linux riscv_compat_v6
+        git checkout 4cebbf9e791522be5b6e7cea289ab1c43c66cbc0
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
 
-Unfortunately that doesn't work. In bpf_object__create_maps, we call
-bpf_object__reuse_map and map_is_reuse_compat before
-bpf_object__create_map, so we check map_info.max_entries ==
-map->def.max_entries before the latter is being overwritten.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-So I propose to send a v2 based on my initial submission, but use __u32
-for def_max_entries instead of int, unless someone has another suggestion?
+All errors (new ones prefixed by >>):
 
-Thanks,
-Stijn
+   arch/riscv/kernel/process.c:101:6: error: implicit declaration of function 'is_compat_task' [-Werror,-Wimplicit-function-declaration]
+           if (is_compat_task())
+               ^
+>> arch/riscv/kernel/process.c:102:35: error: use of undeclared identifier 'SR_UXL'
+                   regs->status = (regs->status & ~SR_UXL) | SR_UXL_32;
+                                                   ^
+>> arch/riscv/kernel/process.c:102:45: error: use of undeclared identifier 'SR_UXL_32'
+                   regs->status = (regs->status & ~SR_UXL) | SR_UXL_32;
+                                                             ^
+   arch/riscv/kernel/process.c:104:35: error: use of undeclared identifier 'SR_UXL'
+                   regs->status = (regs->status & ~SR_UXL) | SR_UXL_64;
+                                                   ^
+>> arch/riscv/kernel/process.c:104:45: error: use of undeclared identifier 'SR_UXL_64'
+                   regs->status = (regs->status & ~SR_UXL) | SR_UXL_64;
+                                                             ^
+   5 errors generated.
 
+
+vim +/SR_UXL +102 arch/riscv/kernel/process.c
+
+    85	
+    86	void start_thread(struct pt_regs *regs, unsigned long pc,
+    87		unsigned long sp)
+    88	{
+    89		regs->status = SR_PIE;
+    90		if (has_fpu()) {
+    91			regs->status |= SR_FS_INITIAL;
+    92			/*
+    93			 * Restore the initial value to the FP register
+    94			 * before starting the user program.
+    95			 */
+    96			fstate_restore(current, regs);
+    97		}
+    98		regs->epc = pc;
+    99		regs->sp = sp;
+   100	
+   101		if (is_compat_task())
+ > 102			regs->status = (regs->status & ~SR_UXL) | SR_UXL_32;
+   103		else
+ > 104			regs->status = (regs->status & ~SR_UXL) | SR_UXL_64;
+   105	}
+   106	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

@@ -2,211 +2,473 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46C144C24BD
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 08:52:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A2C24C24C2
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 08:52:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230291AbiBXHvt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 02:51:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38580 "EHLO
+        id S231437AbiBXHxQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 02:53:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231355AbiBXHvk (ORCPT
+        with ESMTP id S231406AbiBXHxM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 02:51:40 -0500
-Received: from EUR02-HE1-obe.outbound.protection.outlook.com (mail-eopbgr10073.outbound.protection.outlook.com [40.107.1.73])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59E62189A9B;
-        Wed, 23 Feb 2022 23:51:10 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=eQ+fmizOy1luA7N4eEW4oX07E1lQefVRbf7Th+RABlnKZoGAlCxWd3JYT3+iNqz8+OOuaGeQVtxl0ks00mqLGDJ6Cy6ZLeit/7uddFh9L6VtniMnMcWyPR3+uzKZVnv8zH8ickfS8Dxol/01CnYhCa4onm2xQzsCX6smx5JOFwUOTSKfU1tdnDww5kV05I3UxgqHwfqKOY0f5OL0oUnduFQvVMbjOXOjnBl+1Rdyo/mWTk+RAhkWr7t+OiT56Oa/7b8gunRrlXLB6xd73QK71YkRgMVsjkR5CClKtC/WT4DgSnVheYfYFtqObgwgwu9GL40bGcIixRwk5UyoJ3KfrQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=2RO7QOhpnalxCa97KbDbWQ4wJ/gz0o0Nl2nsXwnINIA=;
- b=ihF37xWB5zkOTSLseQAIwLtSo8vZZH0Q+6AuVobFRXcFnUBj9SFQqBOe+BEo4Hx7BSwCJyNUNGDsyynVsflW18Z+A9FmvjOm9PVOt/tagnbrQFuhwOvZb04LhUI/J/2KxKk+b1zyhVEaZ81lG63OHe3hcb41bQyf8zybKrn+urvdGjqacIFbnxX47MUNzz2X33sSEFhOD52cEimqNCioVSsuYjdkTmIQL2m4oTn5vXYt3gfOFYRniN5Eqjbfv5oxx7kaNzjPqPwDy3Yf4ZREeFNPTlRdZ8SwShQCviSFNY/E/8z93HViIIgNZROYwXMkf57PMlU162op7iqSswYeSQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=2RO7QOhpnalxCa97KbDbWQ4wJ/gz0o0Nl2nsXwnINIA=;
- b=pVS0wZLkA88iS8uVGxmvy75HT817jiBNS/AxNg9xDIIZhIomtq1nmnIAJ1u68WkEPfzkm1b/QAXaLZ52+SjAr9soatCGZkAx85Bm9pXaCkU57qZUPd97u38NnygZZfcX3YsKcwTGmGepojN3U4X7889HPBZZfP9z4tYKTe572F8=
-Received: from AS8PR04MB8676.eurprd04.prod.outlook.com (2603:10a6:20b:42b::10)
- by DB7PR04MB4044.eurprd04.prod.outlook.com (2603:10a6:5:1b::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5017.24; Thu, 24 Feb
- 2022 07:51:07 +0000
-Received: from AS8PR04MB8676.eurprd04.prod.outlook.com
- ([fe80::3d1c:b479:1c58:199]) by AS8PR04MB8676.eurprd04.prod.outlook.com
- ([fe80::3d1c:b479:1c58:199%7]) with mapi id 15.20.4995.018; Thu, 24 Feb 2022
- 07:51:07 +0000
-From:   Hongxing Zhu <hongxing.zhu@nxp.com>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-CC:     "l.stach@pengutronix.de" <l.stach@pengutronix.de>,
-        "bhelgaas@google.com" <bhelgaas@google.com>,
-        "broonie@kernel.org" <broonie@kernel.org>,
-        "lorenzo.pieralisi@arm.com" <lorenzo.pieralisi@arm.com>,
-        "jingoohan1@gmail.com" <jingoohan1@gmail.com>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        "francesco.dolcini@toradex.com" <francesco.dolcini@toradex.com>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        dl-linux-imx <linux-imx@nxp.com>
-Subject: RE: [PATCH v7 7/8] PCI: imx6: Disable enabled clocks and regulators
- after link is down
-Thread-Topic: [PATCH v7 7/8] PCI: imx6: Disable enabled clocks and regulators
- after link is down
-Thread-Index: AQHYIwHV7h1LKyc1202jRHmtHaQDcKyhdZ0AgADaonA=
-Date:   Thu, 24 Feb 2022 07:51:07 +0000
-Message-ID: <AS8PR04MB8676B0E4B7D18DA5CB2928628C3D9@AS8PR04MB8676.eurprd04.prod.outlook.com>
-References: <1644992463-14467-8-git-send-email-hongxing.zhu@nxp.com>
- <20220223175016.GA140091@bhelgaas>
-In-Reply-To: <20220223175016.GA140091@bhelgaas>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 5891e1d4-1887-4e27-9f54-08d9f76a6a59
-x-ms-traffictypediagnostic: DB7PR04MB4044:EE_
-x-microsoft-antispam-prvs: <DB7PR04MB404406D3B979D48E513CD1338C3D9@DB7PR04MB4044.eurprd04.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: ztSCG8Y5dizk50Ng2JWValX6hE7UP6dPHC3OP397K6yCknsn9w+exPAq2EUxGt3YE+EVQMzebggiauQirEOdHVuWuZg1Dtzd6m+flztTQqdiwtFiuQImKajldMBK2v87EW9AI69tc6ubB4lobDWaiQ/D6WRmHxzVvYKI7qO4PyqViBqCELkWbNS54UXDR37ou5oRpbdW4YZ6jZTGbC+rRlvEoOLiFVGi2iDSdGX7pn7zQsBUXB+06UwFjKsi+kLWTkYM8Vt2KClfwQm1PqDoCBP4XVQARIMZmOAqXOaBgJodBtMv4OlG6jPCD3ngtOyd1j6Ur5nW8GmUKV05erwVFN7btLh52qdr6FsAyyG8tWK/zTK3AhBmmDQ9rxVPOp0wxrj+kdCRl5DiHN2Gv24ttW8L9hcZSQADR39j5oU9mPmml5XIttjqyRYUOq77my2O4RQHPAiGkAFPySu35EvPsrnmhHOwOzXVCW0V61ht9moKoIo4TCIegoKWQz+QOT8CYJaxMUzHphIRaln7zQy5frV2wgYERBufmXCdW22P/j/diQur/NkJlaFDQIJ8XIv8ofg15rH2LMZpcVziM+sQJvyUkc4BuEhtteco9AUssjQABziMKjtuy+Y6vRTzYhptxZxcbfylaw2+8tJtE6tYOnQHADMuiMPQrCV2vlRcfNNLcQPNG0/4tuObYLt9zUwoMSGtXbF57T3PPSBhBC4TVQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS8PR04MB8676.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(55016003)(4326008)(38070700005)(64756008)(66946007)(8676002)(76116006)(86362001)(38100700002)(7416002)(66476007)(5660300002)(52536014)(66556008)(8936002)(122000001)(44832011)(2906002)(66446008)(26005)(186003)(71200400001)(53546011)(6506007)(7696005)(9686003)(508600001)(316002)(6916009)(83380400001)(54906003)(33656002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?gb2312?B?RVRVYkU1alQrVkZia3dCc05DZWhuVDlySFNKOHRQRFVwblNtaXBjVlk0M0hh?=
- =?gb2312?B?ajIzOUw1WFBIZDUwM0V3aDJQL1d0KzNCakp3Q1Y5SHg5WVAyQ1RyR2pIdzNi?=
- =?gb2312?B?NCtBT05UaU1HWDNXMUpPc1FaMHpiNlFXY0Zla1E1RGVxSm5hZERobDRlYnE2?=
- =?gb2312?B?Qy9IbFIrU2RNbDJmUEM2Zzg4RmR6VTNjeExWR1BvRWRHZTZpSlhkaFZqN1JQ?=
- =?gb2312?B?MjJVVDNRVHRqMWJmSXg3TjBGOEFKVHluSm52NVdsZzlOYlhWMFlWdFA5UldB?=
- =?gb2312?B?eTZIL1U2WklZNVBYcSsrQytHWllrbTB5OWJlSjN0N3NzYzlVOGNIdjRZN0Nq?=
- =?gb2312?B?ZGliYmRDR0V0bTNXMmV4SlQ2UmJoTDdqekVwbUJWYU5pbWFXeUNJaGJnMnUx?=
- =?gb2312?B?QVJVdDk2VVhkTFMwK2JlZVNPcGR1bTg3QXdnYTgvMStKVzBwNWY2blpRMzdC?=
- =?gb2312?B?cDdIeU9JU3U1WjNzMG5uaHI0OWlLcXNsSE9wRkFlNllQL3VEMUwzaXBvdVJL?=
- =?gb2312?B?Zy9aamU0WWhXM3lyR2VVbDJtNEFnYzZXS3ZDV2NvcHlQeUdkQlE0UFBsMWRt?=
- =?gb2312?B?REg3dXpQWkk5VnVIc21mdmVLS2hGSXpwQWxMMURwV2MrQzV0RTZ6V3NPR2Rt?=
- =?gb2312?B?c1FNQmdLc0pDcTUyWlNQNk45aFpYL0hwbkRucXp3TGdxeVJaRkpWQUw0TzNU?=
- =?gb2312?B?eXVaeVpVbTFxa3hFMDJPTCsvM0ZhQ3NyTDdqK0NpMmF2c1hFZDVFRGc1SVlh?=
- =?gb2312?B?WlZ6OHc3ZDI0YUpmaFYxc3N5SS9OZ1dWbXhhQTYxSm5mbWplalZLejNPMWli?=
- =?gb2312?B?UHUyVnpWTUo3bTVzejR2Vms5bWQyTVMrVkhKaHFwNCs5MXlPdVRJK1o3MFlI?=
- =?gb2312?B?U1FtVUNOWHpxZ2Znc1d6UHZUKzBTUGxLQWhrUkdpTGpFWGl4S0I0aDRTSEkr?=
- =?gb2312?B?WHg0TW1KMjd5Y1ptSTlYeGZIUk9RckR5SzdMZUd3aUY5bWdvNG5QbzhoMHFq?=
- =?gb2312?B?OFZJZ29iVWhlUVB2Z3kyODRyZ0NEODY2WUlWSTZVZXI4NVB4ay92UDNOa1Nm?=
- =?gb2312?B?SkVDTWhGalZxU25NUkJZZUpFQ3IzZnV0R2pUU25ZSTRqS0tOUWlITU9oUC9D?=
- =?gb2312?B?YkFFK25HVVNpQTczemp2czJxZm9PR0s1T0RZMy9VR0xaU3FXcWo2eVhEU3lL?=
- =?gb2312?B?OUJTZjV3VEZLOHJwdjg3NzcxTi9vNVZ1dDBGSXVaRUpKVzRZLzhLYkRtL1A1?=
- =?gb2312?B?MHkrZWxpZFAreXVyamhQaUVqN2YyT0hCVEQrVU1BZTVVSUgyRkNCblRySTFj?=
- =?gb2312?B?b1BuNU1TK1dJdUEzWlJsemkyVFJpeDJQK3g4SHFMSFBsNnB0cGUyV1VPMGZh?=
- =?gb2312?B?M0R4OFlsTVpITVZvaDhmZkNNY0w0M2RmMFFOS3I1Q2ROTWNNMXdNQ2xoWno2?=
- =?gb2312?B?dW4wa1FMMWViaVl2YUZmNjl0TE5UU2lvWjFQUzhINFI3NDNKTmdUVjh1Y05p?=
- =?gb2312?B?bm9JUnd5dm9ZbldaWGNRdE5rUmF6N0JhZlpRcktPRTFteG1tN0hNQWgwOTRr?=
- =?gb2312?B?TWRFMCt2S2JEN1JVb0lSdEFNLzN4TjNDbEFHZ0tRbHhwZGkxOUp3ZWFkQkt3?=
- =?gb2312?B?UVZYa1M5cTVTQ3FMRjFXN2JrT29pNFova2RsNmNSS1VONDRDQjBwQVhUeW1U?=
- =?gb2312?B?S1N6Nmw0bHpGOWZPYUNPN1ZwSkdvVVpoc3dnSVU2UDY2K1AxOHF4bjg4NndQ?=
- =?gb2312?B?RHhDZ2doUmducEhzZVZYWWFvcit0R3FXRzlCWUNyK3pIWU1CbDBPTG4zdHNN?=
- =?gb2312?B?OGRXSzEzYzJmdHdQNGFIekxYbFdXcHg2ZDIwdUtsaEM2RFJvT202ZmlMb3hQ?=
- =?gb2312?B?clRjQVc2RjR3bTBMTHNRUS94dGdUUUtTRUR0eFVSS1dJU3ZzKzhsTEtGRzZS?=
- =?gb2312?B?dE1EZDJMQTUyZG45V2lpelVYVktlZzVRUHhWRGhqNnJvYmJuSEJwU2JPQTcz?=
- =?gb2312?B?REhuekJiYXROb3JKMmtTcFdnUFMrc1hNSVB5NklNazlKb1lURFFwREV5YTBJ?=
- =?gb2312?B?WDNuNElJSzh4WmRUNTVLNndFcW1LK2pqTm9VQkxseXJrVHNhOFdieUtqL3p2?=
- =?gb2312?B?ejBVb25wb0FlanR5R0cwd0Fmb1BjTUhqRGtUNHlvemVJNTVSa2VmOFUxRVB1?=
- =?gb2312?B?NlE9PQ==?=
-Content-Type: text/plain; charset="gb2312"
-Content-Transfer-Encoding: base64
+        Thu, 24 Feb 2022 02:53:12 -0500
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49E6C192E3C
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 23:52:41 -0800 (PST)
+Received: by mail-pf1-x42c.google.com with SMTP id x18so1163995pfh.5
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 23:52:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ZJyuo8HW0lgEwQiaSel5I2dm34XpPXh2hRkNyXXESgk=;
+        b=1+Al6T7d8JaIDCsSMmZoAtJwuloPstMDy7VUT2a1ijuiOAp+mK3KPuYJPIrQogNe5E
+         tnqY1bWMAMN0FQ/U01Ta/EJbWnC8xYGp9e2yb+QgC1bGuH/BweVUJUz0ZDZTn8HznZey
+         /FisA4GbvwOBE7yXGO5a0z6tuhrFwgULI4pjYxmwU8HnQBX+a8IHrAATTu0lLVnUnOXx
+         jpvsmWAQGE7mBHUOXXq0vBckSSwV0I/siStfSVuS40Ev2dEwOOl51q08Q7DklfXbbWY6
+         Tk+eWh39vwUTJA8FaNJtTWm1dxfpg1ABniXjWFDBLSUwpQdLIdHy8AxIFR6V//49wk27
+         p4aA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ZJyuo8HW0lgEwQiaSel5I2dm34XpPXh2hRkNyXXESgk=;
+        b=IJkZFYlIliH6X/p02LMMFjfh9k+hxAN2j12+1ZGuboq8VFk0EW7UX1Q5bF4eJp9DLK
+         Fc9goNNOcuL4Z96JLi0ZEmvKTLvOt/3o3+vAIPCsTAgI8jRUVR172gjXYKP1QXYb2M29
+         GxoPg08+UqjuXjL30WiNvJgpiKqc6q6iSnOrz8MQ8Jb7e/jBfc6X347wfhONfljj4iam
+         BZFNWcyxzcuEd0/fIzxal3UiOuXakAx7ncBsN/H9zS/u2r0XO9IZW3dc6cfUDRrv+XmD
+         aGkcr8hNAk5xYc1fNfgrYVBc6IVMsmFEpEUR8X8EVHIndzQIc29V0tq+VSf0RxWR8iYT
+         xroQ==
+X-Gm-Message-State: AOAM530paCMmD4r3TKwU2HbyK8XjeFtfGi8F4o84/0APnAb1basEL8qS
+        Ro816Z2C8kQP+fWVs5jBR42XnA==
+X-Google-Smtp-Source: ABdhPJxYRU8+dpxknEz41BQHzlG1JTyRKzw8MJMPIV02iy2tOa7mG2eF9X+xwSDvPyIotLAHoaRNQg==
+X-Received: by 2002:a05:6a00:2296:b0:4e1:3029:ee2 with SMTP id f22-20020a056a00229600b004e130290ee2mr1434080pfe.22.1645689160684;
+        Wed, 23 Feb 2022 23:52:40 -0800 (PST)
+Received: from C02FT5A6MD6R.bytedance.net ([61.120.150.76])
+        by smtp.gmail.com with ESMTPSA id t9sm1752969pgp.5.2022.02.23.23.52.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Feb 2022 23:52:39 -0800 (PST)
+From:   Gang Li <ligang.bdlg@bytedance.com>
+To:     Jonathan Corbet <corbet@lwn.net>, Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     songmuchun@bytedance.com, zhengqi.arch@bytedance.com,
+        Gang Li <ligang.bdlg@bytedance.com>, linux-api@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org
+Subject: [PATCH] sched/numa: add per-process numa_balancing
+Date:   Thu, 24 Feb 2022 15:52:25 +0800
+Message-Id: <20220224075227.27127-1-ligang.bdlg@bytedance.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: AS8PR04MB8676.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5891e1d4-1887-4e27-9f54-08d9f76a6a59
-X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Feb 2022 07:51:07.1550
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 9O9w1UcfxF4G0rlAp7+tblq5P3vGciFGj/oZidtjWHCrtFK8YeD4jWTyx/AeUTsPjQ97K9wt3OSMP1tNxr3gFQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB7PR04MB4044
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiBGcm9tOiBCam9ybiBIZWxnYWFzIDxoZWxn
-YWFzQGtlcm5lbC5vcmc+DQo+IFNlbnQ6IDIwMjLE6jLUwjI0yNUgMTo1MA0KPiBUbzogSG9uZ3hp
-bmcgWmh1IDxob25neGluZy56aHVAbnhwLmNvbT4NCj4gQ2M6IGwuc3RhY2hAcGVuZ3V0cm9uaXgu
-ZGU7IGJoZWxnYWFzQGdvb2dsZS5jb207IGJyb29uaWVAa2VybmVsLm9yZzsNCj4gbG9yZW56by5w
-aWVyYWxpc2lAYXJtLmNvbTsgamluZ29vaGFuMUBnbWFpbC5jb207IGZlc3RldmFtQGdtYWlsLmNv
-bTsNCj4gZnJhbmNlc2NvLmRvbGNpbmlAdG9yYWRleC5jb207IGxpbnV4LXBjaUB2Z2VyLmtlcm5l
-bC5vcmc7DQo+IGxpbnV4LWFybS1rZXJuZWxAbGlzdHMuaW5mcmFkZWFkLm9yZzsgbGludXgta2Vy
-bmVsQHZnZXIua2VybmVsLm9yZzsNCj4ga2VybmVsQHBlbmd1dHJvbml4LmRlOyBkbC1saW51eC1p
-bXggPGxpbnV4LWlteEBueHAuY29tPg0KPiBTdWJqZWN0OiBSZTogW1BBVENIIHY3IDcvOF0gUENJ
-OiBpbXg2OiBEaXNhYmxlIGVuYWJsZWQgY2xvY2tzIGFuZCByZWd1bGF0b3JzDQo+IGFmdGVyIGxp
-bmsgaXMgZG93bg0KPiANCj4gSW4gc3ViamVjdCwNCj4gDQo+IHMvRGlzYWJsZSBlbmFibGVkIGNs
-b2Nrcy9EaXNhYmxlIGNsb2Nrcy8NCk9rYXksIHdvdWxkIGJlIHVwZGF0ZWQgbGF0ZXIuDQpUaGFu
-a3MuDQoNCj4gDQo+IE9uIFdlZCwgRmViIDE2LCAyMDIyIGF0IDAyOjIxOjAyUE0gKzA4MDAsIFJp
-Y2hhcmQgWmh1IHdyb3RlOg0KPiA+IFNpbmNlIGkuTVggUENJZSBkb2Vzbid0IHN1cHBvcnQgdGhl
-IGhvdC1wbHVnLCBhbmQgdG8gc2F2ZSBwb3dlcg0KPiA+IGNvbnN1bXB0aW9uIGFzIG11Y2ggYXMg
-cG9zc2libGUuIFJldHVybiBlcnJvciBhbmQgZGlzYWJsZSB0aGUgZW5hYmxlZA0KPiA+IGNsb2Nr
-cyBhbmQgcmVndWxhdG9ycyB3aGVuIGxpbmsgaXMgZG93biwuDQo+IA0KPiBNYXliZToNCj4gDQo+
-ICAgU2luY2UgaS5NWCBQQ0llIGRvZXNuJ3Qgc3VwcG9ydCBob3QtcGx1ZywgcmVkdWNlIHBvd2Vy
-IGNvbnN1bXB0aW9uDQo+ICAgYXMgbXVjaCBhcyBwb3NzaWJsZSBieSBkaXNhYmxpbmcgY2xvY2tz
-IGFuZCByZWd1bGF0b3JzIGFuZCByZXR1cm5pbmcNCj4gICBlcnJvciB3aGVuIHRoZSBsaW5rIGlz
-IGRvd24uDQpPa2F5Lg0KDQo+IA0KPiA+IEFkZCBhIG5ldyBob3N0X2V4aXQoKSBjYWxsYmFjayBm
-b3IgaS5NWCBQQ0llIGRyaXZlciB0byBkaXNhYmxlIHRoZQ0KPiA+IGVuYWJsZWQgY2xvY2tzLCBy
-ZWd1bGF0b3JzIGFuZCBzbyBvbiBpbiB0aGUgZXJyb3IgaGFuZGxpbmcgYWZ0ZXINCj4gPiBob3N0
-X2luaXQgaXMgZmluaXNoZWQuDQo+ID4NCj4gPiBTaWduZWQtb2ZmLWJ5OiBSaWNoYXJkIFpodSA8
-aG9uZ3hpbmcuemh1QG54cC5jb20+DQo+ID4gLS0tDQo+ID4gIGRyaXZlcnMvcGNpL2NvbnRyb2xs
-ZXIvZHdjL3BjaS1pbXg2LmMgfCAzMA0KPiA+ICsrKysrKysrKysrKysrKysrKysrKysrKy0tLQ0K
-PiA+ICAxIGZpbGUgY2hhbmdlZCwgMjcgaW5zZXJ0aW9ucygrKSwgMyBkZWxldGlvbnMoLSkNCj4g
-Pg0KPiA+IGRpZmYgLS1naXQgYS9kcml2ZXJzL3BjaS9jb250cm9sbGVyL2R3Yy9wY2ktaW14Ni5j
-DQo+ID4gYi9kcml2ZXJzL3BjaS9jb250cm9sbGVyL2R3Yy9wY2ktaW14Ni5jDQo+ID4gaW5kZXgg
-MjQyZDhlZjczYzFlLi5mZTY3MWU4OGVjOTMgMTAwNjQ0DQo+ID4gLS0tIGEvZHJpdmVycy9wY2kv
-Y29udHJvbGxlci9kd2MvcGNpLWlteDYuYw0KPiA+ICsrKyBiL2RyaXZlcnMvcGNpL2NvbnRyb2xs
-ZXIvZHdjL3BjaS1pbXg2LmMNCj4gPiBAQCAtODQ4LDcgKzg0OCw5IEBAIHN0YXRpYyBpbnQgaW14
-Nl9wY2llX3N0YXJ0X2xpbmsoc3RydWN0IGR3X3BjaWUgKnBjaSkNCj4gPiAgCS8qIFN0YXJ0IExU
-U1NNLiAqLw0KPiA+ICAJaW14Nl9wY2llX2x0c3NtX2VuYWJsZShkZXYpOw0KPiA+DQo+ID4gLQlk
-d19wY2llX3dhaXRfZm9yX2xpbmsocGNpKTsNCj4gPiArCXJldCA9IGR3X3BjaWVfd2FpdF9mb3Jf
-bGluayhwY2kpOw0KPiA+ICsJaWYgKHJldCkNCj4gPiArCQlnb3RvIGVycl9yZXNldF9waHk7DQo+
-IA0KPiBUaGVzZSBsYWJlbHMgbG9vayB3cm9uZyBub3csIHNpbmNlIHlvdSBubyBsb25nZXIgcmVz
-ZXQgdGhlIFBIWSBhdA0KPiBlcnJfcmVzZXRfcGh5Lg0KWW91J3JlIHJpZ2h0LiBXb3VsZCBiZSBy
-ZXBsYWNlZCBieSAiZXJyX291dCIgbGF0ZXIuDQpUaGFua3MuDQoNCkJlc3QgUmVnYXJkcw0KUmlj
-aGFyZCBaaHUNCg0KPiANCj4gPiAgCWlmIChwY2ktPmxpbmtfZ2VuID09IDIpIHsNCj4gPiAgCQkv
-KiBBbGxvdyBHZW4yIG1vZGUgYWZ0ZXIgdGhlIGxpbmsgaXMgdXAuICovIEBAIC04ODQsNyArODg2
-LDkgQEANCj4gPiBzdGF0aWMgaW50IGlteDZfcGNpZV9zdGFydF9saW5rKHN0cnVjdCBkd19wY2ll
-ICpwY2kpDQo+ID4gIAkJfQ0KPiA+DQo+ID4gIAkJLyogTWFrZSBzdXJlIGxpbmsgdHJhaW5pbmcg
-aXMgZmluaXNoZWQgYXMgd2VsbCEgKi8NCj4gPiAtCQlkd19wY2llX3dhaXRfZm9yX2xpbmsocGNp
-KTsNCj4gPiArCQlyZXQgPSBkd19wY2llX3dhaXRfZm9yX2xpbmsocGNpKTsNCj4gPiArCQlpZiAo
-cmV0KQ0KPiA+ICsJCQlnb3RvIGVycl9yZXNldF9waHk7DQo+ID4gIAl9IGVsc2Ugew0KPiA+ICAJ
-CWRldl9pbmZvKGRldiwgIkxpbms6IEdlbjIgZGlzYWJsZWRcbiIpOw0KPiA+ICAJfQ0KPiA+IEBA
-IC04OTcsNyArOTAxLDYgQEAgc3RhdGljIGludCBpbXg2X3BjaWVfc3RhcnRfbGluayhzdHJ1Y3Qg
-ZHdfcGNpZSAqcGNpKQ0KPiA+ICAJZGV2X2RiZyhkZXYsICJQSFkgREVCVUdfUjA9MHglMDh4IERF
-QlVHX1IxPTB4JTA4eFxuIiwNCj4gPiAgCQlkd19wY2llX3JlYWRsX2RiaShwY2ksIFBDSUVfUE9S
-VF9ERUJVRzApLA0KPiA+ICAJCWR3X3BjaWVfcmVhZGxfZGJpKHBjaSwgUENJRV9QT1JUX0RFQlVH
-MSkpOw0KPiA+IC0JaW14Nl9wY2llX3Jlc2V0X3BoeShpbXg2X3BjaWUpOw0KPiA+ICAJcmV0dXJu
-IHJldDsNCj4gPiAgfQ0KPiA+DQo+ID4gQEAgLTkyMSw4ICs5MjQsMjkgQEAgc3RhdGljIGludCBp
-bXg2X3BjaWVfaG9zdF9pbml0KHN0cnVjdCBwY2llX3BvcnQgKnBwKQ0KPiA+ICAJcmV0dXJuIDA7
-DQo+ID4gIH0NCj4gPg0KPiA+ICtzdGF0aWMgdm9pZCBpbXg2X3BjaWVfaG9zdF9leGl0KHN0cnVj
-dCBwY2llX3BvcnQgKnBwKSB7DQo+ID4gKwlzdHJ1Y3QgZHdfcGNpZSAqcGNpID0gdG9fZHdfcGNp
-ZV9mcm9tX3BwKHBwKTsNCj4gPiArCXN0cnVjdCBkZXZpY2UgKmRldiA9IHBjaS0+ZGV2Ow0KPiA+
-ICsJc3RydWN0IGlteDZfcGNpZSAqaW14Nl9wY2llID0gdG9faW14Nl9wY2llKHBjaSk7DQo+ID4g
-Kw0KPiA+ICsJaW14Nl9wY2llX3Jlc2V0X3BoeShpbXg2X3BjaWUpOw0KPiA+ICsJaW14Nl9wY2ll
-X2Nsa19kaXNhYmxlKGlteDZfcGNpZSk7DQo+ID4gKwlzd2l0Y2ggKGlteDZfcGNpZS0+ZHJ2ZGF0
-YS0+dmFyaWFudCkgew0KPiA+ICsJY2FzZSBJTVg4TU06DQo+ID4gKwkJaWYgKHBoeV9wb3dlcl9v
-ZmYoaW14Nl9wY2llLT5waHkpKQ0KPiA+ICsJCQlkZXZfZXJyKGRldiwgInVuYWJsZSB0byBwb3dl
-ciBvZmYgcGh5XG4iKTsNCj4gPiArCQlicmVhazsNCj4gPiArCWRlZmF1bHQ6DQo+ID4gKwkJYnJl
-YWs7DQo+ID4gKwl9DQo+ID4gKwlpZiAoaW14Nl9wY2llLT52cGNpZSkNCj4gPiArCQlyZWd1bGF0
-b3JfZGlzYWJsZShpbXg2X3BjaWUtPnZwY2llKTsNCj4gPiArfQ0KPiA+ICsNCj4gPiAgc3RhdGlj
-IGNvbnN0IHN0cnVjdCBkd19wY2llX2hvc3Rfb3BzIGlteDZfcGNpZV9ob3N0X29wcyA9IHsNCj4g
-PiAgCS5ob3N0X2luaXQgPSBpbXg2X3BjaWVfaG9zdF9pbml0LA0KPiA+ICsJLmhvc3RfZXhpdCA9
-IGlteDZfcGNpZV9ob3N0X2V4aXQsDQo+ID4gIH07DQo+ID4NCj4gPiAgc3RhdGljIGNvbnN0IHN0
-cnVjdCBkd19wY2llX29wcyBkd19wY2llX29wcyA9IHsNCj4gPiAtLQ0KPiA+IDIuMjUuMQ0KPiA+
-DQo=
+This patch add a new api PR_PROCESS_NUMAB in prctl.
+
+A large number of page faults will cause performance loss when numa
+balancing is performing. Thus those processes which care about worst-case
+performance need numa balancing disabled. Others, on the contrary, allow a
+temporary performance loss in exchange for higher average performance, so
+enable numa balancing is better for them.
+
+Numa balancing can only be controlled globally by
+/proc/sys/kernel/numa_balancing. Due to the above case, we want to
+disable/enable numa_balancing per-process instead.
+
+Add numa_balancing under mm_struct. Then use it in task_tick_fair.
+
+Set per-process numa balancing:
+	prctl(PR_PROCESS_NUMAB, PR_SET_PROCESS_NUMAB_DISABLED);
+	prctl(PR_PROCESS_NUMAB, PR_SET_PROCESS_NUMAB_ENABLED);
+	prctl(PR_PROCESS_NUMAB, PR_SET_PROCESS_NUMAB_DEFAULT);
+Get numa_balancing state:
+	prctl(PR_PROCESS_NUMAB, PR_GET_PROCESS_NUMAB, &ret);
+	cat /proc/<pid>/status | grep NumaB_enabled
+
+Cc: linux-api@vger.kernel.org
+Signed-off-by: Gang Li <ligang.bdlg@bytedance.com>
+---
+
+Changes in v4:
+- Adaptation of new feature: optimize page placement for memory tiering system.
+  https://lore.kernel.org/all/20220128082751.593478-3-ying.huang@intel.com/
+- warp sched_numa_balancing and mm->numab_enabled with process_sched_numab_enabled().
+
+Changes in v3:
+- Fix compile error.
+
+Changes in v2:
+- Now PR_NUMA_BALANCING support three states: enabled, disabled, default.
+  enabled and disabled will ignore global setting, and default will follow
+  global setting.
+
+---
+ Documentation/filesystems/proc.rst   |  2 ++
+ fs/proc/task_mmu.c                   | 19 +++++++++++++++
+ include/linux/mm_types.h             |  3 +++
+ include/linux/sched/numa_balancing.h |  6 +++++
+ include/linux/sched/sysctl.h         | 19 +++++++++++++++
+ include/uapi/linux/prctl.h           |  7 ++++++
+ kernel/fork.c                        |  3 +++
+ kernel/sched/fair.c                  | 34 ++++++++++++++++++++++-----
+ kernel/sys.c                         | 35 ++++++++++++++++++++++++++++
+ mm/huge_memory.c                     |  2 +-
+ mm/mprotect.c                        |  6 ++---
+ 11 files changed, 126 insertions(+), 10 deletions(-)
+
+diff --git a/Documentation/filesystems/proc.rst b/Documentation/filesystems/proc.rst
+index 061744c436d9..00f6503f0793 100644
+--- a/Documentation/filesystems/proc.rst
++++ b/Documentation/filesystems/proc.rst
+@@ -192,6 +192,7 @@ read the file /proc/PID/status::
+   VmLib:      1412 kB
+   VmPTE:        20 kb
+   VmSwap:        0 kB
++  NumaB_enabled:  default
+   HugetlbPages:          0 kB
+   CoreDumping:    0
+   THP_enabled:	  1
+@@ -273,6 +274,7 @@ It's slow but very precise.
+  VmPTE                       size of page table entries
+  VmSwap                      amount of swap used by anonymous private data
+                              (shmem swap usage is not included)
++ NumaB_enabled               numa balancing state, set by prctl(PR_PROCESS_NUMAB, ...)
+  HugetlbPages                size of hugetlb memory portions
+  CoreDumping                 process's memory is currently being dumped
+                              (killing the process may lead to a corrupted core)
+diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
+index 6e97ed775074..b1aa100b8711 100644
+--- a/fs/proc/task_mmu.c
++++ b/fs/proc/task_mmu.c
+@@ -20,6 +20,7 @@
+ #include <linux/shmem_fs.h>
+ #include <linux/uaccess.h>
+ #include <linux/pkeys.h>
++#include <linux/sched/numa_balancing.h>
+ 
+ #include <asm/elf.h>
+ #include <asm/tlb.h>
+@@ -76,6 +77,24 @@ void task_mem(struct seq_file *m, struct mm_struct *mm)
+ 		    " kB\nVmPTE:\t", mm_pgtables_bytes(mm) >> 10, 8);
+ 	SEQ_PUT_DEC(" kB\nVmSwap:\t", swap);
+ 	seq_puts(m, " kB\n");
++#ifdef CONFIG_NUMA_BALANCING
++	seq_puts(m, "NumaB_enabled:\t");
++	switch (mm->numab_enabled) {
++	case PROCESS_NUMAB_DEFAULT:
++		seq_puts(m, "default");
++		break;
++	case PROCESS_NUMAB_DISABLED:
++		seq_puts(m, "disabled");
++		break;
++	case PROCESS_NUMAB_ENABLED:
++		seq_puts(m, "enabled");
++		break;
++	default:
++		seq_puts(m, "unknown");
++		break;
++	}
++	seq_putc(m, '\n');
++#endif
+ 	hugetlb_report_usage(m, mm);
+ }
+ #undef SEQ_PUT_DEC
+diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
+index 9f05ffa12265..5a42aba3b17f 100644
+--- a/include/linux/mm_types.h
++++ b/include/linux/mm_types.h
+@@ -626,6 +626,9 @@ struct mm_struct {
+ 
+ 		/* numa_scan_seq prevents two threads setting pte_numa */
+ 		int numa_scan_seq;
++
++		/* Controls whether NUMA balancing is active for this mm. */
++		int numab_enabled;
+ #endif
+ 		/*
+ 		 * An operation with batched TLB flushing is going on. Anything
+diff --git a/include/linux/sched/numa_balancing.h b/include/linux/sched/numa_balancing.h
+index 3988762efe15..c7dc08d6ba6a 100644
+--- a/include/linux/sched/numa_balancing.h
++++ b/include/linux/sched/numa_balancing.h
+@@ -16,6 +16,12 @@
+ #define TNF_MIGRATE_FAIL 0x10
+ 
+ #ifdef CONFIG_NUMA_BALANCING
++enum {
++	PROCESS_NUMAB_DISABLED,
++	PROCESS_NUMAB_ENABLED,
++	PROCESS_NUMAB_DEFAULT
++};
++DECLARE_STATIC_KEY_FALSE(sched_numa_balancing);
+ extern void task_numa_fault(int last_node, int node, int pages, int flags);
+ extern pid_t task_numa_group_id(struct task_struct *p);
+ extern void set_numabalancing_state(bool enabled);
+diff --git a/include/linux/sched/sysctl.h b/include/linux/sched/sysctl.h
+index c1076b5e17fb..77d010942481 100644
+--- a/include/linux/sched/sysctl.h
++++ b/include/linux/sched/sysctl.h
+@@ -3,6 +3,7 @@
+ #define _LINUX_SCHED_SYSCTL_H
+ 
+ #include <linux/types.h>
++#include <linux/sched/numa_balancing.h>
+ 
+ struct ctl_table;
+ 
+@@ -29,8 +30,26 @@ enum sched_tunable_scaling {
+ 
+ #ifdef CONFIG_NUMA_BALANCING
+ extern int sysctl_numa_balancing_mode;
++static inline int process_sysctl_numab_mode(struct mm_struct *mm)
++{
++	int numab = mm->numab_enabled;
++
++	switch (numab) {
++	case PROCESS_NUMAB_ENABLED:
++		return NUMA_BALANCING_NORMAL;
++	case PROCESS_NUMAB_DISABLED:
++		return NUMA_BALANCING_DISABLED;
++	case PROCESS_NUMAB_DEFAULT:
++	default:
++		return sysctl_numa_balancing_mode;
++	}
++}
+ #else
+ #define sysctl_numa_balancing_mode	0
++static inline int process_sysctl_numab_mode(struct mm_struct *mm)
++{
++	return NUMA_BALANCING_DISABLED;
++}
+ #endif
+ 
+ /*
+diff --git a/include/uapi/linux/prctl.h b/include/uapi/linux/prctl.h
+index e998764f0262..d06a904c35c1 100644
+--- a/include/uapi/linux/prctl.h
++++ b/include/uapi/linux/prctl.h
+@@ -275,4 +275,11 @@ struct prctl_mm_map {
+ #define PR_SET_VMA		0x53564d41
+ # define PR_SET_VMA_ANON_NAME		0
+ 
++/* Set/get enabled per-process numa_balancing */
++#define PR_PROCESS_NUMAB		63
++# define PR_SET_PROCESS_NUMAB_DISABLED	PROCESS_NUMAB_DISABLED
++# define PR_SET_PROCESS_NUMAB_ENABLED	PROCESS_NUMAB_ENABLED
++# define PR_SET_PROCESS_NUMAB_DEFAULT	PROCESS_NUMAB_DEFAULT
++# define PR_GET_PROCESS_NUMAB		3
++
+ #endif /* _LINUX_PRCTL_H */
+diff --git a/kernel/fork.c b/kernel/fork.c
+index 64dbfb9426fd..2f93b240ebab 100644
+--- a/kernel/fork.c
++++ b/kernel/fork.c
+@@ -1059,6 +1059,9 @@ static struct mm_struct *mm_init(struct mm_struct *mm, struct task_struct *p,
+ 	init_tlb_flush_pending(mm);
+ #if defined(CONFIG_TRANSPARENT_HUGEPAGE) && !USE_SPLIT_PMD_PTLOCKS
+ 	mm->pmd_huge_pte = NULL;
++#endif
++#ifdef CONFIG_NUMA_BALANCING
++	mm->numab_enabled = PROCESS_NUMAB_DEFAULT;
+ #endif
+ 	mm_init_uprobes_state(mm);
+ 	hugetlb_count_init(mm);
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index 28b91f11b618..7ff5831c5b33 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -2575,6 +2575,23 @@ void task_numa_free(struct task_struct *p, bool final)
+ 	}
+ }
+ 
++static inline bool process_sched_numab_enabled(struct task_struct *p)
++{
++	if (p->mm) {
++		int numab = p->mm->numab_enabled;
++
++		switch (numab) {
++		case PROCESS_NUMAB_ENABLED:
++			return true;
++		case PROCESS_NUMAB_DISABLED:
++			return false;
++		case PROCESS_NUMAB_DEFAULT:
++			break;
++		}
++	}
++	return static_branch_unlikely(&sched_numa_balancing);
++}
++
+ /*
+  * Got a PROT_NONE fault for a page on @node.
+  */
+@@ -2587,13 +2604,13 @@ void task_numa_fault(int last_cpupid, int mem_node, int pages, int flags)
+ 	struct numa_group *ng;
+ 	int priv;
+ 
+-	if (!static_branch_likely(&sched_numa_balancing))
+-		return;
+-
+ 	/* for example, ksmd faulting in a user's mm */
+ 	if (!p->mm)
+ 		return;
+ 
++	if (!process_sched_numab_enabled(p))
++		return;
++
+ 	/* Allocate buffer to track faults on a per-node basis */
+ 	if (unlikely(!p->numa_faults)) {
+ 		int size = sizeof(*p->numa_faults) *
+@@ -2894,7 +2911,7 @@ static void update_scan_period(struct task_struct *p, int new_cpu)
+ 	int src_nid = cpu_to_node(task_cpu(p));
+ 	int dst_nid = cpu_to_node(new_cpu);
+ 
+-	if (!static_branch_likely(&sched_numa_balancing))
++	if (!process_sched_numab_enabled(p))
+ 		return;
+ 
+ 	if (!p->mm || !p->numa_faults || (p->flags & PF_EXITING))
+@@ -2928,6 +2945,11 @@ static void task_tick_numa(struct rq *rq, struct task_struct *curr)
+ {
+ }
+ 
++static inline bool process_sched_numab_enabled(struct task_struct *p)
++{
++	return false;
++}
++
+ static inline void account_numa_enqueue(struct rq *rq, struct task_struct *p)
+ {
+ }
+@@ -7687,7 +7709,7 @@ static int migrate_degrades_locality(struct task_struct *p, struct lb_env *env)
+ 	unsigned long src_weight, dst_weight;
+ 	int src_nid, dst_nid, dist;
+ 
+-	if (!static_branch_likely(&sched_numa_balancing))
++	if (!process_sched_numab_enabled(p))
+ 		return -1;
+ 
+ 	if (!p->numa_faults || !(env->sd->flags & SD_NUMA))
+@@ -11164,7 +11186,7 @@ static void task_tick_fair(struct rq *rq, struct task_struct *curr, int queued)
+ 		entity_tick(cfs_rq, se, queued);
+ 	}
+ 
+-	if (static_branch_unlikely(&sched_numa_balancing))
++	if (process_sched_numab_enabled(curr))
+ 		task_tick_numa(rq, curr);
+ 
+ 	update_misfit_status(curr, rq);
+diff --git a/kernel/sys.c b/kernel/sys.c
+index ecc4cf019242..04cb73e39926 100644
+--- a/kernel/sys.c
++++ b/kernel/sys.c
+@@ -58,6 +58,7 @@
+ #include <linux/sched/coredump.h>
+ #include <linux/sched/task.h>
+ #include <linux/sched/cputime.h>
++#include <linux/sched/numa_balancing.h>
+ #include <linux/rcupdate.h>
+ #include <linux/uidgid.h>
+ #include <linux/cred.h>
+@@ -2081,6 +2082,23 @@ static int prctl_set_auxv(struct mm_struct *mm, unsigned long addr,
+ 	return 0;
+ }
+ 
++#ifdef CONFIG_NUMA_BALANCING
++static int prctl_pid_numa_balancing_write(int numa_balancing)
++{
++	if (numa_balancing != PR_SET_PROCESS_NUMAB_DEFAULT
++	    && numa_balancing != PR_SET_PROCESS_NUMAB_DISABLED
++	    && numa_balancing != PR_SET_PROCESS_NUMAB_ENABLED)
++		return -EINVAL;
++	current->mm->numab_enabled = numa_balancing;
++	return 0;
++}
++
++static int prctl_pid_numa_balancing_read(void)
++{
++	return current->mm->numab_enabled;
++}
++#endif
++
+ static int prctl_set_mm(int opt, unsigned long addr,
+ 			unsigned long arg4, unsigned long arg5)
+ {
+@@ -2585,6 +2603,23 @@ SYSCALL_DEFINE5(prctl, int, option, unsigned long, arg2, unsigned long, arg3,
+ 		error = set_syscall_user_dispatch(arg2, arg3, arg4,
+ 						  (char __user *) arg5);
+ 		break;
++#ifdef CONFIG_NUMA_BALANCING
++	case PR_PROCESS_NUMAB:
++		switch (arg2) {
++		case PR_SET_PROCESS_NUMAB_DEFAULT:
++		case PR_SET_PROCESS_NUMAB_DISABLED:
++		case PR_SET_PROCESS_NUMAB_ENABLED:
++			error = prctl_pid_numa_balancing_write((int)arg2);
++			break;
++		case PR_GET_PROCESS_NUMAB:
++			error = put_user(prctl_pid_numa_balancing_read(), (int __user *)arg3);
++			break;
++		default:
++			error = -EINVAL;
++			break;
++		}
++		break;
++#endif
+ #ifdef CONFIG_SCHED_CORE
+ 	case PR_SCHED_CORE:
+ 		error = sched_core_share_pid(arg2, arg3, arg4, arg5);
+diff --git a/mm/huge_memory.c b/mm/huge_memory.c
+index 09fb65a80e63..25a660065af1 100644
+--- a/mm/huge_memory.c
++++ b/mm/huge_memory.c
+@@ -1760,7 +1760,7 @@ int change_huge_pmd(struct vm_area_struct *vma, pmd_t *pmd,
+ 		 * Skip scanning top tier node if normal numa
+ 		 * balancing is disabled
+ 		 */
+-		if (!(sysctl_numa_balancing_mode & NUMA_BALANCING_NORMAL) &&
++		if (!(process_sysctl_numab_mode(vma->vm_mm) & NUMA_BALANCING_NORMAL) &&
+ 		    node_is_toptier(page_to_nid(page)))
+ 			goto unlock;
+ 	}
+diff --git a/mm/mprotect.c b/mm/mprotect.c
+index 2fe03e695c81..2ae0127f46e8 100644
+--- a/mm/mprotect.c
++++ b/mm/mprotect.c
+@@ -33,7 +33,7 @@
+ #include <asm/cacheflush.h>
+ #include <asm/mmu_context.h>
+ #include <asm/tlbflush.h>
+-
++#include <linux/sched/numa_balancing.h>
+ #include "internal.h"
+ 
+ static unsigned long change_pte_range(struct vm_area_struct *vma, pmd_t *pmd,
+@@ -119,8 +119,8 @@ static unsigned long change_pte_range(struct vm_area_struct *vma, pmd_t *pmd,
+ 				 * Skip scanning top tier node if normal numa
+ 				 * balancing is disabled
+ 				 */
+-				if (!(sysctl_numa_balancing_mode & NUMA_BALANCING_NORMAL) &&
+-				    node_is_toptier(nid))
++				if (!(process_sysctl_numab_mode(vma->vm_mm) & NUMA_BALANCING_NORMAL)
++				    && node_is_toptier(nid))
+ 					continue;
+ 			}
+ 
+-- 
+2.20.1
+

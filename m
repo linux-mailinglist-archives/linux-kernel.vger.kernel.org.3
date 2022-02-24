@@ -2,234 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92B814C2B20
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 12:44:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1845C4C2B25
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 12:46:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233957AbiBXLob (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 06:44:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50102 "EHLO
+        id S234107AbiBXLpG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 06:45:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231176AbiBXLo3 (ORCPT
+        with ESMTP id S231176AbiBXLpC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 06:44:29 -0500
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BA8928DDF9
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 03:43:59 -0800 (PST)
-Received: by mail-lf1-x130.google.com with SMTP id b11so3304783lfb.12
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 03:43:58 -0800 (PST)
+        Thu, 24 Feb 2022 06:45:02 -0500
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D027C3EB82
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 03:44:32 -0800 (PST)
+Received: by mail-wr1-x42c.google.com with SMTP id d28so2573789wra.4
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 03:44:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=0aj1sHJcqKfZb0FtBlcvqwZ+alQwzGOksJeJvrB2n3c=;
-        b=lKuEAZnyhHTHhRa8sI+KaAy+L/24jIHphLByYoXbT7Laiv3Pp2hGZx5OkqoRCCwQiB
-         G5snGJHKil1n7xQZDv4CkZYg5Oexa2ZeRnkMZGZ9K3qBO72NusQBRomYTmqJx26nK2bl
-         k1uSUGzItmiRTTBKKl9kR2We0meBcXcQOJid+4UuFcbyBJ6ZnMFnk+3VVdO40M8QaLXn
-         215J84p6I9iqmAxns1anQP0EGVwzk+gvFKfqAt15OfNbp6i5onWDrRyNazdXg3ct2bC9
-         2GESHzW5dJ+rx0bqHIv4hXUxUzqVnQxr9B59xRg2RVCmLF+JL9/DauUh+hTdUK82Kyfo
-         PgVw==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=By0koPKvfxcMR4uami4q6nEo7H/plZ6B7hXdRpr9zos=;
+        b=i8qMcPf1Q3mE5GCDoGg5rN2z7KNR4v1QkWzdeaMyW3k3kXIOY/PIZZoO6jIzrS9GXf
+         N9J6MgxVHAl8cKqQeyfCQQDG4qPlkD5aYJCyfFSPkTwQNcaQ9gYSWj1kbxmzh8jUh+4o
+         WC4u08jO9c1zBuBLLsiQa8Spwvz7ssr2B3BAWulYxl4FnxeAYyvP13FtiYVEawCyqc0q
+         +yzoQlx6Y4aTL5/fh1nHkgZbx5plCCjmpVTf1t+MWsHwZBuivtQnySk8fM3G6A5NiXCZ
+         sXHHBvZ4aTdUjMWeM2AYEuCPcWqA5p7ojUQdIZHcKCaRG/P808wP/zP8G+Ji2NOxc4zc
+         g81g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=0aj1sHJcqKfZb0FtBlcvqwZ+alQwzGOksJeJvrB2n3c=;
-        b=7VFjyxOTMCaMnidiCUmn/md5zPuUJpCsm/1RJiXnwuWPzsHuvOtWSRZ0WySaF5xm9h
-         3J00Mx3YQwlXlNE0jh76b52r+AmsOMV/GkEWA61BnyZmQJv5DQ5RsicauCVrlTuiRJwo
-         +YnCfdSj/udFV2KlinO1atqAfuP4KwpCa+JJZerO86YiVYvuJXGp3j+UsGpuySTfDY9m
-         ZdR609dvAuhsi0L/Cj4IjGEw8sMqr1m3+RmYWsDLvHbkfIGh9j5Y5pwNXVeZHwA51Hm5
-         G0d2U4rTNOl5GmVjHwOkZGoervXgo1Mw/83CEheeo9HAD2IMQa8kPPGqNUu67icZpl9r
-         rVvA==
-X-Gm-Message-State: AOAM530EpSRfP3xqINJI02JFNJQGLmU0DI/RnhCN49L2cX9oRJj1NoxI
-        UmGLQ6mdRRHpZihdeIdUJk0n89n9pnxTzYmTe4WQiw==
-X-Google-Smtp-Source: ABdhPJz3iN1wfagflfnHgoSqfOU5YkaziRD5rRzHy7J3nc0KrnbGmpLRrTnVqtp7IHNN091wV5xSs6YsGn582ChCuus=
-X-Received: by 2002:a19:e049:0:b0:42f:b0e2:10c4 with SMTP id
- g9-20020a19e049000000b0042fb0e210c4mr1553336lfj.170.1645703037284; Thu, 24
- Feb 2022 03:43:57 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=By0koPKvfxcMR4uami4q6nEo7H/plZ6B7hXdRpr9zos=;
+        b=5ZHR9MNo33O5QkZHdMZSeou6YQQxCnVtWLzh7AySDeucMQ3ICDDM/ugSWUpINCISD1
+         hijXPmdlIBlzEAHMd7OyQk/xQrNGTLbmPvctGbk3Ns/xvqCVoPa7bPZTjhECMus4atzz
+         oEUEcD+0wL0UvgjcyqSxYCmIncaSfq8hsCvthyrCOmfXQJnDDqwtFC3DSlB3o4K52Lup
+         lIyuZVK9voPd1dQzp4nU82qDYE7IZw+uErO/AFdk3gkwQpieS4O32YF6cndvebVYt/EL
+         /oBtBbms35Sm1z+COV0A6W/8ZBTmm9M4+XMKHWJZT9yLZW6pVxnlYR4QakYc2UUGpcdV
+         Z52w==
+X-Gm-Message-State: AOAM532YNk3I6haVcBlMnOpv8GymWIdK7af62JIPLZVUJwdkeMYgOw/P
+        jndSzVbotKYuYdzmsS+6n+1ltA==
+X-Google-Smtp-Source: ABdhPJxFyXliu42yySrAeEXNzyWqVzug0J0Iti33/VcWEhV2LbIEmmE4MOW6ths5lINZk21h7SfROw==
+X-Received: by 2002:a05:6000:186d:b0:1ea:8e14:21c5 with SMTP id d13-20020a056000186d00b001ea8e1421c5mr1880571wri.635.1645703071405;
+        Thu, 24 Feb 2022 03:44:31 -0800 (PST)
+Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
+        by smtp.gmail.com with ESMTPSA id u14sm3164913wmq.41.2022.02.24.03.44.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Feb 2022 03:44:31 -0800 (PST)
+Date:   Thu, 24 Feb 2022 11:44:28 +0000
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     Heiko Stuebner <heiko@sntech.de>, Rob Herring <robh+dt@kernel.org>,
+        Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        devicetree@vger.kernel.org, chrome-platform@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-pwm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        linux-rockchip@lists.infradead.org
+Subject: Re: [PATCH 1/4] dt-bindings: pwm: google,cros-ec: include generic
+ pwm schema
+Message-ID: <YhdvnCnXbzFz63ys@google.com>
+References: <20220214081916.162014-1-krzysztof.kozlowski@canonical.com>
+ <3248917.W5uN0jUHDo@phil>
+ <YhdXyBvAbdHzc4gH@google.com>
+ <1817486.VeUe9BSz9F@phil>
+ <ad6e347b-a25b-5309-2a6a-8fd3faba256c@canonical.com>
 MIME-Version: 1.0
-References: <cover.1645558375.git.riteshh@linux.ibm.com> <e91b6872860df3ec520799a5d0b65e54ccf32407.1645558375.git.riteshh@linux.ibm.com>
- <CAK896s7V7wj0Yiu0NQEFvmS9-oivJUosgMYW5UBJ4cX2YCSh6g@mail.gmail.com> <20220223135755.plbr2fvt66k3xyn5@riteshh-domain>
-In-Reply-To: <20220223135755.plbr2fvt66k3xyn5@riteshh-domain>
-From:   Xin Yin <yinxin.x@bytedance.com>
-Date:   Thu, 24 Feb 2022 19:43:46 +0800
-Message-ID: <CAK896s7GsY_qGPZpA0KvmfsA7frkP0=nO8Fg3qd-ObmL-g+8AA@mail.gmail.com>
-Subject: Re: [External] [RFC 9/9] ext4: fast_commit missing tracking updates
- to a file
-To:     Ritesh Harjani <riteshh@linux.ibm.com>
-Cc:     linux-ext4@vger.kernel.org,
-        Harshad Shirwadkar <harshadshirwadkar@gmail.com>,
-        "Theodore Ts'o" <tytso@mit.edu>, Jan Kara <jack@suse.cz>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ad6e347b-a25b-5309-2a6a-8fd3faba256c@canonical.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 23, 2022 at 9:59 PM Ritesh Harjani <riteshh@linux.ibm.com> wrote:
->
-> On 22/02/23 11:50AM, Xin Yin wrote:
-> > On Wed, Feb 23, 2022 at 4:36 AM Ritesh Harjani <riteshh@linux.ibm.com> wrote:
-> > >
-> > > <DO NOT MERGE THIS YET>
-> > >
-> > > Testcase
-> > > ==========
-> > > 1. i=0; while [ $i -lt 1000 ]; do xfs_io -f -c "pwrite -S 0xaa -b 32k 0 32k" -c "fsync" /mnt/$i; i=$(($i+1)); done && sudo ./src/godown -v /mnt && sudo umount /mnt && sudo mount /dev/loop2 /mnt'
-> > > 2. ls -alih /mnt/ -> In this you will observe one such file with 0 bytes (which ideally should not happen)
-> > >
-> > > ^^^ say if you don't see the issue because your underlying storage
-> > > device is very fast, then maybe try with commit=1 mount option.
-> > >
-> > > Analysis
-> > > ==========
-> > > It seems a file's updates can be a part of two transaction tid.
-> > > Below are the sequence of events which could cause this issue.
-> > >
-> > > jbd2_handle_start -> (t_tid = 38)
-> > > __ext4_new_inode
-> > > ext4_fc_track_template -> __track_inode -> (i_sync_tid = 38, t_tid = 38)
-> > > <track more updates>
-> > > jbd2_start_commit -> (t_tid = 38)
-> > >
-> > > jbd2_handle_start (tid = 39)
-> > > ext4_fc_track_template -> __track_inode -> (i_sync_tid = 38, t_tid 39)
-> > >     -> ext4_fc_reset_inode & ei->i_sync_tid = t_tid
-> > >
-> > > ext4_fc_commit_start -> (will wait since jbd2 full commit is in progress)
-> > > jbd2_end_commit (t_tid = 38)
-> > >     -> jbd2_fc_cleanup() -> this will cleanup entries in sbi->s_fc_q[FC_Q_MAIN]
-> > >         -> And the above could result inode size as 0 as  after effect.
-> > > ext4_fc_commit_stop
-> > >
-> > > You could find the logs for the above behavior for inode 979 at [1].
-> > >
-> > > -> So what is happening here is since the ei->i_fc_list is not empty
-> > > (because it is already part of sb's MAIN queue), we don't add this inode
-> > > again into neither sb's MAIN or STAGING queue.
-> > > And after jbd2_fc_cleanup() is called from jbd2 full commit, we
-> > > just remove this inode from the main queue.
-> > >
-> > > So as a simple fix, what I did below was to check if it is a jbd2 full commit
-> > > in ext4_fc_cleanup(), and if the ei->i_sync_tid > tid, that means we
-> > > need not remove that from MAIN queue. This is since neither jbd2 nor FC
-> > > has committed updates of those inodes for this new txn tid yet.
-> > >
-> > > But below are some quick queries on this
-> > > =========================================
-> > >
-> > > 1. why do we call ext4_fc_reset_inode() when inode tid and
-> > >    running txn tid does not match?
-> > This is part of a change in commit:bdc8a53a6f2f,  it fixes the issue
-> > for fc tracking logic while jbd2 commit is ongoing.
->
-> Thanks Xin for pointing the other issue too.
-> But I think what I was mostly referring to was - calling ext4_fc_reset_inode()
-> in ext4_fc_track_template().
->
-Understood, I missed something here, then maybe Harshad can give some
-directions for this part.
+On Thu, 24 Feb 2022, Krzysztof Kozlowski wrote:
 
-> <..>
->  391         tid = handle->h_transaction->t_tid;
->  392         mutex_lock(&ei->i_fc_lock);
->  393         if (tid == ei->i_sync_tid) {
->  394                 update = true;
->  395         } else {
->  396                 ext4_fc_reset_inode(inode);
->  397                 ei->i_sync_tid = tid;
->  398         }
->  399         ret = __fc_track_fn(inode, args, update);
->  400         mutex_unlock(&ei->i_fc_lock);
->  <..>
->
-> So, yes these are few corner cases which I want to take a deeper look at.
-> I vaugely understand that this reset inode is done since we anyway might have
-> done the full commit for previous tid, so we can reset the inode track range.
->
-> So, yes, we should carefully review this as well that if jbd2 commit happens for
-> an inode which is still part of MAIN_Q, then does it make sense to still
-> call ext4_fc_reset_inode() for that inode in ext4_fc_track_template()?
->
-> > If the inode tid is bigger than txn tid, that means this inode may be
-> > in the STAGING queue, if we reset it then it will lose the tack range.
-> > I think it's a similar issue, the difference is this inode is already
->
-> Do you have a test case which was failing for your issue?
-> I would like to test that one too.
-
-This issue can be triggered by generic/455 , but this is one failed
-case for it. I also do not have a reproducer for this.
-
->
->
-> > in the MAIN queue before the jbd2 commit starts.
-> > And yes , I think in this case we can not remove it from the MAIN
->
-> Yes. I too have a similar thought. But I still wanted to get few queries sorted
-> (like point 1 & 2).
->
-> > queue, but still need to clear EXT4_STATE_FC_COMMITTING right? it may
-> > block some task still waiting for it.
->
-> Sorry I didn't get you here. So I think we will end up in such situation
-> (where ext4_fc_cleanup() is getting called for an inode with i_sync_tid > tid)
-> only from full commit path right ?
-> And that won't set EXT4_FC_COMMITTING for this inode right anyways no?
-
- I am not sure if there are any other cases, But for now we also clear
-EXT4_STATE_FC_COMMITTING in the full commit path right? So maybe some
-further tests are needed.
-
-Thanks,
-Xin Yin
->
-> Do you mean anything else, or am I missing something here?
->
-> -ritesh
->
->
+> On 24/02/2022 11:06, Heiko Stuebner wrote:
+> > Am Donnerstag, 24. Februar 2022, 11:02:48 CET schrieb Lee Jones:
+> >> On Wed, 23 Feb 2022, Heiko Stuebner wrote:
+> >>
+> >>> Hi Lee,
+> >>>
+> >>> Am Mittwoch, 23. Februar 2022, 10:16:01 CET schrieb Lee Jones:
+> >>>> On Mon, 14 Feb 2022, Krzysztof Kozlowski wrote:
+> >>>>
+> >>>>> Include generic pwm.yaml schema, which enforces PWM node naming.  Keep
+> >>>>> the old name in bindings as deprecated.
+> >>>>>
+> >>>>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> >>>>> ---
+> >>>>>  Documentation/devicetree/bindings/mfd/google,cros-ec.yaml    | 4 ++++
+> >>>>
+> >>>> Acked-by: Lee Jones <lee.jones@linaro.org>
+> >>>
+> >>> what is your expectation regarding this patch?
+> >>>
+> >>> Are you planning to merge it or are you expecting this to go through
+> >>> some other tree?
+> >>>
+> >>> The binding-change here is backward-comaptible in that the old
+> >>> node-name is still in it, only marked as deprecated, so in theory
+> >>> this patch should be able to be applied on its own without
+> >>> causing defects.
+> >>
+> >> In an ideal world, it would be broken up and I would take the MFD
+> >> part.   Is that possible or are there dependencies?
+> > 
+> > That is also what Krzysztof had in mind - see his reply to patch4.
+> > Binding going through the MFD tree and soc maintainers applying
+> > the individual dts patches.
+> > 
+> > As written the binding change is backward compatible, so no harm.
+> > 
+> > I was just confused by the "Acked-by" and wanted to clarify how you
+> > see it ;-)
 > >
-> > Thanks,
-> > Xin Yin
-> > >
-> > > 2. Also is this an expected behavior from the design perspective of
-> > >    fast_commit. i.e.
-> > >    a. the inode can be part of two tids?
-> > >    b. And that while a full commit is in progress, the inode can still
-> > >    receive updates but using a new transaction tid.
-> > >
-> > > Frankly speaking, since I was also working on other things, so I haven't
-> > > yet got the chance to completely analyze the situation yet.
-> > > Once I have those things sorted, I will spend more time on this, to
-> > > understand it more. Meanwhile if you already have some answers to above
-> > > queries/observations, please do share those here.
-> > >
-> > > Links
-> > > =========
-> > > [1] https://raw.githubusercontent.com/riteshharjani/LinuxStudy/master/ext4/fast_commit/fc_inode_missing_updates_ino_979.txt
-> > >
-> > > Signed-off-by: Ritesh Harjani <riteshh@linux.ibm.com>
-> > > ---
-> > >  fs/ext4/fast_commit.c | 2 ++
-> > >  1 file changed, 2 insertions(+)
-> > >
-> > > diff --git a/fs/ext4/fast_commit.c b/fs/ext4/fast_commit.c
-> > > index 8803ba087b07..769b584c2552 100644
-> > > --- a/fs/ext4/fast_commit.c
-> > > +++ b/fs/ext4/fast_commit.c
-> > > @@ -1252,6 +1252,8 @@ static void ext4_fc_cleanup(journal_t *journal, int full, tid_t tid)
-> > >         spin_lock(&sbi->s_fc_lock);
-> > >         list_for_each_entry_safe(iter, iter_n, &sbi->s_fc_q[FC_Q_MAIN],
-> > >                                  i_fc_list) {
-> > > +               if (full && iter->i_sync_tid > tid)
-> > > +                       continue;
-> > >                 list_del_init(&iter->i_fc_list);
-> > >                 ext4_clear_inode_state(&iter->vfs_inode,
-> > >                                        EXT4_STATE_FC_COMMITTING);
-> > > --
-> > > 2.31.1
-> > >
+> 
+> The bindings patch should not be split more, but itself can be taken
+> alone. DTS patches can go via SoC maintainer trees.
+
+So in answer to Heiko's question, either Thierry, Rob or I can take
+the patch.  I'm not overly fussed which.  If I am to take it, I need
+Thierry's go-ahead and info on whether he requires a PR or not.
+
+-- 
+Lee Jones [李琼斯]
+Principal Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog

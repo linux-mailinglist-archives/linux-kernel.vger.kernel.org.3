@@ -2,46 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BF4E4C2FB2
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 16:31:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B6F9D4C3043
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 16:47:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236286AbiBXP35 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 10:29:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54770 "EHLO
+        id S235337AbiBXPpz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 10:45:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236264AbiBXP3z (ORCPT
+        with ESMTP id S230062AbiBXPpw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 10:29:55 -0500
-Received: from michel.telenet-ops.be (michel.telenet-ops.be [IPv6:2a02:1800:110:4::f00:18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C89EE1BE4C2
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 07:29:22 -0800 (PST)
-Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed40:598d:7788:288b:e4f])
-        by michel.telenet-ops.be with bizsmtp
-        id z3VK260070fvPgN063VKob; Thu, 24 Feb 2022 16:29:19 +0100
-Received: from rox.of.borg ([192.168.97.57])
-        by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1nNG3S-001rz5-NJ; Thu, 24 Feb 2022 16:29:18 +0100
-Received: from geert by rox.of.borg with local (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1nNG3S-00Ciky-9h; Thu, 24 Feb 2022 16:29:18 +0100
-From:   Geert Uytterhoeven <geert+renesas@glider.be>
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Horatiu Vultur <horatiu.vultur@microchip.com>,
-        Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>
-Cc:     linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH] clk: COMMON_CLK_LAN966X should depend on SOC_LAN966
-Date:   Thu, 24 Feb 2022 16:29:17 +0100
-Message-Id: <eb102eae05e5667b9bd342a0c387f7f262d24bda.1645716471.git.geert+renesas@glider.be>
-X-Mailer: git-send-email 2.25.1
+        Thu, 24 Feb 2022 10:45:52 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 723237EA02
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 07:45:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645717522; x=1677253522;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=9+DVXx/isU6uWI6/XyBC0Lnisob2NuO5FXAXMzKIKQQ=;
+  b=WBsP2n9bNrkP9pFry6jEh1+v2K8hyyU9aGn2TAtmb5dYtcSu9RI2g0z6
+   G09Yak9efLf04yCdoy3hZPJUyWxUwnZcsvREkFQt5/R03tB0kbFosqSwN
+   bcK9CiFovVzEdV0DDqC1zCkz1u2UmnW4hoyjp2IWwQ5nMe7yC2BkMcdUc
+   VRzoxEJgwhk5nXvlku6U8LypIq5UUC3JRrhjESiuQywkeMlCIDm1wt7A3
+   yB3+MRPkDXjallKxxjCTNGuso/118aSgGES2/AK3+c9ov9J35XWe62cqV
+   MhNgCz7WfsC0tbpfL94rkaQzu2xHRmi4Q1Kl7wKo9926BdTdAG7UiHpk9
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10268"; a="239663581"
+X-IronPort-AV: E=Sophos;i="5.90,134,1643702400"; 
+   d="scan'208";a="239663581"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2022 07:45:04 -0800
+X-IronPort-AV: E=Sophos;i="5.90,134,1643702400"; 
+   d="scan'208";a="533178468"
+Received: from ronakmeh-mobl1.amr.corp.intel.com (HELO [10.212.97.131]) ([10.212.97.131])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2022 07:45:04 -0800
+Message-ID: <522ab282-ecc2-4186-2d77-f6241e255109@linux.intel.com>
+Date:   Thu, 24 Feb 2022 09:29:25 -0600
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.5.0
+Subject: Re: [PATCH v2 14/16] ASoC: codecs: wsa881x: add runtime pm support
+Content-Language: en-US
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        broonie@kernel.org
+Cc:     lgirdwood@gmail.com, perex@perex.cz, tiwai@suse.com,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        quic_srivasam@quicinc.com
+References: <20220224111718.6264-1-srinivas.kandagatla@linaro.org>
+ <20220224111718.6264-15-srinivas.kandagatla@linaro.org>
+From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+In-Reply-To: <20220224111718.6264-15-srinivas.kandagatla@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -49,29 +65,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The LAN966x Generic Clock Controller is only present on Microchip
-LAN966x SoCs.  Hence add a dependency on SOC_LAN966, to prevent asking
-the user about this driver when configuring a kernel without LAN966x SoC
-support.
 
-Fixes: 54104ee023333e3b ("clk: lan966x: Add lan966x SoC clock driver")
-Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
----
- drivers/clk/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/clk/Kconfig b/drivers/clk/Kconfig
-index c390e26dadf471f5..1c82a3e1129d4342 100644
---- a/drivers/clk/Kconfig
-+++ b/drivers/clk/Kconfig
-@@ -232,6 +232,7 @@ config COMMON_CLK_GEMINI
- 
- config COMMON_CLK_LAN966X
- 	bool "Generic Clock Controller driver for LAN966X SoC"
-+	depends on SOC_LAN966 || COMPILE_TEST
- 	help
- 	  This driver provides support for Generic Clock Controller(GCK) on
- 	  LAN966X SoC. GCK generates and supplies clock to various peripherals
--- 
-2.25.1
+On 2/24/22 05:17, Srinivas Kandagatla wrote:
+> WSA881x codecs can not cope up with clk stop and requires a full reset after suspend.
+> WSA SoundWire Controller connected to this instances do a full soft reset on suspend.
 
+is it the manager or peripheral that cannot cope with clock stop?
+
+> @@ -1124,6 +1136,7 @@ static int wsa881x_probe(struct sdw_slave *pdev,
+>  	pdev->prop.sink_ports = GENMASK(WSA881X_MAX_SWR_PORTS, 0);
+>  	pdev->prop.sink_dpn_prop = wsa_sink_dpn_prop;
+>  	pdev->prop.scp_int1_mask = SDW_SCP_INT1_BUS_CLASH | SDW_SCP_INT1_PARITY;
+> +	pdev->prop.simple_clk_stop_capable = true;
+
+here it's pretty clear the peripheral is capable of supporting clock
+stop, no?
+
+Something's not clear between the commit message and the code.

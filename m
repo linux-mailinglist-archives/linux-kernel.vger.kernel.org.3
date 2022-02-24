@@ -2,94 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5F624C22C6
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 04:59:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 237AA4C22BF
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 04:58:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229815AbiBXD7G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 22:59:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40870 "EHLO
+        id S229805AbiBXD6x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 22:58:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229814AbiBXD7E (ORCPT
+        with ESMTP id S229735AbiBXD6w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 22:59:04 -0500
-Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8808D25D26E
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 19:58:35 -0800 (PST)
-Received: by mail-pj1-x1049.google.com with SMTP id t12-20020a17090a448c00b001b9cbac9c43so643090pjg.2
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 19:58:35 -0800 (PST)
+        Wed, 23 Feb 2022 22:58:52 -0500
+Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BB1F25D24A
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 19:58:23 -0800 (PST)
+Received: by mail-oi1-x231.google.com with SMTP id s5so1215443oic.10
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 19:58:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=S/BktkTRg3IeOBKPRorlYf8cDypH5GwEH28l9JcLNGU=;
-        b=ZQv2vKvk1pOFvbCHKtwEOcwunkRUKdEYXB3FRaaa1IRk3ge8LuaPQw3HhcCu12PSWn
-         kfCVvYbvALDA+VKUM9caWeWM6Vi0SWRYp2nwzvQjeM4t0D+QyxLMhLkLCNlGm455POwQ
-         GEtOAUlw0jbBFQTDccVh/sPZKHD0Is8L0KnY/3UFcE4KlnWmnTv1DgIg3wR9wYaP0j79
-         aWlx8j+W2oMu5a6mOk3M71HzQv63tooHPxgF3QU4KD9NNYO7IfDVitzwHSskyRd2Mcq6
-         ZFQHf1OMvGTZfeBMD+Jv1+6fn4xE4y/xEcb+gkgeBT7Q0YLFmvQceqMZm9Vc7O4ol467
-         XS0A==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=/rHiMAZ7RH310gYheZGBklR98lgCQetqEuPG8BVoGnc=;
+        b=HtVFWkzVcB22eS57Hsfut1l+77KIhq5/gbM5SHBvkuOE6GFtyFNtp1XsuwdvAW83X3
+         ibivk9VPRmP4U3z6bsgxysubOwl5aG/g5HS7qpv/tqtOUBJTvHwsMqPSTeAEP/MVC6OO
+         /6maTp2IRezoW92bw/VggdtfKvzpkQb8C2DUxQA4OmG4Lmw/r52TndslRuaa1rU1/IG4
+         jALk5HVeFaTImVEzZrIBRBEVnosnnF2TH2khXCmjESDUHliCT6/6azAc6K8jK9Js3sZn
+         lUVyp5ogTAVlShTSNzT1uV7YczjAr0Ws4Zt8R5eNq2Y0t9d/47OkROwPRmjYV6iwIBkE
+         k8Lw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=S/BktkTRg3IeOBKPRorlYf8cDypH5GwEH28l9JcLNGU=;
-        b=V0Fh3xKffnfS+OI4pvpGUwMhSG6iVvDcXPkzO4RhfQVts0VSAzhWorRQxitxlOda1n
-         vLjUb3oMgaFZmM7hQeix2dl8zzH7svUTNRwRaEpheBif+2OaQCG5XuUuV2jPlcmvhYT6
-         wdgcpHzRvnRY9RY5EeeUxjYPbbpfiDEnbT2uFqB6+S9pOneYeLCIJfc71z2q1rb8TeUO
-         6cLJsQIEYXx5dq3PZyzkruWt/OoRgPKB/mBFrsVQfbbxrzyQ5468ySXQTS61fpDouNmo
-         Gu8LJFbzn23Y5CPAsUTPwTQMUK1f0ecaHyOK4N1jb7LAF5UXHsk8F2lLKLYD1DcfZ5JI
-         nrKg==
-X-Gm-Message-State: AOAM531BcdZsaQiivMS1+NvEbQUpJRsznyBNfzQuNNolVasv3JW02iVc
-        Ul7FHThbUlCunWOQ3Mf0Nvjgez7euzXc3w==
-X-Google-Smtp-Source: ABdhPJwbv0RBFl9Vkc/6rlQfWONrAPccTmsZ4K0XwDlcMLb+tBigsUI7IXGaatRjiIPnuFbk9rpA/+7gWSR9dA==
-X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
- (user=davidgow job=sendgmr) by 2002:aa7:9911:0:b0:4e1:3a76:96f8 with SMTP id
- z17-20020aa79911000000b004e13a7696f8mr1055845pff.28.1645675114919; Wed, 23
- Feb 2022 19:58:34 -0800 (PST)
-Date:   Thu, 24 Feb 2022 11:58:19 +0800
-Message-Id: <20220224035819.1593730-1-davidgow@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.35.1.473.g83b2b277ed-goog
-Subject: [PATCH] Input: samsung-keypad - Properly state IOMEM dependency
-From:   David Gow <davidgow@google.com>
-To:     Joonyoung Shim <jy0922.shim@samsung.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     David Gow <davidgow@google.com>, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-um@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=/rHiMAZ7RH310gYheZGBklR98lgCQetqEuPG8BVoGnc=;
+        b=EWZPeQ8+Lo1Wr36plfp/06kai6WtT1G0sPfuwfu4FDKjVc7pM9gJqF1psWjoodvjM7
+         E77IBD0Wjqx+dH6sBCBqtK9x2w3jkPjZtDN4FweJi8SCjsv3ug5hKO01/vZuucCNmB2+
+         O7Nc+QxJDESIFDezYu9OYs4pcTNPdd6LM4wllqF/ixCjUytCso9ATstbUeg0LrMOktZU
+         7T0Yzh3JwMaII+VTlsFC55NeAxfhOP5/H/lnt3hEx5VjiEjeKdnZ6thQBbWsaSeFje1L
+         nU9+rRCowMquoRYgoUnl2GhhRpUgMM4Wu5bI/Ac6SJgn6e906riMJLGFWbgdUsyIb4gR
+         4W/g==
+X-Gm-Message-State: AOAM533T5ZZ5Vmv7Qp6fzMmwEOa1t2jRDmsAYa0VesXZGUV3bgLXj4VJ
+        h4OcuZ8iCRgKic36pB90SsdQEQ==
+X-Google-Smtp-Source: ABdhPJz9NXg0iE9mEWe1XINNAqvGIzk1n7sIHTLoP3qwnqauuCzLd4tE/sYDSuaZtsdh0GeiDf9iig==
+X-Received: by 2002:a05:6808:1707:b0:2ce:6a75:b883 with SMTP id bc7-20020a056808170700b002ce6a75b883mr382885oib.330.1645675102514;
+        Wed, 23 Feb 2022 19:58:22 -0800 (PST)
+Received: from builder.lan ([2600:1700:a0:3dc8:3697:f6ff:fe85:aac9])
+        by smtp.gmail.com with ESMTPSA id s6sm912678oap.32.2022.02.23.19.58.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Feb 2022 19:58:21 -0800 (PST)
+Date:   Wed, 23 Feb 2022 21:58:20 -0600
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Ansuel Smith <ansuelsmth@gmail.com>
+Cc:     Andy Gross <agross@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Taniya Das <tdas@codeaurora.org>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 10/16] clk: qcom: clk-rcg: add clk_rcg_floor_ops ops
+Message-ID: <YhcCXGWJhMBDCp6k@builder.lan>
+References: <20220217235703.26641-1-ansuelsmth@gmail.com>
+ <20220217235703.26641-11-ansuelsmth@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220217235703.26641-11-ansuelsmth@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Make the samsung-keypad driver explicitly depend on CONFIG_IOMEM, as it
-calls devm_ioremap(). This prevents compile errors in some configs (e.g,
-allyesconfig/randconfig under UML):
+On Thu 17 Feb 17:56 CST 2022, Ansuel Smith wrote:
 
-/usr/bin/ld: drivers/input/keyboard/samsung-keypad.o: in function `samsung_keypad_probe':
-samsung-keypad.c:(.text+0xc60): undefined reference to `devm_ioremap'
+> Add clk_rcg_floor_ops for clock that can't provide a stable freq and
+> require to use a floor freq to provide the requested frequency.
+> 
 
-Signed-off-by: David Gow <davidgow@google.com>
----
- drivers/input/keyboard/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
 
-diff --git a/drivers/input/keyboard/Kconfig b/drivers/input/keyboard/Kconfig
-index 0c607da9ee10..5c98d5f996e4 100644
---- a/drivers/input/keyboard/Kconfig
-+++ b/drivers/input/keyboard/Kconfig
-@@ -556,7 +556,7 @@ config KEYBOARD_PMIC8XXX
- 
- config KEYBOARD_SAMSUNG
- 	tristate "Samsung keypad support"
--	depends on HAVE_CLK
-+	depends on IOMEM && HAVE_CLK
- 	select INPUT_MATRIXKMAP
- 	help
- 	  Say Y here if you want to use the keypad on your Samsung mobile
--- 
-2.35.1.473.g83b2b277ed-goog
-
+> Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
+> ---
+>  drivers/clk/qcom/clk-rcg.c | 24 ++++++++++++++++++++++++
+>  1 file changed, 24 insertions(+)
+> 
+> diff --git a/drivers/clk/qcom/clk-rcg.c b/drivers/clk/qcom/clk-rcg.c
+> index a9d181d6be21..88845baa7f84 100644
+> --- a/drivers/clk/qcom/clk-rcg.c
+> +++ b/drivers/clk/qcom/clk-rcg.c
+> @@ -526,6 +526,19 @@ static int clk_rcg_set_rate(struct clk_hw *hw, unsigned long rate,
+>  	return __clk_rcg_set_rate(rcg, f);
+>  }
+>  
+> +static int clk_rcg_set_floor_rate(struct clk_hw *hw, unsigned long rate,
+> +				  unsigned long parent_rate)
+> +{
+> +	struct clk_rcg *rcg = to_clk_rcg(hw);
+> +	const struct freq_tbl *f;
+> +
+> +	f = qcom_find_freq_floor(rcg->freq_tbl, rate);
+> +	if (!f)
+> +		return -EINVAL;
+> +
+> +	return __clk_rcg_set_rate(rcg, f);
+> +}
+> +
+>  static int clk_rcg_bypass_set_rate(struct clk_hw *hw, unsigned long rate,
+>  				unsigned long parent_rate)
+>  {
+> @@ -816,6 +829,17 @@ const struct clk_ops clk_rcg_ops = {
+>  };
+>  EXPORT_SYMBOL_GPL(clk_rcg_ops);
+>  
+> +const struct clk_ops clk_rcg_floor_ops = {
+> +	.enable = clk_enable_regmap,
+> +	.disable = clk_disable_regmap,
+> +	.get_parent = clk_rcg_get_parent,
+> +	.set_parent = clk_rcg_set_parent,
+> +	.recalc_rate = clk_rcg_recalc_rate,
+> +	.determine_rate = clk_rcg_determine_rate,
+> +	.set_rate = clk_rcg_set_floor_rate,
+> +};
+> +EXPORT_SYMBOL_GPL(clk_rcg_floor_ops);
+> +
+>  const struct clk_ops clk_rcg_bypass_ops = {
+>  	.enable = clk_enable_regmap,
+>  	.disable = clk_disable_regmap,
+> -- 
+> 2.34.1
+> 

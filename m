@@ -2,197 +2,601 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D75E4C2BA5
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 13:27:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53B934C2BD9
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 13:36:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234281AbiBXM0p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 07:26:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60880 "EHLO
+        id S234421AbiBXMeZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 07:34:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234280AbiBXM0n (ORCPT
+        with ESMTP id S233335AbiBXMeX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 07:26:43 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 521FA160FC2
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 04:26:13 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 034F71F43D;
-        Thu, 24 Feb 2022 12:26:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1645705572; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
+        Thu, 24 Feb 2022 07:34:23 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 11ACA2804C0
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 04:33:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1645706026;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=iRlluuQbnUld5s/Ic1hGKrSMGDqTXKB3g6TTm6f3L7Y=;
-        b=P4+Atof8O39vObfzAjqg/Nzxqg4luBetNwbADlOtA/HKFS7YWpwMdwKB7c9c8j4YPgPG3/
-        CubsBVR+ghLMjuOi29tKDCB7aoMwQwuEqhf/gCy7EcaU1ewg9NVt6db5FxNoAOyemU5lAT
-        UkXbFafx4SCfmV9vpQYBTxzCQJFw7dE=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1645705572;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=iRlluuQbnUld5s/Ic1hGKrSMGDqTXKB3g6TTm6f3L7Y=;
-        b=TY7aQvrFUZfYzQXzzLbh5HZ0OfZnCp3NUxvJW4Sa1kA0MEP5PZFRvBodlXh7vdKD9rkxf8
-        YBzGqKxWSvLfGKAQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        bh=aX4MT1vBF2wcho1CQqe6YYQGuRMDBqf7YfoAu1BRlaE=;
+        b=aff1OOg44YNykDi+FHV9LVwcd8WGefri+yZM+l+aJ0vpjYJkcxN16nivAf5nZm08IsuO35
+        FZbptVggE7h/opGaU9q7uzMQkTriCe+fFWJQd2/rJeAA4SOnIocba719adtWKgkoGFlfWf
+        CUK1N/km+a+sGYxH0v0cplUClwHeONE=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-346-ZNgNINqVMgeusBOxIiaunA-1; Thu, 24 Feb 2022 07:33:41 -0500
+X-MC-Unique: ZNgNINqVMgeusBOxIiaunA-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id CA82913AD9;
-        Thu, 24 Feb 2022 12:26:11 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id qdrBMGN5F2J8AQAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Thu, 24 Feb 2022 12:26:11 +0000
-Message-ID: <0e02416f-ef43-dc8a-9e8e-50ff63dd3c61@suse.cz>
-Date:   Thu, 24 Feb 2022 13:26:11 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Content-Language: en-US
-To:     Marco Elver <elver@google.com>
-Cc:     Hyeonggon Yoo <42.hyeyoo@gmail.com>, linux-mm@kvack.org,
-        Roman Gushchin <guro@fb.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id B68A21006AA5;
+        Thu, 24 Feb 2022 12:33:38 +0000 (UTC)
+Received: from t480s.redhat.com (unknown [10.39.194.160])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id B96D826575;
+        Thu, 24 Feb 2022 12:33:31 +0000 (UTC)
+From:   David Hildenbrand <david@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
         David Rientjes <rientjes@google.com>,
-        Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>
-References: <20220221105336.522086-1-42.hyeyoo@gmail.com>
- <20220221105336.522086-2-42.hyeyoo@gmail.com>
- <4d42fcec-ff59-2e37-4d8f-a58e641d03c8@suse.cz>
- <CANpmjNMjgSKommNCrfyFuaz+3HQdW92ZSF_p26LQdmS0o3L98Q@mail.gmail.com>
-From:   Vlastimil Babka <vbabka@suse.cz>
-Subject: Re: [PATCH 1/5] mm/sl[au]b: Unify __ksize()
-In-Reply-To: <CANpmjNMjgSKommNCrfyFuaz+3HQdW92ZSF_p26LQdmS0o3L98Q@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Shakeel Butt <shakeelb@google.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Yang Shi <shy828301@gmail.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Nadav Amit <namit@vmware.com>, Rik van Riel <riel@surriel.com>,
+        Roman Gushchin <guro@fb.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Peter Xu <peterx@redhat.com>,
+        Donald Dutile <ddutile@redhat.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
+        Liang Zhang <zhangliang5@huawei.com>,
+        Pedro Gomes <pedrodemargomes@gmail.com>,
+        Oded Gabbay <oded.gabbay@gmail.com>, linux-mm@kvack.org,
+        David Hildenbrand <david@redhat.com>
+Subject: [PATCH RFC 11/13] mm: support GUP-triggered unsharing of anonymous pages
+Date:   Thu, 24 Feb 2022 13:26:12 +0100
+Message-Id: <20220224122614.94921-12-david@redhat.com>
+In-Reply-To: <20220224122614.94921-1-david@redhat.com>
+References: <20220224122614.94921-1-david@redhat.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/23/22 20:06, Marco Elver wrote:
-> On Wed, 23 Feb 2022 at 19:39, Vlastimil Babka <vbabka@suse.cz> wrote:
->> On 2/21/22 11:53, Hyeonggon Yoo wrote:
->> > Only SLOB need to implement __ksize() separately because SLOB records
->> > size in object header for kmalloc objects. Unify SLAB/SLUB's __ksize().
->> >
->> > Signed-off-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
->> > ---
->> >  mm/slab.c        | 23 -----------------------
->> >  mm/slab_common.c | 29 +++++++++++++++++++++++++++++
->> >  mm/slub.c        | 16 ----------------
->> >  3 files changed, 29 insertions(+), 39 deletions(-)
->> >
->> > diff --git a/mm/slab.c b/mm/slab.c
->> > index ddf5737c63d9..eb73d2499480 100644
->> > --- a/mm/slab.c
->> > +++ b/mm/slab.c
->> > @@ -4199,27 +4199,4 @@ void __check_heap_object(const void *ptr, unsigned long n,
->> >  }
->> >  #endif /* CONFIG_HARDENED_USERCOPY */
->> >
->> > -/**
->> > - * __ksize -- Uninstrumented ksize.
->> > - * @objp: pointer to the object
->> > - *
->> > - * Unlike ksize(), __ksize() is uninstrumented, and does not provide the same
->> > - * safety checks as ksize() with KASAN instrumentation enabled.
->> > - *
->> > - * Return: size of the actual memory used by @objp in bytes
->> > - */
->> > -size_t __ksize(const void *objp)
->> > -{
->> > -     struct kmem_cache *c;
->> > -     size_t size;
->> >
->> > -     BUG_ON(!objp);
->> > -     if (unlikely(objp == ZERO_SIZE_PTR))
->> > -             return 0;
->> > -
->> > -     c = virt_to_cache(objp);
->> > -     size = c ? c->object_size : 0;
->>
->> This comes from commit a64b53780ec3 ("mm/slab: sanity-check page type when
->> looking up cache") by Kees and virt_to_cache() is an implicit check for
->> folio slab flag ...
->>
->> > -
->> > -     return size;
->> > -}
->> > -EXPORT_SYMBOL(__ksize);
->> > diff --git a/mm/slab_common.c b/mm/slab_common.c
->> > index 23f2ab0713b7..488997db0d97 100644
->> > --- a/mm/slab_common.c
->> > +++ b/mm/slab_common.c
->> > @@ -1245,6 +1245,35 @@ void kfree_sensitive(const void *p)
->> >  }
->> >  EXPORT_SYMBOL(kfree_sensitive);
->> >
->> > +#ifndef CONFIG_SLOB
->> > +/**
->> > + * __ksize -- Uninstrumented ksize.
->> > + * @objp: pointer to the object
->> > + *
->> > + * Unlike ksize(), __ksize() is uninstrumented, and does not provide the same
->> > + * safety checks as ksize() with KASAN instrumentation enabled.
->> > + *
->> > + * Return: size of the actual memory used by @objp in bytes
->> > + */
->> > +size_t __ksize(const void *object)
->> > +{
->> > +     struct folio *folio;
->> > +
->> > +     if (unlikely(object == ZERO_SIZE_PTR))
->> > +             return 0;
->> > +
->> > +     folio = virt_to_folio(object);
->> > +
->> > +#ifdef CONFIG_SLUB
->> > +     if (unlikely(!folio_test_slab(folio)))
->> > +             return folio_size(folio);
->> > +#endif
->> > +
->> > +     return slab_ksize(folio_slab(folio)->slab_cache);
->>
->> ... and here in the common version you now for SLAB trust that the folio
->> will be a slab folio, thus undoing the intention of that commit. Maybe
->> that's not good and we should keep the folio_test_slab() for both cases?
->> Although maybe it's also strange that prior this patch, SLAB would return 0
->> if the test fails, and SLUB would return folio_size(). Probably because with
->> SLUB this can be a large kmalloc here and with SLAB not. So we could keep
->> doing that in the unified version, or KASAN devs (CC'd) could advise
->> something better?
-> 
-> Is this a definitive failure case?
+Whenever GUP currently ends up taking a R/O pin on an anonymous page that
+might be shared -- mapped R/O and !PageAnonExclusive() -- any write fault
+on the page table entry will end up replacing the mapped anonymous page
+due to COW, resulting in the GUP pin no longer being consistent with the
+page actually mapped into the page table.
 
-Yeah, if we called it on a supposed object pointer that turns out to be not
-slab, it usually means some UAF, so a failure.
+The possible ways to deal with this situation are:
+ (1) Ignore and pin -- what we do right now.
+ (2) Fail to pin -- which would be rather surprising to callers and
+     could break user space.
+ (3) Trigger unsharing and pin the now exclusive page -- reliable R/O
+     pins.
 
-> My opinion here is that returning 0
-> from ksize() in case of failure will a) provide a way to check for
-> error, and b) if the size is used unconditionally to compute an
-> address may be the more graceful failure mode (see comment added in
-> 0d4ca4c9bab39 for what happens if we see invalid memory per KASAN
-> being accessed).
+We want to implement 3) because it provides the clearest semantics and
+allows for checking in unpin_user_pages() and friends for possible BUGs:
+when trying to unpin a page that's no longer exclusive, clearly
+something went very wrong and might result in memory corruptions that
+might be hard to debug. So we better have a nice way to spot such
+issues.
 
-Sounds good, thanks. Then the patch should be fixed up to keep checking for
-slab flag and returning 0 otherwise for CONFIG_SLAB.
-For SLUB we might fail to detect the failure case by assuming it was a large
-kmalloc. Maybe we could improve and only assume that when folio_size() is
-large enough that the corresponding allocation would actually be done as a
-large kmalloc, and the object pointer is to the beginning of the folio?
+To implement 3), we need a way for GUP to trigger unsharing:
+FAULT_FLAG_UNSHARE. FAULT_FLAG_UNSHARE is only applicable to R/O mapped
+anonymous pages and resembles COW logic during a write fault. However, in
+contrast to a write fault, GUP-triggered unsharing will, for example, still
+maintain the write protection.
+
+Let's implement FAULT_FLAG_UNSHARE by hooking into the existing write fault
+handlers for all applicable anonymous page types: ordinary pages, THP and
+hugetlb.
+
+* If FAULT_FLAG_UNSHARE finds a R/O-mapped anonymous page that has been
+  marked exclusive in the meantime by someone else, there is nothing to do.
+* If FAULT_FLAG_UNSHARE finds a R/O-mapped anonymous page that's not
+  marked exclusive, it will try detecting if the process is the exclusive
+  owner. If exclusive, it can be set exclusive similar to reuse logic
+  during write faults via page_move_anon_rmap() and there is nothing
+  else to do; otherwise, we either have to copy and map a fresh,
+  anonymous exclusive page R/O (ordinary pages, hugetlb), or split the
+  THP.
+
+This commit is heavily based on patches by Andrea.
+
+Co-developed-by: Andrea Arcangeli <aarcange@redhat.com>
+Signed-off-by: Andrea Arcangeli <aarcange@redhat.com>
+Signed-off-by: David Hildenbrand <david@redhat.com>
+---
+ include/linux/mm_types.h |  8 ++++
+ mm/huge_memory.c         | 17 ++++++-
+ mm/hugetlb.c             | 56 ++++++++++++++---------
+ mm/memory.c              | 97 +++++++++++++++++++++++++++-------------
+ 4 files changed, 127 insertions(+), 51 deletions(-)
+
+diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
+index 5140e5feb486..315a8d121382 100644
+--- a/include/linux/mm_types.h
++++ b/include/linux/mm_types.h
+@@ -791,6 +791,9 @@ typedef struct {
+  * @FAULT_FLAG_REMOTE: The fault is not for current task/mm.
+  * @FAULT_FLAG_INSTRUCTION: The fault was during an instruction fetch.
+  * @FAULT_FLAG_INTERRUPTIBLE: The fault can be interrupted by non-fatal signals.
++ * @FAULT_FLAG_UNSHARE: The fault is an unsharing request to unshare (and mark
++ *                      exclusive) a possibly shared anonymous page that is
++ *                      mapped R/O.
+  *
+  * About @FAULT_FLAG_ALLOW_RETRY and @FAULT_FLAG_TRIED: we can specify
+  * whether we would allow page faults to retry by specifying these two
+@@ -810,6 +813,10 @@ typedef struct {
+  * continuous faults with flags (b).  We should always try to detect pending
+  * signals before a retry to make sure the continuous page faults can still be
+  * interrupted if necessary.
++ *
++ * The combination FAULT_FLAG_WRITE|FAULT_FLAG_UNSHARE is illegal.
++ * FAULT_FLAG_UNSHARE is ignored and treated like an ordinary read fault when
++ * no existing R/O-mapped anonymous page is encountered.
+  */
+ enum fault_flag {
+ 	FAULT_FLAG_WRITE =		1 << 0,
+@@ -822,6 +829,7 @@ enum fault_flag {
+ 	FAULT_FLAG_REMOTE =		1 << 7,
+ 	FAULT_FLAG_INSTRUCTION =	1 << 8,
+ 	FAULT_FLAG_INTERRUPTIBLE =	1 << 9,
++	FAULT_FLAG_UNSHARE =		1 << 10,
+ };
+ 
+ #endif /* _LINUX_MM_TYPES_H */
+diff --git a/mm/huge_memory.c b/mm/huge_memory.c
+index 6f2ee41cd423..2cb8fa31377a 100644
+--- a/mm/huge_memory.c
++++ b/mm/huge_memory.c
+@@ -1271,6 +1271,7 @@ void huge_pmd_set_accessed(struct vm_fault *vmf)
+ 
+ vm_fault_t do_huge_pmd_wp_page(struct vm_fault *vmf)
+ {
++	const bool unshare = vmf->flags & FAULT_FLAG_UNSHARE;
+ 	struct vm_area_struct *vma = vmf->vma;
+ 	struct page *page;
+ 	unsigned long haddr = vmf->address & HPAGE_PMD_MASK;
+@@ -1279,6 +1280,9 @@ vm_fault_t do_huge_pmd_wp_page(struct vm_fault *vmf)
+ 	vmf->ptl = pmd_lockptr(vma->vm_mm, vmf->pmd);
+ 	VM_BUG_ON_VMA(!vma->anon_vma, vma);
+ 
++	VM_BUG_ON(unshare && (vmf->flags & FAULT_FLAG_WRITE));
++	VM_BUG_ON(!unshare && !(vmf->flags & FAULT_FLAG_WRITE));
++
+ 	if (is_huge_zero_pmd(orig_pmd))
+ 		goto fallback;
+ 
+@@ -1295,6 +1299,12 @@ vm_fault_t do_huge_pmd_wp_page(struct vm_fault *vmf)
+ 	if (PageAnonExclusive(page)) {
+ 		pmd_t entry;
+ 
++		/* R/O and exclusive, nothing to do. */
++		if (unlikely(unshare)) {
++			spin_unlock(vmf->ptl);
++			return 0;
++		}
++
+ 		entry = pmd_mkyoung(orig_pmd);
+ 		entry = maybe_pmd_mkwrite(pmd_mkdirty(entry), vma);
+ 		if (pmdp_set_access_flags(vma, haddr, vmf->pmd, entry, 1))
+@@ -1318,7 +1328,7 @@ vm_fault_t do_huge_pmd_wp_page(struct vm_fault *vmf)
+ 	}
+ 
+ 	/*
+-	 * See do_wp_page(): we can only map the page writable if there are
++	 * See do_wp_page(): we can only reuse the page exclusively if there are
+ 	 * no additional references. Note that we always drain the LRU
+ 	 * pagevecs immediately after adding a THP.
+ 	 */
+@@ -1330,6 +1340,11 @@ vm_fault_t do_huge_pmd_wp_page(struct vm_fault *vmf)
+ 		pmd_t entry;
+ 
+ 		page_move_anon_rmap(page, vma);
++		if (unlikely(unshare)) {
++			unlock_page(page);
++			spin_unlock(vmf->ptl);
++			return 0;
++		}
+ 		entry = pmd_mkyoung(orig_pmd);
+ 		entry = maybe_pmd_mkwrite(pmd_mkdirty(entry), vma);
+ 		if (pmdp_set_access_flags(vma, haddr, vmf->pmd, entry, 1))
+diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+index 8aaca8becf97..ebcde7e9f704 100644
+--- a/mm/hugetlb.c
++++ b/mm/hugetlb.c
+@@ -5140,15 +5140,16 @@ static void unmap_ref_private(struct mm_struct *mm, struct vm_area_struct *vma,
+ }
+ 
+ /*
+- * Hugetlb_cow() should be called with page lock of the original hugepage held.
++ * hugetlb_wp() should be called with page lock of the original hugepage held.
+  * Called with hugetlb_fault_mutex_table held and pte_page locked so we
+  * cannot race with other handlers or page migration.
+  * Keep the pte_same checks anyway to make transition from the mutex easier.
+  */
+-static vm_fault_t hugetlb_cow(struct mm_struct *mm, struct vm_area_struct *vma,
+-		       unsigned long address, pte_t *ptep,
++static vm_fault_t hugetlb_wp(struct mm_struct *mm, struct vm_area_struct *vma,
++		       unsigned long address, pte_t *ptep, unsigned int flags,
+ 		       struct page *pagecache_page, spinlock_t *ptl)
+ {
++	const bool unshare = flags & FAULT_FLAG_UNSHARE;
+ 	pte_t pte;
+ 	struct hstate *h = hstate_vma(vma);
+ 	struct page *old_page, *new_page;
+@@ -5157,17 +5158,26 @@ static vm_fault_t hugetlb_cow(struct mm_struct *mm, struct vm_area_struct *vma,
+ 	unsigned long haddr = address & huge_page_mask(h);
+ 	struct mmu_notifier_range range;
+ 
++	VM_BUG_ON(unshare && (flags & FOLL_WRITE));
++	VM_BUG_ON(!unshare && !(flags & FOLL_WRITE));
++
+ 	pte = huge_ptep_get(ptep);
+ 	old_page = pte_page(pte);
+ 
+ retry_avoidcopy:
+-	/* If no-one else is actually using this page, avoid the copy
+-	 * and just make the page writable */
++	/*
++	 * If no-one else is actually using this page, we're the exclusive
++	 * owner and can reuse this page.
++	 */
+ 	if (page_mapcount(old_page) == 1 && PageAnon(old_page)) {
++		if (unlikely(unshare) && PageAnonExclusive(old_page))
++			return 0;
+ 		page_move_anon_rmap(old_page, vma);
+-		set_huge_ptep_writable(vma, haddr, ptep);
++		if (likely(!unshare))
++			set_huge_ptep_writable(vma, haddr, ptep);
+ 		return 0;
+ 	}
++	VM_BUG_ON_PAGE(PageAnon(old_page) && PageAnonExclusive(old_page), old_page);
+ 
+ 	/*
+ 	 * If the process that created a MAP_PRIVATE mapping is about to
+@@ -5266,13 +5276,13 @@ static vm_fault_t hugetlb_cow(struct mm_struct *mm, struct vm_area_struct *vma,
+ 	if (likely(ptep && pte_same(huge_ptep_get(ptep), pte))) {
+ 		ClearHPageRestoreReserve(new_page);
+ 
+-		/* Break COW */
++		/* Break COW or unshare */
+ 		huge_ptep_clear_flush(vma, haddr, ptep);
+ 		mmu_notifier_invalidate_range(mm, range.start, range.end);
+ 		page_remove_rmap(old_page, true);
+ 		hugepage_add_new_anon_rmap(new_page, vma, haddr);
+ 		set_huge_pte_at(mm, haddr, ptep,
+-				make_huge_pte(vma, new_page, 1));
++				make_huge_pte(vma, new_page, !unshare));
+ 		SetHPageMigratable(new_page);
+ 		/* Make the old page be freed below */
+ 		new_page = old_page;
+@@ -5280,7 +5290,10 @@ static vm_fault_t hugetlb_cow(struct mm_struct *mm, struct vm_area_struct *vma,
+ 	spin_unlock(ptl);
+ 	mmu_notifier_invalidate_range_end(&range);
+ out_release_all:
+-	/* No restore in case of successful pagetable update (Break COW) */
++	/*
++	 * No restore in case of successful pagetable update (Break COW or
++	 * unshare)
++	 */
+ 	if (new_page != old_page)
+ 		restore_reserve_on_error(h, vma, haddr, new_page);
+ 	put_page(new_page);
+@@ -5403,7 +5416,8 @@ static vm_fault_t hugetlb_no_page(struct mm_struct *mm,
+ 	/*
+ 	 * Currently, we are forced to kill the process in the event the
+ 	 * original mapper has unmapped pages from the child due to a failed
+-	 * COW. Warn that such a situation has occurred as it may not be obvious
++	 * COW/unsharing. Warn that such a situation has occurred as it may not
++	 * be obvious.
+ 	 */
+ 	if (is_vma_resv_set(vma, HPAGE_RESV_UNMAPPED)) {
+ 		pr_warn_ratelimited("PID %d killed due to inadequate hugepage pool\n",
+@@ -5529,7 +5543,7 @@ static vm_fault_t hugetlb_no_page(struct mm_struct *mm,
+ 	hugetlb_count_add(pages_per_huge_page(h), mm);
+ 	if ((flags & FAULT_FLAG_WRITE) && !(vma->vm_flags & VM_SHARED)) {
+ 		/* Optimization, do the COW without a second fault */
+-		ret = hugetlb_cow(mm, vma, address, ptep, page, ptl);
++		ret = hugetlb_wp(mm, vma, address, ptep, flags, page, ptl);
+ 	}
+ 
+ 	spin_unlock(ptl);
+@@ -5659,14 +5673,15 @@ vm_fault_t hugetlb_fault(struct mm_struct *mm, struct vm_area_struct *vma,
+ 		goto out_mutex;
+ 
+ 	/*
+-	 * If we are going to COW the mapping later, we examine the pending
+-	 * reservations for this page now. This will ensure that any
++	 * If we are going to COW/unshare the mapping later, we examine the
++	 * pending reservations for this page now. This will ensure that any
+ 	 * allocations necessary to record that reservation occur outside the
+ 	 * spinlock. For private mappings, we also lookup the pagecache
+ 	 * page now as it is used to determine if a reservation has been
+ 	 * consumed.
+ 	 */
+-	if ((flags & FAULT_FLAG_WRITE) && !huge_pte_write(entry)) {
++	if ((flags & (FAULT_FLAG_WRITE|FAULT_FLAG_UNSHARE)) &&
++	    !huge_pte_write(entry)) {
+ 		if (vma_needs_reservation(h, vma, haddr) < 0) {
+ 			ret = VM_FAULT_OOM;
+ 			goto out_mutex;
+@@ -5681,12 +5696,12 @@ vm_fault_t hugetlb_fault(struct mm_struct *mm, struct vm_area_struct *vma,
+ 
+ 	ptl = huge_pte_lock(h, mm, ptep);
+ 
+-	/* Check for a racing update before calling hugetlb_cow */
++	/* Check for a racing update before calling hugetlb_wp() */
+ 	if (unlikely(!pte_same(entry, huge_ptep_get(ptep))))
+ 		goto out_ptl;
+ 
+ 	/*
+-	 * hugetlb_cow() requires page locks of pte_page(entry) and
++	 * hugetlb_wp() requires page locks of pte_page(entry) and
+ 	 * pagecache_page, so here we need take the former one
+ 	 * when page != pagecache_page or !pagecache_page.
+ 	 */
+@@ -5699,13 +5714,14 @@ vm_fault_t hugetlb_fault(struct mm_struct *mm, struct vm_area_struct *vma,
+ 
+ 	get_page(page);
+ 
+-	if (flags & FAULT_FLAG_WRITE) {
++	if (flags & (FAULT_FLAG_WRITE|FAULT_FLAG_UNSHARE)) {
+ 		if (!huge_pte_write(entry)) {
+-			ret = hugetlb_cow(mm, vma, address, ptep,
+-					  pagecache_page, ptl);
++			ret = hugetlb_wp(mm, vma, address, ptep, flags,
++					 pagecache_page, ptl);
+ 			goto out_put_page;
++		} else if (likely(flags & FAULT_FLAG_WRITE)) {
++			entry = huge_pte_mkdirty(entry);
+ 		}
+-		entry = huge_pte_mkdirty(entry);
+ 	}
+ 	entry = pte_mkyoung(entry);
+ 	if (huge_ptep_set_access_flags(vma, haddr, ptep, entry,
+diff --git a/mm/memory.c b/mm/memory.c
+index 11577ee015be..33d046c34819 100644
+--- a/mm/memory.c
++++ b/mm/memory.c
+@@ -2739,8 +2739,8 @@ static inline int pte_unmap_same(struct vm_fault *vmf)
+ 	return same;
+ }
+ 
+-static inline bool cow_user_page(struct page *dst, struct page *src,
+-				 struct vm_fault *vmf)
++static inline bool __wp_page_copy_user(struct page *dst, struct page *src,
++				       struct vm_fault *vmf)
+ {
+ 	bool ret;
+ 	void *kaddr;
+@@ -2968,7 +2968,8 @@ static inline void wp_page_reuse(struct vm_fault *vmf)
+ }
+ 
+ /*
+- * Handle the case of a page which we actually need to copy to a new page.
++ * Handle the case of a page which we actually need to copy to a new page,
++ * either due to COW or unsharing.
+  *
+  * Called with mmap_lock locked and the old page referenced, but
+  * without the ptl held.
+@@ -2985,6 +2986,7 @@ static inline void wp_page_reuse(struct vm_fault *vmf)
+  */
+ static vm_fault_t wp_page_copy(struct vm_fault *vmf)
+ {
++	const bool unshare = vmf->flags & FAULT_FLAG_UNSHARE;
+ 	struct vm_area_struct *vma = vmf->vma;
+ 	struct mm_struct *mm = vma->vm_mm;
+ 	struct page *old_page = vmf->page;
+@@ -3007,7 +3009,7 @@ static vm_fault_t wp_page_copy(struct vm_fault *vmf)
+ 		if (!new_page)
+ 			goto oom;
+ 
+-		if (!cow_user_page(new_page, old_page, vmf)) {
++		if (!__wp_page_copy_user(new_page, old_page, vmf)) {
+ 			/*
+ 			 * COW failed, if the fault was solved by other,
+ 			 * it's fine. If not, userspace would re-fault on
+@@ -3049,7 +3051,14 @@ static vm_fault_t wp_page_copy(struct vm_fault *vmf)
+ 		flush_cache_page(vma, vmf->address, pte_pfn(vmf->orig_pte));
+ 		entry = mk_pte(new_page, vma->vm_page_prot);
+ 		entry = pte_sw_mkyoung(entry);
+-		entry = maybe_mkwrite(pte_mkdirty(entry), vma);
++		if (unlikely(unshare)) {
++			if (pte_soft_dirty(vmf->orig_pte))
++				entry = pte_mksoft_dirty(entry);
++			if (pte_uffd_wp(vmf->orig_pte))
++				entry = pte_mkuffd_wp(entry);
++		} else {
++			entry = maybe_mkwrite(pte_mkdirty(entry), vma);
++		}
+ 
+ 		/*
+ 		 * Clear the pte entry and flush it first, before updating the
+@@ -3066,6 +3075,7 @@ static vm_fault_t wp_page_copy(struct vm_fault *vmf)
+ 		 * mmu page tables (such as kvm shadow page tables), we want the
+ 		 * new page to be mapped directly into the secondary page table.
+ 		 */
++		BUG_ON(unshare && pte_write(entry));
+ 		set_pte_at_notify(mm, vmf->address, vmf->pte, entry);
+ 		update_mmu_cache(vma, vmf->address, vmf->pte);
+ 		if (old_page) {
+@@ -3125,7 +3135,7 @@ static vm_fault_t wp_page_copy(struct vm_fault *vmf)
+ 			free_swap_cache(old_page);
+ 		put_page(old_page);
+ 	}
+-	return page_copied ? VM_FAULT_WRITE : 0;
++	return page_copied && !unshare ? VM_FAULT_WRITE : 0;
+ oom_free_new:
+ 	put_page(new_page);
+ oom:
+@@ -3225,18 +3235,22 @@ static vm_fault_t wp_page_shared(struct vm_fault *vmf)
+ }
+ 
+ /*
+- * This routine handles present pages, when users try to write
+- * to a shared page. It is done by copying the page to a new address
+- * and decrementing the shared-page counter for the old page.
++ * This routine handles present pages, when
++ * * users try to write to a shared page (FAULT_FLAG_WRITE)
++ * * GUP wants to take a R/O pin on a possibly shared anonymous page
++ *   (FAULT_FLAG_UNSHARE)
++ *
++ * It is done by copying the page to a new address and decrementing the
++ * shared-page counter for the old page.
+  *
+  * Note that this routine assumes that the protection checks have been
+  * done by the caller (the low-level page fault routine in most cases).
+- * Thus we can safely just mark it writable once we've done any necessary
+- * COW.
++ * Thus, with FAULT_FLAG_WRITE, we can safely just mark it writable once we've
++ * done any necessary COW.
+  *
+- * We also mark the page dirty at this point even though the page will
+- * change only once the write actually happens. This avoids a few races,
+- * and potentially makes it more efficient.
++ * In case of FAULT_FLAG_WRITE, we also mark the page dirty at this point even
++ * though the page will change only once the write actually happens. This
++ * avoids a few races, and potentially makes it more efficient.
+  *
+  * We enter with non-exclusive mmap_lock (to exclude vma changes,
+  * but allow concurrent faults), with pte both mapped and locked.
+@@ -3245,23 +3259,35 @@ static vm_fault_t wp_page_shared(struct vm_fault *vmf)
+ static vm_fault_t do_wp_page(struct vm_fault *vmf)
+ 	__releases(vmf->ptl)
+ {
++	const bool unshare = vmf->flags & FAULT_FLAG_UNSHARE;
+ 	struct vm_area_struct *vma = vmf->vma;
+ 
+-	if (userfaultfd_pte_wp(vma, *vmf->pte)) {
+-		pte_unmap_unlock(vmf->pte, vmf->ptl);
+-		return handle_userfault(vmf, VM_UFFD_WP);
+-	}
++	VM_BUG_ON(unshare && (vmf->flags & FAULT_FLAG_WRITE));
++	VM_BUG_ON(!unshare && !(vmf->flags & FAULT_FLAG_WRITE));
+ 
+-	/*
+-	 * Userfaultfd write-protect can defer flushes. Ensure the TLB
+-	 * is flushed in this case before copying.
+-	 */
+-	if (unlikely(userfaultfd_wp(vmf->vma) &&
+-		     mm_tlb_flush_pending(vmf->vma->vm_mm)))
+-		flush_tlb_page(vmf->vma, vmf->address);
++	if (likely(!unshare)) {
++		if (userfaultfd_pte_wp(vma, *vmf->pte)) {
++			pte_unmap_unlock(vmf->pte, vmf->ptl);
++			return handle_userfault(vmf, VM_UFFD_WP);
++		}
++
++		/*
++		 * Userfaultfd write-protect can defer flushes. Ensure the TLB
++		 * is flushed in this case before copying.
++		 */
++		if (unlikely(userfaultfd_wp(vmf->vma) &&
++			     mm_tlb_flush_pending(vmf->vma->vm_mm)))
++			flush_tlb_page(vmf->vma, vmf->address);
++	}
+ 
+ 	vmf->page = vm_normal_page(vma, vmf->address, vmf->orig_pte);
+ 	if (!vmf->page) {
++		/* No anonymous page -> nothing to do. */
++		if (unlikely(unshare)) {
++			pte_unmap_unlock(vmf->pte, vmf->ptl);
++			return 0;
++		}
++
+ 		/*
+ 		 * VM_MIXEDMAP !pfn_valid() case, or VM_SOFTDIRTY clear on a
+ 		 * VM_PFNMAP VMA.
+@@ -3324,8 +3350,16 @@ static vm_fault_t do_wp_page(struct vm_fault *vmf)
+ 		page_move_anon_rmap(page, vma);
+ 		unlock_page(page);
+ reuse:
++		if (unlikely(unshare)) {
++			pte_unmap_unlock(vmf->pte, vmf->ptl);
++			return 0;
++		}
+ 		wp_page_reuse(vmf);
+ 		return VM_FAULT_WRITE;
++	} else if (unshare) {
++		/* No anonymous page -> nothing to do. */
++		pte_unmap_unlock(vmf->pte, vmf->ptl);
++		return 0;
+ 	} else if (unlikely((vma->vm_flags & (VM_WRITE|VM_SHARED)) ==
+ 					(VM_WRITE|VM_SHARED))) {
+ 		return wp_page_shared(vmf);
+@@ -4506,8 +4540,11 @@ static inline vm_fault_t create_huge_pmd(struct vm_fault *vmf)
+ /* `inline' is required to avoid gcc 4.1.2 build error */
+ static inline vm_fault_t wp_huge_pmd(struct vm_fault *vmf)
+ {
++	const bool unshare = vmf->flags & FAULT_FLAG_UNSHARE;
++
+ 	if (vma_is_anonymous(vmf->vma)) {
+-		if (userfaultfd_huge_pmd_wp(vmf->vma, vmf->orig_pmd))
++		if (unlikely(unshare) &&
++		    userfaultfd_huge_pmd_wp(vmf->vma, vmf->orig_pmd))
+ 			return handle_userfault(vmf, VM_UFFD_WP);
+ 		return do_huge_pmd_wp_page(vmf);
+ 	}
+@@ -4642,7 +4679,7 @@ static vm_fault_t handle_pte_fault(struct vm_fault *vmf)
+ 		update_mmu_tlb(vmf->vma, vmf->address, vmf->pte);
+ 		goto unlock;
+ 	}
+-	if (vmf->flags & FAULT_FLAG_WRITE) {
++	if (vmf->flags & (FAULT_FLAG_WRITE|FAULT_FLAG_UNSHARE)) {
+ 		if (!pte_write(entry))
+ 			return do_wp_page(vmf);
+ 		entry = pte_mkdirty(entry);
+@@ -4685,7 +4722,6 @@ static vm_fault_t __handle_mm_fault(struct vm_area_struct *vma,
+ 		.pgoff = linear_page_index(vma, address),
+ 		.gfp_mask = __get_fault_gfp_mask(vma),
+ 	};
+-	unsigned int dirty = flags & FAULT_FLAG_WRITE;
+ 	struct mm_struct *mm = vma->vm_mm;
+ 	pgd_t *pgd;
+ 	p4d_t *p4d;
+@@ -4712,7 +4748,7 @@ static vm_fault_t __handle_mm_fault(struct vm_area_struct *vma,
+ 
+ 			/* NUMA case for anonymous PUDs would go here */
+ 
+-			if (dirty && !pud_write(orig_pud)) {
++			if ((flags & FAULT_FLAG_WRITE) && !pud_write(orig_pud)) {
+ 				ret = wp_huge_pud(&vmf, orig_pud);
+ 				if (!(ret & VM_FAULT_FALLBACK))
+ 					return ret;
+@@ -4750,7 +4786,8 @@ static vm_fault_t __handle_mm_fault(struct vm_area_struct *vma,
+ 			if (pmd_protnone(vmf.orig_pmd) && vma_is_accessible(vma))
+ 				return do_huge_pmd_numa_page(&vmf);
+ 
+-			if (dirty && !pmd_write(vmf.orig_pmd)) {
++			if ((flags & (FAULT_FLAG_WRITE|FAULT_FLAG_UNSHARE)) &&
++			    !pmd_write(vmf.orig_pmd)) {
+ 				ret = wp_huge_pmd(&vmf);
+ 				if (!(ret & VM_FAULT_FALLBACK))
+ 					return ret;
+-- 
+2.35.1
+

@@ -2,173 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E407A4C3687
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 21:07:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 323E64C3692
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 21:09:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234208AbiBXUHS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 15:07:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47766 "EHLO
+        id S234210AbiBXUJI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 15:09:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233578AbiBXUHP (ORCPT
+        with ESMTP id S231588AbiBXUJH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 15:07:15 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 33A2342EF6
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 12:06:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1645733203;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=g0B+WO5LiFSrbCtPwzNlhDkRjWZYlmhLiJlV8EM915Y=;
-        b=NPuI0xh8+tjV5P0gHeUJS7OO1sCjqz/i6OvHf7L7HG0mj+a7adYgjA8hn2LB/SvHNgby/s
-        BMBnJuK0J/qscUKxSBuJiyT7LbRWDy02LiL+EhXuGOKC6bun/WA5BwT5c11gxEO+9uXr8X
-        5oG5y7QekWlAACdjlj+CZ2cZqs+dQMw=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-634-GPMiioRsN1epimur1G8LOA-1; Thu, 24 Feb 2022 15:06:40 -0500
-X-MC-Unique: GPMiioRsN1epimur1G8LOA-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id AF2201854E21;
-        Thu, 24 Feb 2022 20:06:38 +0000 (UTC)
-Received: from starship (unknown [10.40.195.190])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 77C9B2D1F7;
-        Thu, 24 Feb 2022 20:06:35 +0000 (UTC)
-Message-ID: <e18ed786f77e4abec112cafef69608883099e19f.camel@redhat.com>
-Subject: Re: [RFC PATCH 12/13] KVM: SVM: Remove APICv inhibit reasone due to
- x2APIC
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Cc:     pbonzini@redhat.com, seanjc@google.com, joro@8bytes.org,
-        jon.grimm@amd.com, wei.huang2@amd.com, terry.bowman@amd.com
-Date:   Thu, 24 Feb 2022 22:06:34 +0200
-In-Reply-To: <20220221021922.733373-13-suravee.suthikulpanit@amd.com>
-References: <20220221021922.733373-1-suravee.suthikulpanit@amd.com>
-         <20220221021922.733373-13-suravee.suthikulpanit@amd.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+        Thu, 24 Feb 2022 15:09:07 -0500
+Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7BFD1B1DCC
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 12:08:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645733316; x=1677269316;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=xb6WUFUcK2wMWO+P1uC6p8nVNdVQ3A2tz0MLG/87zng=;
+  b=hGN0xsgiHEGd+GZcyu778ZU9ISAyQXvU3WhT9bvhi/3ryWOtDgxjUZTc
+   FUR6BuKA0mm8PemxwgkTPbiMpmj9ZYOrQDos+vOGaKyKSvHlU2cly/Lsi
+   EoJ9ltv3+675VLmjP/iP12lOFHOUxmwLozaIaApxr2QSd2dZdHcWngqfY
+   jdiqQcUzhc0j9dwQ44HZlj+a8MTl85PoRXMsk9wZ1BSjp8f799JEm/pCQ
+   qGuGbRGG4GtzIWia0Wia1B6nF+/bRoOXz5HAAAjJrqnhh1wnOLrTu53ij
+   k9OVED3/TCrz86gvAH1xa7aV5YSPvNUfvszLWKEM2AHRvor+fHlpMvpLo
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10268"; a="313055274"
+X-IronPort-AV: E=Sophos;i="5.90,134,1643702400"; 
+   d="scan'208";a="313055274"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2022 12:08:36 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,134,1643702400"; 
+   d="scan'208";a="509009566"
+Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 24 Feb 2022 12:08:32 -0800
+Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nNKPg-0003QQ-65; Thu, 24 Feb 2022 20:08:32 +0000
+Date:   Fri, 25 Feb 2022 04:07:24 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Will Deacon <will@kernel.org>
+Cc:     kbuild-all@lists.01.org,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Marc Zyngier <maz@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] KVM: arm64: fix semicolon.cocci warnings
+Message-ID: <20220224200724.GA16837@6c0ef8ecd909>
+References: <202202250442.6Y6h26na-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202202250442.6Y6h26na-lkp@intel.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 2022-02-20 at 20:19 -0600, Suravee Suthikulpanit wrote:
-> Currently, AVIC is inactive when booting a VM w/ x2APIC support.
-> With x2AVIC support, the APICV_INHIBIT_REASON_X2APIC can be removed.
-The commit title is a bit misleading - the inhibit reason is not removed,
-but rather AVIC is not inhibited when x2avic is present.
+From: kernel test robot <lkp@intel.com>
 
-> 
-> Signed-off-by: Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
-> ---
->  arch/x86/kvm/svm/avic.c | 21 +++++++++++++++++++++
->  arch/x86/kvm/svm/svm.c  | 18 ++----------------
->  arch/x86/kvm/svm/svm.h  |  1 +
->  3 files changed, 24 insertions(+), 16 deletions(-)
-> 
-> diff --git a/arch/x86/kvm/svm/avic.c b/arch/x86/kvm/svm/avic.c
-> index 3306b74f1d8b..874c89f8fd47 100644
-> --- a/arch/x86/kvm/svm/avic.c
-> +++ b/arch/x86/kvm/svm/avic.c
-> @@ -21,6 +21,7 @@
->  
->  #include <asm/irq_remapping.h>
->  
-> +#include "cpuid.h"
->  #include "trace.h"
->  #include "lapic.h"
->  #include "x86.h"
-> @@ -176,6 +177,26 @@ void avic_vm_destroy(struct kvm *kvm)
->  	spin_unlock_irqrestore(&svm_vm_data_hash_lock, flags);
->  }
->  
-> +void avic_vcpu_after_set_cpuid(struct kvm_vcpu *vcpu, int nested)
-> +{
-> +	/*
-> +	 * If the X2APIC feature is exposed to the guest,
-> +	 * disable AVIC unless X2AVIC mode is enabled.
-> +	 */
-> +	if (avic_mode == AVIC_MODE_X1 &&
-> +	    guest_cpuid_has(vcpu, X86_FEATURE_X2APIC))
-> +		kvm_request_apicv_update(vcpu->kvm, false,
-> +					 APICV_INHIBIT_REASON_X2APIC);
-> +
-> +	/*
-> +	 * Currently, AVIC does not work with nested virtualization.
-> +	 * So, we disable AVIC when cpuid for SVM is set in the L1 guest.
-> +	 */
-> +	if (nested && guest_cpuid_has(vcpu, X86_FEATURE_SVM))
-> +		kvm_request_apicv_update(vcpu->kvm, false,
-> +					 APICV_INHIBIT_REASON_NESTED);
+arch/arm64/kvm/psci.c:372:3-4: Unneeded semicolon
 
-BTW, now that I am thinking about it, it would be nice to be able to force
-the AVIC_MODE_X1 even if x2avic is present, for debug purposes from a module
-param. Just a suggestion.
 
-> +}
-> +
->  int avic_vm_init(struct kvm *kvm)
->  {
->  	unsigned long flags;
-> diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-> index afca26aa1f40..b7bc6cd74aba 100644
-> --- a/arch/x86/kvm/svm/svm.c
-> +++ b/arch/x86/kvm/svm/svm.c
-> @@ -3992,23 +3992,9 @@ static void svm_vcpu_after_set_cpuid(struct kvm_vcpu *vcpu)
->  			vcpu->arch.reserved_gpa_bits &= ~(1UL << (best->ebx & 0x3f));
->  	}
->  
-> -	if (kvm_vcpu_apicv_active(vcpu)) {
-> -		/*
-> -		 * AVIC does not work with an x2APIC mode guest. If the X2APIC feature
-> -		 * is exposed to the guest, disable AVIC.
-> -		 */
-> -		if (guest_cpuid_has(vcpu, X86_FEATURE_X2APIC))
-> -			kvm_request_apicv_update(vcpu->kvm, false,
-> -						 APICV_INHIBIT_REASON_X2APIC);
-> +	if (kvm_vcpu_apicv_active(vcpu))
-> +		avic_vcpu_after_set_cpuid(vcpu, nested);
->  
-> -		/*
-> -		 * Currently, AVIC does not work with nested virtualization.
-> -		 * So, we disable AVIC when cpuid for SVM is set in the L1 guest.
-> -		 */
-> -		if (nested && guest_cpuid_has(vcpu, X86_FEATURE_SVM))
-> -			kvm_request_apicv_update(vcpu->kvm, false,
-> -						 APICV_INHIBIT_REASON_NESTED);
-> -	}
->  	init_vmcb_after_set_cpuid(vcpu);
->  }
->  
-> diff --git a/arch/x86/kvm/svm/svm.h b/arch/x86/kvm/svm/svm.h
-> index 41514df5107e..aea80abe9186 100644
-> --- a/arch/x86/kvm/svm/svm.h
-> +++ b/arch/x86/kvm/svm/svm.h
-> @@ -578,6 +578,7 @@ void avic_update_vapic_bar(struct vcpu_svm *svm, u64 data);
->  void avic_vcpu_load(struct kvm_vcpu *vcpu, int cpu);
->  void avic_vcpu_put(struct kvm_vcpu *vcpu);
->  void avic_post_state_restore(struct kvm_vcpu *vcpu);
-> +void avic_vcpu_after_set_cpuid(struct kvm_vcpu *vcpu, int nested);
->  void svm_set_virtual_apic_mode(struct kvm_vcpu *vcpu);
->  void svm_refresh_apicv_exec_ctrl(struct kvm_vcpu *vcpu);
->  bool svm_check_apicv_inhibit_reasons(ulong bit);
+ Remove unneeded semicolon.
 
-Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
+Generated by: scripts/coccinelle/misc/semicolon.cocci
 
-Best regards,
-	Maxim Levitsky
+Fixes: d43583b890e7 ("KVM: arm64: Expose PSCI SYSTEM_RESET2 call to the guest")
+CC: Will Deacon <will@kernel.org>
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: kernel test robot <lkp@intel.com>
+---
 
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   d4a0ae62a277377de396850ed4b709b6bd9b7326
+commit: d43583b890e7cb0078d13d056753a56602b92406 [7067/7915] KVM: arm64: Expose PSCI SYSTEM_RESET2 call to the guest
+:::::: branch date: 18 hours ago
+:::::: commit date: 3 days ago
+
+ arch/arm64/kvm/psci.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+--- a/arch/arm64/kvm/psci.c
++++ b/arch/arm64/kvm/psci.c
+@@ -369,7 +369,7 @@ static int kvm_psci_1_x_call(struct kvm_
+ 				ret = 0;
+ 			}
+ 			break;
+-		};
++		}
+ 		fallthrough;
+ 	default:
+ 		return kvm_psci_0_2_call(vcpu);

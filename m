@@ -2,76 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 201A04C33F2
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 18:45:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AAA94C33F9
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 18:47:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232291AbiBXRp7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 12:45:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56620 "EHLO
+        id S232308AbiBXRrC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 12:47:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231367AbiBXRp4 (ORCPT
+        with ESMTP id S229954AbiBXRq7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 12:45:56 -0500
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0134279470
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 09:45:25 -0800 (PST)
-Received: by mail-lf1-x12e.google.com with SMTP id u20so5216783lff.2
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 09:45:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=pOBmVUTfu7dJw7T0At09LeWpqEdb7Gx94oz8UfcdCXs=;
-        b=AILmembZ985YYL0f4wZ5s11RyKgR5u6qiQrV7RZNkT9G5n/SUdL4Vhrq9B5bX8IAIQ
-         Y6nGnLQuOzkqFVDrilbDkVYSx1GL7mMY7i0oqQFQ167eDMte/SkF8KYTQPuW8ZBUYD0I
-         S+wsm+vFqKevBhVyTZaq6iuYgrlCFfQmfxWN4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=pOBmVUTfu7dJw7T0At09LeWpqEdb7Gx94oz8UfcdCXs=;
-        b=WCIaTSuZA7klWeF8di3ltUqskNNNKSVyzZuwg4lz195sJSLxyLO8wcKjk1dRSVGIN/
-         hA4HbICgwbvejgZciKrMV7+QJ3cTcUdyFb6lM+g7TRZZuTuzLLbREti87TMSk6PRKY/O
-         XSiHFAl+6L9lOcP0nBULu9vyIboX2WJdTc0CjGxVCqbNdNdu5GJ5E+EWcBfyhw6yAxzG
-         7s/krpw9gNal19cPMWvlQhDMIUoXYhC6ATYaZOc1eCwIzHTBPrxFKZcxijyLbVINCyVN
-         SHLSbm0I/FZsshKxfhHb9suh0tDp33W0X4KG+FmHdQ4oZkOH1hMOWbPaADuoFr7O8fwy
-         1xuQ==
-X-Gm-Message-State: AOAM532JqeulMfIApPzobi6f3QfkzAXtueO3du+UWOH/11Ae8epXXMoc
-        +SDOAG1gIRqshB4/DZk80lGZOacxgeVQAhmTQLA=
-X-Google-Smtp-Source: ABdhPJw+ia2xAjp6ju5ZZYPn8EouCt8J78iwYl0OoJzvYmSv7WQ6IZ4eS0NOhN06f4+Car6uPY7BxQ==
-X-Received: by 2002:ac2:5cb5:0:b0:442:13cb:481f with SMTP id e21-20020ac25cb5000000b0044213cb481fmr2445403lfq.174.1645724723835;
-        Thu, 24 Feb 2022 09:45:23 -0800 (PST)
-Received: from mail-lj1-f170.google.com (mail-lj1-f170.google.com. [209.85.208.170])
-        by smtp.gmail.com with ESMTPSA id bu40sm160169lfb.273.2022.02.24.09.45.22
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 24 Feb 2022 09:45:22 -0800 (PST)
-Received: by mail-lj1-f170.google.com with SMTP id bn33so3987334ljb.6
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 09:45:22 -0800 (PST)
-X-Received: by 2002:a2e:80c6:0:b0:246:3334:9778 with SMTP id
- r6-20020a2e80c6000000b0024633349778mr2640059ljg.443.1645724721879; Thu, 24
- Feb 2022 09:45:21 -0800 (PST)
+        Thu, 24 Feb 2022 12:46:59 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74F65279469;
+        Thu, 24 Feb 2022 09:46:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
+        :In-Reply-To:From:References:To:Subject:MIME-Version:Date:Message-ID:Sender:
+        Reply-To:Cc:Content-ID:Content-Description;
+        bh=1WdzptLcvU69z6TcnQKEUU0O4QbFw1jllXY4KPf6BEY=; b=dsNH3HsKu65edNdpcJnnGtONR4
+        lbI25QnHh5IFR24Oi/YkAyUTAyo+NYW6ZFqq+Ut7EoWt+8LfGybYJzejWRQ+8Ga6W4vElKKzZEUHd
+        v8sfRw0pDEzjbsJpuJHjUoYR9nDauVo6NaUdVHx9EZoH4MdPwpACJVnYRJrZJq0Rj0EZarunLCxSm
+        EwfF0lBbflXucRuiGts8wx7oQqV/BkxteCEfTA6aXrRXt4QvzehOxxY6/dVFFkrp/z8G3vZ1DThGX
+        0z8gLRoIGixBJnzr/NuO80D6bcEFVl8P1rO2iEg6DHs7U8Y2F8qXO2dewOPvPKZ2wj3ovgKsGcsrz
+        cShUO97A==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nNIC2-00CgT2-ME; Thu, 24 Feb 2022 17:46:19 +0000
+Message-ID: <97e0c66c-82e3-9016-f71a-cd78a83f7a77@infradead.org>
+Date:   Thu, 24 Feb 2022 09:46:12 -0800
 MIME-Version: 1.0
-References: <20220221122638.7971-1-franciman12@gmail.com> <e32de43c-e00a-5766-e988-fe192d36d719@quicinc.com>
- <CAH4F6utmtAM3CzX2_Fbn94Sb-X8m0patPh8yWwbuBB0t1VYH=g@mail.gmail.com>
- <87o82wvhtk.fsf@kernel.org> <20220224075346.GL3943@kadam> <87fso8vb3w.fsf_-_@kernel.org>
-In-Reply-To: <87fso8vb3w.fsf_-_@kernel.org>
-From:   Linus Torvalds <torvalds@linuxfoundation.org>
-Date:   Thu, 24 Feb 2022 09:45:05 -0800
-X-Gmail-Original-Message-ID: <CAHk-=whFKYMrF6euVvziW+drw7-yi1pYdf=uccnzJ8k09DoTXA@mail.gmail.com>
-Message-ID: <CAHk-=whFKYMrF6euVvziW+drw7-yi1pYdf=uccnzJ8k09DoTXA@mail.gmail.com>
-Subject: Re: Use of void pointer arithmetic?
-To:     Kalle Valo <kvalo@kernel.org>
-Cc:     Dan Carpenter <dan.carpenter@oracle.com>,
-        Francesco Magliocca <franciman12@gmail.com>,
-        Jeff Johnson <quic_jjohnson@quicinc.com>,
-        ath10k@lists.infradead.org, rmanohar@qti.qualcomm.com,
-        linux-wireless <linux-wireless@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: mmotm 2022-02-23-21-20 uploaded (iwlwifi + rfkill)
+Content-Language: en-US
+To:     Andrew Morton <akpm@linux-foundation.org>, broonie@kernel.org,
+        mhocko@suse.cz, sfr@canb.auug.org.au, linux-next@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, mm-commits@vger.kernel.org,
+        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
+        Luca Coelho <luciano.coelho@intel.com>
+References: <20220224052137.BFB10C340E9@smtp.kernel.org>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20220224052137.BFB10C340E9@smtp.kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,41 +56,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 24, 2022 at 1:59 AM Kalle Valo <kvalo@kernel.org> wrote:
->
-> > What does -Wpointer-arith buy us?
->
-> A good question. I have always just thought we should avoid void pointer
-> arithmetic due to the C standard, but now that you mention it void
-> pointers can indeed simplify the code. So I'm not so sure anymore.
->
-> Any opinions? Is there a kernel wide recommendation for this?
 
-We consciously use arithmetic on 'void *' in some places, although
-it's not exactly _hugely_ common.
 
-It's much more common to turn a pointer into an 'unsigned long' and
-then doing basic operations on that.
+On 2/23/22 21:21, Andrew Morton wrote:
+> The mm-of-the-moment snapshot 2022-02-23-21-20 has been uploaded to
+> 
+>    https://www.ozlabs.org/~akpm/mmotm/
+> 
+> mmotm-readme.txt says
+> 
+> README for mm-of-the-moment:
+> 
+> https://www.ozlabs.org/~akpm/mmotm/
+> 
+> This is a snapshot of my -mm patch queue.  Uploaded at random hopefully
+> more than once a week.
+> 
+> You will need quilt to apply these patches to the latest Linus release (5.x
+> or 5.x-rcY).  The series file is in broken-out.tar.gz and is duplicated in
+> https://ozlabs.org/~akpm/mmotm/series
+> 
 
-The advantage of 'void *' is that it does avoid the need to cast the
-pointer back.
+on x86_64:
 
-But at the same time it will never replace the 'cast to an actual
-integer type', because the 'void *' arithmetic only does simple
-addition and subtraction, and many pointer operations need more (ie
-alignment needs to do the bitops).
+# CONFIG_RFKILL is not set
 
-So I think it's mostly a personal preference. I *do* think that doing
-arithmetic on 'void *' is generally superior to doing it the
-old-fashioned C way on 'char *' - unless, of course, 'char *' is
-simply the native type in question.
+In file included from ../drivers/net/wireless/intel/iwlwifi/mvm/fw.c:19:0:
+../drivers/net/wireless/intel/iwlwifi/mvm/mvm.h: In function ‘iwl_mvm_mei_set_sw_rfkill_state’:
+../drivers/net/wireless/intel/iwlwifi/mvm/mvm.h:2215:24: error: implicit declaration of function ‘rfkill_soft_blocked’; did you mean ‘rfkill_blocked’? [-Werror=implicit-function-declaration]
+   mvm->hw_registered ? rfkill_soft_blocked(mvm->hw->wiphy->rfkill) : false;
+                        ^~~~~~~~~~~~~~~~~~~
+                        rfkill_blocked
+In file included from ../drivers/net/wireless/intel/iwlwifi/mvm/mac80211.c:22:0:
+../drivers/net/wireless/intel/iwlwifi/mvm/mvm.h: In function ‘iwl_mvm_mei_set_sw_rfkill_state’:
+../drivers/net/wireless/intel/iwlwifi/mvm/mvm.h:2215:24: error: implicit declaration of function ‘rfkill_soft_blocked’; did you mean ‘rfkill_blocked’? [-Werror=implicit-function-declaration]
+   mvm->hw_registered ? rfkill_soft_blocked(mvm->hw->wiphy->rfkill) : false;
+                        ^~~~~~~~~~~~~~~~~~~
+                        rfkill_blocked
 
-So if 'char *' casts (and casting back) is the alternative, then by
-all means use 'void *' as a kind of generic and type-independent "byte
-pointer". That is how it is meant to be used in the gcc extension.
-
-And no, nobody should ever use -Wpointer-arith on the kernel in
-general. Our use of it is not _hugely_ common, but it's does exist,
-and it's not really frowned upon.
-
-                    Linus
+-- 
+~Randy

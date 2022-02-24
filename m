@@ -2,84 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BF594C2882
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 10:49:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C6A7E4C2849
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 10:39:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233000AbiBXJt5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 04:49:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43380 "EHLO
+        id S232910AbiBXJii (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 04:38:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232999AbiBXJt4 (ORCPT
+        with ESMTP id S232911AbiBXJic (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 04:49:56 -0500
-X-Greylist: delayed 63 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 24 Feb 2022 01:49:25 PST
-Received: from esa4.hc1455-7.c3s2.iphmx.com (esa4.hc1455-7.c3s2.iphmx.com [68.232.139.117])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E2DF15FC89
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 01:49:24 -0800 (PST)
-IronPort-SDR: MlR9ir+ODx2HYvf/DJX649bwc9SwkmCcol268/Ikf/j5u5WczFO7hPjUXGEZpA2gJP80x3Wfr8
- jr9hDwnodTydYuD1zDU0IGc16orgzUn2hhuNgZWx38zm6JAIiZNJNqs40grZhZxylSpUAVUEjt
- EvRWZWoeMP/X26c2rq6vaCbR8GsU0Y/TMXs9esiHNox0th7IRCkGygEZGzL1gMbLL08dSeIGCz
- qi8bqiiD9ZWWE7uc+G1bFuipmszAc19EUmU+iVP8febNwDivO04sOGvUHTe1O/5hXcUREDBMjx
- yzy+EVGCXmcr/aeas1NifpUg
-X-IronPort-AV: E=McAfee;i="6200,9189,10267"; a="63927949"
-X-IronPort-AV: E=Sophos;i="5.88,393,1635174000"; 
-   d="scan'208";a="63927949"
-Received: from unknown (HELO yto-r1.gw.nic.fujitsu.com) ([218.44.52.217])
-  by esa4.hc1455-7.c3s2.iphmx.com with ESMTP; 24 Feb 2022 18:48:20 +0900
-Received: from yto-m1.gw.nic.fujitsu.com (yto-nat-yto-m1.gw.nic.fujitsu.com [192.168.83.64])
-        by yto-r1.gw.nic.fujitsu.com (Postfix) with ESMTP id 2935410617
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 18:48:18 +0900 (JST)
-Received: from m3003.s.css.fujitsu.com (m3003.s.css.fujitsu.com [10.128.233.114])
-        by yto-m1.gw.nic.fujitsu.com (Postfix) with ESMTP id 6C6E2D0437
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 18:48:16 +0900 (JST)
-Received: from localhost.localdomain (unknown [10.125.5.220])
-        by m3003.s.css.fujitsu.com (Postfix) with ESMTP id 45E6E200B431;
-        Thu, 24 Feb 2022 18:48:16 +0900 (JST)
-From:   Rei Yamamoto <yamamoto.rei@jp.fujitsu.com>
-To:     tglx@linutronix.de
-Cc:     geert+renesas@glider.be, linux-kernel@vger.kernel.org,
-        yamamoto.rei@jp.fujitsu.com
-Subject: [PATCH] hrtimer: Remove a warning message in hrtimer_interrupt()
-Date:   Thu, 24 Feb 2022 18:28:48 +0900
-Message-Id: <20220224092848.3755-1-yamamoto.rei@jp.fujitsu.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20211224023924.91851-1-yamamoto.rei@jp.fujitsu.com>
-References: <20211224023924.91851-1-yamamoto.rei@jp.fujitsu.com>
+        Thu, 24 Feb 2022 04:38:32 -0500
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C84F27AFEB;
+        Thu, 24 Feb 2022 01:38:01 -0800 (PST)
+Received: from mail-wr1-f41.google.com ([209.85.221.41]) by
+ mrelayeu.kundenserver.de (mreue010 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1M5wgF-1nK8Z23HC7-007VzJ; Thu, 24 Feb 2022 10:37:59 +0100
+Received: by mail-wr1-f41.google.com with SMTP id d3so2036952wrf.1;
+        Thu, 24 Feb 2022 01:37:59 -0800 (PST)
+X-Gm-Message-State: AOAM531mren4RcSI9hV+ys6vEYPD16bM3U00jfR/pAxKIYZAZm98re8m
+        sYWDOeFLPebeWg1AsQSNW6vrEAmxCpcYwTo4kUg=
+X-Google-Smtp-Source: ABdhPJxKnbR5fQtLrHkUQmPSDD+xkHkCuZRWZe5PlaQucJaWZYHMl1I+Wr1dE0VfS6g2+fYVY4BPWlfD5Z76idC1Sco=
+X-Received: by 2002:adf:a446:0:b0:1ed:c41b:cf13 with SMTP id
+ e6-20020adfa446000000b001edc41bcf13mr1559929wra.407.1645695092672; Thu, 24
+ Feb 2022 01:31:32 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220224085410.399351-1-guoren@kernel.org> <20220224085410.399351-12-guoren@kernel.org>
+In-Reply-To: <20220224085410.399351-12-guoren@kernel.org>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Thu, 24 Feb 2022 10:31:16 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a3wg9S_zPad74FiJzYBn0M9bQyunuKzmH3z_QQrags5ng@mail.gmail.com>
+Message-ID: <CAK8P3a3wg9S_zPad74FiJzYBn0M9bQyunuKzmH3z_QQrags5ng@mail.gmail.com>
+Subject: Re: [PATCH V6 11/20] riscv: compat: syscall: Add compat_sys_call_table
+ implementation
+To:     Guo Ren <guoren@kernel.org>
+Cc:     Palmer Dabbelt <palmer@dabbelt.com>, Arnd Bergmann <arnd@arndb.de>,
+        Anup Patel <anup@brainfault.org>,
+        gregkh <gregkh@linuxfoundation.org>,
+        liush <liush@allwinnertech.com>, Wei Fu <wefu@redhat.com>,
+        Drew Fustini <drew@beagleboard.org>,
+        Wang Junqiang <wangjunqiang@iscas.ac.cn>,
+        Christoph Hellwig <hch@lst.de>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        linux-csky@vger.kernel.org,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        sparclinux <sparclinux@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Parisc List <linux-parisc@vger.kernel.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Guo Ren <guoren@linux.alibaba.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:bJ949jbvxqRzT8RGzj2QYrApGMZ4GN1YTokJ4Yg5/VzjO8Su2uE
+ ipDUtwaeK0DeWGhdUHDvGS6Sxk+PjnIWHXHqM03B+4KiJMsbfQObb3/g4Rb9ehoxvIs7pAb
+ 3xXOC8l0NvUVW3TdDOlDdrw1fIEzH5Ue8s6u34x3GpIf/5gKusINz0fsj5g7jSQKQJXAUDd
+ y9XhStiamjcfDraOeAP7A==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:dwAfY9Ku57I=:6NKueo92cdx8lj+82OAOD5
+ ulk+zylPDzaUxvVUzhJpGKLU7YiwrMbf7G25DHOirZgFEmfxwc51w1cNxnsmQoii7jX4pKE9a
+ dOWn1HvOs9fUNtoNQWaUf6U5ViEPhWvXToLKi75vietmj9uC2QxIhS9ILo41p/hUYLeohsWLi
+ QW3aBB9AkASEmnIngeLwpWY+LBUdXglk0GELcd0a9C64Z3xmOPX5z49YIhjhE/+ipUePv9/Mq
+ L/wWPiJVTMI+eTWTZnFDha0SQ36pExEHntKrTD8b3P7GrhFFSWpMd8i3aaNiERV4x/dmZc7KA
+ Xajt3CIeWflvcnXlqYtKI6eLK+u2Yg7/sONFg09gKfBZXPPFSyIHk4bk3KJ2aRp3jQ0rF8ZlV
+ de19TTPXXdwa9hU0N+l3/3witYzOHCSzIPDU4lXVHpZZDzJG/jSIbFD2MQlV++ca1+a17mzqc
+ /6UCJicm2Xi17UtwaSrGAeOT59ng+WIj0a49UoTHKszzP1ncpwQ13Nn8mepUQWmL8G9BfJ4X0
+ DWlaIYLO+Pyr27exsf0sJXXIi0X65UtJNwfibrp0k9Ndu9c7gkYfV/8FDPNuGwgJwcK1/2esS
+ YoEFouJd8FgXwxvGs8Wr5xQW2GP7glUv0vaYWhu7E8/Mfn7sZv4npXBf5/RZ0Ra/KvvUkTmuG
+ sm+FpxMPUaxs6Mm/tLff2FLkzRLOsYnhal2ZVxJS3hUWmchiqOL0uooT7u/1Md8xTaUmHnRyh
+ bxASaOLsX+ezzHOQykOOAFFi/5kM2dl9mVM+CEUm4q/Ufr17oj0n8OR9SEB7cw1ZPlIYj2BQT
+ qQFtiThCNHUgBuJwQw+98J/orUmUlwXXAyK6PN24WjEYj81+4s=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It seems the warning message in hrtimer_interrupt() has
-no an intention.
-The required action for the warning message in hrtimer_interrupt() 
-is not clear.
-Remove this message not to confuse user.
+On Thu, Feb 24, 2022 at 9:54 AM <guoren@kernel.org> wrote:
+>
+> From: Guo Ren <guoren@linux.alibaba.com>
+>
+> Implement compat sys_call_table and some system call functions:
+> truncate64, ftruncate64, fallocate, pread64, pwrite64,
+> sync_file_range, readahead, fadvise64_64 which need argument
+> translation.
+>
+> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> Signed-off-by: Guo Ren <guoren@kernel.org>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: Palmer Dabbelt <palmer@dabbelt.com>
 
-Signed-off-by: Rei Yamamoto <yamamoto.rei@jp.fujitsu.com>
----
- kernel/time/hrtimer.c | 1 -
- 1 file changed, 1 deletion(-)
+Here, I was hoping you'd convert some of the other architectures to use
+the same code, but the changes you did do look correct.
 
-diff --git a/kernel/time/hrtimer.c b/kernel/time/hrtimer.c
-index 0ea8702eb516..4f4eb9d1f05a 100644
---- a/kernel/time/hrtimer.c
-+++ b/kernel/time/hrtimer.c
-@@ -1866,7 +1866,6 @@ void hrtimer_interrupt(struct clock_event_device *dev)
- 	else
- 		expires_next = ktime_add(now, delta);
- 	tick_program_event(expires_next, 1);
--	pr_warn_once("hrtimer: interrupt took %llu ns\n", ktime_to_ns(delta));
- }
- 
- /* called with interrupts disabled */
--- 
-2.27.0
+Please at least add the missing bit for big-endian architectures here:
 
++#if !defined(compat_arg_u64) && !defined(CONFIG_CPU_BIG_ENDIAN)
++#define compat_arg_u64(name)           u32  name##_lo, u32  name##_hi
++#define compat_arg_u64_dual(name)      u32, name##_lo, u32, name##_hi
++#define compat_arg_u64_glue(name)      (((u64)name##_hi << 32) | \
++                                        ((u64)name##_lo & 0xffffffffUL))
++#endif
+
+with the lo/hi words swapped. With that change:
+
+Reviewed-by: Arnd Bergmann <arnd@arndb.de>

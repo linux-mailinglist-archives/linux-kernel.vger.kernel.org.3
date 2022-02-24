@@ -2,276 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07C824C2BD8
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 13:36:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C48614C2BA3
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 13:27:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234445AbiBXMej (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 07:34:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57418 "EHLO
+        id S234287AbiBXM1Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 07:27:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234450AbiBXMed (ORCPT
+        with ESMTP id S232221AbiBXM1V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 07:34:33 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E011F2819B2
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 04:33:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1645706039;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=5clP4FClpkVME0Divw2JnoZ6h6QaqdSaw66V9RpG2ik=;
-        b=NnT9Xy11cTzmGb6M4pkZKqKQDflqb2M7M/y86bOB7SZ7crgEWhRmoEHlKBJ+uXMS/Nc786
-        wF+fAg9HD1eL4vUd+xSOrle8sAwkz6lystdmCMYOyFcx9mVLiqoXVvHnzspwhnXCV5El5q
-        PdZCtzV8yV5XuCipe9nNo5WDBsRbGbk=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-625-CvylO8yJNnax_zERPdNlwA-1; Thu, 24 Feb 2022 07:33:55 -0500
-X-MC-Unique: CvylO8yJNnax_zERPdNlwA-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id DC0911006AA5;
-        Thu, 24 Feb 2022 12:33:52 +0000 (UTC)
-Received: from t480s.redhat.com (unknown [10.39.194.160])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 51D882634C;
-        Thu, 24 Feb 2022 12:33:46 +0000 (UTC)
-From:   David Hildenbrand <david@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        David Rientjes <rientjes@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Yang Shi <shy828301@gmail.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Nadav Amit <namit@vmware.com>, Rik van Riel <riel@surriel.com>,
-        Roman Gushchin <guro@fb.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Peter Xu <peterx@redhat.com>,
-        Donald Dutile <ddutile@redhat.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
-        Liang Zhang <zhangliang5@huawei.com>,
-        Pedro Gomes <pedrodemargomes@gmail.com>,
-        Oded Gabbay <oded.gabbay@gmail.com>, linux-mm@kvack.org,
-        David Hildenbrand <david@redhat.com>
-Subject: [PATCH RFC 13/13] mm/gup: sanity-check with CONFIG_DEBUG_VM that anonymous pages are exclusive when (un)pinning
-Date:   Thu, 24 Feb 2022 13:26:14 +0100
-Message-Id: <20220224122614.94921-14-david@redhat.com>
-In-Reply-To: <20220224122614.94921-1-david@redhat.com>
-References: <20220224122614.94921-1-david@redhat.com>
+        Thu, 24 Feb 2022 07:27:21 -0500
+Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F1E05BD26
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 04:26:51 -0800 (PST)
+Received: by mail-oi1-x231.google.com with SMTP id j24so2224986oii.11
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 04:26:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=oYTU/xUKnqUv9iv9u+6g24yzpR+pFvcXOd7BnbJwM7w=;
+        b=JR1017e8qWfgaETBmi93Id8ZpoF/iFAwjXtyZL81dMEwoRABQDNCRDEwYJyOYNHJA7
+         3JT4S8HMKzT5aFATiKFCdFdBs0gNgZ3cKYkVoATCsqDNJZkVdpGStrMZ4EIdLurcWQcT
+         axPXDvwkZwCsExi02fUqzjQahgCz2tcXQlclkRQfGlUuX5CfbQ3pp0VoYRMl8dvwB5yo
+         wzS/qZZNloI2WvCFDVltZEkpsitX/EWbewf6DJQXtD+tNxQFb/fb+BXJ3UzO9knbkCWf
+         yOkKJZWXoXPDMAcT7Q7vNS3Wp/XjhTz/cgm42/7uad1Pk4RNPkWC6+5wNQTOVXNmWQdt
+         rKTw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=oYTU/xUKnqUv9iv9u+6g24yzpR+pFvcXOd7BnbJwM7w=;
+        b=RH207x04mknf4+qz7XnWVzJQiJ8N/C84y+l+8/fyAPKzb5j6MJA4AoYMJgpJH9TDmr
+         iGoUgzWOJzB8FdUWR8L+/xDBFxH+00GuLuFS6hO0KKKdxhBVjefnqZNsKFe/V7JyzXD1
+         xN98PbqLws/vKuiXs0Rnez8trk61QIdImEd4v+gWQfc6fMLFxT4QFGAOmRkmLLa+dPjK
+         h6YonIrr0loHWBKRdBFdbicT1b1Q3wgRPmC5scZ0Y2SzrQ7Y+yLvGkSqig92Cy2A7wuM
+         8m1wG5EKAoUa/y5qE68jRuM/7XgPSwdgNzwuolrUyfxxpf/AxJEcKuocdPOUz1yELzKu
+         L8iw==
+X-Gm-Message-State: AOAM531H8B7XCe3iFB3eGI07nuspL1iYEi8L5R6AvT8FrUyJ4+ZQjl0i
+        a3QlzjBe6p5VzNCGI/wggOd8g3g2u89lWaYwT6cN3g==
+X-Google-Smtp-Source: ABdhPJzmSzfVqT9jRRqKWQ7Vbi8o4Aj8CdhVv14Hh6K4GF7CeVmxqmI6yIP2jfyFBJ29+WT16YhgLURlwHMt4sHdxhs=
+X-Received: by 2002:a54:4e86:0:b0:2cf:c254:f77c with SMTP id
+ c6-20020a544e86000000b002cfc254f77cmr1069155oiy.171.1645705610293; Thu, 24
+ Feb 2022 04:26:50 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220224051439.640768-1-kaleshsingh@google.com> <20220224051439.640768-4-kaleshsingh@google.com>
+In-Reply-To: <20220224051439.640768-4-kaleshsingh@google.com>
+From:   Fuad Tabba <tabba@google.com>
+Date:   Thu, 24 Feb 2022 12:26:14 +0000
+Message-ID: <CA+EHjTy6DJt8Pcfj4JnVhSG0sQ7O09zvOaMP--aRuAsM=8zKUw@mail.gmail.com>
+Subject: Re: [PATCH v3 3/8] KVM: arm64: Add guard pages for KVM nVHE
+ hypervisor stack
+To:     Kalesh Singh <kaleshsingh@google.com>
+Cc:     will@kernel.org, maz@kernel.org, qperret@google.com,
+        surenb@google.com, kernel-team@android.com,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Mark Brown <broonie@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Peter Collingbourne <pcc@google.com>,
+        "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>,
+        Andrew Walbran <qwandor@google.com>,
+        Andrew Scull <ascull@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Let's verify when (un)pinning anonymous pages that we always deal with
-exclusive anonymous pages, which guarantees that we'll have a reliable
-PIN, meaning that we cannot end up with the GUP pin being inconsistent
-with he pages mapped into the page tables due to a COW triggered
-by a write fault.
+Hi Kalesh,
 
-When pinning pages, after conditionally triggering GUP unsharing of
-possibly shared anonymous pages, we should always only see exclusive
-anonymous pages. Note that anonymous pages that are mapped writable
-must be marked exclusive, otherwise we'd have a BUG.
 
-When pinning during ordinary GUP, simply add a check after our
-conditional GUP-triggered unsharing checks. As we know exactly how the
-page is mapped, we know exactly in which page we have to check for
-PageAnonExclusive().
 
-When pinning via GUP-fast we have to be careful, because we can race with
-fork(): verify only after we made sure via the seqcount that we didn't
-race with concurrent fork() that we didn't end up pinning a possibly
-shared anonymous page.
+On Thu, Feb 24, 2022 at 5:18 AM Kalesh Singh <kaleshsingh@google.com> wrote:
+>
+> Maps the stack pages in the flexible private VA range and allocates
+> guard pages below the stack as unbacked VA space. The stack is aligned
+> to twice its size to aid overflow detection (implemented in a subsequent
+> patch in the series).
+>
+> Signed-off-by: Kalesh Singh <kaleshsingh@google.com>
+> ---
+>
+> Changes in v3:
+>   - Handle null ptr in IS_ERR_OR_NULL checks, per Mark
+>
+>  arch/arm64/include/asm/kvm_asm.h |  1 +
+>  arch/arm64/kvm/arm.c             | 32 +++++++++++++++++++++++++++++---
+>  2 files changed, 30 insertions(+), 3 deletions(-)
+>
+> diff --git a/arch/arm64/include/asm/kvm_asm.h b/arch/arm64/include/asm/kvm_asm.h
+> index d5b0386ef765..2e277f2ed671 100644
+> --- a/arch/arm64/include/asm/kvm_asm.h
+> +++ b/arch/arm64/include/asm/kvm_asm.h
+> @@ -169,6 +169,7 @@ struct kvm_nvhe_init_params {
+>         unsigned long tcr_el2;
+>         unsigned long tpidr_el2;
+>         unsigned long stack_hyp_va;
+> +       unsigned long stack_pa;
+>         phys_addr_t pgd_pa;
+>         unsigned long hcr_el2;
+>         unsigned long vttbr;
+> diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
+> index ecc5958e27fe..7a23630c4a7f 100644
+> --- a/arch/arm64/kvm/arm.c
+> +++ b/arch/arm64/kvm/arm.c
+> @@ -1541,7 +1541,6 @@ static void cpu_prepare_hyp_mode(int cpu)
+>         tcr |= (idmap_t0sz & GENMASK(TCR_TxSZ_WIDTH - 1, 0)) << TCR_T0SZ_OFFSET;
+>         params->tcr_el2 = tcr;
+>
+> -       params->stack_hyp_va = kern_hyp_va(per_cpu(kvm_arm_hyp_stack_page, cpu) + PAGE_SIZE);
+>         params->pgd_pa = kvm_mmu_get_httbr();
+>         if (is_protected_kvm_enabled())
+>                 params->hcr_el2 = HCR_HOST_NVHE_PROTECTED_FLAGS;
+> @@ -1990,14 +1989,41 @@ static int init_hyp_mode(void)
+>          * Map the Hyp stack pages
+>          */
+>         for_each_possible_cpu(cpu) {
+> +               struct kvm_nvhe_init_params *params = per_cpu_ptr_nvhe_sym(kvm_init_params, cpu);
+>                 char *stack_page = (char *)per_cpu(kvm_arm_hyp_stack_page, cpu);
+> -               err = create_hyp_mappings(stack_page, stack_page + PAGE_SIZE,
+> -                                         PAGE_HYP);
+> +               unsigned long stack_hyp_va, guard_hyp_va;
+>
+> +               /*
+> +                * Private mappings are allocated downwards from io_map_base
+> +                * so allocate the stack first then the guard page.
+> +                *
+> +                * The stack is aligned to twice its size to facilitate overflow
+> +                * detection.
+> +                */
+> +               err = __create_hyp_private_mapping(__pa(stack_page), PAGE_SIZE,
+> +                                               PAGE_SIZE * 2, &stack_hyp_va, PAGE_HYP);
+>                 if (err) {
+>                         kvm_err("Cannot map hyp stack\n");
+>                         goto out_err;
+>                 }
+> +
+> +               /* Allocate unbacked private VA range for stack guard page */
+> +               guard_hyp_va = hyp_alloc_private_va_range(PAGE_SIZE, PAGE_SIZE);
+> +               if (IS_ERR_OR_NULL((void *)guard_hyp_va)) {
+> +                       err = guard_hyp_va ? PTR_ERR((void *)guard_hyp_va) : -ENOMEM;
 
-Similarly, when unpinning, verify that the pages are still marked as
-exclusive: otherwise something turned the pages possibly shared, which
-can result in random memory corruptions, which we really want to catch.
+I am a bit confused by this check. hyp_alloc_private_va_range() always
+returns ERR_PTR(-ENOMEM) if there's an error. Mark's comment (if I
+understood it correctly) was about how you were handling it *in*
+hyp_alloc_private_va_range(), rather than calls *to*
+hyp_alloc_private_va_range().
 
-With only the pinned pages at hand and not the actual page table entries
-we have to be a bit careful: hugetlb pages are always mapped via a
-single logical page table entry referencing the head page and
-PG_anon_exclusive of the head page applies. Anon THP are a bit more
-complicated, because we might have obtained the page reference either via
-a PMD or a PTE -- depending on the mapping type we either have to check
-PageAnonExclusive of the head page (PMD-mapped THP) or the tail page
-(PTE-mapped THP) applies: as we don't know and to make our life easier,
-check that either is set.
+> +                       kvm_err("Cannot allocate hyp stack guard page\n");
+> +                       goto out_err;
+> +               }
+> +
+> +               /*
+> +                * Save the stack PA in nvhe_init_params. This will be needed to recreate
+> +                * the stack mapping in protected nVHE mode. __hyp_pa() won't do the right
+> +                * thing there, since the stack has been mapped in the flexible private
+> +                * VA space.
+> +                */
 
-Take care to not verify in case we're unpinning during GUP-fast because
-we detected concurrent fork(): we might stumble over an anonymous page
-that is now shared.
+Nit: These comments go over 80 columns, unlike other comments that
+you've added in this file.
 
-Signed-off-by: David Hildenbrand <david@redhat.com>
----
- mm/gup.c         | 61 +++++++++++++++++++++++++++++++++++++++++++++++-
- mm/huge_memory.c |  3 +++
- mm/hugetlb.c     |  3 +++
- 3 files changed, 66 insertions(+), 1 deletion(-)
+Thanks,
+/fuad
 
-diff --git a/mm/gup.c b/mm/gup.c
-index 2cb7cbb1fc1f..df1ae29a1f5f 100644
---- a/mm/gup.c
-+++ b/mm/gup.c
-@@ -45,6 +45,41 @@ static void hpage_pincount_sub(struct page *page, int refs)
- 	atomic_sub(refs, compound_pincount_ptr(page));
- }
- 
-+static inline void sanity_check_pinned_pages(struct page **pages,
-+					     unsigned long npages)
-+{
-+#ifdef CONFIG_DEBUG_VM
-+	/*
-+	 * We expect to only succeed in pinning anonymous pages if they are
-+	 * exclusive. Once pinned, we can no longer mark them shared and the
-+	 * PageAnonExclusive() will stick around until the page is freed
-+	 * after it was unmapped.
-+	 *
-+	 * We'd like to verify that our pinned anonymous pages are mapped
-+	 * exclusively. The issue with anon THP is that we don't know how
-+	 * they are/were mapped when pinning them. However, for anon
-+	 * THP we can assume that either the given page (PTE-mapped THP) or
-+	 * the head page (PMD-mapped THP) should be PageAnonExclusive(). If
-+	 * neither is the case there is certainly something wrong.
-+	 */
-+	for (; npages; npages--, pages++) {
-+		struct page *page = *pages;
-+		struct page *head = compound_head(page);
-+
-+		if (!PageAnon(page))
-+			continue;
-+		if (!PageCompound(page))
-+			VM_BUG_ON_PAGE(!PageAnonExclusive(page), page);
-+		else if (PageHuge(page))
-+			VM_BUG_ON_PAGE(!PageAnonExclusive(head), page);
-+		else
-+			/* Either PTE-mapped or PMD-mapped, we don't know. */
-+			VM_BUG_ON_PAGE(!PageAnonExclusive(head) &&
-+				       !PageAnonExclusive(page), page);
-+	}
-+#endif /* CONFIG_DEBUG_VM */
-+}
-+
- /* Equivalent to calling put_page() @refs times. */
- static void put_page_refs(struct page *page, int refs)
- {
-@@ -250,6 +285,7 @@ bool __must_check try_grab_page(struct page *page, unsigned int flags)
-  */
- void unpin_user_page(struct page *page)
- {
-+	sanity_check_pinned_pages(&page, 1);
- 	put_compound_head(compound_head(page), 1, FOLL_PIN);
- }
- EXPORT_SYMBOL(unpin_user_page);
-@@ -340,6 +376,7 @@ void unpin_user_pages_dirty_lock(struct page **pages, unsigned long npages,
- 		return;
- 	}
- 
-+	sanity_check_pinned_pages(pages, npages);
- 	for_each_compound_head(index, pages, npages, head, ntails) {
- 		/*
- 		 * Checking PageDirty at this point may race with
-@@ -404,6 +441,21 @@ void unpin_user_page_range_dirty_lock(struct page *page, unsigned long npages,
- }
- EXPORT_SYMBOL(unpin_user_page_range_dirty_lock);
- 
-+static void unpin_user_pages_lockless(struct page **pages, unsigned long npages)
-+{
-+	unsigned long index;
-+	struct page *head;
-+	unsigned int ntails;
-+
-+	/*
-+	 * Don't perform any sanity checks because we might have raced with
-+	 * fork() and some anonymous pages might no actually be shared --
-+	 * which is why we're unpinning after all.
-+	 */
-+	for_each_compound_head(index, pages, npages, head, ntails)
-+		put_compound_head(head, ntails, FOLL_PIN);
-+}
-+
- /**
-  * unpin_user_pages() - release an array of gup-pinned pages.
-  * @pages:  array of pages to be marked dirty and released.
-@@ -426,6 +478,7 @@ void unpin_user_pages(struct page **pages, unsigned long npages)
- 	 */
- 	if (WARN_ON(IS_ERR_VALUE(npages)))
- 		return;
-+	sanity_check_pinned_pages(pages, npages);
- 
- 	for_each_compound_head(index, pages, npages, head, ntails)
- 		put_compound_head(head, ntails, FOLL_PIN);
-@@ -572,6 +625,10 @@ static struct page *follow_page_pte(struct vm_area_struct *vma,
- 		page = ERR_PTR(-EMLINK);
- 		goto out;
- 	}
-+
-+	VM_BUG_ON((flags & FOLL_PIN) && PageAnon(page) &&
-+		  !PageAnonExclusive(page));
-+
- 	/* try_grab_page() does nothing unless FOLL_GET or FOLL_PIN is set. */
- 	if (unlikely(!try_grab_page(page, flags))) {
- 		page = ERR_PTR(-ENOMEM);
-@@ -2885,8 +2942,10 @@ static unsigned long lockless_pages_from_mm(unsigned long start,
- 	 */
- 	if (gup_flags & FOLL_PIN) {
- 		if (read_seqcount_retry(&current->mm->write_protect_seq, seq)) {
--			unpin_user_pages(pages, nr_pinned);
-+			unpin_user_pages_lockless(pages, nr_pinned);
- 			return 0;
-+		} else {
-+			sanity_check_pinned_pages(pages, nr_pinned);
- 		}
- 	}
- 	return nr_pinned;
-diff --git a/mm/huge_memory.c b/mm/huge_memory.c
-index 334cd9381635..72ed42d0ef3c 100644
---- a/mm/huge_memory.c
-+++ b/mm/huge_memory.c
-@@ -1399,6 +1399,9 @@ struct page *follow_trans_huge_pmd(struct vm_area_struct *vma,
- 	if (!pmd_write(*pmd) && gup_must_unshare(flags, page))
- 		return ERR_PTR(-EMLINK);
- 
-+	VM_BUG_ON((flags & FOLL_PIN) && PageAnon(page) &&
-+		  !PageAnonExclusive(page));
-+
- 	if (!try_grab_page(page, flags))
- 		return ERR_PTR(-ENOMEM);
- 
-diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-index 6c2a7dd8a48d..e1f7fa2b0292 100644
---- a/mm/hugetlb.c
-+++ b/mm/hugetlb.c
-@@ -6091,6 +6091,9 @@ long follow_hugetlb_page(struct mm_struct *mm, struct vm_area_struct *vma,
- 		pfn_offset = (vaddr & ~huge_page_mask(h)) >> PAGE_SHIFT;
- 		page = pte_page(huge_ptep_get(pte));
- 
-+		VM_BUG_ON((flags & FOLL_PIN) && PageAnon(page) &&
-+			  !PageAnonExclusive(page));
-+
- 		/*
- 		 * If subpage information not requested, update counters
- 		 * and skip the same_page loop below.
--- 
-2.35.1
-
+> +               params->stack_pa = __pa(stack_page) + PAGE_SIZE;
+> +
+> +               params->stack_hyp_va = stack_hyp_va + PAGE_SIZE;
+>         }
+>
+>         for_each_possible_cpu(cpu) {
+> --
+> 2.35.1.473.g83b2b277ed-goog
+>

@@ -2,121 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D3BD4C2E67
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 15:28:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 12BC94C2E73
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 15:31:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235552AbiBXO1j convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 24 Feb 2022 09:27:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43616 "EHLO
+        id S235513AbiBXOaC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 09:30:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235551AbiBXO1h (ORCPT
+        with ESMTP id S232394AbiBXOaA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 09:27:37 -0500
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2337566CB5
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 06:27:06 -0800 (PST)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-196-WFPNFewdOROHOFf201Jvtg-1; Thu, 24 Feb 2022 14:27:04 +0000
-X-MC-Unique: WFPNFewdOROHOFf201Jvtg-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.28; Thu, 24 Feb 2022 14:27:02 +0000
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.028; Thu, 24 Feb 2022 14:27:02 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Baoquan He' <bhe@redhat.com>, Christoph Hellwig <hch@lst.de>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "cl@linux.com" <cl@linux.com>,
-        "42.hyeyoo@gmail.com" <42.hyeyoo@gmail.com>,
-        "penberg@kernel.org" <penberg@kernel.org>,
-        "rientjes@google.com" <rientjes@google.com>,
-        "iamjoonsoo.kim@lge.com" <iamjoonsoo.kim@lge.com>,
-        "vbabka@suse.cz" <vbabka@suse.cz>,
-        "david@redhat.com" <david@redhat.com>,
-        "herbert@gondor.apana.org.au" <herbert@gondor.apana.org.au>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "steffen.klassert@secunet.com" <steffen.klassert@secunet.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "hca@linux.ibm.com" <hca@linux.ibm.com>,
-        "gor@linux.ibm.com" <gor@linux.ibm.com>,
-        "agordeev@linux.ibm.com" <agordeev@linux.ibm.com>,
-        "borntraeger@linux.ibm.com" <borntraeger@linux.ibm.com>,
-        "svens@linux.ibm.com" <svens@linux.ibm.com>,
-        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
-        "michael@walle.cc" <michael@walle.cc>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "wsa@kernel.org" <wsa@kernel.org>
-Subject: RE: [PATCH 1/2] dma-mapping: check dma_mask for streaming mapping
- allocs
-Thread-Topic: [PATCH 1/2] dma-mapping: check dma_mask for streaming mapping
- allocs
-Thread-Index: AQHYKYhjymqZSBR5G0e43mhWKNvBx6yiv4Mw
-Date:   Thu, 24 Feb 2022 14:27:02 +0000
-Message-ID: <1fead34bceda468cbe34077a28c4a4b1@AcuMS.aculab.com>
-References: <20220219005221.634-22-bhe@redhat.com>
- <20220219071730.GG26711@lst.de> <20220220084044.GC93179@MiWiFi-R3L-srv>
- <20220222084530.GA6210@lst.de> <YhSpaGfiQV8Nmxr+@MiWiFi-R3L-srv>
- <20220222131120.GB10093@lst.de> <YhToFzlSufrliUsi@MiWiFi-R3L-srv>
- <20220222155904.GA13323@lst.de> <YhV/nabDa5zdNL/4@MiWiFi-R3L-srv>
- <20220223142555.GA5986@lst.de> <YheSBTJY216m6izG@MiWiFi-R3L-srv>
-In-Reply-To: <YheSBTJY216m6izG@MiWiFi-R3L-srv>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Thu, 24 Feb 2022 09:30:00 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 46F4117C402
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 06:29:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1645712970;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=g+rrF8JUub4OBg9MyDm/2REtxx0IIbE/BeW/5erIvm0=;
+        b=hyRVWMMiEv7gaYo2vvV96PVVPrlRZdn/6QxsdOVC2/vbMPP4PM/1KBSpVtipiobaDnLcAl
+        xC0iBBgNK+08u7zDmOybbbxzSZpVIuzXt4aPIdwTkrtWvopLxHD4lLAYg1oxQ/sLtMxq5x
+        VoOnPpOu5cnK8Mj5m3GtE/5NvnrDtjg=
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
+ [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-499-oJ337DgNMhuMaOMk2Uh3Qg-1; Thu, 24 Feb 2022 09:29:28 -0500
+X-MC-Unique: oJ337DgNMhuMaOMk2Uh3Qg-1
+Received: by mail-ej1-f72.google.com with SMTP id sa22-20020a1709076d1600b006ce78cacb85so1300688ejc.2
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 06:29:27 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=g+rrF8JUub4OBg9MyDm/2REtxx0IIbE/BeW/5erIvm0=;
+        b=KMiPYM0B2NX9rvfvpprzmdlV4MwQWUJvuvfXSSG2Jm33IiccV4uKzC9DW5X1KjAHhC
+         HH6OiDgAc/DycIM+bvNyJ1C5OsculNcqhBk7zmSgvqpgqBUEd3Sz/nI1FtBEbFDZ2WDx
+         a1GLT1ppgNNjjEx5iHzoRs22bL1kyjMsSQMe6YcZ4S0zurQkG+lWz7OW+FnoFmF0+bSN
+         UPQ2blAhtzQkHruxSuYPsBeEzNRyuQswt4FxANwZVaumSXdaqidxwMPDyD7g+3QAWcaH
+         lujy9N382VQLlok2L9zMoV0qu7+gW36dyQ5OE8m6rksaXBdP8WqVma2uME5ZxjhyWZWG
+         HG2g==
+X-Gm-Message-State: AOAM531b2DmEuBpmh92skhxhoTHwRDuyeX4iX3NnTqD7CGt+wjZIn/up
+        xDTLy5AkUkOM1Bo+u8ZooQ2ailLPDD4c60VLRulo8tjyv4OVQ0cOQUAAUVNPAlHNqUnBxGfN99j
+        w7SgI4AMUhO7LunO//U96u+yc
+X-Received: by 2002:a17:906:edb5:b0:6b8:1a5a:f3a0 with SMTP id sa21-20020a170906edb500b006b81a5af3a0mr2569834ejb.501.1645712966833;
+        Thu, 24 Feb 2022 06:29:26 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxjZMkWgbXyLCpjc8uqWGsi03sjuHBM8goCnZK40Hcr3xl8F7jTXXvNZQBGS3MZsj62ipbJbA==
+X-Received: by 2002:a17:906:edb5:b0:6b8:1a5a:f3a0 with SMTP id sa21-20020a170906edb500b006b81a5af3a0mr2569822ejb.501.1645712966649;
+        Thu, 24 Feb 2022 06:29:26 -0800 (PST)
+Received: from ?IPV6:2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1? (2001-1c00-0c1e-bf00-1db8-22d3-1bc9-8ca1.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1])
+        by smtp.gmail.com with ESMTPSA id 23sm1421805ejf.215.2022.02.24.06.29.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 24 Feb 2022 06:29:26 -0800 (PST)
+Message-ID: <ce8652bc-ad1d-b158-2822-33681ac3ea91@redhat.com>
+Date:   Thu, 24 Feb 2022 15:29:25 +0100
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH] vboxsf: Remove redundant assignment to out_len
 Content-Language: en-US
+To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Abaci Robot <abaci@linux.alibaba.com>
+References: <20220224104853.71844-1-jiapeng.chong@linux.alibaba.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20220224104853.71844-1-jiapeng.chong@linux.alibaba.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Baoquan He
-> Sent: 24 February 2022 14:11
-...
-> With my understanding, there are two kinds of DMA mapping, coherent
-> mapping (which is also persistent mapping), and streaming mapping. The
-> coherent mapping will be handled during driver init, and released during
-> driver de-init. While streaming mapping will be done when needed at any
-> time, and released after usage.
+Hi,
 
-The lifetime has absolutely nothing to do with it.
+On 2/24/22 11:48, Jiapeng Chong wrote:
+> Clean up the following clang-w1 warning:
+> 
+> fs/vboxsf/utils.c:442:9: warning: variable 'out_len' set but not used
+> [-Wunused-but-set-variable].
+> 
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
 
-It is all about how the DMA cycles (from the device) interact with
-(or more don't interact with) the cpu memory cache.
+This is not the correct fix out_len indeed is never read
+anywhere in this function, so the correct fix is to
+completely remove the out_len variable .
 
-For coherent mapping the cpu and device can write to (different)
-words in the same cache line at the same time, and both will see
-both updates.
-On some systems this can only be achieved by making the memory
-uncached - which significantly slows down cpu access.
+Regards,
 
-For non-coherent (streaming) mapping the cpu writes back and/or
-invalidates the data cache so that the dma read cycles from memory
-read the correct data and the cpu re-reads the cache line after
-the dma has completed.
-They are only really suitable for data buffers.
+Hans
 
-	David
 
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
+
+> ---
+>  fs/vboxsf/utils.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+> 
+> diff --git a/fs/vboxsf/utils.c b/fs/vboxsf/utils.c
+> index e1db0f3f7e5e..865fe5ddc993 100644
+> --- a/fs/vboxsf/utils.c
+> +++ b/fs/vboxsf/utils.c
+> @@ -439,7 +439,7 @@ int vboxsf_nlscpy(struct vboxsf_sbi *sbi, char *name, size_t name_bound_len,
+>  {
+>  	const char *in;
+>  	char *out;
+> -	size_t out_len;
+> +	size_t out_len = 0;
+>  	size_t out_bound_len;
+>  	size_t in_bound_len;
+>  
+> @@ -447,7 +447,6 @@ int vboxsf_nlscpy(struct vboxsf_sbi *sbi, char *name, size_t name_bound_len,
+>  	in_bound_len = utf8_len;
+>  
+>  	out = name;
+> -	out_len = 0;
+>  	/* Reserve space for terminating 0 */
+>  	out_bound_len = name_bound_len - 1;
+>  
 

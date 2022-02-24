@@ -2,131 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07A6D4C2A9C
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 12:17:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E622F4C2AA1
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 12:18:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232455AbiBXLQZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 06:16:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54730 "EHLO
+        id S233990AbiBXLSF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 06:18:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233812AbiBXLQU (ORCPT
+        with ESMTP id S233962AbiBXLRx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 06:16:20 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBAAF294552;
-        Thu, 24 Feb 2022 03:15:50 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4D5696177F;
-        Thu, 24 Feb 2022 11:15:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23E0CC340F0;
-        Thu, 24 Feb 2022 11:15:49 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="K0Ba/2BM"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1645701345;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=tSMJNlgM3iQSZttf3O5yP1K/Zb4cUmNelvTABLfdcOs=;
-        b=K0Ba/2BM/9pExBbaS5Oj8SCJvlvp0LQGyiNAiXDyooG/U9BeyX+5o7RLqsETF26O3Q8oLJ
-        fCsXilmRI7pxc/CYm3kU+fXPDMl1Uchh4ynDmuSO5MbVs6Ufz3QiiawdfSIvm5FepEXDsh
-        cYBAB6wdHUlLLl0Wob5vRSfu6n86I28=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 954041ba (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Thu, 24 Feb 2022 11:15:45 +0000 (UTC)
-Received: by mail-yb1-f182.google.com with SMTP id g6so3016428ybe.12;
-        Thu, 24 Feb 2022 03:15:43 -0800 (PST)
-X-Gm-Message-State: AOAM5315RL/lzYI/NtRNh7x5Px9BdD0ydiHXo8b3FpyEVFwamOhtB+0p
-        gx0/jUlkmeQ1PWrF6jia5iAIhGQNRHDmWJyyjDU=
-X-Google-Smtp-Source: ABdhPJwcyLWv29eKkR/4qn6wxUASneof9Mw7kmR85HjE16vurz2uO8LCL0/vq/6Jg597pXgN7D3peAt9nzCkEAyuvVw=
-X-Received: by 2002:a25:d116:0:b0:61d:e8c9:531e with SMTP id
- i22-20020a25d116000000b0061de8c9531emr1860406ybg.637.1645701342951; Thu, 24
- Feb 2022 03:15:42 -0800 (PST)
+        Thu, 24 Feb 2022 06:17:53 -0500
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 863BDF70C1
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 03:17:23 -0800 (PST)
+Received: by mail-wr1-x42b.google.com with SMTP id b5so1474852wrr.2
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 03:17:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=+4LwzA+Ef31mwQpA9bTjYO5hYFfgu0fC7ELpcssYOSE=;
+        b=hE3EJFfF6VzcfLrzRn5aJCbjjAMiK533zNKHRj+C3WitaLtKo4kAlfYrk3riLzLF/X
+         O3FCI0qXc1eCJmTgeLBa9ydwwy46/9cz8N+duqK6PqUh/Hc41TnP8x+DfWejCQx+/oTi
+         eMSBQaNsKND69ZrEdBH+IWCU5g/EQQymQ8DMfKh1yE8cxk7jrCbFl7YPt7lGW2ezebEI
+         2u2KifVkg5ruCjwzLrzB55IhraI7vWYXI6mE1QVfg6MIoS8CArYN8Ah2jGs86e1g0MdA
+         XiW/POUR4ArEHj1Fgwjw8FYL+tylHcXFXiD0RJgyjVaT8aUHGUTx/5ATwiGxOMKj2MVS
+         TbSQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=+4LwzA+Ef31mwQpA9bTjYO5hYFfgu0fC7ELpcssYOSE=;
+        b=24IcooSzqSOK0gXKgrHNlu7LCuAMroaWqId3A/57QU5bx0p9oKEO4tlpm+Kpj96Ka7
+         KOhYIJ6cEIzDmn6co1/mgZ66Auu3dYdsUPyy1Akp0thjV9yD87JWldBfocJYjahXwTSw
+         joNnuuHaauL0x2o7XwaGS0DnHm9VTYHLau6pbaAoBP3DcHYu8IIeiSI1U8ADki0FOv3W
+         KoiXbkHWjF0itwfT1m/zuBxDeiSWAky2Tp8BcDYI8DPkPDBih3eVrZqVMEHQ4UmnU9Di
+         KAKaIiqjfuZanTcYDJEDpMgL3TuQk3xOcpdf38QtoDVlnot/YIsAKV6N2OejtRFv5yLu
+         9dYA==
+X-Gm-Message-State: AOAM531fiyFJuJvjRrupz30BDXmOkYlQIYrNzWjAuOs9c990NHqT9mGH
+        iRoONmtkEfC1lvnlu/4p2A4u/GoNvIqHzw==
+X-Google-Smtp-Source: ABdhPJyAbKc8qelEnGbGx3dKGDG6VY7tTOq4g66Wk0gJVAM/zAwvRq07CUkhz2V8B9X8kywSZOmwWA==
+X-Received: by 2002:a5d:5850:0:b0:1ea:7d9c:4397 with SMTP id i16-20020a5d5850000000b001ea7d9c4397mr1843934wrf.225.1645701442070;
+        Thu, 24 Feb 2022 03:17:22 -0800 (PST)
+Received: from srini-hackbox.lan (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
+        by smtp.gmail.com with ESMTPSA id t4sm2245737wmj.10.2022.02.24.03.17.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Feb 2022 03:17:21 -0800 (PST)
+From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+To:     broonie@kernel.org
+Cc:     lgirdwood@gmail.com, perex@perex.cz, tiwai@suse.com,
+        pierre-louis.bossart@linux.intel.com, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org, quic_srivasam@quicinc.com,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Subject: [PATCH v2 00/16] ASoC: codecs: add pm runtime support for Qualcomm codecs
+Date:   Thu, 24 Feb 2022 11:17:02 +0000
+Message-Id: <20220224111718.6264-1-srinivas.kandagatla@linaro.org>
+X-Mailer: git-send-email 2.21.0
 MIME-Version: 1.0
-References: <20220223131231.403386-1-Jason@zx2c4.com> <20220223131231.403386-2-Jason@zx2c4.com>
- <YhbAOW/KbFW1CFkQ@sol.localdomain> <CAHmME9oa_wE8_n8e5b=iM5v-s5dgyibm4vXMhwzc8zGd6VWZMQ@mail.gmail.com>
- <YhbfDQ2ernjrRNRX@sol.localdomain>
-In-Reply-To: <YhbfDQ2ernjrRNRX@sol.localdomain>
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date:   Thu, 24 Feb 2022 12:15:32 +0100
-X-Gmail-Original-Message-ID: <CAHmME9rUD5QrgQMpoOCjv3crWFwn+BXXx9Dm0e2Kv4cJCYS+AQ@mail.gmail.com>
-Message-ID: <CAHmME9rUD5QrgQMpoOCjv3crWFwn+BXXx9Dm0e2Kv4cJCYS+AQ@mail.gmail.com>
-Subject: Re: [PATCH RFC v1 1/2] random: add mechanism for VM forks to
- reinitialize crng
-To:     Eric Biggers <ebiggers@kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        QEMU Developers <qemu-devel@nongnu.org>,
-        KVM list <kvm@vger.kernel.org>, linux-s390@vger.kernel.org,
-        adrian@parity.io, "Woodhouse, David" <dwmw@amazon.co.uk>,
-        "Catangiu, Adrian Costin" <acatan@amazon.com>, graf@amazon.com,
-        Colm MacCarthaigh <colmmacc@amazon.com>,
-        "Singh, Balbir" <sblbir@amazon.com>,
-        "Weiss, Radu" <raduweis@amazon.com>, Jann Horn <jannh@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Theodore Ts'o" <tytso@mit.edu>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hey Eric,
+This patchset adds support for runtime pm on tx/rx/wsa/wcd lpass macro, wsa881x
+and wcd938x codecs that are wired up on SoundWire bus.
+During pm testing it was also found that soundwire clks enabled by lpass macros
+are not enabling all the required clocks correctly, so last 3 patches corrects them.
 
-On Thu, Feb 24, 2022 at 2:27 AM Eric Biggers <ebiggers@kernel.org> wrote:
->
-> On Thu, Feb 24, 2022 at 01:54:54AM +0100, Jason A. Donenfeld wrote:
-> > On 2/24/22, Eric Biggers <ebiggers@kernel.org> wrote:
-> > > I think we should be removing cases where the base_crng key is changed
-> > > directly
-> > > besides extraction from the input_pool, not adding new ones.  Why not
-> > > implement
-> > > this as add_device_randomness() followed by crng_reseed(force=true), where
-> > > the
-> > > 'force' argument forces a reseed to occur even if the entropy_count is too
-> > > low?
-> >
-> > Because that induces a "premature next" condition which can let that
-> > entropy, potentially newly acquired by a storm of IRQs at power-on, be
-> > bruteforced by unprivileged userspace. I actually had it exactly the
-> > way you describe at first, but decided that this here is the lesser of
-> > evils and doesn't really complicate things the way an intentional
-> > premature next would. The only thing we care about here is branching
-> > the crng stream, and so this does explicitly that, without having to
-> > interfere with how we collect entropy. Of course we *also* add it as
-> > non-credited "device randomness" so that it's part of the next
-> > reseeding, whenever that might occur.
->
-> Can you make sure to properly explain this in the code?
+Tested this on SM8250 MTP along SoundWire In band Headset Button wakeup interrupts.
 
-The carousel keeps turning, and after I wrote to you last night I kept
-thinking about the matter. Here's how it breaks down:
+Changes since v1:
+- move to handing clks individually from clk bluk apis
+- tidy up the clk provider side code by using devm variants
+- added error handling.
 
-Injection method:
-- Assumes existing pool of entropy is still sacred.
-- Assumes base_crng timestamp is representative of pool age.
-- Result: Mixes directly into base_crng to avoid premature-next of pool.
+Srinivas Kandagatla (16):
+  ASoC: codecs: va-macro: move to individual clks from bulk
+  ASoC: codecs: rx-macro: move clk provider to managed variants
+  ASoC: codecs: tx-macro: move clk provider to managed variants
+  ASoC: codecs: rx-macro: move to individual clks from bulk
+  ASoC: codecs: tx-macro: move to individual clks from bulk
+  ASoC: codecs: wsa-macro: move to individual clks from bulk
+  ASoC: codecs: wsa-macro: setup soundwire clks correctly
+  ASoC: codecs: tx-macro: setup soundwire clks correctly
+  ASoC: codecs: rx-macro: setup soundwire clks correctly
+  ASoC: codecs: va-macro: add runtime pm support
+  ASoC: codecs: wsa-macro: add runtime pm support
+  ASoC: codecs: rx-macro: add runtime pm support
+  ASoC: codecs: tx-macro: add runtime pm support
+  ASoC: codecs: wsa881x: add runtime pm support
+  ASoC: codecs: wcd938x: add simple clk stop support
+  ASoC: codecs: wcd-mbhc: add runtime pm support
 
-Input pool method:
-- Assumes existing pool of entropy is old / out of date / used by a
-different fork, so not sacred.
-- Assumes base_crng timestamp is tied to irrelevant entropy pool.
-- Result: Force-drains input pool, causing intentional premature-next.
+ sound/soc/codecs/lpass-rx-macro.c  | 168 +++++++++++++++++++++++-----
+ sound/soc/codecs/lpass-tx-macro.c  | 169 ++++++++++++++++++++++++-----
+ sound/soc/codecs/lpass-va-macro.c  | 106 ++++++++++++++----
+ sound/soc/codecs/lpass-wsa-macro.c | 157 +++++++++++++++++++++++----
+ sound/soc/codecs/wcd-mbhc-v2.c     |  26 +++++
+ sound/soc/codecs/wcd938x-sdw.c     |   1 +
+ sound/soc/codecs/wsa881x.c         |  54 +++++++++
+ 7 files changed, 580 insertions(+), 101 deletions(-)
 
-Which of these assumptions better models the situation? I started in
-the input pool method camp, then by the time I posted v1, was
-concerned about power-on IRQs, but now I think relying at all on
-snapshotted entropy represents the biggest issue. And judging from
-your email, it appears that you do too. So v3 of this patchset will
-switch back to the input pool method, per your suggestion.
+-- 
+2.21.0
 
-As a plus, it means we go through the RDSEED'd extraction algorithm
-too, which always helps.
-
-Jason

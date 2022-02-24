@@ -2,313 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D58FB4C25D2
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 09:23:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 49D794C25DD
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 09:23:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230128AbiBXIUD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 03:20:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46440 "EHLO
+        id S231442AbiBXIVo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 03:21:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230124AbiBXIUB (ORCPT
+        with ESMTP id S230511AbiBXIVl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 03:20:01 -0500
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B370B251E79;
-        Thu, 24 Feb 2022 00:19:30 -0800 (PST)
-Received: from ip4d144895.dynamic.kabel-deutschland.de ([77.20.72.149] helo=[192.168.66.200]); authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1nN9LQ-0003ur-Ui; Thu, 24 Feb 2022 09:19:25 +0100
-Message-ID: <974cf8f2-06f3-99a5-9a77-6d7b7cc8271a@leemhuis.info>
-Date:   Thu, 24 Feb 2022 09:19:24 +0100
+        Thu, 24 Feb 2022 03:21:41 -0500
+Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2055.outbound.protection.outlook.com [40.107.21.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1C7A269AB8;
+        Thu, 24 Feb 2022 00:21:11 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=UgJBBzG1oYdePe7Kg/N4wsRjDo9PQW9Edh4+0sLbTKMzCk+MqlEru/kJVSXc2nZQEzpFD+T1eUJ2+UmxdODbVPQ7O+WD39M3dsRC5+bpokX+yaXaWINBqdg2mUFXO6TeQWWB1/fv/Ew1VYcEFCJC8nxdOjJ7iuXDGKY4VULMvzahvS5U7NwfNJDajCl6xl9BEtph0hZfeUiNyn2F8mjVVeESgBWkRxRf8zm/trCHht6OBhkxLMhCmjC7gMn8xQCo538otWXjGbY7ycN777XzrlaCF8zjDXb+lgfS8VomkCibL2DRzodqMvUYqi0Mg/UEjain5gWR6Lvw/9/FvGSBbw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=AR5nVJlXEwq1cE7N3W6P5bcrlaImfpe70JlnyuJXBiM=;
+ b=KiBHKuE2tfjd9uQeT2hV+BdfGtdMw1YKh4RcKHocff7OCYrqI+0w6rj+/SgHdDWNz4fE2v5shYdrKsRViE3GH5pLpzYO1YPyAKeAhUWQTDpwkUTI7WYornPd+cz3h9N/4W4rZr0ucrLVUC4rZvZQJddBtsNyiLlsvDnpB7fHmk2jhXPWKOzxcsL+CxIumR1E3Xm8WVTGXJZNgeQaFOeGwkB/6V3EATX/7t54RbyPsVL3kzz//p+mjbA19To3U83gJl+3KnH440qsebftkkH54YxWPYoULVKkEsrT+HNsLFgbdvz189j8lQOzqi6aXyzNVVjTUUxnCvB3jZJ36NyH4Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
+ dkim=pass header.d=oss.nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
+ s=selector2-NXP1-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=AR5nVJlXEwq1cE7N3W6P5bcrlaImfpe70JlnyuJXBiM=;
+ b=ZmjoqurmvEKfw06UnDlzAmwTMPF/R0meyfP/4grV3VA9Mn09pyHqMeAxbxtLfz9QhewLibMUA5GN+JkH1UZ+VKPTPTgmwnX13xH2I4C6iTc3B6ed2fSSaOhYG3BmLUDH3zzH9kXBbNGFH2Zlc1SHw80Rjbguu840nON3wPbbCnI=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=oss.nxp.com;
+Received: from DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
+ by AM6PR04MB6423.eurprd04.prod.outlook.com (2603:10a6:20b:f4::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5017.24; Thu, 24 Feb
+ 2022 08:21:08 +0000
+Received: from DU0PR04MB9417.eurprd04.prod.outlook.com
+ ([fe80::552c:ed46:26dc:77cc]) by DU0PR04MB9417.eurprd04.prod.outlook.com
+ ([fe80::552c:ed46:26dc:77cc%4]) with mapi id 15.20.4995.018; Thu, 24 Feb 2022
+ 08:21:08 +0000
+From:   "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+To:     sboyd@kernel.org, robh+dt@kernel.org, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, abel.vesa@nxp.com
+Cc:     kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Peng Fan <peng.fan@nxp.com>
+Subject: [PATCH V4 0/5] mx: add i.MX93 clk bindings and driver
+Date:   Thu, 24 Feb 2022 16:22:46 +0800
+Message-Id: <20220224082251.1397754-1-peng.fan@oss.nxp.com>
+X-Mailer: git-send-email 2.25.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SG2PR06CA0147.apcprd06.prod.outlook.com
+ (2603:1096:1:1f::25) To DU0PR04MB9417.eurprd04.prod.outlook.com
+ (2603:10a6:10:358::11)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Content-Language: en-BS
-To:     Kees Cook <keescook@chromium.org>, Jonathan Corbet <corbet@lwn.net>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Stefano Zacchiroli <zack@upsilon.cc>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Laura Abbott <labbott@kernel.org>,
-        Julia Lawall <julia.lawall@inria.fr>,
-        Wenwen Wang <wenwen@cs.uga.edu>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-hardening@vger.kernel.org
-References: <20220224001403.1307377-1-keescook@chromium.org>
-From:   Thorsten Leemhuis <linux@leemhuis.info>
-Subject: Re: [PATCH] Documentation/process: Add Researcher Guidelines
-In-Reply-To: <20220224001403.1307377-1-keescook@chromium.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;linux@leemhuis.info;1645690770;edb46c4e;
-X-HE-SMSGID: 1nN9LQ-0003ur-Ui
-X-Spam-Status: No, score=0.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URI_DOTEDU autolearn=no
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 4ee7cbb3-b370-46b3-c932-08d9f76e9b54
+X-MS-TrafficTypeDiagnostic: AM6PR04MB6423:EE_
+X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
+X-Microsoft-Antispam-PRVS: <AM6PR04MB6423F27518F3E2D060B2932BC93D9@AM6PR04MB6423.eurprd04.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: yaDk+wMGZxMxm/BvFs50uZdpM6iZ4t9IM21tsJqamqF/ud/fTXi9AUrsRiDiwLW9kbayTxs5YBAqXCGOPQ+912QOhO4d5Vx8gFgbMMhC3GBx+e2MIp2/evcyeupcVNLoGSJqUqLW5pSfU5AtO7LvNrQhDFqPZVzAvQOVS/UJsTmHxrIaWmzsTSQlM4ckLlawRSfObe3/hs/nMrk/fCt1CU9J/llkIX7tvvuS1MDmkmjFKyroETHGoLU8aleiB9jSV+K5lXjO4fCe7FXCVzBK0W7Zgr0cVcs9QRERtcqx6qgqOlJ79N/jY4Jlvx4y0Ej/yeUqJ3fv7njzMD160t8G8lPrXUb37gKxsXk3yN0JLM54gB4MMxgDJLMtwG8IASYTfZ1ahfsA5tKUoRAmeBhnLB1lM+5gZZAtUNGFO9Rn0IINpcLxzDl1rE2+g+amSN9O7v+jHgGprilEiqEEOKXLC38h9FtmUIFw7mE9Hl1gKxcEFyECnhoDYQlW66LFrv4GdVEt5DuATnE6VPaZnDcaqe6Rv4vMRpOmg+tySHuCdpY9CfWn6cKfGVmbiqbTsVU7KIi2XlxN+5vDFzZAhLO55hlgSR+60mt+GumDqDviFhtb7f8KgW/XZrMqMRS5a0kVD70RPCVsMOEx+vnXTIZBIulZCf3AXNu9xg1UEh90i2x9NLLSpOQMIgt/Oj+TFjfQ0S3CTZ4tCNdTTYQfVlQP6w==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(316002)(1076003)(6486002)(186003)(5660300002)(508600001)(6666004)(4326008)(26005)(6512007)(8676002)(7416002)(6506007)(52116002)(8936002)(66476007)(38350700002)(38100700002)(2616005)(86362001)(2906002)(66556008)(66946007)(83380400001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?gS3OtQZ3wAb65qdEyM7omC/J6OVh/3iOxt3kxJaSVeQiRmfvFsLyMFFWLNxH?=
+ =?us-ascii?Q?b50QT4rls2ncwQQ2S4UUDzRem+fBM9JdGV9gQ+fU0JaaV3FFHh8BludtsnxC?=
+ =?us-ascii?Q?egalRQh7HjaMrkw7x6vPfnkHM7kvQjY3JnBjrDzWvbSWoEUl8zH7KAIFHY6b?=
+ =?us-ascii?Q?zpvV2OvrG73FwRTfb85sMMLQGbljGSYP88mLt7jmStYtfpXDWZQOs6AdmOcY?=
+ =?us-ascii?Q?hHB9+3YMiCakO7SF6yIl3O54YinuSrIn0WC7Qyj88Psr/vFz/6JjZZI7mcDZ?=
+ =?us-ascii?Q?/fAvkJxx88v1/RRZ0r4783f6rO0NcmeJz4clGTKVEbHQO9/wc25acyTbYgi3?=
+ =?us-ascii?Q?0DqbR2t6SXVMYs8r7ZHf70zDKmSqRFqVf4zdB68KfqKeKEmSCq2tYRGrAJiC?=
+ =?us-ascii?Q?J511VWEhFJBZGaiCW94cKD53XUBoYsdgaJz39XWyrgWvWsGcPCiZFd0fUm3J?=
+ =?us-ascii?Q?q164jZan3bEcYz7tvulq54jxFzmzUnn2BEOT4B7332sJnW4XNwfgiEKKgV+K?=
+ =?us-ascii?Q?w/xqihR9SDZASoaAbRyOIYo638NniZdvHaQqbzOTDvxdrOJVg0kbDyU+p4pR?=
+ =?us-ascii?Q?8P87sPt2iiMnUr5++P0gyRpFMJIHLDp7Vk3MdziMD/YuK3e5QBvpREkXudo7?=
+ =?us-ascii?Q?lUIniGU5mkFb8cd3ZbClBdnEqzIHTThbU7BwMhy18+aUTFDXqHJlq0TwXQfV?=
+ =?us-ascii?Q?1e/uOSwrH2GqVT89aXBdctQa5UDJNAwxxC4wABCPZG6HR3r7RGRIM+95qITr?=
+ =?us-ascii?Q?UQVuE7WYF2550x+T3j5c6rGsumRRQ1jh3/56bK68e5bQUPa508JYa2PbdFkZ?=
+ =?us-ascii?Q?m0i2belnSpPS3QsDi5Xx2zpMVOolCMNIcfRuPbRequHyo0M4pH3N+Hv6/t16?=
+ =?us-ascii?Q?hkGpm151Vtqeon08v6e46e9flLz9AW04Z1QajExvL3+G2JIAo7gwrT/ItpfK?=
+ =?us-ascii?Q?42/eJmfI8nESmA+61+sOnJaXY1bdEPTlsZBbJ8wfkA7oyA6tM0ITKVDRprf3?=
+ =?us-ascii?Q?an0QceX8AKI1sebUlqURF6X0+nPdflVEt3PWGQm9QtKupKC5yzYH8h1lRCJi?=
+ =?us-ascii?Q?QeR1FZo3noPfPnfPB6E7WiqOLndO2GnybHeh9rVQtMmJYR/QRS8jIdQIEdQG?=
+ =?us-ascii?Q?mV9YCiH4CkujaBGbP8yGYjJ0pbsB5uSlaIVA/AN1Xs2ycuHVvYiAfMQVvi2i?=
+ =?us-ascii?Q?UdwhjDtfGcKX9SqG5WI7wAEKWTCJNbwwdQfYoZDR9MQ4Ui8t4ei/Anky1VUI?=
+ =?us-ascii?Q?ijo7VnXT4EveR2GOC/jvCarFoVFQwzbnll1/yAVyhCzoVh7o5n8kiltcrmQh?=
+ =?us-ascii?Q?V6VU+A8tT5udqEcdmWlT7GC4Sm2fz53qps1SrUEXzfMHOyE3mFa11etoj9CG?=
+ =?us-ascii?Q?JYViKH107tjt+tIvxanc201enIhSlTJ8cR8eYTqOWc0/nWeXgk/cwtKDX3f+?=
+ =?us-ascii?Q?Vz6AFiXJpfwxUsYfAleLfS7hvwLrPwS+q6e3xdXE+4AtlytlWAmFSkpP3TrN?=
+ =?us-ascii?Q?CsfArbhdxqcKpAWIWjtaWeKVhcPVrns8x1RtHNrBJrfNBW+gAE6RVy5AHDGH?=
+ =?us-ascii?Q?20d0zsp9nL+lBSlxazU4GQSr7eqdOmD9XrRBAOI94mvEaADvMkGzHXtlx1is?=
+ =?us-ascii?Q?jUjEovH0YM/jEyA57IgEn8I=3D?=
+X-OriginatorOrg: oss.nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4ee7cbb3-b370-46b3-c932-08d9f76e9b54
+X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9417.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Feb 2022 08:21:08.0675
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 3VfcQ21GRRL1nhd2frO7JC7pX38DVwBpikWjroigiStzSdRaW6CHab9EDY1UJ46BeddB21LW0PCA+d98yl6cPA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR04MB6423
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24.02.22 01:14, Kees Cook wrote:
-> As a follow-up to the UMN incident[1], the TAB took the responsibility
-> to document Researcher Guidelines so there would be a common place to
-> point for describing our expectations as a developer community.
-> 
-> Document best practices researchers should follow to participate
-> successfully with the Linux developer community.
-> 
-> [1] https://lore.kernel.org/lkml/202105051005.49BFABCE@keescook/
-> 
-> Co-developed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Co-developed-by: Jonathan Corbet <corbet@lwn.net>
-> Signed-off-by: Jonathan Corbet <corbet@lwn.net>
-> Co-developed-by: Stefano Zacchiroli <zack@upsilon.cc>
-> Signed-off-by: Stefano Zacchiroli <zack@upsilon.cc>
-> Co-developed-by: Steven Rostedt <rostedt@goodmis.org>
-> Signed-off-by: Steven Rostedt <rostedt@goodmis.org>
-> Acked-by: Steve Rostedt <rostedt@goodmis.org>
-> Acked-by: Laura Abbott <labbott@kernel.org>
-> Reviewed-by: Julia Lawall <julia.lawall@inria.fr>
-> Reviewed-by: Wenwen Wang <wenwen@cs.uga.edu>
-> Signed-off-by: Kees Cook <keescook@chromium.org>
-> ---
->  Documentation/admin-guide/index.rst           |   1 +
->  .../admin-guide/researcher-guidelines.rst     | 141 ++++++++++++++++++
+From: Peng Fan <peng.fan@nxp.com>
 
-Hmm, the intro for "Documentation/admin-guide/" states that "The
-following manuals are written for users of the kernel", but the added
-text afaics providing nothing regular users care about. So wouldn't it
-be better if this lived below Documentation/process/ ? It might not a
-really good fit either, but I'd say it's the better place.
+V4:
+ Add Abel's R-b and Krzysztof's A-b
+ Address Krzysztof's comments
+ Address Sascha's comments in patch 4/5
+ Typo fix
 
-But well, the best person to know is Jonathan, who is listed as a
-Co-developer above, so maybe I'm wrong my suggestion is a bad one.
+V3:
+ Drop an error included header file in 5/5
 
->  2 files changed, 142 insertions(+)
->  create mode 100644 Documentation/admin-guide/researcher-guidelines.rst
-> 
-> diff --git a/Documentation/admin-guide/index.rst b/Documentation/admin-guide/index.rst
-> index 1bedab498104..7fff0730204d 100644
-> --- a/Documentation/admin-guide/index.rst
-> +++ b/Documentation/admin-guide/index.rst
-> @@ -35,6 +35,7 @@ problems and bugs in particular.
->     :maxdepth: 1
->  
->     reporting-issues
-> +   researcher-guidelines
->     security-bugs
->     bug-hunting
->     bug-bisect
-> diff --git a/Documentation/admin-guide/researcher-guidelines.rst b/Documentation/admin-guide/researcher-guidelines.rst
-> new file mode 100644
-> index 000000000000..993f32d1166c
-> --- /dev/null
-> +++ b/Documentation/admin-guide/researcher-guidelines.rst
-> @@ -0,0 +1,141 @@
-> +.. SPDX-License-Identifier: GPL-2.0
-> +
-> +.. _researcher_guidelines:
-> +
-> +Researcher Guidelines
-> ++++++++++++++++++++++
-> +
-> +The Linux kernel community
+V2:
+ Split yaml binding and clock header
+ apply to Abel's tree
 
-Nitpicking: wondering if this maybe should be something like "The Linux
-kernel developer community" (or "Linux kernel's..."?).
+Add i.MX93 clk bindings and clk.
 
-> welcomes transparent research on the Linux
-> +kernel, the activities involved in producing it, and any other byproducts
-> +of its development. Linux benefits greatly from this kind of research, and
-> +most aspects of Linux are driven by research in one form or another.
-> +
-> +The community greatly appreciates if researchers can share preliminary
-> +findings before making their results public, especially if such research
-> +involves security. Getting involved early helps both improve the quality
-> +of research and ability for Linux to improve from it. In any case,
-> +sharing open access copies of the published research with the community
-> +is recommended.
-> +
-> +This document seeks to clarify what the Linux kernel community considers
-> +acceptable and non-acceptable practices when conducting such research. At
-> +the very least, such research and related activities should follow
-> +standard research ethics rules. For more background on research ethics
-> +generally, ethics in technology, and research of developer communities
-> +in particular, see:
-> +
-> +* `History of Research Ethics <https://www.unlv.edu/research/ORI-HSR/history-ethics>`_
-> +* `IEEE Ethics <https://www.ieee.org/about/ethics/index.html>`_
-> +* `Developer and Researcher Views on the Ethics of Experiments on
-> +   Open-Source Projects <https://arxiv.org/pdf/2112.13217.pdf>`_
-> +
-> +The Linux kernel community expects that everyone interacting with the
-> +project is participating in good faith to make Linux better. Research on
-> +any publicly-available artifact (including, but not limited to source
-> +code) produced by the Linux kernel community is welcome, though research
-> +on developers must be distinctly opt-in.
-> +
-> +Passive research that is based entirely on publicly available sources,
-> +including posts to public mailing lists and commits to public
-> +repositories, is clearly permissible. Though, as with any research,
-> +standard ethics must still be followed.
-> +
-> +Active research on developer behavior,
 
-Nitpicking: when reading this for the first time I here wondered what is
-precisely meant by "Active research". Is this maybe an established term
-in academia I'm simply not aware of? If not, maybe simply writing
-something like "Other research on developer behavior" or "Research on
-developer behavior where you engage in development" avoid this.
+Peng Fan (5):
+  dt-bindings: clock: Add imx93 clock support
+  dt-bindings: clock: add i.MX93 clock definition
+  clk: imx: add i.MX93 composite clk
+  clk: imx: support fracn gppll
+  clk: imx: add i.MX93 clk
 
-> however, must be done with the
-> +explicit agreement of, and full disclosure to, the individual developers
-> +involved. Developers cannot be interacted with/experimented on without
-> +consent; this, too, is standard research ethics.
-> +
-> +To help clarify: 
+ .../bindings/clock/imx93-clock.yaml           |  62 ++++
+ drivers/clk/imx/Kconfig                       |   6 +
+ drivers/clk/imx/Makefile                      |   4 +
+ drivers/clk/imx/clk-composite-93.c            |  93 +++++
+ drivers/clk/imx/clk-fracn-gppll.c             | 326 +++++++++++++++++
+ drivers/clk/imx/clk-imx93.c                   | 338 ++++++++++++++++++
+ drivers/clk/imx/clk.h                         |  30 ++
+ include/dt-bindings/clock/imx93-clock.h       | 201 +++++++++++
+ 8 files changed, 1060 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/clock/imx93-clock.yaml
+ create mode 100644 drivers/clk/imx/clk-composite-93.c
+ create mode 100644 drivers/clk/imx/clk-fracn-gppll.c
+ create mode 100644 drivers/clk/imx/clk-imx93.c
+ create mode 100644 include/dt-bindings/clock/imx93-clock.h
 
-Follow up to above remark: If "Active research" stays above, I'd say it
-might be worth repeating the term here to make clear what's being clarified.
+-- 
+2.25.1
 
-> sending patches to developers *is* interacting
-> +with them, but they have already consented to receiving *good faith
-> +contributions*. Sending intentionally flawed/vulnerable patches or
-> +contributing misleading information to discussions is not consented
-> +to. Such communication can be damaging to the developer (e.g. draining
-> +time, effort, and morale) and damaging to the project by eroding
-> +the entire developer community's trust in the contributor (and the
-> +contributor's organization as a whole), undermining efforts to provide
-> +constructive feedback to contributors, and putting end users at risk of
-> +software flaws.
-
-Nitpicking again: Quite a long sentence. Maybe split it up with
-something like a "s!, undermining !; such an approach would thus undermine"
-
-> +Participation in the development of Linux itself by researchers, as
-> +with anyone, is welcomed and encouraged. Research into Linux code is
-> +a common practice, especially when it comes to developing or running
-> +analysis tools that produce actionable results.
-> +
-> +When engaging with the developer community, sending a patch has
-> +traditionally been the best way to make an impact. Linux already has
-> +plenty of known bugs -- what's much more helpful is having vetted fixes.
-> +Before contributing, carefully read the documentation on
-> +:doc:`submitting patches <../process/submitting-patches>`,
-> +:doc:`reporting issues <reporting-issues>`, and
-> +:doc:`handling serious flaws <security-bugs>`.
-
-Wonder if Documentation/process/{development-process.rst,5.Posting.rst}
-should be linked as well.
-
-Additionally not my area of expertise, but from what I'd noticed it
-seems it's better to avoid the :doc:`foo` tag if there is no strict need
-(and I don't think there is one in this case). For the background see here:
-
-https://lore.kernel.org/all/cover.1623824363.git.mchehab+huawei@kernel.org/
-
-Most of those patches got applied meanwhile afaik.
-
-> Send a patch (including
-> +a commit log with all the details listed below), and follow up on any
-> +feedback from other developers.
-> +
-> +When sending patches produced from research, the commit logs should
-> +contain at least the following details, so that developers have
-> +appropriate context for understanding the contribution. Answer:
-> +
-> +* What is the specific problem that has been found?
-> +* How could the problem be reached on a running system?
-> +* What effect would encountering the problem have on the system?
-> +* How was the problem found? Specifically include details about any
-> +  testing, static or dynamic analysis programs, and any other tools or
-> +  methods used to perform the work.
-> +* Which version of Linux was the problem was found on? Using the most
-> +  recent release or a recent :doc:`linux-next branch <../process/howto>`
-> +  is strongly preferred.
-> +* What was changed to fix the problem, and why it is believed to be correct?
-> +* How was the change build tested and run-time tested?
-> +* What prior commit does this change fix? This should go in a "Fixes:"
-> +  tag as the documentation describes.
-> +* Who else has reviewed this patch? This should go in appropriate
-> +  "Reviewed-by:" tags; see below.
-> +
-> +For example::
-> +
-> +  From: Author <author@email>
-> +  Subject: [PATCH] drivers/foo_bar: Add missing kfree()
-> +
-> +  The error path in foo_bar driver does not correctly free the allocated
-> +  struct foo_bar_info. This can happen if the attached foo_bar device
-> +  rejects the initialization packets sent during foo_bar_probe(). This
-> +  would result in a 64 byte slab memory leak once per device attach,
-> +  wasting memory resources over time.
-> +
-> +  This flaw was found using an experimental static analysis tool we are
-> +  developing, LeakMagic[1], which reported the following warning when
-> +  analyzing the v5.15 kernel release:
-> +
-> +   path/to/foo_bar.c:187: missing kfree() call?
-> +
-> +  Add the missing kfree() to the error path. No other references to
-> +  this memory exist outside the probe function, so this is the only
-> +  place it can be freed.
-> +
-> +  x86_64 and arm64 defconfig builds with CONFIG_FOO_BAR=y using GCC
-> +  11.2 show no new warnings, and LeakMagic no longer warns about this
-> +  code path. As we don't have a FooBar device to test with, no runtime
-> +  testing was able to be performed.
-> +
-> +  [1] https://url/to/leakmagic/details
-> +
-> +  Reported-by: Researcher <researcher@email>
-> +  Fixes: aaaabbbbccccdddd ("Introduce support for FooBar")
-> +  Signed-off-by: Author <author@email>
-> +  Reviewed-by: Reviewer <reviewer@email>
-> +
-> +If you are a first time contributor it is recommended that the patch
-> +itself be vetted by others privately before being posted to public lists.
-> +(This is required if you have been explicitly told your patches need
-> +more careful internal review.) These people are expected to have their
-> +"Reviewed-by" tag included in the resulting patch. Finding another
-> +developer familiar with Linux contribution, especially within your own
-> +organization, and having them help with reviews before sending them to
-> +the public mailing lists tends to significantly improve the quality of the
-> +resulting patches, and there by reduces the burden on other developers.
-
-I like the section, but I wonder why it's needed here. Is there anything
-specific to patches produced from research in it there I missed when
-reading it? If not: Wouldn't it be better to include that section as a
-TLDR in Documentation/process/submitting-patches.rst and point there
-instead? We already have at least two places describing how to submit
-patches, creating yet another one (even if it's just in such a brief
-version) somehow feels slightly wrong to me.
-
-OTOH I fully understand that having things in one place has it's
-benefits. If that's wanted, why not put that text as TLDR in
-submitting-patches.rst and maintain a copy here? Sure, keeping things in
-sync has downsides, but I'd say it's the lesser evil. A copy could also
-be avoided by briefly mentioning some of the important bits found in
-another document; that's the approach I took in my patches regarding
-regressions. To quote:
-
-```
-+#. Report your issue as outlined in
-Documentation/admin-guide/reporting-issues.rst,
-+   it already covers all aspects important for regressions and repeated
-+   below for convenience. Two of them are important: start your
-report's subject
-+   with "[REGRESSION]" and CC or forward it to `the regression mailing list
-+   <https://lore.kernel.org/regressions/>`_ (regressions@lists.linux.dev).
-```
-
-For full context see:
-https://lore.kernel.org/regressions/cover.1644994117.git.linux@leemhuis.info/T/#u
-
-> +If no one can be found to internally review patches and you need
-> +help finding such a person, or if you have any other questions
-> +related to this document and the developer community's expectations,
-> +please reach out to the private Technical Advisory Board mailing list:
-> +<tech-board@lists.linux-foundation.org>.
-
-HTH, Ciao, Thorsten

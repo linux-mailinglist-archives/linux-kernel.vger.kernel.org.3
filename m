@@ -2,50 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC2894C3966
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 00:00:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C0B224C395E
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 00:00:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235813AbiBXW7r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 17:59:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39374 "EHLO
+        id S235859AbiBXW7v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 17:59:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235849AbiBXW7h (ORCPT
+        with ESMTP id S235856AbiBXW7k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 17:59:37 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61E3818BA45;
-        Thu, 24 Feb 2022 14:59:06 -0800 (PST)
+        Thu, 24 Feb 2022 17:59:40 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF155184634;
+        Thu, 24 Feb 2022 14:59:09 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D868761B77;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7BCE461BE9;
+        Thu, 24 Feb 2022 22:59:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA000C340F3;
         Thu, 24 Feb 2022 22:59:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 246DCC340EF;
-        Thu, 24 Feb 2022 22:59:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645743545;
-        bh=fYoEIyHxJXFbQHtImWGdgeWJQrrKCd4uP7hMzgtSFJo=;
+        s=k20201202; t=1645743548;
+        bh=3Qb2BkHQDJuZIu/isvYb9+K/H30oWB63BPIe7mkdsjA=;
         h=From:To:In-Reply-To:References:Subject:Date:From;
-        b=HiVAhWkp5u+A7KSnLZiaXW1BZJ5COq/D+xrTS1Op8nNSSoBONJuznhycvi7S64yJF
-         2pVeB89JVjkfiAMxMxW+EDtksne91Zr3BMrjsf+dmCh4fP3SaeqD+yYmF2qHe6dnbG
-         kbZF4DJ56T4JX4FpaLM/1i6w6eBt9APqEF/lHGHX/GwUoWB4PhEGShaZgcUb8HJu2Z
-         0hXWoYh7M2T4DCabQea4szy6FqWnR+Jn33a7yxl5YQHP8SKhdbiHgE3LfxKkYRLMnt
-         LST2g6m+OlxwFkGU+VYbWkDY/Mv1eZ9waK5BN/h9M9nbu+cG0hBYMRcnDAYoupE8mf
-         WQx+UeFi2gtCw==
+        b=eaIXBQmF7b+U5I8q1detGGs6SLD11jCUGts6JTw8S06U0qxITDP8GrJoV1lyEuKJy
+         DKjAR34X6/4+QDT5v+fGwHyeFBvU11+MxKgCQiUF+t0gQ3TjBnjXrPuCWIG6BBXtAf
+         p4IbMDyWbEQJx+NHqwdyoYOhIMarpzi6J1KAXkEBVek16LK+TjXmMkxgqOBJw82KrC
+         GZQg8RvuniuAD/+I6f9ZFN76kRqSlrRxgKgR0cqIO9bEBS2l0UU//sRFPtN/cg8gEn
+         2NFeaa0jc7M5fetCBYmNxzrCCE6vDoPsuESA30xzAO1mJGRuXkOAmhd9pl5G+dT1ak
+         P8q3PjmQgpBJw==
 From:   Mark Brown <broonie@kernel.org>
-To:     agross@kernel.org, alsa-devel@alsa-project.org,
-        linux-arm-msm@vger.kernel.org, perex@perex.cz, plai@codeaurora.org,
+To:     agross@kernel.org, linux-arm-msm@vger.kernel.org,
+        alsa-devel@alsa-project.org, perex@perex.cz, tiwai@suse.com,
         Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
-        swboyd@chromium.org, robh+dt@kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        swboyd@chromium.org, devicetree@vger.kernel.org,
+        robh+dt@kernel.org, linux-kernel@vger.kernel.org,
         srinivas.kandagatla@linaro.org, bgoswami@codeaurora.org,
-        judyhsiao@chromium.org, tiwai@suse.com, rohitkr@codeaurora.org,
-        lgirdwood@gmail.com, bjorn.andersson@linaro.org
-In-Reply-To: <1638800567-27222-1-git-send-email-quic_srivasam@quicinc.com>
-References: <1638800567-27222-1-git-send-email-quic_srivasam@quicinc.com>
-Subject: Re: [RESEND, v9 00/10] Add support for audio on SC7280 based targets
-Message-Id: <164574354184.4011497.138303028643209346.b4-ty@kernel.org>
-Date:   Thu, 24 Feb 2022 22:59:01 +0000
+        judyhsiao@chromium.org, plai@codeaurora.org,
+        rohitkr@codeaurora.org, lgirdwood@gmail.com,
+        bjorn.andersson@linaro.org
+In-Reply-To: <1639503391-10715-1-git-send-email-quic_srivasam@quicinc.com>
+References: <1639503391-10715-1-git-send-email-quic_srivasam@quicinc.com>
+Subject: Re: [PATCH v10 00/10] Add support for audio on SC7280 based targets
+Message-Id: <164574354548.4011497.8789309217655990766.b4-ty@kernel.org>
+Date:   Thu, 24 Feb 2022 22:59:05 +0000
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -59,10 +60,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 6 Dec 2021 19:52:37 +0530, Srinivasa Rao Mandadapu wrote:
+On Tue, 14 Dec 2021 23:06:21 +0530, Srinivasa Rao Mandadapu wrote:
 > This patch set is to add support for Audio over wcd codec,
 > digital mics, through digital codecs and without ADSP.
 > 
+> Changes Since V9:
+>     -- Change individual clock voting to bulk clock voting of lpass-sc7280 platform driver.
+>     -- Remove redundant clocks in lpass variant structure.
+>     -- Add mclk for MI2S based headset path.
+>     -- Remove unused lpass variant structure members in lpass header.
 > Changes Since V8:
 >     -- Fix errors in sc7280 lpass cpu dt-bindings.
 >     -- Move to quicinc domain email id's.

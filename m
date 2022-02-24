@@ -2,114 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 792FE4C3476
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 19:16:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF06C4C346A
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 19:16:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232618AbiBXSQC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 13:16:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55982 "EHLO
+        id S231777AbiBXSQi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 13:16:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232607AbiBXSP7 (ORCPT
+        with ESMTP id S232286AbiBXSQg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 13:15:59 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07EAA253151;
-        Thu, 24 Feb 2022 10:15:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645726529; x=1677262529;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=XijmOSBFg2r2w0bH7u5K1EPX285/C0Q7dvemmZGlDXA=;
-  b=WI4UE60KOL4tDE9N2Co+B+hm6iO8Wn+l5cQHAyfhWJ2/fRMrxtWOe9qr
-   XQOieByuYKl8GMwGrlX6hf+JXPHznZQzOxRTQ86zMHP2cd81tsWH2luLN
-   KgBrSDMqsQ2vTx5MkQkF7SPSp+GLngX3TqjxFUkgi5VuRdEg03WNvgxBN
-   VR9zMBMlkpeWy0OzhgjOLitC9JEZUDLVQ8mGUnJ+rgEguur/JnnKGVqJE
-   AggrMpcZj8EaRSVWAJvIaHshV/sQ7N3Suhnr6X9ar23bMj98g6A8hONtm
-   MIX1TgzNa4wCNwyENlC7waAZVEZrA5IgWUXaHIdLfrOHLSjuGYqpLbzX4
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10268"; a="232934278"
-X-IronPort-AV: E=Sophos;i="5.90,134,1643702400"; 
-   d="scan'208";a="232934278"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2022 10:15:28 -0800
-X-IronPort-AV: E=Sophos;i="5.90,134,1643702400"; 
-   d="scan'208";a="777145359"
-Received: from punajuuri.fi.intel.com (HELO paasikivi.fi.intel.com) ([10.237.72.43])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2022 10:15:24 -0800
-Received: from paasikivi.fi.intel.com (localhost [127.0.0.1])
-        by paasikivi.fi.intel.com (Postfix) with SMTP id 056B5203BA;
-        Thu, 24 Feb 2022 20:14:52 +0200 (EET)
-Date:   Thu, 24 Feb 2022 20:14:51 +0200
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Hans de Goede <hdegoede@redhat.com>,
-        =?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <clement.leger@bootlin.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Wolfram Sang <wsa@kernel.org>, Peter Rosin <peda@axentia.se>,
-        Russell King <linux@armlinux.org.uk>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-acpi@vger.kernel.org, linux-i2c@vger.kernel.org,
-        netdev@vger.kernel.org,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-Subject: Re: [RFC 00/10] add support for fwnode in i2c mux system and sfp
-Message-ID: <YhfLG6wlFvYY3YU8@paasikivi.fi.intel.com>
-References: <20220221162652.103834-1-clement.leger@bootlin.com>
- <20220224154040.2633a4e4@fixe.home>
- <2d3278ef-0126-7b93-319b-543b17bccdc2@redhat.com>
- <YhelOFYKBsfQ8SRW@sirena.org.uk>
+        Thu, 24 Feb 2022 13:16:36 -0500
+Received: from smtp.smtpout.orange.fr (smtp03.smtpout.orange.fr [80.12.242.125])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53E5C25316A
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 10:16:02 -0800 (PST)
+Received: from [192.168.1.18] ([90.126.236.122])
+        by smtp.orange.fr with ESMTPA
+        id NIeQnn7MbrdkGNIeQnJ9oN; Thu, 24 Feb 2022 19:16:00 +0100
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
+X-ME-Date: Thu, 24 Feb 2022 19:16:00 +0100
+X-ME-IP: 90.126.236.122
+Message-ID: <b3e6a19b-caa0-f58a-1039-02b60b17ed21@wanadoo.fr>
+Date:   Thu, 24 Feb 2022 19:15:38 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YhelOFYKBsfQ8SRW@sirena.org.uk>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 00/16] Remove usage of the deprecated "pci-dma-compat.h"
+ API
+Content-Language: en-US
+To:     Arnd Bergmann <arnd@arndb.de>,
+        Christoph Hellwig <hch@infradead.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        David Miller <davem@davemloft.net>,
+        David Airlie <airlied@linux.ie>, Vinod Koul <vkoul@kernel.org>,
+        hao.wu@intel.com, Tom Rix <trix@redhat.com>,
+        Moritz Fischer <mdf@kernel.org>, Xu Yilun <yilun.xu@intel.com>,
+        awalls@md.metrocast.net,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sathya Prakash <sathya.prakash@broadcom.com>,
+        sreekanth.reddy@broadcom.com,
+        Suganath Prabu Subramani 
+        <suganath-prabu.subramani@broadcom.com>,
+        Matt Porter <mporter@kernel.crashing.org>,
+        Alex Bounine <alex.bou9@gmail.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        alpha <linux-alpha@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        sparclinux <sparclinux@vger.kernel.org>,
+        dmaengine@vger.kernel.org, linux-fpga@vger.kernel.org,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        MPT-FusionLinux.pdl@broadcom.com,
+        linux-scsi <linux-scsi@vger.kernel.org>,
+        linux-pci <linux-pci@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Kernel Janitors <kernel-janitors@vger.kernel.org>
+References: <cover.1641500561.git.christophe.jaillet@wanadoo.fr>
+ <YhXmQwvjMFPQFPUr@infradead.org>
+ <ddf6010e-417d-8da7-8e11-1b4a55f92fff@wanadoo.fr>
+ <YhckzJp5/x9zW4uQ@infradead.org>
+ <CAK8P3a23Pjm1Btc=mXX=vU4hkNiPqz3+o4=j0FuYKHB7KuMtPg@mail.gmail.com>
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <CAK8P3a23Pjm1Btc=mXX=vU4hkNiPqz3+o4=j0FuYKHB7KuMtPg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mark,
 
-On Thu, Feb 24, 2022 at 03:33:12PM +0000, Mark Brown wrote:
-> On Thu, Feb 24, 2022 at 03:58:04PM +0100, Hans de Goede wrote:
-> 
-> > As Mark already mentioned the regulator subsystem has shown to
-> > be a bit problematic here, but you don't seem to need that?
-> 
-> I believe clocks are also potentially problematic for similar reasons
-> (ACPI wants to handle those as part of the device level power management
-> and/or should have native abstractions for them, and I think we also
-> have board file provisions that work well for them and are less error
-> prone than translating into an abstract data structure).
+Le 24/02/2022 à 08:07, Arnd Bergmann a écrit :
+> On Thu, Feb 24, 2022 at 7:25 AM Christoph Hellwig <hch@infradead.org> wrote:
+>> On Wed, Feb 23, 2022 at 09:26:56PM +0100, Christophe JAILLET wrote:
+>>> Patch 01, 04, 05, 06, 08, 09 have not reached -next yet.
+>>> They all still apply cleanly.
+>>>
+>>> 04 has been picked it up for inclusion in the media subsystem for 5.18.
+>>> The other ones all have 1 or more Reviewed-by:/Acked-by: tags.
+>>>
+>>> Patch 16 must be resubmitted to add "#include <linux/dma-mapping.h>" in
+>>> order not to break builds.
+>> So how about this:  I'll pick up 1, 5,6,8 and 9 for the dma-mapping
+>> tree.  After -rc1 when presumably all other patches have reached
+>> mainline your resubmit one with the added include and we finish this
+>> off?
+> Sounds good to me as well.
+>
+>         Arnd
 
-Per ACPI spec, what corresponds to clocks and regulators in DT is handled
-through power resources. This is generally how things work in ACPI based
-systems but there are cases out there where regulators and/or clocks are
-exposed to software directly. This concerns e.g. camera sensors and lens
-voice coils on some systems while rest of the devices in the system are
-powered on and off the usual ACPI way.
+This is fine for me.
+When all patches have reached -next, I'll re-submit the fixed 16th patch.
 
-So controlling regulators or clocks directly on an ACPI based system
-wouldn't be exactly something new. All you need to do in that case is to
-ensure that there's exactly one way regulators and clocks are controlled
-for a given device. For software nodes this is a non-issue.
 
-This does have the limitation that a clock or a regulator is either
-controlled through power resources or relevant drivers, but that tends to
-be the case in practice. But I presume it wouldn't be different with board
-files.
+Thanks for your assistance for ending this long story :)
 
--- 
-Sakari Ailus
+CJ
+

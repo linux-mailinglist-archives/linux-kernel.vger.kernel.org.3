@@ -2,114 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C7454C2BCD
+	by mail.lfdr.de (Postfix) with ESMTP id 9CD5C4C2BCE
 	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 13:33:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234410AbiBXMds (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 07:33:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52072 "EHLO
+        id S234393AbiBXMdn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 07:33:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234389AbiBXMdl (ORCPT
+        with ESMTP id S231379AbiBXMdh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 07:33:41 -0500
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 023F1192E3F
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 04:33:12 -0800 (PST)
-Received: by mail-pl1-x631.google.com with SMTP id e13so1587029plh.3
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 04:33:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=ndo93wIjxvP8kHvXABnHYUiq6F07JiSbtJBf2BQ08oo=;
-        b=BZYuyaV4jmz2dR1NyMZzPD4ZhoiPdfWB/5CClaaUzQhwZw5M9ufL/dcF+OSHfN9XJY
-         RKYvoovcWx6cpD3AlhbbuVtZuhNbUTyZhq07db/1IzRc9cD/z0jZJ6xYKQOe9zEBGwh1
-         Yo9nW0v1PFDweGcEAna9EOkTPhCqtY/9hyxJvjonbISFD2KLQjNQiazEW+9JlvbBwGYH
-         /bY3MLIh2Gueb7RHuQH7k7nSf1OmiRJfiQuKWHg3zTIrns7Ko3UZrxeRsjGxHIDeFvYH
-         SQdfE19sEozOwunVDfo1gHFgR1hJ0TYRPkuJqx/zbnfmOai9I9VYjO0f1jzfFszSnhBt
-         FIGA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=ndo93wIjxvP8kHvXABnHYUiq6F07JiSbtJBf2BQ08oo=;
-        b=zbujdjy+CbHWcampHSfkvr+nkFKxs6wIHYZfBkn19KgvgqGCOEK2OIDa3WVP2LHJG1
-         IG+tjtZM5FN8s/wZGtEXbvkTyk0PidH0af0JN7+L1KHL6OZEHDrxjox4Tqyrt/wtdZ0B
-         AxOpvJczWKnlXJQNsy8bHikWs4dccpSGGiEm5n0PXs7wRX2OFfdqq9I9JZxKDWMhBJnT
-         hOpWLOFt3LPZq4MVCUb9b9xp035q75UHk8vCrW5LjT2wN/jlu0t2UfHMEONQcpUzIwXu
-         ECCXrwZr1kL9Fx/mqhaFYW9OPwjB5f5gJQrPONlrOGOBoplm3hKkwAfVmUrsmGUpwQX5
-         uk4Q==
-X-Gm-Message-State: AOAM5331zXRaGpB9A548r2senvpOLTNtP63NK8yYouyrLWGENHT/KXnh
-        b8Y1CzEDr6cdGDjSdRBgDcjyMQ==
-X-Google-Smtp-Source: ABdhPJx3F0jqYy8AAvIIkDv1/khHxroXYxJdxMJUxEBDrXj1JojYslfhxmsN58K8sPwmvtaZBZNJkg==
-X-Received: by 2002:a17:902:f647:b0:14f:c37d:34ec with SMTP id m7-20020a170902f64700b0014fc37d34ecmr2350409plg.6.1645705991469;
-        Thu, 24 Feb 2022 04:33:11 -0800 (PST)
-Received: from localhost.localdomain ([223.179.129.209])
-        by smtp.gmail.com with ESMTPSA id ep5-20020a17090ae64500b001bc56af507dsm6237567pjb.47.2022.02.24.04.33.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Feb 2022 04:33:11 -0800 (PST)
-From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
-To:     linux-arm-msm@vger.kernel.org
-Cc:     bhupesh.sharma@linaro.org, bhupesh.linux@gmail.com,
-        agross@kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-phy@lists.infradead.org,
-        robh+dt@kernel.org, Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>
-Subject: [PATCH 2/2] dt-bindings: phy: qcom,qmp: Describe 'vdda-max-microamp' & 'vdda-pll-max-microamp' properties
-Date:   Thu, 24 Feb 2022 18:02:48 +0530
-Message-Id: <20220224123248.67073-2-bhupesh.sharma@linaro.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220224123248.67073-1-bhupesh.sharma@linaro.org>
-References: <20220224123248.67073-1-bhupesh.sharma@linaro.org>
+        Thu, 24 Feb 2022 07:33:37 -0500
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC026192E27;
+        Thu, 24 Feb 2022 04:33:04 -0800 (PST)
+Received: from fraeml703-chm.china.huawei.com (unknown [172.18.147.200])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4K4C304K1Pz67dyM;
+        Thu, 24 Feb 2022 20:32:12 +0800 (CST)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ fraeml703-chm.china.huawei.com (10.206.15.52) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2308.21; Thu, 24 Feb 2022 13:33:02 +0100
+Received: from [10.47.86.126] (10.47.86.126) by lhreml724-chm.china.huawei.com
+ (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Thu, 24 Feb
+ 2022 12:33:00 +0000
+Message-ID: <aabd5f0a-1a54-e4da-734c-f940c45d66b4@huawei.com>
+Date:   Thu, 24 Feb 2022 12:32:59 +0000
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [PATCH v4 2/8] hwtracing: Add trace function support for
+ HiSilicon PCIe Tune and Trace device
+To:     Yicong Yang <yangyicong@huawei.com>,
+        Yicong Yang <yangyicong@hisilicon.com>,
+        <gregkh@linuxfoundation.org>, <helgaas@kernel.org>,
+        <alexander.shishkin@linux.intel.com>, <lorenzo.pieralisi@arm.com>,
+        <will@kernel.org>, <mark.rutland@arm.com>,
+        <mathieu.poirier@linaro.org>, <suzuki.poulose@arm.com>,
+        <mike.leach@linaro.org>, <leo.yan@linaro.org>,
+        <jonathan.cameron@huawei.com>, <daniel.thompson@linaro.org>,
+        <joro@8bytes.org>, <shameerali.kolothum.thodi@huawei.com>,
+        <robin.murphy@arm.com>, <peterz@infradead.org>, <mingo@redhat.com>,
+        <acme@kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <coresight@lists.linaro.org>, <linux-pci@vger.kernel.org>,
+        <linux-perf-users@vger.kernel.org>,
+        <iommu@lists.linux-foundation.org>
+CC:     <prime.zeng@huawei.com>, <liuqi115@huawei.com>,
+        <zhangshaokun@hisilicon.com>, <linuxarm@huawei.com>,
+        <song.bao.hua@hisilicon.com>
+References: <20220221084307.33712-1-yangyicong@hisilicon.com>
+ <20220221084307.33712-3-yangyicong@hisilicon.com>
+ <c7d8cff4-b84e-1b73-1d54-2e221b90dac1@huawei.com>
+ <e78f6e5e-a0c3-4976-4f46-e3369635ee3d@huawei.com>
+From:   John Garry <john.garry@huawei.com>
+In-Reply-To: <e78f6e5e-a0c3-4976-4f46-e3369635ee3d@huawei.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.47.86.126]
+X-ClientProxiedBy: lhreml752-chm.china.huawei.com (10.201.108.202) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since a few boards based on QCoM qmp phy use the
-'vdda-max-microamp' & 'vdda-pll-max-microamp' properties to
-describe the ufs phy nodes, add them to the dt-bindings doc as well.
+On 24/02/2022 03:53, Yicong Yang wrote:
+> On 2022/2/22 19:06, John Garry wrote:
+>> On 21/02/2022 08:43, Yicong Yang wrote:
+>>> HiSilicon PCIe tune and trace device(PTT) is a PCIe Root Complex
+>>> integrated Endpoint(RCiEP) device, providing the capability
+>>> to dynamically monitor and tune the PCIe traffic, and trace
+>>> the TLP headers.
+>>>
+>>> Add the driver for the device to enable the trace function.
+>>> This patch adds basic function of trace, including the device's
+>>> probe and initialization, functions for trace buffer allocation
+>>> and trace enable/disable, register an interrupt handler to
+>>> simply response to the DMA events. The user interface of trace
+>>> will be added in the following patch.
+>>>
+>>
+>> Fill commit message lines upto 75 characters
+> 
+> Hi John,
+> 
+> Thanks for the comments.
+> 
+> The commit message is within 75 characters. I checked again and checkpatch
+> didn't warning for this.
 
-This fixes the following '$ make dtbs_check' warning(s):
+I mean to fill the lines up as much as possible, upto 75 char max, if 
+not already done so. I am not sure if you are doing this already, but it 
+looks like you were not.
 
-sm8350-microsoft-surface-duo2.dt.yaml: phy@1d87000:
-  'vdda-max-microamp', 'vdda-pll-max-microamp' do not match any of
-   the regexes: '^phy@[0-9a-f]+$', 'pinctrl-[0-9]+'
+Checkpatch
+will
+no
+warn
+about
+a
+commit
+message
+like
+this
+:)
 
-Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc: Vinod Koul <vkoul@kernel.org>
-Cc: Rob Herring <robh+dt@kernel.org>
-Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
----
- Documentation/devicetree/bindings/phy/qcom,qmp-phy.yaml | 8 ++++++++
- 1 file changed, 8 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/phy/qcom,qmp-phy.yaml b/Documentation/devicetree/bindings/phy/qcom,qmp-phy.yaml
-index 746a929c63bb..a481442c897a 100644
---- a/Documentation/devicetree/bindings/phy/qcom,qmp-phy.yaml
-+++ b/Documentation/devicetree/bindings/phy/qcom,qmp-phy.yaml
-@@ -92,6 +92,14 @@ properties:
-     minItems: 1
-     maxItems: 3
- 
-+  vdda-max-microamp:
-+    description:
-+      Specifies max. load that can be drawn from phy supply.
-+
-+  vdda-pll-max-microamp:
-+    description:
-+      Specifies max. load that can be drawn from pll supply.
-+
-   vdda-phy-supply:
-     description:
-       Phandle to a regulator supply to PHY core block.
--- 
-2.35.1
-
+Thanks,
+john

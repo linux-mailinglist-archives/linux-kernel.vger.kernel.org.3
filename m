@@ -2,100 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 489514C2AA0
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 12:17:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 07A6D4C2A9C
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 12:17:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233915AbiBXLQC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 06:16:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54608 "EHLO
+        id S232455AbiBXLQZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 06:16:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233812AbiBXLP6 (ORCPT
+        with ESMTP id S233812AbiBXLQU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 06:15:58 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B549729455B;
-        Thu, 24 Feb 2022 03:15:28 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: sre)
-        with ESMTPSA id 441A41F44FA8
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1645701327;
-        bh=Rp6AQqc+ilMu/vT7f9GQYHeGNO+h9uO2+4aZ+/clBZ4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=MkcbUtvONXAkCDJWwLOyhQraFnGGMR0b9Ni9FAEXQSUKhqXK//aDIg2mT65cJsgkw
-         ssMcQqWR8xPq6aXsaPpugsTWZfB4VJF3u9Iwv543ZkEy3iH00XIJizmICOi/6IpUKl
-         PKlYSbHSs/OqD2wdpA5trdhsPj0IP2vqLyHruM6PZgD9mWOH63QwMtw0XPLCav8iuW
-         bq56U9n93PQBHcfpzKQA8NBlGjU+ySXnCrHgIBxx/VBN+TZPz6BhqePaaJO3aUJCYv
-         Sae9A0Z6ymb0l2gz4mCtdxmvPteEoTUFMo0yPOWjDwZ2aYPSfU6v+7+Mi/OQjjgbFs
-         8Wpqq2Q+6KGaw==
-Received: by mercury (Postfix, from userid 1000)
-        id B045F106049B; Thu, 24 Feb 2022 12:15:24 +0100 (CET)
-Date:   Thu, 24 Feb 2022 12:15:24 +0100
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Ricardo Rivera-Matos <rriveram@opensource.cirrus.com>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        patches@opensource.cirrus.com
-Subject: Re: [PATCH v3 0/3] Introduces bypass charge type property
-Message-ID: <20220224111524.rzqkumr47ytl5nho@mercury.elektranox.org>
-References: <20220215000758.803501-1-rriveram@opensource.cirrus.com>
+        Thu, 24 Feb 2022 06:16:20 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBAAF294552;
+        Thu, 24 Feb 2022 03:15:50 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4D5696177F;
+        Thu, 24 Feb 2022 11:15:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23E0CC340F0;
+        Thu, 24 Feb 2022 11:15:49 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="K0Ba/2BM"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1645701345;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=tSMJNlgM3iQSZttf3O5yP1K/Zb4cUmNelvTABLfdcOs=;
+        b=K0Ba/2BM/9pExBbaS5Oj8SCJvlvp0LQGyiNAiXDyooG/U9BeyX+5o7RLqsETF26O3Q8oLJ
+        fCsXilmRI7pxc/CYm3kU+fXPDMl1Uchh4ynDmuSO5MbVs6Ufz3QiiawdfSIvm5FepEXDsh
+        cYBAB6wdHUlLLl0Wob5vRSfu6n86I28=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 954041ba (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Thu, 24 Feb 2022 11:15:45 +0000 (UTC)
+Received: by mail-yb1-f182.google.com with SMTP id g6so3016428ybe.12;
+        Thu, 24 Feb 2022 03:15:43 -0800 (PST)
+X-Gm-Message-State: AOAM5315RL/lzYI/NtRNh7x5Px9BdD0ydiHXo8b3FpyEVFwamOhtB+0p
+        gx0/jUlkmeQ1PWrF6jia5iAIhGQNRHDmWJyyjDU=
+X-Google-Smtp-Source: ABdhPJwcyLWv29eKkR/4qn6wxUASneof9Mw7kmR85HjE16vurz2uO8LCL0/vq/6Jg597pXgN7D3peAt9nzCkEAyuvVw=
+X-Received: by 2002:a25:d116:0:b0:61d:e8c9:531e with SMTP id
+ i22-20020a25d116000000b0061de8c9531emr1860406ybg.637.1645701342951; Thu, 24
+ Feb 2022 03:15:42 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="posaq6tqktsqwtpx"
-Content-Disposition: inline
-In-Reply-To: <20220215000758.803501-1-rriveram@opensource.cirrus.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220223131231.403386-1-Jason@zx2c4.com> <20220223131231.403386-2-Jason@zx2c4.com>
+ <YhbAOW/KbFW1CFkQ@sol.localdomain> <CAHmME9oa_wE8_n8e5b=iM5v-s5dgyibm4vXMhwzc8zGd6VWZMQ@mail.gmail.com>
+ <YhbfDQ2ernjrRNRX@sol.localdomain>
+In-Reply-To: <YhbfDQ2ernjrRNRX@sol.localdomain>
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date:   Thu, 24 Feb 2022 12:15:32 +0100
+X-Gmail-Original-Message-ID: <CAHmME9rUD5QrgQMpoOCjv3crWFwn+BXXx9Dm0e2Kv4cJCYS+AQ@mail.gmail.com>
+Message-ID: <CAHmME9rUD5QrgQMpoOCjv3crWFwn+BXXx9Dm0e2Kv4cJCYS+AQ@mail.gmail.com>
+Subject: Re: [PATCH RFC v1 1/2] random: add mechanism for VM forks to
+ reinitialize crng
+To:     Eric Biggers <ebiggers@kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        QEMU Developers <qemu-devel@nongnu.org>,
+        KVM list <kvm@vger.kernel.org>, linux-s390@vger.kernel.org,
+        adrian@parity.io, "Woodhouse, David" <dwmw@amazon.co.uk>,
+        "Catangiu, Adrian Costin" <acatan@amazon.com>, graf@amazon.com,
+        Colm MacCarthaigh <colmmacc@amazon.com>,
+        "Singh, Balbir" <sblbir@amazon.com>,
+        "Weiss, Radu" <raduweis@amazon.com>, Jann Horn <jannh@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Theodore Ts'o" <tytso@mit.edu>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hey Eric,
 
---posaq6tqktsqwtpx
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Thu, Feb 24, 2022 at 2:27 AM Eric Biggers <ebiggers@kernel.org> wrote:
+>
+> On Thu, Feb 24, 2022 at 01:54:54AM +0100, Jason A. Donenfeld wrote:
+> > On 2/24/22, Eric Biggers <ebiggers@kernel.org> wrote:
+> > > I think we should be removing cases where the base_crng key is changed
+> > > directly
+> > > besides extraction from the input_pool, not adding new ones.  Why not
+> > > implement
+> > > this as add_device_randomness() followed by crng_reseed(force=true), where
+> > > the
+> > > 'force' argument forces a reseed to occur even if the entropy_count is too
+> > > low?
+> >
+> > Because that induces a "premature next" condition which can let that
+> > entropy, potentially newly acquired by a storm of IRQs at power-on, be
+> > bruteforced by unprivileged userspace. I actually had it exactly the
+> > way you describe at first, but decided that this here is the lesser of
+> > evils and doesn't really complicate things the way an intentional
+> > premature next would. The only thing we care about here is branching
+> > the crng stream, and so this does explicitly that, without having to
+> > interfere with how we collect entropy. Of course we *also* add it as
+> > non-credited "device randomness" so that it's part of the next
+> > reseeding, whenever that might occur.
+>
+> Can you make sure to properly explain this in the code?
 
-Hi,
+The carousel keeps turning, and after I wrote to you last night I kept
+thinking about the matter. Here's how it breaks down:
 
-On Mon, Feb 14, 2022 at 06:07:55PM -0600, Ricardo Rivera-Matos wrote:
-> This patch series introduces a new POWER_SUPPLY_CHARGE_TYPE for bypass ch=
-arging
-> operation.
->=20
-> In fast charging ICs, the bypass operation is used to bypass the charging=
- path
-> around the charging IC's integrated power converter to its load. This all=
-ows
-> for "smart" wall adaptors (such as USB PPS standard power adaptors) to ha=
-ndle
-> the power conversion and heat dissipation externally.
+Injection method:
+- Assumes existing pool of entropy is still sacred.
+- Assumes base_crng timestamp is representative of pool age.
+- Result: Mixes directly into base_crng to avoid premature-next of pool.
 
-Thanks, queued.
+Input pool method:
+- Assumes existing pool of entropy is old / out of date / used by a
+different fork, so not sacred.
+- Assumes base_crng timestamp is tied to irrelevant entropy pool.
+- Result: Force-drains input pool, causing intentional premature-next.
 
--- Sebastian
+Which of these assumptions better models the situation? I started in
+the input pool method camp, then by the time I posted v1, was
+concerned about power-on IRQs, but now I think relying at all on
+snapshotted entropy represents the biggest issue. And judging from
+your email, it appears that you do too. So v3 of this patchset will
+switch back to the input pool method, per your suggestion.
 
---posaq6tqktsqwtpx
-Content-Type: application/pgp-signature; name="signature.asc"
+As a plus, it means we go through the RDSEED'd extraction algorithm
+too, which always helps.
 
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmIXaMQACgkQ2O7X88g7
-+prL5A/9H8fCXkGpUZc/A8Y1XO9AhD0Ec6/ip4Ltd599hFUxoWWCwXMRqCvbzjDZ
-E39kLMUmwuJYIIHsS1qYpa0rQf/jrpGThfel4A/GLBKP1OUM5TPWjpX+wrK1LziR
-iibWGIQ274KO1fmZtKZy72obVZ+qqrb8BHbAtpkljb79oD6QcNIB3OGJ7Bx52Vte
-Q6h330pMuFLDtNl8sSl16NLNt4oRndTDi6OEdIf2sEkUq0zTqd6TcbErrfJ/1pZy
-lM/j2iHeoT9EiWE7qn7vld6q5H891EaIwT7ilchSkFlrHaI95QLUdo3m8f8QQpVf
-AnoGc9ony9zDloQ9D5GdnpgF4yf1koVb2UsVMKvXV3GhbgaHO/KDj4RofjAqfMai
-qGKxd7yeJJbOfQT+mK9EEO2ndbQ45yqq0hErnln/dHrk2dWK7bND5yNr2qlex0Tm
-T+TFDnxyPBh1TTxorakoa3d3bQA0Vki3NnfSQhKMpP7qpaLB5YejucQaCqbA3OmM
-fI1bMnntZkkaYPpYnHWPCLv6LP7Lx5xKJzsUbcJKEAbaarsREB37GrkywTPkofpe
-tx9SnI50BgHJrmroB/Jb3UAMuRIFHj4KjfINF/8jG4plbOAEP4Qo2JICzRrJclEr
-oXTdzganbfM+ApesVTNPYovEdj4HA1GipuUb7p0e/xxyWm/2zYM=
-=fbKX
------END PGP SIGNATURE-----
-
---posaq6tqktsqwtpx--
+Jason

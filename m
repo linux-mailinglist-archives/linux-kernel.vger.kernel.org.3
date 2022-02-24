@@ -2,138 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97B474C36AD
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 21:12:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D92E4C36B2
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 21:14:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234308AbiBXUND (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 15:13:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59876 "EHLO
+        id S234259AbiBXUOU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 15:14:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234286AbiBXUM7 (ORCPT
+        with ESMTP id S231328AbiBXUOT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 15:12:59 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0CF0F15F355
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 12:12:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1645733547;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=3w+xrQ/brXhB3EAKYqVGuwFhQ8i6mior/cxHqxMPHcs=;
-        b=E0fREdK2MUxAGEfttGYtn5eZFfY+KPeQKiWhOCTauqnDyldrVP6wQCpWxE/J8akfoEHdHl
-        A6en0i4Saw72BwmiKHxDRtaYr3Ozqg2LCMhHEgXNbnNnfaJL4e0FhfBLJY1aMRH1LrwCuI
-        V7f3o30gHHcLxOcjSiqUanHBayxWe18=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-85-d5JrptdOMUex4Z5gzh0LFg-1; Thu, 24 Feb 2022 15:12:23 -0500
-X-MC-Unique: d5JrptdOMUex4Z5gzh0LFg-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Thu, 24 Feb 2022 15:14:19 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1629C15F370;
+        Thu, 24 Feb 2022 12:13:49 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 24380801AAD;
-        Thu, 24 Feb 2022 20:12:22 +0000 (UTC)
-Received: from starship (unknown [10.40.195.190])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 910472CD52;
-        Thu, 24 Feb 2022 20:12:19 +0000 (UTC)
-Message-ID: <34f52fb38a54e22ede0f2e28c6a0ecb49bf01a68.camel@redhat.com>
-Subject: Re: [RFC PATCH 13/13] KVM: SVM: Use fastpath x2apic IPI emulation
- when #vmexit with x2AVIC
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Cc:     pbonzini@redhat.com, seanjc@google.com, joro@8bytes.org,
-        jon.grimm@amd.com, wei.huang2@amd.com, terry.bowman@amd.com
-Date:   Thu, 24 Feb 2022 22:12:18 +0200
-In-Reply-To: <20220221021922.733373-14-suravee.suthikulpanit@amd.com>
-References: <20220221021922.733373-1-suravee.suthikulpanit@amd.com>
-         <20220221021922.733373-14-suravee.suthikulpanit@amd.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+        by ams.source.kernel.org (Postfix) with ESMTPS id CD1F5B82684;
+        Thu, 24 Feb 2022 20:13:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F0B1C340F9;
+        Thu, 24 Feb 2022 20:13:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645733626;
+        bh=wGKXt/NGcVyJAQ2PEnwWJoT6s11nK9r3LQji5pUqHsA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=UUFt3HU6Z93lQ90O1SlI/i7Ftj/LxnOsdVYflFXSOv6WVbidCurFrOphhTRRkDFj3
+         d2BZGvMg1IOL8MGMOwD9UW5OxA5lurMbdNYD/KxvDecaScdg5h3DCFhmROlnVJZ+KK
+         6R0VnXihwXrmnKCUlRj0V4+7otfnQcNi6gJV2X8PP+52Zpgk9tIXdNaNx7bcPFJ74J
+         jYqi1vkJGJ91JZBN2urOf4C0hzuAc9A06IcBLL+W8r/toROdEQnkmEOGkuByDC5QeD
+         8gaEF52qBf7CyPN9RY1z/gvzw/nDZIrHJ48hwRFIMQThbcNp5g4iy9EtBBJOeX4PXE
+         hCEuic8/2s6Pg==
+Date:   Thu, 24 Feb 2022 14:13:44 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>
+Cc:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Rob Herring <robh+dt@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>,
+        Russell King <rmk+kernel@armlinux.org.uk>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/6] PCI: Add PCI_EXP_SLTCTL_ASPL_DISABLE macro
+Message-ID: <20220224201344.GA291052@bhelgaas>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220222163158.1666-2-pali@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 2022-02-20 at 20:19 -0600, Suravee Suthikulpanit wrote:
-> When sends IPI to a halting vCPU, the hardware generates
-> avic_incomplete_ipi #vmexit with the
-> AVIC_IPI_FAILURE_TARGET_NOT_RUNNING reason.
+On Tue, Feb 22, 2022 at 05:31:53PM +0100, Pali Rohár wrote:
+> Add macro defining Auto Slot Power Limit Disable bit in Slot Control
+> Register.
 > 
-> For x2AVIC, enable fastpath emulation.
-> 
-> Signed-off-by: Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
+> Signed-off-by: Pali Rohár <pali@kernel.org>
+> Signed-off-by: Marek Behún <kabel@kernel.org>
+
+Acked-by: Bjorn Helgaas <bhelgaas@google.com>
+
 > ---
->  arch/x86/kvm/svm/avic.c | 2 ++
->  arch/x86/kvm/x86.c      | 3 ++-
->  arch/x86/kvm/x86.h      | 1 +
->  3 files changed, 5 insertions(+), 1 deletion(-)
+>  include/uapi/linux/pci_regs.h | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> diff --git a/arch/x86/kvm/svm/avic.c b/arch/x86/kvm/svm/avic.c
-> index 874c89f8fd47..758a79ee7f99 100644
-> --- a/arch/x86/kvm/svm/avic.c
-> +++ b/arch/x86/kvm/svm/avic.c
-> @@ -428,6 +428,8 @@ int avic_incomplete_ipi_interception(struct kvm_vcpu *vcpu)
->  		kvm_lapic_reg_write(apic, APIC_ICR, icrl);
->  		break;
->  	case AVIC_IPI_FAILURE_TARGET_NOT_RUNNING:
-> +		handle_fastpath_set_x2apic_icr_irqoff(vcpu, svm->vmcb->control.exit_info_1);
-
-This just doesn't seem right - it sends IPI to the target, while we just need to wake it up.
-avic_kick_target_vcpus already does all of this, and it really should be optimized to avoid
-going over all vcpus as it does currently.
-
-Best regards,
-	Maxim Levitsky
-
-
-
-> +
->  		/*
->  		 * At this point, we expect that the AVIC HW has already
->  		 * set the appropriate IRR bits on the valid target
-> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> index 641044db415d..c293027c7c10 100644
-> --- a/arch/x86/kvm/x86.c
-> +++ b/arch/x86/kvm/x86.c
-> @@ -2008,7 +2008,7 @@ static inline bool kvm_vcpu_exit_request(struct kvm_vcpu *vcpu)
->   * from guest to host, e.g. reacquiring KVM's SRCU lock. In contrast to the
->   * other cases which must be called after interrupts are enabled on the host.
->   */
-> -static int handle_fastpath_set_x2apic_icr_irqoff(struct kvm_vcpu *vcpu, u64 data)
-> +int handle_fastpath_set_x2apic_icr_irqoff(struct kvm_vcpu *vcpu, u64 data)
->  {
->  	if (!lapic_in_kernel(vcpu) || !apic_x2apic_mode(vcpu->arch.apic))
->  		return 1;
-> @@ -2028,6 +2028,7 @@ static int handle_fastpath_set_x2apic_icr_irqoff(struct kvm_vcpu *vcpu, u64 data
->  
->  	return 1;
->  }
-> +EXPORT_SYMBOL_GPL(handle_fastpath_set_x2apic_icr_irqoff);
->  
->  static int handle_fastpath_set_tscdeadline(struct kvm_vcpu *vcpu, u64 data)
->  {
-> diff --git a/arch/x86/kvm/x86.h b/arch/x86/kvm/x86.h
-> index 767ec7f99516..035d20f83ca6 100644
-> --- a/arch/x86/kvm/x86.h
-> +++ b/arch/x86/kvm/x86.h
-> @@ -286,6 +286,7 @@ int x86_decode_emulated_instruction(struct kvm_vcpu *vcpu, int emulation_type,
->  int x86_emulate_instruction(struct kvm_vcpu *vcpu, gpa_t cr2_or_gpa,
->  			    int emulation_type, void *insn, int insn_len);
->  fastpath_t handle_fastpath_set_msr_irqoff(struct kvm_vcpu *vcpu);
-> +int handle_fastpath_set_x2apic_icr_irqoff(struct kvm_vcpu *vcpu, u64 data);
->  
->  extern u64 host_xcr0;
->  extern u64 supported_xcr0;
-
-
+> diff --git a/include/uapi/linux/pci_regs.h b/include/uapi/linux/pci_regs.h
+> index bee1a9ed6e66..108f8523fa04 100644
+> --- a/include/uapi/linux/pci_regs.h
+> +++ b/include/uapi/linux/pci_regs.h
+> @@ -616,6 +616,7 @@
+>  #define  PCI_EXP_SLTCTL_PWR_OFF        0x0400 /* Power Off */
+>  #define  PCI_EXP_SLTCTL_EIC	0x0800	/* Electromechanical Interlock Control */
+>  #define  PCI_EXP_SLTCTL_DLLSCE	0x1000	/* Data Link Layer State Changed Enable */
+> +#define  PCI_EXP_SLTCTL_ASPL_DISABLE	0x2000 /* Auto Slot Power Limit Disable */
+>  #define  PCI_EXP_SLTCTL_IBPD_DISABLE	0x4000 /* In-band PD disable */
+>  #define PCI_EXP_SLTSTA		0x1a	/* Slot Status */
+>  #define  PCI_EXP_SLTSTA_ABP	0x0001	/* Attention Button Pressed */
+> -- 
+> 2.20.1
+> 

@@ -2,85 +2,249 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B4074C2B96
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 13:23:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FE534C2B9E
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 13:25:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234274AbiBXMXO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 07:23:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59446 "EHLO
+        id S233483AbiBXMZc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 07:25:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233483AbiBXMXM (ORCPT
+        with ESMTP id S229970AbiBXMZa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 07:23:12 -0500
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C841516040C
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 04:22:42 -0800 (PST)
-Received: from [127.0.0.1] (unknown [92.167.214.184])
-        (Authenticated sender: eric.valette@free.fr)
-        by smtp6-g21.free.fr (Postfix) with ESMTPSA id 5446A780674;
-        Thu, 24 Feb 2022 13:22:24 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
-        s=smtp-20201208; t=1645705360;
-        bh=fP/yrgV3ube2ihjd3ik+3iVnycyzuE8vV8HCQA4UG6U=;
-        h=Date:From:To:Cc:Subject:From;
-        b=kHNcLOLXnyKHDFY7oK+97QWOSoWL/CEPYgnLONLA2/uJL3xfNI+Xvy2objbV6dsDT
-         vV6SiPcF+sIDjEEtmp5kKlR5WoAC6Gtmio6JGfesKCGyAbeUa/VZ2eh7uNQPpe+nHP
-         U1vARC25OaiioqlMgB5USBRxV3uFYnAR3FZkM1WdZGgV352uFScBwmtp29Iuisz0Qb
-         cmjHSCTiNttDCTNLvCa88JgzIn7d9ppC71Ip/uVrAwfEg5Iw+nta6HskkYaan1n4XV
-         SCjA3I20V1K6EmtkUIWjExcbVvRJcEPO2JdlN7iMX4SGidamBWo4aVfamGCXacMN20
-         UVqTFahx0vYRA==
-Date:   Thu, 24 Feb 2022 12:22:23 +0000 (UTC)
-From:   =?UTF-8?Q?=C3=89ric_Valette?= <eric.valette@free.fr>
-To:     Alex Deucher <alexdeucher@gmail.com>
-Cc:     Dominique Dumont <dod@debian.org>,
-        Salvatore Bonaccorso <carnil@debian.org>,
-        Sasha Levin <sashal@kernel.org>,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>,
-        David Airlie <airlied@linux.ie>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Maling list - DRI developers 
-        <dri-devel@lists.freedesktop.org>,
-        Luben Tuikov <luben.tuikov@amd.com>, 1005005@bugs.debian.org,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Evan Quan <evan.quan@amd.com>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
-Message-ID: <68ac824b-3419-4644-a355-24341540fa6d@free.fr>
-Subject: Re: Regression from 3c196f056666 ("drm/amdgpu: always reset the
- asic in suspend (v2)") on suspend?
+        Thu, 24 Feb 2022 07:25:30 -0500
+Received: from mail-oo1-xc33.google.com (mail-oo1-xc33.google.com [IPv6:2607:f8b0:4864:20::c33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CD1616040C
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 04:25:00 -0800 (PST)
+Received: by mail-oo1-xc33.google.com with SMTP id k13-20020a4a948d000000b003172f2f6bdfso3193539ooi.1
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 04:25:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Py9a6z5uwcsSI2pT/P/X06lNc5avWgegLU62z/0BWvM=;
+        b=RPXgZqyUqoq9ax2om738OHkI2ASrhUdSPHYfH+EMXLO5ilhXwMUDnnnseVBHcePdGO
+         xVsdS+s51pd6t+6Djtwa5VuZ8fKI7uZEnOtiYJDDe5Mznm51WHGbNOXrpVNpQoGxmEHs
+         7PbctUM/GVCA58MGrblUb9A+taH9KX4PwOAMcE79XJzfJS7wvX/8Yi59diob+HDDLYpw
+         kNmttcXGnR2dtXsuWF5BtQqgGq1LeQ0OjPrnfhvjFD5xliGAP+VqPuIN7nNutc0cx3gL
+         EQMZntO7nfYkEpDHv1vAkN6vz0JWYNUY7zwiz66ifBnupr8ZHLQSjA1v/nuCE+RgVQng
+         Gz0A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Py9a6z5uwcsSI2pT/P/X06lNc5avWgegLU62z/0BWvM=;
+        b=BcTRIJKqcrb8YMGMewaQVRFNq/Oqjxs9GAlJUSQf9H1QQ1feWH3W0aeUUfFIodsjTl
+         Q2MFV20QRg2imQ14EyfNdTXwYJwt+gGo64CSefqoEXFRPqF3Hs7sOe19EPPdgnoU8oC6
+         iIH77Sy+DxdOvyfX//9sc2mJe32Smyuj72NWrd0hUGC0w8rB8VogceP3yQNlXnJTkQqd
+         ny+WxUfFZlHKfHPZ8Nwn1dUhidwMpP/NaD31Nb/HO7byNrwWT82DNBy2LsEfOSEdIiIe
+         cF0S8Liw4yW5Pjd0OKIQeXYNnyMF43/0vF9b5e2SddBjUXbCWmkjfNIiJ+ScbgrpWXPP
+         VhSw==
+X-Gm-Message-State: AOAM532RQLWXl/GlbD5Ve9/sqWhrjfDdcB8iqDc++jcvM89Ld/9F4Bbz
+        l1R1z87D5EAheuvHtOy9RS9bzwsP00CzPsc+87q2vA==
+X-Google-Smtp-Source: ABdhPJypJhJXpiHx6uc07a0UP/bjXtRUesuyw0zU9+tLQj6a3Ly13d/6h6jq9Luwq8oAkzi78zmptBaTxpEqn4nY1A0=
+X-Received: by 2002:a05:6870:d991:b0:ce:c0c9:622 with SMTP id
+ gn17-20020a056870d99100b000cec0c90622mr6117040oab.116.1645705499586; Thu, 24
+ Feb 2022 04:24:59 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Correlation-ID: <68ac824b-3419-4644-a355-24341540fa6d@free.fr>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220224051439.640768-1-kaleshsingh@google.com> <20220224051439.640768-2-kaleshsingh@google.com>
+In-Reply-To: <20220224051439.640768-2-kaleshsingh@google.com>
+From:   Fuad Tabba <tabba@google.com>
+Date:   Thu, 24 Feb 2022 12:24:23 +0000
+Message-ID: <CA+EHjTzkmPuqtpRQRRfRnC2n-ah_jnPiqfa2kg55YESGSjN6OA@mail.gmail.com>
+Subject: Re: [PATCH v3 1/8] KVM: arm64: Introduce hyp_alloc_private_va_range()
+To:     Kalesh Singh <kaleshsingh@google.com>
+Cc:     will@kernel.org, maz@kernel.org, qperret@google.com,
+        surenb@google.com, kernel-team@android.com,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Mark Brown <broonie@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Peter Collingbourne <pcc@google.com>,
+        "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>,
+        Andrew Scull <ascull@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/21/22 15:16, Alex Deucher wrote:
+Hi Kalesh,
 
->>>> Is this system S0i3 or regular S3?
->>=20
->> For me it is real S3.
->>=20
->> The proposed patch is intended for INTEl + intel gpu + amdgpu but I have
->> dual amd GPU.
-> It doesn't really matter what the platform is, it could still
-> potentially help on your system, it depends on the bios implementation
-> for your platform and how it handles suspend. You can try the patch,
-> but I don't think you are hitting the same issue.=C2=A0 I bisect would be
-> helpful in your case.
+On Thu, Feb 24, 2022 at 5:16 AM Kalesh Singh <kaleshsingh@google.com> wrote:
+>
+> hyp_alloc_private_va_range() can be used to reserve private VA ranges
+> in the nVHE hypervisor. Also update  __create_hyp_private_mapping()
+> to allow specifying an alignment for the private VA mapping.
+>
+> These will be used to implement stack guard pages for KVM nVHE hypervisor
+> (nVHE Hyp mode / not pKVM), in a subsequent patch in the series.
+>
+> Signed-off-by: Kalesh Singh <kaleshsingh@google.com>
+> ---
+>
+> Changes in v3:
+>   - Handle null ptr in IS_ERR_OR_NULL checks, per Mark
+>
+>  arch/arm64/include/asm/kvm_mmu.h |  4 +++
+>  arch/arm64/kvm/mmu.c             | 62 ++++++++++++++++++++------------
+>  2 files changed, 43 insertions(+), 23 deletions(-)
+>
+> diff --git a/arch/arm64/include/asm/kvm_mmu.h b/arch/arm64/include/asm/kvm_mmu.h
+> index 81839e9a8a24..0b0c71302b92 100644
+> --- a/arch/arm64/include/asm/kvm_mmu.h
+> +++ b/arch/arm64/include/asm/kvm_mmu.h
+> @@ -153,6 +153,10 @@ static __always_inline unsigned long __kern_hyp_va(unsigned long v)
+>  int kvm_share_hyp(void *from, void *to);
+>  void kvm_unshare_hyp(void *from, void *to);
+>  int create_hyp_mappings(void *from, void *to, enum kvm_pgtable_prot prot);
+> +unsigned long hyp_alloc_private_va_range(size_t size, size_t align);
+> +int __create_hyp_private_mapping(phys_addr_t phys_addr, size_t size,
+> +                               size_t align, unsigned long *haddr,
+> +                               enum kvm_pgtable_prot prot);
+>  int create_hyp_io_mappings(phys_addr_t phys_addr, size_t size,
+>                            void __iomem **kaddr,
+>                            void __iomem **haddr);
+> diff --git a/arch/arm64/kvm/mmu.c b/arch/arm64/kvm/mmu.c
+> index bc2aba953299..fc09536c8197 100644
+> --- a/arch/arm64/kvm/mmu.c
+> +++ b/arch/arm64/kvm/mmu.c
+> @@ -457,22 +457,16 @@ int create_hyp_mappings(void *from, void *to, enum kvm_pgtable_prot prot)
+>         return 0;
+>  }
+>
+> -static int __create_hyp_private_mapping(phys_addr_t phys_addr, size_t size,
+> -                                       unsigned long *haddr,
+> -                                       enum kvm_pgtable_prot prot)
+> +
+> +/*
+> + * Allocates a private VA range below io_map_base.
+> + *
+> + * @size:      The size of the VA range to reserve.
+> + * @align:     The required alignment for the allocation.
+> + */
 
-Trying to add the pach on top of 5.15.24, I got a already applied message a=
-nd indeed the patch is already there. So this particular patch it does not =
-fix my problem.
+Many of the functions in this file use the kernel-doc format, and your
+added comments are close, but not quite conforment. If you want to use
+the kernel-doc for these you can refer to:
+https://www.kernel.org/doc/html/latest/doc-guide/kernel-doc.html
 
-Saw new modif in 5.15.25. Will try and check if I can find time to bissect.
+> +unsigned long hyp_alloc_private_va_range(size_t size, size_t align)
+>  {
+>         unsigned long base;
+> -       int ret = 0;
+> -
+> -       if (!kvm_host_owns_hyp_mappings()) {
+> -               base = kvm_call_hyp_nvhe(__pkvm_create_private_mapping,
+> -                                        phys_addr, size, prot);
+> -               if (IS_ERR_OR_NULL((void *)base))
+> -                       return PTR_ERR((void *)base);
+> -               *haddr = base;
+> -
+> -               return 0;
+> -       }
+>
+>         mutex_lock(&kvm_hyp_pgd_mutex);
+>
+> @@ -484,8 +478,8 @@ static int __create_hyp_private_mapping(phys_addr_t phys_addr, size_t size,
+>          *
+>          * The allocated size is always a multiple of PAGE_SIZE.
+>          */
+> -       size = PAGE_ALIGN(size + offset_in_page(phys_addr));
+> -       base = io_map_base - size;
+> +       base = io_map_base - PAGE_ALIGN(size);
+> +       base = ALIGN_DOWN(base, align);
+>
+>         /*
+>          * Verify that BIT(VA_BITS - 1) hasn't been flipped by
+> @@ -493,20 +487,42 @@ static int __create_hyp_private_mapping(phys_addr_t phys_addr, size_t size,
+>          * overflowed the idmap/IO address range.
+>          */
+>         if ((base ^ io_map_base) & BIT(VA_BITS - 1))
+> -               ret = -ENOMEM;
+> +               base = (unsigned long)ERR_PTR(-ENOMEM);
+>         else
+>                 io_map_base = base;
+>
+>         mutex_unlock(&kvm_hyp_pgd_mutex);
+>
+> -       if (ret)
+> -               goto out;
+> +       return base;
+> +}
+> +
+> +int __create_hyp_private_mapping(phys_addr_t phys_addr, size_t size,
+> +                               size_t align, unsigned long *haddr,
+> +                               enum kvm_pgtable_prot prot)
+> +{
+> +       unsigned long addr;
+> +       int ret = 0;
+> +
+> +       if (!kvm_host_owns_hyp_mappings()) {
+> +               addr = kvm_call_hyp_nvhe(__pkvm_create_private_mapping,
+> +                                        phys_addr, size, prot);
+> +               if (IS_ERR_OR_NULL((void *)addr))
+> +                       return addr ? PTR_ERR((void *)addr) : -ENOMEM;
+> +               *haddr = addr;
+> +
+> +               return 0;
+> +       }
+> +
+> +       size += offset_in_page(phys_addr);
 
--- eric
+You're not page-aligning the size, which was the behavior before this
+patch. However, looking at where it's being used it seems to be fine
+because the users of size would align it if necessary.
+
+Thanks,
+/fuad
+
+
+
+> +       addr = hyp_alloc_private_va_range(size, align);
+> +       if (IS_ERR_OR_NULL((void *)addr))
+> +               return addr ? PTR_ERR((void *)addr) : -ENOMEM;
+>
+> -       ret = __create_hyp_mappings(base, size, phys_addr, prot);
+> +       ret = __create_hyp_mappings(addr, size, phys_addr, prot);
+>         if (ret)
+>                 goto out;
+>
+> -       *haddr = base + offset_in_page(phys_addr);
+> +       *haddr = addr + offset_in_page(phys_addr);
+>  out:
+>         return ret;
+>  }
+> @@ -537,7 +553,7 @@ int create_hyp_io_mappings(phys_addr_t phys_addr, size_t size,
+>                 return 0;
+>         }
+>
+> -       ret = __create_hyp_private_mapping(phys_addr, size,
+> +       ret = __create_hyp_private_mapping(phys_addr, size, PAGE_SIZE,
+>                                            &addr, PAGE_HYP_DEVICE);
+>         if (ret) {
+>                 iounmap(*kaddr);
+> @@ -564,7 +580,7 @@ int create_hyp_exec_mappings(phys_addr_t phys_addr, size_t size,
+>
+>         BUG_ON(is_kernel_in_hyp_mode());
+>
+> -       ret = __create_hyp_private_mapping(phys_addr, size,
+> +       ret = __create_hyp_private_mapping(phys_addr, size, PAGE_SIZE,
+>                                            &addr, PAGE_HYP_EXEC);
+>         if (ret) {
+>                 *haddr = NULL;
+> --
+> 2.35.1.473.g83b2b277ed-goog
+>

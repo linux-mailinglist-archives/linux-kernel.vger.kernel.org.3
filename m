@@ -2,108 +2,311 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E96A24C28E7
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 11:09:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B7444C28EB
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 11:11:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233270AbiBXKJx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 05:09:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46122 "EHLO
+        id S233074AbiBXKKo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 05:10:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233227AbiBXKJk (ORCPT
+        with ESMTP id S231773AbiBXKKj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 05:09:40 -0500
-Received: from mail.tintel.eu (mail.tintel.eu [51.83.127.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 223D128AD96;
-        Thu, 24 Feb 2022 02:09:05 -0800 (PST)
-Received: from localhost (localhost [IPv6:::1])
-        by mail.tintel.eu (Postfix) with ESMTP id 50C8C434FC4A;
-        Thu, 24 Feb 2022 11:09:02 +0100 (CET)
-Received: from mail.tintel.eu ([IPv6:::1])
-        by localhost (mail.tintel.eu [IPv6:::1]) (amavisd-new, port 10032)
-        with ESMTP id SFVhmd4-Hbc4; Thu, 24 Feb 2022 11:09:01 +0100 (CET)
-Received: from localhost (localhost [IPv6:::1])
-        by mail.tintel.eu (Postfix) with ESMTP id BBDAB434FC4B;
-        Thu, 24 Feb 2022 11:09:01 +0100 (CET)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.tintel.eu BBDAB434FC4B
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux-ipv6.be;
-        s=502B7754-045F-11E5-BBC5-64595FD46BE8; t=1645697341;
-        bh=NsEziSD8zXGAxjibXFGFRrDDNKL9BST7ZKyzNe6aCCc=;
-        h=Message-ID:Date:MIME-Version:To:From;
-        b=cjdelavZb9bpnlZ24Xu1lGiiftDZaQ9y9quF0qr572LG3GfZefKKt9dUqmP7bjiLj
-         R1a8lWip6pBHta8VooDEz3xgPmIt8MdklEls7mtZKSqClTrUKqLM5TJBk0v+8Siyyx
-         keJo3orc3JNB7CeA95rH4x8IBQDcFtW6jFtaYZlc=
-X-Virus-Scanned: amavisd-new at mail.tintel.eu
-Received: from mail.tintel.eu ([IPv6:::1])
-        by localhost (mail.tintel.eu [IPv6:::1]) (amavisd-new, port 10026)
-        with ESMTP id 0BgzWEgqgmxJ; Thu, 24 Feb 2022 11:09:01 +0100 (CET)
-Received: from [IPV6:2001:67c:21bc:20::10] (unknown [IPv6:2001:67c:21bc:20::10])
-        (Authenticated sender: stijn@tintel.eu)
-        by mail.tintel.eu (Postfix) with ESMTPSA id E115A434FC4A;
-        Thu, 24 Feb 2022 11:09:00 +0100 (CET)
-Message-ID: <ac624e07-5310-438a-dce3-d2edb01e8031@linux-ipv6.be>
-Date:   Thu, 24 Feb 2022 12:08:59 +0200
+        Thu, 24 Feb 2022 05:10:39 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DA7F228ADAA;
+        Thu, 24 Feb 2022 02:10:09 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A5609ED1;
+        Thu, 24 Feb 2022 02:10:09 -0800 (PST)
+Received: from lakrids (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0349E3F70D;
+        Thu, 24 Feb 2022 02:10:07 -0800 (PST)
+Date:   Thu, 24 Feb 2022 10:10:02 +0000
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Elliot Berman <quic_eberman@quicinc.com>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-kernel@vger.kernel.org, Trilok Soni <quic_tsoni@quicinc.com>,
+        Murali Nalajala <quic_mnalajala@quicinc.com>,
+        Srivatsa Vaddagiri <quic_svaddagiri@quicinc.com>,
+        Carl van Schaik <quic_cvanscha@quicinc.com>,
+        Andy Gross <agross@kernel.org>, linux-arm-msm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Marc Zyngier <maz@kernel.org>
+Subject: Re: [PATCH 03/11] arm64: gunyah: Add Gunyah hypercalls ABI
+Message-ID: <YhdZen7MwdAIJMsu@lakrids>
+References: <20220223233729.1571114-1-quic_eberman@quicinc.com>
+ <20220223233729.1571114-4-quic_eberman@quicinc.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] libbpf: fix BPF_MAP_TYPE_PERF_EVENT_ARRAY auto-pinning
-Content-Language: en-GB
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Song Liu <song@kernel.org>
-Cc:     =?UTF-8?Q?Toke_H=c3=b8iland-J=c3=b8rgensen?= <toke@redhat.com>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        KP Singh <kpsingh@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Yonghong Song <yhs@fb.com>, Song Liu <songliubraving@fb.com>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>
-References: <20220222204236.2192513-1-stijn@linux-ipv6.be>
- <CAPhsuW6WgjL_atKCivbk5iMNBFHuSGcjAC0tdZYag2fOesUBKA@mail.gmail.com>
- <CAEf4BzYuk2Rur-pae7gbuXSb=ayJ0fUREStdWyorWgd_q1D9zQ@mail.gmail.com>
-From:   Stijn Tintel <stijn@linux-ipv6.be>
-In-Reply-To: <CAEf4BzYuk2Rur-pae7gbuXSb=ayJ0fUREStdWyorWgd_q1D9zQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,NICE_REPLY_A,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220223233729.1571114-4-quic_eberman@quicinc.com>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24/02/2022 01:15, Andrii Nakryiko wrote:
-> On Tue, Feb 22, 2022 at 6:37 PM Song Liu <song@kernel.org> wrote:
->> On Tue, Feb 22, 2022 at 12:51 PM Stijn Tintel <stijn@linux-ipv6.be> wrote:
->>> When a BPF map of type BPF_MAP_TYPE_PERF_EVENT_ARRAY doesn't have the
->>> max_entries parameter set, this parameter will be set to the number of
->>> possible CPUs. Due to this, the map_is_reuse_compat function will return
->>> false, causing the following error when trying to reuse the map:
->>>
->>> libbpf: couldn't reuse pinned map at '/sys/fs/bpf/m_logging': parameter mismatch
->>>
->>> Fix this by checking against the number of possible CPUs if the
->>> max_entries parameter is not set in the map definition.
->>>
->>> Fixes: 57a00f41644f ("libbpf: Add auto-pinning of maps when loading BPF objects")
->>> Signed-off-by: Stijn Tintel <stijn@linux-ipv6.be>
->> Acked-by: Song Liu <songliubraving@fb.com>
->>
->> I think the following fix would be more future proof, but the patch
->> as-is is better for
->> stable backport? How about we add a follow up patch on top of current
->> patch to fix
->> def->max_entries once for all?
-> Keeping special logic for PERF_EVENT_ARRAY in one place is
-> preferrable. With this, the changes in map_is_reuse_compat() shouldn't
-> be necessary at all. Stijn, can you please send v2 with Song's
-> proposed changes?
+Hi,
+
+As a general thing, this is the *only* patch from this series which has
+been Cc'd to linux-arm-kernel, which makes it practically impossible to
+understand the context for this, which is somewhat frustrating.
+
+Looking on lore.kernel.org I see that the entire series was Cc'd to
+linux-arm-msm, but most people don't subscribe to that list. If you send
+one patch in a series to a list, please send the *entire* series there.
+
+On Wed, Feb 23, 2022 at 03:37:21PM -0800, Elliot Berman wrote:
+> Add initial support to perform Gunyah hypercalls. The arm64 ABI for
+> Gunyah hypercalls generally follows the AAPCS64, and can be summarized:
+>  - Function identifier is passed through the imm operand
+>  - [r0,r7] are parameter and result registers
+>  - [r8-r18] are temporary and saved by the caller (VM)
+>  - [r19-r31] are preserved and saved by the hypervisor
 >
-Will do!
+> The preprocessor macors for creating the necessary HVC instruction
+> roughly follows the SMCCC 1.1 implementation in
+> include/linux/arm-smccc.h.
+
+I've added the SMCCC maintainers (myself, Lorenzo, and SUdeep) to Cc,
+and also Marc who was involvedi n prior discussions in this area. Please
+Cc us on any future patches adding HVC or SMCC interfaces (SMCCC or
+otherwise).
+
+We've previously said NO to any new hypercall mechanisms which do not
+follow SMCCC. There is no reason to fragment this space further; please
+use SMCCC (which your hypervisor must already implement in part if it
+exposes PSCI to a guest).
+
+NAK to this non-SMCCC interface.
 
 Thanks,
-Stijn
+Mark.
 
+> 
+> Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
+> ---
+>  MAINTAINERS                               |   1 +
+>  arch/arm64/include/asm/gunyah/hypercall.h | 193 ++++++++++++++++++++++
+>  2 files changed, 194 insertions(+)
+>  create mode 100644 arch/arm64/include/asm/gunyah/hypercall.h
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 6a918f653eac..7e6a8488fa3e 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -8402,6 +8402,7 @@ L:	linux-arm-msm@vger.kernel.org
+>  S:	Maintained
+>  F:	Documentation/devicetree/bindings/gunyah/
+>  F:	Documentation/virt/gunyah/
+> +F:	arch/arm64/include/asm/gunyah/
+>  
+>  H8/300 ARCHITECTURE
+>  M:	Yoshinori Sato <ysato@users.sourceforge.jp>
+> diff --git a/arch/arm64/include/asm/gunyah/hypercall.h b/arch/arm64/include/asm/gunyah/hypercall.h
+> new file mode 100644
+> index 000000000000..626163500e32
+> --- /dev/null
+> +++ b/arch/arm64/include/asm/gunyah/hypercall.h
+> @@ -0,0 +1,193 @@
+> +/* SPDX-License-Identifier: GPL-2.0-only */
+> +/*
+> + * Copyright (c) 2022 Qualcomm Innovation Center, Inc. All rights reserved.
+> + */
+> +#ifndef __ASM_GH_HYPERCALL_H
+> +#define __ASM_GH_HYPERCALL_H
+> +
+> +#include <linux/types.h>
+> +
+> +#define ___gh_count_args(_0, _1, _2, _3, _4, _5, _6, _7, _8, x, ...) x
+> +
+> +#define __gh_count_args(...)						\
+> +	___gh_count_args(_, ## __VA_ARGS__, 8, 7, 6, 5, 4, 3, 2, 1, 0)
+> +
+> +#define __gh_skip_0(...)		__VA_ARGS__
+> +#define __gh_skip_1(a, ...)	__VA_ARGS__
+> +#define __gh_skip_2(a, b, ...)	__VA_ARGS__
+> +#define __gh_skip_3(a, b, c, ...)	__VA_ARGS__
+> +#define __gh_skip_4(a, b, c, d, ...)	__VA_ARGS__
+> +#define __gh_skip_5(a, b, c, d, e, ...)	__VA_ARGS__
+> +#define __gh_skip_6(a, b, c, d, e, f, ...)	__VA_ARGS__
+> +#define __gh_skip_7(a, b, c, d, e, f, g, ...)	__VA_ARGS__
+> +#define __gh_skip_8(a, b, c, d, e, f, g, h, ...)	__VA_ARGS__
+> +
+> +#define __gh_declare_arg_0(...)
+> +
+> +#define __gh_declare_arg_1(a1, ...)					\
+> +	typeof(a1) __gh_a1 = (a1);					\
+> +	register uintptr_t arg1 asm("r0") = __gh_a1
+> +
+> +#define __gh_declare_arg_2(a1, a2, ...)					\
+> +	__gh_declare_arg_1(a1);						\
+> +	typeof(a2) __gh_a2 = (a2);					\
+> +	register uintptr_t arg2 asm("r1") = __gh_a2
+> +
+> +#define __gh_declare_arg_3(a1, a2, a3, ...)				\
+> +	__gh_declare_arg_2(a1, a2);					\
+> +	typeof(a3) __gh_a3 = (a3);					\
+> +	register uintptr_t arg3 asm("r2") = __gh_a3
+> +
+> +#define __gh_declare_arg_4(a1, a2, a3, a4, ...)				\
+> +	__gh_declare_arg_3(a1, a2, a3);					\
+> +	typeof(a4) __gh_a4 = (a4);					\
+> +	register uintptr_t arg4 asm("r3") = __gh_a4
+> +
+> +#define __gh_declare_arg_5(a1, a2, a3, a4, a5, ...)			\
+> +	__gh_declare_arg_4(a1, a2, a3, a4);				\
+> +	typeof(a5) __gh_a5 = (a5);					\
+> +	register uintptr_t arg5 asm("r4") = __gh_a5
+> +
+> +#define __gh_declare_arg_6(a1, a2, a3, a4, a5, a6, ...)			\
+> +	__gh_declare_arg_5(a1, a2, a3, a4, a5);				\
+> +	typeof(a6) __gh_a6 = (a6);					\
+> +	register uintptr_t arg6 asm("r5") = __gh_a6
+> +
+> +#define __gh_declare_arg_7(a1, a2, a3, a4, a5, a6, a7, ...)		\
+> +	__gh_declare_arg_6(a1, a2, a3, a4, a5, a6);			\
+> +	typeof(a7) __gh_a7 = (a7);					\
+> +	register uintptr_t arg7 asm("r6") = __gh_a7
+> +
+> +#define __gh_declare_arg_8(a1, a2, a3, a4, a5, a6, a7, a8, ...)		\
+> +	__gh_declare_arg_7(a1, a2, a3, a4, a5, a6, a7);			\
+> +	typeof(a8) __gh_a8 = (a8);					\
+> +	register uintptr_t arg8 asm("r7") = __gh_a8
+> +
+> +#define ___gh_declare_args(nargs)	__gh_declare_arg_ ## nargs
+> +#define __gh_declare_args(nargs)	___gh_declare_args(nargs)
+> +#define _gh_declare_args(nargs, ...) __gh_declare_args(nargs)(__VA_ARGS__)
+> +
+> +#define __gh_constraint_arg_0
+> +#define __gh_constraint_arg_1	"r" (arg1),
+> +#define __gh_constraint_arg_2	__gh_constraint_arg_1 "r" (arg2),
+> +#define __gh_constraint_arg_3	__gh_constraint_arg_2 "r" (arg3),
+> +#define __gh_constraint_arg_4	__gh_constraint_arg_3 "r" (arg4),
+> +#define __gh_constraint_arg_5	__gh_constraint_arg_4 "r" (arg5),
+> +#define __gh_constraint_arg_6	__gh_constraint_arg_5 "r" (arg6),
+> +#define __gh_constraint_arg_7	__gh_constraint_arg_6 "r" (arg7),
+> +#define __gh_constraint_arg_8	__gh_constraint_arg_7 "r" (arg8),
+> +
+> +#define _gh_constraint_args(nargs)	__gh_constraint_arg_ ## nargs
+> +
+> +#define __gh_to_res(nargs, ...)		__gh_skip_ ## nargs (__VA_ARGS__)
+> +
+> +#define __gh_declare_res_0
+> +
+> +#define __gh_declare_res_1				\
+> +	register uintptr_t res1 asm("r0")
+> +
+> +#define __gh_declare_res_2				\
+> +	__gh_declare_res_1;				\
+> +	register uintptr_t res2 asm("r1")
+> +
+> +#define __gh_declare_res_3				\
+> +	__gh_declare_res_2;				\
+> +	register uintptr_t res3 asm("r2")
+> +
+> +#define __gh_declare_res_4				\
+> +	__gh_declare_res_3;				\
+> +	register uintptr_t res4 asm("r3")
+> +
+> +#define __gh_declare_res_5				\
+> +	__gh_declare_res_4;				\
+> +	register uintptr_t res5 asm("r4")
+> +
+> +#define __gh_declare_res_6				\
+> +	__gh_declare_res_5;				\
+> +	register uintptr_t res6 asm("r5")
+> +
+> +#define __gh_declare_res_7				\
+> +	__gh_declare_res_6;				\
+> +	register uintptr_t res7 asm("r6")
+> +
+> +#define __gh_declare_res_8				\
+> +	__gh_declare_res_7;				\
+> +	register uintptr_t res8 asm("r7")
+> +
+> +#define ___gh_declare_res(nargs)	__gh_declare_res_ ## nargs
+> +#define __gh_declare_res(nargs)		___gh_declare_res(nargs)
+> +#define _gh_declare_res(...)		__gh_declare_res(__gh_count_args(__VA_ARGS__))
+> +
+> +#define __gh_constraint_res_0
+> +#define __gh_constraint_res_1	"=r" (res1)
+> +#define __gh_constraint_res_2	__gh_constraint_res_1, "=r" (res2)
+> +#define __gh_constraint_res_3	__gh_constraint_res_2, "=r" (res3)
+> +#define __gh_constraint_res_4	__gh_constraint_res_3, "=r" (res4)
+> +#define __gh_constraint_res_5	__gh_constraint_res_4, "=r" (res5)
+> +#define __gh_constraint_res_6	__gh_constraint_res_5, "=r" (res6)
+> +#define __gh_constraint_res_7	__gh_constraint_res_6, "=r" (res7)
+> +#define __gh_constraint_res_8	__gh_constraint_res_7, "=r" (res8)
+> +
+> +#define ___gh_constraint_res(nargs)	__gh_constraint_res_ ## nargs
+> +#define __gh_constraint_res(nargs)	___gh_constraint_res(nargs)
+> +#define _gh_constraint_res(...)				\
+> +	__gh_constraint_res(__gh_count_args(__VA_ARGS__))
+> +
+> +#define __gh_assign_res_0(...)
+> +
+> +#define __gh_assign_res_1(r1)					\
+> +	r1 = res1;
+> +
+> +#define __gh_assign_res_2(r1, r2)				\
+> +	__gh_assign_res_1(r1);					\
+> +	r2 = res2
+> +
+> +#define __gh_assign_res_3(r1, r2, r3)				\
+> +	__gh_assign_res_2(r1, r2);				\
+> +	r3 = res3
+> +
+> +#define __gh_assign_res_4(r1, r2, r3, r4)			\
+> +	__gh_assign_res_3(r1, r2, r3);				\
+> +	r4 = res4
+> +
+> +#define __gh_assign_res_5(r1, r2, r3, r4, r5)			\
+> +	__gh_assign_res_4(r1, r2, r3, r4);			\
+> +	r5 = res5
+> +
+> +#define __gh_assign_res_6(r1, r2, r3, r4, r5, r6)		\
+> +	__gh_assign_res_5(r1, r2, r3, r4, r5);			\
+> +	r6 = res6
+> +
+> +#define __gh_assign_res_7(r1, r2, r3, r4, r5, r6, r7)		\
+> +	__gh_assign_res_6(r1, r2, r3, r4, r5, r6);		\
+> +	r7 = res7
+> +
+> +#define __gh_assign_res_8(r1, r2, r3, r4, r5, r6, r7, r8)	\
+> +	__gh_assign_res_7(r1, r2, r3, r4, r5, r6, r7);		\
+> +	r8 = res8
+> +
+> +#define ___gh_assign_res(nargs)	__gh_assign_res_ ## nargs
+> +#define __gh_assign_res(nargs)	___gh_assign_res(nargs)
+> +#define _gh_assign_res(...) __gh_assign_res(__gh_count_args(__VA_ARGS__))(__VA_ARGS__)
+> +
+> +/**
+> + * arch_gh_hypercall() - Performs an AArch64-specific call into hypervisor using Gunyah ABI
+> + * @hcall_num: Hypercall function ID to invoke
+> + * @nargs: Number of input arguments
+> + * @...: First nargs are the input arguments. Remaining arguments are output variables.
+> + */
+> +#define arch_gh_hypercall(hcall_num, nargs, ...)				\
+> +	do {									\
+> +		_gh_declare_res(__gh_to_res(nargs, __VA_ARGS__));		\
+> +		_gh_declare_args(nargs, __VA_ARGS__);				\
+> +		asm volatile(							\
+> +			     "hvc	%[num]\n"				\
+> +			     : _gh_constraint_res(__gh_to_res(nargs, __VA_ARGS__))	\
+> +			     : _gh_constraint_args(nargs)			\
+> +			       [num] "i" (hcall_num)				\
+> +			     : "x9", "x10", "x11", "x12", "x13", "x14", "x15", "x16", "x17", \
+> +			       "memory");					\
+> +		_gh_assign_res(__gh_to_res(nargs, __VA_ARGS__));		\
+> +	} while (0)
+> +
+> +#endif
+> -- 
+> 2.25.1
+> 

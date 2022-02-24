@@ -2,83 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 282334C370B
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 21:50:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 613B34C3749
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 21:58:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234417AbiBXUug (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 15:50:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51616 "EHLO
+        id S233631AbiBXU6a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 15:58:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229455AbiBXUud (ORCPT
+        with ESMTP id S232933AbiBXU62 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 15:50:33 -0500
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 230FA1CF0BC
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 12:50:02 -0800 (PST)
-Received: by mail-lf1-x135.google.com with SMTP id y24so5985938lfg.1
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 12:50:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=K7Q/Yaamh7u6ae3y6zkq/joMW6amPe2G20eLGXBMeLA=;
-        b=LMlhah8SdQ2JxJ3A8LX9FtEG/kjw8TtC5fVbS/xgmC3I8CaYr7YE7fHIhHIsMq1g/g
-         cjqxW8PLx4H7meNqtjpmtNS5G/RcHX3ub7b3DO1/cdh37glVOLbzVCbDvBeCqu/3NLzu
-         SxnprZj4hBezMb3ITkFaMHuNdEazF5zxnNEhE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=K7Q/Yaamh7u6ae3y6zkq/joMW6amPe2G20eLGXBMeLA=;
-        b=iM67vli7AugwovoZaacp8/PgGHM8/xpOBUhOvABEYTQdarrMbD5fEisldZVTMPlUe5
-         /2LJrzNPub8vaOZeXERpq+DchgBRRGcP2uS5X/Z2a5vR9Q4lVPmCZ/ruH9jZ3MZxh5Ev
-         vOFPbpYVCNnDYbX60es1I7SB3wl9pCuu7aN8EJG8w0AGtk7Wr2hPCynuqWMBKJBNtjnh
-         ctWEe6r5nHUoZ6E6HL0ynoxpR6NqP8uETTgX29YgDS08uAk0oxmc4Rnbd4oRNSELvDZk
-         IADc8GLf2DPKEeSboFnmMA+QaHJxnw98lqu/nddIWlxx7VaqDdo3htFHvkVRyHbySC1u
-         CHWA==
-X-Gm-Message-State: AOAM533/j26e0Z4O0iahqCMODXgIDtsTHUPWphMZ5pwmq9cUxn6mC0eQ
-        kj1QE95MRL1NMpu6jk+SIReIWgEfGnn6Howbrv0=
-X-Google-Smtp-Source: ABdhPJxmK0V71o4b91cdGJz638BleqbSAin2SvaSXQCoA+kQcS8pWmszXU9JUpJbscRKqy/ELQcsMQ==
-X-Received: by 2002:ac2:442f:0:b0:443:7bee:85d5 with SMTP id w15-20020ac2442f000000b004437bee85d5mr2779836lfl.294.1645735800110;
-        Thu, 24 Feb 2022 12:50:00 -0800 (PST)
-Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com. [209.85.167.48])
-        by smtp.gmail.com with ESMTPSA id y15-20020a2ebb8f000000b0023134a7b265sm70977lje.36.2022.02.24.12.49.58
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 24 Feb 2022 12:49:59 -0800 (PST)
-Received: by mail-lf1-f48.google.com with SMTP id y24so5985845lfg.1
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 12:49:58 -0800 (PST)
-X-Received: by 2002:ac2:5313:0:b0:443:99c1:7e89 with SMTP id
- c19-20020ac25313000000b0044399c17e89mr2706158lfh.531.1645735798149; Thu, 24
- Feb 2022 12:49:58 -0800 (PST)
+        Thu, 24 Feb 2022 15:58:28 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3E4D192E28
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 12:57:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645736277; x=1677272277;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=n4YIWfU6g7kTrFDHx0D2HIfNv62rTHIxAX7dEhEyOrM=;
+  b=oHrANkt9fqPVysq+aN8fvNCB6NqmhQPOamXthflOVBotuAqlk+w+ZH4D
+   yXSggUJfsVc1cKxH9NKqFF4JdAw1ZyyacHJZGjvsccBDkAituAkQ5jagA
+   jdRyXMjum5PdR7IcaiGB69wnmfHPHnY/IMPFxwL/mbet1RhQXdDVabeW1
+   34r5jceZYYAg6lmIc70yLxOBV69vuV150OaDI36mlKnc4o46CgPpBB/8D
+   ogn1soxalQOfA7vw1WNA3jQoA6OEfrFGt2fo/23pCntwCgoB1f0xJVBCf
+   CjhmSM69K0Qr8vOlI0hbVXV6tja3z/t7FjUOzj3AijdfcJgQkKkgedyqR
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10268"; a="251180293"
+X-IronPort-AV: E=Sophos;i="5.90,134,1643702400"; 
+   d="scan'208";a="251180293"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2022 12:52:34 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,134,1643702400"; 
+   d="scan'208";a="592230420"
+Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 24 Feb 2022 12:52:33 -0800
+Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nNL6G-0003Sf-TO; Thu, 24 Feb 2022 20:52:32 +0000
+Date:   Fri, 25 Feb 2022 04:51:57 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Mel Gorman <mgorman@suse.de>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [mel:mm-pcpllist-v1r1 15/16] mm/page_alloc.c:3079:16: warning:
+ variable 'flags' set but not used
+Message-ID: <202202250427.rG7MMEJp-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220224195305.1584666-1-kuba@kernel.org>
-In-Reply-To: <20220224195305.1584666-1-kuba@kernel.org>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Thu, 24 Feb 2022 12:49:42 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wjWmb9fw1wnuZmaPca92X6+Ot1revY3+t2TKVc--xEVyQ@mail.gmail.com>
-Message-ID: <CAHk-=wjWmb9fw1wnuZmaPca92X6+Ot1revY3+t2TKVc--xEVyQ@mail.gmail.com>
-Subject: Re: [GIT PULL] Networking for 5.17-rc6
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     David Miller <davem@davemloft.net>,
-        Netdev <netdev@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 24, 2022 at 11:53 AM Jakub Kicinski <kuba@kernel.org> wrote:
->
-> Current release - regressions:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mel/linux.git mm-pcpllist-v1r1
+head:   b9d96cc9193b170b205c46a39f68b9b35e774a8d
+commit: df8f36ca2610d80944adcf40720f6a88aba2b822 [15/16] mm/page_alloc: Demote local_lock_irqsave to local_lock
+config: um-i386_defconfig (https://download.01.org/0day-ci/archive/20220225/202202250427.rG7MMEJp-lkp@intel.com/config)
+compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
+reproduce (this is a W=1 build):
+        # https://git.kernel.org/pub/scm/linux/kernel/git/mel/linux.git/commit/?id=df8f36ca2610d80944adcf40720f6a88aba2b822
+        git remote add mel https://git.kernel.org/pub/scm/linux/kernel/git/mel/linux.git
+        git fetch --no-tags mel mm-pcpllist-v1r1
+        git checkout df8f36ca2610d80944adcf40720f6a88aba2b822
+        # save the config file to linux build tree
+        mkdir build_dir
+        make W=1 O=build_dir ARCH=um SUBARCH=i386 SHELL=/bin/bash
 
-.. and not listed here is the build fix for IPV6 being disabled that
-has been reported multiple times.  Thanks.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-                  Linus
+All warnings (new ones prefixed by >>):
+
+   mm/page_alloc.c: In function 'drain_pages_zone':
+>> mm/page_alloc.c:3079:16: warning: variable 'flags' set but not used [-Wunused-but-set-variable]
+    3079 |  unsigned long flags;
+         |                ^~~~~
+   mm/page_alloc.c: In function 'free_unref_page':
+   mm/page_alloc.c:3370:16: warning: variable 'flags' set but not used [-Wunused-but-set-variable]
+    3370 |  unsigned long flags;
+         |                ^~~~~
+   mm/page_alloc.c: In function 'free_unref_page_list':
+   mm/page_alloc.c:3410:16: warning: variable 'flags' set but not used [-Wunused-but-set-variable]
+    3410 |  unsigned long flags;
+         |                ^~~~~
+   mm/page_alloc.c: In function 'rmqueue_pcplist':
+   mm/page_alloc.c:3717:16: warning: variable 'flags' set but not used [-Wunused-but-set-variable]
+    3717 |  unsigned long flags;
+         |                ^~~~~
+   mm/page_alloc.c: At top level:
+   mm/page_alloc.c:3854:15: warning: no previous prototype for 'should_fail_alloc_page' [-Wmissing-prototypes]
+    3854 | noinline bool should_fail_alloc_page(gfp_t gfp_mask, unsigned int order)
+         |               ^~~~~~~~~~~~~~~~~~~~~~
+   mm/page_alloc.c: In function '__alloc_pages_bulk':
+   mm/page_alloc.c:5245:16: warning: variable 'flags' set but not used [-Wunused-but-set-variable]
+    5245 |  unsigned long flags;
+         |                ^~~~~
+
+
+vim +/flags +3079 mm/page_alloc.c
+
+4ae7c03943fca7 Christoph Lameter 2005-06-21  3073  
+9f8f2172537de7 Christoph Lameter 2008-02-04  3074  /*
+93481ff0e5a0c7 Vlastimil Babka   2014-12-10  3075   * Drain pcplists of the indicated processor and zone.
+9f8f2172537de7 Christoph Lameter 2008-02-04  3076   */
+93481ff0e5a0c7 Vlastimil Babka   2014-12-10  3077  static void drain_pages_zone(unsigned int cpu, struct zone *zone)
+^1da177e4c3f41 Linus Torvalds    2005-04-16  3078  {
+c54ad30c784b84 Nicholas Piggin   2006-01-06 @3079  	unsigned long flags;
+3dfa5721f12c3d Christoph Lameter 2008-02-04  3080  	struct per_cpu_pages *pcp;
+^1da177e4c3f41 Linus Torvalds    2005-04-16  3081  
+df8f36ca2610d8 Mel Gorman        2022-02-22  3082  	pcp_local_lock(&pagesets.lock, flags);
+^1da177e4c3f41 Linus Torvalds    2005-04-16  3083  
+28f836b6777b6f Mel Gorman        2021-06-28  3084  	pcp = per_cpu_ptr(zone->per_cpu_pageset, cpu);
+d8d59b4758bcd1 Mel Gorman        2022-02-21  3085  	if (pcp->count) {
+d8d59b4758bcd1 Mel Gorman        2022-02-21  3086  		spin_lock(&pcp->lock);
+c3d92154d2034c Mel Gorman        2022-02-11  3087  		free_pcppages_bulk(zone, pcp->count, pcp, 0);
+d8d59b4758bcd1 Mel Gorman        2022-02-21  3088  		spin_unlock(&pcp->lock);
+d8d59b4758bcd1 Mel Gorman        2022-02-21  3089  	}
+28f836b6777b6f Mel Gorman        2021-06-28  3090  
+df8f36ca2610d8 Mel Gorman        2022-02-22  3091  	pcp_local_unlock(&pagesets.lock, flags);
+^1da177e4c3f41 Linus Torvalds    2005-04-16  3092  }
+93481ff0e5a0c7 Vlastimil Babka   2014-12-10  3093  
+
+:::::: The code at line 3079 was first introduced by commit
+:::::: c54ad30c784b84d0275152d0ca80985b21471811 [PATCH] mm: pagealloc opt
+
+:::::: TO: Nick Piggin <nickpiggin@yahoo.com.au>
+:::::: CC: Linus Torvalds <torvalds@g5.osdl.org>
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

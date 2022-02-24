@@ -2,144 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AB2D4C2946
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 11:25:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 810594C29AB
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 11:38:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233395AbiBXKZE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 05:25:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33482 "EHLO
+        id S233513AbiBXKhM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 05:37:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233356AbiBXKZB (ORCPT
+        with ESMTP id S231714AbiBXKhK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 05:25:01 -0500
-Received: from re-prd-fep-044.btinternet.com (mailomta28-re.btinternet.com [213.120.69.121])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BA0028B61E;
-        Thu, 24 Feb 2022 02:24:31 -0800 (PST)
-Received: from re-prd-rgout-001.btmx-prd.synchronoss.net ([10.2.54.4])
-          by re-prd-fep-044.btinternet.com with ESMTP
-          id <20220224102429.DPND28912.re-prd-fep-044.btinternet.com@re-prd-rgout-001.btmx-prd.synchronoss.net>;
-          Thu, 24 Feb 2022 10:24:29 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=btinternet.com; s=btmx201904; t=1645698269; 
-        bh=/sWckLMjg0ydzalpLHN/ixGkCu+XOlE1ayvL2CxaNS4=;
-        h=From:To:Cc:Subject:Date:Message-Id:X-Mailer:MIME-Version;
-        b=sEAfxWBRnPoOgiKvmtWugrHpS2MTT2t1wPWyWOtENolESSPFznKsIj15iwrmQcI4Kt9Iw74UvQHQAEDNnzsCcHuw9XSvHxGsc/8qgevY/u5UcCze6N2f8HYWgbbpgY76aP+G4wZvQT40hGAgFFzq55Ef67Et4/tTFu8c0xGcZ0+fIU3i13CKUhEI5LHHCZ+ZmHLBy0iFqQOyd4Tjry5NhnWiIUlhQRTuCXKNzs4T++Y5FgN7Oewh9Dg0ZHPlde8/JnzbHwW+nxxfwZ0gkw/wdpUh2oMTTxnzRngKSvk11enzGfbfhfz4MG61i0G8iIdod7dr8+4msHkAJfxc/h2nfg==
-Authentication-Results: btinternet.com;
-    auth=pass (PLAIN) smtp.auth=richard_c_haines@btinternet.com;
-    bimi=skipped
-X-SNCR-Rigid: 613A8CC3160038FB
-X-Originating-IP: [109.158.127.121]
-X-OWM-Source-IP: 109.158.127.121 (GB)
-X-OWM-Env-Sender: richard_c_haines@btinternet.com
-X-VadeSecure-score: verdict=clean score=0/300, class=clean
-X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgedvvddrledvgddugecutefuodetggdotefrodftvfcurfhrohhfihhlvgemuceutffkvffkuffjvffgnffgvefqofdpqfgfvfenuceurghilhhouhhtmecufedtudenucenucfjughrpefhvffufffkofgggfestdekredtredttdenucfhrhhomheptfhitghhrghrugcujfgrihhnvghsuceorhhitghhrghruggptggphhgrihhnvghssegsthhinhhtvghrnhgvthdrtghomheqnecuggftrfgrthhtvghrnheptdefleejjeejtdeiieevhfelkeelgefgleefveevteegffffudelhfevudeltdfgnecuffhomhgrihhnpegthhgvtghkrdhsvggtuhhrihhthienucfkphepuddtledrudehkedruddvjedruddvudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhephhgvlhhopehlohgtrghlhhhoshhtrdhlohgtrghlughomhgrihhnpdhinhgvthepuddtledrudehkedruddvjedruddvuddpmhgrihhlfhhrohhmpehrihgthhgrrhgupggtpghhrghinhgvshessghtihhnthgvrhhnvghtrdgtohhmpdhnsggprhgtphhtthhopeelpdhrtghpthhtohepuggvmhhiohgsvghnohhurhesghhmrghilhdrtghomhdprhgtphhtthhopegvphgrrhhishesphgrrhhishhplhgrtggvrdhorhhgpdhrtghpthhtohepjhgvfhhfvhesghhoohhglhgvrdgtohhmpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthht
-        ohepphgruhhlsehprghulhdqmhhoohhrvgdrtghomhdprhgtphhtthhopehrihgthhgrrhgupggtpghhrghinhgvshessghtihhnthgvrhhnvghtrdgtohhmpdhrtghpthhtohepshgvlhhinhhugidqrhgvfhhpohhlihgthiesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehsvghlihhnuhigsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepshhtvghphhgvnhdrshhmrghllhgvhidrfihorhhksehgmhgrihhlrdgtohhm
-X-RazorGate-Vade-Verdict: clean 0
-X-RazorGate-Vade-Classification: clean
-X-SNCR-hdrdom: btinternet.com
-Received: from localhost.localdomain (109.158.127.121) by re-prd-rgout-001.btmx-prd.synchronoss.net (5.8.716.04) (authenticated as richard_c_haines@btinternet.com)
-        id 613A8CC3160038FB; Thu, 24 Feb 2022 10:24:29 +0000
-From:   Richard Haines <richard_c_haines@btinternet.com>
-To:     paul@paul-moore.com, stephen.smalley.work@gmail.com,
-        eparis@parisplace.org, demiobenour@gmail.com
-Cc:     selinux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        selinux-refpolicy@vger.kernel.org, jeffv@google.com,
-        Richard Haines <richard_c_haines@btinternet.com>
-Subject: [PATCH V3] security/selinux: Always allow FIOCLEX and FIONCLEX
-Date:   Thu, 24 Feb 2022 10:24:17 +0000
-Message-Id: <20220224102417.42268-1-richard_c_haines@btinternet.com>
-X-Mailer: git-send-email 2.35.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 24 Feb 2022 05:37:10 -0500
+Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14F4733E96
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 02:36:37 -0800 (PST)
+Received: from epcas5p2.samsung.com (unknown [182.195.41.40])
+        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20220224103631epoutp042a95f8a4a99f55737490347ab3a38bb4~WsoOGXlgX0341003410epoutp04W
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 10:36:31 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20220224103631epoutp042a95f8a4a99f55737490347ab3a38bb4~WsoOGXlgX0341003410epoutp04W
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1645698991;
+        bh=TrZS5Sc3kEWVfqvt+x2vV2GRttmuUfucMUFHzxpFFo4=;
+        h=Date:Subject:Reply-To:From:To:CC:In-Reply-To:References:From;
+        b=H89DwBRcFTgLM33Axshnse2swztjOgLMUAwH8XHXXrhlr9QnB4bFTu5NyWLc2FGZ6
+         BB9bPjPe30r2Ma2svQPjgnFmZXBf5MBG488Twk8Q4JnZEt23LCvvE6Gulo4kImEC65
+         msH1Qi0532mYR+seLd8F5DZGToEzyvpqLAxyAM9w=
+Received: from epsmges5p2new.samsung.com (unknown [182.195.42.74]) by
+        epcas5p3.samsung.com (KnoxPortal) with ESMTP id
+        20220224103631epcas5p37b8d245b6393bbde7ea2d9119a432737~WsoN0qqHF0549105491epcas5p3H;
+        Thu, 24 Feb 2022 10:36:31 +0000 (GMT)
+X-AuditID: b6c32a4a-dfbff7000000b6e6-e4-62175ee8797e
+Received: from epcas5p1.samsung.com ( [182.195.41.39]) by
+        epsmges5p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        3F.93.46822.8EE57126; Thu, 24 Feb 2022 19:33:12 +0900 (KST)
+Date:   Thu, 24 Feb 2022 15:55:44 +0530
+Message-ID: <1601902218.1030861.1645698344460@mail-kr5-1>
+Mime-Version: 1.0
+Subject: RE: [PATCH 1/1] android-recommended.config: change
+ BACKLIGHT_LCD_SUPPORT to LCD_CLASS_DEVICE
+Reply-To: maninder1.s@samsung.com
+Sender: Maninder Singh <maninder1.s@samsung.com>
+From:   Maninder Singh <maninder1.s@samsung.com>
+To:     Onkarnath <onkarnath.1@samsung.com>,
+        "robh@kernel.org" <robh@kernel.org>,
+        "shc_work@mail.ru" <shc_work@mail.ru>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Vaneet Narang <v.narang@samsung.com>,
+        "maennich@google.com" <maennich@google.com>
+X-Priority: 3
+X-Content-Kind-Code: NORMAL
+In-Reply-To: <20220211093444.661285-1-onkarnath.1@samsung.com>
+X-Drm-Type: N,general
+X-Msg-Generator: Mail
+X-Msg-Type: PERSONAL
+X-Reply-Demand: N
+X-CMS-MailID: 20220224102544epcms5p548fa94cdf86b8105a5a66055437bc82e
+Content-Type: multipart/mixed;
+        boundary="----=_Part_1030860_60501293.1645698344459"
+X-Sendblock-Type: REQ_APPROVE
+CMS-TYPE: 105P
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrCKsWRmVeSWpSXmKPExsWy7bCmuu6LOPEkg1OH+S2aF69ns7i8aw6b
+        xbe9b9gtVvR8YLX4v2cHu8WkHVIWh07OZXRg91iwqdRj06pONo/9c9ewe0yZe4TVo2/LKkaP
+        z5vkAtiiuGxSUnMyy1KL9O0SuDJWTnzDWnBKumLB+qmsDYxHJbsYOTkkBEwk+v4dYe1i5OIQ
+        EtjNKLH733V2kASLgKrE7TOrmUFsXgFLifmr/gPFOYBsQYm/O4RBTGGBdInpi8NAKoQEFCUu
+        zFjDCBE2kPi1VQMkzCagJ7Fq1x4WkOkiApsYJd587WEBSTALTGOU2Lg0HeIEXokZ7U9ZIGxp
+        ie3LtzKC2JwCdhKntv1lhIiLStxc/ZYdxn5/bD5UXESi9d5ZZghbUOLBz91QcRmJ1Zt7wRZL
+        CHQzSqx/txfKmcEo0fNoGlSHucT6JaugprpInN69mA3iulCJhUefsELEZSWmnlrHBBHnk+j9
+        /YQJ5uod82BsVYmWmxtYYT74/PEj1DceEqtOToEGbiujxO23/1kmMMrPQoTjLCTrIGx5ie1v
+        5zCDlDALaEqs36UPEVaTmNL/hQ3CNpNoaJ/KAmErSkzpfsi+gJF9FaNkakFxbnpqsWmBUV5q
+        uV5xYm5xaV66XnJ+7iZGcOLS8trB+PDBB71DjEwcjIcYVYDaH21YfYFRiiUvPy9VSYTXtFAs
+        SYg3JbGyKrUoP76oNCe1+BCjNAeLkjjv6fQNiUIC6YklqdmpqQWpRTBZJg5OqQam+iiRBxq7
+        d9961bAgQFJ52slfdY/Onz42q33vkkLTIvt9KxOldNhYF52eejPyygXp0Ovxl/7fZ7aVcEpi
+        faOkbld2Nef9gY+aTdvzWSK0jP7/un8tzvL+nDWxe5eJaqolrV4w5W+t1l6nAyqmm6XNnG67
+        zg9jXLP5S9Dd9Vuzns5sPl7n01R9/MvOzDf89d6PeH7KWm3t2JE1/+e73RJ2Z2ODj+Zp7nh5
+        cpOBidTzg4pHf923fhHf+C1xDa/Zv+P8tfffBbtPur4g5bjFXemXzXcqhPdM+ZgdwlW++2yp
+        6NMFJjsaUtY7lYssnvap+cxMr5pEmfDenGVnlPxzaqoviF/R2fkiftkH6ayfP85XrFViKc5I
+        NNRiLipOBADiNB8b1wMAAA==
+X-CMS-RootMailID: 20220211093501epcas5p236bca7c55627ef90c7518a34acf6e996
+References: <20220211093444.661285-1-onkarnath.1@samsung.com>
+        <CGME20220211093501epcas5p236bca7c55627ef90c7518a34acf6e996@epcms5p5>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-These ioctls are equivalent to fcntl(fd, F_SETFD, flags), which SELinux
-always allows too.  Furthermore, a failed FIOCLEX could result in a file
-descriptor being leaked to a process that should not have access to it.
+------=_Part_1030860_60501293.1645698344459
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
 
-As this patch removes access controls, a policy capability needs to be
-enabled in policy to always allow these ioctls.
+[ping]
 
-Based-on-patch-by: Demi Marie Obenour <demiobenour@gmail.com>
-Signed-off-by: Richard Haines <richard_c_haines@btinternet.com>
----
-V2 Change: Control via a policy capability.
-V3 Change: Update switch check.
-
- security/selinux/hooks.c                   | 6 ++++++
- security/selinux/include/policycap.h       | 1 +
- security/selinux/include/policycap_names.h | 3 ++-
- security/selinux/include/security.h        | 7 +++++++
- 4 files changed, 16 insertions(+), 1 deletion(-)
-
-diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
-index 5b6895e4f..d369c2d82 100644
---- a/security/selinux/hooks.c
-+++ b/security/selinux/hooks.c
-@@ -3745,6 +3745,12 @@ static int selinux_file_ioctl(struct file *file, unsigned int cmd,
- 					    CAP_OPT_NONE, true);
- 		break;
+> with commit '8c5dc8d9f19c ("video: backlight: Remove useless
+> BACKLIGHT_LCD_SUPPORT kernel symbol")'code of BACKLIGHT_LCD_SUPPORT
+> is removed from kernel, and control shifted to LCD_CLASS_DEVICE only
+> thus updating android recommended config also.
+>  
+> Signed-off-by: Onkarnath <onkarnath.1@samsung.com>
+> ---
+>  kernel/configs/android-recommended.config | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>  
+> diff --git a/kernel/configs/android-recommended.config b/kernel/configs/android-recommended.config
+> index eb0029c9a6a6..0869095ff345 100644
+> --- a/kernel/configs/android-recommended.config
+> +++ b/kernel/configs/android-recommended.config
+> @@ -7,7 +7,6 @@
+>  # CONFIG_PM_WAKELOCKS_GC is not set
+>  # CONFIG_VT is not set
+>  CONFIG_ARM64_SW_TTBR0_PAN=y
+> -CONFIG_BACKLIGHT_LCD_SUPPORT=y
+>  CONFIG_BLK_DEV_DM=y
+>  CONFIG_BLK_DEV_LOOP=y
+>  CONFIG_BLK_DEV_RAM=y
+> @@ -86,6 +85,7 @@ CONFIG_JOYSTICK_XPAD_FF=y
+>  CONFIG_JOYSTICK_XPAD_LEDS=y
+>  CONFIG_KALLSYMS_ALL=y
+>  CONFIG_KSM=y
+> +CONFIG_LCD_CLASS_DEVICE=y
+>  CONFIG_LOGIG940_FF=y
+>  CONFIG_LOGIRUMBLEPAD2_FF=y
+>  CONFIG_LOGITECH_FF=y
+> -- 
+> 2.17.1
  
-+	case FIOCLEX:
-+	case FIONCLEX:
-+		if (!selinux_policycap_ioctl_skip_cloexec())
-+			error = ioctl_has_perm(cred, file, FILE__IOCTL, (u16) cmd);
-+		break;
-+
- 	/* default case assumes that the command will go
- 	 * to the file's ioctl() function.
- 	 */
-diff --git a/security/selinux/include/policycap.h b/security/selinux/include/policycap.h
-index 2ec038efb..44d73dc32 100644
---- a/security/selinux/include/policycap.h
-+++ b/security/selinux/include/policycap.h
-@@ -11,6 +11,7 @@ enum {
- 	POLICYDB_CAPABILITY_CGROUPSECLABEL,
- 	POLICYDB_CAPABILITY_NNP_NOSUID_TRANSITION,
- 	POLICYDB_CAPABILITY_GENFS_SECLABEL_SYMLINKS,
-+	POLICYDB_CAPABILITY_IOCTL_CLOEXEC,
- 	__POLICYDB_CAPABILITY_MAX
- };
- #define POLICYDB_CAPABILITY_MAX (__POLICYDB_CAPABILITY_MAX - 1)
-diff --git a/security/selinux/include/policycap_names.h b/security/selinux/include/policycap_names.h
-index b89289f09..ebd64afe1 100644
---- a/security/selinux/include/policycap_names.h
-+++ b/security/selinux/include/policycap_names.h
-@@ -12,7 +12,8 @@ const char *selinux_policycap_names[__POLICYDB_CAPABILITY_MAX] = {
- 	"always_check_network",
- 	"cgroup_seclabel",
- 	"nnp_nosuid_transition",
--	"genfs_seclabel_symlinks"
-+	"genfs_seclabel_symlinks",
-+	"ioctl_skip_cloexec"
- };
  
- #endif /* _SELINUX_POLICYCAP_NAMES_H_ */
-diff --git a/security/selinux/include/security.h b/security/selinux/include/security.h
-index ac0ece013..8a789c22b 100644
---- a/security/selinux/include/security.h
-+++ b/security/selinux/include/security.h
-@@ -219,6 +219,13 @@ static inline bool selinux_policycap_genfs_seclabel_symlinks(void)
- 	return READ_ONCE(state->policycap[POLICYDB_CAPABILITY_GENFS_SECLABEL_SYMLINKS]);
- }
- 
-+static inline bool selinux_policycap_ioctl_skip_cloexec(void)
-+{
-+	struct selinux_state *state = &selinux_state;
-+
-+	return READ_ONCE(state->policycap[POLICYDB_CAPABILITY_IOCTL_CLOEXEC]);
-+}
-+
- struct selinux_policy_convert_data;
- 
- struct selinux_load_state {
--- 
-2.35.1
+------=_Part_1030860_60501293.1645698344459
+Content-Type: application/octet-stream
+Content-Disposition: attachment; filename="rcptInfo.txt"
+Content-Transfer-Encoding: base64
 
+DQogICA9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT0NCiAgICAgIFN1YmplY3QgICAgOiBbUEFUQ0ggMS8xXSBhbmRy
+b2lkLXJlY29tbWVuZGVkLmNvbmZpZzogY2hhbmdlIEJBQ0tMSUdIVF9MQ0RfU1VQUE9SVCB0byBM
+Q0RfQ0xBU1NfREVWSUNFDQogICAgICBGcm9tICAgICAgIDogT25rYXJuYXRoIEVuZ2luZWVyL1N5
+c3RlbSBTL1cgR3JvdXAgL1NSSS1EZWxoaS9TYW1zdW5nIEVsZWN0cm9uaWNzDQogICAgICBTZW50
+IERhdGUgIDogMjAyMi0wMi0xMSAxNTowNiAgR01UKzU6MzANCiAgID09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQ0K
+ICAgICAgICAgICAgICAgICAgTmFtZSAgICAgICAgICAgICAgICBUeXBlICAgICAgICAgIEpvYiBU
+aXRsZSAgICAgICAgICAgICAgICAgICAgICAgRGVwdC4gICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgQ29tcGFueSAgICAgICAgICAgICAgICANCiAgID09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQ0KICAgICAg
+cm9iaEBrZXJuZWwub3JnICAgICAgICAgICAgICAgIFRPDQogICAgICBsaW51eC1rZXJuZWxAdmdl
+ci5rZXJuZWwub3JnICAgQ0MNCiAgICAgIE1hbmluZGVyIFNpbmdoICAgICAgICAgICAgICAgICBD
+QyAgICAgICAgIFN0YWZmIEVuZ2luZWVyICAgICAgICAgICAgIFN5c3RlbSBTL1cgR3JvdXAgL1NS
+SS1EZWxoaSAgICAgICAgICAgICAgIFNhbXN1bmfCoEVsZWN0cm9uaWNzwqANCiAgICAgIFZhbmVl
+dCBOYXJhbmcgICAgICAgICAgICAgICAgICBDQyAgICAgICAgIEFzc29jaWF0ZSBBcmNoaXRlY3Qg
+ICAgICAgIFN5c3RlbSBTL1cgR3JvdXAgL1NSSS1EZWxoaSAgICAgICAgICAgICAgIFNhbXN1bmcg
+RWxlY3Ryb25pY3MNCiAgICAgIG1hZW5uaWNoQGdvb2dsZS5jb20gICAgICAgICAgICBDQw0KICAg
+ICAgT25rYXJuYXRoICAgICAgICAgICAgICAgICAgICAgIENDICAgICAgICAgRW5naW5lZXIgICAg
+ICAgICAgICAgICAgICAgU3lzdGVtIFMvVyBHcm91cCAvU1JJLURlbGhpICAgICAgICAgICAgICAg
+U2Ftc3VuZyBFbGVjdHJvbmljcw0KICAgPT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09DQo=
+
+------=_Part_1030860_60501293.1645698344459--

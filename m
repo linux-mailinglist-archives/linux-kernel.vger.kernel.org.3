@@ -2,179 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6B6C4C20D3
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 01:50:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F94F4C20CC
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 01:49:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229508AbiBXAu0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 23 Feb 2022 19:50:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59372 "EHLO
+        id S229865AbiBXAtl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 23 Feb 2022 19:49:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229984AbiBXAuX (ORCPT
+        with ESMTP id S229852AbiBXAtk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 23 Feb 2022 19:50:23 -0500
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37058F210E;
-        Wed, 23 Feb 2022 16:49:44 -0800 (PST)
-Received: by mail-ej1-x636.google.com with SMTP id vz16so1055619ejb.0;
-        Wed, 23 Feb 2022 16:49:44 -0800 (PST)
+        Wed, 23 Feb 2022 19:49:40 -0500
+Received: from mail-oo1-xc30.google.com (mail-oo1-xc30.google.com [IPv6:2607:f8b0:4864:20::c30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2584010E073
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 16:49:03 -0800 (PST)
+Received: by mail-oo1-xc30.google.com with SMTP id j7-20020a4ad6c7000000b0031c690e4123so1128119oot.11
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 16:49:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=i55z3pOW9V6Bu0WaroA/XOCY0+AorvQDiheA/c25Gxg=;
-        b=lrreJxet9kc+GEpo9F4jktMaOeiwvvyc45FRfBb6zIssQ3F1Vj2LsRMKKQe8swMOEa
-         GVYUey1uv+8KueY6TfbLzKto9r5KJNeMuhquzFjFwf/a9fmHcHfm4NMRHiPY9lhs/vIT
-         85sp2CHhRl7GpPdG1M1NQhETMlkQT8kRjmp2BcvEl8yk8J3kOf2xroi+PL1XStKlay60
-         Yo6gqYw7aS2arvLnPWMMXpg0FqhEv/QPX+R+03cKQW5+JnW4qE3m9T4YUmV+4QQfo+0N
-         rAioGSEt1UHy85mdTRZ2Zconj4Cm6B9qkn58o5NZrUeFER6rsyL7ohGFR2HdTcBAGshp
-         sjbg==
+        h=mime-version:from:date:message-id:subject:to;
+        bh=9oUhhe9WhBbu4JoH4Pz+I0OHBn3Qr9dI0a7PR0a2whk=;
+        b=GHkiLuN+7SFVKNZQgtg/MjpNFOROGin7DIiHPUSfJbl3y1+N0Ed4YUgs7gUwnAxspS
+         rpgWs5axgemlKIIuUEaT9dVw8YH9ilVCNoNlb8Fg2WeqsMmZOc/zpGsMO82WsiPJfDWT
+         asTB7fJ9JvU3s+f/BzM7VvbjQJacQuOFILF7iVBcu6fVD8Mpv2JinZjBduTp57k7d3xD
+         1yJsZpIJROtG8vZvUFcFeBpOd7/52qvFEvU06MaeIfn8ewVFPpkEyQTHE/mr7aBfj8LK
+         pZy/0Q7EbBoZv7ZUKEPabP3lnoGvb8DnhMBsrF87frOhVPbiZXIQAIwwVrUjHjC+OH59
+         H3LA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=i55z3pOW9V6Bu0WaroA/XOCY0+AorvQDiheA/c25Gxg=;
-        b=lQyedV9+HC707kPQZU0iws8dMZ3tZLA3XyPILJBosGX9pdT0SBZq0OvhWKQj0V5F3T
-         OX+m8wPQvH0Bu7DSLeRMUhWmr3+D7crwXV8NKIOlQmLfKMSklYRL8kV1SJ2juzM5jadl
-         7DTZQOrZLqZDZt4b/kavCiZJRG4sTglEYJhU51EnV9lvfb41cW2K4OENRO4rPuMzv0L3
-         XG39yx0p//hj9kkMzB8Rx7wEWSgYv/03Y8iH490sHa9dPSCh+ZGWRqsYLcz+m3UAMOUV
-         CFu2QxCGSik4ihtIUOAxNJEH1VMGQvbo+b9wRgX0QxvGfTod3g40tbZLmCJhMxb0bzYO
-         C3Cw==
-X-Gm-Message-State: AOAM532FOU5Gm033BbL0xKXGS8dIcIK8HcVmob47J6/kvnWpjIzg/R0g
-        b2Pg2kbKgbn74S5XoejHu0z3cCA+n66g3ATCDUc=
-X-Google-Smtp-Source: ABdhPJx8zlivLeViTos7obPP26bYJDrPc9PrrP6klqoVBCJQlD3yP1us5OvN7wxyECzQTn7vQiLszYVvSBST9YGeppU=
-X-Received: by 2002:a17:906:5950:b0:6b3:65b7:82d3 with SMTP id
- g16-20020a170906595000b006b365b782d3mr225501ejr.636.1645663677923; Wed, 23
- Feb 2022 16:47:57 -0800 (PST)
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=9oUhhe9WhBbu4JoH4Pz+I0OHBn3Qr9dI0a7PR0a2whk=;
+        b=hwswuXEGEMQ372SEQipb9jDYA7aaRKEsvdruYKt7XJ7KDjoA65q+q/cF3huKiuWAGx
+         8iOtvyT+kvbtuD6KyWUhZghd7wtEmBxRXPHajkO8i7aadT7H0tjDPZF2bGD7MFRQRa4K
+         PT9LIDwxe3G4DPwEI+cglz1nrAy6hEOm9qDErkqFQvNe8Sr5hYLTfL66gEU7uK7HfoWb
+         J7R9gf1HjtwI0d0b+yIb32AzKHGSOFhoQqdAr/yT9r8XAg5JZ2Qj6GAFbeSPCgHNpcZ5
+         qItq/dyE0xmbXcRDzrJOzTeCpfHsPPCjnXMu1I+se62mrO6U8pCWcTvGZE8L+adaVda3
+         IbcQ==
+X-Gm-Message-State: AOAM533hTWrQf5FO8TzNW2mAXgue+USmPyfJVieMcPzz/2fcHgLNCLc1
+        Tr5eETynhqAaQFAUN3xFvVtiZQVObezWhlstN8M=
+X-Google-Smtp-Source: ABdhPJweayhREGKrc8UPAkRCHe6p2GcLq7d9dRkdh4uKizv8jJc+eLR1auaUDp37BRyMuR3beawvxpRThL9S/6fDDeY=
+X-Received: by 2002:a05:6870:3124:b0:d6:cbac:6900 with SMTP id
+ v36-20020a056870312400b000d6cbac6900mr53620oaa.24.1645663629805; Wed, 23 Feb
+ 2022 16:47:09 -0800 (PST)
 MIME-Version: 1.0
-References: <20220223163525.13399-1-jagathjog1996@gmail.com> <20220223163525.13399-6-jagathjog1996@gmail.com>
-In-Reply-To: <20220223163525.13399-6-jagathjog1996@gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Thu, 24 Feb 2022 02:46:34 +0200
-Message-ID: <CAHp75VcKvXi6oUm2Ysx_F+Myu6Dy9-Vxp9MwTcrT5si0Fe6c7w@mail.gmail.com>
-Subject: Re: [PATCH v5 5/7] iio: potentiometer: Add device specific read_raw function
-To:     Jagath Jog J <jagathjog1996@gmail.com>
-Cc:     Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Slawomir Stepien <sst@poczta.fm>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Received: by 2002:a05:6838:7c48:0:0:0:0 with HTTP; Wed, 23 Feb 2022 16:47:09
+ -0800 (PST)
+From:   Miss Reacheal <yaovialokpe@gmail.com>
+Date:   Thu, 24 Feb 2022 00:47:09 +0000
+Message-ID: <CAHEe1Kp53BehTWMNQASxJG5vKhz_zpdcQ5VF15X0pYkWUD3B_A@mail.gmail.com>
+Subject: =?UTF-8?B?UmU6INCX0LTRgNCw0LLQtdC50YLQtSDQvNC40LvQuCwg0LrQsNC6INGB0YLQtQ==?=
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-0.7 required=5.0 tests=BAYES_05,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_HK_NAME_FM_MR_MRS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 23, 2022 at 6:35 PM Jagath Jog J <jagathjog1996@gmail.com> wrote:
->
-> Added function pointer in the device specific structure to
-> call the appropriate device read_raw function, so that the
-> other type of devices with different read method can be
-> handled.
->
-> Signed-off-by: Jagath Jog J <jagathjog1996@gmail.com>
-> ---
->  drivers/iio/potentiometer/ds1803.c | 28 ++++++++++++++++++++++------
->  1 file changed, 22 insertions(+), 6 deletions(-)
->
-> diff --git a/drivers/iio/potentiometer/ds1803.c b/drivers/iio/potentiometer/ds1803.c
-> index aeb74ee46fbc..878188351f8f 100644
-> --- a/drivers/iio/potentiometer/ds1803.c
-> +++ b/drivers/iio/potentiometer/ds1803.c
-> @@ -32,6 +32,8 @@ struct ds1803_cfg {
->         int kohms;
->         const struct iio_chan_spec *channels;
->         u8 num_channels;
-> +       int (*read)(struct iio_dev *indio_dev,
-> +                   struct iio_chan_spec const *chan, int *val);
->  };
->
->  struct ds1803_data {
-> @@ -55,6 +57,22 @@ static const struct iio_chan_spec ds1803_channels[] = {
->         DS1803_CHANNEL(1, DS1803_WIPER_1),
->  };
->
-> +static int ds1803_read(struct iio_dev *indio_dev,
-> +                      struct iio_chan_spec const *chan,
-> +                      int *val)
-> +{
-> +       struct ds1803_data *data = iio_priv(indio_dev);
-> +       int ret;
-> +       u8 result[ARRAY_SIZE(ds1803_channels)];
-> +
-> +       ret = i2c_master_recv(data->client, result, indio_dev->num_channels);
-> +       if (ret < 0)
-> +               return ret;
-> +
-> +       *val = result[chan->channel];
-> +       return ret;
-> +}
-> +
->  static const struct ds1803_cfg ds1803_cfg[] = {
->         [DS1803_010] = {
->           .wipers = 2,
-> @@ -62,6 +80,7 @@ static const struct ds1803_cfg ds1803_cfg[] = {
->           .kohms =  10,
->           .channels = ds1803_channels,
->           .num_channels = ARRAY_SIZE(ds1803_channels),
-> +         .read = ds1803_read,
->         },
->         [DS1803_050] = {
->           .wipers = 2,
-> @@ -69,6 +88,7 @@ static const struct ds1803_cfg ds1803_cfg[] = {
->           .kohms =  50,
->           .channels = ds1803_channels,
->           .num_channels = ARRAY_SIZE(ds1803_channels),
-> +         .read = ds1803_read,
->         },
->         [DS1803_100] = {
->           .wipers = 2,
-> @@ -76,6 +96,7 @@ static const struct ds1803_cfg ds1803_cfg[] = {
->           .kohms = 100,
->           .channels = ds1803_channels,
->           .num_channels = ARRAY_SIZE(ds1803_channels),
-> +         .read = ds1803_read,
->         },
->  };
->
-> @@ -84,20 +105,15 @@ static int ds1803_read_raw(struct iio_dev *indio_dev,
->                            int *val, int *val2, long mask)
->  {
->         struct ds1803_data *data = iio_priv(indio_dev);
-> -       int pot = chan->channel;
->         int ret;
-> -       u8 result[ARRAY_SIZE(ds1803_channels)];
->
->         switch (mask) {
->         case IIO_CHAN_INFO_RAW:
-> -               ret = i2c_master_recv(data->client, result,
-> -                                     indio_dev->num_channels);
-> +               ret = data->cfg->read(indio_dev, chan, val);
->                 if (ret < 0)
->                         return ret;
->
-> -               *val = result[pot];
->                 return IIO_VAL_INT;
+Hello,
 
-> -
+You received my previous message? I contacted you before but the
+message failed back, so i decided to write again. Please confirm if
+you receive this so that i can proceed,
 
-Seems like a stray change. Up to Jonathan to decide what to do (no
-need for resend b/c of this).
+waiting  for your response.
 
->         case IIO_CHAN_INFO_SCALE:
->                 *val = 1000 * data->cfg->kohms;
->                 *val2 = data->cfg->avail[2]; /* Max wiper position */
-> --
-> 2.17.1
->
-
-
--- 
-With Best Regards,
-Andy Shevchenko
+Regards,
+Miss Reacheal

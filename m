@@ -2,105 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E57014C2F38
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 16:16:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CC0C4C2F3E
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 16:17:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234407AbiBXPQz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 10:16:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36274 "EHLO
+        id S235956AbiBXPSD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 10:18:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233983AbiBXPQw (ORCPT
+        with ESMTP id S235942AbiBXPRz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 10:16:52 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6B3219F453;
-        Thu, 24 Feb 2022 07:16:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645715782; x=1677251782;
-  h=message-id:date:mime-version:to:cc:references:from:
-   subject:in-reply-to:content-transfer-encoding;
-  bh=RW4pCIgqi9NThdKppRLVW4N+od2ProNeT8oLseDiw6c=;
-  b=dcUXEzF0SK1KoffxCaEhzr2HSCg5D0MdVpsnSyHXM3BMZnvTkNCMcOoG
-   6gaataId9DyW3Kn2RGuBSKBW0FLm5jxA25G0hCuoEDzvkK2uS3YS6PY+e
-   zVE3/HDZxcjYvFWWg4yWrCfEdSdIZ2EEc6yWrrv3EpHyITWt1NG76Xt/y
-   GO74hyJH6vA32IyAJUTbt+fvLPZ20OgwhQ1vk/esuRITCp2AuMD/POfY1
-   C6Hikddsld+k6/Zwp/wZ2nvexR1/R+5fR4ER70McgjkPXlxgB3RYDS81b
-   EBnmsFdxEy+QHIsY3Z47XemmZppIwwwhMMPbXpNFsY2QTNnH+ogbyIk1A
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10267"; a="232232334"
-X-IronPort-AV: E=Sophos;i="5.90,134,1643702400"; 
-   d="scan'208";a="232232334"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2022 07:16:22 -0800
-X-IronPort-AV: E=Sophos;i="5.90,134,1643702400"; 
-   d="scan'208";a="548785924"
-Received: from vpirogov-mobl.amr.corp.intel.com (HELO [10.252.137.68]) ([10.252.137.68])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2022 07:16:21 -0800
-Message-ID: <e495d70b-f138-367d-e1d7-67c77149db7a@intel.com>
-Date:   Thu, 24 Feb 2022 07:16:17 -0800
+        Thu, 24 Feb 2022 10:17:55 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACCF957179;
+        Thu, 24 Feb 2022 07:17:24 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 65086B82695;
+        Thu, 24 Feb 2022 15:17:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD497C340E9;
+        Thu, 24 Feb 2022 15:17:20 +0000 (UTC)
+Date:   Thu, 24 Feb 2022 10:17:19 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     Josh Poimboeuf <jpoimboe@redhat.com>,
+        Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Petr Mladek <pmladek@suse.com>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        "Naveen N . Rao" <naveen.n.rao@linux.vnet.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "live-patching@vger.kernel.org" <live-patching@vger.kernel.org>
+Subject: Re: [PATCH v2 02/13] tracing: Fix selftest config check for
+ function graph start up test
+Message-ID: <20220224101719.51eafc60@gandalf.local.home>
+In-Reply-To: <9e62f80a-86b1-05d7-d5b7-a209b2c4f106@csgroup.eu>
+References: <cover.1640017960.git.christophe.leroy@csgroup.eu>
+        <bdc7e594e13b0891c1d61bc8d56c94b1890eaed7.1640017960.git.christophe.leroy@csgroup.eu>
+        <74775d33-2e54-96ab-4546-57eb2c9e50e0@csgroup.eu>
+        <20220224095316.67729e2b@gandalf.local.home>
+        <9e62f80a-86b1-05d7-d5b7-a209b2c4f106@csgroup.eu>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Content-Language: en-US
-To:     Brian Geffon <bgeffon@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>
-Cc:     Willis Kung <williskung@google.com>,
-        Guenter Roeck <groeck@google.com>,
-        Borislav Petkov <bp@suse.de>,
-        Andy Lutomirski <luto@kernel.org>, stable@vger.kernel.org,
-        x86@kernel.org, linux-kernel@vger.kernel.org
-References: <543efc25-9b99-53cd-e305-d8b4d917b64b@intel.com>
- <20220215192233.8717-1-bgeffon@google.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-Subject: Re: [PATCH stable 5.4,5.10] x86/fpu: Correct pkru/xstate
- inconsistency
-In-Reply-To: <20220215192233.8717-1-bgeffon@google.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/15/22 11:22, Brian Geffon wrote:
-> When eagerly switching PKRU in switch_fpu_finish() it checks that
-> current is not a kernel thread as kernel threads will never use PKRU.
-> It's possible that this_cpu_read_stable() on current_task
-> (ie. get_current()) is returning an old cached value. To resolve this
-> reference next_p directly rather than relying on current.
-> 
-> As written it's possible when switching from a kernel thread to a
-> userspace thread to observe a cached PF_KTHREAD flag and never restore
-> the PKRU. And as a result this issue only occurs when switching
-> from a kernel thread to a userspace thread, switching from a non kernel
-> thread works perfectly fine because all that is considered in that
-> situation are the flags from some other non kernel task and the next fpu
-> is passed in to switch_fpu_finish().
-> 
-> This behavior only exists between 5.2 and 5.13 when it was fixed by a
-> rewrite decoupling PKRU from xstate, in:
->   commit 954436989cc5 ("x86/fpu: Remove PKRU handling from switch_fpu_finish()")
-> 
-> Unfortunately backporting the fix from 5.13 is probably not realistic as
-> it's part of a 60+ patch series which rewrites most of the PKRU handling.
-> 
-> Fixes: 0cecca9d03c9 ("x86/fpu: Eager switch PKRU state")
-> Signed-off-by: Brian Geffon <bgeffon@google.com>
-> Signed-off-by: Willis Kung <williskung@google.com>
-> Tested-by: Willis Kung <williskung@google.com>
-> Cc: <stable@vger.kernel.org> # v5.4.x
-> Cc: <stable@vger.kernel.org> # v5.10.x
+On Thu, 24 Feb 2022 15:13:12 +0000
+Christophe Leroy <christophe.leroy@csgroup.eu> wrote:
 
-I don't like forking the stable code from mainline.  But I also think
-that backporting the FPU reworking that changed the PKRU handling is
-likely to cause more bugs in stable than it fixes.
+> > But I'm working on a series to send to Linus. I can pick this patch up, as
+> > it touches just my code.
+> >   
+> 
+> That would be great, thanks.
 
-This fix is at least isolated to the protection keys code.
+It's in my queue and running through my tests, which take 7 to 13 hours to
+complete (depending on the changes).
 
-Acked-by: Dave Hansen <dave.hansen@linux.intel.com>
+-- Steve

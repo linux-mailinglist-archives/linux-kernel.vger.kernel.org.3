@@ -2,84 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5304B4C266D
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 09:42:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DFC514C266F
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 09:42:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232048AbiBXIm1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 03:42:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53286 "EHLO
+        id S231959AbiBXImr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 03:42:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231959AbiBXImV (ORCPT
+        with ESMTP id S232077AbiBXImo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 03:42:21 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A83FE38BF6
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 00:41:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1645692109;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
+        Thu, 24 Feb 2022 03:42:44 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 017A891363
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 00:42:13 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id AFB132114E;
+        Thu, 24 Feb 2022 08:42:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1645692132; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=7rzV6PMlfh0kMehM1//3l3REbruRJHskxAdx2VyLiJ4=;
-        b=FRFiFeT/I39O5GotJDfgaqBu6YBMmFk9hpuzWtAkAOB05I7g3k9JkCwEkDJaixTiX/9mzm
-        SHTNm0ow5U2THsT+ksQWEHmVmBAZqYG95kOggDW1xdznE88qdOJyXknTtTAXNYj6dB3cNd
-        bxWFEPkz2EGXyaZtINFczuv0yWElUKM=
-Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
- [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-302-v1-V_9COPluKWWqloP_w6w-1; Thu, 24 Feb 2022 03:41:48 -0500
-X-MC-Unique: v1-V_9COPluKWWqloP_w6w-1
-Received: by mail-ej1-f70.google.com with SMTP id ga31-20020a1709070c1f00b006cec400422fso865119ejc.22
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 00:41:48 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=7rzV6PMlfh0kMehM1//3l3REbruRJHskxAdx2VyLiJ4=;
-        b=aiMnBWJI8Haet5NwG8BSG30RB8+78RVF/CUIbdMSzkpBovvwqC8VMKeV3g9D+ako7V
-         EYKYrPVv9NyzPlVCsv1L+tTlM9oMewiizIFuh/rWK8oDN9X1Tb0hO/dJYFxg6WI+kQyC
-         ypf+syCv9UsWmuog1HtUjW2j158nUylTP0864hCH8KCebOKB71EQCwejqHx32Mr17R+6
-         YFqI96I7mXRDK6hJFPgZJxlY/M5MOYGxkJ4DGyN3y3t6uAYZKkHv+9BBTUDB9c9lm32N
-         kz4CxhMkpXU26UaYyz8JlRKdrz7CiHq6DD5meZPDSYTtIc1s6MsX0hVfQbc9/r9TWWCA
-         eAig==
-X-Gm-Message-State: AOAM5313p6wi2cq0z0OPWIrPBR34tXUX3PW+kPh3MeRMql9V0B3cwtcA
-        zzlg8u3zSiMfy6F/FBzyE66A+gIY0+IM6sCZ6En4DNRMuVRmIfh42FRUeLR/rWI0RpciQN1Caly
-        amFgcOvwrKo+VBj4dZup8TuN6
-X-Received: by 2002:a05:6402:2709:b0:413:1871:3bc7 with SMTP id y9-20020a056402270900b0041318713bc7mr1273936edd.71.1645692107309;
-        Thu, 24 Feb 2022 00:41:47 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJx2ZnEJ7WLgoVt692c1UYQI/8lrGcjAT66YxdAlZI5uwMqd9g0R+sHv+Ya1lMpUKZsLcmGnIA==
-X-Received: by 2002:a05:6402:2709:b0:413:1871:3bc7 with SMTP id y9-20020a056402270900b0041318713bc7mr1273924edd.71.1645692107101;
-        Thu, 24 Feb 2022 00:41:47 -0800 (PST)
-Received: from ?IPV6:2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1? (2001-1c00-0c1e-bf00-1db8-22d3-1bc9-8ca1.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1])
-        by smtp.gmail.com with ESMTPSA id j20sm934530edt.67.2022.02.24.00.41.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 24 Feb 2022 00:41:46 -0800 (PST)
-Message-ID: <303dc74a-4d63-70a2-9891-af3e3d8baf26@redhat.com>
-Date:   Thu, 24 Feb 2022 09:41:45 +0100
+        bh=T8xBfceNBe4Yzgfbg7B0K0osO5apIfPg7Z+FN0VzNuA=;
+        b=aiHMutdJS2iej3G/i7bAfS6bfOobP5V+v+6CCu0jO0F4TLtZ9FqA1hsGaodueamB5/vUQp
+        AreNOTfOYoxS1j5jcQkr/XfxfzSPD8PdRUkdoxX+5hk2T9zLWn+ni9Vov6um74jnmvPkQM
+        NxBJo/tzML0uxPnW9Mt+lXE4VGuLgFU=
+Received: from suse.cz (unknown [10.100.201.86])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 2AEA7A3B84;
+        Thu, 24 Feb 2022 08:42:08 +0000 (UTC)
+Date:   Thu, 24 Feb 2022 09:42:11 +0100
+From:   Michal Hocko <mhocko@suse.com>
+To:     Suren Baghdasaryan <surenb@google.com>
+Cc:     akpm@linux-foundation.org, ccross@google.com,
+        sumit.semwal@linaro.org, dave.hansen@intel.com,
+        keescook@chromium.org, willy@infradead.org,
+        kirill.shutemov@linux.intel.com, vbabka@suse.cz,
+        hannes@cmpxchg.org, ebiederm@xmission.com, brauner@kernel.org,
+        legion@kernel.org, ran.xiaokai@zte.com.cn, sashal@kernel.org,
+        chris.hyser@oracle.com, dave@stgolabs.net, pcc@google.com,
+        caoxiaofeng@yulong.com, david@redhat.com, gorcunov@gmail.com,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        kernel-team@android.com
+Subject: Re: [PATCH v2 2/3] mm: prevent vm_area_struct::anon_name refcount
+ saturation
+Message-ID: <YhdE4x3rpAqP2rjC@dhcp22.suse.cz>
+References: <20220223153613.835563-1-surenb@google.com>
+ <20220223153613.835563-2-surenb@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH] x86/acpi: Work around broken XSDT on SEGA AALE board
-Content-Language: en-US
-To:     Mark Cilissen <mark@yotsuba.nl>, linux-acpi@vger.kernel.org,
-        x86@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <len.brown@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>
-References: <20220223160708.88100-1-mark@yotsuba.nl>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20220223160708.88100-1-mark@yotsuba.nl>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220223153613.835563-2-surenb@google.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,90 +63,104 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mark,
+On Wed 23-02-22 07:36:12, Suren Baghdasaryan wrote:
+> A deep process chain with many vmas could grow really high.
+> With default sysctl_max_map_count (64k) and default pid_max (32k)
+> the max number of vmas in the system is 2147450880 and the
+> refcounter has headroom of 1073774592 before it reaches
+> REFCOUNT_SATURATED (3221225472). Therefore it's unlikely that
+> an anonymous name refcounter will overflow with these defaults.
+> Currently the max for pid_max is PID_MAX_LIMIT (4194304) and
+> for sysctl_max_map_count it's INT_MAX (2147483647). In this
+> configuration anon_vma_name refcount overflow becomes
+> theoretically possible (that still require heavy sharing of
+> that anon_vma_name between processes).
+> kref refcounting interface used in anon_vma_name structure will
+> detect a counter overflow when it reaches REFCOUNT_SATURATED value
+> but will only generate a warning about broken refcounter.
 
-On 2/23/22 17:07, Mark Cilissen wrote:
-> On this board the ACPI RSDP structure points to both a RSDT and an XSDT,
-> but the XSDT points to a truncated FADT. This causes all sorts of trouble
-> and usually a complete failure to boot after the following error occurs:
+If I am reading the refcounter code properly the "overflow" will simply
+make the ref counter frozen and the object will never be freed. A
+determined attacker could leak memory like that but it would be rather
+expensive and inefficient way to do so. Still good to have it covered.
+
+> To ensure anon_vma_name refcount does not overflow, stop anon_vma_name
+> sharing when the refcount reaches REFCOUNT_MAX (2147483647), which
+> still leaves INT_MAX/2 (1073741823) values before the counter reaches
+> REFCOUNT_SATURATED. This should provide enough headroom for raising
+> the refcounts temporarily.
+
+I am not sure this is the intended way refcounter users should avoid
+overflows but I do not see other interface that would be usable. Maybe
+somebody else can come up with a better suggestion but this approach
+makes sense to me.
 > 
->   ACPI Error: Unsupported address space: 0x20 (*/hwregs-*)
->   ACPI Error: AE_SUPPORT, Unable to initialize fixed events (*/evevent-*)
->   ACPI: Unable to start ACPI Interpreter
-> 
-> This leaves the ACPI implementation in such a broken state that subsequent
-> kernel subsystem initialisations go wrong, resulting in among others
-> mismapped PCI memory, SATA and USB enumeration failures, and freezes.
-> 
-> As this is an older embedded platform that will likely never see any BIOS
-> updates to address this issue and its default shipping OS only complies to
-> ACPI 1.0, work around this by forcing `acpi=rsdt`. This patch, applied on
-> top of Linux 5.10.102, was confirmed on real hardware to fix the issue.
-> 
-> Signed-off-by: Mark Cilissen <mark@yotsuba.nl>
-> Cc: stable@vger.kernel.org
+> Suggested-by: Michal Hocko <mhocko@suse.com>
+> Signed-off-by: Suren Baghdasaryan <surenb@google.com>
 
-Wow, you got it working, cool!
+Acked-by: Michal Hocko <mhocko@suse.com>
 
-The patch looks good to me:
-
-Reviewed-by: Hans de Goede <hdegoede@redhat.com>
-
-Regards,
-
-Hans
-
-
-
-
+Thanks!
 
 > ---
->  arch/x86/kernel/acpi/boot.c | 25 +++++++++++++++++++++++++
->  1 file changed, 25 insertions(+)
+> changes in v2:
+> - Updated description to include calculation details, per Michal Hocko
 > 
-> diff --git a/arch/x86/kernel/acpi/boot.c b/arch/x86/kernel/acpi/boot.c
-> index 5b6d1a95776f..7caf4da075cd 100644
-> --- a/arch/x86/kernel/acpi/boot.c
-> +++ b/arch/x86/kernel/acpi/boot.c
-> @@ -1328,6 +1328,17 @@ static int __init disable_acpi_pci(const struct dmi_system_id *d)
->  	return 0;
+>  include/linux/mm_inline.h | 18 ++++++++++++++----
+>  mm/madvise.c              |  3 +--
+>  2 files changed, 15 insertions(+), 6 deletions(-)
+> 
+> diff --git a/include/linux/mm_inline.h b/include/linux/mm_inline.h
+> index 4bad32507570..f82085ff8a6b 100644
+> --- a/include/linux/mm_inline.h
+> +++ b/include/linux/mm_inline.h
+> @@ -161,15 +161,25 @@ static inline void anon_vma_name_put(struct anon_vma_name *anon_name)
+>  		kref_put(&anon_name->kref, anon_vma_name_free);
 >  }
 >  
-> +static int __init disable_acpi_xsdt(const struct dmi_system_id *d)
+> +static inline
+> +struct anon_vma_name *anon_vma_name_reuse(struct anon_vma_name *anon_name)
 > +{
-> +	if (!acpi_force) {
-> +		pr_notice("%s detected: force use of acpi=rsdt\n", d->ident);
-> +		acpi_gbl_do_not_use_xsdt = TRUE;
-> +	} else {
-> +		pr_notice("Warning: DMI blacklist says broken, but acpi XSDT forced\n");
+> +	/* Prevent anon_name refcount saturation early on */
+> +	if (kref_read(&anon_name->kref) < REFCOUNT_MAX) {
+> +		anon_vma_name_get(anon_name);
+> +		return anon_name;
+> +
 > +	}
-> +	return 0;
+> +	return anon_vma_name_alloc(anon_name->name);
 > +}
 > +
->  static int __init dmi_disable_acpi(const struct dmi_system_id *d)
+>  static inline void dup_anon_vma_name(struct vm_area_struct *orig_vma,
+>  				     struct vm_area_struct *new_vma)
 >  {
->  	if (!acpi_force) {
-> @@ -1451,6 +1462,20 @@ static const struct dmi_system_id acpi_dmi_table[] __initconst = {
->  		     DMI_MATCH(DMI_PRODUCT_NAME, "TravelMate 360"),
->  		     },
->  	 },
-> +	/*
-> +	 * Boxes that need ACPI XSDT use disabled due to corrupted tables
-> +	 */
-> +	{
-> +	 .callback = disable_acpi_xsdt,
-> +	 .ident = "SEGA AALE",
-> +	 .matches = {
-> +		     DMI_MATCH(DMI_SYS_VENDOR, "NEC"),
-> +		     DMI_MATCH(DMI_PRODUCT_NAME, "Bearlake CRB Board"),
-> +		     DMI_MATCH(DMI_BIOS_VENDOR, "Phoenix Technologies LTD"),
-> +		     DMI_MATCH(DMI_BIOS_VERSION, "V1.12"),
-> +		     DMI_MATCH(DMI_BIOS_DATE, "02/01/2011"),
-> +		     },
-> +	},
->  	{}
->  };
+>  	struct anon_vma_name *anon_name = anon_vma_name(orig_vma);
 >  
-> 
-> base-commit: cfb92440ee71adcc2105b0890bb01ac3cddb8507
+> -	if (anon_name) {
+> -		anon_vma_name_get(anon_name);
+> -		new_vma->anon_name = anon_name;
+> -	}
+> +	if (anon_name)
+> +		new_vma->anon_name = anon_vma_name_reuse(anon_name);
+>  }
+>  
+>  static inline void free_anon_vma_name(struct vm_area_struct *vma)
+> diff --git a/mm/madvise.c b/mm/madvise.c
+> index 081b1cded21e..1f2693dccf7b 100644
+> --- a/mm/madvise.c
+> +++ b/mm/madvise.c
+> @@ -113,8 +113,7 @@ static int replace_anon_vma_name(struct vm_area_struct *vma,
+>  	if (anon_vma_name_eq(orig_name, anon_name))
+>  		return 0;
+>  
+> -	anon_vma_name_get(anon_name);
+> -	vma->anon_name = anon_name;
+> +	vma->anon_name = anon_vma_name_reuse(anon_name);
+>  	anon_vma_name_put(orig_name);
+>  
+>  	return 0;
+> -- 
+> 2.35.1.473.g83b2b277ed-goog
 
+-- 
+Michal Hocko
+SUSE Labs

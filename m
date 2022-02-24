@@ -2,64 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7865B4C37F0
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 22:41:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 951644C37F7
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 22:42:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235090AbiBXVlN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 16:41:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33710 "EHLO
+        id S233160AbiBXVmh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 16:42:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234971AbiBXVlH (ORCPT
+        with ESMTP id S230453AbiBXVme (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 16:41:07 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84D84186B96;
-        Thu, 24 Feb 2022 13:40:37 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2CD48B829BE;
-        Thu, 24 Feb 2022 21:40:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id C4425C340E9;
-        Thu, 24 Feb 2022 21:40:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645738834;
-        bh=mftOn5Nfik4TVPSmweW4i6KzvDszFFGtAI0VzO7wjZk=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=lUyi79UiHYvyk6vY55JuUWoCrKkkIw5fFT9LTZwcCHkh0FOQ4UqrbmLHB/Zz+mLYU
-         RRHmlp9S+gqD7m9vCcOgjxLaRV2S5VzxLk2wMr0Hc6FitYJKq6d5xrGy6EuOHWpSRc
-         ygKrrZOx/N1t88zemh3PthaeuyONoCWEZ0u9IAxRTBjgtlb8r0aj/ESlUMrzy9D8Je
-         LD8Rt/lUVhSl2zhlaZIcwTFIFzhm42w2ukQHd1yFxYPXMiMeUIWU5NdKK55XkMZDsA
-         3ZJPkMdCEeeK+ESk79je31PdQXSXunhN566BvJN0ouU9j5ojWCeLvJ5VpIeEwAnFpY
-         dk1O8NmXy9uug==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B0630E6D3DE;
-        Thu, 24 Feb 2022 21:40:34 +0000 (UTC)
-Subject: Re: [GIT PULL] PCI fixes for v5.17
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20220224195611.GA289605@bhelgaas>
-References: <20220224195611.GA289605@bhelgaas>
-X-PR-Tracked-List-Id: <linux-pci.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20220224195611.GA289605@bhelgaas>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/helgaas/pci.git tags/pci-v5.17-fixes-5
-X-PR-Tracked-Commit-Id: 3f1271b54edcc692da5a3663f2aa2a64781f9bc3
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: d8152cfe2f21d6930c680311b03b169899c8d2a0
-Message-Id: <164573883471.15008.15419625252124832547.pr-tracker-bot@kernel.org>
-Date:   Thu, 24 Feb 2022 21:40:34 +0000
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        Guchun Chen <guchun.chen@amd.com>,
-        Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
-        Jan Palus <jpalus@fastmail.com>, Marcel Menzel <mail@mcl.gg>,
-        linux-arm-kernel@lists.infradead.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        Thu, 24 Feb 2022 16:42:34 -0500
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFB469284C
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 13:42:02 -0800 (PST)
+Received: by mail-wm1-x335.google.com with SMTP id m13-20020a7bca4d000000b00380e379bae2so590334wml.3
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 13:42:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=95Kz0cwVSt+7Sf+leRu54DcFn27kGIFwxoRMYQn155s=;
+        b=TskHSrRSAClsNWy/osGrf9N8tZVPsIzNFG9FImu4CzS4z3KvxPS29pJPJLpn3U6DKR
+         0WenYNPjdQ10OhM7+V32+DzPQF0baUVU5I3KLmLHW4XQduOhPlUXNN5uUPm7Iw3NkwZa
+         rPRjXbAZLAKfeGSEN7JyE9WuuBFndwMTuGKMsYG3+SAXdIB2X7+KPvi3g4gfd/TOnWUp
+         tWFUg7NZxwDhLODrxmwJEU3yQAzEbAmt3u7SImKjOi7N2gQOrYkw/kycHthrFf3xvcZB
+         ca6p4icjbFsgaYp7HbIuecKR43Zk5CDKnIEvwMw6gc710P9i2/HrAEjfZ1wzy5K+9OcG
+         zlqQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=95Kz0cwVSt+7Sf+leRu54DcFn27kGIFwxoRMYQn155s=;
+        b=H10PT7YR2Q/MyxKuLgTFMBk9z7O90PSCtDg3MBm9PvOFG70IRVbos54dVDeJca99qg
+         q185WWgNPhaCMRIIMOHIbdL/fgEezgTe5RrHQ7nNfd3CF607J3jDYWX1xmodcsTw7hIf
+         hK6vR/KfTHH3Pra/PZ1JeFcWxhDg0r4Zsib/5GYmsfSjdhdRdYl77uEQTROswlwlZ3N4
+         9+7LAKNs4iT/kuWZd/D5DDPVs4oY2p6b5lZw30VzhX6CWEIpLRnGZNnFvZiDDcpHqs0v
+         4KSWr6YIWtEKo+Ey3h8Epq8kgoK63OyPEz+w+QYjHZ+/7vCJV0xQxPgWULA36nMf7Ryb
+         5f0w==
+X-Gm-Message-State: AOAM530usVyjUdqpJ7CJifesf6nk/+inwAMAh/mnF6SBWZhTuPM/g9V3
+        INEavaEgStrDKXNujbRbuJ+8Rg==
+X-Google-Smtp-Source: ABdhPJzsPdzdtG7H4jdgtnMyqQAl+jFoO1hKVjMQWOPd72cuoPkq+qQuiiZ2JyZtx/Fu0jNoO7q2sw==
+X-Received: by 2002:a7b:cc0d:0:b0:381:220e:a3a0 with SMTP id f13-20020a7bcc0d000000b00381220ea3a0mr54970wmh.59.1645738921363;
+        Thu, 24 Feb 2022 13:42:01 -0800 (PST)
+Received: from ?IPV6:2a01:e34:ed2f:f020:25a:d4d2:9383:c638? ([2a01:e34:ed2f:f020:25a:d4d2:9383:c638])
+        by smtp.googlemail.com with ESMTPSA id v20-20020a7bcb54000000b0037fa63db8aasm3786678wmj.5.2022.02.24.13.41.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 24 Feb 2022 13:42:00 -0800 (PST)
+Message-ID: <3a3320d1-c4a8-d5e0-63ef-dd098711f38e@linaro.org>
+Date:   Thu, 24 Feb 2022 22:41:58 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v1 0/4] Thermal library and tools
+Content-Language: en-US
+To:     rafael@kernel.org
+Cc:     srinivas.pandruvada@linux.intel.com, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org
+References: <20220218125334.995447-1-daniel.lezcano@linaro.org>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <20220218125334.995447-1-daniel.lezcano@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -68,15 +74,95 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Thu, 24 Feb 2022 13:56:11 -0600:
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/helgaas/pci.git tags/pci-v5.17-fixes-5
+Hi,
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/d8152cfe2f21d6930c680311b03b169899c8d2a0
+What shall I do with this series? Is everyone ok with it?
 
-Thank you!
+
+
+On 18/02/2022 13:53, Daniel Lezcano wrote:
+> This series provides a thermal library providing the basic callback oriented
+> netlink communication and events with the thermal framework, a temperature
+> capture tool and a thermal monitoring skeleton using the thermal library.
+> 
+> Changelog:
+>   - V1:
+>      - Took into account RFC comments (unsubscribe, error enum, thermal daemon
+>        renamed to thermal-engine)
+> 
+> Daniel Lezcano (4):
+>    tools/lib/thermal: Add a thermal library
+>    tools/thermal: Add util library
+>    tools/thermal: A temperature capture tool
+>    tools/thermal: Add thermal daemon skeleton
+> 
+>   tools/Makefile                                |  36 +-
+>   tools/lib/thermal/.gitignore                  |   2 +
+>   tools/lib/thermal/Build                       |   5 +
+>   tools/lib/thermal/Makefile                    | 165 ++++++++
+>   tools/lib/thermal/commands.c                  | 351 ++++++++++++++++
+>   tools/lib/thermal/events.c                    | 164 ++++++++
+>   tools/lib/thermal/include/thermal.h           | 141 +++++++
+>   tools/lib/thermal/libthermal.map              |  25 ++
+>   tools/lib/thermal/libthermal.pc.template      |  12 +
+>   tools/lib/thermal/sampling.c                  |  75 ++++
+>   tools/lib/thermal/thermal.c                   | 126 ++++++
+>   tools/lib/thermal/thermal_nl.c                | 215 ++++++++++
+>   tools/lib/thermal/thermal_nl.h                |  46 ++
+>   tools/thermal/lib/Build                       |   3 +
+>   tools/thermal/lib/Makefile                    | 158 +++++++
+>   .../thermal/lib/libthermal_tools.pc.template  |  12 +
+>   tools/thermal/lib/log.c                       |  77 ++++
+>   tools/thermal/lib/log.h                       |  31 ++
+>   tools/thermal/lib/mainloop.c                  | 135 ++++++
+>   tools/thermal/lib/mainloop.h                  |  14 +
+>   tools/thermal/lib/thermal-tools.h             |  10 +
+>   tools/thermal/lib/uptimeofday.c               |  40 ++
+>   tools/thermal/lib/uptimeofday.h               |  12 +
+>   tools/thermal/thermal-engine/Build            |   2 +
+>   tools/thermal/thermal-engine/Makefile         |  27 ++
+>   tools/thermal/thermal-engine/thermal-engine.c | 287 +++++++++++++
+>   tools/thermal/thermometer/Build               |   2 +
+>   tools/thermal/thermometer/Makefile            |  23 +
+>   tools/thermal/thermometer/thermometer.c       | 393 ++++++++++++++++++
+>   tools/thermal/thermometer/thermometer.conf    |   5 +
+>   30 files changed, 2591 insertions(+), 3 deletions(-)
+>   create mode 100644 tools/lib/thermal/.gitignore
+>   create mode 100644 tools/lib/thermal/Build
+>   create mode 100644 tools/lib/thermal/Makefile
+>   create mode 100644 tools/lib/thermal/commands.c
+>   create mode 100644 tools/lib/thermal/events.c
+>   create mode 100644 tools/lib/thermal/include/thermal.h
+>   create mode 100644 tools/lib/thermal/libthermal.map
+>   create mode 100644 tools/lib/thermal/libthermal.pc.template
+>   create mode 100644 tools/lib/thermal/sampling.c
+>   create mode 100644 tools/lib/thermal/thermal.c
+>   create mode 100644 tools/lib/thermal/thermal_nl.c
+>   create mode 100644 tools/lib/thermal/thermal_nl.h
+>   create mode 100644 tools/thermal/lib/Build
+>   create mode 100644 tools/thermal/lib/Makefile
+>   create mode 100644 tools/thermal/lib/libthermal_tools.pc.template
+>   create mode 100644 tools/thermal/lib/log.c
+>   create mode 100644 tools/thermal/lib/log.h
+>   create mode 100644 tools/thermal/lib/mainloop.c
+>   create mode 100644 tools/thermal/lib/mainloop.h
+>   create mode 100644 tools/thermal/lib/thermal-tools.h
+>   create mode 100644 tools/thermal/lib/uptimeofday.c
+>   create mode 100644 tools/thermal/lib/uptimeofday.h
+>   create mode 100644 tools/thermal/thermal-engine/Build
+>   create mode 100644 tools/thermal/thermal-engine/Makefile
+>   create mode 100644 tools/thermal/thermal-engine/thermal-engine.c
+>   create mode 100644 tools/thermal/thermometer/Build
+>   create mode 100644 tools/thermal/thermometer/Makefile
+>   create mode 100644 tools/thermal/thermometer/thermometer.c
+>   create mode 100644 tools/thermal/thermometer/thermometer.conf
+> 
+
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog

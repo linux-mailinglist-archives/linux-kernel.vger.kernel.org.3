@@ -2,97 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B97D4C2910
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 11:15:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C8E3A4C290E
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 11:15:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233008AbiBXKOy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 05:14:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34080 "EHLO
+        id S232700AbiBXKO5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 05:14:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232418AbiBXKOr (ORCPT
+        with ESMTP id S233024AbiBXKOv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 05:14:47 -0500
-Received: from mail-qv1-xf32.google.com (mail-qv1-xf32.google.com [IPv6:2607:f8b0:4864:20::f32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4658928B61E
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 02:14:18 -0800 (PST)
-Received: by mail-qv1-xf32.google.com with SMTP id g23so2725466qvb.4
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 02:14:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=+KjkkeImUI9MYip2G2L/AqVkgEagftFFhyJYB4CQfXo=;
-        b=lTInkOBH5DxMaG5Q3erZww/shegPeYy5E104sq/GOqx7XxJEYE6xNN3ZhkqHjQTPMi
-         buH5n3cDcdkUMa4PQ+EysSjchxm1Ej1VognzrG0QmYnKMYSaVZz4GPd2SFNVwcGeHVKd
-         ybP+w2nmuiHRYDf1OusAvMKe3mFmd8WRVxlorNQTbdI6FF45gzVhTZSwvp1lVdJGSP6+
-         YoW1GP0LjmhcPDRm0wXYMDKdAYrwzONpdSVmcI0Lq8Xr9+GiRw01HKFo6g4gXAHwUFHZ
-         20Fb435KxveXZwuAy7gvnuktmm93m2OBa22JSl+0T9d+sVGQtxSex59+vJFPTnQwGQvE
-         rUpw==
+        Thu, 24 Feb 2022 05:14:51 -0500
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 671F028B630
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 02:14:20 -0800 (PST)
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com [209.85.218.72])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 0C5C83F1BC
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 10:14:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1645697654;
+        bh=R2XzFGsa+EKmA5bAQUzuu09BXbD6MYmLaXLgYZlWR5Y=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=H9yJlbwPbmWZN4SlZsuarVphwBuYWZnn666W0MTUW8Ls4vRUVON+EQmwheOpvqIZ2
+         miNcbBzsKdlmD0ls2lMyLEcZVySRUlIzkzmaDUEtKEeObI0OKPEwuB7T5DZvlyKYzz
+         G4J5sWIDhh0vhoJP7UkArbioRsNzlqwr/aEmuo7Q/wkiWEsYa9huo/0XLCosdRfC7J
+         WFqjBglh7h9Dc3cWjbKEJVLB6EGudaFv//LJrwT+UmY3HNXLadp57LYjfSqm7xsiFN
+         gHHVVbH0ZQ2V1W4n/sWITz8D/WflqaaWvaj8uZ9bKPlrFK+d8xAgUMsOvtjEvwGfs/
+         9QZowr3GNJhVg==
+Received: by mail-ej1-f72.google.com with SMTP id r18-20020a17090609d200b006a6e943d09eso978725eje.20
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 02:14:14 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=+KjkkeImUI9MYip2G2L/AqVkgEagftFFhyJYB4CQfXo=;
-        b=byQ4rQtrn9LrxfhJX4AuKdQ9A/h3rvnlf77K7oCAwNxjGHvDWsqnb7eFl1ittgWxQm
-         DiQNRy01pMcHZM0CV6QWw1mxpsi31kydP9BfKaJbBKkkN5yltQ+CwO4fYGMQURBeaJR7
-         TTW2fvS8t8BWaSlu2s7S80sPeXS4mlKfl3fSZeeSIwWPk5HrFsp704/RewsCyXVzUNcz
-         xCOTbVRI4p8tte7uKrSC3s+3uAoTjWnUEfNnVQ5emqYuYffWYE6ko2kxMinypHe1TIh2
-         ZT6nh3D56giArW6JukxoAiuhmlZXOGfI0xowoOFofBT6QGfw7qt3pLjvuKvwdDerlgWb
-         OPOg==
-X-Gm-Message-State: AOAM532tKx/jDptrEAfnZatqxlYm2jeuiB9KRtKDXCneSvpNhm28FHUA
-        vTvULJIT9eFBkhXuBJNWgIHun1twS74=
-X-Google-Smtp-Source: ABdhPJxn5EUrDjaC+0i6CzkyXlS/H7T0XFdaclqtUnt/0iDSlHJ88SBRVaR38z6a25AFrEwxIYhh5w==
-X-Received: by 2002:a05:6214:29cc:b0:42d:f63c:f3f4 with SMTP id gh12-20020a05621429cc00b0042df63cf3f4mr1238627qvb.87.1645697657388;
-        Thu, 24 Feb 2022 02:14:17 -0800 (PST)
-Received: from auth2-smtp.messagingengine.com ([66.111.4.228])
-        by smtp.gmail.com with ESMTPSA id i22sm1260647qtm.46.2022.02.24.02.14.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Feb 2022 02:14:16 -0800 (PST)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailauth.nyi.internal (Postfix) with ESMTP id 0420827C005B;
-        Thu, 24 Feb 2022 05:14:12 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Thu, 24 Feb 2022 05:14:13 -0500
-X-ME-Sender: <xms:c1oXYuxoNUj0LqdpHLVB3ZA92itS0t6q7isvO7c7RItT9lOh_UP-aA>
-    <xme:c1oXYqTQh2T8S-7pfB5h52IoDnQwtp8Lc6dwLsVGUcyfPBoqNdQ4ZvDlkVwc4Lr2z
-    lcjhVMBoiOrov2yTQ>
-X-ME-Received: <xmr:c1oXYgWG11n95aYotYpnqa802d4i1gMQyOdMPiNPUkHy5aXPQElCJG2ptrM>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrledvgdduvdcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepuehoqhhunhcu
-    hfgvnhhguceosghoqhhunhdrfhgvnhhgsehgmhgrihhlrdgtohhmqeenucggtffrrghtth
-    gvrhhnpedvleeigedugfegveejhfejveeuveeiteejieekvdfgjeefudehfefhgfegvdeg
-    jeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegsoh
-    hquhhnodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdeiledvgeehtdeigedq
-    udejjeekheehhedvqdgsohhquhhnrdhfvghngheppehgmhgrihhlrdgtohhmsehfihigmh
-    gvrdhnrghmvg
-X-ME-Proxy: <xmx:c1oXYkj6qwoo8hEAuD1vfdWbeTSbEIFKZLAnXs8hAUy7uFNMNpeIYQ>
-    <xmx:c1oXYgAFunQqA9ag0Igj84LJsXysiTzvA_mCAMKDrbmH0FDsAD-U3A>
-    <xmx:c1oXYlK9mPANCJIMx1SM4cw0ZoxMzIK5OlmM8cnzOA8HTnaQBTTsMw>
-    <xmx:dFoXYgs9VJObb6mTohVcM7DeLj6p1bS-ErDu0QXQkuJ7OpsIqKCD4F29s7Q>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 24 Feb 2022 05:14:11 -0500 (EST)
-Date:   Thu, 24 Feb 2022 18:13:25 +0800
-From:   Boqun Feng <boqun.feng@gmail.com>
-To:     Junru Shen <hhusjrsjr@gmail.com>
-Cc:     Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] atomic: Put the fetching of the old value into the loop
- when doing atomic CAS
-Message-ID: <YhdaRd1czxuBPuiU@boqun-archlinux>
-References: <20220224082438.580191-1-hhusjrsjr@gmail.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=R2XzFGsa+EKmA5bAQUzuu09BXbD6MYmLaXLgYZlWR5Y=;
+        b=lHCn/VgFwKDiROFuyl00NSi/F3KuTzW+zZ7hDEbNOqASzpdZ8EttR+chGyKZH+zbyV
+         1MYWrdboCWuk1cNMl8vFRg7nOLI3HY3jDpW834pfzz53wswk5IlbNoTIV/5EcG1e2vzG
+         VScTOHripEc0zzl1dkFlF62f2c7MqqltZteeBqy/9MLP5PeiQ4RrOh6DkaQMXZMwMY69
+         0tzXCSZYdqypTmRXX6l+iFCKcOYhv17m0yYVp17jdEI2vD1D1uTwozD5PxXJxZt6+3uQ
+         lLmfWH12DD9ZNwQ+MOd2abBqMvtLP9+T8W/GakxuRf1OszU32fPMPHMJ8VYf/dzOAtYv
+         0TrQ==
+X-Gm-Message-State: AOAM530Iwpw6xdV7TW6et/Zhaz7fErN5QGNg2OPETbstEs6urO8LXBGt
+        TlbeXCdw1EBiTBocFmQ24GiXRRe0+LjmvFEoBZ43k0nG69SMtGH2IWVE0thscmvfx3eesud+xYR
+        Heg7X/qC9nBxslNFS33f4C4HJNqvfUb6dpK17W03zFQ==
+X-Received: by 2002:a17:907:766a:b0:6cf:bb20:70c with SMTP id kk10-20020a170907766a00b006cfbb20070cmr1665296ejc.94.1645697653730;
+        Thu, 24 Feb 2022 02:14:13 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJy/sLltZSTx8KWRJjI2K/qwIBaOPcUKmFt3AKY4TZ4EYzdTbH9CKy+iaxTYab7Mf5+E65BCKA==
+X-Received: by 2002:a17:907:766a:b0:6cf:bb20:70c with SMTP id kk10-20020a170907766a00b006cfbb20070cmr1665264ejc.94.1645697653535;
+        Thu, 24 Feb 2022 02:14:13 -0800 (PST)
+Received: from [192.168.0.127] (xdsl-188-155-181-108.adslplus.ch. [188.155.181.108])
+        by smtp.gmail.com with ESMTPSA id o10sm1117979ejj.6.2022.02.24.02.14.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 24 Feb 2022 02:14:12 -0800 (PST)
+Message-ID: <ad6e347b-a25b-5309-2a6a-8fd3faba256c@canonical.com>
+Date:   Thu, 24 Feb 2022 11:14:11 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220224082438.580191-1-hhusjrsjr@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 1/4] dt-bindings: pwm: google,cros-ec: include generic pwm
+ schema
+Content-Language: en-US
+To:     Heiko Stuebner <heiko@sntech.de>, Lee Jones <lee.jones@linaro.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        devicetree@vger.kernel.org, chrome-platform@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-pwm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        linux-rockchip@lists.infradead.org
+References: <20220214081916.162014-1-krzysztof.kozlowski@canonical.com>
+ <3248917.W5uN0jUHDo@phil> <YhdXyBvAbdHzc4gH@google.com>
+ <1817486.VeUe9BSz9F@phil>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <1817486.VeUe9BSz9F@phil>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -100,66 +98,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On Thu, Feb 24, 2022 at 04:24:38PM +0800, Junru Shen wrote:
-> Put the acquisition of the expected value inside the loop to prevent an infinite loop when it does not match.
+On 24/02/2022 11:06, Heiko Stuebner wrote:
+> Am Donnerstag, 24. Februar 2022, 11:02:48 CET schrieb Lee Jones:
+>> On Wed, 23 Feb 2022, Heiko Stuebner wrote:
+>>
+>>> Hi Lee,
+>>>
+>>> Am Mittwoch, 23. Februar 2022, 10:16:01 CET schrieb Lee Jones:
+>>>> On Mon, 14 Feb 2022, Krzysztof Kozlowski wrote:
+>>>>
+>>>>> Include generic pwm.yaml schema, which enforces PWM node naming.  Keep
+>>>>> the old name in bindings as deprecated.
+>>>>>
+>>>>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+>>>>> ---
+>>>>>  Documentation/devicetree/bindings/mfd/google,cros-ec.yaml    | 4 ++++
+>>>>
+>>>> Acked-by: Lee Jones <lee.jones@linaro.org>
+>>>
+>>> what is your expectation regarding this patch?
+>>>
+>>> Are you planning to merge it or are you expecting this to go through
+>>> some other tree?
+>>>
+>>> The binding-change here is backward-comaptible in that the old
+>>> node-name is still in it, only marked as deprecated, so in theory
+>>> this patch should be able to be applied on its own without
+>>> causing defects.
+>>
+>> In an ideal world, it would be broken up and I would take the MFD
+>> part.   Is that possible or are there dependencies?
 > 
-
-Is there a small test showing a infinite loop can really happen? If so,
-have you tested it?
-
-Note that arch_atomic64_try_cmpxchg() will refresh 'val' if the previous
-value doesn't match the content of 'v'.
-
-Regards,
-Boqun
-
-> Signed-off-by: Junru Shen <hhusjrsjr@gmail.com>
-> ---
->  arch/x86/include/asm/atomic64_64.h | 9 ++++++---
->  1 file changed, 6 insertions(+), 3 deletions(-)
+> That is also what Krzysztof had in mind - see his reply to patch4.
+> Binding going through the MFD tree and soc maintainers applying
+> the individual dts patches.
 > 
-> diff --git a/arch/x86/include/asm/atomic64_64.h b/arch/x86/include/asm/atomic64_64.h
-> index 7886d0578..3df04c44c 100644
-> --- a/arch/x86/include/asm/atomic64_64.h
-> +++ b/arch/x86/include/asm/atomic64_64.h
-> @@ -207,9 +207,10 @@ static inline void arch_atomic64_and(s64 i, atomic64_t *v)
->  
->  static inline s64 arch_atomic64_fetch_and(s64 i, atomic64_t *v)
->  {
-> -	s64 val = arch_atomic64_read(v);
-> +	s64 val;
->  
->  	do {
-> +		val = arch_atomic64_read(v);
->  	} while (!arch_atomic64_try_cmpxchg(v, &val, val & i));
->  	return val;
->  }
-> @@ -225,9 +226,10 @@ static inline void arch_atomic64_or(s64 i, atomic64_t *v)
->  
->  static inline s64 arch_atomic64_fetch_or(s64 i, atomic64_t *v)
->  {
-> -	s64 val = arch_atomic64_read(v);
-> +	s64 val;
->  
->  	do {
-> +		val = arch_atomic64_read(v);
->  	} while (!arch_atomic64_try_cmpxchg(v, &val, val | i));
->  	return val;
->  }
-> @@ -243,9 +245,10 @@ static inline void arch_atomic64_xor(s64 i, atomic64_t *v)
->  
->  static inline s64 arch_atomic64_fetch_xor(s64 i, atomic64_t *v)
->  {
-> -	s64 val = arch_atomic64_read(v);
-> +	s64 val;
->  
->  	do {
-> +		val = arch_atomic64_read(v);
->  	} while (!arch_atomic64_try_cmpxchg(v, &val, val ^ i));
->  	return val;
->  }
-> -- 
-> 2.30.2
+> As written the binding change is backward compatible, so no harm.
 > 
+> I was just confused by the "Acked-by" and wanted to clarify how you
+> see it ;-)
+>
+
+The bindings patch should not be split more, but itself can be taken
+alone. DTS patches can go via SoC maintainer trees.
+
+
+Best regards,
+Krzysztof

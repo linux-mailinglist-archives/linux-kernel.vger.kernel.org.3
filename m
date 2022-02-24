@@ -2,56 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0962D4C3648
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 20:57:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 581C84C364D
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 20:57:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234113AbiBXT4s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 14:56:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55704 "EHLO
+        id S234155AbiBXT6H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 14:58:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233357AbiBXT4p (ORCPT
+        with ESMTP id S234148AbiBXT6G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 14:56:45 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF8A625D6F2;
-        Thu, 24 Feb 2022 11:56:15 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6A8DFB82928;
-        Thu, 24 Feb 2022 19:56:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE690C340F3;
-        Thu, 24 Feb 2022 19:56:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645732573;
-        bh=0HnlIL853B1xUMl8KCDADbVuNeDJ62TZ+d6tR2IxZ1k=;
-        h=Date:From:To:Cc:Subject:From;
-        b=GTT3ao6IIwNE2HdYz0tAok0Szt6NmyR+KTXpH7HnQtMKKtvq3M5Tc1Cqd4/em/k4X
-         cuNcIhbXq74yuJi9bOCYESKc9Yyk5txomn+4pH6cEPL1H3e82XB43v9VXe0YTW19+H
-         0mkd+o85pp8KL2IYVTltcSDFkCqrpWjla7I6Zfn/3XZwQ5Aw6i96rUNTSf52mIAN5b
-         M+BupFcNj6F0nnoIUTgsIKSvVcoC5i+VyG22+I4ZovjIqWuNK7lxwtSp3wLgJS4cVT
-         WdXiqVlzmY73PUQn6zF/yxy7v5h04KCkJOpHpdyxAO9zVo4c0qRiSLONeT4AOdkfM+
-         YyX9sEzoNYosA==
-Date:   Thu, 24 Feb 2022 13:56:11 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        Guchun Chen <guchun.chen@amd.com>,
-        Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
-        Jan Palus <jpalus@fastmail.com>, Marcel Menzel <mail@mcl.gg>,
-        linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL] PCI fixes for v5.17
-Message-ID: <20220224195611.GA289605@bhelgaas>
+        Thu, 24 Feb 2022 14:58:06 -0500
+Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2143B15E6FB
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 11:57:35 -0800 (PST)
+Received: by mail-oi1-x22d.google.com with SMTP id l25so4557481oic.13
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 11:57:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=uRmLZfQHkYzc7u6LM3Bmygv1wthncLvGRmNglYSkNqo=;
+        b=DkLVMhs9NzFgLjcSvs/jJ22SRT6eQNzgccJ0Itt5s8Pc790Ehnmyq9abxjBU4SXfXa
+         5KxPkqiUURFHLee8AIoP5wsjfNRBW27eJ0wznWxNpFBvljZoII/17nFWntUb4qpvQXoB
+         u+vAEjYN53x3PyOZIojVzKBiZwZ0jgiMUDJMDXk/v2SQE+VFrZdWca1ABk+83GasELJ6
+         R79poDVtv62uxo1ogqphaKAlk2EkmR9MiWSD6OcrnSZfOqGTcXvcTgWA+SD1E3/MQAJG
+         fj9cmBu3lZVSYe1PKlOD1ej4oMiunyqVx+oWAgkWCpp+l1Leb/fO1xrYRVGl85hqw2Ck
+         5cdw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=uRmLZfQHkYzc7u6LM3Bmygv1wthncLvGRmNglYSkNqo=;
+        b=Kj0+l8monKJ400S0ndUVOGNnFEj232LerhyaEXbBYfCrkm6wBvpgwj+xvu5CSMSxsO
+         sZWDP7DkA/DeNd9cGf6/xMTfsFbuHUcM2fzjAvM10nNl3p1H1d83icgRvuelqwE+wpUV
+         XSOKwhlda9CtvLjnA7nXhI65KxxAqXW8uCMSW1nMgyuwoKkR8tqJHU8JUE2G4ivuL2Xj
+         1Yx1VOGWhzFkreLYImhpK9o0AxJoLbwPR8ti54tn2viaBa6Cwm6j4mxbmSuw0RHEjvz3
+         kFA4xkQPj1BhPfxzvOA3luyPm53zu8TCtD6AKh2XL8yIXNHWmtWxHPBq8JNH78glDxbp
+         mi4Q==
+X-Gm-Message-State: AOAM530/rx6wf437EgQ8aiZ38xHLgGiupbtg78VFTTeYtlhyaOYVjsxD
+        7nGft71P8TFpL1GvqsY7iJpycw==
+X-Google-Smtp-Source: ABdhPJySDMCKKL+4aV2cblIdnPtj+AQytyxzcFkG7LPcP+u4BgmCi1Pye8INN6Dn8EDDIyOF+uVWyA==
+X-Received: by 2002:aca:3e56:0:b0:2d4:c902:b851 with SMTP id l83-20020aca3e56000000b002d4c902b851mr8091956oia.114.1645732654500;
+        Thu, 24 Feb 2022 11:57:34 -0800 (PST)
+Received: from builder.lan ([2600:1700:a0:3dc8:3697:f6ff:fe85:aac9])
+        by smtp.gmail.com with ESMTPSA id d35-20020a9d2926000000b005ad1fa8da87sm141701otb.53.2022.02.24.11.57.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Feb 2022 11:57:34 -0800 (PST)
+Date:   Thu, 24 Feb 2022 13:57:32 -0600
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Kathiravan T <quic_kathirav@quicinc.com>
+Cc:     agross@kernel.org, robh+dt@kernel.org, varada@codeaurora.org,
+        mraghava@codeaurora.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Subject: Re: [PATCH] arm64: dts: qcom: ipq8074: fix the sleep clock frequency
+Message-ID: <YhfjLNHCZeK4hYKa@builder.lan>
+References: <1644581655-11568-1-git-send-email-quic_kathirav@quicinc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <1644581655-11568-1-git-send-email-quic_kathirav@quicinc.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,35 +72,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit e783362eb54cd99b2cac8b3a9aeac942e6f6ac07:
+On Fri 11 Feb 06:14 CST 2022, Kathiravan T wrote:
 
-  Linux 5.17-rc1 (2022-01-23 10:12:53 +0200)
+> Sleep clock frequency should be 32768Hz. Lets fix it.
+> 
+> Cc: stable@vger.kernel.org
+> Fixes: 41dac73e243d ("arm64: dts: Add ipq8074 SoC and HK01 board support")
+> Link: https://lore.kernel.org/all/e2a447f8-6024-0369-f698-2027b6edcf9e@codeaurora.org/
+> Signed-off-by: Kathiravan T <quic_kathirav@quicinc.com>
 
-are available in the Git repository at:
+Can you please confirm this? The documentation for GCC says that the
+incoming sleep clock is 32000Hz.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/helgaas/pci.git tags/pci-v5.17-fixes-5
+Regards,
+Bjorn
 
-for you to fetch changes up to 3f1271b54edcc692da5a3663f2aa2a64781f9bc3:
-
-  PCI: Mark all AMD Navi10 and Navi14 GPU ATS as broken (2022-02-23 12:33:32 -0600)
-
-----------------------------------------------------------------
-PCI fixes:
-
-  - Fix a merge error that broke PCI device enumeration on mvebu platforms,
-    including Turris Omnia (Armada 385) (Pali Rohár)
-
-  - Avoid using ATS on all AMD Navi10 and Navi14 GPUs because some VBIOSes
-    don't account for "harvested" (disabled) parts of the chip when
-    initializing caches (Alex Deucher)
-
-----------------------------------------------------------------
-Alex Deucher (1):
-      PCI: Mark all AMD Navi10 and Navi14 GPU ATS as broken
-
-Pali Rohár (1):
-      PCI: mvebu: Fix device enumeration regression
-
- drivers/pci/controller/pci-mvebu.c |  3 ++-
- drivers/pci/quirks.c               | 14 +++++++++-----
- 2 files changed, 11 insertions(+), 6 deletions(-)
+> ---
+>  arch/arm64/boot/dts/qcom/ipq8074.dtsi | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/ipq8074.dtsi b/arch/arm64/boot/dts/qcom/ipq8074.dtsi
+> index 26ba7ce9222c..b6287355ad08 100644
+> --- a/arch/arm64/boot/dts/qcom/ipq8074.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/ipq8074.dtsi
+> @@ -13,7 +13,7 @@
+>  	clocks {
+>  		sleep_clk: sleep_clk {
+>  			compatible = "fixed-clock";
+> -			clock-frequency = <32000>;
+> +			clock-frequency = <32768>;
+>  			#clock-cells = <0>;
+>  		};
+>  
+> -- 
+> 2.7.4
+> 

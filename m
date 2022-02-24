@@ -2,150 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5E7C4C2430
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 07:46:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C32134C2434
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 07:49:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231393AbiBXGqx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 01:46:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54652 "EHLO
+        id S231395AbiBXGtk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 01:49:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230448AbiBXGqv (ORCPT
+        with ESMTP id S229865AbiBXGti (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 01:46:51 -0500
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EE8D26A3A2
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 22:46:22 -0800 (PST)
-Received: by mail-pj1-x102d.google.com with SMTP id m13-20020a17090aab0d00b001bbe267d4d1so5151635pjq.0
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 22:46:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=BNrrQeR6NLfEy9loV4cRdfklZCJsQsZ1Ot62w9IVtWc=;
-        b=FC6WwKcl8bcpZH6rSRW+egDrnBFtM3/+Wz8W+smEyyK8YkHUvCqHkLVFsbIzKgtIkZ
-         rpJQYoPf92HL8Ol2sa/r8myerAxpRTYyvXhTy3eMvROo9vuXKaMmnwMwAwIW0RqdRIhC
-         sCT8nHeSsD0KGOEbF+WJ88qUpgbSAyDK377p0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=BNrrQeR6NLfEy9loV4cRdfklZCJsQsZ1Ot62w9IVtWc=;
-        b=NFVrwnwZiYoe82HSk3tXQBNf1YJ00ucBxDLSvS5nSQJcH6WT+pG3HO7H5N/nf+wi09
-         Jv0EbWjfZBb2qEQeIdQjDC2vQZXUims27DSLIhnJ5KcVbXDKa9a+p75clOOV5UWEsUPB
-         OSPJEkUK8FCczO0Igej85/9qxO3etkv8Eie6nvqBTRhFQwS6szZKou+2bWLpoeTWRmz/
-         /pzmMJ6pihyEO5MQ27QateLDs+jMCf6WzR7NhmxfpktpmPIlzSox+ZYQgzq8fmhlCCDp
-         K4mC65GHVLMjpWCJ8IC0g9Qg9L1EL+sRSq8VblxBaQijd1f3P/fQSuJtuqI+NS5LkA+Y
-         1vlA==
-X-Gm-Message-State: AOAM531ICxOirJ2WIAu/r80iDYNh0v1hSkx7WDGP6UNkmYAzEwULYOJQ
-        4DvEwZGuy2gG2R5BGLX7SjpP0A==
-X-Google-Smtp-Source: ABdhPJxPMmxj82io+/WpZ92rz6mdpLfWg+7yYFn+HEFTUTwqoTzzIKGNd9B5t41jrbqTU+7RMRhLuA==
-X-Received: by 2002:a17:90a:ab89:b0:1bc:71a7:f93a with SMTP id n9-20020a17090aab8900b001bc71a7f93amr1341755pjq.111.1645685181936;
-        Wed, 23 Feb 2022 22:46:21 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id f7sm1866845pfc.0.2022.02.23.22.46.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Feb 2022 22:46:21 -0800 (PST)
-Date:   Wed, 23 Feb 2022 22:46:21 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     David Gow <davidgow@google.com>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] kunit: tool: Do not colorize output when redirected
-Message-ID: <202202232245.BD69919F@keescook>
-References: <20220224055350.1854078-1-keescook@chromium.org>
- <CABVgOS=pFN4T5HjYpJPW4KOzXRFr-SUTm09xymxBmyidg0h=WA@mail.gmail.com>
+        Thu, 24 Feb 2022 01:49:38 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F9401B0C72
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 22:49:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645685349; x=1677221349;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=7KQZvE2Wclzmq1OG+ehEnQ0C6RIzSlyf8YwzyvcS5jw=;
+  b=KQxREU/2IcXCXmLTvT0rvKQ3qzTLHD4v8hV2tQZXoSj4duWNBovxRjvF
+   /pgsDDEUq0eyClaRZ+yL/oAD/Q4ekD0er1cT393e1EKcItbnYxf3WvN9w
+   i/p5kFCItTJken4DykknQRIrVrheDR7tejlrAQX9crmhYJOAS3O3mkjPV
+   xVlwqjk8q8vbQP1XJKIGRxBfeDBnhyp5dMTJMKkBX1BjTwYcSJodPsbFO
+   WAeXNwa9j5PCONembBG3i+yVWpjKB/njh3S0cH+/OrwgJnRSKNsTiXENT
+   4pBJz4nHxZkex1U+mSIcS59j8hxjsl0vyMINNt6nNBk6wHfQ2b8QZt4lk
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10267"; a="239560673"
+X-IronPort-AV: E=Sophos;i="5.88,393,1635231600"; 
+   d="scan'208";a="239560673"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2022 22:49:07 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,393,1635231600"; 
+   d="scan'208";a="637725755"
+Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
+  by fmsmga002.fm.intel.com with ESMTP; 23 Feb 2022 22:49:06 -0800
+Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nN7w1-0002Mg-Q7; Thu, 24 Feb 2022 06:49:05 +0000
+Date:   Thu, 24 Feb 2022 14:48:09 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Hannes Reinecke <hare@suse.de>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [hare-scsi-devel:tls-upcall.v2 63/67] tcp.c:undefined reference to
+ `nvme_keyring_lookup_generated_key'
+Message-ID: <202202241454.BxQTCDeq-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CABVgOS=pFN4T5HjYpJPW4KOzXRFr-SUTm09xymxBmyidg0h=WA@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 24, 2022 at 02:43:53PM +0800, David Gow wrote:
-> On Thu, Feb 24, 2022 at 1:53 PM Kees Cook <keescook@chromium.org> wrote:
-> >
-> > Filling log files with color codes makes diffs and other comparisons
-> > difficult. Only emit vt100 codes when the stdout is a TTY.
-> >
-> > Cc: Brendan Higgins <brendanhiggins@google.com>
-> > Cc: linux-kselftest@vger.kernel.org
-> > Cc: kunit-dev@googlegroups.com
-> > Signed-off-by: Kees Cook <keescook@chromium.org>
-> > ---
-> 
-> Ah, you can tell a tool has "made it" when people are redirecting its output!
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/hare/scsi-devel.git tls-upcall.v2
+head:   ac729ea3c52bda460616c71d5f5fc47b2e64da6d
+commit: ab566bd55ff565627166db4334bb892488261c9c [63/67] nvme-tls: rename 'dhchap' to 'generated' key
+config: openrisc-buildonly-randconfig-r005-20220223 (https://download.01.org/0day-ci/archive/20220224/202202241454.BxQTCDeq-lkp@intel.com/config)
+compiler: or1k-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/hare/scsi-devel.git/commit/?id=ab566bd55ff565627166db4334bb892488261c9c
+        git remote add hare-scsi-devel https://git.kernel.org/pub/scm/linux/kernel/git/hare/scsi-devel.git
+        git fetch --no-tags hare-scsi-devel tls-upcall.v2
+        git checkout ab566bd55ff565627166db4334bb892488261c9c
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=openrisc SHELL=/bin/bash
 
-Heheh. Indeed! I have some more patches coming where I put a diff of
-output in the commit log. ;)
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-> This works fine here.
-> 
-> Reviewed-by: David Gow <davidgow@google.com>
+All errors (new ones prefixed by >>):
 
-Thanks!
+   or1k-linux-ld: drivers/nvme/host/core.o: in function `nvme_core_init':
+   core.c:(.init.text+0x1d8): undefined reference to `nvme_keyring_init'
+   core.c:(.init.text+0x1d8): relocation truncated to fit: R_OR1K_INSN_REL_26 against undefined symbol `nvme_keyring_init'
+   or1k-linux-ld: drivers/nvme/host/tcp.o: in function `nvme_tcp_start_tls':
+   tcp.c:(.text+0xd10): undefined reference to `tls_client_hello_user'
+   tcp.c:(.text+0xd10): relocation truncated to fit: R_OR1K_INSN_REL_26 against undefined symbol `tls_client_hello_user'
+   or1k-linux-ld: drivers/nvme/host/tcp.o: in function `nvme_tcp_lookup_psk.constprop.0':
+>> tcp.c:(.text+0x2ed8): undefined reference to `nvme_keyring_lookup_generated_key'
+   tcp.c:(.text+0x2ed8): relocation truncated to fit: R_OR1K_INSN_REL_26 against undefined symbol `nvme_keyring_lookup_generated_key'
+   or1k-linux-ld: tcp.c:(.text+0x2efc): undefined reference to `nvme_keyring_lookup_tls'
+   tcp.c:(.text+0x2efc): relocation truncated to fit: R_OR1K_INSN_REL_26 against undefined symbol `nvme_keyring_lookup_tls'
+   or1k-linux-ld: tcp.c:(.text+0x2f28): undefined reference to `nvme_keyring_lookup_psk'
+   tcp.c:(.text+0x2f28): relocation truncated to fit: R_OR1K_INSN_REL_26 against undefined symbol `nvme_keyring_lookup_psk'
+   or1k-linux-ld: tcp.c:(.text+0x2f44): undefined reference to `nvme_keyring_insert_tls'
+   tcp.c:(.text+0x2f44): relocation truncated to fit: R_OR1K_INSN_REL_26 against undefined symbol `nvme_keyring_insert_tls'
+>> or1k-linux-ld: tcp.c:(.text+0x2f6c): undefined reference to `nvme_keyring_lookup_generated_key'
+   tcp.c:(.text+0x2f6c): relocation truncated to fit: R_OR1K_INSN_REL_26 against undefined symbol `nvme_keyring_lookup_generated_key'
+   or1k-linux-ld: tcp.c:(.text+0x2f8c): undefined reference to `nvme_keyring_insert_tls'
+   tcp.c:(.text+0x2f8c): relocation truncated to fit: R_OR1K_INSN_REL_26 against undefined symbol `nvme_keyring_insert_tls'
+   or1k-linux-ld: tcp.c:(.text+0x2fb0): undefined reference to `nvme_keyring_lookup_tls'
+   tcp.c:(.text+0x2fb0): relocation truncated to fit: R_OR1K_INSN_REL_26 against undefined symbol `nvme_keyring_lookup_tls'
+   or1k-linux-ld: tcp.c:(.text+0x2fdc): undefined reference to `nvme_keyring_lookup_psk'
+   tcp.c:(.text+0x2fdc): relocation truncated to fit: R_OR1K_INSN_REL_26 against undefined symbol `nvme_keyring_lookup_psk'
+   or1k-linux-ld: tcp.c:(.text+0x2ff8): undefined reference to `nvme_keyring_insert_tls'
+   tcp.c:(.text+0x2ff8): additional relocation overflows omitted from the output
+   or1k-linux-ld: tcp.c:(.text+0x3054): undefined reference to `nvme_keyring_insert_tls'
 
--Kees
-
-> 
-> Thanks,
-> -- David
-> 
-> >  tools/testing/kunit/kunit_parser.py | 7 +++++++
-> >  1 file changed, 7 insertions(+)
-> >
-> > diff --git a/tools/testing/kunit/kunit_parser.py b/tools/testing/kunit/kunit_parser.py
-> > index 05ff334761dd..807ed2bd6832 100644
-> > --- a/tools/testing/kunit/kunit_parser.py
-> > +++ b/tools/testing/kunit/kunit_parser.py
-> > @@ -11,6 +11,7 @@
-> >
-> >  from __future__ import annotations
-> >  import re
-> > +import sys
-> >
-> >  import datetime
-> >  from enum import Enum, auto
-> > @@ -503,14 +504,20 @@ RESET = '\033[0;0m'
-> >
-> >  def red(text: str) -> str:
-> >         """Returns inputted string with red color code."""
-> > +       if not sys.stdout.isatty():
-> > +               return text
-> >         return '\033[1;31m' + text + RESET
-> >
-> >  def yellow(text: str) -> str:
-> >         """Returns inputted string with yellow color code."""
-> > +       if not sys.stdout.isatty():
-> > +               return text
-> >         return '\033[1;33m' + text + RESET
-> >
-> >  def green(text: str) -> str:
-> >         """Returns inputted string with green color code."""
-> > +       if not sys.stdout.isatty():
-> > +               return text
-> >         return '\033[1;32m' + text + RESET
-> >
-> >  ANSI_LEN = len(red(''))
-> > --
-> > 2.30.2
-> >
-> > --
-> > You received this message because you are subscribed to the Google Groups "KUnit Development" group.
-> > To unsubscribe from this group and stop receiving emails from it, send an email to kunit-dev+unsubscribe@googlegroups.com.
-> > To view this discussion on the web visit https://groups.google.com/d/msgid/kunit-dev/20220224055350.1854078-1-keescook%40chromium.org.
-
-
-
--- 
-Kees Cook
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

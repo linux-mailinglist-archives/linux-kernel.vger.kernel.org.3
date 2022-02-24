@@ -2,151 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80E4C4C3937
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 23:52:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 246CC4C393D
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 23:55:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235810AbiBXWwX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 17:52:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42692 "EHLO
+        id S229936AbiBXW40 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 17:56:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235465AbiBXWwS (ORCPT
+        with ESMTP id S229501AbiBXW40 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 17:52:18 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41363286EB;
-        Thu, 24 Feb 2022 14:51:46 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id ED2FEB829B0;
-        Thu, 24 Feb 2022 22:51:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31E15C340E9;
-        Thu, 24 Feb 2022 22:51:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645743103;
-        bh=P9qcOemBY8u888uY/b/Wuuv4yBCQnVd4boIuuS7cnNA=;
-        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
-        b=oO1DeX5QvOxenx0MYZgsizhTiYOeT5Wpi8TK6AkK7Ze6EbkDamOHOoyVhnmV4Cpbj
-         RATgZ9nG4pWwD2RnmW9IxNVU/+Tt+kS+Y7/aug4aQhK0fv+Wutcsli9JUb25Pi+Rt/
-         mFvj+YFI2Pxy9Q6gT0HYtIVc5xt3u2LGl6NpNWw1wEbjkGDz0HLrnCxHNvaft+wKNr
-         i9SLt7UWF+T79G3gk9IxQcb2zNiwFFp5IgjvYMz4MwHcxZnOSg8l5G5hECmwLsoGep
-         QR4BbV+HjlEBBJ3swzVgd2zlArUN1jcfQW0F+YWpxLCYyAFAMxV6688dnjgD3mhqFE
-         jVdUcYOLDdRWQ==
-Date:   Thu, 24 Feb 2022 14:51:42 -0800 (PST)
-From:   Stefano Stabellini <sstabellini@kernel.org>
-X-X-Sender: sstabellini@ubuntu-linux-20-04-desktop
-To:     Sudeep Holla <sudeep.holla@arm.com>
-cc:     Oleksii Moisieiev <Oleksii_Moisieiev@epam.com>,
-        Cristian Marussi <cristian.marussi@arm.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Souvik Chakravarty <Souvik.Chakravarty@arm.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [RFC PATCH 0/1] dt-bindings: arm: Add scmi_devid paramter for
-In-Reply-To: <20220224115443.fwhczfvm3cfwoim7@bogus>
-Message-ID: <alpine.DEB.2.22.394.2202241424110.239973@ubuntu-linux-20-04-desktop>
-References: <cover.1645460043.git.oleksii_moisieiev@epam.com> <20220222110003.GC21915@e120937-lin> <20220222160637.yn6pru4nfgwih23j@bogus> <20220222171549.GA2194063@EPUAKYIW015D> <20220224115443.fwhczfvm3cfwoim7@bogus>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+        Thu, 24 Feb 2022 17:56:26 -0500
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2B5A20A94A;
+        Thu, 24 Feb 2022 14:55:54 -0800 (PST)
+Received: by mail-lf1-x129.google.com with SMTP id g39so6385381lfv.10;
+        Thu, 24 Feb 2022 14:55:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=vIp1Ls9npdQP0dgHRyy6ZSI7XeqWxJiAI55yJU64ieQ=;
+        b=AfqemhLSOAtw2XdWZ9vDKqvl+KonvMzuAzd4D5Ip5L/KptC1ppki4GJwIEqcLqUw4s
+         NzL7AY9Z45oQlV9q1byBgSo0ULWZyZJGzB/dZmci0sipPoO0u8nkzpJeQSXUVb+5hzYE
+         lDoippfcVs0+R7qdQHmAAXXSJJtN8+HzQ0KARNxko7v8ZqP/iO0WWkMGL/WSfJPpLUB4
+         LrrKEo4woY7jZklwnsR9b3vfkzQLrcrTSwf28/InZe4nqmb6fCVsxW0JKdeFlebWLkiD
+         rjFwzVSxu4oteiUobValcrli8v2SXAorRlHR+bP55zyTm8zSqhH5SX/mRz+zNnb1jL8C
+         GHoQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=vIp1Ls9npdQP0dgHRyy6ZSI7XeqWxJiAI55yJU64ieQ=;
+        b=E3PE3rioG1Mb/89P+BmlRMNoHwp9gWGiMrRvR8oWEDsEpXwRZKHl401PiQwtlvMMHc
+         L5N2Yq11FPutMNANdSYG4HRCB4Zr2lNf1lci6nUsjSorPJxe+p52kRFQ1z0G0DwmUwTX
+         UBFxCUgRRreljiKRT3iUgQjTpxbMZWPtGXGbth6tHNYvnTOwL1AA8W0VHaR0ehuJsC/q
+         kzBW1MGlb7T9HyWnJMS07VvtGKmUVlUYyKPBL8d64xw+LuEbUao1gvMQnhJ1n8pnV5ep
+         XuqmotItRJuaqCVj/JKpwvp31/s31Ru/XyvxB4SeNkRMjMDX0SajIR/u/EZ7CqC+27li
+         lw0w==
+X-Gm-Message-State: AOAM533F3cju2lIVoWDl/m4dn97k39xhJg+lG71ntQ0RQxmrqiJv0mni
+        413IYY/0bX9o+PbVydPUYnUVZvvrbIMARPeXltk=
+X-Google-Smtp-Source: ABdhPJwPZOllNLGCFXZIs/UQ69leeeHS5g+8R50RoYyG/mTBxqTQeWXCTSbicLNsXzCpmVDdwubSVU75jEp3PX65fFM=
+X-Received: by 2002:a05:6512:2001:b0:443:5e17:14a0 with SMTP id
+ a1-20020a056512200100b004435e1714a0mr3179234lfb.320.1645743353155; Thu, 24
+ Feb 2022 14:55:53 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <CAH2r5mt9OfU+8PoKsmv_7aszhbw-dOuDCL6BOxb_2yRwc4HHCw@mail.gmail.com>
+ <Yhf+FemcQQToB5x+@redhat.com>
+In-Reply-To: <Yhf+FemcQQToB5x+@redhat.com>
+From:   Steve French <smfrench@gmail.com>
+Date:   Thu, 24 Feb 2022 16:55:42 -0600
+Message-ID: <CAH2r5mt6Sh7qorfCHWnZzc6LUDd-s_NzGB=sa-UDM2-ivzpmAQ@mail.gmail.com>
+Subject: Re: [LSF/MM/BPF TOPIC] Enabling change notification for network and
+ cluster fs
+To:     Vivek Goyal <vgoyal@redhat.com>
+Cc:     lsf-pc@lists.linux-foundation.org,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ioannis Angelakopoulos <jaggel@bu.edu>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 24 Feb 2022, Sudeep Holla wrote:
-> On Tue, Feb 22, 2022 at 05:15:49PM +0000, Oleksii Moisieiev wrote:
-> > Hi Sudeep,
-> > 
-> > On Tue, Feb 22, 2022 at 04:06:37PM +0000, Sudeep Holla wrote:
-> > > Hi Oleksii,
-> > > 
-> > > My initial feedback on this. And thanks Cristian for making it so easy as
-> > > you have covered most of the things in depth(which I might have not done
-> > > myself that well)
-> > > 
-> > > On Tue, Feb 22, 2022 at 11:00:03AM +0000, Cristian Marussi wrote:
-> > > > On Mon, Feb 21, 2022 at 05:26:46PM +0000, Oleksii Moisieiev wrote:
-> > > > > Introducing new parameter called scmi_devid to the device-tree bindings.
-> > > > > This parameter should be set for the device nodes, which has
-> > > > > clocks/power-domains/resets working through SCMI.
-> > > 
-> > > I prefer you had given more details on your usage model here instead of
-> > > pointing to the other Xen thread as it helps for someone without much
-> > > background on Xen or your use-case to review this.
-> > > 
-> > Let me describe the process in few words:
-> > We implemented a new feature, called SCI-mediator in Xen.
-> > The proposed implementation allows Guests to communicate with the Firmware using SCMI
-> > protocol with SMC as a transport. Other implementation are also
-> > possible, such as SCMI-Mailbox, SCPI-mailbox etc.
-> > 
-> > In this feature Xen is the Trusted Agent, which receives the following
-> > information in Xen device-tree:
-> > 1) All channels should be described, each channel defined as
-> > arm,scmi-shmem node;
-> > 2) Scmi node arm,scmi-smc with protocols description;
-> 
-> Sounds good so far.
-> 
-> > 3) scmi-devid should be set in nodes, which works through SCMI.
+>  With this proposal, you are trying to move away from cifs specific ioctl?
+
+Yes - since there are some applications that already use inotify
+(although presumably less common than the similar API on Macs and
+Windows), just fixing inotify to call into the fs to register events
+is a good first step.  See inotify(7) - Linux manual page e.g.
+
+For the case of SMB3.1.1 the wire protocol should be fine for this
+(although perhaps could be a few flags added to inotify to better
+match what servers support) See
+https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-smb2/598f395a-e7a2-4cc8-afb3-ccb30dd2df7c
+
+But there may be other APIs other than inotify that could be mapped to
+what is already supported on the wire (with minor changes to the vfs)
+
+On Thu, Feb 24, 2022 at 3:52 PM Vivek Goyal <vgoyal@redhat.com> wrote:
+>
+> On Wed, Feb 23, 2022 at 11:16:33PM -0600, Steve French wrote:
+> > Currently only local events can be waited on with the current notify
+> > kernel API since the requests to wait on these events is not passed to
+> > the filesystem.   Especially for network and cluster filesystems it is
+> > important that they be told that applications want to be notified of
+> > these file or directory change events.
 > >
-> 
-> Why is this needed for Guest OS, you need not populate this if Guest OS
-> is not required to use it, right ? If it is needed just by Xen hypervisor,
-> lets talk about that and why it is bad idea to mix that with general
-> SCMI bindings.
-
-I'll try to help Oleksii by answering here, I hope I am not off the mark
-:-)
-
-I think Sudeep is right, scmi-devid is not needed by the guest OS.
-
-The host device tree is a more interesting discussion. As the host
-device tree is meant to be generic and not tied to a specific version of
-Linux, it should fully describe the SCMI interface available. If the
-device tree is provided to a Trusted Agent, then it should also have the
-scmi-devid information, right?
-
-
-> > On start Xen inits itself as trusted agent and requests agent
-> > configuration by using BASE_DISCOVER_AGENT message. This message is sent
-> > to each configured channel to get agent_id
-> > 
-> > On Domain creation stage Xen will do the following steps:
-> > 1) Assign channel to the Guest and map channel address to the Domain
-> > address. For the Domain this address should be the same;
-> > 2) Generate arm,scmi-shmem and arm,scmi-smc nodes if needed for Guest
-> > device-tree (the device-tree which should be passed to the Guest);
-> > 3) Process devices, which are passed through to this Guest and set
-> > BASE_SET_DEVICE_PERMISSIONS for the scmi-devid, received from the
-> > device-node;
+> > A few years ago, discussions began on the changes needed to enable
+> > support for this.   Would be timely to finish those discussions, as
+> > waiting on file and directory change events to network mounts is very
+> > common for other OS, and would be valuable for Linux to fix.
 > >
-> 
-> I am confused here. So the Xen knows which devices are assigned to each
-> Guest OS but doesn't know device ID for them, but relies on the device
-> tree node ?
+>
+> This sounds like which might have some overlap with what we are trying
+> to do.
+>
+> Currently inotify/fanotify only work for local filesystems. We were
+> thinking is it possible to extend it for remote filesystems as well. My
+> interest primarily was to make notifications work on virtiofs. So I
+> asked Ioannis (an intern with us) to try to prototype it and see what are
+> the challenges and roadblocks.
+>
+> He posted one version of patches just as proof of concept and only tried
+> to make remote inotify work. One primary feedback from Amir was that
+> this is too specific to inotify and if you are extending fsnotify, then
+> it should have some support for fanotify as well. There is bunch of
+> other feedback too. So Ioannis is trying to rework his patches now.
+>
+> https://lore.kernel.org/linux-fsdevel/20211025204634.2517-1-iangelak@redhat.com/
+>
+> Anyway, you had pointed to following commit.
+>
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/fs/cifs/ioctl.c?id=d26c2ddd33569667e3eeb577c4c1d966ca9192e2
+>
+> So looks like application calls this cifs specific ioctl and blocks and
+> unblocks when notifications comes, IIUC.
+>
+> I don't know about SMB and what kind of other notifications does it
+> support. With this proposal, you are trying to move away from cifs
+> specific ioctl? What will user use to either block or poll for the
+> said notification.
+>
+> Sorry, I might be just completely off the mark. Just trying to find out
+> if there is any overlap in what you are looking for and what we are
+> trying to do.
+>
+> Thanks
+> Vivek
+>
+> > --
+> > Thanks,
+> >
+> > Steve
+> >
+>
 
-Which devices go to which guest OS is a user-provided configuration. For
-instance, a user can say: "assing /amba/ethernet@ff0e0000 to dom1". This
-is normal and not related to SCMI: when a user configures a static
-partitioning system, they decide which resources belong to which domain.
 
-So Xen is told that /amba/ethernet@ff0e0000 is supposed to go to dom1.
-Xen proceeds to map memory and interrupts corresponding to
-/amba/ethernet@ff0e0000 to dom1. So far so good. What about SCMI?
+-- 
+Thanks,
 
-In Oleksii's design, Xen is going to assign one of the available SCMI
-channels to dom1 and restrict its permission to only
-/amba/ethernet@ff0e0000. To do that, Xen needs to know the scmi-devid of
-/amba/ethernet@ff0e0000. As far as I can tell there is nothing
-Xen-specific in this activitity, that's why I asked Oleksii to reach out
-to the upstream device tree community to improve the generic bindings
-for everyone's benefits.
+Steve

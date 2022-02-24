@@ -2,182 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0DD24C23A6
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 06:38:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A8B44C23A7
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 06:39:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230321AbiBXFih (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 00:38:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58822 "EHLO
+        id S230327AbiBXFkS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 00:40:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230289AbiBXFid (ORCPT
+        with ESMTP id S230125AbiBXFkQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 00:38:33 -0500
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCC75B91D4
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 21:37:59 -0800 (PST)
-X-UUID: 54e783c2236a4a0e808de00147f9f087-20220224
-X-UUID: 54e783c2236a4a0e808de00147f9f087-20220224
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
-        (envelope-from <ck.hu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 2093225992; Thu, 24 Feb 2022 13:37:52 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Thu, 24 Feb 2022 13:37:51 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 24 Feb 2022 13:37:50 +0800
-Message-ID: <4abb07d9673fb0e602ae26de233b45471b9e62e2.camel@mediatek.com>
-Subject: Re: [2/3] drm/mediatek: Separate poweron/poweroff from
- enable/disable and define new funcs
-From:   CK Hu <ck.hu@mediatek.com>
-To:     <xinlei.lee@mediatek.com>, <chunkuang.hu@kernel.org>,
-        <p.zabel@pengutronix.de>, <airlied@linux.ie>, <daniel@ffwll.ch>,
-        <matthias.bgg@gmail.com>
-CC:     <dri-devel@lists.freedesktop.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <rex-bc.chen@mediatek.com>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        Jitao Shi <jitao.shi@mediatek.com>
-Date:   Thu, 24 Feb 2022 13:37:50 +0800
-In-Reply-To: <1644589818-13066-3-git-send-email-xinlei.lee@mediatek.com>
-References: <1644589818-13066-1-git-send-email-xinlei.lee@mediatek.com>
-         <1644589818-13066-3-git-send-email-xinlei.lee@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Thu, 24 Feb 2022 00:40:16 -0500
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AA3A25291F
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 21:39:47 -0800 (PST)
+Received: by mail-pl1-x62f.google.com with SMTP id m11so784097pls.5
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 21:39:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=e6g7HRr0zIYQVPNXmzVLc42NaJplGVZDGpMCXVnQwkY=;
+        b=kQguTOJO79zZ4TeGl8ygulyeSSwdjpqt9d2DbpR98u/5voWF2vVcUewhxvoROD4gsS
+         uZrwk5rvwB7Co7uAs9s1JjHsP7YkJ64yF75ePStV2f1kYz89S9mt/653j1vslw3z4QB/
+         bjCw/20qq+IRFwwfQMNTkH23tqNWmgfeZGHTk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=e6g7HRr0zIYQVPNXmzVLc42NaJplGVZDGpMCXVnQwkY=;
+        b=Bybwmyc1JAdzP4TyX28jJBkf6hOdfSRJHD43vvN3RZAcI1PYFbi2Y+itmVOcsSharQ
+         Y3jWczfwvtGAqAOxXurkWIam+fvWjFFQUrnNoP2FdgiebRoeXQrSAb2yLGIV/BO32mzU
+         Ab4G1+P+Hx59xrpnATs434xJHCCrdwuX1QiJqLzyDy0lXHB6zn2n5Ihr5nBwT5a6Qg6M
+         p2mdu8JsN9qHhlJyugiVPZt2+YOB1ncC/byxsN3PrJIgP44J7n8WZHXGsT/qQntbZb9r
+         4KBg/41NsZMHxXVBbl98tht57oIqKdzZKHhjT5GwfPZnhOt7HSwT2KvPWNEWpGxMoKkX
+         jXIQ==
+X-Gm-Message-State: AOAM533sgVLTJxtpHGHg1a70NVWE29JCYJPmq7CzLtXkCqypKxy9jNKw
+        pHZP+ModlX7fshuwWdZLaQ5+8Q==
+X-Google-Smtp-Source: ABdhPJxamHd9J69LDxApBkkgGOYtMrUJj4jHtb4mswOsHzhA2LHPjTBWBDLvlXh3wGYZLdR8Pxap/Q==
+X-Received: by 2002:a17:902:9348:b0:14d:8ee9:329f with SMTP id g8-20020a170902934800b0014d8ee9329fmr1309310plp.80.1645681187027;
+        Wed, 23 Feb 2022 21:39:47 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id s48sm1436917pfw.111.2022.02.23.21.39.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Feb 2022 21:39:46 -0800 (PST)
+From:   Kees Cook <keescook@chromium.org>
+To:     Eric Biederman <ebiederm@xmission.com>
+Cc:     Kees Cook <keescook@chromium.org>, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-hardening@vger.kernel.org
+Subject: [PATCH] MAINTAINERS: Update execve entry with more details
+Date:   Wed, 23 Feb 2022 21:39:45 -0800
+Message-Id: <20220224053945.1852048-1-keescook@chromium.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
-        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
-        autolearn=no autolearn_force=no version=3.4.6
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1098; h=from:subject; bh=gYwy98bhL+KP9Gi2xFKK93KwgEGtemx/KrxoV+zoPYo=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBiFxogXLPUMpaKGsP1Vih6r5khjZfd+nup6pyAwYKN /FXB3bmJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYhcaIAAKCRCJcvTf3G3AJsPCEA ClSkAioh0+Pvcf1Eu11wtLQqXh+P5prw5MDJaii8067aGgL2rRL9vVo1GhyWXJ47YSAPzZoN5ySqu8 6OxUTVM7BOzSj6+lnTxAE9/ktBSag7rE+HLVc2PTOr+RI7VQZimb5CjzrxCTJ3cGcEJz9EaJkaXeTX Zr2p6Lw2C4RN96cRPAoviVXLMcIshmJByek6KA/4RqyT0YCH7bPVHb+pHigX9O1TM2pU3if/tFnafI UQi8GkYO877+/7AFsVYMXK8/gZwr4kEJniBRTUexQ3GThdhV529cmFMoVL3egN4DM0M5qKlxUFyGl0 qE5lUqQGNUXYoTl4o/5O2I3aWYsIsxL4hclkllZZmzHvelCkVMlObtQi4kS9pvn9nFA5vEGRGp4F0+ /w6JDZhUgHMD42TYdypgXRjg6jd5JCUI63pXDq2N+Tstny26C9c+wsZJYlb4XRxs8r6deywJnC9fS5 BBvSHKacNHuqFhIW3JVvncWL5lzwA6k2IWZY4R2fpHpOK58iNITgilLkZ3vd2RbknmwzgpF1ToEp33 zSfO3E1qbQ5Zv5EEY8kcT2VDXWXVxOfigkJSB64beoMIfYS129rIhbIBrKs/DkuirlnmE6YRLvEpcG 7i8Ne4f+WKXP9TzAsG9iGK42gCqYsEXK2KZjJniE2ltk/bvm05tnvq8pRrbg==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Xinlei:
+The UAPI elf.h header was missed in the original MAINTAINER entry. Add
+it. Include linux-mm mailing list since that's where execve has
+traditionally been discussed. Note that this area is Supported, and aim
+at the git tree.
 
-On Fri, 2022-02-11 at 22:30 +0800, xinlei.lee@mediatek.com wrote:
-> From: Jitao Shi <jitao.shi@mediatek.com>
-> 
-> In order to match the changes of DSI RX devices (for example,
-> anx7625), 
-> the poweron/poweroff of dsi is extracted from enable/disable and 
-> defined as new funcs (pre_enable/post_disable).
+Cc: Eric Biederman <ebiederm@xmission.com>
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+ MAINTAINERS | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Does DSI not work with anx7625 now? This patch is a bug-fix or new
-feature? If this patch is a bug-fix, please add 'Fixes' tag [1].
-
-[1] 
-https://www.kernel.org/doc/html/v5.16/process/submitting-patches.html
-
-Regards,
-CK
-
-> 
-> Signed-off-by: Jitao Shi <jitao.shi@mediatek.com>
-> Signed-off-by: Xinlei Lee <xinlei.lee@mediatek.com>
-> ---
->  drivers/gpu/drm/mediatek/mtk_dsi.c | 45 ++++++++++++++++++++++----
-> ------------
->  1 file changed, 26 insertions(+), 19 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/mediatek/mtk_dsi.c
-> b/drivers/gpu/drm/mediatek/mtk_dsi.c
-> index 6d7b66d..e47c338 100644
-> --- a/drivers/gpu/drm/mediatek/mtk_dsi.c
-> +++ b/drivers/gpu/drm/mediatek/mtk_dsi.c
-> @@ -679,16 +679,6 @@ static void mtk_dsi_poweroff(struct mtk_dsi
-> *dsi)
->  	if (--dsi->refcount != 0)
->  		return;
->  
-> -	/*
-> -	 * mtk_dsi_stop() and mtk_dsi_start() is asymmetric, since
-> -	 * mtk_dsi_stop() should be called after
-> mtk_drm_crtc_atomic_disable(),
-> -	 * which needs irq for vblank, and mtk_dsi_stop() will disable
-> irq.
-> -	 * mtk_dsi_start() needs to be called in
-> mtk_output_dsi_enable(),
-> -	 * after dsi is fully set.
-> -	 */
-> -	mtk_dsi_stop(dsi);
-> -
-> -	mtk_dsi_switch_to_cmd_mode(dsi, VM_DONE_INT_FLAG, 500);
->  	mtk_dsi_reset_engine(dsi);
->  	mtk_dsi_lane0_ulp_mode_enter(dsi);
->  	mtk_dsi_clk_ulp_mode_enter(dsi);
-> @@ -703,17 +693,9 @@ static void mtk_dsi_poweroff(struct mtk_dsi
-> *dsi)
->  
->  static void mtk_output_dsi_enable(struct mtk_dsi *dsi)
->  {
-> -	int ret;
-> -
->  	if (dsi->enabled)
->  		return;
->  
-> -	ret = mtk_dsi_poweron(dsi);
-> -	if (ret < 0) {
-> -		DRM_ERROR("failed to power on dsi\n");
-> -		return;
-> -	}
-> -
->  	mtk_dsi_set_mode(dsi);
->  	mtk_dsi_clk_hs_mode(dsi, 1);
->  
-> @@ -727,7 +709,16 @@ static void mtk_output_dsi_disable(struct
-> mtk_dsi *dsi)
->  	if (!dsi->enabled)
->  		return;
->  
-> -	mtk_dsi_poweroff(dsi);
-> +	/*
-> +	 * mtk_dsi_stop() and mtk_dsi_start() is asymmetric, since
-> +	 * mtk_dsi_stop() should be called after
-> mtk_drm_crtc_atomic_disable(),
-> +	 * which needs irq for vblank, and mtk_dsi_stop() will disable
-> irq.
-> +	 * mtk_dsi_start() needs to be called in
-> mtk_output_dsi_enable(),
-> +	 * after dsi is fully set.
-> +	 */
-> +	mtk_dsi_stop(dsi);
-> +
-> +	mtk_dsi_switch_to_cmd_mode(dsi, VM_DONE_INT_FLAG, 500);
->  
->  	dsi->enabled = false;
->  }
-> @@ -765,10 +756,26 @@ static void mtk_dsi_bridge_enable(struct
-> drm_bridge *bridge)
->  	mtk_output_dsi_enable(dsi);
->  }
->  
-> +static void mtk_dsi_bridge_pre_enable(struct drm_bridge *bridge)
-> +{
-> +	struct mtk_dsi *dsi = bridge_to_dsi(bridge);
-> +
-> +	mtk_dsi_poweron(dsi);
-> +}
-> +
-> +static void mtk_dsi_bridge_post_disable(struct drm_bridge *bridge)
-> +{
-> +	struct mtk_dsi *dsi = bridge_to_dsi(bridge);
-> +
-> +	mtk_dsi_poweroff(dsi);
-> +}
-> +
->  static const struct drm_bridge_funcs mtk_dsi_bridge_funcs = {
->  	.attach = mtk_dsi_bridge_attach,
->  	.disable = mtk_dsi_bridge_disable,
->  	.enable = mtk_dsi_bridge_enable,
-> +	.pre_enable = mtk_dsi_bridge_pre_enable,
-> +	.post_disable = mtk_dsi_bridge_post_disable,
->  	.mode_set = mtk_dsi_bridge_mode_set,
->  };
->  
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 69a2935daf6c..2a4de0619c49 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -7225,6 +7225,9 @@ F:	net/core/of_net.c
+ EXEC & BINFMT API
+ R:	Eric Biederman <ebiederm@xmission.com>
+ R:	Kees Cook <keescook@chromium.org>
++L:	linux-mm@kvack.org
++S:	Supported
++T:	git git://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git for-next/execve
+ F:	arch/alpha/kernel/binfmt_loader.c
+ F:	arch/x86/ia32/ia32_aout.c
+ F:	fs/*binfmt_*.c
+@@ -7232,6 +7235,7 @@ F:	fs/exec.c
+ F:	include/linux/binfmts.h
+ F:	include/linux/elf.h
+ F:	include/uapi/linux/binfmts.h
++F:	include/uapi/linux/elf.h
+ F:	tools/testing/selftests/exec/
+ N:	asm/elf.h
+ N:	binfmt
+-- 
+2.30.2
 

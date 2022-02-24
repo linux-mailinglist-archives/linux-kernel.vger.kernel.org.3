@@ -2,109 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2B814C3433
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 18:57:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 198314C3434
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 18:57:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232520AbiBXR5d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 12:57:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54232 "EHLO
+        id S232514AbiBXR5S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 12:57:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232519AbiBXR5U (ORCPT
+        with ESMTP id S232515AbiBXR5P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 12:57:20 -0500
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFB6D4BB8B
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 09:56:48 -0800 (PST)
-Received: by mail-lf1-x129.google.com with SMTP id g39so5204490lfv.10
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 09:56:48 -0800 (PST)
+        Thu, 24 Feb 2022 12:57:15 -0500
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9237736E1E
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 09:56:42 -0800 (PST)
+Received: by mail-wm1-x333.google.com with SMTP id n25-20020a05600c3b9900b00380f41e51e6so279095wms.2
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 09:56:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
+        d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=TMceaaXnV0bDbvJSiP9ofcWLsC6a8Q6tO19sa8u3A0o=;
-        b=bYR2fdhQXZXtx52UFpQTKptu0+tKWepDRJYaSASQht99wn3VdFnIB4nTaKEwcTSwdj
-         9Y87wvLFaLqj5V5tKYfUmequSJmSMbEEC0W2q5XZLBYUTZVR06/y19JLh4eq/k4Gribx
-         M7XZANv8s8gcguKECoEtGWenFqs3zgJrcWIXo=
+        bh=0eQeP3GzjSxs3bFEsWrl0jof0V3c/zOR378LhVu6aVM=;
+        b=eb+djR6grT5DoJHqSaYa43YmTmUXIY1zzrWUkx3lm8dwxaudIuXSEpFreKjqauj0nZ
+         rq8S6FDFEMmkBWqAtIWnb5OvW2qU+eA1vhVR0Cao8KakyZvplVi5P8SPgsN5MSG5xZEy
+         bD2DoMr4NXO1WqW6vWNEq0O2y6BdMU0FcLHQwg4+5xzxjxIkoHrN0Q7rAP4ehLcbfLh9
+         WuJwhQrf4mF9OiTa4Oic677/toW3IEbTDPTlZKrtV9ydwGfz3bGBW7qA3CYoKLnYxxmY
+         1UtIQYyoHhb9hXqGveElUe0IhklJ7bSMf1m1kTXBrBfZj+VF5/yEetss9ZTjOdhJ8TPE
+         dSwA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=TMceaaXnV0bDbvJSiP9ofcWLsC6a8Q6tO19sa8u3A0o=;
-        b=KIPy+x5h8dtY/gVDUUibPm0UgpQ2LrmmFme7xYYJ66h2taH5xR3LH9JzVSTBtbk4AH
-         2G0ewSYCxz50YXjFM/5iFooNi7ZHHGDjhPvTeGbVwWrbXf3B4og7ioK5jlkQfjrsHCTh
-         ojcz0WVWg7Oi4lElilQVW1nnIZdTJYDHGY2R5qGeroNx1J3eRnPjxLl6YCAJmON8Zb1D
-         /HaloESumJWmBp6WsX9fxstaXxFY/6Az8qboRSca5VZBDmFMSOoCkoz3eU+y30gIM87U
-         /t4WVIYwUHEIbFoUGemjOJYCB7O4tfLfa6qWN9gJ5OgxZ4tkapamvAApim0CpmhvS8mw
-         oxeg==
-X-Gm-Message-State: AOAM533mXkCkMLeKg+Tj1H2PeiijQ+TJqwm6CVk1zzhOlqfIGhNd7aFX
-        AqggGbwtR8yyJwXxE5H8aN2mhHSUWChwuz5eUO8=
-X-Google-Smtp-Source: ABdhPJzT2jVdsvn2vNqgeVtm7SN29d5AplgTqY/hl92GToSTiOhWZlLEB8jpq9ZFRDUotY33ewZQnQ==
-X-Received: by 2002:ac2:4893:0:b0:443:3b8d:b54f with SMTP id x19-20020ac24893000000b004433b8db54fmr2370822lfc.73.1645725406673;
-        Thu, 24 Feb 2022 09:56:46 -0800 (PST)
-Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com. [209.85.167.52])
-        by smtp.gmail.com with ESMTPSA id 1-20020a2e1641000000b002463630a11asm23294ljw.140.2022.02.24.09.56.43
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 24 Feb 2022 09:56:44 -0800 (PST)
-Received: by mail-lf1-f52.google.com with SMTP id m14so5246355lfu.4
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 09:56:43 -0800 (PST)
-X-Received: by 2002:ac2:5313:0:b0:443:99c1:7e89 with SMTP id
- c19-20020ac25313000000b0044399c17e89mr2345835lfh.531.1645725402991; Thu, 24
- Feb 2022 09:56:42 -0800 (PST)
+        bh=0eQeP3GzjSxs3bFEsWrl0jof0V3c/zOR378LhVu6aVM=;
+        b=Go0Ef0sbOi8RuGcBTWE9Y8J4O2KbWNzTkdkY9iBUTDy4193G+o0skOZOA146U97Sks
+         2vVGxOFfP3QUe+PGDaBzxYkLhc6Y4LfmNA812Zue+ALg7nMo6jyWY0ZpnbSQU35RNzDO
+         8XG+kJB625TyimpsAuItLXrheITW5mZG/lXRdutzJLYI88/o+m3z+LioNWA7RzgOfxk7
+         qfRHwpt2yxtzS8DMLD3ecVbXL4SBBki0upfqHn7SyD7Ntz3fleuEigLVOCW1gmZQfuo5
+         C1F/oZCEtOo2lLznISy+f2rhRP+O/ruekrMSOS9TCVo3mz+741kE+/nMz1Cmbzk03sfX
+         1Vmg==
+X-Gm-Message-State: AOAM533YKlBGz+rNq2ABF/6cvDJFZT4zLq5Y3BBzCWW0dIiQyNcsnK/M
+        oXrRcb9F6d4/apxvi3pxXDO1CU+FhyiGiUCxhpRmyw==
+X-Google-Smtp-Source: ABdhPJzYW+HNNpZCuNrYQ+PqbU6fJhTMCkFS76nSOqdlNgbBezGKlNVWKEYvrhVOCHiGYxSgEJIQGaqr9FHR5gjgLks=
+X-Received: by 2002:a05:600c:218d:b0:37f:a920:9705 with SMTP id
+ e13-20020a05600c218d00b0037fa9209705mr3264121wme.86.1645725401178; Thu, 24
+ Feb 2022 09:56:41 -0800 (PST)
 MIME-Version: 1.0
-References: <20220217184829.1991035-1-jakobkoschel@gmail.com>
- <20220217184829.1991035-4-jakobkoschel@gmail.com> <CAHk-=wg1RdFQ6OGb_H4ZJoUwEr-gk11QXeQx63n91m0tvVUdZw@mail.gmail.com>
- <6DFD3D91-B82C-469C-8771-860C09BD8623@gmail.com> <86C4CE7D-6D93-456B-AA82-F8ADEACA40B7@gmail.com>
- <YhdfEIwI4EdtHdym@kroah.com>
-In-Reply-To: <YhdfEIwI4EdtHdym@kroah.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Thu, 24 Feb 2022 09:56:26 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wh87tDvKyuTF+NXBPLrRt=bOszP_N2nf5nkf4knX8SxrQ@mail.gmail.com>
-Message-ID: <CAHk-=wh87tDvKyuTF+NXBPLrRt=bOszP_N2nf5nkf4knX8SxrQ@mail.gmail.com>
-Subject: Re: [RFC PATCH 03/13] usb: remove the usage of the list iterator
- after the loop
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Jakob <jakobkoschel@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Arnd Bergman <arnd@arndb.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
-        Cristiano Giuffrida <c.giuffrida@vu.nl>,
-        "Bos, H.J." <h.j.bos@vu.nl>
+References: <20220224051439.640768-1-kaleshsingh@google.com>
+ <20220224051439.640768-7-kaleshsingh@google.com> <CA+EHjTwhpjDDnKRU3QrJysgMhYH7eTi2_LrWpxCArLoP-1-BrQ@mail.gmail.com>
+In-Reply-To: <CA+EHjTwhpjDDnKRU3QrJysgMhYH7eTi2_LrWpxCArLoP-1-BrQ@mail.gmail.com>
+From:   Kalesh Singh <kaleshsingh@google.com>
+Date:   Thu, 24 Feb 2022 09:56:30 -0800
+Message-ID: <CAC_TJve3wW91UMtCNHeDSZ8hspySmuYO2WgEYEH3Dk=Uj+GkJw@mail.gmail.com>
+Subject: Re: [PATCH v3 6/8] KVM: arm64: Add hypervisor overflow stack
+To:     Fuad Tabba <tabba@google.com>
+Cc:     Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Quentin Perret <qperret@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        "Cc: Android Kernel" <kernel-team@android.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Mark Brown <broonie@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Peter Collingbourne <pcc@google.com>,
+        "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>,
+        Andrew Walbran <qwandor@google.com>,
+        Andrew Scull <ascull@google.com>,
+        Zenghui Yu <yuzenghui@huawei.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        "moderated list:ARM64 PORT (AARCH64 ARCHITECTURE)" 
+        <linux-arm-kernel@lists.infradead.org>,
+        kvmarm@lists.cs.columbia.edu, LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 24, 2022 at 2:33 AM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
+On Thu, Feb 24, 2022 at 4:27 AM Fuad Tabba <tabba@google.com> wrote:
 >
-> So, to follow the proposed solution in this thread, the following change
-> is the "correct" one to make, right?
+> Hi Kalesh,
+>
+> On Thu, Feb 24, 2022 at 5:21 AM Kalesh Singh <kaleshsingh@google.com> wrote:
+> >
+> > Allocate and switch to 16-byte aligned secondary stack on overflow. This
+> > provides us stack space to better handle overflows; and is used in
+> > a subsequent patch to dump the hypervisor stacktrace. The overflow stack
+> > is only allocated if CONFIG_NVHE_EL2_DEBUG is enabled, as hypervisor
+> > stacktraces is a debug feature dependent on CONFIG_NVHE_EL2_DEBUG.
+> >
+> > Signed-off-by: Kalesh Singh <kaleshsingh@google.com>
+> > ---
+> >  arch/arm64/kvm/hyp/nvhe/host.S   | 5 +++++
+> >  arch/arm64/kvm/hyp/nvhe/switch.c | 5 +++++
+> >  2 files changed, 10 insertions(+)
+> >
+> > diff --git a/arch/arm64/kvm/hyp/nvhe/host.S b/arch/arm64/kvm/hyp/nvhe/host.S
+> > index 749961bfa5ba..367a01e8abed 100644
+> > --- a/arch/arm64/kvm/hyp/nvhe/host.S
+> > +++ b/arch/arm64/kvm/hyp/nvhe/host.S
+> > @@ -179,6 +179,10 @@ SYM_FUNC_END(__host_hvc)
+> >         b       hyp_panic
+> >
+> >  .L__hyp_sp_overflow\@:
+> > +#ifdef CONFIG_NVHE_EL2_DEBUG
+> > +       /* Switch to the overflow stack */
+> > +       adr_this_cpu sp, hyp_overflow_stack + PAGE_SIZE, x0
+> > +#else
+> >         /*
+> >          * Reset SP to the top of the stack, to allow handling the hyp_panic.
+> >          * This corrupts the stack but is ok, since we won't be attempting
+> > @@ -186,6 +190,7 @@ SYM_FUNC_END(__host_hvc)
+> >          */
+>
+> Nit: Maybe you should update this comment as well, since whether it
+> corrupts the stack or not depends on what happens above with
+> CONFIG_NVHE_EL2_DEBUG.
 
-That would indeed be my preference.
+Ack, will update it in the next version.
 
-If we ever are able to change
-
-        list_for_each_entry(tmp, &ep->queue, queue)...
-
-to simply declare 'tmp' as the right type itself, then the e need to do
-
-        struct gr_request *tmp;
-
-outside the loop goes away, and this kind of "set a variable that is
-declared in the outside context" becomes the only way to do things.
-
-                    Linus
+Thanks,
+Kalesh
+>
+> Thanks,
+> /fuad
+>
+> >         ldr_this_cpu    x0, kvm_init_params + NVHE_INIT_STACK_HYP_VA, x1
+> >         mov     sp, x0
+> > +#endif
+> >
+> >         bl      hyp_panic_bad_stack
+> >         ASM_BUG()
+> > diff --git a/arch/arm64/kvm/hyp/nvhe/switch.c b/arch/arm64/kvm/hyp/nvhe/switch.c
+> > index 703a5d3f611b..efc20273a352 100644
+> > --- a/arch/arm64/kvm/hyp/nvhe/switch.c
+> > +++ b/arch/arm64/kvm/hyp/nvhe/switch.c
+> > @@ -34,6 +34,11 @@ DEFINE_PER_CPU(struct kvm_host_data, kvm_host_data);
+> >  DEFINE_PER_CPU(struct kvm_cpu_context, kvm_hyp_ctxt);
+> >  DEFINE_PER_CPU(unsigned long, kvm_hyp_vector);
+> >
+> > +#ifdef CONFIG_NVHE_EL2_DEBUG
+> > +DEFINE_PER_CPU(unsigned long [PAGE_SIZE/sizeof(long)], hyp_overflow_stack)
+> > +       __aligned(16);
+> > +#endif
+> > +
+> >  static void __activate_traps(struct kvm_vcpu *vcpu)
+> >  {
+> >         u64 val;
+> > --
+> > 2.35.1.473.g83b2b277ed-goog
+> >

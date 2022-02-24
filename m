@@ -2,57 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDC6F4C2FEB
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 16:36:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 18F154C2FF4
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 16:37:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236431AbiBXPgC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 10:36:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35780 "EHLO
+        id S235957AbiBXPgh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 10:36:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234926AbiBXPf7 (ORCPT
+        with ESMTP id S232243AbiBXPge (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 10:35:59 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 712E720A94A;
-        Thu, 24 Feb 2022 07:35:28 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 23B74B826DF;
-        Thu, 24 Feb 2022 15:35:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9CE1C340E9;
-        Thu, 24 Feb 2022 15:35:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645716925;
-        bh=xuHQRrAoDb/VVH82gAa2RaQTr5wBd7B/nPTDQnPfdTk=;
-        h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
-        b=jmlK609LeDES/o7jfPCY/auDpAUs+Tc5Q0iM0KqAn76wD/ETKzdD+VxSyMxgEzBEX
-         i8xzFfC0v6WaDQLnzo6qHnTsh1qIN+y2Y5zVO9hxce3vCjik8SwECIReyYd5xTocsv
-         muI57CDMEo5VV/BlEQbFFjSwmPP/zpmtekcwAgLSjtdLXYqXFgpxC9D4XX6TBEQiBB
-         ZLLsx2HbZVZrs86vz1wvchVFO3lK521PHlFxZ6iaUwpCX0Aqs6gXr9ddmUtl4GqyAF
-         xxw9yhcR8bwdcmm+Xtx264X9pVdieR9y2/12jvpgMHUW25f4W/6PGYN+gifEc34y4S
-         8aytQtbn3hgog==
-Content-Type: text/plain; charset="utf-8"
+        Thu, 24 Feb 2022 10:36:34 -0500
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFD7C253BEA;
+        Thu, 24 Feb 2022 07:35:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1645716951; x=1677252951;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=bQCvdTZjOf13lFt0yVm8tSWeY3Lwx349NSceH/aq55g=;
+  b=deHWip5njNoc1TOgmWtsp4B2mis3B3oENafrHOzQ/kQM1d8/U+BSK2uj
+   QUwUHWfJgNRolAlZUaryDHspQIhvOyvR/7I1EsQWe0FSP+qbCVzT/d/Lx
+   gEXd9ii7ICxJY8pns0WZ1T7O8SZErCoRLgNGJE7mj94DnTwVLEzydDm5N
+   k=;
+Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
+  by alexa-out.qualcomm.com with ESMTP; 24 Feb 2022 07:35:51 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2022 07:35:51 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.15; Thu, 24 Feb 2022 07:35:51 -0800
+Received: from [10.216.20.63] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.15; Thu, 24 Feb
+ 2022 07:35:46 -0800
+Message-ID: <5f80c155-cd17-43ca-1eb4-8c57938d306b@quicinc.com>
+Date:   Thu, 24 Feb 2022 21:05:43 +0530
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH v15 01/10] ASoC: qcom: SC7280: Update config for building
+ codec dma drivers
+Content-Language: en-US
+To:     Mark Brown <broonie@kernel.org>
+CC:     <agross@kernel.org>, <bjorn.andersson@linaro.org>,
+        <lgirdwood@gmail.com>, <robh+dt@kernel.org>,
+        <quic_plai@quicinc.com>, <bgoswami@codeaurora.org>,
+        <perex@perex.cz>, <tiwai@suse.com>,
+        <srinivas.kandagatla@linaro.org>, <rohitkr@codeaurora.org>,
+        <linux-arm-msm@vger.kernel.org>, <alsa-devel@alsa-project.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <swboyd@chromium.org>, <judyhsiao@chromium.org>,
+        Venkata Prasad Potturu <quic_potturu@quicinc.com>
+References: <1645630745-25051-1-git-send-email-quic_srivasam@quicinc.com>
+ <1645630745-25051-2-git-send-email-quic_srivasam@quicinc.com>
+ <YhZynroGqrGZXeek@sirena.org.uk>
+From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+Organization: Qualcomm
+In-Reply-To: <YhZynroGqrGZXeek@sirena.org.uk>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-Subject: Re: [PATCH 2/2] wireless: Initial driver submission for pureLiFi STA
- devices
-From:   Kalle Valo <kvalo@kernel.org>
-In-Reply-To: <20211031131122.275386-3-srini.raju@purelifi.com>
-References: <20211031131122.275386-3-srini.raju@purelifi.com>
-To:     Srinivasan Raju <srini.raju@purelifi.com>
-Cc:     mostafa.afgani@purelifi.com,
-        Srinivasan Raju <srini.raju@purelifi.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        linux-kernel@vger.kernel.org (open list),
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org
-User-Agent: pwcli/0.1.0-git (https://github.com/kvalo/pwcli/) Python/3.7.3
-Message-ID: <164571691946.20059.3084416025465167444.kvalo@kernel.org>
-Date:   Thu, 24 Feb 2022 15:35:23 +0000 (UTC)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -61,43 +77,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Srinivasan Raju <srini.raju@purelifi.com> wrote:
 
-> This driver implementation has been based on the zd1211rw driver
-> 
-> Driver is based on 802.11 softMAC Architecture and uses
-> native 802.11 for configuration and management
-> 
-> The driver is compiled and tested in ARM, x86 architectures and
-> compiled in powerpc architecture
-> 
-> Signed-off-by: Srinivasan Raju <srini.raju@purelifi.com>
-
-I was about to take this to wireless-next but found few issues still:
-
-o rename these to include plfxlc_ prefix:
-
-int download_fpga(struct usb_interface *intf)
-int download_xl_firmware(struct usb_interface *intf)
-int plf_usb_wreq(void *buffer, int buffer_len,
-void tx_urb_complete(struct urb *urb)
-struct firmware_file {
-#define urb_dev(urb) (&(urb)->dev->dev)
-int plf_usb_wreq_async(struct plfxlc_usb *usb, const u8 *buffer,
-int plf_usb_wreq(void *buffer, int buffer_len,
-
-* non-const global variable in usb.c, doesn't that prevent supporting multiple
-  devices on the same host? It should be stored into a dynamically allocated
-  location like struct plfxlc_usb.
-
-struct usb_interface *ez_usb_interface;
-
-* unused workqueue:
-
-static struct workqueue_struct *plfxlc_workqueue;
-
--- 
-https://patchwork.kernel.org/project/linux-wireless/patch/20211031131122.275386-3-srini.raju@purelifi.com/
-
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
-
+On 2/23/2022 11:15 PM, Mark Brown wrote:
+Thanks for Your time Brown!!!
+> On Wed, Feb 23, 2022 at 09:08:56PM +0530, Srinivasa Rao Mandadapu wrote:
+>
+>> +snd-soc-lpass-cdc-dma-objs := lpass-cdc-dma.o
+>>   snd-soc-lpass-hdmi-objs := lpass-hdmi.o
+>>   snd-soc-lpass-platform-objs := lpass-platform.o
+>>   snd-soc-lpass-ipq806x-objs := lpass-ipq806x.o
+>>   snd-soc-lpass-apq8016-objs := lpass-apq8016.o
+>>   snd-soc-lpass-sc7180-objs := lpass-sc7180.o
+>> +snd-soc-lpass-sc7280-objs := lpass-sc7280.o
+> This will break the build given that neither of these source files are
+> present yet?
+Okay. Sent new patch series with fix.

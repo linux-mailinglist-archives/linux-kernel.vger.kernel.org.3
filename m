@@ -2,142 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0F5C4C2659
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 09:35:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 74F154C265B
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 09:37:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230412AbiBXIen (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 03:34:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45718 "EHLO
+        id S231426AbiBXIgy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 03:36:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbiBXIej (ORCPT
+        with ESMTP id S229489AbiBXIgx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 03:34:39 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BE7525A942
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 00:34:10 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Thu, 24 Feb 2022 03:36:53 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31F7126F4D5
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 00:36:24 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id A506E21115;
+        Thu, 24 Feb 2022 08:36:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1645691782; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=9kxeMpmspxDnMPyUwwwglML2VZu3aREU/aXhTjOO0II=;
+        b=hXnAV7FJ9LTqyCSI73ZNNagLQq/kYhrpqsSqwH3Ldqm+docdyf0SgGSo2VgrHBUNRJLSz3
+        +9h7bzd8v1uzsuDevmz9FCgi3dBQ5OahEzFYrmReSJHIg9vRI5gxGV1leiCaJLC2QF+jS2
+        Jo/xO+XIFuwpWw+uWxZJ1GED3vh5ClM=
+Received: from suse.cz (unknown [10.100.201.86])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1E8AEB8235A
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 08:34:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7749C340E9;
-        Thu, 24 Feb 2022 08:34:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645691647;
-        bh=G53eXGEaynby4+JOACWhGd19ejXFu5L6ZpLIPmdQdp4=;
-        h=Date:Subject:To:References:From:In-Reply-To:From;
-        b=sUxXxeJm5EfTGkBYjRocPhJwTMc9EoWytFZjx9fOavH1nsuqmYstgpYB2crPyYnTS
-         TbSolj5lSdtP/dcIiFETK9niVz55Ln0a6cuvq8Ser9UZYGqrCeHqhe94ST4ePNECjm
-         vhB2KuOgpcpIlWq8d5IitUxZsoUv5v44bVIKiG8ww3UdaQzsWvG7bIFiKOTSK7F2jf
-         mQMo20SsVCPffjcIoKduQ9AjyIqOlPIa5p2IB+h9TF0V+CpT3oB/Y3qAZr5wAtorXV
-         /HUO5AStE7R9KXEya+SBP4FOflVR6n+1r3KfpMphxuXopjAPF6cYb6ry/A8ythve5N
-         PxMhhfoyjdPbg==
-Message-ID: <af77ce1a-84cb-a0d0-3419-4e5ccfb7d6d9@kernel.org>
-Date:   Thu, 24 Feb 2022 16:34:03 +0800
+        by relay2.suse.de (Postfix) with ESMTPS id 65634A3B83;
+        Thu, 24 Feb 2022 08:36:15 +0000 (UTC)
+Date:   Thu, 24 Feb 2022 09:36:19 +0100
+From:   Michal Hocko <mhocko@suse.com>
+To:     Suren Baghdasaryan <surenb@google.com>
+Cc:     akpm@linux-foundation.org, ccross@google.com,
+        sumit.semwal@linaro.org, dave.hansen@intel.com,
+        keescook@chromium.org, willy@infradead.org,
+        kirill.shutemov@linux.intel.com, vbabka@suse.cz,
+        hannes@cmpxchg.org, ebiederm@xmission.com, brauner@kernel.org,
+        legion@kernel.org, ran.xiaokai@zte.com.cn, sashal@kernel.org,
+        chris.hyser@oracle.com, dave@stgolabs.net, pcc@google.com,
+        caoxiaofeng@yulong.com, david@redhat.com, gorcunov@gmail.com,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        kernel-team@android.com
+Subject: Re: [PATCH v2 1/3] mm: refactor vm_area_struct::anon_vma_name usage
+ code
+Message-ID: <YhdDg1oPpI7bkshf@dhcp22.suse.cz>
+References: <20220223153613.835563-1-surenb@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [f2fs-dev] [PATCH 1/2] f2fs: fix missing free nid in
- f2fs_handle_failed_inode
-Content-Language: en-US
-To:     Jaegeuk Kim <jaegeuk@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net
-References: <20220212142023.2508247-1-jaegeuk@kernel.org>
-From:   Chao Yu <chao@kernel.org>
-In-Reply-To: <20220212142023.2508247-1-jaegeuk@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220223153613.835563-1-surenb@google.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/2/12 22:20, Jaegeuk Kim wrote:
-> This patch fixes xfstests/generic/475 failure.
+On Wed 23-02-22 07:36:11, Suren Baghdasaryan wrote:
+> Avoid mixing strings and their anon_vma_name referenced pointers
+> by using struct anon_vma_name whenever possible. This simplifies
+> the code and allows easier sharing of anon_vma_name structures when
+> they represent the same name.
 > 
-> [  293.680694] F2FS-fs (dm-1): May loss orphan inode, run fsck to fix.
-> [  293.685358] Buffer I/O error on dev dm-1, logical block 8388592, async page read
-> [  293.691527] Buffer I/O error on dev dm-1, logical block 8388592, async page read
-> [  293.691764] sh (7615): drop_caches: 3
-> [  293.691819] sh (7616): drop_caches: 3
-> [  293.694017] Buffer I/O error on dev dm-1, logical block 1, async page read
-> [  293.695659] sh (7618): drop_caches: 3
-> [  293.696979] sh (7617): drop_caches: 3
-> [  293.700290] sh (7623): drop_caches: 3
-> [  293.708621] sh (7626): drop_caches: 3
-> [  293.711386] sh (7628): drop_caches: 3
-> [  293.711825] sh (7627): drop_caches: 3
-> [  293.716738] sh (7630): drop_caches: 3
-> [  293.719613] sh (7632): drop_caches: 3
-> [  293.720971] sh (7633): drop_caches: 3
-> [  293.727741] sh (7634): drop_caches: 3
-> [  293.730783] sh (7636): drop_caches: 3
-> [  293.732681] sh (7635): drop_caches: 3
-> [  293.732988] sh (7637): drop_caches: 3
-> [  293.738836] sh (7639): drop_caches: 3
-> [  293.740568] sh (7641): drop_caches: 3
-> [  293.743053] sh (7640): drop_caches: 3
-> [  293.821889] ------------[ cut here ]------------
-> [  293.824654] kernel BUG at fs/f2fs/node.c:3334!
-> [  293.826226] invalid opcode: 0000 [#1] PREEMPT SMP PTI
-> [  293.828713] CPU: 0 PID: 7653 Comm: umount Tainted: G           OE     5.17.0-rc1-custom #1
-> [  293.830946] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.15.0-1 04/01/2014
-> [  293.832526] RIP: 0010:f2fs_destroy_node_manager+0x33f/0x350 [f2fs]
-> [  293.833905] Code: e8 d6 3d f9 f9 48 8b 45 d0 65 48 2b 04 25 28 00 00 00 75 1a 48 81 c4 28 03 00 00 5b 41 5c 41 5d 41 5e 41 5f 5d c3 0f 0b
-> [  293.837783] RSP: 0018:ffffb04ec31e7a20 EFLAGS: 00010202
-> [  293.839062] RAX: 0000000000000001 RBX: ffff9df947db2eb8 RCX: 0000000080aa0072
-> [  293.840666] RDX: 0000000000000000 RSI: ffffe86c0432a140 RDI: ffffffffc0b72a21
-> [  293.842261] RBP: ffffb04ec31e7d70 R08: ffff9df94ca85780 R09: 0000000080aa0072
-> [  293.843909] R10: ffff9df94ca85700 R11: ffff9df94e1ccf58 R12: ffff9df947db2e00
-> [  293.845594] R13: ffff9df947db2ed0 R14: ffff9df947db2eb8 R15: ffff9df947db2eb8
-> [  293.847855] FS:  00007f5a97379800(0000) GS:ffff9dfa77c00000(0000) knlGS:0000000000000000
-> [  293.850647] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> [  293.852940] CR2: 00007f5a97528730 CR3: 000000010bc76005 CR4: 0000000000370ef0
-> [  293.854680] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> [  293.856423] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> [  293.858380] Call Trace:
-> [  293.859302]  <TASK>
-> [  293.860311]  ? ttwu_do_wakeup+0x1c/0x170
-> [  293.861800]  ? ttwu_do_activate+0x6d/0xb0
-> [  293.863057]  ? _raw_spin_unlock_irqrestore+0x29/0x40
-> [  293.864411]  ? try_to_wake_up+0x9d/0x5e0
-> [  293.865618]  ? debug_smp_processor_id+0x17/0x20
-> [  293.866934]  ? debug_smp_processor_id+0x17/0x20
-> [  293.868223]  ? free_unref_page+0xbf/0x120
-> [  293.869470]  ? __free_slab+0xcb/0x1c0
-> [  293.870614]  ? preempt_count_add+0x7a/0xc0
-> [  293.871811]  ? __slab_free+0xa0/0x2d0
-> [  293.872918]  ? __wake_up_common_lock+0x8a/0xc0
-> [  293.874186]  ? __slab_free+0xa0/0x2d0
-> [  293.875305]  ? free_inode_nonrcu+0x20/0x20
-> [  293.876466]  ? free_inode_nonrcu+0x20/0x20
-> [  293.877650]  ? debug_smp_processor_id+0x17/0x20
-> [  293.878949]  ? call_rcu+0x11a/0x240
-> [  293.880060]  ? f2fs_destroy_stats+0x59/0x60 [f2fs]
-> [  293.881437]  ? kfree+0x1fe/0x230
-> [  293.882674]  f2fs_put_super+0x160/0x390 [f2fs]
-> [  293.883978]  generic_shutdown_super+0x7a/0x120
-> [  293.885274]  kill_block_super+0x27/0x50
-> [  293.886496]  kill_f2fs_super+0x7f/0x100 [f2fs]
-> [  293.887806]  deactivate_locked_super+0x35/0xa0
-> [  293.889271]  deactivate_super+0x40/0x50
-> [  293.890513]  cleanup_mnt+0x139/0x190
-> [  293.891689]  __cleanup_mnt+0x12/0x20
-> [  293.892850]  task_work_run+0x64/0xa0
-> [  293.894035]  exit_to_user_mode_prepare+0x1b7/0x1c0
-> [  293.895409]  syscall_exit_to_user_mode+0x27/0x50
-> [  293.896872]  do_syscall_64+0x48/0xc0
-> [  293.898090]  entry_SYSCALL_64_after_hwframe+0x44/0xae
-> [  293.899517] RIP: 0033:0x7f5a975cd25b
-> 
-> Fixes: 7735730d39d7 ("f2fs: fix to propagate error from __get_meta_page()")
-> Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
+> Suggested-by: Matthew Wilcox <willy@infradead.org>
+> Suggested-by: Michal Hocko <mhocko@suse.com>
+> Signed-off-by: Suren Baghdasaryan <surenb@google.com>
 
-Reviewed-by: Chao Yu <chao@kernel.org>
+LGTM
+Acked-by: Michal Hocko <mhocko@suse.com>
 
-Thanks,
+Thanks and one minor nit below
+
+[...]
+> +static inline void free_anon_vma_name(struct vm_area_struct *vma)
+>  {
+> -	const char *vma_name = vma_anon_name(vma);
+> +	/*
+> +	 * Not using anon_vma_name because it generates a warning if vma->vm_mm
+> +	 * is not held, which might be the case here.
+
+s@vma->vm_mm@mmap_lock@
+
+> +	 */
+> +	if (!vma->vm_file)
+> +		anon_vma_name_put(vma->anon_name);
+> +}
+>  
+> -	/* either both NULL, or pointers to same string */
+> -	if (vma_name == name)
+
+-- 
+Michal Hocko
+SUSE Labs

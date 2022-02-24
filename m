@@ -2,48 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C03014C3961
-	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 00:00:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD0A74C3956
+	for <lists+linux-kernel@lfdr.de>; Fri, 25 Feb 2022 00:00:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235952AbiBXXAS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 18:00:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39966 "EHLO
+        id S235959AbiBXXAV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 18:00:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235921AbiBXXAC (ORCPT
+        with ESMTP id S235811AbiBXXAG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 18:00:02 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2756E1D1793;
-        Thu, 24 Feb 2022 14:59:32 -0800 (PST)
+        Thu, 24 Feb 2022 18:00:06 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B99220C188;
+        Thu, 24 Feb 2022 14:59:35 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B7678617FB;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 53AEFB829E5;
+        Thu, 24 Feb 2022 22:59:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98593C340E9;
         Thu, 24 Feb 2022 22:59:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94DD9C340F1;
-        Thu, 24 Feb 2022 22:59:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645743571;
-        bh=5Lj6LMv7fKK2xpulDVH0f1NMaqxcLDTpqnyPjloUf3o=;
+        s=k20201202; t=1645743573;
+        bh=2f6xStWYcmNk3QXHVrbs7tqBtLU3rD4OrScTPyl5VWU=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=V37E3SHNRe1LtZJ2kxqJqurmDCXIDo1DXWSGCwvhsu5zdhrhqK5ZhXtMx7AWZqThK
-         pXk/msjVKWmCEjzx1kOgCwmKTPjMXYHu27/L9li4vNd4qdpXcLzLNbrVaqFteEEMkH
-         qoUf3ux8lRgQ+7NXIJELFI74e3v661MpWyaSsUoMGN37YQjsm1S1dQH3fjw9ohP7l+
-         Srr0MX9EipWO4proabal1ER0Saeo8orG0aG9IujUMpaRq5Glp3HQHAHNOu9f7YP8D2
-         LSMBJYTY1IyVIIMxI5ip8Xvm8GKTyyCL1mK+YVCRRnNBILMDYdXR86MdNZW3FsyX5L
-         l5gqmrLc+VuqQ==
+        b=sdYEQvBp0A1nozCZwMm3ETyZ4hnWkyrb1oim+gI64dnhoMIykrF9kYhGyCXhlvz9x
+         kQxrJuQW9+khT8AOX87cZJVtccNky/bMzxB16hV5wJ8+S2PhOTEgi1K440KgL3OXmY
+         5HQuXP2hX0CGoe+iCdbJZgdCydF5aLuKD6s0OWWjsUSxZZogZCns5XoBdJOZd979qX
+         gYzuWLusf5yBzIWZJwf9DUOxUhEuWFDq7RZaKHE8ue27nuYcXd/UGfntj4yNb1oijc
+         RN3hE+mZ2Dq6p7pclGqB4Sng546iRpazcHs579dMHMDeOpiXhJTyVyyFi/dt/OpLo/
+         EWmp1Va1i719w==
 From:   Mark Brown <broonie@kernel.org>
 To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-spi@vger.kernel.org
-Cc:     Daniel Mack <daniel@zonque.org>, Wang Qing <wangqing@vivo.com>,
+Cc:     Daniel Mack <daniel@zonque.org>,
         Haojian Zhuang <haojian.zhuang@gmail.com>,
         Robert Jarzmik <robert.jarzmik@free.fr>
-In-Reply-To: <20220223191637.31147-1-andriy.shevchenko@linux.intel.com>
-References: <20220223191637.31147-1-andriy.shevchenko@linux.intel.com>
-Subject: Re: [PATCH v1 1/1] spi: pxa2xx-pci: Balance reference count for PCI DMA device
-Message-Id: <164574356932.4024751.9943744576271174109.b4-ty@kernel.org>
-Date:   Thu, 24 Feb 2022 22:59:29 +0000
+In-Reply-To: <20220223191948.31325-1-andriy.shevchenko@linux.intel.com>
+References: <20220223191948.31325-1-andriy.shevchenko@linux.intel.com>
+Subject: Re: [PATCH v1 1/1] spi: pxa2xx-pci: Do not dereference fwnode in struct device
+Message-Id: <164574357134.4024751.5930412567641783271.b4-ty@kernel.org>
+Date:   Thu, 24 Feb 2022 22:59:31 +0000
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -57,9 +57,10 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 23 Feb 2022 21:16:37 +0200, Andy Shevchenko wrote:
-> The pci_get_slot() increases its reference count, the caller
-> must decrement the reference count by calling pci_dev_put().
+On Wed, 23 Feb 2022 21:19:48 +0200, Andy Shevchenko wrote:
+> In order to make the underneath API easier to change in the future,
+> prevent users from dereferencing fwnode from struct device.
+> Instead, use the specific dev_fwnode() API for that.
 > 
 > 
 
@@ -69,8 +70,8 @@ Applied to
 
 Thanks!
 
-[1/1] spi: pxa2xx-pci: Balance reference count for PCI DMA device
-      commit: 609d7ffdc42199a0ec949db057e3b4be6745d6c5
+[1/1] spi: pxa2xx-pci: Do not dereference fwnode in struct device
+      commit: a586f944f3a30cfffdbda081aa094bc6845f5ba9
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during

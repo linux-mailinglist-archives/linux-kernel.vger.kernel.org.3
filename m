@@ -2,96 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 323094C28E2
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 11:09:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 046C14C28BB
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 11:00:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233243AbiBXKH4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 05:07:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40840 "EHLO
+        id S233140AbiBXJ7c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 04:59:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233215AbiBXKHu (ORCPT
+        with ESMTP id S230108AbiBXJ73 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 05:07:50 -0500
-X-Greylist: delayed 609 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 24 Feb 2022 02:07:20 PST
-Received: from mail.thorsis.com (mail.thorsis.com [92.198.35.195])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 76345151C71;
-        Thu, 24 Feb 2022 02:07:19 -0800 (PST)
-Date:   Thu, 24 Feb 2022 10:56:59 +0100
-From:   Alexander Dahl <ada@thorsis.com>
-To:     Thorsten Leemhuis <linux@leemhuis.info>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Stefano Zacchiroli <zack@upsilon.cc>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Laura Abbott <labbott@kernel.org>,
-        Julia Lawall <julia.lawall@inria.fr>,
-        Wenwen Wang <wenwen@cs.uga.edu>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] Documentation/process: Add Researcher Guidelines
-Message-ID: <YhdWa41bXssNVrE3@ada-deb-carambola.ifak-system.com>
-Mail-Followup-To: Thorsten Leemhuis <linux@leemhuis.info>,
-        Kees Cook <keescook@chromium.org>, Jonathan Corbet <corbet@lwn.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Stefano Zacchiroli <zack@upsilon.cc>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Laura Abbott <labbott@kernel.org>,
-        Julia Lawall <julia.lawall@inria.fr>,
-        Wenwen Wang <wenwen@cs.uga.edu>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-hardening@vger.kernel.org
-References: <20220224001403.1307377-1-keescook@chromium.org>
- <974cf8f2-06f3-99a5-9a77-6d7b7cc8271a@leemhuis.info>
+        Thu, 24 Feb 2022 04:59:29 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17FF012D0B2
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 01:59:00 -0800 (PST)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <sha@pengutronix.de>)
+        id 1nNAtb-0001Q8-7W; Thu, 24 Feb 2022 10:58:47 +0100
+Received: from sha by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <sha@pengutronix.de>)
+        id 1nNAta-00063u-ID; Thu, 24 Feb 2022 10:58:46 +0100
+Date:   Thu, 24 Feb 2022 10:58:46 +0100
+From:   Sascha Hauer <s.hauer@pengutronix.de>
+To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+Cc:     sboyd@kernel.org, robh+dt@kernel.org, shawnguo@kernel.org,
+        abel.vesa@nxp.com, kernel@pengutronix.de, festevam@gmail.com,
+        linux-imx@nxp.com, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Peng Fan <peng.fan@nxp.com>
+Subject: Re: [PATCH V4 4/5] clk: imx: support fracn gppll
+Message-ID: <20220224095846.GT9136@pengutronix.de>
+References: <20220224082251.1397754-1-peng.fan@oss.nxp.com>
+ <20220224082251.1397754-5-peng.fan@oss.nxp.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <974cf8f2-06f3-99a5-9a77-6d7b7cc8271a@leemhuis.info>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220224082251.1397754-5-peng.fan@oss.nxp.com>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-IRC:  #ptxdist @freenode
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-Uptime: 10:48:59 up 75 days, 18:34, 86 users,  load average: 0.05, 0.27,
+ 0.29
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: sha@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Thorsten,
-
-Am Thu, Feb 24, 2022 at 09:19:24AM +0100 schrieb Thorsten Leemhuis:
-> On 24.02.22 01:14, Kees Cook wrote:
-> > +If you are a first time contributor it is recommended that the patch
-> > +itself be vetted by others privately before being posted to public lists.
-> > +(This is required if you have been explicitly told your patches need
-> > +more careful internal review.) These people are expected to have their
-> > +"Reviewed-by" tag included in the resulting patch. Finding another
-> > +developer familiar with Linux contribution, especially within your own
-> > +organization, and having them help with reviews before sending them to
-> > +the public mailing lists tends to significantly improve the quality of the
-> > +resulting patches, and there by reduces the burden on other developers.
+On Thu, Feb 24, 2022 at 04:22:50PM +0800, Peng Fan (OSS) wrote:
+> From: Peng Fan <peng.fan@nxp.com>
 > 
-> I like the section, but I wonder why it's needed here. Is there anything
-> specific to patches produced from research in it there I missed when
-> reading it? If not: Wouldn't it be better to include that section as a
-> TLDR in Documentation/process/submitting-patches.rst and point there
-> instead? We already have at least two places describing how to submit
-> patches, creating yet another one (even if it's just in such a brief
-> version) somehow feels slightly wrong to me.
+> This PLL module is a Fractional-N synthesizer,
+> supporting 30-bit numerator and denominator. Numerator is a signed
+> number. It has feature to adjust fractional portion of feedback
+> divider dynamically. This fracn gppll is used in i.MX93.
 > 
-> OTOH I fully understand that having things in one place has it's
-> benefits. If that's wanted, why not put that text as TLDR in
-> submitting-patches.rst and maintain a copy here? Sure, keeping things in
-> sync has downsides, but I'd say it's the lesser evil. A copy could also
-> be avoided by briefly mentioning some of the important bits found in
-> another document; that's the approach I took in my patches regarding
-> regressions. To quote:
+> Reviewed-by: Abel Vesa <abel.vesa@nxp.com>
+> Signed-off-by: Peng Fan <peng.fan@nxp.com>
+> ---
+>  drivers/clk/imx/Makefile          |   1 +
+>  drivers/clk/imx/clk-fracn-gppll.c | 326 ++++++++++++++++++++++++++++++
+>  drivers/clk/imx/clk.h             |  21 ++
+>  3 files changed, 348 insertions(+)
+>  create mode 100644 drivers/clk/imx/clk-fracn-gppll.c
+> 
+> diff --git a/drivers/clk/imx/Makefile b/drivers/clk/imx/Makefile
+> index 36c04922d789..60c8a4bb7574 100644
+> --- a/drivers/clk/imx/Makefile
+> +++ b/drivers/clk/imx/Makefile
+> @@ -5,6 +5,7 @@ mxc-clk-objs += clk-busy.o
+>  mxc-clk-objs += clk-composite-7ulp.o
+>  mxc-clk-objs += clk-composite-8m.o
+>  mxc-clk-objs += clk-composite-93.o
+> +mxc-clk-objs += clk-fracn-gppll.o
+>  mxc-clk-objs += clk-cpu.o
+>  mxc-clk-objs += clk-divider-gate.o
+>  mxc-clk-objs += clk-fixup-div.o
+> diff --git a/drivers/clk/imx/clk-fracn-gppll.c b/drivers/clk/imx/clk-fracn-gppll.c
+> new file mode 100644
+> index 000000000000..b6add3a2e472
+> --- /dev/null
+> +++ b/drivers/clk/imx/clk-fracn-gppll.c
+> @@ -0,0 +1,326 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright 2021 NXP
+> + */
+> +
+> +#include <asm/div64.h>
+> +#include <linux/bitfield.h>
+> +#include <linux/clk-provider.h>
+> +#include <linux/err.h>
+> +#include <linux/export.h>
+> +#include <linux/io.h>
+> +#include <linux/iopoll.h>
+> +#include <linux/slab.h>
+> +#include <linux/jiffies.h>
+> +
+> +#include "clk.h"
+> +
+> +#define PLL_CTRL		0x0
+> +#define CLKMUX_BYPASS		BIT(2)
+> +#define CLKMUX_EN		BIT(1)
+> +#define POWERUP_MASK		BIT(0)
+> +
+> +#define PLL_ANA_PRG		0x10
+> +#define PLL_SPREAD_SPECTRUM	0x30
+> +
+> +#define PLL_NUMERATOR		0x40
+> +#define PLL_MFN_MASK		GENMASK(31, 2)
+> +#define PLL_MFN_SHIFT		2
+> +
+> +#define PLL_DENOMINATOR		0x50
+> +#define PLL_MFD_MASK		GENMASK(29, 0)
+> +
+> +#define PLL_DIV			0x60
+> +#define PLL_MFI_MASK		GENMASK(24, 16)
 
-Without further opinion on the topic or content itself: 
-If there's need to have "copied" parts of the documentation available
-in different places, why not put that to a separate file and include
-it in all places which need it?  
-This would solve the manual synchronization issue.  
-Did that in other projects using sphinx/rst already.  
-Only thing you have to keep an eye on is whether the surrounding
-context at places of the include still matches the included piece.
+Is the MFI field really 9 bits wide? Could be, I don't have the
+reference manual. It just looks like it could be a one-off.
 
-Greets
-Alex
+> +#define PLL_MFI_SHIFT		16
+> +#define PLL_RDIV_MASK		GENMASK(15, 13)
+> +#define PLL_RDIV_SHIFT		13
+> +#define PLL_ODIV_MASK		GENMASK(7, 0)
 
+The *_SHIFT defines can be removed.
+
+> +static int clk_fracn_gppll_set_rate(struct clk_hw *hw, unsigned long drate,
+> +				    unsigned long prate)
+> +{
+> +	struct clk_fracn_gppll *pll = to_clk_fracn_gppll(hw);
+> +	const struct imx_fracn_gppll_rate_table *rate;
+> +	u32 tmp, pll_div, ana_mfn;
+> +	int ret;
+> +
+> +	rate = imx_get_pll_settings(pll, drate);
+> +
+> +	/* Disable output */
+> +	tmp = readl_relaxed(pll->base + PLL_CTRL);
+> +	tmp &= ~CLKMUX_EN;
+> +	writel_relaxed(tmp, pll->base + PLL_CTRL);
+> +
+> +	/* Power Down */
+> +	tmp &= ~POWERUP_MASK;
+> +	writel_relaxed(tmp, pll->base + PLL_CTRL);
+> +
+> +	/* Disable BYPASS */
+> +	tmp &= ~CLKMUX_BYPASS;
+> +	writel_relaxed(tmp, pll->base + PLL_CTRL);
+> +
+> +	pll_div = FIELD_PREP(PLL_RDIV_MASK, rate->rdiv) | rate->odiv |
+> +		FIELD_PREP(PLL_MFI_MASK, rate->mfi);
+> +	writel_relaxed(pll_div, pll->base + PLL_DIV);
+> +	writel_relaxed(rate->mfd, pll->base + PLL_DENOMINATOR);
+> +	writel_relaxed(rate->mfn << PLL_MFN_SHIFT, pll->base + PLL_NUMERATOR);
+
+FIELD_PREP
+
+> +
+> +	/* Wait for 5us according to fracn mode pll doc */
+> +	udelay(5);
+> +
+> +	/* Enable Powerup */
+> +	tmp |= POWERUP_MASK;
+> +	writel_relaxed(tmp, pll->base + PLL_CTRL);
+> +
+> +	/* Wait Lock */
+> +	ret = clk_fracn_gppll_wait_lock(pll);
+> +	if (ret)
+> +		return ret;
+> +
+> +	/* Enable output */
+> +	tmp |= CLKMUX_EN;
+> +	writel_relaxed(tmp, pll->base + PLL_CTRL);
+> +
+> +	ana_mfn = (readl_relaxed(pll->base + PLL_STATUS) & PLL_MFN_MASK) >> PLL_MFN_SHIFT;
+
+FIELD_GET
+
+Sascha
+
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |

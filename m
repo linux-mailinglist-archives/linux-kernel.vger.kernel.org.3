@@ -2,134 +2,292 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96C584C37C4
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 22:28:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 045924C37B7
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 22:28:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234825AbiBXV2B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 16:28:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44070 "EHLO
+        id S234868AbiBXV2q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 16:28:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234849AbiBXV1j (ORCPT
+        with ESMTP id S232412AbiBXV2p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 16:27:39 -0500
-Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EEC65DA74
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 13:26:49 -0800 (PST)
-Received: by mail-pf1-x449.google.com with SMTP id h3-20020a628303000000b004e12f44a262so1893052pfe.21
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 13:26:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=reply-to:date:message-id:mime-version:subject:from:to:cc;
-        bh=LYW4tNkSjo8Kza5Anc4vEfQiliyM+KZge7Rmu6VCVnE=;
-        b=nvJroVS5w4YiBdoajw4bTdlmRcmJOcYL7hlW2pw5ntI2yuD5N9Ne3w/gdgRr8o3aE+
-         avlAmiyPUzVZ4c0Gc5Rtd8r8cTZsSu4CycPsEo/qOtxh16hmqeXEFlJaJkgEC9xY8jx3
-         HfDERmfIugyXppTnzHxT6Odb8TGv6c5lmKtG9GdfIw6+bT/C8r0rHCjFka9SKd/wCSv6
-         mDQfBi2IqFZgBeuXQ+Jsm9eoWpjOEGzkc5nLxsFnR3JsQlniMyCweHPrcVE9k2Jy895A
-         wZSet1mYnEpr9EyUc3Xs8zLHiqVEr7WgMJqVLzQG1DVwBjzHPTsGs2F9GlX2J40RCHzP
-         z2TQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:reply-to:date:message-id:mime-version:subject
-         :from:to:cc;
-        bh=LYW4tNkSjo8Kza5Anc4vEfQiliyM+KZge7Rmu6VCVnE=;
-        b=i7r+Di7IxUeDtH3fUSsVzTiA6CLFGHHsnXRPH+pRM5Qhd/F1mNcbp/PD2Ted4j18U7
-         yup+7GESyYtnxbdpmouek7dcvMIL2V2zqZfcCugWqkIWMCK4rWG/UDaZXusAdG2Lszp4
-         NFVKJe5Kcz0FdBi+RsbzdbivuN51hhHOoC8aQAyne2qzbJ+tBL5pIbOqhkRSmb6BzBbe
-         GGxpaR9+wzWFnjp4TG+R0ExkW2p6/SJk3idnCwf3tvYlK4pNXPuCoqxI6AE9zjScJeY/
-         ANyQRMmYoC7rxPrhhIqhsUkoa2buRjQ4kSNv1WuHbkqGIppU1o62ZRFfyEWZwB9omY3Y
-         RSZA==
-X-Gm-Message-State: AOAM532SrXg7GId2VNDQOdB3y3r7r3VffpX8zRt8jn7C65aEzORbFK9r
-        8n+pZ/mlhdneTzIhjW637HpIecKNHQw=
-X-Google-Smtp-Source: ABdhPJzPDQZXA1odOppqUTuAknQnuT64yHKJ4XrZyfWr2ZIkun1193cHSK8wONvU1q0CgVJHzHLVrWzU6Zo=
-X-Received: from seanjc.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e5])
- (user=seanjc job=sendgmr) by 2002:a05:6a00:244d:b0:4e0:1f65:d5da with SMTP id
- d13-20020a056a00244d00b004e01f65d5damr4426131pfj.6.1645738008579; Thu, 24 Feb
- 2022 13:26:48 -0800 (PST)
-Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Thu, 24 Feb 2022 21:26:46 +0000
-Message-Id: <20220224212646.3544811-1-seanjc@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.35.1.574.g5d30c73bfb-goog
-Subject: [PATCH] KVM: x86: Temporarily drop kvm->srcu when uninitialized vCPU
- is blocking
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Like Xu <like.xu.linux@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 24 Feb 2022 16:28:45 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B6F56661F;
+        Thu, 24 Feb 2022 13:28:14 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CB7C6618FA;
+        Thu, 24 Feb 2022 21:28:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D40B9C340E9;
+        Thu, 24 Feb 2022 21:28:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645738093;
+        bh=3m3DlKMGILFVebpMDl5vuVCQeiAAEm489IHqF6lES3E=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=ISH09f3hGYHdaQAbuCQV8zv/YyL39jJUon+kbaT+W0a3XyAgGs6rKqvJaXNDzT8SZ
+         VrDN/517WxDdOLk0mf34olqFdiyXkhMif71/jNbYdmVFupnSF4h6h1sjAsrF//dVWz
+         pcrVrs99h2HgADQdeGleVVSIOTltul2+eGXwD7sO/BPCSv55oHXqz5SJNnntdcrHRi
+         WoNSzQEMbK3E1G48XBKHE/wjxWU7NET0PUeiRxxNFS7k+BNzZDoAkCKuW6Np/oi2Cq
+         st5pJnnPnTm6UjAjUBt3uzNtFiCutWNNdm1yXWu7L96tSBd7ACMr0NTNMFXfmFwQYO
+         OdfQ60hTbHdJg==
+Date:   Thu, 24 Feb 2022 15:28:11 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>
+Cc:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Rob Herring <robh+dt@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>,
+        Russell King <rmk+kernel@armlinux.org.uk>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 5/6] PCI: mvebu: Add support for sending
+ Set_Slot_Power_Limit message
+Message-ID: <20220224212811.GA291001@bhelgaas>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220222163158.1666-6-pali@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Temporarily drop kvm->srcu before invoking kvm_vcpu_block() on a vCPU
-that hasn't yet been initialized.  Best case scenario, blocking while
-holding kvm->srcu will degrade guest performance.  Worst case scenario,
-the vCPU will never get a wake event and the VM's tasks will hang
-indefinitely on synchronize_srcu(), e.g. when trying update memslots.
+On Tue, Feb 22, 2022 at 05:31:57PM +0100, Pali Rohár wrote:
+> This PCIe message is sent automatically by mvebu HW when link changes
+> status from down to up.
 
-E.g. running the "apic" KVM unit test often results in the test hanging
+I *think* the intent of the above is:
 
-  ==> 6409/stack <==
-  [<0>] __synchronize_srcu.part.0+0x7a/0xa0
-  [<0>] kvm_swap_active_memslots+0x141/0x180
-  [<0>] kvm_set_memslot+0x2f9/0x470
-  [<0>] kvm_set_memory_region+0x29/0x40
-  [<0>] kvm_vm_ioctl+0x2c3/0xd70
-  [<0>] __x64_sys_ioctl+0x83/0xb0
-  [<0>] do_syscall_64+0x3b/0xc0
-  [<0>] entry_SYSCALL_64_after_hwframe+0x44/0xae
+  If DT supplies the 'slot-power-limit-milliwatt' property, program
+  the value in the Slot Power Limit in the Slot Capabilities register
+  and program the Root Port to send a Set_Slot_Power_Limit Message
+  when the Link transitions to DL_Up.
 
-  ==> 6410/stack <==
-  [<0>] kvm_vcpu_block+0x36/0x80
-  [<0>] kvm_arch_vcpu_ioctl_run+0x17b1/0x1f50
-  [<0>] kvm_vcpu_ioctl+0x279/0x690
-  [<0>] __x64_sys_ioctl+0x83/0xb0
-  [<0>] do_syscall_64+0x3b/0xc0
-  [<0>] entry_SYSCALL_64_after_hwframe+0x44/0xae
+PCIe r6.0, sec 2.2.8.5 and 7.5.3.9, also say Set_Slot_Power_Limit must
+be sent on a config write to Slot Capabilities.  I don't really
+understand that, since AFAICS, everything in that register is
+read-only.  But there must be some use case for forcing a message.
 
-While it's tempting to never acquire kvm->srcu for an uninitialized vCPU,
-practically speaking there's no penalty to acquiring kvm->srcu "early"
-as the KVM_MP_STATE_UNINITIALIZED path is a one-time thing per vCPU.  On
-the other hand, seemingly innocuous helpers like kvm_apic_accept_events()
-and sync_regs() can theoretically reach code that might access
-SRCU-protected data structures, e.g. sync_regs() can trigger forced
-existing of nested mode via kvm_vcpu_ioctl_x86_set_vcpu_events().
+> Slot power limit is read from DT property 'slot-power-limit-milliwatt' and
+> set to mvebu HW. When this DT property is not specified then driver treat
+> it as "Slot Capabilities register has not yet been initialized".
 
-Fixes: 5d8d2bfc5e65 ("KVM: x86: pull kvm->srcu read-side to kvm_arch_vcpu_ioctl_run")
-Cc: Like Xu <like.xu.linux@gmail.com>
-Signed-off-by: Sean Christopherson <seanjc@google.com>
----
- arch/x86/kvm/x86.c | 4 ++++
- 1 file changed, 4 insertions(+)
+Does this last sentence mean "the Slot Power Limit is set to 0W
+(Value = 00h and Scale = 00b = 1.0x) and Auto Slot Power Limit Disable
+is set, so Set_Slot_Power_Limit Messages will never be sent"?
 
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index e55de9b48d1a..8fd60887f38d 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -10411,7 +10411,11 @@ int kvm_arch_vcpu_ioctl_run(struct kvm_vcpu *vcpu)
- 		 * use before KVM has ever run the vCPU.
- 		 */
- 		WARN_ON_ONCE(kvm_lapic_hv_timer_in_use(vcpu));
-+
-+		srcu_read_unlock(&kvm->srcu, vcpu->srcu_idx);
- 		kvm_vcpu_block(vcpu);
-+		vcpu->srcu_idx = srcu_read_lock(&kvm->srcu);
-+
- 		if (kvm_apic_accept_events(vcpu) < 0) {
- 			r = 0;
- 			goto out;
+> Signed-off-by: Pali Rohár <pali@kernel.org>
+> ---
+>  drivers/pci/controller/pci-mvebu.c | 85 ++++++++++++++++++++++++++++--
+>  1 file changed, 80 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/pci/controller/pci-mvebu.c b/drivers/pci/controller/pci-mvebu.c
+> index a75d2b9196f9..c786feec4d17 100644
+> --- a/drivers/pci/controller/pci-mvebu.c
+> +++ b/drivers/pci/controller/pci-mvebu.c
+> @@ -66,6 +66,12 @@
+>  #define  PCIE_STAT_BUS                  0xff00
+>  #define  PCIE_STAT_DEV                  0x1f0000
+>  #define  PCIE_STAT_LINK_DOWN		BIT(0)
+> +#define PCIE_SSPL_OFF		0x1a0c
+> +#define  PCIE_SSPL_VALUE_SHIFT		0
+> +#define  PCIE_SSPL_VALUE_MASK		GENMASK(7, 0)
+> +#define  PCIE_SSPL_SCALE_SHIFT		8
+> +#define  PCIE_SSPL_SCALE_MASK		GENMASK(9, 8)
+> +#define  PCIE_SSPL_ENABLE		BIT(16)
+>  #define PCIE_RC_RTSTA		0x1a14
+>  #define PCIE_DEBUG_CTRL         0x1a60
+>  #define  PCIE_DEBUG_SOFT_RESET		BIT(20)
+> @@ -111,6 +117,8 @@ struct mvebu_pcie_port {
+>  	struct mvebu_pcie_window iowin;
+>  	u32 saved_pcie_stat;
+>  	struct resource regs;
+> +	u8 slot_power_limit_value;
+> +	u8 slot_power_limit_scale;
+>  	struct irq_domain *intx_irq_domain;
+>  	raw_spinlock_t irq_lock;
+>  	int intx_irq;
+> @@ -239,7 +247,7 @@ static void mvebu_pcie_setup_wins(struct mvebu_pcie_port *port)
+>  
+>  static void mvebu_pcie_setup_hw(struct mvebu_pcie_port *port)
+>  {
+> -	u32 ctrl, lnkcap, cmd, dev_rev, unmask;
+> +	u32 ctrl, lnkcap, cmd, dev_rev, unmask, sspl;
+>  
+>  	/* Setup PCIe controller to Root Complex mode. */
+>  	ctrl = mvebu_readl(port, PCIE_CTRL_OFF);
+> @@ -292,6 +300,20 @@ static void mvebu_pcie_setup_hw(struct mvebu_pcie_port *port)
+>  	/* Point PCIe unit MBUS decode windows to DRAM space. */
+>  	mvebu_pcie_setup_wins(port);
+>  
+> +	/*
+> +	 * Program Root Complex to automatically sends Set Slot Power Limit
+> +	 * PCIe Message when changing status from Dl-Down to Dl-Up and valid
+> +	 * slot power limit was specified.
 
-base-commit: 991f988b43c5ee82ef681907bfe979bee93a55c2
--- 
-2.35.1.574.g5d30c73bfb-goog
+s/Root Complex/Root Port/, right?  AFAIK the message would be sent by
+a Downstream Port, i.e., a Root Port in this case.
 
+s/sends/send/
+s/Set Slot Power Limit/Set_Slot_Power_Limit/ to match spec usage (also
+below)
+s/Dl-Down/DL_Down/ to match spec usage
+s/Dl-Up/DL_Up/ ditto
+
+> +	 */
+> +	sspl = mvebu_readl(port, PCIE_SSPL_OFF);
+> +	sspl &= ~(PCIE_SSPL_VALUE_MASK | PCIE_SSPL_SCALE_MASK | PCIE_SSPL_ENABLE);
+> +	if (port->slot_power_limit_value && port->slot_power_limit_scale) {
+> +		sspl |= port->slot_power_limit_value << PCIE_SSPL_VALUE_SHIFT;
+> +		sspl |= port->slot_power_limit_scale << PCIE_SSPL_SCALE_SHIFT;
+> +		sspl |= PCIE_SSPL_ENABLE;
+> +	}
+> +	mvebu_writel(port, sspl, PCIE_SSPL_OFF);
+> +
+>  	/* Mask all interrupt sources. */
+>  	mvebu_writel(port, ~PCIE_INT_ALL_MASK, PCIE_INT_UNMASK_OFF);
+>  
+> @@ -628,9 +650,16 @@ mvebu_pci_bridge_emul_pcie_conf_read(struct pci_bridge_emul *bridge,
+>  			  (PCI_EXP_LNKSTA_DLLLA << 16) : 0);
+>  		break;
+>  
+> -	case PCI_EXP_SLTCTL:
+> -		*value = PCI_EXP_SLTSTA_PDS << 16;
+> +	case PCI_EXP_SLTCTL: {
+> +		u16 slotsta = le16_to_cpu(bridge->pcie_conf.slotsta);
+> +		u32 val = 0;
+> +		if (!(mvebu_readl(port, PCIE_SSPL_OFF) & PCIE_SSPL_ENABLE))
+> +			val |= PCI_EXP_SLTCTL_ASPL_DISABLE;
+> +		/* PCI_EXP_SLTCTL is 32-bit and contains also slot status bits */
+
+This comment is a little bit confusing because PCI_EXP_SLTCTL is not
+actually 32 bits; it's 16 bits.  It's just that we "read" 32 bits,
+which includes both PCI_EXP_SLTCTL and PCI_EXP_SLTSTA.  If you use
+"PCI_EXP_SLTCTL", I think it would be helpful to also say
+"PCI_EXP_SLTSTA" instead of "slot status bits".
+
+> +		val |= slotsta << 16;
+> +		*value = val;
+>  		break;
+> +	}
+>  
+>  	case PCI_EXP_RTSTA:
+>  		*value = mvebu_readl(port, PCIE_RC_RTSTA);
+> @@ -774,6 +803,19 @@ mvebu_pci_bridge_emul_pcie_conf_write(struct pci_bridge_emul *bridge,
+>  		mvebu_writel(port, new, PCIE_CAP_PCIEXP + PCI_EXP_LNKCTL);
+>  		break;
+>  
+> +	case PCI_EXP_SLTCTL:
+> +		if ((mask & PCI_EXP_SLTCTL_ASPL_DISABLE) &&
+> +		    port->slot_power_limit_value &&
+> +		    port->slot_power_limit_scale) {
+> +			u32 sspl = mvebu_readl(port, PCIE_SSPL_OFF);
+> +			if (new & PCI_EXP_SLTCTL_ASPL_DISABLE)
+> +				sspl &= ~PCIE_SSPL_ENABLE;
+> +			else
+> +				sspl |= PCIE_SSPL_ENABLE;
+> +			mvebu_writel(port, sspl, PCIE_SSPL_OFF);
+
+IIUC, the behavior of PCI_EXP_SLTCTL_ASPL_DISABLE as observed by
+software that sets it and reads it back will depend on whether the DT
+contains "slot-power-limit-milliwatt".
+
+If there is no DT property, port->slot_power_limit_value will be zero
+and PCIE_SSPL_ENABLE will never be set.  So if I clear
+PCI_EXP_SLTCTL_ASPL_DISABLE, then read it back, it looks like it will
+read as being set.  That's not what I would expect from the spec
+(PCIe r6.0, sec 7.5.3.10).
+
+> +		}
+> +		break;
+> +
+>  	case PCI_EXP_RTSTA:
+>  		/*
+>  		 * PME Status bit in Root Status Register (PCIE_RC_RTSTA)
+> @@ -868,8 +910,26 @@ static int mvebu_pci_bridge_emul_init(struct mvebu_pcie_port *port)
+>  	/*
+>  	 * Older mvebu hardware provides PCIe Capability structure only in
+>  	 * version 1. New hardware provides it in version 2.
+> +	 * Enable slot support which is emulated.
+>  	 */
+> -	bridge->pcie_conf.cap = cpu_to_le16(pcie_cap_ver);
+> +	bridge->pcie_conf.cap = cpu_to_le16(pcie_cap_ver | PCI_EXP_FLAGS_SLOT);
+> +
+> +	/*
+> +	 * Set Presence Detect State bit permanently as there is no support for
+> +	 * unplugging PCIe card from the slot. Assume that PCIe card is always
+> +	 * connected in slot.
+> +	 *
+> +	 * Set physical slot number to port+1 as mvebu ports are indexed from
+> +	 * zero and zero value is reserved for ports within the same silicon
+> +	 * as Root Port which is not mvebu case.
+> +	 *
+> +	 * Also set correct slot power limit.
+> +	 */
+> +	bridge->pcie_conf.slotcap = cpu_to_le32(
+> +		(port->slot_power_limit_value << PCI_EXP_SLTCAP_SPLV_SHIFT) |
+> +		(port->slot_power_limit_scale << PCI_EXP_SLTCAP_SPLS_SHIFT) |
+> +		((port->port+1) << PCI_EXP_SLTCAP_PSN_SHIFT));
+> +	bridge->pcie_conf.slotsta = cpu_to_le16(PCI_EXP_SLTSTA_PDS);
+>  
+>  	bridge->subsystem_vendor_id = ssdev_id & 0xffff;
+>  	bridge->subsystem_id = ssdev_id >> 16;
+> @@ -1191,6 +1251,7 @@ static int mvebu_pcie_parse_port(struct mvebu_pcie *pcie,
+>  {
+>  	struct device *dev = &pcie->pdev->dev;
+>  	enum of_gpio_flags flags;
+> +	u32 slot_power_limit;
+>  	int reset_gpio, ret;
+>  	u32 num_lanes;
+>  
+> @@ -1291,6 +1352,15 @@ static int mvebu_pcie_parse_port(struct mvebu_pcie *pcie,
+>  		port->reset_gpio = gpio_to_desc(reset_gpio);
+>  	}
+>  
+> +	slot_power_limit = of_pci_get_slot_power_limit(child,
+> +				&port->slot_power_limit_value,
+> +				&port->slot_power_limit_scale);
+> +	if (slot_power_limit)
+> +		dev_info(dev, "%s: Slot power limit %u.%uW\n",
+> +			 port->name,
+> +			 slot_power_limit / 1000,
+> +			 (slot_power_limit / 100) % 10);
+> +
+>  	port->clk = of_clk_get_by_name(child, NULL);
+>  	if (IS_ERR(port->clk)) {
+>  		dev_err(dev, "%s: cannot get clock\n", port->name);
+> @@ -1587,7 +1657,7 @@ static int mvebu_pcie_remove(struct platform_device *pdev)
+>  {
+>  	struct mvebu_pcie *pcie = platform_get_drvdata(pdev);
+>  	struct pci_host_bridge *bridge = pci_host_bridge_from_priv(pcie);
+> -	u32 cmd;
+> +	u32 cmd, sspl;
+>  	int i;
+>  
+>  	/* Remove PCI bus with all devices. */
+> @@ -1624,6 +1694,11 @@ static int mvebu_pcie_remove(struct platform_device *pdev)
+>  		/* Free config space for emulated root bridge. */
+>  		pci_bridge_emul_cleanup(&port->bridge);
+>  
+> +		/* Disable sending Set Slot Power Limit PCIe Message. */
+> +		sspl = mvebu_readl(port, PCIE_SSPL_OFF);
+> +		sspl &= ~(PCIE_SSPL_VALUE_MASK | PCIE_SSPL_SCALE_MASK | PCIE_SSPL_ENABLE);
+> +		mvebu_writel(port, sspl, PCIE_SSPL_OFF);
+> +
+>  		/* Disable and clear BARs and windows. */
+>  		mvebu_pcie_disable_wins(port);
+>  
+> -- 
+> 2.20.1
+> 

@@ -2,87 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 240284C2D7D
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 14:44:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B0264C2D85
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 14:46:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234942AbiBXNpD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 08:45:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49902 "EHLO
+        id S235208AbiBXNqj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 08:46:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233007AbiBXNo6 (ORCPT
+        with ESMTP id S231439AbiBXNqh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 08:44:58 -0500
-Received: from p3plsmtpa06-08.prod.phx3.secureserver.net (p3plsmtpa06-08.prod.phx3.secureserver.net [173.201.192.109])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2229426F4E6
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 05:44:29 -0800 (PST)
-Received: from localhost ([82.17.115.212])
-        by :SMTPAUTH: with ESMTPA
-        id NEPynxQ5Itbo2NEQ0n87OC; Thu, 24 Feb 2022 06:44:28 -0700
-X-CMAE-Analysis: v=2.4 cv=M8iIlw8s c=1 sm=1 tr=0 ts=62178bbc
- a=9gipVNR6X1CoIeAWHwLoWw==:117 a=9gipVNR6X1CoIeAWHwLoWw==:17
- a=IkcTkHD0fZMA:10 a=dryZNVXSxjYntoBgU78A:9 a=QEXdDO2ut3YA:10
-X-SECURESERVER-ACCT: atomlin@atomlin.com
-Date:   Thu, 24 Feb 2022 13:44:26 +0000
-From:   Aaron Tomlin <atomlin@atomlin.com>
-To:     Marcelo Tosatti <mtosatti@redhat.com>
-Cc:     Aaron Tomlin <atomlin@redhat.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Christoph Lameter <cl@linux.com>, tglx@linutronix.de,
-        mingo@kernel.org, linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Phil Auld <pauld@redhat.com>
-Subject: Re: [RFC PATCH] tick/sched: Ensure quiet_vmstat() is called when the
- idle tick was stopped too
-Message-ID: <20220224134426.ai7demvrupzy6lu5@ava.usersys.com>
-References: <20220217124729.GA743618@lothringen>
- <20220217142615.xqtiydixvnumyvei@ava.usersys.com>
- <20220217163205.GA748087@lothringen>
- <20220218125454.utlgmuhijklzr3if@ava.usersys.com>
- <20220219154616.pwsvh445x3vn7ltf@ava.usersys.com>
- <Yhd5olg9CjXSAf2s@fuller.cnet>
- <20220224130014.rmhtx3xlepybuxn2@ava.usersys.com>
- <YheE0joXm53Hxn4J@fuller.cnet>
- <20220224132816.qsfa66ao3xdjdxxx@ava.usersys.com>
- <YheK2oesh/cxvi6j@fuller.cnet>
+        Thu, 24 Feb 2022 08:46:37 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41C5026F4E6;
+        Thu, 24 Feb 2022 05:46:06 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CD74561B38;
+        Thu, 24 Feb 2022 13:46:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4884C340E9;
+        Thu, 24 Feb 2022 13:46:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645710365;
+        bh=jnbdT8UDAZtAA54FrGhoPcolloNf7HRAUDbtYfwfctw=;
+        h=From:To:Cc:Subject:Date:From;
+        b=IZrqtq2kceQS0Sq/mXjgWYuG/quLzDYr5v0h0g4VvsREdaekkp+FMtShpRfUNSGTS
+         1WIqmWBTkrWPqKLKuhDqisz1YeQJzLkCq9IMN8xPFgeBAuAkmMNf32u0ApbO9Wr0DX
+         Pl7/dtQrhGSKQHkybcvZ7OOwIJuQjLOE8xZW0+VxTxtoHcVI0AJRUVajJGJhBtIFsR
+         csu01x5+6DlNYc7zKoL1WvSkbfmfD8KDPeuU7qMlVuq0Ba4DovHY8mEvaq//wKnbNt
+         g8W5tHvwc4RvGnOq2Q3yUs1gasJVOI3PvnzmhDdWpa0XqYK/zLC0oOy14LvyTFMOh1
+         t6SBPIzc2LkPQ==
+From:   broonie@kernel.org
+To:     David Sterba <dsterba@suse.cz>
+Cc:     David Sterba <dsterba@suse.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Qu Wenruo <wqu@suse.com>,
+        =?UTF-8?q?D=C4=81vis=20Mos=C4=81ns?= <davispuh@gmail.com>
+Subject: linux-next: manual merge of the btrfs tree with the btrfs-fixes tree
+Date:   Thu, 24 Feb 2022 13:44:27 +0000
+Message-Id: <20220224134427.3208381-1-broonie@kernel.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <YheK2oesh/cxvi6j@fuller.cnet>
-X-CMAE-Envelope: MS4xfCEzHm3PJhNGG/t1WGRX1uIq4CTw1/ohvmRt+lOAbOWx+NaU1T9Xe8vUdDEkhfCci4DYz4STHFa4a2B5oVghjtutom7a5mLDK8h/zj7y+umS91dotgLF
- dWgst43fXC+M5LGpz7TSb30O2DWLp3SdPtJrgQuGQxBLU6QNZ0iIy+BYbkm3UlBfKE0Ha/TPw1nVs6793xclOU5/eMdudGsOLaFLnHsJIH/DUs/h9clvJusQ
- LJdITso7ZAFguPkXroY7Etr7XVmk6FjBicAoU6k4ekfVVuWYosFzpSfJdYSWY8CNHnqmUEZwuNsp6pIYIivlZxKqSb60kdYRnpOM3JvhIVt3Q5g4EbobKal9
- iM9cqm2xnuvsyPQu62yLYuHv5cgHApSPqtfnUzS4qE+fg7WTLP06acJg9q6wqgYYL+OrTsQw
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 2022-02-24 10:40 -0300, Marcelo Tosatti wrote:
-> On Thu, Feb 24, 2022 at 01:28:16PM +0000, Aaron Tomlin wrote:
-> > On Thu 2022-02-24 10:14 -0300, Marcelo Tosatti wrote:
-> > > If the per-CPU vmstat_update is limited to happen once per second, that
-> > > shouldnt be a significant performance impact?
-> > 
-> > Perhaps not. Albeit, is the interrupt worth it? 
-> 
-> Its a requirement for correctness right?
+Hi all,
 
-Yes, this is true.
+Today's linux-next merge of the btrfs tree got conflicts in:
 
-> > Then again it could indeed
-> > be a long time before the idle task is selected and a return to idle code
-> > were we'd check for any remaining differentials with the aforementioned
-> > patch.
-> 
-> Or a long time before userspace returns to kernel.
+  fs/btrfs/ctree.h
+  fs/btrfs/file.c
+  fs/btrfs/inode.c
+  fs/btrfs/ioctl.c
+  fs/btrfs/lzo.c
 
-Indeed. I'll put together a patch for comment.
+between commit:
+
+  2ac3e062af024 ("btrfs: reduce extent threshold for autodefrag")
+  741b23a970a79 ("btrfs: prevent copying too big compressed lzo segment")
+  26fbac2517fca ("btrfs: autodefrag: only scan one inode once")
+  966d879bafaaf ("btrfs: defrag: allow defrag_one_cluster() to skip large extent which is not a target")
+  d5633b0dee02d ("btrfs: defrag: bring back the old file extent search behavior")
+
+from the btrfs-fixes tree and commit:
+
+  13b2f7ab699a5 ("btrfs: close the gap between inode_should_defrag() and autodefrag extent size threshold")
+  48b433a2ef82a ("btrfs: add lzo workspace buffer length constants")
+  db360c49d476f ("btrfs: autodefrag: only scan one inode once")
+  e6c69fcbee7ef ("btrfs: defrag: use control structure in btrfs_defrag_file()")
+  6b17743d934ec ("btrfs: defrag: bring back the old file extent search behavior")
+
+from the btrfs tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+diff --cc fs/btrfs/ctree.h
+index 947f04789389e,5a569bc756c3c..0000000000000
+--- a/fs/btrfs/ctree.h
++++ b/fs/btrfs/ctree.h
+diff --cc fs/btrfs/file.c
+index 01111ee06e1ef,8815981447034..0000000000000
+--- a/fs/btrfs/file.c
++++ b/fs/btrfs/file.c
+diff --cc fs/btrfs/inode.c
+index 76e530f76e3cf,44e8d28182b7f..0000000000000
+--- a/fs/btrfs/inode.c
++++ b/fs/btrfs/inode.c
+diff --cc fs/btrfs/ioctl.c
+index 8d47ec5fc4f44,998bf48e5ce29..0000000000000
+--- a/fs/btrfs/ioctl.c
++++ b/fs/btrfs/ioctl.c
+@@@ -1435,16 -1460,16 +1461,23 @@@ static int defrag_collect_targets(struc
+  			goto add;
+  
+  		/* Skip too large extent */
+- 		if (range_len >= extent_thresh)
++ 		if (range_len >= ctrl->extent_thresh)
++ 			goto next;
++ 
++ 		/*
++ 		 * Skip extents already at its max capacity, this is mostly for
++ 		 * compressed extents, which max cap is only 128K.
++ 		 */
++ 		if (em->len >= get_extent_max_capacity(em))
+  			goto next;
+  
+ +		/*
+ +		 * Skip extents already at its max capacity, this is mostly for
+ +		 * compressed extents, which max cap is only 128K.
+ +		 */
+ +		if (em->len >= get_extent_max_capacity(em))
+ +			goto next;
+ +
+  		next_mergeable = defrag_check_next_extent(&inode->vfs_inode, em,
+  							  locked);
+  		if (!next_mergeable) {
+@@@ -1683,19 -1715,11 +1723,20 @@@ static int defrag_one_cluster(struct bt
+  			break;
+  		}
+  
+- 		if (max_sectors)
++ 		if (ctrl->max_sectors_to_defrag)
+  			range_len = min_t(u32, range_len,
+- 				(max_sectors - *sectors_defragged) * sectorsize);
++ 					  (ctrl->max_sectors_to_defrag -
++ 					   ctrl->sectors_defragged) * sectorsize);
+  
+ +		/*
+ +		 * If defrag_one_range() has updated last_scanned_ret,
+ +		 * our range may already be invalid (e.g. hole punched).
+ +		 * Skip if our range is before last_scanned_ret, as there is
+ +		 * no need to defrag the range anymore.
+ +		 */
+ +		if (entry->start + range_len <= *last_scanned_ret)
+ +			continue;
+ +
+  		if (ra)
+  			page_cache_sync_readahead(inode->vfs_inode.i_mapping,
+  				ra, NULL, entry->start >> PAGE_SHIFT,
+@@@ -1834,13 -1879,11 +1898,10 @@@ int btrfs_defrag_file(struct inode *ino
+  			break;
+  		}
+  		if (do_compress)
+- 			BTRFS_I(inode)->defrag_compress = compress_type;
+- 		ret = defrag_one_cluster(BTRFS_I(inode), ra, cur,
+- 				cluster_end + 1 - cur, extent_thresh,
+- 				newer_than, do_compress, &sectors_defragged,
+- 				max_to_defrag, &last_scanned);
+ -			BTRFS_I(inode)->defrag_compress = ctrl->compress;
++ 		ret = defrag_one_cluster(BTRFS_I(inode), ra, ctrl, cur,
++ 					 cluster_end + 1 - cur);
+  
+- 		if (sectors_defragged > prev_sectors_defragged)
++ 		if (ctrl->sectors_defragged > prev_sectors_defragged)
+  			balance_dirty_pages_ratelimited(inode->i_mapping);
+  
+  		btrfs_inode_unlock(inode, 0);
+diff --cc fs/btrfs/lzo.c
+index e6e28a9c79877,430ad36b8b080..0000000000000
+--- a/fs/btrfs/lzo.c
++++ b/fs/btrfs/lzo.c
 
 
-Kind regards,
-
--- 
-Aaron Tomlin
+diff --git a/fs/btrfs/ioctl.c b/fs/btrfs/ioctl.c
+index 7d3542893a165..5ef7c08b24b89 100644
+--- a/fs/btrfs/ioctl.c
++++ b/fs/btrfs/ioctl.c
+@@ -1734,7 +1734,7 @@ static int defrag_one_cluster(struct btrfs_inode *inode,
+ 		 * Skip if our range is before last_scanned_ret, as there is
+ 		 * no need to defrag the range anymore.
+ 		 */
+-		if (entry->start + range_len <= *last_scanned_ret)
++		if (entry->start + range_len <= ctrl->last_scanned)
+ 			continue;
+ 
+ 		if (ra)
+@@ -1760,7 +1760,7 @@ static int defrag_one_cluster(struct btrfs_inode *inode,
+ 		kfree(entry);
+ 	}
+ 	if (ret >= 0)
+-		*last_scanned_ret = max(*last_scanned_ret, start + len);
++		ctrl->last_scanned = max(ctrl->last_scanned, start + len);
+ 	return ret;
+ }
+ 

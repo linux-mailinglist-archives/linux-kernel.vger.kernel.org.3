@@ -2,159 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D0F74C23F9
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 07:15:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8457B4C23F1
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 07:12:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231217AbiBXGQU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 01:16:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36918 "EHLO
+        id S230518AbiBXGNB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 01:13:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230303AbiBXGQS (ORCPT
+        with ESMTP id S230383AbiBXGM7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 01:16:18 -0500
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39D79269A8B;
-        Wed, 23 Feb 2022 22:15:44 -0800 (PST)
-X-UUID: 2dcc8b82a94045cb9bd75b628a1be054-20220224
-X-UUID: 2dcc8b82a94045cb9bd75b628a1be054-20220224
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
-        (envelope-from <lina.wang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 2042828854; Thu, 24 Feb 2022 14:15:40 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Thu, 24 Feb 2022 14:15:38 +0800
-Received: from mbjsdccf07.mediatek.inc (10.15.20.246) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 24 Feb 2022 14:15:36 +0800
-From:   Lina Wang <lina.wang@mediatek.com>
-To:     Steffen Klassert <steffen.klassert@secunet.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S . Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-CC:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        Lina Wang <lina.wang@mediatek.com>
-Subject: [PATCH v2] xfrm: fix tunnel model fragmentation behavior
-Date:   Thu, 24 Feb 2022 14:09:31 +0800
-Message-ID: <20220224060931.30404-1-lina.wang@mediatek.com>
-X-Mailer: git-send-email 2.18.0
+        Thu, 24 Feb 2022 01:12:59 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 057C423400B;
+        Wed, 23 Feb 2022 22:12:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1645683132;
+        bh=REa265nvh/komFD1FcTmecbeNI5/kSivlQxcjQiFZVY=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=Gn2h/79sOF7rYJ/e+u3Q8BwcS/vNJeOXyeXY1+wIr/uxAwDqeUDbXnSC8QKP7GjHc
+         2voLo0styqVF+jyBSIUzU5ZvzOOcIaMlYnA+gtnQ5R4+r9XgA0cooqADf6jYAovLOv
+         iatW3bp9v1qJIsUPTVYXrswHJuIBsER/rVv+VR+w=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from esprimo-mx.users.agdsn.de ([141.30.226.129]) by mail.gmx.net
+ (mrgmx005 [212.227.17.190]) with ESMTPSA (Nemesis) id
+ 1N3bSj-1oM3rj0XDv-010cxR; Thu, 24 Feb 2022 07:12:12 +0100
+From:   Armin Wolf <W_Armin@gmx.de>
+To:     hdegoede@redhat.com
+Cc:     jdelvare@suse.com, linux@roeck-us.net, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/2] hwmon: (sch5627) Add pwmX_auto_channels_temp attributes
+Date:   Thu, 24 Feb 2022 07:12:08 +0100
+Message-Id: <20220224061210.16452-1-W_Armin@gmx.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
-        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:BhB520CYWe2mZI4epOlS9mHcJhtS+XBEdoV+hY7QubDV/OWdK18
+ vzGayCqEYMbQFDmH61Slh0wOd/jDD3+jkl94i7KnOI6+jby/hXlRw+szwWBb5RNetP4wXzi
+ I9VRir36hit0dgiivCqd3kQqOesi2RueDv9JGjn9Gn4s5ifnfZNQD8T3Pvq45VGSC/yoy77
+ qS9af6lFWAxzsO390Km+Q==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:oWGNQgN8jSQ=:HulgLGAOPEHJuH2j11YeUD
+ B6Q6pPE5/NSaUbw3H5AGMGAOlx3NXHIoBpAxJ/qcuUZGGP9EPP8Yf84b0DG44wv1MDHExp0sB
+ HncL6DS3sYnAiNPLWVzAZr1Lg9V1AjCY79DYXGyNrRFdWCz95aJW0x5cuQEmqyLA/UvjoroaN
+ QsBZBTuZ9YqPX0oUGtKp9ZLAUnD637zKegC34nxkY5Ma3cB49NsKNd+Ns1J3BNhgrIF3TGqJe
+ 1lEp0Uhgw2I7czQfi5tjWGRx5DWWCCw9DzxTFsFKO5U0LWvqmQIqEt5WKOAxTGt1b2d8M0cVk
+ RZoTXeBvSikRVN+zvwJqM8AZr+EbIid0UPs1mSHC8IfIyvpxtplwgMEI1o1YZPn8aJiEEO1FY
+ H8jyWZhowwsi5RHid3Q67asbP8x0QdzXlf6TquujmjIIk7zVZrsmSh8gqzadaMklJsvAaHz75
+ UaKWlwvJ7OINhihHAzlL5J92EsaCJqG0G/dDOS/zOrW2n1Eb1ECFn+ppbF2HgSQQebEeOd20r
+ nYvZUmV1R+0uZAfbLDYGVomNFkyVkMVUXCX6A+/thlJLbhScfXThIKnSwIw3FuedYlILmdYa8
+ EpW88f1B9ffKIIxUD4KVS3TaA15oL85Bt2fucd+XYDjdBLVImhHQ6KBYw2M7bwnzclNGhgfjL
+ obr9tCqr10WYr2TgRh2938zKR5NqfBtLxGl8KNbnQbwUbzeT8gzAqawl65EEOcdKk4FWWgvoK
+ rA+j+p+lED0vb8/3OGWvxI2fkLZV4AT3s6Jr3F31X/sHz8Y6wTRtBM6VvtJFfpGlthQ374obf
+ wat+eTD5V47MYFOjaHWVihNQ0ACrdwL7mH44XTW0dMCNB1Jm6ffsu4mjtSmVm3Khmbn4p68iV
+ usVvrDbIjQ/mu7/MgBrGo2u8YIdBK4E0eHB4XF3H/QmCsrZFMDiL05/pt29cN93putBxFEkwc
+ uF/L/75pwMv9ie02waMIl+xMc22fq68xEA9oNmkVJporacMGo3weU/OYAcjcZY9++N5k/xHJl
+ NsZhbsU/9xchsVWUK/NElzsQHPhI4ZZk3jvSxDBItrfjiJgIUI9MdrED2Ipn4Kd+vcMPlUDSt
+ mXFKWpHfuep4fg=
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In tunnel mode, if outer interface(ipv4) is less, it is easily to let 
-inner IPV6 mtu be less than 1280. If so, a Packet Too Big ICMPV6 message 
-is received. When send again, packets are fragmentized with 1280, they
-are still rejected with ICMPV6(Packet Too Big) by xfrmi_xmit2().
+After doing some research, i found out that Fujitsu's hardware
+mointoring solution inside the SCH5627 exports data thru
+registers 0xA0 - 0xA3 regarding the mapping between temperature
+sensors and fans. If those registers are set to 0, the fans
+are forced to full speed.
+The first patch adds support for pwmX_auto_channels_temp
+attributes to the hwmon core, while the second patch does
+extend the sch5627 driver.
 
-According to RFC4213 Section3.2.2:
-         if (IPv4 path MTU - 20) is less than 1280
-                 if packet is larger than 1280 bytes
-                         Send ICMPv6 "packet too big" with MTU = 1280.
-                         Drop packet.
-                 else
-                         Encapsulate but do not set the Don't Fragment
-                         flag in the IPv4 header.  The resulting IPv4
-                         packet might be fragmented by the IPv4 layer
-                         on the encapsulator or by some router along
-                         the IPv4 path.
-                 endif
-         else
-                 if packet is larger than (IPv4 path MTU - 20)
-                         Send ICMPv6 "packet too big" with
-                         MTU = (IPv4 path MTU - 20).
-                         Drop packet.
-                 else
-                         Encapsulate and set the Don't Fragment flag
-                         in the IPv4 header.
-                 endif
-         endif
-Packets should be fragmentized with ipv4 outer interface, so change it.
+Both patches have been tested on a Fujitsu Esprimo P720.
 
-After it is fragemtized with ipv4, there will be double fragmenation.
-No.48 & No.51 are ipv6 fragment packets, No.48 is double fragmentized, 
-then tunneled with IPv4(No.49& No.50), which obey spec. And received peer
-cannot decrypt it rightly.
+=2D--
+Changes in v2:
+- acquire mutex before doing register reads/writes
 
-48              2002::10	2002::11 1296(length) IPv6 fragment (off=0 more=y ident=0xa20da5bc nxt=50) 
-49   0x0000 (0) 2002::10	2002::11 1304	      IPv6 fragment (off=0 more=y ident=0x7448042c nxt=44)
-50   0x0000 (0)	2002::10	2002::11 200	      ESP (SPI=0x00035000) 
-51		2002::10	2002::11 180	      Echo (ping) request 
-52   0x56dc     2002::10	2002::11 248	      IPv6 fragment (off=1232 more=n ident=0xa20da5bc nxt=50)
+Armin Wolf (2):
+  hwmon: (core) Add support for pwm auto channels attribute
+  hwmon: (sch5627) Add pwmX_auto_channels_temp support
 
-esp_noneed_fragment has fixed above issues. Finally, it acted like below:
-1   0x6206 192.168.1.138   192.168.1.1 1316 Fragmented IP protocol (proto=Encap Security Payload 50, off=0, ID=6206) [Reassembled in #2]
-2   0x6206 2002::10	   2002::11    88   IPv6 fragment (off=0 more=y ident=0x1f440778 nxt=50)
-3   0x0000 2002::10	   2002::11    248  ICMPv6    Echo (ping) request 
+ Documentation/hwmon/sch5627.rst |  4 +++
+ drivers/hwmon/hwmon.c           |  1 +
+ drivers/hwmon/sch5627.c         | 61 +++++++++++++++++++++++++++++++++
+ include/linux/hwmon.h           |  2 ++
+ 4 files changed, 68 insertions(+)
 
-Fixes: f203b76d7809 ("xfrm: Add virtual xfrm interfaces")
-Signed-off-by: Lina Wang <lina.wang@mediatek.com>
----
- net/ipv6/xfrm6_output.c   | 16 ++++++++++++++++
- net/xfrm/xfrm_interface.c |  5 ++++-
- 2 files changed, 20 insertions(+), 1 deletion(-)
-
-diff --git a/net/ipv6/xfrm6_output.c b/net/ipv6/xfrm6_output.c
-index d0d280077721..1ee643f8f5d5 100644
---- a/net/ipv6/xfrm6_output.c
-+++ b/net/ipv6/xfrm6_output.c
-@@ -45,6 +45,19 @@ static int __xfrm6_output_finish(struct net *net, struct sock *sk, struct sk_buf
- 	return xfrm_output(sk, skb);
- }
- 
-+static int esp_noneed_fragment(struct sk_buff *skb)
-+{
-+	struct frag_hdr *fh;
-+	u8 prevhdr = ipv6_hdr(skb)->nexthdr;
-+
-+	if (prevhdr != NEXTHDR_FRAGMENT)
-+		return 0;
-+	fh = (struct frag_hdr *)(skb->data + sizeof(struct ipv6hdr));
-+	if (fh->nexthdr == NEXTHDR_ESP || fh->nexthdr == NEXTHDR_AUTH)
-+		return 1;
-+	return 0;
-+}
-+
- static int __xfrm6_output(struct net *net, struct sock *sk, struct sk_buff *skb)
- {
- 	struct dst_entry *dst = skb_dst(skb);
-@@ -73,6 +86,9 @@ static int __xfrm6_output(struct net *net, struct sock *sk, struct sk_buff *skb)
- 		xfrm6_local_rxpmtu(skb, mtu);
- 		kfree_skb(skb);
- 		return -EMSGSIZE;
-+	} else if (toobig && esp_noneed_fragment(skb)) {
-+		skb->ignore_df = 1;
-+		goto skip_frag;
- 	} else if (!skb->ignore_df && toobig && skb->sk) {
- 		xfrm_local_error(skb, mtu);
- 		kfree_skb(skb);
-diff --git a/net/xfrm/xfrm_interface.c b/net/xfrm/xfrm_interface.c
-index 57448fc519fc..242351fffdeb 100644
---- a/net/xfrm/xfrm_interface.c
-+++ b/net/xfrm/xfrm_interface.c
-@@ -304,7 +304,10 @@ xfrmi_xmit2(struct sk_buff *skb, struct net_device *dev, struct flowi *fl)
- 			if (mtu < IPV6_MIN_MTU)
- 				mtu = IPV6_MIN_MTU;
- 
--			icmpv6_ndo_send(skb, ICMPV6_PKT_TOOBIG, 0, mtu);
-+			if (skb->len > 1280)
-+				icmpv6_ndo_send(skb, ICMPV6_PKT_TOOBIG, 0, mtu);
-+			else
-+				goto xmit;
- 		} else {
- 			if (!(ip_hdr(skb)->frag_off & htons(IP_DF)))
- 				goto xmit;
--- 
-2.18.0
+=2D-
+2.30.2
 

@@ -2,101 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F9004C3154
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 17:31:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 804044C3179
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 17:34:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229809AbiBXQbW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 11:31:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50790 "EHLO
+        id S229956AbiBXQcc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 11:32:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229674AbiBXQbU (ORCPT
+        with ESMTP id S229927AbiBXQc2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 11:31:20 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2639E28D386
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 08:30:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1645720239;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=prgZNdV4s/mPu6PlnmJr/hT5U+BTnmvKi0C0dZguK/8=;
-        b=YLpBltOEnyXqzsjhQWnvDLFHAZVZaNF0IKHtePrFeGGHaDvauxVsLCI1QMMAgv8yOXqD7h
-        zqYfPUjLdQug/8AGhxq8sS0GKO2lxbvexoMBlcCpdyB7SQcgvOmB0MP5h0kW+AgjEWXUNk
-        vji3xGhj3FnxOibYTy85O6xxD+h63Eo=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-215-wNvCV_4TOIWtOCStLWJrxA-1; Thu, 24 Feb 2022 11:30:36 -0500
-X-MC-Unique: wNvCV_4TOIWtOCStLWJrxA-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id AEE551854E21;
-        Thu, 24 Feb 2022 16:30:34 +0000 (UTC)
-Received: from starship (unknown [10.40.195.190])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 0B5AF10016F2;
-        Thu, 24 Feb 2022 16:30:31 +0000 (UTC)
-Message-ID: <c9e8ca945fc08f502701c4df7c9fffa1f5f0c001.camel@redhat.com>
-Subject: Re: [RFC PATCH 01/13] KVM: SVM: Add warning when encounter invalid
- APIC ID
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Cc:     pbonzini@redhat.com, seanjc@google.com, joro@8bytes.org,
-        jon.grimm@amd.com, wei.huang2@amd.com, terry.bowman@amd.com
-Date:   Thu, 24 Feb 2022 18:30:30 +0200
-In-Reply-To: <20220221021922.733373-2-suravee.suthikulpanit@amd.com>
-References: <20220221021922.733373-1-suravee.suthikulpanit@amd.com>
-         <20220221021922.733373-2-suravee.suthikulpanit@amd.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+        Thu, 24 Feb 2022 11:32:28 -0500
+Received: from mail-ot1-f53.google.com (mail-ot1-f53.google.com [209.85.210.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1E631680A6;
+        Thu, 24 Feb 2022 08:31:49 -0800 (PST)
+Received: by mail-ot1-f53.google.com with SMTP id l20-20020a0568302b1400b005af8c95bbe4so1654521otv.1;
+        Thu, 24 Feb 2022 08:31:49 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=8WIXGASDgN1b64Ak50PdwgKePA+y4pl9eMfrSaeSs4A=;
+        b=wO5lH854DSFhCuEqjE9NRANFIa70g1/Kj/mppfDoG0C/rSwsbgEIFWwl1MoKob2mI6
+         A/dD1w1C7SoBTdmMDp66VddJpy78l2Y9uuhTDkw92DJLwfRW+921QBliClIT3gvE/R7k
+         lgtzimQC1ft66PEpnpY+BEXYFDdARnMyrc9o9hib4YAgA6AR2HmKAv+W+reWdQ5pyArU
+         HFLTuiwPHSkASIxP29P1S1UGgn4txSIon3R8zFrNDDTanxth5s2HxZ7X6rFYiDjVtupH
+         4NnuDrpog7YI65TeRrU3B5G2OomsT/nCAlZLxLPSmcLRJjWQXbWAoB8ga0aFjvbmUwXa
+         KaJQ==
+X-Gm-Message-State: AOAM532JYC7oddKZRau5Sf6I+WJnOlW2b1/LUETGsFiHQxbQZ6XhNKmT
+        sFhZxiazrgHuTEY0iK4yzeBBzyiF8g==
+X-Google-Smtp-Source: ABdhPJxjcU1+RvX1vLs/qTjze2Ii24dDNmDifnbDD/2Tj8uOIQIcg97gGLGU+CU5pC8S7/+eaCkM8g==
+X-Received: by 2002:a05:6830:192:b0:5af:898b:3f88 with SMTP id q18-20020a056830019200b005af898b3f88mr1244369ota.100.1645720278901;
+        Thu, 24 Feb 2022 08:31:18 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id z2sm1270536oot.3.2022.02.24.08.31.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Feb 2022 08:31:17 -0800 (PST)
+Received: (nullmailer pid 3199816 invoked by uid 1000);
+        Thu, 24 Feb 2022 16:31:17 -0000
+Date:   Thu, 24 Feb 2022 10:31:17 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Antoniu Miclaus <antoniu.miclaus@analog.com>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-iio@vger.kernel.org, robh+dt@kernel.org, jic23@kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Subject: Re: [PATCH v6 1/3] dt-bindings: iio: amplifiers: add ada4250 doc
+Message-ID: <Yhey1QmZa4RU0p50@robh.at.kernel.org>
+References: <20220223120112.8067-1-antoniu.miclaus@analog.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220223120112.8067-1-antoniu.miclaus@analog.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 2022-02-20 at 20:19 -0600, Suravee Suthikulpanit wrote:
-> Current logic checks if avic_get_physical_id_entry() fails to
-> get the entry, and return error. This could silently cause
-> AVIC to fail to operate.  Therefore, add WARN_ON to help
-> report this error.
+On Wed, 23 Feb 2022 14:01:10 +0200, Antoniu Miclaus wrote:
+> Add device tree bindings for the ADA4250 driver.
 > 
-> Signed-off-by: Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
+> Signed-off-by: Antoniu Miclaus <antoniu.miclaus@analog.com>
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 > ---
->  arch/x86/kvm/svm/avic.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
+> changes in v6:
+>  - add space before `{` in the amplifier node example
+>  .../bindings/iio/amplifiers/adi,ada4250.yaml  | 50 +++++++++++++++++++
+>  1 file changed, 50 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/iio/amplifiers/adi,ada4250.yaml
 > 
-> diff --git a/arch/x86/kvm/svm/avic.c b/arch/x86/kvm/svm/avic.c
-> index f07956f15d3b..472445aaaf42 100644
-> --- a/arch/x86/kvm/svm/avic.c
-> +++ b/arch/x86/kvm/svm/avic.c
-> @@ -447,8 +447,10 @@ static int avic_handle_apic_id_update(struct kvm_vcpu *vcpu)
->  
->  	old = avic_get_physical_id_entry(vcpu, vcpu->vcpu_id);
->  	new = avic_get_physical_id_entry(vcpu, id);
-> -	if (!new || !old)
-> +	if (!new || !old) {
-> +		WARN_ON(1);
->  		return 1;
-> +	}
->  
->  	/* We need to move physical_id_entry to new offset */
->  	*new = *old;
 
-I about to purge all of this code, and disallow setting the apicid regardles
-if x2apic, or plain xapic was used at least when AVIC is enabled.
-I really hope for this to be accepted, so we won't need to fix this code.
-
-Best regards,
-	Maxim Levitsky
-
+Reviewed-by: Rob Herring <robh@kernel.org>

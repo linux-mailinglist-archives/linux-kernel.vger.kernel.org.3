@@ -2,153 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A967A4C2ACE
+	by mail.lfdr.de (Postfix) with ESMTP id 127304C2ACC
 	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 12:22:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233955AbiBXLWG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 06:22:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38988 "EHLO
+        id S234085AbiBXLWV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 06:22:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230236AbiBXLWE (ORCPT
+        with ESMTP id S230236AbiBXLWT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 06:22:04 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4259B1CE;
-        Thu, 24 Feb 2022 03:21:31 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id F23651F37F;
-        Thu, 24 Feb 2022 11:21:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1645701690; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=oJU8mNCuvdPjtG+kxUCL1MNwiSJQCMqrnSDUyRWAPys=;
-        b=fbrLd3uYGGuF/+gtgOTc42jy43SBVwMaRLN9Jyjq5Q7kJTFS2NCF/eGWTFihYz3ZuVAO/W
-        2Xu155AIWIa5aQE2Yn3kqLHhqurbQ+J8vibQwWSMCIjzpjO7ODhCKl7S5JRnMnSDIvcz3I
-        KEd7y3uTKgMSv9d0SiU2rdws2TYqFRI=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1645701690;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=oJU8mNCuvdPjtG+kxUCL1MNwiSJQCMqrnSDUyRWAPys=;
-        b=pimrS9guo0/mLaKBn4sTcUW5Kr+erSaQ5pN956+PIe12zIFsX+NuJKBHZAHm8mzWD0gQgZ
-        YGrZG6YXWfuNI4BA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 82DF6139F3;
-        Thu, 24 Feb 2022 11:21:29 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id IsL4HDlqF2IHWAAAMHmgww
-        (envelope-from <lhenriques@suse.de>); Thu, 24 Feb 2022 11:21:29 +0000
-Received: from localhost (brahms.olymp [local])
-        by brahms.olymp (OpenSMTPD) with ESMTPA id b5956cca;
-        Thu, 24 Feb 2022 11:21:43 +0000 (UTC)
-From:   =?UTF-8?q?Lu=C3=ADs=20Henriques?= <lhenriques@suse.de>
-To:     Jeff Layton <jlayton@kernel.org>, Xiubo Li <xiubli@redhat.com>,
-        Ilya Dryomov <idryomov@gmail.com>
-Cc:     ceph-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        =?UTF-8?q?Lu=C3=ADs=20Henriques?= <lhenriques@suse.de>
-Subject: [RFC PATCH] ceph: add support for encrypted snapshot names
-Date:   Thu, 24 Feb 2022 11:21:42 +0000
-Message-Id: <20220224112142.18052-1-lhenriques@suse.de>
+        Thu, 24 Feb 2022 06:22:19 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12F5E59A7D;
+        Thu, 24 Feb 2022 03:21:50 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: sre)
+        with ESMTPSA id C99451F42062
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1645701708;
+        bh=YBLvfr3OobSAV/rNNzdpOTHNgJpHKsaNfSljGVW3xNc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=lvUTuTfupIEMLS2D7sVgrU3AzNiTKEx59CsDtF2KkMSfFDFts4QUDfZaLiuiIFsNI
+         tkqgWySO0Z0TtD1y5saPM0UR4m3BX+DIMv8N3eLGjRQfN32GZfZnnnIajPVvezQlnM
+         KRPoIj4laLzVsBIxu9khBXGqEA0Xqsue05u1BMJwSTjD+8GEzErj9LlPVCVL3G6MrP
+         2zsFwf3iqvBMX885kCgArCCtcZbRHSWL1uPcsWU/CbwnMpRHt+ewOiJeThfl3xtlYL
+         dqwESKlMXAUo84XxttXnoQOiP/YR9LDPYMXRzWQ8YRR5f3byaOzX6Qym0GJXZ4vqFh
+         b589cqNtd5oYA==
+Received: by mercury (Postfix, from userid 1000)
+        id CA609106049B; Thu, 24 Feb 2022 12:21:46 +0100 (CET)
+Date:   Thu, 24 Feb 2022 12:21:46 +0100
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Adam Thomson <Adam.Thomson.Opensource@diasemi.com>
+Cc:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Support Opensource <Support.Opensource@diasemi.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kernel-janitors@vger.kernel.org" <kernel-janitors@vger.kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
+Subject: Re: [PATCH] power: supply: da9150-fg: Use
+ devm_delayed_work_autocancel()
+Message-ID: <20220224112146.ytrcop3lcjfd6f6n@mercury.elektranox.org>
+References: <c4cf74b56258c679f69bbc6350179b8b500f5800.1644774892.git.christophe.jaillet@wanadoo.fr>
+ <DB9PR10MB465210AEF84FD0F390B1616480379@DB9PR10MB4652.EURPRD10.PROD.OUTLOOK.COM>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="qbwhz74rtboa72lk"
+Content-Disposition: inline
+In-Reply-To: <DB9PR10MB465210AEF84FD0F390B1616480379@DB9PR10MB4652.EURPRD10.PROD.OUTLOOK.COM>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since filenames in encrypted directories are already encrypted and shown
-as a base64-encoded string when the directory is locked, snapshot names
-should show a similar behaviour.
 
-Signed-off-by: Luís Henriques <lhenriques@suse.de>
----
- fs/ceph/dir.c   | 15 +++++++++++++++
- fs/ceph/inode.c | 10 +++++++++-
- 2 files changed, 24 insertions(+), 1 deletion(-)
+--qbwhz74rtboa72lk
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Support on the MDS for names that'll be > MAX_NAME when base64 encoded is
-still TBD.  I thought it would be something easy to do, but snapshots
-don't seem to make use of the CDir/CDentry (which is where alternate_name
-is stored on the MDS).  I'm still looking into this, but I may need some
-help there :-(
+Hi,
 
-Cheers,
---
-Luís
+On Fri, Feb 18, 2022 at 01:13:10PM +0000, Adam Thomson wrote:
+> On 13 February 2022 17:55, Christophe JAILLET wrote:
+>=20
+> > This driver only uses managed resources, except for the delayed work, if
+> > it is used.
+> >=20
+> > Use devm_delayed_work_autocancel() to also manage the delayed work.
+> > The error handling path of the probe and the remove function can both be
+> > removed.
+> >=20
+> > This saves a few lines of code.
+> >=20
+> > Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+>=20
+> Reviewed-by: Adam Thomson <Adam.Thomson.Opensource@diasemi.com>
 
-diff --git a/fs/ceph/dir.c b/fs/ceph/dir.c
-index a449f4a07c07..20ae600ee7cd 100644
---- a/fs/ceph/dir.c
-+++ b/fs/ceph/dir.c
-@@ -1065,6 +1065,13 @@ static int ceph_mkdir(struct user_namespace *mnt_userns, struct inode *dir,
- 		op = CEPH_MDS_OP_MKSNAP;
- 		dout("mksnap dir %p snap '%pd' dn %p\n", dir,
- 		     dentry, dentry);
-+		/* XXX missing support for alternate_name in snapshots */
-+		if (IS_ENCRYPTED(dir) && (dentry->d_name.len >= 189)) {
-+			dout("encrypted snapshot name too long: %pd len: %d\n",
-+			     dentry, dentry->d_name.len);
-+			err = -ENAMETOOLONG;
-+			goto out;
-+		}
- 	} else if (ceph_snap(dir) == CEPH_NOSNAP) {
- 		dout("mkdir dir %p dn %p mode 0%ho\n", dir, dentry, mode);
- 		op = CEPH_MDS_OP_MKDIR;
-@@ -1109,6 +1116,14 @@ static int ceph_mkdir(struct user_namespace *mnt_userns, struct inode *dir,
- 	    !req->r_reply_info.head->is_target &&
- 	    !req->r_reply_info.head->is_dentry)
- 		err = ceph_handle_notrace_create(dir, dentry);
-+
-+	/*
-+	 * If we have created a snapshot we need to clear the cache, otherwise
-+	 * snapshot will show encrypted filenames in readdir.
-+	 */
-+	if (ceph_snap(dir) == CEPH_SNAPDIR)
-+		d_drop(dentry);
-+
- out_req:
- 	ceph_mdsc_put_request(req);
- out:
-diff --git a/fs/ceph/inode.c b/fs/ceph/inode.c
-index 8b0832271fdf..080824610b73 100644
---- a/fs/ceph/inode.c
-+++ b/fs/ceph/inode.c
-@@ -182,6 +182,13 @@ struct inode *ceph_get_snapdir(struct inode *parent)
- 	ci->i_rbytes = 0;
- 	ci->i_btime = ceph_inode(parent)->i_btime;
- 
-+	/* if encrypted, just borough fscrypt_auth from parent */
-+	if (IS_ENCRYPTED(parent)) {
-+		struct ceph_inode_info *pci = ceph_inode(parent);
-+		inode->i_flags |= S_ENCRYPTED;
-+		ci->fscrypt_auth_len = pci->fscrypt_auth_len;
-+		ci->fscrypt_auth = pci->fscrypt_auth;
-+	}
- 	if (inode->i_state & I_NEW) {
- 		inode->i_op = &ceph_snapdir_iops;
- 		inode->i_fop = &ceph_snapdir_fops;
-@@ -632,7 +639,8 @@ void ceph_free_inode(struct inode *inode)
- 
- 	kfree(ci->i_symlink);
- #ifdef CONFIG_FS_ENCRYPTION
--	kfree(ci->fscrypt_auth);
-+	if (ceph_snap(inode) != CEPH_SNAPDIR)
-+		kfree(ci->fscrypt_auth);
- #endif
- 	fscrypt_free_inode(inode);
- 	kmem_cache_free(ceph_inode_cachep, ci);
+Thanks, queued.
+
+-- Sebastian
+
+--qbwhz74rtboa72lk
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmIXakoACgkQ2O7X88g7
++pobYA/+LlE8lFoeRCKrCzws94CDRC8eF3Rogl4SuwGgSpRBMbjrIiW5rSF6RwtX
+E1qmWrpCPyksk2i9QsIOiSY8WCWmoo7LnUqVwEfZNtftpXJrwZyo1lKVTepShSvl
+ti4oJYhdTjIKxyfJfpKzd3D8icLkdoPG3Wv46DosxtcXFJIRrXGYR3RaMQLQyu09
+x6chf/sSQDgrsZUtuKdtCTJeBpwoSXIjur2UV4i4wMxw6q0HqPeGJcPpBmnYPsHL
+7KeJPNA0sTcnjXgherqm5l5KVxNDEoXajKKga9XykvO8BQZvxkI5V72AtAxJxT0v
+Ya5DgwtTW0vkSEMQwHARbUrz091BIZSBJkBtkjz8oNLhxi4q9fB99qO+DxrtoZm3
+3EcbxqkmJpjSrm7pslOjc9awj83TxpNBsbxrDEDTxPsf8gGx/ucTUuz0H97Gmf0V
+rXsgYCVBkQu9MFS7kjdLLoF30CH0R2oJTQoD1YSk+WXN+E5t3inufJVMQMillt4Y
+JJeS1ZW/RTK2VD7yXzz/XDOYE2KPajgRwhZLXzRy2s1vYnjU14z91fklS4Yt3zft
+R4eHxSfe4khDViUiDMcm4ssQxxUM4O2tejCy3FdghPaKp/n25Nbnu5OQ0bEkVZy4
+UFAWrPkv32SzNmW5DjrgJ6JUwVVsqAtLZsl34f+MCZb6+Q+8PiQ=
+=LDsa
+-----END PGP SIGNATURE-----
+
+--qbwhz74rtboa72lk--

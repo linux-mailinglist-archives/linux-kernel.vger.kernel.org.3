@@ -2,119 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFBB24C321F
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 17:51:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 784BF4C31EF
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 17:51:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231187AbiBXQua (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 11:50:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41488 "EHLO
+        id S230348AbiBXQug (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 11:50:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231131AbiBXQtn (ORCPT
+        with ESMTP id S230527AbiBXQu1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 11:49:43 -0500
-Received: from mail-il1-x135.google.com (mail-il1-x135.google.com [IPv6:2607:f8b0:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A852F1A94B1
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 08:49:07 -0800 (PST)
-Received: by mail-il1-x135.google.com with SMTP id y5so2151868ill.13
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 08:49:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:sender:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=1WmTiruYcLYjgfCVpwaSh4JcERuBX8rKufTgiQZnbQI=;
-        b=m+6Am5etB5+aaU7SxU4uRdVvvNpwqDNnePJdqPMD/iaVl3HzdHKk5znodTtIHZCSzI
-         VGTa6/S3tv05kHN1fvWXolzRgKeLfUGwUAVfjzfLslV5mloXKxk5JTrL0pBq7VYVJ+cx
-         KIDAUbXTZCV8x5WatbRjlM3sSZXjjm8acIRFyVWECo7yvv62xcqW0I2QrsomAtM6TdHs
-         ldSClEzFwXIOr1gre7kvRN7r7o6ktiDaaq4nh+jVQ5VwTimg0qsD7oU64ukPWJVpIvYm
-         57Q1gkF6SwFhmbTIXRauwcTAyaJ8sSM2nkOouF+U/qhEe69UnYoJDk2TRnYKUWpz1a1i
-         8l1g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to:content-transfer-encoding;
-        bh=1WmTiruYcLYjgfCVpwaSh4JcERuBX8rKufTgiQZnbQI=;
-        b=Rm8vW3uRXHYHC2mjd/wIcAKOa1AMewinpXlE9LdPlU23xLU9wWyrN0sK5vtVzlkL7s
-         roZubK50nsgqk7BmdJTVGPFHjjLd6sW/KiuxGYDmHksLfkewNIdzVhLaaEFlpWxSYTZK
-         7De7JzqqjcmSatHWrMLk4U76dupVjXFF+PRa9Pss6sgojuFf6RMhEhbuMiKmUafOBsx4
-         VuC16N7ljEZEcjqKmmUmzEmIvlnUiq9nb0e5EM7rJTCqe/3Luplx9bacs1vbD8NSxJWP
-         wbXb7XZpLMyr10aJacs3uSerHytPTVP3aYw0mnlKzrc65O8ViAIRiRYzhTaH2+E88l5a
-         OeAw==
-X-Gm-Message-State: AOAM532h1JMHFOiynTieXAW/khfJJSwS4oDaufd8zr1iH5R5P/b0mved
-        sOFd/mu/Y96iLvCfp+K6MVfNERzOm45isQff8rE=
-X-Google-Smtp-Source: ABdhPJwHaItEL+gOJtdHobPBK10F8qOvIKCij1pGixJGYTtblYtMwjbNLN+VkV7BiRaleC7eDUpL5dSyJIdq3AMX/FQ=
-X-Received: by 2002:a05:6e02:184e:b0:2c2:76e6:bbcc with SMTP id
- b14-20020a056e02184e00b002c276e6bbccmr3034339ilv.318.1645721346426; Thu, 24
- Feb 2022 08:49:06 -0800 (PST)
+        Thu, 24 Feb 2022 11:50:27 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B6A61E5006
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 08:49:23 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nNHIu-0000ql-Hk; Thu, 24 Feb 2022 17:49:20 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nNHIu-00138R-1I; Thu, 24 Feb 2022 17:49:19 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nNHIs-005Gmk-Jb; Thu, 24 Feb 2022 17:49:18 +0100
+Date:   Thu, 24 Feb 2022 17:49:18 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Thierry Reding <thierry.reding@gmail.com>
+Cc:     Max Kellermann <max.kellermann@gmail.com>,
+        linux-pwm@vger.kernel.org, lee.jones@linaro.org,
+        linux-kernel@vger.kernel.org, andrey@lebedev.lt,
+        stable@vger.kernel.org
+Subject: Re: [PATCH 1/3] pwm-sun4i: convert "next_period" to local variable
+Message-ID: <20220224164918.ycdjmfsqqasehzks@pengutronix.de>
+References: <20220125123429.3490883-1-max.kellermann@gmail.com>
+ <20220125143158.qbelqvr5mjq33zay@pengutronix.de>
+ <YheCV0RKJcB/ppCn@orome>
 MIME-Version: 1.0
-Sender: aishagaddafii331@gmail.com
-Received: by 2002:a05:6e02:2195:0:0:0:0 with HTTP; Thu, 24 Feb 2022 08:49:05
- -0800 (PST)
-From:   Aisha Gaddafi <aishagaddagfi@gmail.com>
-Date:   Thu, 24 Feb 2022 17:49:05 +0100
-X-Google-Sender-Auth: wbmh3mlB4OZfTbkAyDcWomDln7I
-Message-ID: <CAMrsXqO4-rD-f0HBx6TWd5VU7pmYZeuPNcbL40U_E7+M0CfWXg@mail.gmail.com>
-Subject: Greetings Sir/Madam.
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: Yes, score=6.1 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLY,LOTS_OF_MONEY,MILLION_HUNDRED,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_MONEY,URG_BIZ autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:135 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [aishagaddafii331[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [aishagaddafii331[at]gmail.com]
-        *  0.2 MILLION_HUNDRED BODY: Million "One to Nine" Hundred
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        *  0.0 LOTS_OF_MONEY Huge... sums of money
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  0.6 URG_BIZ Contains urgent matter
-        *  1.0 FREEMAIL_REPLY From and body contain different freemails
-        *  3.5 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-X-Spam-Level: ******
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="qlqvaaqanoepdo5f"
+Content-Disposition: inline
+In-Reply-To: <YheCV0RKJcB/ppCn@orome>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---=20
-Greetings Sir/Madam.
 
-I want to invest in your country
-May i use this medium to open a mutual communication with you, and
-seeking your acceptance towards investing in your country under your
-management as my partner, My name is Aisha Gaddafi , i am a Widow and
-single Mother with three Children, the only biological Daughter of
-late Libyan President (Late Colonel Muammar Gaddafi) and presently i
-am under political asylum protection by the  Government of this
-nation.
-I have funds worth =E2=80=9CTwenty Seven Million Five Hundred Thousand Unit=
-ed
-State Dollars=E2=80=9D -$27.500.000.00 US Dollars which i want to entrust o=
-n
-you for investment project in your country. If you are willing to
-handle this project on my behalf, kindly reply urgent to enable me
-provide you more details to start the transfer process.
-I shall appreciate your urgent response through my email address
-below: madamgadafiaisha@gmail.com
-Thanks
-Yours Truly Aisha
+--qlqvaaqanoepdo5f
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Thu, Feb 24, 2022 at 02:04:23PM +0100, Thierry Reding wrote:
+> On Tue, Jan 25, 2022 at 03:31:58PM +0100, Uwe Kleine-K=F6nig wrote:
+> > Hello,
+> >=20
+> > On Tue, Jan 25, 2022 at 01:34:27PM +0100, Max Kellermann wrote:
+> > > Its value is calculated in sun4i_pwm_apply() and is used only there.
+> > >=20
+> > > Cc: stable@vger.kernel.org
+> >=20
+> > I think I'd drop this. This isn't a fix worth on it's own to be
+> > backported and if this is needed for one of the next patches, the stable
+> > maintainers will notice themselves (and it might be worth to shuffle
+> > this series to make the fixes come first).
+> >=20
+> > > Signed-off-by: Max Kellermann <max.kellermann@gmail.com>
+> >=20
+> > Other than that, LGTM:
+> >=20
+> > Reviewed-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+>=20
+> Does that apply to patches 2 & 3 as well?
+
+No, at that time I only looked at patch 1.
+
+I just looked at 2 and 3 and will reply to them individually.
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--qlqvaaqanoepdo5f
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmIXtwsACgkQwfwUeK3K
+7AnapAgAg+SjkyiP1o2sdudhtyt/I8k3O97+iBe5pyPY0TLq1NP5yp3vZhqf7NMz
+DTGcIrQxmSbQa4/NKXhBbP/78Rc+5PIYJhYYxUBk50IX98DHegOIYP1IqMv8X4DF
+mlNGshVaFj+kbUnSVoLYqjrbCcV9DD2XLJRt4E7F5qGQuLSES4uzpud03Pa9XkzU
+E+U9m045ILyAxjXXbS1Que16WcYxvo1cdDo4cvQM9lhGQKCY7iobmSykBTR3SVhW
+F5XCQb+0TZ9lBSGlzeE5FHKpRP8387mMfYA97G03pUGx+n409affOSB5sWS5uBBY
+oG5GnrIdRe2evQEXH+xwLz+6S7LN7A==
+=vqBF
+-----END PGP SIGNATURE-----
+
+--qlqvaaqanoepdo5f--

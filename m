@@ -2,161 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F21A34C33E0
+	by mail.lfdr.de (Postfix) with ESMTP id A65374C33DF
 	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 18:42:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232169AbiBXRmB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 12:42:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47972 "EHLO
+        id S232176AbiBXRml (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 12:42:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232149AbiBXRlz (ORCPT
+        with ESMTP id S229744AbiBXRmh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 12:41:55 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E93961CF0A4
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 09:41:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1645724485;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ZU9kCOEHshly2VLC25A2iAx+V2sxN9EfZxvkNN9yrms=;
-        b=Sv+5du1HlrLSQ0MR8fjy7IowDwcktupQcX/6rkTAD0QLeg1moYN9uAzW2/0AAP1jktrq5g
-        jie5hJBiHTmGcHMMYrSK2mNd468f4LKcrdKzmmuWsxLYuxCYebCDiH6s/f+Ny4WrQ3HBYg
-        XFey3NsR7IKR8xZOPzryH46PivfcfC4=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-269-3gZhkTUIM0K2UwpFuKuGXg-1; Thu, 24 Feb 2022 12:41:23 -0500
-X-MC-Unique: 3gZhkTUIM0K2UwpFuKuGXg-1
-Received: by mail-wr1-f70.google.com with SMTP id m3-20020adfa3c3000000b001ea95eb48abso203614wrb.3
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 09:41:23 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=ZU9kCOEHshly2VLC25A2iAx+V2sxN9EfZxvkNN9yrms=;
-        b=a51Wd8bAtbQCw0mDLM3pVCdLxycAuez30Ayp/FmfbO5i+OMgba/m8mXig91MOcI6K3
-         TUPpSuFeiv9w64D1pqXYDfd1bVIKjPvWSE436AVdRke8idZoK96+/wSTHg2PpGLQqdTF
-         +l0wVI2KhoJ93gThzhtbWk69cEHrxkrzfA+xGz2r6i2jhgEs3UUI0cpnlwB5rnjQaNdz
-         hAzstRyyICf5fbTtRO2K3OQpXOtsNllOkzZ/jL07pd5Cg0z5rHTOKJIDUMHuzz6a6jJ+
-         3EOV3Q0gVzK/v5gfTHe7fvkeBgcEnLpV0AxY9zqNZqKHxomL+nJ1+SngchZfkxwqfQb/
-         dMpg==
-X-Gm-Message-State: AOAM531uygBJZFmEEUNGT6tiFIn40vJlzvI+0ALEuGLnK1LQzl5g7ocL
-        KFDAgLuitb5RDB701qr/JwGFfVWHLwqCDfuBpwqeAYMCrL3/M298DvYFwUxYhmIB3J/pdBVsK/E
-        EelhRaCsOcW5+w0JGhPvKN6ix
-X-Received: by 2002:adf:f303:0:b0:1e7:aeab:ac6a with SMTP id i3-20020adff303000000b001e7aeabac6amr3174575wro.40.1645724482695;
-        Thu, 24 Feb 2022 09:41:22 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyoXj2qud3pWml5ibfeTWdxFb8Sfw0Iq1KADIMiB6CiEFIvJWGtEasuaviJonK9ozqG8TX6cw==
-X-Received: by 2002:adf:f303:0:b0:1e7:aeab:ac6a with SMTP id i3-20020adff303000000b001e7aeabac6amr3174544wro.40.1645724482379;
-        Thu, 24 Feb 2022 09:41:22 -0800 (PST)
-Received: from ?IPV6:2003:cb:c707:4900:ccb0:e874:2bce:973b? (p200300cbc7074900ccb0e8742bce973b.dip0.t-ipconnect.de. [2003:cb:c707:4900:ccb0:e874:2bce:973b])
-        by smtp.gmail.com with ESMTPSA id q17-20020adfc511000000b001edc0a8a8b6sm62431wrf.0.2022.02.24.09.41.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 24 Feb 2022 09:41:21 -0800 (PST)
-Message-ID: <064ba776-e6c6-a430-7d74-0b691123e2a9@redhat.com>
-Date:   Thu, 24 Feb 2022 18:41:20 +0100
+        Thu, 24 Feb 2022 12:42:37 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59E921C60CB;
+        Thu, 24 Feb 2022 09:42:07 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 089A7B8270D;
+        Thu, 24 Feb 2022 17:42:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A05FCC340E9;
+        Thu, 24 Feb 2022 17:42:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645724524;
+        bh=iD5+0LBNH7T6gpbIgLDfaNdtblX7tu5a+rnPBgdz2ag=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=cZjRTQ2AJH31EaiDy2kOqeFg/ZVo9YKsQ+rfXyIwvlJ1MWHCw1TQJQp/2z3Km5uyp
+         5u/HLfIDqQ4D3lPJyP3+v5lPnFIgbTvflxesDJh6RqzMvNbL+FPwFBBNj7exCLM5qX
+         12gz0AhM95QVbQtdptv9qadAetfCZidcI2vobDykVoYjtmrhTpFOmvPX7CkAynpNDZ
+         fdpg1qUtigQ7l4XP54yjT6033TZxiMNZui6jx5mmeapTAETFD9aHB2b2MZ0P3B3W35
+         B7aYl3RZD0k1uK04XlaKl+RXwD4Ti5UBEmA+4iXPdFJ+/7+3VUbl4dMfheyzOQKJcE
+         qv7yuXxygQ8NQ==
+Received: from disco-boy.misterjones.org ([51.254.78.96] helo=www.loen.fr)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nNI7u-00AGAn-7S; Thu, 24 Feb 2022 17:42:02 +0000
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH RFC 05/13] mm/rmap: remove do_page_add_anon_rmap()
-Content-Language: en-US
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>,
-        David Rientjes <rientjes@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Yang Shi <shy828301@gmail.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Nadav Amit <namit@vmware.com>, Rik van Riel <riel@surriel.com>,
-        Roman Gushchin <guro@fb.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Peter Xu <peterx@redhat.com>,
-        Donald Dutile <ddutile@redhat.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
-        Liang Zhang <zhangliang5@huawei.com>,
-        Pedro Gomes <pedrodemargomes@gmail.com>,
-        Oded Gabbay <oded.gabbay@gmail.com>,
-        Linux-MM <linux-mm@kvack.org>
-References: <20220224122614.94921-1-david@redhat.com>
- <20220224122614.94921-6-david@redhat.com>
- <CAHk-=wh+NxEVxeKc_o1xyVsJAQNqpN1zyCHN96gPEK+DzXaeLw@mail.gmail.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <CAHk-=wh+NxEVxeKc_o1xyVsJAQNqpN1zyCHN96gPEK+DzXaeLw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
+Date:   Thu, 24 Feb 2022 17:42:02 +0000
+From:   Marc Zyngier <maz@kernel.org>
+To:     Thierry Reding <thierry.reding@gmail.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Joey Gouly <joey.gouly@arm.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Hector Martin <marcan@marcan.st>,
+        Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-gpio@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, kernel-team@android.com
+Subject: Re: [PATCH 0/5] gpiolib: Handle immutable irq_chip structures
+In-Reply-To: <Yhe1Cxdn8t3oVxMZ@orome>
+References: <20220223154405.54912-1-maz@kernel.org> <Yhe1Cxdn8t3oVxMZ@orome>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <371a530ea9ae8c58bf13ac16d1f2cd3c@kernel.org>
+X-Sender: maz@kernel.org
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-SA-Exim-Connect-IP: 51.254.78.96
+X-SA-Exim-Rcpt-To: thierry.reding@gmail.com, linux-kernel@vger.kernel.org, linus.walleij@linaro.org, brgl@bgdev.pl, joey.gouly@arm.com, jonathanh@nvidia.com, marcan@marcan.st, sven@svenpeter.dev, alyssa@rosenzweig.io, bjorn.andersson@linaro.org, agross@kernel.org, tglx@linutronix.de, linux-gpio@vger.kernel.org, linux-tegra@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org, kernel-team@android.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24.02.22 18:29, Linus Torvalds wrote:
-> On Thu, Feb 24, 2022 at 4:29 AM David Hildenbrand <david@redhat.com> wrote:
->>
->> ... and instead convert page_add_anon_rmap() to accept flags.
+On 2022-02-24 16:40, Thierry Reding wrote:
+> On Wed, Feb 23, 2022 at 03:44:00PM +0000, Marc Zyngier wrote:
+>> I recently realised that the gpiolib play ugly tricks on the
+>> unsuspecting irq_chip structures by patching the callbacks.
+>> 
+>> Not only this breaks when an irq_chip structure is made const (which
+>> really should be the default case), but it also forces this structure
+>> to be copied at nauseam for each instance of the GPIO block, which is
+>> a waste of memory.
+>> 
+>> My current approach is to add a new irq_chip flag (IRQCHIP_IMMUTABLE)
+>> which does what it says on the tin: don't you dare writing there.
+>> Gpiolib is further updated not to install its own callbacks, and it
+>> becomes the responsibility of the driver to call into the gpiolib when
+>> required. This is similar to what we do for other subsystems such as
+>> PCI-MSI.
+>> 
+>> 3 drivers are updated to this new model: M1, QC and Tegra, as I
+>> actively use them (though Tegra is hosed at the moment), keeping a
 > 
-> Can you fix the comment above the RMAP_xyz definitions? That one still says
-> 
->   /* bitflags for do_page_add_anon_rmap() */
-> 
-> that tnow no longer exists.
+> Hosed in what way? Anything I can help with?
 
-Oh, yes sure.
+Tegra186 doesn't boot as host1x is been broken since -rc1.
 
-> 
-> Also, while this kind of code isn't unusual, I think it's still confusing:
-> 
->> +               page_add_anon_rmap(page, vma, addr, 0);
-> 
-> because when reading that, at least I go "what does 0 mean? Is it a
-> page offset, or what?"
+I have been carrying this[1] patch which has been in -next for
+some time, but still not merged AFAICS.
 
-Yes, I agree.
+         M.
 
-> 
-> It might be a good idea to simply add a
-> 
->   #define RMAP_PAGE 0x00
-> 
-> or something like that, just to have the callers all make it obvious
-> that we're talking about that RMAP_xyz bits - even if some of them may
-> be default.
-> 
-> (Then using an enum of a special type is something we do if we want to
-> add extra clarity or sparse testing, I don't think there are enough
-> users for that to make sense)
-> 
-
-Actually, I thought about doing it similarly to what I did in
-page_alloc.c with fpi_t:
-
-typedef int __bitwise fpi_t;
-
-#define FPI_NONE		((__force fpi_t)0)
-
-
-I can do something similar here.
-
+[1] 
+https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms.git/commit/?h=irq/gpio-immutable&id=58d1d925f05485020306e5141336cfd2989843dc
 -- 
-Thanks,
-
-David / dhildenb
-
+Jazz is not dead. It just smells funny...

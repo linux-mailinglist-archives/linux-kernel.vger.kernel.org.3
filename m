@@ -2,65 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C04144C23D3
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 07:03:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C93F64C23D4
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 07:04:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230474AbiBXGEU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 01:04:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51646 "EHLO
+        id S230454AbiBXGEs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 01:04:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230443AbiBXGEQ (ORCPT
+        with ESMTP id S229737AbiBXGEq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 01:04:16 -0500
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F30712325D8
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 22:03:46 -0800 (PST)
-Received: by mail-pl1-x630.google.com with SMTP id p17so810450plo.9
-        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 22:03:46 -0800 (PST)
+        Thu, 24 Feb 2022 01:04:46 -0500
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC7AC265BC1
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 22:04:17 -0800 (PST)
+Received: by mail-pg1-x529.google.com with SMTP id 27so886326pgk.10
+        for <linux-kernel@vger.kernel.org>; Wed, 23 Feb 2022 22:04:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=AMgrL5D+KiWCdMkA04nMLIuWEJUWtCL6OB6a/lKLlsk=;
-        b=SjFjmxdTyjyqAf6RJdg2tHuijlejReBRn7QF/+aSua+sO0zKJmTVFZalZ5mNA7GH45
-         zAzL2UJVlM7mLSOdJY/JvKpVQQg08AJJb8ESyHKkdGohUbDmqeTDDkxWEvl5zvCQwaM8
-         JSWpnxydgv5Z7IU1+gUj8UOqHVzTt/CW9+jqM=
+        bh=fBQhUdnhsD8RfcUU30uApq8m70WZYUmsL7PCUmornGQ=;
+        b=euV4TcJ4C7XWuUsWe8K/AvIu2OQaD6q8iwxN9TTOS2rnDJUK2X2vp84zXQH8nNYOqh
+         ZBsmFV/XioxweiYKrT2/r3vovVNXoCaUX00VyKdRLtcTqRpt741OCIBvnAtYZ9u4cAwt
+         /VE0GfxT8YhWO1xqsMd+A12AMl3ai738YZyYo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=AMgrL5D+KiWCdMkA04nMLIuWEJUWtCL6OB6a/lKLlsk=;
-        b=Aw5UeEG19MIchOkJnuPr+eKGqMgcm2WziPXlWXFQHtW4UcSB4oFNXbZxoorE8t2J4S
-         jV7t4QozlP8h+22mqv/aKBtH3w5NCAAcO4zLEymJtHX5Q4Z+UMPhdXEIhc+qIfVfrkCw
-         oXPMm52Bfmv5Ow1QPCCq35/IKisYksxgCU5dVZRFEr9YFqhjrKo5xi6zbKVm4v6eSP1y
-         M5BpmEk5jAm8GDzezVQnwUuYm6fjIGe7QA0GSH9wnK8enHCkad5kQa5eCzatcDlDPnYv
-         tLowgb+wBqkChhbATgYkQFthCgn+S6c9oo6NnRhx+7Wq5UXdKQqflmAg/MaW21g5XUgD
-         I5RQ==
-X-Gm-Message-State: AOAM533UHCyegiXviQGvhYr6XU/6dkcNWS0jDwiqZIw2Q9APHs+xmXDa
-        aQoau2HaU6etCUnsP9aD4GogLw==
-X-Google-Smtp-Source: ABdhPJx6Ld80nbuarBWp5o8KCI/l5Z53qcY+ZlRGc5SLMbxpdXxgGnAwn1akrhgVmyLqoIoTxwHGMQ==
-X-Received: by 2002:a17:902:7584:b0:14d:77f4:5598 with SMTP id j4-20020a170902758400b0014d77f45598mr1246271pll.1.1645682626444;
-        Wed, 23 Feb 2022 22:03:46 -0800 (PST)
+        bh=fBQhUdnhsD8RfcUU30uApq8m70WZYUmsL7PCUmornGQ=;
+        b=zjeZxWsYSuRqW/c9BI17MSbnQlcLRBfOaVArym+izI3UCgi77PXIXDevQDbV532mQb
+         n5QGkuclzQcCl52eYfjE589ipUHq1fvigEHfNrfsvhiW2GCqCHIZdvxsGXTeW07vuxBX
+         YLkgOBokVTboCeDAH9YlI/KcewYJbwPmfXOCBLtN0Idg5QKCiPPOrvEqA+1PqraiITGR
+         i2dO81DVNnaS2m+JiSWwfq/Kr3Qd2Tn278z5Tb0SX2YSF2dYK3R/nUsIWDdvYIsgfVpc
+         d+mYkENpFdrwGLvKlptjvRwM2ipBF8re68KK/J+xAZDE0jsPm7hChH0a9chmeG3XW/gp
+         IZeg==
+X-Gm-Message-State: AOAM530548k3zlZuJ8YAO9vQiGmrszgWQfQQodmwiANctt1lrRYyHaN/
+        nRiUC48kAuK2G+Fa49pAJ7GEuw==
+X-Google-Smtp-Source: ABdhPJz5zO8JdHm6dSoWSwfIO1VWInEM6QBCKhwLgEtUt+tZNNicCZ5CqCgHy1wgDXemleJIwK7ewQ==
+X-Received: by 2002:a63:2006:0:b0:364:56b6:868 with SMTP id g6-20020a632006000000b0036456b60868mr1093390pgg.493.1645682657153;
+        Wed, 23 Feb 2022 22:04:17 -0800 (PST)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id bd14sm1470026pfb.165.2022.02.23.22.03.46
+        by smtp.gmail.com with ESMTPSA id d13sm1581760pfj.205.2022.02.23.22.04.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Feb 2022 22:03:46 -0800 (PST)
+        Wed, 23 Feb 2022 22:04:16 -0800 (PST)
 From:   Kees Cook <keescook@chromium.org>
-To:     Matthew Wilcox <willy@infradead.org>
+To:     Paul Walmsley <paul.walmsley@sifive.com>
 Cc:     Kees Cook <keescook@chromium.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        linux-kernel@vger.kernel.org, x86@kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: [PATCH v2] usercopy: Check valid lifetime via stack depth
-Date:   Wed, 23 Feb 2022 22:03:42 -0800
-Message-Id: <20220224060342.1855457-1-keescook@chromium.org>
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Jisheng Zhang <jszhang@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Chen Huang <chenhuang5@huawei.com>,
+        linux-riscv@lists.infradead.org,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: [PATCH] riscv: Rename "sp_in_global" to "current_stack_pointer"
+Date:   Wed, 23 Feb 2022 22:04:11 -0800
+Message-Id: <20220224060411.1855683-1-keescook@chromium.org>
 X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=6569; h=from:subject; bh=6A8mc/rhTTVnxVpbzT3BARo6XcOUZdfrInmbku4Dc4o=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBiFx+9k7mkyBUeqAXKhGpQLGTRH+td6u68zTq4WYHQ Ql54f0WJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYhcfvQAKCRCJcvTf3G3AJhN/D/ 9rptmz9DAb1CkNTCvTXLH+yoTu25eGKdcejSEGfbH5sbzbSrepTMvgMAUaEo4Jo/8UTRQFJq8ad1YJ 29LV70+iJUbjlZwZRali/FQGcNsi5QC8Zfmpo1PH0op8PjQpclPbqzAeu0mrFA7OAYxDIooE6VQhil ZYhpww9k4rhnFCjwLM8s18FkbClCrc8umT9LUrxaCfea7w0WgYWVblrECc3mmdMHQ+ku7+tWcMmdbP kD6bShQmH7d6VurCRzR12joIN8MsNFw9HDiNJK91hJraUq7pBe51ddL2EQTxQ8wvcYBmn6V6w4VApv Za49GBST9yohx35QqEQQLqXtEbGT+WCHCvYxVmLpzigEdVBayvJciN3jxRQg4qPH5NzrCvZvQbn5gk wpbEWxzvCzaOGydlCDaF0K4hqXnStUt4SsEbRrmBRxTCH75dA4ejbXIS31hbNZAzSLOVo/ZbRtRwMK iwuOvLFBROdqpN+7NmFczrgvSRHsOS1l7WoMoUFoMD5r36J62d70Qz/TO2UHlKVjf2oxihTqWDDv76 APOsRc8JzJkKRhEimqn1BgOBh5CYaw0znuEi0E5IGKjVMVnDdCLY3Z+JhJeTJMX31ISHuvaFyRy9Kb 3VPTEzhwG/E3CcVAroWSz5SVRCR4XakTnGsk72PgX5rBKm8Tqny1HU15ZD1Q==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2489; h=from:subject; bh=2XfQlbZt/VASlkLb1MSCqElmqb6vbL4RS4z2QFk7tCM=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBiFx/afSrkh8EYDR9D3m2YLzo8QsdHAeHLqKFsMf9L Ex0rEESJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYhcf2gAKCRCJcvTf3G3AJtYID/ 0R5bxSy2t3cd2QP9ELfq7URD/MGmGsTdjcoofRxSpM1eQZVOiBdeDWyUE+LCujt1n3EWeG9/KLdXHX /WQ95qcvvpE+17Eg+C5rUZC1nHPqEQ5TYzJhNsXY8rTBarxYZf099cwM2Wy/avRalVegpLM+goW0UV OHjqi4ZqHmo5oR79DpD//6hr1R6HEDxIYm2s78ssVhOhxhENJt3LmwqRl1AvpZfRusHp60S/QlKM3X XHH8Nvin/kjfTRPlr6DOGM1rcRVTBgPRTICC+upoS1B0P2v04wOCMEezgWviLq0x4URVJoik/xShCm LCZxmDp9D9FEY8fjy9oGP/T5H0oTdKvJSiDOvPc9daTTskU/zyoGTJLHlfnJ3reli9mCBct2m22LtC JlZ8eU/Nhhh/ja8zJghB2ag5+d0fD67sDPHNZH4jZkmbr0GY7JfRAdiWws7peBAprqURBGMslsW+q0 D1Qjatg8yvome9CgoujRVSBd0VznUSLKOEIYOqy9ZHT08XSHe3zWMH/xHwosPsbg5CF34jKh1uDlVE YLhkHVNCLjImiNXZGAh9hAS4g4son5YFfbbPnNT1DnPvxQN6dounkk7vIKeGD41EeyRiFEV5KrON6N wWEzFHPipr0uNzR4ddaOg1HZnK8+T5mGQYA0aNoK0hyBwwTGOBeYOqPaLE8A==
 X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -73,187 +76,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Under CONFIG_HARDENED_USERCOPY=y, when exact stack frame boundary checking
-is not available (i.e. everything except x86 with FRAME_POINTER), check
-a stack object as being at least "current depth valid", in the sense
-that any object within the stack region but not between start-of-stack
-and current_stack_pointer should be considered unavailable (i.e. its
-lifetime is from a call no longer present on the stack).
+To follow the existing per-arch conventions, rename "sp_in_global" to
+"current_stack_pointer". This will let it be used in non-arch places
+(like HARDENED_USERCOPY).
 
-Introduce ARCH_HAS_CURRENT_STACK_POINTER to track which architectures
-have actually implemented the common global register alias.
-
-Additionally report usercopy bounds checking failures with an offset
-from current_stack_pointer, which may assist with diagnosing failures.
-
-The LKDTM USERCOPY_STACK_FRAME_TO and USERCOPY_STACK_FRAME_FROM tests
-(once slightly adjusted in a separate patch) will pass again with
-this fixed.
-
-Cc: Matthew Wilcox (Oracle) <willy@infradead.org>
-Cc: Josh Poimboeuf <jpoimboe@redhat.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: linux-mm@kvack.org
-Reported-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc: Paul Walmsley <paul.walmsley@sifive.com>
+Cc: Palmer Dabbelt <palmer@dabbelt.com>
+Cc: Albert Ou <aou@eecs.berkeley.edu>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Jisheng Zhang <jszhang@kernel.org>
+Cc: Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: Mark Rutland <mark.rutland@arm.com>
+Cc: Chen Huang <chenhuang5@huawei.com>
+Cc: linux-riscv@lists.infradead.org
 Signed-off-by: Kees Cook <keescook@chromium.org>
 ---
-v1: https://lore.kernel.org/all/20220216201449.2087956-1-keescook@chromium.org/
-v2: adjust for only some archs having current_stack_pointer
----
- arch/arm/Kconfig     |  1 +
- arch/arm64/Kconfig   |  1 +
- arch/powerpc/Kconfig |  1 +
- arch/s390/Kconfig    |  1 +
- arch/sh/Kconfig      |  1 +
- arch/x86/Kconfig     |  1 +
- mm/usercopy.c        | 41 ++++++++++++++++++++++++++++++++++++++---
- 7 files changed, 44 insertions(+), 3 deletions(-)
+ arch/riscv/Kconfig               | 1 +
+ arch/riscv/include/asm/current.h | 2 ++
+ arch/riscv/kernel/stacktrace.c   | 4 +---
+ 3 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
-index 4c97cb40eebb..a7a09eef1852 100644
---- a/arch/arm/Kconfig
-+++ b/arch/arm/Kconfig
-@@ -5,6 +5,7 @@ config ARM
- 	select ARCH_32BIT_OFF_T
- 	select ARCH_CORRECT_STACKTRACE_ON_KRETPROBE if HAVE_KRETPROBES && FRAME_POINTER && !ARM_UNWIND
+diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+index 5adcbd9b5e88..b120c32697af 100644
+--- a/arch/riscv/Kconfig
++++ b/arch/riscv/Kconfig
+@@ -16,6 +16,7 @@ config RISCV
+ 	select ARCH_ENABLE_HUGEPAGE_MIGRATION if HUGETLB_PAGE && MIGRATION
+ 	select ARCH_ENABLE_SPLIT_PMD_PTLOCK if PGTABLE_LEVELS > 2
  	select ARCH_HAS_BINFMT_FLAT
 +	select ARCH_HAS_CURRENT_STACK_POINTER
+ 	select ARCH_HAS_DEBUG_VM_PGTABLE
  	select ARCH_HAS_DEBUG_VIRTUAL if MMU
- 	select ARCH_HAS_DMA_WRITE_COMBINE if !ARM_DMA_MEM_BUFFERABLE
- 	select ARCH_HAS_ELF_RANDOMIZE
-diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-index f2b5a4abef21..b8ab790555c8 100644
---- a/arch/arm64/Kconfig
-+++ b/arch/arm64/Kconfig
-@@ -18,6 +18,7 @@ config ARM64
- 	select ARCH_ENABLE_SPLIT_PMD_PTLOCK if PGTABLE_LEVELS > 2
- 	select ARCH_ENABLE_THP_MIGRATION if TRANSPARENT_HUGEPAGE
- 	select ARCH_HAS_CACHE_LINE_SIZE
-+	select ARCH_HAS_CURRENT_STACK_POINTER
- 	select ARCH_HAS_DEBUG_VIRTUAL
- 	select ARCH_HAS_DEBUG_VM_PGTABLE
- 	select ARCH_HAS_DMA_PREP_COHERENT
-diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
-index b779603978e1..7e7387bd7d53 100644
---- a/arch/powerpc/Kconfig
-+++ b/arch/powerpc/Kconfig
-@@ -108,6 +108,7 @@ config PPC
- 	select ARCH_ENABLE_MEMORY_HOTPLUG
- 	select ARCH_ENABLE_MEMORY_HOTREMOVE
- 	select ARCH_HAS_COPY_MC			if PPC64
-+	select ARCH_HAS_CURRENT_STACK_POINTER
- 	select ARCH_HAS_DEBUG_VIRTUAL
- 	select ARCH_HAS_DEBUG_VM_PGTABLE
- 	select ARCH_HAS_DEBUG_WX		if STRICT_KERNEL_RWX
-diff --git a/arch/s390/Kconfig b/arch/s390/Kconfig
-index be9f39fd06df..4845ab549dd1 100644
---- a/arch/s390/Kconfig
-+++ b/arch/s390/Kconfig
-@@ -60,6 +60,7 @@ config S390
- 	select ARCH_ENABLE_MEMORY_HOTPLUG if SPARSEMEM
- 	select ARCH_ENABLE_MEMORY_HOTREMOVE
- 	select ARCH_ENABLE_SPLIT_PMD_PTLOCK if PGTABLE_LEVELS > 2
-+	select ARCH_HAS_CURRENT_STACK_POINTER
- 	select ARCH_HAS_DEBUG_VM_PGTABLE
  	select ARCH_HAS_DEBUG_WX
- 	select ARCH_HAS_DEVMEM_IS_ALLOWED
-diff --git a/arch/sh/Kconfig b/arch/sh/Kconfig
-index 2474a04ceac4..1c2b53bf3093 100644
---- a/arch/sh/Kconfig
-+++ b/arch/sh/Kconfig
-@@ -7,6 +7,7 @@ config SUPERH
- 	select ARCH_HAVE_CUSTOM_GPIO_H
- 	select ARCH_HAVE_NMI_SAFE_CMPXCHG if (GUSA_RB || CPU_SH4A)
- 	select ARCH_HAS_BINFMT_FLAT if !MMU
-+	select ARCH_HAS_CURRENT_STACK_POINTER
- 	select ARCH_HAS_GIGANTIC_PAGE
- 	select ARCH_HAS_GCOV_PROFILE_ALL
- 	select ARCH_HAS_PTE_SPECIAL
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index 9f5bd41bf660..90494fba3620 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -69,6 +69,7 @@ config X86
- 	select ARCH_ENABLE_THP_MIGRATION if X86_64 && TRANSPARENT_HUGEPAGE
- 	select ARCH_HAS_ACPI_TABLE_UPGRADE	if ACPI
- 	select ARCH_HAS_CACHE_LINE_SIZE
-+	select ARCH_HAS_CURRENT_STACK_POINTER
- 	select ARCH_HAS_DEBUG_VIRTUAL
- 	select ARCH_HAS_DEBUG_VM_PGTABLE	if !X86_PAE
- 	select ARCH_HAS_DEVMEM_IS_ALLOWED
-diff --git a/mm/usercopy.c b/mm/usercopy.c
-index d0d268135d96..5d28725af95f 100644
---- a/mm/usercopy.c
-+++ b/mm/usercopy.c
-@@ -22,6 +22,30 @@
- #include <asm/sections.h>
- #include "slab.h"
+diff --git a/arch/riscv/include/asm/current.h b/arch/riscv/include/asm/current.h
+index 1de233d8e8de..21774d868c65 100644
+--- a/arch/riscv/include/asm/current.h
++++ b/arch/riscv/include/asm/current.h
+@@ -33,6 +33,8 @@ static __always_inline struct task_struct *get_current(void)
  
-+/*
-+ * Only called if obj is within stack/stackend bounds. Determine if within
-+ * current stack depth.
-+ */
-+static inline int check_stack_object_depth(const void *obj,
-+					   unsigned long len)
-+{
-+#ifdef CONFIG_ARCH_HAS_CURRENT_STACK_POINTER
-+#ifndef CONFIG_STACK_GROWSUP
-+	const void * const high = stackend;
-+	const void * const low = (void *)current_stack_pointer;
-+#else
-+	const void * const high = (void *)current_stack_pointer;
-+	const void * const low = stack;
-+#endif
+ #define current get_current()
+ 
++register unsigned long current_stack_pointer __asm__("sp");
 +
-+	/* Reject: object not within current stack depth. */
-+	if (obj < low || high < obj + len)
-+		return BAD_STACK;
-+
-+#endif
-+	return GOOD_STACK;
-+}
-+
- /*
-  * Checks if a given pointer and length is contained by the current
-  * stack frame (if possible).
-@@ -29,7 +53,7 @@
-  * Returns:
-  *	NOT_STACK: not at all on the stack
-  *	GOOD_FRAME: fully within a valid stack frame
-- *	GOOD_STACK: fully on the stack (when can't do frame-checking)
-+ *	GOOD_STACK: within the current stack (when can't frame-check exactly)
-  *	BAD_STACK: error condition (invalid stack position or bad stack frame)
-  */
- static noinline int check_stack_object(const void *obj, unsigned long len)
-@@ -55,7 +79,8 @@ static noinline int check_stack_object(const void *obj, unsigned long len)
- 	if (ret)
- 		return ret;
+ #endif /* __ASSEMBLY__ */
  
--	return GOOD_STACK;
-+	/* Finally, check stack depth if possible. */
-+	return check_stack_object_depth(obj, len);
- }
+ #endif /* _ASM_RISCV_CURRENT_H */
+diff --git a/arch/riscv/kernel/stacktrace.c b/arch/riscv/kernel/stacktrace.c
+index 201ee206fb57..278380e2e956 100644
+--- a/arch/riscv/kernel/stacktrace.c
++++ b/arch/riscv/kernel/stacktrace.c
+@@ -14,8 +14,6 @@
  
- /*
-@@ -280,7 +305,17 @@ void __check_object_size(const void *ptr, unsigned long n, bool to_user)
- 		 */
- 		return;
- 	default:
--		usercopy_abort("process stack", NULL, to_user, 0, n);
-+		usercopy_abort("process stack", NULL, to_user,
-+#ifdef CONFIG_ARCH_HAS_CURRENT_STACK_POINTER
-+# ifndef CONFIG_STACK_GROWSUP
-+				(void *)current_stack_pointer - ptr,
-+# else
-+				ptr - (void *)current_stack_pointer,
-+# endif
-+#else
-+				0,
-+#endif
-+				n);
- 	}
+ #include <asm/stacktrace.h>
  
- 	/* Check for bad heap object. */
+-register unsigned long sp_in_global __asm__("sp");
+-
+ #ifdef CONFIG_FRAME_POINTER
+ 
+ void notrace walk_stackframe(struct task_struct *task, struct pt_regs *regs,
+@@ -77,7 +75,7 @@ void notrace walk_stackframe(struct task_struct *task,
+ 		sp = user_stack_pointer(regs);
+ 		pc = instruction_pointer(regs);
+ 	} else if (task == NULL || task == current) {
+-		sp = sp_in_global;
++		sp = current_stack_pointer;
+ 		pc = (unsigned long)walk_stackframe;
+ 	} else {
+ 		/* task blocked in __switch_to */
 -- 
 2.30.2
 

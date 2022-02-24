@@ -2,99 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEB3D4C2D14
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 14:32:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 657E34C2D19
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 14:33:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234997AbiBXNcm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 08:32:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48326 "EHLO
+        id S235038AbiBXNdV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 08:33:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235006AbiBXNcd (ORCPT
+        with ESMTP id S235025AbiBXNdT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 08:32:33 -0500
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C33B354F8C
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 05:31:57 -0800 (PST)
-Received: by mail-pf1-x430.google.com with SMTP id u16so1850772pfg.12
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 05:31:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=vB1qPinuIx5GJjxM9OclEcDCM4HkOuUdI7J7QIrR8QM=;
-        b=CMWX0MHQCq61Rcj3Lh1fYx6ag2pjCyHBbAm3PFhe8VuNHoL4dmtuRGbuoEkThL3SLs
-         /CZAsggglroair2/MduxqDWQIqBnmYYEojzVncOpv9ZLaA06+XaNo8CMJr/ZDwKGevNi
-         OPrU1ZsR15gYoyDeMerIHUzqjy0fKD5EWJsHLaKAFr0YrURkU35895YhEBeCHOWZWM/F
-         j965QZkZWovbjAZkxMaEInABShRIzQzyoQmrDd1O0WUIV6Ih1Puc+sVpJj+h/a2tHvS+
-         Hsz9K8gtVF/9yFbK1kxfdJCJ5MoM776lDhCoyh1lidRmpz/mSQq6ya0rMp9HNui6rFBE
-         B4EQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=vB1qPinuIx5GJjxM9OclEcDCM4HkOuUdI7J7QIrR8QM=;
-        b=3qtoJBJgn5IFFMS9+wFAw8tZf/2vr5EZd39s0BehhtOJNbTOIzlVBiCzHOKmtw7Tc/
-         yFYoSSxV7Kan4nCzjsTptM3QM24n9nPDg3YmXNxf5EvEydAW59AJy2YUiEbzQbavRlNi
-         q4zvbGEiGL7F1fM3NDRjwNDatLHmXO5I9yL7wO/b38ZbBaNbdln3DOOcQWhjyBcE7qNm
-         eOZ1sczTe2P/1+xVthFN0DCWCN9wLkxTPeuWs9gSKpnq8l7LrzyaUaLgJZR+8Hp3ZHfi
-         glJQJONQ8dodR/kUZ2FdwV4JTIBA9Di5KSMlQBnA6Xc3nWNXRem/pHOINQFuLge/O9HL
-         +LsQ==
-X-Gm-Message-State: AOAM533ChE/tDsgMkMjEo1VxcZpZvKGVVtbNwFffvqgVu3tqk41ceDFM
-        Tvf6xHJDcPokRpDk0V3KDHg=
-X-Google-Smtp-Source: ABdhPJyJwrxYkxGuYUqzQh0P8T0d3Irzg87pct15JGOUsVd4Muoy4g6GUZ84E+A1ouGwDfgLhI4fbw==
-X-Received: by 2002:a65:4348:0:b0:375:9840:b064 with SMTP id k8-20020a654348000000b003759840b064mr1083683pgq.270.1645709516842;
-        Thu, 24 Feb 2022 05:31:56 -0800 (PST)
-Received: from ip-172-31-19-208.ap-northeast-1.compute.internal (ec2-18-181-137-102.ap-northeast-1.compute.amazonaws.com. [18.181.137.102])
-        by smtp.gmail.com with ESMTPSA id q1sm3404717pfs.112.2022.02.24.05.31.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Feb 2022 05:31:56 -0800 (PST)
-Date:   Thu, 24 Feb 2022 13:31:51 +0000
-From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
-To:     Vlastimil Babka <vbabka@suse.cz>
-Cc:     linux-mm@kvack.org, Roman Gushchin <guro@fb.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        David Rientjes <rientjes@google.com>,
-        Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>
-Subject: Re: [PATCH 3/5] mm/slab: Do not call kmalloc_large() for unsupported
- size
-Message-ID: <YheIxyO/2lcD+aBR@ip-172-31-19-208.ap-northeast-1.compute.internal>
-References: <20220221105336.522086-1-42.hyeyoo@gmail.com>
- <20220221105336.522086-4-42.hyeyoo@gmail.com>
- <8915b858-b46d-0acd-bebd-80a0c9882a7e@suse.cz>
+        Thu, 24 Feb 2022 08:33:19 -0500
+Received: from smtpbg153.qq.com (smtpbg153.qq.com [13.245.218.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADB8F16DAEB
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 05:32:47 -0800 (PST)
+X-QQ-mid: bizesmtp70t1645709547tpwkhq7i
+Received: from localhost.localdomain (unknown [58.240.82.166])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Thu, 24 Feb 2022 21:32:20 +0800 (CST)
+X-QQ-SSF: 01400000002000B0F000B00A0000000
+X-QQ-FEAT: /38I06TeVDt/A9RUhVZYOINAD/wPpx9pW1Fb3qmhzq4x7Q2Ua+MBKouMh0Uzn
+        mF7ioiAmnlUyMwrWJmNKv+nmVGoBWKsVxjGl5q6nYE8pE+TExWnUpBh5SlcD/UZFVCM8Isk
+        bRvIkO+BkFI+Vo+R9MC3qN9npU/RvArveLimfqrBtfH1aUfXiI8dUS4EHHNz68oxLxEUFUJ
+        j4VSg9QJkWUkJBIMdt8Y2FgEob+tjpdKZ0jxDzHys7ObyddxOeYpBCEG5EBa7OsZwYK7XSy
+        3wxpQ7bLzxjCGFutx+fQbnjEOV6rtr4OuEtPMNineyYAsgPwEn3u+IcmfHlX0l7XI4xJ46X
+        Ev8c7UftVm2ZQSwKxnjYepAa9bYffdyMQ1gKLRZqw1Q1vTfZvQ=
+X-QQ-GoodBg: 2
+From:   Meng Tang <tangmeng@uniontech.com>
+To:     mcgrof@kernel.org, keescook@chromium.org, yzaikin@google.com
+Cc:     guoren@kernel.org, nickhu@andestech.com, green.hu@gmail.com,
+        deanbo422@gmail.com, ebiggers@kernel.org, tytso@mit.edu,
+        wad@chromium.org, john.johansen@canonical.com, jmorris@namei.org,
+        serge@hallyn.com, linux-csky@vger.kernel.org,
+        linux-fscrypt@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        Meng Tang <tangmeng@uniontech.com>
+Subject: [PATCH v3 1/2] fs/proc: Optimize arrays defined by struct ctl_path
+Date:   Thu, 24 Feb 2022 21:32:16 +0800
+Message-Id: <20220224133217.1755-1-tangmeng@uniontech.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8915b858-b46d-0acd-bebd-80a0c9882a7e@suse.cz>
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:uniontech.com:qybgforeign:qybgforeign2
+X-QQ-Bgrelay: 1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 24, 2022 at 01:48:47PM +0100, Vlastimil Babka wrote:
-> On 2/21/22 11:53, Hyeonggon Yoo wrote:
-> > SLAB's kfree() does not support freeing an object that is allocated from
-> > kmalloc_large(). Fix this as SLAB do not pass requests larger than
-> > KMALLOC_MAX_CACHE_SIZE directly to page allocator.
-> 
-> AFAICS this issue is limited to build-time constant sizes. Might be better
-> to make this a build error rather than build-time NULL?
+Previously, arrays defined by struct ctl_path is terminated
+with an empty one. When we actually only register one ctl_path,
+we've gone from 8 bytes to 16 bytes.
 
-Right. And sounds better. But what about another direction as Matthew said:
-passing large requests to page allocator like SLUB?
+So, I use ARRAY_SIZE() as a boundary condition to optimize it.
 
-I think it's better for maintenance. Any obstacles for this direction?
+Since the original __register_sysctl_paths is only used in
+fs/proc/proc_sysctl.c, in order to not change the usage of
+register_sysctl_paths, delete __register_sysctl_paths from
+include/linux/sysctl.h, change it to __register_sysctl_paths_init
+in fs/proc/proc_sysctl.c, and modify it with static.
+The register_sysctl_paths becomes __register_sysctl_paths,
+and the macro definition is used in include/linux/sysctl.h
+to expand register_sysctl_paths(path, table) to
+__register_sysctl_paths(path, ARRAY_SIZE(path), table).
 
-Thank you!
+Signed-off-by: Meng Tang <tangmeng@uniontech.com>
+---
+ fs/proc/proc_sysctl.c  | 22 +++++++++++++---------
+ include/linux/sysctl.h |  9 ++++-----
+ 2 files changed, 17 insertions(+), 14 deletions(-)
 
-> > Signed-off-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
-
+diff --git a/fs/proc/proc_sysctl.c b/fs/proc/proc_sysctl.c
+index 9ecd5c87e8dd..721a8bec63d6 100644
+--- a/fs/proc/proc_sysctl.c
++++ b/fs/proc/proc_sysctl.c
+@@ -1589,9 +1589,10 @@ static int register_leaf_sysctl_tables(const char *path, char *pos,
+ }
+ 
+ /**
+- * __register_sysctl_paths - register a sysctl table hierarchy
++ * __register_sysctl_paths_init - register a sysctl table hierarchy
+  * @set: Sysctl tree to register on
+  * @path: The path to the directory the sysctl table is in.
++ * @ctl_path_num: The numbers(ARRAY_SIZE(path)) of ctl_path
+  * @table: the top-level table structure
+  *
+  * Register a sysctl table hierarchy. @table should be a filled in ctl_table
+@@ -1599,22 +1600,23 @@ static int register_leaf_sysctl_tables(const char *path, char *pos,
+  *
+  * See __register_sysctl_table for more details.
+  */
+-struct ctl_table_header *__register_sysctl_paths(
++static struct ctl_table_header *__register_sysctl_paths_init(
+ 	struct ctl_table_set *set,
+-	const struct ctl_path *path, struct ctl_table *table)
++	const struct ctl_path *path, int ctl_path_num, struct ctl_table *table)
+ {
+ 	struct ctl_table *ctl_table_arg = table;
+ 	int nr_subheaders = count_subheaders(table);
+ 	struct ctl_table_header *header = NULL, **subheaders, **subheader;
+ 	const struct ctl_path *component;
+ 	char *new_path, *pos;
++	int i;
+ 
+ 	pos = new_path = kmalloc(PATH_MAX, GFP_KERNEL);
+ 	if (!new_path)
+ 		return NULL;
+ 
+ 	pos[0] = '\0';
+-	for (component = path; component->procname; component++) {
++	for (component = path, i = 0; component->procname && i < ctl_path_num; component++, i++) {
+ 		pos = append_path(new_path, pos, component->procname);
+ 		if (!pos)
+ 			goto out;
+@@ -1663,20 +1665,22 @@ struct ctl_table_header *__register_sysctl_paths(
+ /**
+  * register_sysctl_paths - register a sysctl table hierarchy
+  * @path: The path to the directory the sysctl table is in.
++ * @ctl_path_num: The numbers(ARRAY_SIZE(path)) of ctl_path
+  * @table: the top-level table structure
+  *
+  * Register a sysctl table hierarchy. @table should be a filled in ctl_table
+  * array. A completely 0 filled entry terminates the table.
+  *
+- * See __register_sysctl_paths for more details.
++ * See __register_sysctl_paths_init for more details.
+  */
+-struct ctl_table_header *register_sysctl_paths(const struct ctl_path *path,
++struct ctl_table_header *__register_sysctl_paths(const struct ctl_path *path,
++						int ctl_path_num,
+ 						struct ctl_table *table)
+ {
+-	return __register_sysctl_paths(&sysctl_table_root.default_set,
+-					path, table);
++	return __register_sysctl_paths_init(&sysctl_table_root.default_set,
++					path, ctl_path_num, table);
+ }
+-EXPORT_SYMBOL(register_sysctl_paths);
++EXPORT_SYMBOL(__register_sysctl_paths);
+ 
+ /**
+  * register_sysctl_table - register a sysctl table hierarchy
+diff --git a/include/linux/sysctl.h b/include/linux/sysctl.h
+index 889c995d8a08..37958aeecfb5 100644
+--- a/include/linux/sysctl.h
++++ b/include/linux/sysctl.h
+@@ -219,13 +219,12 @@ extern void retire_sysctl_set(struct ctl_table_set *set);
+ struct ctl_table_header *__register_sysctl_table(
+ 	struct ctl_table_set *set,
+ 	const char *path, struct ctl_table *table);
+-struct ctl_table_header *__register_sysctl_paths(
+-	struct ctl_table_set *set,
+-	const struct ctl_path *path, struct ctl_table *table);
+ struct ctl_table_header *register_sysctl(const char *path, struct ctl_table *table);
+ struct ctl_table_header *register_sysctl_table(struct ctl_table * table);
+-struct ctl_table_header *register_sysctl_paths(const struct ctl_path *path,
+-						struct ctl_table *table);
++#define register_sysctl_paths(path, table) \
++	__register_sysctl_paths(path, ARRAY_SIZE(path), table)
++extern struct ctl_table_header *__register_sysctl_paths(const struct ctl_path *path,
++						int ctl_path_num, struct ctl_table *table);
+ 
+ void unregister_sysctl_table(struct ctl_table_header * table);
+ 
 -- 
-Hyeonggon
+2.20.1
+
+
+

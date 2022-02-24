@@ -2,66 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F4D24C316F
-	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 17:34:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 615494C317B
+	for <lists+linux-kernel@lfdr.de>; Thu, 24 Feb 2022 17:34:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230044AbiBXQdO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 24 Feb 2022 11:33:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32922 "EHLO
+        id S229935AbiBXQdr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 24 Feb 2022 11:33:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230074AbiBXQdL (ORCPT
+        with ESMTP id S230104AbiBXQdk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 24 Feb 2022 11:33:11 -0500
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F14011B5E5
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 08:32:33 -0800 (PST)
-Received: by mail-wr1-x42c.google.com with SMTP id d28so526883wra.4
-        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 08:32:33 -0800 (PST)
+        Thu, 24 Feb 2022 11:33:40 -0500
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75C0C17BC70
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 08:32:56 -0800 (PST)
+Received: by mail-ej1-x632.google.com with SMTP id p14so5510339ejf.11
+        for <linux-kernel@vger.kernel.org>; Thu, 24 Feb 2022 08:32:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=TtmeV9bgxOIabhJpHOR897CD9xgb87UemODU6yGgV2U=;
-        b=kuPalLo0ngHOxMvZ6qIgbB+moVrh17o+Lv9Ez7Ucqyo8MJkTddP+53mAdrQrjT/iIS
-         NBbuQpY9+EyL7o0cF9EUX6BiaG/emCBJwgZ7/O8LOzPt3zwXXcdR7BdF3oPNbstEtaWI
-         IEpIbLKdf7RuUHHHH74BbrDqcA7itr0BCaBeyWEfVAkr1eXo6yITFooJcpQfXjpLSX/N
-         Q00TNT7VNos313AB95PZ1Ztfl68NEuVi3Ghw1As1wnhd+/t9fByKElDKdjKiVesNlmeG
-         vgsJyynXcSf5AHf2vzLpP1zEFsoWFYmp1lebeWmVkb4/Y4nnwgoLUfDxWnIwz1JXLLGa
-         7GGg==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=8iFz8OejFA6DX9qXi4bQtBNaigBN1GDlBFEToUXGY3Q=;
+        b=m/r5a9WyEVahimcDrZ+I4kJ+LN5cBWUrcwkSOYJNGjLFuEihkwHAmdn4TmcJQatFmI
+         iJxxXr3qTsESDM74BAln0qM6OAD6wcNOTgIt+Pi5Uf46pLxlbvkff+J5tfM09G7NRc/K
+         pMyLOVPaPukn9OTEQrvxsNvp+jhK1d4R2CKv0MZCys2z0XWqYOZYUI1vJ3DGr8sN4a/w
+         TzxvadnG+pes4kBwh0Slizq3PEfC1CBU4zNlGoNDM4DDrDfjbAnyUwLV9ZqgJrHtOkTw
+         7sPw6x6j+46l2j40lcmS6ciEvtj1buqo5Vh66VgSW53OOnYIpDMhP3ZG7bhuWj2OWnQT
+         XRkA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=TtmeV9bgxOIabhJpHOR897CD9xgb87UemODU6yGgV2U=;
-        b=3UVzJWQwhHuuOKsTEhkKg+5F7Lsf5cAY4cJDiI3QPuz9E2CoovAh7K7MtOodzG6BRW
-         o6KCc5ZuuEPR/gL+5yrTACrJyDxfbcGoYD8gh7ebs9GFeRcebUojYaEP4VzOCN4ZinCn
-         3IB7BLjkQIzBlTcEcXOUArC1juJPSMRJ56a+mohcVDo+Cus+nJM2V8HaaORgco+2ajaY
-         VWjaebh1cR541pw3lBWbZQfUKFLQTmsJEvj5fA7DlAyG54RTJmfAG04Bn8bDGfA8mfQ3
-         uItxEqUc31QsjaKi+3QkHDAn9W7/X6AOSMTkjuvaxamLdiSoO7j1wv687DWYav+SMSoi
-         bc0g==
-X-Gm-Message-State: AOAM532m6eN7ECJjl3pNLXD68spLVjwePGTlMIQ1AEULuNeC73Zh+hX6
-        a19NFGwp82hFNsBpeMOmaeq5w+Qr6w745w==
-X-Google-Smtp-Source: ABdhPJwiKP+dfsndf3VPpMglOVWrIIfHrXym6SEpHnxWV0ApQvGlhQKCMMsZmT1onUav3oJu2Z4OkQ==
-X-Received: by 2002:ac2:5d67:0:b0:442:f135:3bcc with SMTP id h7-20020ac25d67000000b00442f1353bccmr2267428lft.452.1645719756809;
-        Thu, 24 Feb 2022 08:22:36 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=8iFz8OejFA6DX9qXi4bQtBNaigBN1GDlBFEToUXGY3Q=;
+        b=h2l0XUFFO/AKfFWrtdRZcTPEttA4CiuLIvLuegq2lEYAT5RSTFsc7Q0rCV4e0slcTR
+         yO0H9px/ufLbog7rQGImNasPhR46leYJ8da6yj4twkKWduIXTvRzTOb+uqC1voBtPrOx
+         pD+hXuXic3iLb21YcD3VVTz4ab4DoCToDPXm162JpsXxOTR8mEsKLOb4NGLGfOjMP5wT
+         kE1pN8cFvj39q2k0sGUftQ1lWz/y2hU1YLDwkItDy3RbL9ived+WQ+bgohUts35ugM2D
+         bNfeah1vDDxfwo6J7OupTCS0bn9Ixb/PfyQg38Hl0Qyf6JD2T8nuWZecGm5t9Pcw8jIe
+         Mqrw==
+X-Gm-Message-State: AOAM530vvXaplAatYmuaSzd+0t522APm+SNI+lgD3/7w2Bp7TK/7ewLC
+        eYnTd7953BNuyJOuDwMfV7Xkb7nl/1QDNA==
+X-Google-Smtp-Source: ABdhPJxM9Mr69FsUxMrjzwl+vN04ZCx0HQBkHsmr2jnNDhpL/c69hBp6L0yBwPwPAABLQy5SGzYEoA==
+X-Received: by 2002:a05:6512:2306:b0:443:3db8:d6c8 with SMTP id o6-20020a056512230600b004433db8d6c8mr2302641lfu.161.1645719757815;
+        Thu, 24 Feb 2022 08:22:37 -0800 (PST)
 Received: from localhost (c-9b28e555.07-21-73746f28.bbcust.telenor.se. [85.229.40.155])
-        by smtp.gmail.com with ESMTPSA id v9sm242600lfr.130.2022.02.24.08.22.36
+        by smtp.gmail.com with ESMTPSA id i17sm241327lfu.207.2022.02.24.08.22.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Feb 2022 08:22:36 -0800 (PST)
+        Thu, 24 Feb 2022 08:22:37 -0800 (PST)
 From:   Anders Roxell <anders.roxell@linaro.org>
 To:     mpe@ellerman.id.au
 Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
         Anders Roxell <anders.roxell@linaro.org>,
-        stable@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>
-Subject: [PATCHv2 1/3] powerpc: lib: sstep: fix 'sthcx' instruction
-Date:   Thu, 24 Feb 2022 17:22:13 +0100
-Message-Id: <20220224162215.3406642-1-anders.roxell@linaro.org>
+        stable@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        Segher Boessenkool <segher@kernel.crashing.org>
+Subject: [PATCHv2 2/3] powerpc: fix build errors
+Date:   Thu, 24 Feb 2022 17:22:14 +0100
+Message-Id: <20220224162215.3406642-2-anders.roxell@linaro.org>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220224162215.3406642-1-anders.roxell@linaro.org>
+References: <20220224162215.3406642-1-anders.roxell@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,31 +72,163 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Looks like there been a copy paste mistake when added the instruction
-'stbcx' twice and one was probably meant to be 'sthcx'.
-Changing to 'sthcx' from 'stbcx'.
+Building tinyconfig with gcc (Debian 11.2.0-16) and assembler (Debian
+2.37.90.20220207) the following build error shows up:
 
-Cc: <stable@vger.kernel.org> # v4.13+
-Fixes: 350779a29f11 ("powerpc: Handle most loads and stores in instruction emulation code")
-Reported-by: Arnd Bergmann <arnd@arndb.de>
+ {standard input}: Assembler messages:
+ {standard input}:1190: Error: unrecognized opcode: `stbcix'
+ {standard input}:1433: Error: unrecognized opcode: `lwzcix'
+ {standard input}:1453: Error: unrecognized opcode: `stbcix'
+ {standard input}:1460: Error: unrecognized opcode: `stwcix'
+ {standard input}:1596: Error: unrecognized opcode: `stbcix'
+ ...
+
+Rework to add assembler directives [1] around the instruction. Going
+through the them one by one shows that the changes should be safe.  Like
+__get_user_atomic_128_aligned() is only called in p9_hmi_special_emu(),
+which according to the name is specific to power9.  And __raw_rm_read*()
+are only called in things that are powernv or book3s_hv specific.
+
+[1] https://sourceware.org/binutils/docs/as/PowerPC_002dPseudo.html#PowerPC_002dPseudo
+
+Cc: <stable@vger.kernel.org>
+Co-developed-by: Arnd Bergmann <arnd@arndb.de>
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+Reviewed-by: Segher Boessenkool <segher@kernel.crashing.org>
 Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
 ---
- arch/powerpc/lib/sstep.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/powerpc/include/asm/io.h        | 40 ++++++++++++++++++++++------
+ arch/powerpc/include/asm/uaccess.h   |  3 +++
+ arch/powerpc/platforms/powernv/rng.c |  6 ++++-
+ 3 files changed, 40 insertions(+), 9 deletions(-)
 
-diff --git a/arch/powerpc/lib/sstep.c b/arch/powerpc/lib/sstep.c
-index bd3734d5be89..d2d29243fa6d 100644
---- a/arch/powerpc/lib/sstep.c
-+++ b/arch/powerpc/lib/sstep.c
-@@ -3389,7 +3389,7 @@ int emulate_loadstore(struct pt_regs *regs, struct instruction_op *op)
- 			__put_user_asmx(op->val, ea, err, "stbcx.", cr);
- 			break;
- 		case 2:
--			__put_user_asmx(op->val, ea, err, "stbcx.", cr);
-+			__put_user_asmx(op->val, ea, err, "sthcx.", cr);
- 			break;
- #endif
- 		case 4:
+diff --git a/arch/powerpc/include/asm/io.h b/arch/powerpc/include/asm/io.h
+index beba4979bff9..fee979d3a1aa 100644
+--- a/arch/powerpc/include/asm/io.h
++++ b/arch/powerpc/include/asm/io.h
+@@ -359,25 +359,37 @@ static inline void __raw_writeq_be(unsigned long v, volatile void __iomem *addr)
+  */
+ static inline void __raw_rm_writeb(u8 val, volatile void __iomem *paddr)
+ {
+-	__asm__ __volatile__("stbcix %0,0,%1"
++	__asm__ __volatile__(".machine push;   \
++			      .machine power6; \
++			      stbcix %0,0,%1;  \
++			      .machine pop;"
+ 		: : "r" (val), "r" (paddr) : "memory");
+ }
+ 
+ static inline void __raw_rm_writew(u16 val, volatile void __iomem *paddr)
+ {
+-	__asm__ __volatile__("sthcix %0,0,%1"
++	__asm__ __volatile__(".machine push;   \
++			      .machine power6; \
++			      sthcix %0,0,%1;  \
++			      .machine pop;"
+ 		: : "r" (val), "r" (paddr) : "memory");
+ }
+ 
+ static inline void __raw_rm_writel(u32 val, volatile void __iomem *paddr)
+ {
+-	__asm__ __volatile__("stwcix %0,0,%1"
++	__asm__ __volatile__(".machine push;   \
++			      .machine power6; \
++			      stwcix %0,0,%1;  \
++			      .machine pop;"
+ 		: : "r" (val), "r" (paddr) : "memory");
+ }
+ 
+ static inline void __raw_rm_writeq(u64 val, volatile void __iomem *paddr)
+ {
+-	__asm__ __volatile__("stdcix %0,0,%1"
++	__asm__ __volatile__(".machine push;   \
++			      .machine power6; \
++			      stdcix %0,0,%1;  \
++			      .machine pop;"
+ 		: : "r" (val), "r" (paddr) : "memory");
+ }
+ 
+@@ -389,7 +401,10 @@ static inline void __raw_rm_writeq_be(u64 val, volatile void __iomem *paddr)
+ static inline u8 __raw_rm_readb(volatile void __iomem *paddr)
+ {
+ 	u8 ret;
+-	__asm__ __volatile__("lbzcix %0,0, %1"
++	__asm__ __volatile__(".machine push;   \
++			      .machine power6; \
++			      lbzcix %0,0, %1; \
++			      .machine pop;"
+ 			     : "=r" (ret) : "r" (paddr) : "memory");
+ 	return ret;
+ }
+@@ -397,7 +412,10 @@ static inline u8 __raw_rm_readb(volatile void __iomem *paddr)
+ static inline u16 __raw_rm_readw(volatile void __iomem *paddr)
+ {
+ 	u16 ret;
+-	__asm__ __volatile__("lhzcix %0,0, %1"
++	__asm__ __volatile__(".machine push;   \
++			      .machine power6; \
++			      lhzcix %0,0, %1; \
++			      .machine pop;"
+ 			     : "=r" (ret) : "r" (paddr) : "memory");
+ 	return ret;
+ }
+@@ -405,7 +423,10 @@ static inline u16 __raw_rm_readw(volatile void __iomem *paddr)
+ static inline u32 __raw_rm_readl(volatile void __iomem *paddr)
+ {
+ 	u32 ret;
+-	__asm__ __volatile__("lwzcix %0,0, %1"
++	__asm__ __volatile__(".machine push;   \
++			      .machine power6; \
++			      lwzcix %0,0, %1; \
++			      .machine pop;"
+ 			     : "=r" (ret) : "r" (paddr) : "memory");
+ 	return ret;
+ }
+@@ -413,7 +434,10 @@ static inline u32 __raw_rm_readl(volatile void __iomem *paddr)
+ static inline u64 __raw_rm_readq(volatile void __iomem *paddr)
+ {
+ 	u64 ret;
+-	__asm__ __volatile__("ldcix %0,0, %1"
++	__asm__ __volatile__(".machine push;   \
++			      .machine power6; \
++			      ldcix %0,0, %1;  \
++			      .machine pop;"
+ 			     : "=r" (ret) : "r" (paddr) : "memory");
+ 	return ret;
+ }
+diff --git a/arch/powerpc/include/asm/uaccess.h b/arch/powerpc/include/asm/uaccess.h
+index 63316100080c..4a35423f766d 100644
+--- a/arch/powerpc/include/asm/uaccess.h
++++ b/arch/powerpc/include/asm/uaccess.h
+@@ -125,8 +125,11 @@ do {								\
+  */
+ #define __get_user_atomic_128_aligned(kaddr, uaddr, err)		\
+ 	__asm__ __volatile__(				\
++		".machine push\n"			\
++		".machine altivec\n"			\
+ 		"1:	lvx  0,0,%1	# get user\n"	\
+ 		" 	stvx 0,0,%2	# put kernel\n"	\
++		".machine pop\n"			\
+ 		"2:\n"					\
+ 		".section .fixup,\"ax\"\n"		\
+ 		"3:	li %0,%3\n"			\
+diff --git a/arch/powerpc/platforms/powernv/rng.c b/arch/powerpc/platforms/powernv/rng.c
+index b4386714494a..e3d44b36ae98 100644
+--- a/arch/powerpc/platforms/powernv/rng.c
++++ b/arch/powerpc/platforms/powernv/rng.c
+@@ -43,7 +43,11 @@ static unsigned long rng_whiten(struct powernv_rng *rng, unsigned long val)
+ 	unsigned long parity;
+ 
+ 	/* Calculate the parity of the value */
+-	asm ("popcntd %0,%1" : "=r" (parity) : "r" (val));
++	asm (".machine push;   \
++	      .machine power7; \
++	      popcntd %0,%1;   \
++	      .machine pop;"
++	     : "=r" (parity) : "r" (val));
+ 
+ 	/* xor our value with the previous mask */
+ 	val ^= rng->mask;
 -- 
 2.34.1
 
